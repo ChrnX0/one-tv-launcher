@@ -75,8 +75,26 @@ object Vod {
 
     /** Nome sem o ano e sem a sujeira de prefixo de país ("BR: ", "|PT| ") para a tela. */
     fun nomeLimpo(nome: String): String =
-        nome.replace(reAno, "").replace(Regex("""^\s*[\[(|]?[A-Z]{2,3}[\])|]?\s*[:|\-]\s*"""), "").replace(Regex("""\s{2,}"""), " ").trim()
+        nome.replace(reAno, "").replace(rePrefixoPais, "").replace(reEspacos, " ").trim()
             .ifEmpty { nome.trim() }
+
+    // Compiladas uma vez (13/11/2026): antes eram 2 Regex novas a cada chamada, e nomeLimpo roda para cada card desenhado
+    // e para cada filme na ordem por nome.
+    private val rePrefixoPais = Regex("""^\s*[\[(|]?[A-Z]{2,3}[\])|]?\s*[:|\-]\s*""")
+    private val reEspacos = Regex("""\s{2,}""")
+
+    /**
+     * Chave da ordem "nome": sem o prefixo de país, sem acento, minúscula. Calculada UMA vez por item (ver [ordenarPorNome]).
+     */
+    fun chaveNome(nome: String): String = PlayerFiltro.normalizar(nomeLimpo(nome))
+
+    /**
+     * Ordena pela [chaveNome] calculando a chave uma vez por item. Medido na Sala em 13/11/2026: o `sortedBy { chave(it) }`
+     * de antes refazia a chave a cada comparação (~2·n·log n vezes) e travou a tela por 112 s com 20.975 filmes.
+     * Ordenação estável: o resultado é o mesmo de antes.
+     */
+    fun <T> ordenarPorNome(itens: List<T>, nome: (T) -> String): List<T> =
+        itens.map { chaveNome(nome(it)) to it }.sortedBy { it.first }.map { it.second }
 
     private fun numero(o: JSONObject, chave: String): Double? = when (val v = o.opt(chave)) {
         is Number -> v.toDouble()
@@ -240,7 +258,7 @@ object Vod {
 
     fun ordenar(filmes: List<Filme>, ordem: Ordem): List<Filme> = when (ordem) {
         Ordem.RECENTES -> filmes.sortedByDescending { it.adicionado }
-        Ordem.NOME -> filmes.sortedBy { PlayerFiltro.normalizar(nomeLimpo(it.nome)) }
+        Ordem.NOME -> ordenarPorNome(filmes) { it.nome }
         Ordem.NOTA -> filmes.sortedByDescending { it.nota ?: -1f }
         Ordem.ANO -> filmes.sortedByDescending { it.ano ?: 0 }
     }
