@@ -29,6 +29,8 @@ declare -A FONTES=(
   [McpProtocoloTest]="McpProtocolo"
   [PainelHtmlTest]=""
   [ConfirmacoesTest]="Confirmacoes"
+  [CertificadoX509Test]="CertificadoX509"
+  [PaginaCertificadoTest]="PaginaCertificado"
 )
 
 falhou=0

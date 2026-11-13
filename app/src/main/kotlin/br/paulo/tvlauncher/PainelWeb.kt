@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit
  * Painel no navegador SERVIDO PELO PRÓPRIO LAUNCHER (04/11/2026), sem PC: em qualquer celular ou computador da casa,
  * abrir http://<IP da TV>:8080/ (ou http://chromecast:8080/ com o nome cadastrado no roteador), digitar o PIN
  * definido nas Configurações do launcher e administrar a TV. Plano completo: painel-no-launcher.md.
+ * Com cadeado (13/11/2026): o mesmo painel em https://tv:8443/, com o certificado que a TV gera (PainelTls.kt).
  *
  * Fase 1: entrar com PIN, lista de apps com ícone, ocultar/reexibir, desinstalar e backup (baixar/restaurar).
  * Fase 2: permissões de cada app, instalar APK e a aba Arquivos (memória interna: listar, enviar, baixar, apagar).
@@ -50,6 +51,8 @@ object PainelWeb {
     private const val TEMPO_LEITURA_MS = 15_000
 
     @Volatile private var servidor: ServerSocket? = null
+    /** A porta https da rede de casa (PainelTls, 13/11/2026): o mesmo painel, com o certificado que a TV gera. */
+    @Volatile private var servidorTls: ServerSocket? = null
     private lateinit var app: Context
 
     val sessoes = Sessoes({ System.currentTimeMillis() })
@@ -129,7 +132,8 @@ object PainelWeb {
             }
             Log.i(TAG, "painel ligado na porta ${Config.PAINEL_PORTA}")
             PainelVizinhos.ligar(app)   // anuncia esta TV e procura as outras na rede (mDNS)
-            aceitar(s)
+            iniciarTls(minha)
+            aceitar(s, https = false)
             // Saiu do laço: se não foi um parar() (a porta ainda é a atual), limpa para o próximo ajustar() religar.
             synchronized(this) { if (servidor === s) servidor = null }
             try { s.close() } catch (_: IOException) {}
@@ -141,12 +145,102 @@ object PainelWeb {
         geracao++
         try { servidor?.close() } catch (_: IOException) {}
         servidor = null
+        try { servidorTls?.close() } catch (_: IOException) {}
+        servidorTls = null
         sessoes.encerrarTodas()
         PainelVizinhos.desligar()
         Log.i(TAG, "painel desligado")
     }
 
-    private fun aceitar(s: ServerSocket) {
+    // ---------------------------------------------------------------- https na rede de casa (13/11/2026)
+
+    /**
+     * Abre a porta https ([PainelTls.PORTA]) junto com a http. O certificado é carregado (ou feito, na primeira vez)
+     * numa thread própria: gerar chave leva alguns milissegundos e ler o Keystore também não é coisa da thread da tela.
+     * Sem certificado (Keystore com defeito), o painel segue só em http.
+     */
+    private fun iniciarTls(minha: Int) {
+        Thread({
+            // O IP entra no certificado: espera a rede aparecer (até ~5 min) se o painel ligou antes do Wi-Fi.
+            var rede = redes().entries.minByOrNull { it.key }
+            var tentativas = 0
+            while (rede == null && tentativas++ < 10) {
+                try { Thread.sleep(30_000) } catch (_: InterruptedException) { return@Thread }
+                if (geracao != minha) return@Thread
+                redeCache = 0L to emptyMap()
+                rede = redes().entries.minByOrNull { it.key }
+            }
+            val e = PainelTls.garantir(app, rede?.key, rede?.value ?: 24) ?: return@Thread
+            abrirTls(minha, e)
+        }, "Painel-https").apply { priority = Thread.MIN_PRIORITY; isDaemon = true }.start()
+    }
+
+    /** Abre a porta https com este certificado e fica no accept() até parar() ou uma renovação fechar a porta. */
+    private fun abrirTls(minha: Int, e: CertificadoX509.Emissao) {
+        var s: javax.net.ssl.SSLServerSocket? = null
+        for (vez in 1..3) {   // logo depois de renovar, a porta velha pode demorar um instante para soltar
+            val novo = PainelTls.contexto(e).serverSocketFactory.createServerSocket() as javax.net.ssl.SSLServerSocket
+            try {
+                novo.reuseAddress = true
+                novo.enabledProtocols = PainelTls.protocolos(novo.supportedProtocols)
+                novo.bind(InetSocketAddress(InetAddress.getByAddress(byteArrayOf(0, 0, 0, 0)), PainelTls.PORTA), 16)
+                s = novo
+                break
+            } catch (ex: IOException) {
+                try { novo.close() } catch (_: IOException) {}
+                if (vez == 3) { Log.w(TAG, "não consegui abrir a porta https ${PainelTls.PORTA}: $ex"); return }
+                try { Thread.sleep(500) } catch (_: InterruptedException) { return }
+            }
+        }
+        val porta = s ?: return
+        synchronized(this) {
+            if (geracao != minha || servidor == null) { try { porta.close() } catch (_: IOException) {}; return }
+            servidorTls = porta
+        }
+        Log.i(TAG, "painel https ligado na porta ${PainelTls.PORTA}")
+        aceitar(porta, https = true)
+        synchronized(this) { if (servidorTls === porta) servidorTls = null }
+        try { porta.close() } catch (_: IOException) {}
+    }
+
+    private fun ligadoTls(): Boolean = servidorTls?.isClosed == false
+
+    /** Botão "Gerar certificado novo" do painel (pede o PIN de novo): CA nova, e reabre a porta https com ela. */
+    private fun renovarCertificado(token: String?, ip: String): Resposta {
+        if (!sessoes.elevada(token)) return precisaPin()
+        val rede = redes().entries.minByOrNull { it.key }
+        val e = PainelTls.emitir(app, rede?.key, rede?.value ?: 24)
+        PainelArmazem.registrar(app, ip, "gerar certificado https novo", if (e == null) "falhou" else "ok")
+        if (e == null) return erro(500, "a TV não conseguiu gerar o certificado")
+        val minha = synchronized(this) { geracao }
+        // Fecha a porta velha (as conexões já abertas, inclusive esta, continuam até responder) e abre com o novo.
+        try { servidorTls?.close() } catch (_: IOException) {}
+        Thread({ abrirTls(minha, e) }, "Painel-https").apply { priority = Thread.MIN_PRIORITY; isDaemon = true }.start()
+        return json(200, PainelTls.estado(ipsDaRede(), true))
+    }
+
+    /** Nomes aceitos no Host da porta https: os do certificado e os IPs da TV (sempre com :8443). */
+    private fun nomesTls(): Set<String> = PainelTls.nomes().toSet() + ipsDaRede()
+
+    /** O Host vale para a porta por onde o pedido chegou? */
+    private fun hostOk(host: String?, https: Boolean): Boolean =
+        if (https) ChecagensPainel.viaHttps(host, nomesTls())
+        else ChecagensPainel.hostPermitido(host, nomesPermitidos(), Config.PAINEL_PORTA) || ChecagensPainel.viaHttps(host, nomesHttps())
+
+    /** Página do passo a passo (assets/painel/certificado.html), com os dados do certificado já preenchidos. */
+    private fun paginaCertificado(): Resposta {
+        val modelo = app.assets.open("painel/certificado.html").use { it.readBytes() }.toString(Charsets.UTF_8)
+        val html = PaginaCertificado.preencher(modelo, PainelTls.estado(ipsDaRede(), ligadoTls()), PainelTls.nomes().first())
+        return Resposta(200, "text/html; charset=utf-8", html.toByteArray())
+    }
+
+    private fun arquivoCertificado(): Resposta {
+        val pem = PainelTls.pemDaCa() ?: return erro(503, "o certificado ainda não foi gerado; tente em 1 minuto")
+        return Resposta(200, "application/x-x509-ca-cert", pem.toByteArray(),
+            mapOf("Content-Disposition" to "attachment; filename=\"one-tv-painel.crt\""))
+    }
+
+    private fun aceitar(s: ServerSocket, https: Boolean) {
         while (!s.isClosed) {
             val c = try { s.accept() } catch (e: IOException) {
                 if (s.isClosed) break   // parar() fechou a porta: fim
@@ -157,7 +251,7 @@ object PainelWeb {
             }
             if (!redeLocal(c)) { fechar(c); continue }
             try {
-                pool.execute { atender(c) }
+                pool.execute { atender(c, https) }
             } catch (e: RejectedExecutionException) {
                 fechar(c)   // fila cheia: alguém está martelando o painel
             }
@@ -271,7 +365,8 @@ object PainelWeb {
     private fun erro(codigo: Int, mensagem: String, extra: JSONObject.() -> Unit = {}) =
         json(codigo, JSONObject().put("erro", mensagem).apply(extra))
 
-    private fun atender(c: Socket) {
+    /** [https]: chegou pela porta https (a conversa TLS acontece aqui, no primeiro read, não na thread do accept). */
+    private fun atender(c: Socket, https: Boolean) {
         val ip = c.inetAddress.hostAddress ?: "?"
         try {
             c.soTimeout = TEMPO_LEITURA_MS
@@ -283,7 +378,7 @@ object PainelWeb {
                 // é lido já, com limite (só a restauração de backup aceita um corpo maior). Antes de ler um byte do
                 // corpo, as checagens baratas (nome, origem e, nos corpos grandes, sessão): quem não passa nem ocupa
                 // a thread mandando megabytes (auditoria 10/11/2026).
-                val barrado = if (req.caminho !in ROTAS_FLUXO) antesDoCorpo(req) else null
+                val barrado = if (req.caminho !in ROTAS_FLUXO) antesDoCorpo(req, https) else null
                 if (barrado == null && req.caminho !in ROTAS_FLUXO) req.lerCorpo(limiteCorpo(req.caminho))
                 // Recusado: drena o corpo (sem guardar) para o navegador conseguir ler a resposta; ver descartarCorpo.
                 else if (barrado != null) req.descartarCorpo(limiteCorpo(req.caminho))
@@ -294,7 +389,7 @@ object PainelWeb {
                     req.caminho !in ROTAS_FLUXO && !req.caminho.startsWith("/cena/") && req.corpo.isNotEmpty() &&
                         !ChecagensPainel.jsonRaso(req.corpoTexto()) -> erro(400, "JSON inválido")
                     else -> try {
-                        rotear(req, ip)
+                        rotear(req, ip, https)
                     } catch (e: StackOverflowError) {
                         // Defesa em profundidade: um leitor recursivo (JSON) que escapou do jsonRaso. É Error, não
                         // Exception: sem este catch subiria até o tratador do Android e fecharia o launcher inteiro.
@@ -375,10 +470,9 @@ object PainelWeb {
      * X-Painel; nos corpos maiores que o comum, também a sessão. null = pode ler o corpo. [rotear] confere tudo de
      * novo (fica um caminho só para as regras); aqui é só para não gastar thread e memória com quem vai ser recusado.
      */
-    private fun antesDoCorpo(req: Requisicao): Resposta? {
+    private fun antesDoCorpo(req: Requisicao, https: Boolean): Resposta? {
         val host = req.cabecalho("host")
-        if (!ChecagensPainel.hostPermitido(host, nomesPermitidos(), Config.PAINEL_PORTA) &&
-            !ChecagensPainel.viaHttps(host, nomesHttps())) return erro(421, "nome desconhecido")
+        if (!hostOk(host, https)) return erro(421, "nome desconhecido")
         // Cena e recado por link vêm de fora do painel, sem Origin (o token vai no caminho): corpo pequeno, comum.
         if (req.caminho.startsWith("/cena/") || req.caminho.startsWith("/recado/")) return null
         if (req.metodo == "POST" &&
@@ -389,10 +483,9 @@ object PainelWeb {
         return null
     }
 
-    private fun rotear(req: Requisicao, ip: String): Resposta {
+    private fun rotear(req: Requisicao, ip: String, https: Boolean): Resposta {
         val host = req.cabecalho("host")
-        if (!ChecagensPainel.hostPermitido(host, nomesPermitidos(), Config.PAINEL_PORTA) &&
-            !ChecagensPainel.viaHttps(host, nomesHttps())) return erro(421, "nome desconhecido")
+        if (!hostOk(host, https)) return erro(421, "nome desconhecido")
         // Cena por link (Atalhos do iPhone, Home Assistant): vem de fora do painel, sem Origin; a senha é o token.
         if (req.caminho.startsWith("/cena/")) return PainelExtras.cena(app, req.metodo, req.caminho.removePrefix("/cena/"), ip).let { json(it.first, it.second) }
         // Recado por link (Home Assistant, formato TvOverlay/PiPup): também de fora, com o token no caminho.
@@ -407,6 +500,15 @@ object PainelWeb {
 
         // Página e arquivos dela: livres (a página de login é ela mesma).
         if (req.metodo == "GET") estatico(req.caminho)?.let { return it }
+        // https na rede de casa (PainelTls): passo a passo, o arquivo para instalar e o estado. Livres como a página:
+        // o certificado é público por natureza e é preciso baixá-lo ANTES de conseguir entrar pelo https.
+        if (req.metodo == "GET") when (req.caminho) {
+            "/certificado" -> return paginaCertificado()
+            "/certificado.crt" -> return arquivoCertificado()
+            "/certificado.css" -> return Resposta(200, "text/css; charset=utf-8",
+                app.assets.open("painel/certificado.css").use { it.readBytes() })
+            "/api/certificado" -> return json(200, PainelTls.estado(ipsDaRede(), ligadoTls()))
+        }
 
         val token = PainelHttp.cookie(req.cabecalho("cookie"), COOKIE)
         when (req.caminho) {
@@ -513,6 +615,7 @@ object PainelWeb {
             "/api/tela/tecla" -> if (req.metodo == "POST") return tecla(req)
             "/api/tela/texto" -> if (req.metodo == "POST") return texto(req, ip)
             "/api/tv/reiniciar" -> if (req.metodo == "POST") return reiniciarTv(token, ip)
+            "/api/certificado/renovar" -> if (req.metodo == "POST") return renovarCertificado(token, ip)
             "/api/recado" -> if (req.metodo == "POST") return recado(req, ip)
             "/api/rede/historico" -> if (req.metodo == "GET")
                 return json(200, HistoricoRede.json(app, req.consulta["horas"]?.toIntOrNull() ?: 24))
@@ -600,6 +703,7 @@ object PainelWeb {
         "/busca.js" to ("busca.js" to "text/javascript; charset=utf-8"),   // busca rápida (Ctrl+K)
         "/arquivos.js" to ("arquivos.js" to "text/javascript; charset=utf-8"),   // prévia e organizar arquivos
         "/controle.js" to ("controle.js" to "text/javascript; charset=utf-8"),   // digitar ao vivo e touchpad
+        "/certificado.js" to ("certificado.js" to "text/javascript; charset=utf-8"),   // cartão "Instalar como app (https)"
         // "Adicionar à tela inicial" no celular: nome, ícone e atalhos (10/11/2026).
         "/manifest.webmanifest" to ("manifest.webmanifest" to "application/manifest+json; charset=utf-8"),
         "/icone-192.png" to ("icone-192.png" to "image/png"),

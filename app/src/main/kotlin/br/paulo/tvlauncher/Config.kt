@@ -107,6 +107,10 @@ object Config {
     // pode dar: "chromecast" e as variações com o domínio da rede.
     // Um nome fora desta lista é recusado (barreira contra "DNS rebinding"). Para outro nome, acrescente aqui.
     val PAINEL_NOMES = setOf("chromecast", "chromecast.lan", "chromecast.local", "chromecast.localdomain", "chromecast.home.arpa")
+    // Painel em https na rede de casa (13/11/2026, PainelTls.kt): os nomes que vão no certificado que a TV gera, na
+    // porta 8443 (https://tv:8443/). O primeiro é o principal (o que o painel mostra). Para outro nome (ex.: "quarto"
+    // na segunda TV), troque aqui e gere o certificado de novo no painel.
+    val PAINEL_NOMES_HTTPS = listOf("tv", "tv.lan", "tv.local")
 
     // --- Servidor MCP (McpServidor.kt): só em 127.0.0.1, alcançado de fora apenas pelo túnel do Tailscale (TunelTailscale.kt).
     const val MCP_PORTA = 8091
