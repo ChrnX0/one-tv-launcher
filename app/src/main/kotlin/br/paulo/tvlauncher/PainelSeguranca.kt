@@ -279,21 +279,29 @@ object ChecagensPainel {
     fun origemPermitida(origem: String?, host: String?): Boolean {
         if (origem == null || host == null) return false
         val o = origem.lowercase(); val h = host.lowercase()
-        // https só na porta do cadeado do Tailscale (o túnel decifra e repassa em http; ver [viaHttps]).
-        return o == "http://$h" || (h.endsWith(":$PORTA_HTTPS") && o == "https://$h")
+        // https só nas portas com cadeado: a do Tailscale (o túnel decifra e repassa em http; ver [viaHttps]) e a de
+        // casa, com o certificado que a TV gera (PainelTls).
+        return o == "http://$h" || ((h.endsWith(":$PORTA_HTTPS") || h.endsWith(":$PORTA_HTTPS_CASA")) && o == "https://$h")
     }
 
     /** Porta em que o túnel (tunel/main.go, opção "rede Tailscale") atende o painel com HTTPS de verdade. */
     const val PORTA_HTTPS = 8443
 
     /**
+     * Porta do https da rede de casa (PainelTls). NÃO é 8443: no Chromecast com Google TV o Chromecast embutido
+     * (com.google.android.apps.mediashell) já escuta 8443 em todas as interfaces (medido na TV em 13/11/2026: o painel
+     * gerou o certificado e o bind deu EADDRINUSE). 8444 estava livre.
+     */
+    const val PORTA_HTTPS_CASA = 8444
+
+    /**
      * O pedido chegou pelo HTTPS do Tailscale? Só vale o nome completo da TV na conta (o certificado é para ele) e a
      * porta [PORTA_HTTPS]. O túnel é quem decifra; aqui a conexão chega em http vinda do próprio IP da TV.
      */
-    fun viaHttps(host: String?, nomesHttps: Set<String>): Boolean {
+    fun viaHttps(host: String?, nomesHttps: Set<String>, porta: Int = PORTA_HTTPS): Boolean {
         if (host.isNullOrEmpty()) return false
         val h = host.lowercase()
-        return h.endsWith(":$PORTA_HTTPS") && h.removeSuffix(":$PORTA_HTTPS") in nomesHttps
+        return h.endsWith(":$porta") && h.removeSuffix(":$porta") in nomesHttps
     }
 
     /**

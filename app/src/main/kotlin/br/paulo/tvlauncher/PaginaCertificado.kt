@@ -30,7 +30,7 @@ object PaginaCertificado {
         val validoAte = estado.optLong("validoAte", 0L).takeIf { it > 0 }
             ?.let { SimpleDateFormat("dd/MM/yyyy", Locale.forLanguageTag("pt-BR")).format(Date(it)) } ?: ""
         val valores = mapOf(
-            "ENDERECO" to estado.optString("endereco", "https://$nome:${estado.optInt("porta", 8443)}/"),
+            "ENDERECO" to estado.optString("endereco", "https://$nome:${estado.optInt("porta", 8444)}/"),
             "ENDERECO_IP" to (if (estado.isNull("enderecoIp")) "" else estado.optString("enderecoIp", "")),
             "IMPRESSAO" to estado.optString("impressao", ""),
             "VALIDO_ATE" to validoAte,

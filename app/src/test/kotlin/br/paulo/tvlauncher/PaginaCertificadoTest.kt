@@ -11,9 +11,9 @@ class PaginaCertificadoTest {
         .map(::File).first { it.isFile }.readText()
 
     private fun pronto(dias: Long = 800, ipNoCert: Boolean = true) = JSONObject()
-        .put("ligado", true).put("pronto", true).put("porta", 8443)
-        .put("endereco", "https://tv:8443/")
-        .put("enderecoIp", if (ipNoCert) "https://192.168.1.50:8443/" else JSONObject.NULL)
+        .put("ligado", true).put("pronto", true).put("porta", 8444)
+        .put("endereco", "https://tv:8444/")
+        .put("enderecoIp", if (ipNoCert) "https://192.168.1.50:8444/" else JSONObject.NULL)
         .put("ipNoCertificado", ipNoCert)
         .put("impressao", "AB:CD").put("validoAte", 1_864_000_000_000L).put("diasRestantes", dias)
 
@@ -25,8 +25,8 @@ class PaginaCertificadoTest {
     @Test fun prontoMostraPassosEEndereco() {
         val h = PaginaCertificado.preencher(modelo, pronto(), "tv")
         semSobras(h)
-        assertTrue(h.contains("href=\"https://tv:8443/\""))
-        assertTrue(h.contains("https://192.168.1.50:8443/"))
+        assertTrue(h.contains("href=\"https://tv:8444/\""))
+        assertTrue(h.contains("https://192.168.1.50:8444/"))
         assertTrue(h.contains("/certificado.crt"))
         assertTrue(h.contains("AB:CD"))
         assertFalse(h.contains("Ainda não está pronto"))
@@ -34,7 +34,7 @@ class PaginaCertificadoTest {
     }
 
     @Test fun naoProntoSoAvisa() {
-        val h = PaginaCertificado.preencher(modelo, JSONObject().put("ligado", false).put("pronto", false).put("porta", 8443), "tv")
+        val h = PaginaCertificado.preencher(modelo, JSONObject().put("ligado", false).put("pronto", false).put("porta", 8444), "tv")
         semSobras(h)
         assertTrue(h.contains("Ainda não está pronto"))
         assertFalse(h.contains("/certificado.crt"))

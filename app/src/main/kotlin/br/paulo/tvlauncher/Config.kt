@@ -109,7 +109,7 @@ object Config {
     // "DNS rebinding"). Esta lista fica para nomes de mais de uma palavra.
     val PAINEL_NOMES = setOf("chromecast", "chromecast.lan", "chromecast.local", "chromecast.localdomain", "chromecast.home.arpa")
     // Painel em https na rede de casa (13/11/2026, PainelTls.kt): os nomes que vão no certificado que a TV gera, na
-    // porta 8443 (https://tv:8443/). O primeiro é o principal (o que o painel mostra). Para outro nome (ex.: "quarto"
+    // porta 8444 (https://tv:8444/; a 8443 é do Chromecast embutido). O primeiro é o principal (o que o painel mostra). Para outro nome (ex.: "quarto"
     // na segunda TV), troque aqui e gere o certificado de novo no painel.
     val PAINEL_NOMES_HTTPS = listOf("tv", "tv.lan", "tv.local")
 

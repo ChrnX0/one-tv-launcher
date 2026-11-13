@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
  * Painel no navegador SERVIDO PELO PRÓPRIO LAUNCHER (04/11/2026), sem PC: em qualquer celular ou computador da casa,
  * abrir http://<IP da TV>:8080/ (ou http://tv:8080/ com o nome cadastrado no roteador), digitar o PIN
  * definido nas Configurações do launcher e administrar a TV. Plano completo: painel-no-launcher.md.
- * Com cadeado (13/11/2026): o mesmo painel em https://tv:8443/, com o certificado que a TV gera (PainelTls.kt).
+ * Com cadeado (13/11/2026): o mesmo painel em https://tv:8444/, com o certificado que a TV gera (PainelTls.kt).
  *
  * Fase 1: entrar com PIN, lista de apps com ícone, ocultar/reexibir, desinstalar e backup (baixar/restaurar).
  * Fase 2: permissões de cada app, instalar APK e a aba Arquivos (memória interna: listar, enviar, baixar, apagar).
@@ -219,12 +219,12 @@ object PainelWeb {
         return json(200, PainelTls.estado(ipsDaRede(), true))
     }
 
-    /** Nomes aceitos no Host da porta https: os do certificado e os IPs da TV (sempre com :8443). */
+    /** Nomes aceitos no Host da porta https: os do certificado e os IPs da TV (sempre com :8444). */
     private fun nomesTls(): Set<String> = PainelTls.nomes().toSet() + ipsDaRede()
 
     /** O Host vale para a porta por onde o pedido chegou? */
     private fun hostOk(host: String?, https: Boolean): Boolean =
-        if (https) ChecagensPainel.viaHttps(host, nomesTls())
+        if (https) ChecagensPainel.viaHttps(host, nomesTls(), PainelTls.PORTA)
         else ChecagensPainel.hostPermitido(host, nomesPermitidos(), Config.PAINEL_PORTA) || ChecagensPainel.viaHttps(host, nomesHttps())
 
     /** Página do passo a passo (assets/painel/certificado.html), com os dados do certificado já preenchidos. */

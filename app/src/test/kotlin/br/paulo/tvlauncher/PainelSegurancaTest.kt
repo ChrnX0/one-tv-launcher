@@ -214,15 +214,19 @@ class PainelSegurancaTest {
     /** A porta https da rede de casa (PainelTls, 13/11/2026) usa a mesma regra, com os nomes do certificado + IPs. */
     @Test fun httpsDeCasaSoComNomesDoCertificado() {
         val tls = setOf("tv", "tv.lan", "tv.local", "192.168.1.50")
-        assertTrue(ChecagensPainel.viaHttps("tv:8443", tls))
-        assertTrue(ChecagensPainel.viaHttps("TV.LAN:8443", tls))
-        assertTrue(ChecagensPainel.viaHttps("192.168.1.50:8443", tls))
-        assertFalse(ChecagensPainel.viaHttps("tv", tls))                 // sem porta: não é o nosso https
-        assertFalse(ChecagensPainel.viaHttps("tv:8080", tls))
-        assertFalse(ChecagensPainel.viaHttps("sala:8443", tls))          // nome fora do certificado
-        assertFalse(ChecagensPainel.viaHttps("tv.evil.example:8443", tls))
-        assertTrue(ChecagensPainel.origemPermitida("https://tv:8443", "tv:8443"))
-        assertFalse(ChecagensPainel.origemPermitida("https://evil.example", "tv:8443"))
+        val p = ChecagensPainel.PORTA_HTTPS_CASA
+        assertTrue(p != ChecagensPainel.PORTA_HTTPS)                     // 8443 é do Chromecast embutido na TV
+        assertTrue(ChecagensPainel.viaHttps("tv:$p", tls, p))
+        assertTrue(ChecagensPainel.viaHttps("TV.LAN:$p", tls, p))
+        assertTrue(ChecagensPainel.viaHttps("192.168.1.50:$p", tls, p))
+        assertFalse(ChecagensPainel.viaHttps("tv:8443", tls, p))         // a porta do Tailscale não vale aqui
+        assertFalse(ChecagensPainel.viaHttps("tv", tls, p))
+        assertFalse(ChecagensPainel.viaHttps("tv:8080", tls, p))
+        assertFalse(ChecagensPainel.viaHttps("sala:$p", tls, p))         // nome fora do certificado
+        assertFalse(ChecagensPainel.viaHttps("tv.evil.example:$p", tls, p))
+        assertTrue(ChecagensPainel.origemPermitida("https://tv:$p", "tv:$p"))
+        assertFalse(ChecagensPainel.origemPermitida("https://evil.example", "tv:$p"))
+        assertFalse(ChecagensPainel.origemPermitida("https://tv:$p", "tv:8080"))
     }
 
     @Test fun origemHttpsSoNaPorta8443() {

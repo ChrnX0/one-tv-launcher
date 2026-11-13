@@ -72,7 +72,7 @@ function deB64url(s) {
 $('btnAvisosInscrever').addEventListener('click', async () => {
   const st = $('statusAvisos');
   if (!window.isSecureContext || !('serviceWorker' in navigator) || !('PushManager' in window)) {
-    mostrar(st, 'Este navegador não recebe avisos por aqui. Abra o painel com cadeado (https, porta 8443) no Chrome do celular: veja Extras, "Instalar como app".');
+    mostrar(st, 'Este navegador não recebe avisos por aqui. Abra o painel com cadeado (https, porta 8444) no Chrome do celular: veja Extras, "Instalar como app".');
     return;
   }
   if (!chaveVapid) { mostrar(st, 'A TV não criou a chave dos avisos. Tente de novo.'); return; }
