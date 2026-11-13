@@ -498,7 +498,7 @@ class SeriesActivity : Activity() {
         val s = aberta ?: return
         val f = fichaAberta
         painel.removeAllViews()
-        val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(48), dp(34), dp(48), dp(24)) }
+        val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(48), dp(28), dp(48), dp(20)) }   // 34/24 -> 28/20: sobra altura para os episódios com a letra maior
         val capa = ImageView(this).apply {
             scaleType = ImageView.ScaleType.CENTER_CROP
             background = GradientDrawable().apply { cornerRadius = dp(12).toFloat(); setColor(Estilo.BORDA) }; clipToOutline = true
@@ -506,7 +506,7 @@ class SeriesActivity : Activity() {
         PlayerLogos.carregar(this, s.capa, capa, lado = 600)
         linha.addView(capa, LinearLayout.LayoutParams(dp(180), dp(270)))
         val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(28), 0, 0, 0) }
-        col.addView(TextView(this).apply { text = Vod.nomeLimpo(s.nome); textSize = 26f; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END })
+        col.addView(TextView(this).apply { text = Vod.nomeLimpo(s.nome); textSize = Estilo.Ficha.TITULO; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END })
         val dados = listOfNotNull(s.ano?.toString(), f?.temporadas?.size?.let { resources.getQuantityString(R.plurals.series_temporadas, it, it) },
             s.nota?.let { "★ %.1f".format(Locale.getDefault(), it) }, f?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(s.grupo).ifEmpty { null },
             when (Idioma.versao(s.nome, s.grupo)) {
@@ -514,15 +514,15 @@ class SeriesActivity : Activity() {
                 Idioma.Versao.DUBLADA -> getString(R.string.idioma_dublado_curto)
                 Idioma.Versao.DESCONHECIDA -> null
             }).joinToString("   ·   ")
-        col.addView(TextView(this).apply { text = dados; textSize = 13.5f; setTextColor(suave); setPadding(0, dp(6), 0, 0) })
+        col.addView(TextView(this).apply { text = dados; textSize = Estilo.Ficha.DADOS; setTextColor(suave); setPadding(0, dp(8), 0, 0) })
         f?.sinopse?.takeIf { it.isNotEmpty() }?.let {
-            col.addView(TextView(this).apply { text = it; textSize = 13.5f; setTextColor(papel); maxLines = 3; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(8), 0, 0) })
+            col.addView(TextView(this).apply { text = it; textSize = Estilo.Ficha.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.15f); maxLines = 3; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(8), 0, 0) })
         }
 
         if (f == null) {
-            col.addView(TextView(this).apply { text = getString(R.string.filmes_ficha_carregando); textSize = 13f; setTextColor(apagado); setPadding(0, dp(14), 0, 0) })
+            col.addView(TextView(this).apply { text = getString(R.string.filmes_ficha_carregando); textSize = Estilo.Ficha.AVISO; setTextColor(apagado); setPadding(0, dp(14), 0, 0) })
         } else if (f.temporadas.isEmpty()) {
-            col.addView(TextView(this).apply { text = getString(R.string.series_sem_episodios); textSize = 14f; setTextColor(suave); setPadding(0, dp(14), 0, 0) })
+            col.addView(TextView(this).apply { text = getString(R.string.series_sem_episodios); textSize = Estilo.Ficha.AVISO; setTextColor(suave); setPadding(0, dp(14), 0, 0) })
         } else {
             // Botão principal.
             val sugestao = Series.sugestao(f, s.fonteId, ultimos[s.chave], posicoes)
@@ -602,14 +602,14 @@ class SeriesActivity : Activity() {
         val v = (reuso as? LinearLayout) ?: LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL; setPadding(dp(12), dp(8), dp(12), dp(8))
             val topo = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
-            topo.addView(TextView(context).apply { textSize = 14f; typeface = Fontes.manrope(600); setTextColor(ambar) }, LinearLayout.LayoutParams(dp(40), -2))
-            topo.addView(TextView(context).apply { textSize = 14f; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }, LinearLayout.LayoutParams(0, -2, 1f))
-            topo.addView(TextView(context).apply { textSize = 12f; setTextColor(apagado) })
+            topo.addView(TextView(context).apply { textSize = Estilo.Ficha.EPISODIO; typeface = Fontes.manrope(600); setTextColor(ambar) }, LinearLayout.LayoutParams(dp(48), -2))
+            topo.addView(TextView(context).apply { textSize = Estilo.Ficha.EPISODIO; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }, LinearLayout.LayoutParams(0, -2, 1f))
+            topo.addView(TextView(context).apply { textSize = Estilo.Ficha.EPISODIO_DETALHE; setTextColor(apagado) })
             addView(topo)
-            addView(TextView(context).apply { textSize = 12f; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPadding(dp(40), dp(2), 0, 0) })
+            addView(TextView(context).apply { textSize = Estilo.Ficha.EPISODIO_DETALHE; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPadding(dp(48), dp(3), 0, 0) })
             addView(ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal).apply {
                 max = 1000; progressTintList = ColorStateList.valueOf(coral); progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA)
-            }, LinearLayout.LayoutParams(-1, dp(3)).apply { topMargin = dp(5); marginStart = dp(40) })
+            }, LinearLayout.LayoutParams(-1, dp(3)).apply { topMargin = dp(6); marginStart = dp(48) })
         }
         val topo = v.getChildAt(0) as LinearLayout
         (topo.getChildAt(0) as TextView).text = ep.numero.toString()
@@ -676,8 +676,8 @@ class SeriesActivity : Activity() {
     // ---------------------------------------------------------------- peças
 
     private fun botao(texto: String, pequeno: Boolean = false, marcado: Boolean = false, aoApertar: () -> Unit) = TextView(this).apply {
-        text = texto; textSize = if (pequeno) 13.5f else 16f; typeface = fonteMedia
-        setPadding(dp(if (pequeno) 16 else 22), dp(if (pequeno) 7 else 11), dp(if (pequeno) 16 else 22), dp(if (pequeno) 7 else 11))
+        text = texto; textSize = if (pequeno) Estilo.Ficha.BOTAO_PEQUENO else Estilo.Ficha.BOTAO; typeface = fonteMedia
+        setPadding(dp(if (pequeno) 18 else 26), dp(if (pequeno) 8 else 12), dp(if (pequeno) 18 else 26), dp(if (pequeno) 8 else 12))
         isFocusable = true; isClickable = true
         background = StateListDrawable().apply {
             addState(intArrayOf(android.R.attr.state_focused), GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(papel) })

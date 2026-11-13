@@ -78,6 +78,23 @@ object Estilo {
 
     fun fonte(peso: Int): Typeface = Fontes.manrope(peso)
 
+    /**
+     * Ficha de filme e de série (13/11/2026: letra maior para ler a 3 m). É tela de LER, a 3 m do sofá, então fica
+     * um degrau acima de [Papel.CORPO]/[Papel.LEGENDA]: ~+15% no título e +20-30% no texto corrido. As duas fichas usam
+     * estes mesmos números para continuarem iguais entre si.
+     */
+    object Ficha {
+        const val TITULO = 32f          // era 28 (filme) / 26 (série)
+        const val DADOS = 17f           // ano · duração · nota · gênero; era 14 / 13,5
+        const val SINOPSE = 18f         // era 15 / 13,5
+        const val CREDITOS = 16f        // Direção, Elenco; era 13
+        const val AVISO = 15f           // "carregando…", "sem episódios"; era 13 / 14
+        const val BOTAO = 18f           // Assistir, Trailer…; era 16
+        const val BOTAO_PEQUENO = 16f   // temporadas; era 13,5
+        const val EPISODIO = 17f        // número e nome do episódio; era 14
+        const val EPISODIO_DETALHE = 15f // sinopse e duração do episódio; era 12
+    }
+
     // ------------------------------------------------------------------ forma, espaço, movimento
 
     /** Só 3 raios: chip pequeno, card/painel e pílula (botão, foco de lista, avisos). */
