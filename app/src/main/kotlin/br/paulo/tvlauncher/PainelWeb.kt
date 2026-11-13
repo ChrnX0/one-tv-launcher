@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
 
 /**
  * Painel no navegador SERVIDO PELO PRÓPRIO LAUNCHER (04/11/2026), sem PC: em qualquer celular ou computador da casa,
- * abrir http://<IP da TV>:8080/ (ou http://chromecast:8080/ com o nome cadastrado no roteador), digitar o PIN
+ * abrir http://<IP da TV>:8080/ (ou http://tv:8080/ com o nome cadastrado no roteador), digitar o PIN
  * definido nas Configurações do launcher e administrar a TV. Plano completo: painel-no-launcher.md.
  *
  * Fase 1: entrar com PIN, lista de apps com ícone, ocultar/reexibir, desinstalar e backup (baixar/restaurar).
