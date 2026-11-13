@@ -57,7 +57,7 @@ closed action catalog, e.g. `{"acoes":[{"tipo":"abrir_tela","tela":"previsao"}]}
 - Panel: `PainelWeb.kt` on port 8080 (ports < 1024 are not allowed for apps). Pure logic with JVM tests in
   `PainelHttp.kt` / `PainelSeguranca.kt`. LAN only, Host/Origin checks, `X-Painel: 1` on POST, HttpOnly SameSite=Strict
   cookie, PBKDF2 PIN, growing lockout; destructive actions ask for the PIN again. Frontend in `assets/painel/`.
-- HTTPS at home (for installing the panel as a PWA): same panel also on port 8443 with a certificate the TV generates on
+- HTTPS at home (for installing the panel as a PWA): same panel also on port 8444 (8443 is taken by the built-in Chromecast, `mediashell`) with a certificate the TV generates on
   first use (`PainelTls.kt` + `CertificadoX509.kt`, SAN `tv`, `tv.lan`, `tv.local` + the TV's IP, names in
   `Config.PAINEL_NOMES_HTTPS`). The CA key is discarded right after signing (renewing = new CA, devices reinstall);
   the server key is AES-GCM-wrapped by an Android Keystore key in `noBackupFilesDir/painel-tls`. Step-by-step page:

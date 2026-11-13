@@ -17,7 +17,7 @@ import javax.crypto.spec.GCMParameterSpec
 import javax.net.ssl.SSLContext
 
 /**
- * O certificado do painel em https na rede de casa (13/11/2026): https://tv:8443/, para instalar o painel como app
+ * O certificado do painel em https na rede de casa (13/11/2026): https://tv:8444/, para instalar o painel como app
  * (PWA) no celular e no PC. O certificado é feito pela própria TV no primeiro uso ([CertificadoX509.emitir]); nada
  * disso existe no repositório.
  *
@@ -27,12 +27,12 @@ import javax.net.ssl.SSLContext
  *  - A chave da CA não existe mais depois de emitir (ver CertificadoX509): ninguém consegue assinar outro certificado.
  *
  * Renovar (botão no painel, com PIN, ou sozinho quando vence): CA nova, e cada aparelho instala o arquivo de novo.
- * Se o IP da TV mudar, https://tv:8443 continua funcionando (o nome não muda); só o endereço por IP pede renovar.
+ * Se o IP da TV mudar, https://tv:8444 continua funcionando (o nome não muda); só o endereço por IP pede renovar.
  */
 object PainelTls {
     private const val TAG = "TvLauncher.PainelTls"
     private const val APELIDO = "painel_tls_cofre"
-    const val PORTA = ChecagensPainel.PORTA_HTTPS
+    const val PORTA = ChecagensPainel.PORTA_HTTPS_CASA
 
     @Volatile private var atual: CertificadoX509.Emissao? = null
 
