@@ -524,13 +524,9 @@ class PainelRapidoActivity : Activity() {
             mostrarVisita()
         }
         mostrarVisita()
-        // Google Home (Paulo, 13/11/2026: "pq consigo acessar o Google Home do launcherx e do nosso não?"): a tela da casa
-        // mora dentro do painel do Google; Home.abrirGoogleHome abre o painel e toca no tile dele.
-        val casa = tile("casa", getString(R.string.pr_google_home)) {
-            val app = applicationContext
-            finish()
-            ui.postDelayed({ Home.abrirGoogleHome(app) }, 200)
-        }
+        // Casa (Paulo, 13/11/2026): as luzes e cenas do Home Assistant (CasaActivity), no lugar do "Google Home" do painel
+        // do Google (a tela da casa do Google não tem intent público; ver Home.abrirGoogleHome).
+        val casa = tile("casa", getString(R.string.pr_casa)) { abrirEFechar(Intent(this, CasaActivity::class.java)) }
         val grade = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false }
         val pares = listOf(tWifi to tBluetooth, tTimer to dormir, protetor to tAudio, tDespertador to tVisita)
         for ((i, par) in pares.withIndex()) {
@@ -541,8 +537,8 @@ class PainelRapidoActivity : Activity() {
                 addView(par.second.casca, LinearLayout.LayoutParams(0, dp(TILE_DP), 1f).apply { marginStart = dp(Estilo.E1) })
             }, LinearLayout.LayoutParams(-1, -2).apply { if (i > 0) topMargin = dp(Estilo.E1) })
         }
-        // Só com o launcherx ativo (é ele que tem a tela da casa). Linha inteira: a grade tinha 4 pares fechados.
-        if (Home.launcherxAtivo(this)) {
+        // Só com o Home Assistant configurado (painel > Extras > Casa). Linha inteira: a grade tinha 4 pares fechados.
+        if (CasaHA.configurado(this)) {
             grade.addView(casa.casca, LinearLayout.LayoutParams(-1, dp(TILE_DP)).apply { topMargin = dp(Estilo.E1) })
         }
         return grade
