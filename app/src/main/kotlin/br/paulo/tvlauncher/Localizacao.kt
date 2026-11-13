@@ -30,7 +30,8 @@ object Localizacao {
             ?: LocalClima.ler(ctx)?.let { Ponto(it.lat, it.lon, "endereço cadastrado", it.nome) }
             ?: porIp(httpGet)
             ?: ultimo(ctx)
-        Log.i("TvLauncher.Local", ponto?.let { "${it.lat},${it.lon} (${it.fonte})" } ?: "sem localização")
+        // Só a fonte, nunca as coordenadas (13/11/2026): o logcat vai para relatórios de bug e o produto é público.
+        Log.i("TvLauncher.Local", ponto?.let { "localização pela fonte: ${it.fonte.substringBefore(" (")}" } ?: "sem localização")
         return ponto
     }
 
