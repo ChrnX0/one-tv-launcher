@@ -13,6 +13,6 @@
 
 ## Checklist
 
-- [ ] New user-facing text is in both `values/strings.xml` and `values-en/strings.xml`
+- [ ] New user-facing text is in both `values/` (English, default) and `values-pt/` (Portuguese)
 - [ ] No secrets, IPs, personal names or account data in code, comments or screenshots
 - [ ] New permissions or privileged actions are explained above
