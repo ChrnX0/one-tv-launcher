@@ -72,7 +72,7 @@ function erroAmigavel(status, texto) {
     return 'A TV não conseguiu fazer isso agora. Tente de novo em alguns segundos; se repetir, veja a aba Registro.';
   if (status === 404 && (!t || t === 'não existe')) return 'Isso não existe mais na TV (talvez já tenha sido apagado).';
   if (/JSON inválido|use POST|método não suportado/i.test(t)) return 'O painel mandou um pedido que a TV não entendeu. Recarregue a página e tente de novo.';
-  if (status === 421) return 'Abra o painel pelo endereço de sempre (o IP da TV ou chromecast:8080).';
+  if (status === 421) return 'Abra o painel pelo endereço de sempre (o IP da TV ou tv:8080).';
   if (!t) return status === 0 ? 'Sem resposta da TV.' : `A TV recusou o pedido (código ${status}).`;
   return t.charAt(0).toUpperCase() + t.slice(1);
 }
