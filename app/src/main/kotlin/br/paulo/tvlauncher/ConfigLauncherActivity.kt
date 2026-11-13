@@ -304,6 +304,11 @@ class ConfigLauncherActivity : Activity() {
             pedirContaLegenda { tem -> linhaLeg.valor(getString(if (tem) R.string.legenda_conta_sim else R.string.legenda_conta_nao)) }
         }
         c.addView(linhaLeg)
+        // Foto da conta Google na bolinha do perfil (FotoPerfil, 13/11/2026): abre a tela do código para o celular.
+        secao(c, getString(R.string.fp_secao))
+        c.addView(linha(getString(R.string.fp_linha), getString(R.string.fp_linha_det), seta = true) {
+            startActivity(Intent(this, FotoPerfilActivity::class.java))
+        }, lp())
         leitura.execute {
             val p = IdiomaPlayer.prefs(this).padrao
             val tem = LegendaBaixar.temConta(this)

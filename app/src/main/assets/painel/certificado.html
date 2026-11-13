@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Instalar o painel como app</title>
+<meta name="theme-color" content="#0e1015">
+<link rel="icon" type="image/png" href="/icone-192.png">
+<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/certificado.css">
+</head>
+<body>
+<!-- Passo a passo do https (PainelTls.kt). Preenchida no servidor por PaginaCertificado.kt: sem script. -->
+<main class="pagina-cert">
+  <h1>Instalar o painel como app</h1>
+  <p class="aviso">Para virar app no celular ou no PC, o painel precisa abrir com cadeado (https). A TV fez um certificado
+    só dela; cada aparelho instala esse certificado uma vez.</p>
+
+<!--se:naopronto-->
+  <div class="cartao">
+    <h2>Ainda não está pronto</h2>
+    <p class="aviso">A TV gera o certificado sozinha logo depois de ligar o painel. Recarregue esta página em 1 minuto.</p>
+  </div>
+<!--fim:naopronto-->
+
+<!--se:pronto-->
+  <div class="cartao">
+    <h2>1. Baixe o certificado</h2>
+    <p><a class="botao-primario" href="/certificado.crt" download="one-tv-painel.crt">Baixar certificado</a></p>
+    <p class="aviso">Confira a impressão digital. Ela também aparece no painel aberto em outro aparelho:</p>
+    <p class="impressao">{{IMPRESSAO}}</p>
+    <p class="aviso">Válido até {{VALIDO_ATE}}.</p>
+<!--se:vencendo-->
+    <p class="alerta">Faltam {{DIAS}} dias para vencer. Gere um novo no painel (Extras, cartão "Instalar como app") e instale de novo.</p>
+<!--fim:vencendo-->
+  </div>
+
+  <div class="cartao">
+    <h2>2. Instale no aparelho</h2>
+    <h3>Android (Chrome)</h3>
+    <ol>
+      <li>Abra as <b>Configurações</b> do celular e procure por <b>certificado</b>.</li>
+      <li>Toque em <b>Instalar um certificado</b> e depois em <b>Certificado de CA</b> (aparece um aviso: toque em <b>Instalar mesmo assim</b>).</li>
+      <li>Escolha o arquivo <b>one-tv-painel.crt</b> na pasta Downloads e confirme com o bloqueio de tela.</li>
+    </ol>
+    <h3>Windows (Chrome ou Edge)</h3>
+    <ol>
+      <li>Dê dois cliques no arquivo baixado e clique em <b>Instalar Certificado</b>.</li>
+      <li>Escolha <b>Usuário Atual</b>, depois <b>Colocar todos os certificados no repositório a seguir</b>, <b>Procurar</b> e
+        <b>Autoridades de Certificação Raiz Confiáveis</b>.</li>
+      <li>Avance, clique em <b>Concluir</b> e em <b>Sim</b> no aviso. Feche e abra o navegador.</li>
+    </ol>
+    <h3>iPhone ou iPad (Safari)</h3>
+    <ol>
+      <li>Baixe pelo Safari e permita. Em <b>Ajustes</b>, toque em <b>Perfil Baixado</b> e em <b>Instalar</b>.</li>
+      <li>Em <b>Ajustes &gt; Geral &gt; Sobre &gt; Ajustes de Confiança de Certificados</b>, ligue o certificado <b>One TV</b>.</li>
+    </ol>
+    <h3>Mac</h3>
+    <ol>
+      <li>Abra o arquivo (vai para o <b>Acesso às Chaves</b>), dê dois cliques no certificado <b>One TV</b> e, em
+        <b>Confiança</b>, escolha <b>Sempre Confiar</b>.</li>
+    </ol>
+  </div>
+
+  <div class="cartao">
+    <h2>3. Abra com cadeado e instale o app</h2>
+    <p><a class="botao-primario" href="{{ENDERECO}}">{{ENDERECO}}</a></p>
+<!--se:comip-->
+    <p class="aviso">Se o nome <b>{{NOME}}</b> não abrir, o roteador não conhece esse nome: use <a href="{{ENDERECO_IP}}">{{ENDERECO_IP}}</a>.</p>
+<!--fim:comip-->
+    <p class="aviso">Entre com o PIN. No Chrome do celular: menu <b>⋮</b> e <b>Instalar app</b>. No PC: ícone de instalar na
+      barra de endereço. No iPhone: <b>Compartilhar</b> e <b>Adicionar à Tela de Início</b>.</p>
+  </div>
+<!--fim:pronto-->
+
+  <div class="cartao">
+    <h2>É seguro?</h2>
+    <p class="aviso">O certificado só vale para os nomes da TV ({{NOME}}) e o IP dela na sua rede. A TV jogou fora a chave que
+      assina certificados logo depois de fazer este, então ele não serve para nenhum outro site. O painel em https só
+      responde na rede de casa, com o mesmo PIN.</p>
+    <p class="aviso">Se a TV gerar um certificado novo, instale o novo e apague o antigo do aparelho.</p>
+  </div>
+  <p><a href="/">Voltar ao painel</a></p>
+</main>
+</body>
+</html>

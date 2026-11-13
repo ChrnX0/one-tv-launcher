@@ -73,6 +73,7 @@ function minutosLegiveis(m) {
 
 async function carregarInicio() {
   $('inicioNaTela').textContent = (ultimoEstado && ultimoEstado.naTela) || '…';
+  miniaturaInicio();
 
   // Saúde: só os números rápidos (a lista de memória fica na aba Saúde).
   chamar('GET', '/api/saude?rapido=1')
@@ -167,3 +168,28 @@ setInterval(() => {
   if (!$('abaInicio').hidden) carregarInicio();
   else if (!$('abaSaude').hidden) chamar('GET', '/api/saude?rapido=1').then((s) => desenharNumeros(s)).catch(() => {});
 }, 20000);
+
+// Miniatura da tela da TV no cartão "Agora na TV" (13/11/2026): uma foto só, ao abrir o Início (a aba Controle é que
+// atualiza a cada 2 s). TV em espera ou foto que falhou: o cartão fica só com o nome, sem ícone quebrado.
+let miniaturaUrl = null;
+async function miniaturaInicio() {
+  const img = $('inicioMiniatura');
+  if (!img) return;
+  if (ultimoEstado && ultimoEstado.naTela === 'em espera') { img.hidden = true; return; }
+  try {
+    const r = await fetch('/api/tela/foto', { credentials: 'same-origin', cache: 'no-store' });
+    if (!r.ok) throw new Error(String(r.status));
+    const url = URL.createObjectURL(await r.blob());
+    img.onload = () => { img.hidden = false; };
+    img.onerror = () => { img.hidden = true; };
+    img.src = url;
+    if (miniaturaUrl) URL.revokeObjectURL(miniaturaUrl);
+    miniaturaUrl = url;
+  } catch (_) { img.hidden = true; }
+}
+
+// App instalável (PWA): o navegador só instala com o service worker registrado, e ele só existe em https
+// (contexto seguro). Em http (http://tv:8080) nada acontece: lá vira só um atalho do navegador.
+if (window.isSecureContext && 'serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {});
+}

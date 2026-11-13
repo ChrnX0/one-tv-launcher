@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0f17">
+<title>One TV</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Mostrada pelo service worker (sw.js) quando o app instalado abre e a TV não responde (desligada, fora da rede
+       ou o Tailscale do celular desligado). Sem script: a CSP do painel proíbe script inline. -->
+  <section class="entrar">
+    <div class="cartao-entrar">
+      <img class="logo-entrar" src="icone-192.png" alt="" width="64" height="64">
+      <h1>A TV não respondeu</h1>
+      <p class="aviso">Confira se a TV está ligada na tomada e na mesma rede que este aparelho. Fora de casa, o Tailscale
+        precisa estar ligado.</p>
+      <a class="botao-primario" href="/">Tentar de novo</a>
+    </div>
+  </section>
+</body>
+</html>

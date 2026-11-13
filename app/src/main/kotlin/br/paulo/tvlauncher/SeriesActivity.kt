@@ -428,13 +428,13 @@ class SeriesActivity : Activity() {
             c.nome.text = Vod.nomeLimpo(s.nome)
             c.sub.text = ultimos[s.chave]?.let { "T${it.temporada}E${it.numero}" }.orEmpty()
             c.sub.visibility = if (c.sub.text.isEmpty()) View.GONE else View.VISIBLE
-            // Mesma etiqueta dos filmes: "% dos episódios vistos" ou "Finalizado". Sem conta ainda (ficha nunca aberta
+            // Etiqueta: "20 de 62" episódios vistos (sem número de %) ou "Finalizado". Sem conta ainda (ficha nunca aberta
             // depois desta versão) mas com episódio visto: "Assistido".
             val pct = Series.percentual(s, progresso[s.chave])
             val visto = pct != null || ultimos[s.chave]?.let { Vod.assistido(posicoes["${s.fonteId}:e${it.episodioId}"]) } == true
             if (!visto) c.etiqueta.visibility = View.GONE else {
                 c.etiqueta.visibility = View.VISIBLE
-                c.etiqueta.text = when (pct) { 100 -> getString(R.string.filmes_finalizado); null -> getString(R.string.filmes_assistido); else -> "$pct%" }
+                c.etiqueta.text = when (pct) { 100 -> getString(R.string.filmes_finalizado); null -> getString(R.string.filmes_assistido); else -> progresso[s.chave]?.let { getString(R.string.tempo_x_de_y, it.vistos, it.total) } ?: getString(R.string.filmes_assistido) }
                 (c.etiqueta.background as GradientDrawable).setColor(if (pct == 100) verdeEtiqueta else 0xD90B0F17.toInt())
             }
             // Barra embaixo do pôster, como a dos filmes (13/11/2026): episódios vistos / total. Só enquanto a série está

@@ -460,11 +460,12 @@ class FilmesActivity : Activity() {
             if (Vod.deveRetomar(pos) && pos!!.duracao > 0) {
                 c.barra.visibility = View.VISIBLE; c.barra.fracao = BarraTempo.fracao(pos.ms, pos.duracao)
             } else c.barra.visibility = View.GONE
-            // Etiqueta do quanto foi visto: "42%", "Finalizado" (95% ou mais) ou "Assistido" (servidor sem duração).
+            // Etiqueta: "faltam 1 h 04" (a barra já dá a proporção; sem número de %), "Finalizado" (95% ou mais) ou
+            // "Assistido" (servidor sem duração).
             val pct = Vod.progresso(pos)
             if (pct == null) c.etiqueta.visibility = View.GONE else {
                 c.etiqueta.visibility = View.VISIBLE
-                c.etiqueta.text = when (pct) { 100 -> getString(R.string.filmes_finalizado); 0 -> getString(R.string.filmes_assistido); else -> "$pct%" }
+                c.etiqueta.text = when (pct) { 100 -> getString(R.string.filmes_finalizado); 0 -> getString(R.string.filmes_assistido); else -> getString(R.string.tempo_faltam, BarraTempo.duracao(pos!!.duracao - pos.ms)) }
                 (c.etiqueta.background as GradientDrawable).setColor(if (pct == 100) verdeEtiqueta else 0xD90B0F17.toInt())
             }
             c.estrela.visibility = if (f.chave in interesses) View.VISIBLE else View.GONE
@@ -510,9 +511,8 @@ class FilmesActivity : Activity() {
     private fun mostrarFocado(f: Filme?) {
         if (f == null && chave == INTERESSES) { focado.text = getString(R.string.filmes_interesses_vazio); return }
         focado.text = f?.let {
-            val pos = posicoes[it.chave]?.takeIf { p -> p.duracao > 0 && p.ms > 0 }
+            val pos = posicoes[it.chave]?.takeIf { p -> p.duracao > 0 }
             Estilo.infoFoco(Vod.nomeLimpo(it.nome), it.nota, listOfNotNull(it.ano?.toString(), PlayerLista.nomeExibido(it.grupo).ifEmpty { null },
-                pos?.let { p -> getString(R.string.vod_parou_em, (p.ms * 100 / p.duracao).toInt().coerceIn(1, 99)) },
                 pos?.takeIf { p -> Vod.deveRetomar(p) }?.let { p -> getString(R.string.tempo_faltam, BarraTempo.duracao(p.duracao - p.ms)) }))
         } ?: ""
     }

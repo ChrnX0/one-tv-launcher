@@ -165,6 +165,20 @@ class PainelSegurancaTest {
         assertTrue(ChecagensPainel.hostPermitido("Chromecast:8080", nomes, 8080))
     }
 
+    @Test fun hostAceitaNomeDeUmaPalavraDaRedeLocal() {
+        assertTrue(ChecagensPainel.hostPermitido("tv:8080", nomes, 8080))
+        assertTrue(ChecagensPainel.hostPermitido("Quarto:8080", nomes, 8080))
+        assertTrue(ChecagensPainel.hostPermitido("sala-de-estar.lan:8080", nomes, 8080))
+        assertTrue(ChecagensPainel.hostPermitido("tv.home.arpa", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("tv.evil.example:8080", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("evil.com:8080", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("a.b.lan:8080", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("localhost:8080", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("-tv:8080", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("tv:8081", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido(".lan:8080", nomes, 8080))
+    }
+
     @Test fun hostRecusaRebindingEPortaErrada() {
         assertFalse(ChecagensPainel.hostPermitido("evil.example:8080", nomes, 8080))
         assertFalse(ChecagensPainel.hostPermitido("chromecast.evil.example:8080", nomes, 8080))
@@ -195,6 +209,20 @@ class PainelSegurancaTest {
         assertFalse(ChecagensPainel.viaHttps("evil.example:8443", ts))
         assertFalse(ChecagensPainel.viaHttps("onetv-sala.tail1234.ts.net:8443", emptySet()))   // rede Tailscale desligada
         assertFalse(ChecagensPainel.viaHttps(null, ts))
+    }
+
+    /** A porta https da rede de casa (PainelTls, 13/11/2026) usa a mesma regra, com os nomes do certificado + IPs. */
+    @Test fun httpsDeCasaSoComNomesDoCertificado() {
+        val tls = setOf("tv", "tv.lan", "tv.local", "192.168.1.50")
+        assertTrue(ChecagensPainel.viaHttps("tv:8443", tls))
+        assertTrue(ChecagensPainel.viaHttps("TV.LAN:8443", tls))
+        assertTrue(ChecagensPainel.viaHttps("192.168.1.50:8443", tls))
+        assertFalse(ChecagensPainel.viaHttps("tv", tls))                 // sem porta: não é o nosso https
+        assertFalse(ChecagensPainel.viaHttps("tv:8080", tls))
+        assertFalse(ChecagensPainel.viaHttps("sala:8443", tls))          // nome fora do certificado
+        assertFalse(ChecagensPainel.viaHttps("tv.evil.example:8443", tls))
+        assertTrue(ChecagensPainel.origemPermitida("https://tv:8443", "tv:8443"))
+        assertFalse(ChecagensPainel.origemPermitida("https://evil.example", "tv:8443"))
     }
 
     @Test fun origemHttpsSoNaPorta8443() {

@@ -1,0 +1,9 @@
+/* Página do passo a passo do https (certificado.html): coluna de leitura, por cima das cores do style.css. */
+.pagina-cert { max-width: 680px; margin: 0 auto; padding: 24px 16px 48px; }
+.pagina-cert h1 { margin: 8px 0 4px; }
+.pagina-cert h3 { margin: 16px 0 4px; font-size: 16px; }
+.pagina-cert ol { margin: 4px 0 8px; padding-left: 22px; line-height: 1.5; }
+.pagina-cert li { margin: 4px 0; }
+.pagina-cert .botao-primario { display: inline-block; text-decoration: none; }
+.pagina-cert .impressao { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; word-break: break-all; }
+.pagina-cert .alerta { color: var(--perigo, #ff6b6b); }
