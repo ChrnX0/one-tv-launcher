@@ -42,6 +42,7 @@ object BackupCompleto {
         "backup_noturno",   // a senha do próprio cofre (cifrada pelo Keystore: não abre em outra instalação); redefinir na TV
         "saude_acesso", "manutencao",   // estado passageiro da saúde (SaudeAcesso) e o relatório da última noite
         "trava_relogio",   // como a hora automática estava ANTES da trava: vale só para este aparelho (ver TravaRelogio.kt)
+        "foto_perfil",   // só marca "esta foto foi enviada à mão" (FotoPerfil); a foto em si não vai no backup e a chave leva o e-mail
         // Ideias de 12/11/2026. "avisos_celular": as inscrições valem só com a chave VAPID do Keystore desta instalação
         // (inscrever de novo pelo painel). "desempenho" é medida por versão; "retrospectiva" se refaz no domingo; "presenca"
         // e "ideias_12_11" são estado passageiro. A escolha dos celulares, o Meu time e o mural moram em "extras", que vai.
