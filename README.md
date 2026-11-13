@@ -188,6 +188,11 @@ Security was designed in from the start. The web panel only answers on the local
 headers, uses HttpOnly cookies, and asks for the PIN again before anything destructive. MCP uses OAuth 2.1 with PKCE.
 Secrets are encrypted with the Android Keystore. Backups are encrypted with your password.
 
+## Contributing
+
+Bug reports, ideas and pull requests are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). Found a security problem?
+Please report it privately, as described in [SECURITY.md](SECURITY.md). What changed in each version: [CHANGELOG.md](CHANGELOG.md).
+
 ## Credits
 
 The fonts, icons, libraries and data sources all come with their licenses in

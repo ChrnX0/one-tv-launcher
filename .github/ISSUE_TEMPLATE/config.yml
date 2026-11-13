@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/ChrnX0/one-tv-launcher/security/advisories/new
+    about: Report security problems privately, please.
+  - name: Install and setup guide
+    url: https://github.com/ChrnX0/one-tv-launcher#install
+    about: Check the README before opening a setup question.
