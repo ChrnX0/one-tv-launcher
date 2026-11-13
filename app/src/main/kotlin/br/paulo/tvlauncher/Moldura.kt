@@ -23,7 +23,7 @@ object Moldura {
     private val TELAS = setOf(
         "AlarmesActivity", "BackupNoturnoActivity", "BoasVindasActivity", "BuscaActivity", "CasaActivity",
         "ConectarClaudeActivity", "ConfigLauncherActivity", "DiagnosticoActivity", "DnsActivity", "EntrarPeloQrActivity",
-        "ExtrasActivity", "LicencasActivity", "ModoSimplesActivity", "RotinasActivity", "TesteTeclasActivity",
+        "ExtrasActivity", "FotoPerfilActivity", "LicencasActivity", "ModoSimplesActivity", "RotinasActivity", "TesteTeclasActivity",
         "MidiaRedeActivity",   // parte 2: Na rede já usa a margem e o título do sistema
     )
     private const val MARCA = "moldura-relogio"

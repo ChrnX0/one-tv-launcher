@@ -228,6 +228,11 @@
             android:name=".ConectarClaudeActivity"
             android:exported="false"
             android:label="Claude pela internet" />
+        <!-- Buscar a foto da conta Google para a bolinha do perfil (login de TV só para a foto): FotoPerfilActivity.kt -->
+        <activity
+            android:name=".FotoPerfilActivity"
+            android:exported="false"
+            android:label="@string/fp_titulo" />
         <activity
             android:name=".EntrarPeloQrActivity"
             android:exported="false"

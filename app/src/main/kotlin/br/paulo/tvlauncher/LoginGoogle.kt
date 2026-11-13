@@ -33,7 +33,11 @@ object LoginGoogle {
     enum class Estado { ESPERANDO, OK, RECUSADO, ERRO }
 
     /** Uma tentativa de login. [pedido] guarda os campos do /authorize original (client_id, redirect_uri, state...). */
-    class Sessao(val id: String, val pedido: Map<String, String>, val codigoUsuario: String, val urlVerificacao: String, val expira: Long) {
+    class Sessao(val id: String, val pedido: Map<String, String>, val codigoUsuario: String, val urlVerificacao: String, val expira: Long,
+                 /** true = login feito na TV só para buscar a foto da conta (FotoPerfilActivity); não dá acesso a nada. */
+                 val soFoto: Boolean = false) {
+        /** A foto da conta ficou gravada neste login? (só faz sentido depois de [estado] virar OK) */
+        @Volatile var fotoGravada = false
         @Volatile var estado = Estado.ESPERANDO
         @Volatile var email: String? = null
         @Volatile var mensagem: String = ""
@@ -76,7 +80,7 @@ object LoginGoogle {
     fun sessao(id: String?): Sessao? = id?.let { sessoes[it] }?.takeIf { it.expira > System.currentTimeMillis() }
 
     /** Pede o código ao Google e começa a vigiar. Lança Exception com texto para a página se não der. */
-    fun iniciar(ctx: Context, pedido: Map<String, String>): Sessao {
+    fun iniciar(ctx: Context, pedido: Map<String, String>, soFoto: Boolean = false): Sessao {
         val app = ctx.applicationContext
         val agora = System.currentTimeMillis()
         val id = clienteId(app) ?: throw IllegalStateException("login Google não configurado")
@@ -89,10 +93,12 @@ object LoginGoogle {
         val s = Sessao(
             ByteArray(18).also { aleatorio.nextBytes(it) }.joinToString("") { "%02x".format(it) },
             pedido, r.getString("user_code"), r.optString("verification_url", "https://www.google.com/device"),
-            agora + r.optLong("expires_in", 900).coerceAtMost(1800) * 1000,
+            agora + r.optLong("expires_in", 900).coerceAtMost(1800) * 1000, soFoto,
         )
         // mcp-4: lotado, abre vaga em vez de recusar (antes, 5 GETs anônimos no /authorize travavam o login por 15 min).
-        synchronized(sessoes) { abrirVaga(sessoes, agora); sessoes[s.id] = s }
+        // A sessão "só foto" NÃO entra na lista: assim o /authorize do conector nunca a encontra (ela não pode virar
+        // acesso à TV) e não ocupa a vaga de um login de verdade. Quem a acompanha é a tela que a criou.
+        if (!soFoto) synchronized(sessoes) { abrirVaga(sessoes, agora); sessoes[s.id] = s }
         val deviceCode = r.getString("device_code")
         var intervalo = r.optLong("interval", 5).coerceIn(2, 30) * 1000
         Thread({
@@ -140,7 +146,15 @@ object LoginGoogle {
         s.email = email
         if (email.isEmpty() || !u.optBoolean("email_verified", false)) { s.estado = Estado.RECUSADO; s.mensagem = "o Google não confirmou o e-mail"; return }
         val daTv = contasDaTv(app)
-        if (email in daTv) { s.estado = Estado.OK; Log.i(TAG, "login Google ok") }
+        if (email in daTv) {
+            // O Google já manda o endereço da foto junto ("picture", por causa do escopo "profile"): aproveitamos para a
+            // bolinha do perfil (FotoPerfil). Na tela "Buscar foto da conta" a foto vem ANTES do OK (a tela espera por
+            // ela); no login do conector vem depois, para não atrasar quem está entrando.
+            val foto = u.optString("picture")
+            if (s.soFoto) { s.fotoGravada = FotoPerfil.doGoogle(app, email, foto, forcar = true); s.estado = Estado.OK }
+            else { s.estado = Estado.OK; s.fotoGravada = FotoPerfil.doGoogle(app, email, foto, forcar = false) }
+            Log.i(TAG, "login Google ok")
+        }
         else { s.estado = Estado.RECUSADO; s.mensagem = "a conta $email não está em nenhum perfil desta TV" }
     }
 

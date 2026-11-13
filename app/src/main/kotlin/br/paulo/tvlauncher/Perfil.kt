@@ -25,8 +25,9 @@ import java.io.File
  *       pm grant br.paulo.tvlauncher android.permission.GET_ACCOUNTS)
  *  3. um ícone de pessoa.
  *
- * Por que a foto não vem "sozinha" da conta: ler a foto do perfil Google exige entrar com OAuth numa API da Google
- * (projeto no Google Cloud + login na TV). O launcher só guarda a imagem que você colocar.
+ * Quem põe a foto do item 1 sem adb é o [FotoPerfil] (13/11/2026): baixa a foto da conta quando alguém entra pelo
+ * login Google, ou recebe uma imagem enviada pelo painel web. Ela não vem "sozinha" porque o Android não entrega a
+ * foto da conta a apps de fora do Google.
  */
 object Perfil {
     private const val TAG = "TvLauncher.Perfil"

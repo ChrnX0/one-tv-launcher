@@ -508,6 +508,13 @@ body.ocupado::before { opacity: 1; animation: carregando 1.1s linear infinite; }
 .foto { margin: 0; background: var(--superficie); border: 1px solid var(--borda); border-radius: var(--raio-pequeno); overflow: hidden; }
 .foto img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; background: var(--superficie2); }
 .foto figcaption { padding: 8px 10px; font-size: 12.5px; color: var(--texto-fraco); overflow-wrap: anywhere; }
+/* Foto do perfil (FotoPerfil.kt): uma linha por conta, com a bolinha redonda igual à da TV. */
+.lista-perfis { display: flex; flex-direction: column; gap: 12px; }
+.perfil-linha { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.perfil-linha img, .perfil-linha .sem-foto { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex: none;
+  background: var(--superficie2); border: 1px solid var(--borda-forte); display: grid; place-items: center;
+  font-size: 22px; font-weight: 600; color: var(--texto); }
+.perfil-linha .nome { flex: 1 1 160px; overflow-wrap: anywhere; color: var(--texto-fraco); font-size: 14px; }
 
 .periodo.ativo { background: var(--foco); color: var(--foco-texto); border-color: transparent; }
 .resumo-rede { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 16px; }

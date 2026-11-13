@@ -195,7 +195,7 @@ const AO_ABRIR = {
   tv: () => carregarTv(),
   controle: () => { atualizarFoto(); carregarClima(); carregarAutoDesligar(); },
   saude: () => carregarSaude(),
-  fotos: () => carregarFotos(),
+  fotos: () => { carregarFotos(); carregarPerfis(); },
   rede: () => carregarRede(),
   claude: () => carregarMcp(),
   roteador: () => carregarRoteador(),
@@ -1011,6 +1011,62 @@ $('arquivoFotos').addEventListener('change', async (ev) => {
   await carregarFotos();
   if (arquivos.length) mostrar($('statusFotos'), `${ok} de ${arquivos.length} foto(s) enviada(s).`);
 });
+
+// ---------- foto do perfil (FotoPerfil.kt) ----------
+
+async function carregarPerfis() {
+  const lista = $('listaPerfis');
+  let r;
+  try { r = await chamar('GET', '/api/perfil'); } catch (e) { mostrar($('statusPerfil'), textoErro(e)); return; }
+  lista.replaceChildren();
+  $('dicaPerfilGoogle').hidden = !r.google;
+  if (!r.contas.length) { mostrar($('statusPerfil'), 'A TV está sem conta Google (ou o launcher está sem a permissão de ver as contas).'); return; }
+  for (const c of r.contas) {
+    const q = `conta=${encodeURIComponent(c.conta)}`;
+    const linha = document.createElement('div');
+    linha.className = 'perfil-linha';
+    let rosto;
+    if (c.foto) {
+      rosto = document.createElement('img');
+      rosto.alt = '';
+      rosto.src = `/api/perfil/foto?${q}&v=${c.foto}`;   // "v" muda quando a foto muda: o navegador não mostra a antiga
+    } else {
+      rosto = document.createElement('span');
+      rosto.className = 'sem-foto';
+      rosto.textContent = c.conta.charAt(0).toUpperCase();
+    }
+    const nome = document.createElement('span');
+    nome.className = 'nome';
+    nome.textContent = c.conta + (c.foto ? (c.manual ? ' · foto enviada por você' : ' · foto da conta Google') : ' · sem foto');
+    const escolher = document.createElement('input');
+    escolher.type = 'file'; escolher.accept = 'image/jpeg,image/png,image/webp'; escolher.hidden = true;
+    escolher.addEventListener('change', async () => {
+      const a = escolher.files[0];
+      escolher.value = '';
+      if (!a) return;
+      try {
+        await enviarComProgresso(`/api/perfil/foto?${q}`, a, (p) => mostrar($('statusPerfil'), `Enviando… ${Math.round(p * 100)}%`));
+        mostrar($('statusPerfil'), 'Foto trocada. Ela aparece na TV quando a tela inicial for aberta de novo.');
+      } catch (e) { mostrar($('statusPerfil'), textoErro(e)); }
+      carregarPerfis();
+    });
+    const enviar = document.createElement('button');
+    enviar.type = 'button'; enviar.className = 'botao-primario'; enviar.textContent = c.foto ? 'Trocar foto…' : 'Enviar foto…';
+    enviar.addEventListener('click', () => escolher.click());
+    linha.append(rosto, nome, escolher, enviar);
+    if (c.foto) {
+      const tirar = document.createElement('button');
+      tirar.type = 'button'; tirar.className = 'link'; tirar.textContent = 'remover';
+      tirar.addEventListener('click', async () => {
+        try { await chamar('POST', `/api/perfil/foto/apagar?${q}`); mostrar($('statusPerfil'), 'Foto removida: a bolinha volta a mostrar a inicial.'); }
+        catch (e) { mostrar($('statusPerfil'), textoErro(e)); }
+        carregarPerfis();
+      });
+      linha.append(tirar);
+    }
+    lista.appendChild(linha);
+  }
+}
 
 // ---------- acessos ----------
 
