@@ -417,7 +417,7 @@ class SeriesActivity : Activity() {
         }
     }
 
-    private class Card(val capa: ImageView, val nome: TextView, val sub: TextView, val estrela: TextView, val etiqueta: TextView)
+    private class Card(val capa: ImageView, val nome: TextView, val sub: TextView, val estrela: TextView, val etiqueta: TextView, val barra: ProgressBar)
 
     private val adaptadorGrade = object : BaseAdapter() {
         override fun getCount() = naGrade.size
@@ -439,6 +439,12 @@ class SeriesActivity : Activity() {
                 c.etiqueta.text = when (pct) { 100 -> getString(R.string.filmes_finalizado); null -> getString(R.string.filmes_assistido); else -> "$pct%" }
                 (c.etiqueta.background as GradientDrawable).setColor(if (pct == 100) verdeEtiqueta else 0xD90B0F17.toInt())
             }
+            // Barra embaixo do pôster, como a dos filmes (13/11/2026): episódios vistos / total. Só enquanto a série está
+            // em andamento (1 a 99%); finalizada fica só a etiqueta verde, igual ao filme terminado.
+            val prog = progresso[s.chave]
+            if (pct != null && pct in 1..99 && prog != null && prog.total > 0) {
+                c.barra.visibility = View.VISIBLE; c.barra.progress = (prog.vistos * 1000 / prog.total).coerceIn(1, 999)
+            } else c.barra.visibility = View.GONE
             c.estrela.visibility = if (s.chave in interesses) View.VISIBLE else View.GONE
             PlayerLogos.carregar(this@SeriesActivity, s.capa, c.capa, lado = 360)
             return v
@@ -472,9 +478,13 @@ class SeriesActivity : Activity() {
         val sub = TextView(this).apply { textSize = 12f; setTextColor(ambar); maxLines = 1 }
         col.addView(cabecalhoCard(Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.SUB_CARD_ALTURA).apply { addView(nome); addView(sub) })
         col.addView(moldura, LinearLayout.LayoutParams(-1, dp(Estilo.Leitura.POSTER_ALTURA)))
-        // 4 + nome e episódio + pôster + 6
-        col.layoutParams = AbsListView.LayoutParams(-1, dp(4 + Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.SUB_CARD_ALTURA + Estilo.Leitura.POSTER_ALTURA + 6))
-        col.tag = Card(capa, nome, sub, estrela, etiqueta)
+        val barra = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
+            max = 1000; progressTintList = ColorStateList.valueOf(coral); progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA)
+        }
+        col.addView(barra, LinearLayout.LayoutParams(-1, dp(3)).apply { topMargin = dp(4) })
+        // 4 + nome e episódio + pôster + barra (4 + 3) + 6
+        col.layoutParams = AbsListView.LayoutParams(-1, dp(4 + Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.SUB_CARD_ALTURA + Estilo.Leitura.POSTER_ALTURA + 7 + 6))
+        col.tag = Card(capa, nome, sub, estrela, etiqueta, barra)
         return col
     }
 
