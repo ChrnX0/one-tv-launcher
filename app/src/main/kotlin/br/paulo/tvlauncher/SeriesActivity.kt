@@ -111,7 +111,7 @@ class SeriesActivity : Activity() {
         cabecalho = rotulo("")
         direita.addView(cabecalho)
         grade = GridView(this).apply {
-            numColumns = 6; horizontalSpacing = dp(12); verticalSpacing = dp(14); stretchMode = GridView.STRETCH_COLUMN_WIDTH
+            numColumns = Estilo.Leitura.GRADE_COLUNAS; horizontalSpacing = dp(12); verticalSpacing = dp(14); stretchMode = GridView.STRETCH_COLUMN_WIDTH
             estilo(this); setPadding(dp(4), dp(4), dp(4), dp(4)); clipToPadding = false
         }
         direita.addView(grade, LinearLayout.LayoutParams(-1, 0, 1f))
@@ -404,12 +404,12 @@ class SeriesActivity : Activity() {
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90B0F17.toInt()) }
         }
         moldura.addView(etiqueta, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(5), 0, 0, dp(5)) })
-        col.addView(moldura, LinearLayout.LayoutParams(-1, dp(150)))
+        col.addView(moldura, LinearLayout.LayoutParams(-1, dp(Estilo.Leitura.POSTER_ALTURA)))
         val nome = TituloCard(this, Estilo.Leitura.CARD).apply { setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(6), 0, 0) }
         col.addView(nome)
-        val sub = TextView(this).apply { textSize = 12f; setTextColor(ambar) }   // 11 -> 12: cabe no card de 212 dp com o nome em 13,5
+        val sub = TextView(this).apply { textSize = 12f; setTextColor(ambar) }   // 11 -> 12: cabe no card com o nome em 2 linhas
         col.addView(sub)
-        col.layoutParams = AbsListView.LayoutParams(-1, dp(212))
+        col.layoutParams = AbsListView.LayoutParams(-1, dp(Estilo.Leitura.CARD_ALTURA))
         col.tag = Card(capa, nome, sub, estrela, etiqueta)
         return col
     }

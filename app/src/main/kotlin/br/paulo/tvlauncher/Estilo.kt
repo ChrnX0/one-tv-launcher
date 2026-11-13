@@ -101,7 +101,10 @@ object Estilo {
         const val ROTULO = 13f          // "CATEGORIAS", "A SEGUIR"; era 11,5
         const val DICA = 12.5f          // linha de teclas no rodapé; era 11
         // Grade de pôsteres e painel do canal
-        const val CARD = 13.5f          // nome embaixo do pôster; era 12
+        const val CARD = 14.5f          // nome embaixo do pôster; era 12
+        const val GRADE_COLUNAS = 5     // pôsteres por linha em Filmes e Séries; eram 6 (pôster ~20% maior)
+        const val POSTER_ALTURA = 180   // dp; era 150 (mantém a proporção 2:3 com 5 colunas)
+        const val CARD_ALTURA = 248     // dp: pôster + barra + 2 linhas de nome (+ a linha de episódios na Série); era 212
         const val FOCADO = 16f          // linha do item em foco acima da grade; era 14
         const val PROGRAMA = 22f        // título do programa no detalhe do canal; era 19
     }

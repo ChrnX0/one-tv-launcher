@@ -110,7 +110,7 @@ class FilmesActivity : Activity() {
         cabecalho = rotulo("")
         direita.addView(cabecalho)
         grade = GridView(this).apply {
-            numColumns = 6
+            numColumns = Estilo.Leitura.GRADE_COLUNAS
             horizontalSpacing = dp(12); verticalSpacing = dp(14)
             stretchMode = GridView.STRETCH_COLUMN_WIDTH
             estiloLista(this)
@@ -448,14 +448,14 @@ class FilmesActivity : Activity() {
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90B0F17.toInt()) }
         }
         moldura.addView(estrela, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, dp(5), dp(5), 0) })
-        col.addView(moldura, LinearLayout.LayoutParams(-1, dp(150)))
+        col.addView(moldura, LinearLayout.LayoutParams(-1, dp(Estilo.Leitura.POSTER_ALTURA)))
         val barra = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
             max = 1000; progressTintList = ColorStateList.valueOf(coral); progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA)
         }
         col.addView(barra, LinearLayout.LayoutParams(-1, dp(3)).apply { topMargin = dp(4) })
         val nome = TituloCard(this, Estilo.Leitura.CARD).apply { setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(4), 0, 0) }
         col.addView(nome)
-        col.layoutParams = AbsListView.LayoutParams(-1, dp(212))
+        col.layoutParams = AbsListView.LayoutParams(-1, dp(Estilo.Leitura.CARD_ALTURA))
         col.tag = Card(capa, nome, barra, etiqueta, estrela)
         return col
     }
