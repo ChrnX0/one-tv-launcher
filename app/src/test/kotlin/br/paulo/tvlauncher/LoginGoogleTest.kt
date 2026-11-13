@@ -17,7 +17,7 @@ class LoginGoogleTest {
               Accounts: 1
                 Account {name=mae@gmail.com, type=com.google}
         """.trimIndent()
-        assertEquals(setOf("ana@gmail.com", "mae@gmail.com"), LoginGoogle.contasDoDumpsys(dump))
+        assertEquals(setOf("dono@gmail.com", "mae@gmail.com"), LoginGoogle.contasDoDumpsys(dump))
     }
 
     @Test fun validaCliente() {

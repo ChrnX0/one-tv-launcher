@@ -263,7 +263,7 @@ object PainelWeb {
                            val range: String? = null)   // cabeçalho Range do pedido, para arquivo (vídeo pula para o meio)
 
     /** Rotas que recebem o corpo como fluxo, direto para o disco (arquivo de vários GB não cabe na memória). */
-    private val ROTAS_FLUXO = setOf("/api/arquivos/enviar", "/api/apps/instalar", "/api/fotos/enviar")
+    private val ROTAS_FLUXO = setOf("/api/arquivos/enviar", "/api/apps/instalar", "/api/fotos/enviar", "/api/perfil/foto")
 
     private fun json(codigo: Int, o: JSONObject, extras: Map<String, String> = emptyMap()) =
         Resposta(codigo, "application/json; charset=utf-8", o.toString().toByteArray(), extras)
@@ -540,6 +540,35 @@ object PainelWeb {
             "/api/mcp/qr-endereco" -> if (req.metodo == "GET") {
                 val nome = TunelTailscale.nome(app) ?: return erro(404, "o endereço ainda não existe (ligue o acesso na aba Claude)")
                 return Resposta(200, "image/png", QrCodigo.png("https://$nome/mcp"))
+            }
+            // Foto da bolinha do perfil (FotoPerfil.kt, 13/11/2026). A conta tem de ser uma das contas Google desta TV:
+            // o nome do arquivo sai dela, então nada que venha do navegador vira caminho de arquivo.
+            "/api/perfil" -> if (req.metodo == "GET") return json(200, JSONObject().put("google", LoginGoogle.configurado(app))
+                .put("contas", org.json.JSONArray().apply {
+                    for (c in Perfil.contas(app)) put(JSONObject().put("conta", c)
+                        .put("foto", FotoPerfil.arquivo(app, c)?.lastModified() ?: 0L).put("manual", FotoPerfil.manual(app, c)))
+                }))
+            "/api/perfil/foto" -> {
+                val conta = Perfil.contas(app).firstOrNull { it.equals(req.consulta["conta"], ignoreCase = true) }
+                    ?: return erro(404, "essa conta não está nesta TV")
+                when (req.metodo) {
+                    "GET" -> {
+                        val f = FotoPerfil.arquivo(app, conta) ?: return erro(404, "essa conta está sem foto")
+                        return Resposta(200, "image/jpeg", f.readBytes(), mapOf("Cache-Control" to "no-store"))
+                    }
+                    "POST" -> {
+                        val motivo = FotoPerfil.receber(app, conta, req.tamanho, req.fluxoCorpo(), manual = true)
+                        PainelArmazem.registrar(app, ip, "enviar foto do perfil", motivo ?: "ok")   // sem o e-mail no registro
+                        return if (motivo == null) json(200, JSONObject().put("ok", true)) else erro(400, motivo)
+                    }
+                }
+            }
+            "/api/perfil/foto/apagar" -> if (req.metodo == "POST") {
+                val conta = Perfil.contas(app).firstOrNull { it.equals(req.consulta["conta"], ignoreCase = true) }
+                    ?: return erro(404, "essa conta não está nesta TV")
+                val ok = FotoPerfil.remover(app, conta)
+                PainelArmazem.registrar(app, ip, "apagar foto do perfil", if (ok) "ok" else "não existe")
+                return if (ok) json(200, JSONObject().put("ok", true)) else erro(404, "essa conta está sem foto")
             }
             // Player universal, passo 4 (06/11/2026): contas de TV ao vivo. Listar mostra só nome, tipo e servidor (nunca
             // usuário, senha nem o link inteiro, que no Xtream e em muitas listas leva a senha). Cadastrar e apagar pedem o PIN.

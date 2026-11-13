@@ -169,6 +169,11 @@ details summary { cursor: pointer; color: var(--texto-fraco); margin-top: 12px; 
 .foto { margin: 0; background: var(--superficie); border: 1px solid var(--borda); border-radius: 10px; overflow: hidden; }
 .foto img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; background: var(--superficie2); }
 .foto figcaption { padding: 6px 8px; font-size: 13px; color: var(--texto-fraco); overflow-wrap: anywhere; }
+.lista-perfis { display: flex; flex-direction: column; gap: 12px; }
+.perfil-linha { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.perfil-linha img, .perfil-linha .sem-foto { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex: none;
+  background: var(--superficie2); border: 1px solid var(--borda); display: grid; place-items: center; font-size: 22px; }
+.perfil-linha .nome { flex: 1 1 160px; overflow-wrap: anywhere; }
 /* ---------- aba Rede (histórico) e desligar sozinha ---------- */
 .periodo.ativo { outline: 2px solid var(--acento); }
 .resumo-rede { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 16px; }

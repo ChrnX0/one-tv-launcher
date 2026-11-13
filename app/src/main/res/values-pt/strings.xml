@@ -827,4 +827,16 @@
     <string name="tempo_episodios_vistos">%1$s episódios</string>
     <string name="tempo_x_de_y">%1$d de %2$d</string>
     <string name="tempo_visto">visto</string>
+    <!-- Foto da conta na bolinha do perfil (FotoPerfilActivity) -->
+    <string name="fp_secao">Perfil Google</string>
+    <string name="fp_linha">Buscar foto da conta</string>
+    <string name="fp_linha_det">Mostra a foto da sua conta Google na bolinha do perfil</string>
+    <string name="fp_titulo">Foto da conta</string>
+    <string name="fp_fechar">Fechar</string>
+    <string name="fp_pedindo">Pedindo um código ao Google…</string>
+    <string name="fp_passos">1. No celular, abra %1$s (ou aponte a câmera para o código ao lado).\n2. Entre com uma conta Google que esteja nesta TV e digite:\n\n%2$s\n\nEsta tela continua sozinha. Este login serve só para buscar a foto.</string>
+    <string name="fp_ok">Pronto: a foto de %1$s já está na bolinha do perfil.</string>
+    <string name="fp_sem_foto">Entrou como %1$s, mas não deu para guardar a foto. Tente de novo ou envie uma foto pelo painel web (aba Fotos do protetor).</string>
+    <string name="fp_falha">Não deu certo: %1$s</string>
+    <string name="fp_sem_google">O login Google ainda não está configurado nesta TV.\n\nDois jeitos de pôr uma foto na bolinha do perfil:\n• Painel web > aba Fotos do protetor > Foto do perfil: escolha qualquer imagem do celular.\n• Configure o login Google (painel web > aba Claude) e volte aqui para buscar a foto da conta.</string>
 </resources>
