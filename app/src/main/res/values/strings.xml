@@ -754,6 +754,7 @@
     <string name="pr_despertador">Alarm</string>
     <string name="pr_despertador_nenhum">None set</string>
     <string name="pr_visita">Guests</string>
+    <string name="pr_casa">Home</string>
     <string name="pr_config_tv">TV settings</string>
     <string name="pr_sinal_bom">good signal</string>
     <string name="pr_sinal_medio">fair signal</string>

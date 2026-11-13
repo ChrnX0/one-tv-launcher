@@ -3,8 +3,11 @@ package br.paulo.tvlauncher
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Handler
+import android.os.Looper
 import android.os.SystemClock
 import android.util.Log
+import android.view.accessibility.AccessibilityNodeInfo
 
 /**
  * Manter a NOSSA HOME com o launcher do Google (launcherx) ativo (04/11/2026).
@@ -30,6 +33,9 @@ object Home {
     private var ultimoDesvioPainel = 0L
     /** Até quando o painel do Google pode aparecer sem ser trocado pelo nosso (só quando NÓS o abrimos: Casa > Google Home). */
     @Volatile private var googleLiberadoAte = 0L
+    /** Até quando, ao aparecer o painel do Google, tocamos sozinhos no tile "Google Home" dele (abrirGoogleHome). */
+    @Volatile private var tocarCasaAte = 0L
+    private val principal = Handler(Looper.getMainLooper())
 
     fun launcherxAtivo(ctx: Context): Boolean = try {
         val ai = ctx.packageManager.getApplicationInfo(LAUNCHERX, 0)
@@ -66,6 +72,33 @@ object Home {
     }
 
     /**
+     * Abre direto a tela da casa do Google Home (luzes, favoritos), que só existe DENTRO do painel do launcherx: não há app
+     * Google Home na TV nem intent exportado para ela (medido numa TV em 13/11/2026: só OPEN/TOGGLE_NOTIFICATION_HANDLER_PANEL,
+     * que exigem STATUS_BAR_SERVICE). Então abre o painel e, quando ele aparece, a acessibilidade toca no tile "Google Home".
+     * Se o tile não existir (conta sem casa no Google Home), fica o painel do Google aberto, como antes.
+     */
+    fun abrirGoogleHome(ctx: Context) {
+        tocarCasaAte = SystemClock.elapsedRealtime() + 5_000
+        abrirPainelGoogle(ctx)
+    }
+
+    /** Procura o tile "Google Home" no painel do Google e toca nele; tenta de novo enquanto o painel monta (até ~2,7 s). */
+    private fun tocarTileCasa(tentativa: Int) {
+        if (SystemClock.elapsedRealtime() > tocarCasaAte) return
+        val servico = AutorizaShizukuService.instancia ?: return
+        val raiz = try { servico.rootInActiveWindow } catch (_: Exception) { null }
+        var no: AccessibilityNodeInfo? = raiz?.findAccessibilityNodeInfosByText("Google Home")?.firstOrNull()
+        while (no != null && !no.isClickable) no = no.parent   // o texto fica dentro do tile; quem recebe o clique é ele
+        if (no != null && no.performAction(AccessibilityNodeInfo.ACTION_CLICK)) {
+            tocarCasaAte = 0L
+            Log.i(TAG, "tile Google Home tocado no painel do Google")
+            return
+        }
+        if (tentativa < 8) principal.postDelayed({ tocarTileCasa(tentativa + 1) }, 300)
+        else Log.i(TAG, "painel do Google sem o tile Google Home (conta sem casa?)")
+    }
+
+    /**
      * Chamado quando uma janela aparece: se for a HOME do launcherx, traz a nossa por cima; se for o painel dele
      * (.dashboard.DashboardHandler, aberto pelo sistema, pelo Gemini ou por um app), fecha e abre o nosso no lugar
      * (dono, 11/11/2026: "ocultar o painel do Google afim de mantermos apenas o nosso"). O launcherx continua ativo.
@@ -83,7 +116,12 @@ object Home {
 
     private fun trocarPainel(ctx: Context) {
         val agora = SystemClock.elapsedRealtime()
-        if (agora < googleLiberadoAte) return
+        if (agora < googleLiberadoAte) {
+            // Enquanto a pessoa navega no painel que NÓS abrimos (ex.: a tela da casa), cada janela nova renova a liberação.
+            googleLiberadoAte = agora + 120_000
+            if (agora < tocarCasaAte) principal.postDelayed({ tocarTileCasa(0) }, 300)
+            return
+        }
         if (agora - ultimoDesvioPainel < 1500) return   // trava contra laço
         ultimoDesvioPainel = agora
         Log.i(TAG, "o painel do Google apareceu: trocando pelo nosso")

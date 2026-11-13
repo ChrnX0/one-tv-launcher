@@ -23,7 +23,7 @@ class CasaActivity : Activity() {
         coluna.addView(situacao)
         // Google Home (dono, 10/11/2026): abre o painel do Google TV (luzes, câmeras, timer), o mesmo do HOME segurado.
         indiceGoogleHome = coluna.childCount
-        coluna.addView(botao(getString(R.string.casa_google_home)) { Home.abrirPainelGoogle(this) })
+        coluna.addView(botao(getString(R.string.casa_google_home)) { Home.abrirGoogleHome(this) })
         setContentView(raiz)
     }
 
