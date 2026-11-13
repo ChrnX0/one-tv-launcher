@@ -28,7 +28,6 @@ import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
-import android.widget.ProgressBar
 import android.widget.TextView
 import java.util.Locale
 
@@ -60,7 +59,6 @@ class SeriesActivity : Activity() {
     private val suave = Estilo.TEXTO_2
     private val apagado = Estilo.TEXTO_3
     private val ambar = Estilo.ATENCAO
-    private val coral = 0xFFFF5A4E.toInt()
     private val verdeEtiqueta = 0xE62E7D4F.toInt()
     private val fonteMedia = Fontes.manrope(500)
 
@@ -417,7 +415,7 @@ class SeriesActivity : Activity() {
         }
     }
 
-    private class Card(val capa: ImageView, val nome: TextView, val sub: TextView, val estrela: TextView, val etiqueta: TextView, val barra: ProgressBar)
+    private class Card(val capa: ImageView, val nome: TextView, val sub: TextView, val estrela: TextView, val etiqueta: TextView, val barra: BarraTempo.Barra)
 
     private val adaptadorGrade = object : BaseAdapter() {
         override fun getCount() = naGrade.size
@@ -443,7 +441,7 @@ class SeriesActivity : Activity() {
             // em andamento (1 a 99%); finalizada fica só a etiqueta verde, igual ao filme terminado.
             val prog = progresso[s.chave]
             if (pct != null && pct in 1..99 && prog != null && prog.total > 0) {
-                c.barra.visibility = View.VISIBLE; c.barra.progress = (prog.vistos * 1000 / prog.total).coerceIn(1, 999)
+                c.barra.visibility = View.VISIBLE; c.barra.fracao = BarraTempo.fracao(prog.vistos.toLong(), prog.total.toLong())
             } else c.barra.visibility = View.GONE
             c.estrela.visibility = if (s.chave in interesses) View.VISIBLE else View.GONE
             PlayerLogos.carregar(this@SeriesActivity, s.capa, c.capa, lado = 360)
@@ -478,12 +476,10 @@ class SeriesActivity : Activity() {
         val sub = TextView(this).apply { textSize = 12f; setTextColor(ambar); maxLines = 1 }
         col.addView(cabecalhoCard(Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.SUB_CARD_ALTURA).apply { addView(nome); addView(sub) })
         col.addView(moldura, LinearLayout.LayoutParams(-1, dp(Estilo.Leitura.POSTER_ALTURA)))
-        val barra = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
-            max = 1000; progressTintList = ColorStateList.valueOf(coral); progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA)
-        }
-        col.addView(barra, LinearLayout.LayoutParams(-1, dp(3)).apply { topMargin = dp(4) })
-        // 4 + nome e episódio + pôster + barra (4 + 3) + 6
-        col.layoutParams = AbsListView.LayoutParams(-1, dp(4 + Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.SUB_CARD_ALTURA + Estilo.Leitura.POSTER_ALTURA + 7 + 6))
+        val barra = BarraTempo.Barra(this)
+        col.addView(barra, LinearLayout.LayoutParams(-1, dp(BarraTempo.ESPESSURA_DP)).apply { topMargin = dp(5) })
+        // 4 + nome e episódio + pôster + barra (5 + 5) + 6
+        col.layoutParams = AbsListView.LayoutParams(-1, dp(4 + Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.SUB_CARD_ALTURA + Estilo.Leitura.POSTER_ALTURA + 10 + 6))
         col.tag = Card(capa, nome, sub, estrela, etiqueta, barra)
         return col
     }
@@ -584,6 +580,12 @@ class SeriesActivity : Activity() {
                 Idioma.Versao.DESCONHECIDA -> null
             }).joinToString("   ·   ")
         col.addView(TextView(this).apply { text = dados; textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(8), 0, 0) })
+        // A série inteira: barra + "20 de 62 episódios" (13/11/2026), quando já tem episódio visto.
+        progresso[s.chave]?.takeIf { it.total > 0 && it.vistos > 0 }?.let { p ->
+            col.addView(BarraTempo.Linha(this).apply {
+                mostrar(BarraTempo.fracao(p.vistos.toLong(), p.total.toLong()), BarraTempo.textoEpisodios(context, p.vistos, p.total))
+            }, LinearLayout.LayoutParams(dp(460), -2).apply { topMargin = dp(10) })
+        }
         f?.sinopse?.takeIf { it.isNotEmpty() }?.let {
             col.addView(TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.15f); maxLines = 3; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(8), 0, 0) })
         }
@@ -618,7 +620,11 @@ class SeriesActivity : Activity() {
             // Temporadas.
             val temps = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
             f.temporadas.keys.forEach { t ->
-                temps.addView(botao(getString(R.string.series_temporada, t), pequeno = true, marcado = t == temporada) {
+                // "Temporada 1 ✓" (todos vistos) ou "Temporada 2  6/13" (começada): onde parou sem abrir (13/11/2026).
+                val daTemp = f.temporadas[t].orEmpty()
+                val vistosT = daTemp.count { Vod.assistido(posicoes[it.chave(s.fonteId)]) }
+                val marca = when { daTemp.isEmpty() || vistosT == 0 -> ""; vistosT >= daTemp.size -> "  ✓"; else -> "  $vistosT/${daTemp.size}" }
+                temps.addView(botao(getString(R.string.series_temporada, t) + marca, pequeno = true, marcado = t == temporada) {
                     temporada = t; desenharFicha(focarEpisodio = -1)
                 }.apply { tag = "t$t" }, LinearLayout.LayoutParams(-2, -2).apply { marginEnd = dp(8) })
             }
@@ -676,19 +682,23 @@ class SeriesActivity : Activity() {
             topo.addView(TextView(context).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(apagado) })
             addView(topo)
             addView(TextView(context).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPadding(dp(48), dp(3), 0, 0) })
-            addView(ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal).apply {
-                max = 1000; progressTintList = ColorStateList.valueOf(coral); progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA)
-            }, LinearLayout.LayoutParams(-1, dp(3)).apply { topMargin = dp(6); marginStart = dp(48) })
+            addView(BarraTempo.Barra(context), LinearLayout.LayoutParams(-1, dp(BarraTempo.ESPESSURA_DP)).apply { topMargin = dp(6); marginStart = dp(48) })
         }
         val topo = v.getChildAt(0) as LinearLayout
         (topo.getChildAt(0) as TextView).text = ep.numero.toString()
         (topo.getChildAt(1) as TextView).text = Series.tituloCurto(s.nome, ep.titulo)
-        (topo.getChildAt(2) as TextView).text = ep.duracaoMin?.let { "$it min" }.orEmpty()
         (v.getChildAt(1) as TextView).apply { text = ep.sinopse; visibility = if (ep.sinopse.isEmpty()) View.GONE else View.VISIBLE }
-        val barra = v.getChildAt(2) as ProgressBar
+        val barra = v.getChildAt(2) as BarraTempo.Barra
         val pos = posicoes[ep.chave(s.fonteId)]
-        if (pos != null && pos.duracao > 0) { barra.visibility = View.VISIBLE; barra.progress = (pos.ms * 1000 / pos.duracao).toInt() }
+        if (pos != null && pos.duracao > 0) { barra.visibility = View.VISIBLE; barra.fracao = BarraTempo.fracao(pos.ms, pos.duracao) }
         else barra.visibility = View.INVISIBLE
+        // À direita do nome: "faltam 35 min · termina às 17:28" se começou, "visto" se acabou, senão a duração.
+        (topo.getChildAt(2) as TextView).text = when {
+            pos != null && pos.duracao > 0 && Vod.deveRetomar(pos) -> (pos.duracao - pos.ms).coerceAtLeast(0).let { r ->
+                BarraTempo.textoFaltam(this, r, System.currentTimeMillis() + r) }
+            Vod.assistido(pos) -> getString(R.string.tempo_visto)
+            else -> ep.duracaoMin?.let { "$it min" }.orEmpty()
+        }
         return v
     }
 
