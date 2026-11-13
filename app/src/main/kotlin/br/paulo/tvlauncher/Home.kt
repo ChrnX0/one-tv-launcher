@@ -73,7 +73,7 @@ object Home {
 
     /**
      * Abre direto a tela da casa do Google Home (luzes, favoritos), que só existe DENTRO do painel do launcherx: não há app
-     * Google Home na TV nem intent exportado para ela (medido na Sala em 13/11/2026: só OPEN/TOGGLE_NOTIFICATION_HANDLER_PANEL,
+     * Google Home na TV nem intent exportado para ela (medido numa TV em 13/11/2026: só OPEN/TOGGLE_NOTIFICATION_HANDLER_PANEL,
      * que exigem STATUS_BAR_SERVICE). Então abre o painel e, quando ele aparece, a acessibilidade toca no tile "Google Home".
      * Se o tile não existir (conta sem casa no Google Home), fica o painel do Google aberto, como antes.
      */

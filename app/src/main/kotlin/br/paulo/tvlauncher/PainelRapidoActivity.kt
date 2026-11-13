@@ -524,7 +524,7 @@ class PainelRapidoActivity : Activity() {
             mostrarVisita()
         }
         mostrarVisita()
-        // Casa (Paulo, 13/11/2026): as luzes e cenas do Home Assistant (CasaActivity), no lugar do "Google Home" do painel
+        // Casa (13/11/2026): as luzes e cenas do Home Assistant (CasaActivity), no lugar do "Google Home" do painel
         // do Google (a tela da casa do Google não tem intent público; ver Home.abrirGoogleHome).
         val casa = tile("casa", getString(R.string.pr_casa)) { abrirEFechar(Intent(this, CasaActivity::class.java)) }
         val grade = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false }
