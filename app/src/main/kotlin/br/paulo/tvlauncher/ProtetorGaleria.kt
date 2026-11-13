@@ -500,23 +500,28 @@ class ProtetorGaleria(
         // pintura (aconteceu na 1ª foto da TV: 1.04 com 36 dp mostrava uma faixa escura na direita).
         val desliza = dp(24).toFloat()
         v.scaleX = 1.06f; v.scaleY = 1.06f; v.translationX = -desliza
-        animador = android.animation.ValueAnimator.ofFloat(0f, 1f).apply {
-            duration = 75_000; repeatCount = android.animation.ValueAnimator.INFINITE; repeatMode = android.animation.ValueAnimator.REVERSE
-            interpolator = android.view.animation.AccelerateDecelerateInterpolator()
-            addUpdateListener { a ->
-                val f = a.animatedValue as Float
+        // 10 passos por segundo, não 60 (13/11/2026): a pintura anda ~96 px em 75 s, 0,02 px por quadro a 60 fps. A 10 fps
+        // cada passo é ~0,1 px (invisível) e a GPU e a thread da tela (a mesma das teclas) trabalham 6x menos, por horas.
+        val curva = android.view.animation.AccelerateDecelerateInterpolator()
+        val inicio = android.os.SystemClock.uptimeMillis()
+        val passo = object : Runnable {
+            override fun run() {
+                val t = ((android.os.SystemClock.uptimeMillis() - inicio) % 150_000L) / 75_000f   // 0..2: ida e volta
+                val f = curva.getInterpolation(if (t <= 1f) t else 2f - t)
                 val esc = 1.06f + 0.06f * f
                 v.scaleX = esc; v.scaleY = esc; v.translationX = -desliza + 2 * desliza * f
                 vidro.redesenhar()
+                v.postDelayed(this, PASSO_KEN_BURNS_MS)
             }
-            start()
         }
+        animador = v to passo
+        passo.run()
     }
-    private var animador: android.animation.ValueAnimator? = null
+    private var animador: Pair<View, Runnable>? = null
 
     /** Pixels da pintura -> tela: recorte do ImageView, depois o zoom/deslize do Ken Burns, depois onde a raiz está. */
     private fun matrizPintura(f: FundoGaleria): Matrix? {
-        val m = f.matrizImagem() ?: return null
+        val m = f.matrizImagem() ?: return null   // (10x por segundo agora, não 60: as alocações daqui pesam pouco)
         m.postConcat(f.matrix)
         m.postTranslate(f.left.toFloat(), f.top.toFloat())
         val loc = IntArray(2); raiz.getLocationOnScreen(loc)
@@ -534,7 +539,7 @@ class ProtetorGaleria(
     private fun arredondado(cor: Int, raioDp: Float) = GradientDrawable().apply { setColor(cor); cornerRadius = raioDp * ctx.resources.displayMetrics.density }
 
     fun soltar() {
-        animador?.cancel(); animador = null
+        animador?.let { (v, r) -> v.removeCallbacks(r) }; animador = null
         if (::hora.isInitialized) hora.removeCallbacks(tique)
         NotificacoesTv.parar(aoMudarNotificacoes)
         if (::colunaAvisos.isInitialized) colunaAvisos.removeCallbacks(tirarAvisoVencido)
@@ -544,5 +549,5 @@ class ProtetorGaleria(
 
     private fun dp(v: Int) = (v * ctx.resources.displayMetrics.density + 0.5f).toInt()
 
-    private companion object { const val TAG = "TvLauncher.Protetor" }
+    private companion object { const val TAG = "TvLauncher.Protetor"; const val PASSO_KEN_BURNS_MS = 100L }
 }
