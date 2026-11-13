@@ -107,11 +107,18 @@ class PlayerVodTest {
     // 13/11/2026: a ordem por nome calcula a chave uma vez por filme; o resultado tem de ser o mesmo da conta antiga.
     @Test fun ordemPorNomeIgualAAntiga() {
         val nomes = listOf("BR: Ação (2020)", "acao", "|PT| Zorro", "Árvore", "O Último", "o ultimo", "  Big   Fish ", "007 Contra",
-            "[EN] Matrix (1999)", "matrix", "Élite", "elite", "")
+            "[EN] Matrix (1999)", "matrix", "Élite", "elite")
         val f = nomes.mapIndexed { i, n -> Filme("$i", "c", n) }
         val antiga = f.sortedBy { PlayerFiltro.normalizar(Vod.nomeLimpo(it.nome)) }
         assertEquals(antiga.map { it.id }, Vod.ordenar(f, Vod.Ordem.NOME).map { it.id })
         assertEquals("Big Fish", Vod.nomeLimpo("  Big   Fish "))
+    }
+
+    // Título sem letra latina (só coreano, só símbolos) ia para o topo; agora vai para o fim (13/11/2026, visto na Sala).
+    @Test fun ordemPorNomeSemLetraLatinaVaiParaOFim() {
+        val f = listOf("비밀애", "Zorro", "007 Contra", "Ação", "★★★", "").mapIndexed { i, n -> Filme("$i", "c", n) }
+        assertEquals(listOf("007 Contra", "Ação", "Zorro"), Vod.ordenar(f, Vod.Ordem.NOME).take(3).map { it.nome })
+        assertEquals(setOf("비밀애", "★★★", ""), Vod.ordenar(f, Vod.Ordem.NOME).drop(3).map { it.nome }.toSet())
     }
 
     // 20 mil filmes: a ordem por nome tem de caber folgada (na Sala, a conta antiga levou 112 s; aqui no PC ~1 s).

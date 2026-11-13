@@ -86,7 +86,13 @@ object Vod {
     /**
      * Chave da ordem "nome": sem o prefixo de país, sem acento, minúscula. Calculada UMA vez por item (ver [ordenarPorNome]).
      */
-    fun chaveNome(nome: String): String = PlayerFiltro.normalizar(nomeLimpo(nome))
+    fun chaveNome(nome: String): String {
+        val limpo = nomeLimpo(nome)
+        val chave = PlayerFiltro.normalizar(limpo)
+        // Sem nenhuma letra latina ou número (ex.: título só em coreano), a chave ficava vazia e o título ia para o TOPO
+        // da lista (visto na Sala, 13/11/2026). Agora vai para o fim, entre si em ordem do próprio texto.
+        return chave.ifEmpty { "\uFFFF" + limpo.lowercase() }
+    }
 
     /**
      * Ordena pela [chaveNome] calculando a chave uma vez por item. Medido na Sala em 13/11/2026: o `sortedBy { chave(it) }`

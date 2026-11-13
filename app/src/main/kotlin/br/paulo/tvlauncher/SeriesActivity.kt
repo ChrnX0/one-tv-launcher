@@ -302,8 +302,9 @@ class SeriesActivity : Activity() {
             },
             aplicar = { e ->
                 if (!isDestroyed) {
+                    val velhos = itens
                     series = e.series; resultados = e.resultados; itens = e.itens; chave = e.chave
-                    adaptadorCats.notifyDataSetChanged()
+                    atualizarCats(velhos)
                     if (!listaCats.hasFocus()) listaCats.setSelection(itens.indexOfFirst { it.chave == chave }.coerceAtLeast(0))
                     if (e.grade != null) {
                         naGrade = e.grade
@@ -327,12 +328,26 @@ class SeriesActivity : Activity() {
         )
     }
 
+    /**
+     * Lista de categorias depois de uma conta (13/11/2026). Trocar de categoria só muda a cor da escolhida, mas o
+     * notifyDataSetChanged religava todas as linhas visíveis (medido na Sala com atrace: ~24 linhas por troca, a maior
+     * parte do tempo de layout da troca). Com os mesmos itens, só recolore as linhas na tela; com itens novos, refaz.
+     */
+    private fun atualizarCats(velhos: List<Item>) {
+        if (velhos != itens) { adaptadorCats.notifyDataSetChanged(); return }
+        val primeiro = listaCats.firstVisiblePosition
+        for (i in 0 until listaCats.childCount) {
+            val item = itens.getOrNull(primeiro + i) ?: continue
+            ((listaCats.getChildAt(i) as? LinearLayout)?.getChildAt(0) as? TextView)?.setTextColor(if (item.chave == chave) ambar else papel)
+        }
+    }
+
     private fun escolherCat(pos: Int, focarGrade: Boolean = false) {
         val it = itens.getOrNull(pos) ?: return
         if (it.chave == BUSCAR || it.chave == ORDEM || it.chave == OCULTAS) return
         if (it.chave == chave) { if (focarGrade && naGrade.isNotEmpty() && !calculo.calculando) grade.requestFocus(); return }
         chave = it.chave
-        adaptadorCats.notifyDataSetChanged()
+        atualizarCats(itens)   // mesma lista: só troca a cor da escolhida
         recalcular(ModoGrade.NOVA) { if (focarGrade && naGrade.isNotEmpty()) grade.requestFocus() }
     }
 
