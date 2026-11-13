@@ -564,3 +564,33 @@ body.ocupado::before { opacity: 1; animation: carregando 1.1s linear infinite; }
   body.ocupado::before { animation: none; background-size: 100% 100%; }
   * { transition: none !important; }
 }
+
+/* ---------------------------------------------------------------- rodada 2 (13/11/2026) */
+/* Início: miniatura da tela da TV ao lado de "Agora na TV" (toque abre o Controle) */
+.heroi { flex-wrap: nowrap; }
+.heroi-texto { flex: 1; min-width: 0; }
+.heroi .grande { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; }
+.miniatura { flex: none; padding: 0; border: 1px solid var(--borda-forte); border-radius: var(--raio-pequeno); overflow: hidden;
+  background: #000; cursor: pointer; line-height: 0; transition: transform .15s, border-color .15s; }
+.miniatura:hover { border-color: rgba(255, 255, 255, .35); transform: scale(1.02); }
+.miniatura img { display: block; width: 176px; aspect-ratio: 16 / 9; object-fit: cover; }
+.miniatura:has(img[hidden]) { display: none; }
+@media (max-width: 600px) {
+  .heroi { flex-wrap: wrap; }
+  .miniatura { width: 100%; }
+  .miniatura img { width: 100%; }
+  .heroi .botoes-linha { width: 100%; }
+  .heroi .botoes-linha > * { flex: 1; }
+}
+
+/* App instalado (tela cheia): o topo e a barra de baixo respeitam o entalhe e a barra de gestos do celular */
+.topo { padding-top: env(safe-area-inset-top); height: calc(var(--topo) + env(safe-area-inset-top)); }
+.topo { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+@media (min-width: 900px) {
+  #telaPainel { grid-template-rows: calc(var(--topo) + env(safe-area-inset-top)) 1fr; }
+  .abas { top: calc(var(--topo) + env(safe-area-inset-top)); height: calc(100vh - var(--topo) - env(safe-area-inset-top)); }
+}
+@media (display-mode: standalone) { body { overscroll-behavior-y: none; } }
+
+/* Tela "A TV não respondeu" (offline.html) */
+.cartao-entrar a.botao-primario { min-height: 50px; }
