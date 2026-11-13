@@ -19,12 +19,37 @@ object ContaIptv {
     /** Uma linha da área Conta: rótulo à esquerda, valor à direita. `alerta` pinta o valor (vencida, perto de vencer). */
     data class Linha(val rotulo: String, val valor: String, val alerta: Boolean = false)
 
+    /**
+     * Os textos da área Conta. O padrão é o português (o que os testes da JVM conferem); a tela das Configurações passa
+     * os do idioma da TV, lidos dos recursos (res/values = inglês, res/values-pt = português).
+     */
+    data class Textos(
+        val lista: String = "Lista de reprodução", val semNome: String = "(sem nome)", val usuario: String = "Usuário",
+        val tipoLogin: String = "Tipo de login", val servidor: String = "Servidor", val situacao: String = "Situação",
+        val naoRespondeu: String = "o servidor não respondeu agora · tente de novo",
+        val m3uComum: String = "lista M3U comum: o servidor não informa os dados da conta",
+        val criada: String = "Criada em", val naoInformado: String = "não informado", val vence: String = "Vence em",
+        val semValidade: String = "sem data de validade", val conexoes: String = "Conexões máximas",
+        val emUso: (Int, Int) -> String = { max, uso -> "$max ($uso em uso agora)" },
+        val recado: String = "Recado do vendedor", val m3uXtream: String = "M3U (painel Xtream)",
+        val ativa: String = "Ativa", val ativaTeste: String = "Ativa (teste)",
+        val desativada: (String) -> String = { "Desativada ($it)" },
+        val vencida: String = "vencida", val banida: String = "bloqueada pelo vendedor",
+        val desligada: String = "desligada pelo vendedor", val recusado: String = "usuário ou senha recusados",
+        val faltam: (Long) -> String = { "faltam $it dias" }, val falta1: String = "falta 1 dia",
+        val venceHoje: String = "vence hoje", val venceuOntem: String = "venceu ontem",
+        val venceuHa: (Long) -> String = { "venceu há $it dias" },
+        val formatoData: String = "dd/MM/yyyy", val local: Locale = Locale("pt", "BR"),
+    )
+
+    private val PT = Textos()
+
     /** Dias que faltam para vencer a partir dos quais o aviso fica amarelo. */
     const val DIAS_AVISO = 7
 
-    fun tipoLogin(f: FonteTv): String = when {
+    fun tipoLogin(f: FonteTv, t: Textos = PT): String = when {
         f.tipo == FonteTv.TIPO_XTREAM -> "Xtream Codes"
-        Xtream.contaDaLista(f.endereco) != null -> "M3U (painel Xtream)"
+        Xtream.contaDaLista(f.endereco) != null -> t.m3uXtream
         else -> "M3U"
     }
 
@@ -32,20 +57,20 @@ object ContaIptv {
     fun contaConsultavel(f: FonteTv): Xtream.Conta? = f.xtream ?: Xtream.contaDaLista(f.endereco)
 
     /** "Ativa" / "Desativada (vencida)" etc. O texto que o servidor manda é traduzido quando é um dos conhecidos. */
-    fun estado(s: Xtream.Situacao): String {
-        if (s.ativa) return if (s.teste) "Ativa (teste)" else "Ativa"
+    fun estado(s: Xtream.Situacao, t: Textos = PT): String {
+        if (s.ativa) return if (s.teste) t.ativaTeste else t.ativa
         val motivo = when (s.status.lowercase(Locale.ROOT)) {
-            "expired" -> "vencida"
-            "banned" -> "bloqueada pelo vendedor"
-            "disabled" -> "desligada pelo vendedor"
-            "" -> "usuário ou senha recusados"
+            "expired" -> t.vencida
+            "banned" -> t.banida
+            "disabled" -> t.desligada
+            "" -> t.recusado
             else -> s.status.take(40)
         }
-        return "Desativada ($motivo)"
+        return t.desativada(motivo)
     }
 
-    fun data(segundos: Long, fuso: TimeZone = TimeZone.getDefault()): String =
-        SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR")).apply { timeZone = fuso }.format(Date(segundos * 1000))
+    fun data(segundos: Long, fuso: TimeZone = TimeZone.getDefault(), t: Textos = PT): String =
+        SimpleDateFormat(t.formatoData, t.local).apply { timeZone = fuso }.format(Date(segundos * 1000))
 
     /** Quantos dias antes do vencimento a HOME começa a avisar (11/11/2026, visto no 1 Play). */
     const val AVISAR_DIAS = DIAS_AVISO   // o mesmo limite do amarelo da área Conta: a pílula e a Conta não podem discordar
@@ -71,14 +96,14 @@ object ContaIptv {
     }
 
     /** "vence em 12 dias", "vence hoje", "venceu há 3 dias". */
-    fun prazo(expiraEm: Long, agoraMs: Long): String {
+    fun prazo(expiraEm: Long, agoraMs: Long, t: Textos = PT): String {
         val dias = Math.floorDiv(expiraEm * 1000 - agoraMs, 86_400_000L)
         return when {
-            dias > 1 -> "faltam $dias dias"
-            dias == 1L -> "falta 1 dia"
-            dias == 0L -> "vence hoje"
-            dias == -1L -> "venceu ontem"
-            else -> "venceu há ${-dias} dias"
+            dias > 1 -> t.faltam(dias)
+            dias == 1L -> t.falta1
+            dias == 0L -> t.venceHoje
+            dias == -1L -> t.venceuOntem
+            else -> t.venceuHa(-dias)
         }
     }
 
@@ -86,32 +111,33 @@ object ContaIptv {
      * As linhas da área Conta para uma fonte. `s` null = não deu para consultar (sem rede, ou lista sem dados de conta);
      * `consultou` diz qual dos dois, para a mensagem certa.
      */
-    fun linhas(f: FonteTv, s: Xtream.Situacao?, consultou: Boolean, agoraMs: Long, fuso: TimeZone = TimeZone.getDefault()): List<Linha> {
+    fun linhas(f: FonteTv, s: Xtream.Situacao?, consultou: Boolean, agoraMs: Long, fuso: TimeZone = TimeZone.getDefault(),
+               t: Textos = PT): List<Linha> {
         val l = ArrayList<Linha>()
-        l += Linha("Lista de reprodução", f.nome.ifEmpty { "(sem nome)" })
+        l += Linha(t.lista, f.nome.ifEmpty { t.semNome })
         val usuario = s?.usuario?.ifEmpty { null } ?: contaConsultavel(f)?.usuario
-        if (usuario != null) l += Linha("Usuário", usuario)
-        l += Linha("Tipo de login", tipoLogin(f))
-        l += Linha("Servidor", f.servidorVisivel)
+        if (usuario != null) l += Linha(t.usuario, usuario)
+        l += Linha(t.tipoLogin, tipoLogin(f, t))
+        l += Linha(t.servidor, f.servidorVisivel)
         if (s == null) {
-            l += Linha("Situação", if (consultou) "o servidor não respondeu agora · tente de novo" else "lista M3U comum: o servidor não informa os dados da conta")
+            l += Linha(t.situacao, if (consultou) t.naoRespondeu else t.m3uComum)
             return l
         }
-        l += Linha("Situação", estado(s), alerta = !s.ativa)
-        l += Linha("Criada em", s.criadaEm?.let { data(it, fuso) } ?: "não informado")
+        l += Linha(t.situacao, estado(s, t), alerta = !s.ativa)
+        l += Linha(t.criada, s.criadaEm?.let { data(it, fuso, t) } ?: t.naoInformado)
         val exp = s.expiraEm
-        if (exp == null) l += Linha("Vence em", "sem data de validade")
+        if (exp == null) l += Linha(t.vence, t.semValidade)
         else {
             val diasFaltando = Math.floorDiv(exp * 1000 - agoraMs, 86_400_000L)
-            l += Linha("Vence em", "${data(exp, fuso)} · ${prazo(exp, agoraMs)}", alerta = diasFaltando < DIAS_AVISO)
+            l += Linha(t.vence, "${data(exp, fuso, t)} · ${prazo(exp, agoraMs, t)}", alerta = diasFaltando < DIAS_AVISO)
         }
         val telas = when {
-            s.telasMax == null -> "não informado"
-            s.telasEmUso != null -> "${s.telasMax} (${s.telasEmUso} em uso agora)"
+            s.telasMax == null -> t.naoInformado
+            s.telasEmUso != null -> t.emUso(s.telasMax, s.telasEmUso)
             else -> s.telasMax.toString()
         }
-        l += Linha("Conexões máximas", telas)
-        if (s.mensagem.isNotEmpty()) l += Linha("Recado do vendedor", s.mensagem)
+        l += Linha(t.conexoes, telas)
+        if (s.mensagem.isNotEmpty()) l += Linha(t.recado, s.mensagem)
         return l
     }
 }

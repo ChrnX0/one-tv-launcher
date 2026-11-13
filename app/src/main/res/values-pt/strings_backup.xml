@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Backup noturno cifrado (BackupNoturno.kt, BackupNoturnoActivity.kt). Arquivo próprio para não conflitar com outros PRs. -->
+<resources>
+    <string name="bkn_titulo">Backup automático</string>
+    <string name="bkn_explica">Toda noite, com a TV parada, guarda um backup completo trancado com a sua senha. Ficam os 7 últimos. Anote a senha: sem ela o backup não abre.</string>
+    <string name="bkn_ligado">ligado</string>
+    <string name="bkn_desligado">desligado</string>
+    <string name="bkn_sem_senha">desligado · defina a senha do backup primeiro</string>
+    <string name="bkn_senha">Senha do backup</string>
+    <string name="bkn_senha_ok">definida · OK troca</string>
+    <string name="bkn_senha_falta">não definida · OK define</string>
+    <string name="bkn_senha_nova">Senha do backup (8 ou mais caracteres)</string>
+    <string name="bkn_senha_repetir">Digite a senha de novo</string>
+    <string name="bkn_senha_curta">A senha precisa ter de 8 a 128 caracteres.</string>
+    <string name="bkn_senha_diferente">As duas senhas não bateram.</string>
+    <string name="bkn_senha_gravada">Senha gravada. Anote em lugar seguro.</string>
+    <string name="bkn_senha_erro">Não consegui gravar a senha.</string>
+    <string name="bkn_horario">Horário</string>
+    <string name="bkn_extra">Cópia extra</string>
+    <string name="bkn_destino_tv">só na TV</string>
+    <string name="bkn_destino_pendrive">pendrive</string>
+    <string name="bkn_destino_nas">NAS (%1$s)</string>
+    <string name="bkn_agora">Fazer agora</string>
+    <string name="bkn_ultimo">Último</string>
+    <string name="bkn_nunca">nunca</string>
+    <string name="bkn_pin">PIN para mudar o backup</string>
+</resources>

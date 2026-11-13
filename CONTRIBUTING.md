@@ -42,7 +42,8 @@ project favors things that are fast, work with the remote alone and don't need a
   go somewhere sensible.
 - Keep the home screen fast. Heavy work (network, disk, package queries) goes off the main thread.
 - Code comments and identifiers are in Brazilian Portuguese; English is fine in your own comments. User-facing text goes
-  in `res/values/strings.xml` (Portuguese) **and** `res/values-en/strings.xml` (English).
+  in `res/values/strings.xml` (English, the default) **and** `res/values-pt/strings.xml` (Portuguese). The app follows
+  the TV's system language; any language without its own folder falls back to English.
 - New permissions or new "powers" (device owner, shell, accessibility) need a clear reason in the PR, and should ask the
   user before acting when that is possible.
 
