@@ -111,7 +111,7 @@ class FilmesActivity : Activity() {
         direita.addView(cabecalho)
         grade = GridView(this).apply {
             numColumns = Estilo.Leitura.GRADE_COLUNAS
-            horizontalSpacing = dp(12); verticalSpacing = dp(14)
+            horizontalSpacing = dp(12); verticalSpacing = dp(Estilo.Leitura.GRADE_VAO)
             stretchMode = GridView.STRETCH_COLUMN_WIDTH
             estiloLista(this)
             setPadding(dp(4), dp(4), dp(4), dp(4)); clipToPadding = false
@@ -427,6 +427,12 @@ class FilmesActivity : Activity() {
         }
     }
 
+    /** Cabeçalho do card: o nome (2 linhas no máximo) encostado embaixo, logo acima do pôster. */
+    private fun cabecalhoCard(alturaDp: Int) = LinearLayout(this).apply {
+        orientation = LinearLayout.VERTICAL; gravity = Gravity.BOTTOM; setPadding(0, 0, 0, dp(6))
+        layoutParams = LinearLayout.LayoutParams(-1, dp(alturaDp))
+    }
+
     private fun novoCard(): View {
         val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(4), dp(4), dp(4), dp(6)) }
         val capa = ImageView(this).apply {
@@ -448,14 +454,15 @@ class FilmesActivity : Activity() {
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90B0F17.toInt()) }
         }
         moldura.addView(estrela, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, dp(5), dp(5), 0) })
+        val nome = TituloCard(this, Estilo.Leitura.CARD).apply { setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END }
+        col.addView(cabecalhoCard(Estilo.Leitura.NOME_CARD_ALTURA).apply { addView(nome) })
         col.addView(moldura, LinearLayout.LayoutParams(-1, dp(Estilo.Leitura.POSTER_ALTURA)))
         val barra = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
             max = 1000; progressTintList = ColorStateList.valueOf(coral); progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA)
         }
         col.addView(barra, LinearLayout.LayoutParams(-1, dp(3)).apply { topMargin = dp(4) })
-        val nome = TituloCard(this, Estilo.Leitura.CARD).apply { setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(4), 0, 0) }
-        col.addView(nome)
-        col.layoutParams = AbsListView.LayoutParams(-1, dp(Estilo.Leitura.CARD_ALTURA))
+        // 4 + nome + pôster + barra (4 + 3) + 6
+        col.layoutParams = AbsListView.LayoutParams(-1, dp(4 + Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.POSTER_ALTURA + 7 + 6))
         col.tag = Card(capa, nome, barra, etiqueta, estrela)
         return col
     }

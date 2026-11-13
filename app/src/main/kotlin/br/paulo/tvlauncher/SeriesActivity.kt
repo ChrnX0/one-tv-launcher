@@ -111,7 +111,7 @@ class SeriesActivity : Activity() {
         cabecalho = rotulo("")
         direita.addView(cabecalho)
         grade = GridView(this).apply {
-            numColumns = Estilo.Leitura.GRADE_COLUNAS; horizontalSpacing = dp(12); verticalSpacing = dp(14); stretchMode = GridView.STRETCH_COLUMN_WIDTH
+            numColumns = Estilo.Leitura.GRADE_COLUNAS; horizontalSpacing = dp(12); verticalSpacing = dp(Estilo.Leitura.GRADE_VAO); stretchMode = GridView.STRETCH_COLUMN_WIDTH
             estilo(this); setPadding(dp(4), dp(4), dp(4), dp(4)); clipToPadding = false
         }
         direita.addView(grade, LinearLayout.LayoutParams(-1, 0, 1f))
@@ -384,6 +384,12 @@ class SeriesActivity : Activity() {
         }
     }
 
+    /** Cabeçalho do card: o nome (2 linhas no máximo) encostado embaixo, logo acima do pôster. */
+    private fun cabecalhoCard(alturaDp: Int) = LinearLayout(this).apply {
+        orientation = LinearLayout.VERTICAL; gravity = Gravity.BOTTOM; setPadding(0, 0, 0, dp(6))
+        layoutParams = LinearLayout.LayoutParams(-1, dp(alturaDp))
+    }
+
     private fun novoCard(): View {
         val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(4), dp(4), dp(4), dp(6)) }
         val capa = ImageView(this).apply {
@@ -404,12 +410,13 @@ class SeriesActivity : Activity() {
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90B0F17.toInt()) }
         }
         moldura.addView(etiqueta, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(5), 0, 0, dp(5)) })
+        // Nome e "T2E5" em cima do pôster, encostados nele (a linha do episódio some quando não há).
+        val nome = TituloCard(this, Estilo.Leitura.CARD).apply { setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END }
+        val sub = TextView(this).apply { textSize = 12f; setTextColor(ambar); maxLines = 1 }
+        col.addView(cabecalhoCard(Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.SUB_CARD_ALTURA).apply { addView(nome); addView(sub) })
         col.addView(moldura, LinearLayout.LayoutParams(-1, dp(Estilo.Leitura.POSTER_ALTURA)))
-        val nome = TituloCard(this, Estilo.Leitura.CARD).apply { setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(6), 0, 0) }
-        col.addView(nome)
-        val sub = TextView(this).apply { textSize = 12f; setTextColor(ambar) }   // 11 -> 12: cabe no card com o nome em 2 linhas
-        col.addView(sub)
-        col.layoutParams = AbsListView.LayoutParams(-1, dp(Estilo.Leitura.CARD_ALTURA))
+        // 4 + nome e episódio + pôster + 6
+        col.layoutParams = AbsListView.LayoutParams(-1, dp(4 + Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.SUB_CARD_ALTURA + Estilo.Leitura.POSTER_ALTURA + 6))
         col.tag = Card(capa, nome, sub, estrela, etiqueta)
         return col
     }
