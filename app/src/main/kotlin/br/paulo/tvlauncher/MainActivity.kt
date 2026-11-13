@@ -1277,7 +1277,7 @@ class MainActivity : Activity() {
 
     /** Lê o banner (ou a cor do ícone) de um app. Roda em qualquer thread; o resultado vai para [capas]. */
     private fun lerCapa(pacote: String, icone: Drawable?): Pair<Bitmap?, IntArray> {
-        val b = CapaFoco.banner(packageManager, pacote)?.let { runCatching { CapaFoco.bitmap(it) }.getOrNull() }
+        val b = CapaFoco.banner(packageManager, pacote)?.let { runCatching { CapaFoco.bitmapReduzido(it) }.getOrNull() }
         val ic = icone ?: runCatching { packageManager.getApplicationIcon(pacote) }.getOrNull()
         val cores = ic?.let { runCatching { CapaFoco.corDoIcone(it) }.getOrNull() } ?: intArrayOf(0xFF2B2F3A.toInt(), Estilo.FUNDO)
         return (b to cores).also { capas[pacote] = it }
