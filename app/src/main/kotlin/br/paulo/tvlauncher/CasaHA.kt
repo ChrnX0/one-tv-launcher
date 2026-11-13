@@ -110,6 +110,32 @@ object CasaHA {
         }.sortedBy { it.nome.lowercase() }
     }
 
+    // Tela Casa (13/11/2026): ícone e estado de cada cartão. Puras.
+    /** Domínio do Home Assistant -> ícone do [IconeCard]. */
+    fun iconeDe(dominio: String) = when (dominio) {
+        "light" -> "lampada"
+        "switch" -> "tomada"
+        "fan" -> "ventilador"
+        "cover" -> "cortina"
+        "scene" -> "cena"
+        "script" -> "rotina"
+        else -> "chave"
+    }
+
+    /** Conta como "ligado" (verde-água): luz/tomada/ventilador/chave em "on" e cortina aberta. Cena e script nunca. */
+    fun ligado(dominio: String, estado: String) = when (dominio) {
+        "scene", "script" -> false
+        "cover" -> estado == "open" || estado == "opening"
+        else -> estado == "on"
+    }
+
+    /** Estado esperado depois de "alternar", para mostrar na hora; null = não sabe (não muda o cartão). */
+    fun inverso(dominio: String, estado: String): String? = when (dominio) {
+        "scene", "script" -> null
+        "cover" -> when (estado) { "open", "opening" -> "closed"; "closed", "closing" -> "open"; else -> null }
+        else -> when (estado) { "on" -> "off"; "off" -> "on"; else -> null }
+    }
+
     /** (domínio do serviço, serviço) para a ação pedida, ou null se a combinação não é permitida. Pura. */
     fun servico(id: String, acao: String): Pair<String, String>? {
         if (!idValido(id)) return null

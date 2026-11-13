@@ -22,7 +22,7 @@ function todosOsItens() {
   for (const b of document.querySelectorAll('nav.abas .aba')) {
     if (b.dataset.aba === 'mais') continue;
     const nome = b.querySelector('span:not(.ic)')?.textContent || b.textContent;
-    r.push({ tipo: 'Aba', nome, icone: b.querySelector('.ic')?.textContent || '›', fazer: () => mudarAba(b.dataset.aba) });
+    r.push({ tipo: 'Aba', nome, icone: b.querySelector('.ic svg') || '›', fazer: () => mudarAba(b.dataset.aba) });
   }
   for (const [nome, tecla, icone] of ACOES_BUSCA) {
     r.push({ tipo: 'Ação', nome, icone, fazer: async () => { await chamar('POST', '/api/tela/tecla', { tecla }); aviso(nome + ': feito.', 'ok'); } });
@@ -67,7 +67,8 @@ function desenharBusca() {
       img.onerror = () => { ic.textContent = (it.nome || '?').trim().charAt(0).toUpperCase(); ic.classList.add('letra'); };   // sem ícone: a inicial
       img.src = '/api/apps/' + encodeURIComponent(it.pacote) + '/icone';
       ic.appendChild(img);
-    } else ic.textContent = it.icone;
+    } else if (typeof it.icone === 'string') ic.textContent = it.icone;
+    else ic.appendChild(it.icone.cloneNode(true));
     const nome = document.createElement('span'); nome.className = 'nome'; nome.textContent = it.nome;
     const tipo = document.createElement('span'); tipo.className = 'tipo'; tipo.textContent = it.tipo;
     li.append(ic, nome, tipo);
