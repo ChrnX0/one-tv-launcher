@@ -352,7 +352,7 @@ class PlayerActivity : Activity() {
             if (keyCode in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9) lista.fechar()   // número digitado: some a lista e troca
             else return super.onKeyDown(keyCode, event)
         }
-        if (arquivo != null && teclaArquivo(keyCode)) return true
+        if (arquivo != null && teclaArquivo(keyCode, event)) return true
         when (keyCode) {
             KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_CHANNEL_UP -> { zapear(+1); return true }
             KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_CHANNEL_DOWN -> { zapear(-1); return true }
@@ -391,6 +391,18 @@ class PlayerActivity : Activity() {
     // "segurar" do Android dispara em ~0,5 s e não dá para mudar esse tempo na ListView.
     private var okAlvo = 0          // 0 = nada; 1 = vídeo; 2 = canal em foco na lista
     private var okSegurou = false   // já favoritou nesta apertada: soltar não faz mais nada
+
+    /** Soltou ◀ ▶ no passado depois de segurar: o vídeo pula uma vez só, para onde a faixa mostrou. */
+    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        if (arquivo != null) when (keyCode) {
+            KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> {
+                val ir = avanco.soltou()
+                if (ir >= 0) { player?.seekTo(ir); mostrarInfo() }
+                return true
+            }
+        }
+        return super.onKeyUp(keyCode, event)
+    }
 
     override fun dispatchKeyEvent(e: KeyEvent): Boolean {
         val nosso = ehOk(e.keyCode) && !grade.aberta && digitado.isEmpty() && (!lista.aberta || lista.canaisComFoco())
@@ -610,12 +622,20 @@ class PlayerActivity : Activity() {
         if (prox != null) tocarArquivo(prox, 0) else { sintonizar(c, guardarAnterior = false); mostrarAvisoBreve(getString(R.string.tvv_voltou)) }
     }
 
-    /** Teclas no passado: ◀ ▶ andam 30 s; ▲ ▼ e VOLTAR voltam ao ao vivo (o ▲▼ ainda troca de canal, que é ao vivo). */
-    private fun teclaArquivo(keyCode: Int): Boolean {
+    private val avanco = AvancoSegurado()   // ◀ ▶ segurados no passado: posição escolhida enquanto a tecla está apertada
+
+    /** Teclas no passado: ◀ ▶ andam 30 s (segurado acelera aos poucos, ver AvancoSegurado); ▲ ▼ e VOLTAR voltam ao ao vivo
+     *  (o ▲▼ ainda troca de canal, que é ao vivo). */
+    private fun teclaArquivo(keyCode: Int, event: KeyEvent): Boolean {
         val p = player ?: return false
         when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_MEDIA_REWIND -> { p.seekTo((p.currentPosition - 30_000).coerceAtLeast(0)); mostrarInfo() }
-            KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> { p.seekTo(p.currentPosition + 30_000); mostrarInfo() }
+            KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> {
+                val passo = if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT || keyCode == KeyEvent.KEYCODE_MEDIA_FAST_FORWARD) 30_000L else -30_000L
+                val dur = p.duration.takeIf { it != C.TIME_UNSET } ?: Long.MAX_VALUE
+                val ir = avanco.apertou(p.currentPosition, dur, passo, event.repeatCount, event.eventTime, event.downTime)
+                if (ir >= 0) p.seekTo(ir)
+                mostrarInfo()
+            }
             KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE -> { p.playWhenReady = !p.isPlaying; mostrarInfo() }
             KeyEvent.KEYCODE_BACK -> {
                 if (digitado.isNotEmpty() || info.visibility == View.VISIBLE) return false
@@ -633,7 +653,7 @@ class PlayerActivity : Activity() {
         infoTitulo.text = a.titulo
         infoLinha.text = listOf(c.nome, "${diaCurto(a.inicio)} ${hora.format(Date(a.inicio))} – ${hora.format(Date(a.fim))}",
             getString(R.string.tvv_teclas)).joinToString("  ·  ")
-        val pos = player?.currentPosition ?: 0
+        val pos = avanco.alvo.takeIf { it >= 0 } ?: player?.currentPosition ?: 0   // segurando ◀ ▶: mostra para onde vai
         infoHora.text = hora.format(Date(a.inicio + pos))
         infoProgresso.visibility = View.VISIBLE
         infoProgresso.progress = ((pos.toDouble() / (a.fim - a.inicio).coerceAtLeast(1)) * 1000).toInt().coerceIn(0, 1000)
