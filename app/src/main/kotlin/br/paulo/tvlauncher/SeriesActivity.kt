@@ -111,15 +111,15 @@ class SeriesActivity : Activity() {
         cabecalho = rotulo("")
         direita.addView(cabecalho)
         grade = GridView(this).apply {
-            numColumns = 6; horizontalSpacing = dp(12); verticalSpacing = dp(14); stretchMode = GridView.STRETCH_COLUMN_WIDTH
+            numColumns = Estilo.Leitura.GRADE_COLUNAS; horizontalSpacing = dp(12); verticalSpacing = dp(Estilo.Leitura.GRADE_VAO); stretchMode = GridView.STRETCH_COLUMN_WIDTH
             estilo(this); setPadding(dp(4), dp(4), dp(4), dp(4)); clipToPadding = false
         }
         direita.addView(grade, LinearLayout.LayoutParams(-1, 0, 1f))
         // A informação do item em foco fica EM CIMA da grade, como o destaque da HOME (era uma linha de 13 sp embaixo).
-        focado = TextView(this).apply { textSize = 14f; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPadding(dp(4), dp(10), 0, dp(10)) }
+        focado = TextView(this).apply { textSize = Estilo.Leitura.FOCADO; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPadding(dp(4), dp(10), 0, dp(10)) }
         direita.addView(focado, 1)   // logo abaixo do cabeçalho da categoria
         // Dica fixa das teclas, no mesmo jeito da lista de canais do player (player_lista_teclas: 11sp, cor apagada).
-        direita.addView(TextView(this).apply { text = getString(R.string.vod_grade_teclas); textSize = 11f; setTextColor(apagado); setPadding(dp(8), dp(6), 0, 0) })
+        direita.addView(TextView(this).apply { text = getString(R.string.vod_grade_teclas); textSize = Estilo.Leitura.DICA; setTextColor(apagado); setPadding(dp(8), dp(6), 0, 0) })
         colunas.addView(direita, LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(16) })
         raiz.addView(colunas, FrameLayout.LayoutParams(-1, -1))
         // Focável: enquanto a ficha carrega, o foco sai da grade de baixo (senão ▲▼ mexeriam nela por trás).
@@ -342,9 +342,9 @@ class SeriesActivity : Activity() {
         override fun getView(p: Int, reuso: View?, pai: ViewGroup?): View {
             val linha = (reuso as? LinearLayout) ?: LinearLayout(this@SeriesActivity).apply {
                 orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(dp(12), dp(9), dp(12), dp(9))
-                addView(TextView(context).apply { textSize = 14.5f; typeface = fonteMedia; maxLines = 1; ellipsize = TextUtils.TruncateAt.END }, LinearLayout.LayoutParams(0, -2, 1f))
+                addView(TextView(context).apply { textSize = Estilo.Leitura.CATEGORIA; typeface = fonteMedia; maxLines = 1; ellipsize = TextUtils.TruncateAt.END }, LinearLayout.LayoutParams(0, -2, 1f))
                 // Folga entre o nome cortado e o número (12/11: "Reality show / Program…" encostava no 304).
-                addView(TextView(context).apply { textSize = 12f; setTextColor(apagado) }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(10) })
+                addView(TextView(context).apply { textSize = Estilo.Leitura.CONTAGEM; setTextColor(apagado) }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(10) })
             }
             val it = itens[p]
             (linha.getChildAt(0) as TextView).apply {
@@ -384,6 +384,12 @@ class SeriesActivity : Activity() {
         }
     }
 
+    /** Cabeçalho do card: o nome (2 linhas no máximo) encostado embaixo, logo acima do pôster. */
+    private fun cabecalhoCard(alturaDp: Int) = LinearLayout(this).apply {
+        orientation = LinearLayout.VERTICAL; gravity = Gravity.BOTTOM; setPadding(0, 0, 0, dp(6))
+        layoutParams = LinearLayout.LayoutParams(-1, dp(alturaDp))
+    }
+
     private fun novoCard(): View {
         val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(4), dp(4), dp(4), dp(6)) }
         val capa = ImageView(this).apply {
@@ -404,12 +410,13 @@ class SeriesActivity : Activity() {
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90B0F17.toInt()) }
         }
         moldura.addView(etiqueta, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(5), 0, 0, dp(5)) })
-        col.addView(moldura, LinearLayout.LayoutParams(-1, dp(150)))
-        val nome = TituloCard(this, 12f).apply { setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(6), 0, 0) }
-        col.addView(nome)
-        val sub = TextView(this).apply { textSize = 11f; setTextColor(ambar) }
-        col.addView(sub)
-        col.layoutParams = AbsListView.LayoutParams(-1, dp(212))
+        // Nome e "T2E5" em cima do pôster, encostados nele (a linha do episódio some quando não há).
+        val nome = TituloCard(this, Estilo.Leitura.CARD).apply { setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END }
+        val sub = TextView(this).apply { textSize = 12f; setTextColor(ambar); maxLines = 1 }
+        col.addView(cabecalhoCard(Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.SUB_CARD_ALTURA).apply { addView(nome); addView(sub) })
+        col.addView(moldura, LinearLayout.LayoutParams(-1, dp(Estilo.Leitura.POSTER_ALTURA)))
+        // 4 + nome e episódio + pôster + 6
+        col.layoutParams = AbsListView.LayoutParams(-1, dp(4 + Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.SUB_CARD_ALTURA + Estilo.Leitura.POSTER_ALTURA + 6))
         col.tag = Card(capa, nome, sub, estrela, etiqueta)
         return col
     }
@@ -498,7 +505,7 @@ class SeriesActivity : Activity() {
         val s = aberta ?: return
         val f = fichaAberta
         painel.removeAllViews()
-        val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(48), dp(34), dp(48), dp(24)) }
+        val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(48), dp(28), dp(48), dp(20)) }   // 34/24 -> 28/20: sobra altura para os episódios com a letra maior
         val capa = ImageView(this).apply {
             scaleType = ImageView.ScaleType.CENTER_CROP
             background = GradientDrawable().apply { cornerRadius = dp(12).toFloat(); setColor(Estilo.BORDA) }; clipToOutline = true
@@ -506,7 +513,7 @@ class SeriesActivity : Activity() {
         PlayerLogos.carregar(this, s.capa, capa, lado = 600)
         linha.addView(capa, LinearLayout.LayoutParams(dp(180), dp(270)))
         val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(28), 0, 0, 0) }
-        col.addView(TextView(this).apply { text = Vod.nomeLimpo(s.nome); textSize = 26f; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END })
+        col.addView(TextView(this).apply { text = Vod.nomeLimpo(s.nome); textSize = Estilo.Leitura.TITULO; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END })
         val dados = listOfNotNull(s.ano?.toString(), f?.temporadas?.size?.let { resources.getQuantityString(R.plurals.series_temporadas, it, it) },
             s.nota?.let { "★ %.1f".format(Locale.getDefault(), it) }, f?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(s.grupo).ifEmpty { null },
             when (Idioma.versao(s.nome, s.grupo)) {
@@ -514,15 +521,15 @@ class SeriesActivity : Activity() {
                 Idioma.Versao.DUBLADA -> getString(R.string.idioma_dublado_curto)
                 Idioma.Versao.DESCONHECIDA -> null
             }).joinToString("   ·   ")
-        col.addView(TextView(this).apply { text = dados; textSize = 13.5f; setTextColor(suave); setPadding(0, dp(6), 0, 0) })
+        col.addView(TextView(this).apply { text = dados; textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(8), 0, 0) })
         f?.sinopse?.takeIf { it.isNotEmpty() }?.let {
-            col.addView(TextView(this).apply { text = it; textSize = 13.5f; setTextColor(papel); maxLines = 3; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(8), 0, 0) })
+            col.addView(TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.15f); maxLines = 3; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(8), 0, 0) })
         }
 
         if (f == null) {
-            col.addView(TextView(this).apply { text = getString(R.string.filmes_ficha_carregando); textSize = 13f; setTextColor(apagado); setPadding(0, dp(14), 0, 0) })
+            col.addView(TextView(this).apply { text = getString(R.string.filmes_ficha_carregando); textSize = Estilo.Leitura.AVISO; setTextColor(apagado); setPadding(0, dp(14), 0, 0) })
         } else if (f.temporadas.isEmpty()) {
-            col.addView(TextView(this).apply { text = getString(R.string.series_sem_episodios); textSize = 14f; setTextColor(suave); setPadding(0, dp(14), 0, 0) })
+            col.addView(TextView(this).apply { text = getString(R.string.series_sem_episodios); textSize = Estilo.Leitura.AVISO; setTextColor(suave); setPadding(0, dp(14), 0, 0) })
         } else {
             // Botão principal.
             val sugestao = Series.sugestao(f, s.fonteId, ultimos[s.chave], posicoes)
@@ -602,14 +609,14 @@ class SeriesActivity : Activity() {
         val v = (reuso as? LinearLayout) ?: LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL; setPadding(dp(12), dp(8), dp(12), dp(8))
             val topo = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
-            topo.addView(TextView(context).apply { textSize = 14f; typeface = Fontes.manrope(600); setTextColor(ambar) }, LinearLayout.LayoutParams(dp(40), -2))
-            topo.addView(TextView(context).apply { textSize = 14f; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }, LinearLayout.LayoutParams(0, -2, 1f))
-            topo.addView(TextView(context).apply { textSize = 12f; setTextColor(apagado) })
+            topo.addView(TextView(context).apply { textSize = Estilo.Leitura.ITEM; typeface = Fontes.manrope(600); setTextColor(ambar) }, LinearLayout.LayoutParams(dp(48), -2))
+            topo.addView(TextView(context).apply { textSize = Estilo.Leitura.ITEM; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }, LinearLayout.LayoutParams(0, -2, 1f))
+            topo.addView(TextView(context).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(apagado) })
             addView(topo)
-            addView(TextView(context).apply { textSize = 12f; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPadding(dp(40), dp(2), 0, 0) })
+            addView(TextView(context).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPadding(dp(48), dp(3), 0, 0) })
             addView(ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal).apply {
                 max = 1000; progressTintList = ColorStateList.valueOf(coral); progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA)
-            }, LinearLayout.LayoutParams(-1, dp(3)).apply { topMargin = dp(5); marginStart = dp(40) })
+            }, LinearLayout.LayoutParams(-1, dp(3)).apply { topMargin = dp(6); marginStart = dp(48) })
         }
         val topo = v.getChildAt(0) as LinearLayout
         (topo.getChildAt(0) as TextView).text = ep.numero.toString()
@@ -676,8 +683,8 @@ class SeriesActivity : Activity() {
     // ---------------------------------------------------------------- peças
 
     private fun botao(texto: String, pequeno: Boolean = false, marcado: Boolean = false, aoApertar: () -> Unit) = TextView(this).apply {
-        text = texto; textSize = if (pequeno) 13.5f else 16f; typeface = fonteMedia
-        setPadding(dp(if (pequeno) 16 else 22), dp(if (pequeno) 7 else 11), dp(if (pequeno) 16 else 22), dp(if (pequeno) 7 else 11))
+        text = texto; textSize = if (pequeno) Estilo.Leitura.BOTAO_PEQUENO else Estilo.Leitura.BOTAO; typeface = fonteMedia
+        setPadding(dp(if (pequeno) 18 else 26), dp(if (pequeno) 8 else 12), dp(if (pequeno) 18 else 26), dp(if (pequeno) 8 else 12))
         isFocusable = true; isClickable = true
         background = StateListDrawable().apply {
             addState(intArrayOf(android.R.attr.state_focused), GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(papel) })
@@ -700,7 +707,7 @@ class SeriesActivity : Activity() {
     }
 
     private fun rotulo(t: String) = TextView(this).apply {
-        text = t; textSize = 11.5f; typeface = Fontes.manrope(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
+        text = t; textSize = Estilo.Leitura.ROTULO; typeface = Fontes.manrope(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
         setPadding(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
     }
 

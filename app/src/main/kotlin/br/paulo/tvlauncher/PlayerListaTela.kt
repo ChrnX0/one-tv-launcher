@@ -254,9 +254,9 @@ class PlayerListaTela(
             val linha = (reuso as? LinearLayout) ?: LinearLayout(act).apply {
                 orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
                 setPadding(dp(12), dp(9), dp(12), dp(9))
-                addView(TextView(act).apply { textSize = 14.5f; typeface = fonteMedia; maxLines = 1; ellipsize = TextUtils.TruncateAt.END },
+                addView(TextView(act).apply { textSize = Estilo.Leitura.CATEGORIA; typeface = fonteMedia; maxLines = 1; ellipsize = TextUtils.TruncateAt.END },
                     LinearLayout.LayoutParams(0, -2, 1f))
-                addView(TextView(act).apply { textSize = 12f; setTextColor(apagado) })
+                addView(TextView(act).apply { textSize = Estilo.Leitura.CONTAGEM; setTextColor(apagado) })
             }
             val g = grupos[p]
             val escolhida = g.chave == chave
@@ -315,10 +315,10 @@ class PlayerListaTela(
         val linha = LinearLayout(act).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
             setPadding(dp(10), dp(7), dp(12), dp(7))
-            layoutParams = AbsListView.LayoutParams(-1, dp(58))
+            layoutParams = AbsListView.LayoutParams(-1, dp(68))   // 58 -> 68: letra maior (13/11/2026)
         }
-        val numero = TextView(act).apply { textSize = 15f; typeface = Fontes.manrope(600); gravity = Gravity.CENTER }
-        linha.addView(numero, LinearLayout.LayoutParams(dp(44), -2))
+        val numero = TextView(act).apply { textSize = Estilo.Leitura.ITEM; typeface = Fontes.manrope(600); gravity = Gravity.CENTER }
+        linha.addView(numero, LinearLayout.LayoutParams(dp(50), -2))
         val logo = ImageView(act).apply {
             scaleType = ImageView.ScaleType.FIT_CENTER
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(Estilo.BORDA) }
@@ -326,13 +326,13 @@ class PlayerListaTela(
         }
         linha.addView(logo, LinearLayout.LayoutParams(dp(58), dp(40)).apply { marginEnd = dp(12) })
         val col = LinearLayout(act).apply { orientation = LinearLayout.VERTICAL }
-        val nome = TextView(act).apply { textSize = 14.5f; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
-        val sub = TextView(act).apply { textSize = 12f; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
+        val nome = TextView(act).apply { textSize = Estilo.Leitura.ITEM; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
+        val sub = TextView(act).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
         val barra = barra()
         col.addView(nome); col.addView(sub)
         col.addView(barra, LinearLayout.LayoutParams(-1, dp(3)).apply { topMargin = dp(4) })
         linha.addView(col, LinearLayout.LayoutParams(0, -2, 1f))
-        val estrela = TextView(act).apply { text = "★"; textSize = 16f; setTextColor(ambar); setPadding(dp(10), 0, 0, 0) }
+        val estrela = TextView(act).apply { text = "★"; textSize = 18f; setTextColor(ambar); setPadding(dp(10), 0, 0, 0) }
         linha.addView(estrela)
         linha.tag = Linha(numero, logo, nome, sub, barra, estrela)
         return linha
@@ -348,19 +348,19 @@ class PlayerListaTela(
         }
         detLogo = ImageView(act).apply { scaleType = ImageView.ScaleType.FIT_START }
         col.addView(detLogo, LinearLayout.LayoutParams(dp(120), dp(64)))
-        detCanal = TextView(act).apply { textSize = 13f; setTextColor(suave); maxLines = 2; ellipsize = TextUtils.TruncateAt.END }
+        detCanal = TextView(act).apply { textSize = Estilo.Leitura.AVISO; setTextColor(suave); maxLines = 2; ellipsize = TextUtils.TruncateAt.END }
         col.addView(detCanal, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(10) })
-        detTitulo = TextView(act).apply { textSize = 19f; typeface = fonteMedia; setTextColor(papel); maxLines = 3; ellipsize = TextUtils.TruncateAt.END }
+        detTitulo = TextView(act).apply { textSize = Estilo.Leitura.PROGRAMA; typeface = fonteMedia; setTextColor(papel); maxLines = 3; ellipsize = TextUtils.TruncateAt.END }
         col.addView(detTitulo, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(6) })
-        detHorario = TextView(act).apply { textSize = 12.5f; setTextColor(suave) }
+        detHorario = TextView(act).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(suave) }
         col.addView(detHorario, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(4) })
         detBarra = barra()
         col.addView(detBarra, LinearLayout.LayoutParams(-1, dp(4)).apply { topMargin = dp(8) })
-        detDescricao = TextView(act).apply { textSize = 12.5f; setTextColor(suave); maxLines = 7; ellipsize = TextUtils.TruncateAt.END; setLineSpacing(0f, 1.15f) }
+        detDescricao = TextView(act).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(suave); maxLines = 5; ellipsize = TextUtils.TruncateAt.END; setLineSpacing(0f, 1.15f) }
         col.addView(detDescricao, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(10) })
         detSeguir = LinearLayout(act).apply { orientation = LinearLayout.VERTICAL }
         col.addView(detSeguir, LinearLayout.LayoutParams(-1, 0, 1f).apply { topMargin = dp(12) })
-        col.addView(TextView(act).apply { text = act.getString(R.string.player_lista_teclas); textSize = 11f; setTextColor(apagado); setLineSpacing(0f, 1.2f) },
+        col.addView(TextView(act).apply { text = act.getString(R.string.player_lista_teclas); textSize = Estilo.Leitura.DICA; setTextColor(apagado); setLineSpacing(0f, 1.2f) },
             LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(12) })
         return col
     }
@@ -397,7 +397,7 @@ class PlayerListaTela(
             detSeguir.addView(rotulo().apply { text = act.getString(R.string.player_depois) })
             depois.forEach { p ->
                 detSeguir.addView(TextView(act).apply {
-                    text = "${hora.format(Date(p.inicio))}   ${p.titulo}"; textSize = 12.5f; setTextColor(papel)
+                    text = "${hora.format(Date(p.inicio))}   ${p.titulo}"; textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(papel)
                     maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(3), 0, dp(3))
                 })
             }
@@ -425,7 +425,7 @@ class PlayerListaTela(
     }
 
     private fun rotulo() = TextView(act).apply {
-        textSize = 11.5f; typeface = Fontes.manrope(600); letterSpacing = 0.06f; setTextColor(0x99F5F3EE.toInt())
+        textSize = Estilo.Leitura.ROTULO; typeface = Fontes.manrope(600); letterSpacing = 0.06f; setTextColor(0x99F5F3EE.toInt())
         setPadding(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
     }
 
