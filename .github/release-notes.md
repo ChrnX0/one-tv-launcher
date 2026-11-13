@@ -13,7 +13,7 @@ Each APK has a `.sha256` file next to it. Already installed? The launcher update
 
 ### Highlights
 
-- Home screen with your apps first, stacks, hidden apps and themes (Live sky, Gallery, Astrolabe, Dark)
+- Home screen with your apps first, stacks, hidden apps and themes (Dark and Gallery)
 - Weather from the nearest airport report plus a three-model rain forecast, and a full-screen forecast
 - Alarm clock that turns the TV on, sleep timer, routines, calendar and reminders
 - Screensaver with a clock, the weather and your photos

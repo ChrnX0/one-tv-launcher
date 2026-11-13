@@ -40,69 +40,162 @@ remote, not for a phone with a touchscreen.
 
 ## A quick tour
 
+<p align="center">
+  <img src="docs/screenshots/home-dark.jpg" alt="Home screen, Dark theme" width="100%"><br>
+  <sub><b>Home, Dark theme.</b> Your apps first, a search and voice bar, the weather in one line, and the clock.
+  YouTube and YouTube Music share one card here: press ▲ to switch which one is in front.</sub>
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/home-gallery.jpg" alt="Home screen, Gallery theme" width="100%"><br>
+  <sub><b>Home, Gallery theme.</b> A public-domain painting from The Met every day, behind the same home screen.</sub>
+</p>
+
+### Two themes
+
+| Dark | Gallery |
+|---|---|
+| A quiet dark background whose art follows the app or title you select (its logo, poster, rating, year and synopsis). | A different masterpiece every day from [The Met Open Access](https://www.metmuseum.org/about-the-met/policies-and-documents/open-access), with its title and artist. The accent color can follow the painting. |
+
+Switch in *Settings → Appearance → Theme*. The screensaver follows the theme you pick.
+
+### A screensaver worth leaving on
+
 <table>
 <tr>
-<td width="50%"><img src="docs/screenshots/home.jpg" alt="Home screen"><br><b>Home.</b> A search and voice bar, the weather, and your apps. Stack apps you use together (YouTube + YouTube Music) and press ▲ to switch which one is in front.</td>
-<td width="50%"><img src="docs/screenshots/forecast.jpg" alt="Weather forecast"><br><b>Forecast.</b> Press OK on the weather: 24 hours, a rain chart, 9 days, air quality, the sun and the moon.</td>
+<td width="50%"><img src="docs/screenshots/screensaver-gallery.jpg" alt="Screensaver, Gallery theme"><br><b>Gallery + "Day summary".</b> The painting of the day moves slowly (so nothing burns in), with the time, the date and the weather on top.</td>
+<td width="50%"><img src="docs/screenshots/screensaver-dark.jpg" alt="Screensaver, Dark theme"><br><b>Dark + "Next hours".</b> The weather every 2 hours, and a notification card in the corner.</td>
 </tr>
 </table>
 
-### Everything it can do
+What can appear on it:
 
-<details open>
+- **Greeting, a big clock and the date**, with a thin line under the date that shows how much daylight is left
+  (from sunrise to sunset).
+- **Bottom row, your choice** (*Settings → Screen and power → Screensaver bottom row*): **Next hours** (temperature and
+  chance of rain every 2 hours) or **Day summary** (sunrise and sunset, moon phase, humidity, chance of rain, tomorrow).
+- **Cards in the top-right corner:** TV notifications, your next alarm, and messages sent from the web panel, Home
+  Assistant or Claude.
+- **Family board** *(optional)*: a shopping list, pinned notes ("Dentist Thursday 3 pm") and today's birthdays from
+  your Google Calendar.
+- **Your own photos** *(optional)*: upload them in the web panel; they stay in a private folder on the TV.
+- **Weekly recap** *(optional)*: on Sunday night, a card with the week's screen time per app, internet used and network drops.
+- It replaces Google's stock screensaver, which uses about 59 MB more memory.
+
+### Weather that's actually right
+
+<p align="center">
+  <img src="docs/screenshots/forecast.jpg" alt="Full-screen forecast" width="100%"><br>
+  <sub><b>Forecast.</b> Press OK on the weather: the next 24 hours, a rain chart, 9 days, air quality, the sun and the moon.</sub>
+</p>
+
+- **Now** comes from the nearest airport's METAR report, so it's measured, not modeled.
+- **Chance of rain** is the median of three weather models (ECMWF, ICON and GFS) from [Open-Meteo](https://open-meteo.com).
+- The day/night icon follows the real sunrise and sunset where the TV is, plus 20 minutes of twilight.
+- Optional rain alert on screen when rain is about to start.
+
+### Your remote, your rules
+
+The launcher has an accessibility service that sees the remote's keys before the system does, so it can give them
+better jobs:
+
+| Button | What it does |
+|---|---|
+| **HOME** | Always comes back to One TV Launcher, even though Google's launcher is still installed. |
+| **HOME (hold)** | Opens the **quick panel**: Wi-Fi, Bluetooth, sleep timer, screensaver, audio output, alarm, guest mode, Google Home and notifications. |
+| **Netflix / YouTube buttons** | Remap them to **any app**: press to open it, **hold for 3 s** to pick a different app. Your choice is saved. |
+| **OK (hold) on an app** | Move it, stack it with another app, or hide it. |
+| **OK (hold 2 s) on a poster or channel** | Add it to or remove it from your list. |
+| **▲ ▼ on a stack** | Switch which app of the stack is in front. |
+| **Microphone** | Still Google Assistant / Gemini. Voice shortcuts also work ("Hey Google, open *Boletim do Tempo*" reads the forecast aloud; others set a reminder or a sleep timer). |
+
+*Settings → System → Extras → Open the key tester* shows every key the TV receives, live, which helps when a remote behaves oddly.
+
+### Ask Claude to run your TV (MCP)
+
+One TV Launcher has a built-in [Model Context Protocol](https://modelcontextprotocol.io) server. Connect it to
+[Claude](https://claude.ai) (or any MCP client) and talk to your TV in plain language:
+
+> *"What's on the TV right now?"* · *"Set an alarm for 6:30 on weekdays."* · *"Put the news channel on and lower the volume."*
+> · *"Add milk to the shopping list on the TV."* · *"Why is the internet slow on the TV?"* · *"Turn off the living-room lights."*
+
+| Group | Tools |
+|---|---|
+| See | `estado_tv` (on/asleep, app in front, volume), `ver_tela` (screenshot + on-screen text), `elementos_na_tela`, `sistema`, `erros_recentes` |
+| Control | `controle_remoto` (any key), `tocar_elemento`, `digitar_texto`, `abrir` (an app or a link), `midia`, `energia`, `pedir_acoes` (open screens, volume, alarms, guest mode, live channels) |
+| Day to day | `clima`, `agenda_hoje`, `despertadores`, `lembretes`, `rotinas`, `mural` (family board), `aviso_na_tv` (show a message), `buscar_tv`, `semana_tv` |
+| Apps & files | `apps`, `apps_instalados`, `instalar_apk`, `desinstalar_app`, `atualizar_launcher`, `arquivos`, `baixar_arquivo` |
+| Network & home | `diagnostico_rede`, `historico_rede`, `aparelhos_rede`, `aparelhos_tailscale`, `wake_on_lan`, `casa_listar`, `casa_acionar` (Home Assistant) |
+| Power user | `executar_shell` (shell commands as `adb shell`; **blocked by default**, can be set to ask on the TV) |
+
+How it's kept safe:
+
+- **Off until you turn it on.** It's reachable from outside only through a [Tailscale](https://tailscale.com) tunnel that
+  runs inside the app (userspace, so it doesn't take the TV's VPN slot). Setup shows a QR code on the TV.
+- **OAuth 2.1 with PKCE.** You log in with your web-panel PIN or your Google account (any account already on the TV).
+- **You choose how much power it has**: ask for OK on the TV, allow, or block, per kind of
+  action (new logins, actions, shell, installs). Screenshots are a separate switch, and the TV shows a notice every time Claude looks at the screen.
+
+### Everything else it can do
+
+<details>
 <summary><b>Home screen</b></summary>
 
-- Clock, date, weather and moon phase, laid out on a fixed grid so nothing jumps around.
-- Background art follows the app or movie you have selected, with its rating, year and synopsis.
-- Stacks, hidden apps, a manual order or "most used first", and a simple mode with large cards that reads app names aloud.
-- Themes: *Live sky* (the actual sky right now, with the sun, moon, clouds and stars), *Gallery* (a public-domain
-  painting from the Met every day), *Astrolabe* and *Dark*.
-- Hold **HOME** for a quick panel with Wi-Fi, Bluetooth, the sleep timer, screensaver, audio output, alarm, guest mode and notifications.
-- The Google Assistant and Gemini keep working. The voice button still reaches them.
+- Clock, date and weather on a fixed grid, so nothing jumps around.
+- Background art follows the app or title you have selected, with its rating, year and synopsis.
+- Stacks, hidden apps, a manual order or "most used first", and **automatic stacks** by category.
+- **Simple mode** for people who find the remote hard: big cards, and the TV says the app name out loud.
+- **Guest mode** hides your profile, calendar and the apps you choose while visitors are around.
+- The Google Assistant and Gemini keep working.
 </details>
 
 <details>
 <summary><b>Clock, alarms & routines</b></summary>
 
-- Alarms with their own sounds, a volume ramp and snooze. The TV turns itself on to ring.
-- Sleep timer, a "gentle shutdown" that dims the screen and lowers the volume first, and auto-off when everyone leaves the house.
-- Routines that run things at a set time, scenes, reminders, and messages on screen.
-- Calendar: your Google Calendar on the TV.
-</details>
+<img src="docs/screenshots/alarms.jpg" alt="Alarm clock" width="60%">
 
-<details>
-<summary><b>Screensaver</b></summary>
-
-- A large clock with the weather and the day's forecast. It moves slowly so it doesn't burn into the screen.
-- A photo frame for your own pictures, plus a family board.
-- Replaces the stock screensaver and uses about 59 MB less memory.
+- Alarms with their own sounds, a volume ramp and snooze. The TV turns itself on over HDMI-CEC to ring, and tells you
+  if an alarm was missed while it was off.
+- Sleep timer with a **gentle shutdown**: in the last 5 minutes the screen dims and the volume goes down.
+- **Turn off when idle**: after 30 minutes without a key press it warns you for 60 s, then sleeps.
+- Optional **presence** with a UniFi router: when every phone has left the house, the TV goes to sleep.
+- Routines at a set time (turn on, open an app, turn off), scenes, reminders and on-screen messages.
+- Your Google Calendar on the TV.
 </details>
 
 <details>
 <summary><b>Live TV, movies & series</b></summary>
 
-- An IPTV player for your Xtream Codes or M3U playlist: a channel guide, catch-up, favorites, and blocking for channels and categories.
+- An IPTV player for **your own** Xtream Codes or M3U playlist: a channel guide, catch-up, favorites, and blocking for channels and categories.
 - Movies and series with posters, ratings and "continue watching", resuming where you stopped.
-- Audio language preference (original + subtitles, or dubbed), remembered per title.
-- Online subtitles from OpenSubtitles.
+- Audio language preference (original + subtitles, or dubbed), remembered per title, and online subtitles from OpenSubtitles.
 - Network media from Plex, Jellyfin, Emby, SMB, WebDAV and UPnP/DLNA.
+- One TV Launcher doesn't come with any channels or content.
+</details>
+
+<details>
+<summary><b>Family & parental controls</b></summary>
+
+- Parental PIN with locked channels and a **kids mode** for Live TV, Movies and Series.
+- **Bedtime**: during the hours you choose, only the apps on a list open and the volume has a ceiling.
+- Optional PIN to change the home screen.
 </details>
 
 <details>
 <summary><b>Control from your phone or PC</b></summary>
 
-- **Web panel** on your home network (`http://<tv-ip>:8080`), protected by a PIN: install and remove apps,
-  manage permissions, transfer files, see the TV screen live, press remote keys, type text, and download or restore backups.
-- **Claude over the internet** (optional): a built-in [MCP](https://modelcontextprotocol.io) server through a Tailscale tunnel,
-  so an AI assistant can check the weather on the TV, set an alarm, open an app or tell you what's playing.
-  It's off until you turn it on, and you can turn it off at any time.
-- Wake-on-LAN for your PC and UniFi presence.
+- **Web panel** on your home network (`http://<tv-ip>:8080`), protected by a PIN: install and remove apps, manage
+  permissions, transfer files, see the TV screen live, press remote keys, type text, edit the family board, upload
+  screensaver photos, and download or restore encrypted backups.
+- Wake-on-LAN for your PC.
 </details>
 
 <details>
 <summary><b>Smart home (Home Assistant)</b></summary>
 
-- Turn lights, plugs, fans, covers, scenes and scripts on or off from the couch, from the web panel, or by asking Claude.
+<img src="docs/screenshots/settings.jpg" alt="Settings" width="60%">
+
+- Turn lights, plugs, fans, covers, scenes and scripts on or off from the couch (the **Home** tile in the quick panel), from the web panel, or by asking Claude.
 - The TV reports itself to Home Assistant (`sensor.tv_<name>`: on or asleep, the app in front, what's playing), so automations like "movie paused → dim the lights" are easy.
 - When the doorbell rings, the camera snapshot pops up over whatever you're watching.
 - Talks directly to your server on your network, with no cloud in between. The token is encrypted on the TV. Setup: [docs/home-assistant.md](docs/home-assistant.md).
@@ -114,6 +207,7 @@ remote, not for a phone with a touchscreen.
 - Private DNS (DNS over TLS) picker, with an automatic rollback if the new server doesn't answer.
 - A per-app DNS log and internet usage per app, kept on the TV for 7 days.
 - Wi-Fi quality colored by signal, latency and link speed. One-tap speed test.
+- Night filter: a warmer, dimmer screen in the evening.
 - No analytics and no tracking. Crash reports stay on the TV unless *you* send them.
 </details>
 
@@ -124,6 +218,7 @@ remote, not for a phone with a touchscreen.
 - Automatic, encrypted backup every night (PBKDF2 + AES-GCM, with your password).
 - Updates itself from GitHub Releases. Only APKs signed with the project key are accepted.
 - System updates install only at night (3 to 5 am), so they don't interrupt a movie.
+- Re-applies the bloat cleanup after a system update, and can lock "Force stop" and "Clear data" on itself.
 </details>
 
 ## Install
