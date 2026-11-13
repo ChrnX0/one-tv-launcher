@@ -47,10 +47,10 @@ object Retrospectiva {
     /** Regra pura: as linhas do cartão. "12 h de TV · YouTube 5 h, Netflix 3 h" / "Internet: 42 GB · 1 queda (3 min)". */
     fun linhas(r: Resumo): Pair<String, String> {
         fun h(min: Long) = if (min >= 60) "${min / 60} h" + (if (min % 60 >= 10 && min < 600) " ${min % 60} min" else "") else "$min min"
-        val cima = "${h(r.minutosTv)} de TV" + if (r.apps.isEmpty()) "" else " · " + r.apps.joinToString(", ") { "${it.nome} ${h(it.minutos)}" }
+        val cima = txt(R.string.rt_de_tv, h(r.minutosTv)) + if (r.apps.isEmpty()) "" else " · " + r.apps.joinToString(", ") { "${it.nome} ${h(it.minutos)}" }
         val partes = ArrayList<String>()
-        r.bytes?.let { partes += "Internet: ${ConsumoRede.texto(it)}" }
-        r.quedas?.let { partes += if (it == 0) "nenhuma queda" else if (it == 1) "1 queda (${r.foraMin ?: 0} min)" else "$it quedas (${r.foraMin ?: 0} min)" }
+        r.bytes?.let { partes += txt(R.string.rt_internet, ConsumoRede.texto(it)) }
+        r.quedas?.let { partes += if (it == 0) txt(R.string.rt_sem_queda) else txtN(R.plurals.rt_quedas, it) + " (${r.foraMin ?: 0} min)" }
         return cima to partes.joinToString(" · ")
     }
 
@@ -105,7 +105,7 @@ object Retrospectiva {
         val r = ultima(ctx) ?: return null
         if (agora - r.ate !in 0..VALIDADE_CARTAO_MS) return null
         val (a, b) = linhas(r)
-        return Triple("Sua semana na TV", a, b)
+        return Triple(ctx.getString(R.string.rt_titulo), a, b)
     }
 }
 

@@ -51,9 +51,9 @@ class EntrarPeloQrActivity : Activity() {
         texto = Estilo.texto(this, Estilo.Papel.CORPO).apply { setTextColor(Estilo.TEXTO_2); setPadding(0, dp(16), dp(32), 0); setLineSpacing(0f, 1.2f) }
         col.addView(titulo); col.addView(texto)
         val botoes = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-        outro = botao("Gerar outro") { gerar() }
+        outro = botao(getString(R.string.qr_gerar_outro)) { gerar() }
         botoes.addView(outro, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { rightMargin = dp(16) })
-        val fechar = botao("Fechar") { finish() }
+        val fechar = botao(getString(R.string.qr_fechar)) { finish() }
         botoes.addView(fechar)
         col.addView(botoes, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { topMargin = dp(24) })
         raiz.addView(col, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
@@ -79,11 +79,11 @@ class EntrarPeloQrActivity : Activity() {
     private fun gerar() {
         terminou = false
         val link = PainelWeb.linkEntradaQr()
-        titulo.text = "Entrar pelo celular"
+        titulo.text = getString(R.string.lbl_entrar_celular)
         if (link == null) {
             geradoEm = 0L
             qr.visibility = View.INVISIBLE
-            texto.text = "O painel não está no ar.\nLigue em Configurações do launcher > Acesso remoto > Painel (precisa de um PIN)."
+            texto.text = getString(R.string.qr_painel_fora)
             return
         }
         geradoEm = System.currentTimeMillis()
@@ -98,22 +98,20 @@ class EntrarPeloQrActivity : Activity() {
         if (c.usadoEm >= geradoEm) {
             terminou = true
             qr.visibility = View.INVISIBLE
-            titulo.text = "Pronto"
-            texto.text = "O celular entrou no painel."
+            titulo.text = getString(R.string.qr_pronto)
+            texto.text = getString(R.string.qr_entrou)
             ui.postDelayed({ if (!isDestroyed && terminou) finish() }, 2500)
             return
         }
         if (!c.ativo()) {
             geradoEm = 0L
             qr.visibility = View.INVISIBLE
-            texto.text = "O código venceu (vale 2 min).\nToque em \"Gerar outro\" para mostrar um novo."
+            texto.text = getString(R.string.qr_venceu, getString(R.string.qr_gerar_outro))
             outro.requestFocus()
             return
         }
         val falta = ((geradoEm + CodigoEntrada.VALIDADE_MS - System.currentTimeMillis()) / 1000).coerceAtLeast(0)
-        texto.text = "Aponte a câmera do celular para o código ao lado. O celular abre o painel e já entra, sem digitar o PIN.\n\n" +
-            "O celular precisa estar no Wi-Fi da casa. O código vale uma vez só, por mais ${falta / 60}:${"%02d".format(falta % 60)}.\n" +
-            "Instalar, desinstalar e restaurar backup continuam pedindo o PIN."
+        texto.text = getString(R.string.qr_instrucoes, "${falta / 60}:${"%02d".format(falta % 60)}")
     }
 
     /** Botão padrão do sistema de design (pílula; foco = branco). */
