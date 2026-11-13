@@ -13,4 +13,9 @@ class CompilarAotTest {
         assertFalse(CompilarAot.deuCerto("Failure: package not found"))
         assertFalse(CompilarAot.deuCerto(null))
     }
+
+    // Compilada no protetor (13/11/2026): reinicia no próximo apagar, uma vez por versão.
+    @Test fun compiladaSemReiniciarReinicia() = assertTrue(CompilarAot.deveReiniciar(200, 200, 100))
+    @Test fun jaReiniciadaNao() = assertFalse(CompilarAot.deveReiniciar(200, 200, 200))
+    @Test fun naoCompiladaNaoReinicia() = assertFalse(CompilarAot.deveReiniciar(200, 100, 0))
 }
