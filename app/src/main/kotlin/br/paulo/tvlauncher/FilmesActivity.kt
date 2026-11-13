@@ -118,10 +118,10 @@ class FilmesActivity : Activity() {
         }
         direita.addView(grade, LinearLayout.LayoutParams(-1, 0, 1f))
         // A informação do item em foco fica EM CIMA da grade, como o destaque da HOME (era uma linha de 13 sp embaixo).
-        focado = TextView(this).apply { textSize = 14f; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPadding(dp(4), dp(10), 0, dp(10)) }
+        focado = TextView(this).apply { textSize = Estilo.Leitura.FOCADO; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPadding(dp(4), dp(10), 0, dp(10)) }
         direita.addView(focado, 1)   // logo abaixo do cabeçalho da categoria
         // Dica fixa das teclas, no mesmo jeito da lista de canais do player (player_lista_teclas: 11sp, cor apagada).
-        direita.addView(TextView(this).apply { text = getString(R.string.vod_grade_teclas); textSize = 11f; setTextColor(apagado); setPadding(dp(8), dp(6), 0, 0) })
+        direita.addView(TextView(this).apply { text = getString(R.string.vod_grade_teclas); textSize = Estilo.Leitura.DICA; setTextColor(apagado); setPadding(dp(8), dp(6), 0, 0) })
         colunas.addView(direita, LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(16) })
         raiz.addView(colunas, FrameLayout.LayoutParams(-1, -1))
         painelFicha = FrameLayout(this).apply { visibility = View.GONE; background = Estilo.fundoTela(context) }
@@ -383,9 +383,9 @@ class FilmesActivity : Activity() {
         override fun getView(p: Int, reuso: View?, pai: ViewGroup?): View {
             val linha = (reuso as? LinearLayout) ?: LinearLayout(this@FilmesActivity).apply {
                 orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(dp(12), dp(9), dp(12), dp(9))
-                addView(TextView(context).apply { textSize = 14.5f; typeface = fonteMedia; maxLines = 1; ellipsize = TextUtils.TruncateAt.END }, LinearLayout.LayoutParams(0, -2, 1f))
+                addView(TextView(context).apply { textSize = Estilo.Leitura.CATEGORIA; typeface = fonteMedia; maxLines = 1; ellipsize = TextUtils.TruncateAt.END }, LinearLayout.LayoutParams(0, -2, 1f))
                 // Folga entre o nome cortado e o número (12/11: "Reality show / Program…" encostava no 304).
-                addView(TextView(context).apply { textSize = 12f; setTextColor(apagado) }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(10) })
+                addView(TextView(context).apply { textSize = Estilo.Leitura.CONTAGEM; setTextColor(apagado) }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(10) })
             }
             val it = itens[p]
             (linha.getChildAt(0) as TextView).apply {
@@ -453,7 +453,7 @@ class FilmesActivity : Activity() {
             max = 1000; progressTintList = ColorStateList.valueOf(coral); progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA)
         }
         col.addView(barra, LinearLayout.LayoutParams(-1, dp(3)).apply { topMargin = dp(4) })
-        val nome = TituloCard(this, 12f).apply { setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(4), 0, 0) }
+        val nome = TituloCard(this, Estilo.Leitura.CARD).apply { setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(4), 0, 0) }
         col.addView(nome)
         col.layoutParams = AbsListView.LayoutParams(-1, dp(212))
         col.tag = Card(capa, nome, barra, etiqueta, estrela)
@@ -508,7 +508,7 @@ class FilmesActivity : Activity() {
         PlayerLogos.carregar(this, f.capa, capa, lado = 600)
         linha.addView(capa, LinearLayout.LayoutParams(dp(220), dp(330)))
         val texto = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(32), 0, 0, 0) }
-        texto.addView(TextView(this).apply { text = Vod.nomeLimpo(f.nome); textSize = Estilo.Ficha.TITULO; typeface = fonteMedia; setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END })
+        texto.addView(TextView(this).apply { text = Vod.nomeLimpo(f.nome); textSize = Estilo.Leitura.TITULO; typeface = fonteMedia; setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END })
         val dados = listOfNotNull(
             (f.ano?.toString() ?: info?.lancamento?.take(4)?.takeIf { it.isNotEmpty() }),
             info?.duracaoMin?.let { if (it >= 60) "${it / 60} h ${it % 60} min" else "$it min" },
@@ -516,7 +516,7 @@ class FilmesActivity : Activity() {
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(f.grupo).ifEmpty { null },
             rotuloVersao(Idioma.versao(f.nome, f.grupo)),
         ).joinToString("   ·   ")
-        texto.addView(TextView(this).apply { text = dados; textSize = Estilo.Ficha.DADOS; setTextColor(suave); setPadding(0, dp(10), 0, 0) })
+        texto.addView(TextView(this).apply { text = dados; textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(10), 0, 0) })
 
         // Botões: Continuar (se começou) + Do começo, ou só Assistir.
         val pos = posicoes[f.chave]
@@ -542,8 +542,8 @@ class FilmesActivity : Activity() {
         texto.addView(botoes)
 
         val corpo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        if (info == null) corpo.addView(TextView(this).apply { text = getString(R.string.filmes_ficha_carregando); textSize = Estilo.Ficha.AVISO; setTextColor(apagado) })
-        info?.sinopse?.takeIf { it.isNotEmpty() }?.let { corpo.addView(TextView(this).apply { text = it; textSize = Estilo.Ficha.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.25f) }) }
+        if (info == null) corpo.addView(TextView(this).apply { text = getString(R.string.filmes_ficha_carregando); textSize = Estilo.Leitura.AVISO; setTextColor(apagado) })
+        info?.sinopse?.takeIf { it.isNotEmpty() }?.let { corpo.addView(TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.25f) }) }
         info?.diretor?.takeIf { it.isNotEmpty() }?.let { corpo.addView(rotuloValor(getString(R.string.filmes_direcao), it)) }
         info?.elenco?.takeIf { it.isNotEmpty() }?.let { corpo.addView(rotuloValor(getString(R.string.filmes_elenco), it)) }
         // A sinopse longa rola com ▼ (o ScrollView não pega foco; quem rola é a tecla, ver onKeyDown).
@@ -577,7 +577,7 @@ class FilmesActivity : Activity() {
     }
 
     private fun botao(texto: String, marca: String, aoApertar: () -> Unit) = TextView(this).apply {
-        text = texto; textSize = Estilo.Ficha.BOTAO; typeface = fonteMedia; tag = marca
+        text = texto; textSize = Estilo.Leitura.BOTAO; typeface = fonteMedia; tag = marca
         setPadding(dp(26), dp(12), dp(26), dp(12))
         isFocusable = true; isClickable = true
         background = StateListDrawable().apply {
@@ -589,7 +589,7 @@ class FilmesActivity : Activity() {
     }
 
     private fun rotuloValor(r: String, v: String) = TextView(this).apply {
-        text = "$r: $v"; textSize = Estilo.Ficha.CREDITOS; setTextColor(suave); setPadding(0, dp(12), 0, 0); setLineSpacing(0f, 1.15f)
+        text = "$r: $v"; textSize = Estilo.Leitura.CREDITOS; setTextColor(suave); setPadding(0, dp(12), 0, 0); setLineSpacing(0f, 1.15f)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -622,7 +622,7 @@ class FilmesActivity : Activity() {
     }
 
     private fun rotulo(t: String) = TextView(this).apply {
-        text = t; textSize = 11.5f; typeface = Fontes.manrope(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
+        text = t; textSize = Estilo.Leitura.ROTULO; typeface = Fontes.manrope(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
         setPadding(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
     }
 
