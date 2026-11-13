@@ -35,6 +35,15 @@ class LauncherApp : Application() {
         VigiaAtualizacao.aoIniciar(this)
         VigiaAtualizacao.vigiarTelas(this)
         Moldura.instalar(this)   // a hora da HOME no mesmo lugar nas telas de lista (Moldura.kt)
+        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
+            override fun onActivityStarted(a: android.app.Activity) = Estilo.tirarCorDaJanelaSeCoberta(a)   // Estilo.kt
+            override fun onActivityCreated(a: android.app.Activity, salvo: android.os.Bundle?) {}
+            override fun onActivityResumed(a: android.app.Activity) {}
+            override fun onActivityPaused(a: android.app.Activity) {}
+            override fun onActivityStopped(a: android.app.Activity) {}
+            override fun onActivitySaveInstanceState(a: android.app.Activity, s: android.os.Bundle) {}
+            override fun onActivityDestroyed(a: android.app.Activity) {}
+        })
         // A IA na nuvem saiu em 05/11/2026: apaga a chave cifrada que ela tenha deixado (fora da thread da tela).
         Fundo.rodar("limpa-ia") { PedidoIa.apagarRestosDaNuvem(this) }
         // Backup noturno: reagenda a cada processo novo (uma atualização do app apaga os alarmes dele). Só no processo

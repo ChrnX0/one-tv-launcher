@@ -438,11 +438,7 @@ class SeriesActivity : Activity() {
 
     private fun novoCard(): View {
         val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(4), dp(4), dp(4), dp(6)) }
-        val capa = ImageView(this).apply {
-            scaleType = ImageView.ScaleType.CENTER_CROP
-            background = GradientDrawable().apply { cornerRadius = dp(8).toFloat(); setColor(Estilo.BORDA) }
-            clipToOutline = true
-        }
+        val capa = CapaCartao(this, dp(8).toFloat())   // cinza só enquanto o pôster não chega (CapaCartao.kt)
         // Capa num FrameLayout para a estrela dos interesses ficar por cima (canto de cima, à direita).
         val moldura = FrameLayout(this)
         moldura.addView(capa, FrameLayout.LayoutParams(-1, -1))

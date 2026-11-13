@@ -146,11 +146,26 @@ object PlayerLogos {
         if (medidas.outWidth <= 0 || medidas.outHeight <= 0) return null
         var amostra = 1
         while (maxOf(medidas.outWidth, medidas.outHeight) / (amostra * 2) >= lado) amostra *= 2
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size, BitmapFactory.Options().apply {
+        val b = BitmapFactory.decodeByteArray(bytes, 0, bytes.size, BitmapFactory.Options().apply {
             inSampleSize = amostra
             // Pôster não tem transparência: RGB_565 gasta metade da memória. Logo pode ter (fundo transparente): ARGB.
             if (opaco) inPreferredConfig = Bitmap.Config.RGB_565
-        })
+        }) ?: return null
+        return reduzir(b, lado)
+    }
+
+    /**
+     * Do tamanho pedido, não maior (13/11/2026). A amostragem em potência de 2 deixava o pôster com até 2x o lado pedido
+     * (um 1000x1500 virava 500x750 para um card de ~216x360 px): o quádruplo de memória (cabiam ~27 pôsteres nos 20 MB
+     * em vez de ~130, e voltar na grade decodificava tudo de novo) e a GPU encolhendo uma textura grande a cada quadro.
+     */
+    internal fun reduzir(b: Bitmap, lado: Int): Bitmap {
+        val maior = maxOf(b.width, b.height)
+        if (maior <= lado * 11 / 10) return b   // até 10% maior: não vale a cópia
+        val esc = lado.toFloat() / maior
+        val r = Bitmap.createScaledBitmap(b, maxOf(1, (b.width * esc).toInt()), maxOf(1, (b.height * esc).toInt()), true)
+        if (r !== b) b.recycle()
+        return r
     }
 
     /** Baixa seguindo até 4 redirecionamentos (de http para https o HttpURLConnection não segue sozinho). TLS padrão. */

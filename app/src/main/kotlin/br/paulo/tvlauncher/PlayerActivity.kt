@@ -216,6 +216,9 @@ class PlayerActivity : Activity() {
                 favoritos = fav; recentes = rec; categoria = cat; escondidos = esc; liberados = lib; parental = par
                 refiltrar()
                 if (visiveis.isEmpty()) { mostrarAviso(getString(R.string.player_sem_canais)); return@post }
+                // Canais lidos: some o "Carregando os canais…" (13/11/2026, visto na Sala: ficava na tela por minutos em
+                // cima da lista quando o canal não chegava a tocar). Se o canal demorar, o aviso dele aparece em 1,5 s.
+                esconderAviso()
                 // Abre no último canal só se ele ainda passa no filtro (um canal de categoria oculta não abre sem PIN).
                 // Canal pedido de fora que não pode tocar: avisa em vez de cair em outro canal.
                 val externo = intent.getStringExtra(EXTRA_CANAL)?.ifEmpty { null }
