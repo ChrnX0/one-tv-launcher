@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Chromecast</title>
+<meta name="theme-color" content="#0e1015">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TV">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icone-192.png">
+<link rel="apple-touch-icon" href="icone-apple.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Painel servido pelo próprio launcher (PainelWeb.kt). Sem script inline: a CSP do servidor proíbe. -->
+
+  <!-- Entrar com o PIN -->
+  <section id="telaEntrar" class="entrar" hidden>
+    <form id="formEntrar" class="cartao-entrar" autocomplete="off">
+      <h1>Chromecast</h1>
+      <p class="aviso">Digite o PIN definido nas Configurações do launcher, na TV.</p>
+      <p id="avisoEntrar" class="aviso-ok" hidden></p>
+      <input id="campoPin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12"
+             autocomplete="off" aria-label="PIN" placeholder="PIN" required>
+      <button type="submit" class="botao-primario" id="btnEntrar">Entrar</button>
+      <p id="erroEntrar" class="erro" hidden></p>
+    </form>
+  </section>
+
+  <!-- Painel -->
+  <div id="telaPainel" hidden>
+    <header class="topo">
+      <div class="marca">
+        <span class="logo" aria-hidden="true">▣</span>
+        <div>
+          <h1 id="nomeAparelho">Chromecast</h1>
+          <p id="naTela" class="aviso-curto"></p>
+          <p id="outrasTvs" class="aviso-curto" hidden></p>
+        </div>
+      </div>
+      <div class="topo-acoes">
+        <button id="btnBusca" type="button" class="botao-busca" aria-label="Buscar (Ctrl+K)"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+          <span class="rotulo-busca">Buscar app, aba ou ação</span><kbd>Ctrl K</kbd></button>
+        <button id="btnSair" class="botao-secundario botao-pequeno">Sair</button>
+      </div>
+    </header>
+
+    <!-- Navegação: no celular, barra embaixo com as 4 principais + "Mais"; no computador, coluna lateral com tudo.
+         Cada botão de aba (atributo data-aba) mostra a seção de id "aba" + Nome (o PainelHtmlTest confere). ui.js monta a tela "Mais". -->
+    <nav class="abas" aria-label="Seções do painel">
+      <button class="aba principal ativa" data-aba="inicio"><span class="ic" aria-hidden="true">⌂</span><span>Início</span></button>
+      <button class="aba principal" data-aba="controle"><span class="ic" aria-hidden="true">◎</span><span>Controle</span></button>
+      <button class="aba principal" data-aba="apps"><span class="ic" aria-hidden="true">▦</span><span>Apps</span></button>
+      <button class="aba principal" data-aba="arquivos"><span class="ic" aria-hidden="true">▤</span><span>Arquivos</span></button>
+      <p class="nav-titulo">Na TV</p>
+      <button class="aba" data-aba="tv"><span class="ic" aria-hidden="true">▶</span><span>TV ao vivo</span></button>
+      <button class="aba" data-aba="fotos"><span class="ic" aria-hidden="true">◫</span><span>Fotos do protetor</span></button>
+      <button class="aba" data-aba="extras"><span class="ic" aria-hidden="true">✦</span><span>Extras</span></button>
+      <p class="nav-titulo">Rede e conexões</p>
+      <button class="aba" data-aba="rede"><span class="ic" aria-hidden="true">≋</span><span>Rede</span></button>
+      <button class="aba" data-aba="roteador"><span class="ic" aria-hidden="true">⌖</span><span>Roteador</span></button>
+      <button class="aba" data-aba="claude"><span class="ic" aria-hidden="true">✳</span><span>Claude (MCP)</span></button>
+      <button class="aba" data-aba="ia"><span class="ic" aria-hidden="true">⇄</span><span>Conectar uma IA</span></button>
+      <p class="nav-titulo">Sistema</p>
+      <button class="aba" data-aba="saude"><span class="ic" aria-hidden="true">♥</span><span>Saúde</span></button>
+      <button class="aba" data-aba="backup"><span class="ic" aria-hidden="true">⇩</span><span>Backup</span></button>
+      <button class="aba" data-aba="registro"><span class="ic" aria-hidden="true">☰</span><span>Acessos</span></button>
+      <button class="aba principal so-celular" data-aba="mais"><span class="ic" aria-hidden="true">⋯</span><span>Mais</span></button>
+    </nav>
+
+    <main class="conteudo">
+    <section id="abaInicio" class="painel-aba">
+      <div class="cartao heroi">
+        <div>
+          <p class="rotulo">Agora na TV</p>
+          <p id="inicioNaTela" class="grande">…</p>
+        </div>
+        <div class="botoes-linha">
+          <button class="botao-secundario" data-tecla="ligar">Acordar</button>
+          <button class="botao-secundario" data-tecla="apagar">Dormir</button>
+        </div>
+      </div>
+      <div class="cartao">
+        <h2>Controle rápido</h2>
+        <div class="rapido">
+          <button data-tecla="voltar">↩<span>Voltar</span></button>
+          <button data-tecla="inicio">⌂<span>Início</span></button>
+          <button data-tecla="play">▶&#xFE0E;<span>Tocar/pausar</span></button>
+          <button data-tecla="volume-">−<span>Vol −</span></button>
+          <button data-tecla="volume+">+<span>Vol +</span></button>
+          <button data-tecla="mudo">⊘<span>Mudo</span></button>
+        </div>
+        <button type="button" class="link" data-aba="controle">Abrir o controle completo e a tela ao vivo →</button>
+      </div>
+      <div class="grade-inicio">
+        <div class="cartao">
+          <h2>Como a TV está</h2>
+          <div id="inicioSaude" class="numeros-saude compacto"><p class="aviso">Lendo…</p></div>
+          <button type="button" class="link" data-aba="saude">Ver detalhes →</button>
+        </div>
+        <div class="cartao">
+          <h2>Mais usados hoje</h2>
+          <div id="inicioUso" class="lista-uso"><p class="aviso">Lendo…</p></div>
+          <button type="button" class="link" data-aba="apps">Todos os apps →</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="abaMais" class="painel-aba" hidden>
+      <div id="gradeMais" class="grade-mais"></div>
+    </section>
+
+
+    <section id="abaApps" class="painel-aba" hidden>
+      <div class="barra-acoes">
+        <input id="busca" type="search" placeholder="Procurar app" aria-label="Procurar app">
+        <label class="marcar"><input id="mostrarSistema" type="checkbox" checked> apps do sistema</label>
+        <button id="btnSelecionar" type="button" class="botao-secundario">Selecionar vários</button>
+        <label class="botao-primario" for="arquivoApk">Instalar APK…</label>
+        <input type="file" id="arquivoApk" accept=".apk,application/vnd.android.package-archive" hidden>
+      </div>
+      <p id="contagemApps" class="aviso-curto"></p>
+      <p id="statusApps" class="aviso" hidden></p>
+      <div id="listaApps" class="lista-apps"></div>
+      <div id="barraLote" class="barra-lote" hidden>
+        <span id="contagemLote">0 selecionados</span>
+        <button type="button" data-lote="ocultar" class="botao-secundario">Ocultar</button>
+        <button type="button" data-lote="mostrar" class="botao-secundario">Mostrar</button>
+        <button type="button" data-lote="parar" class="botao-secundario">Parar</button>
+        <button type="button" data-lote="desinstalar" class="botao-perigo">Desinstalar</button>
+        <button type="button" id="btnSairLote" class="botao-secundario">Cancelar</button>
+      </div>
+    </section>
+
+    <section id="abaControle" class="painel-aba" hidden>
+      <div class="tela-tv">
+        <img id="fotoTela" alt="Tela da TV" hidden>
+        <div id="semFoto" class="sem-foto">Carregando a tela…</div>
+        <video id="videoControle" muted autoplay playsinline hidden></video>
+        <div class="tela-barra">
+          <p id="statusTela" class="aviso-curto"></p>
+          <button id="btnVideoControle" type="button" class="botao-secundario botao-pequeno">▶ Vídeo ao vivo</button>
+          <button id="btnPararVideoControle" type="button" class="botao-secundario botao-pequeno" hidden>Voltar à foto</button>
+        </div>
+      </div>
+      <div class="controle">
+        <div class="dpad">
+          <span></span><button data-tecla="cima" aria-label="Cima">▲</button><span></span>
+          <button data-tecla="esquerda" aria-label="Esquerda">◀</button><button data-tecla="ok" class="ok">OK</button><button data-tecla="direita" aria-label="Direita">▶</button>
+          <span></span><button data-tecla="baixo" aria-label="Baixo">▼</button><span></span>
+        </div>
+        <div id="touchpad" class="touchpad" role="application" aria-label="Touchpad: arraste para mover, toque para OK">
+          <span>Arraste para mover · toque = OK · segure = voltar</span>
+        </div>
+        <p class="aviso-curto so-pc">No teclado: setas, Enter = OK, Esc = voltar, espaço = tocar/pausar, + e − = volume.</p>
+        <div class="teclas">
+          <button data-tecla="voltar">Voltar</button><button data-tecla="inicio">Início</button><button data-tecla="menu">Menu</button>
+          <button data-tecla="retroceder" aria-label="Retroceder">⏪</button><button data-tecla="play" aria-label="Tocar ou pausar">⏯</button><button data-tecla="avancar" aria-label="Avançar">⏩</button>
+          <button data-tecla="volume-">Vol −</button><button data-tecla="volume+">Vol +</button><button data-tecla="mudo">Mudo</button>
+          <button data-tecla="ligar">Acordar</button><button data-tecla="apagar">Dormir</button><button id="btnReiniciarTv" class="botao-perigo">Reiniciar TV</button>
+        </div>
+        <form id="formTexto" class="form-pasta" autocomplete="off">
+          <input id="campoTexto" type="text" maxlength="100" placeholder="Digitar na TV (sem acento)" aria-label="Texto para digitar na TV">
+          <button type="submit" class="botao-secundario">Enviar</button>
+          <button type="button" data-tecla="apagar_letra" class="botao-secundario" aria-label="Apagar uma letra">⌫</button>
+          <label class="marcar ao-vivo-rotulo"><input id="aoVivo" type="checkbox"> ao vivo</label>
+        </form>
+        <p class="aviso-curto">Voltar e Início respondem na hora; as outras teclas levam cerca de 1 s.</p>
+        <p id="statusControle" class="aviso" hidden></p>
+      </div>
+      <!-- Recado, clima e desligar: no PC largo ficam embaixo da foto (style.css), no celular depois do controle. -->
+      <div class="controle controle-extra">
+        <form id="formRecado" class="recado" autocomplete="off">
+          <label for="campoRecado"><strong>Recado na TV</strong> — aparece por cima de qualquer app</label>
+          <textarea id="campoRecado" maxlength="200" rows="2" placeholder="Ex.: O jantar está pronto!"></textarea>
+          <div class="recado-opcoes">
+            <select id="duracaoRecado" aria-label="Quanto tempo fica na tela">
+              <option value="30">30 s na tela</option><option value="60" selected>1 min na tela</option><option value="300">5 min na tela</option>
+            </select>
+            <label><input id="somRecado" type="checkbox" checked> com bipe</label>
+            <button type="submit">Mandar recado</button>
+          </div>
+        </form>
+        <form id="formClima" class="recado" autocomplete="off">
+          <label for="cepClima"><strong>Endereço do clima</strong> — <span id="estadoClima">carregando…</span></label>
+          <input id="cepClima" type="text" inputmode="numeric" maxlength="9" placeholder="CEP (ex.: 14015-060)" aria-label="CEP">
+          <input id="numeroClima" type="text" inputmode="numeric" maxlength="6" placeholder="Número da casa (opcional)" aria-label="Número">
+          <div class="recado-opcoes">
+            <button type="button" id="btnClimaAuto" class="botao-secundario">Apagar endereço</button>
+            <button type="submit">Salvar endereço</button>
+          </div>
+        </form>
+        <div class="cartao">
+          <h2>Desligar sozinha</h2>
+          <p class="aviso">Depois desse tempo sem ninguém apertar o controle, a TV mostra um aviso por 60 s e desliga.
+            Qualquer botão cancela. Assistir um filme sem tocar no controle também conta como "sem uso".</p>
+          <div class="barra-acoes">
+            <select id="autoDesligar" aria-label="Desligar sozinha depois de"></select>
+          </div>
+          <p id="statusDesligar" class="aviso-curto"></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="abaTv" class="painel-aba" hidden>
+      <div class="cartao">
+        <h2>Contas de TV ao vivo</h2>
+        <p class="aviso">Listas de canais (link .m3u) ou contas Xtream que o player da TV usa. Usuário, senha e link ficam cifrados na TV
+          e nunca voltam para o painel: aqui aparece só o nome e o servidor. Cadastrar e apagar pedem o PIN de novo.</p>
+        <div id="listaContasTv" class="lista-registro"></div>
+        <div class="barra-acoes">
+          <button type="button" class="botao-secundario" id="btnCarregarTv">Testar e recarregar canais</button>
+        </div>
+        <p id="statusTv" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Cadastrar conta</h2>
+        <form id="formContaTv" autocomplete="off">
+          <select id="tvTipo" aria-label="Tipo de conta">
+            <option value="m3u">Lista de canais (link .m3u)</option>
+            <option value="xtream">Xtream (servidor, usuário e senha)</option>
+          </select>
+          <input id="tvNome" type="text" maxlength="40" placeholder="Nome (ex.: TV da casa)" aria-label="Nome da conta">
+          <input id="tvEndereco" type="text" maxlength="2000" autocomplete="off" placeholder="Link da lista (http:// ou https://)" aria-label="Endereço">
+          <input id="tvUsuario" type="text" maxlength="200" autocomplete="off" placeholder="Usuário" aria-label="Usuário" hidden>
+          <input id="tvSenha" type="password" maxlength="200" autocomplete="new-password" placeholder="Senha" aria-label="Senha" hidden>
+          <input id="tvReservas" type="text" maxlength="600" autocomplete="off" placeholder="Servidores reserva (opcional, separados por vírgula)" aria-label="Servidores reserva" hidden>
+          <input id="tvGuia" type="text" maxlength="2000" autocomplete="off" placeholder="Link do guia XMLTV (opcional)" aria-label="Link do guia">
+          <button type="submit" class="botao-primario">Cadastrar</button>
+        </form>
+        <p id="statusContaTv" class="aviso" hidden></p>
+      </div>
+    </section>
+
+    <section id="abaRede" class="painel-aba" hidden>
+      <div class="barra-acoes">
+        <button type="button" class="botao-secundario periodo ativo" data-horas="24">Últimas 24 h</button>
+        <button type="button" class="botao-secundario periodo" data-horas="168">7 dias</button>
+        <button type="button" class="botao-secundario" id="btnAtualizarRede">Atualizar</button>
+      </div>
+      <p id="statusRede" class="aviso" hidden></p>
+      <div id="resumoRede" class="resumo-rede"></div>
+      <div class="cartao">
+        <canvas id="graficoRede" class="grafico-rede" height="160" aria-label="Gráfico de latência e quedas"></canvas>
+        <p class="aviso-curto legenda"><span class="cor ok"></span>internet ok (altura = demora, até 300 ms)
+          <span class="cor dns"></span>DNS falhou <span class="cor fora"></span>sem internet <span class="cor vazio"></span>sem dados (TV desligada)</p>
+      </div>
+      <h2>Quedas</h2>
+      <div id="listaQuedas" class="lista-registro"></div>
+      <h2>O que o Android avisou</h2>
+      <div id="listaEventosRede" class="lista-registro"></div>
+    </section>
+
+    <section id="abaArquivos" class="painel-aba" hidden>
+      <div class="barra-acoes">
+        <nav id="trilha" class="trilha" aria-label="Pasta atual"></nav>
+      </div>
+      <div class="barra-acoes">
+        <label class="botao-primario" for="arquivosEnviar">Enviar arquivos…</label>
+        <input type="file" id="arquivosEnviar" multiple hidden>
+        <form id="formPasta" class="form-pasta" autocomplete="off">
+          <input id="nomePasta" type="text" maxlength="200" placeholder="Nova pasta" aria-label="Nome da nova pasta">
+          <button type="submit" class="botao-secundario">Criar</button>
+        </form>
+      </div>
+      <p id="espacoArquivos" class="aviso-curto"></p>
+      <p id="statusArquivos" class="aviso" hidden></p>
+      <div id="listaArquivos" class="lista-apps"></div>
+    </section>
+
+    <section id="abaSaude" class="painel-aba" hidden>
+      <div class="cartao">
+        <h2>Como a TV está</h2>
+        <div id="numerosSaude" class="numeros-saude"></div>
+        <button type="button" class="botao-primario" id="btnLiberar">Liberar memória</button>
+        <p class="aviso-curto">Fecha os apps em segundo plano (o da frente continua). Nada é apagado; o app fechado abre do zero.</p>
+        <p id="statusSaude" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Acesso remoto</h2>
+        <p class="aviso">O shell do launcher (teclas do painel, comandos do Claude, autocura) e o túnel do Claude pela
+          internet às vezes param sem avisar. Aqui aparece se estão no ar, e o que a TV fez na manutenção da noite.</p>
+        <div id="numerosAcesso" class="numeros-saude"></div>
+        <p id="acaoAcesso" class="aviso" hidden></p>
+        <div id="listaManutencao" class="lista-registro"></div>
+      </div>
+      <div class="cartao">
+        <h2>Erros do launcher</h2>
+        <p id="resumoErros" class="aviso">Lendo…</p>
+        <p><a id="linkRelatar" class="botao-secundario" href="#" target="_blank" rel="noopener noreferrer" hidden>Relatar no GitHub</a></p>
+        <p class="aviso-curto">Vai só o tipo do erro e o ponto do código onde ele aconteceu. A mensagem do erro, a rede, as contas
+          e os apps ficam na TV. O GitHub abre com o texto pronto e você revisa antes de enviar.</p>
+      </div>
+      <div class="cartao">
+        <h2>Quem mais ocupa memória</h2>
+        <div id="listaMemoria" class="lista-registro"></div>
+      </div>
+    </section>
+
+    <section id="abaFotos" class="painel-aba" hidden>
+      <div class="cartao">
+        <h2>Fotos do protetor de tela</h2>
+        <p class="aviso">Com pelo menos uma foto, o protetor da TV passa a mostrá-las por trás do relógio, trocando a cada minuto.
+          Ficam só na TV, numa pasta do launcher. JPG, PNG ou WebP, até 15 MB cada.</p>
+        <label class="botao-primario" for="arquivoFotos">Enviar fotos…</label>
+        <input type="file" id="arquivoFotos" accept="image/jpeg,image/png,image/webp" multiple hidden>
+        <p id="statusFotos" class="aviso" hidden></p>
+      </div>
+      <div id="gradeFotos" class="grade-fotos"></div>
+    </section>
+
+    <section id="abaRoteador" class="painel-aba" hidden>
+      <div class="cartao">
+        <h2>Roteador UniFi</h2>
+        <p class="aviso">Só leitura: a TV vê os aparelhos conectados e se o roteador responde. Ela não bloqueia nem muda nada no roteador.
+          A chave fica cifrada na TV e nunca volta para esta página (só os 4 últimos caracteres).</p>
+        <form id="formRoteador" class="form-roteador" autocomplete="off">
+          <label for="campoEnderecoRoteador">Endereço do roteador na rede de casa</label>
+          <input id="campoEnderecoRoteador" type="text" inputmode="decimal" maxlength="21" placeholder="ex.: 192.168.0.1">
+          <label for="campoChaveRoteador">Chave de API <span id="chaveAtualRoteador" class="aviso-curto"></span></label>
+          <input id="campoChaveRoteador" type="password" maxlength="200" autocomplete="off"
+                 placeholder="criada no UniFi em Configurações → Integrações">
+          <button type="submit" class="botao-primario">Salvar</button>
+        </form>
+        <p class="aviso-curto">Trocar o endereço apaga a chave e o certificado guardados (é preciso colar a chave de novo).</p>
+        <p id="statusRoteador" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Certificado do roteador</h2>
+        <p class="aviso">O roteador usa um certificado próprio. A TV só fala com ele depois de você conferir a impressão digital:
+          abra https://&lt;endereço do roteador&gt; no computador, clique no cadeado e compare com a SHA-256 abaixo.</p>
+        <p id="certAtualRoteador" class="impressao"></p>
+        <button type="button" class="botao-secundario" id="btnLerCert">Ler o certificado</button>
+        <div id="certNovoRoteador" hidden>
+          <p id="certNovoTexto" class="impressao"></p>
+          <button type="button" class="botao-primario" id="btnConfiarCert">É esse: confiar</button>
+        </div>
+      </div>
+      <div class="cartao">
+        <h2>Ligar</h2>
+        <label><input id="chkRoteadorLigado" type="checkbox"> Ler o roteador</label><br>
+        <label><input id="chkRoteadorAviso" type="checkbox"> Recado na TV quando aparecer um aparelho nunca visto (confere a cada 5 min)</label>
+        <p id="infoConhecidos" class="aviso-curto"></p>
+        <button type="button" class="link" id="btnEsquecerRoteador">Esquecer o roteador (apaga endereço, chave e lista)</button>
+      </div>
+      <div class="cartao">
+        <div class="cabeca-modal">
+          <h2>Wi-Fi da TV</h2>
+          <button type="button" class="botao-secundario" id="btnWifiTv">Diagnosticar</button>
+        </div>
+        <p class="aviso-curto">Sinal, banda e velocidade medidos pela própria TV; ponto de acesso, canal e retransmissões vêm do roteador.
+          Nada é mudado no roteador: as dicas dizem o que ajustar no app do UniFi.</p>
+        <p id="estadoWifiTv" class="aviso"></p>
+        <ul id="dicasWifiTv" class="dicas"></ul>
+        <button type="button" class="botao-secundario" id="btnReconectarTv">Reconectar a TV…</button>
+        <p class="aviso-curto">Pede ao roteador para tirar a TV do Wi-Fi por alguns segundos: ela volta sozinha e escolhe de novo o melhor
+          ponto de acesso. Só acontece depois de alguém apertar OK no controle da TV.</p>
+        <p id="statusReconectar" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <div class="cabeca-modal">
+          <h2>Aparelhos conectados</h2>
+          <button type="button" class="botao-secundario" id="btnAtualizarAparelhos">Atualizar</button>
+        </div>
+        <p id="estadoRoteador" class="aviso"></p>
+        <div id="listaAparelhos" class="lista-registro"></div>
+      </div>
+    </section>
+
+    <section id="abaClaude" class="painel-aba" hidden>
+      <div class="cartao">
+        <h2>Claude pela internet (MCP)</h2>
+        <p class="aviso">Claude, ChatGPT e outras IAs controlam a TV: controle remoto, abrir apps e links, instalar APK,
+          despertadores, avisos, arquivos e shell. O que pede OK no controle segue as Confirmações. O login é este mesmo PIN, ou a conta Google, se ligada abaixo. O painel não fica na internet: só o MCP.</p>
+        <p id="estadoMcp" class="aviso"></p>
+        <label><input id="chkMcpLigado" type="checkbox"> Ligar o acesso pelo Claude</label>
+      </div>
+      <div class="cartao">
+        <h2 id="passoTitulo">Conectar</h2>
+        <p id="passoTexto" class="aviso passo-texto"></p>
+        <img id="passoQr" alt="QR code" width="240" height="240" hidden>
+        <p><a id="passoLink" href="#" target="_blank" rel="noopener noreferrer" hidden>Abrir neste aparelho</a></p>
+      </div>
+      <div class="cartao">
+        <h2>Rede Tailscale</h2>
+        <label><input id="chkMcpRede" type="checkbox"> Abrir o painel pelos aparelhos da minha conta Tailscale e deixar o Claude ver a
+          lista deles (só a lista; não mexe neles)</label>
+        <p class="aviso-curto">Desligado: a TV só publica o MCP. Ligado: http://onetv-&lt;nome da TV&gt;:8080, ou com cadeado https://onetv-&lt;nome da TV&gt;.&lt;sua rede&gt;.ts.net:8443, abre este painel de qualquer aparelho da
+          conta Tailscale, com o mesmo PIN, nunca pela internet aberta.</p>
+        <form id="formAtalhos" autocomplete="off">
+          <label for="campoAtalhos">Atalhos de porta (servidor de mídia em outro lugar)</label>
+          <input id="campoAtalhos" type="text" maxlength="400" placeholder="ex.: nas:8096">
+          <button type="submit" class="botao-secundario">Salvar atalhos</button>
+        </form>
+        <p class="aviso-curto">Cada "aparelho:porta" vira http://127.0.0.1:porta na TV: no Jellyfin, Emby ou Kodi, use esse endereço
+          como servidor. Só com a rede Tailscale ligada. Na mesma rede de casa não precisa.</p>
+      </div>
+      <div class="cartao">
+        <details>
+          <summary>Prefere usar uma chave do Tailscale?</summary>
+          <p class="aviso">Console do Tailscale: Settings → Keys → Generate auth key. A chave fica cifrada na TV e é apagada
+            depois do primeiro login.</p>
+          <form id="formMcp" autocomplete="off">
+            <input id="campoChaveMcp" type="password" maxlength="200" autocomplete="off" placeholder="tskey-auth-...">
+            <button type="submit" class="botao-primario">Salvar</button>
+          </form>
+        </details>
+        <p id="statusMcp" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Login pela conta Google</h2>
+        <p id="estadoGoogle" class="aviso-curto"></p>
+        <p class="aviso-curto">Com isto, o login do Claude (e dos outros apps) deixa de aceitar o PIN: só passa uma conta Google
+          que esteja em algum perfil desta TV. Crie no Google Cloud um cliente OAuth do tipo "TVs e dispositivos de entrada
+          limitada" e cole o id e o segredo aqui. Deixe o id vazio e salve para voltar ao PIN.</p>
+        <form id="formGoogle" autocomplete="off">
+          <input id="campoGoogleId" type="text" maxlength="200" autocomplete="off" placeholder="....apps.googleusercontent.com">
+          <input id="campoGoogleSegredo" type="password" maxlength="100" autocomplete="off" placeholder="segredo do cliente">
+          <button type="submit" class="botao-secundario">Salvar</button>
+        </form>
+      </div>
+      <div class="cartao">
+        <h2>Acessos</h2>
+        <p id="loginsMcp" class="aviso-curto"></p>
+        <button type="button" class="botao-secundario" id="btnRevogarMcp">Revogar os logins do Claude</button>
+        <button type="button" class="link" id="btnEsquecerMcp">Esquecer o Tailscale (para entrar com outra conta)</button>
+      </div>
+    </section>
+
+    <section id="abaIa" class="painel-aba" hidden>
+      <div class="cartao">
+        <h2>Conectar uma IA à TV</h2>
+        <p id="iaEstado" class="aviso"></p>
+        <p><code id="iaEndereco"></code></p>
+        <button type="button" class="botao-primario" id="iaCopiar">Copiar o endereço</button>
+        <p class="aviso-curto">Leia o QR com o celular para colar o endereço no app da IA. O login pede o PIN deste painel
+          (ou a conta Google, se ligada na aba Claude).</p>
+        <img id="iaQr" alt="QR code do endereço" width="200" height="200" hidden>
+      </div>
+      <div class="cartao">
+        <h2>Escolha o app</h2>
+        <div id="iaClientes"></div>
+      </div>
+      <div class="cartao">
+        <h2>O que dá para pedir</h2>
+        <ul id="iaExemplos" class="aviso-curto"></ul>
+      </div>
+    </section>
+
+    <section id="abaBackup" class="painel-aba" hidden>
+      <div class="cartao">
+        <h2>Baixar backup</h2>
+        <p class="aviso">Ordem dos apps, tema, alarmes, DNS e as demais configurações do launcher, num arquivo JSON. O PIN não vai junto.</p>
+        <button type="button" class="botao-primario" id="btnBaixar">Baixar agora</button>
+        <p id="statusBaixar" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Backup completo (cifrado)</h2>
+        <p class="aviso">Tudo o que o backup acima leva e mais: contas de TV ao vivo, chave do UniFi, PIN do painel, controle
+          parental, o Tailscale (a TV volta com o mesmo endereço) e os logins do Claude e dos outros apps no conector. Sai
+          trancado com a senha abaixo: guarde-a, porque sem ela o arquivo não abre. Contas Google, Wi-Fi e logins de outros
+          apps (Netflix, YouTube) o Android não deixa copiar.</p>
+        <input id="senhaBackupCompleto" type="password" minlength="8" maxlength="128" autocomplete="new-password"
+               placeholder="senha do backup (8 ou mais caracteres)">
+        <button type="button" class="botao-primario" id="btnBaixarCompleto">Baixar backup completo</button>
+        <p id="statusBaixarCompleto" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Cópias automáticas</h2>
+        <p class="aviso">A TV guarda sozinha uma cópia por dia (as últimas 7), só quando algo mudou. Baixe uma para
+          restaurar em outra TV, ou volte esta TV para o estado daquele dia.</p>
+        <div id="listaCopias" class="lista-registro"></div>
+        <p id="statusCopias" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Backup noturno cifrado</h2>
+        <p class="aviso">Toda noite, com a TV parada, ela guarda um backup completo trancado com a senha abaixo (ficam as 7
+          últimas cópias) e, se quiser, uma cópia extra no pendrive ou numa pasta da rede. Anote a senha: sem ela as cópias
+          não abrem. Trocar a senha ou a cópia extra pede o PIN de novo.</p>
+        <p id="estadoNoturno" class="aviso-curto"></p>
+        <label><input id="chkNoturnoLigado" type="checkbox"> Fazer o backup toda noite</label>
+        <p class="aviso">Horário: <input id="horaNoturno" type="time" aria-label="Horário do backup noturno"></p>
+        <p class="aviso">Cópia extra: <select id="destinoNoturno" aria-label="Cópia extra do backup noturno"></select></p>
+        <input id="senhaNoturno" type="password" minlength="8" maxlength="128" autocomplete="new-password"
+               placeholder="senha nova do backup noturno (8 ou mais caracteres)">
+        <div class="barra-acoes">
+          <button type="button" class="botao-secundario" id="btnSenhaNoturno">Guardar senha</button>
+          <button type="button" class="botao-primario" id="btnNoturnoAgora">Fazer agora</button>
+        </div>
+        <div id="listaNoturno" class="lista-registro"></div>
+        <p id="statusNoturno" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Restaurar</h2>
+        <p class="aviso">Substitui as configurações da TV pelas do arquivo e reinicia o launcher. O estado de antes fica guardado:
+          <button type="button" class="link" id="btnBaixarAnterior">baixar o de antes da última restauração</button>.</p>
+        <label class="botao-secundario" for="arquivoBackup">Escolher arquivo…</label>
+        <input type="file" id="arquivoBackup" accept=".json,application/json" hidden>
+        <input id="senhaRestaurar" type="password" maxlength="128" autocomplete="off"
+               placeholder="senha (só para o backup completo)">
+        <p id="statusBackup" class="aviso" hidden></p>
+      </div>
+    </section>
+
+    <section id="abaExtras" class="painel-aba" hidden>
+      <div class="cartao">
+        <h2>Tela ao vivo</h2>
+        <p class="aviso">Vídeo de verdade da tela da TV (até 2 min por vez; clique de novo para continuar). Netflix e outros apps com
+          proteção aparecem pretos: é o Android, não defeito. Com a tela parada, não chega quadro novo.</p>
+        <video id="videoExtras" muted autoplay playsinline class="video-extras"></video>
+        <div class="barra-acoes">
+          <button type="button" class="botao-primario" id="btnVideoExtras">Ver ao vivo</button>
+          <button type="button" class="botao-secundario" id="btnPararVideoExtras" hidden>Parar</button>
+        </div>
+        <p id="statusVideoExtras" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Chaves</h2>
+        <div id="chavesExtras" class="lista-registro"></div>
+        <p class="aviso">Filtro noturno: <input id="filtroInicio" type="time" aria-label="Início"> até <input id="filtroFim" type="time" aria-label="Fim">,
+          força <input id="filtroForca" type="number" min="5" max="100" step="5" aria-label="Força"> %
+          <button type="button" class="botao-secundario" id="btnFiltroExtras">Salvar</button></p>
+        <p id="otaExtras" class="aviso" hidden></p>
+        <p id="statusExtras" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Recado com foto</h2>
+        <form id="formFotoExtras">
+          <input id="fotoExtras" type="file" accept="image/jpeg,image/png,image/webp" aria-label="Foto">
+          <input id="textoFotoExtras" type="text" maxlength="200" placeholder="Texto (opcional)" aria-label="Texto">
+          <button type="submit" class="botao-primario">Mostrar na TV</button>
+        </form>
+        <p id="statusFotoExtras" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Cenas por link</h2>
+        <p class="aviso">Uma cena junta várias ações (abrir app, volume, mídia e aparelhos da casa). Cada uma ganha um link secreto para os Atalhos do
+          iPhone ou o Home Assistant (POST). O link só aparece ao criar: guarde-o. Criar e apagar pedem o PIN.</p>
+        <p class="aviso-curto">Casa (com o Home Assistant configurado abaixo): {"tipo":"casa","entidade":"light.sala","acao":"desligar"}.
+          Ações: ligar, desligar, alternar. Cena e script do Home Assistant: só ligar.</p>
+        <div id="listaCenas" class="lista-registro"></div>
+        <form id="formCena">
+          <input id="nomeCena" type="text" maxlength="40" placeholder="Nome (ex.: Cinema)" aria-label="Nome da cena">
+          <textarea id="acoesCena" rows="3" placeholder='{"acoes":[{"tipo":"casa","entidade":"light.sala","acao":"desligar"},{"tipo":"abrir_app","pacote":"com.netflix.ninja"}]}' aria-label="Ações"></textarea>
+          <button type="submit" class="botao-primario">Criar cena</button>
+        </form>
+        <p id="statusCena" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Loja curada</h2>
+        <p class="aviso">Apps abertos, baixados do GitHub oficial de cada projeto. Na 1ª instalação a TV guarda quem assinou; depois
+          só aceita a mesma assinatura. Pede o PIN.</p>
+        <div id="listaLoja" class="lista-registro"></div>
+        <p id="statusLoja" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Casa (Home Assistant)</h2>
+        <p class="aviso">A TV fala direto com o Home Assistant da casa (sem nuvem): luzes e cenas aqui, na TV (Extras &gt; Casa) e pelo
+          Claude. Ela também aparece lá como sensor (ligada/dormindo, app aberto). O token fica cifrado na TV. Configurar pede o PIN.</p>
+        <div id="listaCasa" class="lista-registro"></div>
+        <form id="formCasa" autocomplete="off">
+          <input id="casaEndereco" type="text" maxlength="300" placeholder="Endereço (ex.: http://192.168.1.10:8123)" aria-label="Endereço do Home Assistant">
+          <input id="casaToken" type="password" maxlength="1000" autocomplete="new-password" placeholder="Token de longa duração" aria-label="Token">
+          <button type="submit" class="botao-secundario">Salvar</button>
+          <button type="button" class="botao-secundario" id="btnCasaEsquecer">Esquecer</button>
+        </form>
+        <form id="formCampainha" autocomplete="off">
+          <input id="casaSensor" type="text" maxlength="120" placeholder="Sensor da campainha (ex.: binary_sensor.campainha)" aria-label="Sensor">
+          <input id="casaCamera" type="text" maxlength="120" placeholder="Câmera (ex.: camera.porta)" aria-label="Câmera">
+          <button type="submit" class="botao-secundario">Salvar campainha</button>
+        </form>
+        <p id="statusCasa" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Acordar o computador</h2>
+        <form id="formWol">
+          <input id="macWol" type="text" maxlength="17" placeholder="MAC do PC (AA:BB:CC:DD:EE:FF)" aria-label="MAC">
+          <button type="submit" class="botao-secundario">Guardar</button>
+          <button type="button" class="botao-primario" id="btnAcordar">Acordar</button>
+        </form>
+        <p id="statusWol" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Hora de dormir</h2>
+        <p class="aviso">Com a chave ligada: no horário abaixo, só abrem os apps da lista (os do sistema sempre abrem) e o volume não passa
+          do teto. Salvar pede o PIN.</p>
+        <p class="aviso">Padrão: de <input id="dormirInicio" type="time" aria-label="Início"> até <input id="dormirFim" type="time" aria-label="Fim">,
+          volume até <input id="dormirTeto" type="number" min="0" max="100" step="5" aria-label="Teto do volume"> %</p>
+        <p class="aviso">Por dia (vazio = segue o padrão acima; início igual ao fim = dia livre). O horário que passa da meia-noite
+          vale para o dia em que começa: sexta 22:00 até 08:00 termina sábado às 8h.</p>
+        <div id="dormirDias" class="lista-registro"></div>
+        <input id="dormirApps" type="text" placeholder="Apps liberados (pacotes separados por vírgula)" aria-label="Apps liberados">
+        <button type="button" class="botao-secundario" id="btnDormir">Salvar</button>
+        <p id="statusDormir" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Tocando agora</h2>
+        <p id="tocandoExtras" class="aviso">Ligue a chave "Tocando agora" para ver o que está tocando.</p>
+        <div class="barra-acoes">
+          <button type="button" class="botao-secundario" data-tocando="anterior" aria-label="Anterior">⏮</button>
+          <button type="button" class="botao-secundario" data-tocando="alternar" aria-label="Tocar ou pausar">⏯</button>
+          <button type="button" class="botao-secundario" data-tocando="proxima" aria-label="Próxima">⏭</button>
+          <button type="button" class="botao-secundario" id="btnTocando">Atualizar</button>
+        </div>
+      </div>
+      <div class="cartao">
+        <h2>Recado por link</h2>
+        <p class="aviso">Com a chave ligada, um link secreto recebe recados (POST com JSON) do Home Assistant, dos Atalhos do iPhone ou de
+          apps feitos para o TvOverlay. Gerar um link novo invalida o anterior e pede o PIN. O link só aparece agora: guarde-o.</p>
+        <button type="button" class="botao-secundario" id="btnRecadoLink">Gerar link novo</button>
+        <pre id="saidaRecadoLink" class="saida-extras" hidden></pre>
+      </div>
+      <div class="cartao">
+        <h2>Manutenção</h2>
+        <div class="barra-acoes">
+          <button type="button" class="botao-secundario" id="btnCaches">Limpar caches dos apps</button>
+          <select id="diasConsumo" aria-label="Período"><option value="1">hoje</option><option value="7">7 dias</option><option value="30">30 dias</option></select>
+          <button type="button" class="botao-secundario" id="btnConsumo">Internet por app</button>
+        </div>
+        <p id="livreExtras" class="aviso" hidden></p>
+        <pre id="saidaManutencao" class="saida-extras" hidden></pre>
+      </div>
+      <div class="cartao">
+        <h2>Testador de teclas e diário de DNS</h2>
+        <div class="barra-acoes">
+          <button type="button" class="botao-secundario" id="btnTeclas">Armar teclas (2 min)</button>
+          <button type="button" class="botao-secundario" id="btnDiario">Ver diário de DNS de hoje</button>
+          <button type="button" class="botao-secundario" id="btnApagarDiario">Apagar diário</button>
+        </div>
+        <pre id="saidaExtras" class="saida-extras" hidden></pre>
+      </div>
+      <!-- Ideias de 12/11/2026 (ideias.js) -->
+      <div class="cartao">
+        <h2>Avisos no celular</h2>
+        <p class="aviso">A TV avisa no celular: lembrete de jogo, alarme perdido, TV ligada de madrugada, erro, pedido de ajuda. Funciona com o
+          painel aberto pelo endereço https (Tailscale, porta 8443) e o Chrome do Android. O aviso sai cifrado da TV.</p>
+        <div class="barra-acoes">
+          <input id="nomeAvisos" type="text" maxlength="40" placeholder="Nome deste celular" aria-label="Nome deste celular">
+          <button type="button" class="botao-primario" id="btnAvisosInscrever">Receber avisos aqui</button>
+          <button type="button" class="botao-secundario" id="btnAvisosTestar">Mandar um teste</button>
+        </div>
+        <div id="listaAvisos" class="lista-registro"></div>
+        <div id="tiposAvisos" class="lista-registro"></div>
+        <p id="statusAvisos" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Meu time e lembretes</h2>
+        <p class="aviso">Palavras separadas por vírgula ("Flamengo, Fórmula 1"). Todo programa do guia com uma delas no título vira lembrete:
+          a TV avisa 2 min antes. No guia em grade da TV, OK num programa futuro marca ou desmarca à mão.</p>
+        <div class="barra-acoes">
+          <input id="palavrasMeuTime" type="text" maxlength="400" placeholder="Flamengo, Fórmula 1" aria-label="Palavras do Meu time">
+          <button type="button" class="botao-secundario" id="btnPalavrasMeuTime">Salvar</button>
+        </div>
+        <div id="listaLembretes" class="lista-registro"></div>
+        <p id="statusLembretes" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Mural da família</h2>
+        <p class="aviso">Aparece no protetor de tela (chave "Mural" ligada): lista de compras, até 3 recados fixos e os aniversários de hoje da agenda.</p>
+        <form id="formMural" class="barra-acoes">
+          <select id="listaMural" aria-label="Lista"><option value="compras">Compras</option><option value="recados">Recado</option></select>
+          <input id="textoMural" type="text" maxlength="60" placeholder="leite" aria-label="Texto">
+          <button type="submit" class="botao-secundario">Pôr no mural</button>
+        </form>
+        <div id="itensMural" class="lista-registro"></div>
+      </div>
+      <div class="cartao">
+        <h2>Presença</h2>
+        <p class="aviso">Com a chave "Presença" ligada: se os celulares marcados saírem da rede por 15 min e ninguém mexer no controle, a TV
+          apaga a tela e avisa no celular.</p>
+        <button type="button" class="botao-secundario" id="btnPresencaVer">Ver aparelhos do roteador</button>
+        <div id="listaPresenca" class="lista-registro"></div>
+        <button type="button" class="botao-primario" id="btnPresencaSalvar" hidden>Salvar escolha</button>
+        <p id="statusPresenca" class="aviso" hidden></p>
+      </div>
+      <div class="cartao">
+        <h2>Sua semana e desempenho</h2>
+        <p id="textoSemana" class="aviso"></p>
+        <p id="textoDesempenho" class="aviso"></p>
+        <button type="button" class="botao-secundario" id="btnSemanaMontar">Montar a semana agora</button>
+      </div>
+      <div class="cartao">
+        <h2>Modo simples</h2>
+        <p class="aviso">Até 6 cards grandes no lugar da HOME (chave "Modo simples"; desligar pede o PIN). Marque os apps; sem marcar, vão
+          os mais usados.</p>
+        <div id="appsSimples" class="lista-registro"></div>
+        <button type="button" class="botao-secundario" id="btnSimplesSalvar">Salvar apps</button>
+        <p id="statusSimples" class="aviso" hidden></p>
+      </div>
+    </section>
+    <section id="abaRegistro" class="painel-aba" hidden>
+      <div id="listaRegistro" class="lista-registro"></div>
+    </section>
+    </main>
+  </div>
+
+  <!-- Avisos curtos ("Pronto", erros de teclas): somem sozinhos. ui.js -->
+  <div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+
+  <!-- Confirmar uma ação sem volta: texto + (se preciso) o PIN de novo -->
+  <dialog id="caixaBusca" class="busca" aria-label="Busca rápida">
+    <input id="campoBusca" type="search" placeholder="Buscar app, aba ou ação…" autocomplete="off" spellcheck="false"
+      role="combobox" aria-controls="resultadosBusca" aria-expanded="true">
+    <ul id="resultadosBusca" role="listbox"></ul>
+    <p class="dica-busca"><kbd>↑</kbd><kbd>↓</kbd> escolher · <kbd>Enter</kbd> fazer · <kbd>Esc</kbd> fechar</p>
+  </dialog>
+
+  <dialog id="previa" class="previa" aria-labelledby="tituloPrevia">
+    <div class="previa-topo">
+      <div class="previa-titulo"><strong id="tituloPrevia"></strong><span id="infoPrevia" class="aviso-curto"></span></div>
+      <a id="baixarPrevia" class="botao-secundario botao-pequeno">Baixar</a>
+      <button id="fecharPrevia" type="button" class="botao-secundario botao-pequeno" aria-label="Fechar">✕</button>
+    </div>
+    <div id="conteudoPrevia" class="previa-conteudo"></div>
+    <div class="previa-baixo">
+      <button id="anteriorPrevia" type="button" class="botao-secundario" aria-label="Anterior">‹ Anterior</button>
+      <span id="posicaoPrevia" class="aviso-curto"></span>
+      <button id="proximaPrevia" type="button" class="botao-secundario" aria-label="Próximo">Próximo ›</button>
+    </div>
+  </dialog>
+
+  <dialog id="organizar" class="organizar" aria-labelledby="tituloOrganizar">
+    <form id="formOrganizar" autocomplete="off">
+      <h2>Organizar <span id="tituloOrganizar" class="quebra"></span></h2>
+      <label for="nomeOrganizar">Nome</label>
+      <input id="nomeOrganizar" type="text" maxlength="200" spellcheck="false">
+      <p class="rotulo">Pasta</p>
+      <div class="destino">
+        <div class="destino-topo">
+          <button id="subirDestino" type="button" class="botao-secundario botao-pequeno" aria-label="Subir uma pasta">↑</button>
+          <span id="caminhoDestino" class="quebra"></span>
+        </div>
+        <ul id="pastasDestino" class="pastas-destino"></ul>
+      </div>
+      <p id="erroOrganizar" class="aviso erro" hidden></p>
+      <div class="acoes-organizar">
+        <button id="apagarOrganizar" type="button" class="botao-perigo">Apagar…</button>
+        <span class="espaco"></span>
+        <button id="cancelarOrganizar" type="button" class="botao-secundario">Cancelar</button>
+        <button id="salvarOrganizar" type="submit" class="botao-primario">Salvar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="modal" class="modal" hidden>
+    <form id="formModal" class="modal-conteudo" autocomplete="off">
+      <h2 id="tituloModal"></h2>
+      <p id="textoModal" class="aviso"></p>
+      <input id="pinModal" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12"
+             autocomplete="off" aria-label="PIN" placeholder="PIN" hidden>
+      <p id="progressoModal" class="aviso-ok" hidden></p>
+      <p id="erroModal" class="erro" hidden></p>
+      <div class="botoes-modal">
+        <button type="button" id="btnCancelarModal" class="botao-secundario">Cancelar</button>
+        <button type="submit" id="btnOkModal" class="botao-perigo">Confirmar</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Permissões de um app -->
+  <div id="modalPerm" class="modal" hidden>
+    <div class="modal-conteudo modal-largo">
+      <div class="cabeca-modal">
+        <h2 id="tituloPerm"></h2>
+        <button type="button" id="btnFecharPerm" class="botao-secundario">Fechar</button>
+      </div>
+      <p id="avisoPerm" class="aviso"></p>
+      <p id="statusPerm" class="aviso" hidden></p>
+      <div id="listaPerm" class="lista-perm"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="jmuxer.min.js"></script>
+  <script src="extras.js"></script>
+  <script src="ideias.js"></script>
+  <script src="ia.js"></script>
+  <script src="ui.js"></script>
+  <script src="busca.js"></script>
+  <script src="arquivos.js"></script>
+  <script src="controle.js"></script>
+</body>
+</html>

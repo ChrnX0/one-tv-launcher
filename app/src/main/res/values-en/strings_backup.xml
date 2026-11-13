@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bkn_titulo">Automatic backup</string>
+    <string name="bkn_explica">Every night, while the TV is idle, saves a full backup locked with your password. The last 7 are kept. Write the password down: without it the backup cannot be opened.</string>
+    <string name="bkn_ligado">on</string>
+    <string name="bkn_desligado">off</string>
+    <string name="bkn_sem_senha">off · set the backup password first</string>
+    <string name="bkn_senha">Backup password</string>
+    <string name="bkn_senha_ok">set · OK changes</string>
+    <string name="bkn_senha_falta">not set · OK sets</string>
+    <string name="bkn_senha_nova">Backup password (8 or more characters)</string>
+    <string name="bkn_senha_repetir">Type the password again</string>
+    <string name="bkn_senha_curta">The password needs 8 to 128 characters.</string>
+    <string name="bkn_senha_diferente">The two passwords did not match.</string>
+    <string name="bkn_senha_gravada">Password saved. Keep it somewhere safe.</string>
+    <string name="bkn_senha_erro">Could not save the password.</string>
+    <string name="bkn_horario">Time</string>
+    <string name="bkn_extra">Extra copy</string>
+    <string name="bkn_destino_tv">TV only</string>
+    <string name="bkn_destino_pendrive">USB drive</string>
+    <string name="bkn_destino_nas">NAS (%1$s)</string>
+    <string name="bkn_agora">Back up now</string>
+    <string name="bkn_ultimo">Last</string>
+    <string name="bkn_nunca">never</string>
+    <string name="bkn_pin">PIN to change the backup</string>
+</resources>

@@ -1,0 +1,16 @@
+# Dependabot (pedido do dono em 10/11/2026: "a versão mais branda, 1x ao mês").
+# O robô do GitHub confere uma vez por mês se as bibliotecas do Gradle (Kotlin, plugin Android, ExoPlayer, smbj...)
+# ganharam versão nova e abre UM PR só com todas juntas: ~1 build do Actions por mês.
+# Só passa a valer depois que este arquivo estiver no main (o Dependabot lê a configuração da branch padrão).
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/"                # lê o settings.gradle.kts da raiz e os módulos incluídos (hoje só o app)
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 1   # nunca mais de um PR dele aberto
+    groups:
+      tudo-junto:                 # todas as atualizações no mesmo PR, em vez de um PR por biblioteca
+        patterns: ["*"]
+    commit-message:
+      prefix: "deps"

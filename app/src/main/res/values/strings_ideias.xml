@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos das ideias de 10/11/2026, num arquivo próprio para não conflitar com o strings.xml dos PRs abertos. -->
+<resources>
+    <string name="dns_voltou_anterior">O DNS novo não respondeu. Voltei para o anterior.</string>
+    <string name="teclas_titulo">Testador de teclas</string>
+    <string name="teclas_instrucao">Aperte os botões do controle. Cada tecla aparece aqui. INÍCIO sai.</string>
+    <string name="teclas_vazio">Nenhuma tecla ainda.</string>
+    <string name="trava_home_titulo">PIN para mudar a HOME</string>
+    <string name="trava_home_errado">PIN errado</string>
+    <string name="extras_cfg_det">Filtro noturno, janela de atualização, testador de teclas, calibração e mais</string>
+    <string name="extras_titulo">Extras</string>
+    <string name="extras_ligado">ligado</string>
+    <string name="extras_desligado">desligado</string>
+    <string name="extras_JANELA_OTA">Atualização do sistema só de madrugada (3h às 5h)</string>
+    <string name="extras_TRAVAR_CRITICOS">Travar \"Forçar parada\" e \"Limpar dados\" do launcher e da VPN</string>
+    <string name="extras_PIN_HOME">Pedir o PIN para mudar a HOME</string>
+    <string name="extras_FILTRO_NOTURNO">Filtro noturno (tela mais quente)</string>
+    <string name="extras_COR_DO_FUNDO">Cor de destaque tirada do fundo (tema Galeria)</string>
+    <string name="extras_DEBLOAT_POS_OTA">Refazer a limpeza de apps depois de atualizar o sistema</string>
+    <string name="extras_filtro_horario">Filtro: das %1$s às %2$s, força %3$d%%</string>
+    <string name="extras_filtro_inicio">Filtro começa</string>
+    <string name="extras_filtro_fim">Filtro termina</string>
+    <string name="extras_filtro_forca">Força do filtro</string>
+    <string name="extras_teclas">Abrir o testador de teclas</string>
+    <string name="extras_calibracao">Abrir os padrões de calibração da imagem</string>
+    <string name="extras_acordar_pc">Acordar o computador (Wake-on-LAN)</string>
+    <string name="extras_acordar_sem_mac">Falta o MAC do computador (painel ou adb)</string>
+    <string name="extras_acordar_ok">Pacote enviado</string>
+    <string name="extras_acordar_falhou">Não consegui enviar</string>
+    <string name="extras_ota_pendente">Atualização do sistema esperando a janela</string>
+    <string name="extras_ota_nenhuma">Nenhuma atualização do sistema pendente</string>
+    <string name="guardar_dados_titulo">Dados do launcher protegidos</string>
+    <string name="guardar_dados_texto">Limpar os dados apagaria as configurações, os alarmes e o pareamento do launcher com a TV. Nada foi apagado. Para recomeçar do zero, use o backup do painel ou o computador (adb).</string>
+    <string name="dono_titulo">Tornar o launcher dono do aparelho</string>
+    <string name="dono_texto">Isto desliga o Google por uns segundos (a conta fica guardada e volta sozinha) e torna o launcher dono do aparelho: oculta apps, fixa a HOME e trava parar ou limpar. Faça com ninguém usando a TV.</string>
+    <string name="dono_usuarios">Também serão REMOVIDOS os usuários extras da TV, com os dados deles: %s.</string>
+    <string name="dono_ok">Tornar dono</string>
+    <string name="dono_andando">Tornando o launcher dono… (até 1 minuto)</string>
+    <string name="dono_sem_shell">O shell próprio não respondeu. Pareie em Configurações > Shell do launcher.</string>
+    <string name="bv_dev">Ativar as opções do desenvolvedor</string>
+    <string name="bv_dev_det">Em Sobre, desça até "Build do Android TV" (ou "Build do SO") e aperte OK 7 vezes. Depois volte aqui.</string>
+    <string name="bv_parear">Parear o launcher com a TV</string>
+    <string name="bv_parear_det">Abre as Opções do desenvolvedor: ligue "Depuração sem fio" e entre em "Parear dispositivo com código". O launcher lê o código sozinho.</string>
+    <string name="bv_dono">Tornar o launcher dono do aparelho</string>
+    <string name="bv_dono_det">Oculta apps, fixa a HOME e trava parar ou limpar. O Google desliga por uns segundos; a conta fica.</string>
+    <string name="extras_DIARIO_DNS">Diário de DNS por app (fica só na TV, 7 dias)</string>
+    <string name="extras_diario_ver">Ver o diário de DNS de hoje</string>
+    <string name="extras_diario_apagar">Apagar o diário de DNS</string>
+    <string name="extras_diario_apagado">Diário apagado</string>
+</resources>

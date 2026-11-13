@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Temas do launcher (sistema de design, 10/11/2026). Os três herdam os temas do Android que o manifesto já usava
+     e só acrescentam a fonte Manrope e a cor de fundo. Ver Estilo.kt para cores, tamanhos e componentes. -->
+<resources>
+    <style name="One" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:fontFamily">@font/manrope</item>
+        <item name="android:windowBackground">@color/one_fundo</item>
+        <item name="android:colorAccent">@color/one_acento</item>
+    </style>
+    <style name="One.Tela" parent="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+        <item name="android:fontFamily">@font/manrope</item>
+        <item name="android:windowBackground">@color/one_fundo</item>
+    </style>
+    <style name="One.Translucido" parent="@android:style/Theme.Translucent.NoTitleBar">
+        <item name="android:fontFamily">@font/manrope</item>
+    </style>
+    <color name="one_fundo">#FF0B0F17</color>
+    <color name="one_acento">#FF7FD6C2</color>
+</resources>

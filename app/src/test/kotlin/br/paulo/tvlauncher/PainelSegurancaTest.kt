@@ -1,0 +1,352 @@
+package br.paulo.tvlauncher
+
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertTrue
+import org.junit.Test
+
+/** Testes da parte de segurança do painel no navegador (sem Android: roda no computador). */
+class PainelSegurancaTest {
+
+    // ---------------------------------------------------------------- PIN
+
+    @Test fun pinValidoSoComSeisADozeDigitos() {
+        assertTrue(PinSeguro.valido("123456"))
+        assertTrue(PinSeguro.valido("123456789012"))
+        assertFalse(PinSeguro.valido("12345"))
+        assertFalse(PinSeguro.valido("1234567890123"))
+        assertFalse(PinSeguro.valido("12345a"))
+        assertFalse(PinSeguro.valido("12 456"))
+        assertFalse(PinSeguro.valido("١٢٣٤٥٦"))   // dígitos arábicos: isDigit() aceitaria, o PIN não
+        assertFalse(PinSeguro.valido(""))
+    }
+
+    @Test fun resumoConfereSoComOPinCerto() {
+        val sal = PinSeguro.novoSal()
+        val resumo = PinSeguro.resumo("246810", sal, 1000)
+        assertTrue(PinSeguro.confere("246810", sal, 1000, resumo))
+        assertFalse(PinSeguro.confere("246811", sal, 1000, resumo))
+        assertFalse(PinSeguro.confere("246810", sal, 1001, resumo))   // outro número de voltas
+        assertFalse(PinSeguro.confere("246810", PinSeguro.novoSal(), 1000, resumo))   // outro sal
+        assertFalse(PinSeguro.confere("", sal, 1000, resumo))
+    }
+
+    @Test fun salAleatorioMudaOResumo() {
+        val a = PinSeguro.resumo("135790", PinSeguro.novoSal(), 1000)
+        val b = PinSeguro.resumo("135790", PinSeguro.novoSal(), 1000)
+        assertEquals(32, a.size)
+        assertFalse(a.contentEquals(b))
+    }
+
+    // ---------------------------------------------------------------- tentativas
+
+    @Test fun cincoErrosBloqueiamUmMinutoDepoisDobra() {
+        var agora = 0L
+        val c = ControleTentativas({ agora })
+        repeat(4) { assertTrue(c.registrarFalha() is ControleTentativas.Resultado.Errou) }
+        assertEquals(ControleTentativas.Resultado.Bloqueou(60_000), c.registrarFalha())
+        assertEquals(60_000, c.esperaMs())
+        agora = 59_999
+        assertEquals(1, c.esperaMs())
+        agora = 60_000
+        assertEquals(0, c.esperaMs())
+        repeat(4) { c.registrarFalha() }
+        assertEquals(ControleTentativas.Resultado.Bloqueou(120_000), c.registrarFalha())
+        agora += 120_000
+        repeat(4) { c.registrarFalha() }
+        assertEquals(ControleTentativas.Resultado.Bloqueou(240_000), c.registrarFalha())
+    }
+
+    @Test fun vinteErrosDesligam() {
+        val c = ControleTentativas({ 0L })
+        repeat(19) { assertNotEquals(ControleTentativas.Resultado.Desligar, c.registrarFalha()) }
+        assertEquals(ControleTentativas.Resultado.Desligar, c.registrarFalha())
+    }
+
+    @Test fun errouInformaQuantasFaltam() {
+        val c = ControleTentativas({ 0L })
+        assertEquals(ControleTentativas.Resultado.Errou(4), c.registrarFalha())
+        assertEquals(ControleTentativas.Resultado.Errou(3), c.registrarFalha())
+    }
+
+    @Test fun acertarZeraEGravaZero() {
+        val gravados = ArrayList<Int>()
+        val c = ControleTentativas({ 0L }, falhasIniciais = 3) { gravados.add(it) }
+        c.registrarFalha()
+        c.registrarSucesso()
+        assertEquals(listOf(4, 0), gravados)
+        assertEquals(0, c.falhas)
+        assertEquals(0, c.esperaMs())
+    }
+
+    @Test fun falhasGravadasSobrevivemAoReinicio() {
+        // 18 erros antes de reiniciar: faltam 2 para desligar, não 20.
+        val c = ControleTentativas({ 0L }, falhasIniciais = 18)
+        assertTrue(c.registrarFalha() is ControleTentativas.Resultado.Errou)
+        assertEquals(ControleTentativas.Resultado.Desligar, c.registrarFalha())
+    }
+
+    // ---------------------------------------------------------------- sessões
+
+    @Test fun sessaoValeEExpiraPorOciosidade() {
+        var agora = 1_000L
+        val s = Sessoes({ agora })
+        val t = s.criar()
+        assertEquals(32, t.length)
+        assertTrue(s.valida(t))
+        agora += Sessoes.OCIOSO_MS - 1
+        assertTrue(s.valida(t))   // usar renova
+        agora += Sessoes.OCIOSO_MS - 1
+        assertTrue(s.valida(t))
+        agora += Sessoes.OCIOSO_MS + 1
+        assertFalse(s.valida(t))
+    }
+
+    @Test fun sessaoExpiraNoMaximoMesmoEmUso() {
+        var agora = 0L
+        val s = Sessoes({ agora })
+        val t = s.criar()
+        while (agora < Sessoes.MAXIMO_MS - 60_000) { agora += 60_000; assertTrue(s.valida(t)) }
+        agora += 120_000
+        assertFalse(s.valida(t))
+    }
+
+    @Test fun tokenErradoOuNuloNaoVale() {
+        val s = Sessoes({ 0L })
+        s.criar()
+        assertFalse(s.valida(null))
+        assertFalse(s.valida(""))
+        assertFalse(s.valida("0".repeat(32)))
+        assertFalse(s.valida("x"))
+    }
+
+    @Test fun elevadaPorCincoMinutos() {
+        var agora = 0L
+        val s = Sessoes({ agora })
+        val t = s.criar()
+        assertTrue(s.elevada(t))   // acabou de digitar o PIN
+        agora = Sessoes.ELEVADA_MS
+        assertFalse(s.elevada(t))
+        assertTrue(s.elevar(t))
+        assertTrue(s.elevada(t))
+        assertFalse(s.elevar("f".repeat(32)))
+    }
+
+    @Test fun encerrarDerruba() {
+        val s = Sessoes({ 0L })
+        val a = s.criar(); val b = s.criar()
+        s.encerrar(a)
+        assertFalse(s.valida(a)); assertTrue(s.valida(b))
+        s.encerrarTodas()
+        assertFalse(s.valida(b))
+    }
+
+    @Test fun limiteDeSessoesTiraAMaisAntiga() {
+        val s = Sessoes({ 0L }, maximoSessoes = 2)
+        val a = s.criar(); val b = s.criar(); val c = s.criar()
+        assertFalse(s.valida(a)); assertTrue(s.valida(b)); assertTrue(s.valida(c))
+        assertEquals(2, s.quantas())
+    }
+
+    @Test fun tokensSaoDiferentes() {
+        val s = Sessoes({ 0L }, maximoSessoes = 100)
+        val tokens = (1..50).map { s.criar() }.toSet()
+        assertEquals(50, tokens.size)
+    }
+
+    // ---------------------------------------------------------------- Host / Origin / pacote
+
+    private val nomes = setOf("192.168.1.50", "chromecast")
+
+    @Test fun hostAceitaIpENomeComOuSemPorta() {
+        assertTrue(ChecagensPainel.hostPermitido("192.168.1.50:8080", nomes, 8080))
+        assertTrue(ChecagensPainel.hostPermitido("192.168.1.50", nomes, 8080))
+        assertTrue(ChecagensPainel.hostPermitido("Chromecast:8080", nomes, 8080))
+    }
+
+    @Test fun hostRecusaRebindingEPortaErrada() {
+        assertFalse(ChecagensPainel.hostPermitido("evil.example:8080", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("chromecast.evil.example:8080", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("192.168.1.50:8081", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("192.168.1.50:", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido(null, nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("[::1]:8080", nomes, 8080))
+    }
+
+    @Test fun origemTemDeSerOProprioPainel() {
+        assertTrue(ChecagensPainel.origemPermitida("http://192.168.1.50:8080", "192.168.1.50:8080"))
+        assertTrue(ChecagensPainel.origemPermitida("http://chromecast:8080", "Chromecast:8080"))
+        assertFalse(ChecagensPainel.origemPermitida("http://evil.example", "192.168.1.50:8080"))
+        assertFalse(ChecagensPainel.origemPermitida("https://192.168.1.50:8080", "192.168.1.50:8080"))
+        assertFalse(ChecagensPainel.origemPermitida("null", "192.168.1.50:8080"))
+        assertFalse(ChecagensPainel.origemPermitida(null, "192.168.1.50:8080"))
+        assertFalse(ChecagensPainel.origemPermitida("http://192.168.1.50:8080", null))
+    }
+
+    @Test fun httpsSoPeloNomeDoTailscaleNaPorta8443() {
+        val ts = setOf("onetv-sala.tail1234.ts.net")
+        assertTrue(ChecagensPainel.viaHttps("onetv-sala.tail1234.ts.net:8443", ts))
+        assertTrue(ChecagensPainel.viaHttps("ONETV-SALA.tail1234.ts.net:8443", ts))
+        assertFalse(ChecagensPainel.viaHttps("onetv-sala.tail1234.ts.net", ts))        // sem a porta
+        assertFalse(ChecagensPainel.viaHttps("onetv-sala.tail1234.ts.net:8080", ts))
+        assertFalse(ChecagensPainel.viaHttps("192.168.1.50:8443", ts))                // IP de casa não tem cadeado
+        assertFalse(ChecagensPainel.viaHttps("evil.example:8443", ts))
+        assertFalse(ChecagensPainel.viaHttps("onetv-sala.tail1234.ts.net:8443", emptySet()))   // rede Tailscale desligada
+        assertFalse(ChecagensPainel.viaHttps(null, ts))
+    }
+
+    @Test fun origemHttpsSoNaPorta8443() {
+        assertTrue(ChecagensPainel.origemPermitida("https://onetv-sala.tail1234.ts.net:8443", "onetv-sala.tail1234.ts.net:8443"))
+        assertTrue(ChecagensPainel.origemPermitida("http://onetv-sala.tail1234.ts.net:8443", "onetv-sala.tail1234.ts.net:8443"))
+        assertFalse(ChecagensPainel.origemPermitida("https://evil.example:8443", "onetv-sala.tail1234.ts.net:8443"))
+        assertFalse(ChecagensPainel.origemPermitida("https://onetv-sala.tail1234.ts.net:8443", "onetv-sala.tail1234.ts.net:8080"))
+    }
+
+    @Test fun pacoteValido() {
+        assertTrue(ChecagensPainel.pacoteValido("com.netflix.ninja"))
+        assertTrue(ChecagensPainel.pacoteValido("br.paulo.tvlauncher"))
+        assertTrue(ChecagensPainel.pacoteValido("com.google.android.youtube.tv"))
+        assertFalse(ChecagensPainel.pacoteValido("android"))   // sem ponto
+        assertFalse(ChecagensPainel.pacoteValido("com..x"))
+        assertFalse(ChecagensPainel.pacoteValido("../etc"))
+        assertFalse(ChecagensPainel.pacoteValido("com.x;rm"))
+        assertFalse(ChecagensPainel.pacoteValido("com.x/y"))
+        assertFalse(ChecagensPainel.pacoteValido("1com.x"))
+        assertFalse(ChecagensPainel.pacoteValido(null))
+        assertFalse(ChecagensPainel.pacoteValido("a." + "b".repeat(300)))
+    }
+
+    // ---------------------------------------------------------------- revisão (04/11/2026)
+
+    @Test fun depoisDeVinteNadaMaisEConferido() {
+        val c = ControleTentativas({ 0L })
+        repeat(20) { c.registrarFalha() }
+        assertTrue(c.esgotado())
+        assertEquals(Long.MAX_VALUE, c.esperaMs())
+        c.zerar()
+        assertFalse(c.esgotado())
+        assertEquals(0, c.esperaMs())
+    }
+
+    @Test fun existeNaoRenovaASessao() {
+        var agora = 0L
+        val s = Sessoes({ agora })
+        val t = s.criar()
+        agora = Sessoes.OCIOSO_MS - 1
+        assertTrue(s.existe(t))   // não conta como uso...
+        agora = Sessoes.OCIOSO_MS + 1
+        assertFalse(s.existe(t))  // ...então cai com 30 min sem uso de verdade
+    }
+
+    private fun ip(t: String) = java.net.InetAddress.getByName(t).address
+
+    @Test fun mesmaRedeConfereOPrefixo() {
+        assertTrue(ChecagensPainel.mesmaRede(ip("192.168.1.50"), ip("192.168.1.20"), 24))
+        assertFalse(ChecagensPainel.mesmaRede(ip("192.168.1.50"), ip("192.168.2.20"), 24))
+        assertFalse(ChecagensPainel.mesmaRede(ip("192.168.1.50"), ip("10.0.0.5"), 24))
+        assertTrue(ChecagensPainel.mesmaRede(ip("192.168.1.50"), ip("192.168.0.9"), 16))
+        assertTrue(ChecagensPainel.mesmaRede(ip("192.168.1.50"), ip("192.168.1.50"), 32))
+        assertFalse(ChecagensPainel.mesmaRede(ip("192.168.1.50"), ip("192.168.1.154"), 32))
+        assertFalse(ChecagensPainel.mesmaRede(ip("192.168.1.50"), ip("192.168.1.20"), 0))
+        assertFalse(ChecagensPainel.mesmaRede(ip("192.168.1.50"), ByteArray(16), 24))
+    }
+
+    @Test fun jsonRasoBarraAninhamentoFundo() {
+        assertTrue(ChecagensPainel.jsonRaso("""{"pin":"123456"}"""))
+        assertTrue(ChecagensPainel.jsonRaso("""{"a":{"b":[1,2,{"c":"[[[[[[[[[[[[[[[[[[[[["}]}}"""))   // colchetes dentro de string não contam
+        assertTrue(ChecagensPainel.jsonRaso("""{"a":"aspas \" e [[[[[[[[[[[[[[[[[[["}"""))
+        assertFalse(ChecagensPainel.jsonRaso("[".repeat(17)))
+        assertFalse(ChecagensPainel.jsonRaso("[".repeat(500_000)))
+        assertTrue(ChecagensPainel.jsonRaso("[".repeat(16) + "]".repeat(16)))
+    }
+
+    // ---------------------------------------------------------------- fase 2: caminhos de arquivo
+
+    @Test fun nomesDeArquivo() {
+        for (ok in listOf("filme.mp4", "Férias 2026.jpg", ".escondido", "a..b", "x".repeat(200)))
+            assertTrue(ok, ChecagensPainel.nomeArquivoValido(ok))
+        for (ruim in listOf(null, "", ".", "..", "a/b", "a\\b", "   ", "x".repeat(201), "a\u0000b", "a\nb", "a\u007fb"))
+            assertFalse(ruim.toString(), ChecagensPainel.nomeArquivoValido(ruim))
+    }
+
+    @Test fun caminhosRelativos() {
+        for (ok in listOf("", "Download", "Download/Filmes", "Movies/Férias 2026"))
+            assertTrue(ok, ChecagensPainel.caminhoRelativoValido(ok))
+        for (ruim in listOf(null, "..", "Download/..", "../etc", "Download//x", "/Download", "Download/", "Android",
+                "android/data", "ANDROID/obb", "Download/./x", "a".repeat(1001)))
+            assertFalse(ruim.toString(), ChecagensPainel.caminhoRelativoValido(ruim))
+    }
+
+    @Test fun dentroDaRaiz() {
+        assertTrue(ChecagensPainel.dentroDe("/storage/emulated/0", "/storage/emulated/0"))
+        assertTrue(ChecagensPainel.dentroDe("/storage/emulated/0/Download/a", "/storage/emulated/0"))
+        assertFalse(ChecagensPainel.dentroDe("/storage/emulated/01/x", "/storage/emulated/0"))
+        assertFalse(ChecagensPainel.dentroDe("/data/data/br.paulo.tvlauncher", "/storage/emulated/0"))
+        assertFalse(ChecagensPainel.dentroDe("/storage/emulated", "/storage/emulated/0"))
+    }
+
+    @Test fun textoParaDigitarNaTv() {
+        for (ok in listOf("netflix", "Joao 123", "a.b@c.com", "x_y-z"))
+            assertTrue(ok, ChecagensPainel.textoTvValido(ok))
+        for (ruim in listOf(null, "", "a'b", "a;reboot", "\$(id)", "`id`", "a\nb", "a|b", "a&b", "a/b", "ação", "x".repeat(101), "a\"b"))
+            assertFalse(ruim.toString(), ChecagensPainel.textoTvValido(ruim))
+    }
+
+    // Auditoria 10/11/2026: o org.json do Android aceita aspa simples e comentários; a varredura antiga só conhecia a
+    // aspa dupla e deixava passar o aninhamento escondido atrás deles (e o nível negativo de "]]]]").
+    @Test fun jsonRasoNaoSeEnganaComAspaSimplesNemComentario() {
+        // Lote 10/11/2026 (jsonRaso = JsonSeguro.corpoAceitavel): corpo que NÃO começa com [ ou { passa, porque o org.json
+        // lê um valor solto ("'\"'") e para, sem descer nível nenhum. O perigo é o mesmo texto DENTRO de um [ ou {:
+        assertTrue(ChecagensPainel.jsonRaso("'\"' " + "[".repeat(5000)))
+        assertFalse(ChecagensPainel.jsonRaso("['\"' " + "[".repeat(5000)))
+        assertFalse(ChecagensPainel.jsonRaso("/*\"*/" + "[".repeat(5000)))
+        assertFalse(ChecagensPainel.jsonRaso("/*" + "]".repeat(5000) + "*/" + "[".repeat(4000)))
+        assertFalse(ChecagensPainel.jsonRaso("]]]]" + "[".repeat(19)))
+        assertFalse(ChecagensPainel.jsonRaso("# x\n[]"))
+        assertFalse(ChecagensPainel.jsonRaso("{a=1}"))
+        // JSON de verdade continua passando: números, true/false/null, espaços e quebras.
+        assertTrue(ChecagensPainel.jsonRaso("{\n  \"a\": -1.5e+3,\r\n\t\"b\": [true, false, null], \"c\": \"/* ' # dentro da string */\"\n}"))
+        assertTrue(ChecagensPainel.jsonRaso(""))
+    }
+
+    @Test fun pastaPadraoSemDiferenciarMaiusculas() {
+        for (p in listOf("Download", "download", "DOWNLOAD", "DCIM", "dcim", "Pictures", "music"))
+            assertTrue(p, ChecagensPainel.pastaPadraoTopo(p))
+        for (p in listOf("Download/x", "Downloads", "minhas fotos", ""))
+            assertFalse(p, ChecagensPainel.pastaPadraoTopo(p))
+    }
+
+    // Entrar pelo QR da TV (10/11/2026): uso único, 2 min, um código por vez, sessão sem elevação.
+    @Test fun codigoDoQrValeUmaVezEPorDoisMinutos() {
+        var t = 1_000L
+        val c = CodigoEntrada({ t })
+        assertFalse(c.usar("qualquer"))                 // nenhum gerado
+        val a = c.novo()
+        assertEquals(48, a.length)
+        assertTrue(c.ativo())
+        assertFalse(c.usar(a.dropLast(1) + "x"))        // errado não gasta o certo
+        assertFalse(c.usar(null))
+        assertTrue(c.usar(a))
+        assertEquals(1_000L, c.usadoEm)
+        assertFalse(c.usar(a))                          // uma vez só
+        assertFalse(c.ativo())
+
+        val b = c.novo()
+        val d = c.novo()                                // gerar outro anula o anterior
+        assertFalse(c.usar(b))
+        t += CodigoEntrada.VALIDADE_MS + 1              // venceu
+        assertFalse(c.usar(d))
+        assertFalse(c.ativo())
+
+        val e = c.novo(); c.cancelar()                  // saiu da tela da TV
+        assertFalse(c.usar(e))
+    }
+
+    @Test fun sessaoDoQrNasceSemElevacao() {
+        val s = Sessoes({ 0L })
+        assertFalse(s.elevada(s.criar(elevada = false)))
+        assertTrue(s.elevada(s.criar()))
+    }
+}

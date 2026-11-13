@@ -1,0 +1,20 @@
+{
+  "name": "Painel da TV",
+  "short_name": "TV",
+  "description": "Controle e administração da TV da sala pelo celular ou computador.",
+  "start_url": "/#inicio",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0e1015",
+  "theme_color": "#0e1015",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "/icone-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icone-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icone-mascaravel.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Controle", "url": "/#controle", "icons": [{ "src": "/icone-192.png", "sizes": "192x192" }] },
+    { "name": "Arquivos", "url": "/#arquivos", "icons": [{ "src": "/icone-192.png", "sizes": "192x192" }] }
+  ]
+}

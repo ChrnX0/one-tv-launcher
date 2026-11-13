@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Estilo.kt: a cor "de repouso" de um texto, para o foco poder escurecer e depois devolver. -->
+    <item name="estilo_cor_normal" type="id" />
+    <!-- MainActivity: tipo do card de Assistir, para trocar a capa quando ela fica pronta (CapaAtalho) -->
+    <item name="tag_capa_atalho" type="id" />
+</resources>

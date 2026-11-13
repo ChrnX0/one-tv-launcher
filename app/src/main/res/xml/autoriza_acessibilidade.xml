@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Configuração do serviço de acessibilidade AutorizaShizukuService:
+     - enxergar as teclas do controle remoto antes dos botões globais do sistema (onKeyEvent);
+     - (04/11/2026) ver quando uma tela abre (typeWindowStateChanged: só o pacote e a classe, sem ler conteúdo) para
+       manter a NOSSA HOME com o launcherx do Google ativo (ver Home.kt);
+     - (05/11/2026) tirar foto da tela para o painel no navegador (PainelControle.foto), só quando alguém pede;
+     - (10/11/2026) ler o TEXTO da tela (TextoTela.kt) só quando o Claude chama ver_tela, com a chave VER_TELA ligada;
+     - (13/11/2026) ler o código de pareamento na tela das Configurações (PareamentoNaTv), só durante o pareamento. -->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/descricao_autoriza_shizuku"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityEventTypes="typeWindowStateChanged"
+    android:accessibilityFlags="flagRequestFilterKeyEvents|flagRetrieveInteractiveWindows"
+    android:canRequestFilterKeyEvents="true"
+    android:canRetrieveWindowContent="true"
+    android:canTakeScreenshot="true"
+    android:notificationTimeout="100" />

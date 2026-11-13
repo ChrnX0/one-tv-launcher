@@ -1,0 +1,146 @@
+# Compila o launcher no GitHub e publica o APK em "Releases" (04/11/2026; publicação separada do merge em 09/11/2026).
+# As TVs com a chave pública baixam daqui sozinhas (Atualizador.kt).
+#
+# - Pull request: só compila, para conferir que o build passa. Nunca assina com a chave de verdade nem publica.
+# - Merge/push na main: NÃO compila nem publica (09/11/2026, pedido do dono). Antes, todo push na main virava Release e
+#   ia direto para todas as TVs: um merge errado (ou uma conta invadida) chegava em todo mundo, com poder de Device Owner.
+#   Também economiza créditos do Actions.
+# - Publicar para todos = decisão à parte: Actions > "Build e Release" > "Run workflow" na main (workflow_dispatch).
+#   Compila, assina com o segredo ASSINATURA_KEYSTORE_B64 e publica um Release com o APK e o SHA-256.
+#   Rodado em outra branch, só compila e assina com a chave debug do runner: a chave de verdade só é lida na main
+#   (10/11/2026, auditoria: antes uma branch qualquer saía assinada com a chave aceita pelas TVs, como artifact).
+#   Sem o segredo, só compila (e avisa).
+#
+# Segredo necessário (Settings > Secrets and variables > Actions): ASSINATURA_KEYSTORE_B64 = a chave PÚBLICA do
+# projeto em base64 (+ ASSINATURA_SENHA / ASSINATURA_ALIAS se não forem os padrões). NUNCA o debug.keystore do PC de build:
+# decisão do dono (04/11/2026, opção A) — quem tivesse uma chave aceita pela TV poderia assinar uma "atualização"
+# por cima do Device Owner.
+name: Build e Release
+
+on:
+  pull_request:
+  workflow_dispatch:   # publicar: rodar à mão na main (ver o topo)
+
+# Mínimo para todos (PR inclusive): só ler. Só o job "publicar" (main, à mão) ganha a escrita para criar o Release.
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      codigo: ${{ steps.info.outputs.codigo }}
+      nome: ${{ steps.info.outputs.nome }}
+      tem_chave: ${{ steps.chave.outputs.tem_chave }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false   # o token não fica gravado no .git: os passos do build não precisam dele
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      # O runner já traz o Android SDK em $ANDROID_HOME (o setup-android@v3 quebrava ao pedir o pacote "tools", que
+      # não existe mais). Só faltam as mesmas versões do PC de build: SDK 36 (NDK e CMake eram da librish.so do Shizuku
+      # embutido, que saiu em 12/11/2026).
+      - name: Componentes do Android SDK
+        run: |
+          SDKM=$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | sort -V | tail -1)
+          yes | "$SDKM" --licenses > /dev/null || true
+          "$SDKM" "platforms;android-36" "build-tools;36.0.0"
+
+      # Go para o túnel do Tailscale (tunel/, vira libtsnet.so dentro do APK; ver compilarTunel em app/build.gradle.kts).
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: tunel/go.mod
+          cache-dependency-path: tunel/go.sum
+
+      - uses: gradle/actions/setup-gradle@v5
+
+      - name: Chave de assinatura
+        id: chave
+        # Só na main, à mão: é a única execução que publica. Em outra branch a chave real nem é decodificada.
+        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+        env:
+          KEYSTORE_B64: ${{ secrets.ASSINATURA_KEYSTORE_B64 }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/assinatura.keystore"
+            echo "ASSINATURA_ARQUIVO=$RUNNER_TEMP/assinatura.keystore" >> "$GITHUB_ENV"
+            echo "tem_chave=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::Sem o segredo ASSINATURA_KEYSTORE_B64: compila, mas não publica Release."
+          fi
+
+      - name: Compilar o release
+        env:
+          ASSINATURA_SENHA: ${{ secrets.ASSINATURA_SENHA }}
+          ASSINATURA_ALIAS: ${{ secrets.ASSINATURA_ALIAS }}
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:assembleRelease --no-daemon --stacktrace
+
+      # Dois APKs (splits em app/build.gradle.kts), com o mesmo versionCode. NOME é o nome dos arquivos do Release
+      # (o Atualizador.kt procura one-tv-launcher*.apk e ainda aceita o nome antigo tv-launcher*.apk).
+      - name: Versão e SHA-256
+        id: info
+        run: |
+          SAIDA=app/build/outputs/apk/release
+          NOME=one-tv-launcher
+          mkdir -p publicar
+          cp "$SAIDA/app-armeabi-v7a-release.apk" publicar/$NOME.apk
+          cp "$SAIDA/app-arm64-v8a-release.apk" publicar/$NOME-arm64.apk
+          AAPT=$(ls "$ANDROID_HOME"/build-tools/36.0.0/aapt2)
+          CODIGO=$("$AAPT" dump badging publicar/$NOME.apk | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p")
+          C64=$("$AAPT" dump badging publicar/$NOME-arm64.apk | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p")
+          if [ "$CODIGO" != "$C64" ]; then echo "::error::versionCode diferente: 32=$CODIGO 64=$C64"; exit 1; fi
+          for APK in "$NOME.apk" "$NOME-arm64.apk"; do
+            # Cada APK só pode ter as libs da própria arquitetura (confere o splits).
+            unzip -l "publicar/$APK" | grep -o 'lib/[^/]*/' | sort -u | tr '\n' ' '; echo " <- $APK"
+            (cd publicar && sha256sum "$APK" | cut -d' ' -f1 > "$APK.sha256")
+            echo "$APK  versionCode=$CODIGO  tamanho=$(stat -c%s "publicar/$APK") bytes  sha256=$(cat "publicar/$APK.sha256")"
+          done
+          echo "codigo=$CODIGO" >> "$GITHUB_OUTPUT"
+          echo "nome=$NOME" >> "$GITHUB_OUTPUT"
+          # Notas do Release (em inglês), com o número da build e o commit.
+          sed -e "s/{BUILD}/$CODIGO/g" -e "s/{COMMIT}/${GITHUB_SHA::7}/g" .github/release-notes.md > publicar/notas.md
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: tv-launcher-${{ steps.info.outputs.codigo }}
+          path: publicar/
+
+  # Job separado só para ter a permissão de escrita (criar o Release) sem dá-la ao build nem aos PRs.
+  publicar:
+    needs: build
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && needs.build.outputs.tem_chave == '1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write   # criar o Release
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: tv-launcher-${{ needs.build.outputs.codigo }}
+
+      - name: Publicar o Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          V: ${{ needs.build.outputs.codigo }}
+          NOME: ${{ needs.build.outputs.nome }}
+        run: |
+          # Sem checkout neste job: o repositório vai explícito. O download-artifact põe os arquivos de publicar/ aqui.
+          gh release create "v$V" \
+            "$NOME.apk" "$NOME.apk.sha256" \
+            "$NOME-arm64.apk" "$NOME-arm64.apk.sha256" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "One TV Launcher 1.0 (build $V)" \
+            --notes-file notas.md \
+            --target "$GITHUB_SHA"

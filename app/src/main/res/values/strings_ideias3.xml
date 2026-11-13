@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ideias de 12/11/2026 (brainstorm 3): rótulos das chaves em Extras. -->
+<resources>
+    <string name="extras_SONO_SUAVE">Desligar suave (timer de sono escurece e baixa o volume)</string>
+    <string name="extras_MURAL">Mural da família no protetor de tela</string>
+    <string name="extras_PRESENCA">Desligar quando todos saírem de casa (roteador UniFi)</string>
+    <string name="extras_HOJE_NA_TV">\"Hoje na TV\" na tela Buscar</string>
+    <string name="extras_RETROSPECTIVA">Retrospectiva da semana (domingo à noite)</string>
+    <string name="extras_MODO_SIMPLES">Modo simples (cards grandes e nome falado)</string>
+</resources>

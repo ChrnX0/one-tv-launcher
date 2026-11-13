@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dormir_titulo">Bedtime</string>
+    <string name="dormir_texto">This app is not allowed right now. Good night!</string>
+    <string name="dormir_pin">PIN to change bedtime</string>
+    <string name="dormir_inicio">Bedtime: starts</string>
+    <string name="dormir_fim">Bedtime: ends</string>
+    <string name="dormir_teto">Bedtime: max volume</string>
+    <string name="recado_link_titulo">Message</string>
+    <string name="extras_HORA_DORMIR">Bedtime (allowed apps only, capped volume)</string>
+    <string name="extras_TOCANDO_AGORA">Now playing (reads what is playing)</string>
+    <string name="extras_MODO_LEVE">Light mode (shorter animations)</string>
+    <string name="extras_SOM_NAVEGACAO">Navigation sound</string>
+    <string name="extras_RECADO_LINK">Message by link (Home Assistant, TvOverlay)</string>
+    <string name="extras_caches">Clear app caches</string>
+    <string name="extras_livre">%1$s free</string>
+    <string name="extras_consumo">Internet per app (7 days)</string>
+    <string name="extras_tocando">Now playing</string>
+    <string name="extras_aguarde">One moment…</string>
+    <string name="dormir_dia">Bedtime: day</string>
+    <string name="dormir_todos">all (default)</string>
+    <string name="dormir_proprio">own schedule</string>
+    <string name="dormir_segue">follows default</string>
+    <string name="dormir_voltar_padrao">Bedtime: reset this day to default</string>
+    <string name="extras_VER_TELA">Let Claude see the screen (MCP ver_tela; the TV shows a notice)</string>
+    <string name="casa_titulo">Home (Home Assistant)</string>
+    <string name="casa_sem_config">Set up Home Assistant in the phone panel: Extras tab, Home card.</string>
+    <string name="casa_carregando">Loading devices…</string>
+    <string name="casa_vazio">No lights, plugs or scenes in Home Assistant.</string>
+    <string name="casa_google_home">Google Home (Google TV panel)</string>
+</resources>
