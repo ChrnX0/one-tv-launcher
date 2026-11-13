@@ -99,7 +99,7 @@
         <activity
             android:name=".RotinasActivity"
             android:exported="false"
-            android:label="Rotinas" />
+            android:label="@string/lbl_rotinas" />
         <activity
             android:name=".RotinaAcordarActivity"
             android:exported="false"
@@ -153,11 +153,11 @@
         <activity
             android:name=".LicencasActivity"
             android:exported="false"
-            android:label="Licenças" />
+            android:label="@string/lbl_licencas" />
         <activity
             android:name=".DiagnosticoActivity"
             android:exported="false"
-            android:label="Diagnóstico" />
+            android:label="@string/lbl_diagnostico" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -199,7 +199,7 @@
         <service
             android:name=".AutorizaShizukuService"
             android:exported="false"
-            android:label="Teclas do controle"
+            android:label="@string/lbl_teclas"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
@@ -215,41 +215,41 @@
             android:name=".EscolherAppActivity"
             android:exported="false"
             android:excludeFromRecents="true"
-            android:label="Escolher app do botão" />
+            android:label="@string/lbl_escolher_app_botao" />
         <!-- Tela de DNS privado (aberta pelo chip do rodapé) -->
         <activity
             android:name=".DnsActivity"
             android:exported="false"
-            android:label="DNS privado" />
+            android:label="@string/lbl_dns" />
         <!-- "Configurações do launcher": aparência, DNS, teste de velocidade, permissões, diagnóstico (aberta pelo card "Launcher" do popup do perfil) -->
         <!-- Assistente de primeira abertura (só sem Device Owner, uma vez): BoasVindasActivity.kt -->
         <!-- Conectar o Claude (e outros clientes MCP) pela internet: QR codes do Tailscale e do endereço. -->
         <activity
             android:name=".ConectarClaudeActivity"
             android:exported="false"
-            android:label="Claude pela internet" />
+            android:label="@string/lbl_claude_internet" />
         <activity
             android:name=".EntrarPeloQrActivity"
             android:exported="false"
-            android:label="Entrar pelo celular" />
+            android:label="@string/lbl_entrar_celular" />
         <activity
             android:name=".BoasVindasActivity"
             android:exported="false"
-            android:label="Bem-vindo" />
+            android:label="@string/lbl_bem_vindo" />
         <activity
             android:name=".ConfigLauncherActivity"
             android:exported="false"
-            android:label="Configurações do launcher" />
+            android:label="@string/lbl_config" />
         <!-- Controle parental: escolher os canais bloqueados (só pelas Configurações, depois do PIN). -->
         <activity
             android:name=".BloqueioCanaisActivity"
             android:exported="false"
-            android:label="Canais bloqueados" />
+            android:label="@string/lbl_canais_bloqueados" />
         <!-- Despertador: a lista/editor (abre no OK do relógio) e o "app de despertador" do Android (Gemini: "me acorda às 7"). -->
         <activity
             android:name=".AlarmesActivity"
             android:exported="true"
-            android:label="Despertador"
+            android:label="@string/lbl_despertador"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.SET_ALARM" />
@@ -279,7 +279,7 @@
         <activity-alias
             android:name=".Avisar5"
             android:exported="true"
-            android:label="Avisar em 5 minutos"
+            android:label="@string/lbl_avisar5"
             android:targetActivity=".TimerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -290,7 +290,7 @@
         <activity-alias
             android:name=".Avisar10"
             android:exported="true"
-            android:label="Avisar em 10 minutos"
+            android:label="@string/lbl_avisar10"
             android:targetActivity=".TimerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -301,7 +301,7 @@
         <activity-alias
             android:name=".Avisar15"
             android:exported="true"
-            android:label="Avisar em 15 minutos"
+            android:label="@string/lbl_avisar15"
             android:targetActivity=".TimerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -312,7 +312,7 @@
         <activity-alias
             android:name=".Avisar20"
             android:exported="true"
-            android:label="Avisar em 20 minutos"
+            android:label="@string/lbl_avisar20"
             android:targetActivity=".TimerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -323,7 +323,7 @@
         <activity-alias
             android:name=".Avisar30"
             android:exported="true"
-            android:label="Avisar em 30 minutos"
+            android:label="@string/lbl_avisar30"
             android:targetActivity=".TimerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -334,7 +334,7 @@
         <activity-alias
             android:name=".Ampulheta"
             android:exported="true"
-            android:label="Ampulheta"
+            android:label="@string/lbl_ampulheta"
             android:targetActivity=".TimerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -345,7 +345,7 @@
         <activity-alias
             android:name=".NaoAvisar"
             android:exported="true"
-            android:label="Não avisar"
+            android:label="@string/lbl_nao_avisar"
             android:targetActivity=".TimerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -357,13 +357,13 @@
         <activity
             android:name=".PrevisaoActivity"
             android:exported="false"
-            android:label="Previsão" />
+            android:label="@string/lbl_previsao" />
         <!-- "Bom dia": como o Boletim do Tempo, mas fala antes a saudação e a hora e, depois, a agenda de hoje
              ("Ok Google, abrir Bom dia"). É também o que o despertador abre ao apertar Parar (ver AlarmeTocandoActivity). -->
         <activity-alias
             android:name=".BomDia"
             android:exported="true"
-            android:label="Bom dia"
+            android:label="@string/lbl_bom_dia"
             android:targetActivity=".PrevisaoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -376,7 +376,7 @@
         <activity-alias
             android:name=".BoletimDoTempo"
             android:exported="true"
-            android:label="Boletim do Tempo"
+            android:label="@string/lbl_boletim"
             android:targetActivity=".PrevisaoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -395,7 +395,7 @@
         <activity-alias
             android:name=".VozDesligar30"
             android:exported="true"
-            android:label="Desligar em 30 minutos"
+            android:label="@string/lbl_desligar30"
             android:targetActivity=".AtalhoVozActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -406,7 +406,7 @@
         <activity-alias
             android:name=".VozDesligar60"
             android:exported="true"
-            android:label="Desligar em 1 hora"
+            android:label="@string/lbl_desligar60"
             android:targetActivity=".AtalhoVozActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -417,7 +417,7 @@
         <activity-alias
             android:name=".VozNaoDesligar"
             android:exported="true"
-            android:label="Não desligar a TV"
+            android:label="@string/lbl_nao_desligar"
             android:targetActivity=".AtalhoVozActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -428,7 +428,7 @@
         <activity-alias
             android:name=".VozDiagnostico"
             android:exported="true"
-            android:label="Diagnóstico da TV"
+            android:label="@string/lbl_diagnostico_tv"
             android:targetActivity=".AtalhoVozActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -439,7 +439,7 @@
         <activity-alias
             android:name=".VozAgenda"
             android:exported="true"
-            android:label="Minha agenda"
+            android:label="@string/lbl_minha_agenda"
             android:targetActivity=".AtalhoVozActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -455,7 +455,7 @@
         <activity
             android:name=".CalendarioActivity"
             android:exported="false"
-            android:label="Agenda" />
+            android:label="@string/lbl_agenda" />
         <!-- A tela que aparece quando o alarme toca: acende a tela mesmo em standby. -->
         <activity
             android:name=".AlarmeTocandoActivity"
@@ -469,7 +469,7 @@
         <service
             android:name=".ProtetorTela"
             android:exported="true"
-            android:label="Relógio"
+            android:label="@string/lbl_relogio"
             android:permission="android.permission.BIND_DREAM_SERVICE">
             <intent-filter>
                 <action android:name="android.service.dreams.DreamService" />

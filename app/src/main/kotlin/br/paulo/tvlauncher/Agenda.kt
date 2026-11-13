@@ -74,12 +74,12 @@ object Agenda {
                 c.timeInMillis = e.inicio
                 val h = c.get(Calendar.HOUR_OF_DAY); val m = c.get(Calendar.MINUTE)
                 // "às 9", "às 9 e 30"; quem já começou (uma reunião em curso) fica "agora".
-                val quando = if (e.inicio <= agora) "agora" else if (m == 0) "às $h" else "às $h e $m"
+                val quando = if (e.inicio <= agora) txt(R.string.ag_agora) else if (m == 0) txt(R.string.ag_as_h, h) else txt(R.string.ag_as_hm, h, m)
                 "${e.titulo} $quando"
             }
         }
-        val lista = if (itens.size == 1) itens[0] else itens.dropLast(1).joinToString(", ") + " e " + itens.last()
-        val mais = if (hoje.size > 4) ", e mais ${hoje.size - 4}" else ""
-        return "Hoje na agenda: $lista$mais."
+        val lista = if (itens.size == 1) itens[0] else itens.dropLast(1).joinToString(", ") + txt(R.string.dur_e) + itens.last()
+        val mais = if (hoje.size > 4) txt(R.string.ag_e_mais, hoje.size - 4) else ""
+        return txt(R.string.ag_hoje, lista + mais)
     }
 }

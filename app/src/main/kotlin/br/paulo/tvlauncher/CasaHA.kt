@@ -158,21 +158,21 @@ object CasaHA {
 
     /** Grava endereço e token. Devolve null se gravou, ou o motivo. */
     fun configurar(ctx: Context, endereco: String, token: String): String? {
-        val e = enderecoValido(endereco) ?: return "endereço inválido (ex.: http://192.168.1.10:8123; fora da rede de casa use https)"
-        if (!tokenValido(token)) return "token inválido: crie um em Perfil > Segurança > Tokens de acesso de longa duração"
+        val e = enderecoValido(endereco) ?: return txt(R.string.casa_err_endereco)
+        if (!tokenValido(token)) return txt(R.string.casa_err_token)
         return try {
             val c = Cipher.getInstance("AES/GCM/NoPadding"); c.init(Cipher.ENCRYPT_MODE, chave())
             prefs(ctx).edit().putString("endereco", e)
                 .putString("token_cifrado", Base64.encodeToString(c.doFinal(token.trim().toByteArray()), Base64.NO_WRAP))
                 .putString("token_iv", Base64.encodeToString(c.iv, Base64.NO_WRAP)).commit()
             null
-        } catch (ex: Exception) { "o Keystore da TV falhou: ${ex.javaClass.simpleName}" }
+        } catch (ex: Exception) { txt(R.string.casa_err_keystore, ex.javaClass.simpleName) }
     }
 
     /** Campainha e câmera (ids de entidade; vazio desliga o aviso). */
     fun configurarCampainha(ctx: Context, sensor: String, camera: String): String? {
-        if (sensor.isNotEmpty() && !idValido(sensor)) return "sensor inválido (ex.: binary_sensor.campainha)"
-        if (camera.isNotEmpty() && !(idValido(camera) && camera.startsWith("camera."))) return "câmera inválida (ex.: camera.porta)"
+        if (sensor.isNotEmpty() && !idValido(sensor)) return txt(R.string.casa_err_sensor)
+        if (camera.isNotEmpty() && !(idValido(camera) && camera.startsWith("camera."))) return txt(R.string.casa_err_camera)
         prefs(ctx).edit().putString(CHAVE_CAMPAINHA, sensor).putString(CHAVE_CAMERA, camera).apply()
         return null
     }
@@ -309,7 +309,7 @@ object CasaHA {
     private fun tocouCampainha(ctx: Context) {
         val camera = texto(ctx, CHAVE_CAMERA)
         val foto = if (camera.isEmpty()) null else try { fotoCamera(ctx, camera) } catch (e: Exception) { null }
-        AvisoTv.mostrar(ctx, "Campainha", "Tem alguém na porta", 30, som = true, guardarSeApagada = false,
+        AvisoTv.mostrar(ctx, ctx.getString(R.string.casa_campainha), ctx.getString(R.string.casa_alguem_porta), 30, som = true, guardarSeApagada = false,
             imagem = foto?.let { RecadoImagem.decodificar(it) }, fica = AvisoRegras.Fica.ATENCAO)
     }
 

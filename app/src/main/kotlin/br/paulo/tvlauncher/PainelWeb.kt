@@ -573,12 +573,12 @@ object PainelWeb {
                     ?.let { json(200, it) } ?: erro(404, "app não encontrado")
                 "abrir" -> if (req.metodo == "POST") return acaoApp(ip, "abrir", pacote) { PainelControle.abrir(app, pacote) }
                 "parar" -> if (req.metodo == "POST") {
-                    confirmarNaTv(Confirmacoes.Acao.REMOVER, "Parar o app $pacote", ip)?.let { return it }
+                    confirmarNaTv(Confirmacoes.Acao.REMOVER, txt(R.string.cf_parar_app, pacote), ip)?.let { return it }
                     return acaoApp(ip, "parar", pacote) { PainelControle.parar(app, pacote) }
                 }
                 "limpar" -> if (req.metodo == "POST") {
                     if (!sessoes.elevada(token)) return precisaPin()
-                    confirmarNaTv(Confirmacoes.Acao.REMOVER, "Apagar os dados do app $pacote", ip)?.let { return it }
+                    confirmarNaTv(Confirmacoes.Acao.REMOVER, txt(R.string.cf_limpar_app, pacote), ip)?.let { return it }
                     return acaoApp(ip, "limpar dados de", pacote) { PainelControle.limparDados(app, pacote) }
                 }
                 "permissoes" -> if (req.metodo == "GET") return PainelPermissoes.listar(app, pacote)?.let { json(200, it) } ?: erro(404, "app não encontrado")
@@ -789,7 +789,7 @@ object PainelWeb {
      * fica parada, numa thread do servidor, não na da tela). Null = pode seguir; senão, a resposta de recusa pronta.
      */
     private fun confirmarNaTv(a: Confirmacoes.Acao, oQue: String, ip: String): Resposta? =
-        if (ConfirmacoesTv.permitir(app, a, oQue, "painel ($ip)")) null
+        if (ConfirmacoesTv.permitir(app, a, oQue, txt(R.string.cf_quem_painel, ip))) null
         else erro(403, if (ConfirmacoesTv.modo(app, a) == Confirmacoes.Modo.BLOQUEAR)
             "bloqueado na TV (Configurações › Sistema › Confirmações)" else "negado na TV, ou ninguém respondeu em 60 s") { put("negadoNaTv", true) }
 
@@ -815,7 +815,7 @@ object PainelWeb {
 
     private fun desinstalar(pacote: String, token: String?, ip: String): Resposta {
         if (!sessoes.elevada(token)) return precisaPin()
-        confirmarNaTv(Confirmacoes.Acao.REMOVER, "Desinstalar o app $pacote", ip)?.let { return it }
+        confirmarNaTv(Confirmacoes.Acao.REMOVER, txt(R.string.cf_desinstalar_app, pacote), ip)?.let { return it }
         val motivo = PainelApps.desinstalar(app, pacote)
         PainelArmazem.registrar(app, ip, "desinstalar $pacote", motivo ?: "ok")
         return if (motivo == null) json(200, JSONObject().put("ok", true)) else erro(409, motivo)
@@ -974,7 +974,7 @@ object PainelWeb {
         if (permissao.length > 200 || !ChecagensPainel.pacoteValido(permissao)) return erro(400, "permissão inválida")
         // Tirar permissão nunca pergunta (fica mais seguro); só dar.
         if (acao == "conceder") confirmarNaTv(Confirmacoes.Acao.PERMISSOES,
-            "Dar a permissão ${permissao.substringAfterLast('.')} ao app $pacote", ip)?.let { return it }
+            txt(R.string.cf_dar_permissao, permissao.substringAfterLast('.'), pacote), ip)?.let { return it }
         val motivo = PainelPermissoes.mudar(app, pacote, permissao, acao)
         PainelArmazem.registrar(app, ip, "permissão $acao ${permissao.substringAfterLast('.')} em $pacote", motivo ?: "ok")
         return if (motivo == null) json(200, JSONObject().put("ok", true)) else erro(409, motivo)
@@ -987,7 +987,7 @@ object PainelWeb {
         // PERMITIR pede o PIN de novo (revisão 09/11/2026): "instalar outros apps", "todos os arquivos" e "por cima de
         // outros apps" são poderes grandes. Negar e padrão continuam livres.
         if (acao == "permitir" && !sessoes.elevada(token)) return precisaPin()
-        if (acao == "permitir") confirmarNaTv(Confirmacoes.Acao.PERMISSOES, "Dar o acesso especial $op ao app $pacote", ip)?.let { return it }
+        if (acao == "permitir") confirmarNaTv(Confirmacoes.Acao.PERMISSOES, txt(R.string.cf_dar_acesso, op, pacote), ip)?.let { return it }
         val motivo = PainelPermissoes.mudarEspecial(app, pacote, op, acao)
         PainelArmazem.registrar(app, ip, "acesso $acao $op em $pacote", motivo ?: "ok")
         return if (motivo == null) json(200, JSONObject().put("ok", true)) else erro(409, motivo)
@@ -1000,7 +1000,7 @@ object PainelWeb {
         if (!sessoes.elevada(token)) return precisaPin()
         if (req.tamanho <= 0 || req.tamanho > PainelApps.LIMITE_APK) return erro(413, "APK vazio ou grande demais")
         // Pergunta antes de ler o arquivo (o nome é o que o navegador mandou; o pacote de verdade vai para o registro).
-        confirmarNaTv(Confirmacoes.Acao.INSTALAR, "Instalar ${req.consulta["nome"]?.take(80) ?: "um APK"}", ip)?.let { return it }
+        confirmarNaTv(Confirmacoes.Acao.INSTALAR, txt(R.string.cf_instalar, req.consulta["nome"]?.take(80) ?: "APK"), ip)?.let { return it }
         val r = PainelApps.instalar(app, req.fluxoCorpo(), req.tamanho)
         val quem = r.pacote?.let { "${r.nome} ($it ${r.versao})" } ?: (req.consulta["nome"]?.take(80) ?: "APK")
         PainelArmazem.registrar(app, ip, "instalar $quem", r.motivo ?: "ok")
@@ -1354,9 +1354,9 @@ object PainelWeb {
         if (abre && !sessoes.elevada(token)) return precisaPin()
         // Confirmações primeiro, antes de mudar qualquer coisa: abrir a TV para fora de casa.
         if (o.optBoolean("ligado") && !McpServidor.ligado(app))
-            confirmarNaTv(Confirmacoes.Acao.ABRIR_FORA, "Ligar o acesso pela internet (MCP)", ip)?.let { return it }
+            confirmarNaTv(Confirmacoes.Acao.ABRIR_FORA, txt(R.string.cf_ligar_mcp), ip)?.let { return it }
         if (o.optBoolean("rede") && !TunelTailscale.redeLigada(app))
-            confirmarNaTv(Confirmacoes.Acao.ABRIR_FORA, "Ligar a rede Tailscale (painel pelos aparelhos da conta)", ip)?.let { return it }
+            confirmarNaTv(Confirmacoes.Acao.ABRIR_FORA, txt(R.string.cf_ligar_tailscale), ip)?.let { return it }
         val mudou = ArrayList<String>()
         if (o.has("chave")) {
             if (!sessoes.elevada(token)) return precisaPin()

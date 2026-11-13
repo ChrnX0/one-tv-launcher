@@ -11,6 +11,8 @@ import org.json.JSONObject
  * Só lógica pura (sem Android), testada em ConfirmacoesTest. Quem grava e pergunta na TV é o ConfirmacoesTv.
  */
 object Confirmacoes {
+    // Os textos deste arquivo são os que a IA lê (MCP). A TV mostra os de res/values* (ConfirmacoesTv.tituloRes etc.),
+    // no idioma do Android.
     enum class Modo(val chave: String, val rotulo: String) {
         PERGUNTAR("perguntar", "Perguntar na TV"),
         PERMITIR("permitir", "Permitir sempre"),

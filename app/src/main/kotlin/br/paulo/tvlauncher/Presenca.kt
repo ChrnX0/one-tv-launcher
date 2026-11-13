@@ -81,7 +81,7 @@ object Presenca {
             p.edit().remove("ausente_desde").putLong("ultimo_desligou", System.currentTimeMillis()).apply()
             Log.i(TAG, "todos saíram há ${AUSENCIA_MIN} min: apagando a tela")
             Desligamento.apagarTela(app)
-            Avisos.enviar(app, Avisos.Tipo.PRESENCA, "TV desligada", "Todos saíram de casa e a TV estava ligada sem ninguém mexer.")
+            Avisos.enviar(app, Avisos.Tipo.PRESENCA, txt(R.string.pr_tv_desligada), txt(R.string.pr_todos_sairam))
             PainelArmazem.registrar(app, "presença", "TV desligada: todos saíram", "ok")
             return "desligou"
         }

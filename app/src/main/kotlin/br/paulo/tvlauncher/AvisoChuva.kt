@@ -85,10 +85,10 @@ object AvisoChuva {
         val previsao = try { buscar(app, agora) } catch (e: Exception) {
             Log.w(TAG, "previsão falhou: $e"); return "previsão falhou: ${e.javaClass.simpleName}"
         } ?: return "sem chuva à vista"
-        val r = AvisoTv.mostrar(app, "Chuva", "${previsao.chance}% de chance por volta das ${previsao.hora}",
+        val r = AvisoTv.mostrar(app, app.getString(R.string.ch_chuva), app.getString(R.string.ch_chance, previsao.chance, previsao.hora),
             SEGUNDOS_NA_TELA, som = false, guardarSeApagada = false, icone = IconeLinha(IconeLinha.Tipo.CHUVA), fica = AvisoRegras.Fica.CHUVA)
         if (r == AvisoTv.Resultado.MOSTRADO) p.edit().putLong("ultimo_aviso", System.currentTimeMillis()).apply()
-        Avisos.enviar(app, Avisos.Tipo.CHUVA, "Chuva", "${previsao.chance}% de chance por volta das ${previsao.hora}")
+        Avisos.enviar(app, Avisos.Tipo.CHUVA, app.getString(R.string.ch_chuva), app.getString(R.string.ch_chance, previsao.chance, previsao.hora))
         Log.i(TAG, "chuva ${previsao.chance}% às ${previsao.hora}: $r")
         return "avisou: ${previsao.chance}% às ${previsao.hora} ($r)"
     }

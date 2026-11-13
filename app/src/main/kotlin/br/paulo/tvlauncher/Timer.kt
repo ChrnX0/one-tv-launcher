@@ -89,14 +89,7 @@ object Timer {
     }
 
     /** "10 minutos", "1 hora e 30 minutos", "45 segundos": para a confirmação na tela. */
-    fun duracaoTexto(segundos: Int): String {
-        val h = segundos / 3600; val m = (segundos % 3600) / 60; val s = segundos % 60
-        val partes = mutableListOf<String>()
-        if (h > 0) partes += if (h == 1) "1 hora" else "$h horas"
-        if (m > 0) partes += if (m == 1) "1 minuto" else "$m minutos"
-        if (s > 0) partes += if (s == 1) "1 segundo" else "$s segundos"
-        return partes.joinToString(" e ").ifEmpty { "0 segundos" }
-    }
+    fun duracaoTexto(segundos: Int): String = duracaoFalada(segundos)   // no idioma da TV (Textos.kt)
 }
 
 /**
@@ -136,11 +129,11 @@ class TimerActivity : Activity() {
     private fun marcar(seg: Int, nome: String) {
         Timer.iniciar(this, seg, nome)
         val titulo = if (nome.isNotEmpty()) " ($nome)" else ""
-        AvisoTv.rapido(this, "Timer", "Aviso em ${Timer.duracaoTexto(seg)}$titulo")
+        AvisoTv.rapido(this, "Timer", getString(R.string.tm_aviso_em, Timer.duracaoTexto(seg)) + titulo)
     }
 
     private fun cancelar() = AvisoTv.rapido(this, "Timer",
-        if (Timer.cancelar(this)) "Contagem cancelada." else "Não havia contagem correndo.")
+        getString(if (Timer.cancelar(this)) R.string.tm_cancelada else R.string.tm_nenhuma))
 
     /**
      * Uma caixa no meio da tela com um botão por duração (OK marca e fecha; Voltar fecha sem marcar). Mesmo cartão e
@@ -151,7 +144,7 @@ class TimerActivity : Activity() {
         fun botao(rotulo: String, acao: () -> Unit) = Estilo.botao(this, rotulo).apply { setOnClickListener { acao(); finish() } }
         val grade = android.widget.GridLayout(this).apply { columnCount = 3; clipChildren = false }
         OPCOES.forEach { min ->
-            grade.addView(botao(if (min < 60) "$min min" else "1 hora") { marcar(min * 60, "") },
+            grade.addView(botao(if (min < 60) getString(R.string.cfg_min, min) else txtN(R.plurals.dur_horas, 1)) { marcar(min * 60, "") },
                 android.widget.GridLayout.LayoutParams().apply { width = dp(150); setMargins(dp(Estilo.E1), dp(Estilo.E1), dp(Estilo.E1), dp(Estilo.E1)) })
         }
         val caixa = android.widget.LinearLayout(this).apply {
@@ -162,10 +155,10 @@ class TimerActivity : Activity() {
             background = Estilo.fundo(this@TimerActivity, Estilo.CARTAO, Estilo.RAIO, Estilo.VIDRO_BORDA)
             addView(Estilo.texto(this@TimerActivity, Estilo.Papel.SECAO, "Timer"),
                 android.widget.LinearLayout.LayoutParams(-2, -2).apply { bottomMargin = dp(Estilo.E1) })
-            addView(Estilo.texto(this@TimerActivity, Estilo.Papel.TITULO, "Contagem regressiva").apply { textSize = 24f },
+            addView(Estilo.texto(this@TimerActivity, Estilo.Papel.TITULO, getString(R.string.tm_titulo)).apply { textSize = 24f },
                 android.widget.LinearLayout.LayoutParams(-2, -2).apply { bottomMargin = dp(Estilo.E2) })
             addView(grade)
-            if (Timer.ativo(this@TimerActivity) != null) addView(botao("Cancelar a contagem atual") { cancelar() },
+            if (Timer.ativo(this@TimerActivity) != null) addView(botao(getString(R.string.tm_cancelar_atual)) { cancelar() },
                 android.widget.LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(Estilo.E2) })
         }
         grade.getChildAt(3)?.post { grade.getChildAt(3).requestFocus() }   // foco em "10 min", a escolha mais comum

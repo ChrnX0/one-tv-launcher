@@ -193,37 +193,44 @@ internal fun desenharFundoEscuro(c: Canvas, w: Float, h: Float, p: Paint) {
  */
 class FundoGaleria(ctx: Context, private val emSegundoPlano: (() -> Unit) -> Unit, private val comEtiqueta: Boolean = true,
                    etiquetaNoCanto: Boolean = false, veus: Boolean = true) : FrameLayout(ctx), FundoVivo {
-    private class Obra(val id: Int, val titulo: String, val artista: String, val ano: String)
+    // Título e ano em português e no original do Met (inglês): a etiqueta segue o idioma da TV, como o resto do launcher.
+    private class Obra(val id: Int, val tituloPt: String, val artistaPt: String, val anoPt: String,
+                       val tituloEn: String, val anoEn: String, val artistaEn: String = artistaPt) {
+        private val pt get() = java.util.Locale.getDefault().language == "pt"
+        val titulo get() = if (pt) tituloPt else tituloEn
+        val artista get() = if (pt) artistaPt else artistaEn
+        val ano get() = if (pt) anoPt else anoEn
+    }
 
     private val obras = listOf(
-        Obra(436535, "Campo de trigo com ciprestes", "Vincent van Gogh", "1889"),
-        Obra(437323, "Paisagem brasileira", "Frans Post", "1650"),
-        Obra(435809, "Os ceifeiros", "Pieter Bruegel, o Velho", "1565"),
-        Obra(437659, "Vista do Sena", "Georges Seurat", "1882–83"),
-        Obra(435749, "Na praia em Trouville", "Eugène Boudin", "1863"),
-        Obra(437852, "Saltash com a balsa, Cornualha", "J. M. W. Turner", "1811"),
-        Obra(436965, "A família Monet no jardim em Argenteuil", "Édouard Manet", "1874"),
-        Obra(437299, "Colina de Jalais, Pontoise", "Camille Pissarro", "1867"),
-        Obra(438101, "Campo Santa Maria Zobenigo, Veneza", "Canaletto", "década de 1730"),
-        Obra(437979, "Navio ao luar", "Ivan Aivazovsky", "séc. XIX"),
-        Obra(438816, "A floresta no inverno ao pôr do sol", "Théodore Rousseau", "c. 1846–67"),
-        Obra(435988, "Ville-d'Avray", "Camille Corot", "1870"),
-        Obra(438000, "Três mulheres taitianas", "Paul Gauguin", "1896"),
-        Obra(435922, "Catedral de Salisbury vista do jardim do bispo", "John Constable", "c. 1825"),
-        Obra(437192, "Diversão num rio congelado", "Aert van der Neer", "c. 1660"),
-        Obra(436084, "Barcos no litoral de Étaples", "Charles-François Daubigny", "1871"),
-        Obra(438822, "A refeição do leão", "Henri Rousseau", "c. 1907"),
-        Obra(436832, "Paisagem com rio largo", "Philips Koninck", "c. 1648–49"),
-        Obra(438117, "A ilha de San Michele, Veneza", "Francesco Guardi", "década de 1770"),
-        Obra(437514, "Orla do bosque em Monts-Girard", "Théodore Rousseau", "1852–54"),
-        Obra(435750, "Beaulieu: a baía de Fourmis", "Eugène Boudin", "1892"),
-        Obra(436448, "Uma fazenda na Bretanha", "Paul Gauguin", "c. 1894"),
-        Obra(437078, "Cachoeira em Mont-Dore", "Achille-Etna Michallon", "1818"),
-        Obra(435647, "Vaprio d'Adda", "Bernardo Bellotto", "1744"),
-        Obra(437040, "Mudança de pasto", "Anton Mauve", "c. 1880"),
-        Obra(436787, "A Pont Neuf", "Johan Barthold Jongkind", "1849–50"),
-        Obra(437179, "Perto de Penshurst, Kent", "Patrick Nasmyth", "1828"),
-        Obra(435880, "Rochas em Fontainebleau", "Paul Cézanne", "década de 1890"),
+        Obra(436535, "Campo de trigo com ciprestes", "Vincent van Gogh", "1889", "Wheat Field with Cypresses", "1889"),
+        Obra(437323, "Paisagem brasileira", "Frans Post", "1650", "A Brazilian Landscape", "1650"),
+        Obra(435809, "Os ceifeiros", "Pieter Bruegel, o Velho", "1565", "The Harvesters", "1565", artistaEn = "Pieter Bruegel the Elder"),
+        Obra(437659, "Vista do Sena", "Georges Seurat", "1882–83", "View of the Seine", "1882–83"),
+        Obra(435749, "Na praia em Trouville", "Eugène Boudin", "1863", "On the Beach at Trouville", "1863"),
+        Obra(437852, "Saltash com a balsa, Cornualha", "J. M. W. Turner", "1811", "Saltash with the Water Ferry, Cornwall", "1811"),
+        Obra(436965, "A família Monet no jardim em Argenteuil", "Édouard Manet", "1874", "The Monet Family in Their Garden at Argenteuil", "1874"),
+        Obra(437299, "Colina de Jalais, Pontoise", "Camille Pissarro", "1867", "Jalais Hill, Pontoise", "1867"),
+        Obra(438101, "Campo Santa Maria Zobenigo, Veneza", "Canaletto", "década de 1730", "Campo Santa Maria Zobenigo, Venice", "1730s"),
+        Obra(437979, "Navio ao luar", "Ivan Aivazovsky", "séc. XIX", "Ship by Moonlight", "19th century"),
+        Obra(438816, "A floresta no inverno ao pôr do sol", "Théodore Rousseau", "c. 1846–67", "The Forest in Winter at Sunset", "ca. 1846–67"),
+        Obra(435988, "Ville-d'Avray", "Camille Corot", "1870", "Ville-d'Avray", "1870"),
+        Obra(438000, "Três mulheres taitianas", "Paul Gauguin", "1896", "Three Tahitian Women", "1896"),
+        Obra(435922, "Catedral de Salisbury vista do jardim do bispo", "John Constable", "c. 1825", "Salisbury Cathedral from the Bishop's Grounds", "ca. 1825"),
+        Obra(437192, "Diversão num rio congelado", "Aert van der Neer", "c. 1660", "Sports on a Frozen River", "ca. 1660"),
+        Obra(436084, "Barcos no litoral de Étaples", "Charles-François Daubigny", "1871", "Boats on the Seacoast at Étaples", "1871"),
+        Obra(438822, "A refeição do leão", "Henri Rousseau", "c. 1907", "The Repast of the Lion", "ca. 1907"),
+        Obra(436832, "Paisagem com rio largo", "Philips Koninck", "c. 1648–49", "Wide River Landscape", "ca. 1648–49"),
+        Obra(438117, "A ilha de San Michele, Veneza", "Francesco Guardi", "década de 1770", "The Island of San Michele, Venice", "1770s"),
+        Obra(437514, "Orla do bosque em Monts-Girard", "Théodore Rousseau", "1852–54", "The Edge of the Woods at Monts-Girard", "1852–54"),
+        Obra(435750, "Beaulieu: a baía de Fourmis", "Eugène Boudin", "1892", "Beaulieu: The Bay of Fourmis", "1892"),
+        Obra(436448, "Uma fazenda na Bretanha", "Paul Gauguin", "c. 1894", "A Farm in Brittany", "ca. 1894"),
+        Obra(437078, "Cachoeira em Mont-Dore", "Achille-Etna Michallon", "1818", "Waterfall at Mont-Dore", "1818"),
+        Obra(435647, "Vaprio d'Adda", "Bernardo Bellotto", "1744", "Vaprio d'Adda", "1744"),
+        Obra(437040, "Mudança de pasto", "Anton Mauve", "c. 1880", "Changing Pasture", "ca. 1880"),
+        Obra(436787, "A Pont Neuf", "Johan Barthold Jongkind", "1849–50", "The Pont Neuf", "1849–50"),
+        Obra(437179, "Perto de Penshurst, Kent", "Patrick Nasmyth", "1828", "Near Penshurst, Kent", "1828"),
+        Obra(435880, "Rochas em Fontainebleau", "Paul Cézanne", "década de 1890", "Rocks at Fontainebleau", "1890s"),
     )
     private val imagem = ImageView(ctx).apply { scaleType = ImageView.ScaleType.CENTER_CROP }
     private val etiqueta = TextView(ctx).apply {

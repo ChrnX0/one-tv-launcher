@@ -477,7 +477,7 @@ class MainActivity : Activity() {
             visibility = View.GONE
             addView(txtTimer)
             setOnClickListener {
-                if (Timer.cancelar(this@MainActivity)) AvisoTv.rapido(this@MainActivity, "Timer", "Timer cancelado", 4)
+                if (Timer.cancelar(this@MainActivity)) AvisoTv.rapido(this@MainActivity, "Timer", getString(R.string.tm_timer_cancelado), 4)
                 ui.removeCallbacks(tarefaTimer); ui.post(tarefaTimer)
             }
         }
