@@ -717,6 +717,17 @@
         <button type="button" class="botao-secundario" id="btnSimplesSalvar">Salvar apps</button>
         <p id="statusSimples" class="aviso" hidden></p>
       </div>
+      <div class="cartao">
+        <h2>Instalar como app (https)</h2>
+        <p class="aviso">Com o certificado que a TV fez instalado no aparelho, o painel abre com cadeado e vira app no celular e no PC.</p>
+        <p id="textoCertificado" class="aviso">Lendo…</p>
+        <div class="barra-acoes">
+          <a class="botao-primario" href="/certificado">Passo a passo</a>
+          <a id="linkHttps" class="botao-secundario" href="/" hidden>Abrir com cadeado</a>
+          <button type="button" class="botao-secundario" id="btnCertificadoNovo">Gerar certificado novo</button>
+        </div>
+        <p id="statusCertificado" class="aviso" hidden></p>
+      </div>
     </section>
     <section id="abaRegistro" class="painel-aba" hidden>
       <div id="listaRegistro" class="lista-registro"></div>
@@ -809,5 +820,6 @@
   <script src="busca.js"></script>
   <script src="arquivos.js"></script>
   <script src="controle.js"></script>
+  <script src="certificado.js"></script>
 </body>
 </html>

@@ -211,6 +211,20 @@ class PainelSegurancaTest {
         assertFalse(ChecagensPainel.viaHttps(null, ts))
     }
 
+    /** A porta https da rede de casa (PainelTls, 13/11/2026) usa a mesma regra, com os nomes do certificado + IPs. */
+    @Test fun httpsDeCasaSoComNomesDoCertificado() {
+        val tls = setOf("tv", "tv.lan", "tv.local", "192.168.1.50")
+        assertTrue(ChecagensPainel.viaHttps("tv:8443", tls))
+        assertTrue(ChecagensPainel.viaHttps("TV.LAN:8443", tls))
+        assertTrue(ChecagensPainel.viaHttps("192.168.1.50:8443", tls))
+        assertFalse(ChecagensPainel.viaHttps("tv", tls))                 // sem porta: não é o nosso https
+        assertFalse(ChecagensPainel.viaHttps("tv:8080", tls))
+        assertFalse(ChecagensPainel.viaHttps("sala:8443", tls))          // nome fora do certificado
+        assertFalse(ChecagensPainel.viaHttps("tv.evil.example:8443", tls))
+        assertTrue(ChecagensPainel.origemPermitida("https://tv:8443", "tv:8443"))
+        assertFalse(ChecagensPainel.origemPermitida("https://evil.example", "tv:8443"))
+    }
+
     @Test fun origemHttpsSoNaPorta8443() {
         assertTrue(ChecagensPainel.origemPermitida("https://onetv-sala.tail1234.ts.net:8443", "onetv-sala.tail1234.ts.net:8443"))
         assertTrue(ChecagensPainel.origemPermitida("http://onetv-sala.tail1234.ts.net:8443", "onetv-sala.tail1234.ts.net:8443"))
