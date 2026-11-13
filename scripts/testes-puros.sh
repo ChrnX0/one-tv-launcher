@@ -31,6 +31,7 @@ declare -A FONTES=(
   [ConfirmacoesTest]="Confirmacoes"
   [CertificadoX509Test]="CertificadoX509"
   [PaginaCertificadoTest]="PaginaCertificado"
+  [DriveRegrasTest]="DriveRegras BackupNoturnoRegras"
 )
 
 falhou=0

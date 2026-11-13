@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Automatic backup to Google Drive (DriveBackup.kt). Own file so it does not conflict with other PRs. -->
+<resources>
+    <string name="drv_titulo">Google Drive account</string>
+    <string name="drv_destino">Google Drive</string>
+    <string name="drv_conta">Google Drive account</string>
+    <string name="drv_nao_conectada">not connected</string>
+    <string name="drv_passos">1. On your phone, open %1$s (or point the camera at the code on the right).\n2. Sign in with a Google account that is on this TV and type:\n\n%2$s\n\n3. Allow access to Google Drive. The TV only sees the files it creates itself (the OneTV-backup folder), never the rest of your Drive.\n\nThis screen continues by itself.</string>
+    <string name="drv_ok">Done: %1$s is connected. Choose \"Google Drive\" in the Extra copy line so the nightly backup also goes there.</string>
+    <string name="drv_sem_google">Google sign-in is not set up on this TV yet.\n\nSet it up in the web panel > Claude tab (your own OAuth client, \"TVs and Limited Input devices\" type), turn on the Google Drive API in the same Google Cloud project and come back here.</string>
+    <string name="drv_desconectar_pergunta">Disconnect %1$s? The copies already in Google Drive stay there; the TV stops sending new ones.</string>
+    <string name="drv_desconectar">Disconnect</string>
+    <string name="drv_restaurar">Restore from Google Drive</string>
+    <string name="drv_precisa_conta">Connect the Google Drive account first (line above).</string>
+    <string name="drv_falhou">It did not work: %1$s</string>
+    <string name="drv_nenhuma">There are no copies in the OneTV-backup folder of Google Drive yet.</string>
+    <string name="drv_escolha">Which copy?</string>
+    <string name="drv_senha">Password of the backup</string>
+    <string name="drv_senha_errada">Wrong backup password (or the file was changed). Nothing was restored.</string>
+    <string name="drv_restaurado">Restored. The launcher restarts in a moment.</string>
+</resources>

@@ -1012,6 +1012,7 @@ object PainelWeb {
             .put("destino", destino)
             .put("destinoRotulo", BackupNoturno.rotuloDestino(app, destino))
             .put("nas", nas)
+            .put("drive", DriveBackup.email(app) ?: "")   // conta do Google Drive conectada na TV (só o e-mail)
             .put("ultimo", BackupNoturno.ultimo(app))
             .put("copias", copias)
     }
@@ -1032,6 +1033,9 @@ object PainelWeb {
             val d = o.optString("destino")
             when {
                 d == BackupNoturnoRegras.SO_TV || d == BackupNoturnoRegras.PENDRIVE -> d
+                // Google Drive: só com a conta já conectada NA TV (o login é pelo código no celular, na tela da TV).
+                d == BackupNoturnoRegras.DRIVE -> if (DriveBackup.conectado(app)) d
+                    else return erro(400, "conecte a conta do Google Drive na TV primeiro (Configurações > Backup automático)")
                 // NAS: só uma pasta SMB que já está cadastrada em "Mídias na rede" (nada de endereço digitado aqui).
                 else -> {
                     val conta = BackupNoturnoRegras.idSmb(d)?.let { id ->
