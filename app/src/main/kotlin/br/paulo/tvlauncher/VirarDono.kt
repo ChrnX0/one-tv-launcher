@@ -78,13 +78,13 @@ object VirarDono {
     /** A sequência inteira. BLOQUEIA (até ~1 min): nunca na thread da tela. */
     fun executar(ctx: Context): Resultado {
         val app = ctx.applicationContext
-        if (PrivilegioDO.somosDonos(app)) return Resultado(true, "o launcher já é o dono do aparelho")
-        val extras = usuariosAgora(app) ?: return Resultado(false, "o shell próprio não respondeu (pareie em Configurações > Shell do launcher)")
+        if (PrivilegioDO.somosDonos(app)) return Resultado(true, app.getString(R.string.cl_vd_ja_dono))
+        val extras = usuariosAgora(app) ?: return Resultado(false, app.getString(R.string.cl_vd_sem_shell))
 
         // 1) Usuários extras saem (a tela já mostrou quais e a pessoa confirmou).
         for (u in extras) Log.i(TAG, "pm remove-user $u => ${GuardiaoShizuku.comando(app, "pm remove-user $u")?.trim()}")
         val sobraram = usuariosAgora(app).orEmpty()
-        if (sobraram.isNotEmpty()) return Resultado(false, "o Android não deixou remover o usuário ${sobraram.joinToString()}")
+        if (sobraram.isNotEmpty()) return Resultado(false, app.getString(R.string.cl_vd_usuario, sobraram.joinToString()))
 
         // 2) Google desativado só durante o comando; o finally reativa aconteça o que acontecer.
         val desativei = !Congelar.congelado(app, GOOGLE)
@@ -92,7 +92,7 @@ object VirarDono {
         try {
             if (desativei) {
                 prefs(app).edit().putBoolean(MARCA, true).commit()   // commit: grava já, antes de mexer no Google
-                if (!Congelar.definir(app, GOOGLE, true)) return Resultado(false, "o Android não deixou desativar o Google por um instante")
+                if (!Congelar.definir(app, GOOGLE, true)) return Resultado(false, app.getString(R.string.cl_vd_google))
                 Thread.sleep(3_000)   // o AccountManager leva um momento para esquecer o autenticador
             }
             val admin = "${app.packageName}/${AdminReceiver::class.java.name}"
@@ -107,9 +107,10 @@ object VirarDono {
         }
 
         if (!deuCerto(saida) || !PrivilegioDO.somosDonos(app))
-            return Resultado(false, "o Android recusou: " + (saida?.trim()?.lineSequence()?.lastOrNull()?.take(160) ?: "sem resposta"))
+            return Resultado(false, app.getString(R.string.cl_vd_recusou,
+                saida?.trim()?.lineSequence()?.lastOrNull()?.take(160) ?: app.getString(R.string.cl_vd_sem_resposta)))
         PrivilegioDO.aplicar(app)   // HOME fixa, permissões fixas, travas: o que o dono faz ao nascer
-        return Resultado(true, "pronto: o launcher é o dono do aparelho" +
-            if (Congelar.congelado(app, GOOGLE)) " (o Google ainda está voltando; a autocura termina em até 10 min)" else "")
+        return Resultado(true, app.getString(R.string.cl_vd_pronto) +
+            if (Congelar.congelado(app, GOOGLE)) app.getString(R.string.cl_vd_google_voltando) else "")
     }
 }

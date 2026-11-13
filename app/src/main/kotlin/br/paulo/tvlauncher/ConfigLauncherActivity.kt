@@ -65,14 +65,14 @@ class ConfigLauncherActivity : Activity() {
 
     private val abas: List<Aba> by lazy {
         listOf(
-            Aba("Conta", "A conta de IPTV cadastrada na TV: situação, validade e conexões", this::abaConta),
-            Aba("Controle parental", "Bloqueie canais com o PIN: eles somem da lista e não tocam", this::abaParental),
-            Aba("Aparência", "Tema, pilhas de apps, clima e avisos na tela", this::abaAparencia),
-            Aba("Tela e energia", "Protetor de tela e desligar sozinha", this::abaEnergia),
-            Aba("Visitas e rotinas", "Modo visita e ações por horário", this::abaVisitas),
-            Aba("Rede", "DNS, VPN e velocidade da internet", this::abaRede),
-            Aba("Acesso remoto", "Painel no navegador, PIN e o Claude pela internet", this::abaRemoto),
-            Aba("Sistema", "Diagnóstico, atualização, apps e permissões", this::abaSistema),
+            Aba(getString(R.string.cl_aba_conta), getString(R.string.cl_aba_conta_det), this::abaConta),
+            Aba(getString(R.string.cl_aba_parental), getString(R.string.cl_aba_parental_det), this::abaParental),
+            Aba(getString(R.string.cl_aba_aparencia), getString(R.string.cl_aba_aparencia_det), this::abaAparencia),
+            Aba(getString(R.string.cl_aba_energia), getString(R.string.cl_aba_energia_det), this::abaEnergia),
+            Aba(getString(R.string.cl_aba_visitas), getString(R.string.cl_aba_visitas_det), this::abaVisitas),
+            Aba(getString(R.string.cl_aba_rede), getString(R.string.cl_aba_rede_det), this::abaRede),
+            Aba(getString(R.string.cl_aba_remoto), getString(R.string.cl_aba_remoto_det), this::abaRemoto),
+            Aba(getString(R.string.cl_aba_sistema), getString(R.string.cl_aba_sistema_det), this::abaSistema),
         )
     }
 
@@ -239,8 +239,8 @@ class ConfigLauncherActivity : Activity() {
 
     private fun mostrarDica(noMenu: Boolean) {
         dica.removeAllViews()
-        dica.addView(if (noMenu) Estilo.barraDicas(this, "▲▼" to "escolher a aba", "▶ OK" to "entrar nas opções", "VOLTAR" to "sair")
-            else Estilo.barraDicas(this, "▲▼" to "escolher", "OK" to "mudar ou abrir", "◀ VOLTAR" to "voltar às abas"))
+        dica.addView(if (noMenu) Estilo.barraDicas(this, "▲▼" to getString(R.string.cl_dica_aba), "▶ OK" to getString(R.string.cl_dica_entrar), getString(R.string.cl_tecla_voltar) to getString(R.string.cl_dica_sair))
+            else Estilo.barraDicas(this, "▲▼" to getString(R.string.cl_dica_escolher), "OK" to getString(R.string.cl_dica_mudar), "◀ " + getString(R.string.cl_tecla_voltar) to getString(R.string.cl_dica_voltar)))
     }
 
     private var engoliuVoltar = false   // o VOLTAR que só levou o foco ao menu não pode fechar a tela ao soltar
@@ -282,7 +282,7 @@ class ConfigLauncherActivity : Activity() {
             ui.post { if (!isDestroyed) contasNoTopo(topo, fontes) }
         }
         // Gerenciar: cadastrar, apagar, testar (o que antes era a seção "TV ao vivo").
-        secao(c, "Gerenciar contas")
+        secao(c, getString(R.string.cl_gerenciar_contas))
         val caixaContas = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false }
         c.addView(caixaContas, LinearLayout.LayoutParams(MATCH, WRAP))
         montarContasTv(caixaContas)
@@ -324,9 +324,9 @@ class ConfigLauncherActivity : Activity() {
         fun campo(dica: String, tipo: Int) = android.widget.EditText(this).apply {
             inputType = tipo; hint = dica; setSingleLine(); filters = arrayOf(android.text.InputFilter.LengthFilter(100))
         }
-        val chave = campo("Chave da API (opensubtitles.com/consumers)", T or android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS)
-        val usuario = campo("Usuário do OpenSubtitles (opcional)", T or android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS)
-        val senha = campo("Senha (opcional)", T or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD)
+        val chave = campo(getString(R.string.cl_os_chave), T or android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS)
+        val usuario = campo(getString(R.string.cl_os_usuario), T or android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS)
+        val senha = campo(getString(R.string.cl_os_senha), T or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD)
         val caixa = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL; setPadding(48, 16, 48, 0)
             if (erro != null) addView(Estilo.texto(this@ConfigLauncherActivity, Estilo.Papel.LEGENDA, erro).apply { setTextColor(coral) })
@@ -335,36 +335,36 @@ class ConfigLauncherActivity : Activity() {
         CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert)
             .setTitle(getString(R.string.legenda_conta_titulo))
             .setView(caixa)
-            .setPositiveButton("Gravar") { _, _ ->
+            .setPositiveButton(getString(R.string.cl_gravar)) { _, _ ->
                 val conta = LegendaBaixar.Conta(chave.text.toString(), usuario.text.toString(), senha.text.toString())
                 leitura.execute {
                     val r = LegendaBaixar.definirConta(this, conta)
                     val tem = LegendaBaixar.temConta(this)
                     ui.post {
                         if (isDestroyed) return@post
-                        r.onSuccess { aoGravar(tem) }.onFailure { pedirContaLegenda("Não gravei: ${it.message}", aoGravar) }
+                        r.onSuccess { aoGravar(tem) }.onFailure { pedirContaLegenda(getString(R.string.cl_nao_gravei, it.message.toString()), aoGravar) }
                     }
                 }
             }
-            .setNeutralButton("Apagar") { _, _ ->
+            .setNeutralButton(getString(R.string.cl_apagar)) { _, _ ->
                 leitura.execute { LegendaBaixar.definirConta(this, null); ui.post { if (!isDestroyed) aoGravar(false) } }
             }
-            .setNegativeButton("Cancelar", null)
+            .setNegativeButton(getString(R.string.cl_cancelar), null)
             .show()
     }
 
     private fun contasNoTopo(c: LinearLayout, fontes: List<FonteTv>) {
         if (fontes.isEmpty()) {
             c.addView(cartao().apply {
-                addView(valor("Nenhuma conta cadastrada", "cadastre abaixo a conta que o vendedor do IPTV mandou"))
+                addView(valor(getString(R.string.cl_nenhuma_conta), getString(R.string.cl_nenhuma_conta_det)))
             }, lp())
             // Sem lista ainda (11/11/2026, visto no 1 Play): um vídeo livre para ver o player funcionando antes de cadastrar.
-            c.addView(linha("Ver um vídeo de demonstração", "Sintel, da Blender Foundation (licença CC BY 3.0). Precisa de internet", seta = true) {
+            c.addView(linha(getString(R.string.cl_demo), getString(R.string.cl_demo_det), seta = true) {
                 VodActivity.abrirUrl(this, Config.VIDEO_DEMONSTRACAO, "Sintel · Blender Foundation · CC BY 3.0")
             })
         }
         for (f in fontes) {
-            secao(c, f.nome.ifEmpty { "Conta" })
+            secao(c, f.nome.ifEmpty { getString(R.string.cl_aba_conta) })
             val cartao = cartao().apply {
                 // Focável (sem clique) só para o ▲ conseguir voltar até ele: senão o quadro sumia acima da tela.
                 isFocusable = true
@@ -373,28 +373,28 @@ class ConfigLauncherActivity : Activity() {
             c.addView(cartao, lp())
             fun preencher(s: Xtream.Situacao?, consultou: Boolean) {
                 cartao.removeAllViews()
-                for (l in ContaIptv.linhas(f, s, consultou, System.currentTimeMillis()))
+                for (l in ContaIptv.linhas(f, s, consultou, System.currentTimeMillis(), t = textosConta))
                     cartao.addView(valor(l.rotulo, l.valor, if (l.alerta) coral else null))
             }
             preencher(null, consultou = false)
             val podeConsultar = ContaIptv.contaConsultavel(f) != null
             if (podeConsultar) {
                 // Primeiro mostra o que já se sabe (nome, usuário, tipo); a situação chega quando o servidor responder.
-                (cartao.getChildAt(cartao.childCount - 1) as? LinearLayout)?.let { (it.getChildAt(1) as? TextView)?.text = "consultando o servidor…" }
+                (cartao.getChildAt(cartao.childCount - 1) as? LinearLayout)?.let { (it.getChildAt(1) as? TextView)?.text = getString(R.string.cl_consultando) }
                 lateinit var linhaConsultar: LinhaCfg
                 fun consultar() {
-                    linhaConsultar.detalhe("consultando o servidor…")
+                    linhaConsultar.detalhe(getString(R.string.cl_consultando))
                     trabalho.execute {
                         val s = PlayerCarga.situacao(f)
                         val hora = java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date())
                         ui.post {
                             if (isDestroyed) return@post
                             preencher(s, consultou = true)
-                            linhaConsultar.detalhe(if (s != null) "atualizado às $hora · OK consulta de novo" else "sem resposta às $hora · OK tenta de novo")
+                            linhaConsultar.detalhe(if (s != null) getString(R.string.cl_atualizado, hora) else getString(R.string.cl_sem_resposta, hora))
                         }
                     }
                 }
-                linhaConsultar = linha("Atualizar dados da conta", "consulta o servidor de novo", seta = true) { consultar() }
+                linhaConsultar = linha(getString(R.string.cl_atualizar_conta), getString(R.string.cl_atualizar_conta_det), seta = true) { consultar() }
                 c.addView(linhaConsultar, lp())
                 consultar()
             }
@@ -413,42 +413,42 @@ class ConfigLauncherActivity : Activity() {
         caixa.removeAllViews()
         fun adicionar(v: View) = caixa.addView(v, lp())
         for (f in contas) {
-            adicionar(linha(f.nome, "${ContaIptv.tipoLogin(f)} · ${f.servidorVisivel}", valor = "Apagar") {
+            adicionar(linha(f.nome, "${ContaIptv.tipoLogin(f, textosConta)} · ${f.servidorVisivel}", valor = getString(R.string.cl_apagar)) {
                 // Com o controle parental ligado, apagar e cadastrar pedem o PIN: cadastrar de novo muda o id dos canais e
                 // os bloqueados por canal deixariam de valer.
                 exigirPinSeParental {
                     CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert)
-                        .setTitle("Apagar a conta \"${f.nome}\"?")
-                        .setMessage("Os canais dela somem da TV ao vivo. Para voltar, é preciso cadastrar de novo.")
-                        .setPositiveButton("Apagar") { _, _ ->
+                        .setTitle(getString(R.string.cl_apagar_conta_titulo, f.nome))
+                        .setMessage(getString(R.string.cl_apagar_conta_msg))
+                        .setPositiveButton(getString(R.string.cl_apagar)) { _, _ ->
                             PlayerArmazem.apagar(this, f.id)
                             recarregarAba()
                         }
-                        .setNegativeButton("Cancelar", null)
+                        .setNegativeButton(getString(R.string.cl_cancelar), null)
                         .show()
                 }
             })
         }
         if (contas.size < 8) {
-            adicionar(linha("Cadastrar conta Xtream", "servidor, usuário e senha (o que o vendedor do IPTV manda)", seta = true) {
+            adicionar(linha(getString(R.string.cl_cad_xtream), getString(R.string.cl_cad_xtream_det), seta = true) {
                 exigirPinSeParental { pedirContaTv(FonteTv.TIPO_XTREAM) }
             })
-            adicionar(linha("Cadastrar lista de canais (M3U)", "um link .m3u (http:// ou https://)", seta = true) {
+            adicionar(linha(getString(R.string.cl_cad_m3u), getString(R.string.cl_cad_m3u_det), seta = true) {
                 exigirPinSeParental { pedirContaTv(FonteTv.TIPO_M3U) }
             })
         }
         if (contas.isNotEmpty()) {
             lateinit var linhaTestar: LinhaCfg
-            linhaTestar = linha("Testar e recarregar canais", "baixa a lista e o guia de novo e conta os canais", seta = true) {
-                linhaTestar.detalhe("baixando… (pode levar até um minuto)")
+            linhaTestar = linha(getString(R.string.cl_testar), getString(R.string.cl_testar_det), seta = true) {
+                linhaTestar.detalhe(getString(R.string.cl_baixando))
                 trabalho.execute {
                     val agora = System.currentTimeMillis()
                     val semCanal = PlayerArmazem.fontes(this).count { PlayerCarga.canaisDaFonte(this, it, forcar = true).isEmpty() }
                     val canais = PlayerCarga.canais(this)
                     val guia = PlayerCarga.guia(this, canais, forcar = true)
                     val comGuia = guia.comProgramaAgora(agora).let { no -> canais.count { it.guiaId in no } }.also { guia.fechar() }   // 1 consulta; solta o banco
-                    val texto = "${canais.size} canais, $comGuia com programação agora" +
-                        (if (semCanal > 0) " · $semCanal conta(s) sem canal: confira servidor, usuário e senha" else "")
+                    val texto = getString(R.string.cl_teste_resultado, canais.size, comGuia) +
+                        (if (semCanal > 0) getString(R.string.cl_teste_sem_canal, semCanal) else "")
                     ui.post { if (!isDestroyed) linhaTestar.detalhe(texto) }
                 }
             }
@@ -468,14 +468,14 @@ class ConfigLauncherActivity : Activity() {
             hint = dica; setText(valor.orEmpty()); setSingleLine()
         }
         val T = android.text.InputType.TYPE_CLASS_TEXT
-        val nome = campo("Nome da lista (opcional, ex.: Playon)", 40, T, antes?.getOrNull(0))
-        val endereco = campo(if (xtream) "Servidor (ex.: http://servidor:8080)" else "Link da lista (http://…)", 2000,
+        val nome = campo(getString(R.string.cl_campo_nome), 40, T, antes?.getOrNull(0))
+        val endereco = campo(if (xtream) getString(R.string.cl_campo_servidor) else getString(R.string.cl_campo_link), 2000,
             T or android.text.InputType.TYPE_TEXT_VARIATION_URI, antes?.getOrNull(1))
-        val usuario = campo("Usuário", 200, T or android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS, antes?.getOrNull(2))
+        val usuario = campo(getString(R.string.cl_campo_usuario), 200, T or android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS, antes?.getOrNull(2))
         // A senha não volta preenchida num erro: digitar de novo é mais seguro que deixá-la na memória da caixa.
-        val senha = campo("Senha", 200, T or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD, null)
+        val senha = campo(getString(R.string.cl_campo_senha), 200, T or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD, null)
         // Outros endereços do mesmo painel (o vendedor costuma mandar 2 ou 3): usados se o principal cair.
-        val reservas = campo("Servidores reserva (opcional, separados por vírgula)", 600,
+        val reservas = campo(getString(R.string.cl_campo_reservas), 600,
             T or android.text.InputType.TYPE_TEXT_VARIATION_URI, antes?.getOrNull(3))
         val caixa = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -486,17 +486,17 @@ class ConfigLauncherActivity : Activity() {
             addView(nome)
         }
         CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert)
-            .setTitle(if (xtream) "Conta Xtream" else "Lista de canais")
+            .setTitle(if (xtream) getString(R.string.cl_conta_xtream) else getString(R.string.cl_lista_canais))
             .setView(caixa)
-            .setPositiveButton("Cadastrar") { _, _ ->
+            .setPositiveButton(getString(R.string.cl_cadastrar)) { _, _ ->
                 val r = PlayerArmazem.adicionar(this, nome.text.toString(), tipo, endereco.text.toString(),
                     usuario.text.toString(), senha.text.toString(), reservas = reservas.text.toString())
                 r.onSuccess { recarregarAba() }.onFailure {
                     pedirContaTv(tipo, listOf(nome.text.toString(), endereco.text.toString(), usuario.text.toString(), reservas.text.toString()),
-                        "Não cadastrei: ${it.message}")
+                        getString(R.string.cl_nao_cadastrei, it.message.toString()))
                 }
             }
-            .setNegativeButton("Cancelar", null)
+            .setNegativeButton(getString(R.string.cl_cancelar), null)
             .show()
         endereco.requestFocus()
     }
@@ -506,48 +506,48 @@ class ConfigLauncherActivity : Activity() {
     private fun abaParental(c: LinearLayout) {
         if (!PainelArmazem.temPin(this)) {
             c.addView(cartao().apply {
-                addView(valor("Precisa de um PIN", "o controle parental usa o mesmo PIN do painel no navegador; defina um primeiro"))
+                addView(valor(getString(R.string.cl_precisa_pin), getString(R.string.cl_precisa_pin_det)))
             }, lp())
-            c.addView(linha("Definir o PIN", "${PinSeguro.MIN_DIGITOS} a ${PinSeguro.MAX_DIGITOS} números, digitados duas vezes", seta = true) {
+            c.addView(linha(getString(R.string.cl_definir_pin), getString(R.string.cl_definir_pin_det, PinSeguro.MIN_DIGITOS, PinSeguro.MAX_DIGITOS), seta = true) {
                 definirNovoPin(null) { recarregarAba() }
             }, lp())
             return
         }
         val r = PlayerArmazem.parental(this)
         fun resumo(r: ControleParental.Regras) = when {
-            r.vazio -> "nenhum canal escolhido ainda"
-            else -> "${r.canais.size} canal(is) e ${r.grupos.size} categoria(s) inteira(s) escolhidos"
+            r.vazio -> getString(R.string.cl_nenhum_canal)
+            else -> getString(R.string.cl_resumo_bloqueio, r.canais.size, r.grupos.size)
         }
         lateinit var chave: LinhaCfg
-        chave = linha("Controle parental", if (r.ligado) "ligado · ${resumo(r)}" else "desligado · ${resumo(r)}", chave = r.ligado) {
+        chave = linha(getString(R.string.cl_aba_parental), if (r.ligado) getString(R.string.cl_ligado_resumo, resumo(r)) else getString(R.string.cl_desligado_resumo, resumo(r)), chave = r.ligado) {
             pedirPinParental {
                 val atual = PlayerArmazem.parental(this)
                 val nova = atual.copy(ligado = !atual.ligado)
                 if (PlayerArmazem.definirParental(this, nova)) {
                     chave.ligado(nova.ligado)
-                    chave.detalhe(if (nova.ligado) "ligado · ${resumo(nova)}" else "desligado · ${resumo(nova)}")
-                } else chave.detalhe("não consegui gravar · tente de novo")
+                    chave.detalhe(if (nova.ligado) getString(R.string.cl_ligado_resumo, resumo(nova)) else getString(R.string.cl_desligado_resumo, resumo(nova)))
+                } else chave.detalhe(getString(R.string.cl_nao_gravei_tente))
             }
         }
         c.addView(chave, lp())
-        c.addView(linha("Escolher canais bloqueados", "por canal ou por categoria inteira", seta = true) {
+        c.addView(linha(getString(R.string.cl_escolher_bloqueados), getString(R.string.cl_escolher_bloqueados_det), seta = true) {
             pedirPinParental {
                 reconstruirAoVoltar = true
                 startActivity(Intent(this, BloqueioCanaisActivity::class.java))
             }
         }, lp())
         if (!r.vazio) {
-            c.addView(linha("Liberar todos os canais", "apaga a lista de bloqueados (o controle continua como está)", seta = true) {
+            c.addView(linha(getString(R.string.cl_liberar_todos), getString(R.string.cl_liberar_todos_det), seta = true) {
                 pedirPinParental {
                     CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert)
-                        .setTitle("Liberar todos os canais?")
-                        .setMessage("A lista de canais e categorias bloqueados fica vazia.")
-                        .setPositiveButton("Liberar") { _, _ ->
+                        .setTitle(getString(R.string.cl_liberar_todos_q))
+                        .setMessage(getString(R.string.cl_liberar_todos_msg))
+                        .setPositiveButton(getString(R.string.cl_liberar)) { _, _ ->
                             // copy: o modo infantil e as categorias infantis ficam como estão
                             PlayerArmazem.definirParental(this, PlayerArmazem.parental(this).copy(canais = emptySet(), grupos = emptySet()))
                             recarregarAba()
                         }
-                        .setNegativeButton("Cancelar", null)
+                        .setNegativeButton(getString(R.string.cl_cancelar), null)
                         .show()
                 }
             }, lp())
@@ -561,7 +561,7 @@ class ConfigLauncherActivity : Activity() {
                 val atual = PlayerArmazem.parental(this)
                 val nova = atual.copy(infantil = !atual.infantil)
                 if (PlayerArmazem.definirParental(this, nova)) { chaveInf.ligado(nova.infantil); chaveInf.detalhe(detalheInf(nova)) }
-                else chaveInf.detalhe("não consegui gravar · tente de novo")
+                else chaveInf.detalhe(getString(R.string.cl_nao_gravei_tente))
             }
         }
         c.addView(chaveInf, lp())
@@ -571,12 +571,12 @@ class ConfigLauncherActivity : Activity() {
                 startActivity(Intent(this, BloqueioCanaisActivity::class.java).putExtra(BloqueioCanaisActivity.EXTRA_INFANTIS, true))
             }
         }, lp())
-        secao(c, "Como funciona")
+        secao(c, getString(R.string.cl_como_funciona))
         c.addView(cartao().apply {
-            addView(valor("Bloqueado", "some da lista de canais, da grade, da busca, do ▲▼ e do número digitado, e não toca"))
-            addView(valor("Para assistir", "no player: OK > Filtros > \"Mostrar categorias ocultas e canais bloqueados\" e o PIN"))
-            addView(valor("Tranca de novo", "sozinho, quando o player sai da tela (HOME, outro app ou TV apagada)"))
-            addView(valor("PIN", "o mesmo do painel no navegador; trocar o PIN pede o PIN atual (aba Acesso remoto)"))
+            addView(valor(getString(R.string.cl_cf_bloqueado), getString(R.string.cl_cf_bloqueado_det)))
+            addView(valor(getString(R.string.cl_cf_assistir), getString(R.string.cl_cf_assistir_det)))
+            addView(valor(getString(R.string.cl_cf_tranca), getString(R.string.cl_cf_tranca_det)))
+            addView(valor(getString(R.string.cl_cf_pin), getString(R.string.cl_cf_pin_det)))
         }, lp())
     }
 
@@ -593,7 +593,7 @@ class ConfigLauncherActivity : Activity() {
     private fun gravarTentativas(e: TentativasPin.Estado) =
         prefsPin.edit().putInt("erros", e.erros).putLong("ate", e.bloqueadoAte).putLong("ultimo", e.ultimoErro).apply()
 
-    private fun pedirPinParental(titulo: String = "PIN do controle parental", acao: () -> Unit) {
+    private fun pedirPinParental(titulo: String = getString(R.string.cl_pin_parental), acao: () -> Unit) {
         if (!PainelArmazem.temPin(this)) { acao(); return }
         if (System.currentTimeMillis() < pinValidoAte) { acao(); return }
         val espera = TentativasPin.espera(lerTentativas(), System.currentTimeMillis())
@@ -621,30 +621,30 @@ class ConfigLauncherActivity : Activity() {
      * ficar mais seguro, não.
      */
     private fun confirmacoes(c: LinearLayout) {
-        secao(c, "Confirmações")
+        secao(c, getString(R.string.cl_sec_confirmacoes))
         val r = ConfirmacoesTv.regras(this)
         fun mudar(novas: Confirmacoes.Regras) {
             val gravar = { ConfirmacoesTv.definir(this, novas); recarregarAba() }
-            if (Confirmacoes.pedePin(ConfirmacoesTv.regras(this), novas)) pedirPinParental("PIN para liberar", gravar) else gravar()
+            if (Confirmacoes.pedePin(ConfirmacoesTv.regras(this), novas)) pedirPinParental(getString(R.string.cl_pin_liberar), gravar) else gravar()
         }
-        c.addView(linha("Liberar tudo (uso avançado)",
-            "nada pergunta na TV: para quem usa de longe, pelo painel ou pelo Claude · ligar pede o PIN",
+        c.addView(linha(getString(R.string.cl_liberar_tudo),
+            getString(R.string.cl_liberar_tudo_det),
             chave = r.liberarTudo) { mudar(r.copy(liberarTudo = !r.liberarTudo)) }, lp())
         for (a in Confirmacoes.Acao.entries) {
             val atual = Confirmacoes.modo(r, a)
-            c.addView(linha(a.titulo, a.explicacao, valor = if (r.liberarTudo) "Liberado" else atual.rotulo) {
-                if (r.liberarTudo) aviso("desligue \"Liberar tudo\" para escolher linha por linha")
+            c.addView(linha(tituloAcao(a), explicaAcao(a), valor = if (r.liberarTudo) getString(R.string.cl_liberado) else rotuloModo(atual)) {
+                if (r.liberarTudo) aviso(getString(R.string.cl_desligue_liberar))
                 else mudar(r.copy(modos = r.modos + (a to Confirmacoes.proximo(a, atual))))
             }, lp())
         }
-        c.addView(info("Perguntar na TV", "a TV mostra o pedido com o foco em Negar; sem resposta em 60 s, nega."), lp())
+        c.addView(info(getString(R.string.cl_perguntar_tv), getString(R.string.cl_perguntar_tv_det)), lp())
     }
 
     // ================================================================ aba: Aparência
 
     private fun abaAparencia(c: LinearLayout) {
         lateinit var linhaTema: LinhaCfg
-        linhaTema = linha("Tema", getString(R.string.cfg_tema_det), valor = Tema.atual(this).nome) {
+        linhaTema = linha(getString(R.string.cl_tema), getString(R.string.cfg_tema_det), valor = Tema.atual(this).nome) {
             Tema.proximo(this)
             linhaTema.valor(Tema.atual(this).nome)
             // A MainActivity só relê o tema no onCreate: ela mesma percebe a troca e se recria ao voltar (ver onResume lá).
@@ -652,31 +652,31 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linhaTema, lp())
         // Pilhas automáticas (05/11/2026, Organizacao.agruparPorCategoria): a HOME relê ao voltar (preencherApps no onResume).
         lateinit var linhaPilhas: LinhaCfg
-        linhaPilhas = linha(getString(R.string.cfg_pilhas), "junta os apps soltos por categoria; as suas pilhas continuam",
+        linhaPilhas = linha(getString(R.string.cfg_pilhas), getString(R.string.cl_pilhas_det),
             chave = Organizacao.pilhasAutomaticas(this)) {
             Organizacao.definirPilhasAutomaticas(this, !Organizacao.pilhasAutomaticas(this))
             linhaPilhas.ligado(Organizacao.pilhasAutomaticas(this))
         }
         c.addView(linhaPilhas, lp())
 
-        secao(c, "Clima")
+        secao(c, getString(R.string.cl_clima))
         lateinit var linhaEndereco: LinhaCfg
         fun detalheEndereco() = LocalClima.ler(this)?.let { LocalClima.descrever(it) }
-            ?: "nenhum · a TV se acha pelo Wi-Fi; o endereço vale quando o Wi-Fi não acha"
-        linhaEndereco = linha("Endereço do clima", detalheEndereco(), seta = true) {
+            ?: getString(R.string.cl_end_nenhum)
+        linhaEndereco = linha(getString(R.string.cl_end_clima), detalheEndereco(), seta = true) {
             pedirEndereco { cep, numero ->
-                linhaEndereco.detalhe("procurando o endereço…")
+                linhaEndereco.detalhe(getString(R.string.cl_procurando_end))
                 trabalho.execute {
                     val r = LocalClima.definirPorCep(this, cep, numero)
-                    ui.post { if (!isDestroyed) linhaEndereco.detalhe(r.fold({ detalheEndereco() }, { "não deu: ${it.message} · OK tenta de novo" })) }
+                    ui.post { if (!isDestroyed) linhaEndereco.detalhe(r.fold({ detalheEndereco() }, { getString(R.string.cl_nao_deu, it.message.toString()) })) }
                 }
             }
         }
         c.addView(linhaEndereco, lp())
         // Aviso de chuva por cima de qualquer app (AvisoChuva.kt). O recado vem pelo painel e não tem chave aqui.
         lateinit var linhaChuva: LinhaCfg
-        linhaChuva = linha("Aviso de chuva",
-            "avisa por cima do app quando a chance passa de ${AvisoChuva.LIMIAR}% nas próximas ${AvisoChuva.HORAS_A_FRENTE} h",
+        linhaChuva = linha(getString(R.string.cl_aviso_chuva),
+            getString(R.string.cl_aviso_chuva_det, AvisoChuva.LIMIAR, AvisoChuva.HORAS_A_FRENTE),
             chave = AvisoChuva.ligado(this)) {
             AvisoChuva.definirLigado(this, !AvisoChuva.ligado(this))
             linhaChuva.ligado(AvisoChuva.ligado(this))
@@ -691,7 +691,7 @@ class ConfigLauncherActivity : Activity() {
         val opcoes = listOf(60_000, 5 * 60_000, 10 * 60_000, 15 * 60_000, 30 * 60_000, Int.MAX_VALUE)
         fun rotuloTempo(ms: Int) = if (ms == Int.MAX_VALUE) getString(R.string.cfg_nunca) else getString(R.string.cfg_min, ms / 60_000)
         lateinit var linhaDescanso: LinhaCfg
-        linhaDescanso = linha("Protetor de tela", "tempo parado até o protetor aparecer · OK muda",
+        linhaDescanso = linha(getString(R.string.cl_protetor), getString(R.string.cl_protetor_det),
             valor = rotuloTempo(PrivilegioDO.tempoDescanso(this))) {
             val atual = PrivilegioDO.tempoDescanso(this)
             // Próxima opção depois da atual; se o valor atual não estiver na lista (mudado por fora), começa da primeira.
@@ -701,9 +701,9 @@ class ConfigLauncherActivity : Activity() {
         }
         c.addView(linhaDescanso, lp())
         // O que a linha de baixo do protetor mostra (Protetor.barra). OK alterna; vale no próximo protetor.
-        fun rotuloBarra(v: String) = if (v == Protetor.BARRA_RESUMO) "Resumo do dia" else "Próximas horas"
+        fun rotuloBarra(v: String) = if (v == Protetor.BARRA_RESUMO) getString(R.string.cl_resumo_dia) else getString(R.string.cl_proximas_horas)
         lateinit var linhaBarra: LinhaCfg
-        linhaBarra = linha("Linha de baixo do protetor", "próximas horas, ou sol, lua, umidade e chuva do dia · OK muda",
+        linhaBarra = linha(getString(R.string.cl_linha_baixo), getString(R.string.cl_linha_baixo_det),
             valor = rotuloBarra(Protetor.barra(this))) {
             val novo = if (Protetor.barra(this) == Protetor.BARRA_RESUMO) Protetor.BARRA_HORAS else Protetor.BARRA_RESUMO
             Protetor.definirBarra(this, novo)
@@ -713,9 +713,9 @@ class ConfigLauncherActivity : Activity() {
         // (11/11/2026) Saiu a linha "Estilo do protetor": o protetor é um só (o da Galeria) e o TEMA decide o fundo
         // (pintura na Galeria, wallpaper escuro no Escuro). O "clássico" escolhido por engano deixava o Escuro diferente.
         // Desligar sozinha (AutoDesligar): depois de X min sem ninguém apertar o controle, avisa por 60 s e apaga a TV.
-        fun rotuloDesligar(m: Int) = if (m == 0) "Nunca" else if (m % 60 == 0) "${m / 60} h" else "$m min"
+        fun rotuloDesligar(m: Int) = if (m == 0) getString(R.string.cfg_nunca) else if (m % 60 == 0) "${m / 60} h" else "$m min"
         lateinit var linhaDesligar: LinhaCfg
-        linhaDesligar = linha("Desligar a TV sem uso", "avisa 60 s antes; qualquer botão cancela · OK muda",
+        linhaDesligar = linha(getString(R.string.cl_desligar), getString(R.string.cl_desligar_det),
             valor = rotuloDesligar(AutoDesligar.minutos(this))) {
             val o = AutoDesligar.OPCOES
             val proximo = o[(o.indexOf(AutoDesligar.minutos(this)) + 1) % o.size]
@@ -731,7 +731,7 @@ class ConfigLauncherActivity : Activity() {
         // Modo visita (ModoVisita.kt): esconde perfil, agenda e os apps marcados abaixo, até desligar. Na HOME, com o modo
         // ligado, o OK na bolinha do perfil oferece "Sair" (o popup não abre).
         lateinit var linhaVisita: LinhaCfg
-        linhaVisita = linha(getString(R.string.cfg_visita), "esconde o perfil, a agenda e os apps marcados abaixo",
+        linhaVisita = linha(getString(R.string.cfg_visita), getString(R.string.cl_visita_det),
             chave = ModoVisita.ativo(this)) {
             ModoVisita.definir(this, !ModoVisita.ativo(this))
             linhaVisita.ligado(ModoVisita.ativo(this))
@@ -742,10 +742,10 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linha(getString(R.string.cfg_rotinas), getString(R.string.cfg_rotinas_det), seta = true) {
             startActivity(Intent(this, RotinasActivity::class.java))
         }, lp())
-        secao(c, "Apps escondidos no modo visita")
+        secao(c, getString(R.string.cl_apps_visita))
         val listaVisita = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false }
         c.addView(listaVisita, LinearLayout.LayoutParams(MATCH, WRAP))
-        listaVisita.addView(info("Carregando os apps…", ""))
+        listaVisita.addView(info(getString(R.string.cl_carregando_apps), ""))
         carregarAppsDaVisita(listaVisita)
     }
 
@@ -776,7 +776,7 @@ class ConfigLauncherActivity : Activity() {
                 destino.removeAllViews()
                 for ((pacote, rotulo) in apps) {
                     lateinit var linhaApp: LinhaCfg
-                    linhaApp = linha(rotulo, "some no modo visita quando ligado", chave = ModoVisita.escondeNaVisita(this, pacote)) {
+                    linhaApp = linha(rotulo, getString(R.string.cl_some_visita), chave = ModoVisita.escondeNaVisita(this, pacote)) {
                         ModoVisita.alternar(this, pacote)
                         linhaApp.ligado(ModoVisita.escondeNaVisita(this, pacote))
                     }
@@ -802,8 +802,8 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linha(getString(R.string.cfg_dns), Dns.rotulo(this) + (if (caiu != null) getString(R.string.cfg_dns_caiu, caiu) else ""), seta = true) {
             startActivity(Intent(this, DnsActivity::class.java))
         }, lp())
-        val vpnDetalhe = if (Config.VPN_FIXA.isEmpty()) "o launcher não fixa VPN" else "app AdGuard VPN, sempre ativa · OK abre o app"
-        c.addView(linha("VPN", vpnDetalhe, valor = if (vpnAtiva()) "conectada" else "desconectada") {
+        val vpnDetalhe = if (Config.VPN_FIXA.isEmpty()) getString(R.string.cl_vpn_nao_fixa) else getString(R.string.cl_vpn_adguard)
+        c.addView(linha("VPN", vpnDetalhe, valor = if (vpnAtiva()) getString(R.string.cfg_vpn_conectada) else getString(R.string.cfg_vpn_desconectada)) {
             if (Config.VPN_FIXA.isEmpty()) return@linha
             val abrir = packageManager.getLeanbackLaunchIntentForPackage(Config.VPN_FIXA)
                 ?: packageManager.getLaunchIntentForPackage(Config.VPN_FIXA)
@@ -830,20 +830,20 @@ class ConfigLauncherActivity : Activity() {
 
     private fun abaRemoto(c: LinearLayout) {
         // Painel no navegador (PainelWeb.kt): administrar a TV pelo celular/computador da casa, com PIN.
-        secao(c, "Painel no navegador")
+        secao(c, getString(R.string.cl_painel_navegador))
         lateinit var linhaPainel: LinhaCfg
         lateinit var linhaPin: LinhaCfg
         fun detalhePainel(): String = when {
-            !PainelArmazem.temPin(this) -> "defina um PIN abaixo para ligar"
-            PainelArmazem.desligadoPorErros(this) -> "desligou sozinho: PIN errado muitas vezes · OK religa"
-            PainelArmazem.ligado(this) && PainelWeb.ligado() -> "abra ${PainelWeb.endereco() ?: "(sem rede)"} no navegador"
-            PainelArmazem.ligado(this) -> "ligado, mas a porta ${Config.PAINEL_PORTA} não abriu"
-            else -> "administre a TV pelo celular ou computador da casa"
+            !PainelArmazem.temPin(this) -> getString(R.string.cl_painel_defina)
+            PainelArmazem.desligadoPorErros(this) -> getString(R.string.cl_painel_desligou)
+            PainelArmazem.ligado(this) && PainelWeb.ligado() -> getString(R.string.cl_painel_abra, PainelWeb.endereco() ?: getString(R.string.cl_sem_rede))
+            PainelArmazem.ligado(this) -> getString(R.string.cl_painel_porta, Config.PAINEL_PORTA)
+            else -> getString(R.string.cl_painel_det)
         }
         fun ligadoPainel() = PainelArmazem.ligado(this) && PainelArmazem.temPin(this) && !PainelArmazem.desligadoPorErros(this)
-        linhaPainel = linha("Painel", detalhePainel(), chave = ligadoPainel()) {
+        linhaPainel = linha(getString(R.string.cl_painel), detalhePainel(), chave = ligadoPainel()) {
             when {
-                !PainelArmazem.temPin(this) -> linhaPainel.detalhe("defina um PIN primeiro (linha de baixo)")
+                !PainelArmazem.temPin(this) -> linhaPainel.detalhe(getString(R.string.cl_painel_pin_primeiro))
                 PainelArmazem.desligadoPorErros(this) -> {
                     PainelArmazem.definirDesligadoPorErros(this, false)
                     PainelArmazem.definirLigado(this, true)
@@ -861,70 +861,70 @@ class ConfigLauncherActivity : Activity() {
             }
         }
         c.addView(linhaPainel, lp())
-        linhaPin = linha("PIN", "o mesmo PIN vale para o painel, o controle parental e o Claude",
-            valor = if (PainelArmazem.temPin(this)) "definido" else "não definido") {
+        linhaPin = linha(getString(R.string.cl_cf_pin), getString(R.string.cl_pin_det),
+            valor = if (PainelArmazem.temPin(this)) getString(R.string.cl_definido) else getString(R.string.cl_nao_definido)) {
             // Trocar um PIN que já existe pede o PIN atual: senão qualquer um no controle trocava e desligava o parental.
             val trocar = { definirNovoPin(linhaPin) {
-                linhaPin.valor("definido")
+                linhaPin.valor(getString(R.string.cl_definido))
                 linhaPainel.ligado(ligadoPainel()); linhaPainel.detalhe(detalhePainel())
                 ui.postDelayed({ if (!isDestroyed) linhaPainel.detalhe(detalhePainel()) }, 800)
             } }
-            if (PainelArmazem.temPin(this)) pedirPinParental("PIN atual", trocar) else trocar()
+            if (PainelArmazem.temPin(this)) pedirPinParental(getString(R.string.cl_pin_atual), trocar) else trocar()
         }
         c.addView(linhaPin, lp())
         // Entrar pelo celular sem digitar o PIN (EntrarPeloQrActivity). Com alguma trava para criança ligada (controle
         // parental, hora de dormir, PIN para mexer na HOME), quem está na TV pode ser uma criança: pede o PIN antes.
-        c.addView(linha("Entrar pelo celular", "mostra um QR: o celular lê e entra no painel sem digitar o PIN", seta = true) {
+        c.addView(linha(getString(R.string.cl_entrar_celular), getString(R.string.cl_entrar_celular_det), seta = true) {
             val abrir = { startActivity(android.content.Intent(this, EntrarPeloQrActivity::class.java)) }
             when {
-                !PainelArmazem.podeLigar(this) || !PainelWeb.ligado() -> aviso("ligue o painel primeiro (linha Painel, acima)")
+                !PainelArmazem.podeLigar(this) || !PainelWeb.ligado() -> aviso(getString(R.string.cl_ligue_painel))
                 PlayerArmazem.parental(this).ligado || Extras.ligado(this, Extras.Chave.HORA_DORMIR) ||
-                    Extras.ligado(this, Extras.Chave.PIN_HOME) -> pedirPinParental("PIN do painel", abrir)
+                    Extras.ligado(this, Extras.Chave.PIN_HOME) -> pedirPinParental(getString(R.string.cl_pin_painel), abrir)
                 else -> abrir()
             }
         }, lp())
         val acessos = PainelArmazem.resumoRegistro(this, 3)
-        c.addView(info("Últimos acessos", if (acessos.isEmpty()) "nenhum ainda" else acessos.joinToString("\n"), maxLinhas = 4), lp())
+        c.addView(info(getString(R.string.cl_ultimos), if (acessos.isEmpty()) getString(R.string.cl_nenhum_ainda) else acessos.joinToString("\n"), maxLinhas = 4), lp())
 
         // Claude pela internet (McpServidor + TunelTailscale, 05/11/2026). A chave do Tailscale se cola no painel (PIN).
-        secao(c, "Claude pela internet (MCP)")
+        secao(c, getString(R.string.cl_claude_internet))
         lateinit var linhaMcp: LinhaCfg
         fun detalheMcp(): String {
             val nome = TunelTailscale.nome(this)
             return when {
-                !PainelArmazem.temPin(this) -> "defina o PIN do painel primeiro (é o login)"
-                !McpServidor.ligado(this) -> "o Claude, o ChatGPT e outros controlam a TV pela internet"
-                TunelTailscale.urlLogin != null || TunelTailscale.urlAtivar != null -> "falta entrar no Tailscale: abra \"Conectar\" abaixo"
+                !PainelArmazem.temPin(this) -> getString(R.string.cl_mcp_pin)
+                !McpServidor.ligado(this) -> getString(R.string.cl_mcp_off)
+                TunelTailscale.urlLogin != null || TunelTailscale.urlAtivar != null -> getString(R.string.cl_mcp_tailscale)
                 TunelTailscale.rodando() && nome != null -> "https://$nome/mcp"
-                else -> "túnel subindo${TunelTailscale.ultimoErro(this)?.let { " (último erro: $it)" } ?: ""}"
+                else -> getString(R.string.cl_mcp_subindo, TunelTailscale.ultimoErro(this)?.let { getString(R.string.cl_ultimo_erro, it) } ?: "")
             }
         }
-        linhaMcp = linha("Acesso pelo Claude", detalheMcp(), chave = McpServidor.ligado(this)) {
+        linhaMcp = linha(getString(R.string.cl_acesso_claude), detalheMcp(), chave = McpServidor.ligado(this)) {
             if (!PainelArmazem.temPin(this)) { linhaMcp.detalhe(detalheMcp()); return@linha }
             McpServidor.definirLigado(this, !McpServidor.ligado(this))
             linhaMcp.ligado(McpServidor.ligado(this)); linhaMcp.detalhe(detalheMcp())
             ui.postDelayed({ if (!isDestroyed) linhaMcp.detalhe(detalheMcp()) }, 3000)
         }
         c.addView(linhaMcp, lp())
-        c.addView(linha("Conectar (QR code)", "passo a passo: login no Tailscale e endereço para o Claude, ChatGPT, Codex…", seta = true) {
+        c.addView(linha(getString(R.string.cl_conectar_qr), getString(R.string.cl_conectar_qr_det), seta = true) {
             startActivity(Intent(this, ConectarClaudeActivity::class.java))
         }, lp())
         lateinit var linhaRede: LinhaCfg
-        linhaRede = linha("Rede Tailscale", "painel pelos aparelhos da conta Tailscale e lista deles para o Claude",
+        linhaRede = linha(getString(R.string.cl_rede_tailscale), getString(R.string.cl_rede_tailscale_det),
             chave = TunelTailscale.redeLigada(this)) {
             TunelTailscale.definirRede(this, !TunelTailscale.redeLigada(this)); linhaRede.ligado(TunelTailscale.redeLigada(this))
         }
         c.addView(linhaRede, lp())
         lateinit var linhaShell: LinhaCfg
-        linhaShell = linha("Shell pelo Claude", "deixa o Claude rodar qualquer comando na TV (como adb shell); desligue se não usar",
+        linhaShell = linha(getString(R.string.cl_shell_claude), getString(R.string.cl_shell_claude_det),
             chave = McpServidor.shellLigado(this)) {
             McpServidor.definirShell(this, !McpServidor.shellLigado(this)); linhaShell.ligado(McpServidor.shellLigado(this))
         }
         c.addView(linhaShell, lp())
         lateinit var linhaLogins: LinhaCfg
-        linhaLogins = linha("Logins do Claude", "OK revoga todos", valor = "${McpServidor.logins(this)} ativo(s)") {
+        linhaLogins = linha(getString(R.string.cl_logins), getString(R.string.cl_logins_det), valor = getString(R.string.cl_ativos, McpServidor.logins(this))) {
             McpServidor.revogar(this)
-            linhaLogins.valor("${McpServidor.logins(this)} ativo(s)"); linhaLogins.detalhe("revogados")
+            linhaLogins.valor(getString(R.string.cl_ativos, McpServidor.logins(this))); linhaLogins.detalhe(getString(R.string.cl_revogados))
         }
         c.addView(linhaLogins, lp())
     }
@@ -989,7 +989,7 @@ class ConfigLauncherActivity : Activity() {
                     packageManager.getApplicationLabel(packageManager.getApplicationInfo(pacote, 0)).toString()
                 } catch (e: Exception) { pacote }
                 lateinit var linhaApp: LinhaCfg
-                linhaApp = linha(rotulo, "visível na TV", chave = !PrivilegioDO.estaOculto(this, pacote)) {
+                linhaApp = linha(rotulo, getString(R.string.cl_visivel), chave = !PrivilegioDO.estaOculto(this, pacote)) {
                     // Fora da thread da tela: sem Device Owner o ocultar passa pelo shell e pode demorar (Congelar.kt).
                     val app = applicationContext
                     Fundo.rodar {
@@ -1008,12 +1008,12 @@ class ConfigLauncherActivity : Activity() {
 
         // Limpeza de apps de fábrica (Debloat.kt, 05/11/2026): só os apps já testados nesta TV, com desfazer.
         // Chave ligada = app visível (como na seção de cima).
-        secao(c, "Limpeza de apps de fábrica")
+        secao(c, getString(R.string.cl_limpeza))
         val limpaveis = Debloat.disponiveis(this)
-        if (limpaveis.isEmpty()) c.addView(info("Nenhum app liberado ainda", "só entram apps testados um a um nesta TV (ver Debloat.kt)"), lp())
+        if (limpaveis.isEmpty()) c.addView(info(getString(R.string.cl_nenhum_liberado), getString(R.string.cl_nenhum_liberado_det)), lp())
         limpaveis.forEach { item ->
             lateinit var linhaApp: LinhaCfg
-            linhaApp = linha(item.nome, "ocultar perde: ${item.perde}", chave = !PrivilegioDO.estaOculto(this, item.pacote)) {
+            linhaApp = linha(nomeDebloat(item), getString(R.string.cl_ocultar_perde, perdeDebloat(item)), chave = !PrivilegioDO.estaOculto(this, item.pacote)) {
                 val app = applicationContext
                 Fundo.rodar {   // fora da thread da tela (sem Device Owner vai pelo shell, ver Congelar.kt)
                     val ocultar = !PrivilegioDO.estaOculto(app, item.pacote)
@@ -1022,7 +1022,7 @@ class ConfigLauncherActivity : Activity() {
                     runOnUiThread {
                         if (isDestroyed) return@runOnUiThread
                         if (mudou) linhaApp.ligado(!ocultoAgora)
-                        else linhaApp.detalhe("não consegui mudar (sem Device Owner e sem o shell próprio pareado?)")
+                        else linhaApp.detalhe(getString(R.string.cl_nao_mudou))
                     }
                 }
             }
@@ -1030,13 +1030,13 @@ class ConfigLauncherActivity : Activity() {
         }
         if (Debloat.ocultosPorAqui(this).isNotEmpty()) {
             lateinit var linhaDesfazer: LinhaCfg
-            linhaDesfazer = linha("Mostrar todos de volta", "desfaz a limpeza (o protetor do Google continua oculto)", seta = true) {
+            linhaDesfazer = linha(getString(R.string.cl_mostrar_todos), getString(R.string.cl_mostrar_todos_det), seta = true) {
                 val app = applicationContext
                 Fundo.rodar {
                     val n = Debloat.desfazerTudo(app)
                     runOnUiThread {
                         if (isDestroyed) return@runOnUiThread
-                        linhaDesfazer.detalhe("$n app(s) de volta")
+                        linhaDesfazer.detalhe(getString(R.string.cl_apps_de_volta, n))
                         ui.postDelayed({ if (!isDestroyed) recarregarAba() }, 1200)
                     }
                 }
@@ -1071,7 +1071,7 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linhaParear, lp())
 
         // Sobre: números úteis para saber se algo por trás dos panos está ok, sem precisar do logcat.
-        secao(c, "Sobre")
+        secao(c, getString(R.string.cl_sobre))
         val versao = try { packageManager.getPackageInfo(packageName, 0).versionName } catch (e: Exception) { null }
         val cartao = cartao()
         c.addView(cartao, lp())
@@ -1120,11 +1120,11 @@ class ConfigLauncherActivity : Activity() {
      */
     private fun definirNovoPin(linhaAviso: LinhaCfg?, aoGravar: () -> Unit) {
         fun avisar(t: String) { if (linhaAviso != null) linhaAviso.detalhe(t) else aviso(t) }
-        pedirPin("Novo PIN (${PinSeguro.MIN_DIGITOS} a ${PinSeguro.MAX_DIGITOS} dígitos)") { pin ->
-            if (!PinSeguro.valido(pin)) { avisar("PIN precisa ter de ${PinSeguro.MIN_DIGITOS} a ${PinSeguro.MAX_DIGITOS} números"); return@pedirPin }
-            pedirPin("Digite o PIN de novo") { pin2 ->
-                if (pin2 != pin) { avisar("os dois PINs não bateram · OK tenta de novo"); return@pedirPin }
-                avisar("gravando…")
+        pedirPin(getString(R.string.cl_novo_pin, PinSeguro.MIN_DIGITOS, PinSeguro.MAX_DIGITOS)) { pin ->
+            if (!PinSeguro.valido(pin)) { avisar(getString(R.string.cl_pin_invalido, PinSeguro.MIN_DIGITOS, PinSeguro.MAX_DIGITOS)); return@pedirPin }
+            pedirPin(getString(R.string.cl_pin_de_novo)) { pin2 ->
+                if (pin2 != pin) { avisar(getString(R.string.cl_pin_nao_bateu)); return@pedirPin }
+                avisar(getString(R.string.cl_gravando))
                 // PBKDF2 com 100 mil voltas leva um tempo num ARMv7: fora da thread da tela.
                 trabalho.execute {
                     PainelArmazem.definirPin(this, pin)
@@ -1133,7 +1133,7 @@ class ConfigLauncherActivity : Activity() {
                         PainelArmazem.definirLigado(this, true)
                         PainelWeb.recomecar(this)
                         pinValidoAte = System.currentTimeMillis() + PIN_VALE_MS
-                        avisar("PIN definido")
+                        avisar(getString(R.string.cl_pin_definido))
                         aoGravar()
                     }
                 }
@@ -1156,7 +1156,7 @@ class ConfigLauncherActivity : Activity() {
             .setTitle(titulo)
             .setView(moldura)
             .setPositiveButton("OK") { _, _ -> aoConfirmar(campo.text.toString()) }
-            .setNegativeButton("Cancelar", null)
+            .setNegativeButton(getString(R.string.cl_cancelar), null)
             .create()
         // "Concluído" do teclado da TV já confirma, sem ter de descer até o botão.
         campo.setOnEditorActionListener { _, acao, _ ->
@@ -1176,27 +1176,96 @@ class ConfigLauncherActivity : Activity() {
             filters = arrayOf(android.text.InputFilter.LengthFilter(max))
             hint = dica; setText(valor); setSingleLine()
         }
-        val cep = campo("CEP (8 números)", 8, atual?.cep.orEmpty())
-        val numero = campo("Número da casa (opcional)", 6, atual?.numero.orEmpty())
+        val cep = campo(getString(R.string.cl_cep), 8, atual?.cep.orEmpty())
+        val numero = campo(getString(R.string.cl_numero_casa), 6, atual?.numero.orEmpty())
         val caixa = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(48, 16, 48, 0)
             addView(cep); addView(numero)
         }
         CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert)
-            .setTitle("Endereço do clima")
+            .setTitle(getString(R.string.cl_end_clima))
             .setView(caixa)
             .setPositiveButton("OK") { _, _ ->
                 if (cep.text.isBlank()) { LocalClima.limpar(this); recarregarAba() }
                 else aoConfirmar(cep.text.toString(), numero.text.toString())
             }
-            .setNegativeButton("Cancelar", null)
+            .setNegativeButton(getString(R.string.cl_cancelar), null)
             .show()
         cep.requestFocus()
     }
 
     /** Recado curto: o aviso padrão do app (pílula no canto de cima), não mais um texto trocado no rodapé. */
     private fun aviso(t: String) = AvisoTv.rapido(this, getString(R.string.cfg_titulo), t, 4)
+
+    // ================================================================ textos de objetos puros (idioma da TV)
+
+    /** Rótulos da área Conta no idioma da TV (ContaIptv é puro e testado na JVM; o padrão dele é o português). */
+    private val textosConta by lazy {
+        ContaIptv.Textos(
+            lista = getString(R.string.cl_ci_lista), semNome = getString(R.string.cl_ci_sem_nome),
+            usuario = getString(R.string.cl_ci_usuario), tipoLogin = getString(R.string.cl_ci_tipo),
+            servidor = getString(R.string.cl_ci_servidor), situacao = getString(R.string.cl_ci_situacao),
+            naoRespondeu = getString(R.string.cl_ci_nao_respondeu), m3uComum = getString(R.string.cl_ci_m3u_comum),
+            criada = getString(R.string.cl_ci_criada), naoInformado = getString(R.string.cl_ci_nao_informado),
+            vence = getString(R.string.cl_ci_vence), semValidade = getString(R.string.cl_ci_sem_validade),
+            conexoes = getString(R.string.cl_ci_conexoes), emUso = { max, uso -> getString(R.string.cl_ci_em_uso, max, uso) },
+            recado = getString(R.string.cl_ci_recado), m3uXtream = getString(R.string.cl_ci_m3u_xtream),
+            ativa = getString(R.string.cl_ci_ativa), ativaTeste = getString(R.string.cl_ci_ativa_teste),
+            desativada = { motivo -> getString(R.string.cl_ci_desativada, motivo) },
+            vencida = getString(R.string.cl_ci_vencida), banida = getString(R.string.cl_ci_banida),
+            desligada = getString(R.string.cl_ci_desligada), recusado = getString(R.string.cl_ci_recusado),
+            faltam = { d -> getString(R.string.cl_ci_faltam, d) }, falta1 = getString(R.string.cl_ci_falta1),
+            venceHoje = getString(R.string.cl_ci_vence_hoje), venceuOntem = getString(R.string.cl_ci_venceu_ontem),
+            venceuHa = { d -> getString(R.string.cl_ci_venceu_ha, d) },
+            formatoData = getString(R.string.cl_ci_formato_data), local = resources.configuration.locales[0],
+        )
+    }
+
+    /** Confirmacoes é puro (testado na JVM, também usado pelo painel): o texto da tela vem daqui, no idioma da TV. */
+    private fun tituloAcao(a: Confirmacoes.Acao): String = getString(when (a) {
+        Confirmacoes.Acao.MCP_CLIENTE -> R.string.cl_acao_mcp_cliente
+        Confirmacoes.Acao.MCP_ACOES -> R.string.cl_acao_mcp_acoes
+        Confirmacoes.Acao.MCP_SHELL -> R.string.cl_acao_mcp_shell
+        Confirmacoes.Acao.INSTALAR -> R.string.cl_acao_instalar
+        Confirmacoes.Acao.REMOVER -> R.string.cl_acao_remover
+        Confirmacoes.Acao.PERMISSOES -> R.string.cl_acao_permissoes
+        Confirmacoes.Acao.ABRIR_FORA -> R.string.cl_acao_abrir_fora
+        Confirmacoes.Acao.ATUALIZACAO -> R.string.cl_acao_atualizacao
+    })
+
+    private fun explicaAcao(a: Confirmacoes.Acao): String = getString(when (a) {
+        Confirmacoes.Acao.MCP_CLIENTE -> R.string.cl_acao_mcp_cliente_det
+        Confirmacoes.Acao.MCP_ACOES -> R.string.cl_acao_mcp_acoes_det
+        Confirmacoes.Acao.MCP_SHELL -> R.string.cl_acao_mcp_shell_det
+        Confirmacoes.Acao.INSTALAR -> R.string.cl_acao_instalar_det
+        Confirmacoes.Acao.REMOVER -> R.string.cl_acao_remover_det
+        Confirmacoes.Acao.PERMISSOES -> R.string.cl_acao_permissoes_det
+        Confirmacoes.Acao.ABRIR_FORA -> R.string.cl_acao_abrir_fora_det
+        Confirmacoes.Acao.ATUALIZACAO -> R.string.cl_acao_atualizacao_det
+    })
+
+    private fun rotuloModo(m: Confirmacoes.Modo): String = getString(when (m) {
+        Confirmacoes.Modo.PERGUNTAR -> R.string.cl_modo_perguntar
+        Confirmacoes.Modo.PERMITIR -> R.string.cl_modo_permitir
+        Confirmacoes.Modo.BLOQUEAR -> R.string.cl_modo_bloquear
+    })
+
+    /** Nome e "o que se perde" da limpeza (Debloat.LISTA guarda o português; nome de marca fica como está). */
+    private fun nomeDebloat(i: Debloat.Item): String = when (i.pacote) {
+        "com.google.android.videos" -> getString(R.string.cl_db_videos)
+        "com.google.android.tvrecommendations" -> getString(R.string.cl_db_recom)
+        else -> i.nome
+    }
+
+    private fun perdeDebloat(i: Debloat.Item): String = when (i.pacote) {
+        "com.google.android.marvin.talkback" -> getString(R.string.cl_db_talkback_perde)
+        "com.google.android.videos" -> getString(R.string.cl_db_videos_perde)
+        "com.google.android.youtube.tvkids" -> getString(R.string.cl_db_kids_perde)
+        "com.google.android.play.games" -> getString(R.string.cl_db_games_perde)
+        "com.google.android.tvrecommendations" -> getString(R.string.cl_db_recom_perde)
+        else -> i.perde
+    }
 
     // ================================================================ peças
 
@@ -1332,7 +1401,7 @@ class ConfigLauncherActivity : Activity() {
                 marginStart = if (sim) 0 else dp(3); marginEnd = if (sim) dp(3) else 0
             }
             bolinha!!.requestLayout()
-            contentDescription = "${tTitulo.text}: ${if (sim) "ligado" else "desligado"}"
+            contentDescription = "${tTitulo.text}: ${if (sim) getString(R.string.cl_ligado) else getString(R.string.cl_desligado)}"
         }
 
         /** Interruptor: ligado = acento (no foco, acento escuro); desligado = trilho apagado. */

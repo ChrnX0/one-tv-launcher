@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Ideias de 12/11/2026 (brainstorm 3): rótulos das chaves em Extras. -->
+<!-- Ideas of 2026-11-12 (brainstorm 3): labels of the Extras switches. -->
 <resources>
-    <string name="extras_SONO_SUAVE">Desligar suave (timer de sono escurece e baixa o volume)</string>
-    <string name="extras_MURAL">Mural da família no protetor de tela</string>
-    <string name="extras_PRESENCA">Desligar quando todos saírem de casa (roteador UniFi)</string>
-    <string name="extras_HOJE_NA_TV">\"Hoje na TV\" na tela Buscar</string>
-    <string name="extras_RETROSPECTIVA">Retrospectiva da semana (domingo à noite)</string>
-    <string name="extras_MODO_SIMPLES">Modo simples (cards grandes e nome falado)</string>
+    <string name="extras_SONO_SUAVE">Gentle shutdown (sleep timer dims the screen and lowers the volume)</string>
+    <string name="extras_MURAL">Family board on the screensaver</string>
+    <string name="extras_PRESENCA">Turn off when everyone leaves home (UniFi router)</string>
+    <string name="extras_HOJE_NA_TV">\"On TV today\" in the Search screen</string>
+    <string name="extras_RETROSPECTIVA">Weekly recap (Sunday night)</string>
+    <string name="extras_MODO_SIMPLES">Simple mode (large cards, spoken names)</string>
 </resources>

@@ -1,8 +1,8 @@
 # One TV Launcher — notes for AI coding sessions
 
 Custom home screen (launcher) for Google TV / Android TV, in Kotlin with plain Views (no XML layouts, no Compose).
-Code comments and identifiers are in Brazilian Portuguese; user-facing strings exist in `values/` (pt-BR) and
-`values-en/`. Read `README.md` first for the feature list.
+Code comments and identifiers are in Brazilian Portuguese; user-facing strings exist in `values/` (English, the default)
+and `values-pt/` (Portuguese); the app follows the TV's system language. Read `README.md` first for the feature list.
 
 ## Rules that protect installed TVs (do not break)
 
