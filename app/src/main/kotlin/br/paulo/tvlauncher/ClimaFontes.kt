@@ -187,7 +187,7 @@ object ClimaFontes {
         ChuvaModelos(datas, AvisoChuva.mediana(porModelo),
             FaixaDias.chanceDoDia(porDia("precipitation_probability_max"), porDia("precipitation_probability_mean")))
     } catch (e: Exception) {
-        Log.w("TvLauncher.Local", "chuva multi-modelo falhou: $e")
+        Log.w("TvLauncher.Local", "chuva multi-modelo falhou: ${e.javaClass.simpleName}")
         null
     }
 
@@ -214,7 +214,7 @@ object ClimaFontes {
             ultimaComparacaoMs = agora
             prefs.edit().putLong("ultima_comparacao", agora).apply()
         } catch (e: Exception) {
-            Log.w("TvLauncher.Local", "comparacao falhou: $e")
+            Log.w("TvLauncher.Local", "comparacao falhou: ${e.javaClass.simpleName}")
         }
     }
 
@@ -243,7 +243,7 @@ object ClimaFontes {
                 .filter { it.has("temp") && (agoraS - it.optLong("obsTime")) / 60 <= 90 }
                 .minByOrNull { Localizacao.km(ponto.lat, ponto.lon, it.optDouble("lat"), it.optDouble("lon")) }
                 ?: return null
-            Log.i("TvLauncher.Local", "estacao ${boletim.optString("icaoId")} a " +
+            Log.i("TvLauncher.Local", "estacao a " +   // sem o código ICAO: ele diz a cidade
                 "${Localizacao.km(ponto.lat, ponto.lon, boletim.optDouble("lat"), boletim.optDouble("lon")).toInt()} km")
             val celsius = boletim.getDouble("temp")
             // Umidade relativa pela formula de Magnus: compara a pressao de vapor no ponto de orvalho com a da temperatura.
@@ -268,7 +268,7 @@ object ClimaFontes {
             }
             Medida(temp, umidade, fenomeno, nuvens)
         } catch (e: Exception) {
-            Log.w("TvLauncher.Local", "METAR falhou: $e")
+            Log.w("TvLauncher.Local", "METAR falhou: ${e.javaClass.simpleName}")
             null   // formato mudou, sem internet etc.: fica o modelo
         }
     }

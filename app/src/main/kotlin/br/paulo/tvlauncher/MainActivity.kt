@@ -249,11 +249,17 @@ class MainActivity : Activity() {
         atualizarPilulaVencimento()
         getSharedPreferences("launcher", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteLocal)
         vigiarRedeParaClima()   // busca o clima assim que a rede subir no boot, sem esperar o ciclo de 5 min
-        atualizarFotoPerfil()   // a conta ativa ou uma foto pode ter mudado
         Privilegio.religarAcessibilidade(this)
         Privilegio.religarDepuracaoSemFio(this)   // o Android pode ter desligado a Depuração sem fio no reinício
-        Despertador.agendar(this)   // garante o proximo alarme agendado (barato: so le as preferencias)
-        Rotinas.agendar(this)   // idem para as rotinas por horário
+        // Fora da thread da tela (13/11/2026): a foto da conta (AccountManager + arquivos) e os agendamentos do despertador
+        // e das rotinas (AlarmManager, PendingIntent) eram 5 a 7 chamadas ao sistema a cada volta à HOME, na mesma thread
+        // que atende o controle. A filaApps é uma thread só, então os agendamentos continuam um depois do outro.
+        filaApps.execute {
+            val foto = runCatching { avatarDaBolinha() }.getOrNull()   // a conta ativa ou uma foto pode ter mudado
+            if (foto != null) ui.post { if (!isDestroyed) fotoPerfil.setImageBitmap(foto) }
+            runCatching { Despertador.agendar(this) }   // garante o proximo alarme agendado
+            runCatching { Rotinas.agendar(this) }       // idem para as rotinas por horário
+        }
         BackupAutomatico.talvezGravar(this)   // cópia diária das configurações (numa thread; no máximo 1x por dia)
         // DNS fixo que parou de responder deixa a TV "sem internet": confere ao voltar à HOME (fora da thread; só testa
         // a rede de verdade se o modo é fixo E a rede perdeu a validação — no caso normal custa quase nada).
@@ -1271,7 +1277,7 @@ class MainActivity : Activity() {
 
     /** Lê o banner (ou a cor do ícone) de um app. Roda em qualquer thread; o resultado vai para [capas]. */
     private fun lerCapa(pacote: String, icone: Drawable?): Pair<Bitmap?, IntArray> {
-        val b = CapaFoco.banner(packageManager, pacote)?.let { runCatching { CapaFoco.bitmap(it) }.getOrNull() }
+        val b = CapaFoco.banner(packageManager, pacote)?.let { runCatching { CapaFoco.bitmapReduzido(it) }.getOrNull() }
         val ic = icone ?: runCatching { packageManager.getApplicationIcon(pacote) }.getOrNull()
         val cores = ic?.let { runCatching { CapaFoco.corDoIcone(it) }.getOrNull() } ?: intArrayOf(0xFF2B2F3A.toInt(), Estilo.FUNDO)
         return (b to cores).also { capas[pacote] = it }

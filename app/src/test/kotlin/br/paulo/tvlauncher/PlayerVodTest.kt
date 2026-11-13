@@ -103,4 +103,27 @@ class PlayerVodTest {
         val volta = PlayerLista.idsDeJson(PlayerLista.idsParaJson(i), Vod.MAX_INTERESSES)
         assertEquals(i.toList(), volta)
     }
+
+    // 13/11/2026: a ordem por nome calcula a chave uma vez por filme; o resultado tem de ser o mesmo da conta antiga.
+    @Test fun ordemPorNomeIgualAAntiga() {
+        val nomes = listOf("BR: Ação (2020)", "acao", "|PT| Zorro", "Árvore", "O Último", "o ultimo", "  Big   Fish ", "007 Contra",
+            "[EN] Matrix (1999)", "matrix", "Élite", "elite", "")
+        val f = nomes.mapIndexed { i, n -> Filme("$i", "c", n) }
+        val antiga = f.sortedBy { PlayerFiltro.normalizar(Vod.nomeLimpo(it.nome)) }
+        assertEquals(antiga.map { it.id }, Vod.ordenar(f, Vod.Ordem.NOME).map { it.id })
+        assertEquals("Big Fish", Vod.nomeLimpo("  Big   Fish "))
+    }
+
+    // 20 mil filmes: a ordem por nome tem de caber folgada (na Sala, a conta antiga levou 112 s; aqui no PC ~1 s).
+    @Test fun ordemPorNomeRapidaComCatalogoGrande() {
+        val r = java.util.Random(1)
+        val w = listOf("Ação", "O Último", "Vingadores", "Era", "Uma", "Vez", "Noite", "Coração", "Missão")
+        val f = (0 until 20_000).map { i -> Filme("$i", "c", (if (i % 4 == 0) "BR: " else "") + (0..2).joinToString(" ") { w[r.nextInt(w.size)] } + " (${1980 + r.nextInt(45)})") }
+        Vod.ordenar(f.take(500), Vod.Ordem.NOME)   // aquece
+        val t0 = System.nanoTime()
+        val o = Vod.ordenar(f, Vod.Ordem.NOME)
+        val ms = (System.nanoTime() - t0) / 1_000_000
+        assertEquals(20_000, o.size)
+        assertTrue("ordem por nome levou $ms ms", ms < 600)
+    }
 }

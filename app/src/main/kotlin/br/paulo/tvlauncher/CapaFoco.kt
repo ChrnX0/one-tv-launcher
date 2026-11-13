@@ -179,6 +179,26 @@ class CapaFoco(ctx: Context) : View(ctx) {
             return b
         }
 
+        /**
+         * O banner numa cópia NOSSA de no máximo [maxL]x[maxA] px (13/11/2026). A capa da HOME mostra o banner a ~600x400 px;
+         * alguns apps trazem banners muito maiores (o Android decodifica para a densidade da TV), e guardar uma capa por app
+         * somava ~16 MB na memória nativa (estimativa). Sem transparência, RGB_565: metade dos bytes, igual na tela.
+         */
+        fun bitmapReduzido(d: Drawable, maxL: Int = 640, maxA: Int = 360): Bitmap {
+            val orig = (d as? BitmapDrawable)?.bitmap
+            val w0 = orig?.width ?: d.intrinsicWidth.takeIf { it > 0 } ?: 320
+            val h0 = orig?.height ?: d.intrinsicHeight.takeIf { it > 0 } ?: 180
+            val esc = minOf(1f, maxL.toFloat() / w0, maxA.toFloat() / h0)   // só reduz, nunca aumenta
+            val w = maxOf(1, (w0 * esc).toInt()); val h = maxOf(1, (h0 * esc).toInt())
+            val alfa = orig?.hasAlpha() ?: true
+            val b = Bitmap.createBitmap(w, h, if (alfa) Bitmap.Config.ARGB_8888 else Bitmap.Config.RGB_565)
+            // Desenha uma CÓPIA do Drawable: setBounds muda o original, que pode estar na tela.
+            val copia = d.constantState?.newDrawable()?.mutate() ?: d
+            copia.setBounds(0, 0, w, h)
+            copia.draw(Canvas(b))
+            return b
+        }
+
         /** Cor média do ícone (reduzido a 1 pixel), escurecida, para o degradê de quem não tem banner. */
         fun corDoIcone(icone: Drawable): IntArray {
             // Uma CÓPIA do ícone: desenhar muda os limites (setBounds) do Drawable, e o original está na tela, noutra thread.

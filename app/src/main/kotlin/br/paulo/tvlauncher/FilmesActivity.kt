@@ -147,7 +147,7 @@ class FilmesActivity : Activity() {
                 BUSCAR -> buscar()
                 ORDEM -> escolherOrdem()
                 OCULTAS -> alternarOcultas()
-                else -> { escolherCat(pos); if (naGrade.isNotEmpty()) grade.requestFocus() }
+                else -> escolherCat(pos, focarGrade = true)
             }
         }
         grade.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -170,9 +170,10 @@ class FilmesActivity : Activity() {
             tela.post {
                 if (isDestroyed) return@post
                 val mudou = oc != ocultas
-                posicoes = p; prefsIdioma = pi; ocultas = oc; aplicarOcultas(); montarItens()
+                posicoes = p; prefsIdioma = pi; ocultas = oc
                 // "Assistidos" e "Continuar" mudam de conteúdo ao voltar do vídeo: refaz a grade sem perder o lugar.
-                if (mudou || chave == ASSISTIDOS || chave == CONTINUAR) refazerGrade() else adaptadorGrade.notifyDataSetChanged()
+                recalcular(if (mudou || chave == ASSISTIDOS || chave == CONTINUAR) ModoGrade.MANTER_LUGAR else ModoGrade.IGUAL)
+                adaptadorGrade.notifyDataSetChanged()   // a barrinha de progresso do card muda na hora
                 ficha?.let { abrirFicha(it, manterFoco = true) }
             }
         }
@@ -189,19 +190,13 @@ class FilmesActivity : Activity() {
         }
     }
 
-    override fun onDestroy() { tela.removeCallbacksAndMessages(null); super.onDestroy() }
+    override fun onDestroy() { calculo.fechar(); tela.removeCallbacksAndMessages(null); super.onDestroy() }
 
     /** Categorias ocultas deste catálogo (lê arquivos: chamar fora da thread da tela). */
     private fun lerOcultas(lista: List<Filme>) = VodFiltro.ocultas(lista.map { it.grupo },
         PlayerArmazem.gruposEscondidos(this), PlayerArmazem.gruposLiberados(this), PlayerArmazem.parental(this))
 
-    /** `filmes` = o catálogo sem as categorias ocultas (ou tudo, depois do PIN). A busca é refeita em cima disso. */
-    private fun aplicarOcultas() {
-        filmes = if (mostrarOcultas) todos else VodFiltro.visiveis(todos, ocultas) { it.grupo }
-        if (termo.isNotEmpty()) resultados = Vod.buscar(filmes, termo)
-    }
-
-    private fun refiltrarOcultas() { aplicarOcultas(); montarItens(); preencherGrade() }
+    private fun refiltrarOcultas() = recalcular(ModoGrade.NOVA)
 
     /** "Mostrar categorias ocultas" pede o PIN do painel (o mesmo do player); "Esconder de novo" não pede nada. */
     private fun alternarOcultas() {
@@ -224,17 +219,11 @@ class FilmesActivity : Activity() {
             tela.post {
                 if (isDestroyed) return@post
                 todos = f; ocultas = oc; posicoes = p; interesses = i; prefsIdioma = pi
-                aplicarOcultas()
                 if (f.isEmpty()) { aviso.text = getString(R.string.filmes_vazio); return@post }
-                aviso.visibility = View.GONE
-                chave = if (Vod.continuar(filmes, p).isNotEmpty()) CONTINUAR else TODOS
                 // Aberta pela busca única da HOME (12/11/2026): já entra com o termo buscado.
-                intent.getStringExtra(BuscaUnica.EXTRA_TERMO)?.trim()?.takeIf { it.isNotEmpty() }?.let { t ->
-                    termo = t; resultados = Vod.buscar(filmes, t); chave = BUSCA
-                }
-                montarItens()
-                preencherGrade()
-                grade.requestFocus()
+                intent.getStringExtra(BuscaUnica.EXTRA_TERMO)?.trim()?.takeIf { it.isNotEmpty() }?.let { t -> termo = t; chave = BUSCA }
+                // A 1ª conta (ocultas, contagens, ordem) também sai da thread da tela; o "Carregando" fica até ela chegar.
+                recalcular(ModoGrade.NOVA, inicial = true) { aviso.visibility = View.GONE; grade.requestFocus() }
                 // O índice das versões sai depois da grade na tela (é a parte demorada; a ficha funciona sem ele).
                 Fundo.rodar {
                     val idx = Idioma.indice(f, { it.nome }, { it.grupo })
@@ -248,59 +237,104 @@ class FilmesActivity : Activity() {
 
     private val trocarCat = Runnable { escolherCat(listaCats.selectedItemPosition) }
 
-    private fun montarItens() {
-        val l = ArrayList<Item>()
-        l += Item(BUSCAR, getString(R.string.player_acao_buscar), -1)
-        l += Item(ORDEM, getString(R.string.filmes_ordem, nomeOrdem(ordem)), -1)
-        // Só aparece quando há categoria oculta neste catálogo (mesmo texto do menu de filtros do player).
-        if (ocultas.isNotEmpty()) l += Item(OCULTAS, getString(if (mostrarOcultas) R.string.player_ocultas_esconder else R.string.player_ocultas_mostrar), -1)
-        val cont = Vod.continuar(filmes, posicoes).size
-        if (cont > 0) l += Item(CONTINUAR, getString(R.string.filmes_continuar), cont)
-        // Interesses aparece sempre (vazio explica como usar); Assistidos só depois do 1º filme visto.
-        l += Item(INTERESSES, getString(R.string.filmes_interesses), Vod.interesses(filmes, interesses) { it.chave }.size)
-        val vistos = Vod.assistidos(filmes, posicoes).size
-        if (vistos > 0) l += Item(ASSISTIDOS, getString(R.string.filmes_assistidos), vistos)
-        if (termo.isNotEmpty()) l += Item(BUSCA, getString(R.string.player_cat_busca, termo), resultados.size)
-        l += Item(TODOS, getString(R.string.player_cat_todos), filmes.size)
-        Vod.grupos(filmes).forEach { (g, n) -> l += Item("g:$g", PlayerLista.nomeExibido(g).ifEmpty { getString(R.string.player_cat_outros) }, n) }
-        itens = l
-        if (itens.none { it.chave == chave }) chave = TODOS
-        adaptadorCats.notifyDataSetChanged()
-        val pos = itens.indexOfFirst { it.chave == chave }
-        if (!listaCats.hasFocus()) listaCats.setSelection(pos.coerceAtLeast(0))
-    }
+    /** O que fazer com a grade quando a conta chegar. */
+    private enum class ModoGrade { NOVA, MANTER_LUGAR, IGUAL }
 
-    private fun escolherCat(pos: Int) {
+    /** Resultado de uma conta: tudo que a tela precisa, calculado fora dela. */
+    private class Estado(val filmes: List<Filme>, val resultados: List<Filme>, val itens: List<Item>, val chave: String,
+                         val grade: List<Filme>?)
+
+    private val calculo = CalculoTela(tela, "filmes-conta")
+
+    // Caches da conta (só a thread da [calculo] lê e escreve). A chave é a própria lista (===): lista nova = refaz.
+    private var cacheVisiveis: Triple<List<Filme>, Set<String>, List<Filme>>? = null
+    private var cacheBusca: Triple<List<Filme>, String, List<Filme>>? = null
+    private var cacheOrdem: Triple<List<Filme>, Vod.Ordem, List<Filme>>? = null
+    private var cacheGrupos: Pair<List<Filme>, List<Pair<String, Int>>>? = null
+
+    /**
+     * Refaz, FORA da thread da tela, as categorias ocultas, a busca, as contagens das categorias e (conforme [modo]) a
+     * grade. Pedidos seguidos (rolar pelas categorias) descartam os velhos. [inicial]: escolhe a categoria de entrada
+     * (Continuar se houver). [depois] roda na tela com a grade nova já posta.
+     */
+    private fun recalcular(modo: ModoGrade, inicial: Boolean = false, depois: (() -> Unit)? = null) {
+        val todosS = todos; val ocultasS = if (mostrarOcultas) emptySet() else ocultas; val mostrar = mostrarOcultas
+        val termoS = termo; val posS = posicoes; val intS = interesses; val ordemS = ordem; val chaveS = chave
+        val temOcultas = ocultas.isNotEmpty()
+        val rotulo = { id: Int -> getString(id) }
+        val antesSel = grade.selectedItemPosition
+        calculo.pedir(
+            calcular = {
+                val vis = cacheVisiveis?.takeIf { it.first === todosS && it.second == ocultasS }?.third
+                    ?: (if (mostrar) todosS else VodFiltro.visiveis(todosS, ocultasS) { it.grupo }).also { cacheVisiveis = Triple(todosS, ocultasS, it) }
+                val res = if (termoS.isEmpty()) emptyList() else cacheBusca?.takeIf { it.first === vis && it.second == termoS }?.third
+                    ?: Vod.buscar(vis, termoS).also { cacheBusca = Triple(vis, termoS, it) }
+                val cont = Vod.continuar(vis, posS)
+                val ch0 = if (inicial && chaveS != BUSCA) (if (cont.isNotEmpty()) CONTINUAR else TODOS) else chaveS
+                val l = ArrayList<Item>()
+                l += Item(BUSCAR, rotulo(R.string.player_acao_buscar), -1)
+                l += Item(ORDEM, getString(R.string.filmes_ordem, nomeOrdem(ordemS)), -1)
+                // Só aparece quando há categoria oculta neste catálogo (mesmo texto do menu de filtros do player).
+                if (temOcultas) l += Item(OCULTAS, rotulo(if (mostrar) R.string.player_ocultas_esconder else R.string.player_ocultas_mostrar), -1)
+                if (cont.isNotEmpty()) l += Item(CONTINUAR, rotulo(R.string.filmes_continuar), cont.size)
+                // Interesses aparece sempre (vazio explica como usar); Assistidos só depois do 1º filme visto.
+                val ints = Vod.interesses(vis, intS) { it.chave }
+                l += Item(INTERESSES, rotulo(R.string.filmes_interesses), ints.size)
+                val vistos = Vod.assistidos(vis, posS)
+                if (vistos.isNotEmpty()) l += Item(ASSISTIDOS, rotulo(R.string.filmes_assistidos), vistos.size)
+                if (termoS.isNotEmpty()) l += Item(BUSCA, getString(R.string.player_cat_busca, termoS), res.size)
+                l += Item(TODOS, rotulo(R.string.player_cat_todos), vis.size)
+                val grupos = cacheGrupos?.takeIf { it.first === vis }?.second ?: Vod.grupos(vis).also { cacheGrupos = vis to it }
+                grupos.forEach { (g, n) -> l += Item("g:$g", PlayerLista.nomeExibido(g).ifEmpty { rotulo(R.string.player_cat_outros) }, n) }
+                val ch = if (l.none { it.chave == ch0 }) TODOS else ch0
+                val g = if (modo == ModoGrade.IGUAL && ch == chaveS) null else {
+                    // A ordem do catálogo inteiro fica guardada: uma categoria é o filtro dela (filtrar mantém a ordem).
+                    fun ordenados() = cacheOrdem?.takeIf { it.first === vis && it.second == ordemS }?.third
+                        ?: Vod.ordenar(vis, ordemS).also { cacheOrdem = Triple(vis, ordemS, it) }
+                    when {
+                        ch == CONTINUAR -> cont                  // já na ordem de "mais recente"
+                        ch == INTERESSES -> ints                 // o último marcado primeiro
+                        ch == ASSISTIDOS -> vistos               // o visto mais recente primeiro
+                        ch == BUSCA -> res
+                        ch.startsWith("g:") -> { val alvo = ch.removePrefix("g:"); ordenados().filter { it.grupo.trim() == alvo } }
+                        else -> ordenados()
+                    }
+                }
+                Estado(vis, res, l, ch, g)
+            },
+            aplicar = { e ->
+                if (!isDestroyed) {
+                    filmes = e.filmes; resultados = e.resultados; itens = e.itens; chave = e.chave
+                    adaptadorCats.notifyDataSetChanged()
+                    if (!listaCats.hasFocus()) listaCats.setSelection(itens.indexOfFirst { it.chave == chave }.coerceAtLeast(0))
+                    if (e.grade != null) {
+                        naGrade = e.grade
+                        adaptadorGrade.notifyDataSetChanged()
+                        if (modo == ModoGrade.MANTER_LUGAR && naGrade.isNotEmpty()) {
+                            val p = antesSel.coerceIn(0, naGrade.size - 1); grade.setSelection(p); mostrarFocado(naGrade[p])
+                        } else {
+                            grade.setSelection(0); mostrarFocado(naGrade.firstOrNull())
+                        }
+                        if (modo == ModoGrade.MANTER_LUGAR && naGrade.isEmpty() && grade.hasFocus()) listaCats.requestFocus()   // esvaziou
+                    }
+                    val nome = itens.firstOrNull { it.chave == chave }?.nome.orEmpty()
+                    cabecalho.text = getString(R.string.filmes_cabecalho, nome.uppercase(Locale.getDefault()), naGrade.size)
+                    depois?.invoke()
+                }
+            },
+            demorou = { if (!isDestroyed) { aviso.text = getString(R.string.filmes_carregando); aviso.visibility = View.VISIBLE; avisoDaConta = true } },
+            fim = { if (avisoDaConta) { aviso.visibility = View.GONE; avisoDaConta = false } },
+        )
+    }
+    private var avisoDaConta = false
+
+    private fun escolherCat(pos: Int, focarGrade: Boolean = false) {
         val it = itens.getOrNull(pos) ?: return
-        if (it.chave == chave || it.chave == BUSCAR || it.chave == ORDEM || it.chave == OCULTAS) return
+        if (it.chave == BUSCAR || it.chave == ORDEM || it.chave == OCULTAS) return
+        if (it.chave == chave) { if (focarGrade && naGrade.isNotEmpty() && !calculo.calculando) grade.requestFocus(); return }
         chave = it.chave
         adaptadorCats.notifyDataSetChanged()
-        preencherGrade()
-    }
-
-    private fun preencherGrade() {
-        naGrade = when {
-            chave == CONTINUAR -> Vod.continuar(filmes, posicoes)          // já na ordem de "mais recente"
-            chave == INTERESSES -> Vod.interesses(filmes, interesses) { it.chave }   // o último marcado primeiro
-            chave == ASSISTIDOS -> Vod.assistidos(filmes, posicoes)        // o visto mais recente primeiro
-            chave == BUSCA -> resultados
-            chave.startsWith("g:") -> Vod.ordenar(filmes.filter { it.grupo.trim() == chave.removePrefix("g:") }, ordem)
-            else -> Vod.ordenar(filmes, ordem)
-        }
-        adaptadorGrade.notifyDataSetChanged()
-        grade.setSelection(0)
-        val nome = itens.firstOrNull { it.chave == chave }?.nome.orEmpty()
-        cabecalho.text = getString(R.string.filmes_cabecalho, nome.uppercase(Locale.getDefault()), naGrade.size)
-        mostrarFocado(naGrade.firstOrNull())
-    }
-
-    /** Recalcula a categoria atual sem voltar ao 1º pôster (tirou um interesse, voltou do vídeo). */
-    private fun refazerGrade() {
-        val onde = grade.selectedItemPosition
-        val tinhaFoco = grade.hasFocus()
-        preencherGrade()
-        if (naGrade.isNotEmpty()) { val p = onde.coerceIn(0, naGrade.size - 1); grade.setSelection(p); mostrarFocado(naGrade[p]) }
-        else if (tinhaFoco) listaCats.requestFocus()   // esvaziou: o foco volta para as categorias
+        recalcular(ModoGrade.NOVA) { if (focarGrade && naGrade.isNotEmpty()) grade.requestFocus() }
     }
 
     // ---------------------------------------------------------------- interesses (OK segurado 2 s)
@@ -323,8 +357,8 @@ class FilmesActivity : Activity() {
         val virou = f.chave in interesses
         val copia = interesses
         Fundo.rodar { PlayerArmazem.definirInteresses(this, series = false, copia) }   // disco fora da thread da tela
-        montarItens()
-        if (chave == INTERESSES) refazerGrade() else adaptadorGrade.notifyDataSetChanged()
+        adaptadorGrade.notifyDataSetChanged()
+        recalcular(if (chave == INTERESSES) ModoGrade.MANTER_LUGAR else ModoGrade.IGUAL)
         avisoBreve(getString(if (virou) R.string.filmes_interesse_pos else R.string.filmes_interesse_tirou, Vod.nomeLimpo(f.nome)))
     }
 
@@ -348,7 +382,7 @@ class FilmesActivity : Activity() {
         Estilo.lista(this, getString(R.string.filmes_ordem_titulo), todas.map { nomeOrdem(it) }, listOf(todas.indexOf(ordem))) { i ->
             ordem = todas[i]
             getSharedPreferences("player", MODE_PRIVATE).edit().putString("ordem_filmes", ordem.name).apply()
-            montarItens(); preencherGrade()
+            recalcular(ModoGrade.NOVA)
         }
     }
 
@@ -359,9 +393,8 @@ class FilmesActivity : Activity() {
         }
         val aplicar = { t: String ->
             if (t.isNotEmpty()) {
-                termo = t; resultados = Vod.buscar(filmes, t); chave = BUSCA
-                montarItens(); preencherGrade()
-                if (resultados.isNotEmpty()) grade.requestFocus()
+                termo = t; chave = BUSCA
+                recalcular(ModoGrade.NOVA) { if (resultados.isNotEmpty()) grade.requestFocus() }
             }
         }
         val d = CaixaTv(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)

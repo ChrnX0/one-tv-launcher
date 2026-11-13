@@ -241,7 +241,7 @@ object Series {
 
     fun ordenar(series: List<Serie>, ordem: Vod.Ordem): List<Serie> = when (ordem) {
         Vod.Ordem.RECENTES -> series.sortedByDescending { it.atualizada }
-        Vod.Ordem.NOME -> series.sortedBy { PlayerFiltro.normalizar(Vod.nomeLimpo(it.nome)) }
+        Vod.Ordem.NOME -> Vod.ordenarPorNome(series) { it.nome }
         Vod.Ordem.NOTA -> series.sortedByDescending { it.nota ?: -1f }
         Vod.Ordem.ANO -> series.sortedByDescending { it.ano ?: 0 }
     }

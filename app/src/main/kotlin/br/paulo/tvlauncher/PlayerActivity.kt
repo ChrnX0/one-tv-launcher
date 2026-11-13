@@ -182,7 +182,19 @@ class PlayerActivity : Activity() {
 
     override fun onDestroy() {
         tela.removeCallbacksAndMessages(null)
+        disco.shutdown()   // não "Now": deixa terminar a última gravação (canal, recentes)
         super.onDestroy()
+    }
+
+    /**
+     * Gravações no disco fora da thread da tela, em ordem (13/11/2026). Antes cada troca de canal gravava o ultimo.json e o
+     * recentes.json (escrever + renomear) na thread que atende o controle; com a memória da TV apertada o disco disputa
+     * com a troca de páginas e isso chegava a dezenas de ms. Uma thread só: a última gravação de um arquivo vence.
+     */
+    private val disco = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "player-disco").apply { isDaemon = true } }
+    private fun gravar(tarefa: () -> Unit) {
+        try { disco.execute { runCatching(tarefa).onFailure { android.util.Log.w("TvLauncher.Player", "gravar falhou: ${it.javaClass.simpleName}") } } }
+        catch (_: java.util.concurrent.RejectedExecutionException) {}
     }
 
     // ---------------------------------------------------------------- carga (fora da thread da tela)
@@ -490,7 +502,7 @@ class PlayerActivity : Activity() {
         val marca = "${c.id}|${programas.firstOrNull()?.inicio}|${programas.size}"
         if (marca == gravado) return
         gravado = marca
-        PlayerArmazem.definirUltimoCanal(this, c, programas)
+        gravar { PlayerArmazem.definirUltimoCanal(this, c, programas) }
     }
 
     private fun atualizarInfo() {
@@ -692,8 +704,8 @@ class PlayerActivity : Activity() {
             liberados = liberados - grupo
             if (categoria == PlayerLista.chaveDoGrupo(grupo)) categoria = PlayerLista.TODOS
         }
-        PlayerArmazem.definirGruposEscondidos(this, escondidos)
-        PlayerArmazem.definirGruposLiberados(this, liberados)
+        val e = escondidos; val l = liberados
+        gravar { PlayerArmazem.definirGruposEscondidos(this, e); PlayerArmazem.definirGruposLiberados(this, l) }
         refiltrar()
         abrirLista(focarCategorias = true)
         mostrarAvisoBreve(getString(if (oculto) R.string.player_grupo_mostrado else R.string.player_grupo_oculto,
@@ -711,7 +723,8 @@ class PlayerActivity : Activity() {
         favoritos = PlayerLista.alternarFavorito(favoritos, c.id)
         if (favoritos === antes) { mostrarAvisoBreve(getString(R.string.player_favoritos_cheio)); return }
         val virou = c.id in favoritos
-        PlayerArmazem.definirFavoritos(this, favoritos)
+        val fav = favoritos
+        gravar { PlayerArmazem.definirFavoritos(this, fav) }
         lista.atualizarFavoritos(favoritos)
         mostrarAvisoBreve(getString(if (virou) R.string.player_favorito_pos else R.string.player_favorito_tirou, c.nome))
     }
@@ -720,7 +733,8 @@ class PlayerActivity : Activity() {
     private fun lembrarRecente(c: Canal) {
         if (recentes.firstOrNull() == c.id) return
         recentes = PlayerLista.registrarRecente(recentes, c.id)
-        PlayerArmazem.definirRecentes(this, recentes)
+        val rec = recentes
+        gravar { PlayerArmazem.definirRecentes(this, rec) }
     }
 
     // ---------------------------------------------------------------- avisos
