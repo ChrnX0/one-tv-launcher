@@ -50,6 +50,7 @@ class IconeCard(ctx: Context, private val tipo: String) : View(ctx) {
             "dormir" -> dormir(c, w, h)
             "despertador" -> despertador(c, w, h)
             "visita" -> visita(c, w, h)
+            "casa" -> casa(c, w, h)
             "pausar" -> { c.drawLine(w * 0.36f, h * 0.22f, w * 0.36f, h * 0.78f, tinta); c.drawLine(w * 0.64f, h * 0.22f, w * 0.64f, h * 0.78f, tinta) }
             "tocar" -> { caminho.reset(); caminho.moveTo(w * 0.30f, h * 0.18f); caminho.lineTo(w * 0.82f, h * 0.5f); caminho.lineTo(w * 0.30f, h * 0.82f); caminho.close(); c.drawPath(caminho, tinta) }
             "proxima" -> {
@@ -190,5 +191,14 @@ class IconeCard(ctx: Context, private val tipo: String) : View(ctx) {
             caixa.set(x0, y0, x0 + lado, y0 + lado)
             c.drawRoundRect(caixa, raio, raio, preenchimento)
         }
+    }
+
+    /** Casa (Google Home): telhado e paredes em traço, com a porta. */
+    private fun casa(c: Canvas, w: Float, h: Float) {
+        caminho.reset()
+        caminho.moveTo(w * 0.08f, h * 0.48f); caminho.lineTo(w * 0.5f, h * 0.10f); caminho.lineTo(w * 0.92f, h * 0.48f)
+        caminho.moveTo(w * 0.20f, h * 0.38f); caminho.lineTo(w * 0.20f, h * 0.88f); caminho.lineTo(w * 0.80f, h * 0.88f); caminho.lineTo(w * 0.80f, h * 0.38f)
+        caminho.moveTo(w * 0.42f, h * 0.88f); caminho.lineTo(w * 0.42f, h * 0.62f); caminho.lineTo(w * 0.58f, h * 0.62f); caminho.lineTo(w * 0.58f, h * 0.88f)
+        c.drawPath(caminho, tinta)
     }
 }

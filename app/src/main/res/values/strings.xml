@@ -756,6 +756,7 @@
     <string name="pr_despertador">Alarme</string>
     <string name="pr_despertador_nenhum">Nenhum</string>
     <string name="pr_visita">Visita</string>
+    <string name="pr_google_home">Google Home</string>
     <string name="pr_config_tv">Configurações da TV</string>
     <string name="pr_sinal_bom">sinal bom</string>
     <string name="pr_sinal_medio">sinal médio</string>
