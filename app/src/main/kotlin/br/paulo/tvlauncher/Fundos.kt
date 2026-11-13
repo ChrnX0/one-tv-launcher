@@ -88,7 +88,7 @@ class FundoEscuro(ctx: Context, private val comArco: Boolean = true) : View(ctx)
     override fun onDraw(c: Canvas) {
         val est = e ?: EstadoCeu(System.currentTimeMillis(), Config.LATITUDE, Config.LONGITUDE, -1, false)
         val w = width.toFloat(); val h = height.toFloat()
-        desenharFundoEscuro(c, w, h, p)
+        FundoEscuroPronto.desenhar(c, w, h)   // uma imagem, não 5 degradês por quadro
         // Sem arco (tela de previsão): o caminho do sol e os textos "nascer/pôr" cruzariam os cartões que rolam por cima.
         if (!comArco) return
 
@@ -126,6 +126,37 @@ class FundoEscuro(ctx: Context, private val comArco: Boolean = true) : View(ctx)
             val horaLua = ((agora - atraso) % 24 + 24) % 24
             ponto(horaLua)?.let { (x, y) -> desenharLua(c, x, y - context.dpf(6f), context.dpf(17f), est.agoraMs, est.lat, p) }
         }
+    }
+}
+
+/**
+ * O grafite pronto numa imagem (13/11/2026). Medido na Sala (Mali-G31, 1080p): rolando a grade de Filmes, a GPU levava
+ * ~43 ms por quadro, e o fundo era 5 camadas de degradê em tela cheia (+ a cor da janela) refeitas a CADA quadro: a
+ * tela inteira aparecia com sobreposição 4x+ no "mostrar sobreposição". Aqui o degradê é desenhado UMA vez por processo
+ * em meia resolução (é um degradê suave: ampliar não perde nada, como no protetor) e cada quadro só copia uma imagem.
+ * Guarda uma imagem por proporção (na prática uma: a tela 16:9), ~2 MB.
+ */
+internal object FundoEscuroPronto {
+    private val prontas = HashMap<Long, Bitmap>()
+    private val pintar = Paint(Paint.FILTER_BITMAP_FLAG)
+    private val destino = android.graphics.RectF()
+
+    @Synchronized private fun imagem(w: Int, h: Int): Bitmap {
+        val lw = maxOf(1, w / 2); val lh = maxOf(1, h / 2)
+        val chave = (lw.toLong() shl 32) or lh.toLong()
+        prontas[chave]?.let { return it }
+        if (prontas.size >= 3) prontas.clear()   // tamanhos estranhos (janelas parciais) não acumulam
+        val b = Bitmap.createBitmap(lw, lh, Bitmap.Config.ARGB_8888)
+        desenharFundoEscuro(Canvas(b), lw.toFloat(), lh.toFloat(), Paint(Paint.ANTI_ALIAS_FLAG))
+        prontas[chave] = b
+        return b
+    }
+
+    /** Desenha o grafite em (0,0)-(w,h). Só na thread da tela (usa [destino] compartilhado). */
+    fun desenhar(c: Canvas, w: Float, h: Float) {
+        if (w < 1f || h < 1f) return
+        destino.set(0f, 0f, w, h)
+        c.drawBitmap(imagem(w.toInt(), h.toInt()), null, destino, pintar)
     }
 }
 

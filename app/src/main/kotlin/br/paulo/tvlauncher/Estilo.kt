@@ -413,15 +413,28 @@ object Estilo {
      */
     fun fundoTela(@Suppress("UNUSED_PARAMETER") ctx: Context): Drawable = FundoGrafite()
 
+    /**
+     * Tela cuja raiz já pinta o grafite na tela toda: a cor de fundo da janela (tema) por baixo é uma camada de tela
+     * cheia a mais em cada quadro, que ninguém vê (13/11/2026, medido na Sala com "mostrar sobreposição"). Tira essa cor.
+     * Chamado para toda tela pelo LauncherApp (onActivityStarted); só age quando a raiz é o grafite e ocupa a janela.
+     */
+    fun tirarCorDaJanelaSeCoberta(a: android.app.Activity) {
+        val conteudo = a.findViewById<android.view.ViewGroup>(android.R.id.content) ?: return
+        val raiz = conteudo.getChildAt(0) ?: return
+        val lp = raiz.layoutParams ?: return
+        if (raiz.background !is FundoGrafite || lp.width != android.view.ViewGroup.LayoutParams.MATCH_PARENT ||
+            lp.height != android.view.ViewGroup.LayoutParams.MATCH_PARENT) return
+        a.window.setBackgroundDrawable(null)
+    }
+
     private class FundoGrafite : Drawable() {
-        private val p = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
         override fun draw(c: android.graphics.Canvas) {
             c.save(); c.translate(bounds.left.toFloat(), bounds.top.toFloat())
-            desenharFundoEscuro(c, bounds.width().toFloat(), bounds.height().toFloat(), p)
+            FundoEscuroPronto.desenhar(c, bounds.width().toFloat(), bounds.height().toFloat())   // uma imagem pronta (Fundos.kt)
             c.restore()
         }
-        override fun setAlpha(alpha: Int) { p.alpha = alpha }
-        override fun setColorFilter(cf: android.graphics.ColorFilter?) { p.colorFilter = cf }
+        override fun setAlpha(alpha: Int) {}   // opaco sempre (ninguém usa alfa neste fundo)
+        override fun setColorFilter(cf: android.graphics.ColorFilter?) {}
         @Deprecated("Deprecated in Java") override fun getOpacity() = android.graphics.PixelFormat.OPAQUE
     }
 
