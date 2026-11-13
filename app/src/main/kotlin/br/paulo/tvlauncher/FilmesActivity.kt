@@ -26,7 +26,6 @@ import android.widget.GridView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
-import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.TextView
 import java.util.Locale
@@ -65,7 +64,6 @@ class FilmesActivity : Activity() {
     private val suave = Estilo.TEXTO_2
     private val apagado = Estilo.TEXTO_3
     private val ambar = Estilo.ATENCAO
-    private val coral = 0xFFFF5A4E.toInt()
     private val verdeEtiqueta = 0xE62E7D4F.toInt()
     private val fonteMedia = Fontes.manrope(500)
 
@@ -447,7 +445,7 @@ class FilmesActivity : Activity() {
 
     // ---------------------------------------------------------------- grade de pôsteres
 
-    private class Card(val capa: ImageView, val nome: TextView, val barra: ProgressBar, val etiqueta: TextView, val estrela: TextView)
+    private class Card(val capa: ImageView, val nome: TextView, val barra: BarraTempo.Barra, val etiqueta: TextView, val estrela: TextView)
 
     private val adaptadorGrade = object : BaseAdapter() {
         override fun getCount() = naGrade.size
@@ -460,7 +458,7 @@ class FilmesActivity : Activity() {
             c.nome.text = Vod.nomeLimpo(f.nome)
             val pos = posicoes[f.chave]
             if (Vod.deveRetomar(pos) && pos!!.duracao > 0) {
-                c.barra.visibility = View.VISIBLE; c.barra.progress = (pos.ms * 1000 / pos.duracao).toInt()
+                c.barra.visibility = View.VISIBLE; c.barra.fracao = BarraTempo.fracao(pos.ms, pos.duracao)
             } else c.barra.visibility = View.GONE
             // Etiqueta do quanto foi visto: "42%", "Finalizado" (95% ou mais) ou "Assistido" (servidor sem duração).
             val pct = Vod.progresso(pos)
@@ -501,12 +499,10 @@ class FilmesActivity : Activity() {
         val nome = TituloCard(this, Estilo.Leitura.CARD).apply { setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END }
         col.addView(cabecalhoCard(Estilo.Leitura.NOME_CARD_ALTURA).apply { addView(nome) })
         col.addView(moldura, LinearLayout.LayoutParams(-1, dp(Estilo.Leitura.POSTER_ALTURA)))
-        val barra = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
-            max = 1000; progressTintList = ColorStateList.valueOf(coral); progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA)
-        }
-        col.addView(barra, LinearLayout.LayoutParams(-1, dp(3)).apply { topMargin = dp(4) })
-        // 4 + nome + pôster + barra (4 + 3) + 6
-        col.layoutParams = AbsListView.LayoutParams(-1, dp(4 + Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.POSTER_ALTURA + 7 + 6))
+        val barra = BarraTempo.Barra(this)
+        col.addView(barra, LinearLayout.LayoutParams(-1, dp(BarraTempo.ESPESSURA_DP)).apply { topMargin = dp(5) })
+        // 4 + nome + pôster + barra (5 + 5) + 6
+        col.layoutParams = AbsListView.LayoutParams(-1, dp(4 + Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.POSTER_ALTURA + 10 + 6))
         col.tag = Card(capa, nome, barra, etiqueta, estrela)
         return col
     }
@@ -516,7 +512,8 @@ class FilmesActivity : Activity() {
         focado.text = f?.let {
             val pos = posicoes[it.chave]?.takeIf { p -> p.duracao > 0 && p.ms > 0 }
             Estilo.infoFoco(Vod.nomeLimpo(it.nome), it.nota, listOfNotNull(it.ano?.toString(), PlayerLista.nomeExibido(it.grupo).ifEmpty { null },
-                pos?.let { p -> getString(R.string.vod_parou_em, (p.ms * 100 / p.duracao).toInt().coerceIn(1, 99)) }))
+                pos?.let { p -> getString(R.string.vod_parou_em, (p.ms * 100 / p.duracao).toInt().coerceIn(1, 99)) },
+                pos?.takeIf { p -> Vod.deveRetomar(p) }?.let { p -> getString(R.string.tempo_faltam, BarraTempo.duracao(p.duracao - p.ms)) }))
         } ?: ""
     }
 
@@ -571,6 +568,13 @@ class FilmesActivity : Activity() {
 
         // Botões: Continuar (se começou) + Do começo, ou só Assistir.
         val pos = posicoes[f.chave]
+        // Começou e não terminou: barra de onde parou + "faltam 1 h 01 · termina às 22:41" acima dos botões (13/11/2026).
+        if (Vod.deveRetomar(pos) && pos!!.duracao > 0) {
+            val resta = (pos.duracao - pos.ms).coerceAtLeast(0)
+            texto.addView(BarraTempo.Linha(this).apply {
+                mostrar(BarraTempo.fracao(pos.ms, pos.duracao), BarraTempo.textoFaltam(context, resta, System.currentTimeMillis() + resta))
+            }, LinearLayout.LayoutParams(dp(460), -2).apply { topMargin = dp(18) })
+        }
         val botoes = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(0, dp(20), 0, dp(18)) }
         val primeiro: TextView
         if (Vod.deveRetomar(pos)) {

@@ -1,7 +1,6 @@
 package br.paulo.tvlauncher
 
 import android.app.Activity
-import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Handler
@@ -18,7 +17,6 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
-import android.widget.ProgressBar
 import android.widget.TextView
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -55,7 +53,6 @@ class PlayerListaTela(
     private val suave = 0xB3F5F3EE.toInt()
     private val apagado = 0x80F5F3EE.toInt()
     private val ambar = Estilo.ATENCAO
-    private val coral = 0xFFFF5A4E.toInt()
     private val fonteMedia = Fontes.manrope(500)
     private val hora = SimpleDateFormat("HH:mm", Locale.getDefault())
 
@@ -83,7 +80,7 @@ class PlayerListaTela(
     private lateinit var detCanal: TextView
     private lateinit var detTitulo: TextView
     private lateinit var detHorario: TextView
-    private lateinit var detBarra: ProgressBar
+    private lateinit var detBarra: BarraTempo.Barra
     private lateinit var detDescricao: TextView
     private lateinit var detSeguir: LinearLayout
 
@@ -283,7 +280,7 @@ class PlayerListaTela(
     }
 
     /** Peças de uma linha de canal, guardadas na tag para não procurar a cada desenho. */
-    private class Linha(val numero: TextView, val logo: ImageView, val nome: TextView, val sub: TextView, val barra: ProgressBar, val estrela: TextView)
+    private class Linha(val numero: TextView, val logo: ImageView, val nome: TextView, val sub: TextView, val tempo: TextView, val barra: BarraTempo.Barra, val estrela: TextView)
 
     private val adaptadorCanais = object : BaseAdapter() {
         override fun getCount() = doMeio.size
@@ -303,8 +300,11 @@ class PlayerListaTela(
                 prog != null -> prog.titulo
                 else -> PlayerLista.nomeExibido(c.grupo)
             }
+            // Barra do programa + "faltam 22 min" à direita do nome dele (13/11/2026).
             l.barra.visibility = if (prog != null) View.VISIBLE else View.INVISIBLE
-            prog?.let { l.barra.progress = (guia.progresso(it, agora) * 1000).toInt() }
+            prog?.let { l.barra.fracao = guia.progresso(it, agora) }
+            l.tempo.text = prog?.let { BarraTempo.textoFaltam(act, it.fim - agora) } ?: ""
+            l.tempo.visibility = if (prog != null) View.VISIBLE else View.GONE
             l.estrela.visibility = if (c.id in favoritos) View.VISIBLE else View.GONE
             PlayerLogos.carregar(act, c.logo, l.logo)
             return v
@@ -315,7 +315,7 @@ class PlayerListaTela(
         val linha = LinearLayout(act).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
             setPadding(dp(10), dp(7), dp(12), dp(7))
-            layoutParams = AbsListView.LayoutParams(-1, dp(68))   // 58 -> 68: letra maior (13/11/2026)
+            layoutParams = AbsListView.LayoutParams(-1, dp(70))   // 58 -> 70: letra maior e barra de 5 dp (13/11/2026)
         }
         val numero = TextView(act).apply { textSize = Estilo.Leitura.ITEM; typeface = Fontes.manrope(600); gravity = Gravity.CENTER }
         linha.addView(numero, LinearLayout.LayoutParams(dp(50), -2))
@@ -328,13 +328,17 @@ class PlayerListaTela(
         val col = LinearLayout(act).apply { orientation = LinearLayout.VERTICAL }
         val nome = TextView(act).apply { textSize = Estilo.Leitura.ITEM; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
         val sub = TextView(act).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
-        val barra = barra()
-        col.addView(nome); col.addView(sub)
-        col.addView(barra, LinearLayout.LayoutParams(-1, dp(3)).apply { topMargin = dp(4) })
+        val tempo = TextView(act).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(suave); maxLines = 1 }
+        val linhaSub = LinearLayout(act).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
+        linhaSub.addView(sub, LinearLayout.LayoutParams(0, -2, 1f))
+        linhaSub.addView(tempo, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(10) })
+        val barra = BarraTempo.Barra(act)
+        col.addView(nome); col.addView(linhaSub)
+        col.addView(barra, LinearLayout.LayoutParams(-1, dp(BarraTempo.ESPESSURA_DP)).apply { topMargin = dp(4) })
         linha.addView(col, LinearLayout.LayoutParams(0, -2, 1f))
         val estrela = TextView(act).apply { text = "★"; textSize = 18f; setTextColor(ambar); setPadding(dp(10), 0, 0, 0) }
         linha.addView(estrela)
-        linha.tag = Linha(numero, logo, nome, sub, barra, estrela)
+        linha.tag = Linha(numero, logo, nome, sub, tempo, barra, estrela)
         return linha
     }
 
@@ -354,8 +358,8 @@ class PlayerListaTela(
         col.addView(detTitulo, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(6) })
         detHorario = TextView(act).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(suave) }
         col.addView(detHorario, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(4) })
-        detBarra = barra()
-        col.addView(detBarra, LinearLayout.LayoutParams(-1, dp(4)).apply { topMargin = dp(8) })
+        detBarra = BarraTempo.Barra(act)
+        col.addView(detBarra, LinearLayout.LayoutParams(-1, dp(BarraTempo.ESPESSURA_DP)).apply { topMargin = dp(8) })
         detDescricao = TextView(act).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(suave); maxLines = 5; ellipsize = TextUtils.TruncateAt.END; setLineSpacing(0f, 1.15f) }
         col.addView(detDescricao, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(10) })
         detSeguir = LinearLayout(act).apply { orientation = LinearLayout.VERTICAL }
@@ -389,7 +393,7 @@ class PlayerListaTela(
             detHorario.text = act.getString(R.string.player_horario, hora.format(Date(atual.inicio)), hora.format(Date(atual.fim)), faltam) +
                 (atual.categoria.takeIf { it.isNotEmpty() }?.let { "  ·  $it" } ?: "")
             detBarra.visibility = View.VISIBLE
-            detBarra.progress = (guia.progresso(atual, agora) * 1000).toInt()
+            detBarra.fracao = guia.progresso(atual, agora)
             detDescricao.text = atual.descricao
         }
         val depois = prox.filter { it !== atual }.take(3)
@@ -427,12 +431,6 @@ class PlayerListaTela(
     private fun rotulo() = TextView(act).apply {
         textSize = Estilo.Leitura.ROTULO; typeface = Fontes.manrope(600); letterSpacing = 0.06f; setTextColor(0x99F5F3EE.toInt())
         setPadding(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
-    }
-
-    private fun barra() = ProgressBar(act, null, android.R.attr.progressBarStyleHorizontal).apply {
-        max = 1000
-        progressTintList = ColorStateList.valueOf(coral)
-        progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA)
     }
 
     private fun dp(v: Int) = (v * act.resources.displayMetrics.density + 0.5f).toInt()

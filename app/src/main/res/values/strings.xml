@@ -819,4 +819,10 @@
     <string name="legenda_conta_det">OpenSubtitles, with your API key (free at opensubtitles.com/consumers). Without an account: 5 subtitles a day</string>
     <string name="legenda_conta_sim">set up</string>
     <string name="legenda_conta_nao">not set up</string>
+    <!-- Barra + tempo (BarraTempo.kt): %1$s is replaced by the highlighted value. -->
+    <string name="tempo_faltam">%1$s left</string>
+    <string name="tempo_termina_as">ends at %1$s</string>
+    <string name="tempo_episodios_vistos">%1$s episodes</string>
+    <string name="tempo_x_de_y">%1$d of %2$d</string>
+    <string name="tempo_visto">watched</string>
 </resources>

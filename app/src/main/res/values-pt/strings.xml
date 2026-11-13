@@ -821,4 +821,10 @@
     <string name="legenda_conta_det">OpenSubtitles, com a sua chave de API (grátis em opensubtitles.com/consumers). Sem conta: 5 legendas por dia</string>
     <string name="legenda_conta_sim">configurada</string>
     <string name="legenda_conta_nao">não configurada</string>
+    <!-- Barra + tempo (BarraTempo.kt): %1$s é trocado pelo valor em destaque. -->
+    <string name="tempo_faltam">faltam %1$s</string>
+    <string name="tempo_termina_as">termina às %1$s</string>
+    <string name="tempo_episodios_vistos">%1$s episódios</string>
+    <string name="tempo_x_de_y">%1$d de %2$d</string>
+    <string name="tempo_visto">visto</string>
 </resources>
