@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Saúde do acesso remoto e manutenção noturna (10/11/2026), em arquivo próprio para não conflitar com PRs abertos. -->
 <resources>
-    <string name="saude_titulo">Acesso remoto parado</string>
-    <string name="saude_texto_shell">O acesso da TV a ela mesma caiu há %1$d min (painel, Claude e consertos automáticos param). Toque em Parear de novo ou vá em Configurações › Sistema › Parear sem PC.</string>
-    <string name="saude_texto_tunel">O Claude pela internet saiu do ar. Toque em Conectar para ver o que falta, ou vá em Configurações › Acesso remoto.</string>
-    <string name="saude_parear">Parear de novo</string>
-    <string name="saude_conectar">Conectar</string>
-    <string name="saude_depois">Agora não</string>
-    <string name="saude_acao_shell">Parear de novo: Configurações › Sistema › Parear sem PC</string>
-    <string name="saude_acao_tunel">Conectar de novo: Configurações › Acesso remoto › Conectar</string>
-    <string name="mnt_titulo">Manutenção da noite</string>
-    <string name="mnt_consertei">Consertei:</string>
-    <string name="mnt_falhou">Não consegui:</string>
-    <string name="mnt_acesso">acesso remoto</string>
-    <string name="mnt_permissoes">permissões</string>
-    <string name="mnt_agendamentos">despertador e rotinas</string>
-    <string name="mnt_espaco">espaço livre</string>
+    <string name="saude_titulo">Remote access stopped</string>
+    <string name="saude_texto_shell">The TV\'s access to itself dropped %1$d min ago (panel, Claude and automatic fixes stop). Press Pair again or go to Settings › System › Pair without a PC.</string>
+    <string name="saude_texto_tunel">Claude over the internet is offline. Press Connect to see what is missing, or go to Settings › Remote access.</string>
+    <string name="saude_parear">Pair again</string>
+    <string name="saude_conectar">Connect</string>
+    <string name="saude_depois">Not now</string>
+    <string name="saude_acao_shell">Pair again: Settings › System › Pair without a PC</string>
+    <string name="saude_acao_tunel">Connect again: Settings › Remote access › Connect</string>
+    <string name="mnt_titulo">Overnight maintenance</string>
+    <string name="mnt_consertei">Fixed:</string>
+    <string name="mnt_falhou">Could not fix:</string>
+    <string name="mnt_acesso">remote access</string>
+    <string name="mnt_permissoes">permissions</string>
+    <string name="mnt_agendamentos">alarms and routines</string>
+    <string name="mnt_espaco">free space</string>
 </resources>
