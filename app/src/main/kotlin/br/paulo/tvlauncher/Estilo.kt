@@ -78,6 +78,37 @@ object Estilo {
 
     fun fonte(peso: Int): Typeface = Fontes.manrope(peso)
 
+    /**
+     * Filmes, Séries e TV ao vivo (13/11/2026: letra maior para ler a 3 m). São telas de LER, a 3 m do sofá, então
+     * ficam um degrau acima de [Papel.CORPO]/[Papel.LEGENDA]: ~+15% nos títulos e +20-30% no texto corrido e nas listas.
+     * As três telas usam estes mesmos números para continuarem iguais entre si.
+     */
+    object Leitura {
+        // Ficha de filme/série
+        const val TITULO = 32f          // era 28 (filme) / 26 (série)
+        const val DADOS = 17f           // ano · duração · nota · gênero; era 14 / 13,5
+        const val SINOPSE = 18f         // era 15 / 13,5
+        const val CREDITOS = 16f        // Direção, Elenco; era 13
+        const val AVISO = 15f           // "carregando…", "sem episódios"; era 13 / 14
+        const val BOTAO = 18f           // Assistir, Trailer…; era 16
+        const val BOTAO_PEQUENO = 16f   // temporadas; era 13,5
+        // Linhas de lista: episódio, canal
+        const val ITEM = 17f            // número e nome; era 14 / 14,5
+        const val ITEM_DETALHE = 15f    // sinopse do episódio, programa do canal; era 12
+        // Coluna de categorias e cabeçalhos
+        const val CATEGORIA = 16f       // era 14,5
+        const val CONTAGEM = 13.5f      // número ao lado da categoria; era 12
+        const val ROTULO = 13f          // "CATEGORIAS", "A SEGUIR"; era 11,5
+        const val DICA = 12.5f          // linha de teclas no rodapé; era 11
+        // Grade de pôsteres e painel do canal
+        const val CARD = 14.5f          // nome embaixo do pôster; era 12
+        const val GRADE_COLUNAS = 5     // pôsteres por linha em Filmes e Séries; eram 6 (pôster ~20% maior)
+        const val POSTER_ALTURA = 180   // dp; era 150 (mantém a proporção 2:3 com 5 colunas)
+        const val CARD_ALTURA = 248     // dp: pôster + barra + 2 linhas de nome (+ a linha de episódios na Série); era 212
+        const val FOCADO = 16f          // linha do item em foco acima da grade; era 14
+        const val PROGRAMA = 22f        // título do programa no detalhe do canal; era 19
+    }
+
     // ------------------------------------------------------------------ forma, espaço, movimento
 
     /** Só 3 raios: chip pequeno, card/painel e pílula (botão, foco de lista, avisos). */

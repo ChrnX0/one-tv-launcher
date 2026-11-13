@@ -446,13 +446,13 @@ class PlayerActivity : Activity() {
         linha.addView(infoNumero, LinearLayout.LayoutParams(dp(48), dp(44)).apply { marginEnd = dp(14) })
         val textos = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         infoTitulo = Estilo.texto(this, Estilo.Papel.TITULO).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
-        infoLinha = TextView(this).apply { textSize = 13f; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
+        infoLinha = TextView(this).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
         textos.addView(infoTitulo); textos.addView(infoLinha)
         linha.addView(textos, LinearLayout.LayoutParams(0, -2, 1f))
         // "● AO VIVO" em texto vermelho (o mesmo da HOME), sem a etiqueta colorida; ao lado, "faltam X min · hora".
         vivo = Estilo.texto(this, Estilo.Papel.SECAO, "● " + getString(R.string.player_ao_vivo)).apply { setTextColor(Estilo.ERRO) }
         linha.addView(vivo, LinearLayout.LayoutParams(-2, -2).apply { marginEnd = dp(10) })
-        infoHora = Estilo.texto(this, Estilo.Papel.LEGENDA)
+        infoHora = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { textSize = Estilo.Leitura.ITEM_DETALHE }
         linha.addView(infoHora)
         info.addView(linha)
         infoProgresso = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
@@ -462,7 +462,7 @@ class PlayerActivity : Activity() {
         }
         info.addView(infoProgresso, LinearLayout.LayoutParams(-1, dp(4)).apply { topMargin = dp(12) })
         info.addView(TextView(this).apply {
-            text = getString(R.string.player_teclas); textSize = 13f; setTextColor(Estilo.TEXTO_3)
+            text = getString(R.string.player_teclas); textSize = 14f; setTextColor(Estilo.TEXTO_3)
         }, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(10) })
         return info
     }
