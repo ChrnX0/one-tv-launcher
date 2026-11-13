@@ -211,6 +211,7 @@ class VodActivity : Activity() {
     override fun onStart() { super.onStart(); visivel = true; if (url != null && player == null) tocar() }
 
     override fun onStop() {
+        avanco.cancelar()
         super.onStop()
         visivel = false
         salvar()
@@ -343,6 +344,8 @@ class VodActivity : Activity() {
 
     // ---------------------------------------------------------------- controle
 
+    private val avanco = AvancoSegurado()   // ◀ ▶ segurados: posição escolhida enquanto a tecla está apertada
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         val p = player
         when (keyCode) {
@@ -352,21 +355,32 @@ class VodActivity : Activity() {
             }
             KeyEvent.KEYCODE_MEDIA_PLAY -> { p?.play(); return true }
             KeyEvent.KEYCODE_MEDIA_PAUSE -> { p?.pause(); return true }
-            KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_MEDIA_REWIND -> { pular(p, -10_000L, event.repeatCount); return true }
-            KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> { pular(p, +30_000L, event.repeatCount); return true }
+            KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_MEDIA_REWIND -> { pular(p, -10_000L, event); return true }
+            KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> { pular(p, +30_000L, event); return true }
             KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_INFO -> { mostrarBarra(); return true }
             KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_CAPTIONS -> { if (event.repeatCount == 0) escolherFaixas(); return true }
         }
         return super.onKeyDown(keyCode, event)
     }
 
-    /** Segurado acelera: depois de ~1 s de tecla, cada passo vale 2 minutos. */
-    private fun pular(p: ExoPlayer?, passo: Long, repeticao: Int) {
+    /** Toque: pula o passo na hora. Segurado: a barra anda acelerando aos poucos e o vídeo pula ao soltar (AvancoSegurado). */
+    private fun pular(p: ExoPlayer?, passo: Long, event: KeyEvent) {
         p ?: return
-        val delta = if (repeticao > 8) passo.coerceIn(-1L, 1L) * 120_000L else passo
         val dur = p.duration.takeIf { it != C.TIME_UNSET } ?: Long.MAX_VALUE
-        p.seekTo((p.currentPosition + delta).coerceIn(0, (dur - 1_000).coerceAtLeast(0)))
+        val ir = avanco.apertou(p.currentPosition, dur, passo, event.repeatCount, event.eventTime, event.downTime)
+        if (ir >= 0) p.seekTo(ir)
         mostrarBarra()
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> {
+                val ir = avanco.soltou()
+                if (ir >= 0) { player?.seekTo(ir); mostrarBarra() }
+                return true
+            }
+        }
+        return super.onKeyUp(keyCode, event)
     }
 
     /** Áudio e legenda: lista as faixas que o arquivo tem (dublado, legendado, etc.). */
@@ -550,7 +564,7 @@ class VodActivity : Activity() {
     private fun atualizarBarra() {
         val p = player ?: return
         val dur = p.duration.takeIf { it != C.TIME_UNSET && it > 0 }
-        val pos = p.currentPosition
+        val pos = avanco.alvo.takeIf { it >= 0 } ?: p.currentPosition   // segurando ◀ ▶: mostra para onde vai
         val pausa = if (p.isPlaying) "" else "⏸  "
         tempo.text = pausa + (dur?.let { "${relogio(pos)} / ${relogio(it)}   −${relogio(it - pos)}" } ?: relogio(pos))
         progresso.progress = dur?.let { (pos * 1000 / it).toInt() } ?: 0
