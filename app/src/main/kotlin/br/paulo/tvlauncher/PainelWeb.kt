@@ -611,6 +611,10 @@ object PainelWeb {
         "/ia.js" to ("ia.js" to "text/javascript; charset=utf-8"),   // aba "Conectar uma IA" (10/11/2026)
         "/ideias.js" to ("ideias.js" to "text/javascript; charset=utf-8"),   // ideias de 12/11/2026 (aba Extras)
         "/sw.js" to ("sw.js" to "text/javascript; charset=utf-8"),   // avisos no celular (Web Push): o service worker
+        // Fonte Manrope (a mesma da TV), só as letras latinas: 12 KB cada (visual de 13/11/2026).
+        "/manrope-400.woff2" to ("manrope-400.woff2" to "font/woff2"),
+        "/manrope-600.woff2" to ("manrope-600.woff2" to "font/woff2"),
+        "/offline.html" to ("offline.html" to "text/html; charset=utf-8"),   // tela "A TV não respondeu" do app instalado (sw.js)
     )
 
     private fun estatico(caminho: String): Resposta? {
