@@ -24,9 +24,29 @@
     <string name="dormir_segue">segue o padrão</string>
     <string name="dormir_voltar_padrao">Hora de dormir: este dia volta ao padrão</string>
     <string name="extras_VER_TELA">Ver a tela pelo Claude (MCP ver_tela; a TV avisa)</string>
-    <string name="casa_titulo">Casa (Home Assistant)</string>
+    <!-- Tela Casa (redesenho de 13/11/2026) -->
+    <string name="casa_titulo">Casa</string>
     <string name="casa_sem_config">Configure o Home Assistant no painel do celular: aba Extras, cartão Casa.</string>
     <string name="casa_carregando">Buscando os aparelhos…</string>
     <string name="casa_vazio">Nenhuma luz, tomada ou cena no Home Assistant.</string>
-    <string name="casa_google_home">Google Home (painel do Google TV)</string>
+    <string name="casa_google_home">Google Home</string>
+    <string name="casa_google_home_det">luzes e câmeras do Google</string>
+    <string name="casa_resumo">Home Assistant · %1$d de %2$d ligados</string>
+    <string name="casa_resumo_so_cenas">Home Assistant · %1$d cenas</string>
+    <string name="casa_secao_cenas">Cenas e rotinas</string>
+    <string name="casa_secao_aparelhos">Aparelhos</string>
+    <string name="casa_secao_google">Google</string>
+    <string name="casa_ligado">Ligado</string>
+    <string name="casa_desligado">Desligado</string>
+    <string name="casa_aberta">Aberta</string>
+    <string name="casa_fechada">Fechada</string>
+    <string name="casa_rodar">OK para rodar</string>
+    <string name="casa_indisponivel">Indisponível</string>
+    <string name="casa_sem_config_titulo">Ligue a sua casa</string>
+    <string name="casa_dica_acionar">ligar ou desligar</string>
+    <string name="casa_erro">O Home Assistant não respondeu: %1$s</string>
+    <string name="casa_ligado_pct">Ligado · %1$d%%</string>
+    <string name="casa_brilho_ajuste">Brilho %1$d%% · ◀ ▶</string>
+    <string name="casa_dica_brilho">brilho</string>
+    <string name="casa_tecla_segurar_ok">SEGURE OK</string>
 </resources>

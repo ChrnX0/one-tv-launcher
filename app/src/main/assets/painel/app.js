@@ -72,7 +72,7 @@ function erroAmigavel(status, texto) {
     return 'A TV não conseguiu fazer isso agora. Tente de novo em alguns segundos; se repetir, veja a aba Registro.';
   if (status === 404 && (!t || t === 'não existe')) return 'Isso não existe mais na TV (talvez já tenha sido apagado).';
   if (/JSON inválido|use POST|método não suportado/i.test(t)) return 'O painel mandou um pedido que a TV não entendeu. Recarregue a página e tente de novo.';
-  if (status === 421) return 'Abra o painel pelo endereço de sempre (o IP da TV ou chromecast:8080).';
+  if (status === 421) return 'Abra o painel pelo endereço de sempre (o IP da TV ou tv:8080).';
   if (!t) return status === 0 ? 'Sem resposta da TV.' : `A TV recusou o pedido (código ${status}).`;
   return t.charAt(0).toUpperCase() + t.slice(1);
 }
@@ -836,9 +836,9 @@ function desenharNumeros(s, caixa = $('numerosSaude')) {
   // Até 1 GB em MB; acima, em GB ("1.812 MB" quebrava a linha no celular).
   const tam = (b) => (b >= 1073741824 ? gb(b) : mb(b));
   const n = (x) => Number.isFinite(x);   // campo ausente (TV antiga, leitura que falhou): pula a linha em vez de "NaN MB"
-  if (n(s.ramLivre) && n(s.ramTotal)) item('RAM livre', `${tam(s.ramLivre)} de ${tam(s.ramTotal)}`, s.poucaMemoria);
-  if (s.swapTotal) item('swap livre', `${mb(s.swapLivre)} de ${mb(s.swapTotal)}`, s.swapLivre < s.swapTotal * 0.1);
-  if (s.discoTotal) item('espaço livre', `${gb(s.discoLivre)} de ${gb(s.discoTotal)}`, s.discoLivre < s.discoTotal * 0.1);
+  if (n(s.ramLivre) && n(s.ramTotal)) item(`RAM livre de ${tam(s.ramTotal)}`, tam(s.ramLivre), s.poucaMemoria);   // o número grande é só o livre: cabe no celular
+  if (s.swapTotal) item(`swap livre de ${mb(s.swapTotal)}`, mb(s.swapLivre), s.swapLivre < s.swapTotal * 0.1);
+  if (s.discoTotal) item(`espaço livre de ${gb(s.discoTotal)}`, gb(s.discoLivre), s.discoLivre < s.discoTotal * 0.1);
   const maisQuente = (s.temperaturas || []).reduce((a, t) => (!a || t.celsius > a.celsius ? t : a), null);
   if (maisQuente) item('temperatura', `${maisQuente.celsius.toLocaleString('pt-BR')} °C`, maisQuente.celsius >= 80);
   if (s.termico) item('estado térmico', s.termico, !['normal', 'desconhecido'].includes(s.termico));

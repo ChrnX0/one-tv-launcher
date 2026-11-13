@@ -51,6 +51,14 @@ class IconeCard(ctx: Context, private val tipo: String) : View(ctx) {
             "despertador" -> despertador(c, w, h)
             "visita" -> visita(c, w, h)
             "casa" -> casa(c, w, h)
+            // Tela Casa (13/11/2026): um ícone por tipo de aparelho do Home Assistant.
+            "lampada" -> lampada(c, w, h)
+            "tomada" -> tomada(c, w, h)
+            "ventilador" -> ventilador(c, w, h)
+            "cortina" -> cortina(c, w, h)
+            "cena" -> cena(c, w, h)
+            "rotina" -> rotina(c, w, h)
+            "chave" -> chave(c, w, h)
             "pausar" -> { c.drawLine(w * 0.36f, h * 0.22f, w * 0.36f, h * 0.78f, tinta); c.drawLine(w * 0.64f, h * 0.22f, w * 0.64f, h * 0.78f, tinta) }
             "tocar" -> { caminho.reset(); caminho.moveTo(w * 0.30f, h * 0.18f); caminho.lineTo(w * 0.82f, h * 0.5f); caminho.lineTo(w * 0.30f, h * 0.82f); caminho.close(); c.drawPath(caminho, tinta) }
             "proxima" -> {
@@ -200,5 +208,85 @@ class IconeCard(ctx: Context, private val tipo: String) : View(ctx) {
         caminho.moveTo(w * 0.20f, h * 0.38f); caminho.lineTo(w * 0.20f, h * 0.88f); caminho.lineTo(w * 0.80f, h * 0.88f); caminho.lineTo(w * 0.80f, h * 0.38f)
         caminho.moveTo(w * 0.42f, h * 0.88f); caminho.lineTo(w * 0.42f, h * 0.62f); caminho.lineTo(w * 0.58f, h * 0.62f); caminho.lineTo(w * 0.58f, h * 0.88f)
         c.drawPath(caminho, tinta)
+    }
+
+    /** Luz: bulbo redondo com o pescoço e duas linhas da rosca. */
+    private fun lampada(c: Canvas, w: Float, h: Float) {
+        caminho.reset()
+        caminho.moveTo(w * 0.38f, h * 0.70f)
+        caminho.cubicTo(w * 0.38f, h * 0.58f, w * 0.18f, h * 0.50f, w * 0.18f, h * 0.36f)
+        caminho.cubicTo(w * 0.18f, h * 0.16f, w * 0.34f, h * 0.04f, w * 0.5f, h * 0.04f)
+        caminho.cubicTo(w * 0.66f, h * 0.04f, w * 0.82f, h * 0.16f, w * 0.82f, h * 0.36f)
+        caminho.cubicTo(w * 0.82f, h * 0.50f, w * 0.62f, h * 0.58f, w * 0.62f, h * 0.70f)
+        caminho.close()
+        c.drawPath(caminho, tinta)
+        c.drawLine(w * 0.38f, h * 0.82f, w * 0.62f, h * 0.82f, tinta)
+        c.drawLine(w * 0.43f, h * 0.94f, w * 0.57f, h * 0.94f, tinta)
+    }
+
+    /** Tomada/interruptor: o plugue com os dois pinos e o fio. */
+    private fun tomada(c: Canvas, w: Float, h: Float) {
+        c.drawLine(w * 0.36f, h * 0.06f, w * 0.36f, h * 0.28f, tinta)
+        c.drawLine(w * 0.64f, h * 0.06f, w * 0.64f, h * 0.28f, tinta)
+        caminho.reset()
+        caminho.moveTo(w * 0.20f, h * 0.28f); caminho.lineTo(w * 0.80f, h * 0.28f); caminho.lineTo(w * 0.80f, h * 0.48f)
+        caminho.cubicTo(w * 0.80f, h * 0.64f, w * 0.66f, h * 0.74f, w * 0.5f, h * 0.74f)
+        caminho.cubicTo(w * 0.34f, h * 0.74f, w * 0.20f, h * 0.64f, w * 0.20f, h * 0.48f)
+        caminho.close()
+        c.drawPath(caminho, tinta)
+        c.drawLine(w * 0.5f, h * 0.74f, w * 0.5f, h * 0.96f, tinta)
+    }
+
+    /** Ventilador: miolo e três pás curvas. */
+    private fun ventilador(c: Canvas, w: Float, h: Float) {
+        c.drawCircle(w * 0.5f, h * 0.5f, w * 0.07f, tinta)
+        for (i in 0 until 3) {
+            c.save(); c.rotate(i * 120f, w * 0.5f, h * 0.5f)
+            caminho.reset()
+            caminho.moveTo(w * 0.5f, h * 0.43f)
+            caminho.cubicTo(w * 0.40f, h * 0.28f, w * 0.42f, h * 0.06f, w * 0.58f, h * 0.06f)
+            caminho.cubicTo(w * 0.72f, h * 0.06f, w * 0.70f, h * 0.30f, w * 0.56f, h * 0.45f)
+            c.drawPath(caminho, tinta)
+            c.restore()
+        }
+    }
+
+    /** Cortina/persiana: trilho em cima e três lâminas. */
+    private fun cortina(c: Canvas, w: Float, h: Float) {
+        c.drawLine(w * 0.08f, h * 0.10f, w * 0.92f, h * 0.10f, tinta)
+        caixa.set(w * 0.16f, h * 0.10f, w * 0.84f, h * 0.90f)
+        c.drawRoundRect(caixa, w * 0.04f, w * 0.04f, tinta)
+        c.drawLine(w * 0.16f, h * 0.36f, w * 0.84f, h * 0.36f, tinta)
+        c.drawLine(w * 0.16f, h * 0.62f, w * 0.84f, h * 0.62f, tinta)
+    }
+
+    /** Cena: a estrela de quatro pontas (brilho) e uma pequena ao lado. */
+    private fun cena(c: Canvas, w: Float, h: Float) {
+        fun brilho(cx: Float, cy: Float, r: Float) {
+            caminho.reset()
+            caminho.moveTo(cx, cy - r)
+            caminho.quadTo(cx + r * 0.18f, cy - r * 0.18f, cx + r, cy)
+            caminho.quadTo(cx + r * 0.18f, cy + r * 0.18f, cx, cy + r)
+            caminho.quadTo(cx - r * 0.18f, cy + r * 0.18f, cx - r, cy)
+            caminho.quadTo(cx - r * 0.18f, cy - r * 0.18f, cx, cy - r)
+            c.drawPath(caminho, tinta)
+        }
+        brilho(w * 0.42f, h * 0.56f, w * 0.36f)
+        brilho(w * 0.82f, h * 0.18f, w * 0.13f)
+    }
+
+    /** Rotina (script): o triângulo de "rodar" dentro de um círculo. */
+    private fun rotina(c: Canvas, w: Float, h: Float) {
+        c.drawCircle(w * 0.5f, h * 0.5f, w * 0.44f, tinta)
+        caminho.reset()
+        caminho.moveTo(w * 0.42f, h * 0.32f); caminho.lineTo(w * 0.68f, h * 0.5f); caminho.lineTo(w * 0.42f, h * 0.68f); caminho.close()
+        c.drawPath(caminho, tinta)
+    }
+
+    /** Chave liga/desliga (input_boolean): a pílula com a bolinha. */
+    private fun chave(c: Canvas, w: Float, h: Float) {
+        caixa.set(w * 0.04f, h * 0.28f, w * 0.96f, h * 0.72f)
+        c.drawRoundRect(caixa, h * 0.22f, h * 0.22f, tinta)
+        c.drawCircle(w * 0.70f, h * 0.5f, h * 0.12f, preenchimento)
     }
 }

@@ -104,9 +104,14 @@ object Config {
     // Porta: abaixo de 1024 (ex.: 80) o Android não deixa um app abrir (medido na TV em 04/11/2026), por isso 8080.
     const val PAINEL_PORTA = 8080
     // Nomes aceitos no cabeçalho Host, além do IP da TV. São os que um registro de DNS local no roteador (UniFi UX7)
-    // pode dar: "chromecast" e as variações com o domínio da rede.
-    // Um nome fora desta lista é recusado (barreira contra "DNS rebinding"). Para outro nome, acrescente aqui.
+    // pode dar. Desde 13/11/2026 qualquer nome de uma palavra (com ou sem .lan/.local/.localdomain/.home.arpa) também
+    // vale (ChecagensPainel.nomeDaRedeLocal): "tv", "sala", "quarto"... Um domínio público é recusado (barreira contra
+    // "DNS rebinding"). Esta lista fica para nomes de mais de uma palavra.
     val PAINEL_NOMES = setOf("chromecast", "chromecast.lan", "chromecast.local", "chromecast.localdomain", "chromecast.home.arpa")
+    // Painel em https na rede de casa (13/11/2026, PainelTls.kt): os nomes que vão no certificado que a TV gera, na
+    // porta 8443 (https://tv:8443/). O primeiro é o principal (o que o painel mostra). Para outro nome (ex.: "quarto"
+    // na segunda TV), troque aqui e gere o certificado de novo no painel.
+    val PAINEL_NOMES_HTTPS = listOf("tv", "tv.lan", "tv.local")
 
     // --- Servidor MCP (McpServidor.kt): só em 127.0.0.1, alcançado de fora apenas pelo túnel do Tailscale (TunelTailscale.kt).
     const val MCP_PORTA = 8091

@@ -23,9 +23,29 @@
     <string name="dormir_segue">follows default</string>
     <string name="dormir_voltar_padrao">Bedtime: reset this day to default</string>
     <string name="extras_VER_TELA">Let Claude see the screen (MCP ver_tela; the TV shows a notice)</string>
-    <string name="casa_titulo">Home (Home Assistant)</string>
+    <!-- Tela Casa (redesenho de 13/11/2026) -->
+    <string name="casa_titulo">Home</string>
     <string name="casa_sem_config">Set up Home Assistant in the phone panel: Extras tab, Home card.</string>
     <string name="casa_carregando">Loading devices…</string>
     <string name="casa_vazio">No lights, plugs or scenes in Home Assistant.</string>
-    <string name="casa_google_home">Google Home (Google TV panel)</string>
+    <string name="casa_google_home">Google Home</string>
+    <string name="casa_google_home_det">Google lights and cameras</string>
+    <string name="casa_resumo">Home Assistant · %1$d of %2$d on</string>
+    <string name="casa_resumo_so_cenas">Home Assistant · %1$d scenes</string>
+    <string name="casa_secao_cenas">Scenes and scripts</string>
+    <string name="casa_secao_aparelhos">Devices</string>
+    <string name="casa_secao_google">Google</string>
+    <string name="casa_ligado">On</string>
+    <string name="casa_desligado">Off</string>
+    <string name="casa_aberta">Open</string>
+    <string name="casa_fechada">Closed</string>
+    <string name="casa_rodar">OK to run</string>
+    <string name="casa_indisponivel">Unavailable</string>
+    <string name="casa_sem_config_titulo">Connect your home</string>
+    <string name="casa_dica_acionar">turn on or off</string>
+    <string name="casa_erro">Home Assistant did not answer: %1$s</string>
+    <string name="casa_ligado_pct">On · %1$d%%</string>
+    <string name="casa_brilho_ajuste">Brightness %1$d%% · ◀ ▶</string>
+    <string name="casa_dica_brilho">brightness</string>
+    <string name="casa_tecla_segurar_ok">HOLD OK</string>
 </resources>

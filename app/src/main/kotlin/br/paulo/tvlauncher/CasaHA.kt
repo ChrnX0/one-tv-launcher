@@ -46,9 +46,14 @@ object CasaHA {
     const val CHAVE_CAMERA = "camera"
     val DOMINIOS = setOf("light", "switch", "fan", "cover", "scene", "script", "input_boolean")
 
-    class Entidade(val id: String, val nome: String, val estado: String) {
+    /**
+     * Um aparelho. [regulavel]: luz que aceita brilho; [brilho]: 1-100 % quando acesa (null apagada ou sem brilho).
+     */
+    class Entidade(val id: String, val nome: String, val estado: String,
+                   val regulavel: Boolean = false, val brilho: Int? = null) {
         val dominio get() = id.substringBefore('.')
         fun json(): JSONObject = JSONObject().put("id", id).put("nome", nome).put("estado", estado)
+            .apply { if (brilho != null) put("brilho", brilho) }
     }
 
     // ---------------------------------------------------------------- puro
@@ -106,8 +111,68 @@ object CasaHA {
             val id = o.optString("entity_id")
             if (!idValido(id) || id.substringBefore('.') !in DOMINIOS) return@mapNotNull null
             val nome = o.optJSONObject("attributes")?.optString("friendly_name")?.takeIf { it.isNotBlank() } ?: id
-            Entidade(id, nome.take(60), o.optString("state"))
+            val atr = o.optJSONObject("attributes")
+            Entidade(id, nome.take(60), o.optString("state"), regulavel(id, atr), brilhoPct(atr))
         }.sortedBy { it.nome.lowercase() }
+    }
+
+    // Tela Casa (13/11/2026): ícone e estado de cada cartão. Puras.
+    /** Domínio do Home Assistant -> ícone do [IconeCard]. */
+    fun iconeDe(dominio: String) = when (dominio) {
+        "light" -> "lampada"
+        "switch" -> "tomada"
+        "fan" -> "ventilador"
+        "cover" -> "cortina"
+        "scene" -> "cena"
+        "script" -> "rotina"
+        else -> "chave"
+    }
+
+    /** Conta como "ligado" (verde-água): luz/tomada/ventilador/chave em "on" e cortina aberta. Cena e script nunca. */
+    fun ligado(dominio: String, estado: String) = when (dominio) {
+        "scene", "script" -> false
+        "cover" -> estado == "open" || estado == "opening"
+        else -> estado == "on"
+    }
+
+    /** Estado esperado depois de "alternar", para mostrar na hora; null = não sabe (não muda o cartão). */
+    fun inverso(dominio: String, estado: String): String? = when (dominio) {
+        "scene", "script" -> null
+        "cover" -> when (estado) { "open", "opening" -> "closed"; "closed", "closing" -> "open"; else -> null }
+        else -> when (estado) { "on" -> "off"; "off" -> "on"; else -> null }
+    }
+
+    /**
+     * Luz com brilho: o Home Assistant lista os modos de cor; só "onoff" (ou nada) = só liga e desliga. Pura.
+     * Luz apagada não manda "brightness", por isso a decisão vem dos modos e não do brilho.
+     */
+    fun regulavel(id: String, atr: JSONObject?): Boolean {
+        if (!id.startsWith("light.") || atr == null) return false
+        val modos = atr.optJSONArray("supported_color_modes") ?: return atr.has("brightness")
+        return (0 until modos.length()).any { modos.optString(it) != "onoff" }
+    }
+
+    /** "brightness" do Home Assistant (0-255) em porcentagem, 1-100; null quando não vem (luz apagada). Pura. */
+    fun brilhoPct(atr: JSONObject?): Int? {
+        if (atr == null || !atr.has("brightness") || atr.isNull("brightness")) return null
+        val b = atr.optDouble("brightness", Double.NaN)
+        if (b.isNaN()) return null
+        return Math.round(b * 100 / 255).toInt().coerceIn(1, 100)
+    }
+
+    /** Próximo brilho com ◀ ▶ na tela Casa: passos de 10 %, de 0 (apagada) a 100. Pura. */
+    fun proximoBrilho(atual: Int?, passo: Int): Int {
+        val a = atual ?: 0
+        val alvo = if (passo > 0) (a / 10 + 1) * 10 else ((a + 9) / 10 - 1) * 10
+        return alvo.coerceIn(0, 100)
+    }
+
+    /** Brilho de uma luz, 0-100 % (0 apaga). */
+    fun ajustarBrilho(ctx: Context, id: String, pct: Int) {
+        if (!(idValido(id) && id.startsWith("light."))) throw Erro("brilho só para luz")
+        val p = pct.coerceIn(0, 100)
+        if (p == 0) pedir(ctx, "POST", "/api/services/light/turn_off", JSONObject().put("entity_id", id).toString())
+        else pedir(ctx, "POST", "/api/services/light/turn_on", JSONObject().put("entity_id", id).put("brightness_pct", p).toString())
     }
 
     /** (domínio do serviço, serviço) para a ação pedida, ou null se a combinação não é permitida. Pura. */

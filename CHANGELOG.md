@@ -8,7 +8,7 @@ update themselves from [Releases](../../releases).
 First public release.
 
 - **Home screen:** your apps first, stacks, hidden apps, manual or "most used" order, simple mode with large cards,
-  background art and details that follow the focus, and the themes *Live sky*, *Gallery*, *Astrolabe* and *Dark*.
+  background art and details that follow the focus, and the *Dark* and *Gallery* themes.
 - **Weather:** current conditions from the nearest METAR report, three-model rain forecast, full-screen forecast with
   24 hours, 9 days, air quality, sun and moon; day/night icon that follows the real sunset.
 - **Clock:** alarm clock that turns the TV on over HDMI-CEC, sleep timer, gentle shutdown, routines, reminders and

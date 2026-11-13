@@ -2,26 +2,51 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
-<title>Chromecast</title>
-<meta name="theme-color" content="#0e1015">
+<title>One TV</title>
+<meta name="theme-color" content="#0b0f17">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="TV">
+<meta name="apple-mobile-web-app-title" content="One TV">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="icone-192.png">
 <link rel="apple-touch-icon" href="icone-apple.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Ícones de linha do painel (13/11/2026): cada <svg class="i"><use href="#i-..."/></svg> usa um destes. -->
+  <svg class="sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-inicio" viewBox="0 0 24 24"><path d="M3.5 10.5 12 4l8.5 6.5"/><path d="M5.5 9v10.5h13V9"/><path d="M10 19.5v-5h4v5"/></symbol>
+    <symbol id="i-controle" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="5"/><circle cx="12" cy="8.5" r="2.2"/><path d="M12 14v.01M12 17.5v.01"/></symbol>
+    <symbol id="i-apps" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.8"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.8"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.8"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.8"/></symbol>
+    <symbol id="i-arquivos" viewBox="0 0 24 24"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="i-tv" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12.5" rx="2.5"/><path d="m9 2.5 3 3.5 3-3.5M8 21.5h8"/></symbol>
+    <symbol id="i-fotos" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="m20.5 15.5-4.5-4.5-9 8.5"/></symbol>
+    <symbol id="i-extras" viewBox="0 0 24 24"><path d="M12 3.5 13.8 9l5.7 1.8-5.7 1.8L12 18.5l-1.8-5.9-5.7-1.8L10.2 9z"/><path d="M19 3v3M17.5 4.5h3"/></symbol>
+    <symbol id="i-rede" viewBox="0 0 24 24"><path d="M2.5 9a14 14 0 0 1 19 0M5.5 12.5a9.5 9.5 0 0 1 13 0M8.6 16a5 5 0 0 1 6.8 0"/><path d="M12 19.5v.01"/></symbol>
+    <symbol id="i-roteador" viewBox="0 0 24 24"><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 16.5h.01M10.5 16.5h.01M15 13V8M9.5 6.5a5 5 0 0 1 11 0"/></symbol>
+    <symbol id="i-claude" viewBox="0 0 24 24"><path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9"/></symbol>
+    <symbol id="i-ia" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+    <symbol id="i-saude" viewBox="0 0 24 24"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></symbol>
+    <symbol id="i-backup" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5"/><path d="M4 15.5v2.5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2.5"/></symbol>
+    <symbol id="i-acessos" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.5 3.2 8 7.5 9.5 4.3-1.5 7.5-5 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-mais" viewBox="0 0 24 24"><path d="M5.5 12h.01M12 12h.01M18.5 12h.01" stroke-width="3"/></symbol>
+    <symbol id="i-voltar" viewBox="0 0 24 24"><path d="M9 7 4.5 11.5 9 16"/><path d="M4.5 11.5h10a5 5 0 0 1 0 10H12"/></symbol>
+    <symbol id="i-tocar" viewBox="0 0 24 24"><path d="M5 5.5v13l8-6.5z"/><path d="M16 6v12M20 6v12"/></symbol>
+    <symbol id="i-vol-menos" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 12h5"/></symbol>
+    <symbol id="i-vol-mais" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 12h5M18.5 9.5v5"/></symbol>
+    <symbol id="i-mudo" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="m16 9.5 5 5M21 9.5l-5 5"/></symbol>
+    <symbol id="i-sair" viewBox="0 0 24 24"><path d="M14 4.5h3.5a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H14"/><path d="M10 8 6 12l4 4M6 12h10"/></symbol>
+  </svg>
   <!-- Painel servido pelo próprio launcher (PainelWeb.kt). Sem script inline: a CSP do servidor proíbe. -->
 
   <!-- Entrar com o PIN -->
   <section id="telaEntrar" class="entrar" hidden>
     <form id="formEntrar" class="cartao-entrar" autocomplete="off">
-      <h1>Chromecast</h1>
+      <img class="logo-entrar" src="icone-192.png" alt="" width="64" height="64">
+      <h1>One TV</h1>
       <p class="aviso">Digite o PIN definido nas Configurações do launcher, na TV.</p>
       <p id="avisoEntrar" class="aviso-ok" hidden></p>
       <input id="campoPin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12"
@@ -35,7 +60,7 @@
   <div id="telaPainel" hidden>
     <header class="topo">
       <div class="marca">
-        <span class="logo" aria-hidden="true">▣</span>
+        <img class="logo" src="icone-192.png" alt="" width="36" height="36">
         <div>
           <h1 id="nomeAparelho">Chromecast</h1>
           <p id="naTela" class="aviso-curto"></p>
@@ -45,37 +70,38 @@
       <div class="topo-acoes">
         <button id="btnBusca" type="button" class="botao-busca" aria-label="Buscar (Ctrl+K)"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
           <span class="rotulo-busca">Buscar app, aba ou ação</span><kbd>Ctrl K</kbd></button>
-        <button id="btnSair" class="botao-secundario botao-pequeno">Sair</button>
+        <button id="btnSair" class="botao-secundario botao-pequeno botao-sair" aria-label="Sair"><svg class="i" aria-hidden="true"><use href="#i-sair"/></svg><span class="rotulo-sair">Sair</span></button>
       </div>
     </header>
 
     <!-- Navegação: no celular, barra embaixo com as 4 principais + "Mais"; no computador, coluna lateral com tudo.
          Cada botão de aba (atributo data-aba) mostra a seção de id "aba" + Nome (o PainelHtmlTest confere). ui.js monta a tela "Mais". -->
     <nav class="abas" aria-label="Seções do painel">
-      <button class="aba principal ativa" data-aba="inicio"><span class="ic" aria-hidden="true">⌂</span><span>Início</span></button>
-      <button class="aba principal" data-aba="controle"><span class="ic" aria-hidden="true">◎</span><span>Controle</span></button>
-      <button class="aba principal" data-aba="apps"><span class="ic" aria-hidden="true">▦</span><span>Apps</span></button>
-      <button class="aba principal" data-aba="arquivos"><span class="ic" aria-hidden="true">▤</span><span>Arquivos</span></button>
+      <button class="aba principal ativa" data-aba="inicio"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-inicio"/></svg></span><span>Início</span></button>
+      <button class="aba principal" data-aba="controle"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-controle"/></svg></span><span>Controle</span></button>
+      <button class="aba principal" data-aba="apps"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-apps"/></svg></span><span>Apps</span></button>
+      <button class="aba principal" data-aba="arquivos"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-arquivos"/></svg></span><span>Arquivos</span></button>
       <p class="nav-titulo">Na TV</p>
-      <button class="aba" data-aba="tv"><span class="ic" aria-hidden="true">▶</span><span>TV ao vivo</span></button>
-      <button class="aba" data-aba="fotos"><span class="ic" aria-hidden="true">◫</span><span>Fotos do protetor</span></button>
-      <button class="aba" data-aba="extras"><span class="ic" aria-hidden="true">✦</span><span>Extras</span></button>
+      <button class="aba" data-aba="tv"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-tv"/></svg></span><span>TV ao vivo</span></button>
+      <button class="aba" data-aba="fotos"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-fotos"/></svg></span><span>Fotos do protetor</span></button>
+      <button class="aba" data-aba="extras"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-extras"/></svg></span><span>Extras</span></button>
       <p class="nav-titulo">Rede e conexões</p>
-      <button class="aba" data-aba="rede"><span class="ic" aria-hidden="true">≋</span><span>Rede</span></button>
-      <button class="aba" data-aba="roteador"><span class="ic" aria-hidden="true">⌖</span><span>Roteador</span></button>
-      <button class="aba" data-aba="claude"><span class="ic" aria-hidden="true">✳</span><span>Claude (MCP)</span></button>
-      <button class="aba" data-aba="ia"><span class="ic" aria-hidden="true">⇄</span><span>Conectar uma IA</span></button>
+      <button class="aba" data-aba="rede"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-rede"/></svg></span><span>Rede</span></button>
+      <button class="aba" data-aba="roteador"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-roteador"/></svg></span><span>Roteador</span></button>
+      <button class="aba" data-aba="claude"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-claude"/></svg></span><span>Claude (MCP)</span></button>
+      <button class="aba" data-aba="ia"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-ia"/></svg></span><span>Conectar uma IA</span></button>
       <p class="nav-titulo">Sistema</p>
-      <button class="aba" data-aba="saude"><span class="ic" aria-hidden="true">♥</span><span>Saúde</span></button>
-      <button class="aba" data-aba="backup"><span class="ic" aria-hidden="true">⇩</span><span>Backup</span></button>
-      <button class="aba" data-aba="registro"><span class="ic" aria-hidden="true">☰</span><span>Acessos</span></button>
-      <button class="aba principal so-celular" data-aba="mais"><span class="ic" aria-hidden="true">⋯</span><span>Mais</span></button>
+      <button class="aba" data-aba="saude"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-saude"/></svg></span><span>Saúde</span></button>
+      <button class="aba" data-aba="backup"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-backup"/></svg></span><span>Backup</span></button>
+      <button class="aba" data-aba="registro"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-acessos"/></svg></span><span>Acessos</span></button>
+      <button class="aba principal so-celular" data-aba="mais"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-mais"/></svg></span><span>Mais</span></button>
     </nav>
 
     <main class="conteudo">
     <section id="abaInicio" class="painel-aba">
       <div class="cartao heroi">
-        <div>
+        <button type="button" class="miniatura" data-aba="controle" aria-label="Abrir o controle e a tela ao vivo"><img id="inicioMiniatura" alt="" hidden></button>
+        <div class="heroi-texto">
           <p class="rotulo">Agora na TV</p>
           <p id="inicioNaTela" class="grande">…</p>
         </div>
@@ -87,12 +113,12 @@
       <div class="cartao">
         <h2>Controle rápido</h2>
         <div class="rapido">
-          <button data-tecla="voltar">↩<span>Voltar</span></button>
-          <button data-tecla="inicio">⌂<span>Início</span></button>
-          <button data-tecla="play">▶&#xFE0E;<span>Tocar/pausar</span></button>
-          <button data-tecla="volume-">−<span>Vol −</span></button>
-          <button data-tecla="volume+">+<span>Vol +</span></button>
-          <button data-tecla="mudo">⊘<span>Mudo</span></button>
+          <button data-tecla="voltar"><svg class="i" aria-hidden="true"><use href="#i-voltar"/></svg><span>Voltar</span></button>
+          <button data-tecla="inicio"><svg class="i" aria-hidden="true"><use href="#i-inicio"/></svg><span>Início</span></button>
+          <button data-tecla="play"><svg class="i" aria-hidden="true"><use href="#i-tocar"/></svg><span>Tocar/pausar</span></button>
+          <button data-tecla="volume-"><svg class="i" aria-hidden="true"><use href="#i-vol-menos"/></svg><span>Vol −</span></button>
+          <button data-tecla="volume+"><svg class="i" aria-hidden="true"><use href="#i-vol-mais"/></svg><span>Vol +</span></button>
+          <button data-tecla="mudo"><svg class="i" aria-hidden="true"><use href="#i-mudo"/></svg><span>Mudo</span></button>
         </div>
         <button type="button" class="link" data-aba="controle">Abrir o controle completo e a tela ao vivo →</button>
       </div>
@@ -699,6 +725,17 @@
         <button type="button" class="botao-secundario" id="btnSimplesSalvar">Salvar apps</button>
         <p id="statusSimples" class="aviso" hidden></p>
       </div>
+      <div class="cartao">
+        <h2>Instalar como app (https)</h2>
+        <p class="aviso">Com o certificado que a TV fez instalado no aparelho, o painel abre com cadeado e vira app no celular e no PC.</p>
+        <p id="textoCertificado" class="aviso">Lendo…</p>
+        <div class="barra-acoes">
+          <a class="botao-primario" href="/certificado">Passo a passo</a>
+          <a id="linkHttps" class="botao-secundario" href="/" hidden>Abrir com cadeado</a>
+          <button type="button" class="botao-secundario" id="btnCertificadoNovo">Gerar certificado novo</button>
+        </div>
+        <p id="statusCertificado" class="aviso" hidden></p>
+      </div>
     </section>
     <section id="abaRegistro" class="painel-aba" hidden>
       <div id="listaRegistro" class="lista-registro"></div>
@@ -791,5 +828,6 @@
   <script src="busca.js"></script>
   <script src="arquivos.js"></script>
   <script src="controle.js"></script>
+  <script src="certificado.js"></script>
 </body>
 </html>
