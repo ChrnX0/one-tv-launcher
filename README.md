@@ -14,6 +14,7 @@
   <img src="https://img.shields.io/badge/Android%20TV-8.0%2B-3ddc84?style=for-the-badge&logo=android&logoColor=white" alt="Android TV 8.0+">
   <img src="https://img.shields.io/badge/Kotlin-Views-7f52ff?style=for-the-badge&logo=kotlin&logoColor=white" alt="Kotlin">
   <img src="https://img.shields.io/badge/ads-zero-e5484d?style=for-the-badge" alt="Zero ads">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue?style=for-the-badge" alt="License: GPL-3.0"></a>
 </p>
 
 ---
@@ -192,6 +193,12 @@ Secrets are encrypted with the Android Keystore. Backups are encrypted with your
 
 Bug reports, ideas and pull requests are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). Found a security problem?
 Please report it privately, as described in [SECURITY.md](SECURITY.md). What changed in each version: [CHANGELOG.md](CHANGELOG.md).
+
+## License
+
+One TV Launcher is free software, released under the [GNU General Public License v3.0](LICENSE). You can use, study,
+change and share it; if you distribute a modified version, you must publish its source under the same license.
+Third-party code keeps its own license (see Credits below).
 
 ## Credits
 
