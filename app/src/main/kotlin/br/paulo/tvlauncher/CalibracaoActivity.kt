@@ -44,7 +44,8 @@ class CalibracaoActivity : Activity() {
 
 /** Valores dos padrões, sem nada de Android. */
 object Calibracao {
-    val NOMES = listOf("Degraus de cinza", "Quase preto", "Quase branco", "Bordas", "Barras de cor 75%", "Linhas de 1 pixel")
+    val NOMES: List<String> get() = listOf(R.string.cb_cinza, R.string.cb_quase_preto, R.string.cb_quase_branco, R.string.cb_bordas,
+        R.string.cb_barras, R.string.cb_linhas).map { txt(it) }
 
     /** [n] níveis de cinza de [de] a [ate], inclusive, igualmente espaçados. */
     fun degraus(de: Int, ate: Int, n: Int): List<Int> =

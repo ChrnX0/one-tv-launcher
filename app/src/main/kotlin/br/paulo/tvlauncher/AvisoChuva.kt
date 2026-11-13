@@ -95,7 +95,7 @@ object AvisoChuva {
 
     /** Só para teste (comando adb CHUVA --ez simular true): mostra o cartão sem consultar nada nem mexer no silêncio. */
     fun simular(ctx: Context): AvisoTv.Resultado =
-        AvisoTv.mostrar(ctx, "Chuva (teste)", "70% de chance por volta das 15h",
+        AvisoTv.mostrar(ctx, ctx.getString(R.string.ch_chuva) + " (test)", ctx.getString(R.string.ch_chance, 70, "15:00"),
             SEGUNDOS_NA_TELA, som = false, guardarSeApagada = false, icone = IconeLinha(IconeLinha.Tipo.CHUVA), fica = AvisoRegras.Fica.CHUVA)
 
     private fun buscar(app: Context, agora: Calendar): Previsao? {

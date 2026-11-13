@@ -248,4 +248,28 @@
     <string name="pn_achada">Pairing screen found (port %1$d). Type the code:</string>
     <string name="pn_falhou">failed: %1$s</string>
     <string name="pn_recusou">Android refused the code</string>
+    <string name="ci_venceu">expired</string>
+    <string name="ci_vence_amanha">expires tomorrow</string>
+    <string name="ci_vence_em">expires in %1$d days</string>
+    <string name="fg_etiqueta">THE MET · PUBLIC DOMAIN · ARTWORK OF THE DAY</string>
+    <string name="bn_em_uso">not done: the TV was in use all night</string>
+    <string name="bn_keystore">the saved password no longer opens (Keystore): backup turned off, set the password again</string>
+    <string name="bn_sem_senha">no backup password (set it in Settings)</string>
+    <string name="bn_montar">couldn\'t build the backup (%1$s)</string>
+    <string name="bn_gravar">couldn\'t save on the TV (%1$s)</string>
+    <string name="cal_sem_permissao">No calendar permission (pm grant br.paulo.tvlauncher android.permission.READ_CALENDAR)</string>
+    <string name="bv_claude">Use with Claude (optional)</string>
+    <string name="bv_claude_det">Claude, ChatGPT or Codex check the TV and ask for actions, from anywhere. Step by step with a QR code.</string>
+    <string name="cb_cinza">Gray steps</string>
+    <string name="cb_quase_preto">Near black</string>
+    <string name="cb_quase_branco">Near white</string>
+    <string name="cb_bordas">Edges</string>
+    <string name="cb_barras" formatted="false">75% color bars</string>
+    <string name="cb_linhas">1-pixel lines</string>
+    <string name="ad_ninguem">Nobody has touched the remote for %1$d min.\nPress any button to keep watching.</string>
+    <string name="ad_vai_desligar">The TV will turn off in %1$d s</string>
+    <string name="home_busca_voz">Voice search</string>
+    <string name="pg_aviso_as">Reminder at %1$s: %2$s</string>
+    <string name="at_timer">TIMER</string>
+    <string name="at_despertador">ALARM</string>
 </resources>

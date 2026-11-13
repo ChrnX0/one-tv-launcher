@@ -50,6 +50,6 @@ object RecadoImagem {
     fun mostrar(ctx: Context, texto: String?, bytes: ByteArray, segundos: Int?): AvisoTv.Resultado? {
         val t = Recado.limpar(texto ?: "📷") ?: return null
         val bmp = decodificar(bytes) ?: return null
-        return AvisoTv.mostrar(ctx, "Recado", t, Recado.duracao(segundos), som = true, guardarSeApagada = false, imagem = bmp, fica = AvisoRegras.Fica.ATENCAO)
+        return AvisoTv.mostrar(ctx, ctx.getString(R.string.pg_recado), t, Recado.duracao(segundos), som = true, guardarSeApagada = false, imagem = bmp, fica = AvisoRegras.Fica.ATENCAO)
     }
 }

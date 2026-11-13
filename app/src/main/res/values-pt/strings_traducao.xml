@@ -248,4 +248,28 @@
     <string name="pn_achada">Tela de pareamento achada (porta %1$d). Digite o código:</string>
     <string name="pn_falhou">falhou: %1$s</string>
     <string name="pn_recusou">o Android recusou o código</string>
+    <string name="ci_venceu">venceu</string>
+    <string name="ci_vence_amanha">vence amanhã</string>
+    <string name="ci_vence_em">vence em %1$d dias</string>
+    <string name="fg_etiqueta">THE MET · DOMÍNIO PÚBLICO · OBRA DO DIA</string>
+    <string name="bn_em_uso">não feito: a TV ficou em uso a noite toda</string>
+    <string name="bn_keystore">a senha guardada não abre mais (Keystore): backup desligado, defina a senha de novo</string>
+    <string name="bn_sem_senha">sem senha do backup (defina nas Configurações)</string>
+    <string name="bn_montar">não consegui montar o backup (%1$s)</string>
+    <string name="bn_gravar">não consegui gravar na TV (%1$s)</string>
+    <string name="cal_sem_permissao">Sem permissão de agenda (pm grant br.paulo.tvlauncher android.permission.READ_CALENDAR)</string>
+    <string name="bv_claude">Usar com o Claude (opcional)</string>
+    <string name="bv_claude_det">Claude, ChatGPT ou Codex consultam a TV e pedem ações, de qualquer lugar. Passo a passo com QR code.</string>
+    <string name="cb_cinza">Degraus de cinza</string>
+    <string name="cb_quase_preto">Quase preto</string>
+    <string name="cb_quase_branco">Quase branco</string>
+    <string name="cb_bordas">Bordas</string>
+    <string name="cb_barras" formatted="false">Barras de cor 75%</string>
+    <string name="cb_linhas">Linhas de 1 pixel</string>
+    <string name="ad_ninguem">Ninguém mexe no controle há %1$d min.\nAperte qualquer botão para continuar.</string>
+    <string name="ad_vai_desligar">A TV vai desligar em %1$d s</string>
+    <string name="home_busca_voz">Busca por voz</string>
+    <string name="pg_aviso_as">Aviso às %1$s: %2$s</string>
+    <string name="at_timer">TIMER</string>
+    <string name="at_despertador">DESPERTADOR</string>
 </resources>

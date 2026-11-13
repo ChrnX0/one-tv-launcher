@@ -52,7 +52,8 @@ object HoraDormir {
     data class Janela(val inicio: Int, val fim: Int)
 
     const val CHAVE_DIAS = "dormir_dias"   // 7 itens separados por ";" (domingo primeiro): "1260-390" ou "" = usa o padrão
-    val NOMES_DIAS = listOf("dom", "seg", "ter", "qua", "qui", "sex", "sáb")
+    // Domingo a sábado, abreviado no idioma da TV ("dom" / "Sun").
+    val NOMES_DIAS: List<String> get() = java.text.DateFormatSymbols.getInstance().shortWeekdays.drop(1).map { it.trimEnd('.') }
 
     /** Lê os 7 dias guardados. Item vazio ou estragado = null (usa o padrão). Sempre devolve 7 itens. */
     fun lerDias(texto: String?): List<Janela?> {

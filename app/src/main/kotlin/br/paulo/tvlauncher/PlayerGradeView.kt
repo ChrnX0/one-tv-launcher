@@ -100,8 +100,8 @@ class PlayerGradeView(
             post {
                 marcados = if (sim) marcados + "${canal.id}|${p.inicio}" else marcados - "${canal.id}|${p.inicio}"
                 invalidate()
-                AvisoTv.rapido(app, if (sim) "Lembrete marcado" else "Lembrete desmarcado",
-                    if (sim) "Aviso às ${LembretesTv.hora(p.inicio - Lembretes.ANTECEDENCIA_MS)}: ${p.titulo}" else p.titulo)
+                AvisoTv.rapido(app, app.getString(if (sim) R.string.bu_lembrete_sim else R.string.bu_lembrete_nao),
+                    if (sim) app.getString(R.string.pg_aviso_as, LembretesTv.hora(p.inicio - Lembretes.ANTECEDENCIA_MS), p.titulo) else p.titulo)
             }
         }
     }
