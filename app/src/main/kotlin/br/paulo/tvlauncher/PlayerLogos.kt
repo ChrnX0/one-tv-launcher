@@ -31,7 +31,26 @@ object PlayerLogos {
     private const val LADO_PX = 160                   // maior lado guardado (o maior card usa ~120 px na TV 1080p)
 
     private val tela = Handler(Looper.getMainLooper())
-    private val trabalho = Executors.newFixedThreadPool(3)
+    // 3 downloads ao mesmo tempo, e a fila é uma PILHA (13/11/2026): ao rolar a grade, o pôster que acabou de aparecer
+    // vem antes dos que já passaram. Antes era FIFO, e rolando 20 linhas a tela esperava os ~100 pôsteres do caminho.
+    private val trabalho = java.util.concurrent.ThreadPoolExecutor(3, 3, 30, java.util.concurrent.TimeUnit.SECONDS,
+        object : java.util.concurrent.LinkedBlockingDeque<Runnable>() {
+            override fun offer(e: Runnable): Boolean = offerFirst(e)
+        })
+
+    // Quem espera cada imagem que está a caminho (só na thread da tela). Dois cards com o mesmo pôster (o filme dublado e
+    // o legendado) baixavam duas vezes; agora o segundo entra na fila de espera do primeiro.
+    private val esperando = HashMap<String, MutableList<ImageView>>()
+    // Quantas Views ainda querem cada imagem a caminho. Uma View reaproveitada para outro filme (rolagem) deixa de querer a
+    // anterior; se ninguém mais quer quando chega a vez dela na fila, nem baixa. Lido nas threads de download.
+    private val querem = java.util.concurrent.ConcurrentHashMap<String, Int>()
+    private val pedidoDaView = java.util.WeakHashMap<ImageView, String>()
+
+    private fun largar(alvo: ImageView) {
+        val antigo = pedidoDaView.remove(alvo) ?: return
+        esperando[antigo]?.remove(alvo)
+        querem.computeIfPresent(antigo) { _, n -> if (n <= 1) null else n - 1 }
+    }
     // Endereço que deu erro -> quando (relógio desde o boot). Antes era "nunca mais nesta sessão": um único tropeço da
     // rede (Wi-Fi caiu, servidor lento) deixava o logo em branco até o processo morrer. Agora tenta de novo em 5 min.
     private val falhou = HashMap<String, Long>()
@@ -51,19 +70,34 @@ object PlayerLogos {
      * por isso a URL vai na tag, e o resultado só é posto se a tag ainda for a mesma.
      */
     fun carregar(ctx: Context, url: String, alvo: ImageView, lado: Int = LADO_PX) {
+        largar(alvo)   // esta View não espera mais a imagem de antes (foi reaproveitada)
         alvo.tag = url
         alvo.setImageDrawable(null)
         if (url.isEmpty() || !M3u.urlAceita(url) || pular(url)) return
         val k = "$lado|$url"   // o mesmo endereço pode ser logo pequeno e pôster grande
         memoria.get(k)?.let { alvo.setImageBitmap(it); return }
+        pedidoDaView[alvo] = k
+        querem.merge(k, 1, Int::plus)
+        esperando[k]?.let { it += alvo; return }   // já está a caminho: só espera junto
+        esperando[k] = mutableListOf(alvo)
         val dir = File(ctx.cacheDir, "logos")
         trabalho.execute {
-            val bmp = runCatching { obter(dir, url, lado) }.getOrNull()
+            // Ninguém mais quer (rolou para longe antes da vez dela): não baixa. Quem voltar a precisar pede de novo.
+            val bmp = if ((querem[k] ?: 0) <= 0) null else runCatching { obter(dir, url, lado) }.getOrNull()
+            val desistiu = (querem[k] ?: 0) <= 0 && bmp == null
             tela.post {
+                val alvos = esperando.remove(k).orEmpty()
+                querem.remove(k)
+                alvos.forEach { if (pedidoDaView[it] == k) pedidoDaView.remove(it) }
+                if (desistiu) {
+                    // Alguém voltou a querer depois que a fila desistiu: pede de novo para essas Views.
+                    alvos.forEach { if (it.tag == url) carregar(ctx, url, it, lado) }
+                    return@post
+                }
                 if (bmp == null) { falhou[url] = SystemClock.elapsedRealtime(); return@post }
                 falhou -= url
                 memoria.put(k, bmp)
-                if (alvo.tag == url) alvo.setImageBitmap(bmp)
+                alvos.forEach { if (it.tag == url) it.setImageBitmap(bmp) }
             }
         }
     }
