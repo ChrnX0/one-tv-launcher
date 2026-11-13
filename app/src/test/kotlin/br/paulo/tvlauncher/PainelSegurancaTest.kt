@@ -165,6 +165,20 @@ class PainelSegurancaTest {
         assertTrue(ChecagensPainel.hostPermitido("Chromecast:8080", nomes, 8080))
     }
 
+    @Test fun hostAceitaNomeDeUmaPalavraDaRedeLocal() {
+        assertTrue(ChecagensPainel.hostPermitido("tv:8080", nomes, 8080))
+        assertTrue(ChecagensPainel.hostPermitido("Quarto:8080", nomes, 8080))
+        assertTrue(ChecagensPainel.hostPermitido("sala-de-estar.lan:8080", nomes, 8080))
+        assertTrue(ChecagensPainel.hostPermitido("tv.home.arpa", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("tv.evil.example:8080", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("evil.com:8080", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("a.b.lan:8080", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("localhost:8080", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("-tv:8080", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido("tv:8081", nomes, 8080))
+        assertFalse(ChecagensPainel.hostPermitido(".lan:8080", nomes, 8080))
+    }
+
     @Test fun hostRecusaRebindingEPortaErrada() {
         assertFalse(ChecagensPainel.hostPermitido("evil.example:8080", nomes, 8080))
         assertFalse(ChecagensPainel.hostPermitido("chromecast.evil.example:8080", nomes, 8080))

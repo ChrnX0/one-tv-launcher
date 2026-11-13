@@ -244,7 +244,8 @@ object ChecagensPainel {
     /**
      * O cabeçalho Host é um nome que conhecemos? Isto barra "DNS rebinding": um site malicioso aberto no celular de
      * alguém da casa faz o próprio domínio apontar para 192.168.1.50 e tenta falar com o painel; o navegador manda
-     * o Host com o domínio DELE, que não está na lista. [nomes] = IPs da TV na rede + os nomes de Config.PAINEL_NOMES.
+     * o Host com o domínio DELE, que não está na lista. [nomes] = IPs da TV na rede + os nomes de Config.PAINEL_NOMES;
+     * nomes da rede local de uma palavra também valem ([nomeDaRedeLocal]).
      * A porta, se vier, tem de ser a nossa.
      */
     fun hostPermitido(host: String?, nomes: Set<String>, porta: Int): Boolean {
@@ -253,8 +254,22 @@ object ChecagensPainel {
         val doisPontos = h.lastIndexOf(':')
         val (nome, portaTexto) = if (doisPontos >= 0) h.substring(0, doisPontos) to h.substring(doisPontos + 1) else h to null
         if (portaTexto != null && portaTexto != porta.toString()) return false
-        return nome in nomes
+        return nome in nomes || nomeDaRedeLocal(nome)
     }
+
+    /**
+     * Nome que só o DNS da casa resolve: uma palavra só ("tv", "sala", "quarto"), ou ela com o domínio que o roteador
+     * acrescenta (.lan, .local, .localdomain, .home.arpa). Assim cada TV pode ter o próprio nome no roteador sem mudar
+     * o código. Continua barrando o "DNS rebinding": o site de fora precisa de um domínio público (com ponto e outro
+     * final), e esses não passam. "localhost" fica de fora (de outro aparelho, aponta para ele mesmo).
+     */
+    fun nomeDaRedeLocal(nome: String): Boolean {
+        val palavra = SUFIXOS_LOCAIS.firstOrNull { nome.endsWith(it) }?.let { nome.removeSuffix(it) } ?: nome
+        return NOME_UMA_PALAVRA.matches(palavra) && palavra != "localhost" && !palavra.all { it.isDigit() }
+    }
+
+    private val SUFIXOS_LOCAIS = listOf(".lan", ".local", ".localdomain", ".home.arpa")
+    private val NOME_UMA_PALAVRA = Regex("^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$")
 
     /**
      * Em POST, o Origin tem de ser exatamente o próprio painel (http://<host>). Junto com o cabeçalho X-Painel
