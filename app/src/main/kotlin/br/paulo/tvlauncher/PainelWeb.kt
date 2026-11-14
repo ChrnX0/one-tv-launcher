@@ -658,6 +658,18 @@ object PainelWeb {
             "/api/compartilhar" -> if (req.metodo == "POST") return compartilhar(req, ip)   // ideia 55
             "/api/rede/historico" -> if (req.metodo == "GET")
                 return json(200, HistoricoRede.json(app, req.consulta["horas"]?.toIntOrNull() ?: 24))
+            // Aba Configurações (PainelConfig.kt): as opções das Configurações da TV que só existiam lá.
+            "/api/config" -> when (req.metodo) {
+                "GET" -> return json(200, PainelConfig.estado(app))
+                "POST" -> {
+                    val o = corpoJson(req) ?: return erro(400, "JSON inválido")
+                    return when (val r = PainelConfig.mudar(app, o, sessoes.elevada(token)) { PainelArmazem.registrar(app, ip, it, "ok") }) {
+                        is PainelConfig.Resultado.Ok -> json(200, r.estado)
+                        is PainelConfig.Resultado.Erro -> erro(400, r.mensagem)
+                        PainelConfig.Resultado.PrecisaPin -> precisaPin()
+                    }
+                }
+            }
             "/api/tv/autodesligar" -> when (req.metodo) {
                 "GET" -> return autoDesligar()
                 "POST" -> {

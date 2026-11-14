@@ -24,6 +24,11 @@ enum class Tema(private val rotulo: Int) {
             valueOf(ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).getString(CHAVE, ESCURO.name) ?: ESCURO.name)
         } catch (e: IllegalArgumentException) { ESCURO }
 
+        /** Grava o tema escolhido (painel web, aba Configurações). */
+        fun definir(ctx: Context, t: Tema) {
+            ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().putString(CHAVE, t.name).apply()
+        }
+
         /** Passa para o próximo tema da lista (dá a volta). */
         fun proximo(ctx: Context): Tema {
             val novo = values()[(atual(ctx).ordinal + 1) % values().size]

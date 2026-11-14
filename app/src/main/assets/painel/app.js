@@ -202,6 +202,7 @@ const AO_ABRIR = {
   roteador: () => carregarRoteador(),
   registro: () => carregarRegistro(),
   backup: () => { carregarCopias(); carregarNoturno(); acompanharDrive(); },
+  config: () => carregarConfig(),
   arquivos: () => abrirPasta(pastaAtual),
 };
 
@@ -912,6 +913,92 @@ $('btnDriveListar').addEventListener('click', async () => {
     });
     linha.append(q, ' ', voltar);
     lista.appendChild(linha);
+  }
+});
+
+// ---------- Configurações (PainelConfig.kt): as mesmas opções das Configurações da TV ----------
+
+let estadoConfig = null;
+function desenharConfig(r) {
+  estadoConfig = r;
+  const tema = $('cfgTema');
+  tema.replaceChildren(...r.temas.map((t) => { const o = document.createElement('option'); o.value = t.valor; o.textContent = t.nome; return o; }));
+  tema.value = r.tema;
+  $('cfgTamanho').value = String(r.tamanhoTexto);
+  $('cfgPilhas').checked = r.pilhas;
+  $('cfgChuva').checked = r.avisoChuva;
+  $('cfgAudio').value = r.audio;
+  $('cfgProtetor').value = String(r.protetorMs);
+  $('cfgBarra').value = r.barraProtetor;
+  $('cfgParental').checked = r.parental;
+  $('cfgParentalDet').textContent = `(${r.parentalCanais} canal(is) ou categoria(s) escolhidos)`;
+  $('cfgInfantil').checked = r.infantil;
+  $('cfgInfantilDet').textContent = `(${r.infantis} categoria(s) infantil(is))`;
+  $('cfgVisita').checked = r.visita;
+  $('cfgPinFamiliaEstado').textContent = r.pinFamilia ? 'definido' : 'não definido';
+  $('btnApagarPinFamilia').hidden = !r.pinFamilia;
+  $('cfgLiberarTudo').checked = r.confirmacoes.liberarTudo;
+  const lista = $('cfgConfirmacoes');
+  lista.replaceChildren();
+  for (const a of r.confirmacoes.acoes) {
+    const linha = document.createElement('div');
+    linha.className = 'linha-confirmacao';
+    const nome = document.createElement('span');
+    nome.textContent = a.titulo;
+    nome.title = a.explicacao;
+    const sel = document.createElement('select');
+    sel.setAttribute('aria-label', a.titulo);
+    for (const m of a.modos) { const o = document.createElement('option'); o.value = m.valor; o.textContent = m.nome; sel.appendChild(o); }
+    sel.value = a.modo;
+    sel.disabled = r.confirmacoes.liberarTudo;   // como na TV: com "Liberar tudo", as linhas não valem
+    sel.addEventListener('change', () => gravarConfig({ campo: 'confirmacao', acao: a.chave, valor: sel.value }, `${a.titulo}: ${sel.options[sel.selectedIndex].textContent}.`));
+    linha.append(nome, sel);
+    lista.appendChild(linha);
+  }
+}
+
+async function carregarConfig() {
+  mostrar($('statusConfig'), '');
+  try { desenharConfig(await chamar('GET', '/api/config')); } catch (e) { mostrar($('statusConfig'), textoErro(e)); }
+}
+
+/** Grava um campo. Se a TV pedir o PIN, o confirmar() mostra o campo do PIN; cancelado, a tela volta ao estado gravado. */
+async function gravarConfig(corpo, ok, titulo = 'Confirme o PIN') {
+  mostrar($('statusConfig'), '');
+  try { desenharConfig(await chamar('POST', '/api/config', corpo)); aviso(ok, 'ok'); return true; }
+  catch (e) {
+    if (e instanceof PrecisaPin) {
+      const r = await confirmar(titulo, 'Esta opção pede o PIN do painel.', 'Confirmar', () => chamar('POST', '/api/config', corpo), false);
+      if (r) { desenharConfig(r); aviso(ok, 'ok'); return true; }
+    } else mostrar($('statusConfig'), textoErro(e));
+    if (estadoConfig) desenharConfig(estadoConfig);
+    return false;
+  }
+}
+
+$('cfgTema').addEventListener('change', (e) => gravarConfig({ campo: 'tema', valor: e.target.value }, 'Tema trocado.'));
+$('cfgTamanho').addEventListener('change', (e) => gravarConfig({ campo: 'tamanhoTexto', valor: Number(e.target.value) }, 'Tamanho do texto gravado (vale ao abrir cada tela).'));
+$('cfgPilhas').addEventListener('change', (e) => gravarConfig({ campo: 'pilhas', valor: e.target.checked }, e.target.checked ? 'Pilhas automáticas ligadas.' : 'Pilhas automáticas desligadas.'));
+$('cfgChuva').addEventListener('change', (e) => gravarConfig({ campo: 'avisoChuva', valor: e.target.checked }, e.target.checked ? 'Aviso de chuva ligado.' : 'Aviso de chuva desligado.'));
+$('cfgAudio').addEventListener('change', (e) => gravarConfig({ campo: 'audio', valor: e.target.value }, 'Áudio preferido gravado.'));
+$('cfgProtetor').addEventListener('change', (e) => gravarConfig({ campo: 'protetorMs', valor: Number(e.target.value) }, 'Tempo do protetor gravado.'));
+$('cfgBarra').addEventListener('change', (e) => gravarConfig({ campo: 'barraProtetor', valor: e.target.value }, 'Linha do protetor gravada.'));
+$('cfgParental').addEventListener('change', (e) => gravarConfig({ campo: 'parental', valor: e.target.checked }, e.target.checked ? 'Controle parental ligado.' : 'Controle parental desligado.'));
+$('cfgInfantil').addEventListener('change', (e) => gravarConfig({ campo: 'infantil', valor: e.target.checked }, e.target.checked ? 'Modo infantil ligado.' : 'Modo infantil desligado.'));
+$('cfgVisita').addEventListener('change', (e) => gravarConfig({ campo: 'visita', valor: e.target.checked }, e.target.checked ? 'Modo visita ligado.' : 'Modo visita desligado.'));
+$('cfgLiberarTudo').addEventListener('change', (e) => gravarConfig({ campo: 'liberarTudo', valor: e.target.checked }, e.target.checked ? 'Liberar tudo ligado.' : 'Liberar tudo desligado.'));
+$('btnPinFamilia').addEventListener('click', async () => {
+  const pin = $('cfgPinFamilia').value;
+  if (!/^[0-9]{6,12}$/.test(pin)) { mostrar($('statusConfig'), 'O PIN das crianças precisa ter de 6 a 12 números.'); return; }
+  if (await gravarConfig({ campo: 'pinFamilia', valor: pin }, 'PIN das crianças gravado.')) $('cfgPinFamilia').value = '';
+});
+$('btnApagarPinFamilia').addEventListener('click', () => gravarConfig({ campo: 'pinFamilia', valor: '' }, 'PIN das crianças apagado: agora só o PIN do painel destrava.'));
+$('btnPinPainel').addEventListener('click', async () => {
+  const pin = $('cfgPinNovo').value;
+  if (!/^[0-9]{6,12}$/.test(pin)) { mostrar($('statusConfig'), 'O PIN precisa ter de 6 a 12 números.'); return; }
+  if (pin !== $('cfgPinNovo2').value) { mostrar($('statusConfig'), 'Os dois PINs não bateram.'); return; }
+  if (await gravarConfig({ campo: 'pinPainel', valor: pin }, 'PIN do painel trocado. Use o novo da próxima vez.', 'Confirme o PIN atual')) {
+    $('cfgPinNovo').value = ''; $('cfgPinNovo2').value = '';
   }
 });
 
