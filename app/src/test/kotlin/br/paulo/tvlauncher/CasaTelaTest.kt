@@ -55,7 +55,7 @@ class CasaTelaTest {
     }
 
     @Test fun soLuzComBrilhoERegulavel() {
-        val modos = { vararg m: String -> JSONObject().put("supported_color_modes", org.json.JSONArray(m.toList())) }
+        fun modos(vararg m: String) = JSONObject().put("supported_color_modes", org.json.JSONArray(m.toList()))   // lambda não aceita vararg
         assertTrue(CasaHA.regulavel("light.sala", modos("brightness")))
         assertTrue(CasaHA.regulavel("light.sala", modos("color_temp", "hs")))
         assertFalse(CasaHA.regulavel("light.sala", modos("onoff")))

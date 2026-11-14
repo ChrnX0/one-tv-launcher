@@ -31,6 +31,8 @@ declare -A FONTES=(
   [ConfirmacoesTest]="Confirmacoes"
   [CertificadoX509Test]="CertificadoX509"
   [PaginaCertificadoTest]="PaginaCertificado"
+  [CanalAtualizacaoTest]="CanalAtualizacao"
+  [TeclaFalsaTest]="TeclaFalsa"
 )
 
 falhou=0
