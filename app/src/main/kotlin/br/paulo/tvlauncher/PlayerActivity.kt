@@ -122,7 +122,7 @@ class PlayerActivity : Activity() {
         lista = PlayerListaTela(this, aoAssistir = { c, chave -> escolherNaLista(c, chave) }, aoFavoritar = { alternarFavorito(it) }, simples = simples,
             aoBuscar = { buscar() }, aoFiltros = { abrirFiltros() }, aoOcultarGrupo = { alternarOculto(it) },
             aoGuia = { cs, nome -> abrirGrade(cs, nome) },
-            aoGravacoes = { mostrarAvisoBreve(getString(R.string.coluna_gravacoes_em_breve)) })
+            aoGravacoes = { startActivity(android.content.Intent(this, GravacoesActivity::class.java)) })
         raiz.addView(lista.raiz, FrameLayout.LayoutParams(-1, -1))
         grade = PlayerGradeView(this, aoAssistir = { c -> grade.fechar(); lista.fechar(); if (c.id != atual?.id) sintonizar(c) else mostrarInfo() },
             aoFechar = { grade.fechar(); if (lista.aberta) lista.voltarFoco() })
@@ -138,6 +138,7 @@ class PlayerActivity : Activity() {
         }
         raiz.addView(aviso, FrameLayout.LayoutParams(-2, -2, Gravity.CENTER))
         setContentView(raiz)
+        Gravacoes.ouvir(mudouGravacao)
         carregar()
     }
 
@@ -153,7 +154,9 @@ class PlayerActivity : Activity() {
         val perfil = Perfil.chaveDados(this)
         if (perfil != perfilCarregado) { perfilCarregado = perfil; favoritos = PlayerArmazem.favoritos(this); lista.atualizarFavoritos(favoritos) }
         refiltrar()
-        val c = atual?.let { a -> visiveis.firstOrNull { it.id == a.id } } ?: visiveis.firstOrNull()
+        // Gravando: volta para o canal que grava (outro pediria uma 2ª conexão que a lista não dá).
+        val c = Gravacoes.atual?.let { g -> visiveis.firstOrNull { it.id == g.canalId } }
+            ?: atual?.let { a -> visiveis.firstOrNull { it.id == a.id } } ?: visiveis.firstOrNull()
         if (c != null) sintonizar(c, guardarAnterior = false) else { atual = null; mostrarAviso(getString(R.string.player_sem_canais)) }
     }
 
@@ -193,6 +196,7 @@ class PlayerActivity : Activity() {
     }
 
     override fun onDestroy() {
+        Gravacoes.esquecer(mudouGravacao)
         tela.removeCallbacksAndMessages(null)
         disco.shutdown()   // não "Now": deixa terminar a última gravação (canal, recentes)
         super.onDestroy()
@@ -239,7 +243,7 @@ class PlayerActivity : Activity() {
                 // Canal pedido de fora que não pode tocar: avisa em vez de cair em outro canal.
                 val externo = intent.getStringExtra(EXTRA_CANAL)?.ifEmpty { null }
                 if (externo != null) { if (!tocarPedido(externo)) mostrarAviso(getString(R.string.player_bloqueado)); return@post }
-                val pedido = PlayerArmazem.ultimoCanal(this)
+                val pedido = Gravacoes.atual?.canalId ?: PlayerArmazem.ultimoCanal(this)   // gravando: abre no que grava
                 sintonizar(visiveis.firstOrNull { it.id == pedido } ?: visiveis.first(), guardarAnterior = false)
             }
             // O guia vem depois: pode levar alguns segundos (arquivo grande) e o canal já está tocando.
@@ -277,6 +281,8 @@ class PlayerActivity : Activity() {
     // ---------------------------------------------------------------- vídeo
 
     private fun sintonizar(c: Canal, guardarAnterior: Boolean = true) {
+        // Gravando outro canal: a lista só deixa 1 conexão. Pergunta antes de trocar (docs/gravacao.md, item 4).
+        Gravacoes.atual?.let { g -> if (g.canalId != c.id && visivel) { conflitoGravacao(c, g); return } }
         if (guardarAnterior && atual != null && atual?.id != c.id) anterior = atual
         atual = c
         arquivo = null   // trocar de canal (ou voltar ao player) é sempre ao vivo
@@ -296,6 +302,10 @@ class PlayerActivity : Activity() {
         // Trava final do controle parental: canal bloqueado não toca sem o PIN, venha de onde vier o pedido.
         if (ControleParental.bloqueado(c, parental) && !filtro.mostrarOcultas) { mostrarAviso(getString(R.string.player_bloqueado)); return }
         if (!ControleParental.bloqueado(c, parental)) lembrarRecente(c)   // bloqueado não vai para os recentes
+        // Gravando: o canal que grava é lido da gravação (sem 2ª conexão); qualquer outra coisa esperaria uma conexão livre.
+        val g = Gravacoes.atual
+        if (g != null && !(url == c.url && g.canalId == c.id)) { player?.stop(); mostrarAviso(getString(R.string.grv_ocupado, g.canalNome)); return }
+        deGravacao = g != null
         val p = player ?: ExoPlayer.Builder(this, EfeitosSom.fabrica(this)).setLoadControl(pausa.novaCarga()).build().also { novo ->
             novo.setVideoSurfaceView(video)
             novo.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MOVIE).build(), true)
@@ -309,11 +319,14 @@ class PlayerActivity : Activity() {
             .setAllowCrossProtocolRedirects(true)
             .setConnectTimeoutMs(10_000)
             .setReadTimeoutMs(15_000)
-        val item = MediaItem.Builder().setUri(url).apply {
+        val item = MediaItem.Builder().setUri(if (deGravacao) FonteGravacao.URI else url).apply {
+            // A gravação é sempre MPEG-TS (o gravador emenda os pedaços do HLS).
+            if (deGravacao) setMimeType(MimeTypes.VIDEO_MP2T)
             // .m3u8 = HLS. Sem extensão conhecida, o Media3 descobre sozinho pelo conteúdo (ex.: .ts do Xtream).
-            if (url.substringBefore('?').endsWith(".m3u8", ignoreCase = true)) setMimeType(MimeTypes.APPLICATION_M3U8)
+            else if (url.substringBefore('?').endsWith(".m3u8", ignoreCase = true)) setMimeType(MimeTypes.APPLICATION_M3U8)
         }.build()
-        p.setMediaSource(DefaultMediaSourceFactory(http).createMediaSource(item))
+        val fonte = if (deGravacao) FontePastas.Fabrica(this, http) else http
+        p.setMediaSource(DefaultMediaSourceFactory(fonte).createMediaSource(item))
         p.prepare()
         p.playWhenReady = true
     }
@@ -550,6 +563,7 @@ class PlayerActivity : Activity() {
         arquivo?.let { a -> infoDoArquivo(c, a, hora); return }
         vivo.text = "● " + getString(R.string.player_ao_vivo)
         vivo.setTextColor(Estilo.ERRO)
+        Gravacoes.atual?.takeIf { it.canalId == c.id }?.let { vivo.text = "● " + getString(R.string.grv_selo, Gravacoes.hora(it.fim)) }
         if (pausa.ativa) {   // pausado ou atrasado: âmbar, como o passado do TV de volta
             vivo.text = if (pausa.pausado) getString(R.string.pausa_selo)
                 else PausaAoVivo.textoAtraso(pausa.atrasoMs, getString(R.string.pausa_atrasado_min), getString(R.string.pausa_atrasado_seg))
@@ -592,7 +606,8 @@ class PlayerActivity : Activity() {
             itens += getString(if (pausa.pausado) R.string.pausa_continuar else R.string.pausa_pausar) to { alternarPausa() }
         }
         val origem = if (c.arquivoDias > 0) TvDeVolta.origem(c.url) else null
-        if (origem != null) itens += getString(R.string.tvv_abrir) to { abrirTvDeVolta(c, origem) }
+        if (origem != null && Gravacoes.atual == null) itens += getString(R.string.tvv_abrir) to { abrirTvDeVolta(c, origem) }
+        if (arquivo == null) opcoesGravacao(c, itens)
         itens += getString(R.string.imagem_opcao, PlayerImagem.rotulo(this, modoImagem)) to { escolherImagem() }
         // Para quem ouve pior (14/11/2026): ligar/desligar, marcado quando ligado. Só aparece se o aparelho tem o efeito.
         val marcadas = ArrayList<Int>()
@@ -622,6 +637,65 @@ class PlayerActivity : Activity() {
             efeitos.soltar(); pausa.descartar(); p.release(); player = null
             tocar(c)
         } else efeitos.aplicar(p.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
+    }
+
+    // ---------------------------------------------------------------- gravação (GravacaoServico, 14/11/2026)
+
+    private var deGravacao = false   // o vídeo de agora vem da gravação (gravando://), não do canal direto
+    private var depoisDeParar: Canal? = null   // "Parar gravação e ver X": sintoniza X quando a gravação soltar a conexão
+
+    /** A gravação começou, esticou ou acabou: troca a fonte do vídeo (gravação ⇄ canal direto) e o selo. */
+    private val mudouGravacao: () -> Unit = mudou@{
+        if (isDestroyed) return@mudou
+        depoisDeParar?.let { alvo -> if (Gravacoes.atual == null) { depoisDeParar = null; sintonizar(alvo) }; return@mudou }
+        val c = atual ?: return@mudou
+        if (visivel && arquivo == null && Gravacoes.gravando(c.id) != deGravacao) tocar(c)
+        atualizarInfo()
+    }
+
+    private fun opcoesGravacao(c: Canal, itens: MutableList<Pair<String, () -> Unit>>) {
+        val g = Gravacoes.atual
+        val agora = System.currentTimeMillis()
+        if (g?.canalId == c.id) {
+            itens += getString(R.string.grv_parar_ate, Gravacoes.hora(g.fim)) to { Gravacoes.parar(this) }
+            itens += getString(R.string.grv_mais_1h) to { Gravacoes.gravarAgora(this, c, g.programa, g.fim + 60 * 60_000L); mostrarAvisoBreve(getString(R.string.grv_ate, g.canalNome, Gravacoes.hora(g.fim + 60 * 60_000L))) }
+            return
+        }
+        if (g != null) return
+        val p = c.guiaId.takeIf { it.isNotEmpty() }?.let { guia.agora(it, agora) }
+        if (p != null && p.fim > agora) itens += getString(R.string.grv_programa, p.titulo, Gravacoes.hora(p.fim)) to {
+            gravar(c, p.titulo, p.fim + GravacaoRegras.FOLGA_DEPOIS_MS)
+        }
+        itens += getString(R.string.grv_1h) to { gravar(c, "", agora + 60 * 60_000L) }
+        itens += getString(R.string.grv_2h) to { gravar(c, "", agora + 2 * 60 * 60_000L) }
+    }
+
+    private fun gravar(c: Canal, programa: String, fim: Long) {
+        if (GravacaoDestino.descricao(this) == null) {
+            mostrarAviso(getString(R.string.grv_sem_destino)); tela.postDelayed({ esconderAviso() }, 6_000); return
+        }
+        pausa.descartar()
+        player?.stop()   // solta a conexão: daqui em diante quem baixa o canal é o gravador, e o player lê dele
+        Gravacoes.gravarAgora(this, c, programa, fim)
+        mostrarAviso(getString(R.string.grv_comecando))
+        // Não começou (pendrive sem permissão, NAS fora, canal fora do ar): volta ao canal direto e avisa.
+        tela.postDelayed({
+            if (!isDestroyed && visivel && atual?.id == c.id && arquivo == null && Gravacoes.atual == null) {
+                tocar(c); mostrarAvisoBreve(getString(R.string.grv_nao_comecou))
+            }
+        }, 20_000)
+    }
+
+    private fun conflitoGravacao(c: Canal, g: Gravacoes.Sessao) {
+        val gc = canais.firstOrNull { it.id == g.canalId }
+        val itens = ArrayList<Pair<String, () -> Unit>>()
+        if (gc != null) itens += getString(R.string.grv_ver, g.canalNome) to { if (atual?.id != gc.id) sintonizar(gc) }
+        itens += getString(R.string.grv_parar_e_ver, c.nome) to {
+            depoisDeParar = c
+            mostrarAviso(getString(R.string.player_carregando_canal))
+            Gravacoes.parar(this)
+        }
+        Estilo.lista(this, getString(R.string.grv_conflito, g.canalNome, Gravacoes.hora(g.fim)), itens.map { it.first }) { i -> itens[i].second() }
     }
 
     private fun escolherImagem() = PlayerImagem.escolher(this, modoImagem) { m ->

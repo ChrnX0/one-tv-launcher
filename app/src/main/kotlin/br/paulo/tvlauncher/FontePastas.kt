@@ -62,7 +62,7 @@ class FontePastas(private val ctx: Context) : BaseDataSource(true) {
         if (tinha) transferEnded()
     }
 
-    /** Fábrica do player: smb:// e arq:// vêm para cá; o resto (http, https, file) vai para a fábrica de sempre. */
+    /** Fábrica do player: smb://, arq:// e gravando:// vêm para cá; o resto (http, https, file) vai para a fábrica de sempre. */
     class Fabrica(private val ctx: Context, private val outra: DataSource.Factory) : DataSource.Factory {
         override fun createDataSource(): DataSource = Escolhe(ctx.applicationContext, outra.createDataSource())
     }
@@ -71,7 +71,11 @@ class FontePastas(private val ctx: Context) : BaseDataSource(true) {
         private var atual: DataSource? = null
         override fun addTransferListener(t: TransferListener) { outra.addTransferListener(t) }
         override fun open(dataSpec: DataSpec): Long {
-            val d = if (dataSpec.uri.scheme == "smb" || dataSpec.uri.scheme == "arq") FontePastas(ctx) else outra
+            val d = when (dataSpec.uri.scheme) {
+                "smb", "arq" -> FontePastas(ctx)
+                "gravando" -> FonteGravacao()   // o canal que está gravando, lido da gravação (GravacaoServico)
+                else -> outra
+            }
             atual = d
             return d.open(dataSpec)
         }
