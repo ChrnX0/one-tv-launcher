@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ideas 51 to 76 of the 13/11/2026 study (thread "Executar ideias aprovadas 51 a 76"). -->
+<resources>
+    <!-- 64: restore rehearsal of the nightly backup -->
+    <string name="l51_ensaio_ok">restore check passed</string>
+    <string name="l51_ensaio_falhou">the saved copy would not restore (%1$s)</string>
+    <!-- 54: guest Wi-Fi QR in visitor mode -->
+    <string name="l51_wifi_titulo">Guest Wi-Fi</string>
+    <string name="l51_wifi_nao">not set: type it once and visitors scan a QR</string>
+    <string name="l51_wifi_dica">Use your router\'s guest network: anyone in the room can read the password on the screen.</string>
+    <string name="l51_wifi_rede">Network name</string>
+    <string name="l51_wifi_senha">Password</string>
+    <string name="l51_wifi_invalido">Name up to 32 characters; password empty (open network) or 8 to 63 characters.</string>
+    <string name="l51_wifi_qr_titulo">Show the guest Wi-Fi QR</string>
+    <!-- 67: local usage of screens and settings -->
+    <string name="l51_uso_titulo">What gets used</string>
+    <string name="l51_uso_det">Screens and settings by use, counted only on this TV (nothing leaves it)</string>
+    <string name="l51_uso_vazio">Nothing counted yet. Come back in a few days.</string>
+    <string name="l51_uso_tela">screen</string>
+    <string name="l51_uso_opcao">setting</string>
+    <string name="l51_uso_linha">%1$s (%2$s): %3$d times, last %4$d days ago</string>
+    <string name="l51_uso_zerar">Reset</string>
+</resources>

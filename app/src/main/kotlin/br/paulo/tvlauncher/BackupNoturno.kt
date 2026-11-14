@@ -206,6 +206,17 @@ object BackupNoturno {
             RegistroErros.gravar(app, "backup-noturno", e)
             return registrar(app, false, app.getString(R.string.bn_gravar, e.javaClass.simpleName))
         }
+        // 1b. Ensaio da restauração (ideia 64): relê o arquivo DO DISCO, abre com a senha e confere se a restauração o
+        // aceitaria, sem aplicar nada. Cópia que não abre não vai para fora (seria só mais uma cópia estragada).
+        val ensaio = try {
+            EnsaioRestauracao.ensaiar(File(pasta(app), nome).readText(Charsets.UTF_8), senha, app.packageName,
+                BackupCompleto.CAMINHOS_ARQUIVOS, BackupCompleto.LIMITE_BYTES)
+        } catch (e: Exception) { EnsaioRestauracao.Resultado(false, e.javaClass.simpleName) }
+        prefs(app).edit().putBoolean("ensaio_ok", ensaio.ok).putString("ensaio_motivo", ensaio.motivo).apply()
+        if (!ensaio.ok) {
+            RegistroErros.gravar(app, "backup-noturno", IllegalStateException("ensaio: ${ensaio.motivo}"))
+            return registrar(app, false, app.getString(R.string.l51_ensaio_falhou, ensaio.motivo))
+        }
         // 2. A cópia extra, se escolhida. Falhar aqui não apaga a da TV: o resultado diz "parcial".
         val destino = destino(app)
         val extra: String? = try {
@@ -224,7 +235,8 @@ object BackupNoturno {
             prefs(app).edit().putLong("ultimo_ok_em", agora).apply()   // a da TV valeu: não conta como "atrasado"
             return registrar(app, false, "parcial: TV ok; ${rotuloDestino(app, destino)} falhou (${e.message ?: e.javaClass.simpleName})")
         }
-        return registrar(app, true, "ok: TV" + (extra?.let { " + $it" } ?: "") + " (${bytes.size / 1024} KB)")
+        return registrar(app, true, "ok: TV" + (extra?.let { " + $it" } ?: "") + " (${bytes.size / 1024} KB, " +
+            app.getString(R.string.l51_ensaio_ok) + ")")
     }
 
     /** Guarda o resultado para a tela e põe no registro do painel (aba Registro), como as ações de lá. */
