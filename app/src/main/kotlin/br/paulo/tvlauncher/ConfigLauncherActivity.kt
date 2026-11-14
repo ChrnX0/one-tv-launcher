@@ -699,6 +699,12 @@ class ConfigLauncherActivity : Activity() {
             // A MainActivity só relê o tema no onCreate: ela mesma percebe a troca e se recria ao voltar (ver onResume lá).
         }
         c.addView(linhaTema, lp())
+        // Tamanho do texto (ideia 47, TamanhoTexto): vale em todas as telas do launcher; esta tela se refaz para mostrar.
+        fun rotuloTamanho(v: Int) = getString(when (v) { 110 -> R.string.tt_grande; 120 -> R.string.tt_maior; else -> R.string.tt_normal })
+        c.addView(linha(getString(R.string.tt_titulo), getString(R.string.tt_det), valor = rotuloTamanho(TamanhoTexto.atual(this))) {
+            TamanhoTexto.definir(this, TamanhoTexto.proximo(TamanhoTexto.atual(this)))
+            recreate()
+        }, lp())
         // Apps ocultos (14/11/2026): o card "Ocultos (N)" saiu da HOME; mostrar de volta é aqui.
         val nOcultos = Organizacao.ocultos(this).size
         c.addView(linha(getString(R.string.oc_titulo), if (nOcultos == 0) getString(R.string.oc_nenhum) else

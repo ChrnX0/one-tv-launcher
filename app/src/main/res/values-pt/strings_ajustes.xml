@@ -65,4 +65,10 @@
     <string name="sug_nunca">Não sugerir mais</string>
     <string name="sug_feito_titulo">Pronto</string>
     <string name="sug_feito">Para mudar depois: Configurações › Tela e energia</string>
+    <!-- Ideia 47: tamanho do texto -->
+    <string name="tt_titulo">Tamanho do texto</string>
+    <string name="tt_det">Em todas as telas do launcher. Filmes, séries e TV ao vivo já eram maiores e crescem junto</string>
+    <string name="tt_normal">Normal</string>
+    <string name="tt_grande">Grande</string>
+    <string name="tt_maior">Maior</string>
 </resources>
