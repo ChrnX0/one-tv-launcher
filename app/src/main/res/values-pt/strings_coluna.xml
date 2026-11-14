@@ -5,7 +5,7 @@
     <string name="coluna_novos">+%1$s</string>
     <string name="coluna_filtro">Filtro</string>
     <string name="coluna_esportes">Esportes</string>
-    <string name="coluna_guia">Guia de programação</string>
+    <string name="coluna_guia">Guia</string>
     <string name="coluna_filtro_titulo">Filtro</string>
     <string name="coluna_filtro_ordem">Ordem: %1$s</string>
     <string name="coluna_filtro_combinado">Gênero, época, nota, só não vistos…</string>
@@ -33,4 +33,6 @@
     <string name="coluna_letra">Ir para uma letra</string>
     <string name="coluna_ao_vivo">AO VIVO</string>
     <string name="coluna_ao_vivo_primeiro">Ao vivo primeiro</string>
+    <string name="coluna_tv_titulo">TV</string>
+    <string name="coluna_gravacoes">Gravações</string>
 </resources>

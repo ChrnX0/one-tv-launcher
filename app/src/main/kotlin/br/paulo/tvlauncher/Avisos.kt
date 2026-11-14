@@ -37,6 +37,7 @@ object Avisos {
 
     enum class Tipo(val rotulo: String, val padrao: Boolean, val semLimite: Boolean = false) {
         LEMBRETE("Lembretes da grade", true, semLimite = true),
+        GRAVACAO("Gravação terminou ou parou", true, semLimite = true),
         ALARME_PERDIDO("Despertador que não tocou", true),
         CHUVA("Aviso de chuva", false),
         ERRO_NOVO("Erro novo no launcher", true),

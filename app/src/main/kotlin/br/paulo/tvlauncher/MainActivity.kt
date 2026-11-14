@@ -739,6 +739,7 @@ class MainActivity : Activity() {
     private lateinit var txtDestaqueSub: TextView
     private lateinit var txtDestaqueMeta: TextView      // ★ 6,6  Thriller · 2023 · 1 h 59 min · faltam 1 h 18 min
     private lateinit var txtDestaqueSinopse: TextView
+    @Volatile private var gravandoTv: String? = null   // "Globo até 22:05" enquanto grava (Gravacoes.resumoParaHome)
     private var ultimoTv: PlayerArmazem.Ultimo? = null   // último canal + programas (lido no onResume, em preencherContinuar)
     private lateinit var txtTimer: TextView   // "4:32" na pílula do timer enquanto um timer corre (ver Timer.kt)
     private lateinit var pilulaTimer: LinearLayout
@@ -984,9 +985,12 @@ class MainActivity : Activity() {
         val t0 = android.os.SystemClock.elapsedRealtime()
         filaApps.execute {
             val todos = carregarApps()   // cacheApps só é tocado nesta fila (uma thread)
-            jogosNaTv = todos.count { JogosTv.ehJogo(this, it.pacote) }   // a frase do card Jogos (resumoJogos)
+            val doJogos = todos.filter { JogosTv.ehJogo(this, it.pacote) }
+            jogosNaTv = doJogos.size   // a frase do card Jogos (resumoJogos)
             // Uso recente também aqui fora (04/11/2026): antes rodava dentro de montarEntradas, na thread da tela.
             val uso = if (Config.ORDENAR_POR_USO_RECENTE) Uso.ultimoUso(this) else emptyMap()
+            // Card Jogos em foco (esboço A, 14/11/2026): o fundo é o banner oficial do jogo usado por último.
+            ultimoJogo = Jogos.ultimoUsado(doJogos.map { it.pacote }, uso)?.let { p -> p to doJogos.first { it.pacote == p }.nome }
             // Os retângulos mostram o banner de cada app: lê os que faltam ANTES de desenhar (só na 1ª vez do processo).
             for (app in todos) if (!capas.containsKey(app.pacote)) runCatching { lerCapa(app.pacote, app.icone) }
             val t1 = android.os.SystemClock.elapsedRealtime()
@@ -1333,11 +1337,13 @@ class MainActivity : Activity() {
      */
     private fun destaqueTv() {
         val u = ultimoTv
-        if (u == null) { mostrarDestaque(null, getString(R.string.home_card_tv), getString(R.string.home_destaque_tv_sub)); return }
+        // Gravando (14/11/2026): o rótulo em cima do título diz o quê e até quando, seja qual for o último canal.
+        val rotulo = gravandoTv?.let { "● " + getString(R.string.grv_selo_home, it) }
+        if (u == null) { mostrarDestaque(rotulo, getString(R.string.home_card_tv), getString(R.string.home_destaque_tv_sub)); return }
         val agora = System.currentTimeMillis()
         val p = u.programas.firstOrNull { it.inicio <= agora && agora < it.fim && it.titulo.isNotBlank() }
         if (p == null) {
-            mostrarDestaque(null, getString(R.string.home_card_tv), getString(R.string.home_destaque_tv_sub_canal, u.numero)); return
+            mostrarDestaque(rotulo, getString(R.string.home_card_tv), getString(R.string.home_destaque_tv_sub_canal, u.numero)); return
         }
         val fmt = java.text.SimpleDateFormat("HH:mm", Locale.getDefault())
         val meta = android.text.SpannableStringBuilder()
@@ -1345,7 +1351,7 @@ class MainActivity : Activity() {
         meta.setSpan(android.text.style.StyleSpan(Typeface.BOLD), 0, meta.length, 0)
         meta.append("   ${fmt.format(java.util.Date(p.inicio))} – ${fmt.format(java.util.Date(p.fim))}")
         meta.append("  ·  " + getString(R.string.home_faltam, duracaoTexto(((p.fim - agora + 59_999) / 60_000).toInt())))
-        mostrarDestaque(null, p.titulo, getString(R.string.home_dest_tv, u.numero), meta, p.descricao.ifBlank { null })
+        mostrarDestaque(rotulo, p.titulo, getString(R.string.home_dest_tv, u.numero), meta, p.descricao.ifBlank { null })
     }
 
     /**
@@ -1424,6 +1430,7 @@ class MainActivity : Activity() {
             val ultimo = if (temTv) PlayerArmazem.ultimo(this)?.takeIf { ultimoLiberado(it) }?.let { programasDeAgora(it) } else null
             // Séries e Filmes: conta Xtream, ou lista M3U que traz filmes/episódios (ideia 26). fontes() decifra: fora da tela.
             val temVod = temTv && PlayerCarga.temVod(this)
+            gravandoTv = if (temTv) Gravacoes.resumoParaHome(this) else null
             // Os "apps recentes" saíram desta linha (10/11/2026, dono: "por que esses cards repetem os apps de baixo?").
             // A linha de apps já vem ordenada por uso recente, então os 4 recentes eram sempre os 4 primeiros apps de
             // baixo, em tamanho grande. E o "continuar assistindo" de verdade de Netflix/YouTube não é alcançável: a
@@ -1503,6 +1510,8 @@ class MainActivity : Activity() {
     /** Fundo de um card de Assistir: o ícone grande, ou o degradê da cor enquanto ele não fica pronto. Parado, sem zoom. */
     private fun mostrarCapaAtalho(tipo: IconeApp.Tipo) {
         capaPedida = null
+        // Jogos: o banner (logo oficial) do jogo usado por último, como o de um app em foco. Sem jogo usado, o controle.
+        if (tipo == IconeApp.Tipo.JOGOS) ultimoJogo?.first?.let { p -> capas[p]?.first?.let { capa.mostrar(it, null); return } }
         // Séries e Filmes: a arte do último título, grande à direita (12/11/2026). Sem arte, o ícone como os outros.
         arteAtalho[tipo]?.second?.let { capa.mostrar(it, null, arte = true); return }
         val img = capasAtalho[tipo]?.second?.firstOrNull()
@@ -1670,12 +1679,15 @@ class MainActivity : Activity() {
 
     /** Quantos apps de jogo a TV tem (lido em preencherApps, fora da tela). */
     @Volatile private var jogosNaTv = 0
+    /** pacote e nome do jogo usado por último (UsageStats), ou null. Lido em preencherApps. */
+    @Volatile private var ultimoJogo: Pair<String, String>? = null
 
     /** A frase do card Jogos em foco: "3 jogos · 1 controle ligado" ou, sem jogos, o que o card oferece. */
     private fun resumoJogos(): String {
         val controles = runCatching { JogosTv.controles().size }.getOrDefault(0)
         if (jogosNaTv == 0 && controles == 0) return getString(R.string.home_destaque_jogos_vazio)
         val partes = mutableListOf(resources.getQuantityString(R.plurals.jogos_qtd, jogosNaTv, jogosNaTv))
+        ultimoJogo?.second?.let { partes.add(0, getString(R.string.home_jogos_ultimo, it)) }
         if (controles > 0) partes += resources.getQuantityString(R.plurals.jogos_controles, controles, controles)
         return partes.joinToString(" · ")
     }

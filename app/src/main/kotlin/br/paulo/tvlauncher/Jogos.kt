@@ -33,7 +33,8 @@ object Jogos {
         // Do PC e do console: o jogo roda num computador ou console da casa.
         "com.valvesoftware.steamlink" to Grupo.PC,
         "com.limelight" to Grupo.PC,                            // Moonlight
-        "com.playstation.remoteplay" to Grupo.PC,               // PS Remote Play
+        "com.playstation.remoteplay" to Grupo.PC,               // PS Remote Play (celular)
+        "com.playstation.remoteplay.tv" to Grupo.PC,            // PS Remote Play da Google TV (visto na Sala, 14/11/2026)
         "tv.parsec.client" to Grupo.PC,                         // Parsec (não verifiquei)
         "com.metallic.chiaki" to Grupo.PC,                      // Chiaki (PlayStation, código aberto)
         // Retrô: emuladores.
@@ -101,6 +102,19 @@ object Jogos {
     /** Qual app abre o "Jogar no PC": o escolhido (se instalado) ou o 1º de [APPS_PC] instalado. Null = nenhum. */
     fun appDoPc(instalados: Set<String>, escolhido: String?): String? =
         escolhido?.takeIf { it in instalados } ?: APPS_PC.firstOrNull { it in instalados }
+
+    /**
+     * Ordem da fila "Seus jogos" (esboço A, 14/11/2026): o jogado por último primeiro. [uso] = pacote -> última vez
+     * (ms, do UsageStats do Android, que vê o jogo aberto por qualquer caminho). Quem nunca foi usado fica no fim, na
+     * ordem que veio (por nome).
+     */
+    fun ordenarPorUso(pacotes: List<String>, uso: Map<String, Long>): List<String> =
+        pacotes.withIndex().sortedWith(compareByDescending<IndexedValue<String>> { uso[it.value] ?: 0L }.thenBy { it.index })
+            .map { it.value }
+
+    /** O jogo usado por último entre [pacotes] (o fundo do card Jogos na HOME). Null = nenhum usado. */
+    fun ultimoUsado(pacotes: Collection<String>, uso: Map<String, Long>): String? =
+        pacotes.filter { (uso[it] ?: 0L) > 0L }.maxByOrNull { uso.getValue(it) }
 
     // ---------------------------------------------------------------- rede
 

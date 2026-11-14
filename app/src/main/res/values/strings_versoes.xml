@@ -17,6 +17,9 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>New Games screen, console style: the focused game shows big with its official logo, one row with the last played first (OK plays), and the home screen Games card shows the last game</item>
+        <item>The TV as a network drive: its storage opens in Windows (Map network drive), Mac, Linux and phone file apps over WebDAV, with the panel PIN as password; it also shows up in Windows Network (Settings › Remote access, off by default)</item>
+        <item>Player: the top of the column just says TV, Movies or Series, with Search and Filter buttons beside it; the list makes room for Recordings (TV: Favorites, Recent, Guide, Recordings)</item>
         <item>Games card on the home screen, after Network: GeForce NOW, Steam Link, Moonlight, PS Remote Play, RetroArch and the other games leave the apps row and sit in 4 groups</item>
         <item>Games: “Play on the PC” wakes the computer and opens Moonlight or Steam Link; “Test the network” tells whether cloud gaming will work; connected controllers show at the top</item>
         <item>Game mode: while a game is open, the screensaver, night filter and notices wait</item>
@@ -92,10 +95,13 @@
         <item>Movies and series with Dolby (AC3, E-AC3), DTS or TrueHD sound now play with sound even with “Even volume” or “Clearer voices” on; channels with MP2 audio too</item>
         <item>Blu-ray and DVD subtitles (PGS, VobSub) now show in movies and series, and anime ASS subtitles keep their original colour and position</item>
         <item>Network: folders over FTP, FTPS, SFTP and NFS (NAS, router with a drive, Linux or Mac computer), and a USB drive plugged into the TV shows up by itself under “Plugged into the TV”</item>
+        <item>Live TV records to a USB drive or disk on the hub (or a Windows/NAS folder): ▶▶ › Record on a channel, OK on a future show in the guide to schedule it (also every week), and the Recordings screen in the live TV column</item>
         <item>On the network: OneDrive and Dropbox as a source of videos, music and photos (once, you create your own app at the service and sign in from your phone)</item>
         <item>Subtitles in the same folder as the video (Movie.srt, Movie.pt-BR.ass) show up in ▼ by themselves, in network folders, the cloud and USB drives</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>unidade_rede</item>
+        <item>coluna_botoes</item>
         <item>jogos_card</item>
         <item>jogos_tela</item>
         <item>jogos_rede</item>
@@ -169,11 +175,15 @@
         <item>audio_dolby_dts</item>
         <item>legenda_imagem</item>
         <item>pendrive_na_rede</item>
+        <item>gravar_agora</item>
+        <item>gravar_agendada</item>
         <item>nuvem_fonte</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Network drive</item>
+        <item>Search and Filter at the top of the column</item>
         <item>Press HOME and go to the end of the WATCH AND PLAY row</item>
-        <item>Open the Games card</item>
+        <item>Open the Games card and move along the games row</item>
         <item>On the Games screen, press Test the network</item>
         <item>In the web panel, change the theme in the Settings tab</item>
         <item>In the web panel, open the Backup tab</item>
@@ -245,11 +255,15 @@
         <item>Turn on “Clearer voices” in ▼ and open a movie with Dolby or DTS sound (from On the network or Movies)</item>
         <item>Open an MKV movie with Blu-ray (PGS) subtitles or an anime with ASS subtitles and turn subtitles on in ▼</item>
         <item>Plug a USB drive with videos into the TV and open Network</item>
+        <item>With a USB drive on the hub, on a channel: ▶▶ › Record 1 hour; after 2 min, OK › Recordings in the column</item>
+        <item>In the guide, OK on a show starting in 10 min › Record; turn the TV off and wait for it to end</item>
         <item>In On the network › OneDrive (or Dropbox), follow the steps and open a video from the cloud</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>With Settings › Remote access › Show the TV as a network drive on, does Windows Map network drive with the address shown there and the panel PIN open the TV folders?</item>
+        <item>In TV, Movies and Series, does ▲ on the first row reach the Search and Filter buttons beside the title, and ▼ go back to the list?</item>
         <item>Is there an amber Games card after Network?</item>
-        <item>Do the big buttons and the games by group show, and did the game apps leave the apps row?</item>
+        <item>Does the focused game show big, with its official logo, and does ◀ ▶ on the row below switch it right away, last played first?</item>
         <item>Does the top say whether the network is good for cloud gaming, with the time in ms?</item>
         <item>Did the TV home screen switch to the chosen theme?</item>
         <item>Does “Google Drive account” show with connect, and do the code and QR show in the panel?</item>
@@ -321,6 +335,8 @@
         <item>Did the movie play with sound (before it was silent)?</item>
         <item>Did the subtitle show complete, in the right place and in sync?</item>
         <item>Does the drive show under “Plugged into the TV” and does a video from it play?</item>
+        <item>Did the channel keep playing smoothly, and does the recording show up and play in Recordings?</item>
+        <item>Afterwards, is the whole show in Recordings?</item>
         <item>Did the video play, and could you skip forward and back without stalling?</item>
     </string-array>
 </resources>

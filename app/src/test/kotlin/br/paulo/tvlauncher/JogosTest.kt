@@ -24,6 +24,8 @@ class JogosTest {
     @Test fun grupoPadrao() {
         assertEquals(Grupo.PC, Jogos.grupo("com.valvesoftware.steamlink", emptyMap()))
         assertEquals(Grupo.NUVEM, Jogos.grupo("com.nvidia.geforcenow", emptyMap()))
+        // A versão de TV do PS Remote Play tem outro pacote (o Paulo achou o card sem ele, 14/11/2026).
+        assertEquals(Grupo.PC, Jogos.grupo("com.playstation.remoteplay.tv", emptyMap()))
         assertEquals(Grupo.TV, Jogos.grupo("com.jogo.instalado", emptyMap()))
     }
 
@@ -68,5 +70,13 @@ class JogosTest {
         assertFalse(Jogos.ipValido("192.168.1"))
         assertFalse(Jogos.ipValido("192.168.1.300"))
         assertFalse(Jogos.ipValido("pc.lan"))
+    }
+
+    @Test fun ordemPorUso() {
+        val uso = mapOf("b" to 100L, "c" to 300L)
+        assertEquals(listOf("c", "b", "a", "d"), Jogos.ordenarPorUso(listOf("a", "b", "c", "d"), uso))
+        assertEquals(listOf("a", "d"), Jogos.ordenarPorUso(listOf("a", "d"), emptyMap()))
+        assertEquals("c", Jogos.ultimoUsado(listOf("a", "b", "c"), uso))
+        assertNull(Jogos.ultimoUsado(listOf("a"), uso))
     }
 }

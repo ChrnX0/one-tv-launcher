@@ -91,6 +91,22 @@ object JogosTv {
         }
         .map { it.name }.distinct()
 
+    class Controle(val nome: String, val bateria: Int?)
+
+    /** Os controles ligados com a bateria em % (Android 12+, quando o controle informa; null = não sabe). */
+    fun controlesComBateria(): List<Controle> = InputDevice.getDeviceIds().toList().mapNotNull { InputDevice.getDevice(it) }
+        .filter { d ->
+            !d.isVirtual && (d.sources and InputDevice.SOURCE_GAMEPAD == InputDevice.SOURCE_GAMEPAD ||
+                d.sources and InputDevice.SOURCE_JOYSTICK == InputDevice.SOURCE_JOYSTICK)
+        }
+        .distinctBy { it.name }
+        .map { d ->
+            val b = if (android.os.Build.VERSION.SDK_INT >= 31) runCatching {
+                d.batteryState.takeIf { it.isPresent }?.capacity?.takeIf { !it.isNaN() }?.let { (it * 100).toInt().coerceIn(0, 100) }
+            }.getOrNull() else null
+            Controle(d.name, b)
+        }
+
     fun ehControle(id: Int): Boolean {
         val d = InputDevice.getDevice(id) ?: return false
         return !d.isVirtual && d.sources and InputDevice.SOURCE_GAMEPAD == InputDevice.SOURCE_GAMEPAD

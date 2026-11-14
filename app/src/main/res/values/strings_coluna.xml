@@ -5,7 +5,7 @@
     <string name="coluna_novos">+%1$s</string>
     <string name="coluna_filtro">Filter</string>
     <string name="coluna_esportes">Sports</string>
-    <string name="coluna_guia">TV guide</string>
+    <string name="coluna_guia">Guide</string>
     <string name="coluna_filtro_titulo">Filter</string>
     <string name="coluna_filtro_ordem">Sort: %1$s</string>
     <string name="coluna_filtro_combinado">Genre, era, rating, unwatched…</string>
@@ -33,4 +33,6 @@
     <string name="coluna_letra">Go to a letter</string>
     <string name="coluna_ao_vivo">LIVE</string>
     <string name="coluna_ao_vivo_primeiro">Live first</string>
+    <string name="coluna_tv_titulo">TV</string>
+    <string name="coluna_gravacoes">Recordings</string>
 </resources>

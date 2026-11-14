@@ -182,4 +182,21 @@ object HomeDesvio {
         ultimo != null && agora - ultimo < INTERVALO_MIN_MS -> Desvio.Depois(INTERVALO_MIN_MS - (agora - ultimo))
         else -> Desvio.Agora
     }
+
+    enum class AposAtualizar { TROCAR, ESPERAR, DEIXAR }
+    /** Quantas vezes o AtualizadoReceiver confere (a cada 0,7 s): ~8 s, abaixo dos 10 s do goAsync. */
+    const val TENTATIVAS_APOS_ATUALIZAR = 11
+
+    /**
+     * Regra pura (HomeDesvioTest): logo depois de instalar uma versão nova com a tela acesa, o que fazer com quem está na
+     * frente. [servicoLigado] = a acessibilidade já religou; [naFrente] = pacote da janela ativa (null = ainda sem janela).
+     * launcherx na frente = a HOME dele subiu porque a nossa morreu na instalação: troca. Outro app = alguém usando: deixa.
+     * Sem serviço ou sem janela ainda: espera, até [TENTATIVAS_APOS_ATUALIZAR].
+     */
+    fun depoisDeAtualizar(servicoLigado: Boolean, naFrente: String?, tentativa: Int): AposAtualizar = when {
+        servicoLigado && naFrente == Home.LAUNCHERX -> AposAtualizar.TROCAR
+        servicoLigado && naFrente != null -> AposAtualizar.DEIXAR
+        tentativa + 1 >= TENTATIVAS_APOS_ATUALIZAR -> AposAtualizar.DEIXAR
+        else -> AposAtualizar.ESPERAR
+    }
 }
