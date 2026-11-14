@@ -33,7 +33,7 @@ object ServicosFilmes {
         val simklId: String = "", val openSubtitles: String = "",
     ) {
         fun disponivel(s: Servico): Boolean = when (s) {
-            Servico.TRAKT -> traktId.isNotBlank() && traktSegredo.isNotBlank()
+            Servico.TRAKT -> traktId.isNotBlank()
             Servico.SIMKL -> simklId.isNotBlank()
             Servico.TMDB -> tmdb.isNotBlank()
             Servico.OPENSUBTITLES -> openSubtitles.isNotBlank()
@@ -78,6 +78,8 @@ object ServicosFilmes {
     // ---------------------------------------------------------------- Trakt (trakt.docs.apiary.io, Authentication - Devices)
 
     const val TRAKT_API = "https://api.trakt.tv"
+    /** Login (OAuth) do Trakt: o servidor próprio de autenticação, como na documentação de 2026 (o api.trakt.tv ainda responde). */
+    const val TRAKT_AUTH = "https://auth.trakt.tv"
     const val TRAKT_REDIRECT = "urn:ietf:wg:oauth:2.0:oob"
 
     fun traktCabecalhos(clienteId: String, versao: Int, token: String? = null): Map<String, String> = buildMap {
@@ -90,15 +92,21 @@ object ServicosFilmes {
 
     fun traktCorpoCodigo(clienteId: String): String = JSONObject().put("client_id", clienteId).toString()
 
+    /**
+     * O Client Secret ficou opcional (e "deprecated" para apps de TV) em 2026: apps novos do Trakt nem recebem um. Só vai no
+     * corpo quando existe (apps antigos que ainda têm).
+     */
+    private fun JSONObject.segredo(segredo: String) = apply { if (segredo.isNotBlank()) put("client_secret", segredo) }
+
     fun traktCorpoToken(codigoAparelho: String, clienteId: String, segredo: String): String =
-        JSONObject().put("code", codigoAparelho).put("client_id", clienteId).put("client_secret", segredo).toString()
+        JSONObject().put("code", codigoAparelho).put("client_id", clienteId).segredo(segredo).toString()
 
     fun traktCorpoRenovar(renovar: String, clienteId: String, segredo: String): String = JSONObject()
-        .put("refresh_token", renovar).put("client_id", clienteId).put("client_secret", segredo)
+        .put("refresh_token", renovar).put("client_id", clienteId).segredo(segredo)
         .put("redirect_uri", TRAKT_REDIRECT).put("grant_type", "refresh_token").toString()
 
     fun traktCorpoRevogar(token: String, clienteId: String, segredo: String): String =
-        JSONObject().put("token", token).put("client_id", clienteId).put("client_secret", segredo).toString()
+        JSONObject().put("token", token).put("client_id", clienteId).segredo(segredo).toString()
 
     /** Resposta de POST /oauth/device/code. */
     fun traktLerCodigo(json: String): Codigo? = runCatching {

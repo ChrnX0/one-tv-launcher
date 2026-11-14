@@ -113,7 +113,7 @@ object ServicosContas {
         check(k.disponivel(s)) { "serviço sem chave neste build" }
         cancelar(s)
         val codigo = when (s) {
-            Servico.TRAKT -> pedir("${ServicosFilmes.TRAKT_API}/oauth/device/code", ServicosFilmes.traktCabecalhos(k.traktId, versao),
+            Servico.TRAKT -> pedir("${ServicosFilmes.TRAKT_AUTH}/oauth/device/code", ServicosFilmes.traktCabecalhos(k.traktId, versao),
                 ServicosFilmes.traktCorpoCodigo(k.traktId)).let { r ->
                 if (r.codigo !in 200..299) error("o Trakt respondeu ${r.codigo}")
                 ServicosFilmes.traktLerCodigo(r.corpo) ?: error("resposta do Trakt sem código")
@@ -142,7 +142,7 @@ object ServicosContas {
             if (System.currentTimeMillis() > sessao.expira) { fim(sessao, ServicosFilmes.Motivo.VENCEU); return }
             val e = runCatching {
                 when (sessao.servico) {
-                    Servico.TRAKT -> pedir("${ServicosFilmes.TRAKT_API}/oauth/device/token", ServicosFilmes.traktCabecalhos(k.traktId, versao),
+                    Servico.TRAKT -> pedir("${ServicosFilmes.TRAKT_AUTH}/oauth/device/token", ServicosFilmes.traktCabecalhos(k.traktId, versao),
                         ServicosFilmes.traktCorpoToken(sessao.codigo.codigoAparelho, k.traktId, k.traktSegredo))
                         .let { ServicosFilmes.traktLerEspera(it.codigo, it.corpo, System.currentTimeMillis()) }
                     else -> pedir("${ServicosFilmes.SIMKL_API}/oauth2/token", ServicosFilmes.simklCabecalhosForm(versao),
@@ -187,7 +187,7 @@ object ServicosContas {
         val c = conta(ctx, s)
         val k = chavesApp()
         if (s == Servico.TRAKT && c != null && k.disponivel(s)) runCatching {
-            pedir("${ServicosFilmes.TRAKT_API}/oauth/revoke", ServicosFilmes.traktCabecalhos(k.traktId, versao),
+            pedir("${ServicosFilmes.TRAKT_AUTH}/oauth/revoke", ServicosFilmes.traktCabecalhos(k.traktId, versao),
                 ServicosFilmes.traktCorpoRevogar(c.acesso, k.traktId, k.traktSegredo))
         }
         if (s == Servico.SIMKL && c != null && k.disponivel(s)) runCatching {
@@ -247,7 +247,7 @@ object ServicosContas {
         if (!k.disponivel(s) || c.renovar == null) return null
         if (!forcar && !ServicosFilmes.precisaRenovar(c.expiraEmMs, true, System.currentTimeMillis())) return c
         return runCatching {
-            val r = if (s == Servico.TRAKT) pedir("${ServicosFilmes.TRAKT_API}/oauth/token", ServicosFilmes.traktCabecalhos(k.traktId, versao),
+            val r = if (s == Servico.TRAKT) pedir("${ServicosFilmes.TRAKT_AUTH}/oauth/token", ServicosFilmes.traktCabecalhos(k.traktId, versao),
                 ServicosFilmes.traktCorpoRenovar(c.renovar, k.traktId, k.traktSegredo))
             else pedir("${ServicosFilmes.SIMKL_API}/oauth2/token", ServicosFilmes.simklCabecalhosForm(versao),
                 ServicosFilmes.simklCorpoRenovar(c.renovar, k.simklId))
