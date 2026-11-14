@@ -50,7 +50,10 @@ object BackupCompleto {
         "avisos_celular", "desempenho", "retrospectiva", "presenca", "ideias_12_11",
         // "painel_tls" (#34): só o nome do certificado https desta TV (ex.: tv-sala). O certificado não vai no backup, e
         // restaurar em outra TV daria a ela o nome da primeira; cada TV escolhe o seu no painel.
-        "painel_tls")
+        "painel_tls",
+        // "volume_lg" (ideia 49): IP e código de pareamento da LG desta casa. Em outra TV/casa apontaria para a LG errada;
+        // parear de novo leva um minuto (ComandosExtras lg_*).
+        "volume_lg")
     /** Chaves que o Keystore cifrou: não servem em outra instalação. O valor em claro vai em "segredos". */
     private val CHAVES_DO_KEYSTORE = setOf("chave_cifrada", "chave_iv") + CasaHA.CHAVES_DO_KEYSTORE
     /** Arquivos pequenos do player (files/player). O contas.json fica de fora: vai decifrado em "segredos". */
