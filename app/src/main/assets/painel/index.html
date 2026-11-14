@@ -53,7 +53,62 @@
       <input id="campoPin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12"
              autocomplete="off" aria-label="PIN" placeholder="PIN" required>
       <button type="submit" class="botao-primario" id="btnEntrar">Entrar</button>
+      <button type="button" class="botao-secundario" id="btnEntrarDigital" hidden>Entrar com a digital</button>
       <p id="erroEntrar" class="erro" hidden></p>
+    </form>
+  </section>
+
+  <!-- Primeira configuração pelo celular (ideia 97, primeira.js): aberto pelo QR da TV sem PIN, "#primeira=<código>". -->
+  <section id="telaPrimeira" class="entrar" hidden>
+    <form id="formPrimeira" class="cartao-entrar cartao-primeira" autocomplete="off" novalidate>
+      <img class="logo-entrar" src="icone-192.png" alt="" width="64" height="64">
+      <p class="passos-primeira" id="passoPrimeira" aria-live="polite"></p>
+      <h1 id="tituloPrimeira"></h1>
+
+      <div data-passo="pin">
+        <p class="aviso">O PIN protege o painel e o que não tem volta. Use de 6 a 12 números e guarde bem.</p>
+        <input id="primeiraPin" class="campo-pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12" autocomplete="new-password" aria-label="PIN novo" placeholder="PIN">
+        <input id="primeiraPin2" class="campo-pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12" autocomplete="new-password" aria-label="Repita o PIN" placeholder="Repita">
+      </div>
+
+      <div data-passo="idioma">
+        <p class="aviso">Os menus da TV seguem o idioma do Android. Agora ela está em:</p>
+        <p class="destaque-primeira" id="primeiraIdioma"></p>
+        <button type="button" class="botao-secundario" id="btnIdiomaTv">Trocar o idioma na TV</button>
+        <p class="aviso">Filmes e séries, de preferência:</p>
+        <label class="opcao-primeira"><input type="radio" name="primeiraAudio" value="dublado"> Dublado</label>
+        <label class="opcao-primeira"><input type="radio" name="primeiraAudio" value="original"> Áudio original com legenda</label>
+      </div>
+
+      <div data-passo="tv">
+        <p class="aviso">Os dados da sua conta de canais (IPTV). Não tem? Toque em Pular.</p>
+        <p class="aviso-ok" id="primeiraContas" hidden></p>
+        <select id="primeiraTvTipo" aria-label="Tipo de conta">
+          <option value="xtream">Servidor e usuário (Xtream)</option>
+          <option value="m3u">Link da lista (.m3u)</option>
+        </select>
+        <input id="primeiraTvEndereco" type="text" inputmode="url" autocapitalize="off" spellcheck="false" maxlength="600" aria-label="Endereço">
+        <input id="primeiraTvUsuario" type="text" autocapitalize="off" spellcheck="false" maxlength="120" placeholder="Usuário" aria-label="Usuário">
+        <input id="primeiraTvSenha" type="password" autocomplete="off" maxlength="120" placeholder="Senha" aria-label="Senha">
+      </div>
+
+      <div data-passo="cidade">
+        <p class="aviso">Para a previsão do tempo e o aviso de chuva. Sem cidade, a TV tenta achar sozinha.</p>
+        <p class="aviso-ok" id="primeiraCidadeAtual" hidden></p>
+        <input id="primeiraCidade" type="text" maxlength="80" placeholder="Cidade (ex.: Curitiba)" aria-label="Cidade">
+      </div>
+
+      <div data-passo="servicos">
+        <p class="aviso">Opcional: capas e sinopses, o que você já viu e legendas. Dá para fazer depois, em Configurações.</p>
+        <div id="primeiraServicos"></div>
+      </div>
+
+      <p id="erroPrimeira" class="erro" hidden></p>
+      <button type="submit" class="botao-primario" id="btnPrimeiraOk">Continuar</button>
+      <div class="acoes-primeira">
+        <button type="button" class="botao-secundario" id="btnPrimeiraVoltar">Voltar</button>
+        <button type="button" class="botao-secundario" id="btnPrimeiraPular">Pular</button>
+      </div>
     </form>
   </section>
 
@@ -904,6 +959,13 @@
       </div>
     </section>
     <section id="abaRegistro" class="painel-aba" hidden>
+      <!-- Ideia 99: entrar com a digital do celular (chave.js, ChaveAcesso.kt). Só pelo https do Tailscale. -->
+      <div class="cartao" id="cartaoDigital">
+        <h2>Entrar com a digital</h2>
+        <p class="aviso" id="digitalTexto"></p>
+        <div id="listaDigitais"></div>
+        <button type="button" class="botao-primario" id="btnCadastrarDigital" hidden>Cadastrar a digital deste celular</button>
+      </div>
       <div id="listaRegistro" class="lista-registro"></div>
     </section>
     </main>
@@ -996,5 +1058,7 @@
   <script src="arquivos.js"></script>
   <script src="controle.js"></script>
   <script src="certificado.js"></script>
+  <script src="primeira.js"></script>
+  <script src="chave.js"></script>   <!-- ideia 99: entrar com a digital (passkey) -->   <!-- ideia 97: assistente da primeira configuração -->
 </body>
 </html>

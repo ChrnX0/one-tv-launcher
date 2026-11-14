@@ -200,7 +200,7 @@ const AO_ABRIR = {
   rede: () => carregarRede(),
   claude: () => carregarMcp(),
   roteador: () => carregarRoteador(),
-  registro: () => carregarRegistro(),
+  registro: () => { carregarRegistro(); if (typeof carregarChaves === 'function') carregarChaves(); },   // + digital (chave.js)
   backup: () => { carregarCopias(); carregarNoturno(); acompanharDrive(); },
   config: () => carregarConfig(),
   arquivos: () => abrirPasta(pastaAtual),
@@ -1090,7 +1090,7 @@ function desenharServicos(r) {
     caixa.appendChild(bloco);
   }
   // Confere a cada 3 s só com a aba à vista, enquanto algum login espera o celular.
-  if (esperando && !$('abaConfig').hidden && document.visibilityState === 'visible') timerServicos = setTimeout(carregarServicos, 3000);
+  if (esperando && (!$('abaConfig').hidden || !$('telaPrimeira').hidden) && document.visibilityState === 'visible') timerServicos = setTimeout(carregarServicos, 3000);
 }
 
 // Sincronização de uma conta conectada (a mesma tela SincronizarActivity da TV). Tudo começa desligado; LIGAR pede o PIN.
@@ -2590,6 +2590,7 @@ async function enviarCompartilhado() {
 }
 
 (async () => {
+  if (location.hash.startsWith('#primeira=')) return;   // ideia 97: o assistente da 1ª configuração (primeira.js) cuida
   const qr = pegarCodigoQr();
   if (qr && await entrarPeloQr(qr)) return;
   try {

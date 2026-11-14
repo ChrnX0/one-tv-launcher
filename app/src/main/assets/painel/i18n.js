@@ -876,8 +876,71 @@
 "O PIN precisa ter de 6 a 12 números.": "The PIN needs 6 to 12 digits.",
 "Os dois PINs não bateram.": "The two PINs don't match.",
 "PIN do painel trocado. Use o novo da próxima vez.": "Panel PIN changed. Use the new one next time.",
+"Crie um PIN": "Create a PIN",
+"Idioma": "Language",
+"Sua cidade": "Your city",
+"Filmes e séries": "Movies and series",
+"O PIN protege o painel e o que não tem volta. Use de 6 a 12 números e guarde bem.": "The PIN protects the panel and anything that can't be undone. Use 6 to 12 digits and keep it safe.",
+"Repita o PIN": "Repeat the PIN",
+"Repita": "Repeat",
+"Os menus da TV seguem o idioma do Android. Agora ela está em:": "The TV menus follow Android's language. Right now it is:",
+"Trocar o idioma na TV": "Change the language on the TV",
+"Filmes e séries, de preferência:": "Movies and series, preferably:",
+"Áudio original com legenda": "Original audio with subtitles",
+"Os dados da sua conta de canais (IPTV). Não tem? Toque em Pular.": "Your channel account (IPTV). Don't have one? Tap Skip.",
+"Servidor e usuário (Xtream)": "Server and user (Xtream)",
+"Link da lista (.m3u)": "Playlist link (.m3u)",
+"Para a previsão do tempo e o aviso de chuva. Sem cidade, a TV tenta achar sozinha.": "For the forecast and the rain alert. Without a city, the TV tries to find it by itself.",
+"Cidade (ex.: Curitiba)": "City (e.g. Chicago)",
+"Opcional: capas e sinopses, o que você já viu e legendas. Dá para fazer depois, em Configurações.": "Optional: posters and plots, what you watched and subtitles. You can do it later, in Settings.",
+"Continuar": "Continue",
+"Concluir": "Finish",
+"Pular": "Skip",
+"Os dois PINs não são iguais. Digite de novo.": "The two PINs are not the same. Type them again.",
+"Esta TV já tem PIN: entre com ele.": "This TV already has a PIN: sign in with it.",
+"Preencha o servidor, o usuário e a senha, ou toque em Pular.": "Fill in the server, user and password, or tap Skip.",
+"Cole o link da lista, ou toque em Pular.": "Paste the playlist link, or tap Skip.",
+"Digite a cidade, ou toque em Pular.": "Type the city, or tap Skip.",
+"Pronto! A TV está configurada. O resto fica nas abas do painel.": "Done! The TV is set up. Everything else is in the panel tabs.",
+"A tela de idioma abriu na TV. Escolha com o controle.": "The language screen opened on the TV. Choose with the remote.",
+"Por segurança, digite o PIN que você acabou de criar.": "For safety, type the PIN you just created.",
+"Servidor (ex.: http://servidor:8080)": "Server (e.g. http://server:8080)",
+"Entrar com a digital": "Sign in with fingerprint",
+"Cadastrar a digital deste celular": "Register this phone's fingerprint",
+"Cadastrar a digital": "Register the fingerprint",
+"O celular vai pedir a sua digital (ou o rosto, ou o bloqueio de tela). Depois, é só tocar em \"Entrar com a digital\".": "The phone will ask for your fingerprint (or face, or screen lock). Then just tap \"Sign in with fingerprint\".",
+"Digital cadastrada. Da próxima vez, entre com ela.": "Fingerprint registered. Next time, sign in with it.",
+"Funciona só pelo endereço do Tailscale (com cadeado). Ligue antes a opção \"rede Tailscale\" na aba Claude (MCP).": "Works only through the Tailscale address (with the padlock). First turn on the \"Tailscale network\" option in the Claude (MCP) tab.",
+"Entre sem digitar o PIN: o celular confere a sua digital. O PIN continua valendo.": "Sign in without typing the PIN: the phone checks your fingerprint. The PIN still works.",
+"Este navegador não sabe usar a digital. Use o Chrome ou o Safari atualizados.": "This browser can't use fingerprints. Use an up-to-date Chrome or Safari.",
+"Este navegador é antigo para a digital. Atualize o Chrome ou o Safari.": "This browser is too old for fingerprints. Update Chrome or Safari.",
+"Apagar esta digital?": "Delete this fingerprint?",
 };
   const P = [
+[
+"^Funciona só pelo endereço do Tailscale: abra (.+) neste celular, entre com o PIN e cadastre\\.$",
+"Works only through the Tailscale address: open $1 on this phone, sign in with the PIN and register."
+],
+[
+"^(.+) · desde (.+)$",
+"$1 · since $2"
+],
+[
+"^(.+): esse celular volta a entrar só com o PIN\\.$",
+"$1: that phone goes back to signing in with the PIN only."
+],
+[
+"^Passo (\\d+) de (\\d+)$",
+"Step $1 of $2"
+],
+[
+"^A TV já tem (\\d+) conta\\(s\\)\\. Pode pular ou pôr outra\\.$",
+"The TV already has $1 account(s). You can skip or add another."
+],
+[
+"^Agora: (.+)$",
+"Now: $1"
+],
 [
 "^Última sincronização: (.+)\\.$",
 "Last sync: $1."

@@ -90,6 +90,9 @@ class JogosActivity : Activity() {
             isVerticalScrollBarEnabled = false; clipChildren = false; clipToPadding = false
             isSmoothScrollingEnabled = true
             addView(coluna)
+            // Corta embaixo: a fileira de baixo não passa por cima da barra de dicas (achado do teste de tela, ideia 96).
+            // Dos lados e em cima fica a folga para o card com foco crescer.
+            addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ -> v.clipBounds = android.graphics.Rect(-dp(40), -dp(40), v.width + dp(40), v.height) }
         }, LinearLayout.LayoutParams(-1, 0, 1f))
         conteudo.addView(Estilo.barraDicas(this,
             "◀ ▶" to getString(R.string.jogos_tecla_escolher),

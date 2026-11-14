@@ -65,6 +65,10 @@ class BoasVindasActivity : Activity() {
 
         val faltam = Recursos.perigosasFaltando(this)
         val comecar = linha(getString(R.string.bv_comecar), getString(R.string.bv_comecar_det)) { finish() }
+        // Ideia 97 (14/11/2026): sem PIN, a primeira linha (e a que já vem com o foco) é configurar tudo pelo celular.
+        if (!PainelArmazem.temPin(this)) lista.addView(linha(getString(R.string.pc_titulo), getString(R.string.pc_linha_det)) {
+            abrir(Intent(this, EntrarPeloQrActivity::class.java))
+        })
         if (faltam.isNotEmpty()) lista.addView(linha(getString(R.string.bv_perm),
             getString(R.string.bv_perm_det)) { requestPermissions(faltam, PEDIDO) })
         if (AutorizaShizukuService.instancia == null) lista.addView(linha(getString(R.string.bv_teclas),

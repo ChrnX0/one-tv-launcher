@@ -26,6 +26,7 @@ declare -A FONTES=(
   [FimDoVideoTest]="FimDoVideo"
   [PainelHttpTest]="PainelHttp"
   [PainelSegurancaTest]="PainelSeguranca PainelHttp JsonSeguro"
+  [PrimeiraConfigTest]="PainelSeguranca PainelHttp JsonSeguro"
   [McpAutorizacaoTest]="McpAutorizacao"
   [McpProtocoloTest]="McpProtocolo"
   [PainelHtmlTest]=""

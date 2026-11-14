@@ -89,6 +89,12 @@ object PainelArmazem {
         PinFamilia.confereNaTv(pin, temPinFamilia(ctx), { conferirPinFamilia(ctx, it) }, { conferirPin(ctx, it) })
 
     /** O dono quer o painel ligado (chave das Configurações). Não liga sozinho sem PIN: ver [podeLigar]. */
+    /** Chaves de acesso (digital do celular, ideia 99): só chaves PÚBLICAS; ver ChaveAcesso. */
+    @Synchronized fun chaves(ctx: Context): List<ChaveAcesso.Chave> = ChaveAcesso.deJson(prefs(ctx).getString("chaves_acesso", null))
+    @Synchronized fun gravarChaves(ctx: Context, l: List<ChaveAcesso.Chave>) {
+        prefs(ctx).edit().putString("chaves_acesso", ChaveAcesso.paraJson(l.takeLast(ChaveAcesso.MAX_CHAVES))).commit()
+    }
+
     fun ligado(ctx: Context): Boolean = prefs(ctx).getBoolean("ligado", false)
     fun definirLigado(ctx: Context, sim: Boolean) { prefs(ctx).edit().putBoolean("ligado", sim).apply() }
 

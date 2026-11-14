@@ -199,7 +199,7 @@ class Sessoes(private val relogio: () -> Long, private val maximoSessoes: Int = 
  *  - 24 bytes do SecureRandom (192 bits): adivinhar é impossível, então errar não conta tentativa;
  *  - comparação em tempo constante (MessageDigest.isEqual), para o tempo da resposta não entregar os primeiros dígitos.
  */
-class CodigoEntrada(private val relogio: () -> Long) {
+class CodigoEntrada(private val relogio: () -> Long, val validadeMs: Long = VALIDADE_MS) {
     companion object { const val VALIDADE_MS = 2 * 60_000L }
 
     private val aleatorio = SecureRandom()
@@ -213,7 +213,7 @@ class CodigoEntrada(private val relogio: () -> Long) {
         val b = ByteArray(24).also { aleatorio.nextBytes(it) }
         val texto = b.joinToString("") { "%02x".format(it) }
         codigo = texto.toByteArray()
-        venceEm = relogio() + VALIDADE_MS
+        venceEm = relogio() + validadeMs
         return texto
     }
 
@@ -383,4 +383,34 @@ object ChecagensPainel {
      */
     private val TEXTO_TV = Regex("^[A-Za-z0-9 .,@_\\-]{1,100}$")
     fun textoTvValido(t: String?): Boolean = t != null && TEXTO_TV.matches(t)
+}
+
+/**
+ * Primeira configuração pelo celular (ideia 97, 14/11/2026). Numa TV que ainda não tem PIN, a tela "Configurar pelo
+ * celular" mostra um QR com um código de uso único ([CodigoEntrada] com [VALIDADE_MS]); o celular abre o painel num
+ * assistente de 5 passos, e o PRIMEIRO passo cria o PIN. Só depois disso o resto (idioma, TV ao vivo, cidade,
+ * serviços) é gravado, com a sessão normal do painel.
+ *
+ * Por que é seguro abrir o painel sem PIN: a porta só abre enquanto a tela do QR está na TV (modo ativo), só aceita
+ * a rede da casa (como sempre), e só cria o PIN quem tem o código que está NA TELA. Com PIN já criado, recusa sempre:
+ * ninguém troca o PIN de uma TV configurada por aqui. Objeto puro, testado na JVM.
+ */
+object PrimeiraConfig {
+    /** 15 min: o código é gasto no passo do PIN, e a pessoa pode demorar a achar o celular e ler o QR. */
+    const val VALIDADE_MS = 15 * 60_000L
+
+    enum class Recusa(val status: Int, val mensagem: String) {
+        JA_TEM_PIN(409, "esta TV já tem PIN: entre com ele"),
+        FORA_DO_MODO(403, "abra \"Configurar pelo celular\" na TV e leia o QR de novo"),
+        PIN_INVALIDO(400, "o PIN precisa ter de 6 a 12 números"),
+        CODIGO(403, "este QR venceu ou já foi usado: na TV, abra \"Configurar pelo celular\" de novo"),
+    }
+
+    /** Null = pode criar o PIN (falta só gastar o código). A ordem importa: TV com PIN recusa antes de olhar o resto. */
+    fun conferir(temPin: Boolean, modoAtivo: Boolean, pin: String?): Recusa? = when {
+        temPin -> Recusa.JA_TEM_PIN
+        !modoAtivo -> Recusa.FORA_DO_MODO
+        pin == null || !PinSeguro.valido(pin) -> Recusa.PIN_INVALIDO
+        else -> null
+    }
 }
