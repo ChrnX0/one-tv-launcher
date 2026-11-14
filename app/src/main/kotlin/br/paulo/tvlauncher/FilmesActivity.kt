@@ -574,18 +574,20 @@ class FilmesActivity : Activity() {
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(f.grupo).ifEmpty { null },
             pos?.takeIf { p -> Vod.deveRetomar(p) }?.let { p -> getString(R.string.tempo_faltam, BarraTempo.duracao(p.duracao - p.ms)) })),
             info?.sinopse.orEmpty())
-        if (f.chave !in fichasRapidas) { focoRapido = f; tela.postDelayed(lerFichaRapida, 200) }   // espera o dedo parar
+        focoRapido = f; if (f.chave !in fichasRapidas) { tela.postDelayed(lerFichaRapida, 400) }   // espera o dedo parar
     }
 
     // As fichas já lidas do disco (null = não tem guardada), só as últimas 60: a TV tem 2 GB.
     private val fichasRapidas = object : LinkedHashMap<String, FichaFilme?>(64, 0.75f, true) {
         override fun removeEldestEntry(e: MutableMap.MutableEntry<String, FichaFilme?>) = size > 60
     }
-    private var focoRapido: Filme? = null
+    @Volatile private var focoRapido: Filme? = null   // lido também no Fundo: o pôster ainda em foco?
     private val lerFichaRapida = Runnable {
         val f = focoRapido ?: return@Runnable
         Fundo.rodar {
-            val info = PlayerCarga.fichaFilmeGuardada(this, f)
+            // Sem ficha no disco (título nunca aberto, ou aberto antes de 14/11, quando a ficha ainda não ficava no disco):
+            // pede ao servidor, só se o foco ainda está nele (parou o dedo). A resposta fica no disco para a próxima vez.
+            val info = PlayerCarga.fichaFilmeGuardada(this, f) ?: if (focoRapido === f) PlayerCarga.fichaFilme(this, f) else null
             tela.post {
                 if (isDestroyed) return@post
                 fichasRapidas[f.chave] = info
