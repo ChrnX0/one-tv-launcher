@@ -103,6 +103,19 @@ object Jogos {
     fun appDoPc(instalados: Set<String>, escolhido: String?): String? =
         escolhido?.takeIf { it in instalados } ?: APPS_PC.firstOrNull { it in instalados }
 
+    /**
+     * Ordem da fila "Seus jogos" (esboço A, 14/11/2026): o jogado por último primeiro. [uso] = pacote -> última vez
+     * (ms, do UsageStats do Android, que vê o jogo aberto por qualquer caminho). Quem nunca foi usado fica no fim, na
+     * ordem que veio (por nome).
+     */
+    fun ordenarPorUso(pacotes: List<String>, uso: Map<String, Long>): List<String> =
+        pacotes.withIndex().sortedWith(compareByDescending<IndexedValue<String>> { uso[it.value] ?: 0L }.thenBy { it.index })
+            .map { it.value }
+
+    /** O jogo usado por último entre [pacotes] (o fundo do card Jogos na HOME). Null = nenhum usado. */
+    fun ultimoUsado(pacotes: Collection<String>, uso: Map<String, Long>): String? =
+        pacotes.filter { (uso[it] ?: 0L) > 0L }.maxByOrNull { uso.getValue(it) }
+
     // ---------------------------------------------------------------- rede
 
     enum class Rede { BOA, OK, FRACA, SEM }
