@@ -12,7 +12,7 @@ class AuditoriaConfigTest {
     @Test fun chavesDoPainelPedemPinNaTv() {
         for (c in Extras.CHAVES_COM_PIN) {
             assertTrue(c.name, Extras.precisaPinNaTv(c, ligadoAgora = true, temPin = true))
-            if (c != Extras.Chave.HORA_DORMIR && c != Extras.Chave.MODO_SIMPLES) assertTrue(c.name, Extras.precisaPinNaTv(c, ligadoAgora = false, temPin = true))
+            if (c !in Extras.CHAVES_FAMILIA) assertTrue(c.name, Extras.precisaPinNaTv(c, ligadoAgora = false, temPin = true))
         }
         assertTrue(Extras.precisaPinNaTv(Extras.Chave.PIN_HOME, true, true))
         assertTrue(Extras.precisaPinNaTv(Extras.Chave.VER_TELA, false, true))   // ligar ver a tela também pede
@@ -27,9 +27,12 @@ class AuditoriaConfigTest {
     }
 
     // MODO_SIMPLES (12/11/2026): ligar é livre, mas desligar pela tela da TV ou pelo painel pede o PIN.
-    @Test fun conjuntoComPinTemAsOitoChaves() {
+    // TEMPO_TELA (ideia 33, 14/11/2026): a nona, de família como a hora de dormir.
+    @Test fun conjuntoComPinTemAsNoveChaves() {
         assertEquals(setOf(Extras.Chave.JANELA_OTA, Extras.Chave.TRAVAR_CRITICOS, Extras.Chave.PIN_HOME, Extras.Chave.DIARIO_DNS,
-            Extras.Chave.HORA_DORMIR, Extras.Chave.RECADO_LINK, Extras.Chave.VER_TELA, Extras.Chave.MODO_SIMPLES), Extras.CHAVES_COM_PIN)
+            Extras.Chave.HORA_DORMIR, Extras.Chave.RECADO_LINK, Extras.Chave.VER_TELA, Extras.Chave.MODO_SIMPLES,
+            Extras.Chave.TEMPO_TELA), Extras.CHAVES_COM_PIN)
+        assertTrue(Extras.CHAVES_COM_PIN.containsAll(Extras.CHAVES_FAMILIA))
     }
 
     // config-2: orientação do EXIF.

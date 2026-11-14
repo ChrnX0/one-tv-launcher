@@ -576,6 +576,11 @@ class ConfigLauncherActivity : Activity() {
                 startActivity(Intent(this, BloqueioCanaisActivity::class.java).putExtra(BloqueioCanaisActivity.EXTRA_INFANTIS, true))
             }
         }, lp())
+        // PIN das crianças (ideia 34): destrava na frente da criança sem entregar o PIN que administra a TV.
+        c.addView(linha(getString(R.string.fam_pin), getString(R.string.fam_pin_det),
+            valor = getString(if (PainelArmazem.temPinFamilia(this)) R.string.cl_definido else R.string.cl_nao_definido)) {
+            pedirPinParental(getString(R.string.cl_pin_painel)) { pinFamilia() }
+        }, lp())
         secao(c, getString(R.string.cl_como_funciona))
         c.addView(cartao().apply {
             addView(valor(getString(R.string.cl_cf_bloqueado), getString(R.string.cl_cf_bloqueado_det)))
@@ -583,6 +588,37 @@ class ConfigLauncherActivity : Activity() {
             addView(valor(getString(R.string.cl_cf_tranca), getString(R.string.cl_cf_tranca_det)))
             addView(valor(getString(R.string.cl_cf_pin), getString(R.string.cl_cf_pin_det)))
         }, lp())
+    }
+
+    /** Definir, trocar ou apagar o PIN das crianças (ideia 34). Quem chama já conferiu o PIN do painel. */
+    private fun pinFamilia() {
+        val definir = {
+            pedirPin(getString(R.string.cl_novo_pin, PinSeguro.MIN_DIGITOS, PinSeguro.MAX_DIGITOS)) { pin ->
+                pedirPin(getString(R.string.cl_pin_de_novo)) { pin2 ->
+                    if (pin2 != pin) { aviso(getString(R.string.cl_pin_nao_bateu)); return@pedirPin }
+                    aviso(getString(R.string.cl_gravando))
+                    trabalho.execute {
+                        // Igual ao do painel não vale (PinFamilia.conferirNovo). PBKDF2: fora da thread da tela.
+                        val r = PinFamilia.conferirNovo(pin, PinSeguro.valido(pin) && PainelArmazem.conferirPin(this, pin))
+                        if (r == PinFamilia.Novo.OK) PainelArmazem.definirPinFamilia(this, pin)
+                        ui.post {
+                            if (isDestroyed) return@post
+                            aviso(when (r) {
+                                PinFamilia.Novo.OK -> getString(R.string.fam_pin_ok)
+                                PinFamilia.Novo.IGUAL_AO_PAINEL -> getString(R.string.fam_pin_igual)
+                                PinFamilia.Novo.INVALIDO -> getString(R.string.cl_pin_invalido, PinSeguro.MIN_DIGITOS, PinSeguro.MAX_DIGITOS)
+                            })
+                            recarregarAba()
+                        }
+                    }
+                }
+            }
+        }
+        if (!PainelArmazem.temPinFamilia(this)) { definir(); return }
+        Estilo.lista(this, getString(R.string.fam_pin), listOf(getString(R.string.fam_trocar), getString(R.string.fam_apagar))) { i ->
+            if (i == 0) definir()
+            else trabalho.execute { PainelArmazem.apagarPinFamilia(this); ui.post { if (!isDestroyed) { aviso(getString(R.string.fam_apagado)); recarregarAba() } } }
+        }
     }
 
     /** Ação que exige o PIN quando o controle parental está valendo (ex.: apagar ou cadastrar conta). */

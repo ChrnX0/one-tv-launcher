@@ -27,16 +27,20 @@ object TravaHome {
     /** Roda [acao] direto se não precisa de PIN; senão pede o PIN e roda se acertar. */
     fun comPin(act: Activity, acao: () -> Unit) {
         if (!precisaPin(act)) { acao(); return }
-        PinTv.pedir(act, act.getString(R.string.trava_home_titulo)) { certo ->
+        PinTv.pedir(act, act.getString(R.string.trava_home_titulo), familia = true) { certo ->
             if (certo) { liberadoAte = System.currentTimeMillis() + LIBERADO_MS; acao() }
             else { AvisoTv.rapido(act, act.getString(R.string.trava_home_titulo), act.getString(R.string.trava_home_errado), 4) }
         }
     }
 }
 
-/** Caixa de PIN reutilizável (o mesmo PIN do painel). Confere fora da thread da tela: o PBKDF2 passa de 1 s na TV. */
+/**
+ * Caixa de PIN reutilizável. [familia] = true para o que se destrava na frente da criança: aí vale também o PIN das
+ * crianças (ideia 34, [PainelArmazem.conferirPinNaTv]); false = só o do painel (o que administra a TV).
+ * Confere fora da thread da tela: o PBKDF2 passa de 1 s na TV.
+ */
 object PinTv {
-    fun pedir(act: Activity, titulo: String, resultado: (Boolean) -> Unit) {
+    fun pedir(act: Activity, titulo: String, familia: Boolean = false, resultado: (Boolean) -> Unit) {
         val campo = EditText(act).apply {
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
             isSingleLine = true
@@ -44,7 +48,7 @@ object PinTv {
         val conferir = {
             val pin = campo.text.toString()
             Fundo.rodar {
-                val certo = PainelArmazem.conferirPin(act, pin)
+                val certo = if (familia) PainelArmazem.conferirPinNaTv(act, pin) else PainelArmazem.conferirPin(act, pin)
                 act.runOnUiThread { if (!act.isDestroyed) resultado(certo) }
             }
         }

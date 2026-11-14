@@ -45,7 +45,7 @@ class ExtrasActivity : Activity() {
                 // pegasse o controle desligava o PIN da HOME ou as travas). Hora de dormir: só desligar pede.
                 if (Extras.precisaPinNaTv(c, Extras.ligado(this, c), PainelArmazem.temPin(this))) {
                     val titulo = if (c == Extras.Chave.HORA_DORMIR) R.string.dormir_pin else R.string.player_pin_titulo
-                    PinTv.pedir(this, getString(titulo)) { certo -> if (certo) { alternar(c); atualizarTextos() } }
+                    PinTv.pedir(this, getString(titulo), familia = c in Extras.CHAVES_FAMILIA) { certo -> if (certo) { alternar(c); atualizarTextos() } }
                 } else alternar(c)
             }
         }
@@ -64,6 +64,14 @@ class ExtrasActivity : Activity() {
         linhaDormir({ "${getString(R.string.dormir_teto)}: ${Extras.numero(this, HoraDormir.CHAVE_TETO, HoraDormir.PADRAO_TETO)}%" }, 5) { d ->
             val v = Math.floorMod(Extras.numero(this, HoraDormir.CHAVE_TETO, HoraDormir.PADRAO_TETO) + d, 105)   // 0..100, dá a volta
             Extras.definirNumero(this, HoraDormir.CHAVE_TETO, v)
+        }
+        // Tempo de tela por dia (ideia 33): a cota (OK = +30 min; ← →) e "mais 30 min hoje". Mudar pede o PIN com a chave ligada.
+        linhaTela({ getString(R.string.tela_cota_linha, TempoTela.texto(TempoTelaTv.cota(this) * 60_000L, getString(R.string.tela_h), getString(R.string.tela_min)),
+            TempoTela.texto(TempoTelaTv.restanteMs(this), getString(R.string.tela_h), getString(R.string.tela_min))) }) { d ->
+            TempoTelaTv.definirCota(this, TempoTela.proximaCota(TempoTelaTv.cota(this), d * TempoTela.PASSO_COTA))
+        }
+        linhaTela({ getString(R.string.tela_mais, TempoTela.EXTRA_MIN) }, setas = false) { _ ->
+            TempoTelaTv.darMais(this); aviso(getString(R.string.tela_mais_ok, TempoTela.EXTRA_MIN))
         }
         linha({ getString(R.string.extras_caches) + " (" + getString(R.string.extras_livre, Caches.livreTexto()) + ")" }) {
             emSegundoPlano { Caches.limpar(it) }
@@ -152,7 +160,7 @@ class ExtrasActivity : Activity() {
         fun mudar(delta: Int) {
             val fazer = { aplicar(delta); atualizarTextos() }
             if (protegida && Extras.ligado(this, Extras.Chave.HORA_DORMIR) && PainelArmazem.temPin(this))
-                PinTv.pedir(this, getString(R.string.dormir_pin)) { certo -> if (certo) fazer() }
+                PinTv.pedir(this, getString(R.string.dormir_pin), familia = true) { certo -> if (certo) fazer() }
             else fazer()
         }
         val t = linha(texto) { mudar(passo) }
@@ -161,6 +169,25 @@ class ExtrasActivity : Activity() {
             when (code) {
                 KeyEvent.KEYCODE_DPAD_LEFT -> { mudar(-passo); true }
                 KeyEvent.KEYCODE_DPAD_RIGHT -> { mudar(passo); true }
+                else -> false
+            }
+        }
+    }
+
+    /** Linha do tempo de tela: com a chave ligada, mudar pede o PIN (das crianças ou do painel). [aplicar] recebe +1 ou -1. */
+    private fun linhaTela(texto: () -> String, setas: Boolean = true, aplicar: (Int) -> Unit) {
+        fun mudar(d: Int) {
+            val fazer = { aplicar(d); atualizarTextos() }
+            if (Extras.ligado(this, Extras.Chave.TEMPO_TELA) && PainelArmazem.temPin(this))
+                PinTv.pedir(this, getString(R.string.tela_pin), familia = true) { certo -> if (certo) fazer() }
+            else fazer()
+        }
+        val t = linha(texto) { mudar(1) }
+        if (setas) t.setOnKeyListener { _, code, e ->
+            if (e.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+            when (code) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> { mudar(-1); true }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> { mudar(1); true }
                 else -> false
             }
         }
