@@ -14,13 +14,9 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Os textos da TV seguem o idioma do Android</item>
-        <item>Casa separada por cômodo, e os cartões não cobrem mais as dicas</item>
-        <item>Backup toda noite no Google Drive, com restauração pelo Drive</item>
-        <item>Rotinas e despertadores podem rodar uma cena</item>
-        <item>O Claude faz mais na TV: Filmes, Séries e cenas</item>
-        <item>Cada versão nova passa pelos testes antes de sair</item>
-        <item>O painel web também abre com cadeado (https) em casa, na porta 8444</item>
+        <item>Botões do controle: toque, segurar e toque duplo nas teclas livres</item>
+        <item>Eventos podem disparar uma cena</item>
+        <item>O certificado https pode usar o nome que você der à TV (ex.: tv-sala)</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
