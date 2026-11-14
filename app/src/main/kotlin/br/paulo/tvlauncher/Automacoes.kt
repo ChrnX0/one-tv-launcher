@@ -36,12 +36,17 @@ object Automacoes {
     fun montar(rotinas: List<Rotinas.Rotina>, remap: Map<Int, Map<RemapTeclas.Gesto, String>>,
                gatilhos: Map<Gatilhos.Evento, String>, cenas: List<String>): List<Regra> {
         val r = ArrayList<Regra>()
-        for (x in rotinas) r += Regra(Quando.Horario(x.hora, x.minuto, x.dias), when (x.acao) {
-            Rotinas.Acao.LIGAR -> "ligar"
-            Rotinas.Acao.DESLIGAR -> "desligar"
-            Rotinas.Acao.ABRIR -> "app:${x.pacote}"
-            Rotinas.Acao.CENA -> "cena:${x.cena}"
-        }, x.ativa, "rotina:${x.id}")
+        for (x in rotinas) {
+            val faz = when (x.acao) {
+                Rotinas.Acao.LIGAR -> "ligar"
+                Rotinas.Acao.DESLIGAR -> "desligar"
+                Rotinas.Acao.ABRIR -> "app:${x.pacote}"
+                Rotinas.Acao.CENA -> "cena:${x.cena}"
+            }
+            // O JSON das rotinas pode vir de um backup restaurado: app/cena fora do formato não entram na lista.
+            if (faz.contains(':') && !RemapTeclas.atalhoValido(faz)) continue
+            r += Regra(Quando.Horario(x.hora, x.minuto, x.dias), faz, x.ativa, "rotina:${x.id}")
+        }
         for ((tecla, g) in remap.toSortedMap()) for (gesto in RemapTeclas.Gesto.values()) g[gesto]?.let {
             r += Regra(Quando.Botao(tecla, gesto), it, true, "tecla:$tecla")
         }
