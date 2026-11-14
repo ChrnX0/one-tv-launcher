@@ -24,4 +24,8 @@
     <string name="idade_so_categorias">Kids categories only</string>
     <string name="idade_livre">All ages</string>
     <string name="idade_anos">Up to %1$d years</string>
+    <!-- Ideia 82: onde assistir (OndeAssistir) -->
+    <string name="onde_tambem_em">Also on: %1$s (JustWatch)</string>
+    <string name="onde_fora">Not in your list · on %1$s</string>
+    <string name="onde_grupo">Elsewhere (JustWatch)</string>
 </resources>

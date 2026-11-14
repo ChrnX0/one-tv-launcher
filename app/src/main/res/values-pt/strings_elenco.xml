@@ -22,4 +22,8 @@
     <string name="idade_so_categorias">Só as categorias infantis</string>
     <string name="idade_livre">Livre</string>
     <string name="idade_anos">Até %1$d anos</string>
+    <!-- Ideia 82: onde assistir (OndeAssistir) -->
+    <string name="onde_tambem_em">Também em: %1$s (JustWatch)</string>
+    <string name="onde_fora">Não está na sua lista · está em %1$s</string>
+    <string name="onde_grupo">Em outros lugares (JustWatch)</string>
 </resources>

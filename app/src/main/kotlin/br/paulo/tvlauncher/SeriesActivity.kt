@@ -830,6 +830,14 @@ class SeriesActivity : Activity() {
         listOfNotNull(ext?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { InfoExterna.textoNotas(it) }, proximo).takeIf { it.isNotEmpty() }?.let { partes ->
             col.addView(TextView(this).apply { text = partes.joinToString("   ·   "); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPadding(0, dp(6), 0, 0); maxLines = 2 })
         }
+        // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch), preenchido quando chegar; some se não tiver.
+        tmdbDe(s, f)?.takeIf { InfoExternaCache.temTmdb() }?.let { id ->
+            val linhaOnde = TextView(this).apply { textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(6), 0, 0); visibility = View.GONE; maxLines = 1 }
+            col.addView(linhaOnde)
+            Fundo.rodar { InfoExternaCache.provedores(id, serie = true).takeIf { it.isNotEmpty() }?.let { p ->
+                tela.post { linhaOnde.text = getString(R.string.onde_tambem_em, p.joinToString(" · ")); linhaOnde.visibility = View.VISIBLE }
+            } }
+        }
         // A série inteira: barra + "20 de 62 episódios" (13/11/2026), quando já tem episódio visto.
         progresso[s.chave]?.takeIf { it.total > 0 && it.vistos > 0 }?.let { p ->
             col.addView(BarraTempo.Linha(this).apply {

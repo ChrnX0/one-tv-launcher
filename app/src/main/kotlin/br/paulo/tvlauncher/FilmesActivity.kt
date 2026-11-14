@@ -822,6 +822,14 @@ class FilmesActivity : Activity() {
         ext?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { n ->
             texto.addView(TextView(this).apply { text = InfoExterna.textoNotas(n); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPadding(0, dp(6), 0, 0) })
         }
+        // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch), preenchido quando chegar; some se não tiver.
+        (f.tmdb ?: info?.tmdb ?: ext?.tmdb)?.takeIf { InfoExternaCache.temTmdb() }?.let { id ->
+            val linhaOnde = TextView(this).apply { textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(6), 0, 0); visibility = View.GONE; maxLines = 1 }
+            texto.addView(linhaOnde)
+            Fundo.rodar { InfoExternaCache.provedores(id, serie = false).takeIf { it.isNotEmpty() }?.let { p ->
+                tela.post { linhaOnde.text = getString(R.string.onde_tambem_em, p.joinToString(" · ")); linhaOnde.visibility = View.VISIBLE }
+            } }
+        }
         sagaExterna?.takeIf { it.first === f }?.second?.let { (nome, tem, total) ->
             texto.addView(TextView(this).apply { text = getString(R.string.ext_saga, nome, tem, total); textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(6), 0, 0) })
         }
