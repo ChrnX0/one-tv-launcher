@@ -9,7 +9,9 @@ import java.net.URL
  * O ponto único entre as fontes de mídia da rede e o player (10/11/2026).
  *
  * Os endereços que circulam pelo app (Intent, posições salvas) NUNCA levam senha nem token:
- *   smb://<conta>/<arquivo>          pasta compartilhada (o player abre pelo Smb.Fonte)
+ *   smb://<conta>/<arquivo>          pasta compartilhada (o player abre pela FontePastas)
+ *   arq://<conta>/<arquivo>          FTP, FTPS, SFTP e NFS (14/11/2026; também pela FontePastas)
+ *   file:///storage/...              pendrive ou disco USB ligado na TV (só debaixo de /storage)
  *   jellyfin://<conta>/<item>[/audio] Jellyfin e Emby
  *   plex://<conta>/<item>?p=<arquivo> Plex
  *   webdav://<conta>/<caminho>        WebDAV / Nextcloud
@@ -29,9 +31,9 @@ object FontesMidia {
 
     enum class Momento { COMECOU, TOCANDO, PAROU }
 
-    val ESQUEMAS = listOf("http://", "https://", "smb://", "jellyfin://", "plex://", "webdav://")
+    val ESQUEMAS = listOf("http://", "https://", "smb://", "arq://", "jellyfin://", "plex://", "webdav://", "file://")
 
-    fun aceito(u: String) = ESQUEMAS.any { u.startsWith(it) }
+    fun aceito(u: String) = ESQUEMAS.any { u.startsWith(it) } && (!u.startsWith("file://") || Pastas.arquivoLocalPermitido(u))
 
     /** Lê o disco (contas cifradas): chamar fora da thread da tela. null = a conta foi removida ou o endereço é inválido. */
     fun resolver(ctx: Context, u: String): Tocavel? {

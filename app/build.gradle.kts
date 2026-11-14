@@ -154,6 +154,10 @@ dependencies {
         // O smbj traz o bcprov-jdk18on; o projeto já tem o bcprov-jdk15to18 (mesmas classes, versão mais nova). Dois = build quebra.
         exclude(group = "org.bouncycastle")
     }
+    // "Na rede" com mais protocolos (14/11/2026): FTP/FTPS (Apache Commons Net, Apache-2.0) e SFTP (JSch, fork mantido
+    // por mwiede, licença BSD; sem dependências). NFS é código nosso (Nfs.kt), sem biblioteca.
+    implementation("commons-net:commons-net:3.13.0")
+    implementation("com.github.mwiede:jsch:2.28.8")
 
     // Testes que rodam no computador (gradlew testReleaseUnitTest), sem TV: a parte do painel no navegador que não
     // usa o Android (PainelHttp, PainelSeguranca). Não entra no APK.

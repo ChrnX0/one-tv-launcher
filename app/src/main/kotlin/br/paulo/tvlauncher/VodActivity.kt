@@ -282,7 +282,7 @@ class VodActivity : Activity() {
             .setConnectTimeoutMs(10_000).setReadTimeoutMs(20_000).setDefaultRequestProperties(cabecalhos)
         // DefaultDataSource: http continua com a fábrica acima, e file:// (a legenda baixada, no disco da TV) também abre.
         val http = DefaultDataSource.Factory(this, http0)
-        val p = ExoPlayer.Builder(this, EfeitosSom.fabrica(this)).setMediaSourceFactory(DefaultMediaSourceFactory(Smb.Fabrica(this, http)))
+        val p = ExoPlayer.Builder(this, EfeitosSom.fabrica(this)).setMediaSourceFactory(DefaultMediaSourceFactory(FontePastas.Fabrica(this, http)))
             .setSeekBackIncrementMs(10_000).setSeekForwardIncrementMs(30_000).build()
         p.setVideoSurfaceView(video)
         p.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MOVIE).build(), true)

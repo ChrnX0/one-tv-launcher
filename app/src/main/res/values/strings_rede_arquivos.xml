@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "On the network" with FTP, FTPS, SFTP, NFS and USB drives plugged into the TV (14/11/2026). -->
+<resources>
+    <string name="rede_secao_na_tv">Plugged into the TV</string>
+    <string name="rede_sub_usb">USB drive · videos, music and photos</string>
+    <string name="rede_acao_arquivos">FTP, SFTP or NFS</string>
+    <string name="rede_sub_arquivos">NAS, router with a drive, Linux or Mac computer</string>
+    <string name="rede_arq_explica">Start the address with the protocol: sftp://nas/Movies · ftp://192.168.0.10 · ftps://nas/Videos · nfs://nas/volume1/video. SFTP and FTPS are encrypted; plain FTP sends the password unencrypted, so use it only at home. NFS has no password: the NAS must allow the TV\'s IP and connections from non-privileged ports.</string>
+    <string name="rede_arq_endereco">Address (sftp://, ftp://, ftps:// or nfs://)</string>
+    <string name="rede_arq_usuario">Username (NFS: user number, optional)</string>
+    <string name="rede_arq_endereco_erro">Start with sftp://, ftp://, ftps:// or nfs://, followed by the server and the folder. Username and password go in their own fields.</string>
+    <string name="rede_erro_nfs_porta">The NFS server refused the TV. On the NAS, allow connections from non-privileged ports (Linux: the \"insecure\" option in /etc/exports).</string>
+    <string name="rede_erro_nfs_ip">The NFS server did not allow this TV. On the NAS, add the TV\'s IP (or your home network) to this folder\'s NFS rule.</string>
+    <string name="rede_erro_chave_mudou">This server\'s key has changed since it was added. If you reinstalled the server, remove it here and add it again; if not, someone may be impersonating it.</string>
+    <string name="rede_erro_usb_acesso">The TV did not give the launcher access to the USB drive. Try again in a moment.</string>
+</resources>

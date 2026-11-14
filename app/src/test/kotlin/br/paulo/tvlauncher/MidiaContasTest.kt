@@ -25,7 +25,7 @@ class MidiaContasTest {
         val c = listOf(ContaMidia("a1", ContaMidia.SMB, "Filmes", "nas", "Filmes/HD", "eu", "s3nh@", "CASA"),
             ContaMidia("b2", ContaMidia.JELLYFIN, "Jelly", "http://nas:8096", token = "t", usuarioId = "u"))
         assertEquals(c, MidiaContas.deJson(MidiaContas.paraJson(c)))
-        assertEquals(emptyList<ContaMidia>(), MidiaContas.deJson("""[{"id":"x","tipo":"ftp","servidor":"a"}]"""))
+        assertEquals(emptyList<ContaMidia>(), MidiaContas.deJson("""[{"id":"x","tipo":"gopher","servidor":"a"}]"""))
         assertEquals(emptyList<ContaMidia>(), MidiaContas.deJson("lixo"))
     }
 
