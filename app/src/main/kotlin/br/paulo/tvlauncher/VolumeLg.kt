@@ -203,7 +203,8 @@ object VolumeLg {
             c = (URL("http://$ip:${LgNetcast.PORTA}$caminho").openConnection() as HttpURLConnection).apply {
                 connectTimeout = tempoMs; readTimeout = tempoMs; useCaches = false
                 instanceFollowRedirects = false
-                setRequestProperty("User-Agent", "UDAP/2.0")
+                // O cabeçalho "UDAP/2.0" só vale no caminho UDAP: no ROAP a LG responde 400 (verificado na Sala, 14/11/2026).
+                if (LgNetcast.agenteUdap(caminho)) setRequestProperty("User-Agent", "UDAP/2.0")
                 if (corpo != null) {
                     requestMethod = "POST"; doOutput = true
                     setRequestProperty("Content-Type", "${LgNetcast.TIPO}; charset=utf-8")
