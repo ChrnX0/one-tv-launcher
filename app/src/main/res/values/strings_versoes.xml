@@ -17,10 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Automations: one place to create and edit them (Settings &gt; Automations)</item>
-        <item>Remote buttons: tap, hold and double tap on free keys</item>
-        <item>Events can start a scene, for example when a movie is paused</item>
-        <item>The https certificate can use your own TV name (e.g. tv-sala)</item>
+        <item>Real volume on LG NetCast TVs (2013) over the network: sleep timer, bedtime limit, voice and alarm</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
