@@ -52,6 +52,7 @@
         <item>App de IA novo entra sem esperar versão: libere o domínio dele no painel</item>
         <item>Um tamanho de texto para todas as telas: Configurações › Tela inicial › Tamanho do texto (Normal, Grande, Maior)</item>
         <item>TV ao vivo: a lista de canais e a grade usam as cores e os ícones de linha do launcher (estrela, recentes, busca, filtros, grade, cadeado)</item>
+        <item>Filmes: Filtrar (gênero, época, nota mínima, só não vistos) sobre a categoria escolhida, “Coleção deste filme” na ficha e “Sortear um filme”</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -94,6 +95,7 @@
         <item>No painel, Conectar uma IA &gt; Outro app de IA: libere um domínio de teste</item>
         <item>Ponha Configurações › Tela inicial › Tamanho do texto em Maior e abra o painel rápido e Filmes</item>
         <item>Na TV ao vivo, abra a lista de canais (OK) e depois a Grade</item>
+        <item>Em Filmes, use Filtrar (ex.: um gênero + nota 7+), depois Sortear um filme e, na ficha de uma continuação, “Coleção deste filme”</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -136,5 +138,6 @@
         <item>Salvou e aparece na lista?</item>
         <item>A letra cresceu e continuou cabendo, sem nada cortado?</item>
         <item>Favoritos, Recentes, Buscar, Filtros e Grade aparecem com ícones de linha (sem quadradinhos nem emoji), nos mesmos tamanhos?</item>
+        <item>O título da coluna mostrou o filtro, o sorteio abriu um filme da grade filtrada e a coleção listou as continuações?</item>
     </string-array>
 </resources>

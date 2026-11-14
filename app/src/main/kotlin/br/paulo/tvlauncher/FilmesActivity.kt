@@ -40,6 +40,8 @@ import java.util.Locale
  *     ▶ Continuar
  *     ★ Interesses     OK segurado 2 s num pôster põe/tira dos interesses (como os favoritos dos canais).
  *     ✓ Assistidos     tudo o que já foi visto, com a etiqueta "42%" ou "Finalizado" no pôster.
+ *     ☰ Filtrar        gênero + época + nota mínima + só não vistos, sobre a categoria escolhida (ideia 23, FilmesFiltro).
+ *     ✦ Sortear        um filme ao acaso da grade (filtrada), preferindo os Interesses; abre a ficha dele.
  *     Todos · Ação · ...
  *
  * As duas colunas são ListView/GridView do Android (só desenham o que está na tela: 30 mil filmes custam o mesmo que 30).
@@ -55,6 +57,9 @@ class FilmesActivity : Activity() {
         const val TODOS = "*todos"
         const val BUSCA = "*busca"
         const val OCULTAS = "*ocultas"
+        const val FILTRO = "*filtro"       // ideia 23: menu do filtro combinado
+        const val SORTEIO = "*sorteio"     // ideia 23: sorteia um filme da grade
+        const val COLECAO = "*colecao"     // ideia 23: "Coleção deste filme" (aberta pela ficha)
     }
 
     private data class Item(val chave: String, val nome: String, val quantos: Int)
@@ -87,6 +92,10 @@ class FilmesActivity : Activity() {
     // Dublado x legendado (Idioma, 11/11/2026): o mesmo filme nas duas versões do catálogo, e o que a pessoa prefere.
     private var indiceVersoes: Map<String, List<Filme>> = emptyMap()
     private var prefsIdioma = Idioma.Prefs()
+    // Ideia 23: filtro combinado (vale para a categoria escolhida), a coleção aberta pela ficha e a da ficha aberta.
+    private var filtro = FilmesFiltro.Criterios()
+    private var colecao: Pair<String, List<Filme>>? = null          // nome exibido + filmes, do mais antigo ao mais novo
+    private var colecaoFicha: Pair<Filme, List<Filme>>? = null      // calculada fora da tela quando a ficha abre
 
     private lateinit var listaCats: ListView
     private lateinit var grade: GridView
@@ -145,6 +154,8 @@ class FilmesActivity : Activity() {
                 BUSCAR -> buscar()
                 ORDEM -> escolherOrdem()
                 OCULTAS -> alternarOcultas()
+                FILTRO -> menuFiltro()
+                SORTEIO -> sortear()
                 else -> escolherCat(pos, focarGrade = true)
             }
         }
@@ -170,7 +181,7 @@ class FilmesActivity : Activity() {
                 val mudou = oc != ocultas
                 posicoes = p; prefsIdioma = pi; ocultas = oc
                 // "Assistidos" e "Continuar" mudam de conteúdo ao voltar do vídeo: refaz a grade sem perder o lugar.
-                recalcular(if (mudou || chave == ASSISTIDOS || chave == CONTINUAR) ModoGrade.MANTER_LUGAR else ModoGrade.IGUAL)
+                recalcular(if (mudou || chave == ASSISTIDOS || chave == CONTINUAR || filtro.naoVistos) ModoGrade.MANTER_LUGAR else ModoGrade.IGUAL)
                 adaptadorGrade.notifyDataSetChanged()   // a barrinha de progresso do card muda na hora
                 ficha?.let { abrirFicha(it, manterFoco = true) }
             }
@@ -259,6 +270,7 @@ class FilmesActivity : Activity() {
         val todosS = todos; val ocultasS = if (mostrarOcultas) emptySet() else ocultas; val mostrar = mostrarOcultas
         val termoS = termo; val posS = posicoes; val intS = interesses; val ordemS = ordem; val chaveS = chave
         val temOcultas = ocultas.isNotEmpty()
+        val filtroS = filtro; val colecaoS = colecao
         val rotulo = { id: Int -> getString(id) }
         val antesSel = grade.selectedItemPosition
         calculo.pedir(
@@ -274,6 +286,11 @@ class FilmesActivity : Activity() {
                 l += Item(ORDEM, getString(R.string.filmes_ordem, nomeOrdem(ordemS)), -1)
                 // Só aparece quando há categoria oculta neste catálogo (mesmo texto do menu de filtros do player).
                 if (temOcultas) l += Item(OCULTAS, rotulo(if (mostrar) R.string.player_ocultas_esconder else R.string.player_ocultas_mostrar), -1)
+                l += Item(FILTRO, rotulo(R.string.filmes_filtro), -1)
+                l += Item(SORTEIO, rotulo(R.string.filmes_sorteio), -1)
+                // A coleção vem da ficha; filme de categoria oculta não entra (o PIN pode ter trancado de novo).
+                val col = colecaoS?.let { (n, fs) -> n to fs.filter { mostrar || it.grupo.trim() !in ocultasS } }?.takeIf { it.second.isNotEmpty() }
+                if (col != null) l += Item(COLECAO, getString(R.string.filmes_colecao_cat, col.first), col.second.size)
                 if (cont.isNotEmpty()) l += Item(CONTINUAR, rotulo(R.string.filmes_continuar), cont.size)
                 // Interesses aparece sempre (vazio explica como usar); Assistidos só depois do 1º filme visto.
                 val ints = Vod.interesses(vis, intS) { it.chave }
@@ -294,9 +311,10 @@ class FilmesActivity : Activity() {
                         ch == INTERESSES -> ints                 // o último marcado primeiro
                         ch == ASSISTIDOS -> vistos               // o visto mais recente primeiro
                         ch == BUSCA -> res
+                        ch == COLECAO -> col?.second.orEmpty()   // já na ordem dos anos
                         ch.startsWith("g:") -> { val alvo = ch.removePrefix("g:"); ordenados().filter { it.grupo.trim() == alvo } }
                         else -> ordenados()
-                    }
+                    }.let { FilmesFiltro.filtrar(it, filtroS, posS) }   // o filtro combinado vale sobre qualquer categoria
                 }
                 Estado(vis, res, l, ch, g)
             },
@@ -317,7 +335,9 @@ class FilmesActivity : Activity() {
                         if (modo == ModoGrade.MANTER_LUGAR && naGrade.isEmpty() && grade.hasFocus()) listaCats.requestFocus()   // esvaziou
                     }
                     val nome = itens.firstOrNull { it.chave == chave }?.nome.orEmpty()
-                    cabecalho.text = getString(R.string.filmes_cabecalho, nome.uppercase(Locale.getDefault()), naGrade.size)
+                    val cab = getString(R.string.filmes_cabecalho, nome.uppercase(Locale.getDefault()), naGrade.size)
+                    // Resumo do filtro no título da coluna: a pessoa sabe por que a categoria tem menos filmes.
+                    cabecalho.text = if (filtro.ativo) getString(R.string.filmes_filtro_cabecalho, cab, resumoFiltro().uppercase(Locale.getDefault())) else cab
                     depois?.invoke()
                 }
             },
@@ -337,13 +357,13 @@ class FilmesActivity : Activity() {
         val primeiro = listaCats.firstVisiblePosition
         for (i in 0 until listaCats.childCount) {
             val item = itens.getOrNull(primeiro + i) ?: continue
-            ((listaCats.getChildAt(i) as? LinearLayout)?.getChildAt(0) as? TextView)?.setTextColor(if (item.chave == chave) ambar else papel)
+            ((listaCats.getChildAt(i) as? LinearLayout)?.getChildAt(0) as? TextView)?.setTextColor(corCat(item))
         }
     }
 
     private fun escolherCat(pos: Int, focarGrade: Boolean = false) {
         val it = itens.getOrNull(pos) ?: return
-        if (it.chave == BUSCAR || it.chave == ORDEM || it.chave == OCULTAS) return
+        if (it.chave == BUSCAR || it.chave == ORDEM || it.chave == OCULTAS || it.chave == FILTRO || it.chave == SORTEIO) return
         if (it.chave == chave) { if (focarGrade && naGrade.isNotEmpty() && !calculo.calculando) grade.requestFocus(); return }
         chave = it.chave
         atualizarCats(itens)   // mesma lista: só troca a cor da escolhida
@@ -435,8 +455,11 @@ class FilmesActivity : Activity() {
             }
             val it = itens[p]
             (linha.getChildAt(0) as TextView).apply {
-                text = when (it.chave) { BUSCAR, BUSCA -> "⌕  "; ORDEM -> "⇅  "; CONTINUAR -> "▶  "; INTERESSES -> "★  "; ASSISTIDOS -> "✓  "; else -> "" } + it.nome
-                setTextColor(if (it.chave == chave) ambar else papel)
+                text = when (it.chave) {
+                    BUSCAR, BUSCA -> "⌕  "; ORDEM -> "⇅  "; CONTINUAR -> "▶  "; INTERESSES -> "★  "; ASSISTIDOS -> "✓  "
+                    FILTRO -> "☰  "; SORTEIO -> "✦  "; COLECAO -> "❒  "; else -> ""
+                } + it.nome
+                setTextColor(corCat(it))
             }
             (linha.getChildAt(1) as TextView).text = if (it.quantos < 0) "" else it.quantos.toString()
             return linha
@@ -510,6 +533,7 @@ class FilmesActivity : Activity() {
 
     private fun mostrarFocado(f: Filme?) {
         if (f == null && chave == INTERESSES) { focado.text = getString(R.string.filmes_interesses_vazio); return }
+        if (f == null && filtro.ativo) { focado.text = getString(R.string.filmes_filtro_vazio); return }
         focado.text = f?.let {
             val pos = posicoes[it.chave]?.takeIf { p -> p.duracao > 0 }
             Estilo.infoFoco(Vod.nomeLimpo(it.nome), it.nota, listOfNotNull(it.ano?.toString(), PlayerLista.nomeExibido(it.grupo).ifEmpty { null },
@@ -533,6 +557,15 @@ class FilmesActivity : Activity() {
         if (ficha !== f) fichaInfo = null   // outro filme: as cenas da ficha antiga não valem
         ficha = f
         desenharFicha(f, null, manterFoco)
+        // Coleção (ideia 23): o nome-base de cada filme do catálogo visível, fora da tela (dezenas de milhares de nomes).
+        if (colecaoFicha?.first !== f) {
+            colecaoFicha = null
+            val vis = filmes
+            Fundo.rodar {
+                val col = FilmesFiltro.colecao(vis, f)
+                tela.post { if (!isDestroyed && ficha === f) { colecaoFicha = f to col; if (col.size > 1) desenharFicha(f, fichaInfo, manterFoco = true) } }
+            }
+        }
         Fundo.rodar {
             val info = PlayerCarga.fichaFilme(this, f)
             tela.post { if (!isDestroyed && ficha === f) { fichaInfo = info; desenharFicha(f, info, manterFoco = true) } }
@@ -594,6 +627,11 @@ class FilmesActivity : Activity() {
             val r = if (Idioma.versao(o.nome, o.grupo) == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
             botoes.addView(botao(getString(r), "versao") { abrirFicha(o) }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(12) })
         }
+        // Ideia 23: os outros filmes com o mesmo nome-base (sequências, dublado e legendado) viram uma categoria na grade.
+        colecaoFicha?.takeIf { it.first === f && it.second.size > 1 }?.second?.let { lista ->
+            botoes.addView(botao(getString(R.string.filmes_colecao), "colecao") { abrirColecao(lista) },
+                LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(12) })
+        }
         texto.addView(botoes)
 
         val corpo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
@@ -608,6 +646,131 @@ class FilmesActivity : Activity() {
         painelFicha.addView(linha, FrameLayout.LayoutParams(-1, -1))
         painelFicha.visibility = View.VISIBLE
         (focoAntes?.let { t -> botoes.findViewWithTag<View>(t) } ?: primeiro).requestFocus()
+    }
+
+    private fun abrirColecao(lista: List<Filme>) {
+        colecao = Vod.nomeLimpo(lista.first().nome) to lista
+        chave = COLECAO
+        fecharFicha()
+        recalcular(ModoGrade.NOVA) { if (naGrade.isNotEmpty()) grade.requestFocus() }
+    }
+
+    // ---------------------------------------------------------------- filtro combinado e sorteio (ideia 23)
+
+    /** Cor do nome na lista de categorias: a escolhida e o Filtrar em vigor em âmbar (como o Filtros da TV ao vivo). */
+    private fun corCat(it: Item) = if (it.chave == chave || (it.chave == FILTRO && filtro.ativo)) ambar else papel
+
+    private fun nomeGenero(g: FilmesFiltro.Genero) = getString(when (g) {
+        FilmesFiltro.Genero.ACAO -> R.string.genero_acao
+        FilmesFiltro.Genero.AVENTURA -> R.string.genero_aventura
+        FilmesFiltro.Genero.COMEDIA -> R.string.genero_comedia
+        FilmesFiltro.Genero.DRAMA -> R.string.genero_drama
+        FilmesFiltro.Genero.TERROR -> R.string.genero_terror
+        FilmesFiltro.Genero.SUSPENSE -> R.string.genero_suspense
+        FilmesFiltro.Genero.ROMANCE -> R.string.genero_romance
+        FilmesFiltro.Genero.FICCAO -> R.string.genero_ficcao
+        FilmesFiltro.Genero.FANTASIA -> R.string.genero_fantasia
+        FilmesFiltro.Genero.ANIMACAO -> R.string.genero_animacao
+        FilmesFiltro.Genero.INFANTIL -> R.string.genero_infantil
+        FilmesFiltro.Genero.DOCUMENTARIO -> R.string.genero_documentario
+        FilmesFiltro.Genero.CRIME -> R.string.genero_crime
+        FilmesFiltro.Genero.GUERRA -> R.string.genero_guerra
+        FilmesFiltro.Genero.FAROESTE -> R.string.genero_faroeste
+        FilmesFiltro.Genero.MUSICAL -> R.string.genero_musical
+    })
+
+    private fun nomeEpoca(c: FilmesFiltro.Criterios): String? =
+        c.ano?.toString() ?: c.decada?.let { getString(R.string.filmes_filtro_decada, it) }
+
+    private fun nomeNota(n: Int) = "★ " + getString(R.string.filmes_filtro_nota_min, n)
+
+    /** "Ação · Anos 1990 · ★ 7+ · não vistos": o que está filtrando, para o título da coluna. */
+    private fun resumoFiltro(): String = listOfNotNull(
+        filtro.genero?.let { nomeGenero(it) }, nomeEpoca(filtro), filtro.notaMin?.let { nomeNota(it) },
+        if (filtro.naoVistos) getString(R.string.filmes_filtro_nao_vistos_curto) else null,
+    ).joinToString(" · ")
+
+    private fun aplicarFiltro(novo: FilmesFiltro.Criterios) {
+        filtro = novo
+        atualizarCats(itens)   // a cor do "Filtrar" muda
+        recalcular(ModoGrade.NOVA)
+    }
+
+    // Gêneros e épocas do catálogo visível: contados uma vez por lista (fora da tela) e reaproveitados no menu.
+    private var opcoesFiltro: Triple<List<Filme>, List<FilmesFiltro.Genero>, Pair<List<Int>, List<Int>>>? = null
+
+    /** O menu do filtro (Estilo.lista, como o da Ordem). Cada escolha aplica na hora e volta a este menu. */
+    private fun menuFiltro() {
+        val vis = filmes
+        val pronto = opcoesFiltro?.takeIf { it.first === vis }
+        if (pronto == null) {
+            val ano = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
+            Fundo.rodar {
+                val o = Triple(vis, FilmesFiltro.generosPresentes(vis), FilmesFiltro.epocasPresentes(vis, ano))
+                tela.post { if (!isDestroyed) { opcoesFiltro = o; menuFiltro() } }
+            }
+            return
+        }
+        val qualquer = getString(R.string.filmes_filtro_qualquer)
+        val linhas = arrayListOf<CharSequence>(
+            getString(R.string.filmes_filtro_genero, filtro.genero?.let { nomeGenero(it) } ?: qualquer),
+            getString(R.string.filmes_filtro_epoca, nomeEpoca(filtro) ?: qualquer),
+            getString(R.string.filmes_filtro_nota, filtro.notaMin?.let { nomeNota(it) } ?: qualquer),
+            getString(R.string.filmes_filtro_nao_vistos, getString(if (filtro.naoVistos) R.string.filmes_filtro_sim else R.string.filmes_filtro_nao)),
+        )
+        if (filtro.ativo) linhas += getString(R.string.filmes_filtro_limpar)
+        Estilo.lista(this, getString(R.string.filmes_filtro_titulo), linhas) { i ->
+            when (i) {
+                0 -> escolherGenero(pronto.second)
+                1 -> escolherEpoca(pronto.third)
+                2 -> escolherNota()
+                3 -> { aplicarFiltro(filtro.copy(naoVistos = !filtro.naoVistos)); menuFiltro() }
+                else -> aplicarFiltro(FilmesFiltro.Criterios())
+            }
+        }
+    }
+
+    private fun escolherGenero(generos: List<FilmesFiltro.Genero>) {
+        if (generos.isEmpty()) { avisoBreve(getString(R.string.filmes_filtro_sem_genero)); return }
+        val opcoes = listOf<FilmesFiltro.Genero?>(null) + generos
+        val marcada = opcoes.indexOf(filtro.genero).coerceAtLeast(0)
+        Estilo.lista(this, getString(R.string.filmes_filtro_titulo),
+            opcoes.map { it?.let { g -> nomeGenero(g) } ?: getString(R.string.filmes_filtro_qualquer) }, listOf(marcada)) { i ->
+            aplicarFiltro(filtro.copy(genero = opcoes[i])); menuFiltro()
+        }
+    }
+
+    private fun escolherEpoca(epocas: Pair<List<Int>, List<Int>>) {
+        // null = qualquer; ano positivo (2026); década negativa (-1990), para não confundir com um ano.
+        val opcoes = listOf<Int?>(null) + epocas.first + epocas.second.map { -it }
+        val atual = filtro.ano ?: filtro.decada?.let { -it }
+        val marcada = opcoes.indexOf(atual).coerceAtLeast(0)
+        Estilo.lista(this, getString(R.string.filmes_filtro_titulo), opcoes.map { o ->
+            when { o == null -> getString(R.string.filmes_filtro_qualquer); o > 0 -> o.toString(); else -> getString(R.string.filmes_filtro_decada, -o) }
+        }, listOf(marcada)) { i ->
+            val o = opcoes[i]
+            aplicarFiltro(filtro.copy(ano = o?.takeIf { it > 0 }, decada = o?.takeIf { it < 0 }?.let { -it })); menuFiltro()
+        }
+    }
+
+    private fun escolherNota() {
+        val opcoes = listOf<Int?>(null) + FilmesFiltro.NOTAS
+        val marcada = opcoes.indexOf(filtro.notaMin).coerceAtLeast(0)
+        Estilo.lista(this, getString(R.string.filmes_filtro_titulo), opcoes.map { n ->
+            n?.let { nomeNota(it) } ?: getString(R.string.filmes_filtro_qualquer)
+        }, listOf(marcada)) { i -> aplicarFiltro(filtro.copy(notaMin = opcoes[i])); menuFiltro() }
+    }
+
+    /** Sorteio: um filme da grade como está (categoria + filtro), preferindo os Interesses; abre a ficha dele. */
+    private fun sortear() {
+        val g = naGrade; val ints = interesses; val pos = posicoes
+        Fundo.rodar {
+            val f = FilmesFiltro.sortear(g, ints, pos)
+            tela.post {
+                if (isDestroyed) return@post
+                if (f == null) avisoBreve(getString(R.string.filmes_sorteio_vazio)) else abrirFicha(f, trocar = true)
+            }
+        }
     }
 
     private fun rotuloVersao(v: Idioma.Versao): String? = when (v) {

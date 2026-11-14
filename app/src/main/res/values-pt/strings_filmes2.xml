@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dentro de Filmes (ideia 23, 14/11/2026): filtro combinado, coleções pelo nome e sorteio. -->
+<resources>
+    <string name="filmes_filtro">Filtrar</string>
+    <string name="filmes_filtro_titulo">Filtrar filmes</string>
+    <string name="filmes_filtro_cabecalho">%1$s · FILTRO: %2$s</string>
+    <string name="filmes_filtro_genero">Gênero: %1$s</string>
+    <string name="filmes_filtro_epoca">Época: %1$s</string>
+    <string name="filmes_filtro_nota">Nota mínima: %1$s</string>
+    <string name="filmes_filtro_nao_vistos">Só os não vistos: %1$s</string>
+    <string name="filmes_filtro_limpar">Limpar filtro</string>
+    <string name="filmes_filtro_qualquer">Qualquer</string>
+    <string name="filmes_filtro_sim">Sim</string>
+    <string name="filmes_filtro_nao">Não</string>
+    <string name="filmes_filtro_decada">Anos %1$d</string>
+    <string name="filmes_filtro_nota_min">%1$d+</string>
+    <string name="filmes_filtro_nao_vistos_curto">não vistos</string>
+    <string name="filmes_filtro_sem_genero">Nenhuma categoria desta lista indica gênero</string>
+    <string name="filmes_filtro_vazio">Nenhum filme desta categoria passa no filtro</string>
+    <string name="filmes_sorteio">Sortear um filme</string>
+    <string name="filmes_sorteio_vazio">Não há filme para sortear aqui</string>
+    <string name="filmes_colecao">Coleção deste filme</string>
+    <string name="filmes_colecao_cat">Coleção: %1$s</string>
+    <string name="genero_acao">Ação</string>
+    <string name="genero_aventura">Aventura</string>
+    <string name="genero_comedia">Comédia</string>
+    <string name="genero_drama">Drama</string>
+    <string name="genero_terror">Terror</string>
+    <string name="genero_suspense">Suspense</string>
+    <string name="genero_romance">Romance</string>
+    <string name="genero_ficcao">Ficção científica</string>
+    <string name="genero_fantasia">Fantasia</string>
+    <string name="genero_animacao">Animação</string>
+    <string name="genero_infantil">Infantil e família</string>
+    <string name="genero_documentario">Documentário</string>
+    <string name="genero_crime">Crime</string>
+    <string name="genero_guerra">Guerra</string>
+    <string name="genero_faroeste">Faroeste</string>
+    <string name="genero_musical">Musical</string>
+</resources>
