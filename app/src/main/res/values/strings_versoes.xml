@@ -17,6 +17,9 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Set up a new TV from your phone: Welcome › Set up with your phone shows a QR code; the phone creates the PIN and picks language, live TV list, city and services, in big steps</item>
+        <item>Sign in to the web panel with your phone\'s fingerprint or face (passkey), through the Tailscale address: Panel › Sign-ins › Sign in with fingerprint</item>
+        <item>Screens checked by picture on GitHub before each version: cut or shrunken text and lost focus are caught before reaching the TV</item>
         <item>Radio inside Live TV: stations from all over the world (radio-browser.info), near you and most listened in your country first, search by name, genre or country, favorites on keys 1–9 and the song that is playing; the screen dims after 3 min and the sound keeps going. Paste any station address in the web panel</item>
         <item>Birthdays: list in the web panel (Extras); on the day before and on the day, the home screen and the screensaver show “Today is …’s birthday”</item>
         <item>Strong heat or cold alert (“Drink water”, “Dress warmly”) next to the rain alert; Settings › Home screen to turn it off</item>
@@ -109,6 +112,8 @@
         <item>Movies and series at their own frame rate: the TV switches to 24 Hz and the picture does not judder in camera moves (Settings › TV and movies, ▼ menu and panel)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>primeira_celular</item>
+        <item>menu_config_corte</item>
         <item>radios</item>
         <item>aniversarios</item>
         <item>calor_frio</item>
@@ -196,6 +201,8 @@
         <item>taxa_quadros</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Settings › Remote access › Sign in with your phone</item>
+        <item>Settings: walk down the left menu</item>
         <item>Live TV › left column › Radio</item>
         <item>Web panel › Extras › Birthdays: add someone with today’s date</item>
         <item>Settings › Home screen › Heat and cold alert</item>
@@ -283,6 +290,8 @@
         <item>Open a movie and watch a scene where the camera pans slowly</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>The QR showed up big, the phone read it and the panel opened already signed in?</item>
+        <item>Is the focus outline whole on every item (not cut at the sides)?</item>
         <item>Did a station near you play, with the name large and (when the station sends it) the song, and did key 1 play the first favorite?</item>
         <item>Did “Today is …’s birthday” appear at the top of the home screen and on the screensaver?</item>
         <item>Is the switch there and on?</item>

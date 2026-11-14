@@ -14,6 +14,9 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Configurar uma TV nova pelo celular: Boas-vindas › Configurar pelo celular mostra um QR; o celular cria o PIN e escolhe idioma, lista de TV ao vivo, cidade e serviços, em passos grandes</item>
+        <item>Entrar no painel web com a digital ou o rosto do celular (chave de acesso), pelo endereço do Tailscale: Painel › Acessos › Entrar com a digital</item>
+        <item>As telas são conferidas por foto no GitHub antes de cada versão: texto cortado ou encolhido e foco sumido são pegos antes de chegar à TV</item>
         <item>Rádios dentro da TV ao vivo: rádios do mundo todo (radio-browser.info), primeiro as perto de você e as mais ouvidas do país, busca por nome, gênero ou país, favoritas nas teclas 1 a 9 e a música que está tocando; a tela escurece depois de 3 min e o som segue. Cole o endereço de qualquer rádio no painel web</item>
         <item>Aniversários: lista no painel web (Extras); na véspera e no dia, a tela inicial e o protetor mostram “Hoje é aniversário de…”</item>
         <item>Aviso de calor ou frio forte (“Beba água”, “Agasalhe-se”) ao lado do aviso de chuva; desliga em Configurações › Tela inicial</item>
@@ -106,6 +109,8 @@
         <item>Filmes e séries na taxa de quadros deles: a TV troca para 24 Hz e a imagem não treme em movimentos de câmera (Configurações › TV e filmes, menu ▼ e painel)</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Configurações › Acesso remoto › Entrar pelo celular</item>
+        <item>Configurações: desça pelo menu da esquerda</item>
         <item>TV ao vivo › coluna da esquerda › Rádios</item>
         <item>Painel web › Extras › Aniversários: ponha alguém com a data de hoje</item>
         <item>Configurações › Tela inicial › Aviso de calor e frio</item>
@@ -193,6 +198,8 @@
         <item>Abra um filme e repare numa cena com a câmera andando devagar</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>O QR apareceu grande, o celular leu e o painel abriu já entrando?</item>
+        <item>O contorno do foco aparece inteiro em todos os itens (sem cortar nas laterais)?</item>
         <item>Tocou uma rádio perto de você, com o nome grande e (quando a rádio manda) a música, e a tecla 1 tocou a 1ª favorita?</item>
         <item>Apareceu “Hoje é aniversário de…” no alto da tela inicial e no protetor?</item>
         <item>A chave está lá e ligada?</item>
