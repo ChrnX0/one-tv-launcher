@@ -29,6 +29,16 @@ class PainelHtmlTest {
         return r
     }
 
+    /** Ideia 76: a tradução carrega ANTES dos outros scripts (o observador precisa existir quando eles escrevem). */
+    @Test fun traducaoCarregaPrimeiro() {
+        val i18n = html.indexOf("<script src=\"i18n.js\"")
+        assertTrue("index.html carrega i18n.js", i18n >= 0)
+        val outros = Regex("""<script src="([^"]+)"""").findAll(html).map { it.groupValues[1] }.toList()
+        assertEquals("i18n.js é o primeiro script", "i18n.js", outros.first())
+        val js = listOf("src/main/assets/painel/i18n.js", "app/src/main/assets/painel/i18n.js").map(::File).first { it.isFile }.readText()
+        assertTrue("só traduz fora do português", js.contains("/^pt/i.test(idioma)"))
+    }
+
     @Test fun nenhumaAbaDentroDeOutra() {
         val abas = secoes().filter { it.first?.startsWith("aba") == true }
         assertTrue("o painel tem abas", abas.isNotEmpty())
