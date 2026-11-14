@@ -100,6 +100,11 @@
             android:name=".RotinasActivity"
             android:exported="false"
             android:label="@string/lbl_rotinas" />
+        <!-- Botões do controle (ideia 6): o que cada tecla livre faz (RemapTeclas). Aberta por Extras. -->
+        <activity
+            android:name=".TeclasActivity"
+            android:exported="false"
+            android:label="@string/tec_titulo" />
         <!-- Tela Cenas (ideia 4): abre pelo painel rápido ou pela voz (alias VozCenas). -->
         <activity
             android:name=".CenasActivity"

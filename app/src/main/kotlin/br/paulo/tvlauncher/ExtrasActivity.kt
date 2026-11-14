@@ -70,6 +70,7 @@ class ExtrasActivity : Activity() {
         }
         linha({ getString(R.string.extras_consumo) }) { emSegundoPlano(dialogo = R.string.extras_consumo) { ConsumoRedeTv.texto(it) } }
         linha({ getString(R.string.extras_tocando) }) { emSegundoPlano(dialogo = R.string.extras_tocando) { TocandoAgoraTv.texto(it) } }
+        linha({ getString(R.string.tec_titulo) }) { startActivity(Intent(this, TeclasActivity::class.java)) }   // ideia 6
         linha({ getString(R.string.extras_teclas) }) { startActivity(Intent(this, TesteTeclasActivity::class.java)) }
         linha({ getString(R.string.extras_calibracao) }) { startActivity(Intent(this, CalibracaoActivity::class.java)) }
         linha({ getString(R.string.casa_titulo) }) { startActivity(Intent(this, CasaActivity::class.java)) }
