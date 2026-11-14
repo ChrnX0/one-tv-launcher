@@ -40,6 +40,11 @@ import java.io.File
  *  - tecla --es tecla HOME [--el ms 1500]   entrega uma tecla falsa ao funil das teclas da acessibilidade (TeclaFalsa).
  *    Aceita o nome sem "KEYCODE_" ou o número. Ex.: HOME segurado = --es tecla HOME --el ms 1500.
  *  - roteiro               respostas do roteiro "Conferir na TV" desta versão (JSON; ver RoteiroConferencia)
+ * Volume da LG pela rede (14/11/2026, ideia 49; ver VolumeLg). Demoram (rede): o adb espera a resposta.
+ *  - lg_procurar --es ip <qualquer IP da casa>   lista as LG da mesma rede /24
+ *  - lg_pedir_codigo --es ip <IP da LG>         a LG mostra o código na tela dela
+ *  - lg_parear --es ip <IP da LG> --es codigo <números>   guarda (só nesta TV) e passa a usar a LG no volume
+ *  - lg_estado · lg_esquecer · lg_tecla --es tecla subir|descer|mudo [--ei vezes N]
  */
 object ComandosExtras {
     fun tratar(ctx: Context, i: Intent): String = when (i.getStringExtra("o")) {
@@ -84,6 +89,16 @@ object ComandosExtras {
         "recado_link" -> PainelExtras.novoLinkRecado(ctx)
         "tecla" -> teclaFalsa(i)
         "roteiro" -> ConferirTvActivity.relatorio(ctx)
+        "lg_procurar" -> VolumeLg.procurar(i.getStringExtra("ip") ?: "").joinToString("\n") { (ip, m) -> "$ip ${m.nome} ${m.modelo}" }
+            .ifEmpty { "nenhuma LG respondeu (ligada? mesmo /24?)" }
+        "lg_pedir_codigo" -> VolumeLg.pedirCodigo(i.getStringExtra("ip") ?: "")
+        "lg_parear" -> VolumeLg.parear(ctx, i.getStringExtra("ip") ?: "", i.getStringExtra("codigo") ?: "")
+        "lg_estado" -> VolumeLg.estado(ctx)
+        "lg_esquecer" -> { VolumeLg.esquecer(ctx); "esquecida" }
+        "lg_tecla" -> when (i.getStringExtra("tecla")) {
+            "subir" -> LgNetcast.TECLA_SUBIR; "descer" -> LgNetcast.TECLA_DESCER; "mudo" -> LgNetcast.TECLA_MUDO; else -> null
+        }?.let { if (VolumeLg.tecla(ctx, it, i.getIntExtra("vezes", 1))) "ok" else "a LG não aceitou (pareada? ligada?)" }
+            ?: "tecla: subir, descer ou mudo"
         "canal" -> when (i.getStringExtra("canal")) {
             "teste" -> { Atualizador.definirCanalTeste(ctx, true); "canal=teste" }
             "normal" -> { Atualizador.definirCanalTeste(ctx, false); "canal=normal" }

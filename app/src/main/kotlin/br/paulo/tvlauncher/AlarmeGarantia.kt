@@ -164,7 +164,7 @@ object AlarmeGarantia {
     // ---------------------------------------------------------------- volume garantido
 
     /** O que o alarme mudou no volume, para devolver depois. */
-    class Volume(val original: Int, val definido: Int?, val tirouMudo: Boolean)
+    class Volume(val original: Int, val definido: Int?, val tirouMudo: Boolean, val lg: VolumeLg.Mudanca? = null)
 
     fun volumeMinimo(ctx: Context): Int =
         ctx.getSharedPreferences(PREFS_DESPERTADOR, Context.MODE_PRIVATE).getInt(CHAVE_VOLUME, VolumeAlarme.PADRAO)
@@ -180,7 +180,12 @@ object AlarmeGarantia {
     fun subirVolume(ctx: Context): Volume? {
         val pct = volumeMinimo(ctx)
         if (pct <= 0) return null
-        val am = ctx.getSystemService(AudioManager::class.java) ?: return null
+        // LG pareada (ideia 49): o volume do Android não chega na TV pelo HDMI; sobe o da própria LG, em segundo plano.
+        val lg = if (VolumeLg.configurado(ctx)) VolumeLg.Mudanca().also { m ->
+            val app = ctx.applicationContext
+            Fundo.rodar("Alarme-lg") { VolumeLg.subirAlarme(app, pct, m) }
+        } else null
+        val am = ctx.getSystemService(AudioManager::class.java) ?: return lg?.let { Volume(-1, null, false, it) }
         return try {
             val s = AudioManager.STREAM_MUSIC   // o som do alarme sai pela mídia (ver SomAlarme)
             // Tira do mudo ANTES de olhar o volume fixo: com saída fixa (HDMI-CEC) o mudo ainda vale a pena desfazer.
@@ -189,14 +194,14 @@ object AlarmeGarantia {
             if (mudo) am.adjustStreamVolume(s, AudioManager.ADJUST_UNMUTE, 0)
             if (am.isVolumeFixed) {
                 Log.i(TAG, "volume fixo nesta saída: não dá para subir${if (mudo) " (tirou do mudo)" else ""}")
-                return if (mudo) Volume(am.getStreamVolume(s), null, true) else null
+                return if (mudo || lg != null) Volume(am.getStreamVolume(s), null, mudo, lg) else null
             }
             val original = am.getStreamVolume(s)
             val alvo = VolumeAlarme.alvo(original, am.getStreamMaxVolume(s), pct)
             if (alvo != null) am.setStreamVolume(s, alvo, 0)
             Log.i(TAG, "volume do alarme: $original -> ${alvo ?: original}${if (mudo) " (tirou do mudo)" else ""}")
-            if (alvo == null && !mudo) null else Volume(original, alvo, mudo)
-        } catch (e: Exception) { Log.w(TAG, "não mexi no volume: $e"); null }
+            if (alvo == null && !mudo && lg == null) null else Volume(original, alvo, mudo, lg)
+        } catch (e: Exception) { Log.w(TAG, "não mexi no volume: $e"); lg?.let { Volume(-1, null, false, it) } }
     }
 
     /**
@@ -210,6 +215,8 @@ object AlarmeGarantia {
             principal.postDelayed({ devolverVolume(app, v) }, depoisMs)
             return
         }
+        v.lg?.let { m -> val app = ctx.applicationContext; Fundo.rodar("Alarme-lg") { VolumeLg.devolverAlarme(app, m) } }
+        if (v.original < 0) return   // só a LG mexeu
         val am = ctx.getSystemService(AudioManager::class.java) ?: return
         try {
             val s = AudioManager.STREAM_MUSIC

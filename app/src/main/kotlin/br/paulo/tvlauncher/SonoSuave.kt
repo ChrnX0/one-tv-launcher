@@ -18,6 +18,8 @@ import android.view.WindowManager
  * esbarra no HDMI-CEC. O volume volta ao de antes alguns segundos depois de a tela apagar (na próxima vez que a TV ligar,
  * o som está normal) ou se o timer for cancelado.
  *
+ * LG pareada ([VolumeLg], ideia 49): onde o volume do Android é fixo (HDMI), quem desce é o volume da própria LG, pela rede.
+ *
  * Chave: [Extras.Chave.SONO_SUAVE] (ligada por padrão: só age quando alguém marcou o timer).
  */
 object SonoSuave {
@@ -44,6 +46,7 @@ object SonoSuave {
     private val ui by lazy { Handler(Looper.getMainLooper()) }
     private var pelicula: View? = null
     private var volumeAntes = -1
+    @Volatile private var lgAntes = -1   // volume da LG quando começou (-1 = sem LG ou ainda não leu)
     private var fim = 0L
     private var inicio = 0L
 
@@ -56,6 +59,8 @@ object SonoSuave {
                 val alvo = volume(volumeAntes, f)
                 if (am.getStreamVolume(AudioManager.STREAM_MUSIC) > alvo) am.setStreamVolume(AudioManager.STREAM_MUSIC, alvo, 0)
             } catch (_: Exception) {}
+            val lg = lgAntes
+            if (lg > 0) { val app = svc.applicationContext; Fundo.rodar("SonoSuave-lg") { VolumeLg.baixarAte(app, volume(lg, f)) } }
             por(svc, alfa(f))
             if (f < 1.0) ui.postDelayed(this, PASSO_MS)
         }
@@ -70,6 +75,9 @@ object SonoSuave {
             if (volumeAntes < 0) volumeAntes = try {
                 app.getSystemService(AudioManager::class.java).getStreamVolume(AudioManager.STREAM_MUSIC)
             } catch (_: Exception) { -1 }
+            if (lgAntes < 0 && VolumeLg.configurado(app)) Fundo.rodar("SonoSuave-lg") {
+                VolumeLg.nivel(app)?.let { if (lgAntes < 0) lgAntes = it.nivel }
+            }
             fim = fimMs; inicio = System.currentTimeMillis()
             Log.i(TAG, "descendo até ${fimMs - inicio} ms (volume era $volumeAntes)")
             ui.removeCallbacks(passo); ui.post(passo)
@@ -87,6 +95,9 @@ object SonoSuave {
             tirar()
             val v = volumeAntes
             volumeAntes = -1
+            val lg = lgAntes
+            lgAntes = -1
+            if (lg > 0) ui.postDelayed({ Fundo.rodar("SonoSuave-lg") { VolumeLg.irPara(app, lg) } }, esperarMs)
             if (v > 0) ui.postDelayed({
                 try { app.getSystemService(AudioManager::class.java).setStreamVolume(AudioManager.STREAM_MUSIC, v, 0) } catch (_: Exception) {}
             }, esperarMs)
