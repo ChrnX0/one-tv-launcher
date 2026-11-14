@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="elenco_botao">Elenco</string>
+    <string name="elenco_titulo">Elenco</string>
+    <string name="elenco_carregando">Carregando o elenco…</string>
+    <string name="elenco_vazio">O TMDB não tem o elenco deste título.</string>
+    <string name="elenco_dica">Passe pelas pessoas: embaixo, o que mais elas fizeram que está na sua lista.</string>
+    <string name="elenco_na_lista">Também na sua lista</string>
+    <string name="elenco_procurando">Procurando na sua lista…</string>
+    <string name="elenco_nada_na_lista">Nada mais com esta pessoa na sua lista.</string>
+    <string name="elenco_filme">Filme</string>
+    <string name="elenco_serie">Série</string>
+    <string name="elenco_opcao_player">Elenco (quem é esse ator?)</string>
+    <string name="anteriormente_titulo">Anteriormente em %1$s</string>
+    <string name="anteriormente_assistir">Assistir %1$s</string>
+    <string name="anteriormente_pular_sempre">Não mostrar mais</string>
+    <string name="anteriormente_desligado">Resumos desligados. Para ligar de novo: segure OK num episódio.</string>
+    <string name="anteriormente_ligar">Mostrar o resumo “Anteriormente”</string>
+</resources>

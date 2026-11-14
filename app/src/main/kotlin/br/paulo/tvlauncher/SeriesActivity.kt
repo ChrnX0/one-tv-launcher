@@ -41,6 +41,7 @@ import java.util.Locale
  */
 class SeriesActivity : Activity() {
     private companion object {
+        const val ANTERIORMENTE_OFF = "anteriormente_off"   // prefs "player" (vai no backup): o dono desligou o resumo
         const val MAX_NOVIDADES = 15
         const val MIN_PULAR = 30
         const val BUSCAR = "*buscar"
@@ -825,7 +826,7 @@ class SeriesActivity : Activity() {
             val principal = sugestao?.let { (ep, retomar) ->
                 val txt = if (retomar) getString(R.string.series_continuar, ep.rotulo, relogio(posicoes[ep.chave(s.fonteId)]?.ms ?: 0))
                     else getString(R.string.series_assistir, ep.rotulo)
-                botao(txt) { tocar(s, ep, doComeco = !retomar) }
+                botao(txt) { talvezAnteriormente(s, f, ep, doComeco = !retomar) }
             }
             // Botão principal e, se houver, o trailer ao lado (11/11/2026).
             val linhaBotoes = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
@@ -838,6 +839,11 @@ class SeriesActivity : Activity() {
             outraVersao(s)?.let { o ->
                 val r = if (Idioma.versao(o.nome, o.grupo) == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
                 linhaBotoes.addView(botao(getString(r)) { abrirSerie(o) },
+                    LinearLayout.LayoutParams(-2, -2).apply { marginStart = if (linhaBotoes.childCount > 0) dp(12) else 0 })
+            }
+            // Ideia 84: elenco com foto e o que mais cada pessoa fez que está na lista.
+            tmdbDe(s, f)?.takeIf { ElencoActivity.disponivel(it) }?.let { id ->
+                linhaBotoes.addView(botao(getString(R.string.elenco_botao)) { ElencoActivity.abrir(this, id, serie = true, nome = Vod.nomeLimpo(s.nome)) },
                     LinearLayout.LayoutParams(-2, -2).apply { marginStart = if (linhaBotoes.childCount > 0) dp(12) else 0 })
             }
             if (linhaBotoes.childCount > 0) col.addView(linhaBotoes, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(14) })
@@ -887,8 +893,11 @@ class SeriesActivity : Activity() {
     }
 
     private fun menuEpisodio(s: Serie, f: FichaSerie, ep: Episodio, posicao: Int) {
-        val opcoes = listOf(getString(R.string.series_visto_ate_aqui, ep.rotulo), getString(R.string.series_nao_visto))
+        val semResumo = prefsPlayer().getBoolean(ANTERIORMENTE_OFF, false)
+        val opcoes = listOf(getString(R.string.series_visto_ate_aqui, ep.rotulo), getString(R.string.series_nao_visto)) +
+            listOfNotNull(getString(R.string.anteriormente_ligar).takeIf { semResumo })
         Estilo.lista(this, "${ep.rotulo} · ${Series.tituloCurto(s.nome, ep.titulo)}", opcoes) { i ->
+            if (i == 2) { prefsPlayer().edit().putBoolean(ANTERIORMENTE_OFF, false).apply(); return@lista }
             posicoes = if (i == 0) Series.marcarVistosAte(f, s.fonteId, ep, posicoes, System.currentTimeMillis())
                 else Series.desmarcar(s.fonteId, ep, posicoes)
             val copia = posicoes
@@ -925,6 +934,48 @@ class SeriesActivity : Activity() {
             else -> ep.duracaoMin?.let { "$it min" }.orEmpty()
         }
         return v
+    }
+
+    private fun tmdbDe(s: Serie, f: FichaSerie?): Int? = s.tmdb ?: f?.tmdb ?: externo?.takeIf { it.first.chave == s.chave }?.second?.tmdb
+
+    /**
+     * Ideia 83 "Anteriormente" (14/11/2026): série parada há mais de 3 semanas, antes do próximo episódio um cartão com o
+     * resumo do anterior (TMDB no idioma da TV; sem ele, a sinopse da lista). Sem resumo, ou desligado, toca direto.
+     */
+    private fun talvezAnteriormente(s: Serie, f: FichaSerie, ep: Episodio, doComeco: Boolean) {
+        val todos = Series.emOrdem(f)
+        val ant = if (prefsPlayer().getBoolean(ANTERIORMENTE_OFF, false)) null
+            else ElencoTmdb.anterior(todos, ep, ElencoTmdb.ultimaVez(todos, s.fonteId, posicoes, ultimos[s.chave]), System.currentTimeMillis())
+        if (ant == null) { tocar(s, ep, doComeco); return }
+        val id = tmdbDe(s, f)
+        Fundo.rodar {
+            val deFora = id?.let { InfoExternaCache.episodio(it, ant.temporada, ant.numero) }
+            val resumo = deFora?.second ?: ant.sinopse.trim().takeIf { it.isNotEmpty() }
+            val nome = deFora?.first?.takeIf { it.isNotBlank() } ?: Series.tituloCurto(s.nome, ant.titulo)
+            tela.post {
+                if (isDestroyed || aberta !== s) return@post
+                if (resumo == null) tocar(s, ep, doComeco) else mostrarAnteriormente(s, ep, doComeco, "${ant.rotulo} · $nome", resumo)
+            }
+        }
+    }
+
+    private fun mostrarAnteriormente(s: Serie, ep: Episodio, doComeco: Boolean, titulo: String, resumo: String) {
+        val d = android.app.Dialog(this)
+        val nunca = Estilo.botao(this, getString(R.string.anteriormente_pular_sempre), primario = false)
+        val ver = Estilo.botao(this, getString(R.string.anteriormente_assistir, ep.rotulo))
+        nunca.setOnClickListener {
+            d.dismiss(); prefsPlayer().edit().putBoolean(ANTERIORMENTE_OFF, true).apply()
+            avisoBreve(getString(R.string.anteriormente_desligado)); tocar(s, ep, doComeco)
+        }
+        ver.setOnClickListener { d.dismiss(); tocar(s, ep, doComeco) }
+        d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
+        d.setContentView(Estilo.dialogo(this, getString(R.string.anteriormente_titulo, Vod.nomeLimpo(s.nome)), titulo, resumo, listOf(nunca, ver)))
+        d.window?.apply {
+            setBackgroundDrawable(android.graphics.drawable.ColorDrawable(Color.TRANSPARENT))
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        }
+        d.setOnShowListener { ver.requestFocus() }
+        d.show()
     }
 
     private fun tocar(s: Serie, ep: Episodio, doComeco: Boolean) {

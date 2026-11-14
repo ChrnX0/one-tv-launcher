@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ideia 84 "Quem é esse ator?" (ElencoActivity) -->
+    <string name="elenco_botao">Cast</string>
+    <string name="elenco_titulo">Cast</string>
+    <string name="elenco_carregando">Loading the cast…</string>
+    <string name="elenco_vazio">TMDB has no cast for this title.</string>
+    <string name="elenco_dica">Move through the people: below, what else they are in that is in your list.</string>
+    <string name="elenco_na_lista">Also in your list</string>
+    <string name="elenco_procurando">Looking in your list…</string>
+    <string name="elenco_nada_na_lista">Nothing else with this person in your list.</string>
+    <string name="elenco_filme">Movie</string>
+    <string name="elenco_serie">Series</string>
+    <string name="elenco_opcao_player">Cast (who is this actor?)</string>
+    <!-- Ideia 83 "Anteriormente" (SeriesActivity) -->
+    <string name="anteriormente_titulo">Previously on %1$s</string>
+    <string name="anteriormente_assistir">Watch %1$s</string>
+    <string name="anteriormente_pular_sempre">Never show</string>
+    <string name="anteriormente_desligado">Recaps turned off. To turn them on again: hold OK on an episode.</string>
+    <string name="anteriormente_ligar">Show “Previously on” recaps</string>
+</resources>
