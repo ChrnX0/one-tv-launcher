@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ideias 51 a 76 do estudo de 13/11/2026 (thread "Executar ideias aprovadas 51 a 76"). -->
+<resources>
+    <!-- 64: ensaio da restauração do backup noturno -->
+    <string name="l51_ensaio_ok">restauração conferida</string>
+    <string name="l51_ensaio_falhou">a cópia gravada não restauraria (%1$s)</string>
+    <!-- 54: Wi-Fi das visitas em QR no modo visita -->
+    <string name="l51_wifi_titulo">Wi-Fi das visitas</string>
+    <string name="l51_wifi_nao">não configurado: digite uma vez e a visita lê um QR</string>
+    <string name="l51_wifi_dica">Use a rede de visitas do roteador: quem está na sala lê a senha na tela.</string>
+    <string name="l51_wifi_rede">Nome da rede</string>
+    <string name="l51_wifi_senha">Senha</string>
+    <string name="l51_wifi_invalido">Nome com até 32 caracteres; senha vazia (rede aberta) ou de 8 a 63 caracteres.</string>
+    <string name="l51_wifi_qr_titulo">Mostrar o QR do Wi-Fi das visitas</string>
+    <!-- 67: uso local das telas e opções -->
+    <string name="l51_uso_titulo">O que é usado</string>
+    <string name="l51_uso_det">Telas e opções por uso, contadas só nesta TV (nada sai dela)</string>
+    <string name="l51_uso_vazio">Nada contado ainda. Volte daqui a alguns dias.</string>
+    <string name="l51_uso_tela">tela</string>
+    <string name="l51_uso_opcao">opção</string>
+    <string name="l51_uso_linha">%1$s (%2$s): %3$d vezes, última há %4$d dias</string>
+    <string name="l51_uso_zerar">Zerar</string>
+</resources>

@@ -65,21 +65,20 @@ $('btnPararVideoControle').addEventListener('click', () => { pararVideo(); mostr
 // ---------- digitar ao vivo ----------
 
 /**
- * Deixa o texto no que o `input text` da TV aceita: tira acento (ação -> acao) e troca o resto por nada.
- * A mesma regra do servidor (ChecagensPainel.textoTvValido): letras, números, espaço e . , @ _ -
+ * Deixa o texto no que a TV aceita (a mesma regra do servidor, TextoNaTv.validoPainel): letras com ou sem acento,
+ * números, espaço e . , @ _ -. Desde a ideia 56 o acento vai pela acessibilidade, direto no campo da TV.
  */
 function paraTv(t) {
-  return t.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9 .,@_\-]/g, '');
+  return t.normalize('NFC').replace(/[^\p{L}\p{M}\p{N} .,@_\-]/gu, '');
 }
 
 let textoAnterior = '';
-let avisouAcento = false;
 let avisouSimbolo = false;   // o aviso de acento aparece uma vez por vez que o modo ao vivo é ligado
 
 $('aoVivo').addEventListener('change', () => {
   textoAnterior = $('campoTexto').value = '';
-  $('campoTexto').placeholder = $('aoVivo').checked ? 'Cada letra vai direto para a TV (sem acento)' : 'Digitar na TV (sem acento)';
-  avisouAcento = false; avisouSimbolo = false;
+  $('campoTexto').placeholder = $('aoVivo').checked ? 'Cada letra vai direto para a TV' : 'Digitar na TV';
+  avisouSimbolo = false;
   $('formTexto').classList.toggle('ao-vivo', $('aoVivo').checked);
   $('campoTexto').focus();
 });
@@ -96,9 +95,7 @@ $('campoTexto').addEventListener('input', () => {
   while (comum < alvo.length && comum < textoAnterior.length && alvo[comum] === textoAnterior[comum]) comum++;
   for (let i = 0; i < textoAnterior.length - comum; i++) porNaFila({ tecla: 'apagar_letra' });
   if (alvo.length > comum) porNaFila({ texto: alvo.slice(comum) });
-  const semAcento = novo.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  if (semAcento !== novo && !avisouAcento) { avisouAcento = true; aviso('A TV não digita acento: "ç" vai como "c", "ã" como "a".'); }
-  if (alvo.length < semAcento.length && !avisouSimbolo) { avisouSimbolo = true; aviso('Símbolos que a TV não digita são pulados.', 'erro'); }
+  if (alvo.length < novo.normalize('NFC').length && !avisouSimbolo) { avisouSimbolo = true; aviso('Símbolos que a TV não digita são pulados.', 'erro'); }
   textoAnterior = alvo;
 });
 

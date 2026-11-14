@@ -1928,7 +1928,7 @@ for (const b of document.querySelectorAll('[data-tecla]')) {
 $('formTexto').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   if ($('aoVivo').checked) return;   // ao vivo cada letra já foi (controle.js)
-  const t = paraTv($('campoTexto').value);   // tira acento: "ação" vai como "acao"
+  const t = paraTv($('campoTexto').value);   // ideia 56: acento vai junto (pela acessibilidade da TV)
   if (!t) { mostrar($('statusControle'), 'A TV só digita letras, números, espaço e . , @ _ -'); return; }
   try {
     await chamar('POST', '/api/tela/texto', { texto: t });

@@ -17,18 +17,54 @@ Bouncy Castle (vem junto com a LibADB)
   https://www.bouncycastle.org/licence.html
   Licença Bouncy Castle (estilo MIT).
 
-Refine runtime, de RikkaW
-  https://github.com/RikkaApps/Refine
+AndroidX (ProfileInstaller, Media3/ExoPlayer, Annotation, Startup, Tracing, ExifInterface), do Android Open Source Project
+  https://developer.android.com/jetpack/androidx
+  Licença Apache-2.0.
+
+Guava, do Google (vem junto com o Media3)
+  https://github.com/google/guava
+  Licença Apache-2.0.
+
+SPAKE2 para Android, de Muntashir Al-Islam (pareamento do ADB, vem junto com a LibADB)
+  https://github.com/MuntashirAkon/spake2-java
+  Licença Apache-2.0.
+
+ZXing core (QR codes), do projeto ZXing
+  https://github.com/zxing/zxing
+  Licença Apache-2.0.
+
+SMBJ (pastas compartilhadas do Windows e de NAS), de Jeroen van Erp, e a ASN-One que vem junto
+  https://github.com/hierynomus/smbj
+  Licença Apache-2.0.
+
+MBassador (vem junto com o SMBJ), de Benjamin Diedrichsen
+  https://github.com/bennidi/mbassador
   Licença MIT.
 
-AndroidX ProfileInstaller, do Android Open Source Project
-  https://developer.android.com/jetpack/androidx/releases/profileinstaller
+SLF4J API (vem junto com o SMBJ), da QOS.ch
+  https://www.slf4j.org/license.html
+  Licença MIT.
+
+Kotlin (biblioteca padrão), da JetBrains
+  https://github.com/JetBrains/kotlin
   Licença Apache-2.0.
+
+Tailscale (o túnel do acesso de fora de casa, libtsnet.so), da Tailscale Inc.
+  https://github.com/tailscale/tailscale
+  Licença BSD-3-Clause. Compilado com Go (https://go.dev/LICENSE, BSD-3-Clause).
+
+JMuxer (vídeo ao vivo no painel do celular), de Samir Das
+  https://github.com/samirkumardas/jmuxer
+  Licença MIT. Copyright (c) 2018 Samir Das.
 
 — Fontes dos temas —
 
-Instrument Serif, Cormorant, Figtree e IBM Plex Mono
-  https://github.com/google/fonts
+Manrope, de Mikhail Sharanda (telas da TV e painel web)
+  https://github.com/sharanda/manrope
+  Licença SIL Open Font License 1.1 (OFL).
+
+Fraunces, da Undercase Type (protetor de tela)
+  https://github.com/undercasetype/Fraunces
   Licença SIL Open Font License 1.1 (OFL).
 
 — Ícones —

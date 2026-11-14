@@ -104,14 +104,20 @@ object PainelControle {
     private fun shell(ctx: Context, cmd: String): String? =
         if (GuardiaoShizuku.comando(ctx, cmd) == null) "o shell do launcher não respondeu (a depuração sem fio está ligada?)" else null
 
-    /** Texto aceito: ver ChecagensPainel.textoTvValido (o `input text` do Android não digita acento). */
-    fun textoValido(t: String) = ChecagensPainel.textoTvValido(t)
+    /** Texto aceito: o ASCII de ChecagensPainel.textoTvValido ou, com acento, TextoNaTv.validoPainel (ideia 56). */
+    fun textoValido(t: String) = ChecagensPainel.textoTvValido(t) || TextoNaTv.validoPainel(t)
 
     fun digitar(ctx: Context, texto: String): String? {
         AutoDesligar.atividade()
-        if (!textoValido(texto)) return "só letras sem acento, números, espaço e . , @ _ - (até 100)"
+        if (!textoValido(texto)) return "só letras, números, espaço e . , @ _ - (até 100)"
+        // Ideia 56: com acento, escreve pela acessibilidade no campo em foco. Sem campo ou sem o serviço, cai no
+        // `input text` sem acento ("ação" -> "acao"), como era antes.
+        val ascii = if (TextoNaTv.precisaAcessibilidade(texto)) {
+            if (DigitarNaTv.escrever(texto)) return null
+            TextoNaTv.semAcento(texto).takeIf { ChecagensPainel.textoTvValido(it) } ?: return "nenhum campo de texto em foco na TV"
+        } else texto
         // %s é como o `input text` entende espaço; o texto vai entre aspas simples e não tem aspas (barrado acima).
-        val arg = texto.replace(" ", "%s")
+        val arg = ascii.replace(" ", "%s")
         return shell(ctx, "input text '$arg'")
     }
 

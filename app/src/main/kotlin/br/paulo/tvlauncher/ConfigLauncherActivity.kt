@@ -789,6 +789,14 @@ class ConfigLauncherActivity : Activity() {
             // A HOME relê o modo no onResume (bolinha e apps), então não precisa avisar nada a ela.
         }
         c.addView(linhaVisita, lp())
+        // Wi-Fi das visitas em QR (ideia 54): OK configura; com a rede gravada, uma 2ª linha mostra o QR.
+        c.addView(linha(getString(R.string.l51_wifi_titulo),
+            WifiVisita.rede(this).ifEmpty { getString(R.string.l51_wifi_nao) }, seta = true) {
+            WifiVisita.pedir(this) { if (it) recarregarAba() }
+        }, lp())
+        if (WifiVisita.configurado(this)) c.addView(linha(getString(R.string.l51_wifi_qr_titulo), "", seta = true) {
+            WifiVisita.mostrarQr(this)
+        }, lp())
         // Automações (14/11/2026, ideia 1): o editor único de horários (as antigas Rotinas), botões, eventos e links.
         c.addView(linha(getString(R.string.aut_titulo), getString(R.string.aut_cfg_det), seta = true) {
             startActivity(Intent(this, AutomacoesActivity::class.java))
@@ -1050,6 +1058,11 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linha(getString(R.string.bkn_titulo), BackupNoturno.resumo(this), seta = true) {
             reconstruirAoVoltar = true
             startActivity(Intent(this, BackupNoturnoActivity::class.java))
+        }, lp())
+
+        // Uso local das funções (ideia 67): o que é usado e o que ninguém abre. Fica só na TV.
+        c.addView(linha(getString(R.string.l51_uso_titulo), getString(R.string.l51_uso_det), seta = true) {
+            UsoLocal.mostrar(this)
         }, lp())
 
         confirmacoes(c)
@@ -1380,7 +1393,7 @@ class ConfigLauncherActivity : Activity() {
             if (chave != null) ligado(chave)
             if (valor != null) this.valor(valor)
             if (seta && chave == null && valor == null) this.seta()
-            setOnClickListener { aoClicar() }
+            setOnClickListener { UsoLocal.contar(this@ConfigLauncherActivity, "opcao:$titulo"); aoClicar() }   // ideia 67
         }
 
     /** Uma linha só informativa, sem foco nem clique (para ler, não para apertar OK). */

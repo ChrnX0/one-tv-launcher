@@ -155,7 +155,7 @@ object AvisoChuva {
         val c = URL(endereco).openConnection() as HttpURLConnection
         return try {
             c.connectTimeout = 8000; c.readTimeout = 8000
-            c.setRequestProperty("User-Agent", "tv-launcher/0.1")
+            c.setRequestProperty("User-Agent", "onetv-launcher")
             if (c.responseCode == 200) c.inputStream.bufferedReader().use { it.readText() } else null
         } finally { c.disconnect() }
     }
