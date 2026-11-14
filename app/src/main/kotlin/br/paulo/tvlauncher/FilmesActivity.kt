@@ -72,6 +72,8 @@ class FilmesActivity : Activity() {
     private var filmes: List<Filme> = emptyList()      // o que a tela mostra (sem as categorias ocultas, até o PIN)
     // Notas de fora (IMDb pelo MDBList, InfoExterna): valem no Filtro (nota mínima) e na ordem "Nota".
     @Volatile private var notasFora: Map<String, Float> = emptyMap()
+    /** Listas de fora escolhidas (Trakt, MDBList) com os itens: viram categorias em LISTAS (fatia 3, esboço listas-a.png). */
+    @Volatile private var listasFora: List<Pair<SincronizarFilmes.ListaFora, List<SincronizarFilmes.Item>>> = emptyList()
     // Ficha de fora (TMDB + notas) do filme da ficha aberta, e a contagem da saga na lista: (nome, tem, total).
     private var externo: Pair<Filme, InfoExterna.Guardado>? = null
     private var sagaExterna: Pair<Filme, Triple<String, Int, Int>>? = null
@@ -271,11 +273,52 @@ class FilmesActivity : Activity() {
                         tela.post { if (!isDestroyed) recalcular(ModoGrade.IGUAL) }
                     }
                 }
+                sincronizarFora(f, forcar = false)
                 // O índice das versões sai depois da grade na tela (é a parte demorada; a ficha funciona sem ele).
                 Fundo.rodar {
                     val idx = Idioma.indice(f, { it.nome }, { it.grupo })
                     tela.post { if (!isDestroyed && todos === f) indiceVersoes = idx }
                 }
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------- Trakt/Simkl e listas de fora (fatia 3)
+
+    @Volatile private var cacheTitulos: Pair<List<Filme>, List<SincronizarFilmes.Titulo>>? = null
+
+    /** Chave, id TMDB (da lista ou já achado) e nome+ano de cada filme, para cruzar com as listas de fora. Fora da tela. */
+    private fun titulosDoCatalogo(vis: List<Filme>): List<SincronizarFilmes.Titulo> =
+        cacheTitulos?.takeIf { it.first === vis }?.second ?: vis.map {
+            SincronizarFilmes.Titulo(it.chave, it.tmdb ?: InfoExternaCache.guardado(this, it.chave)?.tmdb, InfoExterna.chaveNomeAno(Vod.nomeLimpo(it.nome), it.ano))
+        }.also { cacheTitulos = vis to it }
+
+    private fun etiquetaLista(l: SincronizarFilmes.ListaFora) = if (l.servico == "trakt") "Trakt" else "MDBList"
+
+    /**
+     * Ao abrir: as listas escolhidas (do disco já; da rede se venceram) e a sincronização com Trakt/Simkl (no máximo a
+     * cada 20 min). Mudou algo aqui: relê Interesses e posições e refaz a coluna sem perder o lugar.
+     */
+    private fun sincronizarFora(f: List<Filme>, forcar: Boolean) {
+        val escolhidas = ServicosSync.listas(this)
+        val algumaConta = ServicosSync.ativo(this, ServicosFilmes.Servico.TRAKT) || ServicosSync.ativo(this, ServicosFilmes.Servico.SIMKL)
+        if (escolhidas.isEmpty() && !algumaConta) { listasFora = emptyList(); return }
+        Fundo.rodar("filmes-fora") {
+            if (escolhidas.isNotEmpty()) {
+                listasFora = escolhidas.map { it to ServicosSync.itensGuardados(this, it) }
+                tela.post { if (!isDestroyed) recalcular(ModoGrade.IGUAL) }
+                listasFora = escolhidas.map { it to ServicosSync.itens(this, it, forcar) }
+                tela.post { if (!isDestroyed) recalcular(ModoGrade.IGUAL) }
+            }
+            if (!algumaConta) return@rodar
+            val m = ServicosSync.sincronizar(this, SincronizarFilmes.Tipo.FILME, titulosDoCatalogo(f), forcar)
+            if (!m.interesses && !m.posicoes) return@rodar
+            val i = PlayerArmazem.interesses(this, series = false); val p = PlayerArmazem.posicoes(this)
+            tela.post {
+                if (isDestroyed) return@post
+                interesses = i; posicoes = p
+                adaptadorGrade.notifyDataSetChanged()
+                recalcular(ModoGrade.MANTER_LUGAR)
             }
         }
     }
@@ -292,7 +335,7 @@ class FilmesActivity : Activity() {
     private class Estado(val filmes: List<Filme>, val resultados: List<Filme>, val acoes: List<ColunaCategorias.Linha>,
                          val botoes: List<ColunaCategorias.Linha>,
                          val fixas: List<ColunaCategorias.Linha>, val rola: List<ColunaCategorias.Linha>, val chave: String,
-                         val grade: List<Filme>?)
+                         val grade: List<Filme>?, val deLista: Pair<Int, Int>? = null)
 
     private val calculo = CalculoTela(tela, "filmes-conta")
 
@@ -312,6 +355,7 @@ class FilmesActivity : Activity() {
     private fun recalcular(modo: ModoGrade, inicial: Boolean = false, depois: (() -> Unit)? = null) {
         val todosS = todos; val ocultasS = if (mostrarOcultas) emptySet() else ocultas; val mostrar = mostrarOcultas
         val termoS = termo; val posS = posicoes; val intS = interesses; val ordemS = ordem; val chaveS = chave; val notasS = notasFora
+        val listasS = listasFora
         val temOcultas = ocultas.isNotEmpty()
         val filtroS = filtro; val colecaoS = colecao; val marcoS = marcoNovos; val ultimaS = ultimaSalva
         val rotulo = { id: Int -> getString(id) }
@@ -325,7 +369,8 @@ class FilmesActivity : Activity() {
                 val cont = Vod.continuar(vis, posS)
                 val ints = Vod.interesses(vis, intS) { it.chave }
                 val vistos = Vod.assistidos(vis, posS)
-                val L = ColunaCategorias::Linha
+                fun L(c: String, n: String, q: Int, i: Any?, nv: Int, d: Boolean, det: String, et: String = "") =
+                    ColunaCategorias.Linha(c, n, q, i, nv, d, det, et)
                 // Buscar e Filtro viram botões redondos ao lado do título (pedido do Paulo: mais espaço na lista).
                 // No modo simples fica só Buscar.
                 val botoes = listOfNotNull(
@@ -346,6 +391,17 @@ class FilmesActivity : Activity() {
                 val col = colecaoS?.let { (n, fs) -> n to fs.filter { mostrar || it.grupo.trim() !in ocultasS } }?.takeIf { it.second.isNotEmpty() }
                 if (col != null) fixas += L(COLECAO, getString(R.string.filmes_colecao_cat, col.first), col.second.size, null, 0, false, "")
                 fixas += L(TODOS, rotulo(R.string.player_cat_todos), vis.size, IconePlayer.Tipo.TODOS, 0, false, "")
+                // Listas de fora, logo abaixo de Todos (fixas): só os títulos que a lista de IPTV tem, na ordem da lista.
+                val fora = HashMap<String, Pair<List<String>, Int>>()
+                if (listasS.isNotEmpty()) {
+                    val cat = titulosDoCatalogo(vis)
+                    for ((l, itens) in listasS) {
+                        val (chs, casaram) = SincronizarFilmes.cruzar(itens, cat, SincronizarFilmes.Tipo.FILME)
+                        if (chs.isEmpty()) continue
+                        fora["x:${l.chave}"] = chs to itens.count { it.tipo == SincronizarFilmes.Tipo.FILME }
+                        fixas += L("x:${l.chave}", l.nome, casaram, null, 0, false, "", etiquetaLista(l))
+                    }
+                }
                 val grupos = cacheGrupos?.takeIf { it.first === vis }?.second ?: Vod.grupos(vis).also { cacheGrupos = vis to it }
                 val novos = cacheNovos?.takeIf { it.first === vis && it.second == marcoS }?.third
                     ?: ColunaRegras.novosPorGrupo(vis, marcoS, { it.grupo }, { it.adicionado }).also { cacheNovos = Triple(vis, marcoS, it) }
@@ -370,11 +426,12 @@ class FilmesActivity : Activity() {
                         ch == ASSISTIDOS -> vistos               // o visto mais recente primeiro
                         ch == BUSCA -> res
                         ch == COLECAO -> col?.second.orEmpty()   // já na ordem dos anos
+                        ch.startsWith("x:") -> { val porChave = vis.associateBy { it.chave }; fora[ch]?.first.orEmpty().mapNotNull { porChave[it] } }
                         ch.startsWith("g:") -> { val alvo = ch.removePrefix("g:"); ordenados().filter { it.grupo.trim() == alvo } }
                         else -> ordenados()
                     }.let { FilmesFiltro.filtrar(it, filtroS, posS, notasS) }   // o filtro combinado vale sobre qualquer categoria
                 }
-                Estado(vis, res, acoes, botoes, fixas, rola, ch, g)
+                Estado(vis, res, acoes, botoes, fixas, rola, ch, g, fora[ch]?.let { it.first.size to it.second })
             },
             aplicar = { e ->
                 if (!isDestroyed) {
@@ -393,7 +450,10 @@ class FilmesActivity : Activity() {
                     }
                     val nome = itens.firstOrNull { it.chave == chave }?.nome.orEmpty()
                     // "Ação 1.204 [Ordem: mais recentes] [Só não vistos] [★ 7+]": o que está na grade e por quê (acréscimo 1).
-                    painel.mostrarTopo(nome, naGrade.size, listOf(getString(R.string.coluna_filtro_ordem, nomeOrdem(ordem)) to false) + pilulasFiltro())
+                    // Lista de fora: "112 de 250 na sua lista" no lugar da ordem (a ordem é a da lista).
+                    val primeira = e.deLista?.let { (n, t) -> getString(R.string.sync_n_de, n, t) to false }
+                        ?: (getString(R.string.coluna_filtro_ordem, nomeOrdem(ordem)) to false)
+                    painel.mostrarTopo(nome, naGrade.size, listOf(primeira) + pilulasFiltro())
                     depois?.invoke()
                 }
             },
@@ -956,7 +1016,8 @@ class FilmesActivity : Activity() {
             duracaoMin = info?.duracaoMin, sinopse = info?.sinopse.orEmpty(), chave = f.chave)
         if (paraHome) Fundo.rodar { PlayerArmazem.definirCapaHome(this, serie = false, poster = capa, cenas = cenas, ficha = fichaHome) }
         VodActivity.abrir(this, VodActivity.TIPO_FILME, f.fonteId, f.id, f.extensao, Vod.nomeLimpo(f.nome), doComeco,
-            busca = LegendaExterna.Busca(LegendaExterna.nomeDeBusca(f.nome), f.ano))
+            busca = LegendaExterna.Busca(LegendaExterna.nomeDeBusca(f.nome), f.ano,
+                tmdb = f.tmdb ?: externo?.takeIf { it.first === f }?.second?.tmdb))
     }
 
     private fun botao(texto: String, marca: String, aoApertar: () -> Unit) = TextView(this).apply {

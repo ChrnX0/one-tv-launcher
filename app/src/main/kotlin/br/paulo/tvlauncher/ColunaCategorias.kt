@@ -60,10 +60,11 @@ class ColunaCategorias(
      * Uma linha. [icone]: IconePlayer.Tipo ou IconeMidia.Tipo (null = sem ícone). [quantos] < 0 = sem número.
      * [novos] > 0 = etiqueta "+N" (títulos novos desde a última visita). [destaque] = cor de atenção mesmo sem estar
      * escolhida (ex.: Filtro ativo). [detalhe] = texto curto no lugar do número (ex.: o filtro em vigor).
+     * [etiqueta] = selo antes do nome (listas de fora: "Trakt", "IMDb"; esboço listas-a.png).
      */
     data class Linha(
         val chave: String, val nome: String, val quantos: Int = -1, val icone: Any? = null,
-        val novos: Int = 0, val destaque: Boolean = false, val detalhe: String = "",
+        val novos: Int = 0, val destaque: Boolean = false, val detalhe: String = "", val etiqueta: String = "",
     )
 
     private val tela = Handler(Looper.getMainLooper())
@@ -235,7 +236,7 @@ class ColunaCategorias(
 
     // ---------------------------------------------------------------- linhas
 
-    private class Pecas(val icone: ImageView, val nome: TextView, val novos: TextView, val numero: TextView)
+    private class Pecas(val icone: ImageView, val etiqueta: TextView, val nome: TextView, val novos: TextView, val numero: TextView)
 
     private fun adaptador(i: Int) = object : BaseAdapter() {
         override fun getCount() = grupos[i].size
@@ -255,6 +256,13 @@ class ColunaCategorias(
         }
         val icone = ImageView(act)
         linha.addView(icone, LinearLayout.LayoutParams(dp((18 * escala).toInt()), dp((18 * escala).toInt())).apply { marginEnd = dp(12) })
+        // Selo do serviço (listas de fora): fundo claro, letra escura, pequeno.
+        val etiqueta = TextView(act).apply {
+            textSize = 11f * escala; typeface = Fontes.manrope(700); setTextColor(Estilo.FUNDO); setPadding(dp(6), dp(1), dp(6), dp(1))
+            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(COR_ETIQUETA) }
+            visibility = View.GONE
+        }
+        linha.addView(etiqueta, LinearLayout.LayoutParams(-2, -2).apply { marginEnd = dp(10) })
         val nome = TextView(act).apply { textSize = Estilo.Leitura.CATEGORIA * escala; typeface = fonteMedia; maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
         linha.addView(nome, LinearLayout.LayoutParams(0, -2, 1f))
         // "+12": títulos novos desde a última visita, numa pílula verde (esboço direita-filmes.png).
@@ -266,7 +274,7 @@ class ColunaCategorias(
         // Folga entre o nome cortado e o número (12/11: "Reality show / Program…" encostava no 304).
         val numero = TextView(act).apply { textSize = Estilo.Leitura.CONTAGEM * escala; setTextColor(apagado); maxLines = 1 }
         linha.addView(numero, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(10) })
-        linha.tag = Pecas(icone, nome, novos, numero)
+        linha.tag = Pecas(icone, etiqueta, nome, novos, numero)
         return linha
     }
 
@@ -278,6 +286,8 @@ class ColunaCategorias(
         if (l.icone == null) p.icone.visibility = View.GONE else {
             p.icone.visibility = View.VISIBLE; p.icone.setImageDrawable(icone(l.icone, if (l.chave == escolhida || l.destaque) ambar else COR_ICONE))
         }
+        p.etiqueta.visibility = if (l.etiqueta.isEmpty()) View.GONE else View.VISIBLE
+        p.etiqueta.text = l.etiqueta
         p.novos.visibility = if (l.novos > 0) View.VISIBLE else View.GONE
         if (l.novos > 0) p.novos.text = act.getString(R.string.coluna_novos, milhar(l.novos))
         p.numero.text = when { l.detalhe.isNotEmpty() -> l.detalhe; l.quantos < 0 -> ""; else -> milhar(l.quantos) }
@@ -355,6 +365,7 @@ class ColunaCategorias(
     private companion object {
         const val ESPERA_MS = 180L
         const val COR_NOVOS = 0xFF5FD3B0.toInt()   // o verde-água dos ícones no esboço
+        const val COR_ETIQUETA = 0xFFCFD6E0.toInt()   // selo das listas de fora: cinza claro (cores de marca ficam fora)
         const val COR_ICONE = 0xFF5FD3B0.toInt()
     }
 }

@@ -28,6 +28,31 @@
 "Chave da API do MDBList": "MDBList API key",
 "Usuário do OpenSubtitles": "OpenSubtitles user name",
 "Senha do OpenSubtitles": "OpenSubtitles password",
+"Parado: Modo visita ou perfil infantil ativo.": "Paused: Visit mode or kids profile is on.",
+"Parado: a sincronização é de outro perfil.": "Paused: sync belongs to another profile.",
+"Ainda não sincronizou.": "Not synced yet.",
+"Interesses": "Watchlist",
+"Interesses (Plan to Watch)": "Watchlist (Plan to Watch)",
+"Já assistidos": "Watched",
+"Continuar de onde parou": "Resume where you stopped",
+"Contar o que assisto": "Share what I watch",
+"O que você marca aqui aparece lá e o de lá aparece aqui.": "What you mark here shows up there, and the other way around.",
+"Filmes e episódios vistos ficam marcados nos dois lados.": "Watched movies and episodes are marked on both sides.",
+"Parou no celular? A TV continua do mesmo ponto, e o contrário.": "Stopped on your phone? The TV resumes from the same point, and the other way around.",
+"A TV avisa o serviço enquanto você assiste. Nunca no Modo visita nem no perfil infantil.": "The TV tells the service while you watch. Never in Visit mode or the kids profile.",
+"Sincronizar agora": "Sync now",
+"Sincronizando…": "Syncing…",
+"Sincronizado.": "Synced.",
+"Nenhuma lista no catálogo.": "No lists in the catalog.",
+"Escolher listas": "Choose lists",
+"Buscando as suas listas…": "Fetching your lists…",
+"Dados de Trakt.tv.": "Data from Trakt.tv.",
+"Dados de Simkl.com.": "Data from Simkl.com.",
+"Não achei listas nesta conta.": "No lists found in this account.",
+"Gravar listas": "Save lists",
+"Gravar as listas?": "Save the lists?",
+"As listas marcadas aparecem como categorias em Filmes e Séries.": "The checked lists show up as categories in Movies and Series.",
+"Listas gravadas.": "Lists saved.",
 "Esta página continua sozinha quando você terminar.": "This page continues by itself when you finish.",
 "QR code do login": "Sign-in QR code",
 "Gravar a chave do MDBList?": "Save the MDBList key?",
@@ -850,6 +875,38 @@
 "PIN do painel trocado. Use o novo da próxima vez.": "Panel PIN changed. Use the new one next time.",
 };
   const P = [
+[
+"^Última sincronização: (.+)\\.$",
+"Last sync: $1."
+],
+[
+"^Listas no catálogo: (.+)\\.$",
+"Lists in the catalog: $1."
+],
+[
+"^Ligar \"(.+)\"\\?$",
+"Turn on \"$1\"?"
+],
+[
+"^A TV passa a trocar isso com o (.+?)\\.$",
+"The TV starts sharing this with $1."
+],
+[
+"^(.+): ligado\\.$",
+"$1: on."
+],
+[
+"^No máximo (\\d+) listas\\.$",
+"At most $1 lists."
+],
+[
+"^Cada lista vira uma categoria em Filmes e Séries \\(até (\\d+)\\)\\. Só aparecem os títulos que estão na sua lista de canais\\.$",
+"Each list becomes a category in Movies and Series (up to $1). Only titles in your channel list show up."
+],
+[
+"^ (.+) · (Trakt|MDBList) · (\\d+) títulos(.*)$",
+" $1 · $2 · $3 titles$4"
+],
 [
 "^ · conectado como (.+)$",
 " · connected as $1"

@@ -20,7 +20,8 @@ object LegendaExterna {
     const val MAX_RESULTADOS = 12
 
     /** O que procurar: filme (nome + ano) ou episódio (nome da série + temporada + episódio). */
-    data class Busca(val nome: String, val ano: Int? = null, val temporada: Int? = null, val episodio: Int? = null) {
+    /** [tmdb] = id TMDB do filme ou da série (fatia 3: o player conta ao Trakt/Simkl o que está passando). */
+    data class Busca(val nome: String, val ano: Int? = null, val temporada: Int? = null, val episodio: Int? = null, val tmdb: Int? = null) {
         val eEpisodio get() = temporada != null && episodio != null
     }
 

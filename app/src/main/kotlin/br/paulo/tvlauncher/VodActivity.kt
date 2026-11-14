@@ -66,11 +66,12 @@ class VodActivity : Activity() {
         private const val EXTRA_LEG_ANO = "leg_ano"
         private const val EXTRA_LEG_TEMP = "leg_temp"
         private const val EXTRA_LEG_EP = "leg_ep"
+        private const val EXTRA_TMDB = "tmdb"
         private val ATRASOS = longArrayOf(-3000, -2000, -1500, -1000, -500, 0, 500, 1000, 1500, 2000, 3000)
 
         /** Põe no Intent o que a busca de legenda precisa (sem nada, a busca usa o título da tela). */
         fun comBusca(i: Intent, b: LegendaExterna.Busca?): Intent = if (b == null) i else i.putExtra(EXTRA_LEG_NOME, b.nome)
-            .putExtra(EXTRA_LEG_ANO, b.ano ?: 0).putExtra(EXTRA_LEG_TEMP, b.temporada ?: 0).putExtra(EXTRA_LEG_EP, b.episodio ?: 0)
+            .putExtra(EXTRA_LEG_ANO, b.ano ?: 0).putExtra(EXTRA_LEG_TEMP, b.temporada ?: 0).putExtra(EXTRA_LEG_EP, b.episodio ?: 0).putExtra(EXTRA_TMDB, b.tmdb ?: 0)
         const val TIPO_FILME = "filme"
         const val TIPO_EPISODIO = "episodio"
         const val RESULTADO_TERMINOU = "terminou"
@@ -347,7 +348,10 @@ class VodActivity : Activity() {
                 Player.STATE_READY -> {
                     esconderAviso()
                     tentativas = 0
-                    if (!avisouInicio) { avisouInicio = true; avisar(FontesMidia.Momento.COMECOU, player?.currentPosition ?: 0) }
+                    if (!avisouInicio) {
+                        avisouInicio = true; avisar(FontesMidia.Momento.COMECOU, player?.currentPosition ?: 0)
+                        continuarDeFora()
+                    }
                 }
                 Player.STATE_BUFFERING -> mostrarAviso(getString(R.string.player_carregando_canal))
                 Player.STATE_ENDED -> {
@@ -367,7 +371,12 @@ class VodActivity : Activity() {
             }
             atualizarBarra()
         }
-        override fun onIsPlayingChanged(tocando: Boolean) { Gatilhos.avisarDoPlayer(this@VodActivity, tocando); atualizarBarra(); if (!tocando) mostrarBarra(fixa = true) else mostrarBarra() }
+        override fun onIsPlayingChanged(tocando: Boolean) {
+            Gatilhos.avisarDoPlayer(this@VodActivity, tocando); atualizarBarra(); if (!tocando) mostrarBarra(fixa = true) else mostrarBarra()
+            // Trakt/Simkl: começou ou voltou a tocar = "vendo agora"; pausou no meio = pausa (o fim é tratado no avisar).
+            val p = player ?: return
+            if (avisouInicio && p.playbackState == Player.STATE_READY) contarFora(if (tocando) ServicosSync.Momento.COMECOU else ServicosSync.Momento.PAUSOU, p.currentPosition)
+        }
         override fun onPlayerError(erro: PlaybackException) {
             // Ideia 20: erro de rede tenta de novo no mesmo ponto (2, 4 e 8 s), como a TV ao vivo; o resto mostra a mensagem.
             val p = player ?: return
@@ -422,6 +431,7 @@ class VodActivity : Activity() {
         if (momento == FontesMidia.Momento.PAROU && !avisouInicio) return
         val dur = player?.duration?.takeIf { it != C.TIME_UNSET && it > 0 } ?: 0L
         FontesMidia.informar(this, relato, momento, ms, dur, pausado)
+        if (momento == FontesMidia.Momento.PAROU) contarFora(ServicosSync.Momento.PAROU, ms)
     }
 
     // ---------------------------------------------------------------- controle
@@ -603,7 +613,51 @@ class VodActivity : Activity() {
         val nome = intent.getStringExtra(EXTRA_LEG_NOME)?.takeIf { it.isNotBlank() }
             ?: LegendaExterna.nomeDeBusca(intent.getStringExtra(EXTRA_TITULO).orEmpty().substringBefore(" · "))
         fun n(k: String) = intent.getIntExtra(k, 0).takeIf { it > 0 }
-        return LegendaExterna.Busca(nome, n(EXTRA_LEG_ANO), n(EXTRA_LEG_TEMP), n(EXTRA_LEG_EP))
+        return LegendaExterna.Busca(nome, n(EXTRA_LEG_ANO), n(EXTRA_LEG_TEMP), n(EXTRA_LEG_EP), n(EXTRA_TMDB))
+    }
+
+    // ---------------------------------------------------------------- Trakt/Simkl (fatia 3)
+
+    /** O que contar ao Trakt/Simkl: o filme ou a série + episódio, pelo id TMDB. Null = sem id (nada vai). */
+    private val alvoFora: Pair<SincronizarFilmes.Item, SincronizarFilmes.Ep?>? by lazy {
+        val b = buscaLegenda()
+        val id = b.tmdb ?: return@lazy null
+        val ep = if (b.eEpisodio) SincronizarFilmes.Ep(b.temporada!!, b.episodio!!) else null
+        SincronizarFilmes.Item(if (ep == null) SincronizarFilmes.Tipo.FILME else SincronizarFilmes.Tipo.SERIE, SincronizarFilmes.Ids(tmdb = id),
+            if (ep == null) b.nome else "", if (ep == null) b.ano else null) to ep
+    }
+
+    /** "Vendo agora", pausa e fim, fora da tela. ServicosSync decide se pode (opção ligada, sem visita nem infantil). */
+    private var paradoFora = false   // já contou o fim: a pausa que o Android manda ao soltar o player não vale
+
+    private fun contarFora(m: ServicosSync.Momento, ms: Long) {
+        val (item, ep) = alvoFora ?: return
+        when (m) {
+            ServicosSync.Momento.PAROU -> { if (paradoFora) return; paradoFora = true }
+            ServicosSync.Momento.PAUSOU -> if (paradoFora) return
+            ServicosSync.Momento.COMECOU -> paradoFora = false
+        }
+        val dur = player?.duration?.takeIf { it != C.TIME_UNSET && it > 0 } ?: 0L
+        val concluido = Vod.finalizado(Posicao(ms, dur, 0), episodio = ep != null)
+        val app = applicationContext
+        Fundo.rodar("contar-fora") { ServicosSync.assistindo(app, item, ep, m, ms, dur, concluido) }
+    }
+
+    /** Começou do zero aqui, mas parou no meio no celular: pula para lá (uma vez, no começo). */
+    private fun continuarDeFora() {
+        val (item, ep) = alvoFora ?: return
+        if (retomarEm > 0) return
+        val app = applicationContext; val ch = chave
+        Fundo.rodar("pausa-fora") {
+            val prog = ServicosSync.pausaDeFora(app, item.ids.tmdb ?: return@rodar, ep, PlayerArmazem.posicoes(app)[ch]) ?: return@rodar
+            tela.post {
+                val p = player ?: return@post
+                val dur = p.duration.takeIf { it != C.TIME_UNSET && it > 0 } ?: return@post
+                if (p.currentPosition > 30_000) return@post   // a pessoa já andou: não mexe
+                p.seekTo(SincronizarFilmes.posicaoDaPausa(prog, dur))
+                avisoBreve(getString(R.string.sync_continuando))
+            }
+        }
     }
 
     private val esconderAvisoDepois = Runnable { esconderAviso() }
