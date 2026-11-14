@@ -532,6 +532,9 @@ class ProtetorGaleria(
             try {
                 if (!ModoVisita.ativo(ctx)) {
                     Retrospectiva.cartao(ctx, agora)?.let { cartoes12 += it }
+                    // Ideia 12: o próximo jogo do "Meu time" nas próximas 24 h ("Flamengo × Palmeiras · 21:30").
+                    runCatching { LembretesTv.proximoJogo(ctx, agora) }.getOrNull()
+                        ?.let { cartoes12 += Triple(ctx.getString(R.string.bu_motivo_time), it, "") }
                     if (Extras.ligado(ctx, Extras.Chave.MURAL)) {
                         val m = Mural.ler(ctx)
                         // Aniversários de hoje (calendário de aniversários do Google, que vem dos contatos).

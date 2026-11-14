@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Command box in the phone panel, no AI (idea 10) and the next "My team" match on the Home and screensaver (idea 12). -->
+<resources>
+    <string name="cc_vazia">Type what you want the TV to do</string>
+    <string name="cc_nao_entendi">I didn\'t understand. Try something like:</string>
+    <string name="cc_exemplo_1">put on Globo</string>
+    <string name="cc_exemplo_2">open YouTube</string>
+    <string name="cc_exemplo_3">turn off in 30 minutes</string>
+    <string name="cc_abrindo">Opening %1$s</string>
+    <string name="cc_canal">Putting on %1$s</string>
+    <string name="cc_o_que_passa">What\'s on %1$s</string>
+    <string name="cc_timer">Reminder in %1$d minutes</string>
+    <string name="cc_desligar">The TV turns off in %1$d minutes</string>
+    <string name="cc_desligar_cancelar">Sleep timer cancelled</string>
+    <string name="cc_volume_subir">Volume up</string>
+    <string name="cc_volume_descer">Volume down</string>
+    <string name="cc_mudo">Mute on/off</string>
+    <string name="cc_pausar">Pausing</string>
+    <string name="cc_continuar">Playing</string>
+    <string name="cc_tela_previsao">the forecast</string>
+    <string name="cc_tela_agenda">the calendar</string>
+    <string name="cc_tela_despertador">the alarms</string>
+    <string name="cc_tela_configuracoes">the launcher settings</string>
+    <string name="cc_tela_inicio">the home screen</string>
+    <string name="cc_confirme_na_tv">%1$s: confirm with OK on the TV</string>
+    <string name="cc_nao_fiz">%1$s: not done (%2$s)</string>
+    <string name="cc_aviso_titulo">Phone panel</string>
+</resources>

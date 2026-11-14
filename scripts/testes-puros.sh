@@ -51,6 +51,8 @@ declare -A FONTES=(
   [CompartilharTest]="Compartilhar McpPoderRegras Recado"
   [PacoteDivididoTest]="PacoteDividido"
   [DiarioRegrasTest]="DiarioRegras"
+  [CaixaComandoTest]="CaixaComando"
+  [ProximoJogoTest]="ProximoJogo MeuTimeAdiante"
 )
 
 falhou=0

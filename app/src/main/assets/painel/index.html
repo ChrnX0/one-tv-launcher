@@ -122,6 +122,16 @@
         </div>
         <button type="button" class="link" data-aba="controle">Abrir o controle completo e a tela ao vivo →</button>
       </div>
+      <div class="cartao">
+        <h2>Pedir à TV</h2>
+        <form id="formComando" class="form-pasta" autocomplete="off">
+          <input id="campoComando" type="text" maxlength="200" enterkeyhint="send" placeholder="coloca na Globo, abre o YouTube…" aria-label="O que a TV deve fazer">
+          <button type="submit" class="botao-secundario">Pedir</button>
+        </form>
+        <p class="aviso-curto">Sem IA: entende frases curtas (canal, app, aviso em minutos, desligar). Dá para ditar pelo microfone do teclado.</p>
+        <p id="statusComando" class="aviso" hidden></p>
+        <ul id="exemplosComando" hidden></ul>
+      </div>
       <div class="grade-inicio">
         <div class="cartao">
           <h2>Como a TV está</h2>

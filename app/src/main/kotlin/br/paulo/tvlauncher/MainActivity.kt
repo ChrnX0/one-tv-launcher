@@ -247,6 +247,7 @@ class MainActivity : Activity() {
         ui.post(tarefaTimer)
         atualizarPilulaAlarme()   // o alarme pode ter mudado na tela do despertador
         atualizarPilulaVencimento()
+        atualizarPilulaJogo()
         getSharedPreferences("launcher", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteLocal)
         vigiarRedeParaClima()   // busca o clima assim que a rede subir no boot, sem esperar o ciclo de 5 min
         Privilegio.religarAcessibilidade(this)
@@ -498,6 +499,14 @@ class MainActivity : Activity() {
             setOnClickListener { startActivity(Intent(this@MainActivity, ConfigLauncherActivity::class.java).putExtra(ConfigLauncherActivity.EXTRA_ABA, ConfigLauncherActivity.ABA_CONTA)) }
         }
         avisos.addView(pilulaVencimento, lpPilula())
+        // Ideia 12: o próximo jogo do "Meu time" (24 h) na mesma cápsula, sem fileira nova. OK abre a busca ("Hoje na TV").
+        txtJogo = texto(12.5f, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
+        pilulaJogo = pilula(IconeApp(IconeApp.Tipo.TV), vidro = false).apply {
+            visibility = View.GONE
+            addView(txtJogo)
+            setOnClickListener { abrirBusca() }
+        }
+        avisos.addView(pilulaJogo, lpPilula())
         atualizarAvisos()
 
         raiz.addView(topo, FrameLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(TOPO_PALCO) })
@@ -1107,6 +1116,22 @@ class MainActivity : Activity() {
                 if (isDestroyed) return@post
                 if (texto == null) { if (pilulaVencimento.hasFocus()) linhaApps.requestFocus(); pilulaVencimento.visibility = View.GONE }
                 else { txtVencimento.text = texto; pilulaVencimento.visibility = View.VISIBLE }
+                atualizarAvisos()
+            }
+        }
+    }
+
+    private lateinit var txtJogo: TextView
+    private lateinit var pilulaJogo: LinearLayout
+
+    /** Ideia 12: lê os lembretes fora da tela e mostra/esconde a pílula do próximo jogo do "Meu time" (LembretesTv). */
+    private fun atualizarPilulaJogo() {
+        Fundo.rodar {
+            val texto = runCatching { LembretesTv.proximoJogo(this) }.getOrNull()
+            ui.post {
+                if (isDestroyed) return@post
+                if (texto == null) { if (pilulaJogo.hasFocus()) linhaApps.requestFocus(); pilulaJogo.visibility = View.GONE }
+                else { txtJogo.text = texto; pilulaJogo.visibility = View.VISIBLE }
                 atualizarAvisos()
             }
         }
