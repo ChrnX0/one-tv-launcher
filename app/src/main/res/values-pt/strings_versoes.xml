@@ -64,6 +64,7 @@
         <item>TV ao vivo: pause qualquer canal por até 2 minutos (⏯, ou ▶ ▶ › “Pausar o ao vivo”); OK continua de onde parou, ▶ volta ao ao vivo. Fica só na memória do player, nada é gravado</item>
         <item>O painel web fica em inglês quando o celular ou o computador não está em português</item>
         <item>Com a TV em inglês, os pedidos de canal por voz ("watch Globo", "what's on SBT") também funcionam, e as confirmações aparecem em inglês</item>
+        <item>Volume da LG: o despertador nunca passa de 30, o volume é conferido depois de cada mudança e o despertador na LG vem desligado</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>

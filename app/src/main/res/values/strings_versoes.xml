@@ -67,6 +67,7 @@
         <item>Live TV: pause any channel for up to 2 minutes (⏯, or ▶ ▶ › “Pause live TV”); OK resumes from where you stopped, ▶ goes back to live. Kept only in the player\'s memory, never on disk</item>
         <item>The web panel is in English when the phone or computer is not in Portuguese</item>
         <item>With the TV in English, voice requests for channels ("watch Globo", "what's on SBT") work in English too, and the confirmations show up in English</item>
+        <item>LG volume: the alarm never goes above 30, the volume is checked after each change, and the alarm on the LG starts turned off</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
