@@ -23,6 +23,11 @@
         <item>Busca: no fim do resultado, continue a mesma busca no YouTube, na Netflix ou no Prime Video</item>
         <item>TV ao vivo: cada conta pode ter um 2º guia XMLTV, que só preenche os canais que ficaram sem programação</item>
         <item>Os lembretes do “Meu time” agora enxergam os jogos até 7 dias à frente, não só as próximas 14 horas</item>
+        <item>Até 3 timers ao mesmo tempo, com nome, e um cronômetro (Ampulheta); a HOME mostra o próximo</item>
+        <item>Despertador pode acordar com o último canal da TV ao vivo (vale rádio da lista)</item>
+        <item>PIN das crianças: destrava canal e hora de dormir sem entregar o PIN do painel</item>
+        <item>Tempo de tela por dia: acabou, só os apps liberados abrem (Extras)</item>
+        <item>Agenda com todas as contas Google da TV juntas</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -38,6 +43,12 @@
         <item>Abra a Busca, digite o nome de um filme e escolha “Procurar … no YouTube” no fim</item>
         <item>No painel, cadastre uma conta com o link do 2º guia e abra a TV ao vivo</item>
         <item>Com o seu time salvo no “Meu time”, abra a TV ao vivo uma vez e veja os lembretes no painel</item>
+        <item>Diga “Ok Google, abrir Avisar em 5 minutos” e depois “abrir Avisar em 10 minutos”</item>
+        <item>Diga “Ok Google, abrir Ampulheta” e escolha Começar o cronômetro</item>
+        <item>Num despertador de teste, escolha Som: Último canal da TV ao vivo</item>
+        <item>Configurações &gt; Controle parental &gt; PIN das crianças; depois mostre uma categoria oculta com ele</item>
+        <item>Extras: ligue Tempo de tela por dia com 30 min e abra um app</item>
+        <item>Abra a agenda (OK na data do topo)</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -53,5 +64,11 @@
         <item>O YouTube abriu já com essa busca (ou pelo menos abriu)?</item>
         <item>Os canais que estavam sem programação agora mostram programas, e os outros continuam iguais?</item>
         <item>Aparece na lista um jogo de daqui a mais de um dia?</item>
+        <item>A pílula da HOME mostra o timer mais próximo com “+1”?</item>
+        <item>A pílula mostra o cronômetro subindo, e OK nela para e mostra o tempo?</item>
+        <item>Na hora, tocou o som do canal, subindo aos poucos?</item>
+        <item>O PIN das crianças destravou, e o do painel continua valendo?</item>
+        <item>Depois de 30 min o app voltou para a HOME com o aviso?</item>
+        <item>Aparecem os compromissos de todas as contas da TV?</item>
     </string-array>
 </resources>

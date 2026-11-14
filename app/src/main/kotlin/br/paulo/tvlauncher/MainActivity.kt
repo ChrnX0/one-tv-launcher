@@ -480,7 +480,9 @@ class MainActivity : Activity() {
             visibility = View.GONE
             addView(txtTimer)
             setOnClickListener {
-                if (Timer.cancelar(this@MainActivity)) AvisoTv.rapido(this@MainActivity, "Timer", getString(R.string.tm_timer_cancelado), 4)
+                // Ideia 31: OK cancela o timer que acaba primeiro; sem timer, para o cronômetro e mostra quanto marcou.
+                if (Timer.cancelarProximo(this@MainActivity)) AvisoTv.rapido(this@MainActivity, "Timer", getString(R.string.tm_timer_cancelado), 4)
+                else Timer.pararCronometro(this@MainActivity)?.let { AvisoTv.rapido(this@MainActivity, getString(R.string.tm_crono), getString(R.string.tm_crono_marcou, it), 4) }
                 ui.removeCallbacks(tarefaTimer); ui.post(tarefaTimer)
             }
         }
@@ -694,15 +696,14 @@ class MainActivity : Activity() {
     /** Atualiza o "⏱ 4:32" a cada segundo enquanto a HOME está na frente e há timer; some quando não há. */
     private val tarefaTimer = object : Runnable {
         override fun run() {
-            val t = Timer.ativo(this@MainActivity)
+            val t = Timer.pilula(this@MainActivity)   // o próximo timer, "+N" e o cronômetro (ideia 31)
             if (t == null) {
                 if (pilulaTimer.hasFocus()) linhaApps.requestFocus()   // o foco não pode ficar num texto invisível
                 pilulaTimer.visibility = View.GONE
                 atualizarAvisos()
                 return
             }
-            val nome = if (t.nome.isNotBlank()) "  ·  ${t.nome}" else ""
-            txtTimer.text = "${Timer.restanteTexto(t.fimMs - System.currentTimeMillis())}$nome"
+            txtTimer.text = t
             pilulaTimer.visibility = View.VISIBLE
             atualizarAvisos()
             // Na volta do segundo: o texto anda junto com o relógio, sem pular números.

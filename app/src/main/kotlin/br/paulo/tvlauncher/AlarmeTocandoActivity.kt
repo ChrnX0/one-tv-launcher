@@ -33,6 +33,8 @@ class AlarmeTocandoActivity : Activity() {
     private val ui = Handler(Looper.getMainLooper())
     private var id = 0
     private var player: MediaPlayer? = null
+    private var canal: androidx.media3.exoplayer.ExoPlayer? = null   // ideia 30: o áudio do último canal no lugar do som
+    private val canalNaoAbriu = Runnable { Log.i("TvLauncher.Alarme", "canal não abriu em 20 s: som suave"); trocarParaSom() }
     private var bip: ToneGenerator? = null
     private var volume: AlarmeGarantia.Volume? = null   // o que o alarme mudou no volume da TV, para devolver ao parar
 
@@ -78,14 +80,18 @@ class AlarmeTocandoActivity : Activity() {
             AlarmeGarantia.marcarTocou(this, previsto)
         }
         if (timer) {
-            nomeTimer = getSharedPreferences("timer", MODE_PRIVATE).getString("nome", "") ?: ""
-            Timer.limpar(this)   // acabou: some da HOME
+            // Tira os que acabaram (pode ser mais de um) e arma o próximo (ideia 31: até 3 timers).
+            if (savedInstanceState == null) nomeTimer = Timer.tocou(this)
+            else nomeTimer = savedInstanceState.getString("nomeTimer", "")
         }
         setContentView(montar())
         tocarSom()
         ui.postDelayed(desistir, 10 * 60_000L)
         Log.i("TvLauncher.Alarme", if (timer) "timer acabou ('$nomeTimer')" else "tocando (id $id)")
     }
+
+    // Recriada (TV ligando pelo HDMI-CEC): o nome do timer já saiu da lista em Timer.tocou, então vem daqui.
+    override fun onSaveInstanceState(out: Bundle) { super.onSaveInstanceState(out); out.putString("nomeTimer", nomeTimer) }
 
     private fun montar(): View {
         val alarme = Despertador.listar(this).firstOrNull { it.id == id }
@@ -131,29 +137,92 @@ class AlarmeTocandoActivity : Activity() {
         }
     }
 
+    private var inicioRampa = 0L
+    private var segRampa = 0
+
+    // Rampa: o volume vai de 5% a 100% em [segRampa] segundos, em passos de 1 s (curva ao quadrado: o ouvido percebe o
+    // volume em escala logarítmica, então linear soaria "pulando" no começo). Vale para o som e para o canal.
+    private fun volumeRampa(): Float = if (segRampa <= 0) 1f else {
+        val x = ((System.currentTimeMillis() - inicioRampa) / (segRampa * 1000f)).coerceIn(0f, 1f)
+        0.05f + 0.95f * x * x
+    }
+
+    private fun aplicarVolume(v: Float) { player?.setVolume(v, v); canal?.volume = v }
+
     private fun tocarSom() {
         val alarme = if (timer) null else Despertador.listar(this).firstOrNull { it.id == id }
-        val rampa = alarme?.rampa ?: 0
-        player = SomAlarme.criar(this, alarme?.som ?: 0)
+        segRampa = alarme?.rampa ?: 0
+        inicioRampa = System.currentTimeMillis()
         // Volume garantido: tira do mudo e sobe a TV até o mínimo escolhido (só no despertador; o timer fica como está).
         if (!timer) volume = AlarmeGarantia.subirVolume(this)
-        if (player != null) {
-            // Rampa: o volume do player vai de 5% a 100% em [rampa] segundos, em passos de 1 s (curva ao quadrado:
-            // o ouvido percebe o volume em escala logarítmica, então linear soaria "pulando" no começo).
-            val inicio = System.currentTimeMillis()
-            fun volume(): Float = if (rampa <= 0) 1f else {
-                val x = ((System.currentTimeMillis() - inicio) / (rampa * 1000f)).coerceIn(0f, 1f)
-                0.05f + 0.95f * x * x
-            }
-            player?.setVolume(volume(), volume())
-            player?.start()
-            if (rampa > 0) this.rampa = object : Runnable {
-                override fun run() {
-                    val v = volume()
-                    player?.setVolume(v, v)
-                    if (v < 1f) ui.postDelayed(this, 1000)
+        if (alarme?.som == SomAlarme.CANAL) { tocarCanal(); return }
+        tocarArquivo(alarme?.som ?: 0)
+    }
+
+    /** Ideia 30: procura o último canal (cache da lista, fora da thread da tela) e toca só o áudio dele. */
+    private fun tocarCanal() {
+        val app = applicationContext
+        ui.postDelayed(canalNaoAbriu, 20_000)
+        Fundo.rodar("Alarme-canal") {
+            val c = runCatching {
+                CanalDespertar.escolher(PlayerCarga.canaisDoCache(app), PlayerArmazem.ultimoCanal(app), PlayerArmazem.parental(app))
+            }.getOrNull()
+            runOnUiThread {
+                if (isDestroyed || isFinishing) return@runOnUiThread
+                if (c == null) { trocarParaSom(); return@runOnUiThread }
+                Log.i("TvLauncher.Alarme", "acordando com o canal ${c.numero}")
+                val http = androidx.media3.datasource.DefaultHttpDataSource.Factory()
+                    .setUserAgent(c.agenteUsuario.ifEmpty { "TvLauncher-Player/1.0" })
+                    .setAllowCrossProtocolRedirects(true).setConnectTimeoutMs(10_000).setReadTimeoutMs(15_000)
+                val item = androidx.media3.common.MediaItem.Builder().setUri(c.url).apply {
+                    if (c.url.substringBefore('?').endsWith(".m3u8", ignoreCase = true)) setMimeType(androidx.media3.common.MimeTypes.APPLICATION_M3U8)
+                }.build()
+                canal = androidx.media3.exoplayer.ExoPlayer.Builder(this).build().also { p ->
+                    // USAGE_MEDIA como o som (sai pelo HDMI) e sem foco de áudio: nada para disputar às 6 da manhã.
+                    p.setAudioAttributes(androidx.media3.common.AudioAttributes.Builder().setUsage(androidx.media3.common.C.USAGE_MEDIA)
+                        .setContentType(androidx.media3.common.C.AUDIO_CONTENT_TYPE_MUSIC).build(), false)
+                    p.addListener(object : androidx.media3.common.Player.Listener {
+                        override fun onPlaybackStateChanged(estado: Int) {
+                            if (estado == androidx.media3.common.Player.STATE_READY) ui.removeCallbacks(canalNaoAbriu)
+                        }
+                        override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
+                            Log.i("TvLauncher.Alarme", "canal falhou (${error.errorCodeName}): som suave"); trocarParaSom()
+                        }
+                    })
+                    p.setMediaSource(androidx.media3.exoplayer.source.DefaultMediaSourceFactory(http).createMediaSource(item))
+                    p.volume = volumeRampa()
+                    p.prepare()
+                    p.playWhenReady = true
                 }
-            }.also { ui.post(it) }
+                armarRampa()
+            }
+        }
+    }
+
+    /** O canal não abriu (ou não existe): solta o canal e toca o som suave, sem perder a rampa nem o volume garantido. */
+    private fun trocarParaSom() {
+        ui.removeCallbacks(canalNaoAbriu)
+        canal?.release(); canal = null
+        if (player == null && !isDestroyed) tocarArquivo(0)
+    }
+
+    private fun armarRampa() {
+        if (segRampa <= 0 || rampa != null) return
+        rampa = object : Runnable {
+            override fun run() {
+                val v = volumeRampa()
+                aplicarVolume(v)
+                if (v < 1f) ui.postDelayed(this, 1000)
+            }
+        }.also { ui.post(it) }
+    }
+
+    private fun tocarArquivo(som: Int) {
+        player = SomAlarme.criar(this, som)
+        if (player != null) {
+            aplicarVolume(volumeRampa())
+            player?.start()
+            armarRampa()
             return
         }
         // Último recurso (arquivo não abriu): bipe pelo stream de música, que sai pelo HDMI.
@@ -165,6 +234,9 @@ class AlarmeTocandoActivity : Activity() {
     private fun pararSom() {
         player?.release()
         player = null
+        ui.removeCallbacks(canalNaoAbriu)
+        canal?.release()
+        canal = null
         rampa?.let { ui.removeCallbacks(it) }   // sem isso a rampa seguia rodando 1x/s depois de a tela fechar
         rampa = null
         ui.removeCallbacks(bipar)

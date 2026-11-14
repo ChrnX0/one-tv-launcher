@@ -43,6 +43,7 @@ class AutorizaShizukuService : AccessibilityService() {
             SomNavegacaoTv.pacoteNaFrente = evento.packageName?.toString()
             SaudeAcesso.janela(this, evento.packageName, evento.className)   // HOME na frente: hora boa para aviso pendente
             HoraDormirTv.janela(this, evento.packageName)   // hora de dormir: app fora da lista volta para a HOME
+            TempoTelaTv.janela(this, evento.packageName)   // tempo de tela por dia (ideia 33): conta e fecha se acabou
         }
     }
 

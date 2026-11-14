@@ -15,9 +15,31 @@ object Agenda {
     /** Um evento (uma ocorrência dele, para os que se repetem). */
     class Evento(val titulo: String, val inicio: Long, val fim: Long, val diaInteiro: Boolean, val cor: Int)
 
-    /** Os eventos da conta Google [conta] entre [de] e [ate] (ms), em ordem. Vazio sem conta ou sem READ_CALENDAR. */
-    fun eventos(ctx: Context, conta: String?, de: Long, ate: Long): List<Evento> {
-        val nome = conta ?: return emptyList()
+    /**
+     * As contas que a agenda mostra (ideia 32): com [Extras.Chave.AGENDA_TODAS] ligada (padrão), todas as contas Google
+     * da TV juntas; desligada, só a do perfil ativo (como era). Modo visita: nenhuma (a agenda fica fechada).
+     */
+    fun contas(ctx: Context): List<String> = when {
+        ModoVisita.ativo(ctx) -> emptyList()
+        Extras.ligado(ctx, Extras.Chave.AGENDA_TODAS) -> Perfil.contas(ctx).ifEmpty { listOfNotNull(Perfil.ativa(ctx)) }
+        else -> listOfNotNull(Perfil.ativa(ctx))
+    }
+
+    /** Os eventos das contas da agenda ([contas]) entre [de] e [ate]. */
+    fun eventosDaTv(ctx: Context, de: Long, ate: Long): List<Evento> = eventos(ctx, contas(ctx), de, ate)
+
+    fun eventos(ctx: Context, conta: String?, de: Long, ate: Long): List<Evento> = eventos(ctx, listOfNotNull(conta), de, ate)
+
+    /**
+     * Junta eventos de várias contas: o mesmo compromisso nas duas agendas (um convite da família) aparece uma vez só.
+     * Mesmo título, mesmo início e mesmo fim = o mesmo. Fica em ordem de início. Pura (AgendaTest).
+     */
+    fun juntar(l: List<Evento>): List<Evento> =
+        l.distinctBy { Triple(it.titulo.trim().lowercase(), it.inicio, it.fim) }.sortedBy { it.inicio }
+
+    /** Os eventos das contas Google [contas] entre [de] e [ate] (ms), em ordem. Vazio sem conta ou sem READ_CALENDAR. */
+    fun eventos(ctx: Context, contas: List<String>, de: Long, ate: Long): List<Evento> {
+        if (contas.isEmpty()) return emptyList()
         if (ctx.checkSelfPermission(Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) return emptyList()
         // Pede 1 dia a mais de cada lado: a agenda filtra o dia inteiro pelo horário UTC (ver Datas.janelaConsulta).
         // O recorte certo vem depois do ajuste de fuso, no laço abaixo.
@@ -33,8 +55,8 @@ object Agenda {
                 arrayOf(CalendarContract.Instances.TITLE, CalendarContract.Instances.BEGIN, CalendarContract.Instances.END,
                     CalendarContract.Instances.ALL_DAY, CalendarContract.Instances.DISPLAY_COLOR),
                 // + ACCOUNT_TYPE (revisão 04/11): o mesmo e-mail pode existir em outro tipo de conta (ex.: Exchange).
-                "${CalendarContract.Calendars.ACCOUNT_NAME} = ? AND ${CalendarContract.Calendars.ACCOUNT_TYPE} = 'com.google' AND ${CalendarContract.Instances.VISIBLE} = 1",
-                arrayOf(nome), "${CalendarContract.Instances.BEGIN} ASC"
+                "${CalendarContract.Calendars.ACCOUNT_NAME} IN (${contas.joinToString(",") { "?" }}) AND ${CalendarContract.Calendars.ACCOUNT_TYPE} = 'com.google' AND ${CalendarContract.Instances.VISIBLE} = 1",
+                contas.toTypedArray(), "${CalendarContract.Instances.BEGIN} ASC"
             )?.use { c ->
                 while (c.moveToNext()) {
                     val diaInteiro = c.getInt(3) == 1
@@ -53,7 +75,7 @@ object Agenda {
         } catch (e: Exception) {
             Log.w("TvLauncher.Agenda", "erro lendo a agenda: $e")
         }
-        return saida
+        return if (contas.size > 1) juntar(saida) else saida
     }
 
     /**
@@ -61,12 +83,12 @@ object Agenda {
      * "Hoje na agenda: dentista às 9 e 30, e aniversário da Ana." No máximo 4, para a fala não ficar comprida.
      */
     fun resumoHoje(ctx: Context): String? {
-        if (ModoVisita.ativo(ctx)) return null   // modo visita: a agenda do perfil fica fechada
+        if (ModoVisita.ativo(ctx)) return null   // modo visita: a agenda fica fechada
         val agora = System.currentTimeMillis()
         val fimDoDia = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, 23); set(Calendar.MINUTE, 59); set(Calendar.SECOND, 59)
         }.timeInMillis
-        val hoje = eventos(ctx, Perfil.ativa(ctx), agora, fimDoDia).filter { it.fim > agora }
+        val hoje = eventosDaTv(ctx, agora, fimDoDia).filter { it.fim > agora }
         if (hoje.isEmpty()) return null
         val c = Calendar.getInstance()
         val itens = hoje.take(4).map { e ->

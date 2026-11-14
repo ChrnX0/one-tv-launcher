@@ -77,7 +77,7 @@ class PlayerJanelas(private val act: Activity) {
     }
 
     /**
-     * Pede o PIN do painel (o mesmo do painel no navegador e do MCP). Sem PIN definido, libera direto: a categoria oculta
+     * Pede o PIN: o das crianças (ideia 34) ou o do painel (o mesmo do navegador e do MCP). Sem PIN definido, libera direto: a categoria oculta
      * é só para limpar a lista, e a mensagem diz como proteger.
      */
     fun pedirPin(aoLiberar: () -> Unit, aviso: (String) -> Unit) {
@@ -93,7 +93,7 @@ class PlayerJanelas(private val act: Activity) {
             // PBKDF2 com 100 mil voltas: pode passar de 1 s nesta TV, então roda fora da thread da tela.
             val pin = campo.text.toString()
             Fundo.rodar {
-                val certo = PainelArmazem.conferirPin(act, pin)
+                val certo = PainelArmazem.conferirPinNaTv(act, pin)
                 act.runOnUiThread {
                     if (act.isDestroyed) return@runOnUiThread
                     if (certo) { gravarTentativas(TentativasPin.acertou()); aoLiberar(); return@runOnUiThread }
