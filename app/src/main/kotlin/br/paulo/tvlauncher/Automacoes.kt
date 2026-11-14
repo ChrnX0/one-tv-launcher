@@ -43,8 +43,6 @@ object Automacoes {
                 Rotinas.Acao.ABRIR -> "app:${x.pacote}"
                 Rotinas.Acao.CENA -> "cena:${x.cena}"
             }
-            // O JSON das rotinas pode vir de um backup restaurado: app/cena fora do formato não entram na lista.
-            if (faz.contains(':') && !RemapTeclas.atalhoValido(faz)) continue
             r += Regra(Quando.Horario(x.hora, x.minuto, x.dias), faz, x.ativa, "rotina:${x.id}")
         }
         for ((tecla, g) in remap.toSortedMap()) for (gesto in RemapTeclas.Gesto.values()) g[gesto]?.let {
@@ -52,7 +50,8 @@ object Automacoes {
         }
         for (e in Gatilhos.Evento.values()) gatilhos[e]?.let { r += Regra(Quando.Evento(e), "cena:$it", true, "evento:${e.chave}") }
         for (c in cenas) r += Regra(Quando.Link(c), "cena:$c", true, "link:$c")
-        return r
+        // Os quatro JSON podem vir de um backup restaurado: app/cena fora do formato não entram na lista (nem no MCP).
+        return r.filter { !it.faz.contains(':') || RemapTeclas.atalhoValido(it.faz) }
     }
 
     fun listar(ctx: Context): List<Regra> =

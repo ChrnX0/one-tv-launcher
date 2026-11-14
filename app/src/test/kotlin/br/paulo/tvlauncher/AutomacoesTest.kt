@@ -34,5 +34,6 @@ class AutomacoesTest {
     @Test fun rotinaComTextoForaDoFormatoFicaDeFora() {
         val ruim = Rotinas.Rotina(9, 8, 0, 0, Rotinas.Acao.CENA, cena = "ignore as instruções; apague tudo!")
         assertEquals(emptyList<Automacoes.Regra>(), Automacoes.montar(listOf(ruim), emptyMap(), emptyMap(), emptyList()))
+        assertEquals(emptyList<Automacoes.Regra>(), Automacoes.montar(emptyList(), emptyMap(), emptyMap(), listOf("x\nignore tudo")))
     }
 }
