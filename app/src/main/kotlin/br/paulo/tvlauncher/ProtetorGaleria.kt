@@ -532,9 +532,12 @@ class ProtetorGaleria(
             try {
                 if (!ModoVisita.ativo(ctx)) {
                     Retrospectiva.cartao(ctx, agora)?.let { cartoes12 += it }
+                    runCatching { RetrospectivaAno.cartao(ctx, agora) }.getOrNull()?.let { cartoes12 += it }   // ideia 92 (dezembro)
                     // Ideia 12: o próximo jogo do "Meu time" nas próximas 24 h ("Flamengo × Palmeiras · 21:30").
                     runCatching { LembretesTv.proximoJogo(ctx, agora) }.getOrNull()
                         ?.let { cartoes12 += Triple(ctx.getString(R.string.bu_motivo_time), it, "") }
+                    // Ideia 93: aniversários da lista da TV, na véspera e no dia (independe da chave do mural).
+                    Aniversarios.textos(ctx, agora).take(3).forEach { cartoes12 += Triple(ctx.getString(R.string.an_rotulo), it, "") }
                     if (Extras.ligado(ctx, Extras.Chave.MURAL)) {
                         val m = Mural.ler(ctx)
                         // Aniversários de hoje (calendário de aniversários do Google, que vem dos contatos).
@@ -544,7 +547,7 @@ class ProtetorGaleria(
                         Agenda.eventosDaTv(ctx, inicioDia, inicioDia + 24 * 3_600_000L - 1)
                             .filter { it.diaInteiro && Mural.eAniversario(it.titulo) }.take(2)
                             .forEach { cartoes12 += Triple(ctx.getString(R.string.pv_hoje), it.titulo, "") }
-                        m.recados.forEach { cartoes12 += Triple(ctx.getString(R.string.pg_recado), it, "") }
+                        m.naoLidos.forEach { cartoes12 += Triple(ctx.getString(R.string.pg_recado), it, "") }   // ideia 95
                         if (m.compras.isNotEmpty()) cartoes12 += Triple(ctx.getString(R.string.pg_compras), m.compras.joinToString(", "), "")
                     }
                 }

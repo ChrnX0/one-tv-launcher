@@ -314,6 +314,7 @@ class MainActivity : Activity() {
         atualizarPilulaAlarme()   // o alarme pode ter mudado na tela do despertador
         atualizarPilulaVencimento()
         atualizarPilulaJogo()
+        atualizarPilulaAniversario()
         getSharedPreferences("launcher", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteLocal)
         vigiarRedeParaClima()   // busca o clima assim que a rede subir no boot, sem esperar o ciclo de 5 min
         avaliarSemInternet()    // ideia 88
@@ -613,6 +614,17 @@ class MainActivity : Activity() {
             setOnClickListener { abrirBusca() }
         }
         avisos.addView(pilulaJogo, lpPilula())
+        // Ideia 93: "🎂 Hoje é aniversário de tia Rosa · 80 anos" (véspera e dia, lista do painel). OK mostra todos num aviso.
+        txtAniversario = texto(12.5f, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
+        pilulaAniversario = pilula(vidro = false).apply {
+            visibility = View.GONE
+            addView(txtAniversario)
+            setOnClickListener {
+                val todos = Aniversarios.textos(this@MainActivity)
+                if (todos.isNotEmpty()) AvisoTv.rapido(this@MainActivity, getString(R.string.an_rotulo), todos.joinToString("\n"), 8)
+            }
+        }
+        avisos.addView(pilulaAniversario, lpPilula())
         // Ideia 88: "Sem internet · Funcionam: pendrive, Na rede, Gravações". Primeira da cápsula (é o que mais importa
         // quando aparece). OK abre o Diagnóstico, que explica a queda em uma frase. Ver avaliarSemInternet.
         txtSemInternet = texto(12.5f, Estilo.ATENCAO, fonteUi).apply { includeFontPadding = false }
@@ -1247,6 +1259,8 @@ class MainActivity : Activity() {
     }
 
     private lateinit var txtJogo: TextView
+    private lateinit var pilulaAniversario: LinearLayout
+    private lateinit var txtAniversario: TextView
     private lateinit var pilulaJogo: LinearLayout
 
     // ---- Tocando agora (ideia 75)
@@ -1290,6 +1304,22 @@ class MainActivity : Activity() {
         pilulaTocando.contentDescription = getString(R.string.l75_pilula, p.titulo, p.subtitulo)
         capsulaTocando.visibility = View.VISIBLE
         if (!p.tocando) ui.postDelayed(tarefaTocando, 60_000)
+    }
+
+    /** Ideia 93: aniversário hoje ou amanhã (lista da TV). Mais de um: o primeiro e "+N". */
+    private fun atualizarPilulaAniversario() {
+        Fundo.rodar {
+            val textos = runCatching { Aniversarios.textos(this) }.getOrDefault(emptyList())
+            ui.post {
+                if (isDestroyed) return@post
+                if (textos.isEmpty()) { if (pilulaAniversario.hasFocus()) linhaApps.requestFocus(); pilulaAniversario.visibility = View.GONE }
+                else {
+                    txtAniversario.text = "\uD83C\uDF82 " + textos.first() + if (textos.size > 1) "  +${textos.size - 1}" else ""
+                    pilulaAniversario.visibility = View.VISIBLE
+                }
+                atualizarAvisos()
+            }
+        }
     }
 
     /** Ideia 12: lê os lembretes fora da tela e mostra/esconde a pílula do próximo jogo do "Meu time" (LembretesTv). */

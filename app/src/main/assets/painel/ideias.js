@@ -26,6 +26,8 @@ async function carregarIdeias() {
     desenharAvisos(e.avisos);
     desenharLembretes(e.lembretes);
     desenharMural(e.mural);
+    desenharAniversarios(e.aniversarios || []);
+    desenharRadios(e.radios || []);
     desenharSemana(e.retrospectiva, e.desempenho);
     desenharSimples(e.simples);
     presencaEscolhidos = new Set(e.presenca);
@@ -131,7 +133,12 @@ function desenharMural(m) {
     lista.append(el('strong', '', nome));
     for (const t of itens) {
       const linha = el('div', 'linha-registro');
-      linha.append(el('span', '', t), botao('Tirar', async () => {
+      const lido = lista_ === 'recados' && (m.lidos || []).includes(t);
+      linha.append(el('span', '', lido ? '✓ ' + t + ' (lido)' : t));
+      if (lista_ === 'recados') linha.append(botao(lido ? 'Não lido' : 'Lido', async () => {
+        try { desenharMural(await ideias('POST', 'mural', { lista: lista_, acao: lido ? 'nao_lido' : 'lido', texto: t })); } catch (_) {}
+      }));
+      linha.append(botao('Tirar', async () => {
         try { desenharMural(await ideias('POST', 'mural', { lista: lista_, acao: 'remover', texto: t })); } catch (_) {}
       }));
       lista.append(linha);
@@ -148,6 +155,64 @@ $('formMural').addEventListener('submit', async (ev) => {
     desenharMural(await ideias('POST', 'mural', { lista: $('listaMural').value, acao: 'adicionar', texto }));
     $('textoMural').value = '';
   } catch (_) {}
+});
+
+// ---------- rádios (ideia 87) ----------
+
+function desenharRadios(lista) {
+  const caixa = $('itensRadios');
+  caixa.replaceChildren();
+  lista.forEach((r, i) => {
+    const linha = el('div', 'linha-registro');
+    linha.append(el('span', '', (i < 9 ? (i + 1) + '  ' : '') + r.nome), botao('Tirar', async () => {
+      try { desenharRadios((await ideias('POST', 'radios', { acao: 'remover', id: r.id })).lista); } catch (_) {}
+    }));
+    caixa.append(linha);
+  });
+  if (!lista.length) caixa.append(el('p', 'aviso', 'Nenhuma rádio favorita.'));
+}
+
+$('formRadio').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const nome = $('nomeRadio').value.trim(), url = $('urlRadio').value.trim();
+  if (!nome || !url) return;
+  try {
+    desenharRadios((await ideias('POST', 'radios', { acao: 'colar', nome, url })).lista);
+    $('nomeRadio').value = ''; $('urlRadio').value = '';
+    mostrar($('statusRadios'), 'Rádio na TV.');
+  } catch (err) { mostrar($('statusRadios'), textoErro(err)); }
+});
+
+// ---------- aniversários (ideia 93) ----------
+
+const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+
+function desenharAniversarios(lista) {
+  const caixa = $('itensAniversarios');
+  caixa.replaceChildren();
+  for (const p of lista) {
+    const linha = el('div', 'linha-registro');
+    const data = String(p.dia).padStart(2, '0') + ' ' + MESES[p.mes - 1] + (p.ano ? ' ' + p.ano : '');
+    linha.append(el('span', '', p.nome + ' · ' + data), botao('Tirar', async () => {
+      try { desenharAniversarios((await ideias('POST', 'aniversarios', { acao: 'remover', nome: p.nome })).lista); } catch (_) {}
+    }));
+    caixa.append(linha);
+  }
+  if (!lista.length) caixa.append(el('p', 'aviso', 'Nenhum aniversário.'));
+}
+
+$('formAniversario').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const nome = $('nomeAniversario').value.trim();
+  const d = $('dataAniversario').value;   // "AAAA-MM-DD"; o ano é opcional (caixa "sei o ano")
+  if (!nome || !d) return;
+  const [ano, mes, dia] = d.split('-').map(Number);
+  const corpo = { acao: 'adicionar', nome, dia, mes };
+  if ($('anoAniversario').checked) corpo.ano = ano;
+  try {
+    desenharAniversarios((await ideias('POST', 'aniversarios', corpo)).lista);
+    $('nomeAniversario').value = '';
+  } catch (err) { mostrar($('statusAniversarios'), textoErro(err)); }
 });
 
 // ---------- presença ----------

@@ -17,6 +17,12 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Radio inside Live TV: stations from all over the world (radio-browser.info), near you and most listened in your country first, search by name, genre or country, favorites on keys 1–9 and the song that is playing; the screen dims after 3 min and the sound keeps going. Paste any station address in the web panel</item>
+        <item>Birthdays: list in the web panel (Extras); on the day before and on the day, the home screen and the screensaver show “Today is …’s birthday”</item>
+        <item>Strong heat or cold alert (“Drink water”, “Dress warmly”) next to the rain alert; Settings › Home screen to turn it off</item>
+        <item>Family board on the TV: in the quick panel, OK marks a message as read (it leaves the screensaver) and X deletes it</item>
+        <item>In December, “Your TV in 2026” on the screensaver: hours, most watched apps and favorite channel</item>
+        <item>Turn off when idle now comes on by itself at 3 h on TVs where nobody ever chose; whoever chose “Never” keeps it</item>
         <item>“Are you still watching?” in large text when nobody presses the remote for the time set in Settings › Screen and power › Turn off when idle; with no answer in 60 s, the movie or app pauses before the screen goes off, so you can continue from there later</item>
         <item>Without internet, the top of the home screen says in one line what still works (USB drive, Network, Recordings) and goes away when it comes back; OK on it opens Diagnostics</item>
         <item>New Games screen, console style: the focused game shows big with its official logo, one row with the last played first (OK plays), and the home screen Games card shows the last game</item>
@@ -103,6 +109,10 @@
         <item>Movies and series at their own frame rate: the TV switches to 24 Hz and the picture does not judder in camera moves (Settings › TV and movies, ▼ menu and panel)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>radios</item>
+        <item>aniversarios</item>
+        <item>calor_frio</item>
+        <item>mural_tv</item>
         <item>ainda_assistindo</item>
         <item>sem_internet</item>
         <item>unidade_rede</item>
@@ -186,6 +196,10 @@
         <item>taxa_quadros</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Live TV › left column › Radio</item>
+        <item>Web panel › Extras › Birthdays: add someone with today’s date</item>
+        <item>Settings › Home screen › Heat and cold alert</item>
+        <item>Web panel: pin a message on the board; on the TV open the quick panel</item>
         <item>In Settings › Screen and power, set Turn off when idle to 30 min, play a movie and press nothing</item>
         <item>Turn off the internet at the router (or unplug its internet cable) and press HOME; wait 30 s</item>
         <item>Network drive</item>
@@ -269,6 +283,10 @@
         <item>Open a movie and watch a scene where the camera pans slowly</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Did a station near you play, with the name large and (when the station sends it) the song, and did key 1 play the first favorite?</item>
+        <item>Did “Today is …’s birthday” appear at the top of the home screen and on the screensaver?</item>
+        <item>Is the switch there and on?</item>
+        <item>Did OK mark the message as read (and it left the screensaver), and did X delete it?</item>
         <item>Did a large “Are you still watching?” appear, did any button cancel it and, with no answer, did the movie pause before the screen went off (and continue from there)?</item>
         <item>Did “No internet · Still working: …” appear at the top, and go away when the internet came back?</item>
         <item>With Settings › Remote access › Show the TV as a network drive on, does Windows Map network drive with the address shown there and the panel PIN open the TV folders?</item>

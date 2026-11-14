@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Rodada 2 (14/11/2026): aniversários (93), calor/frio (94), mural pela TV (95), Sua TV no ano (92), rádios (87). -->
+<resources>
+    <string name="an_rotulo">Birthday</string>
+    <string name="an_hoje">Today is %s\'s birthday</string>
+    <string name="an_amanha">Tomorrow is %s\'s birthday</string>
+    <plurals name="an_anos">
+        <item quantity="one">turns %d</item>
+        <item quantity="other">turns %d</item>
+    </plurals>
+    <string name="tp_calor">Strong heat</string>
+    <string name="tp_calor_texto">Up to %d° today · Drink water</string>
+    <string name="tp_frio">Strong cold</string>
+    <string name="tp_frio_texto">Down to %d° tonight · Dress warmly</string>
+    <string name="tp_cfg">Heat and cold alert</string>
+    <string name="tp_cfg_det">A card over any app when today reaches %1$d° or tonight drops to %2$d°</string>
+    <string name="mu_ok_lido">OK marks as read</string>
+    <string name="mu_ok_nao_lido">Read · OK marks as unread</string>
+    <string name="mu_lido_desc">Message, read: %s. OK marks as unread.</string>
+    <string name="mu_nao_lido_desc">Message: %s. OK marks as read.</string>
+    <string name="mu_apagar">Delete message: %s</string>
+    <string name="extras_RETROSPECTIVA_ANO">Your TV this year (in December, on the screensaver)</string>
+    <string name="ra_titulo">Your TV in %d</string>
+    <string name="ra_canal">Favorite channel: %1$s (%2$s)</string>
+    <string name="ra_coluna">Radio</string>
+    <string name="ra_dica_ouvir">listen</string>
+    <string name="ra_dica_favoritar">favorite</string>
+    <string name="ra_carregando">Loading stations…</string>
+    <string name="ra_subtitulo">Stations from all over the world · 1–9 on the remote play your favorites</string>
+    <string name="ra_sem_catalogo">The radio catalog didn\'t answer. Your favorites still work.</string>
+    <string name="ra_nada">No station found.</string>
+    <string name="ra_continuar">continue</string>
+    <string name="ra_pausar">pause</string>
+    <string name="ra_favoritas">Favorites</string>
+    <string name="ra_procurar">Find</string>
+    <string name="ra_buscar">Search by name</string>
+    <string name="ra_buscar_det">Any station in the world</string>
+    <string name="ra_generos">Genres</string>
+    <string name="ra_paises">Other country</string>
+    <string name="ra_paises_det">The countries with the most stations</string>
+    <string name="ra_perto">Near you</string>
+    <string name="ra_mais_ouvidas">Most listened in %s</string>
+    <string name="ra_mundo">Most listened in the world</string>
+    <string name="ra_resultado">Search: %s</string>
+    <string name="ra_favoritada">Added to favorites</string>
+    <string name="ra_desfavoritada">Removed from favorites</string>
+    <string name="ra_falhou">This station isn\'t playing now. Try another.</string>
+</resources>

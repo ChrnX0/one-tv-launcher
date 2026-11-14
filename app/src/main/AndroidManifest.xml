@@ -780,6 +780,10 @@
         <service android:name=".GravacaoServico" android:exported="false" android:process=":player"
             android:foregroundServiceType="dataSync" />
         <receiver android:name=".GravacaoReceiver" android:exported="false" android:process=":player" />
+        <!-- Ideia 87: rádios (catálogo mundial radio-browser.info). No processo do player: o som é dele. -->
+        <activity android:name=".RadioActivity" android:exported="false" android:process=":player"
+            android:excludeFromRecents="true" android:launchMode="singleTask"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection" />
         <activity android:name=".GravacoesActivity" android:exported="false" android:process=":player"
             android:excludeFromRecents="true"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection" />

@@ -69,6 +69,9 @@ object Extras {
         MODO_JOGO(true),
         /** Ligar um controle de videogame com a HOME na tela abre a tela Jogos. */
         CONTROLE_ABRE_JOGOS(false),
+        // Rodada 2 (14/11/2026)
+        /** Ideia 92: "Sua TV em 2026", em dezembro, um cartão no protetor com o ano (horas, apps, canal favorito). */
+        RETROSPECTIVA_ANO(true),
     }
 
     /**

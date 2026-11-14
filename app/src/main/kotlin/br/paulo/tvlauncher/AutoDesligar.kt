@@ -35,7 +35,8 @@ import android.widget.TextView
  * - Desligar = apagar a tela (o Chromecast manda a TV entrar em standby pelo HDMI-CEC, como o botão de ligar do
  *   controle). Três caminhos, na ordem: ação de acessibilidade "bloquear tela", lockNow do Device Owner, e a tecla
  *   SLEEP pelo nosso shell. Para no primeiro que apagar a tela de fato.
- * Valor em minutos nas preferências "launcher" (chave [CHAVE]); 0 = desligado (o padrão).
+ * Valor em minutos nas preferências "launcher" (chave [CHAVE]); 0 = desligado. Padrão [PADRAO_MIN] = 3 h (ideia 80,
+ * decisão do dono em 14/11/2026). Quem já escolheu "Nunca" tem 0 gravado e continua assim: o padrão só vale sem chave.
  */
 object AutoDesligar {
     private const val TAG = "TvLauncher.AutoDesl"
@@ -43,6 +44,8 @@ object AutoDesligar {
     /** Opções oferecidas na TV e no painel. 0 = nunca. */
     val OPCOES = listOf(0, 30, 60, 90, 120, 180, 240)
     const val AVISO_S = 60
+    /** Sem escolha gravada: 3 h sem tecla. Uma TV esquecida ligada à noite apaga sozinha. */
+    const val PADRAO_MIN = 180
 
     private val principal = Handler(Looper.getMainLooper())
     @Volatile private var ultima = SystemClock.elapsedRealtime()
@@ -54,7 +57,7 @@ object AutoDesligar {
     private var engolirSubida = -1
     @Volatile var ultimoDesligamento = 0L; private set
 
-    fun minutos(ctx: Context): Int = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).getInt(CHAVE, 0)
+    fun minutos(ctx: Context): Int = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).getInt(CHAVE, PADRAO_MIN)
 
     fun definir(ctx: Context, min: Int): Boolean {
         if (min !in OPCOES) return false
