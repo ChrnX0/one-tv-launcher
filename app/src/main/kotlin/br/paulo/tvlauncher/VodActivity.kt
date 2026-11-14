@@ -153,6 +153,7 @@ class VodActivity : Activity() {
     // Ideia 20: novas tentativas depois de erro de rede (zera quando o vídeo volta a tocar).
     private var tentativas = 0
     private var tamLegendaSp = FimDoVideo.LEGENDA_PADRAO   // ideia 21
+    private val efeitos = EfeitosSom()                      // volume parecido e voz mais clara (PlayerAcessivel)
     // Ideia 24: abertura marcada na série (AberturaSerie) e a pílula "Pular abertura · OK".
     private var serie = false              // episódio aberto pela tela de séries (com a chave da série)
     private var abertura: AberturaSerie.Marca? = null
@@ -245,6 +246,7 @@ class VodActivity : Activity() {
                 if (endereco == null) { mostrarAviso(getString(R.string.vod_sem_conta)); return@post }
                 url = endereco; retomarEm = pos; legendaArquivo = leg; atrasoLegenda = atraso
                 tamLegendaSp = tamLeg; legenda.textSize = tamLeg.toFloat()
+                pintarLegenda()
                 abertura = ab
                 relato = tocavel?.relato
                 cabecalhos = tocavel?.cabecalhos ?: m3u?.second?.takeIf { it.isNotBlank() }?.let { mapOf("User-Agent" to it) }.orEmpty()
@@ -263,6 +265,7 @@ class VodActivity : Activity() {
         salvar()
         player?.let { avisar(FontesMidia.Momento.PAROU, it.currentPosition) }
         avisouInicio = false
+        efeitos.soltar()
         player?.let { retomarEm = it.currentPosition; it.release() }
         player = null
     }
@@ -279,10 +282,11 @@ class VodActivity : Activity() {
             .setConnectTimeoutMs(10_000).setReadTimeoutMs(20_000).setDefaultRequestProperties(cabecalhos)
         // DefaultDataSource: http continua com a fábrica acima, e file:// (a legenda baixada, no disco da TV) também abre.
         val http = DefaultDataSource.Factory(this, http0)
-        val p = ExoPlayer.Builder(this).setMediaSourceFactory(DefaultMediaSourceFactory(Smb.Fabrica(this, http)))
+        val p = ExoPlayer.Builder(this, EfeitosSom.fabrica(this)).setMediaSourceFactory(DefaultMediaSourceFactory(Smb.Fabrica(this, http)))
             .setSeekBackIncrementMs(10_000).setSeekForwardIncrementMs(30_000).build()
         p.setVideoSurfaceView(video)
         p.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MOVIE).build(), true)
+        efeitos.aplicar(p.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
         // Dublado: já pede o áudio no idioma da TV (ideia 25; "pt" na TV em português). Original: o áudio e a legenda são
         // escolhidos quando as faixas chegam (onTracksChanged + IdiomaPlayer.aplicar). Nos dois casos, a legenda no idioma
         // da TV só liga se o áudio não for desse idioma.
@@ -497,6 +501,17 @@ class VodActivity : Activity() {
         opcoes += Opcao(getString(R.string.imagem_opcao, PlayerImagem.rotulo(this, modoImagem))) { escolherImagem() }
         // Ideias 21 e 19: tamanho da legenda (vale para todos os vídeos) e desligar a TV quando este vídeo acabar.
         opcoes += Opcao(getString(R.string.vod_legenda_tamanho_opcao, rotuloTamanho(tamLegendaSp))) { escolherTamanhoLegenda() }
+        // Para quem enxerga e ouve pior (14/11/2026): ligar/desligar, vale para todos os vídeos e canais.
+        opcoes += Opcao(getString(R.string.acess_legenda_fundo), EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_FUNDO)) {
+            EfeitosSom.alternar(this, PlayerAcessivel.LEGENDA_FUNDO); pintarLegenda()
+        }
+        opcoes += Opcao(getString(R.string.acess_legenda_amarela), EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_AMARELA)) {
+            EfeitosSom.alternar(this, PlayerAcessivel.LEGENDA_AMARELA); pintarLegenda()
+        }
+        if (EfeitosSom.disponivel()) {
+            opcoes += Opcao(getString(R.string.acess_volume), EfeitosSom.volumeIgual(this)) { alternarSom(PlayerAcessivel.VOLUME_IGUAL) }
+            opcoes += Opcao(getString(R.string.acess_voz), EfeitosSom.vozClara(this)) { alternarSom(PlayerAcessivel.VOZ_CLARA) }
+        }
         opcoes += Opcao(getString(R.string.vod_desligar_ao_fim), marcada = desligarAoFim) {
             desligarAoFim = !desligarAoFim
             avisoBreve(getString(if (desligarAoFim) R.string.vod_desligar_ao_fim_ligado else R.string.vod_desligar_ao_fim_desligado))
@@ -644,6 +659,34 @@ class VodActivity : Activity() {
         val v = PlayerImagem.VELOCIDADES
         Estilo.lista(this, getString(R.string.velocidade_titulo), v.map { PlayerImagem.rotuloVelocidade(it) },
             listOf(v.indexOfFirst { it == p.playbackParameters.speed })) { i -> p.setPlaybackSpeed(v[i]) }
+    }
+
+    /** Cores da legenda conforme as chaves (PlayerAcessivel.legenda): padrão = branca com fundo leve, como antes. */
+    private fun pintarLegenda() {
+        val c = PlayerAcessivel.legenda(EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_FUNDO), EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_AMARELA))
+        legenda.setTextColor(c.texto)
+        (legenda.background as? GradientDrawable)?.setColor(c.fundo)
+        if (c.sombra) legenda.setShadowLayer(8f, 0f, 2f, Color.BLACK) else legenda.setShadowLayer(0f, 0f, 0f, 0)
+    }
+
+    /**
+     * Liga/desliga volume parecido ou voz mais clara. Se mudar entre "som direto para a TV" e "som decodificado aqui"
+     * (EfeitosSom.fabrica), o player é refeito no mesmo ponto; senão, só o efeito é trocado.
+     */
+    private fun alternarSom(chave: String) {
+        val antes = PlayerAcessivel.precisaEfeito(EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
+        val ligou = EfeitosSom.alternar(this, chave)
+        val depois = PlayerAcessivel.precisaEfeito(EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
+        avisoBreve(getString(when (chave) {
+            PlayerAcessivel.VOLUME_IGUAL -> if (ligou) R.string.acess_volume_ligado else R.string.acess_volume_desligado
+            else -> if (ligou) R.string.acess_voz_ligado else R.string.acess_voz_desligado
+        }))
+        val p = player ?: return
+        if (antes != depois) {
+            efeitos.soltar()
+            retomarEm = p.currentPosition; p.release(); player = null
+            tocar()
+        } else efeitos.aplicar(p.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
     }
 
     private fun rotuloTamanho(sp: Int): String {

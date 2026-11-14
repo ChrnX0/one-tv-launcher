@@ -52,6 +52,8 @@ class ColunaCategorias(
     private val aoParar: (String) -> Unit,
     private val aoOk: (String) -> Unit,
     private val aoSegurar: ((String) -> Unit)? = null,
+    /** Modo simples no player (PlayerAcessivel.escala): letra e linhas maiores. 1 = como sempre. */
+    private val escala: Float = 1f,
 ) {
     /**
      * Uma linha. [icone]: IconePlayer.Tipo ou IconeMidia.Tipo (null = sem ícone). [quantos] < 0 = sem número.
@@ -74,8 +76,8 @@ class ColunaCategorias(
     var escolhida: String = ""
         private set
 
-    private val alturaAcao = dp(40)
-    private val alturaLinha = dp(46)
+    private val alturaAcao = dp((40 * escala).toInt())
+    private val alturaLinha = dp((46 * escala).toInt())
 
     private val listas: Array<ListView> = Array(3) { i -> lista(i) }
     private val acoes get() = listas[0]
@@ -189,8 +191,8 @@ class ColunaCategorias(
             layoutParams = AbsListView.LayoutParams(-1, altura)
         }
         val icone = ImageView(act)
-        linha.addView(icone, LinearLayout.LayoutParams(dp(18), dp(18)).apply { marginEnd = dp(12) })
-        val nome = TextView(act).apply { textSize = Estilo.Leitura.CATEGORIA; typeface = fonteMedia; maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
+        linha.addView(icone, LinearLayout.LayoutParams(dp((18 * escala).toInt()), dp((18 * escala).toInt())).apply { marginEnd = dp(12) })
+        val nome = TextView(act).apply { textSize = Estilo.Leitura.CATEGORIA * escala; typeface = fonteMedia; maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
         linha.addView(nome, LinearLayout.LayoutParams(0, -2, 1f))
         // "+12": títulos novos desde a última visita, numa pílula verde (esboço direita-filmes.png).
         val novos = TextView(act).apply {
@@ -199,7 +201,7 @@ class ColunaCategorias(
         }
         linha.addView(novos, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(6) })
         // Folga entre o nome cortado e o número (12/11: "Reality show / Program…" encostava no 304).
-        val numero = TextView(act).apply { textSize = Estilo.Leitura.CONTAGEM; setTextColor(apagado); maxLines = 1 }
+        val numero = TextView(act).apply { textSize = Estilo.Leitura.CONTAGEM * escala; setTextColor(apagado); maxLines = 1 }
         linha.addView(numero, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(10) })
         linha.tag = Pecas(icone, nome, novos, numero)
         return linha

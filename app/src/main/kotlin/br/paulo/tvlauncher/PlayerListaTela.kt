@@ -51,7 +51,10 @@ class PlayerListaTela(
     private val aoFiltros: () -> Unit,
     private val aoOcultarGrupo: (String) -> Unit,   // nome do grupo (vazio = "Outros")
     private val aoGuia: (List<Canal>, String) -> Unit,   // guia em grade dos canais da categoria + nome dela
+    /** Modo simples da HOME (ModoSimples): bloco fixo só com Buscar, Favoritos e Recentes, letra maior. */
+    private val simples: Boolean = false,
 ) {
+    private val escala = PlayerAcessivel.escala(simples)
     private val tela = Handler(Looper.getMainLooper())
     private val papel = Estilo.TEXTO       // cores do sistema de design (Estilo), como em Filmes e no player (ideia 17)
     private val suave = Estilo.TEXTO_2
@@ -81,7 +84,7 @@ class PlayerListaTela(
     // Coluna esquerda nova (14/11/2026, esboço tv.png aprovado): ações fixas, LISTAS, Todos e Esportes fixos, A a Z rolando.
     private val coluna = ColunaCategorias(act, act.getString(R.string.home_tv),
         aoParar = { escolherGrupo(it) }, aoOk = { okNaColuna(it) },
-        aoSegurar = { k -> if (k.startsWith("g:")) aoOcultarGrupo(k.removePrefix("g:")) })
+        aoSegurar = { k -> if (k.startsWith("g:")) aoOcultarGrupo(k.removePrefix("g:")) }, escala = escala)
     private val listaCanais = lista()
     private val tituloMeio = rotulo()
     private lateinit var detLogo: ImageView
@@ -96,7 +99,7 @@ class PlayerListaTela(
 
     init {
         val colunas = LinearLayout(act).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(32), dp(26), dp(32), dp(22)) }
-        colunas.addView(coluna.raiz, LinearLayout.LayoutParams(dp(Estilo.Leitura.COLUNA_CATEGORIAS), -1))
+        colunas.addView(coluna.raiz, LinearLayout.LayoutParams(dp((Estilo.Leitura.COLUNA_CATEGORIAS * escala).toInt()), -1))
         colunas.addView(coluna(tituloMeio, listaCanais), LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(14); marginEnd = dp(18) })
         colunas.addView(montarDetalhe(), LinearLayout.LayoutParams(dp(290), -1))
         raiz.addView(colunas, FrameLayout.LayoutParams(-1, -1))
@@ -167,10 +170,11 @@ class PlayerListaTela(
         val cats = base.filter { it.chave.startsWith("g:") && it.quantos > 0 }
         val (semNome, comNome) = cats.partition { it.nome.isBlank() }
         val rola = comNome.sortedBy { ColunaRegras.chaveAZ(it.nome) } + semNome
-        grupos = listOf(GrupoCanais(PlayerLista.ACAO_BUSCAR, "", -1), GrupoCanais(PlayerLista.ACAO_FILTROS, resumoFiltro, -1),
-            porChave.getValue(PlayerLista.FAVORITOS), porChave.getValue(PlayerLista.RECENTES), GrupoCanais(PlayerLista.ACAO_GUIA, "", -1)) +
-            fixas + rola
-        nAcoes = 5; nFixas = fixas.size
+        val acoes = listOf(GrupoCanais(PlayerLista.ACAO_BUSCAR, "", -1), GrupoCanais(PlayerLista.ACAO_FILTROS, resumoFiltro, -1),
+            porChave.getValue(PlayerLista.FAVORITOS), porChave.getValue(PlayerLista.RECENTES), GrupoCanais(PlayerLista.ACAO_GUIA, "", -1))
+            .let { a -> if (simples) PlayerAcessivel.blocoSimples(a, { it.chave }, setOf(PlayerLista.ACAO_BUSCAR, PlayerLista.FAVORITOS, PlayerLista.RECENTES)) else a }
+        grupos = acoes + fixas + rola
+        nAcoes = acoes.size; nFixas = fixas.size
     }
     private var nAcoes = 0
     private var nFixas = 0
@@ -356,9 +360,9 @@ class PlayerListaTela(
         val linha = LinearLayout(act).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
             setPadding(dp(10), dp(7), dp(12), dp(7))
-            layoutParams = AbsListView.LayoutParams(-1, dp(70))   // 58 -> 70: letra maior e barra de 5 dp (13/11/2026)
+            layoutParams = AbsListView.LayoutParams(-1, dp((70 * escala).toInt()))   // 58 -> 70: letra maior e barra de 5 dp (13/11/2026)
         }
-        val numero = TextView(act).apply { textSize = Estilo.Leitura.ITEM; typeface = Fontes.manrope(600); gravity = Gravity.CENTER }
+        val numero = TextView(act).apply { textSize = Estilo.Leitura.ITEM * escala; typeface = Fontes.manrope(600); gravity = Gravity.CENTER }
         linha.addView(numero, LinearLayout.LayoutParams(dp(50), -2))
         val logo = ImageView(act).apply {
             scaleType = ImageView.ScaleType.FIT_CENTER
@@ -367,7 +371,7 @@ class PlayerListaTela(
         }
         linha.addView(logo, LinearLayout.LayoutParams(dp(58), dp(40)).apply { marginEnd = dp(12) })
         val col = LinearLayout(act).apply { orientation = LinearLayout.VERTICAL }
-        val nome = TextView(act).apply { textSize = Estilo.Leitura.ITEM; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
+        val nome = TextView(act).apply { textSize = Estilo.Leitura.ITEM * escala; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
         // "AO VIVO" em vermelho forte, letra branca, ao lado do nome (Esportes; acréscimo 4 do painel, 14/11/2026).
         val vivo = TextView(act).apply {
             text = act.getString(R.string.coluna_ao_vivo); textSize = Estilo.Leitura.ITEM_DETALHE; typeface = Fontes.manrope(700)

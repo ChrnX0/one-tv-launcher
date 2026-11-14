@@ -82,6 +82,9 @@
         <item>Movies and Series: the top of the screen shows the category, the count and the active filters as pills, plus the focused title\'s rating, year, length, genre and 2 lines of synopsis, in large letters</item>
         <item>Movies and Series: in a big category, ▶ on the last column (or Filter › “Go to a letter”) jumps straight to a letter</item>
         <item>Live TV › Sports: channels with a match or fight live right now get a red “LIVE” label and come first</item>
+        <item>Easier subtitles: black background behind the text and yellow subtitles, in the ▼ menu of movies and series and in Settings › TV and movies</item>
+        <item>“Even volume between channels” and “Clearer voices” in the player menu (live TV, movies and series) and in Settings › TV and movies: quiet sound gets louder and speech comes forward</item>
+        <item>With simple mode on, live TV, Movies and Series open on Favorites or Continue, with fewer rows and larger text</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>painel_config</item>
@@ -147,6 +150,9 @@
         <item>marcar_assistido</item>
         <item>painel_direito</item>
         <item>pular_letra</item>
+        <item>legenda_facil</item>
+        <item>volume_parecido</item>
+        <item>voz_clara</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>In the web panel, change the theme in the Settings tab</item>
@@ -212,6 +218,9 @@
         <item>In Movies, hold OK on a started poster and choose “Mark as watched”</item>
         <item>Open Movies › All and move along a few posters</item>
         <item>In Movies › All, go to the last column and press ▶, then choose a letter</item>
+        <item>In a movie with subtitles, ▼ › turn on “Subtitles with black background” and “Yellow subtitles”</item>
+        <item>In live TV, ▶ ▶ › turn on “Even volume between channels” and switch between a quiet and a loud channel</item>
+        <item>In a movie with quiet dialogue, ▼ › turn “Clearer voices” on and off</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did the TV home screen switch to the chosen theme?</item>
@@ -277,5 +286,8 @@
         <item>Did the movie leave Continue and go to Watched with the green label?</item>
         <item>Did the top show the pills and the quick info (with synopsis after a moment), readable from the couch?</item>
         <item>Did the big letters open and the grid jump to that letter?</item>
+        <item>Are the subtitles yellow on a black band, easy to read from the couch?</item>
+        <item>Did the quiet channel get closer to the others, without hiss or distortion?</item>
+        <item>With it on, was speech easier to understand?</item>
     </string-array>
 </resources>

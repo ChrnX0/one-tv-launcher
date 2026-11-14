@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Player para quem enxerga e ouve pior (14/11/2026): legenda, volume parecido, voz mais clara. -->
+<resources>
+    <string name="acess_legenda_fundo">Legenda com fundo preto</string>
+    <string name="acess_legenda_amarela">Legenda amarela</string>
+    <string name="acess_volume">Volume parecido entre canais</string>
+    <string name="acess_voz">Voz mais clara</string>
+    <string name="acess_volume_ligado">Volume parecido ligado: canal e filme baixos ficam mais altos</string>
+    <string name="acess_volume_desligado">Volume parecido desligado</string>
+    <string name="acess_voz_ligado">Voz mais clara ligada</string>
+    <string name="acess_voz_desligado">Voz mais clara desligada</string>
+    <string name="acess_config_titulo">Som e legenda</string>
+    <string name="acess_config_texto">Para quem enxerga ou ouve pior. Também no menu ▼ do player.</string>
+</resources>
