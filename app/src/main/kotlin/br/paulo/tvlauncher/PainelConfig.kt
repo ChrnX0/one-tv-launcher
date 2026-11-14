@@ -39,6 +39,8 @@ object PainelConfig {
             .put("infantis", par.infantis.size)
             .put("pinFamilia", PainelArmazem.temPinFamilia(app))
             .put("visita", ModoVisita.ativo(app))
+            .put("unidadeRede", PainelArmazem.unidadeRede(app))
+            .put("unidadeRedeEndereco", PainelWeb.enderecoUnidade(app) ?: org.json.JSONObject.NULL)
             .put("confirmacoes", JSONObject().put("liberarTudo", conf.liberarTudo).put("acoes", org.json.JSONArray().apply {
                 for (a in Confirmacoes.Acao.entries) put(JSONObject().put("chave", a.chave).put("titulo", a.titulo)
                     .put("explicacao", a.explicacao).put("modo", Confirmacoes.modo(conf.copy(liberarTudo = false), a).chave)
@@ -76,6 +78,11 @@ object PainelConfig {
             "barraProtetor" -> {
                 if (v != Protetor.BARRA_RESUMO && v != Protetor.BARRA_HORAS) return Resultado.Erro("valor inválido")
                 Protetor.definirBarra(app, v as String); registrar("linha de baixo do protetor: $v")
+            }
+            // A TV como unidade de rede (PainelDav): mesma senha (o PIN) e mesmas pastas da aba Arquivos.
+            "unidadeRede" -> {
+                val b = v as? Boolean ?: return Resultado.Erro("valor inválido")
+                PainelArmazem.definirUnidadeRede(app, b); PainelWeb.unidadeRedeMudou(app); registrar("unidade de rede: $b")
             }
             "visita" -> { val b = v as? Boolean ?: return Resultado.Erro("valor inválido"); ModoVisita.definir(app, b); registrar("modo visita: $b") }
             // Controle parental e modo infantil: na TV, ligar e desligar pedem o PIN; aqui também.

@@ -935,6 +935,8 @@ function desenharConfig(r) {
   $('cfgInfantil').checked = r.infantil;
   $('cfgInfantilDet').textContent = `(${r.infantis} categoria(s) infantil(is))`;
   $('cfgVisita').checked = r.visita;
+  $('cfgUnidadeRede').checked = r.unidadeRede;
+  $('cfgUnidadeRedeEndereco').textContent = r.unidadeRede ? (r.unidadeRedeEndereco || 'ligue o https (aba Extras › Certificado)') : 'desligada';
   $('cfgPinFamiliaEstado').textContent = r.pinFamilia ? 'definido' : 'não definido';
   $('btnApagarPinFamilia').hidden = !r.pinFamilia;
   $('cfgLiberarTudo').checked = r.confirmacoes.liberarTudo;
@@ -986,6 +988,7 @@ $('cfgBarra').addEventListener('change', (e) => gravarConfig({ campo: 'barraProt
 $('cfgParental').addEventListener('change', (e) => gravarConfig({ campo: 'parental', valor: e.target.checked }, e.target.checked ? 'Controle parental ligado.' : 'Controle parental desligado.'));
 $('cfgInfantil').addEventListener('change', (e) => gravarConfig({ campo: 'infantil', valor: e.target.checked }, e.target.checked ? 'Modo infantil ligado.' : 'Modo infantil desligado.'));
 $('cfgVisita').addEventListener('change', (e) => gravarConfig({ campo: 'visita', valor: e.target.checked }, e.target.checked ? 'Modo visita ligado.' : 'Modo visita desligado.'));
+$('cfgUnidadeRede').addEventListener('change', (e) => gravarConfig({ campo: 'unidadeRede', valor: e.target.checked }, e.target.checked ? 'Unidade de rede ligada.' : 'Unidade de rede desligada.'));
 $('cfgLiberarTudo').addEventListener('change', (e) => gravarConfig({ campo: 'liberarTudo', valor: e.target.checked }, e.target.checked ? 'Liberar tudo ligado.' : 'Liberar tudo desligado.'));
 $('btnPinFamilia').addEventListener('click', async () => {
   const pin = $('cfgPinFamilia').value;

@@ -11,7 +11,7 @@ package br.paulo.tvlauncher
 object Manual {
     val TOPICOS = listOf(
         "controle", "inicio", "painel", "voz", "clima", "protetor", "relogio", "tv", "filmes", "jogos",
-        "familia", "casa", "lg", "celular", "claude", "backup", "sistema",
+        "familia", "casa", "lg", "celular", "unidade", "claude", "backup", "sistema",
     )
 
     /** As três partes de cada assunto, como sufixo do nome do recurso. */

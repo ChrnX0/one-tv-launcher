@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The TV as a network drive (WebDAV, PainelDav.kt), Settings › Remote access. -->
+<resources>
+    <string name="ur_secao">Network drive</string>
+    <string name="ur_titulo">Show the TV as a network drive</string>
+    <string name="ur_det">Off. The TV\'s storage shows up as a network folder on Windows, Mac, Linux and phones. Password: the panel PIN.</string>
+    <string name="ur_painel">Turn on the web panel above first (it uses the same PIN and the https address).</string>
+    <string name="ur_https">Waiting for the panel\'s https address (the certificate is created about 1 minute after turning the panel on).</string>
+    <string name="ur_abra">On: %1$s · password: the panel PIN. Steps in Help › Files over the network.</string>
+</resources>

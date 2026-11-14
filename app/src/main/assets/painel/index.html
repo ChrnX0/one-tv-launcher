@@ -623,6 +623,16 @@
         <button type="button" class="botao-secundario" id="btnPinFamilia">Gravar PIN das crianças</button>
       </div>
       <div class="cartao">
+        <h2>Unidade de rede</h2>
+        <p class="aviso">A memória da TV aparece no computador e no celular como uma pasta da rede (WebDAV), com as mesmas
+          pastas da aba Arquivos. Senha: o PIN do painel (o usuário pode ser qualquer um, ex.: tv). Precisa do certificado
+          da TV instalado no aparelho (<a href="/certificado">passo a passo</a>).</p>
+        <label><input id="cfgUnidadeRede" type="checkbox"> Mostrar a TV como unidade de rede</label>
+        <p class="aviso">Endereço: <strong id="cfgUnidadeRedeEndereco">—</strong></p>
+        <p class="aviso-curto">Windows: Este Computador › Mapear unidade de rede. Mac: Finder › Ir › Conectar ao Servidor.
+          Linux: davs:// no lugar de https://. O passo a passo completo está na Ajuda da TV (Configurações › Ajuda › Arquivos pela rede).</p>
+      </div>
+      <div class="cartao">
         <h2>PIN do painel</h2>
         <p class="aviso">O mesmo PIN destrava o painel e as opções protegidas na TV. Trocar pede o PIN atual.</p>
         <input id="cfgPinNovo" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12" autocomplete="new-password"
