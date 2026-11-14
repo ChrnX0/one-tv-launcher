@@ -57,7 +57,7 @@ jobs:
       tem_chave: ${{ steps.chave.outputs.tem_chave }}
       commit: ${{ steps.info.outputs.commit }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false   # o token não fica gravado no .git: os passos do build não precisam dele
           fetch-depth: 0               # republicar: precisa do histórico para conferir que o commit é da main
@@ -89,12 +89,12 @@ jobs:
           "$SDKM" "platforms;android-36" "build-tools;36.0.0"
 
       # Go para o túnel do Tailscale (tunel/, vira libtsnet.so dentro do APK; ver compilarTunel em app/build.gradle.kts).
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@v7
         with:
           go-version-file: tunel/go.mod
           cache-dependency-path: tunel/go.sum
 
-      - uses: gradle/actions/setup-gradle@v5
+      - uses: gradle/actions/setup-gradle@v6
 
       - name: Chave de assinatura
         id: chave
@@ -154,7 +154,7 @@ jobs:
           # Notas do Release (em inglês), com o número da build e o commit.
           sed -e "s/{BUILD}/$CODIGO/g" -e "s/{COMMIT}/${COMMIT::7}/g" .github/release-notes.md > publicar/notas.md
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v7
         with:
           name: tv-launcher-${{ steps.info.outputs.codigo }}
           path: publicar/
@@ -168,7 +168,7 @@ jobs:
     permissions:
       contents: write   # criar o Release
     steps:
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v8
         with:
           name: tv-launcher-${{ needs.build.outputs.codigo }}
 
