@@ -149,6 +149,9 @@ object Estilo {
         return (0xFF shl 24) or (canal(16) shl 16) or (canal(8) shl 8) or canal(0)
     }
 
+    /** A mesma cor com outra opacidade ([a] de 0 a 255): o véu escuro do player é o [FUNDO] a 80%, por exemplo. */
+    fun alfa(cor: Int, a: Int): Int = (a.coerceIn(0, 255) shl 24) or (cor and 0xFFFFFF)
+
     fun dp(ctx: Context, v: Int): Int =
         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), ctx.resources.displayMetrics).toInt()
 
