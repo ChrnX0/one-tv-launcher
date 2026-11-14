@@ -74,6 +74,9 @@
         <item>Filmes e Séries: um Filtro só (ordem, gênero/época/nota, só não vistos, sortear e mostrar ocultas); a tela volta na última categoria aberta e mostra “+N” nas categorias com títulos novos</item>
         <item>Concluído conta pelo que falta: menos de 10 min no filme, menos de 3 min no episódio; começar o próximo episódio conclui o anterior; OK segurado no pôster marca assistido ou tira do Continuar</item>
         <item>Séries nos Interesses ganham etiqueta: verde “Concluída” e amarela “Nova temporada” ou “N episódios novos”</item>
+        <item>Filmes e Séries: o alto da tela mostra a categoria, o total e os filtros ligados em pílulas, e a ficha rápida do título em foco (nota, ano, duração, gênero e 2 linhas de sinopse), com letra grande</item>
+        <item>Filmes e Séries: numa categoria grande, ▶ na última coluna (ou Filtro › “Ir para uma letra”) pula direto para uma letra</item>
+        <item>TV ao vivo › Esportes: canais com jogo ou luta ao vivo agora ganham a etiqueta vermelha “AO VIVO” e vêm primeiro</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -135,6 +138,8 @@
         <item>Abra Filmes e desça pela coluna da esquerda até as categorias</item>
         <item>Abra a TV ao vivo, aperte OK e escolha Esportes</item>
         <item>Em Filmes, segure OK num pôster começado e escolha “Marcar como assistido”</item>
+        <item>Abra Filmes › Todos e ande por alguns pôsteres</item>
+        <item>Em Filmes › Todos, vá até a última coluna e aperte ▶; escolha uma letra</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -196,5 +201,7 @@
         <item>O bloco de cima ficou parado, “Todos” também, e só as categorias (de A a Z) rolaram?</item>
         <item>Os canais com jogo ou luta ao vivo apareceram primeiro?</item>
         <item>O filme saiu do Continuar e foi para Assistidos com a etiqueta verde?</item>
+        <item>O alto mostrou as pílulas e a ficha rápida (com sinopse depois de um instante), dá para ler do sofá?</item>
+        <item>Abriram as letras grandes e a grade pulou para a letra?</item>
     </string-array>
 </resources>

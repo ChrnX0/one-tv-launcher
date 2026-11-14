@@ -49,6 +49,7 @@ import java.util.Locale
  */
 class FilmesActivity : Activity() {
     private companion object {
+        const val MIN_PULAR = 30   // grade menor que isso se anda no controle mesmo
         const val BUSCAR = "*buscar"
         const val CONTINUAR = "*continuar"
         const val INTERESSES = "*interesses"
@@ -99,8 +100,7 @@ class FilmesActivity : Activity() {
 
     private lateinit var coluna: ColunaCategorias
     private lateinit var grade: GridView
-    private lateinit var cabecalho: TextView
-    private lateinit var focado: TextView
+    private lateinit var painel: PainelCatalogo   // topo (categoria + pílulas do filtro) e a ficha rápida do pôster em foco
     private lateinit var aviso: TextView
     private lateinit var painelFicha: FrameLayout
 
@@ -116,8 +116,10 @@ class FilmesActivity : Activity() {
         coluna = ColunaCategorias(this, getString(R.string.filmes_titulo), aoParar = { escolherCat(it) }, aoOk = { okNaColuna(it) })
         colunas.addView(coluna.raiz, LinearLayout.LayoutParams(dp(Estilo.Leitura.COLUNA_CATEGORIAS), -1))
         val direita = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        cabecalho = rotulo("")
-        direita.addView(cabecalho)
+        // Painel direito (esboço direita-filmes.png, aprovado em 14/11/2026): o filtro em pílulas e a ficha rápida.
+        painel = PainelCatalogo(this)
+        direita.addView(painel.topo)
+        direita.addView(painel.faixa, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = dp(10) })
         grade = GridView(this).apply {
             numColumns = Estilo.Leitura.GRADE_COLUNAS
             horizontalSpacing = dp(12); verticalSpacing = dp(Estilo.Leitura.GRADE_VAO)
@@ -126,9 +128,6 @@ class FilmesActivity : Activity() {
             setPadding(dp(4), dp(4), dp(4), dp(4)); clipToPadding = false
         }
         direita.addView(grade, LinearLayout.LayoutParams(-1, 0, 1f))
-        // A informação do item em foco fica EM CIMA da grade, como o destaque da HOME (era uma linha de 13 sp embaixo).
-        focado = TextView(this).apply { textSize = Estilo.Leitura.FOCADO; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPadding(dp(4), dp(10), 0, dp(10)) }
-        direita.addView(focado, 1)   // logo abaixo do cabeçalho da categoria
         // Dica fixa das teclas, no mesmo jeito da lista de canais do player (player_lista_teclas: 11sp, cor apagada).
         direita.addView(TextView(this).apply { text = getString(R.string.vod_grade_teclas); textSize = Estilo.Leitura.DICA; setTextColor(apagado); setPadding(dp(8), dp(6), 0, 0) })
         colunas.addView(direita, LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(16) })
@@ -145,9 +144,12 @@ class FilmesActivity : Activity() {
         grade.adapter = adaptadorGrade
         // ◀ na 1ª coluna da grade volta para a categoria escolhida (não para a linha da coluna que estiver mais perto).
         grade.setOnKeyListener { _, codigo, e ->
-            if (e.action == KeyEvent.ACTION_DOWN && codigo == KeyEvent.KEYCODE_DPAD_LEFT && grade.selectedItemPosition % grade.numColumns == 0) {
-                coluna.focar(); true
-            } else false
+            if (e.action != KeyEvent.ACTION_DOWN) false
+            else if (codigo == KeyEvent.KEYCODE_DPAD_LEFT && grade.selectedItemPosition % grade.numColumns == 0) { coluna.focar(); true }
+            // ▶ na última coluna de uma grade grande: as letras, para pular (acréscimo 3).
+            else if (codigo == KeyEvent.KEYCODE_DPAD_RIGHT && e.repeatCount == 0 && podePularLetra() &&
+                (grade.selectedItemPosition % grade.numColumns == grade.numColumns - 1 || grade.selectedItemPosition == naGrade.size - 1)) { pularParaLetra(); true }
+            else false
         }
         grade.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p: AdapterView<*>?, v: View?, pos: Int, id: Long) { mostrarFocado(naGrade.getOrNull(pos)) }
@@ -363,10 +365,8 @@ class FilmesActivity : Activity() {
                         if (modo == ModoGrade.MANTER_LUGAR && naGrade.isEmpty() && grade.hasFocus()) coluna.focar()   // esvaziou
                     }
                     val nome = itens.firstOrNull { it.chave == chave }?.nome.orEmpty()
-                    // "AÇÃO · 1.204 FILMES · MAIS RECENTES · SÓ NÃO VISTOS": o que está na grade e por quê (acréscimo 1).
-                    val cab = getString(R.string.filmes_cabecalho, nome.uppercase(Locale.getDefault()), naGrade.size)
-                    val partes = listOfNotNull(nomeOrdem(ordem), resumoFiltro().ifEmpty { null })
-                    cabecalho.text = (listOf(cab) + partes).joinToString(" · ") { it.uppercase(Locale.getDefault()) }
+                    // "Ação 1.204 [Ordem: mais recentes] [Só não vistos] [★ 7+]": o que está na grade e por quê (acréscimo 1).
+                    painel.mostrarTopo(nome, naGrade.size, listOf(getString(R.string.coluna_filtro_ordem, nomeOrdem(ordem)) to false) + pilulasFiltro())
                     depois?.invoke()
                 }
             },
@@ -553,14 +553,82 @@ class FilmesActivity : Activity() {
         return col
     }
 
+    /**
+     * Ficha rápida do pôster em foco (acréscimo 2): nota, ano, duração, gênero e 2 linhas de sinopse, sem abrir a ficha.
+     * Duração e sinopse só se a ficha já estiver guardada no disco (nunca pede ao servidor a cada passo do controle).
+     */
     private fun mostrarFocado(f: Filme?) {
-        if (f == null && chave == INTERESSES) { focado.text = getString(R.string.filmes_interesses_vazio); return }
-        if (f == null && filtro.ativo) { focado.text = getString(R.string.filmes_filtro_vazio); return }
-        focado.text = f?.let {
-            val pos = posicoes[it.chave]?.takeIf { p -> p.duracao > 0 }
-            Estilo.infoFoco(Vod.nomeLimpo(it.nome), it.nota, listOfNotNull(it.ano?.toString(), PlayerLista.nomeExibido(it.grupo).ifEmpty { null },
-                pos?.takeIf { p -> Vod.deveRetomar(p) }?.let { p -> getString(R.string.tempo_faltam, BarraTempo.duracao(p.duracao - p.ms)) }))
-        } ?: ""
+        tela.removeCallbacks(lerFichaRapida)
+        if (f == null) {
+            painel.mostrarFoco(when {
+                chave == INTERESSES -> getString(R.string.filmes_interesses_vazio)
+                filtro.ativo -> getString(R.string.filmes_filtro_vazio)
+                else -> ""
+            }, ""); return
+        }
+        val info = fichasRapidas[f.chave]
+        val pos = posicoes[f.chave]?.takeIf { p -> p.duracao > 0 }
+        painel.mostrarFoco(Estilo.infoFoco(Vod.nomeLimpo(f.nome), f.nota, listOfNotNull(
+            f.ano?.toString(),
+            info?.duracaoMin?.let { if (it >= 60) "${it / 60} h ${"%02d".format(it % 60)}" else "$it min" },
+            info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(f.grupo).ifEmpty { null },
+            pos?.takeIf { p -> Vod.deveRetomar(p) }?.let { p -> getString(R.string.tempo_faltam, BarraTempo.duracao(p.duracao - p.ms)) })),
+            info?.sinopse.orEmpty())
+        if (f.chave !in fichasRapidas) { focoRapido = f; tela.postDelayed(lerFichaRapida, 200) }   // espera o dedo parar
+    }
+
+    // As fichas já lidas do disco (null = não tem guardada), só as últimas 60: a TV tem 2 GB.
+    private val fichasRapidas = object : LinkedHashMap<String, FichaFilme?>(64, 0.75f, true) {
+        override fun removeEldestEntry(e: MutableMap.MutableEntry<String, FichaFilme?>) = size > 60
+    }
+    private var focoRapido: Filme? = null
+    private val lerFichaRapida = Runnable {
+        val f = focoRapido ?: return@Runnable
+        Fundo.rodar {
+            val info = PlayerCarga.fichaFilmeGuardada(this, f)
+            tela.post {
+                if (isDestroyed) return@post
+                fichasRapidas[f.chave] = info
+                if (naGrade.getOrNull(grade.selectedItemPosition) === f) mostrarFocado(f)
+            }
+        }
+    }
+
+    /** As pílulas do filtro em vigor (em âmbar: é o que está escondendo títulos). */
+    private fun pilulasFiltro(): List<Pair<String, Boolean>> = listOfNotNull(
+        filtro.genero?.let { nomeGenero(it) }, nomeEpoca(filtro), filtro.notaMin?.let { nomeNota(it) },
+        if (filtro.naoVistos) getString(R.string.filmes_filtro_nao_vistos_curto) else null,
+    ).map { it to true }
+
+    // ---------------------------------------------------------------- pular para uma letra (acréscimo 3)
+
+    /** Só em Todos ou numa categoria (as listas que seguem a ordem do catálogo), e com bastante filme. */
+    private fun podePularLetra() = naGrade.size >= MIN_PULAR && (chave == TODOS || chave.startsWith("g:"))
+
+    /** As letras grandes por cima; escolhida a letra, põe em ordem de nome (se não estiver) e pula para ela. */
+    private fun pularParaLetra() {
+        if (!podePularLetra()) return
+        val g = naGrade
+        Fundo.rodar {
+            val presentes = g.mapTo(HashSet()) { ColunaRegras.letraDe(Vod.chaveNome(it.nome)) }
+            tela.post {
+                if (isDestroyed) return@post
+                PainelCatalogo.escolherLetra(this, presentes) { letra ->
+                    val pular = {
+                        val atual = naGrade
+                        Fundo.rodar {
+                            val i = ColunaRegras.indiceDaLetra(atual.map { Vod.chaveNome(it.nome) }, letra)
+                            tela.post { if (!isDestroyed && naGrade === atual && i >= 0) { grade.requestFocus(); grade.setSelection(i); mostrarFocado(atual[i]) } }
+                        }
+                    }
+                    if (ordem == Vod.Ordem.NOME) pular() else {
+                        ordem = Vod.Ordem.NOME
+                        getSharedPreferences("player", MODE_PRIVATE).edit().putString("ordem_filmes", ordem.name).apply()
+                        recalcular(ModoGrade.NOVA) { pular() }
+                    }
+                }
+            }
+        }
     }
 
     // ---------------------------------------------------------------- ficha do filme
@@ -724,6 +792,7 @@ class FilmesActivity : Activity() {
         opcoes += (if (filtro.ativo) getString(R.string.coluna_filtro_combinado_ativo, resumoFiltro()) else getString(R.string.coluna_filtro_combinado)) to { menuFiltro() }
         if (filtro.ativo) opcoes += getString(R.string.coluna_filtro_limpar) to { aplicarFiltro(FilmesFiltro.Criterios()) }
         opcoes += getString(R.string.coluna_filtro_sortear) to { sortear() }
+        if (podePularLetra()) opcoes += getString(R.string.coluna_letra) to { pularParaLetra() }
         if (ocultas.isNotEmpty()) opcoes += JanelaIcones.comIcone(this, IconePlayer.Tipo.OCULTO,
             getString(if (mostrarOcultas) R.string.coluna_filtro_ocultas_esconder else R.string.coluna_filtro_ocultas_mostrar)) to { alternarOcultas() }
         Estilo.lista(this, getString(R.string.coluna_filtro_titulo), opcoes.map { it.first }) { i -> opcoes[i].second() }

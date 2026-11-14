@@ -81,4 +81,27 @@ object ColunaRegras {
     /** A última categoria aberta ainda existe? Senão, a de entrada padrão. Ações (Buscar, Filtro) nunca são "última". */
     fun categoriaInicial(salva: String?, existentes: Collection<String>, padrao: String): String =
         salva?.takeIf { it.isNotEmpty() && it in existentes } ?: padrao
+
+    // ---------------------------------------------------------------- pular para uma letra (acréscimo 3)
+
+    /** '#' (números e símbolos) e A a Z, na ordem em que aparecem na grade em ordem de nome. */
+    val LETRAS: List<Char> = listOf('#') + ('A'..'Z')
+
+    /** A letra de um título na ordem por nome ([Vod.chaveNome]: sem prefixo de país, sem acento). */
+    fun letraDe(chaveNome: String): Char {
+        val c = chaveNome.firstOrNull()?.uppercaseChar() ?: return '#'
+        return if (c in 'A'..'Z') c else '#'
+    }
+
+    /**
+     * Onde começa a [letra] numa grade em ordem de nome (as chaves já ordenadas): o 1º título dela ou, se não houver,
+     * o 1º depois dela. '#' = o começo. -1 = grade vazia.
+     */
+    fun indiceDaLetra(chavesOrdenadas: List<String>, letra: Char): Int {
+        if (chavesOrdenadas.isEmpty()) return -1
+        if (letra == '#') return 0
+        val alvo = letra.lowercaseChar()
+        val i = chavesOrdenadas.indexOfFirst { val l = letraDe(it); l != '#' && l.lowercaseChar() >= alvo }
+        return if (i >= 0) i else chavesOrdenadas.size - 1
+    }
 }
