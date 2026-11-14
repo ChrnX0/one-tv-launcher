@@ -575,6 +575,13 @@
         <p class="aviso">Uma cena junta várias ações. Cada uma ganha um link secreto para os Atalhos do iPhone ou o Home Assistant (POST).
           O link só aparece ao criar: guarde-o. Criar e apagar pedem o PIN.</p>
         <div id="listaCenas" class="lista-registro"></div>
+        <details id="gatilhosCena" class="cena-gatilhos">
+          <summary>Rodar uma cena quando algo acontecer</summary>
+          <p class="aviso">Cada evento roda no máximo uma vez a cada 20 s. Filmes de outros apps precisam do acesso às notificações ("Tocando agora").</p>
+          <div id="gatilhosLista" class="cena-acoes"></div>
+          <button type="button" id="btnGatilhos" class="botao-secundario">Salvar eventos</button>
+          <p id="statusGatilhos" class="aviso" hidden></p>
+        </details>
         <form id="formCena" class="form-cena">
           <input id="nomeCena" type="text" maxlength="40" placeholder="Nome (ex.: Cinema)" aria-label="Nome da cena">
           <div id="acoesLista" class="cena-acoes"></div>

@@ -78,6 +78,7 @@ object Presenca {
         val d = decidir(presentes, escolhidos(app), antes, System.currentTimeMillis(), Rotinas.minutosSemTecla(), acesa)
         p.edit().putLong("ausente_desde", d.ausenteDesde ?: 0L).apply()
         if (d.desligar) {
+            Gatilhos.disparar(ctx, Gatilhos.Evento.TODOS_SAIRAM)   // ideia 7: ex.: apagar as luzes junto
             p.edit().remove("ausente_desde").putLong("ultimo_desligou", System.currentTimeMillis()).apply()
             Log.i(TAG, "todos saíram há ${AUSENCIA_MIN} min: apagando a tela")
             Desligamento.apagarTela(app)

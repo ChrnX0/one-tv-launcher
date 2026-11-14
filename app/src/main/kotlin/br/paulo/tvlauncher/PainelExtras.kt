@@ -141,7 +141,18 @@ object PainelExtras {
             get && rota == "teclas" -> ok(TesteTeclas.json())
             get && rota == "cenas" -> ok(JSONObject().put("cenas", JSONArray().apply {
                 Cenas.lista(app).forEach { put(JSONObject().put("nome", it.nome).put("acoes", it.acoes)) }
-            }))
+            }).put("gatilhos", JSONObject(Gatilhos.paraJson(Gatilhos.todos(app)))))
+            // Eventos como gatilho (ideia 7): {"midia_tocou": "Cinema", ...}; vazio tira o evento. PIN, como criar cena.
+            post && rota == "cenas/gatilhos" -> {
+                if (!elevada) return pin()
+                val o = corpo ?: return erro(400, "JSON inválido")
+                val nomes = Cenas.lista(app).map { it.nome }.toSet()
+                val m = Gatilhos.lerJson(o.toString())
+                m.values.firstOrNull { it !in nomes }?.let { return erro(400, "a cena \"$it\" não existe") }
+                Gatilhos.salvar(app, m)
+                PainelArmazem.registrar(app, ip, "gatilhos de cena: ${m.size}", "ok")
+                ok(JSONObject(Gatilhos.paraJson(m)))
+            }
             post && rota == "cenas/criar" -> {
                 if (!elevada) return pin()
                 val o = corpo ?: return erro(400, "JSON inválido")

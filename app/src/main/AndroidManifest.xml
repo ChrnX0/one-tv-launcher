@@ -100,6 +100,10 @@
             android:name=".RotinasActivity"
             android:exported="false"
             android:label="@string/lbl_rotinas" />
+        <!-- Eventos como gatilho (ideia 7): o player (processo :player) avisa "tocando/pausado" ao processo principal. -->
+        <receiver
+            android:name=".GatilhoReceiver"
+            android:exported="false" />
         <!-- Botões do controle (ideia 6): o que cada tecla livre faz (RemapTeclas). Aberta por Extras. -->
         <activity
             android:name=".TeclasActivity"
