@@ -72,12 +72,7 @@ object Desligamento {
     )
 
     /** "30 minutos", "1 hora", "1 hora e 30 minutos": para os avisos na tela. */
-    fun duracaoTexto(minutos: Int): String {
-        val h = minutos / 60; val m = minutos % 60
-        val horas = if (h == 1) "1 hora" else "$h horas"
-        val mins = if (m == 1) "1 minuto" else "$m minutos"
-        return when { h == 0 -> mins; m == 0 -> horas; else -> "$horas e $mins" }
-    }
+    fun duracaoTexto(minutos: Int): String = duracaoFalada(minutos * 60)   // no idioma da TV (Textos.kt)
 
     internal fun telaAcesa(ctx: Context) = ctx.getSystemService(PowerManager::class.java).isInteractive
 
@@ -114,7 +109,7 @@ class DesligamentoReceiver : BroadcastReceiver() {
         if (intent.action == Desligamento.ACAO_DESLIGAR && marcado - System.currentTimeMillis() > 30_000) return
         when (intent.action) {
             Desligamento.ACAO_AVISO -> if (Desligamento.telaAcesa(ctx))
-                AvisoTv.rapido(ctx, "A TV desliga em 1 minuto", "Para não desligar: \"Ok Google, abrir Não desligar a TV\"", 20)
+                AvisoTv.rapido(ctx, ctx.getString(R.string.dl_um_minuto), ctx.getString(R.string.dl_para_nao, ctx.getString(R.string.lbl_nao_desligar)), 20)
             Desligamento.ACAO_SUAVE -> if (Desligamento.telaAcesa(ctx)) SonoSuave.comecar(ctx, marcado)
             Desligamento.ACAO_DESLIGAR -> {
                 ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().remove(Desligamento.CHAVE).apply()

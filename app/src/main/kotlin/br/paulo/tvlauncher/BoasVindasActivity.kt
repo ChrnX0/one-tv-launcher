@@ -82,7 +82,7 @@ class BoasVindasActivity : Activity() {
             lista.addView(linha(getString(R.string.bv_dono), getString(R.string.bv_dono_det)) {
                 VirarDono.perguntar(this, { t -> AvisoTv.rapido(this, getString(R.string.bv_titulo), t, 4) }) { montar() }
             })
-        lista.addView(linha("Usar com o Claude (opcional)", "Claude, ChatGPT ou Codex consultam a TV e pedem ações, de qualquer lugar. Passo a passo com QR code.") {
+        lista.addView(linha(getString(R.string.bv_claude), getString(R.string.bv_claude_det)) {
             abrir(Intent(this, ConectarClaudeActivity::class.java))
         })
         lista.addView(linha(getString(R.string.bv_tudo), getString(R.string.cfg_titulo)) {

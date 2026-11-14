@@ -125,8 +125,8 @@ object AvisoTv {
         val fica = AvisoRegras.Fica.values().firstOrNull { it.name == p.getString("fica", null) } ?: AvisoRegras.Fica.ATENCAO
         p.edit().clear().apply()
         if (titulo == null || texto == null || System.currentTimeMillis() - em > VALIDADE_PENDENTE_MS) return
-        val h = java.text.SimpleDateFormat("HH:mm", java.util.Locale("pt", "BR")).format(java.util.Date(em))
-        mostrar(app, "$titulo (enviado às $h)", texto, segundos, som, guardarSeApagada = true, fica = fica)
+        val h = java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault()).format(java.util.Date(em))
+        mostrar(app, app.getString(R.string.av_enviado_as, titulo, h), texto, segundos, som, guardarSeApagada = true, fica = fica)
     }
 
     // ---------------------------------------------------------------- janela

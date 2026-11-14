@@ -275,7 +275,7 @@ object McpServidor {
             ctl.registrarSucesso()
         }
         // Confirmações: PIN certo, e ainda pode precisar do OK na TV (instalação nova). Fora da trava do PIN: espera até 60 s.
-        if (!ConfirmacoesTv.permitir(app, Confirmacoes.Acao.MCP_CLIENTE, "Conectar \"${nome.take(60)}\" à TV pela internet", "internet"))
+        if (!ConfirmacoesTv.permitir(app, Confirmacoes.Acao.MCP_CLIENTE, txt(R.string.cf_conectar, nome.take(60)), "internet"))
             return pagina("Negado na TV", "<p>A TV não autorizou este login (negado no controle, ninguém respondeu em 60 s, ou bloqueado nas Confirmações).</p>", null)
         val codigo = autorizacao().criarCodigo(cliente!!, redirect!!, desafio!!)
         PainelArmazem.registrar(app, "internet", "login MCP ($nome)", "ok")
@@ -303,7 +303,7 @@ object McpServidor {
                 // mcp-3: a mesma confirmação do caminho do PIN. Sem ela, quem convencesse alguém da casa a digitar um
                 // código em google.com/device ganhava o acesso sem ninguém ver nada na TV. Roda FORA de qualquer
                 // synchronized (pode esperar até 60 s pela resposta no controle, e não pode travar outros pedidos).
-                if (!ConfirmacoesTv.permitir(app, Confirmacoes.Acao.MCP_CLIENTE, "Conectar \"${nome.take(60)}\" (conta ${s.email ?: "?"}) à TV pela internet", "internet"))
+                if (!ConfirmacoesTv.permitir(app, Confirmacoes.Acao.MCP_CLIENTE, txt(R.string.cf_conectar_conta, nome.take(60), s.email ?: "?"), "internet"))
                     return pagina("Negado na TV", "<p>A TV não autorizou este login (negado no controle, ninguém respondeu em 60 s, ou bloqueado nas Confirmações).</p>", null)
                 val codigo = autorizacao().criarCodigo(cliente!!, redirect!!, desafio!!)
                 PainelArmazem.registrar(app, "internet", "login MCP Google ($nome)", s.email ?: "?")

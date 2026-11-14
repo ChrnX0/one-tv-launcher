@@ -70,7 +70,7 @@ class ModoSimplesActivity : Activity() {
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
         if (VigiaAtualizacao.fechada(this)) return
-        val (raiz, coluna) = Estilo.telaLista(this, "Olá!", "Escolha com as setas e aperte OK.")
+        val (raiz, coluna) = Estilo.telaLista(this, getString(R.string.ms_ola), getString(R.string.ms_ola_det))
         grade = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false }
         coluna.addView(grade, LinearLayout.LayoutParams(-1, -2))
         setContentView(raiz)
@@ -110,11 +110,11 @@ class ModoSimplesActivity : Activity() {
             val i = packageManager.getLeanbackLaunchIntentForPackage(pacote) ?: packageManager.getLaunchIntentForPackage(pacote)
             if (i != null) try { startActivity(i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } catch (_: Exception) {}
         }
-        cards += card("Pedir ajuda", null, Estilo.ATENCAO) {
+        cards += card(getString(R.string.ms_pedir_ajuda), null, Estilo.ATENCAO) {
             val tv = android.provider.Settings.Global.getString(contentResolver, "device_name") ?: "TV"
-            Avisos.enviar(applicationContext, Avisos.Tipo.AJUDA, "Pedido de ajuda", "Alguém pediu ajuda na TV $tv.")
-            falar("Pronto. Avisei a família.")
-            AvisoTv.rapido(applicationContext, "Pedido de ajuda", "Avisei a família no celular.")
+            Avisos.enviar(applicationContext, Avisos.Tipo.AJUDA, getString(R.string.ms_pedido_ajuda), getString(R.string.ms_alguem_pediu, tv))
+            falar(getString(R.string.ms_avisei_falado))
+            AvisoTv.rapido(applicationContext, getString(R.string.ms_pedido_ajuda), getString(R.string.ms_avisei))
         }
         // 3 por linha, cards grandes (o dobro dos da HOME).
         cards.chunked(3).forEach { linha ->
@@ -124,7 +124,7 @@ class ModoSimplesActivity : Activity() {
             })
         }
         // Sair: linha discreta no fim, com o PIN do painel.
-        grade.addView(Estilo.linhaTexto(this, "Voltar à tela completa").apply {
+        grade.addView(Estilo.linhaTexto(this, getString(R.string.ms_voltar)).apply {
             textSize = 14f
             setOnClickListener {
                 val sair = { Extras.definir(this@ModoSimplesActivity, Extras.Chave.MODO_SIMPLES, false); finish() }

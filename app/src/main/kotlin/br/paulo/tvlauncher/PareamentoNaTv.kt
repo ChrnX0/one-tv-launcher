@@ -101,9 +101,9 @@ object PareamentoNaTv {
             setOnClickListener { aoApertar() }
         }
 
-        linhaPorta = texto("Abra: Depuração sem fio › Parear dispositivo com código", 15f, 0xCCFFFFFF.toInt())
-        linhaCodigo = texto("Código: ______", 26f)
-        linhaEstado = texto("procurando a tela de pareamento…", 14f, Estilo.ACENTO)
+        linhaPorta = texto(app.getString(R.string.pn_abra), 15f, 0xCCFFFFFF.toInt())
+        linhaCodigo = texto(app.getString(R.string.pn_codigo, "______"), 26f)
+        linhaEstado = texto(app.getString(R.string.pn_procurando), 14f, Estilo.ACENTO)
 
         val teclado = LinearLayout(app).apply { orientation = LinearLayout.VERTICAL }
         val linhas = listOf(listOf("1", "2", "3", "4", "5"), listOf("6", "7", "8", "9", "0"))
@@ -120,16 +120,16 @@ object PareamentoNaTv {
         }
         teclado.addView(LinearLayout(app).apply {
             orientation = LinearLayout.HORIZONTAL
-            addView(tecla("Apagar") { if (codigo.isNotEmpty()) { codigo.setLength(codigo.length - 1); atualizarCodigo() } })
-            addView(tecla("Parear") { parear(app) }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(app, 8) })
-            addView(tecla("Fechar") { fechar(app) }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(app, 8) })
+            addView(tecla(app.getString(R.string.pn_apagar)) { if (codigo.isNotEmpty()) { codigo.setLength(codigo.length - 1); atualizarCodigo() } })
+            addView(tecla(app.getString(R.string.pn_parear)) { parear(app) }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(app, 8) })
+            addView(tecla(app.getString(R.string.qr_fechar)) { fechar(app) }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(app, 8) })
         })
 
         val painel = LinearLayout(app).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(app, 20), dp(app, 16), dp(app, 20), dp(app, 16))
             background = GradientDrawable().apply { cornerRadius = dp(app, 18).toFloat(); setColor(0xF01C2024.toInt()) }
-            addView(texto("Parear o launcher (sem PC)", 20f))
+            addView(texto(app.getString(R.string.pn_titulo), 20f))
             addView(linhaPorta)
             addView(linhaCodigo)
             addView(teclado)
@@ -149,7 +149,7 @@ object PareamentoNaTv {
     }
 
     private fun atualizarCodigo() {
-        linhaCodigo.text = "Código: " + codigo.toString().padEnd(6, '_')
+        linhaCodigo.text = linhaCodigo.context.getString(R.string.pn_codigo, codigo.toString().padEnd(6, '_'))
     }
 
     private fun estado(t: String) {
@@ -191,7 +191,7 @@ object PareamentoNaTv {
                         porta = i.port
                         principal.post {
                             if (janela == null) return@post
-                            linhaPorta.text = "Tela de pareamento achada (porta $porta). Digite o código:"
+                            linhaPorta.text = linhaPorta.context.getString(R.string.pn_achada, porta)
                             estado("porta $porta achada")
                             lerCodigoDaTela(app, 0)   // antes do foco: a janela ativa ainda é a das Configurações
                             pegarFoco(app)
@@ -232,22 +232,22 @@ object PareamentoNaTv {
         val achado = CodigoPareamento.achar(textosDaTela())
         if (achado == null) { principal.postDelayed({ lerCodigoDaTela(app, tentativa + 1) }, 500); return }
         codigo.append(achado); atualizarCodigo()
-        estado("código lido da tela")
+        estado(app.getString(R.string.pn_lido))
         parear(app)
     }
 
     private fun parear(app: Context) {
         val c = codigo.toString()
-        if (porta <= 0) { estado("ainda não achei a tela de pareamento"); return }
-        if (c.length != 6) { estado("o código tem 6 dígitos"); return }
+        if (porta <= 0) { estado(app.getString(R.string.pn_nao_achei)); return }
+        if (c.length != 6) { estado(app.getString(R.string.pn_6)); return }
         estado("pareando…")
         val p = porta
         trabalho.execute {
             // Pela fila do adb (pista rápida do GuardiaoShizuku), não mais por fora dela (privilegios-10).
             var erro: String? = null
             val ok = GuardiaoShizuku.parear(app, p, c) { erro = it }
-            if (!ok) { estado(erro?.let { "falhou: $it" } ?: "o Android recusou o código"); return@execute }
-            estado("pareado! conferindo o shell…")
+            if (!ok) { estado(erro?.let { app.getString(R.string.pn_falhou, it) } ?: app.getString(R.string.pn_recusou)); return@execute }
+            estado(app.getString(R.string.pn_pareado))
             GuardiaoShizuku.parearEGarantir(app, null, -1)
             principal.postDelayed({ fechar(app) }, 4000)
         }

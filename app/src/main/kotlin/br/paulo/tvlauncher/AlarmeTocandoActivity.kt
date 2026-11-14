@@ -97,7 +97,7 @@ class AlarmeTocandoActivity : Activity() {
         }
         // Rótulo pequeno em cima (SECAO), a hora no desenho da HOME e do protetor (hora cheia forte, ":" apagado, minuto
         // fino; RelogioTela) e o nome do despertador embaixo, no tamanho de título (sistema de design, 12/11/2026).
-        coluna.addView(Estilo.texto(this, Estilo.Papel.SECAO, if (timer) "TIMER" else "DESPERTADOR").apply {
+        coluna.addView(Estilo.texto(this, Estilo.Papel.SECAO, getString(if (timer) R.string.at_timer else R.string.at_despertador)).apply {
             gravity = Gravity.CENTER
             setTextColor(Estilo.ACENTO)
         })
