@@ -71,6 +71,7 @@
         <item>Real profiles: each Google account on the TV has its own channel favorites, Continue watching, last episodes, watchlist and app order; a profile can be marked as a kid profile (quick panel), which turns on kids mode and bedtime and asks the parents\' PIN to leave</item>
         <item>The launcher has its own icon and banner (in Apps and in Settings)</item>
         <item>"Now playing" pill on the top bar of the home screen: cover, title and app; OK pauses or resumes, hold OK opens the app (turn on "Now playing" in Extras)</item>
+        <item>Settings › Help: a manual of everything the launcher does, in 16 topics (remote, home screen, quick panel, voice, TV, movies, family, home, web panel, Claude, backup and more); ◀ ▶ switch topics</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -128,6 +129,7 @@
         <item>perfis</item>
         <item>icone_banner</item>
         <item>pilula_tocando</item>
+        <item>ajuda_manual</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -185,6 +187,7 @@
         <item>In the quick panel, open the profiles, mark one account as “Kid profile” (parents\' PIN) and switch to it; favorite a channel; then switch back to your profile</item>
         <item>Open Settings > Apps and find One TV Launcher</item>
         <item>Play a song or video, go back to the home screen and press OK on the pill</item>
+        <item>Open Settings › Help and press OK on “The remote”; then press ▶ a few times and ▼</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -242,5 +245,6 @@
         <item>Did kids mode and bedtime turn on in the kid profile, did leaving ask for the PIN, and did your favorites come back as before?</item>
         <item>Does it show the ring with the play symbol?</item>
         <item>Did it pause, and did it resume with OK again?</item>
+        <item>Can you read the text from the couch, did ◀ ▶ switch topics and did ▼ scroll to the end?</item>
     </string-array>
 </resources>

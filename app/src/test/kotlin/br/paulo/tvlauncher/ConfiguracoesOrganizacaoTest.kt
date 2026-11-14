@@ -18,8 +18,11 @@ class ConfiguracoesOrganizacaoTest {
         val t = File(pasta, "ConfigLauncherActivity.kt").readText()
         val lista = t.substringAfter("private val abas: List<Aba> by lazy {").substringBefore("\n        )")
         val montadores = Regex("""this::(\w+)\)""").findAll(lista).map { it.groupValues[1] }.toList()
-        assertEquals(8, montadores.size)
+        assertEquals(9, montadores.size)
         assertEquals("abaConta", montadores[ConfigLauncherActivity.ABA_CONTA])
         assertEquals("abaAvancado", montadores[ConfigLauncherActivity.ABA_AVANCADO])
+        // Ajuda (14/11/2026) logo antes do Avançado, que continua a última.
+        assertEquals("abaAjuda", montadores[ConfigLauncherActivity.ABA_AVANCADO - 1])
+        assertEquals(montadores.size - 1, ConfigLauncherActivity.ABA_AVANCADO)
     }
 }
