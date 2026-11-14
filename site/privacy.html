@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Privacy Policy · One TV Launcher</title><link rel="stylesheet" href="estilo.css"></head>
+<body><main>
+<nav><a href="./">Home</a><a href="privacy.html">Privacy / Privacidade</a><a href="terms.html">Terms / Termos</a></nav>
+<h1>Privacy Policy</h1>
+<p class="data">Last updated: November 14, 2026 · <a href="#pt">Leia em português</a></p>
+
+<h2>The short version</h2>
+<p>One TV Launcher has no server of its own. The developers do not receive, store or sell any of your data, and the app has no ads, analytics or telemetry. Everything the app keeps stays on your TV, or in accounts that belong to you (such as your own Google Drive) when you choose to connect them.</p>
+
+<h2>Data kept on your TV</h2>
+<p>Your settings, app order, alarms, reminders, routines, PINs (stored as salted hashes), media accounts you add (IPTV, Plex, Jellyfin, Home Assistant and similar) and local backups are stored on the TV. You can remove them by clearing the app's data or uninstalling it.</p>
+
+<h2>Google account and Google Drive</h2>
+<p>Signing in with Google is optional. When you sign in, the app asks for your basic profile (name, e-mail address and profile picture) and, only if you turn on Drive backup, the <code>https://www.googleapis.com/auth/drive.file</code> permission.</p>
+<ul>
+<li><b>What it is used for:</b> showing your name and picture on the TV, and saving and restoring the app's own backup files in a folder you can see in your Google Drive.</li>
+<li><b>What the app can reach:</b> with <code>drive.file</code>, only files the app itself created or that you open with it. It cannot see, read or change any other file in your Drive.</li>
+<li><b>Where the data goes:</b> directly between your TV and Google. The sign-in token is encrypted with the TV's Android Keystore and is not included in any backup. Nothing is sent to the developers or to anyone else.</li>
+<li><b>How to stop:</b> disconnect the account in the app's settings, or remove access at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>. Backup files already in your Drive stay there until you delete them.</li>
+</ul>
+<p>One TV Launcher's use and transfer of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the Limited Use requirements. Google user data is not used for advertising, is not sold, is not shared with third parties and is not used to train AI models.</p>
+
+<h2>Online services the app contacts</h2>
+<p>To work, the app talks directly to some public services. They receive the requests your TV makes (including its IP address) under their own privacy policies:</p>
+<ul>
+<li>Weather and location: Open-Meteo, OpenStreetMap Nominatim, ViaCEP and ipwho.is (approximate location, only to find your city for the forecast).</li>
+<li>Updates: GitHub, to check for and download new versions.</li>
+<li>Google sign-in and Google Drive, only if you use them.</li>
+<li>Services you configure yourself, such as your IPTV provider, Home Assistant, Plex, Tailscale or a network speed test.</li>
+</ul>
+
+<h2>Remote access you enable</h2>
+<p>The optional web panel works on your home network and is protected by a PIN. The optional remote access (MCP over Tailscale) only works if you set it up with your own Tailscale account. In both cases the connection goes to your TV, not to the developers.</p>
+
+<h2>Children</h2>
+<p>The app does not knowingly collect information from anyone, including children.</p>
+
+<h2>Changes and contact</h2>
+<p>Changes to this policy are published on this page and in the project's public repository. Questions: <a href="https://github.com/ChrnX0/one-tv-launcher/issues">open an issue on GitHub</a>.</p>
+
+<hr>
+<div lang="pt-BR" id="pt">
+<h1>Política de Privacidade</h1>
+<p class="data">Atualizada em 14 de novembro de 2026</p>
+
+<h2>Em resumo</h2>
+<p>O One TV Launcher não tem servidor próprio. Os desenvolvedores não recebem, guardam nem vendem nenhum dado seu, e o app não tem anúncios, análise de uso nem telemetria. Tudo o que o app guarda fica na sua TV, ou em contas que são suas (como o seu próprio Google Drive) quando você escolhe conectá-las.</p>
+
+<h2>Dados guardados na TV</h2>
+<p>Suas configurações, ordem dos apps, despertadores, lembretes, rotinas, PINs (guardados como hash com sal), contas de mídia que você adiciona (IPTV, Plex, Jellyfin, Home Assistant e similares) e backups locais ficam na TV. Você os apaga limpando os dados do app ou desinstalando-o.</p>
+
+<h2>Conta Google e Google Drive</h2>
+<p>Entrar com o Google é opcional. Ao entrar, o app pede seu perfil básico (nome, e-mail e foto) e, só se você ligar o backup no Drive, a permissão <code>https://www.googleapis.com/auth/drive.file</code>.</p>
+<ul>
+<li><b>Para que serve:</b> mostrar seu nome e foto na TV e salvar e restaurar os arquivos de backup do próprio app numa pasta que você vê no seu Google Drive.</li>
+<li><b>O que o app alcança:</b> com <code>drive.file</code>, só os arquivos que o próprio app criou ou que você abriu com ele. Ele não vê, não lê e não altera nenhum outro arquivo do seu Drive.</li>
+<li><b>Para onde vão os dados:</b> direto entre a sua TV e o Google. O token de acesso é cifrado pelo Android Keystore da TV e não entra em nenhum backup. Nada vai para os desenvolvedores nem para terceiros.</li>
+<li><b>Como parar:</b> desconecte a conta nas configurações do app ou remova o acesso em <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>. Os backups que já estão no Drive ficam lá até você apagá-los.</li>
+</ul>
+<p>O uso e a transferência, pelo One TV Launcher, de informações recebidas das APIs do Google seguem a <a href="https://developers.google.com/terms/api-services-user-data-policy">Política de Dados do Usuário dos Serviços de API do Google</a>, incluindo os requisitos de Uso Limitado. Dados de usuário do Google não são usados para publicidade, não são vendidos, não são compartilhados com terceiros e não são usados para treinar modelos de IA.</p>
+
+<h2>Serviços on-line que o app acessa</h2>
+<p>Para funcionar, o app fala diretamente com alguns serviços públicos. Eles recebem as requisições da sua TV (incluindo o endereço IP), sob as próprias políticas de privacidade:</p>
+<ul>
+<li>Clima e localização: Open-Meteo, OpenStreetMap Nominatim, ViaCEP e ipwho.is (localização aproximada, só para achar sua cidade para a previsão).</li>
+<li>Atualizações: GitHub, para procurar e baixar versões novas.</li>
+<li>Login do Google e Google Drive, só se você usá-los.</li>
+<li>Serviços que você mesmo configura, como seu provedor de IPTV, Home Assistant, Plex, Tailscale ou o teste de velocidade da rede.</li>
+</ul>
+
+<h2>Acesso remoto que você liga</h2>
+<p>O painel web opcional funciona na rede da sua casa e é protegido por PIN. O acesso remoto opcional (MCP pelo Tailscale) só funciona se você configurá-lo com a sua própria conta do Tailscale. Nos dois casos a conexão vai para a sua TV, não para os desenvolvedores.</p>
+
+<h2>Crianças</h2>
+<p>O app não coleta, conscientemente, informação de ninguém, incluindo crianças.</p>
+
+<h2>Mudanças e contato</h2>
+<p>Mudanças nesta política são publicadas nesta página e no repositório público do projeto. Dúvidas: <a href="https://github.com/ChrnX0/one-tv-launcher/issues">abra uma issue no GitHub</a>.</p>
+</div>
+</main></body></html>

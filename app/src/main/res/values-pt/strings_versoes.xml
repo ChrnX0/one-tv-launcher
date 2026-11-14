@@ -14,6 +14,8 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Painel web: aba Configurações com tema, tamanho do texto, áudio, protetor, controle parental, modo infantil e visita, PIN das crianças, trocar o PIN e Confirmações, as mesmas da TV</item>
+        <item>Painel web: conectar a conta do Google Drive (código e QR no próprio painel), desconectar e restaurar uma cópia do Drive, como nas Configurações da TV</item>
         <item>Volume de verdade nas TVs LG NetCast (2013) pela rede: desligar suave, teto da hora de dormir, voz e despertador</item>
         <item>Séries: contagem de 10 s antes do próximo episódio, “Ainda está assistindo?” depois de 3 seguidos e “Desligar a TV quando este acabar” no menu do ▼</item>
         <item>Filmes e séries tentam de novo sozinhos quando a conexão cai, tamanho da legenda no menu do ▼ e a ficha abre sem internet</item>
@@ -79,6 +81,8 @@
         <item>TV ao vivo › Esportes: canais com jogo ou luta ao vivo agora ganham a etiqueta vermelha “AO VIVO” e vêm primeiro</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>No painel web, troque o tema na aba Configurações</item>
+        <item>No painel web, abra a aba Backup</item>
         <item>Aperte HOME</item>
         <item>Abra a Casa pelo painel rápido</item>
         <item>Abra Configurações &gt; Automações</item>
@@ -142,6 +146,8 @@
         <item>Em Filmes › Todos, vá até a última coluna e aperte ▶; escolha uma letra</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>A tela inicial da TV mudou para o tema escolhido?</item>
+        <item>Aparece “Conta do Google Drive” com conectar, e o código e o QR aparecem no painel?</item>
         <item>Voltou para a tela inicial?</item>
         <item>Os cartões aparecem por cômodo, sem cobrir as dicas de baixo?</item>
         <item>Suas rotinas e despertadores aparecem lá, e dá para editar um?</item>
