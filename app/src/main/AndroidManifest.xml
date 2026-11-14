@@ -100,6 +100,11 @@
             android:name=".RotinasActivity"
             android:exported="false"
             android:label="@string/lbl_rotinas" />
+        <!-- Tela Cenas (ideia 4): abre pelo painel rápido ou pela voz (alias VozCenas). -->
+        <activity
+            android:name=".CenasActivity"
+            android:exported="false"
+            android:label="@string/lbl_cenas" />
         <activity
             android:name=".RotinaAcordarActivity"
             android:exported="false"
@@ -445,6 +450,17 @@
             android:name=".VozAgenda"
             android:exported="true"
             android:label="@string/lbl_minha_agenda"
+            android:targetActivity=".AtalhoVozActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".VozCenas"
+            android:exported="true"
+            android:label="@string/lbl_cenas"
             android:targetActivity=".AtalhoVozActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

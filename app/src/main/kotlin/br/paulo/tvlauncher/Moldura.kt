@@ -21,7 +21,7 @@ import android.widget.LinearLayout
 object Moldura {
     /** As telas de lista (o "miolo lista" da proposta B). Nome curto da classe. */
     private val TELAS = setOf(
-        "AlarmesActivity", "BackupNoturnoActivity", "BoasVindasActivity", "BuscaActivity", "CasaActivity",
+        "AlarmesActivity", "BackupNoturnoActivity", "BoasVindasActivity", "BuscaActivity", "CasaActivity", "CenasActivity",
         "ConectarClaudeActivity", "ConfigLauncherActivity", "DiagnosticoActivity", "DnsActivity", "EntrarPeloQrActivity",
         "ExtrasActivity", "FotoPerfilActivity", "LicencasActivity", "ModoSimplesActivity", "RotinasActivity", "TesteTeclasActivity",
         "MidiaRedeActivity",   // parte 2: Na rede já usa a margem e o título do sistema

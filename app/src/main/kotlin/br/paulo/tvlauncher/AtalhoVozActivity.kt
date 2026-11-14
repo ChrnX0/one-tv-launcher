@@ -23,6 +23,7 @@ class AtalhoVozActivity : Activity() {
             "VozDesligar30" -> desligarEm(30)
             "VozDesligar60" -> desligarEm(60)
             "VozNaoDesligar" -> avisar(getString(if (Desligamento.cancelar(this)) R.string.dl_cancelado else R.string.dl_nenhum))
+            "VozCenas" -> startActivity(Intent(this, CenasActivity::class.java))   // ideia 4: "abrir Cenas"
             "VozDiagnostico" -> startActivity(Intent(this, DiagnosticoActivity::class.java))
             // No modo visita a agenda (do perfil ativo) não abre, igual ao OK na data da HOME.
             "VozAgenda" -> if (ModoVisita.ativo(this)) avisar(getString(R.string.dl_agenda_visita))

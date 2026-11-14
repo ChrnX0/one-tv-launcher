@@ -537,10 +537,18 @@ class PainelRapidoActivity : Activity() {
                 addView(par.second.casca, LinearLayout.LayoutParams(0, dp(TILE_DP), 1f).apply { marginStart = dp(Estilo.E1) })
             }, LinearLayout.LayoutParams(-1, -2).apply { if (i > 0) topMargin = dp(Estilo.E1) })
         }
-        // Só com o Home Assistant configurado (painel > Extras > Casa). Linha inteira: a grade tinha 4 pares fechados.
-        if (CasaHA.configurado(this)) {
-            grade.addView(casa.casca, LinearLayout.LayoutParams(-1, dp(TILE_DP)).apply { topMargin = dp(Estilo.E1) })
+        // Cenas (14/11/2026, ideia 4): só com alguma cena criada (painel web > Extras > Cenas).
+        val cenas = if (Cenas.lista(this).isEmpty()) null else tile("cena", getString(R.string.pr_cenas)) {
+            abrirEFechar(Intent(this, CenasActivity::class.java))
         }
+        // Casa só com o Home Assistant configurado (painel > Extras > Casa). Casa e Cenas dividem a última linha;
+        // sozinho, o tile ocupa a linha inteira (a grade tinha 4 pares fechados).
+        val ultimos = listOfNotNull(casa.takeIf { CasaHA.configurado(this) }, cenas)
+        if (ultimos.isNotEmpty()) grade.addView(LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            clipChildren = false
+            for ((i, t) in ultimos.withIndex()) addView(t.casca, LinearLayout.LayoutParams(0, dp(TILE_DP), 1f).apply { if (i > 0) marginStart = dp(Estilo.E1) })
+        }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(Estilo.E1) })
         return grade
     }
 
