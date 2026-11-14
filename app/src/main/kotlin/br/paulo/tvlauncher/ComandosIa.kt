@@ -20,18 +20,26 @@ object ComandosIa {
     const val MAX_ACOES = 5
     const val MAX_FRASE = 300
 
+    /**
+     * Ideia 72 (14/11/2026): cada chave do catálogo leva o texto em português (o que os testes do computador veem) e o
+     * recurso que a TV usa, no idioma dela (strings_ideia72.xml).
+     */
+    class Texto(val pt: String, val id: Int) { override fun toString() = tp(id, pt) }
+
     val TELAS = mapOf(
-        "previsao" to "a previsão do tempo",
-        "agenda" to "a agenda",
-        "despertador" to "o despertador",
-        "configuracoes" to "as Configurações do launcher",
-        "inicio" to "a tela inicial",
+        "previsao" to Texto("a previsão do tempo", R.string.l72_tela_previsao),
+        "agenda" to Texto("a agenda", R.string.l72_tela_agenda),
+        "despertador" to Texto("o despertador", R.string.l72_tela_despertador),
+        "configuracoes" to Texto("as Configurações do launcher", R.string.l72_tela_configuracoes),
+        "inicio" to Texto("a tela inicial", R.string.l72_tela_inicio),
     )
-    val VOLUME = mapOf("subir" to "Aumentar o volume", "descer" to "Diminuir o volume", "mudo" to "Ligar/desligar o mudo")
-    val MIDIA = mapOf("pausar" to "Pausar", "tocar" to "Continuar tocando", "proxima" to "Próximo", "anterior" to "Anterior")
+    val VOLUME = mapOf("subir" to Texto("Aumentar o volume", R.string.l72_vol_subir),
+        "descer" to Texto("Diminuir o volume", R.string.l72_vol_descer), "mudo" to Texto("Ligar/desligar o mudo", R.string.l72_vol_mudo))
+    val MIDIA = mapOf("pausar" to Texto("Pausar", R.string.l72_midia_pausar), "tocar" to Texto("Continuar tocando", R.string.l72_midia_tocar),
+        "proxima" to Texto("Próximo", R.string.l72_midia_proxima), "anterior" to Texto("Anterior", R.string.l72_midia_anterior))
     /** Casa (11/11/2026, ideia grande 1): o mesmo catálogo fechado do [CasaHA.servico] (luz, tomada, cortina, cena...). */
-    val CASA = mapOf("ligar" to "Ligar", "desligar" to "Desligar", "alternar" to "Alternar")
-    private val NOMES_DIAS = listOf("dom", "seg", "ter", "qua", "qui", "sex", "sáb")
+    val CASA = mapOf("ligar" to Texto("Ligar", R.string.l72_casa_ligar), "desligar" to Texto("Desligar", R.string.l72_casa_desligar),
+        "alternar" to Texto("Alternar", R.string.l72_casa_alternar))
     const val MAX_TIMER_MIN = 240
     const val MAX_DESLIGAR_MIN = 480
     const val MAX_TITULO = 80
@@ -50,23 +58,29 @@ object ComandosIa {
      */
     internal fun t(id: Int, vararg a: Any): String = try { txt(id, *a) } catch (e: Throwable) { "#$id" }
 
-    /** Uma ação já conferida. [descricao] é o que a TV mostra antes de executar (em português, para quem está no sofá). */
+    /** Como [t], mas sem Context (testes do computador) devolve o português [pt] já formatado, e não "#id". */
+    internal fun tp(id: Int, pt: String, vararg a: Any): String = try { txt(id, *a) } catch (e: Throwable) { pt.format(*a) }
+
+    /** Uma ação já conferida. [descricao] é o que a TV mostra antes de executar (no idioma da TV, para quem está no sofá). */
     sealed class Acao(val descricao: String) {
-        class AbrirApp(val pacote: String, nome: String) : Acao("Abrir $nome")
-        class AbrirTela(val tela: String) : Acao("Abrir ${TELAS.getValue(tela)}")
+        class AbrirApp(val pacote: String, nome: String) : Acao(tp(R.string.l72_abrir, "Abrir %1${'$'}s", nome))
+        class AbrirTela(val tela: String) : Acao(tp(R.string.l72_abrir, "Abrir %1${'$'}s", TELAS.getValue(tela).toString()))
         class Despertador(val hora: Int, val minuto: Int, val dias: Int, val nome: String) :
-            Acao("Criar despertador às %02d:%02d (%s)".format(hora, minuto, textoDias(dias)) + (if (nome.isNotEmpty()) " \"$nome\"" else ""))
-        class Volume(val acao: String, val vezes: Int) : Acao(VOLUME.getValue(acao) + if (acao != "mudo" && vezes > 1) " ($vezes vezes)" else "")
-        class Midia(val acao: String) : Acao(MIDIA.getValue(acao))
-        class ModoVisita(val ligado: Boolean) : Acao(if (ligado) "Ligar o modo visita" else "Desligar o modo visita")
+            Acao(tp(R.string.l72_despertador, "Criar despertador às %1${'$'}s (%2${'$'}s)", "%02d:%02d".format(hora, minuto), textoDias(dias)) +
+                (if (nome.isNotEmpty()) " \"$nome\"" else ""))
+        class Volume(val acao: String, val vezes: Int) : Acao(VOLUME.getValue(acao).toString() +
+            if (acao != "mudo" && vezes > 1) " " + tp(R.string.l72_vezes, "(%1${'$'}d vezes)", vezes) else "")
+        class Midia(val acao: String) : Acao(MIDIA.getValue(acao).toString())
+        class ModoVisita(val ligado: Boolean) : Acao(if (ligado) tp(R.string.l72_visita_liga, "Ligar o modo visita") else tp(R.string.l72_visita_desliga, "Desligar o modo visita"))
         // Canais da TV ao vivo (10/11/2026). Saem da conferência só com o que a pessoa disse ([pedido]); o canal de verdade
         // é escolhido depois, na TV, entre os da lista dela (CanalBusca.resolver), respeitando o controle parental.
         class TocarCanal(val pedido: String, val canalId: String = "", val nomeCanal: String = "", val numero: Int = 0) :
-            Acao(if (canalId.isEmpty()) "Colocar no canal $pedido" else "Colocar no canal $numero ($nomeCanal)")
+            Acao(if (canalId.isEmpty()) tp(R.string.l72_canal_pedido, "Colocar no canal %1${'$'}s", pedido)
+                else tp(R.string.l72_canal, "Colocar no canal %1${'$'}d (%2${'$'}s)", numero, nomeCanal))
         /** [texto] = a resposta do guia ("X agora: ... Depois: ..."), preenchida pelo CanalBusca.resolver. */
-        class OQuePassa(val pedido: String, val texto: String = "") : Acao(texto.ifEmpty { "Ver o que passa em $pedido" })
+        class OQuePassa(val pedido: String, val texto: String = "") : Acao(texto.ifEmpty { tp(R.string.l72_o_que_passa, "Ver o que passa em %1${'$'}s", pedido) })
         /** Um aparelho do Home Assistant ([CasaHA]): junta a casa às cenas ("Cinema" apaga a luz e abre o app). */
-        class Casa(val entidade: String, val acao: String) : Acao("${CASA.getValue(acao)} ${entidade.substringAfter('.').replace('_', ' ')} (casa)")
+        class Casa(val entidade: String, val acao: String) : Acao(tp(R.string.l72_casa, "%1${'$'}s %2${'$'}s (casa)", CASA.getValue(acao).toString(), entidade.substringAfter('.').replace('_', ' ')))
 
         // ---- ideia 2 (14/11/2026): o que já existia na TV por outro caminho (painel, voz), agora no catálogo.
         /** Recado por cima de qualquer tela ([AvisoTv]), como o do painel. [texto] já passou pelo [Recado.limpar]. */
@@ -107,11 +121,13 @@ object ComandosIa {
 
     /** Bit 0 = domingo ... bit 6 = sábado (o mesmo formato do Despertador). 0 = uma vez só. */
     fun textoDias(dias: Int): String = when (dias) {
-        0 -> "uma vez"
-        0b1111111 -> "todo dia"
-        0b0111110 -> "seg a sex"
-        0b1000001 -> "fim de semana"
-        else -> (0..6).filter { dias and (1 shl it) != 0 }.joinToString(", ") { NOMES_DIAS[it] }
+        0 -> tp(R.string.l72_dias_uma, "uma vez")
+        0b1111111 -> tp(R.string.l72_dias_todos, "todo dia")
+        0b0111110 -> tp(R.string.l72_dias_uteis, "seg a sex")
+        0b1000001 -> tp(R.string.l72_dias_fds, "fim de semana")
+        else -> tp(R.string.l72_dias_nomes, "dom,seg,ter,qua,qui,sex,sáb").split(',').let { n ->
+            (0..6).filter { dias and (1 shl it) != 0 }.joinToString(", ") { n.getOrElse(it) { "?" } }
+        }
     }
 
     /**

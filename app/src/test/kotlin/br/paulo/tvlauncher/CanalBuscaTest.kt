@@ -138,6 +138,15 @@ class CanalBuscaTest {
         assertEquals("sbt", q("o que passa no SBT agora"))
         assertNull(CanalBusca.interpretarFrase("desligar em 30 minutos"))
         assertEquals("globo", (CanalBusca.interpretarFrase("Globo", semVerboTocar = true) as CanalBusca.PedidoVoz.Tocar).canal)
+        // Ideia 72: as mesmas frases em inglês, ao lado do português.
+        assertEquals("globo", t("Watch Globo"))
+        assertEquals("5", t("switch to channel 5 please"))
+        assertEquals("cnn", t("hey google, put on CNN"))
+        assertEquals("hbo", t("I want to watch the HBO now"))
+        assertEquals("globo", q("What's on Globo?"))
+        assertEquals("5", q("what is playing on channel 5 right now"))
+        assertEquals("sbt", q("what's on now on SBT"))
+        assertNull(CanalBusca.interpretarFrase("turn off in 30 minutes please"))
         val json = CanalBusca.acoesDaVoz(CanalBusca.PedidoVoz.Tocar("globo \"x\""))
         assertEquals("globo \"x\"", (ComandosIa.conferir(json, emptyMap()).acoes.single() as ComandosIa.Acao.TocarCanal).pedido)
     }

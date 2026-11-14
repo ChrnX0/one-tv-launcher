@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ideia 72 (14/11/2026): o que a TV mostra antes de executar uma ação do catálogo (ComandosIa), no idioma da TV. -->
+<resources>
+    <string name="app_nome" translatable="false">One TV Launcher</string>
+    <string name="l72_abrir">Open %1$s</string>
+    <string name="l72_tela_previsao">the weather forecast</string>
+    <string name="l72_tela_agenda">the calendar</string>
+    <string name="l72_tela_despertador">the alarm clock</string>
+    <string name="l72_tela_configuracoes">the launcher Settings</string>
+    <string name="l72_tela_inicio">the home screen</string>
+    <string name="l72_despertador">Create an alarm at %1$s (%2$s)</string>
+    <string name="l72_dias_uma">once</string>
+    <string name="l72_dias_todos">every day</string>
+    <string name="l72_dias_uteis">Mon to Fri</string>
+    <string name="l72_dias_fds">weekends</string>
+    <string name="l72_dias_nomes">Sun,Mon,Tue,Wed,Thu,Fri,Sat</string>
+    <string name="l72_vol_subir">Turn the volume up</string>
+    <string name="l72_vol_descer">Turn the volume down</string>
+    <string name="l72_vol_mudo">Mute/unmute</string>
+    <string name="l72_vezes">(%1$d times)</string>
+    <string name="l72_midia_pausar">Pause</string>
+    <string name="l72_midia_tocar">Resume playing</string>
+    <string name="l72_midia_proxima">Next</string>
+    <string name="l72_midia_anterior">Previous</string>
+    <string name="l72_visita_liga">Turn guest mode on</string>
+    <string name="l72_visita_desliga">Turn guest mode off</string>
+    <string name="l72_canal_pedido">Switch to channel %1$s</string>
+    <string name="l72_canal">Switch to channel %1$d (%2$s)</string>
+    <string name="l72_o_que_passa">See what\'s on %1$s</string>
+    <string name="l72_casa_ligar">Turn on</string>
+    <string name="l72_casa_desligar">Turn off</string>
+    <string name="l72_casa_alternar">Toggle</string>
+    <string name="l72_casa">%1$s %2$s (home)</string>
+    <string name="l72_guia_vazio">%1$s: nothing in the guide.</string>
+    <string name="l72_guia_agora">%1$s now: %2$s (until %3$s)</string>
+    <string name="l72_guia_nada_agora">%1$s: nothing in the guide now</string>
+    <string name="l72_guia_depois">Next: %1$s (%2$s)</string>
+</resources>
