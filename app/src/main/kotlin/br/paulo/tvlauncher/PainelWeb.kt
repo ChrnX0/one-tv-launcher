@@ -99,6 +99,9 @@ object PainelWeb {
     }
 
     @Volatile private var tentativas: ControleTentativas? = null
+
+    /** Entrar com a digital (ideia 99, [ChaveAcesso]): desafios de uso único, para cadastrar e para entrar. */
+    private val desafiosChave = DesafiosChave({ System.currentTimeMillis() })
     private val travaPin = Any()   // um PBKDF2 por vez: muitas tentativas juntas não derrubam a CPU da TV
 
     /**
@@ -600,6 +603,15 @@ object PainelWeb {
             "/api/entrar" -> if (req.metodo == "POST") return entrar(req, ip)
             "/api/entrar-qr" -> if (req.metodo == "POST") return entrarPeloQr(req, ip)
             "/api/primeira" -> if (req.metodo == "POST") return primeiraConfig(req, ip)   // ideia 97: cria o PIN
+            // Ideia 99: digital do celular (passkey), só pelo https do Tailscale. Estado e desafio são livres como a
+            // página de entrar; a entrada confere a assinatura.
+            "/api/chave/estado" -> if (req.metodo == "GET") return json(200, JSONObject()
+                .put("disponivel", chaveDisponivel(host)).put("temChaves", PainelArmazem.chaves(app).isNotEmpty()))
+            "/api/chave/desafio" -> if (req.metodo == "POST") {
+                if (!chaveDisponivel(host)) return erro(403, "a digital só funciona pelo endereço do Tailscale (https)")
+                return json(200, JSONObject().put("desafio", desafiosChave.novo()).put("rpId", ChaveAcesso.rpId(host!!)))
+            }
+            "/api/chave/entrar" -> if (req.metodo == "POST") return entrarComChave(req, host, ip)
             "/api/sair" -> if (req.metodo == "POST") { sessoes.encerrar(token); return json(200, JSONObject().put("ok", true), cookieApagado()) }
         }
         if (!req.caminho.startsWith("/api/")) return erro(404, "não existe")
@@ -753,6 +765,9 @@ object PainelWeb {
             }
             // Assistente da primeira configuração (ideia 97), depois do PIN criado: o que a TV já tem, e abrir na TV
             // a tela de idioma do Android (o launcher segue o idioma do sistema, nunca um fixo).
+            "/api/chave/lista" -> if (req.metodo == "GET") return json(200, chavesEstado(host))
+            "/api/chave/cadastrar" -> if (req.metodo == "POST") return cadastrarChave(req, token, host, ip)
+            "/api/chave/apagar" -> if (req.metodo == "POST") return apagarChave(req, token, ip)
             "/api/primeira/tv" -> if (req.metodo == "GET") return json(200, primeiraEstado())
             "/api/primeira/idioma-tv" -> if (req.metodo == "POST") return abrirIdiomaNaTv(ip)
             "/api/config" -> when (req.metodo) {
@@ -880,6 +895,7 @@ object PainelWeb {
         "/busca.js" to ("busca.js" to "text/javascript; charset=utf-8"),   // busca rápida (Ctrl+K)
         "/arquivos.js" to ("arquivos.js" to "text/javascript; charset=utf-8"),   // prévia e organizar arquivos
         "/controle.js" to ("controle.js" to "text/javascript; charset=utf-8"),   // digitar ao vivo e touchpad
+        "/chave.js" to ("chave.js" to "text/javascript; charset=utf-8"),   // ideia 99: entrar com a digital
         "/primeira.js" to ("primeira.js" to "text/javascript; charset=utf-8"),   // ideia 97: assistente da 1ª configuração
         "/certificado.js" to ("certificado.js" to "text/javascript; charset=utf-8"),   // cartão "Instalar como app (https)"
         // "Adicionar à tela inicial" no celular: nome, ícone e atalhos (10/11/2026).
@@ -1115,6 +1131,70 @@ object PainelWeb {
         PainelArmazem.definirLigado(app, true)
         val token = sessoes.criar(elevada = true)
         PainelArmazem.registrar(app, ip, "primeira configuração: PIN criado pelo celular", "ok")
+        return json(200, JSONObject().put("ok", true), cookieSessao(token))
+    }
+
+    // ---------------------------------------------------------------- digital do celular (ideia 99)
+
+    /** Só pelo https do Tailscale: é o único endereço com nome de domínio e certificado que o navegador aceita. */
+    private fun chaveDisponivel(host: String?): Boolean = ChecagensPainel.viaHttps(host, nomesHttps())
+
+    private fun chavesEstado(host: String?): JSONObject = JSONObject()
+        .put("disponivel", chaveDisponivel(host))
+        .put("endereco", nomesHttps().firstOrNull()?.let { "https://$it:${ChecagensPainel.PORTA_HTTPS}/" } ?: JSONObject.NULL)
+        .put("chaves", JSONArray().apply {
+            for (c in PainelArmazem.chaves(app)) put(JSONObject().put("id", c.id).put("nome", c.nome).put("criada", c.criada).put("usada", c.usadaEm))
+        })
+
+    private fun cadastrarChave(req: Requisicao, token: String?, host: String?, ip: String): Resposta {
+        if (!chaveDisponivel(host)) return erro(403, "a digital só funciona pelo endereço do Tailscale (https)")
+        if (!sessoes.elevada(token)) return precisaPin()
+        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
+        val desafio = o.optString("desafio")
+        if (!desafiosChave.usar(desafio)) return erro(403, "o pedido venceu: tente de novo")
+        val nova = try {
+            ChaveAcesso.cadastrar(o.optString("id"), o.optString("chavePublica"), o.optInt("alg"), o.optString("authData"),
+                o.optString("clientData"), desafio, ChaveAcesso.rpId(host!!), ChaveAcesso.origem(host), o.optString("nome"), System.currentTimeMillis())
+        } catch (e: ChaveAcesso.Recusa) {
+            PainelArmazem.registrar(app, ip, "cadastrar digital", "recusado: ${e.message}")
+            return erro(400, "o celular mandou uma chave que a TV não aceita (${e.message})")
+        }
+        val lista = PainelArmazem.chaves(app).filter { it.id != nova.id }
+        if (lista.size >= ChaveAcesso.MAX_CHAVES) return erro(409, "já tem ${ChaveAcesso.MAX_CHAVES} digitais: apague uma antes")
+        PainelArmazem.gravarChaves(app, lista + nova)
+        PainelArmazem.registrar(app, ip, "cadastrar digital \"${nova.nome}\"", "ok")
+        return json(200, chavesEstado(host))
+    }
+
+    private fun apagarChave(req: Requisicao, token: String?, ip: String): Resposta {
+        if (!sessoes.elevada(token)) return precisaPin()
+        val id = corpoJson(req)?.optString("id").orEmpty()
+        val lista = PainelArmazem.chaves(app)
+        val sai = lista.firstOrNull { it.id == id } ?: return erro(404, "essa digital não existe")
+        PainelArmazem.gravarChaves(app, lista - sai)
+        PainelArmazem.registrar(app, ip, "apagar digital \"${sai.nome}\"", "ok")
+        return json(200, chavesEstado(req.cabecalho("host")))
+    }
+
+    /** Entrar com a digital: sessão SEM elevação, como a do QR (o que não tem volta ainda pede o PIN). */
+    private fun entrarComChave(req: Requisicao, host: String?, ip: String): Resposta {
+        if (!ligado() || !PainelArmazem.podeLigar(app)) return erro(503, "painel desligado")
+        if (!chaveDisponivel(host)) return erro(403, "a digital só funciona pelo endereço do Tailscale (https)")
+        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
+        val desafio = o.optString("desafio")
+        if (!desafiosChave.usar(desafio)) return erro(403, "o pedido venceu: tente de novo")
+        val lista = PainelArmazem.chaves(app)
+        val chave = lista.firstOrNull { it.id == o.optString("id") }
+            ?: return erro(403, "esta digital não está cadastrada nesta TV: entre com o PIN e cadastre de novo")
+        val contador = try {
+            ChaveAcesso.conferirEntrada(chave, o.optString("authData"), o.optString("clientData"), o.optString("assinatura"), desafio, ChaveAcesso.rpId(host!!), ChaveAcesso.origem(host))
+        } catch (e: ChaveAcesso.Recusa) {
+            PainelArmazem.registrar(app, ip, "entrar com a digital \"${chave.nome}\"", "recusado: ${e.message}")
+            return erro(403, "a digital não confere: entre com o PIN")
+        }
+        PainelArmazem.gravarChaves(app, lista.map { if (it.id == chave.id) it.copy(contador = contador, usadaEm = System.currentTimeMillis()) else it })
+        val token = sessoes.criar(elevada = false)
+        PainelArmazem.registrar(app, ip, "entrar com a digital \"${chave.nome}\"", "ok")
         return json(200, JSONObject().put("ok", true), cookieSessao(token))
     }
 

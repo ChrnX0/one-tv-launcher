@@ -880,8 +880,30 @@
 "A tela de idioma abriu na TV. Escolha com o controle.": "The language screen opened on the TV. Choose with the remote.",
 "Por segurança, digite o PIN que você acabou de criar.": "For safety, type the PIN you just created.",
 "Servidor (ex.: http://servidor:8080)": "Server (e.g. http://server:8080)",
+"Entrar com a digital": "Sign in with fingerprint",
+"Cadastrar a digital deste celular": "Register this phone's fingerprint",
+"Cadastrar a digital": "Register the fingerprint",
+"O celular vai pedir a sua digital (ou o rosto, ou o bloqueio de tela). Depois, é só tocar em \"Entrar com a digital\".": "The phone will ask for your fingerprint (or face, or screen lock). Then just tap \"Sign in with fingerprint\".",
+"Digital cadastrada. Da próxima vez, entre com ela.": "Fingerprint registered. Next time, sign in with it.",
+"Funciona só pelo endereço do Tailscale (com cadeado). Ligue antes a opção \"rede Tailscale\" na aba Claude (MCP).": "Works only through the Tailscale address (with the padlock). First turn on the \"Tailscale network\" option in the Claude (MCP) tab.",
+"Entre sem digitar o PIN: o celular confere a sua digital. O PIN continua valendo.": "Sign in without typing the PIN: the phone checks your fingerprint. The PIN still works.",
+"Este navegador não sabe usar a digital. Use o Chrome ou o Safari atualizados.": "This browser can't use fingerprints. Use an up-to-date Chrome or Safari.",
+"Este navegador é antigo para a digital. Atualize o Chrome ou o Safari.": "This browser is too old for fingerprints. Update Chrome or Safari.",
+"Apagar esta digital?": "Delete this fingerprint?",
 };
   const P = [
+[
+"^Funciona só pelo endereço do Tailscale: abra (.+) neste celular, entre com o PIN e cadastre\\.$",
+"Works only through the Tailscale address: open $1 on this phone, sign in with the PIN and register."
+],
+[
+"^(.+) · desde (.+)$",
+"$1 · since $2"
+],
+[
+"^(.+): esse celular volta a entrar só com o PIN\\.$",
+"$1: that phone goes back to signing in with the PIN only."
+],
 [
 "^Passo (\\d+) de (\\d+)$",
 "Step $1 of $2"

@@ -53,6 +53,7 @@
       <input id="campoPin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12"
              autocomplete="off" aria-label="PIN" placeholder="PIN" required>
       <button type="submit" class="botao-primario" id="btnEntrar">Entrar</button>
+      <button type="button" class="botao-secundario" id="btnEntrarDigital" hidden>Entrar com a digital</button>
       <p id="erroEntrar" class="erro" hidden></p>
     </form>
   </section>
@@ -958,6 +959,13 @@
       </div>
     </section>
     <section id="abaRegistro" class="painel-aba" hidden>
+      <!-- Ideia 99: entrar com a digital do celular (chave.js, ChaveAcesso.kt). Só pelo https do Tailscale. -->
+      <div class="cartao" id="cartaoDigital">
+        <h2>Entrar com a digital</h2>
+        <p class="aviso" id="digitalTexto"></p>
+        <div id="listaDigitais"></div>
+        <button type="button" class="botao-primario" id="btnCadastrarDigital" hidden>Cadastrar a digital deste celular</button>
+      </div>
       <div id="listaRegistro" class="lista-registro"></div>
     </section>
     </main>
@@ -1050,6 +1058,7 @@
   <script src="arquivos.js"></script>
   <script src="controle.js"></script>
   <script src="certificado.js"></script>
-  <script src="primeira.js"></script>   <!-- ideia 97: assistente da primeira configuração -->
+  <script src="primeira.js"></script>
+  <script src="chave.js"></script>   <!-- ideia 99: entrar com a digital (passkey) -->   <!-- ideia 97: assistente da primeira configuração -->
 </body>
 </html>

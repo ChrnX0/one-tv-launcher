@@ -200,7 +200,7 @@ const AO_ABRIR = {
   rede: () => carregarRede(),
   claude: () => carregarMcp(),
   roteador: () => carregarRoteador(),
-  registro: () => carregarRegistro(),
+  registro: () => { carregarRegistro(); if (typeof carregarChaves === 'function') carregarChaves(); },   // + digital (chave.js)
   backup: () => { carregarCopias(); carregarNoturno(); acompanharDrive(); },
   config: () => carregarConfig(),
   arquivos: () => abrirPasta(pastaAtual),
