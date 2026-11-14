@@ -12,6 +12,8 @@ import android.widget.TextView
  *  - [MODO_OCULTOS]: o que aparece na tela inicial. Substitui o card "Ocultos (N)" que ficava na HOME (o dono achou
  *    estranho um card escrito "oculto" na tela inicial). Os ocultos vêm primeiro.
  *  - [MODO_VISITA]: os apps que somem no modo visita (antes era uma lista longa aberta dentro das Configurações).
+ *  - [MODO_JOGOS]: quais apps moram no card Jogos (14/11/2026): para o app de jogo que o launcher não reconheceu sozinho,
+ *    ou para tirar um que não é jogo. Os do card vêm primeiro.
  * A lista de apps (PackageManager) é lida fora da thread da tela.
  */
 class AppsEscolhaActivity : Activity() {
@@ -19,6 +21,7 @@ class AppsEscolhaActivity : Activity() {
         const val EXTRA_MODO = "modo"
         const val MODO_OCULTOS = "ocultos"
         const val MODO_VISITA = "visita"
+        const val MODO_JOGOS = "jogos"
     }
 
     private lateinit var coluna: LinearLayout
@@ -30,8 +33,11 @@ class AppsEscolhaActivity : Activity() {
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro (VigiaAtualizacao)
         modo = intent.getStringExtra(EXTRA_MODO) ?: MODO_OCULTOS
         val visita = modo == MODO_VISITA
-        val (raiz, col) = Estilo.telaLista(this, getString(if (visita) R.string.cl_apps_visita else R.string.oc_titulo),
-            getString(if (visita) R.string.cfg2_apps_visita_sub else R.string.oc_subtitulo))
+        val (raiz, col) = when (modo) {
+            MODO_JOGOS -> Estilo.telaLista(this, getString(R.string.jogos_escolher), getString(R.string.jogos_escolher_sub))
+            else -> Estilo.telaLista(this, getString(if (visita) R.string.cl_apps_visita else R.string.oc_titulo),
+                getString(if (visita) R.string.cfg2_apps_visita_sub else R.string.oc_subtitulo))
+        }
         coluna = col
         setContentView(raiz)
         coluna.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.cl_carregando_apps)))
@@ -53,23 +59,29 @@ class AppsEscolhaActivity : Activity() {
             .map { it.activityInfo.packageName to it.loadLabel(pm).toString() }
             .distinctBy { it.first }
             .sortedBy { it.second.lowercase() }
+            .also { l -> if (modo == MODO_JOGOS) l.forEach { JogosTv.ehJogo(this, it.first) } }   // deixa a resposta em cache, fora da tela
     } catch (_: Exception) { emptyList() }
 
-    private fun marcado(pacote: String): Boolean =
-        if (modo == MODO_VISITA) ModoVisita.escondeNaVisita(this, pacote) else pacote in Organizacao.ocultos(this)
+    private fun marcado(pacote: String): Boolean = when (modo) {
+        MODO_VISITA -> ModoVisita.escondeNaVisita(this, pacote)
+        MODO_JOGOS -> JogosTv.ehJogo(this, pacote)
+        else -> pacote in Organizacao.ocultos(this)
+    }
 
     private fun alternar(pacote: String) {
-        if (modo == MODO_VISITA) ModoVisita.alternar(this, pacote)
+        if (modo == MODO_JOGOS) JogosTv.escolher(this, pacote, if (marcado(pacote)) Jogos.FORA else Jogos.grupo(pacote, emptyMap()).name)
+        else if (modo == MODO_VISITA) ModoVisita.alternar(this, pacote)
         else if (pacote in Organizacao.ocultos(this)) Organizacao.mostrar(this, pacote) else Organizacao.ocultar(this, pacote)
     }
 
     private fun montar(apps: List<Pair<String, String>>) {
         coluna.removeAllViews()
         // Ocultos primeiro: quem abre esta tela quase sempre quer achar um que sumiu.
-        val ordem = if (modo == MODO_OCULTOS) apps.sortedByDescending { marcado(it.first) } else apps
+        val ordem = if (modo == MODO_OCULTOS || modo == MODO_JOGOS) apps.sortedByDescending { marcado(it.first) } else apps
         for ((pacote, nome) in ordem) {
             val texto = {
                 "$nome: " + getString(when {
+                    modo == MODO_JOGOS -> if (marcado(pacote)) R.string.jogos_no_card else R.string.jogos_na_linha
                     modo == MODO_VISITA -> if (marcado(pacote)) R.string.cfg2_some_visita else R.string.cfg2_fica_visita
                     marcado(pacote) -> R.string.oc_oculto
                     else -> R.string.oc_aparece

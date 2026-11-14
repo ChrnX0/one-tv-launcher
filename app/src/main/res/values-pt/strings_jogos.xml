@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Card "Jogos" da HOME (14/11/2026): JogosActivity, JogosTv, MainActivity. -->
+<resources>
+    <string name="home_card_jogos">Jogos</string>
+    <string name="home_destaque_jogos_vazio">Jogue na nuvem, pelo PC e jogos retrô</string>
+    <string name="home_linha_continuar_jogos">ASSISTIR E JOGAR</string>
+    <plurals name="jogos_qtd">
+        <item quantity="one">%d jogo</item>
+        <item quantity="other">%d jogos</item>
+    </plurals>
+    <plurals name="jogos_controles">
+        <item quantity="one">%d controle ligado</item>
+        <item quantity="other">%d controles ligados</item>
+    </plurals>
+    <string name="extras_CARD_JOGOS">Card Jogos na tela inicial (os apps de jogo saem da linha de apps)</string>
+    <string name="extras_MODO_JOGO">Modo jogo: com um jogo aberto, protetor, filtro noturno e avisos esperam</string>
+    <string name="extras_CONTROLE_ABRE_JOGOS">Ligar um controle de videogame abre a tela Jogos</string>
+
+    <string name="jogos_titulo">Jogos</string>
+    <string name="jogos_medindo">Medindo a rede…</string>
+    <string name="jogos_sem_controle">Nenhum controle de videogame ligado</string>
+    <string name="jogos_rede_boa">Rede: boa para jogar na nuvem</string>
+    <string name="jogos_rede_ok">Rede: dá para jogar na nuvem</string>
+    <string name="jogos_rede_fraca">Rede: fraca para jogar na nuvem</string>
+    <string name="jogos_rede_sem">Sem internet</string>
+    <string name="jogos_testar_rede">Testar a rede</string>
+    <string name="jogos_jogar_pc">Jogar no PC</string>
+    <string name="jogos_parear">Parear controle</string>
+    <string name="jogos_parear_falhou">A TV não abriu o Bluetooth. Abra Configurações, Controles e acessórios.</string>
+    <string name="jogos_baixar">Baixar jogos</string>
+    <string name="jogos_escolher">Escolher apps</string>
+    <string name="jogos_escolher_sub">Quais apps moram no card Jogos. OK troca entre o card e a linha de apps.</string>
+    <string name="jogos_no_card">no card Jogos</string>
+    <string name="jogos_na_linha">na linha de apps</string>
+    <string name="jogos_grupo_nuvem">Na nuvem</string>
+    <string name="jogos_grupo_pc">Do PC e do console</string>
+    <string name="jogos_grupo_retro">Retrô</string>
+    <string name="jogos_grupo_tv">Jogos da TV</string>
+    <string name="jogos_para_comecar">Para começar</string>
+    <string name="jogos_vazio_dica">Ainda não há jogos nesta TV. Escolha um acima para abrir a página dele na Play Store.</string>
+    <string name="jogos_dica_segurar">Segure OK num jogo para mudar de grupo ou tirar daqui.</string>
+    <string name="jogos_aviso_fraca_titulo">Rede fraca para jogar na nuvem</string>
+    <string name="jogos_aviso_fraca">O jogo pode travar ou atrasar. Cabo de rede, ou a TV mais perto do roteador, ajuda.</string>
+    <string name="jogos_jogar_assim">Jogar mesmo assim</string>
+    <string name="jogos_nao_abriu">Este app não abriu.</string>
+    <string name="jogos_tirar">Tirar do card Jogos</string>
+    <string name="jogos_automatico">Voltar ao automático</string>
+    <string name="jogos_loja_tudo">Os apps sugeridos já estão nesta TV.</string>
+    <string name="jogos_loja_explica">Abre a página do app na Play Store. Se a Play Store disser que não roda nesta TV, é limite do app.</string>
+    <string name="jogos_sem_loja">A Play Store não abriu.</string>
+    <string name="jogos_pc_sem_mac">Para acordar o PC, guarde o MAC dele no painel web: Extras, Acordar o computador. O PC também precisa do Wake-on-LAN ligado e, quase sempre, de cabo de rede.</string>
+    <string name="jogos_pc_sem_app">Para jogar no PC, instale o Moonlight ou o Steam Link na TV.</string>
+    <string name="jogos_pc_qual_app">Qual app joga no PC?</string>
+    <string name="jogos_pc_acordando">Acordando o PC… %1$d s</string>
+    <string name="jogos_pc_nao_respondeu">O PC não respondeu. Abrindo o app mesmo assim.</string>
+</resources>

@@ -72,7 +72,7 @@ object DiagnosticoInternet {
     fun json(ctx: Context): JSONObject = explicar(ctx).json()
 
     /** Conexão até 1.1.1.1:443: prova que a internet chega SEM depender de DNS. ms ou null. */
-    private fun tcpMs(): Int? {
+    fun tcpMs(): Int? {   // público: o teste de rede do card Jogos (JogosTv) também usa
         val ini = SystemClock.elapsedRealtime()
         return try { Socket().use { it.connect(InetSocketAddress("1.1.1.1", 443), 3000) }; (SystemClock.elapsedRealtime() - ini).toInt() }
         catch (_: Exception) { null }

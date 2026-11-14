@@ -102,7 +102,8 @@ object FiltroNoturno {
             Extras.numero(svc, CHAVE_INICIO, PADRAO_INICIO), Extras.numero(svc, CHAVE_FIM, PADRAO_FIM))
         val f = svc.getSharedPreferences(PREFS_FORCADO, Context.MODE_PRIVATE)
         val ligar = deveLigar(agendado, if (f.contains("ligado")) f.getBoolean("ligado", false) else null, f.getLong("ate", 0), System.currentTimeMillis())
-        if (ligar) por(svc, Extras.numero(svc, CHAVE_FORCA, PADRAO_FORCA)) else tirar()
+        // Modo jogo (card Jogos): com um jogo na frente a película sai e volta quando ele fecha (JogosTv.janela).
+        if (ligar && !JogosTv.modoJogoAgora(svc)) por(svc, Extras.numero(svc, CHAVE_FORCA, PADRAO_FORCA)) else tirar()
     }
 
     private fun por(svc: AccessibilityService, forca: Int) {
