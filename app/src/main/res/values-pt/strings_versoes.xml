@@ -40,6 +40,8 @@
         <item>Painel rápido: os últimos avisos da TV (chuva, recado, manutenção) e a lista de compras, que se risca com OK</item>
         <item>Filmes e séries seguem o idioma da TV: “dublado” é o áudio nesse idioma, e as legendas automáticas e da internet também vêm nele</item>
         <item>Séries: marque a abertura uma vez no menu ▼ (início e fim) e os próximos episódios oferecem “Pular abertura · OK”</item>
+        <item>Configurações reorganizadas por assunto: Tela inicial, TV e filmes, Família, Tela e energia, Casa e automações, Acesso remoto, Sistema; o técnico foi para Avançado</item>
+        <item>O card “Ocultos” saiu da tela inicial: mostre de volta em Configurações › Tela inicial › Apps ocultos</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -72,6 +74,8 @@
         <item>Abra o painel rápido e desça até o fim</item>
         <item>Toque um filme estrangeiro com “Original com legenda” (TV em português)</item>
         <item>Num episódio, marque no ▼ o início e o fim da abertura e abra o próximo episódio</item>
+        <item>Abra as Configurações e desça pelo menu de abas</item>
+        <item>Oculte um app (segure OK nele), depois abra Configurações › Tela inicial › Apps ocultos e dê OK nele</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -104,5 +108,7 @@
         <item>Aparecem os avisos da TV e a lista de compras, e OK risca um item?</item>
         <item>A legenda em português ligou sozinha, como antes?</item>
         <item>Apareceu “Pular abertura · OK” na abertura, e o OK pulou sem pausar?</item>
+        <item>Ficou mais fácil achar as coisas, com o técnico só em Avançado?</item>
+        <item>Nenhum card “Ocultos” na tela inicial, e o app voltou?</item>
     </string-array>
 </resources>

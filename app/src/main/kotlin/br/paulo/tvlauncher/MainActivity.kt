@@ -494,7 +494,7 @@ class MainActivity : Activity() {
         pilulaVencimento = pilula(vidro = false).apply {
             visibility = View.GONE
             addView(txtVencimento)
-            setOnClickListener { startActivity(Intent(this@MainActivity, ConfigLauncherActivity::class.java).putExtra(ConfigLauncherActivity.EXTRA_ABA, 0)) }
+            setOnClickListener { startActivity(Intent(this@MainActivity, ConfigLauncherActivity::class.java).putExtra(ConfigLauncherActivity.EXTRA_ABA, ConfigLauncherActivity.ABA_CONTA)) }
         }
         avisos.addView(pilulaVencimento, lpPilula())
         atualizarAvisos()
@@ -908,8 +908,8 @@ class MainActivity : Activity() {
                 entradas.add(Entrada.Pilha(pilha.id, itens, frente))
             }
         }
-        val escondidos = todos.filter { it.pacote in ocultos }.sortedBy { it.nome.lowercase() }
-        if (escondidos.isNotEmpty() && !naVisita) entradas.add(Entrada.Ocultos(escondidos, getString(R.string.home_ocultos, escondidos.size)))
+        // 14/11/2026 (pedido do dono): o card "Ocultos (N)" saiu da HOME. Mostrar de volta: Configurações > Tela inicial
+        // > Apps ocultos (AppsEscolhaActivity).
         // A TV saiu da linha de apps (06/11 noite): agora é o 1º card do Continuar, ao lado de Séries e Filmes.
         return entradas
     }
@@ -1905,7 +1905,7 @@ class MainActivity : Activity() {
             for (a in acoes) opcoes += when (a) {
                 MenuApp.Acao.MOSTRAR -> Opcao(getString(R.string.home_mostrar)) { Organizacao.mostrar(this, token); atualizarAposMudanca(token) }
                 MenuApp.Acao.MOVER -> Opcao(getString(R.string.home_mover)) { iniciarMover(token, porSegurar = false) }
-                MenuApp.Acao.OCULTAR -> Opcao(getString(R.string.home_ocultar)) { Organizacao.ocultar(this, token); atualizarAposMudanca(null) }
+                MenuApp.Acao.OCULTAR -> Opcao(getString(R.string.home_ocultar)) { Organizacao.ocultar(this, token); atualizarAposMudanca(null); avisarOculto() }
                 MenuApp.Acao.DESINSTALAR -> Opcao(getString(R.string.home_desinstalar)) { confirmarDesinstalar(token) }
             }
         } else if (pastaToken == null && entrada is Entrada.Pilha) {
@@ -2143,7 +2143,11 @@ class MainActivity : Activity() {
         terminarMover()
         Organizacao.ocultar(this, card.token)
         atualizarAposMudanca(null)
+        avisarOculto()
     }
+
+    /** O card "Ocultos" saiu da HOME (14/11/2026): ao ocultar, diz onde mostrar de volta. */
+    private fun avisarOculto() = AvisoTv.rapido(this, getString(R.string.oc_aviso_titulo), getString(R.string.oc_aviso))
 
     private fun restaurarOrdemAutomatica() {
         terminarMover()
