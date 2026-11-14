@@ -275,6 +275,11 @@ cp pessoal.properties.exemplo pessoal.properties   # optional: your city, coordi
 - Unit tests run on the plain JVM: `./gradlew testReleaseUnitTest`.
 - Release builds are signed with `ASSINATURA_ARQUIVO` / `ASSINATURA_SENHA` / `ASSINATURA_ALIAS`. Without them, Gradle uses the debug key.
 
+Other folders: `scripts/` has `testes-puros.sh` (the pure JVM tests without the Android SDK) and, in `scripts/windows/`,
+the PowerShell helpers to build and install over Wi-Fi from a Windows PC (`build3.ps1`) and to set up a fresh TV
+(`restaurar-tv.ps1`). `chromecast-painel/` is an older, optional Node.js panel that manages several TVs from a PC over
+`adb`; the launcher does not need it.
+
 > The code comments are in Brazilian Portuguese, and the app speaks both **English** and **Portuguese**. It follows the
 > TV's language.
 

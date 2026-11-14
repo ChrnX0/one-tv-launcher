@@ -29,7 +29,7 @@
 param(
     [Parameter(Mandatory)][string]$Ip,
     [string]$CodigoPareamento,
-    [string]$Apk = "$PSScriptRoot\app\build\outputs\apk\release\app-armeabi-v7a-release.apk",
+    [string]$Apk = "$PSScriptRoot\..\..\app\build\outputs\apk\release\app-armeabi-v7a-release.apk",
     [switch]$PularHome,
     [switch]$Desfazer,
     [switch]$DryRun

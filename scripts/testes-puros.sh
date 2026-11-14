@@ -41,6 +41,10 @@ declare -A FONTES=(
   [BuscaOutrosAppsTest]="BuscaOutrosApps"
   [GuiaExtraTest]="GuiaExtra"
   [MeuTimeAdianteTest]="MeuTimeAdiante"
+  [EnsaioRestauracaoTest]="EnsaioRestauracao CofreBackup"
+  [TextoNaTvTest]="TextoNaTv"
+  [WifiVisitaQrTest]="WifiVisitaQr"
+  [UsoLocalRegrasTest]="UsoLocalRegras"
 )
 
 falhou=0

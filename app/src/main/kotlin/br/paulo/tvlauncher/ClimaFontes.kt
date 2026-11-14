@@ -278,7 +278,7 @@ object ClimaFontes {
         return try {
             conexao.connectTimeout = 8000
             conexao.readTimeout = 8000
-            conexao.setRequestProperty("User-Agent", "tv-launcher/0.1")
+            conexao.setRequestProperty("User-Agent", "onetv-launcher")
             if (conexao.responseCode == 200) conexao.inputStream.bufferedReader().use { it.readText() } else null
         } finally {
             conexao.disconnect()
