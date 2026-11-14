@@ -452,25 +452,17 @@ class SeriesActivity : Activity() {
 
     private fun pularParaLetra() {
         if (!podePularLetra()) return
-        val g = naGrade
-        Fundo.rodar {
-            val presentes = g.mapTo(HashSet()) { ColunaRegras.letraDe(Vod.chaveNome(it.nome)) }
-            tela.post {
-                if (isDestroyed) return@post
-                PainelCatalogo.escolherLetra(this, presentes) { letra ->
-                    val pular = {
-                        val atual = naGrade
-                        Fundo.rodar {
-                            val i = ColunaRegras.indiceDaLetra(atual.map { Vod.chaveNome(it.nome) }, letra)
-                            tela.post { if (!isDestroyed && naGrade === atual && i >= 0) { grade.requestFocus(); grade.setSelection(i); mostrarFocado(atual[i]) } }
-                        }
-                    }
-                    if (ordem == Vod.Ordem.NOME) pular() else {
-                        ordem = Vod.Ordem.NOME
-                        getSharedPreferences("player", MODE_PRIVATE).edit().putString("ordem_series", ordem.name).apply()
-                        recalcular(ModoGrade.NOVA) { pular() }
-                    }
-                }
+        PainelCatalogo.escolherLetra(this) { letra ->
+            val pular = {
+                val atual = naGrade
+                // Busca binária: a grade em ordem de nome está ordenada pela mesma chave.
+                val i = ColunaRegras.indiceDaLetra(atual.size, { Vod.chaveNome(atual[it].nome) }, letra)
+                if (i >= 0) { grade.requestFocus(); grade.setSelection(i); mostrarFocado(atual[i]) }
+            }
+            if (ordem == Vod.Ordem.NOME) pular() else {
+                ordem = Vod.Ordem.NOME
+                getSharedPreferences("player", MODE_PRIVATE).edit().putString("ordem_series", ordem.name).apply()
+                recalcular(ModoGrade.NOVA) { pular() }
             }
         }
     }
