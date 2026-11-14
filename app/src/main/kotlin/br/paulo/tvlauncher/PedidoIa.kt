@@ -108,7 +108,8 @@ object PedidoIa {
                     if (modo == Confirmacoes.Modo.PERGUNTAR) mostrar(app, p)
                     else {
                         responder(app, p.id, true)
-                        AvisoTv.rapido(app, if (origem == CanalTv.ORIGEM_VOZ) app.getString(R.string.pi_pedido_voz) else "Claude", plano.acoes.joinToString(", ") { it.descricao })
+                        AvisoTv.rapido(app, if (origem == CanalTv.ORIGEM_VOZ) app.getString(R.string.pi_pedido_voz)
+                            else if (origem == CaixaComandoTv.ORIGEM) app.getString(R.string.cc_aviso_titulo) else "Claude",plano.acoes.joinToString(", ") { it.descricao })
                     }
                 }
             } catch (e: Exception) {

@@ -50,6 +50,7 @@ declare -A FONTES=(
   [AberturaSerieTest]="AberturaSerie"
   [CompartilharTest]="Compartilhar McpPoderRegras Recado"
   [DiarioRegrasTest]="DiarioRegras"
+  [CaixaComandoTest]="CaixaComando"
 )
 
 falhou=0

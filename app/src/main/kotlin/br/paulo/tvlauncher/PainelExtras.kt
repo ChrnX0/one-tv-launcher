@@ -87,6 +87,8 @@ object PainelExtras {
             get && rota == "estado" -> ok(estado(app))
             // Erros do launcher sem dado pessoal (ErrosFiltrados), para o botão "Relatar no GitHub" da aba Saúde (11/11/2026).
             get && rota == "erros" -> ok(ErrosFiltrados.json(app, 5))
+            // Caixa de comando sem IA (ideia 10): frase -> uma ação do catálogo fechado (CaixaComandoTv).
+            post && rota == "comando" -> CaixaComandoTv.executar(app, corpo?.optString("frase"), ip)
             post && rota == "chave" -> {
                 val c = Extras.Chave.values().firstOrNull { it.name == corpo?.optString("chave") } ?: return erro(400, "chave desconhecida")
                 if (c in CHAVES_COM_PIN && !elevada) return pin()
