@@ -47,7 +47,10 @@ object BackupCompleto {
         // Ideias de 12/11/2026. "avisos_celular": as inscrições valem só com a chave VAPID do Keystore desta instalação
         // (inscrever de novo pelo painel). "desempenho" é medida por versão; "retrospectiva" se refaz no domingo; "presenca"
         // e "ideias_12_11" são estado passageiro. A escolha dos celulares, o Meu time e o mural moram em "extras", que vai.
-        "avisos_celular", "desempenho", "retrospectiva", "presenca", "ideias_12_11")
+        "avisos_celular", "desempenho", "retrospectiva", "presenca", "ideias_12_11",
+        // "painel_tls" (#34): só o nome do certificado https desta TV (ex.: tv-sala). O certificado não vai no backup, e
+        // restaurar em outra TV daria a ela o nome da primeira; cada TV escolhe o seu no painel.
+        "painel_tls")
     /** Chaves que o Keystore cifrou: não servem em outra instalação. O valor em claro vai em "segredos". */
     private val CHAVES_DO_KEYSTORE = setOf("chave_cifrada", "chave_iv") + CasaHA.CHAVES_DO_KEYSTORE
     /** Arquivos pequenos do player (files/player). O contas.json fica de fora: vai decifrado em "segredos". */
