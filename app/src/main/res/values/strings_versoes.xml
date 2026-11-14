@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Player: the top of the column just says TV, Movies or Series, with Search and Filter buttons beside it; the list makes room for Recordings (TV: Favorites, Recent, Guide, Recordings)</item>
         <item>Games card on the home screen, after Network: GeForce NOW, Steam Link, Moonlight, PS Remote Play, RetroArch and the other games leave the apps row and sit in 4 groups</item>
         <item>Games: “Play on the PC” wakes the computer and opens Moonlight or Steam Link; “Test the network” tells whether cloud gaming will work; connected controllers show at the top</item>
         <item>Game mode: while a game is open, the screensaver, night filter and notices wait</item>
@@ -94,6 +95,7 @@
         <item>Network: folders over FTP, FTPS, SFTP and NFS (NAS, router with a drive, Linux or Mac computer), and a USB drive plugged into the TV shows up by itself under “Plugged into the TV”</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>coluna_botoes</item>
         <item>jogos_card</item>
         <item>jogos_tela</item>
         <item>jogos_rede</item>
@@ -169,6 +171,7 @@
         <item>pendrive_na_rede</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Search and Filter at the top of the column</item>
         <item>Press HOME and go to the end of the WATCH AND PLAY row</item>
         <item>Open the Games card</item>
         <item>On the Games screen, press Test the network</item>
@@ -244,6 +247,7 @@
         <item>Plug a USB drive with videos into the TV and open Network</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>In TV, Movies and Series, does ▲ on the first row reach the Search and Filter buttons beside the title, and ▼ go back to the list?</item>
         <item>Is there an amber Games card after Network?</item>
         <item>Do the big buttons and the games by group show, and did the game apps leave the apps row?</item>
         <item>Does the top say whether the network is good for cloud gaming, with the time in ms?</item>

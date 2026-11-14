@@ -51,6 +51,8 @@ class PlayerListaTela(
     private val aoFiltros: () -> Unit,
     private val aoOcultarGrupo: (String) -> Unit,   // nome do grupo (vazio = "Outros")
     private val aoGuia: (List<Canal>, String) -> Unit,   // guia em grade dos canais da categoria + nome dela
+    /** A linha "Gravações" (a tela é feita em outra frente; até lá, a PlayerActivity mostra um aviso). */
+    private val aoGravacoes: () -> Unit = {},
     /** Modo simples da HOME (ModoSimples): bloco fixo só com Buscar, Favoritos e Recentes, letra maior. */
     private val simples: Boolean = false,
 ) {
@@ -82,7 +84,8 @@ class PlayerListaTela(
         background = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(Estilo.alfa(Estilo.FUNDO, 0xF5), Estilo.alfa(Estilo.FUNDO, 0xE6), Estilo.alfa(Estilo.FUNDO, 0xB3)))
     }
     // Coluna esquerda nova (14/11/2026, esboço tv.png aprovado): ações fixas, LISTAS, Todos e Esportes fixos, A a Z rolando.
-    private val coluna = ColunaCategorias(act, act.getString(R.string.home_tv),
+    // 14/11/2026 (Paulo): título só "TV", com Buscar e Filtro em botões ao lado, para caber Gravações no bloco.
+    private val coluna = ColunaCategorias(act, act.getString(R.string.coluna_tv_titulo),
         aoParar = { escolherGrupo(it) }, aoOk = { okNaColuna(it) },
         aoSegurar = { k -> if (k.startsWith("g:")) aoOcultarGrupo(k.removePrefix("g:")) }, escala = escala)
     private val listaCanais = lista()
@@ -112,6 +115,7 @@ class PlayerListaTela(
             PlayerLista.ACAO_BUSCAR -> aoBuscar()
             PlayerLista.ACAO_FILTROS -> aoFiltros()
             PlayerLista.ACAO_GUIA -> grupos.firstOrNull { it.chave == chave }?.let { aoGuia(doMeio, nomeDoGrupo(it)) }
+            PlayerLista.ACAO_GRAVACOES -> aoGravacoes()
             else -> { escolherGrupo(k); if (doMeio.isNotEmpty()) listaCanais.requestFocus() }
         }
     }
@@ -157,7 +161,7 @@ class PlayerListaTela(
     private fun focarGrupoAtual() = coluna.focar()
 
     /**
-     * As linhas da coluna. Ações: Buscar, Filtro, Favoritos, Recentes, Guia. Fixas: Busca (se houver), Todos, Esportes
+     * As linhas da coluna. Botões do título: Buscar e Filtro. Ações: Favoritos, Recentes, Guia, Gravações. Fixas: Busca (se houver), Todos, Esportes
      * (se a lista tiver canal de esporte). Rolando: as categorias da lista em ordem alfabética.
      */
     private fun montarGrupos() {
@@ -170,12 +174,15 @@ class PlayerListaTela(
         val cats = base.filter { it.chave.startsWith("g:") && it.quantos > 0 }
         val (semNome, comNome) = cats.partition { it.nome.isBlank() }
         val rola = comNome.sortedBy { ColunaRegras.chaveAZ(it.nome) } + semNome
-        val acoes = listOf(GrupoCanais(PlayerLista.ACAO_BUSCAR, "", -1), GrupoCanais(PlayerLista.ACAO_FILTROS, resumoFiltro, -1),
-            porChave.getValue(PlayerLista.FAVORITOS), porChave.getValue(PlayerLista.RECENTES), GrupoCanais(PlayerLista.ACAO_GUIA, "", -1))
-            .let { a -> if (simples) PlayerAcessivel.blocoSimples(a, { it.chave }, setOf(PlayerLista.ACAO_BUSCAR, PlayerLista.FAVORITOS, PlayerLista.RECENTES)) else a }
+        botoes = listOf(GrupoCanais(PlayerLista.ACAO_BUSCAR, "", -1), GrupoCanais(PlayerLista.ACAO_FILTROS, resumoFiltro, -1))
+            .let { b -> if (simples) b.filter { it.chave == PlayerLista.ACAO_BUSCAR } else b }   // modo simples: sem Filtro, como antes
+        val acoes = listOf(porChave.getValue(PlayerLista.FAVORITOS), porChave.getValue(PlayerLista.RECENTES),
+            GrupoCanais(PlayerLista.ACAO_GUIA, "", -1), GrupoCanais(PlayerLista.ACAO_GRAVACOES, "", -1))
+            .let { a -> if (simples) PlayerAcessivel.blocoSimples(a, { it.chave }, setOf(PlayerLista.FAVORITOS, PlayerLista.RECENTES)) else a }
         grupos = acoes + fixas + rola
         nAcoes = acoes.size; nFixas = fixas.size
     }
+    private var botoes: List<GrupoCanais> = emptyList()
     private var nAcoes = 0
     private var nFixas = 0
 
@@ -186,6 +193,7 @@ class PlayerListaTela(
 
     private fun mostrarColuna() {
         val l = grupos.map { linha(it) }
+        coluna.mostrarBotoes(botoes.map { linha(it) })
         coluna.mostrar(l.take(nAcoes), l.drop(nAcoes).take(nFixas), l.drop(nAcoes + nFixas), chave)
     }
 
@@ -298,6 +306,7 @@ class PlayerListaTela(
         PlayerLista.ACAO_BUSCAR -> act.getString(R.string.player_acao_buscar)
         PlayerLista.ACAO_FILTROS -> act.getString(R.string.coluna_filtro)
         PlayerLista.ACAO_GUIA -> act.getString(R.string.coluna_guia)
+        PlayerLista.ACAO_GRAVACOES -> act.getString(R.string.coluna_gravacoes)
         else -> PlayerLista.nomeExibido(g.nome).ifEmpty { act.getString(R.string.player_cat_outros) }
     }
 
@@ -308,6 +317,7 @@ class PlayerListaTela(
         PlayerLista.BUSCA, PlayerLista.ACAO_BUSCAR -> IconeMidia.Tipo.LUPA
         PlayerLista.ACAO_FILTROS -> IconePlayer.Tipo.FILTROS
         PlayerLista.ACAO_GUIA -> IconePlayer.Tipo.GRADE
+        PlayerLista.ACAO_GRAVACOES -> IconePlayer.Tipo.GRAVACOES
         PlayerLista.TODOS -> IconePlayer.Tipo.TODOS
         PlayerLista.ESPORTES -> IconePlayer.Tipo.ESPORTE
         else -> if (g.nome in ocultas) IconePlayer.Tipo.CADEADO else null
