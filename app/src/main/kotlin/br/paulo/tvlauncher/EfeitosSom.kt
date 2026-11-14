@@ -10,6 +10,7 @@ import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.audio.AudioCapabilities
 import androidx.media3.exoplayer.audio.AudioSink
 import androidx.media3.exoplayer.audio.DefaultAudioSink
+import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.NextRenderersFactory
 
 /**
  * Volume parecido e voz mais clara (14/11/2026) num efeito só do Android, o DynamicsProcessing, preso à sessão de áudio
@@ -90,12 +91,16 @@ class EfeitosSom {
         @OptIn(UnstableApi::class)
         fun fabrica(ctx: Context): DefaultRenderersFactory {
             val pcm = PlayerAcessivel.precisaEfeito(volumeIgual(ctx), vozClara(ctx))
-            return object : DefaultRenderersFactory(ctx) {
+            // NextRenderersFactory (14/11/2026, NextLib = FFmpeg + libass): a TV não tem decodificador de Dolby (AC3/E-AC3),
+            // DTS, TrueHD nem MP2 (conferido em dumpsys media.player). Modo ON = o chip/decodificador da TV continua
+            // primeiro; o FFmpeg só entra no que a TV não toca (ou quando o PCM acima é obrigatório). Vídeo em software
+            // fica como último recurso (a Sala, 32 bits, não aguenta 1080p assim). Também traz as legendas em imagem.
+            return object : NextRenderersFactory(ctx) {
                 override fun buildAudioSink(context: Context, enableFloatOutput: Boolean, enableAudioTrackPlaybackParams: Boolean): AudioSink? =
                     if (!pcm) super.buildAudioSink(context, enableFloatOutput, enableAudioTrackPlaybackParams)
                     else DefaultAudioSink.Builder(context).setAudioCapabilities(AudioCapabilities.DEFAULT_AUDIO_CAPABILITIES)
                         .setEnableFloatOutput(false).setEnableAudioTrackPlaybackParams(enableAudioTrackPlaybackParams).build()
-            }
+            }.setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
         }
     }
 }
