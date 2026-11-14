@@ -27,3 +27,13 @@ class CenaNaRotinaTest {
         assertEquals("", Cenas.girar(emptyList(), "", 1, comNenhuma = false))
     }
 }
+
+/** Ideia 4: a linha da tela Cenas conta as ações. */
+class TelaCenasTest {
+    @Test fun contaAcoesNosDoisFormatos() {
+        assertEquals(2, Cenas.contarAcoes("""{"acoes":[{"tipo":"volume","nivel":5},{"tipo":"midia","comando":"pausar"}]}"""))
+        assertEquals(1, Cenas.contarAcoes("""[{"tipo":"volume","nivel":5}]"""))
+        assertEquals(0, Cenas.contarAcoes("estragado"))
+        assertEquals(0, Cenas.contarAcoes("{}"))
+    }
+}

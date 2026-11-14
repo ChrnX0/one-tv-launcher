@@ -29,6 +29,7 @@ class AutorizaShizukuService : AccessibilityService() {
         FiltroNoturno.iniciar(this)
         SaudeAcesso.vigiar(this)   // aviso "acesso remoto parado" (shell próprio / túnel), ver SaudeAcesso.kt
         ManutencaoNoturna.vigiar(this); ManutencaoNoturna.agendar(this)   // manutenção de madrugada + resumo de manhã
+        Gatilhos.iniciar(this)   // eventos como gatilho de cena (ideia 7): tela acesa e sessões de mídia
         CasaHA.iniciar(this)   // Home Assistant: publica o estado da TV e vigia a campainha (só se configurado)   // película âmbar à noite (só com a chave ligada em Extras)
     }
     override fun onUnbind(intent: android.content.Intent?): Boolean { instancia = null; FiltroNoturno.parar(); return super.onUnbind(intent) }
@@ -38,7 +39,7 @@ class AutorizaShizukuService : AccessibilityService() {
     override fun onAccessibilityEvent(evento: AccessibilityEvent?) {
         if (evento?.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             Home.janelaApareceu(this, evento.packageName, evento.className)
-            JanelaNaFrente.apareceu(evento.packageName)   // quem está na frente (MCP, rotinas, Casa, saúde do acesso)
+            JanelaNaFrente.apareceu(evento.packageName, evento.className)   // quem está na frente (MCP, rotinas, Casa, saúde do acesso)
             SomNavegacaoTv.pacoteNaFrente = evento.packageName?.toString()
             SaudeAcesso.janela(this, evento.packageName, evento.className)   // HOME na frente: hora boa para aviso pendente
             HoraDormirTv.janela(this, evento.packageName)   // hora de dormir: app fora da lista volta para a HOME

@@ -100,6 +100,20 @@
             android:name=".RotinasActivity"
             android:exported="false"
             android:label="@string/lbl_rotinas" />
+        <!-- Eventos como gatilho (ideia 7): o player (processo :player) avisa "tocando/pausado" ao processo principal. -->
+        <receiver
+            android:name=".GatilhoReceiver"
+            android:exported="false" />
+        <!-- Botões do controle (ideia 6): o que cada tecla livre faz (RemapTeclas). Aberta por Extras. -->
+        <activity
+            android:name=".TeclasActivity"
+            android:exported="false"
+            android:label="@string/tec_titulo" />
+        <!-- Tela Cenas (ideia 4): abre pelo painel rápido ou pela voz (alias VozCenas). -->
+        <activity
+            android:name=".CenasActivity"
+            android:exported="false"
+            android:label="@string/lbl_cenas" />
         <activity
             android:name=".RotinaAcordarActivity"
             android:exported="false"
@@ -445,6 +459,17 @@
             android:name=".VozAgenda"
             android:exported="true"
             android:label="@string/lbl_minha_agenda"
+            android:targetActivity=".AtalhoVozActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".VozCenas"
+            android:exported="true"
+            android:label="@string/lbl_cenas"
             android:targetActivity=".AtalhoVozActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

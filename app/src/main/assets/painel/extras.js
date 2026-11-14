@@ -344,8 +344,40 @@ $('btnAddAcao').addEventListener('click', () => {
   desenharCena();
 });
 
+// Eventos como gatilho (ideia 7): evento → cena. Os nomes batem com Gatilhos.Evento no Kotlin.
+const EVENTOS_CENA = [
+  ['midia_tocou', 'Filme ou vídeo começou'], ['midia_pausou', 'Filme ou vídeo pausou ou acabou'],
+  ['tv_ligou', 'A TV ligou'], ['todos_sairam', 'Todos saíram (presença)'], ['chuva', 'Chuva chegando'],
+];
+
+function desenharGatilhos(gatilhos, cenas) {
+  const lista = $('gatilhosLista');
+  lista.replaceChildren();
+  for (const [chave, rotulo] of EVENTOS_CENA) {
+    const linha = document.createElement('label'); linha.className = 'cena-linha';
+    const texto = document.createElement('span'); texto.textContent = rotulo;
+    const sel = document.createElement('select'); sel.dataset.evento = chave; sel.setAttribute('aria-label', rotulo);
+    for (const nome of ['', ...cenas.map(c => c.nome)]) {
+      const o = document.createElement('option'); o.value = nome; o.textContent = nome || 'nada'; sel.append(o);
+    }
+    sel.value = gatilhos[chave] || '';
+    linha.append(texto, sel);
+    lista.append(linha);
+  }
+}
+
+$('btnGatilhos').addEventListener('click', async () => {
+  const corpo = {};
+  for (const sel of $('gatilhosLista').querySelectorAll('select')) if (sel.value) corpo[sel.dataset.evento] = sel.value;
+  try {
+    if (await comPin('Eventos', 'Salvar os eventos que rodam cenas?', 'Salvar', () => chamar('POST', '/api/extras/cenas/gatilhos', corpo)))
+      mostrar($('statusGatilhos'), 'Salvo.');
+  } catch (e) { mostrar($('statusGatilhos'), textoErro(e)); }
+});
+
 async function carregarCenas() {
   const r = await chamar('GET', '/api/extras/cenas');
+  desenharGatilhos(r.gatilhos || {}, r.cenas);
   const lista = $('listaCenas');
   lista.replaceChildren();
   if (!r.cenas.length) { const p = document.createElement('p'); p.className = 'aviso'; p.textContent = 'Nenhuma cena ainda.'; lista.append(p); }

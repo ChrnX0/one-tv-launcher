@@ -101,6 +101,12 @@ object Cenas {
         return opcoes[((if (i < 0) -1 else i) + passo).mod(opcoes.size)]
     }
 
+    /** Quantas ações a cena tem (a linha da tela Cenas). Aceita {"acoes":[...]} ou a lista solta. Pura. */
+    fun contarAcoes(acoes: String): Int = try {
+        val t = acoes.trim()
+        if (t.startsWith("[")) JSONArray(t).length() else JSONObject(t).optJSONArray("acoes")?.length() ?: 0
+    } catch (e: Exception) { 0 }
+
     fun apagar(ctx: Context, nome: String): Boolean {
         val l = lista(ctx); val nova = l.filter { it.nome != nome }
         if (nova.size == l.size) return false

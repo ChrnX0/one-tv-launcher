@@ -28,4 +28,36 @@
     <string name="rot_cena_linha">Cena: %1$s</string>
     <string name="rot_cena_sem">Crie uma cena antes (painel web › Extras › Cenas)</string>
     <string name="al_cena">Cena ao parar: %1$s</string>
+    <!-- Tela Cenas (ideia 4) -->
+    <string name="lbl_cenas">Cenas</string>
+    <string name="pr_cenas">Cenas</string>
+    <string name="cenas_titulo">Cenas</string>
+    <string name="cenas_det">OK roda a cena. Crie e edite no painel web › Extras › Cenas.</string>
+    <string name="cenas_vazio">Nenhuma cena ainda. Crie uma no painel web › Extras › Cenas.</string>
+    <plurals name="cenas_acoes">
+        <item quantity="one">%d ação</item>
+        <item quantity="many">%d ações</item>
+        <item quantity="other">%d ações</item>
+    </plurals>
+    <!-- Botões do controle (ideia 6) -->
+    <string name="tec_titulo">Botões do controle</string>
+    <string name="tec_det">Netflix e YouTube valem em qualquer tela; teclas coloridas e números, só na HOME.</string>
+    <string name="tec_nova">+ Configurar um botão</string>
+    <string name="tec_nova_det">Depois aperte o botão no controle</string>
+    <string name="tec_aperte">Aperte o botão</string>
+    <string name="tec_aperte_det">Netflix, YouTube, uma tecla colorida ou um número. VOLTAR cancela.</string>
+    <string name="tec_nao_pode">%1$s não muda (faz falta para usar a TV). Tente outro botão.</string>
+    <string name="tec_so_home">Vale só na HOME (nos apps e no player ela continua com a função dela).</string>
+    <string name="tec_toda_tela">Vale em qualquer tela.</string>
+    <string name="tec_toque">Toque</string>
+    <string name="tec_segurar">Segurar</string>
+    <string name="tec_duplo">Toque duplo</string>
+    <string name="tec_padrao">padrão (app salvo; segurar 3 s = escolher)</string>
+    <string name="tec_cena">cena %1$s</string>
+    <string name="tec_salvo">%1$s salvo</string>
+    <string name="tec_apagar">Limpar este botão</string>
+    <string name="tec_vermelha">Vermelha</string>
+    <string name="tec_verde">Verde</string>
+    <string name="tec_amarela">Amarela</string>
+    <string name="tec_azul">Azul</string>
 </resources>

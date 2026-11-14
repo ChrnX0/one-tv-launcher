@@ -575,6 +575,13 @@
         <p class="aviso">Uma cena junta várias ações. Cada uma ganha um link secreto para os Atalhos do iPhone ou o Home Assistant (POST).
           O link só aparece ao criar: guarde-o. Criar e apagar pedem o PIN.</p>
         <div id="listaCenas" class="lista-registro"></div>
+        <details id="gatilhosCena" class="cena-gatilhos">
+          <summary>Rodar uma cena quando algo acontecer</summary>
+          <p class="aviso">Cada evento roda no máximo uma vez a cada 20 s. Filmes de outros apps precisam do acesso às notificações ("Tocando agora").</p>
+          <div id="gatilhosLista" class="cena-acoes"></div>
+          <button type="button" id="btnGatilhos" class="botao-secundario">Salvar eventos</button>
+          <p id="statusGatilhos" class="aviso" hidden></p>
+        </details>
         <form id="formCena" class="form-cena">
           <input id="nomeCena" type="text" maxlength="40" placeholder="Nome (ex.: Cinema)" aria-label="Nome da cena">
           <div id="acoesLista" class="cena-acoes"></div>
@@ -739,6 +746,8 @@
         <h2>Instalar como app (https)</h2>
         <p class="aviso">Com o certificado que a TV fez instalado no aparelho, o painel abre com cadeado e vira app no celular e no PC.</p>
         <p id="textoCertificado" class="aviso">Lendo…</p>
+        <label for="nomeCertificado" class="aviso-curto">Nome da TV no roteador (o que vai no endereço com cadeado)</label>
+        <input id="nomeCertificado" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="63" placeholder="tv">
         <div class="barra-acoes">
           <a class="botao-primario" href="/certificado">Passo a passo</a>
           <a id="linkHttps" class="botao-secundario" href="/" hidden>Abrir com cadeado</a>

@@ -205,9 +205,18 @@ object PainelWeb {
 
     private fun ligadoTls(): Boolean = servidorTls?.isClosed == false
 
-    /** Botão "Gerar certificado novo" do painel (pede o PIN de novo): CA nova, e reabre a porta https com ela. */
-    private fun renovarCertificado(token: String?, ip: String): Resposta {
+    /**
+     * Botão "Gerar certificado novo" do painel (pede o PIN de novo): CA nova, e reabre a porta https com ela.
+     * Com {"nome": "tv-sala"} no corpo, troca antes o nome da TV no certificado (o que está no DNS do roteador).
+     */
+    private fun renovarCertificado(req: Requisicao, token: String?, ip: String): Resposta {
         if (!sessoes.elevada(token)) return precisaPin()
+        val novoNome = corpoJson(req)?.optString("nome", "")?.trim()?.lowercase().orEmpty()
+        if (novoNome.isNotEmpty()) {
+            if (!ChecagensPainel.nomeCertificadoValido(novoNome))
+                return erro(400, "nome inválido: uma palavra só, com letras, números e hífen (ex.: tv-sala)")
+            PainelTls.definirNome(app, novoNome)
+        }
         val rede = redes().entries.minByOrNull { it.key }
         val e = PainelTls.emitir(app, rede?.key, rede?.value ?: 24)
         PainelArmazem.registrar(app, ip, "gerar certificado https novo", if (e == null) "falhou" else "ok")
@@ -216,11 +225,11 @@ object PainelWeb {
         // Fecha a porta velha (as conexões já abertas, inclusive esta, continuam até responder) e abre com o novo.
         try { servidorTls?.close() } catch (_: IOException) {}
         Thread({ abrirTls(minha, e) }, "Painel-https").apply { priority = Thread.MIN_PRIORITY; isDaemon = true }.start()
-        return json(200, PainelTls.estado(ipsDaRede(), true))
+        return json(200, PainelTls.estado(app, ipsDaRede(), true))
     }
 
     /** Nomes aceitos no Host da porta https: os do certificado e os IPs da TV (sempre com :8444). */
-    private fun nomesTls(): Set<String> = PainelTls.nomes().toSet() + ipsDaRede()
+    private fun nomesTls(): Set<String> = PainelTls.nomesNoCertificado() + ipsDaRede()
 
     /** O Host vale para a porta por onde o pedido chegou? */
     private fun hostOk(host: String?, https: Boolean): Boolean =
@@ -230,7 +239,7 @@ object PainelWeb {
     /** Página do passo a passo (assets/painel/certificado.html), com os dados do certificado já preenchidos. */
     private fun paginaCertificado(): Resposta {
         val modelo = app.assets.open("painel/certificado.html").use { it.readBytes() }.toString(Charsets.UTF_8)
-        val html = PaginaCertificado.preencher(modelo, PainelTls.estado(ipsDaRede(), ligadoTls()), PainelTls.nomes().first())
+        val html = PainelTls.estado(app, ipsDaRede(), ligadoTls()).let { PaginaCertificado.preencher(modelo, it, it.optString("nome")) }
         return Resposta(200, "text/html; charset=utf-8", html.toByteArray())
     }
 
@@ -507,7 +516,7 @@ object PainelWeb {
             "/certificado.crt" -> return arquivoCertificado()
             "/certificado.css" -> return Resposta(200, "text/css; charset=utf-8",
                 app.assets.open("painel/certificado.css").use { it.readBytes() })
-            "/api/certificado" -> return json(200, PainelTls.estado(ipsDaRede(), ligadoTls()))
+            "/api/certificado" -> return json(200, PainelTls.estado(app, ipsDaRede(), ligadoTls()))
         }
 
         val token = PainelHttp.cookie(req.cabecalho("cookie"), COOKIE)
@@ -615,7 +624,7 @@ object PainelWeb {
             "/api/tela/tecla" -> if (req.metodo == "POST") return tecla(req)
             "/api/tela/texto" -> if (req.metodo == "POST") return texto(req, ip)
             "/api/tv/reiniciar" -> if (req.metodo == "POST") return reiniciarTv(token, ip)
-            "/api/certificado/renovar" -> if (req.metodo == "POST") return renovarCertificado(token, ip)
+            "/api/certificado/renovar" -> if (req.metodo == "POST") return renovarCertificado(req, token, ip)
             "/api/recado" -> if (req.metodo == "POST") return recado(req, ip)
             "/api/rede/historico" -> if (req.metodo == "GET")
                 return json(200, HistoricoRede.json(app, req.consulta["horas"]?.toIntOrNull() ?: 24))

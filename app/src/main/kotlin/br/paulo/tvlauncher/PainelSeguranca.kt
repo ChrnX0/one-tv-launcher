@@ -268,6 +268,13 @@ object ChecagensPainel {
         return NOME_UMA_PALAVRA.matches(palavra) && palavra != "localhost" && !palavra.all { it.isDigit() }
     }
 
+    /**
+     * Nome base do certificado https de casa (PainelTls): uma palavra só, como o roteador cadastra ("tv", "tv-sala").
+     * Sem ponto: os finais .lan e .local entram sozinhos. Fora "localhost" e números puros.
+     */
+    fun nomeCertificadoValido(nome: String): Boolean =
+        NOME_UMA_PALAVRA.matches(nome) && nome != "localhost" && !nome.all { it.isDigit() }
+
     private val SUFIXOS_LOCAIS = listOf(".lan", ".local", ".localdomain", ".home.arpa")
     private val NOME_UMA_PALAVRA = Regex("^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$")
 
