@@ -64,11 +64,13 @@ class BackupNoturnoActivity : Activity() {
                 val app = applicationContext
                 Fundo.rodar {
                     val contas = runCatching { BackupNoturno.contasSmb(app) }.getOrDefault(emptyList())
+                    val nuvens = runCatching { BackupNoturno.contasNuvem(app) }.getOrDefault(emptyList())
                     runOnUiThread {
                         if (isDestroyed) return@runOnUiThread
                         val novo = BackupNoturnoRegras.proximoDestino(BackupNoturno.destino(app), contas.map { it.id },
-                            comDrive = DriveBackup.conectado(app))
-                        val nome = contas.firstOrNull { it.id == BackupNoturnoRegras.idSmb(novo) }?.nome.orEmpty()
+                            comDrive = DriveBackup.conectado(app), idsNuvem = nuvens.map { it.id })
+                        val nome = contas.firstOrNull { it.id == BackupNoturnoRegras.idSmb(novo) }?.nome
+                            ?: nuvens.firstOrNull { it.id == BackupNoturnoRegras.idNuvem(novo) }?.let { BackupNoturno.nomeNuvem(it) }.orEmpty()
                         BackupNoturno.definirDestino(app, novo, nome)
                         atualizar()
                     }

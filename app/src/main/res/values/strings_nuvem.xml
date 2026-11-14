@@ -15,14 +15,14 @@
     <string name="rede_od_id_erro">The ID looks like 00000000-0000-0000-0000-000000000000.</string>
     <string name="rede_od_codigo_explica">On your phone or computer, open microsoft.com/link (or point the camera at the QR) and type the code below. The TV only asks to read files.</string>
     <string name="rede_od_erro_app">Microsoft did not accept this app. Check the ID and that “Allow public client flows” is on.</string>
-    <string name="rede_dbx_explica">Once, on a computer: dropbox.com/developers/apps › Create app › Scoped access › Full Dropbox. In the Permissions tab, tick files.metadata.read, files.content.read and account_info.read and save (Submit). Copy the “App key” and type it here.</string>
+    <string name="rede_dbx_explica">Once, on a computer: dropbox.com/developers/apps › Create app › Scoped access › Full Dropbox. In the Permissions tab, tick files.metadata.read, files.content.read and account_info.read (and files.content.write, if you want the nightly backup in Dropbox) and save (Submit). Copy the “App key” and type it here.</string>
     <string name="rede_dbx_chave">App key</string>
     <string name="rede_dbx_chave_erro">The App key has only lowercase letters and numbers.</string>
     <string name="rede_dbx_codigo_explica">Point your phone camera at the QR, sign in to Dropbox and tap Allow. Dropbox shows a code: type it here (you can type from your phone, in the panel).</string>
     <string name="rede_dbx_codigo">Dropbox code</string>
     <string name="rede_dbx_codigo_erro">Type the whole code Dropbox showed.</string>
     <!-- Box (14/11/2026): needs the app secret and a return address; RetornoNuvem.kt + site/volta.html. -->
-    <string name="rede_box_explica">Once, on a computer: app.box.com/developers/console › Create New App › Custom App › User Authentication (OAuth 2.0). In the Configuration tab, under OAuth 2.0 Redirect URI, put %1$s and leave only “Read all files and folders” ticked. Save, then copy the Client ID and the Client Secret here.</string>
+    <string name="rede_box_explica">Once, on a computer: app.box.com/developers/console › Create New App › Custom App › User Authentication (OAuth 2.0). In the Configuration tab, under OAuth 2.0 Redirect URI, put %1$s tick “Read all files and folders” (and “Write all files and folders”, if you want the nightly backup in Box). Save, then copy the Client ID and the Client Secret here.</string>
     <string name="rede_box_id">Client ID</string>
     <string name="rede_box_segredo">Client Secret</string>
     <string name="rede_box_erro">Client ID and Client Secret have only letters and numbers. Copy both from the Configuration tab.</string>

@@ -138,5 +138,11 @@ class BackupNoturnoTest {
         assertEquals("10/11/2026", Rg.diaDoNome("onetv-backup-20261110.json"))
         assertEquals("outro.json", Rg.diaDoNome("outro.json"))
         assertEquals("a1", Rg.idSmb("smb:a1")); assertNull(Rg.idSmb("pendrive")); assertNull(Rg.idSmb("smb:"))
+        // Nuvem de "Na rede" (ideia 98): depois do Drive, uma por conta; conta apagada volta ao começo.
+        assertEquals("nuvem:n1", Rg.proximoDestino("drive", ids, comDrive = true, idsNuvem = listOf("n1", "n2")))
+        assertEquals("nuvem:n2", Rg.proximoDestino("nuvem:n1", ids, idsNuvem = listOf("n1", "n2")))
+        assertEquals("", Rg.proximoDestino("nuvem:n2", ids, idsNuvem = listOf("n1", "n2")))
+        assertEquals("nuvem:n1", Rg.proximoDestino("pendrive", ids, idsNuvem = listOf("n1")))
+        assertEquals("n1", Rg.idNuvem("nuvem:n1")); assertNull(Rg.idNuvem("smb:n1")); assertNull(Rg.idNuvem("nuvem:"))
     }
 }

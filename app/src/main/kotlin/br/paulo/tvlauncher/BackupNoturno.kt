@@ -71,6 +71,12 @@ object BackupNoturno {
         prefs(ctx).edit().putString("destino", d).putString("destino_nome", nome).apply()
     }
 
+    /** OneDrive, Dropbox e Box de "Na rede" (ideia 98): recebem a cópia na pasta OneTV-backup. Fora da tela (Keystore). */
+    fun contasNuvem(ctx: Context): List<ContaMidia> = MidiaArmazem.contas(ctx).filter { it.tipo in NuvemBackup.TIPOS }
+
+    /** O nome que aparece para a conta da nuvem: "OneDrive · Ana". */
+    fun nomeNuvem(c: ContaMidia) = "${c.servidor} · ${c.usuario}"
+
     /** As pastas SMB cadastradas em "Mídias na rede" (Jellyfin não serve: não recebe arquivo). */
     fun contasSmb(ctx: Context): List<ContaMidia> = MidiaArmazem.contas(ctx).filter { it.tipo == ContaMidia.SMB }
 
@@ -228,6 +234,11 @@ object BackupNoturno {
                         ?: throw IllegalStateException("a pasta do NAS foi apagada")
                     enviarSmb(conta, nome, bytes); "NAS (${conta.nome})"
                 }
+                BackupNoturnoRegras.idNuvem(destino) != null -> {
+                    val conta = contasNuvem(app).firstOrNull { it.id == BackupNoturnoRegras.idNuvem(destino) }
+                        ?: throw IllegalStateException("a conta da nuvem foi apagada")
+                    NuvemBackup.enviar(conta, nome, bytes); nomeNuvem(conta)
+                }
                 else -> null
             }
         } catch (e: Exception) {
@@ -322,6 +333,7 @@ object BackupNoturno {
     fun rotuloDestino(ctx: Context, d: String): String = when {
         d == BackupNoturnoRegras.PENDRIVE -> ctx.getString(R.string.bkn_destino_pendrive)
         d == BackupNoturnoRegras.DRIVE -> ctx.getString(R.string.drv_destino)
+        BackupNoturnoRegras.idNuvem(d) != null -> prefs(ctx).getString("destino_nome", null)?.ifEmpty { null } ?: "?"
         BackupNoturnoRegras.idSmb(d) != null ->
             ctx.getString(R.string.bkn_destino_nas, prefs(ctx).getString("destino_nome", null)?.ifEmpty { null } ?: "?")
         else -> ctx.getString(R.string.bkn_destino_tv)

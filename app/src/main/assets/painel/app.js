@@ -749,6 +749,8 @@ function desenharNoturno(r) {
   const opcoes = [['', 'Nenhuma (só na TV)'], ['pendrive', 'Pendrive'], ...r.nas.map((n) => [n.valor, `Pasta da rede: ${n.nome}`])];
   // Google Drive só aparece com a conta conectada na TV (Configurações > Backup automático > Conta do Google Drive).
   if (r.drive) opcoes.push(['drive', `Google Drive (${r.drive})`]);
+  // OneDrive, Dropbox e Box cadastrados em Na rede (o nome já vem pronto: "Dropbox · Ana").
+  for (const n of r.nuvens || []) opcoes.push([n.valor, n.nome]);
   // Destino gravado que não está mais na lista (pasta apagada): aparece com o rótulo da TV, para não sumir calado.
   if (!opcoes.some(([v]) => v === r.destino)) opcoes.push([r.destino, r.destinoRotulo]);
   for (const [valor, rotulo] of opcoes) {

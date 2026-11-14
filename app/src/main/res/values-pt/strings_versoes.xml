@@ -97,6 +97,7 @@
         <item>Legenda na mesma pasta do vídeo (Filme.srt, Filme.pt-BR.ass) aparece sozinha no ▼, nas pastas da rede, na nuvem e no pendrive</item>
         <item>Filmes e séries na taxa de quadros deles: a TV troca para 24 Hz e a imagem não treme em movimentos de câmera (Configurações › TV e filmes, menu ▼ e painel)</item>
         <item>Na rede: Box e Google Drive também como fonte (você cria o app no serviço uma vez; para entrar, o celular no mesmo Wi‑Fi aponta para o QR e volta sozinho para a TV)</item>
+        <item>Backup noturno: a cópia extra também pode ir para o OneDrive, o Dropbox ou o Box cadastrados em Na rede (pasta OneTV-backup, ficam as 7 últimas)</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Unidade de rede</item>
@@ -179,6 +180,7 @@
         <item>Em Na rede › OneDrive (ou Dropbox), siga os passos e abra um vídeo da nuvem</item>
         <item>Abra um filme e repare numa cena com a câmera andando devagar</item>
         <item>Em Na rede › Box (e depois Google Drive), siga os passos no computador e aponte o celular (no Wi‑Fi de casa) para o QR</item>
+        <item>Em Configurações › Sistema › Backup automático, OK em Cópia extra até aparecer a conta da nuvem e depois Fazer agora</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Com Configurações › Acesso remoto › Mostrar a TV como unidade de rede ligada, o Mapear unidade de rede do Windows com o endereço mostrado lá e o PIN do painel abre as pastas da TV?</item>
@@ -261,5 +263,6 @@
         <item>O vídeo tocou e deu para avançar e voltar sem travar?</item>
         <item>A tela piscou preta no começo e o movimento ficou liso, sem trancos?</item>
         <item>Depois de permitir, o celular disse “Pronto” e a pasta do Box (e a do Drive) abriu na TV com um vídeo tocando?</item>
+        <item>A tela disse “ok: TV + OneDrive/Dropbox/Box” e o arquivo apareceu na pasta OneTV-backup da nuvem?</item>
     </string-array>
 </resources>

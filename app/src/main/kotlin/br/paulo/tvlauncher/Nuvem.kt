@@ -28,7 +28,8 @@ object Nuvem {
     // ---------------------------------------------------------------- OneDrive (Microsoft Graph)
 
     const val MS_LOGIN = "https://login.microsoftonline.com/common/oauth2/v2.0"
-    const val MS_ESCOPOS = "Files.Read offline_access"
+    /** Ler tudo; escrever só na pasta do próprio app (Aplicativos/<nome do app>), para o backup (ideia 98). */
+    const val MS_ESCOPOS = "Files.Read Files.ReadWrite.AppFolder offline_access"
     const val MS_PAGINA = "https://microsoft.com/link"
     const val GRAPH = "https://graph.microsoft.com/v1.0"
 
@@ -236,6 +237,13 @@ object Nuvem {
     }
 
     fun get(url: String, token: String): Resposta = ler(conexao(url, "GET", mapOf("Authorization" to "Bearer $token")))
+
+    /** Pedido com corpo qualquer (envio do backup, ideia 98). [extras]: cabeçalhos a mais (ex. Dropbox-API-Arg). */
+    fun enviar(url: String, metodo: String, token: String, corpo: ByteArray?, tipo: String?, extras: Map<String, String> = emptyMap()): Resposta {
+        val c = conexao(url, metodo, mapOf("Authorization" to "Bearer $token") + (tipo?.let { mapOf("Content-Type" to it) } ?: emptyMap()) + extras)
+        if (corpo != null) { c.doOutput = true; c.setFixedLengthStreamingMode(corpo.size); c.outputStream.use { it.write(corpo) } }
+        return ler(c)
+    }
 
     fun postarJson(url: String, token: String, json: String): Resposta {
         val c = conexao(url, "POST", mapOf("Authorization" to "Bearer $token", "Content-Type" to "application/json"))
