@@ -102,6 +102,8 @@ object ManutencaoNoturna {
         val app = ctx.applicationContext
         // Token do Trakt (ServicosContas): renova antes de vencer. Fora do relatório (não é manutenção da TV).
         runCatching { ServicosContas.renovarSePreciso(app) }
+        // Nota do IMDb (arquivo público, 1x por semana; InfoExternaCache): também fora do relatório.
+        runCatching { InfoExternaCache.semanalImdb(app) }
         val passos = listOf(
             passo("acesso") { acesso(app) },
             passo("permissoes") { permissoes(app) },

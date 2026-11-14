@@ -9,13 +9,14 @@
   if (/^pt/i.test(idioma)) return;
   document.documentElement.lang = 'en';
   const T = {
-"Usar a minha conta do MDBList (opcional)": "Use my own MDBList account (optional)",
 "1. Toque em ": "1. Tap ",
 "Serviços de filmes e séries": "Movie and series services",
 "Contas opcionais: nada sai da TV antes de você entrar. Entrar e sair pedem o PIN.": "Optional accounts: nothing leaves the TV until you sign in. Signing in and out asks for the PIN.",
 "Deixa o que você viu e a sua lista iguais aos do celular.": "Keeps what you watched and your watchlist in sync with your phone.",
 "Igual ao Trakt, ótimo também para anime. Use um ou os dois.": "Like Trakt, also great for anime. Use one or both.",
-"Notas do IMDb, Rotten Tomatoes, Letterboxd e listas como o Top 250.": "Ratings from IMDb, Rotten Tomatoes, Letterboxd and lists such as Top 250.",
+"Opcional: notas do Rotten Tomatoes, Letterboxd e Metacritic, e listas como o Top 250.": "Optional: ratings from Rotten Tomatoes, Letterboxd and Metacritic, and lists such as Top 250.",
+"Opcional: soma Rotten Tomatoes, Letterboxd e Metacritic à nota do IMDb. 1. Crie uma conta grátis e abra ": "Optional: adds Rotten Tomatoes, Letterboxd and Metacritic to the IMDb rating. 1. Create a free account and open ",
+". 2. Copie a API Key. 3. Cole aqui e grave: a TV confere na hora.": ". 2. Copy the API Key. 3. Paste it here and save: the TV checks it right away.",
 "Sinopse, elenco e data do próximo episódio, no idioma da TV.": "Plot, cast and next episode date, in the TV's language.",
 "Legendas da internet. Sem conta: 5 por dia. Com conta grátis: 20.": "Online subtitles. Without an account: 5 a day. With a free account: 20.",
 "Esta versão do launcher ainda não tem as chaves destes serviços. Eles aparecem depois da próxima atualização.": "This launcher version does not have the keys of these services yet. They show up after the next update.",
@@ -28,8 +29,6 @@
 "Usuário do OpenSubtitles": "OpenSubtitles user name",
 "Senha do OpenSubtitles": "OpenSubtitles password",
 "Esta página continua sozinha quando você terminar.": "This page continues by itself when you finish.",
-" (API Key). Copie e cole aqui.": " (API Key). Copy and paste it here.",
-"A chave fica em ": "The key is at ",
 "QR code do login": "Sign-in QR code",
 "Gravar a chave do MDBList?": "Save the MDBList key?",
 "A TV confere a chave no MDBList antes de gravar.": "The TV checks the key with MDBList before saving it.",

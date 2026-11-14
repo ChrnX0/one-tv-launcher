@@ -129,7 +129,6 @@ jobs:
           TRAKT_SEGREDO: ${{ github.event_name == 'workflow_dispatch' && secrets.TRAKT_SEGREDO || '' }}
           SIMKL_ID: ${{ github.event_name == 'workflow_dispatch' && secrets.SIMKL_ID || '' }}
           OPENSUBTITLES_CHAVE: ${{ github.event_name == 'workflow_dispatch' && secrets.OPENSUBTITLES_CHAVE || '' }}
-          MDBLIST_CHAVE: ${{ github.event_name == 'workflow_dispatch' && secrets.MDBLIST_CHAVE || '' }}
         run: |
           chmod +x gradlew
           ./gradlew :app:assembleRelease --no-daemon --stacktrace

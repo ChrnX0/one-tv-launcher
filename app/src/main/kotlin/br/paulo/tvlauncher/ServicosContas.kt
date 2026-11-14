@@ -26,7 +26,7 @@ object ServicosContas {
     private const val ARQUIVO = "servicos.json"
 
     fun chavesApp(): ServicosFilmes.ChavesApp = ServicosFilmes.ChavesApp(
-        BuildConfig.TMDB_CHAVE, BuildConfig.TRAKT_ID, BuildConfig.TRAKT_SEGREDO, BuildConfig.SIMKL_ID, BuildConfig.OPENSUBTITLES_CHAVE, BuildConfig.MDBLIST_CHAVE)
+        BuildConfig.TMDB_CHAVE, BuildConfig.TRAKT_ID, BuildConfig.TRAKT_SEGREDO, BuildConfig.SIMKL_ID, BuildConfig.OPENSUBTITLES_CHAVE)
 
     fun disponivel(s: Servico): Boolean = chavesApp().disponivel(s)
 
@@ -83,8 +83,6 @@ object ServicosContas {
         val c = conta(ctx, s)
         return when {
             s == Servico.TMDB -> Estado(s, Situacao.CONECTADO)   // o TMDB não tem conta da pessoa: basta a chave do app
-            // MDBList: a chave pessoal é opcional; sem ela vale a do app (CONECTADO sem nome = "ligado").
-            s == Servico.MDBLIST && c == null && chavesApp().mdblist.isNotBlank() -> Estado(s, Situacao.CONECTADO)
             s == Servico.OPENSUBTITLES -> Estado(s, if (c != null && c.usuario.isNotBlank()) Situacao.CONECTADO else Situacao.DESLIGADO, c?.usuario.orEmpty())
             c != null -> Estado(s, Situacao.CONECTADO, c.usuario)
             else -> Estado(s, Situacao.DESLIGADO)
@@ -194,9 +192,8 @@ object ServicosContas {
         definir(ctx, s, null)
     }
 
-    /** A chave do MDBList em uso: a pessoal (se a pessoa pôs) ou a do app. Null = nenhuma. */
-    fun chaveMdblist(ctx: Context): String? =
-        conta(ctx, Servico.MDBLIST)?.acesso?.takeIf { it.isNotBlank() } ?: chavesApp().mdblist.takeIf { it.isNotBlank() }
+    /** A chave do MDBList da pessoa (opcional). Null = não conectou. */
+    fun chaveMdblist(ctx: Context): String? = conta(ctx, Servico.MDBLIST)?.acesso?.takeIf { it.isNotBlank() }
 
     /** MDBList: confere a chave pessoal no próprio MDBList (GET /user) e grava. Devolve o nome da conta ou o erro. */
     fun definirMdblist(ctx: Context, chave: String): Result<String> = runCatching {

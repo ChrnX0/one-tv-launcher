@@ -17,7 +17,12 @@ Ela fica dentro do APK (dá para extrair, como em todo app aberto, Kodi incluíd
 | `TRAKT_ID` e `TRAKT_SEGREDO` | trakt.tv/oauth/applications/new | Client ID e Client Secret |
 | `SIMKL_ID` | simkl.com/settings/developer › Create new app | Client ID |
 | `OPENSUBTITLES_CHAVE` | opensubtitles.com/consumers › New consumer | API Key |
-| `MDBLIST_CHAVE` | mdblist.com/preferences › API Key | a chave (opcional: dá notas a todas as TVs com a cota de 1.000 consultas/dia dessa conta) |
+
+O MDBList não tem chave de aplicativo: a chave é da conta de cada pessoa. É um extra opcional (Rotten Tomatoes,
+Letterboxd, Metacritic) que a pessoa conecta na TV pelo QR (Configurações › TV e filmes › Serviços de filmes e séries) ou
+colando a chave no painel web. A nota do IMDb vale para todos sem chave: a TV baixa o arquivo público
+`title.ratings.tsv.gz` (datasets.imdbws.com, ~9 MB, uso pessoal e não comercial) uma vez por semana, de madrugada,
+e guarda só as notas dos títulos da lista.
 
 Campos dos formulários:
 - **Trakt**: Name `One TV Launcher`; Redirect uri `urn:ietf:wg:oauth:2.0:oob`; Javascript origins vazio; marque

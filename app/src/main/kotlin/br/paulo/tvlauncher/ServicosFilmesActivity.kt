@@ -66,7 +66,7 @@ class ServicosFilmesActivity : Activity() {
                 var focar: View? = null
                 for (e in visiveis) {
                     val valor = when (e.situacao) {
-                        Situacao.CONECTADO -> if (e.servico == Servico.TMDB || (e.servico == Servico.MDBLIST && e.usuario.isBlank())) getString(R.string.sv_ativo)
+                        Situacao.CONECTADO -> if (e.servico == Servico.TMDB) getString(R.string.sv_ativo)
                             else e.usuario.ifBlank { getString(R.string.sv_conectado) }
                         Situacao.ENTRANDO -> getString(R.string.sv_entrando)
                         else -> getString(R.string.sv_desligado)
@@ -93,15 +93,9 @@ class ServicosFilmesActivity : Activity() {
         val s = e.servico
         when {
             s == Servico.TMDB -> Unit
-            // MDBList ligado pela chave do app: OK oferece pôr a chave da própria conta (opcional); com ela, sair.
-            s == Servico.MDBLIST && e.situacao == Situacao.CONECTADO -> rede.execute {
-                val propria = ServicosContas.conta(this, s) != null
-                ui.post { if (!isDestroyed) { if (propria) perguntarSair(s) else escolher(e.copy(situacao = Situacao.DESLIGADO)) } }
-            }
             e.situacao == Situacao.CONECTADO -> perguntarSair(s)
             s == Servico.TRAKT || s == Servico.SIMKL -> mostrarCodigo(s)
-            s == Servico.MDBLIST -> pedirTexto(s, getString(R.string.sv_mdblist_titulo), getString(R.string.sv_mdblist_texto),
-                listOf(getString(R.string.sv_mdblist_dica) to false)) { v -> ServicosContas.definirMdblist(this, v[0]).map { } }
+            s == Servico.MDBLIST -> mostrarMdblist()
             s == Servico.OPENSUBTITLES -> pedirTexto(s, getString(R.string.sv_os_titulo), getString(R.string.sv_os_texto),
                 listOf(getString(R.string.sv_os_usuario) to false, getString(R.string.sv_os_senha) to true)) { v ->
                 ServicosContas.definirOpenSubtitles(this, v[0], v[1])
@@ -141,13 +135,59 @@ class ServicosFilmesActivity : Activity() {
                     val r = gravar(valores)
                     ui.post {
                         if (isDestroyed) return@post
-                        r.onSuccess { desenhar(s) }
+                        r.onSuccess { if (servicoNoCodigo == s) fecharCodigo() else desenhar(s) }
                             .onFailure { pedirTexto(s, titulo, texto, dicas, getString(R.string.sv_falhou, it.message ?: "?"), gravar) }
                     }
                 }
             }
             .setNegativeButton(getString(R.string.sv_cancelar), null)
             .show()
+    }
+
+    // ================================================================ MDBList: 3 passos sem digitar no controle
+
+    /**
+     * Pedido do dono (14/11/2026, "tem q facilitar ao maximo"): 1. QR para a página da chave no MDBList; 2. QR para o
+     * painel web (aba Configurações), onde a pessoa cola a chave no celular; 3. a TV confere na hora. Quem preferir digita
+     * aqui mesmo. Quando a chave chega pelo painel, esta tela volta sozinha para a lista.
+     */
+    private fun mostrarMdblist() {
+        val tela = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            background = Estilo.fundoTela(context)
+            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+        }
+        tela.addView(Estilo.tituloTela(this, getString(R.string.sv_mdblist_titulo)))
+        tela.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.sv_mdblist_passos)).apply {
+            textSize = Estilo.Leitura.SINOPSE; setLineSpacing(0f, 1.2f); setPadding(0, dp(Estilo.E2), 0, dp(Estilo.E2))
+        })
+        val qrs = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
+        fun qr(url: String, rotulo: String) = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_HORIZONTAL
+            addView(ImageView(context).apply { setImageBitmap(runCatching { QrCodigo.bitmap(url, dp(220)) }.getOrNull()) }, LinearLayout.LayoutParams(dp(220), dp(220)))
+            addView(Estilo.texto(context, Estilo.Papel.LEGENDA, rotulo).apply { textSize = Estilo.Leitura.ITEM_DETALHE; gravity = Gravity.CENTER }, LinearLayout.LayoutParams(dp(260), -2))
+        }
+        qrs.addView(qr(ServicosFilmes.MDBLIST_PREFERENCIAS, getString(R.string.sv_mdblist_qr1)))
+        PainelWeb.endereco()?.let { end ->
+            qrs.addView(qr(end + "#config", getString(R.string.sv_mdblist_qr2, end.removePrefix("http://").trimEnd('/'))),
+                LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(48) })
+        }
+        tela.addView(qrs)
+        val botoes = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(0, dp(24), 0, 0) }
+        val digitar = Estilo.botao(this, getString(R.string.sv_mdblist_digitar)).apply {
+            textSize = Estilo.Leitura.BOTAO
+            setOnClickListener {
+                pedirTexto(Servico.MDBLIST, getString(R.string.sv_mdblist_titulo), getString(R.string.sv_mdblist_texto),
+                    listOf(getString(R.string.sv_mdblist_dica) to false)) { v -> ServicosContas.definirMdblist(this@ServicosFilmesActivity, v[0]).map { } }
+            }
+        }
+        val fechar = Estilo.botao(this, getString(R.string.sv_fechar), primario = false).apply { textSize = Estilo.Leitura.BOTAO; setOnClickListener { fecharCodigo() } }
+        botoes.addView(digitar); botoes.addView(fechar, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(16) })
+        tela.addView(botoes)
+        telaCodigo = tela; servicoNoCodigo = Servico.MDBLIST
+        setContentView(tela)
+        digitar.requestFocus()
+        ui.post(volta)
     }
 
     // ================================================================ código grande + QR (Trakt, Simkl)
@@ -195,6 +235,11 @@ class ServicosFilmesActivity : Activity() {
 
     private fun atualizarCodigo() {
         val s = servicoNoCodigo ?: return
+        // MDBList: a chave chegou (pelo painel ou digitada): volta para a lista mostrando "conectado".
+        if (s == Servico.MDBLIST) {
+            rede.execute { val tem = ServicosContas.conta(this, s) != null; ui.post { if (!isDestroyed && tem && servicoNoCodigo == s) fecharCodigo() } }
+            return
+        }
         val sessao = ServicosContas.sessao(s) ?: return
         when (sessao.estado) {
             ServicosContas.EstadoLogin.ESPERANDO -> {

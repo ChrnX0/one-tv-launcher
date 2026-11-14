@@ -70,6 +70,11 @@ class FilmesActivity : Activity() {
     private val fonteMedia = Fontes.manrope(500)
 
     private var filmes: List<Filme> = emptyList()      // o que a tela mostra (sem as categorias ocultas, até o PIN)
+    // Notas de fora (IMDb pelo MDBList, InfoExterna): valem no Filtro (nota mínima) e na ordem "Nota".
+    @Volatile private var notasFora: Map<String, Float> = emptyMap()
+    // Ficha de fora (TMDB + notas) do filme da ficha aberta, e a contagem da saga na lista: (nome, tem, total).
+    private var externo: Pair<Filme, InfoExterna.Guardado>? = null
+    private var sagaExterna: Pair<Filme, Triple<String, Int, Int>>? = null
     private var todos: List<Filme> = emptyList()       // o catálogo inteiro, como veio do servidor
     private var ocultas: Set<String> = emptySet()      // categorias escondidas (adultas, escondidas, controle parental)
     private var mostrarOcultas = false                 // true só depois do PIN, como no player da TV ao vivo
@@ -245,6 +250,7 @@ class FilmesActivity : Activity() {
             val p = PlayerArmazem.posicoes(this)
             val i = PlayerArmazem.interesses(this, series = false)
             val oc = lerOcultas(f)
+            notasFora = InfoExternaCache.notas(this)
             val pi = IdiomaPlayer.prefs(this)
             val marco = prefsPlayer().getLong(chavePref("marco"), 0L)
             val ultima = prefsPlayer().getString(chavePref("ultima"), null)
@@ -257,6 +263,14 @@ class FilmesActivity : Activity() {
                 intent.getStringExtra(BuscaUnica.EXTRA_TERMO)?.trim()?.takeIf { it.isNotEmpty() }?.let { t -> termo = t; chave = BUSCA }
                 // A 1ª conta (ocultas, contagens, ordem) também sai da thread da tela; o "Carregando" fica até ela chegar.
                 recalcular(ModoGrade.NOVA, inicial = true) { aviso.visibility = View.GONE; grade.requestFocus() }
+                // Notas da grade em lote (MDBList), para os filmes com id do TMDB conhecido; no máximo 20 pedidos por dia.
+                if (InfoExternaCache.temNotas(this)) Fundo.rodar("filmes-notas") {
+                    val ids = InfoExternaCache.idsConhecidos(this, f.map { it.chave to it.tmdb })
+                    if (InfoExternaCache.notasEmLote(this, ids.map { Triple(it.first, it.second, false) }) > 0) {
+                        notasFora = InfoExternaCache.notas(this)
+                        tela.post { if (!isDestroyed) recalcular(ModoGrade.IGUAL) }
+                    }
+                }
                 // O índice das versões sai depois da grade na tela (é a parte demorada; a ficha funciona sem ele).
                 Fundo.rodar {
                     val idx = Idioma.indice(f, { it.nome }, { it.grupo })
@@ -286,6 +300,7 @@ class FilmesActivity : Activity() {
     private var cacheVisiveis: Triple<List<Filme>, Set<String>, List<Filme>>? = null
     private var cacheBusca: Triple<List<Filme>, String, List<Filme>>? = null
     private var cacheOrdem: Triple<List<Filme>, Vod.Ordem, List<Filme>>? = null
+    private var cacheOrdemNotas: Map<String, Float>? = null
     private var cacheGrupos: Pair<List<Filme>, List<Pair<String, Int>>>? = null
     private var cacheNovos: Triple<List<Filme>, Long, Map<String, Int>>? = null
 
@@ -296,7 +311,7 @@ class FilmesActivity : Activity() {
      */
     private fun recalcular(modo: ModoGrade, inicial: Boolean = false, depois: (() -> Unit)? = null) {
         val todosS = todos; val ocultasS = if (mostrarOcultas) emptySet() else ocultas; val mostrar = mostrarOcultas
-        val termoS = termo; val posS = posicoes; val intS = interesses; val ordemS = ordem; val chaveS = chave
+        val termoS = termo; val posS = posicoes; val intS = interesses; val ordemS = ordem; val chaveS = chave; val notasS = notasFora
         val temOcultas = ocultas.isNotEmpty()
         val filtroS = filtro; val colecaoS = colecao; val marcoS = marcoNovos; val ultimaS = ultimaSalva
         val rotulo = { id: Int -> getString(id) }
@@ -347,8 +362,8 @@ class FilmesActivity : Activity() {
                 val ch = if (ch0 !in todasChaves || ch0 == BUSCAR || ch0 == FILTRO) TODOS else ch0
                 val g = if (modo == ModoGrade.IGUAL && ch == chaveS) null else {
                     // A ordem do catálogo inteiro fica guardada: uma categoria é o filtro dela (filtrar mantém a ordem).
-                    fun ordenados() = cacheOrdem?.takeIf { it.first === vis && it.second == ordemS }?.third
-                        ?: Vod.ordenar(vis, ordemS).also { cacheOrdem = Triple(vis, ordemS, it) }
+                    fun ordenados() = cacheOrdem?.takeIf { it.first === vis && it.second == ordemS && cacheOrdemNotas === notasS }?.third
+                        ?: Vod.ordenar(vis, ordemS, notasS).also { cacheOrdem = Triple(vis, ordemS, it); cacheOrdemNotas = notasS }
                     when {
                         ch == CONTINUAR -> cont                  // já na ordem de "mais recente"
                         ch == INTERESSES -> ints                 // o último marcado primeiro
@@ -357,7 +372,7 @@ class FilmesActivity : Activity() {
                         ch == COLECAO -> col?.second.orEmpty()   // já na ordem dos anos
                         ch.startsWith("g:") -> { val alvo = ch.removePrefix("g:"); ordenados().filter { it.grupo.trim() == alvo } }
                         else -> ordenados()
-                    }.let { FilmesFiltro.filtrar(it, filtroS, posS) }   // o filtro combinado vale sobre qualquer categoria
+                    }.let { FilmesFiltro.filtrar(it, filtroS, posS, notasS) }   // o filtro combinado vale sobre qualquer categoria
                 }
                 Estado(vis, res, acoes, botoes, fixas, rola, ch, g)
             },
@@ -665,6 +680,30 @@ class FilmesActivity : Activity() {
         Fundo.rodar {
             val info = PlayerCarga.fichaFilme(this, f)
             tela.post { if (!isDestroyed && ficha === f) { fichaInfo = info; desenharFicha(f, info, manterFoco = true) } }
+            buscarExterno(f, info)
+        }
+    }
+
+    /**
+     * Ficha de fora (fatia 2, 14/11/2026): TMDB (sinopse no idioma da TV quando a lista não tem, elenco, saga) e as notas
+     * do MDBList. Roda fora da tela, depois da ficha do servidor; sem chave nenhuma, não faz nada.
+     */
+    private fun buscarExterno(f: Filme, info: FichaFilme?) {
+        if (!InfoExternaCache.temTmdb() && !InfoExternaCache.temNotas(this)) return
+        val g = InfoExternaCache.resolver(this, f.chave, f.nome, f.ano ?: info?.lancamento?.take(4)?.toIntOrNull(), false, info?.tmdb ?: f.tmdb)
+        val saga = g.detalhe?.colecao?.let { c ->
+            val partes = InfoExternaCache.colecao(c.id).takeIf { it.size > 1 } ?: return@let null
+            val vis = todos
+            val ids = vis.mapNotNullTo(HashSet()) { it.tmdb }
+            val nomes = vis.mapTo(HashSet()) { InfoExterna.chaveNomeAno(Vod.nomeLimpo(it.nome), it.ano) }
+            val (tem, total) = InfoExterna.contarNaLista(partes, ids, nomes)
+            Triple(c.nome, tem, total)
+        }
+        tela.post {
+            if (isDestroyed || ficha !== f) return@post
+            externo = f to g
+            sagaExterna = saga?.let { f to it }
+            desenharFicha(f, fichaInfo, manterFoco = true)
         }
     }
 
@@ -694,6 +733,14 @@ class FilmesActivity : Activity() {
             rotuloVersao(Idioma.versao(f.nome, f.grupo)),
         ).joinToString("   ·   ")
         texto.addView(TextView(this).apply { text = dados; textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(10), 0, 0) })
+        // Notas de fora (MDBList): "IMDb 7,8 · Rotten Tomatoes 93% · Letterboxd 3,9", em âmbar como a estrela.
+        val ext = externo?.takeIf { it.first === f }?.second
+        ext?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { n ->
+            texto.addView(TextView(this).apply { text = InfoExterna.textoNotas(n); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPadding(0, dp(6), 0, 0) })
+        }
+        sagaExterna?.takeIf { it.first === f }?.second?.let { (nome, tem, total) ->
+            texto.addView(TextView(this).apply { text = getString(R.string.ext_saga, nome, tem, total); textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(6), 0, 0) })
+        }
 
         // Botões: Continuar (se começou) + Do começo, ou só Assistir.
         val pos = posicoes[f.chave]
@@ -728,13 +775,23 @@ class FilmesActivity : Activity() {
             botoes.addView(botao(getString(R.string.filmes_colecao), "colecao") { abrirColecao(lista) },
                 LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(12) })
         }
+        // Achado pela busca do nome (a lista não mandou o id): "Não é este filme" refaz a busca sem ele.
+        if (ext?.tmdb != null && f.tmdb == null && info?.tmdb == null) botoes.addView(
+            botao(getString(R.string.ext_nao_e_este), "naoeeste") {
+                externo = null; sagaExterna = null
+                Fundo.rodar { InfoExternaCache.recusar(this, f.chave); buscarExterno(f, fichaInfo) }
+                desenharFicha(f, fichaInfo, manterFoco = false)
+            }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(12) })
         texto.addView(botoes)
 
         val corpo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         if (info == null) corpo.addView(TextView(this).apply { text = getString(R.string.filmes_ficha_carregando); textSize = Estilo.Leitura.AVISO; setTextColor(apagado) })
-        info?.sinopse?.takeIf { it.isNotEmpty() }?.let { corpo.addView(TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.25f) }) }
+        // Sinopse e elenco: os da lista; sem eles, os do TMDB (no idioma da TV).
+        (info?.sinopse?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.sinopse?.takeIf { it.isNotEmpty() })
+            ?.let { corpo.addView(TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.25f) }) }
         info?.diretor?.takeIf { it.isNotEmpty() }?.let { corpo.addView(rotuloValor(getString(R.string.filmes_direcao), it)) }
-        info?.elenco?.takeIf { it.isNotEmpty() }?.let { corpo.addView(rotuloValor(getString(R.string.filmes_elenco), it)) }
+        (info?.elenco?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.elenco?.takeIf { it.isNotEmpty() }?.joinToString(", "))
+            ?.let { corpo.addView(rotuloValor(getString(R.string.filmes_elenco), it)) }
         // A sinopse longa rola com ▼ (o ScrollView não pega foco; quem rola é a tecla, ver onKeyDown).
         val rolagem = ScrollView(this).apply { addView(corpo); isFocusable = false; tag = "rolagem" }
         texto.addView(rolagem, LinearLayout.LayoutParams(-1, 0, 1f))

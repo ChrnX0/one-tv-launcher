@@ -7,7 +7,7 @@
     <string name="sv_linha_det">Trakt, Simkl, MDBList, TMDB and OpenSubtitles</string>
     <string name="sv_trakt_det">Keeps what you watched and your watchlist in sync with your phone</string>
     <string name="sv_simkl_det">Like Trakt, also great for anime. Use one or both</string>
-    <string name="sv_mdblist_det">Ratings from IMDb, Rotten Tomatoes, Letterboxd and lists such as Top 250</string>
+    <string name="sv_mdblist_det">Optional: Rotten Tomatoes, Letterboxd and Metacritic ratings, and lists such as Top 250</string>
     <string name="sv_tmdb_det">Plot, cast and next episode date, in the TV\'s language</string>
     <string name="sv_os_det">Online subtitles. Without an account: 5 a day. With a free account: 20</string>
     <string name="sv_desligado">Sign in</string>
@@ -41,4 +41,13 @@
     <string name="sv_conferindo">Checking with %1$s…</string>
     <string name="sv_limite_dia">The daily subtitle limit is over. It renews in 24 h (with an OpenSubtitles account it is 20 a day).</string>
     <string name="sv_tmdb_atribuicao">This product uses the TMDB API but is not endorsed or certified by TMDB.</string>
+    <string name="ext_saga">%1$s: %2$d of %3$d in your list</string>
+    <string name="ext_nao_e_este">Not this movie</string>
+    <string name="ext_proximo">New episode %1$s (S%2$dE%3$d)</string>
+    <string name="ext_hoje">today</string>
+    <string name="ext_amanha">tomorrow</string>
+    <string name="sv_mdblist_passos">Optional: adds Rotten Tomatoes, Letterboxd and Metacritic to the IMDb rating (which already works without it).\n1. Point the phone camera at the code on the left, create a free account and copy the API key.\n2. Point at the code on the right: the web panel opens on Settings. Paste the key under MDBList and tap Save key.\n3. The TV checks it right away and this screen continues by itself.</string>
+    <string name="sv_mdblist_qr1">MDBList key page</string>
+    <string name="sv_mdblist_qr2">Web panel (%1$s)</string>
+    <string name="sv_mdblist_digitar">Type the key here</string>
 </resources>

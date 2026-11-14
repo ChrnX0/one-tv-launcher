@@ -1024,7 +1024,7 @@ function desenharServicos(r) {
     const topo = document.createElement('p');
     const nome = document.createElement('strong'); nome.textContent = s.nome;
     const est = document.createElement('span'); est.className = 'aviso-curto';
-    est.textContent = s.id === 'tmdb' || (s.id === 'mdblist' && s.situacao === 'conectado' && !s.propria) ? ' · ligado' : s.situacao === 'conectado' && s.usuario ? ` · conectado como ${s.usuario}` : ` · ${SITUACAO_SERVICO[s.situacao] || s.situacao}`;
+    est.textContent = s.id === 'tmdb' ? ' · ligado' : s.situacao === 'conectado' && s.usuario ? ` · conectado como ${s.usuario}` : ` · ${SITUACAO_SERVICO[s.situacao] || s.situacao}`;
     topo.append(nome, est);
     const frase = document.createElement('p'); frase.className = 'aviso-curto'; frase.textContent = s.frase;
     bloco.append(topo, frase);
@@ -1038,7 +1038,7 @@ function desenharServicos(r) {
       if (resp) { desenharServicos(resp); if (ok) aviso(ok, 'ok'); }
     };
     const sessao = s.sessao;
-    if (s.situacao === 'conectado' && s.id !== 'tmdb' && !(s.id === 'mdblist' && !s.propria)) {
+    if (s.situacao === 'conectado' && s.id !== 'tmdb') {
       bloco.append(botao('Sair', () => agir({ acao: 'sair', servico: s.id }, `Sair do ${s.nome}?`,
         `A TV esquece a conta e para de falar com o ${s.nome}. O que está lá continua lá.`, 'Sair', `${s.nome}: saiu.`), false));
     } else if (sessao && sessao.estado === 'esperando') {
@@ -1065,11 +1065,9 @@ function desenharServicos(r) {
       campo.type = 'password'; campo.autocomplete = 'off'; campo.placeholder = 'Chave da API do MDBList'; campo.setAttribute('aria-label', 'Chave da API do MDBList');
       const ajuda = document.createElement('p'); ajuda.className = 'aviso-curto';
       const l = document.createElement('a'); l.href = 'https://mdblist.com/preferences/'; l.target = '_blank'; l.rel = 'noopener'; l.textContent = 'mdblist.com/preferences';
-      ajuda.append('A chave fica em ', l, ' (API Key). Copie e cole aqui.');
-      // Com a chave do app as notas já funcionam: a da pessoa é opcional e fica escondida atrás de um link.
-      const opcional = s.situacao === 'conectado';
-      const extra = document.createElement('div'); extra.hidden = opcional;
-      if (opcional) bloco.append(botao('Usar a minha conta do MDBList (opcional)', () => { extra.hidden = false; }, false));
+      ajuda.append('Opcional: soma Rotten Tomatoes, Letterboxd e Metacritic à nota do IMDb. 1. Crie uma conta grátis e abra ', l, '. 2. Copie a API Key. 3. Cole aqui e grave: a TV confere na hora.');
+      // Opcional (a nota do IMDb já vem sem conta): 3 passos, sem digitar no controle da TV.
+      const extra = document.createElement('div');
       bloco.append(extra);
       extra.append(ajuda, campo, botao('Gravar chave', () => {
         const chave = campo.value.trim();

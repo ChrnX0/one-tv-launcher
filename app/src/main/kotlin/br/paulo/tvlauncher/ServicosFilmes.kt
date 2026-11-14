@@ -30,14 +30,15 @@ object ServicosFilmes {
     /** As chaves do aplicativo (BuildConfig). Vazio = o serviço não existe neste build. */
     data class ChavesApp(
         val tmdb: String = "", val traktId: String = "", val traktSegredo: String = "",
-        val simklId: String = "", val openSubtitles: String = "", val mdblist: String = "",
+        val simklId: String = "", val openSubtitles: String = "",
     ) {
         fun disponivel(s: Servico): Boolean = when (s) {
             Servico.TRAKT -> traktId.isNotBlank() && traktSegredo.isNotBlank()
             Servico.SIMKL -> simklId.isNotBlank()
             Servico.TMDB -> tmdb.isNotBlank()
             Servico.OPENSUBTITLES -> openSubtitles.isNotBlank()
-            // A do app (do desenvolvedor) quando o build tem; sem ela, a pessoa pode pôr a dela (mdblist.com/preferences).
+            // A chave é da pessoa (mdblist.com/preferences): o MDBList não tem chave de app. Decisão do dono (14/11): extra
+            // opcional, com passo a passo fácil (QR para o site, colar pelo painel). A nota do IMDb vem do arquivo público.
             Servico.MDBLIST -> true
         }
     }

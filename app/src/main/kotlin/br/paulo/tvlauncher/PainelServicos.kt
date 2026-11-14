@@ -22,7 +22,7 @@ object PainelServicos {
     private val FRASES = mapOf(
         Servico.TRAKT to "Deixa o que você viu e a sua lista iguais aos do celular.",
         Servico.SIMKL to "Igual ao Trakt, ótimo também para anime. Use um ou os dois.",
-        Servico.MDBLIST to "Notas do IMDb, Rotten Tomatoes, Letterboxd e listas como o Top 250.",
+        Servico.MDBLIST to "Opcional: notas do Rotten Tomatoes, Letterboxd e Metacritic, e listas como o Top 250.",
         Servico.TMDB to "Sinopse, elenco e data do próximo episódio, no idioma da TV.",
         Servico.OPENSUBTITLES to "Legendas da internet. Sem conta: 5 por dia. Com conta grátis: 20.",
     )
@@ -33,7 +33,6 @@ object PainelServicos {
             if (e.situacao == ServicosContas.Situacao.INDISPONIVEL) continue
             val o = JSONObject().put("id", e.servico.id).put("nome", e.servico.nome).put("frase", FRASES[e.servico])
                 .put("situacao", e.situacao.name.lowercase()).put("usuario", e.usuario)
-                .put("propria", e.servico == Servico.MDBLIST && ServicosContas.conta(app, Servico.MDBLIST) != null)
                 .put("login", when (e.servico) {
                     Servico.TRAKT, Servico.SIMKL -> "codigo"
                     Servico.MDBLIST -> "chave"
