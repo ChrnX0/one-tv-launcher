@@ -14,7 +14,7 @@ import android.graphics.drawable.Drawable
  * Arquivo separado do IconeApp para não disputar o arquivo do sistema de design com outra frente.
  */
 class IconeMidia(private val tipo: Tipo, cor: Int = Estilo.TEXTO) : Drawable() {
-    enum class Tipo { PASTA, VIDEO, MUSICA, FOTO, ARQUIVO, SERVIDOR, COMPUTADOR, NUVEM, LINK, MAIS, ATUALIZAR, CONTINUAR, LUPA, NOVOS }
+    enum class Tipo { PASTA, VIDEO, MUSICA, FOTO, ARQUIVO, SERVIDOR, COMPUTADOR, NUVEM, LINK, MAIS, ATUALIZAR, CONTINUAR, LUPA, NOVOS, PENDRIVE }
 
     private val traco = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE; strokeWidth = 1.6f; strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND; color = cor
@@ -64,6 +64,11 @@ class IconeMidia(private val tipo: Tipo, cor: Int = Estilo.TEXTO) : Drawable() {
             Tipo.COMPUTADOR -> {
                 c.drawRoundRect(RectF(3f, 4f, 21f, 16f), 2f, 2f, traco)
                 c.drawLine(12f, 16f, 12f, 20f, traco); c.drawLine(8f, 20f, 16f, 20f, traco)
+            }
+            Tipo.PENDRIVE -> {   // pendrive em pé: corpo arredondado e o conector em cima (14/11/2026)
+                c.drawRoundRect(RectF(7f, 9f, 17f, 21f), 2.5f, 2.5f, traco)
+                c.drawRect(RectF(9f, 3f, 15f, 9f), traco)
+                c.drawLine(11f, 5.5f, 11f, 6.5f, traco); c.drawLine(13f, 5.5f, 13f, 6.5f, traco)
             }
             Tipo.NUVEM -> {
                 p.reset(); p.moveTo(7f, 18f); p.quadTo(3f, 18f, 3f, 14.5f); p.quadTo(3f, 11f, 6.8f, 11f)

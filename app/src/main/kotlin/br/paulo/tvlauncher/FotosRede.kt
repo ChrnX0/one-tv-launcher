@@ -27,10 +27,10 @@ object FotosRede {
     const val INTERVALO_MS = 6 * 60 * 60_000L
     private const val MAX_BYTES = 15 * 1024 * 1024   // o mesmo teto do envio pelo painel
 
-    /** De onde vêm as fotos. [tipo] = ContaMidia.SMB ou WEBDAV; [caminho] = id da pasta na listagem daquela conta. */
+    /** De onde vêm as fotos. [tipo] = um tipo de Pastas.TIPOS ou WEBDAV; [caminho] = id da pasta na listagem daquela conta. */
     data class Origem(val conta: String, val tipo: String, val caminho: String, val nome: String)
 
-    val TIPOS_ACEITOS = setOf(ContaMidia.SMB, ContaMidia.WEBDAV)
+    val TIPOS_ACEITOS = Pastas.TIPOS + ContaMidia.WEBDAV   // SMB, FTP, FTPS, SFTP, NFS e WebDAV
 
     fun pasta(ctx: Context) = File(ctx.noBackupFilesDir, "fotos-rede")
     private fun arquivoOrigem(ctx: Context) = File(ctx.noBackupFilesDir, "fotos-rede-origem.json")
@@ -100,7 +100,7 @@ object FotosRede {
         val c = MidiaArmazem.conta(ctx, o.conta)
         if (c == null) { Log.i(TAG, "a conta da pasta foi removida: parando"); escolher(ctx, null); return@synchronized }
         val fotos = try {
-            fotosDa(when (o.tipo) { ContaMidia.SMB -> Smb.listar(c, o.caminho); else -> WebDav.listar(c, o.caminho) })
+            fotosDa(if (o.tipo == ContaMidia.WEBDAV) WebDav.listar(c, o.caminho) else Pastas.listar(c, o.caminho))
         } catch (e: Exception) { Log.w(TAG, "listar: $e"); return@synchronized }
         val dir = pasta(ctx).apply { mkdirs() }
         val locais = dir.listFiles()?.map { it.name }?.toSet().orEmpty()
@@ -110,10 +110,7 @@ object FotosRede {
         for (caminho in baixar) {
             if (origem(ctx) != o) return@synchronized   // trocaram a pasta no meio: a próxima cópia cuida
             try {
-                val bytes = when (o.tipo) {
-                    ContaMidia.SMB -> Smb.lerTudo(c, caminho, MAX_BYTES)
-                    else -> baixarDav(c, caminho)
-                } ?: continue
+                val bytes = (if (o.tipo == ContaMidia.WEBDAV) baixarDav(c, caminho) else Pastas.lerTudo(c, caminho, MAX_BYTES)) ?: continue
                 val bmp = reduzir(bytes) ?: continue
                 val tmp = File(dir, ".baixando.tmp")
                 tmp.outputStream().use { bmp.compress(Bitmap.CompressFormat.JPEG, 85, it) }

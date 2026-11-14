@@ -88,6 +88,7 @@
         <item>Com o modo simples ligado, TV ao vivo, Filmes e Séries abrem em Favoritos ou Continuar, com menos linhas e letra maior</item>
         <item>Filmes e séries com som Dolby (AC3, E-AC3), DTS ou TrueHD agora tocam com som mesmo com “Volume parecido” ou “Voz mais clara” ligados; canais com áudio MP2 também</item>
         <item>Legendas de Blu-ray e DVD (PGS, VobSub) aparecem nos filmes e séries, e legenda ASS de anime sai com a cor e a posição originais</item>
+        <item>Na rede: pastas por FTP, FTPS, SFTP e NFS (NAS, roteador com disco, PC Linux ou Mac), e o pendrive ou disco USB ligado na TV aparece sozinho em “Ligado na TV”</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME e vá até o fim da linha ASSISTIR E JOGAR</item>
@@ -162,6 +163,7 @@
         <item>Num filme com diálogo baixo, ▼ › ligue e desligue “Voz mais clara”</item>
         <item>Ligue “Voz mais clara” no ▼ e abra um filme com som Dolby ou DTS (de Na rede ou de Filmes)</item>
         <item>Abra um filme MKV com legenda de Blu-ray (PGS) ou um anime com legenda ASS e ligue a legenda no ▼</item>
+        <item>Ligue um pendrive com vídeos na TV e abra Na rede</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Aparece o card Jogos, âmbar, depois de Na rede?</item>
@@ -236,5 +238,6 @@
         <item>Com a opção ligada, as falas ficaram mais fáceis de entender?</item>
         <item>O filme saiu com som (antes ficava mudo)?</item>
         <item>A legenda apareceu inteira, no lugar certo e sem atrasar?</item>
+        <item>O pendrive aparece em “Ligado na TV” e um vídeo dele toca?</item>
     </string-array>
 </resources>

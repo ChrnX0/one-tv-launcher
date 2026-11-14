@@ -15,6 +15,10 @@ import java.util.Locale
  *    em usuarioId, o identificador do servidor (para reconhecer o mesmo servidor achado na rede).
  *  - [WEBDAV] (10/11/2026): endereço base (Nextcloud: https://nuvem/remote.php/dav/files/<usuário>), usuário e senha.
  *  - [LINK] (10/11/2026): um endereço de vídeo (http/https/HLS) ou de uma lista M3U, sem login.
+ *  - [FTP], [FTPS], [SFTP], [NFS] (14/11/2026): pastas de arquivos como o SMB (ver PastaArquivos.kt). servidor = nome ou
+ *    IP com porta opcional; pasta = onde começa (NFS: o caminho exportado, ex. /volume1/video). FTPS confere o
+ *    certificado como qualquer https. SFTP guarda em [token] a impressão da chave do servidor na 1ª conexão e recusa
+ *    se ela mudar depois (é o "known_hosts" do ssh). NFS não tem senha (o servidor confia no IP da TV).
  *
  * Só texto e regras aqui (testes em MidiaContasTest). Quem grava cifrado é o MidiaArmazem.
  */
@@ -37,7 +41,11 @@ data class ContaMidia(
         const val PLEX = "plex"
         const val WEBDAV = "webdav"
         const val LINK = "link"
-        val TIPOS = setOf(SMB, JELLYFIN, EMBY, PLEX, WEBDAV, LINK)
+        const val FTP = "ftp"
+        const val FTPS = "ftps"
+        const val SFTP = "sftp"
+        const val NFS = "nfs"
+        val TIPOS = setOf(SMB, JELLYFIN, EMBY, PLEX, WEBDAV, LINK, FTP, FTPS, SFTP, NFS)
     }
 
     /** Jellyfin e Emby falam a mesma língua (o Jellyfin nasceu do Emby): o mesmo código serve aos dois. */
@@ -115,6 +123,34 @@ object MidiaContas {
         val host = t.substringAfter("://").substringBefore('/').substringBefore(':')
         if (!servidorValido(host) || t.contains('@')) return null   // usuário e senha vão nos campos, nunca no endereço
         return t
+    }
+
+    /** O que a pessoa digitou para FTP, FTPS, SFTP ou NFS: tipo de conta, servidor (com porta, se veio) e pasta. */
+    data class EnderecoArquivos(val tipo: String, val servidor: String, val pasta: String)
+
+    /**
+     * "ftp://nas/Filmes", "ftps://nas:990", "sftp://paulo-pc/home/paulo/Vídeos", "nfs://nas/volume1/video" ou o jeito
+     * clássico do NFS "nas:/volume1/video". Sem esquema não dá para saber o protocolo: null. Usuário e senha nunca vão
+     * no endereço (ftp://ana:senha@nas): null também, eles têm campo próprio.
+     */
+    fun lerEnderecoArquivos(texto: String): EnderecoArquivos? {
+        val t = texto.trim()
+        if (t.isEmpty() || t.any { it.isWhitespace() && it != ' ' } || t.contains('\\')) return null
+        val baixo = t.lowercase(Locale.ROOT)
+        val esquema = listOf("sftp", "ftps", "ftp", "nfs").firstOrNull { baixo.startsWith("$it://") }
+        val (tipo, resto) = when {
+            esquema != null -> esquema to t.substring(esquema.length + 3)
+            Regex("^[A-Za-z0-9._-]+:/([^/].*)?$").matches(t) -> ContaMidia.NFS to t.replaceFirst(":/", "/")   // nas:/volume1/video
+            else -> return null
+        }
+        val servidor = resto.substringBefore('/')
+        if (servidor.contains('@') || !servidorValido(servidor)) return null
+        val porta = servidor.substringAfter(':', "")
+        if (porta.isNotEmpty() && (porta.toIntOrNull() ?: 0) !in 1..65535) return null
+        val pasta = resto.substringAfter('/', "").split('/').filter { it.isNotEmpty() }
+        if (pasta.any { it == ".." || it == "." }) return null
+        if (tipo == ContaMidia.NFS && pasta.isEmpty()) return null   // NFS precisa do caminho exportado
+        return EnderecoArquivos(tipo, servidor, pasta.joinToString("/"))
     }
 
     /** Link de vídeo ou lista: só http/https (o player não toca rtmp/udp), sem espaços. */

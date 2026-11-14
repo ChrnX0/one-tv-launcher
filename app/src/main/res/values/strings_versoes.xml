@@ -91,6 +91,7 @@
         <item>With simple mode on, live TV, Movies and Series open on Favorites or Continue, with fewer rows and larger text</item>
         <item>Movies and series with Dolby (AC3, E-AC3), DTS or TrueHD sound now play with sound even with “Even volume” or “Clearer voices” on; channels with MP2 audio too</item>
         <item>Blu-ray and DVD subtitles (PGS, VobSub) now show in movies and series, and anime ASS subtitles keep their original colour and position</item>
+        <item>Network: folders over FTP, FTPS, SFTP and NFS (NAS, router with a drive, Linux or Mac computer), and a USB drive plugged into the TV shows up by itself under “Plugged into the TV”</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>jogos_card</item>
@@ -165,6 +166,7 @@
         <item>voz_clara</item>
         <item>audio_dolby_dts</item>
         <item>legenda_imagem</item>
+        <item>pendrive_na_rede</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME and go to the end of the WATCH AND PLAY row</item>
@@ -239,6 +241,7 @@
         <item>In a movie with quiet dialogue, ▼ › turn “Clearer voices” on and off</item>
         <item>Turn on “Clearer voices” in ▼ and open a movie with Dolby or DTS sound (from On the network or Movies)</item>
         <item>Open an MKV movie with Blu-ray (PGS) subtitles or an anime with ASS subtitles and turn subtitles on in ▼</item>
+        <item>Plug a USB drive with videos into the TV and open Network</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Is there an amber Games card after Network?</item>
@@ -313,5 +316,6 @@
         <item>With it on, was speech easier to understand?</item>
         <item>Did the movie play with sound (before it was silent)?</item>
         <item>Did the subtitle show complete, in the right place and in sync?</item>
+        <item>Does the drive show under “Plugged into the TV” and does a video from it play?</item>
     </string-array>
 </resources>

@@ -81,7 +81,11 @@ android {
         // 04/11/2026: tabelas da assinatura pós-quântica "Picnic" do bouncycastle (vem de carona numa dependência da
         // libadb). Eram 1,2 MB comprimidos (~2,3 MB reais) no APK e nada do launcher usa Picnic: o pareamento
         // e o TLS do adb usam SPAKE2 (libspake2) e conscrypt. Medido no release: lowmcL1/L3/L5.bin.properties.
-        resources { excludes += "org/bouncycastle/pqc/crypto/picnic/**" }
+        resources {
+            excludes += "org/bouncycastle/pqc/crypto/picnic/**"
+            // Manifesto OSGi repetido no JSch e no error_prone_annotations (14/11/2026): metadado de servidor Java, não vai no APK.
+            excludes += "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+        }
     }
 
     // Chave de assinatura do release (04/11/2026). Se a variável ASSINATURA_ARQUIVO apontar para um keystore (no GitHub
@@ -158,6 +162,10 @@ dependencies {
         // O smbj traz o bcprov-jdk18on; o projeto já tem o bcprov-jdk15to18 (mesmas classes, versão mais nova). Dois = build quebra.
         exclude(group = "org.bouncycastle")
     }
+    // "Na rede" com mais protocolos (14/11/2026): FTP/FTPS (Apache Commons Net, Apache-2.0) e SFTP (JSch, fork mantido
+    // por mwiede, licença BSD; sem dependências). NFS é código nosso (Nfs.kt), sem biblioteca.
+    implementation("commons-net:commons-net:3.13.0")
+    implementation("com.github.mwiede:jsch:2.28.8")
 
     // Testes que rodam no computador (gradlew testReleaseUnitTest), sem TV: a parte do painel no navegador que não
     // usa o Android (PainelHttp, PainelSeguranca). Não entra no APK.

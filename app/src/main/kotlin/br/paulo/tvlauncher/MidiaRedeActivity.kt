@@ -52,8 +52,12 @@ class MidiaRedeActivity : Activity() {
         class PlexO(val c: ContaMidia) : Origem()
         class Dav(val c: ContaMidia) : Origem()
         class Link(val c: ContaMidia) : Origem()
+        /** Pendrive ou disco USB ligado na TV (14/11/2026). */
+        class Local(val raiz: java.io.File) : Origem()
     }
-    private enum class Acao { PLEX, JELLYFIN, EMBY, SMB, WEBDAV, LINK, PROCURAR }
+    private enum class Acao { PLEX, JELLYFIN, EMBY, SMB, WEBDAV, ARQUIVOS, LINK, PROCURAR }
+    /** Um pendrive/disco montado agora: aparece sozinho na raiz, sem cadastrar. */
+    private class Volume(val nome: String, val raiz: java.io.File)
     /** "Usar estas fotos no protetor" (ideia 27): a pasta aberta agora, de uma conta SMB ou WebDAV. */
     private class FotosNoProtetor(val origem: FotosRede.Origem, val quantas: Int)
     /** "Buscar" na raiz de um Jellyfin, Emby ou Plex (ideia 29). */
@@ -170,6 +174,11 @@ class MidiaRedeActivity : Activity() {
     private fun desenharRaiz(texto: String? = null, focarConta: String? = null) {
         val contas = runCatching { MidiaArmazem.contas(this) }.getOrDefault(emptyList())
         val itens = ArrayList<Any>()
+        val volumes = volumesUsb()
+        if (volumes.isNotEmpty()) {
+            itens += Secao(getString(R.string.rede_secao_na_tv))
+            volumes.forEach { itens += Linha(IconeMidia.Tipo.PENDRIVE, it.nome, getString(R.string.rede_sub_usb), null, it) }
+        }
         if (contas.isNotEmpty()) {
             itens += Secao(getString(R.string.rede_secao_seus))
             contas.forEach { itens += linhaConta(it) }
@@ -193,6 +202,7 @@ class MidiaRedeActivity : Activity() {
         itens += Linha(IconeMidia.Tipo.SERVIDOR, "Emby", getString(R.string.rede_sub_jellyfin), null, Acao.EMBY)
         itens += Linha(IconeMidia.Tipo.COMPUTADOR, getString(R.string.rede_acao_smb), getString(R.string.rede_sub_smb), null, Acao.SMB)
         itens += Linha(IconeMidia.Tipo.NUVEM, getString(R.string.rede_acao_webdav), getString(R.string.rede_sub_webdav), null, Acao.WEBDAV)
+        itens += Linha(IconeMidia.Tipo.COMPUTADOR, getString(R.string.rede_acao_arquivos), getString(R.string.rede_sub_arquivos), null, Acao.ARQUIVOS)
         itens += Linha(IconeMidia.Tipo.LINK, getString(R.string.rede_acao_link), getString(R.string.rede_sub_link), null, Acao.LINK)
         itens += Linha(IconeMidia.Tipo.ATUALIZAR, getString(R.string.rede_acao_procurar), null, null, Acao.PROCURAR)
         val velho = pilha[0]
@@ -201,8 +211,8 @@ class MidiaRedeActivity : Activity() {
         pilha[0] = Nivel(velho.titulo, null, itens, if (novo >= 0) novo else velho.foco)
         val resumo = when {
             procurando -> getString(R.string.rede_procurando)
-            contas.isEmpty() && novos.isEmpty() -> getString(R.string.rede_nenhum)
-            else -> (contas.size + novos.size).let { resources.getQuantityString(R.plurals.rede_resumo, it, it) }
+            contas.isEmpty() && novos.isEmpty() && volumes.isEmpty() -> getString(R.string.rede_nenhum)
+            else -> (contas.size + novos.size + volumes.size).let { resources.getQuantityString(R.plurals.rede_resumo, it, it) }
         }
         if (pilha.size == 1) desenhar(texto ?: resumo)
     }
@@ -214,6 +224,10 @@ class MidiaRedeActivity : Activity() {
             ContaMidia.JELLYFIN -> IconeMidia.Tipo.SERVIDOR to "Jellyfin · $onde"
             ContaMidia.EMBY -> IconeMidia.Tipo.SERVIDOR to "Emby · $onde"
             ContaMidia.WEBDAV -> IconeMidia.Tipo.NUVEM to "WebDAV · $onde"
+            ContaMidia.FTP -> IconeMidia.Tipo.COMPUTADOR to "FTP · $onde"
+            ContaMidia.FTPS -> IconeMidia.Tipo.COMPUTADOR to "FTPS · $onde"
+            ContaMidia.SFTP -> IconeMidia.Tipo.COMPUTADOR to "SFTP · $onde"
+            ContaMidia.NFS -> IconeMidia.Tipo.COMPUTADOR to "NFS · $onde"
             ContaMidia.LINK -> IconeMidia.Tipo.LINK to (if (c.pasta == LISTA) getString(R.string.rede_sub_lista, onde) else getString(R.string.rede_sub_video, onde))
             else -> IconeMidia.Tipo.COMPUTADOR to getString(R.string.rede_sub_pasta, onde)
         }
@@ -262,7 +276,8 @@ class MidiaRedeActivity : Activity() {
             val r = runCatching {
                 when (origem) {
                     is Origem.Dlna -> Upnp.navegar(origem.s, id)
-                    is Origem.Pasta -> Smb.listar(origem.c, id)
+                    is Origem.Pasta -> Pastas.listar(origem.c, id)
+                    is Origem.Local -> listarLocal(origem.raiz, id)
                     is Origem.Jelly -> Jellyfin.listar(origem.c, id, aparelho())
                     is Origem.PlexO -> Plex.listar(origem.c, id, aparelho())
                     is Origem.Dav -> WebDav.listar(origem.c, id)
@@ -289,7 +304,7 @@ class MidiaRedeActivity : Activity() {
      */
     private fun linhaFotos(origem: Origem, id: String, nome: String, entradas: List<Upnp.Entrada>): List<Linha> {
         val (conta, tipo) = when (origem) {
-            is Origem.Pasta -> origem.c.id to ContaMidia.SMB
+            is Origem.Pasta -> if (origem.c.tipo in FotosRede.TIPOS_ACEITOS) origem.c.id to origem.c.tipo else return emptyList()
             is Origem.Dav -> origem.c.id to ContaMidia.WEBDAV
             else -> return emptyList()
         }
@@ -445,8 +460,9 @@ class MidiaRedeActivity : Activity() {
                 ContaMidia.PLEX -> entrar(Origem.PlexO(e), "", e.nome)
                 ContaMidia.WEBDAV -> entrar(Origem.Dav(e), "", e.nome)
                 ContaMidia.LINK -> if (e.pasta == LISTA) entrar(Origem.Link(e), "", e.nome) else { nivel.foco = pos; VodActivity.abrirUrl(this, e.servidor, e.nome) }
-                else -> entrar(Origem.Pasta(e), Smb.inicio(e), e.nome)
+                else -> entrar(Origem.Pasta(e), Pastas.inicio(e), e.nome)
             }
+            is Volume -> entrar(Origem.Local(e.raiz), "", e.nome)
             is Plex.Achado -> loginPlex()
             is Jellyfin.Achado -> formularioJellyfin(e, e.emby)
             is Upnp.Servidor -> entrar(Origem.Dlna(e), "0", e.nome)
@@ -456,6 +472,7 @@ class MidiaRedeActivity : Activity() {
             Acao.EMBY -> formularioJellyfin(null, true)
             Acao.SMB -> formularioSmb(null)
             Acao.WEBDAV -> formularioWebDav()
+            Acao.ARQUIVOS -> formularioArquivos()
             Acao.LINK -> formularioLink()
             Acao.PROCURAR -> procurar()
             is FotosNoProtetor -> alternarFotos(pos, e)
@@ -493,6 +510,10 @@ class MidiaRedeActivity : Activity() {
             nome.contains("LOGON_FAILURE", true) || nome.contains("ACCESS_DENIED", true) ||
                 nome.contains("SecurityException 401") -> getString(R.string.rede_erro_senha)
             nome.contains("BAD_NETWORK_NAME", true) -> getString(R.string.rede_erro_pasta)
+            nome.contains("NFS_PORTA") -> getString(R.string.rede_erro_nfs_porta)
+            nome.contains("NFS_IP") || nome.contains("NFS_RECUSADO") -> getString(R.string.rede_erro_nfs_ip)
+            nome.contains("CHAVE_MUDOU") -> getString(R.string.rede_erro_chave_mudou)
+            nome.contains("SEM_ACESSO_ARQUIVOS") -> getString(R.string.rede_erro_usb_acesso)
             nome.contains("certificado", true) || nome.contains("SSLHandshake", true) || nome.contains("CertPath", true) ->
                 getString(R.string.rede_erro_certificado)
             nome.contains("UnknownHost", true) || nome.contains("ConnectException", true) || nome.contains("Timeout", true) ||
@@ -680,6 +701,64 @@ class MidiaRedeActivity : Activity() {
         }
     }
 
+    // ---------------------------------------------------------------- adicionar: FTP, FTPS, SFTP e NFS (14/11/2026)
+
+    /** Um formulário só para os quatro: o começo do endereço (ftp://, ftps://, sftp://, nfs://) diz o protocolo. */
+    private fun formularioArquivos() {
+        formulario(getString(R.string.rede_acao_arquivos), getString(R.string.rede_arq_explica), listOf(
+            Campo(getString(R.string.rede_arq_endereco), endereco = true),
+            Campo(getString(R.string.rede_arq_usuario)),
+            Campo(getString(R.string.rede_senha), senha = true),
+            Campo(getString(R.string.rede_nome_opcional)),
+        ), getString(R.string.rede_testar_salvar)) { v, fim ->
+            val e = MidiaContas.lerEnderecoArquivos(v[0])
+            if (e == null) { fim(getString(R.string.rede_arq_endereco_erro)); return@formulario }
+            val u = v[1].trim()
+            if (e.tipo == ContaMidia.SFTP && u.isEmpty()) { fim(getString(R.string.rede_jf_usuario_falta)); return@formulario }
+            val nome = v[3].trim().ifEmpty { e.pasta.substringAfterLast('/').ifEmpty { e.servidor.substringBefore(':') } }
+            val conta = ContaMidia("", e.tipo, nome, e.servidor, e.pasta, u, if (e.tipo == ContaMidia.NFS) "" else v[2])
+            if (e.tipo == ContaMidia.SFTP) testarESalvarComo(conta, fim) { Sftp.conhecer(it) }
+            else testarESalvar(conta, fim) { Pastas.listar(it.copy(id = "teste"), Pastas.inicio(it)) }
+        }
+    }
+
+    /** Como [testarESalvar], mas o teste devolve a conta completada (SFTP: impressão da chave e pasta inicial). */
+    private fun testarESalvarComo(c: ContaMidia, fim: (String?) -> Unit, testar: (ContaMidia) -> ContaMidia) {
+        rede.execute {
+            val r = runCatching { testar(c) }
+            val salva = r.getOrNull()?.let { MidiaArmazem.salvar(this, it) }
+            tela.post {
+                if (isDestroyed) return@post
+                when {
+                    r.isFailure -> fim(erroLegivel(r.exceptionOrNull()))
+                    salva == null -> fim(getString(R.string.rede_erro_cheio))
+                    else -> { fim(null); desenharRaiz(getString(R.string.rede_salva, salva.nome), salva.id) }
+                }
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------- pendrive e disco USB (14/11/2026)
+
+    /** Volumes removíveis montados agora (pendrive, disco no hub USB). Android 11+: a TV é 14. */
+    private fun volumesUsb(): List<Volume> {
+        if (android.os.Build.VERSION.SDK_INT < 30) return emptyList()
+        val sm = getSystemService(android.os.storage.StorageManager::class.java) ?: return emptyList()
+        return runCatching {
+            sm.storageVolumes.filter { it.isRemovable && it.state == android.os.Environment.MEDIA_MOUNTED }
+                .mapNotNull { v -> v.directory?.let { Volume(v.getDescription(this).ifBlank { it.name }, it) } }
+        }.getOrDefault(emptyList())
+    }
+
+    /** Pasta do pendrive. Na 1ª vez pede ao nosso shell o "acesso a todos os arquivos" (fora da thread da tela). */
+    private fun listarLocal(raiz: java.io.File, caminho: String): List<Upnp.Entrada> {
+        if (!PainelArquivos.garantirAcesso(applicationContext)) throw SecurityException("SEM_ACESSO_ARQUIVOS")
+        require(Pastas.caminhoValido(caminho)) { "caminho inválido" }
+        return PastaLocal(raiz).use { p ->
+            Pastas.entradas(p.listar(caminho), caminho) { sub -> android.net.Uri.fromFile(java.io.File(raiz, sub)).toString() }
+        }
+    }
+
     // ---------------------------------------------------------------- adicionar: Jellyfin e Emby
 
     /** Identificador deste aparelho para Jellyfin/Emby/Plex (resumo do ANDROID_ID, o mesmo do painel). */
@@ -857,7 +936,8 @@ class MidiaRedeActivity : Activity() {
         rede.execute {
             val bmp = runCatching {
                 val bytes = when (origem) {
-                    is Origem.Pasta -> Smb.lerTudo(origem.c, e.id)
+                    is Origem.Pasta -> Pastas.lerTudo(origem.c, e.id)
+                    is Origem.Local -> PastaLocal(origem.raiz).use { Pastas.lerTudo(it, e.id) }
                     is Origem.Jelly -> (URL("${origem.c.servidor}/Items/${e.id}/Images/Primary?maxWidth=1920").openConnection() as HttpURLConnection).run {
                         connectTimeout = 4000; readTimeout = 15000
                         setRequestProperty("Authorization", Jellyfin.cabecalho(aparelho(), origem.c.token))

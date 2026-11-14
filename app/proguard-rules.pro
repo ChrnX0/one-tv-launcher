@@ -27,3 +27,14 @@
 -dontwarn org.ietf.jgss.**
 -dontwarn org.slf4j.**
 -dontwarn javax.el.**
+
+# SFTP (JSch, 14/11/2026): os algoritmos são carregados pelo NOME da classe (Class.forName) a partir da configuração;
+# sem isto o R8 apagaria as classes "não usadas" e a conexão falharia só no APK de release.
+-keep class com.jcraft.jsch.** { *; }
+-dontwarn com.jcraft.jsch.**
+-dontwarn org.apache.logging.log4j.**
+-dontwarn com.sun.jna.**
+-dontwarn org.newsclub.net.unix.**
+# FTP (Commons Net): os leitores de listagem (formato UNIX, Windows, MLSD...) também são escolhidos pelo nome.
+-keep class org.apache.commons.net.ftp.parser.** { *; }
+-dontwarn org.apache.commons.net.**

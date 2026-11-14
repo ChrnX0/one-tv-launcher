@@ -291,7 +291,7 @@ class VodActivity : Activity() {
         val http = DefaultDataSource.Factory(this, http0)
         // Fontes de legenda (14/11/2026, NextLib): o leitor de MKV troca as legendas ASS/PGS/VobSub/DVB por faixas que o
         // FFmpeg e o libass desenham em imagem; withFfmpegSubtitles faz o mesmo com legenda ASS de fora do arquivo.
-        val dados = Smb.Fabrica(this, http)
+        val dados = FontePastas.Fabrica(this, http)
         val fontes = DefaultMediaSourceFactory(dados, FfmpegSubtitleExtractorsFactory()).withFfmpegSubtitles(dados)
         val p = ExoPlayer.Builder(this, EfeitosSom.fabrica(this)).setMediaSourceFactory(fontes)
             .setSeekBackIncrementMs(10_000).setSeekForwardIncrementMs(30_000).build()
