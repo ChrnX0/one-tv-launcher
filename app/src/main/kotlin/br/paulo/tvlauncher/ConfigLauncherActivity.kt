@@ -610,6 +610,21 @@ class ConfigLauncherActivity : Activity() {
                 startActivity(Intent(this, BloqueioCanaisActivity::class.java).putExtra(BloqueioCanaisActivity.EXTRA_INFANTIS, true))
             }
         }, lp())
+        // Ideia 91: idade máxima no modo infantil (classificação indicativa do TMDB). Escolher pede o PIN.
+        fun nomeIdade(i: Int) = when (i) { Classificacao.DESLIGADA -> getString(R.string.idade_so_categorias); 0 -> getString(R.string.idade_livre); else -> getString(R.string.idade_anos, i) }
+        lateinit var linhaIdade: LinhaCfg
+        linhaIdade = linha(getString(R.string.idade_titulo), getString(R.string.idade_det), valor = nomeIdade(r.idadeMax)) {
+            pedirPinParental {
+                val atual = PlayerArmazem.parental(this)
+                Estilo.lista(this, getString(R.string.idade_titulo), Classificacao.OPCOES.map { nomeIdade(it) },
+                    listOf(Classificacao.OPCOES.indexOf(atual.idadeMax))) { i ->
+                    val nova = PlayerArmazem.parental(this).copy(idadeMax = Classificacao.OPCOES[i])
+                    if (PlayerArmazem.definirParental(this, nova)) linhaIdade.valor(nomeIdade(nova.idadeMax))
+                    else linhaIdade.detalhe(getString(R.string.cl_nao_gravei_tente))
+                }
+            }
+        }
+        c.addView(linhaIdade, lp())
         // PIN das crianças (ideia 34): destrava na frente da criança sem entregar o PIN que administra a TV.
         c.addView(linha(getString(R.string.fam_pin), getString(R.string.fam_pin_det),
             valor = getString(if (PainelArmazem.temPinFamilia(this)) R.string.cl_definido else R.string.cl_nao_definido)) {

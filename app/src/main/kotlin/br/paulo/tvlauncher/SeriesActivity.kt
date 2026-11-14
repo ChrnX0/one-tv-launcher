@@ -71,6 +71,7 @@ class SeriesActivity : Activity() {
     @Volatile private var cacheTitulos: Pair<List<Serie>, List<SincronizarFilmes.Titulo>>? = null
     private var todas: List<Serie> = emptyList()       // o catálogo inteiro, como veio do servidor
     private var ocultas: Set<String> = emptySet()      // categorias escondidas (adultas, escondidas, controle parental)
+    @Volatile private var porIdade: IdadesTmdb.Filtro? = null   // ideia 91: modo infantil com idade máxima
     private var mostrarOcultas = false                 // true só depois do PIN, como no player da TV ao vivo
     private var indoAoVideo = false                    // saiu para a VodActivity: o PIN continua valendo na volta
     private val janelas by lazy { PlayerJanelas(this) }
@@ -178,11 +179,12 @@ class SeriesActivity : Activity() {
             val oc = VodFiltro.ocultas(lista.map { it.grupo }, PlayerArmazem.gruposEscondidos(this),
                 PlayerArmazem.gruposLiberados(this), PlayerArmazem.parental(this))
             val pi = IdiomaPlayer.prefs(this)   // trocar o áudio num episódio muda a escolha da série
+            val fi = IdadesTmdb.filtro(this, lista.map { it.grupo }, serie = true)
             tela.post {
                 if (isDestroyed) return@post
                 prefsIdioma = pi
-                if (oc == ocultas) return@post
-                ocultas = oc
+                if (oc == ocultas && fi?.max == porIdade?.max) return@post
+                ocultas = oc; porIdade = fi
                 if (aberta?.let { !mostrarOcultas && it.grupo.trim() in oc } == true) fecharFicha()
                 refiltrarOcultas()
             }
@@ -265,6 +267,7 @@ class SeriesActivity : Activity() {
             // Categorias ocultas: a mesma regra do player (adultas, escondidas) + as bloqueadas no controle parental.
             val oc = VodFiltro.ocultas(s.map { it.grupo }, PlayerArmazem.gruposEscondidos(this),
                 PlayerArmazem.gruposLiberados(this), PlayerArmazem.parental(this))
+            val fi = IdadesTmdb.filtro(this, s.map { it.grupo }, serie = true)
             val u = PlayerArmazem.ultimosEpisodios(this)
             val p = PlayerArmazem.posicoes(this)
             val i = PlayerArmazem.interesses(this, series = true)
@@ -274,7 +277,7 @@ class SeriesActivity : Activity() {
             val ultima = prefsPlayer().getString(chavePref("ultima"), null)
             tela.post {
                 if (isDestroyed) return@post
-                todas = s; ocultas = oc; ultimos = u; posicoes = p; interesses = i; progresso = pr; prefsIdioma = pi
+                todas = s; ocultas = oc; porIdade = fi; ultimos = u; posicoes = p; interesses = i; progresso = pr; prefsIdioma = pi
                 marcoNovos = marco; ultimaSalva = ultima
                 conferirNovidades()
                 if (s.isEmpty()) { aviso.text = getString(R.string.series_vazio); return@post }
@@ -283,6 +286,7 @@ class SeriesActivity : Activity() {
                 // A 1ª conta (ocultas, contagens, ordem) também sai da thread da tela; o "Carregando" fica até ela chegar.
                 recalcular(ModoGrade.NOVA, inicial = true) { aviso.visibility = View.GONE; grade.requestFocus() }
                 sincronizarFora(s, forcar = false)
+                classificarIdades(s)
                 // O índice das versões sai depois da grade na tela (é a parte demorada; a ficha funciona sem ele).
                 Fundo.rodar {
                     val idx = Idioma.indice(s, { it.nome }, { it.grupo })
@@ -381,6 +385,21 @@ class SeriesActivity : Activity() {
 
     // Caches da conta (só a thread da [calculo] lê e escreve). A chave é a própria lista (===): lista nova = refaz.
     private var cacheVisiveis: Triple<List<Serie>, Set<String>, List<Serie>>? = null
+    @Volatile private var cacheIdade: IdadesTmdb.Filtro? = null
+
+    private fun tmdbDaSerie(s: Serie): Int? = s.tmdb ?: InfoExternaCache.guardado(this, s.chave)?.tmdb
+
+    /** Ideia 91: com idade máxima, pergunta ao TMDB a classificação das que faltam (infantis primeiro) e refaz a grade. */
+    private fun classificarIdades(lista: List<Serie>) {
+        val fi = porIdade ?: return
+        Fundo.rodar("series-idades") {
+            val ids = lista.filter { it.grupo.trim() !in fi.duras }.sortedBy { if (it.grupo.trim() in fi.infantis) 0 else 1 }.mapNotNull { tmdbDaSerie(it) }
+            if (IdadesTmdb.classificar(this, serie = true, ids) > 0) {
+                val novo = IdadesTmdb.filtro(this, lista.map { it.grupo }, serie = true)
+                tela.post { if (!isDestroyed && todas === lista) { porIdade = novo; recalcular(ModoGrade.MANTER_LUGAR) } }
+            }
+        }
+    }
     private var cacheBusca: Triple<List<Serie>, String, List<Serie>>? = null
     private var cacheOrdem: Triple<List<Serie>, Vod.Ordem, List<Serie>>? = null
     private var cacheGrupos: Pair<List<Serie>, List<Pair<String, Int>>>? = null
@@ -393,6 +412,7 @@ class SeriesActivity : Activity() {
      */
     private fun recalcular(modo: ModoGrade, inicial: Boolean = false, depois: (() -> Unit)? = null) {
         val todasS = todas; val ocultasS = if (mostrarOcultas) emptySet() else ocultas; val mostrar = mostrarOcultas
+        val idadeS = porIdade
         val termoS = termo; val ultS = ultimos; val posS = posicoes; val intS = interesses; val progS = progresso
         val ordemS = ordem; val chaveS = chave; val marcoS = marcoNovos; val ultimaS = ultimaSalva; val naoVistasS = soNaoVistas
         val listasS = listasFora
@@ -401,8 +421,12 @@ class SeriesActivity : Activity() {
         val antesSel = grade.selectedItemPosition
         calculo.pedir(
             calcular = {
-                val vis = cacheVisiveis?.takeIf { it.first === todasS && it.second == ocultasS }?.third
-                    ?: (if (mostrar) todasS else VodFiltro.visiveis(todasS, ocultasS) { it.grupo }).also { cacheVisiveis = Triple(todasS, ocultasS, it) }
+                val vis = cacheVisiveis?.takeIf { it.first === todasS && it.second == ocultasS && cacheIdade === idadeS }?.third
+                    ?: (when {
+                        mostrar -> todasS
+                        idadeS != null -> todasS.filter { Classificacao.visivel(it.grupo, tmdbDaSerie(it)?.let(idadeS.idades::get), idadeS.max, idadeS.infantis, idadeS.duras) }
+                        else -> VodFiltro.visiveis(todasS, ocultasS) { it.grupo }
+                    }).also { cacheVisiveis = Triple(todasS, ocultasS, it); cacheIdade = idadeS }
                 val res = if (termoS.isEmpty()) emptyList() else cacheBusca?.takeIf { it.first === vis && it.second == termoS }?.third
                     ?: Series.buscar(vis, termoS).also { cacheBusca = Triple(vis, termoS, it) }
                 val cont = Series.continuar(vis, ultS, progS)

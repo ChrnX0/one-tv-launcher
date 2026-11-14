@@ -31,6 +31,9 @@ object ControleParental {
         // usar só um dos dois. Os nomes valem para os três catálogos (uma categoria "Infantil" marcada vale onde existir).
         val infantil: Boolean = false,
         val infantis: Set<String> = emptySet(),
+        // Ideia 91 (14/11/2026): idade máxima no modo infantil (Classificacao): filmes e séries com classificação até ela
+        // aparecem de qualquer categoria. Classificacao.DESLIGADA = só as categorias infantis, como antes.
+        val idadeMax: Int = Classificacao.DESLIGADA,
     ) {
         val vazio: Boolean get() = canais.isEmpty() && grupos.isEmpty()
         /** Há algo bloqueado valendo agora? (modo infantil ligado sempre bloqueia algo: tudo que não for infantil) */
@@ -78,6 +81,7 @@ object ControleParental {
         .put("grupos", JSONArray(r.grupos.take(MAX_GRUPOS)))
         .put("infantil", r.infantil)
         .put("infantis", JSONArray(r.infantis.take(MAX_GRUPOS)))
+        .put("idade", r.idadeMax)
         .toString()
 
     fun deJson(texto: String?): Regras {
@@ -91,6 +95,7 @@ object ControleParental {
         // Adulta marcada como infantil (arquivo mexido à mão ou de versão velha) não vale: some na leitura.
         val infantis = conjunto("infantis", MAX_GRUPOS).filterTo(LinkedHashSet()) { !PlayerFiltro.ehAdulto(it) }
         return Regras(o.optBoolean("ligado", false), conjunto("canais", MAX_CANAIS), conjunto("grupos", MAX_GRUPOS),
-            o.optBoolean("infantil", false), infantis)
+            o.optBoolean("infantil", false), infantis,
+            o.optInt("idade", Classificacao.DESLIGADA).takeIf { it in Classificacao.OPCOES } ?: Classificacao.DESLIGADA)
     }
 }

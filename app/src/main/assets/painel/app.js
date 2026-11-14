@@ -938,6 +938,7 @@ function desenharConfig(r) {
   $('cfgParentalDet').textContent = `(${r.parentalCanais} canal(is) ou categoria(s) escolhidos)`;
   $('cfgInfantil').checked = r.infantil;
   $('cfgInfantilDet').textContent = `(${r.infantis} categoria(s) infantil(is))`;
+  $('cfgIdadeInfantil').value = String(r.idadeInfantil ?? -1);
   $('cfgVisita').checked = r.visita;
   $('cfgUnidadeRede').checked = r.unidadeRede;
   $('cfgUnidadeRedeEndereco').textContent = r.unidadeRede ? (r.unidadeRedeEndereco || 'ligue o https (aba Extras › Certificado)') : 'desligada';
@@ -993,6 +994,8 @@ $('cfgAudio').addEventListener('change', (e) => gravarConfig({ campo: 'audio', v
 $('cfgProtetor').addEventListener('change', (e) => gravarConfig({ campo: 'protetorMs', valor: Number(e.target.value) }, 'Tempo do protetor gravado.'));
 $('cfgBarra').addEventListener('change', (e) => gravarConfig({ campo: 'barraProtetor', valor: e.target.value }, 'Linha do protetor gravada.'));
 $('cfgParental').addEventListener('change', (e) => gravarConfig({ campo: 'parental', valor: e.target.checked }, e.target.checked ? 'Controle parental ligado.' : 'Controle parental desligado.'));
+$('cfgIdadeInfantil').addEventListener('change', (e) => gravarConfig({ campo: 'idadeInfantil', valor: Number(e.target.value) },
+  'Idade do modo infantil gravada. Filmes e séries com classificação até ela aparecem; os sem classificação, só nas categorias infantis.', 'Confirme o PIN'));
 $('cfgInfantil').addEventListener('change', (e) => gravarConfig({ campo: 'infantil', valor: e.target.checked }, e.target.checked ? 'Modo infantil ligado.' : 'Modo infantil desligado.'));
 $('cfgVisita').addEventListener('change', (e) => gravarConfig({ campo: 'visita', valor: e.target.checked }, e.target.checked ? 'Modo visita ligado.' : 'Modo visita desligado.'));
 $('cfgUnidadeRede').addEventListener('change', (e) => gravarConfig({ campo: 'unidadeRede', valor: e.target.checked }, e.target.checked ? 'Unidade de rede ligada.' : 'Unidade de rede desligada.'));

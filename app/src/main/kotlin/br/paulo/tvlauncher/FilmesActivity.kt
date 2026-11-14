@@ -79,6 +79,7 @@ class FilmesActivity : Activity() {
     private var sagaExterna: Pair<Filme, Triple<String, Int, Int>>? = null
     private var todos: List<Filme> = emptyList()       // o catálogo inteiro, como veio do servidor
     private var ocultas: Set<String> = emptySet()      // categorias escondidas (adultas, escondidas, controle parental)
+    @Volatile private var porIdade: IdadesTmdb.Filtro? = null   // ideia 91: modo infantil com idade máxima
     private var mostrarOcultas = false                 // true só depois do PIN, como no player da TV ao vivo
     private var indoAoVideo = false                    // saiu para a VodActivity: o PIN continua valendo na volta
     private val janelas by lazy { PlayerJanelas(this) }
@@ -179,11 +180,12 @@ class FilmesActivity : Activity() {
         if (lista.isNotEmpty()) Fundo.rodar {
             val p = PlayerArmazem.posicoes(this)
             val oc = lerOcultas(lista)   // o controle parental pode ter mudado nas Configurações
+            val fi = IdadesTmdb.filtro(this, lista.map { it.grupo }, serie = false)
             val pi = IdiomaPlayer.prefs(this)   // trocar o áudio no filme muda a escolha dele
             tela.post {
                 if (isDestroyed) return@post
-                val mudou = oc != ocultas
-                posicoes = p; prefsIdioma = pi; ocultas = oc
+                val mudou = oc != ocultas || fi?.max != porIdade?.max
+                posicoes = p; prefsIdioma = pi; ocultas = oc; porIdade = fi
                 // "Assistidos" e "Continuar" mudam de conteúdo ao voltar do vídeo: refaz a grade sem perder o lugar.
                 recalcular(if (mudou || chave == ASSISTIDOS || chave == CONTINUAR || filtro.naoVistos) ModoGrade.MANTER_LUGAR else ModoGrade.IGUAL)
                 adaptadorGrade.notifyDataSetChanged()   // a barrinha de progresso do card muda na hora
@@ -252,13 +254,14 @@ class FilmesActivity : Activity() {
             val p = PlayerArmazem.posicoes(this)
             val i = PlayerArmazem.interesses(this, series = false)
             val oc = lerOcultas(f)
+            val fi = IdadesTmdb.filtro(this, f.map { it.grupo }, serie = false)
             notasFora = InfoExternaCache.notas(this)
             val pi = IdiomaPlayer.prefs(this)
             val marco = prefsPlayer().getLong(chavePref("marco"), 0L)
             val ultima = prefsPlayer().getString(chavePref("ultima"), null)
             tela.post {
                 if (isDestroyed) return@post
-                todos = f; ocultas = oc; posicoes = p; interesses = i; prefsIdioma = pi; marcoNovos = marco
+                todos = f; ocultas = oc; porIdade = fi; posicoes = p; interesses = i; prefsIdioma = pi; marcoNovos = marco
                 ultimaSalva = ultima
                 if (f.isEmpty()) { aviso.text = getString(R.string.filmes_vazio); return@post }
                 // Aberta pela busca única da HOME (12/11/2026): já entra com o termo buscado.
@@ -274,6 +277,7 @@ class FilmesActivity : Activity() {
                     }
                 }
                 sincronizarFora(f, forcar = false)
+                classificarIdades(f)
                 // O índice das versões sai depois da grade na tela (é a parte demorada; a ficha funciona sem ele).
                 Fundo.rodar {
                     val idx = Idioma.indice(f, { it.nome }, { it.grupo })
@@ -341,6 +345,21 @@ class FilmesActivity : Activity() {
 
     // Caches da conta (só a thread da [calculo] lê e escreve). A chave é a própria lista (===): lista nova = refaz.
     private var cacheVisiveis: Triple<List<Filme>, Set<String>, List<Filme>>? = null
+    @Volatile private var cacheIdade: IdadesTmdb.Filtro? = null
+
+    private fun tmdbDe(f: Filme): Int? = f.tmdb ?: InfoExternaCache.guardado(this, f.chave)?.tmdb
+
+    /** Ideia 91: com idade máxima, pergunta ao TMDB a classificação dos que faltam (infantis primeiro) e refaz a grade. */
+    private fun classificarIdades(f: List<Filme>) {
+        val fi = porIdade ?: return
+        Fundo.rodar("filmes-idades") {
+            val ids = f.filter { it.grupo.trim() !in fi.duras }.sortedBy { if (it.grupo.trim() in fi.infantis) 0 else 1 }.mapNotNull { tmdbDe(it) }
+            if (IdadesTmdb.classificar(this, serie = false, ids) > 0) {
+                val novo = IdadesTmdb.filtro(this, f.map { it.grupo }, serie = false)
+                tela.post { if (!isDestroyed && todos === f) { porIdade = novo; recalcular(ModoGrade.MANTER_LUGAR) } }
+            }
+        }
+    }
     private var cacheBusca: Triple<List<Filme>, String, List<Filme>>? = null
     private var cacheOrdem: Triple<List<Filme>, Vod.Ordem, List<Filme>>? = null
     private var cacheOrdemNotas: Map<String, Float>? = null
@@ -354,6 +373,7 @@ class FilmesActivity : Activity() {
      */
     private fun recalcular(modo: ModoGrade, inicial: Boolean = false, depois: (() -> Unit)? = null) {
         val todosS = todos; val ocultasS = if (mostrarOcultas) emptySet() else ocultas; val mostrar = mostrarOcultas
+        val idadeS = porIdade
         val termoS = termo; val posS = posicoes; val intS = interesses; val ordemS = ordem; val chaveS = chave; val notasS = notasFora
         val listasS = listasFora
         val temOcultas = ocultas.isNotEmpty()
@@ -362,8 +382,12 @@ class FilmesActivity : Activity() {
         val antesSel = grade.selectedItemPosition
         calculo.pedir(
             calcular = {
-                val vis = cacheVisiveis?.takeIf { it.first === todosS && it.second == ocultasS }?.third
-                    ?: (if (mostrar) todosS else VodFiltro.visiveis(todosS, ocultasS) { it.grupo }).also { cacheVisiveis = Triple(todosS, ocultasS, it) }
+                val vis = cacheVisiveis?.takeIf { it.first === todosS && it.second == ocultasS && cacheIdade === idadeS }?.third
+                    ?: (when {
+                        mostrar -> todosS
+                        idadeS != null -> todosS.filter { Classificacao.visivel(it.grupo, tmdbDe(it)?.let(idadeS.idades::get), idadeS.max, idadeS.infantis, idadeS.duras) }
+                        else -> VodFiltro.visiveis(todosS, ocultasS) { it.grupo }
+                    }).also { cacheVisiveis = Triple(todosS, ocultasS, it); cacheIdade = idadeS }
                 val res = if (termoS.isEmpty()) emptyList() else cacheBusca?.takeIf { it.first === vis && it.second == termoS }?.third
                     ?: Vod.buscar(vis, termoS).also { cacheBusca = Triple(vis, termoS, it) }
                 val cont = Vod.continuar(vis, posS)
