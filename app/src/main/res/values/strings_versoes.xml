@@ -96,6 +96,7 @@
         <item>Blu-ray and DVD subtitles (PGS, VobSub) now show in movies and series, and anime ASS subtitles keep their original colour and position</item>
         <item>Network: folders over FTP, FTPS, SFTP and NFS (NAS, router with a drive, Linux or Mac computer), and a USB drive plugged into the TV shows up by itself under “Plugged into the TV”</item>
         <item>Live TV records to a USB drive or disk on the hub (or a Windows/NAS folder): ▶▶ › Record on a channel, OK on a future show in the guide to schedule it (also every week), and the Recordings screen in the live TV column</item>
+        <item>Guide: OK on a show that has not started has “Remind me” and “Switch on its own when it starts” (the TV changes to the channel; 10 s to cancel)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>unidade_rede</item>
@@ -175,6 +176,7 @@
         <item>pendrive_na_rede</item>
         <item>gravar_agora</item>
         <item>gravar_agendada</item>
+        <item>troca_sozinha</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Network drive</item>
@@ -254,6 +256,7 @@
         <item>Plug a USB drive with videos into the TV and open Network</item>
         <item>With a USB drive on the hub, on a channel: ▶▶ › Record 1 hour; after 2 min, OK › Recordings in the column</item>
         <item>In the guide, OK on a show starting in 10 min › Record; turn the TV off and wait for it to end</item>
+        <item>In the guide, OK on a show starting in a few minutes › Switch on its own; wait with the TV on another channel</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>With Settings › Remote access › Show the TV as a network drive on, does Windows Map network drive with the address shown there and the panel PIN open the TV folders?</item>
@@ -333,5 +336,6 @@
         <item>Does the drive show under “Plugged into the TV” and does a video from it play?</item>
         <item>Did the channel keep playing smoothly, and does the recording show up and play in Recordings?</item>
         <item>Afterwards, is the whole show in Recordings?</item>
+        <item>At the start time, did the countdown show and the TV change to the channel?</item>
     </string-array>
 </resources>

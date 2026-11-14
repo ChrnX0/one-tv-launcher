@@ -21,8 +21,8 @@ import java.util.Locale
  * A matemática (cursor, janela, rolagem) é a PlayerGrade, testada fora do Android.
  *
  * Teclas: ▲ ▼ canal, ◀ ▶ programa, CH+ CH- página, OK assiste o canal da linha, VOLTAR fecha.
- * OK num programa que ainda vai começar marca (ou desmarca) um lembrete (12/11/2026, LembretesTv): o ponto âmbar no canto
- * do programa mostra os marcados.
+ * OK num programa que ainda vai começar abre: Me avise, Troque sozinho na hora (ideia 85), Gravar e Gravar toda semana.
+ * O ponto âmbar no canto do programa mostra os marcados (LembretesTv).
  */
 class PlayerGradeView(
     ctx: Context,
@@ -92,16 +92,23 @@ class PlayerGradeView(
         }
     }
 
-    /** OK num programa futuro: marca ou desmarca o lembrete (disco fora da thread da tela) e avisa. */
-    private fun lembrar(canal: Canal, p: Programa) {
+    /** Me avise / Troque sozinho / nada (disco fora da thread da tela) e confirma com um aviso curto. */
+    private fun definirLembrete(canal: Canal, p: Programa, modo: Int) {
         val app = context.applicationContext
         Fundo.rodar("lembrete") {
-            val sim = runCatching { LembretesTv.alternar(app, canal, p) }.getOrNull() ?: return@rodar
+            runCatching { LembretesTv.definir(app, canal, p, modo) }.getOrNull() ?: return@rodar
             post {
-                marcados = if (sim) marcados + "${canal.id}|${p.inicio}" else marcados - "${canal.id}|${p.inicio}"
+                val chave = "${canal.id}|${p.inicio}"
+                marcados = if (modo == Lembretes.MODO_NADA) marcados - chave else marcados + chave
                 invalidate()
-                AvisoTv.rapido(app, app.getString(if (sim) R.string.bu_lembrete_sim else R.string.bu_lembrete_nao),
-                    if (sim) app.getString(R.string.pg_aviso_as, LembretesTv.hora(p.inicio - Lembretes.ANTECEDENCIA_MS), p.titulo) else p.titulo)
+                val (titulo, texto) = when (modo) {
+                    Lembretes.MODO_AVISAR -> app.getString(R.string.bu_lembrete_sim) to
+                        app.getString(R.string.pg_aviso_as, LembretesTv.hora(p.inicio - Lembretes.ANTECEDENCIA_MS), p.titulo)
+                    Lembretes.MODO_TROCAR -> app.getString(R.string.lb_troca_marcada) to
+                        app.getString(R.string.lb_troca_marcada_det, canal.nome, LembretesTv.hora(p.inicio))
+                    else -> app.getString(R.string.bu_lembrete_nao) to p.titulo
+                }
+                AvisoTv.rapido(app, titulo, texto)
             }
         }
     }
@@ -114,19 +121,22 @@ class PlayerGradeView(
         val app = context.applicationContext
         Fundo.rodar("gravacao") {
             val ag = runCatching { Gravacoes.agendada(app, canal.id, p.inicio) }.getOrNull()
+            val modo = runCatching { Lembretes.modo(LembretesTv.listar(app), "${canal.id}|${p.inicio}") }.getOrDefault(Lembretes.MODO_NADA)
             val onde = GravacaoDestino.descricao(app)
             post {
                 if (!aberta) return@post
-                val marcado = "${canal.id}|${p.inicio}" in marcados
                 val itens = ArrayList<Pair<String, () -> Unit>>()
-                itens += app.getString(if (marcado) R.string.grv_nao_lembrar else R.string.grv_lembrar) to { lembrar(canal, p) }
+                // Ideia 85: "Me avise" (2 min antes, com Assistir) ou "Troque sozinho na hora". OK no marcado desmarca.
+                itens += app.getString(R.string.lb_me_avise) to { definirLembrete(canal, p, if (modo == Lembretes.MODO_AVISAR) Lembretes.MODO_NADA else Lembretes.MODO_AVISAR) }
+                itens += app.getString(R.string.lb_trocar_sozinho) to { definirLembrete(canal, p, if (modo == Lembretes.MODO_TROCAR) Lembretes.MODO_NADA else Lembretes.MODO_TROCAR) }
+                val marcadas = when (modo) { Lembretes.MODO_AVISAR -> listOf(0); Lembretes.MODO_TROCAR -> listOf(1); else -> emptyList() }
                 if (ag != null) itens += app.getString(R.string.grv_cancelar_agendada) to { cancelarGravacao(ag) }
                 else {
                     itens += app.getString(R.string.grv_agendar, Gravacoes.hora(p.inicio - GravacaoRegras.FOLGA_ANTES_MS),
                         Gravacoes.hora(p.fim + GravacaoRegras.FOLGA_DEPOIS_MS)) to { agendarGravacao(canal, p, false, onde) }
                     itens += app.getString(R.string.grv_agendar_semana) to { agendarGravacao(canal, p, true, onde) }
                 }
-                Estilo.lista(context, "${p.titulo} · ${canal.nome} ${Gravacoes.hora(p.inicio)}", itens.map { it.first }) { i -> itens[i].second() }
+                Estilo.lista(context, "${p.titulo} · ${canal.nome} ${Gravacoes.hora(p.inicio)}", itens.map { it.first }, marcadas) { i -> itens[i].second() }
             }
         }
     }
