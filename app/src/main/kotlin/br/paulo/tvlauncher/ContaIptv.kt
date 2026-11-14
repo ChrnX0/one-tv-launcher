@@ -40,6 +40,9 @@ object ContaIptv {
         val venceHoje: String = "vence hoje", val venceuOntem: String = "venceu ontem",
         val venceuHa: (Long) -> String = { "venceu há $it dias" },
         val formatoData: String = "dd/MM/yyyy", val local: Locale = Locale("pt", "BR"),
+        // Pílula da HOME (avisoVencimento).
+        val venceuCurto: String = "venceu", val venceAmanha: String = "vence amanhã",
+        val venceEmDias: (Long) -> String = { "vence em $it dias" },
     )
 
     private val PT = Textos()
@@ -80,17 +83,17 @@ object ContaIptv {
      * "venceu". null = nenhuma vence nos próximos [AVISAR_DIAS] dias (nem venceu há mais de 30: aí já não adianta avisar).
      * `itens` = nome da lista e vencimento em segundos (exp_date do Xtream).
      */
-    fun avisoVencimento(itens: List<Pair<String, Long>>, agoraMs: Long, fuso: TimeZone = TimeZone.getDefault()): String? {
+    fun avisoVencimento(itens: List<Pair<String, Long>>, agoraMs: Long, fuso: TimeZone = TimeZone.getDefault(), t: Textos = PT): String? {
         // Lista que venceu há mais de 30 dias não conta (não adianta avisar). Ela sai ANTES de escolher a primeira a
         // vencer: senão uma lista antiga e abandonada escondia o aviso de outra que vence amanhã.
         val (nome, expira) = itens.filter { Datas.diasAte(it.second * 1000, agoraMs, fuso) >= -30 }.minByOrNull { it.second } ?: return null
         val dias = Datas.diasAte(expira * 1000, agoraMs, fuso)
         val quando = when {
-            expira * 1000 <= agoraMs -> "venceu"
+            expira * 1000 <= agoraMs -> t.venceuCurto
             dias > AVISAR_DIAS -> return null
-            dias == 0L -> "vence hoje"
-            dias == 1L -> "vence amanhã"
-            else -> "vence em $dias dias"
+            dias == 0L -> t.venceHoje
+            dias == 1L -> t.venceAmanha
+            else -> t.venceEmDias(dias)
         }
         return "${nome.take(24)} $quando"
     }

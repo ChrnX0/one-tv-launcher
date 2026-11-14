@@ -137,7 +137,7 @@ object McpPoder {
         if (arr.length() == 0 || arr.length() > McpPoderRegras.MAX_TECLAS) throw McpProtocolo.ErroFerramenta("de 1 a ${McpPoderRegras.MAX_TECLAS} teclas")
         val teclas = (0 until arr.length()).map { arr.optString(it) }
         teclas.firstOrNull { it !in PainelControle.TECLAS }?.let { throw McpProtocolo.ErroFerramenta("tecla desconhecida: ${it.take(20)}") }
-        exigir(app, Confirmacoes.Acao.MCP_ACOES, "Apertar ${teclas.joinToString(" ")}")
+        exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_apertar, teclas.joinToString(" ")))
         val pausa = a.optLong("pausa_ms", 150).coerceIn(0, 3000)
         teclas.forEachIndexed { i, t ->
             PainelControle.tecla(app, t)?.let { throw McpProtocolo.ErroFerramenta("parou na tecla ${i + 1} ($t): $it") }
@@ -149,7 +149,7 @@ object McpPoder {
     private fun digitar(app: Context, a: JSONObject): String {
         val arg = McpPoderRegras.textoParaInput(a.optString("texto"))
             ?: throw McpProtocolo.ErroFerramenta("texto vazio, longo demais ou com acento/emoji (o Android só digita ASCII por aqui)")
-        exigir(app, Confirmacoes.Acao.MCP_ACOES, "Digitar texto")
+        exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_digitar))
         AutoDesligar.atividade()
         GuardiaoShizuku.comando(app, "input text '$arg'") ?: throw McpProtocolo.ErroFerramenta("o shell do launcher não respondeu")
         if (a.optBoolean("enviar")) PainelControle.tecla(app, "entrar")
@@ -162,7 +162,7 @@ object McpPoder {
         if (pacote == null && link == null) throw McpProtocolo.ErroFerramenta("passe \"pacote\" ou \"link\"")
         if (pacote != null && !ChecagensPainel.pacoteValido(pacote)) throw McpProtocolo.ErroFerramenta("pacote inválido")
         if (link != null && !McpPoderRegras.linkValido(link)) throw McpProtocolo.ErroFerramenta("link inválido (file:, content:, intent: e javascript: não abrem)")
-        exigir(app, Confirmacoes.Acao.MCP_ACOES, "Abrir ${link ?: pacote}")
+        exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_abrir, link ?: pacote ?: ""))
         AutoDesligar.atividade()
         if (link == null) return falha(PainelControle.abrir(app, pacote!!), "aberto: $pacote")
         val i = Intent(Intent.ACTION_VIEW, Uri.parse(link)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -179,7 +179,7 @@ object McpPoder {
         if (!McpPoderRegras.urlApkValida(url)) throw McpProtocolo.ErroFerramenta("URL inválida: só https://")
         val sha = a.optString("sha256").trim().takeIf { it.isNotEmpty() }
         if (sha != null && !McpPoderRegras.sha256Valido(sha)) throw McpProtocolo.ErroFerramenta("sha256 inválido (64 caracteres hexadecimais)")
-        exigir(app, Confirmacoes.Acao.INSTALAR, "Instalar APK de ${url.take(150)}")
+        exigir(app, Confirmacoes.Acao.INSTALAR, txt(R.string.cf_instalar_de, url.take(150)))
         val tmp = File.createTempFile("mcp-apk", ".apk", app.cacheDir)
         try {
             val calculado = baixar(url, tmp)
@@ -235,7 +235,7 @@ object McpPoder {
         val p = a.optString("pacote").trim()
         if (!ChecagensPainel.pacoteValido(p)) throw McpProtocolo.ErroFerramenta("pacote inválido")
         if (p == app.packageName) throw McpProtocolo.ErroFerramenta("o launcher não se desinstala (perderia o Device Owner)")
-        exigir(app, Confirmacoes.Acao.REMOVER, "Desinstalar $p")
+        exigir(app, Confirmacoes.Acao.REMOVER, txt(R.string.cf_desinstalar, p))
         val motivo = PainelApps.desinstalar(app, p)
         registrar(app, "desinstalar (MCP)", "$p: ${motivo ?: "ok"}")
         return falha(motivo, "desinstalado: $p")
@@ -244,7 +244,7 @@ object McpPoder {
     private fun atualizar(app: Context, a: JSONObject): String {
         val instalar = a.optBoolean("instalar")
         if (instalar) {
-            exigir(app, Confirmacoes.Acao.MCP_ACOES, "Atualizar o launcher agora")
+            exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_atualizar))
             registrar(app, "atualizar launcher (MCP)", "pedido")
             Atualizador.verificar(app, instalar = true)
             return "procurando e, se houver versão nova, instalando. O launcher reinicia e o MCP volta em ~1 min; depois confira com sistema."
@@ -264,7 +264,7 @@ object McpPoder {
     private fun aviso(app: Context, a: JSONObject): String {
         val texto = Recado.limpar(a.optString("texto")) ?: throw McpProtocolo.ErroFerramenta("texto vazio ou com mais de ${Recado.MAX_CARACTERES} caracteres")
         val titulo = Recado.limpar(a.optString("titulo"))?.take(40) ?: "Recado"
-        exigir(app, Confirmacoes.Acao.MCP_ACOES, "Aviso na tela: ${texto.take(60)}")
+        exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_aviso, texto.take(60)))
         val r = AvisoTv.mostrar(app, titulo, texto, a.optInt("segundos", 30).coerceIn(5, 300), a.optBoolean("som"), guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO)
         registrar(app, "aviso (MCP)", texto)
         return when (r) {
@@ -291,14 +291,14 @@ object McpPoder {
             val arr = a.optJSONArray("dias") ?: JSONArray()
             val dias = McpPoderRegras.dias((0 until arr.length()).map { arr.optString(it) })
                 ?: throw McpProtocolo.ErroFerramenta("dia desconhecido: use dom, seg, ter, qua, qui, sex, sab, uteis, fim de semana ou todos")
-            exigir(app, Confirmacoes.Acao.MCP_ACOES, "Criar despertador ${"%02d:%02d".format(h, m)}")
+            exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_criar_despertador, "%02d:%02d".format(h, m)))
             val novo = Despertador.salvar(app, Despertador.Alarme(0, h, m, dias, a.optString("nome").take(40), true))
             registrar(app, "despertador (MCP)", "criado ${Despertador.horaTexto(novo)}")
             return alarmeJson(app, novo).toString()
         }
         val id = a.optInt("id", -1)
         val alvo = Despertador.listar(app).firstOrNull { it.id == id } ?: throw McpProtocolo.ErroFerramenta("despertador $id não existe (veja com acao=listar)")
-        exigir(app, Confirmacoes.Acao.MCP_ACOES, "Despertador ${Despertador.horaTexto(alvo)}: $acao")
+        exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_despertador, Despertador.horaTexto(alvo), acao))
         when (acao) {
             "ligar", "desligar" -> Despertador.salvar(app, alvo.copy(ativo = acao == "ligar"))
             "apagar" -> Despertador.apagar(app, id)
@@ -328,18 +328,18 @@ object McpPoder {
                     if (bytes.size > McpPoderRegras.MAX_ESCREVER_BYTES) throw McpProtocolo.ErroFerramenta("conteúdo maior que 1 MB")
                     val pasta = caminho.substringBeforeLast('/', "")
                     val nome = caminho.substringAfterLast('/')
-                    exigir(app, Confirmacoes.Acao.MCP_SHELL, "Gravar o arquivo $caminho")
+                    exigir(app, Confirmacoes.Acao.MCP_SHELL, txt(R.string.cf_gravar, caminho))
                     val f = PainelArquivos.receber(app, pasta, nome, bytes.size.toLong(), substituir = true, entrada = bytes.inputStream())
                     registrar(app, "arquivo (MCP)", "gravou $caminho")
                     "gravado: $caminho (${f.length()} bytes)"
                 }
                 "criar_pasta" -> {
-                    exigir(app, Confirmacoes.Acao.MCP_SHELL, "Criar a pasta $caminho")
+                    exigir(app, Confirmacoes.Acao.MCP_SHELL, txt(R.string.cf_pasta, caminho))
                     PainelArquivos.criarPasta(caminho.substringBeforeLast('/', ""), caminho.substringAfterLast('/'))
                     "pasta criada: $caminho"
                 }
                 "apagar" -> {
-                    exigir(app, Confirmacoes.Acao.MCP_SHELL, "Apagar $caminho")
+                    exigir(app, Confirmacoes.Acao.MCP_SHELL, txt(R.string.cf_apagar, caminho))
                     val n = PainelArquivos.apagar(app, caminho)
                     registrar(app, "arquivo (MCP)", "apagou $caminho")
                     "apagado: $caminho ($n item(ns))"
@@ -372,11 +372,11 @@ object McpPoder {
 
     private fun energia(app: Context, a: JSONObject): String = when (val acao = a.optString("acao")) {
         "acordar", "dormir" -> {
-            exigir(app, Confirmacoes.Acao.MCP_ACOES, if (acao == "acordar") "Acordar a TV" else "Pôr a TV para dormir")
+            exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(if (acao == "acordar") R.string.cf_acordar else R.string.cf_dormir))
             falha(PainelControle.tecla(app, if (acao == "acordar") "ligar" else "apagar"), "ok: $acao")
         }
         "reiniciar" -> {
-            exigir(app, Confirmacoes.Acao.REMOVER, "Reiniciar a TV")
+            exigir(app, Confirmacoes.Acao.REMOVER, txt(R.string.cf_reiniciar))
             registrar(app, "reiniciar TV (MCP)", "pedido")
             if (!PrivilegioDO.somosDonos(app)) throw McpProtocolo.ErroFerramenta("o launcher não é mais o dono do aparelho (Device Owner)")
             // Reinicia 2 s DEPOIS de responder: no teste de 10/11/2026 o túnel caía antes da resposta e o cliente via

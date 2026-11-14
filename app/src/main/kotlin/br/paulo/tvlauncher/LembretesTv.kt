@@ -149,9 +149,9 @@ object LembretesTv {
             if (acesa || primeiro.manual) abrirPergunta(app, primeiro, acordar = !acesa)
             else Log.i(TAG, "tela apagada: ${primeiro.titulo} (automático) não acorda a TV")
             devidos.filter { it !== primeiro }.forEach {
-                if (acesa) AvisoTv.rapido(app, "Começa às ${hora(it.inicio)}", "${it.titulo} · ${it.canalNome}", 12)
+                if (acesa) AvisoTv.rapido(app, txt(R.string.lb_comeca_as, hora(it.inicio)), "${it.titulo} · ${it.canalNome}", 12)
             }
-            Avisos.enviar(app, Avisos.Tipo.LEMBRETE, "Começa às ${hora(primeiro.inicio)}", "${primeiro.titulo} · ${primeiro.canalNome}")
+            Avisos.enviar(app, Avisos.Tipo.LEMBRETE, txt(R.string.lb_comeca_as, hora(primeiro.inicio)), "${primeiro.titulo} · ${primeiro.canalNome}")
         }
         agendar(app)
     }
@@ -164,7 +164,7 @@ object LembretesTv {
                 .putExtra("inicio", l.inicio).putExtra("acordar", acordar))
         } catch (e: Exception) {
             Log.w(TAG, "não abri a pergunta: $e")
-            AvisoTv.rapido(app, "Começa às ${hora(l.inicio)}", "${l.titulo} · ${l.canalNome}", 15)
+            AvisoTv.rapido(app, txt(R.string.lb_comeca_as, hora(l.inicio)), "${l.titulo} · ${l.canalNome}", 15)
         }
     }
 
@@ -213,15 +213,15 @@ class LembreteActivity : Activity() {
         val titulo = intent.getStringExtra("titulo").orEmpty()
         val nome = intent.getStringExtra("nome").orEmpty()
         val inicio = intent.getLongExtra("inicio", 0L)
-        val assistir = Estilo.botao(this, "Assistir").apply {
+        val assistir = Estilo.botao(this, getString(R.string.lb_assistir)).apply {
             setOnClickListener {
                 CanalTv.tocar(applicationContext, ComandosIa.Acao.TocarCanal(nome, canalId = canal, nomeCanal = nome))
                 finish()
             }
         }
-        val fechar = Estilo.botao(this, "Agora não", primario = false).apply { setOnClickListener { finish() } }
-        val quando = if (inicio <= System.currentTimeMillis()) "Começou agora" else "Começa às ${LembretesTv.hora(inicio)}"
-        setContentView(Estilo.dialogo(this, "Lembrete", titulo, "$quando, em $nome.", listOf(fechar, assistir)))
+        val fechar = Estilo.botao(this, getString(R.string.lb_agora_nao), primario = false).apply { setOnClickListener { finish() } }
+        val quando = if (inicio <= System.currentTimeMillis()) getString(R.string.lb_comecou) else getString(R.string.lb_comeca_as, LembretesTv.hora(inicio))
+        setContentView(Estilo.dialogo(this, getString(R.string.lb_lembrete), titulo, getString(R.string.lb_quando_em, quando, nome), listOf(fechar, assistir)))
         assistir.requestFocus()
         ui.postDelayed({ if (!isFinishing) finish() }, 90_000L)
     }

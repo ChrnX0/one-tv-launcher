@@ -44,9 +44,9 @@ class BuscaActivity : Activity() {
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
         if (VigiaAtualizacao.fechada(this)) return
-        val (raiz, coluna) = Estilo.telaLista(this, "Buscar")
+        val (raiz, coluna) = Estilo.telaLista(this, getString(R.string.bu_buscar))
         campo = EditText(this).apply {
-            hint = "Canal, programa, filme, série ou app"
+            hint = getString(R.string.bu_dica)
             setSingleLine()
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
             imeOptions = EditorInfo.IME_ACTION_SEARCH
@@ -139,20 +139,20 @@ class BuscaActivity : Activity() {
     private fun resultados(d: Dados, termo: String): List<Grupo> {
         val grupos = ArrayList<Grupo>()
         val canais = BuscaUnica.filtrarIndice(d.iCanais, termo).first
-        if (canais.isNotEmpty()) grupos += Grupo("Canais", canais.map { c -> Item(c.nome, "Canal ${c.numero}") { tocar(c.id, c.nome) } })
+        if (canais.isNotEmpty()) grupos += Grupo(getString(R.string.bu_canais), canais.map { c -> Item(c.nome, getString(R.string.bu_canal_n, c.numero)) { tocar(c.id, c.nome) } })
         val progs = programas(d, termo)
-        if (progs.isNotEmpty()) grupos += Grupo("No guia", progs)
+        if (progs.isNotEmpty()) grupos += Grupo(getString(R.string.bu_no_guia), progs)
         val (filmes, total) = BuscaUnica.filtrarIndice(d.iFilmes, termo)
         if (filmes.isNotEmpty()) {
-            grupos += Grupo("Filmes", filmes.map { f ->
+            grupos += Grupo(getString(R.string.home_card_filmes), filmes.map { f ->
                 Item(f.nome, listOfNotNull(f.ano?.toString(), f.grupo.takeIf { it.isNotBlank() }).joinToString(" · ")) { catalogo(FilmesActivity::class.java, f.nome) }
-            } + Item("Ver os $total em Filmes", "Abre o catálogo de filmes com esta busca") { catalogo(FilmesActivity::class.java, termo) })
+            } + Item(getString(R.string.bu_ver_filmes, total), getString(R.string.bu_ver_filmes_det)) { catalogo(FilmesActivity::class.java, termo) })
         }
         val (series, totalSeries) = BuscaUnica.filtrarIndice(d.iSeries, termo)
         if (series.isNotEmpty()) {
-            grupos += Grupo("Séries", series.map { s ->
+            grupos += Grupo(getString(R.string.home_card_series), series.map { s ->
                 Item(s.nome, listOfNotNull(s.ano?.toString(), s.grupo.takeIf { it.isNotBlank() }).joinToString(" · ")) { catalogo(SeriesActivity::class.java, s.nome) }
-            } + Item("Ver as $totalSeries em Séries", "Abre o catálogo de séries com esta busca") { catalogo(SeriesActivity::class.java, termo) })
+            } + Item(getString(R.string.bu_ver_series, totalSeries), getString(R.string.bu_ver_series_det)) { catalogo(SeriesActivity::class.java, termo) })
         }
         val apps = BuscaUnica.filtrarIndice(d.iApps, termo).first
         if (apps.isNotEmpty()) grupos += Grupo("Apps", apps.map { (pacote, nome) -> Item(nome, "App") { abrirApp(pacote) } })
@@ -178,20 +178,20 @@ class BuscaActivity : Activity() {
         }
         val melhores = BuscaUnica.filtrar(BuscaUnica.agrupar(achados), termo, max = BuscaUnica.MAX_POR_GRUPO) { it.first.programa.titulo }
         return melhores.sortedBy { it.first.programa.inicio }.map { (c, outros) ->
-            itemPrograma(c, agora, if (outros > 0) "+$outros ${if (outros == 1) "canal" else "canais"}" else null)
+            itemPrograma(c, agora, if (outros > 0) "+" + resources.getQuantityString(R.plurals.bu_canais_n, outros, outros) else null)
         }
     }
 
     private fun itemPrograma(c: Lembretes.Candidato, agora: Long, motivo: String? = null): Item {
         val p = c.programa
-        val quando = if (p.inicio <= agora) "Agora" else hora(p.inicio)
+        val quando = if (p.inicio <= agora) getString(R.string.bu_agora) else hora(p.inicio)
         val sub = listOfNotNull(quando, "${c.canalNome} (${c.numero})", motivo).joinToString(" · ")
         return Item(p.titulo, sub) {
             if (p.inicio <= System.currentTimeMillis()) tocar(c.canalId, c.canalNome)
             else Fundo.rodar("busca-lembrete") {
                 val canal = dados?.canais?.firstOrNull { it.id == c.canalId } ?: return@rodar
                 val sim = LembretesTv.alternar(applicationContext, canal, p)
-                ui.post { AvisoTv.rapido(applicationContext, if (sim) "Lembrete marcado" else "Lembrete desmarcado", "${p.titulo}, ${hora(p.inicio)}") }
+                ui.post { AvisoTv.rapido(applicationContext, getString(if (sim) R.string.bu_lembrete_sim else R.string.bu_lembrete_nao), "${p.titulo}, ${hora(p.inicio)}") }
             }
         }
     }
@@ -217,8 +217,14 @@ class BuscaActivity : Activity() {
         }
         val sug = BuscaUnica.hojeNaTv(itens.asSequence(), agora, meuTime, favoritos, recentes)
         if (sug.isEmpty()) return emptyList()
-        return listOf(Grupo("Hoje na TV", sug.map { s ->
-            itemPrograma(Lembretes.Candidato(s.canalId, s.canalNome, s.numero, s.programa), agora, s.motivo)
+        return listOf(Grupo(getString(R.string.bu_hoje_tv), sug.map { s ->
+            itemPrograma(Lembretes.Candidato(s.canalId, s.canalNome, s.numero, s.programa), agora, when (s.motivo) {
+                // BuscaUnica (lógica pura) devolve o motivo em português; aqui ele sai no idioma da TV.
+                "Meu time" -> getString(R.string.bu_motivo_time)
+                "Canal favorito" -> getString(R.string.bu_motivo_favorito)
+                "Você assistiu" -> getString(R.string.bu_motivo_assistiu)
+                else -> s.motivo
+            })
         }))
     }
 
@@ -226,10 +232,9 @@ class BuscaActivity : Activity() {
         lista.removeAllViews()
         if (grupos.isEmpty()) {
             val msg = when {
-                termo.length >= 2 -> "Nada encontrado para \"$termo\"."
-                Extras.ligado(this, Extras.Chave.HOJE_NA_TV) -> "Digite o nome de um canal, programa, filme, série ou app. " +
-                    "Sem sugestões agora: marque canais favoritos ou palavras do Meu time para ver o que passa hoje."
-                else -> "Digite o nome de um canal, programa, filme, série ou app."
+                termo.length >= 2 -> getString(R.string.bu_nada, termo)
+                Extras.ligado(this, Extras.Chave.HOJE_NA_TV) -> getString(R.string.bu_digite) + " " + getString(R.string.bu_sem_sugestoes)
+                else -> getString(R.string.bu_digite)
             }
             lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, msg).apply { setPadding(dp(4), dp(Estilo.E3), 0, 0) })
             return

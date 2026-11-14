@@ -164,7 +164,7 @@ object McpPoder2 {
         val iguais = candidatos.filter { it.second == melhor }.map { it.first }
         if (n > iguais.size) erro("só há ${iguais.size} elemento(s) com esse texto")
         val no = iguais[n - 1]
-        exigir(app, Confirmacoes.Acao.MCP_ACOES, "Tocar em \"${alvo.take(60)}\"")
+        exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_tocar, alvo.take(60)))
         AutoDesligar.atividade()
         if (acao == "focar") {
             val ok = no.performAction(AccessibilityNodeInfo.ACTION_FOCUS) || no.performAction(AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS)
@@ -231,7 +231,7 @@ object McpPoder2 {
         val c = (if (pacote.isNotEmpty()) todas.firstOrNull { it.packageName == pacote }
             else todas.firstOrNull { it.playbackState?.state == PlaybackState.STATE_PLAYING } ?: todas.firstOrNull())
             ?: erro("nenhuma sessão de mídia${if (pacote.isNotEmpty()) " de $pacote" else ""}; tente controle_remoto (play)")
-        exigir(app, Confirmacoes.Acao.MCP_ACOES, "Mídia: $acao")
+        exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_midia, acao))
         val seg = a.optLong("segundos", 10).coerceIn(0, 24 * 3600)
         val t = c.transportControls
         when (acao) {
@@ -267,7 +267,7 @@ object McpPoder2 {
             val pacote = a.optString("pacote").trim()
             if (tipo == Rotinas.Acao.ABRIR && !ChecagensPainel.pacoteValido(pacote)) erro("tipo=abrir precisa de um pacote válido")
             val ocioso = a.optInt("ocioso", 0).let { o -> Rotinas.OCIOSO_OPCOES.minByOrNull { kotlin.math.abs(it - o) } ?: 0 }
-            exigir(app, Confirmacoes.Acao.MCP_ACOES, "Criar rotina ${"%02d:%02d".format(h, m)} (${tipo.name.lowercase()})")
+            exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_criar_rotina, "%02d:%02d".format(h, m), tipo.name.lowercase()))
             val nova = Rotinas.salvar(app, Rotinas.Rotina(0, h, m, dias, tipo, if (tipo == Rotinas.Acao.ABRIR) pacote else "",
                 if (tipo == Rotinas.Acao.DESLIGAR) ocioso else 0, true))
             PainelArmazem.registrar(app, "internet", "rotina (MCP)", "criada ${Rotinas.descricao(app, nova)}")
@@ -275,7 +275,7 @@ object McpPoder2 {
         }
         val id = a.optInt("id", -1)
         val alvo = Rotinas.listar(app).firstOrNull { it.id == id } ?: erro("rotina $id não existe (veja com acao=listar)")
-        exigir(app, Confirmacoes.Acao.MCP_ACOES, "Rotina ${"%02d:%02d".format(alvo.hora, alvo.minuto)}: $acao")
+        exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_rotina, "%02d:%02d".format(alvo.hora, alvo.minuto), acao))
         when (acao) {
             "ligar", "desligar" -> Rotinas.salvar(app, alvo.copy(ativa = acao == "ligar"))
             "apagar" -> Rotinas.apagar(app, id)
@@ -294,7 +294,7 @@ object McpPoder2 {
         if (!ChecagensPainel.nomeArquivoValido(nome) || nome.startsWith(".")) erro("nome de arquivo inválido; passe 'nome'")
         val pasta = a.optString("pasta").trim().trim('/').ifEmpty { "Download" }
         if (!PainelArquivos.garantirAcesso(app)) erro("o launcher não tem acesso aos arquivos (o shell próprio precisa estar pareado)")
-        exigir(app, Confirmacoes.Acao.MCP_SHELL, "Baixar ${url.take(120)} para $pasta/$nome")
+        exigir(app, Confirmacoes.Acao.MCP_SHELL, txt(R.string.cf_baixar, url.take(120), "$pasta/$nome"))
         val tmp = File.createTempFile("mcp-baixar", ".tmp", app.cacheDir)
         try {
             val sha = McpPoder.baixar(url, tmp)
@@ -307,7 +307,7 @@ object McpPoder2 {
 
     private fun wol(app: Context, a: JSONObject): String {
         val mac = McpPoderRegras2.mac(a.optString("mac")) ?: erro("MAC inválido (ex.: AA:BB:CC:DD:EE:FF)")
-        exigir(app, Confirmacoes.Acao.MCP_ACOES, "Ligar o computador ${a.optString("mac").take(17)}")
+        exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_wol, a.optString("mac").take(17)))
         val pacote = McpPoderRegras2.pacoteMagico(mac)
         DatagramSocket().use { s ->
             s.broadcast = true
