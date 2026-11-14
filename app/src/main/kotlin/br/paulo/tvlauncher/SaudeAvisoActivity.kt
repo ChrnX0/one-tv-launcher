@@ -41,7 +41,7 @@ class SaudeAvisoActivity : Activity() {
         }
         val primeiro = if (shell) botao(getString(R.string.saude_parear)) {
             // Sem o serviço de acessibilidade a janela do pareamento não abre: leva para a aba Sistema, onde está o resto.
-            if (!PareamentoNaTv.comecar(this)) startActivity(Intent(this, ConfigLauncherActivity::class.java).putExtra(ConfigLauncherActivity.EXTRA_ABA, 7))   // 7 = Sistema
+            if (!PareamentoNaTv.comecar(this)) startActivity(Intent(this, ConfigLauncherActivity::class.java).putExtra(ConfigLauncherActivity.EXTRA_ABA, ConfigLauncherActivity.ABA_AVANCADO))   // o shell fica no Avançado
             finish()
         } else null
         val conectar = if (tunel) botao(getString(R.string.saude_conectar)) {

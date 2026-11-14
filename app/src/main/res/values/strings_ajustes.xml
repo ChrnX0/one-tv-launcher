@@ -27,4 +27,31 @@
     <string name="pb_bluetooth">Bluetooth</string>
     <string name="pb_filtro">Night filter</string>
     <string name="pb_dns">DNS</string>
+    <!-- Configurações reorganizadas e apps ocultos fora da HOME (pedido de 14/11/2026) -->
+    <string name="cfg2_aba_inicio">Home screen</string>
+    <string name="cfg2_aba_inicio_det">Theme, hidden apps, quick panel and weather</string>
+    <string name="cfg2_aba_familia">Family</string>
+    <string name="cfg2_aba_familia_det">Parental control, children\'s PIN, bedtime and guests</string>
+    <string name="cfg2_aba_casa">Home and automations</string>
+    <string name="cfg2_aba_casa_det">Automations, smart home and what you set up from the phone</string>
+    <string name="cfg2_aba_sistema_det">Diagnosis, updates, backup and about</string>
+    <string name="cfg2_aba_avancado">Advanced</string>
+    <string name="cfg2_aba_avancado_det">Network, tools, factory apps, permissions and shell. Rarely needed</string>
+    <string name="cfg2_sec_visitas">Guests</string>
+    <string name="cfg2_sec_celular">From your phone</string>
+    <string name="cfg2_sec_ferramentas">Tools</string>
+    <string name="cfg2_sec_ocultos_sistema">System apps hidden by the launcher</string>
+    <string name="cfg2_apps_visita_det">Choose which apps disappear while guest mode is on</string>
+    <string name="cfg2_apps_visita_sub">OK switches · these disappear while guest mode is on</string>
+    <string name="cfg2_some_visita">hidden for guests</string>
+    <string name="cfg2_fica_visita">stays</string>
+    <string name="cfg2_casa_det">Lights, plugs and scenes of your Home Assistant</string>
+    <string name="oc_titulo">Hidden apps</string>
+    <string name="oc_subtitulo">OK shows or hides an app on the home screen · hidden ones come first</string>
+    <string name="oc_nenhum">No hidden apps · OK to choose</string>
+    <string name="oc_quantos">%1$d hidden · OK to show them again</string>
+    <string name="oc_oculto">hidden</string>
+    <string name="oc_aparece">on the home screen</string>
+    <string name="oc_aviso_titulo">App hidden</string>
+    <string name="oc_aviso">To show it again: Settings › Home screen › Hidden apps</string>
 </resources>

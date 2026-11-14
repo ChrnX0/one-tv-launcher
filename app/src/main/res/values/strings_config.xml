@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Settings screen (ConfigLauncherActivity) and the texts it shows from ContaIptv, Confirmacoes, Debloat and VirarDono. -->
-    <string name="cl_aba_conta">Account</string>
+    <string name="cl_aba_conta">TV and movies</string>
     <string name="cl_aba_conta_det">The IPTV account saved on this TV: status, expiry and connections</string>
     <string name="cl_aba_parental">Parental controls</string>
     <string name="cl_aba_parental_det">Lock channels with the PIN: they disappear from the list and won\'t play</string>

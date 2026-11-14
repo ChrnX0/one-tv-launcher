@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Tela de Configurações (ConfigLauncherActivity) e os textos que ela mostra de ContaIptv, Confirmacoes, Debloat e VirarDono. -->
-    <string name="cl_aba_conta">Conta</string>
+    <string name="cl_aba_conta">TV e filmes</string>
     <string name="cl_aba_conta_det">A conta de IPTV cadastrada na TV: situação, validade e conexões</string>
     <string name="cl_aba_parental">Controle parental</string>
     <string name="cl_aba_parental_det">Bloqueie canais com o PIN: eles somem da lista e não tocam</string>

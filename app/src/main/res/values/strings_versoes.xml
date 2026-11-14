@@ -43,6 +43,8 @@
         <item>Quick panel: the TV\'s latest alerts (rain, notes, maintenance) and the shopping list, crossed out with OK</item>
         <item>Movies and series follow the TV’s language: “dubbed” means audio in that language, and automatic and online subtitles come in it too</item>
         <item>Series: mark the opening once in the ▼ menu (start and end) and the next episodes offer “Skip opening · OK”</item>
+        <item>Settings reorganized by subject: Home screen, TV and movies, Family, Screen and power, Home and automations, Remote access, System; the technical part went to Advanced</item>
+        <item>The “Hidden” card left the home screen: show hidden apps again in Settings › Home screen › Hidden apps</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -75,6 +77,8 @@
         <item>avisos_painel_rapido</item>
         <item>idioma_tv</item>
         <item>pular_abertura</item>
+        <item>cfg_abas</item>
+        <item>apps_ocultos</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -107,6 +111,8 @@
         <item>Open the quick panel and scroll to the bottom</item>
         <item>Play a foreign movie set to “Original with subtitles” (TV in Portuguese)</item>
         <item>In an episode, use ▼ to mark the opening start and end, then open the next episode</item>
+        <item>Open Settings and go down the tab menu</item>
+        <item>Hide an app (hold OK on it), then open Settings › Home screen › Hidden apps and press OK on it</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -139,5 +145,7 @@
         <item>Do the TV alerts and the shopping list show, and does OK cross out an item?</item>
         <item>Did Portuguese subtitles turn on by themselves, as before?</item>
         <item>Did “Skip opening · OK” show up in the opening, and did OK jump past it without pausing?</item>
+        <item>Is it easier to find things, with the technical part only in Advanced?</item>
+        <item>No “Hidden” card on the home screen, and the app came back?</item>
     </string-array>
 </resources>
