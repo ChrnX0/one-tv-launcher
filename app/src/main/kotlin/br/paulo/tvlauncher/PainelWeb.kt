@@ -575,6 +575,35 @@ object PainelWeb {
             "/api/backup/noturno" -> if (req.metodo == "GET") return json(200, backupNoturnoEstado())
             "/api/backup/noturno/config" -> if (req.metodo == "POST") return backupNoturnoConfig(req, token, ip)
             "/api/backup/noturno/agora" -> if (req.metodo == "POST") return backupNoturnoAgora(ip)
+            // Conta do Google Drive pelo painel (14/11/2026, pedido do dono: o painel e as Configurações da TV têm de ter
+            // as mesmas opções). Mesmo login por código da tela da TV (FotoPerfilActivity com EXTRA_DRIVE).
+            "/api/backup/drive/conectar" -> if (req.metodo == "POST") return driveConectar(token, ip)
+            "/api/backup/drive/login" -> if (req.metodo == "GET") return json(200, driveLoginEstado())
+            "/api/backup/drive/qr" -> if (req.metodo == "GET") {
+                val s = loginDrive?.takeIf { it.estado == LoginGoogle.Estado.ESPERANDO } ?: return erro(404, "sem código agora")
+                return Resposta(200, "image/png", QrCodigo.png(s.urlVerificacao), mapOf("Cache-Control" to "no-store"))
+            }
+            "/api/backup/drive/cancelar" -> if (req.metodo == "POST") {
+                loginDrive?.let { if (it.estado == LoginGoogle.Estado.ESPERANDO) it.estado = LoginGoogle.Estado.ERRO }
+                loginDrive = null
+                return json(200, backupNoturnoEstado())
+            }
+            "/api/backup/drive/desconectar" -> if (req.metodo == "POST") {
+                if (!sessoes.elevada(token)) return precisaPin()
+                DriveBackup.desconectar(app)
+                PainelArmazem.registrar(app, ip, "Google Drive: desconectar", "ok")   // sem o e-mail no registro
+                return json(200, backupNoturnoEstado())
+            }
+            "/api/backup/drive/copias" -> if (req.metodo == "GET") {
+                if (!DriveBackup.conectado(app)) return erro(400, "conecte a conta do Google Drive primeiro")
+                val copias = try { DriveBackup.listar(app) } catch (e: Exception) {
+                    return erro(502, "o Drive não respondeu: ${e.message ?: e.javaClass.simpleName}")
+                }
+                return json(200, JSONObject().put("copias", JSONArray().apply {
+                    for (c in copias) put(JSONObject().put("id", c.id).put("nome", c.nome).put("tamanho", c.tamanho))
+                }))
+            }
+            "/api/backup/drive/restaurar" -> if (req.metodo == "POST") return driveRestaurar(req, token, ip)
             "/api/backup/automatico/restaurar" -> if (req.metodo == "POST") {
                 val nome = req.consulta["nome"] ?: ""
                 val f = BackupAutomatico.arquivo(app, nome) ?: return erro(404, "essa cópia não existe")
@@ -629,6 +658,18 @@ object PainelWeb {
             "/api/compartilhar" -> if (req.metodo == "POST") return compartilhar(req, ip)   // ideia 55
             "/api/rede/historico" -> if (req.metodo == "GET")
                 return json(200, HistoricoRede.json(app, req.consulta["horas"]?.toIntOrNull() ?: 24))
+            // Aba Configurações (PainelConfig.kt): as opções das Configurações da TV que só existiam lá.
+            "/api/config" -> when (req.metodo) {
+                "GET" -> return json(200, PainelConfig.estado(app))
+                "POST" -> {
+                    val o = corpoJson(req) ?: return erro(400, "JSON inválido")
+                    return when (val r = PainelConfig.mudar(app, o, sessoes.elevada(token)) { PainelArmazem.registrar(app, ip, it, "ok") }) {
+                        is PainelConfig.Resultado.Ok -> json(200, r.estado)
+                        is PainelConfig.Resultado.Erro -> erro(400, r.mensagem)
+                        PainelConfig.Resultado.PrecisaPin -> precisaPin()
+                    }
+                }
+            }
             "/api/tv/autodesligar" -> when (req.metodo) {
                 "GET" -> return autoDesligar()
                 "POST" -> {
@@ -1024,6 +1065,7 @@ object PainelWeb {
             .put("destinoRotulo", BackupNoturno.rotuloDestino(app, destino))
             .put("nas", nas)
             .put("drive", DriveBackup.email(app) ?: "")   // conta do Google Drive conectada na TV (só o e-mail)
+            .put("google", LoginGoogle.configurado(app))   // sem o cliente OAuth do dono não há login do Drive
             .put("ultimo", BackupNoturno.ultimo(app))
             .put("copias", copias)
     }
@@ -1046,7 +1088,7 @@ object PainelWeb {
                 d == BackupNoturnoRegras.SO_TV || d == BackupNoturnoRegras.PENDRIVE -> d
                 // Google Drive: só com a conta já conectada NA TV (o login é pelo código no celular, na tela da TV).
                 d == BackupNoturnoRegras.DRIVE -> if (DriveBackup.conectado(app)) d
-                    else return erro(400, "conecte a conta do Google Drive na TV primeiro (Configurações > Backup automático)")
+                    else return erro(400, "conecte a conta do Google Drive primeiro (botão Conectar, logo acima)")
                 // NAS: só uma pasta SMB que já está cadastrada em "Mídias na rede" (nada de endereço digitado aqui).
                 else -> {
                     val conta = BackupNoturnoRegras.idSmb(d)?.let { id ->
@@ -1087,6 +1129,61 @@ object PainelWeb {
         val r = fila.poll(60, java.util.concurrent.TimeUnit.SECONDS)
         PainelArmazem.registrar(app, ip, "backup noturno: fazer agora", r ?: "rodando")
         return json(200, backupNoturnoEstado().put("resultado", r ?: JSONObject.NULL))
+    }
+
+    // ---------------------------------------------------------------- conta do Google Drive (DriveBackup.kt)
+
+    /** O login do Drive começado pelo painel (um por vez: começar outro encerra este). Fica fora da lista do conector. */
+    @Volatile private var loginDrive: LoginGoogle.Sessao? = null
+
+    /**
+     * Começa o login do Drive: a TV pede ao Google um código curto, o painel mostra o código e o endereço
+     * (google.com/device) com QR, e a TV fica perguntando ao Google até a pessoa terminar no celular. Pede o PIN de novo:
+     * quem conecta a conta decide para onde as cópias da casa vão.
+     */
+    private fun driveConectar(token: String?, ip: String): Resposta {
+        if (!sessoes.elevada(token)) return precisaPin()
+        if (!LoginGoogle.configurado(app)) return erro(400, "falta o login Google da TV (id e segredo do cliente OAuth, aba Claude)")
+        loginDrive?.let { if (it.estado == LoginGoogle.Estado.ESPERANDO) it.estado = LoginGoogle.Estado.ERRO }
+        val s = try { LoginGoogle.iniciar(app, emptyMap(), LoginGoogle.Finalidade.DRIVE) } catch (e: Exception) {
+            PainelArmazem.registrar(app, ip, "Google Drive: conectar", "falhou: ${e.javaClass.simpleName}")
+            return erro(502, e.message ?: "o Google não respondeu")
+        }
+        loginDrive = s
+        PainelArmazem.registrar(app, ip, "Google Drive: conectar", "código pedido")
+        return json(200, driveLoginEstado())
+    }
+
+    /** Estado do login do painel: esperando (com código e endereço), ok (com o e-mail), recusado/erro (com o motivo). */
+    private fun driveLoginEstado(): JSONObject {
+        val s = loginDrive ?: return JSONObject().put("estado", "nenhum").put("drive", DriveBackup.email(app) ?: "")
+        val o = JSONObject().put("estado", s.estado.name.lowercase()).put("drive", DriveBackup.email(app) ?: "")
+        when (s.estado) {
+            LoginGoogle.Estado.ESPERANDO -> o.put("codigo", s.codigoUsuario).put("url", s.urlVerificacao)
+                .put("restaMs", (s.expira - System.currentTimeMillis()).coerceAtLeast(0))
+            LoginGoogle.Estado.OK -> o.put("email", s.email ?: "")
+            else -> o.put("mensagem", s.mensagem)
+        }
+        return o
+    }
+
+    /** "Restaurar do Drive": baixa a cópia escolhida e restaura com a senha do backup (o mesmo da tela da TV). */
+    private fun driveRestaurar(req: Requisicao, token: String?, ip: String): Resposta {
+        if (!sessoes.elevada(token)) return precisaPin()
+        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
+        val id = o.optString("id").takeIf { DriveRegras.idValido(it) } ?: return erro(400, "cópia inválida")
+        val senha = o.optString("senha")
+        if (!CofreBackup.senhaValida(senha)) return erro(400, "a senha do backup precisa ter de 8 a 128 caracteres")
+        val texto = try { DriveBackup.baixar(app, id) } catch (e: Exception) {
+            PainelArmazem.registrar(app, ip, "restaurar do Google Drive", "falhou: ${e.javaClass.simpleName}")
+            return erro(502, "o Drive não entregou a cópia: ${e.message ?: e.javaClass.simpleName}")
+        }
+        return try {
+            restaurarTexto(texto, token, ip, "restaurar do Google Drive") { BackupCompleto.importar(app, it, senha) }
+        } catch (e: CofreBackup.SenhaErrada) {
+            PainelArmazem.registrar(app, ip, "restaurar do Google Drive", "senha errada")
+            erro(400, "senha do backup errada (ou o arquivo foi alterado)")
+        }
     }
 
     /** Restaura um backup já lido (do arquivo enviado ou de uma cópia automática). [acao] vai para o registro. */

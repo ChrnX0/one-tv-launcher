@@ -17,6 +17,8 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Web panel: Settings tab with theme, text size, audio, screensaver, parental control, kids and guest mode, kids’ PIN, change PIN and Confirmations, the same as on the TV</item>
+        <item>Web panel: connect the Google Drive account (code and QR right in the panel), disconnect it and restore a Drive copy, just like in the TV Settings</item>
         <item>Real volume on LG NetCast TVs (2013) over the network: sleep timer, bedtime limit, voice and alarm</item>
         <item>Series: 10-second countdown before the next episode, “Still watching?” after 3 in a row, and “Turn off the TV when this ends” in the ▼ menu</item>
         <item>Movies and series try again by themselves when the connection drops, subtitle size in the ▼ menu, and the details page works offline</item>
@@ -82,6 +84,8 @@
         <item>Live TV › Sports: channels with a match or fight live right now get a red “LIVE” label and come first</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>painel_config</item>
+        <item>painel_drive</item>
         <item>home</item>
         <item>casa_comodos</item>
         <item>automacoes</item>
@@ -145,6 +149,8 @@
         <item>pular_letra</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>In the web panel, change the theme in the Settings tab</item>
+        <item>In the web panel, open the Backup tab</item>
         <item>Press HOME</item>
         <item>Open Home from the quick panel</item>
         <item>Open Settings &gt; Automations</item>
@@ -208,6 +214,8 @@
         <item>In Movies › All, go to the last column and press ▶, then choose a letter</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Did the TV home screen switch to the chosen theme?</item>
+        <item>Does “Google Drive account” show with connect, and do the code and QR show in the panel?</item>
         <item>Did it go back to the home screen?</item>
         <item>Are the cards grouped by room, clear of the hints at the bottom?</item>
         <item>Do your routines and alarms show up there, and can you edit one?</item>

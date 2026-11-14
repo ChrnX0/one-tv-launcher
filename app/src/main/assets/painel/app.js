@@ -201,7 +201,8 @@ const AO_ABRIR = {
   claude: () => carregarMcp(),
   roteador: () => carregarRoteador(),
   registro: () => carregarRegistro(),
-  backup: () => { carregarCopias(); carregarNoturno(); },
+  backup: () => { carregarCopias(); carregarNoturno(); acompanharDrive(); },
+  config: () => carregarConfig(),
   arquivos: () => abrirPasta(pastaAtual),
 };
 
@@ -755,6 +756,7 @@ function desenharNoturno(r) {
     o.value = valor; o.textContent = rotulo; o.selected = valor === r.destino;
     sel.appendChild(o);
   }
+  desenharDriveConta(r);
   const lista = $('listaNoturno');
   lista.replaceChildren();
   for (const c of r.copias) {
@@ -820,6 +822,184 @@ $('btnNoturnoAgora').addEventListener('click', async () => {
     mostrar(status, r.resultado ? `Resultado: ${r.resultado}` : 'Ainda rodando na TV: o resultado aparece em "última vez" daqui a pouco.');
   } catch (e) { mostrar(status, textoErro(e)); }
   b.disabled = false;
+});
+
+// ---------- conta do Google Drive (DriveBackup.kt): o mesmo login por código da tela da TV ----------
+
+function desenharDriveConta(r) {
+  $('driveConta').textContent = r.drive || (r.google ? 'não conectada' : 'falta o login Google (aba Claude)');
+  $('btnDriveConectar').hidden = !!r.drive || !r.google;
+  $('btnDriveDesconectar').hidden = !r.drive;
+  $('cartaoDriveRestaurar').hidden = !r.drive;
+}
+
+let timerDrive = null;
+let qrDriveAtual = null;
+/** Mostra o código enquanto o Google espera; termina sozinho quando a pessoa conclui no celular (ou o código vence). */
+function desenharDriveLogin(l) {
+  clearTimeout(timerDrive);
+  const esperando = l.estado === 'esperando';
+  $('driveLogin').hidden = !esperando;
+  if (esperando) {
+    $('driveCodigo').textContent = l.codigo;
+    $('driveUrl').textContent = l.url.replace(/^https?:\/\//, '');
+    $('driveUrl').href = l.url;
+    if (l.codigo !== qrDriveAtual) $('driveQr').src = '/api/backup/drive/qr?t=' + Date.now();
+    qrDriveAtual = l.codigo;
+    // Confere a cada 3 s só com a aba à vista (a consulta renova a sessão do painel).
+    if (!$('abaBackup').hidden && document.visibilityState === 'visible') timerDrive = setTimeout(acompanharDrive, 3000);
+    return;
+  }
+  qrDriveAtual = null;
+  if (l.estado === 'ok') { aviso(`Google Drive conectado: ${l.email}. Escolha "Google Drive" em Cópia extra.`, 'ok'); carregarNoturno(); }
+  else if (l.estado === 'recusado' || l.estado === 'erro') mostrar($('statusNoturno'), `Não conectou: ${l.mensagem}`);
+}
+
+async function acompanharDrive() {
+  try { desenharDriveLogin(await chamar('GET', '/api/backup/drive/login')); } catch (e) { mostrar($('statusNoturno'), textoErro(e)); }
+}
+
+$('btnDriveConectar').addEventListener('click', async () => {
+  mostrar($('statusNoturno'), '');
+  // Pede o PIN de novo (quem conecta a conta decide para onde vão as cópias da casa).
+  const r = await confirmar('Conectar o Google Drive?',
+    'A TV pede um código ao Google. Depois, no celular, você entra com a conta Google da TV e digita o código. As cópias vão para a pasta OneTV-backup, trancadas com a senha do backup.',
+    'Pedir código', () => chamar('POST', '/api/backup/drive/conectar'), false);
+  if (r) desenharDriveLogin(r);
+});
+$('btnDriveCancelar').addEventListener('click', async () => {
+  clearTimeout(timerDrive);
+  $('driveLogin').hidden = true;
+  try { desenharNoturno(await chamar('POST', '/api/backup/drive/cancelar')); } catch (e) { mostrar($('statusNoturno'), textoErro(e)); }
+});
+$('btnDriveDesconectar').addEventListener('click', async () => {
+  const r = await confirmar('Desconectar o Google Drive?',
+    `A TV deixa de enviar cópias para ${estadoNoturno?.drive || 'a conta'} e o acesso é tirado também no Google. As cópias que já estão no Drive ficam lá.`,
+    'Desconectar', () => chamar('POST', '/api/backup/drive/desconectar'));
+  if (r) { desenharNoturno(r); aviso('Google Drive desconectado.', 'ok'); }
+});
+
+$('btnDriveListar').addEventListener('click', async () => {
+  const lista = $('listaDrive');
+  const status = $('statusDrive');
+  const b = $('btnDriveListar');
+  lista.replaceChildren();
+  b.disabled = true;
+  mostrar(status, 'Perguntando ao Drive…');
+  let r;
+  try { r = await chamar('GET', '/api/backup/drive/copias'); } catch (e) { mostrar(status, textoErro(e)); b.disabled = false; return; }
+  b.disabled = false;
+  mostrar(status, r.copias.length ? '' : 'Nenhuma cópia no Drive ainda.');
+  for (const c of r.copias) {
+    const linha = document.createElement('div');
+    linha.className = 'linha-registro';
+    const q = document.createElement('span');
+    q.className = 'quando';
+    q.textContent = `${diaDaCopiaNoturna(c.nome)} · ${Math.max(1, Math.round(c.tamanho / 1024))} KB`;
+    const voltar = document.createElement('button');
+    voltar.type = 'button'; voltar.className = 'link'; voltar.textContent = 'restaurar';
+    voltar.addEventListener('click', async () => {
+      const senha = $('senhaDrive').value;
+      if (senha.length < 8) { mostrar(status, 'Digite a senha do backup noturno (8 ou mais caracteres).'); $('senhaDrive').focus(); return; }
+      const emUso = await tvEmUso();
+      const ok = await confirmar('Restaurar do Google Drive?',
+        `Substitui as configurações do launcher pelas da cópia de ${diaDaCopiaNoturna(c.nome)} e reinicia o launcher na TV (a tela pisca).` +
+        (emUso ? ` Atenção: a TV está em uso agora (${emUso}).` : ''),
+        'Restaurar', () => chamar('POST', '/api/backup/drive/restaurar', { id: c.id, senha }));
+      if (!ok) return;
+      $('senhaDrive').value = '';
+      mostrar(status, `Restaurado (${ok.chaves} configurações). O launcher está reiniciando…`);
+      esperarVoltar(status);
+    });
+    linha.append(q, ' ', voltar);
+    lista.appendChild(linha);
+  }
+});
+
+// ---------- Configurações (PainelConfig.kt): as mesmas opções das Configurações da TV ----------
+
+let estadoConfig = null;
+function desenharConfig(r) {
+  estadoConfig = r;
+  const tema = $('cfgTema');
+  tema.replaceChildren(...r.temas.map((t) => { const o = document.createElement('option'); o.value = t.valor; o.textContent = t.nome; return o; }));
+  tema.value = r.tema;
+  $('cfgTamanho').value = String(r.tamanhoTexto);
+  $('cfgPilhas').checked = r.pilhas;
+  $('cfgChuva').checked = r.avisoChuva;
+  $('cfgAudio').value = r.audio;
+  $('cfgProtetor').value = String(r.protetorMs);
+  $('cfgBarra').value = r.barraProtetor;
+  $('cfgParental').checked = r.parental;
+  $('cfgParentalDet').textContent = `(${r.parentalCanais} canal(is) ou categoria(s) escolhidos)`;
+  $('cfgInfantil').checked = r.infantil;
+  $('cfgInfantilDet').textContent = `(${r.infantis} categoria(s) infantil(is))`;
+  $('cfgVisita').checked = r.visita;
+  $('cfgPinFamiliaEstado').textContent = r.pinFamilia ? 'definido' : 'não definido';
+  $('btnApagarPinFamilia').hidden = !r.pinFamilia;
+  $('cfgLiberarTudo').checked = r.confirmacoes.liberarTudo;
+  const lista = $('cfgConfirmacoes');
+  lista.replaceChildren();
+  for (const a of r.confirmacoes.acoes) {
+    const linha = document.createElement('div');
+    linha.className = 'linha-confirmacao';
+    const nome = document.createElement('span');
+    nome.textContent = a.titulo;
+    nome.title = a.explicacao;
+    const sel = document.createElement('select');
+    sel.setAttribute('aria-label', a.titulo);
+    for (const m of a.modos) { const o = document.createElement('option'); o.value = m.valor; o.textContent = m.nome; sel.appendChild(o); }
+    sel.value = a.modo;
+    sel.disabled = r.confirmacoes.liberarTudo;   // como na TV: com "Liberar tudo", as linhas não valem
+    sel.addEventListener('change', () => gravarConfig({ campo: 'confirmacao', acao: a.chave, valor: sel.value }, `${a.titulo}: ${sel.options[sel.selectedIndex].textContent}.`));
+    linha.append(nome, sel);
+    lista.appendChild(linha);
+  }
+}
+
+async function carregarConfig() {
+  mostrar($('statusConfig'), '');
+  try { desenharConfig(await chamar('GET', '/api/config')); } catch (e) { mostrar($('statusConfig'), textoErro(e)); }
+}
+
+/** Grava um campo. Se a TV pedir o PIN, o confirmar() mostra o campo do PIN; cancelado, a tela volta ao estado gravado. */
+async function gravarConfig(corpo, ok, titulo = 'Confirme o PIN') {
+  mostrar($('statusConfig'), '');
+  try { desenharConfig(await chamar('POST', '/api/config', corpo)); aviso(ok, 'ok'); return true; }
+  catch (e) {
+    if (e instanceof PrecisaPin) {
+      const r = await confirmar(titulo, 'Esta opção pede o PIN do painel.', 'Confirmar', () => chamar('POST', '/api/config', corpo), false);
+      if (r) { desenharConfig(r); aviso(ok, 'ok'); return true; }
+    } else mostrar($('statusConfig'), textoErro(e));
+    if (estadoConfig) desenharConfig(estadoConfig);
+    return false;
+  }
+}
+
+$('cfgTema').addEventListener('change', (e) => gravarConfig({ campo: 'tema', valor: e.target.value }, 'Tema trocado.'));
+$('cfgTamanho').addEventListener('change', (e) => gravarConfig({ campo: 'tamanhoTexto', valor: Number(e.target.value) }, 'Tamanho do texto gravado (vale ao abrir cada tela).'));
+$('cfgPilhas').addEventListener('change', (e) => gravarConfig({ campo: 'pilhas', valor: e.target.checked }, e.target.checked ? 'Pilhas automáticas ligadas.' : 'Pilhas automáticas desligadas.'));
+$('cfgChuva').addEventListener('change', (e) => gravarConfig({ campo: 'avisoChuva', valor: e.target.checked }, e.target.checked ? 'Aviso de chuva ligado.' : 'Aviso de chuva desligado.'));
+$('cfgAudio').addEventListener('change', (e) => gravarConfig({ campo: 'audio', valor: e.target.value }, 'Áudio preferido gravado.'));
+$('cfgProtetor').addEventListener('change', (e) => gravarConfig({ campo: 'protetorMs', valor: Number(e.target.value) }, 'Tempo do protetor gravado.'));
+$('cfgBarra').addEventListener('change', (e) => gravarConfig({ campo: 'barraProtetor', valor: e.target.value }, 'Linha do protetor gravada.'));
+$('cfgParental').addEventListener('change', (e) => gravarConfig({ campo: 'parental', valor: e.target.checked }, e.target.checked ? 'Controle parental ligado.' : 'Controle parental desligado.'));
+$('cfgInfantil').addEventListener('change', (e) => gravarConfig({ campo: 'infantil', valor: e.target.checked }, e.target.checked ? 'Modo infantil ligado.' : 'Modo infantil desligado.'));
+$('cfgVisita').addEventListener('change', (e) => gravarConfig({ campo: 'visita', valor: e.target.checked }, e.target.checked ? 'Modo visita ligado.' : 'Modo visita desligado.'));
+$('cfgLiberarTudo').addEventListener('change', (e) => gravarConfig({ campo: 'liberarTudo', valor: e.target.checked }, e.target.checked ? 'Liberar tudo ligado.' : 'Liberar tudo desligado.'));
+$('btnPinFamilia').addEventListener('click', async () => {
+  const pin = $('cfgPinFamilia').value;
+  if (!/^[0-9]{6,12}$/.test(pin)) { mostrar($('statusConfig'), 'O PIN das crianças precisa ter de 6 a 12 números.'); return; }
+  if (await gravarConfig({ campo: 'pinFamilia', valor: pin }, 'PIN das crianças gravado.')) $('cfgPinFamilia').value = '';
+});
+$('btnApagarPinFamilia').addEventListener('click', () => gravarConfig({ campo: 'pinFamilia', valor: '' }, 'PIN das crianças apagado: agora só o PIN do painel destrava.'));
+$('btnPinPainel').addEventListener('click', async () => {
+  const pin = $('cfgPinNovo').value;
+  if (!/^[0-9]{6,12}$/.test(pin)) { mostrar($('statusConfig'), 'O PIN precisa ter de 6 a 12 números.'); return; }
+  if (pin !== $('cfgPinNovo2').value) { mostrar($('statusConfig'), 'Os dois PINs não bateram.'); return; }
+  if (await gravarConfig({ campo: 'pinPainel', valor: pin }, 'PIN do painel trocado. Use o novo da próxima vez.', 'Confirme o PIN atual')) {
+    $('cfgPinNovo').value = ''; $('cfgPinNovo2').value = '';
+  }
 });
 
 // ---------- saúde (PainelSaude.kt) ----------
@@ -1917,6 +2097,7 @@ async function atualizarFoto() {
 document.addEventListener('visibilitychange', () => {
   if (!$('abaControle').hidden) atualizarFoto();
   if (!$('abaClaude').hidden && document.visibilityState === 'visible' && !$('telaPainel').hidden) carregarMcp();
+  if (!$('abaBackup').hidden && document.visibilityState === 'visible' && !$('telaPainel').hidden && !$('driveLogin').hidden) acompanharDrive();
 });
 
 for (const b of document.querySelectorAll('[data-tecla]')) {
