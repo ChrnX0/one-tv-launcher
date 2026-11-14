@@ -38,7 +38,7 @@ class AutorizaShizukuService : AccessibilityService() {
     override fun onAccessibilityEvent(evento: AccessibilityEvent?) {
         if (evento?.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             Home.janelaApareceu(this, evento.packageName, evento.className)
-            JanelaNaFrente.apareceu(evento.packageName)   // quem está na frente (MCP, rotinas, Casa, saúde do acesso)
+            JanelaNaFrente.apareceu(evento.packageName, evento.className)   // quem está na frente (MCP, rotinas, Casa, saúde do acesso)
             SomNavegacaoTv.pacoteNaFrente = evento.packageName?.toString()
             SaudeAcesso.janela(this, evento.packageName, evento.className)   // HOME na frente: hora boa para aviso pendente
             HoraDormirTv.janela(this, evento.packageName)   // hora de dormir: app fora da lista volta para a HOME

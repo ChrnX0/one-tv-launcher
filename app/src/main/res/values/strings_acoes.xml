@@ -38,4 +38,25 @@
         <item quantity="one">%d action</item>
         <item quantity="other">%d actions</item>
     </plurals>
+    <!-- Botões do controle (ideia 6) -->
+    <string name="tec_titulo">Remote buttons</string>
+    <string name="tec_det">Netflix and YouTube work on any screen; coloured keys and numbers only on the home screen.</string>
+    <string name="tec_nova">+ Set up a button</string>
+    <string name="tec_nova_det">Then press the button on the remote</string>
+    <string name="tec_aperte">Press the button</string>
+    <string name="tec_aperte_det">Netflix, YouTube, a coloured key or a number. BACK cancels.</string>
+    <string name="tec_nao_pode">%1$s can\'t be changed (it is needed to use the TV). Try another button.</string>
+    <string name="tec_so_home">Works only on the home screen (in apps and the player it keeps its own job).</string>
+    <string name="tec_toda_tela">Works on any screen.</string>
+    <string name="tec_toque">Press</string>
+    <string name="tec_segurar">Hold</string>
+    <string name="tec_duplo">Double press</string>
+    <string name="tec_padrao">default (saved app; hold 3 s = choose)</string>
+    <string name="tec_cena">scene %1$s</string>
+    <string name="tec_salvo">%1$s saved</string>
+    <string name="tec_apagar">Clear this button</string>
+    <string name="tec_vermelha">Red</string>
+    <string name="tec_verde">Green</string>
+    <string name="tec_amarela">Yellow</string>
+    <string name="tec_azul">Blue</string>
 </resources>
