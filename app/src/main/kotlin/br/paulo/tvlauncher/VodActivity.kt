@@ -95,6 +95,8 @@ class VodActivity : Activity() {
             Intent(ctx, VodActivity::class.java)
                 .putExtra(EXTRA_TIPO, tipo).putExtra(EXTRA_FONTE, fonteId).putExtra(EXTRA_ID, id)
                 .putExtra(EXTRA_EXT, extensao).putExtra(EXTRA_TITULO, titulo).putExtra("do_comeco", doComeco)
+                // Aberto de fora de uma tela (pedido do catálogo de ações, 14/11/2026): o Android exige tarefa nova.
+                .apply { if (ctx !is Activity) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
 
         /** Chave da posição salva (a mesma que Filme.chave / Episodio.chave usam). */
         /**

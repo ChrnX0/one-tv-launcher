@@ -138,7 +138,9 @@ class McpFerramentas(ctx: Context) : McpProtocolo.Ferramentas, McpProtocolo.ComC
             .put(ferramenta("apps", "Apps que a tela inicial mostra (pacote -> nome). Só estes podem ser abertos."))
             .put(ferramenta("agenda_hoje", "Resumo dos compromissos de hoje do perfil atual da TV."))
             .put(ferramenta("pedir_acoes",
-                "Pede ações à TV: abrir app, abrir tela, criar despertador, volume, mídia, modo visita. " +
+                "Pede ações à TV: abrir app, abrir tela, criar despertador, volume, mídia, modo visita, recado na tela, timer, " +
+                    "desligar em X min, filtro noturno, rodar cena, item no mural, e Filmes e Séries (tocar_titulo, continuar, " +
+                    "proximo_episodio, o_que_estava_vendo; títulos de categoria oculta ou bloqueada não aparecem). " +
                     "Conforme as Confirmações da TV, executa na hora, espera OK no controle (60 s) ou é recusado; " +
                     "use ver_pedido para saber o resultado. " +
                     "Máximo ${ComandosIa.MAX_ACOES} ações. " +
