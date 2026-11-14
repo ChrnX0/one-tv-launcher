@@ -16,11 +16,13 @@
 },
 "com.adguard.vpn": {
 "d": "AdGuard VPN: a VPN sempre ativa da TV.",
+"en": "The TV's always-on VPN",
 "q": "A VPN e o bloqueio dela caem.",
 "r": "cuidado"
 },
 "com.amazon.amazonvideo.livingroom": {
 "d": "Prime Video.",
+"en": "Movies, shows and sports",
 "q": "Só ele some.",
 "r": "seguro"
 },
@@ -179,11 +181,13 @@
 },
 "com.android.tv.settings": {
 "d": "As Configurações da TV.",
+"en": "TV settings",
 "q": "Sem ela não dá para mexer em Wi-Fi, controle, contas nem nas opções do desenvolvedor.",
 "r": "essencial"
 },
 "com.android.vending": {
 "d": "A Google Play Store.",
+"en": "Install and update apps",
 "q": "Não dá mais para instalar nem atualizar apps pela loja. Apps que conferem a compra pela Play podem reclamar.",
 "r": "cuidado"
 },
@@ -219,6 +223,7 @@
 },
 "com.google.android.apps.mediashell": {
 "d": "O Google Cast: recebe o que você transmite do celular ou do computador.",
+"en": "Receives what you cast from your phone or computer",
 "q": "Não dá mais para transmitir do celular para a TV.",
 "r": "cuidado"
 },
@@ -326,6 +331,7 @@
 "Botão do microfone do controle",
 "Gemini"
 ],
+"en": "Voice search and the Assistant",
 "q": "A busca por voz e o Gemini param.",
 "r": "cuidado"
 },
@@ -442,6 +448,7 @@
 },
 "com.google.android.videos": {
 "d": "Google Play Filmes (a loja de filmes do Google TV).",
+"en": "Purchased and rented movies",
 "q": "Só ele some.",
 "r": "seguro"
 },
@@ -462,31 +469,37 @@
 },
 "com.google.android.youtube.tv": {
 "d": "YouTube. O botão YouTube do controle abre ele.",
+"en": "Videos and channels",
 "q": "Só ele some, e o botão YouTube fica sem app.",
 "r": "seguro"
 },
 "com.google.android.youtube.tvmusic": {
 "d": "YouTube Music.",
+"en": "Music, playlists and music videos",
 "q": "Só ele some.",
 "r": "seguro"
 },
 "com.netflix.ninja": {
 "d": "Netflix. O botão Netflix do controle abre ele.",
+"en": "Movies and shows",
 "q": "Só ele some, e o botão Netflix fica sem app.",
 "r": "seguro"
 },
 "com.onestream.player": {
 "d": "1-Stream: player de listas de canais (IPTV).",
+"en": "Player for channel lists (IPTV)",
 "q": "Só ele some.",
 "r": "seguro"
 },
 "com.sugarapple.workout": {
 "d": "Home Workout: treinos em casa.",
+"en": "Workouts at home",
 "q": "Só ele some.",
 "r": "seguro"
 },
 "pl.solidexplorer2": {
 "d": "Solid Explorer: gerenciador de arquivos.",
+"en": "File manager",
 "q": "Só ele some.",
 "r": "seguro"
 }

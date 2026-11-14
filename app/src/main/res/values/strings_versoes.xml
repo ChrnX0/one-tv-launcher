@@ -22,6 +22,7 @@
         <item>Movies and series try again by themselves when the connection drops, subtitle size in the ▼ menu, and the details page works offline</item>
         <item>Screensaver answers the remote: ◀ ▶ move through the cards, OK dismisses a notice or pauses the music, and a “now playing” card</item>
         <item>Screensaver photos from a network folder (computer, NAS or Nextcloud): open the folder in “Network” and choose “Use these photos”</item>
+        <item>More apps on the home screen now show a short description under their name</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -33,6 +34,7 @@
         <item>proximo_episodio</item>
         <item>protetor_teclas</item>
         <item>fotos_rede</item>
+        <item>frase_apps</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -44,6 +46,7 @@
         <item>Let an episode reach the end (or skip to the last minute)</item>
         <item>Play music, wait for the screensaver, then press ◀ ▶ and OK</item>
         <item>In “Network”, open a folder with photos and choose “Use these photos in the screensaver”</item>
+        <item>On the home screen, move to an app you installed (e.g. a file manager)</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -55,5 +58,6 @@
         <item>Did “Next episode” count down from 10, and did Cancel keep you on the series page?</item>
         <item>Did the cards get highlighted and did OK pause the music?</item>
         <item>Did those photos show up in the next screensaver?</item>
+        <item>Does the line under its name say what it does, in the TV’s language?</item>
     </string-array>
 </resources>

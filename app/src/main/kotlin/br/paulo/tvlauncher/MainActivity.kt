@@ -259,6 +259,9 @@ class MainActivity : Activity() {
             if (foto != null) ui.post { if (!isDestroyed) fotoPerfil.setImageBitmap(foto) }
             runCatching { Despertador.agendar(this) }   // garante o proximo alarme agendado
             runCatching { Rotinas.agendar(this) }       // idem para as rotinas por horário
+            if (fichasHome == null) fichasHome = runCatching {   // frase do destaque dos apps (ideia 13): fora da tela
+                FrasesApps.ler(assets.open("fichas-apps.json").use { String(it.readBytes(), Charsets.UTF_8) })
+            }.getOrDefault(emptyMap())
         }
         BackupAutomatico.talvezGravar(this)   // cópia diária das configurações (numa thread; no máximo 1x por dia)
         // DNS fixo que parou de responder deixa a TV "sem internet": confere ao voltar à HOME (fora da thread; só testa
@@ -804,6 +807,8 @@ class MainActivity : Activity() {
             "com.android.tv.settings" to R.string.app_sub_config,
         )
         const val ALTURA_CONTINUAR = 112    // título + cards do tamanho dos apps (63 dp) + folga do card focado
+        /** As fichas de fichas-apps.json para a frase do destaque (ideia 13). Lidas uma vez, na filaApps; null até lá. */
+        @Volatile var fichasHome: Map<String, FrasesApps.Ficha>? = null
     }
 
     /** Todos os apps de TV instalados, sem ordem e sem tirar os ocultos (quem organiza é montarEntradas). */
@@ -1064,7 +1069,7 @@ class MainActivity : Activity() {
     /** A capa de quem está em foco: banner do app (ou a cor do ícone); a TV ao vivo, coral; o card "Ocultos", nada. */
     private fun mostrarCapa(entrada: Entrada) {
         val item = when (entrada) {
-            is Entrada.App -> { mostrarDestaque(null, entrada.nome, subApp(entrada.item.pacote)); entrada.item }
+            is Entrada.App -> { mostrarDestaque(null, entrada.nome, subApp(entrada.item.pacote, entrada.nome)); entrada.item }
             is Entrada.Pilha -> {
                 mostrarDestaque(null, entrada.daFrente.nome, getString(R.string.home_destaque_pilha, entrada.itens.size))
                 entrada.daFrente
@@ -1271,10 +1276,12 @@ class MainActivity : Activity() {
      * ([DESCRICAO_APPS]); para app novo, a categoria que ele declara no idioma da TV (ex.: "Vídeo"); sem nada, "App".
      * (Medido: YouTube, Netflix e cia. não declaram categoria, por isso a tabela.)
      */
-    private fun subApp(pacote: String): String {
-        DESCRICAO_APPS[pacote]?.let { return getString(it) }
+    private fun subApp(pacote: String, nome: String): String {
+        // Ideia 13 (14/11/2026): entre a frase à mão e a categoria, a ficha do painel (FrasesApps decide).
         val c = categoria(pacote)
-        return (if (c >= 0) ApplicationInfo.getCategoryTitle(this, c)?.toString() else null) ?: getString(R.string.home_destaque_app)
+        return FrasesApps.escolher(pacote, nome, DESCRICAO_APPS[pacote]?.let { getString(it) }, fichasHome,
+            resources.configuration.locales[0].language == "pt",
+            if (c >= 0) ApplicationInfo.getCategoryTitle(this, c)?.toString() else null) ?: getString(R.string.home_destaque_app)
     }
 
     /** Lê o banner (ou a cor do ícone) de um app. Roda em qualquer thread; o resultado vai para [capas]. */
