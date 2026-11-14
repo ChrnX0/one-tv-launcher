@@ -71,4 +71,12 @@ class JogosTest {
         assertFalse(Jogos.ipValido("192.168.1.300"))
         assertFalse(Jogos.ipValido("pc.lan"))
     }
+
+    @Test fun ordemPorUso() {
+        val uso = mapOf("b" to 100L, "c" to 300L)
+        assertEquals(listOf("c", "b", "a", "d"), Jogos.ordenarPorUso(listOf("a", "b", "c", "d"), uso))
+        assertEquals(listOf("a", "d"), Jogos.ordenarPorUso(listOf("a", "d"), emptyMap()))
+        assertEquals("c", Jogos.ultimoUsado(listOf("a", "b", "c"), uso))
+        assertNull(Jogos.ultimoUsado(listOf("a"), uso))
+    }
 }

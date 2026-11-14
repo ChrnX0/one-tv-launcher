@@ -985,9 +985,12 @@ class MainActivity : Activity() {
         val t0 = android.os.SystemClock.elapsedRealtime()
         filaApps.execute {
             val todos = carregarApps()   // cacheApps só é tocado nesta fila (uma thread)
-            jogosNaTv = todos.count { JogosTv.ehJogo(this, it.pacote) }   // a frase do card Jogos (resumoJogos)
+            val doJogos = todos.filter { JogosTv.ehJogo(this, it.pacote) }
+            jogosNaTv = doJogos.size   // a frase do card Jogos (resumoJogos)
             // Uso recente também aqui fora (04/11/2026): antes rodava dentro de montarEntradas, na thread da tela.
             val uso = if (Config.ORDENAR_POR_USO_RECENTE) Uso.ultimoUso(this) else emptyMap()
+            // Card Jogos em foco (esboço A, 14/11/2026): o fundo é o banner oficial do jogo usado por último.
+            ultimoJogo = Jogos.ultimoUsado(doJogos.map { it.pacote }, uso)?.let { p -> p to doJogos.first { it.pacote == p }.nome }
             // Os retângulos mostram o banner de cada app: lê os que faltam ANTES de desenhar (só na 1ª vez do processo).
             for (app in todos) if (!capas.containsKey(app.pacote)) runCatching { lerCapa(app.pacote, app.icone) }
             val t1 = android.os.SystemClock.elapsedRealtime()
@@ -1507,6 +1510,8 @@ class MainActivity : Activity() {
     /** Fundo de um card de Assistir: o ícone grande, ou o degradê da cor enquanto ele não fica pronto. Parado, sem zoom. */
     private fun mostrarCapaAtalho(tipo: IconeApp.Tipo) {
         capaPedida = null
+        // Jogos: o banner (logo oficial) do jogo usado por último, como o de um app em foco. Sem jogo usado, o controle.
+        if (tipo == IconeApp.Tipo.JOGOS) ultimoJogo?.first?.let { p -> capas[p]?.first?.let { capa.mostrar(it, null); return } }
         // Séries e Filmes: a arte do último título, grande à direita (12/11/2026). Sem arte, o ícone como os outros.
         arteAtalho[tipo]?.second?.let { capa.mostrar(it, null, arte = true); return }
         val img = capasAtalho[tipo]?.second?.firstOrNull()
@@ -1674,12 +1679,15 @@ class MainActivity : Activity() {
 
     /** Quantos apps de jogo a TV tem (lido em preencherApps, fora da tela). */
     @Volatile private var jogosNaTv = 0
+    /** pacote e nome do jogo usado por último (UsageStats), ou null. Lido em preencherApps. */
+    @Volatile private var ultimoJogo: Pair<String, String>? = null
 
     /** A frase do card Jogos em foco: "3 jogos · 1 controle ligado" ou, sem jogos, o que o card oferece. */
     private fun resumoJogos(): String {
         val controles = runCatching { JogosTv.controles().size }.getOrDefault(0)
         if (jogosNaTv == 0 && controles == 0) return getString(R.string.home_destaque_jogos_vazio)
         val partes = mutableListOf(resources.getQuantityString(R.plurals.jogos_qtd, jogosNaTv, jogosNaTv))
+        ultimoJogo?.second?.let { partes.add(0, getString(R.string.home_jogos_ultimo, it)) }
         if (controles > 0) partes += resources.getQuantityString(R.plurals.jogos_controles, controles, controles)
         return partes.joinToString(" · ")
     }
