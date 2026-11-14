@@ -210,7 +210,7 @@ object BackupNoturno {
         // aceitaria, sem aplicar nada. Cópia que não abre não vai para fora (seria só mais uma cópia estragada).
         val ensaio = try {
             EnsaioRestauracao.ensaiar(File(pasta(app), nome).readText(Charsets.UTF_8), senha, app.packageName,
-                BackupCompleto.CAMINHOS_ARQUIVOS, BackupCompleto.LIMITE_BYTES)
+                BackupCompleto.LIMITE_BYTES, BackupCompleto::caminhoPermitido)
         } catch (e: Exception) { EnsaioRestauracao.Resultado(false, e.javaClass.simpleName) }
         prefs(app).edit().putBoolean("ensaio_ok", ensaio.ok).putString("ensaio_motivo", ensaio.motivo).apply()
         if (!ensaio.ok) {

@@ -115,10 +115,10 @@ object PlayerArmazem {
     // Arquivos (e não prefs) pelo mesmo motivo do ultimo.json: quem grava é o player, mas a HOME pode querer ler
     // (ex.: uma linha "Favoritos" na HOME). Sem senha nem endereço: só os ids dos canais.
 
-    fun favoritos(ctx: Context): Set<String> = PlayerLista.idsDeJson(lerArquivo(ctx, "favoritos.json"), PlayerLista.MAX_FAVORITOS).toSet()
+    fun favoritos(ctx: Context): Set<String> = PlayerLista.idsDeJson(lerDoPerfil(ctx, "favoritos.json"), PlayerLista.MAX_FAVORITOS).toSet()
     // Id que é URL (formato antigo, ver IdCanal) fica até migrarIdsAntigos trocá-lo: descartar aqui apagaria o favorito
     // de uma conta que ainda não carregou. Nenhum código novo cria id com URL (M3u.ler usa IdCanal.estavel).
-    fun definirFavoritos(ctx: Context, ids: Set<String>) = gravarArquivo(ctx, "favoritos.json", PlayerLista.idsParaJson(ids))
+    fun definirFavoritos(ctx: Context, ids: Set<String>) = gravarNoPerfil(ctx, "favoritos.json", PlayerLista.idsParaJson(ids))
 
     fun recentes(ctx: Context): List<String> = PlayerLista.idsDeJson(lerArquivo(ctx, "recentes.json"), PlayerLista.MAX_RECENTES)
     fun definirRecentes(ctx: Context, ids: List<String>) = gravarArquivo(ctx, "recentes.json", PlayerLista.idsParaJson(ids))
@@ -152,21 +152,21 @@ object PlayerArmazem {
     fun definirGruposLiberados(ctx: Context, g: Set<String>) = gravarArquivo(ctx, "liberadas.json", PlayerLista.idsParaJson(g))
 
     /** Onde parou em cada filme/episódio (chave = Filme.chave). */
-    fun posicoes(ctx: Context): Map<String, Posicao> = Vod.posicoesDeJson(lerArquivo(ctx, "posicoes.json"))
-    fun definirPosicoes(ctx: Context, p: Map<String, Posicao>) = gravarArquivo(ctx, "posicoes.json", Vod.posicoesParaJson(p))
+    fun posicoes(ctx: Context): Map<String, Posicao> = Vod.posicoesDeJson(lerDoPerfil(ctx, "posicoes.json"))
+    fun definirPosicoes(ctx: Context, p: Map<String, Posicao>) = gravarNoPerfil(ctx, "posicoes.json", Vod.posicoesParaJson(p))
 
     /**
      * Filmes ou séries marcados como "interesse" (OK segurado 2 s na grade). Só as chaves, na ordem em que entraram.
      * Um arquivo para cada tela: assim uma tela aberta por trás nunca grava por cima do que a outra mudou.
      */
     fun interesses(ctx: Context, series: Boolean): Set<String> =
-        PlayerLista.idsDeJson(lerArquivo(ctx, arquivoInteresses(series)), Vod.MAX_INTERESSES).toCollection(LinkedHashSet())
-    fun definirInteresses(ctx: Context, series: Boolean, chaves: Set<String>) = gravarArquivo(ctx, arquivoInteresses(series), PlayerLista.idsParaJson(chaves))
+        PlayerLista.idsDeJson(lerDoPerfil(ctx, arquivoInteresses(series)), Vod.MAX_INTERESSES).toCollection(LinkedHashSet())
+    fun definirInteresses(ctx: Context, series: Boolean, chaves: Set<String>) = gravarNoPerfil(ctx, arquivoInteresses(series), PlayerLista.idsParaJson(chaves))
     private fun arquivoInteresses(series: Boolean) = if (series) "interesses_series.json" else "interesses_filmes.json"
 
     /** Último episódio aberto em cada série (chave = Serie.chave). */
-    fun ultimosEpisodios(ctx: Context): Map<String, UltimoEpisodio> = Series.ultimosDeJson(lerArquivo(ctx, "series_ultimos.json"))
-    fun definirUltimosEpisodios(ctx: Context, u: Map<String, UltimoEpisodio>) = gravarArquivo(ctx, "series_ultimos.json", Series.ultimosParaJson(u))
+    fun ultimosEpisodios(ctx: Context): Map<String, UltimoEpisodio> = Series.ultimosDeJson(lerDoPerfil(ctx, "series_ultimos.json"))
+    fun definirUltimosEpisodios(ctx: Context, u: Map<String, UltimoEpisodio>) = gravarNoPerfil(ctx, "series_ultimos.json", Series.ultimosParaJson(u))
 
     /**
      * Arte do último filme e da última série abertos (files/player/capas_home.json), para o fundo dos cards Filmes e
@@ -235,6 +235,23 @@ object PlayerArmazem {
     fun definirCategoria(ctx: Context, chave: String) = prefs(ctx).edit().putString("categoria", chave).apply()
 
     private fun lerArquivo(ctx: Context, nome: String): String? = runCatching { File(pasta(ctx), nome).readText() }.getOrNull()
+
+    /**
+     * Perfis de verdade (ideia 11): favoritos, posições, últimos episódios e interesses são do perfil ativo
+     * ([PerfilDados]). Lê o arquivo do perfil se existir; senão o compartilhado de antes (nada some). O perfil é relido
+     * do disco a cada chamada ([Perfil.chaveDados]): vale igual no processo do launcher e no ":player".
+     */
+    private fun lerDoPerfil(ctx: Context, base: String): String? {
+        require(base in PerfilDados.ARQUIVOS_POR_PERFIL)
+        val pasta = pasta(ctx)
+        return lerArquivo(ctx, PerfilDados.nomeLeitura(base, Perfil.chaveDados(ctx)) { File(pasta, it).exists() })
+    }
+
+    /** Grava sempre no arquivo do perfil ativo; o compartilhado nunca é apagado nem sobrescrito por um perfil. */
+    private fun gravarNoPerfil(ctx: Context, base: String, texto: String) {
+        require(base in PerfilDados.ARQUIVOS_POR_PERFIL)
+        gravarArquivo(ctx, PerfilDados.nomeEscrita(base, Perfil.chaveDados(ctx)), texto)
+    }
 
     /** Escrita atômica: grava ao lado e troca o nome (TV desligada no meio deixa o arquivo antigo inteiro). */
     private fun gravarArquivo(ctx: Context, nome: String, texto: String) {

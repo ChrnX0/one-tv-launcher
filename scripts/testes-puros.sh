@@ -55,6 +55,8 @@ declare -A FONTES=(
   [ProximoJogoTest]="ProximoJogo MeuTimeAdiante"
   [AtalhosVozTest]="AtalhosVoz"
   [PausaAoVivoTest]="PausaAoVivo"
+  [PerfilDadosTest]="PerfilDados EnsaioRestauracao CofreBackup"
+  [PerfilCriancaTest]="PerfilCrianca"
 )
 
 falhou=0

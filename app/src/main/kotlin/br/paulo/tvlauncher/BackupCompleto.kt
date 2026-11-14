@@ -16,7 +16,8 @@ import java.util.Base64
  *    e logins do MCP: o conector do claude.ai continua valendo) + "unifi_seguro" + "tunel_seguro";
  *  - segredos que o Keystore cifra (a chave do Keystore morre no reset, então vão em claro DENTRO do cofre e são
  *    cifrados de novo pelo Keystore da instalação nova): contas de TV ao vivo, chave do UniFi, chave do Tailscale;
- *  - arquivos: os pequenos do player (favoritos, controle parental, posições...) e o "crachá" do Tailscale
+ *  - arquivos: os pequenos do player (favoritos, controle parental, posições..., e desde a ideia 11 as cópias de cada
+ *    perfil, ex.: favoritos@ana.json) e o "crachá" do Tailscale
  *    (tunel/tailscaled.state): a TV volta com o MESMO endereço .ts.net, sem QR de login.
  * O que o Android não deixa nenhum app copiar (contas Google, Wi-Fi, logins de outros apps) fica de fora.
  * Auditoria de 10/11/2026: entraram também "extras", "cenas", "casa_ha" (+ o token do Home Assistant em "segredos"),
@@ -67,8 +68,18 @@ object BackupCompleto {
         "interesses_series.json", "interesses_filmes.json", "series_ultimos.json", "series_progresso.json",
         "parental.json", "ultimo.json")
     private const val ESTADO_TUNEL = "tailscaled.state"
-    /** Os caminhos de "arquivos" que o importar aceita (o ensaio da ideia 64 confere com a mesma lista). */
-    val CAMINHOS_ARQUIVOS: Set<String> get() = ARQUIVOS_PLAYER.map { "player/$it" }.toSet() + "tunel/$ESTADO_TUNEL"
+    /** No máximo tantas cópias por perfil vão no backup (8 contas x 5 arquivos já sobra). */
+    private const val MAX_COPIAS_PERFIL = 64
+
+    /**
+     * Arquivo de files/player que vai no backup: os fixos e, desde a ideia 11 (perfis de verdade), as cópias de cada
+     * perfil (favoritos@ana.json, posicoes@ana.json...; ver PerfilDados.ehCopiaDePerfil).
+     */
+    fun arquivoPlayerPermitido(nome: String): Boolean = nome in ARQUIVOS_PLAYER || PerfilDados.ehCopiaDePerfil(nome)
+
+    /** O caminho que o importar aceita (o ensaio da ideia 64 confere com a mesma regra). */
+    fun caminhoPermitido(caminho: String): Boolean =
+        caminho == "tunel/$ESTADO_TUNEL" || (caminho.startsWith("player/") && arquivoPlayerPermitido(caminho.removePrefix("player/")))
     private const val LIMITE_ARQUIVO = 512 * 1024
 
     /** Monta o backup e tranca com [senha]. Lento (PBKDF2): fora da thread da tela. */
@@ -88,6 +99,10 @@ object BackupCompleto {
         val arquivos = JSONObject()
         val pastaPlayer = PlayerArmazem.pasta(app)
         for (n in ARQUIVOS_PLAYER) lerPequeno(File(pastaPlayer, n))?.let { arquivos.put("player/$n", it) }
+        // Perfis de verdade (ideia 11): as cópias de cada perfil vão junto, com os mesmos nomes.
+        val copias = pastaPlayer.list()?.filter { PerfilDados.ehCopiaDePerfil(it) }?.sorted().orEmpty()
+        if (copias.size > MAX_COPIAS_PERFIL) Log.w(TAG, "${copias.size - MAX_COPIAS_PERFIL} cópias de perfil ficaram fora do backup")
+        for (n in copias.take(MAX_COPIAS_PERFIL)) lerPequeno(File(pastaPlayer, n))?.let { arquivos.put("player/$n", it) }
         lerPequeno(File(TunelTailscale.pastaEstado(app), ESTADO_TUNEL))?.let { arquivos.put("tunel/$ESTADO_TUNEL", it) }
         val claro = JSONObject().put("versao", 3).put("pacote", app.packageName).put("criadoEm", System.currentTimeMillis())
             .put("preferencias", prefs).put("segredos", segredos).put("arquivos", arquivos).toString()
@@ -143,8 +158,7 @@ object BackupCompleto {
         val arquivos = o.optJSONObject("arquivos") ?: JSONObject()
         val bytes = mutableMapOf<String, ByteArray>()
         for (caminho in arquivos.keys()) {
-            val permitido = caminho == "tunel/$ESTADO_TUNEL" || (caminho.startsWith("player/") && caminho.removePrefix("player/") in ARQUIVOS_PLAYER)
-            if (!permitido) throw IllegalArgumentException("arquivo desconhecido no backup: $caminho")
+            if (!caminhoPermitido(caminho)) throw IllegalArgumentException("arquivo desconhecido no backup: $caminho")
             val b = runCatching { Base64.getDecoder().decode(arquivos.getString(caminho)) }.getOrNull()
             if (b == null || b.size > LIMITE_ARQUIVO) throw IllegalArgumentException("arquivo estragado no backup: $caminho")
             bytes[caminho] = b

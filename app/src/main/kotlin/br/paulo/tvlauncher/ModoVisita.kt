@@ -22,6 +22,7 @@ object ModoVisita {
 
     fun definir(ctx: Context, ligado: Boolean) {
         prefs(ctx).edit().putBoolean(ATIVO, ligado).apply()
+        Perfil.ativa(ctx)   // ideia 11: na visita, favoritos e "continuar" voltam a ser os compartilhados (e saindo, os do perfil)
     }
 
     /** Pacotes que somem da HOME enquanto o modo visita está ligado. */
