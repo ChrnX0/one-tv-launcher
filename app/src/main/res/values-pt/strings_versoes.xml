@@ -14,6 +14,8 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>“Ainda está assistindo?” em letra grande quando ninguém aperta o controle pelo tempo de Configurações › Tela e energia › Desligar a TV sem uso; sem resposta em 60 s, o filme ou o app pausa antes de a tela apagar, para continuar dali depois</item>
+        <item>Sem internet, o alto da tela inicial diz em uma linha o que continua funcionando (pendrive, Na rede, Gravações) e some quando ela volta; OK nela abre o Diagnóstico</item>
         <item>Tela Jogos nova, no estilo de console: o jogo em foco aparece grande com o logo oficial dele, uma fila só com o jogado por último primeiro (OK joga), e o card Jogos da tela inicial mostra o último jogo</item>
         <item>A TV como unidade de rede: a memória dela abre no Windows (Mapear unidade de rede), Mac, Linux e apps de arquivos do celular por WebDAV, com o PIN do painel como senha; ela também aparece em Rede do Windows (Configurações › Acesso remoto, desligada por padrão)</item>
         <item>Player: o alto da coluna diz só TV, Filmes ou Séries, com os botões Buscar e Filtro ao lado; a lista abre espaço para Gravações (TV: Favoritos, Recentes, Guia, Gravações; “Guia” curto para não cortar)</item>
@@ -98,6 +100,8 @@
         <item>Filmes e séries na taxa de quadros deles: a TV troca para 24 Hz e a imagem não treme em movimentos de câmera (Configurações › TV e filmes, menu ▼ e painel)</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Em Configurações › Tela e energia, ponha Desligar a TV sem uso em 30 min, toque um filme e não aperte nada</item>
+        <item>Desligue a internet no roteador (ou tire o cabo da internet dele) e aperte HOME; espere 30 s</item>
         <item>Unidade de rede</item>
         <item>Buscar e Filtro no alto da coluna</item>
         <item>Aperte HOME e vá até o fim da linha ASSISTIR E JOGAR</item>
@@ -179,6 +183,8 @@
         <item>Abra um filme e repare numa cena com a câmera andando devagar</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Apareceu “Ainda está assistindo?” grande, um botão qualquer cancelou e, sem resposta, o filme pausou antes de apagar (e continua dali)?</item>
+        <item>Apareceu “Sem internet · Funcionam: …” no alto, e sumiu quando a internet voltou?</item>
         <item>Com Configurações › Acesso remoto › Mostrar a TV como unidade de rede ligada, o Mapear unidade de rede do Windows com o endereço mostrado lá e o PIN do painel abre as pastas da TV?</item>
         <item>Na TV, em Filmes e em Séries, ▲ na primeira linha leva aos botões Buscar e Filtro ao lado do título, e ▼ volta para a lista?</item>
         <item>Aparece o card Jogos, âmbar, depois de Na rede?</item>
