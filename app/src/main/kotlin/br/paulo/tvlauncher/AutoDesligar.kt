@@ -135,16 +135,21 @@ object AutoDesligar {
         restanteAviso = AVISO_S
         val dp = { v: Int -> TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), servico.resources.displayMetrics).toInt() }
         fun texto(sp: Float, cor: Int) = TextView(servico).apply { setTextSize(TypedValue.COMPLEX_UNIT_SP, sp); setTextColor(cor); gravity = Gravity.CENTER }
-        val titulo = texto(30f, Color.WHITE)
+        // Ideia 80 (14/11/2026): a pergunta em letra grande, para quem acordou no sofá ler a 3 m. A contagem fica abaixo,
+        // em âmbar; a explicação por último. Fonte e tamanhos acima do Estilo.Leitura (é um aviso, não uma tela de ler).
+        val pergunta = texto(42f, Color.WHITE).apply { text = servico.getString(R.string.ad_pergunta); typeface = Estilo.fonte(700) }
+        val titulo = texto(30f, Estilo.ATENCAO).apply { typeface = Estilo.fonte(600); setPadding(0, dp(14), 0, 0) }
         textoAviso = titulo
         val caixa = LinearLayout(servico).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(48), dp(32), dp(48), dp(32))
-            background = GradientDrawable().apply { cornerRadius = dp(20).toFloat(); setColor(0xE6101418.toInt()); setStroke(dp(1), 0x40FFFFFF) }
+            setPadding(dp(64), dp(40), dp(64), dp(40))
+            background = GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(0xF0101418.toInt()); setStroke(dp(1), 0x40FFFFFF) }
+            addView(pergunta)
             addView(titulo)
-            addView(texto(20f, 0xFFB8C2CC.toInt()).apply {
-                text = servico.getString(R.string.ad_ninguem, minutos(servico))
-                setPadding(0, dp(12), 0, 0)
+            addView(texto(22f, 0xFFD0D7DE.toInt()).apply {
+                text = servico.getString(R.string.ad_ninguem, Desligamento.duracaoTexto(minutos(servico)))
+                setLineSpacing(0f, 1.15f)
+                setPadding(0, dp(16), 0, 0)
             })
         }
         val p = WindowManager.LayoutParams(
@@ -165,7 +170,15 @@ object AutoDesligar {
 
     private fun contar() {
         if (janela == null) return
-        if (restanteAviso <= 0) { fecharAviso(); desligar(); return }
+        if (restanteAviso <= 0) {
+            fecharAviso()
+            // Ideia 80: pausa o que estiver tocando ANTES de apagar, para continuar dali amanhã (o nosso player também
+            // guarda a posição ao sair; Netflix, YouTube etc. recebem a tecla PAUSE pela sessão de mídia).
+            pausarMidia()
+            val antes = ultima   // alguém apertou um botão nesse 1,5 s: não desliga
+            principal.postDelayed({ if (ultima == antes && app?.let { telaAcesa(it) } == true) desligar() else reagendar() }, 1500)
+            return
+        }
         textoAviso?.text = txt(R.string.ad_vai_desligar, restanteAviso)
         restanteAviso--
         principal.postDelayed(contar, 1000)
@@ -207,6 +220,21 @@ object AutoDesligar {
             principal.postDelayed({ if (telaAcesa(a)) tentar(i + 1) else Log.i(TAG, "tela apagada pela $nome") }, if (aceitou) 3000 else 0)
         }
         tentar(0)
+    }
+
+    /**
+     * Manda PAUSE à sessão de mídia ativa (o app que está tocando), como a tecla ⏸ do controle. Sem nada tocando,
+     * ninguém recebe e nada acontece. Ao vivo também pausa (o nosso player tem a pausa curta), sem prejuízo.
+     */
+    private fun pausarMidia() {
+        val a = app ?: return
+        try {
+            val am = a.getSystemService(android.media.AudioManager::class.java)
+            val t = SystemClock.uptimeMillis()
+            am.dispatchMediaKeyEvent(KeyEvent(t, t, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PAUSE, 0))
+            am.dispatchMediaKeyEvent(KeyEvent(t, t, KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PAUSE, 0))
+            Log.i(TAG, "pausei a mídia antes de desligar")
+        } catch (e: Exception) { Log.w(TAG, "pausar: $e") }
     }
 
     /** Usado só pelo comando de teste por adb: mostra o aviso agora, como se o prazo tivesse vencido. */

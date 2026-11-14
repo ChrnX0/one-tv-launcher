@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Trakt/Simkl sync and outside lists (movie services, part 3). Portuguese in values-pt. -->
+<resources>
+    <string name="sync_sub">Signed in as %1$s. What the TV keeps in step with your phone.</string>
+    <string name="sync_sub_mdblist">Signed in as %1$s. Your MDBList lists can show up in the catalog.</string>
+    <string name="sync_ultima">Last sync: %1$s</string>
+    <string name="sync_nunca">Not synced yet</string>
+    <string name="sync_interesses">Interests ⇄ Watchlist</string>
+    <string name="sync_interesses_simkl">Interests ⇄ Plan to watch</string>
+    <string name="sync_interesses_det">What you mark here shows up there, and the other way round</string>
+    <string name="sync_assistidos">Watched ← History</string>
+    <string name="sync_assistidos_det">Brings in what you already watched on the phone or elsewhere</string>
+    <string name="sync_continuar">Continue ⇄ Where you stopped</string>
+    <string name="sync_continuar_det">Stop on the phone, pick up on the TV at the same spot</string>
+    <string name="sync_contar">Tell %1$s what I watch here</string>
+    <string name="sync_contar_det">Sends “watching now” and “watched” while it plays. Never in Guest mode or on a kids profile.</string>
+    <string name="sync_listas">Lists in the catalog</string>
+    <string name="sync_listas_nenhuma">None chosen</string>
+    <string name="sync_listas_n">%1$d chosen: %2$s</string>
+    <string name="sync_listas_sub">They show up in LISTS, under All, with only the titles your list has. Up to %1$d.</string>
+    <string name="sync_listas_carregando">Loading your lists…</string>
+    <string name="sync_listas_vazio">No lists found. Create or like a list on Trakt or MDBList and come back here.</string>
+    <string name="sync_listas_cheio">Up to %1$d lists</string>
+    <string name="sync_lista_itens">%1$d titles</string>
+    <string name="sync_agora">Sync now</string>
+    <string name="sync_agora_det">It also happens by itself when you open Movies or Series</string>
+    <string name="sync_rodando">Syncing…</string>
+    <string name="sync_feito">Synced</string>
+    <string name="sync_sair">Sign out of %1$s</string>
+    <string name="sync_bloqueado">Paused: Guest mode or a kids profile is on.</string>
+    <string name="sync_outro_perfil">Paused: syncing belongs to another profile.</string>
+    <string name="sync_trakt_cheia">Your Trakt list is full (free accounts hold 100). The launcher keeps going on the TV only.</string>
+    <string name="sync_ligado">On</string>
+    <string name="sync_desligado">Off</string>
+    <string name="sync_fonte_trakt">Data from Trakt (trakt.tv)</string>
+    <string name="sync_fonte_simkl">Data from Simkl (simkl.com)</string>
+    <string name="sync_n_de">%1$d of %2$d in your list</string>
+    <string name="sync_continuando">Picking up where you stopped on the other device</string>
+</resources>

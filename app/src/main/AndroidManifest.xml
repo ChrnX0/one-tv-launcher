@@ -277,6 +277,11 @@
             android:name=".ServicosFilmesActivity"
             android:exported="false"
             android:label="@string/sv_titulo" />
+        <!-- Conta conectada do Trakt/Simkl/MDBList: o que sincroniza e as listas no catálogo (SincronizarActivity.kt) -->
+        <activity
+            android:name=".SincronizarActivity"
+            android:exported="false"
+            android:label="@string/sync_listas" />
         <activity
             android:name=".EntrarPeloQrActivity"
             android:exported="false"
