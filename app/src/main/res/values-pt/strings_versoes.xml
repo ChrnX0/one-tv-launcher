@@ -90,6 +90,7 @@
         <item>Legendas de Blu-ray e DVD (PGS, VobSub) aparecem nos filmes e séries, e legenda ASS de anime sai com a cor e a posição originais</item>
         <item>Na rede: pastas por FTP, FTPS, SFTP e NFS (NAS, roteador com disco, PC Linux ou Mac), e o pendrive ou disco USB ligado na TV aparece sozinho em “Ligado na TV”</item>
         <item>Na rede: OneDrive e Dropbox como fonte de vídeos, músicas e fotos (uma vez só, você cria o seu app no serviço e entra pelo celular)</item>
+        <item>Legenda na mesma pasta do vídeo (Filme.srt, Filme.pt-BR.ass) aparece sozinha no ▼, nas pastas da rede, na nuvem e no pendrive</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME e vá até o fim da linha ASSISTIR E JOGAR</item>

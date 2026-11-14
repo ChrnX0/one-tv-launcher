@@ -93,6 +93,7 @@
         <item>Blu-ray and DVD subtitles (PGS, VobSub) now show in movies and series, and anime ASS subtitles keep their original colour and position</item>
         <item>Network: folders over FTP, FTPS, SFTP and NFS (NAS, router with a drive, Linux or Mac computer), and a USB drive plugged into the TV shows up by itself under “Plugged into the TV”</item>
         <item>On the network: OneDrive and Dropbox as a source of videos, music and photos (once, you create your own app at the service and sign in from your phone)</item>
+        <item>Subtitles in the same folder as the video (Movie.srt, Movie.pt-BR.ass) show up in ▼ by themselves, in network folders, the cloud and USB drives</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>jogos_card</item>
