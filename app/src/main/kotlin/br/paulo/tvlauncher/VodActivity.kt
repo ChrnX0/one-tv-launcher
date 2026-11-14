@@ -34,6 +34,8 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.FfmpegSubtitleExtractorsFactory
+import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.withFfmpegSubtitles
 import java.util.Locale
 
 /**
@@ -141,6 +143,7 @@ class VodActivity : Activity() {
     private var legendaArquivo: java.io.File? = null
     private var atrasoLegenda = 0L
     private lateinit var legenda: TextView
+    private lateinit var legendaImg: LegendaImagem.Vista   // PGS, VobSub, DVB e ASS (libass): legenda que chega como imagem
     // Jellyfin, Emby ou Plex: a quem contar onde parou (é assim que o "Continuar assistindo" deles anda).
     private var relato: FontesMidia.Relato? = null
     private var avisouInicio = false
@@ -196,6 +199,10 @@ class VodActivity : Activity() {
             setPadding(dp(24), dp(16), dp(24), dp(16)); text = getString(R.string.player_carregando_canal)
         }
         raiz.addView(aviso, FrameLayout.LayoutParams(-2, -2, Gravity.CENTER))
+        // Legenda em imagem (14/11/2026): desenhada dentro da área do vídeo, por baixo da barra e dos avisos.
+        legendaImg = LegendaImagem.Vista(this) { android.graphics.Rect(video.left, video.top, video.right, video.bottom) }
+        raiz.addView(legendaImg, 1, FrameLayout.LayoutParams(-1, -1))
+        video.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> legendaImg.invalidate() }   // trocou Ajustar/Zoom
         // Legenda (11/11/2026): sem o media3-ui ninguém desenhava as falas, e a legenda escolhida no ▼ não aparecia.
         // Texto branco com contorno escuro, embaixo e centrado; acima da barra quando ela aparece.
         legenda = TextView(this).apply {
@@ -282,7 +289,11 @@ class VodActivity : Activity() {
             .setConnectTimeoutMs(10_000).setReadTimeoutMs(20_000).setDefaultRequestProperties(cabecalhos)
         // DefaultDataSource: http continua com a fábrica acima, e file:// (a legenda baixada, no disco da TV) também abre.
         val http = DefaultDataSource.Factory(this, http0)
-        val p = ExoPlayer.Builder(this, EfeitosSom.fabrica(this)).setMediaSourceFactory(DefaultMediaSourceFactory(Smb.Fabrica(this, http)))
+        // Fontes de legenda (14/11/2026, NextLib): o leitor de MKV troca as legendas ASS/PGS/VobSub/DVB por faixas que o
+        // FFmpeg e o libass desenham em imagem; withFfmpegSubtitles faz o mesmo com legenda ASS de fora do arquivo.
+        val dados = Smb.Fabrica(this, http)
+        val fontes = DefaultMediaSourceFactory(dados, FfmpegSubtitleExtractorsFactory()).withFfmpegSubtitles(dados)
+        val p = ExoPlayer.Builder(this, EfeitosSom.fabrica(this)).setMediaSourceFactory(fontes)
             .setSeekBackIncrementMs(10_000).setSeekForwardIncrementMs(30_000).build()
         p.setVideoSurfaceView(video)
         p.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MOVIE).build(), true)
@@ -326,7 +337,8 @@ class VodActivity : Activity() {
 
     private val ouvinte = object : Player.Listener {
         override fun onCues(cues: CueGroup) {
-            val t = cues.cues.mapNotNull { it.text }.joinToString("\n")
+            legendaImg.mostrar(cues.cues)
+            val t = cues.cues.filter { it.bitmap == null }.mapNotNull { it.text }.joinToString("\n")
             legenda.text = t
             legenda.visibility = if (t.isBlank()) View.GONE else View.VISIBLE
         }

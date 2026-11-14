@@ -83,6 +83,8 @@
         <item>Legenda mais fácil de ler: fundo preto atrás da letra e legenda amarela, no menu ▼ dos filmes e séries e em Configurações › TV e filmes</item>
         <item>“Volume parecido entre canais” e “Voz mais clara” no menu do player (TV ao vivo, filmes e séries) e em Configurações › TV e filmes: o que vem baixo sobe e a fala fica mais à frente</item>
         <item>Com o modo simples ligado, TV ao vivo, Filmes e Séries abrem em Favoritos ou Continuar, com menos linhas e letra maior</item>
+        <item>Filmes e séries com som Dolby (AC3, E-AC3), DTS ou TrueHD agora tocam com som mesmo com “Volume parecido” ou “Voz mais clara” ligados; canais com áudio MP2 também</item>
+        <item>Legendas de Blu-ray e DVD (PGS, VobSub) aparecem nos filmes e séries, e legenda ASS de anime sai com a cor e a posição originais</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>No painel web, troque o tema na aba Configurações</item>
@@ -152,6 +154,8 @@
         <item>Num filme com legenda, ▼ › ligue “Legenda com fundo preto” e “Legenda amarela”</item>
         <item>Na TV ao vivo, ▶ ▶ › ligue “Volume parecido entre canais” e troque entre um canal baixo e um alto</item>
         <item>Num filme com diálogo baixo, ▼ › ligue e desligue “Voz mais clara”</item>
+        <item>Ligue “Voz mais clara” no ▼ e abra um filme com som Dolby ou DTS (de Na rede ou de Filmes)</item>
+        <item>Abra um filme MKV com legenda de Blu-ray (PGS) ou um anime com legenda ASS e ligue a legenda no ▼</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>A tela inicial da TV mudou para o tema escolhido?</item>
@@ -221,5 +225,7 @@
         <item>A legenda ficou amarela sobre uma faixa preta, fácil de ler do sofá?</item>
         <item>O canal baixo ficou mais perto do volume dos outros, sem chiar nem estourar?</item>
         <item>Com a opção ligada, as falas ficaram mais fáceis de entender?</item>
+        <item>O filme saiu com som (antes ficava mudo)?</item>
+        <item>A legenda apareceu inteira, no lugar certo e sem atrasar?</item>
     </string-array>
 </resources>

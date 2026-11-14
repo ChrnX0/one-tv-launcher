@@ -86,6 +86,8 @@
         <item>Easier subtitles: black background behind the text and yellow subtitles, in the ▼ menu of movies and series and in Settings › TV and movies</item>
         <item>“Even volume between channels” and “Clearer voices” in the player menu (live TV, movies and series) and in Settings › TV and movies: quiet sound gets louder and speech comes forward</item>
         <item>With simple mode on, live TV, Movies and Series open on Favorites or Continue, with fewer rows and larger text</item>
+        <item>Movies and series with Dolby (AC3, E-AC3), DTS or TrueHD sound now play with sound even with “Even volume” or “Clearer voices” on; channels with MP2 audio too</item>
+        <item>Blu-ray and DVD subtitles (PGS, VobSub) now show in movies and series, and anime ASS subtitles keep their original colour and position</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>painel_config</item>
@@ -155,6 +157,8 @@
         <item>legenda_facil</item>
         <item>volume_parecido</item>
         <item>voz_clara</item>
+        <item>audio_dolby_dts</item>
+        <item>legenda_imagem</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>In the web panel, change the theme in the Settings tab</item>
@@ -224,6 +228,8 @@
         <item>In a movie with subtitles, ▼ › turn on “Subtitles with black background” and “Yellow subtitles”</item>
         <item>In live TV, ▶ ▶ › turn on “Even volume between channels” and switch between a quiet and a loud channel</item>
         <item>In a movie with quiet dialogue, ▼ › turn “Clearer voices” on and off</item>
+        <item>Turn on “Clearer voices” in ▼ and open a movie with Dolby or DTS sound (from On the network or Movies)</item>
+        <item>Open an MKV movie with Blu-ray (PGS) subtitles or an anime with ASS subtitles and turn subtitles on in ▼</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did the TV home screen switch to the chosen theme?</item>
@@ -293,5 +299,7 @@
         <item>Are the subtitles yellow on a black band, easy to read from the couch?</item>
         <item>Did the quiet channel get closer to the others, without hiss or distortion?</item>
         <item>With it on, was speech easier to understand?</item>
+        <item>Did the movie play with sound (before it was silent)?</item>
+        <item>Did the subtitle show complete, in the right place and in sync?</item>
     </string-array>
 </resources>
