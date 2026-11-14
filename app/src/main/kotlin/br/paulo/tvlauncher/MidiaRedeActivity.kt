@@ -55,7 +55,7 @@ class MidiaRedeActivity : Activity() {
         /** Pendrive ou disco USB ligado na TV (14/11/2026). */
         class Local(val raiz: java.io.File) : Origem()
     }
-    private enum class Acao { PLEX, JELLYFIN, EMBY, SMB, WEBDAV, ARQUIVOS, ONEDRIVE, DROPBOX, LINK, PROCURAR }
+    private enum class Acao { PLEX, JELLYFIN, EMBY, SMB, WEBDAV, ARQUIVOS, ONEDRIVE, DROPBOX, BOX, GDRIVE, LINK, PROCURAR }
     /** Um pendrive/disco montado agora: aparece sozinho na raiz, sem cadastrar. */
     private class Volume(val nome: String, val raiz: java.io.File)
     /** "Usar estas fotos no protetor" (ideia 27): a pasta aberta agora, de uma conta SMB ou WebDAV. */
@@ -205,6 +205,8 @@ class MidiaRedeActivity : Activity() {
         itens += Linha(IconeMidia.Tipo.COMPUTADOR, getString(R.string.rede_acao_arquivos), getString(R.string.rede_sub_arquivos), null, Acao.ARQUIVOS)
         itens += Linha(IconeMidia.Tipo.NUVEM, "OneDrive", getString(R.string.rede_sub_nuvem), null, Acao.ONEDRIVE)
         itens += Linha(IconeMidia.Tipo.NUVEM, "Dropbox", getString(R.string.rede_sub_nuvem), null, Acao.DROPBOX)
+        itens += Linha(IconeMidia.Tipo.NUVEM, "Box", getString(R.string.rede_sub_nuvem), null, Acao.BOX)
+        itens += Linha(IconeMidia.Tipo.NUVEM, "Google Drive", getString(R.string.rede_sub_nuvem), null, Acao.GDRIVE)
         itens += Linha(IconeMidia.Tipo.LINK, getString(R.string.rede_acao_link), getString(R.string.rede_sub_link), null, Acao.LINK)
         itens += Linha(IconeMidia.Tipo.ATUALIZAR, getString(R.string.rede_acao_procurar), null, null, Acao.PROCURAR)
         val velho = pilha[0]
@@ -232,6 +234,8 @@ class MidiaRedeActivity : Activity() {
             ContaMidia.NFS -> IconeMidia.Tipo.COMPUTADOR to "NFS · $onde"
             ContaMidia.ONEDRIVE -> IconeMidia.Tipo.NUVEM to "OneDrive · ${c.usuario}"
             ContaMidia.DROPBOX -> IconeMidia.Tipo.NUVEM to "Dropbox · ${c.usuario}"
+            ContaMidia.BOX -> IconeMidia.Tipo.NUVEM to "Box · ${c.usuario}"
+            ContaMidia.GDRIVE -> IconeMidia.Tipo.NUVEM to "Google Drive · ${c.usuario}"
             ContaMidia.LINK -> IconeMidia.Tipo.LINK to (if (c.pasta == LISTA) getString(R.string.rede_sub_lista, onde) else getString(R.string.rede_sub_video, onde))
             else -> IconeMidia.Tipo.COMPUTADOR to getString(R.string.rede_sub_pasta, onde)
         }
@@ -479,6 +483,8 @@ class MidiaRedeActivity : Activity() {
             Acao.ARQUIVOS -> formularioArquivos()
             Acao.ONEDRIVE -> loginOneDrive()
             Acao.DROPBOX -> loginDropbox()
+            Acao.BOX -> loginBox()
+            Acao.GDRIVE -> loginDrive()
             Acao.LINK -> formularioLink()
             Acao.PROCURAR -> procurar()
             is FotosNoProtetor -> alternarFotos(pos, e)
@@ -919,9 +925,9 @@ class MidiaRedeActivity : Activity() {
     private fun nuvemPrefs() = getSharedPreferences("nuvem", Context.MODE_PRIVATE)
 
     /** Guarda a conta da nuvem (troca a do mesmo usuário no mesmo serviço) e já abre a pasta. Chamar fora da tela. */
-    private fun salvarNuvem(tipo: String, servico: String, usuario: String, appId: String, renovacao: String, estado: TextView) {
+    private fun salvarNuvem(tipo: String, servico: String, usuario: String, appId: String, renovacao: String, estado: TextView, segredo: String = "") {
         val velha = MidiaArmazem.contas(this).firstOrNull { it.tipo == tipo && it.usuario == usuario }
-        val salva = MidiaArmazem.salvar(this, ContaMidia(velha?.id.orEmpty(), tipo, servico, servico, "", usuario, "", "", renovacao, appId))
+        val salva = MidiaArmazem.salvar(this, ContaMidia(velha?.id.orEmpty(), tipo, servico, servico, "", usuario, segredo, "", renovacao, appId))
         salva?.let { Nuvem.esquecer(it.id) }
         tela.post {
             if (isDestroyed) return@post
@@ -1071,6 +1077,103 @@ class MidiaRedeActivity : Activity() {
                 if (!cancelar.get()) salvarNuvem(ContaMidia.DROPBOX, "Dropbox", nome, chave, tokens.renovacao, estado)
             }.start()
         }
+    }
+
+    /** Passo 1 do Box: Client ID e Client Secret do app que o dono criou no Developer Console (o ID fica lembrado). */
+    private fun loginBox() {
+        formulario("Box", getString(R.string.rede_box_explica, Nuvem.RETORNO),
+            listOf(Campo(getString(R.string.rede_box_id), inicial = nuvemPrefs().getString("box_id", "").orEmpty()),
+                Campo(getString(R.string.rede_box_segredo), senha = true)),
+            getString(R.string.rede_nuvem_seguir)) { v, fim ->
+            val id = v[0].trim(); val segredo = v[1].trim()
+            if (!Nuvem.credencialBoxValida(id) || !Nuvem.credencialBoxValida(segredo)) { fim(getString(R.string.rede_box_erro)); return@formulario }
+            val ip = PainelWeb.ipsDaRede().minOrNull() ?: run { fim(getString(R.string.rede_volta_sem_rede)); return@formulario }
+            nuvemPrefs().edit().putString("box_id", id).apply()
+            fim(null)
+            val numero = RetornoNuvem.novoNumero()
+            codigoVolta("Box", Nuvem.paginaBox(id, Nuvem.estadoRetorno(numero, ip, RetornoNuvem.PORTA)), numero, getString(R.string.rede_volta_explica, "Box"),
+                trocar = { codigo -> Nuvem.postarForm(Nuvem.BOX_TOKEN, mapOf("grant_type" to "authorization_code", "code" to codigo,
+                    "client_id" to id, "client_secret" to segredo)) },
+                nome = { acesso -> org.json.JSONObject(Nuvem.conferir(Nuvem.get("${Nuvem.BOX_API}/users/me?fields=name,login", acesso)))
+                    .let { o -> o.optString("name").takeIf { it.isNotBlank() } ?: o.optString("login") } },
+                tipo = ContaMidia.BOX, appId = id, segredo = segredo)
+        }
+    }
+
+    /**
+     * Google Drive (por último, pedido do dono): o login de TV do Google só deixa ver arquivos que o próprio app criou
+     * (drive.file); para ler os vídeos que já estão no Drive é drive.readonly, que só sai pelo login no navegador.
+     * Então é igual ao Box: um cliente "Aplicativo da Web" no Google Cloud do dono, e o celular volta sozinho para a TV.
+     */
+    private fun loginDrive() {
+        formulario("Google Drive", getString(R.string.rede_gd_explica, Nuvem.RETORNO),
+            listOf(Campo(getString(R.string.rede_gd_id), inicial = nuvemPrefs().getString("gdrive_id", "").orEmpty()),
+                Campo(getString(R.string.rede_gd_segredo), senha = true)),
+            getString(R.string.rede_nuvem_seguir)) { v, fim ->
+            val id = v[0].trim(); val segredo = v[1].trim()
+            if (!Nuvem.clienteGoogleValido(id) || !Nuvem.segredoGoogleValido(segredo)) { fim(getString(R.string.rede_gd_erro)); return@formulario }
+            val ip = PainelWeb.ipsDaRede().minOrNull() ?: run { fim(getString(R.string.rede_volta_sem_rede)); return@formulario }
+            nuvemPrefs().edit().putString("gdrive_id", id).apply()
+            fim(null)
+            val numero = RetornoNuvem.novoNumero()
+            val verificador = Nuvem.novoVerificador()
+            codigoVolta("Google Drive", Nuvem.paginaDrive(id, Nuvem.desafio(verificador), Nuvem.estadoRetorno(numero, ip, RetornoNuvem.PORTA)), numero,
+                getString(R.string.rede_volta_explica, "Google") + " " + getString(R.string.rede_gd_aviso),
+                trocar = { codigo -> Nuvem.postarForm(Nuvem.GOOGLE_TOKEN, mapOf("grant_type" to "authorization_code", "code" to codigo,
+                    "client_id" to id, "client_secret" to segredo, "redirect_uri" to Nuvem.RETORNO, "code_verifier" to verificador)) },
+                nome = { acesso -> org.json.JSONObject(Nuvem.conferir(Nuvem.get("${Nuvem.DRIVE_API}/about?fields=user(displayName,emailAddress)", acesso)))
+                    .optJSONObject("user")?.let { u -> u.optString("displayName").takeIf { it.isNotBlank() } ?: u.optString("emailAddress") }.orEmpty() },
+                tipo = ContaMidia.GDRIVE, appId = id, segredo = segredo)
+        }
+    }
+
+    /**
+     * Passo 2 do Box e do Drive: QR para o celular (na mesma rede da TV) entrar e permitir; o serviço devolve o celular
+     * à TV pela página volta.html (RetornoNuvem) e a TV troca o código pelo token sozinha. Nada para digitar.
+     */
+    private fun codigoVolta(servico: String, pagina: String, numero: String, explica: String, trocar: (String) -> Nuvem.Resposta,
+                            nome: (String) -> String, tipo: String, appId: String, segredo: String) {
+        cancelarPlex?.set(true)
+        val cancelar = AtomicBoolean(false).also { cancelarPlex = it }
+        lateinit var estado: TextView
+        abrirPainel(720) { p ->
+            p.addView(Estilo.texto(this, Estilo.Papel.TITULO, servico).apply { textSize = 22f })
+            val corpo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(0, dp(Estilo.E2), 0, 0) }
+            val esquerda = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+            esquerda.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, explica).apply { setLineSpacing(0f, 1.25f); textSize = 15f })
+            estado = Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.rede_nuvem_esperando)).apply { setPadding(0, dp(Estilo.E2), 0, 0) }
+            esquerda.addView(estado)
+            corpo.addView(esquerda, LinearLayout.LayoutParams(0, -2, 1f))
+            runCatching { QrCodigo.bitmap(pagina, dp(156)) }.getOrNull()?.let { bmp ->
+                corpo.addView(ImageView(this).apply { setImageBitmap(bmp); background = Estilo.fundo(this@MidiaRedeActivity, Color.WHITE, Estilo.RAIO_PEQUENO); setPadding(dp(6), dp(6), dp(6), dp(6)) },
+                    LinearLayout.LayoutParams(dp(168), dp(168)).apply { marginStart = dp(Estilo.E3) })
+            }
+            p.addView(corpo)
+            // Fechar o painel (Cancelar ou Voltar) liga cancelarPlex: o porto fecha em até 1 s.
+            val fechar = Estilo.botao(this, getString(R.string.rede_cancelar), primario = false).apply { setOnClickListener { fecharPainel() } }
+            p.addView(LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END; setPadding(0, dp(Estilo.E3), 0, 0); addView(fechar) })
+            fechar.requestFocus()
+        }
+        Thread {
+            fun naTela(f: () -> Unit) = tela.post { if (!isDestroyed && !cancelar.get()) f() }
+            var ocupado = false
+            val chegou = RetornoNuvem.esperar(numero, System.currentTimeMillis() + 10 * 60_000L, cancelar) { ocupado = true }
+                ?: run {
+                    naTela { estado.text = if (ocupado) getString(R.string.rede_volta_porta, RetornoNuvem.PORTA) else getString(R.string.rede_plex_venceu) }
+                    return@Thread
+                }
+            val codigo = (chegou as? RetornoNuvem.Chegada.Codigo)?.codigo
+                ?: run { naTela { estado.text = getString(R.string.rede_nuvem_recusado) }; return@Thread }
+            naTela { estado.text = getString(R.string.rede_nuvem_salvando) }
+            val tokens = runCatching {
+                val r = trocar(codigo)
+                if (r.codigo != 200) throw IllegalStateException("recusado")
+                Nuvem.lerTokens(r.corpo)
+            }.getOrNull()
+            if (tokens?.renovacao == null) { naTela { estado.text = getString(R.string.rede_nuvem_recusado) }; return@Thread }
+            val quem = runCatching { nome(tokens.acesso) }.getOrNull()?.takeIf { it.isNotBlank() } ?: servico
+            if (!cancelar.get()) salvarNuvem(tipo, servico, quem, appId, tokens.renovacao, estado, segredo)
+        }.start()
     }
 
     // ---------------------------------------------------------------- foto

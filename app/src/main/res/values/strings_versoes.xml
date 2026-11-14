@@ -110,6 +110,8 @@
         <item>On the network: OneDrive and Dropbox as a source of videos, music and photos (once, you create your own app at the service and sign in from your phone)</item>
         <item>Subtitles in the same folder as the video (Movie.srt, Movie.pt-BR.ass) show up in ▼ by themselves, in network folders, the cloud and USB drives</item>
         <item>Movies and series at their own frame rate: the TV switches to 24 Hz and the picture does not judder in camera moves (Settings › TV and movies, ▼ menu and panel)</item>
+        <item>On the network: Box and Google Drive as sources too (you create the app at the service once; to sign in, a phone on the same Wi‑Fi scans the QR and comes back to the TV by itself)</item>
+        <item>Nightly backup: the extra copy can also go to the OneDrive, Dropbox or Box account added in Network (OneTV-backup folder, the last 7 are kept)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>primeira_celular</item>
@@ -199,6 +201,8 @@
         <item>gravar_agendada</item>
         <item>nuvem_fonte</item>
         <item>taxa_quadros</item>
+        <item>nuvem_box</item>
+        <item>backup_nuvem</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Settings › Remote access › Sign in with your phone</item>
@@ -288,6 +292,8 @@
         <item>In the guide, OK on a show starting in 10 min › Record; turn the TV off and wait for it to end</item>
         <item>In On the network › OneDrive (or Dropbox), follow the steps and open a video from the cloud</item>
         <item>Open a movie and watch a scene where the camera pans slowly</item>
+        <item>In Network › Box (then Google Drive), follow the steps on a computer and point a phone (on the home Wi‑Fi) at the QR</item>
+        <item>In Settings › System › Automatic backup, press OK on Extra copy until the cloud account shows up, then Back up now</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>The QR showed up big, the phone read it and the panel opened already signed in?</item>
@@ -377,5 +383,7 @@
         <item>Afterwards, is the whole show in Recordings?</item>
         <item>Did the video play, and could you skip forward and back without stalling?</item>
         <item>Did the screen blink black at the start, and was the motion smooth, without stutter?</item>
+        <item>After allowing access, did the phone say “Done” and the Box (and Drive) folder open on the TV, with a video playing?</item>
+        <item>Did the screen say “ok: TV + OneDrive/Dropbox/Box”, and did the file show up in the cloud\'s OneTV-backup folder?</item>
     </string-array>
 </resources>

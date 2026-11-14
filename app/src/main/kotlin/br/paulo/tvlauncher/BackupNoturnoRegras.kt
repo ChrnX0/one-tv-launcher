@@ -104,22 +104,31 @@ object BackupNoturnoRegras {
 
     // ---------------------------------------------------------------- destino da cópia extra
 
-    /** Como o destino fica guardado: "" = só na TV, "pendrive", "drive" (Google Drive) ou "smb:<id da conta de mídia>". */
+    /**
+     * Como o destino fica guardado: "" = só na TV, "pendrive", "drive" (Google Drive), "smb:<id da conta de mídia>" ou
+     * "nuvem:<id da conta de mídia>" (OneDrive, Dropbox ou Box de "Na rede", ideia 98 de 14/11/2026).
+     */
     const val SO_TV = ""
     const val PENDRIVE = "pendrive"
     const val DRIVE = "drive"
     private const val PREFIXO_SMB = "smb:"
+    private const val PREFIXO_NUVEM = "nuvem:"
 
     fun destinoSmb(id: String) = PREFIXO_SMB + id
     /** O id da conta SMB do destino, ou null se o destino não é um NAS. */
     fun idSmb(destino: String): String? = destino.takeIf { it.startsWith(PREFIXO_SMB) }?.removePrefix(PREFIXO_SMB)?.ifEmpty { null }
 
+    fun destinoNuvem(id: String) = PREFIXO_NUVEM + id
+    /** O id da conta da nuvem do destino, ou null se o destino não é OneDrive/Dropbox/Box. */
+    fun idNuvem(destino: String): String? = destino.takeIf { it.startsWith(PREFIXO_NUVEM) }?.removePrefix(PREFIXO_NUVEM)?.ifEmpty { null }
+
     /**
      * OK na linha "Cópia extra": só na TV -> cada pasta SMB cadastrada -> pendrive -> Google Drive (só com a conta
-     * conectada, [comDrive]) -> só na TV.
+     * conectada, [comDrive]) -> cada conta de nuvem de "Na rede" ([idsNuvem]) -> só na TV.
      */
-    fun proximoDestino(atual: String, idsSmb: List<String>, comDrive: Boolean = false): String {
-        val opcoes = listOf(SO_TV) + idsSmb.map { destinoSmb(it) } + PENDRIVE + (if (comDrive) listOf(DRIVE) else emptyList())
+    fun proximoDestino(atual: String, idsSmb: List<String>, comDrive: Boolean = false, idsNuvem: List<String> = emptyList()): String {
+        val opcoes = listOf(SO_TV) + idsSmb.map { destinoSmb(it) } + PENDRIVE + (if (comDrive) listOf(DRIVE) else emptyList()) +
+            idsNuvem.map { destinoNuvem(it) }
         val i = opcoes.indexOf(atual)
         return opcoes[(i + 1) % opcoes.size]   // destino que sumiu (conta apagada): i = -1, volta ao começo
     }
