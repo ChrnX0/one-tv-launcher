@@ -43,7 +43,8 @@ object McpPoder {
                 .put("pausa_ms", JSONObject().put("type", "integer").put("minimum", 0).put("maximum", 3000)
                     .put("description", "espera entre teclas (padrão 150)")),
             listOf("teclas")),
-        ferramenta("digitar_texto", "Digita texto no campo com foco na TV (busca, login...). Só ASCII: o Android não digita acento por aqui.",
+        ferramenta("digitar_texto", "Digita texto no campo com foco na TV (busca, login...). Acento e ç vão pela acessibilidade, direto no campo; " +
+            "sem campo em foco, vai sem acento.",
             JSONObject().put("texto", s("até ${McpPoderRegras.MAX_TEXTO} caracteres"))
                 .put("enviar", JSONObject().put("type", "boolean").put("description", "aperta Enter no fim")),
             listOf("texto")),
@@ -147,13 +148,23 @@ object McpPoder {
     }
 
     private fun digitar(app: Context, a: JSONObject): String {
-        val arg = McpPoderRegras.textoParaInput(a.optString("texto"))
-            ?: throw McpProtocolo.ErroFerramenta("texto vazio, longo demais ou com acento/emoji (o Android só digita ASCII por aqui)")
+        val texto = a.optString("texto")
+        if (!TextoNaTv.validoMcp(texto, McpPoderRegras.MAX_TEXTO))
+            throw McpProtocolo.ErroFerramenta("texto vazio, longo demais ou com caractere de controle")
         exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_digitar))
         AutoDesligar.atividade()
-        GuardiaoShizuku.comando(app, "input text '$arg'") ?: throw McpProtocolo.ErroFerramenta("o shell do launcher não respondeu")
+        // Ideia 56: com acento, pela acessibilidade (escreve no campo em foco); senão, ou se não deu, `input text`.
+        var aviso = ""
+        val ascii = if (TextoNaTv.precisaAcessibilidade(texto)) {
+            if (DigitarNaTv.escrever(texto)) null
+            else TextoNaTv.semAcento(texto).also { aviso = " (sem acento: nenhum campo em foco aceitou pela acessibilidade)" }
+        } else texto
+        if (ascii != null) {
+            val arg = McpPoderRegras.textoParaInput(ascii) ?: throw McpProtocolo.ErroFerramenta("nada para digitar sem acento")
+            GuardiaoShizuku.comando(app, "input text '$arg'") ?: throw McpProtocolo.ErroFerramenta("o shell do launcher não respondeu")
+        }
         if (a.optBoolean("enviar")) PainelControle.tecla(app, "entrar")
-        return "ok"
+        return "ok$aviso"
     }
 
     private fun abrir(app: Context, a: JSONObject): String {
