@@ -39,6 +39,7 @@ import java.io.File
  * Conferência (14/11/2026):
  *  - tecla --es tecla HOME [--el ms 1500]   entrega uma tecla falsa ao funil das teclas da acessibilidade (TeclaFalsa).
  *    Aceita o nome sem "KEYCODE_" ou o número. Ex.: HOME segurado = --es tecla HOME --el ms 1500.
+ *  - roteiro               respostas do roteiro "Conferir na TV" desta versão (JSON; ver RoteiroConferencia)
  */
 object ComandosExtras {
     fun tratar(ctx: Context, i: Intent): String = when (i.getStringExtra("o")) {
@@ -82,6 +83,7 @@ object ComandosExtras {
             Extras.definirTexto(ctx, HoraDormir.CHAVE_PERMITIDOS, it) }.ifEmpty { "lista vazia: só os essenciais abrem" }
         "recado_link" -> PainelExtras.novoLinkRecado(ctx)
         "tecla" -> teclaFalsa(i)
+        "roteiro" -> ConferirTvActivity.relatorio(ctx)
         "canal" -> when (i.getStringExtra("canal")) {
             "teste" -> { Atualizador.definirCanalTeste(ctx, true); "canal=teste" }
             "normal" -> { Atualizador.definirCanalTeste(ctx, false); "canal=normal" }

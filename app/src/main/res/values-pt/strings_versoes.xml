@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ver_sec">Esta versão</string>
+    <string name="ver_novidades">O que mudou</string>
+    <string name="ver_novidades_det">%1$d novidades na versão %2$s · OK para ler</string>
+    <string name="ver_novidades_sobre">Versão %1$s</string>
+    <string name="ver_ok">OK</string>
+    <string name="ver_conferir">Conferir na TV</string>
+    <string name="ver_conferir_det">%1$d de %2$d conferidos com o controle · OK para começar</string>
+    <string name="ver_conferir_sub">Versão %1$s · %2$d itens · OK num item para responder</string>
+    <string name="ver_conferido">%1$d de %2$d conferidos</string>
+    <string name="ver_sim">Sim</string>
+    <string name="ver_nao">Não</string>
+    <string name="ver_respondido_sim">respondido “sim”</string>
+    <string name="ver_respondido_nao">respondido “não”</string>
+    <string-array name="novidades">
+        <item>Cada versão nova passa pelos testes antes de sair</item>
+        <item>Uma versão de teste pode ir primeiro para uma TV e depois para todas</item>
+        <item>O painel web também abre com cadeado (https) em casa</item>
+    </string-array>
+    <string-array name="roteiro_titulos">
+        <item>Aperte HOME</item>
+        <item>Segure HOME por 2 segundos</item>
+        <item>Aperte o botão Netflix do controle</item>
+        <item>Segure o botão YouTube por 3 segundos</item>
+        <item>Abra Filmes e volte com VOLTAR</item>
+    </string-array>
+    <string-array name="roteiro_perguntas">
+        <item>Voltou para a tela inicial?</item>
+        <item>Abriu o painel rápido?</item>
+        <item>Abriu o app escolhido para o botão?</item>
+        <item>Abriu a lista para trocar o app do botão?</item>
+        <item>A grade manteve o foco no mesmo pôster?</item>
+    </string-array>
+</resources>

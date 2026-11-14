@@ -975,6 +975,16 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linhaAtualiza, lp())
         c.addView(linhaInstalar, lp())
         mostrarInstalar()
+        // Esta versão (14/11/2026, ideias 45 e 63): o que mudou e o roteiro de conferência com o controle.
+        val novidades = Novidades.itens(this)
+        if (novidades.isNotEmpty()) c.addView(linha(getString(R.string.ver_novidades),
+            getString(R.string.ver_novidades_det, novidades.size, versaoInstalada().toString()), seta = true) { Novidades.mostrar(this) }, lp())
+        val idsRoteiro = ConferirTvActivity.ids(this)
+        if (idsRoteiro.isNotEmpty()) c.addView(linha(getString(R.string.ver_conferir), getString(R.string.ver_conferir_det,
+            RoteiroConferencia.conferidos(ConferirTvActivity.estado(this), idsRoteiro), idsRoteiro.size), seta = true) {
+            reconstruirAoVoltar = true
+            startActivity(Intent(this, ConferirTvActivity::class.java))
+        }, lp())
         // Atualização vigiada (VigiaAtualizacao.kt): só aparece se uma versão caiu logo depois de instalar.
         VigiaAtualizacao.textoPausa(this)?.let { pausa ->
             lateinit var linhaSeguro: LinhaCfg
