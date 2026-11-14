@@ -64,7 +64,8 @@ closed action catalog, e.g. `{"acoes":[{"tipo":"abrir_tela","tela":"previsao"}]}
   cookie, PBKDF2 PIN, growing lockout; destructive actions ask for the PIN again. Frontend in `assets/painel/`.
 - HTTPS at home (for installing the panel as a PWA): same panel also on port 8444 (8443 is taken by the built-in Chromecast, `mediashell`) with a certificate the TV generates on
   first use (`PainelTls.kt` + `CertificadoX509.kt`, SAN `tv`, `tv.lan`, `tv.local` + the TV's IP, names in
-  `Config.PAINEL_NOMES_HTTPS`). The CA key is discarded right after signing (renewing = new CA, devices reinstall);
+  `Config.PAINEL_NOMES_HTTPS`; the base name can be changed in the panel, e.g. `tv-sala`, and is stored in prefs
+  `painel_tls`, used on the next certificate). The CA key is discarded right after signing (renewing = new CA, devices reinstall);
   the server key is AES-GCM-wrapped by an Android Keystore key in `noBackupFilesDir/painel-tls`. Step-by-step page:
   `/certificado` (filled server-side by `PaginaCertificado.kt`). Nothing of this goes into the repo.
 - MCP: `McpServidor.kt` on 127.0.0.1:8091, OAuth 2.1 (DCR + PKCE) in `McpAutorizacao.kt`, tools in `McpFerramentas.kt`.
