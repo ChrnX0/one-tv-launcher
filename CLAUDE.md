@@ -68,9 +68,13 @@ closed action catalog, e.g. `{"acoes":[{"tipo":"abrir_tela","tela":"previsao"}]}
   `painel_tls`, used on the next certificate). The CA key is discarded right after signing (renewing = new CA, devices reinstall);
   the server key is AES-GCM-wrapped by an Android Keystore key in `noBackupFilesDir/painel-tls`. Step-by-step page:
   `/certificado` (filled server-side by `PaginaCertificado.kt`). Nothing of this goes into the repo.
-- Network drive (WebDAV, off by default): `PainelDav.kt` at `https://<tv>:8444/dav/`, password = panel PIN with the
-  same lockout; pure logic `DavLogica.kt`; whole server runs in `DavServidorTest`. SSDP (`Ssdp.kt`, `AnuncioUpnp.kt`) puts
-  it in Windows "Network". SMB was studied and rejected: `docs/unidade-de-rede.md`.
+- Network drive (one switch, off by default). Windows: MTP over IP (`MtpIp.kt` pure responder + `MtpNaRede.kt`, port 15740,
+  announced by SSDP as `urn:microsoft-com:device:mtp:1` in `Ssdp.kt`/`AnuncioUpnp.kt`), so the TV shows in "This PC" like
+  a phone; no password (the protocol has none): LAN only + an on-screen "Allow?" per computer (`mtp_permitidos` prefs,
+  out of the backup). Whole server runs in `MtpIpTest`; real client: `gphoto2 --port ptpip:127.0.0.1` against
+  `ONETV_MTP_SERVIR=1`. Mac/Linux/phones: WebDAV, `PainelDav.kt` at `https://<tv>:8444/dav/`, password = panel PIN with
+  the same lockout; pure logic `DavLogica.kt`, server test `DavServidorTest`; `/unidade/conectar.cmd` (`ConectorWindows.kt`)
+  maps it on Windows with a drive letter. SMB is impossible (port 445 < 1024): `docs/unidade-de-rede.md`.
 - MCP: `McpServidor.kt` on 127.0.0.1:8091, OAuth 2.1 (DCR + PKCE) in `McpAutorizacao.kt`, tools in `McpFerramentas.kt`.
   Reachable from outside only through `tunel/main.go` (Tailscale `tsnet`, userspace, Funnel :443), compiled to
   `libtsnet.so` by the `compilarTunel` Gradle task when Go is installed. Machine name: `onetv-<device name>`.

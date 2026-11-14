@@ -21,14 +21,14 @@ object Ssdp {
     private const val SERVIDOR = "Android UPnP/1.0 OneTV/1.0"
 
     /** Os três anúncios que a especificação manda: raiz, o aparelho (uuid) e o tipo dele. NT -> USN. */
-    fun alvos(uuid: String): List<Pair<String, String>> = listOf(
+    fun alvos(uuid: String, tipo: String = TIPO): List<Pair<String, String>> = listOf(
         "upnp:rootdevice" to "uuid:$uuid::upnp:rootdevice",
         "uuid:$uuid" to "uuid:$uuid",
-        TIPO to "uuid:$uuid::$TIPO",
+        tipo to "uuid:$uuid::$tipo",
     )
 
     /** NOTIFY multicast: ssdp:alive (estou aqui) ou ssdp:byebye (saí). */
-    fun notify(uuid: String, local: String, vivo: Boolean): List<String> = alvos(uuid).map { (nt, usn) ->
+    fun notify(uuid: String, local: String, vivo: Boolean, tipo: String = TIPO): List<String> = alvos(uuid, tipo).map { (nt, usn) ->
         "NOTIFY * HTTP/1.1\r\nHOST: $GRUPO:$PORTA\r\n" +
             (if (vivo) "CACHE-CONTROL: max-age=$VALIDADE_S\r\nLOCATION: $local\r\nSERVER: $SERVIDOR\r\n" else "") +
             "NT: $nt\r\nNTS: ${if (vivo) "ssdp:alive" else "ssdp:byebye"}\r\nUSN: $usn\r\n\r\n"
@@ -38,14 +38,14 @@ object Ssdp {
      * Resposta (unicast) a uma busca M-SEARCH, ou lista vazia se a busca não é por nós. Busca malformada, sem
      * MAN: "ssdp:discover" ou grande demais: nada.
      */
-    fun respostas(pedido: String, uuid: String, local: String): List<String> {
+    fun respostas(pedido: String, uuid: String, local: String, tipo: String = TIPO): List<String> {
         if (pedido.length > 2048) return emptyList()
         val linhas = pedido.split("\r\n", "\n")
         if (!linhas.first().trim().equals("M-SEARCH * HTTP/1.1", ignoreCase = true)) return emptyList()
         val cab = linhas.drop(1).filter { ':' in it }.associate { it.substringBefore(':').trim().uppercase() to it.substringAfter(':').trim() }
         if (cab["MAN"]?.trim('"') != "ssdp:discover") return emptyList()
         val st = cab["ST"] ?: return emptyList()
-        val escolhidos = if (st == "ssdp:all") alvos(uuid) else alvos(uuid).filter { it.first == st }
+        val escolhidos = if (st == "ssdp:all") alvos(uuid, tipo) else alvos(uuid, tipo).filter { it.first == st }
         return escolhidos.map { (nt, usn) ->
             "HTTP/1.1 200 OK\r\nCACHE-CONTROL: max-age=$VALIDADE_S\r\nEXT:\r\nLOCATION: $local\r\nSERVER: $SERVIDOR\r\n" +
                 "ST: $nt\r\nUSN: $usn\r\n\r\n"
@@ -62,6 +62,50 @@ object Ssdp {
             "<modelDescription>${e("Arquivos da TV pela rede (WebDAV)")}</modelDescription>" +
             "<UDN>uuid:${e(uuid)}</UDN><presentationURL>${e(pagina)}</presentationURL></device></root>\n"
     }
+
+    // ---------------------------------------------------------------- a TV em "Este Computador" (MTP pela rede)
+
+    /**
+     * O tipo que o driver "MTP IP Device" do Windows procura (wpdmtp.inf: umb\urn:microsoft-com:device:mtp:1). Com ele
+     * a TV vira um dispositivo portátil, como um celular no cabo; os arquivos vão pela porta 15740 (MtpIp.kt).
+     */
+    const val TIPO_MTP = "urn:microsoft-com:device:mtp:1"
+    const val CAMINHO_MTP = "/upnp/onetv-mtp.xml"
+    const val CAMINHO_MTP_SERVICO = "/upnp/onetv-mtp-servico.xml"
+
+    /**
+     * A descrição do aparelho MTP. As linhas pnpx dizem ao Windows qual driver usar (X_compatibleId) e que é um
+     * aparelho de mídia; o serviço "nulo" existe só porque o UPnP exige pelo menos um. [pagina] = o painel web
+     * (no Windows: botão direito no aparelho › Exibir página da Web do dispositivo).
+     */
+    fun descricaoMtp(nome: String, uuid: String, pagina: String, serie: String): String {
+        fun e(t: String) = DavLogica.escaparXml(t)
+        return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<root xmlns=\"urn:schemas-upnp-org:device-1-0\" " +
+            "xmlns:pnpx=\"http://schemas.microsoft.com/windows/pnpx/2005/11\" " +
+            "xmlns:df=\"http://schemas.microsoft.com/windows/2008/09/devicefoundation\">" +
+            "<specVersion><major>1</major><minor>0</minor></specVersion><device>" +
+            "<pnpx:X_hardwareId>VEN_0ETV&amp;DEV_0001</pnpx:X_hardwareId>" +
+            "<pnpx:X_compatibleId>$TIPO_MTP</pnpx:X_compatibleId>" +
+            "<pnpx:X_deviceCategory>MediaDevices</pnpx:X_deviceCategory>" +
+            "<df:X_deviceCategory>Multimedia.DMP</df:X_deviceCategory>" +
+            "<deviceType>$TIPO_MTP</deviceType><friendlyName>${e(nome)}</friendlyName>" +
+            "<manufacturer>One TV Launcher</manufacturer><modelName>One TV Launcher</modelName>" +
+            "<modelDescription>${e("Arquivos da TV")}</modelDescription><serialNumber>${e(serie)}</serialNumber>" +
+            "<UDN>uuid:${e(uuid)}</UDN><serviceList><service>" +
+            "<serviceType>urn:microsoft-com:service:MtpNullService:1</serviceType>" +
+            "<serviceId>urn:microsoft-com:serviceId:MtpNullService</serviceId>" +
+            "<SCPDURL>$CAMINHO_MTP_SERVICO</SCPDURL><controlURL>/upnp/onetv-mtp-controle</controlURL>" +
+            "<eventSubURL>/upnp/onetv-mtp-eventos</eventSubURL></service></serviceList>" +
+            "<presentationURL>${e(pagina)}</presentationURL></device></root>\n"
+    }
+
+    /** A descrição do serviço "nulo": nenhuma ação, uma variável de enfeite (o esquema exige a tabela). */
+    const val SERVICO_MTP = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<scpd xmlns=\"urn:schemas-upnp-org:service-1-0\">" +
+        "<specVersion><major>1</major><minor>0</minor></specVersion><serviceStateTable>" +
+        "<stateVariable sendEvents=\"no\"><name>Nada</name><dataType>string</dataType></stateVariable>" +
+        "</serviceStateTable></scpd>\n"
+
+    fun uuidMtp(idTv: String): String = java.util.UUID.nameUUIDFromBytes("onetv-mtp-$idTv".toByteArray()).toString()
 
     /** Nome que aparece no Windows: o da TV + "arquivos" (o Chromecast já usa o nome sozinho). Até 60 letras. */
     fun nomeVisivel(nomeTv: String): String = "${nomeTv.take(45)} · arquivos"

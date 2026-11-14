@@ -57,7 +57,7 @@ object ConfirmacoesTv {
 
     // ---------------------------------------------------------------- perguntar na TV
 
-    private class Pergunta(val acao: Confirmacoes.Acao, val oQue: String, val quem: String) {
+    private class Pergunta(val titulo: String, val oQue: String, val quem: String) {
         val pronto = CountDownLatch(1)
         @Volatile var sim = false
     }
@@ -79,8 +79,16 @@ object ConfirmacoesTv {
         return sim
     }
 
-    private fun perguntar(app: Context, a: Confirmacoes.Acao, oQue: String, quem: String): Boolean {
-        val p = Pergunta(a, if (oQue.length <= 300) oQue else oQue.take(290) + " … [cortado]", quem.take(80))
+    private fun perguntar(app: Context, a: Confirmacoes.Acao, oQue: String, quem: String): Boolean =
+        perguntarSempre(app, app.getString(tituloRes(a)), oQue, quem)
+
+    /**
+     * Pergunta na TV sem passar pelas regras (nem "Liberar tudo" responde por ela): para o que SEMPRE precisa de
+     * alguém na frente da TV, como um computador novo pedindo os arquivos (MtpNaRede). Bloqueia até 60 s.
+     */
+    fun perguntarSempre(ctx: Context, titulo: String, oQue: String, quem: String): Boolean {
+        val app = ctx.applicationContext
+        val p = Pergunta(titulo, if (oQue.length <= 300) oQue else oQue.take(290) + " … [cortado]", quem.take(80))
         synchronized(this) {
             if (aberta != null) { registrar(app, quem, oQue, "negado: outra pergunta na tela"); return false }
             aberta = p
@@ -103,7 +111,7 @@ object ConfirmacoesTv {
     }
 
     /** Para a PerguntaTvActivity. O título sai no idioma da TV (os textos de Confirmacoes.kt ficam para a IA). */
-    internal fun atual(): Triple<String, String, String>? = aberta?.let { Triple(txt(tituloRes(it.acao)), it.oQue, it.quem) }
+    internal fun atual(): Triple<String, String, String>? = aberta?.let { Triple(it.titulo, it.oQue, it.quem) }
 
     /** Nome, explicação e modo de cada linha das Confirmações, nos recursos de texto (inglês padrão, pt traduzido). */
     fun tituloRes(a: Confirmacoes.Acao): Int = when (a) {

@@ -37,7 +37,7 @@ object BackupCompleto {
      * "confirmacoes" (restaurar um backup não pode liberar nada sem o PIN, ver ConfirmacoesTv), "painel_log" (registro),
      * "atualizador", "aviso_tv" e "loja_curada" (estado passageiro ou cache baixado de novo).
      */
-    internal val FORA_DE_PROPOSITO = setOf("confirmacoes", "painel_log", "atualizador", "aviso_tv", "loja_curada",
+    internal val FORA_DE_PROPOSITO = setOf("confirmacoes", "mtp_permitidos", "painel_log", "atualizador", "aviso_tv", "loja_curada",
         "aot",   // versão já compilada (CompilarAot): é do APK instalado, não da configuração
         "roteiro",   // respostas do "Conferir na TV" (ConferirTvActivity): valem só para a versão em que foram dadas
         "timer",   // timer é passageiro: restaurar um backup feito com o timer correndo o armaria de novo sem ninguém pedir

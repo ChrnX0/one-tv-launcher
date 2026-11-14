@@ -14,7 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>A TV como unidade de rede: a memória dela abre no Windows (Mapear unidade de rede), Mac, Linux e apps de arquivos do celular por WebDAV, com o PIN do painel como senha; ela também aparece em Rede do Windows, e o duplo clique ali traz um conector que prepara o Windows e mapeia a unidade sozinho (Configurações › Acesso remoto, desligada por padrão)</item>
+        <item>A TV em Este Computador do Windows, sozinha, como um celular (a TV pergunta na tela na primeira vez de cada computador). A memória dela também abre no Mac, Linux e apps de arquivos do celular por WebDAV, com o PIN do painel como senha; ela também aparece em Rede do Windows, e o duplo clique ali traz um conector que prepara o Windows e mapeia a unidade sozinho (Configurações › Acesso remoto, desligada por padrão)</item>
         <item>Player: o alto da coluna diz só TV, Filmes ou Séries, com os botões Buscar e Filtro ao lado; a lista abre espaço para Gravações (TV: Favoritos, Recentes, Guia, Gravações; “Guia” curto para não cortar)</item>
         <item>Card Jogos na tela inicial, depois de Na rede: GeForce NOW, Steam Link, Moonlight, PS Remote Play, RetroArch e os outros jogos saem da linha de apps e ficam em 4 grupos</item>
         <item>Jogos: “Jogar no PC” acorda o computador e abre o Moonlight ou o Steam Link; “Testar a rede” diz se dá para jogar na nuvem; os controles ligados aparecem no alto</item>
@@ -173,7 +173,7 @@
         <item>Na grade, OK num programa que começa em 10 min › Gravar; desligue a TV e espere ele acabar</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Com Configurações › Acesso remoto › Mostrar a TV como unidade de rede ligada, o Mapear unidade de rede do Windows com o endereço mostrado lá e o PIN do painel abre as pastas da TV?</item>
+        <item>Com Configurações › Acesso remoto › Mostrar a TV como unidade de rede ligada, a TV aparece em Este Computador do Windows (ou em Rede), pergunta na tela se permite o computador e, depois do Permitir, abre as pastas?</item>
         <item>Na TV, em Filmes e em Séries, ▲ na primeira linha leva aos botões Buscar e Filtro ao lado do título, e ▼ volta para a lista?</item>
         <item>Aparece o card Jogos, âmbar, depois de Na rede?</item>
         <item>Aparecem os botões grandes e os jogos por grupo, e os apps de jogo sumiram da linha de apps?</item>

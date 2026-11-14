@@ -965,6 +965,19 @@ class ConfigLauncherActivity : Activity() {
             linhaUnidade.ligado(PainelArmazem.unidadeRede(this)); linhaUnidade.detalhe(detalheUnidade())
         }
         c.addView(linhaUnidade, lp())
+        // Quem já foi aceito na TV para o MTP pela rede (MtpNaRede). OK esquece todos: cada computador pergunta de novo.
+        lateinit var linhaPcs: LinhaCfg
+        fun detalhePcs(): String = MtpNaRede.permitidos(this).let {
+            if (it.isEmpty()) getString(R.string.mtp_pcs_nenhum) else getString(R.string.mtp_pcs_lista, it.joinToString(", "))
+        }
+        linhaPcs = linha(getString(R.string.mtp_pcs), detalhePcs()) {
+            if (MtpNaRede.permitidos(this).isNotEmpty()) {
+                MtpNaRede.esquecerTodos(this)
+                android.widget.Toast.makeText(this, R.string.mtp_pcs_esquecidos, android.widget.Toast.LENGTH_SHORT).show()
+                linhaPcs.detalhe(detalhePcs())
+            }
+        }
+        c.addView(linhaPcs, lp())
 
         // Claude pela internet (McpServidor + TunelTailscale, 05/11/2026). A chave do Tailscale se cola no painel (PIN).
         secao(c, getString(R.string.cl_claude_internet))

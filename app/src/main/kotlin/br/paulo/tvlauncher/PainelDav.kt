@@ -403,10 +403,12 @@ object AnuncioDav {
         try { m.registerService(info, android.net.nsd.NsdManager.PROTOCOL_DNS_SD, r); registro = r }
         catch (e: Exception) { Log.w(TAG, "mDNS indisponível: $e") }
         AnuncioUpnp.ligar(app)   // e na tela "Rede" do Windows (SSDP)
+        MtpNaRede.ligar(app)     // e em "Este Computador", como um celular (MTP pela rede)
     }
 
     @Synchronized fun desligar() {
         AnuncioUpnp.desligar()
+        MtpNaRede.desligar()
         val m = nsd ?: return
         try { registro?.let { m.unregisterService(it) } } catch (_: Exception) {}
         registro = null
