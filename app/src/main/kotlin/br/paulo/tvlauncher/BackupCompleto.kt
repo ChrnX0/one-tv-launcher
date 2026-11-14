@@ -62,6 +62,8 @@ object BackupCompleto {
         "interesses_series.json", "interesses_filmes.json", "series_ultimos.json", "series_progresso.json",
         "parental.json", "ultimo.json")
     private const val ESTADO_TUNEL = "tailscaled.state"
+    /** Os caminhos de "arquivos" que o importar aceita (o ensaio da ideia 64 confere com a mesma lista). */
+    val CAMINHOS_ARQUIVOS: Set<String> get() = ARQUIVOS_PLAYER.map { "player/$it" }.toSet() + "tunel/$ESTADO_TUNEL"
     private const val LIMITE_ARQUIVO = 512 * 1024
 
     /** Monta o backup e tranca com [senha]. Lento (PBKDF2): fora da thread da tela. */

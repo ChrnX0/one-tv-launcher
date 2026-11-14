@@ -959,6 +959,11 @@ class ConfigLauncherActivity : Activity() {
             startActivity(Intent(this, BackupNoturnoActivity::class.java))
         }, lp())
 
+        // Uso local das funções (ideia 67): o que é usado e o que ninguém abre. Fica só na TV.
+        c.addView(linha(getString(R.string.l51_uso_titulo), getString(R.string.l51_uso_det), seta = true) {
+            UsoLocal.mostrar(this)
+        }, lp())
+
         confirmacoes(c)
 
         // Atualização (Atualizador.kt): o launcher confere o GitHub a cada 6 h e instala sozinho com a tela apagada.
@@ -1287,7 +1292,7 @@ class ConfigLauncherActivity : Activity() {
             if (chave != null) ligado(chave)
             if (valor != null) this.valor(valor)
             if (seta && chave == null && valor == null) this.seta()
-            setOnClickListener { aoClicar() }
+            setOnClickListener { UsoLocal.contar(this@ConfigLauncherActivity, "opcao:$titulo"); aoClicar() }   // ideia 67
         }
 
     /** Uma linha só informativa, sem foco nem clique (para ler, não para apertar OK). */

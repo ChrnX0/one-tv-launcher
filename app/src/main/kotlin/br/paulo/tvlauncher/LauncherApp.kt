@@ -37,7 +37,7 @@ class LauncherApp : Application() {
         Moldura.instalar(this)   // a hora da HOME no mesmo lugar nas telas de lista (Moldura.kt)
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityStarted(a: android.app.Activity) = Estilo.tirarCorDaJanelaSeCoberta(a)   // Estilo.kt
-            override fun onActivityCreated(a: android.app.Activity, salvo: android.os.Bundle?) {}
+            override fun onActivityCreated(a: android.app.Activity, salvo: android.os.Bundle?) { if (salvo == null) UsoLocal.contarTela(a) }   // ideia 67
             override fun onActivityResumed(a: android.app.Activity) {}
             override fun onActivityPaused(a: android.app.Activity) {}
             override fun onActivityStopped(a: android.app.Activity) {}
