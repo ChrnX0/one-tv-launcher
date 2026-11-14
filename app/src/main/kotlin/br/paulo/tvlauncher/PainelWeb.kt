@@ -69,6 +69,35 @@ object PainelWeb {
         val base = endereco() ?: return null
         return base + DestinoPainel.fragmento(codigoEntrada.novo(), destino)   // ideia 43: abre já na página certa
     }
+
+    /**
+     * Primeira configuração pelo celular (ideia 97, [PrimeiraConfig]): código de uso único de 15 min e o "modo" que
+     * deixa a porta abrir sem PIN. O modo só vale enquanto a tela do QR está na TV (EntrarPeloQrActivity sem PIN).
+     */
+    val codigoPrimeira = CodigoEntrada({ System.currentTimeMillis() }, PrimeiraConfig.VALIDADE_MS)
+    @Volatile private var modoPrimeira = false
+
+    /**
+     * Liga o modo da primeira configuração, abre a porta (sem PIN) e devolve o endereço do QR: `#primeira=<código>`.
+     * Null se a TV já tem PIN (aí vale o "Entrar pelo celular" de sempre) ou se não está em rede nenhuma.
+     */
+    fun linkPrimeiraConfig(ctx: Context): String? {
+        app = ctx.applicationContext
+        if (PainelArmazem.temPin(app)) return null
+        val base = endereco() ?: return null
+        modoPrimeira = true
+        ajustar(app)   // a porta abre numa thread à parte: até a pessoa apontar o celular, já está de pé
+        return base + "#primeira=" + codigoPrimeira.novo()
+    }
+
+    /** A tela do QR saiu: o código deixa de valer e, se o PIN não foi criado, a porta fecha de novo. */
+    fun sairPrimeiraConfig(ctx: Context) {
+        app = ctx.applicationContext
+        modoPrimeira = false
+        codigoPrimeira.cancelar()
+        ajustar(app)
+    }
+
     @Volatile private var tentativas: ControleTentativas? = null
     private val travaPin = Any()   // um PBKDF2 por vez: muitas tentativas juntas não derrubam a CPU da TV
 
@@ -91,7 +120,8 @@ object PainelWeb {
     /** Liga ou desliga conforme as preferências (ver PainelArmazem.podeLigar). Barato e idempotente: chamar à vontade. */
     @Synchronized fun ajustar(ctx: Context) {
         app = ctx.applicationContext
-        val deve = PainelArmazem.podeLigar(app)
+        // Sem PIN, só abre no modo da primeira configuração (tela do QR na TV): o assistente cria o PIN pelo celular.
+        val deve = PainelArmazem.podeLigar(app) || (modoPrimeira && !PainelArmazem.temPin(app))
         if (deve && !ligado() && !iniciando) iniciar() else if (!deve && (ligado() || iniciando)) parar()
     }
 
@@ -569,6 +599,7 @@ object PainelWeb {
             "/api/eventos" -> if (req.metodo == "GET") return eventos(token)
             "/api/entrar" -> if (req.metodo == "POST") return entrar(req, ip)
             "/api/entrar-qr" -> if (req.metodo == "POST") return entrarPeloQr(req, ip)
+            "/api/primeira" -> if (req.metodo == "POST") return primeiraConfig(req, ip)   // ideia 97: cria o PIN
             "/api/sair" -> if (req.metodo == "POST") { sessoes.encerrar(token); return json(200, JSONObject().put("ok", true), cookieApagado()) }
         }
         if (!req.caminho.startsWith("/api/")) return erro(404, "não existe")
@@ -720,6 +751,10 @@ object PainelWeb {
                 val s = ServicosContas.sessao(sv)?.takeIf { it.estado == ServicosContas.EstadoLogin.ESPERANDO } ?: return erro(404, "sem código agora")
                 return Resposta(200, "image/png", QrCodigo.png(s.codigo.urlQr), mapOf("Cache-Control" to "no-store"))
             }
+            // Assistente da primeira configuração (ideia 97), depois do PIN criado: o que a TV já tem, e abrir na TV
+            // a tela de idioma do Android (o launcher segue o idioma do sistema, nunca um fixo).
+            "/api/primeira/tv" -> if (req.metodo == "GET") return json(200, primeiraEstado())
+            "/api/primeira/idioma-tv" -> if (req.metodo == "POST") return abrirIdiomaNaTv(ip)
             "/api/config" -> when (req.metodo) {
                 "GET" -> return json(200, PainelConfig.estado(app))
                 "POST" -> {
@@ -845,6 +880,7 @@ object PainelWeb {
         "/busca.js" to ("busca.js" to "text/javascript; charset=utf-8"),   // busca rápida (Ctrl+K)
         "/arquivos.js" to ("arquivos.js" to "text/javascript; charset=utf-8"),   // prévia e organizar arquivos
         "/controle.js" to ("controle.js" to "text/javascript; charset=utf-8"),   // digitar ao vivo e touchpad
+        "/primeira.js" to ("primeira.js" to "text/javascript; charset=utf-8"),   // ideia 97: assistente da 1ª configuração
         "/certificado.js" to ("certificado.js" to "text/javascript; charset=utf-8"),   // cartão "Instalar como app (https)"
         // "Adicionar à tela inicial" no celular: nome, ícone e atalhos (10/11/2026).
         "/manifest.webmanifest" to ("manifest.webmanifest" to "application/manifest+json; charset=utf-8"),
@@ -1059,6 +1095,44 @@ object PainelWeb {
         val token = sessoes.criar(elevada = false)
         PainelArmazem.registrar(app, ip, "entrar pelo QR da TV", "ok")
         return json(200, JSONObject().put("ok", true), cookieSessao(token))
+    }
+
+    /**
+     * Passo 1 do assistente da primeira configuração ([PrimeiraConfig]): com o código do QR da TV, cria o PIN, liga o
+     * painel e entra (sessão elevada: a pessoa acabou de digitar o PIN). Sem volta só no sentido de que, com PIN, este
+     * caminho fecha para sempre; trocar o PIN depois é pelas Configurações da TV, como sempre.
+     */
+    private fun primeiraConfig(req: Requisicao, ip: String): Resposta {
+        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
+        val pin = o.optString("pin")
+        PrimeiraConfig.conferir(PainelArmazem.temPin(app), modoPrimeira, pin)?.let { return erro(it.status, it.mensagem) }
+        if (!codigoPrimeira.usar(o.optString("codigo"))) return erro(PrimeiraConfig.Recusa.CODIGO.status, PrimeiraConfig.Recusa.CODIGO.mensagem)
+        synchronized(travaPin) {
+            if (PainelArmazem.temPin(app)) return erro(409, PrimeiraConfig.Recusa.JA_TEM_PIN.mensagem)   // corrida: outro criou antes
+            PainelArmazem.definirPin(app, pin)   // PBKDF2 (~1 s): numa thread do pedido, não na da tela
+            tentativas?.zerar()
+        }
+        PainelArmazem.definirLigado(app, true)
+        val token = sessoes.criar(elevada = true)
+        PainelArmazem.registrar(app, ip, "primeira configuração: PIN criado pelo celular", "ok")
+        return json(200, JSONObject().put("ok", true), cookieSessao(token))
+    }
+
+    private fun primeiraEstado(): JSONObject {
+        val loc = java.util.Locale.getDefault()
+        return JSONObject()
+            .put("idiomaTv", loc.getDisplayName(loc).replaceFirstChar { it.titlecase(loc) })
+            .put("audio", if (IdiomaPlayer.prefs(app).padrao == Idioma.Pref.ORIGINAL) "original" else "dublado")
+            .put("cidade", LocalClima.ler(app)?.let { LocalClima.descrever(it) } ?: JSONObject.NULL)
+            .put("contasTv", PlayerArmazem.fontes(app).size)
+    }
+
+    private fun abrirIdiomaNaTv(ip: String): Resposta = try {
+        app.startActivity(android.content.Intent(Settings.ACTION_LOCALE_SETTINGS).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
+        PainelArmazem.registrar(app, ip, "abrir o idioma da TV", "ok")
+        json(200, JSONObject().put("ok", true))
+    } catch (e: Exception) {
+        erro(500, "não consegui abrir: na TV, vá em Configurações > Sistema > Idioma")
     }
 
     /** PIN redigitado para uma ação sem volta: a sessão fica "elevada" por 5 min. */

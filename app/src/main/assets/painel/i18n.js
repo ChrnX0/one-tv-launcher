@@ -851,8 +851,49 @@
 "O PIN precisa ter de 6 a 12 números.": "The PIN needs 6 to 12 digits.",
 "Os dois PINs não bateram.": "The two PINs don't match.",
 "PIN do painel trocado. Use o novo da próxima vez.": "Panel PIN changed. Use the new one next time.",
+"Crie um PIN": "Create a PIN",
+"Idioma": "Language",
+"Sua cidade": "Your city",
+"Filmes e séries": "Movies and series",
+"O PIN protege o painel e o que não tem volta. Use de 6 a 12 números e guarde bem.": "The PIN protects the panel and anything that can't be undone. Use 6 to 12 digits and keep it safe.",
+"Repita o PIN": "Repeat the PIN",
+"Repita": "Repeat",
+"Os menus da TV seguem o idioma do Android. Agora ela está em:": "The TV menus follow Android's language. Right now it is:",
+"Trocar o idioma na TV": "Change the language on the TV",
+"Filmes e séries, de preferência:": "Movies and series, preferably:",
+"Áudio original com legenda": "Original audio with subtitles",
+"Os dados da sua conta de canais (IPTV). Não tem? Toque em Pular.": "Your channel account (IPTV). Don't have one? Tap Skip.",
+"Servidor e usuário (Xtream)": "Server and user (Xtream)",
+"Link da lista (.m3u)": "Playlist link (.m3u)",
+"Para a previsão do tempo e o aviso de chuva. Sem cidade, a TV tenta achar sozinha.": "For the forecast and the rain alert. Without a city, the TV tries to find it by itself.",
+"Cidade (ex.: Curitiba)": "City (e.g. Chicago)",
+"Opcional: capas e sinopses, o que você já viu e legendas. Dá para fazer depois, em Configurações.": "Optional: posters and plots, what you watched and subtitles. You can do it later, in Settings.",
+"Continuar": "Continue",
+"Concluir": "Finish",
+"Pular": "Skip",
+"Os dois PINs não são iguais. Digite de novo.": "The two PINs are not the same. Type them again.",
+"Esta TV já tem PIN: entre com ele.": "This TV already has a PIN: sign in with it.",
+"Preencha o servidor, o usuário e a senha, ou toque em Pular.": "Fill in the server, user and password, or tap Skip.",
+"Cole o link da lista, ou toque em Pular.": "Paste the playlist link, or tap Skip.",
+"Digite a cidade, ou toque em Pular.": "Type the city, or tap Skip.",
+"Pronto! A TV está configurada. O resto fica nas abas do painel.": "Done! The TV is set up. Everything else is in the panel tabs.",
+"A tela de idioma abriu na TV. Escolha com o controle.": "The language screen opened on the TV. Choose with the remote.",
+"Por segurança, digite o PIN que você acabou de criar.": "For safety, type the PIN you just created.",
+"Servidor (ex.: http://servidor:8080)": "Server (e.g. http://server:8080)",
 };
   const P = [
+[
+"^Passo (\\d+) de (\\d+)$",
+"Step $1 of $2"
+],
+[
+"^A TV já tem (\\d+) conta\\(s\\)\\. Pode pular ou pôr outra\\.$",
+"The TV already has $1 account(s). You can skip or add another."
+],
+[
+"^Agora: (.+)$",
+"Now: $1"
+],
 [
 "^ · conectado como (.+)$",
 " · connected as $1"

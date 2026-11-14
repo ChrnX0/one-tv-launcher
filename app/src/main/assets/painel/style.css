@@ -145,6 +145,25 @@ details summary { cursor: pointer; color: var(--texto-fraco); margin-top: 12px; 
 .cartao-entrar input::placeholder { letter-spacing: .3em; font-weight: 400; }
 .cartao-entrar .botao-primario { min-height: 50px; font-size: 15px; }
 
+/* Primeira configuração pelo celular (ideia 97, primeira.js): o cartão do PIN, um passo por vez, letra grande. */
+.cartao-primeira { max-width: 440px; text-align: left; }
+.cartao-primeira h1 { text-align: center; }
+.cartao-primeira [data-passo] { display: flex; flex-direction: column; gap: 12px; }
+.cartao-primeira .aviso { margin: 0; font-size: 16px; line-height: 1.45; }
+.cartao-primeira input:not(.campo-pin):not([type=radio]), .cartao-primeira select {
+  font-size: 17px; font-weight: 400; letter-spacing: 0; text-align: left; min-height: 52px; padding-left: 14px; width: 100%;
+}
+.cartao-primeira input:not(.campo-pin)::placeholder { letter-spacing: 0; }
+.cartao-primeira .botao-secundario { min-height: 48px; font-size: 15px; }
+.passos-primeira { text-align: center; color: var(--texto-fraco); font-size: 14px; margin: 0; }
+.destaque-primeira { font-size: 20px; font-weight: 600; margin: 0; }
+.opcao-primeira { display: flex; align-items: center; gap: 12px; font-size: 17px; min-height: 48px; cursor: pointer; }
+.opcao-primeira input { width: 22px; height: 22px; accent-color: var(--acento); }
+.acoes-primeira { display: flex; gap: 10px; }
+.acoes-primeira button { flex: 1; min-height: 48px; }
+.cartao-primeira #cartaoServicos { margin: 0; padding: 0; border: 0; background: none; box-shadow: none; }
+.cartao-primeira #cartaoServicos > h2, .cartao-primeira #cartaoServicos > .aviso:first-of-type { display: none; }
+
 /* ---------------------------------------------------------------- casca: topo, navegação, conteúdo */
 .topo {
   position: sticky; top: 0; z-index: 5; height: var(--topo);
