@@ -58,6 +58,8 @@
         <item>Instalar app dividido (.apks, .xapk) pelo painel ou pelo Claude; a TV escolhe as partes do chip dela</item>
         <item>Loja curada: some qualquer projeto do GitHub que publique o APK; a TV escolhe o arquivo da arquitetura dela</item>
         <item>Fichas dos apps e lista de limpeza podem crescer com contribuições da comunidade (conferidas 1x por semana)</item>
+        <item>Tela Casa: sensores de temperatura, umidade, porta, movimento, água e fumaça, e o ar-condicionado (segure OK para a temperatura)</item>
+        <item>Tela Casa: câmeras mostram a foto de agora na TV com OK (também pelo painel e pelo Claude)</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -106,6 +108,8 @@
         <item>No painel, Apps &gt; Instalar: mande um arquivo .xapk</item>
         <item>No painel, Extras &gt; Loja curada: some um projeto do GitHub (ex.: dono/nome) e instale</item>
         <item>No painel, abra a ficha de um app</item>
+        <item>Abra a tela Casa (Home Assistant) e ache um sensor ou o ar-condicionado</item>
+        <item>Na tela Casa, aperte OK numa câmera</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -154,5 +158,7 @@
         <item>O app instalou e abre?</item>
         <item>Instalou o arquivo certo?</item>
         <item>A ficha continua aparecendo?</item>
+        <item>O valor aparece, e segurar OK no ar muda a temperatura?</item>
+        <item>A foto apareceu por cima da tela?</item>
     </string-array>
 </resources>

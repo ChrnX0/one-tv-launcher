@@ -61,6 +61,8 @@
         <item>Install split apps (.apks, .xapk) from the web panel or Claude; the TV picks the parts for its own chip</item>
         <item>Curated store: add any GitHub project that publishes its APK; the TV picks the file for its architecture</item>
         <item>App sheets and the cleanup list can grow with community contributions (checked once a week)</item>
+        <item>Home screen: temperature, humidity, door, motion, water and smoke sensors, and the air conditioner (hold OK to set the temperature)</item>
+        <item>Home screen: cameras show their picture of right now on the TV with OK (also from the web panel and Claude)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -109,6 +111,8 @@
         <item>apks</item>
         <item>loja_repo</item>
         <item>comunidade</item>
+        <item>casa_sensores</item>
+        <item>casa_camera</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -157,6 +161,8 @@
         <item>In the web panel, Apps &gt; Install: send a .xapk file</item>
         <item>In the web panel, Extras &gt; Curated store: add a GitHub project (e.g. owner/name) and install it</item>
         <item>In the web panel, open the sheet of an app</item>
+        <item>Open the Home screen (Home Assistant) and find a sensor or the air conditioner</item>
+        <item>On the Home screen, press OK on a camera</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -205,5 +211,7 @@
         <item>Did the app install and open?</item>
         <item>Did it install the right file?</item>
         <item>Does the sheet still show?</item>
+        <item>Does the value show, and does holding OK on the air conditioner change the temperature?</item>
+        <item>Did the picture show over the screen?</item>
     </string-array>
 </resources>
