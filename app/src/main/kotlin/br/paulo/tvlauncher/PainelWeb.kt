@@ -736,6 +736,7 @@ object PainelWeb {
     private val TIPOS = mapOf(
         "/" to ("index.html" to "text/html; charset=utf-8"),
         "/app.js" to ("app.js" to "text/javascript; charset=utf-8"),
+        "/i18n.js" to ("i18n.js" to "text/javascript; charset=utf-8"),   // ideia 76: painel em inglês
         "/style.css" to ("style.css" to "text/css; charset=utf-8"),
         "/extras.js" to ("extras.js" to "text/javascript; charset=utf-8"),
         "/ui.js" to ("ui.js" to "text/javascript; charset=utf-8"),   // casca do painel: navegação, Início, avisos
