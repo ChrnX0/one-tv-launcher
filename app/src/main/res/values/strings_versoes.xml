@@ -24,6 +24,7 @@
         <item>Screensaver photos from a network folder (computer, NAS or Nextcloud): open the folder in “Network” and choose “Use these photos”</item>
         <item>More apps on the home screen now show a short description under their name</item>
         <item>Search: at the end of the results, continue the same search on YouTube, Netflix or Prime Video</item>
+        <item>Live TV: each account can have a second XMLTV guide that only fills channels left without a schedule</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -37,6 +38,7 @@
         <item>fotos_rede</item>
         <item>frase_apps</item>
         <item>busca_outros_apps</item>
+        <item>guia_extra</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -50,6 +52,7 @@
         <item>In “Network”, open a folder with photos and choose “Use these photos in the screensaver”</item>
         <item>On the home screen, move to an app you installed (e.g. a file manager)</item>
         <item>Open Search, type a movie name and pick “Search … on YouTube” at the end</item>
+        <item>In the panel, add an account with a second guide link, then open Live TV</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -63,5 +66,6 @@
         <item>Did those photos show up in the next screensaver?</item>
         <item>Does the line under its name say what it does, in the TV’s language?</item>
         <item>Did YouTube open with that search (or at least open)?</item>
+        <item>Do channels that had no schedule now show programs, while the others stay the same?</item>
     </string-array>
 </resources>

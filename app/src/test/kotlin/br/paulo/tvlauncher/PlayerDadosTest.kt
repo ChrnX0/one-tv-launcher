@@ -33,6 +33,15 @@ class PlayerDadosTest {
         assertTrue(PlayerDados.fontesDeJson(null).isEmpty())
     }
 
+    @Test fun guiaExtraValidaEVaiEVolta() {
+        assertTrue(PlayerDados.criar("c", "", FonteTv.TIPO_M3U, "http://e.invalid/l", guiaExtra = "ftp://g").isFailure)
+        val m = PlayerDados.criar("c", "", FonteTv.TIPO_M3U, "http://e.invalid/l", guiaExtra = " http://g.invalid/2.xml ").getOrThrow()
+        val x = PlayerDados.criar("d", "", FonteTv.TIPO_XTREAM, "servidor.invalid", "ana", "s", guiaExtra = "http://g.invalid/3.xml").getOrThrow()
+        assertEquals("http://g.invalid/2.xml", m.guiaExtra)
+        assertEquals(listOf(m, x), PlayerDados.fontesDeJson(PlayerDados.fontesParaJson(listOf(m, x))))
+        assertEquals("", m3u.guiaExtra)   // conta antiga (sem o campo no JSON) continua sem 2º guia
+    }
+
     @Test fun cacheDoXtreamNaoGuardaSenha() {
         val canais = Xtream.lerCanais("""[{"num":1,"name":"Um","stream_id":7,"epg_channel_id":"um"}]""", xt.xtream!!)
         assertTrue(canais[0].url.contains("s%26nh%40"))

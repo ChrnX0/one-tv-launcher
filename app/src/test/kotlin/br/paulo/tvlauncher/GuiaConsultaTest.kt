@@ -39,6 +39,25 @@ class GuiaConsultaTest {
         assertEquals(listOf("A0", "A1", "B2"), Xmltv.ler(KXmlParser(), xml.byteInputStream(), setOf("a", "b"), t0, t0 + 14 * h).map { it.titulo })
     }
 
+    @Test fun guiaExtraPreencheSoOsCanaisQueFaltamComOIdNosso() {
+        // Ideia 15: o 2º guia tem outros ids; casa pelo display-name normalizado e entrega com o guiaId da nossa lista.
+        val extra = """<?xml version="1.0" encoding="UTF-8"?>
+<tv>
+  <channel id="SPORTV2"><display-name>Sportv-2 HD</display-name></channel>
+  <channel id="globo"><display-name>Globo</display-name></channel>
+  <channel id="vazio"/>
+  <programme channel="SPORTV2" start="20261106000000 +0000" stop="20261106010000 +0000"><title>Jogo</title></programme>
+  <programme channel="globo" start="20261106000000 +0000" stop="20261106010000 +0000"><title>Novela</title></programme>
+  <programme channel="SPORTV2" start="20261108000000 +0000" stop="20261108010000 +0000"><title>Longe</title></programme>
+</tv>"""
+        // Globo já tinha programação no guia principal: não está em "faltando".
+        val mescla = GuiaExtra.Mescla(GuiaExtra.faltando(listOf("globo.br" to "Globo", "sportv2.br" to "SporTV 2 FHD"), setOf("globo.br")))
+        val vistos = ArrayList<Programa>()
+        val n = Xmltv.lerExtraEmFluxo(KXmlParser(), extra.byteInputStream(), mescla, t0, t0 + 14 * h, 100) { vistos += it }
+        assertEquals(1, n)
+        assertEquals(listOf("sportv2.br" to "Jogo"), vistos.map { it.guiaId to it.titulo })
+    }
+
     @Test fun fluxoRedeQueCaiNoMeioSobeOErroDepoisDeEntregar() {
         // Rede caiu no meio depois de entregar programas: o erro SOBE mesmo assim (é isso que faz o PlayerCarga desfazer o
         // lote e tentar de novo). O desfazer em si é do SQLite (GuiaBanco.Gravador.lote) e não roda no teste JVM.

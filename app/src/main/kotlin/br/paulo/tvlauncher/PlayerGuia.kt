@@ -119,6 +119,65 @@ object Xmltv {
         return lidos
     }
 
+    /**
+     * Segundo guia (ideia 15): lê um XMLTV EXTRA e entrega só os programas dos canais que a [mescla] traduz para canais
+     * nossos (os que ficaram sem programação no guia principal), já com o guiaId NOSSO. Os <channel> (com os
+     * display-name) vêm antes dos <programme> no padrão XMLTV: cada um passa pela mescla na hora, nada fica guardado
+     * além da tradução dos canais que casaram. Mesmas regras de erro e de teto do [lerEmFluxo].
+     */
+    fun lerExtraEmFluxo(
+        parser: XmlPullParser,
+        entrada: InputStream,
+        mescla: GuiaExtra.Mescla,
+        desde: Long,
+        ate: Long,
+        max: Int,
+        aoLer: (Programa) -> Unit,
+    ): Int {
+        runCatching { parser.setFeature(XmlPullParser.FEATURE_PROCESS_DOCDECL, false) }
+        runCatching { parser.setFeature("http://xmlpull.org/v1/doc/features.html#relaxed", true) }
+        parser.setInput(entrada, null)
+        var lidos = 0
+        try {
+            var evento = parser.eventType
+            while (evento != XmlPullParser.END_DOCUMENT && lidos < max) {
+                if (evento == XmlPullParser.START_TAG && parser.name == "channel") {
+                    val id = parser.getAttributeValue(null, "id").orEmpty()
+                    mescla.canal(id, lerNomes(parser))
+                } else if (evento == XmlPullParser.START_TAG && parser.name == "programme") {
+                    val destinos = mescla.destinos(parser.getAttributeValue(null, "channel").orEmpty())
+                    val inicio = data(parser.getAttributeValue(null, "start"))
+                    val fim = data(parser.getAttributeValue(null, "stop"))
+                    val quer = destinos.isNotEmpty() && inicio != null && fim != null && fim > inicio && fim > desde && inicio < ate
+                    if (quer) lerPrograma(parser, destinos[0], inicio!!, fim!!)?.let { p ->
+                        for (d in destinos) { if (lidos >= max) break; aoLer(if (d == p.guiaId) p else p.copy(guiaId = d)); lidos++ }
+                    } else pularElemento(parser)
+                }
+                evento = parser.next()
+            }
+        } catch (e: XmlPullParserException) {
+            if (lidos == 0) throw e
+        } catch (e: IOException) {
+            if (lidos == 0 || e.message != TETO) throw e
+        }
+        return lidos
+    }
+
+    /** Os display-name de dentro de um <channel> (no máximo 5); fica parado no </channel>. */
+    private fun lerNomes(p: XmlPullParser): List<String> {
+        val nomes = ArrayList<String>(2)
+        val profundidade = p.depth
+        var e = p.next()
+        while (!(e == XmlPullParser.END_TAG && p.depth == profundidade) && e != XmlPullParser.END_DOCUMENT) {
+            if (e == XmlPullParser.START_TAG) {
+                if (p.name == "display-name") p.nextText().trim().let { if (it.isNotEmpty() && nomes.size < 5) nomes += it.take(80) }
+                else pularElemento(p)
+            }
+            e = p.next()
+        }
+        return nomes
+    }
+
     /** Lê title/desc/category de dentro de um <programme>; fica parado no </programme>. */
     private fun lerPrograma(p: XmlPullParser, canal: String, inicio: Long, fim: Long): Programa? {
         var titulo = ""; var desc = ""; var cat = ""

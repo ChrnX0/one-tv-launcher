@@ -1120,7 +1120,7 @@ async function carregarTv() {
       linha.className = 'linha-registro';
       const info = document.createElement('span');
       // textContent: nome e servidor vêm do que foi digitado, nunca viram HTML.
-      info.textContent = `${c.nome} · ${c.tipo === 'xtream' ? 'Xtream' : 'lista'} · ${c.servidor}` + (c.temGuia ? ' · guia próprio' : '') + (c.reservas ? ` · ${c.reservas} reserva(s)` : '');
+      info.textContent = `${c.nome} · ${c.tipo === 'xtream' ? 'Xtream' : 'lista'} · ${c.servidor}` + (c.temGuia ? ' · guia próprio' : '') + (c.temGuiaExtra ? ' · 2º guia' : '') + (c.reservas ? ` · ${c.reservas} reserva(s)` : '');
       const apagar = document.createElement('button');
       apagar.type = 'button'; apagar.className = 'botao-perigo'; apagar.textContent = 'Apagar';
       apagar.addEventListener('click', async () => {
@@ -1141,14 +1141,14 @@ $('formContaTv').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   const corpo = {
     tipo: $('tvTipo').value, nome: $('tvNome').value.trim(), endereco: $('tvEndereco').value.trim(),
-    usuario: $('tvUsuario').value.trim(), senha: $('tvSenha').value, guia: $('tvGuia').value.trim(),
+    usuario: $('tvUsuario').value.trim(), senha: $('tvSenha').value, guia: $('tvGuia').value.trim(), guiaExtra: $('tvGuiaExtra').value.trim(),
     reservas: $('tvReservas').value.trim(),
   };
   if (!corpo.endereco) { mostrar($('statusContaTv'), 'Falta o endereço.'); return; }
   const r = await confirmar('Cadastrar a conta na TV?', 'Fica cifrada na TV. Depois, use "Testar e recarregar canais" para ver se ela funciona.',
     'Cadastrar', () => chamar('POST', '/api/tv/contas', corpo));
   if (r) {
-    for (const id of ['tvNome', 'tvEndereco', 'tvUsuario', 'tvSenha', 'tvGuia', 'tvReservas']) $(id).value = '';
+    for (const id of ['tvNome', 'tvEndereco', 'tvUsuario', 'tvSenha', 'tvGuia', 'tvGuiaExtra', 'tvReservas']) $(id).value = '';
     mostrar($('statusContaTv'), 'Conta cadastrada.');
     carregarTv();
   }

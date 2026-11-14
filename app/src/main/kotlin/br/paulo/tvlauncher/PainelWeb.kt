@@ -1231,7 +1231,7 @@ object PainelWeb {
     private fun tvContas(): JSONObject {
         val lista = JSONArray()
         for (f in PlayerArmazem.fontes(app)) lista.put(JSONObject().put("id", f.id).put("nome", f.nome).put("tipo", f.tipo)
-            .put("servidor", f.servidorVisivel).put("temGuia", f.guia.isNotEmpty()).put("reservas", f.reservas.size))
+            .put("servidor", f.servidorVisivel).put("temGuia", f.guia.isNotEmpty()).put("temGuiaExtra", f.guiaExtra.isNotEmpty()).put("reservas", f.reservas.size))
         return JSONObject().put("contas", lista).put("maximo", 8)
     }
 
@@ -1239,7 +1239,7 @@ object PainelWeb {
         if (!sessoes.elevada(token)) return precisaPin()
         val o = corpoJson(req) ?: return erro(400, "JSON inválido")
         val r = PlayerArmazem.adicionar(app, o.optString("nome"), o.optString("tipo"), o.optString("endereco"),
-            o.optString("usuario"), o.optString("senha"), o.optString("guia"), o.optString("reservas").take(600))
+            o.optString("usuario"), o.optString("senha"), o.optString("guia"), o.optString("reservas").take(600), o.optString("guiaExtra"))
         val f = r.getOrElse {
             PainelArmazem.registrar(app, ip, "TV: cadastrar conta", "recusada")
             return erro(400, it.message ?: "dados inválidos")

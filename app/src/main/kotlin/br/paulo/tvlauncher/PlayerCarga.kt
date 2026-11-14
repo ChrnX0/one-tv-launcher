@@ -331,8 +331,12 @@ object PlayerCarga {
         if (gravador != null) {
             val (desde, ate) = GuiaConsulta.janela(agora)
             var discoFalhou = false
+            // Segundo guia (ideia 15): os canais (guiaId) que receberam programa do guia principal. Só os ids (texto curto),
+            // do tamanho da lista de canais com guia; some no fim do download.
+            val comPrograma = HashSet<String>()
+            val fontes = PlayerArmazem.fontes(ctx)
             try {
-                for (fonte in PlayerArmazem.fontes(ctx)) {
+                for (fonte in fontes) {
                     if (total >= Xmltv.MAX_PROGRAMAS_BANCO || discoFalhou) break
                     val link = linkGuia(fonte) ?: continue
                     // O xmltv.php do Xtream monta o guia inteiro antes de mandar o 1º byte: com milhares de canais isso passa de
@@ -342,10 +346,11 @@ object PlayerCarga {
                         val r = runCatching {
                             abrir(link, MAX_GUIA, leitura = 120_000).use { entrada ->
                                 // Cada tentativa é um lote: se a rede cair no meio, o lote é desfeito (sem programa repetido).
+                                val vistos = HashSet<String>()   // desta tentativa: só valem se o lote for gravado
                                 gravador.lote { inserir ->
                                     Xmltv.lerEmFluxo(Xml.newPullParser(), Xmltv.abrir(entrada), ids, desde, ate,
-                                        Xmltv.MAX_PROGRAMAS_BANCO - total, inserir)
-                                }
+                                        Xmltv.MAX_PROGRAMAS_BANCO - total) { p -> inserir(p); vistos += p.guiaId }
+                                }.also { comPrograma += vistos }
                             }
                         }.onFailure { Log.w(TAG, "guia de ${fonte.servidorVisivel} (tentativa ${tentativa + 1}): ${it.javaClass.simpleName}") }
                         val lidos = r.getOrNull()
@@ -356,6 +361,26 @@ object PlayerCarga {
                         // Mas tenta UMA vez mais: servidor de IPTV às vezes devolve uma página de erro (HTML) com status 200.
                         if (r.exceptionOrNull() is org.xmlpull.v1.XmlPullParserException && tentativa >= 1) break
                     }
+                }
+                // Segundo guia (ideia 15): depois do principal de TODAS as contas, o extra de cada conta preenche só os
+                // canais dela que ficaram sem nenhum programa. Uma tentativa só: é complemento, não vale segurar o player.
+                for (fonte in fontes) {
+                    if (fonte.guiaExtra.isEmpty() || total >= Xmltv.MAX_PROGRAMAS_BANCO || discoFalhou) continue
+                    val prefixo = "${fonte.id}:"
+                    val mescla = GuiaExtra.Mescla(GuiaExtra.faltando(
+                        canais.filter { it.id.startsWith(prefixo) }.map { it.guiaId to it.nome }, comPrograma))
+                    if (mescla.vazia) continue
+                    val r = runCatching {
+                        abrir(fonte.guiaExtra, MAX_GUIA, leitura = 120_000).use { entrada ->
+                            val vistos = HashSet<String>()
+                            gravador.lote { inserir ->
+                                Xmltv.lerExtraEmFluxo(Xml.newPullParser(), Xmltv.abrir(entrada), mescla, desde, ate,
+                                    Xmltv.MAX_PROGRAMAS_BANCO - total) { p -> inserir(p); vistos += p.guiaId }
+                            }.also { comPrograma += vistos; Log.i(TAG, "guia extra de ${fonte.servidorVisivel}: ${vistos.size} canais preenchidos") }
+                        }
+                    }.onFailure { Log.w(TAG, "guia extra de ${fonte.servidorVisivel}: ${it.javaClass.simpleName}") }
+                    r.getOrNull()?.let { total += it }
+                    if (r.exceptionOrNull() is android.database.SQLException) discoFalhou = true
                 }
             } finally {
                 gravador.concluir(indexar = total > 0)
