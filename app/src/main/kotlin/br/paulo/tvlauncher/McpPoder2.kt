@@ -59,12 +59,15 @@ object McpPoder2 {
             JSONObject().put("acao", enumS("ver", "tocar", "pausar", "parar", "proxima", "anterior", "avancar", "voltar", "ir_para"))
                 .put("segundos", i("para avancar, voltar e ir_para")).put("pacote", s("opcional: a sessão de um app específico"))),
         ferramenta("rotinas", "Rotinas por horário da TV: listar, criar, ligar, desligar ou apagar. Ações: ligar (acende a " +
-            "tela), abrir (liga e abre um app), desligar (com 'ocioso' em minutos: só desliga se ninguém mexeu nesse tempo).",
-            JSONObject().put("acao", enumS("listar", "criar", "ligar", "desligar", "apagar"))
+            "tela), abrir (liga e abre um app), desligar (com 'ocioso' em minutos: só desliga se ninguém mexeu nesse tempo), " +
+            "cena (roda uma cena pelo nome). acao=automacoes lista TUDO o que a TV faz sozinha: horários, botões do controle, " +
+            "eventos e links de cena.",
+            JSONObject().put("acao", enumS("listar", "criar", "ligar", "desligar", "apagar", "automacoes"))
                 .put("id", i("de listar")).put("hora", s("HH:MM"))
                 .put("dias", JSONObject().put("type", "array").put("items", JSONObject().put("type", "string"))
                     .put("description", "ex.: [\"uteis\"], [\"sab\",\"dom\"], [\"todos\"]; vazio = uma vez só"))
-                .put("tipo", enumS("ligar", "abrir", "desligar")).put("pacote", s("para tipo=abrir"))
+                .put("tipo", enumS("ligar", "abrir", "desligar", "cena")).put("pacote", s("para tipo=abrir"))
+                .put("cena", s("para tipo=cena: o nome de uma cena que existe"))
                 .put("ocioso", i("para tipo=desligar: 0, 30, 60 ou 120 minutos")),
             listOf("acao")),
         ferramenta("baixar_arquivo", "Baixa um arquivo por HTTPS para a memória da TV (pasta Download, ou 'pasta'). Até 1 GB. " +
@@ -253,23 +256,27 @@ object McpPoder2 {
 
     private fun rotinaJson(app: Context, r: Rotinas.Rotina) = JSONObject().put("id", r.id).put("hora", "%02d:%02d".format(r.hora, r.minuto))
         .put("dias", Despertador.diasTexto(app, r.dias)).put("tipo", r.acao.name.lowercase()).put("pacote", r.pacote)
-        .put("ocioso_min", r.ocioso).put("ligada", r.ativa).put("descricao", Rotinas.descricao(app, r))
+        .put("ocioso_min", r.ocioso).put("cena", r.cena).put("ligada", r.ativa).put("descricao", Rotinas.descricao(app, r))
 
     private fun rotinas(app: Context, a: JSONObject): String {
         val acao = a.optString("acao")
         if (acao == "listar") return JSONArray().apply { Rotinas.listar(app).forEach { put(rotinaJson(app, it)) } }.toString()
+        if (acao == "automacoes") return Automacoes.json(Automacoes.listar(app)).toString()   // ideia 1: o modelo único
         if (acao == "criar") {
             val (h, m) = McpPoderRegras.hora(a.optString("hora")) ?: erro("hora inválida: use HH:MM")
             val arr = a.optJSONArray("dias") ?: JSONArray()
             val dias = McpPoderRegras.dias((0 until arr.length()).map { arr.optString(it) }) ?: erro("dia desconhecido")
             val tipo = when (a.optString("tipo")) { "ligar" -> Rotinas.Acao.LIGAR; "abrir" -> Rotinas.Acao.ABRIR; "desligar" -> Rotinas.Acao.DESLIGAR
-                else -> erro("tipo: ligar, abrir ou desligar") }
+                "cena" -> Rotinas.Acao.CENA
+                else -> erro("tipo: ligar, abrir, desligar ou cena") }
+            val cena = a.optString("cena").trim()
+            if (tipo == Rotinas.Acao.CENA && Cenas.lista(app).none { it.nome == cena }) erro("tipo=cena precisa do nome de uma cena que existe")
             val pacote = a.optString("pacote").trim()
             if (tipo == Rotinas.Acao.ABRIR && !ChecagensPainel.pacoteValido(pacote)) erro("tipo=abrir precisa de um pacote válido")
             val ocioso = a.optInt("ocioso", 0).let { o -> Rotinas.OCIOSO_OPCOES.minByOrNull { kotlin.math.abs(it - o) } ?: 0 }
             exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_criar_rotina, "%02d:%02d".format(h, m), tipo.name.lowercase()))
             val nova = Rotinas.salvar(app, Rotinas.Rotina(0, h, m, dias, tipo, if (tipo == Rotinas.Acao.ABRIR) pacote else "",
-                if (tipo == Rotinas.Acao.DESLIGAR) ocioso else 0, true))
+                if (tipo == Rotinas.Acao.DESLIGAR) ocioso else 0, true, if (tipo == Rotinas.Acao.CENA) cena else ""))
             PainelArmazem.registrar(app, "internet", "rotina (MCP)", "criada ${Rotinas.descricao(app, nova)}")
             return rotinaJson(app, nova).toString()
         }

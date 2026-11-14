@@ -743,9 +743,9 @@ class ConfigLauncherActivity : Activity() {
             // A HOME relê o modo no onResume (bolinha e apps), então não precisa avisar nada a ela.
         }
         c.addView(linhaVisita, lp())
-        // Rotinas por horário (05/11/2026): ligar, abrir um app ou desligar sozinha (ver Rotinas.kt).
-        c.addView(linha(getString(R.string.cfg_rotinas), getString(R.string.cfg_rotinas_det), seta = true) {
-            startActivity(Intent(this, RotinasActivity::class.java))
+        // Automações (14/11/2026, ideia 1): o editor único de horários (as antigas Rotinas), botões, eventos e links.
+        c.addView(linha(getString(R.string.aut_titulo), getString(R.string.aut_cfg_det), seta = true) {
+            startActivity(Intent(this, AutomacoesActivity::class.java))
         }, lp())
         secao(c, getString(R.string.cl_apps_visita))
         val listaVisita = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false }
