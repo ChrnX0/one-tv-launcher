@@ -44,7 +44,7 @@ class ConfigLauncherActivity : Activity() {
         const val EXTRA_ABA = "aba"   // índice da aba para abrir (ex.: o atalho "Conta" de outra tela)
         /** Índices das abas que outras telas abrem direto (a ordem mudou em 14/11/2026: use estes, não números). */
         const val ABA_CONTA = 1
-        const val ABA_AVANCADO = 7
+        const val ABA_AVANCADO = 8
         private const val PIN_VALE_MS = 2 * 60_000L   // depois de acertar o PIN aqui, 2 min sem pedir de novo
     }
 
@@ -78,6 +78,8 @@ class ConfigLauncherActivity : Activity() {
             Aba(getString(R.string.cfg2_aba_casa), getString(R.string.cfg2_aba_casa_det), this::abaCasa),
             Aba(getString(R.string.cl_aba_remoto), getString(R.string.cl_aba_remoto_det), this::abaRemoto),
             Aba(getString(R.string.cl_aba_sistema), getString(R.string.cfg2_aba_sistema_det), this::abaSistema),
+            // Ajuda (14/11/2026, pedido do dono): o manual de tudo o que o launcher faz, antes do Avançado.
+            Aba(getString(R.string.aj_aba), getString(R.string.aj_aba_det), this::abaAjuda),
             Aba(getString(R.string.cfg2_aba_avancado), getString(R.string.cfg2_aba_avancado_det), this::abaAvancado),   // ABA_AVANCADO
         )
     }
@@ -1112,6 +1114,15 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linha(getString(R.string.cfg_licencas), getString(R.string.cfg_licencas_det), seta = true) {
             startActivity(Intent(this, LicencasActivity::class.java))
         }, lp())
+    }
+
+    /** Ajuda (14/11/2026): um assunto do manual por linha; OK abre o texto inteiro (AjudaActivity), com ◀ ▶ entre eles. */
+    private fun abaAjuda(c: LinearLayout) {
+        Manual.TOPICOS.forEachIndexed { i, id ->
+            c.addView(linha(AjudaActivity.texto(this, id, Manual.Parte.TITULO), AjudaActivity.texto(this, id, Manual.Parte.RESUMO), seta = true) {
+                startActivity(Intent(this, AjudaActivity::class.java).putExtra(AjudaActivity.EXTRA_TOPICO, i))
+            }, lp())
+        }
     }
 
     /**

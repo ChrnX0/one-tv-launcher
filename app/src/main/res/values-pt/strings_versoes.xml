@@ -68,6 +68,7 @@
         <item>Perfis de verdade: cada conta Google da TV tem os seus favoritos de canais, continuar, últimos episódios, interesses e ordem dos apps; um perfil pode ser marcado como de criança (painel rápido), que liga o modo infantil e a hora de dormir e pede o PIN dos pais para sair</item>
         <item>O launcher tem ícone e banner próprios (em Apps e nas Configurações)</item>
         <item>Pílula "Tocando agora" na barra do topo da HOME: capa, título e app; OK pausa ou continua, segurar OK abre o app (ligue "Tocando agora" em Extras)</item>
+        <item>Configurações › Ajuda: o manual de tudo o que o launcher faz, em 16 assuntos (controle, tela inicial, painel rápido, voz, TV, filmes, família, casa, painel web, Claude, backup e mais); ◀ ▶ trocam de assunto</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -125,6 +126,7 @@
         <item>No painel rápido, abra os perfis, marque uma conta como “Perfil de criança” (PIN dos pais) e troque para ela; favorite um canal; depois volte ao seu perfil</item>
         <item>Abra Configurações > Apps e procure o One TV Launcher</item>
         <item>Toque uma música ou vídeo, volte à HOME e aperte OK na pílula</item>
+        <item>Abra Configurações › Ajuda e dê OK em “O controle remoto”; depois aperte ▶ algumas vezes e ▼</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -182,5 +184,6 @@
         <item>O modo infantil e a hora de dormir ligaram no perfil de criança, sair pediu o PIN, e os seus favoritos voltaram como antes?</item>
         <item>Aparece o anel com o símbolo de play?</item>
         <item>Pausou, e voltou a tocar com outro OK?</item>
+        <item>O texto dá para ler do sofá, ◀ ▶ trocaram de assunto e ▼ rolou até o fim?</item>
     </string-array>
 </resources>
