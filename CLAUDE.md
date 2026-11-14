@@ -20,6 +20,8 @@ and `values-pt/` (Portuguese); the app follows the TV's system language. Read `R
   That run executes the JVM tests first (a red test publishes nothing). Inputs: `canal=teste` publishes a prerelease
   that only TVs with `EXTRAS canal --es canal teste` install ("Promover para todos" workflow releases it to everyone);
   `commit=<hash on main>` rebuilds an older commit with a newer versionCode (the way back from a bad version).
+  Before each Release, rewrite `res/values*/strings_versoes.xml`: `novidades` ("What changed", Settings > System) and
+  the `roteiro_*` checklist ("Check on the TV"; answers via `EXTRAS --es o roteiro`), in both languages.
   Pull requests only compile (and cost CI minutes): batch commits; use `[skip ci]` for text-only commits.
 - The signing key and its password never go into git, issues or logs.
 - No personal data in the repo (city, coordinates, IPs, names, account ids). Per-owner build values go in

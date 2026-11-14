@@ -36,6 +36,7 @@ object BackupCompleto {
      */
     internal val FORA_DE_PROPOSITO = setOf("confirmacoes", "painel_log", "atualizador", "aviso_tv", "loja_curada",
         "aot",   // versão já compilada (CompilarAot): é do APK instalado, não da configuração
+        "roteiro",   // respostas do "Conferir na TV" (ConferirTvActivity): valem só para a versão em que foram dadas
         "timer",   // timer é passageiro: restaurar um backup feito com o timer correndo o armaria de novo sem ninguém pedir
         "player_pin", "config_pin",   // erros do PIN no player e nas Configurações (TentativasPin): passageiro, e restaurar não pode zerar nem prender ninguém
         "despertador_estado",   // próximo toque anotado (AlarmeGarantia): um antigo restaurado daria aviso falso de alarme perdido

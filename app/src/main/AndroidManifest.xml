@@ -592,6 +592,7 @@
         </service>
         <activity android:name=".CasaActivity" android:exported="false" android:excludeFromRecents="true" />
         <activity android:name=".TesteTeclasActivity" android:exported="false" android:excludeFromRecents="true" />
+        <activity android:name=".ConferirTvActivity" android:exported="false" android:excludeFromRecents="true" />
         <activity android:name=".CalibracaoActivity" android:exported="false" android:excludeFromRecents="true"
             android:theme="@style/One.Tela" />
 

@@ -33,6 +33,7 @@ declare -A FONTES=(
   [PaginaCertificadoTest]="PaginaCertificado"
   [CanalAtualizacaoTest]="CanalAtualizacao"
   [TeclaFalsaTest]="TeclaFalsa"
+  [RoteiroConferenciaTest]="RoteiroConferencia"
 )
 
 falhou=0
