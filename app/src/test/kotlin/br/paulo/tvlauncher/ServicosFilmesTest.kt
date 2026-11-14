@@ -54,21 +54,25 @@ class ServicosFilmesTest {
         assertNull(ServicosFilmes.traktLerUsuario("{}"))
     }
 
-    @Test fun pinDoSimkl() {
-        val c = ServicosFilmes.simklLerCodigo("""{"result":"OK","device_code":"DEVICE_CODE","user_code":"7ED24","verification_url":"https://simkl.com/pin","expires_in":900,"interval":5}""")!!
-        assertEquals("7ED24", c.codigoUsuario); assertEquals("https://simkl.com/pin/7ED24", c.urlQr); assertEquals(900, c.expiraEmS)
-        assertNull(ServicosFilmes.simklLerCodigo("""{"error":"client_id_failed","code":412}"""))
-        assertTrue(ServicosFilmes.simklUrlCodigo("id x", 7).startsWith("https://api.simkl.com/oauth/pin?client_id=id%20x&app-name=onetvlauncher&app-version=1.0.7"))
+    /** Exemplos de api.simkl.org/api-reference/oauth2-device (AUTH V2, RFC 8628). */
+    @Test fun codigoDoSimkl() {
+        val c = ServicosFilmes.simklLerCodigo("""{"device_code":"dc","user_code":"BDWP-HQPK","verification_uri":"https://simkl.com/pin",
+            "verification_uri_complete":"https://simkl.com/pin?user_code=BDWP-HQPK","expires_in":900,"interval":5}""")!!
+        assertEquals("BDWP-HQPK", c.codigoUsuario); assertEquals("https://simkl.com/pin?user_code=BDWP-HQPK", c.urlQr); assertEquals(900, c.expiraEmS)
+        assertNull(ServicosFilmes.simklLerCodigo("""{"error":"invalid_client"}"""))
+        assertEquals("client_id=id%20x&scope=media%3Aread%20media%3Awrite", ServicosFilmes.simklCorpoCodigo("id x"))
+        assertTrue(ServicosFilmes.simklCorpoEspera("dc", "id").startsWith("grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code&client_id=id"))
+        assertEquals("https://api.simkl.com/users/settings?client_id=a&app-name=onetvlauncher&app-version=1.0.7", ServicosFilmes.simklUrlUsuario("a", 7))
     }
 
     @Test fun esperaDoSimkl() {
-        assertTrue(ServicosFilmes.simklLerEspera(200, """{"result":"KO","message":"Authorization pending"}""") is Espera.Pendente)
-        val t = ServicosFilmes.simklLerEspera(200, """{"result":"OK","access_token":"tok"}""") as Espera.Token
-        assertEquals("tok", t.acesso); assertNull(t.expiraEmMs)
-        // Doc do Simkl: o código apagado volta como um código NOVO (com device_code): é o nosso que venceu.
-        assertEquals(Motivo.VENCEU, (ServicosFilmes.simklLerEspera(200,
-            """{"result":"OK","device_code":"DEVICE_CODE","user_code":"AAAAA","verification_url":"https://simkl.com/pin"}""") as Espera.Fim).motivo)
-        assertTrue(ServicosFilmes.simklLerEspera(429, "") is Espera.MaisDevagar)
+        assertTrue(ServicosFilmes.simklLerEspera(400, """{"error":"authorization_pending"}""", 0) is Espera.Pendente)
+        assertTrue(ServicosFilmes.simklLerEspera(400, """{"error":"slow_down"}""", 0) is Espera.MaisDevagar)
+        assertEquals(Motivo.VENCEU, (ServicosFilmes.simklLerEspera(400, """{"error":"expired_token"}""", 0) as Espera.Fim).motivo)
+        assertEquals(Motivo.INVALIDO, (ServicosFilmes.simklLerEspera(401, """{"error":"invalid_client"}""", 0) as Espera.Fim).motivo)
+        val t = ServicosFilmes.simklLerEspera(200, """{"access_token":"simkl_at_x","refresh_token":"simkl_rt_y","token_type":"Bearer",
+            "expires_in":604800,"scope":"media:read media:write"}""", 1_000) as Espera.Token
+        assertEquals("simkl_at_x", t.acesso); assertEquals("simkl_rt_y", t.renovar); assertEquals(1_000 + 604_800_000L, t.expiraEmMs)
         assertEquals("ana", ServicosFilmes.simklLerUsuario("""{"user":{"name":"ana","joined_at":"2020"},"account":{"id":1}}"""))
     }
 
@@ -88,7 +92,7 @@ class ServicosFilmesTest {
         assertTrue(ServicosFilmes.precisaRenovar(dia - 1, true, 0))
         assertTrue(ServicosFilmes.precisaRenovar(-5, true, 0))   // já venceu
         assertFalse(ServicosFilmes.precisaRenovar(dia - 1, false, 0))   // sem refresh token não tem como
-        assertFalse(ServicosFilmes.precisaRenovar(null, true, 0))   // Simkl: não vence
+        assertFalse(ServicosFilmes.precisaRenovar(null, true, 0))   // sem prazo conhecido
     }
 
     @Test fun contasIdaEVolta() {

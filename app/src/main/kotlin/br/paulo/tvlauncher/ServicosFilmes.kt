@@ -53,11 +53,12 @@ object ServicosFilmes {
     // ================================================================ login por código (Trakt e Simkl)
 
     /** O código que a pessoa digita no celular. [intervaloS] = de quanto em quanto tempo perguntar se já entrou. */
-    data class Codigo(val codigoUsuario: String, val url: String, val codigoAparelho: String, val expiraEmS: Int, val intervaloS: Int) {
+    data class Codigo(val codigoUsuario: String, val url: String, val codigoAparelho: String, val expiraEmS: Int, val intervaloS: Int,
+                      val urlCompleta: String? = null) {
         /** Endereço já com o código, para o QR (o celular abre a página com o código preenchido quando o site aceita). */
         val urlQr: String get() = when {
+            urlCompleta != null -> urlCompleta
             url.contains("trakt.tv") -> url.trimEnd('/') + "/" + codigoUsuario
-            url.contains("simkl.com") -> url.trimEnd('/') + "/" + codigoUsuario
             else -> url
         }
     }
@@ -136,19 +137,23 @@ object ServicosFilmes {
         u.optString("username").ifBlank { u.optString("name") }
     }.getOrNull()?.takeIf { it.isNotBlank() }?.take(60)
 
-    // ---------------------------------------------------------------- Simkl (api.simkl.org/api-reference/auth-v1, PIN)
+    // ---------------------------------------------------------------- Simkl (AUTH V2, api.simkl.org/api-reference/oauth2-device)
+    // O login por PIN antigo (AUTH V1, /oauth/pin) não serve para apps novos e sai do ar por volta de abril de 2027
+    // (api.simkl.org/guides/migrating-v1-to-v2): aqui é o fluxo de aparelho padrão (RFC 8628). Token de 7 dias com
+    // renovação de 180 dias que se estende a cada uso; quem renova é só o processo do launcher (renovar em dois
+    // processos derruba um ao outro, diz a doc).
 
     const val SIMKL_API = "https://api.simkl.com"
+    const val SIMKL_ESCOPO = "media:read media:write"
 
     private fun simklParametros(clienteId: String, versao: Int) =
         "client_id=${cod(clienteId)}&app-name=${cod(APP_NOME.lowercase())}&app-version=${cod("1.0.$versao")}"
 
-    fun simklUrlCodigo(clienteId: String, versao: Int): String = "$SIMKL_API/oauth/pin?" + simklParametros(clienteId, versao)
+    /** Parâmetros que toda chamada à API do Simkl leva no endereço (conventions/headers). */
+    fun simklUrl(caminho: String, clienteId: String, versao: Int, extra: String = ""): String =
+        "$SIMKL_API$caminho?" + simklParametros(clienteId, versao) + (if (extra.isEmpty()) "" else "&$extra")
 
-    fun simklUrlEspera(codigoUsuario: String, clienteId: String, versao: Int): String =
-        "$SIMKL_API/oauth/pin/${cod(codigoUsuario)}?" + simklParametros(clienteId, versao)
-
-    fun simklUrlUsuario(clienteId: String, versao: Int): String = "$SIMKL_API/users/settings?" + simklParametros(clienteId, versao)
+    fun simklUrlUsuario(clienteId: String, versao: Int): String = simklUrl("/users/settings", clienteId, versao)
 
     fun simklCabecalhos(clienteId: String, versao: Int, token: String? = null): Map<String, String> = buildMap {
         put("Content-Type", "application/json")
@@ -157,27 +162,54 @@ object ServicosFilmes {
         if (token != null) put("Authorization", "Bearer $token")
     }
 
-    /** Resposta de GET /oauth/pin: user_code, verification_url (simkl.com/pin), expires_in 900, interval 5. */
-    fun simklLerCodigo(json: String): Codigo? = runCatching {
-        val o = JSONObject(json)
-        if (o.optString("result") != "OK") return null
-        val url = o.optString("verification_url").ifBlank { o.optString("verification_uri") }.ifBlank { "https://simkl.com/pin" }
-        Codigo(o.getString("user_code"), url, o.optString("device_code"), o.optInt("expires_in", 900), o.optInt("interval", 5).coerceIn(1, 60))
-    }.getOrNull()?.takeIf { it.codigoUsuario.isNotBlank() && it.url.startsWith("https://") }
+    /** Cabeçalhos dos endereços /oauth2/... (formulário, não JSON). */
+    fun simklCabecalhosForm(versao: Int): Map<String, String> =
+        mapOf("Content-Type" to "application/x-www-form-urlencoded", "User-Agent" to agente(versao), "Accept" to "application/json")
+
+    private fun form(vararg p: Pair<String, String>) = p.joinToString("&") { (k, v) -> "${cod(k)}=${cod(v)}" }
+
+    /** POST /oauth2/device: pede o código, com escrita (sem media:write o token só lê, e marcar como visto falharia). */
+    fun simklCorpoCodigo(clienteId: String): String = form("client_id" to clienteId, "scope" to SIMKL_ESCOPO)
+
+    /** POST /oauth2/token, perguntando "já entrou?". */
+    fun simklCorpoEspera(codigoAparelho: String, clienteId: String): String =
+        form("grant_type" to "urn:ietf:params:oauth:grant-type:device_code", "client_id" to clienteId, "device_code" to codigoAparelho)
+
+    fun simklCorpoRenovar(renovar: String, clienteId: String): String =
+        form("grant_type" to "refresh_token", "client_id" to clienteId, "refresh_token" to renovar)
+
+    /** POST /oauth2/revoke: revogar um dos dois tokens derruba os dois (sempre responde 200). */
+    fun simklCorpoRevogar(token: String, clienteId: String): String = form("client_id" to clienteId, "token" to token)
 
     /**
-     * Resposta de GET /oauth/pin/{code}: {"result":"KO"} = ainda não; {"result":"OK","access_token":...} = entrou.
-     * ATENÇÃO (doc do Simkl): perguntar por um código que já sumiu devolve um código NOVO (com device_code), não erro:
-     * isso quer dizer que o nosso venceu.
+     * Resposta de POST /oauth2/device: device_code, user_code ("BDWP-HQPK"), verification_uri (simkl.com/pin),
+     * verification_uri_complete (já com o código: é o do QR), expires_in 900, interval 5.
      */
-    fun simklLerEspera(http: Int, json: String): Espera {
+    fun simklLerCodigo(json: String): Codigo? = runCatching {
+        val o = JSONObject(json)
+        val url = o.optString("verification_uri").ifBlank { "https://simkl.com/pin" }
+        val completa = o.optString("verification_uri_complete").takeIf { it.startsWith("https://") }
+        Codigo(o.getString("user_code"), url, o.getString("device_code"), o.optInt("expires_in", 900), o.optInt("interval", 5).coerceIn(1, 60), completa)
+    }.getOrNull()?.takeIf { it.codigoUsuario.isNotBlank() && it.codigoAparelho.isNotBlank() && it.url.startsWith("https://") }
+
+    /**
+     * Resposta de POST /oauth2/token: 200 = tokens; 400 com error authorization_pending (ainda não; também quando a pessoa
+     * recusou: o Simkl não avisa recusa, só o prazo encerra), slow_down (+5 s), expired_token (venceu); 401 invalid_client
+     * (client id errado ou de app V1).
+     */
+    fun simklLerEspera(http: Int, json: String, agoraMs: Long): Espera {
+        if (http in 200..299) return lerToken(json, agoraMs) ?: Espera.Fim(Motivo.ERRO)
         if (http == 429) return Espera.MaisDevagar
-        if (http !in 200..299) return Espera.Fim(if (http == 404) Motivo.VENCEU else Motivo.ERRO)
-        val o = runCatching { JSONObject(json) }.getOrNull() ?: return Espera.Fim(Motivo.ERRO)
-        val acesso = o.optString("access_token")
-        if (o.optString("result") == "OK" && acesso.isNotBlank() && acesso != "null") return Espera.Token(acesso, null, null)   // o do Simkl não vence
-        if (o.has("device_code") || o.has("user_code")) return Espera.Fim(Motivo.VENCEU)
-        return Espera.Pendente
+        if (http == 401) return Espera.Fim(Motivo.INVALIDO)
+        val erro = runCatching { JSONObject(json).optString("error") }.getOrNull().orEmpty()
+        return when (erro) {
+            "authorization_pending" -> Espera.Pendente
+            "slow_down" -> Espera.MaisDevagar
+            "expired_token" -> Espera.Fim(Motivo.VENCEU)
+            "access_denied" -> Espera.Fim(Motivo.RECUSADO)
+            "invalid_client" -> Espera.Fim(Motivo.INVALIDO)
+            else -> Espera.Fim(Motivo.ERRO)
+        }
     }
 
     /** Nome em users/settings do Simkl: user.name. */

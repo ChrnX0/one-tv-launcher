@@ -27,8 +27,8 @@ e guarda só as notas dos títulos da lista.
 Campos dos formulários:
 - **Trakt**: Name `One TV Launcher`; Redirect uri `urn:ietf:wg:oauth:2.0:oob`; Javascript origins vazio; marque
   `/checkin` e `/scrobble`.
-- **Simkl**: Name `One TV Launcher`; Redirect URI `urn:ietf:wg:oauth:2.0:oob` (o login por PIN não usa, mas o
-  formulário pede).
+- **Simkl**: app novo (AUTH V2); tipo **TV, devices & command line** (login por código no celular, sem endereço de
+  retorno). O login antigo por PIN (V1) não serve para apps novos e sai do ar por volta de abril de 2027.
 - **TMDB**: tipo de uso "Personal"/não comercial; URL do app: a página do projeto no GitHub.
 - **OpenSubtitles**: nome `OneTVLauncher` (é o User-Agent que o app manda).
 

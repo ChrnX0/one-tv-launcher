@@ -118,7 +118,8 @@ object ServicosContas {
                 if (r.codigo !in 200..299) error("o Trakt respondeu ${r.codigo}")
                 ServicosFilmes.traktLerCodigo(r.corpo) ?: error("resposta do Trakt sem código")
             }
-            else -> pedir(ServicosFilmes.simklUrlCodigo(k.simklId, versao), ServicosFilmes.simklCabecalhos(k.simklId, versao)).let { r ->
+            else -> pedir("${ServicosFilmes.SIMKL_API}/oauth2/device", ServicosFilmes.simklCabecalhosForm(versao),
+                ServicosFilmes.simklCorpoCodigo(k.simklId)).let { r ->
                 if (r.codigo !in 200..299) error("o Simkl respondeu ${r.codigo}")
                 ServicosFilmes.simklLerCodigo(r.corpo) ?: error("resposta do Simkl sem código")
             }
@@ -144,8 +145,9 @@ object ServicosContas {
                     Servico.TRAKT -> pedir("${ServicosFilmes.TRAKT_API}/oauth/device/token", ServicosFilmes.traktCabecalhos(k.traktId, versao),
                         ServicosFilmes.traktCorpoToken(sessao.codigo.codigoAparelho, k.traktId, k.traktSegredo))
                         .let { ServicosFilmes.traktLerEspera(it.codigo, it.corpo, System.currentTimeMillis()) }
-                    else -> pedir(ServicosFilmes.simklUrlEspera(sessao.codigo.codigoUsuario, k.simklId, versao), ServicosFilmes.simklCabecalhos(k.simklId, versao))
-                        .let { ServicosFilmes.simklLerEspera(it.codigo, it.corpo) }
+                    else -> pedir("${ServicosFilmes.SIMKL_API}/oauth2/token", ServicosFilmes.simklCabecalhosForm(versao),
+                        ServicosFilmes.simklCorpoEspera(sessao.codigo.codigoAparelho, k.simklId))
+                        .let { ServicosFilmes.simklLerEspera(it.codigo, it.corpo, System.currentTimeMillis()) }
                 }
             }.getOrElse { Espera.Pendente }   // rede caiu um instante: pergunta de novo no próximo intervalo
             when (e) {
@@ -179,7 +181,7 @@ object ServicosContas {
 
     // ================================================================ sair, MDBList, OpenSubtitles, renovar
 
-    /** Sai da conta: tira o acesso também no serviço (Trakt revoga o token) e apaga da TV. Bloqueia (rede). */
+    /** Sai da conta: tira o acesso também no serviço (Trakt e Simkl revogam o token) e apaga da TV. Bloqueia (rede). */
     fun sair(ctx: Context, s: Servico) {
         cancelar(s)
         val c = conta(ctx, s)
@@ -187,6 +189,10 @@ object ServicosContas {
         if (s == Servico.TRAKT && c != null && k.disponivel(s)) runCatching {
             pedir("${ServicosFilmes.TRAKT_API}/oauth/revoke", ServicosFilmes.traktCabecalhos(k.traktId, versao),
                 ServicosFilmes.traktCorpoRevogar(c.acesso, k.traktId, k.traktSegredo))
+        }
+        if (s == Servico.SIMKL && c != null && k.disponivel(s)) runCatching {
+            pedir("${ServicosFilmes.SIMKL_API}/oauth2/revoke", ServicosFilmes.simklCabecalhosForm(versao),
+                ServicosFilmes.simklCorpoRevogar(c.renovar ?: c.acesso, k.simklId))
         }
         if (s == Servico.OPENSUBTITLES) LegendaBaixar.esquecerToken()
         definir(ctx, s, null)
@@ -224,19 +230,35 @@ object ServicosContas {
         LegendaBaixar.esquecerToken()
     }
 
-    /** Renova o token do Trakt se estiver perto de vencer (chamado pela manutenção periódica). Bloqueia (rede). */
+    /**
+     * Renova os tokens do Trakt (3 meses) e do Simkl (7 dias) quando falta menos de 1 dia (manutenção da madrugada e
+     * ao abrir a tela dos serviços). Só o processo do launcher chama: renovar em dois processos derruba um ao outro.
+     * O Trakt devolve um refresh token novo; o do Simkl é sempre o mesmo. Bloqueia (rede).
+     */
     fun renovarSePreciso(ctx: Context) {
-        val c = conta(ctx, Servico.TRAKT) ?: return
+        for (s in listOf(Servico.TRAKT, Servico.SIMKL)) renovar(ctx, s, forcar = false)
+    }
+
+    /** Renova um token. [forcar] = a API respondeu 401 (token velho), mesmo longe de vencer. Devolve a conta nova ou null. */
+    @Synchronized
+    fun renovar(ctx: Context, s: Servico, forcar: Boolean): ServicosFilmes.Conta? {
+        val c = conta(ctx, s) ?: return null
         val k = chavesApp()
-        if (!k.disponivel(Servico.TRAKT) || !ServicosFilmes.precisaRenovar(c.expiraEmMs, c.renovar != null, System.currentTimeMillis())) return
-        runCatching {
-            val r = pedir("${ServicosFilmes.TRAKT_API}/oauth/token", ServicosFilmes.traktCabecalhos(k.traktId, versao),
-                ServicosFilmes.traktCorpoRenovar(c.renovar!!, k.traktId, k.traktSegredo))
+        if (!k.disponivel(s) || c.renovar == null) return null
+        if (!forcar && !ServicosFilmes.precisaRenovar(c.expiraEmMs, true, System.currentTimeMillis())) return c
+        return runCatching {
+            val r = if (s == Servico.TRAKT) pedir("${ServicosFilmes.TRAKT_API}/oauth/token", ServicosFilmes.traktCabecalhos(k.traktId, versao),
+                ServicosFilmes.traktCorpoRenovar(c.renovar, k.traktId, k.traktSegredo))
+            else pedir("${ServicosFilmes.SIMKL_API}/oauth2/token", ServicosFilmes.simklCabecalhosForm(versao),
+                ServicosFilmes.simklCorpoRenovar(c.renovar, k.simklId))
+            Log.i(TAG, "${s.id}: renovação ${r.codigo}")
             val t = if (r.codigo in 200..299) ServicosFilmes.lerToken(r.corpo, System.currentTimeMillis()) else null
-            if (t != null) definir(ctx, Servico.TRAKT, c.copy(acesso = t.acesso, renovar = t.renovar ?: c.renovar, expiraEmMs = t.expiraEmMs))
-            else if (r.codigo == 400 || r.codigo == 401) definir(ctx, Servico.TRAKT, null)   // renovação recusada: a pessoa entra de novo
-            Log.i(TAG, "trakt: renovação ${r.codigo}")
-        }.onFailure { Log.w(TAG, "trakt: renovação falhou: ${it.javaClass.simpleName}") }
+            when {
+                t != null -> c.copy(acesso = t.acesso, renovar = t.renovar ?: c.renovar, expiraEmMs = t.expiraEmMs).also { definir(ctx, s, it) }
+                r.codigo == 400 || r.codigo == 401 -> { definir(ctx, s, null); null }   // renovação recusada: a pessoa entra de novo
+                else -> c
+            }
+        }.getOrElse { Log.w(TAG, "${s.id}: renovação falhou: ${it.javaClass.simpleName}"); c }
     }
 
     // ================================================================ rede
