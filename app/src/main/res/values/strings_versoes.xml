@@ -58,6 +58,9 @@
         <item>Movies: Filter (genre, period, minimum rating, only unwatched) over the chosen category, “Collection of this movie” in the details, and “Surprise me”</item>
         <item>Phone panel: a “Ask the TV” box on the Home tab, no AI: “put on Globo”, “open YouTube”, “remind me in 7 minutes”, “turn off in 30 minutes” (the keyboard mic works for dictating)</item>
         <item>“My team”: the next match in the next 24 hours shows up next to the alarm and timer at the top of the Home screen and as a card on the Gallery screensaver (“Flamengo × Palmeiras · 21:30”)</item>
+        <item>Install split apps (.apks, .xapk) from the web panel or Claude; the TV picks the parts for its own chip</item>
+        <item>Curated store: add any GitHub project that publishes its APK; the TV picks the file for its architecture</item>
+        <item>App sheets and the cleanup list can grow with community contributions (checked once a week)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -103,6 +106,9 @@
         <item>filmes_filtro_sorteio</item>
         <item>caixa_comando</item>
         <item>proximo_jogo</item>
+        <item>apks</item>
+        <item>loja_repo</item>
+        <item>comunidade</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -148,6 +154,9 @@
         <item>In Movies, use Filter (e.g. a genre + rating 7+), then Surprise me, then “Collection of this movie” in a sequel’s details</item>
         <item>In the phone panel (Home tab), type “open YouTube” in “Ask the TV”</item>
         <item>With a “My team” word that has a match in the next 24 hours, press HOME</item>
+        <item>In the web panel, Apps &gt; Install: send a .xapk file</item>
+        <item>In the web panel, Extras &gt; Curated store: add a GitHub project (e.g. owner/name) and install it</item>
+        <item>In the web panel, open the sheet of an app</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -193,5 +202,8 @@
         <item>Did the column title show the filter, did the pick open a movie from the filtered grid, and did the collection list the sequels?</item>
         <item>Did the panel answer “Opening YouTube” and did YouTube open on the TV?</item>
         <item>Did the match show up next to the alarm/timer at the top, with the start time?</item>
+        <item>Did the app install and open?</item>
+        <item>Did it install the right file?</item>
+        <item>Does the sheet still show?</item>
     </string-array>
 </resources>

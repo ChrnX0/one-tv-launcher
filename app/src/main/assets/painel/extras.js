@@ -452,9 +452,30 @@ async function carregarLoja() {
       } catch (e) { mostrar($('statusLoja'), textoErro(e)); }
     });
     linha.append(nome, desc, botao);
+    if (a.extra) {   // ideia 69: repositório somado pela pessoa pode sair da lista
+      const tirar = document.createElement('button'); tirar.type = 'button'; tirar.className = 'botao-secundario';
+      tirar.textContent = 'Tirar';
+      tirar.addEventListener('click', () => mudarRepoLoja(a.repo, true, tirar));
+      linha.append(tirar);
+    }
     lista.append(linha);
   }
 }
+
+async function mudarRepoLoja(repo, remover, botao) {
+  try {
+    const res = await comPin(remover ? 'Tirar' : 'Somar', remover ? `Tirar ${repo} da loja?` : `Somar ${repo} à loja? A TV vai aceitar instalar o que esse projeto publicar.`,
+      remover ? 'Tirar' : 'Somar', () => chamar('POST', '/api/extras/loja/repo', { repo, remover }));
+    if (res) { $('repoLoja').value = ''; carregarLoja(); }
+  } catch (e) { mostrar($('statusLoja'), textoErro(e)); }
+  if (botao) botao.disabled = false;
+}
+
+$('formRepoLoja').addEventListener('submit', (ev) => {
+  ev.preventDefault();
+  const repo = $('repoLoja').value.trim();
+  if (repo) mudarRepoLoja(repo, false);
+});
 
 // ---------- acordar o computador ----------
 

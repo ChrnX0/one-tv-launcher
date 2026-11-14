@@ -24,7 +24,7 @@ object Debloat {
     private const val CHAVE = "debloat_ocultos"
 
     /** [perde]: o que deixa de funcionar com o app oculto, em português simples. [testadoEm]: null = não testado. */
-    data class Item(val pacote: String, val nome: String, val perde: String, val testadoEm: String? = null)
+    data class Item(val pacote: String, val nome: String, val perde: String, val testadoEm: String? = null, val perdeEn: String? = null)
 
     /**
      * Candidatos. Só os com [Item.testadoEm] aparecem na TV. Para pôr um aqui: ocultar na TV, usar a TV normalmente
@@ -55,8 +55,11 @@ object Debloat {
 
     fun permitido(item: Item) = item.testadoEm != null && item.pacote !in NUNCA
 
+    /** A lista do código e, depois, os itens testados que a comunidade somou (ideia 70, ComunidadeApps). */
+    fun todos(ctx: Context): List<Item> = LISTA + runCatching { ComunidadeApps.limpeza(ctx) }.getOrDefault(emptyList())
+
     /** Os que podem aparecer na TV: testados, fora do [NUNCA] e instalados (ocultos também contam como instalados). */
-    fun disponiveis(ctx: Context): List<Item> = LISTA.filter { permitido(it) && instalado(ctx, it.pacote) }
+    fun disponiveis(ctx: Context): List<Item> = todos(ctx).filter { permitido(it) && instalado(ctx, it.pacote) }
 
     fun instalado(ctx: Context, pacote: String): Boolean = try {
         // MATCH_UNINSTALLED_PACKAGES enxerga o app oculto (oculto = "não instalado" para o PackageManager comum), mas
@@ -72,7 +75,7 @@ object Debloat {
 
     /** Oculta (true) ou mostra de volta (false). Recusa o que não está liberado. Devolve se mudou. */
     fun definir(ctx: Context, pacote: String, ocultar: Boolean): Boolean {
-        val item = LISTA.firstOrNull { it.pacote == pacote }
+        val item = todos(ctx).firstOrNull { it.pacote == pacote }
         if (ocultar && (item == null || !permitido(item))) return false
         // O retorno do setApplicationHidden não é confiável no Android 14 (visto na Sala: reexibir um app que não estava
         // oculto devolve true, e o Play Games "ocultava" sem ocultar). Vale o estado lido depois.
@@ -89,7 +92,7 @@ object Debloat {
     fun desfazerTudo(ctx: Context): Int = ocultosPorAqui(ctx).count { definir(ctx, it, false) }
 
     /** Para o adb: cada candidato instalado, com testado/oculto. */
-    fun relatorio(ctx: Context): String = LISTA.filter { instalado(ctx, it.pacote) }.joinToString("\n") {
+    fun relatorio(ctx: Context): String = todos(ctx).filter { instalado(ctx, it.pacote) }.joinToString("\n") {
         "${it.pacote} testado=${it.testadoEm ?: "não"} oculto=${PrivilegioDO.estaOculto(ctx, it.pacote)} nunca=${it.pacote in NUNCA}"
     }.ifEmpty { "nenhum candidato instalado" }
 }

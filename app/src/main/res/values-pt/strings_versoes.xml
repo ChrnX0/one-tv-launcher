@@ -55,6 +55,9 @@
         <item>Filmes: Filtrar (gênero, época, nota mínima, só não vistos) sobre a categoria escolhida, “Coleção deste filme” na ficha e “Sortear um filme”</item>
         <item>Painel do celular: caixa “Pedir à TV” no Início, sem IA: “coloca na Globo”, “abre o YouTube”, “avisa em 7 minutos”, “desliga em 30 minutos” (dá para ditar pelo microfone do teclado)</item>
         <item>“Meu time”: o próximo jogo das próximas 24 h aparece ao lado do despertador e do timer no topo da HOME e num cartão do protetor Galeria (“Flamengo × Palmeiras · 21:30”)</item>
+        <item>Instalar app dividido (.apks, .xapk) pelo painel ou pelo Claude; a TV escolhe as partes do chip dela</item>
+        <item>Loja curada: some qualquer projeto do GitHub que publique o APK; a TV escolhe o arquivo da arquitetura dela</item>
+        <item>Fichas dos apps e lista de limpeza podem crescer com contribuições da comunidade (conferidas 1x por semana)</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -100,6 +103,9 @@
         <item>Em Filmes, use Filtrar (ex.: um gênero + nota 7+), depois Sortear um filme e, na ficha de uma continuação, “Coleção deste filme”</item>
         <item>No painel do celular (Início), escreva “abre o YouTube” em “Pedir à TV”</item>
         <item>Com uma palavra do “Meu time” que tenha jogo nas próximas 24 h, aperte HOME</item>
+        <item>No painel, Apps &gt; Instalar: mande um arquivo .xapk</item>
+        <item>No painel, Extras &gt; Loja curada: some um projeto do GitHub (ex.: dono/nome) e instale</item>
+        <item>No painel, abra a ficha de um app</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -145,5 +151,8 @@
         <item>O título da coluna mostrou o filtro, o sorteio abriu um filme da grade filtrada e a coleção listou as continuações?</item>
         <item>O painel respondeu “Abrindo YouTube” e o YouTube abriu na TV?</item>
         <item>O jogo apareceu ao lado do despertador/timer no topo, com a hora de início?</item>
+        <item>O app instalou e abre?</item>
+        <item>Instalou o arquivo certo?</item>
+        <item>A ficha continua aparecendo?</item>
     </string-array>
 </resources>

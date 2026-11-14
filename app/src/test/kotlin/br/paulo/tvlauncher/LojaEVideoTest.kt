@@ -8,6 +8,29 @@ import org.junit.Test
 
 /** Loja curada (escolha do APK, confiança no 1º uso) e vídeo ao vivo (corte do H.264). gradlew testReleaseUnitTest. */
 class LojaEVideoTest {
+    @Test fun escolheApkPelaArquiteturaDoAparelho() {   // ideia 69
+        val r = listOf("app-x86_64.apk", "app-x86.apk", "app-arm64-v8a.apk", "app-armeabi-v7a.apk")
+        assertEquals("app-arm64-v8a.apk", LojaCurada.escolherApk(r, listOf("arm64-v8a", "armeabi-v7a", "armeabi")))
+        assertEquals("app-armeabi-v7a.apk", LojaCurada.escolherApk(r, listOf("armeabi-v7a", "armeabi")))
+        assertEquals("app-x86.apk", LojaCurada.escolherApk(r, listOf("x86")))
+        assertEquals("a-arm64.apk", LojaCurada.escolherApk(listOf("a-arm64.apk"), listOf("arm64-v8a", "armeabi-v7a")))
+        assertNull(LojaCurada.escolherApk(listOf("a-x86_64.apk"), listOf("x86")))
+    }
+
+    @Test fun repoDeEndereco() {   // ideia 69
+        assertEquals("dono/nome", LojaCurada.repoDeEndereco("dono/nome"))
+        assertEquals("yuliskov/SmartTube", LojaCurada.repoDeEndereco("https://github.com/yuliskov/SmartTube/releases"))
+        assertEquals("a-b/c.d_e", LojaCurada.repoDeEndereco(" www.github.com/a-b/c.d_e.git/ "))
+        assertNull(LojaCurada.repoDeEndereco("https://gitlab.com/a/b"))
+        assertNull(LojaCurada.repoDeEndereco("evil.com/a/b"))
+        assertNull(LojaCurada.repoDeEndereco("so-um"))
+        assertNull(LojaCurada.repoDeEndereco("a/.."))
+        assertNull(LojaCurada.repoDeEndereco("-a/b"))
+        assertEquals(listOf("a/b", "c/d"), LojaCurada.lerRepos("[\"a/b\",\"a/b\",\"lixo\",\"github.com/c/d\"]"))
+        assertEquals(emptyList<String>(), LojaCurada.lerRepos("{quebrado"))
+        assertEquals("gh:a/b", LojaCurada.itemExtra("a/b").id)
+    }
+
     @Test fun escolheApkDe32Bits() {
         assertEquals("app-armeabi-v7a-release.apk", LojaCurada.escolherApk(listOf("app-arm64-v8a-release.apk", "app-armeabi-v7a-release.apk", "app-universal.apk")))
         assertEquals("app-universal.apk", LojaCurada.escolherApk(listOf("app-arm64-v8a.apk", "app-universal.apk", "notas.txt")))

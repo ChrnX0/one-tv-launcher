@@ -1479,7 +1479,7 @@ $('arquivoApk').addEventListener('change', async (ev) => {
   const arquivo = ev.target.files[0];
   ev.target.value = '';
   if (!arquivo) return;
-  if (!/\.apk$/i.test(arquivo.name)) { mostrar($('statusApps'), 'Escolha um arquivo .apk (.apks e .xapk ainda não são aceitos).'); return; }
+  if (!/\.(apk|apks|xapk)$/i.test(arquivo.name)) { mostrar($('statusApps'), 'Escolha um arquivo .apk, .apks ou .xapk.'); return; }
   const emUso = await tvEmUso();
   const r = await confirmar('Instalar ' + arquivo.name + '?',
     `Instala (ou atualiza) o app na TV, sem pedir confirmação lá (${tamanhoLegivel(arquivo.size)}). ` +

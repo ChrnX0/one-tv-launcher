@@ -190,6 +190,14 @@ object PainelExtras {
                 PainelArmazem.registrar(app, ip, "loja: $id", r)
                 if (r.startsWith("erro:")) erro(409, r.removePrefix("erro:").trim()) else ok(JSONObject().put("resultado", r))
             }
+            post && rota == "loja/repo" -> {
+                if (!elevada) return pin()   // um repositório novo é um app novo que a TV aceita instalar
+                val repo = corpo?.optString("repo").orEmpty()
+                val remover = corpo?.optBoolean("remover") ?: false
+                LojaCurada.definirRepo(app, repo, remover)?.let { return erro(400, it) }
+                PainelArmazem.registrar(app, ip, if (remover) "loja: repositório tirado" else "loja: repositório somado", repo.take(120))
+                ok(JSONObject().put("apps", LojaCurada.json(app)))
+            }
             post && rota == "recado-foto" -> {
                 val o = corpo ?: return erro(400, "JSON inválido")
                 val bytes = try { Base64.decode(o.optString("imagem"), Base64.DEFAULT) } catch (e: Exception) { return erro(400, "imagem inválida") }

@@ -261,8 +261,9 @@ class MainActivity : Activity() {
             runCatching { Despertador.agendar(this) }   // garante o proximo alarme agendado
             runCatching { Rotinas.agendar(this) }       // idem para as rotinas por horário
             if (fichasHome == null) fichasHome = runCatching {   // frase do destaque dos apps (ideia 13): fora da tela
-                FrasesApps.ler(assets.open("fichas-apps.json").use { String(it.readBytes(), Charsets.UTF_8) })
+                FrasesApps.ler(ComunidadeApps.fichasJuntas(this))   // ideia 70: APK + comunidade
             }.getOrDefault(emptyMap())
+            ComunidadeApps.talvezAtualizar(this)   // ideia 70: no máximo 1x por semana, numa thread
         }
         BackupAutomatico.talvezGravar(this)   // cópia diária das configurações (numa thread; no máximo 1x por dia)
         // DNS fixo que parou de responder deixa a TV "sem internet": confere ao voltar à HOME (fora da thread; só testa

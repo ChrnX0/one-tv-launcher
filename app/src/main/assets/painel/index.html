@@ -157,7 +157,7 @@
         <label class="marcar"><input id="mostrarSistema" type="checkbox" checked> apps do sistema</label>
         <button id="btnSelecionar" type="button" class="botao-secundario">Selecionar vários</button>
         <label class="botao-primario" for="arquivoApk">Instalar APK…</label>
-        <input type="file" id="arquivoApk" accept=".apk,application/vnd.android.package-archive" hidden>
+        <input type="file" id="arquivoApk" accept=".apk,.apks,.xapk,application/vnd.android.package-archive" hidden>
       </div>
       <p id="contagemApps" class="aviso-curto"></p>
       <p id="statusApps" class="aviso" hidden></p>
@@ -630,6 +630,11 @@
         <p class="aviso">Apps abertos, baixados do GitHub oficial de cada projeto. Na 1ª instalação a TV guarda quem assinou; depois
           só aceita a mesma assinatura. Pede o PIN.</p>
         <div id="listaLoja" class="lista-registro"></div>
+        <form id="formRepoLoja" class="form-pasta" autocomplete="off">
+          <input id="repoLoja" type="text" placeholder="dono/nome ou link do GitHub" aria-label="Repositório do GitHub" autocomplete="off" spellcheck="false">
+          <button type="submit" class="botao-secundario">Somar repositório</button>
+        </form>
+        <p class="aviso">Qualquer projeto que publique o APK no GitHub Releases. A TV escolhe o arquivo da arquitetura dela.</p>
         <p id="statusLoja" class="aviso" hidden></p>
       </div>
       <div class="cartao" id="cartaoCasa">
