@@ -32,4 +32,12 @@ class TextoNaTvTest {
         assertEquals("busca ação", TextoNaTv.juntar("busca ", false, "ação"))
         assertEquals("á", TextoNaTv.juntar(null, false, "á"))   // NFC: letra + acento = uma letra só
     }
+
+    @Test fun avisoDoCelular() {
+        assertTrue(TextoNaTv.deveAvisarCelular(true, "app.a", "", 0, 1000))
+        assertFalse(TextoNaTv.deveAvisarCelular(false, "app.a", "", 0, 1000))
+        assertFalse(TextoNaTv.deveAvisarCelular(true, "app.a", "app.a", 1000, 30_000))
+        assertTrue(TextoNaTv.deveAvisarCelular(true, "app.b", "app.a", 1000, 30_000))
+        assertTrue(TextoNaTv.deveAvisarCelular(true, "app.a", "app.a", 1000, 70_000))
+    }
 }

@@ -46,6 +46,10 @@
         <item>Casa: cor e temperatura da luz (no ajuste do brilho, ▲ ▼ trocam o tom)</item>
         <item>Ler em voz alta o que está em foco, em todas as telas do launcher (Configurações › Tela inicial › Mais opções)</item>
         <item>Sugestão na hora certa, sem IA: depois de noites até tarde, a tela inicial oferece desligar a TV sozinha ou ligar o filtro noturno</item>
+        <item>Compartilhar para a TV pelo celular: vídeo do YouTube abre no YouTube, link abre na TV, texto vira recado (painel instalado como app)</item>
+        <item>Diário da TV: 7 dias do que mexeu nela (painel, Claude, adb, a própria TV), no painel e para o Claude; ele também pode chamar um link seu</item>
+        <item>Campo de texto aberto na TV pode avisar o celular: “Digitar na TV” (avisos do painel)</item>
+        <item>App de IA novo entra sem esperar versão: libere o domínio dele no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -82,6 +86,10 @@
         <item>Oculte um app (segure OK nele), depois abra Configurações › Tela inicial › Apps ocultos e dê OK nele</item>
         <item>Na Casa, segure OK numa luz colorida e aperte ▲ ▼</item>
         <item>Ligue Configurações › Tela inicial › Mais opções › Ler em voz alta o que está em foco e ande pelas Configurações</item>
+        <item>No celular, compartilhe um vídeo do YouTube com o “One TV”</item>
+        <item>No painel, Extras &gt; Diário da TV &gt; Ver o diário</item>
+        <item>Ligue o aviso “Campo de texto aberto na TV” e abra a busca do YouTube na TV</item>
+        <item>No painel, Conectar uma IA &gt; Outro app de IA: libere um domínio de teste</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -118,5 +126,9 @@
         <item>Nenhum card “Ocultos” na tela inicial, e o app voltou?</item>
         <item>A luz mudou de tom?</item>
         <item>A TV falou o nome de cada linha, sem atropelar a fala?</item>
+        <item>O vídeo abriu no YouTube da TV?</item>
+        <item>Aparecem as ações de hoje?</item>
+        <item>O celular recebeu “Digitar na TV”, e o toque abriu o Controle?</item>
+        <item>Salvou e aparece na lista?</item>
     </string-array>
 </resources>

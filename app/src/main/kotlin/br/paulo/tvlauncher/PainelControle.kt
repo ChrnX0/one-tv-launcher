@@ -121,6 +121,17 @@ object PainelControle {
         return shell(ctx, "input text '$arg'")
     }
 
+    /** Abre um link http(s) na TV (ideia 55, compartilhar do celular). null = abriu; senão o motivo. */
+    fun abrirLink(ctx: Context, link: String): String? {
+        if (!McpPoderRegras.linkValido(link)) return "link inválido"
+        AutoDesligar.atividade()
+        return try {
+            ctx.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(link))
+                .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)); null
+        } catch (e: android.content.ActivityNotFoundException) { "nenhum app da TV abre este link" }
+        catch (e: Exception) { "o Android não deixou abrir (${e.javaClass.simpleName})" }
+    }
+
     // ---------------------------------------------------------------- apps: abrir, parar, limpar dados
 
     fun abrir(ctx: Context, pacote: String): String? {

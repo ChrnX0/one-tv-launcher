@@ -36,7 +36,7 @@ self.addEventListener('fetch', (ev) => {
 const ABA_DO_AVISO = {
   LEMBRETE: 'controle', AJUDA: 'controle', PRESENCA: 'controle', TV_MADRUGADA: 'controle', ALARME_PERDIDO: 'controle',
   CHUVA: 'controle', ERRO_NOVO: 'saude', DESEMPENHO: 'saude', ARMAZENAMENTO: 'saude', INTERNET_VOLTOU: 'rede',
-  VERSAO_NOVA: 'inicio',
+  VERSAO_NOVA: 'inicio', DIGITAR: 'controle',   // ideia 57: "Digitar na TV" abre o Controle
 };
 
 // A TV cifra o aviso (Web Push, RFC 8291) com a chave deste navegador; o serviço de push do Google só vê bytes.

@@ -487,6 +487,16 @@
         <h2>O que dá para pedir</h2>
         <ul id="iaExemplos" class="aviso-curto"></ul>
       </div>
+      <div class="cartao">
+        <h2>Outro app de IA</h2>
+        <p class="aviso">Um app que não está na lista volta do login por um domínio dele (o "redirect" que ele mostra, ex.:
+          app.exemplo.com). Libere o domínio aqui, sem esperar versão nova da TV. Pede o PIN, e a TV ainda pergunta
+          "cliente novo?" no primeiro login.</p>
+        <input id="iaHostNovo" type="text" maxlength="100" placeholder="app.exemplo.com" aria-label="Domínio do app de IA" autocapitalize="off" spellcheck="false">
+        <button type="button" class="botao-secundario" id="iaHostAdicionar">Liberar</button>
+        <ul id="iaHosts" class="aviso-curto"></ul>
+        <p id="iaHostsStatus" class="aviso" hidden></p>
+      </div>
     </section>
 
     <section id="abaBackup" class="painel-aba" hidden>
@@ -668,6 +678,25 @@
           apps feitos para o TvOverlay. Gerar um link novo invalida o anterior e pede o PIN. O link só aparece agora: guarde-o.</p>
         <button type="button" class="botao-secundario" id="btnRecadoLink">Gerar link novo</button>
         <pre id="saidaRecadoLink" class="saida-extras" hidden></pre>
+      </div>
+      <div class="cartao">
+        <h2>Diário da TV</h2>
+        <p class="aviso">O que mexeu na TV nos últimos 7 dias: painel, Claude, adb e a própria TV. O Claude lê o mesmo diário
+          (ferramenta diario_tv).</p>
+        <button type="button" class="botao-secundario" id="btnDiario">Ver o diário</button>
+        <pre id="saidaDiario" class="saida-extras" hidden></pre>
+        <h3>Avisar um link meu</h3>
+        <p class="aviso">A TV manda cada linha nova das origens marcadas (POST com JSON) para este endereço: https, ou http só
+          dentro de casa (ex.: um webhook do Home Assistant). Mudar pede o PIN. Vazio desliga.</p>
+        <input id="campoWebhook" type="url" maxlength="500" placeholder="https://… ou http://homeassistant.local:8123/api/webhook/…" aria-label="Endereço do webhook">
+        <div class="barra-acoes" id="origensWebhook">
+          <label><input type="checkbox" value="painel"> Painel</label>
+          <label><input type="checkbox" value="claude"> Claude</label>
+          <label><input type="checkbox" value="adb"> adb</label>
+          <label><input type="checkbox" value="tv"> A TV</label>
+          <button type="button" class="botao-secundario" id="btnWebhook">Salvar</button>
+        </div>
+        <p id="statusWebhook" class="aviso" hidden></p>
       </div>
       <div class="cartao">
         <h2>Manutenção</h2>

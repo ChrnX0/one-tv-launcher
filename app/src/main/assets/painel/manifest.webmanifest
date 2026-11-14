@@ -16,6 +16,7 @@
     { "src": "/icone-512.png", "sizes": "512x512", "type": "image/png" },
     { "src": "/icone-mascaravel.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
+  "share_target": { "action": "/", "method": "GET", "params": { "title": "titulo", "text": "texto", "url": "url" } },
   "shortcuts": [
     { "name": "Controle", "url": "/#controle", "icons": [{ "src": "/icone-192.png", "sizes": "192x192" }] },
     { "name": "Arquivos", "url": "/#arquivos", "icons": [{ "src": "/icone-192.png", "sizes": "192x192" }] }

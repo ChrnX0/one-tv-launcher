@@ -111,6 +111,7 @@ object PainelArmazem {
         novo.put(JSONObject().put("quando", System.currentTimeMillis()).put("ip", ip).put("acao", acao).put("resultado", resultado))
         for (i in 0 until minOf(atual.length(), MAX_LOG - 1)) novo.put(atual.get(i))
         p.edit().putString("itens", novo.toString()).apply()
+        runCatching { Diario.anotar(ctx, ip, acao, resultado) }   // ideias 58 e 59: diário mais longo + webhook
     }
 
     /** O registro, do mais novo ao mais velho. */

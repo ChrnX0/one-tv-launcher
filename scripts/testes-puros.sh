@@ -48,6 +48,8 @@ declare -A FONTES=(
   [TendenciaDiscoTest]="TendenciaDisco"
   [HistoricoAvisosTest]="HistoricoAvisos"
   [AberturaSerieTest]="AberturaSerie"
+  [CompartilharTest]="Compartilhar McpPoderRegras Recado"
+  [DiarioRegrasTest]="DiarioRegras"
 )
 
 falhou=0

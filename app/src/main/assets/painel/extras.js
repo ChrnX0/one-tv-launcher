@@ -570,6 +570,35 @@ $('btnRecadoLink').addEventListener('click', async () => {
   } catch (e) { mostrar($('saidaRecadoLink'), textoErro(e)); }
 });
 
+// ---------- diário da TV e webhook (ideias 58 e 59) ----------
+
+const NOMES_ORIGEM = { painel: 'painel', claude: 'Claude', adb: 'adb', tv: 'TV' };
+
+$('btnDiario').addEventListener('click', async () => {
+  try {
+    const d = await chamar('GET', '/api/extras/diario');
+    $('campoWebhook').value = d.webhook || '';
+    for (const c of $('origensWebhook').querySelectorAll('input')) c.checked = d.origens.includes(c.value);
+    if (d.webhook && d.ultimo) mostrar($('statusWebhook'), 'Última chamada do link: ' + d.ultimo);
+    const linhas = d.itens.map((i) => {
+      const quando = new Date(i.quando).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+      return `${quando}  ${NOMES_ORIGEM[i.origem] || i.origem}  ${i.acao}${i.resultado ? ' → ' + i.resultado : ''}`;
+    });
+    mostrar($('saidaDiario'), linhas.length ? linhas.join('\n') : 'Nada no diário ainda.');
+  } catch (e) { mostrar($('saidaDiario'), textoErro(e)); }
+});
+
+$('btnWebhook').addEventListener('click', async () => {
+  const url = $('campoWebhook').value.trim();
+  const origens = [...$('origensWebhook').querySelectorAll('input:checked')].map((c) => c.value);
+  if (url && !origens.length) { mostrar($('statusWebhook'), 'Marque ao menos uma origem.'); return; }
+  try {
+    const r = await comPin('Link do diário', url ? 'A TV vai chamar ' + url : 'Desligar o link', url ? 'Salvar' : 'Desligar',
+      () => chamar('POST', '/api/extras/diario/webhook', { url, origens }));
+    if (r) mostrar($('statusWebhook'), url ? 'Salvo.' : 'Desligado.');
+  } catch (e) { mostrar($('statusWebhook'), textoErro(e)); }
+});
+
 $('btnCaches').addEventListener('click', async () => {
   mostrar($('saidaManutencao'), 'Limpando (pode levar alguns segundos)...');
   try { const r = await chamar('POST', '/api/extras/caches/limpar'); mostrar($('saidaManutencao'), r.resultado); carregarChaves(); }
