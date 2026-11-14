@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ideia 88: HOME sem internet -->
+    <string name="si_sem_internet">Sem internet</string>
+    <string name="si_funcionam">Funcionam: %1$s</string>
+    <string name="si_pendrive">pendrive</string>
+    <!-- Ideia 80: "Ainda está assistindo?" -->
+    <string name="ad_pergunta">Ainda está assistindo?</string>
+</resources>
