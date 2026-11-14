@@ -950,6 +950,22 @@ class ConfigLauncherActivity : Activity() {
         val acessos = PainelArmazem.resumoRegistro(this, 3)
         c.addView(info(getString(R.string.cl_ultimos), if (acessos.isEmpty()) getString(R.string.cl_nenhum_ainda) else acessos.joinToString("\n"), maxLinhas = 4), lp())
 
+        // A TV como unidade de rede (PainelDav, 14/11/2026): WebDAV na porta https do painel, senha = PIN. Desligada
+        // por padrão; a mesma chave existe na aba Configurações do painel (PainelConfig "unidadeRede").
+        secao(c, getString(R.string.ur_secao))
+        lateinit var linhaUnidade: LinhaCfg
+        fun detalheUnidade(): String = when {
+            !PainelArmazem.unidadeRede(this) -> getString(R.string.ur_det)
+            !PainelArmazem.podeLigar(this) -> getString(R.string.ur_painel)
+            else -> PainelWeb.enderecoUnidade(this)?.let { getString(R.string.ur_abra, it) } ?: getString(R.string.ur_https)
+        }
+        linhaUnidade = linha(getString(R.string.ur_titulo), detalheUnidade(), chave = PainelArmazem.unidadeRede(this)) {
+            PainelArmazem.definirUnidadeRede(this, !PainelArmazem.unidadeRede(this))
+            PainelWeb.unidadeRedeMudou(this)
+            linhaUnidade.ligado(PainelArmazem.unidadeRede(this)); linhaUnidade.detalhe(detalheUnidade())
+        }
+        c.addView(linhaUnidade, lp())
+
         // Claude pela internet (McpServidor + TunelTailscale, 05/11/2026). A chave do Tailscale se cola no painel (PIN).
         secao(c, getString(R.string.cl_claude_internet))
         lateinit var linhaMcp: LinhaCfg

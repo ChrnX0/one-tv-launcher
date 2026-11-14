@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>The TV as a network drive: its storage opens in Windows (Map network drive), Mac, Linux and phone file apps over WebDAV, with the panel PIN as password; it also shows up in Windows Network (Settings › Remote access, off by default)</item>
         <item>Player: the top of the column just says TV, Movies or Series, with Search and Filter buttons beside it; the list makes room for Recordings (TV: Favorites, Recent, Guide, Recordings)</item>
         <item>Games card on the home screen, after Network: GeForce NOW, Steam Link, Moonlight, PS Remote Play, RetroArch and the other games leave the apps row and sit in 4 groups</item>
         <item>Games: “Play on the PC” wakes the computer and opens Moonlight or Steam Link; “Test the network” tells whether cloud gaming will work; connected controllers show at the top</item>
@@ -96,6 +97,7 @@
         <item>Live TV records to a USB drive or disk on the hub (or a Windows/NAS folder): ▶▶ › Record on a channel, OK on a future show in the guide to schedule it (also every week), and the Recordings screen in the live TV column</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>unidade_rede</item>
         <item>coluna_botoes</item>
         <item>jogos_card</item>
         <item>jogos_tela</item>
@@ -174,6 +176,7 @@
         <item>gravar_agendada</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Network drive</item>
         <item>Search and Filter at the top of the column</item>
         <item>Press HOME and go to the end of the WATCH AND PLAY row</item>
         <item>Open the Games card</item>
@@ -252,6 +255,7 @@
         <item>In the guide, OK on a show starting in 10 min › Record; turn the TV off and wait for it to end</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>With Settings › Remote access › Show the TV as a network drive on, does Windows Map network drive with the address shown there and the panel PIN open the TV folders?</item>
         <item>In TV, Movies and Series, does ▲ on the first row reach the Search and Filter buttons beside the title, and ▼ go back to the list?</item>
         <item>Is there an amber Games card after Network?</item>
         <item>Do the big buttons and the games by group show, and did the game apps leave the apps row?</item>

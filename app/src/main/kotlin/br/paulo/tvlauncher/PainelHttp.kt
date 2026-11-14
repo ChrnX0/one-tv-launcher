@@ -27,6 +27,8 @@ class Requisicao(
     val tamanho: Long,
     private val entrada: InputStream?,
     private val relogio: () -> Long = System::currentTimeMillis,
+    /** Corpo "Transfer-Encoding: chunked" (só o WebDAV aceita; ver [PainelHttp.lerCabecalhos]). Lido por DavLogica.LeitorChunked. */
+    val chunked: Boolean = false,
 ) {
     private var lido: ByteArray? = if (tamanho == 0L) ByteArray(0) else null
 
@@ -123,7 +125,8 @@ object PainelHttp {
      * Lê só a linha de pedido e os cabeçalhos; o corpo fica na conexão até a rota pedir (ver [Requisicao]).
      */
     fun lerCabecalhos(entrada: InputStream, aceitarCorpo: Boolean = true, prazoMs: Long = PRAZO_CABECALHOS_MS,
-                      relogio: () -> Long = System::currentTimeMillis): Requisicao {
+                      relogio: () -> Long = System::currentTimeMillis,
+                      chunkedEm: (String) -> Boolean = { false }): Requisicao {
         val linhas = linhasCabecalho(entrada, prazoMs, relogio)
         val pedido = linhas.first().split(' ')
         if (pedido.size != 3 || !pedido[2].startsWith("HTTP/1.")) throw ErroHttp(400, "linha de pedido inválida")
@@ -146,20 +149,23 @@ object PainelHttp {
             if (nome == "content-length" && cabecalhos.containsKey("content-length")) throw ErroHttp(400, "Content-Length repetido")
             cabecalhos[nome] = valor
         }
-        // Corpo "chunked" não é suportado (o navegador só usa com stream; o painel sempre manda tamanho conhecido).
-        if (cabecalhos.containsKey("transfer-encoding")) throw ErroHttp(411, "use Content-Length")
+        val interrogacao = alvo.indexOf('?')
+        val caminho = if (interrogacao < 0) alvo else alvo.substring(0, interrogacao)
+        // Corpo "chunked" não é suportado no painel (o navegador só usa com stream; o painel sempre manda tamanho
+        // conhecido). Exceção: o WebDAV ([chunkedEm] diz onde), porque o Finder do Mac grava assim. Mesmo lá, só
+        // "chunked" puro e SEM Content-Length (os dois juntos é o truque de "request smuggling").
+        val te = cabecalhos["transfer-encoding"]
+        val chunked = te != null && te.equals("chunked", ignoreCase = true) && !cabecalhos.containsKey("content-length") && chunkedEm(caminho)
+        if (te != null && !chunked) throw ErroHttp(411, "use Content-Length")
 
         val tamanho = cabecalhos["content-length"]?.let {
             // Só dígitos (o toLong aceitaria "+5"); até 19 dígitos cabe num Long.
             if (it.isEmpty() || it.length > 18 || !it.all { c -> c in '0'..'9' }) throw ErroHttp(400, "Content-Length inválido")
             it.toLong()
         } ?: 0L
-        if (!aceitarCorpo && tamanho > 0) throw ErroHttp(413, "corpo grande demais")
-
-        val interrogacao = alvo.indexOf('?')
-        val caminho = if (interrogacao < 0) alvo else alvo.substring(0, interrogacao)
+        if (!aceitarCorpo && (tamanho > 0 || chunked)) throw ErroHttp(413, "corpo grande demais")
         val consulta = if (interrogacao < 0) emptyMap() else lerConsulta(alvo.substring(interrogacao + 1))
-        return Requisicao(metodo, caminho, consulta, cabecalhos, tamanho, entrada, relogio)
+        return Requisicao(metodo, caminho, consulta, cabecalhos, tamanho, entrada, relogio, chunked)
     }
 
     /** Linhas até a linha vazia, sem o \r\n. Lê byte a byte (só os cabeçalhos; poucos KB) para não engolir o corpo. */
@@ -239,7 +245,8 @@ object PainelHttp {
         400 -> "Bad Request"; 401 -> "Unauthorized"; 403 -> "Forbidden"; 404 -> "Not Found"
         405 -> "Method Not Allowed"; 408 -> "Request Timeout"; 409 -> "Conflict"; 411 -> "Length Required"; 413 -> "Payload Too Large"
         421 -> "Misdirected Request"; 429 -> "Too Many Requests"; 431 -> "Request Header Fields Too Large"
-        415 -> "Unsupported Media Type"; 416 -> "Range Not Satisfiable"
+        415 -> "Unsupported Media Type"; 416 -> "Range Not Satisfiable"; 201 -> "Created"; 207 -> "Multi-Status"
+        412 -> "Precondition Failed"; 423 -> "Locked"
         500 -> "Internal Server Error"; 503 -> "Service Unavailable"; 507 -> "Insufficient Storage"
         else -> "Status"
     }

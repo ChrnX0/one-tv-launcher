@@ -29,7 +29,10 @@ object PainelArquivos {
     private const val MAX_ITENS = 2000            // pasta com mais que isso: mostra os 2000 primeiros e avisa
     private const val FOLGA_BYTES = 200L shl 20   // não enche a memória: sempre sobram 200 MB para o sistema
 
-    fun raiz(): File = Environment.getExternalStorageDirectory()
+    fun raiz(): File = raizTeste ?: Environment.getExternalStorageDirectory()
+
+    /** Só para testes JVM (DavServidorTest): uma pasta temporária no lugar da memória interna. */
+    @Volatile var raizTeste: File? = null
 
     /** Erro com código HTTP, para o PainelWeb responder direto. */
     class Erro(val codigo: Int, mensagem: String) : Exception(mensagem)
@@ -145,7 +148,7 @@ object PainelArquivos {
     }
 
     /** Foto, vídeo e música recebidos aparecem logo nos apps de mídia da TV (sem esperar o Android varrer sozinho). */
-    private fun avisarGaleria(ctx: Context, f: File) {
+    fun avisarGaleria(ctx: Context, f: File) {
         try { MediaScannerConnection.scanFile(ctx, arrayOf(f.path), null, null) } catch (_: Exception) {}
     }
 
@@ -160,14 +163,17 @@ object PainelArquivos {
     }
 
     /** Apaga um arquivo ou uma pasta com tudo dentro. Não deixa apagar a raiz nem as pastas padrão do topo. */
-    fun apagar(ctx: Context, rel: String?): Int {
+    fun apagar(ctx: Context, rel: String?): Int = apagar(rel) { avisarGaleria(ctx, it) }
+
+    /** O mesmo, com quem avisar a galeria trocável (a unidade de rede roda também no teste JVM, sem Android). */
+    fun apagar(rel: String?, avisar: (File) -> Unit): Int {
         val f = resolver(rel)
         val r = relativo(f)
         if (r.isEmpty()) throw Erro(400, "a raiz não se apaga")
         if (!r.contains('/') && f.isDirectory && ChecagensPainel.pastaPadraoTopo(r)) throw Erro(400, "a pasta \"$r\" é do sistema: apague o que tem dentro dela")
         val n = apagarTudo(f)
         if (f.exists()) throw Erro(500, "apaguei $n item(ns), mas sobrou algo que o Android não deixou apagar")
-        avisarGaleria(ctx, f)
+        avisar(f)
         return n
     }
 
@@ -177,7 +183,10 @@ object PainelArquivos {
      * e o arquivo nunca fica pela metade. Recusa: a raiz e as pastas padrão do topo, pasta para dentro dela mesma,
      * destino que já existe (nunca sobrescreve). Devolve o caminho relativo novo.
      */
-    fun mover(ctx: Context, rel: String?, pastaDestino: String?, novoNome: String?): String {
+    fun mover(ctx: Context, rel: String?, pastaDestino: String?, novoNome: String?): String =
+        mover(rel, pastaDestino, novoNome) { avisarGaleria(ctx, it) }
+
+    fun mover(rel: String?, pastaDestino: String?, novoNome: String?, avisar: (File) -> Unit): String {
         if (!ChecagensPainel.nomeArquivoValido(novoNome)) throw Erro(400, "nome inválido")
         val origem = resolver(rel)
         val r = relativo(origem)
@@ -201,8 +210,8 @@ object PainelArquivos {
             origem.renameTo(tmp) && (tmp.renameTo(final) || tmp.renameTo(origem).let { false })
         } else origem.renameTo(final)
         if (!ok) throw Erro(500, "o Android não deixou mover/renomear")
-        avisarGaleria(ctx, origem)
-        avisarGaleria(ctx, final)
+        avisar(origem)
+        avisar(final)
         return relativo(final)
     }
 

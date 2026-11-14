@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Arquivos da TV pela rede</title>
+<meta name="theme-color" content="#0e1015">
+<link rel="icon" type="image/png" href="/icone-192.png">
+<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/certificado.css">
+</head>
+<body>
+<!-- Aberta pelo duplo clique na TV em "Rede" do Windows (Ssdp.kt). Preenchida no servidor (PainelWeb.paginaUnidade): sem script. -->
+<main class="pagina-cert">
+  <h1>Arquivos da TV pela rede</h1>
+  <p class="aviso">A memória da TV vira uma unidade de rede (uma letra como T: em Este Computador). Senha: o PIN do painel.
+    Usuário: qualquer um, por exemplo tv.</p>
+  <div class="cartao">
+    <h2>1. Instale o certificado da TV (uma vez)</h2>
+    <p class="aviso">Sem ele o computador recusa a conexão. <a href="/certificado">Passo a passo do certificado</a>. No Windows,
+      se o mapeamento reclamar do certificado, instale de novo escolhendo <b>Máquina Local</b>.</p>
+  </div>
+  <div class="cartao">
+    <h2>2. Endereço para mapear</h2>
+    <p><code>{{ENDERECO}}</code></p>
+<!--se:comip-->
+    <p class="aviso">Se o nome não funcionar, use o IP: <code>{{ENDERECO_IP}}</code></p>
+<!--fim:comip-->
+  </div>
+  <div class="cartao">
+    <h2>3. Conectar</h2>
+    <ul class="aviso">
+      <li><b>Windows</b>: Este Computador › Mapear unidade de rede › cole o endereço › marque <b>Conectar usando credenciais
+        diferentes</b>. O Windows só copia arquivos de até 50 MB, a não ser que você aumente o limite (veja a Ajuda da TV, Arquivos pela rede).</li>
+      <li><b>Mac</b>: Finder › Ir › Conectar ao Servidor › cole o endereço.</li>
+      <li><b>Linux</b>: no gerenciador de arquivos, Conectar ao servidor, trocando https:// por davs://.</li>
+      <li><b>Android</b>: um gerenciador de arquivos com WebDAV (Solid Explorer, CX File Explorer, Material Files): porta 8444, caminho /dav/, HTTPS.</li>
+    </ul>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ur_secao">Unidade de rede</string>
+    <string name="ur_titulo">Mostrar a TV como unidade de rede</string>
+    <string name="ur_det">Desligada. A memória da TV aparece como pasta da rede no Windows, Mac, Linux e celulares. Senha: o PIN do painel.</string>
+    <string name="ur_painel">Ligue antes o painel no navegador, acima (usa o mesmo PIN e o endereço https).</string>
+    <string name="ur_https">Esperando o endereço https do painel (o certificado é feito cerca de 1 minuto depois de ligar o painel).</string>
+    <string name="ur_abra">Ligada: %1$s · senha: o PIN do painel. Passo a passo em Ajuda › Arquivos pela rede.</string>
+</resources>

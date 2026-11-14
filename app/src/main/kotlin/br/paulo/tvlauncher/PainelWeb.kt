@@ -104,6 +104,7 @@ object PainelWeb {
     @Synchronized fun recomecar(ctx: Context) {
         app = ctx.applicationContext
         sessoes.encerrarTodas()
+        senhasDav.limpar()
         tentativas?.zerar()
         ajustar(ctx)
     }
@@ -149,6 +150,7 @@ object PainelWeb {
         servidorTls = null
         sessoes.encerrarTodas()
         PainelVizinhos.desligar()
+        AnuncioDav.desligar()
         Log.i(TAG, "painel desligado")
     }
 
@@ -198,12 +200,26 @@ object PainelWeb {
             servidorTls = porta
         }
         Log.i(TAG, "painel https ligado na porta ${PainelTls.PORTA}")
+        if (PainelDav.ligado(app)) AnuncioDav.ligar(app)
         aceitar(porta, https = true)
         synchronized(this) { if (servidorTls === porta) servidorTls = null }
         try { porta.close() } catch (_: IOException) {}
     }
 
     private fun ligadoTls(): Boolean = servidorTls?.isClosed == false
+
+    /**
+     * A chave "Unidade de rede" mudou (TV ou painel): liga ou desliga o anúncio na rede. O servidor em si não precisa
+     * de nada: cada pedido confere a chave (PainelDav.ligado).
+     */
+    fun unidadeRedeMudou(ctx: Context) {
+        app = ctx.applicationContext
+        if (ligadoTls() && PainelDav.ligado(app)) AnuncioDav.ligar(app) else AnuncioDav.desligar()
+    }
+
+    /** O endereço da unidade de rede para mostrar na TV e no painel (o nome do certificado), ou null com https fechado. */
+    fun enderecoUnidade(ctx: Context): String? =
+        if (!ligadoTls()) null else "https://${PainelTls.nome(ctx)}:${PainelTls.PORTA}${DavLogica.PREFIXO}/"
 
     /**
      * Botão "Gerar certificado novo" do painel (pede o PIN de novo): CA nova, e reabre a porta https com ela.
@@ -240,6 +256,24 @@ object PainelWeb {
     private fun paginaCertificado(): Resposta {
         val modelo = app.assets.open("painel/certificado.html").use { it.readBytes() }.toString(Charsets.UTF_8)
         val html = PainelTls.estado(app, ipsDaRede(), ligadoTls()).let { PaginaCertificado.preencher(modelo, it, it.optString("nome")) }
+        return Resposta(200, "text/html; charset=utf-8", html.toByteArray())
+    }
+
+    /** O XML do aparelho UPnP. A página aponta para o mesmo host que o Windows usou para buscar o XML (o IP da TV). */
+    private fun descricaoUpnp(host: String?): Resposta {
+        val pagina = "http://${host ?: (ipsDaRede().minOrNull() + ":" + Config.PAINEL_PORTA)}/unidade"
+        val xml = Ssdp.descricao(Ssdp.nomeVisivel(PainelVizinhos.nomeDaTv(app)), Ssdp.uuid(PainelVizinhos.idDaTv(app)), pagina)
+        return Resposta(200, "text/xml; charset=utf-8", xml.toByteArray())
+    }
+
+    /** Página com o endereço da unidade de rede para mapear (o nome do certificado e, se estiver nele, o IP). */
+    private fun paginaUnidade(): Resposta {
+        val modelo = app.assets.open("painel/unidade.html").use { it.readBytes() }.toString(Charsets.UTF_8)
+        val est = PainelTls.estado(app, ipsDaRede(), ligadoTls())
+        val ip = if (est.isNull("enderecoIp")) "" else est.optString("enderecoIp", "")
+        var html = modelo.replace(Regex("<!--se:comip-->(.*?)<!--fim:comip-->", RegexOption.DOT_MATCHES_ALL)) { if (ip.isNotEmpty()) it.groupValues[1] else "" }
+        html = html.replace("{{ENDERECO}}", DavLogica.escaparXml("https://${PainelTls.nome(app)}:${PainelTls.PORTA}${DavLogica.PREFIXO}/"))
+            .replace("{{ENDERECO_IP}}", DavLogica.escaparXml(if (ip.isEmpty()) "" else ip.trimEnd('/') + DavLogica.PREFIXO + "/"))
         return Resposta(200, "text/html; charset=utf-8", html.toByteArray())
     }
 
@@ -382,7 +416,13 @@ object PainelWeb {
             val entrada = c.getInputStream().buffered(8192)
             val saida = c.getOutputStream().buffered(16 * 1024)
             val resposta = try {
-                val req = PainelHttp.lerCabecalhos(entrada)
+                val req = PainelHttp.lerCabecalhos(entrada, chunkedEm = { https && DavLogica.ehDav(it) && PainelDav.ligado(app) })
+                // A TV como unidade de rede (WebDAV, PainelDav.kt): só na porta https e com a chave ligada. Responde
+                // ela mesma (métodos e corpos próprios do WebDAV) e a conexão fecha no finally.
+                if (https && PainelDav.meu(req) && PainelDav.ligado(app)) {
+                    PainelDav.atender(PainelDav.ambiente(app), req, entrada, saida, ip, hostOk(req.cabecalho("host"), true)) { conferirSenhaDav(it, ip) }
+                    return
+                }
                 // O corpo: nas rotas de fluxo fica na conexão (a rota lê depois de conferir sessão e PIN); nas outras
                 // é lido já, com limite (só a restauração de backup aceita um corpo maior). Antes de ler um byte do
                 // corpo, as checagens baratas (nome, origem e, nos corpos grandes, sessão): quem não passa nem ocupa
@@ -513,6 +553,10 @@ object PainelWeb {
         // o certificado é público por natureza e é preciso baixá-lo ANTES de conseguir entrar pelo https.
         if (req.metodo == "GET") when (req.caminho) {
             "/certificado" -> return paginaCertificado()
+            // A TV na tela "Rede" do Windows (Ssdp/AnuncioUpnp): a descrição do aparelho e a página que o duplo clique
+            // abre. Livres como a do certificado (não dizem nada além do endereço); só com a unidade de rede ligada.
+            Ssdp.CAMINHO_DESCRICAO -> if (PainelDav.ligado(app)) return descricaoUpnp(host)
+            "/unidade" -> if (PainelDav.ligado(app)) return paginaUnidade()
             "/certificado.crt" -> return arquivoCertificado()
             "/certificado.css" -> return Resposta(200, "text/css; charset=utf-8",
                 app.assets.open("painel/certificado.css").use { it.readBytes() })
@@ -928,6 +972,42 @@ object PainelWeb {
                 is ControleTentativas.Resultado.Errou -> erro(401, "PIN errado") { put("restantes", r.restantes) }
                 is ControleTentativas.Resultado.Bloqueou -> erro(429, "PIN errado; bloqueado por ${r.ms / 60_000} min") { put("esperarSeg", r.ms / 1000) }
                 ControleTentativas.Resultado.Desligar -> { desligarPorErros(ip); erro(403, "PIN errado demais: o painel foi desligado. Religue nas Configurações do launcher, na TV.") }
+            }
+        }
+    }
+
+    /** Senhas da unidade de rede já conferidas (ver DavLogica.CacheSenha): um PBKDF2 a cada 15 min, não a cada pedido. */
+    private val senhasDav = DavLogica.CacheSenha({ System.currentTimeMillis() })
+
+    /**
+     * A senha da unidade de rede (cabeçalho Basic) é o PIN do painel, com o MESMO contador de erros e o mesmo bloqueio
+     * crescente do login. null = pode entrar. O cache leva junto a marca do PIN: trocou o PIN, a senha velha cai.
+     */
+    private fun conferirSenhaDav(cabecalho: String?, ip: String): PainelDav.Recusa? {
+        val pin = DavLogica.senhaBasic(cabecalho) ?: return PainelDav.Recusa(401, "senha: o PIN do painel")
+        val chave = cabecalho + "\u0000" + PainelArmazem.marcaPin(app)
+        if (senhasDav.certo(chave)) return null
+        synchronized(travaPin) {
+            val ctl = controle()
+            if (ctl.esgotado() || !PainelArmazem.podeLigar(app)) return PainelDav.Recusa(403, "painel desligado. Religue nas Configurações do launcher, na TV.")
+            val espera = ctl.esperaMs()
+            if (espera > 0) return PainelDav.Recusa(429, "muitas tentativas erradas; espere ${(espera + 999) / 1000} s",
+                mapOf("Retry-After" to ((espera + 999) / 1000).toString()))
+            // A mesma senha errada repetida pelo cliente (o Windows e o davfs2 repetem sozinhos) conta uma vez só.
+            if (senhasDav.errado(chave)) return PainelDav.Recusa(401, "PIN errado")
+            if (PainelArmazem.conferirPin(app, pin)) {
+                ctl.registrarSucesso()
+                senhasDav.lembrarCerto(chave)
+                PainelArmazem.registrar(app, ip, "unidade de rede: entrar", "ok")
+                return null
+            }
+            senhasDav.lembrarErrado(chave)
+            PainelArmazem.registrar(app, ip, "unidade de rede", "PIN errado")
+            return when (val r = ctl.registrarFalha()) {
+                is ControleTentativas.Resultado.Errou -> PainelDav.Recusa(401, "PIN errado")
+                is ControleTentativas.Resultado.Bloqueou -> PainelDav.Recusa(429, "PIN errado; bloqueado por ${r.ms / 60_000} min",
+                    mapOf("Retry-After" to (r.ms / 1000).toString()))
+                ControleTentativas.Resultado.Desligar -> { desligarPorErros(ip); PainelDav.Recusa(403, "PIN errado demais: o painel foi desligado.") }
             }
         }
     }

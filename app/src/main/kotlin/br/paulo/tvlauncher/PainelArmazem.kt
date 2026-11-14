@@ -39,6 +39,12 @@ object PainelArmazem {
             .commit()
     }
 
+    /**
+     * Muda toda vez que o PIN muda (é o sal, que é novo a cada PIN). A unidade de rede (PainelDav) junta isto à
+     * senha lembrada: trocou o PIN, a senha antiga deixa de valer na hora, sem esperar o cache vencer.
+     */
+    fun marcaPin(ctx: Context): String = prefs(ctx).getString("pin_sal", null) ?: ""
+
     /** Lento (PBKDF2): chamar fora da thread da tela. */
     fun conferirPin(ctx: Context, pin: String): Boolean {
         val p = prefs(ctx)
@@ -95,6 +101,13 @@ object PainelArmazem {
     }
 
     fun podeLigar(ctx: Context): Boolean = ligado(ctx) && temPin(ctx) && !desligadoPorErros(ctx)
+
+    /**
+     * A TV como unidade de rede (WebDAV em https://<tv>:8444/dav/, PainelDav.kt). Desligada por padrão; só funciona
+     * com o painel no ar ([podeLigar]), porque usa a mesma porta https e o mesmo PIN.
+     */
+    fun unidadeRede(ctx: Context): Boolean = prefs(ctx).getBoolean("unidade_rede", false)
+    fun definirUnidadeRede(ctx: Context, sim: Boolean) { prefs(ctx).edit().putBoolean("unidade_rede", sim).apply() }
 
     fun falhas(ctx: Context): Int = prefs(ctx).getInt("falhas", 0)
     // commit e não apply: a contagem de PIN errado vai para o disco antes da resposta; se o processo morrer logo depois,
