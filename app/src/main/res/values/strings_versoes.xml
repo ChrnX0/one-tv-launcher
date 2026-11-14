@@ -54,6 +54,7 @@
         <item>When a text box opens on the TV, your phone can get “Type on the TV” (web panel notifications)</item>
         <item>A new AI app can sign in without waiting for an update: allow its domain in the web panel</item>
         <item>One text size for every screen: Settings › Home screen › Text size (Normal, Large, Larger)</item>
+        <item>Live TV: the channel list and the guide use the launcher’s colors and line icons (star, recents, search, filters, guide, lock)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -95,6 +96,7 @@
         <item>digitar_celular</item>
         <item>ia_dominio</item>
         <item>tamanho_texto</item>
+        <item>lista_canais_icones</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -136,6 +138,7 @@
         <item>Turn on the notification “Text box open on the TV” and open the YouTube search on the TV</item>
         <item>In the web panel, Connect an AI &gt; Another AI app: allow a test domain</item>
         <item>Set Settings › Home screen › Text size to Larger, then open the quick panel and Movies</item>
+        <item>In live TV, open the channel list (OK) and then the Guide</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -177,5 +180,6 @@
         <item>Did the phone get “Type on the TV”, and did tapping it open the Remote tab?</item>
         <item>Was it saved and listed?</item>
         <item>Did the text grow and still fit, with nothing cut off?</item>
+        <item>Do Favorites, Recents, Search, Filters and Guide show line icons (no squares or emoji), with the same sizes as before?</item>
     </string-array>
 </resources>
