@@ -154,6 +154,14 @@
             android:excludeFromRecents="true"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection"
             android:theme="@style/One.Tela" />
+        <!-- Ideia 84: elenco com foto e os outros títulos de cada pessoa na lista (ElencoActivity.kt); junto do player. -->
+        <activity
+            android:name=".ElencoActivity"
+            android:process=":player"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection"
+            android:theme="@style/One.Tela" />
         <activity
             android:name=".SeriesActivity"
             android:process=":player"

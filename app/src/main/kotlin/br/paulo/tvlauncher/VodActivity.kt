@@ -580,6 +580,12 @@ class VodActivity : Activity() {
             desligarAoFim = !desligarAoFim
             avisoBreve(getString(if (desligarAoFim) R.string.vod_desligar_ao_fim_ligado else R.string.vod_desligar_ao_fim_desligado))
         }
+        // Ideia 84 "Quem é esse ator?": o elenco por cima do vídeo (pausa; volta com VOLTAR).
+        buscaLegenda().tmdb?.takeIf { ElencoActivity.disponivel(it) }?.let { id ->
+            opcoes += Opcao(getString(R.string.elenco_opcao_player)) {
+                p.pause(); ElencoActivity.abrir(this, id, serie, intent.getStringExtra(EXTRA_TITULO).orEmpty().substringBefore(" · "))
+            }
+        }
         // Ideia 24: marcar a abertura da série (vale para os próximos episódios). Só em episódio com a chave da série.
         if (serie) {
             val agora = relogio(p.currentPosition)

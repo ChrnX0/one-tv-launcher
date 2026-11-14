@@ -125,6 +125,36 @@ object InfoExternaCache {
         return partes
     }
 
+    // ================================================================ ideias 83 e 84 (memória só: uma consulta por ficha)
+
+    private val pedidos = object : LinkedHashMap<String, Any>(64, 0.75f, true) {
+        override fun removeEldestEntry(e: MutableMap.MutableEntry<String, Any>) = size > 120
+    }
+
+    /** Pergunta ao TMDB (memória por [chave]); null sem chave do app, sem rede ou com resposta que não serve. */
+    private fun <T : Any> tmdb(chave: String, url: (String) -> String, ler: (String) -> T?): T? {
+        synchronized(pedidos) { @Suppress("UNCHECKED_CAST") (pedidos[chave] as? T)?.let { return it } }
+        val k = chaves(); if (k.tmdb.isBlank()) return null
+        val v = runCatching {
+            val r = ServicosContas.pedir(url(k.tmdb), InfoExterna.tmdbCabecalhos(k.tmdb, agente()))
+            if (r.codigo in 200..299) ler(r.corpo) else null
+        }.onFailure { Log.w(TAG, "$chave: ${it.javaClass.simpleName}") }.getOrNull() ?: return null
+        synchronized(pedidos) { pedidos[chave] = v }
+        return v
+    }
+
+    /** Ideia 83: (título, resumo) de um episódio no idioma da TV. Bloqueia (rede). */
+    fun episodio(serie: Int, temporada: Int, numero: Int): Pair<String, String>? =
+        tmdb("ep:$serie:$temporada:$numero", { ElencoTmdb.urlEpisodio(it, serie, temporada, numero, InfoExterna.idiomaTmdb()) }, ElencoTmdb::lerEpisodio)
+
+    /** Ideia 84: o elenco com foto. Bloqueia (rede). */
+    fun elenco(id: Int, serie: Boolean): List<ElencoTmdb.Pessoa> =
+        tmdb("elenco:$serie:$id", { ElencoTmdb.urlElenco(it, id, serie, InfoExterna.idiomaTmdb()) }) { ElencoTmdb.lerElenco(it).ifEmpty { null } }.orEmpty()
+
+    /** Ideia 84: em que filmes e séries a pessoa atuou. Bloqueia (rede). */
+    fun creditos(pessoa: Int): Set<Pair<Boolean, Int>> =
+        tmdb("pessoa:$pessoa", { ElencoTmdb.urlCreditos(it, pessoa, InfoExterna.idiomaTmdb()) }) { ElencoTmdb.lerCreditos(it).ifEmpty { null } }.orEmpty()
+
     // ================================================================ notas em lote (grade)
 
     private fun prefs(ctx: Context) = ctx.getSharedPreferences("info_externa", Context.MODE_PRIVATE)

@@ -835,6 +835,11 @@ class FilmesActivity : Activity() {
             botoes.addView(botao(getString(R.string.filmes_colecao), "colecao") { abrirColecao(lista) },
                 LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(12) })
         }
+        // Ideia 84: elenco com foto e o que mais cada pessoa fez que está na lista.
+        (f.tmdb ?: info?.tmdb ?: ext?.tmdb)?.takeIf { ElencoActivity.disponivel(it) }?.let { id ->
+            botoes.addView(botao(getString(R.string.elenco_botao), "elenco") { ElencoActivity.abrir(this, id, serie = false, nome = Vod.nomeLimpo(f.nome)) },
+                LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(12) })
+        }
         // Achado pela busca do nome (a lista não mandou o id): "Não é este filme" refaz a busca sem ele.
         if (ext?.tmdb != null && f.tmdb == null && info?.tmdb == null) botoes.addView(
             botao(getString(R.string.ext_nao_e_este), "naoeeste") {
