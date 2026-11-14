@@ -114,6 +114,8 @@ class PainelCatalogo(private val act: Activity) {
                 setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT))
                 addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
                 setDimAmount(0.6f)
+                // Largura explícita: sem ela o tema do Dialog cortava a grade em 2 colunas (visto na Sala, 14/11/2026).
+                setLayout(dp(COLUNAS_LETRAS * (LADO_DP + 10) + 56 + 8), android.view.ViewGroup.LayoutParams.WRAP_CONTENT)
             }
             d.setOnShowListener { celulas[1].requestFocus() }   // começa no A
             d.show()
