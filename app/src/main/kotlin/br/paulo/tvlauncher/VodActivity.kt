@@ -226,7 +226,10 @@ class VodActivity : Activity() {
         Fundo.rodar {
             // O endereço com o token (ou o cabeçalho com a senha) só nasce aqui, na hora de tocar.
             val tocavel = direto?.let { FontesMidia.resolver(this, it) }
-            val endereco = tocavel?.url ?: if (direto != null) null else PlayerArmazem.fontes(this).firstOrNull { it.id == fonte }?.xtream?.let { conta ->
+            // Lista M3U (ideia 26): o endereço vem do cache da lista, pelo id da entrada; com o User-Agent que ela pedir.
+            val m3u = if (direto == null && PlayerArmazem.fontes(this).none { it.id == fonte && it.xtream != null })
+                PlayerCarga.urlM3u(this, fonte, id) else null
+            val endereco = tocavel?.url ?: m3u?.first ?: if (direto != null) null else PlayerArmazem.fontes(this).firstOrNull { it.id == fonte }?.xtream?.let { conta ->
                 if (tipo == TIPO_EPISODIO) Series.urlEpisodio(conta, id, ext) else Vod.urlFilme(conta, Filme(id, fonte, "", extensao = ext))
             }
             prefIdioma = IdiomaPlayer.prefs(this).para(chaveIdioma)
@@ -243,7 +246,8 @@ class VodActivity : Activity() {
                 url = endereco; retomarEm = pos; legendaArquivo = leg; atrasoLegenda = atraso
                 tamLegendaSp = tamLeg; legenda.textSize = tamLeg.toFloat()
                 abertura = ab
-                relato = tocavel?.relato; cabecalhos = tocavel?.cabecalhos.orEmpty()
+                relato = tocavel?.relato
+                cabecalhos = tocavel?.cabecalhos ?: m3u?.second?.takeIf { it.isNotBlank() }?.let { mapOf("User-Agent" to it) }.orEmpty()
                 tocar()
             }
         }

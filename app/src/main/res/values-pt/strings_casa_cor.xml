@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ideia 50 do estudo (14/11/2026): cor e temperatura da luz na tela Casa (▲ ▼ no ajuste da luz). -->
+<resources>
+    <string name="casa_dica_brilho_cor">brilho e cor</string>
+    <string name="casa_brilho_ajuste_cor">Brilho %1$d%% · ◀ ▶ · cor ▲ ▼</string>
+    <string name="casa_cor_ajuste">%1$s · ▲ ▼</string>
+    <string name="casa_cor_quente">Luz quente</string>
+    <string name="casa_cor_neutra">Luz neutra</string>
+    <string name="casa_cor_fria">Luz fria</string>
+    <string name="casa_cor_vermelho">Vermelho</string>
+    <string name="casa_cor_laranja">Laranja</string>
+    <string name="casa_cor_amarelo">Amarelo</string>
+    <string name="casa_cor_verde">Verde</string>
+    <string name="casa_cor_azul">Azul</string>
+    <string name="casa_cor_roxo">Roxo</string>
+    <string name="casa_cor_rosa">Rosa</string>
+</resources>

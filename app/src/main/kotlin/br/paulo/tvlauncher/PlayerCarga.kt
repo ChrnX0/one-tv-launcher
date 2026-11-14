@@ -152,11 +152,38 @@ object PlayerCarga {
     }
 
     /** Há alguma conta Xtream? (só essas têm filmes e séries pelo protocolo.) */
-    fun temVod(ctx: Context): Boolean = PlayerArmazem.fontes(ctx).any { it.xtream != null }
+    fun temVod(ctx: Context): Boolean = PlayerArmazem.fontes(ctx).any { it.xtream != null || vodM3u(ctx, it.id) > 0 }
+
+    // ---------------------------------------------------------------- filmes e séries de lista M3U (ideia 26)
+
+    private const val PREFS_VOD_M3U = "player_vod_m3u"
+    /** Quantos filmes e episódios a lista M3U [fonteId] trazia da última vez que foi lida (barato: a HOME pergunta). */
+    fun vodM3u(ctx: Context, fonteId: String): Int =
+        ctx.getSharedPreferences(PREFS_VOD_M3U, Context.MODE_PRIVATE).getInt(fonteId, 0)
+
+    private fun catalogoM3u(ctx: Context, fonte: FonteTv, soCache: Boolean, forcar: Boolean = false): M3uVod.Catalogo {
+        val canais = if (soCache) {
+            val cache = arquivoCanais(ctx, fonte.id)
+            if (cache.exists()) runCatching { PlayerDados.canaisDeJson(cache.readText(), fonte) }.getOrDefault(emptyList()) else emptyList()
+        } else canaisDaFonte(ctx, fonte, forcar)
+        return M3uVod.montar(canais, fonte.id).also { cat ->
+            if (canais.isNotEmpty()) ctx.getSharedPreferences(PREFS_VOD_M3U, Context.MODE_PRIVATE).edit()
+                .putInt(fonte.id, cat.filmes.size + cat.episodios.values.sumOf { t -> t.values.sumOf { it.size } }).apply()
+        }
+    }
+
+    /**
+     * Endereço (e User-Agent, se a lista pedir) de um filme ou episódio de lista M3U, pelo id estável da entrada.
+     * Vem do cache da lista (que já guarda os endereços dos canais M3U). Fora da thread da tela.
+     */
+    fun urlM3u(ctx: Context, fonteId: String, id: String): Pair<String, String>? {
+        val fonte = PlayerArmazem.fontes(ctx).firstOrNull { it.id == fonteId && it.xtream == null } ?: return null
+        return canaisDaFonte(ctx, fonte).firstOrNull { it.id == id }?.let { it.url to it.agenteUsuario }
+    }
 
     /** Filmes de todas as contas Xtream. Cache de 12 h por conta; sem rede, o cache velho. */
     fun filmes(ctx: Context, forcar: Boolean = false, soCache: Boolean = false): List<Filme> = PlayerArmazem.fontes(ctx).flatMap { fonte ->
-        val conta = fonte.xtream ?: return@flatMap emptyList()
+        val conta = fonte.xtream ?: return@flatMap catalogoM3u(ctx, fonte, soCache, forcar).filmes
         val cache = arquivoFilmes(ctx, fonte.id)
         // soCache: quem chama não pode baixar (ex.: a HOME montando a lista de categorias infantis)
         if (soCache) return@flatMap if (cache.exists()) Vod.filmesDeJson(cache.readText(), fonte.id) else emptyList()
@@ -208,7 +235,7 @@ object PlayerCarga {
 
     /** Séries de todas as contas Xtream. Cache de 12 h por conta; sem rede, o cache velho. */
     fun series(ctx: Context, forcar: Boolean = false, soCache: Boolean = false): List<Serie> = PlayerArmazem.fontes(ctx).flatMap { fonte ->
-        val conta = fonte.xtream ?: return@flatMap emptyList()
+        val conta = fonte.xtream ?: return@flatMap catalogoM3u(ctx, fonte, soCache, forcar).series
         val cache = File(PlayerArmazem.pasta(ctx), "${fonte.id}.series.json")
         if (soCache) return@flatMap if (cache.exists()) Series.seriesDeJson(cache.readText(), fonte.id) else emptyList()
         val fresco = cache.exists() && System.currentTimeMillis() - cache.lastModified() < VALIDADE_LISTA
@@ -225,7 +252,9 @@ object PlayerCarga {
 
     /** Ficha e episódios de uma série. Rede primeiro (episódio novo aparece na hora); sem rede, a do disco (ideia 22). */
     fun fichaSerie(ctx: Context, s: Serie): FichaSerie? {
-        val conta = PlayerArmazem.fontes(ctx).firstOrNull { it.id == s.fonteId }?.xtream ?: return null
+        val fonte = PlayerArmazem.fontes(ctx).firstOrNull { it.id == s.fonteId } ?: return null
+        // Lista M3U (ideia 26): os episódios saem da própria lista; não há sinopse nem elenco.
+        val conta = fonte.xtream ?: return catalogoM3u(ctx, fonte, soCache = false).episodios[s.id]?.let { FichaSerie(temporadas = it) }
         return fichaComDisco(ctx, FimDoVideo.nomeFicha(s.fonteId, true, s.id), { Series.lerFicha(it) }) {
             baixarTexto(Series.urlFicha(conta, s.id), 10L * 1024 * 1024)
         }
@@ -233,7 +262,7 @@ object PlayerCarga {
 
     /** O endereço para tocar (com a senha: não guardar, não logar). */
     fun urlFilme(ctx: Context, f: Filme): String? =
-        PlayerArmazem.fontes(ctx).firstOrNull { it.id == f.fonteId }?.xtream?.let { Vod.urlFilme(it, f) }
+        PlayerArmazem.fontes(ctx).firstOrNull { it.id == f.fonteId }?.xtream?.let { Vod.urlFilme(it, f) } ?: urlM3u(ctx, f.fonteId, f.id)?.first
 
     /** Link do guia de uma conta: o cadastrado, senão o do Xtream, senão o que a lista anuncia. */
     private fun linkGuia(fonte: FonteTv): String? {

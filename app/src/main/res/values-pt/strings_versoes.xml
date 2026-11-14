@@ -42,6 +42,8 @@
         <item>Séries: marque a abertura uma vez no menu ▼ (início e fim) e os próximos episódios oferecem “Pular abertura · OK”</item>
         <item>Configurações reorganizadas por assunto: Tela inicial, TV e filmes, Família, Tela e energia, Casa e automações, Acesso remoto, Sistema; o técnico foi para Avançado</item>
         <item>O card “Ocultos” saiu da tela inicial: mostre de volta em Configurações › Tela inicial › Apps ocultos</item>
+        <item>Filmes e Séries também para quem só tem lista M3U: os filmes e episódios da lista viram catálogo</item>
+        <item>Casa: cor e temperatura da luz (no ajuste do brilho, ▲ ▼ trocam o tom)</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -76,6 +78,7 @@
         <item>Num episódio, marque no ▼ o início e o fim da abertura e abra o próximo episódio</item>
         <item>Abra as Configurações e desça pelo menu de abas</item>
         <item>Oculte um app (segure OK nele), depois abra Configurações › Tela inicial › Apps ocultos e dê OK nele</item>
+        <item>Na Casa, segure OK numa luz colorida e aperte ▲ ▼</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -110,5 +113,6 @@
         <item>Apareceu “Pular abertura · OK” na abertura, e o OK pulou sem pausar?</item>
         <item>Ficou mais fácil achar as coisas, com o técnico só em Avançado?</item>
         <item>Nenhum card “Ocultos” na tela inicial, e o app voltou?</item>
+        <item>A luz mudou de tom?</item>
     </string-array>
 </resources>
