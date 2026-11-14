@@ -23,6 +23,10 @@
         <item>Busca: no fim do resultado, continue a mesma busca no YouTube, na Netflix ou no Prime Video</item>
         <item>TV ao vivo: cada conta pode ter um 2º guia XMLTV, que só preenche os canais que ficaram sem programação</item>
         <item>Os lembretes do “Meu time” agora enxergam os jogos até 7 dias à frente, não só as próximas 14 horas</item>
+        <item>Digitar com acento pelo celular e pelo Claude (ç, ã, é chegam como foram digitados)</item>
+        <item>Wi-Fi das visitas em QR: Configurações &gt; Visitas e rotinas; no modo visita, o Wi-Fi do painel rápido mostra o QR</item>
+        <item>O backup noturno agora confere toda noite se a cópia gravada restauraria</item>
+        <item>Configurações &gt; Sistema &gt; O que é usado: telas e opções por uso, contadas só nesta TV</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -38,6 +42,10 @@
         <item>Abra a Busca, digite o nome de um filme e escolha “Procurar … no YouTube” no fim</item>
         <item>No painel, cadastre uma conta com o link do 2º guia e abra a TV ao vivo</item>
         <item>Com o seu time salvo no “Meu time”, abra a TV ao vivo uma vez e veja os lembretes no painel</item>
+        <item>Digite “ação” na busca da TV pelo painel do celular</item>
+        <item>Preencha Configurações &gt; Visitas e rotinas &gt; Wi-Fi das visitas, ligue o modo visita e aperte Wi-Fi no painel rápido</item>
+        <item>Configurações &gt; Sistema &gt; Backup automático &gt; Fazer agora</item>
+        <item>Abra Configurações &gt; Sistema &gt; O que é usado</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -53,5 +61,9 @@
         <item>O YouTube abriu já com essa busca (ou pelo menos abriu)?</item>
         <item>Os canais que estavam sem programação agora mostram programas, e os outros continuam iguais?</item>
         <item>Aparece na lista um jogo de daqui a mais de um dia?</item>
+        <item>Chegou com o ç e o ã?</item>
+        <item>Apareceu o QR, e a câmera de um celular conectou?</item>
+        <item>O resultado diz “restauração conferida”?</item>
+        <item>Aparecem as telas que você abriu hoje?</item>
     </string-array>
 </resources>

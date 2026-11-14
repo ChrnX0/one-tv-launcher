@@ -26,6 +26,10 @@
         <item>Search: at the end of the results, continue the same search on YouTube, Netflix or Prime Video</item>
         <item>Live TV: each account can have a second XMLTV guide that only fills channels left without a schedule</item>
         <item>“My team” reminders now see matches up to 7 days ahead, not just the next 14 hours</item>
+        <item>Type with accents from your phone and from Claude (ç, ã, é arrive as typed)</item>
+        <item>Guest Wi-Fi as a QR: Settings &gt; Guests and routines; in guest mode, Wi-Fi in the quick panel shows the QR</item>
+        <item>The nightly backup now checks every night that the saved copy would restore</item>
+        <item>Settings &gt; System &gt; What gets used: screens and settings by use, counted only on this TV</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -41,6 +45,10 @@
         <item>busca_outros_apps</item>
         <item>guia_extra</item>
         <item>meu_time_dias</item>
+        <item>digitar_acento</item>
+        <item>wifi_visitas</item>
+        <item>ensaio_backup</item>
+        <item>uso_local</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -56,6 +64,10 @@
         <item>Open Search, type a movie name and pick “Search … on YouTube” at the end</item>
         <item>In the panel, add an account with a second guide link, then open Live TV</item>
         <item>With your team saved in “My team”, open Live TV once, then look at the reminders in the panel</item>
+        <item>Type “ação” in the TV search from the phone panel</item>
+        <item>Set Settings &gt; Guests and routines &gt; Guest Wi-Fi, turn guest mode on and press Wi-Fi in the quick panel</item>
+        <item>Settings &gt; System &gt; Automatic backup &gt; Back up now</item>
+        <item>Open Settings &gt; System &gt; What gets used</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -71,5 +83,9 @@
         <item>Did YouTube open with that search (or at least open)?</item>
         <item>Do channels that had no schedule now show programs, while the others stay the same?</item>
         <item>Does a match more than a day away show up in the list?</item>
+        <item>Did it arrive with the ç and the ã?</item>
+        <item>Did the QR show up, and did a phone camera connect?</item>
+        <item>Does the result say “restore check passed”?</item>
+        <item>Do the screens you opened today show up?</item>
     </string-array>
 </resources>
