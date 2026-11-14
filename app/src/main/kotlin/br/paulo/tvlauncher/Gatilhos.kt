@@ -8,6 +8,7 @@ import android.content.IntentFilter
 import android.media.session.MediaController
 import android.media.session.MediaSessionManager
 import android.media.session.PlaybackState
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
@@ -96,9 +97,12 @@ object Gatilhos {
         iniciado = true
         val app = ctx.applicationContext
         try {
-            app.registerReceiver(object : BroadcastReceiver() {
+            // SCREEN_ON é transmissão protegida (só o sistema envia); NOT_EXPORTED deixa isso explícito onde existe.
+            val tela = object : BroadcastReceiver() {
                 override fun onReceive(c: Context, i: Intent) { if (i.action == Intent.ACTION_SCREEN_ON) disparar(app, Evento.TV_LIGOU) }
-            }, IntentFilter(Intent.ACTION_SCREEN_ON))
+            }
+            if (Build.VERSION.SDK_INT >= 33) app.registerReceiver(tela, IntentFilter(Intent.ACTION_SCREEN_ON), Context.RECEIVER_NOT_EXPORTED)
+            else app.registerReceiver(tela, IntentFilter(Intent.ACTION_SCREEN_ON))
         } catch (e: Exception) { Log.w(TAG, "tela: $e") }
         // Sessões de mídia de outros apps: só com o acesso às notificações (sem ele, SecurityException: fica só o player).
         try {
