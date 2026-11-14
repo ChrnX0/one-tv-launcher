@@ -57,6 +57,9 @@ open class ControleShizukuReceiver : BroadcastReceiver() {
             ServidorShizuku.anotar(ctx, "[controle] recusado (só pelo adb): ${intent.action}")
             return
         }
+        // Ideia 58: o que chegou pelo adb entra no diário da TV (só a ação; os extras podem ter texto pessoal).
+        if (this is ControleShizukuAdbReceiver && intent.action != ESTADO)
+            runCatching { Diario.anotar(ctx, "adb", intent.action.orEmpty().substringAfterLast('.'), "") }
         when (intent.action) {
             INICIAR -> {
                 ligar(ctx)

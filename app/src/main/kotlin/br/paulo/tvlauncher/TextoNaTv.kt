@@ -35,4 +35,11 @@ object TextoNaTv {
      */
     fun juntar(atual: CharSequence?, mostrandoDica: Boolean, novo: String): String =
         Normalizer.normalize((if (mostrandoDica || atual == null) "" else atual.toString()) + novo, Normalizer.Form.NFC)
+
+    /** Ideia 57: espera entre dois avisos "Digitar na TV" do mesmo app (o foco pula entre campos da mesma tela). */
+    const val ESPERA_AVISO_MS = 60_000L
+
+    /** Avisa o celular se o campo é editável e não é o mesmo app avisado há menos de [ESPERA_AVISO_MS]. */
+    fun deveAvisarCelular(editavel: Boolean, pacote: String, ultimoPacote: String, ultimo: Long, agora: Long): Boolean =
+        editavel && pacote.isNotEmpty() && (pacote != ultimoPacote || agora - ultimo >= ESPERA_AVISO_MS)
 }

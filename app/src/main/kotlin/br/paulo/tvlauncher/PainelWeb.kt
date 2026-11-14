@@ -626,6 +626,7 @@ object PainelWeb {
             "/api/tv/reiniciar" -> if (req.metodo == "POST") return reiniciarTv(token, ip)
             "/api/certificado/renovar" -> if (req.metodo == "POST") return renovarCertificado(req, token, ip)
             "/api/recado" -> if (req.metodo == "POST") return recado(req, ip)
+            "/api/compartilhar" -> if (req.metodo == "POST") return compartilhar(req, ip)   // ideia 55
             "/api/rede/historico" -> if (req.metodo == "GET")
                 return json(200, HistoricoRede.json(app, req.consulta["horas"]?.toIntOrNull() ?: 24))
             "/api/tv/autodesligar" -> when (req.metodo) {
@@ -1303,6 +1304,23 @@ object PainelWeb {
         // O texto em si não vai para o registro (pode ser uma senha digitada pelo painel).
         PainelArmazem.registrar(app, ip, "digitar ${t.length} caractere(s)", motivo ?: "ok")
         return if (motivo == null) json(200, JSONObject().put("ok", true)) else erro(409, motivo)
+    }
+
+    /** Ideia 55: o que veio do "compartilhar" do celular ({titulo, texto, url}); decide em Compartilhar.kt. */
+    private fun compartilhar(req: Requisicao, ip: String): Resposta {
+        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
+        val d = Compartilhar.decidir(o.optString("titulo"), o.optString("texto"), o.optString("url"))
+            ?: return erro(400, "nada para mandar à TV")
+        PainelArmazem.registrar(app, ip, "compartilhado: ${d.tipo.name.lowercase()}", "")
+        return when (d.tipo) {
+            Compartilhar.Tipo.RECADO -> {
+                val r = AvisoTv.mostrar(app, "Recado", d.valor, 60, som = true, guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO)
+                if (r == AvisoTv.Resultado.MOSTRADO || r == AvisoTv.Resultado.GUARDADO) json(200, JSONObject().put("ok", true).put("feito", "recado"))
+                else erro(409, "a acessibilidade do launcher está desligada na TV: sem ela o recado não aparece")
+            }
+            else -> PainelControle.abrirLink(app, d.valor)?.let { erro(409, it) }
+                ?: json(200, JSONObject().put("ok", true).put("feito", if (d.tipo == Compartilhar.Tipo.YOUTUBE) "youtube" else "link"))
+        }
     }
 
     /** Recado na TV (05/11/2026): {texto, segundos, som}. Ver Recado.kt e AvisoTv.kt. */

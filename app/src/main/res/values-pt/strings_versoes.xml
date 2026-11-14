@@ -36,6 +36,10 @@
         <item>Wi-Fi das visitas em QR: Configurações &gt; Visitas e rotinas; no modo visita, o Wi-Fi do painel rápido mostra o QR</item>
         <item>O backup noturno agora confere toda noite se a cópia gravada restauraria</item>
         <item>Configurações &gt; Sistema &gt; O que é usado: telas e opções por uso, contadas só nesta TV</item>
+        <item>Compartilhar para a TV pelo celular: vídeo do YouTube abre no YouTube, link abre na TV, texto vira recado (painel instalado como app)</item>
+        <item>Diário da TV: 7 dias do que mexeu nela (painel, Claude, adb, a própria TV), no painel e para o Claude; ele também pode chamar um link seu</item>
+        <item>Campo de texto aberto na TV pode avisar o celular: “Digitar na TV” (avisos do painel)</item>
+        <item>App de IA novo entra sem esperar versão: libere o domínio dele no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -65,6 +69,10 @@
         <item>Preencha Configurações &gt; Visitas e rotinas &gt; Wi-Fi das visitas, ligue o modo visita e aperte Wi-Fi no painel rápido</item>
         <item>Configurações &gt; Sistema &gt; Backup automático &gt; Fazer agora</item>
         <item>Abra Configurações &gt; Sistema &gt; O que é usado</item>
+        <item>No celular, compartilhe um vídeo do YouTube com o “One TV”</item>
+        <item>No painel, Extras &gt; Diário da TV &gt; Ver o diário</item>
+        <item>Ligue o aviso “Campo de texto aberto na TV” e abra a busca do YouTube na TV</item>
+        <item>No painel, Conectar uma IA &gt; Outro app de IA: libere um domínio de teste</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -94,5 +102,9 @@
         <item>Apareceu o QR, e a câmera de um celular conectou?</item>
         <item>O resultado diz “restauração conferida”?</item>
         <item>Aparecem as telas que você abriu hoje?</item>
+        <item>O vídeo abriu no YouTube da TV?</item>
+        <item>Aparecem as ações de hoje?</item>
+        <item>O celular recebeu “Digitar na TV”, e o toque abriu o Controle?</item>
+        <item>Salvou e aparece na lista?</item>
     </string-array>
 </resources>

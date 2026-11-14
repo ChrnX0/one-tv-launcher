@@ -232,6 +232,30 @@ object PainelExtras {
                 PainelArmazem.registrar(app, ip, "recado por link: link novo", "ok")
                 ok(JSONObject().put("token", t))   // só aparece agora
             }
+            // ---- cliente de IA novo sem esperar versão (ideia 61): domínios liberados para o login do MCP
+            get && rota == "mcp/hosts" -> ok(JSONObject().put("hosts", JSONArray(McpServidor.hostsExtras(app).sorted()))
+                .put("fixos", JSONArray(McpAutorizacao.HOSTS_HTTPS.sorted())))
+            post && rota == "mcp/hosts" -> {
+                if (!elevada) return pin()
+                val a = corpo?.optJSONArray("hosts") ?: return erro(400, "faltou a lista")
+                val lista = (0 until a.length()).map { a.optString(it) }
+                if (!McpServidor.definirHostsExtras(app, lista))
+                    return erro(400, "domínio inválido (ex.: app.exemplo.com, sem https:// e sem barra) ou mais de ${McpAutorizacao.MAX_HOSTS_EXTRAS}")
+                PainelArmazem.registrar(app, ip, "IA: domínios liberados", lista.joinToString(", ").take(200))
+                ok(JSONObject().put("hosts", JSONArray(McpServidor.hostsExtras(app).sorted())))
+            }
+            // ---- diário da TV e webhook (ideias 58 e 59, Diario.kt)
+            get && rota == "diario" -> ok(JSONObject().put("itens", Diario.ler(app, 24 * 7))
+                .put("webhook", Diario.webhook(app)).put("origens", JSONArray(Diario.origensWebhook(app).toList()))
+                .put("ultimo", Diario.ultimoWebhook(app)))
+            post && rota == "diario/webhook" -> {
+                if (!elevada) return pin()   // um link novo recebe tudo o que acontece na TV: pede o PIN, como o recado por link
+                val origens = corpo?.optJSONArray("origens")?.let { a -> (0 until a.length()).map { a.optString(it) }.toSet() } ?: emptySet()
+                if (!Diario.definirWebhook(app, corpo?.optString("url").orEmpty(), origens))
+                    return 400 to JSONObject().put("erro", "endereço inválido: https, ou http só dentro de casa (IP da rede, .local, .lan)")
+                PainelArmazem.registrar(app, ip, "webhook do diário", if (Diario.webhook(app).isEmpty()) "desligado" else "definido")
+                ok(JSONObject().put("ok", true))
+            }
             // ---- casa (Home Assistant, CasaHA.kt)
             get && rota == "casa" -> {
                 val o = JSONObject().put("configurado", CasaHA.configurado(app)).put("endereco", CasaHA.endereco(app) ?: JSONObject.NULL)

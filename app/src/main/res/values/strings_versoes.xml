@@ -39,6 +39,10 @@
         <item>Guest Wi-Fi as a QR: Settings &gt; Guests and routines; in guest mode, Wi-Fi in the quick panel shows the QR</item>
         <item>The nightly backup now checks every night that the saved copy would restore</item>
         <item>Settings &gt; System &gt; What gets used: screens and settings by use, counted only on this TV</item>
+        <item>Share to the TV from your phone: YouTube videos open in YouTube, links open on the TV, text becomes a message (web panel installed as an app)</item>
+        <item>TV diary: 7 days of what changed the TV (web panel, Claude, adb, the TV itself), in the web panel and for Claude; it can also call a link of yours</item>
+        <item>When a text box opens on the TV, your phone can get “Type on the TV” (web panel notifications)</item>
+        <item>A new AI app can sign in without waiting for an update: allow its domain in the web panel</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -68,6 +72,10 @@
         <item>wifi_visitas</item>
         <item>ensaio_backup</item>
         <item>uso_local</item>
+        <item>compartilhar</item>
+        <item>diario</item>
+        <item>digitar_celular</item>
+        <item>ia_dominio</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -97,6 +105,10 @@
         <item>Set Settings &gt; Guests and routines &gt; Guest Wi-Fi, turn guest mode on and press Wi-Fi in the quick panel</item>
         <item>Settings &gt; System &gt; Automatic backup &gt; Back up now</item>
         <item>Open Settings &gt; System &gt; What gets used</item>
+        <item>On the phone, share a YouTube video to “One TV”</item>
+        <item>In the web panel, Extras &gt; TV diary &gt; Show the diary</item>
+        <item>Turn on the notification “Text box open on the TV” and open the YouTube search on the TV</item>
+        <item>In the web panel, Connect an AI &gt; Another AI app: allow a test domain</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -126,5 +138,9 @@
         <item>Did the QR show up, and did a phone camera connect?</item>
         <item>Does the result say “restore check passed”?</item>
         <item>Do the screens you opened today show up?</item>
+        <item>Did the video open in YouTube on the TV?</item>
+        <item>Do today’s actions show up?</item>
+        <item>Did the phone get “Type on the TV”, and did tapping it open the Remote tab?</item>
+        <item>Was it saved and listed?</item>
     </string-array>
 </resources>

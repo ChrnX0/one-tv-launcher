@@ -20,4 +20,7 @@
     <string name="l51_uso_opcao">opção</string>
     <string name="l51_uso_linha">%1$s (%2$s): %3$d vezes, última há %4$d dias</string>
     <string name="l51_uso_zerar">Zerar</string>
+    <!-- 57: teclado do celular chamado pela TV -->
+    <string name="l51_digitar_titulo">Digitar na TV</string>
+    <string name="l51_digitar_texto">Tem um campo de texto aberto em %1$s. Toque para digitar daqui.</string>
 </resources>

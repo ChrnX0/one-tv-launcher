@@ -43,14 +43,18 @@ self.addEventListener('push', (ev) => {
     badge: '/icone-192.png',
     tag: d.tipo || 'tv',          // o mesmo tipo troca a notificação anterior em vez de empilhar
     renotify: true,
-    data: { url: '/' },
+    data: { url: d.tipo === 'DIGITAR' ? '/#controle' : '/' },   // ideia 57: "Digitar na TV" abre o Controle
   }));
 });
 
 self.addEventListener('notificationclick', (ev) => {
   ev.notification.close();
+  const url = (ev.notification.data && ev.notification.data.url) || '/';
   ev.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((abas) => {
-    for (const a of abas) if ('focus' in a) return a.focus();
-    return self.clients.openWindow('/');
+    for (const a of abas) if ('focus' in a) {
+      if (url !== '/' && 'navigate' in a) return a.navigate(url).then((c) => c && c.focus());
+      return a.focus();
+    }
+    return self.clients.openWindow(url);
   }));
 });

@@ -119,6 +119,7 @@ $('formEntrar').addEventListener('submit', async (ev) => {
     await chamar('POST', '/api/entrar', { pin });
     mostrar($('avisoEntrar'), '');
     await abrirPainel();
+    enviarCompartilhado();   // ideia 55: o compartilhar chegou antes do login
   } catch (e) {
     let msg = textoErro(e);
     if (e.dados && e.dados.restantes) msg += ` (mais ${e.dados.restantes} tentativa(s) antes de bloquear)`;
@@ -2187,12 +2188,30 @@ window.addEventListener('hashchange', () => {
   else if (!$('telaPainel').hidden && location.hash === '') mudarAba('inicio', false);
 });
 
+/**
+ * Ideia 55: "Enviar para a TV" pelo compartilhar do celular (manifest.webmanifest, share_target). O Chrome abre
+ * "/?titulo=…&texto=…&url=…"; com o painel aberto, confirma e manda para /api/compartilhar (vídeo do YouTube abre no
+ * YouTube da TV, outro link abre na TV, texto vira recado). A barra de endereço é limpa para não reenviar ao recarregar.
+ */
+async function enviarCompartilhado() {
+  const q = new URLSearchParams(location.search);
+  const dados = { titulo: q.get('titulo') || '', texto: q.get('texto') || '', url: q.get('url') || '' };
+  if (!dados.titulo && !dados.texto && !dados.url) return;
+  history.replaceState(null, '', '/' + location.hash);
+  const resumo = (dados.url || dados.texto || dados.titulo).slice(0, 160);
+  const ok = await confirmar('Mandar para a TV?', resumo, 'Mandar', async () => {
+    const r = await chamar('POST', '/api/compartilhar', dados);
+    aviso(r.feito === 'recado' ? 'Recado na TV.' : (r.feito === 'youtube' ? 'Abrindo no YouTube da TV.' : 'Abrindo na TV.'), 'ok');
+  }, false);
+  return ok;
+}
+
 (async () => {
   const qr = pegarCodigoQr();
   if (qr && await entrarPeloQr(qr)) return;
   try {
     const e = await chamar('GET', '/api/estado');
-    if (e.logado) { await abrirPainel(); if (qr) irPara(qr.ir); } else mostrarEntrar();
+    if (e.logado) { await abrirPainel(); if (qr) irPara(qr.ir); enviarCompartilhado(); } else mostrarEntrar();
   } catch (e) {
     mostrarEntrar();
   }

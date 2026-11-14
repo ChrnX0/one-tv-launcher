@@ -20,4 +20,7 @@
     <string name="l51_uso_opcao">setting</string>
     <string name="l51_uso_linha">%1$s (%2$s): %3$d times, last %4$d days ago</string>
     <string name="l51_uso_zerar">Reset</string>
+    <!-- 57: phone keyboard called by the TV -->
+    <string name="l51_digitar_titulo">Type on the TV</string>
+    <string name="l51_digitar_texto">A text box is open in %1$s. Tap to type from here.</string>
 </resources>
