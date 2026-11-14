@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Inside Movies (idea 23, 14/11/2026): combined filter, collections by name and a random pick. -->
+<resources>
+    <string name="filmes_filtro">Filter</string>
+    <string name="filmes_filtro_titulo">Filter movies</string>
+    <string name="filmes_filtro_cabecalho">%1$s · FILTER: %2$s</string>
+    <string name="filmes_filtro_genero">Genre: %1$s</string>
+    <string name="filmes_filtro_epoca">Period: %1$s</string>
+    <string name="filmes_filtro_nota">Minimum rating: %1$s</string>
+    <string name="filmes_filtro_nao_vistos">Only unwatched: %1$s</string>
+    <string name="filmes_filtro_limpar">Clear filter</string>
+    <string name="filmes_filtro_qualquer">Any</string>
+    <string name="filmes_filtro_sim">Yes</string>
+    <string name="filmes_filtro_nao">No</string>
+    <string name="filmes_filtro_decada">%1$ds</string>
+    <string name="filmes_filtro_nota_min">%1$d+</string>
+    <string name="filmes_filtro_nao_vistos_curto">unwatched</string>
+    <string name="filmes_filtro_sem_genero">No category of this list names a genre</string>
+    <string name="filmes_filtro_vazio">No movie matches this filter in this category</string>
+    <string name="filmes_sorteio">Surprise me</string>
+    <string name="filmes_sorteio_vazio">No movie to pick from here</string>
+    <string name="filmes_colecao">Collection of this movie</string>
+    <string name="filmes_colecao_cat">Collection: %1$s</string>
+    <string name="genero_acao">Action</string>
+    <string name="genero_aventura">Adventure</string>
+    <string name="genero_comedia">Comedy</string>
+    <string name="genero_drama">Drama</string>
+    <string name="genero_terror">Horror</string>
+    <string name="genero_suspense">Thriller</string>
+    <string name="genero_romance">Romance</string>
+    <string name="genero_ficcao">Sci-fi</string>
+    <string name="genero_fantasia">Fantasy</string>
+    <string name="genero_animacao">Animation</string>
+    <string name="genero_infantil">Kids and family</string>
+    <string name="genero_documentario">Documentary</string>
+    <string name="genero_crime">Crime</string>
+    <string name="genero_guerra">War</string>
+    <string name="genero_faroeste">Western</string>
+    <string name="genero_musical">Musical</string>
+</resources>

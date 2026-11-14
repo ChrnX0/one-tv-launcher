@@ -40,18 +40,18 @@ class PlayerGradeView(
 
     private val d = resources.displayMetrics.density
     private val hora = SimpleDateFormat("HH:mm", Locale.getDefault())
-    private val papel = 0xFFF5F3EE.toInt()
-    private val suave = 0xB3F5F3EE.toInt()
+    private val papel = Estilo.TEXTO       // cores do sistema de design (Estilo), como na lista de canais (ideia 17)
+    private val suave = Estilo.TEXTO_2
     private val ambar = Estilo.ATENCAO
-    private val coral = 0xFFFF5A4E.toInt()
+    private val agoraCor = Estilo.ERRO     // a linha do "agora" no vermelho do "ao vivo"
 
     private val pTexto = TextPaint(Paint.ANTI_ALIAS_FLAG).apply { color = papel; textSize = 16f * d; typeface = Fontes.manrope(500) }   // 14 -> 16 (13/11/2026: letra maior em Filmes, Séries e TV)
     private val pPequeno = TextPaint(Paint.ANTI_ALIAS_FLAG).apply { color = suave; textSize = Estilo.Leitura.CONTAGEM * d }
     private val pTitulo = TextPaint(Paint.ANTI_ALIAS_FLAG).apply { color = papel; textSize = Estilo.Leitura.PROGRAMA * d; typeface = Fontes.manrope(500) }
-    private val pRotulo = TextPaint(Paint.ANTI_ALIAS_FLAG).apply { color = 0x99F5F3EE.toInt(); textSize = Estilo.Leitura.ROTULO * d; typeface = Fontes.manrope(600); letterSpacing = 0.06f }
+    private val pRotulo = TextPaint(Paint.ANTI_ALIAS_FLAG).apply { color = Estilo.TEXTO_3; textSize = Estilo.Leitura.ROTULO * d; typeface = Fontes.manrope(600); letterSpacing = 0.06f }
     private val pBloco = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val pBorda = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE; strokeWidth = 2f * d; color = papel }
-    private val pLinha = Paint().apply { color = coral; strokeWidth = 2f * d }
+    private val pBorda = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE; strokeWidth = 2f * d; color = Estilo.FOCO }
+    private val pLinha = Paint().apply { color = agoraCor; strokeWidth = 2f * d }
     private val r = RectF()
     private val pMarca = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Estilo.ATENCAO }
     /** Lembretes marcados ("canalId|início"), lidos do disco ao abrir a grade. */
@@ -234,9 +234,9 @@ class PlayerGradeView(
                 r.set(xa, y0, xb, y1)
                 val noAr = agora >= p.inicio && agora < p.fim
                 pBloco.color = when {
-                    i == linha && p === focado -> 0x33F5F3EE
-                    noAr -> 0x1FF5F3EE
-                    else -> 0x12F5F3EE
+                    i == linha && p === focado -> Estilo.alfa(Estilo.TEXTO, 0x33)
+                    noAr -> Estilo.SUPERFICIE_ALTA
+                    else -> Estilo.SUPERFICIE
                 }
                 c.drawRoundRect(r, 8f * d, 8f * d, pBloco)
                 if (i == linha && p === focado) c.drawRoundRect(r, 8f * d, 8f * d, pBorda)
@@ -259,7 +259,7 @@ class PlayerGradeView(
         // Detalhe do programa em foco (embaixo).
         val yD = height - margem / 2 - alturaDetalhe
         r.set(esquerda, yD, direita, height - margem / 2)
-        pBloco.color = 0xCC0B0F17.toInt()
+        pBloco.color = Estilo.alfa(Estilo.FUNDO, 0xCC)
         c.drawRoundRect(r, 14f * d, 14f * d, pBloco)
         val canal = canais.getOrNull(linha) ?: return
         val xt = esquerda + 18f * d

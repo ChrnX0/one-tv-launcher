@@ -1249,7 +1249,7 @@ class MainActivity : Activity() {
         val pos = posicoesHome[f.chave]?.takeIf { it.duracao > 0 }
         val sub = when {
             serie -> getString(R.string.home_dest_serie, f.episodio)
-            pos != null -> getString(R.string.home_dest_filme, BarraTempo.duracao((pos.duracao - pos.ms).coerceAtLeast(0)))
+            pos != null -> getString(R.string.home_dest_filme)   // o "faltam" já vai na linha de baixo
             else -> getString(R.string.home_dest_filme_ultimo)
         }
         val meta = android.text.SpannableStringBuilder()

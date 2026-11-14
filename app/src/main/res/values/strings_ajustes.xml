@@ -65,4 +65,10 @@
     <string name="sug_nunca">Don\'t suggest again</string>
     <string name="sug_feito_titulo">Done</string>
     <string name="sug_feito">To change it later: Settings › Screen and power</string>
+    <!-- Ideia 47: tamanho do texto -->
+    <string name="tt_titulo">Text size</string>
+    <string name="tt_det">On every launcher screen. Movies, series and live TV were already larger and grow along</string>
+    <string name="tt_normal">Normal</string>
+    <string name="tt_grande">Large</string>
+    <string name="tt_maior">Larger</string>
 </resources>
