@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Thread "Organizar Configurações e painel rápido" (14/11/2026): ideias 42, 43, 44, 46, 47 e 48. -->
+<resources>
+    <!-- Ideia 46: Extras dentro das abas -->
+    <string name="cfg_extras_secao">More options</string>
+    <!-- Ideia 43: QR that opens the right page of the web panel -->
+    <string name="qrd_fotos">Screensaver photos from your phone</string>
+    <string name="qrd_fotos_det">Shows a code: the phone opens the panel straight on the photos page</string>
+    <string name="qrd_mural">Family board from your phone</string>
+    <string name="qrd_mural_det">Shopping list, pinned notes and birthdays on the screensaver</string>
+    <string name="qrd_cenas">Scenes from your phone</string>
+    <string name="qrd_cenas_det">Create and test scenes in the web panel</string>
+    <string name="qrd_casa">Home Assistant from your phone</string>
+    <string name="qrd_casa_det">Address and token of your Home Assistant, in the web panel</string>
+    <string name="qrd_time">My team and reminders from your phone</string>
+    <string name="qrd_time_det">Words that turn guide programs into reminders</string>
+    <string name="qrd_roteador">Router from your phone</string>
+    <string name="qrd_roteador_det">UniFi router address and API key, in the web panel</string>
+    <!-- Ideia 42: blocos do painel rápido -->
+    <string name="pb_titulo">Quick panel tiles</string>
+    <string name="pb_subtitulo">OK shows or hides · ◀ ▶ change the order</string>
+    <string name="pb_cfg_det">Choose which tiles the quick panel (hold HOME) shows, and in what order</string>
+    <string name="pb_mostrado">shown</string>
+    <string name="pb_escondido">hidden</string>
+    <string name="pb_padrao">Back to the standard tiles</string>
+    <string name="pb_wifi">Wi-Fi</string>
+    <string name="pb_bluetooth">Bluetooth</string>
+    <string name="pb_filtro">Night filter</string>
+    <string name="pb_dns">DNS</string>
+</resources>

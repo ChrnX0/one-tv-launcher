@@ -516,6 +516,7 @@ class ConfigLauncherActivity : Activity() {
             c.addView(linha(getString(R.string.cl_definir_pin), getString(R.string.cl_definir_pin_det, PinSeguro.MIN_DIGITOS, PinSeguro.MAX_DIGITOS), seta = true) {
                 definirNovoPin(null) { recarregarAba() }
             }, lp())
+            extrasDaAba(c, ExtrasAbas.Aba.PARENTAL)
             return
         }
         val r = PlayerArmazem.parental(this)
@@ -581,6 +582,7 @@ class ConfigLauncherActivity : Activity() {
             valor = getString(if (PainelArmazem.temPinFamilia(this)) R.string.cl_definido else R.string.cl_nao_definido)) {
             pedirPinParental(getString(R.string.cl_pin_painel)) { pinFamilia() }
         }, lp())
+        extrasDaAba(c, ExtrasAbas.Aba.PARENTAL)
         secao(c, getString(R.string.cl_como_funciona))
         c.addView(cartao().apply {
             addView(valor(getString(R.string.cl_cf_bloqueado), getString(R.string.cl_cf_bloqueado_det)))
@@ -699,6 +701,10 @@ class ConfigLauncherActivity : Activity() {
             linhaPilhas.ligado(Organizacao.pilhasAutomaticas(this))
         }
         c.addView(linhaPilhas, lp())
+        // Ideia 42: quais blocos o painel rápido (HOME segurado) mostra, e em que ordem.
+        c.addView(linha(getString(R.string.pb_titulo), getString(R.string.pb_cfg_det), seta = true) {
+            startActivity(Intent(this, PainelBlocosActivity::class.java))
+        }, lp())
 
         secao(c, getString(R.string.cl_clima))
         lateinit var linhaEndereco: LinhaCfg
@@ -723,6 +729,7 @@ class ConfigLauncherActivity : Activity() {
             linhaChuva.ligado(AvisoChuva.ligado(this))
         }
         c.addView(linhaChuva, lp())
+        extrasDaAba(c, ExtrasAbas.Aba.APARENCIA)
     }
 
     // ================================================================ aba: Tela e energia
@@ -764,6 +771,9 @@ class ConfigLauncherActivity : Activity() {
             linhaDesligar.valor(rotuloDesligar(proximo))
         }
         c.addView(linhaDesligar, lp())
+        linhaQr(c, DestinoPainel.FOTOS, R.string.qrd_fotos, R.string.qrd_fotos_det)
+        linhaQr(c, DestinoPainel.MURAL, R.string.qrd_mural, R.string.qrd_mural_det)
+        extrasDaAba(c, ExtrasAbas.Aba.ENERGIA)
     }
 
     // ================================================================ aba: Visitas e rotinas
@@ -783,6 +793,10 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linha(getString(R.string.aut_titulo), getString(R.string.aut_cfg_det), seta = true) {
             startActivity(Intent(this, AutomacoesActivity::class.java))
         }, lp())
+        // Ideia 43: o que só se configura pelo painel web, com o QR que abre a página certa no celular.
+        linhaQr(c, DestinoPainel.CENAS, R.string.qrd_cenas, R.string.qrd_cenas_det)
+        linhaQr(c, DestinoPainel.CASA, R.string.qrd_casa, R.string.qrd_casa_det)
+        linhaQr(c, DestinoPainel.TIME, R.string.qrd_time, R.string.qrd_time_det)
         secao(c, getString(R.string.cl_apps_visita))
         val listaVisita = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false }
         c.addView(listaVisita, LinearLayout.LayoutParams(MATCH, WRAP))
@@ -865,6 +879,8 @@ class ConfigLauncherActivity : Activity() {
             }
         }
         c.addView(linhaVelocidade, lp())
+        linhaQr(c, DestinoPainel.ROTEADOR, R.string.qrd_roteador, R.string.qrd_roteador_det)
+        extrasDaAba(c, ExtrasAbas.Aba.REDE)
     }
 
     // ================================================================ aba: Acesso remoto
@@ -916,13 +932,7 @@ class ConfigLauncherActivity : Activity() {
         // Entrar pelo celular sem digitar o PIN (EntrarPeloQrActivity). Com alguma trava para criança ligada (controle
         // parental, hora de dormir, PIN para mexer na HOME), quem está na TV pode ser uma criança: pede o PIN antes.
         c.addView(linha(getString(R.string.cl_entrar_celular), getString(R.string.cl_entrar_celular_det), seta = true) {
-            val abrir = { startActivity(android.content.Intent(this, EntrarPeloQrActivity::class.java)) }
-            when {
-                !PainelArmazem.podeLigar(this) || !PainelWeb.ligado() -> aviso(getString(R.string.cl_ligue_painel))
-                PlayerArmazem.parental(this).ligado || Extras.ligado(this, Extras.Chave.HORA_DORMIR) ||
-                    Extras.ligado(this, Extras.Chave.PIN_HOME) -> pedirPinParental(getString(R.string.cl_pin_painel), abrir)
-                else -> abrir()
-            }
+            abrirQrPainel(null, null)
         }, lp())
         val acessos = PainelArmazem.resumoRegistro(this, 3)
         c.addView(info(getString(R.string.cl_ultimos), if (acessos.isEmpty()) getString(R.string.cl_nenhum_ainda) else acessos.joinToString("\n"), maxLinhas = 4), lp())
@@ -968,6 +978,60 @@ class ConfigLauncherActivity : Activity() {
             linhaLogins.valor(getString(R.string.cl_ativos, McpServidor.logins(this))); linhaLogins.detalhe(getString(R.string.cl_revogados))
         }
         c.addView(linhaLogins, lp())
+        extrasDaAba(c, ExtrasAbas.Aba.REMOTO)
+    }
+
+    // ================================================================ QR que abre o painel na página certa (ideia 43)
+
+    /**
+     * Abre o QR de entrada no painel ([EntrarPeloQrActivity]); com [destino], o celular entra já naquela página.
+     * Com alguma trava para criança ligada (controle parental, hora de dormir, PIN para mexer na HOME), quem está na
+     * TV pode ser uma criança: pede o PIN antes.
+     */
+    private fun abrirQrPainel(destino: DestinoPainel?, titulo: String?) {
+        val abrir = {
+            startActivity(Intent(this, EntrarPeloQrActivity::class.java)
+                .putExtra(EntrarPeloQrActivity.EXTRA_DESTINO, destino?.name).putExtra(EntrarPeloQrActivity.EXTRA_TITULO, titulo))
+        }
+        when {
+            !PainelArmazem.podeLigar(this) || !PainelWeb.ligado() -> aviso(getString(R.string.cl_ligue_painel))
+            PlayerArmazem.parental(this).ligado || Extras.ligado(this, Extras.Chave.HORA_DORMIR) ||
+                Extras.ligado(this, Extras.Chave.PIN_HOME) -> pedirPinParental(getString(R.string.cl_pin_painel), abrir)
+            else -> abrir()
+        }
+    }
+
+    /** Linha "<algo> pelo celular": mostra o QR que entra no painel já em [destino]. */
+    private fun linhaQr(c: LinearLayout, destino: DestinoPainel, titulo: Int, detalhe: Int) {
+        val t = getString(titulo)
+        c.addView(linha(t, getString(detalhe), seta = true) { abrirQrPainel(destino, t) }, lp())
+    }
+
+    // ================================================================ chaves de Extras dentro das abas (ideia 46)
+
+    /**
+     * As chaves de [Extras] que moram em [aba] ([ExtrasAbas]), numa seção "Mais opções" no fim dela. As que o painel
+     * protege pedem o PIN aqui também (o mesmo PIN, com as mesmas tentativas, do controle parental).
+     */
+    private fun extrasDaAba(c: LinearLayout, aba: ExtrasAbas.Aba) {
+        val porNome = Extras.Chave.values().associateBy { it.name }
+        val chaves = ExtrasAbas.daAba(aba, porNome.keys).mapNotNull { porNome[it] }
+        if (chaves.isEmpty()) return
+        secao(c, getString(R.string.cfg_extras_secao))
+        for (k in chaves) {
+            lateinit var l: LinhaCfg
+            l = linha(ExtrasTv.rotulo(this, k), "", chave = Extras.ligado(this, k)) {
+                val mudar = { ExtrasTv.alternar(this, k); l.ligado(Extras.ligado(this, k)) }
+                val titulo = getString(if (k == Extras.Chave.HORA_DORMIR) R.string.dormir_pin else R.string.player_pin_titulo)
+                when {
+                    !Extras.precisaPinNaTv(k, Extras.ligado(this, k), PainelArmazem.temPin(this)) -> mudar()
+                    // Chaves de família (ideia 34): o PIN das crianças também vale, como na tela Extras antes.
+                    k in Extras.CHAVES_FAMILIA -> PinTv.pedir(this, titulo, familia = true) { certo -> if (certo) mudar() }
+                    else -> pedirPinParental(titulo, mudar)
+                }
+            }
+            c.addView(l, lp())
+        }
     }
 
     // ================================================================ aba: Sistema
@@ -981,6 +1045,7 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linha(getString(R.string.extras_titulo), getString(R.string.extras_cfg_det), seta = true) {
             startActivity(Intent(this, ExtrasActivity::class.java))
         }, lp())
+        extrasDaAba(c, ExtrasAbas.Aba.SISTEMA)
         // Backup noturno cifrado (BackupNoturno.kt): as opções ficam numa tela própria; ao voltar, o resumo se atualiza.
         c.addView(linha(getString(R.string.bkn_titulo), BackupNoturno.resumo(this), seta = true) {
             reconstruirAoVoltar = true

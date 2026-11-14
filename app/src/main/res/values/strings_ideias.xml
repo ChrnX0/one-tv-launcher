@@ -6,7 +6,7 @@
     <string name="teclas_vazio">No keys yet.</string>
     <string name="trava_home_titulo">PIN to change the HOME</string>
     <string name="trava_home_errado">Wrong PIN</string>
-    <string name="extras_cfg_det">Night filter, update window, key tester, calibration and more</string>
+    <string name="extras_cfg_det">Night filter and bedtime hours, key tester, calibration and other tools</string>
     <string name="extras_titulo">Extras</string>
     <string name="extras_ligado">on</string>
     <string name="extras_desligado">off</string>

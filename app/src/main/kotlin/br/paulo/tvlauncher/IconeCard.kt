@@ -59,6 +59,9 @@ class IconeCard(ctx: Context, private val tipo: String) : View(ctx) {
             "cena" -> cena(c, w, h)
             "rotina" -> rotina(c, w, h)
             "chave" -> chave(c, w, h)
+            // Painel rápido (14/11/2026, ideia 42): filtro noturno e DNS.
+            "filtro" -> filtro(c, w, h)
+            "dns" -> escudo(c, w, h)
             "pausar" -> { c.drawLine(w * 0.36f, h * 0.22f, w * 0.36f, h * 0.78f, tinta); c.drawLine(w * 0.64f, h * 0.22f, w * 0.64f, h * 0.78f, tinta) }
             "tocar" -> { caminho.reset(); caminho.moveTo(w * 0.30f, h * 0.18f); caminho.lineTo(w * 0.82f, h * 0.5f); caminho.lineTo(w * 0.30f, h * 0.82f); caminho.close(); c.drawPath(caminho, tinta) }
             "proxima" -> {
@@ -288,5 +291,23 @@ class IconeCard(ctx: Context, private val tipo: String) : View(ctx) {
         caixa.set(w * 0.04f, h * 0.28f, w * 0.96f, h * 0.72f)
         c.drawRoundRect(caixa, h * 0.22f, h * 0.22f, tinta)
         c.drawCircle(w * 0.70f, h * 0.5f, h * 0.12f, preenchimento)
+    }
+
+    /** Filtro noturno: um círculo com a metade de baixo cheia (a tela "esquentada"). */
+    private fun filtro(c: Canvas, w: Float, h: Float) {
+        c.drawCircle(w * 0.5f, h * 0.5f, w * 0.40f, tinta)
+        caixa.set(w * 0.10f, h * 0.10f, w * 0.90f, h * 0.90f)
+        c.drawArc(caixa, 0f, 180f, true, preenchimento)
+    }
+
+    /** DNS (o filtro de sites da casa): um escudo. */
+    private fun escudo(c: Canvas, w: Float, h: Float) {
+        caminho.reset()
+        caminho.moveTo(w * 0.5f, h * 0.06f)
+        caminho.lineTo(w * 0.86f, h * 0.20f)
+        caminho.quadTo(w * 0.86f, h * 0.70f, w * 0.5f, h * 0.94f)
+        caminho.quadTo(w * 0.14f, h * 0.70f, w * 0.14f, h * 0.20f)
+        caminho.close()
+        c.drawPath(caminho, tinta)
     }
 }
