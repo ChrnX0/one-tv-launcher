@@ -91,4 +91,30 @@ class LgNetcastTest {
         assertFalse(LgNetcast.agenteUdap(LgNetcast.CAMINHO_COMANDO))
         assertFalse(LgNetcast.agenteUdap(LgNetcast.CAMINHO_VOLUME))
     }
+
+    @Test fun alarmeNuncaPassaDoTeto() {
+        assertEquals(30, LgNetcast.alvoAlarme(8, 100, 50))     // o caso de 14/11: pedia 50, agora para em 30
+        assertEquals(30, LgNetcast.alvoAlarme(0, 100, 100))
+        assertEquals(20, LgNetcast.alvoAlarme(5, 100, 20))
+        assertNull(LgNetcast.alvoAlarme(30, 100, 70))          // já está no teto: não mexe
+        assertNull(LgNetcast.alvoAlarme(66, 100, 50))          // nunca abaixa
+        assertNull(LgNetcast.alvoAlarme(8, 100, 0))            // mínimo desligado
+    }
+
+    @Test fun devolverDepoisDoAlarme() {
+        assertEquals(8, LgNetcast.devolverAlarme(30, 30, 8))   // ninguém mexeu: volta
+        assertEquals(8, LgNetcast.devolverAlarme(32, 30, 8))   // a 2 pontos: ainda conta como nosso
+        assertEquals(8, LgNetcast.devolverAlarme(66, 30, 8))   // acima do teto: sempre volta (o caso que acordou a casa)
+        assertNull(LgNetcast.devolverAlarme(20, 30, 8))        // alguém baixou para 20: respeita
+        assertNull(LgNetcast.devolverAlarme(8, 30, 8))         // já está como era
+        assertNull(LgNetcast.devolverAlarme(30, null, 8))      // não fomos nós que subimos
+        assertNull(LgNetcast.devolverAlarme(30, 30, -1))       // não sabemos o de antes
+    }
+
+    @Test fun rodadaTemPoucasTeclas() {
+        assertEquals(3, LgNetcast.rodada(8, 30))
+        assertEquals(-3, LgNetcast.rodada(66, 8))
+        assertEquals(1, LgNetcast.rodada(29, 30))
+        assertEquals(0, LgNetcast.rodada(30, 30))
+    }
 }

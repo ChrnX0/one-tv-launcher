@@ -181,7 +181,8 @@ object AlarmeGarantia {
         val pct = volumeMinimo(ctx)
         if (pct <= 0) return null
         // LG pareada (ideia 49): o volume do Android não chega na TV pelo HDMI; sobe o da própria LG, em segundo plano.
-        val lg = if (VolumeLg.configurado(ctx)) VolumeLg.Mudanca().also { m ->
+        // Só com a chave própria ligada (desligada por padrão: ver VolumeLg.alarmeLigado) e com teto de 30 na LG.
+        val lg = if (VolumeLg.configurado(ctx) && VolumeLg.alarmeLigado(ctx)) VolumeLg.Mudanca().also { m ->
             val app = ctx.applicationContext
             Fundo.rodar("Alarme-lg") { VolumeLg.subirAlarme(app, pct, m) }
         } else null
