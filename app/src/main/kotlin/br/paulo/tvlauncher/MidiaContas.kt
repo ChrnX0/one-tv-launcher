@@ -19,6 +19,8 @@ import java.util.Locale
  *    IP com porta opcional; pasta = onde começa (NFS: o caminho exportado, ex. /volume1/video). FTPS confere o
  *    certificado como qualquer https. SFTP guarda em [token] a impressão da chave do servidor na 1ª conexão e recusa
  *    se ela mudar depois (é o "known_hosts" do ssh). NFS não tem senha (o servidor confia no IP da TV).
+ *  - [ONEDRIVE], [DROPBOX] (14/11/2026): nuvem como pasta (Nuvem.kt). servidor = o nome do serviço (só para mostrar),
+ *    usuario = e-mail/nome da conta, token = token de renovação, usuarioId = o id do app que o dono criou no serviço.
  *
  * Só texto e regras aqui (testes em MidiaContasTest). Quem grava cifrado é o MidiaArmazem.
  */
@@ -45,7 +47,9 @@ data class ContaMidia(
         const val FTPS = "ftps"
         const val SFTP = "sftp"
         const val NFS = "nfs"
-        val TIPOS = setOf(SMB, JELLYFIN, EMBY, PLEX, WEBDAV, LINK, FTP, FTPS, SFTP, NFS)
+        const val ONEDRIVE = "onedrive"
+        const val DROPBOX = "dropbox"
+        val TIPOS = setOf(SMB, JELLYFIN, EMBY, PLEX, WEBDAV, LINK, FTP, FTPS, SFTP, NFS, ONEDRIVE, DROPBOX)
     }
 
     /** Jellyfin e Emby falam a mesma língua (o Jellyfin nasceu do Emby): o mesmo código serve aos dois. */

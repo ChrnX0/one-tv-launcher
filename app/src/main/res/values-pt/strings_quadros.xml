@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ideia 86 (14/11/2026, TaxaQuadros.kt): filme na taxa de quadros dele. -->
+    <string name="quadros_opcao">Filme na taxa de quadros dele (24 Hz)</string>
+    <string name="quadros_det">A TV troca para 24 Hz enquanto o filme toca e a imagem não treme em movimentos de câmera. A tela pisca preta 1 a 2 s no começo. Não vale para a TV ao vivo.</string>
+    <string name="quadros_ligado">Taxa de quadros do filme ligada: vale a partir do próximo vídeo</string>
+    <string name="quadros_desligado">Taxa de quadros do filme desligada</string>
+</resources>

@@ -928,6 +928,7 @@ function desenharConfig(r) {
   $('cfgPilhas').checked = r.pilhas;
   $('cfgChuva').checked = r.avisoChuva;
   $('cfgAudio').value = r.audio;
+  $('cfgQuadros').checked = r.taxaQuadros !== false;
   $('cfgProtetor').value = String(r.protetorMs);
   $('cfgBarra').value = r.barraProtetor;
   $('cfgParental').checked = r.parental;
@@ -962,6 +963,7 @@ function desenharConfig(r) {
 async function carregarConfig() {
   mostrar($('statusConfig'), '');
   try { desenharConfig(await chamar('GET', '/api/config')); } catch (e) { mostrar($('statusConfig'), textoErro(e)); }
+  carregarServicos();
 }
 
 /** Grava um campo. Se a TV pedir o PIN, o confirmar() mostra o campo do PIN; cancelado, a tela volta ao estado gravado. */
@@ -982,6 +984,7 @@ $('cfgTema').addEventListener('change', (e) => gravarConfig({ campo: 'tema', val
 $('cfgTamanho').addEventListener('change', (e) => gravarConfig({ campo: 'tamanhoTexto', valor: Number(e.target.value) }, 'Tamanho do texto gravado (vale ao abrir cada tela).'));
 $('cfgPilhas').addEventListener('change', (e) => gravarConfig({ campo: 'pilhas', valor: e.target.checked }, e.target.checked ? 'Pilhas automáticas ligadas.' : 'Pilhas automáticas desligadas.'));
 $('cfgChuva').addEventListener('change', (e) => gravarConfig({ campo: 'avisoChuva', valor: e.target.checked }, e.target.checked ? 'Aviso de chuva ligado.' : 'Aviso de chuva desligado.'));
+$('cfgQuadros').addEventListener('change', (e) => gravarConfig({ campo: 'taxaQuadros', valor: e.target.checked }, e.target.checked ? 'Taxa de quadros do filme ligada.' : 'Taxa de quadros do filme desligada.'));
 $('cfgAudio').addEventListener('change', (e) => gravarConfig({ campo: 'audio', valor: e.target.value }, 'Áudio preferido gravado.'));
 $('cfgProtetor').addEventListener('change', (e) => gravarConfig({ campo: 'protetorMs', valor: Number(e.target.value) }, 'Tempo do protetor gravado.'));
 $('cfgBarra').addEventListener('change', (e) => gravarConfig({ campo: 'barraProtetor', valor: e.target.value }, 'Linha do protetor gravada.'));
@@ -1004,6 +1007,94 @@ $('btnPinPainel').addEventListener('click', async () => {
     $('cfgPinNovo').value = ''; $('cfgPinNovo2').value = '';
   }
 });
+
+// ---------- Serviços de filmes e séries (PainelServicos.kt): os mesmos logins da tela da TV ----------
+
+let timerServicos = null;
+const SITUACAO_SERVICO = { desligado: 'desligado', entrando: 'entrando…', conectado: 'conectado' };
+
+function desenharServicos(r) {
+  clearTimeout(timerServicos);
+  const caixa = $('cfgServicos');
+  caixa.replaceChildren();
+  $('cfgServicosTmdb').textContent = r.servicos.some((s) => s.id === 'tmdb') ? r.atribuicaoTmdb : '';
+  if (r.semChaves) { mostrar($('statusServicos'), 'Esta versão do launcher ainda não tem as chaves destes serviços. Eles aparecem depois da próxima atualização.'); return; }
+  let esperando = false;
+  for (const s of r.servicos) {
+    const bloco = document.createElement('div');
+    bloco.className = 'linha-servico';
+    const topo = document.createElement('p');
+    const nome = document.createElement('strong'); nome.textContent = s.nome;
+    const est = document.createElement('span'); est.className = 'aviso-curto';
+    est.textContent = s.id === 'tmdb' ? ' · ligado' : s.situacao === 'conectado' && s.usuario ? ` · conectado como ${s.usuario}` : ` · ${SITUACAO_SERVICO[s.situacao] || s.situacao}`;
+    topo.append(nome, est);
+    const frase = document.createElement('p'); frase.className = 'aviso-curto'; frase.textContent = s.frase;
+    bloco.append(topo, frase);
+    const botao = (rotulo, fazer, primario = true) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = primario ? 'botao-secundario' : 'link'; b.textContent = rotulo;
+      b.addEventListener('click', fazer); return b;
+    };
+    const agir = async (corpo, titulo, texto, rotulo, ok) => {
+      mostrar($('statusServicos'), '');
+      const resp = await confirmar(titulo, texto, rotulo, () => chamar('POST', '/api/servicos', corpo), false);
+      if (resp) { desenharServicos(resp); if (ok) aviso(ok, 'ok'); }
+    };
+    const sessao = s.sessao;
+    if (s.situacao === 'conectado' && s.id !== 'tmdb') {
+      bloco.append(botao('Sair', () => agir({ acao: 'sair', servico: s.id }, `Sair do ${s.nome}?`,
+        `A TV esquece a conta e para de falar com o ${s.nome}. O que está lá continua lá.`, 'Sair', `${s.nome}: saiu.`), false));
+    } else if (sessao && sessao.estado === 'esperando') {
+      esperando = true;
+      const passo = document.createElement('p');
+      passo.className = 'aviso';
+      const link = document.createElement('a');
+      link.href = sessao.urlDireta; link.target = '_blank'; link.rel = 'noopener'; link.textContent = sessao.url.replace(/^https?:\/\//, '');
+      passo.append('1. Toque em ', link, ` (abre o ${s.nome}). 2. Entre na sua conta e confirme o código:`);
+      const cod = document.createElement('p'); cod.className = 'codigo-grande'; cod.textContent = sessao.codigo;
+      const qr = document.createElement('img'); qr.alt = 'QR code do login'; qr.width = 180; qr.height = 180;
+      qr.src = `/api/servicos/qr?servico=${s.id}&c=${encodeURIComponent(sessao.codigo)}`;
+      const fim = document.createElement('p'); fim.className = 'aviso-curto'; fim.textContent = 'Esta página continua sozinha quando você terminar.';
+      bloco.append(passo, cod, qr, fim, botao('Cancelar', async () => {
+        try { desenharServicos(await chamar('POST', '/api/servicos', { acao: 'cancelar', servico: s.id })); } catch (e) { mostrar($('statusServicos'), textoErro(e)); }
+      }, false));
+    } else if (s.login === 'codigo') {
+      if (sessao && sessao.estado === 'ok') aviso(`${s.nome} conectado${sessao.usuario ? ' como ' + sessao.usuario : ''}.`, 'ok');
+      if (sessao && sessao.estado === 'erro') { const m = document.createElement('p'); m.className = 'aviso'; m.textContent = `Não deu certo: ${sessao.motivo}.`; bloco.append(m); }
+      bloco.append(botao('Entrar', () => agir({ acao: 'entrar', servico: s.id }, `Entrar no ${s.nome}?`,
+        `A TV pede um código ao ${s.nome}. Depois você abre o link, entra na sua conta e confirma o código.`, 'Pedir código')));
+    } else if (s.login === 'chave') {
+      const campo = document.createElement('input');
+      campo.type = 'password'; campo.autocomplete = 'off'; campo.placeholder = 'Chave da API do MDBList'; campo.setAttribute('aria-label', 'Chave da API do MDBList');
+      const ajuda = document.createElement('p'); ajuda.className = 'aviso-curto';
+      const l = document.createElement('a'); l.href = 'https://mdblist.com/preferences/'; l.target = '_blank'; l.rel = 'noopener'; l.textContent = 'mdblist.com/preferences';
+      ajuda.append('Opcional: soma Rotten Tomatoes, Letterboxd e Metacritic à nota do IMDb. 1. Crie uma conta grátis e abra ', l, '. 2. Copie a API Key. 3. Cole aqui e grave: a TV confere na hora.');
+      // Opcional (a nota do IMDb já vem sem conta): 3 passos, sem digitar no controle da TV.
+      const extra = document.createElement('div');
+      bloco.append(extra);
+      extra.append(ajuda, campo, botao('Gravar chave', () => {
+        const chave = campo.value.trim();
+        if (!/^[A-Za-z0-9]{16,64}$/.test(chave)) { mostrar($('statusServicos'), 'A chave do MDBList tem só letras e números.'); return; }
+        agir({ acao: 'chave', servico: s.id, chave }, 'Gravar a chave do MDBList?', 'A TV confere a chave no MDBList antes de gravar.', 'Gravar', 'MDBList conectado.')
+          .then(() => { campo.value = ''; });
+      }));
+    } else if (s.login === 'senha') {
+      const u = document.createElement('input'); u.autocomplete = 'username'; u.placeholder = 'Usuário do OpenSubtitles'; u.setAttribute('aria-label', 'Usuário do OpenSubtitles');
+      const p = document.createElement('input'); p.type = 'password'; p.autocomplete = 'current-password'; p.placeholder = 'Senha'; p.setAttribute('aria-label', 'Senha do OpenSubtitles');
+      bloco.append(u, p, botao('Entrar', () => {
+        if (!u.value.trim() || !p.value) { mostrar($('statusServicos'), 'Digite o usuário e a senha do OpenSubtitles.'); return; }
+        agir({ acao: 'senha', servico: s.id, usuario: u.value.trim(), senha: p.value }, 'Entrar no OpenSubtitles?',
+          'A TV entra na sua conta para conferir e guarda tudo cifrado.', 'Entrar', 'OpenSubtitles conectado.').then(() => { p.value = ''; });
+      }));
+    }
+    caixa.appendChild(bloco);
+  }
+  // Confere a cada 3 s só com a aba à vista, enquanto algum login espera o celular.
+  if (esperando && !$('abaConfig').hidden && document.visibilityState === 'visible') timerServicos = setTimeout(carregarServicos, 3000);
+}
+
+async function carregarServicos() {
+  try { desenharServicos(await chamar('GET', '/api/servicos')); } catch (e) { mostrar($('statusServicos'), textoErro(e)); }
+}
 
 // ---------- saúde (PainelSaude.kt) ----------
 

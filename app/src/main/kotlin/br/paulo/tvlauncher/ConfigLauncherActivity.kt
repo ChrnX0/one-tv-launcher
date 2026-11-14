@@ -306,12 +306,17 @@ class ConfigLauncherActivity : Activity() {
             leitura.execute { IdiomaPlayer.definirPadrao(this, nova) }
         }
         c.addView(linhaAudio)
-        // Legenda da internet: a chave de API e a conta do OpenSubtitles são do dono (o launcher é público, não leva chave).
+        // Serviços de filmes e séries (14/11/2026): Trakt, Simkl, MDBList, TMDB e OpenSubtitles numa tela só. A chave do
+        // OpenSubtitles agora é a do app; a linha antiga (chave do dono) só aparece para quem já tinha cadastrado uma,
+        // enquanto o build não tiver a chave do app.
+        c.addView(linha(getString(R.string.sv_linha), getString(R.string.sv_linha_det), seta = true) {
+            startActivity(Intent(this, ServicosFilmesActivity::class.java))
+        }, lp())
         lateinit var linhaLeg: LinhaCfg
         linhaLeg = linha(getString(R.string.legenda_conta_titulo), getString(R.string.legenda_conta_det), valor = "…") {
             pedirContaLegenda { tem -> linhaLeg.valor(getString(if (tem) R.string.legenda_conta_sim else R.string.legenda_conta_nao)) }
         }
-        c.addView(linhaLeg)
+        if (!ServicosContas.disponivel(ServicosFilmes.Servico.OPENSUBTITLES)) c.addView(linhaLeg)
         // Som e legenda para quem enxerga ou ouve pior (14/11/2026). As mesmas chaves do menu ▼ do player.
         secao(c, getString(R.string.acess_config_titulo))
         val chavesAcess = listOf(PlayerAcessivel.LEGENDA_FUNDO to R.string.acess_legenda_fundo, PlayerAcessivel.LEGENDA_AMARELA to R.string.acess_legenda_amarela) +
@@ -323,6 +328,12 @@ class ConfigLauncherActivity : Activity() {
             }
             c.addView(l)
         }
+        // Ideia 86: filme na taxa de quadros dele (24 Hz), a mesma chave do menu ▼ do player e do painel.
+        lateinit var linhaQuadros: LinhaCfg
+        linhaQuadros = linha(getString(R.string.quadros_opcao), getString(R.string.quadros_det), chave = TaxaQuadros.ligada(this)) {
+            linhaQuadros.ligado(TaxaQuadros.alternar(this))
+        }
+        c.addView(linhaQuadros)
         // Foto da conta Google na bolinha do perfil (FotoPerfil, 13/11/2026): abre a tela do código para o celular.
         secao(c, getString(R.string.fp_secao))
         c.addView(linha(getString(R.string.fp_linha), getString(R.string.fp_linha_det), seta = true) {

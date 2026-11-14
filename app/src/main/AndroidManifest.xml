@@ -272,6 +272,11 @@
             android:name=".FotoPerfilActivity"
             android:exported="false"
             android:label="@string/fp_titulo" />
+        <!-- Serviços de filmes e séries (Trakt, Simkl, MDBList, TMDB, OpenSubtitles): ServicosFilmesActivity.kt -->
+        <activity
+            android:name=".ServicosFilmesActivity"
+            android:exported="false"
+            android:label="@string/sv_titulo" />
         <activity
             android:name=".EntrarPeloQrActivity"
             android:exported="false"

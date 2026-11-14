@@ -21,6 +21,7 @@ data class Filme(
     val ano: Int? = null,
     val extensao: String = "mp4",
     val adicionado: Long = 0, // segundos desde 1970 (quando entrou no servidor)
+    val tmdb: Int? = null,   // id do TMDB, quando a lista manda ("tmdb"/"tmdb_id"; InfoExterna, 14/11/2026)
 ) {
     /** Chave única entre contas, para posição salva e favoritos. */
     val chave: String get() = "$fonteId:f$id"
@@ -36,6 +37,7 @@ data class FichaFilme(
     val lancamento: String = "",
     val fundo: String = "",   // imagem larga (backdrop), se houver
     val cenas: List<String> = emptyList(),   // todas as imagens de cena (backdrop_path), para o card Filmes da HOME
+    val tmdb: Int? = null,   // tmdb_id da ficha do Xtream (InfoExterna)
 )
 
 /** Onde o usuário parou: posição e duração em ms, e quando assistiu (ms desde 1970). */
@@ -135,6 +137,7 @@ object Vod {
                 ano = anoDoNome(nome) ?: numero(o, "year")?.toInt()?.takeIf { it in 1900..2100 },
                 extensao = extensaoSegura(o.optString("container_extension")),
                 adicionado = numero(o, "added")?.toLong() ?: 0,
+                tmdb = InfoExterna.tmdbDoXtream(o),
             )
         }
         return saida
@@ -158,6 +161,7 @@ object Vod {
             lancamento = txt("releasedate").ifEmpty { txt("release_date") }.take(20),
             fundo = fundo,
             cenas = cenas,
+            tmdb = InfoExterna.tmdbDoXtream(info) ?: raiz.optJSONObject("movie_data")?.let { InfoExterna.tmdbDoXtream(it) },
         )
     }
 
@@ -285,10 +289,11 @@ object Vod {
 
     enum class Ordem { RECENTES, NOME, NOTA, ANO }
 
-    fun ordenar(filmes: List<Filme>, ordem: Ordem): List<Filme> = when (ordem) {
+    /** [notasFora]: nota de 0 a 10 de fora (IMDb pelo MDBList, InfoExterna) por chave; vale mais que a da lista. */
+    fun ordenar(filmes: List<Filme>, ordem: Ordem, notasFora: Map<String, Float> = emptyMap()): List<Filme> = when (ordem) {
         Ordem.RECENTES -> filmes.sortedByDescending { it.adicionado }
         Ordem.NOME -> ordenarPorNome(filmes) { it.nome }
-        Ordem.NOTA -> filmes.sortedByDescending { it.nota ?: -1f }
+        Ordem.NOTA -> filmes.sortedByDescending { notasFora[it.chave] ?: it.nota ?: -1f }
         Ordem.ANO -> filmes.sortedByDescending { it.ano ?: 0 }
     }
 
@@ -312,7 +317,7 @@ object Vod {
     fun filmesParaJson(filmes: List<Filme>): String = JSONArray().apply {
         filmes.forEach { f ->
             put(JSONObject().put("i", f.id).put("n", f.nome).put("g", f.grupo).put("c", f.capa).put("r", f.nota?.toDouble() ?: 0.0)
-                .put("a", f.ano ?: 0).put("e", f.extensao).put("d", f.adicionado))
+                .put("a", f.ano ?: 0).put("e", f.extensao).put("d", f.adicionado).put("t", f.tmdb ?: 0))
         }
     }.toString()
 
@@ -323,7 +328,7 @@ object Vod {
             val id = o.optString("i").ifEmpty { return@mapNotNull null }
             Filme(id, fonteId, o.optString("n"), o.optString("g"), o.optString("c").takeIf { M3u.urlAceita(it) }.orEmpty(),
                 o.optDouble("r", 0.0).toFloat().takeIf { it > 0f }, o.optInt("a").takeIf { it > 0 },
-                extensaoSegura(o.optString("e")), o.optLong("d"))
+                extensaoSegura(o.optString("e")), o.optLong("d"), o.optInt("t").takeIf { it > 0 })
         }
     }
 }

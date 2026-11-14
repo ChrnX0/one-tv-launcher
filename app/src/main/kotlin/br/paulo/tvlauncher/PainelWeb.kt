@@ -703,6 +703,23 @@ object PainelWeb {
             "/api/rede/historico" -> if (req.metodo == "GET")
                 return json(200, HistoricoRede.json(app, req.consulta["horas"]?.toIntOrNull() ?: 24))
             // Aba Configurações (PainelConfig.kt): as opções das Configurações da TV que só existiam lá.
+            // Serviços de filmes e séries (PainelServicos.kt): os mesmos logins da tela da TV, para quem está no celular.
+            "/api/servicos" -> when (req.metodo) {
+                "GET" -> return json(200, PainelServicos.estado(app))
+                "POST" -> {
+                    val o = corpoJson(req) ?: return erro(400, "JSON inválido")
+                    return when (val r = PainelServicos.agir(app, o, sessoes.elevada(token)) { a, res -> PainelArmazem.registrar(app, ip, a, res) }) {
+                        is PainelServicos.Resultado.Ok -> json(200, r.estado)
+                        is PainelServicos.Resultado.Erro -> erro(r.codigo, r.mensagem)
+                        PainelServicos.Resultado.PrecisaPin -> precisaPin()
+                    }
+                }
+            }
+            "/api/servicos/qr" -> if (req.metodo == "GET") {
+                val sv = ServicosFilmes.Servico.de(req.consulta["servico"]) ?: return erro(404, "serviço desconhecido")
+                val s = ServicosContas.sessao(sv)?.takeIf { it.estado == ServicosContas.EstadoLogin.ESPERANDO } ?: return erro(404, "sem código agora")
+                return Resposta(200, "image/png", QrCodigo.png(s.codigo.urlQr), mapOf("Cache-Control" to "no-store"))
+            }
             "/api/config" -> when (req.metodo) {
                 "GET" -> return json(200, PainelConfig.estado(app))
                 "POST" -> {

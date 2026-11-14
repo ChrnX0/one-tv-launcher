@@ -78,6 +78,10 @@ object LegendaExterna {
     fun lerDownload(json: String): String? = runCatching { JSONObject(json).optString("link") }.getOrNull()
         ?.takeIf { it.startsWith("https://") }
 
+    /** O download foi recusado porque acabou a cota do dia? (HTTP 406, ou a mensagem "You have downloaded your allowed ..."). */
+    fun acabouLimite(http: Int, json: String?): Boolean =
+        http == 406 || (http !in 200..299 && lerErro(json)?.contains("allowed", ignoreCase = true) == true)
+
     fun corpoLogin(usuario: String, senha: String): String = JSONObject().put("username", usuario).put("password", senha).toString()
 
     fun lerToken(json: String): String? = runCatching { JSONObject(json).optString("token") }.getOrNull()?.takeIf { it.isNotBlank() }

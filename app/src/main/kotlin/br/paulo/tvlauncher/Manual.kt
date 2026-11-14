@@ -10,7 +10,7 @@ package br.paulo.tvlauncher
  */
 object Manual {
     val TOPICOS = listOf(
-        "controle", "inicio", "painel", "voz", "clima", "protetor", "relogio", "tv", "filmes", "jogos",
+        "controle", "inicio", "painel", "voz", "clima", "protetor", "relogio", "tv", "filmes", "servicos", "jogos",
         "familia", "casa", "lg", "celular", "unidade", "claude", "backup", "sistema",
     )
 

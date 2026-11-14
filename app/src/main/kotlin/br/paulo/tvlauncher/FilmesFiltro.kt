@@ -83,14 +83,14 @@ object FilmesFiltro {
      * Aplica o filtro a [filmes] mantendo a ordem. O gênero de cada categoria é calculado uma vez (são poucas categorias
      * para dezenas de milhares de filmes). Filme sem ano ou sem nota sai quando o filtro pede ano ou nota.
      */
-    fun filtrar(filmes: List<Filme>, c: Criterios, posicoes: Map<String, Posicao>): List<Filme> {
+    fun filtrar(filmes: List<Filme>, c: Criterios, posicoes: Map<String, Posicao>, notasFora: Map<String, Float> = emptyMap()): List<Filme> {
         if (!c.ativo) return filmes
         val generoDe = HashMap<String, Boolean>()
         return filmes.filter { f ->
             (c.genero == null || generoDe.getOrPut(f.grupo) { c.genero in generosDoGrupo(f.grupo) }) &&
                 (c.ano == null || f.ano == c.ano) &&
                 (c.decada == null || (f.ano != null && f.ano / 10 * 10 == c.decada)) &&
-                (c.notaMin == null || (f.nota != null && f.nota >= c.notaMin)) &&
+                (c.notaMin == null || ((notasFora[f.chave] ?: f.nota)?.let { it >= c.notaMin } == true)) &&   // IMDb quando houver
                 (!c.naoVistos || !Vod.assistido(posicoes[f.chave]))
         }
     }

@@ -63,6 +63,8 @@ class SeriesActivity : Activity() {
     private val fonteMedia = Fontes.manrope(500)
 
     private var series: List<Serie> = emptyList()      // o que a tela mostra (sem as categorias ocultas, até o PIN)
+    // Ficha de fora (TMDB: sinopse, próximo episódio; MDBList: notas) da série aberta (InfoExterna, 14/11/2026).
+    private var externo: Pair<Serie, InfoExterna.Guardado>? = null
     private var todas: List<Serie> = emptyList()       // o catálogo inteiro, como veio do servidor
     private var ocultas: Set<String> = emptySet()      // categorias escondidas (adultas, escondidas, controle parental)
     private var mostrarOcultas = false                 // true só depois do PIN, como no player da TV ao vivo
@@ -624,6 +626,11 @@ class SeriesActivity : Activity() {
                 temporada = ultimos[s.chave]?.temporada?.takeIf { f?.temporadas?.containsKey(it) == true } ?: f?.temporadas?.keys?.firstOrNull() ?: 1
                 desenharFicha()
             }
+            // Ficha de fora, depois da do servidor; sem chave nenhuma, não faz nada.
+            if (InfoExternaCache.temTmdb() || InfoExternaCache.temNotas(this)) {
+                val g = InfoExternaCache.resolver(this, s.chave, s.nome, s.ano, true, f?.tmdb ?: s.tmdb)
+                tela.post { if (!isDestroyed && aberta === s) { externo = s to g; desenharFicha() } }
+            }
         }
     }
 
@@ -710,13 +717,21 @@ class SeriesActivity : Activity() {
                 Idioma.Versao.DESCONHECIDA -> null
             }).joinToString("   ·   ")
         col.addView(TextView(this).apply { text = dados; textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(8), 0, 0) })
+        // De fora: notas (MDBList) e "Novo episódio sexta, 21/11 (T2E5)" (TMDB), numa linha, em âmbar.
+        val ext = externo?.takeIf { it.first === s }?.second
+        val proximo = ext?.detalhe?.proximo?.let {
+            InfoExterna.textoProximo(it, java.time.LocalDate.now(), getString(R.string.ext_proximo), getString(R.string.ext_hoje), getString(R.string.ext_amanha))
+        }
+        listOfNotNull(ext?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { InfoExterna.textoNotas(it) }, proximo).takeIf { it.isNotEmpty() }?.let { partes ->
+            col.addView(TextView(this).apply { text = partes.joinToString("   ·   "); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPadding(0, dp(6), 0, 0); maxLines = 2 })
+        }
         // A série inteira: barra + "20 de 62 episódios" (13/11/2026), quando já tem episódio visto.
         progresso[s.chave]?.takeIf { it.total > 0 && it.vistos > 0 }?.let { p ->
             col.addView(BarraTempo.Linha(this).apply {
                 mostrar(BarraTempo.fracao(p.vistos.toLong(), p.total.toLong()), BarraTempo.textoEpisodios(context, p.vistos, p.total))
             }, LinearLayout.LayoutParams(dp(460), -2).apply { topMargin = dp(10) })
         }
-        f?.sinopse?.takeIf { it.isNotEmpty() }?.let {
+        (f?.sinopse?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.sinopse?.takeIf { it.isNotEmpty() })?.let {
             col.addView(TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.15f); maxLines = 3; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(8), 0, 0) })
         }
 
