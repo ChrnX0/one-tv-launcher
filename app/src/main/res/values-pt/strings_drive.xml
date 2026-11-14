@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Backup automático no Google Drive (DriveBackup.kt). Arquivo próprio para não conflitar com outros PRs. -->
+<resources>
+    <string name="drv_titulo">Conta do Google Drive</string>
+    <string name="drv_destino">Google Drive</string>
+    <string name="drv_conta">Conta do Google Drive</string>
+    <string name="drv_nao_conectada">não conectada</string>
+    <string name="drv_passos">1. No celular, abra %1$s (ou aponte a câmera para o código à direita).\n2. Entre com uma conta Google que esteja nesta TV e digite:\n\n%2$s\n\n3. Permita o acesso ao Google Drive. A TV só enxerga os arquivos que ela mesma cria (a pasta OneTV-backup), nunca o resto do seu Drive.\n\nEsta tela continua sozinha.</string>
+    <string name="drv_ok">Pronto: %1$s está conectada. Escolha \"Google Drive\" na linha Cópia extra para o backup da noite ir também para lá.</string>
+    <string name="drv_sem_google">O login Google ainda não está configurado nesta TV.\n\nConfigure no painel web > aba Claude (o seu cliente OAuth, do tipo \"TVs e dispositivos de entrada limitada\"), ligue a API do Google Drive no mesmo projeto do Google Cloud e volte aqui.</string>
+    <string name="drv_desconectar_pergunta">Desconectar %1$s? As cópias que já estão no Google Drive continuam lá; a TV para de mandar novas.</string>
+    <string name="drv_desconectar">Desconectar</string>
+    <string name="drv_restaurar">Restaurar do Google Drive</string>
+    <string name="drv_precisa_conta">Conecte a conta do Google Drive primeiro (linha de cima).</string>
+    <string name="drv_falhou">Não deu certo: %1$s</string>
+    <string name="drv_nenhuma">Ainda não há cópias na pasta OneTV-backup do Google Drive.</string>
+    <string name="drv_escolha">Qual cópia?</string>
+    <string name="drv_senha">Senha do backup</string>
+    <string name="drv_senha_errada">Senha do backup errada (ou o arquivo foi alterado). Nada foi restaurado.</string>
+    <string name="drv_restaurado">Restaurado. O launcher reinicia em instantes.</string>
+</resources>

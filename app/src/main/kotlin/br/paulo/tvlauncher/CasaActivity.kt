@@ -30,15 +30,23 @@ import android.widget.TextView
  *  - ao vivo: com a tela aberta, relê o Home Assistant a cada [VIVO_MS] e atualiza só os cartões (sem refazer a grade,
  *    para o foco não pular); uma luz apagada pelo celular aparece apagada aqui;
  *  - sem configuração: estado vazio com a explicação, nunca uma tela só com o título.
+ *
+ * Por cômodo (13/11/2026, dono): com as áreas do Home Assistant, um grupo por cômodo com o nome dele no título, em ordem
+ * alfabética, e "Sem cômodo" por último. As áreas vêm do POST /api/template ([CasaHA.areas]), relidas a cada [AREAS_MS]
+ * (mudam pouco); se o token não puder ler (não é de administrador) ou a casa não tiver áreas, fica o agrupamento antigo.
  */
 class CasaActivity : Activity() {
     private lateinit var grade: LinearLayout
+    private lateinit var rolagem: ScrollView
     private lateinit var resumo: TextView
     private lateinit var dicas: FrameLayout
     private val ui = Handler(Looper.getMainLooper())
 
     /** Último resultado mostrado e os cartões de cada aparelho (id -> cartão), para atualizar sem refazer a grade. */
     private var entidades: List<CasaHA.Entidade> = emptyList()
+    /** Cômodo de cada aparelho (null = não deu para ler) e quando foi lido (relógio do sistema). */
+    private var areas: Map<String, String>? = null
+    private var areasEm = 0L
     private val cartoes = HashMap<String, Cartao>()
     /** Mudança feita aqui e ainda não confirmada: o estado/brilho mostrado e até quando vale (relógio do sistema). */
     private val otimista = HashMap<String, Pendente>()
@@ -60,7 +68,7 @@ class CasaActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(this@CasaActivity)
-            clipChildren = false; clipToPadding = false
+            // A rolagem fica presa à própria área: sem isto os cartões de baixo eram desenhados por cima das dicas.
             setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.E3))
         }
         // Título e resumo à esquerda; o alto à direita é da hora (Moldura.kt).
@@ -71,13 +79,15 @@ class CasaActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             clipChildren = false; clipToPadding = false
             // Folga em volta: o cartão focado cresce 5% e não pode ser cortado pela borda da rolagem.
-            setPadding(dp(6), dp(Estilo.E1), dp(6), dp(Estilo.E3))
+            setPadding(dp(FOLGA_DP), dp(Estilo.E1), dp(FOLGA_DP), dp(Estilo.E3))
         }
-        val rolagem = ScrollView(this).apply {
-            isVerticalScrollBarEnabled = false; clipChildren = false; clipToPadding = false; isFillViewport = true
+        rolagem = ScrollView(this).apply {
+            isVerticalScrollBarEnabled = false; isFillViewport = true
+            // Esmaece a borda de baixo quando há mais cartões: mostra que dá para descer.
+            isVerticalFadingEdgeEnabled = true; setFadingEdgeLength(dp(Estilo.E3))
             addView(grade)
         }
-        raiz.addView(rolagem, LinearLayout.LayoutParams(-1, 0, 1f).apply { leftMargin = -dp(6); rightMargin = -dp(6) })
+        raiz.addView(rolagem, LinearLayout.LayoutParams(-1, 0, 1f).apply { leftMargin = -dp(FOLGA_DP); rightMargin = -dp(FOLGA_DP) })
         dicas = FrameLayout(this)
         raiz.addView(dicas, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(Estilo.E1) })
         mostrarDicas(false)
@@ -113,9 +123,19 @@ class CasaActivity : Activity() {
         if (carregando) return
         carregando = true
         val app = applicationContext
+        val lerAreas = areasEm == 0L || SystemClock.elapsedRealtime() - areasEm > AREAS_MS
+        val antes = areas
         Fundo.rodar {
             val r = try { Result.success(CasaHA.listar(app)) } catch (e: Exception) { Result.failure(e) }
-            runOnUiThread { carregando = false; if (!isFinishing) mostrar(r) }
+            // Áreas só quando a lista veio (o Home Assistant respondeu); falhar aqui não é erro de tela: fica sem cômodos.
+            val novas = if (lerAreas && r.isSuccess) try { CasaHA.areas(app) } catch (e: Exception) { null } else antes
+            runOnUiThread {
+                carregando = false
+                if (isFinishing) return@runOnUiThread
+                if (lerAreas && r.isSuccess) areasEm = SystemClock.elapsedRealtime()
+                if (novas != areas) { areas = novas; cartoes.clear() }   // cômodos mudaram: refaz a grade com os grupos novos
+                mostrar(r)
+            }
         }
     }
 
@@ -156,7 +176,10 @@ class CasaActivity : Activity() {
         }
     }
 
-    /** Refaz a grade: aparelhos, cenas e rotinas e o Google Home, em linhas de [COLUNAS] cartões. */
+    /**
+     * Refaz a grade em linhas de [COLUNAS] cartões: um grupo por cômodo (com áreas) ou aparelhos e cenas (sem), e o
+     * Google Home por último.
+     */
     private fun montar(lista: List<CasaHA.Entidade>) {
         val focoAntes = focoId
         grade.removeAllViews()
@@ -166,14 +189,19 @@ class CasaActivity : Activity() {
         var primeiro: View? = null
         fun grupo(nome: String, vistas: List<View>) {
             if (vistas.isEmpty()) return
-            grade.addView(Estilo.secao(this, nome))
+            grade.addView(Estilo.secao(this, nome).apply { tag = SECAO })
             vistas.chunked(COLUNAS).forEach { grade.addView(linha(it)) }
             if (primeiro == null) primeiro = vistas.first()
         }
         fun cartoesDe(l: List<CasaHA.Entidade>) = l.map { e -> cartao(e).casca.also { if (e.id == focoAntes) alvo = it } }
-        // Aparelhos primeiro: luz e tomada são o uso do dia a dia; cena é de vez em quando.
-        grupo(getString(R.string.casa_secao_aparelhos), cartoesDe(lista.filter { !cena(it) }))
-        grupo(getString(R.string.casa_secao_cenas), cartoesDe(lista.filter { cena(it) }))
+        val a = areas
+        if (a != null && lista.any { it.id in a }) {
+            for ((comodo, l) in CasaHA.agruparPorComodo(lista, a)) grupo(comodo ?: getString(R.string.casa_sem_comodo), cartoesDe(l))
+        } else {
+            // Sem cômodos: aparelhos primeiro (luz e tomada são o uso do dia a dia; cena é de vez em quando).
+            grupo(getString(R.string.casa_secao_aparelhos), cartoesDe(lista.filter { !cena(it) }))
+            grupo(getString(R.string.casa_secao_cenas), cartoesDe(lista.filter { cena(it) }))
+        }
         val google = cartaoGoogle()
         grupo(getString(R.string.casa_secao_google), listOf(google))
         (alvo ?: primeiro ?: google).requestFocus()
@@ -226,7 +254,7 @@ class CasaActivity : Activity() {
             c.casca.isLongClickable = true
             c.casca.setOnLongClickListener { entrarNoAjuste(e.id); true }
         }
-        c.casca.setOnFocusChangeListener { _, foco -> if (foco) focoId = e.id; c.pintar() }
+        c.casca.setOnFocusChangeListener { v, foco -> if (foco) { focoId = e.id; mostrarTitulo(v) }; c.pintar() }
         return c
     }
 
@@ -258,8 +286,21 @@ class CasaActivity : Activity() {
         c.mostrar(getString(R.string.casa_google_home_det), false, null, false)
         // Google Home (dono, 10/11/2026): abre o painel do Google TV (luzes, câmeras, timer), o mesmo do HOME segurado.
         c.casca.setOnClickListener { Home.abrirGoogleHome(this) }
-        c.casca.setOnFocusChangeListener { _, foco -> if (foco) focoId = null; c.pintar() }
+        c.casca.setOnFocusChangeListener { v, foco -> if (foco) { focoId = null; mostrarTitulo(v) }; c.pintar() }
         return c.casca
+    }
+
+    /**
+     * Subindo com o controle, o ScrollView mostra só o cartão focado e o título do cômodo fica escondido em cima: sem ele,
+     * não dá para saber de que cômodo é a "Luz 1". Se o cartão está na 1ª linha de um grupo, rola até o título aparecer.
+     */
+    private fun mostrarTitulo(cartao: View) {
+        val linha = cartao.parent as? View ?: return
+        val i = grade.indexOfChild(linha)
+        if (i <= 0) return
+        val titulo = grade.getChildAt(i - 1)?.takeIf { it.tag == SECAO } ?: return
+        // Depois da rolagem do próprio ScrollView (que vem no mesmo quadro), senão ela desfaz esta.
+        ui.post { if (titulo.top < rolagem.scrollY) rolagem.smoothScrollTo(0, titulo.top) }
     }
 
     // ---------------------------------------------------------------- ajuste de brilho (segurar OK)
@@ -353,7 +394,6 @@ class CasaActivity : Activity() {
             ligado = liga
             this.indisponivel = indisponivel
             barra.pct = brilho
-            casca.alpha = if (indisponivel) 0.5f else 1f
             pintar()
         }
 
@@ -367,6 +407,8 @@ class CasaActivity : Activity() {
 
         fun pintar() {
             val foco = casca.isFocused
+            // Indisponível fica apagado, mas não com foco: o cartão branco a 50% virava cinza e parecia defeito.
+            casca.alpha = if (indisponivel && !foco) 0.5f else 1f
             casca.background = Estilo.superficie(this@CasaActivity, foco)
             nomeTv.setTextColor(if (foco) Estilo.TEXTO_NO_FOCO else Estilo.TEXTO)
             nomeTv.typeface = Estilo.fonte(if (foco) 600 else 500)
@@ -441,11 +483,16 @@ class CasaActivity : Activity() {
         private const val COLUNAS = 4
         private const val ALTURA_DP = 104
         private const val ESPACO_DP = 12
+        /** Folga em volta da grade para o cartão focado (até 8% maior no ajuste de brilho) não ser cortado pela rolagem. */
+        private const val FOLGA_DP = 12
         private const val ESCALA = 1.05f
         private const val ESCALA_AJUSTE = 1.08f   // no ajuste de brilho o cartão cresce mais: dá para ver que mudou de modo
         /** Releitura com a tela aberta. O Home Assistant é local; 5 s é o mesmo ritmo do vigia (CasaHA). */
         private const val VIVO_MS = 5_000L
         /** Quanto tempo o estado otimista vale sem confirmação (depois disso, vale o que o Home Assistant disser). */
         private const val PRAZO_MS = 6_000L
+        /** Áreas (cômodos) mudam pouco: relidas a cada 2 min com a tela aberta, não a cada 5 s. */
+        private const val AREAS_MS = 120_000L
+        private const val SECAO = "secao"
     }
 }

@@ -116,6 +116,48 @@ object CasaHA {
         }.sortedBy { it.nome.lowercase() }
     }
 
+    // ---------------------------------------------------------------- cômodos (13/11/2026)
+    // O /api/states não diz em que cômodo (área) cada aparelho está. A área mora nos registros do Home Assistant; o jeito
+    // mais curto de lê-la pela API REST é o POST /api/template com area_name(), que olha a área da entidade e, se ela não
+    // tiver, a do dispositivo dela (homeassistant/helpers/template/extensions/areas.py). O /api/template pede token de
+    // administrador: com token de usuário comum dá 401/403 e a tela volta ao agrupamento antigo (Aparelhos / Cenas).
+
+    /** Template que devolve [[entity_id, nome da área ou null], ...] só dos domínios que a tela mostra. */
+    val TEMPLATE_AREAS: String = "[{%- for s in states if s.domain in " +
+        DOMINIOS.sorted().joinToString(",", "[", "]") { "'$it'" } +
+        " -%}{{ [s.entity_id, area_name(s.entity_id)] | tojson }}{{ ',' if not loop.last }}{%- endfor -%}]"
+
+    /** Resposta do template -> entity_id para nome do cômodo (só quem tem cômodo). Null se a resposta não for a lista. Pura. */
+    fun lerAreas(texto: String): Map<String, String>? {
+        val t = texto.trim()
+        // O HA responde o texto puro; se algum dia vier embrulhado como string JSON, desembrulha.
+        val bruto = if (t.startsWith("\"")) (try { org.json.JSONTokener(t).nextValue() as? String } catch (e: Exception) { null } ?: return null) else t
+        val a = try { JSONArray(bruto) } catch (e: Exception) { return null }
+        val m = LinkedHashMap<String, String>()
+        for (i in 0 until a.length()) {
+            val par = a.optJSONArray(i) ?: continue
+            val id = par.optString(0)
+            if (!idValido(id) || par.isNull(1)) continue
+            val area = par.optString(1).trim().take(40)
+            if (area.isNotEmpty()) m[id] = area
+        }
+        return m
+    }
+
+    /**
+     * Agrupa por cômodo: cômodos em ordem alfabética (sem ligar para acento e maiúscula), dentro de cada um os aparelhos
+     * antes das cenas e rotinas, e quem não tem cômodo por último, com nome null (a tela escreve "Sem cômodo"). Pura.
+     */
+    fun agruparPorComodo(lista: List<Entidade>, areas: Map<String, String>): List<Pair<String?, List<Entidade>>> {
+        val cena = { e: Entidade -> e.dominio == "scene" || e.dominio == "script" }
+        val ordem = java.text.Collator.getInstance(java.util.Locale.ROOT).apply { strength = java.text.Collator.PRIMARY }
+        val porArea = lista.groupBy { areas[it.id] }
+        val nomes = porArea.keys.filterNotNull().sortedWith(ordem)
+        return (nomes + listOf<String?>(null)).mapNotNull { n ->
+            porArea[n]?.let { l -> n to (l.filter { !cena(it) } + l.filter(cena)) }
+        }
+    }
+
     // Tela Casa (13/11/2026): ícone e estado de cada cartão. Puras.
     /** Domínio do Home Assistant -> ícone do [IconeCard]. */
     fun iconeDe(dominio: String) = when (dominio) {
@@ -306,6 +348,11 @@ object CasaHA {
     }
 
     fun listar(ctx: Context): List<Entidade> = lerEstados(String(pedir(ctx, "GET", "/api/states")))
+
+    /** Cômodo de cada aparelho (entity_id -> nome da área). Erra com [Erro] se o token não for de administrador. */
+    fun areas(ctx: Context): Map<String, String> =
+        lerAreas(String(pedir(ctx, "POST", "/api/template", JSONObject().put("template", TEMPLATE_AREAS).toString(), limite = 512 * 1024)))
+            ?: throw Erro("resposta de áreas inesperada")
 
     /** Liga, desliga ou alterna. Devolve o texto do resultado. */
     fun acionar(ctx: Context, id: String, acao: String): String {

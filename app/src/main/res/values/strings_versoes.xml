@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- What changed and what to check on the TV, for THIS version (ideas 45 and 63, 14/11/2026).
+     Whoever publishes a Release rewrites both lists (here and in values-pt). Keep roteiro_ids, roteiro_titulos and
+     roteiro_perguntas the same length and order; ids are never translated. -->
+<resources>
+    <string name="ver_sec">This version</string>
+    <string name="ver_novidades">What changed</string>
+    <string name="ver_novidades_det">%1$d changes in version %2$s · OK to read</string>
+    <string name="ver_novidades_sobre">Version %1$s</string>
+    <string name="ver_ok">OK</string>
+    <string name="ver_conferir">Check on the TV</string>
+    <string name="ver_conferir_det">%1$d of %2$d checked with the remote · OK to start</string>
+    <string name="ver_conferir_sub">Version %1$s · %2$d items · OK on an item to answer</string>
+    <string name="ver_conferido">%1$d of %2$d checked</string>
+    <string name="ver_sim">Yes</string>
+    <string name="ver_nao">No</string>
+    <string name="ver_respondido_sim">answered “yes”</string>
+    <string name="ver_respondido_nao">answered “no”</string>
+    <string-array name="novidades">
+        <item>Each new version runs the tests before it is published</item>
+        <item>A test version can go to one TV first, then to everyone</item>
+        <item>The web panel also opens with a padlock (https) at home</item>
+    </string-array>
+    <string-array name="roteiro_ids" translatable="false">
+        <item>home</item>
+        <item>home_segurar</item>
+        <item>botao_netflix</item>
+        <item>botao_youtube_segurar</item>
+        <item>filmes_voltar</item>
+    </string-array>
+    <string-array name="roteiro_titulos">
+        <item>Press HOME</item>
+        <item>Hold HOME for 2 seconds</item>
+        <item>Press the Netflix button on the remote</item>
+        <item>Hold the YouTube button for 3 seconds</item>
+        <item>Open Movies and go back with BACK</item>
+    </string-array>
+    <string-array name="roteiro_perguntas">
+        <item>Did it go back to the home screen?</item>
+        <item>Did the quick panel open?</item>
+        <item>Did the app chosen for that button open?</item>
+        <item>Did the list to change the button\'s app open?</item>
+        <item>Did the grid keep focus on the same poster?</item>
+    </string-array>
+</resources>

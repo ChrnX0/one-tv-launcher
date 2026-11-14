@@ -20,8 +20,14 @@ import android.widget.TextView
  *
  * Sem o login Google configurado (cada dono cria o seu no Google Cloud), a tela só explica o outro caminho: enviar a
  * foto pelo painel web. BACK sai a qualquer momento e cancela a espera.
+ *
+ * Com [EXTRA_DRIVE] (13/11/2026) a mesma tela conecta a "Conta do Google Drive" do backup noturno: o login pede também
+ * a permissão do Drive e guarda a conta (DriveBackup). Os passos no celular são os mesmos.
  */
 class FotoPerfilActivity : Activity() {
+    companion object { const val EXTRA_DRIVE = "drive" }
+    private val drive by lazy { intent.getBooleanExtra(EXTRA_DRIVE, false) }
+    private val finalidade get() = if (drive) LoginGoogle.Finalidade.DRIVE else LoginGoogle.Finalidade.FOTO
     private val ui = Handler(Looper.getMainLooper())
     private lateinit var texto: TextView
     private lateinit var qr: ImageView
@@ -42,7 +48,7 @@ class FotoPerfilActivity : Activity() {
             gravity = Gravity.CENTER_VERTICAL
         }
         val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        col.addView(Estilo.tituloTela(this, getString(R.string.fp_titulo)))
+        col.addView(Estilo.tituloTela(this, getString(if (drive) R.string.drv_titulo else R.string.fp_titulo)))
         texto = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { textSize = 16f; setPadding(0, dp(Estilo.E2), dp(32), 0); setLineSpacing(0f, 1.25f) }
         col.addView(texto)
         val sair = Estilo.botao(this, getString(R.string.fp_fechar)).apply { setOnClickListener { finish() } }
@@ -53,11 +59,11 @@ class FotoPerfilActivity : Activity() {
         setContentView(raiz)
         sair.requestFocus()
 
-        if (!LoginGoogle.configurado(this)) { terminou = true; texto.text = getString(R.string.fp_sem_google); return }
+        if (!LoginGoogle.configurado(this)) { terminou = true; texto.text = getString(if (drive) R.string.drv_sem_google else R.string.fp_sem_google); return }
         texto.text = getString(R.string.fp_pedindo)
         // Pedir o código é uma chamada de rede: o Android proíbe rede na thread da tela, então vai numa thread à parte.
         Thread({
-            val r = runCatching { LoginGoogle.iniciar(applicationContext, emptyMap(), soFoto = true) }
+            val r = runCatching { LoginGoogle.iniciar(applicationContext, emptyMap(), finalidade) }
             ui.post {
                 if (isDestroyed) { r.getOrNull()?.let { cancelar(it) }; return@post }
                 val s = r.getOrNull()
@@ -73,8 +79,8 @@ class FotoPerfilActivity : Activity() {
     private fun atualizar() {
         val s = sessao ?: return
         when (s.estado) {
-            LoginGoogle.Estado.ESPERANDO -> texto.text = getString(R.string.fp_passos, s.urlVerificacao, s.codigoUsuario)
-            LoginGoogle.Estado.OK -> fim(getString(if (s.fotoGravada) R.string.fp_ok else R.string.fp_sem_foto, s.email ?: ""))
+            LoginGoogle.Estado.ESPERANDO -> texto.text = getString(if (drive) R.string.drv_passos else R.string.fp_passos, s.urlVerificacao, s.codigoUsuario)
+            LoginGoogle.Estado.OK -> if (drive) fim(getString(R.string.drv_ok, s.email ?: "")) else fim(getString(if (s.fotoGravada) R.string.fp_ok else R.string.fp_sem_foto, s.email ?: ""))
             else -> fim(getString(R.string.fp_falha, s.mensagem))
         }
     }

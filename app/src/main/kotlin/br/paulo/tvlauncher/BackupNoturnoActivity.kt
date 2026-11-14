@@ -66,7 +66,8 @@ class BackupNoturnoActivity : Activity() {
                     val contas = runCatching { BackupNoturno.contasSmb(app) }.getOrDefault(emptyList())
                     runOnUiThread {
                         if (isDestroyed) return@runOnUiThread
-                        val novo = BackupNoturnoRegras.proximoDestino(BackupNoturno.destino(app), contas.map { it.id })
+                        val novo = BackupNoturnoRegras.proximoDestino(BackupNoturno.destino(app), contas.map { it.id },
+                            comDrive = DriveBackup.conectado(app))
                         val nome = contas.firstOrNull { it.id == BackupNoturnoRegras.idSmb(novo) }?.nome.orEmpty()
                         BackupNoturno.definirDestino(app, novo, nome)
                         atualizar()
@@ -74,6 +75,19 @@ class BackupNoturnoActivity : Activity() {
                 }
             }
         }
+        // Google Drive (DriveBackup): conectar abre a tela do código para o celular; conectada, OK oferece desconectar.
+        linha({ getString(R.string.drv_conta) + ": " + (DriveBackup.email(this) ?: getString(R.string.drv_nao_conectada)) }) {
+            comPin {
+                if (!DriveBackup.conectado(this))
+                    startActivity(android.content.Intent(this, FotoPerfilActivity::class.java).putExtra(FotoPerfilActivity.EXTRA_DRIVE, true))
+                else CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert).setMessage(getString(R.string.drv_desconectar_pergunta, DriveBackup.email(this) ?: ""))
+                    .setPositiveButton(R.string.drv_desconectar) { _, _ ->
+                        val app = applicationContext
+                        Fundo.rodar { DriveBackup.desconectar(app); runOnUiThread { if (!isDestroyed) atualizar() } }
+                    }.setNegativeButton(android.R.string.cancel, null).show()
+            }
+        }
+        linha({ getString(R.string.drv_restaurar) }) { comPin { restaurarDoDrive() } }
         linha({ getString(R.string.bkn_agora) + if (rodando) " …" else "" }) {
             comPin {
                 if (rodando) return@comPin
@@ -104,6 +118,61 @@ class BackupNoturnoActivity : Activity() {
         if (pinOk || !PainelArmazem.temPin(this)) { acao(); atualizar(); return }
         PinTv.pedir(this, getString(R.string.bkn_pin)) { certo ->
             if (certo) { pinOk = true; acao(); atualizar() } else mostrar(getString(R.string.trava_home_errado))
+        }
+    }
+
+    /**
+     * "Restaurar do Drive": lista as cópias do Drive, pede a senha do backup e restaura (BackupCompleto.importar, o
+     * mesmo do painel). É o caminho depois de um reset de fábrica: instalar o launcher, conectar a conta, restaurar.
+     */
+    private fun restaurarDoDrive() {
+        if (!DriveBackup.conectado(this)) { mostrar(getString(R.string.drv_precisa_conta)); return }
+        if (rodando) return
+        rodando = true; atualizar()
+        val app = applicationContext
+        Fundo.rodar {
+            val r = runCatching { DriveBackup.listar(app) }
+            runOnUiThread {
+                if (isDestroyed) return@runOnUiThread
+                rodando = false; atualizar()
+                val copias = r.getOrElse { mostrar(getString(R.string.drv_falhou, it.message ?: it.javaClass.simpleName)); return@runOnUiThread }
+                if (copias.isEmpty()) { mostrar(getString(R.string.drv_nenhuma)); return@runOnUiThread }
+                // Uma linha por cópia (a mais nova em cima), dentro da caixa padrão da TV.
+                val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+                val caixa = CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert).setTitle(R.string.drv_escolha)
+                    .setView(lista).setNegativeButton(android.R.string.cancel, null)
+                var janela: CaixaTv.Janela? = null
+                for (c in copias) lista.addView(Estilo.linhaTexto(this,
+                    BackupNoturnoRegras.diaDoNome(c.nome) + " · " + maxOf(1L, c.tamanho / 1024) + " KB").apply {
+                    setOnClickListener { janela?.dismiss(); pedirSenhaRestaurar(c) }
+                }, Estilo.lpLinha(this))
+                janela = caixa.show()
+                lista.getChildAt(0)?.requestFocus()
+            }
+        }
+    }
+
+    private fun pedirSenhaRestaurar(c: DriveRegras.Copia) {
+        caixaSenha(getString(R.string.drv_senha)) { senha ->
+            rodando = true; atualizar()
+            val app = applicationContext
+            Fundo.rodar {
+                val msg = try {
+                    val n = BackupCompleto.importar(app, DriveBackup.baixar(app, c.id), senha)
+                    PainelArmazem.registrar(app, "TV", "restaurar do Google Drive ${c.nome}", "ok, $n chaves")
+                    null
+                } catch (e: CofreBackup.SenhaErrada) { getString(R.string.drv_senha_errada) }
+                catch (e: Exception) { getString(R.string.drv_falhou, e.message ?: e.javaClass.simpleName) }
+                runOnUiThread {
+                    if (isDestroyed) return@runOnUiThread
+                    rodando = false; atualizar()
+                    if (msg != null) { mostrar(msg); return@runOnUiThread }
+                    mostrar(getString(R.string.drv_restaurado))
+                    // Mesmo jeito do painel (PainelWeb.restaurarTexto): várias telas leem as preferências só ao abrir,
+                    // então o processo reinicia; o sistema o sobe de novo (serviço de acessibilidade).
+                    android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({ android.os.Process.killProcess(android.os.Process.myPid()) }, 2500)
+                }
+            }
         }
     }
 
