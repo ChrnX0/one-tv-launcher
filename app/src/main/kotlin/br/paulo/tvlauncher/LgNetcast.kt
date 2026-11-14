@@ -78,6 +78,9 @@ object LgNetcast {
     /** Porcentagem do máximo da TV para nível (o teto da hora de dormir é em %). */
     fun nivelDaPorcentagem(pct: Int, maximo: Int = 100): Int = maximo * pct.coerceIn(0, 100) / 100
 
+    /** Mandar "User-Agent: UDAP/2.0"? Só no caminho UDAP; no ROAP esse cabeçalho faz a LG responder 400. */
+    fun agenteUdap(caminho: String): Boolean = caminho.startsWith("/udap/")
+
     private fun tag(xml: String, nome: String): String? =
         Regex("<$nome>([^<]*)</$nome>").find(xml)?.groupValues?.get(1)?.trim()
 }
