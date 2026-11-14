@@ -300,7 +300,7 @@ class VodActivity : Activity() {
             }
             atualizarBarra()
         }
-        override fun onIsPlayingChanged(tocando: Boolean) { atualizarBarra(); if (!tocando) mostrarBarra(fixa = true) else mostrarBarra() }
+        override fun onIsPlayingChanged(tocando: Boolean) { Gatilhos.avisarDoPlayer(this@VodActivity, tocando); atualizarBarra(); if (!tocando) mostrarBarra(fixa = true) else mostrarBarra() }
         override fun onPlayerError(erro: PlaybackException) { mostrarAviso(getString(R.string.vod_erro)) }
         override fun onVideoSizeChanged(t: androidx.media3.common.VideoSize) {
             tamanhoVideo = t

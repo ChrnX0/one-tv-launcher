@@ -632,3 +632,9 @@ body.ocupado::before { opacity: 1; animation: carregando 1.1s linear infinite; }
   .cena-acao .cena-mover { justify-self: end; }
   .cena-campos > * { flex-basis: 100%; width: 100%; }
 }
+
+/* Eventos como gatilho (ideia 7) */
+.cena-gatilhos { margin: 12px 0; }
+.cena-gatilhos summary { cursor: pointer; font-weight: 600; }
+.cena-gatilhos .cena-linha span { flex: 1 1 180px; }
+.cena-gatilhos select { flex: 1 1 140px; min-width: 0; }

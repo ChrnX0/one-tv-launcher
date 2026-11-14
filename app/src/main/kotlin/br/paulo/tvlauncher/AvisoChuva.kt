@@ -87,6 +87,7 @@ object AvisoChuva {
         } ?: return "sem chuva à vista"
         val r = AvisoTv.mostrar(app, app.getString(R.string.ch_chuva), app.getString(R.string.ch_chance, previsao.chance, previsao.hora),
             SEGUNDOS_NA_TELA, som = false, guardarSeApagada = false, icone = IconeLinha(IconeLinha.Tipo.CHUVA), fica = AvisoRegras.Fica.CHUVA)
+        if (r == AvisoTv.Resultado.MOSTRADO) Gatilhos.disparar(app, Gatilhos.Evento.CHUVA)   // ideia 7
         if (r == AvisoTv.Resultado.MOSTRADO) p.edit().putLong("ultimo_aviso", System.currentTimeMillis()).apply()
         Avisos.enviar(app, Avisos.Tipo.CHUVA, app.getString(R.string.ch_chuva), app.getString(R.string.ch_chance, previsao.chance, previsao.hora))
         Log.i(TAG, "chuva ${previsao.chance}% às ${previsao.hora}: $r")

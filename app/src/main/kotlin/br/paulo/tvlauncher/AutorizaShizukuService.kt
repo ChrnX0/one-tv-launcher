@@ -29,6 +29,7 @@ class AutorizaShizukuService : AccessibilityService() {
         FiltroNoturno.iniciar(this)
         SaudeAcesso.vigiar(this)   // aviso "acesso remoto parado" (shell próprio / túnel), ver SaudeAcesso.kt
         ManutencaoNoturna.vigiar(this); ManutencaoNoturna.agendar(this)   // manutenção de madrugada + resumo de manhã
+        Gatilhos.iniciar(this)   // eventos como gatilho de cena (ideia 7): tela acesa e sessões de mídia
         CasaHA.iniciar(this)   // Home Assistant: publica o estado da TV e vigia a campainha (só se configurado)   // película âmbar à noite (só com a chave ligada em Extras)
     }
     override fun onUnbind(intent: android.content.Intent?): Boolean { instancia = null; FiltroNoturno.parar(); return super.onUnbind(intent) }
