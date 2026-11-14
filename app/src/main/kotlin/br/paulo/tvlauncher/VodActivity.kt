@@ -67,6 +67,7 @@ class VodActivity : Activity() {
         private const val EXTRA_LEG_TEMP = "leg_temp"
         private const val EXTRA_LEG_EP = "leg_ep"
         private const val EXTRA_TMDB = "tmdb"
+        private const val LEGENDA_AUTO = "legenda_auto"   // prefs "player" (ideia 89): baixar a legenda sozinho
         private val ATRASOS = longArrayOf(-3000, -2000, -1500, -1000, -500, 0, 500, 1000, 1500, 2000, 3000)
 
         /** Põe no Intent o que a busca de legenda precisa (sem nada, a busca usa o título da tela). */
@@ -442,6 +443,7 @@ class VodActivity : Activity() {
             legendaDecidida = true
             val p = player ?: return
             IdiomaPlayer.aplicar(faixas, p.trackSelectionParameters, prefIdioma, idiomaTv)?.let { p.trackSelectionParameters = it }
+            talvezLegendaAuto(faixas)
         }
     }
 
@@ -554,6 +556,11 @@ class VodActivity : Activity() {
         }
         // Legenda da internet (OpenSubtitles, com a conta do dono) e, se já tem uma baixada, o ajuste de atraso.
         opcoes += Opcao(getString(R.string.legenda_buscar)) { buscarLegenda() }
+        val auto = getSharedPreferences("player", MODE_PRIVATE).getBoolean(LEGENDA_AUTO, true)
+        opcoes += Opcao(getString(R.string.legenda_auto_opcao), marcada = auto) {
+            getSharedPreferences("player", MODE_PRIVATE).edit().putBoolean(LEGENDA_AUTO, !auto).apply()
+            avisoBreve(getString(if (auto) R.string.legenda_auto_desligada else R.string.legenda_auto_ligada))
+        }
         if (legendaArquivo != null) opcoes += Opcao(getString(R.string.legenda_atraso_opcao, rotuloAtraso(atrasoLegenda))) { escolherAtraso() }
         // 11/11/2026 (visto no 1 Play): velocidade e proporção da imagem, no mesmo menu do ▼ para não criar outra tecla
         opcoes += Opcao(getString(R.string.velocidade_opcao, PlayerImagem.rotuloVelocidade(p.playbackParameters.speed))) { escolherVelocidade() }
@@ -712,6 +719,34 @@ class VodActivity : Activity() {
 
     private fun avisoBreve(t: String) {
         mostrarAviso(t); tela.removeCallbacks(esconderAvisoDepois); tela.postDelayed(esconderAvisoDepois, 4_000)
+    }
+
+    private var autoTentada = false
+
+    /**
+     * Ideia 89: áudio que não é do idioma da TV e nenhuma legenda nele -> baixa sozinha a do OpenSubtitles (a que bate com
+     * o arquivo, pelo hash, quando o servidor deixa ler pedaços) e liga, com um aviso. Uma tentativa por vídeo a cada 7
+     * dias; desliga no menu ▼. Sem conta/chave, ou com legenda já guardada ou ao lado do vídeo, não faz nada.
+     */
+    private fun talvezLegendaAuto(t: Tracks) {
+        if (autoTentada || legendaArquivo != null || legendasAoLado.isNotEmpty()) return
+        if (!getSharedPreferences("player", MODE_PRIVATE).getBoolean(LEGENDA_AUTO, true)) return
+        if (!IdiomaPlayer.faltaLegenda(t, prefIdioma, idiomaTv)) return
+        autoTentada = true
+        val k = chave; val u = url; val b = buscaLegenda()
+        if (b.nome.isBlank()) return
+        Fundo.rodar {
+            if (LegendaBaixar.contaEmUso(this) == null || LegendaBaixar.tentouAuto(this, k)) return@rodar
+            val r = LegendaBaixar.automatica(this, k, u, b)
+            tela.post {
+                if (isDestroyed || chave != k || legendaArquivo != null) return@post
+                r.onSuccess { (f, bate) ->
+                    legendaArquivo = f; atrasoLegenda = 0
+                    avisoBreve(getString(if (bate) R.string.legenda_auto_pronta else R.string.legenda_auto_pronta_nome))
+                    recarregarComLegenda()
+                }
+            }
+        }
     }
 
     /** Procura no OpenSubtitles e mostra a lista (a pessoa escolhe: cada download gasta do limite diário da conta). */

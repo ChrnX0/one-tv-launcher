@@ -26,4 +26,10 @@
     <string name="onde_tambem_em">Também em: %1$s (JustWatch)</string>
     <string name="onde_fora">Não está na sua lista · está em %1$s</string>
     <string name="onde_grupo">Em outros lugares (JustWatch)</string>
+    <!-- Ideia 89: legenda automática -->
+    <string name="legenda_auto_pronta">Legenda baixada automaticamente (feita para este arquivo) · ▼ para trocar</string>
+    <string name="legenda_auto_pronta_nome">Legenda baixada automaticamente · ▼ para trocar ou ajustar o atraso</string>
+    <string name="legenda_auto_opcao">Baixar legenda automaticamente</string>
+    <string name="legenda_auto_ligada">A legenda será baixada quando faltar</string>
+    <string name="legenda_auto_desligada">Legenda automática desligada</string>
 </resources>

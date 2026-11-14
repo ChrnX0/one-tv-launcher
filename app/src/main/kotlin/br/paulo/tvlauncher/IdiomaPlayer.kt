@@ -48,6 +48,15 @@ object IdiomaPlayer {
     private fun faixas(t: Tracks, tipo: Int): List<Pair<Tracks.Group, Int>> =
         t.groups.filter { it.type == tipo }.flatMap { g -> (0 until g.length).filter { g.isTrackSupported(it) }.map { g to it } }
 
+    /** Ideia 89: o áudio que vai tocar não é do idioma da TV e não há legenda nele (Idioma.faltaLegenda). */
+    fun faltaLegenda(t: Tracks, pref: Idioma.Pref, idioma: String = idiomaDaTv()): Boolean {
+        val audios = faixas(t, C.TRACK_TYPE_AUDIO)
+        // O mesmo áudio que [aplicar] escolhe (a troca ainda não chegou às faixas quando isto roda).
+        val audio = Idioma.escolherAudio(audios.map { (g, i) -> faixa(g.getTrackFormat(i)) }, pref, idioma)?.let { audios[it] }
+            ?: audios.firstOrNull { (g, i) -> g.isTrackSelected(i) } ?: return false
+        return Idioma.faltaLegenda(faixa(audio.first.getTrackFormat(audio.second)), faixas(t, C.TRACK_TYPE_TEXT).map { (g, i) -> faixa(g.getTrackFormat(i)) }, idioma)
+    }
+
     /**
      * Aplica a preferência quando as faixas chegam: escolhe o áudio e liga (ou não) a legenda no idioma da TV
      * ([idioma], 2 letras; ideia 25). Devolve os parâmetros novos, ou null se não há o que mudar.
