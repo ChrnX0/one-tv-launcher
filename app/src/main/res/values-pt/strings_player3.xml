@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Player de filmes e séries: pular a abertura, marcada uma vez por série (ideia 24, 14/11/2026). -->
+<resources>
+    <string name="abertura_marcar_inicio">Marcar início da abertura aqui (%1$s)</string>
+    <string name="abertura_marcar_fim">Marcar fim da abertura aqui (%1$s)</string>
+    <string name="abertura_apagar">Apagar marcação da abertura</string>
+    <string name="abertura_inicio_marcado">Início da abertura marcado em %1$s. Agora marque o fim no menu ▼</string>
+    <string name="abertura_salva">Abertura guardada: %1$s a %2$s. Os próximos episódios oferecem pular</string>
+    <string name="abertura_falta_inicio">Marque primeiro o início da abertura</string>
+    <string name="abertura_invalida">Isso não parece abertura: ela deve durar de 10 s a 5 min e começar nos primeiros 15 min</string>
+    <string name="abertura_apagada">Marcação da abertura apagada</string>
+    <string name="abertura_pular">Pular abertura · OK</string>
+</resources>
