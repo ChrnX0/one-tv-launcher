@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Clock and family (study ideas 30 to 34, 14/11/2026), in its own file to avoid conflicts with open PRs. -->
+<resources>
+    <string name="fam_pin">Kids PIN</string>
+    <string name="fam_pin_det">A second PIN to unlock channels, hidden categories and bedtime in front of the kids. The panel PIN still works everywhere.</string>
+    <string name="fam_pin_ok">Kids PIN saved</string>
+    <string name="fam_pin_igual">The kids PIN must be different from the panel PIN</string>
+    <string name="fam_trocar">Change kids PIN</string>
+    <string name="fam_apagar">Remove kids PIN</string>
+    <string name="fam_apagado">Kids PIN removed: only the panel PIN unlocks now</string>
+    <string name="extras_TEMPO_TELA">Daily screen time (when it runs out, only allowed apps open)</string>
+    <string name="tela_titulo">Screen time</string>
+    <string name="tela_acabou">Today\'s screen time is over. See you tomorrow!</string>
+    <string name="tela_5min">5 minutes of screen time left today</string>
+    <string name="tela_pin">PIN to change screen time</string>
+    <string name="tela_cota_linha">Screen time per day: %1$s (left today: %2$s)</string>
+    <string name="tela_mais">Give %1$d more minutes today</string>
+    <string name="tela_mais_ok">%1$d more minutes for today</string>
+    <string name="tela_h">h</string>
+    <string name="tela_min">min</string>
+    <string name="extras_AGENDA_TODAS">Calendar of all the TV\'s Google accounts together</string>
+    <string name="cal_todas_contas">All accounts on the TV (%1$d)</string>
+    <string name="tm_crono">Stopwatch</string>
+    <string name="tm_crono_iniciar">Start stopwatch</string>
+    <string name="tm_crono_parar">Stop stopwatch</string>
+    <string name="tm_crono_comecou">Stopwatch started: it shows on the Home screen</string>
+    <string name="tm_crono_marcou">Stopwatch stopped at %1$s</string>
+    <string name="som_canal">Last live TV channel</string>
+</resources>

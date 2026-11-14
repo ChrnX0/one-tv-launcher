@@ -227,7 +227,7 @@ object BackupCompleto {
             } catch (e: org.json.JSONException) { throw IllegalArgumentException("$nome/$chave: valor do tipo errado") }
             // Voltas do PBKDF2 do PIN (auditoria 10/11): um número absurdo deixaria cada login preso por horas, e 0 ou negativo
             // quebraria a conferência; nos dois casos o PIN do painel deixaria de funcionar até ser refeito na TV.
-            if (nome == "painel_seguro" && chave == "pin_iteracoes" && item.optInt("v") !in PinSeguro.ITERACOES_ACEITAS)
+            if (nome == "painel_seguro" && (chave == "pin_iteracoes" || chave == "fam_iteracoes") && item.optInt("v") !in PinSeguro.ITERACOES_ACEITAS)
                 throw IllegalArgumentException("$nome/$chave fora da faixa")
         }
         return p

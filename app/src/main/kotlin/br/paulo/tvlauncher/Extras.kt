@@ -54,6 +54,11 @@ object Extras {
         RETROSPECTIVA(false),
         /** Modo simples (para quem tem dificuldade com o controle): HOME com 6 cards grandes e nome falado. Desligar pede o PIN. */
         MODO_SIMPLES(false),
+        // Ideias do estudo de 13/11/2026 (conversa 10, relógio e família)
+        /** Tempo de tela por dia (ideia 33): acabou a cota, só os apps liberados abrem. Desligar pede o PIN. */
+        TEMPO_TELA(false),
+        /** Agenda de todas as contas Google da TV juntas (ideia 32); desligada, só a do perfil ativo. */
+        AGENDA_TODAS(true),
     }
 
     /**
@@ -62,14 +67,17 @@ object Extras {
      * ficava só no painel, e pela TV qualquer um com o controle desligava o PIN da HOME sem PIN nenhum.
      */
     val CHAVES_COM_PIN: Set<Chave> = setOf(Chave.JANELA_OTA, Chave.TRAVAR_CRITICOS, Chave.PIN_HOME, Chave.DIARIO_DNS,
-        Chave.HORA_DORMIR, Chave.RECADO_LINK, Chave.VER_TELA, Chave.MODO_SIMPLES)
+        Chave.HORA_DORMIR, Chave.RECADO_LINK, Chave.VER_TELA, Chave.MODO_SIMPLES, Chave.TEMPO_TELA)
+
+    /** Chaves de família: na TV, o PIN das crianças (ideia 34) também muda estas; as outras pedem o do painel. */
+    val CHAVES_FAMILIA: Set<Chave> = setOf(Chave.HORA_DORMIR, Chave.MODO_SIMPLES, Chave.TEMPO_TELA)
 
     /**
      * A tela da TV deve pedir o PIN para mudar [c]? Só se houver PIN no painel ([temPin]; sem PIN não há o que pedir).
-     * Exceção: a hora de dormir só pede ao DESLIGAR ([ligadoAgora] = true); ligar é a direção segura.
+     * Exceção: as [CHAVES_FAMILIA] (hora de dormir, modo simples, tempo de tela) só pedem ao DESLIGAR ([ligadoAgora] = true); ligar é a direção segura.
      */
     fun precisaPinNaTv(c: Chave, ligadoAgora: Boolean, temPin: Boolean): Boolean =
-        temPin && c in CHAVES_COM_PIN && ((c != Chave.HORA_DORMIR && c != Chave.MODO_SIMPLES) || ligadoAgora)   // essas duas: só desligar pede
+        temPin && c in CHAVES_COM_PIN && (c !in CHAVES_FAMILIA || ligadoAgora)   // as de família: só desligar pede
 
     private fun prefs(ctx: Context) = ctx.getSharedPreferences(ARQUIVO, Context.MODE_PRIVATE)
 

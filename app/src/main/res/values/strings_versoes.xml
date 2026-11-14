@@ -26,6 +26,11 @@
         <item>Search: at the end of the results, continue the same search on YouTube, Netflix or Prime Video</item>
         <item>Live TV: each account can have a second XMLTV guide that only fills channels left without a schedule</item>
         <item>“My team” reminders now see matches up to 7 days ahead, not just the next 14 hours</item>
+        <item>Up to 3 named timers at once, plus a stopwatch (Hourglass); Home shows the next one</item>
+        <item>Alarms can wake you with the last live TV channel (a radio from your list works too)</item>
+        <item>Kids PIN: unlock channels and bedtime without giving away the panel PIN</item>
+        <item>Daily screen time: when it runs out, only allowed apps open (Extras)</item>
+        <item>Calendar with all the TV\'s Google accounts together</item>
         <item>Type with accents from your phone and from Claude (ç, ã, é arrive as typed)</item>
         <item>Guest Wi-Fi as a QR: Settings &gt; Guests and routines; in guest mode, Wi-Fi in the quick panel shows the QR</item>
         <item>The nightly backup now checks every night that the saved copy would restore</item>
@@ -45,6 +50,12 @@
         <item>busca_outros_apps</item>
         <item>guia_extra</item>
         <item>meu_time_dias</item>
+        <item>timers_tres</item>
+        <item>cronometro</item>
+        <item>despertar_canal</item>
+        <item>pin_criancas</item>
+        <item>tempo_tela</item>
+        <item>agenda_todas</item>
         <item>digitar_acento</item>
         <item>wifi_visitas</item>
         <item>ensaio_backup</item>
@@ -64,6 +75,12 @@
         <item>Open Search, type a movie name and pick “Search … on YouTube” at the end</item>
         <item>In the panel, add an account with a second guide link, then open Live TV</item>
         <item>With your team saved in “My team”, open Live TV once, then look at the reminders in the panel</item>
+        <item>Say “Ok Google, open Avisar em 5 minutos”, then “open Avisar em 10 minutos”</item>
+        <item>Say “Ok Google, open Ampulheta” and pick Start stopwatch</item>
+        <item>In a test alarm, set Sound: Last live TV channel</item>
+        <item>Settings &gt; Parental control &gt; Kids PIN; then show a hidden category with it</item>
+        <item>Extras: turn on Daily screen time with 30 min and open an app</item>
+        <item>Open the calendar (OK on the date at the top)</item>
         <item>Type “ação” in the TV search from the phone panel</item>
         <item>Set Settings &gt; Guests and routines &gt; Guest Wi-Fi, turn guest mode on and press Wi-Fi in the quick panel</item>
         <item>Settings &gt; System &gt; Automatic backup &gt; Back up now</item>
@@ -83,6 +100,12 @@
         <item>Did YouTube open with that search (or at least open)?</item>
         <item>Do channels that had no schedule now show programs, while the others stay the same?</item>
         <item>Does a match more than a day away show up in the list?</item>
+        <item>Does the Home pill show the nearest timer with “+1”?</item>
+        <item>Does the pill show the stopwatch counting up, and does OK on it stop it and show the time?</item>
+        <item>At alarm time, did the channel play, getting louder slowly?</item>
+        <item>Did the kids PIN unlock it, and does the panel PIN still work?</item>
+        <item>After 30 min, did the app go back to Home with the notice?</item>
+        <item>Do events from all the TV\'s accounts show up?</item>
         <item>Did it arrive with the ç and the ã?</item>
         <item>Did the QR show up, and did a phone camera connect?</item>
         <item>Does the result say “restore check passed”?</item>

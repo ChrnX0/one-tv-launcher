@@ -50,6 +50,38 @@ object PainelArmazem {
         } catch (e: IllegalArgumentException) { false }
     }
 
+    // ---- PIN das crianças (ideia 34, ver PinFamilia): mesmo arquivo e mesmo formato do PIN do painel, chaves "fam_*".
+
+    fun temPinFamilia(ctx: Context): Boolean = prefs(ctx).contains("fam_resumo")
+
+    /** Lento (PBKDF2): fora da thread da tela. Quem chama já conferiu PinFamilia.conferirNovo. */
+    fun definirPinFamilia(ctx: Context, pin: String) {
+        require(PinSeguro.valido(pin))
+        val sal = PinSeguro.novoSal()
+        prefs(ctx).edit()
+            .putString("fam_sal", Base64.encodeToString(sal, Base64.NO_WRAP))
+            .putString("fam_resumo", Base64.encodeToString(PinSeguro.resumo(pin, sal, PinSeguro.ITERACOES), Base64.NO_WRAP))
+            .putInt("fam_iteracoes", PinSeguro.ITERACOES)
+            .commit()
+    }
+
+    fun apagarPinFamilia(ctx: Context) { prefs(ctx).edit().remove("fam_sal").remove("fam_resumo").remove("fam_iteracoes").commit() }
+
+    /** Lento (PBKDF2): fora da thread da tela. */
+    fun conferirPinFamilia(ctx: Context, pin: String): Boolean {
+        val p = prefs(ctx)
+        val sal = p.getString("fam_sal", null) ?: return false
+        val resumo = p.getString("fam_resumo", null) ?: return false
+        val iteracoes = p.getInt("fam_iteracoes", PinSeguro.ITERACOES).coerceIn(PinSeguro.ITERACOES_ACEITAS)
+        return try {
+            PinSeguro.confere(pin, Base64.decode(sal, Base64.NO_WRAP), iteracoes, Base64.decode(resumo, Base64.NO_WRAP))
+        } catch (e: IllegalArgumentException) { false }
+    }
+
+    /** PIN digitado NA TV para destravar algo na frente da criança: vale o das crianças ou o do painel. Lento. */
+    fun conferirPinNaTv(ctx: Context, pin: String): Boolean =
+        PinFamilia.confereNaTv(pin, temPinFamilia(ctx), { conferirPinFamilia(ctx, it) }, { conferirPin(ctx, it) })
+
     /** O dono quer o painel ligado (chave das Configurações). Não liga sozinho sem PIN: ver [podeLigar]. */
     fun ligado(ctx: Context): Boolean = prefs(ctx).getBoolean("ligado", false)
     fun definirLigado(ctx: Context, sim: Boolean) { prefs(ctx).edit().putBoolean("ligado", sim).apply() }

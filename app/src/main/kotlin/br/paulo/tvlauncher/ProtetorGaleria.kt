@@ -523,7 +523,7 @@ class ProtetorGaleria(
                         timeInMillis = agora; set(Calendar.HOUR_OF_DAY, 23); set(Calendar.MINUTE, 59); set(Calendar.SECOND, 59)
                     }.timeInMillis
                     val hm = SimpleDateFormat("HH:mm", Locale.getDefault())
-                    lista = Agenda.eventos(ctx, Perfil.ativa(ctx), agora, fimDoDia).filter { it.fim > agora }.take(2).map { e ->
+                    lista = Agenda.eventosDaTv(ctx, agora, fimDoDia).filter { it.fim > agora }.take(2).map { e ->
                         e.titulo to (if (e.diaInteiro) ctx.getString(R.string.pg_dia_todo) else hm.format(Date(e.inicio)))
                     }
                 }
@@ -538,7 +538,7 @@ class ProtetorGaleria(
                         val inicioDia = Calendar.getInstance().apply {
                             timeInMillis = agora; set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0)
                         }.timeInMillis
-                        Agenda.eventos(ctx, Perfil.ativa(ctx), inicioDia, inicioDia + 24 * 3_600_000L - 1)
+                        Agenda.eventosDaTv(ctx, inicioDia, inicioDia + 24 * 3_600_000L - 1)
                             .filter { it.diaInteiro && Mural.eAniversario(it.titulo) }.take(2)
                             .forEach { cartoes12 += Triple(ctx.getString(R.string.pv_hoje), it.titulo, "") }
                         m.recados.forEach { cartoes12 += Triple(ctx.getString(R.string.pg_recado), it, "") }
