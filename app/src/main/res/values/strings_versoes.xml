@@ -96,6 +96,9 @@
         <item>Blu-ray and DVD subtitles (PGS, VobSub) now show in movies and series, and anime ASS subtitles keep their original colour and position</item>
         <item>Network: folders over FTP, FTPS, SFTP and NFS (NAS, router with a drive, Linux or Mac computer), and a USB drive plugged into the TV shows up by itself under “Plugged into the TV”</item>
         <item>Live TV records to a USB drive or disk on the hub (or a Windows/NAS folder): ▶▶ › Record on a channel, OK on a future show in the guide to schedule it (also every week), and the Recordings screen in the live TV column</item>
+        <item>On the network: OneDrive and Dropbox as a source of videos, music and photos (once, you create your own app at the service and sign in from your phone)</item>
+        <item>Subtitles in the same folder as the video (Movie.srt, Movie.pt-BR.ass) show up in ▼ by themselves, in network folders, the cloud and USB drives</item>
+        <item>Movies and series at their own frame rate: the TV switches to 24 Hz and the picture does not judder in camera moves (Settings › TV and movies, ▼ menu and panel)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>unidade_rede</item>
@@ -175,6 +178,8 @@
         <item>pendrive_na_rede</item>
         <item>gravar_agora</item>
         <item>gravar_agendada</item>
+        <item>nuvem_fonte</item>
+        <item>taxa_quadros</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Network drive</item>
@@ -254,6 +259,8 @@
         <item>Plug a USB drive with videos into the TV and open Network</item>
         <item>With a USB drive on the hub, on a channel: ▶▶ › Record 1 hour; after 2 min, OK › Recordings in the column</item>
         <item>In the guide, OK on a show starting in 10 min › Record; turn the TV off and wait for it to end</item>
+        <item>In On the network › OneDrive (or Dropbox), follow the steps and open a video from the cloud</item>
+        <item>Open a movie and watch a scene where the camera pans slowly</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>With Settings › Remote access › Show the TV as a network drive on, does Windows Map network drive with the address shown there and the panel PIN open the TV folders?</item>
@@ -333,5 +340,7 @@
         <item>Does the drive show under “Plugged into the TV” and does a video from it play?</item>
         <item>Did the channel keep playing smoothly, and does the recording show up and play in Recordings?</item>
         <item>Afterwards, is the whole show in Recordings?</item>
+        <item>Did the video play, and could you skip forward and back without stalling?</item>
+        <item>Did the screen blink black at the start, and was the motion smooth, without stutter?</item>
     </string-array>
 </resources>

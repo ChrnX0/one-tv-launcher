@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Nuvem como fonte (14/11/2026, Nuvem.kt): OneDrive e Dropbox em "Na rede". -->
+    <string name="rede_sub_nuvem">Vídeos, músicas e fotos da sua nuvem</string>
+    <string name="rede_nuvem_seguir">Continuar</string>
+    <string name="rede_nuvem_entrar">Entrar</string>
+    <string name="rede_nuvem_pedindo">Pedindo um código…</string>
+    <string name="rede_nuvem_esperando">Esperando você confirmar no celular…</string>
+    <string name="rede_nuvem_salvando">Entrando…</string>
+    <string name="rede_nuvem_recusado">O serviço recusou. Confira o id do app e tente de novo.</string>
+    <string name="rede_erro_nuvem_login">A permissão desta conta venceu ou foi tirada. Remova a conta (OK segurado) e entre de novo.</string>
+    <string name="rede_od_titulo">OneDrive: o seu app na Microsoft</string>
+    <string name="rede_od_explica">Uma vez só, no computador: entra.microsoft.com › Registros de aplicativo › Novo registro. Em tipos de conta, escolha a que inclui contas pessoais da Microsoft. Depois, em Autenticação, ligue “Permitir fluxos de cliente público”. Copie o “ID do aplicativo (cliente)” e digite aqui (dá para digitar pelo celular, no painel).</string>
+    <string name="rede_od_id">ID do aplicativo (cliente)</string>
+    <string name="rede_od_id_erro">O ID tem o formato 00000000-0000-0000-0000-000000000000.</string>
+    <string name="rede_od_codigo_explica">No celular ou no computador, abra microsoft.com/link (ou aponte a câmera para o QR) e digite o código abaixo. A TV só pede para ler os arquivos.</string>
+    <string name="rede_od_erro_app">A Microsoft não aceitou este app. Confira o ID e se “Permitir fluxos de cliente público” está ligado.</string>
+    <string name="rede_dbx_explica">Uma vez só, no computador: dropbox.com/developers/apps › Create app › Scoped access › Full Dropbox. Na aba Permissions, marque files.metadata.read, files.content.read e account_info.read e salve (Submit). Copie a “App key” e digite aqui.</string>
+    <string name="rede_dbx_chave">App key</string>
+    <string name="rede_dbx_chave_erro">A App key tem só letras minúsculas e números.</string>
+    <string name="rede_dbx_codigo_explica">Aponte a câmera do celular para o QR, entre no Dropbox e toque em Permitir. O Dropbox mostra um código: digite aqui (dá para digitar pelo celular, no painel).</string>
+    <string name="rede_dbx_codigo">Código do Dropbox</string>
+    <string name="rede_dbx_codigo_erro">Digite o código inteiro que o Dropbox mostrou.</string>
+</resources>

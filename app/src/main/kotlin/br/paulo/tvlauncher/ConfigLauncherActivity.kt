@@ -328,6 +328,12 @@ class ConfigLauncherActivity : Activity() {
             }
             c.addView(l)
         }
+        // Ideia 86: filme na taxa de quadros dele (24 Hz), a mesma chave do menu ▼ do player e do painel.
+        lateinit var linhaQuadros: LinhaCfg
+        linhaQuadros = linha(getString(R.string.quadros_opcao), getString(R.string.quadros_det), chave = TaxaQuadros.ligada(this)) {
+            linhaQuadros.ligado(TaxaQuadros.alternar(this))
+        }
+        c.addView(linhaQuadros)
         // Foto da conta Google na bolinha do perfil (FotoPerfil, 13/11/2026): abre a tela do código para o celular.
         secao(c, getString(R.string.fp_secao))
         c.addView(linha(getString(R.string.fp_linha), getString(R.string.fp_linha_det), seta = true) {

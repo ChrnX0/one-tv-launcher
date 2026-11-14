@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Cloud as a source (14/11/2026, Nuvem.kt): OneDrive and Dropbox in "On the network". -->
+    <string name="rede_sub_nuvem">Videos, music and photos from your cloud</string>
+    <string name="rede_nuvem_seguir">Continue</string>
+    <string name="rede_nuvem_entrar">Sign in</string>
+    <string name="rede_nuvem_pedindo">Asking for a code…</string>
+    <string name="rede_nuvem_esperando">Waiting for you to confirm on your phone…</string>
+    <string name="rede_nuvem_salvando">Signing in…</string>
+    <string name="rede_nuvem_recusado">The service refused. Check the app id and try again.</string>
+    <string name="rede_erro_nuvem_login">This account\'s permission expired or was removed. Remove the account (hold OK) and sign in again.</string>
+    <string name="rede_od_titulo">OneDrive: your app at Microsoft</string>
+    <string name="rede_od_explica">Once, on a computer: entra.microsoft.com › App registrations › New registration. For account types, pick the one that includes personal Microsoft accounts. Then, under Authentication, turn on “Allow public client flows”. Copy the “Application (client) ID” and type it here (you can type from your phone, in the panel).</string>
+    <string name="rede_od_id">Application (client) ID</string>
+    <string name="rede_od_id_erro">The ID looks like 00000000-0000-0000-0000-000000000000.</string>
+    <string name="rede_od_codigo_explica">On your phone or computer, open microsoft.com/link (or point the camera at the QR) and type the code below. The TV only asks to read files.</string>
+    <string name="rede_od_erro_app">Microsoft did not accept this app. Check the ID and that “Allow public client flows” is on.</string>
+    <string name="rede_dbx_explica">Once, on a computer: dropbox.com/developers/apps › Create app › Scoped access › Full Dropbox. In the Permissions tab, tick files.metadata.read, files.content.read and account_info.read and save (Submit). Copy the “App key” and type it here.</string>
+    <string name="rede_dbx_chave">App key</string>
+    <string name="rede_dbx_chave_erro">The App key has only lowercase letters and numbers.</string>
+    <string name="rede_dbx_codigo_explica">Point your phone camera at the QR, sign in to Dropbox and tap Allow. Dropbox shows a code: type it here (you can type from your phone, in the panel).</string>
+    <string name="rede_dbx_codigo">Dropbox code</string>
+    <string name="rede_dbx_codigo_erro">Type the whole code Dropbox showed.</string>
+</resources>

@@ -134,6 +134,7 @@ class VodActivity : Activity() {
     private var retomarEm = 0L
     private var visivel = false
     private var legendaDecidida = false
+    private var quadrosDecididos = false   // ideia 86: o modo da tela (24 Hz para filme) já foi pedido para este vídeo
     // Preferência de áudio deste título (Idioma), lida do disco fora da thread da tela antes de o vídeo começar.
     @Volatile private var prefIdioma = Idioma.Pref.DUBLADO
     private var chaveIdioma = ""
@@ -141,6 +142,8 @@ class VodActivity : Activity() {
     private val idiomaTv by lazy { IdiomaPlayer.idiomaDaTv() }
     // Legenda baixada da internet para este vídeo (LegendaBaixar), se houver, e o atraso aplicado nela.
     private var legendaArquivo: java.io.File? = null
+    // Legendas na mesma pasta do vídeo ("Filme.srt", "Filme.pt-BR.ass"): endereço + o que o nome diz (LegendaAoLado).
+    private var legendasAoLado: List<Pair<String, LegendaAoLado.Achada>> = emptyList()
     private var atrasoLegenda = 0L
     private lateinit var legenda: TextView
     private lateinit var legendaImg: LegendaImagem.Vista   // PGS, VobSub, DVB e ASS (libass): legenda que chega como imagem
@@ -242,6 +245,7 @@ class VodActivity : Activity() {
             }
             prefIdioma = IdiomaPlayer.prefs(this).para(chaveIdioma)
             val leg = LegendaBaixar.guardada(this, chave)
+            val aoLado = direto?.let { runCatching { acharAoLado(it) }.getOrNull() }.orEmpty()
             val atraso = getSharedPreferences("player", MODE_PRIVATE).getLong("atraso:$chave", 0L)
             // Ideia 21: tamanho da legenda escolhido no ▼ (vale para todos os vídeos).
             val tamLeg = FimDoVideo.tamanhoLegenda(getSharedPreferences("player", MODE_PRIVATE).getInt("legenda_sp", FimDoVideo.LEGENDA_PADRAO))
@@ -251,7 +255,7 @@ class VodActivity : Activity() {
             tela.post {
                 if (isDestroyed) return@post
                 if (endereco == null) { mostrarAviso(getString(R.string.vod_sem_conta)); return@post }
-                url = endereco; retomarEm = pos; legendaArquivo = leg; atrasoLegenda = atraso
+                url = endereco; retomarEm = pos; legendaArquivo = leg; atrasoLegenda = atraso; legendasAoLado = aoLado
                 tamLegendaSp = tamLeg; legenda.textSize = tamLeg.toFloat()
                 pintarLegenda()
                 abertura = ab
@@ -265,6 +269,7 @@ class VodActivity : Activity() {
     override fun onStart() { super.onStart(); visivel = true; if (url != null && player == null) tocar() }
 
     override fun onStop() {
+        TaxaQuadros.soltar(this); quadrosDecididos = false   // a HOME e o resto voltam ao modo de sempre
         avanco.cancelar()
         tela.removeCallbacks(vigiaAbertura); esconderPilula()
         super.onStop()
@@ -317,12 +322,39 @@ class VodActivity : Activity() {
     /** O vídeo e, se houver, a legenda baixada junto (o Media3 a trata como mais uma faixa de legenda). */
     private fun item(u: String): MediaItem {
         val b = MediaItem.Builder().setUri(u)
+        val legendas = ArrayList<MediaItem.SubtitleConfiguration>()
         legendaArquivo?.let { f ->
-            b.setSubtitleConfigurations(listOf(MediaItem.SubtitleConfiguration.Builder(android.net.Uri.fromFile(f))
+            legendas += MediaItem.SubtitleConfiguration.Builder(android.net.Uri.fromFile(f))
                 .setMimeType(MimeTypes.APPLICATION_SUBRIP).setLanguage(Idioma.tagLegendaBaixada(idiomaTv)).setId(IdiomaPlayer.ID_EXTERNA)
-                .setSelectionFlags(C.SELECTION_FLAG_DEFAULT).build()))
+                .setSelectionFlags(C.SELECTION_FLAG_DEFAULT).build()
         }
+        // As da pasta entram como faixas comuns: o ▼ mostra todas, e a escolha automática (IdiomaPlayer) vale para elas.
+        legendasAoLado.forEachIndexed { i, (endereco, a) ->
+            legendas += MediaItem.SubtitleConfiguration.Builder(android.net.Uri.parse(endereco)).setMimeType(a.mime)
+                .setLanguage(a.idioma).setLabel(a.nome).setId("aolado:$i").build()
+        }
+        if (legendas.isNotEmpty()) b.setSubtitleConfigurations(legendas)
         return b.build()
+    }
+
+    /**
+     * Legendas na mesma pasta do vídeo (pastas da rede, nuvem e pendrive). Fora da thread da tela: lista a pasta uma vez.
+     * O endereço volta no mesmo formato do vídeo (arq://, smb:// ou file://), que a FontePastas já sabe abrir.
+     */
+    private fun acharAoLado(u: String): List<Pair<String, LegendaAoLado.Achada>> {
+        Pastas.lerUri(u)?.let { (id, caminho) ->
+            val conta = MidiaArmazem.conta(this, id) ?: return emptyList()
+            val pasta = caminho.substringBeforeLast('/', "")
+            val nomes = Pastas.abrir(conta).use { p -> p.listar(pasta).filter { !it.pasta }.map { it.nome } }
+            return LegendaAoLado.achar(caminho.substringAfterLast('/'), nomes).map { a -> Pastas.uri(conta, MidiaContas.juntar(pasta, a.nome)) to a }
+        }
+        if (Pastas.arquivoLocalPermitido(u)) {
+            val f = java.io.File(android.net.Uri.parse(u).path ?: return emptyList())
+            val dir = f.parentFile ?: return emptyList()
+            val nomes = dir.listFiles()?.filter { it.isFile }?.map { it.name }.orEmpty()
+            return LegendaAoLado.achar(f.name, nomes).map { a -> android.net.Uri.fromFile(java.io.File(dir, a.nome)).toString() to a }
+        }
+        return emptyList()
     }
 
     /** Troca a legenda com o vídeo andando: refaz o item no mesmo ponto (o Media3 não aceita faixa nova no meio). */
@@ -388,6 +420,11 @@ class VodActivity : Activity() {
         }
 
         override fun onTracksChanged(faixas: Tracks) {
+            // Ideia 86: a taxa de quadros só se sabe quando a faixa de vídeo chega.
+            if (!quadrosDecididos) player?.videoFormat?.frameRate?.takeIf { it > 0f }?.let { fps ->
+                quadrosDecididos = true
+                TaxaQuadros.aplicar(this@VodActivity, fps)
+            }
             if (faixas.groups.isNotEmpty()) {
                 val soAudio = faixas.groups.none { it.type == C.TRACK_TYPE_VIDEO }
                 capaAudio.visibility = if (soAudio) View.VISIBLE else View.GONE
@@ -523,6 +560,11 @@ class VodActivity : Activity() {
         if (EfeitosSom.disponivel()) {
             opcoes += Opcao(getString(R.string.acess_volume), EfeitosSom.volumeIgual(this)) { alternarSom(PlayerAcessivel.VOLUME_IGUAL) }
             opcoes += Opcao(getString(R.string.acess_voz), EfeitosSom.vozClara(this)) { alternarSom(PlayerAcessivel.VOZ_CLARA) }
+        }
+        opcoes += Opcao(getString(R.string.quadros_opcao), TaxaQuadros.ligada(this)) {
+            val ligou = TaxaQuadros.alternar(this)
+            if (ligou) player?.videoFormat?.frameRate?.takeIf { it > 0f }?.let { TaxaQuadros.aplicar(this, it) } else TaxaQuadros.soltar(this)
+            avisoBreve(getString(if (ligou) R.string.quadros_ligado else R.string.quadros_desligado))
         }
         opcoes += Opcao(getString(R.string.vod_desligar_ao_fim), marcada = desligarAoFim) {
             desligarAoFim = !desligarAoFim
