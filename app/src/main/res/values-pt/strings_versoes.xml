@@ -36,6 +36,8 @@
         <item>Wi-Fi das visitas em QR: Configurações &gt; Visitas e rotinas; no modo visita, o Wi-Fi do painel rápido mostra o QR</item>
         <item>O backup noturno agora confere toda noite se a cópia gravada restauraria</item>
         <item>Configurações &gt; Sistema &gt; O que é usado: telas e opções por uso, contadas só nesta TV</item>
+        <item>Internet: aviso no celular quando ela volta (quanto ficou fora e a causa provável), resumo por mês no painel e aviso quando o armazenamento está enchendo</item>
+        <item>Painel rápido: os últimos avisos da TV (chuva, recado, manutenção) e a lista de compras, que se risca com OK</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -65,6 +67,7 @@
         <item>Preencha Configurações &gt; Visitas e rotinas &gt; Wi-Fi das visitas, ligue o modo visita e aperte Wi-Fi no painel rápido</item>
         <item>Configurações &gt; Sistema &gt; Backup automático &gt; Fazer agora</item>
         <item>Abra Configurações &gt; Sistema &gt; O que é usado</item>
+        <item>Abra o painel rápido e desça até o fim</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -94,5 +97,6 @@
         <item>Apareceu o QR, e a câmera de um celular conectou?</item>
         <item>O resultado diz “restauração conferida”?</item>
         <item>Aparecem as telas que você abriu hoje?</item>
+        <item>Aparecem os avisos da TV e a lista de compras, e OK risca um item?</item>
     </string-array>
 </resources>

@@ -45,6 +45,8 @@ object Avisos {
         PRESENCA("TV desligada porque todos saíram", true),
         AJUDA("Pedido de ajuda (modo simples)", true, semLimite = true),
         DESEMPENHO("Launcher ficou mais lento", true),
+        INTERNET_VOLTOU("Internet voltou (quanto ficou fora)", true),
+        ARMAZENAMENTO("Armazenamento da TV enchendo", true),
     }
 
     data class Inscricao(val endpoint: String, val p256dh: String, val auth: String, val nome: String, val desde: Long)

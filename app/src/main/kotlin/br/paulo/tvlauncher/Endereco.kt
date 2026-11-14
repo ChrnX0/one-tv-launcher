@@ -73,6 +73,41 @@ object Endereco {
         } finally { c.disconnect() }
     } catch (e: Exception) { null }
 
+    // ---------------------------------------------------------------- cidade em qualquer país (ideia 40, 14/11/2026)
+
+    /**
+     * A busca de cidades da Open-Meteo (a mesma que dá a previsão; sem chave). [idioma] = "pt", "en"... para o nome
+     * vir no idioma da TV. Até 5 resultados: o primeiro é o mais populoso com esse nome.
+     */
+    fun urlCidade(nome: String, idioma: String) =
+        "https://geocoding-api.open-meteo.com/v1/search?count=5&format=json&name=${cod(nome.trim())}&language=${cod(idioma.take(5))}"
+
+    /**
+     * Resposta da busca -> o primeiro lugar válido, com nome "Cidade, País" (ou "Cidade, Estado, País" quando o
+     * estado ajuda a separar homônimos). Null se veio vazio ou estranho.
+     */
+    fun lerCidade(json: String): Achado? = try {
+        val a = JSONObject(json).optJSONArray("results")
+        (0 until (a?.length() ?: 0)).asSequence().mapNotNull { i ->
+            val r = a!!.getJSONObject(i)
+            val lat = r.optDouble("latitude"); val lon = r.optDouble("longitude")
+            val nome = r.optString("name").trim()
+            if (nome.isEmpty() || !LocalClima.coordenadaValida(lat, lon)) return@mapNotNull null
+            val pais = r.optString("country").trim()
+            val estado = r.optString("admin1").trim().takeIf { it.isNotEmpty() && it != nome }
+            Achado(LocalClima.limparNome(listOfNotNull(nome, estado, pais.takeIf { it.isNotEmpty() }).joinToString(", ")), lat, lon, "cidade")
+        }.firstOrNull()
+    } catch (e: Exception) { null }
+
+    /** Nome de cidade (de 2 a 80 letras) -> coordenadas. Mensagem de erro em português, como o [buscar]. */
+    fun buscarCidade(nomeTexto: String?, idioma: String, httpGet: (String) -> String?): Result<Achado> {
+        val nome = nomeTexto.orEmpty().filter { !it.isISOControl() }.trim()
+        if (nome.length !in 2..80) return Result.failure(IllegalArgumentException("nome de cidade inválido"))
+        val achado = httpGet(urlCidade(nome, idioma))?.let { lerCidade(it) }
+            ?: return Result.failure(IllegalStateException("cidade não encontrada (ou sem internet)"))
+        return Result.success(achado)
+    }
+
     /** Nome curto que aparece na previsão: o bairro (ou a rua, ou a cidade). */
     fun nome(c: Cep): String = LocalClima.limparNome(c.bairro.ifBlank { c.rua.ifBlank { c.cidade } })
 

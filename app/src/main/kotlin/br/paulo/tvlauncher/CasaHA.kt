@@ -347,6 +347,11 @@ object CasaHA {
         } finally { c.disconnect() }
     }
 
+    /** Estado de UMA entidade de qualquer domínio (ex.: person.ana = "home"), para a presença (ideia 40). Null se falhar. */
+    fun estadoDe(ctx: Context, id: String): String? = if (!idValido(id)) null else try {
+        JSONObject(String(pedir(ctx, "GET", "/api/states/$id", limite = 256 shl 10))).optString("state").ifEmpty { null }
+    } catch (e: Exception) { null }
+
     fun listar(ctx: Context): List<Entidade> = lerEstados(String(pedir(ctx, "GET", "/api/states")))
 
     /** Cômodo de cada aparelho (entity_id -> nome da área). Erra com [Erro] se o token não for de administrador. */

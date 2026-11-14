@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ideias 35, 36, 37, 39 e 41 do estudo (14/11/2026): avisos de internet que voltou e de armazenamento enchendo. -->
+<resources>
+    <string name="rd_voltou_titulo">Internet is back</string>
+    <string name="rd_voltou_texto">It was down for %1$s (since %2$s). Likely cause: %3$s.</string>
+    <string name="rd_causa_wifi">the TV lost its Wi-Fi</string>
+    <string name="rd_causa_provedor">internet provider or router</string>
+    <string name="rd_min">%1$d min</string>
+    <string name="rd_h_min">%1$d h %2$d min</string>
+    <string name="rd_disco_titulo">TV storage is filling up</string>
+    <string name="rd_disco_texto">At this pace it fills up in about %1$d days (%2$d MB free). Clear app caches or remove apps you don\'t use.</string>
+    <string name="pr_avisos_tv">From the TV</string>
+    <string name="mural_riscar">Cross out %1$s</string>
+</resources>

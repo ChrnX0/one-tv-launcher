@@ -9,6 +9,7 @@ import android.os.SystemClock
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.time.LocalDate
 
 /**
  * Aba "Saúde" do painel no navegador (05/11/2026, fila longa do brainstorm): como a TV está por dentro, em números,
@@ -44,6 +45,11 @@ object PainelSaude {
             o.put("discoLivre", s.availableBytes).put("discoTotal", s.totalBytes)
         } catch (_: Exception) {}
         o.put("ligadaHa", SystemClock.elapsedRealtime())
+        try {   // ideia 41: quando o armazenamento enche, pela medida de cada dia
+            val s = StatFs(Environment.getDataDirectory().path)
+            TendenciaDisco.diasAteEncher(pontosDisco(ctx), LocalDate.now(), s.totalBytes)?.let { o.put("discoDiasAteEncher", it) }
+            o.put("discoMedidas", pontosDisco(ctx).size)
+        } catch (_: Exception) {}
         try { o.put("termico", rotuloTermico(ctx.getSystemService(PowerManager::class.java).currentThermalStatus)) } catch (_: Exception) {}
 
         var zonas = lerZonasDireto()
@@ -65,6 +71,30 @@ object PainelSaude {
             })
         }
         return o
+    }
+
+    private const val PREFS_TENDENCIA = "saude_tendencia"
+    private fun pontosDisco(ctx: Context) =
+        TendenciaDisco.ler(ctx.getSharedPreferences(PREFS_TENDENCIA, Context.MODE_PRIVATE).getString("disco", null))
+
+    /**
+     * Ideia 41: guarda o espaço livre de hoje (uma vez por dia, chamado pelo [HistoricoRede]) e, se a reta diz que
+     * enche em até [TendenciaDisco.AVISAR_DIAS] dias, avisa no celular (no máximo uma vez por semana).
+     */
+    fun registrarDisco(ctx: Context) {
+        val app = ctx.applicationContext
+        val s = StatFs(Environment.getDataDirectory().path)
+        val hoje = LocalDate.now()
+        val p = app.getSharedPreferences(PREFS_TENDENCIA, Context.MODE_PRIVATE)
+        val l = TendenciaDisco.registrar(pontosDisco(app), hoje, s.availableBytes)
+        p.edit().putString("disco", TendenciaDisco.escrever(l)).apply()
+        val dias = TendenciaDisco.diasAteEncher(l, hoje, s.totalBytes) ?: return
+        if (dias > TendenciaDisco.AVISAR_DIAS) return
+        val avisado = runCatching { LocalDate.parse(p.getString("avisado", "")) }.getOrNull()
+        if (avisado != null && avisado > hoje.minusDays(7)) return
+        p.edit().putString("avisado", hoje.toString()).apply()
+        Avisos.enviar(app, Avisos.Tipo.ARMAZENAMENTO, app.getString(R.string.rd_disco_titulo),
+            app.getString(R.string.rd_disco_texto, dias, s.availableBytes / (1L shl 20)))
     }
 
     /** Encerra os processos em segundo plano e devolve quanto de RAM livre ganhou (bytes), ou null sem shell. */

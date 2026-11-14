@@ -233,6 +233,10 @@ document.addEventListener('click', (ev) => {
   const b = ev.target.closest('[data-aba]');
   if (b && !$('telaPainel').hidden) { ev.preventDefault(); mudarAba(b.dataset.aba); }
 });
+// Toque num aviso do celular com o painel já aberto (sw.js, ideia 38): vai para a aba que resolve o aviso.
+if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('message', (ev) => {
+  if (ev.data && typeof ev.data.aba === 'string' && !$('telaPainel').hidden) mudarAba(ev.data.aba);
+});
 window.addEventListener('popstate', () => { if (!$('telaPainel').hidden && !location.hash.startsWith('#qr=')) mudarAba(location.hash.slice(1), false); });
 
 // ---------- confirmação (e PIN de novo) ----------
@@ -845,6 +849,9 @@ function desenharNumeros(s, caixa = $('numerosSaude')) {
   if (maisQuente) item('temperatura', `${maisQuente.celsius.toLocaleString('pt-BR')} °C`, maisQuente.celsius >= 80);
   if (s.termico) item('estado térmico', s.termico, !['normal', 'desconhecido'].includes(s.termico));
   if (n(s.ligadaHa)) item('ligada há', duracao(s.ligadaHa), false);
+  // Ideia 41: tendência do espaço livre (uma medida por dia).
+  if (n(s.discoDiasAteEncher)) item('o armazenamento enche, nesse ritmo', s.discoDiasAteEncher < 14 ? `em ${s.discoDiasAteEncher} dias` : `em ~${Math.round(s.discoDiasAteEncher / 7)} semanas`, s.discoDiasAteEncher <= 21);
+  else if (n(s.discoMedidas) && s.discoTotal) item('espaço livre, tendência', s.discoMedidas < 5 ? 'medindo…' : 'estável', false);
   if (!caixa.children.length) item('números', '—', false);
 }
 
@@ -1959,7 +1966,7 @@ function mostrarClima(c) {
   // A TV usa o Wi-Fi primeiro; o endereço vale quando o Wi-Fi não dá a posição (e antes do IP da internet).
   $('estadoClima').textContent = (c.fixo ? `cadastrado: ${c.fixo.descricao}` : 'nenhum cadastrado (a TV se acha pelo Wi-Fi ou pela internet)') +
     (c.usado ? ` · última posição usada: ${c.usado.lat.toFixed(3)}, ${c.usado.lon.toFixed(3)}` : '');
-  if (c.fixo) { $('cepClima').value = c.fixo.cep; $('numeroClima').value = c.fixo.numero; }
+  if (c.fixo) { $('cepClima').value = c.fixo.cep; $('numeroClima').value = c.fixo.numero; $('cidadeClima').value = c.fixo.cep ? '' : (c.fixo.nome || ''); }
 }
 
 async function carregarClima() {
@@ -1970,7 +1977,9 @@ $('formClima').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   try {
     mostrar($('statusControle'), 'Procurando o endereço…');
-    mostrarClima(await chamar('POST', '/api/clima', { cep: $('cepClima').value.trim(), numero: $('numeroClima').value.trim() }));
+    // Sem CEP e com cidade: busca a cidade (qualquer país, ideia 40). Com CEP, o CEP vence (é mais preciso).
+    const cep = $('cepClima').value.trim(), cidade = $('cidadeClima').value.trim();
+    mostrarClima(await chamar('POST', '/api/clima', !cep && cidade ? { cidade } : { cep, numero: $('numeroClima').value.trim() }));
     mostrar($('statusControle'), 'Endereço salvo.');
   } catch (e) { mostrar($('statusControle'), textoErro(e)); }
 });
@@ -1978,7 +1987,7 @@ $('formClima').addEventListener('submit', async (ev) => {
 $('btnClimaAuto').addEventListener('click', async () => {
   try {
     mostrarClima(await chamar('POST', '/api/clima', { automatico: true }));
-    $('cepClima').value = ''; $('numeroClima').value = '';
+    $('cepClima').value = ''; $('numeroClima').value = ''; $('cidadeClima').value = '';
     mostrar($('statusControle'), 'Endereço apagado: a TV se acha só pelo Wi-Fi ou pela internet.');
   } catch (e) { mostrar($('statusControle'), textoErro(e)); }
 });
@@ -2081,6 +2090,16 @@ async function carregarRede() {
     const fim = q.aberta ? 'ainda agora' : new Date(q.fim).toLocaleTimeString('pt-BR');
     lq.appendChild(linhaSimples(new Date(q.inicio).toLocaleString('pt-BR') + ' até ' + fim,
       `${tipo} · ${q.aberta ? 'em andamento' : duracaoLegivel(q.fim - q.inicio)}`));
+  }
+  // Ideia 37: um resumo por mês, 12 meses (o mês corrente só com os dias já terminados).
+  const lm = $('listaMesesRede'); lm.replaceChildren();
+  if (!(r.meses || []).length) vazio(lm, 'O primeiro mês aparece amanhã: a TV fecha um dia de cada vez.');
+  for (const m of r.meses || []) {
+    const [ano, mes] = m.mes.split('-').map(Number);
+    const nome = new Date(ano, mes - 1, 1).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+    const medido = m.coberturaMs ? ` · medido ${duracaoLegivel(m.coberturaMs)} em ${m.dias} dia${m.dias === 1 ? '' : 's'}` : '';
+    lm.appendChild(linhaSimples(nome, `${m.quedas} queda${m.quedas === 1 ? '' : 's'} de internet, ${m.foraMs ? duracaoLegivel(m.foraMs) : '0 min'} fora` +
+      (m.quedasDns ? `, ${m.quedasDns} só de DNS` : '') + medido));
   }
   const le = $('listaEventosRede'); le.replaceChildren();
   if (!r.eventos.length) vazio(le, 'Nenhum aviso no período.');
