@@ -20,7 +20,14 @@ object EnsaioRestauracao {
      * [claro] = o texto que o CofreBackup.abrir devolveu. [pacote] = o nosso. [arquivosPermitidos] = os caminhos que
      * o importar aceita (player/... e tunel/...). [limite] = o mesmo LIMITE_BYTES do BackupCompleto.
      */
-    fun conferir(claro: String, pacote: String, arquivosPermitidos: Set<String>, limite: Int): Resultado {
+    fun conferir(claro: String, pacote: String, arquivosPermitidos: Set<String>, limite: Int): Resultado =
+        conferir(claro, pacote, limite) { it in arquivosPermitidos }
+
+    /**
+     * Mesma conferência, com [permitido] dizendo se um caminho é aceito. Perfis de verdade (ideia 11): os arquivos por
+     * perfil (player/favoritos@ana.json...) não cabem numa lista fixa; o BackupNoturno passa BackupCompleto.caminhoPermitido.
+     */
+    fun conferir(claro: String, pacote: String, limite: Int, permitido: (String) -> Boolean): Resultado {
         if (claro.length > limite) return Resultado(false, "grande demais")
         val o = runCatching { JSONObject(claro) }.getOrNull() ?: return Resultado(false, "ilegível")
         if (o.optInt("versao") != 3) return Resultado(false, "versão ${o.opt("versao")}")
@@ -30,7 +37,7 @@ object EnsaioRestauracao {
         for (nome in prefs.keys()) if (prefs.optJSONObject(nome) == null) return Resultado(false, "preferência estragada: $nome")
         val arquivos = o.optJSONObject("arquivos") ?: JSONObject()
         for (caminho in arquivos.keys()) {
-            if (caminho !in arquivosPermitidos) return Resultado(false, "arquivo desconhecido: $caminho")
+            if (!permitido(caminho)) return Resultado(false, "arquivo desconhecido: $caminho")
             val b = runCatching { Base64.getDecoder().decode(arquivos.getString(caminho)) }.getOrNull()
                 ?: return Resultado(false, "arquivo estragado: $caminho")
             if (b.isEmpty()) return Resultado(false, "arquivo vazio: $caminho")
@@ -43,10 +50,14 @@ object EnsaioRestauracao {
      * o teste poder usar o cofre de verdade sem o Android). Senha que não abre = "não abre com a senha guardada".
      */
     fun ensaiar(envelope: String, senha: String, pacote: String, arquivosPermitidos: Set<String>, limite: Int,
+                abrir: (String, String) -> String = CofreBackup::abrir): Resultado =
+        ensaiar(envelope, senha, pacote, limite, { it in arquivosPermitidos }, abrir)
+
+    fun ensaiar(envelope: String, senha: String, pacote: String, limite: Int, permitido: (String) -> Boolean,
                 abrir: (String, String) -> String = CofreBackup::abrir): Resultado {
         val claro = try { abrir(envelope, senha) }
         catch (e: CofreBackup.SenhaErrada) { return Resultado(false, "não abre com a senha guardada") }
         catch (e: Exception) { return Resultado(false, "cofre estragado") }
-        return conferir(claro, pacote, arquivosPermitidos, limite)
+        return conferir(claro, pacote, limite, permitido)
     }
 }

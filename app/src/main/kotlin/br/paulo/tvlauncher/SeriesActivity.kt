@@ -71,6 +71,8 @@ class SeriesActivity : Activity() {
     private var ultimos: Map<String, UltimoEpisodio> = emptyMap()
     private var posicoes: Map<String, Posicao> = emptyMap()
     private var interesses: Set<String> = emptySet()
+    /** De que perfil são os interesses e posições na memória (ideia 11): trocou de perfil, a tela se refaz ao voltar. */
+    private var perfilCarregado = ""
     private var progresso: Map<String, ProgressoSerie> = emptyMap()   // episódios vistos / total, por série
     private val segurar = SegurarOk()
     private var ordem = Vod.Ordem.RECENTES
@@ -101,6 +103,7 @@ class SeriesActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
+        perfilCarregado = Perfil.chaveDados(this)
         ordem = runCatching { Vod.Ordem.valueOf(getSharedPreferences("player", MODE_PRIVATE).getString("ordem_series", "")!!) }.getOrDefault(Vod.Ordem.RECENTES)
         // Coerência visual parte 2 (12/11/2026): o grafite e a margem da HOME (eram FUNDO liso e 32/26 dp).
         val raiz = FrameLayout(this).apply { background = Estilo.fundoTela(context) }
@@ -161,6 +164,8 @@ class SeriesActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        // Perfis de verdade (ideia 11): os interesses na memória são do perfil de antes; gravar com eles misturaria os dois.
+        if (Perfil.chaveDados(this) != perfilCarregado) { recreate(); return }
         indoAoVideo = false
         // O controle parental pode ter mudado nas Configurações (igual à tela de Filmes): relê as categorias ocultas.
         val lista = todas

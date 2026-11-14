@@ -68,6 +68,7 @@ class PlayerActivity : Activity() {
     private var tentativas = 0
     private var digitado = ""
     private var favoritos: Set<String> = emptySet()
+    private var perfilCarregado = ""   // de que perfil são os [favoritos] na memória (ideia 11)
     private var recentes: List<String> = emptyList()
     private var categoria = PlayerLista.TODOS   // a escolhida na lista: o ▲▼ zapeia dentro dela
     private var escondidos: Set<String> = emptySet()   // grupos que o usuário escondeu
@@ -144,6 +145,9 @@ class PlayerActivity : Activity() {
         // Voltou para o player: relê o controle parental (pode ter mudado nas Configurações) e retoma o canal, se ele
         // ainda puder tocar; um canal que ficou bloqueado não volta a tocar sem o PIN.
         parental = PlayerArmazem.parental(this)
+        // Perfis de verdade (ideia 11): trocou de perfil com o player atrás, os favoritos na memória são do outro perfil.
+        val perfil = Perfil.chaveDados(this)
+        if (perfil != perfilCarregado) { perfilCarregado = perfil; favoritos = PlayerArmazem.favoritos(this); lista.atualizarFavoritos(favoritos) }
         refiltrar()
         val c = atual?.let { a -> visiveis.firstOrNull { it.id == a.id } } ?: visiveis.firstOrNull()
         if (c != null) sintonizar(c, guardarAnterior = false) else { atual = null; mostrarAviso(getString(R.string.player_sem_canais)) }
@@ -207,6 +211,7 @@ class PlayerActivity : Activity() {
         Fundo.rodar {
             val lidos = PlayerCarga.canais(this)   // "lidos", não "lista": lista é a tela de canais
             PlayerArmazem.migrarIdsAntigos(this, lidos)   // player-8: favoritos com a URL como id viram o id estável
+            val perfil = Perfil.chaveDados(this)
             val fav = PlayerArmazem.favoritos(this)
             val rec = PlayerArmazem.recentes(this)
             val cat = PlayerArmazem.categoria(this) ?: PlayerLista.TODOS
@@ -216,7 +221,7 @@ class PlayerActivity : Activity() {
             tela.post {
                 if (isDestroyed) return@post
                 canais = lidos
-                favoritos = fav; recentes = rec; categoria = cat; escondidos = esc; liberados = lib; parental = par
+                favoritos = fav; perfilCarregado = perfil; recentes = rec; categoria = cat; escondidos = esc; liberados = lib; parental = par
                 refiltrar()
                 if (visiveis.isEmpty()) { mostrarAviso(getString(R.string.player_sem_canais)); return@post }
                 // Canais lidos: some o "Carregando os canais…" (13/11/2026, visto na Sala: ficava na tela por minutos em

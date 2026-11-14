@@ -30,15 +30,23 @@ object Organizacao {
 
     // ---------------------------------------------------------------- ordem
 
-    fun ordem(ctx: Context): List<String> =
-        prefs(ctx).getString("ordem", "").orEmpty().split(",").filter { it.isNotEmpty() }
-
-    fun salvarOrdem(ctx: Context, tokens: List<String>) {
-        prefs(ctx).edit().putString("ordem", tokens.joinToString(",")).apply()
+    // Perfis de verdade (ideia 11): a ordem é do perfil ativo ("ordem@<usuario>", ver PerfilDados). Sem ordem própria,
+    // vale a "ordem" de antes (compartilhada), que nunca é apagada nem sobrescrita por um perfil.
+    fun ordem(ctx: Context): List<String> {
+        val p = prefs(ctx)
+        val chave = PerfilDados.chaveLeitura("ordem", Perfil.chaveDados(ctx)) { p.contains(it) }
+        return p.getString(chave, "").orEmpty().split(",").filter { it.isNotEmpty() }
     }
 
+    fun salvarOrdem(ctx: Context, tokens: List<String>) {
+        prefs(ctx).edit().putString(PerfilDados.chavePrefs("ordem", Perfil.chaveDados(ctx)), tokens.joinToString(",")).apply()
+    }
+
+    /** Volta à ordem automática. Num perfil grava a ordem vazia (remover faria a compartilhada valer de novo). */
     fun limparOrdem(ctx: Context) {
-        prefs(ctx).edit().remove("ordem").apply()
+        val perfil = Perfil.chaveDados(ctx)
+        if (perfil.isEmpty()) prefs(ctx).edit().remove("ordem").apply()
+        else prefs(ctx).edit().putString(PerfilDados.chavePrefs("ordem", perfil), "").apply()
     }
 
     /**

@@ -44,14 +44,54 @@ object Perfil {
         }
     }
 
-    /** A conta escolhida no popup. Se nada foi escolhido (ou a conta sumiu da TV), é a primeira. */
+    /**
+     * A conta escolhida no popup. Se nada foi escolhido (ou a conta sumiu da TV), é a primeira.
+     * Só o processo do launcher chama (HOME, painel rápido, agenda): aproveita para acertar o perfil dos dados
+     * ([sincronizarDados]), assim uma conta removida da TV não deixa os dados presos no perfil dela.
+     */
     fun ativa(contexto: Context, todas: List<String> = contas(contexto)): String? {
         val salva = contexto.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(CHAVE_ATIVO, null)
-        return if (salva != null && salva in todas) salva else todas.firstOrNull()
+        val conta = if (salva != null && salva in todas) salva else todas.firstOrNull()
+        sincronizarDados(contexto, conta)
+        return conta
     }
 
     fun definirAtiva(contexto: Context, conta: String) {
-        contexto.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(CHAVE_ATIVO, conta).apply()
+        // commit (e não apply): o aviso e a HOME leem logo em seguida, e o arquivo dos dados vem junto.
+        contexto.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(CHAVE_ATIVO, conta).commit()
+        sincronizarDados(contexto, conta)
+    }
+
+    // ---------------------------------------------------------------- perfil dos dados (ideia 11)
+
+    /**
+     * De quem são os favoritos, posições, interesses e a ordem dos apps agora ([PerfilDados]; "" = compartilhado).
+     *
+     * Fica num arquivo pequeno (files/perfil_dados.txt) e não nas preferências "launcher": o PlayerArmazem roda também no
+     * processo ":player", e cada processo guarda a SUA cópia das SharedPreferences em memória — o player continuaria
+     * gravando os favoritos no perfil antigo depois da troca. O arquivo é relido a cada uso (alguns bytes; o
+     * PlayerArmazem já lê o favoritos.json do disco a cada vez), então não há cache para invalidar entre processos.
+     */
+    fun chaveDados(contexto: Context): String =
+        PerfilDados.lerChave(runCatching { File(contexto.filesDir, PerfilDados.ARQUIVO_ATIVO).readText() }.getOrNull())
+
+    @Volatile private var chaveGravada: String? = null
+
+    /**
+     * Grava a chave do perfil dos dados se mudou: a da [conta], ou "" em modo visita / sem conta. Escrita atômica
+     * (temporário + troca de nome). Chamada pela troca de perfil, pelo modo visita e por [ativa].
+     */
+    fun sincronizarDados(contexto: Context, conta: String?) {
+        val chave = PerfilDados.chaveDoPerfil(conta, ModoVisita.ativo(contexto))
+        if (chave == chaveGravada) return
+        runCatching {
+            val pasta = contexto.filesDir
+            if (chave == chaveDados(contexto)) { chaveGravada = chave; return }
+            val tmp = File(pasta, PerfilDados.ARQUIVO_ATIVO + ".tmp")
+            tmp.writeText(chave)
+            if (tmp.renameTo(File(pasta, PerfilDados.ARQUIVO_ATIVO))) chaveGravada = chave
+            Log.i(TAG, "perfil dos dados: " + chave.ifEmpty { "(compartilhado)" })
+        }.onFailure { Log.w(TAG, "não gravou o perfil dos dados: ${it.javaClass.simpleName}") }
     }
 
     /** "fulano@gmail.com" -> "fulano". */

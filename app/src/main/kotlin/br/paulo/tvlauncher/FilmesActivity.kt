@@ -80,6 +80,8 @@ class FilmesActivity : Activity() {
     private val janelas by lazy { PlayerJanelas(this) }
     private var posicoes: Map<String, Posicao> = emptyMap()
     private var interesses: Set<String> = emptySet()
+    /** De que perfil são os interesses e posições na memória (ideia 11): trocou de perfil, a tela se refaz ao voltar. */
+    private var perfilCarregado = ""
     private val segurar = SegurarOk()
     private var ordem = Vod.Ordem.RECENTES
     private var itens: List<Item> = emptyList()
@@ -107,6 +109,7 @@ class FilmesActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
+        perfilCarregado = Perfil.chaveDados(this)
         ordem = runCatching { Vod.Ordem.valueOf(getSharedPreferences("player", MODE_PRIVATE).getString("ordem_filmes", "")!!) }.getOrDefault(Vod.Ordem.RECENTES)
         // Coerência visual parte 2 (12/11/2026): o grafite e a margem da HOME (eram FUNDO liso e 32/26 dp).
         val raiz = FrameLayout(this).apply { background = Estilo.fundoTela(context) }
@@ -169,6 +172,8 @@ class FilmesActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        // Perfis de verdade (ideia 11): os interesses na memória são do perfil de antes; gravar com eles misturaria os dois.
+        if (Perfil.chaveDados(this) != perfilCarregado) { recreate(); return }
         // Voltou da VodActivity: a posição mudou ("continuar" e os botões da ficha).
         indoAoVideo = false
         val lista = todos
