@@ -56,6 +56,9 @@
         <item>One text size for every screen: Settings › Home screen › Text size (Normal, Large, Larger)</item>
         <item>Live TV: the channel list and the guide use the launcher’s colors and line icons (star, recents, search, filters, guide, lock)</item>
         <item>Movies: Filter (genre, period, minimum rating, only unwatched) over the chosen category, “Collection of this movie” in the details, and “Surprise me”</item>
+        <item>Install split apps (.apks, .xapk) from the web panel or Claude; the TV picks the parts for its own chip</item>
+        <item>Curated store: add any GitHub project that publishes its APK; the TV picks the file for its architecture</item>
+        <item>App sheets and the cleanup list can grow with community contributions (checked once a week)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -99,6 +102,9 @@
         <item>tamanho_texto</item>
         <item>lista_canais_icones</item>
         <item>filmes_filtro_sorteio</item>
+        <item>apks</item>
+        <item>loja_repo</item>
+        <item>comunidade</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -142,6 +148,9 @@
         <item>Set Settings › Home screen › Text size to Larger, then open the quick panel and Movies</item>
         <item>In live TV, open the channel list (OK) and then the Guide</item>
         <item>In Movies, use Filter (e.g. a genre + rating 7+), then Surprise me, then “Collection of this movie” in a sequel’s details</item>
+        <item>In the web panel, Apps &gt; Install: send a .xapk file</item>
+        <item>In the web panel, Extras &gt; Curated store: add a GitHub project (e.g. owner/name) and install it</item>
+        <item>In the web panel, open the sheet of an app</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -185,5 +194,8 @@
         <item>Did the text grow and still fit, with nothing cut off?</item>
         <item>Do Favorites, Recents, Search, Filters and Guide show line icons (no squares or emoji), with the same sizes as before?</item>
         <item>Did the column title show the filter, did the pick open a movie from the filtered grid, and did the collection list the sequels?</item>
+        <item>Did the app install and open?</item>
+        <item>Did it install the right file?</item>
+        <item>Does the sheet still show?</item>
     </string-array>
 </resources>
