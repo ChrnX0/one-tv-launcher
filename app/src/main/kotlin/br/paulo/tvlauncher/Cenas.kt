@@ -90,6 +90,17 @@ object Cenas {
         return pm.queryIntentActivities(i, 0).associate { it.activityInfo.packageName to it.loadLabel(pm).toString() }
     }
 
+    /**
+     * A cena seguinte (ou anterior) numa lista de nomes, para os editores que mudam com OK / ◀ ▶ (rotina e despertador,
+     * ideia 5). [comNenhuma]: o "" (nenhuma cena) entra como primeira opção. Pura (CenaNaRotinaTest).
+     */
+    fun girar(nomes: List<String>, atual: String, passo: Int, comNenhuma: Boolean): String {
+        val opcoes = (if (comNenhuma) listOf("") else emptyList()) + nomes
+        if (opcoes.isEmpty()) return ""
+        val i = opcoes.indexOf(atual)
+        return opcoes[((if (i < 0) -1 else i) + passo).mod(opcoes.size)]
+    }
+
     fun apagar(ctx: Context, nome: String): Boolean {
         val l = lista(ctx); val nova = l.filter { it.nome != nome }
         if (nova.size == l.size) return false

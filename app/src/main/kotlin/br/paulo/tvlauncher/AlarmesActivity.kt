@@ -196,6 +196,8 @@ class AlarmesActivity : Activity() {
         var som = a?.som ?: 0
         var rampa = a?.rampa ?: 0
         var bomDia = a?.bomDia ?: true
+        var cena = a?.cena ?: ""
+        val cenas = Cenas.lista(this).map { it.nome }
         var previa: android.media.MediaPlayer? = null
         fun pararPrevia() { previa?.release(); previa = null }
 
@@ -295,12 +297,19 @@ class AlarmesActivity : Activity() {
         btBomDia = botao(textoBomDia()) { bomDia = !bomDia; btBomDia.text = textoBomDia() }
         linhaSom.addView(btSom, botaoLp()); linhaSom.addView(btRampa, botaoLp()); linhaSom.addView(btOuvir, botaoLp())
         linhaSom.addView(btBomDia, botaoLp())
+        // Cena ao apertar Parar (ideia 5): só aparece com alguma cena criada (painel > Extras > Cenas por link).
+        if (cenas.isNotEmpty() || cena.isNotEmpty()) {
+            lateinit var btCena: TextView
+            fun textoCena() = getString(R.string.al_cena, cena.ifBlank { getString(R.string.rot_nenhum) })
+            btCena = botao(textoCena()) { cena = Cenas.girar(cenas, cena, 1, comNenhuma = true); btCena.text = textoCena() }
+            linhaSom.addView(btCena, botaoLp())
+        }
         coluna.addView(linhaSom)
 
         // Botões: Salvar · Ligado/Desligado · Apagar (só se já existe) · Cancelar
         val botoes = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(0, dp(24), 0, 0) }
         val salvar = botao(getString(R.string.rot_salvar)) {
-            Despertador.salvar(this, Despertador.Alarme(a?.id ?: 0, hora, minuto, dias, nome.text.toString().trim(), ativo, som, rampa, bomDia))
+            Despertador.salvar(this, Despertador.Alarme(a?.id ?: 0, hora, minuto, dias, nome.text.toString().trim(), ativo, som, rampa, bomDia, cena))
             pararPrevia()
             mostrarLista()
         }

@@ -22,4 +22,10 @@
     <string name="acao_o_que_via">Ver o que estava vendo</string>
     <string name="acao_vendo">Vendo por último: %1$s</string>
     <string name="acao_vendo_nada">Nada assistido ainda em Filmes e Séries.</string>
+    <!-- Rotina e despertador que rodam cena (ideia 5) -->
+    <string name="rot_cena_uma">Rodar uma cena</string>
+    <string name="rot_cena">Rodar a cena: %1$s</string>
+    <string name="rot_cena_linha">Cena: %1$s</string>
+    <string name="rot_cena_sem">Crie uma cena antes (painel web › Extras › Cenas)</string>
+    <string name="al_cena">Cena ao parar: %1$s</string>
 </resources>

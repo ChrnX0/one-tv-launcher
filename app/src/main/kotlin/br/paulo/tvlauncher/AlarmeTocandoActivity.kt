@@ -176,7 +176,8 @@ class AlarmeTocandoActivity : Activity() {
 
     private fun parar(falar: Boolean = true) {
         if (timer) { finish(); return }
-        val bomDia = Despertador.listar(this).firstOrNull { it.id == id }?.bomDia == true && falar
+        val alarme = Despertador.listar(this).firstOrNull { it.id == id }
+        val bomDia = alarme?.bomDia == true && falar
         // Com o "Bom dia" falando logo em seguida, o volume da TV só volta ao que era depois que ele termina.
         if (bomDia) { AlarmeGarantia.devolverVolume(this, volume, AlarmeGarantia.ESPERA_BOM_DIA_MS); volume = null }
         Despertador.tocou(this, id)
@@ -185,6 +186,8 @@ class AlarmeTocandoActivity : Activity() {
         if (bomDia) startActivity(Intent(this, PrevisaoActivity::class.java)
             .putExtra(PrevisaoActivity.EXTRA_BOM_DIA, true)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        // Cena ao parar (14/11/2026, ideia 5): acende a luz, abre o canal... Só no Parar de alguém (não no "ninguém apareceu").
+        if (falar && !alarme?.cena.isNullOrBlank()) Cenas.rodar(applicationContext, alarme!!.cena, "despertador")
         finish()
     }
 
