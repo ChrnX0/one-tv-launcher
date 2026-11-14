@@ -64,10 +64,10 @@ object PainelWeb {
      * Gera um código novo e devolve o endereço que vai no QR, ou null se o painel não está no ar. O código vai depois
      * do # (fragmento): o navegador não o manda em pedido nenhum nem o põe no Referer; o app.js lê e manda por POST.
      */
-    fun linkEntradaQr(): String? {
+    fun linkEntradaQr(destino: DestinoPainel? = null): String? {
         if (!ligado()) return null
         val base = endereco() ?: return null
-        return base + "#qr=" + codigoEntrada.novo()
+        return base + DestinoPainel.fragmento(codigoEntrada.novo(), destino)   // ideia 43: abre já na página certa
     }
     @Volatile private var tentativas: ControleTentativas? = null
     private val travaPin = Any()   // um PBKDF2 por vez: muitas tentativas juntas não derrubam a CPU da TV

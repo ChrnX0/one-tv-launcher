@@ -149,6 +149,9 @@ class PainelRapidoActivity : Activity() {
     private lateinit var tAudio: Tile
     private lateinit var tDespertador: Tile
     private lateinit var tVisita: Tile
+    private lateinit var tFiltro: Tile
+    /** Os blocos que entraram na tela, na ordem (ideia 42): o foco começa no 1º. */
+    private val blocosNaTela = ArrayList<View>()
     private val visita by lazy { ModoVisita.ativo(this) }
 
     private val relogio = object : Runnable {
@@ -220,7 +223,7 @@ class PainelRapidoActivity : Activity() {
         painel.translationX = dp(Estilo.E3).toFloat()
         painel.alpha = 0f
         painel.animate().translationX(0f).alpha(1f).setDuration(Estilo.TRANSICAO_MS).setInterpolator(DecelerateInterpolator()).start()
-        painel.post { tWifi.casca.requestFocus() }
+        painel.post { (blocosNaTela.firstOrNull() ?: tWifi.casca).requestFocus() }   // ideia 42: o 1º bloco escolhido
 
         // O ouvinte de notificações costuma estar ligado (o protetor usa). Se não estiver, liga pelo shell, fora da tela.
         if (!OuvinteNotificacoes.conectado) fundo.execute { TocandoAgoraTv.ajustar(applicationContext, true) }
@@ -531,28 +534,36 @@ class PainelRapidoActivity : Activity() {
         // Casa (13/11/2026): as luzes e cenas do Home Assistant (CasaActivity), no lugar do "Google Home" do painel
         // do Google (a tela da casa do Google não tem intent público; ver Home.abrirGoogleHome).
         val casa = tile("casa", getString(R.string.pr_casa)) { abrirEFechar(Intent(this, CasaActivity::class.java)) }
+        // Cenas (14/11/2026, ideia 4): só com alguma cena criada (painel web > Extras > Cenas).
+        val cenas = tile("cena", getString(R.string.pr_cenas)) { abrirEFechar(Intent(this, CenasActivity::class.java)) }
+        // Ideia 42 (14/11/2026): filtro noturno e DNS também podem virar bloco; quais e em que ordem é escolha de
+        // quem usa (Configurações > Aparência > Blocos do painel rápido, PainelBlocos). Sem escolha = o painel de antes.
+        tFiltro = tile("filtro", getString(R.string.pb_filtro)) {
+            ExtrasTv.alternar(this, Extras.Chave.FILTRO_NOTURNO)
+            mostrarFiltro()
+        }
+        mostrarFiltro()
+        val dns = tile("dns", getString(R.string.pb_dns)) { abrirEFechar(Intent(this, DnsActivity::class.java)) }
+        dns.detalhe(Dns.rotulo(this))
+        val porId = mapOf("wifi" to tWifi, "bluetooth" to tBluetooth, "timer" to tTimer, "dormir" to dormir, "protetor" to protetor,
+            "audio" to tAudio, "despertador" to tDespertador, "visita" to tVisita, "casa" to casa, "cenas" to cenas,
+            "filtro" to tFiltro, "dns" to dns)
+        val visiveis = PainelBlocos.visiveis(PainelBlocosTv.escolhidos(this)) { id ->
+            when (id) {
+                "casa" -> CasaHA.configurado(this)
+                "cenas" -> Cenas.lista(this).isNotEmpty()
+                else -> id in porId
+            }
+        }
         val grade = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false }
-        val pares = listOf(tWifi to tBluetooth, tTimer to dormir, protetor to tAudio, tDespertador to tVisita)
-        for ((i, par) in pares.withIndex()) {
+        for ((i, linha) in PainelBlocos.linhas(visiveis).withIndex()) {
             grade.addView(LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
                 clipChildren = false
-                addView(par.first.casca, LinearLayout.LayoutParams(0, dp(TILE_DP), 1f))
-                addView(par.second.casca, LinearLayout.LayoutParams(0, dp(TILE_DP), 1f).apply { marginStart = dp(Estilo.E1) })
+                for ((j, id) in linha.withIndex()) addView(porId.getValue(id).casca.also { blocosNaTela += it },
+                    LinearLayout.LayoutParams(0, dp(TILE_DP), 1f).apply { if (j > 0) marginStart = dp(Estilo.E1) })
             }, LinearLayout.LayoutParams(-1, -2).apply { if (i > 0) topMargin = dp(Estilo.E1) })
         }
-        // Cenas (14/11/2026, ideia 4): só com alguma cena criada (painel web > Extras > Cenas).
-        val cenas = if (Cenas.lista(this).isEmpty()) null else tile("cena", getString(R.string.pr_cenas)) {
-            abrirEFechar(Intent(this, CenasActivity::class.java))
-        }
-        // Casa só com o Home Assistant configurado (painel > Extras > Casa). Casa e Cenas dividem a última linha;
-        // sozinho, o tile ocupa a linha inteira (a grade tinha 4 pares fechados).
-        val ultimos = listOfNotNull(casa.takeIf { CasaHA.configurado(this) }, cenas)
-        if (ultimos.isNotEmpty()) grade.addView(LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            clipChildren = false
-            for ((i, t) in ultimos.withIndex()) addView(t.casca, LinearLayout.LayoutParams(0, dp(TILE_DP), 1f).apply { if (i > 0) marginStart = dp(Estilo.E1) })
-        }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(Estilo.E1) })
         return grade
     }
 
@@ -667,6 +678,15 @@ class PainelRapidoActivity : Activity() {
         } ?: "")
     }
 
+    /** Filtro noturno (ideia 42): ligado = a chave; o detalhe diz o horário em que ele age. */
+    private fun mostrarFiltro() {
+        val ligado = Extras.ligado(this, Extras.Chave.FILTRO_NOTURNO)
+        tFiltro.ligado = ligado
+        fun hhmm(m: Int) = "%02d:%02d".format(m / 60, m % 60)
+        tFiltro.detalhe(if (!ligado) "" else hhmm(Extras.numero(this, FiltroNoturno.CHAVE_INICIO, FiltroNoturno.PADRAO_INICIO)) +
+            "–" + hhmm(Extras.numero(this, FiltroNoturno.CHAVE_FIM, FiltroNoturno.PADRAO_FIM)))
+    }
+
     private fun mostrarVisita() {
         val ativo = ModoVisita.ativo(this)
         tVisita.ligado = ativo
@@ -752,7 +772,7 @@ class PainelRapidoActivity : Activity() {
         }
         if (focoDentro) {
             val primeiro = (listaAvisos.getChildAt(0) as? ViewGroup)?.getChildAt(0)?.takeIf { it.isFocusable }
-            (primeiro ?: tVisita.casca).requestFocus()
+            (primeiro ?: blocosNaTela.lastOrNull() ?: tVisita.casca).requestFocus()
         }
     }
 

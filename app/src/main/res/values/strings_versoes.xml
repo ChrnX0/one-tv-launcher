@@ -32,6 +32,9 @@
         <item>Daily screen time: when it runs out, only allowed apps open (Extras)</item>
         <item>Calendar with all the TV\'s Google accounts together</item>
         <item>“Network” looks like a catalog: poster and synopsis beside the list, Recently added, Search on Jellyfin, Emby and Plex, and a folder plays the next video or song</item>
+        <item>Settings: each Extras switch now lives in its own tab, under “More options”</item>
+        <item>Settings: lines with a QR code that opens the web panel straight on scenes, Home Assistant, photos, family board, my team or router</item>
+        <item>Quick panel: choose its tiles and their order (Settings &gt; Appearance), with new Night filter and DNS tiles</item>
         <item>Type with accents from your phone and from Claude (ç, ã, é arrive as typed)</item>
         <item>Guest Wi-Fi as a QR: Settings &gt; Guests and routines; in guest mode, Wi-Fi in the quick panel shows the QR</item>
         <item>The nightly backup now checks every night that the saved copy would restore</item>
@@ -58,6 +61,9 @@
         <item>tempo_tela</item>
         <item>agenda_todas</item>
         <item>rede_catalogo</item>
+        <item>extras_abas</item>
+        <item>qr_destino</item>
+        <item>blocos_painel</item>
         <item>digitar_acento</item>
         <item>wifi_visitas</item>
         <item>ensaio_backup</item>
@@ -84,6 +90,9 @@
         <item>Extras: turn on Daily screen time with 30 min and open an app</item>
         <item>Open the calendar (OK on the date at the top)</item>
         <item>In “Network”, open a Jellyfin or Plex server, try Search and Recently added, and play a video from a folder</item>
+        <item>Open Settings &gt; Screen and power and go to the end</item>
+        <item>Open Settings &gt; Guests and routines &gt; Scenes from your phone, and scan the code</item>
+        <item>In Settings &gt; Appearance &gt; Quick panel tiles, show Night filter and move it to the top; then hold HOME</item>
         <item>Type “ação” in the TV search from the phone panel</item>
         <item>Set Settings &gt; Guests and routines &gt; Guest Wi-Fi, turn guest mode on and press Wi-Fi in the quick panel</item>
         <item>Settings &gt; System &gt; Automatic backup &gt; Back up now</item>
@@ -110,6 +119,9 @@
         <item>After 30 min, did the app go back to Home with the notice?</item>
         <item>Do events from all the TV\'s accounts show up?</item>
         <item>Did the poster and synopsis show up, and did the next video start after 10 s?</item>
+        <item>Are Night filter, Gentle shutdown and the other switches there, under “More options”?</item>
+        <item>Did the phone open the panel already on the Scenes card?</item>
+        <item>Is Night filter the first tile of the panel?</item>
         <item>Did it arrive with the ç and the ã?</item>
         <item>Did the QR show up, and did a phone camera connect?</item>
         <item>Does the result say “restore check passed”?</item>

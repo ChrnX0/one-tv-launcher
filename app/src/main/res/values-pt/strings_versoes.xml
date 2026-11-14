@@ -29,6 +29,9 @@
         <item>Tempo de tela por dia: acabou, só os apps liberados abrem (Extras)</item>
         <item>Agenda com todas as contas Google da TV juntas</item>
         <item>“Na rede” com cara de catálogo: pôster e sinopse ao lado da lista, Adicionados há pouco, Buscar no Jellyfin, Emby e Plex, e a pasta emenda o próximo vídeo ou música</item>
+        <item>Configurações: cada chave de Extras agora mora na aba dela, em “Mais opções”</item>
+        <item>Configurações: linhas com QR que abre o painel web já em cenas, Home Assistant, fotos, mural, meu time ou roteador</item>
+        <item>Painel rápido: escolha os blocos e a ordem (Configurações &gt; Aparência), com os blocos novos Filtro noturno e DNS</item>
         <item>Digitar com acento pelo celular e pelo Claude (ç, ã, é chegam como foram digitados)</item>
         <item>Wi-Fi das visitas em QR: Configurações &gt; Visitas e rotinas; no modo visita, o Wi-Fi do painel rápido mostra o QR</item>
         <item>O backup noturno agora confere toda noite se a cópia gravada restauraria</item>
@@ -55,6 +58,9 @@
         <item>Extras: ligue Tempo de tela por dia com 30 min e abra um app</item>
         <item>Abra a agenda (OK na data do topo)</item>
         <item>Em “Na rede”, abra um servidor Jellyfin ou Plex, use Buscar e Adicionados há pouco, e toque um vídeo de uma pasta</item>
+        <item>Abra Configurações &gt; Tela e energia e desça até o fim</item>
+        <item>Abra Configurações &gt; Visitas e rotinas e rotinas &gt; Cenas pelo celular e leia o código</item>
+        <item>Em Configurações &gt; Aparência &gt; Blocos do painel rápido, mostre Filtro noturno e suba ele ao topo; depois segure HOME</item>
         <item>Digite “ação” na busca da TV pelo painel do celular</item>
         <item>Preencha Configurações &gt; Visitas e rotinas &gt; Wi-Fi das visitas, ligue o modo visita e aperte Wi-Fi no painel rápido</item>
         <item>Configurações &gt; Sistema &gt; Backup automático &gt; Fazer agora</item>
@@ -81,6 +87,9 @@
         <item>Depois de 30 min o app voltou para a HOME com o aviso?</item>
         <item>Aparecem os compromissos de todas as contas da TV?</item>
         <item>Apareceram pôster e sinopse, e o próximo vídeo começou depois de 10 s?</item>
+        <item>Filtro noturno, Desligar suave e as outras chaves estão lá, em “Mais opções”?</item>
+        <item>O celular abriu o painel já no cartão de Cenas?</item>
+        <item>Filtro noturno é o primeiro bloco do painel?</item>
         <item>Chegou com o ç e o ã?</item>
         <item>Apareceu o QR, e a câmera de um celular conectou?</item>
         <item>O resultado diz “restauração conferida”?</item>

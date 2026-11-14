@@ -614,6 +614,7 @@
 
         <!-- Ideias de 10/11/2026: tela das chaves novas, testador de teclas e padrões de calibração (não exportadas). -->
         <activity android:name=".ExtrasActivity" android:exported="false" android:excludeFromRecents="true" />
+        <activity android:name=".PainelBlocosActivity" android:exported="false" android:excludeFromRecents="true" />
         <!-- Backup noturno cifrado (BackupNoturno.kt): a tela de opções e o alarme da noite (não exportados). -->
         <activity android:name=".BackupNoturnoActivity" android:exported="false" android:excludeFromRecents="true" />
         <receiver android:name=".BackupNoturnoReceiver" android:exported="false" />
