@@ -64,10 +64,10 @@ object PlayerArmazem {
 
     /** Cria uma conta nova (id gerado). Devolve a conta, ou o motivo de não ter criado. */
     fun adicionar(ctx: Context, nome: String, tipo: String, endereco: String, usuario: String = "", senha: String = "", guia: String = "",
-                  reservas: String = ""): Result<FonteTv> {
+                  reservas: String = "", guiaExtra: String = ""): Result<FonteTv> {
         val atuais = fontes(ctx)
         if (atuais.size >= 8) return Result.failure(IllegalStateException("já há 8 contas; apague uma antes"))
-        val nova = PlayerDados.criar(UUID.randomUUID().toString().take(8), nome, tipo, endereco, usuario, senha, guia, reservas).getOrElse { return Result.failure(it) }
+        val nova = PlayerDados.criar(UUID.randomUUID().toString().take(8), nome, tipo, endereco, usuario, senha, guia, reservas, guiaExtra).getOrElse { return Result.failure(it) }
         return if (gravar(ctx, atuais + nova)) Result.success(nova) else Result.failure(IllegalStateException("não consegui gravar"))
     }
 

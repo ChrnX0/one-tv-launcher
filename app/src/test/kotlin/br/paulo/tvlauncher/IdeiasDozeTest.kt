@@ -45,7 +45,7 @@ class IdeiasDozeTest {
         val l = Lembretes.gerar(emptyList(), sequenceOf(
             cand("a", 30, prog("Flamengo x Vasco", jogo)), cand("b", 5, prog("Flamengo x Vasco", jogo)),
             cand("c", 7, prog("Novela", jogo)),
-            cand("d", 8, prog("Flamengo x Bahia", agora + 30 * h)),   // passa do horizonte de 24 h
+            cand("d", 8, prog("Flamengo x Bahia", agora + 8 * 24 * h)),   // passa do horizonte de 7 dias (ideia 16)
             cand("e", 9, prog("Flamengo ao vivo", agora + 60_000L)),  // começa antes da antecedência
         ), listOf("Flamengo"), agora)
         assertEquals(1, l.size)
