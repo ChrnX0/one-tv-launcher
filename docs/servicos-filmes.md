@@ -14,7 +14,7 @@ Ela fica dentro do APK (dá para extrair, como em todo app aberto, Kodi incluíd
 | Secret | Onde criar | O que copiar |
 |---|---|---|
 | `TMDB_CHAVE` | themoviedb.org › Configurações › API › Criar (tipo Developer) | "Chave da API" (v3) |
-| `TRAKT_ID` e `TRAKT_SEGREDO` | trakt.tv/oauth/applications/new | Client ID e Client Secret |
+| `TRAKT_ID` (e `TRAKT_SEGREDO` só em app antigo) | developer.trakt.tv › My Apps › New app | Client ID (apps novos não recebem Client Secret: deixe `TRAKT_SEGREDO` sem criar) |
 | `SIMKL_ID` | simkl.com/settings/developer › Create new app | Client ID |
 | `OPENSUBTITLES_CHAVE` | opensubtitles.com/consumers › New consumer | API Key |
 
@@ -25,8 +25,8 @@ colando a chave no painel web. A nota do IMDb vale para todos sem chave: a TV ba
 e guarda só as notas dos títulos da lista.
 
 Campos dos formulários:
-- **Trakt**: Name `One TV Launcher`; Redirect uri `urn:ietf:wg:oauth:2.0:oob`; Javascript origins vazio; marque
-  `/checkin` e `/scrobble`.
+- **Trakt**: App name `One TV Launcher`; App type Development (até 16 pessoas; peça Production antes de vender); Redirect URIs
+  `urn:ietf:wg:oauth:2.0:oob`; Allowed origins vazio. O login na TV é por código (device flow em auth.trakt.tv), sem segredo.
 - **Simkl**: app novo (AUTH V2); tipo **TV, devices & command line** (login por código no celular, sem endereço de
   retorno). O login antigo por PIN (V1) não serve para apps novos e sai do ar por volta de abril de 2027.
 - **TMDB**: tipo de uso "Personal"/não comercial; URL do app: a página do projeto no GitHub.

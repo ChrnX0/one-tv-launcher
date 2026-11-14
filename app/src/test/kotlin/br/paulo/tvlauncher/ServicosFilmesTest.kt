@@ -18,8 +18,16 @@ class ServicosFilmesTest {
         assertFalse(vazio.disponivel(Servico.TMDB))
         assertFalse(vazio.disponivel(Servico.OPENSUBTITLES))
         assertTrue(vazio.disponivel(Servico.MDBLIST))   // a chave do MDBList é da pessoa
-        assertFalse(ServicosFilmes.ChavesApp(traktId = "id").disponivel(Servico.TRAKT))   // sem o segredo não entra
+        assertTrue(ServicosFilmes.ChavesApp(traktId = "id").disponivel(Servico.TRAKT))   // apps novos do Trakt não têm segredo
         assertTrue(ServicosFilmes.ChavesApp(traktId = "id", traktSegredo = "s").disponivel(Servico.TRAKT))
+    }
+
+    @Test fun corpoDoTraktSemSegredo() {
+        val sem = org.json.JSONObject(ServicosFilmes.traktCorpoToken("dev", "id", ""))
+        assertFalse(sem.has("client_secret")); assertEquals("id", sem.getString("client_id"))
+        assertFalse(org.json.JSONObject(ServicosFilmes.traktCorpoRenovar("r", "id", "")).has("client_secret"))
+        assertFalse(org.json.JSONObject(ServicosFilmes.traktCorpoRevogar("t", "id", "")).has("client_secret"))
+        assertEquals("s", org.json.JSONObject(ServicosFilmes.traktCorpoToken("dev", "id", "s")).getString("client_secret"))
     }
 
     @Test fun cabecalhosDoTrakt() {
