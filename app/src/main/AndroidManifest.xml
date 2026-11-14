@@ -104,6 +104,11 @@
         <receiver
             android:name=".GatilhoReceiver"
             android:exported="false" />
+        <!-- Automações (ideia 1): o editor único de horários, botões, eventos e links. Aberta pelas Configurações. -->
+        <activity
+            android:name=".AutomacoesActivity"
+            android:exported="false"
+            android:label="@string/aut_titulo" />
         <!-- Botões do controle (ideia 6): o que cada tecla livre faz (RemapTeclas). Aberta por Extras. -->
         <activity
             android:name=".TeclasActivity"
