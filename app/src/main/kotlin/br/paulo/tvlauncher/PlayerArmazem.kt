@@ -156,6 +156,16 @@ object PlayerArmazem {
     fun definirPosicoes(ctx: Context, p: Map<String, Posicao>) = gravarNoPerfil(ctx, "posicoes.json", Vod.posicoesParaJson(p))
 
     /**
+     * Muda UMA posição (lê, troca, grava): "marcar como assistido" na tela não apaga o que o vídeo gravou depois da
+     * última leitura dela. null = esquece a posição.
+     */
+    @Synchronized
+    fun definirPosicao(ctx: Context, chave: String, p: Posicao?) {
+        val m = posicoes(ctx)
+        definirPosicoes(ctx, if (p == null) m - chave else Vod.registrar(m, chave, p))
+    }
+
+    /**
      * Filmes ou séries marcados como "interesse" (OK segurado 2 s na grade). Só as chaves, na ordem em que entraram.
      * Um arquivo para cada tela: assim uma tela aberta por trás nunca grava por cima do que a outra mudou.
      */

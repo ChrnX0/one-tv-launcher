@@ -49,7 +49,20 @@ data class FichaSerie(
  * abre (só ela tem a lista de episódios). `atualizada` = o last_modified da série naquela hora: se o servidor publicar
  * episódio novo depois, a série deixa de contar como "Finalizado" até a ficha abrir de novo.
  */
-data class ProgressoSerie(val vistos: Int, val total: Int, val atualizada: Long)
+data class ProgressoSerie(
+    val vistos: Int, val total: Int, val atualizada: Long,
+    /** Quantos episódios e temporadas a série tinha quando foi concluída (0 = nunca concluída): base do "N episódios novos". */
+    val concluidaCom: Int = 0, val temporadasConcluida: Int = 0,
+    val temporadas: Int = 0,
+)
+
+/** Etiqueta da série nos Interesses e na grade (14/11/2026): verde "Concluída", amarela "Nova temporada"/"N episódios novos". */
+sealed class EtiquetaSerie {
+    object Concluida : EtiquetaSerie()
+    object NovaTemporada : EtiquetaSerie()
+    /** [quantos] = 0 quando o servidor avisou que mudou (last_modified) mas a ficha ainda não foi relida. */
+    data class Novos(val quantos: Int) : EtiquetaSerie()
+}
 
 /** O último episódio que a pessoa abriu numa série (para o "continuar" sem baixar a ficha de todas). */
 data class UltimoEpisodio(val episodioId: String, val temporada: Int, val numero: Int, val titulo: String, val extensao: String, val quando: Long)
@@ -181,8 +194,8 @@ object Series {
         if (todos.isEmpty()) return null
         val ep = ultimo?.let { u -> todos.firstOrNull { it.id == u.episodioId } } ?: return todos.first() to false
         val pos = posicoes[ep.chave(fonteId)]
-        if (Vod.deveRetomar(pos)) return ep to true
-        val terminou = Vod.finalizado(pos)
+        if (Vod.deveRetomar(pos, episodio = true)) return ep to true
+        val terminou = Vod.finalizado(pos, episodio = true)
         return if (terminou) (proximo(f, ep) ?: ep) to false else ep to false
     }
 
@@ -196,15 +209,47 @@ object Series {
     // ---------------------------------------------------------------- assistidos (07/11/2026)
 
     /**
-     * Conta os episódios vistos (1 min ou mais, ou até o fim: a régua dos filmes) com a ficha na mão. Se o total não
+     * Conta os episódios CONCLUÍDOS (régua de minutos do episódio, [Vod.noFim]) com a ficha na mão. Se o total não
      * mudou, nunca desce: posição velha de episódio pode sair do posicoes.json (limite de 1000) e o visto continua visto.
+     * Concluiu tudo: guarda quantos episódios e temporadas havia, para avisar quando o servidor publicar mais.
      */
     fun progressoDaFicha(s: Serie, f: FichaSerie, posicoes: Map<String, Posicao>, anterior: ProgressoSerie?): ProgressoSerie? {
         val todos = emOrdem(f)
         if (todos.isEmpty()) return anterior
-        val vistos = todos.count { Vod.assistido(posicoes[it.chave(s.fonteId)]) }
+        val vistosAgora = todos.count { Vod.finalizado(posicoes[it.chave(s.fonteId)], episodio = true) }
         val manter = if (anterior != null && anterior.total == todos.size) anterior.vistos else 0
-        return ProgressoSerie(maxOf(vistos, manter).coerceAtMost(todos.size), todos.size, s.atualizada)
+        val vistos = maxOf(vistosAgora, manter).coerceAtMost(todos.size)
+        val temporadas = f.temporadas.size
+        val (com, temps) = if (vistos >= todos.size) todos.size to temporadas
+            else (anterior?.concluidaCom ?: 0) to (anterior?.temporadasConcluida ?: 0)
+        return ProgressoSerie(vistos, todos.size, s.atualizada, com, temps, temporadas)
+    }
+
+    /**
+     * A etiqueta da série: Concluída (tudo visto e nada novo); depois de concluída, se chegou coisa nova, "Nova
+     * temporada" ou "N episódios novos" (N = 0 se só o last_modified mudou e a ficha ainda não foi relida). null = nada.
+     */
+    fun etiqueta(s: Serie, p: ProgressoSerie?): EtiquetaSerie? {
+        if (p == null || p.total <= 0) return null
+        if (p.vistos >= p.total) return if (s.atualizada > p.atualizada) EtiquetaSerie.Novos(0) else EtiquetaSerie.Concluida
+        if (p.concluidaCom <= 0 || p.total <= p.concluidaCom) return null
+        if (p.temporadasConcluida in 1 until p.temporadas) return EtiquetaSerie.NovaTemporada
+        return EtiquetaSerie.Novos(p.total - maxOf(p.vistos, p.concluidaCom))
+    }
+
+    /**
+     * Começar um episódio conclui o anterior (14/11/2026): quem pulou para o próximo já viu o fim (ou os créditos) do
+     * outro. Só mexe no anterior se ele foi COMEÇADO e não está concluído; episódio nunca aberto continua não visto.
+     */
+    fun concluirAnterior(f: FichaSerie, fonteId: String, atual: Episodio, posicoes: Map<String, Posicao>, agora: Long): Map<String, Posicao> {
+        val ordem = emOrdem(f)
+        val i = ordem.indexOfFirst { it.id == atual.id }
+        val ant = ordem.getOrNull(i - 1) ?: return posicoes
+        val k = ant.chave(fonteId)
+        val p = posicoes[k] ?: return posicoes
+        if (Vod.finalizado(p, episodio = true)) return posicoes
+        val d = p.duracao.takeIf { it > 0 } ?: ((ant.duracaoMin ?: 1) * 60_000L)
+        return posicoes + (k to Posicao(d, d, p.quando))
     }
 
     /**
@@ -217,15 +262,18 @@ object Series {
         return (p.vistos * 100 / p.total).coerceIn(1, 99)
     }
 
-    /** "Assistidos": toda série com episódio visto, terminada ou não, da mais recente para a mais velha. */
+    /**
+     * "Assistidos": só as séries CONCLUÍDAS (14/11/2026; a começada está no Continuar), da mais recente para a mais
+     * velha. Concluída que ganhou episódio novo continua aqui, com a etiqueta amarela.
+     */
+    @Suppress("UNUSED_PARAMETER")
     fun assistidos(series: List<Serie>, ultimos: Map<String, UltimoEpisodio>, posicoes: Map<String, Posicao>,
                    progresso: Map<String, ProgressoSerie>): List<Serie> =
-        series.filter { s ->
-            (progresso[s.chave]?.vistos ?: 0) > 0 || ultimos[s.chave]?.let { Vod.assistido(posicoes["${s.fonteId}:e${it.episodioId}"]) } == true
-        }.sortedByDescending { ultimos[it.chave]?.quando ?: 0 }
+        series.filter { s -> progresso[s.chave]?.let { it.total > 0 && (it.vistos >= it.total || it.concluidaCom > 0) } == true }
+            .sortedByDescending { ultimos[it.chave]?.quando ?: 0 }
 
     fun progressoParaJson(p: Map<String, ProgressoSerie>): String = JSONObject().apply {
-        p.forEach { (k, v) -> put(k, JSONArray().put(v.vistos).put(v.total).put(v.atualizada)) }
+        p.forEach { (k, v) -> put(k, JSONArray().put(v.vistos).put(v.total).put(v.atualizada).put(v.concluidaCom).put(v.temporadasConcluida).put(v.temporadas)) }
     }.toString()
 
     fun progressoDeJson(texto: String?): Map<String, ProgressoSerie> {
@@ -234,7 +282,7 @@ object Series {
         for (k in o.keys()) {
             val a = o.optJSONArray(k) ?: continue
             if (k.length > 200 || a.length() < 3) continue
-            saida[k] = ProgressoSerie(a.optInt(0), a.optInt(1), a.optLong(2))
+            saida[k] = ProgressoSerie(a.optInt(0), a.optInt(1), a.optLong(2), a.optInt(3), a.optInt(4), a.optInt(5))
         }
         return saida
     }
@@ -256,7 +304,7 @@ object Series {
     fun grupos(series: List<Serie>): List<Pair<String, Int>> {
         val m = LinkedHashMap<String, Int>()
         series.forEach { m[it.grupo.trim()] = (m[it.grupo.trim()] ?: 0) + 1 }
-        return m.entries.map { it.key to it.value }
+        return ColunaRegras.ordenarAZ(m.entries.map { it.key to it.value })
     }
 
     // ---------------------------------------------------------------- arquivos (sem senha)

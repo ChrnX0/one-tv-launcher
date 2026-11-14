@@ -61,7 +61,8 @@ class PlayerListaTela(
     private var guia = Guia(emptyList())
     private var favoritos: Set<String> = emptySet()
     private var recentes: List<String> = emptyList()
-    private var grupos: List<GrupoCanais> = emptyList()
+    private var grupos: List<GrupoCanais> = emptyList()   // todas as linhas da coluna (ações, fixas e categorias), para achar o nome
+    private var esportes: Pair<List<Canal>, Int>? = null    // quantos canais de esporte esta lista tem (conta uma vez por lista)
     private var chave = PlayerLista.TODOS              // categoria cujos canais estão na coluna do meio
     private var doMeio: List<Canal> = emptyList()
     private var atualId: String? = null
@@ -74,7 +75,10 @@ class PlayerListaTela(
         // Escuro à esquerda, mais claro à direita: o vídeo continua aparecendo atrás do detalhe.
         background = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(Estilo.alfa(Estilo.FUNDO, 0xF5), Estilo.alfa(Estilo.FUNDO, 0xE6), Estilo.alfa(Estilo.FUNDO, 0xB3)))
     }
-    private val listaGrupos = lista()
+    // Coluna esquerda nova (14/11/2026, esboço tv.png aprovado): ações fixas, LISTAS, Todos e Esportes fixos, A a Z rolando.
+    private val coluna = ColunaCategorias(act, act.getString(R.string.home_tv),
+        aoParar = { escolherGrupo(it) }, aoOk = { okNaColuna(it) },
+        aoSegurar = { k -> if (k.startsWith("g:")) aoOcultarGrupo(k.removePrefix("g:")) })
     private val listaCanais = lista()
     private val tituloMeio = rotulo()
     private lateinit var detLogo: ImageView
@@ -89,14 +93,22 @@ class PlayerListaTela(
 
     init {
         val colunas = LinearLayout(act).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(32), dp(26), dp(32), dp(22)) }
-        colunas.addView(coluna(rotulo().apply { text = act.getString(R.string.player_categorias) }, listaGrupos), LinearLayout.LayoutParams(dp(210), -1))
+        colunas.addView(coluna.raiz, LinearLayout.LayoutParams(dp(Estilo.Leitura.COLUNA_CATEGORIAS), -1))
         colunas.addView(coluna(tituloMeio, listaCanais), LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(14); marginEnd = dp(18) })
         colunas.addView(montarDetalhe(), LinearLayout.LayoutParams(dp(290), -1))
         raiz.addView(colunas, FrameLayout.LayoutParams(-1, -1))
 
     }
 
-    private val trocarGrupo = Runnable { escolherGrupo(listaGrupos.selectedItemPosition) }
+    /** OK numa linha da coluna: as ações abrem a janela delas (da PlayerActivity); categoria abre e foca os canais. */
+    private fun okNaColuna(k: String) {
+        when (k) {
+            PlayerLista.ACAO_BUSCAR -> aoBuscar()
+            PlayerLista.ACAO_FILTROS -> aoFiltros()
+            PlayerLista.ACAO_GUIA -> grupos.firstOrNull { it.chave == chave }?.let { aoGuia(doMeio, nomeDoGrupo(it)) }
+            else -> { escolherGrupo(k); if (doMeio.isNotEmpty()) listaCanais.requestFocus() }
+        }
+    }
 
     // ---------------------------------------------------------------- uso pela PlayerActivity
 
@@ -112,8 +124,7 @@ class PlayerListaTela(
         busca = busca?.let { (t, r) -> val ids = canais.mapTo(HashSet()) { it.id }; t to r.filter { it.id in ids } }
         montarGrupos()
         this.chave = PlayerLista.chaveValida(grupos, chave)
-        adaptadorGrupos.notifyDataSetChanged()
-        listaGrupos.setSelection(grupos.indexOfFirst { it.chave == this.chave }.coerceAtLeast(0))
+        mostrarColuna()
         preencherMeio(manterNoAtual = true)
         raiz.visibility = View.VISIBLE
         if (focarCategorias || doMeio.isEmpty()) focarGrupoAtual() else listaCanais.requestFocus()
@@ -124,8 +135,7 @@ class PlayerListaTela(
         busca = termo to resultados
         montarGrupos()
         chave = PlayerLista.BUSCA
-        adaptadorGrupos.notifyDataSetChanged()
-        listaGrupos.setSelection(grupos.indexOfFirst { it.chave == chave }.coerceAtLeast(0))
+        mostrarColuna()
         preencherMeio(manterNoAtual = false)
         if (doMeio.isEmpty()) focarGrupoAtual() else listaCanais.requestFocus()
     }
@@ -136,21 +146,44 @@ class PlayerListaTela(
     fun assistirEmFoco() { canalEmFoco()?.let { aoAssistir(it, chave) } }
 
     /** O guia em grade fechou e a lista ficou por baixo: o foco volta para ela. */
-    fun voltarFoco() { listaGrupos.requestFocus() }
+    fun voltarFoco() { coluna.focar() }
 
-    private fun focarGrupoAtual() {
-        listaGrupos.requestFocus()
-        listaGrupos.setSelection(grupos.indexOfFirst { it.chave == chave }.coerceAtLeast(0))
-    }
+    private fun focarGrupoAtual() = coluna.focar()
 
+    /**
+     * As linhas da coluna. Ações: Buscar, Filtro, Favoritos, Recentes, Guia. Fixas: Busca (se houver), Todos, Esportes
+     * (se a lista tiver canal de esporte). Rolando: as categorias da lista em ordem alfabética.
+     */
     private fun montarGrupos() {
+        val base = PlayerLista.grupos(canais, favoritos, recentes, busca?.let { it.first to it.second.size })
+        val nEsportes = esportes?.takeIf { it.first === canais }?.second
+            ?: canais.count { ColunaRegras.ehEsporte(it.grupo, it.nome) }.also { esportes = canais to it }
+        val porChave = base.associateBy { it.chave }
+        val fixas = listOfNotNull(porChave[PlayerLista.BUSCA], porChave[PlayerLista.TODOS],
+            GrupoCanais(PlayerLista.ESPORTES, "", nEsportes).takeIf { nEsportes > 0 })
+        val cats = base.filter { it.chave.startsWith("g:") && it.quantos > 0 }
+        val (semNome, comNome) = cats.partition { it.nome.isBlank() }
+        val rola = comNome.sortedBy { ColunaRegras.chaveAZ(it.nome) } + semNome
         grupos = listOf(GrupoCanais(PlayerLista.ACAO_BUSCAR, "", -1), GrupoCanais(PlayerLista.ACAO_FILTROS, resumoFiltro, -1),
-            GrupoCanais(PlayerLista.ACAO_GUIA, "", -1)) +
-            PlayerLista.grupos(canais, favoritos, recentes, busca?.let { it.first to it.second.size })
+            porChave.getValue(PlayerLista.FAVORITOS), porChave.getValue(PlayerLista.RECENTES), GrupoCanais(PlayerLista.ACAO_GUIA, "", -1)) +
+            fixas + rola
+        nAcoes = 5; nFixas = fixas.size
+    }
+    private var nAcoes = 0
+    private var nFixas = 0
+
+    private fun linha(g: GrupoCanais) = ColunaCategorias.Linha(
+        g.chave, nomeDoGrupo(g), if (g.chave == PlayerLista.ACAO_FILTROS) -1 else g.quantos, iconeDoGrupo(g),
+        destaque = g.chave == PlayerLista.ACAO_FILTROS && g.nome.isNotEmpty(),
+        detalhe = if (g.chave == PlayerLista.ACAO_FILTROS) g.nome else "")
+
+    private fun mostrarColuna() {
+        val l = grupos.map { linha(it) }
+        coluna.mostrar(l.take(nAcoes), l.drop(nAcoes).take(nFixas), l.drop(nAcoes + nFixas), chave)
     }
 
     fun fechar() {
-        tela.removeCallbacksAndMessages(null)
+        tela.removeCallbacksAndMessages(null); coluna.parar()
         raiz.visibility = View.GONE
     }
 
@@ -166,13 +199,13 @@ class PlayerListaTela(
     fun atualizarFavoritos(f: Set<String>) {
         favoritos = f
         montarGrupos()
-        adaptadorGrupos.notifyDataSetChanged()
+        mostrarColuna()
         if (chave == PlayerLista.FAVORITOS) {
             val pos = listaCanais.selectedItemPosition
             doMeio = PlayerLista.filtrar(canais, chave, favoritos, recentes)
             adaptadorCanais.notifyDataSetChanged()
             atualizarTituloMeio()
-            if (doMeio.isEmpty()) { listaGrupos.requestFocus(); mostrarDetalhe(null) }
+            if (doMeio.isEmpty()) { coluna.focar(); mostrarDetalhe(null) }
             else listaCanais.setSelection(pos.coerceAtMost(doMeio.size - 1))
         } else adaptadorCanais.notifyDataSetChanged()
     }
@@ -184,7 +217,7 @@ class PlayerListaTela(
      */
     fun tecla(keyCode: Int): Boolean = when (keyCode) {
         KeyEvent.KEYCODE_BACK -> {
-            if (listaGrupos.hasFocus() && doMeio.isNotEmpty()) listaCanais.requestFocus() else fechar()
+            if (coluna.temFoco() && doMeio.isNotEmpty()) listaCanais.requestFocus() else fechar()
             true
         }
         KeyEvent.KEYCODE_MENU, KeyEvent.KEYCODE_BOOKMARK, KeyEvent.KEYCODE_PROG_YELLOW -> {
@@ -192,14 +225,14 @@ class PlayerListaTela(
             true
         }
         KeyEvent.KEYCODE_DPAD_RIGHT -> {
-            if (listaGrupos.hasFocus()) {
+            if (coluna.temFoco()) {
                 // Desceu rápido nas categorias e já apertou ▶: aplica agora a categoria em que parou.
-                tela.removeCallbacks(trocarGrupo); trocarGrupo.run()
+                coluna.chaveEmFoco()?.let { escolherGrupo(it) }
                 if (doMeio.isNotEmpty()) listaCanais.requestFocus()
             }
             true
         }
-        KeyEvent.KEYCODE_DPAD_LEFT -> { listaGrupos.requestFocus(); true }
+        KeyEvent.KEYCODE_DPAD_LEFT -> { if (!coluna.temFoco()) coluna.focar(); true }
         // ▲▼ e OK repetidos (tecla segurada), CH+ CH- e INFO não podem trocar de canal por baixo da lista.
         KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
         KeyEvent.KEYCODE_NUMPAD_ENTER, KeyEvent.KEYCODE_CHANNEL_UP, KeyEvent.KEYCODE_CHANNEL_DOWN,
@@ -209,16 +242,25 @@ class PlayerListaTela(
 
     // ---------------------------------------------------------------- colunas
 
-    private fun escolherGrupo(pos: Int) {
-        val g = grupos.getOrNull(pos) ?: return
-        if (g.chave == chave || g.chave.startsWith("*acao:")) return   // passar pelas ações não troca a coluna do meio
-        chave = g.chave
-        adaptadorGrupos.notifyDataSetChanged()
+    private fun escolherGrupo(k: String) {
+        if (k == chave || k.startsWith("*acao:") || grupos.none { it.chave == k }) return   // passar pelas ações não troca o meio
+        chave = k
+        coluna.escolher(k)
         preencherMeio(manterNoAtual = true)
     }
 
     private fun preencherMeio(manterNoAtual: Boolean) {
-        doMeio = if (chave == PlayerLista.BUSCA) busca?.second.orEmpty() else PlayerLista.filtrar(canais, chave, favoritos, recentes)
+        doMeio = when (chave) {
+            PlayerLista.BUSCA -> busca?.second.orEmpty()
+            // Esportes: quem está ao vivo agora (pelo guia) primeiro (acréscimo aprovado em 14/11/2026).
+            PlayerLista.ESPORTES -> {
+                val agora = System.currentTimeMillis()
+                ColunaRegras.aoVivoPrimeiro(PlayerLista.filtrar(canais, chave, favoritos, recentes)) { c ->
+                    c.guiaId.takeIf { it.isNotEmpty() }?.let { guia.agora(it, agora) }?.let { ColunaRegras.pareceAoVivo(it.titulo, it.categoria) } == true
+                }
+            }
+            else -> PlayerLista.filtrar(canais, chave, favoritos, recentes)
+        }
         adaptadorCanais.notifyDataSetChanged()
         atualizarTituloMeio()
         val pos = if (manterNoAtual) PlayerLista.posicao(doMeio, atualId) else 0
@@ -237,42 +279,12 @@ class PlayerListaTela(
         PlayerLista.TODOS -> act.getString(R.string.player_cat_todos)
         PlayerLista.FAVORITOS -> act.getString(R.string.player_cat_favoritos)
         PlayerLista.RECENTES -> act.getString(R.string.player_cat_recentes)
+        PlayerLista.ESPORTES -> act.getString(R.string.coluna_esportes)
         PlayerLista.BUSCA -> act.getString(R.string.player_cat_busca, g.nome)
         PlayerLista.ACAO_BUSCAR -> act.getString(R.string.player_acao_buscar)
-        PlayerLista.ACAO_FILTROS -> act.getString(R.string.player_acao_filtros)
-        PlayerLista.ACAO_GUIA -> act.getString(R.string.player_acao_guia)
+        PlayerLista.ACAO_FILTROS -> act.getString(R.string.coluna_filtro)
+        PlayerLista.ACAO_GUIA -> act.getString(R.string.coluna_guia)
         else -> PlayerLista.nomeExibido(g.nome).ifEmpty { act.getString(R.string.player_cat_outros) }
-    }
-
-    private val adaptadorGrupos = object : BaseAdapter() {
-        override fun getCount() = grupos.size
-        override fun getItem(p: Int) = grupos[p]
-        override fun getItemId(p: Int) = p.toLong()
-        override fun getView(p: Int, reuso: View?, pai: ViewGroup?): View {
-            val linha = (reuso as? LinearLayout) ?: LinearLayout(act).apply {
-                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
-                setPadding(dp(12), dp(9), dp(12), dp(9))
-                addView(TextView(act).apply { textSize = Estilo.Leitura.CATEGORIA; typeface = fonteMedia; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; compoundDrawablePadding = dp(10) },
-                    LinearLayout.LayoutParams(0, -2, 1f))
-                addView(TextView(act).apply { textSize = Estilo.Leitura.CONTAGEM; setTextColor(apagado) })
-            }
-            val g = grupos[p]
-            val escolhida = g.chave == chave
-            (linha.getChildAt(0) as TextView).apply {
-                text = nomeDoGrupo(g)
-                val cor = if (escolhida) ambar else if (g.chave == PlayerLista.ACAO_FILTROS && g.nome.isNotEmpty()) ambar else papel
-                setTextColor(cor)
-                // Ícone de linha do sistema de design no lugar do símbolo de texto, na cor do nome (ideia 17).
-                setCompoundDrawablesRelative(iconeDoGrupo(g)?.let { icone(it, cor) }, null, null, null)
-            }
-            // Ações: Filtros mostra o filtro em vigor no lugar da contagem; Buscar não tem número.
-            (linha.getChildAt(1) as TextView).text = when {
-                g.chave == PlayerLista.ACAO_FILTROS -> g.nome
-                g.quantos < 0 -> ""
-                else -> g.quantos.toString()
-            }
-            return linha
-        }
     }
 
     /** Qual ícone a linha da categoria leva (null = nenhum): ações, Favoritos, Recentes, Busca e as ocultas abertas pelo PIN. */
@@ -282,6 +294,8 @@ class PlayerListaTela(
         PlayerLista.BUSCA, PlayerLista.ACAO_BUSCAR -> IconeMidia.Tipo.LUPA
         PlayerLista.ACAO_FILTROS -> IconePlayer.Tipo.FILTROS
         PlayerLista.ACAO_GUIA -> IconePlayer.Tipo.GRADE
+        PlayerLista.TODOS -> IconePlayer.Tipo.TODOS
+        PlayerLista.ESPORTES -> IconePlayer.Tipo.ESPORTE
         else -> if (g.nome in ocultas) IconePlayer.Tipo.CADEADO else null
     }
 
@@ -454,29 +468,7 @@ class PlayerListaTela(
     // Segundo init, no FIM da classe de propósito: o Kotlin inicia as propriedades na ordem em que aparecem, e os
     // adaptadores acima só existem a partir daqui (no 1º init seriam null).
     init {
-        listaGrupos.adapter = adaptadorGrupos
         listaCanais.adapter = adaptadorCanais
-        listaGrupos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p: AdapterView<*>?, v: View?, pos: Int, id: Long) {
-                // Trocar a coluna do meio a cada passo travaria ao descer rápido: espera o dedo parar 180 ms.
-                tela.removeCallbacks(trocarGrupo)
-                if (listaGrupos.hasFocus()) tela.postDelayed(trocarGrupo, 180)
-            }
-            override fun onNothingSelected(p: AdapterView<*>?) {}
-        }
-        listaGrupos.setOnItemClickListener { _, _, pos, _ ->
-            when (grupos.getOrNull(pos)?.chave) {
-                PlayerLista.ACAO_BUSCAR -> aoBuscar()
-                PlayerLista.ACAO_FILTROS -> aoFiltros()
-                PlayerLista.ACAO_GUIA -> grupos.firstOrNull { it.chave == chave }?.let { aoGuia(doMeio, nomeDoGrupo(it)) }
-                else -> { escolherGrupo(pos); if (doMeio.isNotEmpty()) listaCanais.requestFocus() }
-            }
-        }
-        listaGrupos.isLongClickable = true
-        listaGrupos.setOnItemLongClickListener { _, _, pos, _ ->
-            grupos.getOrNull(pos)?.takeIf { it.chave.startsWith("g:") }?.let { aoOcultarGrupo(it.nome) }
-            true
-        }
         listaCanais.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p: AdapterView<*>?, v: View?, pos: Int, id: Long) { mostrarDetalhe(doMeio.getOrNull(pos)) }
             override fun onNothingSelected(p: AdapterView<*>?) {}

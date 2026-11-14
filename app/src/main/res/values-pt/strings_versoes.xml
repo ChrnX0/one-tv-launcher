@@ -69,6 +69,11 @@
         <item>O launcher tem ícone e banner próprios (em Apps e nas Configurações)</item>
         <item>Pílula "Tocando agora" na barra do topo da HOME: capa, título e app; OK pausa ou continua, segurar OK abre o app (ligue "Tocando agora" em Extras)</item>
         <item>Configurações › Ajuda: o manual de tudo o que o launcher faz, em 16 assuntos (controle, tela inicial, painel rápido, voz, TV, filmes, família, casa, painel web, Claude, backup e mais); ◀ ▶ trocam de assunto</item>
+        <item>TV ao vivo, Filmes e Séries com coluna nova: ações fixas em cima (Buscar, Filtro, Interesses/Favoritos, Continuar/Recentes, Assistidos/Guia), “LISTAS” com Todos fixo e as categorias de A a Z</item>
+        <item>TV ao vivo: “Esportes” fixo abaixo de Todos, juntando futebol, lutas e afins, com quem está ao vivo agora primeiro</item>
+        <item>Filmes e Séries: um Filtro só (ordem, gênero/época/nota, só não vistos, sortear e mostrar ocultas); a tela volta na última categoria aberta e mostra “+N” nas categorias com títulos novos</item>
+        <item>Concluído conta pelo que falta: menos de 10 min no filme, menos de 3 min no episódio; começar o próximo episódio conclui o anterior; OK segurado no pôster marca assistido ou tira do Continuar</item>
+        <item>Séries nos Interesses ganham etiqueta: verde “Concluída” e amarela “Nova temporada” ou “N episódios novos”</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -127,6 +132,9 @@
         <item>Abra Configurações > Apps e procure o One TV Launcher</item>
         <item>Toque uma música ou vídeo, volte à HOME e aperte OK na pílula</item>
         <item>Abra Configurações › Ajuda e dê OK em “O controle remoto”; depois aperte ▶ algumas vezes e ▼</item>
+        <item>Abra Filmes e desça pela coluna da esquerda até as categorias</item>
+        <item>Abra a TV ao vivo, aperte OK e escolha Esportes</item>
+        <item>Em Filmes, segure OK num pôster começado e escolha “Marcar como assistido”</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -185,5 +193,8 @@
         <item>Aparece o anel com o símbolo de play?</item>
         <item>Pausou, e voltou a tocar com outro OK?</item>
         <item>O texto dá para ler do sofá, ◀ ▶ trocaram de assunto e ▼ rolou até o fim?</item>
+        <item>O bloco de cima ficou parado, “Todos” também, e só as categorias (de A a Z) rolaram?</item>
+        <item>Os canais com jogo ou luta ao vivo apareceram primeiro?</item>
+        <item>O filme saiu do Continuar e foi para Assistidos com a etiqueta verde?</item>
     </string-array>
 </resources>

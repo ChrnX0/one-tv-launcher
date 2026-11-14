@@ -102,6 +102,7 @@ object Estilo {
         const val DICA = 12.5f          // linha de teclas no rodapé; era 11
         // Grade de pôsteres e painel do canal
         const val CARD = 14.5f          // nome embaixo do pôster; era 12
+        const val COLUNA_CATEGORIAS = 230   // largura (dp) da coluna esquerda do player (14/11/2026; era 210)
         const val GRADE_COLUNAS = 5     // pôsteres por linha em Filmes e Séries; eram 6 (pôster ~20% maior)
         const val POSTER_ALTURA = 180   // dp; era 150 (mantém a proporção 2:3 com 5 colunas)
         /**

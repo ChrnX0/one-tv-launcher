@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Coluna esquerda e filtro único do player (TV, Filmes, Séries), 14/11/2026. -->
+<resources>
+    <string name="coluna_listas">LISTS</string>
+    <string name="coluna_novos">+%1$s</string>
+    <string name="coluna_filtro">Filter</string>
+    <string name="coluna_esportes">Sports</string>
+    <string name="coluna_guia">TV guide</string>
+    <string name="coluna_filtro_titulo">Filter</string>
+    <string name="coluna_filtro_ordem">Sort: %1$s</string>
+    <string name="coluna_filtro_combinado">Genre, era, rating, unwatched…</string>
+    <string name="coluna_filtro_combinado_ativo">Filter: %1$s</string>
+    <string name="coluna_filtro_limpar">Clear filter</string>
+    <string name="coluna_filtro_sortear">Surprise me</string>
+    <string name="coluna_filtro_ocultas_mostrar">Show hidden categories (PIN)</string>
+    <string name="coluna_filtro_ocultas_esconder">Hide hidden categories again</string>
+    <string name="coluna_menu_assistido">Mark as watched</string>
+    <string name="coluna_menu_nao_assistido">Mark as not watched</string>
+    <string name="coluna_menu_tirar_continuar">Remove from Continue watching</string>
+    <string name="coluna_menu_por_interesse">Add to Watchlist</string>
+    <string name="coluna_menu_tirar_interesse">Remove from Watchlist</string>
+    <string name="coluna_marcado_assistido">%1$s marked as watched</string>
+    <string name="coluna_marcado_nao_assistido">%1$s marked as not watched</string>
+    <string name="coluna_tirado_continuar">%1$s removed from Continue watching</string>
+    <string name="coluna_etiqueta_concluida">Finished</string>
+    <string name="coluna_etiqueta_nova_temporada">New season</string>
+    <string name="coluna_etiqueta_novos">New episodes</string>
+    <plurals name="coluna_etiqueta_n_novos">
+        <item quantity="one">%d new episode</item>
+        <item quantity="other">%d new episodes</item>
+    </plurals>
+</resources>

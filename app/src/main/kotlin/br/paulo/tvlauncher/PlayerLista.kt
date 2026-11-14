@@ -21,6 +21,7 @@ object PlayerLista {
     const val FAVORITOS = "*favoritos"
     const val RECENTES = "*recentes"
     const val BUSCA = "*busca"          // resultado da última busca (só existe enquanto há um termo)
+    const val ESPORTES = "*esportes"    // fixa da TV (14/11/2026): futebol, lutas, UFC e afins, juntando as categorias ([ColunaRegras.ehEsporte])
     const val ACAO_BUSCAR = "*acao:buscar"   // linhas de ação no topo da coluna (não são categorias)
     const val ACAO_FILTROS = "*acao:filtros"
     const val ACAO_GUIA = "*acao:guia"
@@ -65,6 +66,7 @@ object PlayerLista {
     fun filtrar(canais: List<Canal>, chave: String, favoritos: Set<String>, recentes: List<String>): List<Canal> = when {
         chave == TODOS -> canais
         chave == FAVORITOS -> canais.filter { it.id in favoritos }
+        chave == ESPORTES -> canais.filter { ColunaRegras.ehEsporte(it.grupo, it.nome) }
         chave == RECENTES -> {
             val porId = canais.associateBy { it.id }
             recentes.mapNotNull { porId[it] }
