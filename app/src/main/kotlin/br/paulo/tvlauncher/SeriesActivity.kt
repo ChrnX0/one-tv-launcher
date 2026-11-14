@@ -426,18 +426,19 @@ class SeriesActivity : Activity() {
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(s.grupo).ifEmpty { null },
             ultimos[s.chave]?.let { "T${it.temporada}E${it.numero}" })),
             info?.sinopse.orEmpty())
-        if (s.chave !in fichasRapidas) { focoRapido = s; tela.postDelayed(lerFichaRapida, 200) }
+        focoRapido = s; if (s.chave !in fichasRapidas) { tela.postDelayed(lerFichaRapida, 400) }
     }
 
     private val fichasRapidas = object : LinkedHashMap<String, FichaSerie?>(64, 0.75f, true) {
         override fun removeEldestEntry(e: MutableMap.MutableEntry<String, FichaSerie?>) = size > 40
     }
-    private var focoRapido: Serie? = null
+    @Volatile private var focoRapido: Serie? = null   // lido também no Fundo: o pôster ainda em foco?
     private val lerFichaRapida = Runnable {
         val s = focoRapido ?: return@Runnable
         Fundo.rodar {
             // Só o que a tela usa (a ficha inteira, com todos os episódios, não fica na memória).
-            val info = PlayerCarga.fichaSerieGuardada(this, s)?.let { f -> f.copy(temporadas = f.temporadas.mapValues { emptyList() }, cenas = emptyList()) }
+            // Sem ficha no disco: pede ao servidor se o foco ainda está nela (mesmo motivo de Filmes).
+            val info = (PlayerCarga.fichaSerieGuardada(this, s) ?: if (focoRapido === s) PlayerCarga.fichaSerie(this, s) else null)?.let { f -> f.copy(temporadas = f.temporadas.mapValues { emptyList() }, cenas = emptyList()) }
             tela.post {
                 if (isDestroyed) return@post
                 fichasRapidas[s.chave] = info
