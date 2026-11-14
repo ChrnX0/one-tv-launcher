@@ -22,7 +22,7 @@ const primeira = { codigo: '', passo: 0, servicosDe: null };
 /** Tira "#primeira=<código>" do endereço (não fica no histórico) e devolve o código, ou '' se não é este caso. */
 function pegarCodigoPrimeira() {
   if (!location.hash.startsWith('#primeira=')) return '';
-  const m = /^#primeira=([0-9a-f]{48})$/.exec(location.hash);
+  const m = /^#primeira=([0-9a-f]{48})(?:&(?:fp|ts)=[a-z0-9.-]*)*$/.exec(location.hash);   // fp/ts: para o app de celular
   history.replaceState(null, '', location.pathname + location.search);
   return m ? m[1] : '';
 }

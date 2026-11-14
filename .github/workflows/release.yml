@@ -131,7 +131,9 @@ jobs:
           OPENSUBTITLES_CHAVE: ${{ github.event_name == 'workflow_dispatch' && secrets.OPENSUBTITLES_CHAVE || '' }}
         run: |
           chmod +x gradlew
-          ./gradlew :app:assembleRelease --no-daemon --stacktrace
+          # Ideia 101: o app de celular sai junto (mesma chave). Num "commit=" antigo sem a pasta celular/, só o launcher.
+          if [ -d celular ]; then CEL=":celular:testReleaseUnitTest :celular:assembleRelease"; else CEL=""; fi
+          ./gradlew :app:assembleRelease $CEL --no-daemon --stacktrace
 
       # Dois APKs (splits em app/build.gradle.kts), com o mesmo versionCode. NOME é o nome dos arquivos do Release
       # (o Atualizador.kt procura one-tv-launcher*.apk e ainda aceita o nome antigo tv-launcher*.apk).
@@ -143,6 +145,12 @@ jobs:
           mkdir -p publicar
           cp "$SAIDA/app-armeabi-v7a-release.apk" publicar/$NOME.apk
           cp "$SAIDA/app-arm64-v8a-release.apk" publicar/$NOME-arm64.apk
+          # App de celular: nome que NÃO começa com one-tv-launcher (o Atualizador da TV nunca o pega por engano).
+          CEL=celular/build/outputs/apk/release/celular-release.apk
+          if [ -f "$CEL" ]; then
+            cp "$CEL" publicar/one-tv-celular.apk
+            (cd publicar && sha256sum one-tv-celular.apk | cut -d' ' -f1 > one-tv-celular.apk.sha256)
+          fi
           AAPT=$(ls "$ANDROID_HOME"/build-tools/36.0.0/aapt2)
           CODIGO=$("$AAPT" dump badging publicar/$NOME.apk | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p")
           C64=$("$AAPT" dump badging publicar/$NOME-arm64.apk | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p")
@@ -191,9 +199,10 @@ jobs:
           # Canal "teste" = pré-lançamento (fora do /releases/latest). "todos" marca --latest explícito: o GitHub ordena o
           # "latest" pela data do COMMIT, e uma republicação (commit antigo) perderia para o Release anterior sem isso.
           if [ "$CANAL" = "teste" ]; then MARCA=--prerelease; else MARCA=--latest; fi
+          EXTRA=""; [ -f one-tv-celular.apk ] && EXTRA="one-tv-celular.apk one-tv-celular.apk.sha256"
           gh release create "v$V" $MARCA \
             "$NOME.apk" "$NOME.apk.sha256" \
-            "$NOME-arm64.apk" "$NOME-arm64.apk.sha256" \
+            "$NOME-arm64.apk" "$NOME-arm64.apk.sha256" $EXTRA \
             --repo "$GITHUB_REPOSITORY" \
             --title "One TV Launcher 1.0 (build $V)" \
             --notes-file notas.md \

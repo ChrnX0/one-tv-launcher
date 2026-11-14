@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cel_nome">One TV</string>
+    <string name="cel_titulo">Your TVs</string>
+    <string name="cel_mandar_para">Send to which TV?</string>
+    <string name="cel_ler_qr">Read the TV\'s QR code</string>
+    <string name="cel_vazio">No TV yet. On the TV, open Settings › Remote access › Sign in with your phone, then tap the button below and point the camera at the code.</string>
+    <string name="cel_pareada_segura">%1$s · secure connection</string>
+    <string name="cel_pareada_http">%1$s · home network</string>
+    <string name="cel_na_rede">Found on the network</string>
+    <string name="cel_achada">%1$s · not paired yet</string>
+    <string name="cel_achada_explica">For a secure connection, read the QR code once: on the TV, Settings › Remote access › Sign in with your phone. Or open it now and sign in with the PIN.</string>
+    <string name="cel_abrir_pin">Open with the PIN</string>
+    <string name="cel_esquecer">Forget</string>
+    <string name="cel_esquecer_explica">This phone forgets this TV. To use it again, read the QR code.</string>
+    <string name="cel_aponte">Point at the code on the TV</string>
+    <string name="cel_qr_invalido">This is not a code from the TV. On the TV, open Settings › Remote access › Sign in with your phone.</string>
+    <string name="cel_cert_outro">The TV answered with a different certificate. If you renewed it, read the QR code again.</string>
+</resources>

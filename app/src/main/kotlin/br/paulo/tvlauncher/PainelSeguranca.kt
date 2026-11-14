@@ -414,3 +414,24 @@ object PrimeiraConfig {
         else -> null
     }
 }
+
+/**
+ * Ideia 101: o que o QR da TV leva a mais para o app de celular (One TV), no fim do "#qr=..." / "#primeira=...":
+ *  - `fp`: SHA-256 do certificado https da TV (porta 8444), em hex minúsculo. O app passa a aceitar SÓ esse
+ *    certificado nesse endereço (fixação). Só quem está na frente da TV vê o QR, por isso ele é a prova de confiança.
+ *  - `ts`: o nome no Tailscale, para o app abrir o painel fora de casa.
+ * O navegador comum ignora os dois (o fragmento "#..." nunca vai ao servidor; app.js só tolera os campos).
+ */
+object QrDoApp {
+    private val NOME_TS = Regex("^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*\\.ts\\.net$")
+
+    fun impressao(der: ByteArray): String =
+        java.security.MessageDigest.getInstance("SHA-256").digest(der).joinToString("") { "%02x".format(it.toInt() and 0xff) }
+
+    /** "&fp=...&ts=..." (cada um só se existir e for válido), ou "". */
+    fun sufixo(certificadoDer: ByteArray?, nomeTailscale: String?): String {
+        val fp = certificadoDer?.let { "&fp=" + impressao(it) }.orEmpty()
+        val ts = nomeTailscale?.lowercase()?.takeIf { NOME_TS.matches(it) }?.let { "&ts=$it" }.orEmpty()
+        return fp + ts
+    }
+}
