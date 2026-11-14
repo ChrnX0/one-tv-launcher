@@ -50,8 +50,11 @@ class PlayerVodTest {
         // Episódio de 23:42 parado em 22:16 (94%, faltam 1:26: os créditos): conta como visto (achado na Sala, 12/11)
         assertFalse(Vod.deveRetomar(Posicao(1_336_000, 1_422_000, 1)))
         assertTrue(Vod.finalizado(Posicao(1_336_000, 1_422_000, 1)))
-        assertTrue(Vod.deveRetomar(Posicao(1_200_000, 1_422_000, 1)))     // faltam 3:42: ainda continua
-        assertTrue(Vod.deveRetomar(Posicao(240_000, 300_000, 1)))         // vídeo de 5 min: só a régua dos 95%
+        // 14/11/2026, régua de minutos: episódio faltando 3:42 ainda continua (precisa faltar menos de 3 min) ...
+        assertTrue(Vod.deveRetomar(Posicao(1_200_000, 1_422_000, 1), episodio = true))
+        assertFalse(Vod.deveRetomar(Posicao(1_200_000, 1_422_000, 1)))   // ... e um filme com o mesmo tempo, não (menos de 10 min)
+        assertFalse(Vod.deveRetomar(Posicao(240_000, 300_000, 1)))        // vídeo de 5 min com 80% visto: concluído
+        assertTrue(Vod.deveRetomar(Posicao(180_000, 300_000, 1)))         // com 60%, não (abaixo dos 70%)
         assertEquals(595_000, Vod.inicio(Posicao(600_000, 6_000_000, 1)))
         assertEquals(0, Vod.inicio(null))
         val f = Vod.lerFilmes(json, "a1", cats)
@@ -78,13 +81,14 @@ class PlayerVodTest {
         assertNull(Vod.progresso(Posicao(30_000, 6_000_000, 1)))          // menos de 1 min: nem conta
         assertEquals(10, Vod.progresso(Posicao(600_000, 6_000_000, 1)))
         assertEquals(1, Vod.progresso(Posicao(61_000, 100_000_000, 1)))   // nunca "0%" para quem viu
-        assertEquals(94, Vod.progresso(Posicao(5_690_000, 6_000_000, 1))) // 94,8%: ainda não terminou (arredonda para baixo)
+        assertEquals(84, Vod.progresso(Posicao(5_040_000, 6_000_000, 1))) // faltam 16 min: ainda não terminou (arredonda para baixo)
+        assertEquals(100, Vod.progresso(Posicao(5_460_000, 6_000_000, 1)))// faltam 9 min: concluído (14/11/2026)
         assertEquals(100, Vod.progresso(Posicao(5_700_000, 6_000_000, 1)))// 95%: Finalizado
         assertEquals(100, Vod.progresso(Posicao(6_000_000, 6_000_000, 1)))// a VodActivity grava o fim assim
         assertEquals(0, Vod.progresso(Posicao(600_000, 0, 1)))            // sem duração: só "Assistido"
         val f = Vod.lerFilmes(json, "a1", cats)
         val pos = mapOf("a1:f10" to Posicao(6_000_000, 6_000_000, 5), "a1:f11" to Posicao(900_000, 6_000_000, 9))
-        assertEquals(listOf("11", "10"), Vod.assistidos(f, pos).map { it.id })   // terminado também fica, mais recente primeiro
+        assertEquals(listOf("10"), Vod.assistidos(f, pos).map { it.id })   // 14/11/2026: só o concluído (o começado está no Continuar)
         assertEquals(listOf("11"), Vod.continuar(f, pos).map { it.id })           // ... mas sai do "continuar"
     }
 

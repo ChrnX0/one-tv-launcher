@@ -46,15 +46,23 @@ object Vod {
     const val MAX_POSICOES = 1000             // filmes + episódios; ~60 KB de JSON (era 300; subiu para os "assistidos" durarem)
     const val MAX_INTERESSES = 500
     private const val MIN_RETOMAR = 60_000L      // menos de 1 min assistido: começa do zero
-    private const val FIM = 0.95                 // passou de 95%: conta como visto, não oferece "continuar"
-    // Faltando 2 min ou menos também conta como visto (12/11/2026): num episódio de 24 min, 95% deixava 1:26 de créditos
-    // fora do "fim" e a ficha oferecia "Continuar T1E7 de 22:16" em vez do próximo episódio. Só vale para vídeo de 10 min+.
-    private const val FIM_RESTANTE_MS = 120_000L
-    private const val MIN_DURACAO_RESTANTE = 600_000L
+    private const val FIM = 0.95                 // passou de 95%: conta como visto em qualquer vídeo
+    /**
+     * Concluído pelo que FALTA, em minutos (14/11/2026, pedido do Paulo): os créditos de um filme passam fácil de 5%.
+     * Filme: faltando menos de 10 min. Episódio: menos de 3 min. Para um vídeo curto não "concluir" na metade (um curta
+     * de 15 min teria só 5 min vistos), a régua de minutos só vale depois de [MIN_FRACAO_MINUTOS] do vídeo.
+     */
+    const val FALTA_FILME_MS = 10 * 60_000L
+    const val FALTA_EPISODIO_MS = 3 * 60_000L
+    private const val MIN_FRACAO_MINUTOS = 0.7
 
-    /** Chegou ao fim: passou de 95% ou faltam 2 min ou menos (vídeo de 10 min ou mais). Sem duração conhecida: não. */
-    private fun noFim(p: Posicao): Boolean = p.duracao > 0 &&
-        (p.ms >= p.duracao * FIM || (p.duracao >= MIN_DURACAO_RESTANTE && p.duracao - p.ms <= FIM_RESTANTE_MS))
+    /** Chegou ao fim (concluído). Sem duração conhecida não dá para saber: não. */
+    fun noFim(p: Posicao, episodio: Boolean = false): Boolean {
+        if (p.duracao <= 0) return false
+        if (p.ms >= p.duracao * FIM) return true
+        val falta = if (episodio) FALTA_EPISODIO_MS else FALTA_FILME_MS
+        return p.duracao - p.ms < falta && p.ms >= p.duracao * MIN_FRACAO_MINUTOS
+    }
 
     private fun cod(v: String) = URLEncoder.encode(v, "UTF-8")
 
@@ -187,10 +195,10 @@ object Vod {
 
     // ---------------------------------------------------------------- continuar de onde parou
 
-    fun deveRetomar(p: Posicao?): Boolean = p != null && p.ms >= MIN_RETOMAR && !noFim(p)
+    fun deveRetomar(p: Posicao?, episodio: Boolean = false): Boolean = p != null && p.ms >= MIN_RETOMAR && !noFim(p, episodio)
 
     /** Onde começar: a posição salva, voltando 5 s (para o usuário se situar), ou 0. */
-    fun inicio(p: Posicao?): Long = if (deveRetomar(p)) (p!!.ms - 5_000).coerceAtLeast(0) else 0
+    fun inicio(p: Posicao?, episodio: Boolean = false): Long = if (deveRetomar(p, episodio)) (p!!.ms - 5_000).coerceAtLeast(0) else 0
 
     /** Registra a posição; mantém só as MAX_POSICOES mais recentes. Visto até o fim = some do "continuar". */
     fun registrar(posicoes: Map<String, Posicao>, chave: String, p: Posicao): Map<String, Posicao> {
@@ -207,10 +215,10 @@ object Vod {
     // ---------------------------------------------------------------- assistidos e interesses (07/11/2026)
 
     /** Já assistiu o bastante para contar (1 min, a mesma régua do "continuar") ou viu até o fim. */
-    fun assistido(p: Posicao?): Boolean = p != null && (p.ms >= MIN_RETOMAR || finalizado(p))
+    fun assistido(p: Posicao?, episodio: Boolean = false): Boolean = p != null && (p.ms >= MIN_RETOMAR || finalizado(p, episodio))
 
     /** Chegou ao fim ([noFim]; ou a VodActivity gravou o fim): "Finalizado". Sem duração conhecida não dá para saber. */
-    fun finalizado(p: Posicao?): Boolean = p != null && noFim(p)
+    fun finalizado(p: Posicao?, episodio: Boolean = false): Boolean = p != null && noFim(p, episodio)
 
     /**
      * O número da etiqueta do pôster: null = sem etiqueta (nem começou); 0 = assistido, mas o servidor não deu a duração
@@ -223,9 +231,24 @@ object Vod {
         else -> (p.ms * 100 / p.duracao).toInt().coerceIn(1, 99)
     }
 
-    /** "Assistidos": tudo o que foi visto (terminado ou não), do mais recente para o mais velho. */
+    /**
+     * "Assistidos": só o que foi CONCLUÍDO (14/11/2026; antes era tudo com 1 min visto, e o começado já está no
+     * Continuar), do mais recente para o mais velho.
+     */
     fun assistidos(filmes: List<Filme>, posicoes: Map<String, Posicao>): List<Filme> =
-        filmes.filter { assistido(posicoes[it.chave]) }.sortedByDescending { posicoes[it.chave]?.quando ?: 0 }
+        filmes.filter { finalizado(posicoes[it.chave]) }.sortedByDescending { posicoes[it.chave]?.quando ?: 0 }
+
+    /**
+     * "Marcar como assistido" à mão (OK segurado no pôster, 14/11/2026): grava a posição no fim. Sem duração conhecida,
+     * grava 1 ms de 1 ms (conta como concluído pela régua dos 95%, e nunca como "continuar").
+     */
+    fun marcarAssistido(posicoes: Map<String, Posicao>, chave: String, agora: Long): Map<String, Posicao> {
+        val d = posicoes[chave]?.duracao?.takeIf { it > 0 } ?: 1L
+        return registrar(posicoes, chave, Posicao(d, d, agora))
+    }
+
+    /** "Tirar do Continuar" / "Marcar como não assistido": esquece a posição (volta a começar do zero). */
+    fun esquecer(posicoes: Map<String, Posicao>, chave: String): Map<String, Posicao> = posicoes - chave
 
     /** Põe ou tira dos interesses (mesma regra dos favoritos de canais). Cheio = devolve o mesmo conjunto. */
     fun alternarInteresse(interesses: Set<String>, chave: String): Set<String> = when {
@@ -277,11 +300,11 @@ object Vod {
         return filmes.filter { f -> val n = PlayerFiltro.normalizar(f.nome); palavras.all { n.contains(it) } }.take(max)
     }
 
-    /** Grupos na ordem do servidor, com a contagem. */
+    /** Grupos com a contagem, em ordem alfabética do nome exibido ([ColunaRegras.ordenarAZ]). */
     fun grupos(filmes: List<Filme>): List<Pair<String, Int>> {
         val m = LinkedHashMap<String, Int>()
         filmes.forEach { m[it.grupo.trim()] = (m[it.grupo.trim()] ?: 0) + 1 }
-        return m.entries.map { it.key to it.value }
+        return ColunaRegras.ordenarAZ(m.entries.map { it.key to it.value })
     }
 
     // ---------------------------------------------------------------- cache (sem senha: o Filme não tem endereço)

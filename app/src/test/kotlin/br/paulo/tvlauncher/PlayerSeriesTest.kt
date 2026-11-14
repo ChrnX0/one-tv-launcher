@@ -66,10 +66,13 @@ class PlayerSeriesTest {
         val serie = Serie("5", "a1", "A Série", atualizada = 100)
         val vista = mapOf("a1:e11" to Posicao(2_700_000, 2_700_000, 1))                 // T1E1 até o fim
         val p1 = Series.progressoDaFicha(serie, ficha, vista, null)!!
-        assertEquals(ProgressoSerie(1, 3, 100), p1)
+        assertEquals(Triple(1, 3, 100L), Triple(p1.vistos, p1.total, p1.atualizada))
+        assertEquals(0, p1.concluidaCom)                                                  // ainda não concluída
         assertEquals(33, Series.percentual(serie, p1))
         assertNull(Series.percentual(serie, Series.progressoDaFicha(serie, ficha, emptyMap(), null)))   // nada visto
-        val todas = vista + ("a1:e12" to Posicao(120_000, 2_700_000, 2)) + ("a1:e21" to Posicao(2_600_000, 2_700_000, 3))
+        // 14/11/2026: episódio conta como visto só concluído (faltando menos de 3 min), não mais com 1 min.
+        val todas = vista + ("a1:e12" to Posicao(2_560_000, 2_700_000, 2)) + ("a1:e21" to Posicao(2_600_000, 2_700_000, 3))
+        assertEquals(2, Series.progressoDaFicha(serie, ficha, vista + ("a1:e12" to Posicao(120_000, 2_700_000, 2)) + ("a1:e21" to Posicao(2_600_000, 2_700_000, 3)), null)!!.vistos)
         val p3 = Series.progressoDaFicha(serie, ficha, todas, p1)!!
         assertEquals(100, Series.percentual(serie, p3))                                  // 3 de 3: Finalizado
         // Posições velhas sumiram do arquivo: o visto continua visto (total igual).
@@ -81,8 +84,8 @@ class PlayerSeriesTest {
         val prog = mapOf(serie.chave to p3)
         assertTrue(Series.continuar(listOf(serie), u, prog).isEmpty())
         assertEquals(listOf("5"), Series.assistidos(listOf(serie), u, todas, prog).map { it.id })
-        // Sem conta ainda, mas com o último episódio visto: entra nos assistidos.
-        assertEquals(listOf("5"), Series.assistidos(listOf(serie), u, todas, emptyMap()).map { it.id })
+        // 14/11/2026: sem conta (nunca concluída), não entra nos assistidos; fica no Continuar.
+        assertTrue(Series.assistidos(listOf(serie), u, todas, emptyMap()).isEmpty())
         assertEquals(prog, Series.progressoDeJson(Series.progressoParaJson(prog)))
     }
 }

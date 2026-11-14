@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Coluna esquerda e filtro único do player (TV, Filmes, Séries), 14/11/2026. -->
+<resources>
+    <string name="coluna_listas">LISTAS</string>
+    <string name="coluna_novos">+%1$s</string>
+    <string name="coluna_filtro">Filtro</string>
+    <string name="coluna_esportes">Esportes</string>
+    <string name="coluna_guia">Guia de programação</string>
+    <string name="coluna_filtro_titulo">Filtro</string>
+    <string name="coluna_filtro_ordem">Ordem: %1$s</string>
+    <string name="coluna_filtro_combinado">Gênero, época, nota, só não vistos…</string>
+    <string name="coluna_filtro_combinado_ativo">Filtro: %1$s</string>
+    <string name="coluna_filtro_limpar">Limpar o filtro</string>
+    <string name="coluna_filtro_sortear">Sortear um título</string>
+    <string name="coluna_filtro_ocultas_mostrar">Mostrar categorias ocultas (PIN)</string>
+    <string name="coluna_filtro_ocultas_esconder">Esconder as categorias ocultas de novo</string>
+    <string name="coluna_menu_assistido">Marcar como assistido</string>
+    <string name="coluna_menu_nao_assistido">Marcar como não assistido</string>
+    <string name="coluna_menu_tirar_continuar">Tirar do Continuar</string>
+    <string name="coluna_menu_por_interesse">Pôr nos Interesses</string>
+    <string name="coluna_menu_tirar_interesse">Tirar dos Interesses</string>
+    <string name="coluna_marcado_assistido">%1$s marcado como assistido</string>
+    <string name="coluna_marcado_nao_assistido">%1$s marcado como não assistido</string>
+    <string name="coluna_tirado_continuar">%1$s saiu do Continuar</string>
+    <string name="coluna_etiqueta_concluida">Concluída</string>
+    <string name="coluna_etiqueta_nova_temporada">Nova temporada</string>
+    <string name="coluna_etiqueta_novos">Episódios novos</string>
+    <plurals name="coluna_etiqueta_n_novos">
+        <item quantity="one">%d episódio novo</item>
+        <item quantity="other">%d episódios novos</item>
+    </plurals>
+</resources>

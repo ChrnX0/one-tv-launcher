@@ -237,7 +237,7 @@ class VodActivity : Activity() {
             val atraso = getSharedPreferences("player", MODE_PRIVATE).getLong("atraso:$chave", 0L)
             // Ideia 21: tamanho da legenda escolhido no ▼ (vale para todos os vídeos).
             val tamLeg = FimDoVideo.tamanhoLegenda(getSharedPreferences("player", MODE_PRIVATE).getInt("legenda_sp", FimDoVideo.LEGENDA_PADRAO))
-            val pos = if (intent.getBooleanExtra("do_comeco", false)) 0L else Vod.inicio(PlayerArmazem.posicoes(this)[chave])
+            val pos = if (intent.getBooleanExtra("do_comeco", false)) 0L else Vod.inicio(PlayerArmazem.posicoes(this)[chave], episodio = tipo == TIPO_EPISODIO)
             val ab = if (serie) AberturaSerie.deTexto(getSharedPreferences("player", MODE_PRIVATE)
                 .getString(AberturaSerie.chave(chaveIdioma), null)) else null
             tela.post {
