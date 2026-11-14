@@ -106,3 +106,32 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar); else iniciar();
 })();
+
+// Caixa de comando sem IA (ideia 10), no Início: a frase vai para POST /api/extras/comando (CaixaComandoTv.kt), que a
+// troca por UMA ação do catálogo fechado. A resposta (o que entendeu, ou "não entendi" com exemplos) vem no idioma da TV.
+(function () {
+  function iniciar() {
+    const form = $('formComando');
+    if (!form) return;
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const campo = $('campoComando');
+      const frase = campo.value.trim();
+      const lista = $('exemplosComando');
+      lista.replaceChildren(); lista.hidden = true;
+      if (!frase) return;
+      try {
+        const r = await chamar('POST', '/api/extras/comando', { frase });
+        mostrar($('statusComando'), r.texto || '');
+        if (r.entendeu) campo.value = '';
+        for (const x of (r.exemplos || [])) {
+          const li = document.createElement('li');
+          li.textContent = x;   // texto sempre por textContent
+          lista.appendChild(li);
+        }
+        lista.hidden = !(r.exemplos && r.exemplos.length);
+      } catch (err) { mostrar($('statusComando'), textoErro(err)); }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar); else iniciar();
+})();
