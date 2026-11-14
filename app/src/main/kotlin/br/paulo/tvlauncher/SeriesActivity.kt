@@ -42,6 +42,7 @@ import java.util.Locale
 class SeriesActivity : Activity() {
     private companion object {
         const val MAX_NOVIDADES = 15
+        const val MIN_PULAR = 30
         const val BUSCAR = "*buscar"
         const val FILTRO = "*filtro"
         const val CONTINUAR = "*continuar"
@@ -97,8 +98,7 @@ class SeriesActivity : Activity() {
 
     private lateinit var coluna: ColunaCategorias
     private lateinit var grade: GridView
-    private lateinit var cabecalho: TextView
-    private lateinit var focado: TextView
+    private lateinit var painelInfo: PainelCatalogo   // topo (categoria + pílulas do filtro) e a ficha rápida da série em foco
     private lateinit var aviso: TextView
     private lateinit var painel: FrameLayout
 
@@ -114,16 +114,15 @@ class SeriesActivity : Activity() {
         coluna = ColunaCategorias(this, getString(R.string.series_titulo), aoParar = { escolherCat(it) }, aoOk = { okNaColuna(it) })
         colunas.addView(coluna.raiz, LinearLayout.LayoutParams(dp(Estilo.Leitura.COLUNA_CATEGORIAS), -1))
         val direita = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        cabecalho = rotulo("")
-        direita.addView(cabecalho)
+        // Painel direito (esboço direita-filmes.png, aprovado em 14/11/2026): o filtro em pílulas e a ficha rápida.
+        painelInfo = PainelCatalogo(this)
+        direita.addView(painelInfo.topo)
+        direita.addView(painelInfo.faixa, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = dp(10) })
         grade = GridView(this).apply {
             numColumns = Estilo.Leitura.GRADE_COLUNAS; horizontalSpacing = dp(12); verticalSpacing = dp(Estilo.Leitura.GRADE_VAO); stretchMode = GridView.STRETCH_COLUMN_WIDTH
             estilo(this); setPadding(dp(4), dp(4), dp(4), dp(4)); clipToPadding = false
         }
         direita.addView(grade, LinearLayout.LayoutParams(-1, 0, 1f))
-        // A informação do item em foco fica EM CIMA da grade, como o destaque da HOME (era uma linha de 13 sp embaixo).
-        focado = TextView(this).apply { textSize = Estilo.Leitura.FOCADO; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPadding(dp(4), dp(10), 0, dp(10)) }
-        direita.addView(focado, 1)   // logo abaixo do cabeçalho da categoria
         // Dica fixa das teclas, no mesmo jeito da lista de canais do player (player_lista_teclas: 11sp, cor apagada).
         direita.addView(TextView(this).apply { text = getString(R.string.vod_grade_teclas); textSize = Estilo.Leitura.DICA; setTextColor(apagado); setPadding(dp(8), dp(6), 0, 0) })
         colunas.addView(direita, LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(16) })
@@ -142,9 +141,12 @@ class SeriesActivity : Activity() {
         grade.adapter = adaptadorGrade
         // ◀ na 1ª coluna da grade volta para a categoria escolhida (não para a linha da coluna que estiver mais perto).
         grade.setOnKeyListener { _, codigo, e ->
-            if (e.action == KeyEvent.ACTION_DOWN && codigo == KeyEvent.KEYCODE_DPAD_LEFT && grade.selectedItemPosition % grade.numColumns == 0) {
-                coluna.focar(); true
-            } else false
+            if (e.action != KeyEvent.ACTION_DOWN) false
+            else if (codigo == KeyEvent.KEYCODE_DPAD_LEFT && grade.selectedItemPosition % grade.numColumns == 0) { coluna.focar(); true }
+            // ▶ na última coluna de uma grade grande: as letras, para pular (acréscimo 3).
+            else if (codigo == KeyEvent.KEYCODE_DPAD_RIGHT && e.repeatCount == 0 && podePularLetra() &&
+                (grade.selectedItemPosition % grade.numColumns == grade.numColumns - 1 || grade.selectedItemPosition == naGrade.size - 1)) { pularParaLetra(); true }
+            else false
         }
         grade.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p: AdapterView<*>?, v: View?, pos: Int, id: Long) {
@@ -222,6 +224,7 @@ class SeriesActivity : Activity() {
             soNaoVistas = !soNaoVistas; recalcular(ModoGrade.NOVA); menuFiltroUnico()
         }
         opcoes += getString(R.string.coluna_filtro_sortear) to { sortear() }
+        if (podePularLetra()) opcoes += getString(R.string.coluna_letra) to { pularParaLetra() }
         if (ocultas.isNotEmpty()) opcoes += JanelaIcones.comIcone(this, IconePlayer.Tipo.OCULTO,
             getString(if (mostrarOcultas) R.string.coluna_filtro_ocultas_esconder else R.string.coluna_filtro_ocultas_mostrar)) to { alternarOcultas() }
         Estilo.lista(this, getString(R.string.coluna_filtro_titulo), opcoes.map { it.first }) { i -> opcoes[i].second() }
@@ -389,10 +392,9 @@ class SeriesActivity : Activity() {
                         if (modo == ModoGrade.MANTER_LUGAR && naGrade.isEmpty() && grade.hasFocus()) coluna.focar()   // esvaziou
                     }
                     val nome = itens.firstOrNull { it.chave == chave }?.nome.orEmpty()
-                    // "DRAMA · 310 SÉRIES · MAIS RECENTES · SÓ NÃO VISTAS": o que está na grade e por quê.
-                    val partes = listOfNotNull(getString(R.string.series_cabecalho, nome, naGrade.size), nomeOrdem(ordem),
-                        if (soNaoVistas) getString(R.string.filmes_filtro_nao_vistos_curto) else null)
-                    cabecalho.text = partes.joinToString(" · ").uppercase(Locale.getDefault())
+                    // "Drama 310 [Ordem: mais recentes] [Só não vistos]": o que está na grade e por quê (acréscimo 1).
+                    painelInfo.mostrarTopo(nome, naGrade.size, listOfNotNull(getString(R.string.coluna_filtro_ordem, nomeOrdem(ordem)) to false,
+                        if (soNaoVistas) getString(R.string.filmes_filtro_nao_vistos_curto) to true else null))
                     depois?.invoke()
                 }
             },
@@ -410,11 +412,67 @@ class SeriesActivity : Activity() {
         recalcular(ModoGrade.NOVA) { if (focarGrade && naGrade.isNotEmpty()) grade.requestFocus() }
     }
 
+    /**
+     * Ficha rápida da série em foco (acréscimo 2): nota, ano, temporadas, gênero e 2 linhas de sinopse, sem abrir a
+     * ficha. Temporadas e sinopse só se a ficha já estiver guardada no disco (nunca pede ao servidor a cada passo).
+     */
     private fun mostrarFocado(s: Serie?) {
-        if (s == null && chave == INTERESSES) { focado.text = getString(R.string.filmes_interesses_vazio); return }
-        focado.text = s?.let {
-            Estilo.infoFoco(Vod.nomeLimpo(it.nome), it.nota, listOfNotNull(it.ano?.toString(), PlayerLista.nomeExibido(it.grupo).ifEmpty { null }))
-        } ?: ""
+        tela.removeCallbacks(lerFichaRapida)
+        if (s == null) { painelInfo.mostrarFoco(if (chave == INTERESSES) getString(R.string.filmes_interesses_vazio) else "", ""); return }
+        val info = fichasRapidas[s.chave]
+        painelInfo.mostrarFoco(Estilo.infoFoco(Vod.nomeLimpo(s.nome), s.nota, listOfNotNull(
+            s.ano?.toString(),
+            info?.temporadas?.size?.takeIf { it > 0 }?.let { resources.getQuantityString(R.plurals.series_temporadas, it, it) },
+            info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(s.grupo).ifEmpty { null },
+            ultimos[s.chave]?.let { "T${it.temporada}E${it.numero}" })),
+            info?.sinopse.orEmpty())
+        if (s.chave !in fichasRapidas) { focoRapido = s; tela.postDelayed(lerFichaRapida, 200) }
+    }
+
+    private val fichasRapidas = object : LinkedHashMap<String, FichaSerie?>(64, 0.75f, true) {
+        override fun removeEldestEntry(e: MutableMap.MutableEntry<String, FichaSerie?>) = size > 40
+    }
+    private var focoRapido: Serie? = null
+    private val lerFichaRapida = Runnable {
+        val s = focoRapido ?: return@Runnable
+        Fundo.rodar {
+            // Só o que a tela usa (a ficha inteira, com todos os episódios, não fica na memória).
+            val info = PlayerCarga.fichaSerieGuardada(this, s)?.let { f -> f.copy(temporadas = f.temporadas.mapValues { emptyList() }, cenas = emptyList()) }
+            tela.post {
+                if (isDestroyed) return@post
+                fichasRapidas[s.chave] = info
+                if (naGrade.getOrNull(grade.selectedItemPosition) === s) mostrarFocado(s)
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------- pular para uma letra (acréscimo 3)
+
+    private fun podePularLetra() = naGrade.size >= MIN_PULAR && (chave == TODOS || chave.startsWith("g:"))
+
+    private fun pularParaLetra() {
+        if (!podePularLetra()) return
+        val g = naGrade
+        Fundo.rodar {
+            val presentes = g.mapTo(HashSet()) { ColunaRegras.letraDe(Vod.chaveNome(it.nome)) }
+            tela.post {
+                if (isDestroyed) return@post
+                PainelCatalogo.escolherLetra(this, presentes) { letra ->
+                    val pular = {
+                        val atual = naGrade
+                        Fundo.rodar {
+                            val i = ColunaRegras.indiceDaLetra(atual.map { Vod.chaveNome(it.nome) }, letra)
+                            tela.post { if (!isDestroyed && naGrade === atual && i >= 0) { grade.requestFocus(); grade.setSelection(i); mostrarFocado(atual[i]) } }
+                        }
+                    }
+                    if (ordem == Vod.Ordem.NOME) pular() else {
+                        ordem = Vod.Ordem.NOME
+                        getSharedPreferences("player", MODE_PRIVATE).edit().putString("ordem_series", ordem.name).apply()
+                        recalcular(ModoGrade.NOVA) { pular() }
+                    }
+                }
+            }
+        }
     }
 
     private fun nomeOrdem(o: Vod.Ordem) = getString(when (o) {

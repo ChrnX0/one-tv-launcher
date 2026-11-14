@@ -29,4 +29,8 @@
         <item quantity="one">%d episódio novo</item>
         <item quantity="other">%d episódios novos</item>
     </plurals>
+    <string name="coluna_letra_titulo">Ir para a letra</string>
+    <string name="coluna_letra">Ir para uma letra</string>
+    <string name="coluna_ao_vivo">AO VIVO</string>
+    <string name="coluna_ao_vivo_primeiro">Ao vivo primeiro</string>
 </resources>

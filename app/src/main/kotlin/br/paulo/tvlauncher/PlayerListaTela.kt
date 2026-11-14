@@ -40,6 +40,9 @@ import java.util.Locale
  * No topo da coluna de categorias ficam três ações: Buscar, Filtros e Guia de programação (as janelas são da PlayerActivity).
  * Filmes e Séries não aparecem aqui: abrem pelos cards da HOME (06/11/2026, pedido do dono).
  */
+/** Vermelho da etiqueta AO VIVO: branco sobre ele passa de 4,5:1 (legível de longe). */
+private const val COR_AO_VIVO = 0xFFC62828.toInt()
+
 class PlayerListaTela(
     private val act: Activity,
     private val aoAssistir: (Canal, String) -> Unit,      // canal escolhido + categoria em que estava
@@ -255,12 +258,15 @@ class PlayerListaTela(
             // Esportes: quem está ao vivo agora (pelo guia) primeiro (acréscimo aprovado em 14/11/2026).
             PlayerLista.ESPORTES -> {
                 val agora = System.currentTimeMillis()
-                ColunaRegras.aoVivoPrimeiro(PlayerLista.filtrar(canais, chave, favoritos, recentes)) { c ->
+                val lista = PlayerLista.filtrar(canais, chave, favoritos, recentes)
+                aoVivo = lista.filterTo(HashSet()) { c ->
                     c.guiaId.takeIf { it.isNotEmpty() }?.let { guia.agora(it, agora) }?.let { ColunaRegras.pareceAoVivo(it.titulo, it.categoria) } == true
-                }
+                }.mapTo(HashSet()) { it.id }
+                ColunaRegras.aoVivoPrimeiro(lista) { it.id in aoVivo }
             }
             else -> PlayerLista.filtrar(canais, chave, favoritos, recentes)
         }
+        if (chave != PlayerLista.ESPORTES) aoVivo = emptySet()
         adaptadorCanais.notifyDataSetChanged()
         atualizarTituloMeio()
         val pos = if (manterNoAtual) PlayerLista.posicao(doMeio, atualId) else 0
@@ -269,9 +275,13 @@ class PlayerListaTela(
         mostrarDetalhe(doMeio.getOrNull(pos))
     }
 
+    /** Canais de Esportes com evento ao vivo agora (pelo título no guia): vêm primeiro e levam a etiqueta AO VIVO. */
+    private var aoVivo: Set<String> = emptySet()
+
     private fun atualizarTituloMeio() {
         val nome = grupos.firstOrNull { it.chave == chave }?.let { nomeDoGrupo(it) } ?: ""
-        val filtro = resumoFiltro.takeIf { it.isNotEmpty() }?.let { "  ·  $it" } ?: ""
+        val filtro = listOfNotNull(resumoFiltro.ifEmpty { null }, if (aoVivo.isNotEmpty()) act.getString(R.string.coluna_ao_vivo_primeiro) else null)
+            .joinToString("  ·  ").let { if (it.isEmpty()) "" else "  ·  $it" }
         tituloMeio.text = act.getString(R.string.player_canais_de, nome.uppercase(Locale.getDefault()), doMeio.size) + filtro
     }
 
@@ -310,7 +320,7 @@ class PlayerListaTela(
     }
 
     /** Peças de uma linha de canal, guardadas na tag para não procurar a cada desenho. */
-    private class Linha(val numero: TextView, val logo: ImageView, val nome: TextView, val sub: TextView, val tempo: TextView, val barra: BarraTempo.Barra, val estrela: View)
+    private class Linha(val numero: TextView, val logo: ImageView, val nome: TextView, val sub: TextView, val tempo: TextView, val barra: BarraTempo.Barra, val estrela: View, val vivo: View)
 
     private val adaptadorCanais = object : BaseAdapter() {
         override fun getCount() = doMeio.size
@@ -336,6 +346,7 @@ class PlayerListaTela(
             l.tempo.text = prog?.let { BarraTempo.textoFaltam(act, it.fim - agora) } ?: ""
             l.tempo.visibility = if (prog != null) View.VISIBLE else View.GONE
             l.estrela.visibility = if (c.id in favoritos) View.VISIBLE else View.GONE
+            l.vivo.visibility = if (c.id in aoVivo) View.VISIBLE else View.GONE
             PlayerLogos.carregar(act, c.logo, l.logo)
             return v
         }
@@ -357,18 +368,27 @@ class PlayerListaTela(
         linha.addView(logo, LinearLayout.LayoutParams(dp(58), dp(40)).apply { marginEnd = dp(12) })
         val col = LinearLayout(act).apply { orientation = LinearLayout.VERTICAL }
         val nome = TextView(act).apply { textSize = Estilo.Leitura.ITEM; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
+        // "AO VIVO" em vermelho forte, letra branca, ao lado do nome (Esportes; acréscimo 4 do painel, 14/11/2026).
+        val vivo = TextView(act).apply {
+            text = act.getString(R.string.coluna_ao_vivo); textSize = Estilo.Leitura.ITEM_DETALHE; typeface = Fontes.manrope(700)
+            setTextColor(0xFFFFFFFF.toInt()); setPadding(dp(8), dp(1), dp(8), dp(2)); visibility = View.GONE
+            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(COR_AO_VIVO) }
+        }
+        val linhaNome = LinearLayout(act).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
+        linhaNome.addView(vivo, LinearLayout.LayoutParams(-2, -2).apply { marginEnd = dp(8) })
+        linhaNome.addView(nome, LinearLayout.LayoutParams(0, -2, 1f))
         val sub = TextView(act).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
         val tempo = TextView(act).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(suave); maxLines = 1 }
         val linhaSub = LinearLayout(act).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
         linhaSub.addView(sub, LinearLayout.LayoutParams(0, -2, 1f))
         linhaSub.addView(tempo, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(10) })
         val barra = BarraTempo.Barra(act)
-        col.addView(nome); col.addView(linhaSub)
+        col.addView(linhaNome); col.addView(linhaSub)
         col.addView(barra, LinearLayout.LayoutParams(-1, dp(BarraTempo.ESPESSURA_DP)).apply { topMargin = dp(4) })
         linha.addView(col, LinearLayout.LayoutParams(0, -2, 1f))
         val estrela = ImageView(act).apply { setImageDrawable(IconePlayer(IconePlayer.Tipo.ESTRELA, ambar)) }
         linha.addView(estrela, LinearLayout.LayoutParams(dp(18), dp(18)).apply { marginStart = dp(10) })
-        linha.tag = Linha(numero, logo, nome, sub, tempo, barra, estrela)
+        linha.tag = Linha(numero, logo, nome, sub, tempo, barra, estrela, vivo)
         return linha
     }
 

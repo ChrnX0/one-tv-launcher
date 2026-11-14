@@ -54,6 +54,19 @@ class ColunaRegrasTest {
         assertEquals("*todos", ColunaRegras.categoriaInicial(null, setOf("g:Ação"), "*todos"))
     }
 
+    @Test fun pularParaLetra() {
+        assertEquals('#', ColunaRegras.letraDe("007 contra"))
+        assertEquals('#', ColunaRegras.letraDe(""))
+        assertEquals('A', ColunaRegras.letraDe("avatar"))
+        val g = listOf("2012", "alien", "avatar", "duna", "matrix", "zumbilandia")
+        assertEquals(0, ColunaRegras.indiceDaLetra(g, '#'))
+        assertEquals(1, ColunaRegras.indiceDaLetra(g, 'A'))
+        assertEquals(3, ColunaRegras.indiceDaLetra(g, 'B'))   // sem B: o 1º depois dela
+        assertEquals(4, ColunaRegras.indiceDaLetra(g, 'M'))
+        assertEquals(5, ColunaRegras.indiceDaLetra(g, 'Z'))
+        assertEquals(-1, ColunaRegras.indiceDaLetra(emptyList(), 'A'))
+    }
+
     @Test fun concluidoPorMinutos() {
         // Filme de 2 h: faltando 9 min = concluído; 12 min = ainda continua.
         assertTrue(Vod.finalizado(Posicao(111 * min, 120 * min, 0)))

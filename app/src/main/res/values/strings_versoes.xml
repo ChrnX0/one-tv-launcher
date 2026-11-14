@@ -77,6 +77,9 @@
         <item>Movies and Series: a single Filter (sort, genre/era/rating, unwatched only, surprise me and show hidden); the screen reopens on the last category and shows “+N” on categories with new titles</item>
         <item>Finished now counts by what is left: under 10 min for a movie, under 3 min for an episode; starting the next episode finishes the previous one; holding OK on a poster marks it watched or removes it from Continue</item>
         <item>Series in the Watchlist get a label: green “Finished” and yellow “New season” or “N new episodes”</item>
+        <item>Movies and Series: the top of the screen shows the category, the count and the active filters as pills, plus the focused title\'s rating, year, length, genre and 2 lines of synopsis, in large letters</item>
+        <item>Movies and Series: in a big category, ▶ on the last column (or Filter › “Go to a letter”) jumps straight to a letter</item>
+        <item>Live TV › Sports: channels with a match or fight live right now get a red “LIVE” label and come first</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -138,6 +141,8 @@
         <item>coluna_player</item>
         <item>tv_esportes</item>
         <item>marcar_assistido</item>
+        <item>painel_direito</item>
+        <item>pular_letra</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -199,6 +204,8 @@
         <item>Open Movies and go down the left column to the categories</item>
         <item>Open Live TV, press OK and choose Sports</item>
         <item>In Movies, hold OK on a started poster and choose “Mark as watched”</item>
+        <item>Open Movies › All and move along a few posters</item>
+        <item>In Movies › All, go to the last column and press ▶, then choose a letter</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -260,5 +267,7 @@
         <item>Did the top block stay put, “All” too, and only the categories (A to Z) scroll?</item>
         <item>Did the channels with a live game or fight come first?</item>
         <item>Did the movie leave Continue and go to Watched with the green label?</item>
+        <item>Did the top show the pills and the quick info (with synopsis after a moment), readable from the couch?</item>
+        <item>Did the big letters open and the grid jump to that letter?</item>
     </string-array>
 </resources>

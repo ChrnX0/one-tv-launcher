@@ -211,6 +211,18 @@ object PlayerCarga {
     }
 
     /**
+     * A ficha já guardada no disco, sem ir à rede (a ficha rápida do pôster em foco, 14/11/2026: pedir ao servidor a
+     * cada passo do controle seria uma enxurrada). null = nunca foi aberta.
+     */
+    fun fichaFilmeGuardada(ctx: Context, f: Filme): FichaFilme? = lerGuardada(ctx, FimDoVideo.nomeFicha(f.fonteId, false, f.id)) { Vod.lerFicha(it) }
+    fun fichaSerieGuardada(ctx: Context, s: Serie): FichaSerie? = lerGuardada(ctx, FimDoVideo.nomeFicha(s.fonteId, true, s.id)) { Series.lerFicha(it) }
+
+    private fun <T> lerGuardada(ctx: Context, nome: String, ler: (String) -> T?): T? {
+        val arq = File(File(ctx.cacheDir, "fichas"), nome)
+        return if (arq.exists()) runCatching { ler(arq.readText()) }.getOrNull() else null
+    }
+
+    /**
      * Rede primeiro (episódio novo aparece na hora); a resposta boa fica em cacheDir/fichas. Se a rede falhar, lê o disco.
      * cacheDir: o Android pode limpar quando falta espaço, e o backup não leva. No máximo FimDoVideo.FICHAS_MAX arquivos.
      */
