@@ -1043,6 +1043,7 @@ function desenharServicos(r) {
     if (s.situacao === 'conectado' && s.id !== 'tmdb') {
       bloco.append(botao('Sair', () => agir({ acao: 'sair', servico: s.id }, `Sair do ${s.nome}?`,
         `A TV esquece a conta e para de falar com o ${s.nome}. O que está lá continua lá.`, 'Sair', `${s.nome}: saiu.`), false));
+      if (s.sync) desenharSync(bloco, s, r, botao, agir);
     } else if (sessao && sessao.estado === 'esperando') {
       esperando = true;
       const passo = document.createElement('p');
@@ -1090,6 +1091,94 @@ function desenharServicos(r) {
   }
   // Confere a cada 3 s só com a aba à vista, enquanto algum login espera o celular.
   if (esperando && (!$('abaConfig').hidden || !$('telaPrimeira').hidden) && document.visibilityState === 'visible') timerServicos = setTimeout(carregarServicos, 3000);
+}
+
+// Sincronização de uma conta conectada (a mesma tela SincronizarActivity da TV). Tudo começa desligado; LIGAR pede o PIN.
+const OPCOES_SYNC = [
+  ['interesses', 'Interesses', 'O que você marca aqui aparece lá e o de lá aparece aqui.'],
+  ['assistidos', 'Já assistidos', 'Filmes e episódios vistos ficam marcados nos dois lados.'],
+  ['continuar', 'Continuar de onde parou', 'Parou no celular? A TV continua do mesmo ponto, e o contrário.'],
+  ['contar', 'Contar o que assisto', 'A TV avisa o serviço enquanto você assiste. Nunca no Modo visita nem no perfil infantil.'],
+];
+
+function desenharSync(bloco, s, r, botao, agir) {
+  const y = s.sync;
+  const caixa = document.createElement('div'); caixa.className = 'sync-servico';
+  const parado = y.parado === 'bloqueado' ? 'Parado: Modo visita ou perfil infantil ativo.'
+    : y.parado === 'outroPerfil' ? 'Parado: a sincronização é de outro perfil.' : y.aviso;
+  if (parado) { const p = document.createElement('p'); p.className = 'aviso'; p.textContent = parado; caixa.append(p); }
+  if (s.id !== 'mdblist') {
+    const quando = document.createElement('p'); quando.className = 'aviso-curto';
+    quando.textContent = y.ultima ? `Última sincronização: ${new Date(y.ultima).toLocaleString('pt-BR')}.` : 'Ainda não sincronizou.';
+    caixa.append(quando);
+    for (const [campo, rotulo, explica] of OPCOES_SYNC) {
+      const nomeOp = campo === 'interesses' && s.id === 'simkl' ? 'Interesses (Plan to Watch)' : rotulo;
+      const linha = document.createElement('label'); linha.className = 'linha-check';
+      const c = document.createElement('input'); c.type = 'checkbox'; c.checked = !!y.opcoes[campo];
+      const t = document.createElement('span'); t.textContent = ` ${nomeOp}. `;
+      const d = document.createElement('span'); d.className = 'aviso-curto'; d.textContent = explica;
+      linha.append(c, t, d);
+      c.addEventListener('change', async () => {
+        const valor = c.checked; c.checked = !valor;   // só muda de verdade quando a TV gravar
+        const corpo = { acao: 'opcao', servico: s.id, campo, valor };
+        if (valor) { await agir(corpo, `Ligar "${nomeOp}"?`, `A TV passa a trocar isso com o ${s.nome}.`, 'Ligar', `${nomeOp}: ligado.`); return; }
+        try { desenharServicos(await chamar('POST', '/api/servicos', corpo)); } catch (e) { mostrar($('statusServicos'), textoErro(e)); }
+      });
+      caixa.append(linha);
+    }
+    caixa.append(botao('Sincronizar agora', async (ev) => {
+      const b = ev.currentTarget; b.disabled = true; mostrar($('statusServicos'), 'Sincronizando…');
+      try { desenharServicos(await chamar('POST', '/api/servicos', { acao: 'sincronizar', servico: s.id })); mostrar($('statusServicos'), 'Sincronizado.'); }
+      catch (e) { b.disabled = false; mostrar($('statusServicos'), textoErro(e)); }
+    }, false));
+  }
+  if (s.id !== 'simkl') {
+    const resumo = document.createElement('p'); resumo.className = 'aviso-curto';
+    resumo.textContent = r.listas.length ? `Listas no catálogo: ${r.listas.map((l) => l.n).join(', ')}.` : 'Nenhuma lista no catálogo.';
+    const escolha = document.createElement('div');
+    caixa.append(resumo, botao('Escolher listas', async (ev) => {
+      const b = ev.currentTarget; b.disabled = true; mostrar($('statusServicos'), 'Buscando as suas listas…');
+      try {
+        const resp = await chamar('POST', '/api/servicos', { acao: 'listasDisponiveis', servico: s.id });
+        mostrar($('statusServicos'), '');
+        desenharEscolhaListas(escolha, resp, agir);
+      } catch (e) { mostrar($('statusServicos'), textoErro(e)); }
+      b.disabled = false;
+    }, false), escolha);
+  }
+  if (s.id === 'trakt' || s.id === 'simkl') {
+    const f = document.createElement('p'); f.className = 'aviso-curto';
+    f.textContent = s.id === 'trakt' ? 'Dados de Trakt.tv.' : 'Dados de Simkl.com.';
+    caixa.append(f);
+  }
+  bloco.append(caixa);
+}
+
+function desenharEscolhaListas(escolha, resp, agir) {
+  escolha.replaceChildren();
+  // As já escolhidas aparecem mesmo se a rede não trouxe, para poder desmarcar.
+  const todas = [...resp.listas];
+  for (const l of resp.disponiveis || []) if (!todas.some((x) => x.chave === l.chave)) todas.push(l);
+  if (!todas.length) { const p = document.createElement('p'); p.className = 'aviso-curto'; p.textContent = 'Não achei listas nesta conta.'; escolha.append(p); return; }
+  const marcadas = new Set(resp.listas.map((l) => l.chave));
+  const dica = document.createElement('p'); dica.className = 'aviso-curto';
+  dica.textContent = `Cada lista vira uma categoria em Filmes e Séries (até ${resp.maxListas}). Só aparecem os títulos que estão na sua lista de canais.`;
+  escolha.append(dica);
+  for (const l of todas) {
+    const linha = document.createElement('label'); linha.className = 'linha-check';
+    const c = document.createElement('input'); c.type = 'checkbox'; c.checked = marcadas.has(l.chave);
+    c.addEventListener('change', () => {
+      if (c.checked && marcadas.size >= resp.maxListas) { c.checked = false; mostrar($('statusServicos'), `No máximo ${resp.maxListas} listas.`); return; }
+      if (c.checked) marcadas.add(l.chave); else marcadas.delete(l.chave);
+    });
+    const t = document.createElement('span');
+    t.textContent = ` ${l.n} · ${l.s === 'trakt' ? 'Trakt' : 'MDBList'} · ${l.t} títulos${l.d ? ' · ' + l.d : ''}`;
+    linha.append(c, t); escolha.append(linha);
+  }
+  const gravar = document.createElement('button'); gravar.type = 'button'; gravar.className = 'botao-secundario'; gravar.textContent = 'Gravar listas';
+  gravar.addEventListener('click', () => agir({ acao: 'escolherListas', listas: todas.filter((l) => marcadas.has(l.chave)) },
+    'Gravar as listas?', 'As listas marcadas aparecem como categorias em Filmes e Séries.', 'Gravar', 'Listas gravadas.'));
+  escolha.append(gravar);
 }
 
 async function carregarServicos() {
