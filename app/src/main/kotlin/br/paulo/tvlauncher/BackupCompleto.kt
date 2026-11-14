@@ -62,7 +62,9 @@ object BackupCompleto {
         "volume_lg",
         // Ideias 35 e 41 (14/11/2026): a central de avisos da TV (passageira) e as medidas de espaço livre por dia (valem
         // só para o armazenamento deste aparelho).
-        "aviso_tv_historico", "saude_tendencia")
+        "aviso_tv_historico", "saude_tendencia",
+        // "info_externa" (serviços de filmes, 14/11/2026): só contadores de cota e a data da última nota do IMDb.
+        "info_externa")
     /** Chaves que o Keystore cifrou: não servem em outra instalação. O valor em claro vai em "segredos". */
     private val CHAVES_DO_KEYSTORE = setOf("chave_cifrada", "chave_iv") + CasaHA.CHAVES_DO_KEYSTORE
     /** Arquivos pequenos do player (files/player). O contas.json fica de fora: vai decifrado em "segredos". */
@@ -98,6 +100,7 @@ object BackupCompleto {
         UnifiArmazem.chave(app)?.let { segredos.put("unifi", it) }
         TunelTailscale.chave(app)?.let { segredos.put("tailscale", it) }
         CasaHA.tokenParaBackup(app)?.let { segredos.put("casa_ha", it) }
+        ServicosContas.paraBackup(app)?.let { segredos.put("servicos", it) }   // contas dos serviços de filmes e séries
         val arquivos = JSONObject()
         val pastaPlayer = PlayerArmazem.pasta(app)
         for (n in ARQUIVOS_PLAYER) lerPequeno(File(pastaPlayer, n))?.let { arquivos.put("player/$n", it) }
@@ -157,6 +160,8 @@ object BackupCompleto {
         if (tailscale != null && !TunelTailscale.chaveValida(tailscale)) throw IllegalArgumentException("chave do Tailscale inválida no backup")
         val tokenCasa = segredos.optString("casa_ha").ifEmpty { null }
         if (tokenCasa != null && !CasaHA.tokenValido(tokenCasa)) throw IllegalArgumentException("token do Home Assistant inválido no backup")
+        val servicos = segredos.optString("servicos").ifEmpty { null }
+        if (servicos != null && ServicosFilmes.contasDeJson(servicos).isEmpty()) throw IllegalArgumentException("contas dos serviços de filmes inválidas no backup")
         val arquivos = o.optJSONObject("arquivos") ?: JSONObject()
         val bytes = mutableMapOf<String, ByteArray>()
         for (caminho in arquivos.keys()) {
@@ -198,6 +203,7 @@ object BackupCompleto {
             if (!PlayerArmazem.substituirContas(app, iptv)) throw IllegalStateException("não consegui gravar as contas de TV ao vivo")
             if (unifi != null && !UnifiArmazem.definirChave(app, unifi)) throw IllegalStateException("não consegui gravar a chave do UniFi")
             if (tailscale != null && !TunelTailscale.definirChave(app, tailscale)) throw IllegalStateException("não consegui gravar a chave do Tailscale")
+            if (servicos != null && !ServicosContas.restaurarDoBackup(app, servicos)) throw IllegalStateException("não consegui gravar as contas dos serviços de filmes")
             if (tokenCasa != null && !CasaHA.definirToken(app, tokenCasa)) throw IllegalStateException("não consegui gravar o token do Home Assistant")
             for ((caminho, b) in bytes) {
                 val destino = destinos.getValue(caminho)
