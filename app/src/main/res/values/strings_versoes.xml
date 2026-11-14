@@ -17,7 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>The TV as a network drive: its storage opens in Windows (Map network drive), Mac, Linux and phone file apps over WebDAV, with the panel PIN as password; it also shows up in Windows Network (Settings › Remote access, off by default)</item>
+        <item>The TV as a network drive: its storage opens in Windows (Map network drive), Mac, Linux and phone file apps over WebDAV, with the panel PIN as password; it also shows up in Windows Network, and double-clicking it there offers a connector that prepares Windows and maps the drive by itself (Settings › Remote access, off by default)</item>
         <item>Player: the top of the column just says TV, Movies or Series, with Search and Filter buttons beside it; the list makes room for Recordings (TV: Favorites, Recent, Guide, Recordings)</item>
         <item>Games card on the home screen, after Network: GeForce NOW, Steam Link, Moonlight, PS Remote Play, RetroArch and the other games leave the apps row and sit in 4 groups</item>
         <item>Games: “Play on the PC” wakes the computer and opens Moonlight or Steam Link; “Test the network” tells whether cloud gaming will work; connected controllers show at the top</item>

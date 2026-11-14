@@ -76,7 +76,9 @@ object AnuncioUpnp {
                     try {
                         s.receive(p)
                         val texto = String(p.data, 0, p.length, Charsets.US_ASCII)
-                        val r = Ssdp.respostas(texto, uuid, local)
+                        // Só buscas IPv4: o socket de envio está preso ao IP v4 da TV e uma busca vinda por IPv6
+                        // (o Windows também procura por ff02::c) dava EAFNOSUPPORT no sendto (visto na Sala, 14/11/2026).
+                        val r = if (p.address is java.net.Inet4Address) Ssdp.respostas(texto, uuid, local) else emptyList()
                         if (r.isNotEmpty()) mandar(r, p.address, p.port)
                     } catch (_: java.net.SocketTimeoutException) {}
                 }

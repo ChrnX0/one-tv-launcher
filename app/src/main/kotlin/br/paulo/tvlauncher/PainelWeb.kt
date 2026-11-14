@@ -277,6 +277,20 @@ object PainelWeb {
         return Resposta(200, "text/html; charset=utf-8", html.toByteArray())
     }
 
+    /**
+     * O .cmd que deixa o Windows pronto e mapeia a unidade (ConectorWindows). Livre como o certificado: só leva o
+     * endereço e o certificado público. Usa o IP quando ele está no certificado (nome sem ponto nem todo PC resolve).
+     */
+    private fun conectorWindows(): Resposta {
+        val pem = PainelTls.pemDaCa() ?: return erro(503, "o certificado ainda não foi gerado; tente em 1 minuto")
+        val ips = ipsDaRede()
+        val noCert = PainelTls.nomesNoCertificado()
+        val host = ips.firstOrNull { it in noCert } ?: PainelTls.nome(app)
+        val texto = ConectorWindows.script(host, PainelTls.PORTA, pem) ?: return erro(503, "não consegui montar o conector")
+        return Resposta(200, "application/octet-stream", texto.toByteArray(Charsets.US_ASCII),
+            mapOf("Content-Disposition" to "attachment; filename=\"${ConectorWindows.ARQUIVO}\"", "Cache-Control" to "no-store"))
+    }
+
     private fun arquivoCertificado(): Resposta {
         val pem = PainelTls.pemDaCa() ?: return erro(503, "o certificado ainda não foi gerado; tente em 1 minuto")
         return Resposta(200, "application/x-x509-ca-cert", pem.toByteArray(),
@@ -557,6 +571,7 @@ object PainelWeb {
             // abre. Livres como a do certificado (não dizem nada além do endereço); só com a unidade de rede ligada.
             Ssdp.CAMINHO_DESCRICAO -> if (PainelDav.ligado(app)) return descricaoUpnp(host)
             "/unidade" -> if (PainelDav.ligado(app)) return paginaUnidade()
+            ConectorWindows.CAMINHO -> if (PainelDav.ligado(app)) return conectorWindows()
             "/certificado.crt" -> return arquivoCertificado()
             "/certificado.css" -> return Resposta(200, "text/css; charset=utf-8",
                 app.assets.open("painel/certificado.css").use { it.readBytes() })
