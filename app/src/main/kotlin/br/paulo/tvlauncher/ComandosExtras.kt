@@ -34,6 +34,8 @@ import java.io.File
  *  - saude                 JSON da saúde do acesso remoto (SaudeAcesso.json)
  *  - manutencao            roda a manutenção noturna agora, em segundo plano (relatório depois em "saude")
  *  - manutencao_resumo     mostra o resumo da última manutenção (só se houver algo e a HOME estiver na frente)
+ * Versões (14/11/2026):
+ *  - canal --es canal teste|normal   teste = esta TV instala também os pré-lançamentos (ver CanalAtualizacao)
  */
 object ComandosExtras {
     fun tratar(ctx: Context, i: Intent): String = when (i.getStringExtra("o")) {
@@ -76,8 +78,14 @@ object ComandosExtras {
         "dormir_apps" -> HoraDormir.lerPermitidos(i.getStringExtra("apps")).joinToString(",").also {
             Extras.definirTexto(ctx, HoraDormir.CHAVE_PERMITIDOS, it) }.ifEmpty { "lista vazia: só os essenciais abrem" }
         "recado_link" -> PainelExtras.novoLinkRecado(ctx)
+        "canal" -> when (i.getStringExtra("canal")) {
+            "teste" -> { Atualizador.definirCanalTeste(ctx, true); "canal=teste" }
+            "normal" -> { Atualizador.definirCanalTeste(ctx, false); "canal=normal" }
+            else -> "canal=${if (Atualizador.canalTeste(ctx)) "teste" else "normal"} (mude com --es canal teste|normal)"
+        }
         "estado" -> Extras.Chave.values().joinToString("\n") { "${it.name}=${Extras.ligado(ctx, it)}" } +
-            "\ndiario_dns_erro=${DiarioDns.erro(ctx)}" + "\nrelogio_travado=${TravaRelogio.travado(ctx)}"
+            "\ndiario_dns_erro=${DiarioDns.erro(ctx)}" + "\nrelogio_travado=${TravaRelogio.travado(ctx)}" +
+            "\ncanal=${if (Atualizador.canalTeste(ctx)) "teste" else "normal"}"
         else -> "comando desconhecido; ver ComandosExtras.kt"
     }
 
