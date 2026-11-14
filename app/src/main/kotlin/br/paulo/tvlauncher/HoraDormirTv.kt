@@ -14,6 +14,9 @@ import java.util.Calendar
  */
 object HoraDormirTv {
     @Volatile private var ultimoAviso = 0L
+    @Volatile private var vigiaLg = false
+    private val principal by lazy { android.os.Handler(android.os.Looper.getMainLooper()) }
+    private const val VIGIA_LG_MS = 30_000L
 
     private fun agoraMin(): Int = Calendar.getInstance().let { it.get(Calendar.HOUR_OF_DAY) * 60 + it.get(Calendar.MINUTE) }
     private fun diaHoje(): Int = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1   // 0 = domingo
@@ -37,6 +40,7 @@ object HoraDormirTv {
 
     /** Uma janela de [pacote] apareceu: se não pode agora, volta para a HOME e avisa (no máximo 1 aviso a cada 10 s). */
     fun janela(servico: AccessibilityService, pacote: CharSequence?) {
+        armarVigiaLg(servico)
         val p = pacote?.toString() ?: return
         if (!valendo(servico) || p in HoraDormir.ESSENCIAIS || p in permitidos(servico)) return
         // O teclado escolhido na TV (pode não ser o do Google): a janela dele aparece com o pacote dele, por cima do app.
@@ -59,6 +63,7 @@ object HoraDormirTv {
     /** VOLUME + na hora de dormir: engole a tecla se passaria do teto (true = tecla usada). */
     fun tecla(ctx: Context, e: KeyEvent): Boolean {
         if (e.keyCode != KeyEvent.KEYCODE_VOLUME_UP || !valendo(ctx)) return false
+        armarVigiaLg(ctx)
         val am = ctx.getSystemService(AudioManager::class.java) ?: return false
         val atual = am.getStreamVolume(AudioManager.STREAM_MUSIC)
         val max = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)
@@ -67,5 +72,25 @@ object HoraDormirTv {
         val limite = max * teto(ctx).coerceIn(0, 100) / 100
         if (e.action == KeyEvent.ACTION_DOWN && atual > limite) am.setStreamVolume(AudioManager.STREAM_MUSIC, limite, 0)
         return true
+    }
+
+    /**
+     * Teto do volume na LG pareada ([VolumeLg], ideia 49). O controle manda o volume direto para a LG por infravermelho,
+     * sem passar pelo Android, então não há tecla para engolir: a cada [VIGIA_LG_MS], dentro do horário, lê o volume da
+     * LG e baixa até o teto. Armada pela janela e pela tecla; para sozinha se a chave desligar ou a LG for esquecida.
+     */
+    private fun armarVigiaLg(ctx: Context) {
+        if (vigiaLg || !Extras.ligado(ctx, Extras.Chave.HORA_DORMIR) || !VolumeLg.configurado(ctx)) return
+        vigiaLg = true
+        val app = ctx.applicationContext
+        principal.post(object : Runnable {
+            override fun run() {
+                if (!Extras.ligado(app, Extras.Chave.HORA_DORMIR) || !VolumeLg.configurado(app)) { vigiaLg = false; return }
+                if (noHorario(app)) Fundo.rodar("HoraDormir-lg") {
+                    VolumeLg.baixarAte(app, LgNetcast.nivelDaPorcentagem(teto(app)))
+                }
+                principal.postDelayed(this, VIGIA_LG_MS)
+            }
+        })
     }
 }

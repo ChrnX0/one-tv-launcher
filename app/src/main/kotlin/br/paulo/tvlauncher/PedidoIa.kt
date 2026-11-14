@@ -193,6 +193,11 @@ object PedidoIa {
                 Despertador.salvar(app, Despertador.Alarme(0, a.hora, a.minuto, a.dias, a.nome, true))
             }
             is ComandosIa.Acao.Volume -> {
+                if (VolumeLg.configurado(app)) {   // LG pareada (ideia 49): o volume do Android não chega na TV pelo HDMI
+                    val tecla = when (a.acao) { "subir" -> LgNetcast.TECLA_SUBIR; "descer" -> LgNetcast.TECLA_DESCER; else -> LgNetcast.TECLA_MUDO }
+                    Fundo.rodar("PedidoIa-lg") { VolumeLg.tecla(app, tecla, if (a.acao == "mudo") 1 else a.vezes) }
+                    return null
+                }
                 val am = app.getSystemService(AudioManager::class.java) ?: return "sem controle de áudio"
                 val direcao = when (a.acao) { "subir" -> AudioManager.ADJUST_RAISE; "descer" -> AudioManager.ADJUST_LOWER; else -> AudioManager.ADJUST_TOGGLE_MUTE }
                 repeat(if (a.acao == "mudo") 1 else a.vezes) { am.adjustStreamVolume(AudioManager.STREAM_MUSIC, direcao, AudioManager.FLAG_SHOW_UI) }
