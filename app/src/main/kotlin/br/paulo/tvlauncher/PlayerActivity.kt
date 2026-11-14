@@ -121,7 +121,8 @@ class PlayerActivity : Activity() {
         janelas = PlayerJanelas(this)
         lista = PlayerListaTela(this, aoAssistir = { c, chave -> escolherNaLista(c, chave) }, aoFavoritar = { alternarFavorito(it) }, simples = simples,
             aoBuscar = { buscar() }, aoFiltros = { abrirFiltros() }, aoOcultarGrupo = { alternarOculto(it) },
-            aoGuia = { cs, nome -> abrirGrade(cs, nome) })
+            aoGuia = { cs, nome -> abrirGrade(cs, nome) },
+            aoGravacoes = { mostrarAvisoBreve(getString(R.string.coluna_gravacoes_em_breve)) })
         raiz.addView(lista.raiz, FrameLayout.LayoutParams(-1, -1))
         grade = PlayerGradeView(this, aoAssistir = { c -> grade.fechar(); lista.fechar(); if (c.id != atual?.id) sintonizar(c) else mostrarInfo() },
             aoFechar = { grade.fechar(); if (lista.aberta) lista.voltarFoco() })

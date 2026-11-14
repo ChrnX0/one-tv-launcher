@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.BaseAdapter
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
@@ -89,11 +90,22 @@ class ColunaCategorias(
     }
     private val divisoria = View(act).apply { setBackgroundColor(Estilo.BORDA) }
 
+    /**
+     * Botões redondos à direita do título (14/11/2026, pedido do Paulo na TV: "TV  ⌕ ☰"): ações que saíram do bloco
+     * para abrir espaço. Chega neles com ▲ a partir da primeira linha; ◀ ▶ entre eles; ▼ volta para o bloco.
+     */
+    private val caixaBotoes = LinearLayout(act).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
+    private var botoes: List<Pair<Linha, FrameLayout>> = emptyList()
+
     val raiz: LinearLayout = LinearLayout(act).apply {
         orientation = LinearLayout.VERTICAL
-        addView(TextView(act).apply {
-            text = titulo; textSize = 24f; typeface = Fontes.manrope(700); setTextColor(papel); maxLines = 1
-            ellipsize = TextUtils.TruncateAt.END; setPadding(dp(6), 0, dp(6), dp(10))
+        addView(LinearLayout(act).apply {
+            orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(0, 0, 0, dp(10))
+            addView(TextView(act).apply {
+                text = titulo; textSize = 24f; typeface = Fontes.manrope(700); setTextColor(papel); maxLines = 1
+                ellipsize = TextUtils.TruncateAt.END; setPadding(dp(6), 0, dp(6), 0)
+            }, LinearLayout.LayoutParams(0, -2, 1f))
+            addView(caixaBotoes, LinearLayout.LayoutParams(-2, -2))
         })
         // O bloco fixo de ações numa caixa própria, um pouco mais clara que o fundo (o esboço aprovado).
         addView(acoes.apply {
@@ -125,10 +137,60 @@ class ColunaCategorias(
         if (!temFoco()) onde(escolhida)?.let { (i, pos) -> listas[i].setSelection(pos) }
     }
 
+    /** Os botões ao lado do título ([Linha.icone] obrigatório; [Linha.destaque] = ícone em âmbar, ex.: filtro ligado). */
+    fun mostrarBotoes(lista: List<Linha>) {
+        if (lista.map { it.chave to it.destaque } == botoes.map { it.first.chave to it.first.destaque }) {
+            botoes = botoes.mapIndexed { k, (_, v) -> lista[k] to v }; return
+        }
+        val focoEm = botoes.indexOfFirst { it.second.hasFocus() }
+        caixaBotoes.removeAllViews()
+        botoes = lista.mapIndexed { k, l -> l to botao(l, k, lista.size) }
+        botoes.forEach { (_, v) -> caixaBotoes.addView(v, LinearLayout.LayoutParams(ladoBotao, ladoBotao).apply { marginStart = dp(8) }) }
+        if (focoEm >= 0) botoes.getOrNull(focoEm.coerceAtMost(botoes.size - 1))?.second?.requestFocus()
+    }
+
+    private val ladoBotao = dp((44 * escala).toInt())
+
+    private fun botao(l: Linha, k: Int, total: Int): FrameLayout {
+        val fundoNormal = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(Estilo.SUPERFICIE); setStroke(dp(1), Estilo.BORDA) }
+        val fundoFoco = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(Estilo.FOCO) }
+        val corIcone = if (l.destaque) ambar else COR_ICONE
+        // Drawable próprio (fora do cache das linhas): a ImageView muda os limites dele, e um Drawable dividido com
+        // as linhas sairia do tamanho certo lá.
+        fun novo(cor: Int): Drawable = when (val t = l.icone ?: IconePlayer.Tipo.FILTROS) {
+            is IconePlayer.Tipo -> IconePlayer(t, cor)
+            else -> IconeMidia(t as IconeMidia.Tipo, cor)
+        }
+        val img = ImageView(act).apply { setImageDrawable(novo(corIcone)) }
+        val focado = ImageView(act).apply { setImageDrawable(novo(Estilo.FUNDO)); visibility = View.GONE }
+        val lado = dp((22 * escala).toInt())
+        return FrameLayout(act).apply {
+            isFocusable = true; isClickable = true; contentDescription = l.nome; background = fundoNormal
+            addView(img, FrameLayout.LayoutParams(lado, lado, Gravity.CENTER))
+            addView(focado, FrameLayout.LayoutParams(lado, lado, Gravity.CENTER))
+            // Foco = disco branco com o ícone escuro (o mesmo contraste das linhas e das janelas).
+            setOnFocusChangeListener { _, tem ->
+                background = if (tem) fundoFoco else fundoNormal
+                img.visibility = if (tem) View.GONE else View.VISIBLE; focado.visibility = if (tem) View.VISIBLE else View.GONE
+            }
+            setOnClickListener { botoes.getOrNull(k)?.first?.let { aoOk(it.chave) } }
+            setOnKeyListener { _, codigo, e ->
+                if (e.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+                when (codigo) {
+                    KeyEvent.KEYCODE_DPAD_DOWN -> { pularPara(-1, +1); true }
+                    KeyEvent.KEYCODE_DPAD_LEFT -> { if (k > 0) botoes[k - 1].second.requestFocus(); true }
+                    KeyEvent.KEYCODE_DPAD_RIGHT -> { if (k < total - 1) botoes[k + 1].second.requestFocus(); true }
+                    KeyEvent.KEYCODE_DPAD_UP -> true
+                    else -> false
+                }
+            }
+        }
+    }
+
     /** Muda só a categoria escolhida (a cor), sem mexer nas linhas. */
     fun escolher(chave: String) { escolhida = chave; for (i in 0..2) recolorir(i) }
 
-    fun temFoco(): Boolean = listas.any { it.hasFocus() }
+    fun temFoco(): Boolean = listas.any { it.hasFocus() } || botoes.any { it.second.hasFocus() }
 
     /** Foco na linha da categoria escolhida (ou na primeira ação, se ela não estiver na coluna). */
     fun focar() {
@@ -145,6 +207,7 @@ class ColunaCategorias(
 
     /** A chave da linha em foco, ou null se o foco não está na coluna. */
     fun chaveEmFoco(): String? {
+        botoes.firstOrNull { it.second.hasFocus() }?.let { return it.first.chave }
         val i = listas.indexOfFirst { it.hasFocus() }.takeIf { it >= 0 } ?: return null
         return grupos[i].getOrNull(listas[i].selectedItemPosition)?.chave
     }
@@ -275,6 +338,8 @@ class ColunaCategorias(
     private fun pularPara(de: Int, sentido: Int): Boolean {
         var j = de + sentido
         while (j in 0..2 && grupos[j].isEmpty()) j += sentido
+        // ▲ acima da primeira linha: os botões do título (o mais à direita fica mais longe; começa no primeiro).
+        if (j < 0) { botoes.firstOrNull()?.second?.requestFocus(); return true }
         if (j !in 0..2) return true
         val l = listas[j]
         l.requestFocus()

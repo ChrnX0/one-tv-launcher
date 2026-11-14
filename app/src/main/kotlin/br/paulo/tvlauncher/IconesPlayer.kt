@@ -20,7 +20,9 @@ import kotlin.math.sin
 class IconePlayer(private val tipo: Tipo, cor: Int = Estilo.TEXTO) : Drawable() {
     enum class Tipo { ESTRELA, RECENTES, FILTROS, GRADE, CADEADO,
         // Coluna nova do player (14/11/2026): Continuar, Assistidos, Todos, Esportes e "Mostrar ocultas".
-        PLAY, VISTO, TODOS, ESPORTE, OCULTO }
+        PLAY, VISTO, TODOS, ESPORTE, OCULTO,
+        // Gravações na coluna da TV (14/11/2026): o "ponto de gravar" dentro de um anel.
+        GRAVACOES }
 
     private val traco = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE; strokeWidth = 1.6f; strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND; color = cor
@@ -71,6 +73,10 @@ class IconePlayer(private val tipo: Tipo, cor: Int = Estilo.TEXTO) : Drawable() 
                 p.arcTo(RectF(8.5f, 4f, 15.5f, 11f), 180f, 180f, false); p.lineTo(15.5f, 10.5f)
                 c.drawPath(p, traco)
                 c.drawCircle(12f, 15.2f, 1.3f, cheio)
+            }
+            Tipo.GRAVACOES -> {   // gravações: anel com o ponto cheio no meio (o botão REC)
+                c.drawCircle(12f, 12f, 8.5f, traco)
+                c.drawCircle(12f, 12f, 4.2f, cheio)
             }
             Tipo.PLAY -> {   // continuar: triângulo cheio
                 p.reset(); p.moveTo(8f, 5.5f); p.lineTo(19f, 12f); p.lineTo(8f, 18.5f); p.close()

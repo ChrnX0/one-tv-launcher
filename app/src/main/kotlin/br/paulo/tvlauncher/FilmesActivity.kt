@@ -276,6 +276,7 @@ class FilmesActivity : Activity() {
 
     /** Resultado de uma conta: tudo que a tela precisa, calculado fora dela. */
     private class Estado(val filmes: List<Filme>, val resultados: List<Filme>, val acoes: List<ColunaCategorias.Linha>,
+                         val botoes: List<ColunaCategorias.Linha>,
                          val fixas: List<ColunaCategorias.Linha>, val rola: List<ColunaCategorias.Linha>, val chave: String,
                          val grade: List<Filme>?)
 
@@ -310,16 +311,20 @@ class FilmesActivity : Activity() {
                 val ints = Vod.interesses(vis, intS) { it.chave }
                 val vistos = Vod.assistidos(vis, posS)
                 val L = ColunaCategorias::Linha
-                // Bloco fixo (esboço aprovado): sempre as mesmas cinco linhas, para a mão decorar onde fica cada uma.
-                val acoes = listOf(
+                // Buscar e Filtro viram botões redondos ao lado do título (pedido do Paulo: mais espaço na lista).
+                // No modo simples fica só Buscar.
+                val botoes = listOfNotNull(
                     L(BUSCAR, rotulo(R.string.player_acao_buscar), -1, IconeMidia.Tipo.LUPA, 0, false, ""),
-                    L(FILTRO, rotulo(R.string.coluna_filtro), -1, IconePlayer.Tipo.FILTROS, 0, filtroS.ativo || mostrar, ""),
+                    if (simples) null else L(FILTRO, rotulo(R.string.coluna_filtro), -1, IconePlayer.Tipo.FILTROS, 0, filtroS.ativo || mostrar, ""),
+                )
+                // Bloco fixo (esboço aprovado): sempre as mesmas três linhas, para a mão decorar onde fica cada uma.
+                val acoes = listOf(
                     L(INTERESSES, rotulo(R.string.filmes_interesses), ints.size, IconePlayer.Tipo.ESTRELA, 0, false, ""),
                     L(CONTINUAR, rotulo(R.string.filmes_continuar), cont.size, IconePlayer.Tipo.PLAY, 0, false, ""),
                     L(ASSISTIDOS, rotulo(R.string.filmes_assistidos), vistos.size, IconePlayer.Tipo.VISTO, 0, false, ""),
                 )
-                    // Modo simples (HOME no modo simples): só Buscar, Interesses e Continuar no bloco fixo.
-                    .let { a -> if (simples) PlayerAcessivel.blocoSimples(a, { it.chave }, setOf(BUSCAR, INTERESSES, CONTINUAR)) else a }
+                    // Modo simples (HOME no modo simples): só Interesses e Continuar no bloco fixo.
+                    .let { a -> if (simples) PlayerAcessivel.blocoSimples(a, { it.chave }, setOf(INTERESSES, CONTINUAR)) else a }
                 val fixas = ArrayList<ColunaCategorias.Linha>()
                 if (termoS.isNotEmpty()) fixas += L(BUSCA, getString(R.string.player_cat_busca, termoS), res.size, IconeMidia.Tipo.LUPA, 0, false, "")
                 // A coleção vem da ficha; filme de categoria oculta não entra (o PIN pode ter trancado de novo).
@@ -354,11 +359,12 @@ class FilmesActivity : Activity() {
                         else -> ordenados()
                     }.let { FilmesFiltro.filtrar(it, filtroS, posS) }   // o filtro combinado vale sobre qualquer categoria
                 }
-                Estado(vis, res, acoes, fixas, rola, ch, g)
+                Estado(vis, res, acoes, botoes, fixas, rola, ch, g)
             },
             aplicar = { e ->
                 if (!isDestroyed) {
                     filmes = e.filmes; resultados = e.resultados; itens = e.acoes + e.fixas + e.rola; chave = e.chave
+                    coluna.mostrarBotoes(e.botoes)
                     coluna.mostrar(e.acoes, e.fixas, e.rola, chave)
                     if (e.grade != null) {
                         naGrade = e.grade
