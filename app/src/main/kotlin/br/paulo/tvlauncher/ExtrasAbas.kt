@@ -16,7 +16,7 @@ object ExtrasAbas {
         // Controle parental: o que segura a criança.
         "HORA_DORMIR" to Aba.PARENTAL, "TEMPO_TELA" to Aba.PARENTAL, "PIN_HOME" to Aba.PARENTAL,
         // Aparência: o que muda o que se vê e ouve nas telas do launcher.
-        "COR_DO_FUNDO" to Aba.APARENCIA, "MODO_SIMPLES" to Aba.APARENCIA, "SOM_NAVEGACAO" to Aba.APARENCIA,
+        "COR_DO_FUNDO" to Aba.APARENCIA, "MODO_SIMPLES" to Aba.APARENCIA, "SOM_NAVEGACAO" to Aba.APARENCIA, "LER_FOCO" to Aba.APARENCIA,
         "TOCANDO_AGORA" to Aba.APARENCIA, "AGENDA_TODAS" to Aba.APARENCIA, "HOJE_NA_TV" to Aba.APARENCIA,
         // Tela e energia: noite, protetor e desligar.
         "FILTRO_NOTURNO" to Aba.ENERGIA, "SONO_SUAVE" to Aba.ENERGIA, "PRESENCA" to Aba.ENERGIA,

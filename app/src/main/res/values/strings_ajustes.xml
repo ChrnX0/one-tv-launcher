@@ -54,4 +54,15 @@
     <string name="oc_aparece">on the home screen</string>
     <string name="oc_aviso_titulo">App hidden</string>
     <string name="oc_aviso">To show it again: Settings › Home screen › Hidden apps</string>
+    <string name="extras_LER_FOCO">Read aloud what has the focus, on every launcher screen</string>
+    <!-- Ideia 44: sugestões -->
+    <string name="sug_desligar_titulo">Turn the TV off by itself?</string>
+    <string name="sug_desligar">The TV was on after midnight on %1$d nights this week. Turn it off after 2 hours with nobody using the remote? (It warns 60 seconds before.)</string>
+    <string name="sug_filtro_titulo">Turn on the night filter?</string>
+    <string name="sug_filtro">The TV was used after 10 PM on %1$d nights this week. The night filter warms and dims the screen at night, easier on the eyes.</string>
+    <string name="sug_ligar">Turn on</string>
+    <string name="sug_agora_nao">Not now</string>
+    <string name="sug_nunca">Don\'t suggest again</string>
+    <string name="sug_feito_titulo">Done</string>
+    <string name="sug_feito">To change it later: Settings › Screen and power</string>
 </resources>

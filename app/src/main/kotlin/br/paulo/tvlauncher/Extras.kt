@@ -59,6 +59,9 @@ object Extras {
         TEMPO_TELA(false),
         /** Agenda de todas as contas Google da TV juntas (ideia 32); desligada, só a do perfil ativo. */
         AGENDA_TODAS(true),
+        // Conversa 11 (14/11/2026)
+        /** Ideia 48: ler em voz alta o que ganha o foco em todas as telas do launcher (VozFoco). */
+        LER_FOCO(false),
     }
 
     /**

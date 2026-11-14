@@ -44,6 +44,8 @@
         <item>O card “Ocultos” saiu da tela inicial: mostre de volta em Configurações › Tela inicial › Apps ocultos</item>
         <item>Filmes e Séries também para quem só tem lista M3U: os filmes e episódios da lista viram catálogo</item>
         <item>Casa: cor e temperatura da luz (no ajuste do brilho, ▲ ▼ trocam o tom)</item>
+        <item>Ler em voz alta o que está em foco, em todas as telas do launcher (Configurações › Tela inicial › Mais opções)</item>
+        <item>Sugestão na hora certa, sem IA: depois de noites até tarde, a tela inicial oferece desligar a TV sozinha ou ligar o filtro noturno</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -79,6 +81,7 @@
         <item>Abra as Configurações e desça pelo menu de abas</item>
         <item>Oculte um app (segure OK nele), depois abra Configurações › Tela inicial › Apps ocultos e dê OK nele</item>
         <item>Na Casa, segure OK numa luz colorida e aperte ▲ ▼</item>
+        <item>Ligue Configurações › Tela inicial › Mais opções › Ler em voz alta o que está em foco e ande pelas Configurações</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -114,5 +117,6 @@
         <item>Ficou mais fácil achar as coisas, com o técnico só em Avançado?</item>
         <item>Nenhum card “Ocultos” na tela inicial, e o app voltou?</item>
         <item>A luz mudou de tom?</item>
+        <item>A TV falou o nome de cada linha, sem atropelar a fala?</item>
     </string-array>
 </resources>
