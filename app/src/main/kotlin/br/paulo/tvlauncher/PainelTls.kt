@@ -32,14 +32,37 @@ import javax.net.ssl.SSLContext
 object PainelTls {
     private const val TAG = "TvLauncher.PainelTls"
     private const val APELIDO = "painel_tls_cofre"
+    private const val PREFS = "painel_tls"
     const val PORTA = ChecagensPainel.PORTA_HTTPS_CASA
 
     @Volatile private var atual: CertificadoX509.Emissao? = null
 
     private fun pasta(ctx: Context) = File(ctx.noBackupFilesDir, "painel-tls")
 
-    /** Os nomes que vão no certificado (e os únicos aceitos no Host da porta https, além do IP). */
-    fun nomes(): List<String> = Config.PAINEL_NOMES_HTTPS
+    @Volatile private var nomeBase: String? = null
+
+    /**
+     * O nome da TV no roteador que vai no certificado (14/11/2026): o padrão é o de Config.PAINEL_NOMES_HTTPS ("tv"),
+     * e o painel deixa trocar (ex.: "tv-sala"), porque cada casa cadastra um nome diferente no DNS do roteador.
+     */
+    fun nome(ctx: Context): String = nomeBase ?: (ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        .getString("nome", null)?.takeIf { ChecagensPainel.nomeCertificadoValido(it) }
+        ?: Config.PAINEL_NOMES_HTTPS.first()).also { nomeBase = it }
+
+    /** Os nomes que vão num certificado NOVO: o nome, nome.lan e nome.local. */
+    fun nomes(ctx: Context): List<String> {
+        val n = nome(ctx)
+        return if (n == Config.PAINEL_NOMES_HTTPS.first()) Config.PAINEL_NOMES_HTTPS else listOf(n, "$n.lan", "$n.local")
+    }
+
+    /** Guarda um nome novo (já validado por quem chama). Só vale para o próximo certificado emitido. */
+    @Synchronized fun definirNome(ctx: Context, novo: String) {
+        ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString("nome", novo).commit()
+        nomeBase = novo
+    }
+
+    /** Nomes aceitos no Host da porta https: os que estão no certificado EM USO (o navegador só aceita esses). */
+    fun nomesNoCertificado(): Set<String> = atual?.let { CertificadoX509.nomesDo(it.servidor) } ?: emptySet()
 
     /** O certificado em uso, se já foi carregado ou emitido. */
     fun emissao(): CertificadoX509.Emissao? = atual
@@ -59,7 +82,7 @@ object PainelTls {
     /** Emite um certificado novo (CA nova): os aparelhos que já tinham o antigo precisam instalar o novo. */
     @Synchronized fun emitir(ctx: Context, ip: String?, prefixo: Int): CertificadoX509.Emissao? = try {
         val rotulo = Settings.Global.getString(ctx.contentResolver, "device_name")?.takeIf { it.isNotBlank() } ?: "TV"
-        val e = CertificadoX509.emitir(nomes(), ip, prefixo, rotulo)
+        val e = CertificadoX509.emitir(nomes(ctx), ip, prefixo, rotulo)
         salvar(ctx, e)
         atual = e
         Log.i(TAG, "certificado novo emitido (${CertificadoX509.impressao(e.ca).take(11)}…)")
@@ -82,11 +105,13 @@ object PainelTls {
      * O que a página do certificado e o cartão do painel mostram. [ips]: IPs da TV na rede agora; [ligado]: a porta
      * https está aberta.
      */
-    fun estado(ips: Set<String>, ligado: Boolean): JSONObject {
-        val o = JSONObject().put("ligado", ligado).put("porta", PORTA)
+    fun estado(ctx: Context, ips: Set<String>, ligado: Boolean): JSONObject {
+        val nomeConfig = nome(ctx)
+        val o = JSONObject().put("ligado", ligado).put("porta", PORTA).put("nome", nomeConfig)
         val e = atual ?: return o.put("pronto", false)
         val noCert = CertificadoX509.nomesDo(e.servidor)
-        val nome = nomes().first()
+        // O endereço é o nome que está no certificado em uso (se o nome mudou e ainda não gerou outro, o antigo).
+        val nome = if (nomeConfig in noCert) nomeConfig else noCert.firstOrNull { !it[0].isDigit() } ?: nomeConfig
         val diasRestantes = (e.servidor.notAfter.time - System.currentTimeMillis()) / 86_400_000L
         return o.put("pronto", true)
             .put("endereco", "https://$nome:$PORTA/")
@@ -96,6 +121,7 @@ object PainelTls {
             .put("impressao", CertificadoX509.impressao(e.ca))
             .put("validoAte", e.servidor.notAfter.time)
             .put("diasRestantes", diasRestantes)
+            .put("nomeNoCertificado", nomeConfig in noCert)
     }
 
     fun pemDaCa(): String? = atual?.let { CertificadoX509.pem(it.ca) }

@@ -229,6 +229,12 @@ class PainelSegurancaTest {
         assertFalse(ChecagensPainel.origemPermitida("https://tv:$p", "tv:8080"))
     }
 
+    @Test fun nomeDoCertificado() {
+        for (ok in listOf("tv", "tv-sala", "quarto", "sala2")) assertTrue(ok, ChecagensPainel.nomeCertificadoValido(ok))
+        for (ruim in listOf("", "tv.lan", "-tv", "tv-", "TV", "tv sala", "localhost", "123", "a".repeat(64), "tv_sala", "x/y"))
+            assertFalse(ruim, ChecagensPainel.nomeCertificadoValido(ruim))
+    }
+
     @Test fun origemHttpsSoNaPorta8443() {
         assertTrue(ChecagensPainel.origemPermitida("https://onetv-sala.tail1234.ts.net:8443", "onetv-sala.tail1234.ts.net:8443"))
         assertTrue(ChecagensPainel.origemPermitida("http://onetv-sala.tail1234.ts.net:8443", "onetv-sala.tail1234.ts.net:8443"))
