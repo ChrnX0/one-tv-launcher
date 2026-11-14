@@ -45,6 +45,16 @@ declare -A FONTES=(
   [TextoNaTvTest]="TextoNaTv"
   [WifiVisitaQrTest]="WifiVisitaQr"
   [UsoLocalRegrasTest]="UsoLocalRegras"
+  [TendenciaDiscoTest]="TendenciaDisco"
+  [HistoricoAvisosTest]="HistoricoAvisos"
+  [AberturaSerieTest]="AberturaSerie"
+  [CompartilharTest]="Compartilhar McpPoderRegras Recado"
+  [PacoteDivididoTest]="PacoteDividido"
+  [DiarioRegrasTest]="DiarioRegras"
+  [CaixaComandoTest]="CaixaComando"
+  [ProximoJogoTest]="ProximoJogo MeuTimeAdiante"
+  [AtalhosVozTest]="AtalhosVoz"
+  [PausaAoVivoTest]="PausaAoVivo"
 )
 
 falhou=0

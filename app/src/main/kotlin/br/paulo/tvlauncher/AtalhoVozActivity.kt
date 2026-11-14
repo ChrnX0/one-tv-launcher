@@ -19,17 +19,33 @@ class AtalhoVozActivity : Activity() {
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
         val alias = intent.component?.className?.substringAfterLast('.') ?: ""
         Log.i("TvLauncher.Voz", "atalho de voz: $alias")
-        when (alias) {
-            "VozDesligar30" -> desligarEm(30)
-            "VozDesligar60" -> desligarEm(60)
-            "VozNaoDesligar" -> avisar(getString(if (Desligamento.cancelar(this)) R.string.dl_cancelado else R.string.dl_nenhum))
-            "VozCenas" -> startActivity(Intent(this, CenasActivity::class.java))   // ideia 4: "abrir Cenas"
-            "VozDiagnostico" -> startActivity(Intent(this, DiagnosticoActivity::class.java))
+        when (AtalhosVoz.destino(alias)) {   // tabela pura e testada (AtalhosVoz)
+            AtalhosVoz.Destino.DESLIGAR_30 -> desligarEm(30)
+            AtalhosVoz.Destino.DESLIGAR_60 -> desligarEm(60)
+            AtalhosVoz.Destino.NAO_DESLIGAR -> avisar(getString(if (Desligamento.cancelar(this)) R.string.dl_cancelado else R.string.dl_nenhum))
+            AtalhosVoz.Destino.CENAS -> abrir(CenasActivity::class.java)   // ideia 4: "abrir Cenas"
+            AtalhosVoz.Destino.DIAGNOSTICO -> abrir(DiagnosticoActivity::class.java)
             // No modo visita a agenda (do perfil ativo) não abre, igual ao OK na data da HOME.
-            "VozAgenda" -> if (ModoVisita.ativo(this)) avisar(getString(R.string.dl_agenda_visita))
-                else startActivity(Intent(this, CalendarioActivity::class.java))
+            AtalhosVoz.Destino.AGENDA -> if (ModoVisita.ativo(this)) avisar(getString(R.string.dl_agenda_visita))
+                else abrir(CalendarioActivity::class.java)
+            // Ideia 8: as telas que a HOME já abre pelos cards. Sem catálogo/sem casa configurada, cada tela mostra o
+            // próprio aviso de vazio (como pelo card).
+            AtalhosVoz.Destino.FILMES -> abrir(FilmesActivity::class.java)
+            AtalhosVoz.Destino.SERIES -> abrir(SeriesActivity::class.java)
+            AtalhosVoz.Destino.NA_REDE -> abrir(MidiaRedeActivity::class.java)
+            AtalhosVoz.Destino.CASA -> abrir(CasaActivity::class.java)
+            AtalhosVoz.Destino.BUSCA -> abrir(BuscaActivity::class.java)
+            // O mural na TV é a lista de compras do painel rápido (ideia 39); desligado ou visita em casa: só avisa.
+            AtalhosVoz.Destino.MURAL -> if (!Extras.ligado(this, Extras.Chave.MURAL) || ModoVisita.ativo(this))
+                avisar(getString(R.string.voz_mural_desligado)) else abrir(PainelRapidoActivity::class.java)
+            null -> {}
         }
         finish()
+    }
+
+    private fun abrir(tela: Class<out Activity>) {
+        try { startActivity(Intent(this, tela)) }
+        catch (e: Exception) { Log.w("TvLauncher.Voz", "não abriu ${tela.simpleName}: ${e.javaClass.simpleName}") }
     }
 
     private fun desligarEm(minutos: Int) {

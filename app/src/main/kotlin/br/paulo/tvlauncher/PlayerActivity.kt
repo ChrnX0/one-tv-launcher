@@ -84,6 +84,8 @@ class PlayerActivity : Activity() {
     private var arquivoLista: List<TvDeVolta.Programa> = emptyList()
     private var arquivoFuso: java.util.TimeZone = java.util.TimeZone.getDefault()
     private var arquivoCanal: String? = null   // de qual canal é a lista acima
+    // Pausa curta no ao vivo (ideia 18): só na memória do player; trocar de canal ou sair descarta (PausaAoVivo)
+    private val pausa = PausaCurta()
 
     private val papel = Estilo.TEXTO       // cores do sistema de design (Estilo)
     private val suave = Estilo.TEXTO_2
@@ -176,8 +178,9 @@ class PlayerActivity : Activity() {
         visivel = false
         // O PIN vale só enquanto o player está na frente: saiu (HOME, outro app, tela apagou), tranca de novo.
         if (filtro.mostrarOcultas) filtro = filtro.copy(mostrarOcultas = false)
-        // Saiu da tela (HOME, outro app): solta o vídeo na hora. Canal ao vivo não tem "pausa" que valha a memória.
+        // Saiu da tela (HOME, outro app): solta o vídeo na hora (e a pausa curta junto: ela não sobrevive a sair).
         player?.release(); player = null
+        pausa.descartar()   // a pausa curta é só memória do player: saiu, acabou
     }
 
     override fun onDestroy() {
@@ -275,11 +278,12 @@ class PlayerActivity : Activity() {
     }
 
     private fun tocar(c: Canal, url: String = c.url) {
+        pausa.descartar(); tela.removeCallbacks(pausaEstourou)   // mídia nova: o que estava pausado na memória vai embora
         if (!visivel) return
         // Trava final do controle parental: canal bloqueado não toca sem o PIN, venha de onde vier o pedido.
         if (ControleParental.bloqueado(c, parental) && !filtro.mostrarOcultas) { mostrarAviso(getString(R.string.player_bloqueado)); return }
         if (!ControleParental.bloqueado(c, parental)) lembrarRecente(c)   // bloqueado não vai para os recentes
-        val p = player ?: ExoPlayer.Builder(this).build().also { novo ->
+        val p = player ?: ExoPlayer.Builder(this).setLoadControl(pausa.novaCarga()).build().also { novo ->
             novo.setVideoSurfaceView(video)
             novo.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MOVIE).build(), true)
             novo.addListener(ouvinte)
@@ -318,7 +322,10 @@ class PlayerActivity : Activity() {
         override fun onPlayerError(erro: PlaybackException) {
             val p = player ?: return
             // Ficou para trás na janela ao vivo (rede engasgou): pula para o "agora" sem incomodar ninguém.
-            if (erro.errorCode == PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW) { p.seekToDefaultPosition(); p.prepare(); return }
+            if (erro.errorCode == PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW) {
+                if (pausa.ativa) { pausa.descartar(); p.playWhenReady = true; mostrarAvisoBreve(getString(R.string.pausa_voltou)) }   // perdeu o atraso
+                p.seekToDefaultPosition(); p.prepare(); return
+            }
             val c = atual ?: return
             if (tentativas < 3) {
                 tentativas++
@@ -353,6 +360,7 @@ class PlayerActivity : Activity() {
             else return super.onKeyDown(keyCode, event)
         }
         if (arquivo != null && teclaArquivo(keyCode, event)) return true
+        if (arquivo == null && teclaPausa(keyCode)) return true
         when (keyCode) {
             KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_CHANNEL_UP -> { zapear(+1); return true }
             KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_CHANNEL_DOWN -> { zapear(-1); return true }
@@ -422,7 +430,7 @@ class PlayerActivity : Activity() {
                 val alvo = okAlvo
                 okAlvo = 0
                 if (!okSegurou && !e.isCanceled) when (alvo) {
-                    1 -> if (arquivo != null) opcoes() else abrirLista()
+                    1 -> if (arquivo != null) opcoes() else if (pausa.pausado) continuarPausa() else abrirLista()
                     2 -> lista.assistirEmFoco()
                 }
             }
@@ -526,6 +534,11 @@ class PlayerActivity : Activity() {
         arquivo?.let { a -> infoDoArquivo(c, a, hora); return }
         vivo.text = "● " + getString(R.string.player_ao_vivo)
         vivo.setTextColor(Estilo.ERRO)
+        if (pausa.ativa) {   // pausado ou atrasado: âmbar, como o passado do TV de volta
+            vivo.text = if (pausa.pausado) getString(R.string.pausa_selo)
+                else PausaAoVivo.textoAtraso(pausa.atrasoMs, getString(R.string.pausa_atrasado_min), getString(R.string.pausa_atrasado_seg))
+            vivo.setTextColor(Estilo.ATENCAO)
+        }
         gravarUltimo(c)   // o guia pode ter acabado de carregar, ou o programa ter mudado
         val agora = System.currentTimeMillis()
         val prog = c.guiaId.takeIf { it.isNotEmpty() }?.let { guia.proximos(it, agora, 2) }.orEmpty()
@@ -558,6 +571,9 @@ class PlayerActivity : Activity() {
                 p.playWhenReady = !p.isPlaying; mostrarInfo()
             }
             itens += getString(R.string.tvv_ao_vivo) to { sintonizar(c, guardarAnterior = false) }
+        } else if (player != null) {
+            if (pausa.ativa) itens += getString(R.string.pausa_ao_vivo) to { voltarAoVivo() }   // 1º: ▶ e OK = ao vivo
+            itens += getString(if (pausa.pausado) R.string.pausa_continuar else R.string.pausa_pausar) to { alternarPausa() }
         }
         val origem = if (c.arquivoDias > 0) TvDeVolta.origem(c.url) else null
         if (origem != null) itens += getString(R.string.tvv_abrir) to { abrirTvDeVolta(c, origem) }
@@ -645,6 +661,41 @@ class PlayerActivity : Activity() {
         }
         return true
     }
+
+    // ---------------------------------------------------------------- pausa curta no ao vivo (ideia 18)
+
+    /** Teclas no ao vivo pausado ou atrasado: ⏯ pausa/continua; ▶▶ volta ao vivo; ▶ abre as opções direto (Ao vivo). */
+    private fun teclaPausa(keyCode: Int): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE -> alternarPausa()
+            KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> if (pausa.ativa) voltarAoVivo() else return false
+            KeyEvent.KEYCODE_DPAD_RIGHT -> if (pausa.ativa) opcoes() else return false
+            else -> return false
+        }
+        return true
+    }
+
+    private fun alternarPausa() {
+        val p = player ?: return
+        if (pausa.pausado) { continuarPausa(); return }
+        if (!p.isPlaying) return   // carregando ou sem sinal: nada para segurar
+        val estoura = pausa.pausar(p)
+        tela.removeCallbacks(pausaEstourou)
+        tela.postDelayed(pausaEstourou, estoura)
+        mostrarInfo()
+    }
+
+    private fun continuarPausa() {
+        val p = player ?: return
+        tela.removeCallbacks(pausaEstourou)
+        if (pausa.continuar(p)) mostrarInfo() else { voltarAoVivo(); mostrarAvisoBreve(getString(R.string.pausa_voltou)) }
+    }
+
+    /** Ao vivo de novo, no mesmo canal: recomeça a mídia (o tocar descarta o que estava na memória). */
+    private fun voltarAoVivo() { atual?.let { tocar(it); mostrarInfo() } }
+
+    /** Pausado até o buffer chegar ao teto: para de baixar e solta a memória já; ao continuar, volta ao vivo e avisa. */
+    private val pausaEstourou = Runnable { if (pausa.pausado) player?.stop() }
 
     private fun infoDoArquivo(c: Canal, a: TvDeVolta.Programa, hora: SimpleDateFormat) {
         vivo.text = getString(R.string.tvv_selo)
@@ -772,7 +823,7 @@ class PlayerActivity : Activity() {
      * O vidro do sistema (mesmo fio claro e raio da HOME), mas com a tinta mais escura: aqui ele fica em cima de VÍDEO, que
      * pode ser uma cena clara (neve, estúdio branco); com os 55% da HOME o texto branco ficaria difícil de ler.
      */
-    private fun vidro(raio: Int) = Estilo.fundo(this, 0xD90B0F17.toInt(), raio, Estilo.VIDRO_BORDA)
+    private fun vidro(raio: Int) = Estilo.fundo(this, Estilo.alfa(Estilo.FUNDO, 0xD9), raio, Estilo.VIDRO_BORDA)
 
     /** "19 min" ou "1 h 05 min". */
     private fun minutosTexto(m: Int) = if (m < 60) "$m min" else "${m / 60} h %02d min".format(m % 60)

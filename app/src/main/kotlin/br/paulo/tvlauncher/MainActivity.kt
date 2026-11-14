@@ -247,6 +247,7 @@ class MainActivity : Activity() {
         ui.post(tarefaTimer)
         atualizarPilulaAlarme()   // o alarme pode ter mudado na tela do despertador
         atualizarPilulaVencimento()
+        atualizarPilulaJogo()
         getSharedPreferences("launcher", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteLocal)
         vigiarRedeParaClima()   // busca o clima assim que a rede subir no boot, sem esperar o ciclo de 5 min
         Privilegio.religarAcessibilidade(this)
@@ -260,8 +261,9 @@ class MainActivity : Activity() {
             runCatching { Despertador.agendar(this) }   // garante o proximo alarme agendado
             runCatching { Rotinas.agendar(this) }       // idem para as rotinas por horário
             if (fichasHome == null) fichasHome = runCatching {   // frase do destaque dos apps (ideia 13): fora da tela
-                FrasesApps.ler(assets.open("fichas-apps.json").use { String(it.readBytes(), Charsets.UTF_8) })
+                FrasesApps.ler(ComunidadeApps.fichasJuntas(this))   // ideia 70: APK + comunidade
             }.getOrDefault(emptyMap())
+            ComunidadeApps.talvezAtualizar(this)   // ideia 70: no máximo 1x por semana, numa thread
         }
         BackupAutomatico.talvezGravar(this)   // cópia diária das configurações (numa thread; no máximo 1x por dia)
         // DNS fixo que parou de responder deixa a TV "sem internet": confere ao voltar à HOME (fora da thread; só testa
@@ -494,9 +496,17 @@ class MainActivity : Activity() {
         pilulaVencimento = pilula(vidro = false).apply {
             visibility = View.GONE
             addView(txtVencimento)
-            setOnClickListener { startActivity(Intent(this@MainActivity, ConfigLauncherActivity::class.java).putExtra(ConfigLauncherActivity.EXTRA_ABA, 0)) }
+            setOnClickListener { startActivity(Intent(this@MainActivity, ConfigLauncherActivity::class.java).putExtra(ConfigLauncherActivity.EXTRA_ABA, ConfigLauncherActivity.ABA_CONTA)) }
         }
         avisos.addView(pilulaVencimento, lpPilula())
+        // Ideia 12: o próximo jogo do "Meu time" (24 h) na mesma cápsula, sem fileira nova. OK abre a busca ("Hoje na TV").
+        txtJogo = texto(12.5f, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
+        pilulaJogo = pilula(IconeApp(IconeApp.Tipo.TV), vidro = false).apply {
+            visibility = View.GONE
+            addView(txtJogo)
+            setOnClickListener { abrirBusca() }
+        }
+        avisos.addView(pilulaJogo, lpPilula())
         atualizarAvisos()
 
         raiz.addView(topo, FrameLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(TOPO_PALCO) })
@@ -908,8 +918,8 @@ class MainActivity : Activity() {
                 entradas.add(Entrada.Pilha(pilha.id, itens, frente))
             }
         }
-        val escondidos = todos.filter { it.pacote in ocultos }.sortedBy { it.nome.lowercase() }
-        if (escondidos.isNotEmpty() && !naVisita) entradas.add(Entrada.Ocultos(escondidos, getString(R.string.home_ocultos, escondidos.size)))
+        // 14/11/2026 (pedido do dono): o card "Ocultos (N)" saiu da HOME. Mostrar de volta: Configurações > Tela inicial
+        // > Apps ocultos (AppsEscolhaActivity).
         // A TV saiu da linha de apps (06/11 noite): agora é o 1º card do Continuar, ao lado de Séries e Filmes.
         return entradas
     }
@@ -1111,6 +1121,22 @@ class MainActivity : Activity() {
         }
     }
 
+    private lateinit var txtJogo: TextView
+    private lateinit var pilulaJogo: LinearLayout
+
+    /** Ideia 12: lê os lembretes fora da tela e mostra/esconde a pílula do próximo jogo do "Meu time" (LembretesTv). */
+    private fun atualizarPilulaJogo() {
+        Fundo.rodar {
+            val texto = runCatching { LembretesTv.proximoJogo(this) }.getOrNull()
+            ui.post {
+                if (isDestroyed) return@post
+                if (texto == null) { if (pilulaJogo.hasFocus()) linhaApps.requestFocus(); pilulaJogo.visibility = View.GONE }
+                else { txtJogo.text = texto; pilulaJogo.visibility = View.VISIBLE }
+                atualizarAvisos()
+            }
+        }
+    }
+
     /** O próximo despertador na pílula: "hoje 18:30", "amanhã 6:30" ou "sáb 7:00". Sem alarme, a pílula some. */
     private fun atualizarPilulaAlarme() {
         val prox = runCatching { Despertador.proximo(this) }.getOrNull()
@@ -1248,7 +1274,7 @@ class MainActivity : Activity() {
         val pos = posicoesHome[f.chave]?.takeIf { it.duracao > 0 }
         val sub = when {
             serie -> getString(R.string.home_dest_serie, f.episodio)
-            pos != null -> getString(R.string.home_dest_filme, BarraTempo.duracao((pos.duracao - pos.ms).coerceAtLeast(0)))
+            pos != null -> getString(R.string.home_dest_filme)   // o "faltam" já vai na linha de baixo
             else -> getString(R.string.home_dest_filme_ultimo)
         }
         val meta = android.text.SpannableStringBuilder()
@@ -1308,8 +1334,8 @@ class MainActivity : Activity() {
         filaApps.execute {
             val temTv = PlayerArmazem.temContas(this)
             val ultimo = if (temTv) PlayerArmazem.ultimo(this)?.takeIf { ultimoLiberado(it) }?.let { programasDeAgora(it) } else null
-            // Séries e Filmes só existem numa conta Xtream (lista M3U não tem catálogo). fontes() decifra: fora da tela.
-            val temVod = temTv && PlayerArmazem.fontes(this).any { it.tipo == FonteTv.TIPO_XTREAM }
+            // Séries e Filmes: conta Xtream, ou lista M3U que traz filmes/episódios (ideia 26). fontes() decifra: fora da tela.
+            val temVod = temTv && PlayerCarga.temVod(this)
             // Os "apps recentes" saíram desta linha (10/11/2026, dono: "por que esses cards repetem os apps de baixo?").
             // A linha de apps já vem ordenada por uso recente, então os 4 recentes eram sempre os 4 primeiros apps de
             // baixo, em tamanho grande. E o "continuar assistindo" de verdade de Netflix/YouTube não é alcançável: a
@@ -1905,7 +1931,7 @@ class MainActivity : Activity() {
             for (a in acoes) opcoes += when (a) {
                 MenuApp.Acao.MOSTRAR -> Opcao(getString(R.string.home_mostrar)) { Organizacao.mostrar(this, token); atualizarAposMudanca(token) }
                 MenuApp.Acao.MOVER -> Opcao(getString(R.string.home_mover)) { iniciarMover(token, porSegurar = false) }
-                MenuApp.Acao.OCULTAR -> Opcao(getString(R.string.home_ocultar)) { Organizacao.ocultar(this, token); atualizarAposMudanca(null) }
+                MenuApp.Acao.OCULTAR -> Opcao(getString(R.string.home_ocultar)) { Organizacao.ocultar(this, token); atualizarAposMudanca(null); avisarOculto() }
                 MenuApp.Acao.DESINSTALAR -> Opcao(getString(R.string.home_desinstalar)) { confirmarDesinstalar(token) }
             }
         } else if (pastaToken == null && entrada is Entrada.Pilha) {
@@ -2143,7 +2169,11 @@ class MainActivity : Activity() {
         terminarMover()
         Organizacao.ocultar(this, card.token)
         atualizarAposMudanca(null)
+        avisarOculto()
     }
+
+    /** O card "Ocultos" saiu da HOME (14/11/2026): ao ocultar, diz onde mostrar de volta. */
+    private fun avisarOculto() = AvisoTv.rapido(this, getString(R.string.oc_aviso_titulo), getString(R.string.oc_aviso))
 
     private fun restaurarOrdemAutomatica() {
         terminarMover()

@@ -626,6 +626,7 @@ object PainelWeb {
             "/api/tv/reiniciar" -> if (req.metodo == "POST") return reiniciarTv(token, ip)
             "/api/certificado/renovar" -> if (req.metodo == "POST") return renovarCertificado(req, token, ip)
             "/api/recado" -> if (req.metodo == "POST") return recado(req, ip)
+            "/api/compartilhar" -> if (req.metodo == "POST") return compartilhar(req, ip)   // ideia 55
             "/api/rede/historico" -> if (req.metodo == "GET")
                 return json(200, HistoricoRede.json(app, req.consulta["horas"]?.toIntOrNull() ?: 24))
             "/api/tv/autodesligar" -> when (req.metodo) {
@@ -735,6 +736,7 @@ object PainelWeb {
     private val TIPOS = mapOf(
         "/" to ("index.html" to "text/html; charset=utf-8"),
         "/app.js" to ("app.js" to "text/javascript; charset=utf-8"),
+        "/i18n.js" to ("i18n.js" to "text/javascript; charset=utf-8"),   // ideia 76: painel em inglês
         "/style.css" to ("style.css" to "text/css; charset=utf-8"),
         "/extras.js" to ("extras.js" to "text/javascript; charset=utf-8"),
         "/ui.js" to ("ui.js" to "text/javascript; charset=utf-8"),   // casca do painel: navegação, Início, avisos
@@ -1305,6 +1307,23 @@ object PainelWeb {
         return if (motivo == null) json(200, JSONObject().put("ok", true)) else erro(409, motivo)
     }
 
+    /** Ideia 55: o que veio do "compartilhar" do celular ({titulo, texto, url}); decide em Compartilhar.kt. */
+    private fun compartilhar(req: Requisicao, ip: String): Resposta {
+        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
+        val d = Compartilhar.decidir(o.optString("titulo"), o.optString("texto"), o.optString("url"))
+            ?: return erro(400, "nada para mandar à TV")
+        PainelArmazem.registrar(app, ip, "compartilhado: ${d.tipo.name.lowercase()}", "")
+        return when (d.tipo) {
+            Compartilhar.Tipo.RECADO -> {
+                val r = AvisoTv.mostrar(app, "Recado", d.valor, 60, som = true, guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO)
+                if (r == AvisoTv.Resultado.MOSTRADO || r == AvisoTv.Resultado.GUARDADO) json(200, JSONObject().put("ok", true).put("feito", "recado"))
+                else erro(409, "a acessibilidade do launcher está desligada na TV: sem ela o recado não aparece")
+            }
+            else -> PainelControle.abrirLink(app, d.valor)?.let { erro(409, it) }
+                ?: json(200, JSONObject().put("ok", true).put("feito", if (d.tipo == Compartilhar.Tipo.YOUTUBE) "youtube" else "link"))
+        }
+    }
+
     /** Recado na TV (05/11/2026): {texto, segundos, som}. Ver Recado.kt e AvisoTv.kt. */
     private fun recado(req: Requisicao, ip: String): Resposta {
         val o = corpoJson(req) ?: return erro(400, "JSON inválido")
@@ -1334,13 +1353,18 @@ object PainelWeb {
             .put("usado", if (c.contains("lat")) JSONObject().put("lat", c.getFloat("lat", 0f).toDouble()).put("lon", c.getFloat("lon", 0f).toDouble()) else JSONObject.NULL)
     }
 
-    /** {"cep","numero"} cadastra o endereço; {"automatico":true} apaga. */
+    /** {"cep","numero"} cadastra o endereço; {"cidade"} cadastra uma cidade de qualquer país (ideia 40); {"automatico":true} apaga. */
     private fun mudarClima(req: Requisicao, ip: String): Resposta {
         val o = corpoJson(req) ?: return erro(400, "JSON inválido")
         when {
             o.optBoolean("automatico", false) -> {
                 LocalClima.limpar(app)
                 PainelArmazem.registrar(app, ip, "clima: localização automática", "ok")
+            }
+            o.optString("cidade").isNotBlank() && o.optString("cep").isBlank() -> {
+                val lugar = LocalClima.definirPorCidade(app, o.optString("cidade"))
+                    .getOrElse { return erro(400, it.message ?: "não achei essa cidade") }
+                PainelArmazem.registrar(app, ip, "clima: cidade \"${lugar.nome}\"", "ok")
             }
             else -> {
                 // CEP + número -> ViaCEP + Nominatim (alguns segundos; esta thread é do pedido, não da tela).

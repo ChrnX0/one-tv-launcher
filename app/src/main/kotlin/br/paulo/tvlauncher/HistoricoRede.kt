@@ -12,6 +12,10 @@ import org.json.JSONObject
 import java.io.File
 import java.net.InetSocketAddress
 import java.net.Socket
+import java.text.DateFormat
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.Date
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
@@ -34,6 +38,8 @@ import java.util.concurrent.TimeUnit
 object HistoricoRede {
     private const val TAG = "TvLauncher.HistRede"
     private const val ARQUIVO = "historico-rede.txt"
+    /** Um resumo por dia por 400 dias (ideia 37, relatório mensal). Ver [RedeMensal]. */
+    private const val ARQUIVO_DIAS = "historico-rede-dias.txt"
     const val INTERVALO_MS = 5 * 60_000L
     const val INTERVALO_FALHA_MS = 30_000L
     const val GUARDAR_MS = 7L * 24 * 60 * 60 * 1000
@@ -43,6 +49,9 @@ object HistoricoRede {
     @Volatile private var exec: ScheduledExecutorService? = null
     private val trava = Any()
     private var ultimoValidado: Boolean? = null
+    /** Se a amostra anterior tinha internet (só na memória: depois de reiniciar, a 1ª amostra não avisa nada). */
+    @Volatile private var anteriorComInternet: Boolean? = null
+    @Volatile private var ultimoDiaDiario: LocalDate? = null
 
     /** Liga a coleta. Idempotente: chamar à vontade (HOME, boot, serviço de acessibilidade). */
     @Synchronized fun iniciar(ctx: Context) {
@@ -62,6 +71,7 @@ object HistoricoRede {
         val proximo = try {
             val a = medir(app)
             gravar(app, ResumoRede.linhaAmostra(a))
+            depoisDaAmostra(app, a)
             if (a.internet) INTERVALO_MS else INTERVALO_FALHA_MS
         } catch (e: Throwable) {
             Log.w(TAG, "amostra falhou: $e"); INTERVALO_MS
@@ -136,7 +146,68 @@ object HistoricoRede {
 
     /** Medição fora do ciclo (depois de um "rede caiu"); não mexe no agendamento normal. */
     private fun amostrarAvulsa(app: Context) {
-        try { val a = medir(app); gravar(app, ResumoRede.linhaAmostra(a)) } catch (_: Throwable) {}
+        try { val a = medir(app); gravar(app, ResumoRede.linhaAmostra(a)); depoisDaAmostra(app, a) } catch (_: Throwable) {}
+    }
+
+    /**
+     * Depois de cada amostra (na thread do histórico): avisa no celular se a internet acabou de voltar (ideia 36) e,
+     * uma vez por dia, fecha os dias terminados no arquivo mensal (ideia 37) e guarda o espaço livre (ideia 41).
+     */
+    private fun depoisDaAmostra(app: Context, a: ResumoRede.Amostra) {
+        val antes = anteriorComInternet
+        anteriorComInternet = a.internet
+        if (antes == false && a.internet) runCatching { avisarVolta(app) }.onFailure { Log.w(TAG, "aviso de volta: $it") }
+        val hoje = LocalDate.now()
+        if (hoje != ultimoDiaDiario) {
+            ultimoDiaDiario = hoje
+            runCatching { consolidarDias(app) }.onFailure { Log.w(TAG, "dias: $it") }
+            runCatching { PainelSaude.registrarDisco(app) }.onFailure { Log.w(TAG, "disco: $it") }
+        }
+    }
+
+    private fun avisarVolta(app: Context) {
+        val l = amostras(app, 12)
+        val q = RedeMensal.quedaQueAcabou(l) ?: return
+        val causa = when (RedeMensal.causa(l, q)) {
+            RedeMensal.Causa.WIFI_DA_TV -> app.getString(R.string.rd_causa_wifi)
+            RedeMensal.Causa.PROVEDOR_OU_ROTEADOR -> app.getString(R.string.rd_causa_provedor)
+        }
+        val desde = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(q.inicio))
+        Log.i(TAG, "internet voltou depois de ${q.duracao / 60_000} min")
+        Avisos.enviar(app, Avisos.Tipo.INTERNET_VOLTOU, app.getString(R.string.rd_voltou_titulo),
+            app.getString(R.string.rd_voltou_texto, duracaoTexto(app, q.duracao), desde, causa))
+    }
+
+    fun duracaoTexto(app: Context, ms: Long): String {
+        val min = (ms / 60_000).toInt()
+        return if (min < 60) app.getString(R.string.rd_min, min) else app.getString(R.string.rd_h_min, min / 60, min % 60)
+    }
+
+    private fun arquivoDias(app: Context) = File(app.filesDir, ARQUIVO_DIAS)
+
+    /** Grava os dias terminados que ainda não estão no arquivo mensal. */
+    private fun consolidarDias(app: Context) = synchronized(trava) {
+        val fd = arquivoDias(app)
+        val dias = RedeMensal.ler(if (fd.exists()) fd.readLines() else emptyList())
+        val bruto = arquivo(app).takeIf { it.exists() }?.readLines() ?: emptyList()
+        val agora = System.currentTimeMillis()
+        val zona = ZoneId.systemDefault()
+        val novos = RedeMensal.diasNovos(ResumoRede.ler(bruto, 0).first, dias.map { it.data }.toSet(), agora, zona)
+        if (novos.isEmpty()) return@synchronized
+        val todos = RedeMensal.aparar(dias + novos, agora, zona)
+        if (todos.size == dias.size + novos.size) fd.appendText(novos.joinToString("") { RedeMensal.linha(it) + "\n" })
+        else {
+            val tmp = File(app.filesDir, "$ARQUIVO_DIAS.tmp")
+            tmp.writeText(todos.joinToString("") { RedeMensal.linha(it) + "\n" })
+            tmp.renameTo(fd)
+        }
+        Log.i(TAG, "dias fechados: ${novos.size}")
+    }
+
+    /** Os últimos 12 meses (o mês corrente só com os dias já terminados), para o painel e o Claude. */
+    fun meses(ctx: Context): List<RedeMensal.Mes> = synchronized(trava) {
+        val fd = arquivoDias(ctx.applicationContext)
+        RedeMensal.meses(RedeMensal.ler(try { if (fd.exists()) fd.readLines() else emptyList() } catch (_: Exception) { emptyList() }))
     }
 
     private fun evento(app: Context, texto: String) {
@@ -206,6 +277,10 @@ object HistoricoRede {
                 .put("latMedia", r.latMedia ?: JSONObject.NULL)
                 .put("latP95", r.latP95 ?: JSONObject.NULL)
                 .put("dbmMedio", r.dbmMedio ?: JSONObject.NULL))
+            .put("meses", JSONArray().apply {
+                for (m in meses(ctx)) put(JSONObject().put("mes", m.mes).put("dias", m.dias).put("quedas", m.quedas)
+                    .put("quedasDns", m.quedasDns).put("foraMs", m.foraMs).put("coberturaMs", m.coberturaMs))
+            })
     }
 }
 

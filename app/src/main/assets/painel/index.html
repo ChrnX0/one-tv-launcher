@@ -122,6 +122,16 @@
         </div>
         <button type="button" class="link" data-aba="controle">Abrir o controle completo e a tela ao vivo →</button>
       </div>
+      <div class="cartao">
+        <h2>Pedir à TV</h2>
+        <form id="formComando" class="form-pasta" autocomplete="off">
+          <input id="campoComando" type="text" maxlength="200" enterkeyhint="send" placeholder="coloca na Globo, abre o YouTube…" aria-label="O que a TV deve fazer">
+          <button type="submit" class="botao-secundario">Pedir</button>
+        </form>
+        <p class="aviso-curto">Sem IA: entende frases curtas (canal, app, aviso em minutos, desligar). Dá para ditar pelo microfone do teclado.</p>
+        <p id="statusComando" class="aviso" hidden></p>
+        <ul id="exemplosComando" hidden></ul>
+      </div>
       <div class="grade-inicio">
         <div class="cartao">
           <h2>Como a TV está</h2>
@@ -147,7 +157,7 @@
         <label class="marcar"><input id="mostrarSistema" type="checkbox" checked> apps do sistema</label>
         <button id="btnSelecionar" type="button" class="botao-secundario">Selecionar vários</button>
         <label class="botao-primario" for="arquivoApk">Instalar APK…</label>
-        <input type="file" id="arquivoApk" accept=".apk,application/vnd.android.package-archive" hidden>
+        <input type="file" id="arquivoApk" accept=".apk,.apks,.xapk,application/vnd.android.package-archive" hidden>
       </div>
       <p id="contagemApps" class="aviso-curto"></p>
       <p id="statusApps" class="aviso" hidden></p>
@@ -215,6 +225,7 @@
           <label for="cepClima"><strong>Endereço do clima</strong> — <span id="estadoClima">carregando…</span></label>
           <input id="cepClima" type="text" inputmode="numeric" maxlength="9" placeholder="CEP (ex.: 14015-060)" aria-label="CEP">
           <input id="numeroClima" type="text" inputmode="numeric" maxlength="6" placeholder="Número da casa (opcional)" aria-label="Número">
+          <input id="cidadeClima" type="text" maxlength="80" placeholder="Ou a cidade, fora do Brasil (ex.: Lisboa)" aria-label="Cidade">
           <div class="recado-opcoes">
             <button type="button" id="btnClimaAuto" class="botao-secundario">Apagar endereço</button>
             <button type="submit">Salvar endereço</button>
@@ -278,6 +289,8 @@
       </div>
       <h2>Quedas</h2>
       <div id="listaQuedas" class="lista-registro"></div>
+      <h2>Por mês (para cobrar o provedor)</h2>
+      <div id="listaMesesRede" class="lista-registro"></div>
       <h2>O que o Android avisou</h2>
       <div id="listaEventosRede" class="lista-registro"></div>
     </section>
@@ -484,6 +497,16 @@
         <h2>O que dá para pedir</h2>
         <ul id="iaExemplos" class="aviso-curto"></ul>
       </div>
+      <div class="cartao">
+        <h2>Outro app de IA</h2>
+        <p class="aviso">Um app que não está na lista volta do login por um domínio dele (o "redirect" que ele mostra, ex.:
+          app.exemplo.com). Libere o domínio aqui, sem esperar versão nova da TV. Pede o PIN, e a TV ainda pergunta
+          "cliente novo?" no primeiro login.</p>
+        <input id="iaHostNovo" type="text" maxlength="100" placeholder="app.exemplo.com" aria-label="Domínio do app de IA" autocapitalize="off" spellcheck="false">
+        <button type="button" class="botao-secundario" id="iaHostAdicionar">Liberar</button>
+        <ul id="iaHosts" class="aviso-curto"></ul>
+        <p id="iaHostsStatus" class="aviso" hidden></p>
+      </div>
     </section>
 
     <section id="abaBackup" class="painel-aba" hidden>
@@ -607,6 +630,11 @@
         <p class="aviso">Apps abertos, baixados do GitHub oficial de cada projeto. Na 1ª instalação a TV guarda quem assinou; depois
           só aceita a mesma assinatura. Pede o PIN.</p>
         <div id="listaLoja" class="lista-registro"></div>
+        <form id="formRepoLoja" class="form-pasta" autocomplete="off">
+          <input id="repoLoja" type="text" placeholder="dono/nome ou link do GitHub" aria-label="Repositório do GitHub" autocomplete="off" spellcheck="false">
+          <button type="submit" class="botao-secundario">Somar repositório</button>
+        </form>
+        <p class="aviso">Qualquer projeto que publique o APK no GitHub Releases. A TV escolhe o arquivo da arquitetura dela.</p>
         <p id="statusLoja" class="aviso" hidden></p>
       </div>
       <div class="cartao" id="cartaoCasa">
@@ -665,6 +693,25 @@
           apps feitos para o TvOverlay. Gerar um link novo invalida o anterior e pede o PIN. O link só aparece agora: guarde-o.</p>
         <button type="button" class="botao-secundario" id="btnRecadoLink">Gerar link novo</button>
         <pre id="saidaRecadoLink" class="saida-extras" hidden></pre>
+      </div>
+      <div class="cartao">
+        <h2>Diário da TV</h2>
+        <p class="aviso">O que mexeu na TV nos últimos 7 dias: painel, Claude, adb e a própria TV. O Claude lê o mesmo diário
+          (ferramenta diario_tv).</p>
+        <button type="button" class="botao-secundario" id="btnDiario">Ver o diário</button>
+        <pre id="saidaDiario" class="saida-extras" hidden></pre>
+        <h3>Avisar um link meu</h3>
+        <p class="aviso">A TV manda cada linha nova das origens marcadas (POST com JSON) para este endereço: https, ou http só
+          dentro de casa (ex.: um webhook do Home Assistant). Mudar pede o PIN. Vazio desliga.</p>
+        <input id="campoWebhook" type="url" maxlength="500" placeholder="https://… ou http://homeassistant.local:8123/api/webhook/…" aria-label="Endereço do webhook">
+        <div class="barra-acoes" id="origensWebhook">
+          <label><input type="checkbox" value="painel"> Painel</label>
+          <label><input type="checkbox" value="claude"> Claude</label>
+          <label><input type="checkbox" value="adb"> adb</label>
+          <label><input type="checkbox" value="tv"> A TV</label>
+          <button type="button" class="botao-secundario" id="btnWebhook">Salvar</button>
+        </div>
+        <p id="statusWebhook" class="aviso" hidden></p>
       </div>
       <div class="cartao">
         <h2>Manutenção</h2>
@@ -726,7 +773,11 @@
           apaga a tela e avisa no celular.</p>
         <button type="button" class="botao-secundario" id="btnPresencaVer">Ver aparelhos do roteador</button>
         <div id="listaPresenca" class="lista-registro"></div>
-        <button type="button" class="botao-primario" id="btnPresencaSalvar" hidden>Salvar escolha</button>
+        <p class="aviso-curto">Sem roteador UniFi: use o Home Assistant (o app dele no celular informa se a pessoa está em casa) ou o IP
+          fixo de cada celular (reserve o IP no roteador). Basta um deles dizer "em casa".</p>
+        <input id="presencaHa" type="text" maxlength="400" placeholder="Home Assistant: person.ana, device_tracker.celular_bia" aria-label="Entidades do Home Assistant">
+        <input id="presencaIps" type="text" maxlength="200" placeholder="IPs dos celulares: 192.168.1.20, 192.168.1.21" aria-label="IPs dos celulares">
+        <button type="button" class="botao-primario" id="btnPresencaSalvar">Salvar escolha</button>
         <p id="statusPresenca" class="aviso" hidden></p>
       </div>
       <div class="cartao">
@@ -839,6 +890,7 @@
     </div>
   </div>
 
+  <script src="i18n.js"></script>   <!-- ideia 76: inglês quando o navegador não está em português -->
   <script src="app.js"></script>
   <script src="jmuxer.min.js"></script>
   <script src="extras.js"></script>

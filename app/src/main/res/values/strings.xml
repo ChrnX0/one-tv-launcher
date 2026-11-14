@@ -624,7 +624,7 @@
     <string name="fmt_data_mes">MMMM d</string>
     <string name="home_busca">Search</string>
     <string name="home_falar">Talk to Gemini</string>
-    <string name="home_dest_filme">Movies · %1$s left</string>
+    <string name="home_dest_filme">Movies · pick up where you left off</string>
     <string name="home_dest_filme_ultimo">Movies · the last one you opened</string>
     <string name="home_dest_serie">Shows · you are on %1$s</string>
     <string name="home_dest_tv">TV · channel %1$d</string>
@@ -793,7 +793,7 @@
     <!-- Original or dubbed audio in movies and series (Idioma, 11/11/2026) -->
     <string name="idioma_secao">Movies and series</string>
     <string name="idioma_titulo">Preferred audio</string>
-    <string name="idioma_det">Original with Portuguese subtitles, or dubbed. Each movie and series remembers the change made in the player (▼)</string>
+    <string name="idioma_det">Original with subtitles in the TV’s language, or dubbed in it. Each movie and series remembers the change made in the player (▼)</string>
     <string name="idioma_original">Original with subtitles</string>
     <string name="idioma_dublado">Dubbed</string>
     <string name="idioma_legendado">Subtitled</string>
@@ -805,7 +805,7 @@
     <string name="legenda_procurando">Looking for subtitles…</string>
     <string name="legenda_baixando">Downloading subtitles…</string>
     <string name="legenda_pronta">Subtitles ready</string>
-    <string name="legenda_nenhuma">No Portuguese subtitles for this video</string>
+    <string name="legenda_nenhuma">No subtitles in the TV’s language for this video</string>
     <string name="legenda_erro">Could not search for subtitles</string>
     <string name="legenda_invalida">The downloaded file is not a subtitle</string>
     <string name="legenda_sem_conta">Add your OpenSubtitles key in Settings > Account > Movies and series</string>

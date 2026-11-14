@@ -27,6 +27,8 @@ import android.widget.TextView
  *  - OK muda o cartão na hora (otimista) e confirma com o Home Assistant logo depois;
  *  - luz com brilho: SEGURAR OK entra no ajuste, ◀ ▶ muda de 10 em 10 %, OK ou VOLTAR sai (◀ ▶ soltos continuam
  *    andando entre os cartões, que é o que a pessoa espera numa grade);
+ *  - luz com cor ou temperatura (ideia 50, 14/11/2026): no mesmo ajuste, ▲ ▼ trocam o tom (quente, neutra, fria e,
+ *    na luz colorida, 7 cores; ver [CasaHA.CorLuz]);
  *  - ao vivo: com a tela aberta, relê o Home Assistant a cada [VIVO_MS] e atualiza só os cartões (sem refazer a grade,
  *    para o foco não pular); uma luz apagada pelo celular aparece apagada aqui;
  *  - sem configuração: estado vazio com a explicação, nunca uma tela só com o título.
@@ -167,7 +169,7 @@ class CasaActivity : Activity() {
     }
 
     private fun escreverResumo() {
-        val aparelhos = entidades.filter { !cena(it) }
+        val aparelhos = entidades.filter { !cena(it) && !it.somenteLeitura && !it.camera }
         val ligados = aparelhos.count { CasaHA.ligado(it.dominio, estadoDe(it)) }
         resumo.text = when {
             entidades.isEmpty() -> getString(R.string.casa_vazio)
@@ -205,12 +207,13 @@ class CasaActivity : Activity() {
         val google = cartaoGoogle()
         grupo(getString(R.string.casa_secao_google), listOf(google))
         (alvo ?: primeiro ?: google).requestFocus()
-        mostrarDicas(lista.any { it.regulavel })
+        mostrarDicas(lista.any { it.regulavel }, lista.any { it.cores.isNotEmpty() }, lista.any { it.clima != null })
     }
 
-    private fun mostrarDicas(temBrilho: Boolean) {
+    private fun mostrarDicas(temBrilho: Boolean, temCor: Boolean = false, temClima: Boolean = false) {
         val pares = mutableListOf("OK" to getString(R.string.casa_dica_acionar))
-        if (temBrilho) pares += getString(R.string.casa_tecla_segurar_ok) to getString(R.string.casa_dica_brilho)
+        if (temClima && !temBrilho) pares += getString(R.string.casa_tecla_segurar_ok) to getString(R.string.casa_dica_temp)
+        if (temBrilho) pares += getString(R.string.casa_tecla_segurar_ok) to getString(if (temCor) R.string.casa_dica_brilho_cor else R.string.casa_dica_brilho)
         pares += getString(R.string.cl_tecla_voltar) to getString(R.string.rede_dica_sair)
         dicas.removeAllViews()
         dicas.addView(Estilo.barraDicas(this, *pares.toTypedArray()))
@@ -241,6 +244,13 @@ class CasaActivity : Activity() {
             val atual = entidades.firstOrNull { it.id == e.id } ?: e
             val estado = estadoDe(atual)
             if (estado == "unavailable" || estado == "unknown") return@setOnClickListener
+            if (atual.somenteLeitura) { carregar(); return@setOnClickListener }   // ideia 51: sensor só se lê; OK relê
+            if (atual.camera) {   // ideia 52: a foto de agora, por cima, como a da campainha
+                resumo.text = getString(R.string.casa_camera_abrindo)
+                val nome = atual.nome
+                enviar(e.id) { CasaHA.mostrarCamera(it, e.id, nome) }
+                return@setOnClickListener
+            }
             focoId = e.id
             val acao = if (cena(atual)) "ligar" else "alternar"
             // Na hora: o cartão já mostra o estado novo (a resposta do Home Assistant leva até ~1 s).
@@ -250,7 +260,7 @@ class CasaActivity : Activity() {
             }
             enviar(e.id) { CasaHA.acionar(it, e.id, acao) }
         }
-        if (e.regulavel) {
+        if (e.regulavel || e.clima != null) {   // ideia 51: no ar-condicionado, segurar OK ajusta a temperatura
             c.casca.isLongClickable = true
             c.casca.setOnLongClickListener { entrarNoAjuste(e.id); true }
         }
@@ -263,7 +273,7 @@ class CasaActivity : Activity() {
         val estado = estadoDe(e)
         val liga = CasaHA.ligado(e.dominio, estado)
         val brilho = if (liga && e.regulavel) brilhoDe(e) else null
-        c.mostrar(rotuloEstado(e.dominio, estado, brilho), liga, brilho,
+        c.mostrar(rotuloEstado(e, estado, brilho), liga, brilho,
             indisponivel = estado == "unavailable" || estado == "unknown")
     }
 
@@ -310,16 +320,79 @@ class CasaActivity : Activity() {
         val c = cartoes[id] ?: return
         val estado = estadoDe(e)
         if (estado == "unavailable" || estado == "unknown") return
+        ajusteClima = e.clima
+        if (e.clima != null) {   // ideia 51: ◀ ▶ muda a temperatura pedida
+            ajusteTemp = e.clima.alvo ?: e.clima.atual?.let { Math.round(it).toDouble() } ?: 24.0
+            ajuste = c; ajusteCores = emptyList(); ajusteCor = -1; ignorarSoltarOk = true
+            c.mostrarTexto(getString(R.string.casa_temp_ajuste, formatarGraus(ajusteTemp)))
+            return
+        }
         ajustePct = if (CasaHA.ligado(e.dominio, estado)) brilhoDe(e) ?: 100 else 0
         ajuste = c
+        ajusteCores = e.cores
+        ajusteCor = -1
         ignorarSoltarOk = true
-        c.mostrarAjuste(ajustePct)
+        c.mostrarAjuste(ajustePct, ajusteCores.isNotEmpty())
     }
+
+    // Ideia 51: ar-condicionado em ajuste (null = é uma luz) e a temperatura que está na tela.
+    private var ajusteClima: CasaHA.Clima? = null
+    private var ajusteTemp = 24.0
+
+    private fun formatarGraus(g: Double): String =
+        java.text.NumberFormat.getNumberInstance().apply { maximumFractionDigits = 1 }.format(g) + " °"
+
+    private val mandarTemp = Runnable {
+        val c = ajuste ?: return@Runnable
+        val id = cartoes.entries.firstOrNull { it.value === c }?.key ?: return@Runnable
+        val g = ajusteTemp
+        enviar(id) { CasaHA.ajustarTemp(it, id, g) }
+    }
+
+    // Ideia 50: os tons da luz em ajuste e o escolhido (-1 = nenhum ainda).
+    private var ajusteCores: List<CasaHA.CorLuz> = emptyList()
+    private var ajusteCor = -1
+
+    /** ▲ ▼ no ajuste de uma luz com cor: troca o tom na tela na hora e manda 350 ms depois da última tecla. */
+    private fun passoCor(passo: Int) {
+        val c = ajuste ?: return
+        if (ajusteCores.isEmpty()) return
+        ajusteCor = CasaHA.proximaCor(ajusteCores.size, ajusteCor, passo)
+        val tom = ajusteCores[ajusteCor]
+        if (ajustePct == 0) ajustePct = 100   // escolher um tom acende a luz
+        c.mostrarTom(nomeTom(tom), ajustePct)
+        ui.removeCallbacks(mandarCor)
+        ui.postDelayed(mandarCor, 350)
+    }
+
+    private val mandarCor = Runnable {
+        val c = ajuste ?: return@Runnable
+        val tom = ajusteCores.getOrNull(ajusteCor) ?: return@Runnable
+        val id = cartoes.entries.firstOrNull { it.value === c }?.key ?: return@Runnable
+        otimista[id] = Pendente("on", ajustePct, SystemClock.elapsedRealtime() + PRAZO_MS)
+        enviar(id) { CasaHA.ajustarCor(it, id, tom) }
+    }
+
+    private fun nomeTom(t: CasaHA.CorLuz): String = getString(when (t) {
+        CasaHA.CorLuz.QUENTE -> R.string.casa_cor_quente
+        CasaHA.CorLuz.NEUTRA -> R.string.casa_cor_neutra
+        CasaHA.CorLuz.FRIA -> R.string.casa_cor_fria
+        CasaHA.CorLuz.VERMELHO -> R.string.casa_cor_vermelho
+        CasaHA.CorLuz.LARANJA -> R.string.casa_cor_laranja
+        CasaHA.CorLuz.AMARELO -> R.string.casa_cor_amarelo
+        CasaHA.CorLuz.VERDE -> R.string.casa_cor_verde
+        CasaHA.CorLuz.AZUL -> R.string.casa_cor_azul
+        CasaHA.CorLuz.ROXO -> R.string.casa_cor_roxo
+        CasaHA.CorLuz.ROSA -> R.string.casa_cor_rosa
+    })
 
     private fun sairDoAjuste() {
         val c = ajuste ?: return
         ajuste = null
         ui.removeCallbacks(mandarBrilho)
+        ui.removeCallbacks(mandarCor)
+        ui.removeCallbacks(mandarTemp)
+        ajusteClima = null
         c.ajustando = false
         entidades.firstOrNull { cartoes[it.id] === c }?.let { atualizar(c, it) }
         escreverResumo()
@@ -328,8 +401,15 @@ class CasaActivity : Activity() {
     /** ◀ ▶ no ajuste: muda na tela na hora e manda ao Home Assistant 350 ms depois da última tecla. */
     private fun passoBrilho(passo: Int) {
         val c = ajuste ?: return
+        ajusteClima?.let { clima ->
+            ajusteTemp = CasaHA.proximaTemp(ajusteTemp, passo, clima)
+            c.mostrarTexto(getString(R.string.casa_temp_ajuste, formatarGraus(ajusteTemp)))
+            ui.removeCallbacks(mandarTemp)
+            ui.postDelayed(mandarTemp, 500)
+            return
+        }
         ajustePct = CasaHA.proximoBrilho(ajustePct, passo)
-        c.mostrarAjuste(ajustePct)
+        c.mostrarAjuste(ajustePct, ajusteCores.isNotEmpty())
         ui.removeCallbacks(mandarBrilho)
         ui.postDelayed(mandarBrilho, 350)
     }
@@ -351,7 +431,8 @@ class CasaActivity : Activity() {
             ev.keyCode == KeyEvent.KEYCODE_BACK -> if (ev.action == KeyEvent.ACTION_UP) sairDoAjuste()
             ev.keyCode == KeyEvent.KEYCODE_DPAD_LEFT -> if (ev.action == KeyEvent.ACTION_DOWN) passoBrilho(-1)
             ev.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT -> if (ev.action == KeyEvent.ACTION_DOWN) passoBrilho(+1)
-            ev.keyCode == KeyEvent.KEYCODE_DPAD_UP || ev.keyCode == KeyEvent.KEYCODE_DPAD_DOWN -> {}   // fica no cartão
+            ev.keyCode == KeyEvent.KEYCODE_DPAD_UP -> if (ev.action == KeyEvent.ACTION_DOWN) passoCor(-1)   // sem cor: fica no cartão
+            ev.keyCode == KeyEvent.KEYCODE_DPAD_DOWN -> if (ev.action == KeyEvent.ACTION_DOWN) passoCor(+1)
             else -> return super.dispatchKeyEvent(ev)
         }
         return true
@@ -397,10 +478,27 @@ class CasaActivity : Activity() {
             pintar()
         }
 
-        fun mostrarAjuste(pct: Int) {
+        fun mostrarAjuste(pct: Int, comCor: Boolean = false) {
             ajustando = true
             ligado = pct > 0
-            estadoTv.text = getString(R.string.casa_brilho_ajuste, pct)
+            estadoTv.text = getString(if (comCor) R.string.casa_brilho_ajuste_cor else R.string.casa_brilho_ajuste, pct)
+            barra.pct = pct
+            pintar()
+        }
+
+        /** Ideia 51: texto livre no lugar do estado (temperatura do ar-condicionado em ajuste). */
+        fun mostrarTexto(texto: String) {
+            ajustando = true
+            estadoTv.text = texto
+            barra.pct = null
+            pintar()
+        }
+
+        /** Ideia 50: o tom escolhido com ▲ ▼ no lugar do estado ("Luz quente · ▲ ▼"). */
+        fun mostrarTom(nome: String, pct: Int) {
+            ajustando = true
+            ligado = true
+            estadoTv.text = getString(R.string.casa_cor_ajuste, nome)
             barra.pct = pct
             pintar()
         }
@@ -456,8 +554,28 @@ class CasaActivity : Activity() {
 
     // ---------------------------------------------------------------- textos e ícones
 
-    private fun rotuloEstado(dominio: String, estado: String, brilho: Int?): String = when {
-        estado == "unavailable" || estado == "unknown" -> getString(R.string.casa_indisponivel)
+    private fun rotuloEstado(e: CasaHA.Entidade, estado: String, brilho: Int?): String {
+        val dominio = e.dominio
+        if (estado == "unavailable" || estado == "unknown") return getString(R.string.casa_indisponivel)
+        return when (dominio) {   // ideia 51
+            "sensor" -> e.valor ?: estado.take(20)
+            CasaHA.CAMERA -> getString(R.string.casa_camera_ver)
+            "binary_sensor" -> getString(when (e.classe) {
+                "motion", "occupancy" -> if (estado == "on") R.string.casa_movimento else R.string.casa_sem_movimento
+                "moisture" -> if (estado == "on") R.string.casa_molhado else R.string.casa_seco
+                "smoke" -> if (estado == "on") R.string.casa_fumaca else R.string.casa_sem_fumaca
+                else -> if (estado == "on") R.string.casa_aberta else R.string.casa_fechada
+            })
+            "climate" -> if (estado == "off") getString(R.string.casa_desligado) else {
+                val alvo = e.clima?.alvo?.let { formatarGraus(it) }
+                val ambiente = e.clima?.atual?.let { formatarGraus(it) }
+                listOfNotNull(alvo, ambiente?.let { getString(R.string.casa_ambiente, it) }).joinToString(" · ").ifEmpty { getString(R.string.casa_ligado) }
+            }
+            else -> rotuloEstadoAntigo(dominio, estado, brilho)
+        }
+    }
+
+    private fun rotuloEstadoAntigo(dominio: String, estado: String, brilho: Int?): String = when {
         dominio == "scene" || dominio == "script" -> getString(R.string.casa_rodar)
         dominio == "cover" -> getString(if (estado == "closed" || estado == "closing") R.string.casa_fechada else R.string.casa_aberta)
         estado == "on" && brilho != null -> getString(R.string.casa_ligado_pct, brilho)

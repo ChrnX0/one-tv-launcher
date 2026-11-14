@@ -2,6 +2,7 @@ package br.paulo.tvlauncher
 
 import android.app.Activity
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Handler
 import android.os.Looper
@@ -49,9 +50,9 @@ class PlayerListaTela(
     private val aoGuia: (List<Canal>, String) -> Unit,   // guia em grade dos canais da categoria + nome dela
 ) {
     private val tela = Handler(Looper.getMainLooper())
-    private val papel = 0xFFF5F3EE.toInt()
-    private val suave = 0xB3F5F3EE.toInt()
-    private val apagado = 0x80F5F3EE.toInt()
+    private val papel = Estilo.TEXTO       // cores do sistema de design (Estilo), como em Filmes e no player (ideia 17)
+    private val suave = Estilo.TEXTO_2
+    private val apagado = Estilo.TEXTO_3
     private val ambar = Estilo.ATENCAO
     private val fonteMedia = Fontes.manrope(500)
     private val hora = SimpleDateFormat("HH:mm", Locale.getDefault())
@@ -66,12 +67,12 @@ class PlayerListaTela(
     private var atualId: String? = null
     private var busca: Pair<String, List<Canal>>? = null   // termo + resultados (a categoria "Busca")
     private var resumoFiltro = ""                           // "4K · BR" na linha de Filtros
-    private var ocultas: Set<String> = emptySet()           // grupos ocultos que estão aparecendo (PIN): ganham 🔒
+    private var ocultas: Set<String> = emptySet()           // grupos ocultos que estão aparecendo (PIN): ganham o cadeado
 
     val raiz: FrameLayout = FrameLayout(act).apply {
         visibility = View.GONE
         // Escuro à esquerda, mais claro à direita: o vídeo continua aparecendo atrás do detalhe.
-        background = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(0xF50B0F17.toInt(), 0xE60B0F17.toInt(), 0xB30B0F17.toInt()))
+        background = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(Estilo.alfa(Estilo.FUNDO, 0xF5), Estilo.alfa(Estilo.FUNDO, 0xE6), Estilo.alfa(Estilo.FUNDO, 0xB3)))
     }
     private val listaGrupos = lista()
     private val listaCanais = lista()
@@ -101,7 +102,7 @@ class PlayerListaTela(
 
     /**
      * @param canais já filtrados (PlayerFiltro.aplicar): o que não passa no filtro nem aparece
-     * @param ocultas grupos ocultos que estão visíveis agora (depois do PIN), para marcar com 🔒
+     * @param ocultas grupos ocultos que estão visíveis agora (depois do PIN), para marcar com o cadeado
      */
     fun abrir(canais: List<Canal>, guia: Guia, favoritos: Set<String>, recentes: List<String>, chave: String, atual: Canal?,
               resumoFiltro: String = "", ocultas: Set<String> = emptySet(), focarCategorias: Boolean = false) {
@@ -251,23 +252,18 @@ class PlayerListaTela(
             val linha = (reuso as? LinearLayout) ?: LinearLayout(act).apply {
                 orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
                 setPadding(dp(12), dp(9), dp(12), dp(9))
-                addView(TextView(act).apply { textSize = Estilo.Leitura.CATEGORIA; typeface = fonteMedia; maxLines = 1; ellipsize = TextUtils.TruncateAt.END },
+                addView(TextView(act).apply { textSize = Estilo.Leitura.CATEGORIA; typeface = fonteMedia; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; compoundDrawablePadding = dp(10) },
                     LinearLayout.LayoutParams(0, -2, 1f))
                 addView(TextView(act).apply { textSize = Estilo.Leitura.CONTAGEM; setTextColor(apagado) })
             }
             val g = grupos[p]
             val escolhida = g.chave == chave
             (linha.getChildAt(0) as TextView).apply {
-                text = when (g.chave) {
-                    PlayerLista.FAVORITOS -> "★  " + nomeDoGrupo(g)
-                    PlayerLista.RECENTES -> "↺  " + nomeDoGrupo(g)
-                    PlayerLista.BUSCA -> "⌕  " + nomeDoGrupo(g)
-                    PlayerLista.ACAO_BUSCAR -> "⌕  " + nomeDoGrupo(g)
-                    PlayerLista.ACAO_FILTROS -> "☰  " + nomeDoGrupo(g)
-                    PlayerLista.ACAO_GUIA -> "▦  " + nomeDoGrupo(g)
-                    else -> (if (g.nome in ocultas) "🔒 " else "") + nomeDoGrupo(g)
-                }
-                setTextColor(if (escolhida) ambar else if (g.chave == PlayerLista.ACAO_FILTROS && g.nome.isNotEmpty()) ambar else papel)
+                text = nomeDoGrupo(g)
+                val cor = if (escolhida) ambar else if (g.chave == PlayerLista.ACAO_FILTROS && g.nome.isNotEmpty()) ambar else papel
+                setTextColor(cor)
+                // Ícone de linha do sistema de design no lugar do símbolo de texto, na cor do nome (ideia 17).
+                setCompoundDrawablesRelative(iconeDoGrupo(g)?.let { icone(it, cor) }, null, null, null)
             }
             // Ações: Filtros mostra o filtro em vigor no lugar da contagem; Buscar não tem número.
             (linha.getChildAt(1) as TextView).text = when {
@@ -279,8 +275,28 @@ class PlayerListaTela(
         }
     }
 
+    /** Qual ícone a linha da categoria leva (null = nenhum): ações, Favoritos, Recentes, Busca e as ocultas abertas pelo PIN. */
+    private fun iconeDoGrupo(g: GrupoCanais): Any? = when (g.chave) {
+        PlayerLista.FAVORITOS -> IconePlayer.Tipo.ESTRELA
+        PlayerLista.RECENTES -> IconePlayer.Tipo.RECENTES
+        PlayerLista.BUSCA, PlayerLista.ACAO_BUSCAR -> IconeMidia.Tipo.LUPA
+        PlayerLista.ACAO_FILTROS -> IconePlayer.Tipo.FILTROS
+        PlayerLista.ACAO_GUIA -> IconePlayer.Tipo.GRADE
+        else -> if (g.nome in ocultas) IconePlayer.Tipo.CADEADO else null
+    }
+
+    // Um Drawable por ícone e cor (as linhas são recicladas; criar um a cada desenho seria lixo à toa na TV de 2 GB).
+    private val icones = HashMap<Pair<Any, Int>, Drawable>()
+
+    private fun icone(tipo: Any, cor: Int): Drawable = icones.getOrPut(tipo to cor) {
+        when (tipo) {
+            is IconePlayer.Tipo -> IconePlayer(tipo, cor)
+            else -> IconeMidia(tipo as IconeMidia.Tipo, cor)
+        }.apply { setBounds(0, 0, dp(18), dp(18)) }
+    }
+
     /** Peças de uma linha de canal, guardadas na tag para não procurar a cada desenho. */
-    private class Linha(val numero: TextView, val logo: ImageView, val nome: TextView, val sub: TextView, val tempo: TextView, val barra: BarraTempo.Barra, val estrela: TextView)
+    private class Linha(val numero: TextView, val logo: ImageView, val nome: TextView, val sub: TextView, val tempo: TextView, val barra: BarraTempo.Barra, val estrela: View)
 
     private val adaptadorCanais = object : BaseAdapter() {
         override fun getCount() = doMeio.size
@@ -336,8 +352,8 @@ class PlayerListaTela(
         col.addView(nome); col.addView(linhaSub)
         col.addView(barra, LinearLayout.LayoutParams(-1, dp(BarraTempo.ESPESSURA_DP)).apply { topMargin = dp(4) })
         linha.addView(col, LinearLayout.LayoutParams(0, -2, 1f))
-        val estrela = TextView(act).apply { text = "★"; textSize = 18f; setTextColor(ambar); setPadding(dp(10), 0, 0, 0) }
-        linha.addView(estrela)
+        val estrela = ImageView(act).apply { setImageDrawable(IconePlayer(IconePlayer.Tipo.ESTRELA, ambar)) }
+        linha.addView(estrela, LinearLayout.LayoutParams(dp(18), dp(18)).apply { marginStart = dp(10) })
         linha.tag = Linha(numero, logo, nome, sub, tempo, barra, estrela)
         return linha
     }
@@ -347,7 +363,7 @@ class PlayerListaTela(
     private fun montarDetalhe(): View {
         val col = LinearLayout(act).apply {
             orientation = LinearLayout.VERTICAL
-            background = GradientDrawable().apply { cornerRadius = dp(16).toFloat(); setColor(0xCC0B0F17.toInt()); setStroke(dp(1), Estilo.SUPERFICIE_ALTA) }
+            background = GradientDrawable().apply { cornerRadius = dp(16).toFloat(); setColor(Estilo.alfa(Estilo.FUNDO, 0xCC)); setStroke(dp(1), Estilo.SUPERFICIE_ALTA) }
             setPadding(dp(18), dp(18), dp(18), dp(16))
         }
         detLogo = ImageView(act).apply { scaleType = ImageView.ScaleType.FIT_START }
@@ -417,7 +433,7 @@ class PlayerListaTela(
         isFocusable = true
         choiceMode = AbsListView.CHOICE_MODE_NONE
         // A moldura branca do foco (só aparece na lista que tem o foco: é o que diz ao usuário em que coluna está).
-        PlayerFoco.molduraSoComFoco(this, GradientDrawable().apply { cornerRadius = dp(10).toFloat(); setColor(0x29F5F3EE); setStroke(dp(2), papel) })
+        PlayerFoco.molduraSoComFoco(this, GradientDrawable().apply { cornerRadius = dp(10).toFloat(); setColor(Estilo.SUPERFICIE_ALTA); setStroke(dp(2), Estilo.FOCO) })
         setDrawSelectorOnTop(false)
         cacheColorHint = 0
     }
@@ -429,7 +445,7 @@ class PlayerListaTela(
     }
 
     private fun rotulo() = TextView(act).apply {
-        textSize = Estilo.Leitura.ROTULO; typeface = Fontes.manrope(600); letterSpacing = 0.06f; setTextColor(0x99F5F3EE.toInt())
+        textSize = Estilo.Leitura.ROTULO; typeface = Fontes.manrope(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
         setPadding(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
     }
 

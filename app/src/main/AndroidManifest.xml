@@ -86,7 +86,7 @@
         android:networkSecurityConfig="@xml/rede"
         android:icon="@android:drawable/sym_def_app_icon"
         android:banner="@android:drawable/sym_def_app_icon"
-        android:label="One TV Launcher"
+        android:label="@string/app_nome"
         android:manageSpaceActivity=".GuardarDadosActivity"
         android:theme="@style/One">
 
@@ -486,6 +486,73 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity-alias>
+        <!-- Ideia 8 (14/11/2026): as telas que faltavam. Tabela alias -> tela em AtalhosVoz (testada). -->
+        <activity-alias
+            android:name=".VozFilmes"
+            android:exported="true"
+            android:label="@string/lbl_voz_filmes"
+            android:targetActivity=".AtalhoVozActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".VozSeries"
+            android:exported="true"
+            android:label="@string/lbl_voz_series"
+            android:targetActivity=".AtalhoVozActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".VozNaRede"
+            android:exported="true"
+            android:label="@string/lbl_voz_na_rede"
+            android:targetActivity=".AtalhoVozActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".VozCasa"
+            android:exported="true"
+            android:label="@string/lbl_voz_casa"
+            android:targetActivity=".AtalhoVozActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".VozBusca"
+            android:exported="true"
+            android:label="@string/lbl_voz_busca"
+            android:targetActivity=".AtalhoVozActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+        <activity-alias
+            android:name=".VozMural"
+            android:exported="true"
+            android:label="@string/lbl_voz_mural"
+            android:targetActivity=".AtalhoVozActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
         <!-- Os dois alarmes do "desligar em X min" (aviso 1 min antes e a hora de apagar). Só o próprio app chama. -->
         <receiver
             android:name=".DesligamentoReceiver"
@@ -615,6 +682,7 @@
         <!-- Ideias de 10/11/2026: tela das chaves novas, testador de teclas e padrões de calibração (não exportadas). -->
         <activity android:name=".ExtrasActivity" android:exported="false" android:excludeFromRecents="true" />
         <activity android:name=".PainelBlocosActivity" android:exported="false" android:excludeFromRecents="true" />
+        <activity android:name=".AppsEscolhaActivity" android:exported="false" android:excludeFromRecents="true" />
         <!-- Backup noturno cifrado (BackupNoturno.kt): a tela de opções e o alarme da noite (não exportados). -->
         <activity android:name=".BackupNoturnoActivity" android:exported="false" android:excludeFromRecents="true" />
         <receiver android:name=".BackupNoturnoReceiver" android:exported="false" />

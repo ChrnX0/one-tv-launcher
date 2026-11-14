@@ -45,6 +45,7 @@ import java.io.File
  *  - lg_pedir_codigo --es ip <IP da LG>         a LG mostra o código na tela dela
  *  - lg_parear --es ip <IP da LG> --es codigo <números>   guarda (só nesta TV) e passa a usar a LG no volume
  *  - lg_estado · lg_esquecer · lg_tecla --es tecla subir|descer|mudo [--ei vezes N]
+ *  - lg_alarme --ez ligado true|false   o despertador sobe a LG (até 30)? Desligado por padrão.
  */
 object ComandosExtras {
     fun tratar(ctx: Context, i: Intent): String = when (i.getStringExtra("o")) {
@@ -94,6 +95,8 @@ object ComandosExtras {
         "lg_pedir_codigo" -> VolumeLg.pedirCodigo(i.getStringExtra("ip") ?: "")
         "lg_parear" -> VolumeLg.parear(ctx, i.getStringExtra("ip") ?: "", i.getStringExtra("codigo") ?: "")
         "lg_estado" -> VolumeLg.estado(ctx)
+        "lg_alarme" -> if (i.hasExtra("ligado")) { VolumeLg.definirAlarme(ctx, i.getBooleanExtra("ligado", false)); "alarme_lg=${VolumeLg.alarmeLigado(ctx)}" }
+            else "alarme_lg=${VolumeLg.alarmeLigado(ctx)} (mude com --ez ligado true|false)"
         "lg_esquecer" -> { VolumeLg.esquecer(ctx); "esquecida" }
         "lg_tecla" -> when (i.getStringExtra("tecla")) {
             "subir" -> LgNetcast.TECLA_SUBIR; "descer" -> LgNetcast.TECLA_DESCER; "mudo" -> LgNetcast.TECLA_MUDO; else -> null

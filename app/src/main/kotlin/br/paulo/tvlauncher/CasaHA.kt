@@ -44,17 +44,41 @@ object CasaHA {
     private const val APELIDO = "casa_ha_token"
     const val CHAVE_CAMPAINHA = "campainha"
     const val CHAVE_CAMERA = "camera"
-    val DOMINIOS = setOf("light", "switch", "fan", "cover", "scene", "script", "input_boolean")
+    val DOMINIOS = setOf("light", "switch", "fan", "cover", "scene", "script", "input_boolean", "climate")
+
+    /**
+     * Ideia 51 (14/11/2026): sensores, só para LER (a tela mostra o valor; nada é acionado). Só estas classes: o resto
+     * dos sensores do Home Assistant (energia, sinal, bateria, centenas) entupiria a tela. Fechadura e alarme ficam de
+     * fora de propósito (outros domínios, que a tela nunca aciona).
+     */
+    val LEITURA = setOf("sensor", "binary_sensor")
+    val CLASSES_SENSOR = setOf("temperature", "humidity")
+    /** Ideia 52: câmeras aparecem como cartão; OK mostra a foto de agora por cima do que está passando (só na TV). */
+    const val CAMERA = "camera"
+    val CLASSES_BINARIO = setOf("door", "window", "opening", "garage_door", "motion", "occupancy", "moisture", "smoke")
 
     /**
      * Um aparelho. [regulavel]: luz que aceita brilho; [brilho]: 1-100 % quando acesa (null apagada ou sem brilho).
      */
     class Entidade(val id: String, val nome: String, val estado: String,
-                   val regulavel: Boolean = false, val brilho: Int? = null) {
+                   val regulavel: Boolean = false, val brilho: Int? = null,
+                   val cores: List<CorLuz> = emptyList(),   // ideia 50: temperatura e cores que a luz aceita
+                   val classe: String? = null, val valor: String? = null,   // ideia 51: sensor (classe e "23,5 °C")
+                   val clima: Clima? = null) {   // ideia 51: ar-condicionado
         val dominio get() = id.substringBefore('.')
+        val somenteLeitura get() = dominio in LEITURA
+        val camera get() = dominio == CAMERA
         fun json(): JSONObject = JSONObject().put("id", id).put("nome", nome).put("estado", estado)
-            .apply { if (brilho != null) put("brilho", brilho) }
+            .apply {
+                if (brilho != null) put("brilho", brilho)
+                if (classe != null) put("classe", classe)
+                if (valor != null) put("valor", valor)
+                clima?.let { c -> c.alvo?.let { put("alvo", it) }; c.atual?.let { put("atual", it) } }
+            }
     }
+
+    /** Ar-condicionado (domínio climate): temperatura pedida, a do ambiente, faixa e passo. */
+    class Clima(val alvo: Double?, val atual: Double?, val minimo: Double, val maximo: Double, val passo: Double)
 
     // ---------------------------------------------------------------- puro
 
@@ -109,11 +133,53 @@ object CasaHA {
         return (0 until a.length()).mapNotNull { i ->
             val o = a.optJSONObject(i) ?: return@mapNotNull null
             val id = o.optString("entity_id")
-            if (!idValido(id) || id.substringBefore('.') !in DOMINIOS) return@mapNotNull null
-            val nome = o.optJSONObject("attributes")?.optString("friendly_name")?.takeIf { it.isNotBlank() } ?: id
+            if (!idValido(id)) return@mapNotNull null
+            val dominio = id.substringBefore('.')
             val atr = o.optJSONObject("attributes")
-            Entidade(id, nome.take(60), o.optString("state"), regulavel(id, atr), brilhoPct(atr))
+            val classe = atr?.optString("device_class")?.takeIf { it.isNotBlank() }
+            val leitura = dominio in LEITURA && when (dominio) {
+                "sensor" -> classe in CLASSES_SENSOR
+                else -> classe in CLASSES_BINARIO
+            }
+            if (dominio !in DOMINIOS && !leitura && dominio != CAMERA) return@mapNotNull null
+            val nome = atr?.optString("friendly_name")?.takeIf { it.isNotBlank() } ?: id
+            val estado = o.optString("state")
+            Entidade(id, nome.take(60), estado, regulavel(id, atr), brilhoPct(atr), coresDisponiveis(id, atr),
+                classe = if (leitura) classe else null,
+                valor = if (dominio == "sensor" && leitura) valorSensor(estado, atr?.optString("unit_of_measurement")) else null,
+                clima = if (dominio == "climate") lerClima(atr) else null)
         }.sortedBy { it.nome.lowercase() }
+    }
+
+    // ---------------------------------------------------------------- sensores e ar-condicionado (ideia 51)
+
+    /** "23.456" + "°C" -> "23,5 °C" (no máximo 1 casa, vírgula ou ponto conforme o idioma). Não numérico: null. Pura. */
+    fun valorSensor(estado: String, unidade: String?, local: java.util.Locale = java.util.Locale.getDefault()): String? {
+        val v = estado.toDoubleOrNull()?.takeIf { it.isFinite() } ?: return null
+        val n = java.text.NumberFormat.getNumberInstance(local).apply { maximumFractionDigits = 1; minimumFractionDigits = 0 }.format(v)
+        val u = unidade?.trim()?.take(8).orEmpty()
+        return if (u.isEmpty()) n else if (u == "%") "$n%" else "$n $u"
+    }
+
+    /** Atributos do climate -> [Clima]. Faixa padrão 16-30 e passo 1 quando o Home Assistant não diz. Pura. */
+    fun lerClima(atr: JSONObject?): Clima {
+        fun num(k: String) = atr?.optDouble(k, Double.NaN)?.takeIf { it.isFinite() }
+        val min = num("min_temp") ?: 16.0
+        val max = (num("max_temp") ?: 30.0).coerceAtLeast(min)
+        val passo = (num("target_temp_step") ?: 1.0).takeIf { it in 0.1..5.0 } ?: 1.0
+        return Clima(num("temperature"), num("current_temperature"), min, max, passo)
+    }
+
+    /** Próxima temperatura pedida com ◀ ▶ (um passo do aparelho), dentro da faixa. [atual] null: começa em 24. Pura. */
+    fun proximaTemp(atual: Double?, passo: Int, c: Clima): Double {
+        val base = atual ?: 24.0
+        val alvo = base + passo * c.passo
+        return (Math.round(alvo / c.passo) * c.passo).coerceIn(c.minimo, c.maximo)
+    }
+
+    fun ajustarTemp(ctx: Context, id: String, graus: Double) {
+        if (!(idValido(id) && id.startsWith("climate."))) throw Erro("temperatura só para ar-condicionado")
+        pedir(ctx, "POST", "/api/services/climate/set_temperature", JSONObject().put("entity_id", id).put("temperature", graus).toString())
     }
 
     // ---------------------------------------------------------------- cômodos (13/11/2026)
@@ -124,7 +190,7 @@ object CasaHA {
 
     /** Template que devolve [[entity_id, nome da área ou null], ...] só dos domínios que a tela mostra. */
     val TEMPLATE_AREAS: String = "[{%- for s in states if s.domain in " +
-        DOMINIOS.sorted().joinToString(",", "[", "]") { "'$it'" } +
+        (DOMINIOS + LEITURA + "camera").sorted().joinToString(",", "[", "]") { "'$it'" } +
         " -%}{{ [s.entity_id, area_name(s.entity_id)] | tojson }}{{ ',' if not loop.last }}{%- endfor -%}]"
 
     /** Resposta do template -> entity_id para nome do cômodo (só quem tem cômodo). Null se a resposta não for a lista. Pura. */
@@ -167,19 +233,25 @@ object CasaHA {
         "cover" -> "cortina"
         "scene" -> "cena"
         "script" -> "rotina"
+        "climate" -> "ar"
+        "sensor" -> "termometro"
+        "binary_sensor" -> "porta"
+        CAMERA -> "camera"
         else -> "chave"
     }
 
     /** Conta como "ligado" (verde-água): luz/tomada/ventilador/chave em "on" e cortina aberta. Cena e script nunca. */
     fun ligado(dominio: String, estado: String) = when (dominio) {
-        "scene", "script" -> false
+        "scene", "script", "sensor", CAMERA -> false
+        "climate" -> estado != "off" && estado != "unavailable" && estado != "unknown"
         "cover" -> estado == "open" || estado == "opening"
         else -> estado == "on"
     }
 
     /** Estado esperado depois de "alternar", para mostrar na hora; null = não sabe (não muda o cartão). */
     fun inverso(dominio: String, estado: String): String? = when (dominio) {
-        "scene", "script" -> null
+        "scene", "script", "sensor", "binary_sensor", CAMERA -> null
+        "climate" -> if (estado == "off" || estado == "unavailable" || estado == "unknown") null else "off"   // ligar volta ao último modo: não sabemos qual
         "cover" -> when (estado) { "open", "opening" -> "closed"; "closed", "closing" -> "open"; else -> null }
         else -> when (estado) { "on" -> "off"; "off" -> "on"; else -> null }
     }
@@ -209,6 +281,56 @@ object CasaHA {
         return alvo.coerceIn(0, 100)
     }
 
+    // ---------------------------------------------------------------- cor e temperatura (ideia 50, 14/11/2026)
+
+    /**
+     * Os tons que a tela Casa oferece com ▲ ▼ no ajuste da luz. Temperatura em kelvin (luz branca: quente, neutra,
+     * fria) ou matiz/saturação (luz colorida). Lista curta de propósito: no controle, escolher entre 10 é rápido; uma
+     * roda de cores não seria.
+     */
+    enum class CorLuz(val kelvin: Int? = null, val matiz: Int = 0, val saturacao: Int = 0) {
+        QUENTE(kelvin = 2700), NEUTRA(kelvin = 4000), FRIA(kelvin = 6500),
+        VERMELHO(matiz = 0, saturacao = 100), LARANJA(matiz = 25, saturacao = 100), AMARELO(matiz = 50, saturacao = 100),
+        VERDE(matiz = 120, saturacao = 100), AZUL(matiz = 230, saturacao = 100), ROXO(matiz = 275, saturacao = 100),
+        ROSA(matiz = 320, saturacao = 60);
+        val temperatura get() = kelvin != null
+    }
+
+    /**
+     * Pelos modos de cor que o Home Assistant lista (`supported_color_modes`): "color_temp" = só as 3 temperaturas;
+     * "hs", "xy", "rgb", "rgbw" ou "rgbww" = as temperaturas e as cores (o Home Assistant converte a temperatura em
+     * cor para quem não tem branco ajustável). "brightness", "onoff" ou nada = nenhum tom. Pura.
+     */
+    fun coresDisponiveis(id: String, atr: JSONObject?): List<CorLuz> {
+        if (!id.startsWith("light.") || atr == null) return emptyList()
+        val a = atr.optJSONArray("supported_color_modes") ?: return emptyList()
+        val modos = (0 until a.length()).map { a.optString(it) }.toSet()
+        val cor = modos.any { it in setOf("hs", "xy", "rgb", "rgbw", "rgbww") }
+        return when {
+            cor -> CorLuz.values().toList()
+            "color_temp" in modos -> CorLuz.values().filter { it.temperatura }
+            else -> emptyList()
+        }
+    }
+
+    /** Próximo tom com ▲ ▼ (dá a volta). [atual] -1 = nenhum escolhido ainda: ▼ vai ao 1º, ▲ ao último. Pura. */
+    fun proximaCor(quantas: Int, atual: Int, passo: Int): Int {
+        if (quantas <= 0) return -1
+        if (atual !in 0 until quantas) return if (passo > 0) 0 else quantas - 1
+        return Math.floorMod(atual + passo, quantas)
+    }
+
+    /** Corpo do light.turn_on para o tom (acende a luz junto). Pura. */
+    fun corpoCor(id: String, c: CorLuz): JSONObject = JSONObject().put("entity_id", id).apply {
+        if (c.kelvin != null) put("color_temp_kelvin", c.kelvin)
+        else put("hs_color", JSONArray().put(c.matiz).put(c.saturacao))
+    }
+
+    fun ajustarCor(ctx: Context, id: String, c: CorLuz) {
+        if (!(idValido(id) && id.startsWith("light."))) throw Erro("cor só para luz")
+        pedir(ctx, "POST", "/api/services/light/turn_on", corpoCor(id, c).toString())
+    }
+
     /** Brilho de uma luz, 0-100 % (0 apaga). */
     fun ajustarBrilho(ctx: Context, id: String, pct: Int) {
         if (!(idValido(id) && id.startsWith("light."))) throw Erro("brilho só para luz")
@@ -224,6 +346,7 @@ object CasaHA {
         if (d !in DOMINIOS) return null
         return when {
             d == "scene" || d == "script" -> if (acao == "ligar") d to "turn_on" else null
+            d == "climate" -> when (acao) { "ligar" -> d to "turn_on"; "desligar" -> d to "turn_off"; else -> null }   // sem "alternar": quem chama decide pelo estado
             d == "cover" -> when (acao) { "ligar" -> d to "open_cover"; "desligar" -> d to "close_cover"; "alternar" -> d to "toggle"; else -> null }
             else -> when (acao) { "ligar" -> d to "turn_on"; "desligar" -> d to "turn_off"; "alternar" -> d to "toggle"; else -> null }
         }
@@ -347,6 +470,11 @@ object CasaHA {
         } finally { c.disconnect() }
     }
 
+    /** Estado de UMA entidade de qualquer domínio (ex.: person.ana = "home"), para a presença (ideia 40). Null se falhar. */
+    fun estadoDe(ctx: Context, id: String): String? = if (!idValido(id)) null else try {
+        JSONObject(String(pedir(ctx, "GET", "/api/states/$id", limite = 256 shl 10))).optString("state").ifEmpty { null }
+    } catch (e: Exception) { null }
+
     fun listar(ctx: Context): List<Entidade> = lerEstados(String(pedir(ctx, "GET", "/api/states")))
 
     /** Cômodo de cada aparelho (entity_id -> nome da área). Erra com [Erro] se o token não for de administrador. */
@@ -356,7 +484,14 @@ object CasaHA {
 
     /** Liga, desliga ou alterna. Devolve o texto do resultado. */
     fun acionar(ctx: Context, id: String, acao: String): String {
-        val (d, s) = servico(id, acao) ?: throw Erro("ação não permitida para $id")
+        if (id.startsWith("$CAMERA.")) {   // ideia 52: qualquer ação numa câmera = mostrar a foto de agora na TV
+            if (acao !in setOf("ver", "ligar", "alternar") || !idValido(id)) throw Erro("ação não permitida para $id")
+            mostrarCamera(ctx, id, estadoNome(ctx, id) ?: id)
+            return "$id: na tela"
+        }
+        // Ideia 51: "alternar" no ar-condicionado vira ligar ou desligar pelo estado de agora (o climate não tem toggle certo).
+        val a = if (acao == "alternar" && id.startsWith("climate.")) (if (estadoDe(ctx, id) == "off") "ligar" else "desligar") else acao
+        val (d, s) = servico(id, a) ?: throw Erro("ação não permitida para $id")
         pedir(ctx, "POST", "/api/services/$d/$s", JSONObject().put("entity_id", id).toString())
         return "$id: $acao"
     }
@@ -366,6 +501,16 @@ object CasaHA {
         if (!(idValido(camera) && camera.startsWith("camera."))) throw Erro("câmera inválida")
         return pedir(ctx, "GET", "/api/camera_proxy/$camera", limite = RecadoImagem.MAX_BYTES)
     }
+
+    /** Ideia 52: a foto de agora da câmera, por 30 s, por cima do que estiver passando. Bloqueia (rede): fora da tela. */
+    fun mostrarCamera(ctx: Context, camera: String, nome: String) {
+        val foto = RecadoImagem.decodificar(fotoCamera(ctx, camera)) ?: throw Erro("a câmera não mandou foto")
+        AvisoTv.mostrar(ctx, nome.take(60), "", 30, som = false, guardarSeApagada = false, imagem = foto)
+    }
+
+    private fun estadoNome(ctx: Context, id: String): String? = try {
+        JSONObject(String(pedir(ctx, "GET", "/api/states/$id"))).optJSONObject("attributes")?.optString("friendly_name")?.takeIf { it.isNotBlank() }
+    } catch (e: Exception) { null }
 
     // ---------------------------------------------------------------- vigia: estado da TV e campainha
 

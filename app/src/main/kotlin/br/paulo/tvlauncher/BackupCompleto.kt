@@ -43,7 +43,9 @@ object BackupCompleto {
         "backup_noturno",   // a senha do próprio cofre (cifrada pelo Keystore: não abre em outra instalação); redefinir na TV
         "saude_acesso", "manutencao",   // estado passageiro da saúde (SaudeAcesso) e o relatório da última noite
         "trava_relogio",   // como a hora automática estava ANTES da trava: vale só para este aparelho (ver TravaRelogio.kt)
+        "diario",   // ideias 58/59: linha do tempo de 7 dias (passageira) e o link do dono, que se cadastra de novo pelo painel
         "uso_local",   // ideia 67: contagem de uso das telas, só para o dono ver nesta TV; nunca sai dela
+        "comunidade_apps",   // ideia 70: só a data da última busca das fichas da comunidade (cache baixado de novo)
         "foto_perfil",   // só marca "esta foto foi enviada à mão" (FotoPerfil); a foto em si não vai no backup e a chave leva o e-mail
         // Ideias de 12/11/2026. "avisos_celular": as inscrições valem só com a chave VAPID do Keystore desta instalação
         // (inscrever de novo pelo painel). "desempenho" é medida por versão; "retrospectiva" se refaz no domingo; "presenca"
@@ -54,7 +56,10 @@ object BackupCompleto {
         "painel_tls",
         // "volume_lg" (ideia 49): IP e código de pareamento da LG desta casa. Em outra TV/casa apontaria para a LG errada;
         // parear de novo leva um minuto (ComandosExtras lg_*).
-        "volume_lg")
+        "volume_lg",
+        // Ideias 35 e 41 (14/11/2026): a central de avisos da TV (passageira) e as medidas de espaço livre por dia (valem
+        // só para o armazenamento deste aparelho).
+        "aviso_tv_historico", "saude_tendencia")
     /** Chaves que o Keystore cifrou: não servem em outra instalação. O valor em claro vai em "segredos". */
     private val CHAVES_DO_KEYSTORE = setOf("chave_cifrada", "chave_iv") + CasaHA.CHAVES_DO_KEYSTORE
     /** Arquivos pequenos do player (files/player). O contas.json fica de fora: vai decifrado em "segredos". */

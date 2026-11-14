@@ -27,7 +27,8 @@ object VolumeLg {
     private const val K_UUID = "uuid"
     private const val K_CODIGO = "codigo"
     private const val TEMPO_MS = 2000
-    private const val ENTRE_TECLAS_MS = 150L
+    private const val ENTRE_TECLAS_MS = 300L
+    private const val K_ALARME = "alarme"
     private const val BUSCA_A_CADA_MS = 10 * 60_000L
 
     private val trava = Any()   // uma conversa com a TV por vez (duas rotinas apertando teclas juntas erram a conta)
@@ -39,6 +40,13 @@ object VolumeLg {
     fun ip(ctx: Context): String? = prefs(ctx).getString(K_IP, null)
 
     fun esquecer(ctx: Context) { prefs(ctx).edit().clear().apply() }
+
+    /**
+     * O despertador mexe no volume da LG? DESLIGADO por padrão desde 14/11/2026 (o primeiro teste acordou a casa).
+     * Liga só por comando: EXTRAS lg_alarme --ez ligado true.
+     */
+    fun alarmeLigado(ctx: Context): Boolean = prefs(ctx).getBoolean(K_ALARME, false)
+    fun definirAlarme(ctx: Context, ligado: Boolean) { prefs(ctx).edit().putBoolean(K_ALARME, ligado).apply() }
 
     // ---------- pareamento (comandos do adb, ver ComandosExtras) ----------
 
@@ -92,15 +100,12 @@ object VolumeLg {
     fun tecla(ctx: Context, tecla: Int, vezes: Int = 1): Boolean = synchronized(trava) { apertar(ctx, tecla, vezes) }
 
     /** Leva o volume a [alvo] (0..máximo da TV). */
-    fun irPara(ctx: Context, alvo: Int): Boolean = synchronized(trava) {
-        val v = lerNivel(ctx) ?: return false
-        mover(ctx, LgNetcast.teclas(v.nivel, alvo, v.maximo))
-    }
+    fun irPara(ctx: Context, alvo: Int): Boolean = synchronized(trava) { ajustar(ctx, alvo, soDescer = false) != null }
 
     /** Só desce, nunca sobe: se o volume passa de [teto], baixa até ele. Devolve o nível antes (null = sem resposta). */
     fun baixarAte(ctx: Context, teto: Int): Int? = synchronized(trava) {
         val v = lerNivel(ctx) ?: return null
-        mover(ctx, LgNetcast.descerAte(v.nivel, teto, v.maximo))
+        if (v.nivel > teto) ajustar(ctx, teto, soDescer = true)
         v.nivel
     }
 
@@ -114,10 +119,11 @@ object VolumeLg {
             val feito = synchronized(trava) {
                 val v = lerNivel(ctx) ?: return@synchronized false
                 if (v.mudo && apertar(ctx, LgNetcast.TECLA_MUDO, 1)) m.tirouMudo = true
-                val alvo = VolumeAlarme.alvo(v.nivel, v.maximo, pct)
+                val alvo = LgNetcast.alvoAlarme(v.nivel, v.maximo, pct)
                 m.original = v.nivel
-                if (alvo != null && mover(ctx, LgNetcast.teclas(v.nivel, alvo, v.maximo))) m.definido = alvo
-                Log.i(TAG, "alarme: volume ${v.nivel} -> ${alvo ?: v.nivel}${if (m.tirouMudo) " (tirou do mudo)" else ""}")
+                // definido = o volume LIDO no fim (não o pedido): é com ele que a volta confere se alguém mexeu.
+                if (alvo != null) m.definido = ajustar(ctx, alvo, soDescer = false)
+                Log.i(TAG, "alarme: volume ${v.nivel} -> ${m.definido ?: v.nivel} (alvo ${alvo ?: "-"})${if (m.tirouMudo) " (tirou do mudo)" else ""}")
                 true
             }
             if (feito || m.cancelado || SystemClock.elapsedRealtime() > fim) return
@@ -129,7 +135,8 @@ object VolumeLg {
     fun devolverAlarme(ctx: Context, m: Mudanca) = synchronized(trava) {
         m.cancelado = true
         val v = lerNivel(ctx) ?: return@synchronized
-        VolumeAlarme.devolver(v.nivel, m.definido, m.original)?.let { mover(ctx, LgNetcast.teclas(v.nivel, it, v.maximo)) }
+        LgNetcast.devolverAlarme(v.nivel, m.definido, m.original)?.let { ajustar(ctx, it, soDescer = false) }
+        Log.i(TAG, "alarme parou: volume ${v.nivel}, antes ${m.original}, pusemos ${m.definido}")
         if (m.tirouMudo && !v.mudo) apertar(ctx, LgNetcast.TECLA_MUDO, 1)
     }
 
@@ -145,6 +152,23 @@ object VolumeLg {
 
     private fun lerNivel(ctx: Context): LgNetcast.Volume? =
         comAuth(ctx) { ip -> pedir(ip, LgNetcast.CAMINHO_VOLUME, null) }?.let { LgNetcast.volume(it) }
+
+    /**
+     * Leva o volume a [alvo] conferindo: poucas teclas por rodada e lê de novo, até acertar (a LG acelera em rajada,
+     * então contar teclas não basta). [soDescer] = nunca aperta "subir". Devolve o volume lido no fim (null = sem resposta).
+     */
+    private fun ajustar(ctx: Context, alvo: Int, soDescer: Boolean): Int? {
+        var v = lerNivel(ctx) ?: return null
+        repeat(40) {
+            var r = LgNetcast.rodada(v.nivel, alvo, v.maximo)
+            if (soDescer) r = minOf(r, 0)
+            if (r == 0) return v.nivel
+            if (!mover(ctx, r)) return v.nivel
+            SystemClock.sleep(ENTRE_TECLAS_MS)
+            v = lerNivel(ctx) ?: return null
+        }
+        return v.nivel
+    }
 
     private fun mover(ctx: Context, teclas: Int): Boolean = when {
         teclas > 0 -> apertar(ctx, LgNetcast.TECLA_SUBIR, teclas)

@@ -34,7 +34,7 @@ object PainelFicha {
 
     private fun tabela(ctx: Context): Map<String, Linha> = tabela ?: synchronized(this) {
         tabela ?: try {
-            val o = JSONObject(ctx.assets.open("fichas-apps.json").use { String(it.readBytes(), Charsets.UTF_8) })
+            val o = JSONObject(ComunidadeApps.fichasJuntas(ctx))   // ideia 70: APK + comunidade
             val m = HashMap<String, Linha>()
             for (p in o.keys()) {
                 val x = o.getJSONObject(p)

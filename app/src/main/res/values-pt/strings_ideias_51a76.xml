@@ -20,4 +20,20 @@
     <string name="l51_uso_opcao">opção</string>
     <string name="l51_uso_linha">%1$s (%2$s): %3$d vezes, última há %4$d dias</string>
     <string name="l51_uso_zerar">Zerar</string>
+    <!-- 57: teclado do celular chamado pela TV -->
+    <string name="l51_digitar_titulo">Digitar na TV</string>
+    <string name="l51_digitar_texto">Tem um campo de texto aberto em %1$s. Toque para digitar daqui.</string>
+    <!-- Ideia 51: sensores e ar-condicionado na tela Casa -->
+    <string name="casa_temp_ajuste">%1$s · ◀ ▶</string>
+    <string name="casa_ambiente">ambiente %1$s</string>
+    <string name="casa_movimento">Movimento</string>
+    <string name="casa_sem_movimento">Sem movimento</string>
+    <string name="casa_molhado">Molhado</string>
+    <string name="casa_seco">Seco</string>
+    <string name="casa_fumaca">Fumaça!</string>
+    <string name="casa_sem_fumaca">Sem fumaça</string>
+    <string name="casa_dica_temp">temperatura</string>
+    <!-- Ideia 52: câmera sob demanda -->
+    <string name="casa_camera_abrindo">Abrindo a câmera…</string>
+    <string name="casa_camera_ver">Ver na TV</string>
 </resources>

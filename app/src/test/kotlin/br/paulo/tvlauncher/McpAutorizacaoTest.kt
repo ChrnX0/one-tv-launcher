@@ -213,4 +213,16 @@ class McpAutorizacaoTest {
         assertEquals("E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM",
             McpAutorizacao.desafioS256("dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"))
     }
+
+    // Ideia 61: domínio liberado pelo dono no painel.
+    @Test fun dominioExtraLiberado() {
+        assertFalse(McpAutorizacao.redirectPermitido("https://app.exemplo.com/oauth/cb"))
+        assertTrue(McpAutorizacao.redirectPermitido("https://app.exemplo.com/oauth/cb", setOf("app.exemplo.com")))
+        assertFalse(McpAutorizacao.redirectPermitido("http://app.exemplo.com/oauth/cb", setOf("app.exemplo.com")))
+        assertFalse(McpAutorizacao.redirectPermitido("https://mal.app.exemplo.com/cb", setOf("app.exemplo.com")))
+        assertTrue(McpAutorizacao.hostExtraValido("app.exemplo.com"))
+        assertTrue(McpAutorizacao.hostExtraValido("Mistral.AI"))
+        for (ruim in listOf(null, "", "localhost", "192.168.1.1", "a..b.com", "-a.com", "a.com/x", "https://a.com", "a.com:443", ".a.com", "a.123"))
+            assertFalse(ruim.toString(), McpAutorizacao.hostExtraValido(ruim))
+    }
 }

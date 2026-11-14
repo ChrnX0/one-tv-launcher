@@ -68,9 +68,13 @@ object PainelIdeias {
             post && r == "presenca" -> {
                 val a = corpo?.optJSONArray("macs") ?: return erro(400, "falta macs")
                 Presenca.definirEscolhidos(app, (0 until a.length()).map { a.optString(it) })
+                // Ideia 40: Home Assistant e IPs; campo ausente (painel antigo) = não mexe.
+                if (corpo.has("entidades") || corpo.has("ips")) Presenca.definirOutras(app,
+                    corpo.optString("entidades", Presenca.entidades(app).joinToString(",")), corpo.optString("ips", Presenca.ips(app).joinToString(",")))
                 Presenca.agendar(app)
                 PainelArmazem.registrar(app, ip, "presença: ${Presenca.escolhidos(app).size} celulares escolhidos", "ok")
-                ok(JSONObject().put("escolhidos", JSONArray(Presenca.escolhidos(app).toList())))
+                ok(JSONObject().put("escolhidos", JSONArray(Presenca.escolhidos(app).toList()))
+                    .put("entidades", JSONArray(Presenca.entidades(app))).put("ips", JSONArray(Presenca.ips(app))))
             }
             // ---- 9. retrospectiva
             post && r == "retrospectiva/montar" -> ok(Retrospectiva.paraJson(Retrospectiva.montar(app)))
@@ -92,6 +96,7 @@ object PainelIdeias {
             .put("desempenho", DesempenhoTv.json(app))
             .put("mural", Mural.paraJson(Mural.ler(app)))
             .put("presenca", JSONArray(Presenca.escolhidos(app).toList()))
+            .put("presencaOutras", JSONObject().put("entidades", Presenca.entidades(app).joinToString(", ")).put("ips", Presenca.ips(app).joinToString(", ")))
             .put("retrospectiva", Retrospectiva.ultima(app)?.let { Retrospectiva.paraJson(it).put("linhas", JSONArray(Retrospectiva.linhas(it).toList())) } ?: JSONObject.NULL)
             .put("simples", JSONObject().put("apps", JSONArray(ModoSimples.escolhidos(app)))
                 .put("instalados", JSONArray().apply {

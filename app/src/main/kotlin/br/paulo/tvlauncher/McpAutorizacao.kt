@@ -30,6 +30,8 @@ class McpAutorizacao(
     estadoSalvo: String? = null,
     private val salvar: (String) -> Unit = {},
     private val aleatorio: SecureRandom = SecureRandom(),
+    /** Ideia 61: domínios https liberados pelo dono no painel (com PIN), além de [HOSTS_HTTPS]. */
+    private val hostsExtras: () -> Set<String> = { emptySet() },
 ) {
     companion object {
         const val CODIGO_MS = 2 * 60_000L
@@ -65,7 +67,24 @@ class McpAutorizacao(
             .encodeToString(MessageDigest.getInstance("SHA-256").digest(verifier.toByteArray(Charsets.US_ASCII)))
 
         /** redirect_uri aceito: https em claude.ai/claude.com, ou http em localhost/127.0.0.1 (qualquer porta). */
-        fun redirectPermitido(uri: String?): Boolean {
+        /** Até quantos domínios o dono pode liberar (ideia 61). */
+        const val MAX_HOSTS_EXTRAS = 10
+
+        /**
+         * Ideia 61: domínio que o dono pode liberar para um cliente de IA novo (sem esperar versão). Só nome de domínio
+         * com ponto (nada de IP, localhost ou porta), letras/números/hífen, até 100 caracteres. O login continua com PIN,
+         * PKCE e o "cliente novo?" da TV (Confirmações): liberar o domínio só deixa o cliente se registrar.
+         */
+        fun hostExtraValido(h: String?): Boolean {
+            val t = h?.trim()?.lowercase() ?: return false
+            if (t.length !in 4..100 || !t.contains('.') || t.startsWith('.') || t.endsWith('.') || ".." in t) return false
+            if (!t.all { it in 'a'..'z' || it in '0'..'9' || it == '.' || it == '-' }) return false
+            if (t.split('.').any { it.isEmpty() || it.startsWith('-') || it.endsWith('-') }) return false
+            if (t.split('.').all { p -> p.all { it.isDigit() } }) return false   // IP
+            return t.substringAfterLast('.').any { it.isLetter() }
+        }
+
+        fun redirectPermitido(uri: String?, extras: Set<String> = emptySet()): Boolean {
             if (uri == null || uri.length > 500) return false
             // Só ASCII visível: o endereço volta no cabeçalho Location do 302, e um acento ali derrubava a resposta
             // (PainelHttp recusa cabeçalho fora de ASCII). Revisão 09/11/2026.
@@ -74,7 +93,7 @@ class McpAutorizacao(
             if (u.rawFragment != null || u.userInfo != null) return false
             val host = u.host?.lowercase() ?: return false
             return when (u.scheme?.lowercase()) {
-                "https" -> host in HOSTS_HTTPS
+                "https" -> host in HOSTS_HTTPS || host in extras
                 "http" -> host in HOSTS_LOCAIS
                 else -> false
             }
@@ -115,7 +134,7 @@ class McpAutorizacao(
     @Synchronized fun registrar(pedido: JSONObject): JSONObject {
         val lista = pedido.optJSONArray("redirect_uris") ?: throw Erro("invalid_redirect_uri", "faltam redirect_uris")
         val redirects = (0 until lista.length()).map { lista.optString(it) }
-        if (redirects.isEmpty() || redirects.size > 5 || !redirects.all { redirectPermitido(it) })
+        if (redirects.isEmpty() || redirects.size > 5 || !redirects.all { redirectPermitido(it, hostsExtras()) })
             throw Erro("invalid_redirect_uri", "endereço de volta não permitido")
         val nome = pedido.optString("client_name").filter { it.isLetterOrDigit() || it in " .-_()" }.take(60).ifBlank { "cliente" }
         // Cheio: sai o registro mais antigo SEM login vivo. O /register é aberto na internet (o OAuth exige): antes, 10

@@ -46,6 +46,7 @@ import java.util.Locale
  * Controle:
  *   OK / ⏯          pausa e continua             ◀ ▶ (ou ⏪ ⏩)  volta 10 s / avança 30 s (segurado acelera)
  *   ▼                áudio, legenda, velocidade e proporção da imagem      VOLTAR  sai (a posição fica salva)
+ *   OK com "Pular abertura" na tela: pula a abertura marcada na série (ideia 24, AberturaSerie)
  */
 @androidx.annotation.OptIn(markerClass = [UnstableApi::class])
 class VodActivity : Activity() {
@@ -134,6 +135,8 @@ class VodActivity : Activity() {
     // Preferência de áudio deste título (Idioma), lida do disco fora da thread da tela antes de o vídeo começar.
     @Volatile private var prefIdioma = Idioma.Pref.DUBLADO
     private var chaveIdioma = ""
+    // Ideia 25: idioma do sistema da TV ("pt", "en", "es"): "dublado" e a legenda automática seguem ele.
+    private val idiomaTv by lazy { IdiomaPlayer.idiomaDaTv() }
     // Legenda baixada da internet para este vídeo (LegendaBaixar), se houver, e o atraso aplicado nela.
     private var legendaArquivo: java.io.File? = null
     private var atrasoLegenda = 0L
@@ -150,6 +153,11 @@ class VodActivity : Activity() {
     // Ideia 20: novas tentativas depois de erro de rede (zera quando o vídeo volta a tocar).
     private var tentativas = 0
     private var tamLegendaSp = FimDoVideo.LEGENDA_PADRAO   // ideia 21
+    // Ideia 24: abertura marcada na série (AberturaSerie) e a pílula "Pular abertura · OK".
+    private var serie = false              // episódio aberto pela tela de séries (com a chave da série)
+    private var abertura: AberturaSerie.Marca? = null
+    private var avisouPulo = false         // a pílula já apareceu neste trecho (some depois de 8 s e não volta até sair dele)
+    private lateinit var pilulaPular: TextView
 
     private val papel = Estilo.TEXTO       // cores do sistema de design (Estilo)
     private val suave = Estilo.TEXTO_2
@@ -174,6 +182,7 @@ class VodActivity : Activity() {
         val direto = intent.getStringExtra(EXTRA_URL)?.takeIf { FontesMidia.aceito(it) }
         chave = if (direto != null) "rede:${direto.hashCode()}" else chave(tipo, fonte, id)
         chaveIdioma = intent.getStringExtra(EXTRA_IDIOMA)?.takeIf { it.isNotEmpty() } ?: chave
+        serie = tipo == TIPO_EPISODIO && !intent.getStringExtra(EXTRA_IDIOMA).isNullOrEmpty()
 
         val raiz = FrameLayout(this).apply { setBackgroundColor(Color.BLACK) }
         video = SurfaceView(this)
@@ -203,13 +212,24 @@ class VodActivity : Activity() {
             text = "♪\n" + intent.getStringExtra(EXTRA_TITULO).orEmpty()
         }
         raiz.addView(capaAudio, FrameLayout.LayoutParams(-1, -2, Gravity.CENTER).apply { setMargins(dp(64), 0, dp(64), dp(80)) })
+        // Ideia 24: pílula "Pular abertura · OK", embaixo à direita, acima da barra.
+        pilulaPular = TextView(this).apply {
+            textSize = 18f; setTextColor(papel); visibility = View.GONE; text = getString(R.string.abertura_pular)
+            typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
+            setPadding(dp(22), dp(12), dp(22), dp(12))
+            background = GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(0xD90B0F17.toInt()); setStroke(dp(2), coral) }
+        }
+        raiz.addView(pilulaPular, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.END).apply { setMargins(0, 0, dp(48), dp(170)) })
         setContentView(raiz)
 
         // O endereço (com a senha) e a posição salva saem do disco: fora da thread da tela.
         Fundo.rodar {
             // O endereço com o token (ou o cabeçalho com a senha) só nasce aqui, na hora de tocar.
             val tocavel = direto?.let { FontesMidia.resolver(this, it) }
-            val endereco = tocavel?.url ?: if (direto != null) null else PlayerArmazem.fontes(this).firstOrNull { it.id == fonte }?.xtream?.let { conta ->
+            // Lista M3U (ideia 26): o endereço vem do cache da lista, pelo id da entrada; com o User-Agent que ela pedir.
+            val m3u = if (direto == null && PlayerArmazem.fontes(this).none { it.id == fonte && it.xtream != null })
+                PlayerCarga.urlM3u(this, fonte, id) else null
+            val endereco = tocavel?.url ?: m3u?.first ?: if (direto != null) null else PlayerArmazem.fontes(this).firstOrNull { it.id == fonte }?.xtream?.let { conta ->
                 if (tipo == TIPO_EPISODIO) Series.urlEpisodio(conta, id, ext) else Vod.urlFilme(conta, Filme(id, fonte, "", extensao = ext))
             }
             prefIdioma = IdiomaPlayer.prefs(this).para(chaveIdioma)
@@ -218,12 +238,16 @@ class VodActivity : Activity() {
             // Ideia 21: tamanho da legenda escolhido no ▼ (vale para todos os vídeos).
             val tamLeg = FimDoVideo.tamanhoLegenda(getSharedPreferences("player", MODE_PRIVATE).getInt("legenda_sp", FimDoVideo.LEGENDA_PADRAO))
             val pos = if (intent.getBooleanExtra("do_comeco", false)) 0L else Vod.inicio(PlayerArmazem.posicoes(this)[chave])
+            val ab = if (serie) AberturaSerie.deTexto(getSharedPreferences("player", MODE_PRIVATE)
+                .getString(AberturaSerie.chave(chaveIdioma), null)) else null
             tela.post {
                 if (isDestroyed) return@post
                 if (endereco == null) { mostrarAviso(getString(R.string.vod_sem_conta)); return@post }
                 url = endereco; retomarEm = pos; legendaArquivo = leg; atrasoLegenda = atraso
                 tamLegendaSp = tamLeg; legenda.textSize = tamLeg.toFloat()
-                relato = tocavel?.relato; cabecalhos = tocavel?.cabecalhos.orEmpty()
+                abertura = ab
+                relato = tocavel?.relato
+                cabecalhos = tocavel?.cabecalhos ?: m3u?.second?.takeIf { it.isNotBlank() }?.let { mapOf("User-Agent" to it) }.orEmpty()
                 tocar()
             }
         }
@@ -233,6 +257,7 @@ class VodActivity : Activity() {
 
     override fun onStop() {
         avanco.cancelar()
+        tela.removeCallbacks(vigiaAbertura); esconderPilula()
         super.onStop()
         visivel = false
         salvar()
@@ -258,10 +283,11 @@ class VodActivity : Activity() {
             .setSeekBackIncrementMs(10_000).setSeekForwardIncrementMs(30_000).build()
         p.setVideoSurfaceView(video)
         p.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MOVIE).build(), true)
-        // Dublado: já pede o áudio em português. Original: o áudio e a legenda são escolhidos quando as faixas chegam
-        // (onTracksChanged + IdiomaPlayer.aplicar). Nos dois casos, a legenda em português só liga se o áudio não for português.
+        // Dublado: já pede o áudio no idioma da TV (ideia 25; "pt" na TV em português). Original: o áudio e a legenda são
+        // escolhidos quando as faixas chegam (onTracksChanged + IdiomaPlayer.aplicar). Nos dois casos, a legenda no idioma
+        // da TV só liga se o áudio não for desse idioma.
         p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
-            .setPreferredAudioLanguage(if (prefIdioma == Idioma.Pref.DUBLADO) "pt" else null).build()
+            .setPreferredAudioLanguage(if (prefIdioma == Idioma.Pref.DUBLADO) idiomaTv else null).build()
         legendaDecidida = false   // player novo (voltou de outra tela): as faixas são escolhidas de novo
         p.addListener(ouvinte)
         p.setMediaItem(item(u), retomarEm)
@@ -270,6 +296,7 @@ class VodActivity : Activity() {
         player = p
         tela.removeCallbacks(salvarDepois); tela.postDelayed(salvarDepois, SALVAR_MS)
         mostrarBarra()
+        vigiarAbertura()
     }
 
     /** O vídeo e, se houver, a legenda baixada junto (o Media3 a trata como mais uma faixa de legenda). */
@@ -277,7 +304,7 @@ class VodActivity : Activity() {
         val b = MediaItem.Builder().setUri(u)
         legendaArquivo?.let { f ->
             b.setSubtitleConfigurations(listOf(MediaItem.SubtitleConfiguration.Builder(android.net.Uri.fromFile(f))
-                .setMimeType(MimeTypes.APPLICATION_SUBRIP).setLanguage("pt-BR").setId(IdiomaPlayer.ID_EXTERNA)
+                .setMimeType(MimeTypes.APPLICATION_SUBRIP).setLanguage(Idioma.tagLegendaBaixada(idiomaTv)).setId(IdiomaPlayer.ID_EXTERNA)
                 .setSelectionFlags(C.SELECTION_FLAG_DEFAULT).build()))
         }
         return b.build()
@@ -352,7 +379,7 @@ class VodActivity : Activity() {
             if (legendaDecidida || faixas.groups.none { it.type == C.TRACK_TYPE_AUDIO }) return
             legendaDecidida = true
             val p = player ?: return
-            IdiomaPlayer.aplicar(faixas, p.trackSelectionParameters, prefIdioma)?.let { p.trackSelectionParameters = it }
+            IdiomaPlayer.aplicar(faixas, p.trackSelectionParameters, prefIdioma, idiomaTv)?.let { p.trackSelectionParameters = it }
         }
     }
 
@@ -390,6 +417,12 @@ class VodActivity : Activity() {
         apertouTecla = true   // ideia 19: alguém está mexendo, então não é hora de perguntar "ainda está assistindo?"
         when (keyCode) {
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_SPACE -> {
+                // Ideia 24: com a pílula "Pular abertura" na tela, o OK pula a abertura (sem pausar). Fora dela, pausa.
+                val ok = keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER
+                if (ok && ::pilulaPular.isInitialized && pilulaPular.visibility == View.VISIBLE) {
+                    if (event.repeatCount == 0) AberturaSerie.alvo(abertura)?.let { alvo -> p?.seekTo(alvo); esconderPilula(); mostrarBarra() }
+                    return true
+                }
                 if (event.repeatCount == 0) p?.let { if (it.isPlaying) it.pause() else it.play() }
                 return true
             }
@@ -441,7 +474,7 @@ class VodActivity : Activity() {
                 val g = grupo.mediaTrackGroup; val indice = i
                 opcoes += Opcao("$prefixo: $nome", grupo.isTrackSelected(i)) {
                     // Trocar o áudio na mão vira a escolha deste filme (ou da série toda): da próxima vez já abre assim.
-                    if (tipo == C.TRACK_TYPE_AUDIO) Idioma.prefDaEscolha(IdiomaPlayer.faixa(f))?.let { pref ->
+                    if (tipo == C.TRACK_TYPE_AUDIO) Idioma.prefDaEscolha(IdiomaPlayer.faixa(f), idiomaTv)?.let { pref ->
                         prefIdioma = pref
                         Fundo.rodar { IdiomaPlayer.lembrar(this, chaveIdioma, pref) }
                     }
@@ -468,8 +501,75 @@ class VodActivity : Activity() {
             desligarAoFim = !desligarAoFim
             avisoBreve(getString(if (desligarAoFim) R.string.vod_desligar_ao_fim_ligado else R.string.vod_desligar_ao_fim_desligado))
         }
+        // Ideia 24: marcar a abertura da série (vale para os próximos episódios). Só em episódio com a chave da série.
+        if (serie) {
+            val agora = relogio(p.currentPosition)
+            opcoes += Opcao(getString(R.string.abertura_marcar_inicio, agora)) { marcarAbertura(inicio = true) }
+            opcoes += Opcao(getString(R.string.abertura_marcar_fim, agora)) { marcarAbertura(inicio = false) }
+            if (abertura != null) opcoes += Opcao(getString(R.string.abertura_apagar)) { apagarAbertura() }
+        }
         Estilo.lista(this, getString(R.string.vod_faixas), opcoes.map { it.rotulo },
             opcoes.indices.filter { opcoes[it].marcada }) { i -> opcoes[i].aplicar() }
+    }
+
+    // ---------------------------------------------------------------- ideia 24: pular abertura
+
+    /** Marca o início ou o fim da abertura na posição atual e guarda na série (prefs "player", "abertura:<série>"). */
+    private fun marcarAbertura(inicio: Boolean) {
+        val pos = player?.currentPosition ?: return
+        val nova = if (inicio) AberturaSerie.marcarInicio(abertura, pos) else AberturaSerie.marcarFim(abertura, pos)
+        if (nova == null) { avisoBreve(getString(R.string.abertura_falta_inicio)); return }
+        if (!inicio && !AberturaSerie.valida(nova)) { avisoBreve(getString(R.string.abertura_invalida)); return }
+        abertura = nova
+        gravarAbertura(nova)
+        avisouPulo = true   // quem acabou de marcar está no trecho: não oferece pular agora
+        avisoBreve(if (AberturaSerie.valida(nova)) getString(R.string.abertura_salva, relogio(nova.ini), relogio(nova.fim))
+            else getString(R.string.abertura_inicio_marcado, relogio(nova.ini)))
+        vigiarAbertura()
+    }
+
+    private fun apagarAbertura() {
+        abertura = null
+        gravarAbertura(null)
+        tela.removeCallbacks(vigiaAbertura); esconderPilula()
+        avisoBreve(getString(R.string.abertura_apagada))
+    }
+
+    private fun gravarAbertura(m: AberturaSerie.Marca?) {
+        val k = AberturaSerie.chave(chaveIdioma)
+        Fundo.rodar {
+            val e = getSharedPreferences("player", MODE_PRIVATE).edit()
+            if (m == null) e.remove(k) else e.putString(k, AberturaSerie.paraTexto(m))
+            e.apply()
+        }
+    }
+
+    /** Confere a posição duas vezes por segundo, só enquanto há abertura válida marcada na série. */
+    private fun vigiarAbertura() {
+        tela.removeCallbacks(vigiaAbertura)
+        if (serie && AberturaSerie.valida(abertura)) tela.post(vigiaAbertura)
+    }
+
+    private val vigiaAbertura: Runnable = object : Runnable {
+        override fun run() {
+            val p = player ?: return
+            val m = abertura
+            if (!AberturaSerie.valida(m)) { esconderPilula(); return }
+            if (!AberturaSerie.mostrarPulo(m, p.currentPosition)) { avisouPulo = false; esconderPilula() }
+            else if (!avisouPulo) {
+                avisouPulo = true
+                pilulaPular.visibility = View.VISIBLE
+                tela.removeCallbacks(esconderPilulaDepois); tela.postDelayed(esconderPilulaDepois, AberturaSerie.AVISO_MS)
+            }
+            tela.postDelayed(this, 500)
+        }
+    }
+
+    private val esconderPilulaDepois = Runnable { esconderPilula() }
+
+    private fun esconderPilula() {
+        tela.removeCallbacks(esconderPilulaDepois)
+        if (::pilulaPular.isInitialized) pilulaPular.visibility = View.GONE
     }
 
     private fun buscaLegenda(): LegendaExterna.Busca {

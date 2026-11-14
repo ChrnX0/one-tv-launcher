@@ -70,13 +70,68 @@
     desenharClientes();
   }
 
+  // Ideia 61: domínios de clientes de IA liberados pelo dono (o login MCP aceita o redirect https deles).
+  let hosts = [];
+  function desenharHosts() {
+    const ul = $('iaHosts'); ul.replaceChildren();
+    for (const h of hosts) {
+      const li = el('li', h + ' ');
+      const b = el('button', 'Tirar', 'botao-secundario'); b.type = 'button';
+      b.onclick = () => salvarHosts(hosts.filter((x) => x !== h));
+      li.appendChild(b); ul.appendChild(li);
+    }
+  }
+  async function carregarHosts() {
+    try { hosts = (await chamar('GET', '/api/extras/mcp/hosts')).hosts; desenharHosts(); } catch (e) { mostrar($('iaHostsStatus'), e.message); }
+  }
+  async function salvarHosts(nova) {
+    try {
+      const r = await confirmar('Apps de IA liberados', nova.length ? nova.join(', ') : 'Nenhum domínio extra', 'Salvar',
+        () => chamar('POST', '/api/extras/mcp/hosts', { hosts: nova }));
+      if (r) { hosts = r.hosts; desenharHosts(); mostrar($('iaHostsStatus'), 'Salvo.'); $('iaHostNovo').value = ''; }
+    } catch (e) { mostrar($('iaHostsStatus'), e.message); }
+  }
+
   function iniciar() {
     if (!$('abaIa')) return;
+    $('iaHostAdicionar').onclick = () => {
+      const h = $('iaHostNovo').value.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/.*$/, '');
+      if (h && !hosts.includes(h)) salvarHosts(hosts.concat(h));
+    };
     const ul = $('iaExemplos'); for (const x of EXEMPLOS) ul.appendChild(el('li', x));
     $('iaCopiar').onclick = () => copiar(endereco, $('iaCopiar'));
     // Mostrar/esconder a aba é com o mudarAba do app.js (vale para a barra, a tela "Mais" e o #ia no endereço);
     // aqui só carrega o conteúdo quando ela abre.
-    document.addEventListener('aba', (e) => { if (e.detail === 'ia') carregar(); });
+    document.addEventListener('aba', (e) => { if (e.detail === 'ia') { carregar(); carregarHosts(); } });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar); else iniciar();
+})();
+
+// Caixa de comando sem IA (ideia 10), no Início: a frase vai para POST /api/extras/comando (CaixaComandoTv.kt), que a
+// troca por UMA ação do catálogo fechado. A resposta (o que entendeu, ou "não entendi" com exemplos) vem no idioma da TV.
+(function () {
+  function iniciar() {
+    const form = $('formComando');
+    if (!form) return;
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const campo = $('campoComando');
+      const frase = campo.value.trim();
+      const lista = $('exemplosComando');
+      lista.replaceChildren(); lista.hidden = true;
+      if (!frase) return;
+      try {
+        const r = await chamar('POST', '/api/extras/comando', { frase });
+        mostrar($('statusComando'), r.texto || '');
+        if (r.entendeu) campo.value = '';
+        for (const x of (r.exemplos || [])) {
+          const li = document.createElement('li');
+          li.textContent = x;   // texto sempre por textContent
+          lista.appendChild(li);
+        }
+        lista.hidden = !(r.exemplos && r.exemplos.length);
+      } catch (err) { mostrar($('statusComando'), textoErro(err)); }
+    });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar); else iniciar();
 })();

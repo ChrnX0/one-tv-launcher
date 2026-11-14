@@ -25,6 +25,7 @@ const NOMES_CHAVES = {
   MODO_SIMPLES: 'Modo simples (cards grandes no lugar da HOME)',
   TEMPO_TELA: 'Tempo de tela por dia (acabou, só os apps liberados abrem)',
   AGENDA_TODAS: 'Agenda de todas as contas Google da TV juntas',
+  LER_FOCO: 'Ler em voz alta o que está em foco nas telas do launcher',
 };
 
 const hhmm = (m) => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
@@ -451,9 +452,30 @@ async function carregarLoja() {
       } catch (e) { mostrar($('statusLoja'), textoErro(e)); }
     });
     linha.append(nome, desc, botao);
+    if (a.extra) {   // ideia 69: repositório somado pela pessoa pode sair da lista
+      const tirar = document.createElement('button'); tirar.type = 'button'; tirar.className = 'botao-secundario';
+      tirar.textContent = 'Tirar';
+      tirar.addEventListener('click', () => mudarRepoLoja(a.repo, true, tirar));
+      linha.append(tirar);
+    }
     lista.append(linha);
   }
 }
+
+async function mudarRepoLoja(repo, remover, botao) {
+  try {
+    const res = await comPin(remover ? 'Tirar' : 'Somar', remover ? `Tirar ${repo} da loja?` : `Somar ${repo} à loja? A TV vai aceitar instalar o que esse projeto publicar.`,
+      remover ? 'Tirar' : 'Somar', () => chamar('POST', '/api/extras/loja/repo', { repo, remover }));
+    if (res) { $('repoLoja').value = ''; carregarLoja(); }
+  } catch (e) { mostrar($('statusLoja'), textoErro(e)); }
+  if (botao) botao.disabled = false;
+}
+
+$('formRepoLoja').addEventListener('submit', (ev) => {
+  ev.preventDefault();
+  const repo = $('repoLoja').value.trim();
+  if (repo) mudarRepoLoja(repo, false);
+});
 
 // ---------- acordar o computador ----------
 
@@ -569,6 +591,35 @@ $('btnRecadoLink').addEventListener('click', async () => {
   } catch (e) { mostrar($('saidaRecadoLink'), textoErro(e)); }
 });
 
+// ---------- diário da TV e webhook (ideias 58 e 59) ----------
+
+const NOMES_ORIGEM = { painel: 'painel', claude: 'Claude', adb: 'adb', tv: 'TV' };
+
+$('btnDiario').addEventListener('click', async () => {
+  try {
+    const d = await chamar('GET', '/api/extras/diario');
+    $('campoWebhook').value = d.webhook || '';
+    for (const c of $('origensWebhook').querySelectorAll('input')) c.checked = d.origens.includes(c.value);
+    if (d.webhook && d.ultimo) mostrar($('statusWebhook'), 'Última chamada do link: ' + d.ultimo);
+    const linhas = d.itens.map((i) => {
+      const quando = new Date(i.quando).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+      return `${quando}  ${NOMES_ORIGEM[i.origem] || i.origem}  ${i.acao}${i.resultado ? ' → ' + i.resultado : ''}`;
+    });
+    mostrar($('saidaDiario'), linhas.length ? linhas.join('\n') : 'Nada no diário ainda.');
+  } catch (e) { mostrar($('saidaDiario'), textoErro(e)); }
+});
+
+$('btnWebhook').addEventListener('click', async () => {
+  const url = $('campoWebhook').value.trim();
+  const origens = [...$('origensWebhook').querySelectorAll('input:checked')].map((c) => c.value);
+  if (url && !origens.length) { mostrar($('statusWebhook'), 'Marque ao menos uma origem.'); return; }
+  try {
+    const r = await comPin('Link do diário', url ? 'A TV vai chamar ' + url : 'Desligar o link', url ? 'Salvar' : 'Desligar',
+      () => chamar('POST', '/api/extras/diario/webhook', { url, origens }));
+    if (r) mostrar($('statusWebhook'), url ? 'Salvo.' : 'Desligado.');
+  } catch (e) { mostrar($('statusWebhook'), textoErro(e)); }
+});
+
 $('btnCaches').addEventListener('click', async () => {
   mostrar($('saidaManutencao'), 'Limpando (pode levar alguns segundos)...');
   try { const r = await chamar('POST', '/api/extras/caches/limpar'); mostrar($('saidaManutencao'), r.resultado); carregarChaves(); }
@@ -596,11 +647,15 @@ async function carregarCasa() {
   if (!r.configurado) { const p = document.createElement('p'); p.className = 'aviso'; p.textContent = 'Ainda não configurado.'; lista.append(p); return; }
   for (const a of (r.aparelhos || [])) {
     const linha = document.createElement('div'); linha.className = 'linha-registro';
-    const nome = document.createElement('strong'); nome.textContent = `${a.nome} · ${a.estado}`;
     const d = a.id.split('.')[0];
-    const acao = (d === 'scene' || d === 'script') ? 'ligar' : 'alternar';
+    // Ideia 51: sensor mostra o valor; ar-condicionado, a temperatura pedida e a do ambiente.
+    let estado = a.valor || a.estado;
+    if (d === 'climate' && a.estado !== 'off' && a.alvo != null) estado = `${a.estado} ${a.alvo}°` + (a.atual != null ? ` (ambiente ${a.atual}°)` : '');
+    const nome = document.createElement('strong'); nome.textContent = `${a.nome} · ${estado}`;
+    if (d === 'sensor' || d === 'binary_sensor') { linha.append(nome); lista.append(linha); continue; }
+    const acao = d === 'camera' ? 'ver' : (d === 'scene' || d === 'script') ? 'ligar' : 'alternar';
     const b = document.createElement('button'); b.type = 'button'; b.className = 'botao-secundario';
-    b.textContent = acao === 'ligar' ? 'Rodar' : 'Ligar/desligar';
+    b.textContent = acao === 'ver' ? 'Ver na TV' : acao === 'ligar' ? 'Rodar' : 'Ligar/desligar';   // ideia 52: câmera
     b.addEventListener('click', async () => {
       try { await chamar('POST', '/api/extras/casa/acionar', { id: a.id, acao }); carregarCasa(); }
       catch (e) { mostrar($('statusCasa'), textoErro(e)); }

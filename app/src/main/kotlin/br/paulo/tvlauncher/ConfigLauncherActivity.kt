@@ -42,6 +42,9 @@ private const val MATCH = ViewGroup.LayoutParams.MATCH_PARENT
 class ConfigLauncherActivity : Activity() {
     companion object {
         const val EXTRA_ABA = "aba"   // índice da aba para abrir (ex.: o atalho "Conta" de outra tela)
+        /** Índices das abas que outras telas abrem direto (a ordem mudou em 14/11/2026: use estes, não números). */
+        const val ABA_CONTA = 1
+        const val ABA_AVANCADO = 7
         private const val PIN_VALE_MS = 2 * 60_000L   // depois de acertar o PIN aqui, 2 min sem pedir de novo
     }
 
@@ -64,15 +67,18 @@ class ConfigLauncherActivity : Activity() {
     private class Aba(val titulo: String, val explica: String, val montar: (LinearLayout) -> Unit)
 
     private val abas: List<Aba> by lazy {
+        // 14/11/2026 (pedido do dono: "complexo demais"): abas por assunto, na ordem do uso do dia a dia; o técnico
+        // (rede, permissões, shell, limpeza de fábrica, confirmações) foi para "Avançado", a última. Antes: 8 abas
+        // por origem do código (Conta, Controle parental, Aparência, Tela e energia, Visitas, Rede, Remoto, Sistema).
         listOf(
-            Aba(getString(R.string.cl_aba_conta), getString(R.string.cl_aba_conta_det), this::abaConta),
-            Aba(getString(R.string.cl_aba_parental), getString(R.string.cl_aba_parental_det), this::abaParental),
-            Aba(getString(R.string.cl_aba_aparencia), getString(R.string.cl_aba_aparencia_det), this::abaAparencia),
+            Aba(getString(R.string.cfg2_aba_inicio), getString(R.string.cfg2_aba_inicio_det), this::abaAparencia),
+            Aba(getString(R.string.cl_aba_conta), getString(R.string.cl_aba_conta_det), this::abaConta),   // ABA_CONTA
+            Aba(getString(R.string.cfg2_aba_familia), getString(R.string.cfg2_aba_familia_det), this::abaFamilia),
             Aba(getString(R.string.cl_aba_energia), getString(R.string.cl_aba_energia_det), this::abaEnergia),
-            Aba(getString(R.string.cl_aba_visitas), getString(R.string.cl_aba_visitas_det), this::abaVisitas),
-            Aba(getString(R.string.cl_aba_rede), getString(R.string.cl_aba_rede_det), this::abaRede),
+            Aba(getString(R.string.cfg2_aba_casa), getString(R.string.cfg2_aba_casa_det), this::abaCasa),
             Aba(getString(R.string.cl_aba_remoto), getString(R.string.cl_aba_remoto_det), this::abaRemoto),
-            Aba(getString(R.string.cl_aba_sistema), getString(R.string.cl_aba_sistema_det), this::abaSistema),
+            Aba(getString(R.string.cl_aba_sistema), getString(R.string.cfg2_aba_sistema_det), this::abaSistema),
+            Aba(getString(R.string.cfg2_aba_avancado), getString(R.string.cfg2_aba_avancado_det), this::abaAvancado),   // ABA_AVANCADO
         )
     }
 
@@ -693,6 +699,19 @@ class ConfigLauncherActivity : Activity() {
             // A MainActivity só relê o tema no onCreate: ela mesma percebe a troca e se recria ao voltar (ver onResume lá).
         }
         c.addView(linhaTema, lp())
+        // Tamanho do texto (ideia 47, TamanhoTexto): vale em todas as telas do launcher; esta tela se refaz para mostrar.
+        fun rotuloTamanho(v: Int) = getString(when (v) { 110 -> R.string.tt_grande; 120 -> R.string.tt_maior; else -> R.string.tt_normal })
+        c.addView(linha(getString(R.string.tt_titulo), getString(R.string.tt_det), valor = rotuloTamanho(TamanhoTexto.atual(this))) {
+            TamanhoTexto.definir(this, TamanhoTexto.proximo(TamanhoTexto.atual(this)))
+            recreate()
+        }, lp())
+        // Apps ocultos (14/11/2026): o card "Ocultos (N)" saiu da HOME; mostrar de volta é aqui.
+        val nOcultos = Organizacao.ocultos(this).size
+        c.addView(linha(getString(R.string.oc_titulo), if (nOcultos == 0) getString(R.string.oc_nenhum) else
+            getString(R.string.oc_quantos, nOcultos), seta = true) {
+            reconstruirAoVoltar = true
+            startActivity(Intent(this, AppsEscolhaActivity::class.java).putExtra(AppsEscolhaActivity.EXTRA_MODO, AppsEscolhaActivity.MODO_OCULTOS))
+        }, lp())
         // Pilhas automáticas (05/11/2026, Organizacao.agruparPorCategoria): a HOME relê ao voltar (preencherApps no onResume).
         lateinit var linhaPilhas: LinhaCfg
         linhaPilhas = linha(getString(R.string.cfg_pilhas), getString(R.string.cl_pilhas_det),
@@ -778,15 +797,17 @@ class ConfigLauncherActivity : Activity() {
 
     // ================================================================ aba: Visitas e rotinas
 
-    private fun abaVisitas(c: LinearLayout) {
-        // Modo visita (ModoVisita.kt): esconde perfil, agenda e os apps marcados abaixo, até desligar. Na HOME, com o modo
+    /** Família (14/11/2026): o controle parental e, embaixo, as visitas (modo visita e os apps que ele esconde). */
+    private fun abaFamilia(c: LinearLayout) {
+        abaParental(c)
+        secao(c, getString(R.string.cfg2_sec_visitas))
+        // Modo visita (ModoVisita.kt): esconde perfil, agenda e os apps marcados, até desligar. Na HOME, com o modo
         // ligado, o OK na bolinha do perfil oferece "Sair" (o popup não abre).
         lateinit var linhaVisita: LinhaCfg
         linhaVisita = linha(getString(R.string.cfg_visita), getString(R.string.cl_visita_det),
             chave = ModoVisita.ativo(this)) {
             ModoVisita.definir(this, !ModoVisita.ativo(this))
             linhaVisita.ligado(ModoVisita.ativo(this))
-            // A HOME relê o modo no onResume (bolinha e apps), então não precisa avisar nada a ela.
         }
         c.addView(linhaVisita, lp())
         // Wi-Fi das visitas em QR (ideia 54): OK configura; com a rede gravada, uma 2ª linha mostra o QR.
@@ -797,56 +818,26 @@ class ConfigLauncherActivity : Activity() {
         if (WifiVisita.configurado(this)) c.addView(linha(getString(R.string.l51_wifi_qr_titulo), "", seta = true) {
             WifiVisita.mostrarQr(this)
         }, lp())
+        // A lista de apps do modo visita era longa e ficava aberta aqui; agora é uma tela própria (AppsEscolhaActivity).
+        c.addView(linha(getString(R.string.cl_apps_visita), getString(R.string.cfg2_apps_visita_det), seta = true) {
+            startActivity(Intent(this, AppsEscolhaActivity::class.java).putExtra(AppsEscolhaActivity.EXTRA_MODO, AppsEscolhaActivity.MODO_VISITA))
+        }, lp())
+    }
+
+    /** Casa e automações (14/11/2026): automações, a tela Casa e o que se configura pelo celular. */
+    private fun abaCasa(c: LinearLayout) {
         // Automações (14/11/2026, ideia 1): o editor único de horários (as antigas Rotinas), botões, eventos e links.
         c.addView(linha(getString(R.string.aut_titulo), getString(R.string.aut_cfg_det), seta = true) {
             startActivity(Intent(this, AutomacoesActivity::class.java))
         }, lp())
+        if (CasaHA.configurado(this)) c.addView(linha(getString(R.string.casa_titulo), getString(R.string.cfg2_casa_det), seta = true) {
+            startActivity(Intent(this, CasaActivity::class.java))
+        }, lp())
         // Ideia 43: o que só se configura pelo painel web, com o QR que abre a página certa no celular.
+        secao(c, getString(R.string.cfg2_sec_celular))
         linhaQr(c, DestinoPainel.CENAS, R.string.qrd_cenas, R.string.qrd_cenas_det)
         linhaQr(c, DestinoPainel.CASA, R.string.qrd_casa, R.string.qrd_casa_det)
         linhaQr(c, DestinoPainel.TIME, R.string.qrd_time, R.string.qrd_time_det)
-        secao(c, getString(R.string.cl_apps_visita))
-        val listaVisita = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false }
-        c.addView(listaVisita, LinearLayout.LayoutParams(MATCH, WRAP))
-        listaVisita.addView(info(getString(R.string.cl_carregando_apps), ""))
-        carregarAppsDaVisita(listaVisita)
-    }
-
-    /**
-     * Uma linha por app de TV instalado, para marcar quais somem no modo visita (chave ligada = some). A lista
-     * (PackageManager) é lida fora da thread da tela; só o nome importa aqui, sem ícone, para ficar leve.
-     */
-    private fun carregarAppsDaVisita(destino: LinearLayout) {
-        trabalho.execute {
-            val pm = packageManager
-            val consulta = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER)
-            val apps = try {
-                pm.queryIntentActivities(consulta, 0)
-                    // Os mesmos apps que a HOME mostra (MainActivity.carregarApps): os instalados pelo usuário e os de
-                    // sistema que estão em SEMPRE_MOSTRAR.
-                    .filter {
-                        val pkg = it.activityInfo.packageName
-                        pkg != packageName && pkg != Config.PACOTE_CONFIG &&
-                            ((it.activityInfo.applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) == 0 ||
-                                pkg in Config.SEMPRE_MOSTRAR)
-                    }
-                    .map { it.activityInfo.packageName to it.loadLabel(pm).toString() }
-                    .distinctBy { it.first }
-                    .sortedBy { it.second.lowercase() }
-            } catch (e: Exception) { emptyList() }
-            ui.post {
-                if (isDestroyed || !destino.isAttachedToWindow) return@post
-                destino.removeAllViews()
-                for ((pacote, rotulo) in apps) {
-                    lateinit var linhaApp: LinhaCfg
-                    linhaApp = linha(rotulo, getString(R.string.cl_some_visita), chave = ModoVisita.escondeNaVisita(this, pacote)) {
-                        ModoVisita.alternar(this, pacote)
-                        linhaApp.ligado(ModoVisita.escondeNaVisita(this, pacote))
-                    }
-                    destino.addView(linhaApp, lp())
-                }
-            }
-        }
     }
 
     // ================================================================ aba: Rede
@@ -860,6 +851,7 @@ class ConfigLauncherActivity : Activity() {
     } catch (e: Exception) { false }
 
     private fun abaRede(c: LinearLayout) {
+        secao(c, getString(R.string.cl_aba_rede))
         // Se o DNS fixo caiu e o launcher voltou para o automático (Dns.voltarAoAutomaticoSeQuebrado), avisa aqui.
         val caiu = Dns.servidorQueCaiu(this)
         c.addView(linha(getString(R.string.cfg_dns), Dns.rotulo(this) + (if (caiu != null) getString(R.string.cfg_dns_caiu, caiu) else ""), seta = true) {
@@ -888,7 +880,7 @@ class ConfigLauncherActivity : Activity() {
         }
         c.addView(linhaVelocidade, lp())
         linhaQr(c, DestinoPainel.ROTEADOR, R.string.qrd_roteador, R.string.qrd_roteador_det)
-        extrasDaAba(c, ExtrasAbas.Aba.REDE)
+        extrasDaAba(c, ExtrasAbas.Aba.REDE, comSecao = false)
     }
 
     // ================================================================ aba: Acesso remoto
@@ -1021,11 +1013,11 @@ class ConfigLauncherActivity : Activity() {
      * As chaves de [Extras] que moram em [aba] ([ExtrasAbas]), numa seção "Mais opções" no fim dela. As que o painel
      * protege pedem o PIN aqui também (o mesmo PIN, com as mesmas tentativas, do controle parental).
      */
-    private fun extrasDaAba(c: LinearLayout, aba: ExtrasAbas.Aba) {
+    private fun extrasDaAba(c: LinearLayout, aba: ExtrasAbas.Aba, comSecao: Boolean = true) {
         val porNome = Extras.Chave.values().associateBy { it.name }
         val chaves = ExtrasAbas.daAba(aba, porNome.keys).mapNotNull { porNome[it] }
         if (chaves.isEmpty()) return
-        secao(c, getString(R.string.cfg_extras_secao))
+        if (comSecao) secao(c, getString(R.string.cfg_extras_secao))
         for (k in chaves) {
             lateinit var l: LinhaCfg
             l = linha(ExtrasTv.rotulo(this, k), "", chave = Extras.ligado(this, k)) {
@@ -1049,11 +1041,6 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linha(getString(R.string.cfg_diag), getString(R.string.cfg_diag_det), seta = true) {
             startActivity(Intent(this, DiagnosticoActivity::class.java))
         }, lp())
-        // Extras (10/11/2026): as chaves das ideias da pesquisa ficam numa tela própria (ExtrasActivity).
-        c.addView(linha(getString(R.string.extras_titulo), getString(R.string.extras_cfg_det), seta = true) {
-            startActivity(Intent(this, ExtrasActivity::class.java))
-        }, lp())
-        extrasDaAba(c, ExtrasAbas.Aba.SISTEMA)
         // Backup noturno cifrado (BackupNoturno.kt): as opções ficam numa tela própria; ao voltar, o resumo se atualiza.
         c.addView(linha(getString(R.string.bkn_titulo), BackupNoturno.resumo(this), seta = true) {
             reconstruirAoVoltar = true
@@ -1064,8 +1051,6 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linha(getString(R.string.l51_uso_titulo), getString(R.string.l51_uso_det), seta = true) {
             UsoLocal.mostrar(this)
         }, lp())
-
-        confirmacoes(c)
 
         // Atualização (Atualizador.kt): o launcher confere o GitHub a cada 6 h e instala sozinho com a tela apagada.
         // "Procurar" só confere; "Instalar a versão N" só aparece quando há um Release que ESTA TV aceita (mesma chave).
@@ -1109,10 +1094,45 @@ class ConfigLauncherActivity : Activity() {
             c.addView(linhaSeguro, lp())
         }
 
+        // Sobre: números úteis para saber se algo por trás dos panos está ok, sem precisar do logcat.
+        secao(c, getString(R.string.cl_sobre))
+        val versao = try { packageManager.getPackageInfo(packageName, 0).versionName } catch (e: Exception) { null }
+        val cartao = cartao()
+        c.addView(cartao, lp())
+        cartao.addView(valor(getString(R.string.cfg_versao), "${versao ?: getString(R.string.cfg_desconhecida)} (${versaoInstalada()})"))
+        cartao.addView(valor(getString(R.string.cfg_depuracao), if (Config.DEPURACAO_SEM_FIO_SEMPRE_LIGADA) getString(R.string.cfg_depuracao_on) else getString(R.string.cfg_depuracao_android)))
+        // Fora da thread da tela (revisão 04/11): na 1ª vez isto GERA a chave RSA-2048 (segundos num ARMv7).
+        val linhaChave = valor(getString(R.string.cfg_chave), getString(R.string.cfg_calculando))
+        cartao.addView(linhaChave)
+        trabalho.execute {
+            val fp = try { ShellProprio.impressaoDigital(this) } catch (e: Exception) { getString(R.string.cfg_erro, e.javaClass.simpleName) }
+            ui.post { if (!isDestroyed) (linhaChave.getChildAt(1) as? TextView)?.text = fp }
+        }
+        // Licenças (05/11/2026): o texto fica em assets/licencas.txt, o mesmo que o repositório mostra.
+        c.addView(linha(getString(R.string.cfg_licencas), getString(R.string.cfg_licencas_det), seta = true) {
+            startActivity(Intent(this, LicencasActivity::class.java))
+        }, lp())
+    }
+
+    /**
+     * Avançado (14/11/2026): o que quase nunca se mexe e exige saber o que é (rede, ferramentas, confirmações do Claude,
+     * apps de fábrica, permissões e o shell). Fica na última aba, fora do caminho do dia a dia.
+     */
+    private fun abaAvancado(c: LinearLayout) {
+        abaRede(c)
+        secao(c, getString(R.string.cfg2_sec_ferramentas))
+        // Extras (10/11/2026): as chaves das ideias da pesquisa ficam numa tela própria (ExtrasActivity).
+        c.addView(linha(getString(R.string.extras_titulo), getString(R.string.extras_cfg_det), seta = true) {
+            startActivity(Intent(this, ExtrasActivity::class.java))
+        }, lp())
+        extrasDaAba(c, ExtrasAbas.Aba.SISTEMA, comSecao = false)
+
+        confirmacoes(c)
+
         // Apps ocultos pelo Device Owner (Config.APPS_OCULTAR/PrivilegioDO.ocultar): libera a memória sem desinstalar.
         // Chave ligada = app visível.
         if (Config.APPS_OCULTAR.isNotEmpty()) {
-            secao(c, getString(R.string.cfg_sec_ocultos))
+            secao(c, getString(R.string.cfg2_sec_ocultos_sistema))
             Config.APPS_OCULTAR.forEach { pacote ->
                 val rotulo = try {
                     packageManager.getApplicationLabel(packageManager.getApplicationInfo(pacote, 0)).toString()
@@ -1199,24 +1219,6 @@ class ConfigLauncherActivity : Activity() {
         }
         c.addView(linhaParear, lp())
 
-        // Sobre: números úteis para saber se algo por trás dos panos está ok, sem precisar do logcat.
-        secao(c, getString(R.string.cl_sobre))
-        val versao = try { packageManager.getPackageInfo(packageName, 0).versionName } catch (e: Exception) { null }
-        val cartao = cartao()
-        c.addView(cartao, lp())
-        cartao.addView(valor(getString(R.string.cfg_versao), "${versao ?: getString(R.string.cfg_desconhecida)} (${versaoInstalada()})"))
-        cartao.addView(valor(getString(R.string.cfg_depuracao), if (Config.DEPURACAO_SEM_FIO_SEMPRE_LIGADA) getString(R.string.cfg_depuracao_on) else getString(R.string.cfg_depuracao_android)))
-        // Fora da thread da tela (revisão 04/11): na 1ª vez isto GERA a chave RSA-2048 (segundos num ARMv7).
-        val linhaChave = valor(getString(R.string.cfg_chave), getString(R.string.cfg_calculando))
-        cartao.addView(linhaChave)
-        trabalho.execute {
-            val fp = try { ShellProprio.impressaoDigital(this) } catch (e: Exception) { getString(R.string.cfg_erro, e.javaClass.simpleName) }
-            ui.post { if (!isDestroyed) (linhaChave.getChildAt(1) as? TextView)?.text = fp }
-        }
-        // Licenças (05/11/2026): o texto fica em assets/licencas.txt, o mesmo que o repositório mostra.
-        c.addView(linha(getString(R.string.cfg_licencas), getString(R.string.cfg_licencas_det), seta = true) {
-            startActivity(Intent(this, LicencasActivity::class.java))
-        }, lp())
     }
 
     private fun ligarRecurso(r: Recursos.Recurso) {
@@ -1369,7 +1371,8 @@ class ConfigLauncherActivity : Activity() {
         "com.google.android.youtube.tvkids" -> getString(R.string.cl_db_kids_perde)
         "com.google.android.play.games" -> getString(R.string.cl_db_games_perde)
         "com.google.android.tvrecommendations" -> getString(R.string.cl_db_recom_perde)
-        else -> i.perde
+        // Ideia 70: item da comunidade traz o português e, se houver, o inglês.
+        else -> if (resources.configuration.locales[0].language == "pt") i.perde else i.perdeEn ?: i.perde
     }
 
     // ================================================================ peças

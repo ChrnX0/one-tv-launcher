@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Caixa de comando no painel do celular, sem IA (ideia 10) e o próximo jogo do "Meu time" na HOME e no protetor (ideia 12). -->
+<resources>
+    <string name="cc_vazia">Escreva o que a TV deve fazer</string>
+    <string name="cc_nao_entendi">Não entendi. Tente algo como:</string>
+    <string name="cc_exemplo_1">coloca na Globo</string>
+    <string name="cc_exemplo_2">abre o YouTube</string>
+    <string name="cc_exemplo_3">desliga em 30 minutos</string>
+    <string name="cc_abrindo">Abrindo %1$s</string>
+    <string name="cc_canal">Colocando em %1$s</string>
+    <string name="cc_o_que_passa">O que passa em %1$s</string>
+    <string name="cc_timer">Aviso em %1$d minutos</string>
+    <string name="cc_desligar">A TV desliga em %1$d minutos</string>
+    <string name="cc_desligar_cancelar">Desligamento cancelado</string>
+    <string name="cc_volume_subir">Aumentando o volume</string>
+    <string name="cc_volume_descer">Abaixando o volume</string>
+    <string name="cc_mudo">Mudo ligado/desligado</string>
+    <string name="cc_pausar">Pausando</string>
+    <string name="cc_continuar">Continuando</string>
+    <string name="cc_tela_previsao">a previsão do tempo</string>
+    <string name="cc_tela_agenda">a agenda</string>
+    <string name="cc_tela_despertador">o despertador</string>
+    <string name="cc_tela_configuracoes">as configurações do launcher</string>
+    <string name="cc_tela_inicio">a tela inicial</string>
+    <string name="cc_confirme_na_tv">%1$s: confirme com OK na TV</string>
+    <string name="cc_nao_fiz">%1$s: não fiz (%2$s)</string>
+    <string name="cc_aviso_titulo">Painel do celular</string>
+</resources>

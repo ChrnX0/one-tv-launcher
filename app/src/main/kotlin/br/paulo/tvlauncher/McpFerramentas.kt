@@ -19,7 +19,7 @@ class McpFerramentas(ctx: Context) : McpProtocolo.Ferramentas, McpProtocolo.ComC
     private val app = ctx.applicationContext
 
     override fun lista(): JSONArray = JSONArray().apply {   // + ferramentas das ideias grandes (McpExtras.kt)
-        for (i in 0 until LISTA.length()) put(LISTA.get(i)); McpExtras.LISTA.forEach { put(it) }; McpPoder.LISTA.forEach { put(it) }; McpPoder2.LISTA.forEach { put(it) }; McpIdeias.LISTA.forEach { put(it) }
+        for (i in 0 until LISTA.length()) put(LISTA.get(i)); McpExtras.LISTA.forEach { put(it) }; McpPoder.LISTA.forEach { put(it) }; McpPoder2.LISTA.forEach { put(it) }; McpIdeias.LISTA.forEach { put(it) }; McpDiario.LISTA.forEach { put(it) }
     }
 
     override fun conteudo(nome: String, argumentos: JSONObject): JSONArray? =
@@ -43,6 +43,7 @@ class McpFerramentas(ctx: Context) : McpProtocolo.Ferramentas, McpProtocolo.ComC
         else -> if (McpPoder.conhece(nome)) McpPoder.chamar(app, nome, argumentos)
             else if (McpPoder2.conhece(nome)) McpPoder2.chamar(app, nome, argumentos)
             else if (McpIdeias.conhece(nome)) McpIdeias.chamar(app, nome, argumentos)
+            else if (McpDiario.conhece(nome)) McpDiario.chamar(app, nome, argumentos)   // ideia 58
             else throw McpProtocolo.ErroFerramenta("ferramenta desconhecida")
     }
 

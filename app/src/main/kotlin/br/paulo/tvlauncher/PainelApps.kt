@@ -227,14 +227,26 @@ object PainelApps {
         if (ctx.cacheDir.usableSpace < tamanho * 2 + (200L shl 20)) return Instalado(null, null, null, "falta espaço na TV para instalar")
         // Nome único: duas instalações ao mesmo tempo (duas abas) não escrevem no mesmo arquivo.
         val tmp = java.io.File.createTempFile("painel-instalar", ".apk", ctx.cacheDir)
+        val pastaPartes = java.io.File(ctx.cacheDir, tmp.name + ".partes")
         try {
             java.io.FileOutputStream(tmp).use { saida -> entrada.copyTo(saida, 64 * 1024); saida.fd.sync() }
             if (tmp.length() != tamanho) return Instalado(null, null, null, "o arquivo chegou incompleto")
             val pm = ctx.packageManager
-            val info = pm.getPackageArchiveInfo(tmp.path, 0)
-                ?: return Instalado(null, null, null, "não é um APK que o Android entenda (arquivos .apks/.xapk, com várias partes, ainda não são aceitos)")
+            // Ideia 71: se não é um APK único, pode ser um pacote dividido (.apks/.xapk/.apkm = ZIP de partes).
+            var info = pm.getPackageArchiveInfo(tmp.path, 0)
+            var partes: List<Pair<String, java.io.File>> = listOf("base.apk" to tmp)
+            if (info == null) {
+                val d = abrirDividido(ctx, tmp, pastaPartes) ?: return Instalado(null, null, null,
+                    "não é um APK nem um pacote dividido (.apks/.xapk) que esta TV rode")
+                if (d.second.isNotEmpty()) return Instalado(null, null, null, d.second)
+                partes = d.first
+                val nomeBase = PacoteDividido.escolherBase(partes.map { it.first })
+                val base = partes.firstOrNull { it.first == nomeBase }?.second ?: partes.first().second
+                info = pm.getPackageArchiveInfo(base.path, 0)
+                    ?: return Instalado(null, null, null, "a parte principal do pacote está estragada")
+                info.applicationInfo?.let { it.sourceDir = base.path; it.publicSourceDir = base.path }
+            } else info.applicationInfo?.let { it.sourceDir = tmp.path; it.publicSourceDir = tmp.path }
             val pacote = info.packageName
-            info.applicationInfo?.let { it.sourceDir = tmp.path; it.publicSourceDir = tmp.path }
             val nome = try { info.applicationInfo?.loadLabel(pm)?.toString() } catch (e: Exception) { null } ?: pacote
             val versao = info.versionName ?: ""
             if (pacote == ctx.packageName) return Instalado(pacote, nome, versao, "o próprio launcher não se atualiza pelo painel (use o build3.ps1 no PC)")
@@ -242,7 +254,7 @@ object PainelApps {
             val instalador = pm.packageInstaller
             val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL).apply {
                 setAppPackageName(pacote)
-                setSize(tamanho)
+                setSize(partes.sumOf { it.second.length() })
             }
             val sessaoId = instalador.createSession(params)
             val id = proximoId.getAndIncrement()
@@ -253,9 +265,11 @@ object PainelApps {
             var confirmado = false
             try {
                 instalador.openSession(sessaoId).use { sessao ->
-                    sessao.openWrite("base.apk", 0, tamanho).use { saida ->
-                        java.io.FileInputStream(tmp).use { it.copyTo(saida, 64 * 1024) }
-                        sessao.fsync(saida)
+                    partes.forEach { (nomeParte, arq) ->
+                        sessao.openWrite(nomeParte, 0, arq.length()).use { saida ->
+                            java.io.FileInputStream(arq).use { it.copyTo(saida, 64 * 1024) }
+                            sessao.fsync(saida)
+                        }
                     }
                     val intent = Intent(ctx, ResultadoDesinstalarReceiver::class.java).setAction(ACAO_RESULTADO).putExtra("id", id)
                     val pi = PendingIntent.getBroadcast(ctx, id, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
@@ -281,6 +295,41 @@ object PainelApps {
             return Instalado(null, null, null, "erro: ${e.javaClass.simpleName}")
         } finally {
             tmp.delete()
+            pastaPartes.deleteRecursively()
+        }
+    }
+
+    /**
+     * Ideia 71: abre o ZIP de um pacote dividido e extrai as partes que servem a esta TV (PacoteDividido.partes) para
+     * [pasta]. Null = não é ZIP. Par (partes, motivo): motivo não vazio = recusado (sem parte que sirva, grande demais).
+     * O total extraído tem teto ([LIMITE_APK]), contado byte a byte: um ZIP que mente o tamanho não enche o disco.
+     */
+    private fun abrirDividido(ctx: Context, zip: java.io.File, pasta: java.io.File): Pair<List<Pair<String, java.io.File>>, String>? {
+        val z = runCatching { java.util.zip.ZipFile(zip) }.getOrNull() ?: return null
+        z.use {
+            val nomes = z.entries().toList().map { it.name }
+            val escolhidas = PacoteDividido.partes(nomes, android.os.Build.SUPPORTED_ABIS.toList())
+                ?: return emptyList<Pair<String, java.io.File>>() to "o pacote não tem partes para esta TV (${android.os.Build.SUPPORTED_ABIS.joinToString()})"
+            pasta.mkdirs()
+            var total = 0L
+            val saida = escolhidas.mapIndexed { i, nome ->
+                val destino = java.io.File(pasta, PacoteDividido.nomeNaSessao(nome, i))
+                z.getInputStream(z.getEntry(nome)).use { ent ->
+                    java.io.FileOutputStream(destino).use { out ->
+                        val buf = ByteArray(64 * 1024)
+                        while (true) {
+                            val n = ent.read(buf); if (n < 0) break
+                            total += n
+                            if (total > LIMITE_APK) return emptyList<Pair<String, java.io.File>>() to "pacote grande demais"
+                            out.write(buf, 0, n)
+                        }
+                    }
+                }
+                destino.name to destino
+            }
+            val aviso = if (PacoteDividido.temObb(nomes)) " (dados extras .obb não são copiados)" else ""
+            if (aviso.isNotEmpty()) Log.i(TAG, "pacote com OBB$aviso")
+            return saida to ""
         }
     }
 

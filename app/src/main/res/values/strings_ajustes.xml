@@ -27,4 +27,48 @@
     <string name="pb_bluetooth">Bluetooth</string>
     <string name="pb_filtro">Night filter</string>
     <string name="pb_dns">DNS</string>
+    <!-- Configurações reorganizadas e apps ocultos fora da HOME (pedido de 14/11/2026) -->
+    <string name="cfg2_aba_inicio">Home screen</string>
+    <string name="cfg2_aba_inicio_det">Theme, hidden apps, quick panel and weather</string>
+    <string name="cfg2_aba_familia">Family</string>
+    <string name="cfg2_aba_familia_det">Parental control, children\'s PIN, bedtime and guests</string>
+    <string name="cfg2_aba_casa">Home and automations</string>
+    <string name="cfg2_aba_casa_det">Automations, smart home and what you set up from the phone</string>
+    <string name="cfg2_aba_sistema_det">Diagnosis, updates, backup and about</string>
+    <string name="cfg2_aba_avancado">Advanced</string>
+    <string name="cfg2_aba_avancado_det">Network, tools, factory apps, permissions and shell. Rarely needed</string>
+    <string name="cfg2_sec_visitas">Guests</string>
+    <string name="cfg2_sec_celular">From your phone</string>
+    <string name="cfg2_sec_ferramentas">Tools</string>
+    <string name="cfg2_sec_ocultos_sistema">System apps hidden by the launcher</string>
+    <string name="cfg2_apps_visita_det">Choose which apps disappear while guest mode is on</string>
+    <string name="cfg2_apps_visita_sub">OK switches · these disappear while guest mode is on</string>
+    <string name="cfg2_some_visita">hidden for guests</string>
+    <string name="cfg2_fica_visita">stays</string>
+    <string name="cfg2_casa_det">Lights, plugs and scenes of your Home Assistant</string>
+    <string name="oc_titulo">Hidden apps</string>
+    <string name="oc_subtitulo">OK shows or hides an app on the home screen · hidden ones come first</string>
+    <string name="oc_nenhum">No hidden apps · OK to choose</string>
+    <string name="oc_quantos">%1$d hidden · OK to show them again</string>
+    <string name="oc_oculto">hidden</string>
+    <string name="oc_aparece">on the home screen</string>
+    <string name="oc_aviso_titulo">App hidden</string>
+    <string name="oc_aviso">To show it again: Settings › Home screen › Hidden apps</string>
+    <string name="extras_LER_FOCO">Read aloud what has the focus, on every launcher screen</string>
+    <!-- Ideia 44: sugestões -->
+    <string name="sug_desligar_titulo">Turn the TV off by itself?</string>
+    <string name="sug_desligar">The TV was on after midnight on %1$d nights this week. Turn it off after 2 hours with nobody using the remote? (It warns 60 seconds before.)</string>
+    <string name="sug_filtro_titulo">Turn on the night filter?</string>
+    <string name="sug_filtro">The TV was used after 10 PM on %1$d nights this week. The night filter warms and dims the screen at night, easier on the eyes.</string>
+    <string name="sug_ligar">Turn on</string>
+    <string name="sug_agora_nao">Not now</string>
+    <string name="sug_nunca">Don\'t suggest again</string>
+    <string name="sug_feito_titulo">Done</string>
+    <string name="sug_feito">To change it later: Settings › Screen and power</string>
+    <!-- Ideia 47: tamanho do texto -->
+    <string name="tt_titulo">Text size</string>
+    <string name="tt_det">On every launcher screen. Movies, series and live TV were already larger and grow along</string>
+    <string name="tt_normal">Normal</string>
+    <string name="tt_grande">Large</string>
+    <string name="tt_maior">Larger</string>
 </resources>

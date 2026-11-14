@@ -55,8 +55,10 @@ object AvisoTv {
         imagem: android.graphics.Bitmap? = null,   // recado com foto (10/11/2026, RecadoImagem.kt); não é guardado com a tela apagada
         icone: android.graphics.drawable.Drawable? = null,   // ícone de linha à esquerda (sistema de design); null = ponto de luz
         fica: AvisoRegras.Fica = AvisoRegras.Fica.PASSAGEIRO,   // quanto tempo o cartão fica no protetor (12/11/2026)
+        historico: Boolean = true,   // false = confirmação curta, fora da central de avisos do painel rápido (ideia 35)
     ): Resultado {
         val app = ctx.applicationContext
+        if (historico) guardarNoHistorico(app, titulo, texto)
         // Guarda o último aviso (recado ou chuva) para o protetor de tela mostrar como cartão por algumas horas
         // ("quadro da família", 10/11/2026). Só o texto: a foto do recado não é guardada. Quanto tempo fica: [fica]
         // (só o que pede atenção fica horas; confirmação como "O Claude olhou a tela" sai em 2 min).
@@ -82,13 +84,33 @@ object AvisoTv {
      * eram outro formato e outro lugar da tela. Sem o serviço de acessibilidade, cai no Toast (melhor que nada).
      */
     fun rapido(ctx: Context, titulo: String, texto: String, segundos: Int = 5) {
-        val r = mostrar(ctx, titulo, texto, segundos, som = false, guardarSeApagada = false)
+        val r = mostrar(ctx, titulo, texto, segundos, som = false, guardarSeApagada = false, historico = false)
         if (r == Resultado.SEM_ACESSIBILIDADE) principal.post {
             try { android.widget.Toast.makeText(ctx.applicationContext, "$titulo: $texto", android.widget.Toast.LENGTH_LONG).show() } catch (_: Exception) {}
         }
     }
 
     /** O serviço de teclas chama isto antes de tudo: VOLTAR com um aviso na tela fecha o aviso (true = tecla usada). */
+    // ---------------------------------------------------------------- central de avisos (ideia 35)
+
+    private const val PREFS_HISTORICO = "aviso_tv_historico"
+
+    /** Os avisos do launcher dos últimos dias, do mais novo para o mais velho (painel rápido). */
+    fun historico(ctx: Context): List<HistoricoAvisos.Item> = HistoricoAvisos.validos(
+        HistoricoAvisos.deJson(ctx.getSharedPreferences(PREFS_HISTORICO, Context.MODE_PRIVATE).getString("lista", null)),
+        System.currentTimeMillis())
+
+    @Synchronized private fun mudarHistorico(ctx: Context, f: (List<HistoricoAvisos.Item>) -> List<HistoricoAvisos.Item>) {
+        val p = ctx.applicationContext.getSharedPreferences(PREFS_HISTORICO, Context.MODE_PRIVATE)
+        p.edit().putString("lista", HistoricoAvisos.paraJson(f(HistoricoAvisos.deJson(p.getString("lista", null))))).apply()
+    }
+
+    private fun guardarNoHistorico(app: Context, titulo: String, texto: String) =
+        mudarHistorico(app) { HistoricoAvisos.acrescentar(it, HistoricoAvisos.Item(titulo, texto, System.currentTimeMillis())) }
+
+    fun dispensarDoHistorico(ctx: Context, quando: Long) { mudarHistorico(ctx) { HistoricoAvisos.remover(it, quando) }; NotificacoesTv.avisarMudanca() }
+    fun limparHistorico(ctx: Context) { mudarHistorico(ctx) { emptyList() }; NotificacoesTv.avisarMudanca() }
+
     fun teclaVoltar(e: KeyEvent): Boolean {
         if (janela == null || e.keyCode != KeyEvent.KEYCODE_BACK) return false
         // Fecha no "sobe" da tecla; o "desce" também é engolido, senão o app da frente veria só metade da tecla.

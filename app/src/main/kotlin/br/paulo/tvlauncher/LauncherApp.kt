@@ -37,8 +37,13 @@ class LauncherApp : Application() {
         Moldura.instalar(this)   // a hora da HOME no mesmo lugar nas telas de lista (Moldura.kt)
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityStarted(a: android.app.Activity) = Estilo.tirarCorDaJanelaSeCoberta(a)   // Estilo.kt
+            // Ideia 47 (TamanhoTexto.kt): o tamanho do texto escolhido, antes do onCreate de cada tela (Android 10+).
+            override fun onActivityPreCreated(a: android.app.Activity, salvo: android.os.Bundle?) = TamanhoTexto.aplicar(a)
             override fun onActivityCreated(a: android.app.Activity, salvo: android.os.Bundle?) { if (salvo == null) UsoLocal.contarTela(a) }   // ideia 67
-            override fun onActivityResumed(a: android.app.Activity) {}
+            override fun onActivityResumed(a: android.app.Activity) {
+                VozFoco.aoRetomar(a)   // ideia 48 (VozFoco.kt)
+                if (a is MainActivity) SugestoesTv.aoRetomarHome(a)   // ideia 44 (SugestoesTv.kt): no máximo 1 vez por dia
+            }
             override fun onActivityPaused(a: android.app.Activity) {}
             override fun onActivityStopped(a: android.app.Activity) {}
             override fun onActivitySaveInstanceState(a: android.app.Activity, s: android.os.Bundle) {}

@@ -45,6 +45,9 @@ object Avisos {
         PRESENCA("TV desligada porque todos saíram", true),
         AJUDA("Pedido de ajuda (modo simples)", true, semLimite = true),
         DESEMPENHO("Launcher ficou mais lento", true),
+        INTERNET_VOLTOU("Internet voltou (quanto ficou fora)", true),
+        ARMAZENAMENTO("Armazenamento da TV enchendo", true),
+        DIGITAR("Campo de texto aberto na TV (toque para digitar pelo celular)", false, semLimite = true),   // ideia 57
     }
 
     data class Inscricao(val endpoint: String, val p256dh: String, val auth: String, val nome: String, val desde: Long)
@@ -63,7 +66,10 @@ object Avisos {
     private fun gravar(ctx: Context, l: List<Inscricao>) = prefs(ctx).edit().putString("inscricoes", JSONArray().apply {
         l.forEach { put(JSONObject().put("endpoint", it.endpoint).put("p256dh", it.p256dh).put("auth", it.auth)
             .put("nome", it.nome).put("desde", it.desde)) }
-    }.toString()).apply()
+    }.toString()).commit().also {
+        // Ideia 57: o evento de foco de campo depende de haver celular inscrito.
+        AutorizaShizukuService.instancia?.let { s -> android.os.Handler(android.os.Looper.getMainLooper()).post { TecladoCelular.ajustar(s) } }
+    }
 
     /** Nova inscrição vinda do painel. Erro em texto, ou null se deu certo. Mesmo endpoint = atualiza. */
     fun inscrever(ctx: Context, o: JSONObject, nome: String): String? = synchronized(this) {
@@ -87,7 +93,10 @@ object Avisos {
     }
 
     fun ligado(ctx: Context, t: Tipo): Boolean = prefs(ctx).getBoolean("tipo_${t.name}", t.padrao)
-    fun definir(ctx: Context, t: Tipo, sim: Boolean) = prefs(ctx).edit().putBoolean("tipo_${t.name}", sim).apply()
+    fun definir(ctx: Context, t: Tipo, sim: Boolean) {
+        prefs(ctx).edit().putBoolean("tipo_${t.name}", sim).commit()
+        if (t == Tipo.DIGITAR) AutorizaShizukuService.instancia?.let { s -> android.os.Handler(android.os.Looper.getMainLooper()).post { TecladoCelular.ajustar(s) } }
+    }
 
     /** A chave pública VAPID (65 bytes em base64url), que o navegador pede ao se inscrever. Cria na 1ª vez. */
     fun chavePublica(): String = WebPush.b64url(WebPush.cru(chave().second))

@@ -105,9 +105,21 @@ object McpServidor {
 
     fun logins(ctx: Context): Int { app = ctx.applicationContext; return autorizacao().quantosLogins() }
 
+    /** Ideia 61: domínios de clientes de IA liberados pelo dono no painel (com PIN). Ficam em mcp_seguro. */
+    fun hostsExtras(ctx: Context): Set<String> =
+        prefs(ctx).getStringSet("hosts_extras", emptySet())?.filter { McpAutorizacao.hostExtraValido(it) }?.toSet() ?: emptySet()
+
+    /** Grava a lista (substitui). False se algum domínio não serve ou passou do teto. */
+    fun definirHostsExtras(ctx: Context, hosts: Collection<String>): Boolean {
+        val limpos = hosts.map { it.trim().lowercase() }.filter { it.isNotEmpty() }.toSet()
+        if (limpos.size > McpAutorizacao.MAX_HOSTS_EXTRAS || !limpos.all { McpAutorizacao.hostExtraValido(it) }) return false
+        prefs(ctx).edit().putStringSet("hosts_extras", HashSet(limpos)).apply()
+        return true
+    }
+
     private fun autorizacao(): McpAutorizacao = auth ?: synchronized(this) {
         auth ?: McpAutorizacao({ System.currentTimeMillis() }, prefs(app).getString("estado", null),
-            { prefs(app).edit().putString("estado", it).apply() }).also { auth = it }
+            { prefs(app).edit().putString("estado", it).apply() }, hostsExtras = { hostsExtras(app) }).also { auth = it }
     }
 
     private fun controle(): ControleTentativas = tentativas ?: ControleTentativas(

@@ -746,7 +746,10 @@ class PainelRapidoActivity : Activity() {
             typeface = Estilo.fonte(500)
             setPadding(dp(Estilo.E2 - 4), dp(7), dp(Estilo.E2 - 4), dp(7))
             background = Estilo.fundo(this@PainelRapidoActivity, Estilo.SUPERFICIE, Estilo.RAIO_PILULA)
-            setOnClickListener { NotificacoesTv.atuais.forEach { OuvinteNotificacoes.dispensar(it.chave) } }
+            setOnClickListener {
+                NotificacoesTv.atuais.forEach { OuvinteNotificacoes.dispensar(it.chave) }
+                AvisoTv.limparHistorico(this@PainelRapidoActivity)
+            }
             setOnFocusChangeListener { v, foco ->
                 v.background = Estilo.fundo(this@PainelRapidoActivity, if (foco) Estilo.FOCO else Estilo.SUPERFICIE, Estilo.RAIO_PILULA)
                 (v as TextView).setTextColor(if (foco) Estilo.TEXTO_NO_FOCO else Estilo.TEXTO_2)
@@ -761,7 +764,8 @@ class PainelRapidoActivity : Activity() {
         val avisos = NotificacoesTv.atuais
         txtSecao.text = if (avisos.isEmpty()) getString(R.string.pr_notificacoes).uppercase()
             else "${getString(R.string.pr_notificacoes).uppercase()} · ${avisos.size}"
-        limpar.visibility = if (avisos.isEmpty()) View.GONE else View.VISIBLE
+        val daTv = AvisoTv.historico(this)
+        limpar.visibility = if (avisos.isEmpty() && daTv.isEmpty()) View.GONE else View.VISIBLE
         if (avisos.isEmpty()) {
             listaAvisos.addView(Estilo.texto(this, Estilo.Papel.LEGENDA,
                 getString(if (OuvinteNotificacoes.conectado) R.string.pr_sem_notificacoes else R.string.pr_notificacoes_desligadas)))
@@ -770,13 +774,39 @@ class PainelRapidoActivity : Activity() {
         for ((i, a) in avisos.take(12).withIndex()) {
             listaAvisos.addView(linhaAviso(a, agora), LinearLayout.LayoutParams(-1, -2).apply { if (i > 0) topMargin = dp(Estilo.E1) })
         }
+        // Central de avisos (ideia 35): os últimos avisos do próprio launcher (chuva, recado, manutenção...), que antes
+        // sumiam quando o seguinte chegava. OK mostra de novo na tela; o X tira da lista.
+        if (daTv.isNotEmpty()) {
+            listaAvisos.addView(Estilo.secao(this, getString(R.string.pr_avisos_tv).uppercase() + " · ${daTv.size}"))
+            val app = "One TV"   // nome do produto, não traduz
+            for ((i, h) in daTv.withIndex()) {
+                val a = NotificacoesTv.Aviso("tv:${h.quando}", packageName, app, h.titulo, h.texto, h.quando)
+                listaAvisos.addView(linhaAviso(a, agora,
+                    aoAbrir = {
+                        AvisoTv.mostrar(this, h.titulo, h.texto, 15, som = false, guardarSeApagada = false, historico = false); true
+                    },
+                    aoDispensar = { AvisoTv.dispensarDoHistorico(this, h.quando) }),
+                    LinearLayout.LayoutParams(-1, -2).apply { if (i > 0) topMargin = dp(Estilo.E1) })
+            }
+        }
+        // Mural na TV (ideia 39): a lista de compras do protetor, aqui com o controle: OK risca o item.
+        val compras = if (Extras.ligado(this, Extras.Chave.MURAL) && !ModoVisita.ativo(this)) Mural.ler(this).compras else emptyList()
+        if (compras.isNotEmpty()) {
+            listaAvisos.addView(Estilo.secao(this, getString(R.string.pg_compras).uppercase() + " · ${compras.size}"))
+            for ((i, item) in compras.withIndex())
+                listaAvisos.addView(linhaCompra(item), LinearLayout.LayoutParams(-1, -2).apply { if (i > 0) topMargin = dp(Estilo.E1) })
+        }
         if (focoDentro) {
             val primeiro = (listaAvisos.getChildAt(0) as? ViewGroup)?.getChildAt(0)?.takeIf { it.isFocusable }
             (primeiro ?: blocosNaTela.lastOrNull() ?: tVisita.casca).requestFocus()
         }
     }
 
-    private fun linhaAviso(a: NotificacoesTv.Aviso, agora: Long): View {
+    private fun linhaAviso(
+        a: NotificacoesTv.Aviso, agora: Long,
+        aoAbrir: () -> Boolean = { OuvinteNotificacoes.abrir(a.chave) },
+        aoDispensar: () -> Unit = { OuvinteNotificacoes.dispensar(a.chave) },
+    ): View {
         val quando = NotificacoesTv.haQuanto(a.quando, agora, getString(R.string.pr_ontem), getString(R.string.pr_agora))
         val icone = ImageView(this).apply {
             setImageDrawable(try { packageManager.getApplicationIcon(a.pacote) } catch (_: Exception) { null })
@@ -798,13 +828,13 @@ class PainelRapidoActivity : Activity() {
             background = Estilo.superficie(this@PainelRapidoActivity, false)
             addView(icone, LinearLayout.LayoutParams(dp(28), dp(28)).apply { marginEnd = dp(Estilo.E2 - 4) })
             addView(textos, LinearLayout.LayoutParams(0, -2, 1f))
-            setOnClickListener { if (OuvinteNotificacoes.abrir(a.chave)) finish() }
+            setOnClickListener { if (aoAbrir()) finish() }
             setOnFocusChangeListener { v, foco ->
                 Estilo.focarLinha(v, foco)
                 v.animate().scaleX(if (foco) Estilo.ESCALA_LINHA else 1f).scaleY(if (foco) Estilo.ESCALA_LINHA else 1f).setDuration(Estilo.FOCO_MS).start()
             }
         }
-        val dispensar = botaoRedondo(IconeCard(this, "fechar"), getString(R.string.pr_dispensar)) { OuvinteNotificacoes.dispensar(a.chave) }
+        val dispensar = botaoRedondo(IconeCard(this, "fechar"), getString(R.string.pr_dispensar)) { aoDispensar() }
         val linha = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
@@ -823,6 +853,30 @@ class PainelRapidoActivity : Activity() {
             }
         }
         return linha
+    }
+
+    /** Um item da lista de compras. OK risca na hora e tira do mural meio segundo depois (dá para ver o que saiu). */
+    private fun linhaCompra(item: String): View = Estilo.texto(this, Estilo.Papel.CORPO, item).apply {
+        isFocusable = true
+        isClickable = true
+        maxLines = 2
+        ellipsize = TextUtils.TruncateAt.END
+        contentDescription = getString(R.string.mural_riscar, item)
+        setPadding(dp(Estilo.E2 - 4), dp(Estilo.E1 + 4), dp(Estilo.E2 - 4), dp(Estilo.E1 + 4))
+        background = Estilo.superficie(this@PainelRapidoActivity, false)
+        setOnFocusChangeListener { v, foco ->
+            Estilo.focarLinha(v, foco)
+            v.animate().scaleX(if (foco) Estilo.ESCALA_LINHA else 1f).scaleY(if (foco) Estilo.ESCALA_LINHA else 1f).setDuration(Estilo.FOCO_MS).start()
+        }
+        setOnClickListener {
+            if (paintFlags and android.graphics.Paint.STRIKE_THRU_TEXT_FLAG != 0) return@setOnClickListener
+            paintFlags = paintFlags or android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
+            alpha = 0.6f
+            fundo.execute {
+                Mural.editar(applicationContext) { Mural.remover(it, Mural.Lista.COMPRAS, item) }
+                ui.postDelayed({ if (!isFinishing) preencherAvisos() }, 500)
+            }
+        }
     }
 
     /** Rola o painel até a linha caber inteira, com uma folga embaixo (o foco cresce 2% e tem sombra). */
