@@ -743,6 +743,14 @@ class ConfigLauncherActivity : Activity() {
             // A HOME relê o modo no onResume (bolinha e apps), então não precisa avisar nada a ela.
         }
         c.addView(linhaVisita, lp())
+        // Wi-Fi das visitas em QR (ideia 54): OK configura; com a rede gravada, uma 2ª linha mostra o QR.
+        c.addView(linha(getString(R.string.l51_wifi_titulo),
+            WifiVisita.rede(this).ifEmpty { getString(R.string.l51_wifi_nao) }, seta = true) {
+            WifiVisita.pedir(this) { if (it) recarregarAba() }
+        }, lp())
+        if (WifiVisita.configurado(this)) c.addView(linha(getString(R.string.l51_wifi_qr_titulo), "", seta = true) {
+            WifiVisita.mostrarQr(this)
+        }, lp())
         // Automações (14/11/2026, ideia 1): o editor único de horários (as antigas Rotinas), botões, eventos e links.
         c.addView(linha(getString(R.string.aut_titulo), getString(R.string.aut_cfg_det), seta = true) {
             startActivity(Intent(this, AutomacoesActivity::class.java))

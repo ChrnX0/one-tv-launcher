@@ -503,7 +503,11 @@ class PainelRapidoActivity : Activity() {
     // ---------------------------------------------------------------- tiles
 
     private fun tiles(): View {
-        tWifi = tile("wifi", "Wi-Fi") { abrirEFechar(Intent(Settings.ACTION_WIFI_SETTINGS)) }
+        tWifi = tile("wifi", "Wi-Fi") {
+            // Ideia 54: com visita em casa e o Wi-Fi das visitas gravado, o OK mostra o QR (visita não mexe na rede da TV).
+            if (ModoVisita.ativo(this) && WifiVisita.configurado(this)) WifiVisita.mostrarQr(this)
+            else abrirEFechar(Intent(Settings.ACTION_WIFI_SETTINGS))
+        }
         tBluetooth = tile("bluetooth", "Bluetooth") {
             // A tela de parear do sistema (a lista "Controles remotos e acessórios" não tem Activity própria).
             abrirEFechar(Intent().setClassName("com.android.tv.settings", "com.android.tv.settings.accessories.AddAccessoryActivity"))
