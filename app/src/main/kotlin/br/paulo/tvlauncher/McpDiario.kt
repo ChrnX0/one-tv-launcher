@@ -18,7 +18,8 @@ object McpDiario {
     fun conhece(nome: String) = LISTA.any { it.optString("name") == nome }
 
     fun chamar(ctx: Context, nome: String, a: JSONObject): String = when (nome) {
-        "diario_tv" -> JSONObject().put("itens", Diario.ler(ctx, a.optInt("horas", 24),
+        // Texto do diário é não confiável (alerta do GitHub no #57): vai marcado e com o aviso, para o modelo não obedecer.
+        "diario_tv" -> DiarioRegras.paraMcp(Diario.ler(ctx, a.optInt("horas", 24),
             a.optString("origem").takeIf { it in DiarioRegras.ORIGENS })).toString()
         else -> throw McpProtocolo.ErroFerramenta("ferramenta desconhecida")
     }
