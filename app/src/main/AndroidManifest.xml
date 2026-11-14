@@ -86,7 +86,7 @@
         android:networkSecurityConfig="@xml/rede"
         android:icon="@android:drawable/sym_def_app_icon"
         android:banner="@android:drawable/sym_def_app_icon"
-        android:label="One TV Launcher"
+        android:label="@string/app_nome"
         android:manageSpaceActivity=".GuardarDadosActivity"
         android:theme="@style/One">
 

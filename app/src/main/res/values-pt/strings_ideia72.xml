@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="l72_abrir">Abrir %1$s</string>
+    <string name="l72_tela_previsao">a previsão do tempo</string>
+    <string name="l72_tela_agenda">a agenda</string>
+    <string name="l72_tela_despertador">o despertador</string>
+    <string name="l72_tela_configuracoes">as Configurações do launcher</string>
+    <string name="l72_tela_inicio">a tela inicial</string>
+    <string name="l72_despertador">Criar despertador às %1$s (%2$s)</string>
+    <string name="l72_dias_uma">uma vez</string>
+    <string name="l72_dias_todos">todo dia</string>
+    <string name="l72_dias_uteis">seg a sex</string>
+    <string name="l72_dias_fds">fim de semana</string>
+    <string name="l72_dias_nomes">dom,seg,ter,qua,qui,sex,sáb</string>
+    <string name="l72_vol_subir">Aumentar o volume</string>
+    <string name="l72_vol_descer">Diminuir o volume</string>
+    <string name="l72_vol_mudo">Ligar/desligar o mudo</string>
+    <string name="l72_vezes">(%1$d vezes)</string>
+    <string name="l72_midia_pausar">Pausar</string>
+    <string name="l72_midia_tocar">Continuar tocando</string>
+    <string name="l72_midia_proxima">Próximo</string>
+    <string name="l72_midia_anterior">Anterior</string>
+    <string name="l72_visita_liga">Ligar o modo visita</string>
+    <string name="l72_visita_desliga">Desligar o modo visita</string>
+    <string name="l72_canal_pedido">Colocar no canal %1$s</string>
+    <string name="l72_canal">Colocar no canal %1$d (%2$s)</string>
+    <string name="l72_o_que_passa">Ver o que passa em %1$s</string>
+    <string name="l72_casa_ligar">Ligar</string>
+    <string name="l72_casa_desligar">Desligar</string>
+    <string name="l72_casa_alternar">Alternar</string>
+    <string name="l72_casa">%1$s %2$s (casa)</string>
+    <string name="l72_guia_vazio">%1$s: sem programação no guia.</string>
+    <string name="l72_guia_agora">%1$s agora: %2$s (até %3$s)</string>
+    <string name="l72_guia_nada_agora">%1$s: nada no guia agora</string>
+    <string name="l72_guia_depois">Depois: %1$s (%2$s)</string>
+</resources>

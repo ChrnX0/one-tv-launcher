@@ -136,10 +136,13 @@ object CanalBusca {
         val depois = if (c.guiaId.isEmpty()) null
             else guia.proximos(c.guiaId, agora, 3).firstOrNull { it.inicio >= (atual?.fim ?: agora) }
         val nome = "${c.nome} (${c.numero})"
-        if (atual == null && depois == null) return "$nome: sem programação no guia."
+        // Ideia 72: no idioma da TV; sem Context (testes do computador), o português de sempre.
+        fun t(id: Int, pt: String, vararg a: Any) = ComandosIa.tp(id, pt, *a)
+        if (atual == null && depois == null) return t(R.string.l72_guia_vazio, "%1${'$'}s: sem programação no guia.", nome)
         val partes = ArrayList<String>()
-        partes += if (atual != null) "$nome agora: ${atual.titulo} (até ${hora(atual.fim, fuso)})" else "$nome: nada no guia agora"
-        if (depois != null) partes += "Depois: ${depois.titulo} (${hora(depois.inicio, fuso)})"
+        partes += if (atual != null) t(R.string.l72_guia_agora, "%1${'$'}s agora: %2${'$'}s (até %3${'$'}s)", nome, atual.titulo, hora(atual.fim, fuso))
+            else t(R.string.l72_guia_nada_agora, "%1${'$'}s: nada no guia agora", nome)
+        if (depois != null) partes += t(R.string.l72_guia_depois, "Depois: %1${'$'}s (%2${'$'}s)", depois.titulo, hora(depois.inicio, fuso))
         return partes.joinToString(". ") + "."
     }
 
@@ -243,8 +246,12 @@ object CanalBusca {
 
     private val reOQuePassa = Regex("""^(?:o ?que|que|qual(?: e)?(?: o)? programa)\s+(?:(?:e que|que|esta|ta|vai)\s+)?(?:passando|passa|tem|vai passar|ta passando|esta passando)\s+(?:agora\s+)?(?:(?:no|na|em|nos|nas)\s+)?(.+)$""")
     private val reTocar = Regex("""^(?:(?:eu\s+)?(?:quero\s+)?(?:assistir|ver|colocar|coloca|coloque|poe|ponha|bota|botar|muda|mudar|mude|troca|trocar|troque|sintoniza|sintonizar|liga|ligar|tocar|toca|passa|passar|vai)\s+)((?:(?:no|na|o|a|para|pra|pro|em)\s+)*)(.+)$""")
-    private val reFinal = Regex("""\s+(?:agora|por favor|pra mim|para mim|ai)$""")
+    private val reFinal = Regex("""\s+(?:agora|por favor|pra mim|para mim|ai|now|please|right now|for me)$""")
     private val reComeco = Regex("""^(?:ok google|hey google|ei google|google)\s+""")
+    // Ideia 72 (14/11/2026): as mesmas frases em inglês, ao lado do português (TV em inglês; modelo: CaixaComando).
+    // "what's" chega normalizado como "what s".
+    private val reOQuePassaEn = Regex("""^(?:what s|whats|what is)\s+(?:on|playing|showing)(?:\s+(?:now|right now))?(?:\s+on)?\s+(.+)$""")
+    private val reTocarEn = Regex("""^(?:(?:i want to|i wanna|let s)\s+)?(?:watch|put on|put|turn on|switch to|change to|turn to|tune in to|tune to|play|go to)\s+((?:(?:the|on|to)\s+)*)(.+)$""")
 
     /**
      * Entende "assistir/colocar no canal X" e "o que está passando na X". [semVerboTocar]: a frase sem verbo (o
@@ -255,9 +262,11 @@ object CanalBusca {
         repeat(2) { f = f.replace(reFinal, "") }
         if (f.isEmpty()) return null
         // "canal 5" -> "5": a palavra "canal" não ajuda a achar (a busca também a ignora, mas o texto fica mais limpo).
-        fun limpar(t: String) = t.trim().removePrefix("canal ").trim().ifEmpty { null }
+        fun limpar(t: String) = t.trim().removePrefix("the ").removePrefix("canal ").removePrefix("channel ").trim().ifEmpty { null }
         reOQuePassa.find(f)?.let { m -> return limpar(m.groupValues[1])?.let { PedidoVoz.OQuePassa(it) } }
         reTocar.find(f)?.let { m -> return limpar(m.groupValues[2])?.let { PedidoVoz.Tocar(it) } }
+        reOQuePassaEn.find(f)?.let { m -> return limpar(m.groupValues[1])?.let { PedidoVoz.OQuePassa(it) } }
+        reTocarEn.find(f)?.let { m -> return limpar(m.groupValues[2])?.let { PedidoVoz.Tocar(it) } }
         return if (semVerboTocar) limpar(f)?.let { PedidoVoz.Tocar(it) } else null
     }
 

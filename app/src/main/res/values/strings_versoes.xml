@@ -66,6 +66,7 @@
         <item>Voice: “Ok Google, open Movies” (also Series, Network media, Home control, Search, Board) opens that launcher screen</item>
         <item>Live TV: pause any channel for up to 2 minutes (⏯, or ▶ ▶ › “Pause live TV”); OK resumes from where you stopped, ▶ goes back to live. Kept only in the player\'s memory, never on disk</item>
         <item>The web panel is in English when the phone or computer is not in Portuguese</item>
+        <item>With the TV in English, voice requests for channels ("watch Globo", "what's on SBT") work in English too, and the confirmations show up in English</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -119,6 +120,7 @@
         <item>voz_telas</item>
         <item>pausa_ao_vivo</item>
         <item>painel_ingles</item>
+        <item>voz_ingles</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -172,6 +174,7 @@
         <item>Say “Ok Google, open Movies” (and the others: Series, Network media, Home control, Search, Board)</item>
         <item>On a live channel without catch-up, ▶ ▶ › “Pause live TV”, wait 1 minute and press OK; then ▶ › “Back to live”</item>
         <item>Open the web panel on a browser set to English</item>
+        <item>With the TV in English, say "what's on" and a channel name</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -225,5 +228,6 @@
         <item>Did each one open the right screen (and not another app)?</item>
         <item>Did it resume where it stopped with “1 MIN BEHIND”, and did “Back to live” jump to now?</item>
         <item>Are the tabs and buttons in English?</item>
+        <item>Did the answer come in English?</item>
     </string-array>
 </resources>

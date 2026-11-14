@@ -63,6 +63,7 @@
         <item>Voz: “Ok Google, abrir Filmes” (também Séries, Na rede, Minha casa, Busca, Mural) abre essa tela do launcher</item>
         <item>TV ao vivo: pause qualquer canal por até 2 minutos (⏯, ou ▶ ▶ › “Pausar o ao vivo”); OK continua de onde parou, ▶ volta ao ao vivo. Fica só na memória do player, nada é gravado</item>
         <item>O painel web fica em inglês quando o celular ou o computador não está em português</item>
+        <item>Com a TV em inglês, os pedidos de canal por voz ("watch Globo", "what's on SBT") também funcionam, e as confirmações aparecem em inglês</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -116,6 +117,7 @@
         <item>Diga “Ok Google, abrir Filmes” (e os outros: Séries, Na rede, Minha casa, Busca, Mural)</item>
         <item>Num canal ao vivo sem TV de volta, ▶ ▶ › “Pausar o ao vivo”, espere 1 minuto e aperte OK; depois ▶ › “Voltar ao vivo”</item>
         <item>Abra o painel num navegador em inglês</item>
+        <item>Com a TV em inglês, diga "what's on" e o nome de um canal</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -169,5 +171,6 @@
         <item>Cada um abriu a tela certa (e não outro app)?</item>
         <item>Continuou de onde parou com “ATRASADO 1 MIN”, e o “Voltar ao vivo” pulou para o agora?</item>
         <item>Abas e botões aparecem em inglês?</item>
+        <item>A resposta veio em inglês?</item>
     </string-array>
 </resources>
