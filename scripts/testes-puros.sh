@@ -37,6 +37,8 @@ declare -A FONTES=(
   [TeclaFalsaTest]="TeclaFalsa"
   [RoteiroConferenciaTest]="RoteiroConferencia"
   [LgNetcastTest]="LgNetcast"
+  [FrasesAppsTest]="FrasesApps"
+  [BuscaOutrosAppsTest]="BuscaOutrosApps"
 )
 
 falhou=0

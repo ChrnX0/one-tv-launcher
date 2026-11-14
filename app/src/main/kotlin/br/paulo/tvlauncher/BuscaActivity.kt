@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
 import android.app.Activity
+import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -38,7 +39,8 @@ class BuscaActivity : Activity() {
      */
     private class Dados(val canais: List<Canal>, val iCanais: List<BuscaUnica.Indexado<Canal>>,
                         val iFilmes: List<BuscaUnica.Indexado<Filme>>, val iSeries: List<BuscaUnica.Indexado<Serie>>,
-                        val iApps: List<BuscaUnica.Indexado<Pair<String, String>>>, val titulos: Map<String, List<String>>)
+                        val iApps: List<BuscaUnica.Indexado<Pair<String, String>>>, val titulos: Map<String, List<String>>,
+                        val instalados: Set<String> = emptySet())
     @Volatile private var dados: Dados? = null
 
     override fun onCreate(b: Bundle?) {
@@ -90,13 +92,17 @@ class BuscaActivity : Activity() {
             val filmes = semOcultas(runCatching { PlayerCarga.filmes(this, soCache = true) }.getOrDefault(emptyList())) { it.grupo }
             val series = semOcultas(runCatching { PlayerCarga.series(this, soCache = true) }.getOrDefault(emptyList())) { it.grupo }
             val t0 = System.currentTimeMillis()
+            val listaApps = apps()
             Dados(canais, BuscaUnica.indexar(canais) { it.nome }, BuscaUnica.indexar(filmes) { it.nome },
-                BuscaUnica.indexar(series) { it.nome }, BuscaUnica.indexar(apps()) { it.second }, titulosDoGuia(canais))
+                BuscaUnica.indexar(series) { it.nome }, BuscaUnica.indexar(listaApps) { it.second }, titulosDoGuia(canais),
+                listaApps.map { it.first }.toSet())
                 .also { Log.i(TAG, "índice: ${canais.size} canais, ${filmes.size} filmes, ${series.size} séries, " +
                     "${it.titulos.size} títulos do guia em ${System.currentTimeMillis() - t0} ms") }
         } catch (e: Exception) {
             Log.w(TAG, "carregar: $e")
-            Dados(emptyList(), emptyList(), emptyList(), emptyList(), BuscaUnica.indexar(apps()) { it.second }, emptyMap())
+            val listaApps = apps()
+            Dados(emptyList(), emptyList(), emptyList(), emptyList(), BuscaUnica.indexar(listaApps) { it.second }, emptyMap(),
+                listaApps.map { it.first }.toSet())
         }
         dados = d
         ui.post { if (!isFinishing) buscarJa() }
@@ -156,6 +162,15 @@ class BuscaActivity : Activity() {
         }
         val apps = BuscaUnica.filtrarIndice(d.iApps, termo).first
         if (apps.isNotEmpty()) grupos += Grupo("Apps", apps.map { (pacote, nome) -> Item(nome, "App") { abrirApp(pacote) } })
+        // Ideia 14: no fim, continuar a busca no YouTube, Netflix e Prime Video (só os instalados). Mesma linha dos apps.
+        val outros = BuscaOutrosApps.montar(termo, d.instalados)
+        if (outros.isNotEmpty()) grupos += Grupo(getString(R.string.bu_outros_apps), outros.map { p ->
+            Item(getString(when (p.destino.chave) {
+                "youtube" -> R.string.bu_outro_youtube
+                "netflix" -> R.string.bu_outro_netflix
+                else -> R.string.bu_outro_prime
+            }, p.termo), getString(R.string.bu_outro_det)) { procurarEm(p) }
+        })
         return grupos
     }
 
@@ -230,6 +245,9 @@ class BuscaActivity : Activity() {
 
     private fun desenhar(termo: String, grupos: List<Grupo>) {
         lista.removeAllViews()
+        // Só as linhas "Procurar no YouTube..." (ideia 14): o "nada encontrado" continua aparecendo, em cima delas.
+        if (grupos.size == 1 && grupos[0].nome == getString(R.string.bu_outros_apps))
+            lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.bu_nada, termo)).apply { setPadding(dp(4), dp(Estilo.E3), 0, dp(Estilo.E3)) })
         if (grupos.isEmpty()) {
             val msg = when {
                 termo.length >= 2 -> getString(R.string.bu_nada, termo)
@@ -259,6 +277,19 @@ class BuscaActivity : Activity() {
     private fun abrirApp(pacote: String) {
         val i = packageManager.getLeanbackLaunchIntentForPackage(pacote) ?: packageManager.getLaunchIntentForPackage(pacote) ?: return
         try { startActivity(i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } catch (e: Exception) { Log.w(TAG, "app: $e") }
+    }
+
+    /**
+     * Ideia 14: a busca do próprio app (ACTION_SEARCH + SearchManager.QUERY, pacote fixo). App que não atende essa
+     * busca: abre o app, e o termo fica para a pessoa digitar lá.
+     */
+    private fun procurarEm(p: BuscaOutrosApps.Pedido) {
+        val i = Intent(Intent.ACTION_SEARCH).setPackage(p.destino.pacote).putExtra(SearchManager.QUERY, p.termo)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        if (i.resolveActivity(packageManager) == null) {
+            Log.i(TAG, "sem ACTION_SEARCH em ${p.destino.pacote}: abre o app"); abrirApp(p.destino.pacote); return
+        }
+        try { startActivity(i) } catch (e: Exception) { Log.w(TAG, "busca em ${p.destino.pacote}: ${e.javaClass.simpleName}"); abrirApp(p.destino.pacote) }
     }
 
     private fun hora(ms: Long) = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(ms))

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Search that continues in other apps (idea 14, 14/11/2026): BuscaActivity + BuscaOutrosApps. -->
+<resources>
+    <string name="bu_outros_apps">In other apps</string>
+    <string name="bu_outro_youtube">Search “%1$s” on YouTube</string>
+    <string name="bu_outro_netflix">Search “%1$s” on Netflix</string>
+    <string name="bu_outro_prime">Search “%1$s” on Prime Video</string>
+    <string name="bu_outro_det">Opens the app’s own search</string>
+</resources>

@@ -73,6 +73,10 @@
         <!-- O launcher do Google (04/11/2026): sem isto o PackageManager diz que ele não existe, e o Home.kt
              (botão HOME pelo serviço de teclas, atalho do painel) achava que ele estava desativado. -->
         <package android:name="com.google.android.apps.tv.launcherx" />
+        <!-- Busca que continua nos outros apps (ideia 14): BuscaOutrosApps.DESTINOS. -->
+        <package android:name="com.google.android.youtube.tv" />
+        <package android:name="com.netflix.ninja" />
+        <package android:name="com.amazon.amazonvideo.livingroom" />
     </queries>
 
     <!-- android:name: LauncherApp liga o registro local de erros (RegistroErros.kt) em todo processo do app. -->

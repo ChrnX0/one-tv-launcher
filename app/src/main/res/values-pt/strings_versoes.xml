@@ -19,6 +19,8 @@
         <item>Filmes e séries tentam de novo sozinhos quando a conexão cai, tamanho da legenda no menu do ▼ e a ficha abre sem internet</item>
         <item>Protetor responde ao controle: ◀ ▶ andam pelos cartões, OK dispensa o aviso ou pausa a música, e um cartão “tocando agora”</item>
         <item>Fotos do protetor vindas de uma pasta da rede (computador, NAS ou Nextcloud): abra a pasta em “Na rede” e escolha “Usar estas fotos”</item>
+        <item>Mais apps da tela inicial mostram uma frase curta embaixo do nome (a ficha do painel)</item>
+        <item>Busca: no fim do resultado, continue a mesma busca no YouTube, na Netflix ou no Prime Video</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -30,6 +32,8 @@
         <item>Deixe um episódio chegar ao fim (ou pule para o último minuto)</item>
         <item>Ponha uma música, espere o protetor, aperte ◀ ▶ e OK</item>
         <item>Em “Na rede”, abra uma pasta com fotos e escolha “Usar estas fotos no protetor de tela”</item>
+        <item>Na tela inicial, pare num app que você instalou (ex.: um gerenciador de arquivos)</item>
+        <item>Abra a Busca, digite o nome de um filme e escolha “Procurar … no YouTube” no fim</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -41,5 +45,7 @@
         <item>O “Próximo episódio” contou de 10, e o Cancelar deixou você na ficha da série?</item>
         <item>Os cartões ficaram marcados e o OK pausou a música?</item>
         <item>Essas fotos apareceram no protetor seguinte?</item>
+        <item>A linha embaixo do nome diz o que ele faz, no idioma da TV?</item>
+        <item>O YouTube abriu já com essa busca (ou pelo menos abriu)?</item>
     </string-array>
 </resources>
