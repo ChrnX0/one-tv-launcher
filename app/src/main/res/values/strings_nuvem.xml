@@ -30,7 +30,7 @@
     <string name="rede_volta_explica">Point the camera of a phone that is on the same Wi‑Fi as the TV at the QR, sign in to %1$s and allow access. The phone comes back to the TV by itself: nothing to type.</string>
     <string name="rede_volta_porta">Port %1$d on the TV is busy. Close other apps and try again.</string>
     <!-- Google Drive as a source (14/11/2026): drive.readonly needs a "Web application" client, same return as Box. -->
-    <string name="rede_gd_explica">Once, on a computer, in your Google Cloud project (console.cloud.google.com): APIs & Services › Library › turn on “Google Drive API”. In Google Auth Platform › Data Access, add the …/auth/drive.readonly scope. In Clients › Create client › Web application, under Authorized redirect URIs put %1$s. Copy the Client ID and the Client secret here.</string>
+    <string name="rede_gd_explica">Once, on a computer, in your Google Cloud project (console.cloud.google.com): APIs &amp; Services › Library › turn on “Google Drive API”. In Google Auth Platform › Data Access, add the …/auth/drive.readonly scope. In Clients › Create client › Web application, under Authorized redirect URIs put %1$s. Copy the Client ID and the Client secret here.</string>
     <string name="rede_gd_id">Client ID (…apps.googleusercontent.com)</string>
     <string name="rede_gd_segredo">Client secret</string>
     <string name="rede_gd_erro">Copy both from the client page: the ID ends in .apps.googleusercontent.com and the secret usually starts with GOCSPX-.</string>
