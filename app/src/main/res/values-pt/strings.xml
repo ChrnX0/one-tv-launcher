@@ -626,7 +626,7 @@
     <string name="fmt_data_mes">d \'de\' MMMM</string>
     <string name="home_busca">Buscar</string>
     <string name="home_falar">Falar com o Gemini</string>
-    <string name="home_dest_filme">Filmes · faltam %1$s</string>
+    <string name="home_dest_filme">Filmes · continue de onde parou</string>
     <string name="home_dest_filme_ultimo">Filmes · o último que você abriu</string>
     <string name="home_dest_serie">Séries · você está no %1$s</string>
     <string name="home_dest_tv">TV · canal %1$d</string>
