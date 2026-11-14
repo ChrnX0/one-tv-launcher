@@ -78,6 +78,37 @@ object LgNetcast {
     /** Porcentagem do máximo da TV para nível (o teto da hora de dormir é em %). */
     fun nivelDaPorcentagem(pct: Int, maximo: Int = 100): Int = maximo * pct.coerceIn(0, 100) / 100
 
+    /**
+     * Teto do despertador na LG (14/11/2026): no primeiro teste o alarme levou a LG de 8 a 66 e acordou a casa. O
+     * despertador nunca sobe a LG acima disto, seja qual for o "volume mínimo" escolhido.
+     */
+    const val TETO_ALARME = 30
+
+    /** Teclas por rodada antes de ler o volume de novo: em rajada a LG acelera (42 teclas subiram 58 pontos). */
+    const val TECLAS_POR_RODADA = 3
+
+    /** Para quanto o despertador sobe a LG: o mínimo [pct] do máximo, limitado a [TETO_ALARME]; null = não mexe. */
+    fun alvoAlarme(atual: Int, maximo: Int, pct: Int): Int? {
+        if (maximo <= 0 || pct <= 0) return null
+        val minimo = ((maximo * pct.coerceIn(0, 100) + 99) / 100).coerceIn(1, maximo)
+        val alvo = minOf(minimo, TETO_ALARME, maximo)
+        return if (atual < alvo) alvo else null
+    }
+
+    /**
+     * Ao parar o despertador: para quanto voltar (null = não mexe). Volta ao [original] se fomos nós que subimos
+     * ([definido] != null) e: ninguém mexeu (está a até 2 pontos do que pusemos) OU ficou acima do [TETO_ALARME]
+     * (alto demais nunca fica depois de um alarme nosso).
+     */
+    fun devolverAlarme(agora: Int, definido: Int?, original: Int): Int? {
+        if (definido == null || original < 0 || agora == original) return null
+        return if (Math.abs(agora - definido) <= 2 || agora > TETO_ALARME) original else null
+    }
+
+    /** Uma rodada de ajuste: no máximo [TECLAS_POR_RODADA] teclas na direção do alvo (o sinal diz a direção). */
+    fun rodada(atual: Int, alvo: Int, maximo: Int = 100): Int =
+        teclas(atual, alvo, maximo).coerceIn(-TECLAS_POR_RODADA, TECLAS_POR_RODADA)
+
     /** Mandar "User-Agent: UDAP/2.0"? Só no caminho UDAP; no ROAP esse cabeçalho faz a LG responder 400. */
     fun agenteUdap(caminho: String): Boolean = caminho.startsWith("/udap/")
 
