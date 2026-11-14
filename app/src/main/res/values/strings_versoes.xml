@@ -17,32 +17,33 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Automations: one place to create and edit them (Settings &gt; Automations)</item>
         <item>Remote buttons: tap, hold and double tap on free keys</item>
-        <item>Events can start a scene</item>
+        <item>Events can start a scene, for example when a movie is paused</item>
         <item>The https certificate can use your own TV name (e.g. tv-sala)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
-        <item>home_segurar</item>
-        <item>botao_netflix</item>
-        <item>botao_youtube_segurar</item>
-        <item>filmes_voltar</item>
         <item>casa_comodos</item>
+        <item>automacoes</item>
+        <item>cenas_painel</item>
+        <item>botao_livre</item>
+        <item>evento_pausa</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
-        <item>Hold HOME for 2 seconds</item>
-        <item>Press the Netflix button on the remote</item>
-        <item>Hold the YouTube button for 3 seconds</item>
-        <item>Open Movies and go back with BACK</item>
         <item>Open Home from the quick panel</item>
+        <item>Open Settings &gt; Automations</item>
+        <item>Open Scenes from the quick panel, or say “Ok Google, open Scenes”</item>
+        <item>Tap, hold and double tap a free button on the remote</item>
+        <item>Make a test scene for “movie paused”, then pause a movie</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
-        <item>Did the quick panel open?</item>
-        <item>Did the app chosen for that button open?</item>
-        <item>Did the list to change the button\'s app open?</item>
-        <item>Did the grid keep focus on the same poster?</item>
         <item>Are the cards grouped by room, clear of the hints at the bottom?</item>
+        <item>Do your routines and alarms show up there, and can you edit one?</item>
+        <item>Did the Scenes list open?</item>
+        <item>Did each one do what you set for it?</item>
+        <item>Did the test scene run?</item>
     </string-array>
 </resources>

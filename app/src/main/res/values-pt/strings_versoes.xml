@@ -14,24 +14,25 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Automações: um lugar só para criar e editar (Configurações &gt; Automações)</item>
         <item>Botões do controle: toque, segurar e toque duplo nas teclas livres</item>
-        <item>Eventos podem disparar uma cena</item>
+        <item>Eventos podem disparar uma cena, por exemplo quando o filme pausa</item>
         <item>O certificado https pode usar o nome que você der à TV (ex.: tv-sala)</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
-        <item>Segure HOME por 2 segundos</item>
-        <item>Aperte o botão Netflix do controle</item>
-        <item>Segure o botão YouTube por 3 segundos</item>
-        <item>Abra Filmes e volte com VOLTAR</item>
         <item>Abra a Casa pelo painel rápido</item>
+        <item>Abra Configurações &gt; Automações</item>
+        <item>Abra Cenas pelo painel rápido, ou diga “Ok Google, abrir Cenas”</item>
+        <item>Toque, segure e toque duas vezes num botão livre do controle</item>
+        <item>Crie uma cena de teste para “filme pausou” e pause um filme</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
-        <item>Abriu o painel rápido?</item>
-        <item>Abriu o app escolhido para o botão?</item>
-        <item>Abriu a lista para trocar o app do botão?</item>
-        <item>A grade manteve o foco no mesmo pôster?</item>
         <item>Os cartões aparecem por cômodo, sem cobrir as dicas de baixo?</item>
+        <item>Suas rotinas e despertadores aparecem lá, e dá para editar um?</item>
+        <item>Abriu a lista de Cenas?</item>
+        <item>Cada um fez o que você escolheu?</item>
+        <item>A cena de teste rodou?</item>
     </string-array>
 </resources>
