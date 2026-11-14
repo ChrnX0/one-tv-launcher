@@ -14,10 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Automações: um lugar só para criar e editar (Configurações &gt; Automações)</item>
-        <item>Botões do controle: toque, segurar e toque duplo nas teclas livres</item>
-        <item>Eventos podem disparar uma cena, por exemplo quando o filme pausa</item>
-        <item>O certificado https pode usar o nome que você der à TV (ex.: tv-sala)</item>
+        <item>Volume de verdade nas TVs LG NetCast (2013) pela rede: desligar suave, teto da hora de dormir, voz e despertador</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
