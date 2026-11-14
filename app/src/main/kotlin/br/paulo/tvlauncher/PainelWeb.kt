@@ -67,7 +67,14 @@ object PainelWeb {
     fun linkEntradaQr(destino: DestinoPainel? = null): String? {
         if (!ligado()) return null
         val base = endereco() ?: return null
-        return base + DestinoPainel.fragmento(codigoEntrada.novo(), destino)   // ideia 43: abre já na página certa
+        return base + DestinoPainel.fragmento(codigoEntrada.novo(), destino) + sufixoApp()   // ideia 43: abre já na página certa
+    }
+
+    /** Ideia 101 ([QrDoApp]): certificado https e nome do Tailscale para o app de celular. */
+    private fun sufixoApp(): String {
+        val der = try { PainelTls.emissao()?.servidor?.encoded } catch (_: Exception) { null }
+        val ts = if (::app.isInitialized) TunelTailscale.nome(app) else null
+        return QrDoApp.sufixo(der, ts)
     }
 
     /**
@@ -87,7 +94,7 @@ object PainelWeb {
         val base = endereco() ?: return null
         modoPrimeira = true
         ajustar(app)   // a porta abre numa thread à parte: até a pessoa apontar o celular, já está de pé
-        return base + "#primeira=" + codigoPrimeira.novo()
+        return base + "#primeira=" + codigoPrimeira.novo() + sufixoApp()
     }
 
     /** A tela do QR saiu: o código deixa de valer e, se o PIN não foi criado, a porta fecha de novo. */

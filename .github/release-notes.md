@@ -8,6 +8,7 @@ A fast, ad-free home screen for Google TV and Android TV. See the [README](https
 |---|---|
 | `one-tv-launcher.apk` | 32-bit (`armeabi-v7a`), e.g. Chromecast with Google TV |
 | `one-tv-launcher-arm64.apk` | 64-bit (`arm64-v8a`) |
+| `one-tv-celular.apk` | The phone app (Android 10+): finds your TVs, opens the panel with a pinned certificate, phone volume keys, Share to TV |
 
 Each APK has a `.sha256` file next to it. Already installed? The launcher updates itself from here.
 

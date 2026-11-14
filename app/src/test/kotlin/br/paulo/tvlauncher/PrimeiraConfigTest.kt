@@ -47,3 +47,21 @@ class PrimeiraConfigTest {
         assertEquals(CodigoEntrada.VALIDADE_MS, c.validadeMs)
     }
 }
+
+/** Ideia 101: o fim do QR para o app de celular. */
+class QrDoAppTest {
+    @org.junit.Test fun `sem certificado e sem Tailscale nada muda no QR`() {
+        org.junit.Assert.assertEquals("", QrDoApp.sufixo(null, null))
+    }
+
+    @org.junit.Test fun `impressao e o SHA-256 em hex minusculo e o nome do Tailscale entra`() {
+        val s = QrDoApp.sufixo("abc".toByteArray(), "OneTV-Sala.tail1234.ts.net")
+        org.junit.Assert.assertEquals(
+            "&fp=ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad&ts=onetv-sala.tail1234.ts.net", s)
+    }
+
+    @org.junit.Test fun `nome que nao e do Tailscale fica de fora`() {
+        org.junit.Assert.assertEquals("", QrDoApp.sufixo(null, "evil.example.com"))
+        org.junit.Assert.assertEquals("", QrDoApp.sufixo(null, "a&b.ts.net"))
+    }
+}

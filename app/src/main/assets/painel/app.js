@@ -2533,7 +2533,7 @@ window.addEventListener('resize', () => { if (!$('abaRede').hidden) carregarRede
  */
 function pegarCodigoQr() {
   if (!location.hash.startsWith('#qr=')) return null;
-  const m = /^#qr=([0-9a-f]{48})(?:&ir=([a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)?))?$/.exec(location.hash);
+  const m = /^#qr=([0-9a-f]{48})(?:&ir=([a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)?))?(?:&(?:fp|ts)=[a-z0-9.-]*)*$/.exec(location.hash);
   history.replaceState(null, '', location.pathname + location.search);
   return m ? { codigo: m[1], ir: m[2] || '' } : null;
 }
