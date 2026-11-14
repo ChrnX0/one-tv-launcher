@@ -79,13 +79,48 @@ class PainelCatalogo(private val act: Activity) {
         const val SINOPSE_SP = 17f
 
         /**
-         * "Ir para a letra" (acréscimo 3): letras grandes numa janela por cima, só enquanto escolhe. Só oferece as letras
-         * que existem na grade. [aoEscolher] recebe a letra ('#' = números e símbolos).
+         * "Ir para a letra" (acréscimo 3): letras grandes numa grade 9 × 3 por cima, só enquanto escolhe. Grade e não lista:
+         * com 27 linhas, chegar ao Z custava 26 apertos (visto na Sala, 14/11/2026); assim são no máximo 8 + 2.
+         * Mostra todas as letras na hora (conferir quais existem em 20 mil títulos levava 5 s na TV); letra sem título
+         * cai no 1º título depois dela. [aoEscolher] recebe a letra ('#' = números e símbolos).
          */
-        fun escolherLetra(act: Activity, presentes: Set<Char>, aoEscolher: (Char) -> Unit) {
-            val letras = ColunaRegras.LETRAS.filter { it in presentes }
-            if (letras.isEmpty()) return
-            Estilo.lista(act, act.getString(R.string.coluna_letra_titulo), letras.map { it.toString() }) { i -> aoEscolher(letras[i]) }
+        fun escolherLetra(act: Activity, aoEscolher: (Char) -> Unit) {
+            val d = android.app.Dialog(act)
+            fun dp(v: Int) = (v * act.resources.displayMetrics.density + 0.5f).toInt()
+            val grade = android.widget.GridLayout(act).apply { columnCount = COLUNAS_LETRAS; useDefaultMargins = false }
+            val celulas = ColunaRegras.LETRAS.map { letra ->
+                TextView(act).apply {
+                    text = letra.toString(); textSize = LETRA_SP; typeface = Fontes.manrope(700); gravity = Gravity.CENTER
+                    isFocusable = true; isClickable = true
+                    val normal = GradientDrawable().apply { cornerRadius = dp(12).toFloat(); setColor(Estilo.SUPERFICIE_ALTA) }
+                    val foco = GradientDrawable().apply { cornerRadius = dp(12).toFloat(); setColor(Estilo.FOCO) }
+                    background = normal; setTextColor(Estilo.TEXTO)
+                    // Foco = branco com letra escura (o mesmo contraste das opções das outras janelas).
+                    setOnFocusChangeListener { _, tem -> background = if (tem) foco else normal; setTextColor(if (tem) Estilo.FUNDO else Estilo.TEXTO) }
+                    setOnClickListener { d.dismiss(); aoEscolher(letra) }
+                }.also { grade.addView(it, android.widget.GridLayout.LayoutParams().apply { width = dp(LADO_DP); height = dp(LADO_DP); setMargins(dp(5), dp(5), dp(5), dp(5)) }) }
+            }
+            val cartao = LinearLayout(act).apply {
+                orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_HORIZONTAL
+                setPadding(dp(28), dp(24), dp(28), dp(28))
+                background = Estilo.fundo(act, Estilo.CARTAO, Estilo.RAIO, Estilo.VIDRO_BORDA)
+                addView(TextView(act).apply { text = act.getString(R.string.coluna_letra_titulo); textSize = TITULO_SP; typeface = Fontes.manrope(700); setTextColor(Estilo.TEXTO) },
+                    LinearLayout.LayoutParams(-2, -2).apply { bottomMargin = dp(16) })
+                addView(grade)
+            }
+            d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
+            d.setContentView(cartao)
+            d.window?.apply {
+                setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT))
+                addFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+                setDimAmount(0.6f)
+            }
+            d.setOnShowListener { celulas[1].requestFocus() }   // começa no A
+            d.show()
         }
+
+        const val COLUNAS_LETRAS = 9
+        const val LADO_DP = 72
+        const val LETRA_SP = 30f
     }
 }

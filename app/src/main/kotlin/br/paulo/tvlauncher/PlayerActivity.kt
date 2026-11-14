@@ -482,8 +482,10 @@ class PlayerActivity : Activity() {
         infoNumero = TextView(this).apply {
             textSize = 22f; typeface = Fontes.manrope(600); setTextColor(Estilo.FUNDO); gravity = Gravity.CENTER
             background = Estilo.fundo(context, ambar, Estilo.RAIO_PEQUENO)
+            // Largura conforme o número: canal 1655 quebrava em "165 / 5" na caixa fixa de 48 dp (visto na Sala, 14/11/2026).
+            maxLines = 1; minWidth = dp(48); setPadding(dp(8), 0, dp(8), 0)
         }
-        linha.addView(infoNumero, LinearLayout.LayoutParams(dp(48), dp(44)).apply { marginEnd = dp(14) })
+        linha.addView(infoNumero, LinearLayout.LayoutParams(-2, dp(44)).apply { marginEnd = dp(14) })
         val textos = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         infoTitulo = Estilo.texto(this, Estilo.Papel.TITULO).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
         infoLinha = TextView(this).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }

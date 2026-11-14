@@ -97,11 +97,18 @@ object ColunaRegras {
      * Onde começa a [letra] numa grade em ordem de nome (as chaves já ordenadas): o 1º título dela ou, se não houver,
      * o 1º depois dela. '#' = o começo. -1 = grade vazia.
      */
-    fun indiceDaLetra(chavesOrdenadas: List<String>, letra: Char): Int {
-        if (chavesOrdenadas.isEmpty()) return -1
+    fun indiceDaLetra(chavesOrdenadas: List<String>, letra: Char): Int = indiceDaLetra(chavesOrdenadas.size, { chavesOrdenadas[it] }, letra)
+
+    /**
+     * O mesmo, por busca binária: só calcula a chave de ~15 títulos em vez de 20 mil (calcular todas levava segundos na
+     * TV). Vale porque a grade em ordem de nome está ordenada por essa mesma chave ([Vod.ordenarPorNome]).
+     */
+    fun indiceDaLetra(tamanho: Int, chaveEm: (Int) -> String, letra: Char): Int {
+        if (tamanho == 0) return -1
         if (letra == '#') return 0
-        val alvo = letra.lowercaseChar()
-        val i = chavesOrdenadas.indexOfFirst { val l = letraDe(it); l != '#' && l.lowercaseChar() >= alvo }
-        return if (i >= 0) i else chavesOrdenadas.size - 1
+        val alvo = letra.lowercaseChar().toString()
+        var lo = 0; var hi = tamanho
+        while (lo < hi) { val m = (lo + hi) ushr 1; if (chaveEm(m) < alvo) lo = m + 1 else hi = m }
+        return minOf(lo, tamanho - 1)
     }
 }

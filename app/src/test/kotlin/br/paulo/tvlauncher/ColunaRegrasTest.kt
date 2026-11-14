@@ -65,6 +65,10 @@ class ColunaRegrasTest {
         assertEquals(4, ColunaRegras.indiceDaLetra(g, 'M'))
         assertEquals(5, ColunaRegras.indiceDaLetra(g, 'Z'))
         assertEquals(-1, ColunaRegras.indiceDaLetra(emptyList(), 'A'))
+        // Títulos sem letra latina (chave "\uFFFF…") ficam no fim; letra sem título cai no 1º depois dela.
+        val h = listOf("1917", "baby", "casa", "zorro", "\uFFFF가")
+        assertEquals(1, ColunaRegras.indiceDaLetra(h, 'A'))
+        assertEquals(3, ColunaRegras.indiceDaLetra(h, 'Y'))
     }
 
     @Test fun concluidoPorMinutos() {
