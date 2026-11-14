@@ -312,6 +312,17 @@ class ConfigLauncherActivity : Activity() {
             pedirContaLegenda { tem -> linhaLeg.valor(getString(if (tem) R.string.legenda_conta_sim else R.string.legenda_conta_nao)) }
         }
         c.addView(linhaLeg)
+        // Som e legenda para quem enxerga ou ouve pior (14/11/2026). As mesmas chaves do menu ▼ do player.
+        secao(c, getString(R.string.acess_config_titulo))
+        val chavesAcess = listOf(PlayerAcessivel.LEGENDA_FUNDO to R.string.acess_legenda_fundo, PlayerAcessivel.LEGENDA_AMARELA to R.string.acess_legenda_amarela) +
+            (if (EfeitosSom.disponivel()) listOf(PlayerAcessivel.VOLUME_IGUAL to R.string.acess_volume, PlayerAcessivel.VOZ_CLARA to R.string.acess_voz) else emptyList())
+        chavesAcess.forEachIndexed { i, (k, rot) ->
+            lateinit var l: LinhaCfg
+            l = linha(getString(rot), if (i == 0) getString(R.string.acess_config_texto) else "", chave = EfeitosSom.ligado(this, k)) {
+                l.ligado(EfeitosSom.alternar(this, k))
+            }
+            c.addView(l)
+        }
         // Foto da conta Google na bolinha do perfil (FotoPerfil, 13/11/2026): abre a tela do código para o celular.
         secao(c, getString(R.string.fp_secao))
         c.addView(linha(getString(R.string.fp_linha), getString(R.string.fp_linha_det), seta = true) {

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Player for people who see and hear less well (14/11/2026): subtitles, even volume, clearer voices. -->
+<resources>
+    <string name="acess_legenda_fundo">Subtitles with black background</string>
+    <string name="acess_legenda_amarela">Yellow subtitles</string>
+    <string name="acess_volume">Even volume between channels</string>
+    <string name="acess_voz">Clearer voices</string>
+    <string name="acess_volume_ligado">Even volume on: quiet channels and movies get louder</string>
+    <string name="acess_volume_desligado">Even volume off</string>
+    <string name="acess_voz_ligado">Clearer voices on</string>
+    <string name="acess_voz_desligado">Clearer voices off</string>
+    <string name="acess_config_titulo">Sound and subtitles</string>
+    <string name="acess_config_texto">For whoever sees or hears less well. Also in the ▼ menu of the player.</string>
+</resources>

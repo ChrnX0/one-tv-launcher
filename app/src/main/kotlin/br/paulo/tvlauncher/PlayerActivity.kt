@@ -70,6 +70,9 @@ class PlayerActivity : Activity() {
     private var favoritos: Set<String> = emptySet()
     private var perfilCarregado = ""   // de que perfil são os [favoritos] na memória (ideia 11)
     private var recentes: List<String> = emptyList()
+    /** Modo simples da HOME (ModoSimples): a lista abre em Favoritos, com menos linhas e letra maior. */
+    private val simples by lazy { ModoSimples.ligado(this) }
+    private val efeitos = EfeitosSom()   // volume parecido e voz mais clara (PlayerAcessivel)
     private var categoria = PlayerLista.TODOS   // a escolhida na lista: o ▲▼ zapeia dentro dela
     private var escondidos: Set<String> = emptySet()   // grupos que o usuário escondeu
     private var liberados: Set<String> = emptySet()    // grupos adultos que ele liberou (começam ocultos)
@@ -116,7 +119,7 @@ class PlayerActivity : Activity() {
         raiz.addView(video, FrameLayout.LayoutParams(-1, -1, Gravity.CENTER))
         raiz.addView(montarInfo(), FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM).apply { setMargins(dp(Estilo.MARGEM_LATERAL), 0, dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL)) })
         janelas = PlayerJanelas(this)
-        lista = PlayerListaTela(this, aoAssistir = { c, chave -> escolherNaLista(c, chave) }, aoFavoritar = { alternarFavorito(it) },
+        lista = PlayerListaTela(this, aoAssistir = { c, chave -> escolherNaLista(c, chave) }, aoFavoritar = { alternarFavorito(it) }, simples = simples,
             aoBuscar = { buscar() }, aoFiltros = { abrirFiltros() }, aoOcultarGrupo = { alternarOculto(it) },
             aoGuia = { cs, nome -> abrirGrade(cs, nome) })
         raiz.addView(lista.raiz, FrameLayout.LayoutParams(-1, -1))
@@ -183,6 +186,7 @@ class PlayerActivity : Activity() {
         // O PIN vale só enquanto o player está na frente: saiu (HOME, outro app, tela apagou), tranca de novo.
         if (filtro.mostrarOcultas) filtro = filtro.copy(mostrarOcultas = false)
         // Saiu da tela (HOME, outro app): solta o vídeo na hora (e a pausa curta junto: ela não sobrevive a sair).
+        efeitos.soltar()
         player?.release(); player = null
         pausa.descartar()   // a pausa curta é só memória do player: saiu, acabou
     }
@@ -221,7 +225,10 @@ class PlayerActivity : Activity() {
             tela.post {
                 if (isDestroyed) return@post
                 canais = lidos
-                favoritos = fav; perfilCarregado = perfil; recentes = rec; categoria = cat; escondidos = esc; liberados = lib; parental = par
+                favoritos = fav; perfilCarregado = perfil; recentes = rec
+                // Modo simples: abre sempre em Favoritos (sem eles, Recentes), e o ▲▼ zapeia só por ali.
+                categoria = if (simples) PlayerAcessivel.entradaSimples(listOf(PlayerLista.FAVORITOS to fav.size, PlayerLista.RECENTES to rec.size), PlayerLista.TODOS) else cat
+                 escondidos = esc; liberados = lib; parental = par
                 refiltrar()
                 if (visiveis.isEmpty()) { mostrarAviso(getString(R.string.player_sem_canais)); return@post }
                 // Canais lidos: some o "Carregando os canais…" (13/11/2026, visto na Sala: ficava na tela por minutos em
@@ -288,9 +295,10 @@ class PlayerActivity : Activity() {
         // Trava final do controle parental: canal bloqueado não toca sem o PIN, venha de onde vier o pedido.
         if (ControleParental.bloqueado(c, parental) && !filtro.mostrarOcultas) { mostrarAviso(getString(R.string.player_bloqueado)); return }
         if (!ControleParental.bloqueado(c, parental)) lembrarRecente(c)   // bloqueado não vai para os recentes
-        val p = player ?: ExoPlayer.Builder(this).setLoadControl(pausa.novaCarga()).build().also { novo ->
+        val p = player ?: ExoPlayer.Builder(this, EfeitosSom.fabrica(this)).setLoadControl(pausa.novaCarga()).build().also { novo ->
             novo.setVideoSurfaceView(video)
             novo.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MOVIE).build(), true)
+            efeitos.aplicar(novo.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
             novo.addListener(ouvinte)
             player = novo
         }
@@ -585,7 +593,34 @@ class PlayerActivity : Activity() {
         val origem = if (c.arquivoDias > 0) TvDeVolta.origem(c.url) else null
         if (origem != null) itens += getString(R.string.tvv_abrir) to { abrirTvDeVolta(c, origem) }
         itens += getString(R.string.imagem_opcao, PlayerImagem.rotulo(this, modoImagem)) to { escolherImagem() }
-        Estilo.lista(this, c.nome, itens.map { it.first }) { i -> itens[i].second() }
+        // Para quem ouve pior (14/11/2026): ligar/desligar, marcado quando ligado. Só aparece se o aparelho tem o efeito.
+        val marcadas = ArrayList<Int>()
+        if (EfeitosSom.disponivel()) {
+            if (EfeitosSom.volumeIgual(this)) marcadas += itens.size
+            itens += getString(R.string.acess_volume) to { alternarSom(c, PlayerAcessivel.VOLUME_IGUAL) }
+            if (EfeitosSom.vozClara(this)) marcadas += itens.size
+            itens += getString(R.string.acess_voz) to { alternarSom(c, PlayerAcessivel.VOZ_CLARA) }
+        }
+        Estilo.lista(this, c.nome, itens.map { it.first }, marcadas) { i -> itens[i].second() }
+    }
+
+    /**
+     * Liga/desliga volume parecido ou voz mais clara. Se mudar entre "som direto para a TV" e "som decodificado aqui"
+     * (EfeitosSom.fabrica), o player é refeito e o canal volta a tocar; senão, só o efeito é trocado.
+     */
+    private fun alternarSom(c: Canal, chave: String) {
+        val antes = PlayerAcessivel.precisaEfeito(EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
+        val ligou = EfeitosSom.alternar(this, chave)
+        val depois = PlayerAcessivel.precisaEfeito(EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
+        mostrarAvisoBreve(getString(when (chave) {
+            PlayerAcessivel.VOLUME_IGUAL -> if (ligou) R.string.acess_volume_ligado else R.string.acess_volume_desligado
+            else -> if (ligou) R.string.acess_voz_ligado else R.string.acess_voz_desligado
+        }))
+        val p = player ?: return
+        if (antes != depois && arquivo == null) {
+            efeitos.soltar(); pausa.descartar(); p.release(); player = null
+            tocar(c)
+        } else efeitos.aplicar(p.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
     }
 
     private fun escolherImagem() = PlayerImagem.escolher(this, modoImagem) { m ->

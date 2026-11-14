@@ -97,6 +97,8 @@ class SeriesActivity : Activity() {
     private var avisoProximo: android.app.Dialog? = null
 
     private lateinit var coluna: ColunaCategorias
+    /** Modo simples da HOME (ModoSimples): o player segue, com menos linhas, letra maior e entrada no Continuar. */
+    private val simples by lazy { ModoSimples.ligado(this) }
     private lateinit var grade: GridView
     private lateinit var painelInfo: PainelCatalogo   // topo (categoria + pílulas do filtro) e a ficha rápida da série em foco
     private lateinit var aviso: TextView
@@ -111,8 +113,9 @@ class SeriesActivity : Activity() {
         val raiz = FrameLayout(this).apply { background = Estilo.fundoTela(context) }
         val colunas = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(18)) }
         // Coluna esquerda nova (14/11/2026, esboço aprovado): ações fixas, LISTAS, Todos fixo, categorias de A a Z rolando.
-        coluna = ColunaCategorias(this, getString(R.string.series_titulo), aoParar = { escolherCat(it) }, aoOk = { okNaColuna(it) })
-        colunas.addView(coluna.raiz, LinearLayout.LayoutParams(dp(Estilo.Leitura.COLUNA_CATEGORIAS), -1))
+        coluna = ColunaCategorias(this, getString(R.string.series_titulo), aoParar = { escolherCat(it) }, aoOk = { okNaColuna(it) },
+            escala = PlayerAcessivel.escala(simples))
+        colunas.addView(coluna.raiz, LinearLayout.LayoutParams(dp((Estilo.Leitura.COLUNA_CATEGORIAS * PlayerAcessivel.escala(simples)).toInt()), -1))
         val direita = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         // Painel direito (esboço direita-filmes.png, aprovado em 14/11/2026): o filtro em pílulas e a ficha rápida.
         painelInfo = PainelCatalogo(this)
@@ -346,6 +349,8 @@ class SeriesActivity : Activity() {
                     L(CONTINUAR, rotulo(R.string.filmes_continuar), cont.size, IconePlayer.Tipo.PLAY, 0, false, ""),
                     L(ASSISTIDOS, rotulo(R.string.filmes_assistidos), vistas.size, IconePlayer.Tipo.VISTO, 0, false, ""),
                 )
+                    // Modo simples (HOME no modo simples): só Buscar, Interesses e Continuar no bloco fixo.
+                    .let { a -> if (simples) PlayerAcessivel.blocoSimples(a, { it.chave }, setOf(BUSCAR, INTERESSES, CONTINUAR)) else a }
                 val fixas = ArrayList<ColunaCategorias.Linha>()
                 if (termoS.isNotEmpty()) fixas += L(BUSCA, getString(R.string.player_cat_busca, termoS), res.size, IconeMidia.Tipo.LUPA, 0, false, "")
                 fixas += L(TODOS, rotulo(R.string.player_cat_todos), vis.size, IconePlayer.Tipo.TODOS, 0, false, "")
@@ -357,7 +362,8 @@ class SeriesActivity : Activity() {
                         if (mostrar && g in ocultasTodas) IconePlayer.Tipo.CADEADO else null, novos[g] ?: 0, false, "")
                 }
                 val todasChaves = (acoes + fixas + rola).mapTo(HashSet()) { it.chave }
-                val ch0 = if (inicial && chaveS != BUSCA) ColunaRegras.categoriaInicial(ultimaS?.takeIf { it != BUSCA }, todasChaves,
+                val ch0 = if (inicial && simples) PlayerAcessivel.entradaSimples(listOf(CONTINUAR to cont.size, INTERESSES to ints.size), TODOS)
+                    else if (inicial && chaveS != BUSCA) ColunaRegras.categoriaInicial(ultimaS?.takeIf { it != BUSCA }, todasChaves,
                     if (cont.isNotEmpty()) CONTINUAR else TODOS) else chaveS
                 val ch = if (ch0 !in todasChaves || ch0 == BUSCAR || ch0 == FILTRO) TODOS else ch0
                 val g = if (modo == ModoGrade.IGUAL && ch == chaveS) null else {
