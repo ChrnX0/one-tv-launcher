@@ -17,6 +17,8 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>“Are you still watching?” in large text when nobody presses the remote for the time set in Settings › Screen and power › Turn off when idle; with no answer in 60 s, the movie or app pauses before the screen goes off, so you can continue from there later</item>
+        <item>Without internet, the top of the home screen says in one line what still works (USB drive, Network, Recordings) and goes away when it comes back; OK on it opens Diagnostics</item>
         <item>New Games screen, console style: the focused game shows big with its official logo, one row with the last played first (OK plays), and the home screen Games card shows the last game</item>
         <item>The TV as a network drive: its storage opens in Windows (Map network drive), Mac, Linux and phone file apps over WebDAV, with the panel PIN as password; it also shows up in Windows Network (Settings › Remote access, off by default)</item>
         <item>Player: the top of the column just says TV, Movies or Series, with Search and Filter buttons beside it; the list makes room for Recordings (TV: Favorites, Recent, Guide, Recordings)</item>
@@ -101,6 +103,8 @@
         <item>Movies and series at their own frame rate: the TV switches to 24 Hz and the picture does not judder in camera moves (Settings › TV and movies, ▼ menu and panel)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>ainda_assistindo</item>
+        <item>sem_internet</item>
         <item>unidade_rede</item>
         <item>coluna_botoes</item>
         <item>jogos_card</item>
@@ -182,6 +186,8 @@
         <item>taxa_quadros</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>In Settings › Screen and power, set Turn off when idle to 30 min, play a movie and press nothing</item>
+        <item>Turn off the internet at the router (or unplug its internet cable) and press HOME; wait 30 s</item>
         <item>Network drive</item>
         <item>Search and Filter at the top of the column</item>
         <item>Press HOME and go to the end of the WATCH AND PLAY row</item>
@@ -263,6 +269,8 @@
         <item>Open a movie and watch a scene where the camera pans slowly</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Did a large “Are you still watching?” appear, did any button cancel it and, with no answer, did the movie pause before the screen went off (and continue from there)?</item>
+        <item>Did “No internet · Still working: …” appear at the top, and go away when the internet came back?</item>
         <item>With Settings › Remote access › Show the TV as a network drive on, does Windows Map network drive with the address shown there and the panel PIN open the TV folders?</item>
         <item>In TV, Movies and Series, does ▲ on the first row reach the Search and Filter buttons beside the title, and ▼ go back to the list?</item>
         <item>Is there an amber Games card after Network?</item>

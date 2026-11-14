@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Idea 88: HOME without internet -->
+    <string name="si_sem_internet">No internet</string>
+    <string name="si_funcionam">Still working: %1$s</string>
+    <string name="si_pendrive">USB drive</string>
+    <!-- Idea 80: "Are you still watching?" -->
+    <string name="ad_pergunta">Are you still watching?</string>
+</resources>

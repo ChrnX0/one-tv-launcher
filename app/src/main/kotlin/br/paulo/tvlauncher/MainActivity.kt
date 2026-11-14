@@ -187,9 +187,74 @@ class MainActivity : Activity() {
                 // Clima fresco (< 2 min)? Entao nao precisa; senao, busca agora, fora da fila dos 5 min.
                 val em = getSharedPreferences("clima", MODE_PRIVATE).getLong("em", 0)
                 if (System.currentTimeMillis() - em > 2 * 60_000L) ui.post { buscarClima() }
+                ui.post { avaliarSemInternet() }
             }
+            // Ideia 88: a internet caiu ou voltou (validação do Android) -> a pílula "Sem internet" aparece ou some.
+            override fun onLost(rede: android.net.Network) { ui.post { avaliarSemInternet() } }
+            override fun onCapabilitiesChanged(rede: android.net.Network, caps: android.net.NetworkCapabilities) { ui.post { avaliarSemInternet() } }
         }
         try { cm.registerDefaultNetworkCallback(vigiaRede!!) } catch (e: Exception) { vigiaRede = null }
+    }
+
+    // ---- Ideia 88 (14/11/2026): sem internet, a HOME diz em uma linha o que continua funcionando (SemInternet.kt).
+    private lateinit var pilulaSemInternet: LinearLayout
+    private lateinit var txtSemInternet: TextView
+    private var semInternetDesde = 0L
+    private val tarefaSemInternet = Runnable { avaliarSemInternet() }
+
+    /**
+     * (internet, rede local). Olha TODAS as redes, não só a padrão: com a VPN sempre ligada a padrão é o túnel, e a
+     * validação dele nem sempre reflete a internet de baixo. Internet = alguma rede validada pelo Android.
+     */
+    private fun estadoInternet(): Pair<Boolean, Boolean> {
+        val cm = getSystemService(android.net.ConnectivityManager::class.java) ?: return true to true
+        val caps = runCatching { @Suppress("DEPRECATION") cm.allNetworks.mapNotNull { cm.getNetworkCapabilities(it) } }.getOrNull() ?: return true to true
+        val internet = caps.any { it.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_VALIDATED) }
+        val local = caps.any { it.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI) || it.hasTransport(android.net.NetworkCapabilities.TRANSPORT_ETHERNET) }
+        return internet to local
+    }
+
+    private fun avaliarSemInternet() {
+        ui.removeCallbacks(tarefaSemInternet)
+        if (isDestroyed || !::pilulaSemInternet.isInitialized) return
+        val (internet, local) = estadoInternet()
+        if (internet) {
+            semInternetDesde = 0L
+            if (pilulaSemInternet.visibility != View.GONE) {
+                if (pilulaSemInternet.hasFocus()) linhaApps.requestFocus()
+                pilulaSemInternet.visibility = View.GONE
+                atualizarAvisos()
+            }
+            return
+        }
+        // Espera um pouco: no boot e na troca de Wi-Fi o Android leva alguns segundos para validar a internet.
+        val agora = android.os.SystemClock.elapsedRealtime()
+        if (semInternetDesde == 0L) semInternetDesde = agora
+        val falta = semInternetDesde + SemInternet.ESPERA_MS - agora
+        if (falta > 0) { ui.postDelayed(tarefaSemInternet, falta); return }
+        val app = applicationContext
+        Fundo.rodar {
+            // Fora da thread da tela: as contas de Na rede são decifradas do disco.
+            val pendrive = runCatching { GravacaoDestino.pendrive(app) != null }.getOrDefault(false)
+            val servidores = runCatching { MidiaArmazem.contas(app).map { it.servidor } }.getOrDefault(emptyList())
+            val destino = when {
+                pendrive -> "pendrive"
+                runCatching { GravacaoDestino.pastaRede(app) }.getOrDefault("").isNotEmpty() -> "rede"
+                else -> null
+            }
+            val itens = SemInternet.itens(SemInternet.Estado(local, pendrive, servidores, destino))
+            val frase = SemInternet.frase(itens, getString(R.string.si_sem_internet), { getString(R.string.si_funcionam, it) },
+                mapOf(SemInternet.Item.PENDRIVE to getString(R.string.si_pendrive),
+                    SemInternet.Item.NA_REDE to getString(R.string.home_card_rede),
+                    SemInternet.Item.GRAVACOES to getString(R.string.grv_tela)))
+            ui.post {
+                if (isDestroyed || estadoInternet().first) return@post
+                txtSemInternet.text = frase
+                pilulaSemInternet.visibility = View.VISIBLE
+                atualizarAvisos()
+            }
+        }
+        ui.postDelayed(tarefaSemInternet, 60_000L)   // pendrive ligado ou tirado muda a frase
     }
 
     private fun pararVigiaRede() {
@@ -251,6 +316,7 @@ class MainActivity : Activity() {
         atualizarPilulaJogo()
         getSharedPreferences("launcher", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteLocal)
         vigiarRedeParaClima()   // busca o clima assim que a rede subir no boot, sem esperar o ciclo de 5 min
+        avaliarSemInternet()    // ideia 88
         Privilegio.religarAcessibilidade(this)
         Privilegio.religarDepuracaoSemFio(this)   // o Android pode ter desligado a Depuração sem fio no reinício
         // Fora da thread da tela (13/11/2026): a foto da conta (AccountManager + arquivos) e os agendamentos do despertador
@@ -284,6 +350,7 @@ class MainActivity : Activity() {
         vigiaTocando.desligar()
         getSharedPreferences("launcher", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteLocal)
         pararVigiaRede()
+        ui.removeCallbacks(tarefaSemInternet)
         menuAberto?.dismiss()
         fecharPasta()
         if (modoMover) cancelarMover()
@@ -546,6 +613,15 @@ class MainActivity : Activity() {
             setOnClickListener { abrirBusca() }
         }
         avisos.addView(pilulaJogo, lpPilula())
+        // Ideia 88: "Sem internet · Funcionam: pendrive, Na rede, Gravações". Primeira da cápsula (é o que mais importa
+        // quando aparece). OK abre o Diagnóstico, que explica a queda em uma frase. Ver avaliarSemInternet.
+        txtSemInternet = texto(12.5f, Estilo.ATENCAO, fonteUi).apply { includeFontPadding = false }
+        pilulaSemInternet = pilula(IconeApp(IconeApp.Tipo.SEM_REDE, Estilo.ATENCAO), vidro = false).apply {
+            visibility = View.GONE
+            addView(txtSemInternet)
+            setOnClickListener { startActivity(Intent(this@MainActivity, DiagnosticoActivity::class.java)) }
+        }
+        avisos.addView(pilulaSemInternet, 0, lpPilula())
         atualizarAvisos()
 
         raiz.addView(topo, FrameLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(TOPO_PALCO) })

@@ -266,7 +266,7 @@
     <string name="cb_bordas">Edges</string>
     <string name="cb_barras" formatted="false">75% color bars</string>
     <string name="cb_linhas">1-pixel lines</string>
-    <string name="ad_ninguem">Nobody has touched the remote for %1$d min.\nPress any button to keep watching.</string>
+    <string name="ad_ninguem">Nobody has touched the remote for %1$s.\nPress any button to keep watching.</string>
     <string name="ad_vai_desligar">The TV will turn off in %1$d s</string>
     <string name="home_busca_voz">Voice search</string>
     <string name="pg_aviso_as">Reminder at %1$s: %2$s</string>
