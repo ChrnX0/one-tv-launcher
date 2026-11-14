@@ -60,7 +60,7 @@ class CasaActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(this@CasaActivity)
-            clipChildren = false; clipToPadding = false
+            // A rolagem fica presa à própria área: sem isto os cartões de baixo eram desenhados por cima das dicas.
             setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.E3))
         }
         // Título e resumo à esquerda; o alto à direita é da hora (Moldura.kt).
@@ -71,13 +71,15 @@ class CasaActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             clipChildren = false; clipToPadding = false
             // Folga em volta: o cartão focado cresce 5% e não pode ser cortado pela borda da rolagem.
-            setPadding(dp(6), dp(Estilo.E1), dp(6), dp(Estilo.E3))
+            setPadding(dp(FOLGA_DP), dp(Estilo.E1), dp(FOLGA_DP), dp(Estilo.E3))
         }
         val rolagem = ScrollView(this).apply {
-            isVerticalScrollBarEnabled = false; clipChildren = false; clipToPadding = false; isFillViewport = true
+            isVerticalScrollBarEnabled = false; isFillViewport = true
+            // Esmaece a borda de baixo quando há mais cartões: mostra que dá para descer.
+            isVerticalFadingEdgeEnabled = true; setFadingEdgeLength(dp(Estilo.E3))
             addView(grade)
         }
-        raiz.addView(rolagem, LinearLayout.LayoutParams(-1, 0, 1f).apply { leftMargin = -dp(6); rightMargin = -dp(6) })
+        raiz.addView(rolagem, LinearLayout.LayoutParams(-1, 0, 1f).apply { leftMargin = -dp(FOLGA_DP); rightMargin = -dp(FOLGA_DP) })
         dicas = FrameLayout(this)
         raiz.addView(dicas, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(Estilo.E1) })
         mostrarDicas(false)
@@ -353,7 +355,6 @@ class CasaActivity : Activity() {
             ligado = liga
             this.indisponivel = indisponivel
             barra.pct = brilho
-            casca.alpha = if (indisponivel) 0.5f else 1f
             pintar()
         }
 
@@ -367,6 +368,8 @@ class CasaActivity : Activity() {
 
         fun pintar() {
             val foco = casca.isFocused
+            // Indisponível fica apagado, mas não com foco: o cartão branco a 50% virava cinza e parecia defeito.
+            casca.alpha = if (indisponivel && !foco) 0.5f else 1f
             casca.background = Estilo.superficie(this@CasaActivity, foco)
             nomeTv.setTextColor(if (foco) Estilo.TEXTO_NO_FOCO else Estilo.TEXTO)
             nomeTv.typeface = Estilo.fonte(if (foco) 600 else 500)
@@ -441,6 +444,8 @@ class CasaActivity : Activity() {
         private const val COLUNAS = 4
         private const val ALTURA_DP = 104
         private const val ESPACO_DP = 12
+        /** Folga em volta da grade para o cartão focado (até 8% maior no ajuste de brilho) não ser cortado pela rolagem. */
+        private const val FOLGA_DP = 12
         private const val ESCALA = 1.05f
         private const val ESCALA_AJUSTE = 1.08f   // no ajuste de brilho o cartão cresce mais: dá para ver que mudou de modo
         /** Releitura com a tela aberta. O Home Assistant é local; 5 s é o mesmo ritmo do vigia (CasaHA). */
