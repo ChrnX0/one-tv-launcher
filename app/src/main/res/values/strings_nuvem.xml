@@ -21,4 +21,12 @@
     <string name="rede_dbx_codigo_explica">Point your phone camera at the QR, sign in to Dropbox and tap Allow. Dropbox shows a code: type it here (you can type from your phone, in the panel).</string>
     <string name="rede_dbx_codigo">Dropbox code</string>
     <string name="rede_dbx_codigo_erro">Type the whole code Dropbox showed.</string>
+    <!-- Box (14/11/2026): needs the app secret and a return address; RetornoNuvem.kt + site/box.html. -->
+    <string name="rede_box_explica">Once, on a computer: app.box.com/developers/console › Create New App › Custom App › User Authentication (OAuth 2.0). In the Configuration tab, under OAuth 2.0 Redirect URI, put %1$s and leave only “Read all files and folders” ticked. Save, then copy the Client ID and the Client Secret here.</string>
+    <string name="rede_box_id">Client ID</string>
+    <string name="rede_box_segredo">Client Secret</string>
+    <string name="rede_box_erro">Client ID and Client Secret have only letters and numbers. Copy both from the Configuration tab.</string>
+    <string name="rede_box_sem_rede">The TV is not on the home network. Connect it and try again.</string>
+    <string name="rede_box_codigo_explica">Point the camera of a phone that is on the same Wi‑Fi as the TV at the QR, sign in to Box and tap Grant access. The phone comes back to the TV by itself: nothing to type.</string>
+    <string name="rede_box_porta">Port %1$d on the TV is busy. Close other apps and try again.</string>
 </resources>

@@ -90,4 +90,24 @@ class NuvemTest {
         assertEquals(listOf(c), volta)
         assertTrue(Pastas.ehPasta(c))
     }
+
+    @Test fun paginaDoBoxLevaRetornoEEstado() {
+        val e = Nuvem.estadoBox("ab".repeat(16), "192.168.1.153", 8095)
+        assertEquals("${"ab".repeat(16)}_192.168.1.153_8095", e)
+        val u = Nuvem.paginaBox("cid123", e)
+        assertTrue(u.startsWith("https://account.box.com/api/oauth2/authorize?client_id=cid123&response_type=code"))
+        assertTrue(u.contains("redirect_uri=https%3A%2F%2Fchrnx0.github.io%2Fone-tv-launcher%2Fbox.html"))
+        assertTrue(u.endsWith("&state=$e"))
+        assertTrue(Nuvem.credencialBoxValida("abcdefghijklmnopqrstuvwxyz012345"))
+        assertFalse(Nuvem.credencialBoxValida("abc def"))
+    }
+
+    @Test fun listaDoBoxGuardaIdsEIgnoraLinks() {
+        val (itens, total) = Nuvem.lerListaBox("""{"total_count":5,"entries":[{"type":"folder","id":"11","name":"Filmes"},
+            {"type":"file","id":"22","name":"a.mkv","size":700},{"type":"web_link","id":"33","name":"site"}],"offset":0,"limit":1000}""")
+        assertEquals(5, total)
+        assertEquals(listOf("11", "22"), itens.map { it.id })
+        assertTrue(itens[0].item.pasta); assertEquals(700L, itens[1].item.tamanho)
+        assertTrue(Nuvem.boxItens("0", 1000).endsWith("/folders/0/items?fields=name,size,type&limit=1000&offset=1000"))
+    }
 }

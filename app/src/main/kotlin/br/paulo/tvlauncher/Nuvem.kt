@@ -14,10 +14,13 @@ import java.util.Base64
  * Nuvem como fonte de vídeo (14/11/2026): OneDrive e Dropbox viram "pastas de arquivos" como o SMB e o FTP
  * (PastaArquivos), então a tela "Na rede" lista e o player toca pelo mesmo caminho (arq://<conta>/<caminho>).
  *
- * Login: cada dono cria o SEU app no serviço (grátis, 5 minutos) e digita o identificador dele na TV. Nada de segredo:
- * os dois são "clientes públicos" (OneDrive: código na tela, como o login do Google da TV; Dropbox: PKCE, o celular
- * mostra um código que se digita na TV). O que fica guardado (cifrado, MidiaArmazem) é o token de renovação em
- * ContaMidia.token e o id do app em ContaMidia.usuarioId. Só leitura: as permissões pedidas não deixam apagar nada.
+ * Login: cada dono cria o SEU app no serviço (grátis, 5 minutos) e digita o identificador dele na TV. OneDrive e
+ * Dropbox são "clientes públicos", sem segredo (OneDrive: código na tela, como o login do Google da TV; Dropbox: PKCE,
+ * o celular mostra um código que se digita na TV). Box (14/11/2026, noite) exige segredo do app e um endereço de volta
+ * https; o código vale só 30 s, então não dá para digitar: a página box.html do site do projeto devolve o celular para
+ * um porto que a TV abre só durante o login (RetornoNuvem). O que fica guardado (cifrado, MidiaArmazem) é o token de
+ * renovação em ContaMidia.token, o id do app em ContaMidia.usuarioId e, no Box, o segredo do app em ContaMidia.senha.
+ * Só leitura: as permissões pedidas não deixam apagar nada.
  *
  * A parte pura (endereços, JSON, PKCE) tem teste em NuvemTest; a parte de rede só junta as peças.
  */
@@ -85,6 +88,48 @@ object Nuvem {
         }
         return Triple(itens, o.optString("cursor").ifEmpty { null }, o.optBoolean("has_more"))
     }
+
+    // ---------------------------------------------------------------- Box (API 2.0)
+
+    const val BOX_API = "https://api.box.com/2.0"
+    const val BOX_TOKEN = "https://api.box.com/oauth2/token"
+    const val BOX_AUTORIZAR = "https://account.box.com/api/oauth2/authorize"
+    /** O "Redirect URI" que o dono põe no app do Box. Página estática do site do projeto (site/box.html). */
+    const val BOX_RETORNO = "https://chrnx0.github.io/one-tv-launcher/box.html"
+
+    /** Client ID e Client Secret do Box: letras e números (32 hoje; aceita uma folga). */
+    fun credencialBoxValida(s: String) = Regex("^[A-Za-z0-9]{16,64}$").matches(s.trim())
+
+    /**
+     * O "state" leva o caminho de volta: um número aleatório (a TV só aceita o código com ele), o IP da TV na rede de
+     * casa e o porto. Formato "<numero>_<ip>_<porto>"; a box.html só manda para IP de rede local.
+     */
+    fun estadoBox(numero: String, ip: String, porta: Int) = "${numero}_${ip}_$porta"
+
+    fun paginaBox(clientId: String, estado: String): String =
+        "$BOX_AUTORIZAR?client_id=${URLEncoder.encode(clientId, "UTF-8")}&response_type=code" +
+            "&redirect_uri=${URLEncoder.encode(BOX_RETORNO, "UTF-8")}&state=${URLEncoder.encode(estado, "UTF-8")}"
+
+    /** Um item da pasta do Box: o Box anda por id, não por caminho. */
+    class ItemBox(val item: PastaArquivos.Item, val id: String)
+
+    /** Lista de /folders/{id}/items: os itens e o total (para pedir a página seguinte). Links ("web_link") ficam de fora. */
+    fun lerListaBox(json: String): Pair<List<ItemBox>, Int> {
+        val o = JSONObject(json)
+        val a = o.optJSONArray("entries")
+        val itens = (0 until (a?.length() ?: 0)).mapNotNull { i ->
+            val e = a!!.optJSONObject(i) ?: return@mapNotNull null
+            val id = e.optString("id").takeIf { it.isNotEmpty() } ?: return@mapNotNull null
+            when (e.optString("type")) {
+                "folder" -> ItemBox(PastaArquivos.Item(e.optString("name"), true, 0), id)
+                "file" -> ItemBox(PastaArquivos.Item(e.optString("name"), false, e.optLong("size")), id)
+                else -> null
+            }
+        }
+        return itens to o.optInt("total_count", itens.size)
+    }
+
+    fun boxItens(idPasta: String, offset: Int) = "$BOX_API/folders/${URLEncoder.encode(idPasta, "UTF-8")}/items?fields=name,size,type&limit=1000&offset=$offset"
 
     // ---------------------------------------------------------------- PKCE (RFC 7636)
 
@@ -178,6 +223,20 @@ object Nuvem {
         return e
     }
 
+    /**
+     * Box: /files/{id}/content responde 302 com o endereço do arquivo (vale ~15 min). Não seguimos o 302 sozinhos
+     * para o token não ir junto ao outro servidor; o endereço já leva a autorização dentro.
+     */
+    fun linkBox(idArquivo: String, token: String): String {
+        val c = conexao("$BOX_API/files/${URLEncoder.encode(idArquivo, "UTF-8")}/content", "GET", mapOf("Authorization" to "Bearer $token"))
+        try {
+            val cod = c.responseCode
+            if (cod == 302 || cod == 301 || cod == 303 || cod == 307) return c.getHeaderField("Location") ?: throw IOException("sem endereço")
+            conferir(Resposta(cod, ""))
+            throw IOException("HTTP $cod")   // 202 = o Box ainda está preparando o arquivo
+        } finally { c.disconnect() }
+    }
+
     // ---------------------------------------------------------------- tokens de acesso (memória do processo)
 
     private val cache = HashMap<String, Pair<String, Long>>()
@@ -191,6 +250,9 @@ object Nuvem {
                 "refresh_token" to atual.token, "scope" to MS_ESCOPOS))
             ContaMidia.DROPBOX -> postarForm(DBX_TOKEN, mapOf("client_id" to atual.usuarioId, "grant_type" to "refresh_token",
                 "refresh_token" to atual.token))
+            // O Box troca o token de renovação a cada uso (o velho deixa de valer): por isso o novo é gravado logo abaixo.
+            ContaMidia.BOX -> postarForm(BOX_TOKEN, mapOf("client_id" to atual.usuarioId, "client_secret" to atual.senha,
+                "grant_type" to "refresh_token", "refresh_token" to atual.token))
             else -> throw IOException("não é nuvem")
         }
         // invalid_grant = a pessoa tirou a permissão ou o token venceu: só entrando de novo.
@@ -262,5 +324,52 @@ class PastaDropbox(private val c: ContaMidia) : PastaArquivos {
 
     override fun tamanho(caminho: String) = item(caminho).second
     override fun ler(caminho: String, posicao: Long): InputStream = Nuvem.abrirLink(item(caminho).third, posicao)
+    override fun close() {}
+}
+
+/** Box como pasta (API 2.0). O Box anda por id: os caminhos viram ids pelo que já foi listado (ou andando da raiz, "0"). */
+class PastaBox(private val c: ContaMidia) : PastaArquivos {
+    private val ids = HashMap<String, Pair<String, Long>>().apply { put("", "0" to 0L) }   // caminho -> (id, tamanho)
+    private var ultimo: Triple<String, String, Long>? = null   // caminho, link, quando pegou
+
+    private fun normal(caminho: String) = caminho.split('/').filter { it.isNotEmpty() }.joinToString("/")
+
+    private fun filhos(idPasta: String): List<Nuvem.ItemBox> {
+        val itens = ArrayList<Nuvem.ItemBox>()
+        var paginas = 0
+        while (paginas++ < 40) {
+            val (lote, total) = Nuvem.lerListaBox(Nuvem.conferir(Nuvem.get(Nuvem.boxItens(idPasta, itens.size), Nuvem.acesso(c))))
+            itens += lote
+            if (lote.isEmpty() || itens.size >= total) break
+        }
+        return itens
+    }
+
+    private fun id(caminho: String): Pair<String, Long> = synchronized(ids) {
+        val n = normal(caminho)
+        ids[n]?.let { return it }
+        val pai = n.substringBeforeLast('/', "")
+        val idPai = id(pai).first
+        filhos(idPai).forEach { f -> ids[if (pai.isEmpty()) f.item.nome else "$pai/${f.item.nome}"] = f.id to f.item.tamanho }
+        ids[n] ?: throw IOException("BAD_NETWORK_NAME")
+    }
+
+    override fun listar(caminho: String): List<PastaArquivos.Item> {
+        val n = normal(caminho)
+        val lista = filhos(id(n).first)
+        synchronized(ids) { lista.forEach { f -> ids[if (n.isEmpty()) f.item.nome else "$n/${f.item.nome}"] = f.id to f.item.tamanho } }
+        return lista.map { it.item }
+    }
+
+    override fun tamanho(caminho: String) = id(caminho).second
+
+    override fun ler(caminho: String, posicao: Long): InputStream {
+        val n = normal(caminho)
+        val agora = System.currentTimeMillis()
+        val link = ultimo?.takeIf { it.first == n && agora - it.third < 10 * 60_000 }?.second
+            ?: Nuvem.linkBox(id(n).first, Nuvem.acesso(c)).also { ultimo = Triple(n, it, agora) }
+        return Nuvem.abrirLink(link, posicao)
+    }
+
     override fun close() {}
 }

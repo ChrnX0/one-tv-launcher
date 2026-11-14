@@ -96,6 +96,7 @@
         <item>Na rede: OneDrive e Dropbox como fonte de vídeos, músicas e fotos (uma vez só, você cria o seu app no serviço e entra pelo celular)</item>
         <item>Legenda na mesma pasta do vídeo (Filme.srt, Filme.pt-BR.ass) aparece sozinha no ▼, nas pastas da rede, na nuvem e no pendrive</item>
         <item>Filmes e séries na taxa de quadros deles: a TV troca para 24 Hz e a imagem não treme em movimentos de câmera (Configurações › TV e filmes, menu ▼ e painel)</item>
+        <item>Na rede: Box também como fonte (você cria o app no Box uma vez; para entrar, o celular no mesmo Wi‑Fi aponta para o QR e volta sozinho para a TV)</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Unidade de rede</item>
@@ -177,6 +178,7 @@
         <item>Na grade, OK num programa que começa em 10 min › Gravar; desligue a TV e espere ele acabar</item>
         <item>Em Na rede › OneDrive (ou Dropbox), siga os passos e abra um vídeo da nuvem</item>
         <item>Abra um filme e repare numa cena com a câmera andando devagar</item>
+        <item>Em Na rede › Box, siga os passos no computador e aponte o celular (no Wi‑Fi de casa) para o QR</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Com Configurações › Acesso remoto › Mostrar a TV como unidade de rede ligada, o Mapear unidade de rede do Windows com o endereço mostrado lá e o PIN do painel abre as pastas da TV?</item>
@@ -258,5 +260,6 @@
         <item>Depois, a gravação do programa aparece inteira em Gravações?</item>
         <item>O vídeo tocou e deu para avançar e voltar sem travar?</item>
         <item>A tela piscou preta no começo e o movimento ficou liso, sem trancos?</item>
+        <item>Depois de Permitir, o celular disse “Pronto” e a pasta do Box abriu na TV com um vídeo tocando?</item>
     </string-array>
 </resources>

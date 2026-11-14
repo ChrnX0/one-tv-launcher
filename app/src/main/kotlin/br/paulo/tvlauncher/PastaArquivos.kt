@@ -58,7 +58,7 @@ class PastaLocal(private val raiz: File) : PastaArquivos {
 
 object Pastas {
     /** Os tipos de conta que são pastas de arquivos (as outras são servidores de mídia ou links). */
-    val TIPOS = setOf(ContaMidia.SMB, ContaMidia.FTP, ContaMidia.FTPS, ContaMidia.SFTP, ContaMidia.NFS, ContaMidia.ONEDRIVE, ContaMidia.DROPBOX)
+    val TIPOS = setOf(ContaMidia.SMB, ContaMidia.FTP, ContaMidia.FTPS, ContaMidia.SFTP, ContaMidia.NFS, ContaMidia.ONEDRIVE, ContaMidia.DROPBOX, ContaMidia.BOX)
 
     fun ehPasta(c: ContaMidia) = c.tipo in TIPOS
 
@@ -69,6 +69,7 @@ object Pastas {
         ContaMidia.NFS -> Nfs.abrir(c)
         ContaMidia.ONEDRIVE -> PastaOneDrive(c)
         ContaMidia.DROPBOX -> PastaDropbox(c)
+        ContaMidia.BOX -> PastaBox(c)
         else -> throw IOException("não é uma pasta: ${c.tipo}")
     }
 

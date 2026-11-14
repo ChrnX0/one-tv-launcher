@@ -99,6 +99,7 @@
         <item>On the network: OneDrive and Dropbox as a source of videos, music and photos (once, you create your own app at the service and sign in from your phone)</item>
         <item>Subtitles in the same folder as the video (Movie.srt, Movie.pt-BR.ass) show up in ▼ by themselves, in network folders, the cloud and USB drives</item>
         <item>Movies and series at their own frame rate: the TV switches to 24 Hz and the picture does not judder in camera moves (Settings › TV and movies, ▼ menu and panel)</item>
+        <item>On the network: Box as a source too (you create the app at Box once; to sign in, a phone on the same Wi‑Fi scans the QR and comes back to the TV by itself)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>unidade_rede</item>
@@ -180,6 +181,7 @@
         <item>gravar_agendada</item>
         <item>nuvem_fonte</item>
         <item>taxa_quadros</item>
+        <item>nuvem_box</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Network drive</item>
@@ -261,6 +263,7 @@
         <item>In the guide, OK on a show starting in 10 min › Record; turn the TV off and wait for it to end</item>
         <item>In On the network › OneDrive (or Dropbox), follow the steps and open a video from the cloud</item>
         <item>Open a movie and watch a scene where the camera pans slowly</item>
+        <item>In Network › Box, follow the steps on a computer and point a phone (on the home Wi‑Fi) at the QR</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>With Settings › Remote access › Show the TV as a network drive on, does Windows Map network drive with the address shown there and the panel PIN open the TV folders?</item>
@@ -342,5 +345,6 @@
         <item>Afterwards, is the whole show in Recordings?</item>
         <item>Did the video play, and could you skip forward and back without stalling?</item>
         <item>Did the screen blink black at the start, and was the motion smooth, without stutter?</item>
+        <item>After Grant access, did the phone say “Done” and the Box folder open on the TV, with a video playing?</item>
     </string-array>
 </resources>
