@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Screensaver remote keys (idea 28) -->
+    <string name="pt_dica_dispensar">OK dismisses · ◀ ▶ move</string>
+    <string name="pt_dica_pausar">OK pauses or resumes · ◀ ▶ move</string>
+    <string name="pt_dica_andar">◀ ▶ move · other keys close</string>
+    <!-- Screensaver photos from a network folder (idea 27) -->
+    <string name="rede_fotos_usar">Use these photos in the screensaver</string>
+    <string name="rede_fotos_parar">Stop using these photos in the screensaver</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="one">%1$d photo · copied to the TV, works with the computer off</item>
+        <item quantity="other">%1$d photos · copied to the TV, works with the computer off</item>
+    </plurals>
+    <string name="rede_fotos_usando">Copying the photos. They show up the next time the screensaver starts.</string>
+    <string name="rede_fotos_paradas">The screensaver no longer uses this folder.</string>
+</resources>

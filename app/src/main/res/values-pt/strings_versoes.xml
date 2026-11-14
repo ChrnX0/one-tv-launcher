@@ -17,6 +17,8 @@
         <item>Volume de verdade nas TVs LG NetCast (2013) pela rede: desligar suave, teto da hora de dormir, voz e despertador</item>
         <item>Séries: contagem de 10 s antes do próximo episódio, “Ainda está assistindo?” depois de 3 seguidos e “Desligar a TV quando este acabar” no menu do ▼</item>
         <item>Filmes e séries tentam de novo sozinhos quando a conexão cai, tamanho da legenda no menu do ▼ e a ficha abre sem internet</item>
+        <item>Protetor responde ao controle: ◀ ▶ andam pelos cartões, OK dispensa o aviso ou pausa a música, e um cartão “tocando agora”</item>
+        <item>Fotos do protetor vindas de uma pasta da rede (computador, NAS ou Nextcloud): abra a pasta em “Na rede” e escolha “Usar estas fotos”</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -26,6 +28,8 @@
         <item>Toque, segure e toque duas vezes num botão livre do controle</item>
         <item>Crie uma cena de teste para “filme pausou” e pause um filme</item>
         <item>Deixe um episódio chegar ao fim (ou pule para o último minuto)</item>
+        <item>Ponha uma música, espere o protetor, aperte ◀ ▶ e OK</item>
+        <item>Em “Na rede”, abra uma pasta com fotos e escolha “Usar estas fotos no protetor de tela”</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -35,5 +39,7 @@
         <item>Cada um fez o que você escolheu?</item>
         <item>A cena de teste rodou?</item>
         <item>O “Próximo episódio” contou de 10, e o Cancelar deixou você na ficha da série?</item>
+        <item>Os cartões ficaram marcados e o OK pausou a música?</item>
+        <item>Essas fotos apareceram no protetor seguinte?</item>
     </string-array>
 </resources>

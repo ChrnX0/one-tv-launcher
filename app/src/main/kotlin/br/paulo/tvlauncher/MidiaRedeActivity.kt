@@ -54,6 +54,8 @@ class MidiaRedeActivity : Activity() {
         class Link(val c: ContaMidia) : Origem()
     }
     private enum class Acao { PLEX, JELLYFIN, EMBY, SMB, WEBDAV, LINK, PROCURAR }
+    /** "Usar estas fotos no protetor" (ideia 27): a pasta aberta agora, de uma conta SMB ou WebDAV. */
+    private class FotosNoProtetor(val origem: FotosRede.Origem, val quantas: Int)
 
     /** O que a lista mostra: um nome de grupo (não focável) ou uma linha. */
     private class Secao(val nome: String)
@@ -246,10 +248,39 @@ class MidiaRedeActivity : Activity() {
                 val entradas = r.getOrNull()
                 if (entradas == null) { aviso.text = erroLegivel(r.exceptionOrNull()); return@post }
                 pilha.last().foco = lista.selectedItemPosition
-                pilha += Nivel(nome, origem, entradas.map { linhaEntrada(it) })
+                pilha += Nivel(nome, origem, linhaFotos(origem, id, nome, entradas) + entradas.map { linhaEntrada(it) })
                 desenhar(if (entradas.isEmpty()) getString(R.string.rede_vazia) else resources.getQuantityString(R.plurals.rede_itens, entradas.size, entradas.size))
             }
         }
+    }
+
+    /**
+     * Pasta com fotos de um PC/NAS (SMB) ou Nextcloud (WebDAV): a 1ª linha põe essas fotos no protetor de tela, ou tira,
+     * se já for a pasta escolhida. As fotos são copiadas para a TV (FotosRede.kt), então o protetor não depende do PC.
+     */
+    private fun linhaFotos(origem: Origem, id: String, nome: String, entradas: List<Upnp.Entrada>): List<Linha> {
+        val (conta, tipo) = when (origem) {
+            is Origem.Pasta -> origem.c.id to ContaMidia.SMB
+            is Origem.Dav -> origem.c.id to ContaMidia.WEBDAV
+            else -> return emptyList()
+        }
+        val n = FotosRede.fotosDa(entradas).size
+        if (n == 0) return emptyList()
+        return listOf(linhaFotos(FotosNoProtetor(FotosRede.Origem(conta, tipo, id, nome), n)))
+    }
+
+    private fun linhaFotos(f: FotosNoProtetor): Linha {
+        val usando = FotosRede.origem(this)?.let { it.conta == f.origem.conta && it.caminho == f.origem.caminho } == true
+        return Linha(IconeMidia.Tipo.FOTO, getString(if (usando) R.string.rede_fotos_parar else R.string.rede_fotos_usar),
+            resources.getQuantityString(R.plurals.rede_fotos_sub, f.quantas, f.quantas), null, f)
+    }
+
+    private fun alternarFotos(pos: Int, f: FotosNoProtetor) {
+        val usando = FotosRede.origem(this)?.let { it.conta == f.origem.conta && it.caminho == f.origem.caminho } == true
+        FotosRede.escolher(this, if (usando) null else f.origem)
+        val nivel = pilha.lastOrNull() ?: return
+        pilha[pilha.lastIndex] = Nivel(nivel.titulo, nivel.origem, nivel.itens.toMutableList().also { it[pos] = linhaFotos(f) }, pos)
+        desenhar(getString(if (usando) R.string.rede_fotos_paradas else R.string.rede_fotos_usando))
     }
 
     private fun linhaEntrada(e: Upnp.Entrada): Linha {
@@ -288,6 +319,7 @@ class MidiaRedeActivity : Activity() {
             Acao.WEBDAV -> formularioWebDav()
             Acao.LINK -> formularioLink()
             Acao.PROCURAR -> procurar()
+            is FotosNoProtetor -> alternarFotos(pos, e)
             is Upnp.Entrada -> when {
                 e.pasta -> entrar(nivel.origem ?: return, e.id, e.titulo)
                 e.tipo == Upnp.Tipo.FOTO -> mostrarFoto(nivel.origem, e)
