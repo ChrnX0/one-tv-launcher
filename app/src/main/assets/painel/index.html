@@ -572,15 +572,25 @@
       </div>
       <div class="cartao">
         <h2>Cenas por link</h2>
-        <p class="aviso">Uma cena junta várias ações (abrir app, volume, mídia e aparelhos da casa). Cada uma ganha um link secreto para os Atalhos do
-          iPhone ou o Home Assistant (POST). O link só aparece ao criar: guarde-o. Criar e apagar pedem o PIN.</p>
-        <p class="aviso-curto">Casa (com o Home Assistant configurado abaixo): {"tipo":"casa","entidade":"light.sala","acao":"desligar"}.
-          Ações: ligar, desligar, alternar. Cena e script do Home Assistant: só ligar.</p>
+        <p class="aviso">Uma cena junta várias ações. Cada uma ganha um link secreto para os Atalhos do iPhone ou o Home Assistant (POST).
+          O link só aparece ao criar: guarde-o. Criar e apagar pedem o PIN.</p>
         <div id="listaCenas" class="lista-registro"></div>
-        <form id="formCena">
+        <form id="formCena" class="form-cena">
           <input id="nomeCena" type="text" maxlength="40" placeholder="Nome (ex.: Cinema)" aria-label="Nome da cena">
-          <textarea id="acoesCena" rows="3" placeholder='{"acoes":[{"tipo":"casa","entidade":"light.sala","acao":"desligar"},{"tipo":"abrir_app","pacote":"com.netflix.ninja"}]}' aria-label="Ações"></textarea>
-          <button type="submit" class="botao-primario">Criar cena</button>
+          <div id="acoesLista" class="cena-acoes"></div>
+          <div class="cena-linha">
+            <button type="button" id="btnAddAcao" class="botao-secundario">+ Adicionar ação</button>
+            <span id="contaAcoes" class="aviso-curto"></span>
+          </div>
+          <div id="resumoCena" class="cena-resumo" hidden><b>A TV vai</b><span id="resumoCenaTexto"></span></div>
+          <details class="cena-json">
+            <summary>Ver como JSON (avançado)</summary>
+            <textarea id="acoesCena" rows="4" aria-label="Ações em JSON"></textarea>
+          </details>
+          <div class="cena-linha">
+            <button type="submit" class="botao-primario">Criar cena</button>
+            <button type="button" id="btnTestarCena" class="botao-secundario">Testar agora</button>
+          </div>
         </form>
         <p id="statusCena" class="aviso" hidden></p>
       </div>

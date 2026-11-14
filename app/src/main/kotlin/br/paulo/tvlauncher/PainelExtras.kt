@@ -151,6 +151,16 @@ object PainelExtras {
                 PainelArmazem.registrar(app, ip, "cena criada: ${o.optString("nome")}", "ok")
                 ok(JSONObject().put("token", r))   // só aparece agora: a TV guarda só o resumo
             }
+            // Testar uma cena sem salvar (14/11/2026, ideia 3): o mesmo caminho de uma cena de verdade (PedidoIa, com as
+            // Confirmações da TV). Sem PIN, como o controle remoto do painel: só ações do catálogo fechado.
+            post && rota == "cenas/testar" -> {
+                val acoes = corpo?.opt("acoes")?.toString() ?: return erro(400, "JSON inválido")
+                val plano = ComandosIa.conferir(acoes, Cenas.appsInstalados(app))
+                if (plano.acoes.isEmpty()) return ok(JSONObject().put("recusadas", JSONArray(plano.recusadas.ifEmpty { listOf("nenhuma ação") })))
+                val p = PedidoIa.propor(app, "teste de cena", "painel", acoes)
+                PainelArmazem.registrar(app, ip, "cena testada", p.situacao.name.lowercase())
+                ok(JSONObject().put("id", p.id).put("recusadas", JSONArray(plano.recusadas)))
+            }
             post && rota == "cenas/apagar" -> {
                 if (!elevada) return pin()
                 val nome = corpo?.optString("nome") ?: ""
