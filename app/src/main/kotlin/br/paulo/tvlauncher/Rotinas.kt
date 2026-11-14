@@ -34,11 +34,12 @@ object Rotinas {
     private const val PREFS = "rotinas"
     const val EXTRA_ID = "rotina_id"
 
-    enum class Acao(val rotulo: Int) { LIGAR(R.string.rot_ligar), ABRIR(R.string.rot_abrir_um), DESLIGAR(R.string.rot_desligar) }
+    // CENA (14/11/2026, ideia 5): roda uma cena (Cenas.kt) pelo nome, com o mesmo catálogo e as mesmas Confirmações.
+    enum class Acao(val rotulo: Int) { LIGAR(R.string.rot_ligar), ABRIR(R.string.rot_abrir_um), DESLIGAR(R.string.rot_desligar), CENA(R.string.rot_cena_uma) }
 
     /** [ocioso]: só para DESLIGAR; minutos sem tecla do controle exigidos (0 = desliga de qualquer jeito). */
     data class Rotina(val id: Int, val hora: Int, val minuto: Int, val dias: Int, val acao: Acao,
-                      val pacote: String = "", val ocioso: Int = 0, val ativa: Boolean = true)
+                      val pacote: String = "", val ocioso: Int = 0, val ativa: Boolean = true, val cena: String = "")
 
     /** Opções do "só se ninguém mexeu há…", em minutos. */
     val OCIOSO_OPCOES = listOf(0, 30, 60, 120)
@@ -54,7 +55,7 @@ object Rotinas {
             try {
                 Rotina(it.getInt("id"), it.getInt("hora").coerceIn(0, 23), it.getInt("minuto").coerceIn(0, 59),
                     it.optInt("dias") and 0b1111111, Acao.valueOf(it.getString("acao")), it.optString("pacote"),
-                    it.optInt("ocioso"), it.optBoolean("ativa", true))
+                    it.optInt("ocioso"), it.optBoolean("ativa", true), it.optString("cena"))
             } catch (e: Exception) { null }   // item estragado (backup antigo, versão futura): ignora só ele
         }.sortedWith(compareBy({ it.hora }, { it.minuto }))
     }
@@ -62,7 +63,7 @@ object Rotinas {
     fun paraJson(lista: List<Rotina>): String = JSONArray().apply {
         lista.forEach {
             put(JSONObject().put("id", it.id).put("hora", it.hora).put("minuto", it.minuto).put("dias", it.dias)
-                .put("acao", it.acao.name).put("pacote", it.pacote).put("ocioso", it.ocioso).put("ativa", it.ativa))
+                .put("acao", it.acao.name).put("pacote", it.pacote).put("ocioso", it.ocioso).put("ativa", it.ativa).put("cena", it.cena))
         }
     }.toString()
 
@@ -131,6 +132,8 @@ object Rotinas {
             Acao.ABRIR -> acordar(ctx, r.pacote.ifBlank { null })
             Acao.DESLIGAR -> if (podeDesligar(r.ocioso, minutosSemTecla(), AutorizaShizukuService.instancia != null)) desligar(ctx)
                 else Log.i(TAG, "não desliguei: alguém mexeu no controle há ${minutosSemTecla()} min (limite ${r.ocioso})")
+            // Não acende a tela por conta própria: a cena decide (ex.: "Noite" só apaga a luz).
+            Acao.CENA -> Log.i(TAG, Cenas.rodar(ctx, r.cena, "rotina"))
         }
         // Uma vez só (sem dias marcados): desliga depois de rodar. Senão, só agenda a próxima.
         if (r.dias == 0) gravar(ctx, listar(ctx).map { if (it.id == id) it.copy(ativa = false) else it }) else agendar(ctx)
@@ -198,6 +201,7 @@ object Rotinas {
     fun descricao(ctx: Context, r: Rotina): String = when (r.acao) {
         Acao.LIGAR -> ctx.getString(R.string.rot_ligar)
         Acao.ABRIR -> ctx.getString(R.string.rot_abrir, rotuloApp(ctx, r.pacote) ?: ctx.getString(R.string.rot_um_app))
+        Acao.CENA -> ctx.getString(R.string.rot_cena, r.cena.ifBlank { ctx.getString(R.string.rot_nenhum) })
         Acao.DESLIGAR -> ctx.getString(R.string.rot_desligar) + if (r.ocioso > 0) ctx.getString(R.string.rot_se_ocioso, ociosoTexto(ctx, r.ocioso)) else ""
     }
 

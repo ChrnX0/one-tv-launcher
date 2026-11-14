@@ -22,4 +22,10 @@
     <string name="acao_o_que_via">See what was playing</string>
     <string name="acao_vendo">Last watched: %1$s</string>
     <string name="acao_vendo_nada">Nothing watched yet in Movies and Series.</string>
+    <!-- Rotina e despertador que rodam cena (ideia 5) -->
+    <string name="rot_cena_uma">Run a scene</string>
+    <string name="rot_cena">Run scene: %1$s</string>
+    <string name="rot_cena_linha">Scene: %1$s</string>
+    <string name="rot_cena_sem">Create a scene first (web panel › Extras › Scenes)</string>
+    <string name="al_cena">Scene on stop: %1$s</string>
 </resources>

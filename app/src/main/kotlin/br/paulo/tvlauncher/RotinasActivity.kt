@@ -87,13 +87,16 @@ class RotinasActivity : Activity() {
         val (raiz, lista) = tela(if (original == null) getString(R.string.rot_nova) else getString(R.string.rot_editar), getString(R.string.rot_editor_det))
 
         lateinit var lHora: TextView; lateinit var lDias: TextView; lateinit var lAcao: TextView
-        lateinit var lApp: TextView; lateinit var lOcioso: TextView; lateinit var lAtiva: TextView
+        lateinit var lApp: TextView; lateinit var lOcioso: TextView; lateinit var lAtiva: TextView; lateinit var lCena: TextView
+        val cenas = Cenas.lista(this).map { it.nome }
         fun redesenhar() {
             lHora.titulo(getString(R.string.rot_hora, "%02d:%02d".format(r.hora, r.minuto)))
             lDias.titulo(getString(R.string.rot_dias, Despertador.diasTexto(this, r.dias)))
             lAcao.titulo(getString(R.string.rot_acao, getString(r.acao.rotulo)))
             lApp.titulo(getString(R.string.rot_app, Rotinas.rotuloApp(this, r.pacote) ?: getString(R.string.rot_nenhum)))
             lApp.visibility = if (r.acao == Rotinas.Acao.ABRIR) View.VISIBLE else View.GONE
+            lCena.titulo(getString(R.string.rot_cena_linha, r.cena.ifBlank { getString(R.string.rot_nenhum) }))
+            lCena.visibility = if (r.acao == Rotinas.Acao.CENA) View.VISIBLE else View.GONE
             lOcioso.titulo(getString(R.string.rot_ocioso, Rotinas.ociosoTexto(this, r.ocioso)))
             lOcioso.visibility = if (r.acao == Rotinas.Acao.DESLIGAR) View.VISIBLE else View.GONE
             lAtiva.titulo(if (r.ativa) getString(R.string.rot_ligada) else getString(R.string.rot_desligada))
@@ -124,7 +127,19 @@ class RotinasActivity : Activity() {
             val a = Rotinas.Acao.values()
             r = r.copy(acao = a[(r.acao.ordinal + 1) % a.size])
             if (r.acao == Rotinas.Acao.ABRIR && r.pacote.isBlank()) mudarApp(1)
+            if (r.acao == Rotinas.Acao.CENA && r.cena.isBlank()) r = r.copy(cena = Cenas.girar(cenas, "", 1, comNenhuma = false))
             redesenhar()
+        }
+        lCena = linha("", if (cenas.isEmpty()) getString(R.string.rot_cena_sem) else getString(R.string.rot_app_det)) {
+            r = r.copy(cena = Cenas.girar(cenas, r.cena, 1, comNenhuma = false)); redesenhar()
+        }
+        lCena.setOnKeyListener { _, k, e ->
+            if (e.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+            when (k) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> { r = r.copy(cena = Cenas.girar(cenas, r.cena, -1, comNenhuma = false)); redesenhar(); true }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> { r = r.copy(cena = Cenas.girar(cenas, r.cena, 1, comNenhuma = false)); redesenhar(); true }
+                else -> false
+            }
         }
         lApp = linha("", getString(R.string.rot_app_det)) { mudarApp(1); redesenhar() }
         lApp.setOnKeyListener { _, k, e ->
@@ -140,9 +155,10 @@ class RotinasActivity : Activity() {
             r = r.copy(ocioso = o[(o.indexOf(r.ocioso) + 1) % o.size]); redesenhar()
         }
         lAtiva = linha("", getString(R.string.rot_ativa_det)) { r = r.copy(ativa = !r.ativa); redesenhar() }
-        for (v in listOf(lHora, lDias, lAcao, lApp, lOcioso, lAtiva)) adicionar(lista, v)
+        for (v in listOf(lHora, lDias, lAcao, lApp, lCena, lOcioso, lAtiva)) adicionar(lista, v)
         adicionar(lista, linha(getString(R.string.rot_salvar), "") {
             if (r.acao == Rotinas.Acao.ABRIR && r.pacote.isBlank()) { AvisoTv.rapido(this, getString(R.string.cfg_rotinas), getString(R.string.rot_escolha_app), 4); return@linha }
+            if (r.acao == Rotinas.Acao.CENA && r.cena.isBlank()) { AvisoTv.rapido(this, getString(R.string.cfg_rotinas), getString(R.string.rot_cena_sem), 4); return@linha }
             Rotinas.salvar(this, r); mostrarLista()
         })
         if (original != null) adicionar(lista, linha(getString(R.string.rot_apagar), "") { Rotinas.apagar(this, original.id); mostrarLista() })
