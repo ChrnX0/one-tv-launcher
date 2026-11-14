@@ -90,6 +90,13 @@ object Idioma {
      * A faixa está no idioma da TV: pela língua ("en", "en-US", "eng") ou, só em português e sem língua, pelo rótulo
      * ("Dublado", "Português"): rótulos assim só existem nas listas brasileiras.
      */
+    /**
+     * Ideia 89: falta legenda? O áudio tocando NÃO é do idioma da TV e não há legenda completa (não forçada) nele. Sem áudio
+     * identificado, não decide (false): baixar às cegas gastaria o limite diário em filme dublado.
+     */
+    fun faltaLegenda(audio: Faixa?, textos: List<Faixa>, idioma: String = "pt"): Boolean =
+        audio != null && !eDoIdioma(audio, idioma) && textos.none { eDoIdioma(it, idioma) && !it.forcada }
+
     fun eDoIdioma(f: Faixa, idioma: String = "pt"): Boolean {
         val l = f.idioma?.lowercase()
         if (l != null && l != "und") {

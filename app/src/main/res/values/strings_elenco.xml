@@ -28,4 +28,10 @@
     <string name="onde_tambem_em">Also on: %1$s (JustWatch)</string>
     <string name="onde_fora">Not in your list · on %1$s</string>
     <string name="onde_grupo">Elsewhere (JustWatch)</string>
+    <!-- Ideia 89: legenda automática -->
+    <string name="legenda_auto_pronta">Subtitles downloaded automatically (made for this file) · ▼ to change</string>
+    <string name="legenda_auto_pronta_nome">Subtitles downloaded automatically · ▼ to change or adjust the delay</string>
+    <string name="legenda_auto_opcao">Download subtitles automatically</string>
+    <string name="legenda_auto_ligada">Subtitles will be downloaded when missing</string>
+    <string name="legenda_auto_desligada">Automatic subtitles turned off</string>
 </resources>

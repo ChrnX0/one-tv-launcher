@@ -166,4 +166,47 @@ object LegendaBaixar {
         val todos = pasta(ctx).listFiles()?.filter { it.name.endsWith(".srt") }?.sortedByDescending { it.lastModified() } ?: return
         todos.drop(MAX_GUARDADAS * 2).forEach { it.delete() }
     }
+
+    // ---------------------------------------------------------------- ideia 89: legenda automática
+
+    /** Um pedaço do vídeo com Range: (bytes, tamanho total). Nulo se o servidor não aceita Range (respondeu 200 ou erro). */
+    private fun pedaco(url: String, de: Long, ate: Long): Pair<ByteArray, Long?>? {
+        val c = URL(url).openConnection() as HttpURLConnection
+        return try {
+            c.connectTimeout = 8_000; c.readTimeout = 12_000
+            c.setRequestProperty("Range", "bytes=$de-$ate")
+            c.setRequestProperty("User-Agent", LegendaExterna.AGENTE)
+            if (c.responseCode != 206) null
+            else c.inputStream.use { ler(it, LegendaExterna.BLOCO_HASH) } to LegendaExterna.tamanhoDoRange(c.getHeaderField("Content-Range"))
+        } catch (_: Exception) { null } finally { c.disconnect() }
+    }
+
+    /**
+     * O moviehash do vídeo, lendo só 64 KB do começo e 64 KB do fim (Range). Nulo se o servidor não aceita Range: aí a
+     * busca vai só pelo nome. O endereço (que tem a conta do IPTV) nunca vai para o registro.
+     */
+    fun hashDoVideo(url: String): String? {
+        if (!url.startsWith("http")) return null
+        val (inicio, tamanho) = pedaco(url, 0, LegendaExterna.BLOCO_HASH - 1L) ?: return null
+        val t = tamanho ?: return null
+        if (t < LegendaExterna.BLOCO_HASH) return null
+        val (fim, _) = pedaco(url, t - LegendaExterna.BLOCO_HASH, t - 1) ?: return null
+        return LegendaExterna.hash(t, inicio, fim)
+    }
+
+    /** Já tentou a automática para este vídeo nos últimos 7 dias? (Falhar de novo a cada abertura gastaria o limite.) */
+    fun tentouAuto(ctx: Context, chaveVideo: String): Boolean =
+        System.currentTimeMillis() - ctx.getSharedPreferences("player", Context.MODE_PRIVATE).getLong("legauto:$chaveVideo", 0) < 7L * 24 * 3_600_000
+
+    /**
+     * Ideia 89: busca (pelo hash do arquivo, se der, e pelo nome) e baixa a melhor legenda no idioma da TV. Gasta um
+     * download do limite diário. Bloqueia (rede).
+     */
+    fun automatica(ctx: Context, chaveVideo: String, url: String?, b: LegendaExterna.Busca): Result<Pair<File, Boolean>> = runCatching {
+        ctx.getSharedPreferences("player", Context.MODE_PRIVATE).edit().putLong("legauto:$chaveVideo", System.currentTimeMillis()).apply()
+        val hash = url?.let { runCatching { hashDoVideo(it) }.getOrNull() }
+        val lista = buscar(ctx, b.copy(hash = hash)).getOrThrow()
+        val c = LegendaExterna.escolherAuto(lista) ?: error(ctx.getString(R.string.legenda_nenhuma))
+        baixar(ctx, chaveVideo, c).getOrThrow() to c.bateHash
+    }
 }
