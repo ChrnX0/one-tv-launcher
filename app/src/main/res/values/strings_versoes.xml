@@ -31,6 +31,7 @@
         <item>Kids PIN: unlock channels and bedtime without giving away the panel PIN</item>
         <item>Daily screen time: when it runs out, only allowed apps open (Extras)</item>
         <item>Calendar with all the TV\'s Google accounts together</item>
+        <item>“Network” looks like a catalog: poster and synopsis beside the list, Recently added, Search on Jellyfin, Emby and Plex, and a folder plays the next video or song</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -52,6 +53,7 @@
         <item>pin_criancas</item>
         <item>tempo_tela</item>
         <item>agenda_todas</item>
+        <item>rede_catalogo</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -73,6 +75,7 @@
         <item>Settings &gt; Parental control &gt; Kids PIN; then show a hidden category with it</item>
         <item>Extras: turn on Daily screen time with 30 min and open an app</item>
         <item>Open the calendar (OK on the date at the top)</item>
+        <item>In “Network”, open a Jellyfin or Plex server, try Search and Recently added, and play a video from a folder</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -94,5 +97,6 @@
         <item>Did the kids PIN unlock it, and does the panel PIN still work?</item>
         <item>After 30 min, did the app go back to Home with the notice?</item>
         <item>Do events from all the TV\'s accounts show up?</item>
+        <item>Did the poster and synopsis show up, and did the next video start after 10 s?</item>
     </string-array>
 </resources>

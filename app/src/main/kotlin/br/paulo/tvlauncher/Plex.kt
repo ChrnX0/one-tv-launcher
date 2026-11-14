@@ -29,6 +29,9 @@ import java.net.URLEncoder
  */
 object Plex {
     const val CONTINUAR = "*continuar"
+    /** Ideia 29: "Adicionados há pouco" e busca ("*busca:" + o texto). */
+    const val RECENTES = "*recentes"
+    const val BUSCA = "*busca:"
     private const val PORTA_GDM = 32414
     private const val MAX_BYTES = 8 * 1024 * 1024
     private const val PLEX_TV = "https://plex.tv/api/v2"
@@ -156,10 +159,13 @@ object Plex {
     /** Filhos de [pai]: "" = Continuar + bibliotecas; CONTINUAR = onDeck; o resto = um caminho /library/... do servidor. */
     fun listar(c: ContaMidia, pai: String, aparelho: String): List<Upnp.Entrada> {
         val cab = cabecalhos(aparelho, c.token)
-        return when (pai) {
-            "" -> listOf(Upnp.Entrada(CONTINUAR, "Continuar assistindo", true, null, Upnp.Tipo.PASTA, null)) +
+        return when {
+            pai == "" -> listOf(Upnp.Entrada(CONTINUAR, "Continuar assistindo", true, null, Upnp.Tipo.PASTA, null),
+                Upnp.Entrada(RECENTES, "Adicionados há pouco", true, null, Upnp.Tipo.PASTA, null)) +
                 lerBibliotecas(pedir("${c.servidor}/library/sections", cab))
-            CONTINUAR -> lerItens(pedir("${c.servidor}/library/onDeck", cab), c, comSerie = true)
+            pai == CONTINUAR -> lerItens(pedir("${c.servidor}/library/onDeck", cab), c, comSerie = true)
+            pai == RECENTES -> lerItens(pedir("${c.servidor}/library/recentlyAdded?X-Plex-Container-Start=0&X-Plex-Container-Size=40", cab), c, comSerie = true)
+            pai.startsWith(BUSCA) -> lerItens(pedir("${c.servidor}/search?query=${enc(pai.removePrefix(BUSCA).take(100))}", cab), c, comSerie = true)
             else -> {
                 require(caminhoValido(pai)) { "caminho inválido" }
                 val sep = if (pai.contains('?')) '&' else '?'
@@ -192,6 +198,9 @@ object Plex {
             val nome = nomeExibido(o, comSerie)
             val parte = o.optJSONArray("Media")?.optJSONObject(0)?.optJSONArray("Part")?.optJSONObject(0)?.optString("key").orEmpty()
             val rk = o.optString("ratingKey").takeIf { k -> k.isNotEmpty() && k.all { it.isDigit() } }
+            // Ideia 29: pôster (caminho /library/... do próprio servidor; o token vai no cabeçalho de quem baixa) e resumo.
+            val capa = o.optString("thumb").takeIf { caminhoValido(it) }
+            val sinopse = o.optString("summary").trim().take(700).ifEmpty { null }
             if (parte.isNotEmpty() && rk != null) {
                 if (!parteValida(parte)) continue
                 val tipo = when (o.optString("type")) {
@@ -199,10 +208,10 @@ object Plex {
                     "photo" -> Upnp.Tipo.FOTO
                     else -> Upnp.Tipo.VIDEO
                 }
-                lista += Upnp.Entrada(rk, nome, false, uri(c.id, rk, parte), tipo, null)
+                lista += Upnp.Entrada(rk, nome, false, uri(c.id, rk, parte), tipo, capa, sinopse)
             } else {
                 val chave = o.optString("key")
-                if (caminhoValido(chave)) lista += Upnp.Entrada(chave, nome, true, null, Upnp.Tipo.PASTA, null)
+                if (caminhoValido(chave)) lista += Upnp.Entrada(chave, nome, true, null, Upnp.Tipo.PASTA, capa, sinopse)
             }
         }
         // Pastas também podem vir como "Directory" (navegação por pasta do disco).
