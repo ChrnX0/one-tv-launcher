@@ -92,6 +92,7 @@
         <item>Movies and series with Dolby (AC3, E-AC3), DTS or TrueHD sound now play with sound even with “Even volume” or “Clearer voices” on; channels with MP2 audio too</item>
         <item>Blu-ray and DVD subtitles (PGS, VobSub) now show in movies and series, and anime ASS subtitles keep their original colour and position</item>
         <item>Network: folders over FTP, FTPS, SFTP and NFS (NAS, router with a drive, Linux or Mac computer), and a USB drive plugged into the TV shows up by itself under “Plugged into the TV”</item>
+        <item>Live TV records to a USB drive or disk on the hub (or a Windows/NAS folder): ▶▶ › Record on a channel, OK on a future show in the guide to schedule it (also every week), and the Recordings screen in ▶▶ › Recordings</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>jogos_card</item>
@@ -167,6 +168,8 @@
         <item>audio_dolby_dts</item>
         <item>legenda_imagem</item>
         <item>pendrive_na_rede</item>
+        <item>gravar_agora</item>
+        <item>gravar_agendada</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME and go to the end of the WATCH AND PLAY row</item>
@@ -242,6 +245,8 @@
         <item>Turn on “Clearer voices” in ▼ and open a movie with Dolby or DTS sound (from On the network or Movies)</item>
         <item>Open an MKV movie with Blu-ray (PGS) subtitles or an anime with ASS subtitles and turn subtitles on in ▼</item>
         <item>Plug a USB drive with videos into the TV and open Network</item>
+        <item>With a USB drive on the hub, on a channel: ▶▶ › Record 1 hour; after 2 min, ▶▶ › Recordings</item>
+        <item>In the guide, OK on a show starting in 10 min › Record; turn the TV off and wait for it to end</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Is there an amber Games card after Network?</item>
@@ -317,5 +322,7 @@
         <item>Did the movie play with sound (before it was silent)?</item>
         <item>Did the subtitle show complete, in the right place and in sync?</item>
         <item>Does the drive show under “Plugged into the TV” and does a video from it play?</item>
+        <item>Did the channel keep playing smoothly, and does the recording show up and play in Recordings?</item>
+        <item>Afterwards, is the whole show in Recordings?</item>
     </string-array>
 </resources>

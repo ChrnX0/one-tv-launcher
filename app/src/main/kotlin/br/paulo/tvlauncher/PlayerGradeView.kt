@@ -106,6 +106,56 @@ class PlayerGradeView(
         }
     }
 
+    /**
+     * OK num programa futuro (14/11/2026): Lembrar, Gravar ou Gravar toda semana (GravacaoServico). Já agendada: Cancelar
+     * a gravação. Disco fora da thread da tela.
+     */
+    private fun futuro(canal: Canal, p: Programa) {
+        val app = context.applicationContext
+        Fundo.rodar("gravacao") {
+            val ag = runCatching { Gravacoes.agendada(app, canal.id, p.inicio) }.getOrNull()
+            val onde = GravacaoDestino.descricao(app)
+            post {
+                if (!aberta) return@post
+                val marcado = "${canal.id}|${p.inicio}" in marcados
+                val itens = ArrayList<Pair<String, () -> Unit>>()
+                itens += app.getString(if (marcado) R.string.grv_nao_lembrar else R.string.grv_lembrar) to { lembrar(canal, p) }
+                if (ag != null) itens += app.getString(R.string.grv_cancelar_agendada) to { cancelarGravacao(ag) }
+                else {
+                    itens += app.getString(R.string.grv_agendar, Gravacoes.hora(p.inicio - GravacaoRegras.FOLGA_ANTES_MS),
+                        Gravacoes.hora(p.fim + GravacaoRegras.FOLGA_DEPOIS_MS)) to { agendarGravacao(canal, p, false, onde) }
+                    itens += app.getString(R.string.grv_agendar_semana) to { agendarGravacao(canal, p, true, onde) }
+                }
+                Estilo.lista(context, "${p.titulo} · ${canal.nome} ${Gravacoes.hora(p.inicio)}", itens.map { it.first }) { i -> itens[i].second() }
+            }
+        }
+    }
+
+    private fun agendarGravacao(canal: Canal, p: Programa, semanal: Boolean, onde: String?) {
+        val app = context.applicationContext
+        Fundo.rodar("gravacao") {
+            val r = runCatching { Gravacoes.agendar(app, canal, p, semanal) }.getOrNull()
+            post {
+                val (titulo, texto) = when {
+                    r == null -> app.getString(R.string.grv_nao_agendou) to app.getString(R.string.grv_lista_cheia)
+                    r.isNotEmpty() -> app.getString(R.string.grv_nao_agendou) to app.getString(R.string.grv_conflito_agenda,
+                        r.first().programa.ifEmpty { r.first().canalNome }, r.first().canalNome, Gravacoes.hora(r.first().inicio))
+                    else -> app.getString(R.string.grv_agendada) to (p.titulo + " · " +
+                        (onde?.let { app.getString(R.string.grv_em, it) } ?: app.getString(R.string.grv_sem_destino_ainda)))
+                }
+                AvisoTv.rapido(app, titulo, texto, 8)
+            }
+        }
+    }
+
+    private fun cancelarGravacao(a: GravacaoRegras.Agendada) {
+        val app = context.applicationContext
+        Fundo.rodar("gravacao") {
+            runCatching { Gravacoes.cancelar(app, a.id) }
+            post { AvisoTv.rapido(app, app.getString(R.string.grv_cancelada), a.programa) }
+        }
+    }
+
     fun fechar() { removeCallbacks(relogio); visibility = GONE }
 
     fun atualizarGuia(g: Guia) { guia = g; if (aberta) invalidate() }
@@ -147,7 +197,7 @@ class PlayerGradeView(
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
                 if (event.repeatCount == 0) {
                     val p = programaFocado()
-                    if (p != null && p.inicio > agora) lembrar(canais[linha], p) else aoAssistir(canais[linha])
+                    if (p != null && p.inicio > agora) futuro(canais[linha], p) else aoAssistir(canais[linha])
                 }
                 return true
             }

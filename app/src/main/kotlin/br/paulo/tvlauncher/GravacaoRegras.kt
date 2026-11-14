@@ -54,6 +54,21 @@ object GravacaoRegras {
         return (if (primeira in nomes) listOf(primeira) else emptyList()) + outras.map { it.second }
     }
 
+    /** O contrário de [nomeArquivo]: (início, "Globo - Jornal Nacional"). Nome de outro jeito: (null, nome sem .ts). */
+    fun lerNome(nome: String, fuso: TimeZone = TimeZone.getDefault()): Pair<Long?, String> {
+        val base = nome.removeSuffix(EXTENSAO).replace(Regex(" \\(parte \\d+\\)$"), "")
+        val m = Regex("^(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2})(\\d{2}) (.+)$").matchEntire(base) ?: return null to base
+        val (a, me, d, h, mi, t) = m.destructured
+        val c = Calendar.getInstance(fuso).apply { clear(); set(a.toInt(), me.toInt() - 1, d.toInt(), h.toInt(), mi.toInt()) }
+        return c.timeInMillis to t
+    }
+
+    /** Agrupa os arquivos da pasta em gravações (a parte 1 e as seguintes), a mais nova primeiro. */
+    fun agrupar(nomes: Collection<String>): List<List<String>> {
+        val primeiras = nomes.filter { it.endsWith(EXTENSAO) && !Regex(" \\(parte \\d+\\)\\.ts$").containsMatchIn(it) }
+        return primeiras.sortedDescending().map { partes(nomes, it) }
+    }
+
     /** Começar um pedaço novo: passou 1 hora ou o arquivo chegou perto do limite do FAT32. */
     fun novoPedaco(msNoPedaco: Long, bytesNoPedaco: Long) = msNoPedaco >= PEDACO_MS || bytesNoPedaco >= PEDACO_MAX_BYTES
 

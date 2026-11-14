@@ -144,4 +144,83 @@ class GravacaoTest {
         assertEquals(Gravador.Motivo.PARADO, Gravador({ ByteArrayInputStream(ByteArray(10)) }, { ByteArrayOutputStream() }, { Long.MAX_VALUE },
             { 0L }, fimMs = h, parar = parar).rodar().motivo)
     }
+
+    // ------------------------------------------------------------ cano ao vivo (player lendo o que o gravador baixa)
+
+    @Test fun canoEntregaOQueFoiEscritoEFimAoFechar() {
+        val cano = CanoAoVivo(capacidade = 64, recuo = 16)
+        val l = cano.leitor(esperaMs = 1000)
+        val dados = ByteArray(40) { it.toByte() }
+        cano.escrever(dados, 40)
+        cano.fechar()
+        assertArrayEquals(dados, l.readBytes())
+        assertFalse(cano.aberto)
+    }
+
+    @Test fun canoLeitorNovoComecaNoRecuo() {
+        val cano = CanoAoVivo(capacidade = 64, recuo = 16)
+        cano.escrever(ByteArray(50) { it.toByte() }, 50)
+        cano.fechar()
+        assertArrayEquals(ByteArray(16) { (34 + it).toByte() }, cano.leitor(1000).readBytes())
+    }
+
+    @Test fun canoLeitorAtrasadoPulaParaOMaisAntigo() {
+        val cano = CanoAoVivo(capacidade = 32, recuo = 32)
+        val l = cano.leitor(1000)
+        cano.escrever(ByteArray(100) { it.toByte() }, 100)   // dá a volta 3 vezes
+        cano.fechar()
+        assertArrayEquals(ByteArray(32) { (68 + it).toByte() }, l.readBytes())
+    }
+
+    @Test fun canoLeitorEsperaOGravador() {
+        val cano = CanoAoVivo(capacidade = 64, recuo = 0)
+        val l = cano.leitor(5000)
+        val t = Thread { Thread.sleep(100); cano.escrever(byteArrayOf(7, 8), 2); cano.fechar() }
+        t.start()
+        assertArrayEquals(byteArrayOf(7, 8), l.readBytes())
+        t.join()
+    }
+
+    @Test(expected = IOException::class) fun canoSemDadosDaErro() {
+        CanoAoVivo(capacidade = 64, recuo = 0).leitor(esperaMs = 50).read()
+    }
+
+    // ------------------------------------------------------------ tela Gravações e HLS
+
+    @Test fun lerNomeDesfazONomeDoArquivo() {
+        val t = 1_794_699_000_000L
+        val n = GravacaoRegras.nomeArquivo(t, "Globo", "Jornal Nacional", 2, sp)
+        assertEquals(t to "Globo - Jornal Nacional", GravacaoRegras.lerNome(n, sp))
+        assertEquals(null to "meu video", GravacaoRegras.lerNome("meu video.ts", sp))
+    }
+
+    @Test fun agruparPartesDaMesmaGravacao() {
+        val nomes = listOf("2026-11-13 2228 A.ts", "2026-11-14 2030 B.ts", "2026-11-14 2030 B (parte 3).ts", "2026-11-14 2030 B (parte 2).ts")
+        assertEquals(listOf(listOf("2026-11-14 2030 B.ts", "2026-11-14 2030 B (parte 2).ts", "2026-11-14 2030 B (parte 3).ts"),
+            listOf("2026-11-13 2228 A.ts")), GravacaoRegras.agrupar(nomes))
+    }
+
+    @Test fun hlsMestraEscolheAMaiorQualidade() {
+        val m = "#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=800000\nbaixa/i.m3u8\n#EXT-X-STREAM-INF:BANDWIDTH=4000000,RESOLUTION=1920x1080\nalta/i.m3u8\n"
+        assertEquals("http://s/c/alta/i.m3u8", GravacaoCanal.variante("http://s/c/mestra.m3u8", m))
+        assertNull(GravacaoCanal.variante("http://s/c/x.m3u8", "#EXTM3U\n#EXTINF:6,\na.ts\n"))
+    }
+
+    @Test fun hlsSoPedacosNovos() {
+        val l = GravacaoCanal.lerLista("http://s/c/i.m3u8", "#EXTM3U\n#EXT-X-TARGETDURATION:6\n#EXT-X-MEDIA-SEQUENCE:100\n#EXTINF:6,\na.ts\n#EXTINF:6,\nb.ts\n#EXTINF:6,\nhttp://o/c.ts\n")
+        assertEquals(6, l.duracaoAlvoS); assertFalse(l.fim)
+        assertEquals(listOf(101L to "http://s/c/b.ts", 102L to "http://o/c.ts"), GravacaoCanal.novos(l, -1))
+        assertEquals(listOf(102L to "http://o/c.ts"), GravacaoCanal.novos(l, 101))
+        assertTrue(GravacaoCanal.novos(l, 102).isEmpty())
+    }
+
+    @Test(expected = IOException::class) fun hlsFmp4Recusado() {
+        GravacaoCanal.lerLista("http://s/i.m3u8", "#EXTM3U\n#EXT-X-MAP:URI=\"init.mp4\"\n#EXTINF:6,\na.m4s\n")
+    }
+
+    @Test fun ehHlsPelaExtensaoOuTipo() {
+        assertTrue(GravacaoCanal.ehHls("http://s/c.m3u8?t=1", ""))
+        assertTrue(GravacaoCanal.ehHls("http://s/live/1", "application/vnd.apple.mpegurl"))
+        assertFalse(GravacaoCanal.ehHls("http://s/live/1.ts", "video/mp2t"))
+    }
 }

@@ -30,6 +30,7 @@ class BootReceiver : BroadcastReceiver() {
         // mostra o aviso "não tocou porque a TV estava desligada" (AlarmeGarantia.conferir).
         Timer.reagendar(context)   // idem para o timer da cozinha (Timer.kt)
         LembretesTv.agendar(context)   // lembretes da grade (12/11/2026)
+        Gravacoes.armar(context)   // gravações agendadas (14/11/2026); se a TV religou no meio de uma, retoma
         ManutencaoNoturna.agendar(context)   // idem para a manutenção de madrugada (ManutencaoNoturna.kt)
         // Shell próprio: reconecta sozinho (espera o Wi-Fi e a depuração sem fio) se faltar algo, e fica vigiando.
         GuardiaoShizuku.vigiar(context)

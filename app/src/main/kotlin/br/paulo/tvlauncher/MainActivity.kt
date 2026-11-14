@@ -739,6 +739,7 @@ class MainActivity : Activity() {
     private lateinit var txtDestaqueSub: TextView
     private lateinit var txtDestaqueMeta: TextView      // ★ 6,6  Thriller · 2023 · 1 h 59 min · faltam 1 h 18 min
     private lateinit var txtDestaqueSinopse: TextView
+    @Volatile private var gravandoTv: String? = null   // "Globo até 22:05" enquanto grava (Gravacoes.resumoParaHome)
     private var ultimoTv: PlayerArmazem.Ultimo? = null   // último canal + programas (lido no onResume, em preencherContinuar)
     private lateinit var txtTimer: TextView   // "4:32" na pílula do timer enquanto um timer corre (ver Timer.kt)
     private lateinit var pilulaTimer: LinearLayout
@@ -1333,11 +1334,13 @@ class MainActivity : Activity() {
      */
     private fun destaqueTv() {
         val u = ultimoTv
-        if (u == null) { mostrarDestaque(null, getString(R.string.home_card_tv), getString(R.string.home_destaque_tv_sub)); return }
+        // Gravando (14/11/2026): o rótulo em cima do título diz o quê e até quando, seja qual for o último canal.
+        val rotulo = gravandoTv?.let { "● " + getString(R.string.grv_selo_home, it) }
+        if (u == null) { mostrarDestaque(rotulo, getString(R.string.home_card_tv), getString(R.string.home_destaque_tv_sub)); return }
         val agora = System.currentTimeMillis()
         val p = u.programas.firstOrNull { it.inicio <= agora && agora < it.fim && it.titulo.isNotBlank() }
         if (p == null) {
-            mostrarDestaque(null, getString(R.string.home_card_tv), getString(R.string.home_destaque_tv_sub_canal, u.numero)); return
+            mostrarDestaque(rotulo, getString(R.string.home_card_tv), getString(R.string.home_destaque_tv_sub_canal, u.numero)); return
         }
         val fmt = java.text.SimpleDateFormat("HH:mm", Locale.getDefault())
         val meta = android.text.SpannableStringBuilder()
@@ -1345,7 +1348,7 @@ class MainActivity : Activity() {
         meta.setSpan(android.text.style.StyleSpan(Typeface.BOLD), 0, meta.length, 0)
         meta.append("   ${fmt.format(java.util.Date(p.inicio))} – ${fmt.format(java.util.Date(p.fim))}")
         meta.append("  ·  " + getString(R.string.home_faltam, duracaoTexto(((p.fim - agora + 59_999) / 60_000).toInt())))
-        mostrarDestaque(null, p.titulo, getString(R.string.home_dest_tv, u.numero), meta, p.descricao.ifBlank { null })
+        mostrarDestaque(rotulo, p.titulo, getString(R.string.home_dest_tv, u.numero), meta, p.descricao.ifBlank { null })
     }
 
     /**
@@ -1424,6 +1427,7 @@ class MainActivity : Activity() {
             val ultimo = if (temTv) PlayerArmazem.ultimo(this)?.takeIf { ultimoLiberado(it) }?.let { programasDeAgora(it) } else null
             // Séries e Filmes: conta Xtream, ou lista M3U que traz filmes/episódios (ideia 26). fontes() decifra: fora da tela.
             val temVod = temTv && PlayerCarga.temVod(this)
+            gravandoTv = if (temTv) Gravacoes.resumoParaHome(this) else null
             // Os "apps recentes" saíram desta linha (10/11/2026, dono: "por que esses cards repetem os apps de baixo?").
             // A linha de apps já vem ordenada por uso recente, então os 4 recentes eram sempre os 4 primeiros apps de
             // baixo, em tamanho grande. E o "continuar assistindo" de verdade de Netflix/YouTube não é alcançável: a
