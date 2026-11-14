@@ -44,6 +44,8 @@
     <string name="ext_saga">%1$s: %2$d of %3$d in your list</string>
     <string name="ext_nao_e_este">Not this movie</string>
     <string name="ext_proximo">New episode %1$s (S%2$dE%3$d)</string>
+    <!-- Etiqueta do pôster em Séries (Interesses): "Novo ep. sex., 20/11" -->
+    <string name="ext_proximo_curto">New ep. %1$s</string>
     <string name="ext_hoje">today</string>
     <string name="ext_amanha">tomorrow</string>
     <string name="sv_mdblist_passos">Optional: adds Rotten Tomatoes, Letterboxd and Metacritic to the IMDb rating (which already works without it).\n1. Point the phone camera at the code on the left, create a free account and copy the API key.\n2. Point at the code on the right: the web panel opens on Settings. Paste the key under MDBList and tap Save key.\n3. The TV checks it right away and this screen continues by itself.</string>

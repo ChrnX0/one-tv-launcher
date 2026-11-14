@@ -116,6 +116,13 @@ class InfoExternaTest {
         assertEquals("Novo episódio hoje (T1E1)", InfoExterna.textoProximo(InfoExterna.ProximoEp("2026-11-14", 1, 1), hoje, m, "hoje", "amanhã", pt))
         assertEquals("Novo episódio amanhã (T1E1)", InfoExterna.textoProximo(InfoExterna.ProximoEp("2026-11-15", 1, 1), hoje, m, "hoje", "amanhã", pt))
         assertNull(InfoExterna.textoProximo(InfoExterna.ProximoEp("2026-11-01", 1, 1), hoje, m, "hoje", "amanhã", pt))
+        // Versão curta da etiqueta do pôster
+        assertEquals("hoje", InfoExterna.quandoCurto(InfoExterna.ProximoEp("2026-11-14", 1, 1), hoje, "hoje", "amanhã", pt))
+        assertEquals("amanhã", InfoExterna.quandoCurto(InfoExterna.ProximoEp("2026-11-15", 1, 1), hoje, "hoje", "amanhã", pt))
+        assertEquals("sex., 20/11", InfoExterna.quandoCurto(InfoExterna.ProximoEp("2026-11-20", 2, 5), hoje, "hoje", "amanhã", pt))
+        assertEquals("Fri, 11/20", InfoExterna.quandoCurto(InfoExterna.ProximoEp("2026-11-20", 2, 5), hoje, "today", "tomorrow", java.util.Locale.US))
+        assertNull(InfoExterna.quandoCurto(InfoExterna.ProximoEp("2026-11-01", 1, 1), hoje, "hoje", "amanhã", pt))
+        assertNull(InfoExterna.quandoCurto(InfoExterna.ProximoEp("lixo", 1, 1), hoje, "hoje", "amanhã", pt))
     }
 
     @Test fun filtroUsaANotaDeFora() {

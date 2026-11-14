@@ -78,6 +78,8 @@ class SeriesActivity : Activity() {
     private var ultimos: Map<String, UltimoEpisodio> = emptyMap()
     private var posicoes: Map<String, Posicao> = emptyMap()
     private var interesses: Set<String> = emptySet()
+    /** Próximo episódio marcado no TMDB (só o que já está guardado), por chave: vira a etiqueta "Novo ep. sex., 20/11". */
+    private var proximos: Map<String, InfoExterna.ProximoEp> = emptyMap()
     /** De que perfil são os interesses e posições na memória (ideia 11): trocou de perfil, a tela se refaz ao voltar. */
     private var perfilCarregado = ""
     private var progresso: Map<String, ProgressoSerie> = emptyMap()   // episódios vistos / total, por série
@@ -272,12 +274,13 @@ class SeriesActivity : Activity() {
             val p = PlayerArmazem.posicoes(this)
             val i = PlayerArmazem.interesses(this, series = true)
             val pr = PlayerArmazem.progressoSeries(this)
+            val px = proximosGuardados(s)
             val pi = IdiomaPlayer.prefs(this)
             val marco = prefsPlayer().getLong(chavePref("marco"), 0L)
             val ultima = prefsPlayer().getString(chavePref("ultima"), null)
             tela.post {
                 if (isDestroyed) return@post
-                todas = s; ocultas = oc; porIdade = fi; ultimos = u; posicoes = p; interesses = i; progresso = pr; prefsIdioma = pi
+                todas = s; ocultas = oc; porIdade = fi; ultimos = u; posicoes = p; interesses = i; progresso = pr; prefsIdioma = pi; proximos = px
                 marcoNovos = marco; ultimaSalva = ultima
                 conferirNovidades()
                 if (s.isEmpty()) { aviso.text = getString(R.string.series_vazio); return@post }
@@ -362,6 +365,14 @@ class SeriesActivity : Activity() {
      * dizer QUANTOS episódios novos ("3 episódios novos", "Nova temporada"). Só as dos Interesses e do Continuar, no
      * máximo [MAX_NOVIDADES] por visita (cada uma é um pedido ao servidor).
      */
+    /** Fora da tela (a primeira leitura do arquivo de fichas de fora vai ao disco). */
+    private fun proximosGuardados(series: List<Serie>): Map<String, InfoExterna.ProximoEp> {
+        if (!InfoExternaCache.temTmdb()) return emptyMap()
+        val r = HashMap<String, InfoExterna.ProximoEp>()
+        for (s in series) InfoExternaCache.guardado(this, s.chave)?.detalhe?.proximo?.let { r[s.chave] = it }
+        return r
+    }
+
     private fun conferirNovidades() {
         val alvo = todas.filter { s -> (s.chave in interesses || s.chave in ultimos) && Series.etiqueta(s, progresso[s.chave]) == EtiquetaSerie.Novos(0) }
             .take(MAX_NOVIDADES)
@@ -541,9 +552,21 @@ class SeriesActivity : Activity() {
             s.ano?.toString(),
             info?.temporadas?.size?.takeIf { it > 0 }?.let { resources.getQuantityString(R.plurals.series_temporadas, it, it) },
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(s.grupo).ifEmpty { null },
-            ultimos[s.chave]?.let { "T${it.temporada}E${it.numero}" })),
+            ultimos[s.chave]?.let { "T${it.temporada}E${it.numero}" },
+            extRapidas[s.chave]?.ifEmpty { null })),
             info?.sinopse.orEmpty())
         focoRapido = s; if (s.chave !in fichasRapidas) { tela.postDelayed(lerFichaRapida, 400) }
+    }
+
+    private val hoje: java.time.LocalDate get() = java.time.LocalDate.now()
+
+    /** "sex., 20/11" do próximo episódio, só nas séries dos Interesses (o pedido: "nas séries de Interesses"). */
+    private fun proximoCurto(s: Serie): String? = proximos[s.chave]?.takeIf { s.chave in interesses }
+        ?.let { InfoExterna.quandoCurto(it, hoje, getString(R.string.ext_hoje), getString(R.string.ext_amanha)) }
+
+    /** Notas de fora (IMDb, RT...) e "Novo episódio sexta, 20/11" para a faixa da ficha rápida; lidas no Fundo. */
+    private val extRapidas = object : LinkedHashMap<String, String>(64, 0.75f, true) {
+        override fun removeEldestEntry(e: MutableMap.MutableEntry<String, String>) = size > 40
     }
 
     private val fichasRapidas = object : LinkedHashMap<String, FichaSerie?>(64, 0.75f, true) {
@@ -556,12 +579,21 @@ class SeriesActivity : Activity() {
             // Só o que a tela usa (a ficha inteira, com todos os episódios, não fica na memória).
             // Sem ficha no disco: pede ao servidor se o foco ainda está nela (mesmo motivo de Filmes).
             val info = (PlayerCarga.fichaSerieGuardada(this, s) ?: if (focoRapido === s) PlayerCarga.fichaSerie(this, s) else null)?.let { f -> f.copy(temporadas = f.temporadas.mapValues { emptyList() }, cenas = emptyList()) }
+            val ext = textoExtRapido(s.chave, serie = true)
             tela.post {
                 if (isDestroyed) return@post
-                fichasRapidas[s.chave] = info
+                fichasRapidas[s.chave] = info; extRapidas[s.chave] = ext
                 if (naGrade.getOrNull(grade.selectedItemPosition) === s) mostrarFocado(s)
             }
         }
+    }
+
+    /** Só o que está guardado (sem rede): notas e, na série, o próximo episódio. Vazio = nada a mostrar. */
+    private fun textoExtRapido(chave: String, serie: Boolean): String {
+        val g = InfoExternaCache.guardado(this, chave) ?: return ""
+        val notas = InfoExterna.notasDe(g).takeIf { !it.vazia }?.let { InfoExterna.textoNotas(it) }
+        val prox = if (serie) g.detalhe?.proximo?.let { InfoExterna.textoProximo(it, hoje, getString(R.string.ext_proximo), getString(R.string.ext_hoje), getString(R.string.ext_amanha)) } else null
+        return listOfNotNull(notas, prox).joinToString("  ·  ")
     }
 
     // ---------------------------------------------------------------- pular para uma letra (acréscimo 3)
@@ -646,12 +678,16 @@ class SeriesActivity : Activity() {
                 EtiquetaSerie.Concluida -> getString(R.string.coluna_etiqueta_concluida)
                 EtiquetaSerie.NovaTemporada -> getString(R.string.coluna_etiqueta_nova_temporada)
                 is EtiquetaSerie.Novos -> if (etq.quantos > 0) resources.getQuantityString(R.plurals.coluna_etiqueta_n_novos, etq.quantos, etq.quantos) else getString(R.string.coluna_etiqueta_novos)
-                null -> progresso[s.chave]?.takeIf { it.vistos > 0 && it.total > 0 }?.let { getString(R.string.tempo_x_de_y, it.vistos, it.total) }
+                // Série dos Interesses com episódio novo marcado (TMDB) ganha do "20 de 62": a barra já mostra o progresso.
+                null -> proximoCurto(s)?.let { getString(R.string.ext_proximo_curto, it) }
+                    ?: progresso[s.chave]?.takeIf { it.vistos > 0 && it.total > 0 }?.let { getString(R.string.tempo_x_de_y, it.vistos, it.total) }
             }
             if (texto == null) c.etiqueta.visibility = View.GONE else {
                 c.etiqueta.visibility = View.VISIBLE
                 c.etiqueta.text = texto
-                c.etiqueta.setTextColor(if (etq is EtiquetaSerie.Novos || etq == EtiquetaSerie.NovaTemporada) Estilo.FUNDO else papel)
+                val novo = etq is EtiquetaSerie.Novos || etq == EtiquetaSerie.NovaTemporada
+                val marcado = etq == null && proximoCurto(s) != null
+                c.etiqueta.setTextColor(if (novo) Estilo.FUNDO else if (marcado) ambar else papel)
                 (c.etiqueta.background as GradientDrawable).setColor(when (etq) {
                     EtiquetaSerie.Concluida -> verdeEtiqueta
                     null -> 0xD90B0F17.toInt()

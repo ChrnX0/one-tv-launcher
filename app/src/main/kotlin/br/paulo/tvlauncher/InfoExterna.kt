@@ -345,4 +345,18 @@ object InfoExterna {
         }
         return String.format(l, modelo, quando, p.temporada, p.numero)
     }
+
+    /**
+     * Versão curta para a etiqueta do pôster: "hoje", "amanhã" ou "sex., 20/11" ("Fri, 11/20"). Passado ou data inválida = null.
+     */
+    fun quandoCurto(p: ProximoEp, hoje: java.time.LocalDate, hojeTxt: String, amanhaTxt: String, l: Locale = Locale.getDefault()): String? {
+        val d = runCatching { java.time.LocalDate.parse(p.data) }.getOrNull() ?: return null
+        return when {
+            d.isBefore(hoje) -> null
+            d == hoje -> hojeTxt
+            d == hoje.plusDays(1) -> amanhaTxt
+            else -> d.dayOfWeek.getDisplayName(java.time.format.TextStyle.SHORT, l) + ", " +
+                java.time.format.DateTimeFormatter.ofPattern(if (l.language == "en") "M/d" else "dd/MM", l).format(d)
+        }
+    }
 }
