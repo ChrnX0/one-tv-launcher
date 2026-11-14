@@ -63,6 +63,7 @@
         <item>App sheets and the cleanup list can grow with community contributions (checked once a week)</item>
         <item>Home screen: temperature, humidity, door, motion, water and smoke sensors, and the air conditioner (hold OK to set the temperature)</item>
         <item>Home screen: cameras show their picture of right now on the TV with OK (also from the web panel and Claude)</item>
+        <item>Voice: “Ok Google, open Movies” (also Series, Network media, Home control, Search, Board) opens that launcher screen</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -113,6 +114,7 @@
         <item>comunidade</item>
         <item>casa_sensores</item>
         <item>casa_camera</item>
+        <item>voz_telas</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -163,6 +165,7 @@
         <item>In the web panel, open the sheet of an app</item>
         <item>Open the Home screen (Home Assistant) and find a sensor or the air conditioner</item>
         <item>On the Home screen, press OK on a camera</item>
+        <item>Say “Ok Google, open Movies” (and the others: Series, Network media, Home control, Search, Board)</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -213,5 +216,6 @@
         <item>Does the sheet still show?</item>
         <item>Does the value show, and does holding OK on the air conditioner change the temperature?</item>
         <item>Did the picture show over the screen?</item>
+        <item>Did each one open the right screen (and not another app)?</item>
     </string-array>
 </resources>
