@@ -28,7 +28,9 @@ import java.util.Locale
  *
  * Anti-burn-in: a coluna inteira se desloca alguns dp a cada minuto (a TV da sala é LCD, mas um painel parado por horas
  * ainda sofre retenção de imagem; e de quebra gasta menos luz). A tela fica escurecida (setScreenBright(false)).
- * Qualquer tecla fecha (setInteractive(false): o toque/clique acorda e encerra o sonho).
+ * Controle remoto (ideia 28, 14/11/2026): o sonho é interativo e [dispatchKeyEvent] decide pela [TeclasProtetor]:
+ * ◀ ▶ andam pelos cartões da Galeria, OK dispensa o aviso marcado ou pausa/retoma a música, volume não fecha, e
+ * qualquer outra tecla fecha como antes.
  */
 class ProtetorTela : DreamService() {
     private val ui = Handler(Looper.getMainLooper())
@@ -48,8 +50,9 @@ class ProtetorTela : DreamService() {
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        isInteractive = false        // qualquer interação encerra o sonho
+        isInteractive = true         // as teclas chegam ao dispatchKeyEvent; quem fecha é ele (ideia 28)
         isFullscreen = true
+        FotosRede.talvezSincronizar(this)   // pasta da rede (ideia 27): renova a cópia se tiver mais de 6 h
         if (Protetor.estilo(this) == Protetor.GALERIA) { montarGaleria(); return }
         isScreenBright = false       // tela escurecida: descanso de verdade
 
@@ -102,7 +105,7 @@ class ProtetorTela : DreamService() {
 
         // Mesmo grafite do tema Escuro (ver Fundos.kt: FundoEscuro), simplificado para o sonho ficar barato.
         // Com fotos enviadas pelo painel (FotosProtetor.kt), elas ficam por trás, com um véu escuro para o relógio ler.
-        fotos = FotosProtetor.listar(this).shuffled()
+        fotos = (FotosProtetor.listar(this) + FotosRede.listar(this)).shuffled()
         setContentView(FrameLayout(this).apply {
             background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
                 intArrayOf(0xFF0E1317.toInt(), 0xFF0A0D10.toInt(), 0xFF07090B.toInt()))
@@ -128,7 +131,7 @@ class ProtetorTela : DreamService() {
      */
     private fun montarGaleria() {
         isScreenBright = true
-        fotos = FotosProtetor.listar(this).shuffled()
+        fotos = (FotosProtetor.listar(this) + FotosRede.listar(this)).shuffled()
         val raiz = FrameLayout(this).apply { setBackgroundColor(0xFF15140F.toInt()) }
         // O fundo segue o TEMA da HOME (dono, 10 e 11/11/2026): Galeria = a pintura do dia; Escuro = o MESMO protetor,
         // só trocando a pintura pelo wallpaper escuro da HOME (sem mudar mais nada do estilo). Fotos do painel valem nos dois.
@@ -300,6 +303,30 @@ class ProtetorTela : DreamService() {
         coluna.addView(tiles, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(28) })
     }
 
+    override fun dispatchKeyEvent(event: android.view.KeyEvent): Boolean {
+        val g = galeria
+        val musica = g?.haMusica ?: (event.keyCode in TECLAS_MUSICA && temMusica())
+        val acao = TeclasProtetor.acao(event.keyCode, g?.totalCartoes ?: 0, g?.tipoEscolhido, musica)
+        if (acao == TeclasProtetor.Acao.DEIXAR_PASSAR) return super.dispatchKeyEvent(event)
+        // Age na descida; a subida da mesma tecla é engolida (senão cairia no app que volta para a frente).
+        if (event.action != android.view.KeyEvent.ACTION_DOWN || event.repeatCount > 0) return true
+        when (acao) {
+            TeclasProtetor.Acao.ANTERIOR -> g?.mover(-1)
+            TeclasProtetor.Acao.PROXIMO -> g?.mover(1)
+            TeclasProtetor.Acao.DISPENSAR -> g?.dispensarEscolhido()
+            TeclasProtetor.Acao.ALTERNAR_MUSICA -> if (g != null) g.alternarMusica()
+                else carregador.execute { try { TocandoAgoraTv.controlar(this, "alternar") } catch (_: Exception) {} }
+            else -> fechar()
+        }
+        return true
+    }
+
+    /** Só no estilo clássico (sem a Galeria, que já relê a cada 10 s): há sessão de mídia com título? */
+    private fun temMusica(): Boolean = try { TocandoAgoraTv.paraPainel(this) != null } catch (_: Exception) { false }
+
+    /** Fecha o sonho como a tecla fazia antes (wakeUp devolve a tela ao que estava por baixo). */
+    private fun fechar() { if (android.os.Build.VERSION.SDK_INT >= 29) wakeUp() else finish() }
+
     override fun onDetachedFromWindow() {
         ui.removeCallbacks(deslocar)
         ui.removeCallbacks(atualizarDados)
@@ -313,4 +340,10 @@ class ProtetorTela : DreamService() {
     }
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density + 0.5f).toInt()
+
+    private companion object {
+        val TECLAS_MUSICA = setOf(android.view.KeyEvent.KEYCODE_DPAD_CENTER, android.view.KeyEvent.KEYCODE_ENTER,
+            android.view.KeyEvent.KEYCODE_NUMPAD_ENTER, android.view.KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
+            android.view.KeyEvent.KEYCODE_MEDIA_PLAY, android.view.KeyEvent.KEYCODE_MEDIA_PAUSE, android.view.KeyEvent.KEYCODE_HEADSETHOOK)
+    }
 }

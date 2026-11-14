@@ -13,8 +13,8 @@ import android.widget.TextView
 import android.widget.Toast
 
 /**
- * Tela das chaves das ideias de 10/11/2026 ([Extras]). Fica separada da tela de Configurações de propósito: aquela está
- * em vários PRs abertos e mexer nela agora daria conflito. Uma linha por chave: OK liga ou desliga.
+ * Ajustes finos e ferramentas das ideias de 10/11/2026 ([Extras]). As chaves liga/desliga foram para as abas das
+ * Configurações em 14/11/2026 (ideia 46, [ExtrasAbas]).
  *
  * Linhas de número (início e fim do filtro noturno, força): OK avança, ◀ ▶ ajustam para trás e para a frente.
  * Abre pelo adb (`--es o extras`, ver [ComandosExtras]) e, depois da costura final, por uma entrada nas Configurações.
@@ -39,16 +39,8 @@ class ExtrasActivity : Activity() {
     private val linhas = mutableListOf<Pair<TextView, () -> String>>()
 
     private fun montar() {
-        for (c in Extras.Chave.values()) {
-            linha({ "${rotulo(c)}: ${if (Extras.ligado(this, c)) getString(R.string.extras_ligado) else getString(R.string.extras_desligado)}" }) {
-                // As mesmas chaves que o painel protege pedem o PIN aqui também (antes só a hora de dormir pedia, e quem
-                // pegasse o controle desligava o PIN da HOME ou as travas). Hora de dormir: só desligar pede.
-                if (Extras.precisaPinNaTv(c, Extras.ligado(this, c), PainelArmazem.temPin(this))) {
-                    val titulo = if (c == Extras.Chave.HORA_DORMIR) R.string.dormir_pin else R.string.player_pin_titulo
-                    PinTv.pedir(this, getString(titulo)) { certo -> if (certo) { alternar(c); atualizarTextos() } }
-                } else alternar(c)
-            }
-        }
+        // As chaves liga/desliga moraram aqui até 14/11/2026; agora cada uma está na aba dela das Configurações (ideia 46,
+        // ExtrasAbas). Aqui ficam os ajustes finos e as ferramentas.
         numero(R.string.extras_filtro_inicio, FiltroNoturno.CHAVE_INICIO, FiltroNoturno.PADRAO_INICIO, 30, 0, 24 * 60 - 30, hora = true)
         numero(R.string.extras_filtro_fim, FiltroNoturno.CHAVE_FIM, FiltroNoturno.PADRAO_FIM, 30, 0, 24 * 60 - 30, hora = true)
         numero(R.string.extras_filtro_forca, FiltroNoturno.CHAVE_FORCA, FiltroNoturno.PADRAO_FORCA, 5, 5, 100, hora = false)
@@ -64,6 +56,14 @@ class ExtrasActivity : Activity() {
         linhaDormir({ "${getString(R.string.dormir_teto)}: ${Extras.numero(this, HoraDormir.CHAVE_TETO, HoraDormir.PADRAO_TETO)}%" }, 5) { d ->
             val v = Math.floorMod(Extras.numero(this, HoraDormir.CHAVE_TETO, HoraDormir.PADRAO_TETO) + d, 105)   // 0..100, dá a volta
             Extras.definirNumero(this, HoraDormir.CHAVE_TETO, v)
+        }
+        // Tempo de tela por dia (ideia 33): a cota (OK = +30 min; ← →) e "mais 30 min hoje". Mudar pede o PIN com a chave ligada.
+        linhaTela({ getString(R.string.tela_cota_linha, TempoTela.texto(TempoTelaTv.cota(this) * 60_000L, getString(R.string.tela_h), getString(R.string.tela_min)),
+            TempoTela.texto(TempoTelaTv.restanteMs(this), getString(R.string.tela_h), getString(R.string.tela_min))) }) { d ->
+            TempoTelaTv.definirCota(this, TempoTela.proximaCota(TempoTelaTv.cota(this), d * TempoTela.PASSO_COTA))
+        }
+        linhaTela({ getString(R.string.tela_mais, TempoTela.EXTRA_MIN) }, setas = false) { _ ->
+            TempoTelaTv.darMais(this); aviso(getString(R.string.tela_mais_ok, TempoTela.EXTRA_MIN))
         }
         linha({ getString(R.string.extras_caches) + " (" + getString(R.string.extras_livre, Caches.livreTexto()) + ")" }) {
             emSegundoPlano { Caches.limpar(it) }
@@ -88,11 +88,6 @@ class ExtrasActivity : Activity() {
         linhas.firstOrNull()?.first?.requestFocus()
     }
 
-    /** O rótulo de cada chave vem de "extras_<NOME>" nas strings (pt e en). */
-    private fun rotulo(c: Extras.Chave): String {
-        val id = resources.getIdentifier("extras_${c.name}", "string", packageName)
-        return if (id != 0) getString(id) else c.name
-    }
 
     private fun linha(texto: () -> String, ao: () -> Unit): TextView {
         // A linha padrão do sistema de design (a mesma das Configurações).
@@ -152,7 +147,7 @@ class ExtrasActivity : Activity() {
         fun mudar(delta: Int) {
             val fazer = { aplicar(delta); atualizarTextos() }
             if (protegida && Extras.ligado(this, Extras.Chave.HORA_DORMIR) && PainelArmazem.temPin(this))
-                PinTv.pedir(this, getString(R.string.dormir_pin)) { certo -> if (certo) fazer() }
+                PinTv.pedir(this, getString(R.string.dormir_pin), familia = true) { certo -> if (certo) fazer() }
             else fazer()
         }
         val t = linha(texto) { mudar(passo) }
@@ -161,6 +156,25 @@ class ExtrasActivity : Activity() {
             when (code) {
                 KeyEvent.KEYCODE_DPAD_LEFT -> { mudar(-passo); true }
                 KeyEvent.KEYCODE_DPAD_RIGHT -> { mudar(passo); true }
+                else -> false
+            }
+        }
+    }
+
+    /** Linha do tempo de tela: com a chave ligada, mudar pede o PIN (das crianças ou do painel). [aplicar] recebe +1 ou -1. */
+    private fun linhaTela(texto: () -> String, setas: Boolean = true, aplicar: (Int) -> Unit) {
+        fun mudar(d: Int) {
+            val fazer = { aplicar(d); atualizarTextos() }
+            if (Extras.ligado(this, Extras.Chave.TEMPO_TELA) && PainelArmazem.temPin(this))
+                PinTv.pedir(this, getString(R.string.tela_pin), familia = true) { certo -> if (certo) fazer() }
+            else fazer()
+        }
+        val t = linha(texto) { mudar(1) }
+        if (setas) t.setOnKeyListener { _, code, e ->
+            if (e.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+            when (code) {
+                KeyEvent.KEYCODE_DPAD_LEFT -> { mudar(-1); true }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> { mudar(1); true }
                 else -> false
             }
         }
@@ -183,17 +197,6 @@ class ExtrasActivity : Activity() {
 
     private fun hhmm(min: Int) = "%02d:%02d".format(min / 60, min % 60)
 
-    private fun alternar(c: Extras.Chave) {
-        Extras.definir(this, c, !Extras.ligado(this, c))
-        when (c) {
-            Extras.Chave.FILTRO_NOTURNO -> FiltroNoturno.avaliar()
-            Extras.Chave.JANELA_OTA, Extras.Chave.TRAVAR_CRITICOS, Extras.Chave.DIARIO_DNS -> {
-                val app = applicationContext
-                Fundo.rodar { ExtrasDO.aplicar(app) }   // chamadas do DO fora da thread da tela
-            }
-            else -> PainelExtras.aoMudar(applicationContext, c)
-        }
-    }
 
     private fun acordarPc() {
         if (AcordarPc.macGuardado(this).isEmpty()) {

@@ -128,7 +128,7 @@ class ModoSimplesActivity : Activity() {
             textSize = 14f
             setOnClickListener {
                 val sair = { Extras.definir(this@ModoSimplesActivity, Extras.Chave.MODO_SIMPLES, false); finish() }
-                if (PainelArmazem.temPin(this@ModoSimplesActivity)) PinTv.pedir(this@ModoSimplesActivity, getString(R.string.player_pin_titulo)) { certo -> if (certo) sair() }
+                if (PainelArmazem.temPin(this@ModoSimplesActivity)) PinTv.pedir(this@ModoSimplesActivity, getString(R.string.player_pin_titulo), familia = true) { certo -> if (certo) sair() }
                 else sair()
             }
         }, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(8) })

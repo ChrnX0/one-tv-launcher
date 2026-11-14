@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Relógio e família (ideias 30 a 34 do estudo, 14/11/2026), em arquivo próprio para não conflitar com PRs abertos. -->
+<resources>
+    <string name="fam_pin">PIN das crianças</string>
+    <string name="fam_pin_det">Um segundo PIN para destravar canais, categorias ocultas e a hora de dormir na frente das crianças. O PIN do painel continua valendo em tudo.</string>
+    <string name="fam_pin_ok">PIN das crianças gravado</string>
+    <string name="fam_pin_igual">O PIN das crianças precisa ser diferente do PIN do painel</string>
+    <string name="fam_trocar">Trocar o PIN das crianças</string>
+    <string name="fam_apagar">Apagar o PIN das crianças</string>
+    <string name="fam_apagado">PIN das crianças apagado: agora só o PIN do painel destrava</string>
+    <string name="extras_TEMPO_TELA">Tempo de tela por dia (acabou, só os apps liberados abrem)</string>
+    <string name="tela_titulo">Tempo de tela</string>
+    <string name="tela_acabou">O tempo de tela de hoje acabou. Até amanhã!</string>
+    <string name="tela_5min">Faltam 5 minutos de tela hoje</string>
+    <string name="tela_pin">PIN para mudar o tempo de tela</string>
+    <string name="tela_cota_linha">Tempo de tela por dia: %1$s (falta hoje: %2$s)</string>
+    <string name="tela_mais">Dar mais %1$d minutos hoje</string>
+    <string name="tela_mais_ok">Mais %1$d minutos para hoje</string>
+    <string name="tela_h">h</string>
+    <string name="tela_min">min</string>
+    <string name="extras_AGENDA_TODAS">Agenda de todas as contas Google da TV juntas</string>
+    <string name="cal_todas_contas">Todas as contas da TV (%1$d)</string>
+    <string name="tm_crono">Cronômetro</string>
+    <string name="tm_crono_iniciar">Começar o cronômetro</string>
+    <string name="tm_crono_parar">Parar o cronômetro</string>
+    <string name="tm_crono_comecou">Cronômetro começou: aparece na HOME</string>
+    <string name="tm_crono_marcou">Cronômetro parado em %1$s</string>
+    <string name="som_canal">Último canal da TV ao vivo</string>
+</resources>

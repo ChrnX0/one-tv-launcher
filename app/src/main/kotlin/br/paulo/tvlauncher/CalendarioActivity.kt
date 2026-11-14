@@ -26,7 +26,7 @@ import java.util.Calendar
 import java.util.Locale
 
 /**
- * Agenda do perfil ativo (a conta Google escolhida na bolinha): abre com OK na data do topo.
+ * Agenda das contas Google da TV, todas juntas (ideia 32; desligável em Extras: aí só a do perfil ativo): abre com OK na data do topo.
  * Esquerda: o mês, com hoje marcado e um ponto nos dias com evento (◀ ▶ trocam o mês).
  * Direita: os eventos dos próximos 30 dias (▲ ▼ rolam).
  *
@@ -49,13 +49,13 @@ class CalendarioActivity : Activity() {
     private lateinit var grade: GridLayout
     private lateinit var listaEventos: LinearLayout
     private lateinit var aviso: TextView
-    private var conta: String? = null
+    private var contas: List<String> = emptyList()   // ideia 32: todas as contas da TV (ou só a do perfil, ver Agenda.contas)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
-        conta = Perfil.ativa(this)
+        contas = Agenda.contas(this)
         setContentView(montar())
         // Item 30 da revisão (04/11/2026): antes redesenhava UMA vez, 6 s depois de abrir, e o que a sincronização
         // trouxesse depois ficava de fora. Agora o provedor da agenda avisa a cada mudança enquanto a tela estiver
@@ -85,7 +85,7 @@ class CalendarioActivity : Activity() {
         tituloMes = Estilo.tituloTela(this, "")
         colunaMes.addView(tituloMes)
         colunaMes.addView(texto(15f, textoSuave).apply {
-            text = (conta ?: getString(R.string.cal_sem_conta)) + "\n" + getString(R.string.cal_dica)
+            text = (if (contas.size > 1) getString(R.string.cal_todas_contas, contas.size) else contas.firstOrNull() ?: getString(R.string.cal_sem_conta)) + "\n" + getString(R.string.cal_dica)
             setPadding(0, dp(4), 0, dp(18))
         })
         grade = GridLayout(this).apply { columnCount = 7 }
@@ -157,7 +157,7 @@ class CalendarioActivity : Activity() {
         aviso.text = when {
             checkSelfPermission(Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ->
                 getString(R.string.cal_sem_permissao)
-            conta == null -> getString(R.string.cal_nenhuma_conta)
+            contas.isEmpty() -> getString(R.string.cal_nenhuma_conta)
             proximos.isEmpty() -> getString(R.string.cal_nada)
             else -> ""
         }
@@ -227,8 +227,8 @@ class CalendarioActivity : Activity() {
         }, FrameLayout.LayoutParams(dp(5), dp(5), Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL).apply { bottomMargin = dp(2) })
     }
 
-    /** Ocorrências entre [de] e [ate], só das agendas visíveis da conta do perfil ativo, em ordem de início. */
-    private fun eventos(de: Long, ate: Long): List<Evento> = Agenda.eventos(this, conta, de, ate)
+    /** Ocorrências entre [de] e [ate], das agendas visíveis das contas da agenda ([Agenda.contas]), em ordem de início. */
+    private fun eventos(de: Long, ate: Long): List<Evento> = Agenda.eventos(this, contas, de, ate)
 
     private fun inicioDoMes(c: Calendar) = (c.clone() as Calendar).apply {
         set(Calendar.DAY_OF_MONTH, 1); set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)

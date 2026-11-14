@@ -84,7 +84,8 @@ object TravaRelogio {
     @Synchronized
     fun ajustar(ctx: Context) {
         val donos = PrivilegioDO.somosDonos(ctx)
-        val ligada = Extras.ligado(ctx, Extras.Chave.HORA_DORMIR)
+        // Tempo de tela por dia (ideia 33) também: mudar a data da TV zeraria a cota.
+        val ligada = Extras.ligado(ctx, Extras.Chave.HORA_DORMIR) || Extras.ligado(ctx, Extras.Chave.TEMPO_TELA)
         val restricao = if (donos) restricaoNossa(ctx) else false
         val auto = if (donos) horaAutomatica(ctx) else true
         when (TravaRelogioRegra.acao(donos, ligada, restricao, auto)) {

@@ -112,6 +112,7 @@ class ProtetorGaleria(
         NotificacoesTv.ouvir(aoMudarNotificacoes)
         garantirOuvinte()
         atualizar()
+        releTocando.run()
         tique.run()
         // Entrada suave: as informações aparecem em 1,5 s depois da pintura.
         camadaInfo.alpha = 0f
@@ -361,11 +362,75 @@ class ProtetorGaleria(
         carregador.execute { try { TocandoAgoraTv.ajustar(ctx, true) } catch (e: Exception) { android.util.Log.w(TAG, "ouvinte: $e") } }
     }
 
-    private class Cartao(val icone: Drawable?, val emoji: String?, val app: String, val tempo: String, val titulo: String, val texto: String)
+    private class Cartao(val icone: Drawable?, val emoji: String?, val app: String, val tempo: String, val titulo: String, val texto: String,
+        val tipo: TeclasProtetor.Tipo = TeclasProtetor.Tipo.OUTRO, val chave: String? = null)
+
+    // ------------------------------------------------------------------ controle remoto (ideia 28, TeclasProtetor.kt)
+    /** Cartões na ordem da coluna (todos, não só os 3 visíveis) e o marcado por ◀ ▶ (-1 = nenhum). */
+    private var cartoesAtuais: List<Cartao> = emptyList()
+    private var escolhido = -1
+    /** O que está tocando (TocandoAgoraTv.paraPainel), relido a cada 10 s fora da thread da tela. null = nada. */
+    @Volatile private var tocando: org.json.JSONObject? = null
+
+    val totalCartoes get() = cartoesAtuais.size
+    val tipoEscolhido: TeclasProtetor.Tipo? get() = cartoesAtuais.getOrNull(escolhido)?.tipo
+    val haMusica get() = tocando != null
+
+    fun mover(delta: Int) {
+        escolhido = TeclasProtetor.mover(escolhido, delta, cartoesAtuais.size)
+        reagendarMarca(); montarAvisos()
+    }
+
+    /** OK num recado (sai do protetor e do painel) ou numa notificação (como deslizar no celular). */
+    fun dispensarEscolhido() {
+        val c = cartoesAtuais.getOrNull(escolhido) ?: return
+        when (c.tipo) {
+            TeclasProtetor.Tipo.RECADO -> ctx.getSharedPreferences(AvisoTv.PREFS_ULTIMO, Context.MODE_PRIVATE).edit().putLong("em", 0).apply()
+            TeclasProtetor.Tipo.NOTIFICACAO -> c.chave?.let { OuvinteNotificacoes.dispensar(it) }
+            else -> return
+        }
+        reagendarMarca(); montarAvisos()
+    }
+
+    fun alternarMusica() {
+        if (carregador.isShutdown) return
+        carregador.execute {
+            try { TocandoAgoraTv.controlar(ctx, "alternar"); Thread.sleep(400) } catch (_: Exception) {}
+            lerTocando()
+        }
+    }
+
+    private fun lerTocando() {
+        val t = try { TocandoAgoraTv.paraPainel(ctx) } catch (_: Exception) { null }
+        val mudou = t?.toString() != tocando?.toString()
+        tocando = t
+        if (mudou && ::colunaAvisos.isInitialized) colunaAvisos.post { montarAvisos() }
+    }
+
+    private val releTocando = object : Runnable {
+        override fun run() {
+            if (carregador.isShutdown) return
+            carregador.execute { lerTocando() }
+            colunaAvisos.postDelayed(this, 10_000)
+        }
+    }
+
+    private val limparMarca = Runnable { escolhido = -1; montarAvisos() }
+    private fun reagendarMarca() {
+        colunaAvisos.removeCallbacks(limparMarca)
+        if (escolhido >= 0) colunaAvisos.postDelayed(limparMarca, TeclasProtetor.MARCA_MS)
+    }
 
     private fun montarAvisos() {
         val agora = System.currentTimeMillis()
         val cartoes = mutableListOf<Cartao>()
+        // Tocando agora (ideia 28): primeiro da coluna; OK nele pausa ou retoma.
+        tocando?.let { t ->
+            val pacote = t.optString("pacote")
+            val ic = icones.getOrPut(pacote) { try { ctx.packageManager.getApplicationIcon(pacote) } catch (e: Exception) { null } }
+            cartoes.add(Cartao(ic, if (ic == null) "♪" else null, t.optString("app"), if (t.optBoolean("tocando")) "▶" else "❚❚",
+                t.optString("titulo"), t.optString("artista"), TeclasProtetor.Tipo.TOCANDO))
+        }
         // Último aviso da TV: recado, campainha e o que pede atenção ficam 6 h; chuva 2 h; confirmação (ex.: "O Claude
         // olhou a tela") 2 min (AvisoRegras, 12/11/2026). Antes tudo ficava 6 h. Ao vencer, o cartão sai sozinho.
         val ultimo = ctx.getSharedPreferences(AvisoTv.PREFS_ULTIMO, Context.MODE_PRIVATE)
@@ -377,7 +442,7 @@ class ProtetorGaleria(
             val linhas = ultimo.getString("texto", "").orEmpty().split('\n')
             cartoes.add(Cartao(IconeLinha(IconeLinha.Tipo.RECADO), null, ultimo.getString("titulo", null) ?: ctx.getString(R.string.pg_recado),
                 NotificacoesTv.haQuanto(emRecado, agora, ctx.getString(R.string.pg_ontem), ctx.getString(R.string.pg_agora)),
-                linhas.firstOrNull().orEmpty(), linhas.drop(1).joinToString(" ")))
+                linhas.firstOrNull().orEmpty(), linhas.drop(1).joinToString(" "), TeclasProtetor.Tipo.RECADO))
         }
         // Retrospectiva e mural (12/11/2026): depois do recado, antes do despertador e das notificações.
         extras12.forEach { (titulo, linha1, linha2) ->
@@ -389,13 +454,38 @@ class ProtetorGaleria(
         NotificacoesTv.atuais.forEach { a ->
             val ic = icones.getOrPut(a.pacote) { try { ctx.packageManager.getApplicationIcon(a.pacote) } catch (e: Exception) { null } }
             cartoes.add(Cartao(ic, if (ic == null) "🔔" else null, a.app,
-                NotificacoesTv.haQuanto(a.quando, agora, ctx.getString(R.string.pg_ontem), ctx.getString(R.string.pg_agora)), a.titulo, a.texto))
+                NotificacoesTv.haQuanto(a.quando, agora, ctx.getString(R.string.pg_ontem), ctx.getString(R.string.pg_agora)), a.titulo, a.texto,
+                TeclasProtetor.Tipo.NOTIFICACAO, a.chave))
         }
         colunaAvisos.removeAllViews()
-        cartoes.take(3).forEach { colunaAvisos.addView(cartao(it), LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = dp(7) }) }
-        if (cartoes.size > 3) colunaAvisos.addView(texto(ctx.getString(R.string.pg_mais_notif, cartoes.size - 3), 8f, m500).apply {
+        cartoesAtuais = cartoes
+        if (escolhido >= cartoes.size) escolhido = cartoes.size - 1   // o marcado sumiu (dispensado ou vencido)
+        // Só 3 à vista; com ◀ ▶ a janela anda para o marcado continuar visível.
+        val inicio = TeclasProtetor.inicioJanela(escolhido, cartoes.size, 3)
+        cartoes.drop(inicio).take(3).forEachIndexed { i, c ->
+            val v = cartao(c)
+            if (escolhido >= 0) {
+                if (inicio + i == escolhido) v.foreground = GradientDrawable().apply {
+                    cornerRadius = dp(13).toFloat(); setStroke(dp(2), 0xE6FFFFFF.toInt())
+                } else v.alpha = 0.55f
+            }
+            colunaAvisos.addView(v, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = dp(7) })
+        }
+        val fora = cartoes.size - inicio - 3
+        if (fora > 0) colunaAvisos.addView(texto(ctx.getString(R.string.pg_mais_notif, fora), 8f, m500).apply {
             alpha = 0.8f; gravity = Gravity.END; setPadding(0, 0, dp(4), 0)
         }, LinearLayout.LayoutParams(-1, -2))
+        // Dica do que o OK faz, só com um cartão marcado (o protetor parado continua limpo).
+        cartoes.getOrNull(escolhido)?.let { c ->
+            val dica = when (c.tipo) {
+                TeclasProtetor.Tipo.RECADO, TeclasProtetor.Tipo.NOTIFICACAO -> R.string.pt_dica_dispensar
+                TeclasProtetor.Tipo.TOCANDO -> R.string.pt_dica_pausar
+                TeclasProtetor.Tipo.OUTRO -> R.string.pt_dica_andar
+            }
+            colunaAvisos.addView(texto(ctx.getString(dica), 8f, m500).apply {
+                alpha = 0.85f; gravity = Gravity.END; setPadding(0, dp(2), dp(4), 0); sombrear()
+            }, LinearLayout.LayoutParams(-1, -2))
+        }
     }
 
     private fun cartao(c: Cartao): View = Vidro(ctx, vidro, 13f).apply {
@@ -433,7 +523,7 @@ class ProtetorGaleria(
                         timeInMillis = agora; set(Calendar.HOUR_OF_DAY, 23); set(Calendar.MINUTE, 59); set(Calendar.SECOND, 59)
                     }.timeInMillis
                     val hm = SimpleDateFormat("HH:mm", Locale.getDefault())
-                    lista = Agenda.eventos(ctx, Perfil.ativa(ctx), agora, fimDoDia).filter { it.fim > agora }.take(2).map { e ->
+                    lista = Agenda.eventosDaTv(ctx, agora, fimDoDia).filter { it.fim > agora }.take(2).map { e ->
                         e.titulo to (if (e.diaInteiro) ctx.getString(R.string.pg_dia_todo) else hm.format(Date(e.inicio)))
                     }
                 }
@@ -448,7 +538,7 @@ class ProtetorGaleria(
                         val inicioDia = Calendar.getInstance().apply {
                             timeInMillis = agora; set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0)
                         }.timeInMillis
-                        Agenda.eventos(ctx, Perfil.ativa(ctx), inicioDia, inicioDia + 24 * 3_600_000L - 1)
+                        Agenda.eventosDaTv(ctx, inicioDia, inicioDia + 24 * 3_600_000L - 1)
                             .filter { it.diaInteiro && Mural.eAniversario(it.titulo) }.take(2)
                             .forEach { cartoes12 += Triple(ctx.getString(R.string.pv_hoje), it.titulo, "") }
                         m.recados.forEach { cartoes12 += Triple(ctx.getString(R.string.pg_recado), it, "") }
@@ -542,7 +632,7 @@ class ProtetorGaleria(
         animador?.let { (v, r) -> v.removeCallbacks(r) }; animador = null
         if (::hora.isInitialized) hora.removeCallbacks(tique)
         NotificacoesTv.parar(aoMudarNotificacoes)
-        if (::colunaAvisos.isInitialized) colunaAvisos.removeCallbacks(tirarAvisoVencido)
+        if (::colunaAvisos.isInitialized) { colunaAvisos.removeCallbacks(tirarAvisoVencido); colunaAvisos.removeCallbacks(releTocando); colunaAvisos.removeCallbacks(limparMarca) }
         vidro.soltar()
         fundo?.let { f -> (0 until f.childCount).map { f.getChildAt(it) }.filterIsInstance<ImageView>().forEach { it.setImageDrawable(null) } }
     }

@@ -18,6 +18,27 @@
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
         <item>Real volume on LG NetCast TVs (2013) over the network: sleep timer, bedtime limit, voice and alarm</item>
+        <item>Series: 10-second countdown before the next episode, “Still watching?” after 3 in a row, and “Turn off the TV when this ends” in the ▼ menu</item>
+        <item>Movies and series try again by themselves when the connection drops, subtitle size in the ▼ menu, and the details page works offline</item>
+        <item>Screensaver answers the remote: ◀ ▶ move through the cards, OK dismisses a notice or pauses the music, and a “now playing” card</item>
+        <item>Screensaver photos from a network folder (computer, NAS or Nextcloud): open the folder in “Network” and choose “Use these photos”</item>
+        <item>More apps on the home screen now show a short description under their name</item>
+        <item>Search: at the end of the results, continue the same search on YouTube, Netflix or Prime Video</item>
+        <item>Live TV: each account can have a second XMLTV guide that only fills channels left without a schedule</item>
+        <item>“My team” reminders now see matches up to 7 days ahead, not just the next 14 hours</item>
+        <item>Up to 3 named timers at once, plus a stopwatch (Hourglass); Home shows the next one</item>
+        <item>Alarms can wake you with the last live TV channel (a radio from your list works too)</item>
+        <item>Kids PIN: unlock channels and bedtime without giving away the panel PIN</item>
+        <item>Daily screen time: when it runs out, only allowed apps open (Extras)</item>
+        <item>Calendar with all the TV\'s Google accounts together</item>
+        <item>“Network” looks like a catalog: poster and synopsis beside the list, Recently added, Search on Jellyfin, Emby and Plex, and a folder plays the next video or song</item>
+        <item>Settings: each Extras switch now lives in its own tab, under “More options”</item>
+        <item>Settings: lines with a QR code that opens the web panel straight on scenes, Home Assistant, photos, family board, my team or router</item>
+        <item>Quick panel: choose its tiles and their order (Settings &gt; Appearance), with new Night filter and DNS tiles</item>
+        <item>Type with accents from your phone and from Claude (ç, ã, é arrive as typed)</item>
+        <item>Guest Wi-Fi as a QR: Settings &gt; Guests and routines; in guest mode, Wi-Fi in the quick panel shows the QR</item>
+        <item>The nightly backup now checks every night that the saved copy would restore</item>
+        <item>Settings &gt; System &gt; What gets used: screens and settings by use, counted only on this TV</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -26,6 +47,27 @@
         <item>cenas_painel</item>
         <item>botao_livre</item>
         <item>evento_pausa</item>
+        <item>proximo_episodio</item>
+        <item>protetor_teclas</item>
+        <item>fotos_rede</item>
+        <item>frase_apps</item>
+        <item>busca_outros_apps</item>
+        <item>guia_extra</item>
+        <item>meu_time_dias</item>
+        <item>timers_tres</item>
+        <item>cronometro</item>
+        <item>despertar_canal</item>
+        <item>pin_criancas</item>
+        <item>tempo_tela</item>
+        <item>agenda_todas</item>
+        <item>rede_catalogo</item>
+        <item>extras_abas</item>
+        <item>qr_destino</item>
+        <item>blocos_painel</item>
+        <item>digitar_acento</item>
+        <item>wifi_visitas</item>
+        <item>ensaio_backup</item>
+        <item>uso_local</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -34,6 +76,27 @@
         <item>Open Scenes from the quick panel, or say “Ok Google, open Scenes”</item>
         <item>Tap, hold and double tap a free button on the remote</item>
         <item>Make a test scene for “movie paused”, then pause a movie</item>
+        <item>Let an episode reach the end (or skip to the last minute)</item>
+        <item>Play music, wait for the screensaver, then press ◀ ▶ and OK</item>
+        <item>In “Network”, open a folder with photos and choose “Use these photos in the screensaver”</item>
+        <item>On the home screen, move to an app you installed (e.g. a file manager)</item>
+        <item>Open Search, type a movie name and pick “Search … on YouTube” at the end</item>
+        <item>In the panel, add an account with a second guide link, then open Live TV</item>
+        <item>With your team saved in “My team”, open Live TV once, then look at the reminders in the panel</item>
+        <item>Say “Ok Google, open Avisar em 5 minutos”, then “open Avisar em 10 minutos”</item>
+        <item>Say “Ok Google, open Ampulheta” and pick Start stopwatch</item>
+        <item>In a test alarm, set Sound: Last live TV channel</item>
+        <item>Settings &gt; Parental control &gt; Kids PIN; then show a hidden category with it</item>
+        <item>Extras: turn on Daily screen time with 30 min and open an app</item>
+        <item>Open the calendar (OK on the date at the top)</item>
+        <item>In “Network”, open a Jellyfin or Plex server, try Search and Recently added, and play a video from a folder</item>
+        <item>Open Settings &gt; Screen and power and go to the end</item>
+        <item>Open Settings &gt; Guests and routines &gt; Scenes from your phone, and scan the code</item>
+        <item>In Settings &gt; Appearance &gt; Quick panel tiles, show Night filter and move it to the top; then hold HOME</item>
+        <item>Type “ação” in the TV search from the phone panel</item>
+        <item>Set Settings &gt; Guests and routines &gt; Guest Wi-Fi, turn guest mode on and press Wi-Fi in the quick panel</item>
+        <item>Settings &gt; System &gt; Automatic backup &gt; Back up now</item>
+        <item>Open Settings &gt; System &gt; What gets used</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -42,5 +105,26 @@
         <item>Did the Scenes list open?</item>
         <item>Did each one do what you set for it?</item>
         <item>Did the test scene run?</item>
+        <item>Did “Next episode” count down from 10, and did Cancel keep you on the series page?</item>
+        <item>Did the cards get highlighted and did OK pause the music?</item>
+        <item>Did those photos show up in the next screensaver?</item>
+        <item>Does the line under its name say what it does, in the TV’s language?</item>
+        <item>Did YouTube open with that search (or at least open)?</item>
+        <item>Do channels that had no schedule now show programs, while the others stay the same?</item>
+        <item>Does a match more than a day away show up in the list?</item>
+        <item>Does the Home pill show the nearest timer with “+1”?</item>
+        <item>Does the pill show the stopwatch counting up, and does OK on it stop it and show the time?</item>
+        <item>At alarm time, did the channel play, getting louder slowly?</item>
+        <item>Did the kids PIN unlock it, and does the panel PIN still work?</item>
+        <item>After 30 min, did the app go back to Home with the notice?</item>
+        <item>Do events from all the TV\'s accounts show up?</item>
+        <item>Did the poster and synopsis show up, and did the next video start after 10 s?</item>
+        <item>Are Night filter, Gentle shutdown and the other switches there, under “More options”?</item>
+        <item>Did the phone open the panel already on the Scenes card?</item>
+        <item>Is Night filter the first tile of the panel?</item>
+        <item>Did it arrive with the ç and the ã?</item>
+        <item>Did the QR show up, and did a phone camera connect?</item>
+        <item>Does the result say “restore check passed”?</item>
+        <item>Do the screens you opened today show up?</item>
     </string-array>
 </resources>

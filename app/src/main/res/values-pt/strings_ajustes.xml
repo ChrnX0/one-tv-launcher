@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Thread "Organizar Configurações e painel rápido" (14/11/2026): ideias 42, 43, 44, 46, 47 e 48. -->
+<resources>
+    <!-- Ideia 46: Extras dentro das abas -->
+    <string name="cfg_extras_secao">Mais opções</string>
+    <!-- Ideia 43: QR que abre a página certa do painel web -->
+    <string name="qrd_fotos">Fotos do protetor pelo celular</string>
+    <string name="qrd_fotos_det">Mostra um código: o celular abre o painel já na página das fotos</string>
+    <string name="qrd_mural">Mural da família pelo celular</string>
+    <string name="qrd_mural_det">Lista de compras, recados fixos e aniversários no protetor</string>
+    <string name="qrd_cenas">Cenas pelo celular</string>
+    <string name="qrd_cenas_det">Criar e testar cenas no painel web</string>
+    <string name="qrd_casa">Home Assistant pelo celular</string>
+    <string name="qrd_casa_det">Endereço e token do seu Home Assistant, no painel web</string>
+    <string name="qrd_time">Meu time e lembretes pelo celular</string>
+    <string name="qrd_time_det">Palavras que viram lembrete dos programas do guia</string>
+    <string name="qrd_roteador">Roteador pelo celular</string>
+    <string name="qrd_roteador_det">Endereço e chave de API do roteador UniFi, no painel web</string>
+    <!-- Ideia 42: blocos do painel rápido -->
+    <string name="pb_titulo">Blocos do painel rápido</string>
+    <string name="pb_subtitulo">OK mostra ou esconde · ◀ ▶ mudam a ordem</string>
+    <string name="pb_cfg_det">Escolha quais blocos o painel rápido (HOME segurado) mostra, e em que ordem</string>
+    <string name="pb_mostrado">aparece</string>
+    <string name="pb_escondido">escondido</string>
+    <string name="pb_padrao">Voltar aos blocos de sempre</string>
+    <string name="pb_wifi">Wi-Fi</string>
+    <string name="pb_bluetooth">Bluetooth</string>
+    <string name="pb_filtro">Filtro noturno</string>
+    <string name="pb_dns">DNS</string>
+</resources>

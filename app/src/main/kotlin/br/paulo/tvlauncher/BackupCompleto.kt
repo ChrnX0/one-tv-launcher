@@ -43,6 +43,7 @@ object BackupCompleto {
         "backup_noturno",   // a senha do próprio cofre (cifrada pelo Keystore: não abre em outra instalação); redefinir na TV
         "saude_acesso", "manutencao",   // estado passageiro da saúde (SaudeAcesso) e o relatório da última noite
         "trava_relogio",   // como a hora automática estava ANTES da trava: vale só para este aparelho (ver TravaRelogio.kt)
+        "uso_local",   // ideia 67: contagem de uso das telas, só para o dono ver nesta TV; nunca sai dela
         "foto_perfil",   // só marca "esta foto foi enviada à mão" (FotoPerfil); a foto em si não vai no backup e a chave leva o e-mail
         // Ideias de 12/11/2026. "avisos_celular": as inscrições valem só com a chave VAPID do Keystore desta instalação
         // (inscrever de novo pelo painel). "desempenho" é medida por versão; "retrospectiva" se refaz no domingo; "presenca"
@@ -61,6 +62,8 @@ object BackupCompleto {
         "interesses_series.json", "interesses_filmes.json", "series_ultimos.json", "series_progresso.json",
         "parental.json", "ultimo.json")
     private const val ESTADO_TUNEL = "tailscaled.state"
+    /** Os caminhos de "arquivos" que o importar aceita (o ensaio da ideia 64 confere com a mesma lista). */
+    val CAMINHOS_ARQUIVOS: Set<String> get() = ARQUIVOS_PLAYER.map { "player/$it" }.toSet() + "tunel/$ESTADO_TUNEL"
     private const val LIMITE_ARQUIVO = 512 * 1024
 
     /** Monta o backup e tranca com [senha]. Lento (PBKDF2): fora da thread da tela. */
@@ -224,7 +227,7 @@ object BackupCompleto {
             } catch (e: org.json.JSONException) { throw IllegalArgumentException("$nome/$chave: valor do tipo errado") }
             // Voltas do PBKDF2 do PIN (auditoria 10/11): um número absurdo deixaria cada login preso por horas, e 0 ou negativo
             // quebraria a conferência; nos dois casos o PIN do painel deixaria de funcionar até ser refeito na TV.
-            if (nome == "painel_seguro" && chave == "pin_iteracoes" && item.optInt("v") !in PinSeguro.ITERACOES_ACEITAS)
+            if (nome == "painel_seguro" && (chave == "pin_iteracoes" || chave == "fam_iteracoes") && item.optInt("v") !in PinSeguro.ITERACOES_ACEITAS)
                 throw IllegalArgumentException("$nome/$chave fora da faixa")
         }
         return p

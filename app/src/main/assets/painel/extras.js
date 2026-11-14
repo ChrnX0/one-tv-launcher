@@ -23,6 +23,8 @@ const NOMES_CHAVES = {
   HOJE_NA_TV: 'Hoje na TV (sugestões na tela Buscar)',
   RETROSPECTIVA: 'Sua semana na TV (domingo, 20h)',
   MODO_SIMPLES: 'Modo simples (cards grandes no lugar da HOME)',
+  TEMPO_TELA: 'Tempo de tela por dia (acabou, só os apps liberados abrem)',
+  AGENDA_TODAS: 'Agenda de todas as contas Google da TV juntas',
 };
 
 const hhmm = (m) => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');

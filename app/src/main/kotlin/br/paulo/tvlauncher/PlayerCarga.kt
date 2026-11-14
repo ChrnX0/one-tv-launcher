@@ -34,6 +34,12 @@ object PlayerCarga {
     /** Desde 10/11/2026 o guia fica num banco SQLite (GuiaBanco). O guia.json antigo é só apagado (migração). */
     private fun arquivoGuia(ctx: Context) = File(PlayerArmazem.pasta(ctx), "guia.db")
     private fun guiaJsonAntigo(ctx: Context) = File(PlayerArmazem.pasta(ctx), "guia.json")
+    /** "Meu time" com alcance de dias (ideia 16): as partidas achadas além da janela do guia, gravadas junto com ele. */
+    private fun arquivoAdiante(ctx: Context) = File(PlayerArmazem.pasta(ctx), "meutime.json")
+
+    /** As partidas do "Meu time" guardadas no último download do guia (até 7 dias à frente). Pequena; nunca baixa. */
+    fun partidasAdiante(ctx: Context): List<MeuTimeAdiante.Partida> =
+        MeuTimeAdiante.deJson(runCatching { arquivoAdiante(ctx).readText() }.getOrNull())
 
     fun apagarCache(ctx: Context, id: String) {
         arquivoCanais(ctx, id).delete()
@@ -41,7 +47,7 @@ object PlayerCarga {
         File(PlayerArmazem.pasta(ctx), "$id.series.json").delete()
         // O guia é de todas as contas juntas: refaz na próxima abertura.
         synchronized(this) { ultimaTentativaGuia = 0L }
-        GuiaBanco.apagar(arquivoGuia(ctx)); guiaJsonAntigo(ctx).delete()
+        GuiaBanco.apagar(arquivoGuia(ctx)); guiaJsonAntigo(ctx).delete(); arquivoAdiante(ctx).delete()
     }
 
     /** Canais de todas as contas, juntos e sem número repetido. */
@@ -166,11 +172,36 @@ object PlayerCarga {
         } else if (cache.exists()) Vod.filmesDeJson(cache.readText(), fonte.id) else emptyList()
     }
 
-    /** A ficha (sinopse, elenco...) de um filme. Pequena: vem sempre da rede, sem cache em disco. */
+    /**
+     * A ficha (sinopse, elenco...) de um filme. Vem da rede; sem rede, a última que deu certo (ideia 22, 14/11/2026:
+     * antes, sem rede, sem ficha).
+     */
     fun fichaFilme(ctx: Context, f: Filme): FichaFilme? {
         val conta = PlayerArmazem.fontes(ctx).firstOrNull { it.id == f.fonteId }?.xtream ?: return null
-        return runCatching { Vod.lerFicha(baixarTexto(Vod.urlFichaFilme(conta, f.id), 2L * 1024 * 1024)) }
-            .onFailure { Log.w(TAG, "ficha: ${it.javaClass.simpleName}") }.getOrNull()
+        return fichaComDisco(ctx, FimDoVideo.nomeFicha(f.fonteId, false, f.id), { Vod.lerFicha(it) }) {
+            baixarTexto(Vod.urlFichaFilme(conta, f.id), 2L * 1024 * 1024)
+        }
+    }
+
+    /**
+     * Rede primeiro (episódio novo aparece na hora); a resposta boa fica em cacheDir/fichas. Se a rede falhar, lê o disco.
+     * cacheDir: o Android pode limpar quando falta espaço, e o backup não leva. No máximo FimDoVideo.FICHAS_MAX arquivos.
+     */
+    private fun <T> fichaComDisco(ctx: Context, nome: String, ler: (String) -> T?, baixar: () -> String): T? {
+        val pasta = File(ctx.cacheDir, "fichas")
+        val arq = File(pasta, nome)
+        val daRede = runCatching { baixar() }.onFailure { Log.w(TAG, "ficha: ${it.javaClass.simpleName}") }.getOrNull()
+        val lida = daRede?.let { t -> runCatching { ler(t) }.getOrNull() }
+        if (lida != null && daRede != null) {
+            runCatching {
+                pasta.mkdirs()
+                gravarAtomico(arq, daRede)
+                val todos = pasta.listFiles().orEmpty().associate { it.name to it.lastModified() }
+                FimDoVideo.podar(todos).forEach { File(pasta, it).delete() }
+            }
+            return lida
+        }
+        return if (arq.exists()) runCatching { ler(arq.readText()) }.getOrNull() else null
     }
 
     // ---------------------------------------------------------------- séries (só contas Xtream)
@@ -192,11 +223,12 @@ object PlayerCarga {
         } else if (cache.exists()) Series.seriesDeJson(cache.readText(), fonte.id) else emptyList()
     }
 
-    /** Ficha e episódios de uma série (sem cache em disco: episódio novo aparece na hora). */
+    /** Ficha e episódios de uma série. Rede primeiro (episódio novo aparece na hora); sem rede, a do disco (ideia 22). */
     fun fichaSerie(ctx: Context, s: Serie): FichaSerie? {
         val conta = PlayerArmazem.fontes(ctx).firstOrNull { it.id == s.fonteId }?.xtream ?: return null
-        return runCatching { Series.lerFicha(baixarTexto(Series.urlFicha(conta, s.id), 10L * 1024 * 1024)) }
-            .onFailure { Log.w(TAG, "ficha da série: ${it.javaClass.simpleName}") }.getOrNull()
+        return fichaComDisco(ctx, FimDoVideo.nomeFicha(s.fonteId, true, s.id), { Series.lerFicha(it) }) {
+            baixarTexto(Series.urlFicha(conta, s.id), 10L * 1024 * 1024)
+        }
     }
 
     /** O endereço para tocar (com a senha: não guardar, não logar). */
@@ -305,8 +337,17 @@ object PlayerCarga {
         if (gravador != null) {
             val (desde, ate) = GuiaConsulta.janela(agora)
             var discoFalhou = false
+            // Segundo guia (ideia 15): os canais (guiaId) que receberam programa do guia principal. Só os ids (texto curto),
+            // do tamanho da lista de canais com guia; some no fim do download.
+            val comPrograma = HashSet<String>()
+            val fontes = PlayerArmazem.fontes(ctx)
+            // "Meu time" com alcance de dias (ideia 16): além da janela, só as partidas que casam com as palavras.
+            val palavras = LembretesTv.palavrasParaGuia(ctx)
+            val adiante = palavras.takeIf { it.isNotEmpty() }?.let { MeuTimeAdiante.Coletor(it, agora) }
+            val alem = if (adiante != null) agora + MeuTimeAdiante.JANELA_MS else Long.MIN_VALUE
+            val aoLerAlem: ((Programa) -> Unit)? = adiante?.let { c -> { p -> c.oferecer(p.guiaId, p.inicio, p.fim, p.titulo) } }
             try {
-                for (fonte in PlayerArmazem.fontes(ctx)) {
+                for (fonte in fontes) {
                     if (total >= Xmltv.MAX_PROGRAMAS_BANCO || discoFalhou) break
                     val link = linkGuia(fonte) ?: continue
                     // O xmltv.php do Xtream monta o guia inteiro antes de mandar o 1º byte: com milhares de canais isso passa de
@@ -316,10 +357,11 @@ object PlayerCarga {
                         val r = runCatching {
                             abrir(link, MAX_GUIA, leitura = 120_000).use { entrada ->
                                 // Cada tentativa é um lote: se a rede cair no meio, o lote é desfeito (sem programa repetido).
+                                val vistos = HashSet<String>()   // desta tentativa: só valem se o lote for gravado
                                 gravador.lote { inserir ->
                                     Xmltv.lerEmFluxo(Xml.newPullParser(), Xmltv.abrir(entrada), ids, desde, ate,
-                                        Xmltv.MAX_PROGRAMAS_BANCO - total, inserir)
-                                }
+                                        Xmltv.MAX_PROGRAMAS_BANCO - total, alem, aoLerAlem) { p -> inserir(p); vistos += p.guiaId }
+                                }.also { comPrograma += vistos }
                             }
                         }.onFailure { Log.w(TAG, "guia de ${fonte.servidorVisivel} (tentativa ${tentativa + 1}): ${it.javaClass.simpleName}") }
                         val lidos = r.getOrNull()
@@ -331,6 +373,28 @@ object PlayerCarga {
                         if (r.exceptionOrNull() is org.xmlpull.v1.XmlPullParserException && tentativa >= 1) break
                     }
                 }
+                // Segundo guia (ideia 15): depois do principal de TODAS as contas, o extra de cada conta preenche só os
+                // canais dela que ficaram sem nenhum programa. Uma tentativa só: é complemento, não vale segurar o player.
+                for (fonte in fontes) {
+                    if (fonte.guiaExtra.isEmpty() || total >= Xmltv.MAX_PROGRAMAS_BANCO || discoFalhou) continue
+                    val prefixo = "${fonte.id}:"
+                    val mescla = GuiaExtra.Mescla(GuiaExtra.faltando(
+                        canais.filter { it.id.startsWith(prefixo) }.map { it.guiaId to it.nome }, comPrograma))
+                    if (mescla.vazia) continue
+                    val r = runCatching {
+                        abrir(fonte.guiaExtra, MAX_GUIA, leitura = 120_000).use { entrada ->
+                            val vistos = HashSet<String>()
+                            gravador.lote { inserir ->
+                                Xmltv.lerExtraEmFluxo(Xml.newPullParser(), Xmltv.abrir(entrada), mescla, desde, ate,
+                                    Xmltv.MAX_PROGRAMAS_BANCO - total) { p -> inserir(p); vistos += p.guiaId }
+                            }.also { comPrograma += vistos; Log.i(TAG, "guia extra de ${fonte.servidorVisivel}: ${vistos.size} canais preenchidos") }
+                        }
+                    }.onFailure { Log.w(TAG, "guia extra de ${fonte.servidorVisivel}: ${it.javaClass.simpleName}") }
+                    r.getOrNull()?.let { total += it }
+                    if (r.exceptionOrNull() is android.database.SQLException) discoFalhou = true
+                }
+                // Grava a lista à parte já agora (antes de trocar o banco): o varrerDepois logo abaixo a usa.
+                if (total > 0) gravarAtomico(arquivoAdiante(ctx), MeuTimeAdiante.paraJson(adiante?.partidas().orEmpty()))
             } finally {
                 gravador.concluir(indexar = total > 0)
             }

@@ -15,6 +15,27 @@
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
         <item>Volume de verdade nas TVs LG NetCast (2013) pela rede: desligar suave, teto da hora de dormir, voz e despertador</item>
+        <item>Séries: contagem de 10 s antes do próximo episódio, “Ainda está assistindo?” depois de 3 seguidos e “Desligar a TV quando este acabar” no menu do ▼</item>
+        <item>Filmes e séries tentam de novo sozinhos quando a conexão cai, tamanho da legenda no menu do ▼ e a ficha abre sem internet</item>
+        <item>Protetor responde ao controle: ◀ ▶ andam pelos cartões, OK dispensa o aviso ou pausa a música, e um cartão “tocando agora”</item>
+        <item>Fotos do protetor vindas de uma pasta da rede (computador, NAS ou Nextcloud): abra a pasta em “Na rede” e escolha “Usar estas fotos”</item>
+        <item>Mais apps da tela inicial mostram uma frase curta embaixo do nome (a ficha do painel)</item>
+        <item>Busca: no fim do resultado, continue a mesma busca no YouTube, na Netflix ou no Prime Video</item>
+        <item>TV ao vivo: cada conta pode ter um 2º guia XMLTV, que só preenche os canais que ficaram sem programação</item>
+        <item>Os lembretes do “Meu time” agora enxergam os jogos até 7 dias à frente, não só as próximas 14 horas</item>
+        <item>Até 3 timers ao mesmo tempo, com nome, e um cronômetro (Ampulheta); a HOME mostra o próximo</item>
+        <item>Despertador pode acordar com o último canal da TV ao vivo (vale rádio da lista)</item>
+        <item>PIN das crianças: destrava canal e hora de dormir sem entregar o PIN do painel</item>
+        <item>Tempo de tela por dia: acabou, só os apps liberados abrem (Extras)</item>
+        <item>Agenda com todas as contas Google da TV juntas</item>
+        <item>“Na rede” com cara de catálogo: pôster e sinopse ao lado da lista, Adicionados há pouco, Buscar no Jellyfin, Emby e Plex, e a pasta emenda o próximo vídeo ou música</item>
+        <item>Configurações: cada chave de Extras agora mora na aba dela, em “Mais opções”</item>
+        <item>Configurações: linhas com QR que abre o painel web já em cenas, Home Assistant, fotos, mural, meu time ou roteador</item>
+        <item>Painel rápido: escolha os blocos e a ordem (Configurações &gt; Aparência), com os blocos novos Filtro noturno e DNS</item>
+        <item>Digitar com acento pelo celular e pelo Claude (ç, ã, é chegam como foram digitados)</item>
+        <item>Wi-Fi das visitas em QR: Configurações &gt; Visitas e rotinas; no modo visita, o Wi-Fi do painel rápido mostra o QR</item>
+        <item>O backup noturno agora confere toda noite se a cópia gravada restauraria</item>
+        <item>Configurações &gt; Sistema &gt; O que é usado: telas e opções por uso, contadas só nesta TV</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -23,6 +44,27 @@
         <item>Abra Cenas pelo painel rápido, ou diga “Ok Google, abrir Cenas”</item>
         <item>Toque, segure e toque duas vezes num botão livre do controle</item>
         <item>Crie uma cena de teste para “filme pausou” e pause um filme</item>
+        <item>Deixe um episódio chegar ao fim (ou pule para o último minuto)</item>
+        <item>Ponha uma música, espere o protetor, aperte ◀ ▶ e OK</item>
+        <item>Em “Na rede”, abra uma pasta com fotos e escolha “Usar estas fotos no protetor de tela”</item>
+        <item>Na tela inicial, pare num app que você instalou (ex.: um gerenciador de arquivos)</item>
+        <item>Abra a Busca, digite o nome de um filme e escolha “Procurar … no YouTube” no fim</item>
+        <item>No painel, cadastre uma conta com o link do 2º guia e abra a TV ao vivo</item>
+        <item>Com o seu time salvo no “Meu time”, abra a TV ao vivo uma vez e veja os lembretes no painel</item>
+        <item>Diga “Ok Google, abrir Avisar em 5 minutos” e depois “abrir Avisar em 10 minutos”</item>
+        <item>Diga “Ok Google, abrir Ampulheta” e escolha Começar o cronômetro</item>
+        <item>Num despertador de teste, escolha Som: Último canal da TV ao vivo</item>
+        <item>Configurações &gt; Controle parental &gt; PIN das crianças; depois mostre uma categoria oculta com ele</item>
+        <item>Extras: ligue Tempo de tela por dia com 30 min e abra um app</item>
+        <item>Abra a agenda (OK na data do topo)</item>
+        <item>Em “Na rede”, abra um servidor Jellyfin ou Plex, use Buscar e Adicionados há pouco, e toque um vídeo de uma pasta</item>
+        <item>Abra Configurações &gt; Tela e energia e desça até o fim</item>
+        <item>Abra Configurações &gt; Visitas e rotinas e rotinas &gt; Cenas pelo celular e leia o código</item>
+        <item>Em Configurações &gt; Aparência &gt; Blocos do painel rápido, mostre Filtro noturno e suba ele ao topo; depois segure HOME</item>
+        <item>Digite “ação” na busca da TV pelo painel do celular</item>
+        <item>Preencha Configurações &gt; Visitas e rotinas &gt; Wi-Fi das visitas, ligue o modo visita e aperte Wi-Fi no painel rápido</item>
+        <item>Configurações &gt; Sistema &gt; Backup automático &gt; Fazer agora</item>
+        <item>Abra Configurações &gt; Sistema &gt; O que é usado</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -31,5 +73,26 @@
         <item>Abriu a lista de Cenas?</item>
         <item>Cada um fez o que você escolheu?</item>
         <item>A cena de teste rodou?</item>
+        <item>O “Próximo episódio” contou de 10, e o Cancelar deixou você na ficha da série?</item>
+        <item>Os cartões ficaram marcados e o OK pausou a música?</item>
+        <item>Essas fotos apareceram no protetor seguinte?</item>
+        <item>A linha embaixo do nome diz o que ele faz, no idioma da TV?</item>
+        <item>O YouTube abriu já com essa busca (ou pelo menos abriu)?</item>
+        <item>Os canais que estavam sem programação agora mostram programas, e os outros continuam iguais?</item>
+        <item>Aparece na lista um jogo de daqui a mais de um dia?</item>
+        <item>A pílula da HOME mostra o timer mais próximo com “+1”?</item>
+        <item>A pílula mostra o cronômetro subindo, e OK nela para e mostra o tempo?</item>
+        <item>Na hora, tocou o som do canal, subindo aos poucos?</item>
+        <item>O PIN das crianças destravou, e o do painel continua valendo?</item>
+        <item>Depois de 30 min o app voltou para a HOME com o aviso?</item>
+        <item>Aparecem os compromissos de todas as contas da TV?</item>
+        <item>Apareceram pôster e sinopse, e o próximo vídeo começou depois de 10 s?</item>
+        <item>Filtro noturno, Desligar suave e as outras chaves estão lá, em “Mais opções”?</item>
+        <item>O celular abriu o painel já no cartão de Cenas?</item>
+        <item>Filtro noturno é o primeiro bloco do painel?</item>
+        <item>Chegou com o ç e o ã?</item>
+        <item>Apareceu o QR, e a câmera de um celular conectou?</item>
+        <item>O resultado diz “restauração conferida”?</item>
+        <item>Aparecem as telas que você abriu hoje?</item>
     </string-array>
 </resources>

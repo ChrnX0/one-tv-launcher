@@ -18,6 +18,9 @@ data class FonteTv(
     // Só Xtream (11/11/2026, visto no 1 Play): outros endereços do MESMO painel. Se o principal não responde, o
     // PlayerCarga tenta estes, e o que funcionou passa a ser o principal (PlayerArmazem.promoverServidor).
     val reservas: List<String> = emptyList(),
+    // Segundo guia (ideia 15, 14/11/2026): link XMLTV EXTRA opcional. Só preenche os canais que ficaram sem programação
+    // no guia principal (casados pelo id ou pelo nome normalizado, ver GuiaExtra).
+    val guiaExtra: String = "",
 ) {
     companion object {
         const val TIPO_M3U = "m3u"
@@ -45,22 +48,24 @@ object PlayerDados {
     }
 
     fun criar(id: String, nome: String, tipo: String, endereco: String, usuario: String = "", senha: String = "", guia: String = "",
-              reservas: String = ""): Result<FonteTv> {
+              reservas: String = "", guiaExtra: String = ""): Result<FonteTv> {
         val guiaLimpo = guia.trim()
         if (guiaLimpo.isNotEmpty() && !M3u.urlAceita(guiaLimpo)) return Result.failure(IllegalArgumentException("o link do guia precisa começar com http:// ou https://"))
+        val extraLimpo = guiaExtra.trim()
+        if (extraLimpo.isNotEmpty() && !M3u.urlAceita(extraLimpo)) return Result.failure(IllegalArgumentException("o link do guia extra precisa começar com http:// ou https://"))
         val nomeLimpo = nome.trim().take(40)
         return when (tipo) {
             FonteTv.TIPO_M3U -> {
                 val u = endereco.trim()
                 if (!M3u.urlAceita(u)) Result.failure(IllegalArgumentException("o link da lista precisa começar com http:// ou https://"))
-                else Result.success(FonteTv(id, nomeLimpo.ifEmpty { "Lista" }, tipo, u, guia = guiaLimpo))
+                else Result.success(FonteTv(id, nomeLimpo.ifEmpty { "Lista" }, tipo, u, guia = guiaLimpo, guiaExtra = extraLimpo))
             }
             FonteTv.TIPO_XTREAM -> {
                 val s = Xtream.normalizarServidor(endereco)
                 when {
                     s == null -> Result.failure(IllegalArgumentException("servidor inválido"))
                     usuario.isBlank() || senha.isEmpty() -> Result.failure(IllegalArgumentException("falta usuário ou senha"))
-                    else -> lerReservas(reservas, s).map { r -> FonteTv(id, nomeLimpo.ifEmpty { "Conta" }, tipo, s, usuario.trim(), senha, guiaLimpo, r) }
+                    else -> lerReservas(reservas, s).map { r -> FonteTv(id, nomeLimpo.ifEmpty { "Conta" }, tipo, s, usuario.trim(), senha, guiaLimpo, r, extraLimpo) }
                 }
             }
             else -> Result.failure(IllegalArgumentException("tipo desconhecido: use m3u ou xtream"))
@@ -70,7 +75,7 @@ object PlayerDados {
     fun fontesParaJson(fontes: List<FonteTv>): String = JSONArray().apply {
         fontes.forEach { f ->
             put(JSONObject().put("id", f.id).put("nome", f.nome).put("tipo", f.tipo).put("endereco", f.endereco)
-                .put("usuario", f.usuario).put("senha", f.senha).put("guia", f.guia).put("reservas", JSONArray(f.reservas)))
+                .put("usuario", f.usuario).put("senha", f.senha).put("guia", f.guia).put("reservas", JSONArray(f.reservas)).put("guiaExtra", f.guiaExtra))
         }
     }.toString()
 
@@ -81,7 +86,8 @@ object PlayerDados {
             val id = o.optString("id"); val tipo = o.optString("tipo"); val end = o.optString("endereco")
             if (id.isEmpty() || end.isEmpty() || (tipo != FonteTv.TIPO_M3U && tipo != FonteTv.TIPO_XTREAM)) null
             else FonteTv(id, o.optString("nome"), tipo, end, o.optString("usuario"), o.optString("senha"), o.optString("guia"),
-                o.optJSONArray("reservas")?.let { r -> (0 until r.length()).mapNotNull { j -> r.optString(j).takeIf { M3u.urlAceita(it) } } }.orEmpty().take(3))
+                o.optJSONArray("reservas")?.let { r -> (0 until r.length()).mapNotNull { j -> r.optString(j).takeIf { M3u.urlAceita(it) } } }.orEmpty().take(3),
+                o.optString("guiaExtra").takeIf { M3u.urlAceita(it) }.orEmpty())
         }
     }
 

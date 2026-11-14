@@ -73,6 +73,10 @@
         <!-- O launcher do Google (04/11/2026): sem isto o PackageManager diz que ele não existe, e o Home.kt
              (botão HOME pelo serviço de teclas, atalho do painel) achava que ele estava desativado. -->
         <package android:name="com.google.android.apps.tv.launcherx" />
+        <!-- Busca que continua nos outros apps (ideia 14): BuscaOutrosApps.DESTINOS. -->
+        <package android:name="com.google.android.youtube.tv" />
+        <package android:name="com.netflix.ninja" />
+        <package android:name="com.amazon.amazonvideo.livingroom" />
     </queries>
 
     <!-- android:name: LauncherApp liga o registro local de erros (RegistroErros.kt) em todo processo do app. -->
@@ -610,6 +614,7 @@
 
         <!-- Ideias de 10/11/2026: tela das chaves novas, testador de teclas e padrões de calibração (não exportadas). -->
         <activity android:name=".ExtrasActivity" android:exported="false" android:excludeFromRecents="true" />
+        <activity android:name=".PainelBlocosActivity" android:exported="false" android:excludeFromRecents="true" />
         <!-- Backup noturno cifrado (BackupNoturno.kt): a tela de opções e o alarme da noite (não exportados). -->
         <activity android:name=".BackupNoturnoActivity" android:exported="false" android:excludeFromRecents="true" />
         <receiver android:name=".BackupNoturnoReceiver" android:exported="false" />

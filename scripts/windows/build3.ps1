@@ -1,6 +1,6 @@
 # Build + instalação na TV. Uso:
-#   .\build3.ps1            -> debug (rápido de compilar; roda só interpretado/JIT, NÃO serve para medir desempenho)
-#   .\build3.ps1 -Release   -> release (R8 + perfil de compilação AOT): é o que fica instalado na TV
+#   .\scripts\windows\build3.ps1            -> debug (rápido de compilar; roda só interpretado/JIT, NÃO serve para medir desempenho)
+#   .\scripts\windows\build3.ps1 -Release   -> release (R8 + perfil de compilação AOT): é o que fica instalado na TV
 # Nunca desinstala: só "install -r". Se o install der erro de assinatura, PARE (desinstalar perde o Device Owner).
 #
 # 04/11/2026: o projeto usa AGP 8.11 + Gradle 8.14 (wrapper do repo, gradlew.bat)
@@ -9,7 +9,8 @@ param([switch]$Release)
 $env:JAVA_HOME='C:\Program Files\Eclipse Adoptium\jdk-21.0.13.9-hotspot'
 $env:ANDROID_HOME=$env:USERPROFILE+'\android-sdk'
 $adb=$env:USERPROFILE+'\android-sdk\platform-tools\adb.exe'
-Set-Location $PSScriptRoot   # a raiz do repo (onde este script fica)
+$raiz = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path   # a raiz do repo (este script fica em scripts\windows)
+Set-Location $raiz
 # 05/11/2026: cidade, coordenadas, apps preferidos e eclipses saíram do Config.kt (repo público) para o pessoal.properties,
 # que fica fora do git. Sem ele o APK sai com padrões neutros e a TV perderia a configuração dela: o build PARA aqui.
 if (-not (Test-Path .\pessoal.properties)) { "FALTA o pessoal.properties na raiz do repo (modelo: pessoal.properties.exemplo). Build cancelado."; exit 1 }
@@ -49,5 +50,5 @@ Start-Sleep -Milliseconds 500
 & $adb -s $s shell "input keyevent DPAD_CENTER"
 Start-Sleep 1
 & $adb -s $s shell screencap -p /sdcard/pop5.png
-& $adb -s $s pull /sdcard/pop5.png $PSScriptRoot\.shots\pop5.png | Out-Null
+& $adb -s $s pull /sdcard/pop5.png $raiz\.shots\pop5.png | Out-Null
 & $adb -s $s shell rm /sdcard/pop5.png

@@ -54,6 +54,10 @@ class MidiaRedeActivity : Activity() {
         class Link(val c: ContaMidia) : Origem()
     }
     private enum class Acao { PLEX, JELLYFIN, EMBY, SMB, WEBDAV, LINK, PROCURAR }
+    /** "Usar estas fotos no protetor" (ideia 27): a pasta aberta agora, de uma conta SMB ou WebDAV. */
+    private class FotosNoProtetor(val origem: FotosRede.Origem, val quantas: Int)
+    /** "Buscar" na raiz de um Jellyfin, Emby ou Plex (ideia 29). */
+    private class Buscar(val origem: Origem)
 
     /** O que a lista mostra: um nome de grupo (não focável) ou uma linha. */
     private class Secao(val nome: String)
@@ -82,6 +86,21 @@ class MidiaRedeActivity : Activity() {
     private lateinit var dicas: FrameLayout
     private lateinit var foto: ImageView
     private lateinit var camada: FrameLayout   // painéis (formulários, confirmação, código do Plex)
+
+    // ---- ideia 29: ficha ao lado da lista (pôster + sinopse) e a pasta que emenda o próximo arquivo
+    private lateinit var ficha: LinearLayout
+    private lateinit var fichaCapa: ImageView
+    private lateinit var fichaTitulo: TextView
+    private lateinit var fichaTexto: TextView
+    private val capas = Executors.newSingleThreadExecutor()
+    private val cacheCapas = android.util.LruCache<String, Bitmap>(12)
+    private var capaPedida: String? = null
+    /** O que está tocando a partir desta tela: posição na lista do nível e o tipo (vídeo ou música). */
+    private var tocandoPos = -1
+    private var tocandoTipo: Upnp.Tipo? = null
+    private var tocandoNivel: Nivel? = null
+    private var seguidos = 0
+    private var contando: Runnable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,7 +134,17 @@ class MidiaRedeActivity : Activity() {
         }
         dicas = FrameLayout(this).apply { setPadding(0, dp(Estilo.E2), 0, 0) }
         coluna.addView(trilha); coluna.addView(titulo); coluna.addView(aviso)
-        coluna.addView(lista, LinearLayout.LayoutParams(-1, 0, 1f).apply { marginStart = -dp(12); marginEnd = -dp(12) }); coluna.addView(dicas)
+        // Lista à esquerda e, quando o item tem pôster ou sinopse (Jellyfin, Emby, Plex, DLNA com capa), a ficha à direita.
+        ficha = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; visibility = View.GONE; setPadding(dp(Estilo.E2), dp(4), 0, 0) }
+        fichaCapa = ImageView(this).apply { scaleType = ImageView.ScaleType.FIT_START; adjustViewBounds = true }
+        fichaTitulo = Estilo.texto(this, Estilo.Papel.CORPO).apply { maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(Estilo.E1), 0, 0) }
+        fichaTexto = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { maxLines = 9; ellipsize = TextUtils.TruncateAt.END; setLineSpacing(0f, 1.2f); setPadding(0, dp(6), 0, 0) }
+        ficha.addView(fichaCapa, LinearLayout.LayoutParams(dp(200), dp(300)))
+        ficha.addView(fichaTitulo); ficha.addView(fichaTexto)
+        val miolo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        miolo.addView(lista, LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = -dp(12); marginEnd = -dp(12) })
+        miolo.addView(ficha, LinearLayout.LayoutParams(dp(360), -1).apply { marginStart = dp(Estilo.E2) })
+        coluna.addView(miolo, LinearLayout.LayoutParams(-1, 0, 1f)); coluna.addView(dicas)
         raiz.addView(coluna, FrameLayout.LayoutParams(-1, -1))
         foto = ImageView(this).apply { visibility = View.GONE; setBackgroundColor(Color.BLACK); scaleType = ImageView.ScaleType.FIT_CENTER }
         raiz.addView(foto, FrameLayout.LayoutParams(-1, -1))
@@ -132,7 +161,7 @@ class MidiaRedeActivity : Activity() {
 
     override fun onDestroy() {
         cancelarPlex?.set(true)
-        tela.removeCallbacksAndMessages(null); rede.shutdownNow(); super.onDestroy()
+        tela.removeCallbacksAndMessages(null); rede.shutdownNow(); capas.shutdownNow(); super.onDestroy()
     }
 
     // ---------------------------------------------------------------- raiz: contas + achados + adicionar
@@ -246,15 +275,47 @@ class MidiaRedeActivity : Activity() {
                 val entradas = r.getOrNull()
                 if (entradas == null) { aviso.text = erroLegivel(r.exceptionOrNull()); return@post }
                 pilha.last().foco = lista.selectedItemPosition
-                pilha += Nivel(nome, origem, entradas.map { linhaEntrada(it) })
+                val buscar = if (id == "" && (origem is Origem.Jelly || origem is Origem.PlexO))
+                    listOf(Linha(IconeMidia.Tipo.LUPA, getString(R.string.rede_buscar), null, null, Buscar(origem))) else emptyList()
+                pilha += Nivel(nome, origem, buscar + linhaFotos(origem, id, nome, entradas) + entradas.map { linhaEntrada(it) })
                 desenhar(if (entradas.isEmpty()) getString(R.string.rede_vazia) else resources.getQuantityString(R.plurals.rede_itens, entradas.size, entradas.size))
             }
         }
     }
 
+    /**
+     * Pasta com fotos de um PC/NAS (SMB) ou Nextcloud (WebDAV): a 1ª linha põe essas fotos no protetor de tela, ou tira,
+     * se já for a pasta escolhida. As fotos são copiadas para a TV (FotosRede.kt), então o protetor não depende do PC.
+     */
+    private fun linhaFotos(origem: Origem, id: String, nome: String, entradas: List<Upnp.Entrada>): List<Linha> {
+        val (conta, tipo) = when (origem) {
+            is Origem.Pasta -> origem.c.id to ContaMidia.SMB
+            is Origem.Dav -> origem.c.id to ContaMidia.WEBDAV
+            else -> return emptyList()
+        }
+        val n = FotosRede.fotosDa(entradas).size
+        if (n == 0) return emptyList()
+        return listOf(linhaFotos(FotosNoProtetor(FotosRede.Origem(conta, tipo, id, nome), n)))
+    }
+
+    private fun linhaFotos(f: FotosNoProtetor): Linha {
+        val usando = FotosRede.origem(this)?.let { it.conta == f.origem.conta && it.caminho == f.origem.caminho } == true
+        return Linha(IconeMidia.Tipo.FOTO, getString(if (usando) R.string.rede_fotos_parar else R.string.rede_fotos_usar),
+            resources.getQuantityString(R.plurals.rede_fotos_sub, f.quantas, f.quantas), null, f)
+    }
+
+    private fun alternarFotos(pos: Int, f: FotosNoProtetor) {
+        val usando = FotosRede.origem(this)?.let { it.conta == f.origem.conta && it.caminho == f.origem.caminho } == true
+        FotosRede.escolher(this, if (usando) null else f.origem)
+        val nivel = pilha.lastOrNull() ?: return
+        pilha[pilha.lastIndex] = Nivel(nivel.titulo, nivel.origem, nivel.itens.toMutableList().also { it[pos] = linhaFotos(f) }, pos)
+        desenhar(getString(if (usando) R.string.rede_fotos_paradas else R.string.rede_fotos_usando))
+    }
+
     private fun linhaEntrada(e: Upnp.Entrada): Linha {
         val icone = when {
             e.pasta && (e.id == Jellyfin.CONTINUAR || e.id == Plex.CONTINUAR) -> IconeMidia.Tipo.CONTINUAR
+            e.pasta && (e.id == Jellyfin.RECENTES || e.id == Plex.RECENTES) -> IconeMidia.Tipo.NOVOS
             else -> when (e.tipo) {
                 Upnp.Tipo.PASTA -> IconeMidia.Tipo.PASTA
                 Upnp.Tipo.VIDEO -> IconeMidia.Tipo.VIDEO
@@ -263,7 +324,116 @@ class MidiaRedeActivity : Activity() {
                 Upnp.Tipo.OUTRO -> IconeMidia.Tipo.ARQUIVO
             }
         }
-        return Linha(icone, e.titulo, null, null, e)
+        // As pastas especiais vêm do servidor com nome fixo em português: aqui ganham o nome no idioma da TV.
+        val titulo = when {
+            e.pasta && (e.id == Jellyfin.CONTINUAR || e.id == Plex.CONTINUAR) -> getString(R.string.rede_continuar)
+            e.pasta && (e.id == Jellyfin.RECENTES || e.id == Plex.RECENTES) -> getString(R.string.rede_recentes)
+            else -> e.titulo
+        }
+        return Linha(icone, titulo, null, null, e)
+    }
+
+    // ---------------------------------------------------------------- ideia 29: buscar, ficha e fila
+
+    private fun buscar(b: Buscar) {
+        formulario(getString(R.string.rede_buscar), getString(R.string.rede_buscar_explica), listOf(Campo(getString(R.string.rede_buscar_campo))),
+            getString(R.string.rede_buscar)) { v, fim ->
+            val q = v[0].trim()
+            if (q.length < 2) { fim(getString(R.string.rede_buscar_curto)); return@formulario }
+            fim(null)
+            entrar(b.origem, (if (b.origem is Origem.Jelly) Jellyfin.BUSCA else Plex.BUSCA) + q, "“$q”")
+        }
+    }
+
+    /** Mostra a ficha do item com foco (pôster baixado fora da tela, guardado em memória; sinopse do servidor). */
+    private fun atualizarFicha() {
+        val nivel = pilha.lastOrNull()
+        val e = (nivel?.itens?.getOrNull(lista.selectedItemPosition) as? Linha)?.alvo as? Upnp.Entrada
+        if (e == null || (e.capa == null && e.sinopse == null) || !lista.hasFocus()) { ficha.visibility = View.GONE; capaPedida = null; return }
+        ficha.visibility = View.VISIBLE
+        fichaTitulo.text = e.titulo
+        fichaTexto.text = e.sinopse.orEmpty(); fichaTexto.visibility = if (e.sinopse == null) View.GONE else View.VISIBLE
+        val chave = e.capa?.let { (nivel.origem?.hashCode() ?: 0).toString() + it }
+        capaPedida = chave
+        fichaCapa.visibility = if (chave == null) View.GONE else View.VISIBLE
+        if (chave == null) return
+        cacheCapas.get(chave)?.let { fichaCapa.setImageBitmap(it); return }
+        fichaCapa.setImageDrawable(null)
+        val origem = nivel.origem
+        if (capas.isShutdown) return
+        capas.execute {
+            if (capaPedida != chave) return@execute   // o foco já andou: não baixa
+            val bmp = runCatching { baixarCapa(origem, e.capa) }.getOrNull()
+            tela.post {
+                if (isDestroyed || bmp == null) return@post
+                cacheCapas.put(chave, bmp)
+                if (capaPedida == chave) fichaCapa.setImageBitmap(bmp)
+            }
+        }
+    }
+
+    private fun baixarCapa(origem: Origem?, capa: String): Bitmap? {
+        val c = when (origem) {
+            is Origem.Jelly -> (URL(origem.c.servidor + capa).openConnection() as HttpURLConnection).apply {
+                setRequestProperty("Authorization", Jellyfin.cabecalho(aparelho(), origem.c.token)) }
+            is Origem.PlexO -> (URL(origem.c.servidor + capa).openConnection() as HttpURLConnection).apply {
+                Plex.cabecalhos(aparelho(), origem.c.token).forEach { (k, v) -> setRequestProperty(k, v) } }
+            is Origem.Dlna -> if (capa.startsWith("http://") || capa.startsWith("https://")) URL(capa).openConnection() as HttpURLConnection else null
+            else -> null
+        } ?: return null
+        c.connectTimeout = 4000; c.readTimeout = 10000; c.instanceFollowRedirects = false
+        val bytes = lerFotoComTeto(c, 5 * 1024 * 1024) ?: return null
+        val o = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeByteArray(bytes, 0, bytes.size, o)
+        var amostra = 1
+        while (o.outWidth / (amostra * 2) >= 400 && o.outHeight / (amostra * 2) >= 600) amostra *= 2
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size, BitmapFactory.Options().apply { inSampleSize = amostra })
+    }
+
+    /** Toca o arquivo da posição [pos] pedindo o resultado: no fim, a pasta emenda o próximo do mesmo tipo. */
+    private fun tocar(pos: Int, e: Upnp.Entrada, url: String) {
+        pararContagem()
+        val nivel = pilha.lastOrNull() ?: return
+        nivel.foco = pos
+        tocandoPos = pos; tocandoTipo = e.tipo; tocandoNivel = nivel
+        VodActivity.abrirUrlComResultado(this, CODIGO_TOCAR, url, e.titulo)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: android.content.Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode != CODIGO_TOCAR) return
+        val nivel = pilha.lastOrNull(); val tipo = tocandoTipo
+        if (nivel == null || nivel !== tocandoNivel || tipo == null) return   // a pessoa saiu da pasta
+        val terminou = resultCode == RESULT_OK && data?.getBooleanExtra(VodActivity.RESULTADO_TERMINOU, false) == true
+        val teclou = data?.getBooleanExtra(VodActivity.RESULTADO_TECLA, true) ?: true
+        val desligou = data?.getBooleanExtra(VodActivity.RESULTADO_DESLIGOU, false) == true
+        seguidos = FimDoVideo.seguidos(seguidos, teclou || !terminou)
+        val tipos = nivel.itens.map { ((it as? Linha)?.alvo as? Upnp.Entrada)?.takeIf { e -> e.url != null }?.tipo }
+        val prox = FilaRede.proximo(tipos, tocandoPos, tipo)
+        val e = ((nivel.itens.getOrNull(prox) as? Linha)?.alvo as? Upnp.Entrada)
+        val url = e?.url
+        when (if (url == null) FilaRede.Passo.NADA else FilaRede.depois(tipo, terminou, true, desligou, seguidos)) {
+            FilaRede.Passo.TOCAR_JA -> tocar(prox, e!!, url!!)
+            FilaRede.Passo.CONTAR -> contar(prox, e!!, url!!, FimDoVideo.CONTAGEM_S)
+            FilaRede.Passo.PERGUNTAR -> { lista.setSelection(prox); nivel.foco = prox; aviso.text = getString(R.string.rede_ainda_assistindo, e!!.titulo) }
+            FilaRede.Passo.NADA -> {}
+        }
+    }
+
+    /** "Próximo em 10 s": o foco já fica no próximo (OK começa agora); qualquer outra tecla cancela. */
+    private fun contar(pos: Int, e: Upnp.Entrada, url: String, resta: Int) {
+        lista.setSelection(pos); lista.requestFocus()
+        aviso.text = getString(R.string.rede_proximo_em, e.titulo, resta)
+        val r = Runnable { if (resta <= 1) tocar(pos, e, url) else contar(pos, e, url, resta - 1) }
+        contando = r
+        tela.postDelayed(r, 1000)
+    }
+
+    private fun pararContagem() {
+        contando?.let { tela.removeCallbacks(it) }
+        if (contando != null) aviso.text = (pilha.lastOrNull()?.itens?.size ?: 0).let { resources.getQuantityString(R.plurals.rede_itens, it, it) }
+        contando = null
     }
 
     private fun abrir(pos: Int) {
@@ -288,10 +458,12 @@ class MidiaRedeActivity : Activity() {
             Acao.WEBDAV -> formularioWebDav()
             Acao.LINK -> formularioLink()
             Acao.PROCURAR -> procurar()
+            is FotosNoProtetor -> alternarFotos(pos, e)
+            is Buscar -> buscar(e)
             is Upnp.Entrada -> when {
                 e.pasta -> entrar(nivel.origem ?: return, e.id, e.titulo)
                 e.tipo == Upnp.Tipo.FOTO -> mostrarFoto(nivel.origem, e)
-                e.url != null -> { nivel.foco = pos; VodActivity.abrirUrl(this, e.url, e.titulo) }
+                e.url != null -> tocar(pos, e, e.url)
             }
         }
     }
@@ -332,6 +504,8 @@ class MidiaRedeActivity : Activity() {
     // ---------------------------------------------------------------- teclas
 
     override fun dispatchKeyEvent(e: KeyEvent): Boolean {
+        // Contagem do próximo arquivo: OK começa já (o foco está nele); qualquer outra tecla cancela e segue normal.
+        if (contando != null && e.action == KeyEvent.ACTION_DOWN && !SegurarOk.ehOk(e.keyCode)) pararContagem()
         // OK segurado 2 s numa conta salva = remover (mesmo gesto dos favoritos e interesses do player).
         if (SegurarOk.ehOk(e.keyCode) && lista.hasFocus() && foto.visibility != View.VISIBLE && camada.visibility != View.VISIBLE &&
             pilha.size == 1 && (pilha[0].itens.getOrNull(lista.selectedItemPosition) as? Linha)?.alvo is ContaMidia) {
@@ -729,6 +903,7 @@ class MidiaRedeActivity : Activity() {
             val pos = lista.firstVisiblePosition + i
             if (v is LinearLayout && v.tag == TAG_LINHA) focar(v, lista.hasFocus() && pos == sel)
         }
+        atualizarFicha()
     }
 
     /** Altura dos [n] nomes de grupo do topo, para o 1º item ficar logo abaixo deles. */
@@ -798,6 +973,7 @@ class MidiaRedeActivity : Activity() {
 
     private companion object {
         const val TAG_LINHA = "linha"
+        const val CODIGO_TOCAR = 29
         /** ContaMidia.pasta de um LINK que é lista M3U (OK abre a lista em vez de tocar). */
         const val LISTA = "lista"
     }

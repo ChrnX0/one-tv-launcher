@@ -2,7 +2,6 @@ package br.paulo.tvlauncher
 
 import org.json.JSONArray
 import org.json.JSONObject
-import java.text.Normalizer
 
 /**
  * Lembretes da grade (12/11/2026, ideia 1 do brainstorm): "me avisa quando começar".
@@ -37,37 +36,24 @@ object Lembretes {
     const val MAX = 60
     const val MAX_PALAVRAS = 20
     const val ANTECEDENCIA_MS = 2 * 60_000L
-    /** Até onde olhar à frente ao gerar pelas palavras: o guia guarda 14 h; 24 h cobre o caso de ele ter mais. */
-    const val HORIZONTE_MS = 24 * 3_600_000L
+    /**
+     * Até onde olhar à frente ao gerar pelas palavras. O guia guarda só 14 h; desde a ideia 16 (14/11/2026) as partidas
+     * de até 7 dias vêm da lista à parte do MeuTimeAdiante, gravada junto com o guia.
+     */
+    const val HORIZONTE_MS = MeuTimeAdiante.JANELA_MS
     /** Por palavra, no máximo isto de lembretes (um time com 6 reprises no dia não pode lotar a lista). */
     const val MAX_POR_PALAVRA = 4
 
-    /** Minúsculas e sem acento: "São dono" e "sao ana" casam. */
-    fun normalizar(s: String): String =
-        Normalizer.normalize(s, Normalizer.Form.NFD).replace(Regex("\\p{Mn}+"), "").lowercase().trim()
+    /** Minúsculas e sem acento: "São dono" e "sao ana" casam. (A regra mora no MeuTimeAdiante, que é puro.) */
+    fun normalizar(s: String): String = MeuTimeAdiante.normalizar(s)
 
     /** "Palmeiras, Fórmula 1\nCorinthians" -> lista limpa (sem repetidas, 3 a 40 letras, no máximo [MAX_PALAVRAS]). */
     fun lerPalavras(texto: String): List<String> =
         texto.split(',', ';', '\n').map { it.trim().replace(Regex("\\s+"), " ") }
             .filter { it.length in 3..40 }.distinctBy { normalizar(it) }.take(MAX_PALAVRAS)
 
-    /**
-     * O título tem a palavra inteira? "Palmeiras x Santos" casa com "palmeiras"; "Palmeirense" não. A palavra pode ter
-     * espaço ("formula 1"): vale como trecho, com borda de palavra nas duas pontas.
-     */
-    fun casa(titulo: String, palavra: String): Boolean {
-        val p = normalizar(palavra)
-        if (p.length < 3) return false
-        val t = normalizar(titulo)
-        var i = t.indexOf(p)
-        while (i >= 0) {
-            val antes = i == 0 || !t[i - 1].isLetterOrDigit()
-            val depois = i + p.length >= t.length || !t[i + p.length].isLetterOrDigit()
-            if (antes && depois) return true
-            i = t.indexOf(p, i + 1)
-        }
-        return false
-    }
+    /** O título tem a palavra inteira? "Palmeiras x Santos" casa com "palmeiras"; "Palmeirense" não (MeuTimeAdiante.casa). */
+    fun casa(titulo: String, palavra: String): Boolean = MeuTimeAdiante.casa(titulo, palavra)
 
     /** Marca ou desmarca à mão o programa (mesmo canal e início). Devolve a lista nova e se ficou marcado. */
     fun alternar(lista: List<Lembrete>, novo: Lembrete): Pair<List<Lembrete>, Boolean> {

@@ -55,8 +55,22 @@ object LembretesTv {
 
     fun definirPalavras(ctx: Context, texto: String) {
         Extras.definirTexto(ctx, CHAVE_PALAVRAS, Lembretes.lerPalavras(texto).joinToString(", "))
+        copiarPalavras(ctx, palavras(ctx))
         varrerDepois(ctx)
     }
+
+    // Cópia das palavras em arquivo (ideia 16): o guia é baixado no ":player", que não vê as prefs do processo principal
+    // atualizadas. O principal grava a cópia ao salvar e a cada varredura; o player só lê.
+    private fun arquivoPalavras(ctx: Context) = File(ctx.applicationContext.filesDir, "meutime_palavras.txt")
+
+    private fun copiarPalavras(ctx: Context, lista: List<String>) {
+        val texto = lista.joinToString(", ")
+        if (runCatching { arquivoPalavras(ctx).readText() }.getOrNull() != texto) PlayerCarga.gravarAtomico(arquivoPalavras(ctx), texto)
+    }
+
+    /** As palavras do "Meu time" para quem baixa o guia (qualquer processo). Sem a cópia ainda: as prefs deste processo. */
+    fun palavrasParaGuia(ctx: Context): List<String> =
+        runCatching { Lembretes.lerPalavras(arquivoPalavras(ctx).readText()) }.getOrNull() ?: palavras(ctx)
 
     /**
      * OK num programa futuro do guia em grade: marca ou desmarca. Chamar FORA da thread da tela (disco).
@@ -99,6 +113,7 @@ object LembretesTv {
         val app = ctx.applicationContext
         val agora = System.currentTimeMillis()
         val palavras = palavras(app)
+        copiarPalavras(app, palavras)
         val candidatos = ArrayList<Lembretes.Candidato>()
         if (palavras.isNotEmpty()) {
             val regras = runCatching { PlayerArmazem.parental(app) }.getOrNull()
@@ -110,6 +125,13 @@ object LembretesTv {
                 if (palavras.none { Lembretes.casa(p.titulo, it) }) return@varrerGuia
                 porGuia[p.guiaId]?.minByOrNull { it.numero }?.let { c ->
                     candidatos += Lembretes.Candidato(c.id, c.nome, c.numero, p)
+                }
+            }
+            // Ideia 16: as partidas além das ~14 h do guia (até 7 dias), guardadas à parte no último download.
+            // O mesmo jogo vindo do guia e da lista vira um lembrete só (Lembretes.gerar junta por título e início).
+            for (pa in MeuTimeAdiante.validas(PlayerCarga.partidasAdiante(app), palavras, agora)) {
+                porGuia[pa.guiaId]?.minByOrNull { it.numero }?.let { c ->
+                    candidatos += Lembretes.Candidato(c.id, c.nome, c.numero, Programa(pa.guiaId, pa.inicio, pa.fim, pa.titulo))
                 }
             }
         }

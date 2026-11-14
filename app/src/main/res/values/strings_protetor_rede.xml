@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Screensaver remote keys (idea 28) -->
+    <string name="pt_dica_dispensar">OK dismisses · ◀ ▶ move</string>
+    <string name="pt_dica_pausar">OK pauses or resumes · ◀ ▶ move</string>
+    <string name="pt_dica_andar">◀ ▶ move · other keys close</string>
+    <!-- Screensaver photos from a network folder (idea 27) -->
+    <string name="rede_fotos_usar">Use these photos in the screensaver</string>
+    <string name="rede_fotos_parar">Stop using these photos in the screensaver</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="one">%1$d photo · copied to the TV, works with the computer off</item>
+        <item quantity="other">%1$d photos · copied to the TV, works with the computer off</item>
+    </plurals>
+    <string name="rede_fotos_usando">Copying the photos. They show up the next time the screensaver starts.</string>
+    <string name="rede_fotos_paradas">The screensaver no longer uses this folder.</string>
+    <!-- "Network" as a catalog (idea 29) -->
+    <string name="rede_continuar">Continue watching</string>
+    <string name="rede_recentes">Recently added</string>
+    <string name="rede_buscar">Search</string>
+    <string name="rede_buscar_explica">Movies, shows, episodes and music on this server.</string>
+    <string name="rede_buscar_campo">Name</string>
+    <string name="rede_buscar_curto">Type at least 2 letters.</string>
+    <string name="rede_proximo_em">Next: %1$s in %2$d s · OK starts now · any other key cancels</string>
+    <string name="rede_ainda_assistindo">Still watching? OK starts %1$s</string>
+</resources>

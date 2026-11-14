@@ -23,6 +23,7 @@ CP="$CACHE/junit-4.13.2.jar:$CACHE/hamcrest-core-1.3.jar:$CACHE/json-20240303.ja
 
 # teste -> arquivos de produção que ele usa (acrescente aqui quando um teste novo for puro)
 declare -A FONTES=(
+  [FimDoVideoTest]="FimDoVideo"
   [PainelHttpTest]="PainelHttp"
   [PainelSegurancaTest]="PainelSeguranca PainelHttp JsonSeguro"
   [McpAutorizacaoTest]="McpAutorizacao"
@@ -36,6 +37,14 @@ declare -A FONTES=(
   [TeclaFalsaTest]="TeclaFalsa"
   [RoteiroConferenciaTest]="RoteiroConferencia"
   [LgNetcastTest]="LgNetcast"
+  [FrasesAppsTest]="FrasesApps"
+  [BuscaOutrosAppsTest]="BuscaOutrosApps"
+  [GuiaExtraTest]="GuiaExtra"
+  [MeuTimeAdianteTest]="MeuTimeAdiante"
+  [EnsaioRestauracaoTest]="EnsaioRestauracao CofreBackup"
+  [TextoNaTvTest]="TextoNaTv"
+  [WifiVisitaQrTest]="WifiVisitaQr"
+  [UsoLocalRegrasTest]="UsoLocalRegras"
 )
 
 falhou=0

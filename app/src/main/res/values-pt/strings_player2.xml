@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Player de filmes e séries: próximo episódio, nova tentativa, tamanho da legenda (ideias 19 a 22, 14/11/2026). -->
+<resources>
+    <string name="vod_tentando">A conexão caiu. Tentando de novo (%1$d de %2$d)…</string>
+    <string name="vod_proximo_episodio">Próximo episódio</string>
+    <string name="vod_proximo_agora">Assistir agora · %1$d s</string>
+    <string name="vod_proximo_cancelar">Cancelar</string>
+    <string name="vod_proximo_continuar">Continuar assistindo</string>
+    <string name="vod_ainda_assistindo">Ainda está assistindo?</string>
+    <string name="vod_ainda_assistindo_texto">Alguns episódios tocaram sem ninguém mexer no controle, então o próximo espera por você.</string>
+    <string name="vod_desligar_ao_fim">Desligar a TV quando este acabar</string>
+    <string name="vod_desligar_ao_fim_ligado">A TV desliga quando este acabar</string>
+    <string name="vod_desligar_ao_fim_desligado">A TV fica ligada quando este acabar</string>
+    <string name="vod_legenda_tamanho_opcao">Tamanho da legenda: %1$s</string>
+    <string name="vod_legenda_tamanho_titulo">Tamanho da legenda</string>
+    <string-array name="vod_legenda_tamanhos">
+        <item>Pequena</item>
+        <item>Normal</item>
+        <item>Grande</item>
+        <item>Enorme</item>
+    </string-array>
+</resources>

@@ -1120,7 +1120,7 @@ async function carregarTv() {
       linha.className = 'linha-registro';
       const info = document.createElement('span');
       // textContent: nome e servidor vêm do que foi digitado, nunca viram HTML.
-      info.textContent = `${c.nome} · ${c.tipo === 'xtream' ? 'Xtream' : 'lista'} · ${c.servidor}` + (c.temGuia ? ' · guia próprio' : '') + (c.reservas ? ` · ${c.reservas} reserva(s)` : '');
+      info.textContent = `${c.nome} · ${c.tipo === 'xtream' ? 'Xtream' : 'lista'} · ${c.servidor}` + (c.temGuia ? ' · guia próprio' : '') + (c.temGuiaExtra ? ' · 2º guia' : '') + (c.reservas ? ` · ${c.reservas} reserva(s)` : '');
       const apagar = document.createElement('button');
       apagar.type = 'button'; apagar.className = 'botao-perigo'; apagar.textContent = 'Apagar';
       apagar.addEventListener('click', async () => {
@@ -1141,14 +1141,14 @@ $('formContaTv').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   const corpo = {
     tipo: $('tvTipo').value, nome: $('tvNome').value.trim(), endereco: $('tvEndereco').value.trim(),
-    usuario: $('tvUsuario').value.trim(), senha: $('tvSenha').value, guia: $('tvGuia').value.trim(),
+    usuario: $('tvUsuario').value.trim(), senha: $('tvSenha').value, guia: $('tvGuia').value.trim(), guiaExtra: $('tvGuiaExtra').value.trim(),
     reservas: $('tvReservas').value.trim(),
   };
   if (!corpo.endereco) { mostrar($('statusContaTv'), 'Falta o endereço.'); return; }
   const r = await confirmar('Cadastrar a conta na TV?', 'Fica cifrada na TV. Depois, use "Testar e recarregar canais" para ver se ela funciona.',
     'Cadastrar', () => chamar('POST', '/api/tv/contas', corpo));
   if (r) {
-    for (const id of ['tvNome', 'tvEndereco', 'tvUsuario', 'tvSenha', 'tvGuia', 'tvReservas']) $(id).value = '';
+    for (const id of ['tvNome', 'tvEndereco', 'tvUsuario', 'tvSenha', 'tvGuia', 'tvGuiaExtra', 'tvReservas']) $(id).value = '';
     mostrar($('statusContaTv'), 'Conta cadastrada.');
     carregarTv();
   }
@@ -1928,7 +1928,7 @@ for (const b of document.querySelectorAll('[data-tecla]')) {
 $('formTexto').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   if ($('aoVivo').checked) return;   // ao vivo cada letra já foi (controle.js)
-  const t = paraTv($('campoTexto').value);   // tira acento: "ação" vai como "acao"
+  const t = paraTv($('campoTexto').value);   // ideia 56: acento vai junto (pela acessibilidade da TV)
   if (!t) { mostrar($('statusControle'), 'A TV só digita letras, números, espaço e . , @ _ -'); return; }
   try {
     await chamar('POST', '/api/tela/texto', { texto: t });
@@ -2141,19 +2141,37 @@ window.addEventListener('resize', () => { if (!$('abaRede').hidden) carregarRede
 
 // Aberto pelo QR da TV (Configurações > Acesso remoto > Entrar pelo celular): o endereço traz "#qr=<código>".
 // Tira o código do endereço na hora (não fica no histórico nem vira nome de aba) e entra com ele, sem PIN.
-/** Tira "#qr=..." do endereço (sem deixar no histórico) e devolve o código, se for um código bem formado. */
+/**
+ * Tira "#qr=..." do endereço (sem deixar no histórico) e devolve { codigo, ir }. Ideia 43: o QR de uma linha das
+ * Configurações da TV traz "&ir=<aba>[.<id do cartão>]" (DestinoPainel.kt) para abrir já na página certa.
+ */
 function pegarCodigoQr() {
   if (!location.hash.startsWith('#qr=')) return null;
-  const m = /^#qr=([0-9a-f]{48})$/.exec(location.hash);
+  const m = /^#qr=([0-9a-f]{48})(?:&ir=([a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)?))?$/.exec(location.hash);
   history.replaceState(null, '', location.pathname + location.search);
-  return m ? m[1] : null;
+  return m ? { codigo: m[1], ir: m[2] || '' } : null;
 }
 
-async function entrarPeloQr(codigo) {
+/** Abre a aba de [ir] ("extras.cartaoCasa") e rola até o cartão, com um realce curto para o olho achar. */
+function irPara(ir) {
+  if (!ir) return;
+  const [aba, cartao] = ir.split('.');
+  mudarAba(aba);
+  const alvo = cartao && $(cartao);
+  if (!alvo) return;
+  setTimeout(() => {
+    alvo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    alvo.classList.add('realce');
+    setTimeout(() => alvo.classList.remove('realce'), 2400);
+  }, 150);
+}
+
+async function entrarPeloQr(qr) {
   try {
-    await chamar('POST', '/api/entrar-qr', { codigo });
+    await chamar('POST', '/api/entrar-qr', { codigo: qr.codigo });
     await abrirPainel();
     aviso('Entrou pelo QR da TV. Para instalar ou desinstalar, o painel ainda pede o PIN.', 'ok');
+    irPara(qr.ir);
     return true;
   } catch (e) {
     // Código vencido ou já usado: cai na entrada normal (se já estiver logado, segue logado).
@@ -2164,17 +2182,17 @@ async function entrarPeloQr(codigo) {
 
 // O leitor de QR pode abrir o link numa aba que já está no painel: aí só o fragmento muda, sem recarregar a página.
 window.addEventListener('hashchange', () => {
-  const codigo = pegarCodigoQr();
-  if (codigo) entrarPeloQr(codigo);
+  const qr = pegarCodigoQr();
+  if (qr) entrarPeloQr(qr);
   else if (!$('telaPainel').hidden && location.hash === '') mudarAba('inicio', false);
 });
 
 (async () => {
-  const codigo = pegarCodigoQr();
-  if (codigo && await entrarPeloQr(codigo)) return;
+  const qr = pegarCodigoQr();
+  if (qr && await entrarPeloQr(qr)) return;
   try {
     const e = await chamar('GET', '/api/estado');
-    if (e.logado) await abrirPainel(); else mostrarEntrar();
+    if (e.logado) { await abrirPainel(); if (qr) irPara(qr.ir); } else mostrarEntrar();
   } catch (e) {
     mostrarEntrar();
   }

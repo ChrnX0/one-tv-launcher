@@ -56,6 +56,7 @@ object PainelExtras {
             Extras.Chave.TOCANDO_AGORA -> Fundo.rodar { TocandoAgoraTv.ajustar(app, Extras.ligado(app, c)) }
             // Hora de dormir ligada trava o relógio da TV; desligada destrava (DO fora da thread da tela).
             Extras.Chave.HORA_DORMIR -> Fundo.rodar { TravaRelogio.ajustar(app) }
+            Extras.Chave.TEMPO_TELA -> Fundo.rodar { TravaRelogio.ajustar(app) }   // ideia 33: data travada (senão zera a cota)
             // Ideias de 12/11/2026: os alarmes periódicos ligam e desligam junto com a chave.
             Extras.Chave.PRESENCA -> Presenca.agendar(app)
             Extras.Chave.RETROSPECTIVA -> Retrospectiva.agendar(app)
