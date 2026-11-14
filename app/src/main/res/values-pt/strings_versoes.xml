@@ -60,6 +60,7 @@
         <item>Fichas dos apps e lista de limpeza podem crescer com contribuições da comunidade (conferidas 1x por semana)</item>
         <item>Tela Casa: sensores de temperatura, umidade, porta, movimento, água e fumaça, e o ar-condicionado (segure OK para a temperatura)</item>
         <item>Tela Casa: câmeras mostram a foto de agora na TV com OK (também pelo painel e pelo Claude)</item>
+        <item>Voz: “Ok Google, abrir Filmes” (também Séries, Na rede, Minha casa, Busca, Mural) abre essa tela do launcher</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -110,6 +111,7 @@
         <item>No painel, abra a ficha de um app</item>
         <item>Abra a tela Casa (Home Assistant) e ache um sensor ou o ar-condicionado</item>
         <item>Na tela Casa, aperte OK numa câmera</item>
+        <item>Diga “Ok Google, abrir Filmes” (e os outros: Séries, Na rede, Minha casa, Busca, Mural)</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -160,5 +162,6 @@
         <item>A ficha continua aparecendo?</item>
         <item>O valor aparece, e segurar OK no ar muda a temperatura?</item>
         <item>A foto apareceu por cima da tela?</item>
+        <item>Cada um abriu a tela certa (e não outro app)?</item>
     </string-array>
 </resources>

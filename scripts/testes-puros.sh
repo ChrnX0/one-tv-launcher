@@ -53,6 +53,7 @@ declare -A FONTES=(
   [DiarioRegrasTest]="DiarioRegras"
   [CaixaComandoTest]="CaixaComando"
   [ProximoJogoTest]="ProximoJogo MeuTimeAdiante"
+  [AtalhosVozTest]="AtalhosVoz"
 )
 
 falhou=0
