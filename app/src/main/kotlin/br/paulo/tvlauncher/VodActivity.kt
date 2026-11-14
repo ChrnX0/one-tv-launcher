@@ -134,6 +134,8 @@ class VodActivity : Activity() {
     // Preferência de áudio deste título (Idioma), lida do disco fora da thread da tela antes de o vídeo começar.
     @Volatile private var prefIdioma = Idioma.Pref.DUBLADO
     private var chaveIdioma = ""
+    // Ideia 25: idioma do sistema da TV ("pt", "en", "es"): "dublado" e a legenda automática seguem ele.
+    private val idiomaTv by lazy { IdiomaPlayer.idiomaDaTv() }
     // Legenda baixada da internet para este vídeo (LegendaBaixar), se houver, e o atraso aplicado nela.
     private var legendaArquivo: java.io.File? = null
     private var atrasoLegenda = 0L
@@ -258,10 +260,11 @@ class VodActivity : Activity() {
             .setSeekBackIncrementMs(10_000).setSeekForwardIncrementMs(30_000).build()
         p.setVideoSurfaceView(video)
         p.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MOVIE).build(), true)
-        // Dublado: já pede o áudio em português. Original: o áudio e a legenda são escolhidos quando as faixas chegam
-        // (onTracksChanged + IdiomaPlayer.aplicar). Nos dois casos, a legenda em português só liga se o áudio não for português.
+        // Dublado: já pede o áudio no idioma da TV (ideia 25; "pt" na TV em português). Original: o áudio e a legenda são
+        // escolhidos quando as faixas chegam (onTracksChanged + IdiomaPlayer.aplicar). Nos dois casos, a legenda no idioma
+        // da TV só liga se o áudio não for desse idioma.
         p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
-            .setPreferredAudioLanguage(if (prefIdioma == Idioma.Pref.DUBLADO) "pt" else null).build()
+            .setPreferredAudioLanguage(if (prefIdioma == Idioma.Pref.DUBLADO) idiomaTv else null).build()
         legendaDecidida = false   // player novo (voltou de outra tela): as faixas são escolhidas de novo
         p.addListener(ouvinte)
         p.setMediaItem(item(u), retomarEm)
@@ -277,7 +280,7 @@ class VodActivity : Activity() {
         val b = MediaItem.Builder().setUri(u)
         legendaArquivo?.let { f ->
             b.setSubtitleConfigurations(listOf(MediaItem.SubtitleConfiguration.Builder(android.net.Uri.fromFile(f))
-                .setMimeType(MimeTypes.APPLICATION_SUBRIP).setLanguage("pt-BR").setId(IdiomaPlayer.ID_EXTERNA)
+                .setMimeType(MimeTypes.APPLICATION_SUBRIP).setLanguage(Idioma.tagLegendaBaixada(idiomaTv)).setId(IdiomaPlayer.ID_EXTERNA)
                 .setSelectionFlags(C.SELECTION_FLAG_DEFAULT).build()))
         }
         return b.build()
@@ -352,7 +355,7 @@ class VodActivity : Activity() {
             if (legendaDecidida || faixas.groups.none { it.type == C.TRACK_TYPE_AUDIO }) return
             legendaDecidida = true
             val p = player ?: return
-            IdiomaPlayer.aplicar(faixas, p.trackSelectionParameters, prefIdioma)?.let { p.trackSelectionParameters = it }
+            IdiomaPlayer.aplicar(faixas, p.trackSelectionParameters, prefIdioma, idiomaTv)?.let { p.trackSelectionParameters = it }
         }
     }
 
@@ -441,7 +444,7 @@ class VodActivity : Activity() {
                 val g = grupo.mediaTrackGroup; val indice = i
                 opcoes += Opcao("$prefixo: $nome", grupo.isTrackSelected(i)) {
                     // Trocar o áudio na mão vira a escolha deste filme (ou da série toda): da próxima vez já abre assim.
-                    if (tipo == C.TRACK_TYPE_AUDIO) Idioma.prefDaEscolha(IdiomaPlayer.faixa(f))?.let { pref ->
+                    if (tipo == C.TRACK_TYPE_AUDIO) Idioma.prefDaEscolha(IdiomaPlayer.faixa(f), idiomaTv)?.let { pref ->
                         prefIdioma = pref
                         Fundo.rodar { IdiomaPlayer.lembrar(this, chaveIdioma, pref) }
                     }

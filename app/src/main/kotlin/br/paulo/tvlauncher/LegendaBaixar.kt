@@ -80,9 +80,10 @@ object LegendaBaixar {
 
     fun buscar(ctx: Context, b: LegendaExterna.Busca): Result<List<LegendaExterna.Candidata>> = runCatching {
         val conta = conta(ctx) ?: error(ctx.getString(R.string.legenda_sem_conta))
-        val r = pedir(LegendaExterna.urlBusca(b), conta)
+        val idioma = IdiomaPlayer.idiomaDaTv()   // ideia 25: legenda no idioma da TV
+        val r = pedir(LegendaExterna.urlBusca(b, idioma), conta)
         if (r.codigo !in 200..299) error(LegendaExterna.lerErro(r.corpo) ?: "erro ${r.codigo}")
-        LegendaExterna.lerBusca(r.corpo)
+        LegendaExterna.lerBusca(r.corpo, idioma)
     }
 
     /** Baixa a escolhida e guarda como a legenda deste vídeo. Devolve o arquivo .srt. */
