@@ -33,7 +33,8 @@ object Jogos {
         // Do PC e do console: o jogo roda num computador ou console da casa.
         "com.valvesoftware.steamlink" to Grupo.PC,
         "com.limelight" to Grupo.PC,                            // Moonlight
-        "com.playstation.remoteplay" to Grupo.PC,               // PS Remote Play
+        "com.playstation.remoteplay" to Grupo.PC,               // PS Remote Play (celular)
+        "com.playstation.remoteplay.tv" to Grupo.PC,            // PS Remote Play da Google TV (visto na Sala, 14/11/2026)
         "tv.parsec.client" to Grupo.PC,                         // Parsec (não verifiquei)
         "com.metallic.chiaki" to Grupo.PC,                      // Chiaki (PlayStation, código aberto)
         // Retrô: emuladores.

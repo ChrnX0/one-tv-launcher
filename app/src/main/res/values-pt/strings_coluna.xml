@@ -5,7 +5,7 @@
     <string name="coluna_novos">+%1$s</string>
     <string name="coluna_filtro">Filtro</string>
     <string name="coluna_esportes">Esportes</string>
-    <string name="coluna_guia">Guia de programação</string>
+    <string name="coluna_guia">Guia</string>
     <string name="coluna_filtro_titulo">Filtro</string>
     <string name="coluna_filtro_ordem">Ordem: %1$s</string>
     <string name="coluna_filtro_combinado">Gênero, época, nota, só não vistos…</string>
