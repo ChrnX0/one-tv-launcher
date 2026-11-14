@@ -44,6 +44,10 @@ class ServicosFilmesActivity : Activity() {
         desenhar()
     }
 
+    /** Voltou da tela de uma conta (pode ter saído dela): redesenha. */
+    private var jaDesenhou = false
+    override fun onResume() { super.onResume(); if (jaDesenhou && telaCodigo == null) desenhar() else jaDesenhou = true }
+
     private fun detalhe(s: Servico) = getString(when (s) {
         Servico.TRAKT -> R.string.sv_trakt_det
         Servico.SIMKL -> R.string.sv_simkl_det
@@ -93,6 +97,8 @@ class ServicosFilmesActivity : Activity() {
         val s = e.servico
         when {
             s == Servico.TMDB -> Unit
+            // Conta conectada: a tela dela (o que sincroniza, listas, sair). OpenSubtitles só tem o sair.
+            e.situacao == Situacao.CONECTADO && s != Servico.OPENSUBTITLES -> SincronizarActivity.abrir(this, s)
             e.situacao == Situacao.CONECTADO -> perguntarSair(s)
             s == Servico.TRAKT || s == Servico.SIMKL -> mostrarCodigo(s)
             s == Servico.MDBLIST -> mostrarMdblist()

@@ -32,7 +32,8 @@ object BackupCompleto {
         "extras", "cenas", "casa_ha", "modo_visita", "aviso_chuva", "clima",
         "jogos",   // card Jogos (14/11/2026): grupos escolhidos, IP e app do PC
         "gravacao",   // gravação (14/11/2026): a pasta da rede de reserva
-        "nuvem")   // Na rede › OneDrive/Dropbox (14/11/2026): o id do app Microsoft e a chave do Dropbox que o dono digitou
+        "nuvem",   // Na rede › OneDrive/Dropbox (14/11/2026): o id do app Microsoft e a chave do Dropbox que o dono digitou
+        "sincronizar_filmes")   // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
     /**
      * Preferências que NÃO vão, de propósito (o teste BackupCompletoTest confere que nenhuma outra ficou esquecida):
      * "confirmacoes" (restaurar um backup não pode liberar nada sem o PIN, ver ConfirmacoesTv), "painel_log" (registro),
