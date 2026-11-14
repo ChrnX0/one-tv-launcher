@@ -88,6 +88,8 @@ class SeriesActivity : Activity() {
     private var fichaAberta: FichaSerie? = null
     private var temporada = 1
     private var tocando: Episodio? = null   // o episódio que foi para a VodActivity (para o "próximo")
+    private var seguidos = 0   // ideia 19: episódios seguidos que terminaram sem ninguém apertar tecla
+    private var avisoProximo: android.app.Dialog? = null
 
     private lateinit var listaCats: ListView
     private lateinit var grade: GridView
@@ -178,6 +180,7 @@ class SeriesActivity : Activity() {
     }
 
     override fun onStop() {
+        avisoProximo?.dismiss()   // ideia 19: saiu da tela (HOME, protetor) com a contagem andando: nada começa sozinho
         super.onStop()
         // O PIN vale só enquanto a tela está na frente (igual ao player): saiu para a HOME ou outro app, tranca de novo.
         // Ir assistir um episódio daqui não conta, senão a cada episódio teria de digitar o PIN.
@@ -739,11 +742,56 @@ class SeriesActivity : Activity() {
                 posicoes = p
                 if (s != null && f != null) atualizarProgresso(s, f)
                 val terminou = resultCode == RESULT_OK && data?.getBooleanExtra(VodActivity.RESULTADO_TERMINOU, false) == true
+                val teclou = data?.getBooleanExtra(VodActivity.RESULTADO_TECLA, true) ?: true
+                val desligou = data?.getBooleanExtra(VodActivity.RESULTADO_DESLIGOU, false) == true
+                seguidos = FimDoVideo.seguidos(seguidos, teclou || !terminou)
                 val prox = if (terminou && s != null && f != null && ep != null) Series.proximo(f, ep) else null
-                if (prox != null && s != null) { temporada = prox.temporada; desenharFicha(); tocar(s, prox, doComeco = true) }
+                // Ideia 19 (14/11/2026): antes o próximo começava na hora. Agora: contagem de 10 s com cancelar; depois de
+                // 3 seguidos sem tecla, pergunta "ainda está assistindo?"; e nada segue se era para desligar ao fim.
+                val passo = FimDoVideo.depois(terminou, prox != null, desligou, seguidos)
+                if (prox != null && s != null && passo != FimDoVideo.Passo.NADA && passo != FimDoVideo.Passo.DESLIGAR) {
+                    temporada = prox.temporada; desenharFicha()
+                    avisarProximo(s, prox, perguntar = passo == FimDoVideo.Passo.PERGUNTAR)
+                }
                 else { adaptadorGrade.notifyDataSetChanged(); recalcular(ModoGrade.IGUAL); if (aberta != null) desenharFicha() }
             }
         }
+    }
+
+    /**
+     * Ideia 19: cartão por cima da ficha antes do próximo episódio. [perguntar] = false: "Assistir agora · 10 s" contando e
+     * começa sozinho no zero; VOLTAR ou "Cancelar" fica na ficha. [perguntar] = true: "Ainda está assistindo?" sem contagem.
+     */
+    private fun avisarProximo(s: Serie, prox: Episodio, perguntar: Boolean) {
+        avisoProximo?.dismiss()
+        val d = android.app.Dialog(this)
+        var resta = FimDoVideo.CONTAGEM_S
+        val parar = Estilo.botao(this, getString(R.string.vod_proximo_cancelar), primario = false)
+        val ver = Estilo.botao(this, if (perguntar) getString(R.string.vod_proximo_continuar) else getString(R.string.vod_proximo_agora, resta))
+        val tique = object : Runnable {
+            override fun run() {
+                if (!d.isShowing) return
+                resta--
+                if (resta <= 0) { d.dismiss(); tocar(s, prox, doComeco = true); return }
+                ver.text = getString(R.string.vod_proximo_agora, resta)
+                tela.postDelayed(this, 1_000)
+            }
+        }
+        parar.setOnClickListener { d.dismiss() }
+        ver.setOnClickListener { d.dismiss(); if (perguntar) seguidos = 0; tocar(s, prox, doComeco = true) }
+        val titulo = "${prox.rotulo} · ${Series.tituloCurto(s.nome, prox.titulo)}"
+        d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
+        d.setContentView(Estilo.dialogo(this, getString(if (perguntar) R.string.vod_ainda_assistindo else R.string.vod_proximo_episodio),
+            titulo, if (perguntar) getString(R.string.vod_ainda_assistindo_texto) else null, listOf(parar, ver)))
+        d.window?.apply {
+            setBackgroundDrawable(android.graphics.drawable.ColorDrawable(Color.TRANSPARENT))
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        }
+        d.setOnShowListener { ver.requestFocus() }
+        d.setOnDismissListener { tela.removeCallbacks(tique); if (avisoProximo === d) avisoProximo = null }
+        avisoProximo = d
+        d.show()
+        if (!perguntar) tela.postDelayed(tique, 1_000)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {

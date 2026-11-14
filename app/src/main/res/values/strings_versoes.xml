@@ -18,6 +18,8 @@
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
         <item>Real volume on LG NetCast TVs (2013) over the network: sleep timer, bedtime limit, voice and alarm</item>
+        <item>Series: 10-second countdown before the next episode, “Still watching?” after 3 in a row, and “Turn off the TV when this ends” in the ▼ menu</item>
+        <item>Movies and series try again by themselves when the connection drops, subtitle size in the ▼ menu, and the details page works offline</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -26,6 +28,7 @@
         <item>cenas_painel</item>
         <item>botao_livre</item>
         <item>evento_pausa</item>
+        <item>proximo_episodio</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -34,6 +37,7 @@
         <item>Open Scenes from the quick panel, or say “Ok Google, open Scenes”</item>
         <item>Tap, hold and double tap a free button on the remote</item>
         <item>Make a test scene for “movie paused”, then pause a movie</item>
+        <item>Let an episode reach the end (or skip to the last minute)</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -42,5 +46,6 @@
         <item>Did the Scenes list open?</item>
         <item>Did each one do what you set for it?</item>
         <item>Did the test scene run?</item>
+        <item>Did “Next episode” count down from 10, and did Cancel keep you on the series page?</item>
     </string-array>
 </resources>

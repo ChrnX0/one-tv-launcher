@@ -15,6 +15,8 @@
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
         <item>Volume de verdade nas TVs LG NetCast (2013) pela rede: desligar suave, teto da hora de dormir, voz e despertador</item>
+        <item>Séries: contagem de 10 s antes do próximo episódio, “Ainda está assistindo?” depois de 3 seguidos e “Desligar a TV quando este acabar” no menu do ▼</item>
+        <item>Filmes e séries tentam de novo sozinhos quando a conexão cai, tamanho da legenda no menu do ▼ e a ficha abre sem internet</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -23,6 +25,7 @@
         <item>Abra Cenas pelo painel rápido, ou diga “Ok Google, abrir Cenas”</item>
         <item>Toque, segure e toque duas vezes num botão livre do controle</item>
         <item>Crie uma cena de teste para “filme pausou” e pause um filme</item>
+        <item>Deixe um episódio chegar ao fim (ou pule para o último minuto)</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -31,5 +34,6 @@
         <item>Abriu a lista de Cenas?</item>
         <item>Cada um fez o que você escolheu?</item>
         <item>A cena de teste rodou?</item>
+        <item>O “Próximo episódio” contou de 10, e o Cancelar deixou você na ficha da série?</item>
     </string-array>
 </resources>

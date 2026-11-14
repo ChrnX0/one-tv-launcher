@@ -166,11 +166,36 @@ object PlayerCarga {
         } else if (cache.exists()) Vod.filmesDeJson(cache.readText(), fonte.id) else emptyList()
     }
 
-    /** A ficha (sinopse, elenco...) de um filme. Pequena: vem sempre da rede, sem cache em disco. */
+    /**
+     * A ficha (sinopse, elenco...) de um filme. Vem da rede; sem rede, a última que deu certo (ideia 22, 14/11/2026:
+     * antes, sem rede, sem ficha).
+     */
     fun fichaFilme(ctx: Context, f: Filme): FichaFilme? {
         val conta = PlayerArmazem.fontes(ctx).firstOrNull { it.id == f.fonteId }?.xtream ?: return null
-        return runCatching { Vod.lerFicha(baixarTexto(Vod.urlFichaFilme(conta, f.id), 2L * 1024 * 1024)) }
-            .onFailure { Log.w(TAG, "ficha: ${it.javaClass.simpleName}") }.getOrNull()
+        return fichaComDisco(ctx, FimDoVideo.nomeFicha(f.fonteId, false, f.id), { Vod.lerFicha(it) }) {
+            baixarTexto(Vod.urlFichaFilme(conta, f.id), 2L * 1024 * 1024)
+        }
+    }
+
+    /**
+     * Rede primeiro (episódio novo aparece na hora); a resposta boa fica em cacheDir/fichas. Se a rede falhar, lê o disco.
+     * cacheDir: o Android pode limpar quando falta espaço, e o backup não leva. No máximo FimDoVideo.FICHAS_MAX arquivos.
+     */
+    private fun <T> fichaComDisco(ctx: Context, nome: String, ler: (String) -> T?, baixar: () -> String): T? {
+        val pasta = File(ctx.cacheDir, "fichas")
+        val arq = File(pasta, nome)
+        val daRede = runCatching { baixar() }.onFailure { Log.w(TAG, "ficha: ${it.javaClass.simpleName}") }.getOrNull()
+        val lida = daRede?.let { t -> runCatching { ler(t) }.getOrNull() }
+        if (lida != null && daRede != null) {
+            runCatching {
+                pasta.mkdirs()
+                gravarAtomico(arq, daRede)
+                val todos = pasta.listFiles().orEmpty().associate { it.name to it.lastModified() }
+                FimDoVideo.podar(todos).forEach { File(pasta, it).delete() }
+            }
+            return lida
+        }
+        return if (arq.exists()) runCatching { ler(arq.readText()) }.getOrNull() else null
     }
 
     // ---------------------------------------------------------------- séries (só contas Xtream)
@@ -192,11 +217,12 @@ object PlayerCarga {
         } else if (cache.exists()) Series.seriesDeJson(cache.readText(), fonte.id) else emptyList()
     }
 
-    /** Ficha e episódios de uma série (sem cache em disco: episódio novo aparece na hora). */
+    /** Ficha e episódios de uma série. Rede primeiro (episódio novo aparece na hora); sem rede, a do disco (ideia 22). */
     fun fichaSerie(ctx: Context, s: Serie): FichaSerie? {
         val conta = PlayerArmazem.fontes(ctx).firstOrNull { it.id == s.fonteId }?.xtream ?: return null
-        return runCatching { Series.lerFicha(baixarTexto(Series.urlFicha(conta, s.id), 10L * 1024 * 1024)) }
-            .onFailure { Log.w(TAG, "ficha da série: ${it.javaClass.simpleName}") }.getOrNull()
+        return fichaComDisco(ctx, FimDoVideo.nomeFicha(s.fonteId, true, s.id), { Series.lerFicha(it) }) {
+            baixarTexto(Series.urlFicha(conta, s.id), 10L * 1024 * 1024)
+        }
     }
 
     /** O endereço para tocar (com a senha: não guardar, não logar). */

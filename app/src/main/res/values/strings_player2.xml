@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Movies and series player: next episode, retry, subtitle size (ideas 19 to 22, 14/11/2026). -->
+<resources>
+    <string name="vod_tentando">Connection dropped. Trying again (%1$d of %2$d)…</string>
+    <string name="vod_proximo_episodio">Next episode</string>
+    <string name="vod_proximo_agora">Watch now · %1$d s</string>
+    <string name="vod_proximo_cancelar">Cancel</string>
+    <string name="vod_proximo_continuar">Keep watching</string>
+    <string name="vod_ainda_assistindo">Still watching?</string>
+    <string name="vod_ainda_assistindo_texto">A few episodes played without anyone touching the remote, so the next one waits for you.</string>
+    <string name="vod_desligar_ao_fim">Turn off the TV when this ends</string>
+    <string name="vod_desligar_ao_fim_ligado">The TV turns off when this ends</string>
+    <string name="vod_desligar_ao_fim_desligado">The TV stays on when this ends</string>
+    <string name="vod_legenda_tamanho_opcao">Subtitle size: %1$s</string>
+    <string name="vod_legenda_tamanho_titulo">Subtitle size</string>
+    <string-array name="vod_legenda_tamanhos">
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+        <item>Huge</item>
+    </string-array>
+</resources>

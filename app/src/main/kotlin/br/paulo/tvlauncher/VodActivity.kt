@@ -71,6 +71,10 @@ class VodActivity : Activity() {
         const val TIPO_FILME = "filme"
         const val TIPO_EPISODIO = "episodio"
         const val RESULTADO_TERMINOU = "terminou"
+        /** Alguma tecla foi apertada durante o vídeo (ideia 19: conta dos episódios seguidos sem ninguém mexer). */
+        const val RESULTADO_TECLA = "tecla"
+        /** "Desligar quando este acabar" estava marcado: a tela apagou e a série não segue para o próximo. */
+        const val RESULTADO_DESLIGOU = "desligou"
         private const val SALVAR_MS = 15_000L
         private const val ESCONDER_MS = 4_000L
 
@@ -134,6 +138,12 @@ class VodActivity : Activity() {
     // Cabeçalhos extras do pedido (WebDAV: a senha vai no cabeçalho, nunca no endereço).
     private var cabecalhos: Map<String, String> = emptyMap()
     private lateinit var capaAudio: TextView
+    // Ideia 19: tecla apertada neste vídeo, e "desligar quando este acabar" (vale só para este vídeo, nada fica salvo).
+    private var apertouTecla = false
+    private var desligarAoFim = false
+    // Ideia 20: novas tentativas depois de erro de rede (zera quando o vídeo volta a tocar).
+    private var tentativas = 0
+    private var tamLegendaSp = FimDoVideo.LEGENDA_PADRAO   // ideia 21
 
     private val papel = Estilo.TEXTO       // cores do sistema de design (Estilo)
     private val suave = Estilo.TEXTO_2
@@ -173,7 +183,7 @@ class VodActivity : Activity() {
         // Legenda (11/11/2026): sem o media3-ui ninguém desenhava as falas, e a legenda escolhida no ▼ não aparecia.
         // Texto branco com contorno escuro, embaixo e centrado; acima da barra quando ela aparece.
         legenda = TextView(this).apply {
-            textSize = 30f; setTextColor(Color.WHITE); gravity = Gravity.CENTER; visibility = View.GONE
+            textSize = FimDoVideo.LEGENDA_PADRAO.toFloat(); setTextColor(Color.WHITE); gravity = Gravity.CENTER; visibility = View.GONE
             typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
             setShadowLayer(8f, 0f, 2f, Color.BLACK)
             setPadding(dp(18), dp(6), dp(18), dp(6))
@@ -199,11 +209,14 @@ class VodActivity : Activity() {
             prefIdioma = IdiomaPlayer.prefs(this).para(chaveIdioma)
             val leg = LegendaBaixar.guardada(this, chave)
             val atraso = getSharedPreferences("player", MODE_PRIVATE).getLong("atraso:$chave", 0L)
+            // Ideia 21: tamanho da legenda escolhido no ▼ (vale para todos os vídeos).
+            val tamLeg = FimDoVideo.tamanhoLegenda(getSharedPreferences("player", MODE_PRIVATE).getInt("legenda_sp", FimDoVideo.LEGENDA_PADRAO))
             val pos = if (intent.getBooleanExtra("do_comeco", false)) 0L else Vod.inicio(PlayerArmazem.posicoes(this)[chave])
             tela.post {
                 if (isDestroyed) return@post
                 if (endereco == null) { mostrarAviso(getString(R.string.vod_sem_conta)); return@post }
                 url = endereco; retomarEm = pos; legendaArquivo = leg; atrasoLegenda = atraso
+                tamLegendaSp = tamLeg; legenda.textSize = tamLeg.toFloat()
                 relato = tocavel?.relato; cabecalhos = tocavel?.cabecalhos.orEmpty()
                 tocar()
             }
@@ -284,6 +297,7 @@ class VodActivity : Activity() {
             when (estado) {
                 Player.STATE_READY -> {
                     esconderAviso()
+                    tentativas = 0
                     if (!avisouInicio) { avisouInicio = true; avisar(FontesMidia.Momento.COMECOU, player?.currentPosition ?: 0) }
                 }
                 Player.STATE_BUFFERING -> mostrarAviso(getString(R.string.player_carregando_canal))
@@ -292,8 +306,12 @@ class VodActivity : Activity() {
                     // Posição = duração: o servidor marca como visto e tira do "Continuar assistindo".
                     player?.let { p -> avisar(FontesMidia.Momento.PAROU, p.duration.takeIf { it > 0 } ?: p.currentPosition) }
                     avisouInicio = false   // o fim já foi avisado; o onStop não repete
-                    // A tela de séries usa isto para tocar o próximo episódio sozinha.
-                    setResult(RESULT_OK, Intent().putExtra(RESULTADO_TERMINOU, true))
+                    // A tela de séries usa isto para decidir o próximo episódio (FimDoVideo.depois).
+                    setResult(RESULT_OK, Intent().putExtra(RESULTADO_TERMINOU, true).putExtra(RESULTADO_TECLA, apertouTecla)
+                        .putExtra(RESULTADO_DESLIGOU, desligarAoFim))
+                    // Ideia 19: "desligar quando este acabar". Este processo (:player) não tem o serviço de acessibilidade;
+                    // o apagarTela cai no lockNow do Device Owner, que só apaga a tela (nada se perde).
+                    if (desligarAoFim) Desligamento.apagarTela(applicationContext)
                     finish()
                 }
                 else -> {}
@@ -301,7 +319,20 @@ class VodActivity : Activity() {
             atualizarBarra()
         }
         override fun onIsPlayingChanged(tocando: Boolean) { Gatilhos.avisarDoPlayer(this@VodActivity, tocando); atualizarBarra(); if (!tocando) mostrarBarra(fixa = true) else mostrarBarra() }
-        override fun onPlayerError(erro: PlaybackException) { mostrarAviso(getString(R.string.vod_erro)) }
+        override fun onPlayerError(erro: PlaybackException) {
+            // Ideia 20: erro de rede tenta de novo no mesmo ponto (2, 4 e 8 s), como a TV ao vivo; o resto mostra a mensagem.
+            val p = player ?: return
+            val espera = FimDoVideo.esperaAntes(tentativas + 1, FimDoVideo.erroDeRede(erro.errorCode))
+            if (espera == null) { mostrarAviso(getString(R.string.vod_erro)); return }
+            tentativas++
+            mostrarAviso(getString(R.string.vod_tentando, tentativas, FimDoVideo.TENTATIVAS))
+            val pos = p.currentPosition
+            tela.postDelayed({
+                if (player !== p || !visivel) return@postDelayed
+                p.setMediaItem(item(url ?: return@postDelayed), pos)
+                p.prepare()
+            }, espera)
+        }
         override fun onVideoSizeChanged(t: androidx.media3.common.VideoSize) {
             tamanhoVideo = t
             PlayerImagem.aplicar(video, modoImagem, t.width, t.height, t.pixelWidthHeightRatio)
@@ -350,6 +381,7 @@ class VodActivity : Activity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         val p = player
+        apertouTecla = true   // ideia 19: alguém está mexendo, então não é hora de perguntar "ainda está assistindo?"
         when (keyCode) {
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_SPACE -> {
                 if (event.repeatCount == 0) p?.let { if (it.isPlaying) it.pause() else it.play() }
@@ -424,6 +456,12 @@ class VodActivity : Activity() {
         // 11/11/2026 (visto no 1 Play): velocidade e proporção da imagem, no mesmo menu do ▼ para não criar outra tecla
         opcoes += Opcao(getString(R.string.velocidade_opcao, PlayerImagem.rotuloVelocidade(p.playbackParameters.speed))) { escolherVelocidade() }
         opcoes += Opcao(getString(R.string.imagem_opcao, PlayerImagem.rotulo(this, modoImagem))) { escolherImagem() }
+        // Ideias 21 e 19: tamanho da legenda (vale para todos os vídeos) e desligar a TV quando este vídeo acabar.
+        opcoes += Opcao(getString(R.string.vod_legenda_tamanho_opcao, rotuloTamanho(tamLegendaSp))) { escolherTamanhoLegenda() }
+        opcoes += Opcao(getString(R.string.vod_desligar_ao_fim), marcada = desligarAoFim) {
+            desligarAoFim = !desligarAoFim
+            avisoBreve(getString(if (desligarAoFim) R.string.vod_desligar_ao_fim_ligado else R.string.vod_desligar_ao_fim_desligado))
+        }
         Estilo.lista(this, getString(R.string.vod_faixas), opcoes.map { it.rotulo },
             opcoes.indices.filter { opcoes[it].marcada }) { i -> opcoes[i].aplicar() }
     }
@@ -500,6 +538,21 @@ class VodActivity : Activity() {
         val v = PlayerImagem.VELOCIDADES
         Estilo.lista(this, getString(R.string.velocidade_titulo), v.map { PlayerImagem.rotuloVelocidade(it) },
             listOf(v.indexOfFirst { it == p.playbackParameters.speed })) { i -> p.setPlaybackSpeed(v[i]) }
+    }
+
+    private fun rotuloTamanho(sp: Int): String {
+        val i = FimDoVideo.TAMANHOS_LEGENDA.indexOf(sp).takeIf { it >= 0 } ?: 1
+        return resources.getStringArray(R.array.vod_legenda_tamanhos)[i]
+    }
+
+    private fun escolherTamanhoLegenda() {
+        val t = FimDoVideo.TAMANHOS_LEGENDA
+        val atual = t.indexOf(tamLegendaSp)
+        Estilo.lista(this, getString(R.string.vod_legenda_tamanho_titulo), resources.getStringArray(R.array.vod_legenda_tamanhos).toList(),
+            listOf(atual)) { i ->
+            tamLegendaSp = t[i]; legenda.textSize = t[i].toFloat()
+            getSharedPreferences("player", MODE_PRIVATE).edit().putInt("legenda_sp", t[i]).apply()
+        }
     }
 
     private fun escolherImagem() = PlayerImagem.escolher(this, modoImagem) { m ->
