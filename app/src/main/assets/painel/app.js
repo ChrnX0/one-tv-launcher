@@ -928,6 +928,7 @@ function desenharConfig(r) {
   $('cfgPilhas').checked = r.pilhas;
   $('cfgChuva').checked = r.avisoChuva;
   $('cfgAudio').value = r.audio;
+  $('cfgQuadros').checked = r.taxaQuadros !== false;
   $('cfgProtetor').value = String(r.protetorMs);
   $('cfgBarra').value = r.barraProtetor;
   $('cfgParental').checked = r.parental;
@@ -982,6 +983,7 @@ $('cfgTema').addEventListener('change', (e) => gravarConfig({ campo: 'tema', val
 $('cfgTamanho').addEventListener('change', (e) => gravarConfig({ campo: 'tamanhoTexto', valor: Number(e.target.value) }, 'Tamanho do texto gravado (vale ao abrir cada tela).'));
 $('cfgPilhas').addEventListener('change', (e) => gravarConfig({ campo: 'pilhas', valor: e.target.checked }, e.target.checked ? 'Pilhas automáticas ligadas.' : 'Pilhas automáticas desligadas.'));
 $('cfgChuva').addEventListener('change', (e) => gravarConfig({ campo: 'avisoChuva', valor: e.target.checked }, e.target.checked ? 'Aviso de chuva ligado.' : 'Aviso de chuva desligado.'));
+$('cfgQuadros').addEventListener('change', (e) => gravarConfig({ campo: 'taxaQuadros', valor: e.target.checked }, e.target.checked ? 'Taxa de quadros do filme ligada.' : 'Taxa de quadros do filme desligada.'));
 $('cfgAudio').addEventListener('change', (e) => gravarConfig({ campo: 'audio', valor: e.target.value }, 'Áudio preferido gravado.'));
 $('cfgProtetor').addEventListener('change', (e) => gravarConfig({ campo: 'protetorMs', valor: Number(e.target.value) }, 'Tempo do protetor gravado.'));
 $('cfgBarra').addEventListener('change', (e) => gravarConfig({ campo: 'barraProtetor', valor: e.target.value }, 'Linha do protetor gravada.'));

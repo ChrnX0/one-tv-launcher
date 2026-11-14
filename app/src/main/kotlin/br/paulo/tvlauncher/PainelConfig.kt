@@ -30,6 +30,7 @@ object PainelConfig {
             .put("tamanhoTexto", TamanhoTexto.atual(app))
             .put("pilhas", Organizacao.pilhasAutomaticas(app))
             .put("avisoChuva", AvisoChuva.ligado(app))
+            .put("taxaQuadros", TaxaQuadros.ligada(app))
             .put("audio", if (IdiomaPlayer.prefs(app).padrao == Idioma.Pref.ORIGINAL) "original" else "dublado")
             .put("protetorMs", PrivilegioDO.tempoDescanso(app).toLong())
             .put("barraProtetor", Protetor.barra(app))
@@ -66,6 +67,7 @@ object PainelConfig {
             }
             "pilhas" -> { val b = v as? Boolean ?: return Resultado.Erro("valor inválido"); Organizacao.definirPilhasAutomaticas(app, b); registrar("pilhas automáticas: $b") }
             "avisoChuva" -> { val b = v as? Boolean ?: return Resultado.Erro("valor inválido"); AvisoChuva.definirLigado(app, b); registrar("aviso de chuva: $b") }
+            "taxaQuadros" -> { val b = v as? Boolean ?: return Resultado.Erro("valor inválido"); TaxaQuadros.definir(app, b); registrar("taxa de quadros do filme: $b") }
             "audio" -> {
                 val p = when (v) { "original" -> Idioma.Pref.ORIGINAL; "dublado" -> Idioma.Pref.DUBLADO; else -> return Resultado.Erro("valor inválido") }
                 IdiomaPlayer.definirPadrao(app, p); registrar("áudio preferido: $v")

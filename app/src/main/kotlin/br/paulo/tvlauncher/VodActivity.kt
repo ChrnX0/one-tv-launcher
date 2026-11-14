@@ -134,6 +134,7 @@ class VodActivity : Activity() {
     private var retomarEm = 0L
     private var visivel = false
     private var legendaDecidida = false
+    private var quadrosDecididos = false   // ideia 86: o modo da tela (24 Hz para filme) já foi pedido para este vídeo
     // Preferência de áudio deste título (Idioma), lida do disco fora da thread da tela antes de o vídeo começar.
     @Volatile private var prefIdioma = Idioma.Pref.DUBLADO
     private var chaveIdioma = ""
@@ -268,6 +269,7 @@ class VodActivity : Activity() {
     override fun onStart() { super.onStart(); visivel = true; if (url != null && player == null) tocar() }
 
     override fun onStop() {
+        TaxaQuadros.soltar(this); quadrosDecididos = false   // a HOME e o resto voltam ao modo de sempre
         avanco.cancelar()
         tela.removeCallbacks(vigiaAbertura); esconderPilula()
         super.onStop()
@@ -418,6 +420,11 @@ class VodActivity : Activity() {
         }
 
         override fun onTracksChanged(faixas: Tracks) {
+            // Ideia 86: a taxa de quadros só se sabe quando a faixa de vídeo chega.
+            if (!quadrosDecididos) player?.videoFormat?.frameRate?.takeIf { it > 0f }?.let { fps ->
+                quadrosDecididos = true
+                TaxaQuadros.aplicar(this@VodActivity, fps)
+            }
             if (faixas.groups.isNotEmpty()) {
                 val soAudio = faixas.groups.none { it.type == C.TRACK_TYPE_VIDEO }
                 capaAudio.visibility = if (soAudio) View.VISIBLE else View.GONE
@@ -553,6 +560,11 @@ class VodActivity : Activity() {
         if (EfeitosSom.disponivel()) {
             opcoes += Opcao(getString(R.string.acess_volume), EfeitosSom.volumeIgual(this)) { alternarSom(PlayerAcessivel.VOLUME_IGUAL) }
             opcoes += Opcao(getString(R.string.acess_voz), EfeitosSom.vozClara(this)) { alternarSom(PlayerAcessivel.VOZ_CLARA) }
+        }
+        opcoes += Opcao(getString(R.string.quadros_opcao), TaxaQuadros.ligada(this)) {
+            val ligou = TaxaQuadros.alternar(this)
+            if (ligou) player?.videoFormat?.frameRate?.takeIf { it > 0f }?.let { TaxaQuadros.aplicar(this, it) } else TaxaQuadros.soltar(this)
+            avisoBreve(getString(if (ligou) R.string.quadros_ligado else R.string.quadros_desligado))
         }
         opcoes += Opcao(getString(R.string.vod_desligar_ao_fim), marcada = desligarAoFim) {
             desligarAoFim = !desligarAoFim
