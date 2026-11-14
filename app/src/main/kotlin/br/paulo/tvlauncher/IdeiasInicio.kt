@@ -21,13 +21,13 @@ object IdeiasInicio {
         val versao = BuildConfig.VERSION_CODE.toLong()
         val antes = p.getLong("versao", 0L)
         if (antes != 0L && antes != versao)
-            Avisos.enviar(app, Avisos.Tipo.VERSAO_NOVA, "Launcher atualizado", "Versão ${BuildConfig.VERSION_NAME} instalada na TV.")
+            Avisos.enviar(app, Avisos.Tipo.VERSAO_NOVA, txt(R.string.ii_atualizado), txt(R.string.ii_versao, BuildConfig.VERSION_NAME))
         val erros = RegistroErros.pasta(app).listFiles { f -> f.name.startsWith("erro-") && f.name.endsWith(".txt") }.orEmpty()
         val visto = p.getLong("erro_visto", 0L)
         val novos = erros.count { it.lastModified() > visto }
         if (visto != 0L && novos > 0)
-            Avisos.enviar(app, Avisos.Tipo.ERRO_NOVO, "Erro no launcher",
-                if (novos == 1) "1 erro novo. Veja em Painel > Saúde." else "$novos erros novos. Veja em Painel > Saúde.")
+            Avisos.enviar(app, Avisos.Tipo.ERRO_NOVO, txt(R.string.ii_erro),
+                LauncherApp.instancia.resources.getQuantityString(R.plurals.ii_erros_novos, novos, novos))
         p.edit().putLong("versao", versao)
             .putLong("erro_visto", maxOf(visto, erros.maxOfOrNull { it.lastModified() } ?: 0L, if (visto == 0L) 1L else 0L))
             .apply()

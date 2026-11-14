@@ -33,7 +33,8 @@ object Despertador {
     data class Alarme(val id: Int, val hora: Int, val minuto: Int, val dias: Int, val nome: String, val ativo: Boolean,
                       val som: Int = 0, val rampa: Int = 0, val bomDia: Boolean = true)
 
-    val NOMES_DIAS = listOf("D", "S", "T", "Q", "Q", "S", "S")   // domingo a sábado
+    // Domingo a sábado, a inicial no idioma da TV ("D S T Q Q S S" / "S M T W T F S"). Lido a cada uso: segue a troca de idioma.
+    val NOMES_DIAS: List<String> get() = java.text.DateFormatSymbols.getInstance().weekdays.drop(1).map { it.take(1).uppercase() }
 
     fun listar(ctx: Context): List<Alarme> {
         val texto = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString("alarmes", "[]") ?: "[]"

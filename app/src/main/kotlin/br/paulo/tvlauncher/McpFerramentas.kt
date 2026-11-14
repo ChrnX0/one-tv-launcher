@@ -99,7 +99,7 @@ class McpFerramentas(ctx: Context) : McpProtocolo.Ferramentas, McpProtocolo.ComC
         // Até 40 s: o túnel corta a resposta em 60 s, e um comando mais longo rodaria sem a saída chegar (auditoria 10/11/2026).
         val limite = a.optInt("tempo_s", 20).coerceIn(1, 40) * 1000L
         // Confirmações: Sala com "Liberar tudo" roda direto; instalação nova vem BLOQUEADO (ou pergunta na TV, até 60 s).
-        if (!ConfirmacoesTv.permitir(app, Confirmacoes.Acao.MCP_SHELL, McpPoderRegras.textoPerguntaShell(cmd), "internet"))
+        if (!ConfirmacoesTv.permitir(app, Confirmacoes.Acao.MCP_SHELL, McpPoderRegras.textoPerguntaShell(cmd, rotulo = txt(R.string.cf_shell), naoMostrados = txt(R.string.cf_shell_cortado)), "internet"))
             throw McpProtocolo.ErroFerramenta(
                 if (ConfirmacoesTv.modo(app, Confirmacoes.Acao.MCP_SHELL) == Confirmacoes.Modo.BLOQUEAR)
                     "o shell pela IA está bloqueado nas Confirmações da TV (Configurações › Sistema › Confirmações)"

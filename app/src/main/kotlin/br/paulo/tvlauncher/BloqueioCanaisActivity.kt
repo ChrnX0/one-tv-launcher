@@ -68,19 +68,19 @@ class BloqueioCanaisActivity : Activity() {
             background = Estilo.fundoTela(context)   // o grafite da HOME (sistema de design)
             setPadding(dp(72), dp(40), dp(72), dp(24))
         }
-        raiz.addView(TextView(this).apply { text = if (modoInfantis) getString(R.string.infantil_titulo) else "Canais bloqueados"; textSize = 32f; typeface = fonteLeve; setTextColor(papel) })
-        subtitulo = TextView(this).apply { textSize = 15f; setTextColor(suave); text = if (modoInfantis) getString(R.string.infantil_carregando) else "carregando os canais…" }
+        raiz.addView(TextView(this).apply { text = if (modoInfantis) getString(R.string.infantil_titulo) else getString(R.string.lbl_canais_bloqueados); textSize = 32f; typeface = fonteLeve; setTextColor(papel) })
+        subtitulo = TextView(this).apply { textSize = 15f; setTextColor(suave); text = if (modoInfantis) getString(R.string.infantil_carregando) else getString(R.string.bc_carregando) }
         raiz.addView(subtitulo)
         val colunas = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
         listaCats = lista()
         listaCanais = lista()
-        colunas.addView(coluna("CATEGORIAS", listaCats), LinearLayout.LayoutParams(0, -1, 0.38f))
-        colunas.addView(coluna(if (modoInfantis) getString(R.string.infantil_coluna_itens) else "CANAIS", listaCanais), LinearLayout.LayoutParams(0, -1, 0.62f).apply { marginStart = dp(20) })
+        colunas.addView(coluna(getString(R.string.bc_categorias), listaCats), LinearLayout.LayoutParams(0, -1, 0.38f))
+        colunas.addView(coluna(if (modoInfantis) getString(R.string.infantil_coluna_itens) else getString(R.string.bc_canais), listaCanais), LinearLayout.LayoutParams(0, -1, 0.62f).apply { marginStart = dp(20) })
         raiz.addView(colunas, LinearLayout.LayoutParams(-1, 0, 1f).apply { topMargin = dp(16) })
         // Dica fixa das teclas, no mesmo jeito da lista de canais do player (11sp, cor apagada).
         raiz.addView(TextView(this).apply {
             text = if (modoInfantis) getString(R.string.infantil_dica)
-                else "OK bloqueia ou libera · OK na categoria vale para ela inteira · ◀ ▶ categorias e canais · VOLTAR sai (já está salvo)"
+                else getString(R.string.bc_dica)
             textSize = 11f; setTextColor(apagado); setPadding(0, dp(10), 0, 0)
         })
         setContentView(raiz)
@@ -99,7 +99,7 @@ class BloqueioCanaisActivity : Activity() {
         listaCanais.setOnItemClickListener { _, _, pos, _ ->
             if (modoInfantis) { subtitulo.text = getString(R.string.infantil_so_categoria); return@setOnItemClickListener }
             val c = daCategoria.getOrNull(pos) ?: return@setOnItemClickListener
-            if (c.grupo.trim() in regras.grupos) { subtitulo.text = "a categoria \"${c.grupo.trim()}\" inteira está bloqueada: libere na coluna da esquerda"; return@setOnItemClickListener }
+            if (c.grupo.trim() in regras.grupos) { subtitulo.text = getString(R.string.bc_categoria_bloqueada, c.grupo.trim()); return@setOnItemClickListener }
             mudar(ControleParental.alternarCanal(regras, c.id))
         }
         if (modoInfantis) carregarInfantis() else carregar()
@@ -124,8 +124,8 @@ class BloqueioCanaisActivity : Activity() {
                 if (l.size < MAX_AMOSTRA) l += nome
             }
             tv.forEach { guardar(it.grupo, "TV · ${it.nome}") }   // o tipo em texto, sem emoji (sistema de design)
-            filmes.forEach { guardar(it.grupo, "Filme · ${it.nome}") }
-            series.forEach { guardar(it.grupo, "Série · ${it.nome}") }
+            filmes.forEach { guardar(it.grupo, getString(R.string.bc_filme, it.nome)) }
+            series.forEach { guardar(it.grupo, getString(R.string.bc_serie, it.nome)) }
             tela.post {
                 if (isDestroyed) return@post
                 regras = r; categoriasInf = cats; amostras = am
@@ -143,7 +143,7 @@ class BloqueioCanaisActivity : Activity() {
         val g = categoriasInf.getOrNull(pos)?.nome ?: return
         val novas = ControleParental.alternarInfantil(regras, g)
         if (novas == regras) { subtitulo.text = getString(R.string.infantil_limite); return }
-        if (!PlayerArmazem.definirParental(this, novas)) { subtitulo.text = "não consegui gravar · tente de novo"; return }
+        if (!PlayerArmazem.definirParental(this, novas)) { subtitulo.text = getString(R.string.bc_nao_gravou); return }
         regras = novas
         atualizarSubtitulo()
         adaptadorCats.notifyDataSetChanged()
@@ -159,7 +159,7 @@ class BloqueioCanaisActivity : Activity() {
             tela.post {
                 if (isDestroyed) return@post
                 regras = r; canais = lidos; grupos = gs
-                if (lidos.isEmpty()) { subtitulo.text = "nenhum canal: cadastre uma conta na aba Conta e use \"Testar e recarregar canais\""; return@post }
+                if (lidos.isEmpty()) { subtitulo.text = getString(R.string.bc_nenhum_canal); return@post }
                 atualizarSubtitulo()
                 adaptadorCats.notifyDataSetChanged()
                 escolherCategoria(0)
@@ -181,8 +181,8 @@ class BloqueioCanaisActivity : Activity() {
     }
 
     private fun mudar(novas: ControleParental.Regras) {
-        if (novas == regras) { subtitulo.text = "limite de bloqueios atingido"; return }
-        if (!PlayerArmazem.definirParental(this, novas)) { subtitulo.text = "não consegui gravar · tente de novo"; return }
+        if (novas == regras) { subtitulo.text = getString(R.string.bc_limite); return }
+        if (!PlayerArmazem.definirParental(this, novas)) { subtitulo.text = getString(R.string.bc_nao_gravou); return }
         regras = novas
         atualizarSubtitulo()
         adaptadorCats.notifyDataSetChanged()
@@ -196,8 +196,8 @@ class BloqueioCanaisActivity : Activity() {
             return
         }
         val n = canais.count { it.id in regras.canais || it.grupo.trim() in regras.grupos }
-        val estado = if (regras.ligado) "controle parental LIGADO" else "controle parental desligado (o bloqueio só vale depois de ligar)"
-        subtitulo.text = "$n de ${canais.size} canais bloqueados · ${regras.grupos.size} categoria(s) inteira(s) · $estado"
+        val estado = getString(if (regras.ligado) R.string.bc_parental_on else R.string.bc_parental_off)
+        subtitulo.text = getString(R.string.bc_resumo, n, canais.size, regras.grupos.size, estado)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -224,10 +224,10 @@ class BloqueioCanaisActivity : Activity() {
                 t.setTextColor(if (marcada) verde else papel)
                 return t
             }
-            if (p == 0) { t.text = "Todas (${canais.size})"; t.setTextColor(papel); return t }
+            if (p == 0) { t.text = getString(R.string.bc_todas, canais.size); t.setTextColor(papel); return t }
             val (g, n) = grupos[p - 1]
             val bloq = g in regras.grupos
-            t.text = "${g.ifEmpty { "Outros" }}  ($n)${if (bloq) "  · bloqueada" else ""}"   // bloqueio dito em texto e em cor
+            t.text = "${g.ifEmpty { getString(R.string.bc_outros) }}  ($n)${if (bloq) "  · " + getString(R.string.bc_bloqueada) else ""}"   // bloqueio dito em texto e em cor
             t.setTextColor(if (bloq) coral else papel)
             return t
         }
@@ -243,7 +243,7 @@ class BloqueioCanaisActivity : Activity() {
             val c = daCategoria[p]
             val porGrupo = c.grupo.trim() in regras.grupos
             val bloq = porGrupo || c.id in regras.canais
-            t.text = "${c.numero}  ${c.nome}${if (porGrupo) "  · bloqueado pela categoria" else if (bloq) "  · bloqueado" else ""}"
+            t.text = "${c.numero}  ${c.nome}${if (porGrupo) "  · " + getString(R.string.bc_bloqueado_cat) else if (bloq) "  · " + getString(R.string.bc_bloqueado) else ""}"
             t.setTextColor(if (bloq) coral else papel)
             return t
         }

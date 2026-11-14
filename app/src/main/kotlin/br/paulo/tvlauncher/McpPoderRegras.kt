@@ -76,10 +76,11 @@ object McpPoderRegras {
      * (senão "echo ok;" + 200 espaços + "pm uninstall x" aparecia como inofensivo) e, se ainda for longo, avisa quanto
      * ficou de fora (auditoria 10/11/2026).
      */
-    fun textoPerguntaShell(cmd: String, max: Int = 220): String {
+    fun textoPerguntaShell(cmd: String, max: Int = 220, rotulo: String = "Rodar no shell",
+                           naoMostrados: String = "caracteres não mostrados"): String {
         val visivel = cmd.replace(Regex("\\s+"), " ").trim()
-        val corpo = if (visivel.length <= max) visivel else visivel.take(max) + " … [+${visivel.length - max} caracteres não mostrados]"
-        return "Rodar no shell: $corpo"
+        val corpo = if (visivel.length <= max) visivel else visivel.take(max) + " … [+${visivel.length - max} $naoMostrados]"
+        return "$rotulo: $corpo"
     }
 
     fun sha256Valido(s: String?): Boolean = s != null && s.matches(Regex("^[0-9a-fA-F]{64}$"))

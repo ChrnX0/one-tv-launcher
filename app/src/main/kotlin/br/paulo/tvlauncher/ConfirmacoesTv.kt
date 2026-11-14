@@ -102,8 +102,37 @@ object ConfirmacoesTv {
         try { PainelArmazem.registrar(app, quem, "confirmação: $oQue", resultado) } catch (_: Exception) {}
     }
 
-    /** Para a PerguntaTvActivity. */
-    internal fun atual(): Triple<String, String, String>? = aberta?.let { Triple(it.acao.titulo, it.oQue, it.quem) }
+    /** Para a PerguntaTvActivity. O título sai no idioma da TV (os textos de Confirmacoes.kt ficam para a IA). */
+    internal fun atual(): Triple<String, String, String>? = aberta?.let { Triple(txt(tituloRes(it.acao)), it.oQue, it.quem) }
+
+    /** Nome, explicação e modo de cada linha das Confirmações, nos recursos de texto (inglês padrão, pt traduzido). */
+    fun tituloRes(a: Confirmacoes.Acao): Int = when (a) {
+        Confirmacoes.Acao.MCP_CLIENTE -> R.string.cl_acao_mcp_cliente
+        Confirmacoes.Acao.MCP_ACOES -> R.string.cl_acao_mcp_acoes
+        Confirmacoes.Acao.MCP_SHELL -> R.string.cl_acao_mcp_shell
+        Confirmacoes.Acao.INSTALAR -> R.string.cl_acao_instalar
+        Confirmacoes.Acao.REMOVER -> R.string.cl_acao_remover
+        Confirmacoes.Acao.PERMISSOES -> R.string.cl_acao_permissoes
+        Confirmacoes.Acao.ABRIR_FORA -> R.string.cl_acao_abrir_fora
+        Confirmacoes.Acao.ATUALIZACAO -> R.string.cl_acao_atualizacao
+    }
+
+    fun explicacaoRes(a: Confirmacoes.Acao): Int = when (a) {
+        Confirmacoes.Acao.MCP_CLIENTE -> R.string.cl_acao_mcp_cliente_det
+        Confirmacoes.Acao.MCP_ACOES -> R.string.cl_acao_mcp_acoes_det
+        Confirmacoes.Acao.MCP_SHELL -> R.string.cl_acao_mcp_shell_det
+        Confirmacoes.Acao.INSTALAR -> R.string.cl_acao_instalar_det
+        Confirmacoes.Acao.REMOVER -> R.string.cl_acao_remover_det
+        Confirmacoes.Acao.PERMISSOES -> R.string.cl_acao_permissoes_det
+        Confirmacoes.Acao.ABRIR_FORA -> R.string.cl_acao_abrir_fora_det
+        Confirmacoes.Acao.ATUALIZACAO -> R.string.cl_acao_atualizacao_det
+    }
+
+    fun modoRes(m: Confirmacoes.Modo): Int = when (m) {
+        Confirmacoes.Modo.PERGUNTAR -> R.string.cl_modo_perguntar
+        Confirmacoes.Modo.PERMITIR -> R.string.cl_modo_permitir
+        Confirmacoes.Modo.BLOQUEAR -> R.string.cl_modo_bloquear
+    }
     internal fun responder(sim: Boolean) {
         val p = aberta ?: return
         p.sim = sim
@@ -126,11 +155,11 @@ class PerguntaTvActivity : Activity() {
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
         val (titulo, oQue, quem) = ConfirmacoesTv.atual() ?: run { respondido = true; finish(); return }
         fun botao(t: String, aoClicar: () -> Unit) = Estilo.botao(this, t).apply { setOnClickListener { aoClicar() } }
-        val negar = botao("Negar") { responder(false) }
-        val permitir = botao("Permitir") { responder(true) }
+        val negar = botao(getString(R.string.cf_negar)) { responder(false) }
+        val permitir = botao(getString(R.string.cf_permitir)) { responder(true) }
         // Diálogo único do sistema de design (Estilo.dialogo).
         setContentView(Estilo.dialogo(this, titulo, oQue,
-            "Pedido por: $quem\nSe não foi você, negue. Sem resposta em 60 s, nega sozinho.", listOf(negar, permitir)))
+            getString(R.string.cf_pedido_por, quem), listOf(negar, permitir)))
         negar.requestFocus()   // o padrão é o seguro
         ui.postDelayed({ responder(false) }, ConfirmacoesTv.ESPERA_MS)
     }

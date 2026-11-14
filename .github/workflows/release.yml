@@ -10,6 +10,14 @@
 #   Rodado em outra branch, só compila e assina com a chave debug do runner: a chave de verdade só é lida na main
 #   (10/11/2026, auditoria: antes uma branch qualquer saía assinada com a chave aceita pelas TVs, como artifact).
 #   Sem o segredo, só compila (e avisa).
+#   Antes de publicar roda os testes JVM (14/11/2026, ideia 62a): teste vermelho = nada sai. Só neste fluxo manual, para
+#   não gastar minutos do Actions em todo PR.
+# - Canal (14/11/2026, ideia 62c): "teste" publica como pré-lançamento (prerelease). O /releases/latest do GitHub ignora
+#   pré-lançamentos, então só a TV com o canal de teste ligado (ComandosExtras "canal") instala. Depois de uns dias sem
+#   queda na TV de teste, o workflow "Promover para todos" (promover.yml) tira a marca e todas as TVs recebem.
+# - Republicar (14/11/2026, ideia 62b): o campo "commit" recompila um commit ANTIGO da main. O versionCode vem da hora da
+#   compilação, então sai MAIOR que a versão ruim e as TVs aceitam por cima (o Android não deixa voltar versão). Risco:
+#   o código antigo precisa ler o que a versão nova gravou (preferências, banco); confira o que mudou entre os dois.
 #
 # Segredo necessário (Settings > Secrets and variables > Actions): ASSINATURA_KEYSTORE_B64 = a chave PÚBLICA do
 # projeto em base64 (+ ASSINATURA_SENHA / ASSINATURA_ALIAS se não forem os padrões). NUNCA o debug.keystore do PC de build:
@@ -20,6 +28,16 @@ name: Build e Release
 on:
   pull_request:
   workflow_dispatch:   # publicar: rodar à mão na main (ver o topo)
+    inputs:
+      canal:
+        description: 'todos = todas as TVs; teste = pré-lançamento, só a TV com o canal de teste'
+        type: choice
+        options: [todos, teste]
+        default: todos
+      commit:
+        description: 'Republicar: commit antigo da main para recompilar (vazio = a ponta da main)'
+        type: string
+        default: ''
 
 # Mínimo para todos (PR inclusive): só ler. Só o job "publicar" (main, à mão) ganha a escrita para criar o Release.
 permissions:
@@ -37,10 +55,24 @@ jobs:
       codigo: ${{ steps.info.outputs.codigo }}
       nome: ${{ steps.info.outputs.nome }}
       tem_chave: ${{ steps.chave.outputs.tem_chave }}
+      commit: ${{ steps.info.outputs.commit }}
     steps:
       - uses: actions/checkout@v5
         with:
           persist-credentials: false   # o token não fica gravado no .git: os passos do build não precisam dele
+          fetch-depth: 0               # republicar: precisa do histórico para conferir que o commit é da main
+
+      # Republicar (62b): só commit que já está na main. O input não entra direto no shell (vai por env).
+      - name: Commit a republicar
+        if: github.event_name == 'workflow_dispatch' && inputs.commit != ''
+        env:
+          ALVO: ${{ inputs.commit }}
+        run: |
+          if ! printf '%s' "$ALVO" | grep -Eq '^[0-9a-f]{7,40}$'; then echo "::error::commit inválido: use o hash"; exit 1; fi
+          git fetch --no-tags origin main
+          if ! git merge-base --is-ancestor "$ALVO" origin/main; then echo "::error::$ALVO não está na main"; exit 1; fi
+          git checkout --detach "$ALVO"
+          echo "Republicando $(git log -1 --format='%h %s' HEAD)"
 
       - uses: actions/setup-java@v5
         with:
@@ -79,6 +111,13 @@ jobs:
             echo "::warning::Sem o segredo ASSINATURA_KEYSTORE_B64: compila, mas não publica Release."
           fi
 
+      # 62a: teste vermelho = não publica. Só no fluxo manual (PR continua só compilando, sem gastar minutos a mais).
+      - name: Testes JVM
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:testReleaseUnitTest --no-daemon --stacktrace
+
       - name: Compilar o release
         env:
           ASSINATURA_SENHA: ${{ secrets.ASSINATURA_SENHA }}
@@ -109,8 +148,11 @@ jobs:
           done
           echo "codigo=$CODIGO" >> "$GITHUB_OUTPUT"
           echo "nome=$NOME" >> "$GITHUB_OUTPUT"
+          # Commit compilado de verdade (na republicação não é o GITHUB_SHA).
+          COMMIT=$(git rev-parse HEAD)
+          echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
           # Notas do Release (em inglês), com o número da build e o commit.
-          sed -e "s/{BUILD}/$CODIGO/g" -e "s/{COMMIT}/${GITHUB_SHA::7}/g" .github/release-notes.md > publicar/notas.md
+          sed -e "s/{BUILD}/$CODIGO/g" -e "s/{COMMIT}/${COMMIT::7}/g" .github/release-notes.md > publicar/notas.md
 
       - uses: actions/upload-artifact@v5
         with:
@@ -135,12 +177,17 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           V: ${{ needs.build.outputs.codigo }}
           NOME: ${{ needs.build.outputs.nome }}
+          COMMIT: ${{ needs.build.outputs.commit }}
+          CANAL: ${{ inputs.canal }}
         run: |
           # Sem checkout neste job: o repositório vai explícito. O download-artifact põe os arquivos de publicar/ aqui.
-          gh release create "v$V" \
+          # Canal "teste" = pré-lançamento (fora do /releases/latest). "todos" marca --latest explícito: o GitHub ordena o
+          # "latest" pela data do COMMIT, e uma republicação (commit antigo) perderia para o Release anterior sem isso.
+          if [ "$CANAL" = "teste" ]; then MARCA=--prerelease; else MARCA=--latest; fi
+          gh release create "v$V" $MARCA \
             "$NOME.apk" "$NOME.apk.sha256" \
             "$NOME-arm64.apk" "$NOME-arm64.apk.sha256" \
             --repo "$GITHUB_REPOSITORY" \
             --title "One TV Launcher 1.0 (build $V)" \
             --notes-file notas.md \
-            --target "$GITHUB_SHA"
+            --target "$COMMIT"

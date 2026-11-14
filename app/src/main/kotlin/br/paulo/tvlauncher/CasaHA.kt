@@ -116,6 +116,48 @@ object CasaHA {
         }.sortedBy { it.nome.lowercase() }
     }
 
+    // ---------------------------------------------------------------- cômodos (13/11/2026)
+    // O /api/states não diz em que cômodo (área) cada aparelho está. A área mora nos registros do Home Assistant; o jeito
+    // mais curto de lê-la pela API REST é o POST /api/template com area_name(), que olha a área da entidade e, se ela não
+    // tiver, a do dispositivo dela (homeassistant/helpers/template/extensions/areas.py). O /api/template pede token de
+    // administrador: com token de usuário comum dá 401/403 e a tela volta ao agrupamento antigo (Aparelhos / Cenas).
+
+    /** Template que devolve [[entity_id, nome da área ou null], ...] só dos domínios que a tela mostra. */
+    val TEMPLATE_AREAS: String = "[{%- for s in states if s.domain in " +
+        DOMINIOS.sorted().joinToString(",", "[", "]") { "'$it'" } +
+        " -%}{{ [s.entity_id, area_name(s.entity_id)] | tojson }}{{ ',' if not loop.last }}{%- endfor -%}]"
+
+    /** Resposta do template -> entity_id para nome do cômodo (só quem tem cômodo). Null se a resposta não for a lista. Pura. */
+    fun lerAreas(texto: String): Map<String, String>? {
+        val t = texto.trim()
+        // O HA responde o texto puro; se algum dia vier embrulhado como string JSON, desembrulha.
+        val bruto = if (t.startsWith("\"")) (try { org.json.JSONTokener(t).nextValue() as? String } catch (e: Exception) { null } ?: return null) else t
+        val a = try { JSONArray(bruto) } catch (e: Exception) { return null }
+        val m = LinkedHashMap<String, String>()
+        for (i in 0 until a.length()) {
+            val par = a.optJSONArray(i) ?: continue
+            val id = par.optString(0)
+            if (!idValido(id) || par.isNull(1)) continue
+            val area = par.optString(1).trim().take(40)
+            if (area.isNotEmpty()) m[id] = area
+        }
+        return m
+    }
+
+    /**
+     * Agrupa por cômodo: cômodos em ordem alfabética (sem ligar para acento e maiúscula), dentro de cada um os aparelhos
+     * antes das cenas e rotinas, e quem não tem cômodo por último, com nome null (a tela escreve "Sem cômodo"). Pura.
+     */
+    fun agruparPorComodo(lista: List<Entidade>, areas: Map<String, String>): List<Pair<String?, List<Entidade>>> {
+        val cena = { e: Entidade -> e.dominio == "scene" || e.dominio == "script" }
+        val ordem = java.text.Collator.getInstance(java.util.Locale.ROOT).apply { strength = java.text.Collator.PRIMARY }
+        val porArea = lista.groupBy { areas[it.id] }
+        val nomes = porArea.keys.filterNotNull().sortedWith(ordem)
+        return (nomes + listOf<String?>(null)).mapNotNull { n ->
+            porArea[n]?.let { l -> n to (l.filter { !cena(it) } + l.filter(cena)) }
+        }
+    }
+
     // Tela Casa (13/11/2026): ícone e estado de cada cartão. Puras.
     /** Domínio do Home Assistant -> ícone do [IconeCard]. */
     fun iconeDe(dominio: String) = when (dominio) {
@@ -223,21 +265,21 @@ object CasaHA {
 
     /** Grava endereço e token. Devolve null se gravou, ou o motivo. */
     fun configurar(ctx: Context, endereco: String, token: String): String? {
-        val e = enderecoValido(endereco) ?: return "endereço inválido (ex.: http://192.168.1.10:8123; fora da rede de casa use https)"
-        if (!tokenValido(token)) return "token inválido: crie um em Perfil > Segurança > Tokens de acesso de longa duração"
+        val e = enderecoValido(endereco) ?: return txt(R.string.casa_err_endereco)
+        if (!tokenValido(token)) return txt(R.string.casa_err_token)
         return try {
             val c = Cipher.getInstance("AES/GCM/NoPadding"); c.init(Cipher.ENCRYPT_MODE, chave())
             prefs(ctx).edit().putString("endereco", e)
                 .putString("token_cifrado", Base64.encodeToString(c.doFinal(token.trim().toByteArray()), Base64.NO_WRAP))
                 .putString("token_iv", Base64.encodeToString(c.iv, Base64.NO_WRAP)).commit()
             null
-        } catch (ex: Exception) { "o Keystore da TV falhou: ${ex.javaClass.simpleName}" }
+        } catch (ex: Exception) { txt(R.string.casa_err_keystore, ex.javaClass.simpleName) }
     }
 
     /** Campainha e câmera (ids de entidade; vazio desliga o aviso). */
     fun configurarCampainha(ctx: Context, sensor: String, camera: String): String? {
-        if (sensor.isNotEmpty() && !idValido(sensor)) return "sensor inválido (ex.: binary_sensor.campainha)"
-        if (camera.isNotEmpty() && !(idValido(camera) && camera.startsWith("camera."))) return "câmera inválida (ex.: camera.porta)"
+        if (sensor.isNotEmpty() && !idValido(sensor)) return txt(R.string.casa_err_sensor)
+        if (camera.isNotEmpty() && !(idValido(camera) && camera.startsWith("camera."))) return txt(R.string.casa_err_camera)
         prefs(ctx).edit().putString(CHAVE_CAMPAINHA, sensor).putString(CHAVE_CAMERA, camera).apply()
         return null
     }
@@ -307,6 +349,11 @@ object CasaHA {
 
     fun listar(ctx: Context): List<Entidade> = lerEstados(String(pedir(ctx, "GET", "/api/states")))
 
+    /** Cômodo de cada aparelho (entity_id -> nome da área). Erra com [Erro] se o token não for de administrador. */
+    fun areas(ctx: Context): Map<String, String> =
+        lerAreas(String(pedir(ctx, "POST", "/api/template", JSONObject().put("template", TEMPLATE_AREAS).toString(), limite = 512 * 1024)))
+            ?: throw Erro("resposta de áreas inesperada")
+
     /** Liga, desliga ou alterna. Devolve o texto do resultado. */
     fun acionar(ctx: Context, id: String, acao: String): String {
         val (d, s) = servico(id, acao) ?: throw Erro("ação não permitida para $id")
@@ -374,7 +421,7 @@ object CasaHA {
     private fun tocouCampainha(ctx: Context) {
         val camera = texto(ctx, CHAVE_CAMERA)
         val foto = if (camera.isEmpty()) null else try { fotoCamera(ctx, camera) } catch (e: Exception) { null }
-        AvisoTv.mostrar(ctx, "Campainha", "Tem alguém na porta", 30, som = true, guardarSeApagada = false,
+        AvisoTv.mostrar(ctx, ctx.getString(R.string.casa_campainha), ctx.getString(R.string.casa_alguem_porta), 30, som = true, guardarSeApagada = false,
             imagem = foto?.let { RecadoImagem.decodificar(it) }, fica = AvisoRegras.Fica.ATENCAO)
     }
 
