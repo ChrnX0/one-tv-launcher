@@ -40,6 +40,7 @@ declare -A FONTES=(
   [FrasesAppsTest]="FrasesApps"
   [BuscaOutrosAppsTest]="BuscaOutrosApps"
   [GuiaExtraTest]="GuiaExtra"
+  [MeuTimeAdianteTest]="MeuTimeAdiante"
 )
 
 falhou=0

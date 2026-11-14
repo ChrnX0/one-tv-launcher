@@ -39,6 +39,20 @@ class GuiaConsultaTest {
         assertEquals(listOf("A0", "A1", "B2"), Xmltv.ler(KXmlParser(), xml.byteInputStream(), setOf("a", "b"), t0, t0 + 14 * h).map { it.titulo })
     }
 
+    @Test fun fluxoEntregaAParteOQueVemDepoisDaJanela() {
+        // Ideia 16: o "Longe" (dia seguinte, canal a) fica fora da janela de 14 h, mas vai para o aoLerAlem sem contar no teto.
+        val dentro = ArrayList<Programa>(); val alem = ArrayList<Programa>()
+        val n = Xmltv.lerEmFluxo(KXmlParser(), xml.byteInputStream(), setOf("a", "b"), t0, t0 + 14 * h,
+            alem = t0 + 7 * 24 * h, aoLerAlem = { alem += it }) { dentro += it }
+        assertEquals(3, n)
+        assertEquals(listOf("B2", "A1", "A0"), dentro.map { it.titulo })
+        assertEquals(listOf("a" to "Longe"), alem.map { it.guiaId to it.titulo })
+        // Sem o aoLerAlem, nada muda (e com alcance curto demais, o "Longe" também não entra).
+        val curto = ArrayList<Programa>()
+        Xmltv.lerEmFluxo(KXmlParser(), xml.byteInputStream(), setOf("a"), t0, t0 + 14 * h, alem = t0 + 20 * h, aoLerAlem = { curto += it }) {}
+        assertTrue(curto.isEmpty())
+    }
+
     @Test fun guiaExtraPreencheSoOsCanaisQueFaltamComOIdNosso() {
         // Ideia 15: o 2º guia tem outros ids; casa pelo display-name normalizado e entrega com o guiaId da nossa lista.
         val extra = """<?xml version="1.0" encoding="UTF-8"?>

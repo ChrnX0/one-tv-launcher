@@ -22,6 +22,7 @@
         <item>Mais apps da tela inicial mostram uma frase curta embaixo do nome (a ficha do painel)</item>
         <item>Busca: no fim do resultado, continue a mesma busca no YouTube, na Netflix ou no Prime Video</item>
         <item>TV ao vivo: cada conta pode ter um 2º guia XMLTV, que só preenche os canais que ficaram sem programação</item>
+        <item>Os lembretes do “Meu time” agora enxergam os jogos até 7 dias à frente, não só as próximas 14 horas</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -36,6 +37,7 @@
         <item>Na tela inicial, pare num app que você instalou (ex.: um gerenciador de arquivos)</item>
         <item>Abra a Busca, digite o nome de um filme e escolha “Procurar … no YouTube” no fim</item>
         <item>No painel, cadastre uma conta com o link do 2º guia e abra a TV ao vivo</item>
+        <item>Com o seu time salvo no “Meu time”, abra a TV ao vivo uma vez e veja os lembretes no painel</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -50,5 +52,6 @@
         <item>A linha embaixo do nome diz o que ele faz, no idioma da TV?</item>
         <item>O YouTube abriu já com essa busca (ou pelo menos abriu)?</item>
         <item>Os canais que estavam sem programação agora mostram programas, e os outros continuam iguais?</item>
+        <item>Aparece na lista um jogo de daqui a mais de um dia?</item>
     </string-array>
 </resources>

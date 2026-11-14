@@ -34,6 +34,12 @@ object PlayerCarga {
     /** Desde 10/11/2026 o guia fica num banco SQLite (GuiaBanco). O guia.json antigo é só apagado (migração). */
     private fun arquivoGuia(ctx: Context) = File(PlayerArmazem.pasta(ctx), "guia.db")
     private fun guiaJsonAntigo(ctx: Context) = File(PlayerArmazem.pasta(ctx), "guia.json")
+    /** "Meu time" com alcance de dias (ideia 16): as partidas achadas além da janela do guia, gravadas junto com ele. */
+    private fun arquivoAdiante(ctx: Context) = File(PlayerArmazem.pasta(ctx), "meutime.json")
+
+    /** As partidas do "Meu time" guardadas no último download do guia (até 7 dias à frente). Pequena; nunca baixa. */
+    fun partidasAdiante(ctx: Context): List<MeuTimeAdiante.Partida> =
+        MeuTimeAdiante.deJson(runCatching { arquivoAdiante(ctx).readText() }.getOrNull())
 
     fun apagarCache(ctx: Context, id: String) {
         arquivoCanais(ctx, id).delete()
@@ -41,7 +47,7 @@ object PlayerCarga {
         File(PlayerArmazem.pasta(ctx), "$id.series.json").delete()
         // O guia é de todas as contas juntas: refaz na próxima abertura.
         synchronized(this) { ultimaTentativaGuia = 0L }
-        GuiaBanco.apagar(arquivoGuia(ctx)); guiaJsonAntigo(ctx).delete()
+        GuiaBanco.apagar(arquivoGuia(ctx)); guiaJsonAntigo(ctx).delete(); arquivoAdiante(ctx).delete()
     }
 
     /** Canais de todas as contas, juntos e sem número repetido. */
@@ -335,6 +341,11 @@ object PlayerCarga {
             // do tamanho da lista de canais com guia; some no fim do download.
             val comPrograma = HashSet<String>()
             val fontes = PlayerArmazem.fontes(ctx)
+            // "Meu time" com alcance de dias (ideia 16): além da janela, só as partidas que casam com as palavras.
+            val palavras = LembretesTv.palavrasParaGuia(ctx)
+            val adiante = palavras.takeIf { it.isNotEmpty() }?.let { MeuTimeAdiante.Coletor(it, agora) }
+            val alem = if (adiante != null) agora + MeuTimeAdiante.JANELA_MS else Long.MIN_VALUE
+            val aoLerAlem: ((Programa) -> Unit)? = adiante?.let { c -> { p -> c.oferecer(p.guiaId, p.inicio, p.fim, p.titulo) } }
             try {
                 for (fonte in fontes) {
                     if (total >= Xmltv.MAX_PROGRAMAS_BANCO || discoFalhou) break
@@ -349,7 +360,7 @@ object PlayerCarga {
                                 val vistos = HashSet<String>()   // desta tentativa: só valem se o lote for gravado
                                 gravador.lote { inserir ->
                                     Xmltv.lerEmFluxo(Xml.newPullParser(), Xmltv.abrir(entrada), ids, desde, ate,
-                                        Xmltv.MAX_PROGRAMAS_BANCO - total) { p -> inserir(p); vistos += p.guiaId }
+                                        Xmltv.MAX_PROGRAMAS_BANCO - total, alem, aoLerAlem) { p -> inserir(p); vistos += p.guiaId }
                                 }.also { comPrograma += vistos }
                             }
                         }.onFailure { Log.w(TAG, "guia de ${fonte.servidorVisivel} (tentativa ${tentativa + 1}): ${it.javaClass.simpleName}") }
@@ -382,6 +393,8 @@ object PlayerCarga {
                     r.getOrNull()?.let { total += it }
                     if (r.exceptionOrNull() is android.database.SQLException) discoFalhou = true
                 }
+                // Grava a lista à parte já agora (antes de trocar o banco): o varrerDepois logo abaixo a usa.
+                if (total > 0) gravarAtomico(arquivoAdiante(ctx), MeuTimeAdiante.paraJson(adiante?.partidas().orEmpty()))
             } finally {
                 gravador.concluir(indexar = total > 0)
             }

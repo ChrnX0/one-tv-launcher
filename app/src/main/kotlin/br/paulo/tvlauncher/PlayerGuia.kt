@@ -76,6 +76,10 @@ object Xmltv {
      * É o que o PlayerCarga usa para gravar o guia direto no banco (GuiaBanco): a memória fica do tamanho de UM
      * programa, e não de dezenas de milhares (era o pico que pesava na TV de 2 GB). Devolve quantos programas entregou.
      * Mesmas regras de erro do [ler]: arquivo com defeito no meio ou corte no teto ficam com o que já foi entregue.
+     *
+     * "Meu time" com alcance de dias (ideia 16): com [aoLerAlem], os programas dos mesmos canais que começam depois de
+     * [ate] e antes de [alem] também são lidos e entregues a ele (sem contar no teto). Quem chama guarda só os que casam
+     * com as palavras do "Meu time" (MeuTimeAdiante.Coletor).
      */
     fun lerEmFluxo(
         parser: XmlPullParser,
@@ -84,6 +88,8 @@ object Xmltv {
         desde: Long = Long.MIN_VALUE,
         ate: Long = Long.MAX_VALUE,
         max: Int = MAX_PROGRAMAS,
+        alem: Long = Long.MIN_VALUE,
+        aoLerAlem: ((Programa) -> Unit)? = null,
         aoLer: (Programa) -> Unit,
     ): Int {
         // DOCDECL desligado de propósito: um guia baixado da internet não pode puxar entidades externas (ataque XXE).
@@ -102,7 +108,13 @@ object Xmltv {
                     val fim = data(parser.getAttributeValue(null, "stop"))
                     val quer = (canais.isEmpty() || canal in canais) && inicio != null && fim != null && fim > inicio &&
                         fim > desde && inicio < ate
-                    if (quer) lerPrograma(parser, canal, inicio!!, fim!!)?.let { aoLer(it); lidos++ } else pularElemento(parser)
+                    val alemDaJanela = !quer && aoLerAlem != null && (canais.isEmpty() || canal in canais) &&
+                        inicio != null && fim != null && fim > inicio && inicio >= ate && inicio < alem
+                    when {
+                        quer -> lerPrograma(parser, canal, inicio!!, fim!!)?.let { aoLer(it); lidos++ }
+                        alemDaJanela -> lerPrograma(parser, canal, inicio!!, fim!!)?.let { aoLerAlem!!(it) }
+                        else -> pularElemento(parser)
+                    }
                 }
                 evento = parser.next()
             }
