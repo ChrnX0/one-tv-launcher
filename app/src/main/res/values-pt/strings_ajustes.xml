@@ -54,4 +54,15 @@
     <string name="oc_aparece">na tela inicial</string>
     <string name="oc_aviso_titulo">App oculto</string>
     <string name="oc_aviso">Para mostrar de volta: Configurações › Tela inicial › Apps ocultos</string>
+    <string name="extras_LER_FOCO">Ler em voz alta o que está em foco, em todas as telas do launcher</string>
+    <!-- Ideia 44: sugestões -->
+    <string name="sug_desligar_titulo">Desligar a TV sozinha?</string>
+    <string name="sug_desligar">A TV ficou ligada depois da meia-noite em %1$d noites esta semana. Desligar depois de 2 horas sem ninguém mexer no controle? (Ela avisa 60 segundos antes.)</string>
+    <string name="sug_filtro_titulo">Ligar o filtro noturno?</string>
+    <string name="sug_filtro">A TV foi usada depois das 22 h em %1$d noites esta semana. O filtro noturno esquenta e escurece a tela à noite, cansa menos a vista.</string>
+    <string name="sug_ligar">Ligar</string>
+    <string name="sug_agora_nao">Agora não</string>
+    <string name="sug_nunca">Não sugerir mais</string>
+    <string name="sug_feito_titulo">Pronto</string>
+    <string name="sug_feito">Para mudar depois: Configurações › Tela e energia</string>
 </resources>

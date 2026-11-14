@@ -47,6 +47,8 @@
         <item>The “Hidden” card left the home screen: show hidden apps again in Settings › Home screen › Hidden apps</item>
         <item>Movies and Series also for M3U-only lists: the list\'s movies and episodes become a catalog</item>
         <item>Home: light color and temperature (while adjusting brightness, ▲ ▼ change the tone)</item>
+        <item>Read aloud what has the focus, on every launcher screen (Settings › Home screen › More options)</item>
+        <item>Suggestions at the right time, no AI: after late nights the home screen offers to turn the TV off by itself or turn on the night filter</item>
         <item>Share to the TV from your phone: YouTube videos open in YouTube, links open on the TV, text becomes a message (web panel installed as an app)</item>
         <item>TV diary: 7 days of what changed the TV (web panel, Claude, adb, the TV itself), in the web panel and for Claude; it can also call a link of yours</item>
         <item>When a text box opens on the TV, your phone can get “Type on the TV” (web panel notifications)</item>
@@ -86,6 +88,7 @@
         <item>cfg_abas</item>
         <item>apps_ocultos</item>
         <item>casa_cor</item>
+        <item>ler_foco</item>
         <item>compartilhar</item>
         <item>diario</item>
         <item>digitar_celular</item>
@@ -125,6 +128,7 @@
         <item>Open Settings and go down the tab menu</item>
         <item>Hide an app (hold OK on it), then open Settings › Home screen › Hidden apps and press OK on it</item>
         <item>In Home, hold OK on a color light and press ▲ ▼</item>
+        <item>Turn on Settings › Home screen › More options › Read aloud what has the focus, then move through Settings</item>
         <item>On the phone, share a YouTube video to “One TV”</item>
         <item>In the web panel, Extras &gt; TV diary &gt; Show the diary</item>
         <item>Turn on the notification “Text box open on the TV” and open the YouTube search on the TV</item>
@@ -164,6 +168,7 @@
         <item>Is it easier to find things, with the technical part only in Advanced?</item>
         <item>No “Hidden” card on the home screen, and the app came back?</item>
         <item>Did the light change tone?</item>
+        <item>Did the TV say the name of each line, without talking over itself?</item>
         <item>Did the video open in YouTube on the TV?</item>
         <item>Do today’s actions show up?</item>
         <item>Did the phone get “Type on the TV”, and did tapping it open the Remote tab?</item>
