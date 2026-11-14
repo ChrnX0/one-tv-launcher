@@ -90,7 +90,7 @@
         <item>Filmes e séries com som Dolby (AC3, E-AC3), DTS ou TrueHD agora tocam com som mesmo com “Volume parecido” ou “Voz mais clara” ligados; canais com áudio MP2 também</item>
         <item>Legendas de Blu-ray e DVD (PGS, VobSub) aparecem nos filmes e séries, e legenda ASS de anime sai com a cor e a posição originais</item>
         <item>Na rede: pastas por FTP, FTPS, SFTP e NFS (NAS, roteador com disco, PC Linux ou Mac), e o pendrive ou disco USB ligado na TV aparece sozinho em “Ligado na TV”</item>
-        <item>TV ao vivo grava no pendrive ou disco do hub USB (ou numa pasta do Windows/NAS): ▶▶ › Gravar no canal, OK num programa futuro da grade para agendar (também toda semana), e a tela Gravações em ▶▶ › Gravações</item>
+        <item>TV ao vivo grava no pendrive ou disco do hub USB (ou numa pasta do Windows/NAS): ▶▶ › Gravar no canal, OK num programa futuro da grade para agendar (também toda semana), e a tela Gravações na coluna da TV</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Buscar e Filtro no alto da coluna</item>
@@ -167,7 +167,7 @@
         <item>Ligue “Voz mais clara” no ▼ e abra um filme com som Dolby ou DTS (de Na rede ou de Filmes)</item>
         <item>Abra um filme MKV com legenda de Blu-ray (PGS) ou um anime com legenda ASS e ligue a legenda no ▼</item>
         <item>Ligue um pendrive com vídeos na TV e abra Na rede</item>
-        <item>Com um pendrive no hub, num canal: ▶▶ › Gravar 1 hora; depois de 2 min, ▶▶ › Gravações</item>
+        <item>Com um pendrive no hub, num canal: ▶▶ › Gravar 1 hora; depois de 2 min, OK › Gravações na coluna</item>
         <item>Na grade, OK num programa que começa em 10 min › Gravar; desligue a TV e espere ele acabar</item>
     </string-array>
     <string-array name="roteiro_perguntas">

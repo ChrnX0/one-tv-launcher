@@ -122,7 +122,7 @@ class PlayerActivity : Activity() {
         lista = PlayerListaTela(this, aoAssistir = { c, chave -> escolherNaLista(c, chave) }, aoFavoritar = { alternarFavorito(it) }, simples = simples,
             aoBuscar = { buscar() }, aoFiltros = { abrirFiltros() }, aoOcultarGrupo = { alternarOculto(it) },
             aoGuia = { cs, nome -> abrirGrade(cs, nome) },
-            aoGravacoes = { mostrarAvisoBreve(getString(R.string.coluna_gravacoes_em_breve)) })
+            aoGravacoes = { startActivity(android.content.Intent(this, GravacoesActivity::class.java)) })
         raiz.addView(lista.raiz, FrameLayout.LayoutParams(-1, -1))
         grade = PlayerGradeView(this, aoAssistir = { c -> grade.fechar(); lista.fechar(); if (c.id != atual?.id) sintonizar(c) else mostrarInfo() },
             aoFechar = { grade.fechar(); if (lista.aberta) lista.voltarFoco() })
@@ -608,8 +608,6 @@ class PlayerActivity : Activity() {
         val origem = if (c.arquivoDias > 0) TvDeVolta.origem(c.url) else null
         if (origem != null && Gravacoes.atual == null) itens += getString(R.string.tvv_abrir) to { abrirTvDeVolta(c, origem) }
         if (arquivo == null) opcoesGravacao(c, itens)
-        // Até a coluna ganhar o item "Gravações" (outra frente), a tela abre por aqui também.
-        itens += getString(R.string.grv_tela) to { startActivity(android.content.Intent(this, GravacoesActivity::class.java)) }
         itens += getString(R.string.imagem_opcao, PlayerImagem.rotulo(this, modoImagem)) to { escolherImagem() }
         // Para quem ouve pior (14/11/2026): ligar/desligar, marcado quando ligado. Só aparece se o aparelho tem o efeito.
         val marcadas = ArrayList<Int>()
