@@ -14,9 +14,13 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Os textos da TV seguem o idioma do Android</item>
+        <item>Casa separada por cômodo, e os cartões não cobrem mais as dicas</item>
+        <item>Backup toda noite no Google Drive, com restauração pelo Drive</item>
+        <item>Rotinas e despertadores podem rodar uma cena</item>
+        <item>O Claude faz mais na TV: Filmes, Séries e cenas</item>
         <item>Cada versão nova passa pelos testes antes de sair</item>
-        <item>Uma versão de teste pode ir primeiro para uma TV e depois para todas</item>
-        <item>O painel web também abre com cadeado (https) em casa</item>
+        <item>O painel web também abre com cadeado (https) em casa, na porta 8444</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -24,6 +28,7 @@
         <item>Aperte o botão Netflix do controle</item>
         <item>Segure o botão YouTube por 3 segundos</item>
         <item>Abra Filmes e volte com VOLTAR</item>
+        <item>Abra a Casa pelo painel rápido</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -31,5 +36,6 @@
         <item>Abriu o app escolhido para o botão?</item>
         <item>Abriu a lista para trocar o app do botão?</item>
         <item>A grade manteve o foco no mesmo pôster?</item>
+        <item>Os cartões aparecem por cômodo, sem cobrir as dicas de baixo?</item>
     </string-array>
 </resources>

@@ -17,9 +17,13 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>TV texts follow the Android language</item>
+        <item>Home screen grouped by room, and cards no longer cover the key hints</item>
+        <item>Nightly backup to Google Drive, with restore from Drive</item>
+        <item>Routines and alarms can run a scene</item>
+        <item>Claude can do more on the TV: Movies, Series and scenes</item>
         <item>Each new version runs the tests before it is published</item>
-        <item>A test version can go to one TV first, then to everyone</item>
-        <item>The web panel also opens with a padlock (https) at home</item>
+        <item>The web panel also opens with a padlock (https) at home, on port 8444</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -27,6 +31,7 @@
         <item>botao_netflix</item>
         <item>botao_youtube_segurar</item>
         <item>filmes_voltar</item>
+        <item>casa_comodos</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -34,6 +39,7 @@
         <item>Press the Netflix button on the remote</item>
         <item>Hold the YouTube button for 3 seconds</item>
         <item>Open Movies and go back with BACK</item>
+        <item>Open Home from the quick panel</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -41,5 +47,6 @@
         <item>Did the app chosen for that button open?</item>
         <item>Did the list to change the button\'s app open?</item>
         <item>Did the grid keep focus on the same poster?</item>
+        <item>Are the cards grouped by room, clear of the hints at the bottom?</item>
     </string-array>
 </resources>
