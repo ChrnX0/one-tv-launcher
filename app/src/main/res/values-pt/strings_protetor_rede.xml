@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Teclas do controle no protetor (ideia 28) -->
+    <string name="pt_dica_dispensar">OK dispensa · ◀ ▶ andam</string>
+    <string name="pt_dica_pausar">OK pausa ou retoma · ◀ ▶ andam</string>
+    <string name="pt_dica_andar">◀ ▶ andam · outra tecla fecha</string>
+    <!-- Fotos do protetor vindas de uma pasta da rede (ideia 27) -->
+    <string name="rede_fotos_usar">Usar estas fotos no protetor de tela</string>
+    <string name="rede_fotos_parar">Parar de usar estas fotos no protetor</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="one">%1$d foto · copiada para a TV, funciona com o computador desligado</item>
+        <item quantity="other">%1$d fotos · copiadas para a TV, funciona com o computador desligado</item>
+    </plurals>
+    <string name="rede_fotos_usando">Copiando as fotos. Elas aparecem na próxima vez que o protetor abrir.</string>
+    <string name="rede_fotos_paradas">O protetor deixou de usar esta pasta.</string>
+</resources>
