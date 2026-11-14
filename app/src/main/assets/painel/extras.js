@@ -171,6 +171,178 @@ $('formFotoExtras').addEventListener('submit', async (ev) => {
 });
 
 // ---------- cenas ----------
+// Cena montada por lista (14/11/2026, ideia 3): cada ação é uma linha com menus que mudam conforme o tipo. O JSON
+// continua por baixo (o mesmo {"acoes":[...]} do catálogo ComandosIa) e aparece em "Ver como JSON" para quem quiser.
+
+const MAX_ACOES_CENA = 5;
+const SIM_NAO = [['true', 'Ligar'], ['false', 'Desligar']];
+// Um campo: {k, op: [[valor, rótulo]...]} = menu; {k, num: [min, max], padrao, sufixo} = número; {k, txt, max, dica} = texto;
+// {k: 'pacote', app: true} = apps da TV; {k: 'entidade', casa: true} = aparelhos do Home Assistant; {hora: true} = despertador.
+const TIPOS_CENA = [
+  { tipo: 'abrir_app', nome: 'Abrir app', campos: [{ k: 'pacote', app: true }] },
+  { tipo: 'abrir_tela', nome: 'Abrir tela', campos: [{ k: 'tela', op: [['previsao', 'Previsão do tempo'], ['agenda', 'Agenda'],
+    ['despertador', 'Despertador'], ['configuracoes', 'Configurações'], ['inicio', 'Tela inicial']] }] },
+  { tipo: 'volume', nome: 'Volume', campos: [{ k: 'acao', op: [['subir', 'Aumentar'], ['descer', 'Diminuir'], ['mudo', 'Mudo']] },
+    { k: 'vezes', num: [1, 10], padrao: 3, sufixo: 'passos' }] },
+  { tipo: 'midia', nome: 'Mídia', campos: [{ k: 'acao', op: [['pausar', 'Pausar'], ['tocar', 'Continuar'], ['proxima', 'Próximo'], ['anterior', 'Anterior']] }] },
+  { tipo: 'modo_visita', nome: 'Modo visita', campos: [{ k: 'ligado', op: SIM_NAO, bool: true }] },
+  { tipo: 'tocar_canal', nome: 'Canal da TV', campos: [{ k: 'canal', txt: true, max: 40, dica: 'Nome ou número (ex.: Globo)' }] },
+  { tipo: 'casa', nome: 'Aparelho da casa', campos: [{ k: 'entidade', casa: true },
+    { k: 'acao', op: [['ligar', 'Ligar'], ['desligar', 'Desligar'], ['alternar', 'Alternar']] }] },
+  { tipo: 'recado', nome: 'Recado na tela', campos: [{ k: 'texto', txt: true, max: 200, dica: 'Mensagem' },
+    { k: 'segundos', op: [['60', '1 min na tela'], ['30', '30 s na tela'], ['300', '5 min na tela']], numero: true }] },
+  { tipo: 'timer', nome: 'Timer', campos: [{ k: 'minutos', num: [1, 240], padrao: 10, sufixo: 'min' }] },
+  { tipo: 'desligar_em', nome: 'Desligar a TV em', campos: [{ k: 'minutos', num: [0, 480], padrao: 30, sufixo: 'min (0 cancela)' }] },
+  { tipo: 'filtro_noturno', nome: 'Filtro noturno', campos: [{ k: 'ligado', op: SIM_NAO, bool: true }] },
+  { tipo: 'mural', nome: 'Mural da família', campos: [{ k: 'lista', op: [['compras', 'Lista de compras'], ['recados', 'Recado fixo']] },
+    { k: 'texto', txt: true, max: 60, dica: 'Item (ex.: leite)' }] },
+  { tipo: 'tocar_titulo', nome: 'Tocar filme ou série', campos: [{ k: 'titulo', txt: true, max: 80, dica: 'Nome do filme ou da série' }] },
+  { tipo: 'continuar', nome: 'Continuar o que estava vendo', campos: [] },
+  { tipo: 'proximo_episodio', nome: 'Próximo episódio', campos: [{ k: 'titulo', txt: true, max: 80, dica: 'Série (vazio = a última vista)', opcional: true }] },
+  { tipo: 'despertador', nome: 'Despertador', campos: [{ hora: true },
+    { k: 'dias', op: [['', 'Uma vez'], ['0,1,2,3,4,5,6', 'Todo dia'], ['1,2,3,4,5', 'Seg a sex'], ['0,6', 'Fim de semana']], dias: true }] },
+];
+const TIPO_POR_NOME = Object.fromEntries(TIPOS_CENA.map((t) => [t.tipo, t]));
+
+let acoesCena = [];   // [{tipo, ...campos}] no formato do catálogo
+let appsCena = null;  // [[pacote, nome]]
+let casaCena = null;  // [[id, nome]]
+
+async function listaApps() {
+  if (!appsCena) {
+    const r = await chamar('GET', '/api/apps');
+    appsCena = r.apps.map((a) => [a.pacote, a.nome]).sort((a, b) => a[1].localeCompare(b[1], 'pt-BR'));
+  }
+  return appsCena;
+}
+async function listaCasa() {
+  if (!casaCena) {
+    const r = await chamar('GET', '/api/extras/casa');
+    casaCena = (r.aparelhos || []).map((a) => [a.id, a.nome]);
+  }
+  return casaCena;
+}
+
+/** Ação nova com os valores padrão de cada campo (o primeiro do menu, o padrão do número). */
+function acaoPadrao(tipo) {
+  const a = { tipo };
+  for (const c of TIPO_POR_NOME[tipo].campos) {
+    if (c.hora) { a.hora = 7; a.minuto = 0; } else if (c.dias) { /* uma vez: sem dias */ } else if (c.op) a[c.k] = valorDe(c, c.op[0][0]);
+    else if (c.num) a[c.k] = c.padrao;
+  }
+  return a;
+}
+const valorDe = (c, v) => c.bool ? v === 'true' : c.numero ? Number(v) : v;
+
+function menu(rotulo, opcoes, atual, mudou) {
+  const s = document.createElement('select'); s.setAttribute('aria-label', rotulo);
+  for (const [v, t] of opcoes) { const o = document.createElement('option'); o.value = v; o.textContent = t; s.append(o); }
+  s.value = atual; s.addEventListener('change', () => mudou(s.value));
+  return s;
+}
+
+/** Os campos de uma linha. Apps e aparelhos da casa vêm das listas da TV (carregadas na 1ª vez). */
+function camposDe(a, i) {
+  const caixa = document.createElement('div'); caixa.className = 'cena-campos';
+  const t = TIPO_POR_NOME[a.tipo];
+  caixa.append(menu('Tipo da ação', TIPOS_CENA.map((x) => [x.tipo, x.nome]), a.tipo, (v) => { acoesCena[i] = acaoPadrao(v); desenharCena(); }));
+  for (const c of t.campos) {
+    if (c.hora) {
+      const h = document.createElement('input'); h.type = 'time'; h.setAttribute('aria-label', 'Hora');
+      h.value = String(a.hora).padStart(2, '0') + ':' + String(a.minuto).padStart(2, '0');
+      h.addEventListener('change', () => { const m = minutos(h.value); a.hora = Math.floor(m / 60); a.minuto = m % 60; atualizarCena(); });
+      caixa.append(h);
+    } else if (c.dias) {
+      caixa.append(menu('Dias', c.op, (a.dias || []).join(','), (v) => { if (v) a.dias = v.split(',').map(Number); else delete a.dias; atualizarCena(); }));
+    } else if (c.op) {
+      caixa.append(menu(c.k, c.op, String(a[c.k]), (v) => { a[c.k] = valorDe(c, v); atualizarCena(); }));
+    } else if (c.num) {
+      const n = document.createElement('input'); n.type = 'number'; n.min = c.num[0]; n.max = c.num[1]; n.value = a[c.k];
+      n.setAttribute('aria-label', c.sufixo); n.title = c.sufixo; n.placeholder = c.sufixo;
+      n.addEventListener('input', () => { a[c.k] = Math.round(Number(n.value)); atualizarCena(); });
+      const rot = document.createElement('label'); rot.className = 'cena-numero';
+      const suf = document.createElement('span'); suf.textContent = c.sufixo;
+      rot.append(n, suf); caixa.append(rot);
+    } else if (c.txt) {
+      const x = document.createElement('input'); x.type = 'text'; x.maxLength = c.max; x.placeholder = c.dica; x.value = a[c.k] || '';
+      x.setAttribute('aria-label', c.dica);
+      x.addEventListener('input', () => { if (x.value.trim() || !c.opcional) a[c.k] = x.value; else delete a[c.k]; atualizarCena(); });
+      caixa.append(x);
+    } else if (c.app || c.casa) {
+      const s = menu(c.app ? 'App' : 'Aparelho', [[a[c.k] || '', 'Carregando…']], a[c.k] || '', (v) => { a[c.k] = v; atualizarCena(); });
+      caixa.append(s);
+      (c.app ? listaApps() : listaCasa()).then((l) => {
+        if (!l.length) { s.options[0].textContent = c.casa ? 'Casa não configurada' : 'Nenhum app'; return; }
+        s.replaceChildren(...l.map(([v, t]) => { const o = document.createElement('option'); o.value = v; o.textContent = t; return o; }));
+        if (!a[c.k] || !l.some(([v]) => v === a[c.k])) a[c.k] = l[0][0];
+        s.value = a[c.k]; atualizarCena();
+      }).catch((e) => { s.options[0].textContent = 'Não consegui listar'; mostrar($('statusCena'), textoErro(e)); });
+    }
+  }
+  return caixa;
+}
+
+function botaoPequeno(texto, rotulo, classe, fazer) {
+  const b = document.createElement('button'); b.type = 'button'; b.className = classe + ' botao-pequeno';
+  b.textContent = texto; b.setAttribute('aria-label', rotulo); b.addEventListener('click', fazer);
+  return b;
+}
+
+function desenharCena() {
+  const lista = $('acoesLista');
+  lista.replaceChildren(...acoesCena.map((a, i) => {
+    const linha = document.createElement('div'); linha.className = 'cena-acao';
+    const num = document.createElement('span'); num.className = 'cena-num'; num.textContent = String(i + 1);
+    const mover = document.createElement('div'); mover.className = 'cena-mover';
+    const trocar = (j) => { [acoesCena[i], acoesCena[j]] = [acoesCena[j], acoesCena[i]]; desenharCena(); };
+    const subir = botaoPequeno('↑', 'Subir', 'botao-secundario', () => trocar(i - 1)); subir.disabled = i === 0;
+    const descer = botaoPequeno('↓', 'Descer', 'botao-secundario', () => trocar(i + 1)); descer.disabled = i === acoesCena.length - 1;
+    mover.append(subir, descer, botaoPequeno('✕', 'Tirar', 'botao-perigo', () => { acoesCena.splice(i, 1); desenharCena(); }));
+    linha.append(num, camposDe(a, i), mover);
+    return linha;
+  }));
+  atualizarCena();
+}
+
+/** Resumo legível de uma ação ("Volume: Aumentar, 3 passos"). */
+function resumoAcao(a) {
+  const t = TIPO_POR_NOME[a.tipo];
+  if (!t) return a.tipo;
+  const partes = t.campos.map((c) => {
+    if (c.hora) return String(a.hora).padStart(2, '0') + ':' + String(a.minuto).padStart(2, '0');
+    if (c.dias) return (c.op.find(([v]) => v === (a.dias || []).join(',')) || ['', ''])[1];
+    if (c.app) return (appsCena || []).find(([v]) => v === a[c.k])?.[1] || a[c.k];
+    if (c.casa) return (casaCena || []).find(([v]) => v === a[c.k])?.[1] || a[c.k];
+    if (c.op) return (c.op.find(([v]) => v === String(a[c.k])) || ['', a[c.k]])[1];
+    if (c.num) return a[c.k] + ' ' + c.sufixo.split(' ')[0];
+    return a[c.k] ? `"${a[c.k]}"` : '';
+  }).filter(Boolean);
+  return t.nome + (partes.length ? ': ' + partes.join(', ') : '');
+}
+
+function atualizarCena() {
+  $('acoesCena').value = acoesCena.length ? JSON.stringify({ acoes: acoesCena }, null, 1) : '';
+  $('btnAddAcao').disabled = acoesCena.length >= MAX_ACOES_CENA;
+  $('contaAcoes').textContent = acoesCena.length >= MAX_ACOES_CENA ? 'máximo de 5 ações' : `até ${MAX_ACOES_CENA} ações`;
+  $('resumoCena').hidden = !acoesCena.length;
+  $('resumoCenaTexto').textContent = acoesCena.map(resumoAcao).join(' · ');
+}
+
+/** Quem edita o JSON à mão: se for válido, a lista segue o JSON (tipos que a lista não conhece ficam só no JSON). */
+$('acoesCena').addEventListener('change', () => {
+  try {
+    const o = JSON.parse($('acoesCena').value || '{"acoes":[]}');
+    const l = Array.isArray(o) ? o : o.acoes;
+    if (!Array.isArray(l) || l.some((a) => !a || !TIPO_POR_NOME[a.tipo])) throw new Error();
+    acoesCena = l.slice(0, MAX_ACOES_CENA); desenharCena(); mostrar($('statusCena'), '');
+  } catch (e) { mostrar($('statusCena'), 'JSON inválido ou com tipo que a lista não conhece: {"acoes":[...]}.'); }
+});
+
+$('btnAddAcao').addEventListener('click', () => {
+  if (acoesCena.length >= MAX_ACOES_CENA) return;
+  acoesCena.push(acaoPadrao('abrir_app'));
+  desenharCena();
+});
 
 async function carregarCenas() {
   const r = await chamar('GET', '/api/extras/cenas');
@@ -180,6 +352,13 @@ async function carregarCenas() {
   for (const c of r.cenas) {
     const linha = document.createElement('div'); linha.className = 'linha-registro';
     const nome = document.createElement('strong'); nome.textContent = c.nome;
+    const editar = document.createElement('button'); editar.type = 'button'; editar.className = 'botao-secundario'; editar.textContent = 'Editar';
+    editar.addEventListener('click', () => {
+      try { const o = JSON.parse(c.acoes); acoesCena = (Array.isArray(o) ? o : o.acoes || []).slice(0, MAX_ACOES_CENA); } catch (e) { acoesCena = []; }
+      $('nomeCena').value = c.nome; desenharCena();
+      mostrar($('statusCena'), 'Salvar com o mesmo nome substitui a cena e gera um link novo (o antigo para de funcionar).');
+      $('nomeCena').scrollIntoView({ block: 'center' });
+    });
     const apagar = document.createElement('button'); apagar.type = 'button'; apagar.className = 'botao-secundario'; apagar.textContent = 'Apagar';
     apagar.addEventListener('click', async () => {
       try {
@@ -187,7 +366,8 @@ async function carregarCenas() {
           () => chamar('POST', '/api/extras/cenas/apagar', { nome: c.nome }))) carregarCenas();
       } catch (e) { mostrar($('statusCena'), textoErro(e)); }
     });
-    linha.append(nome, apagar);
+    const botoes = document.createElement('div'); botoes.className = 'cena-linha'; botoes.append(editar, apagar);
+    linha.append(nome, botoes);
     lista.append(linha);
   }
 }
@@ -195,15 +375,27 @@ async function carregarCenas() {
 $('formCena').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   const nome = $('nomeCena').value.trim();
-  let acoes;
-  try { acoes = JSON.parse($('acoesCena').value); } catch (e) { mostrar($('statusCena'), 'As ações precisam ser um JSON {"acoes":[...]}.'); return; }
+  if (!nome) { mostrar($('statusCena'), 'Dê um nome à cena.'); return; }
+  if (!acoesCena.length) { mostrar($('statusCena'), 'Adicione pelo menos uma ação.'); return; }
   try {
-    const r = await comPin('Criar cena', `Criar a cena "${nome}"?`, 'Criar', () => chamar('POST', '/api/extras/cenas/criar', { nome, acoes }));
+    const r = await comPin('Criar cena', `Criar a cena "${nome}"?`, 'Criar', () => chamar('POST', '/api/extras/cenas/criar', { nome, acoes: { acoes: acoesCena } }));
     if (!r) return;
     mostrar($('statusCena'), `Link (guarde agora, não aparece de novo): POST ${location.origin}/cena/${r.token}`);
+    acoesCena = []; $('nomeCena').value = ''; desenharCena();
     carregarCenas();
   } catch (e) { mostrar($('statusCena'), textoErro(e)); }
 });
+
+// Roda as ações na TV sem salvar (o mesmo caminho e as mesmas Confirmações de uma cena de verdade).
+$('btnTestarCena').addEventListener('click', async () => {
+  if (!acoesCena.length) { mostrar($('statusCena'), 'Adicione pelo menos uma ação.'); return; }
+  try {
+    const r = await chamar('POST', '/api/extras/cenas/testar', { acoes: { acoes: acoesCena } });
+    mostrar($('statusCena'), r.recusadas && r.recusadas.length ? 'Recusado: ' + r.recusadas.join('; ') : 'Enviado para a TV.');
+  } catch (e) { mostrar($('statusCena'), textoErro(e)); }
+});
+
+desenharCena();
 
 // ---------- loja curada ----------
 

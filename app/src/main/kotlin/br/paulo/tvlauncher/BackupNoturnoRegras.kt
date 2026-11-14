@@ -92,6 +92,10 @@ object BackupNoturnoRegras {
     fun proximaTentativa(agora: Long, tentativa: Int): Long? =
         if (tentativa + 1 > MAX_TENTATIVAS) null else agora + ESPERA_MIN * 60_000L
 
+    /** "onetv-backup-20261110.json" -> "10/11/2026" (lista do Restaurar do Drive); outro nome fica como veio. */
+    fun diaDoNome(nome: String): String =
+        Regex("""(\d{4})(\d{2})(\d{2})""").find(nome)?.destructured?.let { (a, m, d) -> "$d/$m/$a" } ?: nome
+
     /** "03:30" */
     fun hhmm(minutoDoDia: Int): String = "%02d:%02d".format(minutoDoDia / 60, minutoDoDia % 60)
 
@@ -100,18 +104,22 @@ object BackupNoturnoRegras {
 
     // ---------------------------------------------------------------- destino da cópia extra
 
-    /** Como o destino fica guardado: "" = só na TV, "pendrive", ou "smb:<id da conta de mídia>". */
+    /** Como o destino fica guardado: "" = só na TV, "pendrive", "drive" (Google Drive) ou "smb:<id da conta de mídia>". */
     const val SO_TV = ""
     const val PENDRIVE = "pendrive"
+    const val DRIVE = "drive"
     private const val PREFIXO_SMB = "smb:"
 
     fun destinoSmb(id: String) = PREFIXO_SMB + id
     /** O id da conta SMB do destino, ou null se o destino não é um NAS. */
     fun idSmb(destino: String): String? = destino.takeIf { it.startsWith(PREFIXO_SMB) }?.removePrefix(PREFIXO_SMB)?.ifEmpty { null }
 
-    /** OK na linha "Cópia extra": só na TV -> cada pasta SMB cadastrada -> pendrive -> só na TV. */
-    fun proximoDestino(atual: String, idsSmb: List<String>): String {
-        val opcoes = listOf(SO_TV) + idsSmb.map { destinoSmb(it) } + PENDRIVE
+    /**
+     * OK na linha "Cópia extra": só na TV -> cada pasta SMB cadastrada -> pendrive -> Google Drive (só com a conta
+     * conectada, [comDrive]) -> só na TV.
+     */
+    fun proximoDestino(atual: String, idsSmb: List<String>, comDrive: Boolean = false): String {
+        val opcoes = listOf(SO_TV) + idsSmb.map { destinoSmb(it) } + PENDRIVE + (if (comDrive) listOf(DRIVE) else emptyList())
         val i = opcoes.indexOf(atual)
         return opcoes[(i + 1) % opcoes.size]   // destino que sumiu (conta apagada): i = -1, volta ao começo
     }

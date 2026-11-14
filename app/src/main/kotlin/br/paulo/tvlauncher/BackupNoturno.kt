@@ -23,8 +23,8 @@ import java.util.concurrent.Executors
  * e só com a TV ociosa, monta o backup completo (BackupCompleto, o mesmo do "Baixar backup completo" do painel),
  * tranca com a senha do dono (CofreBackup) e guarda:
  *  1. na memória da TV: filesDir/backups-cifrados, as [BackupNoturnoRegras.MANTER] últimas;
- *  2. opcionalmente, uma cópia extra numa pasta SMB do NAS (as contas de "Mídias na rede") ou num pendrive, na pasta
- *     "OneTV-backup", também com as 7 últimas. A cópia de FORA é a que sobrevive a um reset de fábrica.
+ *  2. opcionalmente, uma cópia extra numa pasta SMB do NAS (as contas de "Mídias na rede"), num pendrive ou no Google
+ *     Drive (DriveBackup, 13/11/2026), na pasta "OneTV-backup", também com as 7 últimas. A cópia de FORA é a que sobrevive a um reset de fábrica.
  *
  * A senha: o painel pede a senha a cada download e não guarda. Aqui ela precisa ficar guardada (a TV gera o backup
  * sozinha de madrugada), então vai cifrada pelo Android Keystore (a mesma chave das contas de TV, PlayerArmazem).
@@ -64,7 +64,7 @@ object BackupNoturno {
         agendar(ctx)
     }
 
-    /** "" = só na TV; "pendrive"; "smb:<id>". Ver BackupNoturnoRegras. */
+    /** "" = só na TV; "pendrive"; "drive"; "smb:<id>". Ver BackupNoturnoRegras. */
     fun destino(ctx: Context): String = prefs(ctx).getString("destino", BackupNoturnoRegras.SO_TV) ?: BackupNoturnoRegras.SO_TV
     /** [nome] = nome da pasta do NAS, guardado só para mostrar (ler as contas decifra pelo Keystore: fora da tela). */
     fun definirDestino(ctx: Context, d: String, nome: String = "") {
@@ -211,6 +211,7 @@ object BackupNoturno {
         val extra: String? = try {
             when {
                 destino == BackupNoturnoRegras.PENDRIVE -> { enviarPendrive(app, nome, bytes); "pendrive" }
+                destino == BackupNoturnoRegras.DRIVE -> { DriveBackup.enviar(app, nome, bytes); "Google Drive" }
                 BackupNoturnoRegras.idSmb(destino) != null -> {
                     val conta = contasSmb(app).firstOrNull { it.id == BackupNoturnoRegras.idSmb(destino) }
                         ?: throw IllegalStateException("a pasta do NAS foi apagada")
@@ -308,6 +309,7 @@ object BackupNoturno {
 
     fun rotuloDestino(ctx: Context, d: String): String = when {
         d == BackupNoturnoRegras.PENDRIVE -> ctx.getString(R.string.bkn_destino_pendrive)
+        d == BackupNoturnoRegras.DRIVE -> ctx.getString(R.string.drv_destino)
         BackupNoturnoRegras.idSmb(d) != null ->
             ctx.getString(R.string.bkn_destino_nas, prefs(ctx).getString("destino_nome", null)?.ifEmpty { null } ?: "?")
         else -> ctx.getString(R.string.bkn_destino_tv)

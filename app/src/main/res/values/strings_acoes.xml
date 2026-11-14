@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Actions catalog (ComandosIa): what the TV shows before/after running an action from a scene, Claude or voice. -->
+<resources>
+    <string name="acao_recado">Show the message “%1$s”</string>
+    <string name="acao_timer">%1$d-minute timer</string>
+    <string name="acao_timer_nome">%1$d-minute timer (“%2$s”)</string>
+    <string name="acao_desligar_em">Turn the TV off in %1$d min</string>
+    <string name="acao_desligar_cancelar">Cancel the sleep timer</string>
+    <string name="acao_filtro_ligar">Turn on the night filter</string>
+    <string name="acao_filtro_desligar">Turn off the night filter</string>
+    <string name="acao_filtro_sem_servico">the night filter needs the accessibility service</string>
+    <string name="acao_rodar_cena">Run the scene “%1$s”</string>
+    <string name="acao_cena_nao_existe">the scene “%1$s” does not exist</string>
+    <string name="acao_cena_em_cena">a scene cannot run another scene</string>
+    <string name="acao_mural_compras">Add “%1$s” to the shopping list</string>
+    <string name="acao_mural_recado">Pin “%1$s” on the family board</string>
+    <string name="acao_tocar_titulo">Find and play “%1$s”</string>
+    <string name="acao_tocar">Play %1$s</string>
+    <string name="acao_continuar">Resume what was playing</string>
+    <string name="acao_proximo">Play the next episode</string>
+    <string name="acao_proximo_de">Next episode of %1$s</string>
+    <string name="acao_o_que_via">See what was playing</string>
+    <string name="acao_vendo">Last watched: %1$s</string>
+    <string name="acao_vendo_nada">Nothing watched yet in Movies and Series.</string>
+    <!-- Rotina e despertador que rodam cena (ideia 5) -->
+    <string name="rot_cena_uma">Run a scene</string>
+    <string name="rot_cena">Run scene: %1$s</string>
+    <string name="rot_cena_linha">Scene: %1$s</string>
+    <string name="rot_cena_sem">Create a scene first (web panel › Extras › Scenes)</string>
+    <string name="al_cena">Scene on stop: %1$s</string>
+</resources>

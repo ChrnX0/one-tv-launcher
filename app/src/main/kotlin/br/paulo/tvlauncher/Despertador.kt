@@ -31,7 +31,8 @@ object Despertador {
      * Ligado por padrão, inclusive nos alarmes salvos antes de existir (05/11/2026).
      */
     data class Alarme(val id: Int, val hora: Int, val minuto: Int, val dias: Int, val nome: String, val ativo: Boolean,
-                      val som: Int = 0, val rampa: Int = 0, val bomDia: Boolean = true)
+                      val som: Int = 0, val rampa: Int = 0, val bomDia: Boolean = true,
+                      val cena: String = "")   // ideia 5 (14/11/2026): cena que roda ao apertar Parar ("" = nenhuma)
 
     // Domingo a sábado, a inicial no idioma da TV ("D S T Q Q S S" / "S M T W T F S"). Lido a cada uso: segue a troca de idioma.
     val NOMES_DIAS: List<String> get() = java.text.DateFormatSymbols.getInstance().weekdays.drop(1).map { it.take(1).uppercase() }
@@ -42,7 +43,7 @@ object Despertador {
         // Um item estragado (sem id/hora/minuto) é pulado, em vez de derrubar a HOME inteira (revisão do painel, 04/11/2026).
         return (0 until arr.length()).mapNotNull { arr.optJSONObject(it) }.mapNotNull {
             try {
-                Alarme(it.getInt("id"), it.getInt("hora"), it.getInt("minuto"), it.optInt("dias"), it.optString("nome"), it.optBoolean("ativo", true), it.optInt("som", 0), it.optInt("rampa", 0), it.optBoolean("bom_dia", true))
+                Alarme(it.getInt("id"), it.getInt("hora"), it.getInt("minuto"), it.optInt("dias"), it.optString("nome"), it.optBoolean("ativo", true), it.optInt("som", 0), it.optInt("rampa", 0), it.optBoolean("bom_dia", true), it.optString("cena"))
             } catch (e: org.json.JSONException) { null }
         }.sortedWith(compareBy({ it.hora }, { it.minuto }))
     }
@@ -51,7 +52,7 @@ object Despertador {
         val arr = JSONArray()
         lista.forEach {
             arr.put(JSONObject().put("id", it.id).put("hora", it.hora).put("minuto", it.minuto)
-                .put("dias", it.dias).put("nome", it.nome).put("ativo", it.ativo).put("som", it.som).put("rampa", it.rampa).put("bom_dia", it.bomDia))
+                .put("dias", it.dias).put("nome", it.nome).put("ativo", it.ativo).put("som", it.som).put("rampa", it.rampa).put("bom_dia", it.bomDia).put("cena", it.cena))
         }
         ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString("alarmes", arr.toString()).apply()
         if (reagendar) agendar(ctx)

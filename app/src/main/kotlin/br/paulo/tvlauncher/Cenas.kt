@@ -74,6 +74,8 @@ object Cenas {
         if (!nomeValido(n)) return "erro: nome inválido (1 a 40 letras, números, espaço, _ ou -)"
         val plano = ComandosIa.conferir(acoesJson, apps)
         if (plano.acoes.isEmpty()) return "erro: nenhuma ação válida" + plano.recusadas.joinToString("; ", " (", ")")
+        // Cena dentro de cena (14/11/2026): recusada ao criar, para nunca haver cadeia nem laço (A roda B, B roda A).
+        if (plano.acoes.any { it is ComandosIa.Acao.RodarCena }) return "erro: " + ComandosIa.t(R.string.acao_cena_em_cena)
         val atuais = lista(ctx).filter { it.nome != n }
         if (atuais.size >= MAX_CENAS) return "erro: limite de $MAX_CENAS cenas"
         val token = gerarToken()
@@ -86,6 +88,17 @@ object Cenas {
         val pm = ctx.packageManager
         val i = android.content.Intent(android.content.Intent.ACTION_MAIN).addCategory(android.content.Intent.CATEGORY_LEANBACK_LAUNCHER)
         return pm.queryIntentActivities(i, 0).associate { it.activityInfo.packageName to it.loadLabel(pm).toString() }
+    }
+
+    /**
+     * A cena seguinte (ou anterior) numa lista de nomes, para os editores que mudam com OK / ◀ ▶ (rotina e despertador,
+     * ideia 5). [comNenhuma]: o "" (nenhuma cena) entra como primeira opção. Pura (CenaNaRotinaTest).
+     */
+    fun girar(nomes: List<String>, atual: String, passo: Int, comNenhuma: Boolean): String {
+        val opcoes = (if (comNenhuma) listOf("") else emptyList()) + nomes
+        if (opcoes.isEmpty()) return ""
+        val i = opcoes.indexOf(atual)
+        return opcoes[((if (i < 0) -1 else i) + passo).mod(opcoes.size)]
     }
 
     fun apagar(ctx: Context, nome: String): Boolean {
