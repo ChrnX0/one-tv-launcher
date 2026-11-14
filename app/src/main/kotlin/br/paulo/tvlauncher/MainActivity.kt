@@ -1308,8 +1308,8 @@ class MainActivity : Activity() {
         filaApps.execute {
             val temTv = PlayerArmazem.temContas(this)
             val ultimo = if (temTv) PlayerArmazem.ultimo(this)?.takeIf { ultimoLiberado(it) }?.let { programasDeAgora(it) } else null
-            // Séries e Filmes só existem numa conta Xtream (lista M3U não tem catálogo). fontes() decifra: fora da tela.
-            val temVod = temTv && PlayerArmazem.fontes(this).any { it.tipo == FonteTv.TIPO_XTREAM }
+            // Séries e Filmes: conta Xtream, ou lista M3U que traz filmes/episódios (ideia 26). fontes() decifra: fora da tela.
+            val temVod = temTv && PlayerCarga.temVod(this)
             // Os "apps recentes" saíram desta linha (10/11/2026, dono: "por que esses cards repetem os apps de baixo?").
             // A linha de apps já vem ordenada por uso recente, então os 4 recentes eram sempre os 4 primeiros apps de
             // baixo, em tamanho grande. E o "continuar assistindo" de verdade de Netflix/YouTube não é alcançável: a
