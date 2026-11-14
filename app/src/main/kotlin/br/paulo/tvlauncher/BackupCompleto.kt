@@ -98,6 +98,7 @@ object BackupCompleto {
         UnifiArmazem.chave(app)?.let { segredos.put("unifi", it) }
         TunelTailscale.chave(app)?.let { segredos.put("tailscale", it) }
         CasaHA.tokenParaBackup(app)?.let { segredos.put("casa_ha", it) }
+        ServicosContas.paraBackup(app)?.let { segredos.put("servicos", it) }   // contas dos serviços de filmes e séries
         val arquivos = JSONObject()
         val pastaPlayer = PlayerArmazem.pasta(app)
         for (n in ARQUIVOS_PLAYER) lerPequeno(File(pastaPlayer, n))?.let { arquivos.put("player/$n", it) }
@@ -157,6 +158,8 @@ object BackupCompleto {
         if (tailscale != null && !TunelTailscale.chaveValida(tailscale)) throw IllegalArgumentException("chave do Tailscale inválida no backup")
         val tokenCasa = segredos.optString("casa_ha").ifEmpty { null }
         if (tokenCasa != null && !CasaHA.tokenValido(tokenCasa)) throw IllegalArgumentException("token do Home Assistant inválido no backup")
+        val servicos = segredos.optString("servicos").ifEmpty { null }
+        if (servicos != null && ServicosFilmes.contasDeJson(servicos).isEmpty()) throw IllegalArgumentException("contas dos serviços de filmes inválidas no backup")
         val arquivos = o.optJSONObject("arquivos") ?: JSONObject()
         val bytes = mutableMapOf<String, ByteArray>()
         for (caminho in arquivos.keys()) {
@@ -198,6 +201,7 @@ object BackupCompleto {
             if (!PlayerArmazem.substituirContas(app, iptv)) throw IllegalStateException("não consegui gravar as contas de TV ao vivo")
             if (unifi != null && !UnifiArmazem.definirChave(app, unifi)) throw IllegalStateException("não consegui gravar a chave do UniFi")
             if (tailscale != null && !TunelTailscale.definirChave(app, tailscale)) throw IllegalStateException("não consegui gravar a chave do Tailscale")
+            if (servicos != null && !ServicosContas.restaurarDoBackup(app, servicos)) throw IllegalStateException("não consegui gravar as contas dos serviços de filmes")
             if (tokenCasa != null && !CasaHA.definirToken(app, tokenCasa)) throw IllegalStateException("não consegui gravar o token do Home Assistant")
             for ((caminho, b) in bytes) {
                 val destino = destinos.getValue(caminho)

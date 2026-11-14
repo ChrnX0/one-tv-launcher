@@ -100,6 +100,8 @@ object ManutencaoNoturna {
     /** Roda todos os passos agora e guarda o relatório. Também pelo adb (ComandosExtras "manutencao"). */
     fun rodar(ctx: Context): ManutencaoRegras.Relatorio {
         val app = ctx.applicationContext
+        // Token do Trakt (ServicosContas): renova antes de vencer. Fora do relatório (não é manutenção da TV).
+        runCatching { ServicosContas.renovarSePreciso(app) }
         val passos = listOf(
             passo("acesso") { acesso(app) },
             passo("permissoes") { permissoes(app) },

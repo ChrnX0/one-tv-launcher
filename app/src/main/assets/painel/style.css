@@ -648,3 +648,9 @@ body.ocupado::before { opacity: 1; animation: carregando 1.1s linear infinite; }
 #abaConfig label { display: flex; gap: 8px; align-items: center; margin: 10px 0; flex-wrap: wrap; }
 #abaConfig .linha-confirmacao { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin: 10px 0; }
 #abaConfig .linha-confirmacao select { flex: 0 1 200px; }
+
+/* Serviços de filmes e séries (aba Configurações): um bloco por serviço e o código do login em letra grande. */
+.linha-servico { padding: 10px 0; border-top: 1px solid rgba(255,255,255,.08); }
+.linha-servico:first-child { border-top: 0; }
+.linha-servico input { display: block; width: 100%; max-width: 360px; margin: 6px 0; }
+.codigo-grande { font-size: 2rem; font-weight: 600; letter-spacing: .18em; margin: 8px 0; }

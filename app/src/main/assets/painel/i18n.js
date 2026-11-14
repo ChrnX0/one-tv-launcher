@@ -9,6 +9,37 @@
   if (/^pt/i.test(idioma)) return;
   document.documentElement.lang = 'en';
   const T = {
+"Usar a minha conta do MDBList (opcional)": "Use my own MDBList account (optional)",
+"1. Toque em ": "1. Tap ",
+"Serviços de filmes e séries": "Movie and series services",
+"Contas opcionais: nada sai da TV antes de você entrar. Entrar e sair pedem o PIN.": "Optional accounts: nothing leaves the TV until you sign in. Signing in and out asks for the PIN.",
+"Deixa o que você viu e a sua lista iguais aos do celular.": "Keeps what you watched and your watchlist in sync with your phone.",
+"Igual ao Trakt, ótimo também para anime. Use um ou os dois.": "Like Trakt, also great for anime. Use one or both.",
+"Notas do IMDb, Rotten Tomatoes, Letterboxd e listas como o Top 250.": "Ratings from IMDb, Rotten Tomatoes, Letterboxd and lists such as Top 250.",
+"Sinopse, elenco e data do próximo episódio, no idioma da TV.": "Plot, cast and next episode date, in the TV's language.",
+"Legendas da internet. Sem conta: 5 por dia. Com conta grátis: 20.": "Online subtitles. Without an account: 5 a day. With a free account: 20.",
+"Esta versão do launcher ainda não tem as chaves destes serviços. Eles aparecem depois da próxima atualização.": "This launcher version does not have the keys of these services yet. They show up after the next update.",
+" · ligado": " · on",
+" · desligado": " · off",
+" · entrando…": " · signing in…",
+" · conectado": " · connected",
+"Gravar chave": "Save key",
+"Chave da API do MDBList": "MDBList API key",
+"Usuário do OpenSubtitles": "OpenSubtitles user name",
+"Senha do OpenSubtitles": "OpenSubtitles password",
+"Esta página continua sozinha quando você terminar.": "This page continues by itself when you finish.",
+" (API Key). Copie e cole aqui.": " (API Key). Copy and paste it here.",
+"A chave fica em ": "The key is at ",
+"QR code do login": "Sign-in QR code",
+"Gravar a chave do MDBList?": "Save the MDBList key?",
+"A TV confere a chave no MDBList antes de gravar.": "The TV checks the key with MDBList before saving it.",
+"Entrar no OpenSubtitles?": "Sign in to OpenSubtitles?",
+"A TV entra na sua conta para conferir e guarda tudo cifrado.": "The TV signs in to check and stores everything encrypted.",
+"MDBList conectado.": "MDBList connected.",
+"OpenSubtitles conectado.": "OpenSubtitles connected.",
+"A chave do MDBList tem só letras e números.": "The MDBList key has only letters and numbers.",
+"Digite o usuário e a senha do OpenSubtitles.": "Type the OpenSubtitles user name and password.",
+"Gravar": "Save",
 "\"Coloca o último episódio de Round 6 na Netflix.\"": "\"Put on the latest episode of Squid Game on Netflix.\"",
 "\"Cria um despertador às 6:30 nos dias úteis.\"": "\"Set an alarm for 6:30 on weekdays.\"",
 "\"Faz um checkup da TV e da internet.\"": "\"Run a checkup of the TV and the internet.\"",
@@ -820,6 +851,50 @@
 "PIN do painel trocado. Use o novo da próxima vez.": "Panel PIN changed. Use the new one next time.",
 };
   const P = [
+[
+"^ · conectado como (.+)$",
+" · connected as $1"
+],
+[
+"^Sair do (.+?)\\?$",
+"Sign out of $1?"
+],
+[
+"^A TV esquece a conta e para de falar com o (.+?)\\. O que está lá continua lá\\.$",
+"The TV forgets the account and stops talking to $1. Your data there stays there."
+],
+[
+"^(.+?): saiu\\.$",
+"$1: signed out."
+],
+[
+"^Entrar no (.+?)\\?$",
+"Sign in to $1?"
+],
+[
+"^A TV pede um código ao (.+?)\\. Depois você abre o link, entra na sua conta e confirma o código\\.$",
+"The TV asks $1 for a code. Then you open the link, sign in to your account and confirm the code."
+],
+[
+"^\\(abre o (.+?)\\)\\. 2\\. Entre na sua conta e confirme o código:$",
+"(opens $1). 2. Sign in to your account and confirm the code:"
+],
+[
+"^ \\(abre o (.+?)\\)\\. 2\\. Entre na sua conta e confirme o código:$",
+" (opens $1). 2. Sign in to your account and confirm the code:"
+],
+[
+"^(.+?) conectado como (.+?)\\.$",
+"$1 connected as $2."
+],
+[
+"^(.+?) conectado\\.$",
+"$1 connected."
+],
+[
+"^Não deu certo: (.+)$",
+"It did not work: $1"
+],
 [
 "^\\((\\d+) canal\\(is\\) ou categoria\\(s\\) escolhidos\\)$",
 "($1 channel(s) or category(ies) chosen)"

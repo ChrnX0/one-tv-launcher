@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Serviços de filmes e séries (ServicosFilmes.kt, ServicosFilmesActivity.kt). Arquivo próprio para não conflitar com outros PRs. -->
+<resources>
+    <string name="sv_titulo">Serviços de filmes e séries</string>
+    <string name="sv_subtitulo">Contas opcionais. Nada sai da TV antes de você entrar.</string>
+    <string name="sv_linha">Serviços de filmes e séries</string>
+    <string name="sv_linha_det">Trakt, Simkl, MDBList, TMDB e OpenSubtitles</string>
+    <string name="sv_trakt_det">Deixa o que você viu e a sua lista iguais aos do celular</string>
+    <string name="sv_simkl_det">Igual ao Trakt, ótimo também para anime. Use um ou os dois</string>
+    <string name="sv_mdblist_det">Notas do IMDb, Rotten Tomatoes, Letterboxd e listas como o Top 250</string>
+    <string name="sv_tmdb_det">Sinopse, elenco e data do próximo episódio, no idioma da TV</string>
+    <string name="sv_os_det">Legendas da internet. Sem conta: 5 por dia. Com conta grátis: 20</string>
+    <string name="sv_desligado">Entrar</string>
+    <string name="sv_entrando">entrando…</string>
+    <string name="sv_conectado">conectado</string>
+    <string name="sv_conectado_como">%1$s</string>
+    <string name="sv_ativo">ligado</string>
+    <string name="sv_sem_chave">Esta versão ainda não tem as chaves destes serviços. Eles aparecem depois da próxima atualização.</string>
+    <string name="sv_pedindo">Pedindo um código ao %1$s…</string>
+    <string name="sv_passos">1. No celular, abra %1$s (ou aponte a câmera para o código à direita).\n2. Entre no %2$s e digite o código:</string>
+    <string name="sv_espera">Esta tela continua sozinha. VOLTAR cancela.</string>
+    <string name="sv_ok">Pronto: %1$s conectado%2$s.</string>
+    <string name="sv_ok_como"> como %1$s</string>
+    <string name="sv_falhou">Não deu certo: %1$s</string>
+    <string name="sv_motivo_venceu">o código venceu. Tente de novo.</string>
+    <string name="sv_motivo_recusado">o acesso foi recusado no celular.</string>
+    <string name="sv_motivo_usado">este código já foi usado. Tente de novo.</string>
+    <string name="sv_motivo_erro">o serviço não respondeu. Tente de novo daqui a pouco.</string>
+    <string name="sv_sair_pergunta">Sair do %1$s? A TV esquece a conta e para de falar com o %1$s. O que está lá continua lá.</string>
+    <string name="sv_sair">Sair</string>
+    <string name="sv_fechar">Fechar</string>
+    <string name="sv_mdblist_titulo">Chave do MDBList</string>
+    <string name="sv_mdblist_texto">Opcional: as notas já funcionam sem ela. Para usar a sua conta do MDBList (suas listas, sua cota), entre em mdblist.com, abra Preferences, copie a API key e digite aqui (mais fácil pelo painel web, aba Configurações, colando).</string>
+    <string name="sv_mdblist_dica">Chave da API</string>
+    <string name="sv_os_titulo">Conta do OpenSubtitles</string>
+    <string name="sv_os_texto">Opcional: com conta grátis em opensubtitles.com o limite sobe de 5 para 20 legendas por dia.</string>
+    <string name="sv_os_usuario">Usuário</string>
+    <string name="sv_os_senha">Senha</string>
+    <string name="sv_gravar">Gravar</string>
+    <string name="sv_cancelar">Cancelar</string>
+    <string name="sv_conferindo">Conferindo com o %1$s…</string>
+    <string name="sv_limite_dia">Acabou o limite de legendas do dia. Renova em 24 h (com conta no OpenSubtitles são 20 por dia).</string>
+    <string name="sv_tmdb_atribuicao">This product uses the TMDB API but is not endorsed or certified by TMDB. (Este produto usa a API do TMDB, mas não é endossado nem certificado pelo TMDB.)</string>
+</resources>

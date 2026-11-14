@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Movie and series services (ServicosFilmes.kt, ServicosFilmesActivity.kt). Own file so it does not conflict with other PRs. -->
+<resources>
+    <string name="sv_titulo">Movie and series services</string>
+    <string name="sv_subtitulo">Optional accounts. Nothing is sent outside the TV until you sign in.</string>
+    <string name="sv_linha">Movie and series services</string>
+    <string name="sv_linha_det">Trakt, Simkl, MDBList, TMDB and OpenSubtitles</string>
+    <string name="sv_trakt_det">Keeps what you watched and your watchlist in sync with your phone</string>
+    <string name="sv_simkl_det">Like Trakt, also great for anime. Use one or both</string>
+    <string name="sv_mdblist_det">Ratings from IMDb, Rotten Tomatoes, Letterboxd and lists such as Top 250</string>
+    <string name="sv_tmdb_det">Plot, cast and next episode date, in the TV\'s language</string>
+    <string name="sv_os_det">Online subtitles. Without an account: 5 a day. With a free account: 20</string>
+    <string name="sv_desligado">Sign in</string>
+    <string name="sv_entrando">signing in…</string>
+    <string name="sv_conectado">connected</string>
+    <string name="sv_conectado_como">%1$s</string>
+    <string name="sv_ativo">on</string>
+    <string name="sv_sem_chave">This build does not have the keys of these services yet. They show up after the next update.</string>
+    <string name="sv_pedindo">Asking %1$s for a code…</string>
+    <string name="sv_passos">1. On your phone, open %1$s (or point the camera at the code on the right).\n2. Sign in to %2$s and type the code:</string>
+    <string name="sv_espera">This screen continues by itself. BACK cancels.</string>
+    <string name="sv_ok">Done: %1$s is connected%2$s.</string>
+    <string name="sv_ok_como"> as %1$s</string>
+    <string name="sv_falhou">It did not work: %1$s</string>
+    <string name="sv_motivo_venceu">the code expired. Try again.</string>
+    <string name="sv_motivo_recusado">access was denied on the phone.</string>
+    <string name="sv_motivo_usado">this code was already used. Try again.</string>
+    <string name="sv_motivo_erro">the service did not answer. Try again in a moment.</string>
+    <string name="sv_sair_pergunta">Sign out of %1$s? The TV forgets the account and stops talking to %1$s. Your data there stays there.</string>
+    <string name="sv_sair">Sign out</string>
+    <string name="sv_fechar">Close</string>
+    <string name="sv_mdblist_titulo">MDBList key</string>
+    <string name="sv_mdblist_texto">Optional: ratings already work without it. To use your own MDBList account (your lists, your quota), sign in at mdblist.com, open Preferences, copy the API key and type it here (easier from the web panel, Settings tab, by pasting it).</string>
+    <string name="sv_mdblist_dica">API key</string>
+    <string name="sv_os_titulo">OpenSubtitles account</string>
+    <string name="sv_os_texto">Optional: with a free account at opensubtitles.com the limit goes from 5 to 20 subtitles a day.</string>
+    <string name="sv_os_usuario">User name</string>
+    <string name="sv_os_senha">Password</string>
+    <string name="sv_gravar">Save</string>
+    <string name="sv_cancelar">Cancel</string>
+    <string name="sv_conferindo">Checking with %1$s…</string>
+    <string name="sv_limite_dia">The daily subtitle limit is over. It renews in 24 h (with an OpenSubtitles account it is 20 a day).</string>
+    <string name="sv_tmdb_atribuicao">This product uses the TMDB API but is not endorsed or certified by TMDB.</string>
+</resources>

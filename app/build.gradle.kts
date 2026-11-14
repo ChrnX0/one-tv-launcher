@@ -21,6 +21,10 @@ val pessoal = Properties().apply {
 // Texto Java entre aspas, com \ e " escapados (senão um valor com aspas quebra a compilação do BuildConfig).
 fun textoJava(v: String) = "\"" + v.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
 fun pessoalTexto(chave: String, padrao: String = "") = textoJava(pessoal.getProperty(chave, padrao).trim())
+// Chaves dos APLICATIVOS de filmes e séries (ServicosFilmes.kt, 14/11/2026): uma por projeto, nunca no git. No PC vêm do
+// pessoal.properties; no GitHub Actions, das variáveis de ambiente que o release.yml preenche com os secrets de mesmo nome.
+// Sem a chave, o serviço some da tela do launcher.
+fun chaveApp(nome: String) = textoJava((System.getenv(nome) ?: pessoal.getProperty(nome.lowercase(), "")).trim())
 fun pessoalNumero(chave: String, padrao: Double) = (pessoal.getProperty(chave)?.trim()?.toDoubleOrNull() ?: padrao).toString()
 
 android {
@@ -52,6 +56,7 @@ android {
             "com.google.android.youtube.tv,com.google.android.youtube.tvmusic,com.netflix.ninja,com.android.vending"))
         buildConfigField("String", "BOTAO_NETFLIX", pessoalTexto("botao_netflix", "com.netflix.ninja"))
         buildConfigField("String", "ECLIPSES", pessoalTexto("eclipses"))
+        for (k in listOf("TMDB_CHAVE", "TRAKT_ID", "TRAKT_SEGREDO", "SIMKL_ID", "OPENSUBTITLES_CHAVE", "MDBLIST_CHAVE")) buildConfigField("String", k, chaveApp(k))
     }
 
     // Um APK por arquitetura (12/11/2026, pedido do dono: versões de 32 e 64 bits no GitHub).

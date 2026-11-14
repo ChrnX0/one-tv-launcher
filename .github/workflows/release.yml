@@ -122,6 +122,14 @@ jobs:
         env:
           ASSINATURA_SENHA: ${{ secrets.ASSINATURA_SENHA }}
           ASSINATURA_ALIAS: ${{ secrets.ASSINATURA_ALIAS }}
+          # Chaves dos aplicativos de filmes e séries (ServicosFilmes.kt): só no build que publica. Sem o secret, o
+          # serviço some da tela (docs/servicos-filmes.md diz como criar cada uma).
+          TMDB_CHAVE: ${{ github.event_name == 'workflow_dispatch' && secrets.TMDB_CHAVE || '' }}
+          TRAKT_ID: ${{ github.event_name == 'workflow_dispatch' && secrets.TRAKT_ID || '' }}
+          TRAKT_SEGREDO: ${{ github.event_name == 'workflow_dispatch' && secrets.TRAKT_SEGREDO || '' }}
+          SIMKL_ID: ${{ github.event_name == 'workflow_dispatch' && secrets.SIMKL_ID || '' }}
+          OPENSUBTITLES_CHAVE: ${{ github.event_name == 'workflow_dispatch' && secrets.OPENSUBTITLES_CHAVE || '' }}
+          MDBLIST_CHAVE: ${{ github.event_name == 'workflow_dispatch' && secrets.MDBLIST_CHAVE || '' }}
         run: |
           chmod +x gradlew
           ./gradlew :app:assembleRelease --no-daemon --stacktrace
