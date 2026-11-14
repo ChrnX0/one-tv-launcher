@@ -84,8 +84,8 @@
         android:name=".LauncherApp"
         android:allowBackup="false"
         android:networkSecurityConfig="@xml/rede"
-        android:icon="@android:drawable/sym_def_app_icon"
-        android:banner="@android:drawable/sym_def_app_icon"
+        android:icon="@mipmap/ic_onetv"
+        android:banner="@drawable/banner_onetv"
         android:label="@string/app_nome"
         android:manageSpaceActivity=".GuardarDadosActivity"
         android:theme="@style/One">

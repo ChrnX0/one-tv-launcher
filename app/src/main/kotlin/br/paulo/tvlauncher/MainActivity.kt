@@ -245,6 +245,7 @@ class MainActivity : Activity() {
         ui.post(tarefaClima)
         ui.post(tarefaEclipse)
         ui.post(tarefaTimer)
+        vigiaTocando.ligar()   // ideia 75: pílula Tocando agora, por aviso das sessões de mídia
         atualizarPilulaAlarme()   // o alarme pode ter mudado na tela do despertador
         atualizarPilulaVencimento()
         atualizarPilulaJogo()
@@ -279,6 +280,8 @@ class MainActivity : Activity() {
         ui.removeCallbacks(tarefaClima)
         ui.removeCallbacks(tarefaEclipse)
         ui.removeCallbacks(tarefaTimer)
+        ui.removeCallbacks(tarefaTocando)
+        vigiaTocando.desligar()
         getSharedPreferences("launcher", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteLocal)
         pararVigiaRede()
         menuAberto?.dismiss()
@@ -438,6 +441,41 @@ class MainActivity : Activity() {
             addView(voz, LinearLayout.LayoutParams(alturaPilula, alturaPilula))
         }
         val capsulaClima = capsula().apply { addView(blocoClima, LinearLayout.LayoutParams(WRAP, alturaPilula)) }
+        // Ideia 75 (14/11/2026): "Tocando agora", cápsula própria depois do clima (chave Tocando agora, em Extras). Capa do
+        // que toca (ou o ícone do app), barrinhas que mexem só tocando, título e artista/app. OK pausa ou continua; segurar
+        // OK abre o app. Some sem nada tocando e 10 min depois de pausar (ver mostrarTocando).
+        capaTocando = ImageView(this).apply {
+            scaleType = ImageView.ScaleType.CENTER_CROP
+            outlineProvider = object : android.view.ViewOutlineProvider() {
+                override fun getOutline(v: View, o: android.graphics.Outline) = o.setRoundRect(0, 0, v.width, v.height, dp(5).toFloat())
+            }
+            clipToOutline = true
+        }
+        barrasTocando = BarrasSom(this)
+        val corSub = 0xB3F2F5F3.toInt()
+        txtTocandoTitulo = texto(12.5f, Estilo.TEXTO, Typeface.create(fonteUi, Typeface.BOLD)).apply {
+            includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(220)
+        }
+        txtTocandoSub = texto(12.5f, corSub).apply {
+            includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(130)
+        }
+        pilulaTocando = pilula(vidro = false).apply {
+            setPadding(dp(6), 0, dp(14), 0)   // a capa encosta mais na borda que um ícone
+            addView(capaTocando, LinearLayout.LayoutParams(dp(22), dp(22)).apply { marginEnd = dp(8) })
+            addView(barrasTocando, LinearLayout.LayoutParams(dp(11), dp(12)).apply { marginEnd = dp(8) })
+            addView(txtTocandoTitulo)
+            addView(texto(12.5f, corSub).apply { text = " · "; includeFontPadding = false })
+            addView(txtTocandoSub)
+            setOnClickListener {
+                barrasTocando.tocando = !barrasTocando.tocando   // resposta na hora; o aviso da sessão confirma
+                filaApps.execute { runCatching { TocandoAgoraTv.controlar(this@MainActivity, "alternar") } }
+            }
+            setOnLongClickListener { pacoteTocando?.let { abrir(it) }; true }
+        }
+        capsulaTocando = capsula().apply {
+            visibility = View.GONE
+            addView(pilulaTocando, LinearLayout.LayoutParams(WRAP, alturaPilula))
+        }
         // Avisos: despertador, timer e lista vencendo. A cápsula some quando os três somem (ver atualizarAvisos).
         avisos = capsula().apply { addView(pilulaAlarme, lpPilula()) }
         val esquerda = LinearLayout(this).apply {
@@ -447,6 +485,7 @@ class MainActivity : Activity() {
             clipToPadding = false
             addView(busca, LinearLayout.LayoutParams(WRAP, dp(ALTURA_TOPO)))
             addView(capsulaClima, LinearLayout.LayoutParams(WRAP, dp(ALTURA_TOPO)).apply { marginStart = dp(8) })
+            addView(capsulaTocando, LinearLayout.LayoutParams(WRAP, dp(ALTURA_TOPO)).apply { marginStart = dp(8) })
             addView(avisos, LinearLayout.LayoutParams(WRAP, dp(ALTURA_TOPO)).apply { marginStart = dp(8) })
         }
         topo.addView(esquerda, FrameLayout.LayoutParams(WRAP, dp(ALTURA_TOPO)).apply {
@@ -1123,6 +1162,49 @@ class MainActivity : Activity() {
 
     private lateinit var txtJogo: TextView
     private lateinit var pilulaJogo: LinearLayout
+
+    // ---- Tocando agora (ideia 75)
+    private lateinit var capsulaTocando: LinearLayout
+    private lateinit var pilulaTocando: LinearLayout
+    private lateinit var capaTocando: ImageView
+    private lateinit var barrasTocando: BarrasSom
+    private lateinit var txtTocandoTitulo: TextView
+    private lateinit var txtTocandoSub: TextView
+    private var pacoteTocando: String? = null
+    private var capaTocandoDe: String? = null   // pacote + título da capa na tela (não redesenha a mesma)
+    private val vigiaTocando by lazy { TocandoAgoraTv.Vigia(this) { ui.removeCallbacks(tarefaTocando); ui.post(tarefaTocando) } }
+
+    /** Lê o que toca fora da thread da tela e mostra ou esconde a pílula. Pausada e visível: confere de novo em 1 min. */
+    private val tarefaTocando = Runnable {
+        filaApps.execute {
+            val p = runCatching { TocandoAgoraTv.paraHome(this) }.getOrNull()
+            val icone = if (p != null && p.capa == null) runCatching { packageManager.getApplicationIcon(p.pacote) }.getOrNull() else null
+            ui.post { if (!isDestroyed) mostrarTocando(p, icone) }
+        }
+    }
+
+    private fun mostrarTocando(p: TocandoAgoraTv.Pilula?, icone: android.graphics.drawable.Drawable?) {
+        ui.removeCallbacks(tarefaTocando)
+        if (p == null) {
+            if (pilulaTocando.hasFocus()) linhaApps.requestFocus()   // o foco não pode ficar numa pílula invisível
+            capsulaTocando.visibility = View.GONE
+            barrasTocando.tocando = false
+            pacoteTocando = null; capaTocandoDe = null; capaTocando.setImageDrawable(null)
+            return
+        }
+        pacoteTocando = p.pacote
+        txtTocandoTitulo.text = p.titulo
+        txtTocandoSub.text = p.subtitulo
+        barrasTocando.tocando = p.tocando
+        val de = p.pacote + "\u0000" + p.titulo + (if (p.capa != null) "" else "\u0000icone")
+        if (de != capaTocandoDe) {
+            capaTocandoDe = de
+            if (p.capa != null) capaTocando.setImageBitmap(p.capa) else capaTocando.setImageDrawable(icone)
+        }
+        pilulaTocando.contentDescription = getString(R.string.l75_pilula, p.titulo, p.subtitulo)
+        capsulaTocando.visibility = View.VISIBLE
+        if (!p.tocando) ui.postDelayed(tarefaTocando, 60_000)
+    }
 
     /** Ideia 12: lê os lembretes fora da tela e mostra/esconde a pílula do próximo jogo do "Meu time" (LembretesTv). */
     private fun atualizarPilulaJogo() {

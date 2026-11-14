@@ -33,4 +33,6 @@
     <string name="l72_guia_agora">%1$s agora: %2$s (até %3$s)</string>
     <string name="l72_guia_nada_agora">%1$s: nada no guia agora</string>
     <string name="l72_guia_depois">Depois: %1$s (%2$s)</string>
+    <!-- Ideia 75: a pílula Tocando agora da HOME (acessibilidade e MCP acham pelo nome). -->
+    <string name="l75_pilula">Tocando agora: %1$s, %2$s. OK pausa ou continua; segure OK para abrir o app</string>
 </resources>

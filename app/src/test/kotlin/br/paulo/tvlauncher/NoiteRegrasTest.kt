@@ -87,6 +87,20 @@ class NoiteRegrasTest {
         assertNull(TocandoAgora.escolher(emptyList()))
     }
 
+    @Test fun pilulaTocandoAgora() {   // ideia 75
+        assertTrue(TocandoAgora.mostrarPilula("Round 6", true, -1))
+        assertTrue(TocandoAgora.mostrarPilula("Round 6", false, 60_000))
+        assertFalse(TocandoAgora.mostrarPilula("Round 6", false, TocandoAgora.PAUSADA_MAX_MS + 1))
+        assertFalse(TocandoAgora.mostrarPilula("Round 6", false, -1))
+        assertFalse(TocandoAgora.mostrarPilula(" ", true, 0))
+        assertEquals("Queen", TocandoAgora.subtitulo(" Queen ", "Spotify"))
+        assertEquals("Netflix", TocandoAgora.subtitulo("", "Netflix"))
+        assertEquals("Um dois", TocandoAgora.tituloPilula(" Um\n dois "))
+        val longo = TocandoAgora.tituloPilula("x".repeat(80))
+        assertEquals(TocandoAgora.MAX_TITULO_PILULA, longo.length)
+        assertTrue(longo.endsWith("…"))
+    }
+
     // ---------------- recado por link
 
     @Test fun recadoNoFormatoTvOverlay() {
