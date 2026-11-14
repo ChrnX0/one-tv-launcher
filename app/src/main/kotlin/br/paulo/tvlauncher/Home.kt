@@ -29,7 +29,6 @@ object Home {
     private const val HOME_DELE = "$LAUNCHERX.home.HomeActivity"
     const val SEGURAR_HOME_MS = 700L
 
-    private var ultimoDesvio = 0L
     private var ultimoDesvioPainel = 0L
     /** Até quando o painel do Google pode aparecer sem ser trocado pelo nosso (só quando NÓS o abrimos: Casa > Google Home). */
     @Volatile private var googleLiberadoAte = 0L
@@ -107,11 +106,42 @@ object Home {
         if (pacote?.toString() != LAUNCHERX) return
         if (classe?.toString()?.startsWith("$LAUNCHERX.dashboard.") == true) { trocarPainel(ctx); return }
         if (classe?.toString() != HOME_DELE) return
+        desviar(ctx.applicationContext)
+    }
+
+    /** Hora dos desvios recentes (trava contra laço). Só a thread principal mexe aqui. */
+    private val desvios = ArrayDeque<Long>()
+    private var conferenciaMarcada = false
+
+    /**
+     * Traz a nossa HOME por cima da do launcherx, respeitando a trava contra laço ([HomeDesvio.decidir]).
+     *
+     * Bug de 14/11/2026 (Sala, v457287 e v457301): a instalação de uma versão nova mata a nossa MainActivity; ao acordar,
+     * a TV mostra a HOME do launcherx, nós trazemos a nossa e, ~1 s depois, o sistema abre a dele de novo (logcat:
+     * START launcherx HomeActivity "from uid 0" 0,8 s e 1,1 s depois da nossa). Antes, a 2ª aparição caía na trava de
+     * 1,5 s e era só ignorada: a do Google ficava na frente e, como ela já estava no topo, os HOMEs seguintes não abriam
+     * janela nova (nenhum evento de acessibilidade) e nada mais a trocava. Agora a 2ª aparição marca uma conferência
+     * para quando a trava vencer: se a do Google ainda estiver na frente, troca.
+     */
+    private fun desviar(ctx: Context) {
         val agora = SystemClock.elapsedRealtime()
-        if (agora - ultimoDesvio < 1500) return   // trava contra laço, se algo insistir em reabrir a dele
-        ultimoDesvio = agora
-        Log.i(TAG, "a HOME do launcherx apareceu: trazendo a nossa")
-        irParaHome(ctx)
+        while (desvios.isNotEmpty() && agora - desvios.first() > HomeDesvio.JANELA_LACO_MS) desvios.removeFirst()
+        when (val d = HomeDesvio.decidir(agora, desvios.lastOrNull(), desvios.size)) {
+            HomeDesvio.Desvio.Agora -> {
+                desvios.addLast(agora)
+                Log.i(TAG, "a HOME do launcherx apareceu: trazendo a nossa")
+                irParaHome(ctx)
+            }
+            is HomeDesvio.Desvio.Depois -> if (!conferenciaMarcada) {
+                conferenciaMarcada = true
+                principal.postDelayed({
+                    conferenciaMarcada = false
+                    // Só se a do Google ainda é a última tela que apareceu (a pessoa pode ter aberto um app no meio).
+                    if (JanelaNaFrente.pacote == LAUNCHERX && JanelaNaFrente.classe == HOME_DELE) desviar(ctx)
+                }, d.ms)
+            }
+            HomeDesvio.Desvio.Desiste -> Log.w(TAG, "a HOME do launcherx insiste em voltar: desisto por ${HomeDesvio.JANELA_LACO_MS / 1000} s (trava contra laço)")
+        }
     }
 
     private fun trocarPainel(ctx: Context) {
@@ -127,5 +157,29 @@ object Home {
         Log.i(TAG, "o painel do Google apareceu: trocando pelo nosso")
         AutorizaShizukuService.instancia?.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK)
         PainelRapidoActivity.abrir(ctx)
+    }
+}
+
+/** Regra pura da trava contra laço de [Home.desviar], fora do Home (que cria um Handler e não carrega na JVM dos testes). */
+object HomeDesvio {
+    const val INTERVALO_MIN_MS = 1500L
+    const val JANELA_LACO_MS = 30_000L
+    const val MAX_DESVIOS_NA_JANELA = 6
+
+    sealed class Desvio {
+        object Agora : Desvio()
+        data class Depois(val ms: Long) : Desvio()
+        object Desiste : Desvio()
+    }
+
+    /**
+     * Regra pura (HomeDesvioTest). [ultimo] = hora do último desvio (null = nenhum na janela); [naJanela] = quantos nos
+     * últimos [JANELA_LACO_MS]. Mais de [MAX_DESVIOS_NA_JANELA] = algo reabre a dele sem parar: desiste (sem laço).
+     * Desvio recente demais: não troca já (a nossa pode ainda estar subindo), confere quando passar o intervalo.
+     */
+    fun decidir(agora: Long, ultimo: Long?, naJanela: Int): Desvio = when {
+        naJanela >= MAX_DESVIOS_NA_JANELA -> Desvio.Desiste
+        ultimo != null && agora - ultimo < INTERVALO_MIN_MS -> Desvio.Depois(INTERVALO_MIN_MS - (agora - ultimo))
+        else -> Desvio.Agora
     }
 }

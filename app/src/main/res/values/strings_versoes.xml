@@ -82,6 +82,7 @@
         <item>Movies and Series: the top of the screen shows the category, the count and the active filters as pills, plus the focused title\'s rating, year, length, genre and 2 lines of synopsis, in large letters</item>
         <item>Movies and Series: in a big category, ▶ on the last column (or Filter › “Go to a letter”) jumps straight to a letter</item>
         <item>Live TV › Sports: channels with a match or fight live right now get a red “LIVE” label and come first</item>
+        <item>After the launcher updates itself (even overnight), the TV wakes up on our home screen, no longer stuck on Google\'s until you open the launcher once</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>painel_config</item>
@@ -147,6 +148,7 @@
         <item>marcar_assistido</item>
         <item>painel_direito</item>
         <item>pular_letra</item>
+        <item>home_apos_atualizar</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>In the web panel, change the theme in the Settings tab</item>
@@ -212,6 +214,7 @@
         <item>In Movies, hold OK on a started poster and choose “Mark as watched”</item>
         <item>Open Movies › All and move along a few posters</item>
         <item>In Movies › All, go to the last column and press ▶, then choose a letter</item>
+        <item>The next time you turn the TV on, after this version installed</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did the TV home screen switch to the chosen theme?</item>
@@ -277,5 +280,6 @@
         <item>Did the movie leave Continue and go to Watched with the green label?</item>
         <item>Did the top show the pills and the quick info (with synopsis after a moment), readable from the couch?</item>
         <item>Did the big letters open and the grid jump to that letter?</item>
+        <item>Did it open on the One TV home screen (not Google\'s), and does HOME bring it back?</item>
     </string-array>
 </resources>
