@@ -1334,13 +1334,18 @@ object PainelWeb {
             .put("usado", if (c.contains("lat")) JSONObject().put("lat", c.getFloat("lat", 0f).toDouble()).put("lon", c.getFloat("lon", 0f).toDouble()) else JSONObject.NULL)
     }
 
-    /** {"cep","numero"} cadastra o endereço; {"automatico":true} apaga. */
+    /** {"cep","numero"} cadastra o endereço; {"cidade"} cadastra uma cidade de qualquer país (ideia 40); {"automatico":true} apaga. */
     private fun mudarClima(req: Requisicao, ip: String): Resposta {
         val o = corpoJson(req) ?: return erro(400, "JSON inválido")
         when {
             o.optBoolean("automatico", false) -> {
                 LocalClima.limpar(app)
                 PainelArmazem.registrar(app, ip, "clima: localização automática", "ok")
+            }
+            o.optString("cidade").isNotBlank() && o.optString("cep").isBlank() -> {
+                val lugar = LocalClima.definirPorCidade(app, o.optString("cidade"))
+                    .getOrElse { return erro(400, it.message ?: "não achei essa cidade") }
+                PainelArmazem.registrar(app, ip, "clima: cidade \"${lugar.nome}\"", "ok")
             }
             else -> {
                 // CEP + número -> ViaCEP + Nominatim (alguns segundos; esta thread é do pedido, não da tela).

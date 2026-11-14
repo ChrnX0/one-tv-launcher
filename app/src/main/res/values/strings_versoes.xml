@@ -39,6 +39,8 @@
         <item>Guest Wi-Fi as a QR: Settings &gt; Guests and routines; in guest mode, Wi-Fi in the quick panel shows the QR</item>
         <item>The nightly backup now checks every night that the saved copy would restore</item>
         <item>Settings &gt; System &gt; What gets used: screens and settings by use, counted only on this TV</item>
+        <item>Internet: a phone alert when it comes back (how long it was down and the likely cause), a monthly summary in the panel, and an alert when storage is filling up</item>
+        <item>Quick panel: the TV\'s latest alerts (rain, notes, maintenance) and the shopping list, crossed out with OK</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -68,6 +70,7 @@
         <item>wifi_visitas</item>
         <item>ensaio_backup</item>
         <item>uso_local</item>
+        <item>avisos_painel_rapido</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -97,6 +100,7 @@
         <item>Set Settings &gt; Guests and routines &gt; Guest Wi-Fi, turn guest mode on and press Wi-Fi in the quick panel</item>
         <item>Settings &gt; System &gt; Automatic backup &gt; Back up now</item>
         <item>Open Settings &gt; System &gt; What gets used</item>
+        <item>Open the quick panel and scroll to the bottom</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -126,5 +130,6 @@
         <item>Did the QR show up, and did a phone camera connect?</item>
         <item>Does the result say “restore check passed”?</item>
         <item>Do the screens you opened today show up?</item>
+        <item>Do the TV alerts and the shopping list show, and does OK cross out an item?</item>
     </string-array>
 </resources>

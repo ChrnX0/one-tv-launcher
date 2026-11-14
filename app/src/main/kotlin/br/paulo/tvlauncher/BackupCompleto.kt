@@ -54,7 +54,10 @@ object BackupCompleto {
         "painel_tls",
         // "volume_lg" (ideia 49): IP e código de pareamento da LG desta casa. Em outra TV/casa apontaria para a LG errada;
         // parear de novo leva um minuto (ComandosExtras lg_*).
-        "volume_lg")
+        "volume_lg",
+        // Ideias 35 e 41 (14/11/2026): a central de avisos da TV (passageira) e as medidas de espaço livre por dia (valem
+        // só para o armazenamento deste aparelho).
+        "aviso_tv_historico", "saude_tendencia")
     /** Chaves que o Keystore cifrou: não servem em outra instalação. O valor em claro vai em "segredos". */
     private val CHAVES_DO_KEYSTORE = setOf("chave_cifrada", "chave_iv") + CasaHA.CHAVES_DO_KEYSTORE
     /** Arquivos pequenos do player (files/player). O contas.json fica de fora: vai decifrado em "segredos". */

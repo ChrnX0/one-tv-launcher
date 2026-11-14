@@ -52,6 +52,14 @@ object LocalClima {
                 .also { gravar(ctx, it) }
         }
 
+    /**
+     * Ideia 40 (14/11/2026): para quem está fora do Brasil, o nome da cidade no lugar do CEP. O CEP continua sendo o
+     * caminho mais preciso aqui (chega no bairro ou na rua); a cidade é um segundo caminho, não uma troca.
+     */
+    fun definirPorCidade(ctx: Context, cidade: String?): Result<Lugar> =
+        Endereco.buscarCidade(cidade, java.util.Locale.getDefault().language.ifEmpty { "en" }) { Endereco.httpGet(it) }
+            .map { a -> Lugar(a.nome, a.lat, a.lon).also { gravar(ctx, it) } }
+
     /** "Centro · CEP 14015-060, nº 100" (para as telas). */
     fun descrever(l: Lugar): String {
         val cep = if (l.cep.length == 8) "CEP ${l.cep.take(5)}-${l.cep.drop(5)}" else ""
