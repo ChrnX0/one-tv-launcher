@@ -63,4 +63,10 @@ class LoginGoogleTest {
         assertFalse(LoginGoogle.cabeNoRitmo(fila, 2_000L))
         assertTrue(LoginGoogle.cabeNoRitmo(fila, 61_000L))   // passou 1 minuto do primeiro
     }
+
+    @Test fun soOLoginDoBackupPedeODrive() {
+        assertEquals("email profile", LoginGoogle.escopos(LoginGoogle.Finalidade.CONECTOR))
+        assertEquals("email profile", LoginGoogle.escopos(LoginGoogle.Finalidade.FOTO))
+        assertEquals(DriveRegras.ESCOPOS_LOGIN, LoginGoogle.escopos(LoginGoogle.Finalidade.DRIVE))
+    }
 }

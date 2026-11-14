@@ -32,10 +32,18 @@ object LoginGoogle {
 
     enum class Estado { ESPERANDO, OK, RECUSADO, ERRO }
 
+    /**
+     * Para que serve o login. CONECTOR = entrar no conector do Claude (só e-mail e perfil). FOTO = "Buscar foto da conta"
+     * (FotoPerfilActivity). DRIVE = "Conta do Google Drive" do backup noturno (DriveBackup): pede também `drive.file`
+     * e guarda o refresh token. FOTO e DRIVE ficam fora da lista do conector: nunca viram acesso à TV.
+     */
+    enum class Finalidade { CONECTOR, FOTO, DRIVE }
+
     /** Uma tentativa de login. [pedido] guarda os campos do /authorize original (client_id, redirect_uri, state...). */
     class Sessao(val id: String, val pedido: Map<String, String>, val codigoUsuario: String, val urlVerificacao: String, val expira: Long,
-                 /** true = login feito na TV só para buscar a foto da conta (FotoPerfilActivity); não dá acesso a nada. */
-                 val soFoto: Boolean = false) {
+                 val finalidade: Finalidade = Finalidade.CONECTOR) {
+        /** true = login feito na própria TV (foto ou Drive); não dá acesso ao conector. */
+        val soFoto: Boolean get() = finalidade != Finalidade.CONECTOR
         /** A foto da conta ficou gravada neste login? (só faz sentido depois de [estado] virar OK) */
         @Volatile var fotoGravada = false
         @Volatile var estado = Estado.ESPERANDO
@@ -80,7 +88,7 @@ object LoginGoogle {
     fun sessao(id: String?): Sessao? = id?.let { sessoes[it] }?.takeIf { it.expira > System.currentTimeMillis() }
 
     /** Pede o código ao Google e começa a vigiar. Lança Exception com texto para a página se não der. */
-    fun iniciar(ctx: Context, pedido: Map<String, String>, soFoto: Boolean = false): Sessao {
+    fun iniciar(ctx: Context, pedido: Map<String, String>, finalidade: Finalidade = Finalidade.CONECTOR): Sessao {
         val app = ctx.applicationContext
         val agora = System.currentTimeMillis()
         val id = clienteId(app) ?: throw IllegalStateException("login Google não configurado")
@@ -89,16 +97,16 @@ object LoginGoogle {
         synchronized(inicios) {
             if (!cabeNoRitmo(inicios, agora)) throw IllegalStateException("muitos logins seguidos; espere um minuto")
         }
-        val r = postar("https://oauth2.googleapis.com/device/code", mapOf("client_id" to id, "scope" to "email profile"))
+        val r = postar("https://oauth2.googleapis.com/device/code", mapOf("client_id" to id, "scope" to escopos(finalidade)))
         val s = Sessao(
             ByteArray(18).also { aleatorio.nextBytes(it) }.joinToString("") { "%02x".format(it) },
             pedido, r.getString("user_code"), r.optString("verification_url", "https://www.google.com/device"),
-            agora + r.optLong("expires_in", 900).coerceAtMost(1800) * 1000, soFoto,
+            agora + r.optLong("expires_in", 900).coerceAtMost(1800) * 1000, finalidade,
         )
         // mcp-4: lotado, abre vaga em vez de recusar (antes, 5 GETs anônimos no /authorize travavam o login por 15 min).
         // A sessão "só foto" NÃO entra na lista: assim o /authorize do conector nunca a encontra (ela não pode virar
         // acesso à TV) e não ocupa a vaga de um login de verdade. Quem a acompanha é a tela que a criou.
-        if (!soFoto) synchronized(sessoes) { abrirVaga(sessoes, agora); sessoes[s.id] = s }
+        if (!s.soFoto) synchronized(sessoes) { abrirVaga(sessoes, agora); sessoes[s.id] = s }
         val deviceCode = r.getString("device_code")
         var intervalo = r.optLong("interval", 5).coerceIn(2, 30) * 1000
         Thread({
@@ -109,7 +117,7 @@ object LoginGoogle {
                         "client_id" to id, "client_secret" to (segredo(app) ?: ""), "device_code" to deviceCode,
                         "grant_type" to "urn:ietf:params:oauth:grant-type:device_code"), aceitarErro = true)
                     when (t.optString("error")) {
-                        "" -> { concluir(app, s, t.getString("access_token")); return@Thread }
+                        "" -> { concluir(app, s, t); return@Thread }
                         "authorization_pending" -> {}
                         "slow_down" -> intervalo += 5000
                         "access_denied" -> { s.estado = Estado.RECUSADO; s.mensagem = "o login foi negado no Google"; return@Thread }
@@ -140,8 +148,11 @@ object LoginGoogle {
         }
     }
 
-    private fun concluir(app: Context, s: Sessao, acesso: String) {
-        val u = obter("https://openidconnect.googleapis.com/v1/userinfo", acesso)
+    /** Escopos pedidos ao Google. O Drive só entra no login do backup: o do conector nunca entrega o Drive. Puro. */
+    internal fun escopos(f: Finalidade): String = if (f == Finalidade.DRIVE) DriveRegras.ESCOPOS_LOGIN else "email profile"
+
+    private fun concluir(app: Context, s: Sessao, token: JSONObject) {
+        val u = obter("https://openidconnect.googleapis.com/v1/userinfo", token.getString("access_token"))
         val email = u.optString("email").lowercase()
         s.email = email
         if (email.isEmpty() || !u.optBoolean("email_verified", false)) { s.estado = Estado.RECUSADO; s.mensagem = "o Google não confirmou o e-mail"; return }
@@ -151,12 +162,39 @@ object LoginGoogle {
             // bolinha do perfil (FotoPerfil). Na tela "Buscar foto da conta" a foto vem ANTES do OK (a tela espera por
             // ela); no login do conector vem depois, para não atrasar quem está entrando.
             val foto = u.optString("picture")
-            if (s.soFoto) { s.fotoGravada = FotoPerfil.doGoogle(app, email, foto, forcar = true); s.estado = Estado.OK }
+            if (s.finalidade == Finalidade.DRIVE) { concluirDrive(app, s, email, token); if (s.estado == Estado.OK) s.fotoGravada = FotoPerfil.doGoogle(app, email, foto, forcar = false) }
+            else if (s.soFoto) { s.fotoGravada = FotoPerfil.doGoogle(app, email, foto, forcar = true); s.estado = Estado.OK }
             else { s.estado = Estado.OK; s.fotoGravada = FotoPerfil.doGoogle(app, email, foto, forcar = false) }
             Log.i(TAG, "login Google ok")
         }
         else { s.estado = Estado.RECUSADO; s.mensagem = "a conta $email não está em nenhum perfil desta TV" }
     }
+
+    /**
+     * Login do Drive: confere que a pessoa marcou a permissão do Drive (o Google deixa desmarcar) e guarda o refresh
+     * token cifrado (DriveBackup). O Google sempre manda refresh token no login de TV ("refresh tokens are always
+     * returned for devices", limited-input-device).
+     */
+    private fun concluirDrive(app: Context, s: Sessao, email: String, token: JSONObject) {
+        val refresh = token.optString("refresh_token")
+        when {
+            !DriveRegras.escopoConcedido(token.optString("scope")) -> { s.estado = Estado.RECUSADO; s.mensagem = "a permissão do Google Drive não foi marcada" }
+            refresh.isEmpty() -> { s.estado = Estado.ERRO; s.mensagem = "o Google não mandou a chave de acesso; tente de novo" }
+            !DriveBackup.guardarConta(app, email, refresh) -> { s.estado = Estado.ERRO; s.mensagem = "não consegui guardar a conta nesta TV" }
+            else -> s.estado = Estado.OK
+        }
+    }
+
+    /** Pede um access token novo com o refresh token (DriveBackup). Devolve a resposta inteira (com "error" se falhar). */
+    fun renovar(ctx: Context, refresh: String): JSONObject {
+        val app = ctx.applicationContext
+        val id = clienteId(app) ?: throw IllegalStateException("login Google não configurado")
+        return postar("https://oauth2.googleapis.com/token", mapOf("client_id" to id, "client_secret" to (segredo(app) ?: ""),
+            "refresh_token" to refresh, "grant_type" to "refresh_token"), aceitarErro = true)
+    }
+
+    /** Tira o acesso também do lado do Google (Desconectar). */
+    fun revogar(token: String) { postar("https://oauth2.googleapis.com/revoke", mapOf("token" to token), aceitarErro = true) }
 
     /** As contas Google de TODOS os perfis da TV: as que o launcher vê (perfil atual) + as do `dumpsys account` pelo
      *  shell próprio (cada perfil do Google TV é um usuário do Android; o shell enxerga todos). */

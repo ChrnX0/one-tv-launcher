@@ -131,6 +131,12 @@ class BackupNoturnoTest {
         assertEquals("", Rg.proximoDestino("pendrive", ids))
         assertEquals("", Rg.proximoDestino("smb:apagada", ids))
         assertEquals("pendrive", Rg.proximoDestino("", emptyList()))
+        // Google Drive entra depois do pendrive, só com a conta conectada.
+        assertEquals("drive", Rg.proximoDestino("pendrive", ids, comDrive = true))
+        assertEquals("", Rg.proximoDestino("drive", ids, comDrive = true))
+        assertEquals("", Rg.proximoDestino("drive", ids, comDrive = false))   // conta desconectada: volta ao começo
+        assertEquals("10/11/2026", Rg.diaDoNome("onetv-backup-20261110.json"))
+        assertEquals("outro.json", Rg.diaDoNome("outro.json"))
         assertEquals("a1", Rg.idSmb("smb:a1")); assertNull(Rg.idSmb("pendrive")); assertNull(Rg.idSmb("smb:"))
     }
 }

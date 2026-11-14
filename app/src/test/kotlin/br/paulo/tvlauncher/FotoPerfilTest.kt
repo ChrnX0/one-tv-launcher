@@ -72,7 +72,7 @@ class FotoPerfilTest {
     /** A sessão "só foto" é marcada como tal (o LoginGoogle a deixa fora da lista que o conector consulta). */
     @Test fun sessaoSoFotoNaoEDeAcesso() {
         val comum = LoginGoogle.Sessao("a", emptyMap(), "ABCD", "https://www.google.com/device", 1L)
-        val foto = LoginGoogle.Sessao("b", emptyMap(), "ABCD", "https://www.google.com/device", 1L, soFoto = true)
+        val foto = LoginGoogle.Sessao("b", emptyMap(), "ABCD", "https://www.google.com/device", 1L, LoginGoogle.Finalidade.FOTO)
         assertFalse(comum.soFoto); assertTrue(foto.soFoto); assertFalse(foto.fotoGravada)
     }
 }
