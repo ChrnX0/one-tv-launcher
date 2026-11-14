@@ -155,6 +155,19 @@ object InfoExternaCache {
     fun creditos(pessoa: Int): Set<Pair<Boolean, Int>> =
         tmdb("pessoa:$pessoa", { ElencoTmdb.urlCreditos(it, pessoa, InfoExterna.idiomaTmdb()) }) { ElencoTmdb.lerCreditos(it).ifEmpty { null } }.orEmpty()
 
+    // ================================================================ ideia 82: onde assistir
+
+    private fun paisTv() = OndeAssistir.pais(java.util.Locale.getDefault().country)
+
+    /** Os serviços de assinatura/grátis onde o título está, no país da TV (vazio: nenhum ou sem chave). Bloqueia (rede). */
+    fun provedores(id: Int, serie: Boolean): List<String> = paisTv().let { pais ->
+        tmdb("prov:$serie:$id:$pais", { OndeAssistir.urlProvedores(it, id, serie) }) { OndeAssistir.lerProvedores(it, pais) }.orEmpty()
+    }
+
+    /** Filmes e séries do TMDB com o termo (para achar o que não está na lista). Bloqueia (rede). */
+    fun buscarFora(termo: String): List<OndeAssistir.Achado> =
+        tmdb("multi:${termo.lowercase()}", { OndeAssistir.urlBusca(it, termo, InfoExterna.idiomaTmdb()) }, OndeAssistir::lerBusca).orEmpty()
+
     // ================================================================ notas em lote (grade)
 
     private fun prefs(ctx: Context) = ctx.getSharedPreferences("info_externa", Context.MODE_PRIVATE)
