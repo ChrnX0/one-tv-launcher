@@ -385,13 +385,17 @@ class PainelRapidoActivity : Activity() {
                 outlineProvider = circulo()
             }
             val b = bolinhaPerfil(foto, eAtiva) {
-                if (!eAtiva) Perfil.definirAtiva(this, conta)
-                finish()   // a HOME redesenha a bolinha no onResume
+                // Ideia 11: a troca leva favoritos, "continuar" e ordem dos apps do perfil; sair de um perfil de criança
+                // pede o PIN dos pais (sem PIN certo, fica onde está). A HOME redesenha a bolinha no onResume.
+                if (eAtiva) finish() else PerfilCriancaTv.trocar(this, ativa, conta) { trocou -> if (trocou) finish() }
             }
             b.setOnFocusChangeListener { v, foco ->
                 v.background = anelPerfil(foco, eAtiva)
                 v.animate().scaleX(if (foco) 1.1f else 1f).scaleY(if (foco) 1.1f else 1f).setDuration(Estilo.FOCO_MS).start()
-                if (foco) legenda.text = Perfil.usuario(conta) + if (eAtiva) getString(R.string.pp_ativo) else ""
+                if (foco) {
+                    legenda.text = Perfil.usuario(conta) + if (eAtiva) getString(R.string.pp_ativo) else ""
+                    alvoCrianca = conta; mostrarCrianca()
+                }
             }
             bolinhas.addView(b, LinearLayout.LayoutParams(dp(56), dp(56)).apply { marginEnd = dp(Estilo.E1) })
         }
@@ -415,12 +419,45 @@ class PainelRapidoActivity : Activity() {
             setPadding(dp(4), dp(4), dp(4), dp(4))
             addView(bolinhas)
         }
+        // "Perfil de criança" (ideia 11): vale para a última bolinha com foco (de início, a ativa). Mudar pede o PIN dos pais.
+        alvoCrianca = ativa
+        txtCrianca = Estilo.texto(this, Estilo.Papel.LEGENDA, "").apply {
+            isFocusable = true
+            isClickable = true
+            maxLines = 1
+            ellipsize = TextUtils.TruncateAt.END
+            typeface = Estilo.fonte(500)
+            setPadding(dp(Estilo.E2 - 4), dp(7), dp(Estilo.E2 - 4), dp(7))
+            background = Estilo.fundo(this@PainelRapidoActivity, Estilo.SUPERFICIE, Estilo.RAIO_PILULA)
+            setOnClickListener {
+                val conta = alvoCrianca ?: return@setOnClickListener
+                PerfilCriancaTv.alternarMarca(this@PainelRapidoActivity, conta, ativa) { mostrarCrianca() }
+            }
+            setOnFocusChangeListener { v, foco ->
+                v.background = Estilo.fundo(this@PainelRapidoActivity, if (foco) Estilo.FOCO else Estilo.SUPERFICIE, Estilo.RAIO_PILULA)
+                (v as TextView).setTextColor(if (foco) Estilo.TEXTO_NO_FOCO else Estilo.TEXTO_2)
+            }
+            visibility = if (contas.isEmpty()) View.GONE else View.VISIBLE
+        }
+        mostrarCrianca()
         return LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             clipChildren = false
             addView(rolagem)
             addView(legenda, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(4) })
+            addView(txtCrianca, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(Estilo.E1) })
         }
+    }
+
+    private var alvoCrianca: String? = null
+    private var txtCrianca: TextView? = null
+
+    /** "Perfil de criança · ana: sim/não" para a conta [alvoCrianca]. */
+    private fun mostrarCrianca() {
+        val t = txtCrianca ?: return
+        val conta = alvoCrianca ?: return
+        t.text = getString(R.string.perfil_crianca_linha, Perfil.usuario(conta),
+            getString(if (PerfilCriancaTv.eCrianca(this, conta)) R.string.pr_ligado else R.string.perfil_crianca_nao))
     }
 
     private fun bolinhaPerfil(dentro: View, eAtiva: Boolean, aoClicar: () -> Unit) = FrameLayout(this).apply {

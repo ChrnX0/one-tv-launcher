@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Real profiles (idea 11): each Google account with its own favorites, Continue watching and app order; kid profile. -->
+<resources>
+    <string name="perfil_aviso_titulo">Profile: %1$s</string>
+    <string name="perfil_aviso_texto">Favorites, Continue watching and app order of this profile</string>
+    <string name="perfil_aviso_crianca">Kid profile: kids mode and bedtime turned on</string>
+    <string name="perfil_crianca">Kid profile</string>
+    <string name="perfil_crianca_linha">Kid profile · %1$s: %2$s</string>
+    <string name="perfil_crianca_nao">Off</string>
+    <string name="perfil_crianca_sem_pin">Set the web panel PIN first: it is the parents\' PIN that protects the kid profile</string>
+    <string name="perfil_pin_sair">Parents\' PIN to leave the kid profile</string>
+    <string name="perfil_pin_marcar">Parents\' PIN to change the kid profile</string>
+</resources>

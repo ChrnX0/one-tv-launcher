@@ -68,6 +68,7 @@
         <item>The web panel is in English when the phone or computer is not in Portuguese</item>
         <item>With the TV in English, voice requests for channels ("watch Globo", "what's on SBT") work in English too, and the confirmations show up in English</item>
         <item>LG volume: the alarm never goes above 30, the volume is checked after each change, and the alarm on the LG starts turned off</item>
+        <item>Real profiles: each Google account on the TV has its own channel favorites, Continue watching, last episodes, watchlist and app order; a profile can be marked as a kid profile (quick panel), which turns on kids mode and bedtime and asks the parents\' PIN to leave</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -122,6 +123,7 @@
         <item>pausa_ao_vivo</item>
         <item>painel_ingles</item>
         <item>voz_ingles</item>
+        <item>perfis</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -176,6 +178,7 @@
         <item>On a live channel without catch-up, ▶ ▶ › “Pause live TV”, wait 1 minute and press OK; then ▶ › “Back to live”</item>
         <item>Open the web panel on a browser set to English</item>
         <item>With the TV in English, say "what's on" and a channel name</item>
+        <item>In the quick panel, open the profiles, mark one account as “Kid profile” (parents\' PIN) and switch to it; favorite a channel; then switch back to your profile</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -230,5 +233,6 @@
         <item>Did it resume where it stopped with “1 MIN BEHIND”, and did “Back to live” jump to now?</item>
         <item>Are the tabs and buttons in English?</item>
         <item>Did the answer come in English?</item>
+        <item>Did kids mode and bedtime turn on in the kid profile, did leaving ask for the PIN, and did your favorites come back as before?</item>
     </string-array>
 </resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Perfis de verdade (ideia 11): cada conta Google com seus favoritos, continuar e ordem dos apps; perfil de criança. -->
+<resources>
+    <string name="perfil_aviso_titulo">Perfil de %1$s</string>
+    <string name="perfil_aviso_texto">Favoritos, continuar e ordem dos apps deste perfil</string>
+    <string name="perfil_aviso_crianca">Perfil de criança: modo infantil e hora de dormir ligados</string>
+    <string name="perfil_crianca">Perfil de criança</string>
+    <string name="perfil_crianca_linha">Perfil de criança · %1$s: %2$s</string>
+    <string name="perfil_crianca_nao">Desligado</string>
+    <string name="perfil_crianca_sem_pin">Defina antes o PIN do painel web: é o PIN dos pais que protege o perfil de criança</string>
+    <string name="perfil_pin_sair">PIN dos pais para sair do perfil de criança</string>
+    <string name="perfil_pin_marcar">PIN dos pais para mudar o perfil de criança</string>
+</resources>
