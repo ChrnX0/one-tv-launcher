@@ -647,11 +647,15 @@ async function carregarCasa() {
   if (!r.configurado) { const p = document.createElement('p'); p.className = 'aviso'; p.textContent = 'Ainda não configurado.'; lista.append(p); return; }
   for (const a of (r.aparelhos || [])) {
     const linha = document.createElement('div'); linha.className = 'linha-registro';
-    const nome = document.createElement('strong'); nome.textContent = `${a.nome} · ${a.estado}`;
     const d = a.id.split('.')[0];
-    const acao = (d === 'scene' || d === 'script') ? 'ligar' : 'alternar';
+    // Ideia 51: sensor mostra o valor; ar-condicionado, a temperatura pedida e a do ambiente.
+    let estado = a.valor || a.estado;
+    if (d === 'climate' && a.estado !== 'off' && a.alvo != null) estado = `${a.estado} ${a.alvo}°` + (a.atual != null ? ` (ambiente ${a.atual}°)` : '');
+    const nome = document.createElement('strong'); nome.textContent = `${a.nome} · ${estado}`;
+    if (d === 'sensor' || d === 'binary_sensor') { linha.append(nome); lista.append(linha); continue; }
+    const acao = d === 'camera' ? 'ver' : (d === 'scene' || d === 'script') ? 'ligar' : 'alternar';
     const b = document.createElement('button'); b.type = 'button'; b.className = 'botao-secundario';
-    b.textContent = acao === 'ligar' ? 'Rodar' : 'Ligar/desligar';
+    b.textContent = acao === 'ver' ? 'Ver na TV' : acao === 'ligar' ? 'Rodar' : 'Ligar/desligar';   // ideia 52: câmera
     b.addEventListener('click', async () => {
       try { await chamar('POST', '/api/extras/casa/acionar', { id: a.id, acao }); carregarCasa(); }
       catch (e) { mostrar($('statusCasa'), textoErro(e)); }

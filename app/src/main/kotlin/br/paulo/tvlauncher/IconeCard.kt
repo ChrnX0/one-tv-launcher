@@ -59,6 +59,26 @@ class IconeCard(ctx: Context, private val tipo: String) : View(ctx) {
             "cena" -> cena(c, w, h)
             "rotina" -> rotina(c, w, h)
             "chave" -> chave(c, w, h)
+            // Ideia 51: ar-condicionado, termômetro (temperatura e umidade) e porta (sensores de abrir, movimento, água).
+            "ar" -> {
+                caixa.set(w * 0.08f, h * 0.18f, w * 0.92f, h * 0.52f); c.drawRoundRect(caixa, w * 0.08f, w * 0.08f, tinta)
+                c.drawLine(w * 0.22f, h * 0.42f, w * 0.78f, h * 0.42f, tinta)
+                for (x in listOf(0.30f, 0.50f, 0.70f)) c.drawLine(w * x, h * 0.64f, w * (x - 0.04f), h * 0.84f, tinta)
+            }
+            "termometro" -> {
+                caixa.set(w * 0.40f, h * 0.06f, w * 0.60f, h * 0.66f); c.drawRoundRect(caixa, w * 0.10f, w * 0.10f, tinta)
+                c.drawCircle(w * 0.5f, h * 0.76f, w * 0.16f, tinta)
+                c.drawCircle(w * 0.5f, h * 0.76f, w * 0.07f, preenchimento)
+            }
+            "camera" -> {   // ideia 52
+                caixa.set(w * 0.06f, h * 0.30f, w * 0.68f, h * 0.74f); c.drawRoundRect(caixa, w * 0.06f, w * 0.06f, tinta)
+                caminho.reset(); caminho.moveTo(w * 0.68f, h * 0.46f); caminho.lineTo(w * 0.94f, h * 0.32f)
+                caminho.lineTo(w * 0.94f, h * 0.72f); caminho.lineTo(w * 0.68f, h * 0.58f); c.drawPath(caminho, tinta)
+            }
+            "porta" -> {
+                caixa.set(w * 0.24f, h * 0.08f, w * 0.76f, h * 0.92f); c.drawRoundRect(caixa, w * 0.04f, w * 0.04f, tinta)
+                c.drawCircle(w * 0.64f, h * 0.52f, w * 0.045f, preenchimento)
+            }
             // Painel rápido (14/11/2026, ideia 42): filtro noturno e DNS.
             "filtro" -> filtro(c, w, h)
             "dns" -> escudo(c, w, h)

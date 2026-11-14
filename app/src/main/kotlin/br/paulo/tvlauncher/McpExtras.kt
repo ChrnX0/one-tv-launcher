@@ -27,10 +27,12 @@ object McpExtras {
         ferramenta("erros_recentes", "Erros recentes do launcher da TV (tipo, onde no código, versão), sem dados pessoais. " +
             "Para diagnosticar e propor correção no repositório ChrnX0/one-tv-launcher.",
             JSONObject().put("quantos", JSONObject().put("type", "integer").put("minimum", 1).put("maximum", 20))),
-        ferramenta("casa_listar", "Luzes, tomadas, ventiladores, cortinas, cenas e scripts do Home Assistant da casa, com o estado."),
-        ferramenta("casa_acionar", "Liga, desliga ou alterna um aparelho do Home Assistant (id de casa_listar). Cenas e scripts: só 'ligar'.",
+        ferramenta("casa_listar", "Luzes, tomadas, ventiladores, cortinas, ar-condicionado, cenas, scripts, câmeras e sensores " +
+            "(temperatura, umidade, portas, movimento, água, fumaça) do Home Assistant da casa, com o estado. Sensores só se leem."),
+        ferramenta("casa_acionar", "Liga, desliga ou alterna um aparelho do Home Assistant (id de casa_listar). Cenas e scripts: só 'ligar'. " +
+            "Câmera: 'ver' mostra a foto de agora na tela da TV por 30 s (a foto não volta para cá).",
             JSONObject().put("id", JSONObject().put("type", "string"))
-                .put("acao", JSONObject().put("type", "string").put("enum", JSONArray(listOf("ligar", "desligar", "alternar")))),
+                .put("acao", JSONObject().put("type", "string").put("enum", JSONArray(listOf("ligar", "desligar", "alternar", "ver")))),
             listOf("id", "acao"), leitura = false),
     )
 
