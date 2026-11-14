@@ -17,13 +17,9 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>TV texts follow the Android language</item>
-        <item>Home screen grouped by room, and cards no longer cover the key hints</item>
-        <item>Nightly backup to Google Drive, with restore from Drive</item>
-        <item>Routines and alarms can run a scene</item>
-        <item>Claude can do more on the TV: Movies, Series and scenes</item>
-        <item>Each new version runs the tests before it is published</item>
-        <item>The web panel also opens with a padlock (https) at home, on port 8444</item>
+        <item>Remote buttons: tap, hold and double tap on free keys</item>
+        <item>Events can start a scene</item>
+        <item>The https certificate can use your own TV name (e.g. tv-sala)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
