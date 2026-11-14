@@ -18,6 +18,25 @@ class LegendaExternaTest {
             LegendaExterna.urlBusca(Busca("Frieren", 2023, 1, 3)))
     }
 
+    @Test fun buscaNoIdiomaDaTv() {   // ideia 25
+        assertEquals("pt-br,pt-pt", LegendaExterna.idiomasBusca("pt"))
+        assertEquals("en", LegendaExterna.idiomasBusca("en"))
+        assertEquals("es", LegendaExterna.idiomasBusca("es"))
+        assertEquals("https://api.opensubtitles.com/api/v1/subtitles?languages=en&query=duna%20parte%202&type=movie&year=2024",
+            LegendaExterna.urlBusca(Busca("Duna Parte 2", 2024), "en"))
+        // Sem idioma: o mesmo endereço de antes (português).
+        assertEquals(LegendaExterna.urlBusca(Busca("Frieren", 2023, 1, 3)), LegendaExterna.urlBusca(Busca("Frieren", 2023, 1, 3), "pt"))
+    }
+
+    @Test fun ordenaNoIdiomaDaTv() {
+        val r = """{"data":[
+            {"attributes":{"language":"pt-br","download_count":900,"files":[{"file_id":1}]}},
+            {"attributes":{"language":"en","download_count":5,"files":[{"file_id":2}]}}
+        ]}"""
+        assertEquals(listOf(2L, 1L), LegendaExterna.lerBusca(r, "en").map { it.arquivo })
+        assertEquals(listOf(1L, 2L), LegendaExterna.lerBusca(r, "pt").map { it.arquivo })
+    }
+
     @Test fun nomeDeBuscaSemMarca() {
         assertEquals("duna parte 2", LegendaExterna.nomeDeBusca("Duna: Parte 2 (2024) [L]"))
     }

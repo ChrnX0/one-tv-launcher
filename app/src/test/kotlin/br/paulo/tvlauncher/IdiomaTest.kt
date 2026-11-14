@@ -59,6 +59,54 @@ class IdiomaTest {
         assertNull(Idioma.prefDaEscolha(Faixa(null)))
     }
 
+    // ---- ideia 25: idioma da TV
+
+    @Test fun idiomaDaTvNormalizado() {
+        assertEquals("pt", Idioma.idiomaDaTv("pt"))
+        assertEquals("en", Idioma.idiomaDaTv("EN"))
+        assertEquals("he", Idioma.idiomaDaTv("iw"))
+        assertEquals("pt", Idioma.idiomaDaTv(""))
+        assertEquals("pt", Idioma.idiomaDaTv(null))
+    }
+
+    @Test fun tvEmInglesDubladoEOIngles() {
+        val faixas = listOf(Faixa("por", padrao = true), Faixa("eng"), ja)
+        assertEquals(1, Idioma.escolherAudio(faixas, Pref.DUBLADO, "en"))
+        assertEquals(0, Idioma.escolherAudio(faixas, Pref.ORIGINAL, "en"))      // português é "outra língua" aqui
+        assertEquals(1, Idioma.escolherAudio(listOf(ja, Faixa("en-US")), Pref.DUBLADO, "en"))
+        assertNull(Idioma.escolherAudio(listOf(pt, ja), Pref.DUBLADO, "en"))
+        // Rótulo "Dublado" sem idioma só vale para português.
+        assertEquals(false, Idioma.eDoIdioma(Faixa(null, rotulo = "Dublado"), "en"))
+        assertEquals(false, Idioma.eDoIdioma(Faixa(null, rotulo = "English"), "en"))
+    }
+
+    @Test fun tvEmInglesLegendaEmIngles() {
+        val legs = listOf(Faixa("pt"), Faixa("eng", forcada = true), Faixa("en"))
+        assertEquals(2, Idioma.escolherLegenda(legs, audioPortugues = false, idioma = "en"))
+        assertEquals(1, Idioma.escolherLegenda(legs, audioPortugues = true, idioma = "en"))
+        assertNull(Idioma.escolherLegenda(listOf(Faixa("pt")), audioPortugues = false, idioma = "en"))
+        assertEquals(Pref.DUBLADO, Idioma.prefDaEscolha(Faixa("eng"), "en"))
+        assertEquals(Pref.ORIGINAL, Idioma.prefDaEscolha(pt, "en"))
+    }
+
+    @Test fun tvEmEspanhol() {
+        val faixas = listOf(en, Faixa("spa"), pt)
+        assertEquals(1, Idioma.escolherAudio(faixas, Pref.DUBLADO, "es"))
+        assertEquals(0, Idioma.escolherAudio(faixas, Pref.ORIGINAL, "es"))
+        assertEquals(1, Idioma.escolherLegenda(listOf(Faixa("pt"), Faixa("es-419")), audioPortugues = false, idioma = "es"))
+        assertEquals(true, Idioma.eDoIdioma(Faixa("es-ES"), "es"))
+        assertEquals(false, Idioma.eDoIdioma(Faixa("und", rotulo = "Español"), "es"))
+    }
+
+    @Test fun tvEmPortuguesIgualAntes() {
+        // Os mesmos casos do começo, agora com o idioma explícito: nada muda para a TV em português.
+        assertEquals(1, Idioma.escolherAudio(listOf(en, pt), Pref.DUBLADO, "pt"))
+        assertEquals(true, Idioma.eDoIdioma(Faixa(null, rotulo = "Dublado"), "pt"))
+        assertEquals(2, Idioma.escolherLegenda(listOf(Faixa("en"), Faixa("pt", forcada = true), Faixa("pt")), false, "pt"))
+        assertEquals("pt-BR", Idioma.tagLegendaBaixada("pt"))
+        assertEquals("en", Idioma.tagLegendaBaixada("en"))
+    }
+
     // ---- preferência
 
     @Test fun preferenciaPorTituloVenceAGeral() {

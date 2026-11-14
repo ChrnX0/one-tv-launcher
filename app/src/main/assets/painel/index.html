@@ -215,6 +215,7 @@
           <label for="cepClima"><strong>Endereço do clima</strong> — <span id="estadoClima">carregando…</span></label>
           <input id="cepClima" type="text" inputmode="numeric" maxlength="9" placeholder="CEP (ex.: 14015-060)" aria-label="CEP">
           <input id="numeroClima" type="text" inputmode="numeric" maxlength="6" placeholder="Número da casa (opcional)" aria-label="Número">
+          <input id="cidadeClima" type="text" maxlength="80" placeholder="Ou a cidade, fora do Brasil (ex.: Lisboa)" aria-label="Cidade">
           <div class="recado-opcoes">
             <button type="button" id="btnClimaAuto" class="botao-secundario">Apagar endereço</button>
             <button type="submit">Salvar endereço</button>
@@ -278,6 +279,8 @@
       </div>
       <h2>Quedas</h2>
       <div id="listaQuedas" class="lista-registro"></div>
+      <h2>Por mês (para cobrar o provedor)</h2>
+      <div id="listaMesesRede" class="lista-registro"></div>
       <h2>O que o Android avisou</h2>
       <div id="listaEventosRede" class="lista-registro"></div>
     </section>
@@ -755,7 +758,11 @@
           apaga a tela e avisa no celular.</p>
         <button type="button" class="botao-secundario" id="btnPresencaVer">Ver aparelhos do roteador</button>
         <div id="listaPresenca" class="lista-registro"></div>
-        <button type="button" class="botao-primario" id="btnPresencaSalvar" hidden>Salvar escolha</button>
+        <p class="aviso-curto">Sem roteador UniFi: use o Home Assistant (o app dele no celular informa se a pessoa está em casa) ou o IP
+          fixo de cada celular (reserve o IP no roteador). Basta um deles dizer "em casa".</p>
+        <input id="presencaHa" type="text" maxlength="400" placeholder="Home Assistant: person.ana, device_tracker.celular_bia" aria-label="Entidades do Home Assistant">
+        <input id="presencaIps" type="text" maxlength="200" placeholder="IPs dos celulares: 192.168.1.20, 192.168.1.21" aria-label="IPs dos celulares">
+        <button type="button" class="botao-primario" id="btnPresencaSalvar">Salvar escolha</button>
         <p id="statusPresenca" class="aviso" hidden></p>
       </div>
       <div class="cartao">

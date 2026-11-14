@@ -45,6 +45,8 @@ object Avisos {
         PRESENCA("TV desligada porque todos saíram", true),
         AJUDA("Pedido de ajuda (modo simples)", true, semLimite = true),
         DESEMPENHO("Launcher ficou mais lento", true),
+        INTERNET_VOLTOU("Internet voltou (quanto ficou fora)", true),
+        ARMAZENAMENTO("Armazenamento da TV enchendo", true),
         DIGITAR("Campo de texto aberto na TV (toque para digitar pelo celular)", false, semLimite = true),   // ideia 57
     }
 

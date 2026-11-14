@@ -29,6 +29,7 @@ async function carregarIdeias() {
     desenharSemana(e.retrospectiva, e.desempenho);
     desenharSimples(e.simples);
     presencaEscolhidos = new Set(e.presenca);
+    if (e.presencaOutras) { $('presencaHa').value = e.presencaOutras.entidades || ''; $('presencaIps').value = e.presencaOutras.ips || ''; }
   } catch (err) { mostrar($('statusAvisos'), textoErro(err)); }
 }
 
@@ -169,14 +170,15 @@ $('btnPresencaVer').addEventListener('click', async () => {
       rotulo.append(caixa, ' ' + (a.nome || 'sem nome') + ' (' + a.mac + ')');
       lista.append(rotulo);
     }
-    $('btnPresencaSalvar').hidden = !(r.aparelhos || []).length;
   } catch (err) { mostrar(st, textoErro(err)); }
 });
 
 $('btnPresencaSalvar').addEventListener('click', async () => {
   try {
-    const r = await ideias('POST', 'presenca', { macs: [...presencaEscolhidos] });
-    mostrar($('statusPresenca'), r.escolhidos.length + ' celular(es) contam como "alguém em casa".');
+    const r = await ideias('POST', 'presenca', { macs: [...presencaEscolhidos], entidades: $('presencaHa').value, ips: $('presencaIps').value });
+    $('presencaHa').value = (r.entidades || []).join(', '); $('presencaIps').value = (r.ips || []).join(', ');
+    const n = r.escolhidos.length + (r.entidades || []).length + (r.ips || []).length;
+    mostrar($('statusPresenca'), n + ' aparelho(s) ou pessoa(s) contam como "alguém em casa".');
   } catch (err) { mostrar($('statusPresenca'), textoErro(err)); }
 });
 

@@ -15,7 +15,7 @@ import java.net.URLEncoder
 object LegendaExterna {
     const val BASE = "https://api.opensubtitles.com/api/v1"
     const val AGENTE = "OneTVLauncher v1.0"   // a API exige um User-Agent com o nome do app
-    const val IDIOMAS = "pt-br,pt-pt"
+    const val IDIOMAS = "pt-br,pt-pt"   // TV em português (o caso de sempre); os outros idiomas: idiomasBusca()
     const val MAX_SRT = 2_000_000             // legenda de 3 h tem ~150 KB; acima disso não é legenda
     const val MAX_RESULTADOS = 12
 
@@ -29,8 +29,18 @@ object LegendaExterna {
 
     private fun cod(v: String) = URLEncoder.encode(v, "UTF-8").replace("+", "%20")
 
+    /**
+     * Ideia 25: a legenda procurada é a do idioma da TV (2 letras, Idioma.idiomaDaTv). Português: Brasil e Portugal, como
+     * antes; chinês: as duas grafias; o resto, o próprio código (é o que o OpenSubtitles usa: "en", "es", "fr").
+     */
+    fun idiomasBusca(idioma: String = "pt"): String = when (idioma) {
+        "pt" -> IDIOMAS
+        "zh" -> "zh-cn,zh-tw"
+        else -> idioma.lowercase().filter { it in 'a'..'z' }.take(3).ifEmpty { IDIOMAS }
+    }
+
     /** Endereço da busca. A documentação pede os parâmetros em ordem alfabética e minúsculos (senão a API redireciona). */
-    fun urlBusca(b: Busca): String {
+    fun urlBusca(b: Busca, idioma: String = "pt"): String {
         val p = sortedMapOf<String, String>()
         if (b.eEpisodio) {
             p["episode_number"] = b.episodio.toString(); p["season_number"] = b.temporada.toString(); p["type"] = "episode"
@@ -38,13 +48,17 @@ object LegendaExterna {
             p["type"] = "movie"
             b.ano?.let { p["year"] = it.toString() }
         }
-        p["languages"] = IDIOMAS
+        p["languages"] = idiomasBusca(idioma)
         p["query"] = b.nome.trim().lowercase()
         return "$BASE/subtitles?" + p.entries.joinToString("&") { "${it.key}=${cod(it.value)}" }
     }
 
-    /** Lê a resposta da busca: português do Brasil primeiro, depois as mais baixadas; sem a "para surdos" na frente. */
-    fun lerBusca(json: String): List<Candidata> {
+    /**
+     * Lê a resposta da busca: a variante preferida do idioma da TV primeiro (português do Brasil, na TV em português),
+     * depois as mais baixadas; sem a "para surdos" na frente.
+     */
+    fun lerBusca(json: String, idioma: String = "pt"): List<Candidata> {
+        val preferida = idiomasBusca(idioma).substringBefore(',')
         val dados = runCatching { JSONObject(json).optJSONArray("data") }.getOrNull() ?: return emptyList()
         val saida = ArrayList<Candidata>()
         for (i in 0 until dados.length()) {
@@ -55,7 +69,7 @@ object LegendaExterna {
             val nome = (a.optString("release").takeIf { it.isNotBlank() && it != "null" } ?: f.optString("file_name")).trim().take(120)
             saida += Candidata(id, a.optString("language").lowercase(), nome, a.optInt("download_count", 0), a.optBoolean("hearing_impaired", false))
         }
-        return saida.sortedWith(compareBy<Candidata>({ it.idioma != "pt-br" }, { it.surdos }, { -it.baixadas })).take(MAX_RESULTADOS)
+        return saida.sortedWith(compareBy<Candidata>({ it.idioma != preferida }, { it.surdos }, { -it.baixadas })).take(MAX_RESULTADOS)
     }
 
     fun corpoDownload(arquivo: Long): String = JSONObject().put("file_id", arquivo).put("sub_format", "srt").toString()

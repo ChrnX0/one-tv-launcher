@@ -31,6 +31,9 @@ object IdiomaPlayer {
         }
     }
 
+    /** Ideia 25: o idioma do sistema da TV, 2 letras ("pt", "en", "es"). É o que "dublado" e a legenda seguem. */
+    fun idiomaDaTv(): String = Idioma.idiomaDaTv(java.util.Locale.getDefault().language)
+
     fun definirPadrao(ctx: Context, pref: Idioma.Pref) = gravar(ctx, prefs(ctx).copy(padrao = pref))
 
     fun lembrar(ctx: Context, chave: String, pref: Idioma.Pref) = gravar(ctx, Idioma.lembrar(prefs(ctx), chave, pref))
@@ -46,23 +49,23 @@ object IdiomaPlayer {
         t.groups.filter { it.type == tipo }.flatMap { g -> (0 until g.length).filter { g.isTrackSupported(it) }.map { g to it } }
 
     /**
-     * Aplica a preferência quando as faixas chegam: escolhe o áudio e liga (ou não) a legenda em português.
-     * Devolve os parâmetros novos, ou null se não há o que mudar.
+     * Aplica a preferência quando as faixas chegam: escolhe o áudio e liga (ou não) a legenda no idioma da TV
+     * ([idioma], 2 letras; ideia 25). Devolve os parâmetros novos, ou null se não há o que mudar.
      */
-    fun aplicar(t: Tracks, atual: TrackSelectionParameters, pref: Idioma.Pref): TrackSelectionParameters? {
+    fun aplicar(t: Tracks, atual: TrackSelectionParameters, pref: Idioma.Pref, idioma: String = idiomaDaTv()): TrackSelectionParameters? {
         val audios = faixas(t, C.TRACK_TYPE_AUDIO)
         val b = atual.buildUpon()
         var mudou = false
-        val escolhido = Idioma.escolherAudio(audios.map { (g, i) -> faixa(g.getTrackFormat(i)) }, pref)?.let { audios[it] }
+        val escolhido = Idioma.escolherAudio(audios.map { (g, i) -> faixa(g.getTrackFormat(i)) }, pref, idioma)?.let { audios[it] }
         if (escolhido != null && !escolhido.first.isTrackSelected(escolhido.second)) {
             b.setOverrideForType(TrackSelectionOverride(escolhido.first.mediaTrackGroup, escolhido.second)); mudou = true
         }
         val audio = escolhido ?: audios.firstOrNull { (g, i) -> g.isTrackSelected(i) }
         // Sem faixa de áudio identificada (ainda), não mexe na legenda: decidir às cegas ligaria legenda em filme dublado.
         if (audio == null) return if (mudou) b.build() else null
-        val audioPt = Idioma.ePortugues(faixa(audio.first.getTrackFormat(audio.second)))
+        val audioDaTv = Idioma.eDoIdioma(faixa(audio.first.getTrackFormat(audio.second)), idioma)
         val textos = faixas(t, C.TRACK_TYPE_TEXT)
-        val leg = Idioma.escolherLegenda(textos.map { (g, i) -> faixa(g.getTrackFormat(i)) }, audioPt)?.let { textos[it] }
+        val leg = Idioma.escolherLegenda(textos.map { (g, i) -> faixa(g.getTrackFormat(i)) }, audioDaTv, idioma)?.let { textos[it] }
         if (leg != null) {
             b.setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false).setOverrideForType(TrackSelectionOverride(leg.first.mediaTrackGroup, leg.second))
             mudou = true

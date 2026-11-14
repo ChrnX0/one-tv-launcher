@@ -84,4 +84,11 @@ class LgNetcastTest {
         assertEquals(15, LgNetcast.nivelDaPorcentagem(50, 30))
         assertEquals(100, LgNetcast.nivelDaPorcentagem(150))
     }
+
+    @Test fun agenteUdapSoNoUdap() {
+        assertTrue(LgNetcast.agenteUdap(LgNetcast.CAMINHO_MODELO))
+        assertFalse(LgNetcast.agenteUdap(LgNetcast.CAMINHO_AUTH))
+        assertFalse(LgNetcast.agenteUdap(LgNetcast.CAMINHO_COMANDO))
+        assertFalse(LgNetcast.agenteUdap(LgNetcast.CAMINHO_VOLUME))
+    }
 }

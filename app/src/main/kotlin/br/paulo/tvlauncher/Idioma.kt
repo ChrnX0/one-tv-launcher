@@ -55,51 +55,93 @@ object Idioma {
     data class Faixa(val idioma: String?, val padrao: Boolean = false, val forcada: Boolean = false, val rotulo: String? = null,
                      val externa: Boolean = false)   // externa = a legenda baixada da internet (LegendaExterna)
 
+    // Ideia 25 (14/11/2026): "dublado" quer dizer o idioma da TV (Locale.getDefault().language), não mais só português.
+    // As funções recebem o idioma (código de 2 letras: "pt", "en", "es"); o padrão "pt" mantém o comportamento antigo.
+
+    /** O idioma da TV como as funções abaixo esperam: 2 letras minúsculas (códigos antigos do Java convertidos). */
+    fun idiomaDaTv(lingua: String?): String = when (val l = lingua?.trim()?.lowercase().orEmpty()) {
+        "" -> "pt"
+        "iw" -> "he"; "in" -> "id"; "ji" -> "yi"
+        else -> normalizar(l) ?: l
+    }
+
+    // Códigos de 3 letras (como vêm nos arquivos: "eng", "spa", "por") para os de 2. O Java dá os "terminológicos" (fra,
+    // deu); os "bibliográficos" (fre, ger), também comuns em mkv, vão à parte.
+    private val tres: Map<String, String> by lazy {
+        val m = HashMap<String, String>()
+        for (c in java.util.Locale.getISOLanguages()) runCatching { m[java.util.Locale.forLanguageTag(c).isO3Language] = c }
+        m += mapOf("fre" to "fr", "ger" to "de", "chi" to "zh", "dut" to "nl", "cze" to "cs", "gre" to "el", "per" to "fa",
+            "rum" to "ro", "slo" to "sk", "ice" to "is", "alb" to "sq", "arm" to "hy", "baq" to "eu", "bur" to "my",
+            "geo" to "ka", "mac" to "mk", "mao" to "mi", "may" to "ms", "tib" to "bo", "wel" to "cy", "pob" to "pt")
+        m
+    }
+
+    /** "pt-BR" → "pt", "eng" → "en", "pob" → "pt". Null = sem idioma ("und", vazio). */
+    private fun normalizar(l: String?): String? {
+        val x = l?.trim()?.lowercase()?.takeIf { it.isNotEmpty() && it != "und" } ?: return null
+        val base = x.substringBefore('-').substringBefore('_')
+        return if (base.length == 3) tres[base] ?: base else base
+    }
+
     /** Português: pela língua ("pt", "pt-BR", "por") ou, sem língua, pelo rótulo ("Dublado", "Português"). */
-    fun ePortugues(f: Faixa): Boolean {
+    fun ePortugues(f: Faixa): Boolean = eDoIdioma(f, "pt")
+
+    /**
+     * A faixa está no idioma da TV: pela língua ("en", "en-US", "eng") ou, só em português e sem língua, pelo rótulo
+     * ("Dublado", "Português"): rótulos assim só existem nas listas brasileiras.
+     */
+    fun eDoIdioma(f: Faixa, idioma: String = "pt"): Boolean {
         val l = f.idioma?.lowercase()
-        if (l != null && l != "und") return l == "pt" || l.startsWith("pt-") || l == "por" || l == "pob"
+        if (l != null && l != "und") {
+            if (idioma == "pt") return l == "pt" || l.startsWith("pt-") || l == "por" || l == "pob"
+            return normalizar(l) == idioma
+        }
+        if (idioma != "pt") return false
         val r = f.rotulo?.let { semAcento(it).lowercase() } ?: return false
         return "portug" in r || "dublad" in r || r.contains(Regex("""\b(pt|ptbr|pt-br)\b"""))
     }
 
-    /** A faixa tem idioma conhecido e não é português (é a original, num filme estrangeiro). */
-    private fun eOutraLingua(f: Faixa): Boolean {
+    /** A faixa tem idioma conhecido e não é o da TV (é a original, num filme estrangeiro). */
+    private fun eOutraLingua(f: Faixa, idioma: String): Boolean {
         val l = f.idioma?.lowercase()
-        return l != null && l != "und" && !ePortugues(f)
+        return l != null && l != "und" && !eDoIdioma(f, idioma)
     }
 
     /**
-     * Qual áudio tocar. Dublado: o primeiro em português. Original: a faixa padrão do arquivo se não for português; senão
-     * a primeira de outra língua. Null = deixar o que o player escolheu (só tem uma faixa, ou nada bate).
+     * Qual áudio tocar. Dublado: o primeiro no idioma da TV. Original: a faixa padrão do arquivo se não for o idioma da TV;
+     * senão a primeira de outra língua. Null = deixar o que o player escolheu (só tem uma faixa, ou nada bate).
      */
-    fun escolherAudio(faixas: List<Faixa>, pref: Pref): Int? {
+    fun escolherAudio(faixas: List<Faixa>, pref: Pref, idioma: String = "pt"): Int? {
         if (faixas.size < 2) return null
         return when (pref) {
-            Pref.DUBLADO -> faixas.indexOfFirst { ePortugues(it) }.takeIf { it >= 0 }
-            Pref.ORIGINAL -> faixas.indexOfFirst { it.padrao && eOutraLingua(it) }.takeIf { it >= 0 }
-                ?: faixas.indexOfFirst { eOutraLingua(it) }.takeIf { it >= 0 }
+            Pref.DUBLADO -> faixas.indexOfFirst { eDoIdioma(it, idioma) }.takeIf { it >= 0 }
+            Pref.ORIGINAL -> faixas.indexOfFirst { it.padrao && eOutraLingua(it, idioma) }.takeIf { it >= 0 }
+                ?: faixas.indexOfFirst { eOutraLingua(it, idioma) }.takeIf { it >= 0 }
         }
     }
 
     /**
-     * Qual legenda ligar. Legenda baixada: sempre ela. Áudio em português: nenhuma (só a "forçada", que traduz placa e fala em outra língua, se houver).
-     * Áudio em outra língua: a legenda em português completa; sem ela, a forçada em português. Null = sem legenda.
+     * Qual legenda ligar. Legenda baixada: sempre ela. Áudio no idioma da TV ([audioPortugues], nome antigo): nenhuma (só a
+     * "forçada", que traduz placa e fala em outra língua, se houver). Áudio em outra língua: a legenda completa no idioma
+     * da TV; sem ela, a forçada nesse idioma. Null = sem legenda.
      */
-    fun escolherLegenda(faixas: List<Faixa>, audioPortugues: Boolean): Int? {
+    fun escolherLegenda(faixas: List<Faixa>, audioPortugues: Boolean, idioma: String = "pt"): Int? {
         // Quem baixou uma legenda quer vê-la, mesmo com o áudio dublado (ex.: o arquivo só tem a faixa dublada).
         faixas.indexOfFirst { it.externa }.takeIf { it >= 0 }?.let { return it }
-        val pt = faixas.withIndex().filter { ePortugues(it.value) }
-        if (audioPortugues) return pt.firstOrNull { it.value.forcada }?.index
-        return (pt.firstOrNull { !it.value.forcada } ?: pt.firstOrNull())?.index
+        val daTv = faixas.withIndex().filter { eDoIdioma(it.value, idioma) }
+        if (audioPortugues) return daTv.firstOrNull { it.value.forcada }?.index
+        return (daTv.firstOrNull { !it.value.forcada } ?: daTv.firstOrNull())?.index
     }
 
-    /** A escolha manual de áudio (menu ▼) vira a preferência do título: português = dublado, outra língua = original. */
-    fun prefDaEscolha(f: Faixa): Pref? = when {
-        ePortugues(f) -> Pref.DUBLADO
-        eOutraLingua(f) -> Pref.ORIGINAL
+    /** A escolha manual de áudio (menu ▼) vira a preferência do título: idioma da TV = dublado, outra língua = original. */
+    fun prefDaEscolha(f: Faixa, idioma: String = "pt"): Pref? = when {
+        eDoIdioma(f, idioma) -> Pref.DUBLADO
+        eOutraLingua(f, idioma) -> Pref.ORIGINAL
         else -> null
     }
+
+    /** Idioma que o player marca na legenda baixada (o Media3 mostra o nome no ▼): "pt-BR" para português, como antes. */
+    fun tagLegendaBaixada(idioma: String = "pt"): String = if (idioma == "pt") "pt-BR" else idioma
 
     // ---------------------------------------------------------------- 3. versão no catálogo
 

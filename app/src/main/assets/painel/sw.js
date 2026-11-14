@@ -31,8 +31,16 @@ self.addEventListener('fetch', (ev) => {
   }
 });
 
+// Ideia 38 (14/11/2026): o toque abre o painel na aba que resolve o aviso, não na página inicial.
+// Tipos de Avisos.kt -> aba do painel. Tipo desconhecido (TV mais nova que este painel) abre o início.
+const ABA_DO_AVISO = {
+  LEMBRETE: 'controle', AJUDA: 'controle', PRESENCA: 'controle', TV_MADRUGADA: 'controle', ALARME_PERDIDO: 'controle',
+  CHUVA: 'controle', ERRO_NOVO: 'saude', DESEMPENHO: 'saude', ARMAZENAMENTO: 'saude', INTERNET_VOLTOU: 'rede',
+  VERSAO_NOVA: 'inicio', DIGITAR: 'controle',   // ideia 57: "Digitar na TV" abre o Controle
+};
+
 // A TV cifra o aviso (Web Push, RFC 8291) com a chave deste navegador; o serviço de push do Google só vê bytes.
-// Toque na notificação: abre o painel (ou foca a aba dele, se já estiver aberta).
+// Toque na notificação: abre o painel na aba certa (ou foca a aba do navegador, se já estiver aberta, e troca a aba).
 self.addEventListener('push', (ev) => {
   let d = {};
   try { d = ev.data ? ev.data.json() : {}; } catch (_) { d = { titulo: 'TV', texto: ev.data ? ev.data.text() : '' }; }
@@ -43,18 +51,15 @@ self.addEventListener('push', (ev) => {
     badge: '/icone-192.png',
     tag: d.tipo || 'tv',          // o mesmo tipo troca a notificação anterior em vez de empilhar
     renotify: true,
-    data: { url: d.tipo === 'DIGITAR' ? '/#controle' : '/' },   // ideia 57: "Digitar na TV" abre o Controle
+    data: { aba: ABA_DO_AVISO[d.tipo] || 'inicio' },
   }));
 });
 
 self.addEventListener('notificationclick', (ev) => {
   ev.notification.close();
-  const url = (ev.notification.data && ev.notification.data.url) || '/';
+  const aba = (ev.notification.data && ev.notification.data.aba) || 'inicio';
   ev.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((abas) => {
-    for (const a of abas) if ('focus' in a) {
-      if (url !== '/' && 'navigate' in a) return a.navigate(url).then((c) => c && c.focus());
-      return a.focus();
-    }
-    return self.clients.openWindow(url);
+    for (const a of abas) if ('focus' in a) { a.postMessage({ aba }); return a.focus(); }   // app.js troca a aba
+    return self.clients.openWindow('/#' + aba);
   }));
 });

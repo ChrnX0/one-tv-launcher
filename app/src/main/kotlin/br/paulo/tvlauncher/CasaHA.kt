@@ -50,7 +50,8 @@ object CasaHA {
      * Um aparelho. [regulavel]: luz que aceita brilho; [brilho]: 1-100 % quando acesa (null apagada ou sem brilho).
      */
     class Entidade(val id: String, val nome: String, val estado: String,
-                   val regulavel: Boolean = false, val brilho: Int? = null) {
+                   val regulavel: Boolean = false, val brilho: Int? = null,
+                   val cores: List<CorLuz> = emptyList()) {   // ideia 50: temperatura e cores que a luz aceita
         val dominio get() = id.substringBefore('.')
         fun json(): JSONObject = JSONObject().put("id", id).put("nome", nome).put("estado", estado)
             .apply { if (brilho != null) put("brilho", brilho) }
@@ -112,7 +113,7 @@ object CasaHA {
             if (!idValido(id) || id.substringBefore('.') !in DOMINIOS) return@mapNotNull null
             val nome = o.optJSONObject("attributes")?.optString("friendly_name")?.takeIf { it.isNotBlank() } ?: id
             val atr = o.optJSONObject("attributes")
-            Entidade(id, nome.take(60), o.optString("state"), regulavel(id, atr), brilhoPct(atr))
+            Entidade(id, nome.take(60), o.optString("state"), regulavel(id, atr), brilhoPct(atr), coresDisponiveis(id, atr))
         }.sortedBy { it.nome.lowercase() }
     }
 
@@ -207,6 +208,56 @@ object CasaHA {
         val a = atual ?: 0
         val alvo = if (passo > 0) (a / 10 + 1) * 10 else ((a + 9) / 10 - 1) * 10
         return alvo.coerceIn(0, 100)
+    }
+
+    // ---------------------------------------------------------------- cor e temperatura (ideia 50, 14/11/2026)
+
+    /**
+     * Os tons que a tela Casa oferece com ▲ ▼ no ajuste da luz. Temperatura em kelvin (luz branca: quente, neutra,
+     * fria) ou matiz/saturação (luz colorida). Lista curta de propósito: no controle, escolher entre 10 é rápido; uma
+     * roda de cores não seria.
+     */
+    enum class CorLuz(val kelvin: Int? = null, val matiz: Int = 0, val saturacao: Int = 0) {
+        QUENTE(kelvin = 2700), NEUTRA(kelvin = 4000), FRIA(kelvin = 6500),
+        VERMELHO(matiz = 0, saturacao = 100), LARANJA(matiz = 25, saturacao = 100), AMARELO(matiz = 50, saturacao = 100),
+        VERDE(matiz = 120, saturacao = 100), AZUL(matiz = 230, saturacao = 100), ROXO(matiz = 275, saturacao = 100),
+        ROSA(matiz = 320, saturacao = 60);
+        val temperatura get() = kelvin != null
+    }
+
+    /**
+     * Pelos modos de cor que o Home Assistant lista (`supported_color_modes`): "color_temp" = só as 3 temperaturas;
+     * "hs", "xy", "rgb", "rgbw" ou "rgbww" = as temperaturas e as cores (o Home Assistant converte a temperatura em
+     * cor para quem não tem branco ajustável). "brightness", "onoff" ou nada = nenhum tom. Pura.
+     */
+    fun coresDisponiveis(id: String, atr: JSONObject?): List<CorLuz> {
+        if (!id.startsWith("light.") || atr == null) return emptyList()
+        val a = atr.optJSONArray("supported_color_modes") ?: return emptyList()
+        val modos = (0 until a.length()).map { a.optString(it) }.toSet()
+        val cor = modos.any { it in setOf("hs", "xy", "rgb", "rgbw", "rgbww") }
+        return when {
+            cor -> CorLuz.values().toList()
+            "color_temp" in modos -> CorLuz.values().filter { it.temperatura }
+            else -> emptyList()
+        }
+    }
+
+    /** Próximo tom com ▲ ▼ (dá a volta). [atual] -1 = nenhum escolhido ainda: ▼ vai ao 1º, ▲ ao último. Pura. */
+    fun proximaCor(quantas: Int, atual: Int, passo: Int): Int {
+        if (quantas <= 0) return -1
+        if (atual !in 0 until quantas) return if (passo > 0) 0 else quantas - 1
+        return Math.floorMod(atual + passo, quantas)
+    }
+
+    /** Corpo do light.turn_on para o tom (acende a luz junto). Pura. */
+    fun corpoCor(id: String, c: CorLuz): JSONObject = JSONObject().put("entity_id", id).apply {
+        if (c.kelvin != null) put("color_temp_kelvin", c.kelvin)
+        else put("hs_color", JSONArray().put(c.matiz).put(c.saturacao))
+    }
+
+    fun ajustarCor(ctx: Context, id: String, c: CorLuz) {
+        if (!(idValido(id) && id.startsWith("light."))) throw Erro("cor só para luz")
+        pedir(ctx, "POST", "/api/services/light/turn_on", corpoCor(id, c).toString())
     }
 
     /** Brilho de uma luz, 0-100 % (0 apaga). */
@@ -346,6 +397,11 @@ object CasaHA {
         } catch (ex: Exception) { throw Erro("não consegui falar com o Home Assistant: ${ex.javaClass.simpleName}")
         } finally { c.disconnect() }
     }
+
+    /** Estado de UMA entidade de qualquer domínio (ex.: person.ana = "home"), para a presença (ideia 40). Null se falhar. */
+    fun estadoDe(ctx: Context, id: String): String? = if (!idValido(id)) null else try {
+        JSONObject(String(pedir(ctx, "GET", "/api/states/$id", limite = 256 shl 10))).optString("state").ifEmpty { null }
+    } catch (e: Exception) { null }
 
     fun listar(ctx: Context): List<Entidade> = lerEstados(String(pedir(ctx, "GET", "/api/states")))
 

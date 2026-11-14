@@ -27,6 +27,8 @@ import android.widget.TextView
  *  - OK muda o cartão na hora (otimista) e confirma com o Home Assistant logo depois;
  *  - luz com brilho: SEGURAR OK entra no ajuste, ◀ ▶ muda de 10 em 10 %, OK ou VOLTAR sai (◀ ▶ soltos continuam
  *    andando entre os cartões, que é o que a pessoa espera numa grade);
+ *  - luz com cor ou temperatura (ideia 50, 14/11/2026): no mesmo ajuste, ▲ ▼ trocam o tom (quente, neutra, fria e,
+ *    na luz colorida, 7 cores; ver [CasaHA.CorLuz]);
  *  - ao vivo: com a tela aberta, relê o Home Assistant a cada [VIVO_MS] e atualiza só os cartões (sem refazer a grade,
  *    para o foco não pular); uma luz apagada pelo celular aparece apagada aqui;
  *  - sem configuração: estado vazio com a explicação, nunca uma tela só com o título.
@@ -205,12 +207,12 @@ class CasaActivity : Activity() {
         val google = cartaoGoogle()
         grupo(getString(R.string.casa_secao_google), listOf(google))
         (alvo ?: primeiro ?: google).requestFocus()
-        mostrarDicas(lista.any { it.regulavel })
+        mostrarDicas(lista.any { it.regulavel }, lista.any { it.cores.isNotEmpty() })
     }
 
-    private fun mostrarDicas(temBrilho: Boolean) {
+    private fun mostrarDicas(temBrilho: Boolean, temCor: Boolean = false) {
         val pares = mutableListOf("OK" to getString(R.string.casa_dica_acionar))
-        if (temBrilho) pares += getString(R.string.casa_tecla_segurar_ok) to getString(R.string.casa_dica_brilho)
+        if (temBrilho) pares += getString(R.string.casa_tecla_segurar_ok) to getString(if (temCor) R.string.casa_dica_brilho_cor else R.string.casa_dica_brilho)
         pares += getString(R.string.cl_tecla_voltar) to getString(R.string.rede_dica_sair)
         dicas.removeAllViews()
         dicas.addView(Estilo.barraDicas(this, *pares.toTypedArray()))
@@ -312,14 +314,54 @@ class CasaActivity : Activity() {
         if (estado == "unavailable" || estado == "unknown") return
         ajustePct = if (CasaHA.ligado(e.dominio, estado)) brilhoDe(e) ?: 100 else 0
         ajuste = c
+        ajusteCores = e.cores
+        ajusteCor = -1
         ignorarSoltarOk = true
-        c.mostrarAjuste(ajustePct)
+        c.mostrarAjuste(ajustePct, ajusteCores.isNotEmpty())
     }
+
+    // Ideia 50: os tons da luz em ajuste e o escolhido (-1 = nenhum ainda).
+    private var ajusteCores: List<CasaHA.CorLuz> = emptyList()
+    private var ajusteCor = -1
+
+    /** ▲ ▼ no ajuste de uma luz com cor: troca o tom na tela na hora e manda 350 ms depois da última tecla. */
+    private fun passoCor(passo: Int) {
+        val c = ajuste ?: return
+        if (ajusteCores.isEmpty()) return
+        ajusteCor = CasaHA.proximaCor(ajusteCores.size, ajusteCor, passo)
+        val tom = ajusteCores[ajusteCor]
+        if (ajustePct == 0) ajustePct = 100   // escolher um tom acende a luz
+        c.mostrarTom(nomeTom(tom), ajustePct)
+        ui.removeCallbacks(mandarCor)
+        ui.postDelayed(mandarCor, 350)
+    }
+
+    private val mandarCor = Runnable {
+        val c = ajuste ?: return@Runnable
+        val tom = ajusteCores.getOrNull(ajusteCor) ?: return@Runnable
+        val id = cartoes.entries.firstOrNull { it.value === c }?.key ?: return@Runnable
+        otimista[id] = Pendente("on", ajustePct, SystemClock.elapsedRealtime() + PRAZO_MS)
+        enviar(id) { CasaHA.ajustarCor(it, id, tom) }
+    }
+
+    private fun nomeTom(t: CasaHA.CorLuz): String = getString(when (t) {
+        CasaHA.CorLuz.QUENTE -> R.string.casa_cor_quente
+        CasaHA.CorLuz.NEUTRA -> R.string.casa_cor_neutra
+        CasaHA.CorLuz.FRIA -> R.string.casa_cor_fria
+        CasaHA.CorLuz.VERMELHO -> R.string.casa_cor_vermelho
+        CasaHA.CorLuz.LARANJA -> R.string.casa_cor_laranja
+        CasaHA.CorLuz.AMARELO -> R.string.casa_cor_amarelo
+        CasaHA.CorLuz.VERDE -> R.string.casa_cor_verde
+        CasaHA.CorLuz.AZUL -> R.string.casa_cor_azul
+        CasaHA.CorLuz.ROXO -> R.string.casa_cor_roxo
+        CasaHA.CorLuz.ROSA -> R.string.casa_cor_rosa
+    })
 
     private fun sairDoAjuste() {
         val c = ajuste ?: return
         ajuste = null
         ui.removeCallbacks(mandarBrilho)
+        ui.removeCallbacks(mandarCor)
         c.ajustando = false
         entidades.firstOrNull { cartoes[it.id] === c }?.let { atualizar(c, it) }
         escreverResumo()
@@ -329,7 +371,7 @@ class CasaActivity : Activity() {
     private fun passoBrilho(passo: Int) {
         val c = ajuste ?: return
         ajustePct = CasaHA.proximoBrilho(ajustePct, passo)
-        c.mostrarAjuste(ajustePct)
+        c.mostrarAjuste(ajustePct, ajusteCores.isNotEmpty())
         ui.removeCallbacks(mandarBrilho)
         ui.postDelayed(mandarBrilho, 350)
     }
@@ -351,7 +393,8 @@ class CasaActivity : Activity() {
             ev.keyCode == KeyEvent.KEYCODE_BACK -> if (ev.action == KeyEvent.ACTION_UP) sairDoAjuste()
             ev.keyCode == KeyEvent.KEYCODE_DPAD_LEFT -> if (ev.action == KeyEvent.ACTION_DOWN) passoBrilho(-1)
             ev.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT -> if (ev.action == KeyEvent.ACTION_DOWN) passoBrilho(+1)
-            ev.keyCode == KeyEvent.KEYCODE_DPAD_UP || ev.keyCode == KeyEvent.KEYCODE_DPAD_DOWN -> {}   // fica no cartão
+            ev.keyCode == KeyEvent.KEYCODE_DPAD_UP -> if (ev.action == KeyEvent.ACTION_DOWN) passoCor(-1)   // sem cor: fica no cartão
+            ev.keyCode == KeyEvent.KEYCODE_DPAD_DOWN -> if (ev.action == KeyEvent.ACTION_DOWN) passoCor(+1)
             else -> return super.dispatchKeyEvent(ev)
         }
         return true
@@ -397,10 +440,19 @@ class CasaActivity : Activity() {
             pintar()
         }
 
-        fun mostrarAjuste(pct: Int) {
+        fun mostrarAjuste(pct: Int, comCor: Boolean = false) {
             ajustando = true
             ligado = pct > 0
-            estadoTv.text = getString(R.string.casa_brilho_ajuste, pct)
+            estadoTv.text = getString(if (comCor) R.string.casa_brilho_ajuste_cor else R.string.casa_brilho_ajuste, pct)
+            barra.pct = pct
+            pintar()
+        }
+
+        /** Ideia 50: o tom escolhido com ▲ ▼ no lugar do estado ("Luz quente · ▲ ▼"). */
+        fun mostrarTom(nome: String, pct: Int) {
+            ajustando = true
+            ligado = true
+            estadoTv.text = getString(R.string.casa_cor_ajuste, nome)
             barra.pct = pct
             pintar()
         }

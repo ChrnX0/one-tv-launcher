@@ -36,6 +36,14 @@
         <item>Wi-Fi das visitas em QR: Configurações &gt; Visitas e rotinas; no modo visita, o Wi-Fi do painel rápido mostra o QR</item>
         <item>O backup noturno agora confere toda noite se a cópia gravada restauraria</item>
         <item>Configurações &gt; Sistema &gt; O que é usado: telas e opções por uso, contadas só nesta TV</item>
+        <item>Internet: aviso no celular quando ela volta (quanto ficou fora e a causa provável), resumo por mês no painel e aviso quando o armazenamento está enchendo</item>
+        <item>Painel rápido: os últimos avisos da TV (chuva, recado, manutenção) e a lista de compras, que se risca com OK</item>
+        <item>Filmes e séries seguem o idioma da TV: “dublado” é o áudio nesse idioma, e as legendas automáticas e da internet também vêm nele</item>
+        <item>Séries: marque a abertura uma vez no menu ▼ (início e fim) e os próximos episódios oferecem “Pular abertura · OK”</item>
+        <item>Configurações reorganizadas por assunto: Tela inicial, TV e filmes, Família, Tela e energia, Casa e automações, Acesso remoto, Sistema; o técnico foi para Avançado</item>
+        <item>O card “Ocultos” saiu da tela inicial: mostre de volta em Configurações › Tela inicial › Apps ocultos</item>
+        <item>Filmes e Séries também para quem só tem lista M3U: os filmes e episódios da lista viram catálogo</item>
+        <item>Casa: cor e temperatura da luz (no ajuste do brilho, ▲ ▼ trocam o tom)</item>
         <item>Compartilhar para a TV pelo celular: vídeo do YouTube abre no YouTube, link abre na TV, texto vira recado (painel instalado como app)</item>
         <item>Diário da TV: 7 dias do que mexeu nela (painel, Claude, adb, a própria TV), no painel e para o Claude; ele também pode chamar um link seu</item>
         <item>Campo de texto aberto na TV pode avisar o celular: “Digitar na TV” (avisos do painel)</item>
@@ -69,6 +77,12 @@
         <item>Preencha Configurações &gt; Visitas e rotinas &gt; Wi-Fi das visitas, ligue o modo visita e aperte Wi-Fi no painel rápido</item>
         <item>Configurações &gt; Sistema &gt; Backup automático &gt; Fazer agora</item>
         <item>Abra Configurações &gt; Sistema &gt; O que é usado</item>
+        <item>Abra o painel rápido e desça até o fim</item>
+        <item>Toque um filme estrangeiro com “Original com legenda” (TV em português)</item>
+        <item>Num episódio, marque no ▼ o início e o fim da abertura e abra o próximo episódio</item>
+        <item>Abra as Configurações e desça pelo menu de abas</item>
+        <item>Oculte um app (segure OK nele), depois abra Configurações › Tela inicial › Apps ocultos e dê OK nele</item>
+        <item>Na Casa, segure OK numa luz colorida e aperte ▲ ▼</item>
         <item>No celular, compartilhe um vídeo do YouTube com o “One TV”</item>
         <item>No painel, Extras &gt; Diário da TV &gt; Ver o diário</item>
         <item>Ligue o aviso “Campo de texto aberto na TV” e abra a busca do YouTube na TV</item>
@@ -102,6 +116,12 @@
         <item>Apareceu o QR, e a câmera de um celular conectou?</item>
         <item>O resultado diz “restauração conferida”?</item>
         <item>Aparecem as telas que você abriu hoje?</item>
+        <item>Aparecem os avisos da TV e a lista de compras, e OK risca um item?</item>
+        <item>A legenda em português ligou sozinha, como antes?</item>
+        <item>Apareceu “Pular abertura · OK” na abertura, e o OK pulou sem pausar?</item>
+        <item>Ficou mais fácil achar as coisas, com o técnico só em Avançado?</item>
+        <item>Nenhum card “Ocultos” na tela inicial, e o app voltou?</item>
+        <item>A luz mudou de tom?</item>
         <item>O vídeo abriu no YouTube da TV?</item>
         <item>Aparecem as ações de hoje?</item>
         <item>O celular recebeu “Digitar na TV”, e o toque abriu o Controle?</item>
