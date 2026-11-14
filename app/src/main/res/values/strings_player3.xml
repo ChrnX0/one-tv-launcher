@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Movies and series player: skip the opening, marked once per series (idea 24, 14/11/2026). -->
+<resources>
+    <string name="abertura_marcar_inicio">Mark opening start here (%1$s)</string>
+    <string name="abertura_marcar_fim">Mark opening end here (%1$s)</string>
+    <string name="abertura_apagar">Delete opening mark</string>
+    <string name="abertura_inicio_marcado">Opening start marked at %1$s. Now mark the end in the ▼ menu</string>
+    <string name="abertura_salva">Opening saved: %1$s to %2$s. The next episodes offer to skip it</string>
+    <string name="abertura_falta_inicio">Mark the opening start first</string>
+    <string name="abertura_invalida">That doesn’t look like an opening: it must last 10 s to 5 min and start in the first 15 min</string>
+    <string name="abertura_apagada">Opening mark deleted</string>
+    <string name="abertura_pular">Skip opening · OK</string>
+</resources>

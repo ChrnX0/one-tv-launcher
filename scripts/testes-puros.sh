@@ -47,6 +47,7 @@ declare -A FONTES=(
   [UsoLocalRegrasTest]="UsoLocalRegras"
   [TendenciaDiscoTest]="TendenciaDisco"
   [HistoricoAvisosTest]="HistoricoAvisos"
+  [AberturaSerieTest]="AberturaSerie"
 )
 
 falhou=0

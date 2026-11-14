@@ -39,6 +39,7 @@
         <item>Internet: aviso no celular quando ela volta (quanto ficou fora e a causa provável), resumo por mês no painel e aviso quando o armazenamento está enchendo</item>
         <item>Painel rápido: os últimos avisos da TV (chuva, recado, manutenção) e a lista de compras, que se risca com OK</item>
         <item>Filmes e séries seguem o idioma da TV: “dublado” é o áudio nesse idioma, e as legendas automáticas e da internet também vêm nele</item>
+        <item>Séries: marque a abertura uma vez no menu ▼ (início e fim) e os próximos episódios oferecem “Pular abertura · OK”</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -70,6 +71,7 @@
         <item>Abra Configurações &gt; Sistema &gt; O que é usado</item>
         <item>Abra o painel rápido e desça até o fim</item>
         <item>Toque um filme estrangeiro com “Original com legenda” (TV em português)</item>
+        <item>Num episódio, marque no ▼ o início e o fim da abertura e abra o próximo episódio</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -101,5 +103,6 @@
         <item>Aparecem as telas que você abriu hoje?</item>
         <item>Aparecem os avisos da TV e a lista de compras, e OK risca um item?</item>
         <item>A legenda em português ligou sozinha, como antes?</item>
+        <item>Apareceu “Pular abertura · OK” na abertura, e o OK pulou sem pausar?</item>
     </string-array>
 </resources>
