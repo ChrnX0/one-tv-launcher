@@ -78,6 +78,16 @@ object Atualizador {
         return if (c > versaoAtual(ctx) && VigiaAtualizacao.podeInstalar(ctx, c)) c else null
     }
 
+    private const val CANAL_TESTE = "canal_teste"
+
+    /** Canal de teste (62c): esta TV instala também os pré-lançamentos. Só pelo adb (EXTRAS "canal"). */
+    fun canalTeste(ctx: Context): Boolean = prefs(ctx).getBoolean(CANAL_TESTE, false)
+
+    fun definirCanalTeste(ctx: Context, ligado: Boolean) {
+        // Troca de canal muda o que "o último Release" quer dizer: a próxima volta confere de novo, sem esperar 6 h.
+        prefs(ctx).edit().putBoolean(CANAL_TESTE, ligado).remove(ULTIMA).remove(PENDENTE).apply()
+    }
+
     private fun versaoAtual(ctx: Context): Long = try {
         if (android.os.Build.VERSION.SDK_INT >= 28) instalado(ctx.applicationContext).longVersionCode else 0L
     } catch (e: Exception) { 0L }
@@ -120,9 +130,11 @@ object Atualizador {
     }
 
     private fun verificarAgora(app: Context, instalar: Boolean, soComTelaApagada: Boolean): String {
-        val json = JSONObject(baixarTexto("https://api.github.com/repos/${Config.ATUALIZACAO_REPO}/releases/latest"))
+        // Canal de teste (62c): lê a lista e aceita pré-lançamento; o normal pede só o /latest (CanalAtualizacao).
+        val json = CanalAtualizacao.escolher(baixarTexto(CanalAtualizacao.url(Config.ATUALIZACAO_REPO, canalTeste(app))))
+            ?: return "Release sem versão na tag"
         // A tag é "v<versionCode>" (o workflow cria assim).
-        val codigo = json.optString("tag_name").removePrefix("v").toLongOrNull() ?: return "Release sem versão na tag"
+        val codigo = CanalAtualizacao.codigo(json.optString("tag_name")) ?: return "Release sem versão na tag"
         val meu = instalado(app).longVersionCode
         if (codigo <= meu) { prefs(app).edit().remove(PENDENTE).apply(); return txt(R.string.atu_em_dia, meu, codigo) }
         // Este mesmo Release já foi recusado pela chave: o APK não muda, então não baixa 12 MB de novo a cada 6 h.

@@ -34,6 +34,11 @@ import java.io.File
  *  - saude                 JSON da saúde do acesso remoto (SaudeAcesso.json)
  *  - manutencao            roda a manutenção noturna agora, em segundo plano (relatório depois em "saude")
  *  - manutencao_resumo     mostra o resumo da última manutenção (só se houver algo e a HOME estiver na frente)
+ * Versões (14/11/2026):
+ *  - canal --es canal teste|normal   teste = esta TV instala também os pré-lançamentos (ver CanalAtualizacao)
+ * Conferência (14/11/2026):
+ *  - tecla --es tecla HOME [--el ms 1500]   entrega uma tecla falsa ao funil das teclas da acessibilidade (TeclaFalsa).
+ *    Aceita o nome sem "KEYCODE_" ou o número. Ex.: HOME segurado = --es tecla HOME --el ms 1500.
  */
 object ComandosExtras {
     fun tratar(ctx: Context, i: Intent): String = when (i.getStringExtra("o")) {
@@ -76,9 +81,34 @@ object ComandosExtras {
         "dormir_apps" -> HoraDormir.lerPermitidos(i.getStringExtra("apps")).joinToString(",").also {
             Extras.definirTexto(ctx, HoraDormir.CHAVE_PERMITIDOS, it) }.ifEmpty { "lista vazia: só os essenciais abrem" }
         "recado_link" -> PainelExtras.novoLinkRecado(ctx)
+        "tecla" -> teclaFalsa(i)
+        "canal" -> when (i.getStringExtra("canal")) {
+            "teste" -> { Atualizador.definirCanalTeste(ctx, true); "canal=teste" }
+            "normal" -> { Atualizador.definirCanalTeste(ctx, false); "canal=normal" }
+            else -> "canal=${if (Atualizador.canalTeste(ctx)) "teste" else "normal"} (mude com --es canal teste|normal)"
+        }
         "estado" -> Extras.Chave.values().joinToString("\n") { "${it.name}=${Extras.ligado(ctx, it)}" } +
-            "\ndiario_dns_erro=${DiarioDns.erro(ctx)}" + "\nrelogio_travado=${TravaRelogio.travado(ctx)}"
+            "\ndiario_dns_erro=${DiarioDns.erro(ctx)}" + "\nrelogio_travado=${TravaRelogio.travado(ctx)}" +
+            "\ncanal=${if (Atualizador.canalTeste(ctx)) "teste" else "normal"}"
         else -> "comando desconhecido; ver ComandosExtras.kt"
+    }
+
+    /** Tecla falsa (63): agenda o plano na thread principal, onde o sistema entrega as teclas de verdade. */
+    private fun teclaFalsa(i: Intent): String {
+        val servico = AutorizaShizukuService.instancia ?: return "acessibilidade desligada: o funil das teclas não está rodando"
+        val nome = i.getStringExtra("tecla")?.trim().orEmpty()
+        val codigo = nome.toIntOrNull() ?: android.view.KeyEvent.keyCodeFromString("KEYCODE_" + nome.uppercase().removePrefix("KEYCODE_"))
+        if (codigo <= 0) return "tecla desconhecida: $nome"
+        val ms = TeclaFalsa.duracao(if (i.hasExtra("ms")) i.getLongExtra("ms", TeclaFalsa.PADRAO_MS) else null)
+        val principal = android.os.Handler(android.os.Looper.getMainLooper())
+        val inicio = android.os.SystemClock.uptimeMillis()
+        for (ev in TeclaFalsa.plano(ms)) principal.postAtTime({
+            val agora = android.os.SystemClock.uptimeMillis()
+            val acao = if (ev.desce) android.view.KeyEvent.ACTION_DOWN else android.view.KeyEvent.ACTION_UP
+            try { servico.tecla(android.view.KeyEvent(inicio, agora, acao, codigo, ev.repeticao)) }
+            catch (e: Exception) { android.util.Log.w("TvLauncher.Tecla", "tecla falsa falhou: $e") }
+        }, inicio + ev.emMs)
+        return "${android.view.KeyEvent.keyCodeToString(codigo)} por $ms ms"
     }
 
     private fun abrir(ctx: Context, c: Class<*>): String {

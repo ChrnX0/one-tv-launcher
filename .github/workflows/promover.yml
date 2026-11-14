@@ -1,0 +1,37 @@
+# Promover um pré-lançamento (canal de teste) para todas as TVs (14/11/2026, ideia 62c).
+# Fluxo: "Build e Release" com canal = teste -> só a TV com o canal de teste instala -> uns dias sem queda nela
+# (Configurações > Sistema, ou EXTRAS "estado" pelo adb) -> rodar ESTE workflow à mão na main com a tag (ex.: v456400).
+# Ele só tira a marca de pré-lançamento e marca como "latest": o /releases/latest passa a apontar para ele e as outras
+# TVs instalam na próxima volta do Atualizador (6 h). Não compila nem assina nada.
+name: Promover para todos
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag do pré-lançamento (v<versionCode>, ex.: v456400)'
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  promover:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write   # editar o Release
+    steps:
+      - name: Promover
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          # Tag fora do formato v<número> faria todas as TVs pararem de atualizar (Atualizador.kt lê o número da tag).
+          if ! printf '%s' "$TAG" | grep -Eq '^v[0-9]+$'; then echo "::error::tag inválida: use v<versionCode>"; exit 1; fi
+          PRE=$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isPrerelease --jq .isPrerelease)
+          if [ "$PRE" != "true" ]; then echo "::error::$TAG não é pré-lançamento (já é de todos?)"; exit 1; fi
+          gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --prerelease=false --latest
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json tagName,isPrerelease,publishedAt
