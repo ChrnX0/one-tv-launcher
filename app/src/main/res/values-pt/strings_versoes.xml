@@ -54,6 +54,7 @@
         <item>TV ao vivo: a lista de canais e a grade usam as cores e os ícones de linha do launcher (estrela, recentes, busca, filtros, grade, cadeado)</item>
         <item>Filmes: Filtrar (gênero, época, nota mínima, só não vistos) sobre a categoria escolhida, “Coleção deste filme” na ficha e “Sortear um filme”</item>
         <item>Painel do celular: caixa “Pedir à TV” no Início, sem IA: “coloca na Globo”, “abre o YouTube”, “avisa em 7 minutos”, “desliga em 30 minutos” (dá para ditar pelo microfone do teclado)</item>
+        <item>“Meu time”: o próximo jogo das próximas 24 h aparece ao lado do despertador e do timer no topo da HOME e num cartão do protetor Galeria (“Flamengo × Palmeiras · 21:30”)</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Aperte HOME</item>
@@ -98,6 +99,7 @@
         <item>Na TV ao vivo, abra a lista de canais (OK) e depois a Grade</item>
         <item>Em Filmes, use Filtrar (ex.: um gênero + nota 7+), depois Sortear um filme e, na ficha de uma continuação, “Coleção deste filme”</item>
         <item>No painel do celular (Início), escreva “abre o YouTube” em “Pedir à TV”</item>
+        <item>Com uma palavra do “Meu time” que tenha jogo nas próximas 24 h, aperte HOME</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Voltou para a tela inicial?</item>
@@ -142,5 +144,6 @@
         <item>Favoritos, Recentes, Buscar, Filtros e Grade aparecem com ícones de linha (sem quadradinhos nem emoji), nos mesmos tamanhos?</item>
         <item>O título da coluna mostrou o filtro, o sorteio abriu um filme da grade filtrada e a coleção listou as continuações?</item>
         <item>O painel respondeu “Abrindo YouTube” e o YouTube abriu na TV?</item>
+        <item>O jogo apareceu ao lado do despertador/timer no topo, com a hora de início?</item>
     </string-array>
 </resources>

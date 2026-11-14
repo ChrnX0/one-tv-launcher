@@ -192,6 +192,18 @@ object LembretesTv {
 
     fun hora(ms: Long): String = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(ms))
 
+    /**
+     * Ideia 12: o próximo jogo do "Meu time" nas próximas 24 h, já curto ("Flamengo × Palmeiras · 21:30"), para a cápsula
+     * de avisos da HOME e o protetor. Null = nada a mostrar (ou modo visita). Lê disco: FORA da thread da tela.
+     */
+    fun proximoJogo(ctx: Context, agora: Long = System.currentTimeMillis()): String? {
+        if (ModoVisita.ativo(ctx)) return null
+        val palavras = palavras(ctx)
+        if (palavras.isEmpty()) return null
+        val itens = listar(ctx).map { ProximoJogo.Item(it.titulo, it.inicio, it.fim, it.palavra) }
+        return ProximoJogo.escolher(itens, palavras, agora)?.let { ProximoJogo.texto(it, java.util.TimeZone.getDefault()) }
+    }
+
     /** Para o painel e o MCP. */
     fun json(ctx: Context): org.json.JSONObject = org.json.JSONObject()
         .put("palavras", Extras.texto(ctx, CHAVE_PALAVRAS))
