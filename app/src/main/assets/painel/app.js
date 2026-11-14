@@ -201,7 +201,7 @@ const AO_ABRIR = {
   claude: () => carregarMcp(),
   roteador: () => carregarRoteador(),
   registro: () => carregarRegistro(),
-  backup: () => { carregarCopias(); carregarNoturno(); },
+  backup: () => { carregarCopias(); carregarNoturno(); acompanharDrive(); },
   arquivos: () => abrirPasta(pastaAtual),
 };
 
@@ -755,6 +755,7 @@ function desenharNoturno(r) {
     o.value = valor; o.textContent = rotulo; o.selected = valor === r.destino;
     sel.appendChild(o);
   }
+  desenharDriveConta(r);
   const lista = $('listaNoturno');
   lista.replaceChildren();
   for (const c of r.copias) {
@@ -820,6 +821,98 @@ $('btnNoturnoAgora').addEventListener('click', async () => {
     mostrar(status, r.resultado ? `Resultado: ${r.resultado}` : 'Ainda rodando na TV: o resultado aparece em "última vez" daqui a pouco.');
   } catch (e) { mostrar(status, textoErro(e)); }
   b.disabled = false;
+});
+
+// ---------- conta do Google Drive (DriveBackup.kt): o mesmo login por código da tela da TV ----------
+
+function desenharDriveConta(r) {
+  $('driveConta').textContent = r.drive || (r.google ? 'não conectada' : 'falta o login Google (aba Claude)');
+  $('btnDriveConectar').hidden = !!r.drive || !r.google;
+  $('btnDriveDesconectar').hidden = !r.drive;
+  $('cartaoDriveRestaurar').hidden = !r.drive;
+}
+
+let timerDrive = null;
+let qrDriveAtual = null;
+/** Mostra o código enquanto o Google espera; termina sozinho quando a pessoa conclui no celular (ou o código vence). */
+function desenharDriveLogin(l) {
+  clearTimeout(timerDrive);
+  const esperando = l.estado === 'esperando';
+  $('driveLogin').hidden = !esperando;
+  if (esperando) {
+    $('driveCodigo').textContent = l.codigo;
+    $('driveUrl').textContent = l.url.replace(/^https?:\/\//, '');
+    $('driveUrl').href = l.url;
+    if (l.codigo !== qrDriveAtual) $('driveQr').src = '/api/backup/drive/qr?t=' + Date.now();
+    qrDriveAtual = l.codigo;
+    // Confere a cada 3 s só com a aba à vista (a consulta renova a sessão do painel).
+    if (!$('abaBackup').hidden && document.visibilityState === 'visible') timerDrive = setTimeout(acompanharDrive, 3000);
+    return;
+  }
+  qrDriveAtual = null;
+  if (l.estado === 'ok') { aviso(`Google Drive conectado: ${l.email}. Escolha "Google Drive" em Cópia extra.`, 'ok'); carregarNoturno(); }
+  else if (l.estado === 'recusado' || l.estado === 'erro') mostrar($('statusNoturno'), `Não conectou: ${l.mensagem}`);
+}
+
+async function acompanharDrive() {
+  try { desenharDriveLogin(await chamar('GET', '/api/backup/drive/login')); } catch (e) { mostrar($('statusNoturno'), textoErro(e)); }
+}
+
+$('btnDriveConectar').addEventListener('click', async () => {
+  mostrar($('statusNoturno'), '');
+  // Pede o PIN de novo (quem conecta a conta decide para onde vão as cópias da casa).
+  const r = await confirmar('Conectar o Google Drive?',
+    'A TV pede um código ao Google. Depois, no celular, você entra com a conta Google da TV e digita o código. As cópias vão para a pasta OneTV-backup, trancadas com a senha do backup.',
+    'Pedir código', () => chamar('POST', '/api/backup/drive/conectar'), false);
+  if (r) desenharDriveLogin(r);
+});
+$('btnDriveCancelar').addEventListener('click', async () => {
+  clearTimeout(timerDrive);
+  $('driveLogin').hidden = true;
+  try { desenharNoturno(await chamar('POST', '/api/backup/drive/cancelar')); } catch (e) { mostrar($('statusNoturno'), textoErro(e)); }
+});
+$('btnDriveDesconectar').addEventListener('click', async () => {
+  const r = await confirmar('Desconectar o Google Drive?',
+    `A TV deixa de enviar cópias para ${estadoNoturno?.drive || 'a conta'} e o acesso é tirado também no Google. As cópias que já estão no Drive ficam lá.`,
+    'Desconectar', () => chamar('POST', '/api/backup/drive/desconectar'));
+  if (r) { desenharNoturno(r); aviso('Google Drive desconectado.', 'ok'); }
+});
+
+$('btnDriveListar').addEventListener('click', async () => {
+  const lista = $('listaDrive');
+  const status = $('statusDrive');
+  const b = $('btnDriveListar');
+  lista.replaceChildren();
+  b.disabled = true;
+  mostrar(status, 'Perguntando ao Drive…');
+  let r;
+  try { r = await chamar('GET', '/api/backup/drive/copias'); } catch (e) { mostrar(status, textoErro(e)); b.disabled = false; return; }
+  b.disabled = false;
+  mostrar(status, r.copias.length ? '' : 'Nenhuma cópia no Drive ainda.');
+  for (const c of r.copias) {
+    const linha = document.createElement('div');
+    linha.className = 'linha-registro';
+    const q = document.createElement('span');
+    q.className = 'quando';
+    q.textContent = `${diaDaCopiaNoturna(c.nome)} · ${Math.max(1, Math.round(c.tamanho / 1024))} KB`;
+    const voltar = document.createElement('button');
+    voltar.type = 'button'; voltar.className = 'link'; voltar.textContent = 'restaurar';
+    voltar.addEventListener('click', async () => {
+      const senha = $('senhaDrive').value;
+      if (senha.length < 8) { mostrar(status, 'Digite a senha do backup noturno (8 ou mais caracteres).'); $('senhaDrive').focus(); return; }
+      const emUso = await tvEmUso();
+      const ok = await confirmar('Restaurar do Google Drive?',
+        `Substitui as configurações do launcher pelas da cópia de ${diaDaCopiaNoturna(c.nome)} e reinicia o launcher na TV (a tela pisca).` +
+        (emUso ? ` Atenção: a TV está em uso agora (${emUso}).` : ''),
+        'Restaurar', () => chamar('POST', '/api/backup/drive/restaurar', { id: c.id, senha }));
+      if (!ok) return;
+      $('senhaDrive').value = '';
+      mostrar(status, `Restaurado (${ok.chaves} configurações). O launcher está reiniciando…`);
+      esperarVoltar(status);
+    });
+    linha.append(q, ' ', voltar);
+    lista.appendChild(linha);
+  }
 });
 
 // ---------- saúde (PainelSaude.kt) ----------
@@ -1917,6 +2010,7 @@ async function atualizarFoto() {
 document.addEventListener('visibilitychange', () => {
   if (!$('abaControle').hidden) atualizarFoto();
   if (!$('abaClaude').hidden && document.visibilityState === 'visible' && !$('telaPainel').hidden) carregarMcp();
+  if (!$('abaBackup').hidden && document.visibilityState === 'visible' && !$('telaPainel').hidden && !$('driveLogin').hidden) acompanharDrive();
 });
 
 for (const b of document.querySelectorAll('[data-tecla]')) {

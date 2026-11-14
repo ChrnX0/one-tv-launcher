@@ -703,9 +703,50 @@
 "Últimas 24 h": "Last 24 h",
 "— aparece por cima de qualquer app": "— shows over any app",
 "‹ Anterior": "‹ Previous",
-"▶ Vídeo ao vivo": "▶ Live video"
+"▶ Vídeo ao vivo": "▶ Live video",
+"Conta do Google Drive:": "Google Drive account:",
+"conectar": "connect",
+"desconectar": "disconnect",
+"cancelar": "cancel",
+"restaurar": "restore",
+"No celular, abra": "On your phone, open",
+"(ou leia o QR), entre com a conta Google da TV, digite o código abaixo e marque a permissão do Google Drive.": "(or scan the QR), sign in with the TV's Google account, type the code below and tick the Google Drive permission.",
+"QR do endereço do Google": "QR of the Google address",
+"Restaurar do Google Drive": "Restore from Google Drive",
+"As cópias noturnas que estão no Drive. Restaurar pede a senha do backup e o PIN, substitui as configurações da TV e reinicia o launcher.": "The nightly copies stored in Drive. Restoring asks for the backup password and the PIN, replaces the TV settings and restarts the launcher.",
+"senha do backup noturno": "nightly backup password",
+"Senha do backup noturno": "Nightly backup password",
+"Ver cópias do Drive": "Show Drive copies",
+"não conectada": "not connected",
+"falta o login Google (aba Claude)": "Google sign-in missing (Claude tab)",
+"Conectar o Google Drive?": "Connect Google Drive?",
+"A TV pede um código ao Google. Depois, no celular, você entra com a conta Google da TV e digita o código. As cópias vão para a pasta OneTV-backup, trancadas com a senha do backup.": "The TV asks Google for a code. Then, on your phone, you sign in with the TV's Google account and type the code. Copies go to the OneTV-backup folder, locked with the backup password.",
+"Pedir código": "Get code",
+"Desconectar o Google Drive?": "Disconnect Google Drive?",
+"Desconectar": "Disconnect",
+"Google Drive desconectado.": "Google Drive disconnected.",
+"Perguntando ao Drive…": "Asking Drive…",
+"Nenhuma cópia no Drive ainda.": "No copies in Drive yet.",
+"Digite a senha do backup noturno (8 ou mais caracteres).": "Type the nightly backup password (8 or more characters).",
+"Restaurar do Google Drive?": "Restore from Google Drive?",
 };
   const P = [
+[
+"^Google Drive conectado: (.+?)\\. Escolha \\\"Google Drive\\\" em Cópia extra\\.$",
+"Google Drive connected: $1. Choose \"Google Drive\" under Extra copy."
+],
+[
+"^Não conectou: (.+)$",
+"Did not connect: $1"
+],
+[
+"^A TV deixa de enviar cópias para (.+?) e o acesso é tirado também no Google\\. As cópias que já estão no Drive ficam lá\\.$",
+"The TV stops sending copies to $1 and access is revoked at Google too. Copies already in Drive stay there."
+],
+[
+"^Substitui as configurações do launcher pelas da cópia de (.+?) e reinicia o launcher na TV \\(a tela pisca\\)\\.(.*)$",
+"Replaces the launcher settings with those of the $1 copy and restarts the launcher on the TV (the screen blinks).$2"
+],
 [
 "^Substitui\\ as\\ configurações,\\ as\\ contas\\ de\\ TV\\ ao\\ vivo,\\ o\\ PIN,\\ o\\ Tailscale\\ e\\ os\\ logins\\ do\\ conector\\ pelos\\ de\\ \"(.+?)\"$",
 "Replaces the settings, live TV accounts, PIN, Tailscale and connector sign-ins with those of \"$1\""

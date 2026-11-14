@@ -542,6 +542,16 @@
         <p id="estadoNoturno" class="aviso-curto"></p>
         <label><input id="chkNoturnoLigado" type="checkbox"> Fazer o backup toda noite</label>
         <p class="aviso">Horário: <input id="horaNoturno" type="time" aria-label="Horário do backup noturno"></p>
+        <p class="aviso">Conta do Google Drive: <strong id="driveConta"></strong>
+          <button type="button" class="link" id="btnDriveConectar">conectar</button>
+          <button type="button" class="link" id="btnDriveDesconectar" hidden>desconectar</button></p>
+        <div id="driveLogin" hidden>
+          <p class="aviso">No celular, abra <a id="driveUrl" target="_blank" rel="noopener noreferrer"></a> (ou leia o QR),
+            entre com a conta Google da TV, digite o código abaixo e marque a permissão do Google Drive.</p>
+          <p class="codigo-grande" id="driveCodigo"></p>
+          <img id="driveQr" alt="QR do endereço do Google" width="200" height="200">
+          <p class="aviso"><button type="button" class="link" id="btnDriveCancelar">cancelar</button></p>
+        </div>
         <p class="aviso">Cópia extra: <select id="destinoNoturno" aria-label="Cópia extra do backup noturno"></select></p>
         <input id="senhaNoturno" type="password" minlength="8" maxlength="128" autocomplete="new-password"
                placeholder="senha nova do backup noturno (8 ou mais caracteres)">
@@ -551,6 +561,16 @@
         </div>
         <div id="listaNoturno" class="lista-registro"></div>
         <p id="statusNoturno" class="aviso" hidden></p>
+      </div>
+      <div class="cartao" id="cartaoDriveRestaurar" hidden>
+        <h2>Restaurar do Google Drive</h2>
+        <p class="aviso">As cópias noturnas que estão no Drive. Restaurar pede a senha do backup e o PIN, substitui as
+          configurações da TV e reinicia o launcher.</p>
+        <input id="senhaDrive" type="password" maxlength="128" autocomplete="off"
+               placeholder="senha do backup noturno" aria-label="Senha do backup noturno">
+        <button type="button" class="botao-secundario" id="btnDriveListar">Ver cópias do Drive</button>
+        <div id="listaDrive" class="lista-registro"></div>
+        <p id="statusDrive" class="aviso" hidden></p>
       </div>
       <div class="cartao">
         <h2>Restaurar</h2>
