@@ -26,11 +26,23 @@ class TeclasActivity : Activity() {
     private var passo = Passo.LISTA
     private var avisoCaptura: TextView? = null
 
+    companion object {
+        /** Abre direto num botão (código da tecla; 0 = "aperte o botão") e fecha ao salvar/voltar (tela Automações). */
+        const val EXTRA_TECLA = "tecla"
+    }
+    private var direto = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
-        mostrarLista()
+        if (intent.hasExtra(EXTRA_TECLA)) {
+            direto = true
+            val t = intent.getIntExtra(EXTRA_TECLA, 0)
+            if (RemapTeclas.livre(t)) mostrarEditor(t) else capturar()
+        } else mostrarLista()
     }
+
+    private fun fimEditor() { if (direto) finish() else mostrarLista() }
 
     // A captura nunca pode ficar ligada fora desta tela: as teclas livres parariam de funcionar.
     override fun onPause() { RemapTeclas.capturando = false; super.onPause() }
@@ -41,7 +53,7 @@ class TeclasActivity : Activity() {
         if (e.action != KeyEvent.ACTION_DOWN || e.repeatCount > 0) return true
         when {
             RemapTeclas.livre(e.keyCode) -> { RemapTeclas.capturando = false; mostrarEditor(e.keyCode) }
-            e.keyCode == KeyEvent.KEYCODE_BACK -> { RemapTeclas.capturando = false; mostrarLista() }
+            e.keyCode == KeyEvent.KEYCODE_BACK -> { RemapTeclas.capturando = false; fimEditor() }
             else -> avisoCaptura?.text = getString(R.string.tec_nao_pode, KeyEvent.keyCodeToString(e.keyCode).removePrefix("KEYCODE_"))
         }
         return true
@@ -49,7 +61,7 @@ class TeclasActivity : Activity() {
 
     @Deprecated("Activity simples, sem AndroidX")
     override fun onBackPressed() {
-        if (passo == Passo.EDITOR) { mostrarLista(); return }
+        if (passo == Passo.EDITOR) { fimEditor(); return }
         @Suppress("DEPRECATION") super.onBackPressed()
     }
 
@@ -123,10 +135,10 @@ class TeclasActivity : Activity() {
         adicionar(lista, linha(getString(R.string.rot_salvar), "") {
             RemapTeclas.salvar(this, tecla, cfg)
             AvisoTv.rapido(this, getString(R.string.tec_titulo), getString(R.string.tec_salvo, RemapTeclas.nome(this, tecla)), 3)
-            mostrarLista()
+            fimEditor()
         })
         if (RemapTeclas.da(this, tecla).isNotEmpty()) adicionar(lista, linha(getString(R.string.tec_apagar), "") {
-            RemapTeclas.salvar(this, tecla, emptyMap()); mostrarLista()
+            RemapTeclas.salvar(this, tecla, emptyMap()); fimEditor()
         })
         setContentView(raiz)
         linhas[RemapTeclas.Gesto.TOQUE]?.requestFocus()

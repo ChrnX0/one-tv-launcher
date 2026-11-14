@@ -59,4 +59,22 @@
     <string name="tec_verde">Green</string>
     <string name="tec_amarela">Yellow</string>
     <string name="tec_azul">Blue</string>
+    <!-- Automações (ideia 1) -->
+    <string name="aut_titulo">Automations</string>
+    <string name="aut_det">Everything the TV does on its own: at a time, at a button, when something happens and by link.</string>
+    <string name="aut_cfg_det">Times, remote buttons, events and scene links</string>
+    <string name="aut_horario">When it is time</string>
+    <string name="aut_botao">When a button is pressed</string>
+    <string name="aut_evento">When something happens (runs a scene)</string>
+    <string name="aut_link">By link</string>
+    <string name="aut_link_det">Create and edit in the web panel › Extras › Scenes</string>
+    <plurals name="aut_links">
+        <item quantity="one">%d scene with a link</item>
+        <item quantity="other">%d scenes with a link</item>
+    </plurals>
+    <string name="ev_midia_tocou">Movie or video started</string>
+    <string name="ev_midia_pausou">Movie or video paused or ended</string>
+    <string name="ev_tv_ligou">The TV turned on</string>
+    <string name="ev_todos_sairam">Everyone left (presence)</string>
+    <string name="ev_chuva">Rain coming</string>
 </resources>

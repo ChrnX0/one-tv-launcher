@@ -60,4 +60,23 @@
     <string name="tec_verde">Verde</string>
     <string name="tec_amarela">Amarela</string>
     <string name="tec_azul">Azul</string>
+    <!-- Automações (ideia 1) -->
+    <string name="aut_titulo">Automações</string>
+    <string name="aut_det">Tudo o que a TV faz sozinha: na hora marcada, num botão, quando algo acontece e por link.</string>
+    <string name="aut_cfg_det">Horários, botões do controle, eventos e links de cena</string>
+    <string name="aut_horario">Quando for hora</string>
+    <string name="aut_botao">Quando apertar um botão</string>
+    <string name="aut_evento">Quando algo acontecer (roda uma cena)</string>
+    <string name="aut_link">Por link</string>
+    <string name="aut_link_det">Criar e editar no painel web › Extras › Cenas</string>
+    <plurals name="aut_links">
+        <item quantity="one">%d cena com link</item>
+        <item quantity="many">%d cenas com link</item>
+        <item quantity="other">%d cenas com link</item>
+    </plurals>
+    <string name="ev_midia_tocou">Filme ou vídeo começou</string>
+    <string name="ev_midia_pausou">Filme ou vídeo pausou ou acabou</string>
+    <string name="ev_tv_ligou">A TV ligou</string>
+    <string name="ev_todos_sairam">Todos saíram (presença)</string>
+    <string name="ev_chuva">Chuva chegando</string>
 </resources>

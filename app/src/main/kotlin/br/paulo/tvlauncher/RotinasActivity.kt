@@ -36,15 +36,27 @@ class RotinasActivity : Activity() {
     /** Presets de dias (o despertador tem as bolinhas; aqui basta isto). Bit 0 = domingo. */
     private val DIAS = listOf(0b1111111, 0b0111110, 0b1000001, 0)
 
+    companion object {
+        /** Abre direto no editor (id da rotina; -1 = nova) e fecha ao salvar/voltar: o caminho da tela Automações. */
+        const val EXTRA_ROTINA = "rotina"
+    }
+    private var direto = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
-        mostrarLista()
+        if (intent.hasExtra(EXTRA_ROTINA)) {
+            direto = true
+            val id = intent.getIntExtra(EXTRA_ROTINA, -1)
+            mostrarEditor(Rotinas.listar(this).firstOrNull { it.id == id })
+        } else mostrarLista()
     }
+
+    private fun fimEditor() { if (direto) finish() else mostrarLista() }
 
     @Deprecated("Activity simples, sem AndroidX")
     override fun onBackPressed() {
-        if (noEditor) { mostrarLista(); return }
+        if (noEditor) { fimEditor(); return }
         @Suppress("DEPRECATION") super.onBackPressed()
     }
 
@@ -159,9 +171,9 @@ class RotinasActivity : Activity() {
         adicionar(lista, linha(getString(R.string.rot_salvar), "") {
             if (r.acao == Rotinas.Acao.ABRIR && r.pacote.isBlank()) { AvisoTv.rapido(this, getString(R.string.cfg_rotinas), getString(R.string.rot_escolha_app), 4); return@linha }
             if (r.acao == Rotinas.Acao.CENA && r.cena.isBlank()) { AvisoTv.rapido(this, getString(R.string.cfg_rotinas), getString(R.string.rot_cena_sem), 4); return@linha }
-            Rotinas.salvar(this, r); mostrarLista()
+            Rotinas.salvar(this, r); fimEditor()
         })
-        if (original != null) adicionar(lista, linha(getString(R.string.rot_apagar), "") { Rotinas.apagar(this, original.id); mostrarLista() })
+        if (original != null) adicionar(lista, linha(getString(R.string.rot_apagar), "") { Rotinas.apagar(this, original.id); fimEditor() })
         redesenhar()
         setContentView(raiz)
         lHora.requestFocus()
