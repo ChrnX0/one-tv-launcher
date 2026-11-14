@@ -28,4 +28,15 @@
     <string name="rot_cena_linha">Cena: %1$s</string>
     <string name="rot_cena_sem">Crie uma cena antes (painel web › Extras › Cenas)</string>
     <string name="al_cena">Cena ao parar: %1$s</string>
+    <!-- Tela Cenas (ideia 4) -->
+    <string name="lbl_cenas">Cenas</string>
+    <string name="pr_cenas">Cenas</string>
+    <string name="cenas_titulo">Cenas</string>
+    <string name="cenas_det">OK roda a cena. Crie e edite no painel web › Extras › Cenas.</string>
+    <string name="cenas_vazio">Nenhuma cena ainda. Crie uma no painel web › Extras › Cenas.</string>
+    <plurals name="cenas_acoes">
+        <item quantity="one">%d ação</item>
+        <item quantity="many">%d ações</item>
+        <item quantity="other">%d ações</item>
+    </plurals>
 </resources>

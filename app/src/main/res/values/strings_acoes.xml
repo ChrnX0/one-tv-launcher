@@ -28,4 +28,14 @@
     <string name="rot_cena_linha">Scene: %1$s</string>
     <string name="rot_cena_sem">Create a scene first (web panel › Extras › Scenes)</string>
     <string name="al_cena">Scene on stop: %1$s</string>
+    <!-- Tela Cenas (ideia 4) -->
+    <string name="lbl_cenas">Scenes</string>
+    <string name="pr_cenas">Scenes</string>
+    <string name="cenas_titulo">Scenes</string>
+    <string name="cenas_det">OK runs the scene. Create and edit them in the web panel › Extras › Scenes.</string>
+    <string name="cenas_vazio">No scenes yet. Create one in the web panel › Extras › Scenes.</string>
+    <plurals name="cenas_acoes">
+        <item quantity="one">%d action</item>
+        <item quantity="other">%d actions</item>
+    </plurals>
 </resources>
