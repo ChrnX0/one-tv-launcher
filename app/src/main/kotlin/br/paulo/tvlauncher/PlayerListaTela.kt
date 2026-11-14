@@ -53,6 +53,7 @@ class PlayerListaTela(
     private val aoGuia: (List<Canal>, String) -> Unit,   // guia em grade dos canais da categoria + nome dela
     /** A linha "Gravações" (a tela é feita em outra frente; até lá, a PlayerActivity mostra um aviso). */
     private val aoGravacoes: () -> Unit = {},
+    private val aoRadios: () -> Unit = {},
     /** Modo simples da HOME (ModoSimples): bloco fixo só com Buscar, Favoritos e Recentes, letra maior. */
     private val simples: Boolean = false,
 ) {
@@ -116,6 +117,7 @@ class PlayerListaTela(
             PlayerLista.ACAO_FILTROS -> aoFiltros()
             PlayerLista.ACAO_GUIA -> grupos.firstOrNull { it.chave == chave }?.let { aoGuia(doMeio, nomeDoGrupo(it)) }
             PlayerLista.ACAO_GRAVACOES -> aoGravacoes()
+            PlayerLista.ACAO_RADIOS -> aoRadios()
             else -> { escolherGrupo(k); if (doMeio.isNotEmpty()) listaCanais.requestFocus() }
         }
     }
@@ -177,7 +179,8 @@ class PlayerListaTela(
         botoes = listOf(GrupoCanais(PlayerLista.ACAO_BUSCAR, "", -1), GrupoCanais(PlayerLista.ACAO_FILTROS, resumoFiltro, -1))
             .let { b -> if (simples) b.filter { it.chave == PlayerLista.ACAO_BUSCAR } else b }   // modo simples: sem Filtro, como antes
         val acoes = listOf(porChave.getValue(PlayerLista.FAVORITOS), porChave.getValue(PlayerLista.RECENTES),
-            GrupoCanais(PlayerLista.ACAO_GUIA, "", -1), GrupoCanais(PlayerLista.ACAO_GRAVACOES, "", -1))
+            GrupoCanais(PlayerLista.ACAO_GUIA, "", -1), GrupoCanais(PlayerLista.ACAO_GRAVACOES, "", -1),
+            GrupoCanais(PlayerLista.ACAO_RADIOS, "", -1))
             .let { a -> if (simples) PlayerAcessivel.blocoSimples(a, { it.chave }, setOf(PlayerLista.FAVORITOS, PlayerLista.RECENTES)) else a }
         grupos = acoes + fixas + rola
         nAcoes = acoes.size; nFixas = fixas.size
@@ -307,6 +310,7 @@ class PlayerListaTela(
         PlayerLista.ACAO_FILTROS -> act.getString(R.string.coluna_filtro)
         PlayerLista.ACAO_GUIA -> act.getString(R.string.coluna_guia)
         PlayerLista.ACAO_GRAVACOES -> act.getString(R.string.coluna_gravacoes)
+        PlayerLista.ACAO_RADIOS -> act.getString(R.string.ra_coluna)
         else -> PlayerLista.nomeExibido(g.nome).ifEmpty { act.getString(R.string.player_cat_outros) }
     }
 
@@ -318,6 +322,7 @@ class PlayerListaTela(
         PlayerLista.ACAO_FILTROS -> IconePlayer.Tipo.FILTROS
         PlayerLista.ACAO_GUIA -> IconePlayer.Tipo.GRADE
         PlayerLista.ACAO_GRAVACOES -> IconePlayer.Tipo.GRAVACOES
+        PlayerLista.ACAO_RADIOS -> IconePlayer.Tipo.RADIO
         PlayerLista.TODOS -> IconePlayer.Tipo.TODOS
         PlayerLista.ESPORTES -> IconePlayer.Tipo.ESPORTE
         else -> if (g.nome in ocultas) IconePlayer.Tipo.CADEADO else null

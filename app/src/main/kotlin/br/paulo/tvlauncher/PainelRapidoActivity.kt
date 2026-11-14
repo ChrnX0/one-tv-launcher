@@ -827,7 +827,14 @@ class PainelRapidoActivity : Activity() {
             }
         }
         // Mural na TV (ideia 39): a lista de compras do protetor, aqui com o controle: OK risca o item.
-        val compras = if (Extras.ligado(this, Extras.Chave.MURAL) && !ModoVisita.ativo(this)) Mural.ler(this).compras else emptyList()
+        val mural = if (Extras.ligado(this, Extras.Chave.MURAL) && !ModoVisita.ativo(this)) Mural.ler(this) else Mural.Conteudo()
+        val compras = mural.compras
+        // Ideia 95: os recados fixos, editáveis pela TV: OK marca como lido (sai do protetor), X apaga.
+        if (mural.recados.isNotEmpty()) {
+            listaAvisos.addView(Estilo.secao(this, getString(R.string.pg_recado).uppercase() + " · ${mural.recados.size}"))
+            for ((i, r) in mural.recados.withIndex())
+                listaAvisos.addView(linhaRecado(r, mural.lido(r)), LinearLayout.LayoutParams(-1, -2).apply { if (i > 0) topMargin = dp(Estilo.E1) })
+        }
         if (compras.isNotEmpty()) {
             listaAvisos.addView(Estilo.secao(this, getString(R.string.pg_compras).uppercase() + " · ${compras.size}"))
             for ((i, item) in compras.withIndex())
@@ -890,6 +897,49 @@ class PainelRapidoActivity : Activity() {
             }
         }
         return linha
+    }
+
+    /** Ideia 95: um recado do mural. OK marca/desmarca como lido; o X apaga (o painel e o Claude veem na hora). */
+    private fun linhaRecado(recado: String, lido: Boolean): View {
+        val texto = Estilo.texto(this, Estilo.Papel.CORPO, if (lido) "\u2713 " + recado else recado).apply {
+            maxLines = 3
+            ellipsize = TextUtils.TruncateAt.END
+            alpha = if (lido) 0.6f else 1f
+        }
+        val cartao = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            isFocusable = true
+            isClickable = true
+            setPadding(dp(Estilo.E2 - 4), dp(Estilo.E1 + 4), dp(Estilo.E2 - 4), dp(Estilo.E1 + 4))
+            background = Estilo.superficie(this@PainelRapidoActivity, false)
+            addView(texto)
+            addView(Estilo.texto(this@PainelRapidoActivity, Estilo.Papel.LEGENDA,
+                getString(if (lido) R.string.mu_ok_nao_lido else R.string.mu_ok_lido)))
+            contentDescription = getString(if (lido) R.string.mu_lido_desc else R.string.mu_nao_lido_desc, recado)
+            setOnFocusChangeListener { v, foco ->
+                Estilo.focarLinha(v, foco)
+                v.animate().scaleX(if (foco) Estilo.ESCALA_LINHA else 1f).scaleY(if (foco) Estilo.ESCALA_LINHA else 1f).setDuration(Estilo.FOCO_MS).start()
+            }
+            setOnClickListener {
+                fundo.execute {
+                    Mural.editar(applicationContext) { Mural.marcarLido(it, recado, !lido) }
+                    ui.post { if (!isFinishing) preencherAvisos() }
+                }
+            }
+        }
+        val apagar = botaoRedondo(IconeCard(this, "fechar"), getString(R.string.mu_apagar, recado)) {
+            fundo.execute {
+                Mural.editar(applicationContext) { Mural.remover(it, Mural.Lista.RECADOS, recado) }
+                ui.post { if (!isFinishing) preencherAvisos() }
+            }
+        }
+        return LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            clipChildren = false
+            addView(cartao, LinearLayout.LayoutParams(0, -2, 1f))
+            addView(apagar, LinearLayout.LayoutParams(dp(40), dp(40)).apply { marginStart = dp(Estilo.E1) })
+        }
     }
 
     /** Um item da lista de compras. OK risca na hora e tira do mural meio segundo depois (dá para ver o que saiu). */

@@ -595,6 +595,7 @@
           <option value="100">Normal</option><option value="110">Grande</option><option value="120">Maior</option></select></p>
         <label><input id="cfgPilhas" type="checkbox"> Pilhas automáticas (agrupar os apps por tipo)</label>
         <label><input id="cfgChuva" type="checkbox"> Aviso de chuva por cima de qualquer app</label>
+        <label><input id="cfgTemperatura" type="checkbox"> Aviso de calor ou frio forte (“Beba água”)</label>
       </div>
       <div class="cartao">
         <h2>TV e filmes</h2>
@@ -854,13 +855,36 @@
       </div>
       <div class="cartao" id="cartaoMural">
         <h2>Mural da família</h2>
-        <p class="aviso">Aparece no protetor de tela (chave "Mural" ligada): lista de compras, até 3 recados fixos e os aniversários de hoje da agenda.</p>
+        <p class="aviso">Aparece no protetor de tela (chave "Mural" ligada): lista de compras, até 3 recados fixos e os aniversários de hoje da agenda. Na TV, o painel rápido marca recado como lido (sai do protetor) e apaga.</p>
         <form id="formMural" class="barra-acoes">
           <select id="listaMural" aria-label="Lista"><option value="compras">Compras</option><option value="recados">Recado</option></select>
           <input id="textoMural" type="text" maxlength="60" placeholder="leite" aria-label="Texto">
           <button type="submit" class="botao-secundario">Pôr no mural</button>
         </form>
         <div id="itensMural" class="lista-registro"></div>
+      </div>
+      <div class="cartao" id="cartaoRadios">
+        <h2>Rádios</h2>
+        <p class="aviso">Na TV: TV ao vivo › Rádios (rádios do mundo todo, do radio-browser.info). Aqui dá para colar o endereço de qualquer rádio (.mp3, .aac, .m3u8, .pls ou .m3u); ela vira favorita na TV.</p>
+        <form id="formRadio" class="barra-acoes">
+          <input id="nomeRadio" type="text" maxlength="80" placeholder="Nome da rádio" aria-label="Nome da rádio">
+          <input id="urlRadio" type="url" maxlength="500" placeholder="https://..." aria-label="Endereço">
+          <button type="submit" class="botao-secundario">Pôr na TV</button>
+        </form>
+        <div id="itensRadios" class="lista-registro"></div>
+        <p id="statusRadios" class="aviso" hidden></p>
+      </div>
+      <div class="cartao" id="cartaoAniversarios">
+        <h2>Aniversários</h2>
+        <p class="aviso">Na véspera e no dia, a HOME e o protetor de tela mostram "Hoje é aniversário de…". Com o ano, mostra também a idade.</p>
+        <form id="formAniversario" class="barra-acoes">
+          <input id="nomeAniversario" type="text" maxlength="40" placeholder="tia Rosa" aria-label="Nome">
+          <input id="dataAniversario" type="date" aria-label="Data">
+          <label><input id="anoAniversario" type="checkbox" checked> sei o ano</label>
+          <button type="submit" class="botao-secundario">Adicionar</button>
+        </form>
+        <div id="itensAniversarios" class="lista-registro"></div>
+        <p id="statusAniversarios" class="aviso" hidden></p>
       </div>
       <div class="cartao">
         <h2>Presença</h2>

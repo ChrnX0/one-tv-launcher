@@ -772,6 +772,14 @@ class ConfigLauncherActivity : Activity() {
             linhaChuva.ligado(AvisoChuva.ligado(this))
         }
         c.addView(linhaChuva, lp())
+        // Ideia 94: calor ou frio forte ("Beba água"), no mesmo cartão do aviso de chuva.
+        lateinit var linhaTemp: LinhaCfg
+        linhaTemp = linha(getString(R.string.tp_cfg), getString(R.string.tp_cfg_det, AvisoTemperatura.CALOR.toInt(), AvisoTemperatura.FRIO.toInt()),
+            chave = AvisoTemperatura.ligado(this)) {
+            AvisoTemperatura.definirLigado(this, !AvisoTemperatura.ligado(this))
+            linhaTemp.ligado(AvisoTemperatura.ligado(this))
+        }
+        c.addView(linhaTemp, lp())
         extrasDaAba(c, ExtrasAbas.Aba.APARENCIA)
     }
 

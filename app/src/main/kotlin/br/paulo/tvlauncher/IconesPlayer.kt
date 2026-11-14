@@ -18,7 +18,7 @@ import kotlin.math.sin
  * A lupa da busca é a [IconeMidia.Tipo.LUPA], a mesma da tela "Na rede".
  */
 class IconePlayer(private val tipo: Tipo, cor: Int = Estilo.TEXTO) : Drawable() {
-    enum class Tipo { ESTRELA, RECENTES, FILTROS, GRADE, CADEADO,
+    enum class Tipo { ESTRELA, RECENTES, FILTROS, GRADE, CADEADO, RADIO,
         // Coluna nova do player (14/11/2026): Continuar, Assistidos, Todos, Esportes e "Mostrar ocultas".
         PLAY, VISTO, TODOS, ESPORTE, OCULTO,
         // Gravações na coluna da TV (14/11/2026): o "ponto de gravar" dentro de um anel.
@@ -73,6 +73,12 @@ class IconePlayer(private val tipo: Tipo, cor: Int = Estilo.TEXTO) : Drawable() 
                 p.arcTo(RectF(8.5f, 4f, 15.5f, 11f), 180f, 180f, false); p.lineTo(15.5f, 10.5f)
                 c.drawPath(p, traco)
                 c.drawCircle(12f, 15.2f, 1.3f, cheio)
+            }
+            Tipo.RADIO -> {   // rádio (ideia 87): caixa com o alto-falante redondo e a antena
+                c.drawRoundRect(3.5f, 8.5f, 20.5f, 19.5f, 2.5f, 2.5f, traco)
+                c.drawCircle(15.5f, 14f, 3f, traco)
+                c.drawLine(7f, 12.5f, 11f, 12.5f, traco); c.drawLine(7f, 15.5f, 11f, 15.5f, traco)
+                c.drawLine(6.5f, 8.5f, 17f, 3.5f, traco)
             }
             Tipo.GRAVACOES -> {   // gravações: anel com o ponto cheio no meio (o botão REC)
                 c.drawCircle(12f, 12f, 8.5f, traco)

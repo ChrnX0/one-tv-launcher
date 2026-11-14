@@ -29,7 +29,7 @@ object BackupCompleto {
 
     /** Preferências que vão inteiras, além das do backup comum (BackupConfig.ARQUIVOS). */
     internal val PREFS_EXTRAS = listOf("player", "painel_seguro", "mcp_seguro", "unifi_seguro", "tunel_seguro",
-        "extras", "cenas", "casa_ha", "modo_visita", "aviso_chuva", "clima",
+        "extras", "cenas", "casa_ha", "modo_visita", "aviso_chuva", "aviso_temperatura", "clima",
         "jogos",   // card Jogos (14/11/2026): grupos escolhidos, IP e app do PC
         "gravacao",   // gravação (14/11/2026): a pasta da rede de reserva
         "nuvem",   // Na rede › OneDrive/Dropbox (14/11/2026): o id do app Microsoft e a chave do Dropbox que o dono digitou
@@ -72,7 +72,7 @@ object BackupCompleto {
     /** Arquivos pequenos do player (files/player). O contas.json fica de fora: vai decifrado em "segredos". */
     val ARQUIVOS_PLAYER = listOf("favoritos.json", "recentes.json", "ocultas.json", "liberadas.json", "posicoes.json",
         "interesses_series.json", "interesses_filmes.json", "series_ultimos.json", "series_progresso.json",
-        "parental.json", "ultimo.json")
+        "parental.json", "ultimo.json", "radios.json", "ano_canais.json")   // rodada 2: rádios favoritas, minutos por canal
     private const val ESTADO_TUNEL = "tailscaled.state"
     /** No máximo tantas cópias por perfil vão no backup (8 contas x 5 arquivos já sobra). */
     private const val MAX_COPIAS_PERFIL = 64

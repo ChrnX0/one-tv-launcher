@@ -25,6 +25,7 @@ object PlayerLista {
     const val ACAO_BUSCAR = "*acao:buscar"   // linhas de ação no topo da coluna (não são categorias)
     const val ACAO_FILTROS = "*acao:filtros"
     const val ACAO_GUIA = "*acao:guia"
+    const val ACAO_RADIOS = "*acao:radios"   // ideia 87: a tela de rádios (RadioActivity)
     const val ACAO_GRAVACOES = "*acao:gravacoes"   // 14/11/2026: a tela de gravações (feita em outra frente)
     const val MAX_RECENTES = 30
     const val MAX_FAVORITOS = 500
