@@ -98,6 +98,14 @@ object Radios {
         }
     }.firstOrNull { enderecoValido(it) }
 
+    /** Destino que o painel não busca: a própria TV (loopback, 0.0.0.0, IPs dela), link-local e multicast. */
+    fun destinoProibido(ip: java.net.InetAddress, daTv: Set<java.net.InetAddress> = ipsDaTv()): Boolean =
+        ip.isLoopbackAddress || ip.isAnyLocalAddress || ip.isLinkLocalAddress || ip.isMulticastAddress || ip in daTv
+
+    private fun ipsDaTv(): Set<java.net.InetAddress> = runCatching {
+        java.net.NetworkInterface.getNetworkInterfaces().toList().flatMap { it.inetAddresses.toList() }.toSet()
+    }.getOrDefault(emptySet())
+
     fun pareceplaylist(url: String): Boolean = url.substringBefore('?').lowercase().let { it.endsWith(".pls") || it.endsWith(".m3u") }
 
     // ---------------------------------------------------------------- puro: favoritas
@@ -146,7 +154,14 @@ object Radios {
     /** Colar pelo painel: se for playlist, abre e pega o 1º endereço. Devolve a lista nova ou o erro. */
     fun colar(ctx: Context, nome: String, url: String): Result<List<Radio>> = runCatching {
         var u = url.trim()
-        if (pareceplaylist(u)) u = daPlaylist(httpGet(u) ?: error("playlist não abriu")) ?: error("playlist sem endereço")
+        if (pareceplaylist(u)) {
+            // Alerta de SSRF no PR #102: o painel só busca a playlist em endereço fora da própria TV (loopback,
+            // link-local, "qualquer" e multicast bloqueados). A rede de casa continua valendo (rádio do NAS).
+            val host = runCatching { URL(u).host }.getOrNull()?.takeIf { it.isNotEmpty() } ?: error("endereço inválido")
+            val ips = runCatching { java.net.InetAddress.getAllByName(host).toList() }.getOrElse { error("endereço não existe") }
+            if (ips.any { destinoProibido(it) }) error("endereço da própria TV não é aceito")
+            u = daPlaylist(httpGet(u) ?: error("playlist não abriu")) ?: error("playlist sem endereço")
+        }
         val r = criarColada(nome, u) ?: error("nome ou endereço inválidos")
         editarFavoritas(ctx) { l -> if (l.any { it.id == r.id }) l else (l + r).take(MAX_FAVORITAS) }
     }

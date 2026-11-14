@@ -146,6 +146,17 @@ class FamiliaRodada2Test {
         assertTrue(r.id.startsWith("url:"))
     }
 
+    @Test fun destinosProibidosParaPlaylist() {
+        fun ip(t: String) = java.net.InetAddress.getByName(t)
+        assertTrue(Radios.destinoProibido(ip("127.0.0.1"), emptySet()))
+        assertTrue(Radios.destinoProibido(ip("169.254.1.1"), emptySet()))
+        assertTrue(Radios.destinoProibido(ip("0.0.0.0"), emptySet()))
+        assertTrue(Radios.destinoProibido(ip("::1"), emptySet()))
+        assertTrue(Radios.destinoProibido(ip("10.0.0.5"), setOf(ip("10.0.0.5"))))
+        assertFalse(Radios.destinoProibido(ip("10.0.0.9"), setOf(ip("10.0.0.5"))))   // NAS da casa vale
+        assertFalse(Radios.destinoProibido(ip("8.8.8.8"), emptySet()))
+    }
+
     @Test fun favoritasAlternamEMantemOrdem() {
         val a = Radios.Radio("a", "A", "https://x/a1"); val b = Radios.Radio("b", "B", "https://x/b1")
         var l = Radios.alternar(Radios.alternar(emptyList(), a), b)
