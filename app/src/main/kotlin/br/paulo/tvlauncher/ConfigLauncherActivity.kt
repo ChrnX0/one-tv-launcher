@@ -1365,7 +1365,8 @@ class ConfigLauncherActivity : Activity() {
         "com.google.android.youtube.tvkids" -> getString(R.string.cl_db_kids_perde)
         "com.google.android.play.games" -> getString(R.string.cl_db_games_perde)
         "com.google.android.tvrecommendations" -> getString(R.string.cl_db_recom_perde)
-        else -> i.perde
+        // Ideia 70: item da comunidade traz o português e, se houver, o inglês.
+        else -> if (resources.configuration.locales[0].language == "pt") i.perde else i.perdeEn ?: i.perde
     }
 
     // ================================================================ peças

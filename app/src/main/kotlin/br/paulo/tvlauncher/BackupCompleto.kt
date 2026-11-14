@@ -45,6 +45,7 @@ object BackupCompleto {
         "trava_relogio",   // como a hora automática estava ANTES da trava: vale só para este aparelho (ver TravaRelogio.kt)
         "diario",   // ideias 58/59: linha do tempo de 7 dias (passageira) e o link do dono, que se cadastra de novo pelo painel
         "uso_local",   // ideia 67: contagem de uso das telas, só para o dono ver nesta TV; nunca sai dela
+        "comunidade_apps",   // ideia 70: só a data da última busca das fichas da comunidade (cache baixado de novo)
         "foto_perfil",   // só marca "esta foto foi enviada à mão" (FotoPerfil); a foto em si não vai no backup e a chave leva o e-mail
         // Ideias de 12/11/2026. "avisos_celular": as inscrições valem só com a chave VAPID do Keystore desta instalação
         // (inscrever de novo pelo painel). "desempenho" é medida por versão; "retrospectiva" se refaz no domingo; "presenca"

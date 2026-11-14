@@ -49,6 +49,7 @@ declare -A FONTES=(
   [HistoricoAvisosTest]="HistoricoAvisos"
   [AberturaSerieTest]="AberturaSerie"
   [CompartilharTest]="Compartilhar McpPoderRegras Recado"
+  [PacoteDivididoTest]="PacoteDividido"
   [DiarioRegrasTest]="DiarioRegras"
 )
 
