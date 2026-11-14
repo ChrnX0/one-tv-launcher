@@ -66,6 +66,8 @@ object AvisoTv {
             .putString("titulo", titulo).putString("texto", texto).putLong("em", System.currentTimeMillis())
             .putString("fica", fica.name).apply()
         NotificacoesTv.avisarMudanca()
+        // Modo jogo (card Jogos, 14/11/2026): o aviso fica só na central de avisos (painel rápido), sem cartão por cima do jogo.
+        if (JogosTv.modoJogoAgora(app)) return Resultado.DESCARTADO.also { Log.i(TAG, "modo jogo: aviso só na central ($titulo)") }
         if (AutorizaShizukuService.instancia == null) return Resultado.SEM_ACESSIBILIDADE
         if (!telaAcesa(app)) {
             if (!guardarSeApagada) return Resultado.DESCARTADO.also { Log.i(TAG, "tela apagada: aviso descartado ($titulo)") }

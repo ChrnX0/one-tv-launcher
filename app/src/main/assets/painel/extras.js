@@ -26,6 +26,9 @@ const NOMES_CHAVES = {
   TEMPO_TELA: 'Tempo de tela por dia (acabou, só os apps liberados abrem)',
   AGENDA_TODAS: 'Agenda de todas as contas Google da TV juntas',
   LER_FOCO: 'Ler em voz alta o que está em foco nas telas do launcher',
+  CARD_JOGOS: 'Card Jogos na tela inicial (os apps de jogo saem da linha de apps)',
+  MODO_JOGO: 'Modo jogo: com um jogo aberto, protetor, filtro noturno e avisos esperam',
+  CONTROLE_ABRE_JOGOS: 'Ligar um controle de videogame abre a tela Jogos',
 };
 
 const hhmm = (m) => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
@@ -73,6 +76,7 @@ async function carregarChaves(dados) {
   $('filtroFim').value = hhmm(e.filtro.fim);
   $('filtroForca').value = e.filtro.forca;
   $('macWol').value = e.mac || '';
+  $('ipWol').value = e.pcIp || '';
   mostrar($('otaExtras'), e.otaPendente ? 'Há uma atualização do sistema esperando a janela das 3h.' : '');
   if (e.diarioErro) mostrar($('statusExtras'), 'Diário de DNS: ' + e.diarioErro);
   // 2ª leva (10/11/2026)
@@ -481,7 +485,7 @@ $('formRepoLoja').addEventListener('submit', (ev) => {
 
 $('formWol').addEventListener('submit', async (ev) => {
   ev.preventDefault();
-  try { await chamar('POST', '/api/extras/wol', { mac: $('macWol').value }); mostrar($('statusWol'), 'MAC guardado na TV.'); }
+  try { await chamar('POST', '/api/extras/wol', { mac: $('macWol').value, ip: $('ipWol').value.trim() }); mostrar($('statusWol'), 'Guardado na TV.'); }
   catch (e) { mostrar($('statusWol'), textoErro(e)); }
 });
 $('btnAcordar').addEventListener('click', async () => {

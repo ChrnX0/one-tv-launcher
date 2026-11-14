@@ -39,6 +39,9 @@ object LojaCurada {
         Item("jellyfin", "Jellyfin", "jellyfin/jellyfin-androidtv", "Cliente do servidor de mídia Jellyfin"),
         Item("justplayer", "Just Player", "moneytoo/Player", "Player de vídeo leve (ExoPlayer)"),
         Item("newpipe", "NewPipe", "TeamNewPipe/NewPipe", "YouTube e outros, sem conta"),
+        // Card Jogos (14/11/2026): jogar os jogos do PC na TV. Não verifiquei os nomes dos APKs da release (escolherApk
+        // procura pela ABI no nome); a Play Store também tem o Moonlight (com.limelight).
+        Item("moonlight", "Moonlight", "moonlight-stream/moonlight-android", "Jogar os jogos do PC na TV"),
     )
 
     /** Ideia 69: até quantos repositórios a pessoa pode somar à lista fixa. */

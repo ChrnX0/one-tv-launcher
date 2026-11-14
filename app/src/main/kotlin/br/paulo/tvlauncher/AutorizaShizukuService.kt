@@ -31,9 +31,10 @@ class AutorizaShizukuService : AccessibilityService() {
         ManutencaoNoturna.vigiar(this); ManutencaoNoturna.agendar(this)   // manutenção de madrugada + resumo de manhã
         Gatilhos.iniciar(this)   // eventos como gatilho de cena (ideia 7): tela acesa e sessões de mídia
         TecladoCelular.ajustar(this)   // ideia 57: foco de campo de texto só com o aviso ligado
+        JogosTv.iniciarControles(this)   // card Jogos: ligar um controle abre a tela Jogos (só com a chave ligada)
         CasaHA.iniciar(this)   // Home Assistant: publica o estado da TV e vigia a campainha (só se configurado)   // película âmbar à noite (só com a chave ligada em Extras)
     }
-    override fun onUnbind(intent: android.content.Intent?): Boolean { instancia = null; FiltroNoturno.parar(); return super.onUnbind(intent) }
+    override fun onUnbind(intent: android.content.Intent?): Boolean { instancia = null; FiltroNoturno.parar(); JogosTv.pararControles(); return super.onUnbind(intent) }
     override fun onDestroy() { instancia = null; super.onDestroy() }
 
     // Só TYPE_WINDOW_STATE_CHANGED (ver autoriza_acessibilidade.xml): poucas por minuto, quando uma tela abre.
@@ -45,6 +46,7 @@ class AutorizaShizukuService : AccessibilityService() {
             SaudeAcesso.janela(this, evento.packageName, evento.className)   // HOME na frente: hora boa para aviso pendente
             HoraDormirTv.janela(this, evento.packageName)   // hora de dormir: app fora da lista volta para a HOME
             TempoTelaTv.janela(this, evento.packageName)   // tempo de tela por dia (ideia 33): conta e fecha se acabou
+            JogosTv.janela(this)   // modo jogo: entrou ou saiu de um jogo -> o filtro noturno se reavalia
         } else if (evento?.eventType == AccessibilityEvent.TYPE_VIEW_FOCUSED) {
             TecladoCelular.foco(this, evento)   // ideia 57: só chega com o aviso "Digitar na TV" ligado (TecladoCelular.ajustar)
         }

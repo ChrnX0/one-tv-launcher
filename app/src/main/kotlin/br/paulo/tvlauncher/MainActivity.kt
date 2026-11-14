@@ -637,6 +637,7 @@ class MainActivity : Activity() {
             clipToPadding = false
             visibility = View.GONE
             addView(texto(12f, textoSuave, fonteUi).apply {
+                rotuloContinuar = this
                 text = getString(R.string.home_linha_continuar)
                 letterSpacing = 0.1f
                 if (tema != Tema.ESCURO) setShadowLayer(dp(6).toFloat(), 0f, 0f, 0x99000000.toInt())
@@ -844,6 +845,7 @@ class MainActivity : Activity() {
         val CORES_SERIES = intArrayOf(0xFF9B7BFF.toInt(), 0xFF4A2C9A.toInt())   // roxo
         val CORES_FILMES = intArrayOf(0xFF4C9BFF.toInt(), 0xFF1A3F8F.toInt())   // azul
         val CORES_REDE = intArrayOf(0xFF2FBF8F.toInt(), 0xFF0E5A45.toInt())     // verde
+        val CORES_JOGOS = intArrayOf(0xFFF5A524.toInt(), 0xFF7A4A0E.toInt())    // âmbar (card Jogos, 14/11/2026)
         const val LARGURA_ARTE = 640   // px da arte de filme/série no fundo (ver carregarArte)
         /** Frase curta embaixo do nome de cada app da HOME. Pacote novo na TV: acrescentar aqui (e nas strings). */
         val DESCRICAO_APPS = mapOf(
@@ -880,6 +882,7 @@ class MainActivity : Activity() {
             val chave = ri.activityInfo.applicationInfo.sourceDir + "|" + ri.activityInfo.name
             // A categoria já vem no ResolveInfo: sem IPC na thread da tela depois (home-9).
             categorias[pkg] = ri.activityInfo.applicationInfo.category
+            JogosTv.primar(this, pkg, ri.activityInfo.applicationInfo.category)   // card Jogos: já sabe se é jogo, sem IPC depois
             // APK novo (atualizado): a capa guardada pode ser a arte antiga; lê de novo (home-6).
             if (cacheApps[pkg]?.first != null && cacheApps[pkg]?.first != chave) capas.remove(pkg)
             itens[pkg] = cacheApps[pkg]?.takeIf { it.first == chave }?.second ?: run {
@@ -907,7 +910,9 @@ class MainActivity : Activity() {
         // Modo visita (ModoVisita.kt): os apps escolhidos somem também, e o card "Apps ocultos" não aparece.
         val naVisita = ModoVisita.ativo(this)
         val daVisita = if (naVisita) ModoVisita.apps(this) else emptySet()
-        val visiveis = todos.filter { it.pacote !in ocultos && it.pacote !in daVisita }
+        // Card Jogos (14/11/2026): com ele ligado, os apps de jogo moram só nele e saem desta linha.
+        val semJogos = JogosTv.cardLigado(this)
+        val visiveis = todos.filter { it.pacote !in ocultos && it.pacote !in daVisita && !(semJogos && JogosTv.ehJogo(this, it.pacote)) }
         val porPacote = visiveis.associateBy { it.pacote }
 
         // Pilhas: só valem com 2+ apps instalados e visíveis. Um app nunca fica em duas pilhas.
@@ -979,6 +984,7 @@ class MainActivity : Activity() {
         val t0 = android.os.SystemClock.elapsedRealtime()
         filaApps.execute {
             val todos = carregarApps()   // cacheApps só é tocado nesta fila (uma thread)
+            jogosNaTv = todos.count { JogosTv.ehJogo(this, it.pacote) }   // a frase do card Jogos (resumoJogos)
             // Uso recente também aqui fora (04/11/2026): antes rodava dentro de montarEntradas, na thread da tela.
             val uso = if (Config.ORDENAR_POR_USO_RECENTE) Uso.ultimoUso(this) else emptyMap()
             // Os retângulos mostram o banner de cada app: lê os que faltam ANTES de desenhar (só na 1ª vez do processo).
@@ -1475,7 +1481,7 @@ class MainActivity : Activity() {
      * cena (backdrop) do último título com zoom lento e troca a cada 7 s; Séries e Filmes ficam iguais a TV e Na rede.
      */
     private fun montarCapasAtalho() {
-        if (capasAtalho.size == 4) return   // não depende de nada que mude: monta uma vez
+        if (capasAtalho.size == 5) return   // não depende de nada que mude: monta uma vez
         if (montandoCapas) return
         montandoCapas = true
         Fundo.rodar("CapasAtalho") {
@@ -1487,6 +1493,7 @@ class MainActivity : Activity() {
                 montar(IconeApp.Tipo.SERIES, CORES_SERIES)
                 montar(IconeApp.Tipo.FILMES, CORES_FILMES)
                 montar(IconeApp.Tipo.REDE, CORES_REDE)
+                montar(IconeApp.Tipo.JOGOS, CORES_JOGOS)
                 // O card já em foco quando a capa ficou pronta: troca o degradê pelo ícone na hora.
                 ui.post { if (!isDestroyed) (currentFocus?.getTag(R.id.tag_capa_atalho) as? IconeApp.Tipo)?.let { mostrarCapaAtalho(it) } }
             } finally { montandoCapas = false }
@@ -1503,6 +1510,7 @@ class MainActivity : Activity() {
             IconeApp.Tipo.SERIES -> CORES_SERIES
             IconeApp.Tipo.FILMES -> CORES_FILMES
             IconeApp.Tipo.REDE -> CORES_REDE
+            IconeApp.Tipo.JOGOS -> CORES_JOGOS
             else -> CapaFoco.CORES_TV
         }
         capa.mostrar(img, if (img == null) cores else null)
@@ -1552,6 +1560,12 @@ class MainActivity : Activity() {
             mostrarDestaque(null, getString(R.string.home_card_rede), getString(R.string.home_destaque_rede))
             mostrarCapaAtalho(IconeApp.Tipo.REDE)
         }) { abrirCatalogo(MidiaRedeActivity::class.java) }, quadrado = true)   // quadrado também (dono, 07/11)
+        // Jogos (14/11/2026, dono): sempre presente, depois de Na rede; os apps de jogo saem da linha de apps.
+        if (JogosTv.cardLigado(this)) adicionar(cartaoAtalho(getString(R.string.home_card_jogos), IconeApp.Tipo.JOGOS, CORES_JOGOS, {
+            mostrarDestaque(null, getString(R.string.home_card_jogos), resumoJogos())
+            mostrarCapaAtalho(IconeApp.Tipo.JOGOS)
+        }) { abrirCatalogo(JogosActivity::class.java) }, quadrado = true)
+        rotuloContinuar?.text = getString(if (JogosTv.cardLigado(this)) R.string.home_linha_continuar_jogos else R.string.home_linha_continuar)
         // O card Buscar saiu (12/11/2026, dono): a lupa do topo abre a mesma busca única, e a linha ganha espaço.
         // O card "AO VIVO · Canal N" saiu (10/11/2026): abria o mesmo player, no mesmo último canal, que o card TV.
         caixaContinuar.visibility = if (linhaContinuar.childCount > 0) View.VISIBLE else View.GONE
@@ -1650,6 +1664,21 @@ class MainActivity : Activity() {
                 if (temFoco) aoFocar()
             }
         }
+
+    /** "ASSISTIR" ou "ASSISTIR E JOGAR" (com o card Jogos), em cima da linha dos atalhos. */
+    private var rotuloContinuar: TextView? = null
+
+    /** Quantos apps de jogo a TV tem (lido em preencherApps, fora da tela). */
+    @Volatile private var jogosNaTv = 0
+
+    /** A frase do card Jogos em foco: "3 jogos · 1 controle ligado" ou, sem jogos, o que o card oferece. */
+    private fun resumoJogos(): String {
+        val controles = runCatching { JogosTv.controles().size }.getOrDefault(0)
+        if (jogosNaTv == 0 && controles == 0) return getString(R.string.home_destaque_jogos_vazio)
+        val partes = mutableListOf(resources.getQuantityString(R.plurals.jogos_qtd, jogosNaTv, jogosNaTv))
+        if (controles > 0) partes += resources.getQuantityString(R.plurals.jogos_controles, controles, controles)
+        return partes.joinToString(" · ")
+    }
 
     /** true até o 1º desenho do Continuar nesta abertura da HOME (ver desenharContinuar). */
     private var focoInicialNaTv = true

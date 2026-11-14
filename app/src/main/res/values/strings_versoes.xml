@@ -17,6 +17,9 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Games card on the home screen, after Network: GeForce NOW, Steam Link, Moonlight, PS Remote Play, RetroArch and the other games leave the apps row and sit in 4 groups</item>
+        <item>Games: “Play on the PC” wakes the computer and opens Moonlight or Steam Link; “Test the network” tells whether cloud gaming will work; connected controllers show at the top</item>
+        <item>Game mode: while a game is open, the screensaver, night filter and notices wait</item>
         <item>Web panel: Settings tab with theme, text size, audio, screensaver, parental control, kids and guest mode, kids’ PIN, change PIN and Confirmations, the same as on the TV</item>
         <item>Web panel: connect the Google Drive account (code and QR right in the panel), disconnect it and restore a Drive copy, just like in the TV Settings</item>
         <item>Real volume on LG NetCast TVs (2013) over the network: sleep timer, bedtime limit, voice and alarm</item>
@@ -90,6 +93,9 @@
         <item>Blu-ray and DVD subtitles (PGS, VobSub) now show in movies and series, and anime ASS subtitles keep their original colour and position</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>jogos_card</item>
+        <item>jogos_tela</item>
+        <item>jogos_rede</item>
         <item>painel_config</item>
         <item>painel_drive</item>
         <item>home</item>
@@ -161,6 +167,9 @@
         <item>legenda_imagem</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Press HOME and go to the end of the WATCH AND PLAY row</item>
+        <item>Open the Games card</item>
+        <item>On the Games screen, press Test the network</item>
         <item>In the web panel, change the theme in the Settings tab</item>
         <item>In the web panel, open the Backup tab</item>
         <item>Press HOME</item>
@@ -232,6 +241,9 @@
         <item>Open an MKV movie with Blu-ray (PGS) subtitles or an anime with ASS subtitles and turn subtitles on in ▼</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Is there an amber Games card after Network?</item>
+        <item>Do the big buttons and the games by group show, and did the game apps leave the apps row?</item>
+        <item>Does the top say whether the network is good for cloud gaming, with the time in ms?</item>
         <item>Did the TV home screen switch to the chosen theme?</item>
         <item>Does “Google Drive account” show with connect, and do the code and QR show in the panel?</item>
         <item>Did it go back to the home screen?</item>

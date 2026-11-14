@@ -19,6 +19,10 @@ object JanelaNaFrente {
     fun apareceu(pacote: CharSequence?, classe: CharSequence? = null) {
         val p = pacote?.toString() ?: return
         if (p == "android" || p == "com.android.systemui") return   // diálogos e barras: não mudam quem está na frente
+        // O nosso protetor de tela (sonho) por cima de um jogo não muda quem está "na frente": sem isto o modo jogo
+        // (JogosTv) se perdia quando o protetor abria e fechava. Não verifiquei se o sonho gera este evento.
+        val c = classe?.toString() ?: ""
+        if (c.contains("ProtetorTela") || c.contains("DreamService")) return
         this.pacote = p
         this.classe = classe?.toString()
     }

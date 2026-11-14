@@ -18,9 +18,10 @@ object ExtrasAbas {
         // Aparência: o que muda o que se vê e ouve nas telas do launcher.
         "COR_DO_FUNDO" to Aba.APARENCIA, "MODO_SIMPLES" to Aba.APARENCIA, "SOM_NAVEGACAO" to Aba.APARENCIA, "LER_FOCO" to Aba.APARENCIA,
         "TOCANDO_AGORA" to Aba.APARENCIA, "AGENDA_TODAS" to Aba.APARENCIA, "HOJE_NA_TV" to Aba.APARENCIA,
+        "CARD_JOGOS" to Aba.APARENCIA, "CONTROLE_ABRE_JOGOS" to Aba.APARENCIA,
         // Tela e energia: noite, protetor e desligar.
         "FILTRO_NOTURNO" to Aba.ENERGIA, "SONO_SUAVE" to Aba.ENERGIA, "PRESENCA" to Aba.ENERGIA,
-        "MURAL" to Aba.ENERGIA, "RETROSPECTIVA" to Aba.ENERGIA, "MODO_LEVE" to Aba.ENERGIA,
+        "MURAL" to Aba.ENERGIA, "RETROSPECTIVA" to Aba.ENERGIA, "MODO_LEVE" to Aba.ENERGIA, "MODO_JOGO" to Aba.ENERGIA,
         // Rede.
         "DIARIO_DNS" to Aba.REDE,
         // Acesso remoto: o que deixa algo de fora agir na TV.

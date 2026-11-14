@@ -113,6 +113,8 @@ object PainelExtras {
             }
             post && rota == "wol" -> {
                 if (!AcordarPc.guardarMac(app, corpo?.optString("mac") ?: "")) return erro(400, "MAC inválido (ex.: AA:BB:CC:DD:EE:FF)")
+                // IP do PC (opcional, card Jogos): com ele, "Jogar no PC" sabe quando o PC acordou em vez de esperar 20 s.
+                if (corpo?.has("ip") == true && !JogosTv.guardarIpPc(app, corpo.optString("ip"))) return erro(400, "IP inválido (ex.: 192.168.1.10)")
                 PainelArmazem.registrar(app, ip, "extras: MAC do computador guardado", "ok")
                 ok(estado(app))
             }
@@ -308,6 +310,7 @@ object PainelExtras {
             .put("fim", Extras.numero(app, FiltroNoturno.CHAVE_FIM, FiltroNoturno.PADRAO_FIM))
             .put("forca", Extras.numero(app, FiltroNoturno.CHAVE_FORCA, FiltroNoturno.PADRAO_FORCA)))
         .put("mac", AcordarPc.macGuardado(app))
+        .put("pcIp", JogosTv.ipPc(app))
         .put("diarioErro", DiarioDns.erro(app))
         .put("otaPendente", ExtrasDO.atualizacaoPendente(app) ?: JSONObject.NULL)
         .put("dormir", JSONObject().put("inicio", HoraDormirTv.inicio(app)).put("fim", HoraDormirTv.fim(app))

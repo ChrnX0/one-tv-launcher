@@ -52,6 +52,8 @@ class ProtetorTela : DreamService() {
         super.onAttachedToWindow()
         isInteractive = true         // as teclas chegam ao dispatchKeyEvent; quem fecha é ele (ideia 28)
         isFullscreen = true
+        // Modo jogo (card Jogos): com um jogo na frente o protetor não fica; fecha e devolve o jogo.
+        if (JogosTv.modoJogoAgora(this)) { ui.post { fechar() }; return }
         FotosRede.talvezSincronizar(this)   // pasta da rede (ideia 27): renova a cópia se tiver mais de 6 h
         if (Protetor.estilo(this) == Protetor.GALERIA) { montarGaleria(); return }
         isScreenBright = false       // tela escurecida: descanso de verdade

@@ -62,6 +62,13 @@ object Extras {
         // Conversa 11 (14/11/2026)
         /** Ideia 48: ler em voz alta o que ganha o foco em todas as telas do launcher (VozFoco). */
         LER_FOCO(false),
+        // Card Jogos (14/11/2026)
+        /** Card "Jogos" na HOME; os apps de jogo saem da linha de apps. Desligado, eles voltam para lá. */
+        CARD_JOGOS(true),
+        /** Modo jogo: com um jogo na frente, protetor, filtro noturno e avisos esperam. */
+        MODO_JOGO(true),
+        /** Ligar um controle de videogame com a HOME na tela abre a tela Jogos. */
+        CONTROLE_ABRE_JOGOS(false),
     }
 
     /**

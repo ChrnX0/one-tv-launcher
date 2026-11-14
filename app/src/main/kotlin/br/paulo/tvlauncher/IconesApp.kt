@@ -16,7 +16,7 @@ import android.graphics.drawable.Drawable
  * Ficam num arquivo separado do [IconeLinha] só para não mexer no arquivo do protetor (outra frente de trabalho).
  */
 class IconeApp(private val tipo: Tipo, private val cor: Int = 0xFFFFFFFF.toInt()) : Drawable() {
-    enum class Tipo { TV, SERIES, FILMES, REDE, MICROFONE, TIMER, SEM_REDE, AVISO, BUSCA }
+    enum class Tipo { TV, SERIES, FILMES, REDE, MICROFONE, TIMER, SEM_REDE, AVISO, BUSCA, JOGOS }
 
     private val traco = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE; strokeWidth = 1.6f; strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND; color = cor
@@ -78,6 +78,17 @@ class IconeApp(private val tipo: Tipo, private val cor: Int = 0xFFFFFFFF.toInt()
             Tipo.BUSCA -> {   // lupa
                 c.drawCircle(10.5f, 10.5f, 6.5f, traco)
                 c.drawLine(15.3f, 15.3f, 20.5f, 20.5f, traco)
+            }
+            Tipo.JOGOS -> {   // controle de videogame: corpo com duas alças, cruz à esquerda e dois botões à direita
+                p.reset()
+                p.moveTo(7f, 7f); p.lineTo(17f, 7f)
+                p.quadTo(20.5f, 7f, 21.3f, 11f); p.lineTo(22f, 15.5f)
+                p.quadTo(22.4f, 18.5f, 20f, 18.5f); p.quadTo(18.4f, 18.5f, 17f, 16.5f); p.lineTo(16f, 15f); p.lineTo(8f, 15f)
+                p.lineTo(7f, 16.5f); p.quadTo(5.6f, 18.5f, 4f, 18.5f); p.quadTo(1.6f, 18.5f, 2f, 15.5f)
+                p.lineTo(2.7f, 11f); p.quadTo(3.5f, 7f, 7f, 7f); p.close()
+                c.drawPath(p, traco)
+                c.drawLine(5.5f, 11f, 9.5f, 11f, traco); c.drawLine(7.5f, 9f, 7.5f, 13f, traco)
+                c.drawCircle(15.5f, 11.8f, 1f, cheio); c.drawCircle(18f, 10f, 1f, cheio)
             }
         }
         c.restore()

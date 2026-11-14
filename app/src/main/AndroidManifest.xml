@@ -696,6 +696,11 @@
         <activity android:name=".ExtrasActivity" android:exported="false" android:excludeFromRecents="true" />
         <activity android:name=".PainelBlocosActivity" android:exported="false" android:excludeFromRecents="true" />
         <activity android:name=".AppsEscolhaActivity" android:exported="false" android:excludeFromRecents="true" />
+        <!-- Card Jogos da HOME (14/11/2026): o hub dos apps de jogo (JogosActivity.kt). -->
+        <!-- configChanges: ligar um controle muda "keyboard/navigation"; sem isto a tela era recriada no meio do uso. -->
+        <activity android:name=".JogosActivity" android:exported="false" android:excludeFromRecents="true"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection"
+            android:theme="@style/One.Tela" />
         <!-- Backup noturno cifrado (BackupNoturno.kt): a tela de opções e o alarme da noite (não exportados). -->
         <activity android:name=".BackupNoturnoActivity" android:exported="false" android:excludeFromRecents="true" />
         <receiver android:name=".BackupNoturnoReceiver" android:exported="false" />
