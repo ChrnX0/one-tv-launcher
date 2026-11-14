@@ -86,8 +86,8 @@ object ManutencaoNoturna {
                     ManutencaoRegras.Decisao.ADIAR -> {
                         agendar(app, System.currentTimeMillis() + 60 * 60_000L)
                         // TV acesa e em uso às 4h (ideia 3, 12/11/2026): pode ser alguém que dormiu com ela ligada.
-                        Avisos.enviar(app, Avisos.Tipo.TV_MADRUGADA, "TV ligada de madrugada",
-                            "Às %02d:%02d a TV estava acesa. Dá para desligar pelo painel.".format(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE)))
+                        Avisos.enviar(app, Avisos.Tipo.TV_MADRUGADA, txt(R.string.mn_madrugada),
+                            txt(R.string.mn_madrugada_det, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE)))
                     }
                     ManutencaoRegras.Decisao.DESISTIR -> { prefs(app).edit().remove("adiado_para").apply(); agendar(app) }
                 }

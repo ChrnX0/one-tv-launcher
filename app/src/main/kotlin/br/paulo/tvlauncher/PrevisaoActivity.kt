@@ -139,11 +139,13 @@ class PrevisaoActivity : Activity() {
     private fun saudacao(): String {
         val c = java.util.Calendar.getInstance()
         val h = c.get(java.util.Calendar.HOUR_OF_DAY); val m = c.get(java.util.Calendar.MINUTE)
-        val ola = when { h < 12 -> "Bom dia!"; h < 18 -> "Boa tarde!"; else -> "Boa noite!" }
-        val horas = if (h == 1) "1 hora" else "$h horas"
-        val agora = when (m) { 0 -> horas; 1 -> "$horas e 1 minuto"; else -> "$horas e $m minutos" }
-        val dia = java.text.SimpleDateFormat("EEEE, d 'de' MMMM", Locale("pt", "BR")).format(c.time)
-        return "$ola ${if (h == 1) "É" else "São"} $agora, $dia."
+        val ola = getString(when { h < 12 -> R.string.pv_bom_dia; h < 18 -> R.string.pv_boa_tarde; else -> R.string.pv_boa_noite })
+        val horas = resources.getQuantityString(R.plurals.pv_sao_horas, h, h)
+        val agora = if (m == 0) horas else horas + getString(R.string.dur_e) + resources.getQuantityString(R.plurals.dur_minutos, m, m)
+        // Data no formato do idioma da TV ("quinta-feira, 13 de novembro" / "Thursday, November 13").
+        val dia = java.text.SimpleDateFormat(android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), "EEEEdMMMM"),
+            Locale.getDefault()).format(c.time)
+        return getString(R.string.pv_saudacao, ola, agora, dia)
     }
 
     /** "Agora faz 20 graus, chuva. Hoje, máxima de 27 e mínima de 20, com 86 por cento de chance de chuva. Amanhã, ..." */

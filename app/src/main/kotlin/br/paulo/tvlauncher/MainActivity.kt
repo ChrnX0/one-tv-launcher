@@ -477,7 +477,7 @@ class MainActivity : Activity() {
             visibility = View.GONE
             addView(txtTimer)
             setOnClickListener {
-                if (Timer.cancelar(this@MainActivity)) AvisoTv.rapido(this@MainActivity, "Timer", "Timer cancelado", 4)
+                if (Timer.cancelar(this@MainActivity)) AvisoTv.rapido(this@MainActivity, "Timer", getString(R.string.tm_timer_cancelado), 4)
                 ui.removeCallbacks(tarefaTimer); ui.post(tarefaTimer)
             }
         }
@@ -1093,7 +1093,9 @@ class MainActivity : Activity() {
     private fun atualizarPilulaVencimento() {
         if (!PlayerArmazem.temContas(this)) { pilulaVencimento.visibility = View.GONE; atualizarAvisos(); return }
         Fundo.rodar {
-            val texto = runCatching { ContaIptv.avisoVencimento(PlayerArmazem.vencimentos(this), System.currentTimeMillis()) }.getOrNull()
+            val texto = runCatching { ContaIptv.avisoVencimento(PlayerArmazem.vencimentos(this), System.currentTimeMillis(),
+                t = ContaIptv.Textos(venceHoje = getString(R.string.cl_ci_vence_hoje), venceuCurto = getString(R.string.ci_venceu),
+                    venceAmanha = getString(R.string.ci_vence_amanha), venceEmDias = { d -> getString(R.string.ci_vence_em, d) })) }.getOrNull()
             ui.post {
                 if (isDestroyed) return@post
                 if (texto == null) { if (pilulaVencimento.hasFocus()) linhaApps.requestFocus(); pilulaVencimento.visibility = View.GONE }
@@ -1148,7 +1150,7 @@ class MainActivity : Activity() {
         for (i in tentativas) {
             try { startActivity(i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); return } catch (e: Exception) { }
         }
-        AvisoTv.rapido(this, "Busca por voz", getString(R.string.home_voz_indisponivel), 4)
+        AvisoTv.rapido(this, getString(R.string.home_busca_voz), getString(R.string.home_voz_indisponivel), 4)
     }
 
     private fun aplicarTeste() {

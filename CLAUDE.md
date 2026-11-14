@@ -17,6 +17,9 @@ and `values-pt/` (Portuguese); the app follows the TV's system language. Read `R
   older `tv-launcher*.apk`.
 - **Publishing is separate from merging.** Merging to `main` builds nothing. A Release is created only by running the
   "Build e Release" workflow by hand on `main` (`workflow_dispatch`), which signs with the `ASSINATURA_*` secrets.
+  That run executes the JVM tests first (a red test publishes nothing). Inputs: `canal=teste` publishes a prerelease
+  that only TVs with `EXTRAS canal --es canal teste` install ("Promover para todos" workflow releases it to everyone);
+  `commit=<hash on main>` rebuilds an older commit with a newer versionCode (the way back from a bad version).
   Pull requests only compile (and cost CI minutes): batch commits; use `[skip ci]` for text-only commits.
 - The signing key and its password never go into git, issues or logs.
 - No personal data in the repo (city, coordinates, IPs, names, account ids). Per-owner build values go in
@@ -57,7 +60,7 @@ closed action catalog, e.g. `{"acoes":[{"tipo":"abrir_tela","tela":"previsao"}]}
 - Panel: `PainelWeb.kt` on port 8080 (ports < 1024 are not allowed for apps). Pure logic with JVM tests in
   `PainelHttp.kt` / `PainelSeguranca.kt`. LAN only, Host/Origin checks, `X-Painel: 1` on POST, HttpOnly SameSite=Strict
   cookie, PBKDF2 PIN, growing lockout; destructive actions ask for the PIN again. Frontend in `assets/painel/`.
-- HTTPS at home (for installing the panel as a PWA): same panel also on port 8443 with a certificate the TV generates on
+- HTTPS at home (for installing the panel as a PWA): same panel also on port 8444 (8443 is taken by the built-in Chromecast, `mediashell`) with a certificate the TV generates on
   first use (`PainelTls.kt` + `CertificadoX509.kt`, SAN `tv`, `tv.lan`, `tv.local` + the TV's IP, names in
   `Config.PAINEL_NOMES_HTTPS`). The CA key is discarded right after signing (renewing = new CA, devices reinstall);
   the server key is AES-GCM-wrapped by an Android Keystore key in `noBackupFilesDir/painel-tls`. Step-by-step page:
@@ -78,8 +81,9 @@ closed action catalog, e.g. `{"acoes":[{"tipo":"abrir_tela","tela":"previsao"}]}
 
 ## Testing limits (don't rediscover)
 
-- `input keyevent` from adb does **not** pass through the accessibility key filter: anything that depends on the key
-  service must be tested with a real remote.
+- `input keyevent` from adb does **not** pass through the accessibility key filter. To test the key logic without the
+  remote use `EXTRAS --es o tecla --es tecla HOME [--el ms 1500]` (fake key into the same funnel, `TeclaFalsa.kt`);
+  the remote's hardware itself still needs a real remote.
 - `uiautomator dump` disconnects accessibility services while it runs: navigate by screenshot.
 - In Developer options, "Revoke authorizations", turning debugging off, etc. drop the adb connection.
 - `pm dump` / `resolve-activity` don't show the Device Owner's persistent preferred activity.

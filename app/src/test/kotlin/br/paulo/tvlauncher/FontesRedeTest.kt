@@ -119,7 +119,7 @@ class FontesRedeTest {
         val alvo = WebDav.lerUri(e[1].url!!)!!
         assertEquals("https://nuvem.casa.com/remote.php/dav/files/ana/ferias.mp4", WebDav.urlTocar(dav, alvo.caminho))
         assertNull(WebDav.urlTocar(dav, "/remote.php/dav/files/outro/x.mp4"))
-        assertEquals("Basic cGF1bG86czNuaGE=", WebDav.cabecalhoAuth(dav)["Authorization"])
+        assertEquals("Basic YW5hOnMzbmhh", WebDav.cabecalhoAuth(dav)["Authorization"])   // "ana:s3nha" (o usuário do teste virou "ana" ao tirar dados pessoais)
         assertTrue(runCatching { WebDav.lerMultistatus("<!DOCTYPE x [<!ENTITY a 'b'>]><d:multistatus xmlns:d=\"DAV:\"/>".toByteArray(), dav, "/") }.isFailure)
     }
 

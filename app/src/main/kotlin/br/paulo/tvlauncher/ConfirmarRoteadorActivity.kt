@@ -30,12 +30,11 @@ class ConfirmarRoteadorActivity : Activity() {
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
         if (UnifiCliente.estadoReconectar != UnifiCliente.EstadoReconectar.ESPERANDO_TV) { respondido = true; finish(); return }
         fun botao(t: String, aoClicar: () -> Unit) = Estilo.botao(this, t).apply { setOnClickListener { aoClicar() } }
-        val cancelar = botao("Cancelar") { responder(false) }
-        val reconectar = botao("Reconectar") { responder(true) }
+        val cancelar = botao(getString(R.string.comum_cancelar)) { responder(false) }
+        val reconectar = botao(getString(R.string.rt_reconectar)) { responder(true) }
         // Diálogo único do sistema de design (Estilo.dialogo): o mesmo das outras perguntas na TV.
-        setContentView(Estilo.dialogo(this, "Pedido pelo painel", "Reconectar a TV no Wi-Fi?",
-            "O roteador desconecta a TV por alguns segundos e ela volta sozinha, escolhendo de novo o melhor " +
-                "ponto de acesso. Um vídeo tocando pode pausar.", listOf(cancelar, reconectar)))
+        setContentView(Estilo.dialogo(this, getString(R.string.rt_pedido_painel), getString(R.string.rt_reconectar_wifi),
+            getString(R.string.rt_reconectar_det), listOf(cancelar, reconectar)))
         cancelar.requestFocus()   // o padrão é o seguro
         ui.postDelayed({ responder(false) }, UnifiCliente.ESPERA_CONFIRMAR_MS)
     }

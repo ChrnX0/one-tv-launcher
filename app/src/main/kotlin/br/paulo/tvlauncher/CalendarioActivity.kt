@@ -156,7 +156,7 @@ class CalendarioActivity : Activity() {
         listaEventos.removeAllViews()
         aviso.text = when {
             checkSelfPermission(Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ->
-                "Sem permissão de agenda (pm grant br.paulo.tvlauncher android.permission.READ_CALENDAR)"
+                getString(R.string.cal_sem_permissao)
             conta == null -> getString(R.string.cal_nenhuma_conta)
             proximos.isEmpty() -> getString(R.string.cal_nada)
             else -> ""

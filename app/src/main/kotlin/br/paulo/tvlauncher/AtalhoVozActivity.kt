@@ -22,10 +22,10 @@ class AtalhoVozActivity : Activity() {
         when (alias) {
             "VozDesligar30" -> desligarEm(30)
             "VozDesligar60" -> desligarEm(60)
-            "VozNaoDesligar" -> avisar(if (Desligamento.cancelar(this)) "Pronto: a TV não vai mais desligar sozinha." else "Não havia desligamento marcado.")
+            "VozNaoDesligar" -> avisar(getString(if (Desligamento.cancelar(this)) R.string.dl_cancelado else R.string.dl_nenhum))
             "VozDiagnostico" -> startActivity(Intent(this, DiagnosticoActivity::class.java))
             // No modo visita a agenda (do perfil ativo) não abre, igual ao OK na data da HOME.
-            "VozAgenda" -> if (ModoVisita.ativo(this)) avisar("A agenda está fechada no modo visita.")
+            "VozAgenda" -> if (ModoVisita.ativo(this)) avisar(getString(R.string.dl_agenda_visita))
                 else startActivity(Intent(this, CalendarioActivity::class.java))
         }
         finish()
@@ -33,8 +33,8 @@ class AtalhoVozActivity : Activity() {
 
     private fun desligarEm(minutos: Int) {
         Desligamento.agendar(this, minutos)
-        avisar("A TV desliga em ${Desligamento.duracaoTexto(minutos)}.")
+        avisar(getString(R.string.dl_desliga_em, Desligamento.duracaoTexto(minutos)))
     }
 
-    private fun avisar(texto: String) = AvisoTv.rapido(this, "Atalho de voz", texto)
+    private fun avisar(texto: String) = AvisoTv.rapido(this, getString(R.string.dl_atalho_voz), texto)
 }

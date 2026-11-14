@@ -143,7 +143,7 @@ object AutoDesligar {
             background = GradientDrawable().apply { cornerRadius = dp(20).toFloat(); setColor(0xE6101418.toInt()); setStroke(dp(1), 0x40FFFFFF) }
             addView(titulo)
             addView(texto(20f, 0xFFB8C2CC.toInt()).apply {
-                text = "Ninguém mexe no controle há ${minutos(servico)} min.\nAperte qualquer botão para continuar."
+                text = servico.getString(R.string.ad_ninguem, minutos(servico))
                 setPadding(0, dp(12), 0, 0)
             })
         }
@@ -166,7 +166,7 @@ object AutoDesligar {
     private fun contar() {
         if (janela == null) return
         if (restanteAviso <= 0) { fecharAviso(); desligar(); return }
-        textoAviso?.text = "A TV vai desligar em $restanteAviso s"
+        textoAviso?.text = txt(R.string.ad_vai_desligar, restanteAviso)
         restanteAviso--
         principal.postDelayed(contar, 1000)
     }

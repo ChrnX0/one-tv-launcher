@@ -44,13 +44,17 @@ object Retrospectiva {
         return Resumo(desde, ate, semProprio.values.sum() / 60_000, apps, bytes, quedas, foraMin)
     }
 
-    /** Regra pura: as linhas do cartão. "12 h de TV · YouTube 5 h, Netflix 3 h" / "Internet: 42 GB · 1 queda (3 min)". */
-    fun linhas(r: Resumo): Pair<String, String> {
+    /** Regra pura: as linhas do cartão. "12 h de TV · YouTube 5 h, Netflix 3 h" / "Internet: 42 GB · 1 queda (3 min)".
+     *  As frases vêm em [Frases]: o padrão é o português (teste JVM); a TV passa as do idioma dela ([cartao]). */
+    class Frases(val deTv: (String) -> String = { "$it de TV" }, val internet: (String) -> String = { "Internet: $it" },
+                 val semQueda: String = "nenhuma queda", val quedas: (Int) -> String = { if (it == 1) "1 queda" else "$it quedas" })
+
+    fun linhas(r: Resumo, f: Frases = Frases()): Pair<String, String> {
         fun h(min: Long) = if (min >= 60) "${min / 60} h" + (if (min % 60 >= 10 && min < 600) " ${min % 60} min" else "") else "$min min"
-        val cima = "${h(r.minutosTv)} de TV" + if (r.apps.isEmpty()) "" else " · " + r.apps.joinToString(", ") { "${it.nome} ${h(it.minutos)}" }
+        val cima = f.deTv(h(r.minutosTv)) + if (r.apps.isEmpty()) "" else " · " + r.apps.joinToString(", ") { "${it.nome} ${h(it.minutos)}" }
         val partes = ArrayList<String>()
-        r.bytes?.let { partes += "Internet: ${ConsumoRede.texto(it)}" }
-        r.quedas?.let { partes += if (it == 0) "nenhuma queda" else if (it == 1) "1 queda (${r.foraMin ?: 0} min)" else "$it quedas (${r.foraMin ?: 0} min)" }
+        r.bytes?.let { partes += f.internet(ConsumoRede.texto(it)) }
+        r.quedas?.let { partes += if (it == 0) f.semQueda else f.quedas(it) + " (${r.foraMin ?: 0} min)" }
         return cima to partes.joinToString(" · ")
     }
 
@@ -104,8 +108,9 @@ object Retrospectiva {
         if (!Extras.ligado(ctx, Extras.Chave.RETROSPECTIVA)) return null
         val r = ultima(ctx) ?: return null
         if (agora - r.ate !in 0..VALIDADE_CARTAO_MS) return null
-        val (a, b) = linhas(r)
-        return Triple("Sua semana na TV", a, b)
+        val (a, b) = linhas(r, Frases(deTv = { ctx.getString(R.string.rt_de_tv, it) }, internet = { ctx.getString(R.string.rt_internet, it) },
+            semQueda = ctx.getString(R.string.rt_sem_queda), quedas = { ctx.resources.getQuantityString(R.plurals.rt_quedas, it, it) }))
+        return Triple(ctx.getString(R.string.rt_titulo), a, b)
     }
 }
 

@@ -155,7 +155,7 @@ object BackupNoturno {
                         app.getSystemService(AlarmManager::class.java)?.let { armar(it, app, de, tentativa + 1) }
                         Log.i(TAG, "TV em uso: backup adiado 30 min")
                     } else {
-                        registrar(app, false, "não feito: a TV ficou em uso a noite toda")
+                        registrar(app, false, app.getString(R.string.bn_em_uso))
                         agendar(app)
                     }
                     return@execute
@@ -187,9 +187,9 @@ object BackupNoturno {
             // toda noite com "ligado" na tela. O dono define a senha de novo.
             if (temSenha(app)) {
                 prefs(app).edit().remove("senha_dados").remove("senha_iv").putBoolean("ligado", false).commit()
-                return registrar(app, false, "a senha guardada não abre mais (Keystore): backup desligado, defina a senha de novo")
+                return registrar(app, false, app.getString(R.string.bn_keystore))
             }
-            return registrar(app, false, "sem senha do backup (defina nas Configurações)")
+            return registrar(app, false, app.getString(R.string.bn_sem_senha))
         }
         val agora = System.currentTimeMillis()
         val nome = BackupNoturnoRegras.nomeDoDia(agora)
@@ -197,14 +197,14 @@ object BackupNoturno {
             BackupCompleto.exportar(app, senha).toByteArray(Charsets.UTF_8)
         } catch (e: Exception) {
             RegistroErros.gravar(app, "backup-noturno", e)   // aparece no Diagnóstico
-            return registrar(app, false, "não consegui montar o backup (${e.javaClass.simpleName})")
+            return registrar(app, false, app.getString(R.string.bn_montar, e.javaClass.simpleName))
         }
         // 1. Na TV (sempre). Temporário + renomear: queda de energia no meio não deixa arquivo pela metade com nome válido.
         try {
             gravarLocal(pasta(app), nome, bytes)
         } catch (e: Exception) {
             RegistroErros.gravar(app, "backup-noturno", e)
-            return registrar(app, false, "não consegui gravar na TV (${e.javaClass.simpleName})")
+            return registrar(app, false, app.getString(R.string.bn_gravar, e.javaClass.simpleName))
         }
         // 2. A cópia extra, se escolhida. Falhar aqui não apaga a da TV: o resultado diz "parcial".
         val destino = destino(app)
