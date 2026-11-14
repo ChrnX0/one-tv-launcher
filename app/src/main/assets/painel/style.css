@@ -124,6 +124,9 @@ input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--acento); c
   padding: 20px; margin-bottom: 16px;
 }
 .cartao > h2:first-child { margin-bottom: 14px; }
+/* Ideia 43: o cartão aberto pelo QR de uma linha das Configurações da TV pisca o acento por 2 s (app.js irPara). */
+.cartao { transition: box-shadow .3s ease-out, border-color .3s ease-out; }
+.cartao.realce { border-color: var(--acento); box-shadow: 0 0 0 3px var(--acento-fundo); }
 .cartao > .aviso:first-of-type { margin-top: -6px; }
 .botoes-linha { display: flex; gap: 8px; flex-wrap: wrap; }
 details summary { cursor: pointer; color: var(--texto-fraco); margin-top: 12px; }

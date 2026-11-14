@@ -22,6 +22,12 @@ import android.widget.TextView
  * Confere a cada 1 s: o celular entrou -> avisa e fecha; venceu -> some o QR e oferece gerar outro.
  */
 class EntrarPeloQrActivity : Activity() {
+    companion object {
+        /** Ideia 43: nome de um [DestinoPainel]; o QR entra e já abre aquela página do painel. */
+        const val EXTRA_DESTINO = "destino"
+        /** Título da tela quando abre por um destino ("Casa pelo celular"). */
+        const val EXTRA_TITULO = "titulo"
+    }
     private val ui = Handler(Looper.getMainLooper())
     private lateinit var titulo: TextView
     private lateinit var texto: TextView
@@ -78,8 +84,8 @@ class EntrarPeloQrActivity : Activity() {
 
     private fun gerar() {
         terminou = false
-        val link = PainelWeb.linkEntradaQr()
-        titulo.text = getString(R.string.lbl_entrar_celular)
+        val link = PainelWeb.linkEntradaQr(DestinoPainel.porNome(intent.getStringExtra(EXTRA_DESTINO)))
+        titulo.text = intent.getStringExtra(EXTRA_TITULO) ?: getString(R.string.lbl_entrar_celular)
         if (link == null) {
             geradoEm = 0L
             qr.visibility = View.INVISIBLE

@@ -7,7 +7,7 @@
     <string name="teclas_vazio">Nenhuma tecla ainda.</string>
     <string name="trava_home_titulo">PIN para mudar a HOME</string>
     <string name="trava_home_errado">PIN errado</string>
-    <string name="extras_cfg_det">Filtro noturno, janela de atualização, testador de teclas, calibração e mais</string>
+    <string name="extras_cfg_det">Horários do filtro noturno e da hora de dormir, testador de teclas, calibração e outras ferramentas</string>
     <string name="extras_titulo">Extras</string>
     <string name="extras_ligado">ligado</string>
     <string name="extras_desligado">desligado</string>
