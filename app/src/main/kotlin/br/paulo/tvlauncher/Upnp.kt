@@ -32,7 +32,9 @@ object Upnp {
     private const val MAX_BYTES = 4 * 1024 * 1024   // 4 MB por resposta: pasta com milhares de arquivos ainda cabe
 
     data class Servidor(val nome: String, val pastas: String)   // pastas = endereço completo do ContentDirectory
-    data class Entrada(val id: String, val titulo: String, val pasta: Boolean, val url: String?, val tipo: Tipo, val capa: String?)
+    data class Entrada(val id: String, val titulo: String, val pasta: Boolean, val url: String?, val tipo: Tipo, val capa: String?,
+        /** Sinopse/resumo do servidor (Jellyfin, Emby, Plex), para a ficha ao lado da lista (ideia 29). */
+        val sinopse: String? = null)
     enum class Tipo { PASTA, VIDEO, AUDIO, FOTO, OUTRO }
 
     // ---------------------------------------------------------------- 1. procurar (rede)

@@ -89,6 +89,12 @@ class VodActivity : Activity() {
                 .putExtra(EXTRA_TIPO, TIPO_FILME).putExtra(EXTRA_URL, url).putExtra(EXTRA_TITULO, titulo))
         }
 
+        /** Endereço da rede com resultado (ideia 29: a pasta do "Na rede" emenda o próximo arquivo). */
+        fun abrirUrlComResultado(act: Activity, codigo: Int, url: String, titulo: String) {
+            act.startActivityForResult(Intent(act, VodActivity::class.java)
+                .putExtra(EXTRA_TIPO, TIPO_FILME).putExtra(EXTRA_URL, url).putExtra(EXTRA_TITULO, titulo), codigo)
+        }
+
         /** Para quem quer saber se o vídeo foi até o fim (séries: próximo episódio). */
         fun abrirComResultado(act: Activity, codigo: Int, tipo: String, fonteId: String, id: String, extensao: String, titulo: String,
                               doComeco: Boolean = false, chaveIdioma: String = "", busca: LegendaExterna.Busca? = null) {

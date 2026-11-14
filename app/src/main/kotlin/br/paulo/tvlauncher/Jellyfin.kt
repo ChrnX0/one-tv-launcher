@@ -24,6 +24,9 @@ import java.net.URLEncoder
  */
 object Jellyfin {
     const val CONTINUAR = "*continuar"
+    /** Ideia 29: "Adicionados há pouco" e busca no servidor ("*busca:" + o texto). */
+    const val RECENTES = "*recentes"
+    const val BUSCA = "*busca:"
     private const val PORTA_BUSCA = 7359
     private const val MAX_BYTES = 8 * 1024 * 1024
 
@@ -110,11 +113,17 @@ object Jellyfin {
     /** Filhos de [pai]: "" = as bibliotecas (com "Continuar assistindo" na frente), CONTINUAR = os começados. */
     fun listar(c: ContaMidia, pai: String, aparelho: String): List<Upnp.Entrada> {
         val base = "${c.servidor}/Users/${c.usuarioId}"
-        val campos = "Fields=MediaSources&EnableImages=false"
-        return when (pai) {
-            "" -> listOf(Upnp.Entrada(CONTINUAR, "Continuar assistindo", true, null, Upnp.Tipo.PASTA, null)) +
+        // Ideia 29: sinopse (Overview) e só a imagem principal (pôster), para a ficha ao lado da lista.
+        val campos = "Fields=MediaSources,Overview&EnableImageTypes=Primary&ImageTypeLimit=1"
+        return when {
+            pai == "" -> listOf(Upnp.Entrada(CONTINUAR, "Continuar assistindo", true, null, Upnp.Tipo.PASTA, null),
+                Upnp.Entrada(RECENTES, "Adicionados há pouco", true, null, Upnp.Tipo.PASTA, null)) +
                 lerItens(pedir("$base/Views", cabecalho(aparelho, c.token)), c)
-            CONTINUAR -> lerItens(pedir("$base/Items/Resume?Limit=40&$campos", cabecalho(aparelho, c.token)), c, comSerie = true)
+            pai == CONTINUAR -> lerItens(pedir("$base/Items/Resume?Limit=40&$campos", cabecalho(aparelho, c.token)), c, comSerie = true)
+            pai == RECENTES -> lerItens(pedir("$base/Items?SortBy=DateCreated&SortOrder=Descending&Recursive=true" +
+                "&IncludeItemTypes=Movie,Episode,MusicAlbum&Limit=40&$campos", cabecalho(aparelho, c.token)), c, comSerie = true)
+            pai.startsWith(BUSCA) -> lerItens(pedir("$base/Items?searchTerm=${enc(pai.removePrefix(BUSCA).take(100))}&Recursive=true" +
+                "&IncludeItemTypes=Movie,Series,Episode,MusicAlbum,Audio&Limit=60&$campos", cabecalho(aparelho, c.token)), c, comSerie = true)
             else -> lerItens(pedir("$base/Items?ParentId=${enc(pai)}&SortBy=SortName&SortOrder=Ascending&$campos",
                 cabecalho(aparelho, c.token)), c)
         }
@@ -127,7 +136,11 @@ object Jellyfin {
             val o = itens.optJSONObject(i) ?: return@mapNotNull null
             val id = o.optString("Id").ifEmpty { return@mapNotNull null }
             val nome = nomeExibido(o, comSerie)
-            if (o.optBoolean("IsFolder")) Upnp.Entrada(id, nome, true, null, Upnp.Tipo.PASTA, null)
+            // Pôster: caminho no servidor (sem o endereço nem o token; quem baixa junta os dois). Só id seguro.
+            val capa = if (o.optJSONObject("ImageTags")?.has("Primary") == true && id.all { it.isLetterOrDigit() || it == '-' })
+                "/Items/$id/Images/Primary?maxHeight=450" else null
+            val sinopse = o.optString("Overview").trim().take(700).ifEmpty { null }
+            if (o.optBoolean("IsFolder")) Upnp.Entrada(id, nome, true, null, Upnp.Tipo.PASTA, capa, sinopse)
             else {
                 val tipo = when (o.optString("MediaType")) {
                     "Video" -> Upnp.Tipo.VIDEO
@@ -136,7 +149,7 @@ object Jellyfin {
                     else -> Upnp.Tipo.OUTRO
                 }
                 val sufixo = if (tipo == Upnp.Tipo.AUDIO) "/audio" else ""
-                Upnp.Entrada(id, nome, false, "jellyfin://${c.id}/$id$sufixo", tipo, null)
+                Upnp.Entrada(id, nome, false, "jellyfin://${c.id}/$id$sufixo", tipo, capa, sinopse)
             }
         }
         return lista.filter { it.pasta } + lista.filter { !it.pasta }
