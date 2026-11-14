@@ -119,6 +119,22 @@ object TocandoAgora {
     fun escolher(l: List<Sessao>): Sessao? =
         l.filter { it.tocando }.maxByOrNull { it.atualizadoMs }
             ?: l.filter { it.titulo.isNotBlank() }.maxByOrNull { it.atualizadoMs }
+
+    /** Ideia 75: a pílula da HOME some sozinha quando a sessão está pausada há mais que isto. */
+    const val PAUSADA_MAX_MS = 10 * 60_000L
+    const val MAX_TITULO_PILULA = 48
+
+    /** A pílula aparece com título, tocando, ou pausada há no máximo [PAUSADA_MAX_MS] ([pausadaHaMs] < 0 = não se sabe). */
+    fun mostrarPilula(titulo: String, tocando: Boolean, pausadaHaMs: Long): Boolean =
+        titulo.isNotBlank() && (tocando || pausadaHaMs in 0..PAUSADA_MAX_MS)
+
+    /** O segundo texto da pílula: o artista quando há (música), senão o nome do app (filme, série). */
+    fun subtitulo(artista: String, app: String): String = artista.trim().ifEmpty { app.trim() }
+
+    /** Título de uma linha, sem quebras, cortado com "…" (o TextView também corta pela largura; isto evita texto enorme). */
+    fun tituloPilula(t: String): String = t.replace(Regex("""\s+"""), " ").trim().let {
+        if (it.length > MAX_TITULO_PILULA) it.take(MAX_TITULO_PILULA - 1).trimEnd() + "…" else it
+    }
 }
 
 /**

@@ -86,8 +86,8 @@ class OuvinteNotificacoes : NotificationListenerService() {
 
 /**
  * Tocando agora (10/11/2026, 2ª leva das ideias; li no Home Deck): título, artista e app do que está tocando (Spotify,
- * YouTube Music, o nosso player...) e controles tocar/pausar/próxima. Painel, tela Extras e adb. A pílula na HOME fica
- * para depois da foto da HOME (o visual dela está em revisão).
+ * YouTube Music, o nosso player...) e controles tocar/pausar/próxima. Painel, tela Extras e adb. Desde a ideia 75
+ * (14/11/2026), também uma pílula na barra do topo da HOME ([paraHome]).
  */
 object TocandoAgoraTv {
     private fun componente(ctx: Context) = ComponentName(ctx, OuvinteNotificacoes::class.java)
@@ -135,6 +135,78 @@ object TocandoAgoraTv {
         return JSONObject().put("app", rotulo).put("pacote", c.packageName).put("titulo", titulo)
             .put("artista", (m?.getString(MediaMetadata.METADATA_KEY_ARTIST) ?: m?.getString(MediaMetadata.METADATA_KEY_ALBUM_ARTIST)).orEmpty())
             .put("tocando", c.playbackState?.state == PlaybackState.STATE_PLAYING)
+    }
+
+    /** Ideia 75: o que a pílula da HOME mostra. [capa] = a arte que o app mandou (null: a HOME usa o ícone do app). */
+    class Pilula(val pacote: String, val titulo: String, val subtitulo: String, val tocando: Boolean, val capa: android.graphics.Bitmap?)
+
+    /**
+     * Para a pílula "Tocando agora" da HOME. Null = não mostrar: chave desligada, nada tocando, sem título ou pausado há
+     * mais de [TocandoAgora.PAUSADA_MAX_MS]. Fora da thread da tela (são chamadas ao sistema).
+     */
+    fun paraHome(ctx: Context): Pilula? {
+        if (!Extras.ligado(ctx, Extras.Chave.TOCANDO_AGORA)) return null
+        val c = atual(ctx) ?: return null
+        val m = c.metadata
+        val titulo = m?.getString(MediaMetadata.METADATA_KEY_TITLE).orEmpty()
+        val estado = c.playbackState
+        val tocando = estado?.state == PlaybackState.STATE_PLAYING
+        // lastPositionUpdateTime está no relógio desde o boot: para uma sessão pausada, é quando ela pausou.
+        val desde = estado?.lastPositionUpdateTime ?: 0L
+        val pausadaHa = if (desde > 0) android.os.SystemClock.elapsedRealtime() - desde else -1L
+        if (!TocandoAgora.mostrarPilula(titulo, tocando, pausadaHa)) return null
+        val rotulo = try { ctx.packageManager.getApplicationLabel(ctx.packageManager.getApplicationInfo(c.packageName, 0)).toString() }
+            catch (e: Exception) { c.packageName }
+        val artista = (m?.getString(MediaMetadata.METADATA_KEY_ARTIST) ?: m?.getString(MediaMetadata.METADATA_KEY_ALBUM_ARTIST)).orEmpty()
+        val capa = m?.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART) ?: m?.getBitmap(MediaMetadata.METADATA_KEY_ART)
+            ?: m?.getBitmap(MediaMetadata.METADATA_KEY_DISPLAY_ICON)
+        return Pilula(c.packageName, TocandoAgora.tituloPilula(titulo), TocandoAgora.subtitulo(artista, rotulo), tocando, capa)
+    }
+
+    /**
+     * Avisa [aoMudar] quando o que toca muda (sessão nova, play/pausa, outro título), sem ficar perguntando a cada
+     * segundo: cada pergunta traria a capa inteira pelo binder. Só enquanto a HOME está na frente ([ligar]/[desligar]).
+     * Sem acesso às sessões (ouvinte desligado), não faz nada.
+     */
+    class Vigia(private val ctx: Context, private val aoMudar: () -> Unit) {
+        private val ui = android.os.Handler(android.os.Looper.getMainLooper())
+        private var vigiados: List<MediaController> = emptyList()
+        private val avisar = Runnable { aoMudar() }
+        private val prazo = Runnable { aoMudar() }
+        private fun pedir() { ui.removeCallbacks(avisar); ui.postDelayed(avisar, 250) }   // junta rajadas de eventos
+        private val cb = object : MediaController.Callback() {
+            override fun onPlaybackStateChanged(state: PlaybackState?) {
+                pedir()
+                // Pausou: confere de novo quando passar o prazo, para a pílula sumir sozinha.
+                ui.removeCallbacks(prazo)
+                if (state?.state != PlaybackState.STATE_PLAYING) ui.postDelayed(prazo, TocandoAgora.PAUSADA_MAX_MS + 1000)
+            }
+            override fun onMetadataChanged(metadata: MediaMetadata?) = pedir()
+            override fun onSessionDestroyed() = pedir()
+        }
+        private val sessoes = MediaSessionManager.OnActiveSessionsChangedListener { l -> trocar(l.orEmpty()); pedir() }
+
+        private fun trocar(l: List<MediaController>) {
+            vigiados.forEach { runCatching { it.unregisterCallback(cb) } }
+            vigiados = l
+            l.forEach { runCatching { it.registerCallback(cb, ui) } }
+        }
+
+        fun ligar() {
+            if (!Extras.ligado(ctx, Extras.Chave.TOCANDO_AGORA)) { aoMudar(); return }
+            try {
+                val m = ctx.getSystemService(MediaSessionManager::class.java) ?: return
+                m.addOnActiveSessionsChangedListener(sessoes, componente(ctx), ui)
+                trocar(m.getActiveSessions(componente(ctx)).orEmpty())
+            } catch (e: SecurityException) { }
+            aoMudar()
+        }
+
+        fun desligar() {
+            ui.removeCallbacks(avisar); ui.removeCallbacks(prazo)
+            runCatching { ctx.getSystemService(MediaSessionManager::class.java)?.removeOnActiveSessionsChangedListener(sessoes) }
+            trocar(emptyList())
+        }
     }
 
     fun texto(ctx: Context): String = json(ctx).let {
