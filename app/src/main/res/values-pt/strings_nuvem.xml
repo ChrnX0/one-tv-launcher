@@ -21,12 +21,18 @@
     <string name="rede_dbx_codigo_explica">Aponte a câmera do celular para o QR, entre no Dropbox e toque em Permitir. O Dropbox mostra um código: digite aqui (dá para digitar pelo celular, no painel).</string>
     <string name="rede_dbx_codigo">Código do Dropbox</string>
     <string name="rede_dbx_codigo_erro">Digite o código inteiro que o Dropbox mostrou.</string>
-    <!-- Box (14/11/2026): precisa do segredo do app e de um endereço de volta; RetornoNuvem.kt + site/box.html. -->
+    <!-- Box (14/11/2026): precisa do segredo do app e de um endereço de volta; RetornoNuvem.kt + site/volta.html. -->
     <string name="rede_box_explica">Uma vez só, no computador: app.box.com/developers/console › Create New App › Custom App › User Authentication (OAuth 2.0). Na aba Configuration, em OAuth 2.0 Redirect URI, ponha %1$s e deixe marcado só “Read all files and folders”. Salve e copie para cá o Client ID e o Client Secret.</string>
     <string name="rede_box_id">Client ID</string>
     <string name="rede_box_segredo">Client Secret</string>
     <string name="rede_box_erro">Client ID e Client Secret têm só letras e números. Copie os dois da aba Configuration.</string>
-    <string name="rede_box_sem_rede">A TV não está na rede de casa. Conecte e tente de novo.</string>
-    <string name="rede_box_codigo_explica">Aponte para o QR a câmera de um celular que esteja no mesmo Wi‑Fi da TV, entre no Box e toque em Grant access (Permitir). O celular volta para a TV sozinho: nada para digitar.</string>
-    <string name="rede_box_porta">A porta %1$d da TV está ocupada. Feche outros apps e tente de novo.</string>
+    <string name="rede_volta_sem_rede">A TV não está na rede de casa. Conecte e tente de novo.</string>
+    <string name="rede_volta_explica">Aponte para o QR a câmera de um celular que esteja no mesmo Wi‑Fi da TV, entre no %1$s e permita o acesso. O celular volta para a TV sozinho: nada para digitar.</string>
+    <string name="rede_volta_porta">A porta %1$d da TV está ocupada. Feche outros apps e tente de novo.</string>
+    <!-- Google Drive como fonte (14/11/2026): drive.readonly pede cliente "Aplicativo da Web", mesma volta do Box. -->
+    <string name="rede_gd_explica">Uma vez só, no computador, no seu projeto do Google Cloud (console.cloud.google.com): APIs e serviços › Biblioteca › ative a “Google Drive API”. Em Google Auth Platform › Acesso a dados, adicione o escopo …/auth/drive.readonly. Em Clientes › Criar cliente › Aplicativo da Web, em URIs de redirecionamento autorizados, ponha %1$s. Copie para cá o ID do cliente e a Chave secreta do cliente.</string>
+    <string name="rede_gd_id">ID do cliente (…apps.googleusercontent.com)</string>
+    <string name="rede_gd_segredo">Chave secreta do cliente</string>
+    <string name="rede_gd_erro">Copie os dois da página do cliente: o ID termina em .apps.googleusercontent.com e a chave costuma começar com GOCSPX-.</string>
+    <string name="rede_gd_aviso">Se o Google avisar que o app não foi verificado, toque em Avançado › Acessar (o app é seu).</string>
 </resources>

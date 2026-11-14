@@ -17,8 +17,8 @@ import java.util.Base64
  * Login: cada dono cria o SEU app no serviço (grátis, 5 minutos) e digita o identificador dele na TV. OneDrive e
  * Dropbox são "clientes públicos", sem segredo (OneDrive: código na tela, como o login do Google da TV; Dropbox: PKCE,
  * o celular mostra um código que se digita na TV). Box (14/11/2026, noite) exige segredo do app e um endereço de volta
- * https; o código vale só 30 s, então não dá para digitar: a página box.html do site do projeto devolve o celular para
- * um porto que a TV abre só durante o login (RetornoNuvem). O que fica guardado (cifrado, MidiaArmazem) é o token de
+ * https; o código vale só 30 s, então não dá para digitar: a página volta.html do site do projeto devolve o celular para
+ * um porto que a TV abre só durante o login (RetornoNuvem). Google Drive (por último, pedido do dono) usa a mesma volta. O que fica guardado (cifrado, MidiaArmazem) é o token de
  * renovação em ContaMidia.token, o id do app em ContaMidia.usuarioId e, no Box, o segredo do app em ContaMidia.senha.
  * Só leitura: as permissões pedidas não deixam apagar nada.
  *
@@ -89,40 +89,43 @@ object Nuvem {
         return Triple(itens, o.optString("cursor").ifEmpty { null }, o.optBoolean("has_more"))
     }
 
+    // ---------------------------------------------------------------- volta do login pelo celular (Box e Drive)
+
+    /** O "Redirect URI" que o dono põe no app do Box e no cliente do Google. Página estática do site (site/volta.html). */
+    const val RETORNO = "https://chrnx0.github.io/one-tv-launcher/volta.html"
+
+    /**
+     * O "state" leva o caminho de volta: um número aleatório (a TV só aceita o código com ele), o IP da TV na rede de
+     * casa e o porto. Formato "<numero>_<ip>_<porto>"; a volta.html só manda para IP de rede local.
+     */
+    fun estadoRetorno(numero: String, ip: String, porta: Int) = "${numero}_${ip}_$porta"
+
     // ---------------------------------------------------------------- Box (API 2.0)
 
     const val BOX_API = "https://api.box.com/2.0"
     const val BOX_TOKEN = "https://api.box.com/oauth2/token"
     const val BOX_AUTORIZAR = "https://account.box.com/api/oauth2/authorize"
-    /** O "Redirect URI" que o dono põe no app do Box. Página estática do site do projeto (site/box.html). */
-    const val BOX_RETORNO = "https://chrnx0.github.io/one-tv-launcher/box.html"
 
     /** Client ID e Client Secret do Box: letras e números (32 hoje; aceita uma folga). */
     fun credencialBoxValida(s: String) = Regex("^[A-Za-z0-9]{16,64}$").matches(s.trim())
 
-    /**
-     * O "state" leva o caminho de volta: um número aleatório (a TV só aceita o código com ele), o IP da TV na rede de
-     * casa e o porto. Formato "<numero>_<ip>_<porto>"; a box.html só manda para IP de rede local.
-     */
-    fun estadoBox(numero: String, ip: String, porta: Int) = "${numero}_${ip}_$porta"
-
     fun paginaBox(clientId: String, estado: String): String =
         "$BOX_AUTORIZAR?client_id=${URLEncoder.encode(clientId, "UTF-8")}&response_type=code" +
-            "&redirect_uri=${URLEncoder.encode(BOX_RETORNO, "UTF-8")}&state=${URLEncoder.encode(estado, "UTF-8")}"
+            "&redirect_uri=${URLEncoder.encode(RETORNO, "UTF-8")}&state=${URLEncoder.encode(estado, "UTF-8")}"
 
-    /** Um item da pasta do Box: o Box anda por id, não por caminho. */
-    class ItemBox(val item: PastaArquivos.Item, val id: String)
+    /** Um item de pasta de quem anda por id, não por caminho (Box e Google Drive). */
+    class ItemComId(val item: PastaArquivos.Item, val id: String)
 
     /** Lista de /folders/{id}/items: os itens e o total (para pedir a página seguinte). Links ("web_link") ficam de fora. */
-    fun lerListaBox(json: String): Pair<List<ItemBox>, Int> {
+    fun lerListaBox(json: String): Pair<List<ItemComId>, Int> {
         val o = JSONObject(json)
         val a = o.optJSONArray("entries")
         val itens = (0 until (a?.length() ?: 0)).mapNotNull { i ->
             val e = a!!.optJSONObject(i) ?: return@mapNotNull null
             val id = e.optString("id").takeIf { it.isNotEmpty() } ?: return@mapNotNull null
             when (e.optString("type")) {
-                "folder" -> ItemBox(PastaArquivos.Item(e.optString("name"), true, 0), id)
-                "file" -> ItemBox(PastaArquivos.Item(e.optString("name"), false, e.optLong("size")), id)
+                "folder" -> ItemComId(PastaArquivos.Item(e.optString("name"), true, 0), id)
+                "file" -> ItemComId(PastaArquivos.Item(e.optString("name"), false, e.optLong("size")), id)
                 else -> null
             }
         }
@@ -130,6 +133,53 @@ object Nuvem {
     }
 
     fun boxItens(idPasta: String, offset: Int) = "$BOX_API/folders/${URLEncoder.encode(idPasta, "UTF-8")}/items?fields=name,size,type&limit=1000&offset=$offset"
+
+    // ---------------------------------------------------------------- Google Drive (API v3, só leitura)
+
+    const val GOOGLE_AUTORIZAR = "https://accounts.google.com/o/oauth2/v2/auth"
+    const val GOOGLE_TOKEN = "https://oauth2.googleapis.com/token"
+    const val DRIVE_API = "https://www.googleapis.com/drive/v3"
+    /** Ler qualquer arquivo do Drive (o drive.file do backup só vê o que o próprio app criou). */
+    const val DRIVE_ESCOPO = "https://www.googleapis.com/auth/drive.readonly"
+    private const val PASTA_GOOGLE = "application/vnd.google-apps.folder"
+
+    /** "ID do cliente" do Google Cloud: termina em .apps.googleusercontent.com. */
+    fun clienteGoogleValido(s: String) = Regex("^[0-9]+-[a-z0-9]+\\.apps\\.googleusercontent\\.com$").matches(s.trim())
+    /** "Chave secreta do cliente": hoje GOCSPX-..., letras, números, - e _. */
+    fun segredoGoogleValido(s: String) = Regex("^[A-Za-z0-9_-]{16,64}$").matches(s.trim())
+
+    /** Página de autorização: PKCE + offline (para vir o token de renovação) + consent (sempre vem de novo). */
+    fun paginaDrive(clientId: String, desafio: String, estado: String): String =
+        "$GOOGLE_AUTORIZAR?client_id=${URLEncoder.encode(clientId, "UTF-8")}&response_type=code" +
+            "&redirect_uri=${URLEncoder.encode(RETORNO, "UTF-8")}&scope=${URLEncoder.encode(DRIVE_ESCOPO, "UTF-8")}" +
+            "&access_type=offline&prompt=consent&code_challenge=$desafio&code_challenge_method=S256" +
+            "&state=${URLEncoder.encode(estado, "UTF-8")}"
+
+    /** Filhos da pasta [idPasta] ("root" = Meu Drive), sem os da lixeira; pastas primeiro. */
+    fun driveFilhos(idPasta: String, pagina: String?): String {
+        val q = "'${idPasta.filter { it.isLetterOrDigit() || it == '-' || it == '_' }}' in parents and trashed=false"
+        return "$DRIVE_API/files?q=${URLEncoder.encode(q, "UTF-8")}&fields=${URLEncoder.encode("nextPageToken,files(id,name,size,mimeType)", "UTF-8")}" +
+            "&pageSize=1000&orderBy=folder,name" + (pagina?.let { "&pageToken=" + URLEncoder.encode(it, "UTF-8") } ?: "")
+    }
+
+    /** Lista do Drive. Documentos, planilhas e atalhos do Google (não são arquivos de verdade) ficam de fora. */
+    fun lerListaDrive(json: String): Pair<List<ItemComId>, String?> {
+        val o = JSONObject(json)
+        val a = o.optJSONArray("files")
+        val itens = (0 until (a?.length() ?: 0)).mapNotNull { i ->
+            val e = a!!.optJSONObject(i) ?: return@mapNotNull null
+            val id = e.optString("id").takeIf { it.isNotEmpty() } ?: return@mapNotNull null
+            val tipo = e.optString("mimeType")
+            when {
+                tipo == PASTA_GOOGLE -> ItemComId(PastaArquivos.Item(e.optString("name"), true, 0), id)
+                tipo.startsWith("application/vnd.google-apps.") -> null
+                else -> ItemComId(PastaArquivos.Item(e.optString("name"), false, e.optString("size").toLongOrNull() ?: 0L), id)
+            }
+        }
+        return itens to o.optString("nextPageToken").ifEmpty { null }
+    }
+
+    fun driveConteudo(idArquivo: String) = "$DRIVE_API/files/${idArquivo.filter { it.isLetterOrDigit() || it == '-' || it == '_' }}?alt=media"
 
     // ---------------------------------------------------------------- PKCE (RFC 7636)
 
@@ -207,10 +257,13 @@ object Nuvem {
      * Arquivo a partir de [posicao] num link de download que já leva a autorização dentro (OneDrive e Dropbox dão um
      * assim, válido por horas). Sem o cabeçalho Authorization: o link é de outro servidor.
      */
-    fun abrirLink(url: String, posicao: Long): InputStream {
+    fun abrirLink(url: String, posicao: Long, token: String? = null): InputStream {
         require(url.startsWith("https://")) { "link de download sem https" }
+        // Com token (Google Drive), só para o próprio Drive, e sem seguir redirecionamento.
+        if (token != null) require(url.startsWith("$DRIVE_API/")) { "token só vai para o Drive" }
         val c = (URL(url).openConnection() as HttpURLConnection).apply {
             connectTimeout = 10_000; readTimeout = 30_000
+            if (token != null) { setRequestProperty("Authorization", "Bearer $token"); instanceFollowRedirects = false }
             if (posicao > 0) setRequestProperty("Range", "bytes=$posicao-")
         }
         val cod = c.responseCode
@@ -252,6 +305,8 @@ object Nuvem {
                 "refresh_token" to atual.token))
             // O Box troca o token de renovação a cada uso (o velho deixa de valer): por isso o novo é gravado logo abaixo.
             ContaMidia.BOX -> postarForm(BOX_TOKEN, mapOf("client_id" to atual.usuarioId, "client_secret" to atual.senha,
+                "grant_type" to "refresh_token", "refresh_token" to atual.token))
+            ContaMidia.GDRIVE -> postarForm(GOOGLE_TOKEN, mapOf("client_id" to atual.usuarioId, "client_secret" to atual.senha,
                 "grant_type" to "refresh_token", "refresh_token" to atual.token))
             else -> throw IOException("não é nuvem")
         }
@@ -327,15 +382,47 @@ class PastaDropbox(private val c: ContaMidia) : PastaArquivos {
     override fun close() {}
 }
 
-/** Box como pasta (API 2.0). O Box anda por id: os caminhos viram ids pelo que já foi listado (ou andando da raiz, "0"). */
-class PastaBox(private val c: ContaMidia) : PastaArquivos {
-    private val ids = HashMap<String, Pair<String, Long>>().apply { put("", "0" to 0L) }   // caminho -> (id, tamanho)
-    private var ultimo: Triple<String, String, Long>? = null   // caminho, link, quando pegou
+/**
+ * Pasta de quem anda por id, não por caminho (Box e Google Drive): os caminhos viram ids pelo que já foi listado (ou
+ * andando da raiz). [raiz] é o id da raiz ("0" no Box, "root" no Drive).
+ */
+abstract class PastaPorId(raiz: String) : PastaArquivos {
+    private val ids = HashMap<String, Pair<String, Long>>().apply { put("", raiz to 0L) }   // caminho -> (id, tamanho)
+
+    protected abstract fun filhos(idPasta: String): List<Nuvem.ItemComId>
+    protected abstract fun abrir(idArquivo: String, posicao: Long): InputStream
 
     private fun normal(caminho: String) = caminho.split('/').filter { it.isNotEmpty() }.joinToString("/")
 
-    private fun filhos(idPasta: String): List<Nuvem.ItemBox> {
-        val itens = ArrayList<Nuvem.ItemBox>()
+    private fun guardar(pai: String, lista: List<Nuvem.ItemComId>) =
+        lista.forEach { f -> ids[if (pai.isEmpty()) f.item.nome else "$pai/${f.item.nome}"] = f.id to f.item.tamanho }
+
+    protected fun id(caminho: String): Pair<String, Long> = synchronized(ids) {
+        val n = normal(caminho)
+        ids[n]?.let { return it }
+        val pai = n.substringBeforeLast('/', "")
+        guardar(pai, filhos(id(pai).first))
+        ids[n] ?: throw IOException("BAD_NETWORK_NAME")
+    }
+
+    override fun listar(caminho: String): List<PastaArquivos.Item> {
+        val n = normal(caminho)
+        val lista = filhos(id(n).first)
+        synchronized(ids) { guardar(n, lista) }
+        return lista.map { it.item }
+    }
+
+    override fun tamanho(caminho: String) = id(caminho).second
+    override fun ler(caminho: String, posicao: Long): InputStream = abrir(id(caminho).first, posicao)
+    override fun close() {}
+}
+
+/** Box como pasta (API 2.0). */
+class PastaBox(private val c: ContaMidia) : PastaPorId("0") {
+    private var ultimo: Triple<String, String, Long>? = null   // id, link, quando pegou (o link vale ~15 min)
+
+    override fun filhos(idPasta: String): List<Nuvem.ItemComId> {
+        val itens = ArrayList<Nuvem.ItemComId>()
         var paginas = 0
         while (paginas++ < 40) {
             val (lote, total) = Nuvem.lerListaBox(Nuvem.conferir(Nuvem.get(Nuvem.boxItens(idPasta, itens.size), Nuvem.acesso(c))))
@@ -345,31 +432,27 @@ class PastaBox(private val c: ContaMidia) : PastaArquivos {
         return itens
     }
 
-    private fun id(caminho: String): Pair<String, Long> = synchronized(ids) {
-        val n = normal(caminho)
-        ids[n]?.let { return it }
-        val pai = n.substringBeforeLast('/', "")
-        val idPai = id(pai).first
-        filhos(idPai).forEach { f -> ids[if (pai.isEmpty()) f.item.nome else "$pai/${f.item.nome}"] = f.id to f.item.tamanho }
-        ids[n] ?: throw IOException("BAD_NETWORK_NAME")
-    }
-
-    override fun listar(caminho: String): List<PastaArquivos.Item> {
-        val n = normal(caminho)
-        val lista = filhos(id(n).first)
-        synchronized(ids) { lista.forEach { f -> ids[if (n.isEmpty()) f.item.nome else "$n/${f.item.nome}"] = f.id to f.item.tamanho } }
-        return lista.map { it.item }
-    }
-
-    override fun tamanho(caminho: String) = id(caminho).second
-
-    override fun ler(caminho: String, posicao: Long): InputStream {
-        val n = normal(caminho)
+    override fun abrir(idArquivo: String, posicao: Long): InputStream {
         val agora = System.currentTimeMillis()
-        val link = ultimo?.takeIf { it.first == n && agora - it.third < 10 * 60_000 }?.second
-            ?: Nuvem.linkBox(id(n).first, Nuvem.acesso(c)).also { ultimo = Triple(n, it, agora) }
+        val link = ultimo?.takeIf { it.first == idArquivo && agora - it.third < 10 * 60_000 }?.second
+            ?: Nuvem.linkBox(idArquivo, Nuvem.acesso(c)).also { ultimo = Triple(idArquivo, it, agora) }
         return Nuvem.abrirLink(link, posicao)
     }
+}
 
-    override fun close() {}
+/** Google Drive como pasta (API v3, drive.readonly). O arquivo vem do próprio Drive, com o token e Range. */
+class PastaDrive(private val c: ContaMidia) : PastaPorId("root") {
+    override fun filhos(idPasta: String): List<Nuvem.ItemComId> {
+        val itens = ArrayList<Nuvem.ItemComId>()
+        var pagina: String? = null
+        var n = 0
+        do {
+            val (lote, prox) = Nuvem.lerListaDrive(Nuvem.conferir(Nuvem.get(Nuvem.driveFilhos(idPasta, pagina), Nuvem.acesso(c))))
+            itens += lote; pagina = prox
+        } while (pagina != null && n++ < 40)
+        return itens
+    }
+
+    override fun abrir(idArquivo: String, posicao: Long): InputStream =
+        Nuvem.abrirLink(Nuvem.driveConteudo(idArquivo), posicao, Nuvem.acesso(c))
 }

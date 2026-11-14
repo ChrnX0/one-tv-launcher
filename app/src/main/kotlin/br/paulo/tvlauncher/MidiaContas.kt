@@ -21,7 +21,7 @@ import java.util.Locale
  *    se ela mudar depois (é o "known_hosts" do ssh). NFS não tem senha (o servidor confia no IP da TV).
  *  - [ONEDRIVE], [DROPBOX] (14/11/2026): nuvem como pasta (Nuvem.kt). servidor = o nome do serviço (só para mostrar),
  *    usuario = e-mail/nome da conta, token = token de renovação, usuarioId = o id do app que o dono criou no serviço.
- *  - [BOX] (14/11/2026): como a de cima, mais o segredo do app (Client Secret) em senha.
+ *  - [BOX], [GDRIVE] (14/11/2026): como a de cima, mais o segredo do app (Client Secret) em senha.
  *
  * Só texto e regras aqui (testes em MidiaContasTest). Quem grava cifrado é o MidiaArmazem.
  */
@@ -51,7 +51,8 @@ data class ContaMidia(
         const val ONEDRIVE = "onedrive"
         const val DROPBOX = "dropbox"
         const val BOX = "box"
-        val TIPOS = setOf(SMB, JELLYFIN, EMBY, PLEX, WEBDAV, LINK, FTP, FTPS, SFTP, NFS, ONEDRIVE, DROPBOX, BOX)
+        const val GDRIVE = "gdrive"
+        val TIPOS = setOf(SMB, JELLYFIN, EMBY, PLEX, WEBDAV, LINK, FTP, FTPS, SFTP, NFS, ONEDRIVE, DROPBOX, BOX, GDRIVE)
     }
 
     /** Jellyfin e Emby falam a mesma língua (o Jellyfin nasceu do Emby): o mesmo código serve aos dois. */

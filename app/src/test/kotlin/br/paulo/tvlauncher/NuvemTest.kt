@@ -92,11 +92,11 @@ class NuvemTest {
     }
 
     @Test fun paginaDoBoxLevaRetornoEEstado() {
-        val e = Nuvem.estadoBox("ab".repeat(16), "192.168.1.153", 8095)
+        val e = Nuvem.estadoRetorno("ab".repeat(16), "192.168.1.153", 8095)
         assertEquals("${"ab".repeat(16)}_192.168.1.153_8095", e)
         val u = Nuvem.paginaBox("cid123", e)
         assertTrue(u.startsWith("https://account.box.com/api/oauth2/authorize?client_id=cid123&response_type=code"))
-        assertTrue(u.contains("redirect_uri=https%3A%2F%2Fchrnx0.github.io%2Fone-tv-launcher%2Fbox.html"))
+        assertTrue(u.contains("redirect_uri=https%3A%2F%2Fchrnx0.github.io%2Fone-tv-launcher%2Fvolta.html"))
         assertTrue(u.endsWith("&state=$e"))
         assertTrue(Nuvem.credencialBoxValida("abcdefghijklmnopqrstuvwxyz012345"))
         assertFalse(Nuvem.credencialBoxValida("abc def"))
@@ -109,5 +109,31 @@ class NuvemTest {
         assertEquals(listOf("11", "22"), itens.map { it.id })
         assertTrue(itens[0].item.pasta); assertEquals(700L, itens[1].item.tamanho)
         assertTrue(Nuvem.boxItens("0", 1000).endsWith("/folders/0/items?fields=name,size,type&limit=1000&offset=1000"))
+    }
+
+    @Test fun driveLePastasEArquivosEIgnoraDocsDoGoogle() {
+        val (itens, prox) = Nuvem.lerListaDrive("""{"nextPageToken":"P2","files":[
+            {"id":"f1","name":"Filmes","mimeType":"application/vnd.google-apps.folder"},
+            {"id":"f2","name":"a.mp4","mimeType":"video/mp4","size":"123456789012"},
+            {"id":"f3","name":"Notas","mimeType":"application/vnd.google-apps.document"}]}""")
+        assertEquals(listOf("f1", "f2"), itens.map { it.id })
+        assertTrue(itens[0].item.pasta); assertEquals(123456789012L, itens[1].item.tamanho)
+        assertEquals("P2", prox)
+        assertNull(Nuvem.lerListaDrive("""{"files":[]}""").second)
+    }
+
+    @Test fun enderecosDoDrive() {
+        val u = Nuvem.driveFilhos("root", null)
+        assertTrue(u.startsWith("https://www.googleapis.com/drive/v3/files?q=%27root%27+in+parents+and+trashed%3Dfalse"))
+        assertFalse(u.contains("pageToken"))
+        assertTrue(Nuvem.driveFilhos("x'y", "T").contains("q=%27xy%27") )   // aspas no id não escapam da consulta
+        assertTrue(Nuvem.driveFilhos("a", "T 1").endsWith("&pageToken=T+1"))
+        assertEquals("https://www.googleapis.com/drive/v3/files/ab-C_1x?alt=media", Nuvem.driveConteudo("ab-C_1/../x"))   // barras e pontos saem
+        val p = Nuvem.paginaDrive("123-abc.apps.googleusercontent.com", "DES", "EST")
+        assertTrue(p.contains("scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.readonly"))
+        assertTrue(p.contains("access_type=offline") && p.contains("code_challenge=DES&code_challenge_method=S256") && p.endsWith("&state=EST"))
+        assertTrue(Nuvem.clienteGoogleValido("123456-abc123def.apps.googleusercontent.com"))
+        assertFalse(Nuvem.clienteGoogleValido("123456-abc.apps.googleusercontent.com.evil"))
+        assertTrue(Nuvem.segredoGoogleValido("GOCSPX-abcdEFGH1234_xyz"))
     }
 }
