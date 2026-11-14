@@ -29,6 +29,8 @@ fun pessoalNumero(chave: String, padrao: Double) = (pessoal.getProperty(chave)?.
 
 android {
     namespace = "br.paulo.tvlauncher"
+    // Ideia 96: o Robolectric precisa dos recursos (textos, cores) para desenhar as telas nos testes.
+    testOptions { unitTests.isIncludeAndroidResources = true }
     // 36 (antes 34): veio com o Shizuku embutido em 04/11/2026 (androidx.core 1.16 pede compileSdk >= 35); ficou.
     // Não muda o comportamento na TV: quem manda nisso é o targetSdk, que continua 34.
     compileSdk = 36
@@ -179,6 +181,18 @@ dependencies {
     testImplementation("org.json:json:20260814")
     // Leitor de XML em fluxo para os testes do guia XMLTV (PlayerGuia.kt): na TV o Android já traz um (é o mesmo kxml).
     testImplementation("net.sf.kxml:kxml2:2.3.0")
+    // Teste de tela por foto (ideia 96, 14/11/2026): o Robolectric desenha as telas de verdade (gráficos nativos) no
+    // computador, sem emulador. Só roda com -Ptelas (ver tasks.withType<Test> abaixo): o "Build e Release" não paga isso.
+    // Sem o conscrypt do Robolectric: ele é assinado e briga com a ponte nossa em org/conscrypt (mesmo pacote).
+    testImplementation("org.robolectric:robolectric:4.16") { exclude(group = "org.conscrypt") }
+}
+
+// Ideia 96: os testes de tela (pasta telas/) baixam o Android do Robolectric (~150 MB na primeira vez) e levam minutos.
+// Ficam fora do testReleaseUnitTest de sempre; rodam com "./gradlew testReleaseUnitTest -Ptelas" (workflow telas.yml).
+tasks.withType<Test>().configureEach {
+    if (!project.hasProperty("telas")) exclude("br/paulo/tvlauncher/telas/**")
+    else filter { includeTestsMatching("br.paulo.tvlauncher.telas.*") }
+    systemProperty("telas.atualizar", project.hasProperty("telasAtualizar").toString())
 }
 
 // Túnel para a internet (opção E, 05/11/2026): o programa Go em tunel/ (Tailscale embutido, tsnet) compilado para ARM

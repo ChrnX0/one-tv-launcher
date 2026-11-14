@@ -147,7 +147,10 @@ class ConfigLauncherActivity : Activity() {
         val colunas = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false }
         menu = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false; setPadding(0, dp(4), 0, dp(4)) }
         abas.forEachIndexed { i, aba -> menu.addView(itemMenu(i, aba), LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(4) }) }
-        colunas.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(menu) },
+        colunas.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(menu)
+            // Igual ao conteúdo: corta embaixo (a última aba não passa por cima da barra de dicas; achado do teste de tela,
+            // ideia 96) e deixa 16 dp dos lados para a pílula com foco crescer.
+            addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ -> v.clipBounds = android.graphics.Rect(-dp(16), 0, v.width + dp(16), v.height) } },
             LinearLayout.LayoutParams(dp(270), MATCH))
         // Sem linha separando menu e conteúdo (nenhuma outra tela tem): o espaço já separa as duas colunas.
         colunas.addView(View(this), LinearLayout.LayoutParams(dp(Estilo.E3 + 8), MATCH))
