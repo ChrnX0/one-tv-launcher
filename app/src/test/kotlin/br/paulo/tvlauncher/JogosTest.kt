@@ -24,6 +24,8 @@ class JogosTest {
     @Test fun grupoPadrao() {
         assertEquals(Grupo.PC, Jogos.grupo("com.valvesoftware.steamlink", emptyMap()))
         assertEquals(Grupo.NUVEM, Jogos.grupo("com.nvidia.geforcenow", emptyMap()))
+        // A versão de TV do PS Remote Play tem outro pacote (o Paulo achou o card sem ele, 14/11/2026).
+        assertEquals(Grupo.PC, Jogos.grupo("com.playstation.remoteplay.tv", emptyMap()))
         assertEquals(Grupo.TV, Jogos.grupo("com.jogo.instalado", emptyMap()))
     }
 
