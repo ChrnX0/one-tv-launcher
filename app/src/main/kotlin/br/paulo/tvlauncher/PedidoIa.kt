@@ -80,10 +80,12 @@ object PedidoIa {
         trabalho.execute {
             try {
                 // Canais (tocar_canal / o_que_passa): a TV escolhe o canal na lista dela e lê o guia (CanalTv).
-                val plano = CanalTv.resolver(app, ComandosIa.conferir(acoesJson, appsDaHome(app)))
+                // Filmes e Séries (ideia 60): a TV escolhe o título nas listas dela (VodTv).
+                val plano = VodTv.resolver(app, CanalTv.resolver(app, ComandosIa.conferir(acoesJson, appsDaHome(app))))
                 p.plano = plano
                 // A resposta do "o que passa" vai também na mensagem, para quem pediu ler pelo ver_pedido.
-                p.mensagem = (listOf(plano.resposta) + plano.acoes.filterIsInstance<ComandosIa.Acao.OQuePassa>().map { it.texto })
+                p.mensagem = (listOf(plano.resposta) + plano.acoes.filterIsInstance<ComandosIa.Acao.OQuePassa>().map { it.texto } +
+                    plano.acoes.filterIsInstance<ComandosIa.Acao.OQueEstavaVendo>().map { it.texto })
                     .filter { it.isNotEmpty() }.joinToString(" ")
                 if (plano.acoes.isEmpty()) {
                     p.situacao = Situacao.NADA
@@ -218,6 +220,26 @@ object PedidoIa {
                     try { PainelArmazem.registrar(app, "cena/ia", "casa: ${a.entidade} ${a.acao}", r) } catch (_: Exception) {}
                 }
             }
+            // Ideia 2 (14/11/2026): o que já existia por outro caminho (painel, voz), agora também no catálogo.
+            is ComandosIa.Acao.Recado -> {
+                val r = AvisoTv.mostrar(app, app.getString(R.string.recado_link_titulo), a.texto, a.segundos, som = true,
+                    guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO)
+                if (r == AvisoTv.Resultado.SEM_ACESSIBILIDADE) return "sem o serviço de acessibilidade"
+            }
+            is ComandosIa.Acao.Timer -> Timer.iniciar(app, a.minutos * 60, a.nome)
+            is ComandosIa.Acao.DesligarEm -> if (a.minutos == 0) Desligamento.cancelar(app) else Desligamento.agendar(app, a.minutos)
+            is ComandosIa.Acao.FiltroNoturno -> return FiltroNoturno.forcar(app, a.ligado)
+            // Cena por nome: um pedido novo, com a mesma conferência. Cena não contém cena (Cenas.criar recusa).
+            is ComandosIa.Acao.RodarCena -> {
+                if (Cenas.lista(app).none { it.nome == a.cena }) return ComandosIa.t(R.string.acao_cena_nao_existe, a.cena)
+                Cenas.rodar(app, a.cena, "cena/ia")
+            }
+            is ComandosIa.Acao.Mural -> Mural.editar(app) { Mural.adicionar(it, a.lista, a.texto) }
+            // Filmes e Séries (ideia 60): o título já foi escolhido no VodTv.resolver.
+            is ComandosIa.Acao.TocarTitulo -> return VodTv.tocar(app, a.alvo)
+            is ComandosIa.Acao.Continuar -> return VodTv.tocar(app, a.alvo)
+            is ComandosIa.Acao.ProximoEpisodio -> return VodTv.tocar(app, a.alvo)
+            is ComandosIa.Acao.OQueEstavaVendo -> {}
         }
         return null
     }

@@ -32,6 +32,23 @@ object ComandosIa {
     /** Casa (11/11/2026, ideia grande 1): o mesmo catálogo fechado do [CasaHA.servico] (luz, tomada, cortina, cena...). */
     val CASA = mapOf("ligar" to "Ligar", "desligar" to "Desligar", "alternar" to "Alternar")
     private val NOMES_DIAS = listOf("dom", "seg", "ter", "qua", "qui", "sex", "sáb")
+    const val MAX_TIMER_MIN = 240
+    const val MAX_DESLIGAR_MIN = 480
+    const val MAX_TITULO = 80
+
+    /**
+     * Os tipos do catálogo, na ordem do esquema. Ideia 2 (14/11/2026): recado, timer, desligar_em, filtro_noturno,
+     * rodar_cena e mural. Ideia 60: tocar_titulo, continuar, proximo_episodio e o_que_estava_vendo (Filmes e Séries).
+     */
+    val TIPOS = listOf("abrir_app", "abrir_tela", "despertador", "volume", "midia", "modo_visita", "tocar_canal", "o_que_passa", "casa",
+        "recado", "timer", "desligar_em", "filtro_noturno", "rodar_cena", "mural",
+        "tocar_titulo", "continuar", "proximo_episodio", "o_que_estava_vendo")
+
+    /**
+     * Texto visível das ações novas (strings_acoes.xml em values e values-pt, no idioma da TV). Nos testes do computador não há
+     * Context: devolve "#id", e os testes conferem o tipo da ação, não a frase.
+     */
+    internal fun t(id: Int, vararg a: Any): String = try { txt(id, *a) } catch (e: Throwable) { "#$id" }
 
     /** Uma ação já conferida. [descricao] é o que a TV mostra antes de executar (em português, para quem está no sofá). */
     sealed class Acao(val descricao: String) {
@@ -50,6 +67,39 @@ object ComandosIa {
         class OQuePassa(val pedido: String, val texto: String = "") : Acao(texto.ifEmpty { "Ver o que passa em $pedido" })
         /** Um aparelho do Home Assistant ([CasaHA]): junta a casa às cenas ("Cinema" apaga a luz e abre o app). */
         class Casa(val entidade: String, val acao: String) : Acao("${CASA.getValue(acao)} ${entidade.substringAfter('.').replace('_', ' ')} (casa)")
+
+        // ---- ideia 2 (14/11/2026): o que já existia na TV por outro caminho (painel, voz), agora no catálogo.
+        /** Recado por cima de qualquer tela ([AvisoTv]), como o do painel. [texto] já passou pelo [Recado.limpar]. */
+        class Recado(val texto: String, val segundos: Int) : Acao(t(R.string.acao_recado, texto.replace('\n', ' ')))
+        /** O timer da cozinha ([br.paulo.tvlauncher.Timer]): um só por vez, um novo substitui o anterior. */
+        class Timer(val minutos: Int, val nome: String) :
+            Acao(if (nome.isEmpty()) t(R.string.acao_timer, minutos) else t(R.string.acao_timer_nome, minutos, nome))
+        /** Timer de sono ([Desligamento]). [minutos] = 0 cancela o que estiver marcado. */
+        class DesligarEm(val minutos: Int) :
+            Acao(if (minutos == 0) t(R.string.acao_desligar_cancelar) else t(R.string.acao_desligar_em, minutos))
+        /** Película âmbar AGORA, até a próxima virada do horário ([br.paulo.tvlauncher.FiltroNoturno.forcar]). */
+        class FiltroNoturno(val ligado: Boolean) :
+            Acao(t(if (ligado) R.string.acao_filtro_ligar else R.string.acao_filtro_desligar))
+        /** Roda outra cena pelo nome. Uma cena não pode conter esta ação ([Cenas.criar] recusa): nada de cena em cadeia. */
+        class RodarCena(val cena: String) : Acao(t(R.string.acao_rodar_cena, cena))
+        /** Um item no mural do protetor ([Mural]): lista de compras ou recado fixo. */
+        class Mural(val lista: br.paulo.tvlauncher.Mural.Lista, val texto: String) :
+            Acao(t(if (lista == br.paulo.tvlauncher.Mural.Lista.COMPRAS) R.string.acao_mural_compras else R.string.acao_mural_recado, texto))
+
+        // ---- ideia 60 (14/11/2026): Filmes e Séries. Saem da conferência só com o que a pessoa disse; o título de verdade
+        // é escolhido depois, na TV, nas listas dela (VodTv.resolver), só entre as categorias visíveis (as mesmas travas
+        // das telas Filmes e Séries: adultas, escondidas e controle parental). [alvo] != null = já resolvida.
+        class TocarTitulo(val pedido: String, val alvo: VodBusca.Alvo? = null) :
+            Acao(if (alvo == null) t(R.string.acao_tocar_titulo, pedido) else t(R.string.acao_tocar, alvo.titulo))
+        class Continuar(val alvo: VodBusca.Alvo? = null) :
+            Acao(if (alvo == null) t(R.string.acao_continuar) else t(R.string.acao_tocar, alvo.titulo))
+        class ProximoEpisodio(val pedido: String, val alvo: VodBusca.Alvo? = null) : Acao(when {
+            alvo != null -> t(R.string.acao_tocar, alvo.titulo)
+            pedido.isEmpty() -> t(R.string.acao_proximo)
+            else -> t(R.string.acao_proximo_de, pedido)
+        })
+        /** Só informação: [texto] = os últimos títulos vistos, preenchido pelo VodTv.resolver (volta no ver_pedido). */
+        class OQueEstavaVendo(val texto: String = "") : Acao(texto.ifEmpty { t(R.string.acao_o_que_via) })
     }
 
     /** O resultado da conferência: as ações válidas, a resposta em texto da IA e o que foi recusado (para mostrar). */
@@ -79,19 +129,27 @@ object ComandosIa {
         fun inteiro(desc: String) = JSONObject().put("type", t("INTEGER")).put("description", desc)
         val acao = objeto()
             .put("properties", JSONObject()
-                .put("tipo", texto("o que fazer", listOf("abrir_app", "abrir_tela", "despertador", "volume", "midia", "modo_visita", "tocar_canal", "o_que_passa", "casa")))
+                .put("tipo", texto("o que fazer", TIPOS))
                 .put("pacote", texto("abrir_app: o pacote, copiado exatamente da lista de apps"))
                 .put("tela", texto("abrir_tela", TELAS.keys))
                 .put("hora", inteiro("despertador: hora de 0 a 23"))
                 .put("minuto", inteiro("despertador: minuto de 0 a 59"))
                 .put("dias", JSONObject().put("type", t("ARRAY")).put("items", JSONObject().put("type", t("INTEGER")))
                     .put("description", "despertador: dias da semana que repete, 0=domingo ... 6=sábado; vazio = uma vez só"))
-                .put("nome", texto("despertador: nome curto, opcional"))
+                .put("nome", texto("despertador e timer: nome curto, opcional"))
                 .put("acao", texto("volume: subir|descer|mudo; midia: pausar|tocar|proxima|anterior; casa: ligar|desligar|alternar", VOLUME.keys + MIDIA.keys + CASA.keys))
                 .put("entidade", texto("casa: id do Home Assistant (ex.: light.sala), copiado da lista da casa; cena e script só ligar"))
                 .put("vezes", inteiro("volume: quantos passos, de 1 a 10"))
-                .put("ligado", JSONObject().put("type", t("BOOLEAN")).put("description", "modo_visita: true liga, false desliga"))
-                .put("canal", texto("tocar_canal e o_que_passa: nome ou número do canal, como a pessoa falou (ex.: globo, 5)")))
+                .put("ligado", JSONObject().put("type", t("BOOLEAN")).put("description", "modo_visita e filtro_noturno: true liga, false desliga"))
+                .put("canal", texto("tocar_canal e o_que_passa: nome ou número do canal, como a pessoa falou (ex.: globo, 5)"))
+                .put("texto", texto("recado: a mensagem na tela (até 200 letras, 3 linhas); mural: o item"))
+                .put("segundos", inteiro("recado: quanto tempo fica na tela, 30, 60 ou 300 (padrão 60)"))
+                .put("minutos", inteiro("timer: de 1 a $MAX_TIMER_MIN; desligar_em: de 1 a $MAX_DESLIGAR_MIN, 0 cancela"))
+                .put("cena", texto("rodar_cena: o nome da cena, como foi criada no painel"))
+                .put("lista", texto("mural: compras ou recados", listOf("compras", "recados")))
+                .put("titulo", texto("tocar_titulo e proximo_episodio: nome do filme ou da série, como a pessoa falou; " +
+                    "proximo_episodio sem titulo = a última série vista. continuar retoma o último filme ou série vista; " +
+                    "o_que_estava_vendo devolve os últimos títulos em ver_pedido (campo mensagem)")))
             .put("required", JSONArray(listOf("tipo")))
         return objeto()
             .put("properties", JSONObject()
@@ -180,6 +238,39 @@ object ComandosIa {
                 if (a !in CASA) return "casa: ação \"${a.take(20)}\" não existe"
                 if (CasaHA.servico(e, a) == null) "casa: \"${e.take(60)}\" não é aparelho aceito, ou a ação não vale para ele" else Acao.Casa(e, a)
             }
+            "recado" -> {
+                val txt = br.paulo.tvlauncher.Recado.limpar(o.optString("texto")) ?: return "recado: texto vazio ou longo demais"
+                Acao.Recado(txt, br.paulo.tvlauncher.Recado.duracao(inteiro("segundos")))
+            }
+            "timer" -> {
+                val m = inteiro("minutos")
+                if (m == null || m !in 1..MAX_TIMER_MIN) return "timer: minutos de 1 a $MAX_TIMER_MIN"
+                Acao.Timer(m, o.optString("nome").filter { it.isLetterOrDigit() || it == ' ' }.trim().take(30))
+            }
+            "desligar_em" -> {
+                val m = inteiro("minutos")
+                if (m == null || m !in 0..MAX_DESLIGAR_MIN) "desligar_em: minutos de 0 a $MAX_DESLIGAR_MIN" else Acao.DesligarEm(m)
+            }
+            "filtro_noturno" -> {
+                if (o.opt("ligado") !is Boolean) "filtro_noturno: falta ligado true/false" else Acao.FiltroNoturno(o.getBoolean("ligado"))
+            }
+            "rodar_cena" -> {
+                val c = o.optString("cena").trim()
+                if (Cenas.nomeValido(c)) Acao.RodarCena(c) else "rodar_cena: nome de cena inválido"
+            }
+            "mural" -> {
+                val l = br.paulo.tvlauncher.Mural.lista(o.optString("lista")) ?: return "mural: lista compras ou recados"
+                val txt = br.paulo.tvlauncher.Mural.limpar(o.optString("texto").filter { !it.isISOControl() })
+                if (txt.isEmpty()) "mural: texto vazio" else Acao.Mural(l, txt)
+            }
+            "tocar_titulo", "proximo_episodio" -> {
+                // Como no canal: aqui só o texto. Qual filme ou série é, a TV decide nas listas dela.
+                val tt = o.optString("titulo").filter { !it.isISOControl() }.trim().take(MAX_TITULO)
+                if (tipo == "proximo_episodio") Acao.ProximoEpisodio(tt)
+                else if (tt.isEmpty()) "tocar_titulo: falta o titulo" else Acao.TocarTitulo(tt)
+            }
+            "continuar" -> Acao.Continuar()
+            "o_que_estava_vendo" -> Acao.OQueEstavaVendo()
             else -> "tipo \"${tipo.take(30)}\" não está no catálogo"
         }
     }

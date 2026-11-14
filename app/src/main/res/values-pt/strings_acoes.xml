@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Catálogo de ações (ComandosIa): o que a TV mostra antes/depois de rodar uma ação de cena, do Claude ou da voz. -->
+<resources>
+    <string name="acao_recado">Mostrar o recado “%1$s”</string>
+    <string name="acao_timer">Timer de %1$d min</string>
+    <string name="acao_timer_nome">Timer de %1$d min (“%2$s”)</string>
+    <string name="acao_desligar_em">Desligar a TV em %1$d min</string>
+    <string name="acao_desligar_cancelar">Cancelar o desligamento</string>
+    <string name="acao_filtro_ligar">Ligar o filtro noturno</string>
+    <string name="acao_filtro_desligar">Desligar o filtro noturno</string>
+    <string name="acao_filtro_sem_servico">o filtro noturno precisa do serviço de acessibilidade</string>
+    <string name="acao_rodar_cena">Rodar a cena “%1$s”</string>
+    <string name="acao_cena_nao_existe">a cena “%1$s” não existe</string>
+    <string name="acao_cena_em_cena">uma cena não pode rodar outra cena</string>
+    <string name="acao_mural_compras">Pôr “%1$s” na lista de compras</string>
+    <string name="acao_mural_recado">Pôr “%1$s” no mural da família</string>
+    <string name="acao_tocar_titulo">Procurar e tocar “%1$s”</string>
+    <string name="acao_tocar">Tocar %1$s</string>
+    <string name="acao_continuar">Continuar o que estava vendo</string>
+    <string name="acao_proximo">Tocar o próximo episódio</string>
+    <string name="acao_proximo_de">Próximo episódio de %1$s</string>
+    <string name="acao_o_que_via">Ver o que estava vendo</string>
+    <string name="acao_vendo">Vendo por último: %1$s</string>
+    <string name="acao_vendo_nada">Nada assistido ainda em Filmes e Séries.</string>
+</resources>

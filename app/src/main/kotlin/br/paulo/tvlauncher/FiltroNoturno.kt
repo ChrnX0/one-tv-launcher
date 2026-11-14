@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
 import android.accessibilityservice.AccessibilityService
+import android.content.Context
 import android.graphics.Color
 import android.graphics.PixelFormat
 import android.os.Handler
@@ -27,6 +28,10 @@ object FiltroNoturno {
     const val PADRAO_INICIO = 22 * 60
     const val PADRAO_FIM = 6 * 60
     const val PADRAO_FORCA = 35
+    // Ligar/desligar na hora, pelo catálogo de ações (cena, Claude, voz; 14/11/2026, ideia 2): vale até a próxima virada
+    // do horário (início ou fim da janela), no máximo [MAX_FORCADO_MIN]; depois o horário volta a mandar.
+    private const val PREFS_FORCADO = "filtro_forcado"
+    const val MAX_FORCADO_MIN = 12 * 60
 
     private val ui by lazy { Handler(Looper.getMainLooper()) }   // lazy: os testes JVM usam só as regras puras
     private var pelicula: View? = null
@@ -37,6 +42,35 @@ object FiltroNoturno {
         inicio == fim -> false
         inicio < fim -> minuto in inicio until fim
         else -> minuto >= inicio || minuto < fim
+    }
+
+    /**
+     * Regra pura (FiltroNoturnoTest): quantos minutos faltam, a partir de [minuto], para a janela virar (chegar ao
+     * [inicio] ou ao [fim]), de 1 a [MAX_FORCADO_MIN]. É até quando vale o "ligar/desligar agora".
+     */
+    fun minutosAteVirar(minuto: Int, inicio: Int, fim: Int): Int {
+        fun ate(alvo: Int) = ((alvo - minuto) % 1440 + 1440) % 1440
+        val candidatos = listOf(ate(inicio), ate(fim)).filter { it > 0 }
+        return (candidatos.minOrNull() ?: MAX_FORCADO_MIN).coerceIn(1, MAX_FORCADO_MIN)
+    }
+
+    /** Regra pura: o estado forçado vale enquanto [agoraMs] < [ateMs]; fora disso, o do horário ([agendado]). */
+    fun deveLigar(agendado: Boolean, forcado: Boolean?, ateMs: Long, agoraMs: Long): Boolean =
+        if (forcado != null && agoraMs < ateMs) forcado else agendado
+
+    /**
+     * Liga ou desliga a película AGORA (ação "filtro_noturno" do catálogo). Null = feito; senão o motivo. Sem o serviço de
+     * acessibilidade não há como pôr a película.
+     */
+    fun forcar(ctx: Context, ligado: Boolean): String? {
+        val c = Calendar.getInstance()
+        val minuto = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE)
+        val min = minutosAteVirar(minuto, Extras.numero(ctx, CHAVE_INICIO, PADRAO_INICIO), Extras.numero(ctx, CHAVE_FIM, PADRAO_FIM))
+        ctx.getSharedPreferences(PREFS_FORCADO, Context.MODE_PRIVATE).edit()
+            .putBoolean("ligado", ligado).putLong("ate", System.currentTimeMillis() + min * 60_000L).apply()
+        if (servico == null) return txt(R.string.acao_filtro_sem_servico)
+        ui.post { avaliar() }
+        return null
     }
 
     /** Cor da película para a força 0..100: âmbar (luz azul cortada) com transparência proporcional. Máx. 70% opaca. */
@@ -64,8 +98,10 @@ object FiltroNoturno {
         val svc = servico ?: return
         val c = Calendar.getInstance()
         val minuto = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE)
-        val ligar = Extras.ligado(svc, Extras.Chave.FILTRO_NOTURNO) && dentro(minuto,
+        val agendado = Extras.ligado(svc, Extras.Chave.FILTRO_NOTURNO) && dentro(minuto,
             Extras.numero(svc, CHAVE_INICIO, PADRAO_INICIO), Extras.numero(svc, CHAVE_FIM, PADRAO_FIM))
+        val f = svc.getSharedPreferences(PREFS_FORCADO, Context.MODE_PRIVATE)
+        val ligar = deveLigar(agendado, if (f.contains("ligado")) f.getBoolean("ligado", false) else null, f.getLong("ate", 0), System.currentTimeMillis())
         if (ligar) por(svc, Extras.numero(svc, CHAVE_FORCA, PADRAO_FORCA)) else tirar()
     }
 

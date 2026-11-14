@@ -74,6 +74,8 @@ object Cenas {
         if (!nomeValido(n)) return "erro: nome inválido (1 a 40 letras, números, espaço, _ ou -)"
         val plano = ComandosIa.conferir(acoesJson, apps)
         if (plano.acoes.isEmpty()) return "erro: nenhuma ação válida" + plano.recusadas.joinToString("; ", " (", ")")
+        // Cena dentro de cena (14/11/2026): recusada ao criar, para nunca haver cadeia nem laço (A roda B, B roda A).
+        if (plano.acoes.any { it is ComandosIa.Acao.RodarCena }) return "erro: " + ComandosIa.t(R.string.acao_cena_em_cena)
         val atuais = lista(ctx).filter { it.nome != n }
         if (atuais.size >= MAX_CENAS) return "erro: limite de $MAX_CENAS cenas"
         val token = gerarToken()
