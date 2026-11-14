@@ -18,4 +18,10 @@
     <string name="anteriormente_pular_sempre">Never show</string>
     <string name="anteriormente_desligado">Recaps turned off. To turn them on again: hold OK on an episode.</string>
     <string name="anteriormente_ligar">Show “Previously on” recaps</string>
+    <!-- Ideia 91: idade máxima no modo infantil (Classificacao) -->
+    <string name="idade_titulo">Maximum age in kids mode</string>
+    <string name="idade_det">Movies and series rated up to this age show up from any category (TMDB rating). Unrated ones only in kids categories.</string>
+    <string name="idade_so_categorias">Kids categories only</string>
+    <string name="idade_livre">All ages</string>
+    <string name="idade_anos">Up to %1$d years</string>
 </resources>

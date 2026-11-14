@@ -623,6 +623,9 @@
           (Configurações &gt; Família).</p>
         <label><input id="cfgParental" type="checkbox"> Controle parental <span id="cfgParentalDet" class="aviso-curto"></span></label>
         <label><input id="cfgInfantil" type="checkbox"> Modo infantil <span id="cfgInfantilDet" class="aviso-curto"></span></label>
+        <p class="aviso">No modo infantil, filmes e séries até: <select id="cfgIdadeInfantil" aria-label="Idade máxima no modo infantil">
+          <option value="-1">só as categorias infantis</option><option value="0">Livre</option><option value="10">10 anos</option>
+          <option value="12">12 anos</option><option value="14">14 anos</option><option value="16">16 anos</option></select></p>
         <label><input id="cfgVisita" type="checkbox"> Modo visita (esconde perfil, agenda e os apps marcados)</label>
         <p class="aviso">PIN das crianças: <strong id="cfgPinFamiliaEstado"></strong>
           <button type="button" class="link" id="btnApagarPinFamilia" hidden>apagar</button></p>

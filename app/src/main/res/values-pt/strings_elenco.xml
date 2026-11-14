@@ -16,4 +16,10 @@
     <string name="anteriormente_pular_sempre">Não mostrar mais</string>
     <string name="anteriormente_desligado">Resumos desligados. Para ligar de novo: segure OK num episódio.</string>
     <string name="anteriormente_ligar">Mostrar o resumo “Anteriormente”</string>
+    <!-- Ideia 91: idade máxima no modo infantil (Classificacao) -->
+    <string name="idade_titulo">Idade máxima no modo infantil</string>
+    <string name="idade_det">Filmes e séries com classificação até esta idade aparecem de qualquer categoria (classificação do TMDB). Os sem classificação, só nas categorias infantis.</string>
+    <string name="idade_so_categorias">Só as categorias infantis</string>
+    <string name="idade_livre">Livre</string>
+    <string name="idade_anos">Até %1$d anos</string>
 </resources>
