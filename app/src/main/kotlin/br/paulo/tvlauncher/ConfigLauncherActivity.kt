@@ -1228,33 +1228,9 @@ class ConfigLauncherActivity : Activity() {
     }
 
     /** Confirmacoes é puro (testado na JVM, também usado pelo painel): o texto da tela vem daqui, no idioma da TV. */
-    private fun tituloAcao(a: Confirmacoes.Acao): String = getString(when (a) {
-        Confirmacoes.Acao.MCP_CLIENTE -> R.string.cl_acao_mcp_cliente
-        Confirmacoes.Acao.MCP_ACOES -> R.string.cl_acao_mcp_acoes
-        Confirmacoes.Acao.MCP_SHELL -> R.string.cl_acao_mcp_shell
-        Confirmacoes.Acao.INSTALAR -> R.string.cl_acao_instalar
-        Confirmacoes.Acao.REMOVER -> R.string.cl_acao_remover
-        Confirmacoes.Acao.PERMISSOES -> R.string.cl_acao_permissoes
-        Confirmacoes.Acao.ABRIR_FORA -> R.string.cl_acao_abrir_fora
-        Confirmacoes.Acao.ATUALIZACAO -> R.string.cl_acao_atualizacao
-    })
-
-    private fun explicaAcao(a: Confirmacoes.Acao): String = getString(when (a) {
-        Confirmacoes.Acao.MCP_CLIENTE -> R.string.cl_acao_mcp_cliente_det
-        Confirmacoes.Acao.MCP_ACOES -> R.string.cl_acao_mcp_acoes_det
-        Confirmacoes.Acao.MCP_SHELL -> R.string.cl_acao_mcp_shell_det
-        Confirmacoes.Acao.INSTALAR -> R.string.cl_acao_instalar_det
-        Confirmacoes.Acao.REMOVER -> R.string.cl_acao_remover_det
-        Confirmacoes.Acao.PERMISSOES -> R.string.cl_acao_permissoes_det
-        Confirmacoes.Acao.ABRIR_FORA -> R.string.cl_acao_abrir_fora_det
-        Confirmacoes.Acao.ATUALIZACAO -> R.string.cl_acao_atualizacao_det
-    })
-
-    private fun rotuloModo(m: Confirmacoes.Modo): String = getString(when (m) {
-        Confirmacoes.Modo.PERGUNTAR -> R.string.cl_modo_perguntar
-        Confirmacoes.Modo.PERMITIR -> R.string.cl_modo_permitir
-        Confirmacoes.Modo.BLOQUEAR -> R.string.cl_modo_bloquear
-    })
+    private fun tituloAcao(a: Confirmacoes.Acao): String = getString(ConfirmacoesTv.tituloRes(a))
+    private fun explicaAcao(a: Confirmacoes.Acao): String = getString(ConfirmacoesTv.explicacaoRes(a))
+    private fun rotuloModo(m: Confirmacoes.Modo): String = getString(ConfirmacoesTv.modoRes(m))
 
     /** Nome e "o que se perde" da limpeza (Debloat.LISTA guarda o português; nome de marca fica como está). */
     private fun nomeDebloat(i: Debloat.Item): String = when (i.pacote) {

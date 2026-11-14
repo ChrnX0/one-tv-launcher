@@ -224,7 +224,7 @@ class ProtetorGaleria(
             val eDia = Astronomia.eDia(agora, lat, lon, clima.getBoolean("eDia", true))
             seg.addView(IconesClima.imagem(ctx, IconesClima.chave(codigo, eDia, chovendo)), LinearLayout.LayoutParams(dp(34), dp(34)))
             seg.addView(texto("${clima.getInt("temp", 0)}°", 38f, m200).apply { letterSpacing = -0.03f; sombrear() }, lpSeg(10))
-            val maxMin = if (clima.contains("max")) "máx ${clima.getInt("max", 0)}° · mín ${clima.getInt("min", 0)}°" else null
+            val maxMin = if (clima.contains("max")) ctx.getString(R.string.pg_max_min, clima.getInt("max", 0), clima.getInt("min", 0)) else null
             seg.addView(par(IconesClima.texto(codigo, chovendo), maxMin, 170, 13f, 11f), lpSeg(12))
             barra.addView(seg)
         }
@@ -246,7 +246,7 @@ class ProtetorGaleria(
             val grupo = segmento()
             val itens = mutableListOf<View>()
             Astronomia.nascerEPor(agora, lat, lon)?.let { (nasce, poe) ->
-                itens += segmentoSimples(icone(IconeLinha.Tipo.HORIZONTE), hm.format(Date(nasce)), "pôr ${hm.format(Date(poe))}")
+                itens += segmentoSimples(icone(IconeLinha.Tipo.HORIZONTE), hm.format(Date(nasce)), ctx.getString(R.string.pg_por_do_sol, hm.format(Date(poe))))
             }
             val luaR = Lua.resumoCurto(agora, lat).split("  ·  ")
             luaR[0].substringAfter("  ").trim().takeIf { it.isNotEmpty() }?.let { f ->
@@ -450,9 +450,9 @@ class ProtetorGaleria(
                         }.timeInMillis
                         Agenda.eventos(ctx, Perfil.ativa(ctx), inicioDia, inicioDia + 24 * 3_600_000L - 1)
                             .filter { it.diaInteiro && Mural.eAniversario(it.titulo) }.take(2)
-                            .forEach { cartoes12 += Triple("Hoje", it.titulo, "") }
-                        m.recados.forEach { cartoes12 += Triple("Recado", it, "") }
-                        if (m.compras.isNotEmpty()) cartoes12 += Triple("Lista de compras", m.compras.joinToString(", "), "")
+                            .forEach { cartoes12 += Triple(ctx.getString(R.string.pv_hoje), it.titulo, "") }
+                        m.recados.forEach { cartoes12 += Triple(ctx.getString(R.string.pg_recado), it, "") }
+                        if (m.compras.isNotEmpty()) cartoes12 += Triple(ctx.getString(R.string.pg_compras), m.compras.joinToString(", "), "")
                     }
                 }
             } catch (e: Exception) { android.util.Log.w(TAG, "mural: $e") }

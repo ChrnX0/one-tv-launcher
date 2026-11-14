@@ -51,7 +51,7 @@ class ConectarClaudeActivity : Activity() {
         titulo = Estilo.tituloTela(this, "")
         texto = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { textSize = 16f; setPadding(0, dp(Estilo.E2), dp(32), 0); setLineSpacing(0f, 1.25f) }
         col.addView(titulo); col.addView(texto)
-        val sair = Estilo.botao(this, "Fechar").apply { setOnClickListener { finish() } }
+        val sair = Estilo.botao(this, getString(R.string.qr_fechar)).apply { setOnClickListener { finish() } }
         col.addView(sair, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { topMargin = dp(24) })
         raiz.addView(col, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         qr = ImageView(this).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
@@ -79,32 +79,25 @@ class ConectarClaudeActivity : Activity() {
         companion object {
             fun agora(ctx: android.content.Context): Passo {
                 val conta = Perfil.contas(ctx).firstOrNull()
-                val dicaConta = conta?.let { "\nNo celular, toque em \"Sign in with Google\" e use $it (a conta desta TV)." } ?: ""
+                val dicaConta = conta?.let { "\n" + ctx.getString(R.string.cc_dica_conta, it) } ?: ""
                 return when {
-                    !PainelArmazem.temPin(ctx) -> Passo("pin", "Primeiro, um PIN",
-                        "Defina o PIN em Configurações do launcher > Painel no navegador.\nÉ ele que você digita quando o Claude pedir para entrar na TV.", null)
-                    !TunelTailscale.binario(ctx).exists() -> Passo("sem_tunel", "Esta versão veio sem o túnel",
-                        "O launcher foi compilado sem o Tailscale. Instale a versão completa.", null)
-                    !McpServidor.ligado(ctx) -> Passo("desligado", "Desligado", "Ligue em Configurações do launcher > Claude pela internet.", null)
-                    TunelTailscale.urlLogin != null -> Passo("login", "1. Entre no Tailscale",
-                        "Aponte a câmera do celular para o código ao lado e entre (é grátis).$dicaConta\n\nO Tailscale cria um endereço seguro só para esta TV na internet.",
+                    !PainelArmazem.temPin(ctx) -> Passo("pin", ctx.getString(R.string.cc_pin), ctx.getString(R.string.cc_pin_det), null)
+                    !TunelTailscale.binario(ctx).exists() -> Passo("sem_tunel", ctx.getString(R.string.cc_sem_tunel), ctx.getString(R.string.cc_sem_tunel_det), null)
+                    !McpServidor.ligado(ctx) -> Passo("desligado", ctx.getString(R.string.cc_desligado), ctx.getString(R.string.cc_desligado_det), null)
+                    TunelTailscale.urlLogin != null -> Passo("login", ctx.getString(R.string.cc_login), ctx.getString(R.string.cc_login_det, dicaConta),
                         TunelTailscale.urlLogin)
-                    TunelTailscale.urlAtivar != null -> Passo("ativar", "2. Ligue o endereço público",
-                        "Conta nova: falta ligar HTTPS e Funnel. Abra o código ao lado no celular e confirme.", TunelTailscale.urlAtivar)
+                    TunelTailscale.urlAtivar != null -> Passo("ativar", ctx.getString(R.string.cc_ativar), ctx.getString(R.string.cc_ativar_det), TunelTailscale.urlAtivar)
                     TunelTailscale.rodando() && TunelTailscale.nome(ctx) != null -> {
                         val url = "https://${TunelTailscale.nome(ctx)}/mcp"
-                        Passo("pronto", "Pronto: a TV está no ar",
-                            "Endereço: $url\n\nClaude: Configurações > Conectores > Adicionar conector personalizado.\n" +
-                                "ChatGPT: Configurações > Conectores (modo desenvolvedor).\nPerplexity: Configurações > Conectores > Personalizado.\n" +
-                                "Grok: grok.com/connectors > Novo > Personalizado.\nCodex, Antigravity, Claude Code, Cursor: adicione um servidor MCP com esse endereço.\n\n" +
+                        Passo("pronto", ctx.getString(R.string.cc_pronto),
+                            ctx.getString(R.string.cc_pronto_det, url) + "\n\n" +
                                 // Com o login Google ligado (LoginGoogle), o PIN não vale mais no login do conector (11/11/2026).
-                                (if (LoginGoogle.configurado(ctx)) "Ao conectar, ele pede a conta Google (google.com/device + código). "
-                                 else "Ao conectar, ele pede o PIN. ") +
-                                (if (ConfirmacoesTv.modo(ctx, Confirmacoes.Acao.MCP_ACOES) == Confirmacoes.Modo.PERGUNTAR) "Ações na TV só com OK no controle." else "Ações na TV acontecem na hora; a TV mostra um aviso.") +
-                                (TunelTailscale.conta(ctx)?.let { "\nConta Tailscale: $it" } ?: ""), url)
+                                ctx.getString(if (LoginGoogle.configurado(ctx)) R.string.cc_pede_google else R.string.cc_pede_pin) + " " +
+                                ctx.getString(if (ConfirmacoesTv.modo(ctx, Confirmacoes.Acao.MCP_ACOES) == Confirmacoes.Modo.PERGUNTAR) R.string.cc_acoes_ok else R.string.cc_acoes_na_hora) +
+                                (TunelTailscale.conta(ctx)?.let { "\n" + ctx.getString(R.string.cc_conta_ts, it) } ?: ""), url)
                     }
-                    else -> Passo("subindo", "Conectando…",
-                        "Ligando o túnel. Leva alguns segundos." + (TunelTailscale.ultimoErro(ctx)?.let { "\n\nÚltimo erro: $it" } ?: ""), null)
+                    else -> Passo("subindo", ctx.getString(R.string.cc_conectando),
+                        ctx.getString(R.string.cc_conectando_det) + (TunelTailscale.ultimoErro(ctx)?.let { "\n\n" + ctx.getString(R.string.cc_ultimo_erro, it) } ?: ""), null)
                 }
             }
         }
