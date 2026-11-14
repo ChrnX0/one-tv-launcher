@@ -211,6 +211,15 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <!-- Versão nova instalada: com a tela apagada, a nossa HOME volta ao topo (a instalação a mata; ver AtualizadoReceiver).
+             MY_PACKAGE_REPLACED só o sistema envia, e só para o próprio app: não precisa ser exportado. -->
+        <receiver
+            android:name=".AtualizadoReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
         <!-- Teste do shell proprio (MARCO 2): recebe o codigo de pareamento por adb broadcast (ver PareamentoReceiver) -->
         <!-- permission=DUMP: so o shell (adb) e o sistema tem essa permissao. Sem isto, QUALQUER app instalado na TV
              podia disparar o PAREAR e mandar o launcher abrir um shell. -->
