@@ -23,6 +23,7 @@
         <item>Screensaver answers the remote: ◀ ▶ move through the cards, OK dismisses a notice or pauses the music, and a “now playing” card</item>
         <item>Screensaver photos from a network folder (computer, NAS or Nextcloud): open the folder in “Network” and choose “Use these photos”</item>
         <item>More apps on the home screen now show a short description under their name</item>
+        <item>Search: at the end of the results, continue the same search on YouTube, Netflix or Prime Video</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>home</item>
@@ -35,6 +36,7 @@
         <item>protetor_teclas</item>
         <item>fotos_rede</item>
         <item>frase_apps</item>
+        <item>busca_outros_apps</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Press HOME</item>
@@ -47,6 +49,7 @@
         <item>Play music, wait for the screensaver, then press ◀ ▶ and OK</item>
         <item>In “Network”, open a folder with photos and choose “Use these photos in the screensaver”</item>
         <item>On the home screen, move to an app you installed (e.g. a file manager)</item>
+        <item>Open Search, type a movie name and pick “Search … on YouTube” at the end</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did it go back to the home screen?</item>
@@ -59,5 +62,6 @@
         <item>Did the cards get highlighted and did OK pause the music?</item>
         <item>Did those photos show up in the next screensaver?</item>
         <item>Does the line under its name say what it does, in the TV’s language?</item>
+        <item>Did YouTube open with that search (or at least open)?</item>
     </string-array>
 </resources>
