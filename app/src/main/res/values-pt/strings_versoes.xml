@@ -14,7 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Player: o alto da coluna diz só TV, Filmes ou Séries, com os botões Buscar e Filtro ao lado; a lista abre espaço para Gravações (TV: Favoritos, Recentes, Guia, Gravações)</item>
+        <item>Player: o alto da coluna diz só TV, Filmes ou Séries, com os botões Buscar e Filtro ao lado; a lista abre espaço para Gravações (TV: Favoritos, Recentes, Guia, Gravações; “Guia” curto para não cortar)</item>
         <item>Card Jogos na tela inicial, depois de Na rede: GeForce NOW, Steam Link, Moonlight, PS Remote Play, RetroArch e os outros jogos saem da linha de apps e ficam em 4 grupos</item>
         <item>Jogos: “Jogar no PC” acorda o computador e abre o Moonlight ou o Steam Link; “Testar a rede” diz se dá para jogar na nuvem; os controles ligados aparecem no alto</item>
         <item>Modo jogo: com um jogo aberto, o protetor, o filtro noturno e os avisos esperam</item>
