@@ -14,7 +14,7 @@ import android.graphics.drawable.Drawable
  * Arquivo separado do IconeApp para não disputar o arquivo do sistema de design com outra frente.
  */
 class IconeMidia(private val tipo: Tipo, cor: Int = Estilo.TEXTO) : Drawable() {
-    enum class Tipo { PASTA, VIDEO, MUSICA, FOTO, ARQUIVO, SERVIDOR, COMPUTADOR, NUVEM, LINK, MAIS, ATUALIZAR, CONTINUAR }
+    enum class Tipo { PASTA, VIDEO, MUSICA, FOTO, ARQUIVO, SERVIDOR, COMPUTADOR, NUVEM, LINK, MAIS, ATUALIZAR, CONTINUAR, LUPA, NOVOS }
 
     private val traco = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE; strokeWidth = 1.6f; strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND; color = cor
@@ -83,6 +83,14 @@ class IconeMidia(private val tipo: Tipo, cor: Int = Estilo.TEXTO) : Drawable() {
             Tipo.ATUALIZAR -> {
                 c.drawArc(RectF(5f, 5f, 19f, 19f), -60f, 300f, false, traco)
                 p.reset(); p.moveTo(15.5f, 3.5f); p.lineTo(16.7f, 6.4f); p.lineTo(13.6f, 7.2f)
+                c.drawPath(p, traco)
+            }
+            Tipo.LUPA -> {   // buscar (ideia 29)
+                c.drawCircle(10.5f, 10.5f, 6f, traco); c.drawLine(15f, 15f, 20f, 20f, traco)
+            }
+            Tipo.NOVOS -> {   // adicionados há pouco: estrela de 4 pontas (ideia 29)
+                p.reset(); p.moveTo(12f, 3.5f); p.quadTo(13f, 11f, 20.5f, 12f); p.quadTo(13f, 13f, 12f, 20.5f)
+                p.quadTo(11f, 13f, 3.5f, 12f); p.quadTo(11f, 11f, 12f, 3.5f); p.close()
                 c.drawPath(p, traco)
             }
             Tipo.CONTINUAR -> {   // círculo com "play"

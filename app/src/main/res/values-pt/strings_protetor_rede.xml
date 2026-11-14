@@ -13,4 +13,13 @@
     </plurals>
     <string name="rede_fotos_usando">Copiando as fotos. Elas aparecem na próxima vez que o protetor abrir.</string>
     <string name="rede_fotos_paradas">O protetor deixou de usar esta pasta.</string>
+    <!-- "Na rede" com cara de catálogo (ideia 29) -->
+    <string name="rede_continuar">Continuar assistindo</string>
+    <string name="rede_recentes">Adicionados há pouco</string>
+    <string name="rede_buscar">Buscar</string>
+    <string name="rede_buscar_explica">Filmes, séries, episódios e músicas deste servidor.</string>
+    <string name="rede_buscar_campo">Nome</string>
+    <string name="rede_buscar_curto">Digite pelo menos 2 letras.</string>
+    <string name="rede_proximo_em">Próximo: %1$s em %2$d s · OK começa agora · outra tecla cancela</string>
+    <string name="rede_ainda_assistindo">Ainda está assistindo? OK começa %1$s</string>
 </resources>
