@@ -224,9 +224,33 @@ class ConfigLauncherActivity : Activity() {
 
     /** Redesenha a aba atual no lugar (depois de voltar de outra tela ou de mudar algo que mexe em várias linhas). */
     private fun recarregarAba() {
-        val tinhaFocoNoConteudo = conteudo.hasFocus()
+        // 15/11/2026 (visto na Sala): tirar as linhas com o foco numa delas deixava o Android escolher outro foco, às
+        // vezes outra aba do menu, que então abria (Avançado > ligar um empréstimo > caía em "TV e filmes" com o foco
+        // numa linha de lá, e o próximo OK mudava uma opção que ninguém escolheu). Agora o foco espera na aba atual e
+        // volta para a MESMA linha (pela posição) depois de redesenhar.
+        val antes = focaveis(conteudo)
+        val focado = conteudo.findFocus()
+        val indice = antes.indexOfFirst { it === focado || (focado != null && ehAncestral(it, focado)) }
+        val tinhaFocoNoConteudo = focado != null
+        if (tinhaFocoNoConteudo) itensMenu[abaAtual].requestFocus()
         mostrarAba(abaAtual)
-        if (tinhaFocoNoConteudo) conteudo.post { entrarNoConteudo() }
+        if (tinhaFocoNoConteudo) conteudo.post {
+            val depois = focaveis(conteudo)
+            (depois.getOrNull(indice) ?: depois.firstOrNull())?.requestFocus()
+        }
+    }
+
+    private fun focaveis(v: View, r: MutableList<View> = mutableListOf()): List<View> {
+        if (v.visibility != View.VISIBLE) return r
+        if (v.isFocusable) { r += v; return r }
+        if (v is ViewGroup) for (k in 0 until v.childCount) focaveis(v.getChildAt(k), r)
+        return r
+    }
+
+    private fun ehAncestral(pai: View, filho: View): Boolean {
+        var p = filho.parent
+        while (p != null) { if (p === pai) return true; p = p.parent }
+        return false
     }
 
     private fun entrarNoConteudo() {

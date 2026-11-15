@@ -73,7 +73,7 @@ class TesteActivity : Activity() {
             fun t(nome: String, esperado: String, f: () -> Any?) = try { mostrar("$nome: ${f()} (esperado $esperado)") }
                 catch (e: Throwable) { mostrar("$nome: ${e.javaClass.simpleName} ${e.message} (esperado $esperado)") }
             t("D1 isApplicationHidden(vending)", "false") { dpm.isApplicationHidden(dono, "com.android.vending") }
-            t("D2 setApplicationHidden(eu mesmo,false)", "false") { dpm.setApplicationHidden(dono, packageName, false) }
+            t("D2 setApplicationHidden(eu mesmo,false)", "true") { dpm.setApplicationHidden(dono, packageName, false) }
             t("D3 setApplicationHidden(launcher,false)", "SecurityException") { dpm.setApplicationHidden(dono, dono.packageName, false) }
             t("D4 newProcess(id)", "SecurityException (sem poder total)") {
                 com.rosan.dhizuku.api.Dhizuku.newProcess(arrayOf("id"), null, null).inputStream.bufferedReader().readText().trim()
