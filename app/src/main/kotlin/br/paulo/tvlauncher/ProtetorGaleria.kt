@@ -28,8 +28,8 @@ import java.util.concurrent.ExecutorService
  * - em cima, à esquerda: saudação, a hora grande em Manrope (hora cheia, minuto fino), a data e uma linha fina que mostra
  *   quanto do dia claro já passou (do nascer ao pôr do sol; some à noite);
  * - em cima, à direita: as notificações da TV em cartões de vidro fosco ([NotificacoesTv]), mais o próximo despertador;
- * - embaixo: uma linha solta sobre a pintura (12/11/2026): o tempo de agora, as próximas horas de 2 em 2 e, à direita,
- *   sol, lua e amanhã; acima dela, a obra do dia.
+ * - embaixo: os widgets do tempo (agora, próximas horas, amanhã) no estilo escolhido nas Configurações
+ *   ([WidgetsProtetor], 15/11/2026: faixa de vidro, cartões ou sem caixa); acima deles, a obra do dia.
  * O vidro é a própria pintura desfocada atrás de cada painel ([Vidro]).
  *
  * Quem cria e destrói é o [ProtetorTela]. [montar] monta a tela; [atualizar] relê clima, avisos e a obra do dia.
@@ -52,6 +52,7 @@ class ProtetorGaleria(
     lateinit var camadaInfo: FrameLayout; private set
     private var fundo: FundoGaleria? = null
     private val vidro = FonteVidro()
+    private val widgets by lazy { WidgetsProtetor(ctx, vidro) }
     private lateinit var raiz: FrameLayout
     private lateinit var saudacao: TextView
     private lateinit var hora: TextView
@@ -209,73 +210,39 @@ class ProtetorGaleria(
         return clima.getFloat("lat", Config.LATITUDE.toFloat()).toDouble() to clima.getFloat("lon", Config.LONGITUDE.toFloat()).toDouble()
     }
 
-    // ------------------------------------------------------------------ linha de baixo (sem caixa)
     private fun montarBarra(agora: Long, lat: Double, lon: Double) {
         barra.removeAllViews()
         val clima = ctx.getSharedPreferences("clima", Context.MODE_PRIVATE)
         // Só com medida de até 3 h, como no protetor clássico: melhor calar que mostrar um número velho.
         val temClima = clima.contains("temp") && agora - clima.getLong("em", 0) < 3 * 60 * 60_000L
-        val hm = SimpleDateFormat("HH:mm", Locale.getDefault())
-        // 1) O tempo de agora, o maior da linha.
-        if (temClima) {
-            val codigo = clima.getInt("codigo", 0)
-            val chovendo = clima.getBoolean("chovendo", false)
-            val seg = segmento()
-            // Dia/noite recalculado agora, não o gravado pela HOME (que pode ter até 3 h; auditoria 10/11).
-            val eDia = Astronomia.eDia(agora, lat, lon, clima.getBoolean("eDia", true))
-            seg.addView(IconesClima.imagem(ctx, IconesClima.chave(codigo, eDia, chovendo)), LinearLayout.LayoutParams(dp(34), dp(34)))
-            seg.addView(texto("${clima.getInt("temp", 0)}°", 38f, m200).apply { letterSpacing = -0.03f; sombrear() }, lpSeg(10))
-            val maxMin = if (clima.contains("max")) ctx.getString(R.string.pg_max_min, clima.getInt("max", 0), clima.getInt("min", 0)) else null
-            seg.addView(par(IconesClima.texto(codigo, chovendo), maxMin, 170, 13f, 11f), lpSeg(12))
-            barra.addView(seg)
-        }
-        // 2) As próximas horas, de 2 em 2 (5 marcas): hora, céu, temperatura e chance de chuva. Sem as horas gravadas
-        //    (HOME antiga, ou a Open-Meteo não mandou), cai na chance de chuva do dia, como era.
-        //    A pessoa pode trocar pelo "resumo do dia" nas Configurações (Protetor.barra).
-        val resumo = Protetor.barra(ctx) == Protetor.BARRA_RESUMO
-        val horas = if (temClima && !resumo) proximasHoras(clima.getString("horas", "").orEmpty(), agora, lat, lon) else emptyList()
-        if (horas.isNotEmpty()) {
-            // As marcas se espalham pelo vão entre o "agora" e a coluna da direita (vãos iguais de peso 1 entre elas).
-            val grupo = segmento().apply { gravity = Gravity.BOTTOM }
-            horas.forEachIndexed { i, v ->
-                if (i > 0) grupo.addView(View(ctx), LinearLayout.LayoutParams(0, 1, 1f))
-                grupo.addView(v, LinearLayout.LayoutParams(-2, -2))
+        val horas = if (temClima) WidgetsTempo.lerHoras(clima.getString("horas", "").orEmpty()) else emptyList()
+        val marcas = WidgetsTempo.deDuasEmDuas(horas, agora)
+        val nascerPor = Astronomia.nascerEPor(agora, lat, lon)
+        // O sol que cai dentro das próximas horas: o pôr de hoje, senão o nascer de amanhã (a curva cobre ~9 h).
+        val solNaCurva = nascerPor?.let { (nasce, poe) ->
+            when {
+                poe > agora -> poe to false
+                nasce > agora -> nasce to true
+                else -> Astronomia.nascerEPor(agora + 24 * 60 * 60_000L, lat, lon)?.first?.let { it to true }
             }
-            barra.addView(grupo, LinearLayout.LayoutParams(0, -2, 1f).apply { leftMargin = dp(44); rightMargin = dp(44) })
-        } else if (temClima) {
-            // Resumo do dia (ou sem as horas gravadas): sol, lua, umidade e chuva de hoje espalhados; amanhã fica à direita.
-            val grupo = segmento()
-            val itens = mutableListOf<View>()
-            Astronomia.nascerEPor(agora, lat, lon)?.let { (nasce, poe) ->
-                itens += segmentoSimples(icone(IconeLinha.Tipo.HORIZONTE), hm.format(Date(nasce)), ctx.getString(R.string.pg_por_do_sol, hm.format(Date(poe))))
-            }
-            val luaR = Lua.resumoCurto(agora, lat).split("  ·  ")
-            luaR[0].substringAfter("  ").trim().takeIf { it.isNotEmpty() }?.let { f ->
-                itens += segmentoSimples(IconeLinha(IconeLinha.Tipo.LUA, Lua.idade(agora) / 29.530588853, sul = lat < 0), f, luaR.getOrNull(1))
-            }
-            clima.getInt("umidade", -1).takeIf { it >= 0 }?.let { itens += segmentoSimples(icone(IconeLinha.Tipo.GOTA), "$it%", ctx.getString(R.string.pg_umidade)) }
-            clima.getInt("chuva", -1).takeIf { it >= 0 }?.let { itens += segmentoSimples(icone(IconeLinha.Tipo.CHUVA), "$it%", ctx.getString(R.string.pg_chuva)) }
-            itens.forEachIndexed { i, v ->
-                if (i > 0) grupo.addView(View(ctx), LinearLayout.LayoutParams(0, 1, 1f))
-                grupo.addView(v)
-            }
-            barra.addView(grupo, LinearLayout.LayoutParams(0, -2, 1f).apply { leftMargin = dp(48); rightMargin = dp(36) })
-        } else barra.addView(View(ctx), LinearLayout.LayoutParams(0, 1, 1f))
-        // 3) À direita, três linhas menores: sol, lua e amanhã.
-        val direita = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; gravity = Gravity.END }
-        if (!resumo || !temClima) Astronomia.nascerEPor(agora, lat, lon)?.let { (nasce, poe) ->
-            direita.addView(linhaDireita(icone(IconeLinha.Tipo.HORIZONTE), "${hm.format(Date(nasce))} – ${hm.format(Date(poe))}"))
         }
         val lua = Lua.resumoCurto(agora, lat).split("  ·  ")
-        val fase = lua[0].substringAfter("  ").trim()
-        if (fase.isNotEmpty() && (!resumo || !temClima)) direita.addView(linhaDireita(
-            IconeLinha(IconeLinha.Tipo.LUA, Lua.idade(agora) / 29.530588853, sul = lat < 0), fase))
-        if (temClima && clima.contains("amanha_max")) {
-            val chuvaAmanha = clima.getInt("amanha_chuva", -1).takeIf { it >= 0 }?.let { " · $it%" } ?: ""
-            direita.addView(linhaDireita(null, "${ctx.getString(R.string.pg_amanha)}  ${clima.getInt("amanha_max", 0)}° / ${clima.getInt("amanha_min", 0)}°$chuvaAmanha",
-                IconesClima.imagem(ctx, IconesClima.chave(clima.getInt("amanha_codigo", 0), true, false))))
-        }
-        barra.addView(direita)
+        val fase = lua[0].substringAfter("  ").trim().takeIf { it.isNotEmpty() }
+        val dados = WidgetsProtetor.Dados(
+            agora = agora, temClima = temClima,
+            temp = clima.getInt("temp", 0), codigo = clima.getInt("codigo", 0), chovendo = clima.getBoolean("chovendo", false),
+            // Dia/noite recalculado agora, não o gravado pela HOME (que pode ter até 3 h; auditoria 10/11).
+            eDia = Astronomia.eDia(agora, lat, lon, clima.getBoolean("eDia", true)),
+            max = if (clima.contains("max")) clima.getInt("max", 0) else null,
+            min = if (clima.contains("min")) clima.getInt("min", 0) else null,
+            horas = horas, marcas = marcas, eDiaEm = { ms -> Astronomia.eDia(ms, lat, lon, true) },
+            nascerPor = nascerPor, solNaCurva = solNaCurva,
+            luaFase = fase, luaFracao = Lua.idade(agora) / 29.530588853, sul = lat < 0,
+            umidade = clima.getInt("umidade", -1).takeIf { it >= 0 }, chuvaHoje = clima.getInt("chuva", -1).takeIf { it >= 0 },
+            amanha = if (clima.contains("amanha_max")) WidgetsProtetor.Amanha(clima.getInt("amanha_max", 0), clima.getInt("amanha_min", 0),
+                clima.getInt("amanha_chuva", -1).takeIf { it >= 0 }, clima.getInt("amanha_codigo", 0)) else null,
+        )
+        barra.addView(widgets.montar(Protetor.widget(ctx), dados), LinearLayout.LayoutParams(0, -2, 1f))
         // A obra do dia: etiqueta de museu logo acima da linha, à direita.
         etiquetaObra.removeAllViews()
         fundo?.legenda(agora)?.let { (titulo, autor) ->
@@ -294,63 +261,8 @@ class ProtetorGaleria(
         }
     }
 
-    /**
-     * As marcas das próximas horas: a partir da próxima hora cheia, de 2 em 2, até 5. Lê "hora|temp|código|chuva;…" que a
-     * HOME grava (ClimaFontes.proximasHoras). A hora vem no fuso do lugar, que é o da TV.
-     */
-    private fun proximasHoras(texto: String, agora: Long, lat: Double, lon: Double): List<View> {
-        if (texto.isBlank()) return emptyList()
-        val leitor = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.US)
-        val marcas = texto.split(';').mapNotNull { linha ->
-            val p = linha.split('|')
-            if (p.size < 4) return@mapNotNull null
-            val ms = try { leitor.parse(p[0])?.time } catch (e: Exception) { null } ?: return@mapNotNull null
-            if (ms <= agora) null else Triple(ms, p[1].toIntOrNull() ?: return@mapNotNull null, p[2].toIntOrNull() ?: 0) to (p[3].toIntOrNull() ?: -1)
-        }.filterIndexed { i, _ -> i % 2 == 0 }.take(8)
-        val hh = SimpleDateFormat("H'h'", Locale.getDefault())
-        return marcas.map { (t, chuva) ->
-            val (ms, temp, cod) = t
-            LinearLayout(ctx).apply {
-                orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_HORIZONTAL
-                addView(texto(hh.format(Date(ms)), 11f, m500).apply { alpha = 0.75f; sombrear() })
-                val eDia = Astronomia.eDia(ms, lat, lon, true)
-                addView(IconesClima.imagem(ctx, IconesClima.chave(cod, eDia, false)), LinearLayout.LayoutParams(dp(28), dp(28)).apply { topMargin = dp(4) })
-                addView(texto("$temp°", 15f, m600).apply { sombrear() }, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(4) })
-                // Chance de chuva em azul claro (a cor do gráfico da Previsão); some abaixo de 10%, que é ruído.
-                addView(texto(if (chuva >= 10) "$chuva%" else " ", 11f, m500).apply { setTextColor(0xFF9CC2FF.toInt()); sombrear() },
-                    LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(2) })
-            }
-        }
-    }
-
-    private fun linhaDireita(icone: Drawable?, t: String, ilustracao: View? = null) = segmento().apply {
-        gravity = Gravity.CENTER_VERTICAL or Gravity.END
-        if (icone != null) addView(ImageView(ctx).apply { setImageDrawable(icone) }, LinearLayout.LayoutParams(dp(16), dp(16)))
-        ilustracao?.let { addView(it, LinearLayout.LayoutParams(dp(18), dp(18))) }
-        addView(texto(t, 11f, m500).apply { linhaUnica(); alpha = 0.9f; sombrear() }, lpSeg(8))
-        setPadding(0, dp(3), 0, dp(3))
-    }
-
-    /** Sombra suave nas letras: a linha não tem caixa, então precisa se destacar da pintura sozinha. */
+    /** Sombra suave nas letras: o texto solto precisa se destacar da pintura sozinho. */
     private fun TextView.sombrear() = setShadowLayer(dp(8).toFloat(), 0f, dp(1).toFloat(), 0xB3000000.toInt())
-
-    private fun segmento() = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
-    private fun lpSeg(margem: Int = 8) = LinearLayout.LayoutParams(-2, -2).apply { leftMargin = dp(margem) }
-
-    private fun icone(t: IconeLinha.Tipo) = IconeLinha(t)
-
-    private fun segmentoSimples(icone: Drawable, cima: String, baixo: String?, larguraMax: Int = 120) = segmento().apply {
-        addView(ImageView(ctx).apply { setImageDrawable(icone) }, LinearLayout.LayoutParams(dp(20), dp(20)))
-        addView(par(cima, baixo, larguraMax), lpSeg())
-    }
-
-    /** Duas linhas: a de cima forte, a de baixo apagada (como "Nublado" / "máx 29° · mín 19°"). */
-    private fun par(cima: String, baixo: String?, larguraMax: Int, spCima: Float = 12f, spBaixo: Float = 10.5f) = LinearLayout(ctx).apply {
-        orientation = LinearLayout.VERTICAL
-        addView(texto(cima, spCima, m600).apply { linhaUnica(); maxWidth = dp(larguraMax); sombrear() }, LinearLayout.LayoutParams(-2, -2))
-        if (baixo != null) addView(texto(baixo, spBaixo, m400).apply { linhaUnica(); maxWidth = dp(larguraMax); alpha = 0.8f; sombrear() },
-            LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(3) })
-    }
 
     // ------------------------------------------------------------------ notificações (canto de cima, à direita)
     private val aoMudarNotificacoes: () -> Unit = { if (::colunaAvisos.isInitialized) montarAvisos() }

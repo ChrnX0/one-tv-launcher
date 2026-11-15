@@ -34,7 +34,7 @@ object PainelConfig {
             .put("avisoTemperatura", AvisoTemperatura.ligado(app))
             .put("audio", if (IdiomaPlayer.prefs(app).padrao == Idioma.Pref.ORIGINAL) "original" else "dublado")
             .put("protetorMs", PrivilegioDO.tempoDescanso(app).toLong())
-            .put("barraProtetor", Protetor.barra(app))
+            .put("barraProtetor", Protetor.widget(app))
             .put("parental", par.ligado)
             .put("parentalCanais", par.canais.size + par.grupos.size)
             .put("infantil", par.infantil)
@@ -82,8 +82,8 @@ object PainelConfig {
                 registrar("protetor de tela: " + if (ms == Int.MAX_VALUE) "nunca" else "${ms / 60_000} min")
             }
             "barraProtetor" -> {
-                if (v != Protetor.BARRA_RESUMO && v != Protetor.BARRA_HORAS) return Resultado.Erro("valor inválido")
-                Protetor.definirBarra(app, v as String); registrar("linha de baixo do protetor: $v")
+                if (v !in Protetor.WIDGETS) return Resultado.Erro("valor inválido")
+                Protetor.definirWidget(app, v as String); registrar("widgets do protetor: $v")
             }
             // A TV como unidade de rede (PainelDav): mesma senha (o PIN) e mesmas pastas da aba Arquivos.
             "unidadeRede" -> {
