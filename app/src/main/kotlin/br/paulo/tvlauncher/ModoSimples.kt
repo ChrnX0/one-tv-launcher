@@ -147,6 +147,7 @@ class ModoSimplesActivity : Activity() {
         addView(TextView(context).apply {
             text = nome; setTextColor(Estilo.TEXTO); setTextSize(TypedValue.COMPLEX_UNIT_SP, 26f)
             typeface = Estilo.fonte(700); maxLines = 1
+            ellipsize = android.text.TextUtils.TruncateAt.END   // "Amazon Prime Vid…" em vez de letra cortada ao meio
         }, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(18), 0, dp(12), dp(12)) })
         setOnClickListener { abrir() }
         setOnFocusChangeListener { v, foco ->

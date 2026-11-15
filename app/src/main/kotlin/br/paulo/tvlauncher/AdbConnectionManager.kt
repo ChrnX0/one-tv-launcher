@@ -38,6 +38,10 @@ class AdbConnectionManager private constructor(ctx: Context) : AbsAdbConnectionM
     init {
         // A versão da API do adbd que vamos falar: a do proprio aparelho.
         api = Build.VERSION.SDK_INT
+        // Prazo para o aperto de mão (TLS/CNXN/AUTH). O padrão da libadb é Long.MAX_VALUE: um adbd que não responde (ou
+        // que pergunta "Permitir depuração?" na tela) prendia a thread do guardião e a trava do gerenciador para sempre.
+        // O autoConnect(ctx, 15 s) só limita a busca por mDNS. Verificado no bytecode da libadb 3.1.1.
+        setTimeout(20, java.util.concurrent.TimeUnit.SECONDS)
         val par = ShellProprio.chave(ctx)
         chavePrivada = par.private
         certificado = gerarCertificado(par)

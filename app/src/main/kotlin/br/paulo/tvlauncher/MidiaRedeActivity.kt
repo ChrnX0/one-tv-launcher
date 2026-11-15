@@ -163,6 +163,9 @@ class MidiaRedeActivity : Activity() {
         procurar()
     }
 
+    // Saiu para a HOME (que não chega como tecla) ou outro app: o "próximo em 10 s" não pode tocar por cima deles.
+    override fun onStop() { super.onStop(); pararContagem() }
+
     override fun onDestroy() {
         cancelarPlex?.set(true)
         tela.removeCallbacksAndMessages(null); rede.shutdownNow(); capas.shutdownNow(); super.onDestroy()
@@ -347,13 +350,14 @@ class MidiaRedeActivity : Activity() {
                 Upnp.Tipo.OUTRO -> IconeMidia.Tipo.ARQUIVO
             }
         }
-        // As pastas especiais vêm do servidor com nome fixo em português: aqui ganham o nome no idioma da TV.
-        val titulo = when {
-            e.pasta && (e.id == Jellyfin.CONTINUAR || e.id == Plex.CONTINUAR) -> getString(R.string.rede_continuar)
-            e.pasta && (e.id == Jellyfin.RECENTES || e.id == Plex.RECENTES) -> getString(R.string.rede_recentes)
-            else -> e.titulo
-        }
-        return Linha(icone, titulo, null, null, e)
+        return Linha(icone, tituloEntrada(e), null, null, e)
+    }
+
+    /** As pastas especiais vêm do servidor com nome fixo em português: aqui ganham o nome no idioma da TV (lista e título). */
+    private fun tituloEntrada(e: Upnp.Entrada): String = when {
+        e.pasta && (e.id == Jellyfin.CONTINUAR || e.id == Plex.CONTINUAR) -> getString(R.string.rede_continuar)
+        e.pasta && (e.id == Jellyfin.RECENTES || e.id == Plex.RECENTES) -> getString(R.string.rede_recentes)
+        else -> e.titulo
     }
 
     // ---------------------------------------------------------------- ideia 29: buscar, ficha e fila
@@ -490,7 +494,7 @@ class MidiaRedeActivity : Activity() {
             is FotosNoProtetor -> alternarFotos(pos, e)
             is Buscar -> buscar(e)
             is Upnp.Entrada -> when {
-                e.pasta -> entrar(nivel.origem ?: return, e.id, e.titulo)
+                e.pasta -> entrar(nivel.origem ?: return, e.id, tituloEntrada(e))
                 e.tipo == Upnp.Tipo.FOTO -> mostrarFoto(nivel.origem, e)
                 e.url != null -> tocar(pos, e, e.url)
             }
@@ -1239,7 +1243,10 @@ class MidiaRedeActivity : Activity() {
         BitmapFactory.decodeByteArray(bytes, 0, bytes.size, o)
         var amostra = 1
         while (o.outWidth / (amostra * 2) >= 1920 || o.outHeight / (amostra * 2) >= 1080) amostra *= 2
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size, BitmapFactory.Options().apply { inSampleSize = amostra })
+        // RGB_565 (metade da memória, como no FotosProtetor): foto de 24 MP fica 3000x2000 = 12 MB, não 24 MB, na TV de 32 bits.
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size, BitmapFactory.Options().apply {
+            inSampleSize = amostra; inPreferredConfig = Bitmap.Config.RGB_565
+        })
     }
 
     // ---------------------------------------------------------------- lista

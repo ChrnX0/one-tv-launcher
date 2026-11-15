@@ -169,6 +169,12 @@ class Sessoes(private val relogio: () -> Long, private val maximoSessoes: Int = 
 
     @Synchronized fun encerrarTodas() = mapa.clear()
 
+    /** PIN trocado pelo painel: só quem trocou continua dentro (as outras sessões, talvez de quem viu o PIN velho, caem). */
+    @Synchronized fun encerrarOutras(token: String?) {
+        val minha = token?.let { chave(it) }
+        mapa.keys.retainAll { it == minha }
+    }
+
     @Synchronized fun quantas(): Int { limpar(); return mapa.size }
 
     private fun buscar(token: String?): Sessao? {

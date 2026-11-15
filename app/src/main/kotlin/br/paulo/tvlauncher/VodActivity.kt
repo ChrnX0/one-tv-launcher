@@ -280,6 +280,9 @@ class VodActivity : Activity() {
         TaxaQuadros.soltar(this); quadrosDecididos = false   // a HOME e o resto voltam ao modo de sempre
         avanco.cancelar()
         tela.removeCallbacks(vigiaAbertura); esconderPilula()
+        // Os relógios da tela param junto (o tocar() da volta liga de novo): sem isso, com a barra à mostra, o :player
+        // acordava a cada 1 s e o salvar a cada 15 s, com a tela atrás de outro app.
+        tela.removeCallbacks(salvarDepois); tela.removeCallbacks(tique); tela.removeCallbacks(esconderBarra)
         super.onStop()
         visivel = false
         salvar()
@@ -466,10 +469,9 @@ class VodActivity : Activity() {
         if (ms <= 0 && !terminou) return
         if (!terminou) avisar(FontesMidia.Momento.TOCANDO, ms, pausado = !p.isPlaying)
         val agora = System.currentTimeMillis()
-        Fundo.rodar {
-            val antes = PlayerArmazem.posicoes(this)
-            PlayerArmazem.definirPosicoes(this, Vod.registrar(antes, chave, Posicao(ms, dur, agora)))
-        }
+        // definirPosicao é @Synchronized: o salvar(terminou) do fim do vídeo e o do onStop logo depois correm em threads
+        // diferentes do Fundo; ler-trocar-gravar sem trava deixava um apagar o outro.
+        Fundo.rodar { PlayerArmazem.definirPosicao(this, chave, Posicao(ms, dur, agora)) }
     }
 
     /** Conta ao servidor (Jellyfin, Emby, Plex), se o vídeo é de lá, onde está. Fora da thread da tela; erro é ignorado. */
@@ -805,7 +807,7 @@ class VodActivity : Activity() {
             tela.post {
                 if (isDestroyed) return@post
                 esconderAviso()
-                r.onFailure { avisoBreve(it.message ?: getString(R.string.legenda_erro)) }
+                r.onFailure { avisoBreve((it as? LegendaBaixar.Falha)?.message ?: getString(R.string.legenda_erro)) }
                 r.onSuccess { lista ->
                     if (lista.isEmpty()) { avisoBreve(getString(R.string.legenda_nenhuma)); return@onSuccess }
                     val rotulos = lista.map { c ->
@@ -826,7 +828,7 @@ class VodActivity : Activity() {
             getSharedPreferences("player", MODE_PRIVATE).edit().remove("atraso:$k").apply()
             tela.post {
                 if (isDestroyed) return@post
-                r.onFailure { avisoBreve(it.message ?: getString(R.string.legenda_erro)) }
+                r.onFailure { avisoBreve((it as? LegendaBaixar.Falha)?.message ?: getString(R.string.legenda_erro)) }
                 r.onSuccess { f ->
                     pararTraducao.set(true); LegendaTraduzida.esquecer(this, k)   // a escolhida pela pessoa vale mais que a tradução
                     legendaArquivo = f; legendaTraduzida = false; atrasoLegenda = 0; avisoBreve(getString(R.string.legenda_pronta)); recarregarComLegenda()

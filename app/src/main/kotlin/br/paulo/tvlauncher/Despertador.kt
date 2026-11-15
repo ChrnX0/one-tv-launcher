@@ -71,11 +71,17 @@ object Despertador {
         val novo = if (a.id == 0) a.copy(id = (lista.maxOfOrNull { it.id } ?: 0) + 1) else a
         lista.removeAll { it.id == novo.id }
         lista.add(novo)
+        // Mexeu no alarme que estava na soneca (desligou, mudou a hora): a soneca dele não toca mais.
+        if (a.id != 0) limparSonecaDe(ctx, novo.id)
         gravar(ctx, lista)
         return novo
     }
 
-    fun apagar(ctx: Context, id: Int) = gravar(ctx, listar(ctx).filter { it.id != id })
+    fun apagar(ctx: Context, id: Int) {
+        // Sem isto a soneca do apagado tocaria no alarme novo que herdar o mesmo id (max + 1).
+        limparSonecaDe(ctx, id)
+        gravar(ctx, listar(ctx).filter { it.id != id })
+    }
 
     /** O alarme [id] tocou e foi parado: se era de uma vez só, desliga; agenda o próximo. */
     fun tocou(ctx: Context, id: Int) {
@@ -90,6 +96,10 @@ object Despertador {
         ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
             .putLong("soneca_em", System.currentTimeMillis() + minutos * 60_000L).putInt("soneca_id", id).apply()
         agendar(ctx)
+    }
+
+    private fun limparSonecaDe(ctx: Context, id: Int) {
+        if (ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getInt("soneca_id", -1) == id) limparSoneca(ctx)
     }
 
     private fun limparSoneca(ctx: Context) =

@@ -20,6 +20,8 @@
     <string name="tela_min">min</string>
     <string name="extras_AGENDA_TODAS">Agenda de todas as contas Google da TV juntas</string>
     <string name="cal_todas_contas">Todas as contas da TV (%1$d)</string>
+    <string name="tm_tempo_esgotado">Tempo esgotado</string>
+    <string name="painel_desligado_pin">Painel no navegador desligado: PIN errado muitas vezes</string>
     <string name="tm_crono">Cronômetro</string>
     <string name="tm_crono_iniciar">Começar o cronômetro</string>
     <string name="tm_crono_parar">Parar o cronômetro</string>

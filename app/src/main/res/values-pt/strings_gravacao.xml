@@ -43,6 +43,7 @@
     <string name="grv_lista_cheia">Já há 50 gravações agendadas.</string>
     <string name="grv_conflito_agenda">Bate com \"%1$s\" no %2$s às %3$s. A lista só deixa uma gravação por vez.</string>
     <string name="grv_onde">No %1$s · %2$s livres, cabem ~%3$d h</string>
+    <string name="grv_onde_sem_livre">No %1$s (espaço livre desconhecido)</string>
     <string name="grv_agora_titulo">Gravando agora: %1$s</string>
     <string name="grv_assistir">assistir</string>
     <string name="grv_parar_pergunta">Parar de gravar %1$s?</string>

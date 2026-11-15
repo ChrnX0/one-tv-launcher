@@ -233,7 +233,7 @@
         <item>nuvem_box</item>
         <item>backup_nuvem</item>
         <item>troca_sozinha</item>
-        <item>In Settings › Screen and power, press OK on Screensaver widgets until the style you want, then wait for the screensaver</item>
+        <item>protetor_widgets</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Movies › open a movie you already started</item>
@@ -337,7 +337,7 @@
         <item>In Network › Box (then Google Drive), follow the steps on a computer and point a phone (on the home Wi‑Fi) at the QR</item>
         <item>In Settings › System › Automatic backup, press OK on Extra copy until the cloud account shows up, then Back up now</item>
         <item>In the guide, OK on a show starting in a few minutes › Switch on its own; wait with the TV on another channel</item>
-        <item>Did the screensaver show the chosen style, with now, the next hours and tomorrow, and no cut text?</item>
+        <item>In Settings › Screen and power, press OK on Screensaver widgets until the style you want, then wait for the screensaver</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Do the big actions on the left read well from the couch, and does the focus stay put while the details load (no jumping between Cast and Collection)?</item>
@@ -441,5 +441,6 @@
         <item>After allowing access, did the phone say “Done” and the Box (and Drive) folder open on the TV, with a video playing?</item>
         <item>Did the screen say “ok: TV + OneDrive/Dropbox/Box”, and did the file show up in the cloud\'s OneTV-backup folder?</item>
         <item>At the start time, did the countdown show and the TV change to the channel?</item>
+        <item>Did the screensaver show the chosen style, with now, the next hours and tomorrow, and no cut text?</item>
     </string-array>
 </resources>

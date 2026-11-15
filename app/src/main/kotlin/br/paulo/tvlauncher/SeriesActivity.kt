@@ -206,7 +206,12 @@ class SeriesActivity : Activity() {
         }
     }
 
-    override fun onDestroy() { calculo.fechar(); coluna.parar(); tela.removeCallbacksAndMessages(null); super.onDestroy() }
+    override fun onDestroy() {
+        calculo.fechar()
+        if (!VigiaAtualizacao.fechada(this)) coluna.parar()   // modo seguro: o onCreate parou antes de criar a coluna
+        tela.removeCallbacksAndMessages(null)
+        super.onDestroy()
+    }
 
     // Preferências por perfil (ideia 11): a última categoria e o marco dos "novos" são de cada pessoa.
     private fun prefsPlayer() = getSharedPreferences("player", MODE_PRIVATE)
