@@ -731,6 +731,30 @@ class ConfigLauncherActivity : Activity() {
         c.addView(info(getString(R.string.cl_perguntar_tv), getString(R.string.cl_perguntar_tv_det)), lp())
     }
 
+    /**
+     * Emprestar o shell a outros apps (15/11/2026, "poder máximo"; ver ShizukuEmbutido). Desligado de fábrica. Ligar pede
+     * o PIN (liberar mais); desligar não. Cada app ainda pede na TV, com PIN, na primeira vez.
+     */
+    private fun emprestimoShell(c: LinearLayout) {
+        secao(c, getString(R.string.emp_secao))
+        val modo = ShizukuEmbutido.modo(this)
+        val rotulo = when (modo) {
+            RegrasEmprestimo.Modo.DESLIGADO -> getString(R.string.emp_modo_desligado)
+            RegrasEmprestimo.Modo.SOB_DEMANDA -> getString(R.string.emp_modo_sob_demanda)
+            RegrasEmprestimo.Modo.SEMPRE -> getString(R.string.emp_modo_sempre)
+        }
+        c.addView(linha(getString(R.string.emp_titulo), getString(R.string.emp_titulo_det), valor = rotulo) {
+            val proximo = RegrasEmprestimo.Modo.values()[(modo.ordinal + 1) % RegrasEmprestimo.Modo.values().size]
+            val gravar = { ShizukuEmbutido.definirModo(this, proximo); recarregarAba() }
+            if (modo == RegrasEmprestimo.Modo.DESLIGADO) pedirPinParental(getString(R.string.cl_pin_liberar), gravar) else gravar()
+        }, lp())
+        when (ShizukuEmbutido.parado(this)) {
+            RegrasEmprestimo.Parado.SHIZUKU_OFICIAL -> c.addView(info(getString(R.string.emp_titulo), getString(R.string.emp_oficial)), lp())
+            RegrasEmprestimo.Parado.PLANO -> c.addView(info(getString(R.string.emp_titulo), getString(R.string.emp_plano)), lp())
+            else -> {}
+        }
+    }
+
     // ================================================================ aba: Aparência
 
     private fun abaAparencia(c: LinearLayout) {
@@ -1285,6 +1309,7 @@ class ConfigLauncherActivity : Activity() {
         extrasDaAba(c, ExtrasAbas.Aba.SISTEMA, comSecao = false)
 
         confirmacoes(c)
+        emprestimoShell(c)
 
         // Apps ocultos pelo Device Owner (Config.APPS_OCULTAR/PrivilegioDO.ocultar): libera a memória sem desinstalar.
         // Chave ligada = app visível.

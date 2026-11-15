@@ -7,6 +7,9 @@
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- A biblioteca do Shizuku (módulo provider) traz o pedido da permissão dos CLIENTES e a marca V3_SUPPORT. O launcher é
+         o gerente, não cliente: sem isto ele apareceria na lista de apps do app Shizuku oficial, se instalado. -->
+    <uses-permission android:name="moe.shizuku.manager.permission.API_V23" tools:node="remove" />
     <!-- Android 13+: aviso de pedido sem resposta na TV (PedidoPendente); o Device Owner concede -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Chip de rede: sinal e velocidade do Wi-Fi -->
@@ -638,6 +641,31 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+
+        <!-- Emprestar o shell a outros apps (15/11/2026, ver ShizukuEmbutido.kt). O launcher NÃO define as permissões
+             moe.shizuku.* (definir conflitava com o app Shizuku oficial na instalação, motivo da saída em 12/11).
+             Provider: por ele o servidor shizuku_server (uid 2000) entrega o binder ao launcher, o gerente. Activity:
+             o servidor a abre quando um app pede acesso. As duas só aceitam o sistema e o shell
+             (INTERACT_ACROSS_USERS_FULL). -->
+        <meta-data android:name="moe.shizuku.client.V3_SUPPORT" tools:node="remove" />
+        <provider
+            android:name=".ProvedorShizuku"
+            android:authorities="${applicationId}.shizuku"
+            android:directBootAware="true"
+            android:enabled="true"
+            android:exported="true"
+            android:multiprocess="false"
+            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
+        <activity
+            android:name=".PedidoShizukuActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL">
+            <intent-filter>
+                <action android:name="${applicationId}.intent.action.REQUEST_PERMISSION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <!-- Comandos por adb (DUMP: só o adb e o sistema). Os nomes .shizuku.* ficaram por compatibilidade: desde 12/11/2026
              não há mais servidor do Shizuku embutido; INICIAR confere o shell próprio, ESTADO diz se ele responde. -->

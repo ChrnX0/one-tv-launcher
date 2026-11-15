@@ -802,6 +802,17 @@ object PainelWeb {
                 PainelArmazem.registrar(app, ip, "apagar foto do protetor ${nome.take(80)}", if (ok) "ok" else "não existe")
                 return if (ok) json(200, JSONObject().put("ok", true)) else erro(404, "essa foto não existe")
             }
+            // Shell emprestado (PainelShizuku.kt, cartão na aba Extras). Permitir dá shell ao app: PIN de novo; revogar não.
+            "/api/shizuku" -> if (req.metodo == "GET") return json(200, PainelShizuku.estado(app))
+            "/api/shizuku/app" -> if (req.metodo == "POST") {
+                val o = corpoJson(req) ?: return erro(400, "JSON inválido")
+                val pacote = o.optString("pacote")
+                val permitir = o.optString("acao") == "permitir"
+                if (permitir && !sessoes.elevada(token)) return precisaPin()
+                val motivo = PainelShizuku.mudar(app, pacote, permitir)
+                PainelArmazem.registrar(app, ip, "Shizuku ${if (permitir) "permitir" else "revogar"} ${pacote.take(80)}", motivo ?: "ok")
+                return if (motivo == null) json(200, JSONObject().put("ok", true)) else erro(409, motivo)
+            }
             "/api/registro" -> if (req.metodo == "GET") return json(200, JSONObject().put("itens", PainelArmazem.registro(app)))
             "/api/apps/instalar" -> if (req.metodo == "POST") return instalar(req, token, ip)
             "/api/arquivos" -> if (req.metodo == "GET") { semAcesso()?.let { return it }; return json(200, PainelArquivos.listar(req.consulta["caminho"])) }
@@ -973,6 +984,7 @@ object PainelWeb {
         "/arquivos.js" to ("arquivos.js" to "text/javascript; charset=utf-8"),   // prévia e organizar arquivos
         "/controle.js" to ("controle.js" to "text/javascript; charset=utf-8"),   // digitar ao vivo e touchpad
         "/chave.js" to ("chave.js" to "text/javascript; charset=utf-8"),   // ideia 99: entrar com a digital
+        "/emprestimo.js" to ("emprestimo.js" to "text/javascript; charset=utf-8"),   // shell emprestado (Shizuku)
         "/primeira.js" to ("primeira.js" to "text/javascript; charset=utf-8"),   // ideia 97: assistente da 1ª configuração
         "/certificado.js" to ("certificado.js" to "text/javascript; charset=utf-8"),   // cartão "Instalar como app (https)"
         // "Adicionar à tela inicial" no celular: nome, ícone e atalhos (10/11/2026).

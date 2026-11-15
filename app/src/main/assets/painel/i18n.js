@@ -9,6 +9,14 @@
   if (/^pt/i.test(idioma)) return;
   document.documentElement.lang = 'en';
   const T = {
+"Shell emprestado (Shizuku)": "Lent shell (Shizuku)",
+"Apps feitos para o Shizuku usam o shell do launcher sem instalar o Shizuku. Cada app pede na TV, com o PIN.": "Apps made for Shizuku use the launcher's shell without installing Shizuku. Each app asks on the TV, with the PIN.",
+"Nenhum app instalado pede o Shizuku.": "No installed app asks for Shizuku.",
+"Permitir o shell?": "Allow the shell?",
+"Revogar": "Revoke",
+" · tem acesso": " · has access",
+" · sem acesso": " · no access",
+" · estado só com o empréstimo rodando": " · state only while lending is running",
 "1. Toque em ": "1. Tap ",
 "Serviços de filmes e séries": "Movie and series services",
 "Contas opcionais: nada sai da TV antes de você entrar. Entrar e sair pedem o PIN.": "Optional accounts: nothing leaves the TV until you sign in. Signing in and out asks for the PIN.",

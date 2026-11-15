@@ -42,7 +42,8 @@ open class ControleShizukuReceiver : BroadcastReceiver() {
         const val EXTRAS = "br.paulo.tvlauncher.EXTRAS"   // comandos das ideias de 10/11/2026 (só adb; ver ComandosExtras.kt)
 
         /** O shell próprio responde agora? Roda um `echo` na fila do guardião (até 8 s: o broadcast tem ~10 s). */
-        fun estado(ctx: Context): String = if (GuardiaoShizuku.comando(ctx, "echo ok", 8_000)?.contains("ok") == true) "shell ok" else "sem shell"
+        fun estado(ctx: Context): String = (if (GuardiaoShizuku.comando(ctx, "echo ok", 8_000)?.contains("ok") == true) "shell ok" else "sem shell") +
+            "; emprestimo: ${ShizukuEmbutido.estado(ctx)}"
 
         /** Reconecta o shell próprio e roda a autocura (o que faltar de permissão). Usado pelo INICIAR. */
         fun ligar(ctx: Context) = GuardiaoShizuku.garantir(ctx, "INICIAR", mesmoSemFalta = true)

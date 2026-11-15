@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Emprestar o shell a outros apps (servidor do Shizuku embutido, 15/11/2026). -->
+<resources>
+    <string name="emp_secao">Emprestar poderes do sistema</string>
+    <string name="emp_titulo">Emprestar o shell a outros apps (Shizuku)</string>
+    <string name="emp_titulo_det">Apps feitos para o Shizuku funcionam sem instalar o Shizuku. Cada app pede na TV, com o PIN, na primeira vez.</string>
+    <string name="emp_modo_desligado">Desligado</string>
+    <string name="emp_modo_sob_demanda">Quando um app precisar</string>
+    <string name="emp_modo_sempre">Sempre ligado</string>
+    <string name="emp_oficial">O app Shizuku está instalado nesta TV, então o launcher não entra no caminho dele. Desinstale-o para usar o do launcher.</string>
+    <string name="emp_plano">Faz parte dos planos pagos.</string>
+    <string name="emp_negar">Negar</string>
+    <string name="emp_permitir">Permitir sempre</string>
+    <string name="emp_pedido_titulo">Permitir que %1$s use os poderes de sistema do launcher?</string>
+    <string name="emp_pedido_texto">O app vai conseguir fazer o que o adb faz: instalar e remover apps, mudar configurações do sistema e mais. Só permita apps em que você confia. Dá para revogar depois no painel web.</string>
+    <string name="emp_pin_titulo">PIN do painel para permitir</string>
+    <string name="emp_sem_pin">Defina o PIN do painel primeiro (Configurações, Painel web).</string>
+</resources>
