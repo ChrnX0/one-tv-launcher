@@ -95,4 +95,8 @@
     <string name="vp_4_det">Em Acessibilidade, desligue o Projectivy. Dois apps pegando o Home fazem abrir o errado.</string>
     <string name="vp_pronto">Pronto</string>
     <string name="vp_pronto_det">Ir para a tela inicial.</string>
+    <string name="vq_titulo">Compartilhar visual</string>
+    <string name="vq_det">Mostra um QR com o visual desta TV: tema, texto, ícones.</string>
+    <string name="vq_texto">Leia com o celular para guardar ou mandar para quem tem a One TV.</string>
+    <string name="vq_fechar">Fechar</string>
 </resources>

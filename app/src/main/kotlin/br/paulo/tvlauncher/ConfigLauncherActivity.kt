@@ -759,13 +759,15 @@ class ConfigLauncherActivity : Activity() {
                         marcadas = listOf(arquivos.indexOfFirst { it == atual } + 1)) { i ->
                         FundoMeuDados.definirArquivo(this, arquivos.getOrNull(i - 1))
                         Tema.definir(this, if (i == 0) Tema.ESCURO else Tema.MEU)
-                        linhaMeu.valor(rotuloMeu()); linhaTema.valor(Tema.atual(this).nome)
+                        recarregarAba()   // mostra (ou esconde) brilho e contraste
                     }
                 }
             }
         }
         c.addView(linhaMeu, lp())
         fun pct(v: Int) = if (v > 0) "+$v%" else "$v%"
+        // Brilho e contraste só aparecem com um arquivo escolhido (sem "Meu fundo" não valem nada: conciso).
+        if (FundoMeuDados.arquivo(this) != null) {
         lateinit var linhaBrilho: LinhaCfg
         linhaBrilho = linha(getString(R.string.fm_brilho), getString(R.string.fm_ajuste_det), valor = pct(FundoMeuDados.brilho(this))) {
             FundoMeuDados.definirBrilho(this, FundoMeuRegras.proximoDegrau(FundoMeuDados.brilho(this)))
@@ -778,6 +780,7 @@ class ConfigLauncherActivity : Activity() {
             linhaContraste.valor(pct(FundoMeuDados.contraste(this)))
         }
         c.addView(linhaContraste, lp())
+        }
         // Tamanho do texto (ideia 47, TamanhoTexto): vale em todas as telas do launcher; esta tela se refaz para mostrar.
         fun rotuloTamanho(v: Int) = getString(when (v) { 110 -> R.string.tt_grande; 120 -> R.string.tt_maior; else -> R.string.tt_normal })
         c.addView(linha(getString(R.string.tt_titulo), getString(R.string.tt_det), valor = rotuloTamanho(TamanhoTexto.atual(this))) {
@@ -794,6 +797,8 @@ class ConfigLauncherActivity : Activity() {
             linhaPacote.valor(rotuloPacote())   // a HOME redesenha sozinha ao voltar: o pacote entra na chave do cache
         }
         c.addView(linhaPacote, lp())
+        // Tema por QR (degrau 1, 15/11/2026): mostra o código do visual desta TV num QR; o celular abre a página pública.
+        c.addView(linha(getString(R.string.vq_titulo), getString(R.string.vq_det), seta = true) { mostrarQrVisual() }, lp())
         // Apps ocultos (14/11/2026): o card "Ocultos (N)" saiu da HOME; mostrar de volta é aqui.
         val nOcultos = Organizacao.ocultos(this).size
         c.addView(linha(getString(R.string.oc_titulo), if (nOcultos == 0) getString(R.string.oc_nenhum) else
@@ -1674,5 +1679,27 @@ class ConfigLauncherActivity : Activity() {
             direita.addView(Estilo.texto(context, Estilo.Papel.TITULO, "›").apply { typeface = Estilo.fonte(200) }.also { tSeta = it })
             pintarTextos()
         }
+    }
+
+    /** O QR do "Compartilhar visual": cartão por cima, com o link curto embaixo para quem não tem leitor de QR. */
+    private fun mostrarQrVisual() {
+        val link = VisualCodigoTv.link(this)
+        val d = android.app.Dialog(this)
+        val fechar = Estilo.botao(this, getString(R.string.vq_fechar)).apply { setOnClickListener { d.dismiss() } }
+        val qr = android.widget.ImageView(this).apply {
+            setImageBitmap(runCatching { QrCodigo.bitmap(link, dp(280)) }.getOrNull())
+        }
+        val tela = Estilo.dialogo(this, null, getString(R.string.vq_titulo), getString(R.string.vq_texto), listOf(fechar))
+        // o QR entra no cartão antes do título (o cartão é o 1º filho do véu)
+        (tela.getChildAt(0) as android.widget.LinearLayout).addView(qr, 0,
+            android.widget.LinearLayout.LayoutParams(dp(280), dp(280)).apply { bottomMargin = dp(16) })
+        d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
+        d.setContentView(tela)
+        d.window?.apply {
+            setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT))
+            setLayout(-1, -1)
+        }
+        d.show()
+        fechar.requestFocus()
     }
 }

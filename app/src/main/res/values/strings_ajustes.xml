@@ -95,4 +95,8 @@
     <string name="vp_4_det">In Accessibility, turn off Projectivy. Two apps catching Home make it open the wrong one.</string>
     <string name="vp_pronto">Done</string>
     <string name="vp_pronto_det">Go to the home screen.</string>
+    <string name="vq_titulo">Share look</string>
+    <string name="vq_det">Show a QR code with this TV\'s look: theme, text size, icons.</string>
+    <string name="vq_texto">Scan it with your phone to keep it or send it to someone with One TV.</string>
+    <string name="vq_fechar">Close</string>
 </resources>
