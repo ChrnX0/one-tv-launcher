@@ -683,7 +683,8 @@ class FilmesActivity : Activity() {
             f.ano?.toString(),
             info?.duracaoMin?.let { if (it >= 60) "${it / 60} h ${"%02d".format(it % 60)}" else "$it min" },
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(f.grupo).ifEmpty { null },
-            pos?.takeIf { p -> Vod.deveRetomar(p) }?.let { p -> getString(R.string.tempo_faltam, BarraTempo.duracao(p.duracao - p.ms)) })),
+            pos?.takeIf { p -> Vod.deveRetomar(p) }?.let { p -> getString(R.string.tempo_faltam, BarraTempo.duracao(p.duracao - p.ms)) },
+            extRapidas[f.chave]?.ifEmpty { null })),
             info?.sinopse.orEmpty())
         focoRapido = f; if (f.chave !in fichasRapidas) { tela.postDelayed(lerFichaRapida, 400) }   // espera o dedo parar
     }
@@ -692,6 +693,10 @@ class FilmesActivity : Activity() {
     private val fichasRapidas = object : LinkedHashMap<String, FichaFilme?>(64, 0.75f, true) {
         override fun removeEldestEntry(e: MutableMap.MutableEntry<String, FichaFilme?>) = size > 60
     }
+    /** Notas de fora (IMDb, Rotten Tomatoes...) já guardadas, para a faixa da ficha rápida; lidas no Fundo. */
+    private val extRapidas = object : LinkedHashMap<String, String>(64, 0.75f, true) {
+        override fun removeEldestEntry(e: MutableMap.MutableEntry<String, String>) = size > 60
+    }
     @Volatile private var focoRapido: Filme? = null   // lido também no Fundo: o pôster ainda em foco?
     private val lerFichaRapida = Runnable {
         val f = focoRapido ?: return@Runnable
@@ -699,9 +704,10 @@ class FilmesActivity : Activity() {
             // Sem ficha no disco (título nunca aberto, ou aberto antes de 14/11, quando a ficha ainda não ficava no disco):
             // pede ao servidor, só se o foco ainda está nele (parou o dedo). A resposta fica no disco para a próxima vez.
             val info = PlayerCarga.fichaFilmeGuardada(this, f) ?: if (focoRapido === f) PlayerCarga.fichaFilme(this, f) else null
+            val ext = InfoExternaCache.guardado(this, f.chave)?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { InfoExterna.textoNotas(it) }.orEmpty()
             tela.post {
                 if (isDestroyed) return@post
-                fichasRapidas[f.chave] = info
+                fichasRapidas[f.chave] = info; extRapidas[f.chave] = ext
                 if (naGrade.getOrNull(grade.selectedItemPosition) === f) mostrarFocado(f)
             }
         }
