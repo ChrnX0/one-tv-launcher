@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Legenda traduzida na TV: quando não há legenda em português, a TV traduz a inglesa sozinha (primeiro os próximos 10 minutos, o resto em segundo plano), marcada “Tradução automática”; desliga no menu ▼ do player</item>
         <item>Jogos: o botão Jogar não sai mais cortado com letra grande, a tela abre no primeiro jogo, os controles internos da TV não aparecem como controle de jogo, e o Xbox entrou (XBPlayer na Play Store e XStreaming na loja curada)</item>
         <item>Filmes e Séries com dados de fora: entre no Trakt, Simkl, MDBList e OpenSubtitles pelo código no celular (Configurações › TV e filmes › Serviços de filmes e séries, ou no painel web); a ficha ganha sinopse, elenco e sagas do TMDB, nota do IMDb e a data do próximo episódio</item>
         <item>Trakt e Simkl: sincronizar Interesses, já assistidos e onde parou (cada um ligado à parte, tudo começa desligado), e até 8 listas suas viram categorias em Filmes e Séries</item>
@@ -122,6 +123,7 @@
         <item>Guia: OK num programa que vai começar tem “Me avise” e “Troque sozinho na hora” (na hora, a TV muda para o canal; 10 s para desistir)</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Legenda traduzida na TV</item>
         <item>Configurações › TV e filmes › Serviços de filmes e séries › Trakt › OK</item>
         <item>Na mesma tela, Simkl › OK</item>
         <item>Abra a ficha de um filme conhecido em Filmes</item>
@@ -222,6 +224,7 @@
         <item>Na grade, OK num programa que começa em poucos minutos › Troque sozinho na hora; espere com a TV ligada em outro canal</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Abra um filme ou episódio sem legenda em português: em uns 20 s aparece a legenda marcada “Tradução automática”, e o filme continua sem travar?</item>
         <item>Apareceram o código e o QR, o celular aprovou e a TV mostrou a conta conectada?</item>
         <item>O código entrou em simkl.com/pin e a TV mostrou a conta conectada?</item>
         <item>Apareceram sinopse, nota do IMDb e “Também em: …”?</item>

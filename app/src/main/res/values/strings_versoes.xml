@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Subtitles translated on the TV: when there are none in your language, the TV translates the English ones by itself (first the next 10 minutes, the rest in the background), marked “Automatic translation”; turn it off in the player’s ▼ menu</item>
         <item>Games: the Play button no longer gets cut with large text, the screen opens on the first game, the TV\'s internal controllers no longer show as game controllers, and Xbox is in (XBPlayer on the Play Store and XStreaming in the curated store)</item>
         <item>Movies and Series with outside data: sign in to Trakt, Simkl, MDBList and OpenSubtitles with a code on your phone (Settings › TV and movies › Movie and series services, or in the web panel); the details page gets TMDB plot, cast and collections, the IMDb rating and the next episode date</item>
         <item>Trakt and Simkl: sync Interests, watched and where you stopped (each turned on separately, all start off), and up to 8 of your lists become categories in Movies and Series</item>
@@ -125,6 +126,7 @@
         <item>Guide: OK on a show that has not started has “Remind me” and “Switch on its own when it starts” (the TV changes to the channel; 10 s to cancel)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>legenda_traduzida</item>
         <item>servicos_trakt</item>
         <item>servicos_simkl</item>
         <item>ficha_tmdb</item>
@@ -225,6 +227,7 @@
         <item>troca_sozinha</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Subtitles translated on the TV</item>
         <item>Settings › TV and movies › Movie and series services › Trakt › OK</item>
         <item>On the same screen, Simkl › OK</item>
         <item>Open the details of a well-known movie in Movies</item>
@@ -325,6 +328,7 @@
         <item>In the guide, OK on a show starting in a few minutes › Switch on its own; wait with the TV on another channel</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Open a movie or episode that has no subtitles in your language: within about 20 s, do subtitles marked “Automatic translation” appear, and does the movie keep playing without stuttering?</item>
         <item>Did the code and QR show up, the phone approve it and the TV show the account connected?</item>
         <item>Did the code work at simkl.com/pin and the TV show the account connected?</item>
         <item>Did the plot, the IMDb rating and “Also on: …” show up?</item>
