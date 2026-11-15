@@ -10,7 +10,6 @@ import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.audio.AudioCapabilities
 import androidx.media3.exoplayer.audio.AudioSink
 import androidx.media3.exoplayer.audio.DefaultAudioSink
-import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.NextRenderersFactory
 
 /**
  * Volume parecido e voz mais clara (14/11/2026) num efeito só do Android, o DynamicsProcessing, preso à sessão de áudio
@@ -84,23 +83,37 @@ class EfeitosSom {
         fun volumeIgual(ctx: Context) = ligado(ctx, PlayerAcessivel.VOLUME_IGUAL)
         fun vozClara(ctx: Context) = ligado(ctx, PlayerAcessivel.VOZ_CLARA)
 
+        fun dialogoAlto(ctx: Context) = ligado(ctx, MixDialogo.PREF)
+        /** Nome da caixa Bluetooth ligada (a saída que costuma atrasar o som), ou null. */
+        fun caixaBluetooth(ctx: Context): String? = try {
+            val am = ctx.getSystemService(Context.AUDIO_SERVICE) as android.media.AudioManager
+            am.getDevices(android.media.AudioManager.GET_DEVICES_OUTPUTS)
+                .firstOrNull { it.type == android.media.AudioDeviceInfo.TYPE_BLUETOOTH_A2DP }?.productName?.toString()
+        } catch (_: Exception) { null }
+        fun atrasoMs(ctx: Context) = prefs(ctx).getInt(RenderizadoresPlayer.chaveAtraso(caixaBluetooth(ctx)), 0)
+        fun gravarAtraso(ctx: Context, ms: Int) = prefs(ctx).edit().putInt(RenderizadoresPlayer.chaveAtraso(caixaBluetooth(ctx)), ms).apply()
+
         /**
-         * Fábrica de renderizadores do player: com volume parecido ou voz clara ligados, o áudio sempre vira PCM no
-         * aparelho (sem passthrough de Dolby/DTS para a TV), senão o efeito não alcançaria o som.
+         * Fábrica de renderizadores do player: com volume parecido, voz clara ou diálogo mais alto ligados, o áudio sempre
+         * vira PCM no aparelho (sem passthrough de Dolby/DTS para a TV), senão o efeito não alcançaria o som.
+         * [ass] = ajustes da legenda ASS (só a tela de filmes passa; a TV ao vivo não desenha ASS).
          */
         @OptIn(UnstableApi::class)
-        fun fabrica(ctx: Context): DefaultRenderersFactory {
-            val pcm = PlayerAcessivel.precisaEfeito(volumeIgual(ctx), vozClara(ctx))
-            // NextRenderersFactory (14/11/2026, NextLib = FFmpeg + libass): a TV não tem decodificador de Dolby (AC3/E-AC3),
-            // DTS, TrueHD nem MP2 (conferido em dumpsys media.player). Modo ON = o chip/decodificador da TV continua
-            // primeiro; o FFmpeg só entra no que a TV não toca (ou quando o PCM acima é obrigatório). Vídeo em software
-            // fica como último recurso (a Sala, 32 bits, não aguenta 1080p assim). Também traz as legendas em imagem.
-            return object : NextRenderersFactory(ctx) {
-                override fun buildAudioSink(context: Context, enableFloatOutput: Boolean, enableAudioTrackPlaybackParams: Boolean): AudioSink? =
-                    if (!pcm) super.buildAudioSink(context, enableFloatOutput, enableAudioTrackPlaybackParams)
-                    else DefaultAudioSink.Builder(context).setAudioCapabilities(AudioCapabilities.DEFAULT_AUDIO_CAPABILITIES)
-                        .setEnableFloatOutput(false).setEnableAudioTrackPlaybackParams(enableAudioTrackPlaybackParams).build()
-            }.setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
+        fun fabrica(ctx: Context, ass: AssAjustes? = null, segunda: Pair<SegundaLegenda, androidx.media3.exoplayer.text.TextOutput>? = null): DefaultRenderersFactory {
+            val dialogo = dialogoAlto(ctx)
+            val pcm = PlayerAcessivel.precisaEfeito(volumeIgual(ctx), vozClara(ctx)) || dialogo
+            // RenderizadoresPlayer (15/11/2026, FFmpeg LGPL + libass, no lugar da NextLib): a TV não tem decodificador de
+            // Dolby (AC3/E-AC3), DTS, TrueHD nem MP2 (conferido em dumpsys media.player). O chip da TV continua primeiro;
+            // o FFmpeg só entra no que a TV não toca (ou quando o PCM acima é obrigatório). Vídeo em software fica como
+            // último recurso (a Sala, 32 bits, não aguenta 1080p assim). A ASS sai completa pelo libass.
+            return object : RenderizadoresPlayer(ctx, atrasoMs(ctx), ass, segunda) {
+                override fun buildAudioSink(context: Context, enableFloatOutput: Boolean, enableAudioTrackPlaybackParams: Boolean): AudioSink? {
+                    val b = DefaultAudioSink.Builder(context).setEnableAudioTrackPlaybackParams(enableAudioTrackPlaybackParams)
+                        .setAudioProcessors(arrayOf(ProcessadorDialogo(dialogo)))
+                    return if (!pcm) b.setEnableFloatOutput(enableFloatOutput).build()
+                    else b.setAudioCapabilities(AudioCapabilities.DEFAULT_AUDIO_CAPABILITIES).setEnableFloatOutput(false).build()
+                }
+            }
         }
     }
 }

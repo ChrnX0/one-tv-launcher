@@ -71,6 +71,12 @@ object FimDoVideo {
     /** O tamanho salvo, se ainda for um dos válidos; senão o padrão (valor velho ou estragado). */
     fun tamanhoLegenda(salvo: Int): Int = if (salvo in TAMANHOS_LEGENDA) salvo else LEGENDA_PADRAO
 
+    /**
+     * Ideia 7 (15/11/2026): o mesmo "Tamanho da legenda" vale para a ASS (desenhada pelo libass com a letra do arquivo).
+     * Normal = como o arquivo pediu; os outros tamanhos aumentam ou diminuem na mesma proporção da legenda comum.
+     */
+    fun escalaAss(sp: Int): Double = tamanhoLegenda(sp).toDouble() / LEGENDA_PADRAO
+
     // ---------------------------------------------------------------- 22: ficha guardada em disco
 
     /** Quantas fichas ficam no disco (as mais recentes). Cada uma tem de 2 a 60 KB. */
