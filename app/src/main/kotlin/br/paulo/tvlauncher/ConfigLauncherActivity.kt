@@ -747,6 +747,16 @@ class ConfigLauncherActivity : Activity() {
             TamanhoTexto.definir(this, TamanhoTexto.proximo(TamanhoTexto.atual(this)))
             recreate()
         }, lp())
+        // Pacote de ícones (degrau 1, 15/11/2026): desligado de fábrica; cada OK passa ao próximo instalado e volta a "Nenhum".
+        val pacotes = PacoteIcones.instalados(this)
+        fun rotuloPacote() = PacoteIcones.escolhido(this).let { if (it.isEmpty()) getString(R.string.pi_nenhum) else PacoteIcones.nome(this, it) }
+        lateinit var linhaPacote: LinhaCfg
+        linhaPacote = linha(getString(R.string.pi_titulo), getString(if (pacotes.isEmpty()) R.string.pi_det_vazio else R.string.pi_det),
+            valor = rotuloPacote()) {
+            PacoteIcones.escolher(this, PacoteIconesRegras.proximo(PacoteIcones.escolhido(this), pacotes.map { it.first }))
+            linhaPacote.valor(rotuloPacote())   // a HOME redesenha sozinha ao voltar: o pacote entra na chave do cache
+        }
+        c.addView(linhaPacote, lp())
         // Apps ocultos (14/11/2026): o card "Ocultos (N)" saiu da HOME; mostrar de volta é aqui.
         val nOcultos = Organizacao.ocultos(this).size
         c.addView(linha(getString(R.string.oc_titulo), if (nOcultos == 0) getString(R.string.oc_nenhum) else

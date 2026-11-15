@@ -84,6 +84,13 @@
         <package android:name="com.google.android.youtube.tv" />
         <package android:name="com.netflix.ninja" />
         <package android:name="com.amazon.amazonvideo.livingroom" />
+        <!-- Pacotes de ícones (PacoteIconesRegras.ACOES): sem isto, no Android 11+ nenhum pacote aparece na lista. -->
+        <intent><action android:name="org.adw.launcher.THEMES" /></intent>
+        <intent><action android:name="com.novalauncher.THEME" /></intent>
+        <intent><action android:name="com.teslacoilsw.launcher.THEME" /></intent>
+        <intent><action android:name="com.anddoes.launcher.THEME" /></intent>
+        <intent><action android:name="com.gau.go.launcherex.theme" /></intent>
+        <intent><action android:name="app.lawnchair.icons.THEMED_ICON" /></intent>
     </queries>
 
     <!-- android:name: LauncherApp liga o registro local de erros (RegistroErros.kt) em todo processo do app. -->

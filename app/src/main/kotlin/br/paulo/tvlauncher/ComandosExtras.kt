@@ -40,6 +40,9 @@ import java.io.File
  *  - tecla --es tecla HOME [--el ms 1500]   entrega uma tecla falsa ao funil das teclas da acessibilidade (TeclaFalsa).
  *    Aceita o nome sem "KEYCODE_" ou o número. Ex.: HOME segurado = --es tecla HOME --el ms 1500.
  *  - roteiro               respostas do roteiro "Conferir na TV" desta versão (JSON; ver RoteiroConferencia)
+ * Compatibilidade (15/11/2026, degrau 1 contra o Projectivy):
+ *  - compat                JSON do aparelho para a página "Funciona no seu aparelho?" (Compatibilidade.kt)
+ *  - compat_texto          o mesmo em uma linha por teste
  * Volume da LG pela rede (14/11/2026, ideia 49; ver VolumeLg). Demoram (rede): o adb espera a resposta.
  *  - lg_procurar --es ip <qualquer IP da casa>   lista as LG da mesma rede /24
  *  - lg_pedir_codigo --es ip <IP da LG>         a LG mostra o código na tela dela
@@ -93,6 +96,8 @@ object ComandosExtras {
         "recado_link" -> PainelExtras.novoLinkRecado(ctx)
         "tecla" -> teclaFalsa(i)
         "roteiro" -> ConferirTvActivity.relatorio(ctx)
+        "compat" -> CompatibilidadeTv.json(ctx).toString(2)   // relatório da página "Funciona no seu aparelho?"
+        "compat_texto" -> CompatibilidadeTv.texto(ctx)
         "lg_procurar" -> VolumeLg.procurar(i.getStringExtra("ip") ?: "").joinToString("\n") { (ip, m) -> "$ip ${m.nome} ${m.modelo}" }
             .ifEmpty { "nenhuma LG respondeu (ligada? mesmo /24?)" }
         "lg_pedir_codigo" -> VolumeLg.pedirCodigo(i.getStringExtra("ip") ?: "")

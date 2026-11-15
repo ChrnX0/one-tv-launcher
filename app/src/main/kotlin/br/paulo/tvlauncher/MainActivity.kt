@@ -975,6 +975,7 @@ class MainActivity : Activity() {
         // "Quais apps aparecem no menu de uma TV?" = os que declaram a categoria LEANBACK_LAUNCHER.
         val consulta = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER)
         val itens = LinkedHashMap<String, Item>()
+        val pacoteIcones = PacoteIcones.versao(this)
         for (ri in pm.queryIntentActivities(consulta, 0)) {
             val pkg = ri.activityInfo.packageName
             if (pkg == packageName || pkg == Config.PACOTE_CONFIG || pkg in itens) continue
@@ -985,7 +986,8 @@ class MainActivity : Activity() {
             // controle divide essa thread — medido 107-260 ms só aqui. O caminho do APK muda quando o app é
             // atualizado, então serve de chave: app igual = reaproveita nome e ícone já carregados.
             // (Antes também carregava o banner, que nada usava, e o ícone duas vezes.)
-            val chave = ri.activityInfo.applicationInfo.sourceDir + "|" + ri.activityInfo.name
+            // Pacote de ícones (PacoteIcones.kt, desligado de fábrica) entra na chave: trocar de pacote redesenha.
+            val chave = ri.activityInfo.applicationInfo.sourceDir + "|" + ri.activityInfo.name + "|" + pacoteIcones
             // A categoria já vem no ResolveInfo: sem IPC na thread da tela depois (home-9).
             categorias[pkg] = ri.activityInfo.applicationInfo.category
             JogosTv.primar(this, pkg, ri.activityInfo.applicationInfo.category)   // card Jogos: já sabe se é jogo, sem IPC depois
@@ -993,7 +995,8 @@ class MainActivity : Activity() {
             if (cacheApps[pkg]?.first != null && cacheApps[pkg]?.first != chave) capas.remove(pkg)
             itens[pkg] = cacheApps[pkg]?.takeIf { it.first == chave }?.second ?: run {
                 // Só o ícone redondo fica guardado: o original (loadIcon) vira lixo logo depois de desenhado.
-                Item(pkg, ri.loadLabel(pm).toString(), DesenhoHome.iconeRedondo(resources, ri.loadIcon(pm))).also { cacheApps[pkg] = chave to it }
+                Item(pkg, ri.loadLabel(pm).toString(), DesenhoHome.iconeRedondo(resources,
+                    PacoteIcones.icone(this, pkg, ri.activityInfo.name) ?: ri.loadIcon(pm))).also { cacheApps[pkg] = chave to it }
             }
         }
         cacheApps.keys.retainAll(itens.keys)   // app desinstalado sai do cache

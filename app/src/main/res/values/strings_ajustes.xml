@@ -71,4 +71,8 @@
     <string name="tt_normal">Normal</string>
     <string name="tt_grande">Large</string>
     <string name="tt_maior">Larger</string>
+    <string name="pi_titulo">Icon pack</string>
+    <string name="pi_det">Swap app icons for the ones in an installed icon pack. OK picks the next one.</string>
+    <string name="pi_det_vazio">No icon pack installed. Get one from the Play Store and it shows up here.</string>
+    <string name="pi_nenhum">None</string>
 </resources>

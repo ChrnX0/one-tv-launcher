@@ -51,6 +51,7 @@ object PainelIdeias {
             post && r == "avisos/testar" -> ok(JSONObject().put("resultado", Avisos.testar(app)))   // bloqueia: thread do pedido
             // ---- 4. desempenho
             get && r == "desempenho" -> ok(DesempenhoTv.json(app))
+            get && r == "compatibilidade" -> ok(CompatibilidadeTv.json(app))   // página "Funciona no seu aparelho?"
             // ---- 6. mural
             post && r == "mural" -> {
                 val o = corpo ?: return erro(400, "JSON inválido")
