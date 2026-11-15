@@ -20,6 +20,8 @@
     <string name="mu_nao_lido_desc">Message: %s. OK marks as read.</string>
     <string name="mu_apagar">Delete message: %s</string>
     <string name="extras_RETROSPECTIVA_ANO">Your TV this year (in December, on the screensaver)</string>
+    <string name="extras_CARTOES_TRANSPARENTES">See-through app cards when not selected</string>
+    <string name="extras_ENTRADAS_TV">HDMI inputs in the app row (only on TVs with inputs)</string>
     <string name="ra_titulo">Your TV in %d</string>
     <string name="ra_canal">Favorite channel: %1$s (%2$s)</string>
     <string name="ra_coluna">Radio</string>

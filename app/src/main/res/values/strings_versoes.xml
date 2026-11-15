@@ -18,6 +18,13 @@
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
         <item>Scrolling menus and lists (like the player’s “Audio and subtitles” and folders): items no longer slide over the title; in menus, the edges fade when there are more items</item>
+        <item>App layout: choose between the usual row and a grid with every app in view (Settings › Appearance)</item>
+        <item>Card size: Normal or Large, plus see-through cards when not selected (in Extras); everything starts off</item>
+        <item>Icon packs: install an icon pack from Play and pick it in Settings › Appearance</item>
+        <item>My background: your photo, GIF or video behind the home screen, with brightness and contrast (put the file in the Fundo, Pictures or Movies folder)</item>
+        <item>Share look: a QR code with this TV\'s theme, text size and icons, to keep or send to another One TV</item>
+        <item>HDMI and AV inputs show up as cards in the app row, on TVs that have inputs</item>
+        <item>Coming from Projectivy? A 1-minute walkthrough to bring hidden apps, icons and background</item>
         <item>Player inside: FFmpeg and ASS subtitles are now the launcher\'s own (NextLib is gone), and it opens old AVI, WMV, RMVB and FLV files</item>
         <item>Player, in the ▼ menu: Louder dialogue (5.1 movie on two speakers), Audio delay from −500 to +500 ms (kept per Bluetooth speaker), Second subtitle at the top, Chapters and Technical info</item>
         <item>Player: holding ◀ ▶ shows a picture of where you are going (network and folder videos); ⏮ ⏭ jump between chapters; the subtitle size also applies to ASS subtitles</item>
@@ -154,6 +161,9 @@
         <item>Screensaver with new, larger widgets: pick Glass strip (the next hours on a curve, with the sun time), Cards (now, hours, today and tomorrow) or No box (big temperature and the weather in one sentence) in Settings › Screen and power › Screensaver widgets, or in the panel</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>home_grade</item>
+        <item>cartoes_grandes</item>
+        <item>visual_qr</item>
         <item>player_ass</item>
         <item>player_dialogo</item>
         <item>player_miniatura</item>
@@ -274,6 +284,9 @@
         <item>protetor_widgets</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Apps in a grid</item>
+        <item>Large cards</item>
+        <item>Share look</item>
         <item>Movie with ASS subtitles (anime)</item>
         <item>Louder dialogue</item>
         <item>Picture while holding ▶</item>
@@ -394,6 +407,9 @@
         <item>In Settings › Screen and power, press OK on Screensaver widgets until the style you want, then wait for the screensaver</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>In Settings › Appearance, set App layout to Grid. On the home screen, do ▲ ▼ ◀ ▶ move through the grid without jumping to the clock, and does switching back to Row leave everything as before?</item>
+        <item>In Settings › Appearance, set Card size to Large. Are the cards bigger, not cut off at the bottom, and does going back to Normal leave things as before?</item>
+        <item>In Settings › Appearance › Share look, does a QR code appear that your phone can read?</item>
         <item>Open a video with ASS subtitles (anime). Do the subtitles show with the right colors and positions, and change size in ▼ › Subtitle size?</item>
         <item>In a 5.1 movie, turn on ▼ › Louder dialogue. Does the movie come back at the same point, with speech easier to hear?</item>
         <item>In a network or folder video, hold ▶. Does a picture of where you are going show above the bar?</item>

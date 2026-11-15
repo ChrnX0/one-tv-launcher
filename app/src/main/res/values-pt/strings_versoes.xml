@@ -15,6 +15,13 @@
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
         <item>Menus e listas que rolam (como “Áudio e legenda” do player e as pastas): os itens não passam mais por cima do título; nos menus, as bordas esmaecem quando há mais itens</item>
+        <item>Arranjo dos apps: escolha entre a fileira de sempre e uma grade com todos os apps à vista (Configurações › Aparência)</item>
+        <item>Tamanho dos cartões: Normal ou Grande, e cartões transparentes fora do foco (em Extras); tudo começa desligado</item>
+        <item>Pacotes de ícones: instale um pacote de ícones da Play e escolha em Configurações › Aparência</item>
+        <item>Meu fundo: sua foto, GIF ou vídeo atrás da tela inicial, com brilho e contraste (coloque o arquivo na pasta Fundo, Pictures ou Movies)</item>
+        <item>Compartilhar visual: um QR com o tema, o tamanho e os ícones desta TV, para guardar ou mandar para outra One TV</item>
+        <item>Entradas HDMI e AV aparecem como cartões na linha de apps, nas TVs que têm entrada</item>
+        <item>Vindo do Projectivy? Um passo a passo de 1 minuto para trazer apps ocultos, ícones e fundo</item>
         <item>Player por dentro: o FFmpeg e as legendas ASS agora são do próprio launcher (sai a NextLib); e ele abre arquivos antigos AVI, WMV, RMVB e FLV</item>
         <item>Player, no menu ▼: Diálogo mais alto (filme 5.1 em duas caixas), Atraso do áudio de −500 a +500 ms (guardado por caixa Bluetooth), Segunda legenda em cima, Capítulos e Informações técnicas</item>
         <item>Player: segurando ◀ ▶ aparece a imagem do ponto para onde vai (vídeos da rede e das pastas); ⏮ ⏭ pulam capítulos; o tamanho da legenda vale também para legendas ASS</item>
@@ -151,6 +158,9 @@
         <item>Protetor de tela com widgets novos, de letra maior: escolha Faixa de vidro (as próximas horas numa curva, com a hora do sol), Cartões (agora, horas, hoje e amanhã) ou Sem caixa (a temperatura grande e o tempo numa frase) em Configurações › Tela e energia › Widgets do protetor, ou no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Apps em grade</item>
+        <item>Cartões grandes</item>
+        <item>Compartilhar visual</item>
         <item>Filme com legenda ASS (anime)</item>
         <item>Diálogo mais alto</item>
         <item>Imagem ao segurar ▶</item>
@@ -271,6 +281,9 @@
         <item>Em Configurações › Tela e energia, OK em Widgets do protetor até o estilo que quiser e espere o protetor aparecer</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Em Configurações › Aparência, mude Arranjo dos apps para Grade. Na tela inicial, ▲ ▼ ◀ ▶ andam pela grade sem pular para o relógio, e o VOLTAR para Fileira deixa tudo como antes?</item>
+        <item>Em Configurações › Aparência, mude Tamanho dos cartões para Grande. Os cartões ficam maiores, sem cortar embaixo, e voltar para Normal deixa como antes?</item>
+        <item>Em Configurações › Aparência › Compartilhar visual, aparece um QR que o celular consegue ler?</item>
         <item>Abra um vídeo com legenda ASS (anime). A legenda aparece com as cores e posições certas, e muda de tamanho no ▼ › Tamanho da legenda?</item>
         <item>Num filme 5.1, ligue ▼ › Diálogo mais alto. O filme volta no mesmo ponto e as falas ficam mais fáceis de ouvir?</item>
         <item>Num vídeo da rede ou das pastas, segure ▶. Aparece a imagem do ponto para onde vai, acima da barra?</item>

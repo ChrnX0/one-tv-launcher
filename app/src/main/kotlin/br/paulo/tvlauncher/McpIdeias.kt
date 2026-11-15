@@ -28,7 +28,7 @@ object McpIdeias {
                 .put("texto", s("até 60 caracteres")), listOf("acao"), leitura = false),
         ferramenta("buscar_tv", "Procura nos catálogos guardados da TV (canais, filmes, séries e apps) pelo nome. Não baixa nada.",
             JSONObject().put("termo", s("ex.: 'globo', 'batman'")), listOf("termo")),
-        ferramenta("semana_tv", "A última retrospectiva da semana (horas de TV, apps mais vistos, internet, quedas) e o desempenho da HOME por versão."),
+        ferramenta("semana_tv", "A última retrospectiva da semana (horas de TV, apps mais vistos, internet, quedas) o desempenho da HOME por versão e o relatório de compatibilidade do aparelho."),
     )
 
     fun conhece(nome: String) = LISTA.any { it.optString("name") == nome }
@@ -58,7 +58,8 @@ object McpIdeias {
             "buscar_tv" -> buscar(app, a.optString("termo")).toString()
             "semana_tv" -> JSONObject()
                 .put("semana", Retrospectiva.ultima(app)?.let { Retrospectiva.paraJson(it) } ?: JSONObject.NULL)
-                .put("desempenho", DesempenhoTv.json(app)).toString()
+                .put("desempenho", DesempenhoTv.json(app))
+                .put("compatibilidade", CompatibilidadeTv.json(app)).toString()
             else -> erro("ferramenta desconhecida")
         }
     }
