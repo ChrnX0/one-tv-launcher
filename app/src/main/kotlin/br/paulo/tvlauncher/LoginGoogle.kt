@@ -28,6 +28,7 @@ object LoginGoogle {
     private const val TAG = "TvLauncher.LoginGoogle"
     private const val PREFS = "mcp_seguro"
     private const val MAX_SESSOES = 5
+    private const val MAX_PRIORITARIAS = 3   // vagas a mais, só para quem já entrou
     private val aleatorio = SecureRandom()
 
     enum class Estado { ESPERANDO, OK, RECUSADO, ERRO }
@@ -50,6 +51,8 @@ object LoginGoogle {
         @Volatile var email: String? = null
         @Volatile var mensagem: String = ""
         @Volatile var usada = false
+        /** Login de um cliente que já entrou antes ([McpAutorizacao.temLogin]): anônimos não o expulsam. */
+        var prioritaria = false
     }
 
     private val sessoes = ConcurrentHashMap<String, Sessao>()
@@ -74,8 +77,15 @@ object LoginGoogle {
         sessoes.clear()
     }
 
-    /** Instantes dos últimos inícios de login (para o ritmo). */
+    /**
+     * Instantes dos últimos inícios de login, para o ritmo. Três filas (15/11/2026): antes era uma só, e qualquer um
+     * pela internet, com 6 GETs por minuto no /authorize, esgotava o ritmo do dono e expulsava o login dele.
+     * [inicios]: clientes sem login (qualquer um). [iniciosPrioritarios]: cliente que já entrou. [iniciosNaTv]: foto e
+     * Drive, que começam na própria TV.
+     */
     private val inicios = ArrayDeque<Long>()
+    private val iniciosPrioritarios = ArrayDeque<Long>()
+    private val iniciosNaTv = ArrayDeque<Long>()
 
     /** Até [max] inícios por [janelaMs]; registra este se couber. Pura (com a fila de fora) para o teste JVM. */
     internal fun cabeNoRitmo(fila: ArrayDeque<Long>, agora: Long, max: Int = 6, janelaMs: Long = 60_000): Boolean {
@@ -88,25 +98,31 @@ object LoginGoogle {
     fun sessao(id: String?): Sessao? = id?.let { sessoes[it] }?.takeIf { it.expira > System.currentTimeMillis() }
 
     /** Pede o código ao Google e começa a vigiar. Lança Exception com texto para a página se não der. */
-    fun iniciar(ctx: Context, pedido: Map<String, String>, finalidade: Finalidade = Finalidade.CONECTOR): Sessao {
+    fun iniciar(ctx: Context, pedido: Map<String, String>, finalidade: Finalidade = Finalidade.CONECTOR,
+                prioritaria: Boolean = false): Sessao {
         val app = ctx.applicationContext
         val agora = System.currentTimeMillis()
         val id = clienteId(app) ?: throw IllegalStateException("login Google não configurado")
         // Ritmo ANTES de chamar o Google (revisão da auditoria): o /authorize é aberto pela internet; sem isto, cada GET
         // virava uma chamada ao Google + uma thread de consulta, e gastava a cota do cliente OAuth do dono.
-        synchronized(inicios) {
-            if (!cabeNoRitmo(inicios, agora)) throw IllegalStateException("muitos logins seguidos; espere um minuto")
+        val fila = when {
+            finalidade != Finalidade.CONECTOR -> iniciosNaTv
+            prioritaria -> iniciosPrioritarios
+            else -> inicios
+        }
+        synchronized(fila) {
+            if (!cabeNoRitmo(fila, agora)) throw IllegalStateException("muitos logins seguidos; espere um minuto")
         }
         val r = postar("https://oauth2.googleapis.com/device/code", mapOf("client_id" to id, "scope" to escopos(finalidade)))
         val s = Sessao(
             ByteArray(18).also { aleatorio.nextBytes(it) }.joinToString("") { "%02x".format(it) },
             pedido, r.getString("user_code"), r.optString("verification_url", "https://www.google.com/device"),
             agora + r.optLong("expires_in", 900).coerceAtMost(1800) * 1000, finalidade,
-        )
+        ).also { it.prioritaria = prioritaria && finalidade == Finalidade.CONECTOR }
         // mcp-4: lotado, abre vaga em vez de recusar (antes, 5 GETs anônimos no /authorize travavam o login por 15 min).
         // A sessão "só foto" NÃO entra na lista: assim o /authorize do conector nunca a encontra (ela não pode virar
         // acesso à TV) e não ocupa a vaga de um login de verdade. Quem a acompanha é a tela que a criou.
-        if (!s.soFoto) synchronized(sessoes) { abrirVaga(sessoes, agora); sessoes[s.id] = s }
+        if (!s.soFoto) synchronized(sessoes) { abrirVaga(sessoes, agora, novaPrioritaria = s.prioritaria); sessoes[s.id] = s }
         val deviceCode = r.getString("device_code")
         var intervalo = r.optLong("interval", 5).coerceIn(2, 30) * 1000
         Thread({
@@ -137,10 +153,16 @@ object LoginGoogle {
      * Antes, o limite recusava a sessão NOVA: qualquer um pela internet, com 5 pedidos, impedia o dono de entrar.
      * Puro (teste JVM em LoginGoogleTest).
      */
-    internal fun abrirVaga(sessoes: MutableMap<String, Sessao>, agora: Long, max: Int = MAX_SESSOES) {
+    internal fun abrirVaga(sessoes: MutableMap<String, Sessao>, agora: Long, max: Int = MAX_SESSOES,
+                           novaPrioritaria: Boolean = false, maxPrioritarias: Int = MAX_PRIORITARIAS) {
         sessoes.values.removeIf { it.expira < agora || it.usada }
-        while (sessoes.size >= max) {
-            val sai = sessoes.values.minWithOrNull(compareBy<Sessao>({
+        // Duas turmas com vagas separadas (15/11/2026): quem já entrou (prioritárias) e o resto. Um pedido anônimo só
+        // disputa vaga com outros anônimos; assim, nem 6 GETs por minuto pela internet tiram o login do dono.
+        val limite = if (novaPrioritaria) maxPrioritarias else max
+        while (true) {
+            val turma = sessoes.values.filter { it.prioritaria == novaPrioritaria }
+            if (turma.size < limite) break
+            val sai = turma.minWithOrNull(compareBy<Sessao>({
                 when (it.estado) { Estado.RECUSADO, Estado.ERRO -> 0; Estado.ESPERANDO -> 1; Estado.OK -> 2 }
             }, { it.expira })) ?: break
             if (sai.estado == Estado.ESPERANDO) { sai.estado = Estado.ERRO; sai.mensagem = "outro login começou; comece de novo" }

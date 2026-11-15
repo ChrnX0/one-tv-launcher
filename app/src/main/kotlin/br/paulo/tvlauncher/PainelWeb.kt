@@ -49,6 +49,7 @@ object PainelWeb {
     const val COOKIE = "painel_sessao"
     private const val LIMITE_CORPO = 4 * 1024   // login e ações: corpo pequeno
     private const val TEMPO_LEITURA_MS = 15_000
+    private const val PRAZO_TLS_MS = 10_000L
 
     @Volatile private var servidor: ServerSocket? = null
     /** A porta https da rede de casa (PainelTls, 13/11/2026): o mesmo painel, com o certificado que a TV gera. */
@@ -120,6 +121,25 @@ object PainelWeb {
         ThreadPoolExecutor(6, 6, 30, TimeUnit.SECONDS, ArrayBlockingQueue(24)) { r ->
             Thread({ Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND); r.run() }, "Painel-atende")
         }.apply { allowCoreThreadTimeOut(true) }
+    }
+
+    /**
+     * Prazo TOTAL do aperto de mão TLS (15/11/2026). O soTimeout só limita cada leitura: um aparelho mandando 1 byte a
+     * cada 14 s prendia uma thread para sempre, e 6 dessas derrubavam o painel inteiro (8080 junto). Uma thread só,
+     * criada no primeiro https e encerrada quando fica 30 s sem nada para vigiar.
+     */
+    private val vigiaTls by lazy {
+        java.util.concurrent.ScheduledThreadPoolExecutor(1) { r -> Thread(r, "Painel-vigiaTls").apply { isDaemon = true } }.apply {
+            removeOnCancelPolicy = true
+            setKeepAliveTime(30, TimeUnit.SECONDS)
+            allowCoreThreadTimeOut(true)
+        }
+    }
+
+    /** Faz o aperto de mão TLS em até [PRAZO_TLS_MS]; estourou, fecha a conexão (o startHandshake lança IOException). */
+    private fun apertoDeMao(c: javax.net.ssl.SSLSocket) {
+        val prazo = vigiaTls.schedule({ fechar(c) }, PRAZO_TLS_MS, TimeUnit.MILLISECONDS)
+        try { c.startHandshake() } finally { prazo.cancel(false) }
     }
 
     @Volatile private var iniciando = false
@@ -341,12 +361,16 @@ object PainelWeb {
      */
     private fun conectorWindows(): Resposta {
         val pem = PainelTls.pemDaCa() ?: return erro(503, "o certificado ainda não foi gerado; tente em 1 minuto")
-        val ips = ipsDaRede()
-        val noCert = PainelTls.nomesNoCertificado()
-        val host = ips.firstOrNull { it in noCert } ?: PainelTls.nome(app)
+        val host = hostConector()
         val texto = ConectorWindows.script(host, PainelTls.PORTA, pem) ?: return erro(503, "não consegui montar o conector")
         return Resposta(200, "application/octet-stream", texto.toByteArray(Charsets.US_ASCII),
             mapOf("Content-Disposition" to "attachment; filename=\"${ConectorWindows.ARQUIVO}\"", "Cache-Control" to "no-store"))
+    }
+
+    /** O endereço da TV no conector: o IP quando ele está no certificado (nome sem ponto nem todo PC resolve). */
+    private fun hostConector(): String {
+        val noCert = PainelTls.nomesNoCertificado()
+        return ipsDaRede().firstOrNull { it in noCert } ?: PainelTls.nome(app)
     }
 
     private fun arquivoCertificado(): Resposta {
@@ -488,6 +512,7 @@ object PainelWeb {
         val ip = c.inetAddress.hostAddress ?: "?"
         try {
             c.soTimeout = TEMPO_LEITURA_MS
+            if (c is javax.net.ssl.SSLSocket) apertoDeMao(c)
             val entrada = c.getInputStream().buffered(8192)
             val saida = c.getOutputStream().buffered(16 * 1024)
             val resposta = try {
@@ -634,7 +659,11 @@ object PainelWeb {
             "/unidade" -> if (PainelDav.ligado(app)) return paginaUnidade()
             Ssdp.CAMINHO_MTP -> if (PainelDav.ligado(app)) return descricaoMtp(host)
             Ssdp.CAMINHO_MTP_SERVICO -> if (PainelDav.ligado(app)) return Resposta(200, "text/xml; charset=utf-8", Ssdp.SERVICO_MTP.toByteArray())
-            ConectorWindows.CAMINHO -> if (PainelDav.ligado(app)) return conectorWindows()
+            // O .cmd roda como administrador e instala um certificado no Windows: só sai pela porta https (15/11/2026).
+            // Pelo http, alguém no meio do caminho trocaria o certificado de dentro dele; lá, manda para o https.
+            ConectorWindows.CAMINHO -> if (PainelDav.ligado(app)) return if (https) conectorWindows() else
+                Resposta(302, "text/plain; charset=utf-8", ByteArray(0),
+                    mapOf("Location" to "https://${hostConector()}:${PainelTls.PORTA}${ConectorWindows.CAMINHO}", "Cache-Control" to "no-store"))
             "/certificado.crt" -> return arquivoCertificado()
             "/certificado.css" -> return Resposta(200, "text/css; charset=utf-8",
                 app.assets.open("painel/certificado.css").use { it.readBytes() })

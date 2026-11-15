@@ -56,6 +56,26 @@ class LoginGoogleTest {
         assertFalse("velha" in m)
     }
 
+    /** 15/11/2026: pedidos anônimos (6 por minuto pela internet) não expulsam o login de um cliente que já entrou. */
+    @Test fun anonimoNaoExpulsaQuemJaEntrou() {
+        val agora = 1_000_000L
+        val m = HashMap<String, LoginGoogle.Sessao>()
+        val dono = sessao("dono", agora + 900_000, LoginGoogle.Estado.ESPERANDO).also { it.prioritaria = true }
+        m["dono"] = dono
+        repeat(20) { i ->
+            LoginGoogle.abrirVaga(m, agora)
+            m["a$i"] = sessao("a$i", agora + 1 + i, LoginGoogle.Estado.ESPERANDO)
+        }
+        assertTrue("dono" in m)
+        assertEquals(LoginGoogle.Estado.ESPERANDO, dono.estado)
+        assertEquals(6, m.size)   // 5 anônimas + a do dono
+        // Entre as prioritárias, a regra antiga vale: lotou, sai a mais antiga.
+        for (i in 1..2) m["p$i"] = sessao("p$i", agora + 900_000 + i, LoginGoogle.Estado.ESPERANDO).also { it.prioritaria = true }
+        LoginGoogle.abrirVaga(m, agora, novaPrioritaria = true)
+        assertFalse("dono" in m)
+        assertTrue("a19" in m)
+    }
+
     @Test fun ritmoDeInicios() {
         // Revisão da auditoria: no máximo 6 inícios por minuto, contados ANTES de chamar o Google.
         val fila = ArrayDeque<Long>()
