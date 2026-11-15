@@ -13,6 +13,8 @@ public final class Conscrypt {
     private Conscrypt() {}
 
     public static byte[] exportKeyingMaterial(SSLSocket socket, String label, byte[] context, int length) throws SSLException {
+        // Depuração sem fio (e o pareamento) só existe no Android 11+; a API pública é do 12 (31).
+        if (android.os.Build.VERSION.SDK_INT < 31) throw new SSLException("pareamento exige Android 12");
         return android.net.ssl.SSLSockets.exportKeyingMaterial(socket, label, context, length);
     }
 }

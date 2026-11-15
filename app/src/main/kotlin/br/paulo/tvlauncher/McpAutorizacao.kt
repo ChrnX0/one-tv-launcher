@@ -161,6 +161,16 @@ class McpAutorizacao(
     /** O nome que o cliente deu ao se registrar (para a página de PIN mostrar quem está pedindo). Null = desconhecido. */
     @Synchronized fun nomeDoCliente(id: String?): String? = clientes[id]?.nome
 
+    /**
+     * Este cliente já tem login vivo (algum token não vencido)? Só o dono consegue isso (PIN ou conta Google da TV),
+     * então o login Google desse cliente vai numa fila própria que pedidos anônimos da internet não esgotam.
+     */
+    @Synchronized fun temLogin(id: String?): Boolean {
+        if (id == null) return false
+        val agora = relogio()
+        return tokens.values.any { it.clienteId == id && it.expira > agora }
+    }
+
     // ---------------------------------------------------------------- 2. página do PIN
 
     /**

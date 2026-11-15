@@ -259,7 +259,7 @@ object McpServidor {
         // Com o login Google configurado, o PIN não vale pela internet (é ele o ponto fraco): só a conta Google.
         if (LoginGoogle.configurado(app)) {
             if (req.metodo == "POST") return pagina("Use a conta Google", "<p>Este login é pela conta Google. Abra o endereço de novo.</p>", null)
-            val s = try { LoginGoogle.iniciar(app, p) } catch (e: Exception) {
+            val s = try { LoginGoogle.iniciar(app, p, prioritaria = autorizacao().temLogin(cliente)) } catch (e: Exception) {
                 return pagina("Não deu", "<p>${esc(e.message ?: "erro ao falar com o Google")}</p>", null)
             }
             return paginaGoogle(s, nome)

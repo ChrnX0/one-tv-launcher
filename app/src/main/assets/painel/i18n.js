@@ -2,7 +2,7 @@
 // daqui em diante edite aqui: texto novo no painel sem entrada em T (ou padrão em P) aparece em português.
 // Como funciona: se o navegador NÃO está em português, troca cada texto da página (e o que os scripts escrevem
 // depois, por um MutationObserver) pelo da tabela. Só textos visíveis, placeholder, aria-label, title e alt;
-// nunca o que a pessoa digitou. Mensagens que vêm da TV (erros do servidor) continuam como a TV manda.
+// nunca o que a pessoa digitou. Mensagens de erro que vêm da TV (servidor) também estão na tabela (15/11/2026).
 (function () {
   'use strict';
   const idioma = (navigator.languages && navigator.languages[0]) || navigator.language || 'pt';
@@ -949,8 +949,281 @@
 "Este navegador não sabe usar a digital. Use o Chrome ou o Safari atualizados.": "This browser can't use fingerprints. Use an up-to-date Chrome or Safari.",
 "Este navegador é antigo para a digital. Atualize o Chrome ou o Safari.": "This browser is too old for fingerprints. Update Chrome or Safari.",
 "Apagar esta digital?": "Delete this fingerprint?",
+// Mensagens que vêm da TV (erros do servidor, 15/11/2026).
+"A TV está em espera. Toque em Acordar para ver a tela.": "The TV is on standby. Tap Wake up to see the screen.",
+"APK vazio ou grande demais": "APK empty or too large",
+"Content-Length inválido": "Invalid Content-Length",
+"Content-Length repetido": "Repeated Content-Length",
+"Host repetido": "Repeated Host",
+"IP inválido (ex.: 192.168.1.10)": "Invalid IP (e.g. 192.168.1.10)",
+"JSON inválido": "Invalid JSON",
+"MAC inválido (ex.: AA:BB:CC:DD:EE:FF)": "Invalid MAC (e.g. AA:BB:CC:DD:EE:FF)",
+"PIN errado demais: o painel foi desligado. Religue nas Configurações do launcher, na TV.": "Too many wrong PINs: the panel was turned off. Turn it back on in the launcher Settings, on the TV.",
+"PIN errado": "Wrong PIN",
+"a TV não conseguiu gerar o certificado": "the TV could not create the certificate",
+"a acessibilidade do launcher está desligada na TV: sem ela o recado não aparece": "the launcher accessibility is off on the TV: without it the note does not show",
+"a acessibilidade do launcher está desligada, ou a TV está dormindo": "the launcher accessibility is off, or the TV is asleep",
+"a digital não confere: entre com o PIN": "the fingerprint does not match: sign in with the PIN",
+"a digital só funciona pelo endereço do Tailscale (https)": "fingerprint sign-in works only through the Tailscale address (https)",
+"a memória da TV encheu durante o envio": "the TV storage filled up during the upload",
+"a pasta de destino não existe": "the destination folder does not exist",
+"a raiz não se apaga": "the root cannot be deleted",
+"a raiz não se move": "the root cannot be moved",
+"a senha do backup precisa ter de 8 a 128 caracteres": "the backup password must have 8 to 128 characters",
+"alvo inválido": "invalid target",
+"app não encontrado": "app not found",
+"ação desconhecida": "unknown action",
+"cabeçalho inválido": "invalid header",
+"cabeçalhos demoraram demais": "headers took too long",
+"cabeçalhos grandes demais": "headers too large",
+"cabeçalhos incompletos": "incomplete headers",
+"caminho fora da memória interna": "path outside the internal storage",
+"caminho inválido": "invalid path",
+"chave desconhecida": "unknown key",
+"chave inválida (cole a chave inteira criada em Integrações do UniFi)": "invalid key (paste the whole key created in UniFi Integrations)",
+"chave inválida: cole a chave inteira, que começa com tskey-": "invalid key: paste the whole key, which starts with tskey-",
+"chave inválida (só letras e números)": "invalid key (letters and numbers only)",
+"chave recusada": "key rejected",
+"conta recusada": "account rejected",
+"conecte a conta do Google Drive primeiro (botão Conectar, logo acima)": "connect the Google Drive account first (Connect button, right above)",
+"conecte a conta do Google Drive primeiro": "connect the Google Drive account first",
+"consulta inválida": "invalid query",
+"conta não encontrada": "account not found",
+"corpo demorou demais": "request body took too long",
+"corpo grande demais": "request body too large",
+"código vencido ou já usado: gere outro na TV": "code expired or already used: create another one on the TV",
+"cópia inválida": "invalid backup",
+"defina a senha antes de ligar": "set the password before turning it on",
+"defina a senha antes": "set the password first",
+"defina o PIN antes": "set the PIN first",
+"destino desconhecido": "unknown destination",
+"destino igual à origem": "destination is the same as the source",
+"destino inválido": "invalid destination",
+"destino não é uma pasta": "destination is not a folder",
+"devagar: 1 recado a cada 3 s": "slow down: 1 note every 3 s",
+"endereço inválido: use o IP do roteador na rede de casa (ex.: 192.168.0.1)": "invalid address: use the router IP on the home network (e.g. 192.168.0.1)",
+"entre com o PIN": "sign in with the PIN",
+"espaço antes de ':'": "space before ':'",
+"essa conta está sem foto": "this account has no photo",
+"essa conta não está nesta TV": "this account is not on this TV",
+"essa cópia não existe": "this backup does not exist",
+"essa digital não existe": "this fingerprint does not exist",
+"esse tipo de arquivo não tem prévia: baixe para abrir": "this file type has no preview: download it to open",
+"esta digital não está cadastrada nesta TV: entre com o PIN e cadastre de novo": "this fingerprint is not registered on this TV: sign in with the PIN and register again",
+"falta a inscrição": "the subscription is missing",
+"falta apps": "apps missing",
+"falta macs": "MAC addresses missing",
+"falta o login Google da TV (id e segredo do cliente OAuth, aba Claude)": "the TV Google sign-in is missing (OAuth client id and secret, Claude tab)",
+"falta o usuário ou a senha": "user name or password missing",
+"faltou a lista": "the list is missing",
+"horário inválido": "invalid time",
+"id inválido: termina em .apps.googleusercontent.com": "invalid id: it ends in .apps.googleusercontent.com",
+"imagem inválida (JPEG, PNG ou WebP até 4 MB)": "invalid image (JPEG, PNG or WebP up to 4 MB)",
+"imagem inválida": "invalid image",
+"intervalo fora do arquivo": "range outside the file",
+"leia o certificado de novo antes de confirmar": "read the certificate again before confirming",
+"linha de pedido inválida": "invalid request line",
+"lista: compras ou recados": "list: shopping or notes",
+"modo inválido": "invalid mode",
+"muitas janelas do painel abertas; esta atualiza a cada 30 s": "too many panel windows open; this one refreshes every 30 s",
+"método não suportado": "method not supported",
+"nada para mandar à TV": "nothing to send to the TV",
+"nada tocando (ou a chave está desligada)": "nothing playing (or the switch is off)",
+"nenhuma restauração feita ainda": "no restore done yet",
+"no Modo visita e no perfil infantil a sincronização não muda": "in Guest mode and in the kids profile, sync does not change",
+"nome de arquivo inválido": "invalid file name",
+"nome de pasta inválido": "invalid folder name",
+"nome desconhecido": "unknown name",
+"nome inválido": "invalid name",
+"nome inválido: uma palavra só, com letras, números e hífen (ex.: tv-sala)": "invalid name: a single word with letters, numbers and hyphens (e.g. tv-living)",
+"nome ou data inválidos": "invalid name or date",
+"nome reservado": "reserved name",
+"não consegui abrir: na TV, vá em Configurações > Sistema > Idioma": "could not open it: on the TV, go to Settings > System > Language",
+"não consegui apagar": "could not delete",
+"não consegui dar o nome final ao arquivo recebido": "could not give the received file its final name",
+"não consegui dar o nome final ao arquivo": "could not give the file its final name",
+"não consegui gravar (Device Owner inativo?)": "could not save (Device Owner inactive?)",
+"não consegui gravar; tente de novo": "could not save; try again",
+"não consegui gravar": "could not save",
+"não consegui guardar a chave cifrada": "could not store the encrypted key",
+"não consegui guardar a senha na TV": "could not store the password on the TV",
+"não consegui montar o conector": "could not build the connector",
+"não consegui substituir o arquivo": "could not replace the file",
+"não dá para mover uma pasta para dentro dela mesma": "a folder cannot be moved into itself",
+"não dá para pôr uma pasta dentro dela mesma": "a folder cannot be put into itself",
+"não enviei: falta o MAC ou a TV está sem rede": "not sent: the MAC is missing or the TV has no network",
+"não existe (talvez apagado na TV)": "does not exist (maybe deleted on the TV)",
+"não é uma pasta": "not a folder",
+"o Android não deixou criar a pasta": "Android did not allow creating the folder",
+"o Android não deixou ler esta pasta": "Android did not allow reading this folder",
+"o Android não deixou ler este arquivo": "Android did not allow reading this file",
+"o Android não deixou mover/renomear": "Android did not allow moving/renaming",
+"o PIN das crianças precisa ser diferente do PIN do painel": "the kids PIN must be different from the panel PIN",
+"o PIN do painel precisa ser diferente do PIN das crianças": "the panel PIN must be different from the kids PIN",
+"o certificado ainda não foi gerado; tente em 1 minuto": "the certificate was not created yet; try in 1 minute",
+"o destino não é uma pasta": "the destination is not a folder",
+"o endereço ainda não existe (ligue o acesso na aba Claude)": "the address does not exist yet (turn on access in the Claude tab)",
+"o launcher ainda não tem acesso à memória interna, e o shell dele não respondeu para conceder. Confira se a depuração sem fio está ligada na TV e tente de novo.": "the launcher has no access to the internal storage yet, and its shell did not answer to grant it. Check that wireless debugging is on on the TV and try again.",
+"o pedido venceu: tente de novo": "the request expired: try again",
+"o shell do launcher não respondeu (a depuração sem fio está ligada?)": "the launcher shell did not answer (is wireless debugging on?)",
+"opção desconhecida": "unknown option",
+"opção inválida": "invalid option",
+"pacote inválido": "invalid package",
+"painel desligado": "panel turned off",
+"painel desligado. Religue nas Configurações do launcher, na TV.": "panel turned off. Turn it back on in the launcher Settings, on the TV.",
+"pedido de fora do painel": "request from outside the panel",
+"pedido demorou demais": "request took too long",
+"pedido inválido": "invalid request",
+"permissão inválida": "invalid permission",
+"salve o endereço do roteador antes da chave": "save the router address before the key",
+"salve o endereço do roteador primeiro": "save the router address first",
+"segredo do cliente inválido": "invalid client secret",
+"sem código agora": "no code right now",
+"senha do backup errada (ou o arquivo foi alterado)": "wrong backup password (or the file was changed)",
+"serviço desconhecido": "unknown service",
+"só dá para baixar arquivo, não pasta": "only files can be downloaded, not folders",
+"só o MDBList usa chave pessoal": "only MDBList uses a personal key",
+"só o OpenSubtitles usa usuário e senha": "only OpenSubtitles uses a user name and password",
+"tamanho inválido": "invalid size",
+"tema desconhecido": "unknown theme",
+"tempo inválido": "invalid time",
+"tipo desconhecido": "unknown type",
+"use Content-Length": "use Content-Length",
+"use POST": "use POST",
+"valor inválido": "invalid value",
+"valor inválido (Device Owner inativo?)": "invalid value (Device Owner inactive?)",
+"usuário ou senha longos demais": "user name or password too long",
+"usuário ou senha errados": "wrong user name or password",
+"o MDBList não aceitou esta chave": "MDBList did not accept this key",
+"este build não tem a chave do OpenSubtitles": "this build does not have the OpenSubtitles key",
+"serviço sem chave neste build": "service without a key in this build",
+"acao: adicionar ou remover": "action: add or remove",
+"acao: adicionar, remover, limpar, lido ou nao_lido": "action: add, remove, clear, read or unread",
+"acao: colar ou remover": "action: paste or remove",
+"mande {\"title\":\"...\",\"message\":\"...\",\"duration\":10}": "send {\"title\":\"...\",\"message\":\"...\",\"duration\":10}",
+"falta \"oculto\"": "\"oculto\" is missing",
 };
   const P = [
+[
+"^PIN errado; bloqueado por (\\d+) min$",
+"Wrong PIN; locked for $1 min"
+],
+[
+"^a cena \"(.+)\" não existe$",
+"the scene \"$1\" does not exist"
+],
+[
+"^a pasta \"(.+)\" é do sistema: apague o que tem dentro dela$",
+"the folder \"$1\" belongs to the system: delete what is inside it"
+],
+[
+"^a pasta \"(.+)\" é do sistema e fica onde está$",
+"the folder \"$1\" belongs to the system and stays where it is"
+],
+[
+"^a restauração falhou na TV \\((.+)\\); as configurações de antes foram mantidas$",
+"the restore failed on the TV ($1); the previous settings were kept"
+],
+[
+"^apaguei (\\d+) item\\(ns\\), mas sobrou algo que o Android não deixou apagar$",
+"deleted $1 item(s), but something was left that Android did not allow deleting"
+],
+[
+"^atalhos inválidos: use aparelho:porta separados por vírgula \\(máximo (\\d+)\\), ex\\.: nas:8096$",
+"invalid shortcuts: use device:port separated by commas (up to $1), e.g. nas:8096"
+],
+[
+"^backup recusado: (.+)$",
+"backup rejected: $1"
+],
+[
+"^domínio inválido \\(ex\\.: app\\.exemplo\\.com, sem https:// e sem barra\\) ou mais de (\\d+)$",
+"invalid domain (e.g. app.example.com, without https:// and without a slash) or more than $1"
+],
+[
+"^entre no (.+) primeiro$",
+"sign in to $1 first"
+],
+[
+"^erro na TV: (.+)$",
+"error on the TV: $1"
+],
+[
+"^escreva o recado \\(até (\\d+) caracteres\\)$",
+"write the note (up to $1 characters)"
+],
+[
+"^esta versão do launcher não tem a chave do (.+)$",
+"this launcher version does not have the $1 key"
+],
+[
+"^já existe \"(.+)\" nesta pasta$",
+"\"$1\" already exists in this folder"
+],
+[
+"^já existe \"(.+)\" no destino$",
+"\"$1\" already exists in the destination"
+],
+[
+"^já existe \"(.+)\"$",
+"\"$1\" already exists"
+],
+[
+"^já tem (\\d+) digitais: apague uma antes$",
+"there are already $1 fingerprints: delete one first"
+],
+[
+"^muitas tentativas erradas; espere (\\d+) s$",
+"too many wrong attempts; wait $1 s"
+],
+[
+"^não cabe: faltam (.+) MB na TV$",
+"does not fit: $1 MB missing on the TV"
+],
+[
+"^não consegui montar o backup \\((.+)\\)$",
+"could not build the backup ($1)"
+],
+[
+"^não consegui substituir \"(.+)\"$",
+"could not replace \"$1\""
+],
+[
+"^o (.+) não entra por código$",
+"$1 does not sign in with a code"
+],
+[
+"^o (.+) não sincroniza$",
+"$1 does not sync"
+],
+[
+"^o (.+) respondeu (\\d+)$",
+"$1 answered $2"
+],
+[
+"^o (.+) não respondeu$",
+"$1 did not answer"
+],
+[
+"^o Drive não entregou a cópia: (.+)$",
+"Drive did not deliver the backup: $1"
+],
+[
+"^o Drive não respondeu: (.+)$",
+"Drive did not answer: $1"
+],
+[
+"^o PIN precisa ter de (\\d+) a (\\d+) números$",
+"the PIN must have $1 to $2 digits"
+],
+[
+"^o celular mandou uma chave que a TV não aceita \\((.+)\\)$",
+"the phone sent a key the TV does not accept ($1)"
+],
+[
+"^resposta do (.+) sem código$",
+"$1 answer without a code"
+],
 [
 "^Funciona só pelo endereço do Tailscale: abra (.+) neste celular, entre com o PIN e cadastre\\.$",
 "Works only through the Tailscale address: open $1 on this phone, sign in with the PIN and register."

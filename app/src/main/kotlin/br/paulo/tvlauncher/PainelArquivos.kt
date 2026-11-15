@@ -39,7 +39,8 @@ object PainelArquivos {
 
     // ---------------------------------------------------------------- acesso
 
-    fun temAcesso(): Boolean = Environment.isExternalStorageManager()
+    fun temAcesso(): Boolean =   // "todos os arquivos" só existe no Android 11+; no 10 o painel fica sem acesso
+        android.os.Build.VERSION.SDK_INT >= 30 && Environment.isExternalStorageManager()
 
     /**
      * Sem a permissão, pede ao nosso shell (adb embutido) para conceder. Bloqueia até ~40 s na primeira vez (fora da

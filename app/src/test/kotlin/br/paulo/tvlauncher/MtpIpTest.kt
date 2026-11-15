@@ -268,6 +268,22 @@ class MtpIpTest {
         pc.fechar()
     }
 
+    /** 15/11/2026: a conexão de eventos de uma sessão é uma só; um segundo aparelho não entra nela. Número sorteado. */
+    @Test fun eventosSoDoDonoDaSessao() {
+        val pc = Pc()
+        assertEquals(PtpIp.INICIO_COMANDO_OK, pc.entrar())
+        assertTrue("número sorteado, não sequencial", pc.numero !in 1..3)
+        Socket(InetAddress.getLoopbackAddress(), ss.localPort).use {
+            PtpIp.escrever(it.getOutputStream(), PtpIp.INICIO_EVENTO, Mtp.Escritor().u32(pc.numero).bytes())
+            assertEquals(PtpIp.INICIO_RECUSADO, PtpIp.ler(it.getInputStream()).first)
+        }
+        // Outro computador da casa continua entrando com a própria sessão.
+        val outro = Pc()
+        assertEquals(PtpIp.INICIO_COMANDO_OK, outro.entrar())
+        assertTrue(outro.numero != pc.numero)
+        outro.fechar(); pc.fechar()
+    }
+
     /** Cabeçalho de dados/cancelar dizendo ~2 GB: recusa sem alocar (antes: OutOfMemoryError derrubava a HOME). */
     @Test fun corpoGrandeDemaisERecusadoSemAlocar() {
         val cab = PtpIp.lerCabecalho(Mtp.Escritor().u32(0x7FFFFFF0).u32(PtpIp.DADOS_COMECO).bytes().inputStream())

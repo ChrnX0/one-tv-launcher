@@ -52,4 +52,11 @@
     <string name="sv_mdblist_qr1">Página da chave no MDBList</string>
     <string name="sv_mdblist_qr2">Painel web (%1$s)</string>
     <string name="sv_mdblist_digitar">Digitar a chave aqui</string>
+    <string name="sv_f_chave_invalida">chave inválida (só letras e números)</string>
+    <string name="sv_f_chave_recusada">o %1$s não aceitou esta chave</string>
+    <string name="sv_f_respondeu">o %1$s respondeu com erro %2$d. Tente de novo daqui a pouco.</string>
+    <string name="sv_f_falta">digite o usuário e a senha</string>
+    <string name="sv_f_longo">usuário ou senha longos demais</string>
+    <string name="sv_f_senha">usuário ou senha errados</string>
+    <string name="sv_f_gravar">não consegui gravar na TV. Tente de novo.</string>
 </resources>

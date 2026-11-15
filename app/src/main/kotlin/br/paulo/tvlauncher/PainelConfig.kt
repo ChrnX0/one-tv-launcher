@@ -85,9 +85,11 @@ object PainelConfig {
                 if (v !in Protetor.WIDGETS) return Resultado.Erro("valor inválido")
                 Protetor.definirWidget(app, v as String); registrar("widgets do protetor: $v")
             }
-            // A TV como unidade de rede (PainelDav): mesma senha (o PIN) e mesmas pastas da aba Arquivos.
+            // A TV como unidade de rede (PainelDav): mesma senha (o PIN) e mesmas pastas da aba Arquivos. Ligar abre os
+            // arquivos da TV para a rede: pede o PIN de novo (15/11/2026), como o MCP; desligar não pede.
             "unidadeRede" -> {
                 val b = v as? Boolean ?: return Resultado.Erro("valor inválido")
+                if (b && !elevada) return Resultado.PrecisaPin
                 PainelArmazem.definirUnidadeRede(app, b); PainelWeb.unidadeRedeMudou(app); registrar("unidade de rede: $b")
             }
             // Esquecer os computadores aceitos na TV para o MTP pela rede: tirar acesso nunca pede PIN.

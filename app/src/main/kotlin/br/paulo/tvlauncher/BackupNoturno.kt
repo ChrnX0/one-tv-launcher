@@ -278,7 +278,7 @@ object BackupNoturno {
      */
     private fun enviarPendrive(app: Context, nome: String, bytes: ByteArray) {
         val raiz = pastaPendrive(app) ?: throw IllegalStateException("nenhum pendrive conectado")   // < Android 11 = null
-        if (!Environment.isExternalStorageManager()) throw IllegalStateException("sem acesso a arquivos")
+        if (android.os.Build.VERSION.SDK_INT >= 30 && !Environment.isExternalStorageManager()) throw IllegalStateException("sem acesso a arquivos")
         gravarLocal(File(raiz, BackupNoturnoRegras.PASTA_EXTERNA), nome, bytes)
     }
 

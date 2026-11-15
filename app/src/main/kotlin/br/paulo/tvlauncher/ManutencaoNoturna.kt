@@ -42,7 +42,8 @@ object ManutencaoNoturna {
     const val HORA = 4
     private const val ESPACO_MINIMO = 1L shl 30            // 1 GB: abaixo disso, limpa o cache dos apps
     private const val ESPACO_CRITICO = 500L shl 20          // 500 MB: abaixo disso depois da limpeza = avisa
-    private const val MAX_ESPERA_MS = 3 * 60_000L           // a manutenção inteira não segura o aparelho acordado mais que isso
+    private const val MAX_ESPERA_MS = 3 * 60_000L           // os passos da manutenção não seguram o aparelho acordado mais que isso
+    private const val MAX_REDE_MS = 15 * 60_000L            // a parte de rede (Trakt, IMDb semanal), depois dos passos
 
     private val principal = Handler(Looper.getMainLooper())
     private var ouvindoTela = false
@@ -100,10 +101,6 @@ object ManutencaoNoturna {
     /** Roda todos os passos agora e guarda o relatório. Também pelo adb (ComandosExtras "manutencao"). */
     fun rodar(ctx: Context): ManutencaoRegras.Relatorio {
         val app = ctx.applicationContext
-        // Token do Trakt (ServicosContas): renova antes de vencer. Fora do relatório (não é manutenção da TV).
-        runCatching { ServicosContas.renovarSePreciso(app) }
-        // Nota do IMDb (arquivo público, 1x por semana; InfoExternaCache): também fora do relatório.
-        runCatching { InfoExternaCache.semanalImdb(app) }
         val passos = listOf(
             passo("acesso") { acesso(app) },
             passo("permissoes") { permissoes(app) },
@@ -114,7 +111,26 @@ object ManutencaoNoturna {
         val r = ManutencaoRegras.Relatorio(System.currentTimeMillis(), passos)
         prefs(app).edit().putString("ultimo", ManutencaoRegras.paraJson(r).toString()).apply()
         Log.i(TAG, "relatório: " + passos.joinToString { "${it.nome}=${it.resultado}" })
+        rede(app)
         return r
+    }
+
+    /**
+     * A parte de rede, DEPOIS dos passos e com trava própria (15/11/2026). Antes vinha primeiro: o IMDb semanal (até
+     * 1.500 perguntas ao TMDB + ~9 MB) passava dos 3 min de [MAX_ESPERA_MS], o aparelho dormia no meio e o resto
+     * (autoconserto, limpeza) só rodava de manhã, com a família ligando a TV.
+     */
+    private fun rede(app: Context) {
+        val trava = try {
+            app.getSystemService(PowerManager::class.java).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "tvlauncher:manutencao-rede")
+                .apply { acquire(MAX_REDE_MS) }
+        } catch (e: Exception) { null }
+        try {
+            // Token do Trakt (ServicosContas): renova antes de vencer. Fora do relatório (não é manutenção da TV).
+            runCatching { ServicosContas.renovarSePreciso(app) }
+            // Nota do IMDb (arquivo público, 1x por semana; InfoExternaCache): também fora do relatório.
+            runCatching { InfoExternaCache.semanalImdb(app) }
+        } finally { try { trava?.release() } catch (_: Exception) {} }
     }
 
     private fun passo(nome: String, corpo: () -> Pair<ManutencaoRegras.Resultado, String>): ManutencaoRegras.Passo = try {

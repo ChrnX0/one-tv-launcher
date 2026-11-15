@@ -37,7 +37,7 @@ android {
 
     defaultConfig {
         applicationId = "br.paulo.tvlauncher"
-        minSdk = 26
+        minSdk = 29   // Android 10, o mínimo do Google TV (15/11/2026: abaixo disso ~27 chamadas de API 28-29 derrubavam o launcher)
         targetSdk = 34
         // 04/11/2026: a atualização automática (GitHub Releases) precisa de um versionCode que sempre cresce, senão o
         // Android recusa a instalação ("downgrade"). Usamos os minutos desde 01/01/2026 na hora do build, no PC e no

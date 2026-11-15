@@ -24,6 +24,17 @@ object InfoExternaCache {
     @Volatile private var memoria: LinkedHashMap<String, Guardado>? = null
     private val colecoes = HashMap<Int, List<InfoExterna.Candidato>>()
 
+    /*
+     * Dois processos usam este arquivo (15/11/2026): o da HOME (manutenção da noite, IMDb semanal, busca) e o do player
+     * (Filmes e Séries). Antes cada um lia uma vez e gravava o mapa inteiro por cima do outro: notas do IMDb e ids do
+     * TMDB sumiam e a cota do TMDB era gasta de novo. Agora: [sujos] guarda o que mudou AQUI desde a última gravação;
+     * gravar trava o arquivo entre processos, relê o disco se outro processo gravou, põe os sujos por cima e grava.
+     * E a leitura confere (no máximo a cada 2 s) se o arquivo mudou, para não usar um mapa velho por horas.
+     */
+    private val sujos = HashSet<String>()
+    private var visto = ""            // identidade do arquivo na última leitura/gravação (inode + tamanho + data)
+    private var conferidoEm = 0L      // System.nanoTime da última conferência
+
     private fun chaves() = ServicosContas.chavesApp()
     fun temTmdb(): Boolean = chaves().tmdb.isNotBlank()
     fun temNotas(ctx: Context): Boolean = ServicosContas.chaveMdblist(ctx) != null
@@ -31,23 +42,59 @@ object InfoExternaCache {
 
     // ================================================================ disco
 
-    private fun mapa(ctx: Context): LinkedHashMap<String, Guardado> = memoria ?: synchronized(trava) {
-        memoria ?: LinkedHashMap<String, Guardado>().also { m ->
-            runCatching {
-                val o = JSONObject(File(PlayerArmazem.pasta(ctx), ARQUIVO).readText())
-                for (k in o.keys()) o.optJSONObject(k)?.let { m[k] = InfoExterna.guardadoDeJson(it) }
-            }
-            memoria = m
+    private fun arquivo(ctx: Context) = File(PlayerArmazem.pasta(ctx), ARQUIVO)
+
+    /** Muda quando outro processo grava: cada gravação é um arquivo novo (renomeado), então o inode muda. */
+    private fun identidade(arq: File): String = try {
+        val st = android.system.Os.stat(arq.path)
+        "${st.st_ino}:${st.st_size}:${st.st_mtime}"
+    } catch (_: Exception) { "${arq.length()}:${arq.lastModified()}" }
+
+    private fun ler(arq: File): LinkedHashMap<String, Guardado> = LinkedHashMap<String, Guardado>().also { m ->
+        runCatching {
+            val o = JSONObject(arq.readText())
+            for (k in o.keys()) o.optJSONObject(k)?.let { m[k] = InfoExterna.guardadoDeJson(it) }
         }
     }
 
+    /** Relê do disco se outro processo gravou, mantendo por cima o que mudou aqui ([sujos]). Chamar com [trava]. */
+    private fun recarregarSeMudou(arq: File, forcar: Boolean) {
+        val agora = System.nanoTime()
+        val m = memoria
+        if (m != null && !forcar && agora - conferidoEm < 2_000_000_000L) return
+        conferidoEm = agora
+        val id = identidade(arq)
+        if (m != null && id == visto) return
+        val novo = ler(arq)
+        if (m != null) for (k in sujos) m[k]?.let { novo.remove(k); novo[k] = it }
+        visto = id
+        memoria = novo
+    }
+
+    private fun mapa(ctx: Context): LinkedHashMap<String, Guardado> = synchronized(trava) {
+        recarregarSeMudou(arquivo(ctx), forcar = false)
+        memoria!!
+    }
+
+    /** Põe um título no mapa e marca para a próxima gravação. Chamar com [trava]. */
+    private fun por(m: LinkedHashMap<String, Guardado>, chave: String, g: Guardado) { m.remove(chave); m[chave] = g; sujos.add(chave) }
+
     private fun gravar(ctx: Context) = synchronized(trava) {
-        val m = mapa(ctx)
-        while (m.size > MAX_TITULOS) m.remove(m.keys.first())   // os mais antigos saem
+        val arq = arquivo(ctx)
         runCatching {
-            val o = JSONObject(); for ((k, g) in m) o.put(k, InfoExterna.guardadoParaJson(g))
-            val arq = File(PlayerArmazem.pasta(ctx), ARQUIVO)
-            val tmp = File(arq.path + ".tmp"); tmp.writeText(o.toString()); check(tmp.renameTo(arq))
+            // Trava entre processos (fcntl) durante reler + gravar: o outro processo espera a vez.
+            java.io.RandomAccessFile(File(arq.path + ".trava"), "rw").use { raf ->
+                raf.channel.lock().use {
+                    recarregarSeMudou(arq, forcar = true)
+                    val m = memoria!!
+                    while (m.size > MAX_TITULOS) m.remove(m.keys.first())   // os mais antigos saem
+                    val o = JSONObject(); for ((k, g) in m) o.put(k, InfoExterna.guardadoParaJson(g))
+                    val tmp = File.createTempFile("$ARQUIVO.", ".tmp", arq.parentFile)
+                    try { tmp.writeText(o.toString()); check(tmp.renameTo(arq)) } finally { tmp.delete() }
+                    sujos.clear()
+                    visto = identidade(arq)
+                }
+            }
         }.onFailure { Log.w(TAG, "não gravei: ${it.javaClass.simpleName}") }
     }
 
@@ -61,8 +108,8 @@ object InfoExternaCache {
 
     private fun mudar(ctx: Context, chave: String, f: (Guardado) -> Guardado): Guardado = synchronized(trava) {
         val m = mapa(ctx)
-        val novo = f(m.remove(chave) ?: Guardado())   // tira e põe de volta: vai para o fim (mais recente)
-        m[chave] = novo
+        val novo = f(m[chave] ?: Guardado())
+        por(m, chave, novo)   // tira e põe de volta: vai para o fim (mais recente)
         gravar(ctx)
         novo
     }
@@ -204,9 +251,9 @@ object InfoExternaCache {
             synchronized(trava) {
                 val m = mapa(app)
                 for ((k, id, _) in lote) {
-                    val g = m.remove(k) ?: Guardado(tmdb = id)
+                    val g = m[k] ?: Guardado(tmdb = id)
                     // Sem nota no MDBList: guarda vazio com a data, para não perguntar de novo por 30 dias.
-                    m[k] = g.copy(tmdb = g.tmdb ?: id, notas = notas[id] ?: InfoExterna.Notas(), notasEm = agora)
+                    por(m, k, g.copy(tmdb = g.tmdb ?: id, notas = notas[id] ?: InfoExterna.Notas(), notasEm = agora))
                     if (notas[id]?.vazia == false) n++
                 }
                 gravar(app)
@@ -247,8 +294,8 @@ object InfoExternaCache {
                     if (r.codigo in 200..299) InfoExterna.lerIdImdb(r.corpo) else null
                 }.getOrNull()
                 synchronized(trava) {
-                    val m = mapa(app); val g = m.remove(ch) ?: Guardado()
-                    m[ch] = g.copy(tmdb = g.tmdb ?: id, imdb = imdb ?: g.imdb.ifBlank { "-" })   // "-" = o TMDB não tem: não perguntar de novo
+                    val m = mapa(app); val g = m[ch] ?: Guardado()
+                    por(m, ch, g.copy(tmdb = g.tmdb ?: id, imdb = imdb ?: g.imdb.ifBlank { "-" }))   // "-" = o TMDB não tem: não perguntar de novo
                 }
                 Thread.sleep(120)   // ~8 por segundo: bem abaixo do limite do TMDB
             }
@@ -268,7 +315,7 @@ object InfoExternaCache {
         }.onFailure { Log.w(TAG, "IMDb: ${it.javaClass.simpleName}") }.getOrNull() ?: return -1
         synchronized(trava) {
             val m = mapa(app)
-            for ((imdb, chaves) in porImdb) for (ch in chaves) m[ch]?.let { m[ch] = it.copy(imdbNota = notas[imdb]) }
+            for ((imdb, chaves) in porImdb) for (ch in chaves) m[ch]?.let { m[ch] = it.copy(imdbNota = notas[imdb]); sujos.add(ch) }
             gravar(app)
         }
         p.edit().putLong("imdb_em", agora).apply()

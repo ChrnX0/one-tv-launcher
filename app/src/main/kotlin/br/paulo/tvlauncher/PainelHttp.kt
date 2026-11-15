@@ -241,7 +241,7 @@ object PainelHttp {
     }
 
     fun textoStatus(codigo: Int): String = when (codigo) {
-        200 -> "OK"; 204 -> "No Content"; 206 -> "Partial Content"; 304 -> "Not Modified"
+        200 -> "OK"; 204 -> "No Content"; 206 -> "Partial Content"; 302 -> "Found"; 304 -> "Not Modified"
         400 -> "Bad Request"; 401 -> "Unauthorized"; 403 -> "Forbidden"; 404 -> "Not Found"
         405 -> "Method Not Allowed"; 408 -> "Request Timeout"; 409 -> "Conflict"; 411 -> "Length Required"; 413 -> "Payload Too Large"
         421 -> "Misdirected Request"; 429 -> "Too Many Requests"; 431 -> "Request Header Fields Too Large"
