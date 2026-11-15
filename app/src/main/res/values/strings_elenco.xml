@@ -34,4 +34,11 @@
     <string name="legenda_auto_opcao">Download subtitles automatically</string>
     <string name="legenda_auto_ligada">Subtitles will be downloaded when missing</string>
     <string name="legenda_auto_desligada">Automatic subtitles turned off</string>
+    <string name="legenda_trad_rotulo">Automatic translation</string>
+    <string name="legenda_trad_traduzindo">No subtitles in your language: translating the English ones on the TV…</string>
+    <string name="legenda_trad_parcial">Subtitles translated on the TV (automatic translation). The rest keeps translating.</string>
+    <string name="legenda_trad_pronta">Subtitle translation finished</string>
+    <string name="legenda_trad_opcao">Translate subtitles on the TV when missing</string>
+    <string name="legenda_trad_ligada">Subtitles will be translated on the TV when missing</string>
+    <string name="legenda_trad_desligada">Subtitles will no longer be translated</string>
 </resources>

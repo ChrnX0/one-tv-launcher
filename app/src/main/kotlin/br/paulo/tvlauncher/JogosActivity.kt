@@ -52,6 +52,7 @@ class JogosActivity : Activity() {
     private var uso: Map<String, Long> = emptyMap()
     private var atual: JogosTv.App? = null               // o jogo do destaque
     private var esperandoPc = false
+    private var montado = false   // o 1º montar põe o foco no 1º jogo, nunca no Jogar que o Android focou sozinho
     private var focoPacote: String? = null   // ao redesenhar (mudou de grupo, voltou de um jogo), o foco volta no mesmo jogo
 
     /** O que a tela desenha de cada app: o banner oficial (logo) ou, sem banner, o ícone sobre a cor dele. */
@@ -221,7 +222,7 @@ class JogosActivity : Activity() {
             maxLines = 1; ellipsize = TextUtils.TruncateAt.END
         }
         heroTexto = Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO).apply {
-            textSize = 17f; setTextColor(Estilo.TEXTO_2); maxLines = 3; setLineSpacing(0f, 1.2f)
+            textSize = 17f; setTextColor(Estilo.TEXTO_2); maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setLineSpacing(0f, 1.2f)
         }
         texto.addView(heroGrupo)
         texto.addView(heroNome, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(6) })
@@ -240,7 +241,10 @@ class JogosActivity : Activity() {
         botoes.addView(botaoJogar)
         botoes.addView(botaoPc, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(Estilo.E2) })
         texto.addView(botoes, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(Estilo.E2) })
-        addView(texto, LinearLayout.LayoutParams(0, dp(204), 1f).apply { marginEnd = dp(Estilo.E3 * 2) })
+        // Altura mínima do banner, mas cresce com o texto: com "Tamanho do texto" Grande/Maior o botão Jogar saía cortado
+        // (visto na Sala, 15/11/2026).
+        texto.minimumHeight = dp(198)
+        addView(texto, LinearLayout.LayoutParams(0, -2, 1f).apply { marginEnd = dp(Estilo.E3 * 2) })
 
         // O banner oficial do app, grande, à direita (16:9, como a Google TV mostra).
         capa = FrameLayout(this@JogosActivity).apply {
@@ -317,7 +321,7 @@ class JogosActivity : Activity() {
 
     private fun montar() {
         val focoBotao = (currentFocus?.tag as? String)?.takeIf { it.startsWith("botao:") }
-        val heroComFoco = currentFocus === botaoJogar || currentFocus === botaoPc
+        val heroComFoco = montado && (currentFocus === botaoJogar || currentFocus === botaoPc)
         coluna.removeAllViews()
         var alvo: View? = null
         var primeiro: View? = null
@@ -382,6 +386,7 @@ class JogosActivity : Activity() {
             else -> (alvo ?: voltar ?: primeiro)?.requestFocus()
         }
         focoPacote = null
+        montado = true
         atualizarStatus()
     }
 

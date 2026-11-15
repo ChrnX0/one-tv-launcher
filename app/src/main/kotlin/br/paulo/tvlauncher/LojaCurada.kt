@@ -42,6 +42,9 @@ object LojaCurada {
         // Card Jogos (14/11/2026): jogar os jogos do PC na TV. Não verifiquei os nomes dos APKs da release (escolherApk
         // procura pela ABI no nome); a Play Store também tem o Moonlight (com.limelight).
         Item("moonlight", "Moonlight", "moonlight-stream/moonlight-android", "Jogar os jogos do PC na TV"),
+        // Xbox na TV (15/11/2026, dono: "xbox tb"): XStreaming, código aberto, joga do Xbox de casa e do Xbox Cloud.
+        // Só no GitHub (não está na Play Store). Pacote com.xstreaming (li no build.gradle do projeto).
+        Item("xstreaming", "XStreaming", "Geocld/XStreaming", "Jogar do Xbox e do Xbox Cloud na TV"),
     )
 
     /** Ideia 69: até quantos repositórios a pessoa pode somar à lista fixa. */

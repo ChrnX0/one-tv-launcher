@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Jogos: o botão Jogar não sai mais cortado com letra grande, a tela abre no primeiro jogo, os controles internos da TV não aparecem como controle de jogo, e o Xbox entrou (XBPlayer na Play Store e XStreaming na loja curada)</item>
         <item>Filmes e Séries com dados de fora: entre no Trakt, Simkl, MDBList e OpenSubtitles pelo código no celular (Configurações › TV e filmes › Serviços de filmes e séries, ou no painel web); a ficha ganha sinopse, elenco e sagas do TMDB, nota do IMDb e a data do próximo episódio</item>
         <item>Trakt e Simkl: sincronizar Interesses, já assistidos e onde parou (cada um ligado à parte, tudo começa desligado), e até 8 listas suas viram categorias em Filmes e Séries</item>
         <item>Ficha rápida com as notas (IMDb, Rotten Tomatoes) e, nas séries dos Interesses, a etiqueta “Novo ep. sex., 20/11”</item>

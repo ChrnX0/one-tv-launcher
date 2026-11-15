@@ -27,7 +27,7 @@ object Jogos {
         // Na nuvem: o jogo roda num servidor e a TV só recebe o vídeo.
         "com.nvidia.geforcenow" to Grupo.NUVEM,
         "com.microsoft.xboxone.smartglass" to Grupo.NUVEM,      // app Xbox (Cloud Gaming)
-        "com.gamepass" to Grupo.NUVEM,                          // Xbox Game Pass (não verifiquei)
+        "com.gamepass" to Grupo.NUVEM,                          // versões antigas do XStreaming (build.gradle dele)
         "com.boosteroid.streaming" to Grupo.NUVEM,              // Boosteroid (não verifiquei)
         "com.amazon.luna.android" to Grupo.NUVEM,               // Amazon Luna (não verifiquei)
         // Do PC e do console: o jogo roda num computador ou console da casa.
@@ -35,6 +35,8 @@ object Jogos {
         "com.limelight" to Grupo.PC,                            // Moonlight
         "com.playstation.remoteplay" to Grupo.PC,               // PS Remote Play (celular)
         "com.playstation.remoteplay.tv" to Grupo.PC,            // PS Remote Play da Google TV (visto na Sala, 14/11/2026)
+        "eu.hetko.xbplayer" to Grupo.PC,                        // XBPlayer: Xbox de casa e Xbox Cloud (Play Store, roda na TV)
+        "com.xstreaming" to Grupo.PC,                           // XStreaming: o mesmo, código aberto (GitHub)
         "tv.parsec.client" to Grupo.PC,                         // Parsec (não verifiquei)
         "com.metallic.chiaki" to Grupo.PC,                      // Chiaki (PlayStation, código aberto)
         // Retrô: emuladores.
@@ -59,6 +61,8 @@ object Jogos {
         Sugestao("com.nvidia.geforcenow", "GeForce NOW", Grupo.NUVEM),
         Sugestao("com.valvesoftware.steamlink", "Steam Link", Grupo.PC),
         Sugestao("com.limelight", "Moonlight", Grupo.PC),
+        Sugestao("com.playstation.remoteplay.tv", "PS Remote Play", Grupo.PC),
+        Sugestao("eu.hetko.xbplayer", "XBPlayer (Xbox)", Grupo.PC),
         Sugestao("com.retroarch", "RetroArch", Grupo.RETRO),
     )
 

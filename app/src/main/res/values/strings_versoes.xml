@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Games: the Play button no longer gets cut with large text, the screen opens on the first game, the TV\'s internal controllers no longer show as game controllers, and Xbox is in (XBPlayer on the Play Store and XStreaming in the curated store)</item>
         <item>Movies and Series with outside data: sign in to Trakt, Simkl, MDBList and OpenSubtitles with a code on your phone (Settings › TV and movies › Movie and series services, or in the web panel); the details page gets TMDB plot, cast and collections, the IMDb rating and the next episode date</item>
         <item>Trakt and Simkl: sync Interests, watched and where you stopped (each turned on separately, all start off), and up to 8 of your lists become categories in Movies and Series</item>
         <item>Quick details with the ratings (IMDb, Rotten Tomatoes) and, on series in Interests, the “New ep. Fri, 11/20” label</item>

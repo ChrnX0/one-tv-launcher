@@ -95,9 +95,9 @@ object LegendaBaixar {
         }
     }
 
-    fun buscar(ctx: Context, b: LegendaExterna.Busca): Result<List<LegendaExterna.Candidata>> = runCatching {
+    /** [idioma]: o da TV (ideia 25); a ideia 90 pede a inglesa para traduzir. */
+    fun buscar(ctx: Context, b: LegendaExterna.Busca, idioma: String = IdiomaPlayer.idiomaDaTv()): Result<List<LegendaExterna.Candidata>> = runCatching {
         val conta = contaEmUso(ctx) ?: error(ctx.getString(R.string.legenda_sem_conta))
-        val idioma = IdiomaPlayer.idiomaDaTv()   // ideia 25: legenda no idioma da TV
         val r = pedir(LegendaExterna.urlBusca(b, idioma), conta)
         if (r.codigo !in 200..299) error(LegendaExterna.lerErro(r.corpo) ?: "erro ${r.codigo}")
         LegendaExterna.lerBusca(r.corpo, idioma)
@@ -150,6 +150,9 @@ object LegendaBaixar {
         limpar(ctx)
         return destino
     }
+
+    /** Ideia 90: a tradução feita na TV vira a legenda deste vídeo (e a "original" do ajuste de atraso). */
+    fun gravarTraduzida(ctx: Context, chaveVideo: String, texto: String): File = gravar(ctx, chaveVideo, texto, original = true)
 
     /** Refaz a legenda que toca com [ms] de atraso (positivo = a fala aparece depois) em relação à original. */
     fun ajustar(ctx: Context, chaveVideo: String, ms: Long): File? = runCatching {
