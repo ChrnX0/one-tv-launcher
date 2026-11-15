@@ -59,6 +59,7 @@ declare -A FONTES=(
   [PausaAoVivoTest]="PausaAoVivo"
   [PerfilDadosTest]="PerfilDados EnsaioRestauracao CofreBackup"
   [PerfilCriancaTest]="PerfilCrianca"
+  [AutoDesligarRegraTest]="AutoDesligarRegra"
 )
 
 falhou=0
