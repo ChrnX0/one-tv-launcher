@@ -358,7 +358,23 @@ class ProtetorTela : DreamService() {
 
         fun fecharSeAberto() {
             val p = atual?.get() ?: return
+            manterAcordada(p.applicationContext)
             android.os.Handler(android.os.Looper.getMainLooper()).post { try { p.fechar() } catch (_: Exception) {} }
+        }
+
+        /**
+         * Acordar só com wakeUp não conta como uso da TV: se ela já estava parada há mais que o tempo do protetor, o
+         * Android volta a sonhar na mesma hora (teste na Sala, 15/11/2026: a confirmação abriu atrás de um protetor
+         * novo). Uma trava de tela por 20 s segura a TV acordada e, ao soltar, conta como uso (ON_AFTER_RELEASE): o
+         * protetor só volta depois do tempo normal.
+         */
+        @Suppress("DEPRECATION")
+        private fun manterAcordada(ctx: android.content.Context) {
+            try {
+                ctx.getSystemService(android.os.PowerManager::class.java)
+                    ?.newWakeLock(android.os.PowerManager.SCREEN_BRIGHT_WAKE_LOCK or android.os.PowerManager.ON_AFTER_RELEASE,
+                        "onetv:sai-do-protetor")?.acquire(20_000L)
+            } catch (_: Exception) {}
         }
 
         private val TECLAS_MUSICA = setOf(android.view.KeyEvent.KEYCODE_DPAD_CENTER, android.view.KeyEvent.KEYCODE_ENTER,
