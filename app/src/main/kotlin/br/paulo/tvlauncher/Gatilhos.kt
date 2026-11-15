@@ -99,7 +99,11 @@ object Gatilhos {
         try {
             // SCREEN_ON é transmissão protegida (só o sistema envia); NOT_EXPORTED deixa isso explícito onde existe.
             val tela = object : BroadcastReceiver() {
-                override fun onReceive(c: Context, i: Intent) { if (i.action == Intent.ACTION_SCREEN_ON) disparar(app, Evento.TV_LIGOU) }
+                override fun onReceive(c: Context, i: Intent) {
+                    if (i.action != Intent.ACTION_SCREEN_ON) return
+                    disparar(app, Evento.TV_LIGOU)
+                    CuidarDeLongeTv.tvLigou(app)   // Cuidar de longe: "ligou hoje" (79) e lembrete que esperava a tela (78)
+                }
             }
             if (Build.VERSION.SDK_INT >= 33) app.registerReceiver(tela, IntentFilter(Intent.ACTION_SCREEN_ON), Context.RECEIVER_NOT_EXPORTED)
             else app.registerReceiver(tela, IntentFilter(Intent.ACTION_SCREEN_ON))

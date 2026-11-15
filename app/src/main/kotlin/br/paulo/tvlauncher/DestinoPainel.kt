@@ -11,6 +11,7 @@ enum class DestinoPainel(val aba: String, val cartao: String = "") {
     CENAS("extras", "cartaoCenas"),
     TIME("extras", "cartaoTime"),
     MURAL("extras", "cartaoMural"),
+    CUIDAR("extras", "cartaoCuidar"),   // Cuidar de longe (15/11/2026): lembretes e quem recebe
     FOTOS("fotos"),
     ROTEADOR("roteador");
 

@@ -37,6 +37,8 @@ const ABA_DO_AVISO = {
   LEMBRETE: 'controle', AJUDA: 'controle', PRESENCA: 'controle', TV_MADRUGADA: 'controle', ALARME_PERDIDO: 'controle',
   CHUVA: 'controle', ERRO_NOVO: 'saude', DESEMPENHO: 'saude', ARMAZENAMENTO: 'saude', INTERNET_VOLTOU: 'rede',
   VERSAO_NOVA: 'inicio', DIGITAR: 'controle',   // ideia 57: "Digitar na TV" abre o Controle
+  // Cuidar de longe: o pedido de ajuda (AJUDA, acima) abre o Controle com a foto; os outros, o cartão de configuração.
+  LEMBRETE_CUIDAR: 'extras', TV_NAO_LIGOU: 'controle', CUIDAR: 'extras',
 };
 
 // A TV cifra o aviso (Web Push, RFC 8291) com a chave deste navegador; o serviço de push do Google só vê bytes.
