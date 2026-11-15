@@ -57,6 +57,29 @@ JMuxer (vídeo ao vivo no painel do celular), de Samir Das
   https://github.com/samirkumardas/jmuxer
   Licença MIT. Copyright (c) 2018 Samir Das.
 
+NextLib media3ext (player completo: FFmpeg + libass para o Media3), de Anil Beesetti
+  https://github.com/anilbeesetti/nextlib
+  Licença GPL-3.0. Traz bibliotecas nativas, cada uma com a sua licença:
+    FFmpeg (https://ffmpeg.org/legal.html): LGPL-3.0 nesta compilação (--enable-version3, sem --enable-gpl).
+    dav1d, da VideoLAN (https://code.videolan.org/videolan/dav1d): BSD-2-Clause.
+    libass (https://github.com/libass/libass): ISC.
+    FreeType (https://freetype.org/license.html): FreeType License (FTL).
+    FriBidi (https://github.com/fribidi/fribidi): LGPL-2.1-or-later.
+    HarfBuzz (https://github.com/harfbuzz/harfbuzz): licença "Old MIT".
+
+ML Kit Translation (tradução de legendas na TV), do Google
+  https://developers.google.com/ml-kit/terms
+  Termos de serviço do ML Kit e das APIs do Google. O texto é traduzido na própria TV; o ML Kit envia ao Google
+  métricas de desempenho e uso, não o texto.
+
+JSch (pastas por SFTP), de Atsuhiko Yamanaka/JCraft e mantido por Matthias Wiedemann
+  https://github.com/mwiede/jsch
+  Licença estilo BSD (LICENSE.txt do projeto).
+
+Apache Commons Net (FTP e FTPS), da Apache Software Foundation
+  https://commons.apache.org/proper/commons-net/
+  Licença Apache-2.0.
+
 — Fontes dos temas —
 
 Manrope, de Mikhail Sharanda (telas da TV e painel web)
@@ -83,5 +106,13 @@ Previsão do tempo: Open-Meteo (https://open-meteo.com), dados sob CC BY 4.0.
 Observação do aeroporto (METAR): Aviation Weather Center, NOAA (domínio público dos EUA).
 Obras de arte dos fundos: The Metropolitan Museum of Art, Open Access (CC0).
 Localização aproximada pelo IP: ipwho.is.
+Fichas de filmes e séries: TMDB (https://www.themoviedb.org). This product uses the TMDB API but is not endorsed
+  or certified by TMDB. "Onde assistir": dados da JustWatch (https://www.justwatch.com), via TMDB.
+Notas do IMDb: IMDb Non-Commercial Datasets (https://developer.imdb.com/non-commercial-datasets/), uso pessoal.
+One TV Launcher uses Trakt but is not endorsed or certified by Trakt (https://trakt.tv). Simkl: https://simkl.com.
+Legendas: OpenSubtitles.com (https://www.opensubtitles.com).
+Rádios: Radio Browser (https://www.radio-browser.info).
+Endereço pelo nome: dados © colaboradores do OpenStreetMap (https://www.openstreetmap.org/copyright), pelo Nominatim.
+Endereço pelo CEP: ViaCEP (https://viacep.com.br).
 
 Os sons do despertador foram gerados pelo próprio projeto.
