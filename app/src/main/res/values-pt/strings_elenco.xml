@@ -32,4 +32,11 @@
     <string name="legenda_auto_opcao">Baixar legenda automaticamente</string>
     <string name="legenda_auto_ligada">A legenda será baixada quando faltar</string>
     <string name="legenda_auto_desligada">Legenda automática desligada</string>
+    <string name="legenda_trad_rotulo">Tradução automática</string>
+    <string name="legenda_trad_traduzindo">Sem legenda em português: traduzindo a inglesa na TV…</string>
+    <string name="legenda_trad_parcial">Legenda traduzida na TV (tradução automática). O resto continua traduzindo.</string>
+    <string name="legenda_trad_pronta">Tradução da legenda terminada</string>
+    <string name="legenda_trad_opcao">Traduzir a legenda na TV quando faltar</string>
+    <string name="legenda_trad_ligada">A legenda será traduzida na TV quando faltar</string>
+    <string name="legenda_trad_desligada">A legenda não será mais traduzida</string>
 </resources>
