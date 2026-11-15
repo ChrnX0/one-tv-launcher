@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  *
  *  - Para no horário [fimMs], quando [parar] vira true, quando não cabem mais 10 min no destino, ou quando a conexão
  *    cai [GravacaoRegras.TENTATIVAS] vezes seguidas. O que já foi escrito fica (TS tolera corte no meio).
- *  - Conexão que cai: espera 2, 4, 8 s e pede o canal de novo, no mesmo pedaço (o buraco é só o tempo sem sinal).
+ *  - Conexão que cai: espera 2, 4, 8, 16, 30 s... ([GravacaoRegras.espera]) e pede o canal de novo, no mesmo pedaço (o buraco é só o tempo sem sinal).
  *  - Erro ao escrever (pendrive arrancado, disco cheio, NAS fora): para na hora, não tenta de novo.
  *  - [aoGravar] recebe cada trecho gravado: é por ali que o player assiste o mesmo canal sem 2ª conexão.
  */
@@ -50,7 +50,7 @@ class Gravador(
             if (relogio() >= fimMs) return fim(Motivo.FIM)
             val canal = try { abrirCanal() } catch (e: Exception) {
                 if (++falhas >= GravacaoRegras.TENTATIVAS) return fim(Motivo.CONEXAO, e)
-                esperar(2000L shl (falhas - 1)); continue
+                esperar(GravacaoRegras.espera(falhas)); continue
             }
             canal.use { ent ->
                 while (true) {
@@ -60,7 +60,7 @@ class Gravador(
                     val n = try { ent.read(buf) } catch (e: IOException) { -2 }
                     if (n < 0) {   // fim do fluxo (-1) ou erro de rede (-2): reconectar
                         if (++falhas >= GravacaoRegras.TENTATIVAS) return fim(Motivo.CONEXAO)
-                        esperar(2000L shl (falhas - 1))
+                        esperar(GravacaoRegras.espera(falhas))
                         break
                     }
                     if (n == 0) continue

@@ -118,7 +118,7 @@ class GravacaoTest {
         assertArrayEquals(junto, vistos.toByteArray())   // o player recebe exatamente o que foi gravado
     }
 
-    @Test fun reconectaQuandoACaiEDesisteDepoisDeTres() {
+    @Test fun reconectaQuandoACaiEDesisteDepoisDeOito() {
         val r = Relogio(); var aberturas = 0; val esperas = ArrayList<Long>()
         val g = Gravador({ aberturas++; canal(r, ByteArray(3000), min, falharEm = if (aberturas == 1) 1000 else -1) },
             { ByteArrayOutputStream() }, { Long.MAX_VALUE }, { r.agora }, fimMs = h, esperar = { esperas += it })
@@ -130,7 +130,7 @@ class GravacaoTest {
         val semCanal = Gravador({ throw IOException("fora do ar") }, { ByteArrayOutputStream() }, { Long.MAX_VALUE }, { r.agora },
             fimMs = Long.MAX_VALUE, esperar = { esperas += it }).rodar()
         assertEquals(Gravador.Motivo.CONEXAO, semCanal.motivo)
-        assertEquals(listOf(2000L, 4000L), esperas.takeLast(2))
+        assertEquals(listOf(2000L, 4000L, 8000L, 16000L, 30000L, 30000L, 30000L), esperas.takeLast(7))
     }
 
     @Test fun paraSemEspacoEComDestinoQuebrado() {
