@@ -862,8 +862,8 @@
     <string name="vod_atraso_audio_titulo">Audio delay (%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">None</string>
-    <string name="vod_atraso_audio_mais">Sound late, picture waits %1$d ms</string>
-    <string name="vod_atraso_audio_menos">Sound early, picture ahead %1$d ms</string>
+    <string name="vod_atraso_audio_mais">Sound arrives %1$d ms late</string>
+    <string name="vod_atraso_audio_menos">Sound arrives %1$d ms early</string>
     <string name="vod_info_opcao">Technical info</string>
     <string name="info_video">Video</string>
     <string name="info_audio">Audio</string>
