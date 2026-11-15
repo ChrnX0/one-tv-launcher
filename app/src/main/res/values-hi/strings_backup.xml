@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_backup.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="bkn_titulo">अपने-आप बैकअप</string>
+    <string name="bkn_explica">हर रात, जब TV निष्क्रिय हो, आपके पासवर्ड से लॉक पूरा बैकअप सेव करता है। आख़िरी 7 रखे जाते हैं। पासवर्ड लिख लें: इसके बिना बैकअप नहीं खुल सकता।</string>
+    <string name="bkn_ligado">चालू</string>
+    <string name="bkn_desligado">बंद</string>
+    <string name="bkn_sem_senha">बंद · पहले बैकअप पासवर्ड सेट करें</string>
+    <string name="bkn_senha">बैकअप पासवर्ड</string>
+    <string name="bkn_senha_ok">सेट · OK से बदलें</string>
+    <string name="bkn_senha_falta">सेट नहीं · OK से सेट करें</string>
+    <string name="bkn_senha_nova">बैकअप पासवर्ड (8 या ज़्यादा अक्षर)</string>
+    <string name="bkn_senha_repetir">पासवर्ड फिर टाइप करें</string>
+    <string name="bkn_senha_curta">पासवर्ड में 8 से 128 अक्षर चाहिए।</string>
+    <string name="bkn_senha_diferente">दोनों पासवर्ड मेल नहीं खाए।</string>
+    <string name="bkn_senha_gravada">पासवर्ड सेव हुआ। इसे कहीं सुरक्षित रखें।</string>
+    <string name="bkn_senha_erro">पासवर्ड सेव नहीं हो सका।</string>
+    <string name="bkn_horario">समय</string>
+    <string name="bkn_extra">अतिरिक्त कॉपी</string>
+    <string name="bkn_destino_tv">सिर्फ़ TV</string>
+    <string name="bkn_destino_pendrive">USB ड्राइव</string>
+    <string name="bkn_destino_nas">NAS (%1$s)</string>
+    <string name="bkn_agora">अभी बैकअप लें</string>
+    <string name="bkn_ultimo">आख़िरी</string>
+    <string name="bkn_nunca">कभी नहीं</string>
+    <string name="bkn_pin">बैकअप बदलने के लिए PIN</string>
+</resources>

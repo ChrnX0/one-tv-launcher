@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_acessivel.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acess_legenda_fundo">काली पृष्ठभूमि वाले सबटाइटल</string>
+    <string name="acess_legenda_amarela">पीले सबटाइटल</string>
+    <string name="acess_volume">चैनलों में बराबर वॉल्यूम</string>
+    <string name="acess_voz">साफ़ आवाज़ें</string>
+    <string name="acess_volume_ligado">बराबर वॉल्यूम चालू: धीमे चैनल और फ़िल्में तेज़ होती हैं</string>
+    <string name="acess_volume_desligado">बराबर वॉल्यूम बंद</string>
+    <string name="acess_voz_ligado">साफ़ आवाज़ें चालू</string>
+    <string name="acess_voz_desligado">साफ़ आवाज़ें बंद</string>
+    <string name="acess_config_titulo">आवाज़ और सबटाइटल</string>
+    <string name="acess_config_texto">कम देखने या सुनने वालों के लिए। प्लेयर के ▼ मेनू में भी।</string>
+</resources>

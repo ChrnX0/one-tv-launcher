@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_coluna.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="coluna_listas">सूचियाँ</string>
+    <string name="coluna_novos">+%1$s</string>
+    <string name="coluna_filtro">फ़िल्टर</string>
+    <string name="coluna_esportes">खेल</string>
+    <string name="coluna_guia">गाइड</string>
+    <string name="coluna_filtro_titulo">फ़िल्टर</string>
+    <string name="coluna_filtro_ordem">क्रम: %1$s</string>
+    <string name="coluna_filtro_combinado">शैली, दौर, रेटिंग, न देखी…</string>
+    <string name="coluna_filtro_combinado_ativo">फ़िल्टर: %1$s</string>
+    <string name="coluna_filtro_limpar">फ़िल्टर साफ़ करें</string>
+    <string name="coluna_filtro_sortear">कुछ भी चुनें</string>
+    <string name="coluna_filtro_ocultas_mostrar">छिपी श्रेणियाँ दिखाएँ (PIN)</string>
+    <string name="coluna_filtro_ocultas_esconder">छिपी श्रेणियाँ फिर छिपाएँ</string>
+    <string name="coluna_menu_assistido">देखा हुआ चिह्नित करें</string>
+    <string name="coluna_menu_nao_assistido">न देखा चिह्नित करें</string>
+    <string name="coluna_menu_tirar_continuar">जारी रखें से हटाएँ</string>
+    <string name="coluna_menu_por_interesse">देखने की सूची में जोड़ें</string>
+    <string name="coluna_menu_tirar_interesse">देखने की सूची से हटाएँ</string>
+    <string name="coluna_marcado_assistido">%1$s देखा हुआ चिह्नित</string>
+    <string name="coluna_marcado_nao_assistido">%1$s न देखा चिह्नित</string>
+    <string name="coluna_tirado_continuar">%1$s जारी रखें से हटाया</string>
+    <string name="coluna_etiqueta_concluida">पूरी हुई</string>
+    <string name="coluna_etiqueta_nova_temporada">नया सीज़न</string>
+    <string name="coluna_etiqueta_novos">नए एपिसोड</string>
+    <string name="coluna_letra_titulo">अक्षर पर जाएँ</string>
+    <string name="coluna_letra">किसी अक्षर पर जाएँ</string>
+    <string name="coluna_ao_vivo">लाइव</string>
+    <string name="coluna_ao_vivo_primeiro">पहले लाइव</string>
+    <string name="coluna_tv_titulo">TV</string>
+    <string name="coluna_gravacoes">रिकॉर्डिंग</string>
+    <plurals name="coluna_etiqueta_n_novos">
+        <item quantity="one">%d नया एपिसोड</item>
+        <item quantity="other">%d नए एपिसोड</item>
+    </plurals>
+</resources>

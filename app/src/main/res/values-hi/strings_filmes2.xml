@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_filmes2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="filmes_filtro">फ़िल्टर</string>
+    <string name="filmes_filtro_titulo">फ़िल्में फ़िल्टर करें</string>
+    <string name="filmes_filtro_cabecalho">%1$s · फ़िल्टर: %2$s</string>
+    <string name="filmes_filtro_genero">शैली: %1$s</string>
+    <string name="filmes_filtro_epoca">दौर: %1$s</string>
+    <string name="filmes_filtro_nota">न्यूनतम रेटिंग: %1$s</string>
+    <string name="filmes_filtro_nao_vistos">सिर्फ़ न देखी: %1$s</string>
+    <string name="filmes_filtro_limpar">फ़िल्टर साफ़ करें</string>
+    <string name="filmes_filtro_qualquer">कोई भी</string>
+    <string name="filmes_filtro_sim">हाँ</string>
+    <string name="filmes_filtro_nao">नहीं</string>
+    <string name="filmes_filtro_decada">%1$d का दशक</string>
+    <string name="filmes_filtro_nota_min">%1$d+</string>
+    <string name="filmes_filtro_nao_vistos_curto">न देखी</string>
+    <string name="filmes_filtro_sem_genero">इस सूची की कोई श्रेणी शैली का नाम नहीं देती</string>
+    <string name="filmes_filtro_vazio">इस श्रेणी में कोई फ़िल्म इस फ़िल्टर से मेल नहीं खाती</string>
+    <string name="filmes_sorteio">कुछ भी चुनें</string>
+    <string name="filmes_sorteio_vazio">यहाँ से चुनने को कोई फ़िल्म नहीं</string>
+    <string name="filmes_colecao">इस फ़िल्म का संग्रह</string>
+    <string name="filmes_colecao_cat">संग्रह: %1$s</string>
+    <string name="genero_acao">एक्शन</string>
+    <string name="genero_aventura">एडवेंचर</string>
+    <string name="genero_comedia">कॉमेडी</string>
+    <string name="genero_drama">ड्रामा</string>
+    <string name="genero_terror">हॉरर</string>
+    <string name="genero_suspense">थ्रिलर</string>
+    <string name="genero_romance">रोमांस</string>
+    <string name="genero_ficcao">साइंस फ़िक्शन</string>
+    <string name="genero_fantasia">फ़ैंटेसी</string>
+    <string name="genero_animacao">एनिमेशन</string>
+    <string name="genero_infantil">बच्चे और परिवार</string>
+    <string name="genero_documentario">डॉक्यूमेंट्री</string>
+    <string name="genero_crime">अपराध</string>
+    <string name="genero_guerra">युद्ध</string>
+    <string name="genero_faroeste">वेस्टर्न</string>
+    <string name="genero_musical">म्यूज़िकल</string>
+</resources>

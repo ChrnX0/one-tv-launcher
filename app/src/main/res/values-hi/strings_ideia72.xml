@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_ideia72.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l72_abrir">%1$s खोलें</string>
+    <string name="l72_tela_previsao">मौसम का पूर्वानुमान</string>
+    <string name="l72_tela_agenda">कैलेंडर</string>
+    <string name="l72_tela_despertador">अलार्म घड़ी</string>
+    <string name="l72_tela_configuracoes">लॉन्चर सेटिंग्स</string>
+    <string name="l72_tela_inicio">होम स्क्रीन</string>
+    <string name="l72_despertador">%1$s पर अलार्म बनाएँ (%2$s)</string>
+    <string name="l72_dias_uma">एक बार</string>
+    <string name="l72_dias_todos">हर दिन</string>
+    <string name="l72_dias_uteis">सोम से शुक्र</string>
+    <string name="l72_dias_fds">सप्ताहांत</string>
+    <string name="l72_dias_nomes">रवि,सोम,मंगल,बुध,गुरु,शुक्र,शनि</string>
+    <string name="l72_vol_subir">वॉल्यूम बढ़ाएँ</string>
+    <string name="l72_vol_descer">वॉल्यूम घटाएँ</string>
+    <string name="l72_vol_mudo">म्यूट/अनम्यूट</string>
+    <string name="l72_vezes">(%1$d बार)</string>
+    <string name="l72_midia_pausar">रोकें</string>
+    <string name="l72_midia_tocar">फिर चलाएँ</string>
+    <string name="l72_midia_proxima">अगला</string>
+    <string name="l72_midia_anterior">पिछला</string>
+    <string name="l72_visita_liga">मेहमान मोड चालू करें</string>
+    <string name="l72_visita_desliga">मेहमान मोड बंद करें</string>
+    <string name="l72_canal_pedido">चैनल %1$s पर जाएँ</string>
+    <string name="l72_canal">चैनल %1$d (%2$s) पर जाएँ</string>
+    <string name="l72_o_que_passa">देखें %1$s पर क्या आ रहा है</string>
+    <string name="l72_casa_ligar">चालू करें</string>
+    <string name="l72_casa_desligar">बंद करें</string>
+    <string name="l72_casa_alternar">बदलें</string>
+    <string name="l72_casa">%1$s %2$s (घर)</string>
+    <string name="l72_guia_vazio">%1$s: गाइड में कुछ नहीं।</string>
+    <string name="l72_guia_agora">%1$s अभी: %2$s (%3$s तक)</string>
+    <string name="l72_guia_nada_agora">%1$s: गाइड में अभी कुछ नहीं</string>
+    <string name="l72_guia_depois">अगला: %1$s (%2$s)</string>
+    <string name="l75_pilula">अभी चल रहा: %1$s, %2$s। OK रोकता या जारी रखता है; ऐप खोलने के लिए OK दबाए रखें</string>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_saude.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="saude_titulo">रिमोट एक्सेस रुका</string>
+    <string name="saude_texto_shell">TV की खुद तक पहुँच %1$d मिनट पहले टूट गई (पैनल, Claude और अपने-आप सुधार रुकते हैं)। फिर पेयर करें दबाएँ या सेटिंग्स › सिस्टम › बिना PC के पेयर करें पर जाएँ।</string>
+    <string name="saude_texto_tunel">इंटरनेट पर Claude ऑफ़लाइन है। क्या कमी है देखने के लिए कनेक्ट करें दबाएँ, या सेटिंग्स › रिमोट एक्सेस पर जाएँ।</string>
+    <string name="saude_parear">फिर पेयर करें</string>
+    <string name="saude_conectar">कनेक्ट करें</string>
+    <string name="saude_depois">अभी नहीं</string>
+    <string name="saude_acao_shell">फिर पेयर करें: सेटिंग्स › सिस्टम › बिना PC के पेयर करें</string>
+    <string name="saude_acao_tunel">फिर कनेक्ट करें: सेटिंग्स › रिमोट एक्सेस › कनेक्ट करें</string>
+    <string name="mnt_titulo">रात का रखरखाव</string>
+    <string name="mnt_consertei">ठीक किया:</string>
+    <string name="mnt_falhou">ठीक नहीं हो सका:</string>
+    <string name="mnt_acesso">रिमोट एक्सेस</string>
+    <string name="mnt_permissoes">अनुमतियाँ</string>
+    <string name="mnt_agendamentos">अलार्म और रूटीन</string>
+    <string name="mnt_espaco">ख़ाली जगह</string>
+</resources>

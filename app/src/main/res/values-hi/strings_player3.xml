@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_player3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="abertura_marcar_inicio">इंट्रो की शुरुआत यहाँ चिह्नित करें (%1$s)</string>
+    <string name="abertura_marcar_fim">इंट्रो का अंत यहाँ चिह्नित करें (%1$s)</string>
+    <string name="abertura_apagar">इंट्रो चिह्न हटाएँ</string>
+    <string name="abertura_inicio_marcado">इंट्रो की शुरुआत %1$s पर चिह्नित। अब ▼ मेनू में अंत चिह्नित करें</string>
+    <string name="abertura_salva">इंट्रो सेव: %1$s से %2$s। अगले एपिसोड इसे छोड़ने का विकल्प देंगे</string>
+    <string name="abertura_falta_inicio">पहले इंट्रो की शुरुआत चिह्नित करें</string>
+    <string name="abertura_invalida">यह इंट्रो नहीं लगता: यह 10 s से 5 मिनट का हो और पहले 15 मिनट में शुरू हो</string>
+    <string name="abertura_apagada">इंट्रो चिह्न हटाया</string>
+    <string name="abertura_pular">इंट्रो छोड़ें · OK</string>
+</resources>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_ideias_51a76.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l51_ensaio_ok">रीस्टोर जाँच पास</string>
+    <string name="l51_ensaio_falhou">सेव कॉपी रीस्टोर नहीं होती (%1$s)</string>
+    <string name="l51_wifi_titulo">मेहमान Wi-Fi</string>
+    <string name="l51_wifi_nao">सेट नहीं: एक बार टाइप करें और मेहमान QR स्कैन करें</string>
+    <string name="l51_wifi_dica">अपने राउटर का मेहमान नेटवर्क इस्तेमाल करें: कमरे में कोई भी स्क्रीन पर पासवर्ड पढ़ सकता है।</string>
+    <string name="l51_wifi_rede">नेटवर्क का नाम</string>
+    <string name="l51_wifi_senha">पासवर्ड</string>
+    <string name="l51_wifi_invalido">नाम 32 अक्षरों तक; पासवर्ड ख़ाली (खुला नेटवर्क) या 8 से 63 अक्षर।</string>
+    <string name="l51_wifi_qr_titulo">मेहमान Wi-Fi का QR दिखाएँ</string>
+    <string name="l51_uso_titulo">क्या इस्तेमाल होता है</string>
+    <string name="l51_uso_det">उपयोग के अनुसार स्क्रीन और सेटिंग्स, सिर्फ़ इस TV पर गिने (कुछ बाहर नहीं जाता)</string>
+    <string name="l51_uso_vazio">अभी कुछ गिना नहीं। कुछ दिनों बाद आएँ।</string>
+    <string name="l51_uso_tela">स्क्रीन</string>
+    <string name="l51_uso_opcao">सेटिंग</string>
+    <string name="l51_uso_linha">%1$s (%2$s): %3$s, %4$s</string>
+    <string name="l51_uso_hoje">आख़िरी आज</string>
+    <string name="l51_uso_ontem">आख़िरी कल</string>
+    <string name="l51_uso_dias">आख़िरी %d दिन पहले</string>
+    <string name="l51_tela_Main">होम स्क्रीन</string>
+    <string name="l51_tela_Dream">स्क्रीन सेवर</string>
+    <string name="l51_tela_Filmes">फ़िल्में</string>
+    <string name="l51_tela_Series">शो</string>
+    <string name="l51_tela_Jogos">गेम</string>
+    <string name="l51_tela_Player">लाइव TV और वीडियो</string>
+    <string name="l51_tela_PainelRapido">क्विक पैनल</string>
+    <string name="l51_tela_Vod">प्लेलिस्ट कैटलॉग</string>
+    <string name="l51_tela_Previsao">मौसम का पूर्वानुमान</string>
+    <string name="l51_tela_Elenco">कलाकार</string>
+    <string name="l51_tela_ConfigLauncher">सेटिंग्स</string>
+    <string name="l51_tela_MidiaRede">नेटवर्क पर</string>
+    <string name="l51_tela_Calendario">कैलेंडर</string>
+    <string name="l51_tela_Gravacoes">रिकॉर्डिंग</string>
+    <string name="l51_tela_Busca">खोज</string>
+    <string name="l51_tela_Casa">मेरा घर</string>
+    <string name="l51_tela_AlarmeTocando">अलार्म बज रहा</string>
+    <string name="l51_tela_Radio">रेडियो</string>
+    <string name="l51_tela_Diagnostico">जाँच</string>
+    <string name="l51_uso_zerar">रीसेट करें</string>
+    <string name="l51_digitar_titulo">TV पर टाइप करें</string>
+    <string name="l51_digitar_texto">%1$s में एक टेक्स्ट बॉक्स खुला है। यहाँ से टाइप करने के लिए टैप करें।</string>
+    <string name="casa_temp_ajuste">%1$s · ◀ ▶</string>
+    <string name="casa_ambiente">कमरा %1$s</string>
+    <string name="casa_movimento">हलचल</string>
+    <string name="casa_sem_movimento">कोई हलचल नहीं</string>
+    <string name="casa_molhado">गीला</string>
+    <string name="casa_seco">सूखा</string>
+    <string name="casa_fumaca">धुआँ!</string>
+    <string name="casa_sem_fumaca">कोई धुआँ नहीं</string>
+    <string name="casa_dica_temp">तापमान</string>
+    <string name="casa_camera_abrindo">कैमरा खुल रहा है…</string>
+    <string name="casa_camera_ver">TV पर दिखाएँ</string>
+    <plurals name="l51_uso_vezes">
+        <item quantity="one">%d बार</item>
+        <item quantity="other">%d बार</item>
+    </plurals>
+</resources>

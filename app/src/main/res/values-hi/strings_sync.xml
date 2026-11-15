@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_sync.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="sync_sub">%1$s के रूप में साइन इन। TV आपके फ़ोन के साथ क्या सिंक रखता है।</string>
+    <string name="sync_sub_mdblist">%1$s के रूप में साइन इन। आपकी MDBList सूचियाँ कैटलॉग में दिख सकती हैं।</string>
+    <string name="sync_ultima">आख़िरी सिंक: %1$s</string>
+    <string name="sync_nunca">अभी सिंक नहीं हुआ</string>
+    <string name="sync_interesses">देखने की सूची ⇄ Watchlist</string>
+    <string name="sync_interesses_simkl">देखने की सूची ⇄ Plan to watch</string>
+    <string name="sync_interesses_det">जो आप यहाँ चिह्नित करते हैं वह वहाँ दिखता है, और उल्टा भी</string>
+    <string name="sync_assistidos">देखी गई ← इतिहास</string>
+    <string name="sync_assistidos_det">फ़ोन या कहीं और जो देख चुके हैं वह लाता है</string>
+    <string name="sync_continuar">जारी रखें ⇄ जहाँ रुके थे</string>
+    <string name="sync_continuar_det">फ़ोन पर रोकें, TV पर उसी जगह से जारी रखें</string>
+    <string name="sync_contar">%1$s को बताएँ कि मैं यहाँ क्या देखता हूँ</string>
+    <string name="sync_contar_det">चलते समय “अभी देख रहे” और “देखा” भेजता है। मेहमान मोड या बच्चे की प्रोफ़ाइल में कभी नहीं।</string>
+    <string name="sync_listas">कैटलॉग में सूचियाँ</string>
+    <string name="sync_listas_nenhuma">कोई नहीं चुनी</string>
+    <string name="sync_listas_n">%1$d चुनी: %2$s</string>
+    <string name="sync_listas_sub">ये सूचियाँ में, सभी के नीचे दिखती हैं, सिर्फ़ आपकी सूची वाले शीर्षकों के साथ। %1$d तक।</string>
+    <string name="sync_listas_carregando">आपकी सूचियाँ लोड हो रही हैं…</string>
+    <string name="sync_listas_vazio">कोई सूची नहीं मिली। Trakt या MDBList पर कोई सूची बनाएँ या पसंद करें और यहाँ लौटें।</string>
+    <string name="sync_listas_cheio">%1$d सूचियों तक</string>
+    <string name="sync_lista_itens">%1$d शीर्षक</string>
+    <string name="sync_agora">अभी सिंक करें</string>
+    <string name="sync_agora_det">फ़िल्में या सीरीज़ खोलने पर यह अपने-आप भी होता है</string>
+    <string name="sync_rodando">सिंक हो रहा है…</string>
+    <string name="sync_feito">सिंक हो गया</string>
+    <string name="sync_sair">%1$s से साइन आउट करें</string>
+    <string name="sync_bloqueado">रुका: मेहमान मोड या बच्चे की प्रोफ़ाइल चालू है।</string>
+    <string name="sync_outro_perfil">रुका: सिंक दूसरी प्रोफ़ाइल का है।</string>
+    <string name="sync_trakt_cheia">आपकी Trakt सूची भरी है (मुफ़्त खाते में 100)। लॉन्चर सिर्फ़ TV पर जारी रखता है।</string>
+    <string name="sync_ligado">चालू</string>
+    <string name="sync_desligado">बंद</string>
+    <string name="sync_fonte_trakt">Trakt (trakt.tv) से डेटा</string>
+    <string name="sync_fonte_simkl">Simkl (simkl.com) से डेटा</string>
+    <string name="sync_n_de">आपकी सूची में %2$d में से %1$d</string>
+    <string name="sync_continuando">दूसरे डिवाइस पर जहाँ रुके थे वहीं से जारी</string>
+</resources>

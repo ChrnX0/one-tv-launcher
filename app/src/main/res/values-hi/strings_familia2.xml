@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_familia2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="an_rotulo">जन्मदिन</string>
+    <string name="an_hoje">आज %s का जन्मदिन है</string>
+    <string name="an_amanha">कल %s का जन्मदिन है</string>
+    <string name="tp_calor">तेज़ गर्मी</string>
+    <string name="tp_calor_texto">आज %d° तक · पानी पिएँ</string>
+    <string name="tp_frio">तेज़ ठंड</string>
+    <string name="tp_frio_texto">आज रात %d° तक · गर्म कपड़े पहनें</string>
+    <string name="tp_cfg">गर्मी और ठंड की सूचना</string>
+    <string name="tp_cfg_det">आज %1$d° तक पहुँचने या आज रात %2$d° तक गिरने पर किसी भी ऐप के ऊपर कार्ड</string>
+    <string name="mu_ok_lido">OK से पढ़ा चिह्नित करें</string>
+    <string name="mu_ok_nao_lido">पढ़ा · OK से न पढ़ा चिह्नित करें</string>
+    <string name="mu_lido_desc">संदेश, पढ़ा: %s। OK से न पढ़ा चिह्नित करें।</string>
+    <string name="mu_nao_lido_desc">संदेश: %s। OK से पढ़ा चिह्नित करें।</string>
+    <string name="mu_apagar">संदेश हटाएँ: %s</string>
+    <string name="extras_RETROSPECTIVA_ANO">इस साल आपका TV (दिसंबर में, स्क्रीन सेवर पर)</string>
+    <string name="ra_titulo">%d में आपका TV</string>
+    <string name="ra_canal">पसंदीदा चैनल: %1$s (%2$s)</string>
+    <string name="ra_coluna">रेडियो</string>
+    <string name="ra_dica_ouvir">सुनें</string>
+    <string name="ra_dica_favoritar">पसंदीदा</string>
+    <string name="ra_carregando">स्टेशन लोड हो रहे हैं…</string>
+    <string name="ra_subtitulo">दुनिया भर के स्टेशन · रिमोट पर 1–9 आपके पसंदीदा चलाते हैं</string>
+    <string name="ra_sem_catalogo">रेडियो कैटलॉग ने जवाब नहीं दिया। आपके पसंदीदा अब भी चलते हैं।</string>
+    <string name="ra_nada">कोई स्टेशन नहीं मिला।</string>
+    <string name="ra_continuar">जारी रखें</string>
+    <string name="ra_pausar">रोकें</string>
+    <string name="ra_favoritas">पसंदीदा</string>
+    <string name="ra_procurar">ढूँढें</string>
+    <string name="ra_buscar">नाम से खोजें</string>
+    <string name="ra_buscar_det">दुनिया का कोई भी स्टेशन</string>
+    <string name="ra_generos">शैलियाँ</string>
+    <string name="ra_paises">दूसरा देश</string>
+    <string name="ra_paises_det">सबसे ज़्यादा स्टेशनों वाले देश</string>
+    <string name="ra_perto">आपके पास</string>
+    <string name="ra_mais_ouvidas">%s में सबसे ज़्यादा सुने गए</string>
+    <string name="ra_mundo">दुनिया में सबसे ज़्यादा सुने गए</string>
+    <string name="ra_resultado">खोज: %s</string>
+    <string name="ra_favoritada">पसंदीदा में जोड़ा</string>
+    <string name="ra_desfavoritada">पसंदीदा से हटाया</string>
+    <string name="ra_falhou">यह स्टेशन अभी नहीं चल रहा। दूसरा आज़माएँ।</string>
+    <plurals name="an_anos">
+        <item quantity="one">%d वर्ष का होगा</item>
+        <item quantity="other">%d वर्ष का होगा</item>
+    </plurals>
+</resources>

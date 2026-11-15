@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_voz2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="lbl_voz_filmes">फ़िल्में</string>
+    <string name="lbl_voz_series">सीरीज़</string>
+    <string name="lbl_voz_na_rede">नेटवर्क मीडिया</string>
+    <string name="lbl_voz_casa">घर नियंत्रण</string>
+    <string name="lbl_voz_busca">खोज</string>
+    <string name="lbl_voz_mural">बोर्ड</string>
+    <string name="voz_mural_desligado">परिवार बोर्ड बंद है (या TV मेहमान मोड में है)।</string>
+</resources>

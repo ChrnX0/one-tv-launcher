@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_pausa.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pausa_pausar">लाइव TV रोकें</string>
+    <string name="pausa_continuar">जारी रखें</string>
+    <string name="pausa_ao_vivo">लाइव पर वापस</string>
+    <string name="pausa_selo">⏸ रुका · OK से जारी</string>
+    <string name="pausa_atrasado_min">%1$d मिनट पीछे · ▶ लाइव</string>
+    <string name="pausa_atrasado_seg">%1$d s पीछे · ▶ लाइव</string>
+    <string name="pausa_voltou">मेमोरी की सीमा से ज़्यादा देर रुका: लाइव पर वापस</string>
+</resources>

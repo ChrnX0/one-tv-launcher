@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_player2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="vod_tentando">कनेक्शन टूटा। फिर कोशिश हो रही है (%2$d में से %1$d)…</string>
+    <string name="vod_proximo_episodio">अगला एपिसोड</string>
+    <string name="vod_proximo_agora">अभी देखें · %1$d s</string>
+    <string name="vod_proximo_cancelar">रद्द करें</string>
+    <string name="vod_proximo_continuar">देखते रहें</string>
+    <string name="vod_ainda_assistindo">अब भी देख रहे हैं?</string>
+    <string name="vod_ainda_assistindo_texto">किसी के रिमोट छुए बिना कुछ एपिसोड चल चुके हैं, इसलिए अगला आपका इंतज़ार कर रहा है।</string>
+    <string name="vod_desligar_ao_fim">यह ख़त्म होने पर TV बंद करें</string>
+    <string name="vod_desligar_ao_fim_ligado">यह ख़त्म होने पर TV बंद होगा</string>
+    <string name="vod_desligar_ao_fim_desligado">यह ख़त्म होने पर TV चालू रहेगा</string>
+    <string name="vod_legenda_tamanho_opcao">सबटाइटल आकार: %1$s</string>
+    <string name="vod_legenda_tamanho_titulo">सबटाइटल आकार</string>
+    <string-array name="vod_legenda_tamanhos">
+        <item>छोटा</item>
+        <item>सामान्य</item>
+        <item>बड़ा</item>
+        <item>बहुत बड़ा</item>
+    </string-array>
+</resources>

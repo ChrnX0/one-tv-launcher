@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_ideias.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dns_voltou_anterior">नए DNS ने जवाब नहीं दिया। पिछले पर लौटाया।</string>
+    <string name="teclas_titulo">कुंजी परीक्षक</string>
+    <string name="teclas_instrucao">रिमोट के बटन दबाएँ। हर कुंजी यहाँ दिखती है। HOME से बाहर।</string>
+    <string name="teclas_vazio">अभी कोई कुंजी नहीं।</string>
+    <string name="trava_home_titulo">HOME बदलने के लिए PIN</string>
+    <string name="trava_home_errado">ग़लत PIN</string>
+    <string name="extras_cfg_det">नाइट फ़िल्टर और सोने के घंटे, कुंजी परीक्षक, कैलिब्रेशन और दूसरे टूल</string>
+    <string name="extras_titulo">एक्स्ट्रा</string>
+    <string name="extras_ligado">चालू</string>
+    <string name="extras_desligado">बंद</string>
+    <string name="extras_JANELA_OTA">सिस्टम अपडेट सिर्फ़ रात में (3 से 5 बजे)</string>
+    <string name="extras_TRAVAR_CRITICOS">लॉन्चर और VPN के लिए “फ़ोर्स स्टॉप” और “डेटा साफ़ करें” ब्लॉक करें</string>
+    <string name="extras_PIN_HOME">HOME बदलने के लिए PIN माँगें</string>
+    <string name="extras_FILTRO_NOTURNO">नाइट फ़िल्टर (गर्म स्क्रीन)</string>
+    <string name="extras_COR_DO_FUNDO">वॉलपेपर से एक्सेंट रंग (गैलरी थीम)</string>
+    <string name="extras_DEBLOAT_POS_OTA">सिस्टम अपडेट के बाद ऐप सफ़ाई फिर करें</string>
+    <string name="extras_filtro_horario">फ़िल्टर: %1$s से %2$s, तीव्रता %3$d%%</string>
+    <string name="extras_filtro_inicio">फ़िल्टर शुरू</string>
+    <string name="extras_filtro_fim">फ़िल्टर ख़त्म</string>
+    <string name="extras_filtro_forca">फ़िल्टर तीव्रता</string>
+    <string name="extras_teclas">कुंजी परीक्षक खोलें</string>
+    <string name="extras_calibracao">तस्वीर कैलिब्रेशन पैटर्न खोलें</string>
+    <string name="extras_acordar_pc">कंप्यूटर जगाएँ (Wake-on-LAN)</string>
+    <string name="extras_acordar_sem_mac">कंप्यूटर का MAC नहीं है (पैनल या adb)</string>
+    <string name="extras_acordar_ok">पैकेट भेजा</string>
+    <string name="extras_acordar_falhou">भेजा नहीं जा सका</string>
+    <string name="extras_ota_pendente">सिस्टम अपडेट समय-खिड़की का इंतज़ार कर रहा है</string>
+    <string name="extras_ota_nenhuma">कोई सिस्टम अपडेट बाकी नहीं</string>
+    <string name="guardar_dados_titulo">लॉन्चर डेटा सुरक्षित</string>
+    <string name="guardar_dados_texto">डेटा साफ़ करने से सेटिंग्स, अलार्म और TV के साथ लॉन्चर की पेयरिंग मिट जाती। कुछ नहीं हटाया गया। नए सिरे से शुरू करने के लिए पैनल बैकअप या कंप्यूटर (adb) इस्तेमाल करें।</string>
+    <string name="dono_titulo">लॉन्चर को डिवाइस ओनर बनाएँ</string>
+    <string name="dono_texto">यह कुछ सेकंड के लिए Google बंद करता है (खाता बना रहता है और अपने-आप लौटता है) और लॉन्चर को डिवाइस ओनर बनाता है: ऐप छिपाना, HOME स्थिर करना और रोकना या साफ़ करना ब्लॉक करना। तब करें जब कोई TV इस्तेमाल न कर रहा हो।</string>
+    <string name="dono_usuarios">TV के अतिरिक्त उपयोगकर्ता भी उनके डेटा के साथ हटा दिए जाएँगे: %s।</string>
+    <string name="dono_ok">ओनर बनाएँ</string>
+    <string name="dono_andando">लॉन्चर को ओनर बनाया जा रहा है… (1 मिनट तक)</string>
+    <string name="dono_sem_shell">अपने शेल ने जवाब नहीं दिया। सेटिंग्स &gt; लॉन्चर शेल में पेयर करें।</string>
+    <string name="bv_dev">डेवलपर विकल्प चालू करें</string>
+    <string name="bv_dev_det">जानकारी में “Android TV OS बिल्ड” तक नीचे जाएँ और OK 7 बार दबाएँ। फिर यहाँ लौटें।</string>
+    <string name="bv_parear">लॉन्चर को TV से पेयर करें</string>
+    <string name="bv_parear_det">डेवलपर विकल्प खोलता है: “वायरलेस डीबगिंग” चालू करें और “पेयरिंग कोड से डिवाइस पेयर करें” खोलें। लॉन्चर कोड खुद पढ़ता है।</string>
+    <string name="bv_dono">लॉन्चर को डिवाइस ओनर बनाएँ</string>
+    <string name="bv_dono_det">ऐप छिपाता है, HOME स्थिर करता है और रोकना या साफ़ करना ब्लॉक करता है। Google कुछ सेकंड बंद रहता है; खाता बना रहता है।</string>
+    <string name="extras_DIARIO_DNS">हर ऐप की DNS डायरी (सिर्फ़ TV पर, 7 दिन)</string>
+    <string name="extras_diario_ver">आज की DNS डायरी दिखाएँ</string>
+    <string name="extras_diario_apagar">DNS डायरी हटाएँ</string>
+    <string name="extras_diario_apagado">डायरी हटाई गई</string>
+</resources>

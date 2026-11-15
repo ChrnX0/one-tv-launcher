@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_elenco.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="elenco_botao">कलाकार</string>
+    <string name="elenco_titulo">कलाकार</string>
+    <string name="elenco_carregando">कलाकार लोड हो रहे हैं…</string>
+    <string name="elenco_vazio">TMDB में इस शीर्षक के कलाकार नहीं हैं।</string>
+    <string name="elenco_dica">लोगों के बीच चलें: नीचे, वे और किनमें हैं जो आपकी सूची में हैं।</string>
+    <string name="elenco_na_lista">आपकी सूची में भी</string>
+    <string name="elenco_procurando">आपकी सूची में खोजा जा रहा है…</string>
+    <string name="elenco_nada_na_lista">आपकी सूची में इस व्यक्ति का और कुछ नहीं।</string>
+    <string name="elenco_filme">फ़िल्म</string>
+    <string name="elenco_serie">सीरीज़</string>
+    <string name="elenco_opcao_player">कलाकार (यह अभिनेता कौन है?)</string>
+    <string name="anteriormente_titulo">%1$s में पिछली बार</string>
+    <string name="anteriormente_assistir">%1$s देखें</string>
+    <string name="anteriormente_pular_sempre">कभी न दिखाएँ</string>
+    <string name="anteriormente_desligado">सार बंद किए गए। फिर चालू करने के लिए: किसी एपिसोड पर OK दबाए रखें।</string>
+    <string name="anteriormente_ligar">“पिछली बार” सार दिखाएँ</string>
+    <string name="idade_titulo">बच्चों के मोड में अधिकतम उम्र</string>
+    <string name="idade_det">इस उम्र तक रेटेड फ़िल्में और सीरीज़ किसी भी श्रेणी से दिखती हैं (TMDB रेटिंग)। बिना रेटिंग वाली सिर्फ़ बच्चों की श्रेणियों में।</string>
+    <string name="idade_so_categorias">सिर्फ़ बच्चों की श्रेणियाँ</string>
+    <string name="idade_livre">सभी उम्र</string>
+    <string name="idade_anos">%1$d वर्ष तक</string>
+    <string name="onde_tambem_em">यहाँ भी: %1$s (JustWatch)</string>
+    <string name="onde_fora">आपकी सूची में नहीं · %1$s पर</string>
+    <string name="onde_grupo">और कहीं (JustWatch)</string>
+    <string name="legenda_auto_pronta">सबटाइटल अपने-आप डाउनलोड हुए (इस फ़ाइल के लिए बने) · बदलने के लिए ▼</string>
+    <string name="legenda_auto_pronta_nome">सबटाइटल अपने-आप डाउनलोड हुए · बदलने या देरी ठीक करने के लिए ▼</string>
+    <string name="legenda_auto_opcao">सबटाइटल अपने-आप डाउनलोड करें</string>
+    <string name="legenda_auto_ligada">सबटाइटल न होने पर डाउनलोड होंगे</string>
+    <string name="legenda_auto_desligada">अपने-आप सबटाइटल बंद</string>
+    <string name="legenda_trad_rotulo">अपने-आप अनुवाद</string>
+    <string name="legenda_trad_traduzindo">आपकी भाषा में सबटाइटल नहीं: TV पर अंग्रेज़ी वाले का अनुवाद हो रहा है…</string>
+    <string name="legenda_trad_parcial">TV पर अनुवादित सबटाइटल (अपने-आप अनुवाद)। बाकी का अनुवाद जारी है।</string>
+    <string name="legenda_trad_pronta">सबटाइटल अनुवाद पूरा</string>
+    <string name="legenda_trad_opcao">सबटाइटल न होने पर TV पर अनुवाद करें</string>
+    <string name="legenda_trad_ligada">सबटाइटल न होने पर TV पर अनुवाद होगा</string>
+    <string name="legenda_trad_desligada">सबटाइटल का अनुवाद अब नहीं होगा</string>
+    <string name="series_sinopse_mais">पूरा सारांश</string>
+    <string name="series_sinopse_menos">छोटा सारांश</string>
+    <string name="series_continuar_curto">▶  %1$s जारी रखें</string>
+    <string name="series_episodios">एपिसोड</string>
+    <string name="series_trocar_temporada">सीज़न बदलें</string>
+    <string name="fechar">बंद करें</string>
+</resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_familia.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="fam_pin">बच्चों का PIN</string>
+    <string name="fam_pin_det">बच्चों के सामने चैनल, छिपी श्रेणियाँ और सोने का समय खोलने के लिए दूसरा PIN। पैनल PIN हर जगह चलता रहता है।</string>
+    <string name="fam_pin_ok">बच्चों का PIN सेव हुआ</string>
+    <string name="fam_pin_igual">बच्चों का PIN पैनल PIN से अलग होना चाहिए</string>
+    <string name="fam_trocar">बच्चों का PIN बदलें</string>
+    <string name="fam_apagar">बच्चों का PIN हटाएँ</string>
+    <string name="fam_apagado">बच्चों का PIN हटाया: अब सिर्फ़ पैनल PIN खोलता है</string>
+    <string name="extras_TEMPO_TELA">रोज़ का स्क्रीन समय (ख़त्म होने पर सिर्फ़ अनुमत ऐप खुलते हैं)</string>
+    <string name="tela_titulo">स्क्रीन समय</string>
+    <string name="tela_acabou">आज का स्क्रीन समय ख़त्म। कल मिलते हैं!</string>
+    <string name="tela_5min">आज 5 मिनट स्क्रीन समय बाकी</string>
+    <string name="tela_pin">स्क्रीन समय बदलने के लिए PIN</string>
+    <string name="tela_cota_linha">रोज़ का स्क्रीन समय: %1$s (आज बाकी: %2$s)</string>
+    <string name="tela_mais">आज %1$d मिनट और दें</string>
+    <string name="tela_mais_ok">आज के लिए %1$d मिनट और</string>
+    <string name="tela_h">घंटे</string>
+    <string name="tela_min">मिनट</string>
+    <string name="extras_AGENDA_TODAS">TV के सभी Google खातों का कैलेंडर एक साथ</string>
+    <string name="cal_todas_contas">TV के सभी खाते (%1$d)</string>
+    <string name="tm_tempo_esgotado">समय पूरा</string>
+    <string name="painel_desligado_pin">वेब पैनल बंद: बहुत बार ग़लत PIN</string>
+    <string name="tm_crono">स्टॉपवॉच</string>
+    <string name="tm_crono_iniciar">स्टॉपवॉच शुरू करें</string>
+    <string name="tm_crono_parar">स्टॉपवॉच रोकें</string>
+    <string name="tm_crono_comecou">स्टॉपवॉच शुरू: होम स्क्रीन पर दिखती है</string>
+    <string name="tm_crono_marcou">स्टॉपवॉच %1$s पर रुकी</string>
+    <string name="som_canal">आख़िरी लाइव TV चैनल</string>
+</resources>
