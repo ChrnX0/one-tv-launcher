@@ -14,6 +14,8 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Ficha de filme e de série refeita para ler de longe: ações grandes à esquerda (Continuar, Trailer, Elenco, Coleção…), informações e pôster à direita; nada pula de lugar quando os dados chegam, e “Sinopse inteira” abre o texto todo</item>
+        <item>Trailer: quando o servidor não tem, a ficha usa o trailer do TMDB (YouTube); o título dos episódios não repete mais o ano</item>
         <item>Gravação: com um pendrive que a TV não lê (NTFS, como o do instalador do Windows) ou cheio, a TV agora diz o motivo na hora, em vez de parecer que gravou; com 2 partes no pendrive, grava na que tem mais espaço</item>
         <item>Gravação: enquanto grava, o canal mostra “● GRAVANDO até HH:mm” fixo no canto de cima, mesmo com a faixa escondida</item>
         <item>Legenda traduzida na TV: quando não há legenda em português, a TV traduz a inglesa sozinha (primeiro os próximos 10 minutos, o resto em segundo plano), marcada “Tradução automática”; desliga no menu ▼ do player</item>
@@ -126,6 +128,8 @@
         <item>Protetor de tela com widgets novos, de letra maior: escolha Faixa de vidro (as próximas horas numa curva, com a hora do sol), Cartões (agora, horas, hoje e amanhã) ou Sem caixa (a temperatura grande e o tempo numa frase) em Configurações › Tela e energia › Widgets do protetor, ou no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Filmes › abra um filme que já começou</item>
+        <item>Séries › abra uma série › Episódios</item>
         <item>Legenda traduzida na TV</item>
         <item>Configurações › TV e filmes › Serviços de filmes e séries › Trakt › OK</item>
         <item>Na mesma tela, Simkl › OK</item>
@@ -228,6 +232,8 @@
         <item>Em Configurações › Tela e energia, OK em Widgets do protetor até o estilo que quiser e espere o protetor aparecer</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>As ações grandes à esquerda dá para ler do sofá, e o foco fica parado enquanto a ficha carrega (sem pular entre Elenco e Coleção)?</item>
+        <item>A lista de episódios apareceu à direita, o VOLTAR voltou às informações da série e o “Trocar temporada” funcionou?</item>
         <item>Abra um filme ou episódio sem legenda em português: em uns 20 s aparece a legenda marcada “Tradução automática”, e o filme continua sem travar?</item>
         <item>Apareceram o código e o QR, o celular aprovou e a TV mostrou a conta conectada?</item>
         <item>O código entrou em simkl.com/pin e a TV mostrou a conta conectada?</item>
