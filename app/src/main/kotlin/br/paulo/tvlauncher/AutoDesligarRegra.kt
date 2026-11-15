@@ -12,7 +12,7 @@ package br.paulo.tvlauncher
  * maior), o aviso aparece mesmo assim, e qualquer botão o cancela.
  */
 object AutoDesligarRegra {
-    const val TETO_MIDIA_MIN = 240
+    const val TETO_MIDIA_MIN = 180
 
     /**
      * Hora (no mesmo relógio dos argumentos) em que a TV deve desligar.

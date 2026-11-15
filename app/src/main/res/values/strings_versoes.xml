@@ -17,7 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Turn off when idle: a movie, show, YouTube or live TV playing now counts as use, so the TV no longer asks “Are you still watching?” in the middle of it. While something plays, it only asks after 4 h without anyone pressing the remote (a TV left on at night)</item>
+        <item>Turn off when idle: a movie, show, YouTube or live TV playing now counts as use, so the TV no longer asks “Are you still watching?” in the middle of it. While something plays, it only asks after 3 h without anyone pressing the remote (a TV left on at night)</item>
         <item>LG turned on with its own remote: if it opens on the Chromecast input, the Chromecast now wakes up by itself within about 20 s (before, the screen stayed black until you switched inputs). On the antenna or another input, nothing changes. Needs the LG paired over the network</item>
         <item>Series and Movies: opening a title is smoother; the page draws once when its data arrives instead of three times, and the grid behind it is no longer redrawn</item>
         <item>Claude sign-in in the browser in English or Portuguese, following the browser language; the English web panel also translates error messages, and movie account errors show in the TV language</item>

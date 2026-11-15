@@ -16,12 +16,12 @@ class AutoDesligarRegraTest {
     }
 
     @Test fun tvAoVivoEsquecidaApagaNoTeto() {
-        // som tocando o tempo todo (visto agora, minuto 300): o teto de 4 h desde a última tecla vence
-        assertEquals(240 * min, AutoDesligarRegra.prazo(0, 300 * min, 30))
+        // som tocando o tempo todo (visto agora, minuto 300): o teto de 3 h desde a última tecla vence
+        assertEquals(180 * min, AutoDesligarRegra.prazo(0, 300 * min, 30))
     }
 
     @Test fun tempoEscolhidoMaiorQueOTetoVale() {
-        assertEquals(300 * min, AutoDesligarRegra.prazo(0, 400 * min, 300))
+        assertEquals(240 * min, AutoDesligarRegra.prazo(0, 400 * min, 240))
     }
 
     @Test fun teclaDepoisDaMidiaReiniciaTudo() {
