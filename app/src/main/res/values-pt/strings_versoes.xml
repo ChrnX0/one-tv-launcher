@@ -37,7 +37,7 @@
         <item>“Ainda está assistindo?” em letra grande quando ninguém aperta o controle pelo tempo de Configurações › Tela e energia › Desligar a TV sem uso; sem resposta em 60 s, o filme ou o app pausa antes de a tela apagar, para continuar dali depois</item>
         <item>Sem internet, o alto da tela inicial diz em uma linha o que continua funcionando (pendrive, Na rede, Gravações) e some quando ela volta; OK nela abre o Diagnóstico</item>
         <item>Tela Jogos nova, no estilo de console: o jogo em foco aparece grande com o logo oficial dele, uma fila só com o jogado por último primeiro (OK joga), e o card Jogos da tela inicial mostra o último jogo</item>
-        <item>A TV como unidade de rede: a memória dela abre no Windows (Mapear unidade de rede), Mac, Linux e apps de arquivos do celular por WebDAV, com o PIN do painel como senha; ela também aparece em Rede do Windows (Configurações › Acesso remoto, desligada por padrão)</item>
+        <item>A TV em Este Computador do Windows, sozinha, como um celular (a TV pergunta na tela na primeira vez de cada computador). A memória dela também abre no Mac, Linux e apps de arquivos do celular por WebDAV, com o PIN do painel como senha; ela também aparece em Rede do Windows, e o duplo clique ali traz um conector que prepara o Windows e mapeia a unidade sozinho (Configurações › Acesso remoto, desligada por padrão)</item>
         <item>Player: o alto da coluna diz só TV, Filmes ou Séries, com os botões Buscar e Filtro ao lado; a lista abre espaço para Gravações (TV: Favoritos, Recentes, Guia, Gravações; “Guia” curto para não cortar)</item>
         <item>Card Jogos na tela inicial, depois de Na rede: GeForce NOW, Steam Link, Moonlight, PS Remote Play, RetroArch e os outros jogos saem da linha de apps e ficam em 4 grupos</item>
         <item>Jogos: “Jogar no PC” acorda o computador e abre o Moonlight ou o Steam Link; “Testar a rede” diz se dá para jogar na nuvem; os controles ligados aparecem no alto</item>
@@ -241,7 +241,7 @@
         <item>OK marcou o recado como lido (e ele saiu do protetor) e o X apagou?</item>
         <item>Apareceu “Ainda está assistindo?” grande, um botão qualquer cancelou e, sem resposta, o filme pausou antes de apagar (e continua dali)?</item>
         <item>Apareceu “Sem internet · Funcionam: …” no alto, e sumiu quando a internet voltou?</item>
-        <item>Com Configurações › Acesso remoto › Mostrar a TV como unidade de rede ligada, o Mapear unidade de rede do Windows com o endereço mostrado lá e o PIN do painel abre as pastas da TV?</item>
+        <item>Com Configurações › Acesso remoto › Mostrar a TV como unidade de rede ligada, a TV aparece em Este Computador do Windows (ou em Rede), pergunta na tela se permite o computador e, depois do Permitir, abre as pastas?</item>
         <item>Na TV, em Filmes e em Séries, ▲ na primeira linha leva aos botões Buscar e Filtro ao lado do título, e ▼ volta para a lista?</item>
         <item>Aparece o card Jogos, âmbar, depois de Na rede?</item>
         <item>O jogo em foco aparece grande, com o logo oficial dele, e ◀ ▶ na fila de baixo troca o destaque na hora, com o jogado por último primeiro?</item>

@@ -47,4 +47,22 @@ class SsdpTest {
         assertTrue("<UDN>uuid:$uuid</UDN>" in x)
         assertTrue("<deviceType>${Ssdp.TIPO}</deviceType>" in x)
     }
+
+    @Test fun aparelhoMtpTemOTipoQueOWindowsProcura() {
+        val u = Ssdp.uuidMtp("abc123")
+        assertTrue(u != Ssdp.uuid("abc123"))
+        val n = Ssdp.notify(u, "http://192.168.1.9:8080${Ssdp.CAMINHO_MTP}", true, Ssdp.TIPO_MTP)
+        assertTrue(n.any { "NT: urn:microsoft-com:device:mtp:1\r\n" in it })
+        val busca = "M-SEARCH * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\nMAN: \"ssdp:discover\"\r\nMX: 1\r\nST: ${Ssdp.TIPO_MTP}\r\n\r\n"
+        assertEquals(1, Ssdp.respostas(busca, u, "http://x/", Ssdp.TIPO_MTP).size)
+        assertEquals(0, Ssdp.respostas(busca, u, "http://x/").size)   // o aparelho Basic não responde por MTP
+        val xml = Ssdp.descricaoMtp("Sala <1> & cia", u, "http://192.168.1.9:8080/", "abc123")
+        val doc = javax.xml.parsers.DocumentBuilderFactory.newInstance().apply { isNamespaceAware = true }
+            .newDocumentBuilder().parse(xml.byteInputStream())
+        assertEquals("urn:microsoft-com:device:mtp:1", doc.getElementsByTagName("deviceType").item(0).textContent)
+        assertEquals("Sala <1> & cia", doc.getElementsByTagName("friendlyName").item(0).textContent)
+        assertEquals("urn:microsoft-com:device:mtp:1",
+            doc.getElementsByTagNameNS("http://schemas.microsoft.com/windows/pnpx/2005/11", "X_compatibleId").item(0).textContent)
+        javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(Ssdp.SERVICO_MTP.byteInputStream())
+    }
 }

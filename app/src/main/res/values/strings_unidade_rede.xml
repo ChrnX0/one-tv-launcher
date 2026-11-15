@@ -3,8 +3,14 @@
 <resources>
     <string name="ur_secao">Network drive</string>
     <string name="ur_titulo">Show the TV as a network drive</string>
-    <string name="ur_det">Off. The TV\'s storage shows up as a network folder on Windows, Mac, Linux and phones. Password: the panel PIN.</string>
+    <string name="ur_det">Off. The TV shows up by itself in This PC on Windows, like a phone, and as a network folder on Mac, Linux and phones.</string>
     <string name="ur_painel">Turn on the web panel above first (it uses the same PIN and the https address).</string>
     <string name="ur_https">Waiting for the panel\'s https address (the certificate is created about 1 minute after turning the panel on).</string>
-    <string name="ur_abra">On: %1$s · password: the panel PIN. Steps in Help › Files over the network.</string>
+    <string name="ur_abra">On. On Windows the TV shows up in This PC (the TV asks on screen the first time for each computer). Mac, Linux and phone: %1$s · password: the panel PIN.</string>
+    <string name="mtp_pergunta_titulo">A computer is asking for the TV files</string>
+    <string name="mtp_pergunta">“%1$s” wants to see and copy the files in the TV storage over the home network. Allow this computer?</string>
+    <string name="mtp_pcs">Allowed computers</string>
+    <string name="mtp_pcs_nenhum">None yet. The TV asks on screen when a computer requests the files.</string>
+    <string name="mtp_pcs_lista">%1$s · OK forgets all (each one asks again)</string>
+    <string name="mtp_pcs_esquecidos">Computers forgotten</string>
 </resources>

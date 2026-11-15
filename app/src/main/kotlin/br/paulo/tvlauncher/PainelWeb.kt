@@ -306,6 +306,14 @@ object PainelWeb {
         return Resposta(200, "text/xml; charset=utf-8", xml.toByteArray())
     }
 
+    /** A descrição do aparelho MTP (a TV em "Este Computador"); a página dele é o próprio painel. */
+    private fun descricaoMtp(host: String?): Resposta {
+        val pagina = "http://${host ?: (ipsDaRede().minOrNull() + ":" + Config.PAINEL_PORTA)}/"
+        val id = PainelVizinhos.idDaTv(app)
+        val xml = Ssdp.descricaoMtp(PainelVizinhos.nomeDaTv(app).take(60), Ssdp.uuidMtp(id), pagina, id)
+        return Resposta(200, "text/xml; charset=utf-8", xml.toByteArray())
+    }
+
     /** Página com o endereço da unidade de rede para mapear (o nome do certificado e, se estiver nele, o IP). */
     private fun paginaUnidade(): Resposta {
         val modelo = app.assets.open("painel/unidade.html").use { it.readBytes() }.toString(Charsets.UTF_8)
@@ -315,6 +323,20 @@ object PainelWeb {
         html = html.replace("{{ENDERECO}}", DavLogica.escaparXml("https://${PainelTls.nome(app)}:${PainelTls.PORTA}${DavLogica.PREFIXO}/"))
             .replace("{{ENDERECO_IP}}", DavLogica.escaparXml(if (ip.isEmpty()) "" else ip.trimEnd('/') + DavLogica.PREFIXO + "/"))
         return Resposta(200, "text/html; charset=utf-8", html.toByteArray())
+    }
+
+    /**
+     * O .cmd que deixa o Windows pronto e mapeia a unidade (ConectorWindows). Livre como o certificado: só leva o
+     * endereço e o certificado público. Usa o IP quando ele está no certificado (nome sem ponto nem todo PC resolve).
+     */
+    private fun conectorWindows(): Resposta {
+        val pem = PainelTls.pemDaCa() ?: return erro(503, "o certificado ainda não foi gerado; tente em 1 minuto")
+        val ips = ipsDaRede()
+        val noCert = PainelTls.nomesNoCertificado()
+        val host = ips.firstOrNull { it in noCert } ?: PainelTls.nome(app)
+        val texto = ConectorWindows.script(host, PainelTls.PORTA, pem) ?: return erro(503, "não consegui montar o conector")
+        return Resposta(200, "application/octet-stream", texto.toByteArray(Charsets.US_ASCII),
+            mapOf("Content-Disposition" to "attachment; filename=\"${ConectorWindows.ARQUIVO}\"", "Cache-Control" to "no-store"))
     }
 
     private fun arquivoCertificado(): Resposta {
@@ -380,6 +402,9 @@ object PainelWeb {
      * A conexão chegou num IP nosso de Wi-Fi/cabo (não no da VPN) e veio da MESMA sub-rede (ex.: 192.168.1.x)?
      * Recusa tudo o que vier pela VPN, de outra VLAN do roteador ou de fora da casa.
      */
+    /** Para os outros servidores da casa (MtpNaRede): a mesma conferência de rede do painel. */
+    internal fun daRedeDeCasa(c: Socket): Boolean = redeLocal(c)
+
     private fun redeLocal(c: Socket): Boolean {
         val local = c.localAddress as? Inet4Address ?: return false
         val remoto = c.inetAddress as? Inet4Address ?: return false
@@ -597,6 +622,9 @@ object PainelWeb {
             // abre. Livres como a do certificado (não dizem nada além do endereço); só com a unidade de rede ligada.
             Ssdp.CAMINHO_DESCRICAO -> if (PainelDav.ligado(app)) return descricaoUpnp(host)
             "/unidade" -> if (PainelDav.ligado(app)) return paginaUnidade()
+            Ssdp.CAMINHO_MTP -> if (PainelDav.ligado(app)) return descricaoMtp(host)
+            Ssdp.CAMINHO_MTP_SERVICO -> if (PainelDav.ligado(app)) return Resposta(200, "text/xml; charset=utf-8", Ssdp.SERVICO_MTP.toByteArray())
+            ConectorWindows.CAMINHO -> if (PainelDav.ligado(app)) return conectorWindows()
             "/certificado.crt" -> return arquivoCertificado()
             "/certificado.css" -> return Resposta(200, "text/css; charset=utf-8",
                 app.assets.open("painel/certificado.css").use { it.readBytes() })

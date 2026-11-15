@@ -43,8 +43,14 @@ object AnuncioUpnp {
     private fun rodar(app: Context) {
         val eu = Thread.currentThread()
         val ip = PainelWeb.ipsDaRede().minOrNull() ?: run { synchronized(this) { if (thread === eu) thread = null }; return }
-        val uuid = Ssdp.uuid(PainelVizinhos.idDaTv(app))
-        val local = "http://$ip:${Config.PAINEL_PORTA}${Ssdp.CAMINHO_DESCRICAO}"
+        // Dois aparelhos: o atalho para a página de ajuda (Basic) e a TV como dispositivo portátil (MTP pela rede).
+        val id = PainelVizinhos.idDaTv(app)
+        val base = "http://$ip:${Config.PAINEL_PORTA}"
+        val aparelhos = listOf(
+            Triple(Ssdp.uuid(id), base + Ssdp.CAMINHO_DESCRICAO, Ssdp.TIPO),
+            Triple(Ssdp.uuidMtp(id), base + Ssdp.CAMINHO_MTP, Ssdp.TIPO_MTP),
+        )
+        fun anuncios(vivo: Boolean) = aparelhos.flatMap { (u, l, t) -> Ssdp.notify(u, l, vivo, t) }
         val grupo = InetAddress.getByName(Ssdp.GRUPO)
         val envio = try { DatagramSocket(InetSocketAddress(InetAddress.getByName(ip), 0)) } catch (e: Exception) { Log.w(TAG, "sem socket: $e"); return }
         fun mandar(textos: List<String>, para: InetAddress, porta: Int) = textos.forEach {
@@ -65,7 +71,7 @@ object AnuncioUpnp {
         } catch (e: Exception) { Log.i(TAG, "porta 1900 ocupada, só anúncios: $e"); null }
         escuta = s
         try {
-            mandar(Ssdp.notify(uuid, local, true), grupo, Ssdp.PORTA)
+            mandar(anuncios(true), grupo, Ssdp.PORTA)
             var ultimo = System.currentTimeMillis()
             val buf = ByteArray(2048)
             while (thread === eu) {
@@ -76,17 +82,19 @@ object AnuncioUpnp {
                     try {
                         s.receive(p)
                         val texto = String(p.data, 0, p.length, Charsets.US_ASCII)
-                        val r = Ssdp.respostas(texto, uuid, local)
+                        // Só buscas IPv4: o socket de envio está preso ao IP v4 da TV e uma busca vinda por IPv6
+                        // (o Windows também procura por ff02::c) dava EAFNOSUPPORT no sendto (visto na Sala, 14/11/2026).
+                        val r = if (p.address is java.net.Inet4Address) aparelhos.flatMap { (u, l, t) -> Ssdp.respostas(texto, u, l, t) } else emptyList()
                         if (r.isNotEmpty()) mandar(r, p.address, p.port)
                     } catch (_: java.net.SocketTimeoutException) {}
                 }
-                if (System.currentTimeMillis() - ultimo >= REANUNCIO_MS) { mandar(Ssdp.notify(uuid, local, true), grupo, Ssdp.PORTA); ultimo = System.currentTimeMillis() }
+                if (System.currentTimeMillis() - ultimo >= REANUNCIO_MS) { mandar(anuncios(true), grupo, Ssdp.PORTA); ultimo = System.currentTimeMillis() }
             }
         } catch (_: InterruptedException) {
         } catch (e: Exception) {
             if (thread === eu) Log.w(TAG, "parou: $e")
         } finally {
-            mandar(Ssdp.notify(uuid, local, false), grupo, Ssdp.PORTA)
+            mandar(anuncios(false), grupo, Ssdp.PORTA)
             try { s?.close() } catch (_: Exception) {}
             envio.close()
             try { trava?.release() } catch (_: Exception) {}

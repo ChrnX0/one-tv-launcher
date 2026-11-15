@@ -57,3 +57,23 @@ Por que não SMB "de verdade": o Windows só abre como pasta, em "Rede", quem fa
 
 Recomendação: ficar com WebDAV + o atalho em "Rede" (SSDP). Reabrir SMB só se surgir servidor SMB2/3 livre.
 O Paulo decide.
+
+
+## Windows: MTP pela rede (14/11/2026, depois do primeiro teste real)
+
+O primeiro teste no Windows 11 (build 26300) mostrou que o WebDAV não é "ligar e usar": o certificado da TV precisa
+estar em Máquina Local e o serviço WebClient vem parado e não liga sozinho. O dono pediu que a TV aparecesse sozinha,
+como o celular dele aparece em Este Computador.
+
+- **Medido no Windows:** `wpdmtp.inf` traz o driver "MTP IP Device" (`wpdmtpip.dll`) para o id
+  `umb\urn:microsoft-com:device:mtp:1`. É MTP dentro de PTP/IP (CIPA DC-005), porta TCP 15740.
+- **Medido na TV:** `ip_unprivileged_port_start` = 1024. SMB (porta 445) continua impossível.
+- **Feito:** `MtpIp.kt` (respondedor MTP puro, testado com o gphoto2), `MtpNaRede.kt` (porta, permissão na tela),
+  segundo aparelho no anúncio SSDP com o tipo acima e a descrição em `/upnp/onetv-mtp.xml`.
+- **Segurança:** o MTP/IP não tem senha nem criptografia. Decisão do dono: sem PIN, com "Permitir?" na tela da TV uma
+  vez por computador. O identificador do computador viaja aberto na rede e pode ser copiado por quem a escuta.
+- **Não verificado ainda:** o Windows de verdade (descoberta, instalação do driver, o que ele pede além do básico).
+  O conteúdo exato que o Windows espera na descrição UPnP (pnpx, MtpNullService) veio de memória da documentação
+  antiga da Microsoft, não de um teste.
+- **Limites:** sem eventos (arquivo criado na TV aparece no Windows ao atualizar a pasta); leitura aos pedaços só até
+  4 GB de deslocamento (o arquivo inteiro baixa sem limite); sem miniaturas.

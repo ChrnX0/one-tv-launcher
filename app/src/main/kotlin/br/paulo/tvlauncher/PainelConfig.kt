@@ -44,6 +44,7 @@ object PainelConfig {
             .put("visita", ModoVisita.ativo(app))
             .put("unidadeRede", PainelArmazem.unidadeRede(app))
             .put("unidadeRedeEndereco", PainelWeb.enderecoUnidade(app) ?: org.json.JSONObject.NULL)
+            .put("mtpPermitidos", org.json.JSONArray(MtpNaRede.permitidos(app)))
             .put("confirmacoes", JSONObject().put("liberarTudo", conf.liberarTudo).put("acoes", org.json.JSONArray().apply {
                 for (a in Confirmacoes.Acao.entries) put(JSONObject().put("chave", a.chave).put("titulo", a.titulo)
                     .put("explicacao", a.explicacao).put("modo", Confirmacoes.modo(conf.copy(liberarTudo = false), a).chave)
@@ -89,6 +90,8 @@ object PainelConfig {
                 val b = v as? Boolean ?: return Resultado.Erro("valor inválido")
                 PainelArmazem.definirUnidadeRede(app, b); PainelWeb.unidadeRedeMudou(app); registrar("unidade de rede: $b")
             }
+            // Esquecer os computadores aceitos na TV para o MTP pela rede: tirar acesso nunca pede PIN.
+            "mtpEsquecer" -> { MtpNaRede.esquecerTodos(app); registrar("computadores permitidos: esquecidos") }
             "visita" -> { val b = v as? Boolean ?: return Resultado.Erro("valor inválido"); ModoVisita.definir(app, b); registrar("modo visita: $b") }
             // Controle parental e modo infantil: na TV, ligar e desligar pedem o PIN; aqui também.
             "parental", "infantil" -> {
