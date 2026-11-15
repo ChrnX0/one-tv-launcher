@@ -85,20 +85,25 @@ object JogosTv {
 
     /** Nomes dos controles de videogame ligados agora (o controle remoto da TV não conta: não é gamepad). */
     fun controles(): List<String> = InputDevice.getDeviceIds().toList().mapNotNull { InputDevice.getDevice(it) }
-        .filter { d ->
-            !d.isVirtual && (d.sources and InputDevice.SOURCE_GAMEPAD == InputDevice.SOURCE_GAMEPAD ||
-                d.sources and InputDevice.SOURCE_JOYSTICK == InputDevice.SOURCE_JOYSTICK)
-        }
-        .map { it.name }.distinct()
+        .filter(::ehGamepad).map { it.name }.distinct()
+
+    /**
+     * Controle de videogame de verdade. Na Sala (15/11/2026) apareciam "virtual-search" e "virtual-remote": aparelhos
+     * internos do sistema que se dizem gamepad. Por isso: só os ligados de fora (USB/Bluetooth, Android 10+) e nenhum
+     * com nome "virtual".
+     */
+    private fun ehGamepad(d: InputDevice): Boolean {
+        if (d.isVirtual || d.name.orEmpty().startsWith("virtual", ignoreCase = true)) return false
+        if (android.os.Build.VERSION.SDK_INT >= 29 && !d.isExternal) return false
+        return d.sources and InputDevice.SOURCE_GAMEPAD == InputDevice.SOURCE_GAMEPAD ||
+            d.sources and InputDevice.SOURCE_JOYSTICK == InputDevice.SOURCE_JOYSTICK
+    }
 
     class Controle(val nome: String, val bateria: Int?)
 
     /** Os controles ligados com a bateria em % (Android 12+, quando o controle informa; null = não sabe). */
     fun controlesComBateria(): List<Controle> = InputDevice.getDeviceIds().toList().mapNotNull { InputDevice.getDevice(it) }
-        .filter { d ->
-            !d.isVirtual && (d.sources and InputDevice.SOURCE_GAMEPAD == InputDevice.SOURCE_GAMEPAD ||
-                d.sources and InputDevice.SOURCE_JOYSTICK == InputDevice.SOURCE_JOYSTICK)
-        }
+        .filter(::ehGamepad)
         .distinctBy { it.name }
         .map { d ->
             val b = if (android.os.Build.VERSION.SDK_INT >= 31) runCatching {
@@ -109,7 +114,7 @@ object JogosTv {
 
     fun ehControle(id: Int): Boolean {
         val d = InputDevice.getDevice(id) ?: return false
-        return !d.isVirtual && d.sources and InputDevice.SOURCE_GAMEPAD == InputDevice.SOURCE_GAMEPAD
+        return ehGamepad(d) && d.sources and InputDevice.SOURCE_GAMEPAD == InputDevice.SOURCE_GAMEPAD
     }
 
     /** Abre a tela do Android para parear Bluetooth (onde o controle aparece no modo de pareamento). */
