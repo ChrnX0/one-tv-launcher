@@ -9,6 +9,70 @@
   if (/^pt/i.test(idioma)) return;
   document.documentElement.lang = 'en';
   const T = {
+"1. Toque em ": "1. Tap ",
+"Serviços de filmes e séries": "Movie and series services",
+"Contas opcionais: nada sai da TV antes de você entrar. Entrar e sair pedem o PIN.": "Optional accounts: nothing leaves the TV until you sign in. Signing in and out asks for the PIN.",
+"Deixa o que você viu e a sua lista iguais aos do celular.": "Keeps what you watched and your watchlist in sync with your phone.",
+"Igual ao Trakt, ótimo também para anime. Use um ou os dois.": "Like Trakt, also great for anime. Use one or both.",
+"Opcional: notas do Rotten Tomatoes, Letterboxd e Metacritic, e listas como o Top 250.": "Optional: ratings from Rotten Tomatoes, Letterboxd and Metacritic, and lists such as Top 250.",
+"Opcional: soma Rotten Tomatoes, Letterboxd e Metacritic à nota do IMDb. 1. Crie uma conta grátis e abra ": "Optional: adds Rotten Tomatoes, Letterboxd and Metacritic to the IMDb rating. 1. Create a free account and open ",
+". 2. Copie a API Key. 3. Cole aqui e grave: a TV confere na hora.": ". 2. Copy the API Key. 3. Paste it here and save: the TV checks it right away.",
+"Sinopse, elenco e data do próximo episódio, no idioma da TV.": "Plot, cast and next episode date, in the TV's language.",
+"Legendas da internet. Sem conta: 5 por dia. Com conta grátis: 20.": "Online subtitles. Without an account: 5 a day. With a free account: 20.",
+"Esta versão do launcher ainda não tem as chaves destes serviços. Eles aparecem depois da próxima atualização.": "This launcher version does not have the keys of these services yet. They show up after the next update.",
+" · ligado": " · on",
+" · desligado": " · off",
+" · entrando…": " · signing in…",
+" · conectado": " · connected",
+"Gravar chave": "Save key",
+"Chave da API do MDBList": "MDBList API key",
+"Usuário do OpenSubtitles": "OpenSubtitles user name",
+"Senha do OpenSubtitles": "OpenSubtitles password",
+"No modo infantil, filmes e séries até: ": "In kids mode, movies and series up to: ",
+"Idade máxima no modo infantil": "Maximum age in kids mode",
+"só as categorias infantis": "kids categories only",
+"Livre": "All ages",
+"10 anos": "10 years",
+"12 anos": "12 years",
+"14 anos": "14 years",
+"16 anos": "16 years",
+"Idade do modo infantil gravada. Filmes e séries com classificação até ela aparecem; os sem classificação, só nas categorias infantis.": "Kids mode age saved. Movies and series rated up to it show up; unrated ones only in kids categories.",
+"Parado: Modo visita ou perfil infantil ativo.": "Paused: Visit mode or kids profile is on.",
+"Parado: a sincronização é de outro perfil.": "Paused: sync belongs to another profile.",
+"Ainda não sincronizou.": "Not synced yet.",
+"Interesses": "Watchlist",
+"Interesses (Plan to Watch)": "Watchlist (Plan to Watch)",
+"Já assistidos": "Watched",
+"Continuar de onde parou": "Resume where you stopped",
+"Contar o que assisto": "Share what I watch",
+"O que você marca aqui aparece lá e o de lá aparece aqui.": "What you mark here shows up there, and the other way around.",
+"Filmes e episódios vistos ficam marcados nos dois lados.": "Watched movies and episodes are marked on both sides.",
+"Parou no celular? A TV continua do mesmo ponto, e o contrário.": "Stopped on your phone? The TV resumes from the same point, and the other way around.",
+"A TV avisa o serviço enquanto você assiste. Nunca no Modo visita nem no perfil infantil.": "The TV tells the service while you watch. Never in Visit mode or the kids profile.",
+"Sincronizar agora": "Sync now",
+"Sincronizando…": "Syncing…",
+"Sincronizado.": "Synced.",
+"Nenhuma lista no catálogo.": "No lists in the catalog.",
+"Escolher listas": "Choose lists",
+"Buscando as suas listas…": "Fetching your lists…",
+"Dados de Trakt.tv.": "Data from Trakt.tv.",
+"Dados de Simkl.com.": "Data from Simkl.com.",
+"Não achei listas nesta conta.": "No lists found in this account.",
+"Gravar listas": "Save lists",
+"Gravar as listas?": "Save the lists?",
+"As listas marcadas aparecem como categorias em Filmes e Séries.": "The checked lists show up as categories in Movies and Series.",
+"Listas gravadas.": "Lists saved.",
+"Esta página continua sozinha quando você terminar.": "This page continues by itself when you finish.",
+"QR code do login": "Sign-in QR code",
+"Gravar a chave do MDBList?": "Save the MDBList key?",
+"A TV confere a chave no MDBList antes de gravar.": "The TV checks the key with MDBList before saving it.",
+"Entrar no OpenSubtitles?": "Sign in to OpenSubtitles?",
+"A TV entra na sua conta para conferir e guarda tudo cifrado.": "The TV signs in to check and stores everything encrypted.",
+"MDBList conectado.": "MDBList connected.",
+"OpenSubtitles conectado.": "OpenSubtitles connected.",
+"A chave do MDBList tem só letras e números.": "The MDBList key has only letters and numbers.",
+"Digite o usuário e a senha do OpenSubtitles.": "Type the OpenSubtitles user name and password.",
+"Gravar": "Save",
 "\"Coloca o último episódio de Round 6 na Netflix.\"": "\"Put on the latest episode of Squid Game on Netflix.\"",
 "\"Cria um despertador às 6:30 nos dias úteis.\"": "\"Set an alarm for 6:30 on weekdays.\"",
 "\"Faz um checkup da TV e da internet.\"": "\"Run a checkup of the TV and the internet.\"",
@@ -89,7 +153,22 @@
 "Apagar todo o diário de DNS guardado na TV?": "Delete the whole DNS diary stored on the TV?",
 "Apagar uma letra": "Delete a letter",
 "Apagar…": "Delete…",
-"Aparece no protetor de tela (chave \"Mural\" ligada): lista de compras, até 3 recados fixos e os aniversários de hoje da agenda.": "Shows on the screensaver (\"Board\" switch on): shopping list, up to 3 pinned messages and today's birthdays from the calendar.",
+"Aparece no protetor de tela (chave \"Mural\" ligada): lista de compras, até 3 recados fixos e os aniversários de hoje da agenda. Na TV, o painel rápido marca recado como lido (sai do protetor) e apaga.": "Shows on the screensaver (\"Board\" switch on): shopping list, up to 3 pinned messages and today's birthdays from the calendar. On the TV, the quick panel marks a message as read (it leaves the screensaver) and deletes it.",
+"Aniversários": "Birthdays",
+"Rádios": "Radio",
+"Na TV: TV ao vivo › Rádios (rádios do mundo todo, do radio-browser.info). Aqui dá para colar o endereço de qualquer rádio (.mp3, .aac, .m3u8, .pls ou .m3u); ela vira favorita na TV.": "On the TV: Live TV › Radio (stations from all over the world, from radio-browser.info). Here you can paste the address of any station (.mp3, .aac, .m3u8, .pls or .m3u); it becomes a favorite on the TV.",
+"Nome da rádio": "Station name",
+"Pôr na TV": "Send to TV",
+"Nenhuma rádio favorita.": "No favorite stations.",
+"Rádio na TV.": "Station sent to the TV.",
+"Sua TV no ano (em dezembro, no protetor)": "Your TV this year (in December, on the screensaver)",
+"Na véspera e no dia, a HOME e o protetor de tela mostram \"Hoje é aniversário de…\". Com o ano, mostra também a idade.": "On the day before and on the day, HOME and the screensaver show \"Today is …'s birthday\". With the year, it also shows the age.",
+"sei o ano": "I know the year",
+"Adicionar": "Add",
+"Nenhum aniversário.": "No birthdays.",
+"Lido": "Read",
+"Não lido": "Unread",
+"tia Rosa": "aunt Rose",
 "Aparelho da casa": "Home device",
 "Aparelhos conectados": "Connected devices",
 "Aperte OK no controle da TV para confirmar (ou Cancelar).": "Press OK on the TV remote to confirm (or Cancel).",
@@ -800,7 +879,13 @@
 "Pilhas automáticas ligadas.": "Automatic stacks on.",
 "Pilhas automáticas desligadas.": "Automatic stacks off.",
 "Aviso de chuva ligado.": "Rain alert on.",
+"Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)": "Movies at their own frame rate (24 Hz, no judder in motion)",
+"Taxa de quadros do filme ligada.": "Movie frame rate matching on.",
+"Taxa de quadros do filme desligada.": "Movie frame rate matching off.",
 "Aviso de chuva desligado.": "Rain alert off.",
+"Aviso de calor ou frio forte (“Beba água”)": "Strong heat or cold alert (“Drink water”)",
+"Aviso de calor e frio ligado.": "Heat and cold alert on.",
+"Aviso de calor e frio desligado.": "Heat and cold alert off.",
 "Áudio preferido gravado.": "Preferred audio saved.",
 "Tempo do protetor gravado.": "Screensaver time saved.",
 "Linha do protetor gravada.": "Screensaver line saved.",
@@ -818,8 +903,147 @@
 "O PIN precisa ter de 6 a 12 números.": "The PIN needs 6 to 12 digits.",
 "Os dois PINs não bateram.": "The two PINs don't match.",
 "PIN do painel trocado. Use o novo da próxima vez.": "Panel PIN changed. Use the new one next time.",
+"Crie um PIN": "Create a PIN",
+"Idioma": "Language",
+"Sua cidade": "Your city",
+"Filmes e séries": "Movies and series",
+"O PIN protege o painel e o que não tem volta. Use de 6 a 12 números e guarde bem.": "The PIN protects the panel and anything that can't be undone. Use 6 to 12 digits and keep it safe.",
+"Repita o PIN": "Repeat the PIN",
+"Repita": "Repeat",
+"Os menus da TV seguem o idioma do Android. Agora ela está em:": "The TV menus follow Android's language. Right now it is:",
+"Trocar o idioma na TV": "Change the language on the TV",
+"Filmes e séries, de preferência:": "Movies and series, preferably:",
+"Áudio original com legenda": "Original audio with subtitles",
+"Os dados da sua conta de canais (IPTV). Não tem? Toque em Pular.": "Your channel account (IPTV). Don't have one? Tap Skip.",
+"Servidor e usuário (Xtream)": "Server and user (Xtream)",
+"Link da lista (.m3u)": "Playlist link (.m3u)",
+"Para a previsão do tempo e o aviso de chuva. Sem cidade, a TV tenta achar sozinha.": "For the forecast and the rain alert. Without a city, the TV tries to find it by itself.",
+"Cidade (ex.: Curitiba)": "City (e.g. Chicago)",
+"Opcional: capas e sinopses, o que você já viu e legendas. Dá para fazer depois, em Configurações.": "Optional: posters and plots, what you watched and subtitles. You can do it later, in Settings.",
+"Continuar": "Continue",
+"Concluir": "Finish",
+"Pular": "Skip",
+"Os dois PINs não são iguais. Digite de novo.": "The two PINs are not the same. Type them again.",
+"Esta TV já tem PIN: entre com ele.": "This TV already has a PIN: sign in with it.",
+"Preencha o servidor, o usuário e a senha, ou toque em Pular.": "Fill in the server, user and password, or tap Skip.",
+"Cole o link da lista, ou toque em Pular.": "Paste the playlist link, or tap Skip.",
+"Digite a cidade, ou toque em Pular.": "Type the city, or tap Skip.",
+"Pronto! A TV está configurada. O resto fica nas abas do painel.": "Done! The TV is set up. Everything else is in the panel tabs.",
+"A tela de idioma abriu na TV. Escolha com o controle.": "The language screen opened on the TV. Choose with the remote.",
+"Por segurança, digite o PIN que você acabou de criar.": "For safety, type the PIN you just created.",
+"Servidor (ex.: http://servidor:8080)": "Server (e.g. http://server:8080)",
+"Entrar com a digital": "Sign in with fingerprint",
+"Cadastrar a digital deste celular": "Register this phone's fingerprint",
+"Cadastrar a digital": "Register the fingerprint",
+"O celular vai pedir a sua digital (ou o rosto, ou o bloqueio de tela). Depois, é só tocar em \"Entrar com a digital\".": "The phone will ask for your fingerprint (or face, or screen lock). Then just tap \"Sign in with fingerprint\".",
+"Digital cadastrada. Da próxima vez, entre com ela.": "Fingerprint registered. Next time, sign in with it.",
+"Funciona só pelo endereço do Tailscale (com cadeado). Ligue antes a opção \"rede Tailscale\" na aba Claude (MCP).": "Works only through the Tailscale address (with the padlock). First turn on the \"Tailscale network\" option in the Claude (MCP) tab.",
+"Entre sem digitar o PIN: o celular confere a sua digital. O PIN continua valendo.": "Sign in without typing the PIN: the phone checks your fingerprint. The PIN still works.",
+"Este navegador não sabe usar a digital. Use o Chrome ou o Safari atualizados.": "This browser can't use fingerprints. Use an up-to-date Chrome or Safari.",
+"Este navegador é antigo para a digital. Atualize o Chrome ou o Safari.": "This browser is too old for fingerprints. Update Chrome or Safari.",
+"Apagar esta digital?": "Delete this fingerprint?",
 };
   const P = [
+[
+"^Funciona só pelo endereço do Tailscale: abra (.+) neste celular, entre com o PIN e cadastre\\.$",
+"Works only through the Tailscale address: open $1 on this phone, sign in with the PIN and register."
+],
+[
+"^(.+) · desde (.+)$",
+"$1 · since $2"
+],
+[
+"^(.+): esse celular volta a entrar só com o PIN\\.$",
+"$1: that phone goes back to signing in with the PIN only."
+],
+[
+"^Passo (\\d+) de (\\d+)$",
+"Step $1 of $2"
+],
+[
+"^A TV já tem (\\d+) conta\\(s\\)\\. Pode pular ou pôr outra\\.$",
+"The TV already has $1 account(s). You can skip or add another."
+],
+[
+"^Agora: (.+)$",
+"Now: $1"
+],
+[
+"^Última sincronização: (.+)\\.$",
+"Last sync: $1."
+],
+[
+"^Listas no catálogo: (.+)\\.$",
+"Lists in the catalog: $1."
+],
+[
+"^Ligar \"(.+)\"\\?$",
+"Turn on \"$1\"?"
+],
+[
+"^A TV passa a trocar isso com o (.+?)\\.$",
+"The TV starts sharing this with $1."
+],
+[
+"^(.+): ligado\\.$",
+"$1: on."
+],
+[
+"^No máximo (\\d+) listas\\.$",
+"At most $1 lists."
+],
+[
+"^Cada lista vira uma categoria em Filmes e Séries \\(até (\\d+)\\)\\. Só aparecem os títulos que estão na sua lista de canais\\.$",
+"Each list becomes a category in Movies and Series (up to $1). Only titles in your channel list show up."
+],
+[
+"^ (.+) · (Trakt|MDBList) · (\\d+) títulos(.*)$",
+" $1 · $2 · $3 titles$4"
+],
+[
+"^ · conectado como (.+)$",
+" · connected as $1"
+],
+[
+"^Sair do (.+?)\\?$",
+"Sign out of $1?"
+],
+[
+"^A TV esquece a conta e para de falar com o (.+?)\\. O que está lá continua lá\\.$",
+"The TV forgets the account and stops talking to $1. Your data there stays there."
+],
+[
+"^(.+?): saiu\\.$",
+"$1: signed out."
+],
+[
+"^Entrar no (.+?)\\?$",
+"Sign in to $1?"
+],
+[
+"^A TV pede um código ao (.+?)\\. Depois você abre o link, entra na sua conta e confirma o código\\.$",
+"The TV asks $1 for a code. Then you open the link, sign in to your account and confirm the code."
+],
+[
+"^\\(abre o (.+?)\\)\\. 2\\. Entre na sua conta e confirme o código:$",
+"(opens $1). 2. Sign in to your account and confirm the code:"
+],
+[
+"^ \\(abre o (.+?)\\)\\. 2\\. Entre na sua conta e confirme o código:$",
+" (opens $1). 2. Sign in to your account and confirm the code:"
+],
+[
+"^(.+?) conectado como (.+?)\\.$",
+"$1 connected as $2."
+],
+[
+"^(.+?) conectado\\.$",
+"$1 connected."
+],
+[
+"^Não deu certo: (.+)$",
+"It did not work: $1"
+],
 [
 "^\\((\\d+) canal\\(is\\) ou categoria\\(s\\) escolhidos\\)$",
 "($1 channel(s) or category(ies) chosen)"

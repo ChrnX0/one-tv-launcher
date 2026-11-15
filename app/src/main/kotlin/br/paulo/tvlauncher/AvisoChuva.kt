@@ -57,7 +57,11 @@ object AvisoChuva {
         val app = ctx.applicationContext
         val relogio = object : Runnable {
             override fun run() {
-                rede.execute { verificar(app) }
+                rede.execute {
+                    verificar(app)
+                    // Ideia 94: calor/frio forte no mesmo relógio (só busca a previsão na hora de avisar).
+                    runCatching { AvisoTemperatura.verificar(app) }.onFailure { Log.w(TAG, "temperatura: $it") }
+                }
                 principal.postDelayed(this, INTERVALO_MIN * 60_000L)
             }
         }

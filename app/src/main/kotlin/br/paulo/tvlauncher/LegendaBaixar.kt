@@ -9,8 +9,9 @@ import java.net.URL
 /**
  * A parte de rede e disco da legenda baixada (LegendaExterna, 11/11/2026). Tudo aqui bloqueia: chamar fora da thread da tela.
  *
- * A chave de API e a conta do OpenSubtitles são do DONO da TV (Configurações > Conta > Filmes e séries), guardadas cifradas
- * pelo Keystore como as contas de IPTV. A legenda baixada fica em files/player/legendas/, uma por vídeo: abrir de novo o
+ * 14/11/2026: a chave de API é a do APLICATIVO (BuildConfig.OPENSUBTITLES_CHAVE, secret do GitHub): o OpenSubtitles proíbe
+ * app que pede a chave ao usuário. A conta (usuário e senha, opcional: sobe o limite diário) fica em [ServicosContas].
+ * Quem já tinha cadastrado a chave própria (legendas_conta.json) continua usando-a enquanto o build não tiver a do app. A legenda baixada fica em files/player/legendas/, uma por vídeo: abrir de novo o
  * mesmo filme não gasta outro download do limite diário.
  */
 object LegendaBaixar {
@@ -23,6 +24,22 @@ object LegendaBaixar {
 
     // ---------------------------------------------------------------- conta do dono
 
+    /** A conta em uso: chave do app + usuário/senha de ServicosContas; sem chave do app, a antiga cadastrada pelo dono. */
+    fun contaEmUso(ctx: Context): Conta? {
+        val chaveApp = ServicosContas.chavesApp().openSubtitles
+        val antiga = conta(ctx)
+        if (chaveApp.isBlank()) return antiga
+        val c = ServicosContas.conta(ctx, ServicosFilmes.Servico.OPENSUBTITLES)
+        return when {
+            c != null && c.usuario.isNotBlank() -> Conta(chaveApp, c.usuario, c.senha)
+            antiga != null -> Conta(chaveApp, antiga.usuario, antiga.senha)   // migração: a conta de antes continua valendo
+            else -> Conta(chaveApp)
+        }
+    }
+
+    fun esquecerToken() { token = null }
+
+    /** A chave antiga, cadastrada pelo dono antes de 14/11/2026. */
     fun conta(ctx: Context): Conta? = runCatching {
         val o = JSONObject(File(PlayerArmazem.pasta(ctx), CONTA).readText())
         val claro = JSONObject(PlayerArmazem.decifrar(o.getString("dados"), o.getString("iv")))
@@ -79,7 +96,7 @@ object LegendaBaixar {
     }
 
     fun buscar(ctx: Context, b: LegendaExterna.Busca): Result<List<LegendaExterna.Candidata>> = runCatching {
-        val conta = conta(ctx) ?: error(ctx.getString(R.string.legenda_sem_conta))
+        val conta = contaEmUso(ctx) ?: error(ctx.getString(R.string.legenda_sem_conta))
         val idioma = IdiomaPlayer.idiomaDaTv()   // ideia 25: legenda no idioma da TV
         val r = pedir(LegendaExterna.urlBusca(b, idioma), conta)
         if (r.codigo !in 200..299) error(LegendaExterna.lerErro(r.corpo) ?: "erro ${r.codigo}")
@@ -88,10 +105,12 @@ object LegendaBaixar {
 
     /** Baixa a escolhida e guarda como a legenda deste vídeo. Devolve o arquivo .srt. */
     fun baixar(ctx: Context, chaveVideo: String, c: LegendaExterna.Candidata): Result<File> = runCatching {
-        val conta = conta(ctx) ?: error(ctx.getString(R.string.legenda_sem_conta))
+        val conta = contaEmUso(ctx) ?: error(ctx.getString(R.string.legenda_sem_conta))
         entrar(conta)
         val r = pedir("${LegendaExterna.BASE}/download", conta, LegendaExterna.corpoDownload(c.arquivo), comToken = true)
         if (r.codigo == 401) token = null
+        // Limite do dia (406 na doc; a mensagem fala em "allowed ... subtitles"): frase clara no idioma da TV.
+        if (LegendaExterna.acabouLimite(r.codigo, r.corpo)) error(ctx.getString(R.string.sv_limite_dia))
         if (r.codigo !in 200..299) error(LegendaExterna.lerErro(r.corpo) ?: "erro ${r.codigo}")
         val link = LegendaExterna.lerDownload(r.corpo) ?: error("resposta sem link")
         val conexao = URL(link).openConnection() as HttpURLConnection
@@ -146,5 +165,48 @@ object LegendaBaixar {
     private fun limpar(ctx: Context) {
         val todos = pasta(ctx).listFiles()?.filter { it.name.endsWith(".srt") }?.sortedByDescending { it.lastModified() } ?: return
         todos.drop(MAX_GUARDADAS * 2).forEach { it.delete() }
+    }
+
+    // ---------------------------------------------------------------- ideia 89: legenda automática
+
+    /** Um pedaço do vídeo com Range: (bytes, tamanho total). Nulo se o servidor não aceita Range (respondeu 200 ou erro). */
+    private fun pedaco(url: String, de: Long, ate: Long): Pair<ByteArray, Long?>? {
+        val c = URL(url).openConnection() as HttpURLConnection
+        return try {
+            c.connectTimeout = 8_000; c.readTimeout = 12_000
+            c.setRequestProperty("Range", "bytes=$de-$ate")
+            c.setRequestProperty("User-Agent", LegendaExterna.AGENTE)
+            if (c.responseCode != 206) null
+            else c.inputStream.use { ler(it, LegendaExterna.BLOCO_HASH) } to LegendaExterna.tamanhoDoRange(c.getHeaderField("Content-Range"))
+        } catch (_: Exception) { null } finally { c.disconnect() }
+    }
+
+    /**
+     * O moviehash do vídeo, lendo só 64 KB do começo e 64 KB do fim (Range). Nulo se o servidor não aceita Range: aí a
+     * busca vai só pelo nome. O endereço (que tem a conta do IPTV) nunca vai para o registro.
+     */
+    fun hashDoVideo(url: String): String? {
+        if (!url.startsWith("http")) return null
+        val (inicio, tamanho) = pedaco(url, 0, LegendaExterna.BLOCO_HASH - 1L) ?: return null
+        val t = tamanho ?: return null
+        if (t < LegendaExterna.BLOCO_HASH) return null
+        val (fim, _) = pedaco(url, t - LegendaExterna.BLOCO_HASH, t - 1) ?: return null
+        return LegendaExterna.hash(t, inicio, fim)
+    }
+
+    /** Já tentou a automática para este vídeo nos últimos 7 dias? (Falhar de novo a cada abertura gastaria o limite.) */
+    fun tentouAuto(ctx: Context, chaveVideo: String): Boolean =
+        System.currentTimeMillis() - ctx.getSharedPreferences("player", Context.MODE_PRIVATE).getLong("legauto:$chaveVideo", 0) < 7L * 24 * 3_600_000
+
+    /**
+     * Ideia 89: busca (pelo hash do arquivo, se der, e pelo nome) e baixa a melhor legenda no idioma da TV. Gasta um
+     * download do limite diário. Bloqueia (rede).
+     */
+    fun automatica(ctx: Context, chaveVideo: String, url: String?, b: LegendaExterna.Busca): Result<Pair<File, Boolean>> = runCatching {
+        ctx.getSharedPreferences("player", Context.MODE_PRIVATE).edit().putLong("legauto:$chaveVideo", System.currentTimeMillis()).apply()
+        val hash = url?.let { runCatching { hashDoVideo(it) }.getOrNull() }
+        val lista = buscar(ctx, b.copy(hash = hash)).getOrThrow()
+        val c = LegendaExterna.escolherAuto(lista) ?: error(ctx.getString(R.string.legenda_nenhuma))
+        baixar(ctx, chaveVideo, c).getOrThrow() to c.bateHash
     }
 }

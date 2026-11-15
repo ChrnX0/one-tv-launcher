@@ -21,7 +21,15 @@ object Mural {
     const val MAX_RECADOS = 3
     const val MAX_TEXTO = 60
 
-    data class Conteudo(val compras: List<String> = emptyList(), val recados: List<String> = emptyList())
+    /**
+     * [lidos] (ideia 95, 14/11/2026): recados que alguém marcou como lidos pela TV (painel rápido). Continuam na lista
+     * (o painel e a TV mostram "lido") mas saem do protetor. Guardados pelo texto do recado.
+     */
+    data class Conteudo(val compras: List<String> = emptyList(), val recados: List<String> = emptyList(), val lidos: List<String> = emptyList()) {
+        fun lido(recado: String) = lidos.any { Lembretes.normalizar(it) == Lembretes.normalizar(recado) }
+        /** Os recados que ainda não foram lidos: os que o protetor mostra. */
+        val naoLidos: List<String> get() = recados.filterNot { lido(it) }
+    }
 
     enum class Lista { COMPRAS, RECADOS }
 
@@ -44,25 +52,36 @@ object Mural {
         val n = Lembretes.normalizar(limpar(texto))
         return when (l) {
             Lista.COMPRAS -> c.copy(compras = c.compras.filterNot { Lembretes.normalizar(it) == n })
-            Lista.RECADOS -> c.copy(recados = c.recados.filterNot { Lembretes.normalizar(it) == n })
+            Lista.RECADOS -> c.copy(recados = c.recados.filterNot { Lembretes.normalizar(it) == n }, lidos = c.lidos.filterNot { Lembretes.normalizar(it) == n })
         }
+    }
+
+    /** Ideia 95: marca (ou desmarca, com [lido] = false) um recado como lido. Recado que não existe: nada muda. */
+    fun marcarLido(c: Conteudo, texto: String, lido: Boolean = true): Conteudo {
+        val n = Lembretes.normalizar(limpar(texto))
+        val recado = c.recados.firstOrNull { Lembretes.normalizar(it) == n } ?: return c
+        val sem = c.lidos.filterNot { Lembretes.normalizar(it) == n }
+        return c.copy(lidos = if (lido) sem + recado else sem)
     }
 
     fun limparLista(c: Conteudo, l: Lista): Conteudo = when (l) {
         Lista.COMPRAS -> c.copy(compras = emptyList())
-        Lista.RECADOS -> c.copy(recados = emptyList())
+        Lista.RECADOS -> c.copy(recados = emptyList(), lidos = emptyList())
     }
 
     /** "Aniversário de Ana" / "Ana's birthday": título de evento de dia inteiro que é aniversário. */
     fun eAniversario(titulo: String): Boolean = Lembretes.normalizar(titulo).let { "aniversario" in it || "birthday" in it }
 
     fun paraJson(c: Conteudo): JSONObject = JSONObject().put("compras", JSONArray(c.compras)).put("recados", JSONArray(c.recados))
+        .put("lidos", JSONArray(c.lidos))
 
     fun deJson(texto: String?): Conteudo {
         val o = try { JSONObject(texto ?: return Conteudo()) } catch (_: Exception) { return Conteudo() }
         fun lista(k: String, max: Int) = o.optJSONArray(k)?.let { a -> (0 until a.length()).map { limpar(a.optString(it)) }.filter { it.isNotEmpty() } }
             .orEmpty().takeLast(max)
-        return Conteudo(lista("compras", MAX_COMPRAS), lista("recados", MAX_RECADOS))
+        val recados = lista("recados", MAX_RECADOS)
+        val lidos = lista("lidos", MAX_RECADOS).filter { l -> recados.any { Lembretes.normalizar(it) == Lembretes.normalizar(l) } }
+        return Conteudo(lista("compras", MAX_COMPRAS), recados, lidos)
     }
 
     // ---- na TV

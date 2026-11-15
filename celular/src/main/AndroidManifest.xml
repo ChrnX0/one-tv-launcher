@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Leitor de QR (ZXing). A câmera só abre quando a pessoa toca em "Ler o QR da TV". -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
+    <application
+        android:label="@string/cel_nome"
+        android:icon="@mipmap/ic_onetv"
+        android:allowBackup="false"
+        android:networkSecurityConfig="@xml/rede"
+        android:theme="@android:style/Theme.Material.NoActionBar"
+        android:supportsRtl="true">
+        <activity android:name=".TvsActivity" android:exported="true" android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- "Compartilhar" do Android: link ou texto vai para a TV (o painel pergunta antes de mandar). -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".PainelActivity" android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden|uiMode" />
+    </application>
+</manifest>

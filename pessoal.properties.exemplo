@@ -27,3 +27,12 @@ eclipses=
 
 # IP da TV na rede local (só o build3.ps1 usa, para achar a porta da depuração sem fio). Não entra no APK.
 tv_ip=
+
+# Chaves dos aplicativos de filmes e séries (Configurações > TV e filmes > Serviços de filmes e séries). São do APLICATIVO,
+# criadas uma vez pelo dono do build nos sites (passo a passo em docs/servicos-filmes.md). No GitHub vão como secrets
+# com o nome em maiúsculas (TMDB_CHAVE...). Vazio = o serviço não aparece. Nunca coloque no git.
+tmdb_chave=
+trakt_id=
+trakt_segredo=
+simkl_id=
+opensubtitles_chave=

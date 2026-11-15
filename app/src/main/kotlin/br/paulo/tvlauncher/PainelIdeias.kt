@@ -59,9 +59,37 @@ object PainelIdeias {
                     "adicionar" -> Mural.editar(app) { Mural.adicionar(it, l, o.optString("texto")) }
                     "remover" -> Mural.editar(app) { Mural.remover(it, l, o.optString("texto")) }
                     "limpar" -> Mural.editar(app) { Mural.limparLista(it, l) }
-                    else -> return erro(400, "acao: adicionar, remover ou limpar")
+                    "lido" -> Mural.editar(app) { Mural.marcarLido(it, o.optString("texto"), true) }
+                    "nao_lido" -> Mural.editar(app) { Mural.marcarLido(it, o.optString("texto"), false) }
+                    else -> return erro(400, "acao: adicionar, remover, limpar, lido ou nao_lido")
                 }
                 ok(Mural.paraJson(novo))
+            }
+            // ---- ideia 93: aniversários
+            post && r == "aniversarios" -> {
+                val o = corpo ?: return erro(400, "JSON inválido")
+                val nova = when (o.optString("acao")) {
+                    "adicionar" -> {
+                        val p = Aniversarios.criar(o.optString("nome"), o.optInt("dia"), o.optInt("mes"),
+                            if (o.has("ano") && !o.isNull("ano")) o.optInt("ano") else null) ?: return erro(400, "nome ou data inválidos")
+                        Aniversarios.editar(app) { Aniversarios.adicionar(it, p) }
+                    }
+                    "remover" -> Aniversarios.editar(app) { Aniversarios.remover(it, o.optString("nome")) }
+                    else -> return erro(400, "acao: adicionar ou remover")
+                }
+                PainelArmazem.registrar(app, ip, "aniversários: ${nova.size}", "ok")
+                ok(JSONObject().put("lista", Aniversarios.paraJson(nova)))
+            }
+            // ---- ideia 87: rádios (colar o endereço de qualquer rádio; vira favorita na TV)
+            post && r == "radios" -> {
+                val o = corpo ?: return erro(400, "JSON inválido")
+                val nova = when (o.optString("acao")) {
+                    "colar" -> Radios.colar(app, o.optString("nome"), o.optString("url")).getOrElse { return erro(400, it.message ?: "inválido") }
+                    "remover" -> Radios.editarFavoritas(app) { l -> l.filterNot { it.id == o.optString("id") } }
+                    else -> return erro(400, "acao: colar ou remover")
+                }
+                PainelArmazem.registrar(app, ip, "rádios favoritas: ${nova.size}", "ok")
+                ok(JSONObject().put("lista", Radios.paraJson(nova)))
             }
             // ---- 7. presença
             get && r == "presenca" -> ok(Presenca.json(app))   // chama o roteador: thread do pedido
@@ -95,6 +123,8 @@ object PainelIdeias {
             .put("avisos", Avisos.json(app))
             .put("desempenho", DesempenhoTv.json(app))
             .put("mural", Mural.paraJson(Mural.ler(app)))
+            .put("aniversarios", Aniversarios.paraJson(Aniversarios.ler(app)))
+            .put("radios", Radios.paraJson(Radios.favoritas(app)))
             .put("presenca", JSONArray(Presenca.escolhidos(app).toList()))
             .put("presencaOutras", JSONObject().put("entidades", Presenca.entidades(app).joinToString(", ")).put("ips", Presenca.ips(app).joinToString(", ")))
             .put("retrospectiva", Retrospectiva.ultima(app)?.let { Retrospectiva.paraJson(it).put("linhas", JSONArray(Retrospectiva.linhas(it).toList())) } ?: JSONObject.NULL)

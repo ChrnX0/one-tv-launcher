@@ -122,7 +122,8 @@ class PlayerActivity : Activity() {
         lista = PlayerListaTela(this, aoAssistir = { c, chave -> escolherNaLista(c, chave) }, aoFavoritar = { alternarFavorito(it) }, simples = simples,
             aoBuscar = { buscar() }, aoFiltros = { abrirFiltros() }, aoOcultarGrupo = { alternarOculto(it) },
             aoGuia = { cs, nome -> abrirGrade(cs, nome) },
-            aoGravacoes = { startActivity(android.content.Intent(this, GravacoesActivity::class.java)) })
+            aoGravacoes = { startActivity(android.content.Intent(this, GravacoesActivity::class.java)) },
+            aoRadios = { startActivity(android.content.Intent(this, RadioActivity::class.java)) })
         raiz.addView(lista.raiz, FrameLayout.LayoutParams(-1, -1))
         grade = PlayerGradeView(this, aoAssistir = { c -> grade.fechar(); lista.fechar(); if (c.id != atual?.id) sintonizar(c) else mostrarInfo() },
             aoFechar = { grade.fechar(); if (lista.aberta) lista.voltarFoco() })
@@ -190,6 +191,7 @@ class PlayerActivity : Activity() {
         // O PIN vale só enquanto o player está na frente: saiu (HOME, outro app, tela apagou), tranca de novo.
         if (filtro.mostrarOcultas) filtro = filtro.copy(mostrarOcultas = false)
         // Saiu da tela (HOME, outro app): solta o vídeo na hora (e a pausa curta junto: ela não sobrevive a sair).
+        contarCanal(null)   // ideia 92: fecha os minutos do canal que estava tocando
         efeitos.soltar()
         player?.release(); player = null
         pausa.descartar()   // a pausa curta é só memória do player: saiu, acabou
@@ -285,6 +287,7 @@ class PlayerActivity : Activity() {
         Gravacoes.atual?.let { g -> if (g.canalId != c.id && visivel) { conflitoGravacao(c, g); return } }
         if (guardarAnterior && atual != null && atual?.id != c.id) anterior = atual
         atual = c
+        contarCanal(c)
         arquivo = null   // trocar de canal (ou voltar ao player) é sempre ao vivo
         tentativas = 0
         gravarUltimo(c)
@@ -546,6 +549,25 @@ class PlayerActivity : Activity() {
     private var gravado = ""
 
     /** O último canal e os próximos programas dele, para o destaque da HOME (que roda em outro processo). */
+    /**
+     * Ideia 92 ("Sua TV em 2026"): soma os minutos do canal que estava tocando quando troca de canal ou sai do player.
+     * Canal bloqueado ou de categoria oculta não conta (mesma regra do "Continuar" da HOME).
+     */
+    private var vendoCanal: Canal? = null
+    private var vendoDesde = 0L
+    private fun contarCanal(novo: Canal?) {
+        val agora = android.os.SystemClock.elapsedRealtime()
+        val antes = vendoCanal
+        if (antes != null && antes.id != novo?.id) {
+            val min = (agora - vendoDesde) / 60_000
+            if (min > 0 && PlayerFiltro.podeIrParaHome(antes, filtro.ocultas, parental)) {
+                val app = applicationContext; val nome = antes.nome
+                gravar { RetrospectivaAno.somarCanal(app, nome, min) }
+            }
+        }
+        if (novo == null || antes?.id != novo.id) { vendoCanal = novo; vendoDesde = agora }
+    }
+
     private fun gravarUltimo(c: Canal) {
         // O "Continuar" da HOME não mostra canal bloqueado nem de categoria oculta (antes só olhava o bloqueado, e um
         // canal adulto aberto com o PIN ia parar na HOME com nome e programa).

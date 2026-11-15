@@ -53,7 +53,62 @@
       <input id="campoPin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12"
              autocomplete="off" aria-label="PIN" placeholder="PIN" required>
       <button type="submit" class="botao-primario" id="btnEntrar">Entrar</button>
+      <button type="button" class="botao-secundario" id="btnEntrarDigital" hidden>Entrar com a digital</button>
       <p id="erroEntrar" class="erro" hidden></p>
+    </form>
+  </section>
+
+  <!-- Primeira configuração pelo celular (ideia 97, primeira.js): aberto pelo QR da TV sem PIN, "#primeira=<código>". -->
+  <section id="telaPrimeira" class="entrar" hidden>
+    <form id="formPrimeira" class="cartao-entrar cartao-primeira" autocomplete="off" novalidate>
+      <img class="logo-entrar" src="icone-192.png" alt="" width="64" height="64">
+      <p class="passos-primeira" id="passoPrimeira" aria-live="polite"></p>
+      <h1 id="tituloPrimeira"></h1>
+
+      <div data-passo="pin">
+        <p class="aviso">O PIN protege o painel e o que não tem volta. Use de 6 a 12 números e guarde bem.</p>
+        <input id="primeiraPin" class="campo-pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12" autocomplete="new-password" aria-label="PIN novo" placeholder="PIN">
+        <input id="primeiraPin2" class="campo-pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12" autocomplete="new-password" aria-label="Repita o PIN" placeholder="Repita">
+      </div>
+
+      <div data-passo="idioma">
+        <p class="aviso">Os menus da TV seguem o idioma do Android. Agora ela está em:</p>
+        <p class="destaque-primeira" id="primeiraIdioma"></p>
+        <button type="button" class="botao-secundario" id="btnIdiomaTv">Trocar o idioma na TV</button>
+        <p class="aviso">Filmes e séries, de preferência:</p>
+        <label class="opcao-primeira"><input type="radio" name="primeiraAudio" value="dublado"> Dublado</label>
+        <label class="opcao-primeira"><input type="radio" name="primeiraAudio" value="original"> Áudio original com legenda</label>
+      </div>
+
+      <div data-passo="tv">
+        <p class="aviso">Os dados da sua conta de canais (IPTV). Não tem? Toque em Pular.</p>
+        <p class="aviso-ok" id="primeiraContas" hidden></p>
+        <select id="primeiraTvTipo" aria-label="Tipo de conta">
+          <option value="xtream">Servidor e usuário (Xtream)</option>
+          <option value="m3u">Link da lista (.m3u)</option>
+        </select>
+        <input id="primeiraTvEndereco" type="text" inputmode="url" autocapitalize="off" spellcheck="false" maxlength="600" aria-label="Endereço">
+        <input id="primeiraTvUsuario" type="text" autocapitalize="off" spellcheck="false" maxlength="120" placeholder="Usuário" aria-label="Usuário">
+        <input id="primeiraTvSenha" type="password" autocomplete="off" maxlength="120" placeholder="Senha" aria-label="Senha">
+      </div>
+
+      <div data-passo="cidade">
+        <p class="aviso">Para a previsão do tempo e o aviso de chuva. Sem cidade, a TV tenta achar sozinha.</p>
+        <p class="aviso-ok" id="primeiraCidadeAtual" hidden></p>
+        <input id="primeiraCidade" type="text" maxlength="80" placeholder="Cidade (ex.: Curitiba)" aria-label="Cidade">
+      </div>
+
+      <div data-passo="servicos">
+        <p class="aviso">Opcional: capas e sinopses, o que você já viu e legendas. Dá para fazer depois, em Configurações.</p>
+        <div id="primeiraServicos"></div>
+      </div>
+
+      <p id="erroPrimeira" class="erro" hidden></p>
+      <button type="submit" class="botao-primario" id="btnPrimeiraOk">Continuar</button>
+      <div class="acoes-primeira">
+        <button type="button" class="botao-secundario" id="btnPrimeiraVoltar">Voltar</button>
+        <button type="button" class="botao-secundario" id="btnPrimeiraPular">Pular</button>
+      </div>
     </form>
   </section>
 
@@ -595,11 +650,20 @@
           <option value="100">Normal</option><option value="110">Grande</option><option value="120">Maior</option></select></p>
         <label><input id="cfgPilhas" type="checkbox"> Pilhas automáticas (agrupar os apps por tipo)</label>
         <label><input id="cfgChuva" type="checkbox"> Aviso de chuva por cima de qualquer app</label>
+        <label><input id="cfgTemperatura" type="checkbox"> Aviso de calor ou frio forte (“Beba água”)</label>
       </div>
       <div class="cartao">
         <h2>TV e filmes</h2>
         <p class="aviso">Áudio preferido em filmes e séries: <select id="cfgAudio" aria-label="Áudio preferido">
           <option value="dublado">Dublado</option><option value="original">Original</option></select></p>
+        <label><input id="cfgQuadros" type="checkbox"> Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)</label>
+      </div>
+      <div class="cartao" id="cartaoServicos">
+        <h2>Serviços de filmes e séries</h2>
+        <p class="aviso">Contas opcionais: nada sai da TV antes de você entrar. Entrar e sair pedem o PIN.</p>
+        <div id="cfgServicos"></div>
+        <p class="aviso-curto" id="cfgServicosTmdb"></p>
+        <p class="aviso" id="statusServicos" hidden></p>
       </div>
       <div class="cartao">
         <h2>Tela e energia</h2>
@@ -615,6 +679,9 @@
           (Configurações &gt; Família).</p>
         <label><input id="cfgParental" type="checkbox"> Controle parental <span id="cfgParentalDet" class="aviso-curto"></span></label>
         <label><input id="cfgInfantil" type="checkbox"> Modo infantil <span id="cfgInfantilDet" class="aviso-curto"></span></label>
+        <p class="aviso">No modo infantil, filmes e séries até: <select id="cfgIdadeInfantil" aria-label="Idade máxima no modo infantil">
+          <option value="-1">só as categorias infantis</option><option value="0">Livre</option><option value="10">10 anos</option>
+          <option value="12">12 anos</option><option value="14">14 anos</option><option value="16">16 anos</option></select></p>
         <label><input id="cfgVisita" type="checkbox"> Modo visita (esconde perfil, agenda e os apps marcados)</label>
         <p class="aviso">PIN das crianças: <strong id="cfgPinFamiliaEstado"></strong>
           <button type="button" class="link" id="btnApagarPinFamilia" hidden>apagar</button></p>
@@ -846,13 +913,36 @@
       </div>
       <div class="cartao" id="cartaoMural">
         <h2>Mural da família</h2>
-        <p class="aviso">Aparece no protetor de tela (chave "Mural" ligada): lista de compras, até 3 recados fixos e os aniversários de hoje da agenda.</p>
+        <p class="aviso">Aparece no protetor de tela (chave "Mural" ligada): lista de compras, até 3 recados fixos e os aniversários de hoje da agenda. Na TV, o painel rápido marca recado como lido (sai do protetor) e apaga.</p>
         <form id="formMural" class="barra-acoes">
           <select id="listaMural" aria-label="Lista"><option value="compras">Compras</option><option value="recados">Recado</option></select>
           <input id="textoMural" type="text" maxlength="60" placeholder="leite" aria-label="Texto">
           <button type="submit" class="botao-secundario">Pôr no mural</button>
         </form>
         <div id="itensMural" class="lista-registro"></div>
+      </div>
+      <div class="cartao" id="cartaoRadios">
+        <h2>Rádios</h2>
+        <p class="aviso">Na TV: TV ao vivo › Rádios (rádios do mundo todo, do radio-browser.info). Aqui dá para colar o endereço de qualquer rádio (.mp3, .aac, .m3u8, .pls ou .m3u); ela vira favorita na TV.</p>
+        <form id="formRadio" class="barra-acoes">
+          <input id="nomeRadio" type="text" maxlength="80" placeholder="Nome da rádio" aria-label="Nome da rádio">
+          <input id="urlRadio" type="url" maxlength="500" placeholder="https://..." aria-label="Endereço">
+          <button type="submit" class="botao-secundario">Pôr na TV</button>
+        </form>
+        <div id="itensRadios" class="lista-registro"></div>
+        <p id="statusRadios" class="aviso" hidden></p>
+      </div>
+      <div class="cartao" id="cartaoAniversarios">
+        <h2>Aniversários</h2>
+        <p class="aviso">Na véspera e no dia, a HOME e o protetor de tela mostram "Hoje é aniversário de…". Com o ano, mostra também a idade.</p>
+        <form id="formAniversario" class="barra-acoes">
+          <input id="nomeAniversario" type="text" maxlength="40" placeholder="tia Rosa" aria-label="Nome">
+          <input id="dataAniversario" type="date" aria-label="Data">
+          <label><input id="anoAniversario" type="checkbox" checked> sei o ano</label>
+          <button type="submit" class="botao-secundario">Adicionar</button>
+        </form>
+        <div id="itensAniversarios" class="lista-registro"></div>
+        <p id="statusAniversarios" class="aviso" hidden></p>
       </div>
       <div class="cartao">
         <h2>Presença</h2>
@@ -896,6 +986,13 @@
       </div>
     </section>
     <section id="abaRegistro" class="painel-aba" hidden>
+      <!-- Ideia 99: entrar com a digital do celular (chave.js, ChaveAcesso.kt). Só pelo https do Tailscale. -->
+      <div class="cartao" id="cartaoDigital">
+        <h2>Entrar com a digital</h2>
+        <p class="aviso" id="digitalTexto"></p>
+        <div id="listaDigitais"></div>
+        <button type="button" class="botao-primario" id="btnCadastrarDigital" hidden>Cadastrar a digital deste celular</button>
+      </div>
       <div id="listaRegistro" class="lista-registro"></div>
     </section>
     </main>
@@ -988,5 +1085,7 @@
   <script src="arquivos.js"></script>
   <script src="controle.js"></script>
   <script src="certificado.js"></script>
+  <script src="primeira.js"></script>
+  <script src="chave.js"></script>   <!-- ideia 99: entrar com a digital (passkey) -->   <!-- ideia 97: assistente da primeira configuração -->
 </body>
 </html>

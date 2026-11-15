@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="elenco_botao">Elenco</string>
+    <string name="elenco_titulo">Elenco</string>
+    <string name="elenco_carregando">Carregando o elenco…</string>
+    <string name="elenco_vazio">O TMDB não tem o elenco deste título.</string>
+    <string name="elenco_dica">Passe pelas pessoas: embaixo, o que mais elas fizeram que está na sua lista.</string>
+    <string name="elenco_na_lista">Também na sua lista</string>
+    <string name="elenco_procurando">Procurando na sua lista…</string>
+    <string name="elenco_nada_na_lista">Nada mais com esta pessoa na sua lista.</string>
+    <string name="elenco_filme">Filme</string>
+    <string name="elenco_serie">Série</string>
+    <string name="elenco_opcao_player">Elenco (quem é esse ator?)</string>
+    <string name="anteriormente_titulo">Anteriormente em %1$s</string>
+    <string name="anteriormente_assistir">Assistir %1$s</string>
+    <string name="anteriormente_pular_sempre">Não mostrar mais</string>
+    <string name="anteriormente_desligado">Resumos desligados. Para ligar de novo: segure OK num episódio.</string>
+    <string name="anteriormente_ligar">Mostrar o resumo “Anteriormente”</string>
+    <!-- Ideia 91: idade máxima no modo infantil (Classificacao) -->
+    <string name="idade_titulo">Idade máxima no modo infantil</string>
+    <string name="idade_det">Filmes e séries com classificação até esta idade aparecem de qualquer categoria (classificação do TMDB). Os sem classificação, só nas categorias infantis.</string>
+    <string name="idade_so_categorias">Só as categorias infantis</string>
+    <string name="idade_livre">Livre</string>
+    <string name="idade_anos">Até %1$d anos</string>
+    <!-- Ideia 82: onde assistir (OndeAssistir) -->
+    <string name="onde_tambem_em">Também em: %1$s (JustWatch)</string>
+    <string name="onde_fora">Não está na sua lista · está em %1$s</string>
+    <string name="onde_grupo">Em outros lugares (JustWatch)</string>
+    <!-- Ideia 89: legenda automática -->
+    <string name="legenda_auto_pronta">Legenda baixada automaticamente (feita para este arquivo) · ▼ para trocar</string>
+    <string name="legenda_auto_pronta_nome">Legenda baixada automaticamente · ▼ para trocar ou ajustar o atraso</string>
+    <string name="legenda_auto_opcao">Baixar legenda automaticamente</string>
+    <string name="legenda_auto_ligada">A legenda será baixada quando faltar</string>
+    <string name="legenda_auto_desligada">Legenda automática desligada</string>
+</resources>

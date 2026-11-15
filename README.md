@@ -157,7 +157,8 @@ How it's kept safe:
 - Alarms with their own sounds, a volume ramp and snooze. The TV turns itself on over HDMI-CEC to ring, and tells you
   if an alarm was missed while it was off.
 - Sleep timer with a **gentle shutdown**: in the last 5 minutes the screen dims and the volume goes down.
-- **Turn off when idle**: after 30 minutes without a key press it warns you for 60 s, then sleeps.
+- **Turn off when idle** ("Are you still watching?"): after the chosen time without a key press it asks in large text for
+  60 s, pauses whatever is playing and then sleeps.
 - Optional **presence** with a UniFi router: when every phone has left the house, the TV goes to sleep.
 - Routines at a set time (turn on, open an app, turn off), scenes, reminders and on-screen messages.
 - Your Google Calendar on the TV.

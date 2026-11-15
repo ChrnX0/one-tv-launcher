@@ -154,6 +154,14 @@
             android:excludeFromRecents="true"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection"
             android:theme="@style/One.Tela" />
+        <!-- Ideia 84: elenco com foto e os outros títulos de cada pessoa na lista (ElencoActivity.kt); junto do player. -->
+        <activity
+            android:name=".ElencoActivity"
+            android:process=":player"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection"
+            android:theme="@style/One.Tela" />
         <activity
             android:name=".SeriesActivity"
             android:process=":player"
@@ -272,6 +280,16 @@
             android:name=".FotoPerfilActivity"
             android:exported="false"
             android:label="@string/fp_titulo" />
+        <!-- Serviços de filmes e séries (Trakt, Simkl, MDBList, TMDB, OpenSubtitles): ServicosFilmesActivity.kt -->
+        <activity
+            android:name=".ServicosFilmesActivity"
+            android:exported="false"
+            android:label="@string/sv_titulo" />
+        <!-- Conta conectada do Trakt/Simkl/MDBList: o que sincroniza e as listas no catálogo (SincronizarActivity.kt) -->
+        <activity
+            android:name=".SincronizarActivity"
+            android:exported="false"
+            android:label="@string/sync_listas" />
         <activity
             android:name=".EntrarPeloQrActivity"
             android:exported="false"
@@ -762,6 +780,10 @@
         <service android:name=".GravacaoServico" android:exported="false" android:process=":player"
             android:foregroundServiceType="dataSync" />
         <receiver android:name=".GravacaoReceiver" android:exported="false" android:process=":player" />
+        <!-- Ideia 87: rádios (catálogo mundial radio-browser.info). No processo do player: o som é dele. -->
+        <activity android:name=".RadioActivity" android:exported="false" android:process=":player"
+            android:excludeFromRecents="true" android:launchMode="singleTask"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection" />
         <activity android:name=".GravacoesActivity" android:exported="false" android:process=":player"
             android:excludeFromRecents="true"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection" />

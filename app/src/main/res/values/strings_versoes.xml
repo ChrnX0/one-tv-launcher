@@ -17,6 +17,26 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Movies and Series with outside data: sign in to Trakt, Simkl, MDBList and OpenSubtitles with a code on your phone (Settings › TV and movies › Movie and series services, or in the web panel); the details page gets TMDB plot, cast and collections, the IMDb rating and the next episode date</item>
+        <item>Trakt and Simkl: sync Interests, watched and where you stopped (each turned on separately, all start off), and up to 8 of your lists become categories in Movies and Series</item>
+        <item>Quick details with the ratings (IMDb, Rotten Tomatoes) and, on series in Interests, the “New ep. Fri, 11/20” label</item>
+        <item>“Previously”: a series paused for more than 3 weeks shows the previous episode\'s summary before the next one</item>
+        <item>Cast on the details page and in the player\'s ▼ menu: photo and character of each person and, with the focus on one, what else they did that is in your list</item>
+        <item>Kids mode by age: choose the maximum age (All ages, 10, 12, 14 or 16) in Settings › Family or in the panel; movies and series up to that rating show from any category</item>
+        <item>Where to watch: “Also on: Netflix · Prime Video” on the details page and, in Search, where to find what is not in your list (data from JustWatch)</item>
+        <item>Automatic subtitles: when the audio is not in the TV language and there is no subtitle, the player downloads the OpenSubtitles one made for that file (turn off in ▼)</item>
+        <item>One TV phone app: finds the TVs at home, opens the panel with the certificate checked through the QR, changes the volume and shares to the TV</item>
+        <item>Set up a new TV from your phone: Welcome › Set up with your phone shows a QR code; the phone creates the PIN and picks language, live TV list, city and services, in big steps</item>
+        <item>Sign in to the web panel with your phone\'s fingerprint or face (passkey), through the Tailscale address: Panel › Sign-ins › Sign in with fingerprint</item>
+        <item>Screens checked by picture on GitHub before each version: cut or shrunken text and lost focus are caught before reaching the TV</item>
+        <item>Radio inside Live TV: stations from all over the world (radio-browser.info), near you and most listened in your country first, search by name, genre or country, favorites on keys 1–9 and the song that is playing; the screen dims after 3 min and the sound keeps going. Paste any station address in the web panel</item>
+        <item>Birthdays: list in the web panel (Extras); on the day before and on the day, the home screen and the screensaver show “Today is …’s birthday”</item>
+        <item>Strong heat or cold alert (“Drink water”, “Dress warmly”) next to the rain alert; Settings › Home screen to turn it off</item>
+        <item>Family board on the TV: in the quick panel, OK marks a message as read (it leaves the screensaver) and X deletes it</item>
+        <item>In December, “Your TV in 2026” on the screensaver: hours, most watched apps and favorite channel</item>
+        <item>Turn off when idle now comes on by itself at 3 h on TVs where nobody ever chose; whoever chose “Never” keeps it</item>
+        <item>“Are you still watching?” in large text when nobody presses the remote for the time set in Settings › Screen and power › Turn off when idle; with no answer in 60 s, the movie or app pauses before the screen goes off, so you can continue from there later</item>
+        <item>Without internet, the top of the home screen says in one line what still works (USB drive, Network, Recordings) and goes away when it comes back; OK on it opens Diagnostics</item>
         <item>New Games screen, console style: the focused game shows big with its official logo, one row with the last played first (OK plays), and the home screen Games card shows the last game</item>
         <item>The TV as a network drive: its storage opens in Windows (Map network drive), Mac, Linux and phone file apps over WebDAV, with the panel PIN as password; it also shows up in Windows Network (Settings › Remote access, off by default)</item>
         <item>Player: the top of the column just says TV, Movies or Series, with Search and Filter buttons beside it; the list makes room for Recordings (TV: Favorites, Recent, Guide, Recordings)</item>
@@ -96,9 +116,30 @@
         <item>Blu-ray and DVD subtitles (PGS, VobSub) now show in movies and series, and anime ASS subtitles keep their original colour and position</item>
         <item>Network: folders over FTP, FTPS, SFTP and NFS (NAS, router with a drive, Linux or Mac computer), and a USB drive plugged into the TV shows up by itself under “Plugged into the TV”</item>
         <item>Live TV records to a USB drive or disk on the hub (or a Windows/NAS folder): ▶▶ › Record on a channel, OK on a future show in the guide to schedule it (also every week), and the Recordings screen in the live TV column</item>
+        <item>On the network: OneDrive and Dropbox as a source of videos, music and photos (once, you create your own app at the service and sign in from your phone)</item>
+        <item>Subtitles in the same folder as the video (Movie.srt, Movie.pt-BR.ass) show up in ▼ by themselves, in network folders, the cloud and USB drives</item>
+        <item>Movies and series at their own frame rate: the TV switches to 24 Hz and the picture does not judder in camera moves (Settings › TV and movies, ▼ menu and panel)</item>
+        <item>On the network: Box and Google Drive as sources too (you create the app at the service once; to sign in, a phone on the same Wi‑Fi scans the QR and comes back to the TV by itself)</item>
+        <item>Nightly backup: the extra copy can also go to the OneDrive, Dropbox or Box account added in Network (OneTV-backup folder, the last 7 are kept)</item>
         <item>Guide: OK on a show that has not started has “Remind me” and “Switch on its own when it starts” (the TV changes to the channel; 10 s to cancel)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>servicos_trakt</item>
+        <item>servicos_simkl</item>
+        <item>ficha_tmdb</item>
+        <item>elenco</item>
+        <item>idade_infantil</item>
+        <item>legenda_auto</item>
+        <item>novo_ep_interesses</item>
+        <item>busca_justwatch</item>
+        <item>primeira_celular</item>
+        <item>menu_config_corte</item>
+        <item>radios</item>
+        <item>aniversarios</item>
+        <item>calor_frio</item>
+        <item>mural_tv</item>
+        <item>ainda_assistindo</item>
+        <item>sem_internet</item>
         <item>unidade_rede</item>
         <item>coluna_botoes</item>
         <item>jogos_card</item>
@@ -176,9 +217,29 @@
         <item>pendrive_na_rede</item>
         <item>gravar_agora</item>
         <item>gravar_agendada</item>
+        <item>nuvem_fonte</item>
+        <item>taxa_quadros</item>
+        <item>nuvem_box</item>
+        <item>backup_nuvem</item>
         <item>troca_sozinha</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Settings › TV and movies › Movie and series services › Trakt › OK</item>
+        <item>On the same screen, Simkl › OK</item>
+        <item>Open the details of a well-known movie in Movies</item>
+        <item>On the details page, OK on Cast and stop on an actor</item>
+        <item>Settings › Family › Maximum age in kids mode: 10; turn kids mode on and open Movies</item>
+        <item>Open a foreign movie that has no subtitle in the TV language</item>
+        <item>In Series › Interests, move over the posters of a series still on the air</item>
+        <item>In Search, type a movie that is not in your list</item>
+        <item>Settings › Remote access › Sign in with your phone</item>
+        <item>Settings: walk down the left menu</item>
+        <item>Live TV › left column › Radio</item>
+        <item>Web panel › Extras › Birthdays: add someone with today’s date</item>
+        <item>Settings › Home screen › Heat and cold alert</item>
+        <item>Web panel: pin a message on the board; on the TV open the quick panel</item>
+        <item>In Settings › Screen and power, set Turn off when idle to 30 min, play a movie and press nothing</item>
+        <item>Turn off the internet at the router (or unplug its internet cable) and press HOME; wait 30 s</item>
         <item>Network drive</item>
         <item>Search and Filter at the top of the column</item>
         <item>Press HOME and go to the end of the WATCH AND PLAY row</item>
@@ -256,9 +317,29 @@
         <item>Plug a USB drive with videos into the TV and open Network</item>
         <item>With a USB drive on the hub, on a channel: ▶▶ › Record 1 hour; after 2 min, OK › Recordings in the column</item>
         <item>In the guide, OK on a show starting in 10 min › Record; turn the TV off and wait for it to end</item>
+        <item>In On the network › OneDrive (or Dropbox), follow the steps and open a video from the cloud</item>
+        <item>Open a movie and watch a scene where the camera pans slowly</item>
+        <item>In Network › Box (then Google Drive), follow the steps on a computer and point a phone (on the home Wi‑Fi) at the QR</item>
+        <item>In Settings › System › Automatic backup, press OK on Extra copy until the cloud account shows up, then Back up now</item>
         <item>In the guide, OK on a show starting in a few minutes › Switch on its own; wait with the TV on another channel</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Did the code and QR show up, the phone approve it and the TV show the account connected?</item>
+        <item>Did the code work at simkl.com/pin and the TV show the account connected?</item>
+        <item>Did the plot, the IMDb rating and “Also on: …” show up?</item>
+        <item>Did the photos show up and, below, other titles of theirs that are in your list?</item>
+        <item>Did only movies up to 10 show up (plus unrated ones from kids categories)?</item>
+        <item>Within a few seconds did “Subtitle downloaded automatically” show and turn on by itself?</item>
+        <item>Does the poster show “New ep. …” and the quick details at the top show the ratings?</item>
+        <item>Did “Elsewhere (JustWatch)” show up with the service where it is?</item>
+        <item>The QR showed up big, the phone read it and the panel opened already signed in?</item>
+        <item>Is the focus outline whole on every item (not cut at the sides)?</item>
+        <item>Did a station near you play, with the name large and (when the station sends it) the song, and did key 1 play the first favorite?</item>
+        <item>Did “Today is …’s birthday” appear at the top of the home screen and on the screensaver?</item>
+        <item>Is the switch there and on?</item>
+        <item>Did OK mark the message as read (and it left the screensaver), and did X delete it?</item>
+        <item>Did a large “Are you still watching?” appear, did any button cancel it and, with no answer, did the movie pause before the screen went off (and continue from there)?</item>
+        <item>Did “No internet · Still working: …” appear at the top, and go away when the internet came back?</item>
         <item>With Settings › Remote access › Show the TV as a network drive on, does Windows Map network drive with the address shown there and the panel PIN open the TV folders?</item>
         <item>In TV, Movies and Series, does ▲ on the first row reach the Search and Filter buttons beside the title, and ▼ go back to the list?</item>
         <item>Is there an amber Games card after Network?</item>
@@ -336,6 +417,10 @@
         <item>Does the drive show under “Plugged into the TV” and does a video from it play?</item>
         <item>Did the channel keep playing smoothly, and does the recording show up and play in Recordings?</item>
         <item>Afterwards, is the whole show in Recordings?</item>
+        <item>Did the video play, and could you skip forward and back without stalling?</item>
+        <item>Did the screen blink black at the start, and was the motion smooth, without stutter?</item>
+        <item>After allowing access, did the phone say “Done” and the Box (and Drive) folder open on the TV, with a video playing?</item>
+        <item>Did the screen say “ok: TV + OneDrive/Dropbox/Box”, and did the file show up in the cloud\'s OneTV-backup folder?</item>
         <item>At the start time, did the countdown show and the TV change to the channel?</item>
     </string-array>
 </resources>

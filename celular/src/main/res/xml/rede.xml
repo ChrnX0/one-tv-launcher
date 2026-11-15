@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- O painel da TV na rede de casa é http (porta 8080) quando a TV ainda não tem https: o Android não deixa limitar
+     o "texto aberto" por IP, então ele fica liberado, e o app só abre endereços de TVs (Pareamento.ler aceita só IP
+     privado). O https segue a regra normal; o certificado da TV é aceito só pela impressão lida no QR (PainelActivity). -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

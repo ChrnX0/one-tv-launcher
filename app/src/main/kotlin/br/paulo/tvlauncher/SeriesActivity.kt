@@ -41,6 +41,7 @@ import java.util.Locale
  */
 class SeriesActivity : Activity() {
     private companion object {
+        const val ANTERIORMENTE_OFF = "anteriormente_off"   // prefs "player" (vai no backup): o dono desligou o resumo
         const val MAX_NOVIDADES = 15
         const val MIN_PULAR = 30
         const val BUSCAR = "*buscar"
@@ -63,14 +64,22 @@ class SeriesActivity : Activity() {
     private val fonteMedia = Fontes.manrope(500)
 
     private var series: List<Serie> = emptyList()      // o que a tela mostra (sem as categorias ocultas, até o PIN)
+    // Ficha de fora (TMDB: sinopse, próximo episódio; MDBList: notas) da série aberta (InfoExterna, 14/11/2026).
+    private var externo: Pair<Serie, InfoExterna.Guardado>? = null
+    /** Listas de fora escolhidas (Trakt, MDBList) com os itens: viram categorias em LISTAS (fatia 3). */
+    @Volatile private var listasFora: List<Pair<SincronizarFilmes.ListaFora, List<SincronizarFilmes.Item>>> = emptyList()
+    @Volatile private var cacheTitulos: Pair<List<Serie>, List<SincronizarFilmes.Titulo>>? = null
     private var todas: List<Serie> = emptyList()       // o catálogo inteiro, como veio do servidor
     private var ocultas: Set<String> = emptySet()      // categorias escondidas (adultas, escondidas, controle parental)
+    @Volatile private var porIdade: IdadesTmdb.Filtro? = null   // ideia 91: modo infantil com idade máxima
     private var mostrarOcultas = false                 // true só depois do PIN, como no player da TV ao vivo
     private var indoAoVideo = false                    // saiu para a VodActivity: o PIN continua valendo na volta
     private val janelas by lazy { PlayerJanelas(this) }
     private var ultimos: Map<String, UltimoEpisodio> = emptyMap()
     private var posicoes: Map<String, Posicao> = emptyMap()
     private var interesses: Set<String> = emptySet()
+    /** Próximo episódio marcado no TMDB (só o que já está guardado), por chave: vira a etiqueta "Novo ep. sex., 20/11". */
+    private var proximos: Map<String, InfoExterna.ProximoEp> = emptyMap()
     /** De que perfil são os interesses e posições na memória (ideia 11): trocou de perfil, a tela se refaz ao voltar. */
     private var perfilCarregado = ""
     private var progresso: Map<String, ProgressoSerie> = emptyMap()   // episódios vistos / total, por série
@@ -172,11 +181,12 @@ class SeriesActivity : Activity() {
             val oc = VodFiltro.ocultas(lista.map { it.grupo }, PlayerArmazem.gruposEscondidos(this),
                 PlayerArmazem.gruposLiberados(this), PlayerArmazem.parental(this))
             val pi = IdiomaPlayer.prefs(this)   // trocar o áudio num episódio muda a escolha da série
+            val fi = IdadesTmdb.filtro(this, lista.map { it.grupo }, serie = true)
             tela.post {
                 if (isDestroyed) return@post
                 prefsIdioma = pi
-                if (oc == ocultas) return@post
-                ocultas = oc
+                if (oc == ocultas && fi?.max == porIdade?.max) return@post
+                ocultas = oc; porIdade = fi
                 if (aberta?.let { !mostrarOcultas && it.grupo.trim() in oc } == true) fecharFicha()
                 refiltrarOcultas()
             }
@@ -259,16 +269,18 @@ class SeriesActivity : Activity() {
             // Categorias ocultas: a mesma regra do player (adultas, escondidas) + as bloqueadas no controle parental.
             val oc = VodFiltro.ocultas(s.map { it.grupo }, PlayerArmazem.gruposEscondidos(this),
                 PlayerArmazem.gruposLiberados(this), PlayerArmazem.parental(this))
+            val fi = IdadesTmdb.filtro(this, s.map { it.grupo }, serie = true)
             val u = PlayerArmazem.ultimosEpisodios(this)
             val p = PlayerArmazem.posicoes(this)
             val i = PlayerArmazem.interesses(this, series = true)
             val pr = PlayerArmazem.progressoSeries(this)
+            val px = proximosGuardados(s)
             val pi = IdiomaPlayer.prefs(this)
             val marco = prefsPlayer().getLong(chavePref("marco"), 0L)
             val ultima = prefsPlayer().getString(chavePref("ultima"), null)
             tela.post {
                 if (isDestroyed) return@post
-                todas = s; ocultas = oc; ultimos = u; posicoes = p; interesses = i; progresso = pr; prefsIdioma = pi
+                todas = s; ocultas = oc; porIdade = fi; ultimos = u; posicoes = p; interesses = i; progresso = pr; prefsIdioma = pi; proximos = px
                 marcoNovos = marco; ultimaSalva = ultima
                 conferirNovidades()
                 if (s.isEmpty()) { aviso.text = getString(R.string.series_vazio); return@post }
@@ -276,11 +288,72 @@ class SeriesActivity : Activity() {
                 intent.getStringExtra(BuscaUnica.EXTRA_TERMO)?.trim()?.takeIf { it.isNotEmpty() }?.let { t -> termo = t; chave = BUSCA }
                 // A 1ª conta (ocultas, contagens, ordem) também sai da thread da tela; o "Carregando" fica até ela chegar.
                 recalcular(ModoGrade.NOVA, inicial = true) { aviso.visibility = View.GONE; grade.requestFocus() }
+                sincronizarFora(s, forcar = false)
+                classificarIdades(s)
                 // O índice das versões sai depois da grade na tela (é a parte demorada; a ficha funciona sem ele).
                 Fundo.rodar {
                     val idx = Idioma.indice(s, { it.nome }, { it.grupo })
                     tela.post { if (!isDestroyed && todas === s) indiceVersoes = idx }
                 }
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------- Trakt/Simkl e listas de fora (fatia 3)
+
+    private fun titulosDoCatalogo(vis: List<Serie>): List<SincronizarFilmes.Titulo> =
+        cacheTitulos?.takeIf { it.first === vis }?.second ?: vis.map {
+            SincronizarFilmes.Titulo(it.chave, it.tmdb ?: InfoExternaCache.guardado(this, it.chave)?.tmdb, InfoExterna.chaveNomeAno(Vod.nomeLimpo(it.nome), it.ano))
+        }.also { cacheTitulos = vis to it }
+
+    /** Igual a Filmes: listas escolhidas e sincronização (no máximo a cada 20 min); mudou algo, relê e refaz a coluna. */
+    private fun sincronizarFora(s: List<Serie>, forcar: Boolean) {
+        val escolhidas = ServicosSync.listas(this)
+        val algumaConta = ServicosSync.ativo(this, ServicosFilmes.Servico.TRAKT) || ServicosSync.ativo(this, ServicosFilmes.Servico.SIMKL)
+        if (escolhidas.isEmpty() && !algumaConta) { listasFora = emptyList(); return }
+        Fundo.rodar("series-fora") {
+            if (escolhidas.isNotEmpty()) {
+                listasFora = escolhidas.map { it to ServicosSync.itensGuardados(this, it) }
+                tela.post { if (!isDestroyed) recalcular(ModoGrade.IGUAL) }
+                listasFora = escolhidas.map { it to ServicosSync.itens(this, it, forcar) }
+                tela.post { if (!isDestroyed) recalcular(ModoGrade.IGUAL) }
+            }
+            if (!algumaConta) return@rodar
+            val m = ServicosSync.sincronizar(this, SincronizarFilmes.Tipo.SERIE, titulosDoCatalogo(s), forcar)
+            if (!m.interesses && !m.posicoes) return@rodar
+            val i = PlayerArmazem.interesses(this, series = true); val p = PlayerArmazem.posicoes(this)
+            tela.post {
+                if (isDestroyed) return@post
+                interesses = i; posicoes = p
+                adaptadorGrade.notifyDataSetChanged()
+                recalcular(ModoGrade.MANTER_LUGAR)
+            }
+        }
+    }
+
+    /** Episódios vistos no Trakt e ainda não aqui: marca como vistos (visto é união). Na tela, com a ficha aberta. */
+    private fun trazerEpisodiosVistos(s: Serie, f: FichaSerie, tmdb: Int) {
+        Fundo.rodar {
+            val fora = ServicosSync.episodiosVistosFora(this, tmdb)
+            if (fora.isEmpty()) return@rodar
+            tela.post {
+                if (isDestroyed || aberta !== s) return@post
+                val agora = System.currentTimeMillis()
+                val novas = HashMap(posicoes)
+                var mudou = false
+                for ((t, eps) in f.temporadas) for (ep in eps) {
+                    if (SincronizarFilmes.Ep(t, ep.numero) !in fora) continue
+                    val k = ep.chave(s.fonteId)
+                    if (Vod.finalizado(novas[k], episodio = true)) continue
+                    val d = novas[k]?.duracao?.takeIf { it > 0 } ?: ((ep.duracaoMin ?: 1) * 60_000L)
+                    novas[k] = Posicao(d, d, agora); mudou = true
+                }
+                if (!mudou) return@post
+                posicoes = novas
+                val copia = novas
+                Fundo.rodar { PlayerArmazem.definirPosicoes(this, copia) }
+                atualizarProgresso(s, f)
+                desenharFicha()
             }
         }
     }
@@ -292,6 +365,14 @@ class SeriesActivity : Activity() {
      * dizer QUANTOS episódios novos ("3 episódios novos", "Nova temporada"). Só as dos Interesses e do Continuar, no
      * máximo [MAX_NOVIDADES] por visita (cada uma é um pedido ao servidor).
      */
+    /** Fora da tela (a primeira leitura do arquivo de fichas de fora vai ao disco). */
+    private fun proximosGuardados(series: List<Serie>): Map<String, InfoExterna.ProximoEp> {
+        if (!InfoExternaCache.temTmdb()) return emptyMap()
+        val r = HashMap<String, InfoExterna.ProximoEp>()
+        for (s in series) InfoExternaCache.guardado(this, s.chave)?.detalhe?.proximo?.let { r[s.chave] = it }
+        return r
+    }
+
     private fun conferirNovidades() {
         val alvo = todas.filter { s -> (s.chave in interesses || s.chave in ultimos) && Series.etiqueta(s, progresso[s.chave]) == EtiquetaSerie.Novos(0) }
             .take(MAX_NOVIDADES)
@@ -309,12 +390,27 @@ class SeriesActivity : Activity() {
     private class Estado(val series: List<Serie>, val resultados: List<Serie>, val acoes: List<ColunaCategorias.Linha>,
                          val botoes: List<ColunaCategorias.Linha>,
                          val fixas: List<ColunaCategorias.Linha>, val rola: List<ColunaCategorias.Linha>, val chave: String,
-                         val grade: List<Serie>?)
+                         val grade: List<Serie>?, val deLista: Pair<Int, Int>? = null)
 
     private val calculo = CalculoTela(tela, "series-conta")
 
     // Caches da conta (só a thread da [calculo] lê e escreve). A chave é a própria lista (===): lista nova = refaz.
     private var cacheVisiveis: Triple<List<Serie>, Set<String>, List<Serie>>? = null
+    @Volatile private var cacheIdade: IdadesTmdb.Filtro? = null
+
+    private fun tmdbDaSerie(s: Serie): Int? = s.tmdb ?: InfoExternaCache.guardado(this, s.chave)?.tmdb
+
+    /** Ideia 91: com idade máxima, pergunta ao TMDB a classificação das que faltam (infantis primeiro) e refaz a grade. */
+    private fun classificarIdades(lista: List<Serie>) {
+        val fi = porIdade ?: return
+        Fundo.rodar("series-idades") {
+            val ids = lista.filter { it.grupo.trim() !in fi.duras }.sortedBy { if (it.grupo.trim() in fi.infantis) 0 else 1 }.mapNotNull { tmdbDaSerie(it) }
+            if (IdadesTmdb.classificar(this, serie = true, ids) > 0) {
+                val novo = IdadesTmdb.filtro(this, lista.map { it.grupo }, serie = true)
+                tela.post { if (!isDestroyed && todas === lista) { porIdade = novo; recalcular(ModoGrade.MANTER_LUGAR) } }
+            }
+        }
+    }
     private var cacheBusca: Triple<List<Serie>, String, List<Serie>>? = null
     private var cacheOrdem: Triple<List<Serie>, Vod.Ordem, List<Serie>>? = null
     private var cacheGrupos: Pair<List<Serie>, List<Pair<String, Int>>>? = null
@@ -327,21 +423,28 @@ class SeriesActivity : Activity() {
      */
     private fun recalcular(modo: ModoGrade, inicial: Boolean = false, depois: (() -> Unit)? = null) {
         val todasS = todas; val ocultasS = if (mostrarOcultas) emptySet() else ocultas; val mostrar = mostrarOcultas
+        val idadeS = porIdade
         val termoS = termo; val ultS = ultimos; val posS = posicoes; val intS = interesses; val progS = progresso
         val ordemS = ordem; val chaveS = chave; val marcoS = marcoNovos; val ultimaS = ultimaSalva; val naoVistasS = soNaoVistas
+        val listasS = listasFora
         val ocultasTodas = ocultas
         val rotulo = { id: Int -> getString(id) }
         val antesSel = grade.selectedItemPosition
         calculo.pedir(
             calcular = {
-                val vis = cacheVisiveis?.takeIf { it.first === todasS && it.second == ocultasS }?.third
-                    ?: (if (mostrar) todasS else VodFiltro.visiveis(todasS, ocultasS) { it.grupo }).also { cacheVisiveis = Triple(todasS, ocultasS, it) }
+                val vis = cacheVisiveis?.takeIf { it.first === todasS && it.second == ocultasS && cacheIdade === idadeS }?.third
+                    ?: (when {
+                        mostrar -> todasS
+                        idadeS != null -> todasS.filter { Classificacao.visivel(it.grupo, tmdbDaSerie(it)?.let(idadeS.idades::get), idadeS.max, idadeS.infantis, idadeS.duras) }
+                        else -> VodFiltro.visiveis(todasS, ocultasS) { it.grupo }
+                    }).also { cacheVisiveis = Triple(todasS, ocultasS, it); cacheIdade = idadeS }
                 val res = if (termoS.isEmpty()) emptyList() else cacheBusca?.takeIf { it.first === vis && it.second == termoS }?.third
                     ?: Series.buscar(vis, termoS).also { cacheBusca = Triple(vis, termoS, it) }
                 val cont = Series.continuar(vis, ultS, progS)
                 val ints = Vod.interesses(vis, intS) { it.chave }
                 val vistas = Series.assistidos(vis, ultS, posS, progS)
-                val L = ColunaCategorias::Linha
+                fun L(c: String, n: String, q: Int, i: Any?, nv: Int, d: Boolean, det: String, et: String = "") =
+                    ColunaCategorias.Linha(c, n, q, i, nv, d, det, et)
                 // Buscar e Filtro viram botões redondos ao lado do título (pedido do Paulo: mais espaço na lista).
                 // No modo simples fica só Buscar.
                 val botoes = listOfNotNull(
@@ -359,6 +462,17 @@ class SeriesActivity : Activity() {
                 val fixas = ArrayList<ColunaCategorias.Linha>()
                 if (termoS.isNotEmpty()) fixas += L(BUSCA, getString(R.string.player_cat_busca, termoS), res.size, IconeMidia.Tipo.LUPA, 0, false, "")
                 fixas += L(TODOS, rotulo(R.string.player_cat_todos), vis.size, IconePlayer.Tipo.TODOS, 0, false, "")
+                // Listas de fora, logo abaixo de Todos: só as séries que a lista de IPTV tem, na ordem da lista.
+                val fora = HashMap<String, Pair<List<String>, Int>>()
+                if (listasS.isNotEmpty()) {
+                    val cat = titulosDoCatalogo(vis)
+                    for ((l, itensL) in listasS) {
+                        val (chs, casaram) = SincronizarFilmes.cruzar(itensL, cat, SincronizarFilmes.Tipo.SERIE)
+                        if (chs.isEmpty()) continue
+                        fora["x:${l.chave}"] = chs to itensL.count { it.tipo == SincronizarFilmes.Tipo.SERIE }
+                        fixas += L("x:${l.chave}", l.nome, casaram, null, 0, false, "", if (l.servico == "trakt") "Trakt" else "MDBList")
+                    }
+                }
                 val grupos = cacheGrupos?.takeIf { it.first === vis }?.second ?: Series.grupos(vis).also { cacheGrupos = vis to it }
                 val novos = cacheNovos?.takeIf { it.first === vis && it.second == marcoS }?.third
                     ?: ColunaRegras.novosPorGrupo(vis, marcoS, { it.grupo }, { it.atualizada }).also { cacheNovos = Triple(vis, marcoS, it) }
@@ -380,11 +494,12 @@ class SeriesActivity : Activity() {
                         ch == ASSISTIDOS -> vistas
                         ch == INTERESSES -> ints                 // a última marcada primeiro
                         ch == BUSCA -> res
+                        ch.startsWith("x:") -> { val porChave = vis.associateBy { it.chave }; fora[ch]?.first.orEmpty().mapNotNull { porChave[it] } }
                         ch.startsWith("g:") -> { val alvo = ch.removePrefix("g:"); ordenadas().filter { it.grupo.trim() == alvo } }
                         else -> ordenadas()
                     }.let { lista -> if (naoVistasS) lista.filter { it.chave !in ultS && (progS[it.chave]?.vistos ?: 0) == 0 } else lista }
                 }
-                Estado(vis, res, acoes, botoes, fixas, rola, ch, g)
+                Estado(vis, res, acoes, botoes, fixas, rola, ch, g, fora[ch]?.let { it.first.size to it.second })
             },
             aplicar = { e ->
                 if (!isDestroyed) {
@@ -405,7 +520,8 @@ class SeriesActivity : Activity() {
                     }
                     val nome = itens.firstOrNull { it.chave == chave }?.nome.orEmpty()
                     // "Drama 310 [Ordem: mais recentes] [Só não vistos]": o que está na grade e por quê (acréscimo 1).
-                    painelInfo.mostrarTopo(nome, naGrade.size, listOfNotNull(getString(R.string.coluna_filtro_ordem, nomeOrdem(ordem)) to false,
+                    painelInfo.mostrarTopo(nome, naGrade.size, listOfNotNull(e.deLista?.let { (n, t) -> getString(R.string.sync_n_de, n, t) to false }
+                        ?: (getString(R.string.coluna_filtro_ordem, nomeOrdem(ordem)) to false),
                         if (soNaoVistas) getString(R.string.filmes_filtro_nao_vistos_curto) to true else null))
                     depois?.invoke()
                 }
@@ -436,9 +552,21 @@ class SeriesActivity : Activity() {
             s.ano?.toString(),
             info?.temporadas?.size?.takeIf { it > 0 }?.let { resources.getQuantityString(R.plurals.series_temporadas, it, it) },
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(s.grupo).ifEmpty { null },
-            ultimos[s.chave]?.let { "T${it.temporada}E${it.numero}" })),
+            ultimos[s.chave]?.let { "T${it.temporada}E${it.numero}" },
+            extRapidas[s.chave]?.ifEmpty { null })),
             info?.sinopse.orEmpty())
         focoRapido = s; if (s.chave !in fichasRapidas) { tela.postDelayed(lerFichaRapida, 400) }
+    }
+
+    private val hoje: java.time.LocalDate get() = java.time.LocalDate.now()
+
+    /** "sex., 20/11" do próximo episódio, só nas séries dos Interesses (o pedido: "nas séries de Interesses"). */
+    private fun proximoCurto(s: Serie): String? = proximos[s.chave]?.takeIf { s.chave in interesses }
+        ?.let { InfoExterna.quandoCurto(it, hoje, getString(R.string.ext_hoje), getString(R.string.ext_amanha)) }
+
+    /** Notas de fora (IMDb, RT...) e "Novo episódio sexta, 20/11" para a faixa da ficha rápida; lidas no Fundo. */
+    private val extRapidas = object : LinkedHashMap<String, String>(64, 0.75f, true) {
+        override fun removeEldestEntry(e: MutableMap.MutableEntry<String, String>) = size > 40
     }
 
     private val fichasRapidas = object : LinkedHashMap<String, FichaSerie?>(64, 0.75f, true) {
@@ -451,12 +579,21 @@ class SeriesActivity : Activity() {
             // Só o que a tela usa (a ficha inteira, com todos os episódios, não fica na memória).
             // Sem ficha no disco: pede ao servidor se o foco ainda está nela (mesmo motivo de Filmes).
             val info = (PlayerCarga.fichaSerieGuardada(this, s) ?: if (focoRapido === s) PlayerCarga.fichaSerie(this, s) else null)?.let { f -> f.copy(temporadas = f.temporadas.mapValues { emptyList() }, cenas = emptyList()) }
+            val ext = textoExtRapido(s.chave, serie = true)
             tela.post {
                 if (isDestroyed) return@post
-                fichasRapidas[s.chave] = info
+                fichasRapidas[s.chave] = info; extRapidas[s.chave] = ext
                 if (naGrade.getOrNull(grade.selectedItemPosition) === s) mostrarFocado(s)
             }
         }
+    }
+
+    /** Só o que está guardado (sem rede): notas e, na série, o próximo episódio. Vazio = nada a mostrar. */
+    private fun textoExtRapido(chave: String, serie: Boolean): String {
+        val g = InfoExternaCache.guardado(this, chave) ?: return ""
+        val notas = InfoExterna.notasDe(g).takeIf { !it.vazia }?.let { InfoExterna.textoNotas(it) }
+        val prox = if (serie) g.detalhe?.proximo?.let { InfoExterna.textoProximo(it, hoje, getString(R.string.ext_proximo), getString(R.string.ext_hoje), getString(R.string.ext_amanha)) } else null
+        return listOfNotNull(notas, prox).joinToString("  ·  ")
     }
 
     // ---------------------------------------------------------------- pular para uma letra (acréscimo 3)
@@ -541,12 +678,16 @@ class SeriesActivity : Activity() {
                 EtiquetaSerie.Concluida -> getString(R.string.coluna_etiqueta_concluida)
                 EtiquetaSerie.NovaTemporada -> getString(R.string.coluna_etiqueta_nova_temporada)
                 is EtiquetaSerie.Novos -> if (etq.quantos > 0) resources.getQuantityString(R.plurals.coluna_etiqueta_n_novos, etq.quantos, etq.quantos) else getString(R.string.coluna_etiqueta_novos)
-                null -> progresso[s.chave]?.takeIf { it.vistos > 0 && it.total > 0 }?.let { getString(R.string.tempo_x_de_y, it.vistos, it.total) }
+                // Série dos Interesses com episódio novo marcado (TMDB) ganha do "20 de 62": a barra já mostra o progresso.
+                null -> proximoCurto(s)?.let { getString(R.string.ext_proximo_curto, it) }
+                    ?: progresso[s.chave]?.takeIf { it.vistos > 0 && it.total > 0 }?.let { getString(R.string.tempo_x_de_y, it.vistos, it.total) }
             }
             if (texto == null) c.etiqueta.visibility = View.GONE else {
                 c.etiqueta.visibility = View.VISIBLE
                 c.etiqueta.text = texto
-                c.etiqueta.setTextColor(if (etq is EtiquetaSerie.Novos || etq == EtiquetaSerie.NovaTemporada) Estilo.FUNDO else papel)
+                val novo = etq is EtiquetaSerie.Novos || etq == EtiquetaSerie.NovaTemporada
+                val marcado = etq == null && proximoCurto(s) != null
+                c.etiqueta.setTextColor(if (novo) Estilo.FUNDO else if (marcado) ambar else papel)
                 (c.etiqueta.background as GradientDrawable).setColor(when (etq) {
                     EtiquetaSerie.Concluida -> verdeEtiqueta
                     null -> 0xD90B0F17.toInt()
@@ -623,6 +764,13 @@ class SeriesActivity : Activity() {
                 atualizarProgresso(s, f)
                 temporada = ultimos[s.chave]?.temporada?.takeIf { f?.temporadas?.containsKey(it) == true } ?: f?.temporadas?.keys?.firstOrNull() ?: 1
                 desenharFicha()
+            }
+            // Ficha de fora, depois da do servidor; sem chave nenhuma, não faz nada.
+            if (InfoExternaCache.temTmdb() || InfoExternaCache.temNotas(this)) {
+                val g = InfoExternaCache.resolver(this, s.chave, s.nome, s.ano, true, f?.tmdb ?: s.tmdb)
+                tela.post { if (!isDestroyed && aberta === s) { externo = s to g; desenharFicha() } }
+                val id = g.tmdb
+                if (f != null && id != null) tela.post { if (!isDestroyed && aberta === s) trazerEpisodiosVistos(s, f, id) }
             }
         }
     }
@@ -710,13 +858,29 @@ class SeriesActivity : Activity() {
                 Idioma.Versao.DESCONHECIDA -> null
             }).joinToString("   ·   ")
         col.addView(TextView(this).apply { text = dados; textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(8), 0, 0) })
+        // De fora: notas (MDBList) e "Novo episódio sexta, 21/11 (T2E5)" (TMDB), numa linha, em âmbar.
+        val ext = externo?.takeIf { it.first === s }?.second
+        val proximo = ext?.detalhe?.proximo?.let {
+            InfoExterna.textoProximo(it, java.time.LocalDate.now(), getString(R.string.ext_proximo), getString(R.string.ext_hoje), getString(R.string.ext_amanha))
+        }
+        listOfNotNull(ext?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { InfoExterna.textoNotas(it) }, proximo).takeIf { it.isNotEmpty() }?.let { partes ->
+            col.addView(TextView(this).apply { text = partes.joinToString("   ·   "); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPadding(0, dp(6), 0, 0); maxLines = 2 })
+        }
+        // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch), preenchido quando chegar; some se não tiver.
+        tmdbDe(s, f)?.takeIf { InfoExternaCache.temTmdb() }?.let { id ->
+            val linhaOnde = TextView(this).apply { textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(6), 0, 0); visibility = View.GONE; maxLines = 1 }
+            col.addView(linhaOnde)
+            Fundo.rodar { InfoExternaCache.provedores(id, serie = true).takeIf { it.isNotEmpty() }?.let { p ->
+                tela.post { linhaOnde.text = getString(R.string.onde_tambem_em, p.joinToString(" · ")); linhaOnde.visibility = View.VISIBLE }
+            } }
+        }
         // A série inteira: barra + "20 de 62 episódios" (13/11/2026), quando já tem episódio visto.
         progresso[s.chave]?.takeIf { it.total > 0 && it.vistos > 0 }?.let { p ->
             col.addView(BarraTempo.Linha(this).apply {
                 mostrar(BarraTempo.fracao(p.vistos.toLong(), p.total.toLong()), BarraTempo.textoEpisodios(context, p.vistos, p.total))
             }, LinearLayout.LayoutParams(dp(460), -2).apply { topMargin = dp(10) })
         }
-        f?.sinopse?.takeIf { it.isNotEmpty() }?.let {
+        (f?.sinopse?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.sinopse?.takeIf { it.isNotEmpty() })?.let {
             col.addView(TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.15f); maxLines = 3; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(8), 0, 0) })
         }
 
@@ -730,7 +894,7 @@ class SeriesActivity : Activity() {
             val principal = sugestao?.let { (ep, retomar) ->
                 val txt = if (retomar) getString(R.string.series_continuar, ep.rotulo, relogio(posicoes[ep.chave(s.fonteId)]?.ms ?: 0))
                     else getString(R.string.series_assistir, ep.rotulo)
-                botao(txt) { tocar(s, ep, doComeco = !retomar) }
+                botao(txt) { talvezAnteriormente(s, f, ep, doComeco = !retomar) }
             }
             // Botão principal e, se houver, o trailer ao lado (11/11/2026).
             val linhaBotoes = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
@@ -743,6 +907,11 @@ class SeriesActivity : Activity() {
             outraVersao(s)?.let { o ->
                 val r = if (Idioma.versao(o.nome, o.grupo) == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
                 linhaBotoes.addView(botao(getString(r)) { abrirSerie(o) },
+                    LinearLayout.LayoutParams(-2, -2).apply { marginStart = if (linhaBotoes.childCount > 0) dp(12) else 0 })
+            }
+            // Ideia 84: elenco com foto e o que mais cada pessoa fez que está na lista.
+            tmdbDe(s, f)?.takeIf { ElencoActivity.disponivel(it) }?.let { id ->
+                linhaBotoes.addView(botao(getString(R.string.elenco_botao)) { ElencoActivity.abrir(this, id, serie = true, nome = Vod.nomeLimpo(s.nome)) },
                     LinearLayout.LayoutParams(-2, -2).apply { marginStart = if (linhaBotoes.childCount > 0) dp(12) else 0 })
             }
             if (linhaBotoes.childCount > 0) col.addView(linhaBotoes, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(14) })
@@ -792,8 +961,11 @@ class SeriesActivity : Activity() {
     }
 
     private fun menuEpisodio(s: Serie, f: FichaSerie, ep: Episodio, posicao: Int) {
-        val opcoes = listOf(getString(R.string.series_visto_ate_aqui, ep.rotulo), getString(R.string.series_nao_visto))
+        val semResumo = prefsPlayer().getBoolean(ANTERIORMENTE_OFF, false)
+        val opcoes = listOf(getString(R.string.series_visto_ate_aqui, ep.rotulo), getString(R.string.series_nao_visto)) +
+            listOfNotNull(getString(R.string.anteriormente_ligar).takeIf { semResumo })
         Estilo.lista(this, "${ep.rotulo} · ${Series.tituloCurto(s.nome, ep.titulo)}", opcoes) { i ->
+            if (i == 2) { prefsPlayer().edit().putBoolean(ANTERIORMENTE_OFF, false).apply(); return@lista }
             posicoes = if (i == 0) Series.marcarVistosAte(f, s.fonteId, ep, posicoes, System.currentTimeMillis())
                 else Series.desmarcar(s.fonteId, ep, posicoes)
             val copia = posicoes
@@ -832,6 +1004,48 @@ class SeriesActivity : Activity() {
         return v
     }
 
+    private fun tmdbDe(s: Serie, f: FichaSerie?): Int? = s.tmdb ?: f?.tmdb ?: externo?.takeIf { it.first.chave == s.chave }?.second?.tmdb
+
+    /**
+     * Ideia 83 "Anteriormente" (14/11/2026): série parada há mais de 3 semanas, antes do próximo episódio um cartão com o
+     * resumo do anterior (TMDB no idioma da TV; sem ele, a sinopse da lista). Sem resumo, ou desligado, toca direto.
+     */
+    private fun talvezAnteriormente(s: Serie, f: FichaSerie, ep: Episodio, doComeco: Boolean) {
+        val todos = Series.emOrdem(f)
+        val ant = if (prefsPlayer().getBoolean(ANTERIORMENTE_OFF, false)) null
+            else ElencoTmdb.anterior(todos, ep, ElencoTmdb.ultimaVez(todos, s.fonteId, posicoes, ultimos[s.chave]), System.currentTimeMillis())
+        if (ant == null) { tocar(s, ep, doComeco); return }
+        val id = tmdbDe(s, f)
+        Fundo.rodar {
+            val deFora = id?.let { InfoExternaCache.episodio(it, ant.temporada, ant.numero) }
+            val resumo = deFora?.second ?: ant.sinopse.trim().takeIf { it.isNotEmpty() }
+            val nome = deFora?.first?.takeIf { it.isNotBlank() } ?: Series.tituloCurto(s.nome, ant.titulo)
+            tela.post {
+                if (isDestroyed || aberta !== s) return@post
+                if (resumo == null) tocar(s, ep, doComeco) else mostrarAnteriormente(s, ep, doComeco, "${ant.rotulo} · $nome", resumo)
+            }
+        }
+    }
+
+    private fun mostrarAnteriormente(s: Serie, ep: Episodio, doComeco: Boolean, titulo: String, resumo: String) {
+        val d = android.app.Dialog(this)
+        val nunca = Estilo.botao(this, getString(R.string.anteriormente_pular_sempre), primario = false)
+        val ver = Estilo.botao(this, getString(R.string.anteriormente_assistir, ep.rotulo))
+        nunca.setOnClickListener {
+            d.dismiss(); prefsPlayer().edit().putBoolean(ANTERIORMENTE_OFF, true).apply()
+            avisoBreve(getString(R.string.anteriormente_desligado)); tocar(s, ep, doComeco)
+        }
+        ver.setOnClickListener { d.dismiss(); tocar(s, ep, doComeco) }
+        d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
+        d.setContentView(Estilo.dialogo(this, getString(R.string.anteriormente_titulo, Vod.nomeLimpo(s.nome)), titulo, resumo, listOf(nunca, ver)))
+        d.window?.apply {
+            setBackgroundDrawable(android.graphics.drawable.ColorDrawable(Color.TRANSPARENT))
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        }
+        d.setOnShowListener { ver.requestFocus() }
+        d.show()
+    }
+
     private fun tocar(s: Serie, ep: Episodio, doComeco: Boolean) {
         tocando = ep
         indoAoVideo = true
@@ -861,7 +1075,8 @@ class SeriesActivity : Activity() {
         }
         VodActivity.abrirComResultado(this, CODIGO_VIDEO, VodActivity.TIPO_EPISODIO, s.fonteId, ep.id, ep.extensao,
             "${Vod.nomeLimpo(s.nome)} · ${ep.rotulo} · ${Series.tituloCurto(s.nome, ep.titulo)}", doComeco, chaveIdioma = s.chave,
-            busca = LegendaExterna.Busca(LegendaExterna.nomeDeBusca(s.nome), temporada = ep.temporada, episodio = ep.numero))
+            busca = LegendaExterna.Busca(LegendaExterna.nomeDeBusca(s.nome), temporada = ep.temporada, episodio = ep.numero,
+                tmdb = s.tmdb ?: externo?.takeIf { it.first.chave == s.chave }?.second?.tmdb))
     }
 
     // API antiga (deprecated), mas é a que existe numa Activity comum, sem AndroidX.
