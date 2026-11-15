@@ -16,6 +16,9 @@ android {
         versionCode = 1
         versionName = "teste"
     }
+    // Pequeno (vai para a TV em pedaços pelo shell): R8 também no debug. As classes do Dhizuku/Shizuku têm regras
+    // próprias (consumer rules); a TesteActivity é mantida pelo manifesto.
+    buildTypes { getByName("debug") { isMinifyEnabled = true; proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt")) } }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -29,4 +32,7 @@ kotlin {
 dependencies {
     implementation(project(":api"))
     implementation(project(":provider"))
+    // Teste do Dhizuku embutido (15/11/2026): cliente igual aos apps feitos para o Dhizuku.
+    implementation("io.github.iamr0s:Dhizuku-API:2.7.0")
+    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:6.1")
 }

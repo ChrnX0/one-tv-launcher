@@ -48,11 +48,28 @@ class PedidoShizukuActivity : Activity() {
             intent.getParcelableExtra("applicationInfo", ApplicationInfo::class.java)
         else @Suppress("DEPRECATION") intent.getParcelableExtra("applicationInfo")
         Log.i(ServidorShizuku.TAG, "pedido de permissao: uid=$uid pid=$pid requestCode=$requestCode pacote=${ai?.packageName}")
-        if (uid < 0 || pid < 0 || ai == null || !Shizuku.pingBinder()) {
-            Log.w(ServidorShizuku.TAG, "pedido invalido ou servidor fora do ar; fechando")
+        if (uid < 0 || pid < 0 || ai == null) {
+            Log.w(ServidorShizuku.TAG, "pedido invalido; fechando")
             return finish()
         }
+        // 15/11/2026 (visto na Sala, modo sob demanda): o servidor recém-subido entrega o binder ao app cliente ANTES
+        // de o launcher (gerente) receber o dele; o pedido chegava, pingBinder dava falso e a tela negava sozinha em
+        // 50 ms. Agora espera o binder até 8 s.
+        if (Shizuku.pingBinder()) montar(ai) else {
+            val desistir = Runnable { if (!Shizuku.pingBinder()) { Log.w(ServidorShizuku.TAG, "servidor fora do ar; fechando"); finish() } }
+            val chegou = object : Shizuku.OnBinderReceivedListener {
+                override fun onBinderReceived() {
+                    Shizuku.removeBinderReceivedListener(this)
+                    window.decorView.removeCallbacks(desistir)
+                    runOnUiThread { if (!isFinishing && !isDestroyed) montar(ai) }
+                }
+            }
+            Shizuku.addBinderReceivedListenerSticky(chegou)
+            window.decorView.postDelayed({ Shizuku.removeBinderReceivedListener(chegou); desistir.run() }, 8_000)
+        }
+    }
 
+    private fun montar(ai: ApplicationInfo) {
         val tema = Tema.atual(this)
         val nome = ai.loadLabel(packageManager).toString()
 

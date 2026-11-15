@@ -39,6 +39,46 @@ class TesteActivity : Activity() {
         mostrar("Teste do Shizuku: esperando o binder…")
         Shizuku.addRequestPermissionResultListener(aoResponder)
         Shizuku.addBinderReceivedListenerSticky(aoReceberBinder)
+        thread { testarDhizuku() }
+    }
+
+    // ---- Dhizuku (dono emprestado). Cada linha diz o ESPERADO; nada aqui faz mal se o filtro falhar
+    // (setApplicationHidden com hidden=false só mostra o que já está à mostra).
+    private fun testarDhizuku() {
+        val ok = try { com.rosan.dhizuku.api.Dhizuku.init(this) } catch (e: Throwable) { mostrar("dhizuku init erro: $e"); false }
+        mostrar("dhizuku init: $ok (esperado true; false = provider invisivel ou emprestimo desligado)")
+        if (!ok) return
+        if (com.rosan.dhizuku.api.Dhizuku.isPermissionGranted()) return testesDono()
+        mostrar("dhizuku: pedindo permissao…")
+        com.rosan.dhizuku.api.Dhizuku.requestPermission(object : com.rosan.dhizuku.api.DhizukuRequestPermissionListener() {
+            override fun onRequestPermission(grantResult: Int) {
+                mostrar("dhizuku resposta: ${if (grantResult == PackageManager.PERMISSION_GRANTED) "PERMITIDO" else "NEGADO"}")
+                if (grantResult == PackageManager.PERMISSION_GRANTED) thread { testesDono() }
+            }
+        })
+    }
+
+    private fun testesDono() {
+        try {
+            org.lsposed.hiddenapibypass.HiddenApiBypass.addHiddenApiExemptions("L")
+            val dono = com.rosan.dhizuku.api.Dhizuku.getOwnerComponent()
+            val ctx = createPackageContext(dono.packageName, 0)
+            val dpm = ctx.getSystemService(android.app.admin.DevicePolicyManager::class.java)
+            val campo = android.app.admin.DevicePolicyManager::class.java.getDeclaredField("mService").apply { isAccessible = true }
+            val original = campo.get(dpm) as android.os.IInterface
+            val embrulhado = com.rosan.dhizuku.api.Dhizuku.binderWrapper(original.asBinder())
+            val novo = Class.forName("android.app.admin.IDevicePolicyManager\$Stub")
+                .getMethod("asInterface", android.os.IBinder::class.java).invoke(null, embrulhado)
+            campo.set(dpm, novo)
+            fun t(nome: String, esperado: String, f: () -> Any?) = try { mostrar("$nome: ${f()} (esperado $esperado)") }
+                catch (e: Throwable) { mostrar("$nome: ${e.javaClass.simpleName} ${e.message} (esperado $esperado)") }
+            t("D1 isApplicationHidden(vending)", "false") { dpm.isApplicationHidden(dono, "com.android.vending") }
+            t("D2 setApplicationHidden(eu mesmo,false)", "true") { dpm.setApplicationHidden(dono, packageName, false) }
+            t("D3 setApplicationHidden(launcher,false)", "SecurityException") { dpm.setApplicationHidden(dono, dono.packageName, false) }
+            t("D4 newProcess(id)", "SecurityException (sem poder total)") {
+                com.rosan.dhizuku.api.Dhizuku.newProcess(arrayOf("id"), null, null).inputStream.bufferedReader().readText().trim()
+            }
+        } catch (e: Throwable) { mostrar("dhizuku testes erro: $e") }
     }
 
     override fun onDestroy() {
