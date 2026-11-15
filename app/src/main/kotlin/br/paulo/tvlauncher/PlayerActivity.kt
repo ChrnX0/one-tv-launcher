@@ -108,6 +108,7 @@ class PlayerActivity : Activity() {
     private lateinit var grade: PlayerGradeView
     private lateinit var numero: TextView
     private lateinit var aviso: TextView
+    private lateinit var seloGravando: TextView   // "● GRAVANDO até 22:05" fixo no canto enquanto grava este canal
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,6 +119,13 @@ class PlayerActivity : Activity() {
         video = SurfaceView(this)
         raiz.addView(video, FrameLayout.LayoutParams(-1, -1, Gravity.CENTER))
         raiz.addView(montarInfo(), FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM).apply { setMargins(dp(Estilo.MARGEM_LATERAL), 0, dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL)) })
+        // Selo de gravação (pedido do dono, 15/11/2026): fica no canto de cima mesmo com a faixa escondida. Entra antes da
+        // lista e do guia, que cobrem o selo quando abertos.
+        seloGravando = TextView(this).apply {
+            textSize = 20f; typeface = Fontes.manrope(700); setTextColor(Estilo.ERRO); background = vidro(Estilo.RAIO)
+            setPadding(dp(18), dp(8), dp(18), dp(10)); visibility = View.GONE
+        }
+        raiz.addView(seloGravando, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, dp(28), dp(Estilo.MARGEM_LATERAL), 0) })
         janelas = PlayerJanelas(this)
         lista = PlayerListaTela(this, aoAssistir = { c, chave -> escolherNaLista(c, chave) }, aoFavoritar = { alternarFavorito(it) }, simples = simples,
             aoBuscar = { buscar() }, aoFiltros = { abrirFiltros() }, aoOcultarGrupo = { alternarOculto(it) },
@@ -288,7 +296,7 @@ class PlayerActivity : Activity() {
         if (guardarAnterior && atual != null && atual?.id != c.id) anterior = atual
         atual = c
         contarCanal(c)
-        arquivo = null   // trocar de canal (ou voltar ao player) é sempre ao vivo
+        arquivo = null; atualizarSelo()   // trocar de canal (ou voltar ao player) é sempre ao vivo
         tentativas = 0
         gravarUltimo(c)
         tocar(c)
@@ -534,6 +542,13 @@ class PlayerActivity : Activity() {
         return info
     }
 
+    /** Mostra o selo fixo só no ao vivo do canal que está gravando (no vídeo do passado ou noutro canal, some). */
+    private fun atualizarSelo() {
+        val g = Gravacoes.atual?.takeIf { arquivo == null && it.canalId == atual?.id && !it.parar.get() }
+        seloGravando.text = g?.let { "● " + getString(R.string.grv_selo, Gravacoes.hora(it.fim)) }.orEmpty()
+        seloGravando.visibility = if (g != null) View.VISIBLE else View.GONE
+    }
+
     private val esconderInfo = Runnable { info.visibility = View.GONE }
 
     private fun mostrarInfo() {
@@ -580,6 +595,7 @@ class PlayerActivity : Activity() {
     }
 
     private fun atualizarInfo() {
+        atualizarSelo()
         val c = atual ?: return
         val hora = SimpleDateFormat("HH:mm", Locale.getDefault())
         arquivo?.let { a -> infoDoArquivo(c, a, hora); return }
@@ -694,7 +710,9 @@ class PlayerActivity : Activity() {
 
     private fun gravar(c: Canal, programa: String, fim: Long) {
         if (GravacaoDestino.descricao(this) == null) {
-            mostrarAviso(getString(R.string.grv_sem_destino)); tela.postDelayed({ esconderAviso() }, 6_000); return
+            // Diz o motivo de verdade: pendrive em NTFS ou cheio, em vez de só "sem lugar" (15/11/2026)
+            mostrarAviso(GravacaoDestino.problemaPendrive(this) ?: getString(R.string.grv_sem_destino))
+            tela.postDelayed({ esconderAviso() }, 10_000); return
         }
         pausa.descartar()
         player?.stop()   // solta a conexão: daqui em diante quem baixa o canal é o gravador, e o player lê dele
@@ -763,7 +781,7 @@ class PlayerActivity : Activity() {
     private fun tocarArquivo(p: TvDeVolta.Programa, posicao: Long) {
         val c = atual ?: return
         val o = TvDeVolta.origem(c.url) ?: return
-        arquivo = p
+        arquivo = p; atualizarSelo()
         tocar(c, TvDeVolta.urlArquivo(o, p.inicio, p.fim, arquivoFuso))
         if (posicao > 0) player?.seekTo(posicao)
         mostrarInfo()

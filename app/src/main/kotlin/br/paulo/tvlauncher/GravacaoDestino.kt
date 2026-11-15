@@ -42,12 +42,33 @@ object GravacaoDestino {
         ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString(CHAVE_REDE, idConta).apply()
     }
 
-    /** Pendrive ou disco montado agora: (nome para a tela, pasta raiz). */
+    /** Menos que isso livre não serve (15/11/2026: um pendrive do Rufus mostrava só a parte de boot, 0,9 MB). */
+    const val MINIMO_LIVRE = 512L * 1024 * 1024
+
+    /**
+     * Pendrive ou disco montado agora: (nome para a tela, pasta raiz). Com várias partes (pendrive com 2 partições, hub
+     * com 2 discos), fica com a de mais espaço livre; parte com menos de [MINIMO_LIVRE] não conta.
+     */
     fun pendrive(ctx: Context): Pair<String, File>? {
         if (Build.VERSION.SDK_INT < 30) return null
         val sm = ctx.getSystemService(StorageManager::class.java) ?: return null
-        val v = sm.storageVolumes.firstOrNull { it.isRemovable && it.state == Environment.MEDIA_MOUNTED && it.directory != null } ?: return null
+        val v = sm.storageVolumes.filter { it.isRemovable && it.state == Environment.MEDIA_MOUNTED && it.directory != null }
+            .map { it to runCatching { it.directory!!.usableSpace }.getOrDefault(0L) }
+            .filter { it.second >= MINIMO_LIVRE }.maxByOrNull { it.second }?.first ?: return null
         return v.getDescription(ctx) to v.directory!!
+    }
+
+    /**
+     * Por que o pendrive ligado não serve (para a mensagem da tela), ou null se não há pendrive ou ele serve:
+     * formato que a TV não lê (NTFS e afins aparecem "unmountable") ou cheio/minúsculo.
+     */
+    fun problemaPendrive(ctx: Context): String? {
+        if (Build.VERSION.SDK_INT < 30 || pendrive(ctx) != null) return null
+        val vols = ctx.getSystemService(StorageManager::class.java)?.storageVolumes?.filter { it.isRemovable } ?: return null
+        val ilegivel = vols.firstOrNull { it.state == Environment.MEDIA_UNMOUNTABLE || it.state == Environment.MEDIA_NOFS }
+        if (ilegivel != null) return ctx.getString(R.string.grv_pendrive_formato, ilegivel.getDescription(ctx))
+        val pequeno = vols.firstOrNull { it.state == Environment.MEDIA_MOUNTED } ?: return null
+        return ctx.getString(R.string.grv_pendrive_cheio, pequeno.getDescription(ctx))
     }
 
     /**

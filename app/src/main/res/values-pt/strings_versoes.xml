@@ -14,6 +14,8 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Gravação: com um pendrive que a TV não lê (NTFS, como o do instalador do Windows) ou cheio, a TV agora diz o motivo na hora, em vez de parecer que gravou; com 2 partes no pendrive, grava na que tem mais espaço</item>
+        <item>Gravação: enquanto grava, o canal mostra “● GRAVANDO até HH:mm” fixo no canto de cima, mesmo com a faixa escondida</item>
         <item>Legenda traduzida na TV: quando não há legenda em português, a TV traduz a inglesa sozinha (primeiro os próximos 10 minutos, o resto em segundo plano), marcada “Tradução automática”; desliga no menu ▼ do player</item>
         <item>Jogos: o botão Jogar não sai mais cortado com letra grande, a tela abre no primeiro jogo, os controles internos da TV não aparecem como controle de jogo, e o Xbox entrou (XBPlayer na Play Store e XStreaming na loja curada)</item>
         <item>Filmes e Séries com dados de fora: entre no Trakt, Simkl, MDBList e OpenSubtitles pelo código no celular (Configurações › TV e filmes › Serviços de filmes e séries, ou no painel web); a ficha ganha sinopse, elenco e sagas do TMDB, nota do IMDb e a data do próximo episódio</item>

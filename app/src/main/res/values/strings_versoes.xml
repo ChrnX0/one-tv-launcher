@@ -17,6 +17,8 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Recording: with a USB drive the TV can’t read (NTFS, like a Windows installer) or that is full, the TV now says why right away instead of looking like it recorded; with 2 partitions it records on the one with more space</item>
+        <item>Recording: while it records, the channel shows “● RECORDING until HH:mm” fixed in the top corner, even with the info bar hidden</item>
         <item>Subtitles translated on the TV: when there are none in your language, the TV translates the English ones by itself (first the next 10 minutes, the rest in the background), marked “Automatic translation”; turn it off in the player’s ▼ menu</item>
         <item>Games: the Play button no longer gets cut with large text, the screen opens on the first game, the TV\'s internal controllers no longer show as game controllers, and Xbox is in (XBPlayer on the Play Store and XStreaming in the curated store)</item>
         <item>Movies and Series with outside data: sign in to Trakt, Simkl, MDBList and OpenSubtitles with a code on your phone (Settings › TV and movies › Movie and series services, or in the web panel); the details page gets TMDB plot, cast and collections, the IMDb rating and the next episode date</item>

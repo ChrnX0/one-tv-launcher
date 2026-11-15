@@ -74,7 +74,7 @@ class GravacoesActivity : Activity() {
     private fun montar(agendadas: List<GravacaoRegras.Agendada>, gravadas: List<Gravada>, destino: String?, livre: Long) {
         val focoAntes = coluna.focusedChild?.tag
         coluna.removeAllViews()
-        subtitulo.text = if (destino == null) getString(R.string.grv_sem_destino)
+        subtitulo.text = if (destino == null) (GravacaoDestino.problemaPendrive(this) ?: getString(R.string.grv_sem_destino))
             else getString(R.string.grv_onde, destino, gb(livre), GravacaoRegras.horasQueCabem(livre))
         Gravacoes.atual?.let { g ->
             linha("agora", "● " + getString(R.string.grv_agora_titulo, g.canalNome),
