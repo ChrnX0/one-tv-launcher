@@ -14,7 +14,7 @@
   <img src="https://img.shields.io/badge/Android%20TV-8.0%2B-3ddc84?style=for-the-badge&logo=android&logoColor=white" alt="Android TV 8.0+">
   <img src="https://img.shields.io/badge/Kotlin-Views-7f52ff?style=for-the-badge&logo=kotlin&logoColor=white" alt="Kotlin">
   <img src="https://img.shields.io/badge/ads-zero-e5484d?style=for-the-badge" alt="Zero ads">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue?style=for-the-badge" alt="License: GPL-3.0"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-proprietary-555?style=for-the-badge" alt="License: proprietary"></a>
 </p>
 
 ---
@@ -262,28 +262,6 @@ On a 64-bit TV, type this address in Downloader instead:
 > Google's own launcher stays installed. Gemini, voice search results and Google's notifications panel live inside it.
 > One TV Launcher keeps HOME for itself and lets Google handle the rest.
 
-## Build it yourself
-
-```bash
-git clone https://github.com/ChrnX0/one-tv-launcher.git
-cd one-tv-launcher
-cp pessoal.properties.exemplo pessoal.properties   # optional: your city, coordinates and favorite apps
-./gradlew assembleRelease                           # JDK 21 + Android SDK 36
-```
-
-- Kotlin 2.2, AGP 8.11, Gradle 8.14. Views only, with no XML layouts and no Compose.
-- The Tailscale tunnel (`tunel/`, Go) is built into the APK if Go is installed. Without Go, the APK is built without it.
-- Unit tests run on the plain JVM: `./gradlew testReleaseUnitTest`.
-- Release builds are signed with `ASSINATURA_ARQUIVO` / `ASSINATURA_SENHA` / `ASSINATURA_ALIAS`. Without them, Gradle uses the debug key.
-
-Other folders: `scripts/` has `testes-puros.sh` (the pure JVM tests without the Android SDK) and, in `scripts/windows/`,
-the PowerShell helpers to build and install over Wi-Fi from a Windows PC (`build3.ps1`) and to set up a fresh TV
-(`restaurar-tv.ps1`). `chromecast-painel/` is an older, optional Node.js panel that manages several TVs from a PC over
-`adb`; the launcher does not need it.
-
-> The code comments are in Brazilian Portuguese, and the app speaks both **English** and **Portuguese**. It follows the
-> TV's language.
-
 ## Under the hood
 
 ```
@@ -304,13 +282,14 @@ Secrets are encrypted with the Android Keystore. Backups are encrypted with your
 
 ## Contributing
 
-Bug reports, ideas and pull requests are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). Found a security problem?
+Bug reports and ideas are welcome: see [CONTRIBUTING.md](CONTRIBUTING.md). Pull requests aren't accepted. Found a security problem?
 Please report it privately, as described in [SECURITY.md](SECURITY.md). What changed in each version: [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
-One TV Launcher is free software, released under the [GNU General Public License v3.0](LICENSE). You can use, study,
-change and share it; if you distribute a modified version, you must publish its source under the same license.
+One TV Launcher is proprietary software: © 2026 ChrnX0, all rights reserved (see [LICENSE](LICENSE)). The code is
+here to be read; copying it, changing it or building apps from it needs written permission. Versions up to Release
+v458906 (15 November 2026) were published under the GPL-3.0, and those copies keep that license.
 Third-party code keeps its own license (see Credits below).
 
 ## Credits
