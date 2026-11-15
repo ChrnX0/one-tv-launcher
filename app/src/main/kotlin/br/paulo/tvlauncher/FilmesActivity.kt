@@ -114,6 +114,10 @@ class FilmesActivity : Activity() {
     private lateinit var aviso: TextView
     private lateinit var painelFicha: FrameLayout
 
+    /** A grade e a coluna, atrás da ficha. Escondidas enquanto a ficha está aberta: a ficha cobre a tela toda e,
+     *  visíveis, eram desenhadas de novo a cada quadro (fundo, 10 pôsteres, a coluna), o que pesava ao abrir (15/11/2026). */
+    private lateinit var telaDeTras: View
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
@@ -143,6 +147,7 @@ class FilmesActivity : Activity() {
         direita.addView(TextView(this).apply { text = getString(R.string.vod_grade_teclas); textSize = Estilo.Leitura.DICA; setTextColor(apagado); setPadding(dp(8), dp(6), 0, 0) })
         colunas.addView(direita, LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(16) })
         raiz.addView(colunas, FrameLayout.LayoutParams(-1, -1))
+        telaDeTras = colunas
         painelFicha = FrameLayout(this).apply { visibility = View.GONE; background = Estilo.fundoTela(context) }
         raiz.addView(painelFicha, FrameLayout.LayoutParams(-1, -1))
         aviso = TextView(this).apply {
@@ -770,12 +775,12 @@ class FilmesActivity : Activity() {
             val vis = filmes
             Fundo.rodar {
                 val col = FilmesFiltro.colecao(vis, f)
-                tela.post { if (!isDestroyed && ficha === f) { colecaoFicha = f to col; if (col.size > 1) desenharFicha(f, fichaInfo, manterFoco = true) } }
+                tela.post { if (!isDestroyed && ficha === f) { colecaoFicha = f to col; if (col.size > 1) pedirDesenho() } }
             }
         }
         Fundo.rodar {
             val info = PlayerCarga.fichaFilme(this, f)
-            tela.post { if (!isDestroyed && ficha === f) { fichaInfo = info; desenharFicha(f, info, manterFoco = true) } }
+            tela.post { if (!isDestroyed && ficha === f) { fichaInfo = info; pedirDesenho() } }
             buscarExterno(f, info)
         }
     }
@@ -799,12 +804,18 @@ class FilmesActivity : Activity() {
             if (isDestroyed || ficha !== f) return@post
             externo = f to g
             sagaExterna = saga?.let { f to it }
-            desenharFicha(f, fichaInfo, manterFoco = true)
+            pedirDesenho()
         }
     }
 
+    /** Os dados que chegam juntos (servidor, coleção, TMDB) viram um desenho só da ficha, mantendo o foco (15/11/2026). */
+    private val desenhoPendente = Runnable { ficha?.takeIf { !isDestroyed }?.let { desenharFicha(it, fichaInfo, manterFoco = true) } }
+    private fun pedirDesenho() { tela.removeCallbacks(desenhoPendente); tela.post(desenhoPendente) }
+
     private fun fecharFicha() {
+        tela.removeCallbacks(desenhoPendente)
         ficha = null; painelFicha.visibility = View.GONE; painelFicha.removeAllViews()
+        telaDeTras.visibility = View.VISIBLE
         if (naGrade.isNotEmpty()) grade.requestFocus() else coluna.focar()
     }
 
@@ -924,6 +935,7 @@ class FilmesActivity : Activity() {
         // "Sinopse inteira" só aparece quando a sinopse não coube (dá para saber só depois de desenhada).
         if (txtSinopse != null && acaoSinopse != null) txtSinopse.post { if (FichaAcoes.cortada(txtSinopse)) acaoSinopse.visibility = View.VISIBLE }
         (focoAntes?.let { t -> acoes.findViewWithTag<View>(t)?.takeIf { it.visibility == View.VISIBLE } } ?: primeiro).requestFocus()
+        if (telaDeTras.visibility != View.INVISIBLE) telaDeTras.visibility = View.INVISIBLE   // o foco já está na ficha
     }
 
     private fun abrirColecao(lista: List<Filme>) {

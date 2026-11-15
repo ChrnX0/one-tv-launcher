@@ -113,6 +113,10 @@ class SeriesActivity : Activity() {
     private lateinit var aviso: TextView
     private lateinit var painel: FrameLayout
 
+    /** A grade e a coluna, atrás da ficha. Escondidas enquanto a ficha está aberta: a ficha cobre a tela toda e,
+     *  visíveis, eram desenhadas de novo a cada quadro (fundo, 10 pôsteres, a coluna), o que pesava ao abrir (15/11/2026). */
+    private lateinit var telaDeTras: View
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
@@ -139,6 +143,7 @@ class SeriesActivity : Activity() {
         direita.addView(TextView(this).apply { text = getString(R.string.vod_grade_teclas); textSize = Estilo.Leitura.DICA; setTextColor(apagado); setPadding(dp(8), dp(6), 0, 0) })
         colunas.addView(direita, LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(16) })
         raiz.addView(colunas, FrameLayout.LayoutParams(-1, -1))
+        telaDeTras = colunas
         // Focável: enquanto a ficha carrega, o foco sai da grade de baixo (senão ▲▼ mexeriam nela por trás).
         painel = FrameLayout(this).apply { visibility = View.GONE; background = Estilo.fundoTela(context); isFocusable = true }
         raiz.addView(painel, FrameLayout.LayoutParams(-1, -1))
@@ -761,7 +766,12 @@ class SeriesActivity : Activity() {
             ?.takeIf { Idioma.versao(it.nome, it.grupo) == Idioma.versaoDesejada(prefsIdioma.para(s0.chave)) } ?: s0
         if (aberta !== s) verEpisodios = false
         aberta = s; fichaAberta = null
-        desenharFicha()
+        // A ficha abre já com o foco nela (a grade de trás não mexe mais), mas o "carregando" só aparece se a ficha do
+        // servidor demorar: antes eram 3 desenhos seguidos ao abrir (carregando, servidor, TMDB), cada um com quadros
+        // de 50-110 ms na TV (medido em 15/11/2026). Agora os que chegam juntos viram um só.
+        painel.removeAllViews(); painel.visibility = View.VISIBLE; painel.requestFocus()
+        telaDeTras.visibility = View.INVISIBLE
+        tela.removeCallbacks(desenhoPendente); tela.postDelayed(desenhoPendente, 250)
         Fundo.rodar {
             val f = PlayerCarga.fichaSerie(this, s)
             tela.post {
@@ -769,20 +779,26 @@ class SeriesActivity : Activity() {
                 fichaAberta = f
                 atualizarProgresso(s, f)
                 temporada = ultimos[s.chave]?.temporada?.takeIf { f?.temporadas?.containsKey(it) == true } ?: f?.temporadas?.keys?.firstOrNull() ?: 1
-                desenharFicha()
+                pedirDesenho()
             }
             // Ficha de fora, depois da do servidor; sem chave nenhuma, não faz nada.
             if (InfoExternaCache.temTmdb() || InfoExternaCache.temNotas(this)) {
                 val g = InfoExternaCache.resolver(this, s.chave, s.nome, s.ano, true, f?.tmdb ?: s.tmdb)
-                tela.post { if (!isDestroyed && aberta === s) { externo = s to g; desenharFicha() } }
+                tela.post { if (!isDestroyed && aberta === s) { externo = s to g; pedirDesenho() } }
                 val id = g.tmdb
                 if (f != null && id != null) tela.post { if (!isDestroyed && aberta === s) trazerEpisodiosVistos(s, f, id) }
             }
         }
     }
 
+    /** Um desenho da ficha no próximo giro da tela; vários pedidos seguidos (dados que chegam juntos) viram um só. */
+    private val desenhoPendente = Runnable { if (aberta != null && !isDestroyed) desenharFicha() }
+    private fun pedirDesenho() { tela.removeCallbacks(desenhoPendente); tela.post(desenhoPendente) }
+
     private fun fecharFicha() {
+        tela.removeCallbacks(desenhoPendente)
         aberta = null; fichaAberta = null; verEpisodios = false; painel.visibility = View.GONE; painel.removeAllViews()
+        telaDeTras.visibility = View.VISIBLE
         if (naGrade.isNotEmpty()) grade.requestFocus() else coluna.focar()
     }
 
@@ -991,6 +1007,7 @@ class SeriesActivity : Activity() {
             l != null && focarEp != null -> painel.post { l.requestFocus(); l.setSelection(focarEp.coerceIn(0, (l.count - 1).coerceAtLeast(0))) }
             else -> (marcaAntes?.let { t -> acoes.findViewWithTag<View>(t)?.takeIf { it.visibility == View.VISIBLE } } ?: primeiro)?.requestFocus() ?: painel.requestFocus()
         }
+        if (telaDeTras.visibility != View.INVISIBLE) telaDeTras.visibility = View.INVISIBLE   // o foco já está na ficha
     }
 
     /** "Trocar temporada": a lista das temporadas com onde parou ("✓" toda vista, "6/13" começada); escolher abre os episódios. */
