@@ -192,6 +192,29 @@ object UnifiCliente {
     }
 
     /**
+     * Relato SÓ DE LEITURA do roteador (adb: UNIFI --es o relato --ei horas 8), para achar a causa de uma queda do
+     * Wi-Fi da TV: há quanto tempo cada aparelho UniFi está ligado (stat/device) e os eventos da TV e dos aparelhos
+     * nas últimas [horas] (stat/event). Nada é gravado no roteador. Chamar fora da thread da tela.
+     */
+    fun relato(ctx: Context, horas: Int): String {
+        val app = ctx.applicationContext
+        val linhas = ArrayList<String>()
+        val zona = java.time.ZoneId.systemDefault()
+        try {
+            val (endereco, cert, chave) = credenciais(app)
+            val ref = siteAtual(app).ref
+            val mac = ipDaTv(app)?.let { ip -> try { estacao(app, ip).mac } catch (e: Falha) { linhas += "TV no roteador: ${e.message}"; null } }
+            linhas += "MAC da TV visto pelo roteador: ${mac ?: "?"}"
+            try { linhas += Unifi.relatoAparelhos(pegar(app, endereco, cert, chave, "/api/s/$ref/stat/device", base = BASE_ANTIGA), System.currentTimeMillis(), zona) }
+            catch (e: Falha) { linhas += "aparelhos: ${e.message}" } catch (e: org.json.JSONException) { linhas += "aparelhos: resposta estranha" }
+            val h = horas.coerceIn(1, 72)
+            try { linhas += Unifi.relatoEventos(pegar(app, endereco, cert, chave, "/api/s/$ref/stat/event?within=$h&_limit=1000", base = BASE_ANTIGA), mac, zona) }
+            catch (e: Falha) { linhas += "eventos: ${e.message}" } catch (e: org.json.JSONException) { linhas += "eventos: resposta estranha" }
+        } catch (e: Falha) { linhas += "roteador: ${e.message}" }
+        return linhas.joinToString("\n")
+    }
+
+    /**
      * O que o ROTEADOR acha da internet agora: texto cru do stat/health da API antiga (subsistemas "wan" e "www"), lido
      * por InternetEmUmaFrase.lerSaudeRoteador. Só leitura. Lança [Falha]. Chamar fora da thread da tela.
      */

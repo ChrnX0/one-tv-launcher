@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
 import android.content.Context
+import android.media.AudioManager
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -52,6 +53,13 @@ object HistoricoRede {
     /** Se a amostra anterior tinha internet (só na memória: depois de reiniciar, a 1ª amostra não avisa nada). */
     @Volatile private var anteriorComInternet: Boolean? = null
     @Volatile private var ultimoDiaDiario: LocalDate? = null
+    // Reparo do Wi-Fi (ver ReparoWifi): só na memória; se o launcher reiniciar no meio de uma queda, recomeça a contar.
+    @Volatile private var semWifiDesde: Long? = null
+    @Volatile private var religadas = 0
+    @Volatile private var ultimaReligada = 0L
+    /** O launcher desligou o Wi-Fi e ainda não o viu ligado de novo: religa mesmo que pareça "desligado de propósito". */
+    @Volatile private var religando = false
+    private const val PREFS_REPARO = "reparo_wifi"
 
     /** Liga a coleta. Idempotente: chamar à vontade (HOME, boot, serviço de acessibilidade). */
     @Synchronized fun iniciar(ctx: Context) {
@@ -157,11 +165,56 @@ object HistoricoRede {
         val antes = anteriorComInternet
         anteriorComInternet = a.internet
         if (antes == false && a.internet) runCatching { avisarVolta(app) }.onFailure { Log.w(TAG, "aviso de volta: $it") }
+        runCatching { cuidarDoWifi(app, a) }.onFailure { Log.w(TAG, "reparo do Wi-Fi: $it") }
         val hoje = LocalDate.now()
         if (hoje != ultimoDiaDiario) {
             ultimoDiaDiario = hoje
             runCatching { consolidarDias(app) }.onFailure { Log.w(TAG, "dias: $it") }
             runCatching { PainelSaude.registrarDisco(app) }.onFailure { Log.w(TAG, "disco: $it") }
+        }
+    }
+
+    /**
+     * Wi-Fi ligado mas sem conexão há 5 min: religa o Wi-Fi; se não voltar depois de 2 religadas, reinicia a TV (no
+     * máximo 1 vez a cada 6 h, nunca com som tocando). A decisão está em [ReparoWifi]; aqui só o que é Android.
+     * Roda na thread do histórico, a cada amostra (30 s enquanto a rede está fora).
+     */
+    @Suppress("DEPRECATION")
+    private fun cuidarDoWifi(app: Context, a: ResumoRede.Amostra) {
+        val wm = app.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        if (religando && !wm.isWifiEnabled) { wm.setWifiEnabled(true); return }
+        religando = false
+        val cm = app.getSystemService(ConnectivityManager::class.java)
+        val noCabo = cm.activeNetwork?.let { cm.getNetworkCapabilities(it) }?.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) == true
+        val agora = System.currentTimeMillis()
+        if (a.dbm != 0 || noCabo || !wm.isWifiEnabled) {
+            if (religadas > 0) evento(app, "Wi-Fi voltou depois de $religadas religada(s) pelo launcher")
+            semWifiDesde = null; religadas = 0; ultimaReligada = 0L
+            return
+        }
+        val desde = semWifiDesde ?: agora.also { semWifiDesde = it }
+        val p = app.getSharedPreferences(PREFS_REPARO, Context.MODE_PRIVATE)
+        val som = app.getSystemService(AudioManager::class.java)?.isMusicActive == true
+        val minFora = (agora - desde) / 60_000
+        when (ReparoWifi.decidir(agora, desde, religadas, ultimaReligada, p.getLong("reinicio", 0L), som)) {
+            ReparoWifi.Acao.NADA -> {}
+            ReparoWifi.Acao.RELIGAR_WIFI -> {
+                religadas++; ultimaReligada = agora
+                if (!PrivilegioDO.somosDonos(app)) { evento(app, "sem Wi-Fi há $minFora min; sem Device Owner para religar"); return }
+                religando = true
+                val desligou = wm.setWifiEnabled(false)
+                SystemClock.sleep(3000)
+                val ligou = wm.setWifiEnabled(true)
+                if (ligou) religando = false
+                Log.w(TAG, "sem Wi-Fi há $minFora min: religuei o Wi-Fi ($desligou/$ligou)")
+                evento(app, "sem Wi-Fi há $minFora min: o launcher desligou e religou o Wi-Fi")
+            }
+            ReparoWifi.Acao.REINICIAR -> {
+                p.edit().putLong("reinicio", agora).commit()   // antes de reiniciar: nunca em ciclo
+                gravar(app, ResumoRede.linhaEvento(agora, "sem Wi-Fi há $minFora min e religar não bastou: o launcher reiniciou a TV"))
+                Log.w(TAG, "sem Wi-Fi há $minFora min: reiniciando a TV")
+                PainelControle.reiniciarTv(app)?.let { evento(app, "reiniciar a TV falhou: $it") }
+            }
         }
     }
 

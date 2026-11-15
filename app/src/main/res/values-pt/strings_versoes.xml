@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Wi-Fi que não volta sozinho: se a TV ficar 5 min com o Wi-Fi ligado mas sem conexão, o launcher desliga e religa o Wi-Fi; se mesmo assim não voltar, reinicia a TV (no máximo uma vez a cada 6 h e nunca com som tocando). Fica anotado no histórico de rede</item>
         <item>Protetor de tela: um pedido de fora (celular, painel, Claude) que abriria um app ou uma tela agora sempre pergunta na TV antes de tirar o protetor, mesmo com “Permitir” nas Confirmações. A pergunta espera 3 min; sem resposta, o pedido fica nas notificações da TV e, tocando nele, a TV pergunta se você aceita</item>
         <item>Tela inicial: numa pilha de apps, ▲ agora sobe de fileira como em qualquer card; quem troca o app da frente é o ▼</item>
         <item>Protetor de tela: “Sua semana na TV” agora conta o tempo na TV ao vivo, nos filmes e nas rádios do próprio launcher (antes dizia “0 min de TV”)</item>

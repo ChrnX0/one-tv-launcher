@@ -55,7 +55,8 @@ any preferred-activity setting, so `Home.kt` + the accessibility service handle 
 / `ESTADO` (shell status), `ROTULOS`, `OCULTAR --es pacote <pkg> --ez oculto true|false`, `REINICIAR` (restarts the
 launcher process; shell `force-stop` can't kill a device owner with accessibility), `IA_TESTE` (open a screen via the
 closed action catalog, e.g. `{"acoes":[{"tipo":"abrir_tela","tela":"previsao"}]}`), `EXTRAS --es o <cmd>`
-(see `ComandosExtras.kt`).
+(see `ComandosExtras.kt`), `br.paulo.tvlauncher.UNIFI --es o relato --ei horas 8` (read-only router report: UniFi uptime and
+the TV's Wi-Fi events, to explain a drop).
 
 ## Web panel, MCP and tunnel
 

@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Chip de rede: sinal e velocidade do Wi-Fi -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- Religar o Wi-Fi que não volta sozinho (ReparoWifi; o Android só deixa o Device Owner). -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <!-- Nome da rede Wi-Fi (SSID): o Android so entrega com permissao de localizacao (concedida por adb, ver README). -->
