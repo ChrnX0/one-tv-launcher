@@ -43,6 +43,7 @@ import java.io.File
  * Compatibilidade (15/11/2026, degrau 1 contra o Projectivy):
  *  - compat                JSON do aparelho para a página "Funciona no seu aparelho?" (Compatibilidade.kt)
  *  - compat_texto          o mesmo em uma linha por teste
+ *  - planos / planos_texto   tela "Conhecer o Pro" / plano atual e o que cada recurso exige (Planos.kt)
  *  - visual                link com o código do visual desta TV (tema por QR, VisualCodigo)
  *  - visual_aplicar --es codigo <código ou link>   aplica um visual recebido
  *  - watchnext             o Watch Next dos outros apps é legível neste aparelho? (WatchNextTv)
@@ -101,6 +102,8 @@ object ComandosExtras {
         "roteiro" -> ConferirTvActivity.relatorio(ctx)
         "compat" -> CompatibilidadeTv.json(ctx).toString(2)   // relatório da página "Funciona no seu aparelho?"
         "compat_texto" -> CompatibilidadeTv.texto(ctx)
+        "planos" -> abrir(ctx, ConhecerProActivity::class.java)   // tela "Conhecer o Pro" (venda ainda desligada)
+        "planos_texto" -> Planos.texto(Planos.atual(ctx))
         "visual" -> VisualCodigoTv.link(ctx)   // tema por QR: o link com o código do visual desta TV
         "visual_aplicar" -> VisualCodigoTv.aplicar(ctx, i.getStringExtra("codigo") ?: "")?.joinToString("\n") ?: "código inválido"
         "watchnext" -> WatchNextTv.diagnostico(ctx).toString(2)   // dá para ler o "continuar" dos outros apps aqui?

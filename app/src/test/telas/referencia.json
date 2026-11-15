@@ -53,6 +53,12 @@
   "cortes": [],
   "sobrepostos": []
  },
+ "en\/planos": {
+  "menorSp": 13,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
  "en\/previsao": {
   "menorSp": 18,
   "foco": true,
@@ -115,6 +121,12 @@
  },
  "pt\/jogos": {
   "menorSp": 11,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
+ "pt\/planos": {
+  "menorSp": 13,
   "foco": true,
   "cortes": [],
   "sobrepostos": []

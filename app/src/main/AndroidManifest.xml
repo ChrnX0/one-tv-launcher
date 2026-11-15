@@ -285,6 +285,8 @@
             android:label="@string/lbl_dns" />
         <!-- "Configurações do launcher": aparência, DNS, teste de velocidade, permissões, diagnóstico (aberta pelo card "Launcher" do popup do perfil) -->
         <!-- Assistente de primeira abertura (só sem Device Owner, uma vez): BoasVindasActivity.kt -->
+        <!-- "Conhecer o Pro": planos e QR para a compra no celular (Planos.kt; venda ainda desligada). -->
+        <activity android:name=".ConhecerProActivity" android:exported="false" />
         <!-- Conectar o Claude (e outros clientes MCP) pela internet: QR codes do Tailscale e do endereço. -->
         <activity
             android:name=".ConectarClaudeActivity"

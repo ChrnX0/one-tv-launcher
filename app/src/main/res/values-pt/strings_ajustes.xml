@@ -103,4 +103,13 @@
     <string name="lh_det">Cartões maiores são mais fáceis de ver do sofá.</string>
     <string name="lh_normal">Normal</string>
     <string name="lh_grande">Grande</string>
+    <string name="pl_titulo">Planos</string>
+    <string name="pl_texto">Tudo é grátis enquanto a venda não abre. Depois, o Pro e o Ultra se compram pelo celular.</string>
+    <string name="pl_basico">Básico</string>
+    <string name="pl_pro">Pro</string>
+    <string name="pl_ultra">Ultra</string>
+    <string name="pl_basico_itens">• Tela inicial, protetor\n• Despertador, modo simples\n• Player e rádios\n• 1 lista de IPTV\n• 2 temas</string>
+    <string name="pl_pro_itens">• Tudo do Básico\n• Várias listas de IPTV, gravação\n• Painel web completo\n• Claude, rotinas, Home Assistant\n• Todos os temas, backup na nuvem</string>
+    <string name="pl_ultra_itens">• Tudo do Pro\n• Clima melhor (3 modelos)\n• Fichas de filme completas\n• Legenda automática\n• Até 3 TVs</string>
+    <string name="pl_qr">Leia com o celular para ver preços e comprar.</string>
 </resources>

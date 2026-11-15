@@ -61,6 +61,7 @@ class TelasTest {
         "despertador" to AlarmesActivity::class.java,
         "jogos" to JogosActivity::class.java,
         "entrar-celular" to EntrarPeloQrActivity::class.java,
+        "planos" to br.paulo.tvlauncher.ConhecerProActivity::class.java,
     )
     private val referencia = File("src/test/telas/referencia.json")
     private val saida = File("build/telas")

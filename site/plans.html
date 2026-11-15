@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One TV plans</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; padding: 24px 16px; font: 18px/1.5 system-ui, sans-serif; background: #0d1216; color: #e8eeea; }
+  main { max-width: 640px; margin: 0 auto; }
+  h1 { font-size: 28px; margin: 0 0 8px; }
+  .plano { border: 1px solid #ffffff38; border-radius: 16px; padding: 14px 18px; margin: 14px 0; background: #ffffff10; }
+  .plano h2 { margin: 0 0 4px; font-size: 22px; }
+  .plano p { margin: 0; color: #c8d2cd; }
+  .aviso { color: #7fd6c2; }
+</style>
+</head>
+<body>
+<main>
+  <h1 data-en="One TV plans" data-pt="Planos da One TV">One TV plans</h1>
+  <p class="aviso" data-en="Sales are not open yet: everything is free for now." data-pt="A venda ainda não abriu: por enquanto tudo é grátis.">Sales are not open yet: everything is free for now.</p>
+  <div class="plano"><h2 data-en="Basic" data-pt="Básico">Basic</h2>
+    <p data-en="Home screen, screensaver, alarm, simple mode, player, radios, 1 IPTV list, 2 themes." data-pt="Tela inicial, protetor, despertador, modo simples, player, rádios, 1 lista de IPTV, 2 temas.">Home screen, screensaver, alarm, simple mode, player, radios, 1 IPTV list, 2 themes.</p></div>
+  <div class="plano"><h2>Pro</h2>
+    <p data-en="Everything in Basic, plus many IPTV lists and recording, the full web panel, Claude, routines, Home Assistant, all themes and cloud backup." data-pt="Tudo do Básico, mais várias listas de IPTV e gravação, painel web completo, Claude, rotinas, Home Assistant, todos os temas e backup na nuvem.">Everything in Basic, plus many IPTV lists and recording, the full web panel, Claude, routines, Home Assistant, all themes and cloud backup.</p></div>
+  <div class="plano"><h2>Ultra</h2>
+    <p data-en="Everything in Pro, plus better weather (3 models), rich movie pages, automatic subtitles and up to 3 TVs." data-pt="Tudo do Pro, mais clima melhor (3 modelos), fichas de filme completas, legenda automática e até 3 TVs.">Everything in Pro, plus better weather (3 models), rich movie pages, automatic subtitles and up to 3 TVs.</p></div>
+</main>
+<script>
+  if ((navigator.language || "").toLowerCase().startsWith("pt")) {
+    document.documentElement.lang = "pt-BR";
+    document.querySelectorAll("[data-pt]").forEach(e => { e.textContent = e.dataset.pt; });
+  }
+</script>
+</body>
+</html>
