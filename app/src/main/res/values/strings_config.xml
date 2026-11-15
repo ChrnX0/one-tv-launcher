@@ -132,7 +132,7 @@
     <string name="cl_linha_baixo">Screensaver widgets</string>
     <string name="cl_linha_baixo_det">glass strip, cards or no box · OK changes</string>
     <string name="cl_desligar">Turn off when idle</string>
-    <string name="cl_desligar_det">warns 60 s before; any button cancels · OK changes</string>
+    <string name="cl_desligar_det">a playing video counts as use; warns 60 s before · OK changes</string>
     <string name="cl_visita_det">hides the profile, calendar and the apps checked below</string>
     <string name="cl_apps_visita">Apps hidden in guest mode</string>
     <string name="cl_carregando_apps">Loading apps…</string>
