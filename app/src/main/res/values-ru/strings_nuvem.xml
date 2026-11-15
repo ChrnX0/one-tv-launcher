@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_nuvem.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_sub_nuvem">Видео, музыка и фото из вашего облака</string>
+    <string name="rede_nuvem_seguir">Продолжить</string>
+    <string name="rede_nuvem_entrar">Войти</string>
+    <string name="rede_nuvem_pedindo">Запрос кода…</string>
+    <string name="rede_nuvem_esperando">Ждём подтверждения на телефоне…</string>
+    <string name="rede_nuvem_salvando">Вход…</string>
+    <string name="rede_nuvem_recusado">Сервис отказал. Проверьте id приложения и попробуйте снова.</string>
+    <string name="rede_erro_nuvem_login">Разрешение этого аккаунта истекло или было отозвано. Удалите аккаунт (удерживайте OK) и войдите снова.</string>
+    <string name="rede_od_titulo">OneDrive: ваше приложение в Microsoft</string>
+    <string name="rede_od_explica">Один раз, на компьютере: entra.microsoft.com › Регистрация приложений › Новая регистрация. В типах учётных записей выберите вариант, включающий личные учётные записи Microsoft. Затем в разделе «Проверка подлинности» включите «Разрешить общедоступные клиентские потоки». Скопируйте «Идентификатор приложения (клиента)» и введите его здесь (можно ввести с телефона, в панели).</string>
+    <string name="rede_od_id">Идентификатор приложения (клиента)</string>
+    <string name="rede_od_id_erro">ID выглядит так: 00000000-0000-0000-0000-000000000000.</string>
+    <string name="rede_od_codigo_explica">На телефоне или компьютере откройте microsoft.com/link (или наведите камеру на QR) и введите код ниже. ТВ просит только чтение файлов.</string>
+    <string name="rede_od_erro_app">Microsoft не принял это приложение. Проверьте ID и что «Разрешить общедоступные клиентские потоки» включено.</string>
+    <string name="rede_dbx_explica">Один раз, на компьютере: dropbox.com/developers/apps › Create app › Scoped access › Full Dropbox. На вкладке Permissions отметьте files.metadata.read, files.content.read и account_info.read (и files.content.write, если хотите ночную копию в Dropbox) и сохраните (Submit). Скопируйте «App key» и введите здесь.</string>
+    <string name="rede_dbx_chave">App key</string>
+    <string name="rede_dbx_chave_erro">App key состоит только из строчных букв и цифр.</string>
+    <string name="rede_dbx_codigo_explica">Наведите камеру телефона на QR, войдите в Dropbox и нажмите «Разрешить». Dropbox покажет код: введите его здесь (можно с телефона, в панели).</string>
+    <string name="rede_dbx_codigo">Код Dropbox</string>
+    <string name="rede_dbx_codigo_erro">Введите весь код, показанный Dropbox.</string>
+    <string name="rede_box_explica">Один раз, на компьютере: app.box.com/developers/console › Create New App › Custom App › User Authentication (OAuth 2.0). На вкладке Configuration в OAuth 2.0 Redirect URI укажите %1$s отметьте «Read all files and folders» (и «Write all files and folders», если хотите ночную копию в Box). Сохраните, затем скопируйте сюда Client ID и Client Secret.</string>
+    <string name="rede_box_id">Client ID</string>
+    <string name="rede_box_segredo">Client Secret</string>
+    <string name="rede_box_erro">Client ID и Client Secret состоят только из букв и цифр. Скопируйте оба с вкладки Configuration.</string>
+    <string name="rede_volta_sem_rede">ТВ не в домашней сети. Подключите его и попробуйте снова.</string>
+    <string name="rede_volta_explica">Наведите на QR камеру телефона, подключённого к тому же Wi‑Fi, что и ТВ, войдите в %1$s и разрешите доступ. Телефон сам вернётся к ТВ: ничего вводить не нужно.</string>
+    <string name="rede_volta_porta">Порт %1$d на ТВ занят. Закройте другие приложения и попробуйте снова.</string>
+    <string name="rede_gd_explica">Один раз, на компьютере, в вашем проекте Google Cloud (console.cloud.google.com): API и сервисы › Библиотека › включите «Google Drive API». В Google Auth Platform › Доступ к данным добавьте область …/auth/drive.readonly. В Клиенты › Создать клиент › Веб-приложение в разрешённых URI перенаправления укажите %1$s. Скопируйте сюда Client ID и Client secret.</string>
+    <string name="rede_gd_id">Client ID (…apps.googleusercontent.com)</string>
+    <string name="rede_gd_segredo">Client secret</string>
+    <string name="rede_gd_erro">Скопируйте оба со страницы клиента: ID заканчивается на .apps.googleusercontent.com, а секрет обычно начинается с GOCSPX-.</string>
+    <string name="rede_gd_aviso">Если Google пишет, что приложение не проверено, нажмите «Дополнительно» › «Перейти» (это ваше собственное приложение).</string>
+</resources>

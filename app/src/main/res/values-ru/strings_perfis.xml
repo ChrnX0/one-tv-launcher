@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_perfis.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="perfil_aviso_titulo">Профиль: %1$s</string>
+    <string name="perfil_aviso_texto">Избранное, «Продолжить просмотр» и порядок приложений этого профиля</string>
+    <string name="perfil_aviso_crianca">Детский профиль: детский режим и время сна включены</string>
+    <string name="perfil_crianca">Детский профиль</string>
+    <string name="perfil_crianca_linha">Детский профиль · %1$s: %2$s</string>
+    <string name="perfil_crianca_nao">Выкл</string>
+    <string name="perfil_crianca_sem_pin">Сначала задайте PIN веб-панели: это родительский PIN, который защищает детский профиль</string>
+    <string name="perfil_pin_sair">Родительский PIN для выхода из детского профиля</string>
+    <string name="perfil_pin_marcar">Родительский PIN для изменения детского профиля</string>
+</resources>

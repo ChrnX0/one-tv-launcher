@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_unidade_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="ur_secao">Сетевой диск</string>
+    <string name="ur_titulo">Показывать ТВ как сетевой диск</string>
+    <string name="ur_det">Выкл. ТВ сам появляется в «Этот компьютер» в Windows, как телефон, и как сетевая папка на Mac, Linux и телефонах.</string>
+    <string name="ur_painel">Сначала включите веб-панель выше (используются тот же PIN и адрес https).</string>
+    <string name="ur_https">Ожидание адреса https панели (сертификат создаётся примерно через 1 минуту после включения панели).</string>
+    <string name="ur_abra">Вкл. В Windows ТВ появляется в «Этот компьютер» (в первый раз для каждого компьютера ТВ спрашивает на экране). Mac, Linux и телефон: %1$s · пароль: PIN панели.</string>
+    <string name="mtp_pergunta_titulo">Компьютер запрашивает файлы ТВ</string>
+    <string name="mtp_pergunta">«%1$s» хочет просматривать и копировать файлы из памяти ТВ по домашней сети. Разрешить этому компьютеру?</string>
+    <string name="mtp_pcs">Разрешённые компьютеры</string>
+    <string name="mtp_pcs_nenhum">Пока нет. ТВ спрашивает на экране, когда компьютер запрашивает файлы.</string>
+    <string name="mtp_pcs_lista">%1$s · OK забывает все (каждый спросит снова)</string>
+    <string name="mtp_pcs_esquecidos">Компьютеры забыты</string>
+</resources>

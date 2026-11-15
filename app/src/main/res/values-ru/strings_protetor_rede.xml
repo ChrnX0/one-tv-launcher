@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_protetor_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pt_dica_dispensar">OK скрывает · ◀ ▶ листают</string>
+    <string name="pt_dica_pausar">OK — пауза или продолжить · ◀ ▶ листают</string>
+    <string name="pt_dica_andar">◀ ▶ листают · другие кнопки закрывают</string>
+    <string name="rede_fotos_usar">Использовать эти фото в заставке</string>
+    <string name="rede_fotos_parar">Не использовать эти фото в заставке</string>
+    <string name="rede_fotos_usando">Копирую фото. Они появятся при следующем запуске заставки.</string>
+    <string name="rede_fotos_paradas">Заставка больше не использует эту папку.</string>
+    <string name="rede_continuar">Продолжить просмотр</string>
+    <string name="rede_recentes">Недавно добавленные</string>
+    <string name="rede_buscar">Поиск</string>
+    <string name="rede_buscar_explica">Фильмы, сериалы, серии и музыка на этом сервере.</string>
+    <string name="rede_buscar_campo">Название</string>
+    <string name="rede_buscar_curto">Введите хотя бы 2 буквы.</string>
+    <string name="rede_proximo_em">Далее: %1$s через %2$d с · OK начать сейчас · любая другая кнопка отменяет</string>
+    <string name="rede_ainda_assistindo">Вы ещё смотрите? OK запускает %1$s</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="one">%1$d фото · скопировано на ТВ, работает при выключенном компьютере</item>
+        <item quantity="few">%1$d фото · скопированы на ТВ, работают при выключенном компьютере</item>
+        <item quantity="many">%1$d фото · скопированы на ТВ, работают при выключенном компьютере</item>
+        <item quantity="other">%1$d фото · скопированы на ТВ, работают при выключенном компьютере</item>
+    </plurals>
+</resources>

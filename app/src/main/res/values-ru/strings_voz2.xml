@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_voz2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="lbl_voz_filmes">Фильмы</string>
+    <string name="lbl_voz_series">Сериалы</string>
+    <string name="lbl_voz_na_rede">Медиа в сети</string>
+    <string name="lbl_voz_casa">Управление домом</string>
+    <string name="lbl_voz_busca">Поиск</string>
+    <string name="lbl_voz_mural">Доска</string>
+    <string name="voz_mural_desligado">Семейная доска выключена (или ТВ в гостевом режиме).</string>
+</resources>

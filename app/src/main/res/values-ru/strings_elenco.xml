@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_elenco.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="elenco_botao">В ролях</string>
+    <string name="elenco_titulo">В ролях</string>
+    <string name="elenco_carregando">Загрузка актёров…</string>
+    <string name="elenco_vazio">В TMDB нет актёрского состава для этого названия.</string>
+    <string name="elenco_dica">Переходите между людьми: ниже — где ещё они снимались из вашего списка.</string>
+    <string name="elenco_na_lista">Также в вашем списке</string>
+    <string name="elenco_procurando">Поиск в вашем списке…</string>
+    <string name="elenco_nada_na_lista">Больше ничего с этим человеком в вашем списке.</string>
+    <string name="elenco_filme">Фильм</string>
+    <string name="elenco_serie">Сериал</string>
+    <string name="elenco_opcao_player">В ролях (кто этот актёр?)</string>
+    <string name="anteriormente_titulo">Ранее в «%1$s»</string>
+    <string name="anteriormente_assistir">Смотреть %1$s</string>
+    <string name="anteriormente_pular_sempre">Никогда не показывать</string>
+    <string name="anteriormente_desligado">Краткое содержание выключено. Чтобы включить: удерживайте OK на серии.</string>
+    <string name="anteriormente_ligar">Показывать «Ранее в сериале»</string>
+    <string name="idade_titulo">Максимальный возраст в детском режиме</string>
+    <string name="idade_det">Фильмы и сериалы с рейтингом до этого возраста видны из любой категории (рейтинг TMDB). Без рейтинга — только в детских категориях.</string>
+    <string name="idade_so_categorias">Только детские категории</string>
+    <string name="idade_livre">Для всех возрастов</string>
+    <string name="idade_anos">До %1$d лет</string>
+    <string name="onde_tambem_em">Также на: %1$s (JustWatch)</string>
+    <string name="onde_fora">Нет в вашем списке · на %1$s</string>
+    <string name="onde_grupo">В других местах (JustWatch)</string>
+    <string name="legenda_auto_pronta">Субтитры загружены автоматически (сделаны под этот файл) · ▼ сменить</string>
+    <string name="legenda_auto_pronta_nome">Субтитры загружены автоматически · ▼ сменить или настроить задержку</string>
+    <string name="legenda_auto_opcao">Загружать субтитры автоматически</string>
+    <string name="legenda_auto_ligada">Субтитры будут загружаться, если их нет</string>
+    <string name="legenda_auto_desligada">Автосубтитры выключены</string>
+    <string name="legenda_trad_rotulo">Автоперевод</string>
+    <string name="legenda_trad_traduzindo">Нет субтитров на вашем языке: перевод английских на ТВ…</string>
+    <string name="legenda_trad_parcial">Субтитры переведены на ТВ (автоперевод). Остальное ещё переводится.</string>
+    <string name="legenda_trad_pronta">Перевод субтитров завершён</string>
+    <string name="legenda_trad_opcao">Переводить субтитры на ТВ, если их нет</string>
+    <string name="legenda_trad_ligada">Субтитры будут переводиться на ТВ, если их нет</string>
+    <string name="legenda_trad_desligada">Субтитры больше не будут переводиться</string>
+    <string name="series_sinopse_mais">Полное описание</string>
+    <string name="series_sinopse_menos">Краткое описание</string>
+    <string name="series_continuar_curto">▶  Продолжить %1$s</string>
+    <string name="series_episodios">Серии</string>
+    <string name="series_trocar_temporada">Сменить сезон</string>
+    <string name="fechar">Закрыть</string>
+</resources>

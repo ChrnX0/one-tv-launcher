@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_avisos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rd_voltou_titulo">Интернет вернулся</string>
+    <string name="rd_voltou_texto">Его не было %1$s (с %2$s). Вероятная причина: %3$s.</string>
+    <string name="rd_causa_wifi">ТВ потерял Wi-Fi</string>
+    <string name="rd_causa_provedor">провайдер или роутер</string>
+    <string name="rd_min">%1$d мин</string>
+    <string name="rd_h_min">%1$d ч %2$d мин</string>
+    <string name="rd_disco_titulo">Память ТВ заполняется</string>
+    <string name="rd_disco_texto">При таком темпе она заполнится примерно через %1$d дн. (свободно %2$d МБ). Очистите кеш приложений или удалите неиспользуемые приложения.</string>
+    <string name="pr_avisos_tv">От ТВ</string>
+    <string name="mural_riscar">Вычеркнуть %1$s</string>
+</resources>

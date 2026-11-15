@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_pausa.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pausa_pausar">Поставить эфир на паузу</string>
+    <string name="pausa_continuar">Продолжить</string>
+    <string name="pausa_ao_vivo">Вернуться в эфир</string>
+    <string name="pausa_selo">⏸ ПАУЗА · OK продолжает</string>
+    <string name="pausa_atrasado_min">ОТСТАВАНИЕ %1$d МИН · ▶ эфир</string>
+    <string name="pausa_atrasado_seg">ОТСТАВАНИЕ %1$d С · ▶ эфир</string>
+    <string name="pausa_voltou">Пауза длиннее, чем вмещает память: возврат в эфир</string>
+</resources>

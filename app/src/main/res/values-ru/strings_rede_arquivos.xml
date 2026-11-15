@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_rede_arquivos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_secao_na_tv">Подключено к ТВ</string>
+    <string name="rede_sub_usb">Флешка · видео, музыка и фото</string>
+    <string name="rede_acao_arquivos">FTP, SFTP или NFS</string>
+    <string name="rede_sub_arquivos">NAS, роутер с диском, компьютер Linux или Mac</string>
+    <string name="rede_arq_explica">Начните адрес с протокола: sftp://nas/Фильмы · ftp://192.168.0.10 · ftps://nas/Видео · nfs://nas/volume1/video. SFTP и FTPS шифруются; обычный FTP передаёт пароль открыто, поэтому используйте его только дома. У NFS нет пароля: NAS должен разрешать IP ТВ и подключения с непривилегированных портов.</string>
+    <string name="rede_arq_endereco">Адрес (sftp://, ftp://, ftps:// или nfs://)</string>
+    <string name="rede_arq_usuario">Имя пользователя (NFS: номер пользователя, необязательно)</string>
+    <string name="rede_arq_endereco_erro">Начните с sftp://, ftp://, ftps:// или nfs://, затем сервер и папка. Имя пользователя и пароль — в своих полях.</string>
+    <string name="rede_erro_nfs_porta">Сервер NFS отказал ТВ. На NAS разрешите подключения с непривилегированных портов (Linux: параметр «insecure» в /etc/exports).</string>
+    <string name="rede_erro_nfs_ip">Сервер NFS не допустил этот ТВ. На NAS добавьте IP ТВ (или вашу домашнюю сеть) в правило NFS этой папки.</string>
+    <string name="rede_erro_chave_mudou">Ключ этого сервера изменился с момента добавления. Если вы переустановили сервер, удалите его здесь и добавьте снова; если нет, возможно, кто-то выдаёт себя за него.</string>
+    <string name="rede_erro_usb_acesso">ТВ не дал лаунчеру доступ к флешке. Попробуйте чуть позже.</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_primeira.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pc_titulo">Настройка с телефона</string>
+    <string name="pc_linha_det">Рекомендуется. Наведите камеру телефона на код: PIN, язык, ТВ, город и сервисы фильмов за 5 шагов.</string>
+    <string name="pc_instrucoes">Наведите камеру телефона на код рядом. Телефон откроет настройку из 5 шагов.\n\nТелефон должен быть в домашнем Wi-Fi. Не закрывайте этот экран, пока не создадите PIN на телефоне (осталось %1$s).</string>
+    <string name="pc_entrou">Продолжайте на телефоне.</string>
+    <string name="pc_venceu">Срок кода истёк.\nНажмите «%1$s», чтобы показать новый.</string>
+    <string name="pc_sem_rede">ТВ не подключён к сети.\nПодключите его к домашнему Wi-Fi и попробуйте снова.</string>
+</resources>

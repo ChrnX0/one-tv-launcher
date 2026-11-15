@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_player2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="vod_tentando">Соединение прервалось. Повтор (%1$d из %2$d)…</string>
+    <string name="vod_proximo_episodio">Следующая серия</string>
+    <string name="vod_proximo_agora">Смотреть сейчас · %1$d с</string>
+    <string name="vod_proximo_cancelar">Отмена</string>
+    <string name="vod_proximo_continuar">Продолжить просмотр</string>
+    <string name="vod_ainda_assistindo">Вы ещё смотрите?</string>
+    <string name="vod_ainda_assistindo_texto">Несколько серий прошли без нажатий на пульт, поэтому следующая ждёт вас.</string>
+    <string name="vod_desligar_ao_fim">Выключить ТВ по окончании</string>
+    <string name="vod_desligar_ao_fim_ligado">ТВ выключится по окончании</string>
+    <string name="vod_desligar_ao_fim_desligado">ТВ останется включённым по окончании</string>
+    <string name="vod_legenda_tamanho_opcao">Размер субтитров: %1$s</string>
+    <string name="vod_legenda_tamanho_titulo">Размер субтитров</string>
+    <string-array name="vod_legenda_tamanhos">
+        <item>Мелкий</item>
+        <item>Обычный</item>
+        <item>Крупный</item>
+        <item>Огромный</item>
+    </string-array>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_drive.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="drv_titulo">Аккаунт Google Drive</string>
+    <string name="drv_destino">Google Drive</string>
+    <string name="drv_conta">Аккаунт Google Drive</string>
+    <string name="drv_nao_conectada">не подключён</string>
+    <string name="drv_passos">1. На телефоне откройте %1$s (или наведите камеру на код справа).\n2. Войдите в аккаунт Google, который есть на этом ТВ, и введите:\n\n%2$s\n\n3. Разрешите доступ к Google Drive. ТВ видит только файлы, созданные им самим (папка OneTV-backup), и никогда остальной Drive.\n\nЭкран продолжит сам.</string>
+    <string name="drv_ok">Готово: %1$s подключён. Выберите «Google Drive» в строке «Доп. копия», чтобы ночная копия шла и туда.</string>
+    <string name="drv_sem_google">Вход Google на этом ТВ ещё не настроен.\n\nНастройте его в веб-панели > вкладка Claude (ваш собственный клиент OAuth, тип «TVs and Limited Input devices»), включите Google Drive API в том же проекте Google Cloud и вернитесь сюда.</string>
+    <string name="drv_desconectar_pergunta">Отключить %1$s? Копии, уже лежащие в Google Drive, останутся; ТВ перестанет отправлять новые.</string>
+    <string name="drv_desconectar">Отключить</string>
+    <string name="drv_restaurar">Восстановить из Google Drive</string>
+    <string name="drv_precisa_conta">Сначала подключите аккаунт Google Drive (строка выше).</string>
+    <string name="drv_falhou">Не получилось: %1$s</string>
+    <string name="drv_nenhuma">В папке OneTV-backup на Google Drive пока нет копий.</string>
+    <string name="drv_escolha">Какую копию?</string>
+    <string name="drv_senha">Пароль копии</string>
+    <string name="drv_senha_errada">Неверный пароль копии (или файл изменён). Ничего не восстановлено.</string>
+    <string name="drv_restaurado">Восстановлено. Лаунчер сейчас перезапустится.</string>
+</resources>

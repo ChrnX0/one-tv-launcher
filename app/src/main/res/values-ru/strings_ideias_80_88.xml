@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_ideias_80_88.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="si_sem_internet">Нет интернета</string>
+    <string name="si_funcionam">Всё ещё работают: %1$s</string>
+    <string name="si_pendrive">Флешка</string>
+    <string name="ad_pergunta">Вы ещё смотрите?</string>
+</resources>

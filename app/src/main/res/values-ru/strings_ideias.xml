@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_ideias.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dns_voltou_anterior">Новый DNS не ответил. Возвращён предыдущий.</string>
+    <string name="teclas_titulo">Проверка кнопок</string>
+    <string name="teclas_instrucao">Нажимайте кнопки пульта. Каждая кнопка появится здесь. HOME — выход.</string>
+    <string name="teclas_vazio">Пока нет нажатий.</string>
+    <string name="trava_home_titulo">PIN для смены HOME</string>
+    <string name="trava_home_errado">Неверный PIN</string>
+    <string name="extras_cfg_det">Часы ночного фильтра и времени сна, проверка кнопок, калибровка и другие инструменты</string>
+    <string name="extras_titulo">Дополнительно</string>
+    <string name="extras_ligado">вкл</string>
+    <string name="extras_desligado">выкл</string>
+    <string name="extras_JANELA_OTA">Системные обновления только ночью (с 3 до 5)</string>
+    <string name="extras_TRAVAR_CRITICOS">Блокировать «Остановить» и «Очистить данные» для лаунчера и VPN</string>
+    <string name="extras_PIN_HOME">Запрашивать PIN для смены HOME</string>
+    <string name="extras_FILTRO_NOTURNO">Ночной фильтр (более тёплый экран)</string>
+    <string name="extras_COR_DO_FUNDO">Акцентный цвет из обоев (тема Галерея)</string>
+    <string name="extras_DEBLOAT_POS_OTA">Повторять очистку приложений после системного обновления</string>
+    <string name="extras_filtro_horario">Фильтр: с %1$s до %2$s, сила %3$d%%</string>
+    <string name="extras_filtro_inicio">Начало фильтра</string>
+    <string name="extras_filtro_fim">Конец фильтра</string>
+    <string name="extras_filtro_forca">Сила фильтра</string>
+    <string name="extras_teclas">Открыть проверку кнопок</string>
+    <string name="extras_calibracao">Открыть калибровочные изображения</string>
+    <string name="extras_acordar_pc">Разбудить компьютер (Wake-on-LAN)</string>
+    <string name="extras_acordar_sem_mac">Не задан MAC компьютера (панель или adb)</string>
+    <string name="extras_acordar_ok">Пакет отправлен</string>
+    <string name="extras_acordar_falhou">Не удалось отправить</string>
+    <string name="extras_ota_pendente">Системное обновление ждёт своего времени</string>
+    <string name="extras_ota_nenhuma">Нет ожидающих системных обновлений</string>
+    <string name="guardar_dados_titulo">Данные лаунчера защищены</string>
+    <string name="guardar_dados_texto">Очистка данных стёрла бы настройки, будильники и сопряжение лаунчера с ТВ. Ничего не удалено. Чтобы начать с нуля, используйте резервную копию из панели или компьютер (adb).</string>
+    <string name="dono_titulo">Сделать лаунчер владельцем устройства</string>
+    <string name="dono_texto">Google выключится на несколько секунд (аккаунт сохранится и вернётся сам), а лаунчер станет владельцем устройства: скрывать приложения, закреплять HOME и блокировать остановку и очистку. Делайте это, когда ТВ никто не использует.</string>
+    <string name="dono_usuarios">Дополнительные пользователи ТВ тоже будут УДАЛЕНЫ вместе с их данными: %s.</string>
+    <string name="dono_ok">Сделать владельцем</string>
+    <string name="dono_andando">Лаунчер становится владельцем… (до 1 минуты)</string>
+    <string name="dono_sem_shell">Встроенная оболочка не ответила. Выполните сопряжение в Настройки > Оболочка лаунчера.</string>
+    <string name="bv_dev">Включить параметры разработчика</string>
+    <string name="bv_dev_det">В разделе «Об устройстве» спуститесь до «Сборка ОС Android TV» и нажмите OK 7 раз. Затем вернитесь сюда.</string>
+    <string name="bv_parear">Сопрячь лаунчер с ТВ</string>
+    <string name="bv_parear_det">Открывает параметры разработчика: включите «Отладка по Wi-Fi» и откройте «Подключить устройство с помощью кода». Лаунчер сам прочитает код.</string>
+    <string name="bv_dono">Сделать лаунчер владельцем устройства</string>
+    <string name="bv_dono_det">Скрывает приложения, закрепляет HOME и блокирует остановку и очистку. Google выключится на несколько секунд; аккаунт останется.</string>
+    <string name="extras_DIARIO_DNS">Журнал DNS по приложениям (только на ТВ, 7 дней)</string>
+    <string name="extras_diario_ver">Показать журнал DNS за сегодня</string>
+    <string name="extras_diario_apagar">Удалить журнал DNS</string>
+    <string name="extras_diario_apagado">Журнал удалён</string>
+</resources>

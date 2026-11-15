@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_backup.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="bkn_titulo">Автоматическое резервное копирование</string>
+    <string name="bkn_explica">Каждую ночь, пока ТВ простаивает, сохраняет полную копию, защищённую вашим паролем. Хранятся последние 7. Запишите пароль: без него копию не открыть.</string>
+    <string name="bkn_ligado">вкл</string>
+    <string name="bkn_desligado">выкл</string>
+    <string name="bkn_sem_senha">выкл · сначала задайте пароль копии</string>
+    <string name="bkn_senha">Пароль копии</string>
+    <string name="bkn_senha_ok">задан · OK меняет</string>
+    <string name="bkn_senha_falta">не задан · OK задаёт</string>
+    <string name="bkn_senha_nova">Пароль копии (8 символов или больше)</string>
+    <string name="bkn_senha_repetir">Введите пароль ещё раз</string>
+    <string name="bkn_senha_curta">Пароль должен содержать от 8 до 128 символов.</string>
+    <string name="bkn_senha_diferente">Пароли не совпадают.</string>
+    <string name="bkn_senha_gravada">Пароль сохранён. Храните его в надёжном месте.</string>
+    <string name="bkn_senha_erro">Не удалось сохранить пароль.</string>
+    <string name="bkn_horario">Время</string>
+    <string name="bkn_extra">Доп. копия</string>
+    <string name="bkn_destino_tv">Только ТВ</string>
+    <string name="bkn_destino_pendrive">Флешка</string>
+    <string name="bkn_destino_nas">NAS (%1$s)</string>
+    <string name="bkn_agora">Создать копию сейчас</string>
+    <string name="bkn_ultimo">Последняя</string>
+    <string name="bkn_nunca">никогда</string>
+    <string name="bkn_pin">PIN для изменения копирования</string>
+</resources>
