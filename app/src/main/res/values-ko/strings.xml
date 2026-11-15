@@ -287,6 +287,7 @@
     <string name="aq_perigosa">위험</string>
     <string name="tema_escuro">어둡게</string>
     <string name="tema_galeria">갤러리</string>
+    <string name="tema_meu">내 배경</string>
     <string name="som_suave">부드럽게</string>
     <string name="som_classico">클래식</string>
     <string name="som_sino">벨</string>
@@ -785,8 +786,8 @@ AS\\Movies).</string>
     <string name="vod_atraso_audio_titulo">오디오 지연(%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">없음</string>
-    <string name="vod_atraso_audio_mais">소리가 늦음, 화면이 %1$d ms 대기</string>
-    <string name="vod_atraso_audio_menos">소리가 빠름, 화면이 %1$d ms 앞섬</string>
+    <string name="vod_atraso_audio_mais">소리가 %1$dms 늦게 나옵니다</string>
+    <string name="vod_atraso_audio_menos">소리가 %1$dms 빨리 나옵니다</string>
     <string name="vod_info_opcao">기술 정보</string>
     <string name="info_video">동영상</string>
     <string name="info_audio">오디오</string>

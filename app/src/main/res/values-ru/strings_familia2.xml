@@ -16,6 +16,8 @@
     <string name="mu_nao_lido_desc">Сообщение: %s. OK отмечает прочитанным.</string>
     <string name="mu_apagar">Удалить сообщение: %s</string>
     <string name="extras_RETROSPECTIVA_ANO">Ваш ТВ за год (в декабре, на заставке)</string>
+    <string name="extras_CARTOES_TRANSPARENTES">Прозрачные карточки приложений, когда они не выбраны</string>
+    <string name="extras_ENTRADAS_TV">Входы HDMI в ряду приложений (только на ТВ с входами)</string>
     <string name="ra_titulo">Ваш ТВ в %d году</string>
     <string name="ra_canal">Любимый канал: %1$s (%2$s)</string>
     <string name="ra_coluna">Радио</string>

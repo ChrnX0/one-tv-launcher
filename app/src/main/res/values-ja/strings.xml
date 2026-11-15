@@ -287,6 +287,7 @@
     <string name="aq_perigosa">危険</string>
     <string name="tema_escuro">ダーク</string>
     <string name="tema_galeria">ギャラリー</string>
+    <string name="tema_meu">マイ背景</string>
     <string name="som_suave">やさしい</string>
     <string name="som_classico">クラシック</string>
     <string name="som_sino">ベル</string>
@@ -785,8 +786,8 @@ AS\\Movies）。</string>
     <string name="vod_atraso_audio_titulo">音声の遅延（%1$s）</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">なし</string>
-    <string name="vod_atraso_audio_mais">音が遅れる場合、映像を %1$d ms 待たせる</string>
-    <string name="vod_atraso_audio_menos">音が早い場合、映像を %1$d ms 先に進める</string>
+    <string name="vod_atraso_audio_mais">音声が %1$d ms 遅れています</string>
+    <string name="vod_atraso_audio_menos">音声が %1$d ms 早く出ています</string>
     <string name="vod_info_opcao">技術情報</string>
     <string name="info_video">映像</string>
     <string name="info_audio">音声</string>

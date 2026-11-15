@@ -287,6 +287,7 @@
     <string name="aq_perigosa">Peligrosa</string>
     <string name="tema_escuro">Oscuro</string>
     <string name="tema_galeria">Galería</string>
+    <string name="tema_meu">Mi fondo</string>
     <string name="som_suave">Suave</string>
     <string name="som_classico">Clásico</string>
     <string name="som_sino">Campana</string>
@@ -785,8 +786,8 @@ AS\\Peliculas).</string>
     <string name="vod_atraso_audio_titulo">Retraso de audio (%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">Ninguno</string>
-    <string name="vod_atraso_audio_mais">Sonido atrasado, la imagen espera %1$d ms</string>
-    <string name="vod_atraso_audio_menos">Sonido adelantado, la imagen se adelanta %1$d ms</string>
+    <string name="vod_atraso_audio_mais">El sonido llega %1$d ms tarde</string>
+    <string name="vod_atraso_audio_menos">El sonido llega %1$d ms antes</string>
     <string name="vod_info_opcao">Información técnica</string>
     <string name="info_video">Video</string>
     <string name="info_audio">Audio</string>

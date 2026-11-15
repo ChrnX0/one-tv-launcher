@@ -287,6 +287,7 @@
     <string name="aq_perigosa">Berbahaya</string>
     <string name="tema_escuro">Gelap</string>
     <string name="tema_galeria">Galeri</string>
+    <string name="tema_meu">Latar saya</string>
     <string name="som_suave">Lembut</string>
     <string name="som_classico">Klasik</string>
     <string name="som_sino">Lonceng</string>
@@ -785,8 +786,8 @@ AS\\Film).</string>
     <string name="vod_atraso_audio_titulo">Jeda audio (%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">Tidak ada</string>
-    <string name="vod_atraso_audio_mais">Suara terlambat, gambar menunggu %1$d ms</string>
-    <string name="vod_atraso_audio_menos">Suara lebih awal, gambar maju %1$d ms</string>
+    <string name="vod_atraso_audio_mais">Suara terlambat %1$d ms</string>
+    <string name="vod_atraso_audio_menos">Suara lebih awal %1$d ms</string>
     <string name="vod_info_opcao">Info teknis</string>
     <string name="info_video">Video</string>
     <string name="info_audio">Audio</string>

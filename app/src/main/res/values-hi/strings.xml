@@ -287,6 +287,7 @@
     <string name="aq_perigosa">ख़तरनाक</string>
     <string name="tema_escuro">गहरा</string>
     <string name="tema_galeria">गैलरी</string>
+    <string name="tema_meu">मेरा बैकग्राउंड</string>
     <string name="som_suave">धीमी</string>
     <string name="som_classico">क्लासिक</string>
     <string name="som_sino">घंटी</string>
@@ -785,8 +786,8 @@ AS\\Movies)।</string>
     <string name="vod_atraso_audio_titulo">ऑडियो देरी (%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">कोई नहीं</string>
-    <string name="vod_atraso_audio_mais">आवाज़ देर से, तस्वीर %1$d ms रुकती है</string>
-    <string name="vod_atraso_audio_menos">आवाज़ पहले, तस्वीर %1$d ms आगे</string>
+    <string name="vod_atraso_audio_mais">आवाज़ %1$d ms देर से आ रही है</string>
+    <string name="vod_atraso_audio_menos">आवाज़ %1$d ms पहले आ रही है</string>
     <string name="vod_info_opcao">तकनीकी जानकारी</string>
     <string name="info_video">वीडियो</string>
     <string name="info_audio">ऑडियो</string>

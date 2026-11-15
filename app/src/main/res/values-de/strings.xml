@@ -287,6 +287,7 @@
     <string name="aq_perigosa">Gefährlich</string>
     <string name="tema_escuro">Dunkel</string>
     <string name="tema_galeria">Galerie</string>
+    <string name="tema_meu">Mein Hintergrund</string>
     <string name="som_suave">Sanft</string>
     <string name="som_classico">Klassisch</string>
     <string name="som_sino">Glocke</string>
@@ -785,8 +786,8 @@ AS\\Filme).</string>
     <string name="vod_atraso_audio_titulo">Tonverzögerung (%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">Keine</string>
-    <string name="vod_atraso_audio_mais">Ton zu spät, Bild wartet %1$d ms</string>
-    <string name="vod_atraso_audio_menos">Ton zu früh, Bild läuft %1$d ms vor</string>
+    <string name="vod_atraso_audio_mais">Ton kommt %1$d ms zu spät</string>
+    <string name="vod_atraso_audio_menos">Ton kommt %1$d ms zu früh</string>
     <string name="vod_info_opcao">Technische Infos</string>
     <string name="info_video">Video</string>
     <string name="info_audio">Audio</string>

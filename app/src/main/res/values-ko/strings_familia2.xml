@@ -16,6 +16,8 @@
     <string name="mu_nao_lido_desc">메시지: %s. OK로 읽음 표시.</string>
     <string name="mu_apagar">메시지 삭제: %s</string>
     <string name="extras_RETROSPECTIVA_ANO">올해의 내 TV(12월에 화면 보호기에서)</string>
+    <string name="extras_CARTOES_TRANSPARENTES">선택되지 않았을 때 앱 카드를 반투명하게</string>
+    <string name="extras_ENTRADAS_TV">앱 줄에 HDMI 입력 표시(입력 단자가 있는 TV만)</string>
     <string name="ra_titulo">%d년 나의 TV</string>
     <string name="ra_canal">가장 많이 본 채널: %1$s(%2$s)</string>
     <string name="ra_coluna">라디오</string>

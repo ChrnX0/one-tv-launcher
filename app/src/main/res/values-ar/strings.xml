@@ -287,6 +287,7 @@
     <string name="aq_perigosa">خطرة</string>
     <string name="tema_escuro">داكن</string>
     <string name="tema_galeria">معرض</string>
+    <string name="tema_meu">خلفيتي</string>
     <string name="som_suave">ناعم</string>
     <string name="som_classico">كلاسيكي</string>
     <string name="som_sino">جرس</string>
@@ -785,8 +786,8 @@ AS\\Movies).</string>
     <string name="vod_atraso_audio_titulo">تأخير الصوت (%1$s)</string>
     <string name="vod_atraso_audio_tv">التلفزيون</string>
     <string name="vod_atraso_audio_zero">لا شيء</string>
-    <string name="vod_atraso_audio_mais">الصوت متأخر، الصورة تنتظر %1$d مللي ث</string>
-    <string name="vod_atraso_audio_menos">الصوت مبكر، الصورة تتقدم %1$d مللي ث</string>
+    <string name="vod_atraso_audio_mais">الصوت متأخر %1$d مللي ث</string>
+    <string name="vod_atraso_audio_menos">الصوت مبكر %1$d مللي ث</string>
     <string name="vod_info_opcao">معلومات تقنية</string>
     <string name="info_video">الفيديو</string>
     <string name="info_audio">الصوت</string>

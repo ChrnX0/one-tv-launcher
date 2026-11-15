@@ -287,6 +287,7 @@
     <string name="aq_perigosa">Опасное</string>
     <string name="tema_escuro">Тёмная</string>
     <string name="tema_galeria">Галерея</string>
+    <string name="tema_meu">Мой фон</string>
     <string name="som_suave">Мягкий</string>
     <string name="som_classico">Классический</string>
     <string name="som_sino">Колокол</string>
@@ -785,8 +786,8 @@ AS\\Фильмы).</string>
     <string name="vod_atraso_audio_titulo">Задержка звука (%1$s)</string>
     <string name="vod_atraso_audio_tv">ТВ</string>
     <string name="vod_atraso_audio_zero">Нет</string>
-    <string name="vod_atraso_audio_mais">Звук отстаёт, изображение ждёт %1$d мс</string>
-    <string name="vod_atraso_audio_menos">Звук опережает, изображение впереди на %1$d мс</string>
+    <string name="vod_atraso_audio_mais">Звук опаздывает на %1$d мс</string>
+    <string name="vod_atraso_audio_menos">Звук опережает на %1$d мс</string>
     <string name="vod_info_opcao">Технические сведения</string>
     <string name="info_video">Видео</string>
     <string name="info_audio">Звук</string>

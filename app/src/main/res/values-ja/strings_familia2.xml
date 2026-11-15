@@ -16,6 +16,8 @@
     <string name="mu_nao_lido_desc">メッセージ: %s。OK で既読にします。</string>
     <string name="mu_apagar">メッセージを削除: %s</string>
     <string name="extras_RETROSPECTIVA_ANO">今年の TV（12 月にスクリーンセーバーで）</string>
+    <string name="extras_CARTOES_TRANSPARENTES">選択していないときはアプリカードを半透明にする</string>
+    <string name="extras_ENTRADAS_TV">アプリの列に HDMI 入力を表示(入力端子のあるテレビのみ)</string>
     <string name="ra_titulo">%d 年の TV</string>
     <string name="ra_canal">お気に入りのチャンネル: %1$s（%2$s）</string>
     <string name="ra_coluna">ラジオ</string>

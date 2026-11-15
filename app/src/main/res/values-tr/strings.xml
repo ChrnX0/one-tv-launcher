@@ -287,6 +287,7 @@
     <string name="aq_perigosa">Tehlikeli</string>
     <string name="tema_escuro">Koyu</string>
     <string name="tema_galeria">Galeri</string>
+    <string name="tema_meu">Arka planım</string>
     <string name="som_suave">Yumuşak</string>
     <string name="som_classico">Klasik</string>
     <string name="som_sino">Zil</string>
@@ -785,8 +786,8 @@ AS\\Filmler).</string>
     <string name="vod_atraso_audio_titulo">Ses gecikmesi (%1$s)</string>
     <string name="vod_atraso_audio_tv">TV</string>
     <string name="vod_atraso_audio_zero">Yok</string>
-    <string name="vod_atraso_audio_mais">Ses geç, görüntü %1$d ms bekler</string>
-    <string name="vod_atraso_audio_menos">Ses erken, görüntü %1$d ms önde</string>
+    <string name="vod_atraso_audio_mais">Ses %1$d ms geç geliyor</string>
+    <string name="vod_atraso_audio_menos">Ses %1$d ms erken geliyor</string>
     <string name="vod_info_opcao">Teknik bilgi</string>
     <string name="info_video">Video</string>
     <string name="info_audio">Ses</string>
