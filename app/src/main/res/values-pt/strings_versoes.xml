@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Séries e Filmes: abrir um título ficou mais liso; a ficha se desenha uma vez quando os dados chegam, em vez de três, e a grade de trás não é mais redesenhada</item>
         <item>Login do Claude no navegador em inglês ou português, conforme o idioma do navegador; o painel web em inglês também traduz as mensagens de erro, e os erros das contas de filmes saem no idioma da TV</item>
         <item>Segurança: ligar a unidade de rede pelo painel pede o PIN; o conector do Windows só baixa pelo https; outro aparelho da casa não trava mais o painel, o login do Claude nem a cópia de arquivos do seu computador (cada computador continua entrando com o próprio “Permitir?”)</item>
         <item>A manutenção da madrugada termina antes de a família ligar a TV, e as notas do IMDb dos filmes não somem mais</item>
@@ -144,6 +145,7 @@
         <item>Protetor de tela com widgets novos, de letra maior: escolha Faixa de vidro (as próximas horas numa curva, com a hora do sol), Cartões (agora, horas, hoje e amanhã) ou Sem caixa (a temperatura grande e o tempo numa frase) em Configurações › Tela e energia › Widgets do protetor, ou no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Séries › abra 3 ou 4 séries seguidas</item>
         <item>Unidade de rede pede o PIN</item>
         <item>Notas do IMDb em Filmes</item>
         <item>Timer de sono desliga a LG</item>
@@ -258,6 +260,7 @@
         <item>Em Configurações › Tela e energia, OK em Widgets do protetor até o estilo que quiser e espere o protetor aparecer</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Cada ficha abriu sem travadinha, e o VOLTAR voltou para o mesmo pôster?</item>
         <item>No painel web, desligue e ligue de novo a unidade de rede: ao ligar, o painel pediu o PIN?</item>
         <item>Abra Filmes e a ficha de um filme: as notas do IMDb continuam aparecendo?</item>
         <item>Marque o timer de sono para 2 minutos: uns 15 s depois que a tela apagar, a LG desligou sozinha?</item>
