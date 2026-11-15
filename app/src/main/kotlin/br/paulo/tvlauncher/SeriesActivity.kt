@@ -754,6 +754,7 @@ class SeriesActivity : Activity() {
     private fun abrirSerie(s0: Serie, trocar: Boolean = false) {
         val s = if (!trocar || ultimos[s0.chave] != null) s0 else outraVersao(s0)
             ?.takeIf { Idioma.versao(it.nome, it.grupo) == Idioma.versaoDesejada(prefsIdioma.para(s0.chave)) } ?: s0
+        if (aberta !== s) sinopseInteira = false
         aberta = s; fichaAberta = null
         desenharFicha()
         Fundo.rodar {
@@ -837,8 +838,12 @@ class SeriesActivity : Activity() {
         tela.removeCallbacks(esconderAviso); tela.postDelayed(esconderAviso, 2_500)
     }
 
+    private var sinopseInteira = false   // "Sinopse inteira" apertado nesta ficha
+    private var sinopseCurta: TextView? = null
+
     private fun desenharFicha(focarEpisodio: Int? = null) {
         val s = aberta ?: return
+        sinopseCurta = null
         val f = fichaAberta
         painel.removeAllViews()
         val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(48), dp(28), dp(48), dp(20)) }   // 34/24 -> 28/20: sobra altura para os episódios com a letra maior
@@ -881,7 +886,8 @@ class SeriesActivity : Activity() {
             }, LinearLayout.LayoutParams(dp(460), -2).apply { topMargin = dp(10) })
         }
         (f?.sinopse?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.sinopse?.takeIf { it.isNotEmpty() })?.let {
-            col.addView(TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.15f); maxLines = 3; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(8), 0, 0) })
+            sinopseCurta = TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.15f); maxLines = if (sinopseInteira) Int.MAX_VALUE else 3; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(8), 0, 0) }
+            col.addView(sinopseCurta)
         }
 
         if (f == null) {
@@ -914,7 +920,17 @@ class SeriesActivity : Activity() {
                 linhaBotoes.addView(botao(getString(R.string.elenco_botao)) { ElencoActivity.abrir(this, id, serie = true, nome = Vod.nomeLimpo(s.nome)) },
                     LinearLayout.LayoutParams(-2, -2).apply { marginStart = if (linhaBotoes.childCount > 0) dp(12) else 0 })
             }
-            if (linhaBotoes.childCount > 0) col.addView(linhaBotoes, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(14) })
+            // Sinopse cortada em 3 linhas ("forç..."): "Sinopse inteira" abre o resto ali mesmo (e volta a encolher).
+            sinopseCurta?.let { sv ->
+                val b = botao(getString(if (sinopseInteira) R.string.series_sinopse_menos else R.string.series_sinopse_mais)) {
+                    sinopseInteira = !sinopseInteira; desenharFicha()
+                }.apply { tag = "sinopse"; visibility = if (sinopseInteira) View.VISIBLE else View.GONE }
+                linhaBotoes.addView(b, LinearLayout.LayoutParams(-2, -2).apply { marginStart = if (linhaBotoes.childCount > 0) dp(12) else 0 })
+                if (!sinopseInteira) sv.post { if ((sv.layout?.let { l -> l.lineCount > 0 && l.getEllipsisCount(l.lineCount - 1) > 0 }) == true) b.visibility = View.VISIBLE }
+            }
+            if (linhaBotoes.childCount > 0) col.addView(HorizontalScrollView(this).apply {
+                isHorizontalScrollBarEnabled = false; isFocusable = false; addView(linhaBotoes)
+            }, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(14) })
 
             // Temporadas.
             val temps = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
@@ -927,7 +943,10 @@ class SeriesActivity : Activity() {
                     temporada = t; desenharFicha(focarEpisodio = -1)
                 }.apply { tag = "t$t" }, LinearLayout.LayoutParams(-2, -2).apply { marginEnd = dp(8) })
             }
-            col.addView(HorizontalScrollView(this).apply { isHorizontalScrollBarEnabled = false; addView(temps) },
+            // Temporadas que passam da tela: o canto esmaece (sinal de que há mais à direita) em vez de cortar seco.
+            col.addView(HorizontalScrollView(this).apply {
+                isHorizontalScrollBarEnabled = false; isHorizontalFadingEdgeEnabled = true; setFadingEdgeLength(dp(56)); addView(temps)
+            },
                 LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(14) })
 
             // Episódios da temporada.
@@ -1159,9 +1178,10 @@ class SeriesActivity : Activity() {
         isFocusable = true; isClickable = true
         background = StateListDrawable().apply {
             addState(intArrayOf(android.R.attr.state_focused), GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(papel) })
-            addState(intArrayOf(), GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(if (marcado) 0x4DF5B544 else Estilo.SUPERFICIE_ALTA) })
+            // Sem foco: mais apagado (6% + fio, texto a 70%), para o botão branco com foco saltar aos olhos a 3 m (15/11/2026).
+            addState(intArrayOf(), GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(if (marcado) 0x4DF5B544 else Estilo.SUPERFICIE); if (!marcado) setStroke(dp(1), Estilo.BORDA) })
         }
-        setTextColor(ColorStateList(arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf()), intArrayOf(Estilo.FUNDO, papel)))
+        setTextColor(ColorStateList(arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf()), intArrayOf(Estilo.FUNDO, if (marcado) papel else Estilo.TEXTO_2)))
         setOnClickListener { aoApertar() }
     }
 

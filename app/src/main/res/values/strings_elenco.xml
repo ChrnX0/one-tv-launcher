@@ -41,4 +41,6 @@
     <string name="legenda_trad_opcao">Translate subtitles on the TV when missing</string>
     <string name="legenda_trad_ligada">Subtitles will be translated on the TV when missing</string>
     <string name="legenda_trad_desligada">Subtitles will no longer be translated</string>
+    <string name="series_sinopse_mais">Full synopsis</string>
+    <string name="series_sinopse_menos">Shorter synopsis</string>
 </resources>
