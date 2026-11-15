@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_backup.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="bkn_titulo">自动备份</string>
+    <string name="bkn_explica">每天晚上电视空闲时，保存一份用你的密码加密的完整备份。保留最近 7 份。请记下密码：没有它就无法打开备份。</string>
+    <string name="bkn_ligado">开</string>
+    <string name="bkn_desligado">关</string>
+    <string name="bkn_sem_senha">关 · 请先设置备份密码</string>
+    <string name="bkn_senha">备份密码</string>
+    <string name="bkn_senha_ok">已设置 · 按 OK 更改</string>
+    <string name="bkn_senha_falta">未设置 · 按 OK 设置</string>
+    <string name="bkn_senha_nova">备份密码（8 个字符或以上）</string>
+    <string name="bkn_senha_repetir">再次输入密码</string>
+    <string name="bkn_senha_curta">密码需要 8 到 128 个字符。</string>
+    <string name="bkn_senha_diferente">两次输入的密码不一致。</string>
+    <string name="bkn_senha_gravada">密码已保存。请妥善保管。</string>
+    <string name="bkn_senha_erro">无法保存密码。</string>
+    <string name="bkn_horario">时间</string>
+    <string name="bkn_extra">额外副本</string>
+    <string name="bkn_destino_tv">仅电视</string>
+    <string name="bkn_destino_pendrive">U 盘</string>
+    <string name="bkn_destino_nas">NAS（%1$s）</string>
+    <string name="bkn_agora">立即备份</string>
+    <string name="bkn_ultimo">上次</string>
+    <string name="bkn_nunca">从未</string>
+    <string name="bkn_pin">更改备份需要 PIN</string>
+</resources>

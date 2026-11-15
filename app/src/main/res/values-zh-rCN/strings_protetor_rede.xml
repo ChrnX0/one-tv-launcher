@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_protetor_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pt_dica_dispensar">OK 关闭 · ◀ ▶ 移动</string>
+    <string name="pt_dica_pausar">OK 暂停或继续 · ◀ ▶ 移动</string>
+    <string name="pt_dica_andar">◀ ▶ 移动 · 其他键关闭</string>
+    <string name="rede_fotos_usar">在屏保中使用这些照片</string>
+    <string name="rede_fotos_parar">停止在屏保中使用这些照片</string>
+    <string name="rede_fotos_usando">正在复制照片。下次屏保启动时会显示。</string>
+    <string name="rede_fotos_paradas">屏保不再使用此文件夹。</string>
+    <string name="rede_continuar">继续观看</string>
+    <string name="rede_recentes">最近添加</string>
+    <string name="rede_buscar">搜索</string>
+    <string name="rede_buscar_explica">此服务器上的电影、剧集、单集和音乐。</string>
+    <string name="rede_buscar_campo">名称</string>
+    <string name="rede_buscar_curto">请至少输入 2 个字。</string>
+    <string name="rede_proximo_em">接下来：%1$s，%2$d 秒后 · OK 立即开始 · 其他键取消</string>
+    <string name="rede_ainda_assistindo">还在看吗？按 OK 开始 %1$s</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="other">%1$d 张照片 · 已复制到电视，电脑关机也可使用</item>
+    </plurals>
+</resources>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_ideias_51a76.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l51_ensaio_ok">恢复检查通过</string>
+    <string name="l51_ensaio_falhou">保存的副本无法恢复（%1$s）</string>
+    <string name="l51_wifi_titulo">访客 Wi-Fi</string>
+    <string name="l51_wifi_nao">未设置：输入一次，访客扫描二维码即可</string>
+    <string name="l51_wifi_dica">请使用路由器的访客网络：房间里的任何人都能在屏幕上看到密码。</string>
+    <string name="l51_wifi_rede">网络名称</string>
+    <string name="l51_wifi_senha">密码</string>
+    <string name="l51_wifi_invalido">名称最多 32 个字符；密码为空（开放网络）或 8 到 63 个字符。</string>
+    <string name="l51_wifi_qr_titulo">显示访客 Wi-Fi 二维码</string>
+    <string name="l51_uso_titulo">常用内容</string>
+    <string name="l51_uso_det">按使用次数排列的界面和设置，仅在此电视上统计（不会外传）</string>
+    <string name="l51_uso_vazio">还没有统计数据。几天后再来看看。</string>
+    <string name="l51_uso_tela">界面</string>
+    <string name="l51_uso_opcao">设置</string>
+    <string name="l51_uso_linha">%1$s（%2$s）：%3$s，%4$s</string>
+    <string name="l51_uso_hoje">最近：今天</string>
+    <string name="l51_uso_ontem">最近：昨天</string>
+    <string name="l51_uso_dias">最近：%d 天前</string>
+    <string name="l51_tela_Main">主屏幕</string>
+    <string name="l51_tela_Dream">屏保</string>
+    <string name="l51_tela_Filmes">电影</string>
+    <string name="l51_tela_Series">剧集</string>
+    <string name="l51_tela_Jogos">游戏</string>
+    <string name="l51_tela_Player">电视直播和视频</string>
+    <string name="l51_tela_PainelRapido">快捷面板</string>
+    <string name="l51_tela_Vod">列表片库</string>
+    <string name="l51_tela_Previsao">天气预报</string>
+    <string name="l51_tela_Elenco">演员</string>
+    <string name="l51_tela_ConfigLauncher">设置</string>
+    <string name="l51_tela_MidiaRede">网络</string>
+    <string name="l51_tela_Calendario">日历</string>
+    <string name="l51_tela_Gravacoes">录制</string>
+    <string name="l51_tela_Busca">搜索</string>
+    <string name="l51_tela_Casa">我的家</string>
+    <string name="l51_tela_AlarmeTocando">闹钟响铃</string>
+    <string name="l51_tela_Radio">电台</string>
+    <string name="l51_tela_Diagnostico">诊断</string>
+    <string name="l51_uso_zerar">重置</string>
+    <string name="l51_digitar_titulo">在电视上输入</string>
+    <string name="l51_digitar_texto">%1$s 中有一个打开的文本框。点按即可从这里输入。</string>
+    <string name="casa_temp_ajuste">%1$s · ◀ ▶</string>
+    <string name="casa_ambiente">室温 %1$s</string>
+    <string name="casa_movimento">有移动</string>
+    <string name="casa_sem_movimento">无移动</string>
+    <string name="casa_molhado">潮湿</string>
+    <string name="casa_seco">干燥</string>
+    <string name="casa_fumaca">有烟雾！</string>
+    <string name="casa_sem_fumaca">无烟雾</string>
+    <string name="casa_dica_temp">温度</string>
+    <string name="casa_camera_abrindo">正在打开摄像头…</string>
+    <string name="casa_camera_ver">在电视上显示</string>
+    <plurals name="l51_uso_vezes">
+        <item quantity="other">%d 次</item>
+    </plurals>
+</resources>

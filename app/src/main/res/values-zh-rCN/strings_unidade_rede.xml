@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_unidade_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="ur_secao">网络驱动器</string>
+    <string name="ur_titulo">将电视显示为网络驱动器</string>
+    <string name="ur_det">关。电视会像手机一样自动出现在 Windows 的“此电脑”中，在 Mac、Linux 和手机上显示为网络文件夹。</string>
+    <string name="ur_painel">请先开启上方的网页面板（使用相同的 PIN 和 https 地址）。</string>
+    <string name="ur_https">正在等待面板的 https 地址（开启面板约 1 分钟后会创建证书）。</string>
+    <string name="ur_abra">开。在 Windows 上，电视会出现在“此电脑”中（每台电脑首次连接时电视会在屏幕上询问）。Mac、Linux 和手机：%1$s · 密码：面板 PIN。</string>
+    <string name="mtp_pergunta_titulo">有电脑请求访问电视文件</string>
+    <string name="mtp_pergunta">“%1$s”想通过家庭网络查看和复制电视存储中的文件。允许这台电脑吗？</string>
+    <string name="mtp_pcs">已允许的电脑</string>
+    <string name="mtp_pcs_nenhum">还没有。当有电脑请求文件时，电视会在屏幕上询问。</string>
+    <string name="mtp_pcs_lista">%1$s · OK 全部忘记（每台都会重新询问）</string>
+    <string name="mtp_pcs_esquecidos">已忘记这些电脑</string>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_voz2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="lbl_voz_filmes">电影</string>
+    <string name="lbl_voz_series">剧集</string>
+    <string name="lbl_voz_na_rede">网络媒体</string>
+    <string name="lbl_voz_casa">家居控制</string>
+    <string name="lbl_voz_busca">搜索</string>
+    <string name="lbl_voz_mural">留言板</string>
+    <string name="voz_mural_desligado">家庭留言板已关闭（或电视处于访客模式）。</string>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_player2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="vod_tentando">连接已断开。正在重试（%1$d / %2$d）…</string>
+    <string name="vod_proximo_episodio">下一集</string>
+    <string name="vod_proximo_agora">立即观看 · %1$d 秒</string>
+    <string name="vod_proximo_cancelar">取消</string>
+    <string name="vod_proximo_continuar">继续观看</string>
+    <string name="vod_ainda_assistindo">还在看吗？</string>
+    <string name="vod_ainda_assistindo_texto">已连续播放几集且没有人碰遥控器，所以下一集在等你。</string>
+    <string name="vod_desligar_ao_fim">播放结束后关闭电视</string>
+    <string name="vod_desligar_ao_fim_ligado">播放结束后电视将关闭</string>
+    <string name="vod_desligar_ao_fim_desligado">播放结束后电视保持开启</string>
+    <string name="vod_legenda_tamanho_opcao">字幕大小：%1$s</string>
+    <string name="vod_legenda_tamanho_titulo">字幕大小</string>
+    <string-array name="vod_legenda_tamanhos">
+        <item>小</item>
+        <item>标准</item>
+        <item>大</item>
+        <item>特大</item>
+    </string-array>
+</resources>

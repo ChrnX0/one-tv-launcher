@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_ideia72.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l72_abrir">打开%1$s</string>
+    <string name="l72_tela_previsao">天气预报</string>
+    <string name="l72_tela_agenda">日历</string>
+    <string name="l72_tela_despertador">闹钟</string>
+    <string name="l72_tela_configuracoes">启动器设置</string>
+    <string name="l72_tela_inicio">主屏幕</string>
+    <string name="l72_despertador">在 %1$s 创建闹钟（%2$s）</string>
+    <string name="l72_dias_uma">仅一次</string>
+    <string name="l72_dias_todos">每天</string>
+    <string name="l72_dias_uteis">周一至周五</string>
+    <string name="l72_dias_fds">周末</string>
+    <string name="l72_dias_nomes">周日,周一,周二,周三,周四,周五,周六</string>
+    <string name="l72_vol_subir">调高音量</string>
+    <string name="l72_vol_descer">调低音量</string>
+    <string name="l72_vol_mudo">静音/取消静音</string>
+    <string name="l72_vezes">（%1$d 次）</string>
+    <string name="l72_midia_pausar">暂停</string>
+    <string name="l72_midia_tocar">继续播放</string>
+    <string name="l72_midia_proxima">下一个</string>
+    <string name="l72_midia_anterior">上一个</string>
+    <string name="l72_visita_liga">开启访客模式</string>
+    <string name="l72_visita_desliga">关闭访客模式</string>
+    <string name="l72_canal_pedido">切换到频道 %1$s</string>
+    <string name="l72_canal">切换到频道 %1$d（%2$s）</string>
+    <string name="l72_o_que_passa">查看 %1$s 正在播什么</string>
+    <string name="l72_casa_ligar">打开</string>
+    <string name="l72_casa_desligar">关闭</string>
+    <string name="l72_casa_alternar">切换</string>
+    <string name="l72_casa">%1$s %2$s（家居）</string>
+    <string name="l72_guia_vazio">%1$s：节目指南中没有内容。</string>
+    <string name="l72_guia_agora">%1$s 正在播出：%2$s（至 %3$s）</string>
+    <string name="l72_guia_nada_agora">%1$s：节目指南中当前没有内容</string>
+    <string name="l72_guia_depois">接下来：%1$s（%2$s）</string>
+    <string name="l75_pilula">正在播放：%1$s，%2$s。OK 暂停或继续；长按 OK 打开应用</string>
+</resources>

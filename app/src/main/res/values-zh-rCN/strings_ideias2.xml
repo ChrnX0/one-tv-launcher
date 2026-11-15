@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_ideias2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dormir_titulo">就寝时间</string>
+    <string name="dormir_texto">此应用现在不可用。晚安！</string>
+    <string name="dormir_pin">更改就寝时间需要 PIN</string>
+    <string name="dormir_inicio">就寝时间：开始</string>
+    <string name="dormir_fim">就寝时间：结束</string>
+    <string name="dormir_teto">就寝时间：最大音量</string>
+    <string name="recado_link_titulo">留言</string>
+    <string name="extras_HORA_DORMIR">就寝时间（仅允许的应用，限制音量）</string>
+    <string name="extras_TOCANDO_AGORA">正在播放（读取正在播放的内容）</string>
+    <string name="extras_MODO_LEVE">轻量模式（动画更短）</string>
+    <string name="extras_SOM_NAVEGACAO">导航音</string>
+    <string name="extras_RECADO_LINK">通过链接留言（Home Assistant、TvOverlay）</string>
+    <string name="extras_caches">清除应用缓存</string>
+    <string name="extras_livre">可用 %1$s</string>
+    <string name="extras_consumo">各应用的网络用量（7 天）</string>
+    <string name="extras_tocando">正在播放</string>
+    <string name="extras_aguarde">请稍候…</string>
+    <string name="dormir_dia">就寝时间：日期</string>
+    <string name="dormir_todos">全部（默认）</string>
+    <string name="dormir_proprio">单独安排</string>
+    <string name="dormir_segue">跟随默认</string>
+    <string name="dormir_voltar_padrao">就寝时间：将这一天恢复为默认</string>
+    <string name="extras_VER_TELA">让 Claude 查看屏幕（MCP ver_tela；电视会显示提醒）</string>
+    <string name="casa_titulo">家居</string>
+    <string name="casa_sem_config">请在手机面板中设置 Home Assistant：附加功能标签页，家居卡片。</string>
+    <string name="casa_carregando">正在加载设备…</string>
+    <string name="casa_vazio">Home Assistant 中没有灯、插座或场景。</string>
+    <string name="casa_google_home">Google Home</string>
+    <string name="casa_google_home_det">Google 的灯和摄像头</string>
+    <string name="casa_resumo">Home Assistant · %2$d 个中 %1$d 个已开启</string>
+    <string name="casa_resumo_so_cenas">Home Assistant · %1$d 个场景</string>
+    <string name="casa_secao_cenas">场景和脚本</string>
+    <string name="casa_secao_aparelhos">设备</string>
+    <string name="casa_secao_google">Google</string>
+    <string name="casa_sem_comodo">无房间</string>
+    <string name="casa_ligado">开</string>
+    <string name="casa_desligado">关</string>
+    <string name="casa_aberta">打开</string>
+    <string name="casa_fechada">关闭</string>
+    <string name="casa_rodar">按 OK 运行</string>
+    <string name="casa_indisponivel">不可用</string>
+    <string name="casa_sem_config_titulo">连接你的家</string>
+    <string name="casa_dica_acionar">开或关</string>
+    <string name="casa_erro_simples">Home Assistant 无响应。请检查其服务器是否已开启，然后重试。</string>
+    <string name="casa_erro">Home Assistant 无响应：%1$s</string>
+    <string name="casa_ligado_pct">开 · %1$d%%</string>
+    <string name="casa_brilho_ajuste">亮度 %1$d%% · ◀ ▶</string>
+    <string name="casa_dica_brilho">亮度</string>
+    <string name="casa_tecla_segurar_ok">长按 OK</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_avisos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rd_voltou_titulo">网络已恢复</string>
+    <string name="rd_voltou_texto">中断了 %1$s（从 %2$s 开始）。可能原因：%3$s。</string>
+    <string name="rd_causa_wifi">电视断开了 Wi-Fi</string>
+    <string name="rd_causa_provedor">网络运营商或路由器</string>
+    <string name="rd_min">%1$d 分钟</string>
+    <string name="rd_h_min">%1$d 小时 %2$d 分钟</string>
+    <string name="rd_disco_titulo">电视存储空间即将用完</string>
+    <string name="rd_disco_texto">按此速度，大约 %1$d 天后会用完（剩余 %2$d MB）。请清除应用缓存或删除不用的应用。</string>
+    <string name="pr_avisos_tv">来自电视</string>
+    <string name="mural_riscar">划掉 %1$s</string>
+</resources>

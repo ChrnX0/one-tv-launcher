@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_ideias_80_88.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="si_sem_internet">无网络</string>
+    <string name="si_funcionam">仍可使用：%1$s</string>
+    <string name="si_pendrive">U 盘</string>
+    <string name="ad_pergunta">你还在看吗？</string>
+</resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_sync.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="sync_sub">已以 %1$s 登录。电视与手机保持同步的内容。</string>
+    <string name="sync_sub_mdblist">已以 %1$s 登录。你的 MDBList 清单可以显示在片库中。</string>
+    <string name="sync_ultima">上次同步：%1$s</string>
+    <string name="sync_nunca">尚未同步</string>
+    <string name="sync_interesses">感兴趣 ⇄ 待看清单</string>
+    <string name="sync_interesses_simkl">感兴趣 ⇄ 计划观看</string>
+    <string name="sync_interesses_det">你在这里标记的会出现在那边，反之亦然</string>
+    <string name="sync_assistidos">已观看 ← 历史记录</string>
+    <string name="sync_assistidos_det">导入你在手机或其他地方看过的内容</string>
+    <string name="sync_continuar">继续观看 ⇄ 上次停止的位置</string>
+    <string name="sync_continuar_det">在手机上暂停，在电视上从同一位置继续</string>
+    <string name="sync_contar">告诉 %1$s 我在这里看了什么</string>
+    <string name="sync_contar_det">播放时发送“正在观看”和“已观看”。访客模式或儿童资料下从不发送。</string>
+    <string name="sync_listas">片库中的清单</string>
+    <string name="sync_listas_nenhuma">未选择</string>
+    <string name="sync_listas_n">已选 %1$d 个：%2$s</string>
+    <string name="sync_listas_sub">它们显示在“清单”的“全部”下，只包含你清单中的作品。最多 %1$d 个。</string>
+    <string name="sync_listas_carregando">正在加载你的清单…</string>
+    <string name="sync_listas_vazio">未找到清单。请在 Trakt 或 MDBList 上创建或点赞一个清单后再回来。</string>
+    <string name="sync_listas_cheio">最多 %1$d 个清单</string>
+    <string name="sync_lista_itens">%1$d 部作品</string>
+    <string name="sync_agora">立即同步</string>
+    <string name="sync_agora_det">打开电影或剧集时也会自动同步</string>
+    <string name="sync_rodando">正在同步…</string>
+    <string name="sync_feito">已同步</string>
+    <string name="sync_sair">退出 %1$s</string>
+    <string name="sync_bloqueado">已暂停：访客模式或儿童资料已开启。</string>
+    <string name="sync_outro_perfil">已暂停：同步属于另一个个人资料。</string>
+    <string name="sync_trakt_cheia">你的 Trakt 清单已满（免费账号最多 100 个）。启动器仅在电视上继续记录。</string>
+    <string name="sync_ligado">开</string>
+    <string name="sync_desligado">关</string>
+    <string name="sync_fonte_trakt">数据来自 Trakt（trakt.tv）</string>
+    <string name="sync_fonte_simkl">数据来自 Simkl（simkl.com）</string>
+    <string name="sync_n_de">你的清单中 %2$d 部里的第 %1$d 部</string>
+    <string name="sync_continuando">从另一台设备上停止的位置继续</string>
+</resources>

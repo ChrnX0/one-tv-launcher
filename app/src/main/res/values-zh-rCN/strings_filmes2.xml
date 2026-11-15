@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_filmes2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="filmes_filtro">筛选</string>
+    <string name="filmes_filtro_titulo">筛选电影</string>
+    <string name="filmes_filtro_cabecalho">%1$s · 筛选：%2$s</string>
+    <string name="filmes_filtro_genero">类型：%1$s</string>
+    <string name="filmes_filtro_epoca">年代：%1$s</string>
+    <string name="filmes_filtro_nota">最低评分：%1$s</string>
+    <string name="filmes_filtro_nao_vistos">仅未看：%1$s</string>
+    <string name="filmes_filtro_limpar">清除筛选</string>
+    <string name="filmes_filtro_qualquer">任意</string>
+    <string name="filmes_filtro_sim">是</string>
+    <string name="filmes_filtro_nao">否</string>
+    <string name="filmes_filtro_decada">%1$d 年代</string>
+    <string name="filmes_filtro_nota_min">%1$d+</string>
+    <string name="filmes_filtro_nao_vistos_curto">未看</string>
+    <string name="filmes_filtro_sem_genero">此列表的类别中没有类型名称</string>
+    <string name="filmes_filtro_vazio">此类别中没有符合该筛选的电影</string>
+    <string name="filmes_sorteio">随便看看</string>
+    <string name="filmes_sorteio_vazio">这里没有可选的电影</string>
+    <string name="filmes_colecao">本片系列</string>
+    <string name="filmes_colecao_cat">系列：%1$s</string>
+    <string name="genero_acao">动作</string>
+    <string name="genero_aventura">冒险</string>
+    <string name="genero_comedia">喜剧</string>
+    <string name="genero_drama">剧情</string>
+    <string name="genero_terror">恐怖</string>
+    <string name="genero_suspense">惊悚</string>
+    <string name="genero_romance">爱情</string>
+    <string name="genero_ficcao">科幻</string>
+    <string name="genero_fantasia">奇幻</string>
+    <string name="genero_animacao">动画</string>
+    <string name="genero_infantil">儿童和家庭</string>
+    <string name="genero_documentario">纪录片</string>
+    <string name="genero_crime">犯罪</string>
+    <string name="genero_guerra">战争</string>
+    <string name="genero_faroeste">西部</string>
+    <string name="genero_musical">歌舞</string>
+</resources>

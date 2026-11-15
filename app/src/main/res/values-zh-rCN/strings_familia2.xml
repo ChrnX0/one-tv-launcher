@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_familia2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="an_rotulo">生日</string>
+    <string name="an_hoje">今天是 %s 的生日</string>
+    <string name="an_amanha">明天是 %s 的生日</string>
+    <string name="tp_calor">高温</string>
+    <string name="tp_calor_texto">今天最高 %d° · 多喝水</string>
+    <string name="tp_frio">严寒</string>
+    <string name="tp_frio_texto">今晚最低 %d° · 注意保暖</string>
+    <string name="tp_cfg">高温和严寒提醒</string>
+    <string name="tp_cfg_det">今天达到 %1$d° 或今晚降到 %2$d° 时，在任何应用上方显示卡片</string>
+    <string name="mu_ok_lido">按 OK 标为已读</string>
+    <string name="mu_ok_nao_lido">已读 · 按 OK 标为未读</string>
+    <string name="mu_lido_desc">留言，已读：%s。按 OK 标为未读。</string>
+    <string name="mu_nao_lido_desc">留言：%s。按 OK 标为已读。</string>
+    <string name="mu_apagar">删除留言：%s</string>
+    <string name="extras_RETROSPECTIVA_ANO">你的电视年度回顾（12 月在屏保上显示）</string>
+    <string name="ra_titulo">你的电视 %d 年度回顾</string>
+    <string name="ra_canal">最爱的频道：%1$s（%2$s）</string>
+    <string name="ra_coluna">电台</string>
+    <string name="ra_dica_ouvir">收听</string>
+    <string name="ra_dica_favoritar">收藏</string>
+    <string name="ra_carregando">正在加载电台…</string>
+    <string name="ra_subtitulo">来自世界各地的电台 · 遥控器上的 1–9 播放你的收藏</string>
+    <string name="ra_sem_catalogo">电台目录无响应。你的收藏仍可使用。</string>
+    <string name="ra_nada">未找到电台。</string>
+    <string name="ra_continuar">继续</string>
+    <string name="ra_pausar">暂停</string>
+    <string name="ra_favoritas">收藏</string>
+    <string name="ra_procurar">查找</string>
+    <string name="ra_buscar">按名称搜索</string>
+    <string name="ra_buscar_det">世界上的任何电台</string>
+    <string name="ra_generos">类型</string>
+    <string name="ra_paises">其他国家/地区</string>
+    <string name="ra_paises_det">电台最多的国家/地区</string>
+    <string name="ra_perto">你附近</string>
+    <string name="ra_mais_ouvidas">%s 最受欢迎</string>
+    <string name="ra_mundo">全球最受欢迎</string>
+    <string name="ra_resultado">搜索：%s</string>
+    <string name="ra_favoritada">已加入收藏</string>
+    <string name="ra_desfavoritada">已移出收藏</string>
+    <string name="ra_falhou">此电台现在无法播放。请换一个。</string>
+    <plurals name="an_anos">
+        <item quantity="other">满 %d 岁</item>
+    </plurals>
+</resources>
