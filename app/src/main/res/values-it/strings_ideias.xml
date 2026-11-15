@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (it) de values/strings_ideias.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dns_voltou_anterior">Il nuovo DNS non ha risposto. Tornato al precedente.</string>
+    <string name="teclas_titulo">Prova tasti</string>
+    <string name="teclas_instrucao">Premi i tasti del telecomando. Ogni tasto compare qui. HOME esce.</string>
+    <string name="teclas_vazio">Ancora nessun tasto.</string>
+    <string name="trava_home_titulo">PIN per cambiare la HOME</string>
+    <string name="trava_home_errado">PIN errato</string>
+    <string name="extras_cfg_det">Orari del filtro notturno e dell’ora di dormire, prova tasti, calibrazione e altri strumenti</string>
+    <string name="extras_titulo">Extra</string>
+    <string name="extras_ligado">attivo</string>
+    <string name="extras_desligado">disattivo</string>
+    <string name="extras_JANELA_OTA">Aggiornamenti di sistema solo di notte (dalle 3 alle 5)</string>
+    <string name="extras_TRAVAR_CRITICOS">Blocca «Termina» e «Cancella dati» per il launcher e la VPN</string>
+    <string name="extras_PIN_HOME">Chiedi il PIN per cambiare la HOME</string>
+    <string name="extras_FILTRO_NOTURNO">Filtro notturno (schermo più caldo)</string>
+    <string name="extras_COR_DO_FUNDO">Colore d’accento dallo sfondo (tema Galleria)</string>
+    <string name="extras_DEBLOAT_POS_OTA">Rifai la pulizia delle app dopo un aggiornamento di sistema</string>
+    <string name="extras_filtro_horario">Filtro: dalle %1$s alle %2$s, intensità %3$d%%</string>
+    <string name="extras_filtro_inicio">Inizio del filtro</string>
+    <string name="extras_filtro_fim">Fine del filtro</string>
+    <string name="extras_filtro_forca">Intensità del filtro</string>
+    <string name="extras_teclas">Apri la prova tasti</string>
+    <string name="extras_calibracao">Apri le immagini di calibrazione</string>
+    <string name="extras_acordar_pc">Risveglia il computer (Wake-on-LAN)</string>
+    <string name="extras_acordar_sem_mac">Manca il MAC del computer (pannello o adb)</string>
+    <string name="extras_acordar_ok">Pacchetto inviato</string>
+    <string name="extras_acordar_falhou">Impossibile inviare</string>
+    <string name="extras_ota_pendente">Aggiornamento di sistema in attesa della fascia oraria</string>
+    <string name="extras_ota_nenhuma">Nessun aggiornamento di sistema in sospeso</string>
+    <string name="guardar_dados_titulo">Dati del launcher protetti</string>
+    <string name="guardar_dados_texto">Cancellare i dati eliminerebbe le impostazioni, le sveglie e l’abbinamento del launcher con la TV. Non è stato eliminato nulla. Per ripartire da zero, usa il backup del pannello o un computer (adb).</string>
+    <string name="dono_titulo">Rendi il launcher proprietario del dispositivo</string>
+    <string name="dono_texto">Disattiva Google per qualche secondo (l’account resta e torna da solo) e rende il launcher proprietario del dispositivo: nascondere app, fissare la HOME e bloccare termina o cancella. Fallo quando nessuno usa la TV.</string>
+    <string name="dono_usuarios">Anche gli utenti aggiuntivi della TV verranno RIMOSSI, con i loro dati: %s.</string>
+    <string name="dono_ok">Rendi proprietario</string>
+    <string name="dono_andando">Il launcher sta diventando proprietario… (fino a 1 minuto)</string>
+    <string name="dono_sem_shell">La shell integrata non ha risposto. Abbinala in Impostazioni > Shell del launcher.</string>
+    <string name="bv_dev">Attiva le opzioni sviluppatore</string>
+    <string name="bv_dev_det">In Informazioni, scendi fino a «Build del sistema operativo Android TV» e premi OK 7 volte. Poi torna qui.</string>
+    <string name="bv_parear">Abbina il launcher alla TV</string>
+    <string name="bv_parear_det">Apre le Opzioni sviluppatore: attiva «Debug wireless» e apri «Accoppia dispositivo con codice di accoppiamento». Il launcher legge il codice da solo.</string>
+    <string name="bv_dono">Rendi il launcher proprietario del dispositivo</string>
+    <string name="bv_dono_det">Nasconde app, fissa la HOME e blocca termina o cancella. Google si disattiva per qualche secondo; l’account resta.</string>
+    <string name="extras_DIARIO_DNS">Diario DNS per app (conservato solo sulla TV, 7 giorni)</string>
+    <string name="extras_diario_ver">Mostra il diario DNS di oggi</string>
+    <string name="extras_diario_apagar">Elimina il diario DNS</string>
+    <string name="extras_diario_apagado">Diario eliminato</string>
+</resources>

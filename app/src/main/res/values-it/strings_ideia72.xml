@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (it) de values/strings_ideia72.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l72_abrir">Apri %1$s</string>
+    <string name="l72_tela_previsao">le previsioni del tempo</string>
+    <string name="l72_tela_agenda">il calendario</string>
+    <string name="l72_tela_despertador">la sveglia</string>
+    <string name="l72_tela_configuracoes">le Impostazioni del launcher</string>
+    <string name="l72_tela_inicio">la schermata Home</string>
+    <string name="l72_despertador">Crea una sveglia alle %1$s (%2$s)</string>
+    <string name="l72_dias_uma">una volta</string>
+    <string name="l72_dias_todos">tutti i giorni</string>
+    <string name="l72_dias_uteis">lun–ven</string>
+    <string name="l72_dias_fds">fine settimana</string>
+    <string name="l72_dias_nomes">Dom,Lun,Mar,Mer,Gio,Ven,Sab</string>
+    <string name="l72_vol_subir">Alza il volume</string>
+    <string name="l72_vol_descer">Abbassa il volume</string>
+    <string name="l72_vol_mudo">Attiva/disattiva muto</string>
+    <string name="l72_vezes">(%1$d volte)</string>
+    <string name="l72_midia_pausar">Pausa</string>
+    <string name="l72_midia_tocar">Riprendi la riproduzione</string>
+    <string name="l72_midia_proxima">Successivo</string>
+    <string name="l72_midia_anterior">Precedente</string>
+    <string name="l72_visita_liga">Attiva la modalità ospiti</string>
+    <string name="l72_visita_desliga">Disattiva la modalità ospiti</string>
+    <string name="l72_canal_pedido">Passa al canale %1$s</string>
+    <string name="l72_canal">Passa al canale %1$d (%2$s)</string>
+    <string name="l72_o_que_passa">Vedi cosa c’è su %1$s</string>
+    <string name="l72_casa_ligar">Accendi</string>
+    <string name="l72_casa_desligar">Spegni</string>
+    <string name="l72_casa_alternar">Commuta</string>
+    <string name="l72_casa">%1$s %2$s (casa)</string>
+    <string name="l72_guia_vazio">%1$s: niente nella guida.</string>
+    <string name="l72_guia_agora">%1$s ora: %2$s (fino alle %3$s)</string>
+    <string name="l72_guia_nada_agora">%1$s: niente nella guida ora</string>
+    <string name="l72_guia_depois">Dopo: %1$s (%2$s)</string>
+    <string name="l75_pilula">In riproduzione: %1$s, %2$s. OK mette in pausa o riprende; tieni premuto OK per aprire l’app</string>
+</resources>
