@@ -74,6 +74,21 @@ object Desligamento {
     /** "30 minutos", "1 hora", "1 hora e 30 minutos": para os avisos na tela. */
     fun duracaoTexto(minutos: Int): String = duracaoFalada(minutos * 60)   // no idioma da TV (Textos.kt)
 
+    /**
+     * A LG ignora o standby do CEC (verificado 14/11/2026): o Chromecast dorme e ela fica acesa. Se ela está pareada,
+     * 15 s depois (o volume dela já voltou, ver SonoSuave.parar) aperta a energia pela rede. Não desliga se alguém
+     * acordou o Chromecast nesse meio-tempo.
+     */
+    fun desligarLg(ctx: Context) {
+        val app = ctx.applicationContext
+        if (!VolumeLg.configurado(app) || !VolumeLg.desligarJunto(app)) return
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (telaAcesa(app)) { Log.i(TAG, "LG fica ligada: acordaram o Chromecast"); return@postDelayed }
+            Fundo.rodar("Desligar-lg") { Log.i(TAG, "LG desligada pela rede: ${VolumeLg.desligar(app)}") }
+        }, LG_ESPERA_MS)
+    }
+    private const val LG_ESPERA_MS = 15_000L
+
     internal fun telaAcesa(ctx: Context) = ctx.getSystemService(PowerManager::class.java).isInteractive
 
     /**
@@ -115,6 +130,7 @@ class DesligamentoReceiver : BroadcastReceiver() {
                 ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().remove(Desligamento.CHAVE).apply()
                 Desligamento.apagarTela(ctx)
                 SonoSuave.parar(ctx, esperarMs = 8_000L)   // a película sai e o volume volta depois que a TV dormiu
+                Desligamento.desligarLg(ctx)
             }
         }
     }

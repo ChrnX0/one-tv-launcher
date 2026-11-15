@@ -117,4 +117,9 @@ class LgNetcastTest {
         assertEquals(1, LgNetcast.rodada(29, 30))
         assertEquals(0, LgNetcast.rodada(30, 30))
     }
+
+    @Test fun teclaDeEnergiaDesliga() {
+        assertEquals(1, LgNetcast.TECLA_ENERGIA)
+        assertTrue(LgNetcast.corpoTecla(LgNetcast.TECLA_ENERGIA).endsWith("<value>1</value></command>"))
+    }
 }

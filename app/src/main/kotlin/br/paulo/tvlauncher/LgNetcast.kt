@@ -22,6 +22,8 @@ object LgNetcast {
     const val TECLA_SUBIR = 24
     const val TECLA_DESCER = 25
     const val TECLA_MUDO = 26
+    /** Energia: DESLIGA (verificado na Sala em 15/11/2026). Não liga: em standby a LG sai da rede; quem liga é o CEC. */
+    const val TECLA_ENERGIA = 1
 
     /** Teto de teclas numa ida: a LG vai de 0 a 100; nada pede mais do que isso de uma vez. */
     const val MAX_TECLAS = 100
