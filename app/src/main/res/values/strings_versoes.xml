@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Scrolling menus and lists (like the player’s “Audio and subtitles” and folders): items no longer slide over the title; in menus, the edges fade when there are more items</item>
         <item>App layout: choose between the usual row and a grid with every app in view (Settings › Appearance)</item>
         <item>Card size: Normal or Large, plus see-through cards when not selected (in Extras); everything starts off</item>
         <item>Icon packs: install an icon pack from Play and pick it in Settings › Appearance</item>

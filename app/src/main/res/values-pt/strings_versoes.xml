@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Menus e listas que rolam (como “Áudio e legenda” do player e as pastas): os itens não passam mais por cima do título; nos menus, as bordas esmaecem quando há mais itens</item>
         <item>Arranjo dos apps: escolha entre a fileira de sempre e uma grade com todos os apps à vista (Configurações › Aparência)</item>
         <item>Tamanho dos cartões: Normal ou Grande, e cartões transparentes fora do foco (em Extras); tudo começa desligado</item>
         <item>Pacotes de ícones: instale um pacote de ícones da Play e escolha em Configurações › Aparência</item>
