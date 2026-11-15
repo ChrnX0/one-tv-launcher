@@ -1,0 +1,30 @@
+plugins {
+    id("com.android.library")
+}
+
+android {
+    namespace = "rikka.rish"
+    // tv-launcher: sem a parte nativa (librish.so). O build não precisa de NDK/CMake; o `rish` (terminal do Shizuku
+    // para apps de terminal) fica indisponível e o servidor segue sem ele (ver RishConfig.init).
+    buildTypes {
+        release {
+            minifyEnabled = false
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+}
+
+dependencies {
+    implementation project(":api")
+
+    implementation "androidx.annotation:annotation:1.3.0"
+}
+
+ext {
+    publishLibrary = false
+    POM_NAME = "RISH"
+    POM_DESCRIPTION = "RISH"
+}

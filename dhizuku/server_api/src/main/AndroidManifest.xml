@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- tv-launcher: sem o uses-permission do Dhizuku oficial nem as <queries> do pacote dele: o launcher é o SERVIDOR. -->
+<manifest />
