@@ -333,6 +333,7 @@
     <!-- Tema.kt -->
     <string name="tema_escuro">Dark</string>
     <string name="tema_galeria">Gallery</string>
+    <string name="tema_meu">My background</string>
     <!-- SomAlarme.kt -->
     <string name="som_suave">Soft</string>
     <string name="som_classico">Classic</string>

@@ -28,7 +28,7 @@ object CorDoFundo {
 
     /** Cor da borda de foco: a do fundo (se ligada e conhecida) ou [padrao]. */
     fun foco(ctx: Context, padrao: Int): Int =
-        if (!Extras.ligado(ctx, Extras.Chave.COR_DO_FUNDO) || Tema.atual(ctx) != Tema.GALERIA) padrao
+        if (!Extras.ligado(ctx, Extras.Chave.COR_DO_FUNDO) || Tema.atual(ctx) == Tema.ESCURO) padrao
         else Extras.numero(ctx, CHAVE, 0).takeIf { it != 0 } ?: padrao
 
     // ---------------------------------------------------------------- puro

@@ -75,4 +75,11 @@
     <string name="pi_det">Swap app icons for the ones in an installed icon pack. OK picks the next one.</string>
     <string name="pi_det_vazio">No icon pack installed. Get one from the Play Store and it shows up here.</string>
     <string name="pi_nenhum">None</string>
+    <string name="fm_titulo">My background</string>
+    <string name="fm_det">Your photo, GIF or video behind the home screen. Put the file in the Fundo, Pictures, DCIM, Movies or Download folder.</string>
+    <string name="fm_vazio">No photo or video found. Copy one to the Fundo folder (network drive or USB) and come back.</string>
+    <string name="fm_nenhum">None (back to Dark)</string>
+    <string name="fm_brilho">Background brightness</string>
+    <string name="fm_contraste">Background contrast</string>
+    <string name="fm_ajuste_det">Applies to My background. OK changes the step.</string>
 </resources>

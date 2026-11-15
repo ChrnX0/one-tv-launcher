@@ -90,6 +90,7 @@ class MainActivity : Activity() {
     private val textoSuave: Int get() = if (tema == Tema.ESCURO) 0xFF93A19A.toInt() else 0xFFCFD9D4.toInt()
     // O visual escolhido no menu do perfil (Tema.kt). Lido no onCreate; trocar de tema recria a tela.
     private var tema = Tema.ESCURO
+    private var assinaturaFundo = ""   // "Meu fundo": arquivo|brilho|contraste quando a tela foi montada
     private val fonteLeve by lazy { Fontes.display(this, tema) }   // hora e temperatura
     private val fonteUi by lazy { Fontes.ui(this, tema) }
 
@@ -279,6 +280,7 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         DesempenhoTv.criou()   // guarda de desempenho (12/11/2026): o 1º quadro depois disto dá o tempo de abertura
         tema = Tema.atual(this)
+        assinaturaFundo = FundoMeuDados.assinatura(this)
         setContentView(montarTela())
         window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, novo ->
             if (novo != null && novo !== bolinhaPerfil) voltarAoPerfil = false
@@ -307,6 +309,7 @@ class MainActivity : Activity() {
         // O tema agora só troca na tela separada de Configurações do launcher (ConfigLauncherActivity), que não
         // tem como chamar recreate() nesta Activity diretamente — então aqui a gente mesmo percebe a troca ao voltar.
         if (Tema.atual(this) != tema) { recreate(); return }
+        if (tema == Tema.MEU && FundoMeuDados.assinatura(this) != assinaturaFundo) { recreate(); return }   // outro arquivo/brilho
         // Modo simples (12/11/2026, ideia 10; desligado por padrão): a HOME vira a tela de cards grandes.
         if (ModoSimples.ligado(this)) {
             try { startActivity(Intent(this, ModoSimplesActivity::class.java)); return } catch (_: Exception) {}
@@ -779,7 +782,7 @@ class MainActivity : Activity() {
         fundo = vivo
         // Sem fundo preto aqui (nem na janela, ver onCreate): o fundo vivo já cobre a tela inteira e é opaco. Cada camada
         // de tela cheia a mais é a GPU pintando 1920x1080 de novo A CADA QUADRO (medido: 3 camadas, 22 ms por quadro).
-        capa = CapaFoco(this).apply { desligada = tema == Tema.GALERIA }   // Galeria: a obra é o fundo, sem brilho por cima
+        capa = CapaFoco(this).apply { desligada = tema == Tema.GALERIA || tema == Tema.MEU }   // Galeria: a obra é o fundo, sem brilho por cima
         conteudo = raiz
         return FrameLayout(this).apply {
             clipChildren = false   // a tela que sobe (Continuar) desenha o que estava abaixo da borda

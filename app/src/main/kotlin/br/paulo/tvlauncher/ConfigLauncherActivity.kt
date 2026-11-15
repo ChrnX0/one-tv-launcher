@@ -741,6 +741,39 @@ class ConfigLauncherActivity : Activity() {
             // A MainActivity só relê o tema no onCreate: ela mesma percebe a troca e se recria ao voltar (ver onResume lá).
         }
         c.addView(linhaTema, lp())
+        // "Meu fundo" (degrau 1, 15/11/2026; FundoMeu.kt): escolher o arquivo já põe o tema; brilho e contraste em degraus.
+        fun rotuloMeu() = FundoMeuDados.arquivo(this)?.name ?: getString(R.string.pi_nenhum)
+        lateinit var linhaMeu: LinhaCfg
+        linhaMeu = linha(getString(R.string.fm_titulo), getString(R.string.fm_det), valor = rotuloMeu()) {
+            trabalho.execute {
+                val arquivos = FundoMeuDados.candidatos()
+                ui.post {
+                    if (isDestroyed) return@post
+                    if (arquivos.isEmpty()) { aviso(getString(R.string.fm_vazio)); return@post }
+                    val atual = FundoMeuDados.arquivo(this)
+                    Estilo.lista(this, getString(R.string.fm_titulo), listOf(getString(R.string.fm_nenhum)) + arquivos.map { it.name },
+                        marcadas = listOf(arquivos.indexOfFirst { it == atual } + 1)) { i ->
+                        FundoMeuDados.definirArquivo(this, arquivos.getOrNull(i - 1))
+                        Tema.definir(this, if (i == 0) Tema.ESCURO else Tema.MEU)
+                        linhaMeu.valor(rotuloMeu()); linhaTema.valor(Tema.atual(this).nome)
+                    }
+                }
+            }
+        }
+        c.addView(linhaMeu, lp())
+        fun pct(v: Int) = if (v > 0) "+$v%" else "$v%"
+        lateinit var linhaBrilho: LinhaCfg
+        linhaBrilho = linha(getString(R.string.fm_brilho), getString(R.string.fm_ajuste_det), valor = pct(FundoMeuDados.brilho(this))) {
+            FundoMeuDados.definirBrilho(this, FundoMeuRegras.proximoDegrau(FundoMeuDados.brilho(this)))
+            linhaBrilho.valor(pct(FundoMeuDados.brilho(this)))
+        }
+        c.addView(linhaBrilho, lp())
+        lateinit var linhaContraste: LinhaCfg
+        linhaContraste = linha(getString(R.string.fm_contraste), getString(R.string.fm_ajuste_det), valor = pct(FundoMeuDados.contraste(this))) {
+            FundoMeuDados.definirContraste(this, FundoMeuRegras.proximoDegrau(FundoMeuDados.contraste(this)))
+            linhaContraste.valor(pct(FundoMeuDados.contraste(this)))
+        }
+        c.addView(linhaContraste, lp())
         // Tamanho do texto (ideia 47, TamanhoTexto): vale em todas as telas do launcher; esta tela se refaz para mostrar.
         fun rotuloTamanho(v: Int) = getString(when (v) { 110 -> R.string.tt_grande; 120 -> R.string.tt_maior; else -> R.string.tt_normal })
         c.addView(linha(getString(R.string.tt_titulo), getString(R.string.tt_det), valor = rotuloTamanho(TamanhoTexto.atual(this))) {

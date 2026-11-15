@@ -75,4 +75,11 @@
     <string name="pi_det">Troca os ícones dos apps pelos de um pacote instalado. OK passa para o próximo.</string>
     <string name="pi_det_vazio">Nenhum pacote de ícones instalado. Baixe um na Play Store e ele aparece aqui.</string>
     <string name="pi_nenhum">Nenhum</string>
+    <string name="fm_titulo">Meu fundo</string>
+    <string name="fm_det">Sua foto, GIF ou vídeo atrás da tela inicial. Ponha o arquivo na pasta Fundo, Pictures, DCIM, Movies ou Download.</string>
+    <string name="fm_vazio">Nenhuma foto ou vídeo encontrado. Copie um para a pasta Fundo (unidade de rede ou pendrive) e volte aqui.</string>
+    <string name="fm_nenhum">Nenhum (volta ao Escuro)</string>
+    <string name="fm_brilho">Brilho do fundo</string>
+    <string name="fm_contraste">Contraste do fundo</string>
+    <string name="fm_ajuste_det">Vale para o Meu fundo. OK muda o degrau.</string>
 </resources>
