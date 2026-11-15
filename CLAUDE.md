@@ -23,6 +23,10 @@ and `values-pt/` (Portuguese); the app follows the TV's system language. Read `R
   Before each Release, rewrite `res/values*/strings_versoes.xml`: `novidades` ("What changed", Settings > System) and
   the `roteiro_*` checklist ("Check on the TV"; answers via `EXTRAS --es o roteiro`), in both languages.
   Pull requests only compile (and cost CI minutes): batch commits; use `[skip ci]` for text-only commits.
+- **Closed source (decided 15/11/2026).** The code repo becomes private; TVs keep reading the PUBLIC repo with the old name
+  (`Config.ATUALIZACAO_REPO`). Repo variable `REPO_PUBLICO` + secret `PUBLICO_TOKEN` make "Build e Release" / "Promover"
+  publish there, and the "Repo publico" workflow mirrors `site/`, `comunidade/`, `publico/`, screenshots and a code-free
+  README to it (Pages, `volta.html`, raw `comunidade/` keep their URLs). Nothing else from this repo goes public.
 - The signing key and its password never go into git, issues or logs.
 - No personal data in the repo (city, coordinates, IPs, names, account ids). Per-owner build values go in
   `pessoal.properties` (git-ignored; template `pessoal.properties.exemplo`) and reach the code via `BuildConfig`.

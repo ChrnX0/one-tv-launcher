@@ -1,0 +1,65 @@
+# Repo público só de APKs (15/11/2026, decisão do dono: código fechado).
+# O código vive num repo privado; as TVs continuam lendo o repo PÚBLICO com o nome de sempre (Config.ATUALIZACAO_REPO):
+# Releases (o "Build e Release" publica lá), comunidade/ (ComunidadeApps.kt lê pelo raw), site/ no Pages (volta.html do
+# login das nuvens, privacidade e termos) e issues. Este workflow copia para lá só o que é público:
+#   site/, comunidade/, docs/screenshots/, tudo de publico/ (Pages, modelos de issue, SECURITY.md) e um README
+#   gerado do README daqui sem as partes de código (compilar, por dentro, contribuir, licença).
+# Precisa de: variável REPO_PUBLICO (ex.: ChrnX0/one-tv-launcher) e segredo PUBLICO_TOKEN (token fine-grained só
+# daquele repo, com Contents e Workflows em leitura e escrita). Sem a variável, não faz nada.
+name: Repo publico
+
+on:
+  push:
+    branches: [main]
+    paths: ['site/**', 'comunidade/**', 'publico/**', 'README.md', 'docs/screenshots/**', 'docs/device-owner.md', 'docs/home-assistant.md', 'app/src/main/assets/licencas.txt', '.github/workflows/publico.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: repo-publico
+  cancel-in-progress: false
+
+jobs:
+  copiar:
+    if: vars.REPO_PUBLICO != '' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Montar e enviar
+        env:
+          PUBLICO: ${{ vars.REPO_PUBLICO }}
+          TOKEN: ${{ secrets.PUBLICO_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$TOKEN" ]; then echo "::error::falta o segredo PUBLICO_TOKEN"; exit 1; fi
+          # Clona o público (vazio na primeira vez: aí começa um main novo).
+          git clone --depth 1 "https://x-access-token:${TOKEN}@github.com/${PUBLICO}.git" pub 2>/dev/null \
+            || { mkdir pub; git -C pub init -q -b main; git -C pub remote add origin "https://x-access-token:${TOKEN}@github.com/${PUBLICO}.git"; }
+          # Espelha só as pastas públicas (apaga lá o que saiu daqui), sem tocar no .git.
+          mkdir -p pub/docs
+          rsync -a --delete site/ pub/site/
+          rsync -a --delete comunidade/ pub/comunidade/
+          rsync -a --delete docs/screenshots/ pub/docs/screenshots/
+          cp docs/device-owner.md docs/home-assistant.md pub/docs/   # guias de uso citados no README
+          mkdir -p pub/app/src/main/assets && cp app/src/main/assets/licencas.txt pub/app/src/main/assets/   # créditos citados no README
+          rsync -a publico/ pub/
+          # README público: o daqui sem o selo de licença e sem as seções de código.
+          awk '
+            /img.shields.io\/badge\/license/ { next }
+            /^## / { pula = ($0 ~ /^## (Build it yourself|Under the hood|Contributing|License)/) }
+            !pula { print }
+          ' README.md > pub/README.md
+          printf '\n## Source code\n\nOne TV Launcher is closed-source. This repository holds the releases, the website and the\ncommunity lists. Bug reports and ideas are welcome in [Issues](../../issues).\n' >> pub/README.md
+          cd pub
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "Nada mudou."; exit 0; fi
+          git commit -q -m "Atualiza site, comunidade e README (${GITHUB_SHA::7})"
+          git push -q origin HEAD:main

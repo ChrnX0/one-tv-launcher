@@ -189,7 +189,11 @@ jobs:
 
       - name: Publicar o Release
         env:
-          GH_TOKEN: ${{ github.token }}
+          # Código fechado (15/11/2026): o código fica num repo privado e o Release sai no repo PÚBLICO só de APKs,
+          # que tem o nome que as TVs já leem (Config.ATUALIZACAO_REPO). Variável REPO_PUBLICO + segredo PUBLICO_TOKEN
+          # (token com escrita em Contents só naquele repo). Sem a variável, publica no próprio repo, como antes.
+          GH_TOKEN: ${{ vars.REPO_PUBLICO && secrets.PUBLICO_TOKEN || github.token }}
+          DESTINO: ${{ vars.REPO_PUBLICO || github.repository }}
           V: ${{ needs.build.outputs.codigo }}
           NOME: ${{ needs.build.outputs.nome }}
           COMMIT: ${{ needs.build.outputs.commit }}
@@ -199,11 +203,13 @@ jobs:
           # Canal "teste" = pré-lançamento (fora do /releases/latest). "todos" marca --latest explícito: o GitHub ordena o
           # "latest" pela data do COMMIT, e uma republicação (commit antigo) perderia para o Release anterior sem isso.
           if [ "$CANAL" = "teste" ]; then MARCA=--prerelease; else MARCA=--latest; fi
+          # O commit só existe no repo do código: no repo público a tag nasce no main dele (o número vem da tag).
+          if [ "$DESTINO" = "$GITHUB_REPOSITORY" ]; then ALVO_TAG="--target $COMMIT"; else ALVO_TAG=""; fi
           EXTRA=""; [ -f one-tv-celular.apk ] && EXTRA="one-tv-celular.apk one-tv-celular.apk.sha256"
           gh release create "v$V" $MARCA \
             "$NOME.apk" "$NOME.apk.sha256" \
             "$NOME-arm64.apk" "$NOME-arm64.apk.sha256" $EXTRA \
-            --repo "$GITHUB_REPOSITORY" \
+            --repo "$DESTINO" \
             --title "One TV Launcher 1.0 (build $V)" \
             --notes-file notas.md \
-            --target "$COMMIT"
+            $ALVO_TAG
