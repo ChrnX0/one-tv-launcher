@@ -16,6 +16,11 @@ class LayoutHomeTest {
         assertTrue(429 + LayoutHome.acrescimo(115) + a + 12 <= 540)
     }
 
+    @Test fun gradeCabe() {
+        // passo de um cartão normal: 112 + 2 x 6 de anel + 4 = 128 dp; entre as margens de 48 cabem 6
+        assertEquals(6, LayoutHome.colunas(128, 48)); assertEquals(3, LayoutHome.colunas(900, 48))
+    }
+
     @Test fun estranhoVoltaAoNormal() {
         assertEquals(112, LayoutHome.largura(300)); assertEquals(100, LayoutHome.proximo(115)); assertEquals(100, LayoutHome.proximo(7))
     }

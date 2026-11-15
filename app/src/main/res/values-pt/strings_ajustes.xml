@@ -112,4 +112,8 @@
     <string name="pl_pro_itens">• Tudo do Básico\n• Várias listas de IPTV, gravação\n• Painel web completo\n• Claude, rotinas, Home Assistant\n• Todos os temas, backup na nuvem</string>
     <string name="pl_ultra_itens">• Tudo do Pro\n• Clima melhor (3 modelos)\n• Fichas de filme completas\n• Legenda automática\n• Até 3 TVs</string>
     <string name="pl_qr">Leia com o celular para ver preços e comprar.</string>
+    <string name="lh_arranjo">Arranjo dos apps</string>
+    <string name="lh_arranjo_det">Uma fileira que rola de lado, ou uma grade com todos os apps à vista.</string>
+    <string name="lh_fileira">Fileira</string>
+    <string name="lh_grade">Grade</string>
 </resources>

@@ -787,6 +787,12 @@ class ConfigLauncherActivity : Activity() {
             TamanhoTexto.definir(this, TamanhoTexto.proximo(TamanhoTexto.atual(this)))
             recreate()
         }, lp())
+        // Fileira ou grade (layout flexível, LayoutHome): a HOME se refaz ao voltar.
+        c.addView(linha(getString(R.string.lh_arranjo), getString(R.string.lh_arranjo_det),
+            valor = getString(if (LayoutHome.grade(this)) R.string.lh_grade else R.string.lh_fileira)) {
+            LayoutHome.definirGrade(this, !LayoutHome.grade(this))
+            recarregarAba()
+        }, lp())
         // Tamanho dos cartões (layout flexível, LayoutHome): a HOME se refaz ao voltar.
         c.addView(linha(getString(R.string.lh_titulo), getString(R.string.lh_det),
             valor = getString(if (LayoutHome.tamanho(this) == 100) R.string.lh_normal else R.string.lh_grande)) {

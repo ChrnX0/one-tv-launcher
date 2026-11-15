@@ -41,6 +41,12 @@
   "cortes": [],
   "sobrepostos": []
  },
+ "en\/home-grade": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
  "en\/home-grande": {
   "menorSp": 12,
   "foco": true,
@@ -108,6 +114,12 @@
   "sobrepostos": []
  },
  "pt\/home": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
+ "pt\/home-grade": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],

@@ -112,4 +112,8 @@
     <string name="pl_pro_itens">• Everything in Basic\n• Many IPTV lists, recording\n• Full web panel\n• Claude, routines, Home Assistant\n• All themes, cloud backup</string>
     <string name="pl_ultra_itens">• Everything in Pro\n• Better weather (3 models)\n• Rich movie pages\n• Automatic subtitles\n• Up to 3 TVs</string>
     <string name="pl_qr">Scan with your phone to see prices and buy.</string>
+    <string name="lh_arranjo">App layout</string>
+    <string name="lh_arranjo_det">A row that scrolls sideways, or a grid with all apps in view.</string>
+    <string name="lh_fileira">Row</string>
+    <string name="lh_grade">Grid</string>
 </resources>

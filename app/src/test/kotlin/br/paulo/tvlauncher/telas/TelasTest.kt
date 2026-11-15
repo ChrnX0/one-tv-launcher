@@ -53,6 +53,7 @@ class TelasTest {
         "boas-vindas" to BoasVindasActivity::class.java,
         "home" to MainActivity::class.java,
         "home-grande" to MainActivity::class.java,   // layout flexível: cartões Grandes e transparentes (LayoutHome)
+        "home-grade" to MainActivity::class.java,    // layout flexível: apps em grade (LayoutHome, GradeApps)
         "configuracoes" to ConfigLauncherActivity::class.java,
         "filmes" to FilmesActivity::class.java,
         "series" to SeriesActivity::class.java,
@@ -95,6 +96,7 @@ class TelasTest {
             val app = RuntimeEnvironment.getApplication()
             br.paulo.tvlauncher.LayoutHome.definirTamanho(app, if (nome == "home-grande") 115 else 100)
             br.paulo.tvlauncher.Extras.definir(app, br.paulo.tvlauncher.Extras.Chave.CARTOES_TRANSPARENTES, nome == "home-grande")
+            br.paulo.tvlauncher.LayoutHome.definirGrade(app, nome == "home-grade")
             val m = try { medir(cls, "$idioma-$nome") } catch (e: Throwable) {
                 problemas += "$chave: a tela não abriu (${e.javaClass.simpleName}: ${e.message?.take(160)})"; continue
             }
