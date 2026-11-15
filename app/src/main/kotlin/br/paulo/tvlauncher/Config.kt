@@ -97,8 +97,10 @@ object Config {
     // So valem as declaradas no manifesto. Evita depender de `pm grant` por adb.
     // GET_ACCOUNTS desde 04/11/2026 (revisão): é "perigosa" (o DO pode fixar) e a foto/inicial do perfil depende dela;
     // antes só vinha de um `pm grant` por adb, que o sistema pode revogar.
+    // POST_NOTIFICATIONS (Android 13+, 15/11/2026): o aviso de pedido sem resposta (PedidoPendente) e o da gravação.
     val PERMISSOES_FIXAS = listOf("android.permission.READ_CALENDAR", "android.permission.ACCESS_FINE_LOCATION",
-        "android.permission.GET_ACCOUNTS")
+        "android.permission.GET_ACCOUNTS") +
+        (if (android.os.Build.VERSION.SDK_INT >= 33) listOf("android.permission.POST_NOTIFICATIONS") else emptyList())
 
     // --- Painel no navegador (PainelWeb.kt): liga/desliga e PIN em Configurações do launcher > Painel no navegador.
     // Porta: abaixo de 1024 (ex.: 80) o Android não deixa um app abrir (medido na TV em 04/11/2026), por isso 8080.

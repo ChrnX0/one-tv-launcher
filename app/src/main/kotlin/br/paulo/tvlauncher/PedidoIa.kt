@@ -20,7 +20,8 @@ import java.util.concurrent.Executors
  *   JSON de ações (hoje: gancho do adb IA_TESTE; depois: o servidor MCP) -> [propor] -> ComandosIa.conferir
  *   -> ConfirmarIaActivity na TV ("Vou fazer: ...", foco em Cancelar) -> OK no controle -> [executar].
  *
- * Só um pedido esperando confirmação por vez; um novo cancela o anterior. Sem resposta na TV em 60 s, cancela.
+ * Só um pedido esperando confirmação por vez; um novo cancela o anterior. Sem resposta na TV em 3 min, a tela fecha e o
+ * pedido vira uma notificação do launcher (PedidoPendente): tocando nela, a TV pergunta de novo se aceita.
  * Quem pediu acompanha pelo [estado] (id aleatório devolvido por [propor]).
  *
  * (05/11/2026) A IA na nuvem com a chave do dono (IaNuvem/IaArmazem, aba Falar do painel) foi removida por decisão do
@@ -28,14 +29,14 @@ import java.util.concurrent.Executors
  */
 object PedidoIa {
     private const val TAG = "TvLauncher.Ia"
-    const val ESPERA_CONFIRMAR_MS = 60_000L
+    const val ESPERA_CONFIRMAR_MS = 180_000L   // dono, 15/11/2026: 3 min (antes 60 s)
 
     enum class Situacao(val texto: String) {
         PENSANDO("conferindo o pedido"), ESPERANDO("esperando o OK na TV"), FEITO("feito"),
-        CANCELADO("cancelado na TV"), EXPIRADO("ninguém confirmou na TV em 60 s"), NADA("nada a fazer"), ERRO("erro")
+        CANCELADO("cancelado na TV"), EXPIRADO("ninguém confirmou na TV em 3 min; ficou nas notificações da TV"), NADA("nada a fazer"), ERRO("erro")
     }
 
-    class Pedido(val id: String, val frase: String, val origem: String) {
+    class Pedido(val id: String, val frase: String, val origem: String, val acoesJson: String = "") {
         @Volatile var situacao = Situacao.PENSANDO
         @Volatile var mensagem = ""
         @Volatile var plano: ComandosIa.Plano? = null
@@ -71,7 +72,7 @@ object PedidoIa {
     fun propor(ctx: Context, fraseCrua: String?, origem: String, acoesJson: String): Pedido {
         val app = ctx.applicationContext
         val frase = ComandosIa.limparFrase(fraseCrua)
-        val p = Pedido(novoId(), frase ?: "", origem)
+        val p = Pedido(novoId(), frase ?: "", origem, acoesJson)
         guardar(p)
         fun falhar(m: String) = p.apply { situacao = Situacao.ERRO; mensagem = m }
         if (frase == null) return falhar("frase vazia")
@@ -145,7 +146,7 @@ object PedidoIa {
         atual = p
         try {
             // A pergunta precisa aparecer: atrás do protetor ninguém veria. Fechar o protetor aqui só mostra a pergunta;
-            // nada roda sem o OK (e sem resposta em 60 s, cancela).
+            // nada roda sem o OK (e sem resposta em 3 min, vira notificação).
             ProtetorTela.fecharSeAberto()
             app.startActivity(Intent(app, ConfirmarIaActivity::class.java)
                 .putExtra(ConfirmarIaActivity.EXTRA_ID, p.id)
@@ -156,8 +157,31 @@ object PedidoIa {
             return
         }
         ui.postDelayed({
-            if (p.situacao == Situacao.ESPERANDO) { p.situacao = Situacao.EXPIRADO; p.mensagem = "" }
+            if (p.situacao == Situacao.ESPERANDO) {
+                p.situacao = Situacao.EXPIRADO; p.mensagem = ""
+                PedidoPendente.notificar(app, p)   // fica nas notificações para aceitar depois
+            }
         }, ESPERA_CONFIRMAR_MS)
+    }
+
+    /**
+     * Aceite tardio pela notificação (PedidoPendente): confere o JSON de novo (o catálogo pode ter mudado, um app pode ter
+     * saído) e executa sem perguntar outra vez: o "Sim" na TV já é a confirmação. Devolve o Pedido novo.
+     */
+    fun aceitarDepois(ctx: Context, frase: String, origem: String, acoesJson: String): Pedido {
+        val app = ctx.applicationContext
+        val p = Pedido(novoId(), frase, origem, acoesJson)
+        guardar(p)
+        trabalho.execute {
+            try {
+                val plano = VodTv.resolver(app, CanalTv.resolver(app, ComandosIa.conferir(acoesJson, appsDaHome(app))))
+                p.plano = plano
+                if (plano.acoes.isEmpty()) { p.situacao = Situacao.NADA; return@execute }
+                p.situacao = Situacao.ESPERANDO
+                ui.post { responder(app, p.id, true) }
+            } catch (e: Exception) { p.situacao = Situacao.ERRO; p.mensagem = "erro na TV: ${e.javaClass.simpleName}" }
+        }
+        return p
     }
 
     /** A pessoa respondeu na TV. Só vale para o pedido que está ESPERANDO. Chamar na thread da tela. */

@@ -235,6 +235,11 @@
     <string name="rt_reconectar_det">The router disconnects the TV for a few seconds and it comes back on its own, picking the best access point again. A playing video may pause.</string>
     <string name="ci_executar">Run</string>
     <string name="ci_pedido_de">Request from the panel (%1$s)</string>
+    <string name="pp_canal">Requests to the TV</string>
+    <string name="pp_titulo">Unanswered request (%1$s)</string>
+    <string name="pp_aceitar">Accept this request?</string>
+    <string name="pp_sim">Yes</string>
+    <string name="pp_nao">No</string>
     <string name="ci_ia_quer">The AI wants to:</string>
     <string name="pn_abra">Open: Wireless debugging › Pair device with pairing code</string>
     <string name="pn_procurando">looking for the pairing screen…</string>

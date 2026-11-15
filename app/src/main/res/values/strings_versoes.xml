@@ -17,7 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Screensaver: a request from outside (phone, panel, Claude) that would open an app or a screen now always asks on the TV before closing the screensaver, even with “Allow” in Confirmations</item>
+        <item>Screensaver: a request from outside (phone, panel, Claude) that would open an app or a screen now always asks on the TV before closing the screensaver, even with “Allow” in Confirmations. The question waits 3 min; with no answer the request stays in the TV notifications, and tapping it asks whether you accept it</item>
         <item>Home screen: on an app stack, ▲ now moves up a row like on any card; ▼ switches the app in front</item>
         <item>Screensaver: “Your week on TV” now counts live TV, movies and radio inside the launcher itself (it used to say “0 min of TV”)</item>
         <item>A screen opened by a scene, the panel or Claude while the screensaver is up now shows in front (it used to open hidden behind it)</item>
