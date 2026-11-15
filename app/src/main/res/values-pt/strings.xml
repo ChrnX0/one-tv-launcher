@@ -536,7 +536,7 @@
     <string name="vod_audio">Áudio</string>
     <string name="vod_legenda">Legenda</string>
     <string name="vod_faixas">Áudio e legenda</string>
-    <string name="vod_teclas">OK pausa · ◀ 10 s · ▶ 30 s (segure para ir mais rápido) · ▼ áudio, legenda e imagem · VOLTAR sair</string>
+    <string name="vod_teclas">OK pausa · ◀ 10 s · ▶ 30 s (segure para ir mais rápido) · ▼ áudio, legenda e imagem · ⏮ ⏭ capítulos · VOLTAR sair</string>
     <string name="series_titulo">SÉRIES</string>
     <string name="series_carregando">Carregando as séries…</string>
     <string name="series_vazio">Nenhuma série nas contas cadastradas (séries só vêm de conta Xtream).</string>
@@ -850,4 +850,32 @@
     <string name="fp_sem_foto">Entrou como %1$s, mas não deu para guardar a foto. Tente de novo ou envie uma foto pelo painel web (aba Fotos do protetor).</string>
     <string name="fp_falha">Não deu certo: %1$s</string>
     <string name="fp_sem_google">O login Google ainda não está configurado nesta TV.\n\nDois jeitos de pôr uma foto na bolinha do perfil:\n• Painel web > aba Fotos do protetor > Foto do perfil: escolha qualquer imagem do celular.\n• Configure o login Google (painel web > aba Claude) e volte aqui para buscar a foto da conta.</string>
+    <!-- Player sem NextLib (15/11/2026): ideias 2 a 8 -->
+    <string name="vod_capitulo_n">Capítulo %1$d</string>
+    <string name="vod_capitulos_titulo">Capítulos</string>
+    <string name="vod_capitulos_opcao">Capítulos (%1$d)</string>
+    <string name="vod_segunda_opcao">Segunda legenda (em cima)</string>
+    <string name="vod_segunda_titulo">Segunda legenda</string>
+    <string name="vod_segunda_desligada">Desligada</string>
+    <string name="vod_dialogo_opcao">Diálogo mais alto</string>
+    <string name="vod_dialogo_ligado">Diálogo mais alto ligado</string>
+    <string name="vod_dialogo_desligado">Diálogo mais alto desligado</string>
+    <string name="vod_atraso_audio_opcao">Atraso do áudio: %1$s</string>
+    <string name="vod_atraso_audio_titulo">Atraso do áudio (%1$s)</string>
+    <string name="vod_atraso_audio_tv">TV</string>
+    <string name="vod_atraso_audio_zero">Nenhum</string>
+    <string name="vod_atraso_audio_mais">Som atrasado, imagem espera %1$d ms</string>
+    <string name="vod_atraso_audio_menos">Som adiantado, imagem adianta %1$d ms</string>
+    <string name="vod_info_opcao">Informações técnicas</string>
+    <string name="info_video">Vídeo</string>
+    <string name="info_audio">Áudio</string>
+    <string name="info_perdidos">Quadros perdidos</string>
+    <string name="info_taxa">Taxa</string>
+    <string name="info_buffer">Reserva</string>
+    <string name="info_atraso">Atraso do áudio</string>
+    <string name="info_dialogo">Diálogo mais alto ligado</string>
+    <string name="info_chip">chip da TV</string>
+    <string name="info_qps">qps</string>
+    <string name="info_mono">mono</string>
+    <string name="info_estereo">estéreo</string>
 </resources>

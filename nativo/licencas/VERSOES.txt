@@ -1,0 +1,1 @@
+FFmpeg 9.0.2, dav1d 1.5.4, libass 0.17.5, FreeType 2.14.1, FriBidi 1.0.16, HarfBuzz 14.4.0, Fontconfig 2.16.0, Expat 2.8.4, libunibreak 7.0
