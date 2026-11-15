@@ -16,4 +16,19 @@ class AgendaTest {
         assertEquals(2, Agenda.juntar(listOf(ev("Futebol", 1000), ev("Futebol", 5000))).size)
         assertEquals(2, Agenda.juntar(listOf(ev("Futebol", 1000, 2000), ev("Futebol", 1000, 3000))).size)
     }
+
+    @Test fun feriadosEmDoisIdiomasFicaOdaTv() {
+        val pt = "pt-br.brazilian#holiday@group.v.calendar.google.com"; val en = "en.brazilian#holiday@group.v.calendar.google.com"
+        val l = listOf(Agenda.Evento("Proclamação da República", 1000, 2000, true, 0, pt),
+            Agenda.Evento("Republic Proclamation Day", 1000, 2000, true, 0, en), ev("Dentista", 3000))
+        assertEquals(listOf("Proclamação da República", "Dentista"), Agenda.juntar(l, "pt").map { it.titulo })
+        assertEquals(listOf("Republic Proclamation Day", "Dentista"), Agenda.juntar(l, "en").map { it.titulo })
+        assertEquals(2, Agenda.juntar(l, "es").size)   // idioma sem agenda própria: fica só a 1ª (pt)
+    }
+
+    @Test fun idiomaDaAgendaDeFeriados() {
+        assertEquals("pt", Agenda.idiomaFeriados("pt-br.brazilian#holiday@group.v.calendar.google.com"))
+        assertEquals("en", Agenda.idiomaFeriados("en.brazilian#holiday@group.v.calendar.google.com"))
+        assertEquals(null, Agenda.idiomaFeriados("alguem@gmail.com"))
+    }
 }

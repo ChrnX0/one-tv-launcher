@@ -72,6 +72,9 @@ class CasaActivity : Activity() {
             background = Estilo.fundoTela(this@CasaActivity)
             // A rolagem fica presa à própria área: sem isto os cartões de baixo eram desenhados por cima das dicas.
             setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.E3))
+            // A rolagem entra na margem (leftMargin negativo, abaixo) para o cartão focado crescer sem corte; sem isto o
+            // padding da raiz cortava a borda esquerda do 1º cartão (teste na TV, 15/11/2026).
+            clipToPadding = false
         }
         // Título e resumo à esquerda; o alto à direita é da hora (Moldura.kt).
         raiz.addView(Estilo.tituloTela(this, getString(R.string.casa_titulo)))
@@ -156,7 +159,10 @@ class CasaActivity : Activity() {
     private fun mostrar(r: Result<List<CasaHA.Entidade>>) {
         val lista = r.getOrElse {
             if (entidades.isEmpty() && grade.childCount == 0) montar(emptyList())   // ao menos o Google Home fica à mão
-            resumo.text = getString(R.string.casa_erro, it.message ?: it.javaClass.simpleName)
+            // Frase simples na tela (quem lê pode ser idoso); o detalhe técnico fica no log (teste na TV, 15/11/2026:
+            // aparecia "não respondeu: não consegui falar com o Home Assistant: ConnectException").
+            android.util.Log.w("TvLauncher.Casa", "Home Assistant: ${it.message ?: it.javaClass.simpleName}")
+            resumo.text = getString(R.string.casa_erro_simples)
             return
         }
         val agora = SystemClock.elapsedRealtime()

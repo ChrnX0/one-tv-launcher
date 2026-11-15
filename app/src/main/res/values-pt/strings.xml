@@ -506,7 +506,7 @@
     <string name="filmes_carregando">Carregando os filmes…</string>
     <string name="filmes_vazio">Nenhum filme nas contas cadastradas (filmes só vêm de conta Xtream).</string>
     <string name="filmes_cabecalho">%1$s · %2$d FILMES</string>
-    <string name="filmes_continuar">Continuar assistindo</string>
+    <string name="filmes_continuar">Continuar</string>
     <string name="filmes_ordem">Ordem: %1$s</string>
     <string name="filmes_ordem_titulo">Ordenar por</string>
     <string name="filmes_ordem_recentes">mais novos no catálogo</string>

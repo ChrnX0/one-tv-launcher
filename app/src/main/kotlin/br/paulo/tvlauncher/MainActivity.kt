@@ -873,7 +873,9 @@ class MainActivity : Activity() {
     private fun abrirPrevisao() {
         startActivity(Intent(this, PrevisaoActivity::class.java)
             .putExtra(PrevisaoActivity.EXTRA_TEMP, ultimaTemp ?: Int.MIN_VALUE)
-            .putExtra(PrevisaoActivity.EXTRA_CHOVENDO, ultimoChovendo))
+            .putExtra(PrevisaoActivity.EXTRA_CHOVENDO, ultimoChovendo)
+            .putExtra(PrevisaoActivity.EXTRA_CODIGO, ultimoCodigo)
+            .putExtra(PrevisaoActivity.EXTRA_UMIDADE, getSharedPreferences("clima", MODE_PRIVATE).getInt("umidade", -1)))
     }
 
     /** Abre o painel rápido (perfis, Wi-Fi, timer, notificações...): ver PainelRapidoActivity.kt. */
@@ -1119,6 +1121,7 @@ class MainActivity : Activity() {
             linhaApps.removeAllViews()
             cards.forEach { linhaApps.addView(criarCartao(it)) }
             prenderEsquerda(linhaApps.getChildAt(0))
+            prenderDireita(linhaApps.getChildAt(linhaApps.childCount - 1))
             ultimaAssinatura = assinatura
         }
         if (cards.isEmpty()) return
@@ -1685,6 +1688,7 @@ class MainActivity : Activity() {
         // O card "AO VIVO · Canal N" saiu (10/11/2026): abria o mesmo player, no mesmo último canal, que o card TV.
         caixaContinuar.visibility = if (linhaContinuar.childCount > 0) View.VISIBLE else View.GONE
         prenderEsquerda(linhaContinuar.getChildAt(0))
+        prenderDireita(linhaContinuar.getChildAt(linhaContinuar.childCount - 1))
         // A HOME abre com o foco no card TV (dono, 06/11 noite: "a home já é parte do player"). Só na abertura: voltando de
         // um app, o foco fica onde estava.
         if (focoInicialNaTv) {
@@ -1806,6 +1810,13 @@ class MainActivity : Activity() {
         if (v == null) return
         if (v.id == View.NO_ID) v.id = View.generateViewId()
         v.nextFocusLeftId = v.id
+    }
+
+    /** ▶ no último card de uma linha não sai dela (teste de 15/11/2026: o foco pulava para o relógio, lá em cima). */
+    private fun prenderDireita(v: View?) {
+        if (v == null) return
+        if (v.id == View.NO_ID) v.id = View.generateViewId()
+        v.nextFocusRightId = v.id
     }
 
     /** Qual card fixo do Continuar (0 TV, 1 Séries, 2 Filmes) foi aberto: ao voltar, o foco volta nele. -1 = nenhum. */
@@ -2007,6 +2018,7 @@ class MainActivity : Activity() {
         vista.requestFocus()
         linhaApps.removeViewAt(posicao + 1)
         if (posicao == 0) prenderEsquerda(vista)   // ◀ no 1º card não pode escapar para o topo (home-7)
+        if (posicao == linhaApps.childCount - 1) prenderDireita(vista)   // e ▶ no último também não
         ultimaAssinatura = null   // a linha mudou por fora do desenhar(): o próximo desenho refaz tudo
     }
 
