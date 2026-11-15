@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_ideias.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dns_voltou_anterior">Nowy DNS nie odpowiedział. Przywrócono poprzedni.</string>
+    <string name="teclas_titulo">Tester przycisków</string>
+    <string name="teclas_instrucao">Naciskaj przyciski pilota. Każdy pojawi się tutaj. HOME wychodzi.</string>
+    <string name="teclas_vazio">Jeszcze brak przycisków.</string>
+    <string name="trava_home_titulo">PIN do zmiany HOME</string>
+    <string name="trava_home_errado">Błędny PIN</string>
+    <string name="extras_cfg_det">Godziny filtra nocnego i pory snu, tester przycisków, kalibracja i inne narzędzia</string>
+    <string name="extras_titulo">Dodatki</string>
+    <string name="extras_ligado">wł.</string>
+    <string name="extras_desligado">wył.</string>
+    <string name="extras_JANELA_OTA">Aktualizacje systemu tylko w nocy (3–5)</string>
+    <string name="extras_TRAVAR_CRITICOS">Blokuj „Wymuś zatrzymanie” i „Wyczyść dane” dla launchera i VPN</string>
+    <string name="extras_PIN_HOME">Wymagaj PIN-u do zmiany HOME</string>
+    <string name="extras_FILTRO_NOTURNO">Filtr nocny (cieplejszy ekran)</string>
+    <string name="extras_COR_DO_FUNDO">Kolor akcentu z tapety (motyw Galeria)</string>
+    <string name="extras_DEBLOAT_POS_OTA">Powtórz porządki w aplikacjach po aktualizacji systemu</string>
+    <string name="extras_filtro_horario">Filtr: od %1$s do %2$s, siła %3$d%%</string>
+    <string name="extras_filtro_inicio">Początek filtra</string>
+    <string name="extras_filtro_fim">Koniec filtra</string>
+    <string name="extras_filtro_forca">Siła filtra</string>
+    <string name="extras_teclas">Otwórz tester przycisków</string>
+    <string name="extras_calibracao">Otwórz wzorce kalibracji obrazu</string>
+    <string name="extras_acordar_pc">Obudź komputer (Wake-on-LAN)</string>
+    <string name="extras_acordar_sem_mac">Brak adresu MAC komputera (panel lub adb)</string>
+    <string name="extras_acordar_ok">Pakiet wysłany</string>
+    <string name="extras_acordar_falhou">Nie udało się wysłać</string>
+    <string name="extras_ota_pendente">Aktualizacja systemu czeka na okno</string>
+    <string name="extras_ota_nenhuma">Brak oczekującej aktualizacji systemu</string>
+    <string name="guardar_dados_titulo">Dane launchera chronione</string>
+    <string name="guardar_dados_texto">Wyczyszczenie danych usunęłoby ustawienia, budziki i parowanie launchera z telewizorem. Nic nie zostało usunięte. Aby zacząć od zera, użyj kopii zapasowej z panelu lub komputera (adb).</string>
+    <string name="dono_titulo">Uczyń launcher właścicielem urządzenia</string>
+    <string name="dono_texto">Wyłącza to Google na kilka sekund (konto zostaje i samo wraca) i czyni launcher właścicielem urządzenia: ukrywanie aplikacji, przypięcie HOME i blokada zatrzymania lub czyszczenia. Zrób to, gdy nikt nie używa telewizora.</string>
+    <string name="dono_usuarios">Dodatkowi użytkownicy telewizora również zostaną USUNIĘCI wraz z danymi: %s.</string>
+    <string name="dono_ok">Uczyń właścicielem</string>
+    <string name="dono_andando">Launcher staje się właścicielem… (do 1 minuty)</string>
+    <string name="dono_sem_shell">Własna powłoka nie odpowiedziała. Sparuj ją w Ustawienia > Powłoka launchera.</string>
+    <string name="bv_dev">Włącz opcje programisty</string>
+    <string name="bv_dev_det">W Informacjach zejdź do „Kompilacja Android TV OS” i naciśnij OK 7 razy. Potem wróć tutaj.</string>
+    <string name="bv_parear">Sparuj launcher z telewizorem</string>
+    <string name="bv_parear_det">Otwiera Opcje programisty: włącz „Debugowanie bezprzewodowe” i otwórz „Sparuj urządzenie za pomocą kodu parowania”. Launcher sam odczyta kod.</string>
+    <string name="bv_dono">Uczyń launcher właścicielem urządzenia</string>
+    <string name="bv_dono_det">Ukrywa aplikacje, przypina HOME i blokuje zatrzymanie lub czyszczenie. Google wyłącza się na kilka sekund; konto zostaje.</string>
+    <string name="extras_DIARIO_DNS">Dziennik DNS według aplikacji (tylko na telewizorze, 7 dni)</string>
+    <string name="extras_diario_ver">Pokaż dzisiejszy dziennik DNS</string>
+    <string name="extras_diario_apagar">Usuń dziennik DNS</string>
+    <string name="extras_diario_apagado">Dziennik usunięty</string>
+</resources>

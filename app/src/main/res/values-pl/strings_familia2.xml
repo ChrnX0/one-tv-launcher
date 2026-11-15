@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_familia2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="an_rotulo">Urodziny</string>
+    <string name="an_hoje">Dziś urodziny: %s</string>
+    <string name="an_amanha">Jutro urodziny: %s</string>
+    <string name="tp_calor">Silny upał</string>
+    <string name="tp_calor_texto">Dziś do %d° · Pij wodę</string>
+    <string name="tp_frio">Silny mróz</string>
+    <string name="tp_frio_texto">W nocy do %d° · Ubierz się ciepło</string>
+    <string name="tp_cfg">Alert upału i zimna</string>
+    <string name="tp_cfg_det">Karta nad każdą aplikacją, gdy dziś będzie %1$d° lub w nocy spadnie do %2$d°</string>
+    <string name="mu_ok_lido">OK oznacza jako przeczytane</string>
+    <string name="mu_ok_nao_lido">Przeczytane · OK oznacza jako nieprzeczytane</string>
+    <string name="mu_lido_desc">Wiadomość, przeczytana: %s. OK oznacza jako nieprzeczytaną.</string>
+    <string name="mu_nao_lido_desc">Wiadomość: %s. OK oznacza jako przeczytaną.</string>
+    <string name="mu_apagar">Usuń wiadomość: %s</string>
+    <string name="extras_RETROSPECTIVA_ANO">Twój telewizor w tym roku (w grudniu, na wygaszaczu)</string>
+    <string name="ra_titulo">Twój telewizor w %d</string>
+    <string name="ra_canal">Ulubiony kanał: %1$s (%2$s)</string>
+    <string name="ra_coluna">Radio</string>
+    <string name="ra_dica_ouvir">słuchaj</string>
+    <string name="ra_dica_favoritar">ulubione</string>
+    <string name="ra_carregando">Ładowanie stacji…</string>
+    <string name="ra_subtitulo">Stacje z całego świata · 1–9 na pilocie odtwarzają ulubione</string>
+    <string name="ra_sem_catalogo">Katalog radiowy nie odpowiedział. Ulubione nadal działają.</string>
+    <string name="ra_nada">Nie znaleziono stacji.</string>
+    <string name="ra_continuar">wznów</string>
+    <string name="ra_pausar">pauza</string>
+    <string name="ra_favoritas">Ulubione</string>
+    <string name="ra_procurar">Znajdź</string>
+    <string name="ra_buscar">Szukaj po nazwie</string>
+    <string name="ra_buscar_det">Dowolna stacja na świecie</string>
+    <string name="ra_generos">Gatunki</string>
+    <string name="ra_paises">Inny kraj</string>
+    <string name="ra_paises_det">Kraje z największą liczbą stacji</string>
+    <string name="ra_perto">W pobliżu</string>
+    <string name="ra_mais_ouvidas">Najczęściej słuchane: %s</string>
+    <string name="ra_mundo">Najczęściej słuchane na świecie</string>
+    <string name="ra_resultado">Wyszukiwanie: %s</string>
+    <string name="ra_favoritada">Dodano do ulubionych</string>
+    <string name="ra_desfavoritada">Usunięto z ulubionych</string>
+    <string name="ra_falhou">Ta stacja teraz nie gra. Spróbuj innej.</string>
+    <plurals name="an_anos">
+        <item quantity="one">kończy %d rok</item>
+        <item quantity="few">kończy %d lata</item>
+        <item quantity="many">kończy %d lat</item>
+        <item quantity="other">kończy %d lat</item>
+    </plurals>
+</resources>

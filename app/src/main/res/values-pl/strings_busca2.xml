@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_busca2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="bu_outros_apps">W innych aplikacjach</string>
+    <string name="bu_outro_youtube">Szukaj „%1$s” w YouTube</string>
+    <string name="bu_outro_netflix">Szukaj „%1$s” w Netflix</string>
+    <string name="bu_outro_prime">Szukaj „%1$s” w Prime Video</string>
+    <string name="bu_outro_det">Otwiera wyszukiwanie samej aplikacji</string>
+</resources>

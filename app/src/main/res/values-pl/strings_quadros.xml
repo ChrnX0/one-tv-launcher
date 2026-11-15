@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_quadros.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="quadros_opcao">Filmy we własnej liczbie klatek (24 Hz)</string>
+    <string name="quadros_det">Telewizor przełącza się na 24 Hz podczas filmu, więc obraz nie drga przy ruchach kamery. Ekran gaśnie na 1–2 s na początku. Nie dotyczy telewizji na żywo.</string>
+    <string name="quadros_ligado">Liczba klatek filmu wł.: działa od następnego wideo</string>
+    <string name="quadros_desligado">Liczba klatek filmu wył.</string>
+</resources>

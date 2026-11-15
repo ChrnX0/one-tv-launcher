@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_player3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="abertura_marcar_inicio">Oznacz tu początek czołówki (%1$s)</string>
+    <string name="abertura_marcar_fim">Oznacz tu koniec czołówki (%1$s)</string>
+    <string name="abertura_apagar">Usuń oznaczenie czołówki</string>
+    <string name="abertura_inicio_marcado">Początek czołówki oznaczony na %1$s. Teraz oznacz koniec w menu ▼</string>
+    <string name="abertura_salva">Czołówka zapisana: od %1$s do %2$s. Kolejne odcinki zaproponują jej pominięcie</string>
+    <string name="abertura_falta_inicio">Najpierw oznacz początek czołówki</string>
+    <string name="abertura_invalida">To nie wygląda na czołówkę: musi trwać od 10 s do 5 min i zaczynać się w pierwszych 15 min</string>
+    <string name="abertura_apagada">Oznaczenie czołówki usunięte</string>
+    <string name="abertura_pular">Pomiń czołówkę · OK</string>
+</resources>

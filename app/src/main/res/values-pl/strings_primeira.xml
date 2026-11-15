@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_primeira.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pc_titulo">Skonfiguruj telefonem</string>
+    <string name="pc_linha_det">Zalecane. Skieruj aparat telefonu na kod: PIN, język, telewizja na żywo, miasto i serwisy filmowe, w 5 krokach.</string>
+    <string name="pc_instrucoes">Skieruj aparat telefonu na kod obok. Telefon otworzy konfigurację w 5 krokach.\n\nTelefon musi być w domowym Wi-Fi. Zostaw ten ekran otwarty, dopóki nie utworzysz PIN-u na telefonie (zostało %1$s).</string>
+    <string name="pc_entrou">Kontynuuj na telefonie.</string>
+    <string name="pc_venceu">Kod wygasł.\nNaciśnij „%1$s”, by pokazać nowy.</string>
+    <string name="pc_sem_rede">Telewizor nie jest w sieci.\nPodłącz go do domowego Wi-Fi i spróbuj ponownie.</string>
+</resources>
