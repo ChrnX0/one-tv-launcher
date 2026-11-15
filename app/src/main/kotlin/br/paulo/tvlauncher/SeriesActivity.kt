@@ -754,7 +754,7 @@ class SeriesActivity : Activity() {
     private fun abrirSerie(s0: Serie, trocar: Boolean = false) {
         val s = if (!trocar || ultimos[s0.chave] != null) s0 else outraVersao(s0)
             ?.takeIf { Idioma.versao(it.nome, it.grupo) == Idioma.versaoDesejada(prefsIdioma.para(s0.chave)) } ?: s0
-        if (aberta !== s) sinopseInteira = false
+        if (aberta !== s) verEpisodios = false
         aberta = s; fichaAberta = null
         desenharFicha()
         Fundo.rodar {
@@ -777,7 +777,7 @@ class SeriesActivity : Activity() {
     }
 
     private fun fecharFicha() {
-        aberta = null; fichaAberta = null; painel.visibility = View.GONE; painel.removeAllViews()
+        aberta = null; fichaAberta = null; verEpisodios = false; painel.visibility = View.GONE; painel.removeAllViews()
         if (naGrade.isNotEmpty()) grade.requestFocus() else coluna.focar()
     }
 
@@ -838,145 +838,167 @@ class SeriesActivity : Activity() {
         tela.removeCallbacks(esconderAviso); tela.postDelayed(esconderAviso, 2_500)
     }
 
-    private var sinopseInteira = false   // "Sinopse inteira" apertado nesta ficha
-    private var sinopseCurta: TextView? = null
+    private var verEpisodios = false     // ficha C: a direita mostra a lista de episódios em vez das informações
 
+    /**
+     * Ficha no estilo C "Botões grandes" (15/11/2026): à esquerda as ações em letra grande, uma embaixo da outra; à direita
+     * as informações ou, depois de "Episódios", a lista de episódios da temporada (VOLTAR volta às informações).
+     * [focarEpisodio]: abre direto na lista, com o foco nesse episódio. Os dados chegam aos poucos e cada um redesenha:
+     * o foco fica onde estava (na mesma ação, ou no mesmo episódio).
+     */
     private fun desenharFicha(focarEpisodio: Int? = null) {
         val s = aberta ?: return
-        sinopseCurta = null
         val f = fichaAberta
+        val focoAntes = painel.findFocus()
+        val marcaAntes = focoAntes?.tag as? String
+        var focarEp = focarEpisodio
+        if (focarEp == null && verEpisodios && marcaAntes == "eps") focarEp = (focoAntes as? ListView)?.selectedItemPosition?.coerceAtLeast(0)
+        if (focarEp != null) verEpisodios = true
         painel.removeAllViews()
-        val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(48), dp(28), dp(48), dp(20)) }   // 34/24 -> 28/20: sobra altura para os episódios com a letra maior
-        val capa = ImageView(this).apply {
-            scaleType = ImageView.ScaleType.CENTER_CROP
-            background = GradientDrawable().apply { cornerRadius = dp(12).toFloat(); setColor(Estilo.BORDA) }; clipToOutline = true
+        val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(48), dp(36), dp(48), dp(24)) }
+        val ext = externo?.takeIf { it.first === s }?.second
+        val sinopse = f?.sinopse?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.sinopse?.takeIf { it.isNotEmpty() }
+        val temEps = f != null && f.temporadas.isNotEmpty()
+        if (!temEps) verEpisodios = false
+
+        // ---- ações (esquerda)
+        val (colAcoes, acoes) = FichaAcoes.coluna(this)
+        var primeiro: View? = null
+        if (f != null && temEps) {
+            Series.sugestao(f, s.fonteId, ultimos[s.chave], posicoes)?.let { (ep, retomar) ->
+                primeiro = (if (retomar) FichaAcoes.acao(this, getString(R.string.series_continuar_curto, ep.rotulo), relogio(posicoes[ep.chave(s.fonteId)]?.ms ?: 0), "continuar") { talvezAnteriormente(s, f, ep, doComeco = false) }
+                    else FichaAcoes.acao(this, getString(R.string.series_assistir, ep.rotulo), marca = "assistir") { talvezAnteriormente(s, f, ep, doComeco = true) })
+                    .also { FichaAcoes.adicionar(acoes, it) }
+            }
+            val nTemp = f.temporadas.size
+            FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.series_episodios), if (nTemp > 1) getString(R.string.series_temporada, temporada) else null, "episodios") {
+                verEpisodios = true; desenharFicha(focarEpisodio = 0)
+            }.also { if (primeiro == null) primeiro = it })
+            if (nTemp > 1) FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.series_trocar_temporada), nTemp.toString(), "temporadas") { escolherTemporada(s, f) })
         }
-        PlayerLogos.carregar(this, s.capa, capa, lado = 600)
-        linha.addView(capa, LinearLayout.LayoutParams(dp(180), dp(270)))
-        val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(28), 0, 0, 0) }
-        col.addView(TextView(this).apply { text = Vod.nomeLimpo(s.nome); textSize = Estilo.Leitura.TITULO; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END })
-        val dados = listOfNotNull(s.ano?.toString(), f?.temporadas?.size?.let { resources.getQuantityString(R.plurals.series_temporadas, it, it) },
+        // Trailer: o do servidor; sem ele, o do TMDB.
+        (f?.trailer?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.linkTrailer?.takeIf { it.isNotEmpty() })?.let { link ->
+            FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.trailer), marca = "trailer") { VodActivity.abrirTrailer(this, link) })
+        }
+        // A mesma série na outra versão do catálogo (dublada x legendada): abre a ficha dela.
+        outraVersao(s)?.let { o ->
+            val r = if (Idioma.versao(o.nome, o.grupo) == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
+            FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(r), marca = "versao") { verEpisodios = false; abrirSerie(o) })
+        }
+        // Ideia 84: elenco com foto e o que mais cada pessoa fez que está na lista.
+        tmdbDe(s, f)?.takeIf { ElencoActivity.disponivel(it) }?.let { id ->
+            FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.elenco_botao), marca = "elenco") { ElencoActivity.abrir(this, id, serie = true, nome = Vod.nomeLimpo(s.nome)) })
+        }
+        val acaoSinopse = sinopse?.let { txt ->
+            FichaAcoes.acao(this, getString(R.string.series_sinopse_mais), marca = "sinopse") { FichaAcoes.mostrarSinopse(this, Vod.nomeLimpo(s.nome), txt) }
+                .also { FichaAcoes.adicionar(acoes, it); it.visibility = if (verEpisodios) View.VISIBLE else View.GONE }
+        }
+        if (acoes.childCount > 0) linha.addView(colAcoes, LinearLayout.LayoutParams(dp(FichaAcoes.LARGURA_DP), -1))
+
+        // ---- direita: título e dados sempre; depois informações ou episódios
+        val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(if (acoes.childCount > 0) dp(36) else 0, 0, 0, 0) }
+        val topo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        val texto = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        texto.addView(TextView(this).apply { text = Vod.nomeLimpo(s.nome); textSize = Estilo.Leitura.TITULO; typeface = fonteMedia; setTextColor(papel); maxLines = if (verEpisodios) 1 else 2; ellipsize = TextUtils.TruncateAt.END })
+        val dados = listOfNotNull(s.ano?.toString(), f?.temporadas?.size?.takeIf { it > 0 }?.let { resources.getQuantityString(R.plurals.series_temporadas, it, it) },
             s.nota?.let { "★ %.1f".format(Locale.getDefault(), it) }, f?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(s.grupo).ifEmpty { null },
             when (Idioma.versao(s.nome, s.grupo)) {
                 Idioma.Versao.LEGENDADA -> getString(R.string.idioma_legendado)
                 Idioma.Versao.DUBLADA -> getString(R.string.idioma_dublado_curto)
                 Idioma.Versao.DESCONHECIDA -> null
             }).joinToString("   ·   ")
-        col.addView(TextView(this).apply { text = dados; textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(8), 0, 0) })
-        // De fora: notas (MDBList) e "Novo episódio sexta, 21/11 (T2E5)" (TMDB), numa linha, em âmbar.
-        val ext = externo?.takeIf { it.first === s }?.second
-        val proximo = ext?.detalhe?.proximo?.let {
-            InfoExterna.textoProximo(it, java.time.LocalDate.now(), getString(R.string.ext_proximo), getString(R.string.ext_hoje), getString(R.string.ext_amanha))
+        texto.addView(TextView(this).apply { text = dados; textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(8), 0, 0); maxLines = 1; ellipsize = TextUtils.TruncateAt.END })
+        var txtSinopse: TextView? = null
+        if (!verEpisodios) {
+            // De fora: notas (MDBList) e "Novo episódio sexta, 21/11 (T2E5)" (TMDB), numa linha, em âmbar.
+            val proximo = ext?.detalhe?.proximo?.let {
+                InfoExterna.textoProximo(it, java.time.LocalDate.now(), getString(R.string.ext_proximo), getString(R.string.ext_hoje), getString(R.string.ext_amanha))
+            }
+            listOfNotNull(ext?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { InfoExterna.textoNotas(it) }, proximo).takeIf { it.isNotEmpty() }?.let { partes ->
+                texto.addView(TextView(this).apply { text = partes.joinToString("   ·   "); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPadding(0, dp(6), 0, 0); maxLines = 2 })
+            }
+            // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch), preenchido quando chegar; some se não tiver.
+            tmdbDe(s, f)?.takeIf { InfoExternaCache.temTmdb() }?.let { id ->
+                val linhaOnde = TextView(this).apply { textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(6), 0, 0); visibility = View.GONE; maxLines = 1 }
+                texto.addView(linhaOnde)
+                Fundo.rodar { InfoExternaCache.provedores(id, serie = true).takeIf { it.isNotEmpty() }?.let { p ->
+                    tela.post { linhaOnde.text = getString(R.string.onde_tambem_em, p.joinToString(" · ")); linhaOnde.visibility = View.VISIBLE }
+                } }
+            }
+            // A série inteira: barra + "20 de 62 episódios" (13/11/2026), quando já tem episódio visto.
+            progresso[s.chave]?.takeIf { it.total > 0 && it.vistos > 0 }?.let { p ->
+                texto.addView(BarraTempo.Linha(this).apply {
+                    mostrar(BarraTempo.fracao(p.vistos.toLong(), p.total.toLong()), BarraTempo.textoEpisodios(context, p.vistos, p.total))
+                }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(12) })
+            }
         }
-        listOfNotNull(ext?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { InfoExterna.textoNotas(it) }, proximo).takeIf { it.isNotEmpty() }?.let { partes ->
-            col.addView(TextView(this).apply { text = partes.joinToString("   ·   "); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPadding(0, dp(6), 0, 0); maxLines = 2 })
+        topo.addView(texto, LinearLayout.LayoutParams(0, -2, 1f))
+        if (!verEpisodios) {
+            val capa = ImageView(this).apply {
+                scaleType = ImageView.ScaleType.CENTER_CROP
+                background = GradientDrawable().apply { cornerRadius = dp(12).toFloat(); setColor(Estilo.BORDA) }; clipToOutline = true
+            }
+            PlayerLogos.carregar(this, s.capa, capa, lado = 600)
+            topo.addView(capa, LinearLayout.LayoutParams(dp(140), dp(210)).apply { marginStart = dp(24) })
         }
-        // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch), preenchido quando chegar; some se não tiver.
-        tmdbDe(s, f)?.takeIf { InfoExternaCache.temTmdb() }?.let { id ->
-            val linhaOnde = TextView(this).apply { textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(6), 0, 0); visibility = View.GONE; maxLines = 1 }
-            col.addView(linhaOnde)
-            Fundo.rodar { InfoExternaCache.provedores(id, serie = true).takeIf { it.isNotEmpty() }?.let { p ->
-                tela.post { linhaOnde.text = getString(R.string.onde_tambem_em, p.joinToString(" · ")); linhaOnde.visibility = View.VISIBLE }
-            } }
-        }
-        // A série inteira: barra + "20 de 62 episódios" (13/11/2026), quando já tem episódio visto.
-        progresso[s.chave]?.takeIf { it.total > 0 && it.vistos > 0 }?.let { p ->
-            col.addView(BarraTempo.Linha(this).apply {
-                mostrar(BarraTempo.fracao(p.vistos.toLong(), p.total.toLong()), BarraTempo.textoEpisodios(context, p.vistos, p.total))
-            }, LinearLayout.LayoutParams(dp(460), -2).apply { topMargin = dp(10) })
-        }
-        (f?.sinopse?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.sinopse?.takeIf { it.isNotEmpty() })?.let {
-            sinopseCurta = TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.15f); maxLines = if (sinopseInteira) Int.MAX_VALUE else 3; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(8), 0, 0) }
-            col.addView(sinopseCurta)
-        }
+        col.addView(topo)
 
-        if (f == null) {
-            col.addView(TextView(this).apply { text = getString(R.string.filmes_ficha_carregando); textSize = Estilo.Leitura.AVISO; setTextColor(apagado); setPadding(0, dp(14), 0, 0) })
-        } else if (f.temporadas.isEmpty()) {
-            col.addView(TextView(this).apply { text = getString(R.string.series_sem_episodios); textSize = Estilo.Leitura.AVISO; setTextColor(suave); setPadding(0, dp(14), 0, 0) })
-        } else {
-            // Botão principal.
-            val sugestao = Series.sugestao(f, s.fonteId, ultimos[s.chave], posicoes)
-            val principal = sugestao?.let { (ep, retomar) ->
-                val txt = if (retomar) getString(R.string.series_continuar, ep.rotulo, relogio(posicoes[ep.chave(s.fonteId)]?.ms ?: 0))
-                    else getString(R.string.series_assistir, ep.rotulo)
-                botao(txt) { talvezAnteriormente(s, f, ep, doComeco = !retomar) }
-            }
-            // Botão principal e, se houver, o trailer ao lado (11/11/2026).
-            val linhaBotoes = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-            principal?.let { linhaBotoes.addView(it) }
-            f.trailer.takeIf { it.isNotEmpty() }?.let { link ->
-                linhaBotoes.addView(botao(getString(R.string.trailer)) { VodActivity.abrirTrailer(this, link) },
-                    LinearLayout.LayoutParams(-2, -2).apply { marginStart = if (principal != null) dp(12) else 0 })
-            }
-            // A mesma série na outra versão do catálogo (dublada x legendada): abre a ficha dela.
-            outraVersao(s)?.let { o ->
-                val r = if (Idioma.versao(o.nome, o.grupo) == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
-                linhaBotoes.addView(botao(getString(r)) { abrirSerie(o) },
-                    LinearLayout.LayoutParams(-2, -2).apply { marginStart = if (linhaBotoes.childCount > 0) dp(12) else 0 })
-            }
-            // Ideia 84: elenco com foto e o que mais cada pessoa fez que está na lista.
-            tmdbDe(s, f)?.takeIf { ElencoActivity.disponivel(it) }?.let { id ->
-                linhaBotoes.addView(botao(getString(R.string.elenco_botao)) { ElencoActivity.abrir(this, id, serie = true, nome = Vod.nomeLimpo(s.nome)) },
-                    LinearLayout.LayoutParams(-2, -2).apply { marginStart = if (linhaBotoes.childCount > 0) dp(12) else 0 })
-            }
-            // Sinopse cortada em 3 linhas ("forç..."): "Sinopse inteira" abre o resto ali mesmo (e volta a encolher).
-            sinopseCurta?.let { sv ->
-                val b = botao(getString(if (sinopseInteira) R.string.series_sinopse_menos else R.string.series_sinopse_mais)) {
-                    sinopseInteira = !sinopseInteira; desenharFicha()
-                }.apply { tag = "sinopse"; visibility = if (sinopseInteira) View.VISIBLE else View.GONE }
-                linhaBotoes.addView(b, LinearLayout.LayoutParams(-2, -2).apply { marginStart = if (linhaBotoes.childCount > 0) dp(12) else 0 })
-                if (!sinopseInteira) sv.post { if ((sv.layout?.let { l -> l.lineCount > 0 && l.getEllipsisCount(l.lineCount - 1) > 0 }) == true) b.visibility = View.VISIBLE }
-            }
-            if (linhaBotoes.childCount > 0) col.addView(HorizontalScrollView(this).apply {
-                isHorizontalScrollBarEnabled = false; isFocusable = false; addView(linhaBotoes)
-            }, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(14) })
-
-            // Temporadas.
-            val temps = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
-            f.temporadas.keys.forEach { t ->
-                // "Temporada 1 ✓" (todos vistos) ou "Temporada 2  6/13" (começada): onde parou sem abrir (13/11/2026).
-                val daTemp = f.temporadas[t].orEmpty()
-                val vistosT = daTemp.count { Vod.finalizado(posicoes[it.chave(s.fonteId)], episodio = true) }
-                val marca = when { daTemp.isEmpty() || vistosT == 0 -> ""; vistosT >= daTemp.size -> "  ✓"; else -> "  $vistosT/${daTemp.size}" }
-                temps.addView(botao(getString(R.string.series_temporada, t) + marca, pequeno = true, marcado = t == temporada) {
-                    temporada = t; desenharFicha(focarEpisodio = -1)
-                }.apply { tag = "t$t" }, LinearLayout.LayoutParams(-2, -2).apply { marginEnd = dp(8) })
-            }
-            // Temporadas que passam da tela: o canto esmaece (sinal de que há mais à direita) em vez de cortar seco.
-            col.addView(HorizontalScrollView(this).apply {
-                isHorizontalScrollBarEnabled = false; isHorizontalFadingEdgeEnabled = true; setFadingEdgeLength(dp(56)); addView(temps)
-            },
-                LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(14) })
-
-            // Episódios da temporada.
-            val eps = f.temporadas[temporada].orEmpty()
-            val lista = ListView(this).apply { estilo(this) }
-            lista.adapter = object : BaseAdapter() {
-                override fun getCount() = eps.size
-                override fun getItem(p: Int) = eps[p]
-                override fun getItemId(p: Int) = p.toLong()
-                override fun getView(p: Int, reuso: View?, pai: ViewGroup?): View = linhaEpisodio(s, eps[p], reuso)
-            }
-            lista.setOnItemClickListener { _, _, p, _ -> eps.getOrNull(p)?.let { ep ->
-                tocar(s, ep, doComeco = !Vod.deveRetomar(posicoes[ep.chave(s.fonteId)], episodio = true))
-            } }
-            // OK segurado num episódio: marcar como visto até aqui, ou como não visto (11/11/2026, visto no 1 Play).
-            lista.setOnItemLongClickListener { _, _, p, _ -> eps.getOrNull(p)?.let { ep -> menuEpisodio(s, f, ep, p) }; true }
-            col.addView(lista, LinearLayout.LayoutParams(-1, 0, 1f).apply { topMargin = dp(10) })
-
-            painel.post {
-                when {
-                    focarEpisodio == -1 -> temps.findViewWithTag<View>("t$temporada")?.requestFocus()
-                    focarEpisodio != null -> { lista.requestFocus(); lista.setSelection(focarEpisodio) }
-                    else -> principal?.requestFocus() ?: lista.requestFocus()
+        var lista: ListView? = null
+        when {
+            f == null -> col.addView(TextView(this).apply { text = getString(R.string.filmes_ficha_carregando); textSize = Estilo.Leitura.AVISO; setTextColor(apagado); setPadding(0, dp(14), 0, 0) })
+            !temEps -> col.addView(TextView(this).apply { text = getString(R.string.series_sem_episodios); textSize = Estilo.Leitura.AVISO; setTextColor(suave); setPadding(0, dp(14), 0, 0) })
+            verEpisodios -> {
+                // "Temporada 2 · 6 de 13 vistos" e os episódios dela.
+                val eps = f.temporadas[temporada].orEmpty()
+                val vistosT = eps.count { Vod.finalizado(posicoes[it.chave(s.fonteId)], episodio = true) }
+                col.addView(TextView(this).apply {
+                    text = getString(R.string.series_temporada, temporada) + (if (eps.isNotEmpty() && vistosT > 0) "   ·   " + BarraTempo.textoEpisodios(context, vistosT, eps.size) else "")
+                    textSize = Estilo.Leitura.DADOS; typeface = fonteMedia; setTextColor(papel); setPadding(dp(12), dp(16), 0, dp(4))
+                })
+                val l = ListView(this).apply { estilo(this); tag = "eps" }
+                l.adapter = object : BaseAdapter() {
+                    override fun getCount() = eps.size
+                    override fun getItem(p: Int) = eps[p]
+                    override fun getItemId(p: Int) = p.toLong()
+                    override fun getView(p: Int, reuso: View?, pai: ViewGroup?): View = linhaEpisodio(s, eps[p], reuso)
                 }
+                l.setOnItemClickListener { _, _, p, _ -> eps.getOrNull(p)?.let { ep ->
+                    tocar(s, ep, doComeco = !Vod.deveRetomar(posicoes[ep.chave(s.fonteId)], episodio = true))
+                } }
+                // OK segurado num episódio: marcar como visto até aqui, ou como não visto (11/11/2026, visto no 1 Play).
+                l.setOnItemLongClickListener { _, _, p, _ -> eps.getOrNull(p)?.let { ep -> menuEpisodio(s, f, ep, p) }; true }
+                col.addView(l, LinearLayout.LayoutParams(-1, 0, 1f))
+                lista = l
+            }
+            else -> sinopse?.let {
+                txtSinopse = TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.25f); maxLines = 5; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(16), 0, 0) }
+                col.addView(txtSinopse)
             }
         }
         linha.addView(col, LinearLayout.LayoutParams(0, -1, 1f))
         painel.addView(linha, FrameLayout.LayoutParams(-1, -1))
         painel.visibility = View.VISIBLE
-        if (f == null) painel.requestFocus()
+        // "Sinopse inteira" só aparece quando a sinopse não coube (dá para saber só depois de desenhada).
+        val ts = txtSinopse
+        if (ts != null && acaoSinopse != null) ts.post { if (FichaAcoes.cortada(ts)) acaoSinopse.visibility = View.VISIBLE }
+        val l = lista
+        when {
+            l != null && focarEp != null -> painel.post { l.requestFocus(); l.setSelection(focarEp.coerceIn(0, (l.count - 1).coerceAtLeast(0))) }
+            else -> (marcaAntes?.let { t -> acoes.findViewWithTag<View>(t)?.takeIf { it.visibility == View.VISIBLE } } ?: primeiro)?.requestFocus() ?: painel.requestFocus()
+        }
+    }
+
+    /** "Trocar temporada": a lista das temporadas com onde parou ("✓" toda vista, "6/13" começada); escolher abre os episódios. */
+    private fun escolherTemporada(s: Serie, f: FichaSerie) {
+        val ts = f.temporadas.keys.toList()
+        val rotulos = ts.map { t ->
+            val daTemp = f.temporadas[t].orEmpty()
+            val vistosT = daTemp.count { Vod.finalizado(posicoes[it.chave(s.fonteId)], episodio = true) }
+            getString(R.string.series_temporada, t) + when { daTemp.isEmpty() || vistosT == 0 -> ""; vistosT >= daTemp.size -> "   ✓"; else -> "   $vistosT/${daTemp.size}" }
+        }
+        Estilo.lista(this, getString(R.string.series_trocar_temporada), rotulos, listOf(ts.indexOf(temporada)).filter { it >= 0 }) { i ->
+            temporada = ts[i]; desenharFicha(focarEpisodio = 0)
+        }
     }
 
     private fun menuEpisodio(s: Serie, f: FichaSerie, ep: Episodio, posicao: Int) {
@@ -1165,6 +1187,10 @@ class SeriesActivity : Activity() {
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        // Na lista de episódios, VOLTAR volta às informações da série (com o foco em "Episódios"); depois fecha a ficha.
+        if (painel.visibility == View.VISIBLE && keyCode == KeyEvent.KEYCODE_BACK && verEpisodios && fichaAberta != null) {
+            verEpisodios = false; desenharFicha(); painel.findViewWithTag<View>("episodios")?.requestFocus(); return true
+        }
         if (painel.visibility == View.VISIBLE && keyCode == KeyEvent.KEYCODE_BACK) { fecharFicha(); return true }
         if (painel.visibility != View.VISIBLE && keyCode == KeyEvent.KEYCODE_BACK && !coluna.temFoco() && itens.isNotEmpty()) { coluna.focar(); return true }
         return super.onKeyDown(keyCode, event)

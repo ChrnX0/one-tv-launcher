@@ -41,4 +41,8 @@
     <string name="legenda_trad_desligada">A legenda não será mais traduzida</string>
     <string name="series_sinopse_mais">Sinopse inteira</string>
     <string name="series_sinopse_menos">Sinopse curta</string>
+    <string name="series_continuar_curto">▶  Continuar %1$s</string>
+    <string name="series_episodios">Episódios</string>
+    <string name="series_trocar_temporada">Trocar temporada</string>
+    <string name="fechar">Fechar</string>
 </resources>

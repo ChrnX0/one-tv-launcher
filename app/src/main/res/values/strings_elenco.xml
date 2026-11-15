@@ -43,4 +43,8 @@
     <string name="legenda_trad_desligada">Subtitles will no longer be translated</string>
     <string name="series_sinopse_mais">Full synopsis</string>
     <string name="series_sinopse_menos">Shorter synopsis</string>
+    <string name="series_continuar_curto">▶  Continue %1$s</string>
+    <string name="series_episodios">Episodes</string>
+    <string name="series_trocar_temporada">Change season</string>
+    <string name="fechar">Close</string>
 </resources>

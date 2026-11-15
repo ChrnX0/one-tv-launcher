@@ -23,7 +23,6 @@ import android.widget.BaseAdapter
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.GridView
-import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
@@ -804,21 +803,65 @@ class FilmesActivity : Activity() {
         if (naGrade.isNotEmpty()) grade.requestFocus() else coluna.focar()
     }
 
+    /**
+     * Ficha no estilo C "Botões grandes" (15/11/2026): à esquerda as ações uma embaixo da outra, em letra grande (▲▼ anda,
+     * nada sai cortado da tela nem é empurrado quando um dado chega depois); à direita título, dados, pôster e sinopse.
+     * Os dados chegam aos poucos (servidor, coleção, TMDB) e cada um redesenha: o foco fica na mesma ação.
+     */
     private fun desenharFicha(f: Filme, info: FichaFilme?, manterFoco: Boolean) {
         val focoAntes = if (manterFoco) (painelFicha.findFocus()?.tag as? String) else null
-        // Os dados de fora chegam aos poucos e cada um redesenha a ficha: a sinopse que a pessoa rolou com ▼ fica onde estava.
-        val rolagemAntes = if (manterFoco) painelFicha.findViewWithTag<ScrollView>("rolagem")?.scrollY ?: 0 else 0
         painelFicha.removeAllViews()
-        val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(48), dp(40), dp(48), dp(32)) }
-        val capa = ImageView(this).apply {
-            scaleType = ImageView.ScaleType.CENTER_CROP
-            background = GradientDrawable().apply { cornerRadius = dp(12).toFloat(); setColor(Estilo.BORDA) }
-            clipToOutline = true
+        val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(48), dp(36), dp(48), dp(28)) }
+        val ext = externo?.takeIf { it.first === f }?.second
+        val pos = posicoes[f.chave]
+
+        // ---- ações (coluna da esquerda)
+        val (colAcoes, acoes) = FichaAcoes.coluna(this)
+        val primeiro: View
+        if (Vod.deveRetomar(pos)) {
+            primeiro = FichaAcoes.acao(this, getString(R.string.filmes_continuar_de, relogio(pos!!.ms)), marca = "continuar") { tocar(f, doComeco = false) }
+            FichaAcoes.adicionar(acoes, primeiro)
+            FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.filmes_do_comeco), marca = "comeco") { tocar(f, doComeco = true) })
+        } else {
+            primeiro = FichaAcoes.acao(this, getString(R.string.filmes_assistir), marca = "assistir") { tocar(f, doComeco = true) }
+            FichaAcoes.adicionar(acoes, primeiro)
         }
-        PlayerLogos.carregar(this, f.capa, capa, lado = 600)
-        linha.addView(capa, LinearLayout.LayoutParams(dp(220), dp(330)))
-        val texto = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(32), 0, 0, 0) }
-        texto.addView(TextView(this).apply { text = Vod.nomeLimpo(f.nome); textSize = Estilo.Leitura.TITULO; typeface = fonteMedia; setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END })
+        // Trailer: o do servidor; sem ele, o do TMDB (chega com a ficha de fora).
+        (info?.trailer?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.linkTrailer?.takeIf { it.isNotEmpty() })?.let { link ->
+            FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.trailer), marca = "trailer") { VodActivity.abrirTrailer(this, link) })
+        }
+        // Ideia 84: elenco com foto e o que mais cada pessoa fez que está na lista.
+        (f.tmdb ?: info?.tmdb ?: ext?.tmdb)?.takeIf { ElencoActivity.disponivel(it) }?.let { id ->
+            FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.elenco_botao), marca = "elenco") { ElencoActivity.abrir(this, id, serie = false, nome = Vod.nomeLimpo(f.nome)) })
+        }
+        // O mesmo filme na outra versão do catálogo (dublado x legendado): abre a ficha dela.
+        outraVersao(f)?.let { o ->
+            val r = if (Idioma.versao(o.nome, o.grupo) == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
+            FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(r), marca = "versao") { abrirFicha(o) })
+        }
+        // Ideia 23: os outros filmes com o mesmo nome-base (sequências, dublado e legendado) viram uma categoria na grade.
+        colecaoFicha?.takeIf { it.first === f && it.second.size > 1 }?.second?.let { lista ->
+            FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.filmes_colecao), lista.size.toString(), "colecao") { abrirColecao(lista) })
+        }
+        val sinopse = info?.sinopse?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.sinopse?.takeIf { it.isNotEmpty() }
+        val acaoSinopse = sinopse?.let { txt ->
+            FichaAcoes.acao(this, getString(R.string.series_sinopse_mais), marca = "sinopse") { FichaAcoes.mostrarSinopse(this, Vod.nomeLimpo(f.nome), txt) }
+                .also { FichaAcoes.adicionar(acoes, it); it.visibility = View.GONE }
+        }
+        // Achado pela busca do nome (a lista não mandou o id): "Não é este filme" refaz a busca sem ele.
+        if (ext?.tmdb != null && f.tmdb == null && info?.tmdb == null) FichaAcoes.adicionar(acoes,
+            FichaAcoes.acao(this, getString(R.string.ext_nao_e_este), marca = "naoeeste") {
+                externo = null; sagaExterna = null
+                Fundo.rodar { InfoExternaCache.recusar(this, f.chave); buscarExterno(f, fichaInfo) }
+                desenharFicha(f, fichaInfo, manterFoco = false)
+            })
+        linha.addView(colAcoes, LinearLayout.LayoutParams(dp(FichaAcoes.LARGURA_DP), -1))
+
+        // ---- informações (direita): título e dados ao lado do pôster, sinopse embaixo
+        val direita = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(36), 0, 0, 0) }
+        val topo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        val texto = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        texto.addView(TextView(this).apply { text = Vod.nomeLimpo(f.nome); textSize = Estilo.Leitura.TITULO; typeface = fonteMedia; setTextColor(papel); maxLines = 3; ellipsize = TextUtils.TruncateAt.END })
         val dados = listOfNotNull(
             (f.ano?.toString() ?: info?.lancamento?.take(4)?.takeIf { it.isNotEmpty() }),
             info?.duracaoMin?.let { if (it >= 60) "${it / 60} h ${it % 60} min" else "$it min" },
@@ -828,13 +871,12 @@ class FilmesActivity : Activity() {
         ).joinToString("   ·   ")
         texto.addView(TextView(this).apply { text = dados; textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(10), 0, 0) })
         // Notas de fora (MDBList): "IMDb 7,8 · Rotten Tomatoes 93% · Letterboxd 3,9", em âmbar como a estrela.
-        val ext = externo?.takeIf { it.first === f }?.second
         ext?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { n ->
             texto.addView(TextView(this).apply { text = InfoExterna.textoNotas(n); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPadding(0, dp(6), 0, 0) })
         }
         // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch), preenchido quando chegar; some se não tiver.
         (f.tmdb ?: info?.tmdb ?: ext?.tmdb)?.takeIf { InfoExternaCache.temTmdb() }?.let { id ->
-            val linhaOnde = TextView(this).apply { textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(6), 0, 0); visibility = View.GONE; maxLines = 1 }
+            val linhaOnde = TextView(this).apply { textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(6), 0, 0); visibility = View.GONE; maxLines = 2 }
             texto.addView(linhaOnde)
             Fundo.rodar { InfoExternaCache.provedores(id, serie = false).takeIf { it.isNotEmpty() }?.let { p ->
                 tela.post { linhaOnde.text = getString(R.string.onde_tambem_em, p.joinToString(" · ")); linhaOnde.visibility = View.VISIBLE }
@@ -843,76 +885,40 @@ class FilmesActivity : Activity() {
         sagaExterna?.takeIf { it.first === f }?.second?.let { (nome, tem, total) ->
             texto.addView(TextView(this).apply { text = getString(R.string.ext_saga, nome, tem, total); textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(6), 0, 0) })
         }
-
-        // Botões: Continuar (se começou) + Do começo, ou só Assistir.
-        val pos = posicoes[f.chave]
-        // Começou e não terminou: barra de onde parou + "faltam 1 h 01 · termina às 22:41" acima dos botões (13/11/2026).
+        // Começou e não terminou: barra de onde parou + "faltam 1 h 01 · termina às 22:41" (13/11/2026).
         if (Vod.deveRetomar(pos) && pos!!.duracao > 0) {
             val resta = (pos.duracao - pos.ms).coerceAtLeast(0)
             texto.addView(BarraTempo.Linha(this).apply {
                 mostrar(BarraTempo.fracao(pos.ms, pos.duracao), BarraTempo.textoFaltam(context, resta, System.currentTimeMillis() + resta))
-            }, LinearLayout.LayoutParams(dp(460), -2).apply { topMargin = dp(18) })
+            }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(14) })
         }
-        val botoes = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(0, dp(20), 0, dp(18)) }
-        val primeiro: TextView
-        if (Vod.deveRetomar(pos)) {
-            primeiro = botao(getString(R.string.filmes_continuar_de, relogio(pos!!.ms)), "continuar") { tocar(f, doComeco = false) }
-            botoes.addView(primeiro)
-            botoes.addView(botao(getString(R.string.filmes_do_comeco), "comeco") { tocar(f, doComeco = true) }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(12) })
-        } else {
-            primeiro = botao(getString(R.string.filmes_assistir), "assistir") { tocar(f, doComeco = true) }
-            botoes.addView(primeiro)
+        topo.addView(texto, LinearLayout.LayoutParams(0, -2, 1f))
+        val capa = ImageView(this).apply {
+            scaleType = ImageView.ScaleType.CENTER_CROP
+            background = GradientDrawable().apply { cornerRadius = dp(12).toFloat(); setColor(Estilo.BORDA) }
+            clipToOutline = true
         }
-        // Trailer: o do servidor; sem ele, o do TMDB (chega com a ficha de fora).
-        (info?.trailer?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.linkTrailer?.takeIf { it.isNotEmpty() })?.let { link ->
-            botoes.addView(botao(getString(R.string.trailer), "trailer") { VodActivity.abrirTrailer(this, link) },
-                LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(12) })
-        }
-        // O mesmo filme na outra versão do catálogo (dublado x legendado): abre a ficha dela.
-        outraVersao(f)?.let { o ->
-            val r = if (Idioma.versao(o.nome, o.grupo) == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
-            botoes.addView(botao(getString(r), "versao") { abrirFicha(o) }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(12) })
-        }
-        // Ideia 84: elenco com foto e o que mais cada pessoa fez que está na lista.
-        (f.tmdb ?: info?.tmdb ?: ext?.tmdb)?.takeIf { ElencoActivity.disponivel(it) }?.let { id ->
-            botoes.addView(botao(getString(R.string.elenco_botao), "elenco") { ElencoActivity.abrir(this, id, serie = false, nome = Vod.nomeLimpo(f.nome)) },
-                LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(12) })
-        }
-        // Ideia 23 (depois do Elenco: é o último a ficar pronto, assim não empurra os outros): os outros filmes com o mesmo nome-base (sequências, dublado e legendado) viram uma categoria na grade.
-        colecaoFicha?.takeIf { it.first === f && it.second.size > 1 }?.second?.let { lista ->
-            botoes.addView(botao(getString(R.string.filmes_colecao), "colecao") { abrirColecao(lista) },
-                LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(12) })
-        }
-        // Achado pela busca do nome (a lista não mandou o id): "Não é este filme" refaz a busca sem ele.
-        if (ext?.tmdb != null && f.tmdb == null && info?.tmdb == null) botoes.addView(
-            botao(getString(R.string.ext_nao_e_este), "naoeeste") {
-                externo = null; sagaExterna = null
-                Fundo.rodar { InfoExternaCache.recusar(this, f.chave); buscarExterno(f, fichaInfo) }
-                desenharFicha(f, fichaInfo, manterFoco = false)
-            }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(12) })
-        // Com Continuar, Do começo, Elenco e Coleção a fila passa da largura da tela: rola para o lado com o foco
-        // (o HorizontalScrollView acompanha o botão focado) em vez de cortar o último botão.
-        texto.addView(HorizontalScrollView(this).apply {
-            isHorizontalScrollBarEnabled = false; isFocusable = false; clipToPadding = false
-            addView(botoes)
-        })
+        PlayerLogos.carregar(this, f.capa, capa, lado = 600)
+        topo.addView(capa, LinearLayout.LayoutParams(dp(140), dp(210)).apply { marginStart = dp(24) })
+        direita.addView(topo)
 
-        val corpo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        val corpo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(0, dp(16), 0, 0) }
         if (info == null) corpo.addView(TextView(this).apply { text = getString(R.string.filmes_ficha_carregando); textSize = Estilo.Leitura.AVISO; setTextColor(apagado) })
-        // Sinopse e elenco: os da lista; sem eles, os do TMDB (no idioma da TV).
-        (info?.sinopse?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.sinopse?.takeIf { it.isNotEmpty() })
-            ?.let { corpo.addView(TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.25f) }) }
-        info?.diretor?.takeIf { it.isNotEmpty() }?.let { corpo.addView(rotuloValor(getString(R.string.filmes_direcao), it)) }
+        val txtSinopse = sinopse?.let {
+            TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.25f); maxLines = 5; ellipsize = TextUtils.TruncateAt.END }
+                .also { t -> corpo.addView(t) }
+        }
+        info?.diretor?.takeIf { it.isNotEmpty() }?.let { corpo.addView(rotuloValor(getString(R.string.filmes_direcao), it).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }) }
         (info?.elenco?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.elenco?.takeIf { it.isNotEmpty() }?.joinToString(", "))
-            ?.let { corpo.addView(rotuloValor(getString(R.string.filmes_elenco), it)) }
-        // A sinopse longa rola com ▼ (o ScrollView não pega foco; quem rola é a tecla, ver onKeyDown).
-        val rolagem = ScrollView(this).apply { addView(corpo); isFocusable = false; tag = "rolagem" }
-        texto.addView(rolagem, LinearLayout.LayoutParams(-1, 0, 1f))
-        if (rolagemAntes > 0) rolagem.post { rolagem.scrollTo(0, rolagemAntes) }
-        linha.addView(texto, LinearLayout.LayoutParams(0, -1, 1f))
+            ?.let { corpo.addView(rotuloValor(getString(R.string.filmes_elenco), it).apply { maxLines = 2; ellipsize = TextUtils.TruncateAt.END }) }
+        direita.addView(corpo, LinearLayout.LayoutParams(-1, 0, 1f))
+        linha.addView(direita, LinearLayout.LayoutParams(0, -1, 1f))
+
         painelFicha.addView(linha, FrameLayout.LayoutParams(-1, -1))
         painelFicha.visibility = View.VISIBLE
-        (focoAntes?.let { t -> botoes.findViewWithTag<View>(t) } ?: primeiro).requestFocus()
+        // "Sinopse inteira" só aparece quando a sinopse não coube (dá para saber só depois de desenhada).
+        if (txtSinopse != null && acaoSinopse != null) txtSinopse.post { if (FichaAcoes.cortada(txtSinopse)) acaoSinopse.visibility = View.VISIBLE }
+        (focoAntes?.let { t -> acoes.findViewWithTag<View>(t)?.takeIf { it.visibility == View.VISIBLE } } ?: primeiro).requestFocus()
     }
 
     private fun abrirColecao(lista: List<Filme>) {
@@ -1095,10 +1101,6 @@ class FilmesActivity : Activity() {
         if (painelFicha.visibility == View.VISIBLE) {
             when (keyCode) {
                 KeyEvent.KEYCODE_BACK -> { fecharFicha(); return true }
-                KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_UP -> {
-                    painelFicha.findViewWithTag<ScrollView>("rolagem")?.smoothScrollBy(0, if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) dp(80) else -dp(80))
-                    return true
-                }
             }
             return super.onKeyDown(keyCode, event)
         }
