@@ -30,6 +30,8 @@ object VolumeLg {
     private const val ENTRE_TECLAS_MS = 300L
     private const val K_ALARME = "alarme"
     private const val K_DESLIGAR = "desligar_junto"
+    private const val K_ACORDAR = "acordar_junto"
+    private const val K_ENTRADA = "entrada_chromecast"
     private const val BUSCA_A_CADA_MS = 10 * 60_000L
 
     private val trava = Any()   // uma conversa com a TV por vez (duas rotinas apertando teclas juntas erram a conta)
@@ -55,6 +57,34 @@ object VolumeLg {
      */
     fun desligarJunto(ctx: Context): Boolean = prefs(ctx).getBoolean(K_DESLIGAR, true)
     fun definirDesligarJunto(ctx: Context, ligado: Boolean) { prefs(ctx).edit().putBoolean(K_DESLIGAR, ligado).apply() }
+
+    /**
+     * A LG ligou pelo controle dela e está na entrada do Chromecast: acordar o Chromecast ([AcordarComLg], 15/11/2026)?
+     * LIGADO por padrão: a LG não acorda o Chromecast ao ligar, e a tela fica preta. Muda por EXTRAS lg_acordar --ez ligado.
+     */
+    fun acordarJunto(ctx: Context): Boolean = prefs(ctx).getBoolean(K_ACORDAR, true)
+    fun definirAcordarJunto(ctx: Context, ligado: Boolean) { prefs(ctx).edit().putBoolean(K_ACORDAR, ligado).apply() }
+
+    /** A entrada da LG em que o Chromecast já foi reconhecido (ex.: "HDMI1"), ou null. */
+    fun entradaAprendida(ctx: Context): String? = prefs(ctx).getString(K_ENTRADA, null)
+    fun aprenderEntrada(ctx: Context, nome: String) { prefs(ctx).edit().putString(K_ENTRADA, nome).apply() }
+
+    /** A entrada que a LG mostra agora, ou null (não pareada, desligada ou fora da rede). */
+    fun entrada(ctx: Context): LgNetcast.Entrada? = synchronized(trava) {
+        comAuth(ctx) { ip -> pedir(ip, LgNetcast.CAMINHO_ENTRADA, null) }?.let { LgNetcast.entrada(it) }
+    }
+
+    /**
+     * A LG está na rede (porta do ROAP aceita conexão)? Em standby ela sai da rede. Barato: só abre e fecha o socket,
+     * sem pareamento e sem a trava (não espera uma conversa longa de volume).
+     */
+    fun naRede(ctx: Context, tempoMs: Int = 1500): Boolean {
+        val ip = ip(ctx)?.takeIf { LgNetcast.ipLocal(it) } ?: return false
+        return try {
+            java.net.Socket().use { it.connect(java.net.InetSocketAddress(ip, LgNetcast.PORTA), tempoMs) }
+            true
+        } catch (_: Exception) { false }
+    }
 
     /** Aperta a tecla de energia da LG (desliga). false = não respondeu (já desligada, fora da rede ou não pareada). */
     fun desligar(ctx: Context): Boolean = synchronized(trava) { apertar(ctx, LgNetcast.TECLA_ENERGIA, 1) }

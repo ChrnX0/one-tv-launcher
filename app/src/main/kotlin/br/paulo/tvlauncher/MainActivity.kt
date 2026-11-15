@@ -294,6 +294,7 @@ class MainActivity : Activity() {
         PainelWeb.ajustar(this)   // painel no navegador: só abre a porta se estiver ligado e com PIN (ver PainelWeb.kt)
         HistoricoRede.iniciar(this)   // histórico de rede (ver HistoricoRede.kt); idempotente
         AutoDesligar.iniciar(this)   // desligar sozinha depois de X min sem controle (ver AutoDesligar.kt)
+        AcordarComLg.iniciar(this)   // LG ligou pelo controle dela na entrada do Chromecast: acorda o Chromecast
         if (Config.SHELL_PROPRIO_DIAG) ShellProprio.diagnosticar(this)   // MARCO 1 do shell proprio: loga chave + porta adb (ver ShellProprio.kt)
         // Shell próprio: liga o vigia (Wi-Fi, 10 min) e roda a autocura se faltar alguma permissão (GuardiaoShizuku).
         GuardiaoShizuku.vigiar(this)

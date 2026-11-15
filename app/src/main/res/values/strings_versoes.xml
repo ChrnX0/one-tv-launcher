@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>LG turned on with its own remote: if it opens on the Chromecast input, the Chromecast now wakes up by itself within about 20 s (before, the screen stayed black until you switched inputs). On the antenna or another input, nothing changes. Needs the LG paired over the network</item>
         <item>Series and Movies: opening a title is smoother; the page draws once when its data arrives instead of three times, and the grid behind it is no longer redrawn</item>
         <item>Claude sign-in in the browser in English or Portuguese, following the browser language; the English web panel also translates error messages, and movie account errors show in the TV language</item>
         <item>Security: turning on the network drive from the panel asks for the PIN; the Windows connector downloads only over https; another device at home can no longer jam the panel, the Claude sign-in or file copies from your computer (each computer still joins with its own “Allow?”)</item>
@@ -148,6 +149,7 @@
         <item>Screensaver with new, larger widgets: pick Glass strip (the next hours on a curve, with the sun time), Cards (now, hours, today and tomorrow) or No box (big temperature and the weather in one sentence) in Settings › Screen and power › Screensaver widgets, or in the panel</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>lg_acorda_chromecast</item>
         <item>ficha_sem_tranco</item>
         <item>unidade_pede_pin</item>
         <item>filmes_notas_imdb</item>
@@ -263,6 +265,7 @@
         <item>protetor_widgets</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Turn the LG on with its own remote</item>
         <item>Series › open 3 or 4 series in a row</item>
         <item>Network drive asks for the PIN</item>
         <item>IMDb ratings in Movies</item>
@@ -378,6 +381,7 @@
         <item>In Settings › Screen and power, press OK on Screensaver widgets until the style you want, then wait for the screensaver</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>With everything off, turn the LG on with ITS remote (not the Chromecast one). Does the Chromecast picture show up by itself within about 20 s?</item>
         <item>Did each page open without a stutter, and did BACK return to the same poster?</item>
         <item>In the web panel, turn the network drive off and on again: when turning it on, did the panel ask for the PIN?</item>
         <item>Open Movies and a movie card: do the IMDb ratings still show?</item>
