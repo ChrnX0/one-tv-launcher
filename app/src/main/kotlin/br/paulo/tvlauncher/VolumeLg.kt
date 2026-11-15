@@ -29,6 +29,7 @@ object VolumeLg {
     private const val TEMPO_MS = 2000
     private const val ENTRE_TECLAS_MS = 300L
     private const val K_ALARME = "alarme"
+    private const val K_DESLIGAR = "desligar_junto"
     private const val BUSCA_A_CADA_MS = 10 * 60_000L
 
     private val trava = Any()   // uma conversa com a TV por vez (duas rotinas apertando teclas juntas erram a conta)
@@ -47,6 +48,16 @@ object VolumeLg {
      */
     fun alarmeLigado(ctx: Context): Boolean = prefs(ctx).getBoolean(K_ALARME, false)
     fun definirAlarme(ctx: Context, ligado: Boolean) { prefs(ctx).edit().putBoolean(K_ALARME, ligado).apply() }
+
+    /**
+     * O timer de sono desliga a LG pela rede (15/11/2026)? LIGADO por padrão: a LG ignora o standby do CEC, então sem
+     * isto o Chromecast dorme e a LG fica acesa no protetor dela. Muda por comando: EXTRAS lg_desligar --ez ligado.
+     */
+    fun desligarJunto(ctx: Context): Boolean = prefs(ctx).getBoolean(K_DESLIGAR, true)
+    fun definirDesligarJunto(ctx: Context, ligado: Boolean) { prefs(ctx).edit().putBoolean(K_DESLIGAR, ligado).apply() }
+
+    /** Aperta a tecla de energia da LG (desliga). false = não respondeu (já desligada, fora da rede ou não pareada). */
+    fun desligar(ctx: Context): Boolean = synchronized(trava) { apertar(ctx, LgNetcast.TECLA_ENERGIA, 1) }
 
     // ---------- pareamento (comandos do adb, ver ComandosExtras) ----------
 
