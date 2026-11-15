@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_comando.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="cc_vazia">Schreib, was der Fernseher tun soll</string>
+    <string name="cc_nao_entendi">Das habe ich nicht verstanden. Versuch etwas wie:</string>
+    <string name="cc_exemplo_1">schalte Globo ein</string>
+    <string name="cc_exemplo_2">öffne YouTube</string>
+    <string name="cc_exemplo_3">in 30 Minuten ausschalten</string>
+    <string name="cc_abrindo">%1$s wird geöffnet</string>
+    <string name="cc_canal">%1$s wird eingeschaltet</string>
+    <string name="cc_o_que_passa">Was läuft auf %1$s</string>
+    <string name="cc_timer">Erinnerung in %1$d Minuten</string>
+    <string name="cc_desligar">Der Fernseher schaltet sich in %1$d Minuten aus</string>
+    <string name="cc_desligar_cancelar">Ausschalt-Timer abgebrochen</string>
+    <string name="cc_volume_subir">Lauter</string>
+    <string name="cc_volume_descer">Leiser</string>
+    <string name="cc_mudo">Stumm an/aus</string>
+    <string name="cc_pausar">Wird pausiert</string>
+    <string name="cc_continuar">Wird abgespielt</string>
+    <string name="cc_tela_previsao">die Vorhersage</string>
+    <string name="cc_tela_agenda">den Kalender</string>
+    <string name="cc_tela_despertador">die Wecker</string>
+    <string name="cc_tela_configuracoes">die Launcher-Einstellungen</string>
+    <string name="cc_tela_inicio">den Startbildschirm</string>
+    <string name="cc_confirme_na_tv">%1$s: mit OK am Fernseher bestätigen</string>
+    <string name="cc_nao_fiz">%1$s: nicht ausgeführt (%2$s)</string>
+    <string name="cc_aviso_titulo">Handy-Panel</string>
+</resources>

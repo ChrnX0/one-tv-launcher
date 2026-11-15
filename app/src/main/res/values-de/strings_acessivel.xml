@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_acessivel.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acess_legenda_fundo">Untertitel mit schwarzem Hintergrund</string>
+    <string name="acess_legenda_amarela">Gelbe Untertitel</string>
+    <string name="acess_volume">Gleiche Lautstärke zwischen Sendern</string>
+    <string name="acess_voz">Klarere Stimmen</string>
+    <string name="acess_volume_ligado">Gleiche Lautstärke an: leise Sender und Filme werden lauter</string>
+    <string name="acess_volume_desligado">Gleiche Lautstärke aus</string>
+    <string name="acess_voz_ligado">Klarere Stimmen an</string>
+    <string name="acess_voz_desligado">Klarere Stimmen aus</string>
+    <string name="acess_config_titulo">Ton und Untertitel</string>
+    <string name="acess_config_texto">Für alle, die schlechter sehen oder hören. Auch im Menü ▼ des Players.</string>
+</resources>

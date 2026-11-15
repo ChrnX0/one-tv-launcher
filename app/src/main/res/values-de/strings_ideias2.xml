@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_ideias2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dormir_titulo">Schlafenszeit</string>
+    <string name="dormir_texto">Diese App ist gerade nicht erlaubt. Gute Nacht!</string>
+    <string name="dormir_pin">PIN zum Ändern der Schlafenszeit</string>
+    <string name="dormir_inicio">Schlafenszeit: Beginn</string>
+    <string name="dormir_fim">Schlafenszeit: Ende</string>
+    <string name="dormir_teto">Schlafenszeit: max. Lautstärke</string>
+    <string name="recado_link_titulo">Nachricht</string>
+    <string name="extras_HORA_DORMIR">Schlafenszeit (nur erlaubte Apps, begrenzte Lautstärke)</string>
+    <string name="extras_TOCANDO_AGORA">Läuft gerade (liest, was spielt)</string>
+    <string name="extras_MODO_LEVE">Leichter Modus (kürzere Animationen)</string>
+    <string name="extras_SOM_NAVEGACAO">Navigationston</string>
+    <string name="extras_RECADO_LINK">Nachricht per Link (Home Assistant, TvOverlay)</string>
+    <string name="extras_caches">App-Caches leeren</string>
+    <string name="extras_livre">%1$s frei</string>
+    <string name="extras_consumo">Internet pro App (7 Tage)</string>
+    <string name="extras_tocando">Läuft gerade</string>
+    <string name="extras_aguarde">Einen Moment …</string>
+    <string name="dormir_dia">Schlafenszeit: Tag</string>
+    <string name="dormir_todos">alle (Standard)</string>
+    <string name="dormir_proprio">eigener Zeitplan</string>
+    <string name="dormir_segue">folgt dem Standard</string>
+    <string name="dormir_voltar_padrao">Schlafenszeit: diesen Tag auf Standard zurücksetzen</string>
+    <string name="extras_VER_TELA">Claude den Bildschirm sehen lassen (MCP ver_tela; der Fernseher zeigt einen Hinweis)</string>
+    <string name="casa_titulo">Zuhause</string>
+    <string name="casa_sem_config">Richte Home Assistant im Handy-Panel ein: Tab Extras, Karte Zuhause.</string>
+    <string name="casa_carregando">Geräte werden geladen …</string>
+    <string name="casa_vazio">Keine Lampen, Steckdosen oder Szenen in Home Assistant.</string>
+    <string name="casa_google_home">Google Home</string>
+    <string name="casa_google_home_det">Google-Lampen und -Kameras</string>
+    <string name="casa_resumo">Home Assistant · %1$d von %2$d an</string>
+    <string name="casa_resumo_so_cenas">Home Assistant · %1$d Szenen</string>
+    <string name="casa_secao_cenas">Szenen und Skripte</string>
+    <string name="casa_secao_aparelhos">Geräte</string>
+    <string name="casa_secao_google">Google</string>
+    <string name="casa_sem_comodo">Kein Raum</string>
+    <string name="casa_ligado">An</string>
+    <string name="casa_desligado">Aus</string>
+    <string name="casa_aberta">Offen</string>
+    <string name="casa_fechada">Geschlossen</string>
+    <string name="casa_rodar">OK zum Ausführen</string>
+    <string name="casa_indisponivel">Nicht verfügbar</string>
+    <string name="casa_sem_config_titulo">Verbinde dein Zuhause</string>
+    <string name="casa_dica_acionar">ein- oder ausschalten</string>
+    <string name="casa_erro_simples">Home Assistant hat nicht geantwortet. Prüfe, ob sein Server an ist, und versuch es erneut.</string>
+    <string name="casa_erro">Home Assistant hat nicht geantwortet: %1$s</string>
+    <string name="casa_ligado_pct">An · %1$d%%</string>
+    <string name="casa_brilho_ajuste">Helligkeit %1$d%% · ◀ ▶</string>
+    <string name="casa_dica_brilho">Helligkeit</string>
+    <string name="casa_tecla_segurar_ok">OK HALTEN</string>
+</resources>

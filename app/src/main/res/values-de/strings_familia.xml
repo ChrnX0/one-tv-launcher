@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_familia.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="fam_pin">Kinder-PIN</string>
+    <string name="fam_pin_det">Eine zweite PIN, um vor den Kindern Sender, ausgeblendete Kategorien und Schlafenszeit zu entsperren. Die Panel-PIN funktioniert weiterhin überall.</string>
+    <string name="fam_pin_ok">Kinder-PIN gespeichert</string>
+    <string name="fam_pin_igual">Die Kinder-PIN muss sich von der Panel-PIN unterscheiden</string>
+    <string name="fam_trocar">Kinder-PIN ändern</string>
+    <string name="fam_apagar">Kinder-PIN entfernen</string>
+    <string name="fam_apagado">Kinder-PIN entfernt: jetzt entsperrt nur die Panel-PIN</string>
+    <string name="extras_TEMPO_TELA">Tägliche Bildschirmzeit (wenn sie aufgebraucht ist, öffnen nur erlaubte Apps)</string>
+    <string name="tela_titulo">Bildschirmzeit</string>
+    <string name="tela_acabou">Die Bildschirmzeit für heute ist vorbei. Bis morgen!</string>
+    <string name="tela_5min">Noch 5 Minuten Bildschirmzeit heute</string>
+    <string name="tela_pin">PIN zum Ändern der Bildschirmzeit</string>
+    <string name="tela_cota_linha">Bildschirmzeit pro Tag: %1$s (heute übrig: %2$s)</string>
+    <string name="tela_mais">Heute %1$d Minuten mehr geben</string>
+    <string name="tela_mais_ok">%1$d Minuten mehr für heute</string>
+    <string name="tela_h">h</string>
+    <string name="tela_min">Min.</string>
+    <string name="extras_AGENDA_TODAS">Kalender aller Google-Konten des Fernsehers zusammen</string>
+    <string name="cal_todas_contas">Alle Konten des Fernsehers (%1$d)</string>
+    <string name="tm_tempo_esgotado">Die Zeit ist um</string>
+    <string name="painel_desligado_pin">Web-Panel ausgeschaltet: zu oft falsche PIN</string>
+    <string name="tm_crono">Stoppuhr</string>
+    <string name="tm_crono_iniciar">Stoppuhr starten</string>
+    <string name="tm_crono_parar">Stoppuhr anhalten</string>
+    <string name="tm_crono_comecou">Stoppuhr gestartet: sie erscheint auf dem Startbildschirm</string>
+    <string name="tm_crono_marcou">Stoppuhr angehalten bei %1$s</string>
+    <string name="som_canal">Letzter Live-TV-Sender</string>
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_ideia72.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l72_abrir">%1$s öffnen</string>
+    <string name="l72_tela_previsao">die Wettervorhersage</string>
+    <string name="l72_tela_agenda">den Kalender</string>
+    <string name="l72_tela_despertador">den Wecker</string>
+    <string name="l72_tela_configuracoes">die Launcher-Einstellungen</string>
+    <string name="l72_tela_inicio">den Startbildschirm</string>
+    <string name="l72_despertador">Wecker um %1$s erstellen (%2$s)</string>
+    <string name="l72_dias_uma">einmal</string>
+    <string name="l72_dias_todos">jeden Tag</string>
+    <string name="l72_dias_uteis">Mo bis Fr</string>
+    <string name="l72_dias_fds">am Wochenende</string>
+    <string name="l72_dias_nomes">So,Mo,Di,Mi,Do,Fr,Sa</string>
+    <string name="l72_vol_subir">Lauter stellen</string>
+    <string name="l72_vol_descer">Leiser stellen</string>
+    <string name="l72_vol_mudo">Stumm an/aus</string>
+    <string name="l72_vezes">(%1$d-mal)</string>
+    <string name="l72_midia_pausar">Pausieren</string>
+    <string name="l72_midia_tocar">Weiter abspielen</string>
+    <string name="l72_midia_proxima">Weiter</string>
+    <string name="l72_midia_anterior">Zurück</string>
+    <string name="l72_visita_liga">Gastmodus einschalten</string>
+    <string name="l72_visita_desliga">Gastmodus ausschalten</string>
+    <string name="l72_canal_pedido">Auf Sender %1$s umschalten</string>
+    <string name="l72_canal">Auf Sender %1$d umschalten (%2$s)</string>
+    <string name="l72_o_que_passa">Sehen, was auf %1$s läuft</string>
+    <string name="l72_casa_ligar">Einschalten</string>
+    <string name="l72_casa_desligar">Ausschalten</string>
+    <string name="l72_casa_alternar">Umschalten</string>
+    <string name="l72_casa">%1$s %2$s (Zuhause)</string>
+    <string name="l72_guia_vazio">%1$s: nichts im Programmführer.</string>
+    <string name="l72_guia_agora">%1$s jetzt: %2$s (bis %3$s)</string>
+    <string name="l72_guia_nada_agora">%1$s: gerade nichts im Programmführer</string>
+    <string name="l72_guia_depois">Danach: %1$s (%2$s)</string>
+    <string name="l75_pilula">Läuft gerade: %1$s, %2$s. OK pausiert oder setzt fort; OK halten öffnet die App</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_primeira.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pc_titulo">Mit dem Handy einrichten</string>
+    <string name="pc_linha_det">Empfohlen. Richte die Handykamera auf einen Code: PIN, Sprache, Live-TV, Stadt und Filmdienste, in 5 Schritten.</string>
+    <string name="pc_instrucoes">Richte die Handykamera auf den Code daneben. Das Handy öffnet eine Einrichtung in 5 Schritten.\n\nDas Handy muss im WLAN zu Hause sein. Lass diesen Bildschirm offen, bis du die PIN auf dem Handy erstellst (noch %1$s).</string>
+    <string name="pc_entrou">Mach auf dem Handy weiter.</string>
+    <string name="pc_venceu">Der Code ist abgelaufen.\nDrücke „%1$s“, um einen neuen zu zeigen.</string>
+    <string name="pc_sem_rede">Der Fernseher ist in keinem Netzwerk.\nVerbinde ihn mit dem WLAN zu Hause und versuch es erneut.</string>
+</resources>

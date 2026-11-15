@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_player2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="vod_tentando">Verbindung unterbrochen. Neuer Versuch (%1$d von %2$d) …</string>
+    <string name="vod_proximo_episodio">Nächste Folge</string>
+    <string name="vod_proximo_agora">Jetzt ansehen · %1$d s</string>
+    <string name="vod_proximo_cancelar">Abbrechen</string>
+    <string name="vod_proximo_continuar">Weiterschauen</string>
+    <string name="vod_ainda_assistindo">Schaust du noch?</string>
+    <string name="vod_ainda_assistindo_texto">Einige Folgen liefen, ohne dass jemand die Fernbedienung berührt hat, also wartet die nächste auf dich.</string>
+    <string name="vod_desligar_ao_fim">Fernseher ausschalten, wenn das endet</string>
+    <string name="vod_desligar_ao_fim_ligado">Der Fernseher schaltet sich aus, wenn das endet</string>
+    <string name="vod_desligar_ao_fim_desligado">Der Fernseher bleibt an, wenn das endet</string>
+    <string name="vod_legenda_tamanho_opcao">Untertitelgröße: %1$s</string>
+    <string name="vod_legenda_tamanho_titulo">Untertitelgröße</string>
+    <string-array name="vod_legenda_tamanhos">
+        <item>Klein</item>
+        <item>Normal</item>
+        <item>Groß</item>
+        <item>Riesig</item>
+    </string-array>
+</resources>

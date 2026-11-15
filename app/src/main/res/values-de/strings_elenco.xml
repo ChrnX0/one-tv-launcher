@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_elenco.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="elenco_botao">Besetzung</string>
+    <string name="elenco_titulo">Besetzung</string>
+    <string name="elenco_carregando">Besetzung wird geladen …</string>
+    <string name="elenco_vazio">TMDB hat keine Besetzung für diesen Titel.</string>
+    <string name="elenco_dica">Geh durch die Personen: darunter, worin sie sonst noch in deiner Liste vorkommen.</string>
+    <string name="elenco_na_lista">Auch in deiner Liste</string>
+    <string name="elenco_procurando">Suche in deiner Liste …</string>
+    <string name="elenco_nada_na_lista">Nichts anderes mit dieser Person in deiner Liste.</string>
+    <string name="elenco_filme">Film</string>
+    <string name="elenco_serie">Serie</string>
+    <string name="elenco_opcao_player">Besetzung (wer ist dieser Schauspieler?)</string>
+    <string name="anteriormente_titulo">Was bisher geschah: %1$s</string>
+    <string name="anteriormente_assistir">%1$s ansehen</string>
+    <string name="anteriormente_pular_sempre">Nie zeigen</string>
+    <string name="anteriormente_desligado">Rückblicke ausgeschaltet. Zum Einschalten: OK auf einer Folge halten.</string>
+    <string name="anteriormente_ligar">Rückblicke „Was bisher geschah“ zeigen</string>
+    <string name="idade_titulo">Höchstalter im Kindermodus</string>
+    <string name="idade_det">Filme und Serien mit Freigabe bis zu diesem Alter erscheinen aus jeder Kategorie (TMDB-Freigabe). Titel ohne Freigabe nur in Kinderkategorien.</string>
+    <string name="idade_so_categorias">Nur Kinderkategorien</string>
+    <string name="idade_livre">Alle Altersstufen</string>
+    <string name="idade_anos">Bis %1$d Jahre</string>
+    <string name="onde_tambem_em">Auch bei: %1$s (JustWatch)</string>
+    <string name="onde_fora">Nicht in deiner Liste · bei %1$s</string>
+    <string name="onde_grupo">Anderswo (JustWatch)</string>
+    <string name="legenda_auto_pronta">Untertitel automatisch heruntergeladen (für diese Datei gemacht) · ▼ zum Ändern</string>
+    <string name="legenda_auto_pronta_nome">Untertitel automatisch heruntergeladen · ▼ zum Ändern oder Verzögerung anpassen</string>
+    <string name="legenda_auto_opcao">Untertitel automatisch herunterladen</string>
+    <string name="legenda_auto_ligada">Fehlende Untertitel werden heruntergeladen</string>
+    <string name="legenda_auto_desligada">Automatische Untertitel ausgeschaltet</string>
+    <string name="legenda_trad_rotulo">Automatische Übersetzung</string>
+    <string name="legenda_trad_traduzindo">Keine Untertitel in deiner Sprache: die englischen werden auf dem Fernseher übersetzt …</string>
+    <string name="legenda_trad_parcial">Untertitel auf dem Fernseher übersetzt (automatische Übersetzung). Der Rest wird weiter übersetzt.</string>
+    <string name="legenda_trad_pronta">Übersetzung der Untertitel abgeschlossen</string>
+    <string name="legenda_trad_opcao">Fehlende Untertitel auf dem Fernseher übersetzen</string>
+    <string name="legenda_trad_ligada">Fehlende Untertitel werden auf dem Fernseher übersetzt</string>
+    <string name="legenda_trad_desligada">Untertitel werden nicht mehr übersetzt</string>
+    <string name="series_sinopse_mais">Vollständiger Inhalt</string>
+    <string name="series_sinopse_menos">Kürzerer Inhalt</string>
+    <string name="series_continuar_curto">▶  %1$s fortsetzen</string>
+    <string name="series_episodios">Folgen</string>
+    <string name="series_trocar_temporada">Staffel wechseln</string>
+    <string name="fechar">Schließen</string>
+</resources>

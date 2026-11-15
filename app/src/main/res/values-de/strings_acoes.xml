@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_acoes.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acao_recado">Die Nachricht „%1$s“ anzeigen</string>
+    <string name="acao_timer">Timer für %1$d Minuten</string>
+    <string name="acao_timer_nome">Timer für %1$d Minuten („%2$s“)</string>
+    <string name="acao_desligar_em">Fernseher in %1$d Min. ausschalten</string>
+    <string name="acao_desligar_cancelar">Ausschalt-Timer abbrechen</string>
+    <string name="acao_filtro_ligar">Nachtfilter einschalten</string>
+    <string name="acao_filtro_desligar">Nachtfilter ausschalten</string>
+    <string name="acao_filtro_sem_servico">der Nachtfilter braucht den Bedienungshilfedienst</string>
+    <string name="acao_rodar_cena">Die Szene „%1$s“ ausführen</string>
+    <string name="acao_cena_nao_existe">die Szene „%1$s“ existiert nicht</string>
+    <string name="acao_cena_em_cena">eine Szene kann keine andere Szene ausführen</string>
+    <string name="acao_mural_compras">„%1$s“ zur Einkaufsliste hinzufügen</string>
+    <string name="acao_mural_recado">„%1$s“ an die Familienpinnwand heften</string>
+    <string name="acao_tocar_titulo">„%1$s“ suchen und abspielen</string>
+    <string name="acao_tocar">%1$s abspielen</string>
+    <string name="acao_continuar">Fortsetzen, was lief</string>
+    <string name="acao_proximo">Nächste Folge abspielen</string>
+    <string name="acao_proximo_de">Nächste Folge von %1$s</string>
+    <string name="acao_o_que_via">Anzeigen, was lief</string>
+    <string name="acao_vendo">Zuletzt gesehen: %1$s</string>
+    <string name="acao_vendo_nada">In Filme und Serien wurde noch nichts gesehen.</string>
+    <string name="rot_cena_uma">Eine Szene ausführen</string>
+    <string name="rot_cena">Szene ausführen: %1$s</string>
+    <string name="rot_cena_linha">Szene: %1$s</string>
+    <string name="rot_cena_sem">Erstelle zuerst eine Szene (Web-Panel › Extras › Szenen)</string>
+    <string name="al_cena">Szene beim Stoppen: %1$s</string>
+    <string name="lbl_cenas">Szenen</string>
+    <string name="pr_cenas">Szenen</string>
+    <string name="cenas_titulo">Szenen</string>
+    <string name="cenas_det">OK führt die Szene aus. Erstellen und bearbeiten im Web-Panel › Extras › Szenen.</string>
+    <string name="cenas_vazio">Noch keine Szenen. Erstelle eine im Web-Panel › Extras › Szenen.</string>
+    <string name="tec_titulo">Tasten der Fernbedienung</string>
+    <string name="tec_det">Netflix und YouTube funktionieren auf jedem Bildschirm; Farbtasten und Zahlen nur auf dem Startbildschirm.</string>
+    <string name="tec_nova">+ Eine Taste einrichten</string>
+    <string name="tec_nova_det">Drücke dann die Taste auf der Fernbedienung</string>
+    <string name="tec_aperte">Drücke die Taste</string>
+    <string name="tec_aperte_det">Netflix, YouTube, eine Farbtaste oder eine Zahl. ZURÜCK bricht ab.</string>
+    <string name="tec_nao_pode">%1$s kann nicht geändert werden (wird zur Bedienung des Fernsehers gebraucht). Versuche eine andere Taste.</string>
+    <string name="tec_so_home">Funktioniert nur auf dem Startbildschirm (in Apps und im Player behält sie ihre eigene Funktion).</string>
+    <string name="tec_toda_tela">Funktioniert auf jedem Bildschirm.</string>
+    <string name="tec_toque">Drücken</string>
+    <string name="tec_segurar">Halten</string>
+    <string name="tec_duplo">Doppelt drücken</string>
+    <string name="tec_padrao">Standard (gespeicherte App; 3 s halten = auswählen)</string>
+    <string name="tec_cena">Szene %1$s</string>
+    <string name="tec_salvo">%1$s gespeichert</string>
+    <string name="tec_apagar">Diese Taste zurücksetzen</string>
+    <string name="tec_vermelha">Rot</string>
+    <string name="tec_verde">Grün</string>
+    <string name="tec_amarela">Gelb</string>
+    <string name="tec_azul">Blau</string>
+    <string name="aut_titulo">Automationen</string>
+    <string name="aut_det">Alles, was der Fernseher von selbst macht: zu einer Uhrzeit, per Taste, wenn etwas passiert und per Link.</string>
+    <string name="aut_cfg_det">Uhrzeiten, Fernbedienungstasten, Ereignisse und Szenen-Links</string>
+    <string name="aut_horario">Wenn es Zeit ist</string>
+    <string name="aut_botao">Wenn eine Taste gedrückt wird</string>
+    <string name="aut_evento">Wenn etwas passiert (führt eine Szene aus)</string>
+    <string name="aut_link">Per Link</string>
+    <string name="aut_link_det">Erstellen und bearbeiten im Web-Panel › Extras › Szenen</string>
+    <string name="ev_midia_tocou">Film oder Video gestartet</string>
+    <string name="ev_midia_pausou">Film oder Video pausiert oder beendet</string>
+    <string name="ev_tv_ligou">Der Fernseher wurde eingeschaltet</string>
+    <string name="ev_todos_sairam">Alle sind weg (Anwesenheit)</string>
+    <string name="ev_chuva">Regen im Anmarsch</string>
+    <plurals name="cenas_acoes">
+        <item quantity="one">%d Aktion</item>
+        <item quantity="other">%d Aktionen</item>
+    </plurals>
+    <plurals name="aut_links">
+        <item quantity="one">%d Szene mit Link</item>
+        <item quantity="other">%d Szenen mit Link</item>
+    </plurals>
+</resources>

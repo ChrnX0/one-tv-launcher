@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_ideias_51a76.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l51_ensaio_ok">Wiederherstellungstest bestanden</string>
+    <string name="l51_ensaio_falhou">die gespeicherte Kopie ließe sich nicht wiederherstellen (%1$s)</string>
+    <string name="l51_wifi_titulo">Gäste-WLAN</string>
+    <string name="l51_wifi_nao">nicht festgelegt: einmal eingeben und Gäste scannen einen QR-Code</string>
+    <string name="l51_wifi_dica">Nutze das Gastnetz deines Routers: jeder im Raum kann das Passwort auf dem Bildschirm lesen.</string>
+    <string name="l51_wifi_rede">Netzwerkname</string>
+    <string name="l51_wifi_senha">Passwort</string>
+    <string name="l51_wifi_invalido">Name bis 32 Zeichen; Passwort leer (offenes Netz) oder 8 bis 63 Zeichen.</string>
+    <string name="l51_wifi_qr_titulo">QR-Code des Gäste-WLANs zeigen</string>
+    <string name="l51_uso_titulo">Was genutzt wird</string>
+    <string name="l51_uso_det">Bildschirme und Optionen nach Nutzung, nur auf diesem Fernseher gezählt (nichts verlässt ihn)</string>
+    <string name="l51_uso_vazio">Noch nichts gezählt. Schau in ein paar Tagen wieder vorbei.</string>
+    <string name="l51_uso_tela">Bildschirm</string>
+    <string name="l51_uso_opcao">Option</string>
+    <string name="l51_uso_linha">%1$s (%2$s): %3$s, %4$s</string>
+    <string name="l51_uso_hoje">zuletzt heute</string>
+    <string name="l51_uso_ontem">zuletzt gestern</string>
+    <string name="l51_uso_dias">zuletzt vor %d Tagen</string>
+    <string name="l51_tela_Main">Startbildschirm</string>
+    <string name="l51_tela_Dream">Bildschirmschoner</string>
+    <string name="l51_tela_Filmes">Filme</string>
+    <string name="l51_tela_Series">Serien</string>
+    <string name="l51_tela_Jogos">Spiele</string>
+    <string name="l51_tela_Player">Live-TV und Videos</string>
+    <string name="l51_tela_PainelRapido">Schnellmenü</string>
+    <string name="l51_tela_Vod">Listenkatalog</string>
+    <string name="l51_tela_Previsao">Wettervorhersage</string>
+    <string name="l51_tela_Elenco">Besetzung</string>
+    <string name="l51_tela_ConfigLauncher">Einstellungen</string>
+    <string name="l51_tela_MidiaRede">Netzwerk</string>
+    <string name="l51_tela_Calendario">Kalender</string>
+    <string name="l51_tela_Gravacoes">Aufnahmen</string>
+    <string name="l51_tela_Busca">Suche</string>
+    <string name="l51_tela_Casa">Mein Zuhause</string>
+    <string name="l51_tela_AlarmeTocando">Wecker klingelt</string>
+    <string name="l51_tela_Radio">Radio</string>
+    <string name="l51_tela_Diagnostico">Diagnose</string>
+    <string name="l51_uso_zerar">Zurücksetzen</string>
+    <string name="l51_digitar_titulo">Auf dem Fernseher tippen</string>
+    <string name="l51_digitar_texto">In %1$s ist ein Textfeld offen. Tippe, um von hier aus zu schreiben.</string>
+    <string name="casa_temp_ajuste">%1$s · ◀ ▶</string>
+    <string name="casa_ambiente">Raum %1$s</string>
+    <string name="casa_movimento">Bewegung</string>
+    <string name="casa_sem_movimento">Keine Bewegung</string>
+    <string name="casa_molhado">Nass</string>
+    <string name="casa_seco">Trocken</string>
+    <string name="casa_fumaca">Rauch!</string>
+    <string name="casa_sem_fumaca">Kein Rauch</string>
+    <string name="casa_dica_temp">Temperatur</string>
+    <string name="casa_camera_abrindo">Kamera wird geöffnet …</string>
+    <string name="casa_camera_ver">Auf dem Fernseher zeigen</string>
+    <plurals name="l51_uso_vezes">
+        <item quantity="one">%d-mal</item>
+        <item quantity="other">%d-mal</item>
+    </plurals>
+</resources>
