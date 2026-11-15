@@ -234,7 +234,12 @@
     <string name="rt_reconectar_wifi">Reconnect the TV to Wi-Fi?</string>
     <string name="rt_reconectar_det">The router disconnects the TV for a few seconds and it comes back on its own, picking the best access point again. A playing video may pause.</string>
     <string name="ci_executar">Run</string>
-    <string name="ci_pedido_de">Request from the panel (%1$s)</string>
+    <string name="ci_pedido_de">Request from %1$s</string>
+    <string name="ci_origem_claude">Claude</string>
+    <string name="ci_origem_painel">the panel</string>
+    <string name="ci_origem_link">a scene link</string>
+    <string name="ci_origem_celular">the phone</string>
+    <string name="ci_origem_rotina">a routine</string>
     <string name="pp_canal">Requests to the TV</string>
     <string name="pp_titulo">Unanswered request (%1$s)</string>
     <string name="pp_aceitar">Accept this request?</string>
