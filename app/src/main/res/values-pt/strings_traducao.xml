@@ -234,7 +234,12 @@
     <string name="rt_reconectar_wifi">Reconectar a TV no Wi-Fi?</string>
     <string name="rt_reconectar_det">O roteador desconecta a TV por alguns segundos e ela volta sozinha, escolhendo de novo o melhor ponto de acesso. Um vídeo tocando pode pausar.</string>
     <string name="ci_executar">Executar</string>
-    <string name="ci_pedido_de">Pedido pelo painel (%1$s)</string>
+    <string name="ci_pedido_de">Pedido de %1$s</string>
+    <string name="ci_origem_claude">Claude</string>
+    <string name="ci_origem_painel">painel</string>
+    <string name="ci_origem_link">link de cena</string>
+    <string name="ci_origem_celular">celular</string>
+    <string name="ci_origem_rotina">rotina</string>
     <string name="pp_canal">Pedidos à TV</string>
     <string name="pp_titulo">Pedido sem resposta (%1$s)</string>
     <string name="pp_aceitar">Aceitar este pedido?</string>

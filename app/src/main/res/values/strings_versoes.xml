@@ -17,6 +17,8 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>The alarm pill on the home screen now updates right away when an alarm is created or deleted from the phone, the panel or Claude</item>
+        <item>The question on the TV now says where the request came from (Claude, the panel, a scene link) instead of “Request from the panel (mcp)”</item>
         <item>Wi-Fi that does not come back by itself: if the TV spends 5 min with Wi-Fi on but not connected, the launcher turns Wi-Fi off and on again; if that is not enough, it restarts the TV (at most once every 6 h and never while sound is playing). It is noted in the network history</item>
         <item>Sleep timer: with an LG NetCast TV paired for volume, the timer now also turns the LG off over the network 15 s after the Chromecast sleeps (the LG ignores the HDMI standby). Switch: EXTRAS lg_desligar</item>
         <item>Screensaver: a request from outside (phone, panel, Claude) that would open an app or a screen now always asks on the TV before closing the screensaver, even with “Allow” in Confirmations. The question waits 3 min; with no answer the request stays in the TV notifications, and tapping it asks whether you accept it</item>

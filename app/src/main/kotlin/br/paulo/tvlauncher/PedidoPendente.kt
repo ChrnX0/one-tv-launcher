@@ -45,7 +45,7 @@ object PedidoPendente {
             val b = if (Build.VERSION.SDK_INT >= 26) Notification.Builder(app, CANAL) else @Suppress("DEPRECATION") Notification.Builder(app)
             val texto = descricoes.joinToString(", ")
             val n = b.setSmallIcon(R.drawable.ic_onetv_frente)
-                .setContentTitle(app.getString(R.string.pp_titulo, p.origem))
+                .setContentTitle(app.getString(R.string.pp_titulo, ConfirmarIaActivity.nomeOrigem(app, p.origem)))
                 .setContentText(texto)
                 .setStyle(Notification.BigTextStyle().bigText("“${p.frase}”\n$texto"))
                 .setContentIntent(pi).setAutoCancel(true).setWhen(System.currentTimeMillis()).setShowWhen(true)

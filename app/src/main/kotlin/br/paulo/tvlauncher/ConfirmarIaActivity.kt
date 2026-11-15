@@ -23,7 +23,22 @@ import android.widget.TextView
  * pergunta "Aceitar este pedido?" com Não/Sim; o Sim roda pelo PedidoIa.aceitarDepois.
  */
 class ConfirmarIaActivity : Activity() {
-    companion object { const val EXTRA_ID = "pedido_ia" }
+    companion object {
+        const val EXTRA_ID = "pedido_ia"
+
+        /**
+         * De onde veio o pedido, em palavras da família ("Pedido de Claude", "Pedido de painel"). Antes o título dizia
+         * "Pedido pelo painel (mcp)" para qualquer origem (teste na Sala, 15/11/2026).
+         */
+        fun nomeOrigem(ctx: android.content.Context, origem: String): String = when (origem) {
+            "mcp", "claude" -> ctx.getString(R.string.ci_origem_claude)
+            "painel" -> ctx.getString(R.string.ci_origem_painel)
+            "link", "cena" -> ctx.getString(R.string.ci_origem_link)
+            "celular", "app" -> ctx.getString(R.string.ci_origem_celular)
+            "rotina" -> ctx.getString(R.string.ci_origem_rotina)
+            else -> origem
+        }
+    }
 
     private var id: String? = null
     private var respondido = false
@@ -61,7 +76,7 @@ class ConfirmarIaActivity : Activity() {
         val cancelar = botao(getString(R.string.comum_cancelar)) { responder(false) }
         val executar = botao(getString(R.string.ci_executar)) { responder(true) }
         // Diálogo único do sistema de design (Estilo.dialogo).
-        setContentView(Estilo.dialogo(this, getString(R.string.ci_pedido_de, p.origem), "“${p.frase}”",
+        setContentView(Estilo.dialogo(this, getString(R.string.ci_pedido_de, nomeOrigem(this, p.origem)), "“${p.frase}”",
             getString(R.string.ci_ia_quer) + "\n" + acoes.joinToString("\n") { "• ${it.descricao}" }, listOf(cancelar, executar)))
         cancelar.requestFocus()   // o padrão é o seguro
         // Fecha junto com o prazo do PedidoIa (que marca EXPIRADO): um OK atrasado não executa nada velho.
@@ -80,7 +95,7 @@ class ConfirmarIaActivity : Activity() {
         fun botao(t: String, aoClicar: () -> Unit) = Estilo.botao(this, t).apply { setOnClickListener { aoClicar() } }
         val nao = botao(getString(R.string.pp_nao)) { responder(false) }
         val sim = botao(getString(R.string.pp_sim)) { responder(true) }
-        setContentView(Estilo.dialogo(this, getString(R.string.ci_pedido_de, origem), getString(R.string.pp_aceitar),
+        setContentView(Estilo.dialogo(this, getString(R.string.ci_pedido_de, nomeOrigem(this, origem)), getString(R.string.pp_aceitar),
             "“$frase”\n" + descricoes.joinToString("\n") { "• $it" }, listOf(nao, sim)))
         nao.requestFocus()   // o padrão é o seguro
     }
