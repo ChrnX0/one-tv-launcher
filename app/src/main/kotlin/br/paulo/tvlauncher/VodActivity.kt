@@ -538,6 +538,8 @@ class VodActivity : Activity() {
                 EfeitosSom.atrasoMs(this@VodActivity), EfeitosSom.dialogoAlto(this@VodActivity))
             infoTec.text = InfoTecnica.linhas(e, rotulosInfo).joinToString("\n")
             infoTec.visibility = View.VISIBLE
+            // A segunda legenda (em cima) desce para não ficar embaixo do quadro (visto na Sala).
+            legenda2.translationY = (infoTec.height + dp(12)).toFloat()
             tela.postDelayed(this, 1_000)
         }
     }
@@ -552,7 +554,7 @@ class VodActivity : Activity() {
     private fun alternarInfo() {
         val ligou = EfeitosSom.alternar(this, InfoTecnica.PREF)
         tela.removeCallbacks(tiqueInfo)
-        if (ligou) tela.post(tiqueInfo) else infoTec.visibility = View.GONE
+        if (ligou) tela.post(tiqueInfo) else { infoTec.visibility = View.GONE; legenda2.translationY = 0f }
     }
 
     /** O vídeo e, se houver, a legenda baixada junto (o Media3 a trata como mais uma faixa de legenda). */

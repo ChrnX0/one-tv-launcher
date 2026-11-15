@@ -13,6 +13,7 @@ import androidx.media3.extractor.Extractor
 import androidx.media3.extractor.ExtractorInput
 import androidx.media3.extractor.ExtractorOutput
 import androidx.media3.extractor.ExtractorsFactory
+import androidx.media3.extractor.text.SubtitleParser
 import androidx.media3.extractor.PositionHolder
 import androidx.media3.extractor.SeekMap
 import androidx.media3.extractor.SeekPoint
@@ -66,6 +67,13 @@ object FfFormatos {
 /** Põe o [FfExtrator] junto dos leitores do Media3: na frente, mas ele só aceita os formatos de [FfFormatos.ACEITOS]. */
 @OptIn(UnstableApi::class)
 class FfExtratores(private val base: ExtractorsFactory, private val dados: DataSource.Factory) : ExtractorsFactory {
+    // Os ajustes passam para os leitores do Media3. Sem isto (visto na Sala, 15/11), o DefaultMediaSourceFactory
+    // entregava o leitor de legendas sem ASS a este embrulho, que o ignorava: o MKV lia a ASS como texto simples
+    // e o libass nunca a recebia.
+    override fun setSubtitleParserFactory(f: SubtitleParser.Factory): ExtractorsFactory { base.setSubtitleParserFactory(f); return this }
+    override fun experimentalSetTextTrackTranscodingEnabled(ligado: Boolean): ExtractorsFactory { base.experimentalSetTextTrackTranscodingEnabled(ligado); return this }
+    override fun experimentalSetCodecsToParseWithinGopSampleDependencies(c: Int): ExtractorsFactory { base.experimentalSetCodecsToParseWithinGopSampleDependencies(c); return this }
+    override fun setParseHagcMetadata(ligado: Boolean): ExtractorsFactory { base.setParseHagcMetadata(ligado); return this }
     override fun createExtractors(): Array<Extractor> = base.createExtractors()
     override fun createExtractors(uri: Uri, cabecalhos: Map<String, List<String>>): Array<Extractor> {
         val normais = base.createExtractors(uri, cabecalhos)
@@ -143,7 +151,10 @@ class FfExtrator(private val uri: Uri, private val dados: DataSource.Factory) : 
             if (tipo != 0 && tipo != 1) continue
             val f = Format.Builder().setId(i.toString()).setCodecs(codec)
                 .setLanguage(FfNativo.arquivoFaixaMeta(ctx, i, "language")).setLabel(FfNativo.arquivoFaixaMeta(ctx, i, "title"))
-            FfNativo.arquivoFaixaExtra(ctx, i)?.let { f.setInitializationData(listOf(it)) }
+            val extra = FfNativo.arquivoFaixaExtra(ctx, i)
+            // Áudio: o 2º bloco leva o tamanho do bloco e os bits do contêiner (FfCodecs.parametrosAudio).
+            if (tipo == 1) f.setInitializationData(listOf(extra ?: ByteArray(0), FfCodecs.empacotarAudio(info[9].toInt(), info[8].toInt())))
+            else extra?.let { f.setInitializationData(listOf(it)) }
             if (info[7] > 0) f.setAverageBitrate(info[7].toInt())
             val faixa = if (tipo == 0) {
                 f.setSampleMimeType(FfCodecs.MIME_VIDEO_FF).setWidth(info[1].toInt()).setHeight(info[2].toInt())
