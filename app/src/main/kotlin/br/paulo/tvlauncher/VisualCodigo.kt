@@ -27,6 +27,8 @@ object VisualCodigo {
         val pilhas: Boolean? = null,
         val brilho: Int? = null,
         val contraste: Int? = null,
+        val cartoes: Int? = null,        // 100 ou 115 (LayoutHome)
+        val transparente: Boolean? = null,
     )
 
     fun codificar(v: Visual): String {
@@ -34,6 +36,7 @@ object VisualCodigo {
         v.tema?.let { j.put("t", it) }; v.texto?.let { j.put("x", it) }; v.icones?.let { j.put("i", it) }
         v.corDoFundo?.let { j.put("c", it) }; v.pilhas?.let { j.put("p", it) }
         v.brilho?.let { j.put("b", it) }; v.contraste?.let { j.put("k", it) }
+        v.cartoes?.let { j.put("s", it) }; v.transparente?.let { j.put("v", it) }
         return PREFIXO + Base64.getUrlEncoder().withoutPadding().encodeToString(j.toString().toByteArray(Charsets.UTF_8))
     }
 
@@ -54,6 +57,8 @@ object VisualCodigo {
             pilhas = bool("p"),
             brilho = int("b") { it in -100..100 },
             contraste = int("k") { it in -100..100 },
+            cartoes = int("s") { it in setOf(100, 115) },
+            transparente = bool("v"),
         )
     }
 }

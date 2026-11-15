@@ -41,6 +41,12 @@
   "cortes": [],
   "sobrepostos": []
  },
+ "en\/home-grande": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
  "en\/jogos": {
   "menorSp": 11,
   "foco": true,
@@ -96,6 +102,12 @@
   "sobrepostos": []
  },
  "pt\/home": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
+ "pt\/home-grande": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],

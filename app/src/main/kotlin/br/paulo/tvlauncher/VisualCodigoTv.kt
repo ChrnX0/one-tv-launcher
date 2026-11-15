@@ -10,6 +10,7 @@ object VisualCodigoTv {
         tema = Tema.atual(ctx).name, texto = TamanhoTexto.atual(ctx), icones = PacoteIcones.escolhido(ctx),
         corDoFundo = Extras.ligado(ctx, Extras.Chave.COR_DO_FUNDO), pilhas = Organizacao.pilhasAutomaticas(ctx),
         brilho = FundoMeuDados.brilho(ctx), contraste = FundoMeuDados.contraste(ctx),
+        cartoes = LayoutHome.tamanho(ctx), transparente = LayoutHome.transparente(ctx),
     )
 
     fun codigo(ctx: Context) = VisualCodigo.codificar(atual(ctx))
@@ -35,6 +36,8 @@ object VisualCodigoTv {
         v.pilhas?.let { Organizacao.definirPilhasAutomaticas(ctx, it); feito += "pilhas=$it" }
         v.brilho?.let { FundoMeuDados.definirBrilho(ctx, it); feito += "brilho=$it" }
         v.contraste?.let { FundoMeuDados.definirContraste(ctx, it); feito += "contraste=$it" }
+        v.cartoes?.let { LayoutHome.definirTamanho(ctx, it); feito += "cartoes=$it" }
+        v.transparente?.let { Extras.definir(ctx, Extras.Chave.CARTOES_TRANSPARENTES, it); feito += "transparente=$it" }
         return feito
     }
 }

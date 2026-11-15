@@ -91,6 +91,7 @@ class MainActivity : Activity() {
     // O visual escolhido no menu do perfil (Tema.kt). Lido no onCreate; trocar de tema recria a tela.
     private var tema = Tema.ESCURO
     private var assinaturaFundo = ""   // "Meu fundo": arquivo|brilho|contraste quando a tela foi montada
+    private var assinaturaLayout = ""  // layout flexível (LayoutHome): tamanho|transparente quando a tela foi montada
     private val fonteLeve by lazy { Fontes.display(this, tema) }   // hora e temperatura
     private val fonteUi by lazy { Fontes.ui(this, tema) }
 
@@ -281,6 +282,7 @@ class MainActivity : Activity() {
         DesempenhoTv.criou()   // guarda de desempenho (12/11/2026): o 1º quadro depois disto dá o tempo de abertura
         tema = Tema.atual(this)
         assinaturaFundo = FundoMeuDados.assinatura(this)
+        assinaturaLayout = "${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}"
         setContentView(montarTela())
         window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, novo ->
             if (novo != null && novo !== bolinhaPerfil) voltarAoPerfil = false
@@ -311,6 +313,7 @@ class MainActivity : Activity() {
         // tem como chamar recreate() nesta Activity diretamente — então aqui a gente mesmo percebe a troca ao voltar.
         if (Tema.atual(this) != tema) { recreate(); return }
         if (tema == Tema.MEU && FundoMeuDados.assinatura(this) != assinaturaFundo) { recreate(); return }   // outro arquivo/brilho
+        if ("${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}" != assinaturaLayout) { recreate(); return }   // cartões mudaram
         // Modo simples (12/11/2026, ideia 10; desligado por padrão): a HOME vira a tela de cards grandes.
         if (ModoSimples.ligado(this)) {
             try { startActivity(Intent(this, ModoSimplesActivity::class.java)); return } catch (_: Exception) {}
@@ -727,13 +730,13 @@ class MainActivity : Activity() {
             clipChildren = false
         }
         rolagem.addView(linhaApps)
-        raiz.addView(rolagem, FrameLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(LINHA_APPS_HOME - folga) })
+        raiz.addView(rolagem, FrameLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(LINHA_APPS_HOME + descer - folga) })
         // Título "APPS" em cima da linha, como o "CONTINUAR" (esboço do dono, 06/11 noite).
         raiz.addView(texto(12f, textoSuave, fonteUi).apply {
             text = getString(R.string.home_linha_apps)
             letterSpacing = 0.1f
             if (tema != Tema.ESCURO) setShadowLayer(dp(6).toFloat(), 0f, 0f, 0x99000000.toInt())
-        }, FrameLayout.LayoutParams(WRAP, WRAP).apply { leftMargin = dp(Grade.MARGEM); topMargin = dp(LINHA_APPS_HOME - 32) })
+        }, FrameLayout.LayoutParams(WRAP, WRAP).apply { leftMargin = dp(Grade.MARGEM); topMargin = dp(LINHA_APPS_HOME + descer - 32) })
 
         // ---- Continuar (HOME recomendada): último canal e apps usados há pouco, em cards 16:9 com o banner do app. Fica
         // meio escondida na borda de baixo; com o foco nela (▼ num card solto), a tela inteira sobe para mostrá-la.
@@ -759,7 +762,7 @@ class MainActivity : Activity() {
         }
         // Altura fixa (passa da borda de baixo de propósito): com WRAP o FrameLayout cortava a linha no fim da tela, e ao
         // subir aparecia só o topo dos cards e uma faixa vazia embaixo (visto na Sala, 06/11).
-        raiz.addView(caixaContinuar, FrameLayout.LayoutParams(MATCH, dp(ALTURA_CONTINUAR)).apply {
+        raiz.addView(caixaContinuar, FrameLayout.LayoutParams(MATCH, dp(ALTURA_CONTINUAR + descer)).apply {
             leftMargin = dp(Grade.MARGEM)
             topMargin = dp(TOPO_CONTINUAR)
         })
@@ -950,8 +953,6 @@ class MainActivity : Activity() {
         // cards TV, Séries e Filmes), apps em retângulos 16:9 embaixo, em 404 (até ~467; sobram ~70 dp).
         const val TOPO_CONTINUAR = 290
         const val LINHA_APPS_HOME = 429     // o título "APPS" fica 32 dp acima; com 10 dp a menos ele encostava no foco
-        const val RET_L = 112               // retângulo de um app na linha de baixo (16:9, a arte de banner do app)
-        const val RET_A = 63
         val CORES_SERIES = intArrayOf(0xFF9B7BFF.toInt(), 0xFF4A2C9A.toInt())   // roxo
         val CORES_FILMES = intArrayOf(0xFF4C9BFF.toInt(), 0xFF1A3F8F.toInt())   // azul
         val CORES_REDE = intArrayOf(0xFF2FBF8F.toInt(), 0xFF0E5A45.toInt())     // verde
@@ -2241,10 +2242,19 @@ class MainActivity : Activity() {
         (grupo?.getChildAt(1) as? TextView)?.setTextColor(if (focado || movendo) Color.WHITE else textoSuave)
         // Só o disco cresce (o nome não: crescendo junto, ele encostava no nome do vizinho).
         val escala = if (movendo) 1.12f else if (focado) 1.08f else 1f
-        (grupo?.getChildAt(0) ?: card).animate().scaleX(escala).scaleY(escala).setDuration(120).start()
+        // Cartões transparentes (LayoutHome): fora do foco o fundo aparece pelo cartão; o focado fica inteiro.
+        val alfa = if (transparente && !focado && !movendo) LayoutHome.ALFA_TRANSPARENTE else 1f
+        (grupo?.getChildAt(0) ?: card).animate().scaleX(escala).scaleY(escala).alpha(alfa).setDuration(120).start()
     }
 
     private val ANEL = 6   // folga (dp) entre o disco e o anel de foco
+    // Retângulo de um app na linha de baixo (16:9, a arte de banner do app): 112x63 de fábrica; LayoutHome muda (15/11/2026).
+    private val tamanhoCartoes by lazy { LayoutHome.tamanho(this) }
+    private val RET_L by lazy { LayoutHome.largura(tamanhoCartoes) }
+    private val RET_A by lazy { LayoutHome.altura(tamanhoCartoes) }
+    /** A linha de apps desce o quanto o cartão cresceu (LayoutHome); 0 no tamanho de fábrica. */
+    private val descer by lazy { LayoutHome.acrescimo(tamanhoCartoes) }
+    private val transparente by lazy { LayoutHome.transparente(this) }
 
     /** Fio de 1 dp em volta do disco (não da moldura): ícones escuros (Netflix) não somem no fundo. */
     private fun fioFino() = android.graphics.drawable.InsetDrawable(contorno(0x33FFFFFF, Color.TRANSPARENT, 1), dp(ANEL))

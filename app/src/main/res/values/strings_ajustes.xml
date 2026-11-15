@@ -99,4 +99,8 @@
     <string name="vq_det">Show a QR code with this TV\'s look: theme, text size, icons.</string>
     <string name="vq_texto">Scan it with your phone to keep it or send it to someone with One TV.</string>
     <string name="vq_fechar">Close</string>
+    <string name="lh_titulo">App card size</string>
+    <string name="lh_det">Bigger cards are easier to see from the couch.</string>
+    <string name="lh_normal">Normal</string>
+    <string name="lh_grande">Large</string>
 </resources>

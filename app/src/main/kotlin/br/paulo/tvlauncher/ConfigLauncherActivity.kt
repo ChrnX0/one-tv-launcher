@@ -787,6 +787,13 @@ class ConfigLauncherActivity : Activity() {
             TamanhoTexto.definir(this, TamanhoTexto.proximo(TamanhoTexto.atual(this)))
             recreate()
         }, lp())
+        // Tamanho dos cartões (layout flexível, LayoutHome): a HOME se refaz ao voltar.
+        c.addView(linha(getString(R.string.lh_titulo), getString(R.string.lh_det),
+            valor = getString(if (LayoutHome.tamanho(this) == 100) R.string.lh_normal else R.string.lh_grande)) {
+            LayoutHome.definirTamanho(this, LayoutHome.proximo(LayoutHome.tamanho(this)))
+            reconstruirAoVoltar = true
+            recarregarAba()
+        }, lp())
         // Pacote de ícones (degrau 1, 15/11/2026): desligado de fábrica; cada OK passa ao próximo instalado e volta a "Nenhum".
         val pacotes = PacoteIcones.instalados(this)
         fun rotuloPacote() = PacoteIcones.escolhido(this).let { if (it.isEmpty()) getString(R.string.pi_nenhum) else PacoteIcones.nome(this, it) }

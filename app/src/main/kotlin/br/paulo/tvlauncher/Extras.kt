@@ -75,6 +75,8 @@ object Extras {
         // Degrau 1 contra o Projectivy (15/11/2026)
         /** Entradas HDMI/AV como cards na linha de apps (EntradasTv). Só aparecem em TV que tem entrada. */
         ENTRADAS_TV(true),
+        /** Cartões de app transparentes fora do foco (layout flexível, LayoutHome). Desligado de fábrica. */
+        CARTOES_TRANSPARENTES(false),
     }
 
     /**
