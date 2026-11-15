@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Protetor de tela: um pedido de fora (celular, painel, Claude) que abriria um app ou uma tela agora sempre pergunta na TV antes de tirar o protetor, mesmo com “Permitir” nas Confirmações</item>
         <item>Tela inicial: numa pilha de apps, ▲ agora sobe de fileira como em qualquer card; quem troca o app da frente é o ▼</item>
         <item>Protetor de tela: “Sua semana na TV” agora conta o tempo na TV ao vivo, nos filmes e nas rádios do próprio launcher (antes dizia “0 min de TV”)</item>
         <item>Uma tela pedida por cena, pelo painel ou pelo Claude com o protetor de tela aberto agora aparece na frente (antes abria escondida atrás dele)</item>
@@ -136,6 +137,7 @@
         <item>Protetor de tela com widgets novos, de letra maior: escolha Faixa de vidro (as próximas horas numa curva, com a hora do sol), Cartões (agora, horas, hoje e amanhã) ou Sem caixa (a temperatura grande e o tempo numa frase) em Configurações › Tela e energia › Widgets do protetor, ou no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Pedido de fora com o protetor aberto</item>
         <item>Rotinas no mesmo minuto</item>
         <item>Soneca do despertador</item>
         <item>Na rede: próximo episódio</item>
@@ -246,6 +248,7 @@
         <item>Em Configurações › Tela e energia, OK em Widgets do protetor até o estilo que quiser e espere o protetor aparecer</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Com o protetor aberto, peça pelo celular ou painel para abrir a Previsão: a TV perguntou antes (e só abriu depois do OK)?</item>
         <item>Crie duas rotinas para o mesmo minuto (ex.: ligar e abrir um app): as duas rodaram?</item>
         <item>Toque um despertador, aperte Soneca e depois desligue o alarme: a soneca sumiu e não tocou de novo?</item>
         <item>Num vídeo da rede, quando aparecer “próximo em 10 s”, aperte HOME: a contagem parou e nada abriu sozinho depois?</item>

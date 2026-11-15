@@ -353,6 +353,9 @@ class ProtetorTela : DreamService() {
          * Fecha o protetor se estiver aberto. Para quem abre uma tela de fora (cena, MCP, pedido): sem isso a tela abria
          * POR BAIXO do protetor e ninguém via (teste na TV, 15/11/2026: cena "abrir previsão" ficou atrás dele).
          */
+        /** O protetor está na tela agora? */
+        fun aberto(): Boolean = atual?.get() != null
+
         fun fecharSeAberto() {
             val p = atual?.get() ?: return
             android.os.Handler(android.os.Looper.getMainLooper()).post { try { p.fechar() } catch (_: Exception) {} }
