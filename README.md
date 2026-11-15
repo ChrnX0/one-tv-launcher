@@ -43,7 +43,7 @@ remote, not for a phone with a touchscreen.
 <p align="center">
   <img src="docs/screenshots/home-dark.jpg" alt="Home screen, Dark theme" width="100%"><br>
   <sub><b>Home, Dark theme.</b> Your apps first, a search and voice bar, the weather in one line, and the clock.
-  YouTube and YouTube Music share one card here: press ▲ to switch which one is in front.</sub>
+  YouTube and YouTube Music share one card here: press ▼ to switch which one is in front.</sub>
 </p>
 
 <p align="center">
@@ -106,7 +106,7 @@ better jobs:
 | **Netflix / YouTube buttons** | Remap them to **any app**: press to open it, **hold for 3 s** to pick a different app. Your choice is saved. |
 | **OK (hold) on an app** | Move it, stack it with another app, or hide it. |
 | **OK (hold 2 s) on a poster or channel** | Add it to or remove it from your list. |
-| **▲ ▼ on a stack** | Switch which app of the stack is in front. |
+| **▼ on a stack** | Switch which app of the stack is in front (▲ moves up a row, as on any card). |
 | **Microphone** | Still Google Assistant / Gemini. Voice shortcuts also work ("Hey Google, open *Boletim do Tempo*" reads the forecast aloud; others set a reminder or a sleep timer). |
 
 *Settings → System → Extras → Open the key tester* shows every key the TV receives, live, which helps when a remote behaves oddly.

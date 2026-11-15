@@ -18,7 +18,33 @@
     <string name="l51_uso_vazio">Nothing counted yet. Come back in a few days.</string>
     <string name="l51_uso_tela">screen</string>
     <string name="l51_uso_opcao">setting</string>
-    <string name="l51_uso_linha">%1$s (%2$s): %3$d times, last %4$d days ago</string>
+    <string name="l51_uso_linha">%1$s (%2$s): %3$s, %4$s</string>
+    <plurals name="l51_uso_vezes">
+        <item quantity="one">%d time</item>
+        <item quantity="other">%d times</item>
+    </plurals>
+    <string name="l51_uso_hoje">last today</string>
+    <string name="l51_uso_ontem">last yesterday</string>
+    <string name="l51_uso_dias">last %d days ago</string>
+    <string name="l51_tela_Main">Home screen</string>
+    <string name="l51_tela_Dream">Screensaver</string>
+    <string name="l51_tela_Filmes">Movies</string>
+    <string name="l51_tela_Series">Shows</string>
+    <string name="l51_tela_Jogos">Games</string>
+    <string name="l51_tela_Player">Live TV and videos</string>
+    <string name="l51_tela_PainelRapido">Quick panel</string>
+    <string name="l51_tela_Vod">Playlist catalog</string>
+    <string name="l51_tela_Previsao">Weather forecast</string>
+    <string name="l51_tela_Elenco">Cast</string>
+    <string name="l51_tela_ConfigLauncher">Settings</string>
+    <string name="l51_tela_MidiaRede">On the network</string>
+    <string name="l51_tela_Calendario">Calendar</string>
+    <string name="l51_tela_Gravacoes">Recordings</string>
+    <string name="l51_tela_Busca">Search</string>
+    <string name="l51_tela_Casa">My home</string>
+    <string name="l51_tela_AlarmeTocando">Alarm ringing</string>
+    <string name="l51_tela_Radio">Radio</string>
+    <string name="l51_tela_Diagnostico">Diagnostics</string>
     <string name="l51_uso_zerar">Reset</string>
     <!-- 57: phone keyboard called by the TV -->
     <string name="l51_digitar_titulo">Type on the TV</string>

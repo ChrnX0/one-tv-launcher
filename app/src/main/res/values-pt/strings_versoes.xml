@@ -14,7 +14,14 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Tela inicial: numa pilha de apps, ▲ agora sobe de fileira como em qualquer card; quem troca o app da frente é o ▼</item>
+        <item>Protetor de tela: “Sua semana na TV” agora conta o tempo na TV ao vivo, nos filmes e nas rádios do próprio launcher (antes dizia “0 min de TV”)</item>
+        <item>Uma tela pedida por cena, pelo painel ou pelo Claude com o protetor de tela aberto agora aparece na frente (antes abria escondida atrás dele)</item>
+        <item>Configurações › Sistema › O que é usado: nomes das telas como você conhece, “1 vez” e “hoje/ontem”</item>
         <item>Gravação: quando a lista derruba o canal, a TV insiste por até 2 minutos antes de desistir (antes desistia em 6 segundos)</item>
+        <item>Correções de estabilidade: a tela inicial não cai mais com um arquivo grande pela unidade de rede; o shell próprio não fica preso; a gravação não abre duas vezes; posições de filmes salvas sem perder</item>
+        <item>Rotinas: duas no mesmo minuto agora rodam juntas; despertador: a soneca some quando você desliga ou apaga o alarme</item>
+        <item>Na rede: o “próximo em 10 s” para quando você aperta HOME; painel web: o cartão Diário da TV voltou a abrir</item>
         <item>Ficha de filme e de série refeita para ler de longe: ações grandes à esquerda (Continuar, Trailer, Elenco, Coleção…), informações e pôster à direita; nada pula de lugar quando os dados chegam, e “Sinopse inteira” abre o texto todo</item>
         <item>Trailer: quando o servidor não tem, a ficha usa o trailer do TMDB (YouTube); o título dos episódios não repete mais o ano</item>
         <item>Gravação: com um pendrive que a TV não lê (NTFS, como o do instalador do Windows) ou cheio, a TV agora diz o motivo na hora, em vez de parecer que gravou; com 2 partes no pendrive, grava na que tem mais espaço</item>
@@ -129,6 +136,12 @@
         <item>Protetor de tela com widgets novos, de letra maior: escolha Faixa de vidro (as próximas horas numa curva, com a hora do sol), Cartões (agora, horas, hoje e amanhã) ou Sem caixa (a temperatura grande e o tempo numa frase) em Configurações › Tela e energia › Widgets do protetor, ou no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Rotinas no mesmo minuto</item>
+        <item>Soneca do despertador</item>
+        <item>Na rede: próximo episódio</item>
+        <item>Painel: Diário da TV</item>
+        <item>Protetor: Sua semana na TV</item>
+        <item>Pedido com o protetor aberto</item>
         <item>Filmes › abra um filme que já começou</item>
         <item>Séries › abra uma série › Episódios</item>
         <item>Legenda traduzida na TV</item>
@@ -233,6 +246,12 @@
         <item>Em Configurações › Tela e energia, OK em Widgets do protetor até o estilo que quiser e espere o protetor aparecer</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Crie duas rotinas para o mesmo minuto (ex.: ligar e abrir um app): as duas rodaram?</item>
+        <item>Toque um despertador, aperte Soneca e depois desligue o alarme: a soneca sumiu e não tocou de novo?</item>
+        <item>Num vídeo da rede, quando aparecer “próximo em 10 s”, aperte HOME: a contagem parou e nada abriu sozinho depois?</item>
+        <item>No painel web, abra o cartão Diário da TV: aparece o diário (e não o do DNS)?</item>
+        <item>No domingo à noite, o cartão “Sua semana na TV” mostra as horas de TV ao vivo e filmes (não “0 min”)?</item>
+        <item>Com o protetor aberto, peça pelo celular/painel para abrir a Previsão: ela aparece na frente?</item>
         <item>As ações grandes à esquerda dá para ler do sofá, e o foco fica parado enquanto a ficha carrega (sem pular entre Elenco e Coleção)?</item>
         <item>A lista de episódios apareceu à direita, o VOLTAR voltou às informações da série e o “Trocar temporada” funcionou?</item>
         <item>Abra um filme ou episódio sem legenda em português: em uns 20 s aparece a legenda marcada “Tradução automática”, e o filme continua sem travar?</item>

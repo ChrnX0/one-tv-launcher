@@ -49,6 +49,7 @@ class ProtetorTela : DreamService() {
     }
 
     override fun onAttachedToWindow() {
+        atual = java.lang.ref.WeakReference(this)
         super.onAttachedToWindow()
         isInteractive = true         // as teclas chegam ao dispatchKeyEvent; quem fecha é ele (ideia 28)
         isFullscreen = true
@@ -330,6 +331,7 @@ class ProtetorTela : DreamService() {
     private fun fechar() { if (android.os.Build.VERSION.SDK_INT >= 29) wakeUp() else finish() }
 
     override fun onDetachedFromWindow() {
+        if (atual?.get() === this) atual = null
         ui.removeCallbacks(deslocar)
         ui.removeCallbacks(atualizarDados)
         ui.removeCallbacks(trocarFoto)
@@ -343,8 +345,20 @@ class ProtetorTela : DreamService() {
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density + 0.5f).toInt()
 
-    private companion object {
-        val TECLAS_MUSICA = setOf(android.view.KeyEvent.KEYCODE_DPAD_CENTER, android.view.KeyEvent.KEYCODE_ENTER,
+    companion object {
+        /** O protetor que está na tela agora (só um por vez). Fraco: não segura o serviço depois de fechado. */
+        @Volatile private var atual: java.lang.ref.WeakReference<ProtetorTela>? = null
+
+        /**
+         * Fecha o protetor se estiver aberto. Para quem abre uma tela de fora (cena, MCP, pedido): sem isso a tela abria
+         * POR BAIXO do protetor e ninguém via (teste na TV, 15/11/2026: cena "abrir previsão" ficou atrás dele).
+         */
+        fun fecharSeAberto() {
+            val p = atual?.get() ?: return
+            android.os.Handler(android.os.Looper.getMainLooper()).post { try { p.fechar() } catch (_: Exception) {} }
+        }
+
+        private val TECLAS_MUSICA = setOf(android.view.KeyEvent.KEYCODE_DPAD_CENTER, android.view.KeyEvent.KEYCODE_ENTER,
             android.view.KeyEvent.KEYCODE_NUMPAD_ENTER, android.view.KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
             android.view.KeyEvent.KEYCODE_MEDIA_PLAY, android.view.KeyEvent.KEYCODE_MEDIA_PAUSE, android.view.KeyEvent.KEYCODE_HEADSETHOOK)
     }

@@ -225,6 +225,7 @@
         <item quantity="other">%d quedas</item>
     </plurals>
     <string name="rt_titulo">Sua semana na TV</string>
+    <string name="rt_player">TV e filmes</string>
     <string name="pi_bloqueado">Bloqueado nas Confirmações da TV.</string>
     <string name="pi_nao_entendi">Não entendi o pedido.</string>
     <string name="pi_pedido_voz">Pedido de voz</string>

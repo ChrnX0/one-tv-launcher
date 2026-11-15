@@ -2,6 +2,7 @@ package br.paulo.tvlauncher
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -16,7 +17,9 @@ import java.util.Calendar
  * gasta e quedas de rede. Vira um cartão no protetor (até segunda ao meio-dia) e fica no painel. Nada sai da TV.
  *
  * As fontes já existiam: uso de apps (UsageStatsManager, a mesma permissão do "uso recente"), consumo por app
- * (ConsumoRedeTv) e o histórico de rede (HistoricoRede). A HOME e o protetor do próprio launcher não contam como "TV".
+ * (ConsumoRedeTv) e o histórico de rede (HistoricoRede). A HOME e o protetor do próprio launcher não contam como "TV",
+ * mas o player dele (TV ao vivo, filmes, séries, rádio) conta: o uso por pacote mistura os dois, então o tempo do player sai
+ * dos eventos de tela (RESUMED/PAUSED por Activity). Antes ficava de fora e o cartão dizia "0 min de TV" (teste 15/11/2026).
  */
 object Retrospectiva {
     private const val TAG = "TvLauncher.Retro"
@@ -34,6 +37,28 @@ object Retrospectiva {
         cal.set(Calendar.HOUR_OF_DAY, HORA); cal.set(Calendar.MINUTE, 0); cal.set(Calendar.SECOND, 0); cal.set(Calendar.MILLISECOND, 0)
         while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY || cal.timeInMillis <= agora) cal.add(Calendar.DAY_OF_MONTH, 1)
         return cal.timeInMillis
+    }
+
+    /** Chave do tempo do próprio player no mapa de uso (não é pacote; [montar] dá o nome). */
+    const val CHAVE_PLAYER = "#player"
+    /** Telas do próprio launcher em que a pessoa está assistindo/ouvindo. */
+    val TELAS_PLAYER = setOf("br.paulo.tvlauncher.PlayerActivity", "br.paulo.tvlauncher.RadioActivity")
+
+    /** Um evento de tela do próprio app: [tipo] = UsageEvents.Event.ACTIVITY_RESUMED (1) ou ACTIVITY_PAUSED (2). */
+    data class EventoTela(val tipo: Int, val classe: String, val em: Long)
+
+    /** Regra pura: ms em que uma das [classes] ficou na frente entre [desde] e [ate]. Aberta no fim conta até [ate]. */
+    fun msNasTelas(eventos: List<EventoTela>, classes: Set<String>, desde: Long, ate: Long): Long {
+        var total = 0L; var inicio = -1L
+        for (e in eventos.sortedBy { it.em }) {
+            val nossa = e.classe in classes
+            if (e.tipo == 1 && nossa) { if (inicio < 0) inicio = e.em }
+            else if (inicio >= 0 && (e.tipo == 2 && nossa || e.tipo == 1)) {
+                total += (minOf(e.em, ate) - maxOf(inicio, desde)).coerceAtLeast(0); inicio = -1
+            }
+        }
+        if (inicio >= 0) total += (ate - maxOf(inicio, desde)).coerceAtLeast(0)
+        return total
     }
 
     /** Regra pura: junta o uso por app (ms) num resumo, sem o próprio launcher, com os 3 maiores. */
@@ -91,14 +116,29 @@ object Retrospectiva {
             app.getSystemService(UsageStatsManager::class.java).queryAndAggregateUsageStats(desde, ate)
                 .mapValues { it.value.totalTimeInForeground }
         } catch (e: Exception) { Log.w(TAG, "uso: $e"); emptyMap() }
+        val player = try { msNasTelas(eventosProprios(app, desde, ate), TELAS_PLAYER, desde, ate) }
+            catch (e: Exception) { Log.w(TAG, "player: $e"); 0L }
         val pm = app.packageManager
-        val nomes = { p: String -> try { pm.getApplicationLabel(pm.getApplicationInfo(p, 0)).toString() } catch (_: Exception) { p.substringAfterLast('.') } }
+        val nomes = { p: String -> if (p == CHAVE_PLAYER) app.getString(R.string.rt_player) else try { pm.getApplicationLabel(pm.getApplicationInfo(p, 0)).toString() } catch (_: Exception) { p.substringAfterLast('.') } }
         val bytes = ConsumoRedeTv.medir(app, 7).getOrNull()?.sumOf { it.bytes }
         val rede = runCatching { ResumoRede.resumir(HistoricoRede.amostras(app, 168), desde, ate) }.getOrNull()
-        val r = resumir(desde, ate, uso, nomes, app.packageName, bytes,
+        val r = resumir(desde, ate, uso + (CHAVE_PLAYER to player), nomes, app.packageName, bytes,
             rede?.quedas?.count { it.tipo == "internet" }, rede?.let { it.foraMs / 60_000 })
         prefs(app).edit().putString("ultima", paraJson(r).toString()).apply()
         return r
+    }
+
+    /** Eventos RESUMED/PAUSED das telas do próprio app (o sistema guarda alguns dias; o que faltar só deixa o total menor). */
+    private fun eventosProprios(app: Context, desde: Long, ate: Long): List<EventoTela> {
+        val ev = app.getSystemService(UsageStatsManager::class.java).queryEvents(desde, ate) ?: return emptyList()
+        val lista = ArrayList<EventoTela>(); val e = UsageEvents.Event()
+        while (ev.hasNextEvent()) {
+            ev.getNextEvent(e)
+            if (e.packageName != app.packageName) continue
+            val tipo = when (e.eventType) { UsageEvents.Event.ACTIVITY_RESUMED -> 1; UsageEvents.Event.ACTIVITY_PAUSED -> 2; else -> continue }
+            lista += EventoTela(tipo, e.className ?: "", e.timeStamp)
+        }
+        return lista
     }
 
     fun ultima(ctx: Context): Resumo? = deJson(prefs(ctx).getString("ultima", null))
@@ -108,6 +148,7 @@ object Retrospectiva {
         if (!Extras.ligado(ctx, Extras.Chave.RETROSPECTIVA)) return null
         val r = ultima(ctx) ?: return null
         if (agora - r.ate !in 0..VALIDADE_CARTAO_MS) return null
+        if (r.minutosTv < 1) return null   // sem uso medido (ou sem permissão): "0 min de TV" só confunde
         val (a, b) = linhas(r, Frases(deTv = { ctx.getString(R.string.rt_de_tv, it) }, internet = { ctx.getString(R.string.rt_internet, it) },
             semQueda = ctx.getString(R.string.rt_sem_queda), quedas = { ctx.resources.getQuantityString(R.plurals.rt_quedas, it, it) }))
         return Triple(ctx.getString(R.string.rt_titulo), a, b)

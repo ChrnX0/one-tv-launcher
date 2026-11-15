@@ -1943,64 +1943,21 @@ class MainActivity : Activity() {
         }
     }
 
-    // ---------------------------------------------------------------- ▲▼ numa pilha: trocar o app da frente
-
-    private var cimaAgendado: Runnable? = null   // o cronometro do "segurar ▲"; null = nenhum rodando
-    private var cimaSaiu = false   // true: este "segurar ▲" ja tirou o foco da pilha; o soltar nao troca o app
+    // ---------------------------------------------------------------- ▼ numa pilha: trocar o app da frente
 
     /**
-     * Num card de pilha:
-     *  - ▼ (toque) troca o app da frente para o proximo, na hora (só sem a linha Continuar; com ela, ▼ desce);
-     *  - ▲ (toque) troca para o anterior, ao SOLTAR a tecla;
-     *  - ▲ segurado por 2 s sai da pilha e vai para o topo da tela (clima, bolinha do perfil).
-     * Os dois dao a volta (depois do ultimo vem o primeiro). Segurar ▼ nao gira a pilha inteira.
-     * Em card solto nao faz nada: a tecla segue o caminho normal.
+     * Num card de pilha, ▼ troca o app da frente para o próximo (dá a volta; segurar ▼ não gira a pilha inteira).
+     * ▲ e o resto seguem o caminho normal do foco. Em card solto não faz nada.
      */
-    private var cimaApertadoEm: View? = null   // o card em que o ▲ foi apertado (o soltar só gira a pilha se for o mesmo)
-
     private fun trocarDaFrente(event: KeyEvent): Boolean {
-        val sobe = event.keyCode == KeyEvent.KEYCODE_DPAD_UP
-        if (!sobe && event.keyCode != KeyEvent.KEYCODE_DPAD_DOWN) return false
-        // Anota onde o ▲ foi apertado ANTES de ver se é pilha: assim um aperto em outro card nunca fica valendo para ela.
-        if (sobe && event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) cimaApertadoEm = currentFocus
-        // O "segurar ▲" já tirou o foco da pilha: as repetições da tecla ainda apertada não podem seguir subindo (da data
-        // pulava para a hora), e o soltar encerra o gesto (auditoria 10/11/2026, home-8).
-        if (sobe && cimaSaiu && event.repeatCount > 0 && event.action == KeyEvent.ACTION_DOWN) return true
-        if (sobe && cimaSaiu && event.action == KeyEvent.ACTION_UP) { cimaSaiu = false; cimaApertadoEm = null; return true }
+        // 15/11/2026 (teste de todas as funções): ▲ numa pilha trocava o app da frente em vez de subir de fileira; quem
+        // queria ir para TV/Filmes ficava preso, e duas sessões de teste caíram nisso (uma abriu a Netflix sem querer).
+        // Agora ▲ sobe como em qualquer card e só ▼ troca o app da frente: a fileira de apps é a última, ▼ não tinha uso.
+        if (event.keyCode != KeyEvent.KEYCODE_DPAD_DOWN) return false
         val atual = currentFocus ?: return false
         val token = atual.tag as? String ?: return false
         val pilha = lista.firstOrNull { it.token == token } as? Entrada.Pilha ?: return false
-        if (!sobe) {
-            // 06/11/2026: com a linha Continuar na tela, ▼ desce para ela, como em qualquer card (senão, a partir de uma
-            // pilha, o Continuar ficava inalcançável). Só ▲ troca o app da frente. Sem Continuar, ▼ gira como antes.
-            if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) girarPilha(pilha, +1)
-            return true
-        }
-        when (event.action) {
-            KeyEvent.ACTION_DOWN -> if (event.repeatCount == 0) {
-                cimaSaiu = false
-                cimaAgendado?.let { ui.removeCallbacks(it) }
-                // Um cronometro, em vez de contar as repeticoes da tecla segurada: a 1a repeticao so chega ~0,5 s depois do aperto
-                // e nem todo controle repete. Soltar antes do tempo cancela o cronometro e a tecla vira "trocar o app da frente".
-                cimaAgendado = Runnable {
-                    cimaAgendado = null
-                    if (currentFocus === atual) {
-                        cimaSaiu = true
-                        atual.focusSearch(View.FOCUS_UP)?.requestFocus()
-                    }
-                }.also { ui.postDelayed(it, Config.PILHA_SUBIR_MS) }
-            }
-            KeyEvent.ACTION_UP -> {
-                cimaAgendado?.let { ui.removeCallbacks(it) }
-                cimaAgendado = null
-                // ▲ apertado em OUTRO card (ex.: no Continuar, embaixo): o foco chegou na pilha com a tecla ainda apertada, e
-                // o soltar não pode girá-la (visto na Sala, 06/11: subindo do Continuar, a pilha Play Store trocava de app).
-                val daqui = cimaApertadoEm === atual
-                cimaApertadoEm = null
-                if (!daqui) return true
-                if (!cimaSaiu) girarPilha(pilha, -1)
-            }
-        }
+        if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) girarPilha(pilha, +1)
         return true
     }
 
