@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_filmes2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="filmes_filtro">필터</string>
+    <string name="filmes_filtro_titulo">영화 필터</string>
+    <string name="filmes_filtro_cabecalho">%1$s · 필터: %2$s</string>
+    <string name="filmes_filtro_genero">장르: %1$s</string>
+    <string name="filmes_filtro_epoca">시대: %1$s</string>
+    <string name="filmes_filtro_nota">최소 평점: %1$s</string>
+    <string name="filmes_filtro_nao_vistos">안 본 것만: %1$s</string>
+    <string name="filmes_filtro_limpar">필터 지우기</string>
+    <string name="filmes_filtro_qualquer">전체</string>
+    <string name="filmes_filtro_sim">예</string>
+    <string name="filmes_filtro_nao">아니요</string>
+    <string name="filmes_filtro_decada">%1$d년대</string>
+    <string name="filmes_filtro_nota_min">%1$d+</string>
+    <string name="filmes_filtro_nao_vistos_curto">안 본 것</string>
+    <string name="filmes_filtro_sem_genero">이 목록의 카테고리에는 장르 이름이 없습니다</string>
+    <string name="filmes_filtro_vazio">이 카테고리에 이 필터와 일치하는 영화가 없습니다</string>
+    <string name="filmes_sorteio">무작위로 고르기</string>
+    <string name="filmes_sorteio_vazio">여기에는 고를 영화가 없습니다</string>
+    <string name="filmes_colecao">이 영화의 컬렉션</string>
+    <string name="filmes_colecao_cat">컬렉션: %1$s</string>
+    <string name="genero_acao">액션</string>
+    <string name="genero_aventura">모험</string>
+    <string name="genero_comedia">코미디</string>
+    <string name="genero_drama">드라마</string>
+    <string name="genero_terror">공포</string>
+    <string name="genero_suspense">스릴러</string>
+    <string name="genero_romance">로맨스</string>
+    <string name="genero_ficcao">SF</string>
+    <string name="genero_fantasia">판타지</string>
+    <string name="genero_animacao">애니메이션</string>
+    <string name="genero_infantil">어린이 및 가족</string>
+    <string name="genero_documentario">다큐멘터리</string>
+    <string name="genero_crime">범죄</string>
+    <string name="genero_guerra">전쟁</string>
+    <string name="genero_faroeste">서부</string>
+    <string name="genero_musical">뮤지컬</string>
+</resources>

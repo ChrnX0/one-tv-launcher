@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_perfis.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="perfil_aviso_titulo">프로필: %1$s</string>
+    <string name="perfil_aviso_texto">이 프로필의 즐겨찾기, 이어서 보기, 앱 순서</string>
+    <string name="perfil_aviso_crianca">어린이 프로필: 어린이 모드와 취침 시간 켜짐</string>
+    <string name="perfil_crianca">어린이 프로필</string>
+    <string name="perfil_crianca_linha">어린이 프로필 · %1$s: %2$s</string>
+    <string name="perfil_crianca_nao">꺼짐</string>
+    <string name="perfil_crianca_sem_pin">먼저 웹 패널 PIN을 설정하세요: 어린이 프로필을 보호하는 부모 PIN입니다</string>
+    <string name="perfil_pin_sair">어린이 프로필에서 나가려면 부모 PIN 필요</string>
+    <string name="perfil_pin_marcar">어린이 프로필을 변경하려면 부모 PIN 필요</string>
+</resources>

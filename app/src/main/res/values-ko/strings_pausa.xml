@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_pausa.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pausa_pausar">실시간 TV 일시정지</string>
+    <string name="pausa_continuar">계속</string>
+    <string name="pausa_ao_vivo">실시간으로 돌아가기</string>
+    <string name="pausa_selo">⏸ 일시정지됨 · OK로 계속</string>
+    <string name="pausa_atrasado_min">%1$d분 늦음 · ▶ 실시간</string>
+    <string name="pausa_atrasado_seg">%1$d초 늦음 · ▶ 실시간</string>
+    <string name="pausa_voltou">메모리 한도보다 오래 일시정지됨: 실시간으로 돌아감</string>
+</resources>

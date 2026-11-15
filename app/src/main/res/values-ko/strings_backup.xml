@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_backup.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="bkn_titulo">자동 백업</string>
+    <string name="bkn_explica">매일 밤 TV가 대기 중일 때 내 비밀번호로 잠긴 전체 백업을 저장합니다. 최근 7개가 보관됩니다. 비밀번호를 적어 두세요: 없으면 백업을 열 수 없습니다.</string>
+    <string name="bkn_ligado">켜짐</string>
+    <string name="bkn_desligado">꺼짐</string>
+    <string name="bkn_sem_senha">꺼짐 · 먼저 백업 비밀번호를 설정하세요</string>
+    <string name="bkn_senha">백업 비밀번호</string>
+    <string name="bkn_senha_ok">설정됨 · OK로 변경</string>
+    <string name="bkn_senha_falta">설정 안 됨 · OK로 설정</string>
+    <string name="bkn_senha_nova">백업 비밀번호(8자 이상)</string>
+    <string name="bkn_senha_repetir">비밀번호를 다시 입력하세요</string>
+    <string name="bkn_senha_curta">비밀번호는 8~128자여야 합니다.</string>
+    <string name="bkn_senha_diferente">두 비밀번호가 일치하지 않습니다.</string>
+    <string name="bkn_senha_gravada">비밀번호가 저장되었습니다. 안전한 곳에 보관하세요.</string>
+    <string name="bkn_senha_erro">비밀번호를 저장할 수 없습니다.</string>
+    <string name="bkn_horario">시간</string>
+    <string name="bkn_extra">추가 사본</string>
+    <string name="bkn_destino_tv">TV에만</string>
+    <string name="bkn_destino_pendrive">USB 드라이브</string>
+    <string name="bkn_destino_nas">NAS(%1$s)</string>
+    <string name="bkn_agora">지금 백업</string>
+    <string name="bkn_ultimo">마지막</string>
+    <string name="bkn_nunca">없음</string>
+    <string name="bkn_pin">백업 변경 시 PIN</string>
+</resources>

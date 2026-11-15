@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_protetor_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pt_dica_dispensar">OK로 닫기 · ◀ ▶ 이동</string>
+    <string name="pt_dica_pausar">OK로 일시정지 또는 재개 · ◀ ▶ 이동</string>
+    <string name="pt_dica_andar">◀ ▶ 이동 · 다른 키로 닫기</string>
+    <string name="rede_fotos_usar">화면 보호기에 이 사진 사용</string>
+    <string name="rede_fotos_parar">화면 보호기에서 이 사진 사용 중지</string>
+    <string name="rede_fotos_usando">사진을 복사하는 중입니다. 다음에 화면 보호기가 시작될 때 표시됩니다.</string>
+    <string name="rede_fotos_paradas">화면 보호기가 더 이상 이 폴더를 사용하지 않습니다.</string>
+    <string name="rede_continuar">이어서 보기</string>
+    <string name="rede_recentes">최근 추가됨</string>
+    <string name="rede_buscar">검색</string>
+    <string name="rede_buscar_explica">이 서버의 영화, 시리즈, 에피소드, 음악.</string>
+    <string name="rede_buscar_campo">이름</string>
+    <string name="rede_buscar_curto">2글자 이상 입력하세요.</string>
+    <string name="rede_proximo_em">다음: %1$s, %2$d초 후 · OK로 지금 시작 · 다른 키로 취소</string>
+    <string name="rede_ainda_assistindo">아직 보고 계세요? OK로 %1$s 시작</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="other">사진 %1$d장 · TV에 복사됨, 컴퓨터가 꺼져 있어도 작동</item>
+    </plurals>
+</resources>

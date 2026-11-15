@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_familia.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="fam_pin">어린이 PIN</string>
+    <string name="fam_pin_det">아이들 앞에서 채널, 숨긴 카테고리, 취침 시간을 해제하는 두 번째 PIN. 패널 PIN은 어디서나 계속 작동합니다.</string>
+    <string name="fam_pin_ok">어린이 PIN 저장됨</string>
+    <string name="fam_pin_igual">어린이 PIN은 패널 PIN과 달라야 합니다</string>
+    <string name="fam_trocar">어린이 PIN 변경</string>
+    <string name="fam_apagar">어린이 PIN 삭제</string>
+    <string name="fam_apagado">어린이 PIN 삭제됨: 이제 패널 PIN으로만 해제됩니다</string>
+    <string name="extras_TEMPO_TELA">하루 화면 시간(다 쓰면 허용된 앱만 열림)</string>
+    <string name="tela_titulo">화면 시간</string>
+    <string name="tela_acabou">오늘의 화면 시간이 끝났습니다. 내일 만나요!</string>
+    <string name="tela_5min">오늘 화면 시간이 5분 남았습니다</string>
+    <string name="tela_pin">화면 시간 변경 시 PIN</string>
+    <string name="tela_cota_linha">하루 화면 시간: %1$s(오늘 남은 시간: %2$s)</string>
+    <string name="tela_mais">오늘 %1$d분 더 주기</string>
+    <string name="tela_mais_ok">오늘 %1$d분 추가</string>
+    <string name="tela_h">시간</string>
+    <string name="tela_min">분</string>
+    <string name="extras_AGENDA_TODAS">TV의 모든 Google 계정 캘린더 함께 보기</string>
+    <string name="cal_todas_contas">TV의 모든 계정(%1$d)</string>
+    <string name="tm_tempo_esgotado">시간이 다 됐습니다</string>
+    <string name="painel_desligado_pin">웹 패널 꺼짐: PIN을 너무 많이 틀림</string>
+    <string name="tm_crono">스톱워치</string>
+    <string name="tm_crono_iniciar">스톱워치 시작</string>
+    <string name="tm_crono_parar">스톱워치 정지</string>
+    <string name="tm_crono_comecou">스톱워치 시작됨: 홈 화면에 표시됩니다</string>
+    <string name="tm_crono_marcou">스톱워치가 %1$s에 정지됨</string>
+    <string name="som_canal">마지막 실시간 TV 채널</string>
+</resources>

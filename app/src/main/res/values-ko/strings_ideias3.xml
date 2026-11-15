@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_ideias3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="extras_SONO_SUAVE">부드러운 종료(취침 타이머가 화면을 어둡게 하고 볼륨을 낮춤)</string>
+    <string name="extras_MURAL">화면 보호기의 가족 게시판</string>
+    <string name="extras_PRESENCA">모두 외출하면 끄기(UniFi 라우터)</string>
+    <string name="extras_HOJE_NA_TV">검색 화면의 ‘오늘의 TV’</string>
+    <string name="extras_RETROSPECTIVA">주간 요약(일요일 밤)</string>
+    <string name="extras_MODO_SIMPLES">간편 모드(큰 카드, 이름 읽어 주기)</string>
+</resources>

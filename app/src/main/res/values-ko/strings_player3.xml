@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_player3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="abertura_marcar_inicio">여기를 오프닝 시작으로 표시(%1$s)</string>
+    <string name="abertura_marcar_fim">여기를 오프닝 끝으로 표시(%1$s)</string>
+    <string name="abertura_apagar">오프닝 표시 삭제</string>
+    <string name="abertura_inicio_marcado">오프닝 시작을 %1$s에 표시했습니다. 이제 ▼ 메뉴에서 끝을 표시하세요</string>
+    <string name="abertura_salva">오프닝 저장됨: %1$s~%2$s. 다음 에피소드부터 건너뛰기를 제안합니다</string>
+    <string name="abertura_falta_inicio">먼저 오프닝 시작을 표시하세요</string>
+    <string name="abertura_invalida">오프닝 같지 않습니다: 길이는 10초~5분이어야 하고 처음 15분 안에 시작해야 합니다</string>
+    <string name="abertura_apagada">오프닝 표시가 삭제됨</string>
+    <string name="abertura_pular">오프닝 건너뛰기 · OK</string>
+</resources>

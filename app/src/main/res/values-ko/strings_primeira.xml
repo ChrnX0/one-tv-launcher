@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_primeira.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pc_titulo">휴대폰으로 설정</string>
+    <string name="pc_linha_det">추천. 휴대폰 카메라로 코드를 스캔하세요: PIN, 언어, 실시간 TV, 도시, 영화 서비스를 5단계로.</string>
+    <string name="pc_instrucoes">휴대폰 카메라로 옆의 코드를 스캔하세요. 휴대폰에서 5단계 설정이 열립니다.\n\n휴대폰은 집 Wi-Fi에 연결되어 있어야 합니다. 휴대폰에서 PIN을 만들 때까지 이 화면을 열어 두세요(%1$s 남음).</string>
+    <string name="pc_entrou">휴대폰에서 계속하세요.</string>
+    <string name="pc_venceu">코드가 만료되었습니다.\n‘%1$s’을(를) 눌러 새 코드를 표시하세요.</string>
+    <string name="pc_sem_rede">TV가 네트워크에 연결되어 있지 않습니다.\n집 Wi-Fi에 연결한 후 다시 시도하세요.</string>
+</resources>

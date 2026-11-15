@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_drive.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="drv_titulo">Google Drive 계정</string>
+    <string name="drv_destino">Google Drive</string>
+    <string name="drv_conta">Google Drive 계정</string>
+    <string name="drv_nao_conectada">연결 안 됨</string>
+    <string name="drv_passos">1. 휴대폰에서 %1$s을(를) 여세요(또는 카메라로 오른쪽 코드를 스캔).\n2. 이 TV에 있는 Google 계정으로 로그인하고 다음을 입력하세요:\n\n%2$s\n\n3. Google Drive 액세스를 허용하세요. TV는 자신이 만든 파일(OneTV-backup 폴더)만 볼 수 있으며, Drive의 나머지는 절대 볼 수 없습니다.\n\n이 화면은 자동으로 진행됩니다.</string>
+    <string name="drv_ok">완료: %1$s이(가) 연결되었습니다. 매일 밤 백업이 그곳에도 저장되도록 추가 사본 줄에서 ‘Google Drive’를 선택하세요.</string>
+    <string name="drv_sem_google">이 TV에는 아직 Google 로그인이 설정되어 있지 않습니다.\n\n웹 패널 › Claude 탭에서 설정하고(자체 OAuth 클라이언트, ‘TV 및 입력 제한 기기’ 유형), 같은 Google Cloud 프로젝트에서 Google Drive API를 켠 뒤 여기로 돌아오세요.</string>
+    <string name="drv_desconectar_pergunta">%1$s 연결을 해제할까요? Google Drive에 이미 있는 사본은 그대로 남고, TV는 새 사본을 보내지 않습니다.</string>
+    <string name="drv_desconectar">연결 해제</string>
+    <string name="drv_restaurar">Google Drive에서 복원</string>
+    <string name="drv_precisa_conta">먼저 Google Drive 계정을 연결하세요(위 줄).</string>
+    <string name="drv_falhou">실패: %1$s</string>
+    <string name="drv_nenhuma">Google Drive의 OneTV-backup 폴더에 아직 사본이 없습니다.</string>
+    <string name="drv_escolha">어떤 사본?</string>
+    <string name="drv_senha">백업 비밀번호</string>
+    <string name="drv_senha_errada">백업 비밀번호가 틀렸습니다(또는 파일이 변경됨). 아무것도 복원되지 않았습니다.</string>
+    <string name="drv_restaurado">복원되었습니다. 잠시 후 런처가 다시 시작됩니다.</string>
+</resources>
