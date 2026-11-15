@@ -225,6 +225,7 @@
         <item quantity="other">%d outages</item>
     </plurals>
     <string name="rt_titulo">Your week on TV</string>
+    <string name="rt_player">TV and movies</string>
     <string name="pi_bloqueado">Blocked in the TV\'s Confirmations.</string>
     <string name="pi_nao_entendi">I didn\'t understand the request.</string>
     <string name="pi_pedido_voz">Voice request</string>

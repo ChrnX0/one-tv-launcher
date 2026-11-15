@@ -283,4 +283,25 @@ class IdeiasDozeTest {
         assertFalse(Extras.precisaPinNaTv(Extras.Chave.MODO_SIMPLES, ligadoAgora = false, temPin = true))
         assertTrue(Extras.precisaPinNaTv(Extras.Chave.MODO_SIMPLES, ligadoAgora = true, temPin = true))
     }
+
+    @Test fun retrospectivaContaOPlayerDoProprioLauncher() {
+        val P = "br.paulo.tvlauncher.PlayerActivity"; val H = "br.paulo.tvlauncher.MainActivity"
+        val m = 60_000L
+        val ev = listOf(
+            Retrospectiva.EventoTela(1, H, 0), Retrospectiva.EventoTela(2, H, 1 * m),
+            Retrospectiva.EventoTela(1, P, 1 * m), Retrospectiva.EventoTela(2, P, 61 * m),   // 60 min de TV ao vivo
+            Retrospectiva.EventoTela(1, H, 61 * m), Retrospectiva.EventoTela(2, H, 70 * m),  // HOME não conta
+            Retrospectiva.EventoTela(1, P, 100 * m))                                           // ainda assistindo no fim
+        assertEquals(60 * m + 20 * m, Retrospectiva.msNasTelas(ev, Retrospectiva.TELAS_PLAYER, 0, 120 * m))
+        // corta no começo da semana
+        assertEquals(30 * m + 20 * m, Retrospectiva.msNasTelas(ev, Retrospectiva.TELAS_PLAYER, 31 * m, 120 * m))
+        // pausa perdida: a próxima tela que abre fecha o trecho
+        val semPausa = listOf(Retrospectiva.EventoTela(1, P, 0), Retrospectiva.EventoTela(1, H, 10 * m))
+        assertEquals(10 * m, Retrospectiva.msNasTelas(semPausa, Retrospectiva.TELAS_PLAYER, 0, 120 * m))
+        // no resumo entra com nome próprio e o pacote do launcher continua fora
+        val r = Retrospectiva.resumir(0, 1, mapOf("eu" to 90 * m, Retrospectiva.CHAVE_PLAYER to 80 * m), { if (it == "#player") "TV e filmes" else it },
+            "eu", null, null, null)
+        assertEquals(80L, r.minutosTv)
+        assertEquals("TV e filmes", r.apps.single().nome)
+    }
 }
