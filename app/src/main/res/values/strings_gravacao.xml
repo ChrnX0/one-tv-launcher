@@ -43,6 +43,7 @@
     <string name="grv_lista_cheia">There are already 50 scheduled recordings.</string>
     <string name="grv_conflito_agenda">It overlaps \"%1$s\" on %2$s at %3$s. The list allows one recording at a time.</string>
     <string name="grv_onde">On %1$s · %2$s free, about %3$d h fit</string>
+    <string name="grv_onde_sem_livre">On %1$s (free space unknown)</string>
     <string name="grv_agora_titulo">Recording now: %1$s</string>
     <string name="grv_assistir">watch</string>
     <string name="grv_parar_pergunta">Stop recording %1$s?</string>

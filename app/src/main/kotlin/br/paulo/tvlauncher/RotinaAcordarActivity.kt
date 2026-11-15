@@ -13,8 +13,7 @@ class RotinaAcordarActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
-        setShowWhenLocked(true)
-        setTurnScreenOn(true)
+        AcenderTela.em(this)
         val pacote = intent.getStringExtra("pacote")
         val abrir = pacote?.let { packageManager.getLeanbackLaunchIntentForPackage(it) ?: packageManager.getLaunchIntentForPackage(it) }
             ?: Intent(this, MainActivity::class.java)

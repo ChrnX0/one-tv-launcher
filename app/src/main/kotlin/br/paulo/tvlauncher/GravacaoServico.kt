@@ -51,6 +51,13 @@ object Gravacoes {
     }
 
     @Volatile var atual: Sessao? = null; internal set
+    /**
+     * Entre o pedido e o [atual] existir (ler o cache de canais e abrir o destino leva segundos, numa thread de fundo):
+     * sem esta marca, um segundo ▶ Gravar ou o alarme de uma agendada nesse intervalo abria OUTRA gravação (duas
+     * conexões, o mesmo arquivo, e o fim da primeira soltava as travas da segunda).
+     */
+    internal val iniciando = java.util.concurrent.atomic.AtomicBoolean(false)
+    fun ocupado() = atual != null || iniciando.get()
     private val ouvintes = ArrayList<() -> Unit>()
     private val principal = Handler(Looper.getMainLooper())
 
@@ -141,7 +148,7 @@ object Gravacoes {
         if (lista != antes) salvar(app, lista)
         val am = app.getSystemService(AlarmManager::class.java) ?: return
         GravacaoRegras.gravandoAgora(lista, agora)?.let { a ->
-            if (atual == null) iniciar(app, Intent(app, GravacaoServico::class.java).setAction(GravacaoServico.ACAO_AGENDADA).putExtra("id", a.id))
+            if (!ocupado()) iniciar(app, Intent(app, GravacaoServico::class.java).setAction(GravacaoServico.ACAO_AGENDADA).putExtra("id", a.id))
         }
         val prox = GravacaoRegras.proximaAComecar(lista, agora)
         if (prox == null) { am.cancel(pendente(app)); return }
@@ -202,9 +209,9 @@ class GravacaoServico : Service() {
                 i.getStringExtra("programa").orEmpty(), i.getLongExtra("fim", 0L), null)
             ACAO_AGENDADA -> {
                 val a = Gravacoes.agendadas(this).firstOrNull { it.id == i.getStringExtra("id") }
-                if (a == null) { if (Gravacoes.atual == null) encerrar() } else comecar(a.canal, a.canalNome, a.programa, a.terminaEm, a.id)
+                if (a == null) { if (!Gravacoes.ocupado()) encerrar() } else comecar(a.canal, a.canalNome, a.programa, a.terminaEm, a.id)
             }
-            else -> if (Gravacoes.atual == null) encerrar()
+            else -> if (!Gravacoes.ocupado()) encerrar()
         }
         return START_NOT_STICKY
     }
@@ -218,8 +225,9 @@ class GravacaoServico : Service() {
             return
         }
         if (fim <= System.currentTimeMillis()) { encerrar(); return }
+        if (!Gravacoes.iniciando.compareAndSet(false, true)) { Log.w(TAG, "outra gravação está começando: ignorei $nome"); return }
         val app = applicationContext
-        Fundo.rodar("gravacao") {
+        Fundo.rodar("gravacao") { try {
             val canal = PlayerCarga.canaisDoCache(app).firstOrNull { it.id == canalId }
             val destino = runCatching { GravacaoDestino.abrir(app) }.getOrNull()
             if (canal == null || destino == null) {
@@ -228,11 +236,16 @@ class GravacaoServico : Service() {
                 Avisos.enviar(app, Avisos.Tipo.GRAVACAO, getString(R.string.grv_nao_gravou, nome), motivo)
                 agendadaId?.let { Gravacoes.concluir(app, it) }
                 runCatching { destino?.close() }
+                Gravacoes.iniciando.set(false)   // antes do encerrar(), que não fecha nada enquanto há gravação começando
                 Handler(Looper.getMainLooper()).post { encerrar() }
                 return@rodar
             }
             gravar(canal, nome, programa, fim, agendadaId, destino)
-        }
+        } catch (e: Exception) {
+            Log.w(TAG, "gravação de $nome falhou ao começar: ${e.javaClass.simpleName}")
+            Gravacoes.iniciando.set(false)
+            Handler(Looper.getMainLooper()).post { encerrar() }   // sem isso a notificação "preparando" ficava para sempre
+        } finally { Gravacoes.iniciando.set(false) } }
     }
 
     private fun gravar(c: Canal, nome: String, programa: String, fim: Long, agendadaId: String?, destino: GravacaoDestino.Destino) {
@@ -240,6 +253,7 @@ class GravacaoServico : Service() {
         val inicio = System.currentTimeMillis()
         val s = Gravacoes.Sessao(c.id, nome.ifEmpty { c.nome }, programa, inicio, fim, agendadaId, destino.nome)
         Gravacoes.atual = s
+        Gravacoes.iniciando.set(false)   // daqui em diante quem barra uma segunda gravação é o [atual]
         Gravacoes.escreverEstado(app, s)
         Gravacoes.avisarOuvintes()
         travar()
@@ -296,7 +310,7 @@ class GravacaoServico : Service() {
     }
 
     private fun encerrar() {
-        if (Gravacoes.atual != null) return
+        if (Gravacoes.ocupado()) return
         runCatching { trava?.release() }; runCatching { wifi?.release() }
         trava = null; wifi = null
         if (Build.VERSION.SDK_INT >= 24) stopForeground(STOP_FOREGROUND_REMOVE) else @Suppress("DEPRECATION") stopForeground(true)

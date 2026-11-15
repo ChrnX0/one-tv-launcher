@@ -20,6 +20,8 @@
     <string name="tela_min">min</string>
     <string name="extras_AGENDA_TODAS">Calendar of all the TV\'s Google accounts together</string>
     <string name="cal_todas_contas">All accounts on the TV (%1$d)</string>
+    <string name="tm_tempo_esgotado">Time is up</string>
+    <string name="painel_desligado_pin">Web panel turned off: wrong PIN too many times</string>
     <string name="tm_crono">Stopwatch</string>
     <string name="tm_crono_iniciar">Start stopwatch</string>
     <string name="tm_crono_parar">Stop stopwatch</string>

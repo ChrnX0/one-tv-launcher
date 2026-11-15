@@ -47,6 +47,8 @@ class UpnpTest {
         val e = Upnp.lerDidl(texto)
         assertEquals(2, e.size)
         assertTrue(e[0].pasta); assertEquals("Filmes", e[0].titulo); assertEquals("2$1", e[0].id)
+        // A paginação avança pelos 3 devolvidos, não pelos 2 que sobraram do filtro (15/11/2026).
+        assertEquals(3, Upnp.devolvidos(soap))
         assertEquals("Férias & praia", e[1].titulo)
         assertEquals(Upnp.Tipo.VIDEO, e[1].tipo)
         assertEquals("http://192.168.1.20:8200/MediaItems/1.mp4", e[1].url)

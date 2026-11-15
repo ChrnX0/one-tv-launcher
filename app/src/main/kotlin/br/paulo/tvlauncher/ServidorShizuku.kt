@@ -20,6 +20,16 @@ object ServidorShizuku {
 
     private const val LOG_MAX = 256 * 1024   // 256 KB: passou disso, o atual vira .1 e começa outro
 
+    /**
+     * O comando como vai para o log: o texto de `input text` (digitar_texto do MCP, teclado do painel) pode ser uma
+     * senha, e o log vai para o logcat e para shell_proprio.log, que fica numa pasta que o painel e a unidade de rede
+     * mostram. Fica só o tamanho; o resto do comando (útil para diagnóstico) vai inteiro, até 200 caracteres.
+     */
+    internal fun resumo(cmd: String): String {
+        val m = Regex("""^(.*?\binput(?:\s+\S+)?\s+text)\s+(.*)$""", RegexOption.DOT_MATCHES_ALL).find(cmd)
+        return if (m != null) "${m.groupValues[1]} (${m.groupValues[2].length} caracteres)" else cmd.take(200)
+    }
+
     @Synchronized
     fun anotar(ctx: Context, linha: String) {
         Log.i(TAG, linha)
@@ -134,10 +144,13 @@ object ServidorShizuku {
         val acabou = AtomicBoolean(false)
         val estourou = AtomicBoolean(false)   // o vigia fechou por tempo: a saída lida é só um pedaço
         val abrindo = AtomicBoolean(false)    // true só durante o openStream (ver o vigia)
+        // A conexão de baixo, pega ANTES do openStream: o openStream segura a trava do gerenciador (mLock) durante toda a
+        // espera do OKAY, e m.disconnect()/m.isConnected precisam dessa trava (li no bytecode da libadb 3.1.1).
+        val conexaoRef = AtomicReference<io.github.muntashirakon.adb.AdbConnection?>(null)
         val vigia = thread(name = "Shizuku-vigia") {
             try { Thread.sleep(limiteMs) } catch (_: InterruptedException) { return@thread }
             if (acabou.compareAndSet(false, true)) {   // CAS: se o comando terminou junto, não marca saída inteira como cortada
-                anotar(ctx, "sem resposta em ${limiteMs / 1000} s para: $cmd")
+                anotar(ctx, "sem resposta em ${limiteMs / 1000} s para: ${resumo(cmd)}")
                 estourou.set(true)
                 val f = fluxoRef.get()
                 // Sem fluxo ainda = preso no openStream: o open() da libadb espera o OKAY do adbd num wait() SEM prazo e
@@ -149,7 +162,9 @@ object ServidorShizuku {
                 // o open() não tem outro jeito de acordar, e um openStream sem OKAY por [limiteMs] quer dizer que a
                 // conexão está quebrada para todos (inclusive para um comando longo da lenta). A próxima chamada reconecta.
                 if (f != null) try { f.close() } catch (_: Exception) {}
-                else if (abrindo.get()) try { m.disconnect() } catch (_: Exception) {}
+                // AdbConnection.close() não usa a trava do gerenciador: fecha o socket, e isso acorda o open() com erro.
+                // (m.disconnect() aqui ficaria esperando a mesma trava que o open() preso segura: travava as duas threads.)
+                else if (abrindo.get()) try { conexaoRef.get()?.close() } catch (_: Exception) {}
             }
         }
         return try {
@@ -157,6 +172,7 @@ object ServidorShizuku {
             // O prazo venceu enquanto conectava: quem pediu já desistiu, então o comando não roda mais.
             if (estourou.get()) return null
             val inicio = android.os.SystemClock.elapsedRealtime()
+            conexaoRef.set(m.adbConnection)
             abrindo.set(true)
             val fluxo = try { m.openStream("shell:${ComandoAscii.preparar(cmd)}") /* acento quebra a libadb: ver ComandoAscii */ } finally { abrindo.set(false) }
             fluxoRef.set(fluxo)
@@ -165,10 +181,10 @@ object ServidorShizuku {
             val lido = lerAteOFim(ctx, fluxo)
             acabou.compareAndSet(false, true)   // terminou antes do vigia: a saída é inteira
             try { fluxo.close() } catch (_: Exception) {}
-            Log.i(TAG, "comando '$cmd' em ${android.os.SystemClock.elapsedRealtime() - inicio} ms (sem o autoConnect)")
+            Log.i(TAG, "comando '${resumo(cmd)}' em ${android.os.SystemClock.elapsedRealtime() - inicio} ms (sem o autoConnect)")
             resultado(lido, estourou.get(), limiteMs)
         } catch (e: Throwable) {
-            anotar(ctx, "falhou '$cmd': ${e.javaClass.simpleName}: ${e.message}")
+            anotar(ctx, "falhou '${resumo(cmd)}': ${e.javaClass.simpleName}: ${e.message}")
             // Com duas pistas (10/11/2026) a conexão é compartilhada: derrubar por causa de um comando que falhou mataria
             // o comando que a outra pista estiver rodando. Então só derruba (limpeza) se a conexão já caiu de fato; uma
             // conexão travada é tratada pelo vigia acima (openStream sem resposta). A próxima chamada reconecta.

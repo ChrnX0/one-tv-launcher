@@ -195,7 +195,13 @@ object Radios {
         return try {
             c.connectTimeout = 8000; c.readTimeout = 10000
             c.setRequestProperty("User-Agent", "onetv-launcher/1 (+https://github.com/ChrnX0/one-tv-launcher)")
-            if (c.responseCode == 200) c.inputStream.bufferedReader().use { it.readText().take(2_000_000) } else null
+            if (c.responseCode != 200) null else c.inputStream.use { e ->
+                // Lê no máximo 2 MB: um link que é o próprio áudio (não a lista .m3u/.pls) nunca acaba, e o readText()
+                // inteiro antes do take() enchia a memória até o processo cair.
+                val saida = java.io.ByteArrayOutputStream(); val buf = ByteArray(16_384)
+                while (saida.size() < 2_000_000) { val n = e.read(buf, 0, minOf(buf.size, 2_000_000 - saida.size())); if (n < 0) break; saida.write(buf, 0, n) }
+                saida.toString("UTF-8")
+            }
         } finally { c.disconnect() }
     }
 }

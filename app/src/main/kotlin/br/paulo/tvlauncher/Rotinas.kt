@@ -67,9 +67,9 @@ object Rotinas {
         }
     }.toString()
 
-    private fun gravar(ctx: Context, lista: List<Rotina>) {
+    private fun gravar(ctx: Context, lista: List<Rotina>, reagendar: Boolean = true) {
         ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString("lista", paraJson(lista)).apply()
-        agendar(ctx)
+        if (reagendar) agendar(ctx)
     }
 
     fun salvar(ctx: Context, r: Rotina): Rotina {
@@ -96,9 +96,10 @@ object Rotinas {
         ctx, 3, Intent(ctx, RotinaReceiver::class.java).putExtra(EXTRA_ID, id),
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-    fun agendar(ctx: Context) {
+    /** [desde]: a conta começa aí (padrão: agora). O rodar passa a hora da rotina que acabou de rodar (ver lá). */
+    fun agendar(ctx: Context, desde: Long = System.currentTimeMillis()) {
         val am = ctx.getSystemService(AlarmManager::class.java) ?: return
-        val prox = proxima(ctx)
+        val prox = proxima(ctx, desde)
         if (prox == null) { am.cancel(pendente(ctx, 0)); return }
         try {
             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, prox.second, pendente(ctx, prox.first.id))
@@ -121,9 +122,33 @@ object Rotinas {
 
     /** Chamado pelo RotinaReceiver na hora marcada (e pelo adb, para testar). */
     fun rodar(ctx: Context, id: Int) {
-        val r = listar(ctx).firstOrNull { it.id == id }
+        val todas = listar(ctx)
+        val r = todas.firstOrNull { it.id == id }
         if (r == null) { agendar(ctx); return }
-        Log.i(TAG, "rodando rotina $id: ${r.acao}")
+        val agora = System.currentTimeMillis()
+        val previsto = horaPrevista(r, agora)
+        // Só há UM alarme no sistema (o da mais próxima). Duas rotinas no mesmo minuto: rodam juntas aqui; antes, a
+        // segunda era empurrada para o dia seguinte pelo agendar logo abaixo, e nunca rodava (revisão de 15/11/2026).
+        val juntas = listOf(r) + mesmoHorario(todas, r, previsto)
+        juntas.forEach { executar(ctx, it) }
+        // Uma vez só (sem dias marcados): desliga depois de rodar.
+        val umaVez = juntas.filter { it.dias == 0 }.map { it.id }.toSet()
+        if (umaVez.isNotEmpty()) gravar(ctx, listar(ctx).map { if (it.id in umaVez) it.copy(ativa = false) else it }, reagendar = false)
+        // A próxima conta a partir da hora desta (até 5 min atrás): uma rotina 1 min depois, com este alarme chegando
+        // atrasado, ainda roda (o alarme no passado dispara na hora) em vez de pular para amanhã.
+        agendar(ctx, maxOf(previsto, agora - 5 * 60_000L))
+    }
+
+    /** A hora em que [r] devia rodar agora (o alarme pode chegar segundos ou minutos atrasado); sem como saber, [agora]. */
+    fun horaPrevista(r: Rotina, agora: Long): Long =
+        proximaVez(r.copy(ativa = true), agora - 2 * 3600_000L)?.takeIf { it <= agora + 60_000L } ?: agora
+
+    /** As outras rotinas ligadas marcadas para o mesmo instante [previsto] (mesmo minuto e dia). */
+    fun mesmoHorario(todas: List<Rotina>, r: Rotina, previsto: Long): List<Rotina> =
+        todas.filter { it.id != r.id && proximaVez(it, previsto - 1) == previsto }
+
+    private fun executar(ctx: Context, r: Rotina) {
+        Log.i(TAG, "rodando rotina ${r.id}: ${r.acao}")
         when (r.acao) {
             // Tela já acesa e sem protetor = alguém pode estar vendo um filme: "ligar" não tem o que fazer, e abrir a
             // HOME por cima tiraria a pessoa do filme. Com o protetor de tela na frente, acorda normalmente.
@@ -135,8 +160,6 @@ object Rotinas {
             // Não acende a tela por conta própria: a cena decide (ex.: "Noite" só apaga a luz).
             Acao.CENA -> Log.i(TAG, Cenas.rodar(ctx, r.cena, "rotina"))
         }
-        // Uma vez só (sem dias marcados): desliga depois de rodar. Senão, só agenda a próxima.
-        if (r.dias == 0) gravar(ctx, listar(ctx).map { if (it.id == id) it.copy(ativa = false) else it }) else agendar(ctx)
     }
 
     /**

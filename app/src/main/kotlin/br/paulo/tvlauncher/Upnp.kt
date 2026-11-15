@@ -96,8 +96,11 @@ object Upnp {
             val (didl, total) = lerRespostaNavegar(resposta)
             val pagina = lerDidl(didl)
             todos += pagina
-            inicio += pagina.size
-            if (pagina.isEmpty() || inicio >= total) break
+            // Avança pelo que o servidor DEVOLVEU (NumberReturned), não pelo que sobrou do filtro: o lerDidl tira os
+            // arquivos sem endereço http, e avançar só por eles repetia itens (ou parava cedo numa página toda filtrada).
+            val avanco = devolvidos(resposta) ?: pagina.size
+            inicio += avanco
+            if (avanco <= 0 || inicio >= total) break
         }
         return todos
     }
@@ -109,6 +112,10 @@ object Upnp {
             "<ObjectID>${escapar(id)}</ObjectID><BrowseFlag>BrowseDirectChildren</BrowseFlag><Filter>*</Filter>" +
             "<StartingIndex>$inicio</StartingIndex><RequestedCount>$quantos</RequestedCount><SortCriteria></SortCriteria>" +
             "</u:Browse></s:Body></s:Envelope>"
+
+    /** Quantos filhos o servidor devolveu nesta página (NumberReturned), antes de qualquer filtro; null se não disse. */
+    fun devolvidos(xml: ByteArray): Int? =
+        runCatching { texto(documento(xml).documentElement, "NumberReturned")?.trim()?.toIntOrNull() }.getOrNull()
 
     /** O DIDL (que vem como texto dentro do SOAP) e o total de filhos que a pasta diz ter. */
     fun lerRespostaNavegar(xml: ByteArray): Pair<String, Int> {

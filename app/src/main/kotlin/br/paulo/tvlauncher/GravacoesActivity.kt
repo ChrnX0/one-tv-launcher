@@ -75,6 +75,8 @@ class GravacoesActivity : Activity() {
         val focoAntes = coluna.focusedChild?.tag
         coluna.removeAllViews()
         subtitulo.text = if (destino == null) (GravacaoDestino.problemaPendrive(this) ?: getString(R.string.grv_sem_destino))
+            // Long.MAX_VALUE = a pasta da rede não disse o espaço (o gravador segue gravando); não mostrar "9223372036 GB".
+            else if (livre < 0 || livre == Long.MAX_VALUE) getString(R.string.grv_onde_sem_livre, destino)
             else getString(R.string.grv_onde, destino, gb(livre), GravacaoRegras.horasQueCabem(livre))
         Gravacoes.atual?.let { g ->
             linha("agora", "● " + getString(R.string.grv_agora_titulo, g.canalNome),

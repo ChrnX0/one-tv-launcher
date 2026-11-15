@@ -85,6 +85,8 @@ class RadioActivity : Activity() {
     override fun onStop() {
         super.onStop()
         parar()   // saiu da tela (HOME, outro app, tela apagou): o rádio para, como o vídeo do player
+        // Redesenha já: na volta, a linha "● Tocando / Pausar" de uma rádio que parou não pode continuar na lista.
+        if (!isFinishing) montar()
     }
 
     override fun onDestroy() { ui.removeCallbacksAndMessages(null); parar(); super.onDestroy() }

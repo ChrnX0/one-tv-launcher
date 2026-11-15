@@ -602,7 +602,7 @@ const NOMES_ORIGEM = { painel: 'painel', claude: 'Claude', adb: 'adb', tv: 'TV' 
 
 $('btnDiario').addEventListener('click', async () => {
   try {
-    const d = await chamar('GET', '/api/extras/diario');
+    const d = await chamar('GET', '/api/extras/diario-tv');
     $('campoWebhook').value = d.webhook || '';
     for (const c of $('origensWebhook').querySelectorAll('input')) c.checked = d.origens.includes(c.value);
     if (d.webhook && d.ultimo) mostrar($('statusWebhook'), 'Última chamada do link: ' + d.ultimo);

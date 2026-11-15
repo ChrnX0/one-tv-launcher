@@ -254,7 +254,7 @@ class LembreteActivity : Activity() {
     override fun onCreate(estado: Bundle?) {
         super.onCreate(estado)
         if (VigiaAtualizacao.fechada(this)) return
-        if (intent.getBooleanExtra("acordar", false)) { setShowWhenLocked(true); setTurnScreenOn(true) }
+        if (intent.getBooleanExtra("acordar", false)) AcenderTela.em(this)
         val canal = intent.getStringExtra("canal").orEmpty()
         val titulo = intent.getStringExtra("titulo").orEmpty()
         val nome = intent.getStringExtra("nome").orEmpty()

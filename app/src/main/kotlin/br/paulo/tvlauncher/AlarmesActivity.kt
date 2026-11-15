@@ -34,6 +34,14 @@ class AlarmesActivity : Activity() {
     private val fonteMedia = Fontes.manrope(600)
     private lateinit var conteudo: FrameLayout
     private var editando = false
+    /** A prévia do som do Ouvir (editor). Para no Voltar, ao sair da tela e 4 s depois de começar. */
+    private var previa: android.media.MediaPlayer? = null
+    private val ui = android.os.Handler(android.os.Looper.getMainLooper())
+    private val fimPrevia = Runnable { pararPrevia() }
+    private fun pararPrevia() { ui.removeCallbacks(fimPrevia); previa?.release(); previa = null }
+
+    override fun onStop() { super.onStop(); pararPrevia() }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -198,8 +206,6 @@ class AlarmesActivity : Activity() {
         var bomDia = a?.bomDia ?: true
         var cena = a?.cena ?: ""
         val cenas = Cenas.lista(this).map { it.nome }
-        var previa: android.media.MediaPlayer? = null
-        fun pararPrevia() { previa?.release(); previa = null }
 
         val coluna = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -289,7 +295,8 @@ class AlarmesActivity : Activity() {
         val btOuvir = botao(getString(R.string.al_ouvir)) {
             pararPrevia()
             previa = SomAlarme.criar(this, som)?.also { it.start() }
-            btSom.postDelayed({ pararPrevia() }, 4000)
+            // Um só "parar daqui a 4 s" por vez: o de um Ouvir anterior cortaria a prévia nova no meio.
+            ui.postDelayed(fimPrevia, 4000)
         }
         // "Bom dia" falado ao parar o alarme (ver Despertador.Alarme.bomDia).
         lateinit var btBomDia: TextView
@@ -330,7 +337,7 @@ class AlarmesActivity : Activity() {
     private fun botaoLp() = LinearLayout.LayoutParams(dp(Grade.largura(2)), ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginEnd = dp(Grade.VAO) }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && editando) { mostrarLista(); return true }   // Voltar no editor = cancelar
+        if (keyCode == KeyEvent.KEYCODE_BACK && editando) { pararPrevia(); mostrarLista(); return true }   // Voltar no editor = cancelar
         return super.onKeyDown(keyCode, event)
     }
 

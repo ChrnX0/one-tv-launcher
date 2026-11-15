@@ -711,8 +711,7 @@ class PlayerActivity : Activity() {
     private fun gravar(c: Canal, programa: String, fim: Long) {
         if (GravacaoDestino.descricao(this) == null) {
             // Diz o motivo de verdade: pendrive em NTFS ou cheio, em vez de só "sem lugar" (15/11/2026)
-            mostrarAviso(GravacaoDestino.problemaPendrive(this) ?: getString(R.string.grv_sem_destino))
-            tela.postDelayed({ esconderAviso() }, 10_000); return
+            mostrarAvisoBreve(GravacaoDestino.problemaPendrive(this) ?: getString(R.string.grv_sem_destino), 10_000); return
         }
         pausa.descartar()
         player?.stop()   // solta a conexão: daqui em diante quem baixa o canal é o gravador, e o player lê dele
@@ -970,9 +969,12 @@ class PlayerActivity : Activity() {
 
     // ---------------------------------------------------------------- avisos
 
-    private fun mostrarAviso(t: String) { aviso.text = t; aviso.visibility = View.VISIBLE }
-    private fun esconderAviso() { tela.removeCallbacks(avisoCarregando); aviso.visibility = View.GONE }
-    private fun mostrarAvisoBreve(t: String) { mostrarAviso(t); tela.postDelayed({ esconderAviso() }, 2_500) }
+    // Um só "esconder depois" por vez: o de um aviso breve anterior (ex.: "favorito") apagava um aviso novo e importante
+    // ("canal bloqueado", "sem sinal") antes da hora. Cada aviso novo cancela o esconder pendente.
+    private val esconderAvisoDepois = Runnable { esconderAviso() }
+    private fun mostrarAviso(t: String) { tela.removeCallbacks(esconderAvisoDepois); aviso.text = t; aviso.visibility = View.VISIBLE }
+    private fun esconderAviso() { tela.removeCallbacks(avisoCarregando); tela.removeCallbacks(esconderAvisoDepois); aviso.visibility = View.GONE }
+    private fun mostrarAvisoBreve(t: String, ms: Long = 2_500) { mostrarAviso(t); tela.postDelayed(esconderAvisoDepois, ms) }
 
     // ---------------------------------------------------------------- aparência
 

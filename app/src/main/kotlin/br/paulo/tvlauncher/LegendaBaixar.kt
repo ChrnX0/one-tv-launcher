@@ -15,6 +15,10 @@ import java.net.URL
  * mesmo filme não gasta outro download do limite diário.
  */
 object LegendaBaixar {
+    /** Falha com frase para a tela (no idioma da TV, ou o motivo que o OpenSubtitles mandou). As outras (rede, etc.)
+     *  viram a frase genérica legenda_erro: "Unable to resolve host…" não é para quem está no sofá. */
+    class Falha(mensagem: String) : Exception(mensagem)
+
     private const val CONTA = "legendas_conta.json"
     private const val MAX_GUARDADAS = 60
 
@@ -97,21 +101,21 @@ object LegendaBaixar {
 
     /** [idioma]: o da TV (ideia 25); a ideia 90 pede a inglesa para traduzir. */
     fun buscar(ctx: Context, b: LegendaExterna.Busca, idioma: String = IdiomaPlayer.idiomaDaTv()): Result<List<LegendaExterna.Candidata>> = runCatching {
-        val conta = contaEmUso(ctx) ?: error(ctx.getString(R.string.legenda_sem_conta))
+        val conta = contaEmUso(ctx) ?: throw Falha(ctx.getString(R.string.legenda_sem_conta))
         val r = pedir(LegendaExterna.urlBusca(b, idioma), conta)
-        if (r.codigo !in 200..299) error(LegendaExterna.lerErro(r.corpo) ?: "erro ${r.codigo}")
+        if (r.codigo !in 200..299) throw Falha(LegendaExterna.lerErro(r.corpo) ?: ctx.getString(R.string.legenda_erro))
         LegendaExterna.lerBusca(r.corpo, idioma)
     }
 
     /** Baixa a escolhida e guarda como a legenda deste vídeo. Devolve o arquivo .srt. */
     fun baixar(ctx: Context, chaveVideo: String, c: LegendaExterna.Candidata): Result<File> = runCatching {
-        val conta = contaEmUso(ctx) ?: error(ctx.getString(R.string.legenda_sem_conta))
+        val conta = contaEmUso(ctx) ?: throw Falha(ctx.getString(R.string.legenda_sem_conta))
         entrar(conta)
         val r = pedir("${LegendaExterna.BASE}/download", conta, LegendaExterna.corpoDownload(c.arquivo), comToken = true)
         if (r.codigo == 401) token = null
         // Limite do dia (406 na doc; a mensagem fala em "allowed ... subtitles"): frase clara no idioma da TV.
-        if (LegendaExterna.acabouLimite(r.codigo, r.corpo)) error(ctx.getString(R.string.sv_limite_dia))
-        if (r.codigo !in 200..299) error(LegendaExterna.lerErro(r.corpo) ?: "erro ${r.codigo}")
+        if (LegendaExterna.acabouLimite(r.codigo, r.corpo)) throw Falha(ctx.getString(R.string.sv_limite_dia))
+        if (r.codigo !in 200..299) throw Falha(LegendaExterna.lerErro(r.corpo) ?: ctx.getString(R.string.legenda_erro))
         val link = LegendaExterna.lerDownload(r.corpo) ?: error("resposta sem link")
         val conexao = URL(link).openConnection() as HttpURLConnection
         val bytes = try {
@@ -121,7 +125,7 @@ object LegendaBaixar {
             conexao.inputStream.use { ler(it, LegendaExterna.MAX_SRT + 1) }
         } finally { conexao.disconnect() }
         val texto = LegendaExterna.decodificar(bytes)
-        if (!LegendaExterna.pareceSrt(texto)) error(ctx.getString(R.string.legenda_invalida))
+        if (!LegendaExterna.pareceSrt(texto)) throw Falha(ctx.getString(R.string.legenda_invalida))
         gravar(ctx, chaveVideo, texto, original = true)
     }
 
@@ -209,7 +213,7 @@ object LegendaBaixar {
         ctx.getSharedPreferences("player", Context.MODE_PRIVATE).edit().putLong("legauto:$chaveVideo", System.currentTimeMillis()).apply()
         val hash = url?.let { runCatching { hashDoVideo(it) }.getOrNull() }
         val lista = buscar(ctx, b.copy(hash = hash)).getOrThrow()
-        val c = LegendaExterna.escolherAuto(lista) ?: error(ctx.getString(R.string.legenda_nenhuma))
+        val c = LegendaExterna.escolherAuto(lista) ?: throw Falha(ctx.getString(R.string.legenda_nenhuma))
         baixar(ctx, chaveVideo, c).getOrThrow() to c.bateHash
     }
 }

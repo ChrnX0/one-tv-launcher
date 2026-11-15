@@ -268,6 +268,15 @@ class MtpIpTest {
         pc.fechar()
     }
 
+    /** Cabeçalho de dados/cancelar dizendo ~2 GB: recusa sem alocar (antes: OutOfMemoryError derrubava a HOME). */
+    @Test fun corpoGrandeDemaisERecusadoSemAlocar() {
+        val cab = PtpIp.lerCabecalho(Mtp.Escritor().u32(0x7FFFFFF0).u32(PtpIp.DADOS_COMECO).bytes().inputStream())
+        val erro = runCatching { PtpIp.lerCorpo(ByteArray(0).inputStream(), cab) }.exceptionOrNull()
+        assertTrue("esperava IOException, veio $erro", erro is java.io.IOException)
+        val pequeno = PtpIp.lerCabecalho(Mtp.Escritor().u32(8 + 3).u32(PtpIp.CANCELAR).bytes().inputStream())
+        assertArrayEquals(byteArrayOf(1, 2, 3), PtpIp.lerCorpo(byteArrayOf(1, 2, 3).inputStream(), pequeno))
+    }
+
     /** Fica no ar para clientes reais. Ver o comentário da classe. */
     @Test fun servirParaClientesReais() {
         Assume.assumeTrue(System.getenv("ONETV_MTP_SERVIR") != null)

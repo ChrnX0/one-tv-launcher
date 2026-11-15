@@ -58,8 +58,7 @@ class AlarmeTocandoActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Acende a tela mesmo com o Chromecast em standby e não deixa apagar enquanto toca.
-        setShowWhenLocked(true)
-        setTurnScreenOn(true)
+        AcenderTela.em(this)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         id = intent.getIntExtra(Despertador.EXTRA_ID, 0)
         timer = intent.getBooleanExtra(EXTRA_TIMER, false)
@@ -116,7 +115,7 @@ class AlarmeTocandoActivity : Activity() {
             gravity = Gravity.CENTER   // numa coluna vertical cada linha ocupa a largura toda: o texto precisa se centralizar
         }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(8) })
         coluna.addView(Estilo.texto(this, Estilo.Papel.TITULO,
-            if (timer) nomeTimer.ifBlank { "Tempo esgotado" } else alarme?.nome?.takeIf { it.isNotBlank() } ?: getString(R.string.al_titulo)).apply {
+            if (timer) nomeTimer.ifBlank { getString(R.string.tm_tempo_esgotado) } else alarme?.nome?.takeIf { it.isNotBlank() } ?: getString(R.string.al_titulo)).apply {
             setPadding(0, dp(8), 0, dp(40))
             gravity = Gravity.CENTER
         })

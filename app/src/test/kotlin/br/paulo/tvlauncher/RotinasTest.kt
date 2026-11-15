@@ -28,4 +28,18 @@ class RotinasTest {
         assertFalse(Rotinas.podeDesligar(60, 10, true))        // alguém mexeu há 10 min
         assertTrue(Rotinas.podeDesligar(60, 61, true))
     }
+
+    /** 15/11/2026: duas rotinas no mesmo minuto rodam juntas (antes a segunda pulava para o dia seguinte, todo dia). */
+    @Test fun rotinasNoMesmoMinutoRodamJuntas() {
+        val fuso = java.util.TimeZone.getDefault()
+        val c = java.util.Calendar.getInstance(fuso).apply { set(2026, 10, 16, 22, 0, 0); set(java.util.Calendar.MILLISECOND, 0) }
+        val previsto = c.timeInMillis
+        val todos = 0b1111111
+        val a = Rotinas.Rotina(1, 22, 0, todos, Rotinas.Acao.CENA, cena = "Noite")
+        val b = Rotinas.Rotina(2, 22, 0, todos, Rotinas.Acao.DESLIGAR)
+        val outra = Rotinas.Rotina(3, 22, 1, todos, Rotinas.Acao.DESLIGAR)
+        val desligada = Rotinas.Rotina(4, 22, 0, todos, Rotinas.Acao.LIGAR, ativa = false)
+        assertEquals(previsto, Rotinas.horaPrevista(a, previsto + 40_000))   // alarme chegou 40 s atrasado
+        assertEquals(listOf(b), Rotinas.mesmoHorario(listOf(a, b, outra, desligada), a, previsto))
+    }
 }
