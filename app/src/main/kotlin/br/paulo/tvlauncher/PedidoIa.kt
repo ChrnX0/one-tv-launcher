@@ -178,6 +178,7 @@ object PedidoIa {
                 // Confere de novo: o app pode ter sido desinstalado entre a pergunta e o OK.
                 val pm = app.packageManager
                 val i = pm.getLeanbackLaunchIntentForPackage(a.pacote) ?: pm.getLaunchIntentForPackage(a.pacote) ?: return "o app não abre mais"
+                ProtetorTela.fecharSeAberto()   // senão o app abre por baixo do protetor
                 app.startActivity(i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             }
             is ComandosIa.Acao.AbrirTela -> {
@@ -188,6 +189,7 @@ object PedidoIa {
                     "configuracoes" -> ConfigLauncherActivity::class.java
                     else -> MainActivity::class.java
                 }
+                ProtetorTela.fecharSeAberto()
                 app.startActivity(Intent(app, classe).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             }
             is ComandosIa.Acao.Despertador -> {
