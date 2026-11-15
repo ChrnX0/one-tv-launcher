@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (fr) de values/strings_rede_arquivos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_secao_na_tv">Branché sur la TV</string>
+    <string name="rede_sub_usb">Clé USB · vidéos, musique et photos</string>
+    <string name="rede_acao_arquivos">FTP, SFTP ou NFS</string>
+    <string name="rede_sub_arquivos">NAS, routeur avec disque, ordinateur Linux ou Mac</string>
+    <string name="rede_arq_explica">Commencez l’adresse par le protocole : sftp://nas/Films · ftp://192.168.0.10 · ftps://nas/Videos · nfs://nas/volume1/video. SFTP et FTPS sont chiffrés ; le FTP simple envoie le mot de passe en clair, à n’utiliser qu’à la maison. NFS n’a pas de mot de passe : le NAS doit autoriser l’IP de la TV et les connexions depuis des ports non privilégiés.</string>
+    <string name="rede_arq_endereco">Adresse (sftp://, ftp://, ftps:// ou nfs://)</string>
+    <string name="rede_arq_usuario">Utilisateur (NFS : numéro d’utilisateur, facultatif)</string>
+    <string name="rede_arq_endereco_erro">Commencez par sftp://, ftp://, ftps:// ou nfs://, suivi du serveur et du dossier. Utilisateur et mot de passe vont dans leurs propres champs.</string>
+    <string name="rede_erro_nfs_porta">Le serveur NFS a refusé la TV. Sur le NAS, autorisez les connexions depuis des ports non privilégiés (Linux : l’option « insecure » dans /etc/exports).</string>
+    <string name="rede_erro_nfs_ip">Le serveur NFS n’a pas autorisé cette TV. Sur le NAS, ajoutez l’IP de la TV (ou votre réseau domestique) à la règle NFS de ce dossier.</string>
+    <string name="rede_erro_chave_mudou">La clé de ce serveur a changé depuis son ajout. Si vous avez réinstallé le serveur, retirez-le ici et ajoutez-le à nouveau ; sinon, quelqu’un se fait peut-être passer pour lui.</string>
+    <string name="rede_erro_usb_acesso">La TV n’a pas donné au launcher l’accès à la clé USB. Réessayez dans un instant.</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (fr) de values/strings_ideias3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="extras_SONO_SUAVE">Extinction douce (le minuteur assombrit l’écran et baisse le volume)</string>
+    <string name="extras_MURAL">Tableau familial sur l’économiseur</string>
+    <string name="extras_PRESENCA">Éteindre quand tout le monde quitte la maison (routeur UniFi)</string>
+    <string name="extras_HOJE_NA_TV">« Aujourd’hui à la TV » sur l’écran de recherche</string>
+    <string name="extras_RETROSPECTIVA">Récap de la semaine (dimanche soir)</string>
+    <string name="extras_MODO_SIMPLES">Mode simple (grandes cartes, noms lus à voix haute)</string>
+</resources>

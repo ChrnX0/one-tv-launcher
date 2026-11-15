@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (fr) de values/strings_ideias_51a76.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l51_ensaio_ok">test de restauration réussi</string>
+    <string name="l51_ensaio_falhou">la copie enregistrée ne se restaurerait pas (%1$s)</string>
+    <string name="l51_wifi_titulo">Wi-Fi invités</string>
+    <string name="l51_wifi_nao">non défini : saisissez-le une fois et les invités scannent un QR</string>
+    <string name="l51_wifi_dica">Utilisez le réseau invités de votre routeur : n’importe qui dans la pièce peut lire le mot de passe à l’écran.</string>
+    <string name="l51_wifi_rede">Nom du réseau</string>
+    <string name="l51_wifi_senha">Mot de passe</string>
+    <string name="l51_wifi_invalido">Nom jusqu’à 32 caractères ; mot de passe vide (réseau ouvert) ou de 8 à 63 caractères.</string>
+    <string name="l51_wifi_qr_titulo">Afficher le QR du Wi-Fi invités</string>
+    <string name="l51_uso_titulo">Ce qui est utilisé</string>
+    <string name="l51_uso_det">Écrans et options par utilisation, comptés uniquement sur cette TV (rien n’en sort)</string>
+    <string name="l51_uso_vazio">Rien de compté pour l’instant. Revenez dans quelques jours.</string>
+    <string name="l51_uso_tela">écran</string>
+    <string name="l51_uso_opcao">option</string>
+    <string name="l51_uso_linha">%1$s (%2$s) : %3$s, %4$s</string>
+    <string name="l51_uso_hoje">dernière fois aujourd’hui</string>
+    <string name="l51_uso_ontem">dernière fois hier</string>
+    <string name="l51_uso_dias">dernière fois il y a %d jours</string>
+    <string name="l51_tela_Main">Écran d’accueil</string>
+    <string name="l51_tela_Dream">Économiseur d’écran</string>
+    <string name="l51_tela_Filmes">Films</string>
+    <string name="l51_tela_Series">Séries</string>
+    <string name="l51_tela_Jogos">Jeux</string>
+    <string name="l51_tela_Player">TV en direct et vidéos</string>
+    <string name="l51_tela_PainelRapido">Panneau rapide</string>
+    <string name="l51_tela_Vod">Catalogue de la liste</string>
+    <string name="l51_tela_Previsao">Prévisions météo</string>
+    <string name="l51_tela_Elenco">Distribution</string>
+    <string name="l51_tela_ConfigLauncher">Paramètres</string>
+    <string name="l51_tela_MidiaRede">Réseau</string>
+    <string name="l51_tela_Calendario">Agenda</string>
+    <string name="l51_tela_Gravacoes">Enregistrements</string>
+    <string name="l51_tela_Busca">Recherche</string>
+    <string name="l51_tela_Casa">Ma maison</string>
+    <string name="l51_tela_AlarmeTocando">Réveil qui sonne</string>
+    <string name="l51_tela_Radio">Radio</string>
+    <string name="l51_tela_Diagnostico">Diagnostic</string>
+    <string name="l51_uso_zerar">Réinitialiser</string>
+    <string name="l51_digitar_titulo">Écrire sur la TV</string>
+    <string name="l51_digitar_texto">Un champ de texte est ouvert dans %1$s. Touchez pour écrire d’ici.</string>
+    <string name="casa_temp_ajuste">%1$s · ◀ ▶</string>
+    <string name="casa_ambiente">pièce %1$s</string>
+    <string name="casa_movimento">Mouvement</string>
+    <string name="casa_sem_movimento">Pas de mouvement</string>
+    <string name="casa_molhado">Humide</string>
+    <string name="casa_seco">Sec</string>
+    <string name="casa_fumaca">Fumée !</string>
+    <string name="casa_sem_fumaca">Pas de fumée</string>
+    <string name="casa_dica_temp">température</string>
+    <string name="casa_camera_abrindo">Ouverture de la caméra…</string>
+    <string name="casa_camera_ver">Afficher sur la TV</string>
+    <plurals name="l51_uso_vezes">
+        <item quantity="one">%d fois</item>
+        <item quantity="other">%d fois</item>
+    </plurals>
+</resources>

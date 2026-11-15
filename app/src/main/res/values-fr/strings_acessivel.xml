@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (fr) de values/strings_acessivel.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acess_legenda_fundo">Sous-titres sur fond noir</string>
+    <string name="acess_legenda_amarela">Sous-titres jaunes</string>
+    <string name="acess_volume">Volume égal entre les chaînes</string>
+    <string name="acess_voz">Voix plus claires</string>
+    <string name="acess_volume_ligado">Volume égal activé : les chaînes et films faibles montent</string>
+    <string name="acess_volume_desligado">Volume égal désactivé</string>
+    <string name="acess_voz_ligado">Voix plus claires activées</string>
+    <string name="acess_voz_desligado">Voix plus claires désactivées</string>
+    <string name="acess_config_titulo">Son et sous-titres</string>
+    <string name="acess_config_texto">Pour ceux qui voient ou entendent moins bien. Aussi dans le menu ▼ du lecteur.</string>
+</resources>

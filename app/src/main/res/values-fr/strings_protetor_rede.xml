@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (fr) de values/strings_protetor_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pt_dica_dispensar">OK ignore · ◀ ▶ changent</string>
+    <string name="pt_dica_pausar">OK met en pause ou reprend · ◀ ▶ changent</string>
+    <string name="pt_dica_andar">◀ ▶ changent · les autres touches ferment</string>
+    <string name="rede_fotos_usar">Utiliser ces photos dans l’économiseur</string>
+    <string name="rede_fotos_parar">Ne plus utiliser ces photos dans l’économiseur</string>
+    <string name="rede_fotos_usando">Copie des photos. Elles apparaîtront au prochain démarrage de l’économiseur.</string>
+    <string name="rede_fotos_paradas">L’économiseur n’utilise plus ce dossier.</string>
+    <string name="rede_continuar">Reprendre</string>
+    <string name="rede_recentes">Ajoutés récemment</string>
+    <string name="rede_buscar">Rechercher</string>
+    <string name="rede_buscar_explica">Films, séries, épisodes et musique sur ce serveur.</string>
+    <string name="rede_buscar_campo">Nom</string>
+    <string name="rede_buscar_curto">Saisissez au moins 2 lettres.</string>
+    <string name="rede_proximo_em">Ensuite : %1$s dans %2$d s · OK démarre maintenant · toute autre touche annule</string>
+    <string name="rede_ainda_assistindo">Vous regardez toujours ? OK lance %1$s</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="one">%1$d photo · copiée sur la TV, fonctionne ordinateur éteint</item>
+        <item quantity="other">%1$d photos · copiées sur la TV, fonctionnent ordinateur éteint</item>
+    </plurals>
+</resources>
