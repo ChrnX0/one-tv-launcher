@@ -52,4 +52,11 @@
     <string name="sv_mdblist_qr1">MDBList key page</string>
     <string name="sv_mdblist_qr2">Web panel (%1$s)</string>
     <string name="sv_mdblist_digitar">Type the key here</string>
+    <string name="sv_f_chave_invalida">invalid key (letters and numbers only)</string>
+    <string name="sv_f_chave_recusada">%1$s did not accept this key</string>
+    <string name="sv_f_respondeu">%1$s answered with error %2$d. Try again in a moment.</string>
+    <string name="sv_f_falta">enter the user name and the password</string>
+    <string name="sv_f_longo">user name or password too long</string>
+    <string name="sv_f_senha">wrong user name or password</string>
+    <string name="sv_f_gravar">could not save it on the TV. Try again.</string>
 </resources>

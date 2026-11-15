@@ -22,6 +22,13 @@ import java.net.URL
  * Nada de token, senha, chave ou nome de usuário no log (só o nome do serviço e o tipo do erro).
  */
 object ServicosContas {
+    /**
+     * Falha que a pessoa vê (15/11/2026). A mensagem fica em português para o painel (que traduz no navegador, i18n.js);
+     * a TV mostra o texto do [motivo] no idioma dela (ServicosFilmesActivity.textoFalha).
+     */
+    enum class Motivo { CHAVE_INVALIDA, CHAVE_RECUSADA, RESPONDEU, FALTA_DADOS, LONGO, SENHA_ERRADA, GRAVAR, DO_SERVICO }
+    class FalhaConta(val motivo: Motivo, texto: String, val servico: String = "", val codigo: Int = 0) : Exception(texto)
+
     private const val TAG = "TvLauncher.Servicos"
     private const val ARQUIVO = "servicos.json"
 
@@ -115,12 +122,12 @@ object ServicosContas {
         val codigo = when (s) {
             Servico.TRAKT -> pedir("${ServicosFilmes.TRAKT_AUTH}/oauth/device/code", ServicosFilmes.traktCabecalhos(k.traktId, versao),
                 ServicosFilmes.traktCorpoCodigo(k.traktId)).let { r ->
-                if (r.codigo !in 200..299) error("o Trakt respondeu ${r.codigo}")
+                if (r.codigo !in 200..299) throw FalhaConta(Motivo.RESPONDEU, "o Trakt respondeu ${r.codigo}", "Trakt", r.codigo)
                 ServicosFilmes.traktLerCodigo(r.corpo) ?: error("resposta do Trakt sem código")
             }
             else -> pedir("${ServicosFilmes.SIMKL_API}/oauth2/device", ServicosFilmes.simklCabecalhosForm(versao),
                 ServicosFilmes.simklCorpoCodigo(k.simklId)).let { r ->
-                if (r.codigo !in 200..299) error("o Simkl respondeu ${r.codigo}")
+                if (r.codigo !in 200..299) throw FalhaConta(Motivo.RESPONDEU, "o Simkl respondeu ${r.codigo}", "Simkl", r.codigo)
                 ServicosFilmes.simklLerCodigo(r.corpo) ?: error("resposta do Simkl sem código")
             }
         }
@@ -204,12 +211,12 @@ object ServicosContas {
     /** MDBList: confere a chave pessoal no próprio MDBList (GET /user) e grava. Devolve o nome da conta ou o erro. */
     fun definirMdblist(ctx: Context, chave: String): Result<String> = runCatching {
         val ch = chave.trim()
-        require(ServicosFilmes.mdblistChaveValida(ch)) { "chave inválida (só letras e números)" }
+        if (!ServicosFilmes.mdblistChaveValida(ch)) throw FalhaConta(Motivo.CHAVE_INVALIDA, "chave inválida (só letras e números)")
         val r = pedir(ServicosFilmes.mdblistUrlUsuario(ch), mapOf("User-Agent" to ServicosFilmes.agente(versao)))
-        if (r.codigo == 401 || r.codigo == 403) error("o MDBList não aceitou esta chave")
-        if (r.codigo !in 200..299) error("o MDBList respondeu ${r.codigo}")
+        if (r.codigo == 401 || r.codigo == 403) throw FalhaConta(Motivo.CHAVE_RECUSADA, "o MDBList não aceitou esta chave", "MDBList")
+        if (r.codigo !in 200..299) throw FalhaConta(Motivo.RESPONDEU, "o MDBList respondeu ${r.codigo}", "MDBList", r.codigo)
         val nome = ServicosFilmes.mdblistLerUsuario(r.corpo).orEmpty()
-        check(definir(ctx, Servico.MDBLIST, ServicosFilmes.Conta(ch, usuario = nome))) { "não consegui gravar" }
+        if (!definir(ctx, Servico.MDBLIST, ServicosFilmes.Conta(ch, usuario = nome))) throw FalhaConta(Motivo.GRAVAR, "não consegui gravar")
         nome
     }
 
@@ -218,15 +225,16 @@ object ServicosContas {
      * de verdade (POST /login com a chave do app) antes de gravar.
      */
     fun definirOpenSubtitles(ctx: Context, usuario: String, senha: String): Result<Unit> = runCatching {
-        require(usuario.isNotBlank() && senha.isNotEmpty()) { "falta o usuário ou a senha" }
-        require(usuario.length <= 100 && senha.length <= 200) { "usuário ou senha longos demais" }
+        if (usuario.isBlank() || senha.isEmpty()) throw FalhaConta(Motivo.FALTA_DADOS, "falta o usuário ou a senha")
+        if (usuario.length > 100 || senha.length > 200) throw FalhaConta(Motivo.LONGO, "usuário ou senha longos demais")
         val chave = chavesApp().openSubtitles.ifBlank { LegendaBaixar.conta(ctx)?.chaveApi.orEmpty() }
         check(chave.isNotBlank()) { "este build não tem a chave do OpenSubtitles" }
         val r = pedir("${LegendaExterna.BASE}/login", mapOf("Api-Key" to chave, "User-Agent" to LegendaExterna.AGENTE,
             "Content-Type" to "application/json", "Accept" to "application/json"), LegendaExterna.corpoLogin(usuario.trim(), senha))
-        if (r.codigo == 401) error("usuário ou senha errados")
-        if (r.codigo !in 200..299) error(LegendaExterna.lerErro(r.corpo) ?: "o OpenSubtitles respondeu ${r.codigo}")
-        check(definir(ctx, Servico.OPENSUBTITLES, ServicosFilmes.Conta("", usuario = usuario.trim(), senha = senha))) { "não consegui gravar" }
+        if (r.codigo == 401) throw FalhaConta(Motivo.SENHA_ERRADA, "usuário ou senha errados")
+        if (r.codigo !in 200..299) throw LegendaExterna.lerErro(r.corpo)?.let { FalhaConta(Motivo.DO_SERVICO, it) }
+            ?: FalhaConta(Motivo.RESPONDEU, "o OpenSubtitles respondeu ${r.codigo}", "OpenSubtitles", r.codigo)
+        if (!definir(ctx, Servico.OPENSUBTITLES, ServicosFilmes.Conta("", usuario = usuario.trim(), senha = senha))) throw FalhaConta(Motivo.GRAVAR, "não consegui gravar")
         LegendaBaixar.esquecerToken()
     }
 

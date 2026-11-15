@@ -142,7 +142,7 @@ class ServicosFilmesActivity : Activity() {
                     ui.post {
                         if (isDestroyed) return@post
                         r.onSuccess { if (servicoNoCodigo == s) fecharCodigo() else desenhar(s) }
-                            .onFailure { pedirTexto(s, titulo, texto, dicas, getString(R.string.sv_falhou, it.message ?: "?"), gravar) }
+                            .onFailure { pedirTexto(s, titulo, texto, dicas, getString(R.string.sv_falhou, textoFalha(it)), gravar) }
                     }
                 }
             }
@@ -231,7 +231,7 @@ class ServicosFilmesActivity : Activity() {
             val r = runCatching { ServicosContas.entrar(this, s) }
             ui.post {
                 if (isDestroyed || servicoNoCodigo != s) { ServicosContas.cancelar(s); return@post }
-                val sessao = r.getOrElse { cTexto.text = getString(R.string.sv_falhou, it.message ?: "?"); return@post }
+                val sessao = r.getOrElse { cTexto.text = getString(R.string.sv_falhou, textoFalha(it)); return@post }
                 cQr.setImageBitmap(runCatching { QrCodigo.bitmap(sessao.codigo.urlQr, dp(300)) }.getOrNull())
                 cQr.visibility = View.VISIBLE
                 ui.post(volta)
@@ -298,4 +298,19 @@ class ServicosFilmesActivity : Activity() {
     }
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density + 0.5f).toInt()
+
+    /** A falha no idioma da TV. Erro de rede ou interno vira "o serviço não respondeu" em vez do texto cru do Java. */
+    private fun textoFalha(e: Throwable): String {
+        val f = e as? ServicosContas.FalhaConta ?: return getString(R.string.sv_motivo_erro)
+        return when (f.motivo) {
+            ServicosContas.Motivo.CHAVE_INVALIDA -> getString(R.string.sv_f_chave_invalida)
+            ServicosContas.Motivo.CHAVE_RECUSADA -> getString(R.string.sv_f_chave_recusada, f.servico)
+            ServicosContas.Motivo.RESPONDEU -> getString(R.string.sv_f_respondeu, f.servico, f.codigo)
+            ServicosContas.Motivo.FALTA_DADOS -> getString(R.string.sv_f_falta)
+            ServicosContas.Motivo.LONGO -> getString(R.string.sv_f_longo)
+            ServicosContas.Motivo.SENHA_ERRADA -> getString(R.string.sv_f_senha)
+            ServicosContas.Motivo.GRAVAR -> getString(R.string.sv_f_gravar)
+            ServicosContas.Motivo.DO_SERVICO -> f.message ?: getString(R.string.sv_motivo_erro)   // o texto do próprio serviço (inglês)
+        }
+    }
 }

@@ -755,8 +755,19 @@ class MtpServico(
         const val VERSAO = 0x00010000
     }
 
-    private val sessoes = ConcurrentHashMap<Int, MtpSessao>()
-    private val numero = AtomicInteger(1)
+    /** Uma sessão aberta pela conexão de comandos, com o IP de quem passou pelo "Permitir?" e a conexão de eventos dela. */
+    private class Aberta(val sessao: MtpSessao, val ip: String) { val evento = java.util.concurrent.atomic.AtomicReference<Socket?>(null) }
+
+    private val sessoes = ConcurrentHashMap<Int, Aberta>()
+    private val sorteio = java.security.SecureRandom()
+
+    /**
+     * Número da sessão SORTEADO (15/11/2026). Era 1, 2, 3...: qualquer aparelho da rede adivinhava e, pela conexão de
+     * eventos (que não passa pelo "Permitir?"), cancelava as cópias do computador permitido ou deixava conexões presas.
+     */
+    private fun novoNumero(): Int {
+        while (true) { val n = sorteio.nextInt(Int.MAX_VALUE - 1) + 1; if (!sessoes.containsKey(n)) return n }
+    }
     private val vivas = AtomicInteger(0)
     private val abertas = ConcurrentHashMap.newKeySet<Socket>()
 
@@ -799,20 +810,28 @@ class MtpServico(
                     registro("recusado: $nome ($ip)")
                     return
                 }
-                val n = numero.getAndIncrement()
                 val sessao = MtpSessao(loja, ap, e, s)
-                sessoes[n] = sessao
+                val aberta = Aberta(sessao, ip)
+                val n = synchronized(sessoes) { novoNumero().also { sessoes[it] = aberta } }
                 try {
                     val w = Mtp.Escritor().u32(n).cru(ap.guid)
                     for (ch in ap.nome.take(40)) w.u16(ch.code)
                     PtpIp.escrever(s, PtpIp.INICIO_COMANDO_OK, w.u16(0).u32(VERSAO).bytes()); s.flush()
                     registro("entrou: $nome ($ip)")
                     sessao.rodar()
-                } finally { sessoes.remove(n); registro("saiu: $nome ($ip)") }
+                } finally {
+                    sessoes.remove(n)
+                    // A conexão de eventos só vive junto com a de comandos: o computador saiu, ela fecha também.
+                    aberta.evento.get()?.let { try { it.close() } catch (_: IOException) {} }
+                    registro("saiu: $nome ($ip)")
+                }
             }
             PtpIp.INICIO_EVENTO -> {
-                val sessao = sessoes[l.u32()]
-                if (sessao == null) { PtpIp.escrever(s, PtpIp.INICIO_RECUSADO, Mtp.Escritor().u32(1).bytes()); s.flush(); return }
+                // Só o MESMO aparelho que abriu a sessão (mesmo IP), e uma conexão de eventos por sessão. Cada computador
+                // da casa continua entrando com o próprio "Permitir?" e a própria sessão.
+                val aberta = sessoes[l.u32()]?.takeIf { it.ip == c.inetAddress.hostAddress && it.evento.compareAndSet(null, c) }
+                if (aberta == null) { PtpIp.escrever(s, PtpIp.INICIO_RECUSADO, Mtp.Escritor().u32(1).bytes()); s.flush(); return }
+                val sessao = aberta.sessao
                 PtpIp.escrever(s, PtpIp.INICIO_EVENTO_OK, ByteArray(0)); s.flush()
                 c.soTimeout = 0
                 while (true) {
