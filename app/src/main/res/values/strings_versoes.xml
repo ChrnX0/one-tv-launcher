@@ -22,6 +22,9 @@
         <item>A screen opened by a scene, the panel or Claude while the screensaver is up now shows in front (it used to open hidden behind it)</item>
         <item>Settings › System › What gets used: screens by the names you know, “1 time” and “today/yesterday”</item>
         <item>Recording: when the list drops the channel, the TV keeps retrying for up to 2 minutes before giving up (it used to give up after 6 seconds)</item>
+        <item>Stability fixes: the home screen no longer crashes on a huge file over the network drive; the built-in shell no longer gets stuck; recordings don\'t start twice; movie positions saved without loss</item>
+        <item>Routines: two at the same minute now both run; alarm: the snooze goes away when you turn off or delete the alarm</item>
+        <item>On the network: “next in 10 s” stops when you press HOME; web panel: the TV diary card opens again</item>
         <item>Movie and series details redone for reading from afar: big actions down the left (Continue, Trailer, Cast, Collection…), info and poster on the right; nothing jumps around when data arrives, and “Full synopsis” opens the whole text</item>
         <item>Trailer: when the server has none, the details page uses the TMDB trailer (YouTube); series list titles no longer repeat the year</item>
         <item>Recording: with a USB drive the TV can’t read (NTFS, like a Windows installer) or that is full, the TV now says why right away instead of looking like it recorded; with 2 partitions it records on the one with more space</item>
@@ -136,6 +139,12 @@
         <item>Screensaver with new, larger widgets: pick Glass strip (the next hours on a curve, with the sun time), Cards (now, hours, today and tomorrow) or No box (big temperature and the weather in one sentence) in Settings › Screen and power › Screensaver widgets, or in the panel</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>rotinas_mesmo_minuto</item>
+        <item>soneca_some</item>
+        <item>na_rede_home</item>
+        <item>painel_diario</item>
+        <item>semana_tv</item>
+        <item>cena_protetor</item>
         <item>ficha_c_filme</item>
         <item>ficha_c_serie</item>
         <item>legenda_traduzida</item>
@@ -240,6 +249,12 @@
         <item>protetor_widgets</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Routines at the same minute</item>
+        <item>Alarm snooze</item>
+        <item>On the network: next episode</item>
+        <item>Panel: TV diary</item>
+        <item>Screensaver: Your week on TV</item>
+        <item>Request with the screensaver up</item>
         <item>Movies › open a movie you already started</item>
         <item>Series › open a series › Episodes</item>
         <item>Subtitles translated on the TV</item>
@@ -344,6 +359,12 @@
         <item>In Settings › Screen and power, press OK on Screensaver widgets until the style you want, then wait for the screensaver</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Create two routines for the same minute (e.g. turn on and open an app): did both run?</item>
+        <item>Let an alarm ring, press Snooze, then turn the alarm off: did the snooze go away and not ring again?</item>
+        <item>On a network video, when “next in 10 s” shows, press HOME: did the countdown stop and nothing open by itself?</item>
+        <item>In the web panel, open the TV diary card: does the diary show (not the DNS one)?</item>
+        <item>On Sunday night, does the “Your week on TV” card show live TV and movie hours (not “0 min”)?</item>
+        <item>With the screensaver up, ask from the phone/panel to open the Forecast: does it show in front?</item>
         <item>Do the big actions on the left read well from the couch, and does the focus stay put while the details load (no jumping between Cast and Collection)?</item>
         <item>Did the episode list show up on the right, did BACK return to the series info, and did “Change season” work?</item>
         <item>Open a movie or episode that has no subtitles in your language: within about 20 s, do subtitles marked “Automatic translation” appear, and does the movie keep playing without stuttering?</item>

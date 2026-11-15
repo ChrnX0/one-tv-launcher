@@ -19,7 +19,10 @@
     <string name="l51_uso_tela">tela</string>
     <string name="l51_uso_opcao">opção</string>
     <string name="l51_uso_linha">%1$s (%2$s): %3$s, %4$s</string>
-    <plurals name="l51_uso_vezes"><item quantity="one">%d vez</item><item quantity="other">%d vezes</item></plurals>
+    <plurals name="l51_uso_vezes">
+        <item quantity="one">%d vez</item>
+        <item quantity="other">%d vezes</item>
+    </plurals>
     <string name="l51_uso_hoje">última hoje</string>
     <string name="l51_uso_ontem">última ontem</string>
     <string name="l51_uso_dias">última há %d dias</string>

@@ -19,7 +19,10 @@
     <string name="l51_uso_tela">screen</string>
     <string name="l51_uso_opcao">setting</string>
     <string name="l51_uso_linha">%1$s (%2$s): %3$s, %4$s</string>
-    <plurals name="l51_uso_vezes"><item quantity="one">%d time</item><item quantity="other">%d times</item></plurals>
+    <plurals name="l51_uso_vezes">
+        <item quantity="one">%d time</item>
+        <item quantity="other">%d times</item>
+    </plurals>
     <string name="l51_uso_hoje">last today</string>
     <string name="l51_uso_ontem">last yesterday</string>
     <string name="l51_uso_dias">last %d days ago</string>
