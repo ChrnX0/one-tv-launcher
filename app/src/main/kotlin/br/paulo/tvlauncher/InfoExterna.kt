@@ -23,6 +23,8 @@ object InfoExterna {
     const val VALIDADE_SERIE_NO_AR_MS = 3L * 24 * 3_600_000
     /** Notas por pedido em lote no MDBList (a doc não fixa o máximo do /{provider}/{type}/; 100 é o do /rating). */
     const val LOTE_MDBLIST = 100
+    /** Formato da ficha guardada: 2 = com trailer (15/11/2026). Ficha de formato antigo é pedida de novo. */
+    const val VERSAO_DETALHE = 2
 
     // ================================================================ id do Xtream
 
@@ -74,7 +76,9 @@ object InfoExterna {
 
     fun urlDetalhe(chave: String, id: Int, serie: Boolean, idioma: String): String =
         tmdbUrl(if (serie) "/tv/$id" else "/movie/$id", chave,
-            linkedMapOf("language" to idioma, "append_to_response" to if (serie) "external_ids,aggregate_credits" else "external_ids,credits"))
+            linkedMapOf("language" to idioma, "append_to_response" to if (serie) "external_ids,aggregate_credits,videos" else "external_ids,credits,videos",
+                // Trailer: no idioma da TV, senão o inglês, senão o sem idioma (o TMDB filtra pelo "language" sem isto).
+                "include_video_language" to listOf(idioma.substringBefore('-'), "en", "null").distinct().joinToString(",")))
 
     fun urlColecao(chave: String, id: Int, idioma: String): String = tmdbUrl("/collection/$id", chave, linkedMapOf("language" to idioma))
 
@@ -123,7 +127,30 @@ object InfoExterna {
         val colecao: Colecao? = null,
         val proximo: ProximoEp? = null,
         val noAr: Boolean = false,
-    )
+        /** Trailer no YouTube (só a chave do vídeo, ex. "n9xhJrPXop4"); vazio quando o TMDB não tem. */
+        val trailer: String = "",
+    ) {
+        val linkTrailer: String get() = if (trailer.isEmpty()) "" else "https://www.youtube.com/watch?v=$trailer"
+    }
+
+    /**
+     * O trailer de "videos" do TMDB: só YouTube; Trailer antes de Teaser; no idioma da TV antes do inglês; oficial antes
+     * do de fã. Só aceita chave de vídeo do YouTube (letras, números, - e _), nunca um endereço vindo de fora.
+     */
+    fun escolherTrailer(videos: JSONArray?, idiomaTv: String): String {
+        if (videos == null) return ""
+        val lingua = idiomaTv.substringBefore('-').lowercase()
+        data class V(val chave: String, val tipo: Int, val lingua: Int, val oficial: Boolean)
+        val lista = (0 until videos.length()).mapNotNull { i ->
+            val o = videos.optJSONObject(i) ?: return@mapNotNull null
+            val chave = o.optString("key")
+            if (!o.optString("site").equals("YouTube", true) || !chave.matches(Regex("[A-Za-z0-9_-]{6,20}"))) return@mapNotNull null
+            val tipo = when (o.optString("type")) { "Trailer" -> 0; "Teaser" -> 1; else -> return@mapNotNull null }
+            val l = when (o.optString("iso_639_1").lowercase()) { lingua -> 0; "en" -> 1; else -> 2 }
+            V(chave, tipo, l, o.optBoolean("official"))
+        }
+        return lista.sortedWith(compareBy<V>({ it.tipo }, { it.lingua }, { if (it.oficial) 0 else 1 })).firstOrNull()?.chave.orEmpty()
+    }
 
     fun lerDetalhe(json: String, serie: Boolean): Detalhe? = runCatching {
         // (o id do IMDb vem em external_ids; quem guarda é o InfoExternaCache, em Guardado.imdb)
@@ -140,7 +167,8 @@ object InfoExterna {
             if (d.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) ProximoEp(d, p.optInt("season_number"), p.optInt("episode_number")) else null
         }
         Detalhe(id, imdb, o.optString("overview").trim().take(1500), elenco, generos.take(3), col, prox,
-            noAr = serie && (o.optBoolean("in_production") || prox != null))
+            noAr = serie && (o.optBoolean("in_production") || prox != null),
+            trailer = escolherTrailer(o.optJSONObject("videos")?.optJSONArray("results"), idiomaTmdb()))
     }.getOrNull()
 
     /** As partes da coleção: (id TMDB, título, ano), do mais antigo ao mais novo. */
@@ -256,7 +284,8 @@ object InfoExterna {
         if (g.buscaEm > 0) put("b", g.buscaEm)
         g.detalhe?.let { d ->
             put("d", JSONObject().put("i", d.imdb).put("s", d.sinopse).put("e", JSONArray(d.elenco)).put("g", JSONArray(d.generos))
-                .put("ar", d.noAr).apply {
+                .put("ar", d.noAr).put("v", VERSAO_DETALHE).apply {
+                    if (d.trailer.isNotEmpty()) put("tr", d.trailer)
                     d.colecao?.let { put("c", it.id).put("cn", it.nome) }
                     d.proximo?.let { put("pd", it.data).put("pt", it.temporada).put("pe", it.numero) }
                 })
@@ -275,14 +304,17 @@ object InfoExterna {
             if (tmdb == null) return@let null
             Detalhe(tmdb, d.optString("i"), d.optString("s"), lista(d.optJSONArray("e")), lista(d.optJSONArray("g")),
                 d.optInt("c").takeIf { it > 0 }?.let { Colecao(it, d.optString("cn")) },
-                d.optString("pd").takeIf { it.isNotBlank() }?.let { ProximoEp(it, d.optInt("pt"), d.optInt("pe")) }, d.optBoolean("ar"))
+                d.optString("pd").takeIf { it.isNotBlank() }?.let { ProximoEp(it, d.optInt("pt"), d.optInt("pe")) }, d.optBoolean("ar"),
+                d.optString("tr"))
         }
+        // Ficha guardada antes do trailer (sem "v"): vale até a próxima abertura, que pede de novo ao TMDB.
+        val detEm = if (o.optJSONObject("d")?.optInt("v") == VERSAO_DETALHE) o.optLong("de") else 0L
         val notas = o.optJSONObject("n")?.let { n ->
             Notas(n.optDouble("i", Double.NaN).takeIf { !it.isNaN() }?.toFloat(), n.optInt("r", -1).takeIf { it >= 0 },
                 n.optInt("m", -1).takeIf { it >= 0 }, n.optDouble("l", Double.NaN).takeIf { !it.isNaN() }?.toFloat())
         }
         val rec = o.optJSONArray("x")?.let { x -> (0 until x.length()).map { x.optInt(it) }.filter { it > 0 }.toSet() }.orEmpty()
-        return Guardado(tmdb, o.optString("im"), o.optDouble("iv", Double.NaN).takeIf { !it.isNaN() }?.toFloat(), rec, det, o.optLong("de"),
+        return Guardado(tmdb, o.optString("im"), o.optDouble("iv", Double.NaN).takeIf { !it.isNaN() }?.toFloat(), rec, det, detEm,
             notas, o.optLong("ne"), o.optLong("b"))
     }
 

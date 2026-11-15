@@ -21,6 +21,13 @@ class TituloEpisodioTest {
         assertEquals("Episódio 7", Series.tituloCurto("Overgeared 2026", "Overgeared 2026 - S01E07 - Episódio 7"))
         assertEquals("O Primeiro Passo de Um Ferreiro", Series.tituloCurto("Overgeared 2026", "Overgeared 2026 - S01E02 - O Primeiro Passo de Um Ferreiro"))
     }
+    @Test fun anoDaListaSaiJunto() {
+        assertEquals("Fracasso é contagioso", Series.tituloCurto("Slow Horses", "Slow Horses 2022 - S01E01 - Fracasso é contagioso"))
+        assertEquals("Fracasso é contagioso", Series.tituloCurto("Slow Horses", "Slow Horses (2022) - S01E01 - Fracasso é contagioso"))
+        assertEquals("Fracasso é contagioso", Series.tituloCurto("Slow Horses", "2022 - S01E01 - Fracasso é contagioso"))
+        assertEquals("1984", Series.tituloCurto("Série", "1984"))   // título que é só um ano fica
+    }
+
     @Test fun tituloNormalFica() = assertEquals("Piloto", Series.tituloCurto("Dom de Iludir", "Piloto"))
     @Test fun soCodigoNaoSomeTudo() = assertEquals("Overgeared 2026 - S01E07", Series.tituloCurto("Overgeared 2026", "Overgeared 2026 - S01E07"))
 }

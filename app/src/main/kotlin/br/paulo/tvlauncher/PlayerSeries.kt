@@ -80,7 +80,8 @@ object Series {
         for (n in listOf(serie.trim(), Vod.nomeLimpo(serie))) {
             if (n.isNotEmpty() && t.startsWith(n, ignoreCase = true)) { t = t.substring(n.length); break }
         }
-        t = t.replace(Regex("""^[\s\-–:|·]*(?:S\d{1,2}\s*E\d{1,3}|T\d{1,2}\s*E\d{1,3}|\d{1,2}x\d{1,3})?[\s\-–:|·]*""", RegexOption.IGNORE_CASE), "")
+        // O ano que a lista põe depois do nome ("Slow Horses 2022 - S01E01 - ..." ou "(2022)") sai junto com o código.
+        t = t.replace(Regex("""^[\s\-–:|·]*(?:\(?(?:19|20)\d{2}\)?[\s\-–:|·]+(?=S\d|T\d|\d{1,2}x\d))?(?:S\d{1,2}\s*E\d{1,3}|T\d{1,2}\s*E\d{1,3}|\d{1,2}x\d{1,3})?[\s\-–:|·]*""", RegexOption.IGNORE_CASE), "")
         return t.trim().ifEmpty { titulo.trim() }
     }
 

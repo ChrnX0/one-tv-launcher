@@ -39,4 +39,6 @@
     <string name="legenda_trad_opcao">Traduzir a legenda na TV quando faltar</string>
     <string name="legenda_trad_ligada">A legenda será traduzida na TV quando faltar</string>
     <string name="legenda_trad_desligada">A legenda não será mais traduzida</string>
+    <string name="series_sinopse_mais">Sinopse inteira</string>
+    <string name="series_sinopse_menos">Sinopse curta</string>
 </resources>
