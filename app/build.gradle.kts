@@ -21,10 +21,16 @@ val pessoal = Properties().apply {
 // Texto Java entre aspas, com \ e " escapados (senão um valor com aspas quebra a compilação do BuildConfig).
 fun textoJava(v: String) = "\"" + v.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
 fun pessoalTexto(chave: String, padrao: String = "") = textoJava(pessoal.getProperty(chave, padrao).trim())
+// Chaves dos APLICATIVOS de filmes e séries (ServicosFilmes.kt, 14/11/2026): uma por projeto, nunca no git. No PC vêm do
+// pessoal.properties; no GitHub Actions, das variáveis de ambiente que o release.yml preenche com os secrets de mesmo nome.
+// Sem a chave, o serviço some da tela do launcher.
+fun chaveApp(nome: String) = textoJava((System.getenv(nome) ?: pessoal.getProperty(nome.lowercase(), "")).trim())
 fun pessoalNumero(chave: String, padrao: Double) = (pessoal.getProperty(chave)?.trim()?.toDoubleOrNull() ?: padrao).toString()
 
 android {
     namespace = "br.paulo.tvlauncher"
+    // Ideia 96: o Robolectric precisa dos recursos (textos, cores) para desenhar as telas nos testes.
+    testOptions { unitTests.isIncludeAndroidResources = true }
     // 36 (antes 34): veio com o Shizuku embutido em 04/11/2026 (androidx.core 1.16 pede compileSdk >= 35); ficou.
     // Não muda o comportamento na TV: quem manda nisso é o targetSdk, que continua 34.
     compileSdk = 36
@@ -52,6 +58,7 @@ android {
             "com.google.android.youtube.tv,com.google.android.youtube.tvmusic,com.netflix.ninja,com.android.vending"))
         buildConfigField("String", "BOTAO_NETFLIX", pessoalTexto("botao_netflix", "com.netflix.ninja"))
         buildConfigField("String", "ECLIPSES", pessoalTexto("eclipses"))
+        for (k in listOf("TMDB_CHAVE", "TRAKT_ID", "TRAKT_SEGREDO", "SIMKL_ID", "OPENSUBTITLES_CHAVE")) buildConfigField("String", k, chaveApp(k))
     }
 
     // Um APK por arquitetura (12/11/2026, pedido do dono: versões de 32 e 64 bits no GitHub).
@@ -174,6 +181,18 @@ dependencies {
     testImplementation("org.json:json:20260814")
     // Leitor de XML em fluxo para os testes do guia XMLTV (PlayerGuia.kt): na TV o Android já traz um (é o mesmo kxml).
     testImplementation("net.sf.kxml:kxml2:2.3.0")
+    // Teste de tela por foto (ideia 96, 14/11/2026): o Robolectric desenha as telas de verdade (gráficos nativos) no
+    // computador, sem emulador. Só roda com -Ptelas (ver tasks.withType<Test> abaixo): o "Build e Release" não paga isso.
+    // Sem o conscrypt do Robolectric: ele é assinado e briga com a ponte nossa em org/conscrypt (mesmo pacote).
+    testImplementation("org.robolectric:robolectric:4.16") { exclude(group = "org.conscrypt") }
+}
+
+// Ideia 96: os testes de tela (pasta telas/) baixam o Android do Robolectric (~150 MB na primeira vez) e levam minutos.
+// Ficam fora do testReleaseUnitTest de sempre; rodam com "./gradlew testReleaseUnitTest -Ptelas" (workflow telas.yml).
+tasks.withType<Test>().configureEach {
+    if (!project.hasProperty("telas")) exclude("br/paulo/tvlauncher/telas/**")
+    else filter { includeTestsMatching("br.paulo.tvlauncher.telas.*") }
+    systemProperty("telas.atualizar", project.hasProperty("telasAtualizar").toString())
 }
 
 // Túnel para a internet (opção E, 05/11/2026): o programa Go em tunel/ (Tailscale embutido, tsnet) compilado para ARM

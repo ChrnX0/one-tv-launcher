@@ -18,6 +18,7 @@ data class Serie(
     val nota: Float? = null,
     val ano: Int? = null,
     val atualizada: Long = 0, // last_modified (s): série com episódio novo sobe em "recentes"
+    val tmdb: Int? = null,   // id do TMDB, quando a lista manda (InfoExterna, 14/11/2026)
 ) {
     val chave: String get() = "$fonteId:s$id"
 }
@@ -42,6 +43,7 @@ data class FichaSerie(
     val genero: String = "",
     val temporadas: Map<Int, List<Episodio>> = emptyMap(),   // ordenadas por número
     val cenas: List<String> = emptyList(),   // imagens de cena (backdrop_path), para o card Séries da HOME
+    val tmdb: Int? = null,   // tmdb_id da ficha do Xtream (InfoExterna)
 )
 
 /**
@@ -114,7 +116,7 @@ object Series {
             saida += Serie(id, fonteId, nome, grupos[o.opt("category_id")?.toString()].orEmpty(),
                 if (M3u.urlAceita(capa)) capa else "",
                 numero(o, "rating")?.toFloat()?.takeIf { it > 0f && it <= 10f }, ano,
-                numero(o, "last_modified")?.toLong() ?: 0)
+                numero(o, "last_modified")?.toLong() ?: 0, InfoExterna.tmdbDoXtream(o))
         }
         return saida
     }
@@ -153,6 +155,7 @@ object Series {
             sinopse = texto(info, "plot").take(1500), elenco = texto(info, "cast").take(300), genero = texto(info, "genre").take(120),
             temporadas = porTemporada.toSortedMap().mapValues { (_, l) -> l.sortedBy { it.numero } },
             cenas = Vod.cenas(info),
+            tmdb = InfoExterna.tmdbDoXtream(info),
         )
     }
 
@@ -312,7 +315,7 @@ object Series {
     fun seriesParaJson(series: List<Serie>): String = JSONArray().apply {
         series.forEach { s ->
             put(JSONObject().put("i", s.id).put("n", s.nome).put("g", s.grupo).put("c", s.capa).put("r", s.nota?.toDouble() ?: 0.0)
-                .put("a", s.ano ?: 0).put("m", s.atualizada))
+                .put("a", s.ano ?: 0).put("m", s.atualizada).put("t", s.tmdb ?: 0))
         }
     }.toString()
 
@@ -322,7 +325,7 @@ object Series {
             val o = a.optJSONObject(i) ?: return@mapNotNull null
             val id = o.optString("i").ifEmpty { return@mapNotNull null }
             Serie(id, fonteId, o.optString("n"), o.optString("g"), o.optString("c").takeIf { M3u.urlAceita(it) }.orEmpty(),
-                o.optDouble("r", 0.0).toFloat().takeIf { it > 0f }, o.optInt("a").takeIf { it > 0 }, o.optLong("m"))
+                o.optDouble("r", 0.0).toFloat().takeIf { it > 0f }, o.optInt("a").takeIf { it > 0 }, o.optLong("m"), o.optInt("t").takeIf { it > 0 })
         }
     }
 

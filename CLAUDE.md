@@ -84,6 +84,10 @@ closed action catalog, e.g. `{"acoes":[{"tipo":"abrir_tela","tela":"previsao"}]}
 
 - JDK 21, Android SDK 36, Gradle wrapper 8.14, AGP 8.11, Kotlin 2.2. `./gradlew assembleRelease`;
   JVM tests: `./gradlew testReleaseUnitTest` (or `scripts/testes-puros.sh`).
+- Screen test (idea 96): `./gradlew testReleaseUnitTest -Ptelas` draws the main screens with Robolectric (native
+  graphics, 960x540 dp TV, en + pt) into `app/build/telas/` and fails if text shrank, got cut, overlaps other text or
+  focus vanished, compared with `app/src/test/telas/referencia.json`. Changed a screen on purpose (or fixed one)? Rerun
+  with `-PtelasAtualizar` and commit the new reference. Workflow `telas.yml` runs it on PRs that touch screens.
 - Android 14 forces the HOME app to `speed-profile`; `app/src/main/baseline-prof.txt` + `androidx.profileinstaller`
   provide the profile. Debug builds run in `verify` mode: don't measure performance with them.
 - Measuring: `dumpsys gfxinfo br.paulo.tvlauncher reset`, return to HOME by component name 10×, `dumpsys gfxinfo`,

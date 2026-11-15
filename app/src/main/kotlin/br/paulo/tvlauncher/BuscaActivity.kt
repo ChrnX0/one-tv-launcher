@@ -40,7 +40,8 @@ class BuscaActivity : Activity() {
     private class Dados(val canais: List<Canal>, val iCanais: List<BuscaUnica.Indexado<Canal>>,
                         val iFilmes: List<BuscaUnica.Indexado<Filme>>, val iSeries: List<BuscaUnica.Indexado<Serie>>,
                         val iApps: List<BuscaUnica.Indexado<Pair<String, String>>>, val titulos: Map<String, List<String>>,
-                        val instalados: Set<String> = emptySet())
+                        val instalados: Set<String> = emptySet(),
+                        val idsFilmes: Set<Int> = emptySet(), val idsSeries: Set<Int> = emptySet())
     @Volatile private var dados: Dados? = null
 
     override fun onCreate(b: Bundle?) {
@@ -95,7 +96,9 @@ class BuscaActivity : Activity() {
             val listaApps = apps()
             Dados(canais, BuscaUnica.indexar(canais) { it.nome }, BuscaUnica.indexar(filmes) { it.nome },
                 BuscaUnica.indexar(series) { it.nome }, BuscaUnica.indexar(listaApps) { it.second }, titulosDoGuia(canais),
-                listaApps.map { it.first }.toSet())
+                listaApps.map { it.first }.toSet(),
+                // Ideia 82: ids TMDB do catálogo inteiro (com as ocultas: o que está escondido não vira "fora da sua lista").
+                idsDoCatalogo(false), idsDoCatalogo(true))
                 .also { Log.i(TAG, "índice: ${canais.size} canais, ${filmes.size} filmes, ${series.size} séries, " +
                     "${it.titulos.size} títulos do guia em ${System.currentTimeMillis() - t0} ms") }
         } catch (e: Exception) {
@@ -106,6 +109,27 @@ class BuscaActivity : Activity() {
         }
         dados = d
         ui.post { if (!isFinishing) buscarJa() }
+    }
+
+    private fun idsDoCatalogo(serie: Boolean): Set<Int> = runCatching {
+        if (serie) PlayerCarga.series(this, soCache = true).mapNotNullTo(HashSet()) { it.tmdb ?: InfoExternaCache.guardado(this, it.chave)?.tmdb }
+        else PlayerCarga.filmes(this, soCache = true).mapNotNullTo(HashSet()) { it.tmdb ?: InfoExternaCache.guardado(this, it.chave)?.tmdb }
+    }.getOrDefault(emptySet())
+
+    /**
+     * Ideia 82: o que o TMDB acha com o termo e NÃO está na lista, com onde assistir (assinatura ou grátis). OK abre a
+     * busca do app quando ele está instalado. Pede à rede: só quando a pessoa para de digitar (a busca já espera 700 ms).
+     */
+    private fun foraDaLista(d: Dados, termo: String): List<Item> {
+        if (termo.length < 3 || !InfoExternaCache.temTmdb() || PlayerArmazem.parental(this).infantil) return emptyList()
+        val fora = OndeAssistir.foraDaLista(InfoExternaCache.buscarFora(termo), d.idsFilmes, d.idsSeries)
+        return fora.mapNotNull { a ->
+            val onde = InfoExternaCache.provedores(a.tmdb, a.serie).takeIf { it.isNotEmpty() } ?: return@mapNotNull null
+            val app = onde.firstNotNullOfOrNull { n -> OndeAssistir.pacote(n)?.takeIf { it in d.instalados }?.let { n to it } }
+            Item(listOfNotNull(a.nome, a.ano?.let { "($it)" }).joinToString(" "), getString(R.string.onde_fora, onde.joinToString(" · "))) {
+                if (app != null) BuscaOutrosApps.DESTINOS.firstOrNull { it.pacote == app.second }?.let { procurarEm(BuscaOutrosApps.Pedido(it, a.nome)) } ?: abrirApp(app.second)
+            }
+        }
     }
 
     /** Apps que abrem pela HOME (pacote, nome), sem o próprio launcher. */
@@ -135,6 +159,11 @@ class BuscaActivity : Activity() {
             val r = try { if (termo.length < 2) hoje(d) else resultados(d, termo) } catch (e: Exception) { Log.w(TAG, "busca: $e"); emptyList() }
             if (termo.length >= 2) Log.i(TAG, "busca (${termo.length} letras): ${System.currentTimeMillis() - t0} ms")
             ui.post { if (minha == geracao && !isFinishing) desenhar(termo, r) }
+            // Ideia 82: depois, sem atrasar o resto, o que não está na lista e onde assistir.
+            if (termo.length >= 3 && minha == geracao) {
+                val fora = try { foraDaLista(d, termo) } catch (e: Exception) { Log.w(TAG, "fora: ${e.javaClass.simpleName}"); emptyList() }
+                if (fora.isNotEmpty()) ui.post { if (minha == geracao && !isFinishing) desenhar(termo, r + Grupo(getString(R.string.onde_grupo), fora)) }
+            }
         }
     }
 

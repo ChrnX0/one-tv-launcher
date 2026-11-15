@@ -30,6 +30,8 @@ object PainelConfig {
             .put("tamanhoTexto", TamanhoTexto.atual(app))
             .put("pilhas", Organizacao.pilhasAutomaticas(app))
             .put("avisoChuva", AvisoChuva.ligado(app))
+            .put("taxaQuadros", TaxaQuadros.ligada(app))
+            .put("avisoTemperatura", AvisoTemperatura.ligado(app))
             .put("audio", if (IdiomaPlayer.prefs(app).padrao == Idioma.Pref.ORIGINAL) "original" else "dublado")
             .put("protetorMs", PrivilegioDO.tempoDescanso(app).toLong())
             .put("barraProtetor", Protetor.barra(app))
@@ -37,6 +39,7 @@ object PainelConfig {
             .put("parentalCanais", par.canais.size + par.grupos.size)
             .put("infantil", par.infantil)
             .put("infantis", par.infantis.size)
+            .put("idadeInfantil", par.idadeMax)
             .put("pinFamilia", PainelArmazem.temPinFamilia(app))
             .put("visita", ModoVisita.ativo(app))
             .put("unidadeRede", PainelArmazem.unidadeRede(app))
@@ -67,6 +70,8 @@ object PainelConfig {
             }
             "pilhas" -> { val b = v as? Boolean ?: return Resultado.Erro("valor inválido"); Organizacao.definirPilhasAutomaticas(app, b); registrar("pilhas automáticas: $b") }
             "avisoChuva" -> { val b = v as? Boolean ?: return Resultado.Erro("valor inválido"); AvisoChuva.definirLigado(app, b); registrar("aviso de chuva: $b") }
+            "taxaQuadros" -> { val b = v as? Boolean ?: return Resultado.Erro("valor inválido"); TaxaQuadros.definir(app, b); registrar("taxa de quadros do filme: $b") }
+            "avisoTemperatura" -> { val b = v as? Boolean ?: return Resultado.Erro("valor inválido"); AvisoTemperatura.definirLigado(app, b); registrar("aviso de calor/frio: $b") }
             "audio" -> {
                 val p = when (v) { "original" -> Idioma.Pref.ORIGINAL; "dublado" -> Idioma.Pref.DUBLADO; else -> return Resultado.Erro("valor inválido") }
                 IdiomaPlayer.definirPadrao(app, p); registrar("áudio preferido: $v")
@@ -96,6 +101,13 @@ object PainelConfig {
                 val nova = if (campo == "parental") atual.copy(ligado = b) else atual.copy(infantil = b)
                 if (!PlayerArmazem.definirParental(app, nova)) return Resultado.Erro("não consegui gravar; tente de novo")
                 registrar((if (campo == "parental") "controle parental: " else "modo infantil: ") + b)
+            }
+            // Ideia 91: idade máxima no modo infantil (Classificacao.OPCOES; -1 = só as categorias infantis). Pede o PIN.
+            "idadeInfantil" -> {
+                val n = (v as? Number)?.toInt()?.takeIf { it in Classificacao.OPCOES } ?: return Resultado.Erro("valor inválido")
+                if (!elevada) return Resultado.PrecisaPin
+                if (!PlayerArmazem.definirParental(app, PlayerArmazem.parental(app).copy(idadeMax = n))) return Resultado.Erro("não consegui gravar; tente de novo")
+                registrar("idade máxima no modo infantil: $n")
             }
             // PIN das crianças: "" apaga. Igual ao do painel não vale (PinFamilia.conferirNovo).
             "pinFamilia" -> {

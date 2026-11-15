@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Primeira configuração pelo celular (ideia 97, 14/11/2026): BoasVindasActivity e EntrarPeloQrActivity sem PIN. -->
+<resources>
+    <string name="pc_titulo">Set up with your phone</string>
+    <string name="pc_linha_det">Recommended. Point the phone\'s camera at a code: PIN, language, live TV, city and movie services, in 5 steps.</string>
+    <string name="pc_instrucoes">Point the phone\'s camera at the code beside this. The phone opens a 5-step setup.\n\nThe phone must be on the home Wi-Fi. Keep this screen open until you create the PIN on the phone (%1$s left).</string>
+    <string name="pc_entrou">Continue on the phone.</string>
+    <string name="pc_venceu">The code expired.\nPress \"%1$s\" to show a new one.</string>
+    <string name="pc_sem_rede">The TV is not on a network.\nConnect it to the home Wi-Fi and try again.</string>
+</resources>

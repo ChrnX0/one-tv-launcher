@@ -187,9 +187,74 @@ class MainActivity : Activity() {
                 // Clima fresco (< 2 min)? Entao nao precisa; senao, busca agora, fora da fila dos 5 min.
                 val em = getSharedPreferences("clima", MODE_PRIVATE).getLong("em", 0)
                 if (System.currentTimeMillis() - em > 2 * 60_000L) ui.post { buscarClima() }
+                ui.post { avaliarSemInternet() }
             }
+            // Ideia 88: a internet caiu ou voltou (validação do Android) -> a pílula "Sem internet" aparece ou some.
+            override fun onLost(rede: android.net.Network) { ui.post { avaliarSemInternet() } }
+            override fun onCapabilitiesChanged(rede: android.net.Network, caps: android.net.NetworkCapabilities) { ui.post { avaliarSemInternet() } }
         }
         try { cm.registerDefaultNetworkCallback(vigiaRede!!) } catch (e: Exception) { vigiaRede = null }
+    }
+
+    // ---- Ideia 88 (14/11/2026): sem internet, a HOME diz em uma linha o que continua funcionando (SemInternet.kt).
+    private lateinit var pilulaSemInternet: LinearLayout
+    private lateinit var txtSemInternet: TextView
+    private var semInternetDesde = 0L
+    private val tarefaSemInternet = Runnable { avaliarSemInternet() }
+
+    /**
+     * (internet, rede local). Olha TODAS as redes, não só a padrão: com a VPN sempre ligada a padrão é o túnel, e a
+     * validação dele nem sempre reflete a internet de baixo. Internet = alguma rede validada pelo Android.
+     */
+    private fun estadoInternet(): Pair<Boolean, Boolean> {
+        val cm = getSystemService(android.net.ConnectivityManager::class.java) ?: return true to true
+        val caps = runCatching { @Suppress("DEPRECATION") cm.allNetworks.mapNotNull { cm.getNetworkCapabilities(it) } }.getOrNull() ?: return true to true
+        val internet = caps.any { it.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_VALIDATED) }
+        val local = caps.any { it.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI) || it.hasTransport(android.net.NetworkCapabilities.TRANSPORT_ETHERNET) }
+        return internet to local
+    }
+
+    private fun avaliarSemInternet() {
+        ui.removeCallbacks(tarefaSemInternet)
+        if (isDestroyed || !::pilulaSemInternet.isInitialized) return
+        val (internet, local) = estadoInternet()
+        if (internet) {
+            semInternetDesde = 0L
+            if (pilulaSemInternet.visibility != View.GONE) {
+                if (pilulaSemInternet.hasFocus()) linhaApps.requestFocus()
+                pilulaSemInternet.visibility = View.GONE
+                atualizarAvisos()
+            }
+            return
+        }
+        // Espera um pouco: no boot e na troca de Wi-Fi o Android leva alguns segundos para validar a internet.
+        val agora = android.os.SystemClock.elapsedRealtime()
+        if (semInternetDesde == 0L) semInternetDesde = agora
+        val falta = semInternetDesde + SemInternet.ESPERA_MS - agora
+        if (falta > 0) { ui.postDelayed(tarefaSemInternet, falta); return }
+        val app = applicationContext
+        Fundo.rodar {
+            // Fora da thread da tela: as contas de Na rede são decifradas do disco.
+            val pendrive = runCatching { GravacaoDestino.pendrive(app) != null }.getOrDefault(false)
+            val servidores = runCatching { MidiaArmazem.contas(app).map { it.servidor } }.getOrDefault(emptyList())
+            val destino = when {
+                pendrive -> "pendrive"
+                runCatching { GravacaoDestino.pastaRede(app) }.getOrDefault("").isNotEmpty() -> "rede"
+                else -> null
+            }
+            val itens = SemInternet.itens(SemInternet.Estado(local, pendrive, servidores, destino))
+            val frase = SemInternet.frase(itens, getString(R.string.si_sem_internet), { getString(R.string.si_funcionam, it) },
+                mapOf(SemInternet.Item.PENDRIVE to getString(R.string.si_pendrive),
+                    SemInternet.Item.NA_REDE to getString(R.string.home_card_rede),
+                    SemInternet.Item.GRAVACOES to getString(R.string.grv_tela)))
+            ui.post {
+                if (isDestroyed || estadoInternet().first) return@post
+                txtSemInternet.text = frase
+                pilulaSemInternet.visibility = View.VISIBLE
+                atualizarAvisos()
+            }
+        }
+        ui.postDelayed(tarefaSemInternet, 60_000L)   // pendrive ligado ou tirado muda a frase
     }
 
     private fun pararVigiaRede() {
@@ -249,8 +314,10 @@ class MainActivity : Activity() {
         atualizarPilulaAlarme()   // o alarme pode ter mudado na tela do despertador
         atualizarPilulaVencimento()
         atualizarPilulaJogo()
+        atualizarPilulaAniversario()
         getSharedPreferences("launcher", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteLocal)
         vigiarRedeParaClima()   // busca o clima assim que a rede subir no boot, sem esperar o ciclo de 5 min
+        avaliarSemInternet()    // ideia 88
         Privilegio.religarAcessibilidade(this)
         Privilegio.religarDepuracaoSemFio(this)   // o Android pode ter desligado a Depuração sem fio no reinício
         // Fora da thread da tela (13/11/2026): a foto da conta (AccountManager + arquivos) e os agendamentos do despertador
@@ -284,6 +351,7 @@ class MainActivity : Activity() {
         vigiaTocando.desligar()
         getSharedPreferences("launcher", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteLocal)
         pararVigiaRede()
+        ui.removeCallbacks(tarefaSemInternet)
         menuAberto?.dismiss()
         fecharPasta()
         if (modoMover) cancelarMover()
@@ -546,6 +614,26 @@ class MainActivity : Activity() {
             setOnClickListener { abrirBusca() }
         }
         avisos.addView(pilulaJogo, lpPilula())
+        // Ideia 93: "🎂 Hoje é aniversário de tia Rosa · 80 anos" (véspera e dia, lista do painel). OK mostra todos num aviso.
+        txtAniversario = texto(12.5f, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
+        pilulaAniversario = pilula(vidro = false).apply {
+            visibility = View.GONE
+            addView(txtAniversario)
+            setOnClickListener {
+                val todos = Aniversarios.textos(this@MainActivity)
+                if (todos.isNotEmpty()) AvisoTv.rapido(this@MainActivity, getString(R.string.an_rotulo), todos.joinToString("\n"), 8)
+            }
+        }
+        avisos.addView(pilulaAniversario, lpPilula())
+        // Ideia 88: "Sem internet · Funcionam: pendrive, Na rede, Gravações". Primeira da cápsula (é o que mais importa
+        // quando aparece). OK abre o Diagnóstico, que explica a queda em uma frase. Ver avaliarSemInternet.
+        txtSemInternet = texto(12.5f, Estilo.ATENCAO, fonteUi).apply { includeFontPadding = false }
+        pilulaSemInternet = pilula(IconeApp(IconeApp.Tipo.SEM_REDE, Estilo.ATENCAO), vidro = false).apply {
+            visibility = View.GONE
+            addView(txtSemInternet)
+            setOnClickListener { startActivity(Intent(this@MainActivity, DiagnosticoActivity::class.java)) }
+        }
+        avisos.addView(pilulaSemInternet, 0, lpPilula())
         atualizarAvisos()
 
         raiz.addView(topo, FrameLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(TOPO_PALCO) })
@@ -985,9 +1073,12 @@ class MainActivity : Activity() {
         val t0 = android.os.SystemClock.elapsedRealtime()
         filaApps.execute {
             val todos = carregarApps()   // cacheApps só é tocado nesta fila (uma thread)
-            jogosNaTv = todos.count { JogosTv.ehJogo(this, it.pacote) }   // a frase do card Jogos (resumoJogos)
+            val doJogos = todos.filter { JogosTv.ehJogo(this, it.pacote) }
+            jogosNaTv = doJogos.size   // a frase do card Jogos (resumoJogos)
             // Uso recente também aqui fora (04/11/2026): antes rodava dentro de montarEntradas, na thread da tela.
             val uso = if (Config.ORDENAR_POR_USO_RECENTE) Uso.ultimoUso(this) else emptyMap()
+            // Card Jogos em foco (esboço A, 14/11/2026): o fundo é o banner oficial do jogo usado por último.
+            ultimoJogo = Jogos.ultimoUsado(doJogos.map { it.pacote }, uso)?.let { p -> p to doJogos.first { it.pacote == p }.nome }
             // Os retângulos mostram o banner de cada app: lê os que faltam ANTES de desenhar (só na 1ª vez do processo).
             for (app in todos) if (!capas.containsKey(app.pacote)) runCatching { lerCapa(app.pacote, app.icone) }
             val t1 = android.os.SystemClock.elapsedRealtime()
@@ -1168,6 +1259,8 @@ class MainActivity : Activity() {
     }
 
     private lateinit var txtJogo: TextView
+    private lateinit var pilulaAniversario: LinearLayout
+    private lateinit var txtAniversario: TextView
     private lateinit var pilulaJogo: LinearLayout
 
     // ---- Tocando agora (ideia 75)
@@ -1211,6 +1304,22 @@ class MainActivity : Activity() {
         pilulaTocando.contentDescription = getString(R.string.l75_pilula, p.titulo, p.subtitulo)
         capsulaTocando.visibility = View.VISIBLE
         if (!p.tocando) ui.postDelayed(tarefaTocando, 60_000)
+    }
+
+    /** Ideia 93: aniversário hoje ou amanhã (lista da TV). Mais de um: o primeiro e "+N". */
+    private fun atualizarPilulaAniversario() {
+        Fundo.rodar {
+            val textos = runCatching { Aniversarios.textos(this) }.getOrDefault(emptyList())
+            ui.post {
+                if (isDestroyed) return@post
+                if (textos.isEmpty()) { if (pilulaAniversario.hasFocus()) linhaApps.requestFocus(); pilulaAniversario.visibility = View.GONE }
+                else {
+                    txtAniversario.text = "\uD83C\uDF82 " + textos.first() + if (textos.size > 1) "  +${textos.size - 1}" else ""
+                    pilulaAniversario.visibility = View.VISIBLE
+                }
+                atualizarAvisos()
+            }
+        }
     }
 
     /** Ideia 12: lê os lembretes fora da tela e mostra/esconde a pílula do próximo jogo do "Meu time" (LembretesTv). */
@@ -1507,6 +1616,8 @@ class MainActivity : Activity() {
     /** Fundo de um card de Assistir: o ícone grande, ou o degradê da cor enquanto ele não fica pronto. Parado, sem zoom. */
     private fun mostrarCapaAtalho(tipo: IconeApp.Tipo) {
         capaPedida = null
+        // Jogos: o banner (logo oficial) do jogo usado por último, como o de um app em foco. Sem jogo usado, o controle.
+        if (tipo == IconeApp.Tipo.JOGOS) ultimoJogo?.first?.let { p -> capas[p]?.first?.let { capa.mostrar(it, null); return } }
         // Séries e Filmes: a arte do último título, grande à direita (12/11/2026). Sem arte, o ícone como os outros.
         arteAtalho[tipo]?.second?.let { capa.mostrar(it, null, arte = true); return }
         val img = capasAtalho[tipo]?.second?.firstOrNull()
@@ -1674,12 +1785,15 @@ class MainActivity : Activity() {
 
     /** Quantos apps de jogo a TV tem (lido em preencherApps, fora da tela). */
     @Volatile private var jogosNaTv = 0
+    /** pacote e nome do jogo usado por último (UsageStats), ou null. Lido em preencherApps. */
+    @Volatile private var ultimoJogo: Pair<String, String>? = null
 
     /** A frase do card Jogos em foco: "3 jogos · 1 controle ligado" ou, sem jogos, o que o card oferece. */
     private fun resumoJogos(): String {
         val controles = runCatching { JogosTv.controles().size }.getOrDefault(0)
         if (jogosNaTv == 0 && controles == 0) return getString(R.string.home_destaque_jogos_vazio)
         val partes = mutableListOf(resources.getQuantityString(R.plurals.jogos_qtd, jogosNaTv, jogosNaTv))
+        ultimoJogo?.second?.let { partes.add(0, getString(R.string.home_jogos_ultimo, it)) }
         if (controles > 0) partes += resources.getQuantityString(R.plurals.jogos_controles, controles, controles)
         return partes.joinToString(" · ")
     }

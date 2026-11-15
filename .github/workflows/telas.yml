@@ -1,0 +1,76 @@
+# Teste de tela por foto (ideia 96, 14/11/2026; o dono aprovou "se não for pesado").
+# Desenha as telas principais (HOME, Configurações, Filmes, Séries, Jogos, Ajuda, Previsão, Despertador, Boas-vindas,
+# Entrar pelo celular) no computador, sem emulador (Robolectric, gráficos nativos), em inglês e em português, e compara
+# com a versão anterior (app/src/test/telas/referencia.json): letra que encolheu, texto cortado, texto por cima de
+# outro e foco que sumiu quebram o teste. As fotos ficam no artefato "telas" de cada execução.
+#
+# Para não pesar: só em PR que mexe em tela (Kotlin de telas, Estilo, textos, fontes) e à mão. Leva ~4 min (a maior
+# parte é compilar); o Android do Robolectric (~150 MB) fica em cache. O "Build e Release" não roda isto.
+name: Telas
+
+on:
+  pull_request:
+    paths:
+      - 'app/src/main/kotlin/**/*Activity.kt'
+      - 'app/src/main/kotlin/**/Estilo.kt'
+      - 'app/src/main/kotlin/**/Home.kt'
+      - 'app/src/main/kotlin/**/DesenhoHome.kt'
+      - 'app/src/main/res/**'
+      - '!app/src/main/res/values*/strings_versoes.xml'   # O que mudou / Conferir na TV: não é tela desenhada aqui
+      - 'app/src/test/telas/**'
+      - 'app/src/test/kotlin/br/paulo/tvlauncher/telas/**'
+      - '.github/workflows/telas.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: telas-${{ github.ref }}
+  cancel-in-progress: true   # push novo no mesmo PR: a execução antiga não vale mais
+
+jobs:
+  telas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Componentes do Android SDK
+        run: |
+          SDKM=$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | sort -V | tail -1)
+          yes | "$SDKM" --licenses > /dev/null || true
+          "$SDKM" "platforms;android-36" "build-tools;36.0.0"
+
+      - uses: gradle/actions/setup-gradle@v5
+
+      # O Android que o Robolectric desenha (android-all-instrumented) vem do Maven para ~/.m2: guardar evita baixar
+      # ~150 MB a cada execução.
+      - uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository/org/robolectric
+          key: robolectric-${{ hashFiles('app/build.gradle.kts') }}
+          restore-keys: robolectric-
+
+      - name: Desenhar e conferir as telas
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:testReleaseUnitTest -Ptelas --no-daemon
+
+      - name: Resumo
+        if: always()
+        run: cat app/build/telas/relatorio-*.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "Sem relatório (o teste não chegou a rodar)." >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: telas
+          path: app/build/telas/
+          retention-days: 14

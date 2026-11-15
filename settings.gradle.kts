@@ -17,6 +17,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "one-tv-launcher"
 include(":app")
+include(":celular")   // ideia 101: app de celular (casca fina do painel)
 
 // Até 12/11/2026 havia aqui os módulos do servidor do Shizuku embutido (fork thedjchi, pasta shizuku/) e um app de teste
 // (ferramentas/cliente-shizuku). Saíram: o launcher usa só o shell próprio (cliente ADB Wi-Fi). Ver o git se precisar.

@@ -20,12 +20,16 @@ object LegendaExterna {
     const val MAX_RESULTADOS = 12
 
     /** O que procurar: filme (nome + ano) ou episódio (nome da série + temporada + episódio). */
-    data class Busca(val nome: String, val ano: Int? = null, val temporada: Int? = null, val episodio: Int? = null) {
+    /** [tmdb] = id TMDB do filme ou da série (fatia 3: o player conta ao Trakt/Simkl o que está passando). */
+    /** [hash] = o "moviehash" do arquivo (ideia 89): acha a legenda feita para ESTE arquivo, com o tempo certo. */
+    data class Busca(val nome: String, val ano: Int? = null, val temporada: Int? = null, val episodio: Int? = null, val tmdb: Int? = null,
+                     val hash: String? = null) {
         val eEpisodio get() = temporada != null && episodio != null
     }
 
     /** Uma legenda encontrada. [arquivo] é o file_id que o download pede. */
-    data class Candidata(val arquivo: Long, val idioma: String, val nome: String, val baixadas: Int, val surdos: Boolean)
+    data class Candidata(val arquivo: Long, val idioma: String, val nome: String, val baixadas: Int, val surdos: Boolean,
+                         val bateHash: Boolean = false)
 
     private fun cod(v: String) = URLEncoder.encode(v, "UTF-8").replace("+", "%20")
 
@@ -49,6 +53,7 @@ object LegendaExterna {
             b.ano?.let { p["year"] = it.toString() }
         }
         p["languages"] = idiomasBusca(idioma)
+        b.hash?.takeIf { it.matches(Regex("[0-9a-f]{16}")) }?.let { p["moviehash"] = it }
         p["query"] = b.nome.trim().lowercase()
         return "$BASE/subtitles?" + p.entries.joinToString("&") { "${it.key}=${cod(it.value)}" }
     }
@@ -67,16 +72,46 @@ object LegendaExterna {
             val f = arquivos.optJSONObject(0) ?: continue
             val id = f.optLong("file_id", -1).takeIf { it > 0 } ?: continue
             val nome = (a.optString("release").takeIf { it.isNotBlank() && it != "null" } ?: f.optString("file_name")).trim().take(120)
-            saida += Candidata(id, a.optString("language").lowercase(), nome, a.optInt("download_count", 0), a.optBoolean("hearing_impaired", false))
+            saida += Candidata(id, a.optString("language").lowercase(), nome, a.optInt("download_count", 0), a.optBoolean("hearing_impaired", false),
+                a.optBoolean("moviehash_match", false))
         }
-        return saida.sortedWith(compareBy<Candidata>({ it.idioma != preferida }, { it.surdos }, { -it.baixadas })).take(MAX_RESULTADOS)
+        return saida.sortedWith(compareBy<Candidata>({ !it.bateHash }, { it.idioma != preferida }, { it.surdos }, { -it.baixadas })).take(MAX_RESULTADOS)
     }
+
+    // ---------------------------------------------------------------- ideia 89: legenda automática
+
+    /** Bytes lidos do começo e do fim do arquivo para o hash (o algoritmo do OpenSubtitles). */
+    const val BLOCO_HASH = 65_536
+
+    /**
+     * O "moviehash" do OpenSubtitles: tamanho do arquivo + a soma dos números de 64 bits (little-endian) dos primeiros e
+     * dos últimos 64 KB, com estouro (módulo 2^64), em 16 dígitos hexadecimais. Nulo se o arquivo é menor que um bloco.
+     */
+    fun hash(tamanho: Long, inicio: ByteArray, fim: ByteArray): String? {
+        if (tamanho < BLOCO_HASH || inicio.size < BLOCO_HASH || fim.size < BLOCO_HASH) return null
+        var h = tamanho
+        for (bloco in listOf(inicio, fim)) {
+            val b = java.nio.ByteBuffer.wrap(bloco, 0, BLOCO_HASH).order(java.nio.ByteOrder.LITTLE_ENDIAN)
+            repeat(BLOCO_HASH / 8) { h += b.long }
+        }
+        return "%016x".format(h)
+    }
+
+    /** "bytes 0-65535/734003200" -> 734003200 (o tamanho do arquivo, do cabeçalho Content-Range). */
+    fun tamanhoDoRange(cabecalho: String?): Long? = cabecalho?.substringAfterLast('/')?.trim()?.toLongOrNull()?.takeIf { it > 0 }
+
+    /** A legenda que a TV liga sozinha: a que bate com o arquivo; sem ela, a primeira da lista (já ordenada). */
+    fun escolherAuto(lista: List<Candidata>): Candidata? = lista.firstOrNull { it.bateHash } ?: lista.firstOrNull()
 
     fun corpoDownload(arquivo: Long): String = JSONObject().put("file_id", arquivo).put("sub_format", "srt").toString()
 
     /** O link temporário do arquivo, só https (é o que a API devolve; outra coisa é recusada). */
     fun lerDownload(json: String): String? = runCatching { JSONObject(json).optString("link") }.getOrNull()
         ?.takeIf { it.startsWith("https://") }
+
+    /** O download foi recusado porque acabou a cota do dia? (HTTP 406, ou a mensagem "You have downloaded your allowed ..."). */
+    fun acabouLimite(http: Int, json: String?): Boolean =
+        http == 406 || (http !in 200..299 && lerErro(json)?.contains("allowed", ignoreCase = true) == true)
 
     fun corpoLogin(usuario: String, senha: String): String = JSONObject().put("username", usuario).put("password", senha).toString()
 

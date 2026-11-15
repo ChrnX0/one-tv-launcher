@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cel_titulo">Suas TVs</string>
+    <string name="cel_mandar_para">Mandar para qual TV?</string>
+    <string name="cel_ler_qr">Ler o QR da TV</string>
+    <string name="cel_vazio">Nenhuma TV ainda. Na TV, abra Configurações › Acesso remoto › Entrar pelo celular; depois toque no botão abaixo e aponte a câmera para o código.</string>
+    <string name="cel_pareada_segura">%1$s · conexão segura</string>
+    <string name="cel_pareada_http">%1$s · rede de casa</string>
+    <string name="cel_na_rede">Achadas na rede</string>
+    <string name="cel_achada">%1$s · ainda não pareada</string>
+    <string name="cel_achada_explica">Para a conexão segura, leia o QR uma vez: na TV, Configurações › Acesso remoto › Entrar pelo celular. Ou abra agora e entre com o PIN.</string>
+    <string name="cel_abrir_pin">Abrir com o PIN</string>
+    <string name="cel_esquecer">Esquecer</string>
+    <string name="cel_esquecer_explica">Este celular esquece esta TV. Para usar de novo, leia o QR.</string>
+    <string name="cel_aponte">Aponte para o código na TV</string>
+    <string name="cel_qr_invalido">Este não é um código da TV. Na TV, abra Configurações › Acesso remoto › Entrar pelo celular.</string>
+    <string name="cel_cert_outro">A TV respondeu com outro certificado. Se você renovou o certificado, leia o QR de novo.</string>
+</resources>

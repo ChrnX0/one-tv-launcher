@@ -266,7 +266,7 @@
     <string name="cb_bordas">Bordas</string>
     <string name="cb_barras" formatted="false">Barras de cor 75%</string>
     <string name="cb_linhas">Linhas de 1 pixel</string>
-    <string name="ad_ninguem">Ninguém mexe no controle há %1$d min.\nAperte qualquer botão para continuar.</string>
+    <string name="ad_ninguem">Ninguém mexe no controle há %1$s.\nAperte qualquer botão para continuar.</string>
     <string name="ad_vai_desligar">A TV vai desligar em %1$d s</string>
     <string name="home_busca_voz">Busca por voz</string>
     <string name="pg_aviso_as">Aviso às %1$s: %2$s</string>

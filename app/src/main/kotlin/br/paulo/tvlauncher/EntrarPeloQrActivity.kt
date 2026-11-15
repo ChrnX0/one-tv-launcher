@@ -20,6 +20,10 @@ import android.widget.TextView
  * pedem o PIN. Ao sair desta tela, o código é anulado (um QR esquecido não fica valendo).
  *
  * Confere a cada 1 s: o celular entrou -> avisa e fecha; venceu -> some o QR e oferece gerar outro.
+ *
+ * TV sem PIN (ideia 97, 14/11/2026): a mesma tela vira "Configurar pelo celular". O QR leva a `#primeira=<código>` e o
+ * celular abre o assistente de 5 passos, que começa criando o PIN ([PrimeiraConfig]). A porta do painel só fica aberta
+ * sem PIN enquanto esta tela está aberta.
  */
 class EntrarPeloQrActivity : Activity() {
     companion object {
@@ -35,6 +39,9 @@ class EntrarPeloQrActivity : Activity() {
     private lateinit var outro: TextView
     private var geradoEm = 0L       // quando o código atual foi gerado (0 = nenhum)
     private var terminou = false
+    /** TV sem PIN: assistente da primeira configuração em vez de "Entrar pelo celular". Decidido a cada gerar(). */
+    private var primeira = false
+    private val codigo: CodigoEntrada get() = if (primeira) PainelWeb.codigoPrimeira else PainelWeb.codigoEntrada
 
     private val volta = object : Runnable {
         override fun run() { conferir(); if (!terminou) ui.postDelayed(this, 1000) }
@@ -79,17 +86,21 @@ class EntrarPeloQrActivity : Activity() {
     override fun onPause() {
         ui.removeCallbacks(volta)
         PainelWeb.codigoEntrada.cancelar()   // saiu da tela: o QR que ficou para trás não vale mais
+        if (primeira) PainelWeb.sairPrimeiraConfig(this)   // e, sem PIN criado, a porta do painel fecha de novo
         super.onPause()
     }
 
     private fun gerar() {
         terminou = false
-        val link = PainelWeb.linkEntradaQr(DestinoPainel.porNome(intent.getStringExtra(EXTRA_DESTINO)))
-        titulo.text = intent.getStringExtra(EXTRA_TITULO) ?: getString(R.string.lbl_entrar_celular)
+        primeira = !PainelArmazem.temPin(this)
+        val link = if (primeira) PainelWeb.linkPrimeiraConfig(this)
+            else PainelWeb.linkEntradaQr(DestinoPainel.porNome(intent.getStringExtra(EXTRA_DESTINO)))
+        titulo.text = if (primeira) getString(R.string.pc_titulo)
+            else intent.getStringExtra(EXTRA_TITULO) ?: getString(R.string.lbl_entrar_celular)
         if (link == null) {
             geradoEm = 0L
             qr.visibility = View.INVISIBLE
-            texto.text = getString(R.string.qr_painel_fora)
+            texto.text = getString(if (primeira) R.string.pc_sem_rede else R.string.qr_painel_fora)
             return
         }
         geradoEm = System.currentTimeMillis()
@@ -100,24 +111,26 @@ class EntrarPeloQrActivity : Activity() {
 
     private fun conferir() {
         if (geradoEm == 0L) return
-        val c = PainelWeb.codigoEntrada
+        val c = codigo
         if (c.usadoEm >= geradoEm) {
             terminou = true
             qr.visibility = View.INVISIBLE
             titulo.text = getString(R.string.qr_pronto)
-            texto.text = getString(R.string.qr_entrou)
+            texto.text = getString(if (primeira) R.string.pc_entrou else R.string.qr_entrou)
             ui.postDelayed({ if (!isDestroyed && terminou) finish() }, 2500)
             return
         }
         if (!c.ativo()) {
             geradoEm = 0L
             qr.visibility = View.INVISIBLE
-            texto.text = getString(R.string.qr_venceu, getString(R.string.qr_gerar_outro))
+            texto.text = if (primeira) getString(R.string.pc_venceu, getString(R.string.qr_gerar_outro))
+                else getString(R.string.qr_venceu, getString(R.string.qr_gerar_outro))
             outro.requestFocus()
             return
         }
-        val falta = ((geradoEm + CodigoEntrada.VALIDADE_MS - System.currentTimeMillis()) / 1000).coerceAtLeast(0)
-        texto.text = getString(R.string.qr_instrucoes, "${falta / 60}:${"%02d".format(falta % 60)}")
+        val falta = ((geradoEm + c.validadeMs - System.currentTimeMillis()) / 1000).coerceAtLeast(0)
+        val tempo = "${falta / 60}:${"%02d".format(falta % 60)}"
+        texto.text = if (primeira) getString(R.string.pc_instrucoes, tempo) else getString(R.string.qr_instrucoes, tempo)
     }
 
     /** Botão padrão do sistema de design (pílula; foco = branco). */

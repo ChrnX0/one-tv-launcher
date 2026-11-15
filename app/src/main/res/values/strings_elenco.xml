@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ideia 84 "Quem é esse ator?" (ElencoActivity) -->
+    <string name="elenco_botao">Cast</string>
+    <string name="elenco_titulo">Cast</string>
+    <string name="elenco_carregando">Loading the cast…</string>
+    <string name="elenco_vazio">TMDB has no cast for this title.</string>
+    <string name="elenco_dica">Move through the people: below, what else they are in that is in your list.</string>
+    <string name="elenco_na_lista">Also in your list</string>
+    <string name="elenco_procurando">Looking in your list…</string>
+    <string name="elenco_nada_na_lista">Nothing else with this person in your list.</string>
+    <string name="elenco_filme">Movie</string>
+    <string name="elenco_serie">Series</string>
+    <string name="elenco_opcao_player">Cast (who is this actor?)</string>
+    <!-- Ideia 83 "Anteriormente" (SeriesActivity) -->
+    <string name="anteriormente_titulo">Previously on %1$s</string>
+    <string name="anteriormente_assistir">Watch %1$s</string>
+    <string name="anteriormente_pular_sempre">Never show</string>
+    <string name="anteriormente_desligado">Recaps turned off. To turn them on again: hold OK on an episode.</string>
+    <string name="anteriormente_ligar">Show “Previously on” recaps</string>
+    <!-- Ideia 91: idade máxima no modo infantil (Classificacao) -->
+    <string name="idade_titulo">Maximum age in kids mode</string>
+    <string name="idade_det">Movies and series rated up to this age show up from any category (TMDB rating). Unrated ones only in kids categories.</string>
+    <string name="idade_so_categorias">Kids categories only</string>
+    <string name="idade_livre">All ages</string>
+    <string name="idade_anos">Up to %1$d years</string>
+    <!-- Ideia 82: onde assistir (OndeAssistir) -->
+    <string name="onde_tambem_em">Also on: %1$s (JustWatch)</string>
+    <string name="onde_fora">Not in your list · on %1$s</string>
+    <string name="onde_grupo">Elsewhere (JustWatch)</string>
+    <!-- Ideia 89: legenda automática -->
+    <string name="legenda_auto_pronta">Subtitles downloaded automatically (made for this file) · ▼ to change</string>
+    <string name="legenda_auto_pronta_nome">Subtitles downloaded automatically · ▼ to change or adjust the delay</string>
+    <string name="legenda_auto_opcao">Download subtitles automatically</string>
+    <string name="legenda_auto_ligada">Subtitles will be downloaded when missing</string>
+    <string name="legenda_auto_desligada">Automatic subtitles turned off</string>
+</resources>

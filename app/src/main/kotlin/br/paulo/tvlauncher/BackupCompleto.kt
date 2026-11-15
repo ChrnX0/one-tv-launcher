@@ -29,9 +29,11 @@ object BackupCompleto {
 
     /** Preferências que vão inteiras, além das do backup comum (BackupConfig.ARQUIVOS). */
     internal val PREFS_EXTRAS = listOf("player", "painel_seguro", "mcp_seguro", "unifi_seguro", "tunel_seguro",
-        "extras", "cenas", "casa_ha", "modo_visita", "aviso_chuva", "clima",
+        "extras", "cenas", "casa_ha", "modo_visita", "aviso_chuva", "aviso_temperatura", "clima",
         "jogos",   // card Jogos (14/11/2026): grupos escolhidos, IP e app do PC
-        "gravacao")   // gravação (14/11/2026): a pasta da rede de reserva
+        "gravacao",   // gravação (14/11/2026): a pasta da rede de reserva
+        "nuvem",   // Na rede › OneDrive/Dropbox (14/11/2026): o id do app Microsoft e a chave do Dropbox que o dono digitou
+        "sincronizar_filmes")   // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
     /**
      * Preferências que NÃO vão, de propósito (o teste BackupCompletoTest confere que nenhuma outra ficou esquecida):
      * "confirmacoes" (restaurar um backup não pode liberar nada sem o PIN, ver ConfirmacoesTv), "painel_log" (registro),
@@ -62,13 +64,15 @@ object BackupCompleto {
         "volume_lg",
         // Ideias 35 e 41 (14/11/2026): a central de avisos da TV (passageira) e as medidas de espaço livre por dia (valem
         // só para o armazenamento deste aparelho).
-        "aviso_tv_historico", "saude_tendencia")
+        "aviso_tv_historico", "saude_tendencia",
+        // "info_externa" (serviços de filmes, 14/11/2026): só contadores de cota e a data da última nota do IMDb.
+        "info_externa")
     /** Chaves que o Keystore cifrou: não servem em outra instalação. O valor em claro vai em "segredos". */
     private val CHAVES_DO_KEYSTORE = setOf("chave_cifrada", "chave_iv") + CasaHA.CHAVES_DO_KEYSTORE
     /** Arquivos pequenos do player (files/player). O contas.json fica de fora: vai decifrado em "segredos". */
     val ARQUIVOS_PLAYER = listOf("favoritos.json", "recentes.json", "ocultas.json", "liberadas.json", "posicoes.json",
         "interesses_series.json", "interesses_filmes.json", "series_ultimos.json", "series_progresso.json",
-        "parental.json", "ultimo.json")
+        "parental.json", "ultimo.json", "radios.json", "ano_canais.json")   // rodada 2: rádios favoritas, minutos por canal
     private const val ESTADO_TUNEL = "tailscaled.state"
     /** No máximo tantas cópias por perfil vão no backup (8 contas x 5 arquivos já sobra). */
     private const val MAX_COPIAS_PERFIL = 64
@@ -98,6 +102,7 @@ object BackupCompleto {
         UnifiArmazem.chave(app)?.let { segredos.put("unifi", it) }
         TunelTailscale.chave(app)?.let { segredos.put("tailscale", it) }
         CasaHA.tokenParaBackup(app)?.let { segredos.put("casa_ha", it) }
+        ServicosContas.paraBackup(app)?.let { segredos.put("servicos", it) }   // contas dos serviços de filmes e séries
         val arquivos = JSONObject()
         val pastaPlayer = PlayerArmazem.pasta(app)
         for (n in ARQUIVOS_PLAYER) lerPequeno(File(pastaPlayer, n))?.let { arquivos.put("player/$n", it) }
@@ -157,6 +162,8 @@ object BackupCompleto {
         if (tailscale != null && !TunelTailscale.chaveValida(tailscale)) throw IllegalArgumentException("chave do Tailscale inválida no backup")
         val tokenCasa = segredos.optString("casa_ha").ifEmpty { null }
         if (tokenCasa != null && !CasaHA.tokenValido(tokenCasa)) throw IllegalArgumentException("token do Home Assistant inválido no backup")
+        val servicos = segredos.optString("servicos").ifEmpty { null }
+        if (servicos != null && ServicosFilmes.contasDeJson(servicos).isEmpty()) throw IllegalArgumentException("contas dos serviços de filmes inválidas no backup")
         val arquivos = o.optJSONObject("arquivos") ?: JSONObject()
         val bytes = mutableMapOf<String, ByteArray>()
         for (caminho in arquivos.keys()) {
@@ -198,6 +205,7 @@ object BackupCompleto {
             if (!PlayerArmazem.substituirContas(app, iptv)) throw IllegalStateException("não consegui gravar as contas de TV ao vivo")
             if (unifi != null && !UnifiArmazem.definirChave(app, unifi)) throw IllegalStateException("não consegui gravar a chave do UniFi")
             if (tailscale != null && !TunelTailscale.definirChave(app, tailscale)) throw IllegalStateException("não consegui gravar a chave do Tailscale")
+            if (servicos != null && !ServicosContas.restaurarDoBackup(app, servicos)) throw IllegalStateException("não consegui gravar as contas dos serviços de filmes")
             if (tokenCasa != null && !CasaHA.definirToken(app, tokenCasa)) throw IllegalStateException("não consegui gravar o token do Home Assistant")
             for ((caminho, b) in bytes) {
                 val destino = destinos.getValue(caminho)

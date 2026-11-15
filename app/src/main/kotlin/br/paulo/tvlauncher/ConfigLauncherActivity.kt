@@ -147,7 +147,10 @@ class ConfigLauncherActivity : Activity() {
         val colunas = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false }
         menu = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false; setPadding(0, dp(4), 0, dp(4)) }
         abas.forEachIndexed { i, aba -> menu.addView(itemMenu(i, aba), LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(4) }) }
-        colunas.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(menu) },
+        colunas.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(menu)
+            // Igual ao conteúdo: corta embaixo (a última aba não passa por cima da barra de dicas; achado do teste de tela,
+            // ideia 96) e deixa 16 dp dos lados para a pílula com foco crescer.
+            addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ -> v.clipBounds = android.graphics.Rect(-dp(16), 0, v.width + dp(16), v.height) } },
             LinearLayout.LayoutParams(dp(270), MATCH))
         // Sem linha separando menu e conteúdo (nenhuma outra tela tem): o espaço já separa as duas colunas.
         colunas.addView(View(this), LinearLayout.LayoutParams(dp(Estilo.E3 + 8), MATCH))
@@ -306,12 +309,17 @@ class ConfigLauncherActivity : Activity() {
             leitura.execute { IdiomaPlayer.definirPadrao(this, nova) }
         }
         c.addView(linhaAudio)
-        // Legenda da internet: a chave de API e a conta do OpenSubtitles são do dono (o launcher é público, não leva chave).
+        // Serviços de filmes e séries (14/11/2026): Trakt, Simkl, MDBList, TMDB e OpenSubtitles numa tela só. A chave do
+        // OpenSubtitles agora é a do app; a linha antiga (chave do dono) só aparece para quem já tinha cadastrado uma,
+        // enquanto o build não tiver a chave do app.
+        c.addView(linha(getString(R.string.sv_linha), getString(R.string.sv_linha_det), seta = true) {
+            startActivity(Intent(this, ServicosFilmesActivity::class.java))
+        }, lp())
         lateinit var linhaLeg: LinhaCfg
         linhaLeg = linha(getString(R.string.legenda_conta_titulo), getString(R.string.legenda_conta_det), valor = "…") {
             pedirContaLegenda { tem -> linhaLeg.valor(getString(if (tem) R.string.legenda_conta_sim else R.string.legenda_conta_nao)) }
         }
-        c.addView(linhaLeg)
+        if (!ServicosContas.disponivel(ServicosFilmes.Servico.OPENSUBTITLES)) c.addView(linhaLeg)
         // Som e legenda para quem enxerga ou ouve pior (14/11/2026). As mesmas chaves do menu ▼ do player.
         secao(c, getString(R.string.acess_config_titulo))
         val chavesAcess = listOf(PlayerAcessivel.LEGENDA_FUNDO to R.string.acess_legenda_fundo, PlayerAcessivel.LEGENDA_AMARELA to R.string.acess_legenda_amarela) +
@@ -323,6 +331,12 @@ class ConfigLauncherActivity : Activity() {
             }
             c.addView(l)
         }
+        // Ideia 86: filme na taxa de quadros dele (24 Hz), a mesma chave do menu ▼ do player e do painel.
+        lateinit var linhaQuadros: LinhaCfg
+        linhaQuadros = linha(getString(R.string.quadros_opcao), getString(R.string.quadros_det), chave = TaxaQuadros.ligada(this)) {
+            linhaQuadros.ligado(TaxaQuadros.alternar(this))
+        }
+        c.addView(linhaQuadros)
         // Foto da conta Google na bolinha do perfil (FotoPerfil, 13/11/2026): abre a tela do código para o celular.
         secao(c, getString(R.string.fp_secao))
         c.addView(linha(getString(R.string.fp_linha), getString(R.string.fp_linha_det), seta = true) {
@@ -596,6 +610,21 @@ class ConfigLauncherActivity : Activity() {
                 startActivity(Intent(this, BloqueioCanaisActivity::class.java).putExtra(BloqueioCanaisActivity.EXTRA_INFANTIS, true))
             }
         }, lp())
+        // Ideia 91: idade máxima no modo infantil (classificação indicativa do TMDB). Escolher pede o PIN.
+        fun nomeIdade(i: Int) = when (i) { Classificacao.DESLIGADA -> getString(R.string.idade_so_categorias); 0 -> getString(R.string.idade_livre); else -> getString(R.string.idade_anos, i) }
+        lateinit var linhaIdade: LinhaCfg
+        linhaIdade = linha(getString(R.string.idade_titulo), getString(R.string.idade_det), valor = nomeIdade(r.idadeMax)) {
+            pedirPinParental {
+                val atual = PlayerArmazem.parental(this)
+                Estilo.lista(this, getString(R.string.idade_titulo), Classificacao.OPCOES.map { nomeIdade(it) },
+                    listOf(Classificacao.OPCOES.indexOf(atual.idadeMax))) { i ->
+                    val nova = PlayerArmazem.parental(this).copy(idadeMax = Classificacao.OPCOES[i])
+                    if (PlayerArmazem.definirParental(this, nova)) linhaIdade.valor(nomeIdade(nova.idadeMax))
+                    else linhaIdade.detalhe(getString(R.string.cl_nao_gravei_tente))
+                }
+            }
+        }
+        c.addView(linhaIdade, lp())
         // PIN das crianças (ideia 34): destrava na frente da criança sem entregar o PIN que administra a TV.
         c.addView(linha(getString(R.string.fam_pin), getString(R.string.fam_pin_det),
             valor = getString(if (PainelArmazem.temPinFamilia(this)) R.string.cl_definido else R.string.cl_nao_definido)) {
@@ -761,6 +790,14 @@ class ConfigLauncherActivity : Activity() {
             linhaChuva.ligado(AvisoChuva.ligado(this))
         }
         c.addView(linhaChuva, lp())
+        // Ideia 94: calor ou frio forte ("Beba água"), no mesmo cartão do aviso de chuva.
+        lateinit var linhaTemp: LinhaCfg
+        linhaTemp = linha(getString(R.string.tp_cfg), getString(R.string.tp_cfg_det, AvisoTemperatura.CALOR.toInt(), AvisoTemperatura.FRIO.toInt()),
+            chave = AvisoTemperatura.ligado(this)) {
+            AvisoTemperatura.definirLigado(this, !AvisoTemperatura.ligado(this))
+            linhaTemp.ligado(AvisoTemperatura.ligado(this))
+        }
+        c.addView(linhaTemp, lp())
         extrasDaAba(c, ExtrasAbas.Aba.APARENCIA)
     }
 
