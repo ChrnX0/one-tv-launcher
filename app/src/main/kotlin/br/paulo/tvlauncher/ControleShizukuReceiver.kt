@@ -223,7 +223,11 @@ open class ControleShizukuReceiver : BroadcastReceiver() {
             UNIFI -> if (this is ControleShizukuAdbReceiver) {
                 val pendente = goAsync()   // HTTP: fora da thread principal
                 val antiga = intent.getBooleanExtra("antiga", false)   // --ez antiga true: testa a API antiga (sinal da TV)
-                Fundo.rodar { try { pendente.resultData = if (antiga) UnifiCliente.testarApiAntiga(ctx) else UnifiCliente.verificarNovos(ctx) }
+                val o = intent.getStringExtra("o")   // --es o relato [--ei horas 8]: relato só de leitura (eventos e tempo ligado)
+                Fundo.rodar { try { pendente.resultData = when {
+                        o == "relato" -> UnifiCliente.relato(ctx, intent.getIntExtra("horas", 8))
+                        antiga -> UnifiCliente.testarApiAntiga(ctx)
+                        else -> UnifiCliente.verificarNovos(ctx) } }
                     finally { pendente.finish() } }
             }
             REINICIAR -> {

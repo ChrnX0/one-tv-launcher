@@ -247,4 +247,58 @@ object Unifi {
     } catch (e: Exception) {
         "não é JSON (${texto.length} caracteres, começa com \"${texto.take(15).filter { it.isLetterOrDigit() || it in "<>{}[ !" }}\")"
     }
+
+    // ------------------------------------------------------------ relato do roteador (só leitura, 15/11/2026)
+
+    /**
+     * "Por que a TV caiu do Wi-Fi?": os aparelhos UniFi (gateway, pontos de acesso) com o tempo que estão ligados,
+     * a partir do stat/device da API antiga. Um tempo ligado menor que o da queda mostra que o roteador reiniciou.
+     */
+    fun relatoAparelhos(texto: String, agoraMs: Long, zona: java.time.ZoneId): List<String> {
+        val dados = JSONObject(texto).optJSONArray("data") ?: return listOf("aparelhos: resposta sem lista")
+        val fmt = java.time.format.DateTimeFormatter.ofPattern("dd/MM HH:mm").withZone(zona)
+        val linhas = ArrayList<String>()
+        for (i in 0 until dados.length()) {
+            val d = dados.optJSONObject(i) ?: continue
+            val nome = d.optString("name").ifEmpty { d.optString("model") }.take(40)
+            val modelo = d.optString("model").take(20)
+            val versao = d.optString("version").take(30)
+            val up = d.optLong("uptime", -1L)
+            val ligado = if (up < 0) "tempo ligado desconhecido" else {
+                val desde = fmt.format(java.time.Instant.ofEpochMilli(agoraMs - up * 1000))
+                "ligado há ${up / 3600} h ${up % 3600 / 60} min (desde $desde)"
+            }
+            linhas += "aparelho $nome ($modelo, ${d.optString("type").take(10)}): $ligado" +
+                (if (versao.isNotEmpty()) ", versão $versao" else "") +
+                (if (d.optBoolean("upgradable")) ", tem atualização pendente" else "")
+        }
+        return linhas.ifEmpty { listOf("aparelhos: nenhum") }
+    }
+
+    /**
+     * Eventos do stat/event da API antiga que importam para a queda: os da TV (pelo [macTv]) e os dos aparelhos UniFi
+     * (reinício, atualização, perda de contato, mudança de canal). Do mais velho ao mais novo, no máximo [max].
+     */
+    fun relatoEventos(texto: String, macTv: String?, zona: java.time.ZoneId, max: Int = 80): List<String> {
+        val dados = JSONObject(texto).optJSONArray("data") ?: return listOf("eventos: resposta sem lista")
+        val fmt = java.time.format.DateTimeFormatter.ofPattern("dd/MM HH:mm:ss").withZone(zona)
+        val mac = macTv?.lowercase()
+        val achados = ArrayList<Pair<Long, String>>()
+        var total = 0
+        for (i in 0 until dados.length()) {
+            val e = dados.optJSONObject(i) ?: continue
+            total++
+            val chave = e.optString("key")
+            val daTv = mac != null && (e.optString("user").lowercase() == mac || e.optString("client").lowercase() == mac ||
+                e.optString("guest").lowercase() == mac || e.optString("msg").lowercase().contains(mac))
+            val doAparelho = EVENTOS_DE_APARELHO.any { chave.startsWith(it) }
+            if (!daTv && !doAparelho) continue
+            val t = e.optLong("time", 0L)
+            achados += t to "${if (t > 0) fmt.format(java.time.Instant.ofEpochMilli(t)) else "?"} ${if (daTv) "[TV] " else ""}$chave: ${e.optString("msg").take(160)}"
+        }
+        val linhas = achados.sortedBy { it.first }.takeLast(max).map { it.second }
+        return listOf("eventos: $total no período, ${achados.size} sobre a TV ou os aparelhos UniFi") + linhas
+    }
+
+    private val EVENTOS_DE_APARELHO = listOf("EVT_GW_", "EVT_AP_", "EVT_SW_", "EVT_LU_", "EVT_DM_", "EVT_USW_", "EVT_UGW_", "EVT_UDM_")
 }

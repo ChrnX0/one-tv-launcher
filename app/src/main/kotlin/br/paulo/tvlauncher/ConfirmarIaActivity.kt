@@ -36,6 +36,8 @@ class ConfirmarIaActivity : Activity() {
     override fun onCreate(estado: Bundle?) {
         super.onCreate(estado)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
+        // A pergunta espera até 3 min: sem isto o protetor de tela pode voltar por cima dela antes de alguém responder.
+        window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         montar(intent)
     }
 
