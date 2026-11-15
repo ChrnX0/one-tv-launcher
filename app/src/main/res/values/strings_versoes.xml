@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Recording: when the list drops the channel, the TV keeps retrying for up to 2 minutes before giving up (it used to give up after 6 seconds)</item>
         <item>Movie and series details redone for reading from afar: big actions down the left (Continue, Trailer, Cast, Collection…), info and poster on the right; nothing jumps around when data arrives, and “Full synopsis” opens the whole text</item>
         <item>Trailer: when the server has none, the details page uses the TMDB trailer (YouTube); series list titles no longer repeat the year</item>
         <item>Recording: with a USB drive the TV can’t read (NTFS, like a Windows installer) or that is full, the TV now says why right away instead of looking like it recorded; with 2 partitions it records on the one with more space</item>

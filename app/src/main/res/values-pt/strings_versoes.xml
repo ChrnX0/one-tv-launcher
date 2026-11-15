@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Gravação: quando a lista derruba o canal, a TV insiste por até 2 minutos antes de desistir (antes desistia em 6 segundos)</item>
         <item>Ficha de filme e de série refeita para ler de longe: ações grandes à esquerda (Continuar, Trailer, Elenco, Coleção…), informações e pôster à direita; nada pula de lugar quando os dados chegam, e “Sinopse inteira” abre o texto todo</item>
         <item>Trailer: quando o servidor não tem, a ficha usa o trailer do TMDB (YouTube); o título dos episódios não repete mais o ano</item>
         <item>Gravação: com um pendrive que a TV não lê (NTFS, como o do instalador do Windows) ou cheio, a TV agora diz o motivo na hora, em vez de parecer que gravou; com 2 partes no pendrive, grava na que tem mais espaço</item>

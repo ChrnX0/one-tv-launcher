@@ -24,7 +24,11 @@ object GravacaoRegras {
     const val FOLGA_DEPOIS_MS = 5 * 60_000L
     const val RESERVA_MS = 10 * 60_000L                  // precisa caber mais 10 min para continuar
     const val BITRATE_PADRAO_BPS = 8_000_000L            // enquanto não mediu: o pior caso (Full HD)
-    const val TENTATIVAS = 3                             // a conexão caiu: tenta de novo até 3 vezes seguidas
+    // A conexão caiu: tenta de novo até 8 vezes seguidas, esperando 2, 4, 8, 16 e depois 30 s (~2 min no total).
+    // Medido na Sala (15/11/2026): a lista derrubou o canal aos 90 s e respondeu HTTP 502 por mais de 6 s; com 3
+    // tentativas (2 + 4 s) a gravação desistia.
+    const val TENTATIVAS = 8
+    fun espera(falhas: Int): Long = minOf(2000L shl (falhas - 1).coerceIn(0, 10), 30_000L)
     const val SEMANA_MS = 7 * 24 * 60 * 60_000L
     const val MAX_AGENDADAS = 50
 
