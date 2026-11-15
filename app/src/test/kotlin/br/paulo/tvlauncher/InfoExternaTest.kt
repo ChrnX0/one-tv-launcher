@@ -63,6 +63,26 @@ class InfoExternaTest {
         assertNull(InfoExterna.lerDetalhe("{}", false))
     }
 
+    @Test fun trailerDoTmdb() {
+        val v = org.json.JSONArray("""[
+            {"site":"YouTube","type":"Featurette","key":"abcdefgh1","iso_639_1":"pt"},
+            {"site":"Vimeo","type":"Trailer","key":"vimeo12345","iso_639_1":"pt"},
+            {"site":"YouTube","type":"Teaser","key":"teaserPT01","iso_639_1":"pt","official":true},
+            {"site":"YouTube","type":"Trailer","key":"trailerEN1","iso_639_1":"en","official":true},
+            {"site":"YouTube","type":"Trailer","key":"trailerPTf","iso_639_1":"pt","official":false},
+            {"site":"YouTube","type":"Trailer","key":"bad key/../x","iso_639_1":"pt","official":true}]""")
+        // Trailer em português (mesmo de fã) antes do inglês oficial; Teaser e Featurette depois; chave estranha fora.
+        assertEquals("trailerPTf", InfoExterna.escolherTrailer(v, "pt-BR"))
+        assertEquals("trailerEN1", InfoExterna.escolherTrailer(v, "en-US"))
+        assertEquals("", InfoExterna.escolherTrailer(null, "pt-BR"))
+        val d = InfoExterna.lerDetalhe("""{"id":5,"videos":{"results":[{"site":"YouTube","type":"Trailer","key":"trailerEN1","iso_639_1":"en"}]}}""", false)!!
+        assertEquals("https://www.youtube.com/watch?v=trailerEN1", d.linkTrailer)
+        // Ficha guardada antes do trailer: os dados ficam, mas a data zera para pedir de novo.
+        val antigo = org.json.JSONObject("""{"t":5,"d":{"i":"","s":"x"},"de":1000}""")
+        assertEquals(0L, InfoExterna.guardadoDeJson(antigo).detalheEm)
+        assertEquals("x", InfoExterna.guardadoDeJson(antigo).detalhe?.sinopse)
+    }
+
     @Test fun sagaNaLista() {
         val partes = InfoExterna.lerColecao("""{"parts":[{"id":2,"title":"Duna: Parte Dois","original_title":"Dune: Part Two","release_date":"2024-02-27"},
             {"id":438631,"title":"Duna","original_title":"Dune","release_date":"2021-09-15"},{"id":3,"title":"Duna: Messias","release_date":"2026-12-16"}]}""")
@@ -99,7 +119,7 @@ class InfoExternaTest {
 
     @Test fun guardadoIdaEVolta() {
         val g = InfoExterna.Guardado(tmdb = 10, imdb = "tt0111161", imdbNota = 9.3f, recusados = setOf(3, 4),
-            detalhe = InfoExterna.Detalhe(10, "tt1", "sinopse", listOf("A", "B"), listOf("Drama"), InfoExterna.Colecao(7, "Saga"), InfoExterna.ProximoEp("2026-11-21", 1, 2), true),
+            detalhe = InfoExterna.Detalhe(10, "tt1", "sinopse", listOf("A", "B"), listOf("Drama"), InfoExterna.Colecao(7, "Saga"), InfoExterna.ProximoEp("2026-11-21", 1, 2), true, "abcdefgh12"),
             detalheEm = 100, notas = InfoExterna.Notas(null, 90, null, 3.5f), notasEm = 200)
         assertEquals(9.3f, InfoExterna.notasDe(g).imdb)   // sem IMDb do MDBList, vale o do arquivo público
         assertEquals(7f, InfoExterna.notasDe(g.copy(notas = InfoExterna.Notas(imdb = 7f))).imdb)
