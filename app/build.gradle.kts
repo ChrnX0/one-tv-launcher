@@ -58,6 +58,10 @@ android {
             "com.google.android.youtube.tv,com.google.android.youtube.tvmusic,com.netflix.ninja,com.android.vending"))
         buildConfigField("String", "BOTAO_NETFLIX", pessoalTexto("botao_netflix", "com.netflix.ninja"))
         buildConfigField("String", "ECLIPSES", pessoalTexto("eclipses"))
+        // Cuidar de longe (15/11/2026, decisão do Paulo): a Play proíbe app que avisa terceiros sobre um adulto, mesmo
+        // com consentimento (regra de stalkerware). Build da Play = `-Pplay`: só fica o pedido de ajuda (77); o aviso à
+        // família do lembrete (78) e da TV que não ligou (79) só existe no APK do site.
+        buildConfigField("boolean", "CUIDAR_FAMILIA", (!project.hasProperty("play")).toString())
         for (k in listOf("TMDB_CHAVE", "TRAKT_ID", "TRAKT_SEGREDO", "SIMKL_ID", "OPENSUBTITLES_CHAVE")) buildConfigField("String", k, chaveApp(k))
     }
 

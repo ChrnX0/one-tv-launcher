@@ -33,6 +33,19 @@ class CuidarDeLongeTest {
         assertEquals(CuidarDeLonge.Falta.NOME, CuidarDeLonge.falta(c))
     }
 
+    @Test fun buildDaPlaySoOferecePedidoDeAjuda() {
+        assertEquals(aceita, CuidarDeLonge.limitar(aceita, familia = true))
+        val play = CuidarDeLonge.limitar(aceita, familia = false)
+        assertEquals(setOf(Aviso.AJUDA), play.avisos)
+        // o aceite era para os 3 avisos: com menos avisos a assinatura muda e a TV pergunta de novo
+        assertFalse(CuidarDeLonge.consentido(play))
+        Aviso.values().forEach { assertFalse(CuidarDeLonge.ativo(play, it)) }
+        val reaceita = CuidarDeLonge.consentir(play, ms("2026-11-15T11:00"))
+        assertTrue(CuidarDeLonge.ativo(reaceita, Aviso.AJUDA))
+        assertFalse(CuidarDeLonge.ativo(reaceita, Aviso.LEMBRETE))
+        assertEquals(reaceita, CuidarDeLonge.limitar(reaceita, familia = false))
+    }
+
     @Test fun semConsentimentoNadaSaiMesmoConfigurado() {
         Aviso.values().forEach { assertFalse(CuidarDeLonge.ativo(pronta, it)) }
         Aviso.values().forEach { assertTrue(CuidarDeLonge.ativo(aceita, it)) }

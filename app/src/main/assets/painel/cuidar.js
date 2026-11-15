@@ -60,7 +60,7 @@
     for (const a of e.disponiveis) ap.appendChild(caixa('Recebe: ' + a.nome, e.aparelhos.includes(a.id), a.id));
 
     const av = $('avisosCuidar'); av.textContent = '';
-    for (const k of Object.keys(NOMES_AVISOS)) av.appendChild(caixa(NOMES_AVISOS[k], e.avisos.includes(k), k));
+    for (const k of Object.keys(NOMES_AVISOS)) if (e.familia !== false || k === 'AJUDA') av.appendChild(caixa(NOMES_AVISOS[k], e.avisos.includes(k), k));
 
     opcoes($('prazoCuidar'), [10, 15, 20, 30, 60].map((m) => [m, m + ' min']), e.prazo);
     const aprendida = e.costume != null && e.horaFixa < 0 ? 'Aprender (' + hhmm(e.costume) + ')' : 'Aprender (' + e.amostras + ' de 5 dias)';

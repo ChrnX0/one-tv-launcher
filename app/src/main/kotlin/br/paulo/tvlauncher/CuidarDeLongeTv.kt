@@ -40,7 +40,8 @@ object CuidarDeLongeTv {
 
     // ---------------------------------------------------------------- configuração e estado
 
-    fun config(ctx: Context): CuidarDeLonge.Config = CuidarDeLonge.deJson(prefs(ctx).getString("config", null))
+    fun config(ctx: Context): CuidarDeLonge.Config =
+        CuidarDeLonge.limitar(CuidarDeLonge.deJson(prefs(ctx).getString("config", null)), BuildConfig.CUIDAR_FAMILIA)
 
     @Synchronized
     fun mudar(ctx: Context, f: (CuidarDeLonge.Config) -> CuidarDeLonge.Config): CuidarDeLonge.Config {
@@ -295,6 +296,7 @@ object CuidarDeLongeTv {
         return o.put("consentido", CuidarDeLonge.consentido(c))
             .put("falta", CuidarDeLonge.falta(c)?.name ?: JSONObject.NULL)
             .put("plano", Planos.permite(app, Planos.Recurso.CUIDAR_DE_LONGE))
+            .put("familia", BuildConfig.CUIDAR_FAMILIA)   // false na build da Play: só o pedido de ajuda
             .put("disponiveis", JSONArray().apply { aparelhos(app).forEach { (id, nome) -> put(JSONObject().put("id", id).put("nome", nome)) } })
             .put("costume", CuidarDeLonge.horaCostume(c, e.ligadas, hoje) ?: JSONObject.NULL)
             .put("amostras", e.ligadas.keys.count { it < hoje })

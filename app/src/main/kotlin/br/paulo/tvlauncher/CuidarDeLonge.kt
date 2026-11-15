@@ -31,6 +31,13 @@ import java.util.TimeZone
 object CuidarDeLonge {
     enum class Aviso { AJUDA, LEMBRETE, NAO_LIGOU }
 
+    /** Avisos que esta build oferece. [familia] false (build da Play) = só o pedido de ajuda, que parte da própria pessoa. */
+    fun permitidos(familia: Boolean): Set<Aviso> = if (familia) Aviso.values().toSet() else setOf(Aviso.AJUDA)
+
+    /** Tira os avisos que a build não oferece. Mudar os avisos muda a assinatura: um aceite antigo deixa de valer. */
+    fun limitar(c: Config, familia: Boolean): Config =
+        if (c.avisos.all { it in permitidos(familia) }) c else c.copy(avisos = c.avisos.filter { it in permitidos(familia) }.toSet())
+
     /**
      * Tecla que, segurada [SEGURAR_MS], pede ajuda. VOLTAR é o padrão: é a tecla que todo mundo acha, e ninguém a segura
      * 3 s sem querer (o toque curto continua sendo "voltar"). HOME curto/longo já tem uso; os botões de app seguram 3 s
