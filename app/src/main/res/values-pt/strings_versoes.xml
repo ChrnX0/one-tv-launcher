@@ -14,7 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>A pílula do despertador na tela inicial agora muda na hora quando um alarme é criado ou apagado pelo celular, painel ou Claude</item>
+        <item>As pílulas do despertador e do timer na tela inicial agora mudam na hora quando um alarme é criado ou apagado pelo celular, painel ou Claude</item>
         <item>A pergunta na TV diz de onde veio o pedido (Claude, painel, link de cena) em vez de “Pedido pelo painel (mcp)”</item>
         <item>Wi-Fi que não volta sozinho: se a TV ficar 5 min com o Wi-Fi ligado mas sem conexão, o launcher desliga e religa o Wi-Fi; se mesmo assim não voltar, reinicia a TV (no máximo uma vez a cada 6 h e nunca com som tocando). Fica anotado no histórico de rede</item>
         <item>Timer de sono: com a LG NetCast pareada para o volume, o timer agora também desliga a LG pela rede 15 s depois que o Chromecast dorme (a LG ignora o standby do HDMI)</item>

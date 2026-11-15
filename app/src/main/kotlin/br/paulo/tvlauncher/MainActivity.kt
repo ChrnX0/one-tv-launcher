@@ -112,11 +112,14 @@ class MainActivity : Activity() {
         if (chave == LocalClima.CHAVE_LAT || chave == LocalClima.CHAVE_LON) { ui.removeCallbacks(tarefaClima); ui.postDelayed(tarefaClima, 300) }
     }
     /**
-     * Despertador criado ou apagado de fora (MCP, painel, celular) com a HOME na tela: a pílula só mudava na próxima
-     * volta à HOME (teste na Sala, 15/11/2026: alarme apagado pelo MCP continuava na pílula).
+     * Despertador ou timer criado ou apagado de fora (MCP, painel, celular) com a HOME na tela: a pílula só mudava na
+     * próxima volta à HOME (teste na Sala, 15/11/2026: alarme apagado e timer criado pelo MCP não apareciam).
      */
     private val ouvinteAlarmes = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
         ui.post { runCatching { atualizarPilulaAlarme() } }
+    }
+    private val ouvinteTimer = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+        ui.post { ui.removeCallbacks(tarefaTimer); ui.post(tarefaTimer) }
     }
     private lateinit var txtDica: TextView            // guia de teclas do modo mover (some fora dele)
     private lateinit var fotoPerfil: ImageView        // a bolinha do perfil, no canto superior direito
@@ -324,6 +327,7 @@ class MainActivity : Activity() {
         atualizarPilulaAniversario()
         getSharedPreferences("launcher", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteLocal)
         getSharedPreferences("despertador", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteAlarmes)
+        getSharedPreferences("timer", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteTimer)
         vigiarRedeParaClima()   // busca o clima assim que a rede subir no boot, sem esperar o ciclo de 5 min
         avaliarSemInternet()    // ideia 88
         Privilegio.religarAcessibilidade(this)
@@ -359,6 +363,7 @@ class MainActivity : Activity() {
         vigiaTocando.desligar()
         getSharedPreferences("launcher", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteLocal)
         getSharedPreferences("despertador", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteAlarmes)
+        getSharedPreferences("timer", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteTimer)
         pararVigiaRede()
         ui.removeCallbacks(tarefaSemInternet)
         menuAberto?.dismiss()
