@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tipo de conta próprio "One TV" (ContaOneTv.kt). NÃO é com.google. Usado só no caminho 2 de virar Device Owner;
+     o serviço vem desligado de fábrica no manifesto. -->
+<account-authenticator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accountType="br.paulo.tvlauncher.conta"
+    android:icon="@mipmap/ic_onetv"
+    android:smallIcon="@mipmap/ic_onetv"
+    android:label="@string/app_nome" />
