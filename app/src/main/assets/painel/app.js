@@ -994,7 +994,7 @@ $('cfgQuadros').addEventListener('change', (e) => gravarConfig({ campo: 'taxaQua
 $('cfgTemperatura').addEventListener('change', (e) => gravarConfig({ campo: 'avisoTemperatura', valor: e.target.checked }, e.target.checked ? 'Aviso de calor e frio ligado.' : 'Aviso de calor e frio desligado.'));
 $('cfgAudio').addEventListener('change', (e) => gravarConfig({ campo: 'audio', valor: e.target.value }, 'Áudio preferido gravado.'));
 $('cfgProtetor').addEventListener('change', (e) => gravarConfig({ campo: 'protetorMs', valor: Number(e.target.value) }, 'Tempo do protetor gravado.'));
-$('cfgBarra').addEventListener('change', (e) => gravarConfig({ campo: 'barraProtetor', valor: e.target.value }, 'Linha do protetor gravada.'));
+$('cfgBarra').addEventListener('change', (e) => gravarConfig({ campo: 'barraProtetor', valor: e.target.value }, 'Widgets do protetor gravados.'));
 $('cfgParental').addEventListener('change', (e) => gravarConfig({ campo: 'parental', valor: e.target.checked }, e.target.checked ? 'Controle parental ligado.' : 'Controle parental desligado.'));
 $('cfgIdadeInfantil').addEventListener('change', (e) => gravarConfig({ campo: 'idadeInfantil', valor: Number(e.target.value) },
   'Idade do modo infantil gravada. Filmes e séries com classificação até ela aparecem; os sem classificação, só nas categorias infantis.', 'Confirme o PIN'));

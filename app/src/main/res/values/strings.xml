@@ -724,6 +724,18 @@
     <string name="pg_dia_todo">today</string>
     <string name="pg_hoje_as">today at %1$s</string>
     <string name="pg_amanha_as">tomorrow at %1$s</string>
+    <!-- Widgets de baixo do protetor (15/11/2026, WidgetsProtetor.kt) -->
+    <string name="pw_agora">Now</string>
+    <string name="pw_proximas_horas">Next hours</string>
+    <string name="pw_hoje">Today</string>
+    <string name="pw_chuva_pct">%1$d%% chance of rain</string>
+    <string name="pw_umidade_pct">%1$d%% humidity</string>
+    <string name="pw_ate_umas">%1$s until about %2$s</string>
+    <string name="pw_chuva_pelas">%1$s, rain around %2$s</string>
+    <string name="pw_chuva_segue">%1$s for the next hours</string>
+    <string name="pw_amanha_frase">Tomorrow %1$d°, %2$s</string>
+    <string name="pw_nasce">sunrise %1$s</string>
+    <string name="pw_poe">sunset %1$s</string>
     <string name="cfg_protetor_estilo">Screensaver style</string>
     <string name="cfg_protetor_galeria">Gallery (painting of the day)</string>
     <string name="cfg_protetor_classico">Classic (clock and tiles)</string>

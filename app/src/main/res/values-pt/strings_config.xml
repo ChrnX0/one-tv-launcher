@@ -126,10 +126,11 @@
     <string name="cl_aviso_chuva_det">avisa por cima do app quando a chance passa de %1$d%% nas próximas %2$d h</string>
     <string name="cl_protetor">Protetor de tela</string>
     <string name="cl_protetor_det">tempo parado até o protetor aparecer · OK muda</string>
-    <string name="cl_resumo_dia">Resumo do dia</string>
-    <string name="cl_proximas_horas">Próximas horas</string>
-    <string name="cl_linha_baixo">Linha de baixo do protetor</string>
-    <string name="cl_linha_baixo_det">próximas horas, ou sol, lua, umidade e chuva do dia · OK muda</string>
+    <string name="cl_widget_faixa">Faixa de vidro</string>
+    <string name="cl_widget_cartoes">Cartões</string>
+    <string name="cl_widget_solto">Sem caixa</string>
+    <string name="cl_linha_baixo">Widgets do protetor</string>
+    <string name="cl_linha_baixo_det">faixa de vidro, cartões ou sem caixa · OK muda</string>
     <string name="cl_desligar">Desligar a TV sem uso</string>
     <string name="cl_desligar_det">avisa 60 s antes; qualquer botão cancela · OK muda</string>
     <string name="cl_visita_det">esconde o perfil, a agenda e os apps marcados abaixo</string>

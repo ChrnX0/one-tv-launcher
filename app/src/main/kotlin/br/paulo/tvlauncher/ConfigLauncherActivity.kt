@@ -817,13 +817,17 @@ class ConfigLauncherActivity : Activity() {
             else linhaDescanso.detalhe(getString(R.string.cfg_nao_gravou_do))
         }
         c.addView(linhaDescanso, lp())
-        // O que a linha de baixo do protetor mostra (Protetor.barra). OK alterna; vale no próximo protetor.
-        fun rotuloBarra(v: String) = if (v == Protetor.BARRA_RESUMO) getString(R.string.cl_resumo_dia) else getString(R.string.cl_proximas_horas)
+        // Estilo dos widgets de baixo do protetor (Protetor.widget, 15/11/2026). OK passa para o próximo; vale no próximo protetor.
+        fun rotuloBarra(v: String) = getString(when (v) {
+            Protetor.WIDGET_CARTOES -> R.string.cl_widget_cartoes
+            Protetor.WIDGET_SOLTO -> R.string.cl_widget_solto
+            else -> R.string.cl_widget_faixa
+        })
         lateinit var linhaBarra: LinhaCfg
         linhaBarra = linha(getString(R.string.cl_linha_baixo), getString(R.string.cl_linha_baixo_det),
-            valor = rotuloBarra(Protetor.barra(this))) {
-            val novo = if (Protetor.barra(this) == Protetor.BARRA_RESUMO) Protetor.BARRA_HORAS else Protetor.BARRA_RESUMO
-            Protetor.definirBarra(this, novo)
+            valor = rotuloBarra(Protetor.widget(this))) {
+            val novo = Protetor.proximoWidget(Protetor.widget(this))
+            Protetor.definirWidget(this, novo)
             linhaBarra.valor(rotuloBarra(novo))
         }
         c.addView(linhaBarra, lp())

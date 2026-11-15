@@ -126,10 +126,11 @@
     <string name="cl_aviso_chuva_det">shows over any app when the chance goes above %1$d%% in the next %2$d h</string>
     <string name="cl_protetor">Screensaver</string>
     <string name="cl_protetor_det">idle time before the screensaver starts · OK changes</string>
-    <string name="cl_resumo_dia">Day summary</string>
-    <string name="cl_proximas_horas">Next hours</string>
-    <string name="cl_linha_baixo">Screensaver bottom row</string>
-    <string name="cl_linha_baixo_det">next hours, or the day\'s sun, moon, humidity and rain · OK changes</string>
+    <string name="cl_widget_faixa">Glass strip</string>
+    <string name="cl_widget_cartoes">Cards</string>
+    <string name="cl_widget_solto">No box</string>
+    <string name="cl_linha_baixo">Screensaver widgets</string>
+    <string name="cl_linha_baixo_det">glass strip, cards or no box · OK changes</string>
     <string name="cl_desligar">Turn off when idle</string>
     <string name="cl_desligar_det">warns 60 s before; any button cancels · OK changes</string>
     <string name="cl_visita_det">hides the profile, calendar and the apps checked below</string>
