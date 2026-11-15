@@ -82,4 +82,17 @@
     <string name="fm_brilho">Brilho do fundo</string>
     <string name="fm_contraste">Contraste do fundo</string>
     <string name="fm_ajuste_det">Vale para o Meu fundo. OK muda o degrau.</string>
+    <string name="vp_titulo">Vindo do Projectivy?</string>
+    <string name="vp_texto">Quatro passos trazem o seu jeito em cerca de um minuto. Cada um pode ser feito depois nas Configurações.</string>
+    <string name="vp_cfg_det">Traga apps ocultos, pacote de ícones e fundo do Projectivy.</string>
+    <string name="vp_1">1. Apps ocultos</string>
+    <string name="vp_1_det">Marque os apps que você tinha escondido. Para mudar a ordem, segure OK num app na tela inicial.</string>
+    <string name="vp_2">2. Pacote de ícones</string>
+    <string name="vp_2_det">Os mesmos pacotes de ícones do Projectivy funcionam aqui.</string>
+    <string name="vp_3">3. Fundo</string>
+    <string name="vp_3_det">Sua foto, GIF ou vídeo. Copie para a pasta Fundo antes.</string>
+    <string name="vp_4">4. Desligar o botão Home do Projectivy</string>
+    <string name="vp_4_det">Em Acessibilidade, desligue o Projectivy. Dois apps pegando o Home fazem abrir o errado.</string>
+    <string name="vp_pronto">Pronto</string>
+    <string name="vp_pronto_det">Ir para a tela inicial.</string>
 </resources>

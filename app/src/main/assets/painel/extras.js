@@ -23,6 +23,7 @@ const NOMES_CHAVES = {
   HOJE_NA_TV: 'Hoje na TV (sugestões na tela Buscar)',
   RETROSPECTIVA: 'Sua semana na TV (domingo, 20h)',
   RETROSPECTIVA_ANO: 'Sua TV no ano (em dezembro, no protetor)',
+  ENTRADAS_TV: 'Entradas HDMI na linha de apps (só em TV com entrada)',
   MODO_SIMPLES: 'Modo simples (cards grandes no lugar da HOME)',
   TEMPO_TELA: 'Tempo de tela por dia (acabou, só os apps liberados abrem)',
   AGENDA_TODAS: 'Agenda de todas as contas Google da TV juntas',

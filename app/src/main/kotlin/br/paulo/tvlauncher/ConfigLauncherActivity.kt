@@ -734,6 +734,10 @@ class ConfigLauncherActivity : Activity() {
     // ================================================================ aba: Aparência
 
     private fun abaAparencia(c: LinearLayout) {
+        if (VindoDoProjectivyActivity.instalado(this)) c.addView(linha(getString(R.string.vp_titulo), getString(R.string.vp_cfg_det), seta = true) {
+            reconstruirAoVoltar = true
+            startActivity(Intent(this, VindoDoProjectivyActivity::class.java))
+        }, lp())
         lateinit var linhaTema: LinhaCfg
         linhaTema = linha(getString(R.string.cl_tema), getString(R.string.cfg_tema_det), valor = Tema.atual(this).nome) {
             Tema.proximo(this)

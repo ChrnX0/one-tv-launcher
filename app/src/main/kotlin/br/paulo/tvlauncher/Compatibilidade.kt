@@ -50,6 +50,8 @@ object Compatibilidade {
         val acordarMs: List<Int>,      // medidas de "tela acendeu" -> 1º quadro da HOME
         val quedas24h: Int,
         val ligadoHoras: Long,         // desde o último boot
+        val watchNext: Int = -1,       // programas do Watch Next legíveis (-1 = erro/sem acesso); decide a fileira
+        val entradas: Int = 0,         // entradas HDMI/AV
     )
 
     data class Teste(val id: String, val veredito: Veredito, val detalhe: String)
@@ -103,7 +105,7 @@ object Compatibilidade {
                 .put("fabricante", f.fabricante).put("modelo", f.modelo).put("codinome", f.aparelho)
                 .put("android", f.android).put("sdk", f.sdk).put("abis", JSONArray(f.abis))
                 .put("ramMb", f.ramMb).put("processo64", f.processo64)
-                .put("googleTv", f.googleTv).put("fireOs", f.fireOs))
+                .put("googleTv", f.googleTv).put("fireOs", f.fireOs).put("entradas", f.entradas))
             .put("app", JSONObject().put("versao", f.versaoApp).put("versionCode", f.versaoCode))
             .put("poderes", JSONObject().put("dono", f.dono).put("acessibilidade", f.acessibilidade).put("homePreferida", f.homePreferida))
             .put("medidas", JSONObject()
@@ -111,7 +113,8 @@ object Compatibilidade {
                 .put("acordarMs", mediana(f.acordarMs) ?: JSONObject.NULL)
                 .put("acordarAmostras", f.acordarMs.size)
                 .put("quedas24h", f.quedas24h)
-                .put("ligadoHoras", f.ligadoHoras))
+                .put("ligadoHoras", f.ligadoHoras)
+                .put("watchNext", f.watchNext))
             .put("testes", JSONArray().apply {
                 t.forEach { put(JSONObject().put("id", it.id).put("veredito", it.veredito.name).put("detalhe", it.detalhe)) }
             })

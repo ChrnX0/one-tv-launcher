@@ -72,6 +72,9 @@ object Extras {
         // Rodada 2 (14/11/2026)
         /** Ideia 92: "Sua TV em 2026", em dezembro, um cartão no protetor com o ano (horas, apps, canal favorito). */
         RETROSPECTIVA_ANO(true),
+        // Degrau 1 contra o Projectivy (15/11/2026)
+        /** Entradas HDMI/AV como cards na linha de apps (EntradasTv). Só aparecem em TV que tem entrada. */
+        ENTRADAS_TV(true),
     }
 
     /**

@@ -94,6 +94,8 @@ object CompatibilidadeTv {
             acordarMs = lerAcordar(ctx),
             quedas24h = quedas,
             ligadoHoras = SystemClock.elapsedRealtime() / 3_600_000L,
+            watchNext = WatchNextTv.ler(ctx).map { it.size }.getOrDefault(-1),
+            entradas = runCatching { EntradasTv.listar(ctx).size }.getOrDefault(0),
         )
     }
 

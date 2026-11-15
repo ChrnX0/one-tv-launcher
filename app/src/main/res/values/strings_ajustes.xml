@@ -82,4 +82,17 @@
     <string name="fm_brilho">Background brightness</string>
     <string name="fm_contraste">Background contrast</string>
     <string name="fm_ajuste_det">Applies to My background. OK changes the step.</string>
+    <string name="vp_titulo">Coming from Projectivy?</string>
+    <string name="vp_texto">Four steps bring your setup over in about a minute. Each one can be done later in Settings.</string>
+    <string name="vp_cfg_det">Bring hidden apps, icon pack and background over from Projectivy.</string>
+    <string name="vp_1">1. Hidden apps</string>
+    <string name="vp_1_det">Mark the apps you had hidden. To reorder, hold OK on an app on the home screen.</string>
+    <string name="vp_2">2. Icon pack</string>
+    <string name="vp_2_det">The same icon packs Projectivy uses work here.</string>
+    <string name="vp_3">3. Background</string>
+    <string name="vp_3_det">Your photo, GIF or video. Copy it to the Fundo folder first.</string>
+    <string name="vp_4">4. Turn off Projectivy\'s Home button</string>
+    <string name="vp_4_det">In Accessibility, turn off Projectivy. Two apps catching Home make it open the wrong one.</string>
+    <string name="vp_pronto">Done</string>
+    <string name="vp_pronto_det">Go to the home screen.</string>
 </resources>

@@ -21,7 +21,7 @@ object ExtrasAbas {
         "CARD_JOGOS" to Aba.APARENCIA, "CONTROLE_ABRE_JOGOS" to Aba.APARENCIA,
         // Tela e energia: noite, protetor e desligar.
         "FILTRO_NOTURNO" to Aba.ENERGIA, "SONO_SUAVE" to Aba.ENERGIA, "PRESENCA" to Aba.ENERGIA,
-        "MURAL" to Aba.ENERGIA, "RETROSPECTIVA" to Aba.ENERGIA, "RETROSPECTIVA_ANO" to Aba.ENERGIA, "MODO_LEVE" to Aba.ENERGIA, "MODO_JOGO" to Aba.ENERGIA,
+        "MURAL" to Aba.ENERGIA, "RETROSPECTIVA" to Aba.ENERGIA, "RETROSPECTIVA_ANO" to Aba.ENERGIA, "ENTRADAS_TV" to Aba.APARENCIA, "MODO_LEVE" to Aba.ENERGIA, "MODO_JOGO" to Aba.ENERGIA,
         // Rede.
         "DIARIO_DNS" to Aba.REDE,
         // Acesso remoto: o que deixa algo de fora agir na TV.

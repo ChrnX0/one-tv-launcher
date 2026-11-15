@@ -43,6 +43,7 @@ import java.io.File
  * Compatibilidade (15/11/2026, degrau 1 contra o Projectivy):
  *  - compat                JSON do aparelho para a página "Funciona no seu aparelho?" (Compatibilidade.kt)
  *  - compat_texto          o mesmo em uma linha por teste
+ *  - watchnext             o Watch Next dos outros apps é legível neste aparelho? (WatchNextTv)
  * Volume da LG pela rede (14/11/2026, ideia 49; ver VolumeLg). Demoram (rede): o adb espera a resposta.
  *  - lg_procurar --es ip <qualquer IP da casa>   lista as LG da mesma rede /24
  *  - lg_pedir_codigo --es ip <IP da LG>         a LG mostra o código na tela dela
@@ -98,6 +99,7 @@ object ComandosExtras {
         "roteiro" -> ConferirTvActivity.relatorio(ctx)
         "compat" -> CompatibilidadeTv.json(ctx).toString(2)   // relatório da página "Funciona no seu aparelho?"
         "compat_texto" -> CompatibilidadeTv.texto(ctx)
+        "watchnext" -> WatchNextTv.diagnostico(ctx).toString(2)   // dá para ler o "continuar" dos outros apps aqui?
         "lg_procurar" -> VolumeLg.procurar(i.getStringExtra("ip") ?: "").joinToString("\n") { (ip, m) -> "$ip ${m.nome} ${m.modelo}" }
             .ifEmpty { "nenhuma LG respondeu (ligada? mesmo /24?)" }
         "lg_pedir_codigo" -> VolumeLg.pedirCodigo(i.getStringExtra("ip") ?: "")

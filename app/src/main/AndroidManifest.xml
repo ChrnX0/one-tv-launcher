@@ -72,6 +72,8 @@
         xmlns:tools="http://schemas.android.com/tools" tools:ignore="QueryAllPackagesPermission" />
 
     <!-- Android 11+ só deixa um app enxergar outros apps se isso for declarado aqui -->
+    <!-- Watch Next dos outros apps (WatchNextTv, degrau 1): só leitura; diz se a fileira "Continuar" é possível. -->
+    <uses-permission android:name="com.android.providers.tv.permission.READ_EPG_DATA" />
     <queries>
         <intent>
             <action android:name="android.intent.action.MAIN" />
@@ -80,6 +82,8 @@
         <!-- O launcher do Google (04/11/2026): sem isto o PackageManager diz que ele não existe, e o Home.kt
              (botão HOME pelo serviço de teclas, atalho do painel) achava que ele estava desativado. -->
         <package android:name="com.google.android.apps.tv.launcherx" />
+        <!-- Projectivy instalado = oferece a migração guiada (VindoDoProjectivyActivity). -->
+        <package android:name="com.spocky.projengmenu" />
         <!-- Busca que continua nos outros apps (ideia 14): BuscaOutrosApps.DESTINOS. -->
         <package android:name="com.google.android.youtube.tv" />
         <package android:name="com.netflix.ninja" />
@@ -305,6 +309,11 @@
             android:name=".EntrarPeloQrActivity"
             android:exported="false"
             android:label="@string/lbl_entrar_celular" />
+        <!-- "Vindo do Projectivy?": migração guiada, uma vez (VindoDoProjectivyActivity.kt) -->
+        <activity
+            android:name=".VindoDoProjectivyActivity"
+            android:exported="false"
+            android:label="@string/vp_titulo" />
         <activity
             android:name=".BoasVindasActivity"
             android:exported="false"

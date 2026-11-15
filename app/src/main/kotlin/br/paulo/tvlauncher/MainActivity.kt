@@ -302,6 +302,7 @@ class MainActivity : Activity() {
         GuardiaoShizuku.vigiar(this)
         GuardiaoShizuku.garantir(this, "launcher abriu")
         BoasVindasActivity.talvezMostrar(this)   // 1ª abertura sem Device Owner: assistente (nunca na TV com DO)
+        VindoDoProjectivyActivity.talvezMostrar(this)   // Projectivy no aparelho: migração guiada, uma vez
     }
 
     override fun onResume() {
@@ -1002,6 +1003,9 @@ class MainActivity : Activity() {
                     PacoteIcones.icone(this, pkg, ri.activityInfo.name) ?: ri.loadIcon(pm))).also { cacheApps[pkg] = chave to it }
             }
         }
+        // Entradas HDMI/AV (EntradasTv, degrau 1): só em TV com entrada; chave "entrada:<id>", ícone redondo como os apps.
+        for (e in EntradasTv.listar(this)) itens[e.chave] = cacheApps[e.chave]?.second ?: Item(e.chave, e.nome,
+            DesenhoHome.iconeRedondo(resources, e.icone ?: IconeApp(IconeApp.Tipo.TV))).also { cacheApps[e.chave] = "" to it }
         cacheApps.keys.retainAll(itens.keys)   // app desinstalado sai do cache
         capas.keys.retainAll(itens.keys)       // e a capa dele também (home-6)
         return itens.values.toList()
@@ -2417,6 +2421,7 @@ class MainActivity : Activity() {
     }
 
     private fun abrir(pacote: String) {
+        if (EntradasTv.eh(pacote)) { EntradasTv.abrir(this, pacote); return }   // entrada HDMI/AV (EntradasTv)
         val intent = packageManager.getLeanbackLaunchIntentForPackage(pacote)
             ?: packageManager.getLaunchIntentForPackage(pacote)
             ?: return
