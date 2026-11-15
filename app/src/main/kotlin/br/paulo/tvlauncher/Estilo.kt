@@ -452,7 +452,8 @@ object Estilo {
         val raiz = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
             background = fundoTela(ctx)
-            clipChildren = false; clipToPadding = false
+            // clipChildren = true: as linhas roladas ficam dentro da rolagem e não passam por cima do título (15/11/2026).
+            clipChildren = true; clipToPadding = false
             setPadding(dp(ctx, MARGEM_LATERAL), dp(ctx, MARGEM_VERTICAL + 9), dp(ctx, MARGEM_LATERAL), 0)
             addView(tituloTela(ctx, titulo))
             if (subtitulo != null) addView(texto(ctx, Papel.LEGENDA, subtitulo), LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(ctx, 4) })
@@ -465,8 +466,11 @@ object Estilo {
         }
         raiz.addView(android.widget.ScrollView(ctx).apply {
             isVerticalScrollBarEnabled = false; clipChildren = false; clipToPadding = false; isFillViewport = true
+            // Folga E2 dos lados (padding aqui, margem negativa abaixo): as linhas ficam no mesmo lugar, e a focada,
+            // 2% maior, ainda cabe no recorte da raiz.
+            setPadding(dp(ctx, E2), 0, dp(ctx, E2), 0)
             addView(coluna)
-        }, LinearLayout.LayoutParams(-1, 0, 1f))
+        }, LinearLayout.LayoutParams(-1, 0, 1f).apply { leftMargin = -dp(ctx, E2); rightMargin = -dp(ctx, E2) })
         return raiz to coluna
     }
 
@@ -581,11 +585,15 @@ object Estilo {
         }
         val rolagem = android.widget.ScrollView(ctx).apply {
             isVerticalScrollBarEnabled = false; clipChildren = false; clipToPadding = false
+            // Borda que esmaece em cima e embaixo: mostra que há mais itens e deixa folga ao rolar até o foco.
+            isVerticalFadingEdgeEnabled = true; setFadingEdgeLength(dp(ctx, E3))
             addView(linhas)
         }
         val cartao = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
-            clipChildren = false; clipToPadding = false
+            // clipChildren = true: a lista rolada fica dentro do retângulo dela. Sem isso as linhas passavam por cima
+            // do título (visto na Sala, 15/11/2026). A linha em foco aumentada (ESCALA_LINHA) cabe no padding E1 de `linhas`.
+            clipChildren = true; clipToPadding = false
             setPadding(dp(ctx, E3), dp(ctx, E3), dp(ctx, E3), dp(ctx, E3))
             background = fundo(ctx, CARTAO, RAIO, VIDRO_BORDA)
             addView(texto(ctx, Papel.TITULO, titulo).apply { textSize = 22f; maxLines = 2; ellipsize = TextUtils.TruncateAt.END },

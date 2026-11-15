@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Scrolling menus and lists (like the player’s “Audio and subtitles” and folders): items no longer slide over the title; in menus, the edges fade when there are more items</item>
         <item>Player inside: FFmpeg and ASS subtitles are now the launcher\'s own (NextLib is gone), and it opens old AVI, WMV, RMVB and FLV files</item>
         <item>Player, in the ▼ menu: Louder dialogue (5.1 movie on two speakers), Audio delay from −500 to +500 ms (kept per Bluetooth speaker), Second subtitle at the top, Chapters and Technical info</item>
         <item>Player: holding ◀ ▶ shows a picture of where you are going (network and folder videos); ⏮ ⏭ jump between chapters; the subtitle size also applies to ASS subtitles</item>

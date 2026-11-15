@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Menus e listas que rolam (como “Áudio e legenda” do player e as pastas): os itens não passam mais por cima do título; nos menus, as bordas esmaecem quando há mais itens</item>
         <item>Player por dentro: o FFmpeg e as legendas ASS agora são do próprio launcher (sai a NextLib); e ele abre arquivos antigos AVI, WMV, RMVB e FLV</item>
         <item>Player, no menu ▼: Diálogo mais alto (filme 5.1 em duas caixas), Atraso do áudio de −500 a +500 ms (guardado por caixa Bluetooth), Segunda legenda em cima, Capítulos e Informações técnicas</item>
         <item>Player: segurando ◀ ▶ aparece a imagem do ponto para onde vai (vídeos da rede e das pastas); ⏮ ⏭ pulam capítulos; o tamanho da legenda vale também para legendas ASS</item>
