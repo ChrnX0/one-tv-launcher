@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_protetor_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pt_dica_dispensar">OK menutup · ◀ ▶ berpindah</string>
+    <string name="pt_dica_pausar">OK menjeda atau melanjutkan · ◀ ▶ berpindah</string>
+    <string name="pt_dica_andar">◀ ▶ berpindah · tombol lain menutup</string>
+    <string name="rede_fotos_usar">Gunakan foto ini di screensaver</string>
+    <string name="rede_fotos_parar">Berhenti memakai foto ini di screensaver</string>
+    <string name="rede_fotos_usando">Menyalin foto. Foto muncul saat screensaver dimulai berikutnya.</string>
+    <string name="rede_fotos_paradas">Screensaver tidak lagi memakai folder ini.</string>
+    <string name="rede_continuar">Lanjutkan menonton</string>
+    <string name="rede_recentes">Baru ditambahkan</string>
+    <string name="rede_buscar">Cari</string>
+    <string name="rede_buscar_explica">Film, acara, episode, dan musik di server ini.</string>
+    <string name="rede_buscar_campo">Nama</string>
+    <string name="rede_buscar_curto">Ketik minimal 2 huruf.</string>
+    <string name="rede_proximo_em">Berikutnya: %1$s dalam %2$d dtk · OK mulai sekarang · tombol lain membatalkan</string>
+    <string name="rede_ainda_assistindo">Masih menonton? OK memulai %1$s</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="other">%1$d foto · disalin ke TV, berfungsi dengan komputer mati</item>
+    </plurals>
+</resources>

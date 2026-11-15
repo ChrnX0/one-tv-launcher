@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_ideias_51a76.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l51_ensaio_ok">pemeriksaan pemulihan lolos</string>
+    <string name="l51_ensaio_falhou">salinan tersimpan tidak bisa dipulihkan (%1$s)</string>
+    <string name="l51_wifi_titulo">Wi-Fi tamu</string>
+    <string name="l51_wifi_nao">belum diatur: ketik sekali dan tamu memindai QR</string>
+    <string name="l51_wifi_dica">Gunakan jaringan tamu router Anda: siapa pun di ruangan bisa membaca kata sandinya di layar.</string>
+    <string name="l51_wifi_rede">Nama jaringan</string>
+    <string name="l51_wifi_senha">Kata sandi</string>
+    <string name="l51_wifi_invalido">Nama hingga 32 karakter; kata sandi kosong (jaringan terbuka) atau 8 sampai 63 karakter.</string>
+    <string name="l51_wifi_qr_titulo">Tampilkan QR Wi-Fi tamu</string>
+    <string name="l51_uso_titulo">Yang dipakai</string>
+    <string name="l51_uso_det">Layar dan setelan menurut pemakaian, dihitung hanya di TV ini (tidak ada yang keluar)</string>
+    <string name="l51_uso_vazio">Belum ada yang dihitung. Kembali lagi beberapa hari lagi.</string>
+    <string name="l51_uso_tela">layar</string>
+    <string name="l51_uso_opcao">setelan</string>
+    <string name="l51_uso_linha">%1$s (%2$s): %3$s, %4$s</string>
+    <string name="l51_uso_hoje">terakhir hari ini</string>
+    <string name="l51_uso_ontem">terakhir kemarin</string>
+    <string name="l51_uso_dias">terakhir %d hari lalu</string>
+    <string name="l51_tela_Main">Layar utama</string>
+    <string name="l51_tela_Dream">Screensaver</string>
+    <string name="l51_tela_Filmes">Film</string>
+    <string name="l51_tela_Series">Acara</string>
+    <string name="l51_tela_Jogos">Game</string>
+    <string name="l51_tela_Player">TV langsung dan video</string>
+    <string name="l51_tela_PainelRapido">Panel cepat</string>
+    <string name="l51_tela_Vod">Katalog playlist</string>
+    <string name="l51_tela_Previsao">Prakiraan cuaca</string>
+    <string name="l51_tela_Elenco">Pemeran</string>
+    <string name="l51_tela_ConfigLauncher">Setelan</string>
+    <string name="l51_tela_MidiaRede">Di jaringan</string>
+    <string name="l51_tela_Calendario">Kalender</string>
+    <string name="l51_tela_Gravacoes">Rekaman</string>
+    <string name="l51_tela_Busca">Cari</string>
+    <string name="l51_tela_Casa">Rumah saya</string>
+    <string name="l51_tela_AlarmeTocando">Alarm berbunyi</string>
+    <string name="l51_tela_Radio">Radio</string>
+    <string name="l51_tela_Diagnostico">Diagnostik</string>
+    <string name="l51_uso_zerar">Atur ulang</string>
+    <string name="l51_digitar_titulo">Ketik di TV</string>
+    <string name="l51_digitar_texto">Kotak teks terbuka di %1$s. Ketuk untuk mengetik dari sini.</string>
+    <string name="casa_temp_ajuste">%1$s · ◀ ▶</string>
+    <string name="casa_ambiente">ruangan %1$s</string>
+    <string name="casa_movimento">Gerakan</string>
+    <string name="casa_sem_movimento">Tidak ada gerakan</string>
+    <string name="casa_molhado">Basah</string>
+    <string name="casa_seco">Kering</string>
+    <string name="casa_fumaca">Asap!</string>
+    <string name="casa_sem_fumaca">Tidak ada asap</string>
+    <string name="casa_dica_temp">suhu</string>
+    <string name="casa_camera_abrindo">Membuka kamera…</string>
+    <string name="casa_camera_ver">Tampilkan di TV</string>
+    <plurals name="l51_uso_vezes">
+        <item quantity="other">%d kali</item>
+    </plurals>
+</resources>

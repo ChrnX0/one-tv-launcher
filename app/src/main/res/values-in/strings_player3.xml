@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_player3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="abertura_marcar_inicio">Tandai awal pembuka di sini (%1$s)</string>
+    <string name="abertura_marcar_fim">Tandai akhir pembuka di sini (%1$s)</string>
+    <string name="abertura_apagar">Hapus tanda pembuka</string>
+    <string name="abertura_inicio_marcado">Awal pembuka ditandai di %1$s. Sekarang tandai akhirnya di menu ▼</string>
+    <string name="abertura_salva">Pembuka disimpan: %1$s sampai %2$s. Episode berikutnya menawarkan untuk melewatinya</string>
+    <string name="abertura_falta_inicio">Tandai awal pembuka dulu</string>
+    <string name="abertura_invalida">Itu tidak tampak seperti pembuka: harus berdurasi 10 dtk sampai 5 mnt dan dimulai di 15 mnt pertama</string>
+    <string name="abertura_apagada">Tanda pembuka dihapus</string>
+    <string name="abertura_pular">Lewati pembuka · OK</string>
+</resources>

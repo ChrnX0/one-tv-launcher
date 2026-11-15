@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_backup.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="bkn_titulo">Cadangan otomatis</string>
+    <string name="bkn_explica">Setiap malam, saat TV diam, menyimpan cadangan lengkap yang dikunci dengan kata sandi Anda. 7 terakhir disimpan. Catat kata sandinya: tanpanya cadangan tidak bisa dibuka.</string>
+    <string name="bkn_ligado">aktif</string>
+    <string name="bkn_desligado">nonaktif</string>
+    <string name="bkn_sem_senha">nonaktif · atur kata sandi cadangan dulu</string>
+    <string name="bkn_senha">Kata sandi cadangan</string>
+    <string name="bkn_senha_ok">diatur · OK mengubah</string>
+    <string name="bkn_senha_falta">belum diatur · OK mengatur</string>
+    <string name="bkn_senha_nova">Kata sandi cadangan (8 karakter atau lebih)</string>
+    <string name="bkn_senha_repetir">Ketik kata sandi lagi</string>
+    <string name="bkn_senha_curta">Kata sandi harus 8 sampai 128 karakter.</string>
+    <string name="bkn_senha_diferente">Kedua kata sandi tidak cocok.</string>
+    <string name="bkn_senha_gravada">Kata sandi disimpan. Simpan di tempat aman.</string>
+    <string name="bkn_senha_erro">Tidak bisa menyimpan kata sandi.</string>
+    <string name="bkn_horario">Jam</string>
+    <string name="bkn_extra">Salinan tambahan</string>
+    <string name="bkn_destino_tv">Hanya TV</string>
+    <string name="bkn_destino_pendrive">Flashdisk</string>
+    <string name="bkn_destino_nas">NAS (%1$s)</string>
+    <string name="bkn_agora">Cadangkan sekarang</string>
+    <string name="bkn_ultimo">Terakhir</string>
+    <string name="bkn_nunca">belum pernah</string>
+    <string name="bkn_pin">PIN untuk mengubah cadangan</string>
+</resources>

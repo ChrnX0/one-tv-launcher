@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_ideias2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dormir_titulo">Waktu tidur</string>
+    <string name="dormir_texto">Aplikasi ini tidak diizinkan sekarang. Selamat tidur!</string>
+    <string name="dormir_pin">PIN untuk mengubah waktu tidur</string>
+    <string name="dormir_inicio">Waktu tidur: mulai</string>
+    <string name="dormir_fim">Waktu tidur: berakhir</string>
+    <string name="dormir_teto">Waktu tidur: volume maksimum</string>
+    <string name="recado_link_titulo">Pesan</string>
+    <string name="extras_HORA_DORMIR">Waktu tidur (hanya aplikasi yang diizinkan, volume dibatasi)</string>
+    <string name="extras_TOCANDO_AGORA">Sedang diputar (membacakan yang diputar)</string>
+    <string name="extras_MODO_LEVE">Mode ringan (animasi lebih singkat)</string>
+    <string name="extras_SOM_NAVEGACAO">Suara navigasi</string>
+    <string name="extras_RECADO_LINK">Pesan lewat tautan (Home Assistant, TvOverlay)</string>
+    <string name="extras_caches">Hapus cache aplikasi</string>
+    <string name="extras_livre">%1$s kosong</string>
+    <string name="extras_consumo">Internet per aplikasi (7 hari)</string>
+    <string name="extras_tocando">Sedang diputar</string>
+    <string name="extras_aguarde">Sebentar…</string>
+    <string name="dormir_dia">Waktu tidur: hari</string>
+    <string name="dormir_todos">semua (bawaan)</string>
+    <string name="dormir_proprio">jadwal sendiri</string>
+    <string name="dormir_segue">ikut bawaan</string>
+    <string name="dormir_voltar_padrao">Waktu tidur: kembalikan hari ini ke bawaan</string>
+    <string name="extras_VER_TELA">Izinkan Claude melihat layar (MCP ver_tela; TV menampilkan pemberitahuan)</string>
+    <string name="casa_titulo">Rumah</string>
+    <string name="casa_sem_config">Atur Home Assistant di panel ponsel: tab Ekstra, kartu Rumah.</string>
+    <string name="casa_carregando">Memuat perangkat…</string>
+    <string name="casa_vazio">Tidak ada lampu, colokan, atau adegan di Home Assistant.</string>
+    <string name="casa_google_home">Google Home</string>
+    <string name="casa_google_home_det">Lampu dan kamera Google</string>
+    <string name="casa_resumo">Home Assistant · %1$d dari %2$d menyala</string>
+    <string name="casa_resumo_so_cenas">Home Assistant · %1$d adegan</string>
+    <string name="casa_secao_cenas">Adegan dan skrip</string>
+    <string name="casa_secao_aparelhos">Perangkat</string>
+    <string name="casa_secao_google">Google</string>
+    <string name="casa_sem_comodo">Tanpa ruangan</string>
+    <string name="casa_ligado">Menyala</string>
+    <string name="casa_desligado">Mati</string>
+    <string name="casa_aberta">Terbuka</string>
+    <string name="casa_fechada">Tertutup</string>
+    <string name="casa_rodar">OK untuk menjalankan</string>
+    <string name="casa_indisponivel">Tidak tersedia</string>
+    <string name="casa_sem_config_titulo">Hubungkan rumah Anda</string>
+    <string name="casa_dica_acionar">nyalakan atau matikan</string>
+    <string name="casa_erro_simples">Home Assistant tidak menjawab. Pastikan servernya menyala lalu coba lagi.</string>
+    <string name="casa_erro">Home Assistant tidak menjawab: %1$s</string>
+    <string name="casa_ligado_pct">Menyala · %1$d%%</string>
+    <string name="casa_brilho_ajuste">Kecerahan %1$d%% · ◀ ▶</string>
+    <string name="casa_dica_brilho">kecerahan</string>
+    <string name="casa_tecla_segurar_ok">TAHAN OK</string>
+</resources>

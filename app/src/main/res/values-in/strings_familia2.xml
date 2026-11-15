@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_familia2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="an_rotulo">Ulang tahun</string>
+    <string name="an_hoje">Hari ini ulang tahun %s</string>
+    <string name="an_amanha">Besok ulang tahun %s</string>
+    <string name="tp_calor">Panas terik</string>
+    <string name="tp_calor_texto">Hingga %d° hari ini · Minum air</string>
+    <string name="tp_frio">Dingin sekali</string>
+    <string name="tp_frio_texto">Turun ke %d° malam ini · Berpakaian hangat</string>
+    <string name="tp_cfg">Peringatan panas dan dingin</string>
+    <string name="tp_cfg_det">Kartu di atas aplikasi apa pun saat hari ini mencapai %1$d° atau malam ini turun ke %2$d°</string>
+    <string name="mu_ok_lido">OK menandai sudah dibaca</string>
+    <string name="mu_ok_nao_lido">Dibaca · OK menandai belum dibaca</string>
+    <string name="mu_lido_desc">Pesan, dibaca: %s. OK menandai belum dibaca.</string>
+    <string name="mu_nao_lido_desc">Pesan: %s. OK menandai sudah dibaca.</string>
+    <string name="mu_apagar">Hapus pesan: %s</string>
+    <string name="extras_RETROSPECTIVA_ANO">TV Anda tahun ini (di bulan Desember, di screensaver)</string>
+    <string name="ra_titulo">TV Anda di %d</string>
+    <string name="ra_canal">Saluran favorit: %1$s (%2$s)</string>
+    <string name="ra_coluna">Radio</string>
+    <string name="ra_dica_ouvir">dengarkan</string>
+    <string name="ra_dica_favoritar">favorit</string>
+    <string name="ra_carregando">Memuat stasiun…</string>
+    <string name="ra_subtitulo">Stasiun dari seluruh dunia · 1–9 di remote memutar favorit Anda</string>
+    <string name="ra_sem_catalogo">Katalog radio tidak menjawab. Favorit Anda tetap berfungsi.</string>
+    <string name="ra_nada">Stasiun tidak ditemukan.</string>
+    <string name="ra_continuar">lanjutkan</string>
+    <string name="ra_pausar">jeda</string>
+    <string name="ra_favoritas">Favorit</string>
+    <string name="ra_procurar">Temukan</string>
+    <string name="ra_buscar">Cari menurut nama</string>
+    <string name="ra_buscar_det">Stasiun mana pun di dunia</string>
+    <string name="ra_generos">Genre</string>
+    <string name="ra_paises">Negara lain</string>
+    <string name="ra_paises_det">Negara dengan stasiun terbanyak</string>
+    <string name="ra_perto">Di dekat Anda</string>
+    <string name="ra_mais_ouvidas">Paling banyak didengar di %s</string>
+    <string name="ra_mundo">Paling banyak didengar di dunia</string>
+    <string name="ra_resultado">Cari: %s</string>
+    <string name="ra_favoritada">Ditambahkan ke favorit</string>
+    <string name="ra_desfavoritada">Dihapus dari favorit</string>
+    <string name="ra_falhou">Stasiun ini sedang tidak memutar. Coba yang lain.</string>
+    <plurals name="an_anos">
+        <item quantity="other">berusia %d</item>
+    </plurals>
+</resources>

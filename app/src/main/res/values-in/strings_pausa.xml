@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_pausa.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pausa_pausar">Jeda TV langsung</string>
+    <string name="pausa_continuar">Lanjutkan</string>
+    <string name="pausa_ao_vivo">Kembali ke siaran langsung</string>
+    <string name="pausa_selo">⏸ DIJEDA · OK melanjutkan</string>
+    <string name="pausa_atrasado_min">TERTINGGAL %1$d MNT · ▶ langsung</string>
+    <string name="pausa_atrasado_seg">TERTINGGAL %1$d DTK · ▶ langsung</string>
+    <string name="pausa_voltou">Dijeda lebih lama dari kapasitas memori: kembali ke siaran langsung</string>
+</resources>

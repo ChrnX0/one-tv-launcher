@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_rede_arquivos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_secao_na_tv">Dicolokkan ke TV</string>
+    <string name="rede_sub_usb">Flashdisk · video, musik, dan foto</string>
+    <string name="rede_acao_arquivos">FTP, SFTP, atau NFS</string>
+    <string name="rede_sub_arquivos">NAS, router dengan drive, komputer Linux atau Mac</string>
+    <string name="rede_arq_explica">Awali alamat dengan protokolnya: sftp://nas/Film · ftp://192.168.0.10 · ftps://nas/Video · nfs://nas/volume1/video. SFTP dan FTPS terenkripsi; FTP biasa mengirim kata sandi tanpa enkripsi, jadi pakai hanya di rumah. NFS tidak punya kata sandi: NAS harus mengizinkan IP TV dan koneksi dari port non-privileged.</string>
+    <string name="rede_arq_endereco">Alamat (sftp://, ftp://, ftps:// atau nfs://)</string>
+    <string name="rede_arq_usuario">Nama pengguna (NFS: nomor pengguna, opsional)</string>
+    <string name="rede_arq_endereco_erro">Awali dengan sftp://, ftp://, ftps:// atau nfs://, diikuti server dan folder. Nama pengguna dan kata sandi diisi di kolomnya sendiri.</string>
+    <string name="rede_erro_nfs_porta">Server NFS menolak TV. Di NAS, izinkan koneksi dari port non-privileged (Linux: opsi \"insecure\" di /etc/exports).</string>
+    <string name="rede_erro_nfs_ip">Server NFS tidak mengizinkan TV ini. Di NAS, tambahkan IP TV (atau jaringan rumah Anda) ke aturan NFS folder ini.</string>
+    <string name="rede_erro_chave_mudou">Kunci server ini berubah sejak ditambahkan. Jika Anda memasang ulang server, hapus di sini dan tambahkan lagi; jika tidak, mungkin ada yang menyamar sebagai server itu.</string>
+    <string name="rede_erro_usb_acesso">TV tidak memberi launcher akses ke flashdisk. Coba lagi sebentar lagi.</string>
+</resources>

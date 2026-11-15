@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_sync.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="sync_sub">Masuk sebagai %1$s. Yang diselaraskan TV dengan ponsel Anda.</string>
+    <string name="sync_sub_mdblist">Masuk sebagai %1$s. Daftar MDBList Anda bisa muncul di katalog.</string>
+    <string name="sync_ultima">Sinkronisasi terakhir: %1$s</string>
+    <string name="sync_nunca">Belum disinkronkan</string>
+    <string name="sync_interesses">Minat ⇄ Watchlist</string>
+    <string name="sync_interesses_simkl">Minat ⇄ Plan to watch</string>
+    <string name="sync_interesses_det">Yang Anda tandai di sini muncul di sana, dan sebaliknya</string>
+    <string name="sync_assistidos">Sudah ditonton ← Riwayat</string>
+    <string name="sync_assistidos_det">Membawa yang sudah Anda tonton di ponsel atau di tempat lain</string>
+    <string name="sync_continuar">Lanjutkan ⇄ Titik berhenti</string>
+    <string name="sync_continuar_det">Berhenti di ponsel, lanjutkan di TV dari titik yang sama</string>
+    <string name="sync_contar">Beri tahu %1$s yang saya tonton di sini</string>
+    <string name="sync_contar_det">Mengirim “sedang menonton” dan “sudah ditonton” saat diputar. Tidak pernah di mode Tamu atau profil anak.</string>
+    <string name="sync_listas">Daftar di katalog</string>
+    <string name="sync_listas_nenhuma">Belum ada yang dipilih</string>
+    <string name="sync_listas_n">%1$d dipilih: %2$s</string>
+    <string name="sync_listas_sub">Muncul di DAFTAR, di bawah Semua, hanya dengan judul yang ada di daftar Anda. Hingga %1$d.</string>
+    <string name="sync_listas_carregando">Memuat daftar Anda…</string>
+    <string name="sync_listas_vazio">Tidak ada daftar. Buat atau sukai daftar di Trakt atau MDBList lalu kembali ke sini.</string>
+    <string name="sync_listas_cheio">Hingga %1$d daftar</string>
+    <string name="sync_lista_itens">%1$d judul</string>
+    <string name="sync_agora">Sinkronkan sekarang</string>
+    <string name="sync_agora_det">Juga terjadi sendiri saat Anda membuka Film atau Serial</string>
+    <string name="sync_rodando">Menyinkronkan…</string>
+    <string name="sync_feito">Tersinkron</string>
+    <string name="sync_sair">Keluar dari %1$s</string>
+    <string name="sync_bloqueado">Dijeda: mode Tamu atau profil anak aktif.</string>
+    <string name="sync_outro_perfil">Dijeda: sinkronisasi milik profil lain.</string>
+    <string name="sync_trakt_cheia">Daftar Trakt Anda penuh (akun gratis memuat 100). Launcher melanjutkan hanya di TV.</string>
+    <string name="sync_ligado">Aktif</string>
+    <string name="sync_desligado">Nonaktif</string>
+    <string name="sync_fonte_trakt">Data dari Trakt (trakt.tv)</string>
+    <string name="sync_fonte_simkl">Data dari Simkl (simkl.com)</string>
+    <string name="sync_n_de">%1$d dari %2$d ada di daftar Anda</string>
+    <string name="sync_continuando">Melanjutkan dari titik berhenti di perangkat lain</string>
+</resources>

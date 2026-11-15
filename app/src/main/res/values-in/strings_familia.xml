@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_familia.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="fam_pin">PIN anak</string>
+    <string name="fam_pin_det">PIN kedua untuk membuka saluran, kategori tersembunyi, dan waktu tidur di depan anak-anak. PIN panel tetap berlaku di mana saja.</string>
+    <string name="fam_pin_ok">PIN anak disimpan</string>
+    <string name="fam_pin_igual">PIN anak harus berbeda dari PIN panel</string>
+    <string name="fam_trocar">Ubah PIN anak</string>
+    <string name="fam_apagar">Hapus PIN anak</string>
+    <string name="fam_apagado">PIN anak dihapus: sekarang hanya PIN panel yang membuka</string>
+    <string name="extras_TEMPO_TELA">Waktu layar harian (saat habis, hanya aplikasi yang diizinkan yang terbuka)</string>
+    <string name="tela_titulo">Waktu layar</string>
+    <string name="tela_acabou">Waktu layar hari ini sudah habis. Sampai besok!</string>
+    <string name="tela_5min">Sisa 5 menit waktu layar hari ini</string>
+    <string name="tela_pin">PIN untuk mengubah waktu layar</string>
+    <string name="tela_cota_linha">Waktu layar per hari: %1$s (sisa hari ini: %2$s)</string>
+    <string name="tela_mais">Beri %1$d menit lagi hari ini</string>
+    <string name="tela_mais_ok">%1$d menit lagi untuk hari ini</string>
+    <string name="tela_h">j</string>
+    <string name="tela_min">mnt</string>
+    <string name="extras_AGENDA_TODAS">Kalender semua akun Google TV sekaligus</string>
+    <string name="cal_todas_contas">Semua akun di TV (%1$d)</string>
+    <string name="tm_tempo_esgotado">Waktu habis</string>
+    <string name="painel_desligado_pin">Panel web dimatikan: PIN salah terlalu sering</string>
+    <string name="tm_crono">Stopwatch</string>
+    <string name="tm_crono_iniciar">Mulai stopwatch</string>
+    <string name="tm_crono_parar">Hentikan stopwatch</string>
+    <string name="tm_crono_comecou">Stopwatch dimulai: tampil di layar utama</string>
+    <string name="tm_crono_marcou">Stopwatch berhenti di %1$s</string>
+    <string name="som_canal">Saluran TV langsung terakhir</string>
+</resources>

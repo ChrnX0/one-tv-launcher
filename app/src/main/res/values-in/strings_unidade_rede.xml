@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_unidade_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="ur_secao">Drive jaringan</string>
+    <string name="ur_titulo">Tampilkan TV sebagai drive jaringan</string>
+    <string name="ur_det">Nonaktif. TV muncul sendiri di This PC di Windows, seperti ponsel, dan sebagai folder jaringan di Mac, Linux, dan ponsel.</string>
+    <string name="ur_painel">Aktifkan panel web di atas dulu (memakai PIN yang sama dan alamat https).</string>
+    <string name="ur_https">Menunggu alamat https panel (sertifikat dibuat sekitar 1 menit setelah panel diaktifkan).</string>
+    <string name="ur_abra">Aktif. Di Windows TV muncul di This PC (TV bertanya di layar pertama kali untuk tiap komputer). Mac, Linux, dan ponsel: %1$s · kata sandi: PIN panel.</string>
+    <string name="mtp_pergunta_titulo">Sebuah komputer meminta file TV</string>
+    <string name="mtp_pergunta">“%1$s” ingin melihat dan menyalin file di penyimpanan TV lewat jaringan rumah. Izinkan komputer ini?</string>
+    <string name="mtp_pcs">Komputer yang diizinkan</string>
+    <string name="mtp_pcs_nenhum">Belum ada. TV bertanya di layar saat komputer meminta file.</string>
+    <string name="mtp_pcs_lista">%1$s · OK melupakan semua (tiap komputer bertanya lagi)</string>
+    <string name="mtp_pcs_esquecidos">Komputer dilupakan</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_casa_cor.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="casa_dica_brilho_cor">kecerahan dan warna</string>
+    <string name="casa_brilho_ajuste_cor">Kecerahan %1$d%% · ◀ ▶ · warna ▲ ▼</string>
+    <string name="casa_cor_ajuste">%1$s · ▲ ▼</string>
+    <string name="casa_cor_quente">Putih hangat</string>
+    <string name="casa_cor_neutra">Putih netral</string>
+    <string name="casa_cor_fria">Putih dingin</string>
+    <string name="casa_cor_vermelho">Merah</string>
+    <string name="casa_cor_laranja">Oranye</string>
+    <string name="casa_cor_amarelo">Kuning</string>
+    <string name="casa_cor_verde">Hijau</string>
+    <string name="casa_cor_azul">Biru</string>
+    <string name="casa_cor_roxo">Ungu</string>
+    <string name="casa_cor_rosa">Merah muda</string>
+</resources>

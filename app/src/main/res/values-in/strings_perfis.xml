@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_perfis.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="perfil_aviso_titulo">Profil: %1$s</string>
+    <string name="perfil_aviso_texto">Favorit, Lanjutkan menonton, dan urutan aplikasi profil ini</string>
+    <string name="perfil_aviso_crianca">Profil anak: mode anak dan waktu tidur diaktifkan</string>
+    <string name="perfil_crianca">Profil anak</string>
+    <string name="perfil_crianca_linha">Profil anak · %1$s: %2$s</string>
+    <string name="perfil_crianca_nao">Nonaktif</string>
+    <string name="perfil_crianca_sem_pin">Atur PIN panel web dulu: itulah PIN orang tua yang melindungi profil anak</string>
+    <string name="perfil_pin_sair">PIN orang tua untuk keluar dari profil anak</string>
+    <string name="perfil_pin_marcar">PIN orang tua untuk mengubah profil anak</string>
+</resources>

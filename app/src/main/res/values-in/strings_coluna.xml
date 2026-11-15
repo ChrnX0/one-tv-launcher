@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_coluna.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="coluna_listas">DAFTAR</string>
+    <string name="coluna_novos">+%1$s</string>
+    <string name="coluna_filtro">Filter</string>
+    <string name="coluna_esportes">Olahraga</string>
+    <string name="coluna_guia">Panduan</string>
+    <string name="coluna_filtro_titulo">Filter</string>
+    <string name="coluna_filtro_ordem">Urutkan: %1$s</string>
+    <string name="coluna_filtro_combinado">Genre, era, rating, belum ditonton…</string>
+    <string name="coluna_filtro_combinado_ativo">Filter: %1$s</string>
+    <string name="coluna_filtro_limpar">Hapus filter</string>
+    <string name="coluna_filtro_sortear">Kejutkan saya</string>
+    <string name="coluna_filtro_ocultas_mostrar">Tampilkan kategori tersembunyi (PIN)</string>
+    <string name="coluna_filtro_ocultas_esconder">Sembunyikan lagi kategori tersembunyi</string>
+    <string name="coluna_menu_assistido">Tandai sudah ditonton</string>
+    <string name="coluna_menu_nao_assistido">Tandai belum ditonton</string>
+    <string name="coluna_menu_tirar_continuar">Hapus dari Lanjutkan menonton</string>
+    <string name="coluna_menu_por_interesse">Tambah ke Daftar tontonan</string>
+    <string name="coluna_menu_tirar_interesse">Hapus dari Daftar tontonan</string>
+    <string name="coluna_marcado_assistido">%1$s ditandai sudah ditonton</string>
+    <string name="coluna_marcado_nao_assistido">%1$s ditandai belum ditonton</string>
+    <string name="coluna_tirado_continuar">%1$s dihapus dari Lanjutkan menonton</string>
+    <string name="coluna_etiqueta_concluida">Selesai</string>
+    <string name="coluna_etiqueta_nova_temporada">Musim baru</string>
+    <string name="coluna_etiqueta_novos">Episode baru</string>
+    <string name="coluna_letra_titulo">Ke huruf</string>
+    <string name="coluna_letra">Ke sebuah huruf</string>
+    <string name="coluna_ao_vivo">LANGSUNG</string>
+    <string name="coluna_ao_vivo_primeiro">Langsung dulu</string>
+    <string name="coluna_tv_titulo">TV</string>
+    <string name="coluna_gravacoes">Rekaman</string>
+    <plurals name="coluna_etiqueta_n_novos">
+        <item quantity="other">%d episode baru</item>
+    </plurals>
+</resources>

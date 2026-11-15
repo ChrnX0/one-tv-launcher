@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_voz2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="lbl_voz_filmes">Film</string>
+    <string name="lbl_voz_series">Serial</string>
+    <string name="lbl_voz_na_rede">Media jaringan</string>
+    <string name="lbl_voz_casa">Kontrol rumah</string>
+    <string name="lbl_voz_busca">Cari</string>
+    <string name="lbl_voz_mural">Papan</string>
+    <string name="voz_mural_desligado">Papan keluarga nonaktif (atau TV dalam mode tamu).</string>
+</resources>

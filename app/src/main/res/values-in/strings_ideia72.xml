@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_ideia72.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l72_abrir">Buka %1$s</string>
+    <string name="l72_tela_previsao">prakiraan cuaca</string>
+    <string name="l72_tela_agenda">kalender</string>
+    <string name="l72_tela_despertador">jam alarm</string>
+    <string name="l72_tela_configuracoes">Setelan launcher</string>
+    <string name="l72_tela_inicio">layar utama</string>
+    <string name="l72_despertador">Buat alarm pukul %1$s (%2$s)</string>
+    <string name="l72_dias_uma">sekali</string>
+    <string name="l72_dias_todos">setiap hari</string>
+    <string name="l72_dias_uteis">Sen sampai Jum</string>
+    <string name="l72_dias_fds">akhir pekan</string>
+    <string name="l72_dias_nomes">Min,Sen,Sel,Rab,Kam,Jum,Sab</string>
+    <string name="l72_vol_subir">Naikkan volume</string>
+    <string name="l72_vol_descer">Turunkan volume</string>
+    <string name="l72_vol_mudo">Bisukan/bunyikan</string>
+    <string name="l72_vezes">(%1$d kali)</string>
+    <string name="l72_midia_pausar">Jeda</string>
+    <string name="l72_midia_tocar">Lanjutkan pemutaran</string>
+    <string name="l72_midia_proxima">Berikutnya</string>
+    <string name="l72_midia_anterior">Sebelumnya</string>
+    <string name="l72_visita_liga">Aktifkan mode tamu</string>
+    <string name="l72_visita_desliga">Nonaktifkan mode tamu</string>
+    <string name="l72_canal_pedido">Pindah ke saluran %1$s</string>
+    <string name="l72_canal">Pindah ke saluran %1$d (%2$s)</string>
+    <string name="l72_o_que_passa">Lihat yang tayang di %1$s</string>
+    <string name="l72_casa_ligar">Nyalakan</string>
+    <string name="l72_casa_desligar">Matikan</string>
+    <string name="l72_casa_alternar">Alihkan</string>
+    <string name="l72_casa">%1$s %2$s (rumah)</string>
+    <string name="l72_guia_vazio">%1$s: tidak ada di panduan.</string>
+    <string name="l72_guia_agora">%1$s sekarang: %2$s (sampai %3$s)</string>
+    <string name="l72_guia_nada_agora">%1$s: tidak ada di panduan saat ini</string>
+    <string name="l72_guia_depois">Berikutnya: %1$s (%2$s)</string>
+    <string name="l75_pilula">Sedang diputar: %1$s, %2$s. OK menjeda atau melanjutkan; tahan OK untuk membuka aplikasi</string>
+</resources>

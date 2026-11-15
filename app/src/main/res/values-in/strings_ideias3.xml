@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_ideias3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="extras_SONO_SUAVE">Mati perlahan (timer tidur meredupkan layar dan menurunkan volume)</string>
+    <string name="extras_MURAL">Papan keluarga di screensaver</string>
+    <string name="extras_PRESENCA">Matikan saat semua orang pergi dari rumah (router UniFi)</string>
+    <string name="extras_HOJE_NA_TV">\"Hari ini di TV\" di layar Cari</string>
+    <string name="extras_RETROSPECTIVA">Rekap mingguan (Minggu malam)</string>
+    <string name="extras_MODO_SIMPLES">Mode sederhana (kartu besar, nama diucapkan)</string>
+</resources>
