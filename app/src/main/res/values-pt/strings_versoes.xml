@@ -17,6 +17,8 @@
         <item>Login do Claude no navegador em inglês ou português, conforme o idioma do navegador; o painel web em inglês também traduz as mensagens de erro, e os erros das contas de filmes saem no idioma da TV</item>
         <item>Segurança: ligar a unidade de rede pelo painel pede o PIN; o conector do Windows só baixa pelo https; outro aparelho da casa não trava mais o painel, o login do Claude nem a cópia de arquivos do seu computador (cada computador continua entrando com o próprio “Permitir?”)</item>
         <item>A manutenção da madrugada termina antes de a família ligar a TV, e as notas do IMDb dos filmes não somem mais</item>
+        <item>As pílulas do despertador e do timer na tela inicial agora mudam na hora quando um alarme é criado ou apagado pelo celular, painel ou Claude</item>
+        <item>A pergunta na TV diz de onde veio o pedido (Claude, painel, link de cena) em vez de “Pedido pelo painel (mcp)”</item>
         <item>Wi-Fi que não volta sozinho: se a TV ficar 5 min com o Wi-Fi ligado mas sem conexão, o launcher desliga e religa o Wi-Fi; se mesmo assim não voltar, reinicia a TV (no máximo uma vez a cada 6 h e nunca com som tocando). Fica anotado no histórico de rede</item>
         <item>Timer de sono: com a LG NetCast pareada para o volume, o timer agora também desliga a LG pela rede 15 s depois que o Chromecast dorme (a LG ignora o standby do HDMI)</item>
         <item>Protetor de tela: um pedido de fora (celular, painel, Claude) que abriria um app ou uma tela agora sempre pergunta na TV antes de tirar o protetor, mesmo com “Permitir” nas Confirmações. A pergunta espera 3 min; sem resposta, o pedido fica nas notificações da TV e, tocando nele, a TV pergunta se você aceita</item>
