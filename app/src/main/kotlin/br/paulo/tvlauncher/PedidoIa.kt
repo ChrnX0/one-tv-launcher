@@ -96,7 +96,8 @@ object PedidoIa {
                 p.situacao = Situacao.ESPERANDO
                 // Confirmações (09/11/2026): "Perguntar" mostra o OK no controle; "Bloqueado" recusa; "Permitir" (e "Liberar
                 // tudo", o padrão da Sala, que o dono escolheu em 06/11: "tire o ok") executa e a TV só avisa o que fez.
-                val modo = ConfirmacoesTv.modo(app, Confirmacoes.Acao.MCP_ACOES)
+                val modo = Confirmacoes.comProtetor(ConfirmacoesTv.modo(app, Confirmacoes.Acao.MCP_ACOES), ProtetorTela.aberto(), origem,
+                    plano.acoes.any { it is ComandosIa.Acao.AbrirApp || it is ComandosIa.Acao.AbrirTela })
                 if (modo == Confirmacoes.Modo.BLOQUEAR) {
                     falhar("bloqueado na TV (Configurações › Sistema › Confirmações)")
                     try { PainelArmazem.registrar(app, origem, "confirmação: ações da IA", "bloqueado nas Confirmações") } catch (_: Exception) {}
@@ -143,6 +144,9 @@ object PedidoIa {
         atual?.let { if (it !== p && it.situacao == Situacao.ESPERANDO) { it.situacao = Situacao.CANCELADO; it.mensagem = "substituído por um pedido novo" } }
         atual = p
         try {
+            // A pergunta precisa aparecer: atrás do protetor ninguém veria. Fechar o protetor aqui só mostra a pergunta;
+            // nada roda sem o OK (e sem resposta em 60 s, cancela).
+            ProtetorTela.fecharSeAberto()
             app.startActivity(Intent(app, ConfirmarIaActivity::class.java)
                 .putExtra(ConfirmarIaActivity.EXTRA_ID, p.id)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP))

@@ -49,6 +49,17 @@ object Confirmacoes {
     data class Regras(val liberarTudo: Boolean = false, val modos: Map<Acao, Modo> = emptyMap())
 
     /** O modo que vale agora para a ação. "Liberar tudo" permite tudo. */
+    /** Origens de pedido de quem está na frente da TV ou do que o dono agendou nela (voz, controle, telas, rotina, despertador, evento). */
+    val ORIGENS_NA_TV = setOf("voz", "tecla", "tela", "rotina", "despertador", "evento")
+
+    /**
+     * Regra pura (15/11/2026, pedido do dono): um pedido DE FORA (MCP, painel, link de cena, adb) que [abreAlgo] (app ou
+     * tela) com o protetor aberto sempre pergunta na TV, mesmo com "Permitir": quem está na sala decide se o protetor sai.
+     * "Bloqueado" continua bloqueando; pedidos da própria TV seguem a configuração.
+     */
+    fun comProtetor(modo: Modo, protetorAberto: Boolean, origem: String, abreAlgo: Boolean): Modo =
+        if (modo == Modo.PERMITIR && protetorAberto && abreAlgo && origem !in ORIGENS_NA_TV) Modo.PERGUNTAR else modo
+
     fun modo(r: Regras, a: Acao): Modo {
         if (r.liberarTudo) return Modo.PERMITIR
         val m = r.modos[a] ?: a.padrao
