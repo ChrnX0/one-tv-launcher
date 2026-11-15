@@ -95,8 +95,11 @@ object JogosTv {
     private fun ehGamepad(d: InputDevice): Boolean {
         if (d.isVirtual || d.name.orEmpty().startsWith("virtual", ignoreCase = true)) return false
         if (android.os.Build.VERSION.SDK_INT >= 29 && !d.isExternal) return false
-        return d.sources and InputDevice.SOURCE_GAMEPAD == InputDevice.SOURCE_GAMEPAD ||
-            d.sources and InputDevice.SOURCE_JOYSTICK == InputDevice.SOURCE_JOYSTICK
+        val gamepad = d.sources and InputDevice.SOURCE_GAMEPAD == InputDevice.SOURCE_GAMEPAD
+        // Teclado com touchpad (Logitech K400 Plus na Sala, 15/11/2026) se diz "joystick" por causa da roda de rolar:
+        // teclado alfabético só conta se também for gamepad.
+        if (!gamepad && d.keyboardType == InputDevice.KEYBOARD_TYPE_ALPHABETIC) return false
+        return gamepad || d.sources and InputDevice.SOURCE_JOYSTICK == InputDevice.SOURCE_JOYSTICK
     }
 
     class Controle(val nome: String, val bateria: Int?)

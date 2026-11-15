@@ -45,6 +45,8 @@ class PrevisaoActivity : Activity() {
     companion object {
         const val EXTRA_TEMP = "temp"            // a temperatura mostrada no topo (Int.MIN_VALUE = sem medida)
         const val EXTRA_CHOVENDO = "chovendo"    // o topo diz que chove agora
+        const val EXTRA_CODIGO = "codigo"        // o código WMO que o topo mostra (-1 = sem medida)
+        const val EXTRA_UMIDADE = "umidade"      // a umidade medida que o topo usa (-1 = sem medida)
         const val EXTRA_FALAR = "falar"          // ler a previsão em voz alta ao abrir
         const val EXTRA_BOM_DIA = "bom_dia"      // falar "Bom dia", a hora e a agenda de hoje junto (despertador)
     }
@@ -117,8 +119,15 @@ class PrevisaoActivity : Activity() {
             ?: if (recente && guardado.contains("temp")) guardado.getInt("temp", 0) else null
         val chovendo = if (intent.hasExtra(EXTRA_CHOVENDO)) intent.getBooleanExtra(EXTRA_CHOVENDO, false)
             else recente && guardado.getBoolean("chovendo", false)
+        // O céu e a umidade de agora também vêm do topo (aeroporto): antes a HOME dizia "Poucas nuvens" e esta tela,
+        // com o modelo, "Garoa forte" e outra umidade para o mesmo instante (teste na TV, 15/11/2026).
+        val codigoTopo = intent.getIntExtra(EXTRA_CODIGO, -1).takeIf { it >= 0 }
+            ?: if (recente) guardado.getInt("codigo", -1).takeIf { it >= 0 } else null
+        val umidadeTopo = intent.getIntExtra(EXTRA_UMIDADE, -1).takeIf { it >= 0 }
+            ?: if (recente) guardado.getInt("umidade", -1).takeIf { it >= 0 } else null
         Fundo.rodar {
             val dados = try { carregar() } catch (e: Exception) { null }
+            dados?.let { d -> codigoTopo?.let { d.codigo = it }; umidadeTopo?.let { d.umidade = it } }
             runOnUiThread { if (!isFinishing) montar(dados, tempTopo, chovendo) }
         }
     }
@@ -166,7 +175,7 @@ class PrevisaoActivity : Activity() {
     private class Dados(
         val ponto: Localizacao.Ponto,
         val agoraTexto: String,            // "2026-11-02T16:15" (hora local do lugar)
-        val temp: Double, val sensacao: Double, val umidade: Int, val codigo: Int, val pressao: Double,
+        val temp: Double, val sensacao: Double, var umidade: Int, var codigo: Int, val pressao: Double,   // var: o topo da HOME manda (montar)
         val vento: Double, val ventoDir: Int, val eDia: Boolean,
         val hTempo: List<String>, val hTemp: List<Double>, val hChuva: List<Int>, val hCodigo: List<Int>,
         val hVento: List<Double>, val hVisib: List<Double>, val hOrvalho: List<Double>, val hUv: List<Double>,

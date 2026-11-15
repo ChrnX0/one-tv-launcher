@@ -504,7 +504,7 @@
     <string name="filmes_carregando">Loading movies…</string>
     <string name="filmes_vazio">No movies in the saved accounts (movies only come from Xtream accounts).</string>
     <string name="filmes_cabecalho">%1$s · %2$d MOVIES</string>
-    <string name="filmes_continuar">Continue watching</string>
+    <string name="filmes_continuar">Continue</string>
     <string name="filmes_ordem">Sort: %1$s</string>
     <string name="filmes_ordem_titulo">Sort by</string>
     <string name="filmes_ordem_recentes">newest in catalog</string>

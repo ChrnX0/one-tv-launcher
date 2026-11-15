@@ -13,7 +13,12 @@ import java.util.Calendar
  */
 object Agenda {
     /** Um evento (uma ocorrência dele, para os que se repetem). */
-    class Evento(val titulo: String, val inicio: Long, val fim: Long, val diaInteiro: Boolean, val cor: Int)
+    class Evento(val titulo: String, val inicio: Long, val fim: Long, val diaInteiro: Boolean, val cor: Int,
+                 val dono: String = "")   // dono da agenda (OWNER_ACCOUNT), ex.: "pt-br.brazilian#holiday@group.v.calendar.google.com"
+
+    /** Idioma de uma agenda de feriados do Google ("pt-br.brazilian#holiday@…" = "pt"), ou null se não for de feriados. */
+    fun idiomaFeriados(dono: String): String? =
+        if ("#holiday@" in dono) dono.substringBefore('.').substringBefore('-').lowercase().ifEmpty { null } else null
 
     /**
      * As contas que a agenda mostra (ideia 32): com [Extras.Chave.AGENDA_TODAS] ligada (padrão), todas as contas Google
@@ -34,8 +39,14 @@ object Agenda {
      * Junta eventos de várias contas: o mesmo compromisso nas duas agendas (um convite da família) aparece uma vez só.
      * Mesmo título, mesmo início e mesmo fim = o mesmo. Fica em ordem de início. Pura (AgendaTest).
      */
-    fun juntar(l: List<Evento>): List<Evento> =
-        l.distinctBy { Triple(it.titulo.trim().lowercase(), it.inicio, it.fim) }.sortedBy { it.inicio }
+    fun juntar(l: List<Evento>, idioma: String = java.util.Locale.getDefault().language): List<Evento> {
+        // Feriados: cada conta pode assinar a agenda de feriados num idioma ("Proclamação da República" numa e
+        // "Republic Proclamation Day" na outra; teste na TV, 15/11/2026). Fica só uma: a do idioma da TV, senão a 1ª.
+        val idiomas = l.mapNotNull { idiomaFeriados(it.dono) }.distinct()
+        val fica = if (idiomas.size > 1) idiomas.firstOrNull { it == idioma.lowercase() } ?: idiomas.first() else null
+        return l.filter { e -> fica == null || idiomaFeriados(e.dono).let { it == null || it == fica } }
+            .distinctBy { Triple(it.titulo.trim().lowercase(), it.inicio, it.fim) }.sortedBy { it.inicio }
+    }
 
     /** Os eventos das contas Google [contas] entre [de] e [ate] (ms), em ordem. Vazio sem conta ou sem READ_CALENDAR. */
     fun eventos(ctx: Context, contas: List<String>, de: Long, ate: Long): List<Evento> {
@@ -53,7 +64,7 @@ object Agenda {
             ctx.contentResolver.query(
                 uri,
                 arrayOf(CalendarContract.Instances.TITLE, CalendarContract.Instances.BEGIN, CalendarContract.Instances.END,
-                    CalendarContract.Instances.ALL_DAY, CalendarContract.Instances.DISPLAY_COLOR),
+                    CalendarContract.Instances.ALL_DAY, CalendarContract.Instances.DISPLAY_COLOR, CalendarContract.Instances.OWNER_ACCOUNT),
                 // + ACCOUNT_TYPE (revisão 04/11): o mesmo e-mail pode existir em outro tipo de conta (ex.: Exchange).
                 "${CalendarContract.Calendars.ACCOUNT_NAME} IN (${contas.joinToString(",") { "?" }}) AND ${CalendarContract.Calendars.ACCOUNT_TYPE} = 'com.google' AND ${CalendarContract.Instances.VISIBLE} = 1",
                 contas.toTypedArray(), "${CalendarContract.Instances.BEGIN} ASC"
@@ -69,7 +80,7 @@ object Agenda {
                     }
                     // Recorta JÁ no horário local: sem isso o dia inteiro de amanhã entrava em "Hoje na agenda".
                     if (!Datas.dentro(inicio, fim, de, ate)) continue
-                    saida.add(Evento(c.getString(0) ?: ctx.getString(R.string.cal_sem_titulo), inicio, fim, diaInteiro, c.getInt(4) or 0xFF000000.toInt()))
+                    saida.add(Evento(c.getString(0) ?: ctx.getString(R.string.cal_sem_titulo), inicio, fim, diaInteiro, c.getInt(4) or 0xFF000000.toInt(), c.getString(5) ?: ""))
                 }
             }
         } catch (e: Exception) {
