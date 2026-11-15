@@ -51,3 +51,50 @@ async function carregarEmprestimo() {
     lista.appendChild(linha);
   }
 }
+
+// Cartão "Controle de dono emprestado" (Dhizuku; rotas em PainelShizuku.kt, PainelDono). Autorizar app novo só na TV.
+const PARADO_DONO = {
+  DESLIGADO: 'Desligado nas Configurações da TV.',
+  PLANO: 'Faz parte dos planos pagos.',
+  SEM_DONO: 'O launcher não é o dono desta TV: não há o que emprestar.',
+};
+
+document.addEventListener('aba', (ev) => { if (ev.detail === 'extras') carregarDono(); });
+
+async function carregarDono() {
+  const status = $('statusDono'), lista = $('listaDono');
+  mostrar(status, '');
+  let r;
+  try { r = await chamar('GET', '/api/dono'); } catch (e) { mostrar(status, textoErro(e)); return; }
+  $('estadoDono').textContent = r.parado === 'NAO' ? 'Ligado.' : (PARADO_DONO[r.parado] || 'Desligado.');
+  lista.replaceChildren();
+  if (!r.apps.length) {
+    lista.appendChild(Object.assign(document.createElement('p'), { className: 'aviso', textContent: 'Nenhum app autorizado. O app pede na TV na primeira vez.' }));
+    return;
+  }
+  for (const a of r.apps) {
+    const linha = document.createElement('p');
+    const nome = document.createElement('strong');
+    nome.textContent = a.nome;
+    linha.append(nome, a.total ? ' · poder total' : ' · só o controle de dono', ' ');
+    const botao = (texto, classe, acao, pergunta) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = classe;
+      b.textContent = texto;
+      b.addEventListener('click', async () => {
+        const fazer = () => chamar('POST', '/api/dono/app', { pacote: a.pacote, acao });
+        try {
+          const ok = pergunta ? await confirmar(pergunta, `${a.nome} vai rodar como o launcher e ler os dados dele.`, texto, fazer) : await fazer();
+          if (ok) carregarDono();
+        } catch (e) { mostrar(status, textoErro(e)); }
+      });
+      return b;
+    };
+    linha.appendChild(a.total ? botao('Tirar poder total', 'botao-secundario', 'normal')
+      : botao('Dar poder total', 'botao-secundario', 'total', 'Dar poder total?'));
+    linha.append(' ');
+    linha.appendChild(botao('Revogar', 'botao-secundario', 'revogar'));
+    lista.appendChild(linha);
+  }
+}

@@ -47,7 +47,11 @@ and `values-pt/` (Portuguese); the app follows the TV's system language. Read `R
    adb queue with self-healing. **Lending the shell** (15/11/2026, `ShizukuEmbutido.kt`, off by default, Extras/paid plan):
    the vendored Shizuku server (`shizuku/`, see `shizuku/NOTICE.md`) is started through that queue; the APK must **never
    define** `moe.shizuku.*` permissions (that blocked installing next to the Shizuku app; `RegrasEmprestimoTest` checks it).
-   Clients are authorized only through the server's config after the panel PIN on the TV (`PedidoShizukuActivity`). `org/conscrypt/` bridges `SSLSockets.exportKeyingMaterial` for the pairing.
+   Clients are authorized only through the server's config after the panel PIN on the TV (`PedidoShizukuActivity`). **Lending the Device Owner** (same date, `DonoEmprestado.kt`, off by default, paid plan, only while we ARE owner):
+   built-in Dhizuku server (`dhizuku/server_api`, MIT, own `DhizukuProcess` instead of the LGPL AndroidAppProcess), provider
+   `<pkg>.dhizuku_server.provider`, PIN on the TV (`PedidoDhizukuActivity`). Without "full power" a client only reaches
+   `IDevicePolicyManager`, through `FiltroDpm`/`RegrasDono` (never wipe/clear owner/transfer; never target our package;
+   unreadable call = denied). "Full power" (process, user service, delegated scopes, other binders) is per app with PIN. `org/conscrypt/` bridges `SSLSockets.exportKeyingMaterial` for the pairing.
 3. **Accessibility service** (`AutorizaShizukuService.kt`, historical name): remote keys, HOME short/long press,
    window watcher that keeps our HOME on top.
 

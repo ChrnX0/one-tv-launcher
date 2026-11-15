@@ -10,6 +10,9 @@
     <!-- A biblioteca do Shizuku (módulo provider) traz o pedido da permissão dos CLIENTES e a marca V3_SUPPORT. O launcher é
          o gerente, não cliente: sem isto ele apareceria na lista de apps do app Shizuku oficial, se instalado. -->
     <uses-permission android:name="moe.shizuku.manager.permission.API_V23" tools:node="remove" />
+    <!-- A Dhizuku-API (lado cliente, usada pelo servidor embutido) pede a permissão do app Dhizuku oficial: o launcher
+         é o servidor, não cliente. -->
+    <uses-permission android:name="com.rosan.dhizuku.permission.API" tools:node="remove" />
     <!-- Android 13+: aviso de pedido sem resposta na TV (PedidoPendente); o Device Owner concede -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Chip de rede: sinal e velocidade do Wi-Fi -->
@@ -666,6 +669,25 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <!-- Empréstimo do Device Owner (servidor do Dhizuku, 15/11/2026; DonoEmprestado.kt). A authority é onde a
+             Dhizuku-API procura quando o dono da TV não é o app Dhizuku oficial. Exportados sem permissão: qualquer app
+             chega, mas só os autorizados com o PIN fazem algo, e cada chamada passa pelo filtro (RegrasDono/FiltroDpm). -->
+        <provider
+            android:name=".ProvedorDhizuku"
+            android:authorities="${applicationId}.dhizuku_server.provider"
+            android:exported="true"
+            android:multiprocess="false" />
+        <activity
+            android:name=".PedidoDhizukuActivity"
+            android:exported="true"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="${applicationId}.action.REQUEST_DHIZUKU_PERMISSION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <service android:name=".ServicoUsuarioDhizuku" android:exported="false" android:process=":dhizuku_usuario" />
 
         <!-- Comandos por adb (DUMP: só o adb e o sistema). Os nomes .shizuku.* ficaram por compatibilidade: desde 12/11/2026
              não há mais servidor do Shizuku embutido; INICIAR confere o shell próprio, ESTADO diz se ele responde. -->

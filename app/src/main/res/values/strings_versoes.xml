@@ -18,6 +18,7 @@
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
         <item>Lend the shell: apps made for Shizuku work without installing Shizuku (off by default; Settings › Lend system powers). Each app asks on the TV with the panel PIN, and the web panel (Extras) shows who has access and revokes it</item>
+        <item>Lend owner control: apps made for Dhizuku use the launcher\'s Device Owner (off by default; same place). Each app asks on the TV with the PIN; none can remove the launcher as owner or wipe the TV. “Full power” is per app, with the PIN and a warning</item>
         <item>Scrolling menus and lists (like the player’s “Audio and subtitles” and folders): items no longer slide over the title; in menus, the edges fade when there are more items</item>
         <item>App layout: choose between the usual row and a grid with every app in view (Settings › Appearance)</item>
         <item>Card size: Normal or Large, plus see-through cards when not selected (in Extras); everything starts off</item>
@@ -163,6 +164,7 @@
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>emprestar_shell</item>
+        <item>emprestar_dono</item>
         <item>home_grade</item>
         <item>cartoes_grandes</item>
         <item>visual_qr</item>
@@ -287,6 +289,7 @@
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Lend the shell (Shizuku)</item>
+        <item>Lend owner control (Dhizuku)</item>
         <item>Apps in a grid</item>
         <item>Large cards</item>
         <item>Share look</item>
@@ -411,6 +414,7 @@
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>With the panel PIN set, in Settings › Lend system powers, switch "Lend the shell" to Always on. Open an app made for Shizuku: does the TV ask, accept the PIN and the app work? Then revoke it in the web panel (Extras) and switch it back Off.</item>
+        <item>In Settings › Lend system powers, turn on “Lend owner control”. Open an app made for Dhizuku (e.g. OwnDroid or App Manager): does the TV ask, accept the PIN with “Allow always” and the app work? In the web panel (Extras) it shows up; revoke it and turn the option off again.</item>
         <item>In Settings › Appearance, set App layout to Grid. On the home screen, do ▲ ▼ ◀ ▶ move through the grid without jumping to the clock, and does switching back to Row leave everything as before?</item>
         <item>In Settings › Appearance, set Card size to Large. Are the cards bigger, not cut off at the bottom, and does going back to Normal leave things as before?</item>
         <item>In Settings › Appearance › Share look, does a QR code appear that your phone can read?</item>

@@ -753,6 +753,18 @@ class ConfigLauncherActivity : Activity() {
             RegrasEmprestimo.Parado.PLANO -> c.addView(info(getString(R.string.emp_titulo), getString(R.string.emp_plano)), lp())
             else -> {}
         }
+        // Device Owner emprestado (Dhizuku, DonoEmprestado.kt). Ligar pede o PIN; desligar vale na hora para todos os apps.
+        val donoLigado = DonoEmprestado.ligado(this)
+        c.addView(linha(getString(R.string.emd_titulo), getString(R.string.emd_titulo_det),
+            valor = getString(if (donoLigado) R.string.emd_ligado else R.string.emp_modo_desligado)) {
+            val gravar = { DonoEmprestado.definirLigado(this, !donoLigado); recarregarAba() }
+            if (!donoLigado) pedirPinParental(getString(R.string.cl_pin_liberar), gravar) else gravar()
+        }, lp())
+        if (donoLigado) when (DonoEmprestado.parado(this)) {
+            RegrasDono.Parado.SEM_DONO -> c.addView(info(getString(R.string.emd_titulo), getString(R.string.emd_sem_dono)), lp())
+            RegrasDono.Parado.PLANO -> c.addView(info(getString(R.string.emd_titulo), getString(R.string.emp_plano)), lp())
+            else -> {}
+        }
     }
 
     // ================================================================ aba: Aparência

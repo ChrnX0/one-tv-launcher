@@ -39,3 +39,34 @@ object PainelShizuku {
         } catch (e: Throwable) { "o servidor recusou: ${e.javaClass.simpleName}" }
     }
 }
+
+/**
+ * Cartão "Controle de dono emprestado" do painel (Dhizuku, DonoEmprestado.kt): quem está autorizado, ligar/desligar o
+ * poder total e revogar. Autorizar um app novo só na TV (o pedido parte do app); dar poder total pelo painel pede o PIN
+ * de novo, revogar e tirar o poder total não.
+ */
+object PainelDono {
+    fun estado(ctx: Context): JSONObject {
+        val pm = ctx.packageManager
+        val apps = JSONArray()
+        for (a in DonoEmprestado.apps(ctx)) {
+            val nome = try { pm.getApplicationInfo(a.pacote, 0).loadLabel(pm).toString() } catch (_: Exception) { a.pacote }
+            apps.put(JSONObject().put("pacote", a.pacote).put("nome", nome).put("total", a.total))
+        }
+        return JSONObject()
+            .put("ligado", DonoEmprestado.ligado(ctx))
+            .put("parado", DonoEmprestado.parado(ctx).name)
+            .put("apps", apps)
+    }
+
+    /** [acao]: "revogar", "total" ou "normal". Devolve null se deu certo, ou o motivo. */
+    fun mudar(ctx: Context, pacote: String, acao: String): String? {
+        if (!ChecagensPainel.pacoteValido(pacote)) return "pacote inválido"
+        if (DonoEmprestado.apps(ctx).none { it.pacote == pacote }) return "esse app não está autorizado"
+        return when (acao) {
+            "revogar" -> { DonoEmprestado.revogar(ctx, pacote); null }
+            "total", "normal" -> if (DonoEmprestado.definirTotal(ctx, pacote, acao == "total")) null else "não mudou"
+            else -> "ação inválida"
+        }
+    }
+}

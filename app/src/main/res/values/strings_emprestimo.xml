@@ -15,4 +15,13 @@
     <string name="emp_pedido_texto">The app will be able to do what adb does: install and remove apps, change system settings and more. Only allow apps you trust. You can revoke it later in the web panel.</string>
     <string name="emp_pin_titulo">Panel PIN to allow</string>
     <string name="emp_sem_pin">Set the panel PIN first (Settings, Web panel).</string>
+    <!-- Lend the Device Owner (built-in Dhizuku server, 15/11/2026; DonoEmprestado.kt). -->
+    <string name="emd_titulo">Lend owner control to other apps (Dhizuku)</string>
+    <string name="emd_titulo_det">Apps made for Dhizuku use the launcher\'s owner control. Each app asks on the TV, with the PIN. None can remove the launcher as owner or wipe the TV.</string>
+    <string name="emd_ligado">On</string>
+    <string name="emd_sem_dono">The launcher is not the owner (Device Owner) of this TV, so there is nothing to lend.</string>
+    <string name="emd_pedido_titulo">Allow %1$s to use the launcher\'s owner control?</string>
+    <string name="emd_pedido_texto">With “Allow”, the app can hide and block apps and change the TV\'s permissions and rules, but never remove the launcher as owner or wipe the TV. “Full power” lets the app run as the launcher and read its data: only for apps you fully trust. You can revoke it in the web panel.</string>
+    <string name="emd_total">Full power</string>
+    <string name="emd_pin_total">FULL POWER: the app will read the launcher\'s data. Panel PIN</string>
 </resources>

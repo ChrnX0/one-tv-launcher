@@ -813,6 +813,16 @@ object PainelWeb {
                 PainelArmazem.registrar(app, ip, "Shizuku ${if (permitir) "permitir" else "revogar"} ${pacote.take(80)}", motivo ?: "ok")
                 return if (motivo == null) json(200, JSONObject().put("ok", true)) else erro(409, motivo)
             }
+            "/api/dono" -> if (req.metodo == "GET") return json(200, PainelDono.estado(app))
+            "/api/dono/app" -> if (req.metodo == "POST") {
+                val o = corpoJson(req) ?: return erro(400, "JSON inválido")
+                val pacote = o.optString("pacote")
+                val acao = o.optString("acao")
+                if (acao == "total" && !sessoes.elevada(token)) return precisaPin()
+                val motivo = PainelDono.mudar(app, pacote, acao)
+                PainelArmazem.registrar(app, ip, "Dono emprestado ${acao.take(10)} ${pacote.take(80)}", motivo ?: "ok")
+                return if (motivo == null) json(200, JSONObject().put("ok", true)) else erro(409, motivo)
+            }
             "/api/registro" -> if (req.metodo == "GET") return json(200, JSONObject().put("itens", PainelArmazem.registro(app)))
             "/api/apps/instalar" -> if (req.metodo == "POST") return instalar(req, token, ip)
             "/api/arquivos" -> if (req.metodo == "GET") { semAcesso()?.let { return it }; return json(200, PainelArquivos.listar(req.consulta["caminho"])) }

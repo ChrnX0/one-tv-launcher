@@ -43,7 +43,7 @@ open class ControleShizukuReceiver : BroadcastReceiver() {
 
         /** O shell próprio responde agora? Roda um `echo` na fila do guardião (até 8 s: o broadcast tem ~10 s). */
         fun estado(ctx: Context): String = (if (GuardiaoShizuku.comando(ctx, "echo ok", 8_000)?.contains("ok") == true) "shell ok" else "sem shell") +
-            "; emprestimo: ${ShizukuEmbutido.estado(ctx)}"
+            "; emprestimo: ${ShizukuEmbutido.estado(ctx)}; dono: ${DonoEmprestado.estado(ctx)}"
 
         /** Reconecta o shell próprio e roda a autocura (o que faltar de permissão). Usado pelo INICIAR. */
         fun ligar(ctx: Context) = GuardiaoShizuku.garantir(ctx, "INICIAR", mesmoSemFalta = true)

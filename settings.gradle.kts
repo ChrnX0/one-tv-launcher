@@ -48,6 +48,11 @@ for (m in listOf("aidl", "shared", "server-shared", "rish", "provider", "api")) 
     project(":$m").projectDir = file("shizuku/api/$m")
 }
 
+// Servidor do Dhizuku (Dhizuku-API, MIT, ver dhizuku/NOTICE.md): o launcher, que é o Device Owner, empresta o dono a
+// outros apps (15/11/2026). Sem a AndroidAppProcess (LGPL) da origem: DhizukuProcess próprio.
+include(":dhizuku-server_api")
+project(":dhizuku-server_api").projectDir = file("dhizuku/server_api")
+
 // App de teste do empréstimo de shell (cliente mínimo do Shizuku). Fica fora do build normal (CI e Release):
 // ./gradlew -PclienteShizuku :cliente-shizuku:assembleDebug
 if (providers.gradleProperty("clienteShizuku").isPresent) {

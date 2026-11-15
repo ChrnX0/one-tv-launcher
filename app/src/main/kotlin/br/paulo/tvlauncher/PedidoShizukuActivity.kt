@@ -115,49 +115,8 @@ class PedidoShizukuActivity : Activity() {
         negar.requestFocus()   // o padrão é o seguro
     }
 
-    private val prefsPin by lazy { getSharedPreferences("config_pin", MODE_PRIVATE) }
-    private fun lerTentativas() = TentativasPin.Estado(prefsPin.getInt("erros", 0), prefsPin.getLong("ate", 0), prefsPin.getLong("ultimo", 0))
-    private fun gravarTentativas(e: TentativasPin.Estado) =
-        prefsPin.edit().putInt("erros", e.erros).putLong("ate", e.bloqueadoAte).putLong("ultimo", e.ultimoErro).apply()
-    private fun aviso(t: String) = android.widget.Toast.makeText(this, t, android.widget.Toast.LENGTH_LONG).show()
-
-    /** "Permitir sempre": só com o PIN do painel certo. A conferência (PBKDF2, lenta) roda fora da thread da tela. */
-    private fun conferirPinEPermitir() {
-        if (!PainelArmazem.temPin(this)) { aviso(getString(R.string.emp_sem_pin)); return }
-        val espera = TentativasPin.espera(lerTentativas(), System.currentTimeMillis())
-        if (espera > 0) { aviso(getString(R.string.player_pin_espere, TentativasPin.minutos(espera))); return }
-        val campo = android.widget.EditText(this).apply {
-            inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD
-            filters = arrayOf(android.text.InputFilter.LengthFilter(PinSeguro.MAX_DIGITOS))
-            setSingleLine()
-        }
-        fun conferir(pin: String) = Fundo.rodar("pin-emprestimo") {
-            val certo = PainelArmazem.conferirPin(this, pin)
-            runOnUiThread {
-                if (isDestroyed || respondido) return@runOnUiThread
-                if (certo) { gravarTentativas(TentativasPin.acertou()); responder(true) }
-                else {
-                    val e = TentativasPin.errou(lerTentativas(), System.currentTimeMillis())
-                    gravarTentativas(e)
-                    val falta = TentativasPin.espera(e, System.currentTimeMillis())
-                    aviso(if (falta > 0) getString(R.string.player_pin_espere, TentativasPin.minutos(falta)) else getString(R.string.player_pin_errado))
-                }
-            }
-        }
-        val d = CaixaTv(this)
-            .setTitle(getString(R.string.emp_pin_titulo))
-            .setView(android.widget.FrameLayout(this).apply { setPadding(dp(20), dp(8), dp(20), 0); addView(campo) })
-            .setPositiveButton("OK") { _, _ -> conferir(campo.text.toString()) }
-            .setNegativeButton(getString(R.string.cl_cancelar), null)
-            .create()
-        campo.setOnEditorActionListener { _, acao, _ ->
-            if (acao == android.view.inputmethod.EditorInfo.IME_ACTION_DONE || acao == android.view.inputmethod.EditorInfo.IME_ACTION_GO) {
-                d.dismiss(); conferir(campo.text.toString()); true
-            } else false
-        }
-        d.setOnShowListener { campo.requestFocus() }
-        d.show()
-    }
+    /** "Permitir sempre": só com o PIN do painel certo (PinNaTela). */
+    private fun conferirPinEPermitir() = PinNaTela.pedir(this, getString(R.string.emp_pin_titulo)) { if (!respondido) responder(true) }
 
     private fun responder(permitido: Boolean) {
         if (respondido) return
