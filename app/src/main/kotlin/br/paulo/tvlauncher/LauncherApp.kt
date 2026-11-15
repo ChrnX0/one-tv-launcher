@@ -57,6 +57,7 @@ class LauncherApp : Application() {
             Fundo.rodar("backup-noturno") { runCatching { BackupNoturno.agendar(this) } }
             // Versão nova ainda sem AOT: compila quando a tela apagar (CompilarAot.kt). Só registra um receiver.
             CompilarAot.iniciar(this)
+            CompatibilidadeTv.vigiar(this)   // mede o "acordar" do relatório de compatibilidade (CompatibilidadeTv.kt)
             // Ideias de 12/11/2026: lembretes reagendados (atualizar o app apaga os alarmes), aviso no celular de versão
             // nova e de erro novo, e a guarda de desempenho (anota a versão para comparar os quadros com a anterior).
             Fundo.rodar("ideias-12-11") { runCatching { IdeiasInicio.aoIniciar(this) } }

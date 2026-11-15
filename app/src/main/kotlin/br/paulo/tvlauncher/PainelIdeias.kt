@@ -51,6 +51,14 @@ object PainelIdeias {
             post && r == "avisos/testar" -> ok(JSONObject().put("resultado", Avisos.testar(app)))   // bloqueia: thread do pedido
             // ---- 4. desempenho
             get && r == "desempenho" -> ok(DesempenhoTv.json(app))
+            get && r == "compatibilidade" -> ok(CompatibilidadeTv.json(app))   // página "Funciona no seu aparelho?"
+            // tema por QR: o código do visual desta TV e aplicar um recebido
+            get && r == "visual" -> ok(JSONObject().put("codigo", VisualCodigoTv.codigo(app)).put("link", VisualCodigoTv.link(app)))
+            post && r == "visual" -> {
+                val feito = VisualCodigoTv.aplicar(app, corpo?.optString("codigo") ?: "") ?: return erro(400, "código inválido")
+                PainelArmazem.registrar(app, ip, "visual aplicado", feito.joinToString(", "))
+                ok(JSONObject().put("feito", org.json.JSONArray(feito)))
+            }
             // ---- 6. mural
             post && r == "mural" -> {
                 val o = corpo ?: return erro(400, "JSON inválido")

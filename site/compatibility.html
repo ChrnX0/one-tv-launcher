@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Device compatibility · One TV Launcher</title>
+<meta name="description" content="Which TVs and streaming boxes One TV Launcher was tested on, with the numbers each device measured.">
+<link rel="stylesheet" href="estilo.css">
+<style>
+/* Página "Funciona no seu aparelho?" (degrau 1, item 1.2). Os dados vêm de aparelhos/lista.json e, para cada
+   aparelho testado, do JSON que a própria TV gerou (EXTRAS --es o compat). Nada aqui é digitado à mão. */
+:root{--ok:#0b7a43;--falha:#b3261e;--medindo:#8a5a00;--cartao:rgba(127,127,127,.08)}
+@media (prefers-color-scheme:dark){:root{--ok:#58d68d;--falha:#ff8a80;--medindo:#ffcc66}}
+[hidden]{display:none!important}
+.idioma{float:right;font-size:.95rem}
+.busca{width:100%;box-sizing:border-box;font:inherit;font-size:1.1rem;padding:.7rem .9rem;border-radius:.6rem;
+  border:1px solid var(--suave);background:transparent;color:inherit;margin:1rem 0 1.5rem}
+.lista{display:grid;gap:1rem}
+.cartao{background:var(--cartao);border-radius:.9rem;padding:1rem 1.2rem}
+.cartao h2{margin:0 0 .2rem;font-size:1.2rem}
+.sub{color:var(--suave);font-size:.95rem;margin:0 0 .6rem}
+.selo{display:inline-block;font-weight:600;font-size:.9rem;padding:.15rem .6rem;border-radius:1rem;border:1px solid currentColor}
+.PASSOU{color:var(--ok)}.FALHOU{color:var(--falha)}.MEDINDO,.em_teste{color:var(--medindo)}.planejado,.NAO_MEDIDO{color:var(--suave)}
+.testes{list-style:none;padding:0;margin:.8rem 0 0}
+.testes li{display:flex;gap:.6rem;align-items:baseline;padding:.2rem 0}
+.testes b{min-width:1.2rem}
+.num{color:var(--suave);font-size:.9rem;margin-left:auto;white-space:nowrap}
+details{margin-top:2rem}summary{cursor:pointer;font-weight:600}
+code{font-size:.9em;word-break:break-all}
+</style></head>
+<body><main>
+<nav><a href="./">Home</a><a href="compatibility.html" aria-current="page" data-t="nav">Compatibility</a>
+<a href="privacy.html" data-t="nav_priv">Privacy</a>
+<a href="#" class="idioma" id="trocar">Português</a></nav>
+<h1 data-t="titulo">Does it work on your TV?</h1>
+<p data-t="intro">Every device below runs the same four checks. The numbers are measured by the launcher itself on that device, not typed by us.</p>
+<ul>
+<li data-t="t_home"><b>Home button</b>: pressing Home always lands on One TV.</li>
+<li data-t="t_acordar"><b>Fast wake</b>: from screen on to the home screen in under 2 seconds.</li>
+<li data-t="t_estavel"><b>24 h stable</b>: no crash in 24 hours of use.</li>
+<li data-t="t_telas"><b>Screens</b>: no cut or overlapping text (checked on a computer for each release).</li>
+</ul>
+<input class="busca" id="busca" type="search" autocomplete="off" placeholder="Find your device" aria-label="Find your device">
+<p id="carregando" data-t="carregando">Loading…</p>
+<div class="lista" id="lista"></div>
+<p id="vazio" hidden data-t="vazio">Not tested yet. Tell us your device on GitHub and we will add it to the list.</p>
+<details>
+<summary data-t="como">How to measure your own device</summary>
+<p data-t="como1">Install the launcher and use it for a day. Then open the web panel and go to <code>/api/extras/ideias/compatibilidade</code>, or run:</p>
+<p><code>adb shell am broadcast -n br.paulo.tvlauncher/.ControleShizukuAdbReceiver -a br.paulo.tvlauncher.EXTRAS --es o compat</code></p>
+<p data-t="como2">The report holds only the model, the system version and the measurements: no serial number, account, network or name.</p>
+</details>
+<p class="data"><span data-t="atualizado">Updated</span> <span id="data"></span> · <a href="https://github.com/ChrnX0/one-tv-launcher/issues" data-t="pedir">Ask for a device</a></p>
+</main>
+<script>
+const T = {
+  pt: {
+    nav: "Compatibilidade", nav_priv: "Privacidade", titulo: "Funciona na sua TV?",
+    intro: "Cada aparelho abaixo passa pelos mesmos quatro testes. Os números são medidos pelo próprio launcher naquele aparelho, não digitados por nós.",
+    t_home: "<b>Botão Home</b>: apertar Home sempre cai no One TV.",
+    t_acordar: "<b>Acorda rápido</b>: da tela acesa até a tela inicial em menos de 2 segundos.",
+    t_estavel: "<b>24 h estável</b>: nenhuma queda em 24 horas de uso.",
+    t_telas: "<b>Telas</b>: nenhum texto cortado ou sobreposto (conferido no computador a cada versão).",
+    carregando: "Carregando…", vazio: "Ainda não testado. Diga seu aparelho no GitHub e ele entra na lista.",
+    como: "Como medir o seu aparelho",
+    como1: "Instale o launcher e use por um dia. Depois abra o painel web em <code>/api/extras/ideias/compatibilidade</code>, ou rode:",
+    como2: "O relatório só tem o modelo, a versão do sistema e as medidas: nada de número de série, conta, rede ou nome.",
+    atualizado: "Atualizado em", pedir: "Pedir um aparelho", busca: "Procure seu aparelho", trocar: "English",
+    PASSOU: "Passou", FALHOU: "Falhou", MEDINDO: "Medindo", NAO_MEDIDO: "No computador",
+    em_teste: "Em teste", planejado: "Na fila",
+    home: "Botão Home", acordar: "Acorda rápido", estavel: "24 h estável", telas: "Telas",
+    stick: "Stick", box: "Caixinha", tv: "TV", medido: "Medido em",
+  },
+  en: {
+    busca: "Find your device", trocar: "Português",
+    PASSOU: "Passed", FALHOU: "Failed", MEDINDO: "Measuring", NAO_MEDIDO: "On computer",
+    em_teste: "Testing", planejado: "Queued",
+    home: "Home button", acordar: "Fast wake", estavel: "24 h stable", telas: "Screens",
+    stick: "Stick", box: "Box", tv: "TV", medido: "Measured on",
+  },
+};
+const ORIGINAL = {};
+document.querySelectorAll("[data-t]").forEach(e => ORIGINAL[e.dataset.t] = e.innerHTML);
+let idioma = (navigator.language || "en").toLowerCase().startsWith("pt") ? "pt" : "en";
+try { idioma = localStorage.getItem("idioma") || idioma; } catch (_) {}
+const t = k => (T[idioma] && T[idioma][k]) || T.en[k] || ORIGINAL[k] || k;
+let aparelhos = [], relatorios = {}, atualizado = "";
+
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function dataLocal(ms) { return new Date(ms).toLocaleDateString(idioma === "pt" ? "pt-BR" : "en-US", {day: "numeric", month: "short", year: "numeric"}); }
+
+function numero(id, r) {
+  const m = r.medidas;
+  if (id === "acordar" && m.acordarMs != null) return m.acordarMs + " ms";
+  if (id === "estavel") return m.ligadoHoras + " h";
+  return "";
+}
+
+function cartao(a) {
+  const r = relatorios[a.id];
+  const selo = r ? r.geral : a.situacao;
+  let corpo = "";
+  if (r) {
+    const ap = r.aparelho;
+    corpo = `<p class="sub">Android ${esc(ap.android)} · ${esc(ap.ramMb)} MB RAM · ${ap.processo64 ? "64-bit" : "32-bit"}</p>
+      <ul class="testes">${r.testes.map(x => `<li class="${x.veredito}"><b>${x.veredito === "PASSOU" ? "✓" : x.veredito === "FALHOU" ? "✗" : "…"}</b>
+      <span>${esc(t(x.id))}: ${esc(t(x.veredito))}</span><span class="num">${esc(numero(x.id, r))}</span></li>`).join("")}</ul>
+      <p class="sub">${esc(t("medido"))} ${esc(dataLocal(r.medidoEm))} · v${esc(r.app.versionCode)}</p>`;
+  }
+  return `<article class="cartao"><h2>${esc(a.nome)}</h2>
+    <p class="sub">${esc(t(a.tipo))} · ${esc(a.sistema)} · <span class="selo ${selo}">${esc(t(selo))}</span></p>${corpo}</article>`;
+}
+
+function desenhar() {
+  document.documentElement.lang = idioma === "pt" ? "pt-BR" : "en";
+  document.querySelectorAll("[data-t]").forEach(e => e.innerHTML = idioma === "pt" ? t(e.dataset.t) : ORIGINAL[e.dataset.t]);
+  document.getElementById("trocar").textContent = t("trocar");
+  const b = document.getElementById("busca");
+  b.placeholder = t("busca"); b.setAttribute("aria-label", t("busca"));
+  const q = b.value.trim().toLowerCase();
+  const vis = aparelhos.filter(a => !q || (a.nome + " " + a.sistema).toLowerCase().includes(q));
+  document.getElementById("lista").innerHTML = vis.map(cartao).join("");
+  document.getElementById("vazio").hidden = vis.length > 0 || !aparelhos.length;
+  document.getElementById("data").textContent = atualizado;
+}
+
+document.getElementById("trocar").addEventListener("click", e => {
+  e.preventDefault(); idioma = idioma === "pt" ? "en" : "pt";
+  try { localStorage.setItem("idioma", idioma); } catch (_) {}
+  desenhar();
+});
+document.getElementById("busca").addEventListener("input", desenhar);
+
+fetch("aparelhos/lista.json").then(r => r.json()).then(async l => {
+  atualizado = l.atualizado; aparelhos = l.aparelhos;
+  await Promise.all(aparelhos.filter(a => a.relatorio).map(a =>
+    fetch("aparelhos/" + a.relatorio).then(r => r.json()).then(j => relatorios[a.id] = j).catch(() => {})));
+  // Testados primeiro (passou > medindo > falhou), depois em teste, depois a fila.
+  const ordem = a => { const r = relatorios[a.id]; return r ? ({PASSOU: 0, MEDINDO: 1, FALHOU: 2}[r.geral] ?? 3) : a.situacao === "em_teste" ? 4 : 5; };
+  aparelhos.sort((x, y) => ordem(x) - ordem(y));
+}).catch(() => {}).finally(() => { document.getElementById("carregando").hidden = true; desenhar(); });
+desenhar();
+</script>
+</body></html>

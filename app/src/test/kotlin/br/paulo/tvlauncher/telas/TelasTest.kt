@@ -52,6 +52,8 @@ class TelasTest {
     private val telas: List<Pair<String, Class<out Activity>>> = listOf(
         "boas-vindas" to BoasVindasActivity::class.java,
         "home" to MainActivity::class.java,
+        "home-grande" to MainActivity::class.java,   // layout flexível: cartões Grandes e transparentes (LayoutHome)
+        "home-grade" to MainActivity::class.java,    // layout flexível: apps em grade (LayoutHome, GradeApps)
         "configuracoes" to ConfigLauncherActivity::class.java,
         "filmes" to FilmesActivity::class.java,
         "series" to SeriesActivity::class.java,
@@ -60,6 +62,7 @@ class TelasTest {
         "despertador" to AlarmesActivity::class.java,
         "jogos" to JogosActivity::class.java,
         "entrar-celular" to EntrarPeloQrActivity::class.java,
+        "planos" to br.paulo.tvlauncher.ConhecerProActivity::class.java,
     )
     private val referencia = File("src/test/telas/referencia.json")
     private val saida = File("build/telas")
@@ -90,6 +93,10 @@ class TelasTest {
         val ref = if (referencia.exists()) JSONObject(referencia.readText()) else JSONObject()
         for ((nome, cls) in telas) {
             val chave = "$idioma/$nome"
+            val app = RuntimeEnvironment.getApplication()
+            br.paulo.tvlauncher.LayoutHome.definirTamanho(app, if (nome == "home-grande") 115 else 100)
+            br.paulo.tvlauncher.Extras.definir(app, br.paulo.tvlauncher.Extras.Chave.CARTOES_TRANSPARENTES, nome == "home-grande")
+            br.paulo.tvlauncher.LayoutHome.definirGrade(app, nome == "home-grade")
             val m = try { medir(cls, "$idioma-$nome") } catch (e: Throwable) {
                 problemas += "$chave: a tela não abriu (${e.javaClass.simpleName}: ${e.message?.take(160)})"; continue
             }
