@@ -38,6 +38,7 @@ declare -A FONTES=(
   [TeclaFalsaTest]="TeclaFalsa"
   [RoteiroConferenciaTest]="RoteiroConferencia"
   [LgNetcastTest]="LgNetcast"
+  [AcordarComLgTest]="LgNetcast"
   [FrasesAppsTest]="FrasesApps"
   [BuscaOutrosAppsTest]="BuscaOutrosApps"
   [GuiaExtraTest]="GuiaExtra"

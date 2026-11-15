@@ -41,6 +41,7 @@ class BootReceiver : BroadcastReceiver() {
         BackupNoturno.agendar(context)   // o Android esquece os alarmes no boot (backup noturno cifrado, se ligado)
         HistoricoRede.iniciar(context)   // histórico de rede: mede desde o boot
         AutoDesligar.iniciar(context)
+        AcordarComLg.iniciar(context)
         val app = context.applicationContext
         Fundo.rodar { DebloatPosOta.talvezReaplicar(app) }   // a OTA desfez a limpeza? oculta de novo (DebloatPosOta.kt)
         if (Config.ABRIR_AO_LIGAR.isEmpty()) return
