@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pt-rPT) de values/strings_avisos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rd_voltou_titulo">A internet voltou</string>
+    <string name="rd_voltou_texto">Ficou fora %1$s (desde %2$s). Causa provável: %3$s.</string>
+    <string name="rd_causa_wifi">a TV perdeu o Wi-Fi</string>
+    <string name="rd_causa_provedor">provedor ou router</string>
+    <string name="rd_min">%1$d min</string>
+    <string name="rd_h_min">%1$d h %2$d min</string>
+    <string name="rd_disco_titulo">O armazenamento da TV está a encher</string>
+    <string name="rd_disco_texto">Nesse ritmo enche em uns %1$d dias (%2$d MB livres). Limpe o cache dos apps ou tire os que não usa.</string>
+    <string name="pr_avisos_tv">Avisos da TV</string>
+    <string name="mural_riscar">Riscar %1$s</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pt-rPT) de values/strings_unidade_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="ur_secao">Unidade de rede</string>
+    <string name="ur_titulo">Mostrar a TV como unidade de rede</string>
+    <string name="ur_det">Desligada. A TV aparece sozinha em Este Computador do Windows, como um telemóvel, e como pasta da rede no Mac, Linux e telemóveis.</string>
+    <string name="ur_painel">Ligue antes o painel no navegador, acima (usa o mesmo PIN e o endereço https).</string>
+    <string name="ur_https">A esperar o endereço https do painel (o certificado é feito cerca de 1 minuto depois de ligar o painel).</string>
+    <string name="ur_abra">Ligada. No Windows a TV aparece em Este Computador (a TV pergunta no ecrã na primeira vez de cada computador). Mac, Linux e telemóvel: %1$s · senha: o PIN do painel.</string>
+    <string name="mtp_pergunta_titulo">Computador a pedir os ficheiros da TV</string>
+    <string name="mtp_pergunta">“%1$s” quer ver e copiar os ficheiros da memória da TV pela rede de casa. Permitir este computador?</string>
+    <string name="mtp_pcs">Computadores permitidos</string>
+    <string name="mtp_pcs_nenhum">Nenhum ainda. A TV pergunta no ecrã quando um computador pede os ficheiros.</string>
+    <string name="mtp_pcs_lista">%1$s · OK esquece todos (cada um pergunta de novo)</string>
+    <string name="mtp_pcs_esquecidos">Computadores esquecidos</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pt-rPT) de values/strings_ideias3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="extras_SONO_SUAVE">Desligar suave (timer de sono escurece e baixa o volume)</string>
+    <string name="extras_MURAL">Mural da família no protetor de ecrã</string>
+    <string name="extras_PRESENCA">Desligar quando todos saírem de casa (router UniFi)</string>
+    <string name="extras_HOJE_NA_TV">\"Hoje na TV\" no ecrã Pesquisar</string>
+    <string name="extras_RETROSPECTIVA">Retrospectiva da semana (domingo à noite)</string>
+    <string name="extras_MODO_SIMPLES">Modo simples (cards grandes e nome falado)</string>
+</resources>

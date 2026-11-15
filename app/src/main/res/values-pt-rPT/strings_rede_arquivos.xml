@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pt-rPT) de values/strings_rede_arquivos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_secao_na_tv">Ligado na TV</string>
+    <string name="rede_sub_usb">Pendrive ou disco USB · vídeos, músicas e fotos</string>
+    <string name="rede_acao_arquivos">FTP, SFTP ou NFS</string>
+    <string name="rede_sub_arquivos">NAS, router com disco, computador Linux ou Mac</string>
+    <string name="rede_arq_explica">Comece o endereço pelo protocolo: sftp://nas/Filmes · ftp://192.168.0.10 · ftps://nas/Videos · nfs://nas/volume1/video. SFTP e FTPS são cifrados; o FTP comum manda a senha sem cifrar, use só em casa. NFS não tem senha: o NAS precisa liberar o IP da TV e conexões de portas não privilegiadas.</string>
+    <string name="rede_arq_endereco">Endereço (sftp://, ftp://, ftps:// ou nfs://)</string>
+    <string name="rede_arq_usuario">Utilizador (NFS: número do utilizador, opcional)</string>
+    <string name="rede_arq_endereco_erro">Comece com sftp://, ftp://, ftps:// ou nfs://, depois o servidor e a pasta. Utilizador e senha vão nos campos deles.</string>
+    <string name="rede_erro_nfs_porta">O servidor NFS recusou a TV. No NAS, permita conexões de portas não privilegiadas (no Linux, a opção \"insecure\" do /etc/exports).</string>
+    <string name="rede_erro_nfs_ip">O servidor NFS não liberou esta TV. No NAS, ponha o IP da TV (ou a rede da casa) na regra de NFS desta pasta.</string>
+    <string name="rede_erro_chave_mudou">A chave deste servidor mudou desde que ele foi adicionado. Se reinstalou o servidor, remova aqui e adicione de novo; se não, alguém pode estar a fazer-se passar por ele.</string>
+    <string name="rede_erro_usb_acesso">A TV não liberou o pendrive para o launcher. Tente de novo daqui a pouco.</string>
+</resources>

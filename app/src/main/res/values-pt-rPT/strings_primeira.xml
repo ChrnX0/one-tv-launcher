@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pt-rPT) de values/strings_primeira.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pc_titulo">Configurar pelo telemóvel</string>
+    <string name="pc_linha_det">Recomendado. Aponte a câmara do telemóvel para um código: PIN, idioma, TV em direto, cidade e serviços de filmes, em 5 passos.</string>
+    <string name="pc_instrucoes">Aponte a câmara do telemóvel para o código ao lado. O telemóvel abre uma definição de 5 passos.\n\nO telemóvel precisa de estar no Wi-Fi de casa. Deixe este ecrã aberto até criar o PIN no telemóvel (faltam %1$s).</string>
+    <string name="pc_entrou">Continue no telemóvel.</string>
+    <string name="pc_venceu">O código venceu.\nAperte \"%1$s\" para mostrar outro.</string>
+    <string name="pc_sem_rede">A TV não está em nenhuma rede.\nLigue-a no Wi-Fi de casa e tente de novo.</string>
+</resources>
