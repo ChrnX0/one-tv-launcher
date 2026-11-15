@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_nuvem.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_sub_nuvem">Bulutunuzdaki videolar, müzikler ve fotoğraflar</string>
+    <string name="rede_nuvem_seguir">Devam</string>
+    <string name="rede_nuvem_entrar">Oturum aç</string>
+    <string name="rede_nuvem_pedindo">Kod isteniyor…</string>
+    <string name="rede_nuvem_esperando">Telefonunuzda onaylamanız bekleniyor…</string>
+    <string name="rede_nuvem_salvando">Oturum açılıyor…</string>
+    <string name="rede_nuvem_recusado">Hizmet reddetti. Uygulama kimliğini kontrol edin ve yeniden deneyin.</string>
+    <string name="rede_erro_nuvem_login">Bu hesabın izni sona erdi veya kaldırıldı. Hesabı kaldırın (OK basılı) ve yeniden oturum açın.</string>
+    <string name="rede_od_titulo">OneDrive: Microsoft’taki uygulamanız</string>
+    <string name="rede_od_explica">Bir kez, bir bilgisayarda: entra.microsoft.com › Uygulama kayıtları › Yeni kayıt. Hesap türleri için kişisel Microsoft hesaplarını içereni seçin. Ardından Kimlik Doğrulama altında «Genel istemci akışlarına izin ver»i açın. «Uygulama (istemci) kimliği»ni kopyalayıp buraya yazın (telefonunuzdan, panelde yazabilirsiniz).</string>
+    <string name="rede_od_id">Uygulama (istemci) kimliği</string>
+    <string name="rede_od_id_erro">Kimlik 00000000-0000-0000-0000-000000000000 biçimindedir.</string>
+    <string name="rede_od_codigo_explica">Telefonunuzda veya bilgisayarınızda microsoft.com/link’i açın (veya kamerayı QR’a tutun) ve aşağıdaki kodu yazın. TV yalnızca dosyaları okumak ister.</string>
+    <string name="rede_od_erro_app">Microsoft bu uygulamayı kabul etmedi. Kimliği ve «Genel istemci akışlarına izin ver»in açık olduğunu kontrol edin.</string>
+    <string name="rede_dbx_explica">Bir kez, bir bilgisayarda: dropbox.com/developers/apps › Create app › Scoped access › Full Dropbox. Permissions sekmesinde files.metadata.read, files.content.read ve account_info.read’i işaretleyin (gece yedeğini Dropbox’ta istiyorsanız files.content.write’ı da) ve kaydedin (Submit). «App key»i kopyalayıp buraya yazın.</string>
+    <string name="rede_dbx_chave">App key</string>
+    <string name="rede_dbx_chave_erro">App key yalnızca küçük harf ve rakam içerir.</string>
+    <string name="rede_dbx_codigo_explica">Telefon kamerasını QR’a tutun, Dropbox’ta oturum açın ve İzin ver’e dokunun. Dropbox bir kod gösterir: buraya yazın (telefonunuzdan, panelde yazabilirsiniz).</string>
+    <string name="rede_dbx_codigo">Dropbox kodu</string>
+    <string name="rede_dbx_codigo_erro">Dropbox’ın gösterdiği kodun tamamını yazın.</string>
+    <string name="rede_box_explica">Bir kez, bir bilgisayarda: app.box.com/developers/console › Create New App › Custom App › User Authentication (OAuth 2.0). Configuration sekmesinde OAuth 2.0 Redirect URI altına %1$s koyun, «Read all files and folders»ı işaretleyin (gece yedeğini Box’ta istiyorsanız «Write all files and folders»ı da). Kaydedin, sonra Client ID ve Client Secret’ı buraya kopyalayın.</string>
+    <string name="rede_box_id">Client ID</string>
+    <string name="rede_box_segredo">Client Secret</string>
+    <string name="rede_box_erro">Client ID ve Client Secret yalnızca harf ve rakam içerir. İkisini de Configuration sekmesinden kopyalayın.</string>
+    <string name="rede_volta_sem_rede">TV ev ağında değil. Bağlayın ve yeniden deneyin.</string>
+    <string name="rede_volta_explica">TV ile aynı Wi‑Fi’deki bir telefonun kamerasını QR’a tutun, %1$s’de oturum açın ve erişime izin verin. Telefon kendiliğinden TV’ye döner: yazacak bir şey yok.</string>
+    <string name="rede_volta_porta">TV’deki %1$d portu meşgul. Diğer uygulamaları kapatın ve yeniden deneyin.</string>
+    <string name="rede_gd_explica">Bir kez, bir bilgisayarda, Google Cloud projenizde (console.cloud.google.com): APIs &amp; Services › Library › «Google Drive API»yi açın. Google Auth Platform › Data Access’te …/auth/drive.readonly kapsamını ekleyin. Clients › Create client › Web application’da Authorized redirect URIs altına %1$s koyun. Client ID ve Client secret’ı buraya kopyalayın.</string>
+    <string name="rede_gd_id">Client ID (…apps.googleusercontent.com)</string>
+    <string name="rede_gd_segredo">Client secret</string>
+    <string name="rede_gd_erro">İkisini de istemci sayfasından kopyalayın: ID .apps.googleusercontent.com ile biter ve gizli anahtar genellikle GOCSPX- ile başlar.</string>
+    <string name="rede_gd_aviso">Google uygulamanın doğrulanmadığını söylerse Gelişmiş › Git’e dokunun (kendi uygulamanız).</string>
+</resources>

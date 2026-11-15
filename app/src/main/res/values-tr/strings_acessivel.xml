@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_acessivel.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acess_legenda_fundo">Siyah arka planlı altyazı</string>
+    <string name="acess_legenda_amarela">Sarı altyazı</string>
+    <string name="acess_volume">Kanallar arasında eşit ses</string>
+    <string name="acess_voz">Daha net sesler</string>
+    <string name="acess_volume_ligado">Eşit ses açık: sessiz kanallar ve filmler yükselir</string>
+    <string name="acess_volume_desligado">Eşit ses kapalı</string>
+    <string name="acess_voz_ligado">Daha net sesler açık</string>
+    <string name="acess_voz_desligado">Daha net sesler kapalı</string>
+    <string name="acess_config_titulo">Ses ve altyazı</string>
+    <string name="acess_config_texto">Daha az gören veya duyanlar için. Oynatıcının ▼ menüsünde de var.</string>
+</resources>

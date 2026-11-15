@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_protetor_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pt_dica_dispensar">OK kapatır · ◀ ▶ gezinir</string>
+    <string name="pt_dica_pausar">OK duraklatır veya sürdürür · ◀ ▶ gezinir</string>
+    <string name="pt_dica_andar">◀ ▶ gezinir · diğer tuşlar kapatır</string>
+    <string name="rede_fotos_usar">Bu fotoğrafları ekran koruyucuda kullan</string>
+    <string name="rede_fotos_parar">Bu fotoğrafları ekran koruyucuda kullanmayı bırak</string>
+    <string name="rede_fotos_usando">Fotoğraflar kopyalanıyor. Ekran koruyucu bir sonraki başladığında görünürler.</string>
+    <string name="rede_fotos_paradas">Ekran koruyucu artık bu klasörü kullanmıyor.</string>
+    <string name="rede_continuar">İzlemeye devam et</string>
+    <string name="rede_recentes">Son eklenenler</string>
+    <string name="rede_buscar">Ara</string>
+    <string name="rede_buscar_explica">Bu sunucudaki filmler, diziler, bölümler ve müzik.</string>
+    <string name="rede_buscar_campo">Ad</string>
+    <string name="rede_buscar_curto">En az 2 harf yazın.</string>
+    <string name="rede_proximo_em">Sonraki: %1$s, %2$d sn içinde · OK şimdi başlatır · başka bir tuş iptal eder</string>
+    <string name="rede_ainda_assistindo">Hâlâ izliyor musunuz? OK %1$s başlatır</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="one">%1$d fotoğraf · TV’ye kopyalandı, bilgisayar kapalıyken çalışır</item>
+        <item quantity="other">%1$d fotoğraf · TV’ye kopyalandı, bilgisayar kapalıyken çalışır</item>
+    </plurals>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_primeira.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pc_titulo">Telefonunuzla kurun</string>
+    <string name="pc_linha_det">Önerilen. Telefon kamerasını bir koda tutun: PIN, dil, canlı TV, şehir ve film hizmetleri, 5 adımda.</string>
+    <string name="pc_instrucoes">Telefon kamerasını yandaki koda tutun. Telefon 5 adımlı bir kurulum açar.\n\nTelefon ev Wi-Fi’sinde olmalı. Telefonda PIN’i oluşturana kadar bu ekranı açık tutun (%1$s kaldı).</string>
+    <string name="pc_entrou">Telefonda devam edin.</string>
+    <string name="pc_venceu">Kodun süresi doldu.\nYenisini göstermek için «%1$s»e basın.</string>
+    <string name="pc_sem_rede">TV bir ağda değil.\nEv Wi-Fi’sine bağlayın ve yeniden deneyin.</string>
+</resources>

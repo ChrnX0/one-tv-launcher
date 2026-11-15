@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_elenco.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="elenco_botao">Oyuncular</string>
+    <string name="elenco_titulo">Oyuncular</string>
+    <string name="elenco_carregando">Oyuncular yükleniyor…</string>
+    <string name="elenco_vazio">TMDB’de bu yapımın oyuncuları yok.</string>
+    <string name="elenco_dica">Kişiler arasında gezinin: altta, listenizde başka nelerde oynadıkları.</string>
+    <string name="elenco_na_lista">Listenizde ayrıca</string>
+    <string name="elenco_procurando">Listenizde aranıyor…</string>
+    <string name="elenco_nada_na_lista">Listenizde bu kişiyle başka bir şey yok.</string>
+    <string name="elenco_filme">Film</string>
+    <string name="elenco_serie">Dizi</string>
+    <string name="elenco_opcao_player">Oyuncular (bu oyuncu kim?)</string>
+    <string name="anteriormente_titulo">%1$s – önceki bölümlerde</string>
+    <string name="anteriormente_assistir">%1$s izle</string>
+    <string name="anteriormente_pular_sempre">Asla gösterme</string>
+    <string name="anteriormente_desligado">Özetler kapatıldı. Yeniden açmak için: bir bölümde OK’yi basılı tutun.</string>
+    <string name="anteriormente_ligar">«Önceki bölümlerde» özetlerini göster</string>
+    <string name="idade_titulo">Çocuk modunda en yüksek yaş</string>
+    <string name="idade_det">Bu yaşa kadar sınıflandırılan filmler ve diziler her kategoriden görünür (TMDB sınıflandırması). Sınıflandırmasızlar yalnızca çocuk kategorilerinde.</string>
+    <string name="idade_so_categorias">Yalnızca çocuk kategorileri</string>
+    <string name="idade_livre">Genel izleyici</string>
+    <string name="idade_anos">%1$d yaşa kadar</string>
+    <string name="onde_tambem_em">Ayrıca: %1$s (JustWatch)</string>
+    <string name="onde_fora">Listenizde yok · %1$s’de</string>
+    <string name="onde_grupo">Başka yerlerde (JustWatch)</string>
+    <string name="legenda_auto_pronta">Altyazı otomatik indirildi (bu dosya için yapılmış) · değiştirmek için ▼</string>
+    <string name="legenda_auto_pronta_nome">Altyazı otomatik indirildi · değiştirmek veya gecikmeyi ayarlamak için ▼</string>
+    <string name="legenda_auto_opcao">Altyazıları otomatik indir</string>
+    <string name="legenda_auto_ligada">Eksik olduğunda altyazılar indirilecek</string>
+    <string name="legenda_auto_desligada">Otomatik altyazılar kapatıldı</string>
+    <string name="legenda_trad_rotulo">Otomatik çeviri</string>
+    <string name="legenda_trad_traduzindo">Dilinizde altyazı yok: İngilizce olanlar TV’de çevriliyor…</string>
+    <string name="legenda_trad_parcial">Altyazılar TV’de çevrildi (otomatik çeviri). Gerisi çevrilmeye devam ediyor.</string>
+    <string name="legenda_trad_pronta">Altyazı çevirisi bitti</string>
+    <string name="legenda_trad_opcao">Eksik olduğunda altyazıları TV’de çevir</string>
+    <string name="legenda_trad_ligada">Eksik olduğunda altyazılar TV’de çevrilecek</string>
+    <string name="legenda_trad_desligada">Altyazılar artık çevrilmeyecek</string>
+    <string name="series_sinopse_mais">Tam özet</string>
+    <string name="series_sinopse_menos">Kısa özet</string>
+    <string name="series_continuar_curto">▶  %1$s devam et</string>
+    <string name="series_episodios">Bölümler</string>
+    <string name="series_trocar_temporada">Sezon değiştir</string>
+    <string name="fechar">Kapat</string>
+</resources>

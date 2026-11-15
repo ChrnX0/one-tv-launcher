@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_unidade_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="ur_secao">Ağ sürücüsü</string>
+    <string name="ur_titulo">TV’yi ağ sürücüsü olarak göster</string>
+    <string name="ur_det">Kapalı. TV, Windows’ta Bu Bilgisayar’da bir telefon gibi, Mac, Linux ve telefonlarda ağ klasörü olarak kendiliğinden görünür.</string>
+    <string name="ur_painel">Önce yukarıdaki web panelini açın (aynı PIN’i ve https adresini kullanır).</string>
+    <string name="ur_https">Panelin https adresi bekleniyor (sertifika, panel açıldıktan yaklaşık 1 dakika sonra oluşturulur).</string>
+    <string name="ur_abra">Açık. Windows’ta TV Bu Bilgisayar’da görünür (TV her bilgisayar için ilk seferde ekranda sorar). Mac, Linux ve telefon: %1$s · şifre: panel PIN’i.</string>
+    <string name="mtp_pergunta_titulo">Bir bilgisayar TV dosyalarını istiyor</string>
+    <string name="mtp_pergunta">«%1$s», ev ağı üzerinden TV depolamasındaki dosyaları görmek ve kopyalamak istiyor. Bu bilgisayara izin verilsin mi?</string>
+    <string name="mtp_pcs">İzin verilen bilgisayarlar</string>
+    <string name="mtp_pcs_nenhum">Henüz yok. Bir bilgisayar dosyaları istediğinde TV ekranda sorar.</string>
+    <string name="mtp_pcs_lista">%1$s · OK hepsini unutur (her biri yeniden sorar)</string>
+    <string name="mtp_pcs_esquecidos">Bilgisayarlar unutuldu</string>
+</resources>

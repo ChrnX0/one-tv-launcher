@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_familia.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="fam_pin">Çocuk PIN’i</string>
+    <string name="fam_pin_det">Çocukların önünde kanalların, gizli kategorilerin ve yatma saatinin kilidini açmak için ikinci bir PIN. Panel PIN’i her yerde çalışmaya devam eder.</string>
+    <string name="fam_pin_ok">Çocuk PIN’i kaydedildi</string>
+    <string name="fam_pin_igual">Çocuk PIN’i panel PIN’inden farklı olmalı</string>
+    <string name="fam_trocar">Çocuk PIN’ini değiştir</string>
+    <string name="fam_apagar">Çocuk PIN’ini kaldır</string>
+    <string name="fam_apagado">Çocuk PIN’i kaldırıldı: artık yalnızca panel PIN’i kilit açar</string>
+    <string name="extras_TEMPO_TELA">Günlük ekran süresi (bitince yalnızca izin verilen uygulamalar açılır)</string>
+    <string name="tela_titulo">Ekran süresi</string>
+    <string name="tela_acabou">Bugünkü ekran süresi bitti. Yarın görüşürüz!</string>
+    <string name="tela_5min">Bugün 5 dakika ekran süresi kaldı</string>
+    <string name="tela_pin">Ekran süresini değiştirmek için PIN</string>
+    <string name="tela_cota_linha">Günlük ekran süresi: %1$s (bugün kalan: %2$s)</string>
+    <string name="tela_mais">Bugün %1$d dakika daha ver</string>
+    <string name="tela_mais_ok">Bugün için %1$d dakika daha</string>
+    <string name="tela_h">sa</string>
+    <string name="tela_min">dk</string>
+    <string name="extras_AGENDA_TODAS">TV’nin tüm Google hesaplarının takvimi birlikte</string>
+    <string name="cal_todas_contas">TV’deki tüm hesaplar (%1$d)</string>
+    <string name="tm_tempo_esgotado">Süre doldu</string>
+    <string name="painel_desligado_pin">Web paneli kapatıldı: çok fazla yanlış PIN</string>
+    <string name="tm_crono">Kronometre</string>
+    <string name="tm_crono_iniciar">Kronometreyi başlat</string>
+    <string name="tm_crono_parar">Kronometreyi durdur</string>
+    <string name="tm_crono_comecou">Kronometre başladı: Ana ekranda görünür</string>
+    <string name="tm_crono_marcou">Kronometre %1$s’de durdu</string>
+    <string name="som_canal">Son canlı TV kanalı</string>
+</resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_familia2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="an_rotulo">Doğum günü</string>
+    <string name="an_hoje">Bugün %s’in doğum günü</string>
+    <string name="an_amanha">Yarın %s’in doğum günü</string>
+    <string name="tp_calor">Aşırı sıcak</string>
+    <string name="tp_calor_texto">Bugün %d°’ye kadar · Su için</string>
+    <string name="tp_frio">Aşırı soğuk</string>
+    <string name="tp_frio_texto">Bu gece %d°’ye kadar düşüyor · Sıkı giyinin</string>
+    <string name="tp_cfg">Sıcak ve soğuk uyarısı</string>
+    <string name="tp_cfg_det">Bugün %1$d°’ye ulaşınca veya bu gece %2$d°’ye düşünce her uygulamanın üstünde bir kart</string>
+    <string name="mu_ok_lido">OK okundu olarak işaretler</string>
+    <string name="mu_ok_nao_lido">Okundu · OK okunmadı olarak işaretler</string>
+    <string name="mu_lido_desc">Mesaj, okundu: %s. OK okunmadı olarak işaretler.</string>
+    <string name="mu_nao_lido_desc">Mesaj: %s. OK okundu olarak işaretler.</string>
+    <string name="mu_apagar">Mesajı sil: %s</string>
+    <string name="extras_RETROSPECTIVA_ANO">Bu yıl TV’niz (aralıkta, ekran koruyucuda)</string>
+    <string name="ra_titulo">%d yılında TV’niz</string>
+    <string name="ra_canal">Favori kanal: %1$s (%2$s)</string>
+    <string name="ra_coluna">Radyo</string>
+    <string name="ra_dica_ouvir">dinle</string>
+    <string name="ra_dica_favoritar">favori</string>
+    <string name="ra_carregando">İstasyonlar yükleniyor…</string>
+    <string name="ra_subtitulo">Dünyanın her yerinden istasyonlar · kumandadaki 1–9 favorilerinizi çalar</string>
+    <string name="ra_sem_catalogo">Radyo kataloğu yanıt vermedi. Favorileriniz yine çalışır.</string>
+    <string name="ra_nada">İstasyon bulunamadı.</string>
+    <string name="ra_continuar">devam et</string>
+    <string name="ra_pausar">duraklat</string>
+    <string name="ra_favoritas">Favoriler</string>
+    <string name="ra_procurar">Bul</string>
+    <string name="ra_buscar">Ada göre ara</string>
+    <string name="ra_buscar_det">Dünyadaki herhangi bir istasyon</string>
+    <string name="ra_generos">Türler</string>
+    <string name="ra_paises">Başka ülke</string>
+    <string name="ra_paises_det">En çok istasyonu olan ülkeler</string>
+    <string name="ra_perto">Yakınınızda</string>
+    <string name="ra_mais_ouvidas">%s’de en çok dinlenenler</string>
+    <string name="ra_mundo">Dünyada en çok dinlenenler</string>
+    <string name="ra_resultado">Arama: %s</string>
+    <string name="ra_favoritada">Favorilere eklendi</string>
+    <string name="ra_desfavoritada">Favorilerden çıkarıldı</string>
+    <string name="ra_falhou">Bu istasyon şu an çalmıyor. Başka birini deneyin.</string>
+    <plurals name="an_anos">
+        <item quantity="one">%d yaşına giriyor</item>
+        <item quantity="other">%d yaşına giriyor</item>
+    </plurals>
+</resources>

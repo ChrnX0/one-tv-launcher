@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_sync.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="sync_sub">%1$s olarak oturum açıldı. TV’nin telefonunuzla eşit tuttukları.</string>
+    <string name="sync_sub_mdblist">%1$s olarak oturum açıldı. MDBList listeleriniz katalogda görünebilir.</string>
+    <string name="sync_ultima">Son eşitleme: %1$s</string>
+    <string name="sync_nunca">Henüz eşitlenmedi</string>
+    <string name="sync_interesses">İlgi alanları ⇄ Watchlist</string>
+    <string name="sync_interesses_simkl">İlgi alanları ⇄ Plan to watch</string>
+    <string name="sync_interesses_det">Burada işaretledikleriniz orada görünür, tersi de geçerli</string>
+    <string name="sync_assistidos">İzlenenler ← Geçmiş</string>
+    <string name="sync_assistidos_det">Telefonda veya başka yerde izlediklerinizi getirir</string>
+    <string name="sync_continuar">Devam et ⇄ Kaldığınız yer</string>
+    <string name="sync_continuar_det">Telefonda durdurun, TV’de aynı yerden devam edin</string>
+    <string name="sync_contar">Burada izlediklerimi %1$s’e bildir</string>
+    <string name="sync_contar_det">Oynatılırken «şimdi izleniyor» ve «izlendi» gönderir. Misafir modunda veya çocuk profilinde asla.</string>
+    <string name="sync_listas">Katalogdaki listeler</string>
+    <string name="sync_listas_nenhuma">Hiçbiri seçilmedi</string>
+    <string name="sync_listas_n">%1$d seçildi: %2$s</string>
+    <string name="sync_listas_sub">LİSTELER’de, Tümü altında, yalnızca listenizdeki başlıklarla görünürler. En fazla %1$d.</string>
+    <string name="sync_listas_carregando">Listeleriniz yükleniyor…</string>
+    <string name="sync_listas_vazio">Liste bulunamadı. Trakt veya MDBList’te bir liste oluşturun ya da beğenin ve buraya dönün.</string>
+    <string name="sync_listas_cheio">En fazla %1$d liste</string>
+    <string name="sync_lista_itens">%1$d başlık</string>
+    <string name="sync_agora">Şimdi eşitle</string>
+    <string name="sync_agora_det">Filmler veya Diziler’i açtığınızda kendiliğinden de olur</string>
+    <string name="sync_rodando">Eşitleniyor…</string>
+    <string name="sync_feito">Eşitlendi</string>
+    <string name="sync_sair">%1$s oturumunu kapat</string>
+    <string name="sync_bloqueado">Duraklatıldı: Misafir modu veya çocuk profili açık.</string>
+    <string name="sync_outro_perfil">Duraklatıldı: eşitleme başka bir profile ait.</string>
+    <string name="sync_trakt_cheia">Trakt listeniz dolu (ücretsiz hesaplar 100 tutar). Launcher yalnızca TV’de devam eder.</string>
+    <string name="sync_ligado">Açık</string>
+    <string name="sync_desligado">Kapalı</string>
+    <string name="sync_fonte_trakt">Veriler Trakt’tan (trakt.tv)</string>
+    <string name="sync_fonte_simkl">Veriler Simkl’den (simkl.com)</string>
+    <string name="sync_n_de">Listenizde %2$d’den %1$d</string>
+    <string name="sync_continuando">Diğer cihazda kaldığınız yerden devam ediliyor</string>
+</resources>

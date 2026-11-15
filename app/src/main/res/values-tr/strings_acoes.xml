@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_acoes.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acao_recado">«%1$s» mesajını göster</string>
+    <string name="acao_timer">%1$d dakikalık zamanlayıcı</string>
+    <string name="acao_timer_nome">%1$d dakikalık zamanlayıcı («%2$s»)</string>
+    <string name="acao_desligar_em">TV’yi %1$d dk sonra kapat</string>
+    <string name="acao_desligar_cancelar">Uyku zamanlayıcısını iptal et</string>
+    <string name="acao_filtro_ligar">Gece filtresini aç</string>
+    <string name="acao_filtro_desligar">Gece filtresini kapat</string>
+    <string name="acao_filtro_sem_servico">gece filtresi erişilebilirlik hizmetine ihtiyaç duyar</string>
+    <string name="acao_rodar_cena">«%1$s» sahnesini çalıştır</string>
+    <string name="acao_cena_nao_existe">«%1$s» sahnesi yok</string>
+    <string name="acao_cena_em_cena">bir sahne başka bir sahneyi çalıştıramaz</string>
+    <string name="acao_mural_compras">«%1$s» alışveriş listesine ekle</string>
+    <string name="acao_mural_recado">«%1$s» aile panosuna iğnele</string>
+    <string name="acao_tocar_titulo">«%1$s» bul ve oynat</string>
+    <string name="acao_tocar">%1$s oynat</string>
+    <string name="acao_continuar">Oynatılanı sürdür</string>
+    <string name="acao_proximo">Sonraki bölümü oynat</string>
+    <string name="acao_proximo_de">%1$s sonraki bölüm</string>
+    <string name="acao_o_que_via">Ne oynatıldığını gör</string>
+    <string name="acao_vendo">Son izlenen: %1$s</string>
+    <string name="acao_vendo_nada">Filmler ve Diziler’de henüz bir şey izlenmedi.</string>
+    <string name="rot_cena_uma">Bir sahne çalıştır</string>
+    <string name="rot_cena">Sahne çalıştır: %1$s</string>
+    <string name="rot_cena_linha">Sahne: %1$s</string>
+    <string name="rot_cena_sem">Önce bir sahne oluşturun (web paneli › Ekstralar › Sahneler)</string>
+    <string name="al_cena">Durdurunca sahne: %1$s</string>
+    <string name="lbl_cenas">Sahneler</string>
+    <string name="pr_cenas">Sahneler</string>
+    <string name="cenas_titulo">Sahneler</string>
+    <string name="cenas_det">OK sahneyi çalıştırır. Web paneli › Ekstralar › Sahneler’de oluşturun ve düzenleyin.</string>
+    <string name="cenas_vazio">Henüz sahne yok. Web paneli › Ekstralar › Sahneler’de bir tane oluşturun.</string>
+    <string name="tec_titulo">Kumanda tuşları</string>
+    <string name="tec_det">Netflix ve YouTube her ekranda çalışır; renkli tuşlar ve rakamlar yalnızca ana ekranda.</string>
+    <string name="tec_nova">+ Bir tuş ayarla</string>
+    <string name="tec_nova_det">Ardından kumandadaki tuşa basın</string>
+    <string name="tec_aperte">Tuşa basın</string>
+    <string name="tec_aperte_det">Netflix, YouTube, renkli bir tuş veya rakam. GERİ iptal eder.</string>
+    <string name="tec_nao_pode">%1$s değiştirilemez (TV’yi kullanmak için gerekli). Başka bir tuş deneyin.</string>
+    <string name="tec_so_home">Yalnızca ana ekranda çalışır (uygulamalarda ve oynatıcıda kendi işini korur).</string>
+    <string name="tec_toda_tela">Her ekranda çalışır.</string>
+    <string name="tec_toque">Bas</string>
+    <string name="tec_segurar">Basılı tut</string>
+    <string name="tec_duplo">Çift bas</string>
+    <string name="tec_padrao">varsayılan (kayıtlı uygulama; 3 sn basılı = seç)</string>
+    <string name="tec_cena">sahne %1$s</string>
+    <string name="tec_salvo">%1$s kaydedildi</string>
+    <string name="tec_apagar">Bu tuşu temizle</string>
+    <string name="tec_vermelha">Kırmızı</string>
+    <string name="tec_verde">Yeşil</string>
+    <string name="tec_amarela">Sarı</string>
+    <string name="tec_azul">Mavi</string>
+    <string name="aut_titulo">Otomasyonlar</string>
+    <string name="aut_det">TV’nin kendi kendine yaptığı her şey: bir saatte, bir tuşla, bir şey olduğunda ve bağlantıyla.</string>
+    <string name="aut_cfg_det">Saatler, kumanda tuşları, olaylar ve sahne bağlantıları</string>
+    <string name="aut_horario">Saati geldiğinde</string>
+    <string name="aut_botao">Bir tuşa basıldığında</string>
+    <string name="aut_evento">Bir şey olduğunda (sahne çalıştırır)</string>
+    <string name="aut_link">Bağlantıyla</string>
+    <string name="aut_link_det">Web paneli › Ekstralar › Sahneler’de oluşturun ve düzenleyin</string>
+    <string name="ev_midia_tocou">Film veya video başladı</string>
+    <string name="ev_midia_pausou">Film veya video duraklatıldı ya da bitti</string>
+    <string name="ev_tv_ligou">TV açıldı</string>
+    <string name="ev_todos_sairam">Herkes çıktı (varlık)</string>
+    <string name="ev_chuva">Yağmur geliyor</string>
+    <plurals name="cenas_acoes">
+        <item quantity="one">%d eylem</item>
+        <item quantity="other">%d eylem</item>
+    </plurals>
+    <plurals name="aut_links">
+        <item quantity="one">bağlantılı %d sahne</item>
+        <item quantity="other">bağlantılı %d sahne</item>
+    </plurals>
+</resources>

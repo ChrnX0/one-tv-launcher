@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_ideia72.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l72_abrir">%1$s aç</string>
+    <string name="l72_tela_previsao">hava tahmini</string>
+    <string name="l72_tela_agenda">takvim</string>
+    <string name="l72_tela_despertador">çalar saat</string>
+    <string name="l72_tela_configuracoes">launcher Ayarları</string>
+    <string name="l72_tela_inicio">ana ekran</string>
+    <string name="l72_despertador">%1$s için alarm oluştur (%2$s)</string>
+    <string name="l72_dias_uma">bir kez</string>
+    <string name="l72_dias_todos">her gün</string>
+    <string name="l72_dias_uteis">Pzt–Cum</string>
+    <string name="l72_dias_fds">hafta sonları</string>
+    <string name="l72_dias_nomes">Paz,Pzt,Sal,Çar,Per,Cum,Cmt</string>
+    <string name="l72_vol_subir">Sesi aç</string>
+    <string name="l72_vol_descer">Sesi kıs</string>
+    <string name="l72_vol_mudo">Sessiz aç/kapat</string>
+    <string name="l72_vezes">(%1$d kez)</string>
+    <string name="l72_midia_pausar">Duraklat</string>
+    <string name="l72_midia_tocar">Oynatmayı sürdür</string>
+    <string name="l72_midia_proxima">Sonraki</string>
+    <string name="l72_midia_anterior">Önceki</string>
+    <string name="l72_visita_liga">Misafir modunu aç</string>
+    <string name="l72_visita_desliga">Misafir modunu kapat</string>
+    <string name="l72_canal_pedido">%1$s kanalına geç</string>
+    <string name="l72_canal">%1$d kanalına geç (%2$s)</string>
+    <string name="l72_o_que_passa">%1$s’de ne olduğunu gör</string>
+    <string name="l72_casa_ligar">Aç</string>
+    <string name="l72_casa_desligar">Kapat</string>
+    <string name="l72_casa_alternar">Değiştir</string>
+    <string name="l72_casa">%1$s %2$s (ev)</string>
+    <string name="l72_guia_vazio">%1$s: yayın akışında bir şey yok.</string>
+    <string name="l72_guia_agora">%1$s şimdi: %2$s (%3$s’e kadar)</string>
+    <string name="l72_guia_nada_agora">%1$s: şu an yayın akışında bir şey yok</string>
+    <string name="l72_guia_depois">Sonraki: %1$s (%2$s)</string>
+    <string name="l75_pilula">Şimdi çalıyor: %1$s, %2$s. OK duraklatır veya sürdürür; uygulamayı açmak için OK’yi basılı tutun</string>
+</resources>

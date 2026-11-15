@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_comando.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="cc_vazia">TV’nin ne yapmasını istediğinizi yazın</string>
+    <string name="cc_nao_entendi">Anlamadım. Şöyle bir şey deneyin:</string>
+    <string name="cc_exemplo_1">Globo’yu aç</string>
+    <string name="cc_exemplo_2">YouTube’u aç</string>
+    <string name="cc_exemplo_3">30 dakika sonra kapat</string>
+    <string name="cc_abrindo">%1$s açılıyor</string>
+    <string name="cc_canal">%1$s açılıyor</string>
+    <string name="cc_o_que_passa">%1$s’de ne var</string>
+    <string name="cc_timer">%1$d dakika sonra hatırlatma</string>
+    <string name="cc_desligar">TV %1$d dakika sonra kapanacak</string>
+    <string name="cc_desligar_cancelar">Uyku zamanlayıcısı iptal edildi</string>
+    <string name="cc_volume_subir">Sesi aç</string>
+    <string name="cc_volume_descer">Sesi kıs</string>
+    <string name="cc_mudo">Sessiz aç/kapat</string>
+    <string name="cc_pausar">Duraklatılıyor</string>
+    <string name="cc_continuar">Oynatılıyor</string>
+    <string name="cc_tela_previsao">hava tahmini</string>
+    <string name="cc_tela_agenda">takvim</string>
+    <string name="cc_tela_despertador">alarmlar</string>
+    <string name="cc_tela_configuracoes">launcher ayarları</string>
+    <string name="cc_tela_inicio">ana ekran</string>
+    <string name="cc_confirme_na_tv">%1$s: TV’de OK ile onaylayın</string>
+    <string name="cc_nao_fiz">%1$s: yapılmadı (%2$s)</string>
+    <string name="cc_aviso_titulo">Telefon paneli</string>
+</resources>

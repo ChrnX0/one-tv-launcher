@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_backup.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="bkn_titulo">Otomatik yedekleme</string>
+    <string name="bkn_explica">Her gece TV boştayken şifrenizle kilitli tam bir yedek kaydeder. Son 7 tanesi tutulur. Şifreyi yazın: o olmadan yedek açılamaz.</string>
+    <string name="bkn_ligado">açık</string>
+    <string name="bkn_desligado">kapalı</string>
+    <string name="bkn_sem_senha">kapalı · önce yedek şifresini belirleyin</string>
+    <string name="bkn_senha">Yedek şifresi</string>
+    <string name="bkn_senha_ok">belirlendi · OK değiştirir</string>
+    <string name="bkn_senha_falta">belirlenmedi · OK belirler</string>
+    <string name="bkn_senha_nova">Yedek şifresi (8 veya daha fazla karakter)</string>
+    <string name="bkn_senha_repetir">Şifreyi yeniden yazın</string>
+    <string name="bkn_senha_curta">Şifre 8 ile 128 karakter arasında olmalı.</string>
+    <string name="bkn_senha_diferente">İki şifre eşleşmedi.</string>
+    <string name="bkn_senha_gravada">Şifre kaydedildi. Güvenli bir yerde saklayın.</string>
+    <string name="bkn_senha_erro">Şifre kaydedilemedi.</string>
+    <string name="bkn_horario">Saat</string>
+    <string name="bkn_extra">Ek kopya</string>
+    <string name="bkn_destino_tv">Yalnızca TV</string>
+    <string name="bkn_destino_pendrive">USB bellek</string>
+    <string name="bkn_destino_nas">NAS (%1$s)</string>
+    <string name="bkn_agora">Şimdi yedekle</string>
+    <string name="bkn_ultimo">Son</string>
+    <string name="bkn_nunca">hiç</string>
+    <string name="bkn_pin">Yedeği değiştirmek için PIN</string>
+</resources>

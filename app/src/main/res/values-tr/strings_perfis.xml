@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_perfis.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="perfil_aviso_titulo">Profil: %1$s</string>
+    <string name="perfil_aviso_texto">Bu profilin favorileri, İzlemeye devam et listesi ve uygulama sırası</string>
+    <string name="perfil_aviso_crianca">Çocuk profili: çocuk modu ve yatma saati açıldı</string>
+    <string name="perfil_crianca">Çocuk profili</string>
+    <string name="perfil_crianca_linha">Çocuk profili · %1$s: %2$s</string>
+    <string name="perfil_crianca_nao">Kapalı</string>
+    <string name="perfil_crianca_sem_pin">Önce web paneli PIN’ini belirleyin: çocuk profilini koruyan ebeveyn PIN’i odur</string>
+    <string name="perfil_pin_sair">Çocuk profilinden çıkmak için ebeveyn PIN’i</string>
+    <string name="perfil_pin_marcar">Çocuk profilini değiştirmek için ebeveyn PIN’i</string>
+</resources>

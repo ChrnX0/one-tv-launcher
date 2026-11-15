@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_player3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="abertura_marcar_inicio">Jenerik başlangıcını burada işaretle (%1$s)</string>
+    <string name="abertura_marcar_fim">Jenerik bitişini burada işaretle (%1$s)</string>
+    <string name="abertura_apagar">Jenerik işaretini sil</string>
+    <string name="abertura_inicio_marcado">Jenerik başlangıcı %1$s’de işaretlendi. Şimdi bitişi ▼ menüsünde işaretleyin</string>
+    <string name="abertura_salva">Jenerik kaydedildi: %1$s – %2$s. Sonraki bölümler atlamayı önerir</string>
+    <string name="abertura_falta_inicio">Önce jenerik başlangıcını işaretleyin</string>
+    <string name="abertura_invalida">Bu bir jenerik gibi görünmüyor: 10 sn ile 5 dk sürmeli ve ilk 15 dakikada başlamalı</string>
+    <string name="abertura_apagada">Jenerik işareti silindi</string>
+    <string name="abertura_pular">Jeneriği atla · OK</string>
+</resources>

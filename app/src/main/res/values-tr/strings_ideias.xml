@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_ideias.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dns_voltou_anterior">Yeni DNS yanıt vermedi. Öncekine geri dönüldü.</string>
+    <string name="teclas_titulo">Tuş test aracı</string>
+    <string name="teclas_instrucao">Kumanda tuşlarına basın. Her tuş burada görünür. HOME çıkar.</string>
+    <string name="teclas_vazio">Henüz tuş yok.</string>
+    <string name="trava_home_titulo">HOME’u değiştirmek için PIN</string>
+    <string name="trava_home_errado">Yanlış PIN</string>
+    <string name="extras_cfg_det">Gece filtresi ve yatma saati, tuş test aracı, kalibrasyon ve diğer araçlar</string>
+    <string name="extras_titulo">Ekstralar</string>
+    <string name="extras_ligado">açık</string>
+    <string name="extras_desligado">kapalı</string>
+    <string name="extras_JANELA_OTA">Sistem güncellemeleri yalnızca gece (03:00–05:00)</string>
+    <string name="extras_TRAVAR_CRITICOS">Launcher ve VPN için «Durmaya zorla» ve «Verileri temizle»yi engelle</string>
+    <string name="extras_PIN_HOME">HOME’u değiştirmek için PIN iste</string>
+    <string name="extras_FILTRO_NOTURNO">Gece filtresi (daha sıcak ekran)</string>
+    <string name="extras_COR_DO_FUNDO">Duvar kâğıdından vurgu rengi (Galeri teması)</string>
+    <string name="extras_DEBLOAT_POS_OTA">Sistem güncellemesinden sonra uygulama temizliğini yinele</string>
+    <string name="extras_filtro_horario">Filtre: %1$s – %2$s, güç %%%3$d</string>
+    <string name="extras_filtro_inicio">Filtre başlangıcı</string>
+    <string name="extras_filtro_fim">Filtre bitişi</string>
+    <string name="extras_filtro_forca">Filtre gücü</string>
+    <string name="extras_teclas">Tuş test aracını aç</string>
+    <string name="extras_calibracao">Görüntü kalibrasyon desenlerini aç</string>
+    <string name="extras_acordar_pc">Bilgisayarı uyandır (Wake-on-LAN)</string>
+    <string name="extras_acordar_sem_mac">Bilgisayarın MAC adresi eksik (panel veya adb)</string>
+    <string name="extras_acordar_ok">Paket gönderildi</string>
+    <string name="extras_acordar_falhou">Gönderilemedi</string>
+    <string name="extras_ota_pendente">Sistem güncellemesi zaman aralığını bekliyor</string>
+    <string name="extras_ota_nenhuma">Bekleyen sistem güncellemesi yok</string>
+    <string name="guardar_dados_titulo">Launcher verileri korundu</string>
+    <string name="guardar_dados_texto">Verileri temizlemek ayarları, alarmları ve launcher’ın TV ile eşleşmesini silerdi. Hiçbir şey silinmedi. Sıfırdan başlamak için panel yedeğini veya bir bilgisayarı (adb) kullanın.</string>
+    <string name="dono_titulo">Launcher’ı cihaz sahibi yap</string>
+    <string name="dono_texto">Bu, Google’ı birkaç saniyeliğine kapatır (hesap korunur ve kendiliğinden geri gelir) ve launcher’ı cihaz sahibi yapar: uygulama gizleme, HOME sabitleme ve durdurma veya temizlemeyi engelleme. TV’yi kimse kullanmıyorken yapın.</string>
+    <string name="dono_usuarios">TV’deki ek kullanıcılar da verileriyle birlikte KALDIRILACAK: %s.</string>
+    <string name="dono_ok">Sahip yap</string>
+    <string name="dono_andando">Launcher sahip yapılıyor… (1 dakikaya kadar)</string>
+    <string name="dono_sem_shell">Kendi kabuğu yanıt vermedi. Ayarlar > Launcher kabuğu’nda eşleştirin.</string>
+    <string name="bv_dev">Geliştirici seçeneklerini aç</string>
+    <string name="bv_dev_det">Hakkında’da «Android TV OS derlemesi»ne inin ve 7 kez OK’ye basın. Sonra buraya dönün.</string>
+    <string name="bv_parear">Launcher’ı TV ile eşleştir</string>
+    <string name="bv_parear_det">Geliştirici seçeneklerini açar: «Kablosuz hata ayıklama»yı açın ve «Cihazı eşleme koduyla eşle»yi açın. Launcher kodu kendisi okur.</string>
+    <string name="bv_dono">Launcher’ı cihaz sahibi yap</string>
+    <string name="bv_dono_det">Uygulamaları gizler, HOME’u sabitler ve durdurma veya temizlemeyi engeller. Google birkaç saniye kapanır; hesap kalır.</string>
+    <string name="extras_DIARIO_DNS">Uygulama başına DNS günlüğü (yalnızca TV’de, 7 gün)</string>
+    <string name="extras_diario_ver">Bugünün DNS günlüğünü göster</string>
+    <string name="extras_diario_apagar">DNS günlüğünü sil</string>
+    <string name="extras_diario_apagado">Günlük silindi</string>
+</resources>

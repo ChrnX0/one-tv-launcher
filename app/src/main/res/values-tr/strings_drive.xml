@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_drive.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="drv_titulo">Google Drive hesabı</string>
+    <string name="drv_destino">Google Drive</string>
+    <string name="drv_conta">Google Drive hesabı</string>
+    <string name="drv_nao_conectada">bağlı değil</string>
+    <string name="drv_passos">1. Telefonunuzda %1$s adresini açın (veya kamerayı sağdaki koda tutun).\n2. Bu TV’de olan bir Google hesabıyla oturum açın ve şunu yazın:\n\n%2$s\n\n3. Google Drive erişimine izin verin. TV yalnızca kendi oluşturduğu dosyaları (OneTV-backup klasörü) görür, Drive’ınızın geri kalanını asla görmez.\n\nBu ekran kendiliğinden devam eder.</string>
+    <string name="drv_ok">Tamam: %1$s bağlandı. Gece yedeğinin oraya da gitmesi için Ek kopya satırında «Google Drive»ı seçin.</string>
+    <string name="drv_sem_google">Google oturumu bu TV’de henüz ayarlanmadı.\n\nWeb paneli > Claude sekmesinde ayarlayın (kendi OAuth istemciniz, «TVs and Limited Input devices» türü), aynı Google Cloud projesinde Google Drive API’yi açın ve buraya dönün.</string>
+    <string name="drv_desconectar_pergunta">%1$s bağlantısı kesilsin mi? Google Drive’daki kopyalar orada kalır; TV yenilerini göndermeyi bırakır.</string>
+    <string name="drv_desconectar">Bağlantıyı kes</string>
+    <string name="drv_restaurar">Google Drive’dan geri yükle</string>
+    <string name="drv_precisa_conta">Önce Google Drive hesabını bağlayın (yukarıdaki satır).</string>
+    <string name="drv_falhou">Olmadı: %1$s</string>
+    <string name="drv_nenhuma">Google Drive’ın OneTV-backup klasöründe henüz kopya yok.</string>
+    <string name="drv_escolha">Hangi kopya?</string>
+    <string name="drv_senha">Yedeğin şifresi</string>
+    <string name="drv_senha_errada">Yanlış yedek şifresi (veya dosya değiştirilmiş). Hiçbir şey geri yüklenmedi.</string>
+    <string name="drv_restaurado">Geri yüklendi. Launcher birazdan yeniden başlar.</string>
+</resources>
