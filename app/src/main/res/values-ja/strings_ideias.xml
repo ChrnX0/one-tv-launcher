@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_ideias.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dns_voltou_anterior">新しい DNS が応答しませんでした。前の DNS に戻しました。</string>
+    <string name="teclas_titulo">キーテスター</string>
+    <string name="teclas_instrucao">リモコンのボタンを押してください。各キーがここに表示されます。HOME で終了。</string>
+    <string name="teclas_vazio">まだキーはありません。</string>
+    <string name="trava_home_titulo">HOME を変更するための PIN</string>
+    <string name="trava_home_errado">PIN が違います</string>
+    <string name="extras_cfg_det">夜間フィルターと就寝時間、キーテスター、キャリブレーション、その他のツール</string>
+    <string name="extras_titulo">追加機能</string>
+    <string name="extras_ligado">オン</string>
+    <string name="extras_desligado">オフ</string>
+    <string name="extras_JANELA_OTA">システムアップデートは夜間のみ（3〜5 時）</string>
+    <string name="extras_TRAVAR_CRITICOS">ランチャーと VPN の「強制停止」と「データを削除」をブロック</string>
+    <string name="extras_PIN_HOME">HOME の変更に PIN を要求</string>
+    <string name="extras_FILTRO_NOTURNO">夜間フィルター（画面を暖色に）</string>
+    <string name="extras_COR_DO_FUNDO">壁紙からアクセントカラー（ギャラリーテーマ）</string>
+    <string name="extras_DEBLOAT_POS_OTA">システムアップデート後にアプリの整理をやり直す</string>
+    <string name="extras_filtro_horario">フィルター: %1$s〜%2$s、強さ %3$d%%</string>
+    <string name="extras_filtro_inicio">フィルター開始</string>
+    <string name="extras_filtro_fim">フィルター終了</string>
+    <string name="extras_filtro_forca">フィルターの強さ</string>
+    <string name="extras_teclas">キーテスターを開く</string>
+    <string name="extras_calibracao">画質キャリブレーションのパターンを開く</string>
+    <string name="extras_acordar_pc">パソコンを起動（Wake-on-LAN）</string>
+    <string name="extras_acordar_sem_mac">パソコンの MAC アドレスがありません（パネルまたは adb）</string>
+    <string name="extras_acordar_ok">パケットを送信しました</string>
+    <string name="extras_acordar_falhou">送信できませんでした</string>
+    <string name="extras_ota_pendente">システムアップデートが時間帯を待っています</string>
+    <string name="extras_ota_nenhuma">保留中のシステムアップデートはありません</string>
+    <string name="guardar_dados_titulo">ランチャーのデータを保護しました</string>
+    <string name="guardar_dados_texto">データを消去すると、設定、アラーム、ランチャーと TV のペアリングが消えてしまいます。何も削除していません。最初からやり直すには、パネルのバックアップかパソコン（adb）を使ってください。</string>
+    <string name="dono_titulo">ランチャーをデバイスオーナーにする</string>
+    <string name="dono_texto">Google を数秒間オフにし（アカウントは保持され、自動で戻ります）、ランチャーをデバイスオーナーにします: アプリの非表示、HOME の固定、停止や消去のブロック。誰も TV を使っていないときに行ってください。</string>
+    <string name="dono_usuarios">TV の追加ユーザーもデータごと削除されます: %s。</string>
+    <string name="dono_ok">オーナーにする</string>
+    <string name="dono_andando">ランチャーをオーナーにしています…（最大 1 分）</string>
+    <string name="dono_sem_shell">専用シェルが応答しませんでした。設定 > ランチャーのシェル でペアリングしてください。</string>
+    <string name="bv_dev">開発者向けオプションをオン</string>
+    <string name="bv_dev_det">「デバイス情報」で「Android TV OS ビルド」まで下がり、OK を 7 回押します。その後ここに戻ってください。</string>
+    <string name="bv_parear">ランチャーを TV とペアリング</string>
+    <string name="bv_parear_det">開発者向けオプションを開きます:「ワイヤレス デバッグ」をオンにし、「ペア設定コードによるデバイスのペア設定」を開いてください。ランチャーがコードを自動で読み取ります。</string>
+    <string name="bv_dono">ランチャーをデバイスオーナーにする</string>
+    <string name="bv_dono_det">アプリを隠し、HOME を固定し、停止や消去をブロックします。Google は数秒間オフになりますが、アカウントは残ります。</string>
+    <string name="extras_DIARIO_DNS">アプリごとの DNS 日誌（TV にのみ保存、7 日間）</string>
+    <string name="extras_diario_ver">今日の DNS 日誌を表示</string>
+    <string name="extras_diario_apagar">DNS 日誌を削除</string>
+    <string name="extras_diario_apagado">日誌を削除しました</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_rede_arquivos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_secao_na_tv">TV に接続</string>
+    <string name="rede_sub_usb">USB メモリ · 動画、音楽、写真</string>
+    <string name="rede_acao_arquivos">FTP、SFTP、NFS</string>
+    <string name="rede_sub_arquivos">NAS、ディスク付きルーター、Linux や Mac のパソコン</string>
+    <string name="rede_arq_explica">アドレスはプロトコルから始めます: sftp://nas/Movies · ftp://192.168.0.10 · ftps://nas/Videos · nfs://nas/volume1/video。SFTP と FTPS は暗号化されます。通常の FTP はパスワードを暗号化せずに送るため、家の中でのみ使ってください。NFS にはパスワードがありません: NAS で TV の IP と非特権ポートからの接続を許可する必要があります。</string>
+    <string name="rede_arq_endereco">アドレス（sftp://、ftp://、ftps://、nfs://）</string>
+    <string name="rede_arq_usuario">ユーザー名（NFS: ユーザー番号、任意）</string>
+    <string name="rede_arq_endereco_erro">sftp://、ftp://、ftps://、nfs:// のいずれかで始め、その後にサーバーとフォルダを続けてください。ユーザー名とパスワードはそれぞれの欄に入力します。</string>
+    <string name="rede_erro_nfs_porta">NFS サーバーが TV を拒否しました。NAS で非特権ポートからの接続を許可してください（Linux: /etc/exports の「insecure」オプション）。</string>
+    <string name="rede_erro_nfs_ip">NFS サーバーがこの TV を許可しませんでした。NAS で、このフォルダの NFS ルールに TV の IP（またはホームネットワーク）を追加してください。</string>
+    <string name="rede_erro_chave_mudou">このサーバーの鍵が追加時から変わっています。サーバーを再インストールした場合は、ここで削除してもう一度追加してください。そうでない場合は、誰かがなりすましている可能性があります。</string>
+    <string name="rede_erro_usb_acesso">TV がランチャーに USB メモリへのアクセスを許可しませんでした。少ししてからもう一度お試しください。</string>
+</resources>

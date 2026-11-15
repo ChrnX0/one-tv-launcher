@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_sync.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="sync_sub">%1$s としてログイン中。TV とスマートフォンで同期する項目です。</string>
+    <string name="sync_sub_mdblist">%1$s としてログイン中。MDBList のリストをカタログに表示できます。</string>
+    <string name="sync_ultima">前回の同期: %1$s</string>
+    <string name="sync_nunca">まだ同期していません</string>
+    <string name="sync_interesses">ウォッチリスト ⇄ Watchlist</string>
+    <string name="sync_interesses_simkl">ウォッチリスト ⇄ Plan to watch</string>
+    <string name="sync_interesses_det">ここで追加したものはあちらにも表示され、その逆も同様です</string>
+    <string name="sync_assistidos">視聴済み ← 履歴</string>
+    <string name="sync_assistidos_det">スマートフォンや他の場所で見たものを取り込みます</string>
+    <string name="sync_continuar">続きを見る ⇄ 止めた所</string>
+    <string name="sync_continuar_det">スマートフォンで止めて、TV で同じ所から再開</string>
+    <string name="sync_contar">ここで見ているものを %1$s に共有</string>
+    <string name="sync_contar_det">再生中に「視聴中」と「視聴済み」を送ります。ゲストモードや子どもプロフィールでは送りません。</string>
+    <string name="sync_listas">カタログのリスト</string>
+    <string name="sync_listas_nenhuma">未選択</string>
+    <string name="sync_listas_n">%1$d 件選択: %2$s</string>
+    <string name="sync_listas_sub">「リスト」の「すべて」の下に、リストにある作品だけで表示されます。最大 %1$d 件。</string>
+    <string name="sync_listas_carregando">リストを読み込み中…</string>
+    <string name="sync_listas_vazio">リストが見つかりません。Trakt か MDBList でリストを作成するか「いいね」して、ここに戻ってください。</string>
+    <string name="sync_listas_cheio">最大 %1$d 件のリスト</string>
+    <string name="sync_lista_itens">%1$d 作品</string>
+    <string name="sync_agora">今すぐ同期</string>
+    <string name="sync_agora_det">映画やシリーズを開いたときにも自動で行われます</string>
+    <string name="sync_rodando">同期中…</string>
+    <string name="sync_feito">同期しました</string>
+    <string name="sync_sair">%1$s からログアウト</string>
+    <string name="sync_bloqueado">一時停止中: ゲストモードか子どもプロフィールがオンです。</string>
+    <string name="sync_outro_perfil">一時停止中: 同期は別のプロフィールのものです。</string>
+    <string name="sync_trakt_cheia">Trakt のリストがいっぱいです（無料アカウントは 100 件まで）。ランチャーは TV 上だけで続けます。</string>
+    <string name="sync_ligado">オン</string>
+    <string name="sync_desligado">オフ</string>
+    <string name="sync_fonte_trakt">Trakt（trakt.tv）のデータ</string>
+    <string name="sync_fonte_simkl">Simkl（simkl.com）のデータ</string>
+    <string name="sync_n_de">リストに %2$d 作品中 %1$d 作品</string>
+    <string name="sync_continuando">別のデバイスで止めた所から再開しています</string>
+</resources>

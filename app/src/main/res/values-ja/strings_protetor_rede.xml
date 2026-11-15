@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_protetor_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pt_dica_dispensar">OK で閉じる · ◀ ▶ で移動</string>
+    <string name="pt_dica_pausar">OK で一時停止/再開 · ◀ ▶ で移動</string>
+    <string name="pt_dica_andar">◀ ▶ で移動 · 他のキーで閉じる</string>
+    <string name="rede_fotos_usar">これらの写真をスクリーンセーバーで使う</string>
+    <string name="rede_fotos_parar">これらの写真をスクリーンセーバーで使うのをやめる</string>
+    <string name="rede_fotos_usando">写真をコピーしています。次にスクリーンセーバーが始まるときに表示されます。</string>
+    <string name="rede_fotos_paradas">スクリーンセーバーはこのフォルダを使わなくなりました。</string>
+    <string name="rede_continuar">続きを見る</string>
+    <string name="rede_recentes">最近追加</string>
+    <string name="rede_buscar">検索</string>
+    <string name="rede_buscar_explica">このサーバーの映画、番組、エピソード、音楽。</string>
+    <string name="rede_buscar_campo">名前</string>
+    <string name="rede_buscar_curto">2 文字以上入力してください。</string>
+    <string name="rede_proximo_em">次: %1$s、%2$d 秒後 · OK で今すぐ開始 · 他のキーでキャンセル</string>
+    <string name="rede_ainda_assistindo">まだ見ていますか？ OK で %1$s を開始</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="other">写真 %1$d 枚 · TV にコピー済み、パソコンがオフでも表示</item>
+    </plurals>
+</resources>

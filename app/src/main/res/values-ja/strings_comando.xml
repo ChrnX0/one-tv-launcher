@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_comando.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="cc_vazia">TV にしてほしいことを入力してください</string>
+    <string name="cc_nao_entendi">わかりませんでした。次のように試してください:</string>
+    <string name="cc_exemplo_1">Globo をつけて</string>
+    <string name="cc_exemplo_2">YouTube を開いて</string>
+    <string name="cc_exemplo_3">30 分後に電源オフ</string>
+    <string name="cc_abrindo">%1$s を開いています</string>
+    <string name="cc_canal">%1$s をつけています</string>
+    <string name="cc_o_que_passa">%1$s で放送中の番組</string>
+    <string name="cc_timer">%1$d 分後にお知らせ</string>
+    <string name="cc_desligar">TV は %1$d 分後に電源が切れます</string>
+    <string name="cc_desligar_cancelar">スリープタイマーをキャンセルしました</string>
+    <string name="cc_volume_subir">音量を上げる</string>
+    <string name="cc_volume_descer">音量を下げる</string>
+    <string name="cc_mudo">ミュートのオン/オフ</string>
+    <string name="cc_pausar">一時停止しています</string>
+    <string name="cc_continuar">再生しています</string>
+    <string name="cc_tela_previsao">天気予報</string>
+    <string name="cc_tela_agenda">カレンダー</string>
+    <string name="cc_tela_despertador">アラーム</string>
+    <string name="cc_tela_configuracoes">ランチャーの設定</string>
+    <string name="cc_tela_inicio">ホーム画面</string>
+    <string name="cc_confirme_na_tv">%1$s: TV で OK を押して確認してください</string>
+    <string name="cc_nao_fiz">%1$s: 実行しませんでした（%2$s）</string>
+    <string name="cc_aviso_titulo">スマートフォンのパネル</string>
+</resources>

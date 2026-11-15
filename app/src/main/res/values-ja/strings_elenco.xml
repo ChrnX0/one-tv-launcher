@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_elenco.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="elenco_botao">キャスト</string>
+    <string name="elenco_titulo">キャスト</string>
+    <string name="elenco_carregando">キャストを読み込み中…</string>
+    <string name="elenco_vazio">TMDB にはこの作品のキャストがありません。</string>
+    <string name="elenco_dica">人物を移動すると、下にリストにある他の出演作が表示されます。</string>
+    <string name="elenco_na_lista">リストにある他の作品</string>
+    <string name="elenco_procurando">リストを検索中…</string>
+    <string name="elenco_nada_na_lista">リストにはこの人物の他の作品はありません。</string>
+    <string name="elenco_filme">映画</string>
+    <string name="elenco_serie">シリーズ</string>
+    <string name="elenco_opcao_player">キャスト（この俳優は誰？）</string>
+    <string name="anteriormente_titulo">前回までの %1$s</string>
+    <string name="anteriormente_assistir">%1$s を見る</string>
+    <string name="anteriormente_pular_sempre">表示しない</string>
+    <string name="anteriormente_desligado">あらすじをオフにしました。再びオンにするには: エピソードで OK を長押し。</string>
+    <string name="anteriormente_ligar">「前回までの」あらすじを表示</string>
+    <string name="idade_titulo">キッズモードの年齢上限</string>
+    <string name="idade_det">この年齢までのレーティングの映画とシリーズは、どのカテゴリからでも表示されます（TMDB のレーティング）。レーティングのないものは子ども向けカテゴリのみ。</string>
+    <string name="idade_so_categorias">子ども向けカテゴリのみ</string>
+    <string name="idade_livre">全年齢</string>
+    <string name="idade_anos">%1$d 歳まで</string>
+    <string name="onde_tambem_em">こちらでも: %1$s（JustWatch）</string>
+    <string name="onde_fora">リストにはありません · %1$s で配信</string>
+    <string name="onde_grupo">他の配信先（JustWatch）</string>
+    <string name="legenda_auto_pronta">字幕を自動でダウンロードしました（このファイル用）· ▼ で変更</string>
+    <string name="legenda_auto_pronta_nome">字幕を自動でダウンロードしました · ▼ で変更または遅延を調整</string>
+    <string name="legenda_auto_opcao">字幕を自動でダウンロード</string>
+    <string name="legenda_auto_ligada">字幕がないときはダウンロードします</string>
+    <string name="legenda_auto_desligada">自動字幕をオフにしました</string>
+    <string name="legenda_trad_rotulo">自動翻訳</string>
+    <string name="legenda_trad_traduzindo">お使いの言語の字幕がありません: 英語の字幕を TV で翻訳しています…</string>
+    <string name="legenda_trad_parcial">字幕を TV で翻訳しました（自動翻訳）。残りも翻訳を続けています。</string>
+    <string name="legenda_trad_pronta">字幕の翻訳が完了しました</string>
+    <string name="legenda_trad_opcao">字幕がないときは TV で翻訳する</string>
+    <string name="legenda_trad_ligada">字幕がないときは TV で翻訳します</string>
+    <string name="legenda_trad_desligada">字幕を翻訳しなくなります</string>
+    <string name="series_sinopse_mais">あらすじ全文</string>
+    <string name="series_sinopse_menos">あらすじを短く</string>
+    <string name="series_continuar_curto">▶  %1$s の続きを見る</string>
+    <string name="series_episodios">エピソード</string>
+    <string name="series_trocar_temporada">シーズンを変更</string>
+    <string name="fechar">閉じる</string>
+</resources>

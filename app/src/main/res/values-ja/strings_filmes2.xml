@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_filmes2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="filmes_filtro">フィルター</string>
+    <string name="filmes_filtro_titulo">映画を絞り込む</string>
+    <string name="filmes_filtro_cabecalho">%1$s · フィルター: %2$s</string>
+    <string name="filmes_filtro_genero">ジャンル: %1$s</string>
+    <string name="filmes_filtro_epoca">年代: %1$s</string>
+    <string name="filmes_filtro_nota">最低評価: %1$s</string>
+    <string name="filmes_filtro_nao_vistos">未視聴のみ: %1$s</string>
+    <string name="filmes_filtro_limpar">フィルターをクリア</string>
+    <string name="filmes_filtro_qualquer">すべて</string>
+    <string name="filmes_filtro_sim">はい</string>
+    <string name="filmes_filtro_nao">いいえ</string>
+    <string name="filmes_filtro_decada">%1$d年代</string>
+    <string name="filmes_filtro_nota_min">%1$d+</string>
+    <string name="filmes_filtro_nao_vistos_curto">未視聴</string>
+    <string name="filmes_filtro_sem_genero">このリストのカテゴリにはジャンル名がありません</string>
+    <string name="filmes_filtro_vazio">このカテゴリにはフィルターに合う映画がありません</string>
+    <string name="filmes_sorteio">おまかせ</string>
+    <string name="filmes_sorteio_vazio">ここには選べる映画がありません</string>
+    <string name="filmes_colecao">この映画のコレクション</string>
+    <string name="filmes_colecao_cat">コレクション: %1$s</string>
+    <string name="genero_acao">アクション</string>
+    <string name="genero_aventura">アドベンチャー</string>
+    <string name="genero_comedia">コメディ</string>
+    <string name="genero_drama">ドラマ</string>
+    <string name="genero_terror">ホラー</string>
+    <string name="genero_suspense">スリラー</string>
+    <string name="genero_romance">ロマンス</string>
+    <string name="genero_ficcao">SF</string>
+    <string name="genero_fantasia">ファンタジー</string>
+    <string name="genero_animacao">アニメーション</string>
+    <string name="genero_infantil">キッズ・ファミリー</string>
+    <string name="genero_documentario">ドキュメンタリー</string>
+    <string name="genero_crime">犯罪</string>
+    <string name="genero_guerra">戦争</string>
+    <string name="genero_faroeste">西部劇</string>
+    <string name="genero_musical">ミュージカル</string>
+</resources>

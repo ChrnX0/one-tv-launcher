@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_ideias3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="extras_SONO_SUAVE">ゆるやかな電源オフ（スリープタイマーで画面を暗くし音量を下げる）</string>
+    <string name="extras_MURAL">スクリーンセーバーに家族ボード</string>
+    <string name="extras_PRESENCA">全員が外出したら電源オフ（UniFi ルーター）</string>
+    <string name="extras_HOJE_NA_TV">検索画面に「今日の TV」</string>
+    <string name="extras_RETROSPECTIVA">週間まとめ（日曜の夜）</string>
+    <string name="extras_MODO_SIMPLES">シンプルモード（大きなカード、名前の読み上げ）</string>
+</resources>

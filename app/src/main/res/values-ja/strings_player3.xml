@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_player3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="abertura_marcar_inicio">ここをオープニングの開始にする（%1$s）</string>
+    <string name="abertura_marcar_fim">ここをオープニングの終了にする（%1$s）</string>
+    <string name="abertura_apagar">オープニングのマークを削除</string>
+    <string name="abertura_inicio_marcado">オープニングの開始を %1$s に設定しました。次に ▼ メニューで終了を設定してください</string>
+    <string name="abertura_salva">オープニングを保存しました: %1$s〜%2$s。次のエピソードからスキップを提案します</string>
+    <string name="abertura_falta_inicio">先にオープニングの開始を設定してください</string>
+    <string name="abertura_invalida">オープニングではないようです: 長さは 10 秒〜5 分で、最初の 15 分以内に始まる必要があります</string>
+    <string name="abertura_apagada">オープニングのマークを削除しました</string>
+    <string name="abertura_pular">オープニングをスキップ · OK</string>
+</resources>

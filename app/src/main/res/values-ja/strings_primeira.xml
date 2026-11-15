@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_primeira.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pc_titulo">スマートフォンで設定</string>
+    <string name="pc_linha_det">おすすめ。スマートフォンのカメラをコードに向けるだけ: PIN、言語、ライブ TV、都市、映画サービスを 5 ステップで。</string>
+    <string name="pc_instrucoes">スマートフォンのカメラを横のコードに向けてください。スマートフォンで 5 ステップの設定が開きます。\n\nスマートフォンはホームの Wi-Fi に接続している必要があります。スマートフォンで PIN を作成するまで、この画面を開いたままにしてください（残り %1$s）。</string>
+    <string name="pc_entrou">スマートフォンで続けてください。</string>
+    <string name="pc_venceu">コードの有効期限が切れました。\n新しいコードを表示するには「%1$s」を押してください。</string>
+    <string name="pc_sem_rede">TV がネットワークに接続されていません。\nホームの Wi-Fi に接続して、もう一度お試しください。</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_busca2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="bu_outros_apps">他のアプリで</string>
+    <string name="bu_outro_youtube">YouTube で「%1$s」を検索</string>
+    <string name="bu_outro_netflix">Netflix で「%1$s」を検索</string>
+    <string name="bu_outro_prime">Prime Video で「%1$s」を検索</string>
+    <string name="bu_outro_det">アプリ自体の検索を開きます</string>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_pausa.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pausa_pausar">ライブ TV を一時停止</string>
+    <string name="pausa_continuar">再開</string>
+    <string name="pausa_ao_vivo">ライブに戻る</string>
+    <string name="pausa_selo">⏸ 一時停止中 · OK で再開</string>
+    <string name="pausa_atrasado_min">%1$d 分遅れ · ▶ ライブ</string>
+    <string name="pausa_atrasado_seg">%1$d 秒遅れ · ▶ ライブ</string>
+    <string name="pausa_voltou">メモリの保持時間を超えて一時停止したため、ライブに戻りました</string>
+</resources>

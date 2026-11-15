@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_coluna.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="coluna_listas">リスト</string>
+    <string name="coluna_novos">+%1$s</string>
+    <string name="coluna_filtro">フィルター</string>
+    <string name="coluna_esportes">スポーツ</string>
+    <string name="coluna_guia">番組表</string>
+    <string name="coluna_filtro_titulo">フィルター</string>
+    <string name="coluna_filtro_ordem">並べ替え: %1$s</string>
+    <string name="coluna_filtro_combinado">ジャンル、年代、評価、未視聴…</string>
+    <string name="coluna_filtro_combinado_ativo">フィルター: %1$s</string>
+    <string name="coluna_filtro_limpar">フィルターをクリア</string>
+    <string name="coluna_filtro_sortear">おまかせ</string>
+    <string name="coluna_filtro_ocultas_mostrar">非表示のカテゴリを表示（PIN）</string>
+    <string name="coluna_filtro_ocultas_esconder">非表示のカテゴリを再び隠す</string>
+    <string name="coluna_menu_assistido">視聴済みにする</string>
+    <string name="coluna_menu_nao_assistido">未視聴にする</string>
+    <string name="coluna_menu_tirar_continuar">「続きを見る」から削除</string>
+    <string name="coluna_menu_por_interesse">ウォッチリストに追加</string>
+    <string name="coluna_menu_tirar_interesse">ウォッチリストから削除</string>
+    <string name="coluna_marcado_assistido">%1$s を視聴済みにしました</string>
+    <string name="coluna_marcado_nao_assistido">%1$s を未視聴にしました</string>
+    <string name="coluna_tirado_continuar">%1$s を「続きを見る」から削除しました</string>
+    <string name="coluna_etiqueta_concluida">完結</string>
+    <string name="coluna_etiqueta_nova_temporada">新シーズン</string>
+    <string name="coluna_etiqueta_novos">新エピソード</string>
+    <string name="coluna_letra_titulo">文字へ移動</string>
+    <string name="coluna_letra">文字へ移動</string>
+    <string name="coluna_ao_vivo">ライブ</string>
+    <string name="coluna_ao_vivo_primeiro">ライブを先頭に</string>
+    <string name="coluna_tv_titulo">TV</string>
+    <string name="coluna_gravacoes">録画</string>
+    <plurals name="coluna_etiqueta_n_novos">
+        <item quantity="other">新エピソード %d 話</item>
+    </plurals>
+</resources>

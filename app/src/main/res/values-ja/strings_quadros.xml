@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_quadros.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="quadros_opcao">映画を本来のフレームレートで（24 Hz）</string>
+    <string name="quadros_det">映画の再生中は TV が 24 Hz に切り替わり、カメラが動く場面で映像がカクつきません。開始時に画面が 1〜2 秒暗くなります。ライブ TV では使いません。</string>
+    <string name="quadros_ligado">映画のフレームレート オン: 次の動画から適用</string>
+    <string name="quadros_desligado">映画のフレームレート オフ</string>
+</resources>

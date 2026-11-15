@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_unidade_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="ur_secao">ネットワークドライブ</string>
+    <string name="ur_titulo">TV をネットワークドライブとして表示</string>
+    <string name="ur_det">オフ。TV は Windows の「PC」にスマートフォンのように、Mac、Linux、スマートフォンではネットワークフォルダとして自動で表示されます。</string>
+    <string name="ur_painel">先に上のウェブパネルをオンにしてください（同じ PIN と https アドレスを使います）。</string>
+    <string name="ur_https">パネルの https アドレスを待っています（証明書はパネルをオンにしてから約 1 分後に作成されます）。</string>
+    <string name="ur_abra">オン。Windows では TV が「PC」に表示されます（パソコンごとに初回は TV の画面で確認します）。Mac、Linux、スマートフォン: %1$s · パスワード: パネルの PIN。</string>
+    <string name="mtp_pergunta_titulo">パソコンが TV のファイルを求めています</string>
+    <string name="mtp_pergunta">「%1$s」がホームネットワーク経由で TV のストレージのファイルを表示・コピーしようとしています。このパソコンを許可しますか？</string>
+    <string name="mtp_pcs">許可したパソコン</string>
+    <string name="mtp_pcs_nenhum">まだありません。パソコンがファイルを求めると TV の画面で確認します。</string>
+    <string name="mtp_pcs_lista">%1$s · OK ですべて忘れる（それぞれ再度確認します）</string>
+    <string name="mtp_pcs_esquecidos">パソコンを忘れました</string>
+</resources>

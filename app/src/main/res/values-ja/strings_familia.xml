@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_familia.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="fam_pin">キッズ PIN</string>
+    <string name="fam_pin_det">子どもの前でチャンネル、非表示のカテゴリ、就寝時間を解除するための 2 つ目の PIN。パネルの PIN もこれまでどおりどこでも使えます。</string>
+    <string name="fam_pin_ok">キッズ PIN を保存しました</string>
+    <string name="fam_pin_igual">キッズ PIN はパネルの PIN と別にしてください</string>
+    <string name="fam_trocar">キッズ PIN を変更</string>
+    <string name="fam_apagar">キッズ PIN を削除</string>
+    <string name="fam_apagado">キッズ PIN を削除しました: 今後はパネルの PIN だけで解除できます</string>
+    <string name="extras_TEMPO_TELA">1 日の視聴時間（使い切ると許可したアプリだけが開きます）</string>
+    <string name="tela_titulo">視聴時間</string>
+    <string name="tela_acabou">今日の視聴時間は終わりました。また明日！</string>
+    <string name="tela_5min">今日の視聴時間は残り 5 分です</string>
+    <string name="tela_pin">視聴時間を変更するための PIN</string>
+    <string name="tela_cota_linha">1 日の視聴時間: %1$s（今日の残り: %2$s）</string>
+    <string name="tela_mais">今日 %1$d 分追加する</string>
+    <string name="tela_mais_ok">今日 %1$d 分追加しました</string>
+    <string name="tela_h">時間</string>
+    <string name="tela_min">分</string>
+    <string name="extras_AGENDA_TODAS">TV のすべての Google アカウントのカレンダーをまとめる</string>
+    <string name="cal_todas_contas">TV のすべてのアカウント（%1$d）</string>
+    <string name="tm_tempo_esgotado">時間になりました</string>
+    <string name="painel_desligado_pin">ウェブパネルをオフにしました: PIN の入力ミスが多すぎます</string>
+    <string name="tm_crono">ストップウォッチ</string>
+    <string name="tm_crono_iniciar">ストップウォッチを開始</string>
+    <string name="tm_crono_parar">ストップウォッチを停止</string>
+    <string name="tm_crono_comecou">ストップウォッチを開始しました: ホーム画面に表示されます</string>
+    <string name="tm_crono_marcou">ストップウォッチを %1$s で停止しました</string>
+    <string name="som_canal">最後に見たライブ TV チャンネル</string>
+</resources>

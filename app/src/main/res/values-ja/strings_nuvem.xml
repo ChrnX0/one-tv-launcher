@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_nuvem.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_sub_nuvem">クラウドの動画、音楽、写真</string>
+    <string name="rede_nuvem_seguir">続ける</string>
+    <string name="rede_nuvem_entrar">ログイン</string>
+    <string name="rede_nuvem_pedindo">コードを要求中…</string>
+    <string name="rede_nuvem_esperando">スマートフォンでの確認を待っています…</string>
+    <string name="rede_nuvem_salvando">ログイン中…</string>
+    <string name="rede_nuvem_recusado">サービスに拒否されました。アプリ ID を確認して、もう一度お試しください。</string>
+    <string name="rede_erro_nuvem_login">このアカウントの許可は期限切れか、削除されました。アカウントを削除し（OK 長押し）、もう一度ログインしてください。</string>
+    <string name="rede_od_titulo">OneDrive: Microsoft でのあなたのアプリ</string>
+    <string name="rede_od_explica">一度だけ、パソコンで: entra.microsoft.com › アプリの登録 › 新規登録。アカウントの種類は個人用 Microsoft アカウントを含むものを選びます。次に「認証」で「パブリック クライアント フローを許可する」をオンにします。「アプリケーション (クライアント) ID」をコピーしてここに入力してください（パネルからスマートフォンで入力できます）。</string>
+    <string name="rede_od_id">アプリケーション (クライアント) ID</string>
+    <string name="rede_od_id_erro">ID は 00000000-0000-0000-0000-000000000000 の形式です。</string>
+    <string name="rede_od_codigo_explica">スマートフォンかパソコンで microsoft.com/link を開き（または QR にカメラを向け）、下のコードを入力してください。TV が求めるのはファイルの読み取りだけです。</string>
+    <string name="rede_od_erro_app">Microsoft がこのアプリを受け付けませんでした。ID と「パブリック クライアント フローを許可する」がオンかを確認してください。</string>
+    <string name="rede_dbx_explica">一度だけ、パソコンで: dropbox.com/developers/apps › Create app › Scoped access › Full Dropbox。Permissions タブで files.metadata.read、files.content.read、account_info.read にチェックし（夜間のバックアップを Dropbox にも保存するなら files.content.write も）、保存（Submit）します。「App key」をコピーしてここに入力してください。</string>
+    <string name="rede_dbx_chave">App key</string>
+    <string name="rede_dbx_chave_erro">App key は小文字の英字と数字だけです。</string>
+    <string name="rede_dbx_codigo_explica">スマートフォンのカメラを QR に向け、Dropbox にログインして「許可」をタップします。Dropbox に表示されたコードをここに入力してください（パネルからスマートフォンで入力できます）。</string>
+    <string name="rede_dbx_codigo">Dropbox のコード</string>
+    <string name="rede_dbx_codigo_erro">Dropbox に表示されたコードをすべて入力してください。</string>
+    <string name="rede_box_explica">一度だけ、パソコンで: app.box.com/developers/console › Create New App › Custom App › User Authentication (OAuth 2.0)。Configuration タブの OAuth 2.0 Redirect URI に %1$s を入れ、「Read all files and folders」にチェックします（夜間のバックアップを Box にも保存するなら「Write all files and folders」も）。保存してから、Client ID と Client Secret をここにコピーしてください。</string>
+    <string name="rede_box_id">Client ID</string>
+    <string name="rede_box_segredo">Client Secret</string>
+    <string name="rede_box_erro">Client ID と Client Secret は英字と数字だけです。両方を Configuration タブからコピーしてください。</string>
+    <string name="rede_volta_sem_rede">TV がホームネットワークにありません。接続してもう一度お試しください。</string>
+    <string name="rede_volta_explica">TV と同じ Wi‑Fi にあるスマートフォンのカメラを QR に向け、%1$s にログインしてアクセスを許可してください。スマートフォンは自動で TV に戻ります。入力は不要です。</string>
+    <string name="rede_volta_porta">TV のポート %1$d が使用中です。他のアプリを閉じて、もう一度お試しください。</string>
+    <string name="rede_gd_explica">一度だけ、パソコンで、Google Cloud プロジェクト（console.cloud.google.com）にて: APIs &amp; Services › Library ›「Google Drive API」をオンにします。Google Auth Platform › Data Access で …/auth/drive.readonly スコープを追加します。Clients › Create client › Web application の Authorized redirect URIs に %1$s を入れます。Client ID と Client secret をここにコピーしてください。</string>
+    <string name="rede_gd_id">Client ID（…apps.googleusercontent.com）</string>
+    <string name="rede_gd_segredo">Client secret</string>
+    <string name="rede_gd_erro">両方をクライアントのページからコピーしてください: ID は .apps.googleusercontent.com で終わり、シークレットは通常 GOCSPX- で始まります。</string>
+    <string name="rede_gd_aviso">Google がアプリは未確認だと表示したら、詳細 › 移動 をタップしてください（あなた自身のアプリです）。</string>
+</resources>

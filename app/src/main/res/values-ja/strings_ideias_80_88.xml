@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_ideias_80_88.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="si_sem_internet">インターネットなし</string>
+    <string name="si_funcionam">引き続き使えるもの: %1$s</string>
+    <string name="si_pendrive">USB メモリ</string>
+    <string name="ad_pergunta">まだ見ていますか？</string>
+</resources>

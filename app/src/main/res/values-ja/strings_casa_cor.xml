@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_casa_cor.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="casa_dica_brilho_cor">明るさと色</string>
+    <string name="casa_brilho_ajuste_cor">明るさ %1$d%% · ◀ ▶ · 色 ▲ ▼</string>
+    <string name="casa_cor_ajuste">%1$s · ▲ ▼</string>
+    <string name="casa_cor_quente">電球色</string>
+    <string name="casa_cor_neutra">昼白色</string>
+    <string name="casa_cor_fria">昼光色</string>
+    <string name="casa_cor_vermelho">赤</string>
+    <string name="casa_cor_laranja">オレンジ</string>
+    <string name="casa_cor_amarelo">黄</string>
+    <string name="casa_cor_verde">緑</string>
+    <string name="casa_cor_azul">青</string>
+    <string name="casa_cor_roxo">紫</string>
+    <string name="casa_cor_rosa">ピンク</string>
+</resources>
