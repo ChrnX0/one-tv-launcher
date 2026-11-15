@@ -159,6 +159,8 @@ dependencies {
     // mais comum de canal ao vivo; .ts direto (Xtream) já vem no exoplayer. Sem o media3-ui: a tela é nossa (Views).
     implementation("androidx.media3:media3-exoplayer:1.11.1")
     implementation("androidx.media3:media3-exoplayer-hls:1.11.1")
+    // Ideia 90: tradução de legenda NA TV (ML Kit, offline; modelo de ~30 MB baixado no primeiro uso). +~12 MB no APK.
+    implementation("com.google.mlkit:translate:17.0.3")
     // Player completo (14/11/2026): FFmpeg + libass para o Media3 (NextLib, GPL-3.0 como este repo). A TV não decodifica
     // Dolby AC3/E-AC3, DTS, TrueHD nem MP2, e legenda ASS/PGS/VobSub precisa ser desenhada em imagem. A versão tem de
     // ser a do Media3 acima (1.11.1-...): ao subir o Media3, subir esta junto. ~10 MB de libs nativas por arquitetura.

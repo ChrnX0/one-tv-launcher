@@ -68,6 +68,7 @@ class VodActivity : Activity() {
         private const val EXTRA_LEG_EP = "leg_ep"
         private const val EXTRA_TMDB = "tmdb"
         private const val LEGENDA_AUTO = "legenda_auto"   // prefs "player" (ideia 89): baixar a legenda sozinho
+        private const val LEGENDA_TRADUZIR = "legenda_traduzir"   // ideia 90: sem legenda no idioma da TV, traduzir a inglesa
         private val ATRASOS = longArrayOf(-3000, -2000, -1500, -1000, -500, 0, 500, 1000, 1500, 2000, 3000)
 
         /** Põe no Intent o que a busca de legenda precisa (sem nada, a busca usa o título da tela). */
@@ -144,6 +145,8 @@ class VodActivity : Activity() {
     private val idiomaTv by lazy { IdiomaPlayer.idiomaDaTv() }
     // Legenda baixada da internet para este vídeo (LegendaBaixar), se houver, e o atraso aplicado nela.
     private var legendaArquivo: java.io.File? = null
+    private var legendaTraduzida = false   // ideia 90: a legenda baixada é tradução feita na TV (rótulo da faixa)
+    private val pararTraducao = java.util.concurrent.atomic.AtomicBoolean(false)
     // Legendas na mesma pasta do vídeo ("Filme.srt", "Filme.pt-BR.ass"): endereço + o que o nome diz (LegendaAoLado).
     private var legendasAoLado: List<Pair<String, LegendaAoLado.Achada>> = emptyList()
     private var atrasoLegenda = 0L
@@ -246,7 +249,10 @@ class VodActivity : Activity() {
                 if (tipo == TIPO_EPISODIO) Series.urlEpisodio(conta, id, ext) else Vod.urlFilme(conta, Filme(id, fonte, "", extensao = ext))
             }
             prefIdioma = IdiomaPlayer.prefs(this).para(chaveIdioma)
+            // Ideia 90: tradução que ficou pela metade (o player fechou no meio) é refeita; a metade não fica valendo.
+            if (LegendaTraduzida.pelaMetade(this, chave)) LegendaBaixar.apagar(this, chave)
             val leg = LegendaBaixar.guardada(this, chave)
+            val trad = leg != null && LegendaTraduzida.ehTraducao(this, chave)
             val aoLado = direto?.let { runCatching { acharAoLado(it) }.getOrNull() }.orEmpty()
             val atraso = getSharedPreferences("player", MODE_PRIVATE).getLong("atraso:$chave", 0L)
             // Ideia 21: tamanho da legenda escolhido no ▼ (vale para todos os vídeos).
@@ -257,7 +263,7 @@ class VodActivity : Activity() {
             tela.post {
                 if (isDestroyed) return@post
                 if (endereco == null) { mostrarAviso(getString(R.string.vod_sem_conta)); return@post }
-                url = endereco; retomarEm = pos; legendaArquivo = leg; atrasoLegenda = atraso; legendasAoLado = aoLado
+                url = endereco; retomarEm = pos; legendaArquivo = leg; legendaTraduzida = trad; atrasoLegenda = atraso; legendasAoLado = aoLado
                 tamLegendaSp = tamLeg; legenda.textSize = tamLeg.toFloat()
                 pintarLegenda()
                 abertura = ab
@@ -284,7 +290,7 @@ class VodActivity : Activity() {
         player = null
     }
 
-    override fun onDestroy() { tela.removeCallbacksAndMessages(null); super.onDestroy() }
+    override fun onDestroy() { pararTraducao.set(true); tela.removeCallbacksAndMessages(null); super.onDestroy() }
 
     // ---------------------------------------------------------------- vídeo
 
@@ -328,6 +334,7 @@ class VodActivity : Activity() {
         legendaArquivo?.let { f ->
             legendas += MediaItem.SubtitleConfiguration.Builder(android.net.Uri.fromFile(f))
                 .setMimeType(MimeTypes.APPLICATION_SUBRIP).setLanguage(Idioma.tagLegendaBaixada(idiomaTv)).setId(IdiomaPlayer.ID_EXTERNA)
+                .apply { if (legendaTraduzida) setLabel(getString(R.string.legenda_trad_rotulo)) }
                 .setSelectionFlags(C.SELECTION_FLAG_DEFAULT).build()
         }
         // As da pasta entram como faixas comuns: o ▼ mostra todas, e a escolha automática (IdiomaPlayer) vale para elas.
@@ -561,6 +568,14 @@ class VodActivity : Activity() {
             getSharedPreferences("player", MODE_PRIVATE).edit().putBoolean(LEGENDA_AUTO, !auto).apply()
             avisoBreve(getString(if (auto) R.string.legenda_auto_desligada else R.string.legenda_auto_ligada))
         }
+        if (LegendaTraduzida.suporta(idiomaTv)) {
+            val trad = getSharedPreferences("player", MODE_PRIVATE).getBoolean(LEGENDA_TRADUZIR, true)
+            opcoes += Opcao(getString(R.string.legenda_trad_opcao), marcada = trad) {
+                getSharedPreferences("player", MODE_PRIVATE).edit().putBoolean(LEGENDA_TRADUZIR, !trad).apply()
+                if (trad) pararTraducao.set(true)
+                avisoBreve(getString(if (trad) R.string.legenda_trad_desligada else R.string.legenda_trad_ligada))
+            }
+        }
         if (legendaArquivo != null) opcoes += Opcao(getString(R.string.legenda_atraso_opcao, rotuloAtraso(atrasoLegenda))) { escolherAtraso() }
         // 11/11/2026 (visto no 1 Play): velocidade e proporção da imagem, no mesmo menu do ▼ para não criar outra tecla
         opcoes += Opcao(getString(R.string.velocidade_opcao, PlayerImagem.rotuloVelocidade(p.playbackParameters.speed))) { escolherVelocidade() }
@@ -735,18 +750,50 @@ class VodActivity : Activity() {
         autoTentada = true
         val k = chave; val u = url; val b = buscaLegenda()
         if (b.nome.isBlank()) return
-        Fundo.rodar {
-            if (LegendaBaixar.contaEmUso(this) == null || LegendaBaixar.tentouAuto(this, k)) return@rodar
-            val r = LegendaBaixar.automatica(this, k, u, b)
-            tela.post {
-                if (isDestroyed || chave != k || legendaArquivo != null) return@post
-                r.onSuccess { (f, bate) ->
-                    legendaArquivo = f; atrasoLegenda = 0
-                    avisoBreve(getString(if (bate) R.string.legenda_auto_pronta else R.string.legenda_auto_pronta_nome))
-                    recarregarComLegenda()
+        val pos = player?.currentPosition ?: 0L
+        Fundo.rodar("legenda-auto") {
+            if (LegendaBaixar.contaEmUso(this) == null) return@rodar
+            // Tradução pela metade da última vez: vai direto para a tradução (a busca já foi feita e não achou).
+            if (!LegendaTraduzida.pelaMetade(this, k)) {
+                if (LegendaBaixar.tentouAuto(this, k)) return@rodar
+                val r = LegendaBaixar.automatica(this, k, u, b)
+                if (r.isSuccess) {
+                    tela.post {
+                        if (isDestroyed || chave != k || legendaArquivo != null) return@post
+                        r.onSuccess { (f, bate) ->
+                            legendaArquivo = f; legendaTraduzida = false; atrasoLegenda = 0
+                            LegendaTraduzida.esquecer(this, k)
+                            avisoBreve(getString(if (bate) R.string.legenda_auto_pronta else R.string.legenda_auto_pronta_nome))
+                            recarregarComLegenda()
+                        }
+                    }
+                    return@rodar
                 }
             }
+            traduzirLegenda(k, u, b, pos)
         }
+    }
+
+    /**
+     * Ideia 90: nenhuma legenda no idioma da TV. Baixa a inglesa e traduz aqui mesmo: os 10 min a partir de [pos]
+     * primeiro (a legenda aparece em uns 20 s), o resto à frente da cena. Bloqueia: chamar fora da thread da tela.
+     */
+    private fun traduzirLegenda(k: String, u: String?, b: LegendaExterna.Busca, pos: Long) {
+        if (!getSharedPreferences("player", MODE_PRIVATE).getBoolean(LEGENDA_TRADUZIR, true)) return
+        if (!LegendaTraduzida.suporta(idiomaTv) || pararTraducao.get()) return
+        val origem = LegendaTraduzida.origem(this, k, u, b).getOrElse { return }
+        tela.post { if (!isDestroyed && chave == k && legendaArquivo == null) avisoBreve(getString(R.string.legenda_trad_traduzindo)) }
+        fun usar(f: java.io.File, aviso: Int) = tela.post {
+            if (isDestroyed || chave != k || pararTraducao.get()) return@post
+            if (legendaArquivo != null && !legendaTraduzida) return@post   // a pessoa já escolheu outra
+            legendaArquivo = f; legendaTraduzida = true; atrasoLegenda = 0
+            avisoBreve(getString(aviso))
+            recarregarComLegenda()
+        }
+        LegendaTraduzida.traduzir(this, k, origem, idiomaTv, pos, pararTraducao,
+            aoPrimeiro = { f -> usar(f, R.string.legenda_trad_parcial) },
+            aoFim = { f -> usar(f, R.string.legenda_trad_pronta) })
+            .onFailure { android.util.Log.w("TvLauncher.Traducao", "não traduzi: ${it.javaClass.simpleName}") }
     }
 
     /** Procura no OpenSubtitles e mostra a lista (a pessoa escolhe: cada download gasta do limite diário da conta). */
@@ -780,7 +827,10 @@ class VodActivity : Activity() {
             tela.post {
                 if (isDestroyed) return@post
                 r.onFailure { avisoBreve(it.message ?: getString(R.string.legenda_erro)) }
-                r.onSuccess { f -> legendaArquivo = f; atrasoLegenda = 0; avisoBreve(getString(R.string.legenda_pronta)); recarregarComLegenda() }
+                r.onSuccess { f ->
+                    pararTraducao.set(true); LegendaTraduzida.esquecer(this, k)   // a escolhida pela pessoa vale mais que a tradução
+                    legendaArquivo = f; legendaTraduzida = false; atrasoLegenda = 0; avisoBreve(getString(R.string.legenda_pronta)); recarregarComLegenda()
+                }
             }
         }
     }
