@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_ideias3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="extras_SONO_SUAVE">Apagado suave (el temporizador oscurece la pantalla y baja el volumen)</string>
+    <string name="extras_MURAL">Mural de la familia en el protector</string>
+    <string name="extras_PRESENCA">Apagar cuando todos salen de casa (router UniFi)</string>
+    <string name="extras_HOJE_NA_TV">\"Hoy en la TV\" en la pantalla Buscar</string>
+    <string name="extras_RETROSPECTIVA">Resumen semanal (domingo por la noche)</string>
+    <string name="extras_MODO_SIMPLES">Modo simple (tarjetas grandes, nombres dichos en voz alta)</string>
+</resources>

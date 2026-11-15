@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_familia2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="an_rotulo">Cumpleaños</string>
+    <string name="an_hoje">Hoy es el cumpleaños de %s</string>
+    <string name="an_amanha">Mañana es el cumpleaños de %s</string>
+    <string name="tp_calor">Calor fuerte</string>
+    <string name="tp_calor_texto">Hasta %d° hoy · Toma agua</string>
+    <string name="tp_frio">Frío fuerte</string>
+    <string name="tp_frio_texto">Hasta %d° esta noche · Abrígate</string>
+    <string name="tp_cfg">Alerta de calor y frío</string>
+    <string name="tp_cfg_det">Una tarjeta sobre cualquier app cuando hoy llega a %1$d° o esta noche baja a %2$d°</string>
+    <string name="mu_ok_lido">OK marca como leído</string>
+    <string name="mu_ok_nao_lido">Leído · OK marca como no leído</string>
+    <string name="mu_lido_desc">Mensaje, leído: %s. OK marca como no leído.</string>
+    <string name="mu_nao_lido_desc">Mensaje: %s. OK marca como leído.</string>
+    <string name="mu_apagar">Borrar mensaje: %s</string>
+    <string name="extras_RETROSPECTIVA_ANO">Tu TV este año (en diciembre, en el protector)</string>
+    <string name="ra_titulo">Tu TV en %d</string>
+    <string name="ra_canal">Canal favorito: %1$s (%2$s)</string>
+    <string name="ra_coluna">Radio</string>
+    <string name="ra_dica_ouvir">escuchar</string>
+    <string name="ra_dica_favoritar">favorita</string>
+    <string name="ra_carregando">Cargando emisoras…</string>
+    <string name="ra_subtitulo">Emisoras de todo el mundo · 1–9 en el control reproducen tus favoritas</string>
+    <string name="ra_sem_catalogo">El catálogo de radios no respondió. Tus favoritas siguen funcionando.</string>
+    <string name="ra_nada">No se encontró ninguna emisora.</string>
+    <string name="ra_continuar">continuar</string>
+    <string name="ra_pausar">pausar</string>
+    <string name="ra_favoritas">Favoritas</string>
+    <string name="ra_procurar">Buscar</string>
+    <string name="ra_buscar">Buscar por nombre</string>
+    <string name="ra_buscar_det">Cualquier emisora del mundo</string>
+    <string name="ra_generos">Géneros</string>
+    <string name="ra_paises">Otro país</string>
+    <string name="ra_paises_det">Los países con más emisoras</string>
+    <string name="ra_perto">Cerca de ti</string>
+    <string name="ra_mais_ouvidas">Las más escuchadas en %s</string>
+    <string name="ra_mundo">Las más escuchadas del mundo</string>
+    <string name="ra_resultado">Búsqueda: %s</string>
+    <string name="ra_favoritada">Agregada a favoritas</string>
+    <string name="ra_desfavoritada">Quitada de favoritas</string>
+    <string name="ra_falhou">Esta emisora no está sonando ahora. Prueba otra.</string>
+    <plurals name="an_anos">
+        <item quantity="one">cumple %d año</item>
+        <item quantity="many">cumple %d años</item>
+        <item quantity="other">cumple %d años</item>
+    </plurals>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_rede_arquivos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_secao_na_tv">Conectado a la TV</string>
+    <string name="rede_sub_usb">Memoria USB · videos, música y fotos</string>
+    <string name="rede_acao_arquivos">FTP, SFTP o NFS</string>
+    <string name="rede_sub_arquivos">NAS, router con disco, computadora Linux o Mac</string>
+    <string name="rede_arq_explica">Empieza la dirección con el protocolo: sftp://nas/Peliculas · ftp://192.168.0.10 · ftps://nas/Videos · nfs://nas/volume1/video. SFTP y FTPS están cifrados; FTP común envía la contraseña sin cifrar, así que úsalo solo en casa. NFS no tiene contraseña: el NAS debe permitir el IP de la TV y conexiones desde puertos no privilegiados.</string>
+    <string name="rede_arq_endereco">Dirección (sftp://, ftp://, ftps:// o nfs://)</string>
+    <string name="rede_arq_usuario">Usuario (NFS: número de usuario, opcional)</string>
+    <string name="rede_arq_endereco_erro">Empieza con sftp://, ftp://, ftps:// o nfs://, seguido del servidor y la carpeta. Usuario y contraseña van en sus propios campos.</string>
+    <string name="rede_erro_nfs_porta">El servidor NFS rechazó la TV. En el NAS, permite conexiones desde puertos no privilegiados (Linux: la opción \"insecure\" en /etc/exports).</string>
+    <string name="rede_erro_nfs_ip">El servidor NFS no permitió esta TV. En el NAS, agrega el IP de la TV (o tu red de casa) a la regla NFS de esta carpeta.</string>
+    <string name="rede_erro_chave_mudou">La clave de este servidor cambió desde que se agregó. Si reinstalaste el servidor, quítalo aquí y agrégalo de nuevo; si no, alguien podría estar haciéndose pasar por él.</string>
+    <string name="rede_erro_usb_acesso">La TV no le dio al launcher acceso a la memoria USB. Inténtalo de nuevo en un momento.</string>
+</resources>

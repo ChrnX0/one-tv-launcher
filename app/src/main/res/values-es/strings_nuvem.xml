@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_nuvem.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_sub_nuvem">Videos, música y fotos de tu nube</string>
+    <string name="rede_nuvem_seguir">Continuar</string>
+    <string name="rede_nuvem_entrar">Iniciar sesión</string>
+    <string name="rede_nuvem_pedindo">Pidiendo un código…</string>
+    <string name="rede_nuvem_esperando">Esperando que confirmes en tu teléfono…</string>
+    <string name="rede_nuvem_salvando">Iniciando sesión…</string>
+    <string name="rede_nuvem_recusado">El servicio se negó. Revisa el id de la app e inténtalo de nuevo.</string>
+    <string name="rede_erro_nuvem_login">El permiso de esta cuenta venció o se quitó. Quita la cuenta (mantén OK) e inicia sesión de nuevo.</string>
+    <string name="rede_od_titulo">OneDrive: tu app en Microsoft</string>
+    <string name="rede_od_explica">Una vez, en una computadora: entra.microsoft.com › Registros de aplicaciones › Nuevo registro. En tipos de cuenta, elige el que incluye cuentas personales de Microsoft. Luego, en Autenticación, activa “Permitir flujos de clientes públicos”. Copia el “Id. de aplicación (cliente)” y escríbelo aquí (puedes escribir desde el teléfono, en el panel).</string>
+    <string name="rede_od_id">Id. de aplicación (cliente)</string>
+    <string name="rede_od_id_erro">El ID tiene la forma 00000000-0000-0000-0000-000000000000.</string>
+    <string name="rede_od_codigo_explica">En tu teléfono o computadora, abre microsoft.com/link (o apunta la cámara al QR) y escribe el código de abajo. La TV solo pide leer archivos.</string>
+    <string name="rede_od_erro_app">Microsoft no aceptó esta app. Revisa el ID y que “Permitir flujos de clientes públicos” esté activado.</string>
+    <string name="rede_dbx_explica">Una vez, en una computadora: dropbox.com/developers/apps › Create app › Scoped access › Full Dropbox. En la pestaña Permissions, marca files.metadata.read, files.content.read y account_info.read (y files.content.write, si quieres la copia nocturna en Dropbox) y guarda (Submit). Copia la “App key” y escríbela aquí.</string>
+    <string name="rede_dbx_chave">App key</string>
+    <string name="rede_dbx_chave_erro">La App key solo tiene letras minúsculas y números.</string>
+    <string name="rede_dbx_codigo_explica">Apunta la cámara del teléfono al QR, inicia sesión en Dropbox y toca Permitir. Dropbox muestra un código: escríbelo aquí (puedes escribir desde el teléfono, en el panel).</string>
+    <string name="rede_dbx_codigo">Código de Dropbox</string>
+    <string name="rede_dbx_codigo_erro">Escribe el código completo que mostró Dropbox.</string>
+    <string name="rede_box_explica">Una vez, en una computadora: app.box.com/developers/console › Create New App › Custom App › User Authentication (OAuth 2.0). En la pestaña Configuration, en OAuth 2.0 Redirect URI, pon %1$s marca “Read all files and folders” (y “Write all files and folders”, si quieres la copia nocturna en Box). Guarda y copia aquí el Client ID y el Client Secret.</string>
+    <string name="rede_box_id">Client ID</string>
+    <string name="rede_box_segredo">Client Secret</string>
+    <string name="rede_box_erro">Client ID y Client Secret solo tienen letras y números. Copia ambos de la pestaña Configuration.</string>
+    <string name="rede_volta_sem_rede">La TV no está en la red de casa. Conéctala e inténtalo de nuevo.</string>
+    <string name="rede_volta_explica">Apunta al QR la cámara de un teléfono que esté en el mismo Wi‑Fi que la TV, inicia sesión en %1$s y permite el acceso. El teléfono vuelve solo a la TV: no hay que escribir nada.</string>
+    <string name="rede_volta_porta">El puerto %1$d de la TV está ocupado. Cierra otras apps e inténtalo de nuevo.</string>
+    <string name="rede_gd_explica">Una vez, en una computadora, en tu proyecto de Google Cloud (console.cloud.google.com): APIs y servicios › Biblioteca › activa “Google Drive API”. En Google Auth Platform › Acceso a datos, agrega el alcance …/auth/drive.readonly. En Clientes › Crear cliente › Aplicación web, en URI de redireccionamiento autorizados pon %1$s. Copia aquí el ID de cliente y el secreto del cliente.</string>
+    <string name="rede_gd_id">ID de cliente (…apps.googleusercontent.com)</string>
+    <string name="rede_gd_segredo">Secreto del cliente</string>
+    <string name="rede_gd_erro">Copia ambos de la página del cliente: el ID termina en .apps.googleusercontent.com y el secreto suele empezar con GOCSPX-.</string>
+    <string name="rede_gd_aviso">Si Google dice que la app no está verificada, toca Configuración avanzada › Ir a (es tu propia app).</string>
+</resources>

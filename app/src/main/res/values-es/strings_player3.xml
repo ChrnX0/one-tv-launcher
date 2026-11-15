@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_player3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="abertura_marcar_inicio">Marcar aquí el inicio de la intro (%1$s)</string>
+    <string name="abertura_marcar_fim">Marcar aquí el fin de la intro (%1$s)</string>
+    <string name="abertura_apagar">Borrar la marca de la intro</string>
+    <string name="abertura_inicio_marcado">Inicio de la intro marcado en %1$s. Ahora marca el fin en el menú ▼</string>
+    <string name="abertura_salva">Intro guardada: de %1$s a %2$s. Los siguientes episodios ofrecen saltarla</string>
+    <string name="abertura_falta_inicio">Marca primero el inicio de la intro</string>
+    <string name="abertura_invalida">No parece una intro: debe durar de 10 s a 5 min y empezar en los primeros 15 min</string>
+    <string name="abertura_apagada">Marca de la intro borrada</string>
+    <string name="abertura_pular">Saltar intro · OK</string>
+</resources>

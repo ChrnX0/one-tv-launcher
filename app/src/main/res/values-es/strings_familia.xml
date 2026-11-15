@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_familia.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="fam_pin">PIN infantil</string>
+    <string name="fam_pin_det">Un segundo PIN para desbloquear canales, categorías ocultas y la hora de dormir delante de los niños. El PIN del panel sigue sirviendo para todo.</string>
+    <string name="fam_pin_ok">PIN infantil guardado</string>
+    <string name="fam_pin_igual">El PIN infantil debe ser distinto del PIN del panel</string>
+    <string name="fam_trocar">Cambiar el PIN infantil</string>
+    <string name="fam_apagar">Quitar el PIN infantil</string>
+    <string name="fam_apagado">PIN infantil quitado: ahora solo el PIN del panel desbloquea</string>
+    <string name="extras_TEMPO_TELA">Tiempo de pantalla diario (cuando se acaba, solo abren las apps permitidas)</string>
+    <string name="tela_titulo">Tiempo de pantalla</string>
+    <string name="tela_acabou">Se acabó el tiempo de pantalla de hoy. ¡Hasta mañana!</string>
+    <string name="tela_5min">Quedan 5 minutos de pantalla hoy</string>
+    <string name="tela_pin">PIN para cambiar el tiempo de pantalla</string>
+    <string name="tela_cota_linha">Tiempo de pantalla por día: %1$s (queda hoy: %2$s)</string>
+    <string name="tela_mais">Dar %1$d minutos más hoy</string>
+    <string name="tela_mais_ok">%1$d minutos más para hoy</string>
+    <string name="tela_h">h</string>
+    <string name="tela_min">min</string>
+    <string name="extras_AGENDA_TODAS">Calendario de todas las cuentas de Google de la TV juntas</string>
+    <string name="cal_todas_contas">Todas las cuentas de la TV (%1$d)</string>
+    <string name="tm_tempo_esgotado">Se acabó el tiempo</string>
+    <string name="painel_desligado_pin">Panel web desactivado: PIN incorrecto demasiadas veces</string>
+    <string name="tm_crono">Cronómetro</string>
+    <string name="tm_crono_iniciar">Iniciar cronómetro</string>
+    <string name="tm_crono_parar">Detener cronómetro</string>
+    <string name="tm_crono_comecou">Cronómetro iniciado: aparece en la pantalla de inicio</string>
+    <string name="tm_crono_marcou">Cronómetro detenido en %1$s</string>
+    <string name="som_canal">Último canal de TV en vivo</string>
+</resources>

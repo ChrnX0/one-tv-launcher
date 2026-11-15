@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_comando.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="cc_vazia">Escribe lo que quieres que haga la TV</string>
+    <string name="cc_nao_entendi">No entendí. Prueba algo como:</string>
+    <string name="cc_exemplo_1">pon Globo</string>
+    <string name="cc_exemplo_2">abre YouTube</string>
+    <string name="cc_exemplo_3">apaga en 30 minutos</string>
+    <string name="cc_abrindo">Abriendo %1$s</string>
+    <string name="cc_canal">Poniendo %1$s</string>
+    <string name="cc_o_que_passa">Qué pasa en %1$s</string>
+    <string name="cc_timer">Recordatorio en %1$d minutos</string>
+    <string name="cc_desligar">La TV se apaga en %1$d minutos</string>
+    <string name="cc_desligar_cancelar">Apagado programado cancelado</string>
+    <string name="cc_volume_subir">Subir volumen</string>
+    <string name="cc_volume_descer">Bajar volumen</string>
+    <string name="cc_mudo">Silencio sí/no</string>
+    <string name="cc_pausar">Pausando</string>
+    <string name="cc_continuar">Reproduciendo</string>
+    <string name="cc_tela_previsao">el pronóstico</string>
+    <string name="cc_tela_agenda">el calendario</string>
+    <string name="cc_tela_despertador">las alarmas</string>
+    <string name="cc_tela_configuracoes">los ajustes del launcher</string>
+    <string name="cc_tela_inicio">la pantalla de inicio</string>
+    <string name="cc_confirme_na_tv">%1$s: confirma con OK en la TV</string>
+    <string name="cc_nao_fiz">%1$s: no se hizo (%2$s)</string>
+    <string name="cc_aviso_titulo">Panel del teléfono</string>
+</resources>

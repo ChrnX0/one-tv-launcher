@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_protetor_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pt_dica_dispensar">OK descarta · ◀ ▶ mover</string>
+    <string name="pt_dica_pausar">OK pausa o reanuda · ◀ ▶ mover</string>
+    <string name="pt_dica_andar">◀ ▶ mover · otras teclas cierran</string>
+    <string name="rede_fotos_usar">Usar estas fotos en el protector</string>
+    <string name="rede_fotos_parar">Dejar de usar estas fotos en el protector</string>
+    <string name="rede_fotos_usando">Copiando las fotos. Aparecen la próxima vez que empiece el protector.</string>
+    <string name="rede_fotos_paradas">El protector ya no usa esta carpeta.</string>
+    <string name="rede_continuar">Seguir viendo</string>
+    <string name="rede_recentes">Agregados recientemente</string>
+    <string name="rede_buscar">Buscar</string>
+    <string name="rede_buscar_explica">Películas, series, episodios y música en este servidor.</string>
+    <string name="rede_buscar_campo">Nombre</string>
+    <string name="rede_buscar_curto">Escribe al menos 2 letras.</string>
+    <string name="rede_proximo_em">Siguiente: %1$s en %2$d s · OK empieza ahora · cualquier otra tecla cancela</string>
+    <string name="rede_ainda_assistindo">¿Sigues mirando? OK empieza %1$s</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="one">%1$d foto · copiada a la TV, funciona con la computadora apagada</item>
+        <item quantity="many">%1$d fotos · copiadas a la TV, funcionan con la computadora apagada</item>
+        <item quantity="other">%1$d fotos · copiadas a la TV, funcionan con la computadora apagada</item>
+    </plurals>
+</resources>

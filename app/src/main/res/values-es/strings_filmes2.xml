@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_filmes2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="filmes_filtro">Filtro</string>
+    <string name="filmes_filtro_titulo">Filtrar películas</string>
+    <string name="filmes_filtro_cabecalho">%1$s · FILTRO: %2$s</string>
+    <string name="filmes_filtro_genero">Género: %1$s</string>
+    <string name="filmes_filtro_epoca">Época: %1$s</string>
+    <string name="filmes_filtro_nota">Calificación mínima: %1$s</string>
+    <string name="filmes_filtro_nao_vistos">Solo no vistas: %1$s</string>
+    <string name="filmes_filtro_limpar">Quitar filtro</string>
+    <string name="filmes_filtro_qualquer">Cualquiera</string>
+    <string name="filmes_filtro_sim">Sí</string>
+    <string name="filmes_filtro_nao">No</string>
+    <string name="filmes_filtro_decada">Años %1$d</string>
+    <string name="filmes_filtro_nota_min">%1$d+</string>
+    <string name="filmes_filtro_nao_vistos_curto">no vistas</string>
+    <string name="filmes_filtro_sem_genero">Ninguna categoría de esta lista indica un género</string>
+    <string name="filmes_filtro_vazio">Ninguna película coincide con este filtro en esta categoría</string>
+    <string name="filmes_sorteio">Sorpréndeme</string>
+    <string name="filmes_sorteio_vazio">No hay ninguna película para elegir aquí</string>
+    <string name="filmes_colecao">Colección de esta película</string>
+    <string name="filmes_colecao_cat">Colección: %1$s</string>
+    <string name="genero_acao">Acción</string>
+    <string name="genero_aventura">Aventura</string>
+    <string name="genero_comedia">Comedia</string>
+    <string name="genero_drama">Drama</string>
+    <string name="genero_terror">Terror</string>
+    <string name="genero_suspense">Suspenso</string>
+    <string name="genero_romance">Romance</string>
+    <string name="genero_ficcao">Ciencia ficción</string>
+    <string name="genero_fantasia">Fantasía</string>
+    <string name="genero_animacao">Animación</string>
+    <string name="genero_infantil">Infantil y familia</string>
+    <string name="genero_documentario">Documental</string>
+    <string name="genero_crime">Crimen</string>
+    <string name="genero_guerra">Guerra</string>
+    <string name="genero_faroeste">Western</string>
+    <string name="genero_musical">Musical</string>
+</resources>

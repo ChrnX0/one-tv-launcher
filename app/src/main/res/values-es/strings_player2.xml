@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_player2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="vod_tentando">Se cayó la conexión. Intentando de nuevo (%1$d de %2$d)…</string>
+    <string name="vod_proximo_episodio">Siguiente episodio</string>
+    <string name="vod_proximo_agora">Ver ahora · %1$d s</string>
+    <string name="vod_proximo_cancelar">Cancelar</string>
+    <string name="vod_proximo_continuar">Seguir viendo</string>
+    <string name="vod_ainda_assistindo">¿Sigues mirando?</string>
+    <string name="vod_ainda_assistindo_texto">Se reprodujeron varios episodios sin que nadie tocara el control, así que el siguiente te espera.</string>
+    <string name="vod_desligar_ao_fim">Apagar la TV cuando termine</string>
+    <string name="vod_desligar_ao_fim_ligado">La TV se apaga cuando termine</string>
+    <string name="vod_desligar_ao_fim_desligado">La TV sigue encendida cuando termine</string>
+    <string name="vod_legenda_tamanho_opcao">Tamaño de subtítulos: %1$s</string>
+    <string name="vod_legenda_tamanho_titulo">Tamaño de subtítulos</string>
+    <string-array name="vod_legenda_tamanhos">
+        <item>Pequeño</item>
+        <item>Normal</item>
+        <item>Grande</item>
+        <item>Enorme</item>
+    </string-array>
+</resources>

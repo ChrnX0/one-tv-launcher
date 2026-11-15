@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_coluna.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="coluna_listas">LISTAS</string>
+    <string name="coluna_novos">+%1$s</string>
+    <string name="coluna_filtro">Filtro</string>
+    <string name="coluna_esportes">Deportes</string>
+    <string name="coluna_guia">Guía</string>
+    <string name="coluna_filtro_titulo">Filtro</string>
+    <string name="coluna_filtro_ordem">Orden: %1$s</string>
+    <string name="coluna_filtro_combinado">Género, época, calificación, no vistas…</string>
+    <string name="coluna_filtro_combinado_ativo">Filtro: %1$s</string>
+    <string name="coluna_filtro_limpar">Quitar filtro</string>
+    <string name="coluna_filtro_sortear">Sorpréndeme</string>
+    <string name="coluna_filtro_ocultas_mostrar">Mostrar categorías ocultas (PIN)</string>
+    <string name="coluna_filtro_ocultas_esconder">Volver a ocultar las categorías ocultas</string>
+    <string name="coluna_menu_assistido">Marcar como visto</string>
+    <string name="coluna_menu_nao_assistido">Marcar como no visto</string>
+    <string name="coluna_menu_tirar_continuar">Quitar de Seguir viendo</string>
+    <string name="coluna_menu_por_interesse">Agregar a Para ver</string>
+    <string name="coluna_menu_tirar_interesse">Quitar de Para ver</string>
+    <string name="coluna_marcado_assistido">%1$s marcado como visto</string>
+    <string name="coluna_marcado_nao_assistido">%1$s marcado como no visto</string>
+    <string name="coluna_tirado_continuar">%1$s quitado de Seguir viendo</string>
+    <string name="coluna_etiqueta_concluida">Terminada</string>
+    <string name="coluna_etiqueta_nova_temporada">Nueva temporada</string>
+    <string name="coluna_etiqueta_novos">Episodios nuevos</string>
+    <string name="coluna_letra_titulo">Ir a la letra</string>
+    <string name="coluna_letra">Ir a una letra</string>
+    <string name="coluna_ao_vivo">EN VIVO</string>
+    <string name="coluna_ao_vivo_primeiro">En vivo primero</string>
+    <string name="coluna_tv_titulo">TV</string>
+    <string name="coluna_gravacoes">Grabaciones</string>
+    <plurals name="coluna_etiqueta_n_novos">
+        <item quantity="one">%d episodio nuevo</item>
+        <item quantity="many">%d episodios nuevos</item>
+        <item quantity="other">%d episodios nuevos</item>
+    </plurals>
+</resources>

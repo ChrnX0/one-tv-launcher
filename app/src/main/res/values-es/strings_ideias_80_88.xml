@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_ideias_80_88.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="si_sem_internet">Sin internet</string>
+    <string name="si_funcionam">Siguen funcionando: %1$s</string>
+    <string name="si_pendrive">Memoria USB</string>
+    <string name="ad_pergunta">¿Sigues mirando?</string>
+</resources>
