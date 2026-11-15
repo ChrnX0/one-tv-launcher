@@ -26,12 +26,14 @@ jobs:
     steps:
       - name: Promover
         env:
-          GH_TOKEN: ${{ github.token }}
+          # Mesmo destino do "Build e Release": repo público de APKs quando REPO_PUBLICO existe (15/11/2026).
+          GH_TOKEN: ${{ vars.REPO_PUBLICO && secrets.PUBLICO_TOKEN || github.token }}
+          DESTINO: ${{ vars.REPO_PUBLICO || github.repository }}
           TAG: ${{ inputs.tag }}
         run: |
           # Tag fora do formato v<número> faria todas as TVs pararem de atualizar (Atualizador.kt lê o número da tag).
           if ! printf '%s' "$TAG" | grep -Eq '^v[0-9]+$'; then echo "::error::tag inválida: use v<versionCode>"; exit 1; fi
-          PRE=$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isPrerelease --jq .isPrerelease)
+          PRE=$(gh release view "$TAG" --repo "$DESTINO" --json isPrerelease --jq .isPrerelease)
           if [ "$PRE" != "true" ]; then echo "::error::$TAG não é pré-lançamento (já é de todos?)"; exit 1; fi
-          gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --prerelease=false --latest
-          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json tagName,isPrerelease,publishedAt
+          gh release edit "$TAG" --repo "$DESTINO" --prerelease=false --latest
+          gh release view "$TAG" --repo "$DESTINO" --json tagName,isPrerelease,publishedAt

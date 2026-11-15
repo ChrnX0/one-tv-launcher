@@ -1,0 +1,45 @@
+name: Bug report
+description: Something on the TV doesn't work as it should
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please **don't paste PINs, passwords, IPTV logins or tokens** here.
+        Security problems go through [SECURITY.md](../blob/main/SECURITY.md), not public issues.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you pressed on the remote, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and Android version
+      placeholder: Chromecast with Google TV 4K, Android 14
+    validations:
+      required: true
+  - type: input
+    id: build
+    attributes:
+      label: Launcher build
+      description: The Release tag (e.g. v455000) or Settings → Check for a new version.
+    validations:
+      required: true
+  - type: dropdown
+    id: owner
+    attributes:
+      label: Is the launcher the device owner?
+      options:
+        - "Yes"
+        - "No"
+        - I don't know
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots, logs or anything else
+      description: A photo of the screen helps a lot. `adb logcat` output is welcome (check it for personal data first).
