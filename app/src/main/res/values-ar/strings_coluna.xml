@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_coluna.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="coluna_listas">القوائم</string>
+    <string name="coluna_novos">+%1$s</string>
+    <string name="coluna_filtro">تصفية</string>
+    <string name="coluna_esportes">رياضة</string>
+    <string name="coluna_guia">الدليل</string>
+    <string name="coluna_filtro_titulo">تصفية</string>
+    <string name="coluna_filtro_ordem">الترتيب: %1$s</string>
+    <string name="coluna_filtro_combinado">النوع، الحقبة، التقييم، غير المُشاهَد…</string>
+    <string name="coluna_filtro_combinado_ativo">التصفية: %1$s</string>
+    <string name="coluna_filtro_limpar">مسح التصفية</string>
+    <string name="coluna_filtro_sortear">فاجئني</string>
+    <string name="coluna_filtro_ocultas_mostrar">إظهار الفئات المخفية (PIN)</string>
+    <string name="coluna_filtro_ocultas_esconder">إخفاء الفئات المخفية مجددًا</string>
+    <string name="coluna_menu_assistido">وضع علامة مُشاهَد</string>
+    <string name="coluna_menu_nao_assistido">وضع علامة غير مُشاهَد</string>
+    <string name="coluna_menu_tirar_continuar">إزالة من متابعة المشاهدة</string>
+    <string name="coluna_menu_por_interesse">إضافة إلى قائمة المشاهدة</string>
+    <string name="coluna_menu_tirar_interesse">إزالة من قائمة المشاهدة</string>
+    <string name="coluna_marcado_assistido">تم وضع علامة مُشاهَد على %1$s</string>
+    <string name="coluna_marcado_nao_assistido">تم وضع علامة غير مُشاهَد على %1$s</string>
+    <string name="coluna_tirado_continuar">أُزيل %1$s من متابعة المشاهدة</string>
+    <string name="coluna_etiqueta_concluida">انتهى</string>
+    <string name="coluna_etiqueta_nova_temporada">موسم جديد</string>
+    <string name="coluna_etiqueta_novos">حلقات جديدة</string>
+    <string name="coluna_letra_titulo">انتقال إلى حرف</string>
+    <string name="coluna_letra">انتقال إلى حرف</string>
+    <string name="coluna_ao_vivo">مباشر</string>
+    <string name="coluna_ao_vivo_primeiro">المباشر أولًا</string>
+    <string name="coluna_tv_titulo">التلفزيون</string>
+    <string name="coluna_gravacoes">التسجيلات</string>
+    <plurals name="coluna_etiqueta_n_novos">
+        <item quantity="zero">%d حلقة جديدة</item>
+        <item quantity="one">حلقة جديدة واحدة</item>
+        <item quantity="two">حلقتان جديدتان</item>
+        <item quantity="few">%d حلقات جديدة</item>
+        <item quantity="many">%d حلقة جديدة</item>
+        <item quantity="other">%d حلقة جديدة</item>
+    </plurals>
+</resources>

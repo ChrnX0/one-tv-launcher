@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_perfis.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="perfil_aviso_titulo">الملف الشخصي: %1$s</string>
+    <string name="perfil_aviso_texto">المفضلة ومتابعة المشاهدة وترتيب التطبيقات لهذا الملف الشخصي</string>
+    <string name="perfil_aviso_crianca">ملف الطفل: تم تفعيل وضع الأطفال ووقت النوم</string>
+    <string name="perfil_crianca">ملف الطفل</string>
+    <string name="perfil_crianca_linha">ملف الطفل · %1$s: %2$s</string>
+    <string name="perfil_crianca_nao">متوقف</string>
+    <string name="perfil_crianca_sem_pin">عيّن PIN لوحة الويب أولًا: إنه PIN الوالدين الذي يحمي ملف الطفل</string>
+    <string name="perfil_pin_sair">PIN الوالدين للخروج من ملف الطفل</string>
+    <string name="perfil_pin_marcar">PIN الوالدين لتغيير ملف الطفل</string>
+</resources>

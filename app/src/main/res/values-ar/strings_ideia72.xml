@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_ideia72.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l72_abrir">افتح %1$s</string>
+    <string name="l72_tela_previsao">توقعات الطقس</string>
+    <string name="l72_tela_agenda">التقويم</string>
+    <string name="l72_tela_despertador">المنبّه</string>
+    <string name="l72_tela_configuracoes">إعدادات المشغّل</string>
+    <string name="l72_tela_inicio">الشاشة الرئيسية</string>
+    <string name="l72_despertador">إنشاء منبّه الساعة %1$s (%2$s)</string>
+    <string name="l72_dias_uma">مرة واحدة</string>
+    <string name="l72_dias_todos">كل يوم</string>
+    <string name="l72_dias_uteis">من الاثنين إلى الجمعة</string>
+    <string name="l72_dias_fds">عطلة نهاية الأسبوع</string>
+    <string name="l72_dias_nomes">أحد,اثنين,ثلاثاء,أربعاء,خميس,جمعة,سبت</string>
+    <string name="l72_vol_subir">رفع الصوت</string>
+    <string name="l72_vol_descer">خفض الصوت</string>
+    <string name="l72_vol_mudo">كتم/إلغاء الكتم</string>
+    <string name="l72_vezes">(%1$d مرات)</string>
+    <string name="l72_midia_pausar">إيقاف مؤقت</string>
+    <string name="l72_midia_tocar">استئناف التشغيل</string>
+    <string name="l72_midia_proxima">التالي</string>
+    <string name="l72_midia_anterior">السابق</string>
+    <string name="l72_visita_liga">تفعيل وضع الضيوف</string>
+    <string name="l72_visita_desliga">إيقاف وضع الضيوف</string>
+    <string name="l72_canal_pedido">التبديل إلى القناة %1$s</string>
+    <string name="l72_canal">التبديل إلى القناة %1$d (%2$s)</string>
+    <string name="l72_o_que_passa">عرض ما يُعرض على %1$s</string>
+    <string name="l72_casa_ligar">تشغيل</string>
+    <string name="l72_casa_desligar">إطفاء</string>
+    <string name="l72_casa_alternar">تبديل</string>
+    <string name="l72_casa">%1$s %2$s (المنزل)</string>
+    <string name="l72_guia_vazio">%1$s: لا شيء في الدليل.</string>
+    <string name="l72_guia_agora">%1$s الآن: %2$s (حتى %3$s)</string>
+    <string name="l72_guia_nada_agora">%1$s: لا شيء في الدليل الآن</string>
+    <string name="l72_guia_depois">التالي: %1$s (%2$s)</string>
+    <string name="l75_pilula">قيد التشغيل الآن: %1$s، %2$s. OK يوقف مؤقتًا أو يستأنف؛ اضغط مطولًا على OK لفتح التطبيق</string>
+</resources>

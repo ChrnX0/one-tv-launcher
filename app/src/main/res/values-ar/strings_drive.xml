@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_drive.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="drv_titulo">حساب Google Drive</string>
+    <string name="drv_destino">Google Drive</string>
+    <string name="drv_conta">حساب Google Drive</string>
+    <string name="drv_nao_conectada">غير متصل</string>
+    <string name="drv_passos">1. على هاتفك، افتح %1$s (أو وجّه الكاميرا إلى الرمز على اليمين).\n2. سجّل الدخول بحساب Google موجود على هذا التلفزيون واكتب:\n\n%2$s\n\n3. اسمح بالوصول إلى Google Drive. يرى التلفزيون فقط الملفات التي ينشئها بنفسه (مجلد OneTV-backup)، ولا يرى أبدًا باقي Drive.\n\nتستمر هذه الشاشة وحدها.</string>
+    <string name="drv_ok">تم: %1$s متصل. اختر \"Google Drive\" في سطر النسخة الإضافية لكي تذهب النسخة الليلية إلى هناك أيضًا.</string>
+    <string name="drv_sem_google">تسجيل الدخول عبر Google غير مُعد على هذا التلفزيون بعد.\n\nأعدّه في لوحة الويب &gt; تبويب Claude (عميل OAuth خاص بك، من نوع \"TVs and Limited Input devices\")، وفعّل Google Drive API في مشروع Google Cloud نفسه وعد إلى هنا.</string>
+    <string name="drv_desconectar_pergunta">فصل %1$s؟ النسخ الموجودة في Google Drive تبقى هناك؛ ويتوقف التلفزيون عن إرسال نسخ جديدة.</string>
+    <string name="drv_desconectar">فصل</string>
+    <string name="drv_restaurar">الاستعادة من Google Drive</string>
+    <string name="drv_precisa_conta">اربط حساب Google Drive أولًا (السطر أعلاه).</string>
+    <string name="drv_falhou">لم ينجح: %1$s</string>
+    <string name="drv_nenhuma">لا توجد نسخ في مجلد OneTV-backup في Google Drive بعد.</string>
+    <string name="drv_escolha">أي نسخة؟</string>
+    <string name="drv_senha">كلمة مرور النسخة الاحتياطية</string>
+    <string name="drv_senha_errada">كلمة مرور النسخة خاطئة (أو تم تعديل الملف). لم تُستعد أي بيانات.</string>
+    <string name="drv_restaurado">تمت الاستعادة. يعيد المشغّل التشغيل بعد لحظة.</string>
+</resources>

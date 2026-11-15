@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_ideias2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dormir_titulo">وقت النوم</string>
+    <string name="dormir_texto">هذا التطبيق غير مسموح الآن. تصبح على خير!</string>
+    <string name="dormir_pin">PIN لتغيير وقت النوم</string>
+    <string name="dormir_inicio">وقت النوم: البداية</string>
+    <string name="dormir_fim">وقت النوم: النهاية</string>
+    <string name="dormir_teto">وقت النوم: أقصى صوت</string>
+    <string name="recado_link_titulo">الرسالة</string>
+    <string name="extras_HORA_DORMIR">وقت النوم (التطبيقات المسموحة فقط، صوت محدود)</string>
+    <string name="extras_TOCANDO_AGORA">قيد التشغيل الآن (يقرأ ما يُشغَّل)</string>
+    <string name="extras_MODO_LEVE">الوضع الخفيف (حركات أقصر)</string>
+    <string name="extras_SOM_NAVEGACAO">صوت التنقل</string>
+    <string name="extras_RECADO_LINK">رسالة عبر رابط (Home Assistant، TvOverlay)</string>
+    <string name="extras_caches">مسح ذاكرة التخزين المؤقت للتطبيقات</string>
+    <string name="extras_livre">%1$s متاحة</string>
+    <string name="extras_consumo">الإنترنت لكل تطبيق (7 أيام)</string>
+    <string name="extras_tocando">قيد التشغيل الآن</string>
+    <string name="extras_aguarde">لحظة…</string>
+    <string name="dormir_dia">وقت النوم: اليوم</string>
+    <string name="dormir_todos">الكل (افتراضي)</string>
+    <string name="dormir_proprio">جدول خاص</string>
+    <string name="dormir_segue">يتبع الافتراضي</string>
+    <string name="dormir_voltar_padrao">وقت النوم: إعادة هذا اليوم إلى الافتراضي</string>
+    <string name="extras_VER_TELA">السماح لـClaude برؤية الشاشة (MCP ver_tela؛ يعرض التلفزيون تنبيهًا)</string>
+    <string name="casa_titulo">المنزل</string>
+    <string name="casa_sem_config">أعدّ Home Assistant في لوحة الهاتف: تبويب الإضافات، بطاقة المنزل.</string>
+    <string name="casa_carregando">جارٍ تحميل الأجهزة…</string>
+    <string name="casa_vazio">لا أضواء أو مقابس أو مشاهد في Home Assistant.</string>
+    <string name="casa_google_home">Google Home</string>
+    <string name="casa_google_home_det">أضواء وكاميرات Google</string>
+    <string name="casa_resumo">Home Assistant · %1$d من %2$d تعمل</string>
+    <string name="casa_resumo_so_cenas">Home Assistant · %1$d مشاهد</string>
+    <string name="casa_secao_cenas">المشاهد والنصوص البرمجية</string>
+    <string name="casa_secao_aparelhos">الأجهزة</string>
+    <string name="casa_secao_google">Google</string>
+    <string name="casa_sem_comodo">بلا غرفة</string>
+    <string name="casa_ligado">يعمل</string>
+    <string name="casa_desligado">مطفأ</string>
+    <string name="casa_aberta">مفتوح</string>
+    <string name="casa_fechada">مغلق</string>
+    <string name="casa_rodar">OK للتشغيل</string>
+    <string name="casa_indisponivel">غير متاح</string>
+    <string name="casa_sem_config_titulo">اربط منزلك</string>
+    <string name="casa_dica_acionar">تشغيل أو إطفاء</string>
+    <string name="casa_erro_simples">Home Assistant لم يستجب. تحقق من أن خادمه يعمل وحاول مجددًا.</string>
+    <string name="casa_erro">Home Assistant لم يستجب: %1$s</string>
+    <string name="casa_ligado_pct">يعمل · %1$d%%</string>
+    <string name="casa_brilho_ajuste">السطوع %1$d%% · ◀ ▶</string>
+    <string name="casa_dica_brilho">السطوع</string>
+    <string name="casa_tecla_segurar_ok">اضغط مطولًا على OK</string>
+</resources>

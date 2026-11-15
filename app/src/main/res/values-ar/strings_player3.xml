@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_player3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="abertura_marcar_inicio">تحديد بداية المقدمة هنا (%1$s)</string>
+    <string name="abertura_marcar_fim">تحديد نهاية المقدمة هنا (%1$s)</string>
+    <string name="abertura_apagar">حذف علامة المقدمة</string>
+    <string name="abertura_inicio_marcado">حُددت بداية المقدمة عند %1$s. الآن حدّد النهاية في قائمة ▼</string>
+    <string name="abertura_salva">حُفظت المقدمة: من %1$s إلى %2$s. الحلقات التالية تعرض تخطيها</string>
+    <string name="abertura_falta_inicio">حدّد بداية المقدمة أولًا</string>
+    <string name="abertura_invalida">لا يبدو هذا مقدمة: يجب أن تدوم من 10 ث إلى 5 د وتبدأ في أول 15 د</string>
+    <string name="abertura_apagada">حُذفت علامة المقدمة</string>
+    <string name="abertura_pular">تخطي المقدمة · OK</string>
+</resources>

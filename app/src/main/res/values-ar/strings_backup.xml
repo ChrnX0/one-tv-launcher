@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_backup.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="bkn_titulo">النسخ الاحتياطي التلقائي</string>
+    <string name="bkn_explica">كل ليلة، والتلفزيون خامل، يحفظ نسخة كاملة مقفلة بكلمة مرورك. تُحفظ آخر 7. اكتب كلمة المرور: بدونها لا يمكن فتح النسخة.</string>
+    <string name="bkn_ligado">مفعّل</string>
+    <string name="bkn_desligado">متوقف</string>
+    <string name="bkn_sem_senha">متوقف · عيّن كلمة مرور النسخة الاحتياطية أولًا</string>
+    <string name="bkn_senha">كلمة مرور النسخة الاحتياطية</string>
+    <string name="bkn_senha_ok">معيّنة · OK يغيّر</string>
+    <string name="bkn_senha_falta">غير معيّنة · OK يعيّن</string>
+    <string name="bkn_senha_nova">كلمة مرور النسخة الاحتياطية (8 أحرف أو أكثر)</string>
+    <string name="bkn_senha_repetir">اكتب كلمة المرور مجددًا</string>
+    <string name="bkn_senha_curta">يجب أن تكون كلمة المرور من 8 إلى 128 حرفًا.</string>
+    <string name="bkn_senha_diferente">كلمتا المرور غير متطابقتين.</string>
+    <string name="bkn_senha_gravada">تم حفظ كلمة المرور. احتفظ بها في مكان آمن.</string>
+    <string name="bkn_senha_erro">تعذّر حفظ كلمة المرور.</string>
+    <string name="bkn_horario">الوقت</string>
+    <string name="bkn_extra">نسخة إضافية</string>
+    <string name="bkn_destino_tv">التلفزيون فقط</string>
+    <string name="bkn_destino_pendrive">ذاكرة USB</string>
+    <string name="bkn_destino_nas">NAS (%1$s)</string>
+    <string name="bkn_agora">نسخ احتياطي الآن</string>
+    <string name="bkn_ultimo">الأخيرة</string>
+    <string name="bkn_nunca">أبدًا</string>
+    <string name="bkn_pin">PIN لتغيير النسخ الاحتياطي</string>
+</resources>

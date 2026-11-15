@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_ideias.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dns_voltou_anterior">DNS الجديد لم يستجب. تمت العودة إلى السابق.</string>
+    <string name="teclas_titulo">اختبار الأزرار</string>
+    <string name="teclas_instrucao">اضغط أزرار جهاز التحكم. يظهر كل زر هنا. HOME يخرج.</string>
+    <string name="teclas_vazio">لا أزرار بعد.</string>
+    <string name="trava_home_titulo">PIN لتغيير HOME</string>
+    <string name="trava_home_errado">PIN خاطئ</string>
+    <string name="extras_cfg_det">ساعات الفلتر الليلي ووقت النوم، اختبار الأزرار، المعايرة وأدوات أخرى</string>
+    <string name="extras_titulo">إضافات</string>
+    <string name="extras_ligado">مفعّل</string>
+    <string name="extras_desligado">متوقف</string>
+    <string name="extras_JANELA_OTA">تحديثات النظام ليلًا فقط (من 3 إلى 5 صباحًا)</string>
+    <string name="extras_TRAVAR_CRITICOS">حظر \"فرض الإيقاف\" و\"مسح البيانات\" للمشغّل وVPN</string>
+    <string name="extras_PIN_HOME">طلب PIN لتغيير HOME</string>
+    <string name="extras_FILTRO_NOTURNO">الفلتر الليلي (شاشة أدفأ)</string>
+    <string name="extras_COR_DO_FUNDO">لون التمييز من الخلفية (سمة المعرض)</string>
+    <string name="extras_DEBLOAT_POS_OTA">إعادة تنظيف التطبيقات بعد تحديث النظام</string>
+    <string name="extras_filtro_horario">الفلتر: من %1$s إلى %2$s، الشدة %3$d%%</string>
+    <string name="extras_filtro_inicio">بدء الفلتر</string>
+    <string name="extras_filtro_fim">نهاية الفلتر</string>
+    <string name="extras_filtro_forca">شدة الفلتر</string>
+    <string name="extras_teclas">فتح اختبار الأزرار</string>
+    <string name="extras_calibracao">فتح أنماط معايرة الصورة</string>
+    <string name="extras_acordar_pc">إيقاظ الكمبيوتر (Wake-on-LAN)</string>
+    <string name="extras_acordar_sem_mac">عنوان MAC للكمبيوتر ناقص (اللوحة أو adb)</string>
+    <string name="extras_acordar_ok">أُرسلت الحزمة</string>
+    <string name="extras_acordar_falhou">تعذّر الإرسال</string>
+    <string name="extras_ota_pendente">تحديث النظام ينتظر النافذة الزمنية</string>
+    <string name="extras_ota_nenhuma">لا يوجد تحديث نظام معلّق</string>
+    <string name="guardar_dados_titulo">بيانات المشغّل محمية</string>
+    <string name="guardar_dados_texto">مسح البيانات سيمحو الإعدادات والمنبّهات وإقران المشغّل بالتلفزيون. لم يُحذف شيء. للبدء من الصفر، استخدم النسخة الاحتياطية في اللوحة أو كمبيوتر (adb).</string>
+    <string name="dono_titulo">جعل المشغّل مالك الجهاز</string>
+    <string name="dono_texto">هذا يوقف Google لبضع ثوانٍ (يبقى الحساب ويعود وحده) ويجعل المشغّل مالك الجهاز: إخفاء التطبيقات، وتثبيت HOME، وحظر الإيقاف أو المسح. افعل ذلك حين لا يستخدم أحد التلفزيون.</string>
+    <string name="dono_usuarios">سيُزال أيضًا المستخدمون الإضافيون على التلفزيون، مع بياناتهم: %s.</string>
+    <string name="dono_ok">اجعله مالكًا</string>
+    <string name="dono_andando">جارٍ جعل المشغّل مالكًا… (حتى دقيقة)</string>
+    <string name="dono_sem_shell">الصدفة الخاصة لم تستجب. أقرنها في الإعدادات > صدفة المشغّل.</string>
+    <string name="bv_dev">تفعيل خيارات المطوّر</string>
+    <string name="bv_dev_det">في حول، انزل إلى "Android TV OS build" واضغط OK سبع مرات. ثم عد إلى هنا.</string>
+    <string name="bv_parear">إقران المشغّل بالتلفزيون</string>
+    <string name="bv_parear_det">يفتح خيارات المطوّر: فعّل "Wireless debugging" وافتح "Pair device with pairing code". يقرأ المشغّل الرمز وحده.</string>
+    <string name="bv_dono">جعل المشغّل مالك الجهاز</string>
+    <string name="bv_dono_det">يخفي التطبيقات ويثبّت HOME ويحظر الإيقاف أو المسح. يتوقف Google لبضع ثوانٍ؛ ويبقى الحساب.</string>
+    <string name="extras_DIARIO_DNS">يوميات DNS لكل تطبيق (تُحفظ على التلفزيون فقط، 7 أيام)</string>
+    <string name="extras_diario_ver">عرض يوميات DNS لليوم</string>
+    <string name="extras_diario_apagar">حذف يوميات DNS</string>
+    <string name="extras_diario_apagado">حُذفت اليوميات</string>
+</resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_nuvem.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_sub_nuvem">فيديوهات وموسيقى وصور من سحابتك</string>
+    <string name="rede_nuvem_seguir">متابعة</string>
+    <string name="rede_nuvem_entrar">تسجيل الدخول</string>
+    <string name="rede_nuvem_pedindo">جارٍ طلب رمز…</string>
+    <string name="rede_nuvem_esperando">بانتظار تأكيدك على الهاتف…</string>
+    <string name="rede_nuvem_salvando">جارٍ تسجيل الدخول…</string>
+    <string name="rede_nuvem_recusado">رفضت الخدمة. تحقق من معرّف التطبيق وحاول مجددًا.</string>
+    <string name="rede_erro_nuvem_login">انتهى إذن هذا الحساب أو أُزيل. أزل الحساب (اضغط مطولًا على OK) وسجّل الدخول مجددًا.</string>
+    <string name="rede_od_titulo">OneDrive: تطبيقك في Microsoft</string>
+    <string name="rede_od_explica">مرة واحدة، على كمبيوتر: entra.microsoft.com › App registrations › New registration. لأنواع الحسابات، اختر النوع الذي يشمل حسابات Microsoft الشخصية. ثم في Authentication، فعّل “Allow public client flows”. انسخ “Application (client) ID” واكتبه هنا (يمكنك الكتابة من هاتفك، في اللوحة).</string>
+    <string name="rede_od_id">Application (client) ID</string>
+    <string name="rede_od_id_erro">يبدو المعرّف هكذا 00000000-0000-0000-0000-000000000000.</string>
+    <string name="rede_od_codigo_explica">على هاتفك أو الكمبيوتر، افتح microsoft.com/link (أو وجّه الكاميرا إلى QR) واكتب الرمز أدناه. يطلب التلفزيون قراءة الملفات فقط.</string>
+    <string name="rede_od_erro_app">لم تقبل Microsoft هذا التطبيق. تحقق من المعرّف ومن تفعيل “Allow public client flows”.</string>
+    <string name="rede_dbx_explica">مرة واحدة، على كمبيوتر: dropbox.com/developers/apps › Create app › Scoped access › Full Dropbox. في تبويب Permissions، حدّد files.metadata.read وfiles.content.read وaccount_info.read (وfiles.content.write إن أردت النسخة الليلية في Dropbox) واحفظ (Submit). انسخ “App key” واكتبه هنا.</string>
+    <string name="rede_dbx_chave">App key</string>
+    <string name="rede_dbx_chave_erro">يحتوي App key على حروف صغيرة وأرقام فقط.</string>
+    <string name="rede_dbx_codigo_explica">وجّه كاميرا هاتفك إلى QR، وسجّل الدخول إلى Dropbox وانقر Allow. يعرض Dropbox رمزًا: اكتبه هنا (يمكنك الكتابة من هاتفك، في اللوحة).</string>
+    <string name="rede_dbx_codigo">رمز Dropbox</string>
+    <string name="rede_dbx_codigo_erro">اكتب الرمز الذي عرضه Dropbox كاملًا.</string>
+    <string name="rede_box_explica">مرة واحدة، على كمبيوتر: app.box.com/developers/console › Create New App › Custom App › User Authentication (OAuth 2.0). في تبويب Configuration، في OAuth 2.0 Redirect URI، ضع %1$s وحدد “Read all files and folders” (و“Write all files and folders” إن أردت النسخة الليلية في Box). احفظ، ثم انسخ Client ID وClient Secret إلى هنا.</string>
+    <string name="rede_box_id">Client ID</string>
+    <string name="rede_box_segredo">Client Secret</string>
+    <string name="rede_box_erro">يحتوي Client ID وClient Secret على حروف وأرقام فقط. انسخهما من تبويب Configuration.</string>
+    <string name="rede_volta_sem_rede">التلفزيون ليس على شبكة المنزل. اربطه وحاول مجددًا.</string>
+    <string name="rede_volta_explica">وجّه كاميرا هاتف على Wi‑Fi نفسها التي عليها التلفزيون إلى QR، وسجّل الدخول إلى %1$s واسمح بالوصول. يعود الهاتف إلى التلفزيون وحده: لا شيء لتكتبه.</string>
+    <string name="rede_volta_porta">المنفذ %1$d على التلفزيون مشغول. أغلق التطبيقات الأخرى وحاول مجددًا.</string>
+    <string name="rede_gd_explica">مرة واحدة، على كمبيوتر، في مشروع Google Cloud الخاص بك (console.cloud.google.com): APIs &amp; Services › Library › فعّل “Google Drive API”. في Google Auth Platform › Data Access، أضف النطاق …/auth/drive.readonly. في Clients › Create client › Web application، ضع في Authorized redirect URIs %1$s. انسخ Client ID وClient secret إلى هنا.</string>
+    <string name="rede_gd_id">Client ID (…apps.googleusercontent.com)</string>
+    <string name="rede_gd_segredo">Client secret</string>
+    <string name="rede_gd_erro">انسخهما من صفحة العميل: المعرّف ينتهي بـ.apps.googleusercontent.com والسر يبدأ عادةً بـGOCSPX-.</string>
+    <string name="rede_gd_aviso">إذا قالت Google إن التطبيق غير موثّق، انقر Advanced › Go to (إنه تطبيقك).</string>
+</resources>

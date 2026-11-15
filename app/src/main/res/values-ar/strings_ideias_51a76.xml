@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_ideias_51a76.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l51_ensaio_ok">نجح فحص الاستعادة</string>
+    <string name="l51_ensaio_falhou">النسخة المحفوظة لن تُستعاد (%1$s)</string>
+    <string name="l51_wifi_titulo">Wi-Fi الضيوف</string>
+    <string name="l51_wifi_nao">غير معيّنة: اكتبها مرة واحدة ويمسح الزوار رمز QR</string>
+    <string name="l51_wifi_dica">استخدم شبكة الضيوف في الراوتر: أي شخص في الغرفة يمكنه قراءة كلمة المرور على الشاشة.</string>
+    <string name="l51_wifi_rede">اسم الشبكة</string>
+    <string name="l51_wifi_senha">كلمة المرور</string>
+    <string name="l51_wifi_invalido">الاسم حتى 32 حرفًا؛ كلمة المرور فارغة (شبكة مفتوحة) أو من 8 إلى 63 حرفًا.</string>
+    <string name="l51_wifi_qr_titulo">عرض رمز QR لـWi-Fi الضيوف</string>
+    <string name="l51_uso_titulo">ما يُستخدم</string>
+    <string name="l51_uso_det">الشاشات والإعدادات حسب الاستخدام، تُحسب على هذا التلفزيون فقط (لا يخرج منه شيء)</string>
+    <string name="l51_uso_vazio">لم يُحسب شيء بعد. عد بعد بضعة أيام.</string>
+    <string name="l51_uso_tela">شاشة</string>
+    <string name="l51_uso_opcao">إعداد</string>
+    <string name="l51_uso_linha">%1$s (%2$s): %3$s، %4$s</string>
+    <string name="l51_uso_hoje">آخرها اليوم</string>
+    <string name="l51_uso_ontem">آخرها أمس</string>
+    <string name="l51_uso_dias">آخرها منذ %d يومًا</string>
+    <string name="l51_tela_Main">الشاشة الرئيسية</string>
+    <string name="l51_tela_Dream">شاشة التوقف</string>
+    <string name="l51_tela_Filmes">أفلام</string>
+    <string name="l51_tela_Series">برامج</string>
+    <string name="l51_tela_Jogos">ألعاب</string>
+    <string name="l51_tela_Player">التلفزيون المباشر والفيديوهات</string>
+    <string name="l51_tela_PainelRapido">اللوحة السريعة</string>
+    <string name="l51_tela_Vod">كتالوج قائمة التشغيل</string>
+    <string name="l51_tela_Previsao">توقعات الطقس</string>
+    <string name="l51_tela_Elenco">طاقم التمثيل</string>
+    <string name="l51_tela_ConfigLauncher">الإعدادات</string>
+    <string name="l51_tela_MidiaRede">على الشبكة</string>
+    <string name="l51_tela_Calendario">التقويم</string>
+    <string name="l51_tela_Gravacoes">التسجيلات</string>
+    <string name="l51_tela_Busca">البحث</string>
+    <string name="l51_tela_Casa">منزلي</string>
+    <string name="l51_tela_AlarmeTocando">المنبّه يرن</string>
+    <string name="l51_tela_Radio">الراديو</string>
+    <string name="l51_tela_Diagnostico">التشخيص</string>
+    <string name="l51_uso_zerar">إعادة تعيين</string>
+    <string name="l51_digitar_titulo">اكتب على التلفزيون</string>
+    <string name="l51_digitar_texto">مربع نص مفتوح في %1$s. انقر للكتابة من هنا.</string>
+    <string name="casa_temp_ajuste">%1$s · ◀ ▶</string>
+    <string name="casa_ambiente">الغرفة %1$s</string>
+    <string name="casa_movimento">حركة</string>
+    <string name="casa_sem_movimento">لا حركة</string>
+    <string name="casa_molhado">رطب</string>
+    <string name="casa_seco">جاف</string>
+    <string name="casa_fumaca">دخان!</string>
+    <string name="casa_sem_fumaca">لا دخان</string>
+    <string name="casa_dica_temp">الحرارة</string>
+    <string name="casa_camera_abrindo">جارٍ فتح الكاميرا…</string>
+    <string name="casa_camera_ver">اعرض على التلفزيون</string>
+    <plurals name="l51_uso_vezes">
+        <item quantity="zero">%d مرة</item>
+        <item quantity="one">مرة واحدة</item>
+        <item quantity="two">مرتان</item>
+        <item quantity="few">%d مرات</item>
+        <item quantity="many">%d مرة</item>
+        <item quantity="other">%d مرة</item>
+    </plurals>
+</resources>

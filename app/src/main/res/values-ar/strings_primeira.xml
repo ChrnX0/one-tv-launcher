@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_primeira.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pc_titulo">الإعداد بهاتفك</string>
+    <string name="pc_linha_det">موصى به. وجّه كاميرا الهاتف إلى رمز: PIN، اللغة، التلفزيون المباشر، المدينة وخدمات الأفلام، في 5 خطوات.</string>
+    <string name="pc_instrucoes">وجّه كاميرا الهاتف إلى الرمز المجاور. يفتح الهاتف إعدادًا من 5 خطوات.\n\nيجب أن يكون الهاتف على Wi-Fi المنزل. أبقِ هذه الشاشة مفتوحة حتى تنشئ PIN على الهاتف (متبقٍ %1$s).</string>
+    <string name="pc_entrou">تابع على الهاتف.</string>
+    <string name="pc_venceu">انتهت صلاحية الرمز.\nاضغط \"%1$s\" لعرض رمز جديد.</string>
+    <string name="pc_sem_rede">التلفزيون ليس على شبكة.\nاربطه بـWi-Fi المنزل وحاول مجددًا.</string>
+</resources>

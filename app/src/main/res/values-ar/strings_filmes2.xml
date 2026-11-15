@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_filmes2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="filmes_filtro">تصفية</string>
+    <string name="filmes_filtro_titulo">تصفية الأفلام</string>
+    <string name="filmes_filtro_cabecalho">%1$s · تصفية: %2$s</string>
+    <string name="filmes_filtro_genero">النوع: %1$s</string>
+    <string name="filmes_filtro_epoca">الفترة: %1$s</string>
+    <string name="filmes_filtro_nota">الحد الأدنى للتقييم: %1$s</string>
+    <string name="filmes_filtro_nao_vistos">غير المُشاهَد فقط: %1$s</string>
+    <string name="filmes_filtro_limpar">مسح التصفية</string>
+    <string name="filmes_filtro_qualquer">الكل</string>
+    <string name="filmes_filtro_sim">نعم</string>
+    <string name="filmes_filtro_nao">لا</string>
+    <string name="filmes_filtro_decada">الـ%1$d</string>
+    <string name="filmes_filtro_nota_min">%1$d+</string>
+    <string name="filmes_filtro_nao_vistos_curto">غير مُشاهَد</string>
+    <string name="filmes_filtro_sem_genero">لا توجد فئة في هذه القائمة تذكر نوعًا</string>
+    <string name="filmes_filtro_vazio">لا فيلم يطابق هذه التصفية في هذه الفئة</string>
+    <string name="filmes_sorteio">فاجئني</string>
+    <string name="filmes_sorteio_vazio">لا يوجد فيلم للاختيار هنا</string>
+    <string name="filmes_colecao">مجموعة هذا الفيلم</string>
+    <string name="filmes_colecao_cat">المجموعة: %1$s</string>
+    <string name="genero_acao">أكشن</string>
+    <string name="genero_aventura">مغامرة</string>
+    <string name="genero_comedia">كوميديا</string>
+    <string name="genero_drama">دراما</string>
+    <string name="genero_terror">رعب</string>
+    <string name="genero_suspense">إثارة</string>
+    <string name="genero_romance">رومانسي</string>
+    <string name="genero_ficcao">خيال علمي</string>
+    <string name="genero_fantasia">فانتازيا</string>
+    <string name="genero_animacao">رسوم متحركة</string>
+    <string name="genero_infantil">أطفال وعائلة</string>
+    <string name="genero_documentario">وثائقي</string>
+    <string name="genero_crime">جريمة</string>
+    <string name="genero_guerra">حرب</string>
+    <string name="genero_faroeste">غرب أمريكي</string>
+    <string name="genero_musical">موسيقي</string>
+</resources>

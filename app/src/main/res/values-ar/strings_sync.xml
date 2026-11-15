@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_sync.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="sync_sub">تم تسجيل الدخول باسم %1$s. ما يبقيه التلفزيون متزامنًا مع هاتفك.</string>
+    <string name="sync_sub_mdblist">تم تسجيل الدخول باسم %1$s. يمكن أن تظهر قوائم MDBList الخاصة بك في الكتالوج.</string>
+    <string name="sync_ultima">آخر مزامنة: %1$s</string>
+    <string name="sync_nunca">لم تتم المزامنة بعد</string>
+    <string name="sync_interesses">الاهتمامات ⇄ Watchlist</string>
+    <string name="sync_interesses_simkl">الاهتمامات ⇄ Plan to watch</string>
+    <string name="sync_interesses_det">ما تحدده هنا يظهر هناك، والعكس</string>
+    <string name="sync_assistidos">ما شوهد ← السجل</string>
+    <string name="sync_assistidos_det">يجلب ما شاهدته بالفعل على الهاتف أو في مكان آخر</string>
+    <string name="sync_continuar">المتابعة ⇄ حيث توقفت</string>
+    <string name="sync_continuar_det">توقف على الهاتف، وتابع على التلفزيون من النقطة نفسها</string>
+    <string name="sync_contar">أخبر %1$s بما أشاهده هنا</string>
+    <string name="sync_contar_det">يرسل “أشاهد الآن” و“شوهد” أثناء التشغيل. لا يحدث أبدًا في وضع الضيوف أو في ملف طفل.</string>
+    <string name="sync_listas">قوائم في الكتالوج</string>
+    <string name="sync_listas_nenhuma">لم يُختر شيء</string>
+    <string name="sync_listas_n">اختيرت %1$d: %2$s</string>
+    <string name="sync_listas_sub">تظهر في القوائم، تحت الكل، بالعناوين الموجودة في قائمتك فقط. حتى %1$d.</string>
+    <string name="sync_listas_carregando">جارٍ تحميل قوائمك…</string>
+    <string name="sync_listas_vazio">لم يُعثر على قوائم. أنشئ قائمة أو أعجب بها في Trakt أو MDBList وعد إلى هنا.</string>
+    <string name="sync_listas_cheio">حتى %1$d قائمة</string>
+    <string name="sync_lista_itens">%1$d عنوان</string>
+    <string name="sync_agora">مزامنة الآن</string>
+    <string name="sync_agora_det">تحدث أيضًا وحدها عند فتح الأفلام أو المسلسلات</string>
+    <string name="sync_rodando">جارٍ المزامنة…</string>
+    <string name="sync_feito">تمت المزامنة</string>
+    <string name="sync_sair">تسجيل الخروج من %1$s</string>
+    <string name="sync_bloqueado">متوقف مؤقتًا: وضع الضيوف أو ملف طفل مفعّل.</string>
+    <string name="sync_outro_perfil">متوقف مؤقتًا: المزامنة تخص ملفًا شخصيًا آخر.</string>
+    <string name="sync_trakt_cheia">قائمتك في Trakt ممتلئة (الحسابات المجانية تتسع لـ100). يواصل المشغّل على التلفزيون فقط.</string>
+    <string name="sync_ligado">مفعّل</string>
+    <string name="sync_desligado">متوقف</string>
+    <string name="sync_fonte_trakt">بيانات من Trakt (trakt.tv)</string>
+    <string name="sync_fonte_simkl">بيانات من Simkl (simkl.com)</string>
+    <string name="sync_n_de">%1$d من %2$d في قائمتك</string>
+    <string name="sync_continuando">المتابعة من حيث توقفت على الجهاز الآخر</string>
+</resources>
