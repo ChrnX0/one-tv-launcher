@@ -35,6 +35,7 @@ public class Teste {
 
     avi(new File(pasta, "pegasus-1958-chiptune.avi"));
     capitulos(new File(pasta, "asf_with_chapters.wmv"));
+    wma(new File(pasta, "asf_with_chapters.wmv"));
     ac3(new File(pasta, "Canyon-5.1-48khz-448kbit.ac3"));
     ass(new File(a[2]));
     System.out.println(falhas == 0 ? "\nTUDO OK" : "\n" + falhas + " FALHA(S)");
@@ -71,7 +72,7 @@ public class Teste {
     long dv = FfNativo.videoAbrir(FfNativo.arquivoFaixaCodec(ctx, fv), FfNativo.arquivoFaixaExtra(ctx, fv), (int) infoV[1], (int) infoV[2], 4);
     String codecA = FfNativo.arquivoFaixaCodec(ctx, fa);
     long[] infoA = FfNativo.arquivoFaixaInfo(ctx, fa);
-    long da = FfNativo.audioAbrir(codecA, FfNativo.arquivoFaixaExtra(ctx, fa), (int) infoA[3], (int) infoA[4], false);
+    long da = FfNativo.audioAbrir(codecA, FfNativo.arquivoFaixaExtra(ctx, fa), (int) infoA[3], (int) infoA[4], false, (int) infoA[9], (int) infoA[7], (int) infoA[8]);
     conferir(dv != 0 && da != 0, "abre decodificadores de vídeo e áudio");
     int quadros = 0, pacotesV = 0, bytesPcm = 0;
     long ultimo = Long.MIN_VALUE; boolean ordem = true;
@@ -134,11 +135,38 @@ public class Teste {
     FfNativo.arquivoFechar(ctx);
   }
 
+  // Visto na Sala (15/11): o WMA não abria sem o tamanho do bloco e a taxa do contêiner.
+  static void wma(File f) throws Exception {
+    System.out.println("\n== WMA (bloco do contêiner) " + f.getName());
+    long ctx = FfNativo.arquivoAbrir(new Arquivo(f), true);
+    int fa = -1;
+    for (int i = 0; i < FfNativo.arquivoFaixas(ctx); i++) if (FfNativo.arquivoFaixaInfo(ctx, i)[0] == 1) { fa = i; break; }
+    long[] info = FfNativo.arquivoFaixaInfo(ctx, fa);
+    String codec = FfNativo.arquivoFaixaCodec(ctx, fa);
+    long d = FfNativo.audioAbrir(codec, FfNativo.arquivoFaixaExtra(ctx, fa), (int) info[3], (int) info[4], false, (int) info[9], (int) info[7], (int) info[8]);
+    conferir(d != 0, "abre " + codec + " (bloco " + info[9] + ", " + info[7] + " b/s)");
+    ByteBuffer ent = ByteBuffer.allocateDirect(1 << 16);
+    byte[] pac = new byte[1 << 16];
+    int total = 0;
+    for (int k = 0; k < 200 && d != 0; k++) {
+      int t = FfNativo.arquivoLerPacote(ctx);
+      if (t < 0) break;
+      if (FfNativo.arquivoPacoteFaixa(ctx) != fa) continue;
+      FfNativo.arquivoPacoteCopiar(ctx, pac);
+      ent.clear(); ent.put(pac, 0, t); ent.flip();
+      int r = FfNativo.audioDecodificar(d, ent, t);
+      if (r > 0) { ByteBuffer s = ByteBuffer.allocateDirect(r); FfNativo.audioCopiar(d, s); total += r; }
+    }
+    conferir(total > 0, "sai som: " + total + " bytes");
+    if (d != 0) FfNativo.audioFechar(d);
+    FfNativo.arquivoFechar(ctx);
+  }
+
   static void ac3(File f) throws Exception {
     System.out.println("\n== Dolby AC-3 5.1 " + f.getName());
     long ctx = FfNativo.arquivoAbrir(new Arquivo(f), true);
     conferir(ctx != 0 && "ac3".equals(FfNativo.arquivoFaixaCodec(ctx, 0)), "abre e acha ac3");
-    long d = FfNativo.audioAbrir("ac3", null, 0, 0, false);
+    long d = FfNativo.audioAbrir("ac3", null, 0, 0, false, 0, 0, 0);
     ByteBuffer ent = ByteBuffer.allocateDirect(1 << 16);
     byte[] pac = new byte[1 << 16];
     int total = 0;

@@ -73,10 +73,23 @@ object FfCodecs {
             "audio/alac" -> alac(dados[0])
             "audio/flac" -> dados.firstNotNullOfOrNull { flacInfo(it) }
             "video/avc", "video/hevc" -> anexoB(dados)
-            MIME_AUDIO_FF, MIME_VIDEO_FF -> dados[0]
+            MIME_AUDIO_FF, MIME_VIDEO_FF -> dados[0].takeIf { it.isNotEmpty() }
             else -> dados[0]
         }
     }
+
+    /**
+     * Áudio do FfExtrator: o 2º bloco de [dados] leva o que o Format do Media3 não tem campo para levar (tamanho do
+     * bloco e bits por amostra do contêiner, que WMA, cook e ADPCM exigem). [empacotarAudio] faz, este lê. [bloco, bits].
+     */
+    fun parametrosAudio(mime: String?, dados: List<ByteArray>): IntArray {
+        val p = dados.getOrNull(1)
+        if (mime != MIME_AUDIO_FF || p == null || p.size != 8) return IntArray(2)
+        val b = java.nio.ByteBuffer.wrap(p)
+        return intArrayOf(b.int, b.int)
+    }
+
+    fun empacotarAudio(bloco: Int, bits: Int): ByteArray = java.nio.ByteBuffer.allocate(8).putInt(bloco).putInt(bits).array()
 
     private fun vorbis(h0: ByteArray, h1: ByteArray): ByteArray {
         val r = ByteArray(h0.size + h1.size + 6)
