@@ -15,6 +15,9 @@
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
         <item>Tela inicial: numa pilha de apps, ▲ agora sobe de fileira como em qualquer card; quem troca o app da frente é o ▼</item>
+        <item>Protetor de tela: “Sua semana na TV” agora conta o tempo na TV ao vivo, nos filmes e nas rádios do próprio launcher (antes dizia “0 min de TV”)</item>
+        <item>Uma tela pedida por cena, pelo painel ou pelo Claude com o protetor de tela aberto agora aparece na frente (antes abria escondida atrás dele)</item>
+        <item>Configurações › Sistema › O que é usado: nomes das telas como você conhece, “1 vez” e “hoje/ontem”</item>
         <item>Ficha de filme e de série refeita para ler de longe: ações grandes à esquerda (Continuar, Trailer, Elenco, Coleção…), informações e pôster à direita; nada pula de lugar quando os dados chegam, e “Sinopse inteira” abre o texto todo</item>
         <item>Trailer: quando o servidor não tem, a ficha usa o trailer do TMDB (YouTube); o título dos episódios não repete mais o ano</item>
         <item>Gravação: com um pendrive que a TV não lê (NTFS, como o do instalador do Windows) ou cheio, a TV agora diz o motivo na hora, em vez de parecer que gravou; com 2 partes no pendrive, grava na que tem mais espaço</item>

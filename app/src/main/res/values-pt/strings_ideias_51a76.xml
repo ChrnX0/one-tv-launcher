@@ -18,7 +18,30 @@
     <string name="l51_uso_vazio">Nada contado ainda. Volte daqui a alguns dias.</string>
     <string name="l51_uso_tela">tela</string>
     <string name="l51_uso_opcao">opção</string>
-    <string name="l51_uso_linha">%1$s (%2$s): %3$d vezes, última há %4$d dias</string>
+    <string name="l51_uso_linha">%1$s (%2$s): %3$s, %4$s</string>
+    <plurals name="l51_uso_vezes"><item quantity="one">%d vez</item><item quantity="other">%d vezes</item></plurals>
+    <string name="l51_uso_hoje">última hoje</string>
+    <string name="l51_uso_ontem">última ontem</string>
+    <string name="l51_uso_dias">última há %d dias</string>
+    <string name="l51_tela_Main">Tela inicial</string>
+    <string name="l51_tela_Dream">Protetor de tela</string>
+    <string name="l51_tela_Filmes">Filmes</string>
+    <string name="l51_tela_Series">Séries</string>
+    <string name="l51_tela_Jogos">Jogos</string>
+    <string name="l51_tela_Player">TV ao vivo e vídeos</string>
+    <string name="l51_tela_PainelRapido">Painel rápido</string>
+    <string name="l51_tela_Vod">Catálogo da lista</string>
+    <string name="l51_tela_Previsao">Previsão do tempo</string>
+    <string name="l51_tela_Elenco">Elenco</string>
+    <string name="l51_tela_ConfigLauncher">Configurações</string>
+    <string name="l51_tela_MidiaRede">Na rede</string>
+    <string name="l51_tela_Calendario">Agenda</string>
+    <string name="l51_tela_Gravacoes">Gravações</string>
+    <string name="l51_tela_Busca">Buscar</string>
+    <string name="l51_tela_Casa">Minha casa</string>
+    <string name="l51_tela_AlarmeTocando">Despertador tocando</string>
+    <string name="l51_tela_Radio">Rádios</string>
+    <string name="l51_tela_Diagnostico">Diagnóstico</string>
     <string name="l51_uso_zerar">Zerar</string>
     <!-- 57: teclado do celular chamado pela TV -->
     <string name="l51_digitar_titulo">Digitar na TV</string>
