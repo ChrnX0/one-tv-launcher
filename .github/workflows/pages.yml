@@ -15,6 +15,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   publicar:
+    # Com o código fechado (REPO_PUBLICO definido), o site é publicado pelo repo público (workflow "Repo publico").
+    if: vars.REPO_PUBLICO == ''
     runs-on: ubuntu-latest
     environment:
       name: github-pages
