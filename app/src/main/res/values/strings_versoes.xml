@@ -122,6 +122,7 @@
         <item>Movies and series at their own frame rate: the TV switches to 24 Hz and the picture does not judder in camera moves (Settings › TV and movies, ▼ menu and panel)</item>
         <item>On the network: Box and Google Drive as sources too (you create the app at the service once; to sign in, a phone on the same Wi‑Fi scans the QR and comes back to the TV by itself)</item>
         <item>Nightly backup: the extra copy can also go to the OneDrive, Dropbox or Box account added in Network (OneTV-backup folder, the last 7 are kept)</item>
+        <item>Guide: OK on a show that has not started has “Remind me” and “Switch on its own when it starts” (the TV changes to the channel; 10 s to cancel)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>servicos_trakt</item>
@@ -221,6 +222,7 @@
         <item>taxa_quadros</item>
         <item>nuvem_box</item>
         <item>backup_nuvem</item>
+        <item>troca_sozinha</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Settings › TV and movies › Movie and series services › Trakt › OK</item>
@@ -320,6 +322,7 @@
         <item>Open a movie and watch a scene where the camera pans slowly</item>
         <item>In Network › Box (then Google Drive), follow the steps on a computer and point a phone (on the home Wi‑Fi) at the QR</item>
         <item>In Settings › System › Automatic backup, press OK on Extra copy until the cloud account shows up, then Back up now</item>
+        <item>In the guide, OK on a show starting in a few minutes › Switch on its own; wait with the TV on another channel</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Did the code and QR show up, the phone approve it and the TV show the account connected?</item>
@@ -419,5 +422,6 @@
         <item>Did the screen blink black at the start, and was the motion smooth, without stutter?</item>
         <item>After allowing access, did the phone say “Done” and the Box (and Drive) folder open on the TV, with a video playing?</item>
         <item>Did the screen say “ok: TV + OneDrive/Dropbox/Box”, and did the file show up in the cloud\'s OneTV-backup folder?</item>
+        <item>At the start time, did the countdown show and the TV change to the channel?</item>
     </string-array>
 </resources>

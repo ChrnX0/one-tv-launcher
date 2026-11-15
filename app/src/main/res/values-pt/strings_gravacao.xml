@@ -31,8 +31,6 @@
     <string name="grv_parar_ate">Parar gravação (até %1$s)</string>
     <string name="grv_comecando">Começando a gravar…</string>
     <string name="grv_nao_comecou">A gravação não começou. Confira o pendrive ou a pasta da rede.</string>
-    <string name="grv_lembrar">Lembrar</string>
-    <string name="grv_nao_lembrar">Não lembrar</string>
     <string name="grv_agendar">Gravar (%1$s – %2$s)</string>
     <string name="grv_agendar_semana">Gravar toda semana</string>
     <string name="grv_cancelar_agendada">Cancelar gravação</string>
@@ -67,4 +65,12 @@
     <string name="grv_dica_assistir">assistir</string>
     <string name="grv_dica_segurar">segurar OK</string>
     <string name="grv_dica_apagar">apagar</string>
+    <string name="lb_me_avise">Me avise</string>
+    <string name="lb_trocar_sozinho">Troque sozinho na hora</string>
+    <string name="lb_troca_sobre">Trocando de canal</string>
+    <string name="lb_troca_em">Começa agora no %1$s</string>
+    <string name="lb_trocar_agora">Trocar agora (%1$d)</string>
+    <string name="lb_nao_trocar">Não trocar</string>
+    <string name="lb_troca_marcada">Vai trocar sozinho</string>
+    <string name="lb_troca_marcada_det">Para %1$s às %2$s (se a TV estiver ligada)</string>
 </resources>

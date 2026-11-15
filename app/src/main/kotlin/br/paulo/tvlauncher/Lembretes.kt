@@ -25,8 +25,12 @@ object Lembretes {
         val palavra: String = "",
         /** Já avisou (o aviso não se repete). */
         val avisado: Boolean = false,
+        /** "Troque sozinho na hora" (ideia 85, 14/11/2026): na hora do início a TV muda para o canal (10 s para desistir). */
+        val trocar: Boolean = false,
     ) {
         val manual: Boolean get() = palavra.isEmpty()
+        /** Quando avisar: 2 min antes ("Me avise"), ou no início (troca sozinha). */
+        val momento: Long get() = if (trocar) inicio else inicio - ANTECEDENCIA_MS
         val chave: String get() = "$canalId|$inicio"
     }
 
@@ -61,6 +65,24 @@ object Lembretes {
         if (existe) return lista.filterNot { it.chave == novo.chave } to false
         return (lista + novo.copy(palavra = "", avisado = false)).sortedBy { it.inicio }.takeLast(MAX) to true
     }
+
+    /**
+     * Guia (ideia 85): define o jeito de um programa marcado à mão: [MODO_NADA] tira, [MODO_AVISAR] = "Me avise",
+     * [MODO_TROCAR] = "Troque sozinho na hora". Trocar o jeito volta a avisar (avisado = false).
+     */
+    fun definir(lista: List<Lembrete>, novo: Lembrete, modo: Int): List<Lembrete> {
+        val sem = lista.filterNot { it.chave == novo.chave }
+        if (modo == MODO_NADA) return sem
+        return (sem + novo.copy(palavra = "", avisado = false, trocar = modo == MODO_TROCAR)).sortedBy { it.inicio }.takeLast(MAX)
+    }
+
+    /** O jeito marcado de um programa (para o ✓ do menu do guia). */
+    fun modo(lista: List<Lembrete>, chave: String): Int =
+        lista.firstOrNull { it.chave == chave }?.let { if (it.trocar) MODO_TROCAR else MODO_AVISAR } ?: MODO_NADA
+
+    const val MODO_NADA = 0
+    const val MODO_AVISAR = 1
+    const val MODO_TROCAR = 2
 
     /** Marcado? (para desenhar o sininho no guia) */
     fun marcados(lista: List<Lembrete>): Set<String> = lista.mapTo(HashSet()) { it.chave }
@@ -101,18 +123,18 @@ object Lembretes {
 
     /** Os que devem avisar agora: não avisados, cujo instante de aviso já chegou, e que ainda não acabaram. */
     fun devidos(lista: List<Lembrete>, agora: Long): List<Lembrete> =
-        lista.filter { !it.avisado && it.inicio - ANTECEDENCIA_MS <= agora + 5_000L && it.fim > agora }
+        lista.filter { !it.avisado && it.momento <= agora + 5_000L && it.fim > agora }
 
     /** Quando acordar para o próximo aviso (ms), ou null se não há nenhum por avisar. */
     fun proximoAviso(lista: List<Lembrete>, agora: Long): Long? =
-        lista.filter { !it.avisado && it.fim > agora }.minOfOrNull { maxOf(it.inicio - ANTECEDENCIA_MS, agora + 1_000L) }
+        lista.filter { !it.avisado && it.fim > agora }.minOfOrNull { maxOf(it.momento, agora + 1_000L) }
 
     fun marcarAvisados(lista: List<Lembrete>, chaves: Set<String>): List<Lembrete> =
         lista.map { if (it.chave in chaves) it.copy(avisado = true) else it }
 
     fun paraJson(lista: List<Lembrete>): String = JSONArray().apply {
         for (l in lista) put(JSONObject().put("canal", l.canalId).put("nome", l.canalNome).put("titulo", l.titulo)
-            .put("inicio", l.inicio).put("fim", l.fim).put("palavra", l.palavra).put("avisado", l.avisado))
+            .put("inicio", l.inicio).put("fim", l.fim).put("palavra", l.palavra).put("avisado", l.avisado).put("trocar", l.trocar))
     }.toString()
 
     /** Lê o JSON salvo; item estragado sai sozinho, texto inválido vira lista vazia. */
@@ -124,7 +146,7 @@ object Lembretes {
             val canal = o.optString("canal"); val titulo = o.optString("titulo")
             val inicio = o.optLong("inicio"); val fim = o.optLong("fim")
             if (canal.isEmpty() || titulo.isEmpty() || inicio <= 0 || fim <= inicio) continue
-            saida += Lembrete(canal, o.optString("nome"), titulo, inicio, fim, o.optString("palavra"), o.optBoolean("avisado"))
+            saida += Lembrete(canal, o.optString("nome"), titulo, inicio, fim, o.optString("palavra"), o.optBoolean("avisado"), o.optBoolean("trocar"))
         }
         return saida.sortedBy { it.inicio }
     }

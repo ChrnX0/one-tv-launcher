@@ -31,8 +31,6 @@
     <string name="grv_parar_ate">Stop recording (until %1$s)</string>
     <string name="grv_comecando">Starting to record…</string>
     <string name="grv_nao_comecou">The recording did not start. Check the USB drive or the network folder.</string>
-    <string name="grv_lembrar">Remind me</string>
-    <string name="grv_nao_lembrar">Don\'t remind me</string>
     <string name="grv_agendar">Record (%1$s – %2$s)</string>
     <string name="grv_agendar_semana">Record every week</string>
     <string name="grv_cancelar_agendada">Cancel recording</string>
@@ -67,4 +65,12 @@
     <string name="grv_dica_assistir">watch</string>
     <string name="grv_dica_segurar">hold OK</string>
     <string name="grv_dica_apagar">delete</string>
+    <string name="lb_me_avise">Remind me</string>
+    <string name="lb_trocar_sozinho">Switch on its own when it starts</string>
+    <string name="lb_troca_sobre">Switching channel</string>
+    <string name="lb_troca_em">Starting now on %1$s</string>
+    <string name="lb_trocar_agora">Switch now (%1$d)</string>
+    <string name="lb_nao_trocar">Don\'t switch</string>
+    <string name="lb_troca_marcada">Will switch on its own</string>
+    <string name="lb_troca_marcada_det">To %1$s at %2$s (if the TV is on)</string>
 </resources>

@@ -119,6 +119,7 @@
         <item>Filmes e séries na taxa de quadros deles: a TV troca para 24 Hz e a imagem não treme em movimentos de câmera (Configurações › TV e filmes, menu ▼ e painel)</item>
         <item>Na rede: Box e Google Drive também como fonte (você cria o app no serviço uma vez; para entrar, o celular no mesmo Wi‑Fi aponta para o QR e volta sozinho para a TV)</item>
         <item>Backup noturno: a cópia extra também pode ir para o OneDrive, o Dropbox ou o Box cadastrados em Na rede (pasta OneTV-backup, ficam as 7 últimas)</item>
+        <item>Guia: OK num programa que vai começar tem “Me avise” e “Troque sozinho na hora” (na hora, a TV muda para o canal; 10 s para desistir)</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Configurações › TV e filmes › Serviços de filmes e séries › Trakt › OK</item>
@@ -218,6 +219,7 @@
         <item>Abra um filme e repare numa cena com a câmera andando devagar</item>
         <item>Em Na rede › Box (e depois Google Drive), siga os passos no computador e aponte o celular (no Wi‑Fi de casa) para o QR</item>
         <item>Em Configurações › Sistema › Backup automático, OK em Cópia extra até aparecer a conta da nuvem e depois Fazer agora</item>
+        <item>Na grade, OK num programa que começa em poucos minutos › Troque sozinho na hora; espere com a TV ligada em outro canal</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Apareceram o código e o QR, o celular aprovou e a TV mostrou a conta conectada?</item>
@@ -317,5 +319,6 @@
         <item>A tela piscou preta no começo e o movimento ficou liso, sem trancos?</item>
         <item>Depois de permitir, o celular disse “Pronto” e a pasta do Box (e a do Drive) abriu na TV com um vídeo tocando?</item>
         <item>A tela disse “ok: TV + OneDrive/Dropbox/Box” e o arquivo apareceu na pasta OneTV-backup da nuvem?</item>
+        <item>Na hora, apareceu a contagem e a TV mudou para o canal?</item>
     </string-array>
 </resources>

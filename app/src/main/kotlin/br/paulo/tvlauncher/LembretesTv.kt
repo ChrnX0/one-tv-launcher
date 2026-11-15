@@ -87,6 +87,16 @@ object LembretesTv {
         return marcou
     }
 
+    /**
+     * Guia (ideia 85): "Me avise" ([Lembretes.MODO_AVISAR]), "Troque sozinho na hora" ([Lembretes.MODO_TROCAR]) ou
+     * nada. FORA da thread da tela (disco).
+     */
+    fun definir(ctx: Context, canal: Canal, p: Programa, modo: Int) {
+        editar(ctx) { l -> Lembretes.definir(Lembretes.limpar(l, System.currentTimeMillis()),
+            Lembretes.Lembrete(canal.id, canal.nome, p.titulo, p.inicio, p.fim), modo) }
+        agendar(ctx)
+    }
+
     /** Apaga um lembrete (painel, MCP). */
     fun apagar(ctx: Context, chave: String): Boolean {
         var achou = false
@@ -168,12 +178,14 @@ object LembretesTv {
             val acesa = app.getSystemService(PowerManager::class.java)?.isInteractive != false
             // Dois ao mesmo tempo (raro): mostra o que começa primeiro; o outro vira aviso curto.
             val primeiro = devidos.minByOrNull { it.inicio }!!
-            if (acesa || primeiro.manual) abrirPergunta(app, primeiro, acordar = !acesa)
+            // "Troque sozinho na hora" só troca com a tela acesa: não liga a TV de ninguém para mudar de canal.
+            if (primeiro.trocar && !acesa) Log.i(TAG, "tela apagada: não troquei para ${primeiro.canalNome}")
+            else if (acesa || primeiro.manual) abrirPergunta(app, primeiro, acordar = !acesa)
             else Log.i(TAG, "tela apagada: ${primeiro.titulo} (automático) não acorda a TV")
             devidos.filter { it !== primeiro }.forEach {
                 if (acesa) AvisoTv.rapido(app, txt(R.string.lb_comeca_as, hora(it.inicio)), "${it.titulo} · ${it.canalNome}", 12)
             }
-            Avisos.enviar(app, Avisos.Tipo.LEMBRETE, txt(R.string.lb_comeca_as, hora(primeiro.inicio)), "${primeiro.titulo} · ${primeiro.canalNome}")
+            if (!primeiro.trocar) Avisos.enviar(app, Avisos.Tipo.LEMBRETE, txt(R.string.lb_comeca_as, hora(primeiro.inicio)), "${primeiro.titulo} · ${primeiro.canalNome}")
         }
         agendar(app)
     }
@@ -183,7 +195,7 @@ object LembretesTv {
             app.startActivity(Intent(app, LembreteActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra("canal", l.canalId).putExtra("nome", l.canalNome).putExtra("titulo", l.titulo)
-                .putExtra("inicio", l.inicio).putExtra("acordar", acordar))
+                .putExtra("inicio", l.inicio).putExtra("acordar", acordar).putExtra("trocar", l.trocar))
         } catch (e: Exception) {
             Log.w(TAG, "não abri a pergunta: $e")
             AvisoTv.rapido(app, txt(R.string.lb_comeca_as, hora(l.inicio)), "${l.titulo} · ${l.canalNome}", 15)
@@ -253,11 +265,39 @@ class LembreteActivity : Activity() {
                 finish()
             }
         }
+        if (intent.getBooleanExtra("trocar", false)) { montarTroca(canal, nome, titulo); return }
         val fechar = Estilo.botao(this, getString(R.string.lb_agora_nao), primario = false).apply { setOnClickListener { finish() } }
         val quando = if (inicio <= System.currentTimeMillis()) getString(R.string.lb_comecou) else getString(R.string.lb_comeca_as, LembretesTv.hora(inicio))
         setContentView(Estilo.dialogo(this, getString(R.string.lb_lembrete), titulo, getString(R.string.lb_quando_em, quando, nome), listOf(fechar, assistir)))
         assistir.requestFocus()
         ui.postDelayed({ if (!isFinishing) finish() }, 90_000L)
+    }
+
+    /**
+     * "Troque sozinho na hora" (ideia 85): conta 10 s e muda para o canal. O foco começa em "Não trocar": OK ou VOLTAR
+     * desistem; "Trocar agora" não espera.
+     */
+    private fun montarTroca(canal: String, nome: String, titulo: String) {
+        var falta = 10
+        fun trocar() {
+            if (isFinishing) return
+            CanalTv.tocar(applicationContext, ComandosIa.Acao.TocarCanal(nome, canalId = canal, nomeCanal = nome))
+            finish()
+        }
+        val agora = Estilo.botao(this, getString(R.string.lb_trocar_agora, falta)).apply { setOnClickListener { trocar() } }
+        val nao = Estilo.botao(this, getString(R.string.lb_nao_trocar), primario = false).apply { setOnClickListener { finish() } }
+        setContentView(Estilo.dialogo(this, getString(R.string.lb_troca_sobre), titulo, getString(R.string.lb_troca_em, nome), listOf(nao, agora)))
+        nao.requestFocus()
+        val tique = object : Runnable {
+            override fun run() {
+                if (isFinishing) return
+                falta--
+                if (falta <= 0) { trocar(); return }
+                agora.text = getString(R.string.lb_trocar_agora, falta)
+                ui.postDelayed(this, 1_000)
+            }
+        }
+        ui.postDelayed(tique, 1_000)
     }
 
     override fun onDestroy() { super.onDestroy(); ui.removeCallbacksAndMessages(null) }
