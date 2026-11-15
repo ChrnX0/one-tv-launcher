@@ -860,7 +860,7 @@ class PainelRapidoActivity : Activity() {
         val textos = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             addView(Estilo.texto(this@PainelRapidoActivity, Estilo.Papel.LEGENDA, "${a.app} · $quando").apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END })
-            addView(Estilo.texto(this@PainelRapidoActivity, Estilo.Papel.CORPO, a.titulo).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END })
+            addView(Estilo.texto(this@PainelRapidoActivity, Estilo.Papel.CORPO, a.titulo).apply { maxLines = 2; ellipsize = TextUtils.TruncateAt.END })
             if (a.texto.isNotBlank()) addView(Estilo.texto(this@PainelRapidoActivity, Estilo.Papel.LEGENDA, a.texto).apply { maxLines = 2; ellipsize = TextUtils.TruncateAt.END })
         }
         val cartao = LinearLayout(this).apply {
