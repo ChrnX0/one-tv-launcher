@@ -37,6 +37,8 @@ class FfAudioDecodificador(formato: Format, tamanhoEntrada: Int, private val pcm
     private val extra = FfCodecs.extra(formato.sampleMimeType, formato.initializationData)
     private val taxaDeclarada = formato.sampleRate
     private val canaisDeclarados = formato.channelCount
+    private val bitrate = maxOf(formato.averageBitrate, 0)
+    private val contener = FfCodecs.parametrosAudio(formato.sampleMimeType, formato.initializationData)   // bloco, bits
     private var ctx = abrir()
     @Volatile var canais = 0; private set
     @Volatile var taxa = 0; private set
@@ -45,7 +47,8 @@ class FfAudioDecodificador(formato: Format, tamanhoEntrada: Int, private val pcm
 
     private fun abrir(): Long {
         if (!FfNativo.disponivel) throw FfErro("FFmpeg não carregou")
-        val c = FfNativo.audioAbrir(codec, extra, maxOf(taxaDeclarada, 0), maxOf(canaisDeclarados, 0), pcmFloat)
+        val c = FfNativo.audioAbrir(codec, extra, maxOf(taxaDeclarada, 0), maxOf(canaisDeclarados, 0), pcmFloat,
+            contener[0], bitrate, contener[1])
         if (c == 0L) throw FfErro("FFmpeg não abriu $codec")
         return c
     }

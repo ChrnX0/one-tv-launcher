@@ -28,7 +28,9 @@ object DesempenhoTv {
 
     fun ligar(a: Activity) {
         if (ouvinte != null) return
+        val app = a.applicationContext
         val o = Window.OnFrameMetricsAvailableListener { _, m, _ ->
+            CompatibilidadeTv.quadroDaHome(app)   // relatório de compatibilidade: 1º quadro depois da tela acender
             val ms = m.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000.0
             val abriu = abriuEm
             synchronized(trava) {
@@ -87,6 +89,9 @@ object DesempenhoTv {
         fun ler(k: String) = Desempenho.deJson(p.getString(k, null)?.let { runCatching { JSONObject(it) }.getOrNull() })
         return ler("anterior") to ler("atual")
     }
+
+    /** Mediana do tempo de abertura da HOME na versão atual (relatório de compatibilidade). Null sem medida. */
+    fun aberturaMediana(ctx: Context): Int? = Desempenho.mediana(medidas(ctx).second.aberturas)
 
     fun comparacao(ctx: Context): Desempenho.Comparacao? = medidas(ctx).let { (a, b) -> Desempenho.comparar(a, b) }
 

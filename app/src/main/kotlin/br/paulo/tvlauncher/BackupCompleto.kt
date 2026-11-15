@@ -33,13 +33,16 @@ object BackupCompleto {
         "jogos",   // card Jogos (14/11/2026): grupos escolhidos, IP e app do PC
         "gravacao",   // gravação (14/11/2026): a pasta da rede de reserva
         "nuvem",   // Na rede › OneDrive/Dropbox (14/11/2026): o id do app Microsoft e a chave do Dropbox que o dono digitou
-        "sincronizar_filmes")   // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
+        "sincronizar_filmes",   // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
+        "pacote_icones", "fundo_meu")   // degrau 1 (15/11/2026): pacote de ícones e "Meu fundo" (caminho, brilho, contraste)
+    // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
     /**
      * Preferências que NÃO vão, de propósito (o teste BackupCompletoTest confere que nenhuma outra ficou esquecida):
      * "confirmacoes" (restaurar um backup não pode liberar nada sem o PIN, ver ConfirmacoesTv), "painel_log" (registro),
      * "atualizador", "aviso_tv" e "loja_curada" (estado passageiro ou cache baixado de novo).
      */
     internal val FORA_DE_PROPOSITO = setOf("confirmacoes", "mtp_permitidos", "painel_log", "atualizador", "aviso_tv", "loja_curada",
+        "compatibilidade",   // medidas do "acordar" deste aparelho (CompatibilidadeTv): de outro aparelho não valem
         "aot",   // versão já compilada (CompilarAot): é do APK instalado, não da configuração
         "roteiro",   // respostas do "Conferir na TV" (ConferirTvActivity): valem só para a versão em que foram dadas
         "timer",   // timer é passageiro: restaurar um backup feito com o timer correndo o armaria de novo sem ninguém pedir

@@ -1,7 +1,7 @@
 package br.paulo.tvlauncher;
 // Gerado de FfNativo.kt para o teste da cola no computador (nativo/teste/rodar.sh). Não editar à mão.
 public final class FfNativo {
-  public static native long audioAbrir(String codec, byte[] extra, int taxa, int canais, boolean pcmFloat);
+  public static native long audioAbrir(String codec, byte[] extra, int taxa, int canais, boolean pcmFloat, int bloco, int bitrate, int bits);
   public static native int audioDecodificar(long ctx, java.nio.ByteBuffer entrada, int tamanho);
   public static native void audioCopiar(long ctx, java.nio.ByteBuffer saida);
   public static native int audioCanais(long ctx);

@@ -734,6 +734,10 @@ class ConfigLauncherActivity : Activity() {
     // ================================================================ aba: Aparência
 
     private fun abaAparencia(c: LinearLayout) {
+        if (VindoDoProjectivyActivity.instalado(this)) c.addView(linha(getString(R.string.vp_titulo), getString(R.string.vp_cfg_det), seta = true) {
+            reconstruirAoVoltar = true
+            startActivity(Intent(this, VindoDoProjectivyActivity::class.java))
+        }, lp())
         lateinit var linhaTema: LinhaCfg
         linhaTema = linha(getString(R.string.cl_tema), getString(R.string.cfg_tema_det), valor = Tema.atual(this).nome) {
             Tema.proximo(this)
@@ -741,12 +745,73 @@ class ConfigLauncherActivity : Activity() {
             // A MainActivity só relê o tema no onCreate: ela mesma percebe a troca e se recria ao voltar (ver onResume lá).
         }
         c.addView(linhaTema, lp())
+        // "Meu fundo" (degrau 1, 15/11/2026; FundoMeu.kt): escolher o arquivo já põe o tema; brilho e contraste em degraus.
+        fun rotuloMeu() = FundoMeuDados.arquivo(this)?.name ?: getString(R.string.pi_nenhum)
+        lateinit var linhaMeu: LinhaCfg
+        linhaMeu = linha(getString(R.string.fm_titulo), getString(R.string.fm_det), valor = rotuloMeu()) {
+            trabalho.execute {
+                val arquivos = FundoMeuDados.candidatos()
+                ui.post {
+                    if (isDestroyed) return@post
+                    if (arquivos.isEmpty()) { aviso(getString(R.string.fm_vazio)); return@post }
+                    val atual = FundoMeuDados.arquivo(this)
+                    Estilo.lista(this, getString(R.string.fm_titulo), listOf(getString(R.string.fm_nenhum)) + arquivos.map { it.name },
+                        marcadas = listOf(arquivos.indexOfFirst { it == atual } + 1)) { i ->
+                        FundoMeuDados.definirArquivo(this, arquivos.getOrNull(i - 1))
+                        Tema.definir(this, if (i == 0) Tema.ESCURO else Tema.MEU)
+                        recarregarAba()   // mostra (ou esconde) brilho e contraste
+                    }
+                }
+            }
+        }
+        c.addView(linhaMeu, lp())
+        fun pct(v: Int) = if (v > 0) "+$v%" else "$v%"
+        // Brilho e contraste só aparecem com um arquivo escolhido (sem "Meu fundo" não valem nada: conciso).
+        if (FundoMeuDados.arquivo(this) != null) {
+        lateinit var linhaBrilho: LinhaCfg
+        linhaBrilho = linha(getString(R.string.fm_brilho), getString(R.string.fm_ajuste_det), valor = pct(FundoMeuDados.brilho(this))) {
+            FundoMeuDados.definirBrilho(this, FundoMeuRegras.proximoDegrau(FundoMeuDados.brilho(this)))
+            linhaBrilho.valor(pct(FundoMeuDados.brilho(this)))
+        }
+        c.addView(linhaBrilho, lp())
+        lateinit var linhaContraste: LinhaCfg
+        linhaContraste = linha(getString(R.string.fm_contraste), getString(R.string.fm_ajuste_det), valor = pct(FundoMeuDados.contraste(this))) {
+            FundoMeuDados.definirContraste(this, FundoMeuRegras.proximoDegrau(FundoMeuDados.contraste(this)))
+            linhaContraste.valor(pct(FundoMeuDados.contraste(this)))
+        }
+        c.addView(linhaContraste, lp())
+        }
         // Tamanho do texto (ideia 47, TamanhoTexto): vale em todas as telas do launcher; esta tela se refaz para mostrar.
         fun rotuloTamanho(v: Int) = getString(when (v) { 110 -> R.string.tt_grande; 120 -> R.string.tt_maior; else -> R.string.tt_normal })
         c.addView(linha(getString(R.string.tt_titulo), getString(R.string.tt_det), valor = rotuloTamanho(TamanhoTexto.atual(this))) {
             TamanhoTexto.definir(this, TamanhoTexto.proximo(TamanhoTexto.atual(this)))
             recreate()
         }, lp())
+        // Fileira ou grade (layout flexível, LayoutHome): a HOME se refaz ao voltar.
+        c.addView(linha(getString(R.string.lh_arranjo), getString(R.string.lh_arranjo_det),
+            valor = getString(if (LayoutHome.grade(this)) R.string.lh_grade else R.string.lh_fileira)) {
+            LayoutHome.definirGrade(this, !LayoutHome.grade(this))
+            recarregarAba()
+        }, lp())
+        // Tamanho dos cartões (layout flexível, LayoutHome): a HOME se refaz ao voltar.
+        c.addView(linha(getString(R.string.lh_titulo), getString(R.string.lh_det),
+            valor = getString(if (LayoutHome.tamanho(this) == 100) R.string.lh_normal else R.string.lh_grande)) {
+            LayoutHome.definirTamanho(this, LayoutHome.proximo(LayoutHome.tamanho(this)))
+            reconstruirAoVoltar = true
+            recarregarAba()
+        }, lp())
+        // Pacote de ícones (degrau 1, 15/11/2026): desligado de fábrica; cada OK passa ao próximo instalado e volta a "Nenhum".
+        val pacotes = PacoteIcones.instalados(this)
+        fun rotuloPacote() = PacoteIcones.escolhido(this).let { if (it.isEmpty()) getString(R.string.pi_nenhum) else PacoteIcones.nome(this, it) }
+        lateinit var linhaPacote: LinhaCfg
+        linhaPacote = linha(getString(R.string.pi_titulo), getString(if (pacotes.isEmpty()) R.string.pi_det_vazio else R.string.pi_det),
+            valor = rotuloPacote()) {
+            PacoteIcones.escolher(this, PacoteIconesRegras.proximo(PacoteIcones.escolhido(this), pacotes.map { it.first }))
+            linhaPacote.valor(rotuloPacote())   // a HOME redesenha sozinha ao voltar: o pacote entra na chave do cache
+        }
+        c.addView(linhaPacote, lp())
+        // Tema por QR (degrau 1, 15/11/2026): mostra o código do visual desta TV num QR; o celular abre a página pública.
+        c.addView(linha(getString(R.string.vq_titulo), getString(R.string.vq_det), seta = true) { mostrarQrVisual() }, lp())
         // Apps ocultos (14/11/2026): o card "Ocultos (N)" saiu da HOME; mostrar de volta é aqui.
         val nOcultos = Organizacao.ocultos(this).size
         c.addView(linha(getString(R.string.oc_titulo), if (nOcultos == 0) getString(R.string.oc_nenhum) else
@@ -1627,5 +1692,27 @@ class ConfigLauncherActivity : Activity() {
             direita.addView(Estilo.texto(context, Estilo.Papel.TITULO, "›").apply { typeface = Estilo.fonte(200) }.also { tSeta = it })
             pintarTextos()
         }
+    }
+
+    /** O QR do "Compartilhar visual": cartão por cima, com o link curto embaixo para quem não tem leitor de QR. */
+    private fun mostrarQrVisual() {
+        val link = VisualCodigoTv.link(this)
+        val d = android.app.Dialog(this)
+        val fechar = Estilo.botao(this, getString(R.string.vq_fechar)).apply { setOnClickListener { d.dismiss() } }
+        val qr = android.widget.ImageView(this).apply {
+            setImageBitmap(runCatching { QrCodigo.bitmap(link, dp(280)) }.getOrNull())
+        }
+        val tela = Estilo.dialogo(this, null, getString(R.string.vq_titulo), getString(R.string.vq_texto), listOf(fechar))
+        // o QR entra no cartão antes do título (o cartão é o 1º filho do véu)
+        (tela.getChildAt(0) as android.widget.LinearLayout).addView(qr, 0,
+            android.widget.LinearLayout.LayoutParams(dp(280), dp(280)).apply { bottomMargin = dp(16) })
+        d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
+        d.setContentView(tela)
+        d.window?.apply {
+            setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT))
+            setLayout(-1, -1)
+        }
+        d.show()
+        fechar.requestFocus()
     }
 }

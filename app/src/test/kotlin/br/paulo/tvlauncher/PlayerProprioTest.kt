@@ -97,3 +97,32 @@ class PlayerProprioTest {
         assertTrue(FimDoVideo.escalaAss(24) < 1.0)
     }
 }
+
+/** O embrulho dos leitores passa os ajustes adiante (bug visto na Sala: a ASS virava texto simples). */
+class FfExtratoresTest {
+    @Test fun repassaLeitorDeLegendas() {
+        var recebido: androidx.media3.extractor.text.SubtitleParser.Factory? = null
+        var transcodificar: Boolean? = null
+        val base = object : androidx.media3.extractor.ExtractorsFactory {
+            override fun createExtractors() = emptyArray<androidx.media3.extractor.Extractor>()
+            override fun setSubtitleParserFactory(f: androidx.media3.extractor.text.SubtitleParser.Factory) = apply { recebido = f }
+            override fun experimentalSetTextTrackTranscodingEnabled(l: Boolean) = apply { transcodificar = l }
+        }
+        val e = FfExtratores(base, androidx.media3.datasource.DataSource.Factory { throw IllegalStateException() })
+        val leitor = LeitoresLegendaSemAss()
+        e.setSubtitleParserFactory(leitor).experimentalSetTextTrackTranscodingEnabled(true)
+        assertEquals(leitor, recebido)
+        assertEquals(true, transcodificar)
+    }
+}
+
+/** WMA/cook pedem o bloco do contêiner (visto na Sala: "FFmpeg não abriu wmav2"). */
+class ParametrosAudioTest {
+    @Test fun idaEVolta() {
+        val d = listOf(ByteArray(0), FfCodecs.empacotarAudio(4459, 16))
+        assertArrayEquals(intArrayOf(4459, 16), FfCodecs.parametrosAudio(FfCodecs.MIME_AUDIO_FF, d))
+        assertNull(FfCodecs.extra(FfCodecs.MIME_AUDIO_FF, d))                  // extradata vazio = nenhum
+        assertArrayEquals(intArrayOf(0, 0), FfCodecs.parametrosAudio("audio/ac3", d))
+        assertArrayEquals(intArrayOf(0, 0), FfCodecs.parametrosAudio(FfCodecs.MIME_AUDIO_FF, listOf(ByteArray(3))))
+    }
+}

@@ -1,0 +1,16 @@
+{
+  "formato": 1,
+  "atualizado": "2026-11-15",
+  "aparelhos": [
+    {"id": "chromecast-gtv-4k", "nome": "Chromecast with Google TV (4K)", "tipo": "stick", "sistema": "Google TV", "situacao": "em_teste", "relatorio": null},
+    {"id": "chromecast-gtv-hd", "nome": "Chromecast with Google TV (HD)", "tipo": "stick", "sistema": "Google TV", "situacao": "planejado", "relatorio": null},
+    {"id": "google-tv-streamer", "nome": "Google TV Streamer", "tipo": "box", "sistema": "Google TV", "situacao": "planejado", "relatorio": null},
+    {"id": "onn-4k-pro", "nome": "Onn 4K Pro", "tipo": "box", "sistema": "Google TV", "situacao": "planejado", "relatorio": null},
+    {"id": "xiaomi-tv-box-s-3", "nome": "Xiaomi TV Box S (3rd gen)", "tipo": "box", "sistema": "Google TV", "situacao": "planejado", "relatorio": null},
+    {"id": "xiaomi-mi-tv-stick", "nome": "Xiaomi Mi TV Stick", "tipo": "stick", "sistema": "Android TV", "situacao": "planejado", "relatorio": null},
+    {"id": "nvidia-shield-pro", "nome": "NVIDIA SHIELD TV Pro", "tipo": "box", "sistema": "Android TV", "situacao": "planejado", "relatorio": null},
+    {"id": "tcl-google-tv", "nome": "TCL TV with Google TV", "tipo": "tv", "sistema": "Google TV", "situacao": "planejado", "relatorio": null},
+    {"id": "sony-bravia-gtv", "nome": "Sony BRAVIA with Google TV", "tipo": "tv", "sistema": "Google TV", "situacao": "planejado", "relatorio": null},
+    {"id": "fire-tv-stick-4k-max", "nome": "Amazon Fire TV Stick 4K Max", "tipo": "stick", "sistema": "Fire OS", "situacao": "planejado", "relatorio": null}
+  ]
+}

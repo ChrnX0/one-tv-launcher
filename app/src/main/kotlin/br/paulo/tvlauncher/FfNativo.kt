@@ -36,7 +36,8 @@ object FfNativo {
     fun tem(codec: String): Boolean = disponivel && runCatching { temDecodificador(codec) }.getOrDefault(false)
 
     // ------------------------------------------------------------- áudio (audio.cc)
-    @JvmStatic external fun audioAbrir(codec: String, extra: ByteArray?, taxa: Int, canais: Int, pcmFloat: Boolean): Long
+    @JvmStatic external fun audioAbrir(codec: String, extra: ByteArray?, taxa: Int, canais: Int, pcmFloat: Boolean,
+                                       bloco: Int, bitrate: Int, bits: Int): Long
     @JvmStatic external fun audioDecodificar(ctx: Long, entrada: ByteBuffer, tamanho: Int): Int
     @JvmStatic external fun audioCopiar(ctx: Long, saida: ByteBuffer)
     @JvmStatic external fun audioCanais(ctx: Long): Int

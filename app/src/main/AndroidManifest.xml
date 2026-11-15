@@ -72,6 +72,8 @@
         xmlns:tools="http://schemas.android.com/tools" tools:ignore="QueryAllPackagesPermission" />
 
     <!-- Android 11+ só deixa um app enxergar outros apps se isso for declarado aqui -->
+    <!-- Watch Next dos outros apps (WatchNextTv, degrau 1): só leitura; diz se a fileira "Continuar" é possível. -->
+    <uses-permission android:name="com.android.providers.tv.permission.READ_EPG_DATA" />
     <queries>
         <intent>
             <action android:name="android.intent.action.MAIN" />
@@ -80,10 +82,19 @@
         <!-- O launcher do Google (04/11/2026): sem isto o PackageManager diz que ele não existe, e o Home.kt
              (botão HOME pelo serviço de teclas, atalho do painel) achava que ele estava desativado. -->
         <package android:name="com.google.android.apps.tv.launcherx" />
+        <!-- Projectivy instalado = oferece a migração guiada (VindoDoProjectivyActivity). -->
+        <package android:name="com.spocky.projengmenu" />
         <!-- Busca que continua nos outros apps (ideia 14): BuscaOutrosApps.DESTINOS. -->
         <package android:name="com.google.android.youtube.tv" />
         <package android:name="com.netflix.ninja" />
         <package android:name="com.amazon.amazonvideo.livingroom" />
+        <!-- Pacotes de ícones (PacoteIconesRegras.ACOES): sem isto, no Android 11+ nenhum pacote aparece na lista. -->
+        <intent><action android:name="org.adw.launcher.THEMES" /></intent>
+        <intent><action android:name="com.novalauncher.THEME" /></intent>
+        <intent><action android:name="com.teslacoilsw.launcher.THEME" /></intent>
+        <intent><action android:name="com.anddoes.launcher.THEME" /></intent>
+        <intent><action android:name="com.gau.go.launcherex.theme" /></intent>
+        <intent><action android:name="app.lawnchair.icons.THEMED_ICON" /></intent>
     </queries>
 
     <!-- android:name: LauncherApp liga o registro local de erros (RegistroErros.kt) em todo processo do app. -->
@@ -274,6 +285,8 @@
             android:label="@string/lbl_dns" />
         <!-- "Configurações do launcher": aparência, DNS, teste de velocidade, permissões, diagnóstico (aberta pelo card "Launcher" do popup do perfil) -->
         <!-- Assistente de primeira abertura (só sem Device Owner, uma vez): BoasVindasActivity.kt -->
+        <!-- "Conhecer o Pro": planos e QR para a compra no celular (Planos.kt; venda ainda desligada). -->
+        <activity android:name=".ConhecerProActivity" android:exported="false" />
         <!-- Conectar o Claude (e outros clientes MCP) pela internet: QR codes do Tailscale e do endereço. -->
         <activity
             android:name=".ConectarClaudeActivity"
@@ -298,6 +311,11 @@
             android:name=".EntrarPeloQrActivity"
             android:exported="false"
             android:label="@string/lbl_entrar_celular" />
+        <!-- "Vindo do Projectivy?": migração guiada, uma vez (VindoDoProjectivyActivity.kt) -->
+        <activity
+            android:name=".VindoDoProjectivyActivity"
+            android:exported="false"
+            android:label="@string/vp_titulo" />
         <activity
             android:name=".BoasVindasActivity"
             android:exported="false"

@@ -27,7 +27,8 @@ struct Audio {
   int canais = 0, taxa = 0;
 };
 
-AVCodecContext* abrirContexto(const char* nome, JNIEnv* env, jbyteArray extra, int taxa, int canais) {
+AVCodecContext* abrirContexto(const char* nome, JNIEnv* env, jbyteArray extra, int taxa, int canais,
+                              int bloco, long bitrate, int bits) {
   const AVCodec* codec = avcodec_find_decoder_by_name(nome);
   if (!codec) { LOGE("sem decodificador de áudio '%s'", nome); return nullptr; }
   AVCodecContext* c = avcodec_alloc_context3(codec);
@@ -43,6 +44,10 @@ AVCodecContext* abrirContexto(const char* nome, JNIEnv* env, jbyteArray extra, i
   // Formatos "crus" (RealAudio, ADPCM, PCM) não dizem taxa/canais no pacote: vêm do contêiner.
   if (taxa > 0) c->sample_rate = taxa;
   if (canais > 0) av_channel_layout_default(&c->ch_layout, canais);
+  // WMA, RealAudio (cook), ADPCM: o tamanho do bloco e a taxa vêm do contêiner; sem eles o avcodec_open2 recusa.
+  if (bloco > 0) c->block_align = bloco;
+  if (bitrate > 0) c->bit_rate = bitrate;
+  if (bits > 0) c->bits_per_coded_sample = bits;
   if (avcodec_open2(c, codec, nullptr) < 0) { LOGE("avcodec_open2 falhou (%s)", nome); avcodec_free_context(&c); return nullptr; }
   return c;
 }
@@ -88,11 +93,12 @@ bool guardar(Audio* a) {
 }
 }  // namespace
 
-NATIVO(jlong, audioAbrir)(JNIEnv* env, jclass, jstring codec, jbyteArray extra, jint taxa, jint canais, jboolean pcmFloat) {
+NATIVO(jlong, audioAbrir)(JNIEnv* env, jclass, jstring codec, jbyteArray extra, jint taxa, jint canais, jboolean pcmFloat,
+                          jint bloco, jint bitrate, jint bits) {
   const char* nome = env->GetStringUTFChars(codec, nullptr);
   auto* a = new Audio();
   a->saidaFormato = pcmFloat ? AV_SAMPLE_FMT_FLT : AV_SAMPLE_FMT_S16;
-  a->ctx = abrirContexto(nome, env, extra, taxa, canais);
+  a->ctx = abrirContexto(nome, env, extra, taxa, canais, bloco, bitrate, bits);
   env->ReleaseStringUTFChars(codec, nome);
   a->pacote = av_packet_alloc();
   a->quadro = av_frame_alloc();

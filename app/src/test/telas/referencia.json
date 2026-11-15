@@ -41,8 +41,26 @@
   "cortes": [],
   "sobrepostos": []
  },
+ "en\/home-grade": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
+ "en\/home-grande": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
  "en\/jogos": {
   "menorSp": 11,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
+ "en\/planos": {
+  "menorSp": 13,
   "foco": true,
   "cortes": [],
   "sobrepostos": []
@@ -101,8 +119,26 @@
   "cortes": [],
   "sobrepostos": []
  },
+ "pt\/home-grade": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
+ "pt\/home-grande": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
  "pt\/jogos": {
   "menorSp": 11,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
+ "pt\/planos": {
+  "menorSp": 13,
   "foco": true,
   "cortes": [],
   "sobrepostos": []

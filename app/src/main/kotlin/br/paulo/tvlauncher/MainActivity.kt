@@ -26,6 +26,7 @@ import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
+import android.widget.ScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextClock
@@ -90,6 +91,8 @@ class MainActivity : Activity() {
     private val textoSuave: Int get() = if (tema == Tema.ESCURO) 0xFF93A19A.toInt() else 0xFFCFD9D4.toInt()
     // O visual escolhido no menu do perfil (Tema.kt). Lido no onCreate; trocar de tema recria a tela.
     private var tema = Tema.ESCURO
+    private var assinaturaFundo = ""   // "Meu fundo": arquivo|brilho|contraste quando a tela foi montada
+    private var assinaturaLayout = ""  // layout flexível (LayoutHome): tamanho|transparente quando a tela foi montada
     private val fonteLeve by lazy { Fontes.display(this, tema) }   // hora e temperatura
     private val fonteUi by lazy { Fontes.ui(this, tema) }
 
@@ -131,7 +134,7 @@ class MainActivity : Activity() {
     // último. Quem abriu uma tela pelo topo recebe o foco de volta, como a bolinha do perfil já fazia.
     private var topoRaiz: View? = null
     private var focoTopo: View? = null
-    private lateinit var linhaApps: LinearLayout
+    private lateinit var linhaApps: ViewGroup   // LinearLayout (fileira) ou GradeApps (grade, LayoutHome)
     // HOME recomendada (06/11/2026): capa de quem está em foco e a linha "Continuar" embaixo dos apps.
     private lateinit var capa: CapaFoco
     private lateinit var conteudo: FrameLayout          // tudo menos o fundo e a capa: sobe quando o foco vai para o Continuar
@@ -150,7 +153,7 @@ class MainActivity : Activity() {
     @Volatile private var fichaSerie: PlayerArmazem.FichaHome? = null
     @Volatile private var posicoesHome: Map<String, Posicao> = emptyMap()
     private var capaPedida: String? = null   // o pacote cuja capa a tela espera (se o foco andar, a que chegar atrasada não aparece)
-    private lateinit var rolagem: HorizontalScrollView
+    private lateinit var rolagem: FrameLayout   // HorizontalScrollView (fileira) ou ScrollView (grade)
     private var instalados: List<Item> = emptyList()          // todos os apps de TV instalados (inclui os ocultos)
     private var lista: MutableList<Entrada> = mutableListOf()   // cards da linha principal, na ordem da tela
     private var modoMover = false
@@ -279,6 +282,8 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         DesempenhoTv.criou()   // guarda de desempenho (12/11/2026): o 1º quadro depois disto dá o tempo de abertura
         tema = Tema.atual(this)
+        assinaturaFundo = FundoMeuDados.assinatura(this)
+        assinaturaLayout = "${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}"
         setContentView(montarTela())
         window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, novo ->
             if (novo != null && novo !== bolinhaPerfil) voltarAoPerfil = false
@@ -300,6 +305,7 @@ class MainActivity : Activity() {
         GuardiaoShizuku.vigiar(this)
         GuardiaoShizuku.garantir(this, "launcher abriu")
         BoasVindasActivity.talvezMostrar(this)   // 1ª abertura sem Device Owner: assistente (nunca na TV com DO)
+        VindoDoProjectivyActivity.talvezMostrar(this)   // Projectivy no aparelho: migração guiada, uma vez
     }
 
     override fun onResume() {
@@ -307,6 +313,8 @@ class MainActivity : Activity() {
         // O tema agora só troca na tela separada de Configurações do launcher (ConfigLauncherActivity), que não
         // tem como chamar recreate() nesta Activity diretamente — então aqui a gente mesmo percebe a troca ao voltar.
         if (Tema.atual(this) != tema) { recreate(); return }
+        if (tema == Tema.MEU && FundoMeuDados.assinatura(this) != assinaturaFundo) { recreate(); return }   // outro arquivo/brilho
+        if ("${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}" != assinaturaLayout) { recreate(); return }   // cartões mudaram
         // Modo simples (12/11/2026, ideia 10; desligado por padrão): a HOME vira a tela de cards grandes.
         if (ModoSimples.ligado(this)) {
             try { startActivity(Intent(this, ModoSimplesActivity::class.java)); return } catch (_: Exception) {}
@@ -701,6 +709,7 @@ class MainActivity : Activity() {
         val topoCaixa = TOPO_PALCO + ALTURA_TOPO + 12
         raiz.addView(FrameLayout(this).apply {
             clipChildren = false
+            if (emGrade) visibility = View.GONE   // grade: a ficha sai e o Continuar sobe para o lugar dela (LayoutHome)
             addView(destaque, FrameLayout.LayoutParams(MATCH, WRAP, Gravity.BOTTOM))
         }, FrameLayout.LayoutParams(dp(Grade.largura(10)), dp(TOPO_DESTAQUE - topoCaixa)).apply {
             leftMargin = dp(Grade.MARGEM)
@@ -712,24 +721,42 @@ class MainActivity : Activity() {
         // ---- Linha de apps (rola na horizontal). O padding de cima/baixo e a folga para o card focado crescer;
         // por isso a rolagem comeca FOLGA acima da linha da grade.
         val folga = 24
-        rolagem = HorizontalScrollView(this).apply {
-            clipChildren = false    // senão a rolagem corta o card focado quando ele cresce
-            isHorizontalScrollBarEnabled = false
-            clipToPadding = false
-            setPadding(dp(Grade.MARGEM - ANEL), dp(folga) - dp(ANEL), dp(Grade.MARGEM), dp(folga))
+        // Grade (LayoutHome): o Continuar sobe para logo abaixo do topo e a grade começa embaixo dele, até o fim da tela.
+        val topoContinuar = if (emGrade) LayoutHome.TOPO_CONTINUAR_GRADE else TOPO_CONTINUAR
+        val linhaDosApps = if (emGrade) topoContinuar + ALTURA_CONTINUAR + descer + 28 else LINHA_APPS_HOME + descer
+        if (emGrade) {
+            linhaApps = GradeApps(this, LayoutHome.colunas(passoCartao, Grade.MARGEM), dp(12))
+            rolagem = ScrollView(this).apply {
+                clipChildren = false
+                clipToPadding = false
+                isVerticalScrollBarEnabled = false
+                isSmoothScrollingEnabled = true
+                setPadding(dp(Grade.MARGEM - ANEL), dp(folga) - dp(ANEL), dp(Grade.MARGEM), dp(folga))
+                addView(linhaApps)
+            }
+            raiz.addView(rolagem, FrameLayout.LayoutParams(MATCH, dp(LayoutHome.TELA_A - linhaDosApps + folga)).apply {
+                topMargin = dp(linhaDosApps - folga)
+            })
+        } else {
+            rolagem = HorizontalScrollView(this).apply {
+                clipChildren = false    // senão a rolagem corta o card focado quando ele cresce
+                isHorizontalScrollBarEnabled = false
+                clipToPadding = false
+                setPadding(dp(Grade.MARGEM - ANEL), dp(folga) - dp(ANEL), dp(Grade.MARGEM), dp(folga))
+            }
+            linhaApps = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                clipChildren = false
+            }
+            rolagem.addView(linhaApps)
+            raiz.addView(rolagem, FrameLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(linhaDosApps - folga) })
         }
-        linhaApps = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            clipChildren = false
-        }
-        rolagem.addView(linhaApps)
-        raiz.addView(rolagem, FrameLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(LINHA_APPS_HOME - folga) })
         // Título "APPS" em cima da linha, como o "CONTINUAR" (esboço do dono, 06/11 noite).
         raiz.addView(texto(12f, textoSuave, fonteUi).apply {
             text = getString(R.string.home_linha_apps)
             letterSpacing = 0.1f
             if (tema != Tema.ESCURO) setShadowLayer(dp(6).toFloat(), 0f, 0f, 0x99000000.toInt())
-        }, FrameLayout.LayoutParams(WRAP, WRAP).apply { leftMargin = dp(Grade.MARGEM); topMargin = dp(LINHA_APPS_HOME - 32) })
+        }, FrameLayout.LayoutParams(WRAP, WRAP).apply { leftMargin = dp(Grade.MARGEM); topMargin = dp(linhaDosApps - 32) })
 
         // ---- Continuar (HOME recomendada): último canal e apps usados há pouco, em cards 16:9 com o banner do app. Fica
         // meio escondida na borda de baixo; com o foco nela (▼ num card solto), a tela inteira sobe para mostrá-la.
@@ -755,9 +782,9 @@ class MainActivity : Activity() {
         }
         // Altura fixa (passa da borda de baixo de propósito): com WRAP o FrameLayout cortava a linha no fim da tela, e ao
         // subir aparecia só o topo dos cards e uma faixa vazia embaixo (visto na Sala, 06/11).
-        raiz.addView(caixaContinuar, FrameLayout.LayoutParams(MATCH, dp(ALTURA_CONTINUAR)).apply {
+        raiz.addView(caixaContinuar, FrameLayout.LayoutParams(MATCH, dp(ALTURA_CONTINUAR + descer)).apply {
             leftMargin = dp(Grade.MARGEM)
-            topMargin = dp(TOPO_CONTINUAR)
+            topMargin = dp(topoContinuar)
         })
 
         // ---- Guia de teclas do modo mover: uma faixa na parte de baixo, por cima de tudo. Some fora do modo mover.
@@ -779,7 +806,7 @@ class MainActivity : Activity() {
         fundo = vivo
         // Sem fundo preto aqui (nem na janela, ver onCreate): o fundo vivo já cobre a tela inteira e é opaco. Cada camada
         // de tela cheia a mais é a GPU pintando 1920x1080 de novo A CADA QUADRO (medido: 3 camadas, 22 ms por quadro).
-        capa = CapaFoco(this).apply { desligada = tema == Tema.GALERIA }   // Galeria: a obra é o fundo, sem brilho por cima
+        capa = CapaFoco(this).apply { desligada = tema == Tema.GALERIA || tema == Tema.MEU }   // Galeria: a obra é o fundo, sem brilho por cima
         conteudo = raiz
         return FrameLayout(this).apply {
             clipChildren = false   // a tela que sobe (Continuar) desenha o que estava abaixo da borda
@@ -946,8 +973,6 @@ class MainActivity : Activity() {
         // cards TV, Séries e Filmes), apps em retângulos 16:9 embaixo, em 404 (até ~467; sobram ~70 dp).
         const val TOPO_CONTINUAR = 290
         const val LINHA_APPS_HOME = 429     // o título "APPS" fica 32 dp acima; com 10 dp a menos ele encostava no foco
-        const val RET_L = 112               // retângulo de um app na linha de baixo (16:9, a arte de banner do app)
-        const val RET_A = 63
         val CORES_SERIES = intArrayOf(0xFF9B7BFF.toInt(), 0xFF4A2C9A.toInt())   // roxo
         val CORES_FILMES = intArrayOf(0xFF4C9BFF.toInt(), 0xFF1A3F8F.toInt())   // azul
         val CORES_REDE = intArrayOf(0xFF2FBF8F.toInt(), 0xFF0E5A45.toInt())     // verde
@@ -975,6 +1000,7 @@ class MainActivity : Activity() {
         // "Quais apps aparecem no menu de uma TV?" = os que declaram a categoria LEANBACK_LAUNCHER.
         val consulta = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER)
         val itens = LinkedHashMap<String, Item>()
+        val pacoteIcones = PacoteIcones.versao(this)
         for (ri in pm.queryIntentActivities(consulta, 0)) {
             val pkg = ri.activityInfo.packageName
             if (pkg == packageName || pkg == Config.PACOTE_CONFIG || pkg in itens) continue
@@ -985,7 +1011,8 @@ class MainActivity : Activity() {
             // controle divide essa thread — medido 107-260 ms só aqui. O caminho do APK muda quando o app é
             // atualizado, então serve de chave: app igual = reaproveita nome e ícone já carregados.
             // (Antes também carregava o banner, que nada usava, e o ícone duas vezes.)
-            val chave = ri.activityInfo.applicationInfo.sourceDir + "|" + ri.activityInfo.name
+            // Pacote de ícones (PacoteIcones.kt, desligado de fábrica) entra na chave: trocar de pacote redesenha.
+            val chave = ri.activityInfo.applicationInfo.sourceDir + "|" + ri.activityInfo.name + "|" + pacoteIcones
             // A categoria já vem no ResolveInfo: sem IPC na thread da tela depois (home-9).
             categorias[pkg] = ri.activityInfo.applicationInfo.category
             JogosTv.primar(this, pkg, ri.activityInfo.applicationInfo.category)   // card Jogos: já sabe se é jogo, sem IPC depois
@@ -993,9 +1020,13 @@ class MainActivity : Activity() {
             if (cacheApps[pkg]?.first != null && cacheApps[pkg]?.first != chave) capas.remove(pkg)
             itens[pkg] = cacheApps[pkg]?.takeIf { it.first == chave }?.second ?: run {
                 // Só o ícone redondo fica guardado: o original (loadIcon) vira lixo logo depois de desenhado.
-                Item(pkg, ri.loadLabel(pm).toString(), DesenhoHome.iconeRedondo(resources, ri.loadIcon(pm))).also { cacheApps[pkg] = chave to it }
+                Item(pkg, ri.loadLabel(pm).toString(), DesenhoHome.iconeRedondo(resources,
+                    PacoteIcones.icone(this, pkg, ri.activityInfo.name) ?: ri.loadIcon(pm))).also { cacheApps[pkg] = chave to it }
             }
         }
+        // Entradas HDMI/AV (EntradasTv, degrau 1): só em TV com entrada; chave "entrada:<id>", ícone redondo como os apps.
+        for (e in EntradasTv.listar(this)) itens[e.chave] = cacheApps[e.chave]?.second ?: Item(e.chave, e.nome,
+            DesenhoHome.iconeRedondo(resources, e.icone ?: IconeApp(IconeApp.Tipo.TV))).also { cacheApps[e.chave] = "" to it }
         cacheApps.keys.retainAll(itens.keys)   // app desinstalado sai do cache
         capas.keys.retainAll(itens.keys)       // e a capa dele também (home-6)
         return itens.values.toList()
@@ -1135,8 +1166,7 @@ class MainActivity : Activity() {
         if (assinatura == null || assinatura != ultimaAssinatura || linhaApps.childCount != cards.size) {
             linhaApps.removeAllViews()
             cards.forEach { linhaApps.addView(criarCartao(it)) }
-            prenderEsquerda(linhaApps.getChildAt(0))
-            prenderDireita(linhaApps.getChildAt(linhaApps.childCount - 1))
+            prenderBordas()
             ultimaAssinatura = assinatura
         }
         if (cards.isEmpty()) return
@@ -1174,7 +1204,7 @@ class MainActivity : Activity() {
         val aoFocar = { v: View ->
             ultimoToken = entrada.token
             indiceFoco = linhaApps.indexOfChild(v)
-            centralizar(v, rolagem)
+            (rolagem as? HorizontalScrollView)?.let { centralizar(v, it) }   // a grade (ScrollView) rola sozinha até o foco
             mostrarCapa(entrada)
         }
         return when (entrada) {
@@ -1820,6 +1850,17 @@ class MainActivity : Activity() {
     /** true até o 1º desenho do Continuar nesta abertura da HOME (ver desenharContinuar). */
     private var focoInicialNaTv = true
 
+    /** ◀ e ▶ presos nas bordas: na fileira, o 1º e o último card; na grade, o 1º e o último de cada fileira. */
+    private fun prenderBordas() {
+        val n = linhaApps.childCount
+        if (n == 0) return
+        val cols = (linhaApps as? GradeApps)?.colunas ?: n
+        for (i in 0 until n) {
+            if (i % cols == 0) prenderEsquerda(linhaApps.getChildAt(i))
+            if (i % cols == cols - 1 || i == n - 1) prenderDireita(linhaApps.getChildAt(i))
+        }
+    }
+
     /** ◀ no 1º card de uma linha não sai dela (antes o foco fugia para o relógio, lá em cima). */
     private fun prenderEsquerda(v: View?) {
         if (v == null) return
@@ -1972,6 +2013,8 @@ class MainActivity : Activity() {
         val atual = currentFocus ?: return false
         val token = atual.tag as? String ?: return false
         val pilha = lista.firstOrNull { it.token == token } as? Entrada.Pilha ?: return false
+        // Grade (LayoutHome): com uma fileira embaixo, ▼ desce para ela; só troca o app da frente na última fileira.
+        if (emGrade && atual.focusSearch(View.FOCUS_DOWN)?.let { dentro(it, linhaApps) } == true) return false
         if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) girarPilha(pilha, +1)
         return true
     }
@@ -1989,8 +2032,7 @@ class MainActivity : Activity() {
         linhaApps.addView(vista, posicao)
         vista.requestFocus()
         linhaApps.removeViewAt(posicao + 1)
-        if (posicao == 0) prenderEsquerda(vista)   // ◀ no 1º card não pode escapar para o topo (home-7)
-        if (posicao == linhaApps.childCount - 1) prenderDireita(vista)   // e ▶ no último também não
+        prenderBordas()   // ◀ no 1º card (de cada fileira, na grade) e ▶ no último não escapam para o topo (home-7)
         ultimaAssinatura = null   // a linha mudou por fora do desenhar(): o próximo desenho refaz tudo
     }
 
@@ -2231,10 +2273,22 @@ class MainActivity : Activity() {
         (grupo?.getChildAt(1) as? TextView)?.setTextColor(if (focado || movendo) Color.WHITE else textoSuave)
         // Só o disco cresce (o nome não: crescendo junto, ele encostava no nome do vizinho).
         val escala = if (movendo) 1.12f else if (focado) 1.08f else 1f
-        (grupo?.getChildAt(0) ?: card).animate().scaleX(escala).scaleY(escala).setDuration(120).start()
+        // Cartões transparentes (LayoutHome): fora do foco o fundo aparece pelo cartão; o focado fica inteiro.
+        val alfa = if (transparente && !focado && !movendo) LayoutHome.ALFA_TRANSPARENTE else 1f
+        (grupo?.getChildAt(0) ?: card).animate().scaleX(escala).scaleY(escala).alpha(alfa).setDuration(120).start()
     }
 
     private val ANEL = 6   // folga (dp) entre o disco e o anel de foco
+    // Retângulo de um app na linha de baixo (16:9, a arte de banner do app): 112x63 de fábrica; LayoutHome muda (15/11/2026).
+    private val tamanhoCartoes by lazy { LayoutHome.tamanho(this) }
+    private val RET_L by lazy { LayoutHome.largura(tamanhoCartoes) }
+    private val RET_A by lazy { LayoutHome.altura(tamanhoCartoes) }
+    /** A linha de apps desce o quanto o cartão cresceu (LayoutHome); 0 no tamanho de fábrica. */
+    private val descer by lazy { LayoutHome.acrescimo(tamanhoCartoes) }
+    private val transparente by lazy { LayoutHome.transparente(this) }
+    private val emGrade by lazy { LayoutHome.grade(this) }
+    /** Passo de um cartão na fila (largura + anel dos dois lados + margem): o mesmo na fileira e na grade. */
+    private val passoCartao get() = RET_L + 2 * ANEL + 4
 
     /** Fio de 1 dp em volta do disco (não da moldura): ícones escuros (Netflix) não somem no fundo. */
     private fun fioFino() = android.graphics.drawable.InsetDrawable(contorno(0x33FFFFFF, Color.TRANSPARENT, 1), dp(ANEL))
@@ -2411,6 +2465,7 @@ class MainActivity : Activity() {
     }
 
     private fun abrir(pacote: String) {
+        if (EntradasTv.eh(pacote)) { EntradasTv.abrir(this, pacote); return }   // entrada HDMI/AV (EntradasTv)
         val intent = packageManager.getLeanbackLaunchIntentForPackage(pacote)
             ?: packageManager.getLaunchIntentForPackage(pacote)
             ?: return
