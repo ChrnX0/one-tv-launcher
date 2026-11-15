@@ -446,6 +446,9 @@ object Estilo {
      * Molde de tela de lista (um só para o app inteiro): fundo da HOME, margem da HOME, título no tamanho de título e a
      * coluna onde a tela põe as linhas. Devolve (raiz para o setContentView, coluna).
      */
+    /** Folga lateral (dp) da rolagem de [telaLista], para o aumento da linha focada caber sem corte. */
+    private const val FOLGA_LISTA = 16
+
     fun telaLista(ctx: Context, titulo: String, subtitulo: String? = null): Pair<View, LinearLayout> {
         // Título e subtítulo fixos; só as linhas rolam (12/11/2026, moldura da HOME): rolando tudo, as linhas passavam por
         // baixo da hora da moldura (Moldura.kt), que fica parada no alto à direita.
@@ -453,9 +456,11 @@ object Estilo {
             orientation = LinearLayout.VERTICAL
             background = fundoTela(ctx)
             clipChildren = false; clipToPadding = false
-            setPadding(dp(ctx, MARGEM_LATERAL), dp(ctx, MARGEM_VERTICAL + 9), dp(ctx, MARGEM_LATERAL), 0)
-            addView(tituloTela(ctx, titulo))
-            if (subtitulo != null) addView(texto(ctx, Papel.LEGENDA, subtitulo), LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(ctx, 4) })
+            setPadding(dp(ctx, MARGEM_LATERAL - FOLGA_LISTA), dp(ctx, MARGEM_VERTICAL + 9), dp(ctx, MARGEM_LATERAL - FOLGA_LISTA), 0)
+            // O título e o subtítulo ficam na margem de sempre; só a rolagem usa a folga dos lados.
+            addView(tituloTela(ctx, titulo), LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(ctx, FOLGA_LISTA) })
+            if (subtitulo != null) addView(texto(ctx, Papel.LEGENDA, subtitulo), LinearLayout.LayoutParams(-2, -2).apply {
+                topMargin = dp(ctx, 4); marginStart = dp(ctx, FOLGA_LISTA) })
         }
         val coluna = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
@@ -463,8 +468,12 @@ object Estilo {
             // Folga de cima (E2) dentro da rolagem: a linha focada cresce 2% e não pode ser cortada pela borda dela.
             setPadding(0, dp(ctx, E2), 0, dp(ctx, MARGEM_VERTICAL + 16))
         }
+        // Teste na TV (15/11/2026, Blocos do painel rápido): com clipChildren=false a lista rolada era desenhada POR CIMA do
+        // título. Agora a rolagem corta o que sai dela (clipChildren=true), e a folga dos lados (FOLGA_LISTA, dentro do
+        // padding, que é desenhado porque clipToPadding=false) deixa a linha focada crescer 2% sem ser cortada.
         raiz.addView(android.widget.ScrollView(ctx).apply {
-            isVerticalScrollBarEnabled = false; clipChildren = false; clipToPadding = false; isFillViewport = true
+            isVerticalScrollBarEnabled = false; clipChildren = true; clipToPadding = false; isFillViewport = true
+            setPadding(dp(ctx, FOLGA_LISTA), 0, dp(ctx, FOLGA_LISTA), 0)
             addView(coluna)
         }, LinearLayout.LayoutParams(-1, 0, 1f))
         return raiz to coluna
