@@ -45,4 +45,12 @@ class ServidorShizukuTest {
         val r = ServidorShizuku.resultado(ServidorShizuku.Lido("aaa", cortado = true), estourou = false, limiteMs = 20_000)!!
         assertTrue(r, r.startsWith("[saída cortada: passou de 1 MB]"))
     }
+
+    /** 15/11/2026: o texto digitado (pode ser senha) não vai para o logcat nem para o shell_proprio.log. */
+    @Test fun textoDigitadoNaoVaiParaOLog() {
+        assertEquals("input text (16 caracteres)", ServidorShizuku.resumo("input text 'senha%ssecreta'"))
+        assertEquals("input keyboard text (3 caracteres)", ServidorShizuku.resumo("input keyboard text abc"))
+        assertEquals("dumpsys power", ServidorShizuku.resumo("dumpsys power"))
+        assertEquals(200, ServidorShizuku.resumo("x".repeat(500)).length)
+    }
 }

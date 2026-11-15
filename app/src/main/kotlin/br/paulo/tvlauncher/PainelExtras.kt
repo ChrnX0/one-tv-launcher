@@ -257,7 +257,7 @@ object PainelExtras {
                 ok(JSONObject().put("hosts", JSONArray(McpServidor.hostsExtras(app).sorted())))
             }
             // ---- diário da TV e webhook (ideias 58 e 59, Diario.kt)
-            get && rota == "diario" -> ok(JSONObject().put("itens", Diario.ler(app, 24 * 7))
+            get && rota == "diario-tv" -> ok(JSONObject().put("itens", Diario.ler(app, 24 * 7))   // "diario" é o de DNS (acima)
                 .put("webhook", Diario.webhook(app)).put("origens", JSONArray(Diario.origensWebhook(app).toList()))
                 .put("ultimo", Diario.ultimoWebhook(app)))
             post && rota == "diario/webhook" -> {

@@ -78,8 +78,16 @@ object PtpIp {
     /** Um pacote de controle inteiro: (tipo, corpo). */
     fun ler(e: InputStream): Pair<Int, ByteArray> {
         val c = lerCabecalho(e)
+        return c.tipo to lerCorpo(e, c)
+    }
+
+    /**
+     * O corpo de um pacote que vai inteiro para a memória, com o teto [MAX_CONTROLE]. Sem ele, um cabeçalho dizendo
+     * ~2 GB faria a TV tentar alocar isso (OutOfMemoryError derruba o processo inteiro, que é a HOME).
+     */
+    fun lerCorpo(e: InputStream, c: Cabecalho): ByteArray {
         if (c.tamanho > MAX_CONTROLE) throw IOException("pacote de controle grande demais: ${c.tamanho}")
-        return c.tipo to lerExato(e, c.tamanho)
+        return lerExato(e, c.tamanho)
     }
 
     fun escrever(s: OutputStream, tipo: Int, corpo: ByteArray, de: Int = 0, n: Int = corpo.size) {
@@ -565,7 +573,7 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
             val c = PtpIp.lerCabecalho(e)
             when (c.tipo) {
                 PtpIp.DADOS_COMECO -> {
-                    val l = Mtp.Leitor(PtpIp.lerExato(e, c.tamanho)); l.u32(); anunciado = l.u64()
+                    val l = Mtp.Leitor(PtpIp.lerCorpo(e, c)); l.u32(); anunciado = l.u64()
                     if (anunciado in 0..Long.MAX_VALUE && anunciado > max) throw IOException("dados maiores que o permitido")
                 }
                 PtpIp.DADOS, PtpIp.DADOS_FIM -> {
@@ -581,7 +589,7 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
                     }
                     if (c.tipo == PtpIp.DADOS_FIM) return total
                 }
-                PtpIp.CANCELAR -> { PtpIp.lerExato(e, c.tamanho); throw Cancelou() }
+                PtpIp.CANCELAR -> { PtpIp.lerCorpo(e, c); throw Cancelou() }
                 else -> throw IOException("pacote ${c.tipo} no meio dos dados")
             }
         }

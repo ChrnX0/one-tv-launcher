@@ -149,6 +149,16 @@ object PainelWeb {
         ajustar(ctx)
     }
 
+    /**
+     * PIN trocado pelo próprio painel: o mesmo que [recomecar] faz para a troca na TV (senhas do WebDAV guardadas e o
+     * contador de erros recomeçam), mas mantém a sessão de quem trocou, para não cair da página no meio do uso.
+     */
+    private fun pinTrocadoPeloPainel(token: String?) {
+        sessoes.encerrarOutras(token)
+        senhasDav.limpar()
+        synchronized(travaPin) { tentativas?.zerar() }
+    }
+
     /** Abre a porta numa thread própria (abrir socket na thread da tela é proibido no Android) e fica no accept(). */
     private fun iniciar() {
         iniciando = true
@@ -810,7 +820,10 @@ object PainelWeb {
                 "POST" -> {
                     val o = corpoJson(req) ?: return erro(400, "JSON inválido")
                     return when (val r = PainelConfig.mudar(app, o, sessoes.elevada(token)) { PainelArmazem.registrar(app, ip, it, "ok") }) {
-                        is PainelConfig.Resultado.Ok -> json(200, r.estado)
+                        is PainelConfig.Resultado.Ok -> {
+                            if (o.optString("campo") == "pinPainel") pinTrocadoPeloPainel(token)
+                            json(200, r.estado)
+                        }
                         is PainelConfig.Resultado.Erro -> erro(400, r.mensagem)
                         PainelConfig.Resultado.PrecisaPin -> precisaPin()
                     }
@@ -1123,7 +1136,7 @@ object PainelWeb {
         // Fecha a porta logo depois de responder (a conexão atual continua aberta até a resposta sair).
         Handler(Looper.getMainLooper()).post {
             ajustar(app)
-            try { Toast.makeText(app, "Painel no navegador desligado: PIN errado muitas vezes", Toast.LENGTH_LONG).show() } catch (_: Exception) {}
+            try { Toast.makeText(app, app.getString(R.string.painel_desligado_pin), Toast.LENGTH_LONG).show() } catch (_: Exception) {}
         }
     }
 

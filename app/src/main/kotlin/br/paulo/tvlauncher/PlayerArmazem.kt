@@ -266,9 +266,13 @@ object PlayerArmazem {
     /** Escrita atômica: grava ao lado e troca o nome (TV desligada no meio deixa o arquivo antigo inteiro). */
     private fun gravarArquivo(ctx: Context, nome: String, texto: String) {
         runCatching {
-            val tmp = File(pasta(ctx), "$nome.tmp")
-            tmp.writeText(texto)
-            tmp.renameTo(File(pasta(ctx), nome))
+            // Nome temporário único: dois gravadores ao mesmo tempo (o player e a tela de Séries, ou dois salvar() do
+            // fim do vídeo) escreviam no MESMO .tmp e o arquivo trocado podia sair misturado (JSON inválido = lista vazia).
+            val tmp = File.createTempFile("$nome.", ".tmp", pasta(ctx))
+            try {
+                tmp.writeText(texto)
+                if (!tmp.renameTo(File(pasta(ctx), nome))) throw java.io.IOException("renameTo falhou")
+            } finally { tmp.delete() }
         }.onFailure { Log.w(TAG, "não gravou $nome: ${it.javaClass.simpleName}") }
     }
 
