@@ -14,6 +14,15 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Filmes e Séries com dados de fora: entre no Trakt, Simkl, MDBList e OpenSubtitles pelo código no celular (Configurações › TV e filmes › Serviços de filmes e séries, ou no painel web); a ficha ganha sinopse, elenco e sagas do TMDB, nota do IMDb e a data do próximo episódio</item>
+        <item>Trakt e Simkl: sincronizar Interesses, já assistidos e onde parou (cada um ligado à parte, tudo começa desligado), e até 8 listas suas viram categorias em Filmes e Séries</item>
+        <item>Ficha rápida com as notas (IMDb, Rotten Tomatoes) e, nas séries dos Interesses, a etiqueta “Novo ep. sex., 20/11”</item>
+        <item>“Anteriormente”: série parada há mais de 3 semanas mostra o resumo do episódio anterior antes do próximo</item>
+        <item>Elenco na ficha e no ▼ do player: foto e personagem de cada pessoa e, com o foco nela, o que mais ela fez que está na sua lista</item>
+        <item>Modo infantil pela idade: escolha a idade máxima (Livre, 10, 12, 14 ou 16) em Configurações › Família ou no painel; filmes e séries até essa classificação aparecem de qualquer categoria</item>
+        <item>Onde assistir: “Também em: Netflix · Prime Video” na ficha e, na Busca, onde está o que não está na sua lista (dados do JustWatch)</item>
+        <item>Legenda automática: quando o áudio não é do idioma da TV e falta legenda, o player baixa sozinho a do OpenSubtitles feita para aquele arquivo (desliga no ▼)</item>
+        <item>App One TV para celular: acha as TVs da casa, abre o painel com o certificado conferido pelo QR, muda o volume e compartilha para a TV</item>
         <item>Configurar uma TV nova pelo celular: Boas-vindas › Configurar pelo celular mostra um QR; o celular cria o PIN e escolhe idioma, lista de TV ao vivo, cidade e serviços, em passos grandes</item>
         <item>Entrar no painel web com a digital ou o rosto do celular (chave de acesso), pelo endereço do Tailscale: Painel › Acessos › Entrar com a digital</item>
         <item>As telas são conferidas por foto no GitHub antes de cada versão: texto cortado ou encolhido e foco sumido são pegos antes de chegar à TV</item>
@@ -111,6 +120,14 @@
         <item>Backup noturno: a cópia extra também pode ir para o OneDrive, o Dropbox ou o Box cadastrados em Na rede (pasta OneTV-backup, ficam as 7 últimas)</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Configurações › TV e filmes › Serviços de filmes e séries › Trakt › OK</item>
+        <item>Na mesma tela, Simkl › OK</item>
+        <item>Abra a ficha de um filme conhecido em Filmes</item>
+        <item>Na ficha, OK em Elenco e pare num ator</item>
+        <item>Configurações › Família › Idade máxima no modo infantil: 10; ligue o modo infantil e abra Filmes</item>
+        <item>Abra um filme estrangeiro que não tenha legenda em português</item>
+        <item>Em Séries › Interesses, ande pelos pôsteres de uma série que ainda está no ar</item>
+        <item>Na Busca, digite um filme que não está na sua lista</item>
         <item>Configurações › Acesso remoto › Entrar pelo celular</item>
         <item>Configurações: desça pelo menu da esquerda</item>
         <item>TV ao vivo › coluna da esquerda › Rádios</item>
@@ -202,6 +219,14 @@
         <item>Em Configurações › Sistema › Backup automático, OK em Cópia extra até aparecer a conta da nuvem e depois Fazer agora</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Apareceram o código e o QR, o celular aprovou e a TV mostrou a conta conectada?</item>
+        <item>O código entrou em simkl.com/pin e a TV mostrou a conta conectada?</item>
+        <item>Apareceram sinopse, nota do IMDb e “Também em: …”?</item>
+        <item>Apareceram as fotos e, embaixo, outros títulos dele que estão na sua lista?</item>
+        <item>Só apareceram filmes até 10 anos (e os sem classificação das categorias infantis)?</item>
+        <item>Em poucos segundos apareceu “Legenda baixada automaticamente” e ela ligou sozinha?</item>
+        <item>O pôster mostra “Novo ep. …” e a ficha rápida em cima mostra as notas?</item>
+        <item>Apareceu “Em outros lugares (JustWatch)” com o serviço onde ele está?</item>
         <item>O QR apareceu grande, o celular leu e o painel abriu já entrando?</item>
         <item>O contorno do foco aparece inteiro em todos os itens (sem cortar nas laterais)?</item>
         <item>Tocou uma rádio perto de você, com o nome grande e (quando a rádio manda) a música, e a tecla 1 tocou a 1ª favorita?</item>

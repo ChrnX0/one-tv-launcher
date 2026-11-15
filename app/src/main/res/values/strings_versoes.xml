@@ -17,6 +17,15 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Movies and Series with outside data: sign in to Trakt, Simkl, MDBList and OpenSubtitles with a code on your phone (Settings › TV and movies › Movie and series services, or in the web panel); the details page gets TMDB plot, cast and collections, the IMDb rating and the next episode date</item>
+        <item>Trakt and Simkl: sync Interests, watched and where you stopped (each turned on separately, all start off), and up to 8 of your lists become categories in Movies and Series</item>
+        <item>Quick details with the ratings (IMDb, Rotten Tomatoes) and, on series in Interests, the “New ep. Fri, 11/20” label</item>
+        <item>“Previously”: a series paused for more than 3 weeks shows the previous episode\'s summary before the next one</item>
+        <item>Cast on the details page and in the player\'s ▼ menu: photo and character of each person and, with the focus on one, what else they did that is in your list</item>
+        <item>Kids mode by age: choose the maximum age (All ages, 10, 12, 14 or 16) in Settings › Family or in the panel; movies and series up to that rating show from any category</item>
+        <item>Where to watch: “Also on: Netflix · Prime Video” on the details page and, in Search, where to find what is not in your list (data from JustWatch)</item>
+        <item>Automatic subtitles: when the audio is not in the TV language and there is no subtitle, the player downloads the OpenSubtitles one made for that file (turn off in ▼)</item>
+        <item>One TV phone app: finds the TVs at home, opens the panel with the certificate checked through the QR, changes the volume and shares to the TV</item>
         <item>Set up a new TV from your phone: Welcome › Set up with your phone shows a QR code; the phone creates the PIN and picks language, live TV list, city and services, in big steps</item>
         <item>Sign in to the web panel with your phone\'s fingerprint or face (passkey), through the Tailscale address: Panel › Sign-ins › Sign in with fingerprint</item>
         <item>Screens checked by picture on GitHub before each version: cut or shrunken text and lost focus are caught before reaching the TV</item>
@@ -114,6 +123,14 @@
         <item>Nightly backup: the extra copy can also go to the OneDrive, Dropbox or Box account added in Network (OneTV-backup folder, the last 7 are kept)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>servicos_trakt</item>
+        <item>servicos_simkl</item>
+        <item>ficha_tmdb</item>
+        <item>elenco</item>
+        <item>idade_infantil</item>
+        <item>legenda_auto</item>
+        <item>novo_ep_interesses</item>
+        <item>busca_justwatch</item>
         <item>primeira_celular</item>
         <item>menu_config_corte</item>
         <item>radios</item>
@@ -205,6 +222,14 @@
         <item>backup_nuvem</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Settings › TV and movies › Movie and series services › Trakt › OK</item>
+        <item>On the same screen, Simkl › OK</item>
+        <item>Open the details of a well-known movie in Movies</item>
+        <item>On the details page, OK on Cast and stop on an actor</item>
+        <item>Settings › Family › Maximum age in kids mode: 10; turn kids mode on and open Movies</item>
+        <item>Open a foreign movie that has no subtitle in the TV language</item>
+        <item>In Series › Interests, move over the posters of a series still on the air</item>
+        <item>In Search, type a movie that is not in your list</item>
         <item>Settings › Remote access › Sign in with your phone</item>
         <item>Settings: walk down the left menu</item>
         <item>Live TV › left column › Radio</item>
@@ -296,6 +321,14 @@
         <item>In Settings › System › Automatic backup, press OK on Extra copy until the cloud account shows up, then Back up now</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Did the code and QR show up, the phone approve it and the TV show the account connected?</item>
+        <item>Did the code work at simkl.com/pin and the TV show the account connected?</item>
+        <item>Did the plot, the IMDb rating and “Also on: …” show up?</item>
+        <item>Did the photos show up and, below, other titles of theirs that are in your list?</item>
+        <item>Did only movies up to 10 show up (plus unrated ones from kids categories)?</item>
+        <item>Within a few seconds did “Subtitle downloaded automatically” show and turn on by itself?</item>
+        <item>Does the poster show “New ep. …” and the quick details at the top show the ratings?</item>
+        <item>Did “Elsewhere (JustWatch)” show up with the service where it is?</item>
         <item>The QR showed up big, the phone read it and the panel opened already signed in?</item>
         <item>Is the focus outline whole on every item (not cut at the sides)?</item>
         <item>Did a station near you play, with the name large and (when the station sends it) the song, and did key 1 play the first favorite?</item>
