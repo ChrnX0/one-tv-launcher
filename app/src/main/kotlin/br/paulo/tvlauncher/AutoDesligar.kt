@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
+import android.media.AudioManager
+import android.media.AudioPlaybackConfiguration
 import android.graphics.PixelFormat
 import android.graphics.drawable.GradientDrawable
 import android.os.Handler
@@ -27,9 +29,11 @@ import android.widget.TextView
  * TV avisa por 60 s ("vai desligar, aperte qualquer botão") e então desliga. É o "ainda está assistindo?" da Netflix,
  * para a TV que ficou ligada com todo mundo dormindo.
  *
- * - "Sem uso" = nenhuma tecla do controle. Quem vê as teclas é o serviço de acessibilidade (AutorizaShizukuService),
- *   que chama [atividade] a cada tecla; o painel no navegador também conta (PainelControle). Assistir um filme
- *   inteiro sem tocar no controle CONTA como sem uso: o aviso aparece e um botão qualquer o cancela.
+ * - "Sem uso" = nenhuma tecla do controle E nenhum som tocando. Quem vê as teclas é o serviço de acessibilidade
+ *   (AutorizaShizukuService), que chama [atividade] a cada tecla; o painel no navegador também conta (PainelControle).
+ *   Som tocando em qualquer app (filme, novela, YouTube, TV ao vivo) também é uso desde 15/11/2026 (a família reclamou
+ *   do aviso no meio do filme), com o teto de [AutoDesligarRegra.TETO_MIDIA_MIN] para a TV esquecida ligada à noite.
+ *   A regra pura fica em AutoDesligarRegra.
  * - Sem o serviço de acessibilidade ligado ninguém veria as teclas, então NÃO desliga (desligaria no meio do uso).
  * - Custo: nenhum por tecla (só grava a hora); um único agendamento na thread da tela, que dorme até o prazo.
  * - Desligar = apagar a tela (o Chromecast manda a TV entrar em standby pelo HDMI-CEC, como o botão de ligar do
@@ -49,6 +53,8 @@ object AutoDesligar {
 
     private val principal = Handler(Looper.getMainLooper())
     @Volatile private var ultima = SystemClock.elapsedRealtime()
+    /** Última vez que se viu som tocando (0 = nunca). Atualizada pelo aviso de mudança de reprodução e em [verificar]. */
+    @Volatile private var ultimaMidia = 0L
     private var app: Context? = null
     private var janela: View? = null
     private var textoAviso: TextView? = null
@@ -80,8 +86,20 @@ object AutoDesligar {
                 reagendar()
             }
         }, IntentFilter().apply { addAction(Intent.ACTION_SCREEN_ON); addAction(Intent.ACTION_SCREEN_OFF) })
+        // Qualquer app começou ou parou de tocar: anota a hora. Assim, um filme que acabou há 5 min conta 5 min, e
+        // não o tempo desde a última tecla. Custo: só grava a hora; o prazo é recalculado quando o vigia acorda.
+        try {
+            a.getSystemService(AudioManager::class.java).registerAudioPlaybackCallback(object : AudioManager.AudioPlaybackCallback() {
+                override fun onPlaybackConfigChanged(configs: MutableList<AudioPlaybackConfiguration>?) {
+                    ultimaMidia = SystemClock.elapsedRealtime()
+                }
+            }, principal)
+        } catch (e: Exception) { Log.w(TAG, "aviso de reprodução: $e") }
         reagendar()
     }
+
+    /** Algum app está tocando som agora (Netflix, YouTube, o nosso player, TV ao vivo...). */
+    private fun tocando(ctx: Context) = try { ctx.getSystemService(AudioManager::class.java).isMusicActive } catch (_: Exception) { false }
 
     /** O aviso de "vai desligar" está na tela agora. */
     fun avisoNaTela() = janela != null
@@ -112,7 +130,7 @@ object AutoDesligar {
         val a = app ?: return
         val min = minutos(a)
         if (min == 0 || !telaAcesa(a)) return   // a tela acender chama reagendar() de novo
-        val prazo = ultima + min * 60_000L - AVISO_S * 1000L
+        val prazo = AutoDesligarRegra.prazo(ultima, ultimaMidia, min) - AVISO_S * 1000L
         principal.postDelayed(verificar, (prazo - SystemClock.elapsedRealtime()).coerceAtLeast(1000))
     }
 
@@ -120,8 +138,10 @@ object AutoDesligar {
         val a = app ?: return
         val min = minutos(a)
         if (min == 0 || !telaAcesa(a)) return
-        val faltam = ultima + min * 60_000L - SystemClock.elapsedRealtime()
-        if (faltam > AVISO_S * 1000L + 1000) { reagendar(); return }   // alguém mexeu enquanto dormíamos
+        val agora = SystemClock.elapsedRealtime()
+        if (tocando(a)) ultimaMidia = agora   // filme ainda passando = TV em uso (até o teto, ver AutoDesligarRegra)
+        val faltam = AutoDesligarRegra.prazo(ultima, ultimaMidia, min) - agora
+        if (faltam > AVISO_S * 1000L + 1000) { reagendar(); return }   // alguém mexeu ou algo tocou enquanto dormíamos
         val servico = AutorizaShizukuService.instancia
         if (servico == null) {
             // Sem o serviço não vemos as teclas: desligar agora poderia ser no meio do uso. Tenta de novo mais tarde.
@@ -150,7 +170,7 @@ object AutoDesligar {
             addView(pergunta)
             addView(titulo)
             addView(texto(22f, 0xFFD0D7DE.toInt()).apply {
-                text = servico.getString(R.string.ad_ninguem, Desligamento.duracaoTexto(minutos(servico)))
+                text = servico.getString(R.string.ad_ninguem, Desligamento.duracaoTexto(((SystemClock.elapsedRealtime() - ultima) / 60_000L).toInt().coerceAtLeast(1)))   // tempo real sem tecla (no teto da mídia passa do escolhido)
                 setLineSpacing(0f, 1.15f)
                 setPadding(0, dp(16), 0, 0)
             })

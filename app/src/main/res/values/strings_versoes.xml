@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Turn off when idle: a movie, show, YouTube or live TV playing now counts as use, so the TV no longer asks “Are you still watching?” in the middle of it. While something plays, it only asks after 4 h without anyone pressing the remote (a TV left on at night)</item>
         <item>LG turned on with its own remote: if it opens on the Chromecast input, the Chromecast now wakes up by itself within about 20 s (before, the screen stayed black until you switched inputs). On the antenna or another input, nothing changes. Needs the LG paired over the network</item>
         <item>Series and Movies: opening a title is smoother; the page draws once when its data arrives instead of three times, and the grid behind it is no longer redrawn</item>
         <item>Claude sign-in in the browser in English or Portuguese, following the browser language; the English web panel also translates error messages, and movie account errors show in the TV language</item>
@@ -294,7 +295,7 @@
         <item>Web panel › Extras › Birthdays: add someone with today’s date</item>
         <item>Settings › Home screen › Heat and cold alert</item>
         <item>Web panel: pin a message on the board; on the TV open the quick panel</item>
-        <item>In Settings › Screen and power, set Turn off when idle to 30 min, play a movie and press nothing</item>
+        <item>In Settings › Screen and power, set Turn off when idle to 30 min and leave a movie or live TV playing for 40 min without pressing anything</item>
         <item>Turn off the internet at the router (or unplug its internet cable) and press HOME; wait 30 s</item>
         <item>Network drive</item>
         <item>Search and Filter at the top of the column</item>
@@ -410,7 +411,7 @@
         <item>Did “Today is …’s birthday” appear at the top of the home screen and on the screensaver?</item>
         <item>Is the switch there and on?</item>
         <item>Did OK mark the message as read (and it left the screensaver), and did X delete it?</item>
-        <item>Did a large “Are you still watching?” appear, did any button cancel it and, with no answer, did the movie pause before the screen went off (and continue from there)?</item>
+        <item>While the video was playing, did the TV NOT ask “Are you still watching?” or turn off? (Pause it and leave the home screen idle: then it asks 30 min later.)</item>
         <item>Did “No internet · Still working: …” appear at the top, and go away when the internet came back?</item>
         <item>With Settings › Remote access › Show the TV as a network drive on, does the TV show up in This PC on Windows (or in Network), ask on screen to allow the computer and, after Allow, open the folders?</item>
         <item>In TV, Movies and Series, does ▲ on the first row reach the Search and Filter buttons beside the title, and ▼ go back to the list?</item>
