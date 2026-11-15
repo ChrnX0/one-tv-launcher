@@ -26,6 +26,13 @@ class AcordarComLgTest {
         assertFalse(LgNetcast.entradaDoChromecast(e, "", null))
     }
 
+    @Test fun chromecastDormindoTemORotuloDaLg() {
+        // Sala, 15/11/2026 14:30: com o Chromecast dormindo a LG mostrou HDMI1 "Smartphone", não o nome dele.
+        val dormindo = LgNetcast.Entrada("HDMI1", "Smartphone")
+        assertFalse(LgNetcast.entradaDoChromecast(dormindo, "Sala de estar", null))
+        assertTrue(LgNetcast.entradaDoChromecast(dormindo, "Sala de estar", "HDMI1"))
+    }
+
     @Test fun naAntenaNuncaAcorda() {
         val antena = LgNetcast.Entrada("TV", "Sala de estar")
         assertFalse(LgNetcast.entradaDoChromecast(antena, "Sala de estar", "TV"))

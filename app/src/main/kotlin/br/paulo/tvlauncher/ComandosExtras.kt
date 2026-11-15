@@ -49,6 +49,7 @@ import java.io.File
  *  - lg_desligar --ez ligado true|false   o timer de sono desliga a LG pela rede? Ligado por padrão.
  *  - lg_acordar [--ez ligado true|false]  a LG ligou na entrada do Chromecast: acordar o Chromecast? Ligado por padrão.
  *                                          Sem "ligado": mostra o estado e a entrada que a LG mostra agora.
+ *  - lg_acordar --es entrada HDMI1         diz em que entrada da LG está o Chromecast (normalmente aprende sozinho).
  */
 object ComandosExtras {
     fun tratar(ctx: Context, i: Intent): String = when (i.getStringExtra("o")) {
@@ -102,7 +103,11 @@ object ComandosExtras {
             else "alarme_lg=${VolumeLg.alarmeLigado(ctx)} (mude com --ez ligado true|false)"
         "lg_desligar" -> if (i.hasExtra("ligado")) { VolumeLg.definirDesligarJunto(ctx, i.getBooleanExtra("ligado", true)); "desligar_lg=${VolumeLg.desligarJunto(ctx)}" }
             else "desligar_lg=${VolumeLg.desligarJunto(ctx)} (mude com --ez ligado true|false)"
-        "lg_acordar" -> if (i.hasExtra("ligado")) { VolumeLg.definirAcordarJunto(ctx, i.getBooleanExtra("ligado", true)); "acordar_com_lg=${VolumeLg.acordarJunto(ctx)}" }
+        "lg_acordar" -> if (i.hasExtra("entrada")) {
+                val e = i.getStringExtra("entrada").orEmpty().trim()
+                if (Regex("HDMI[0-9]", RegexOption.IGNORE_CASE).matches(e)) { VolumeLg.aprenderEntrada(ctx, e.uppercase()); "entrada do Chromecast = ${e.uppercase()}" }
+                else "entrada: HDMI1, HDMI2..."
+            } else if (i.hasExtra("ligado")) { VolumeLg.definirAcordarJunto(ctx, i.getBooleanExtra("ligado", true)); "acordar_com_lg=${VolumeLg.acordarJunto(ctx)}" }
             else "acordar_com_lg=${VolumeLg.acordarJunto(ctx)}; ${AcordarComLg.estado(ctx)}"
         "lg_esquecer" -> { VolumeLg.esquecer(ctx); "esquecida" }
         "lg_tecla" -> when (i.getStringExtra("tecla")) {

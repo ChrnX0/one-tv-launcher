@@ -37,12 +37,30 @@ object AcordarComLg {
         app = a
         val r = object : BroadcastReceiver() {
             override fun onReceive(c: Context, i: Intent) {
-                if (i.action == Intent.ACTION_SCREEN_OFF) comecar(a) else parar()
+                if (i.action == Intent.ACTION_SCREEN_OFF) comecar(a) else { parar(); aprender(a) }
             }
         }
         val f = IntentFilter().apply { addAction(Intent.ACTION_SCREEN_ON); addAction(Intent.ACTION_SCREEN_OFF) }
         if (Build.VERSION.SDK_INT >= 33) a.registerReceiver(r, f, Context.RECEIVER_NOT_EXPORTED) else a.registerReceiver(r, f)
         if (!acesa(a)) comecar(a)
+    }
+
+    /**
+     * Com o Chromecast aceso, a LG dá à entrada dele o nome dele (OSD name do CEC); dormindo, volta ao rótulo dela
+     * (na Sala, "Smartphone": verificado em 15/11/2026, o primeiro teste não acordou por isso). Então a entrada é
+     * aprendida aqui, com a tela acesa, e é ela que vale quando o Chromecast está dormindo.
+     */
+    private fun aprender(ctx: Context) {
+        if (!VolumeLg.configurado(ctx) || !VolumeLg.acordarJunto(ctx)) return
+        Fundo.rodar("aprender-entrada-lg") {
+            Thread.sleep(10_000)   // a LG troca de entrada e de rótulo depois do Active Source do CEC
+            val e = VolumeLg.entrada(ctx) ?: return@rodar
+            val nosso = runCatching { Settings.Global.getString(ctx.contentResolver, "device_name") }.getOrNull()
+            if (acesa(ctx) && LgNetcast.entradaDoChromecast(e, nosso, null) && e.nome != VolumeLg.entradaAprendida(ctx)) {
+                VolumeLg.aprenderEntrada(ctx, e.nome)
+                Log.i(TAG, "entrada do Chromecast na LG: ${e.nome}")
+            }
+        }
     }
 
     fun estado(ctx: Context): String {
