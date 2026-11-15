@@ -235,6 +235,11 @@
     <string name="rt_reconectar_det">O roteador desconecta a TV por alguns segundos e ela volta sozinha, escolhendo de novo o melhor ponto de acesso. Um vídeo tocando pode pausar.</string>
     <string name="ci_executar">Executar</string>
     <string name="ci_pedido_de">Pedido pelo painel (%1$s)</string>
+    <string name="pp_canal">Pedidos à TV</string>
+    <string name="pp_titulo">Pedido sem resposta (%1$s)</string>
+    <string name="pp_aceitar">Aceitar este pedido?</string>
+    <string name="pp_sim">Sim</string>
+    <string name="pp_nao">Não</string>
     <string name="ci_ia_quer">A IA quer:</string>
     <string name="pn_abra">Abra: Depuração sem fio › Parear dispositivo com código</string>
     <string name="pn_procurando">procurando a tela de pareamento…</string>

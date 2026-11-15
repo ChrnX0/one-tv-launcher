@@ -18,14 +18,17 @@ import android.widget.TextView
  * A confirmação NA TV de um pedido de ações do catálogo (ComandosIa; hoje pelo adb, depois pelo MCP). Nada roda sem
  * alguém apertar OK aqui, no controle de verdade.
  *
- * O foco começa em "Cancelar" (o seguro), ◀ ▶ trocam, OK escolhe. Voltar = cancelar. Sem resposta em 60 s, a tela
- * fecha e o pedido é cancelado.
+ * O foco começa em "Cancelar" (o seguro), ◀ ▶ trocam, OK escolhe. Voltar = cancelar. Sem resposta em 3 min, a tela
+ * fecha e o pedido vai para as notificações (PedidoPendente). Aberta pela notificação ([PedidoPendente.EXTRA_TARDIO]),
+ * pergunta "Aceitar este pedido?" com Não/Sim; o Sim roda pelo PedidoIa.aceitarDepois.
  */
 class ConfirmarIaActivity : Activity() {
     companion object { const val EXTRA_ID = "pedido_ia" }
 
     private var id: String? = null
     private var respondido = false
+    /** Pedido vindo da notificação: (frase, origem, JSON das ações). */
+    private var tardio: Triple<String, String, String>? = null
     private val ui = Handler(Looper.getMainLooper())
 
     private fun dp(v: Int) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics).toInt()
@@ -45,6 +48,8 @@ class ConfirmarIaActivity : Activity() {
     }
 
     private fun montar(i: Intent) {
+        if (i.getBooleanExtra(PedidoPendente.EXTRA_TARDIO, false)) { montarTardio(i); return }
+        tardio = null
         id = i.getStringExtra(EXTRA_ID)
         val p = PedidoIa.estado(id)
         val acoes = p?.plano?.acoes.orEmpty()
@@ -61,9 +66,31 @@ class ConfirmarIaActivity : Activity() {
         ui.postDelayed({ if (!respondido) { respondido = true; finish() } }, PedidoIa.ESPERA_CONFIRMAR_MS)
     }
 
+    private fun montarTardio(i: Intent) {
+        id = null
+        val frase = i.getStringExtra(PedidoPendente.EXTRA_FRASE).orEmpty()
+        val origem = i.getStringExtra(PedidoPendente.EXTRA_ORIGEM).orEmpty()
+        val acoes = i.getStringExtra(PedidoPendente.EXTRA_ACOES).orEmpty()
+        val descricoes = i.getStringArrayExtra(PedidoPendente.EXTRA_DESCRICOES).orEmpty()
+        PedidoPendente.apagar(this, i.getIntExtra(PedidoPendente.EXTRA_NOTIF, 0))
+        if (acoes.isEmpty() || descricoes.isEmpty()) { respondido = true; finish(); return }
+        tardio = Triple(frase, origem, acoes)
+        fun botao(t: String, aoClicar: () -> Unit) = Estilo.botao(this, t).apply { setOnClickListener { aoClicar() } }
+        val nao = botao(getString(R.string.pp_nao)) { responder(false) }
+        val sim = botao(getString(R.string.pp_sim)) { responder(true) }
+        setContentView(Estilo.dialogo(this, getString(R.string.ci_pedido_de, origem), getString(R.string.pp_aceitar),
+            "“$frase”\n" + descricoes.joinToString("\n") { "• $it" }, listOf(nao, sim)))
+        nao.requestFocus()   // o padrão é o seguro
+    }
+
     private fun responder(sim: Boolean) {
         if (respondido) return
         respondido = true
+        tardio?.let { (frase, origem, acoes) ->
+            finish()
+            if (sim) { val app = applicationContext; Handler(Looper.getMainLooper()).post { PedidoIa.aceitarDepois(app, frase, origem, acoes) } }
+            return
+        }
         val meu = id
         // Fecha ANTES de executar: assim o app aberto pela ação fica por cima, e não esta tela.
         finish()
