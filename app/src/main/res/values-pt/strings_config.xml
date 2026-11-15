@@ -132,7 +132,7 @@
     <string name="cl_linha_baixo">Widgets do protetor</string>
     <string name="cl_linha_baixo_det">faixa de vidro, cartões ou sem caixa · OK muda</string>
     <string name="cl_desligar">Desligar a TV sem uso</string>
-    <string name="cl_desligar_det">avisa 60 s antes; qualquer botão cancela · OK muda</string>
+    <string name="cl_desligar_det">vídeo tocando conta como uso; avisa 60 s antes · OK muda</string>
     <string name="cl_visita_det">esconde o perfil, a agenda e os apps marcados abaixo</string>
     <string name="cl_apps_visita">Apps escondidos no modo visita</string>
     <string name="cl_carregando_apps">Carregando os apps…</string>

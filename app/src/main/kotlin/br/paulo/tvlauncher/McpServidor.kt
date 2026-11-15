@@ -248,39 +248,40 @@ object McpServidor {
     }
 
     private fun authorize(req: Requisicao): Resposta {
+        val tx = McpTextos.de(req.cabecalho("accept-language"))
         val p = if (req.metodo == "POST") form(req.corpoTexto()) else req.consulta
         val cliente = p["client_id"]; val redirect = p["redirect_uri"]; val desafio = p["code_challenge"]
         try {
             autorizacao().conferirPedido(cliente, redirect, p["response_type"], desafio, p["code_challenge_method"])
         } catch (e: McpAutorizacao.Erro) {
-            return pagina("Pedido inválido", "<p>${esc(e.descricao)}</p>", null)
+            return pagina(tx, tx.pedidoInvalido, "<p>${esc(tx.mensagem(e.descricao))}</p>", null)
         }
         val nome = autorizacao().nomeDoCliente(cliente) ?: "?"
         // Com o login Google configurado, o PIN não vale pela internet (é ele o ponto fraco): só a conta Google.
         if (LoginGoogle.configurado(app)) {
-            if (req.metodo == "POST") return pagina("Use a conta Google", "<p>Este login é pela conta Google. Abra o endereço de novo.</p>", null)
+            if (req.metodo == "POST") return pagina(tx, tx.useGoogle, "<p>${tx.useGoogleTexto}</p>", null)
             val s = try { LoginGoogle.iniciar(app, p, prioritaria = autorizacao().temLogin(cliente)) } catch (e: Exception) {
-                return pagina("Não deu", "<p>${esc(e.message ?: "erro ao falar com o Google")}</p>", null)
+                return pagina(tx, tx.naoDeu, "<p>${esc(tx.mensagem(e.message ?: "erro ao falar com o Google"))}</p>", null)
             }
-            return paginaGoogle(s, nome)
+            return paginaGoogle(tx, s, nome)
         }
-        if (req.metodo != "POST") return paginaPin(p, nome, null, redirect!!)
+        if (req.metodo != "POST") return paginaPin(tx, p, nome, null, redirect!!)
 
         synchronized(travaPin) {
             val ctl = controle()
-            if (ctl.esgotado() || !ligado(app)) return pagina("Desligado", "<p>O acesso pela internet foi desligado. Religue nas Configurações do launcher, na TV.</p>", null)
+            if (ctl.esgotado() || !ligado(app)) return pagina(tx, tx.desligado, "<p>${tx.desligadoTexto}</p>", null)
             val espera = ctl.esperaMs()
-            if (espera > 0) return paginaPin(p, nome, "Muitas tentativas erradas. Espere ${(espera + 999) / 1000} s.", redirect!!)
+            if (espera > 0) return paginaPin(tx, p, nome, tx.espere((espera + 999) / 1000), redirect!!)
             if (!PainelArmazem.conferirPin(app, p["pin"] ?: "")) {
                 PainelArmazem.registrar(app, "internet", "login MCP", "PIN errado")
                 return when (val r = ctl.registrarFalha()) {
-                    is ControleTentativas.Resultado.Errou -> paginaPin(p, nome, "PIN errado (${r.restantes} tentativa(s) antes de esperar).", redirect!!)
-                    is ControleTentativas.Resultado.Bloqueou -> paginaPin(p, nome, "PIN errado. Bloqueado por ${r.ms / 60_000} min.", redirect!!)
+                    is ControleTentativas.Resultado.Errou -> paginaPin(tx, p, nome, tx.pinErrado(r.restantes), redirect!!)
+                    is ControleTentativas.Resultado.Bloqueou -> paginaPin(tx, p, nome, tx.pinBloqueado(r.ms / 60_000), redirect!!)
                     ControleTentativas.Resultado.Desligar -> {
                         prefs(app).edit().putBoolean("ligado", false).apply()
                         android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({ ajustar(app); TunelTailscale.ajustar(app) }, 1000)
                         Log.w(TAG, "PIN errado demais: MCP desligado")
-                        pagina("Desligado", "<p>PIN errado demais. O acesso pela internet foi desligado; religue na TV.</p>", null)
+                        pagina(tx, tx.desligado, "<p>${tx.pinDemaisTexto}</p>", null)
                     }
                 }
             }
@@ -288,7 +289,7 @@ object McpServidor {
         }
         // Confirmações: PIN certo, e ainda pode precisar do OK na TV (instalação nova). Fora da trava do PIN: espera até 60 s.
         if (!ConfirmacoesTv.permitir(app, Confirmacoes.Acao.MCP_CLIENTE, txt(R.string.cf_conectar, nome.take(60)), "internet"))
-            return pagina("Negado na TV", "<p>A TV não autorizou este login (negado no controle, ninguém respondeu em 60 s, ou bloqueado nas Confirmações).</p>", null)
+            return pagina(tx, tx.negado, "<p>${tx.negadoTexto}</p>", null)
         val codigo = autorizacao().criarCodigo(cliente!!, redirect!!, desafio!!)
         PainelArmazem.registrar(app, "internet", "login MCP ($nome)", "ok")
         val destino = StringBuilder(redirect).append(if ('?' in redirect) '&' else '?')
@@ -299,24 +300,25 @@ object McpServidor {
 
     /** A página do código fica se recarregando aqui até o Google responder (ver LoginGoogle). */
     private fun authorizeGoogle(req: Requisicao): Resposta {
-        val s = LoginGoogle.sessao(req.consulta["s"]) ?: return pagina("Login vencido", "<p>Abra o endereço de novo pelo app.</p>", null)
+        val tx = McpTextos.de(req.cabecalho("accept-language"))
+        val s = LoginGoogle.sessao(req.consulta["s"]) ?: return pagina(tx, tx.vencido, "<p>${tx.vencidoTexto}</p>", null)
         val p = s.pedido
         val cliente = p["client_id"]; val redirect = p["redirect_uri"]; val desafio = p["code_challenge"]
         val nome = autorizacao().nomeDoCliente(cliente) ?: "?"
         return when (s.estado) {
-            LoginGoogle.Estado.ESPERANDO -> paginaGoogle(s, nome)
+            LoginGoogle.Estado.ESPERANDO -> paginaGoogle(tx, s, nome)
             LoginGoogle.Estado.OK -> {
                 synchronized(s) {
-                    if (s.usada) return pagina("Já usado", "<p>Este login já foi concluído.</p>", null)
+                    if (s.usada) return pagina(tx, tx.jaUsado, "<p>${tx.jaUsadoTexto}</p>", null)
                     s.usada = true
                 }
                 try { autorizacao().conferirPedido(cliente, redirect, p["response_type"], desafio, p["code_challenge_method"]) }
-                catch (e: McpAutorizacao.Erro) { return pagina("Pedido inválido", "<p>${esc(e.descricao)}</p>", null) }
+                catch (e: McpAutorizacao.Erro) { return pagina(tx, tx.pedidoInvalido, "<p>${esc(tx.mensagem(e.descricao))}</p>", null) }
                 // mcp-3: a mesma confirmação do caminho do PIN. Sem ela, quem convencesse alguém da casa a digitar um
                 // código em google.com/device ganhava o acesso sem ninguém ver nada na TV. Roda FORA de qualquer
                 // synchronized (pode esperar até 60 s pela resposta no controle, e não pode travar outros pedidos).
                 if (!ConfirmacoesTv.permitir(app, Confirmacoes.Acao.MCP_CLIENTE, txt(R.string.cf_conectar_conta, nome.take(60), s.email ?: "?"), "internet"))
-                    return pagina("Negado na TV", "<p>A TV não autorizou este login (negado no controle, ninguém respondeu em 60 s, ou bloqueado nas Confirmações).</p>", null)
+                    return pagina(tx, tx.negado, "<p>${tx.negadoTexto}</p>", null)
                 val codigo = autorizacao().criarCodigo(cliente!!, redirect!!, desafio!!)
                 PainelArmazem.registrar(app, "internet", "login MCP Google ($nome)", s.email ?: "?")
                 val destino = StringBuilder(redirect).append(if ('?' in redirect) '&' else '?')
@@ -326,19 +328,19 @@ object McpServidor {
             }
             else -> {
                 PainelArmazem.registrar(app, "internet", "login MCP Google", "recusado: ${s.mensagem.take(120)}")
-                pagina("Não liberado", "<p class=\"aviso\">${esc(s.mensagem)}</p>", null)
+                pagina(tx, tx.naoLiberado, "<p class=\"aviso\">${esc(tx.mensagem(s.mensagem))}</p>", null)
             }
         }
     }
 
-    private fun paginaGoogle(s: LoginGoogle.Sessao, nome: String): Resposta {
+    private fun paginaGoogle(tx: McpTextos, s: LoginGoogle.Sessao, nome: String): Resposta {
         val url = esc(s.urlVerificacao)
-        val corpo = "<p><b>${esc(nome)}</b> quer usar as ferramentas da TV da sala.</p>" +
-            "<p>1. Abra <a href=\"$url\" target=\"_blank\" rel=\"noopener\">$url</a> (pode ser no celular).</p>" +
-            "<p>2. Entre com a conta Google de um dos perfis da TV e digite o código:</p>" +
+        val corpo = "<p>${tx.querUsar(esc(nome))}</p>" +
+            "<p>${tx.abra("<a href=\"$url\" target=\"_blank\" rel=\"noopener\">$url</a>")}</p>" +
+            "<p>${tx.entreGoogle}</p>" +
             "<p style=\"font-size:32px;letter-spacing:4px\"><b>${esc(s.codigoUsuario)}</b></p>" +
-            "<p>Esta página continua sozinha quando o Google confirmar.</p>"
-        val r = pagina("Entrar com a conta Google", corpo, null)
+            "<p>${tx.continua}</p>"
+        val r = pagina(tx, tx.entrarGoogle, corpo, null)
         return Resposta(r.codigo, r.tipo, r.corpo, r.extras + ("Refresh" to "4; url=/authorize/google?s=${s.id}"))
     }
 
@@ -357,32 +359,32 @@ object McpServidor {
 
     private fun esc(s: String) = s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;")
 
-    private fun paginaPin(p: Map<String, String>, nome: String, aviso: String?, redirect: String): Resposta {
+    private fun paginaPin(tx: McpTextos, p: Map<String, String>, nome: String, aviso: String?, redirect: String): Resposta {
         val ocultos = listOf("client_id", "redirect_uri", "response_type", "code_challenge", "code_challenge_method", "state", "scope", "resource")
             .mapNotNull { k -> p[k]?.let { "<input type=\"hidden\" name=\"$k\" value=\"${esc(it)}\">" } }.joinToString("")
         // O nome vem do próprio cliente (pode mentir); o destino da volta não: mostramos os dois.
         val destino = try { URI(redirect).host ?: "?" } catch (e: Exception) { "?" }
-        val corpo = "<p><b>${esc(nome)}</b> (volta para <b>${esc(destino)}</b>) quer usar as ferramentas da TV da sala.</p>" +
+        val corpo = "<p>${tx.querUsarDestino(esc(nome), esc(destino))}</p>" +
             // Dizer a verdade sobre o consentimento (revisão 09/11/2026: a frase fixa "só com OK" ficou errada em 06/11).
-            (if (ConfirmacoesTv.modo(app, Confirmacoes.Acao.MCP_ACOES) == Confirmacoes.Modo.PERGUNTAR) "<p>Ações só acontecem depois de um OK no controle da TV.</p>"
-            else "<p>Atenção: as ações pedidas (abrir app, volume, despertador...) acontecem na hora, sem OK no controle.</p>") +
+            (if (ConfirmacoesTv.modo(app, Confirmacoes.Acao.MCP_ACOES) == Confirmacoes.Modo.PERGUNTAR) "<p>${tx.comOk}</p>"
+            else "<p>${tx.semOk}</p>") +
             (aviso?.let { "<p class=\"aviso\">${esc(it)}</p>" } ?: "") +
             "<form method=\"post\" action=\"/authorize\">$ocultos" +
-            "<input name=\"pin\" type=\"password\" inputmode=\"numeric\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"PIN do painel\" autofocus>" +
-            "<button type=\"submit\">Permitir</button></form>"
-        return pagina("Entrar na TV", corpo, redirect)
+            "<input name=\"pin\" type=\"password\" inputmode=\"numeric\" autocomplete=\"off\" maxlength=\"12\" placeholder=\"${tx.pinPainel}\" autofocus>" +
+            "<button type=\"submit\">${tx.permitir}</button></form>"
+        return pagina(tx, tx.entrarTv, corpo, redirect)
     }
 
     /** [redirect]: o form-action da CSP precisa permitir o destino do redirecionamento (o navegador confere). */
-    private fun pagina(titulo: String, corpo: String, redirect: String?): Resposta {
+    private fun pagina(tx: McpTextos, titulo: String, corpo: String, redirect: String?): Resposta {
         val origem = redirect?.let { try { URI(it).let { u -> "${u.scheme}://${u.authority}" } } catch (e: Exception) { null } }
-        val html = "<!doctype html><html lang=\"pt-BR\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">" +
+        val html = "<!doctype html><html lang=\"${tx.lang}\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">" +
             "<title>${esc(titulo)}</title><style>body{font-family:sans-serif;background:#111;color:#eee;max-width:420px;margin:40px auto;padding:0 16px}" +
             "input,button{font-size:18px;padding:10px;margin:6px 0;width:100%;box-sizing:border-box}.aviso{color:#f99}</style></head>" +
             "<body><h1>${esc(titulo)}</h1>$corpo</body></html>"
         val csp = "default-src 'none'; style-src 'unsafe-inline'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'" +
             (origem?.let { " $it" } ?: "")
-        return Resposta(200, "text/html; charset=utf-8", html.toByteArray(), mapOf("Content-Security-Policy" to csp))
+        return Resposta(200, "text/html; charset=utf-8", html.toByteArray(), mapOf("Content-Security-Policy" to csp, "Vary" to "Accept-Language"))
     }
 }
 

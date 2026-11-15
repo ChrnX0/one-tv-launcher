@@ -111,6 +111,16 @@ class MainActivity : Activity() {
     private val ouvinteLocal = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, chave ->
         if (chave == LocalClima.CHAVE_LAT || chave == LocalClima.CHAVE_LON) { ui.removeCallbacks(tarefaClima); ui.postDelayed(tarefaClima, 300) }
     }
+    /**
+     * Despertador ou timer criado ou apagado de fora (MCP, painel, celular) com a HOME na tela: a pílula só mudava na
+     * próxima volta à HOME (teste na Sala, 15/11/2026: alarme apagado e timer criado pelo MCP não apareciam).
+     */
+    private val ouvinteAlarmes = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+        ui.post { runCatching { atualizarPilulaAlarme() } }
+    }
+    private val ouvinteTimer = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+        ui.post { ui.removeCallbacks(tarefaTimer); ui.post(tarefaTimer) }
+    }
     private lateinit var txtDica: TextView            // guia de teclas do modo mover (some fora dele)
     private lateinit var fotoPerfil: ImageView        // a bolinha do perfil, no canto superior direito
     private var bolinhaPerfil: View? = null            // o botão em volta da foto (o que recebe o foco)
@@ -284,6 +294,7 @@ class MainActivity : Activity() {
         PainelWeb.ajustar(this)   // painel no navegador: só abre a porta se estiver ligado e com PIN (ver PainelWeb.kt)
         HistoricoRede.iniciar(this)   // histórico de rede (ver HistoricoRede.kt); idempotente
         AutoDesligar.iniciar(this)   // desligar sozinha depois de X min sem controle (ver AutoDesligar.kt)
+        AcordarComLg.iniciar(this)   // LG ligou pelo controle dela na entrada do Chromecast: acorda o Chromecast
         if (Config.SHELL_PROPRIO_DIAG) ShellProprio.diagnosticar(this)   // MARCO 1 do shell proprio: loga chave + porta adb (ver ShellProprio.kt)
         // Shell próprio: liga o vigia (Wi-Fi, 10 min) e roda a autocura se faltar alguma permissão (GuardiaoShizuku).
         GuardiaoShizuku.vigiar(this)
@@ -316,6 +327,8 @@ class MainActivity : Activity() {
         atualizarPilulaJogo()
         atualizarPilulaAniversario()
         getSharedPreferences("launcher", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteLocal)
+        getSharedPreferences("despertador", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteAlarmes)
+        getSharedPreferences("timer", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteTimer)
         vigiarRedeParaClima()   // busca o clima assim que a rede subir no boot, sem esperar o ciclo de 5 min
         avaliarSemInternet()    // ideia 88
         Privilegio.religarAcessibilidade(this)
@@ -350,6 +363,8 @@ class MainActivity : Activity() {
         ui.removeCallbacks(tarefaTocando)
         vigiaTocando.desligar()
         getSharedPreferences("launcher", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteLocal)
+        getSharedPreferences("despertador", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteAlarmes)
+        getSharedPreferences("timer", MODE_PRIVATE).unregisterOnSharedPreferenceChangeListener(ouvinteTimer)
         pararVigiaRede()
         ui.removeCallbacks(tarefaSemInternet)
         menuAberto?.dismiss()

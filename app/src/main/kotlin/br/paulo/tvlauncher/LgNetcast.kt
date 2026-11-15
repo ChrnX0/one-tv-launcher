@@ -15,6 +15,8 @@ object LgNetcast {
     const val CAMINHO_AUTH = "/roap/api/auth"
     const val CAMINHO_COMANDO = "/roap/api/command"
     const val CAMINHO_VOLUME = "/roap/api/data?target=volume_info"
+    /** Entrada e canal de agora (pareada). Na Sala, no Chromecast: inputSourceName HDMI1, labelName = nome do Chromecast. */
+    const val CAMINHO_ENTRADA = "/roap/api/data?target=cur_channel"
     /** Responde sem pareamento: serve para achar a TV na rede e conferir que é ela (uuid). */
     const val CAMINHO_MODELO = "/udap/api/data?target=netrcu.model_info"
 
@@ -110,6 +112,50 @@ object LgNetcast {
     /** Uma rodada de ajuste: no máximo [TECLAS_POR_RODADA] teclas na direção do alvo (o sinal diz a direção). */
     fun rodada(atual: Int, alvo: Int, maximo: Int = 100): Int =
         teclas(atual, alvo, maximo).coerceIn(-TECLAS_POR_RODADA, TECLAS_POR_RODADA)
+
+    /** A entrada que a LG mostra: [nome] = "HDMI1", "TV"...; [rotulo] = o nome que o aparelho deu pelo CEC. */
+    data class Entrada(val nome: String, val rotulo: String)
+
+    fun entrada(xml: String): Entrada? {
+        if (erro(xml) != 200) return null
+        val nome = tag(xml, "inputSourceName")?.takeIf { it.isNotBlank() } ?: return null
+        return Entrada(nome, tag(xml, "labelName").orEmpty())
+    }
+
+    /**
+     * A LG está na entrada do Chromecast? Só HDMI, e com o rótulo igual ao nome deste aparelho ([nossoNome], o
+     * "device_name" que o CEC manda como OSD name) ou a mesma entrada já reconhecida antes ([aprendida], ex.: "HDMI1").
+     * Na dúvida, não: acordar o Chromecast troca a LG para ele, e quem está vendo a antena perderia o programa.
+     */
+    fun entradaDoChromecast(e: Entrada, nossoNome: String?, aprendida: String?): Boolean {
+        if (!e.nome.startsWith("HDMI", ignoreCase = true)) return false
+        val nome = nossoNome?.trim().orEmpty()
+        if (nome.isNotEmpty() && e.rotulo.trim().equals(nome, ignoreCase = true)) return true
+        return !aprendida.isNullOrBlank() && e.nome.equals(aprendida, ignoreCase = true)
+    }
+
+    /**
+     * Quando conferir a entrada ([AcordarComLg]): [ver] recebe cada leitura "LG na rede?" e devolve true quando ela
+     * voltou depois de sair. Só conta como desligada depois de [FORA_SEGUIDAS] leituras fora (uma perdida não é a LG
+     * desligando), e uma vez por volta: se a pessoa escolheu a antena, não fica perguntando de novo.
+     */
+    class Volta {
+        private var foraSeguidas = 0
+        private var viuDesligada = false
+
+        fun ver(naRede: Boolean): Boolean {
+            if (!naRede) {
+                if (++foraSeguidas >= FORA_SEGUIDAS) viuDesligada = true
+                return false
+            }
+            foraSeguidas = 0
+            if (!viuDesligada) return false
+            viuDesligada = false
+            return true
+        }
+
+        companion object { const val FORA_SEGUIDAS = 2 }
+    }
 
     /** Mandar "User-Agent: UDAP/2.0"? Só no caminho UDAP; no ROAP esse cabeçalho faz a LG responder 400. */
     fun agenteUdap(caminho: String): Boolean = caminho.startsWith("/udap/")
