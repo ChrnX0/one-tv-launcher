@@ -257,6 +257,20 @@
                 <action android:name="br.paulo.tvlauncher.PAREAR" />
             </intent-filter>
         </receiver>
+        <!-- Caminho 2 de virar Device Owner (ContaOneTv.kt): autenticador do tipo de conta próprio "One TV".
+             DESLIGADO de fábrica (enabled=false); o próprio launcher o liga quando a pessoa pede o teste. NÃO é
+             com.google. Só responde se a conta aceita Device Owner; sem login, senha ou token. -->
+        <service
+            android:name=".ServicoContaOneTv"
+            android:enabled="false"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/conta_onetv" />
+        </service>
         <!-- Serviço de acessibilidade: hoje só trata as teclas do controle remoto (ver AutorizaShizukuService.kt) -->
         <service
             android:name=".AutorizaShizukuService"

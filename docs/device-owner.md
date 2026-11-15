@@ -43,3 +43,16 @@ adb shell pm enable --user 0 com.google.android.gms   # ALWAYS, even if the line
 ```
 
 If `set-device-owner` fails, `pm enable` puts everything back. Never uninstall Google Play services or clear its data.
+
+## Other paths when the GMS trick doesn't work
+
+The "pause Google" trick above (path 1, `VirarDono.kt`) is the first thing to try. Two fallbacks exist, meant for a
+**test Chromecast** and documented step by step in `device-owner-testes-chromecast.md`:
+
+- **Path 2 — the "One TV" account** (`ContaOneTv.kt`): a custom account type (**not** `com.google`; it impersonates
+  nobody) whose authenticator tells Android the account is device-owner-friendly. The person signs the Google account
+  out, adds the One TV account, runs `dpm`, then swaps back. The authenticator ships **disabled**; it is turned on only
+  for the test by `am broadcast -a br.paulo.tvlauncher.CONTA --ez ligada true -n br.paulo.tvlauncher/.ControleShizukuAdbReceiver`
+  and turns itself off after 15 min.
+- **Path 3 — during first setup**: right after a factory reset, before any Google account is added, there are no
+  accounts, so `dpm set-device-owner` passes with no trick at all.

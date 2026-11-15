@@ -40,6 +40,7 @@ open class ControleShizukuReceiver : BroadcastReceiver() {
         const val HOME_TESTE = "br.paulo.tvlauncher.HOME_TESTE"   // ligar/desligar partes da HOME para medir a GPU (só adb)
         const val UNIFI = "br.paulo.tvlauncher.UNIFI"     // verificar aparelho novo no roteador agora (só adb, testes)
         const val EXTRAS = "br.paulo.tvlauncher.EXTRAS"   // comandos das ideias de 10/11/2026 (só adb; ver ComandosExtras.kt)
+        const val CONTA = "br.paulo.tvlauncher.CONTA"     // caminho 2 de virar dono: liga/desliga a conta One TV (só adb)
 
         /** O shell próprio responde agora? Roda um `echo` na fila do guardião (até 8 s: o broadcast tem ~10 s). */
         fun estado(ctx: Context): String = if (GuardiaoShizuku.comando(ctx, "echo ok", 8_000)?.contains("ok") == true) "shell ok" else "sem shell"
@@ -263,6 +264,20 @@ open class ControleShizukuReceiver : BroadcastReceiver() {
             EXTRAS -> if (this is ControleShizukuAdbReceiver) {
                 val pendente = goAsync()   // alguns comandos fazem rede ou disco: fora da thread principal
                 Fundo.rodar { try { pendente.resultData = ComandosExtras.tratar(ctx, intent) } finally { pendente.finish() } }
+            }
+            // Só pelo adb (15/11/2026): caminho 2 de virar Device Owner (ContaOneTv.kt). Liga o tipo de conta próprio
+            // "One TV" e cria a conta; depois do `dpm`, desliga e apaga. Sem --ez ligada, só mostra o estado. Ex.:
+            //   am broadcast -a br.paulo.tvlauncher.CONTA --ez ligada true  -n br.paulo.tvlauncher/.ControleShizukuAdbReceiver
+            //   am broadcast -a br.paulo.tvlauncher.CONTA --ez ligada false -n br.paulo.tvlauncher/.ControleShizukuAdbReceiver
+            CONTA -> if (this is ControleShizukuAdbReceiver) {
+                val pendente = goAsync()   // AccountManager: fora da thread principal
+                Fundo.rodar {
+                    try {
+                        pendente.resultData = if (intent.hasExtra("ligada"))
+                            ContaOneTv.ligar(ctx, intent.getBooleanExtra("ligada", false))
+                        else "ativo=${ContaOneTv.ativo(ctx)} conta=${ContaOneTv.temConta(ctx)}"
+                    } finally { pendente.finish() }
+                }
             }
         }
     }
