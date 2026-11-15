@@ -161,10 +161,8 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-hls:1.11.1")
     // Ideia 90: tradução de legenda NA TV (ML Kit, offline; modelo de ~30 MB baixado no primeiro uso). +~12 MB no APK.
     implementation("com.google.mlkit:translate:17.0.3")
-    // Player completo (14/11/2026): FFmpeg + libass para o Media3 (NextLib, GPL-3.0 como este repo). A TV não decodifica
-    // Dolby AC3/E-AC3, DTS, TrueHD nem MP2, e legenda ASS/PGS/VobSub precisa ser desenhada em imagem. A versão tem de
-    // ser a do Media3 acima (1.11.1-...): ao subir o Media3, subir esta junto. ~10 MB de libs nativas por arquitetura.
-    implementation("io.github.anilbeesetti:nextlib-media3ext:1.11.1-0.18.0")
+    // Player completo (15/11/2026): FFmpeg (LGPL-2.1) e libass compilados por nós (nativo/compilar.sh), com cola própria
+    // (nativo/cola + FfNativo.kt). Substitui a NextLib (GPL). As .so prontas ficam em nativo/libs (ver sourceSets abaixo).
     // Mídias da rede, etapa 2 (07/11/2026): pasta compartilhada SMB 2/3 (Windows, NAS). Apache-2.0. Traz bcprov e slf4j;
     // o R8 corta o que não é usado.
     implementation("com.hierynomus:smbj:0.15.0") {
@@ -229,4 +227,6 @@ val compilarTunel = tasks.register("compilarTunel") {
     }
 }
 android.sourceSets["main"].jniLibs.srcDir(pastaTunel)
+// Player: FFmpeg, libass e a cola nativa, já compilados (nativo/compilar.sh). O build do app não precisa do NDK.
+android.sourceSets["main"].jniLibs.srcDir(rootProject.file("nativo/libs"))
 tasks.named("preBuild") { dependsOn(compilarTunel) }

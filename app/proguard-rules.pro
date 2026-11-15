@@ -38,3 +38,9 @@
 # FTP (Commons Net): os leitores de listagem (formato UNIX, Windows, MLSD...) também são escolhidos pelo nome.
 -keep class org.apache.commons.net.ftp.parser.** { *; }
 -dontwarn org.apache.commons.net.**
+
+# Player nativo (15/11/2026, FfNativo + nativo/cola): o C++ chama as funções pelo NOME (Java_br_paulo_tvlauncher_FfNativo_*)
+# e lê os bytes pela interface LeitorNativo (métodos ler/tamanho achados por nome). Renomear quebraria só no release.
+-keep class br.paulo.tvlauncher.FfNativo { native <methods>; }
+-keep interface br.paulo.tvlauncher.LeitorNativo { *; }
+-keepclassmembers class * implements br.paulo.tvlauncher.LeitorNativo { int ler(long, byte[], int); long tamanho(); }

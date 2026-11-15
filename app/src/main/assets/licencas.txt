@@ -57,15 +57,48 @@ JMuxer (vídeo ao vivo no painel do celular), de Samir Das
   https://github.com/samirkumardas/jmuxer
   Licença MIT. Copyright (c) 2018 Samir Das.
 
-NextLib media3ext (player completo: FFmpeg + libass para o Media3), de Anil Beesetti
-  https://github.com/anilbeesetti/nextlib
-  Licença GPL-3.0. Traz bibliotecas nativas, cada uma com a sua licença:
-    FFmpeg (https://ffmpeg.org/legal.html): LGPL-3.0 nesta compilação (--enable-version3, sem --enable-gpl).
-    dav1d, da VideoLAN (https://code.videolan.org/videolan/dav1d): BSD-2-Clause.
-    libass (https://github.com/libass/libass): ISC.
-    FreeType (https://freetype.org/license.html): FreeType License (FTL).
-    FriBidi (https://github.com/fribidi/fribidi): LGPL-2.1-or-later.
-    HarfBuzz (https://github.com/harfbuzz/harfbuzz): licença "Old MIT".
+— Player de vídeo (FFmpeg e legendas ASS) —
+
+As bibliotecas abaixo vão no app como arquivos .so separados (ligação dinâmica). Pela LGPL, você pode trocá-las por
+uma versão sua: o script que as compila, com as versões e opções exatas, está em nativo/compilar.sh no repositório
+https://github.com/ChrnX0/one-tv-launcher, e o código-fonte de cada uma no endereço indicado.
+
+FFmpeg 9.0.2 (libavcodec, libavformat, libavutil, libswresample, libswscale)
+  https://ffmpeg.org — código: https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz
+  Licença LGPL-2.1-or-later (compilado sem nenhuma parte GPL nem "nonfree").
+
+FriBidi 1.0.16
+  https://github.com/fribidi/fribidi
+  Licença LGPL-2.1-or-later.
+
+dav1d 1.5.4 (vídeo AV1), da VideoLAN
+  https://code.videolan.org/videolan/dav1d
+  Licença BSD-2-Clause.
+
+libass 0.17.5 (legendas ASS/SSA)
+  https://github.com/libass/libass
+  Licença ISC.
+
+FreeType 2.14.1
+  https://freetype.org
+  Licença FreeType (FTL). Portions of this software are copyright © 2025 The FreeType Project (www.freetype.org).
+  All rights reserved.
+
+HarfBuzz 14.4.0
+  https://github.com/harfbuzz/harfbuzz
+  Licença "Old MIT".
+
+Fontconfig 2.16.0
+  https://www.freedesktop.org/wiki/Software/fontconfig/
+  Licença estilo MIT.
+
+Expat 2.8.4
+  https://github.com/libexpat/libexpat
+  Licença MIT.
+
+libunibreak 7.0
+  https://github.com/adah1972/libunibreak
+  Licença zlib.
 
 ML Kit Translation (tradução de legendas na TV), do Google
   https://developers.google.com/ml-kit/terms

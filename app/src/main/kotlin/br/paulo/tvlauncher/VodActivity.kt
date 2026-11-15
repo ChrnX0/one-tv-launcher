@@ -17,6 +17,7 @@ import android.view.SurfaceView
 import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -34,8 +35,6 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
-import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.FfmpegSubtitleExtractorsFactory
-import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.withFfmpegSubtitles
 import java.util.Locale
 
 /**
@@ -165,6 +164,23 @@ class VodActivity : Activity() {
     private var tentativas = 0
     private var tamLegendaSp = FimDoVideo.LEGENDA_PADRAO   // ideia 21
     private val efeitos = EfeitosSom()                      // volume parecido e voz mais clara (PlayerAcessivel)
+    private val assAjustes = AssAjustes()                   // legenda ASS (libass): área do vídeo, tamanho, fontes do MKV
+    // Player sem NextLib (15/11/2026): segunda legenda (ideia 6), capítulos (5), miniatura no avanço (3), quadro técnico (8).
+    private val segunda = SegundaLegenda()
+    private var seletor: SegundaLegenda.Seletor? = null
+    private lateinit var legenda2: TextView
+    private var podeSondar = false         // a sonda abre o arquivo de novo: só fora do IPTV (lá o limite é 1 conexão)
+    private var sonda: SondaMidia? = null
+    private var sondaUrl: String? = null
+    private var capitulos: List<Capitulos.Capitulo> = emptyList()
+    private var aberturaDoArquivo = false  // a abertura veio de um capítulo do arquivo (não da marca da série)
+    private lateinit var miniatura: ImageView
+    private var tamMiniatura = Capitulos.tamanhoMiniatura(0, 0)
+    private var miniaturaPedida = Long.MIN_VALUE
+    private lateinit var infoTec: TextView
+    private var decodVideo: String? = null
+    private var decodAudio: String? = null
+    private var perdidos = 0
     // Ideia 24: abertura marcada na série (AberturaSerie) e a pílula "Pular abertura · OK".
     private var serie = false              // episódio aberto pela tela de séries (com a chave da série)
     private var abertura: AberturaSerie.Marca? = null
@@ -195,6 +211,7 @@ class VodActivity : Activity() {
         chave = if (direto != null) "rede:${direto.hashCode()}" else chave(tipo, fonte, id)
         chaveIdioma = intent.getStringExtra(EXTRA_IDIOMA)?.takeIf { it.isNotEmpty() } ?: chave
         serie = tipo == TIPO_EPISODIO && !intent.getStringExtra(EXTRA_IDIOMA).isNullOrEmpty()
+        podeSondar = direto != null
 
         val raiz = FrameLayout(this).apply { setBackgroundColor(Color.BLACK) }
         video = SurfaceView(this)
@@ -210,7 +227,10 @@ class VodActivity : Activity() {
         // Legenda em imagem (14/11/2026): desenhada dentro da área do vídeo, por baixo da barra e dos avisos.
         legendaImg = LegendaImagem.Vista(this) { android.graphics.Rect(video.left, video.top, video.right, video.bottom) }
         raiz.addView(legendaImg, 1, FrameLayout.LayoutParams(-1, -1))
-        video.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> legendaImg.invalidate() }   // trocou Ajustar/Zoom
+        video.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->   // trocou Ajustar/Zoom
+            assAjustes.area(v.width, v.height)
+            legendaImg.invalidate()
+        }
         // Legenda (11/11/2026): sem o media3-ui ninguém desenhava as falas, e a legenda escolhida no ▼ não aparecia.
         // Texto branco com contorno escuro, embaixo e centrado; acima da barra quando ela aparece.
         legenda = TextView(this).apply {
@@ -236,6 +256,29 @@ class VodActivity : Activity() {
             background = GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(0xD90B0F17.toInt()); setStroke(dp(2), coral) }
         }
         raiz.addView(pilulaPular, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.END).apply { setMargins(0, 0, dp(48), dp(170)) })
+        // Ideia 6: a segunda legenda fica em cima (a primeira continua embaixo), com o mesmo estilo.
+        legenda2 = TextView(this).apply {
+            textSize = FimDoVideo.LEGENDA_PADRAO.toFloat(); setTextColor(Color.WHITE); gravity = Gravity.CENTER; visibility = View.GONE
+            typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
+            setShadowLayer(8f, 0f, 2f, Color.BLACK)
+            setPadding(dp(18), dp(6), dp(18), dp(6))
+            background = GradientDrawable().apply { cornerRadius = dp(8).toFloat(); setColor(0x8C000000.toInt()) }
+        }
+        raiz.addView(legenda2, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL).apply { setMargins(dp(96), dp(40), dp(96), 0) })
+        // Ideia 3: miniatura acima da barra enquanto ◀ ▶ estão segurados (anda junto com o ponto da barra).
+        miniatura = ImageView(this).apply {
+            visibility = View.GONE; scaleType = ImageView.ScaleType.FIT_XY
+            background = GradientDrawable().apply { setColor(Color.BLACK); setStroke(dp(2), coral) }
+            setPadding(dp(2), dp(2), dp(2), dp(2))
+        }
+        raiz.addView(miniatura, FrameLayout.LayoutParams(dp(tamMiniatura.first), dp(tamMiniatura.second), Gravity.BOTTOM or Gravity.START)
+            .apply { setMargins(dp(32), 0, 0, dp(176)) })
+        // Ideia 8: quadro técnico, em cima à esquerda.
+        infoTec = TextView(this).apply {
+            textSize = 13f; setTextColor(papel); visibility = View.GONE; typeface = Typeface.MONOSPACE
+            setPadding(dp(14), dp(10), dp(14), dp(10)); background = vidro(12)
+        }
+        raiz.addView(infoTec, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.START).apply { setMargins(dp(32), dp(28), 0, 0) })
         setContentView(raiz)
 
         // O endereço (com a senha) e a posição salva saem do disco: fora da thread da tela.
@@ -264,7 +307,7 @@ class VodActivity : Activity() {
                 if (isDestroyed) return@post
                 if (endereco == null) { mostrarAviso(getString(R.string.vod_sem_conta)); return@post }
                 url = endereco; retomarEm = pos; legendaArquivo = leg; legendaTraduzida = trad; atrasoLegenda = atraso; legendasAoLado = aoLado
-                tamLegendaSp = tamLeg; legenda.textSize = tamLeg.toFloat()
+                tamLegendaSp = tamLeg; legenda.textSize = tamLeg.toFloat(); legenda2.textSize = tamLeg.toFloat(); assAjustes.escala(FimDoVideo.escalaAss(tamLeg))
                 pintarLegenda()
                 abertura = ab
                 relato = tocavel?.relato
@@ -280,6 +323,7 @@ class VodActivity : Activity() {
         TaxaQuadros.soltar(this); quadrosDecididos = false   // a HOME e o resto voltam ao modo de sempre
         avanco.cancelar()
         tela.removeCallbacks(vigiaAbertura); esconderPilula()
+        tela.removeCallbacks(tiqueInfo); esconderMiniatura()
         // Os relógios da tela param junto (o tocar() da volta liga de novo): sem isso, com a barra à mostra, o :player
         // acordava a cada 1 s e o salvar a cada 15 s, com a tela atrás de outro app.
         tela.removeCallbacks(salvarDepois); tela.removeCallbacks(tique); tela.removeCallbacks(esconderBarra)
@@ -293,7 +337,11 @@ class VodActivity : Activity() {
         player = null
     }
 
-    override fun onDestroy() { pararTraducao.set(true); tela.removeCallbacksAndMessages(null); super.onDestroy() }
+    override fun onDestroy() {
+        pararTraducao.set(true); tela.removeCallbacksAndMessages(null)
+        sonda?.fechar(); sonda = null
+        super.onDestroy()
+    }
 
     // ---------------------------------------------------------------- vídeo
 
@@ -305,12 +353,16 @@ class VodActivity : Activity() {
             .setConnectTimeoutMs(10_000).setReadTimeoutMs(20_000).setDefaultRequestProperties(cabecalhos)
         // DefaultDataSource: http continua com a fábrica acima, e file:// (a legenda baixada, no disco da TV) também abre.
         val http = DefaultDataSource.Factory(this, http0)
-        // Fontes de legenda (14/11/2026, NextLib): o leitor de MKV troca as legendas ASS/PGS/VobSub/DVB por faixas que o
-        // FFmpeg e o libass desenham em imagem; withFfmpegSubtitles faz o mesmo com legenda ASS de fora do arquivo.
+        // Fontes (15/11/2026, FontesPlayer): ASS crua (de dentro ou de fora do arquivo) para o libass; PGS/VobSub/DVB com o
+        // Media3; AVI/WMV/RMVB/FLV antigo pelo libavformat.
         val dados = FontePastas.Fabrica(this, http)
-        val fontes = DefaultMediaSourceFactory(dados, FfmpegSubtitleExtractorsFactory()).withFfmpegSubtitles(dados)
-        val p = ExoPlayer.Builder(this, EfeitosSom.fabrica(this)).setMediaSourceFactory(fontes)
-            .setSeekBackIncrementMs(10_000).setSeekForwardIncrementMs(30_000).build()
+        val fontes = FontesPlayer.fabrica(dados)
+        val sel = SegundaLegenda.Seletor(this, segunda).also { seletor = it }
+        val saida2 = androidx.media3.exoplayer.text.TextOutput { cg -> mostrarSegunda(cg) }
+        val p = ExoPlayer.Builder(this, EfeitosSom.fabrica(this, assAjustes, segunda to saida2)).setMediaSourceFactory(fontes)
+            .setTrackSelector(sel).setSeekBackIncrementMs(10_000).setSeekForwardIncrementMs(30_000).build()
+        p.addAnalyticsListener(analise)
+        if (podeSondar && sondaUrl != u) sondar(u, dados)
         p.setVideoSurfaceView(video)
         p.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MOVIE).build(), true)
         efeitos.aplicar(p.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
@@ -328,6 +380,179 @@ class VodActivity : Activity() {
         tela.removeCallbacks(salvarDepois); tela.postDelayed(salvarDepois, SALVAR_MS)
         mostrarBarra()
         vigiarAbertura()
+        if (EfeitosSom.ligado(this, InfoTecnica.PREF)) { tela.removeCallbacks(tiqueInfo); tela.post(tiqueInfo) }
+    }
+
+    /** Refaz o player no mesmo ponto (troca de diálogo alto ou de atraso do áudio: a fábrica de renderizadores muda). */
+    private fun refazerPlayer() {
+        val p = player ?: return
+        efeitos.soltar()
+        retomarEm = p.currentPosition; p.release(); player = null
+        tocar()
+    }
+
+    // ---------------------------------------------------------------- ideias 3, 5 e 6 (player sem NextLib)
+
+    /** Abre o arquivo à parte (SondaMidia): capítulos, fontes anexadas do MKV e, depois, as miniaturas. */
+    private fun sondar(u: String, dados: androidx.media3.datasource.DataSource.Factory) {
+        sonda?.fechar()
+        sondaUrl = u; capitulos = emptyList()
+        val s = SondaMidia(android.net.Uri.parse(u), dados)
+        sonda = s
+        s.abrir { caps, fontes, vl, va ->
+            fontes.forEach { (nome, bytes) -> assAjustes.fonte(nome, bytes) }
+            tela.post {
+                if (isDestroyed || sonda !== s) return@post
+                capitulos = caps
+                tamMiniatura = Capitulos.tamanhoMiniatura(vl, va)
+                miniatura.layoutParams = (miniatura.layoutParams as FrameLayout.LayoutParams).apply {
+                    width = dp(tamMiniatura.first); height = dp(tamMiniatura.second)
+                }
+                // Ideia 5: sem abertura marcada na série, vale o capítulo "Opening"/"Abertura" do próprio arquivo.
+                if (abertura == null) Capitulos.abertura(caps)?.let { c ->
+                    val m = AberturaSerie.Marca(c.inicioMs, c.fimMs)
+                    if (AberturaSerie.valida(m)) { abertura = m; aberturaDoArquivo = true; vigiarAbertura() }
+                }
+            }
+        }
+    }
+
+    /** Pede a miniatura do ponto escolhido com ◀ ▶ segurados (no máximo uma a cada 2 s de vídeo). */
+    private fun pedirMiniatura(alvo: Long, dur: Long) {
+        val s = sonda ?: return
+        if (alvo < 0 || dur <= 0) { miniatura.visibility = View.GONE; return }
+        val larguraBarra = progresso.width.takeIf { it > 0 } ?: return
+        val x = dp(20) + (larguraBarra.toLong() * alvo / dur).toInt() - dp(tamMiniatura.first) / 2
+        miniatura.translationX = x.coerceIn(0, (barra.width - dp(tamMiniatura.first)).coerceAtLeast(0)).toFloat()
+        if (kotlin.math.abs(alvo - miniaturaPedida) < 2_000) return
+        miniaturaPedida = alvo
+        val (l, a) = tamMiniatura
+        s.miniatura(alvo, l, a) { _, bmp ->
+            tela.post {
+                if (isDestroyed || avanco.alvo < 0) return@post
+                miniatura.setImageBitmap(bmp); miniatura.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun esconderMiniatura() {
+        miniaturaPedida = Long.MIN_VALUE
+        if (::miniatura.isInitialized) { miniatura.visibility = View.GONE; miniatura.setImageDrawable(null) }
+    }
+
+    /** ⏭ ⏮ do controle: próximo capítulo / começo deste (ou o anterior, se acabou de começar). */
+    private fun pularCapitulo(proximo: Boolean): Boolean {
+        val p = player ?: return false
+        if (capitulos.size < 2) return false
+        val ir = if (proximo) Capitulos.proximo(capitulos, p.currentPosition) else Capitulos.anterior(capitulos, p.currentPosition)
+        if (ir < 0) return true
+        p.seekTo(ir); mostrarBarra()
+        avisoBreve(rotuloCapitulo(capitulos.indexOfLast { it.inicioMs <= ir }.coerceAtLeast(0)))
+        return true
+    }
+
+    private fun rotuloCapitulo(i: Int): String {
+        val c = capitulos[i]
+        return "${relogio(c.inicioMs)} · " + (c.titulo ?: getString(R.string.vod_capitulo_n, i + 1))
+    }
+
+    private fun escolherCapitulo() {
+        val p = player ?: return
+        val atual = capitulos.indexOfLast { it.inicioMs <= p.currentPosition }
+        Estilo.lista(this, getString(R.string.vod_capitulos_titulo), capitulos.indices.map { rotuloCapitulo(it) },
+            listOfNotNull(atual.takeIf { it >= 0 })) { i -> p.seekTo(capitulos[i].inicioMs); mostrarBarra() }
+    }
+
+    private fun mostrarSegunda(cg: CueGroup) {
+        val t = cg.cues.mapNotNull { it.text }.joinToString("\n")
+        legenda2.text = t
+        legenda2.visibility = if (t.isBlank() || segunda.id == null) View.GONE else View.VISIBLE
+    }
+
+    /** Segunda legenda: as faixas de texto (menos a que já está embaixo e as ASS) ou "Desligada". */
+    private fun escolherSegunda() {
+        val p = player ?: return
+        val faixas = ArrayList<Pair<String, String>>()   // id, rótulo
+        for (grupo in p.currentTracks.groups) {
+            for (i in 0 until grupo.length) {
+                val f = grupo.getTrackFormat(i)
+                val id = f.id ?: continue
+                if (!SegundaLegenda.aceita(f) || (grupo.type == C.TRACK_TYPE_TEXT && grupo.isTrackSelected(i))) continue
+                faixas += id to nomeFaixa(f)
+            }
+        }
+        val rotulos = listOf(getString(R.string.vod_segunda_desligada)) + faixas.map { it.second }
+        val marcada = faixas.indexOfFirst { it.first == segunda.id }.let { if (it < 0) 0 else it + 1 }
+        Estilo.lista(this, getString(R.string.vod_segunda_titulo), rotulos, listOf(marcada)) { i ->
+            segunda.id = if (i == 0) null else faixas[i - 1].first
+            if (segunda.id == null) legenda2.visibility = View.GONE
+            seletor?.atualizar()
+        }
+    }
+
+    private fun nomeFaixa(f: androidx.media3.common.Format): String {
+        val idioma = f.language?.let { Locale.forLanguageTag(it).getDisplayLanguage(Locale.getDefault()).ifEmpty { it } } ?: getString(R.string.vod_faixa)
+        return listOfNotNull(idioma, f.label?.takeIf { it.isNotBlank() && it != idioma }).joinToString(" · ")
+    }
+
+    // ---------------------------------------------------------------- ideias 2 e 4: diálogo e atraso do áudio
+
+    private fun alternarDialogo() {
+        val ligou = EfeitosSom.alternar(this, MixDialogo.PREF)
+        avisoBreve(getString(if (ligou) R.string.vod_dialogo_ligado else R.string.vod_dialogo_desligado))
+        refazerPlayer()
+    }
+
+    private fun rotuloAtrasoAudio(ms: Int) = if (ms == 0) getString(R.string.vod_atraso_audio_zero)
+        else getString(if (ms > 0) R.string.vod_atraso_audio_mais else R.string.vod_atraso_audio_menos, kotlin.math.abs(ms))
+
+    private fun escolherAtrasoAudio() {
+        val v = RenderizadoresPlayer.ATRASOS
+        val atual = EfeitosSom.atrasoMs(this)
+        val titulo = getString(R.string.vod_atraso_audio_titulo, EfeitosSom.caixaBluetooth(this) ?: getString(R.string.vod_atraso_audio_tv))
+        Estilo.lista(this, titulo, v.map { rotuloAtrasoAudio(it) }, listOf(v.indexOf(atual).coerceAtLeast(0))) { i ->
+            if (v[i] == atual) return@lista
+            EfeitosSom.gravarAtraso(this, v[i])
+            refazerPlayer()
+        }
+    }
+
+    // ---------------------------------------------------------------- ideia 8: quadro técnico
+
+    private val analise = object : androidx.media3.exoplayer.analytics.AnalyticsListener {
+        override fun onVideoDecoderInitialized(t: androidx.media3.exoplayer.analytics.AnalyticsListener.EventTime, nome: String, inicio: Long, duracao: Long) { decodVideo = nome }
+        override fun onAudioDecoderInitialized(t: androidx.media3.exoplayer.analytics.AnalyticsListener.EventTime, nome: String, inicio: Long, duracao: Long) { decodAudio = nome }
+        override fun onDroppedVideoFrames(t: androidx.media3.exoplayer.analytics.AnalyticsListener.EventTime, n: Int, ms: Long) { perdidos += n }
+    }
+
+    private val tiqueInfo: Runnable = object : Runnable {
+        override fun run() {
+            val p = player
+            if (p == null || !EfeitosSom.ligado(this@VodActivity, InfoTecnica.PREF)) { infoTec.visibility = View.GONE; return }
+            val v = p.videoFormat; val a = p.audioFormat
+            val e = InfoTecnica.Estado(
+                v?.sampleMimeType, v?.codecs, v?.width ?: 0, v?.height ?: 0, v?.frameRate ?: 0f, decodVideo, perdidos,
+                a?.sampleMimeType, a?.codecs, a?.channelCount ?: 0, a?.sampleRate ?: 0, decodAudio,
+                listOfNotNull(v?.bitrate, a?.bitrate).filter { it > 0 }.sum(),
+                (p.bufferedPosition - p.currentPosition).coerceAtLeast(0), FfNativo.versaoFfmpeg,
+                EfeitosSom.atrasoMs(this@VodActivity), EfeitosSom.dialogoAlto(this@VodActivity))
+            infoTec.text = InfoTecnica.linhas(e, rotulosInfo).joinToString("\n")
+            infoTec.visibility = View.VISIBLE
+            tela.postDelayed(this, 1_000)
+        }
+    }
+
+    private val rotulosInfo by lazy {
+        InfoTecnica.Rotulos(getString(R.string.info_video), getString(R.string.info_audio), getString(R.string.info_perdidos),
+            getString(R.string.info_taxa), getString(R.string.info_buffer), getString(R.string.info_atraso),
+            getString(R.string.info_dialogo), getString(R.string.info_chip), "FFmpeg", getString(R.string.info_qps),
+            getString(R.string.info_mono), getString(R.string.info_estereo))
+    }
+
+    private fun alternarInfo() {
+        val ligou = EfeitosSom.alternar(this, InfoTecnica.PREF)
+        tela.removeCallbacks(tiqueInfo)
+        if (ligou) tela.post(tiqueInfo) else infoTec.visibility = View.GONE
     }
 
     /** O vídeo e, se houver, a legenda baixada junto (o Media3 a trata como mais uma faixa de legenda). */
@@ -435,6 +660,7 @@ class VodActivity : Activity() {
             }, espera)
         }
         override fun onVideoSizeChanged(t: androidx.media3.common.VideoSize) {
+            assAjustes.video(t.width, t.height)
             tamanhoVideo = t
             PlayerImagem.aplicar(video, modoImagem, t.width, t.height, t.pixelWidthHeightRatio)
         }
@@ -506,6 +732,8 @@ class VodActivity : Activity() {
             KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> { pular(p, +30_000L, event); return true }
             KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_INFO -> { mostrarBarra(); return true }
             KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_CAPTIONS -> { if (event.repeatCount == 0) escolherFaixas(); return true }
+            KeyEvent.KEYCODE_MEDIA_NEXT -> if (event.repeatCount == 0 && pularCapitulo(true)) return true
+            KeyEvent.KEYCODE_MEDIA_PREVIOUS -> if (event.repeatCount == 0 && pularCapitulo(false)) return true
         }
         return super.onKeyDown(keyCode, event)
     }
@@ -517,12 +745,14 @@ class VodActivity : Activity() {
         val ir = avanco.apertou(p.currentPosition, dur, passo, event.repeatCount, event.eventTime, event.downTime)
         if (ir >= 0) p.seekTo(ir)
         mostrarBarra()
+        pedirMiniatura(avanco.alvo, p.duration.takeIf { it != C.TIME_UNSET } ?: 0L)
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         when (keyCode) {
             KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> {
                 val ir = avanco.soltou()
+                esconderMiniatura()
                 if (ir >= 0) { player?.seekTo(ir); mostrarBarra() }
                 return true
             }
@@ -552,6 +782,7 @@ class VodActivity : Activity() {
                         prefIdioma = pref
                         Fundo.rodar { IdiomaPlayer.lembrar(this, chaveIdioma, pref) }
                     }
+                    if (tipo == C.TRACK_TYPE_TEXT && f.id != null && f.id == segunda.id) { segunda.id = null; legenda2.visibility = View.GONE; seletor?.atualizar() }
                     p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
                         .setTrackTypeDisabled(tipo, false)
                         .setOverrideForType(TrackSelectionOverride(g, indice)).build()
@@ -584,6 +815,11 @@ class VodActivity : Activity() {
         opcoes += Opcao(getString(R.string.imagem_opcao, PlayerImagem.rotulo(this, modoImagem))) { escolherImagem() }
         // Ideias 21 e 19: tamanho da legenda (vale para todos os vídeos) e desligar a TV quando este vídeo acabar.
         opcoes += Opcao(getString(R.string.vod_legenda_tamanho_opcao, rotuloTamanho(tamLegendaSp))) { escolherTamanhoLegenda() }
+        // Ideia 6: segunda legenda (em cima). Só aparece se houver outra faixa de texto para mostrar.
+        if (p.currentTracks.groups.any { g -> (0 until g.length).any { SegundaLegenda.aceita(g.getTrackFormat(it)) } })
+            opcoes += Opcao(getString(R.string.vod_segunda_opcao), marcada = segunda.id != null) { escolherSegunda() }
+        // Ideia 5: capítulos do arquivo (MKV, MP4, WMV). ⏭ ⏮ do controle também pulam entre eles.
+        if (capitulos.size >= 2) opcoes += Opcao(getString(R.string.vod_capitulos_opcao, capitulos.size)) { escolherCapitulo() }
         // Para quem enxerga e ouve pior (14/11/2026): ligar/desligar, vale para todos os vídeos e canais.
         opcoes += Opcao(getString(R.string.acess_legenda_fundo), EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_FUNDO)) {
             EfeitosSom.alternar(this, PlayerAcessivel.LEGENDA_FUNDO); pintarLegenda()
@@ -595,6 +831,11 @@ class VodActivity : Activity() {
             opcoes += Opcao(getString(R.string.acess_volume), EfeitosSom.volumeIgual(this)) { alternarSom(PlayerAcessivel.VOLUME_IGUAL) }
             opcoes += Opcao(getString(R.string.acess_voz), EfeitosSom.vozClara(this)) { alternarSom(PlayerAcessivel.VOZ_CLARA) }
         }
+        // Ideia 2: diálogo mais alto (5.1/7.1 tocando em 2 caixas). Ideia 4: atraso do áudio, um por saída de som.
+        if (FfNativo.disponivel) opcoes += Opcao(getString(R.string.vod_dialogo_opcao), EfeitosSom.dialogoAlto(this)) { alternarDialogo() }
+        opcoes += Opcao(getString(R.string.vod_atraso_audio_opcao, rotuloAtrasoAudio(EfeitosSom.atrasoMs(this)))) { escolherAtrasoAudio() }
+        // Ideia 8: informações técnicas por cima do vídeo.
+        opcoes += Opcao(getString(R.string.vod_info_opcao), EfeitosSom.ligado(this, InfoTecnica.PREF)) { alternarInfo() }
         opcoes += Opcao(getString(R.string.quadros_opcao), TaxaQuadros.ligada(this)) {
             val ligou = TaxaQuadros.alternar(this)
             if (ligou) player?.videoFormat?.frameRate?.takeIf { it > 0f }?.let { TaxaQuadros.aplicar(this, it) } else TaxaQuadros.soltar(this)
@@ -629,7 +870,7 @@ class VodActivity : Activity() {
         val nova = if (inicio) AberturaSerie.marcarInicio(abertura, pos) else AberturaSerie.marcarFim(abertura, pos)
         if (nova == null) { avisoBreve(getString(R.string.abertura_falta_inicio)); return }
         if (!inicio && !AberturaSerie.valida(nova)) { avisoBreve(getString(R.string.abertura_invalida)); return }
-        abertura = nova
+        abertura = nova; aberturaDoArquivo = false
         gravarAbertura(nova)
         avisouPulo = true   // quem acabou de marcar está no trecho: não oferece pular agora
         avisoBreve(if (AberturaSerie.valida(nova)) getString(R.string.abertura_salva, relogio(nova.ini), relogio(nova.fim))
@@ -656,7 +897,7 @@ class VodActivity : Activity() {
     /** Confere a posição duas vezes por segundo, só enquanto há abertura válida marcada na série. */
     private fun vigiarAbertura() {
         tela.removeCallbacks(vigiaAbertura)
-        if (serie && AberturaSerie.valida(abertura)) tela.post(vigiaAbertura)
+        if ((serie || aberturaDoArquivo) && AberturaSerie.valida(abertura)) tela.post(vigiaAbertura)
     }
 
     private val vigiaAbertura: Runnable = object : Runnable {
@@ -900,7 +1141,7 @@ class VodActivity : Activity() {
         val atual = t.indexOf(tamLegendaSp)
         Estilo.lista(this, getString(R.string.vod_legenda_tamanho_titulo), resources.getStringArray(R.array.vod_legenda_tamanhos).toList(),
             listOf(atual)) { i ->
-            tamLegendaSp = t[i]; legenda.textSize = t[i].toFloat()
+            tamLegendaSp = t[i]; legenda.textSize = t[i].toFloat(); legenda2.textSize = t[i].toFloat(); assAjustes.escala(FimDoVideo.escalaAss(t[i]))
             getSharedPreferences("player", MODE_PRIVATE).edit().putInt("legenda_sp", t[i]).apply()
         }
     }

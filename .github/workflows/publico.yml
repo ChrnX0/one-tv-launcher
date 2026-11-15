@@ -11,7 +11,7 @@ name: Repo publico
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'comunidade/**', 'publico/**', 'README.md', 'docs/screenshots/**', 'docs/device-owner.md', 'docs/home-assistant.md', 'app/src/main/assets/licencas.txt', '.github/workflows/publico.yml']
+    paths: ['site/**', 'comunidade/**', 'publico/**', 'README.md', 'docs/screenshots/**', 'docs/device-owner.md', 'docs/home-assistant.md', 'app/src/main/assets/licencas.txt', 'nativo/compilar.sh', 'nativo/README.md', 'nativo/licencas/**', '.github/workflows/publico.yml']
   workflow_dispatch:
 
 permissions:
@@ -48,6 +48,9 @@ jobs:
           rsync -a --delete docs/screenshots/ pub/docs/screenshots/
           cp docs/device-owner.md docs/home-assistant.md pub/docs/   # guias de uso citados no README
           mkdir -p pub/app/src/main/assets && cp app/src/main/assets/licencas.txt pub/app/src/main/assets/   # créditos citados no README
+          # LGPL do FFmpeg/FriBidi: quem recebe o app precisa poder recompilar e trocar as .so. O script, as versões e as
+          # licenças ficam públicos (a cola JNI é nossa e não entra).
+          mkdir -p pub/nativo && cp nativo/compilar.sh nativo/README.md pub/nativo/ && rsync -a --delete nativo/licencas/ pub/nativo/licencas/
           rsync -a publico/ pub/
           # README público: o daqui sem o selo de licença e sem as seções de código.
           awk '
