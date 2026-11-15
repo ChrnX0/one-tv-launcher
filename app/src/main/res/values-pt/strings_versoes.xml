@@ -14,6 +14,9 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Login do Claude no navegador em inglês ou português, conforme o idioma do navegador; o painel web em inglês também traduz as mensagens de erro, e os erros das contas de filmes saem no idioma da TV</item>
+        <item>Segurança: ligar a unidade de rede pelo painel pede o PIN; o conector do Windows só baixa pelo https; outro aparelho da casa não trava mais o painel, o login do Claude nem a cópia de arquivos do seu computador (cada computador continua entrando com o próprio “Permitir?”)</item>
+        <item>A manutenção da madrugada termina antes de a família ligar a TV, e as notas do IMDb dos filmes não somem mais</item>
         <item>Wi-Fi que não volta sozinho: se a TV ficar 5 min com o Wi-Fi ligado mas sem conexão, o launcher desliga e religa o Wi-Fi; se mesmo assim não voltar, reinicia a TV (no máximo uma vez a cada 6 h e nunca com som tocando). Fica anotado no histórico de rede</item>
         <item>Timer de sono: com a LG NetCast pareada para o volume, o timer agora também desliga a LG pela rede 15 s depois que o Chromecast dorme (a LG ignora o standby do HDMI)</item>
         <item>Protetor de tela: um pedido de fora (celular, painel, Claude) que abriria um app ou uma tela agora sempre pergunta na TV antes de tirar o protetor, mesmo com “Permitir” nas Confirmações. A pergunta espera 3 min; sem resposta, o pedido fica nas notificações da TV e, tocando nele, a TV pergunta se você aceita</item>
@@ -139,6 +142,8 @@
         <item>Protetor de tela com widgets novos, de letra maior: escolha Faixa de vidro (as próximas horas numa curva, com a hora do sol), Cartões (agora, horas, hoje e amanhã) ou Sem caixa (a temperatura grande e o tempo numa frase) em Configurações › Tela e energia › Widgets do protetor, ou no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Unidade de rede pede o PIN</item>
+        <item>Notas do IMDb em Filmes</item>
         <item>Timer de sono desliga a LG</item>
         <item>Pedido de fora com o protetor aberto</item>
         <item>Rotinas no mesmo minuto</item>
@@ -251,6 +256,8 @@
         <item>Em Configurações › Tela e energia, OK em Widgets do protetor até o estilo que quiser e espere o protetor aparecer</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>No painel web, desligue e ligue de novo a unidade de rede: ao ligar, o painel pediu o PIN?</item>
+        <item>Abra Filmes e a ficha de um filme: as notas do IMDb continuam aparecendo?</item>
         <item>Marque o timer de sono para 2 minutos: uns 15 s depois que a tela apagar, a LG desligou sozinha?</item>
         <item>Com o protetor aberto, peça pelo celular ou painel para abrir a Previsão: a TV perguntou antes (e só abriu depois do OK)?</item>
         <item>Crie duas rotinas para o mesmo minuto (ex.: ligar e abrir um app): as duas rodaram?</item>
