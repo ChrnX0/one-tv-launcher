@@ -24,7 +24,7 @@ object InfoExterna {
     /** Notas por pedido em lote no MDBList (a doc não fixa o máximo do /{provider}/{type}/; 100 é o do /rating). */
     const val LOTE_MDBLIST = 100
     /** Formato da ficha guardada: 2 = com trailer (15/11/2026). Ficha de formato antigo é pedida de novo. */
-    const val VERSAO_DETALHE = 2
+    const val VERSAO_DETALHE = 3   // 3: diretor do TMDB (16/11/2026)
 
     // ================================================================ id do Xtream
 
@@ -129,6 +129,8 @@ object InfoExterna {
         val noAr: Boolean = false,
         /** Trailer no YouTube (só a chave do vídeo, ex. "n9xhJrPXop4"); vazio quando o TMDB não tem. */
         val trailer: String = "",
+        /** Direção (filme): crew "Director" do TMDB. Vence a do provedor, que errou na Sala (Getúlio: "Gigi Soares"). */
+        val diretor: String = "",
     ) {
         val linkTrailer: String get() = if (trailer.isEmpty()) "" else "https://www.youtube.com/watch?v=$trailer"
     }
@@ -159,6 +161,10 @@ object InfoExterna {
         val imdb = (o.optJSONObject("external_ids")?.optString("imdb_id") ?: "").ifBlank { o.optString("imdb_id") }
             .takeIf { it.matches(Regex("tt\\d{5,10}")) }.orEmpty()
         val creditos = o.optJSONObject(if (serie) "aggregate_credits" else "credits")?.optJSONArray("cast")
+        val diretor = if (serie) "" else o.optJSONObject("credits")?.optJSONArray("crew")?.let { c ->
+            (0 until c.length()).mapNotNull { c.optJSONObject(it) }.filter { it.optString("job") == "Director" }
+                .mapNotNull { it.optString("name").takeIf { n -> n.isNotBlank() } }.distinct().take(2).joinToString(", ")
+        }.orEmpty()
         val elenco = creditos?.let { c -> (0 until minOf(c.length(), 6)).mapNotNull { c.optJSONObject(it)?.optString("name")?.takeIf { n -> n.isNotBlank() } } }.orEmpty()
         val generos = o.optJSONArray("genres")?.let { g -> (0 until g.length()).mapNotNull { g.optJSONObject(it)?.optString("name")?.takeIf { n -> n.isNotBlank() } } }.orEmpty()
         val col = o.optJSONObject("belongs_to_collection")?.let { c -> c.optInt("id").takeIf { it > 0 }?.let { Colecao(it, c.optString("name")) } }
@@ -168,7 +174,7 @@ object InfoExterna {
         }
         Detalhe(id, imdb, o.optString("overview").trim().take(1500), elenco, generos.take(3), col, prox,
             noAr = serie && (o.optBoolean("in_production") || prox != null),
-            trailer = escolherTrailer(o.optJSONObject("videos")?.optJSONArray("results"), idiomaTmdb()))
+            trailer = escolherTrailer(o.optJSONObject("videos")?.optJSONArray("results"), idiomaTmdb()), diretor = diretor)
     }.getOrNull()
 
     /** As partes da coleção: (id TMDB, título, ano), do mais antigo ao mais novo. */
@@ -295,6 +301,7 @@ object InfoExterna {
             put("d", JSONObject().put("i", d.imdb).put("s", d.sinopse).put("e", JSONArray(d.elenco)).put("g", JSONArray(d.generos))
                 .put("ar", d.noAr).put("v", VERSAO_DETALHE).apply {
                     if (d.trailer.isNotEmpty()) put("tr", d.trailer)
+                    if (d.diretor.isNotEmpty()) put("dr", d.diretor)
                     d.colecao?.let { put("c", it.id).put("cn", it.nome) }
                     d.proximo?.let { put("pd", it.data).put("pt", it.temporada).put("pe", it.numero) }
                 })
@@ -314,7 +321,7 @@ object InfoExterna {
             Detalhe(tmdb, d.optString("i"), d.optString("s"), lista(d.optJSONArray("e")), lista(d.optJSONArray("g")),
                 d.optInt("c").takeIf { it > 0 }?.let { Colecao(it, d.optString("cn")) },
                 d.optString("pd").takeIf { it.isNotBlank() }?.let { ProximoEp(it, d.optInt("pt"), d.optInt("pe")) }, d.optBoolean("ar"),
-                d.optString("tr"))
+                d.optString("tr"), d.optString("dr"))
         }
         // Ficha guardada antes do trailer (sem "v"): vale até a próxima abertura, que pede de novo ao TMDB.
         val detEm = if (o.optJSONObject("d")?.optInt("v") == VERSAO_DETALHE) o.optLong("de") else 0L
