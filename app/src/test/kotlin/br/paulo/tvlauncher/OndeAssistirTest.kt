@@ -20,6 +20,15 @@ class OndeAssistirTest {
         assertNull(OndeAssistir.pacote("Globoplay"))
     }
 
+    @Test fun canalDentroDeOutroServicoViraOServico() {
+        assertEquals("Apple TV", OndeAssistir.limparNome("Apple TV Amazon Channel"))
+        assertEquals("Paramount Plus", OndeAssistir.limparNome("Paramount Plus Apple TV Channel"))
+        assertEquals("Netflix", OndeAssistir.limparNome("Netflix basic with Ads"))
+        val j = """{"results":{"BR":{"flatrate":[{"provider_name":"Apple TV","display_priority":1},
+            {"provider_name":"Apple TV Amazon Channel","display_priority":5}]}}}"""
+        assertEquals(listOf("Apple TV"), OndeAssistir.lerProvedores(j, "BR"))
+    }
+
     @Test fun buscaSoFilmesESeriesForaDaLista() {
         val j = """{"results":[{"media_type":"movie","id":1,"title":"A","release_date":"2020-01-01"},{"media_type":"person","id":2,"name":"P"},
             {"media_type":"tv","id":3,"name":"B","first_air_date":""},{"media_type":"movie","id":4,"title":"C"}]}"""
