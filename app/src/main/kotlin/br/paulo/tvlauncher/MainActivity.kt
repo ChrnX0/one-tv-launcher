@@ -92,6 +92,7 @@ class MainActivity : Activity() {
     // O visual escolhido no menu do perfil (Tema.kt). Lido no onCreate; trocar de tema recria a tela.
     private var tema = Tema.ESCURO
     private var assinaturaFundo = ""   // "Meu fundo": arquivo|brilho|contraste quando a tela foi montada
+    private var idiomaMontado = ""     // idioma em que a tela foi montada (locale está em configChanges: não recria sozinha)
     private var assinaturaLayout = ""  // layout flexível (LayoutHome): tamanho|transparente quando a tela foi montada
     private val fonteLeve by lazy { Fontes.display(this, tema) }   // hora e temperatura
     private val fonteUi by lazy { Fontes.ui(this, tema) }
@@ -173,8 +174,10 @@ class MainActivity : Activity() {
             // Clima instantâneo (auditoria 10/11/2026): o salvo já está na tela (mostrarClimaSalvo, no onResume). Só busca
             // se ele tem mais de CLIMA_A_CADA_MIN; senão espera o que falta. Antes buscava a cada volta à HOME.
             val ciclo = Config.CLIMA_A_CADA_MIN * 60_000L
-            val idade = System.currentTimeMillis() - getSharedPreferences("clima", MODE_PRIVATE).getLong("em", 0)
-            if (idade in 0 until ciclo) { ui.postDelayed(this, ciclo - idade); return }
+            val prefs = getSharedPreferences("clima", MODE_PRIVATE)
+            val idade = System.currentTimeMillis() - prefs.getLong("em", 0)
+            // A linha salva vem pronta no idioma da busca: trocou o idioma, busca já (senão ficava no antigo até o ciclo).
+            if (idade in 0 until ciclo && prefs.getString("idioma", null) == idiomaAtual()) { ui.postDelayed(this, ciclo - idade); return }
             buscarClima()
             ui.postDelayed(this, ciclo)
         }
@@ -283,6 +286,7 @@ class MainActivity : Activity() {
         DesempenhoTv.criou()   // guarda de desempenho (12/11/2026): o 1º quadro depois disto dá o tempo de abertura
         tema = Tema.atual(this)
         assinaturaFundo = FundoMeuDados.assinatura(this)
+        idiomaMontado = idiomaAtual()
         assinaturaLayout = "${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}"
         setContentView(montarTela())
         window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, novo ->
@@ -308,11 +312,19 @@ class MainActivity : Activity() {
         VindoDoProjectivyActivity.talvezMostrar(this)   // Projectivy no aparelho: migração guiada, uma vez
     }
 
+    override fun onConfigurationChanged(novo: android.content.res.Configuration) {
+        super.onConfigurationChanged(novo)
+        // Idioma trocado com a HOME na frente: remonta já, sem esperar a próxima volta.
+        if (idiomaMontado.isNotEmpty() && idiomaAtual() != idiomaMontado) recreate()
+    }
+
     override fun onResume() {
         super.onResume()
         // O tema agora só troca na tela separada de Configurações do launcher (ConfigLauncherActivity), que não
         // tem como chamar recreate() nesta Activity diretamente — então aqui a gente mesmo percebe a troca ao voltar.
         if (Tema.atual(this) != tema) { recreate(); return }
+        // Trocou o idioma (do sistema ou só do launcher): textos já montados (data, destaque) ficavam no antigo.
+        if (idiomaAtual() != idiomaMontado) { recreate(); return }
         if (tema == Tema.MEU && FundoMeuDados.assinatura(this) != assinaturaFundo) { recreate(); return }   // outro arquivo/brilho
         if ("${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}" != assinaturaLayout) { recreate(); return }   // cartões mudaram
         // Modo simples (12/11/2026, ideia 10; desligado por padrão): a HOME vira a tela de cards grandes.
@@ -2510,6 +2522,7 @@ class MainActivity : Activity() {
                         .putFloat("lat", r.ponto.lat.toFloat()).putFloat("lon", r.ponto.lon.toFloat())
                         .putInt("max", r.max).putInt("min", r.min).putString("linha", r.linha)
                         .putString("horas", r.horas)   // próximas horas: a barra do protetor
+                        .putString("idioma", idiomaAtual())   // a linha é texto pronto nesse idioma
                         .putLong("em", System.currentTimeMillis()).apply()
                     txtMax.text = "↑ ${r.max}°"
                     txtMin.text = "↓ ${r.min}°"
@@ -2549,9 +2562,13 @@ class MainActivity : Activity() {
         ultimaTemp = temp
         txtMax.text = "↑ ${c.getInt("max", temp)}°"
         txtMin.text = "↓ ${c.getInt("min", temp)}°"
-        txtChuva.text = c.getString("linha", "")
+        // Linha salva em outro idioma (a pessoa trocou): não mostra texto no idioma errado; a busca já vem.
+        txtChuva.text = if (c.getString("idioma", null) == idiomaAtual()) c.getString("linha", "") else ""
         atualizarEclipse()
     }
+
+    /** Idioma em que as strings desta Activity saem (o do app, ou o do sistema). */
+    private fun idiomaAtual(): String = resources.configuration.locales[0].toLanguageTag()
 
     /**
      * Dia/noite andando com o relógio, sem rede (auditoria 10/11/2026, home-3): antes só mudava numa busca de clima que deu
