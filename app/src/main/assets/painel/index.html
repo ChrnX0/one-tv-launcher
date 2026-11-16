@@ -230,6 +230,17 @@
     </section>
 
     <section id="abaControle" class="painel-aba" hidden>
+      <!-- Pedido de ajuda do Cuidar de longe (cuidar.js): só aparece nas 24 h depois de um pedido -->
+      <div id="ajudaCuidar" class="cartao" hidden>
+        <h2 id="tituloAjudaCuidar">Pedido de ajuda</h2>
+        <img id="fotoAjudaCuidar" class="foto-ajuda" alt="A tela da TV no momento do pedido" hidden>
+        <p class="aviso">A foto é do momento do pedido (pode sair preta com filme protegido). A tela de agora e o controle estão logo abaixo.</p>
+        <form id="formRespostaCuidar" class="barra-acoes">
+          <input id="textoRespostaCuidar" type="text" maxlength="200" placeholder="Já vou te ligar!" aria-label="Resposta na TV">
+          <button type="submit" class="botao-primario">Responder na TV</button>
+        </form>
+        <p id="statusAjudaCuidar" class="aviso" hidden></p>
+      </div>
       <div class="tela-tv">
         <img id="fotoTela" alt="Tela da TV" hidden>
         <div id="semFoto" class="sem-foto">Carregando a tela…</div>
@@ -916,6 +927,41 @@
         <div id="tiposAvisos" class="lista-registro"></div>
         <p id="statusAvisos" class="aviso" hidden></p>
       </div>
+      <!-- Cuidar de longe (ideias 77-79, cuidar.js; rotas em PainelCuidar.kt) -->
+      <div class="cartao" id="cartaoCuidar">
+        <h2>Cuidar de longe</h2>
+        <p class="aviso">Avisos no celular de quem cuida de quem mora com esta TV: pedido de ajuda (segurar uma tecla 3 s, com a foto da tela),
+          lembrete não confirmado e TV que não ligou até a hora de costume. Desligado de fábrica: só liga quando quem mora aí aceitar na própria TV,
+          pelo controle. Antes, instale o painel no celular de quem cuida e ligue "Receber avisos aqui" (cartão acima).</p>
+        <p id="estadoCuidar" class="aviso-curto"></p>
+        <div class="barra-acoes">
+          <input id="nomeCuidar" type="text" maxlength="30" placeholder="Nome de quem recebe (ex.: Ana)" aria-label="Nome de quem recebe">
+          <select id="teclaCuidar" aria-label="Tecla de ajuda"><option value="VOLTAR">Segurar VOLTAR</option><option value="OK">Segurar OK</option></select>
+        </div>
+        <div id="aparelhosCuidar" class="lista-registro"></div>
+        <div id="avisosCuidar" class="lista-registro"></div>
+        <div class="barra-acoes">
+          <label>Prazo do "Feito" <select id="prazoCuidar" aria-label="Prazo do Feito"></select></label>
+          <label>Hora de costume <select id="horaCuidar" aria-label="Hora de costume"></select></label>
+          <label>Margem <select id="margemCuidar" aria-label="Margem"></select></label>
+          <label><input id="acenderCuidar" type="checkbox"> acender a tela no lembrete</label>
+        </div>
+        <div class="barra-acoes">
+          <button type="button" class="botao-primario" id="btnGravarCuidar">Gravar</button>
+          <button type="button" class="botao-secundario" id="btnPerguntarCuidar">Perguntar na TV</button>
+          <button type="button" class="botao-secundario" id="btnTestarCuidar">Mandar um teste</button>
+          <button type="button" class="botao-secundario" id="btnDesligarCuidar">Desligar</button>
+        </div>
+        <h3>Lembretes</h3>
+        <form id="formLembreteCuidar" class="barra-acoes">
+          <input id="horaLembreteCuidar" type="time" value="20:00" aria-label="Hora do lembrete">
+          <input id="textoLembreteCuidar" type="text" maxlength="60" placeholder="Remédio da pressão" aria-label="Texto do lembrete">
+          <button type="submit" class="botao-secundario">Adicionar</button>
+        </form>
+        <p class="aviso">O texto do lembrete aparece grande na TV, com "Feito". Ele não sai da casa: o celular recebe só "o lembrete das 20:00 não foi confirmado".</p>
+        <div id="lembretesCuidar" class="lista-registro"></div>
+        <p id="statusCuidar" class="aviso" hidden></p>
+      </div>
       <div class="cartao" id="cartaoTime">
         <h2>Meu time e lembretes</h2>
         <p class="aviso">Palavras separadas por vírgula ("Flamengo, Fórmula 1"). Todo programa do guia com uma delas no título vira lembrete:
@@ -1095,6 +1141,7 @@
   <script src="jmuxer.min.js"></script>
   <script src="extras.js"></script>
   <script src="ideias.js"></script>
+  <script src="cuidar.js"></script>
   <script src="ia.js"></script>
   <script src="ui.js"></script>
   <script src="busca.js"></script>

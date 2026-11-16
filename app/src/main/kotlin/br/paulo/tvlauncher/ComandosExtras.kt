@@ -100,6 +100,11 @@ object ComandosExtras {
             Extras.definirTexto(ctx, HoraDormir.CHAVE_PERMITIDOS, it) }.ifEmpty { "lista vazia: só os essenciais abrem" }
         "recado_link" -> PainelExtras.novoLinkRecado(ctx)
         "tecla" -> teclaFalsa(i)
+        // Cuidar de longe (ideias 77-79): estado, rodar o relógio agora, abrir a pergunta de consentimento, teste de envio.
+        "cuidar" -> CuidarDeLongeTv.texto(ctx)
+        "cuidar_rodar" -> { val app = ctx.applicationContext; Fundo.rodar("cuidar-adb") { CuidarDeLongeTv.rodar(app) }; "rodando; ver depois com cuidar" }
+        "cuidar_perguntar" -> CuidarDeLongeTv.pedirConsentimento(ctx)?.let { "falta: ${it.name}" } ?: "pergunta aberta na TV"
+        "cuidar_desligar" -> { CuidarDeLongeTv.retirar(ctx, "adb"); "consentimento retirado" }
         "roteiro" -> ConferirTvActivity.relatorio(ctx)
         "compat" -> CompatibilidadeTv.json(ctx).toString(2)   // relatório da página "Funciona no seu aparelho?"
         "compat_texto" -> CompatibilidadeTv.texto(ctx)

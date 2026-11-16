@@ -21,6 +21,7 @@ class HoraMudouReceiver : BroadcastReceiver() {
         Despertador.agendar(app)   // também confere o alarme perdido: o Chromecast liga com o relógio velho e só acerta
                                    // a hora pela internet depois; é aqui que se descobre que as 6:30 já passaram
         Rotinas.agendar(app)
+        runCatching { CuidarDeLongeTv.agendar(app) }   // Cuidar de longe: o próximo lembrete/aviso
         Timer.reagendar(app)   // o fim do timer não muda; só arma de novo (ou limpa se já passou)
         LembretesTv.agendar(app)   // lembretes da grade (12/11/2026)
         ManutencaoNoturna.agendar(app)   // "4h" no fuso novo

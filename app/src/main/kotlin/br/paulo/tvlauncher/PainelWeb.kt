@@ -694,6 +694,16 @@ object PainelWeb {
         if (req.caminho == "/api/tvs" && req.metodo == "GET")
             return if (sessoes.existe(token)) json(200, PainelVizinhos.json(app)) else erro(401, "entre com o PIN")
         if (!sessoes.valida(token)) return erro(401, "entre com o PIN")
+        // Cuidar de longe (ideias 77-79, PainelCuidar.kt). A foto do pedido de ajuda é imagem: sai daqui mesmo.
+        if (req.caminho == "/api/cuidar/foto" && req.metodo == "GET") {
+            val f = CuidarDeLongeTv.fotoAjuda(app) ?: return erro(404, "sem foto de pedido de ajuda nas últimas 24 h")
+            return Resposta(200, "image/jpeg", f.readBytes(), mapOf("Cache-Control" to "no-store"))
+        }
+        if (req.caminho == "/api/cuidar" || req.caminho.startsWith("/api/cuidar/")) {
+            PainelCuidar.rotear(app, req.metodo, req.caminho.removePrefix("/api/cuidar"),
+                if (req.metodo == "POST") corpoJson(req) else null, sessoes.elevada(token), ip)
+                ?.let { return json(it.first, it.second) }
+        }
         if (req.caminho.startsWith("/api/extras/")) {   // ideias de 10/11/2026: PainelExtras.kt
             if (req.caminho == "/api/extras/video" && req.metodo == "GET")
                 return Resposta(200, null, ByteArray(0), fluxo = { PainelExtras.video(app, it) })
@@ -1007,6 +1017,7 @@ object PainelWeb {
         "/jmuxer.min.js" to ("jmuxer.min.js" to "text/javascript; charset=utf-8"),
         "/ia.js" to ("ia.js" to "text/javascript; charset=utf-8"),   // aba "Conectar uma IA" (10/11/2026)
         "/ideias.js" to ("ideias.js" to "text/javascript; charset=utf-8"),   // ideias de 12/11/2026 (aba Extras)
+        "/cuidar.js" to ("cuidar.js" to "text/javascript; charset=utf-8"),   // Cuidar de longe (ideias 77-79)
         "/sw.js" to ("sw.js" to "text/javascript; charset=utf-8"),   // avisos no celular (Web Push): o service worker
         // Fonte Manrope (a mesma da TV), só as letras latinas: 12 KB cada (visual de 13/11/2026).
         "/manrope-400.woff2" to ("manrope-400.woff2" to "font/woff2"),

@@ -134,8 +134,24 @@ object Avisos {
      * Um envio. 404/410 = o celular cancelou a inscrição (desinstalou o painel, limpou o navegador): sai da lista.
      * Devolve o código HTTP (ou -1 em erro de rede).
      */
-    fun enviarUm(app: Context, i: Inscricao, tipo: Tipo, titulo: String, texto: String): Int = try {
-        val corpoClaro = JSONObject().put("titulo", titulo.take(80)).put("texto", texto.take(240)).put("tipo", tipo.name)
+    fun enviarUm(app: Context, i: Inscricao, tipo: Tipo, titulo: String, texto: String): Int =
+        enviarCru(app, i, tipo.name, titulo, texto, ttl = if (tipo == Tipo.LEMBRETE) 600 else 86400,
+            urgente = tipo == Tipo.LEMBRETE || tipo == Tipo.AJUDA)
+
+    /**
+     * "Cuidar de longe" (CuidarDeLongeTv): manda só para os aparelhos [ids] (fim do endpoint, o mesmo id do painel), sem
+     * olhar as chaves por tipo nem o intervalo: quem decide é a configuração do Cuidar de longe, com o consentimento.
+     * BLOQUEIA (rede): chamar fora da thread principal. Devolve (aceitos, tentados).
+     */
+    fun enviarPara(ctx: Context, ids: Collection<String>, tipoNome: String, titulo: String, texto: String): Pair<Int, Int> {
+        val app = ctx.applicationContext
+        val lista = inscricoes(app).filter { it.endpoint.takeLast(16) in ids }
+        val aceitos = lista.count { enviarCru(app, it, tipoNome, titulo, texto, ttl = 6 * 3600, urgente = true) in 200..299 }
+        return aceitos to lista.size
+    }
+
+    private fun enviarCru(app: Context, i: Inscricao, tipoNome: String, titulo: String, texto: String, ttl: Int, urgente: Boolean): Int = try {
+        val corpoClaro = JSONObject().put("titulo", titulo.take(80)).put("texto", texto.take(240)).put("tipo", tipoNome)
             .put("tv", runCatching { android.provider.Settings.Global.getString(app.contentResolver, "device_name") }.getOrNull() ?: "TV").toString().toByteArray()
         val efemera = KeyPairGenerator.getInstance("EC").apply { initialize(ECGenParameterSpec("secp256r1")) }.generateKeyPair()
         val sal = ByteArray(16).also { SecureRandom().nextBytes(it) }
@@ -149,14 +165,14 @@ object Avisos {
         c.instanceFollowRedirects = false
         c.setRequestProperty("Content-Type", "application/octet-stream")
         c.setRequestProperty("Content-Encoding", "aes128gcm")
-        c.setRequestProperty("TTL", if (tipo == Tipo.LEMBRETE) "600" else "86400")
-        c.setRequestProperty("Urgency", if (tipo == Tipo.LEMBRETE || tipo == Tipo.AJUDA) "high" else "normal")
+        c.setRequestProperty("TTL", ttl.toString())
+        c.setRequestProperty("Urgency", if (urgente) "high" else "normal")
         c.setRequestProperty("Authorization", auth)
         c.outputStream.use { it.write(corpo) }
         val codigo = c.responseCode
         c.disconnect()
         if (codigo == 404 || codigo == 410) remover(app, i.endpoint)
-        Log.i(TAG, "${tipo.name} -> ${WebPush.audiencia(i.endpoint)}: $codigo")
+        Log.i(TAG, "$tipoNome -> ${WebPush.audiencia(i.endpoint)}: $codigo")
         codigo
     } catch (e: Exception) {
         Log.w(TAG, "envio falhou: ${e.javaClass.simpleName}"); -1

@@ -291,11 +291,16 @@ class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
             val (ms, nasce) = sol ?: return
             val pos = WidgetsTempo.posicaoNaCurva(marcas, ms) ?: return
             val x = xs.first() + pos * (xs.last() - xs.first())
-            c.drawLine(x, topoCurva - dp(4), x, fundoBarra, pRisco)
             val rotulo = ctx.getString(if (nasce) R.string.pw_nasce else R.string.pw_poe, hm.format(Date(ms)))
             val largura = pSol.measureText(rotulo)
-            val tx = if (x + dp(6) + largura > w) x - dp(6) - largura else x + dp(6)
-            c.drawText(rotulo, tx, fundoBarra - dp(2), pSol)
+            // O rótulo não pode cobrir uma barra de chuva (foto da Sala, 15/11): WidgetsTempo escolhe o lado ou o vão.
+            val barras = marcas.indices.filter { marcas[it].chuva >= 10 }.map { xs[it] }
+            val tx = WidgetsTempo.xRotuloSol(x, largura, barras, dp(3) + dp(4).toFloat(), dp(6).toFloat(), w)
+            val yTexto = fundoBarra - dp(2)
+            // Se o texto ficou em cima do risco (centralizado no vão), o risco para logo acima dele.
+            val fimRisco = if (x >= tx - dp(2) && x <= tx + largura + dp(2)) yTexto - pSol.textSize - dp(2) else fundoBarra
+            c.drawLine(x, topoCurva - dp(4), x, fimRisco, pRisco)
+            c.drawText(rotulo, tx, yTexto, pSol)
         }
     }
 }

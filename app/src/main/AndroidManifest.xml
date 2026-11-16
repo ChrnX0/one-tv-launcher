@@ -122,6 +122,21 @@
             android:excludeFromRecents="true"
             android:theme="@style/One.Translucido" />
 
+        <!-- Cuidar de longe (ideias 77-79, CuidarDeLongeTv.kt): a configuração, a pergunta grande por cima de tudo
+             (consentimento, pedido de ajuda, lembrete) e o alarme (não exportado). -->
+        <activity
+            android:name=".CuidarDeLongeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CuidarTelaActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTop"
+            android:theme="@style/One.Translucido" />
+        <receiver
+            android:name=".CuidarReceiver"
+            android:exported="false" />
+
         <!-- Rotinas por horário (Rotinas.kt): a tela, a tela invisível que acorda a TV, e o receiver do alarme
              (não exportado: só o PendingIntent do próprio launcher chega nele). -->
         <activity

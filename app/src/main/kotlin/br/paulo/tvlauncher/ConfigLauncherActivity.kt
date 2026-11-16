@@ -979,6 +979,13 @@ class ConfigLauncherActivity : Activity() {
     /** Família (14/11/2026): o controle parental e, embaixo, as visitas (modo visita e os apps que ele esconde). */
     private fun abaFamilia(c: LinearLayout) {
         abaParental(c)
+        // Cuidar de longe (ideias 77-79, 15/11/2026): pedido de ajuda, lembrete com aviso, TV que não ligou. Desligado de fábrica.
+        secao(c, getString(R.string.cuidar_titulo))
+        c.addView(linha(getString(R.string.cuidar_titulo), getString(
+            if (CuidarDeLonge.consentido(CuidarDeLongeTv.config(this))) R.string.cuidar_cfg_ligado else R.string.cuidar_cfg_det), seta = true) {
+            reconstruirAoVoltar = true
+            startActivity(Intent(this, CuidarDeLongeActivity::class.java))
+        }, lp())
         secao(c, getString(R.string.cfg2_sec_visitas))
         // Modo visita (ModoVisita.kt): esconde perfil, agenda e os apps marcados, até desligar. Na HOME, com o modo
         // ligado, o OK na bolinha do perfil oferece "Sair" (o popup não abre).

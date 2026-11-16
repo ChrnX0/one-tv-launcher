@@ -67,7 +67,9 @@ any preferred-activity setting, so `Home.kt` + the accessibility service handle 
 launcher process; shell `force-stop` can't kill a device owner with accessibility), `IA_TESTE` (open a screen via the
 closed action catalog, e.g. `{"acoes":[{"tipo":"abrir_tela","tela":"previsao"}]}`), `EXTRAS --es o <cmd>`
 (see `ComandosExtras.kt`), `br.paulo.tvlauncher.UNIFI --es o relato --ei horas 8` (read-only router report: UniFi uptime and
-the TV's Wi-Fi events, to explain a drop).
+the TV's Wi-Fi events, to explain a drop). Care from afar (ideas 77-79, `CuidarDeLonge.kt`): `EXTRAS --es o cuidar` (state),
+`cuidar_rodar`, `cuidar_perguntar` (opens the consent question; only a PHYSICAL remote key accepts it), `cuidar_desligar`.
+It is off by default and needs the resident's consent on the TV: never turn it on at the Sala TV unless Paulo asks.
 
 ## Web panel, MCP and tunnel
 

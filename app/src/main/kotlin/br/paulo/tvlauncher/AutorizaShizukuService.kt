@@ -29,6 +29,7 @@ class AutorizaShizukuService : AccessibilityService() {
         FiltroNoturno.iniciar(this)
         SaudeAcesso.vigiar(this)   // aviso "acesso remoto parado" (shell próprio / túnel), ver SaudeAcesso.kt
         ManutencaoNoturna.vigiar(this); ManutencaoNoturna.agendar(this)   // manutenção de madrugada + resumo de manhã
+        CuidarDeLongeTv.iniciar(this)   // Cuidar de longe: lê a tecla de ajuda e agenda o próximo lembrete/aviso
         Gatilhos.iniciar(this)   // eventos como gatilho de cena (ideia 7): tela acesa e sessões de mídia
         TecladoCelular.ajustar(this)   // ideia 57: foco de campo de texto só com o aviso ligado
         JogosTv.iniciarControles(this)   // card Jogos: ligar um controle abre a tela Jogos (só com a chave ligada)
@@ -72,6 +73,8 @@ class AutorizaShizukuService : AccessibilityService() {
         Rotinas.tecla()   // rotina "desligar se ninguém mexeu há N min" (só grava a hora; ver Rotinas.kt)
         // Desligar sozinha: toda tecla conta como "alguém está usando"; com o aviso na tela, a tecla só o cancela.
         if (AutoDesligar.tecla(e)) return true
+        // Cuidar de longe (77): segurar a tecla de ajuda 3 s. Toque curto passa; só depois dos 3 s a tecla é nossa.
+        if (CuidarDeLongeTv.tecla(this, e)) return true
         if (AvisoTv.teclaVoltar(e)) return true   // VOLTAR com um recado/aviso na tela: fecha o aviso, não o filme
         if (HoraDormirTv.tecla(this, e)) return true   // hora de dormir: VOLUME + não passa do teto
         SomNavegacaoTv.tecla(this, e)   // clique de navegação (só nas telas do launcher, se ligado)
