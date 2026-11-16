@@ -194,6 +194,7 @@
     <string name="al_perdido_um">TV가 꺼져 있어서 %1$s 알람이 울리지 않았습니다.</string>
     <string name="al_perdido_varios">TV가 꺼져 있어서 %1$s 알람이 울리지 않았습니다.</string>
     <string name="al_perdido_e">및</string>
+    <string name="al_volume_tv">울릴 때 TV 볼륨: 작게 시작해 %1$d까지 올라갑니다</string>
     <string name="al_volume_min">울릴 때 최소 볼륨: %1$s</string>
     <string name="al_volume_nao_mexe">변경 안 함</string>
     <string name="pp_sem_conta">Google 계정 없음</string>

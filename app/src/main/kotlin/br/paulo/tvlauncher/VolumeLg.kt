@@ -45,10 +45,10 @@ object VolumeLg {
     fun esquecer(ctx: Context) { prefs(ctx).edit().clear().apply() }
 
     /**
-     * O despertador mexe no volume da LG? DESLIGADO por padrão desde 14/11/2026 (o primeiro teste acordou a casa).
-     * Liga só por comando: EXTRAS lg_alarme --ez ligado true.
+     * O despertador mexe no volume da LG? Desligado por padrão de 14/11 (o primeiro teste acordou a casa) a 16/11; LIGADO
+     * desde que a LG sobe aos poucos até um volume fixo de no máximo 30 ([subirAlarme]). Desliga por EXTRAS lg_alarme.
      */
-    fun alarmeLigado(ctx: Context): Boolean = prefs(ctx).getBoolean(K_ALARME, false)
+    fun alarmeLigado(ctx: Context): Boolean = prefs(ctx).getBoolean(K_ALARME, true)
     fun definirAlarme(ctx: Context, ligado: Boolean) { prefs(ctx).edit().putBoolean(K_ALARME, ligado).apply() }
 
     /**
@@ -151,25 +151,49 @@ object VolumeLg {
     }
 
     /**
-     * Despertador: tira do mudo e sobe até o mínimo [pct] (regra de [VolumeAlarme]). A LG pode estar ligando agora
-     * (o CEC acabou de acordá-la e o Wi-Fi dela demora): tenta por até [esperaMs]. Anota o que fez em [m].
+     * Despertador: tira do mudo, põe a LG em [LgNetcast.inicioRampaAlarme] e sobe 1 ponto por vez até [alvo] em
+     * [rampaSeg] segundos (rampa 0 = vai direto ao alvo). A LG pode estar ligando agora (o CEC acabou de acordá-la e a
+     * rede dela demora mais de 37 s): tenta por até [esperaMs]. Se alguém mexer no volume durante a subida, para de
+     * subir. Anota o que fez em [m].
      */
-    fun subirAlarme(ctx: Context, pct: Int, m: Mudanca, esperaMs: Long = 60_000) {
+    fun subirAlarme(ctx: Context, alvo: Int, rampaSeg: Int, m: Mudanca, esperaMs: Long = 120_000) {
         val fim = SystemClock.elapsedRealtime() + esperaMs
+        val inicio: Int
+        val ate = LgNetcast.alvoFixoAlarme(alvo)
         while (true) {
-            val feito = synchronized(trava) {
+            if (m.cancelado) return
+            val comecou = synchronized(trava) {
                 val v = lerNivel(ctx) ?: return@synchronized false
                 if (v.mudo && apertar(ctx, LgNetcast.TECLA_MUDO, 1)) m.tirouMudo = true
-                val alvo = LgNetcast.alvoAlarme(v.nivel, v.maximo, pct)
                 m.original = v.nivel
-                // definido = o volume LIDO no fim (não o pedido): é com ele que a volta confere se alguém mexeu.
-                if (alvo != null) m.definido = ajustar(ctx, alvo, soDescer = false)
-                Log.i(TAG, "alarme: volume ${v.nivel} -> ${m.definido ?: v.nivel} (alvo ${alvo ?: "-"})${if (m.tirouMudo) " (tirou do mudo)" else ""}")
+                m.definido = ajustar(ctx, LgNetcast.inicioRampaAlarme(ate, rampaSeg), soDescer = false)
+                Log.i(TAG, "alarme: volume ${v.nivel} -> ${m.definido}, sobe até $ate em ${rampaSeg}s${if (m.tirouMudo) " (tirou do mudo)" else ""}")
                 true
             }
-            if (feito || m.cancelado || SystemClock.elapsedRealtime() > fim) return
+            if (comecou) { inicio = m.definido ?: return; break }
+            if (SystemClock.elapsedRealtime() > fim) { Log.i(TAG, "alarme: a LG não respondeu em ${esperaMs / 1000}s"); return }
             SystemClock.sleep(5000)
         }
+        val passo = LgNetcast.intervaloRampaMs(rampaSeg, inicio, ate)
+        var esperado = inicio
+        while (esperado < ate && !m.cancelado) {
+            SystemClock.sleep(passo)
+            if (m.cancelado) return
+            val parar = synchronized(trava) {
+                val v = lerNivel(ctx) ?: return@synchronized true
+                if (LgNetcast.mexeramNaRampa(v.nivel, esperado)) { Log.i(TAG, "alarme: mexeram no volume (${v.nivel}), paro de subir"); m.definido = v.nivel; return@synchronized true }
+                if (v.nivel >= ate) { m.definido = v.nivel; esperado = ate; return@synchronized false }
+                apertar(ctx, LgNetcast.TECLA_SUBIR, 1)
+                SystemClock.sleep(ENTRE_TECLAS_MS)
+                val depois = lerNivel(ctx)?.nivel ?: return@synchronized true
+                // A LG às vezes perde ou dobra uma tecla: o que vale é o lido. Passou do alvo? Volta ao alvo.
+                m.definido = if (depois > ate) ajustar(ctx, ate, soDescer = true) else depois
+                esperado = m.definido ?: return@synchronized true
+                false
+            }
+            if (parar) return
+        }
+        Log.i(TAG, "alarme: subida terminou em ${m.definido}")
     }
 
     /** Despertador parou: devolve volume e mudo, se ninguém mexeu durante o alarme (mesma regra do Android). */

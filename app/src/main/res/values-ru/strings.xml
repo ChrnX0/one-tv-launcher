@@ -194,6 +194,7 @@
     <string name="al_perdido_um">Будильник на %1$s не сработал, потому что ТВ был выключен.</string>
     <string name="al_perdido_varios">Будильники на %1$s не сработали, потому что ТВ был выключен.</string>
     <string name="al_perdido_e">и</string>
+    <string name="al_volume_tv">Громкость ТВ при сигнале: начинается тихо и растёт до %1$d</string>
     <string name="al_volume_min">Минимальная громкость при сигнале: %1$s</string>
     <string name="al_volume_nao_mexe">не менять</string>
     <string name="pp_sem_conta">Нет аккаунта Google</string>

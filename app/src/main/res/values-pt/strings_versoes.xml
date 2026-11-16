@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Despertador com a LG NetCast: a LG começa baixa (5) e sobe aos poucos, na rampa do alarme, até um volume fixo escolhido em Despertador (“Volume da TV ao tocar”, de 10 a 30); ao parar, o volume volta</item>
         <item>Timer de sono: a LG agora desliga primeiro e o Chromecast 2 s depois, então a LG não mostra mais a tela de seleção de entradas antes de entrar em standby</item>
         <item>Mais 14 idiomas: espanhol, francês, alemão, italiano, polonês, russo, turco, indonésio, híndi, árabe, japonês, coreano, chinês e português de Portugal. O launcher segue o idioma da TV (Configurações › Sistema › Idioma)</item>
         <item>Cuidar de longe (desligado de fábrica; Configurações › Família): segure VOLTAR 3 s para mandar um pedido de ajuda ao celular da família, lembretes com “Feito” que avisam se ninguém confirmar e um aviso quando a TV não foi ligada no horário de sempre. Para ligar, quem mora com a TV dá o consentimento com o controle</item>
@@ -164,6 +165,7 @@
         <item>Protetor de tela com widgets novos, de letra maior: escolha Faixa de vidro (as próximas horas numa curva, com a hora do sol), Cartões (agora, horas, hoje e amanhã) ou Sem caixa (a temperatura grande e o tempo numa frase) em Configurações › Tela e energia › Widgets do protetor, ou no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Despertador sobe aos poucos na LG</item>
         <item>Idiomas novos</item>
         <item>Cuidar de longe</item>
         <item>Emprestar o shell (Shizuku)</item>
@@ -291,6 +293,7 @@
         <item>Em Configurações › Tela e energia, OK em Widgets do protetor até o estilo que quiser e espere o protetor aparecer</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Com a TV desligada, marque um alarme para daqui a 2 minutos com rampa de 60 s: o Chromecast e a LG ligaram, e o som começou baixo e subiu aos poucos até o volume escolhido no Despertador?</item>
         <item>Troque o idioma da TV (configurações da TV › Sistema › Idioma) para espanhol, por exemplo: a tela inicial e as Configurações aparecem nesse idioma sem texto cortado? Volte depois.</item>
         <item>Em Configurações › Família › Cuidar de longe, a tela de consentimento abre e o “Concordo” só funciona com o controle? Ligado, segurar VOLTAR 3 s pergunta “Mandar um pedido de ajuda?” e o VOLTAR curto continua voltando? Desligue de novo depois.</item>
         <item>Com o PIN do painel definido, em Configurações › Emprestar poderes do sistema, mude "Emprestar o shell" para Sempre ligado. Abra um app feito para o Shizuku: a TV pergunta, aceita o PIN e o app funciona? Depois revogue no painel web (Extras) e volte para Desligado.</item>

@@ -153,7 +153,7 @@ class AlarmeTocandoActivity : Activity() {
         segRampa = alarme?.rampa ?: 0
         inicioRampa = System.currentTimeMillis()
         // Volume garantido: tira do mudo e sobe a TV até o mínimo escolhido (só no despertador; o timer fica como está).
-        if (!timer) volume = AlarmeGarantia.subirVolume(this)
+        if (!timer) volume = AlarmeGarantia.subirVolume(this, segRampa)
         if (alarme?.som == SomAlarme.CANAL) { tocarCanal(); return }
         tocarArquivo(alarme?.som ?: 0)
     }

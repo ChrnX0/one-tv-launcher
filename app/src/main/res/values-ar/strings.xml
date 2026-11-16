@@ -194,6 +194,7 @@
     <string name="al_perdido_um">لم يرنّ منبّه %1$s لأن التلفزيون كان مطفأً.</string>
     <string name="al_perdido_varios">لم ترنّ منبّهات %1$s لأن التلفزيون كان مطفأً.</string>
     <string name="al_perdido_e">و</string>
+    <string name="al_volume_tv">صوت التلفاز عند الرنين: يبدأ منخفضًا ويرتفع حتى %1$d</string>
     <string name="al_volume_min">أدنى مستوى صوت عند الرنين: %1$s</string>
     <string name="al_volume_nao_mexe">بدون تغيير</string>
     <string name="pp_sem_conta">لا يوجد حساب Google</string>

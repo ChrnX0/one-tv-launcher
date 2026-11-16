@@ -194,6 +194,7 @@
     <string name="al_perdido_um">由于电视处于关闭状态，%1$s 的闹钟没有响。</string>
     <string name="al_perdido_varios">由于电视处于关闭状态，%1$s 的闹钟没有响。</string>
     <string name="al_perdido_e">和</string>
+    <string name="al_volume_tv">响铃时电视音量：从低音量开始，逐渐升到 %1$d</string>
     <string name="al_volume_min">响铃时最低音量：%1$s</string>
     <string name="al_volume_nao_mexe">不更改</string>
     <string name="pp_sem_conta">无 Google 账号</string>

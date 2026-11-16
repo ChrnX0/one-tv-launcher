@@ -213,6 +213,7 @@
     <string name="al_perdido_um">The %1$s alarm did not ring because the TV was off.</string>
     <string name="al_perdido_varios">The %1$s alarms did not ring because the TV was off.</string>
     <string name="al_perdido_e">and</string>
+    <string name="al_volume_tv">TV volume when ringing: starts low and rises to %1$d</string>
     <string name="al_volume_min">Minimum volume when ringing: %1$s</string>
     <string name="al_volume_nao_mexe">don\'t change</string>
     <!-- PopupPerfil.kt -->

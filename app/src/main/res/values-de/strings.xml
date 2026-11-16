@@ -194,6 +194,7 @@
     <string name="al_perdido_um">Der Wecker um %1$s hat nicht geklingelt, weil der Fernseher aus war.</string>
     <string name="al_perdido_varios">Die Wecker um %1$s haben nicht geklingelt, weil der Fernseher aus war.</string>
     <string name="al_perdido_e">und</string>
+    <string name="al_volume_tv">TV-Lautstärke beim Klingeln: beginnt leise und steigt bis %1$d</string>
     <string name="al_volume_min">Mindestlautstärke beim Klingeln: %1$s</string>
     <string name="al_volume_nao_mexe">nicht ändern</string>
     <string name="pp_sem_conta">Kein Google-Konto</string>

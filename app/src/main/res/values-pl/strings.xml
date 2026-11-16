@@ -194,6 +194,7 @@
     <string name="al_perdido_um">Budzik %1$s nie zadzwonił, bo telewizor był wyłączony.</string>
     <string name="al_perdido_varios">Budziki %1$s nie zadzwoniły, bo telewizor był wyłączony.</string>
     <string name="al_perdido_e">i</string>
+    <string name="al_volume_tv">Głośność TV podczas dzwonienia: zaczyna cicho i rośnie do %1$d</string>
     <string name="al_volume_min">Minimalna głośność podczas dzwonienia: %1$s</string>
     <string name="al_volume_nao_mexe">nie zmieniaj</string>
     <string name="pp_sem_conta">Brak konta Google</string>

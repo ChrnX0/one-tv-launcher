@@ -215,6 +215,7 @@
     <string name="al_perdido_um">O despertador das %1$s não tocou porque a TV estava desligada.</string>
     <string name="al_perdido_varios">Os despertadores das %1$s não tocaram porque a TV estava desligada.</string>
     <string name="al_perdido_e">e</string>
+    <string name="al_volume_tv">Volume da TV ao tocar: começa baixo e sobe até %1$d</string>
     <string name="al_volume_min">Volume mínimo ao tocar: %1$s</string>
     <string name="al_volume_nao_mexe">não mexer</string>
     <!-- PopupPerfil.kt -->
