@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cenas prontas sem voz (degrau 3, CenasProntas.kt). -->
+<resources>
+    <string name="cpr_secao">Escenas listas</string>
+    <string name="cpr_dormir">Dormir</string>
+    <string name="cpr_dormir_det">Filtro nocturno, volumen más bajo, la TV se apaga en 30 min</string>
+    <string name="cpr_novela">Telenovela</string>
+    <string name="cpr_novela_det">Tu canal, con colores normales</string>
+    <string name="cpr_jogo">Partido</string>
+    <string name="cpr_jogo_det">Tu canal de deportes, más alto</string>
+    <string name="cpr_canal">¿Qué canal para “%1$s”?</string>
+    <string name="cpr_canal_dica">Nombre o número del canal</string>
+</resources>

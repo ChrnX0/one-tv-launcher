@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Relatar um problema pelo celular (degrau 3, RelatarProblema.kt). -->
+<resources>
+    <string name="rel_titulo">Sorun bildir</string>
+    <string name="rel_linha_det">QR kod, teknik bilgileri doldurulmuş formu telefonda açar</string>
+    <string name="rel_texto">Telefon kamerasını koda tutun. Ne olduğunu yazıp gönderin. Adınız, hesabınız, ağınız ve şehriniz eklenmez.</string>
+    <string name="rel_vai_junto">Neler eklenir</string>
+</resources>

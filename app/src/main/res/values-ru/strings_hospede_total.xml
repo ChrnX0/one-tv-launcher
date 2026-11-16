@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede com limpeza total (degrau 3). -->
+<resources>
+    <string name="hos_total">Полная очистка</string>
+    <string name="hos_total_det">При выезде стирает данные всех приложений, а не только стриминга. Сервисы Google и Настройки остаются.</string>
+</resources>

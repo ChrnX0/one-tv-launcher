@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Família conectada (degrau 3, FamiliaConectada.kt): fotos e recados dos parentes por um link. -->
+<resources>
+    <string name="famc_titulo">Famille connectée</string>
+    <string name="famc_det">Enfants et petits-enfants envoient photos et mots à cette TV par un lien, sans compte</string>
+    <string name="famc_ligado">Activé : OK affiche le QR pour le partager à nouveau</string>
+    <string name="famc_texto">Scannez le code avec le téléphone et envoyez le lien à la famille (WhatsApp, e-mail). Qui a le lien envoie photos et mots : ils s’affichent à l’écran et sur l’économiseur. Rien ne passe par nos serveurs.</string>
+    <string name="famc_sem_tunel">Cela utilise l’accès depuis l’extérieur (Tailscale), pas encore configuré sur cette TV. Configurez-le dans Paramètres › Accès à distance, puis revenez ici.</string>
+    <string name="famc_trocar">Nouveau lien</string>
+    <string name="famc_trocar_det">L’ancien lien cesse de fonctionner tout de suite</string>
+    <string name="famc_desligar">Désactiver</string>
+    <string name="famc_alguem">Famille</string>
+    <string name="famc_de">De %1$s</string>
+</resources>

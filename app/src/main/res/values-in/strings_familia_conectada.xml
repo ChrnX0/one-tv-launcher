@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Família conectada (degrau 3, FamiliaConectada.kt): fotos e recados dos parentes por um link. -->
+<resources>
+    <string name="famc_titulo">Keluarga terhubung</string>
+    <string name="famc_det">Anak dan cucu mengirim foto dan pesan ke TV ini lewat tautan, tanpa akun</string>
+    <string name="famc_ligado">Aktif: OK menampilkan kode QR untuk dibagikan lagi</string>
+    <string name="famc_texto">Pindai kode dengan ponsel dan kirim tautannya ke keluarga (WhatsApp, email). Siapa pun yang punya tautan bisa mengirim foto dan pesan: muncul di layar dan screensaver. Tidak ada yang lewat server kami.</string>
+    <string name="famc_sem_tunel">Ini memakai akses dari luar rumah (Tailscale), yang belum disiapkan di TV ini. Siapkan di Setelan › Akses jarak jauh, lalu kembali ke sini.</string>
+    <string name="famc_trocar">Tautan baru</string>
+    <string name="famc_trocar_det">Tautan lama langsung tidak berfungsi</string>
+    <string name="famc_desligar">Matikan</string>
+    <string name="famc_alguem">Keluarga</string>
+    <string name="famc_de">Dari %1$s</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nada sai da sua casa (degrau 3): o compromisso de privacidade, o mesmo texto do site. -->
+<resources>
+    <string name="nsc_titulo">कुछ भी आपके घर से बाहर नहीं जाता</string>
+    <string name="nsc_det">हमारा कोई खाता नहीं, हमारा कोई सर्वर नहीं, कोई विज्ञापन नहीं</string>
+    <string name="nsc_texto">हमारा कोई खाता नहीं, हमारा कोई सर्वर नहीं, कोई विज्ञापन नहीं, उपयोग की कोई ट्रैकिंग नहीं।\n\nआपकी सेटिंग, फ़ोटो, संदेश और बैकअप इसी TV पर रहते हैं, या आपके अपने खाते में, अगर आप जोड़ें।\n\nTV सिर्फ़ उन्हीं सेवाओं से बात करता है जिन्हें आप चालू करते हैं, जैसे मौसम या फ़िल्मों के पोस्टर। साइट की गोपनीयता नीति हर एक की सूची देती है।</string>
+</resources>

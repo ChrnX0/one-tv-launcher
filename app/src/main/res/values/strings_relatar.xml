@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Relatar um problema pelo celular (degrau 3, RelatarProblema.kt). -->
+<resources>
+    <string name="rel_titulo">Report a problem</string>
+    <string name="rel_linha_det">A QR code opens the form on your phone, with the technical details already filled in</string>
+    <string name="rel_texto">Point your phone camera at the code. Write what happened and send. Your name, account, network and city are not included.</string>
+    <string name="rel_vai_junto">What goes along</string>
+</resources>

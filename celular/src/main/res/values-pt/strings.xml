@@ -15,4 +15,8 @@
     <string name="cel_aponte">Aponte para o código na TV</string>
     <string name="cel_qr_invalido">Este não é um código da TV. Na TV, abra Configurações › Acesso remoto › Entrar pelo celular.</string>
     <string name="cel_cert_outro">A TV respondeu com outro certificado. Se você renovou o certificado, leia o QR de novo.</string>
+    <string name="cel_casa_padrao">Casa</string>
+    <string name="cel_casa_qual">Em qual casa fica esta TV?</string>
+    <string name="cel_casa_nova">Outra casa…</string>
+    <string name="cel_casa_dica">ex.: Praia, Casa da mãe</string>
 </resources>

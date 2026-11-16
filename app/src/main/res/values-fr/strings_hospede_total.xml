@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede com limpeza total (degrau 3). -->
+<resources>
+    <string name="hos_total">Nettoyage complet</string>
+    <string name="hos_total_det">Au départ, efface les données de toutes les applis de la TV, pas seulement le streaming. Les services Google et les Paramètres restent.</string>
+</resources>

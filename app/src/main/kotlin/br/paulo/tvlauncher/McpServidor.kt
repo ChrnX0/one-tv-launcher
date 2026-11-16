@@ -64,6 +64,9 @@ object McpServidor {
 
     fun ligado(ctx: Context): Boolean = prefs(ctx).getBoolean("ligado", false)
 
+    /** O servidor (e o túnel) sobem com o MCP ligado OU com o link da família ligado (degrau 3). As rotas do MCP ainda conferem [ligado]. */
+    fun precisaServidor(ctx: Context): Boolean = ligado(ctx) || FamiliaConectada.ligado(ctx)
+
     /** Ferramenta executar_shell (dono, 09/11/2026: "controle total", sem trava). Ligada por padrão; a chave nas
      *  Configurações é o botão de desligar. */
     fun shellLigado(ctx: Context): Boolean = prefs(ctx).getBoolean("shell", true)
@@ -80,7 +83,7 @@ object McpServidor {
     /** Liga ou desliga o socket conforme a preferência. Idempotente. */
     @Synchronized fun ajustar(ctx: Context) {
         app = ctx.applicationContext
-        val querLigado = ligado(app) && PainelArmazem.temPin(app)
+        val querLigado = precisaServidor(app) && PainelArmazem.temPin(app)
         if (querLigado && servidor == null) {
             val s = ServerSocket()
             try {
@@ -160,7 +163,10 @@ object McpServidor {
             val entrada = EntradaComPrazo(c.getInputStream(), PRAZO_PEDIDO_MS).buffered(8192)
             val saida = c.getOutputStream().buffered(16 * 1024)
             val r = try {
-                val req = PainelHttp.ler(entrada, LIMITE_CORPO)
+                // Família conectada (degrau 3): só a rota da foto aceita corpo maior (a foto chega já reduzida pelo celular).
+                val req = PainelHttp.lerCabecalhos(entrada).also {
+                    it.lerCorpo(if (it.caminho.startsWith("/familia/")) FamiliaConectada.MAX_FOTO + 1024 else LIMITE_CORPO)
+                }
                 // painel-1: as rotas que montam JSON (/register e /mcp) só recebem JSON estrito e raso, SEM depender do
                 // Content-Type (antes, sem esse cabeçalho a checagem era pulada e "[[[[..." derrubava o launcher).
                 if (req.metodo == "POST" && req.caminho in ROTAS_JSON && !JsonSeguro.valido(req.corpoTexto()))
@@ -193,6 +199,11 @@ object McpServidor {
     }
 
     private fun rotear(req: Requisicao): Resposta {
+        // Família conectada (degrau 3): não depende do MCP ligado, só do link (FamiliaConectada.kt).
+        FamiliaConectada.Regras.rota(req.caminho)?.let { (token, acao) ->
+            if (base(req) == null) return json(421, JSONObject().put("erro", "nome desconhecido"))
+            return familia(req, token, acao)
+        }
         if (!ligado(app)) return json(503, JSONObject().put("erro", "MCP desligado na TV"))
         val base = base(req) ?: return json(421, JSONObject().put("erro", "nome desconhecido"))
         return when (req.caminho) {
@@ -219,6 +230,34 @@ object McpServidor {
             "/mcp" -> mcp(req, base)
             else -> json(404, JSONObject().put("erro", "não encontrado"))
         }
+    }
+
+    // ---------------------------------------------------------------- família conectada (degrau 3)
+
+    /** O link vai num QR e numa mensagem: não deixar o token sair como Referer nem a página ficar em cache ou busca. */
+    private val CABECALHOS_FAMILIA = mapOf("Cache-Control" to "no-store", "Referrer-Policy" to "no-referrer", "X-Robots-Tag" to "noindex",
+        "X-Content-Type-Options" to "nosniff", "X-Frame-Options" to "DENY",
+        "Content-Security-Policy" to "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src blob: data:; connect-src 'self'; form-action 'none'; frame-ancestors 'none'; base-uri 'none'")
+
+    private fun familia(req: Requisicao, token: String, acao: String): Resposta {
+        if (!FamiliaConectada.Regras.confere(token, FamiliaConectada.token(app))) {
+            return if (acao.isEmpty() && req.metodo == "GET") Resposta(404, "text/html; charset=utf-8",
+                "<!doctype html><meta name=viewport content='width=device-width'><p style='font:20px sans-serif;padding:24px'>Link off · Link desligado</p>".toByteArray(), CABECALHOS_FAMILIA)
+            else json(404, JSONObject().put("erro", "desligado"), CABECALHOS_FAMILIA)
+        }
+        val r: String? = when {
+            acao.isEmpty() && req.metodo == "GET" -> return Resposta(200, "text/html; charset=utf-8",
+                app.assets.open("familia/index.html").use { it.readBytes() }, CABECALHOS_FAMILIA)
+            acao == "recado" && req.metodo == "POST" -> {
+                val o = JsonSeguro.objeto(req.corpoTexto()) ?: return json(400, JSONObject().put("erro", "json"), CABECALHOS_FAMILIA)
+                FamiliaConectada.receber(app, o.optString("nome"), o.optString("texto"), null)
+            }
+            acao == "foto" && req.metodo == "POST" ->
+                FamiliaConectada.receber(app, req.consulta["nome"], req.consulta["texto"]?.takeIf { it.isNotBlank() }, req.lerCorpo(FamiliaConectada.MAX_FOTO + 1024))
+            else -> return json(405, JSONObject(), CABECALHOS_FAMILIA)
+        }
+        return if (r == null) json(200, JSONObject().put("ok", true), CABECALHOS_FAMILIA)
+        else json(if (r == "limite") 429 else 400, JSONObject().put("erro", r), CABECALHOS_FAMILIA)
     }
 
     // ---------------------------------------------------------------- MCP

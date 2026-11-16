@@ -17,6 +17,13 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Connected family (Settings › Family): a link with no account so grandchildren can send photos and notes that show on the TV</item>
+        <item>Ready-made scenes: Sleep, Soap opera and Game in Scenes, created with one OK</item>
+        <item>Guest mode: checkout cleanup now includes preinstalled apps such as Netflix, and can clear everything at once</item>
+        <item>Report a problem (Settings › System): a QR code opens it on your phone, showing exactly what will be sent</item>
+        <item>“Nothing leaves your home” (Settings › System): what stays only on the TV, in a few lines</item>
+        <item>Plugins (Settings › Appearance): other apps can add a card to the Watch row, each one only with your OK</item>
+        <item>Phone app: several homes, with TVs grouped by home</item>
         <item>Safe mode: if the home screen stops 3 times in 15 minutes, a simple version of it opens, with your apps and a “Look for a fixed version” button</item>
         <item>First launch: the TV asks how it is used (Simple, Complete or Caring for someone) and shows only what fits. You can change it in Settings › System</item>
         <item>Guest mode (Settings › Family): asks for the PIN to leave, shows a welcome with the house rules and the Wi-Fi, and at check-out clears the sign-ins of the chosen apps</item>
@@ -186,6 +193,12 @@
         <item>Screensaver with new, larger widgets: pick Glass strip (the next hours on a curve, with the sun time), Cards (now, hours, today and tomorrow) or No box (big temperature and the weather in one sentence) in Settings › Screen and power › Screensaver widgets, or in the panel</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>d3_familia</item>
+        <item>d3_cenas_prontas</item>
+        <item>d3_hospede_total</item>
+        <item>d3_relatar</item>
+        <item>d3_nada_sai</item>
+        <item>d3_plugins</item>
         <item>d2_modo_seguro</item>
         <item>d2_uso_tv</item>
         <item>d2_hospede</item>
@@ -326,6 +339,12 @@
         <item>protetor_widgets</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Connected family</item>
+        <item>Ready-made scenes</item>
+        <item>Guest: full cleanup</item>
+        <item>Report a problem</item>
+        <item>Nothing leaves your home</item>
+        <item>Plugins</item>
         <item>Safe mode</item>
         <item>How this TV is used</item>
         <item>Guest mode</item>
@@ -466,6 +485,12 @@
         <item>In Settings › Screen and power, press OK on Screensaver widgets until the style you want, then wait for the screensaver</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>In Settings › Family › Connected family, does the QR appear? Sending a photo through the link on a phone, does it show on the TV?</item>
+        <item>In Scenes, do Sleep, Soap opera and Game appear under “Ready-made scenes”? After creating Sleep, is it in the list and does OK run it?</item>
+        <item>In Guest mode, does the list of apps to clean also show Netflix and YouTube?</item>
+        <item>In Settings › System › Report a problem, do the QR and the text that goes with it appear?</item>
+        <item>In Settings › System, does “Nothing leaves your home” open a short, readable text?</item>
+        <item>In Settings › Appearance › Plugins, does the TV ask for the PIN and show “No plugin installed”?</item>
         <item>With the safe mode test command, does the simple screen with your apps appear when you go back HOME? And does “Try the normal home screen” bring back the usual one?</item>
         <item>In Settings › System, switch “How this TV is used” to Simple: do the Home and automations, Remote access and Advanced tabs disappear? Then switch back to Complete</item>
         <item>In Settings › Family, turn on Guest mode and go back HOME: does the welcome screen appear? To turn it off, does the TV ask for the PIN?</item>

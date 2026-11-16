@@ -25,7 +25,7 @@ object Cenas {
     private const val PREFS = "cenas"
     private const val CHAVE = "lista"
     const val MAX_CENAS = 20
-    private val NOME = Regex("^[\\p{L}\\p{N} _-]{1,40}$")
+    private val NOME = Regex("^[\\p{L}\\p{M}\\p{N} _-]{1,40}$")   // p{M}: sinais de vogal do hindi (degrau 3)
 
     class Cena(val nome: String, val acoes: String, val hash: String)
 

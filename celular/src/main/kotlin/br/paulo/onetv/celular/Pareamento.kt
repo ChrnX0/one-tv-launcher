@@ -22,7 +22,27 @@ object Pareamento {
     const val MAX_TVS = 8
 
     /** Uma TV salva. [fp] vazio = sem https (TV antiga ou sem certificado ainda). [ts] = nome no Tailscale, se houver. */
-    data class Tv(val nome: String, val ip: String, val fp: String = "", val ts: String = "", val id: String = "")
+    data class Tv(val nome: String, val ip: String, val fp: String = "", val ts: String = "", val id: String = "", val casa: String = "")
+
+    /**
+     * Várias casas (degrau 3, 16/11/2026): o IP de casa se repete entre casas (192.168.1.50 existe nas duas), então a
+     * TV é identificada pelo nome no Tailscale (único no mundo) ou pelo id; sem eles, pela casa + IP.
+     */
+    fun chave(tv: Tv): String = when {
+        tv.ts.isNotEmpty() -> "ts:${tv.ts}"
+        tv.id.isNotEmpty() -> "id:${tv.id}"
+        else -> "ip:${tv.casa}|${tv.ip}"
+    }
+
+    /** Nome de casa limpo (letras, números, espaço e . - '; até 30). Vazio = a casa sem nome ("Casa"). */
+    fun nomeCasa(bruto: String?): String = (bruto ?: "").filter { it.isLetterOrDigit() || it in " .-'" }
+        .replace(Regex("\\s+"), " ").trim().take(30)
+
+    /** As casas, na ordem em que aparecem na lista (a da TV usada por último primeiro), com as TVs de cada uma. */
+    fun porCasa(l: List<Tv>): List<Pair<String, List<Tv>>> = l.groupBy { it.casa }.toList()
+
+    /** Os nomes de casa já usados (para a pergunta "Em qual casa fica esta TV?"). */
+    fun casas(l: List<Tv>): List<String> = l.map { it.casa }.distinct()
 
     /** O que veio no QR: a TV e o código de uso único para entrar sem PIN (ou criar o PIN, se [primeira]). */
     data class Lido(val ip: String, val codigo: String, val primeira: Boolean, val fp: String, val ts: String, val ir: String)
@@ -88,16 +108,23 @@ object Pareamento {
 
     /** Junta a TV lida à lista: a mesma TV (mesmo IP) é atualizada no lugar; a mais recente vai para o topo. */
     fun guardar(lista: List<Tv>, nova: Tv): List<Tv> =
-        (listOf(nova) + lista.filter { it.ip != nova.ip && (nova.id.isEmpty() || it.id != nova.id) }).take(MAX_TVS)
+        (listOf(nova) + lista.filter { !mesma(it, nova) }).take(MAX_TVS)
+
+    /** Mesma TV: mesmo nome no Tailscale, mesmo id, ou (sem eles) mesmo IP NA MESMA CASA. */
+    fun mesma(a: Tv, b: Tv): Boolean = when {
+        a.ts.isNotEmpty() && b.ts.isNotEmpty() -> a.ts == b.ts
+        a.id.isNotEmpty() && b.id.isNotEmpty() -> a.id == b.id
+        else -> a.ip == b.ip && a.casa == b.casa
+    }
 
     fun paraJson(l: List<Tv>): String = JSONArray().apply {
-        for (t in l) put(JSONObject().put("nome", t.nome).put("ip", t.ip).put("fp", t.fp).put("ts", t.ts).put("id", t.id))
+        for (t in l) put(JSONObject().put("nome", t.nome).put("ip", t.ip).put("fp", t.fp).put("ts", t.ts).put("id", t.id).put("casa", t.casa))
     }.toString()
 
     fun deJson(s: String?): List<Tv> = try {
         val a = JSONArray(s ?: "[]")
         (0 until a.length()).mapNotNull { i -> a.optJSONObject(i)?.let {
-            Tv(it.optString("nome"), it.optString("ip"), it.optString("fp"), it.optString("ts"), it.optString("id"))
+            Tv(it.optString("nome"), it.optString("ip"), it.optString("fp"), it.optString("ts"), it.optString("id"), nomeCasa(it.optString("casa")))
         } }.filter { IPV4.matches(it.ip) }
     } catch (e: Exception) { emptyList() }
 

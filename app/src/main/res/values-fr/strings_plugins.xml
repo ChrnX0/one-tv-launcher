@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plugins de terceiros na HOME (degrau 3, PluginsTv.kt) -->
+<resources>
+    <string name="plg_titulo">Plugins</string>
+    <string name="plg_cfg_det">Cartes d\'autres apps dans la ligne Regarder. Chacune demande votre accord.</string>
+    <string name="plg_det">N\'activez que des apps de confiance. Un plugin n\'envoie qu\'un court texte ; il ne voit ni vos apps ni vos comptes.</string>
+    <string name="plg_nenhum">Aucun plugin installé. Les plugins sont des apps d\'autres développeurs qui affichent une carte ici, comme un score ou un prix.</string>
+    <string name="plg_ligado">Activé</string>
+    <string name="plg_desligado">Désactivé</string>
+    <string name="plg_limite">%1$d plugins au maximum à la fois. Désactivez-en un d\'abord.</string>
+    <string name="plg_seguranca">Si un plugin est mis à jour avec une autre signature, il disparaît jusqu\'à ce que vous l\'autorisiez à nouveau.</string>
+</resources>

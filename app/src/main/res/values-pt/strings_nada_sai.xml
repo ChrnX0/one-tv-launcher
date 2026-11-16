@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nada sai da sua casa (degrau 3): o compromisso de privacidade, o mesmo texto do site. -->
+<resources>
+    <string name="nsc_titulo">Nada sai da sua casa</string>
+    <string name="nsc_det">Sem conta nossa, sem servidor nosso, sem propaganda</string>
+    <string name="nsc_texto">Sem conta nossa, sem servidor nosso, sem propaganda, sem rastrear o uso.\n\nSuas configurações, fotos, recados e backups ficam nesta TV, ou numa conta sua, se você conectar.\n\nA TV só conversa com os serviços que você liga, como o clima ou as capas dos filmes. A política de privacidade no site lista cada um.</string>
+</resources>

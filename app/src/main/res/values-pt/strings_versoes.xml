@@ -14,6 +14,13 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Família conectada (Configurações › Família): um link sem conta para os netos mandarem fotos e recados que aparecem na TV</item>
+        <item>Cenas prontas: Dormir, Novela e Jogo em Cenas, criadas com um OK</item>
+        <item>Modo hóspede: a limpeza na saída agora inclui os apps que vieram de fábrica, como a Netflix, e pode limpar tudo de uma vez</item>
+        <item>Relatar um problema (Configurações › Sistema): um QR leva ao celular, que mostra exatamente o que vai ser enviado</item>
+        <item>“Nada sai da sua casa” (Configurações › Sistema): o que fica só na TV, explicado em poucas linhas</item>
+        <item>Plugins (Configurações › Aparência): outros apps podem pôr um cartão na linha Assistir, cada um só com o seu OK</item>
+        <item>App do celular: várias casas, com as TVs agrupadas por casa</item>
         <item>Modo de segurança: se a tela inicial parar 3 vezes em 15 minutos, abre uma versão simples dela, com os apps e o botão “Procurar versão corrigida”</item>
         <item>Primeira abertura: a TV pergunta como é usada (Simples, Completo ou Cuidar de alguém) e mostra só o que serve. Dá para trocar em Configurações › Sistema</item>
         <item>Modo hóspede (Configurações › Família): pede o PIN para sair, mostra as boas-vindas com as regras da casa e o Wi-Fi, e na saída apaga os logins dos apps escolhidos</item>
@@ -183,6 +190,12 @@
         <item>Protetor de tela com widgets novos, de letra maior: escolha Faixa de vidro (as próximas horas numa curva, com a hora do sol), Cartões (agora, horas, hoje e amanhã) ou Sem caixa (a temperatura grande e o tempo numa frase) em Configurações › Tela e energia › Widgets do protetor, ou no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Família conectada</item>
+        <item>Cenas prontas</item>
+        <item>Hóspede: limpeza total</item>
+        <item>Relatar problema</item>
+        <item>Nada sai da sua casa</item>
+        <item>Plugins</item>
         <item>Modo de segurança</item>
         <item>Como esta TV é usada</item>
         <item>Modo hóspede</item>
@@ -323,6 +336,12 @@
         <item>Em Configurações › Tela e energia, OK em Widgets do protetor até o estilo que quiser e espere o protetor aparecer</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Em Configurações › Família › Família conectada, aparece o QR? Mandando uma foto pelo link no celular, ela aparece na TV?</item>
+        <item>Em Cenas, aparecem Dormir, Novela e Jogo em “Cenas prontas”? Criando Dormir, ela entra na lista e roda com OK?</item>
+        <item>No Modo hóspede, a escolha de apps a limpar mostra também a Netflix e o YouTube?</item>
+        <item>Em Configurações › Sistema › Relatar um problema, aparece o QR e o texto que vai junto?</item>
+        <item>Em Configurações › Sistema, “Nada sai da sua casa” abre um texto curto e legível?</item>
+        <item>Em Configurações › Aparência › Plugins, a TV pede o PIN e mostra “Nenhum plugin instalado”?</item>
         <item>Com o comando de teste do modo de segurança, ao voltar à HOME aparece a tela simples com os apps? E “Tentar a tela inicial normal” volta para a de sempre?</item>
         <item>Em Configurações › Sistema, troque “Como esta TV é usada” para Simples: as abas Casa e automações, Acesso remoto e Avançado somem? Depois volte para Completo</item>
         <item>Em Configurações › Família, ligue o Modo hóspede e volte à HOME: aparecem as boas-vindas? Para desligar, a TV pede o PIN?</item>

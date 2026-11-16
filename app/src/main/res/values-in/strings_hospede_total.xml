@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede com limpeza total (degrau 3). -->
+<resources>
+    <string name="hos_total">Pembersihan total</string>
+    <string name="hos_total_det">Saat check-out, menghapus data semua aplikasi di TV, bukan hanya streaming. Layanan Google dan Setelan tetap ada.</string>
+</resources>

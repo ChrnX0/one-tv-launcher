@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cenas prontas sem voz (degrau 3, CenasProntas.kt). -->
+<resources>
+    <string name="cpr_secao">तैयार सीन</string>
+    <string name="cpr_dormir">सोना</string>
+    <string name="cpr_dormir_det">नाइट फ़िल्टर, कम आवाज़, 30 मिनट में TV बंद</string>
+    <string name="cpr_novela">धारावाहिक</string>
+    <string name="cpr_novela_det">आपका चैनल, सामान्य रंग</string>
+    <string name="cpr_jogo">मैच</string>
+    <string name="cpr_jogo_det">आपका खेल चैनल, ज़्यादा आवाज़</string>
+    <string name="cpr_canal">“%1$s” के लिए कौन-सा चैनल?</string>
+    <string name="cpr_canal_dica">चैनल का नाम या नंबर</string>
+</resources>

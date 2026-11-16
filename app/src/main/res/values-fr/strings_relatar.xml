@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Relatar um problema pelo celular (degrau 3, RelatarProblema.kt). -->
+<resources>
+    <string name="rel_titulo">Signaler un problème</string>
+    <string name="rel_linha_det">Un QR ouvre le formulaire sur le téléphone, avec les données techniques déjà remplies</string>
+    <string name="rel_texto">Visez le code avec l’appareil photo du téléphone. Écrivez ce qui s’est passé et envoyez. Votre nom, compte, réseau et ville ne sont pas inclus.</string>
+    <string name="rel_vai_junto">Ce qui est inclus</string>
+</resources>

@@ -830,6 +830,13 @@ class ConfigLauncherActivity : Activity() {
             reconstruirAoVoltar = true
             startActivity(Intent(this, VindoDoProjectivyActivity::class.java))
         }, lp())
+        // Plugins (degrau 3, PluginsTv): cartões de outros apps na linha Assistir. Ligar um plugin pede o PIN parental.
+        c.addView(linha(getString(R.string.plg_titulo), getString(R.string.plg_cfg_det), seta = true) {
+            pedirPinParental(getString(R.string.plg_titulo)) {
+                reconstruirAoVoltar = true
+                startActivity(Intent(this, PluginsActivity::class.java))
+            }
+        }, lp())
         lateinit var linhaTema: LinhaCfg
         linhaTema = linha(getString(R.string.cl_tema), getString(R.string.cfg_tema_det), valor = Tema.atual(this).nome) {
             Tema.proximo(this)
@@ -1018,6 +1025,14 @@ class ConfigLauncherActivity : Activity() {
                 startActivity(Intent(this, AgendaFamiliaActivity::class.java))
             }
         }, lp())
+        // Família conectada (degrau 3, FamiliaConectada.kt): filhos e netos mandam foto e recado por um link. Atrás do PIN
+        // dos pais (o link abre a TV para quem o tiver). Abrir a tela liga o link; "Desligar" lá dentro desliga.
+        c.addView(linha(getString(R.string.famc_titulo), getString(if (FamiliaConectada.ligado(this)) R.string.famc_ligado else R.string.famc_det), seta = true) {
+            pedirPinParental {
+                reconstruirAoVoltar = true
+                startActivity(Intent(this, FamiliaConectadaActivity::class.java))
+            }
+        }, lp())
         // Cuidar de longe (ideias 77-79, 15/11/2026): pedido de ajuda, lembrete com aviso, TV que não ligou. Desligado de fábrica.
         secao(c, getString(R.string.cuidar_titulo))
         c.addView(linha(getString(R.string.cuidar_titulo), getString(
@@ -1076,6 +1091,14 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linha(getString(R.string.hos_regras), ModoHospede.regras(this).ifBlank { getString(R.string.hos_regras_vazio) }, seta = true) {
             pedirRegrasHospede()
         }, lp())
+        // Degrau 3: limpeza total = todos os apps da TV (menos os que mantêm a TV funcionando). Ligar desfaz a lista escolhida.
+        lateinit var linhaTotal: LinhaCfg
+        linhaTotal = linha(getString(R.string.hos_total), getString(R.string.hos_total_det), chave = ModoHospede.total(this)) {
+            val novo = !ModoHospede.total(this)
+            ModoHospede.definirTotal(this, novo)
+            linhaTotal.ligado(novo)
+        }
+        c.addView(linhaTotal, lp())
         c.addView(linha(getString(R.string.hos_apps), getString(R.string.hos_apps_det), seta = true) {
             reconstruirAoVoltar = true
             startActivity(Intent(this, AppsEscolhaActivity::class.java).putExtra(AppsEscolhaActivity.EXTRA_MODO, AppsEscolhaActivity.MODO_HOSPEDE))
@@ -1365,6 +1388,15 @@ class ConfigLauncherActivity : Activity() {
         // Diagnóstico de 1 botão (04/11/2026): o 1º da aba, para ser o OK mais rápido quando "o app parou".
         c.addView(linha(getString(R.string.cfg_diag), getString(R.string.cfg_diag_det), seta = true) {
             startActivity(Intent(this, DiagnosticoActivity::class.java))
+        }, lp())
+        // Degrau 3: "Nada sai da sua casa", o compromisso de privacidade em uma tela (o mesmo texto do site).
+        c.addView(linha(getString(R.string.nsc_titulo), getString(R.string.nsc_det), seta = true) {
+            CaixaTv(this).setTitle(getString(R.string.nsc_titulo)).setMessage(getString(R.string.nsc_texto))
+                .setPositiveButton("OK", null).show()
+        }, lp())
+        // Degrau 3: relatar um problema pelo celular (QR com os dados técnicos, RelatarProblema.kt).
+        c.addView(linha(getString(R.string.rel_titulo), getString(R.string.rel_linha_det), seta = true) {
+            startActivity(Intent(this, RelatarProblemaActivity::class.java))
         }, lp())
         // Backup noturno cifrado (BackupNoturno.kt): as opções ficam numa tela própria; ao voltar, o resumo se atualiza.
         c.addView(linha(getString(R.string.bkn_titulo), BackupNoturno.resumo(this), seta = true) {

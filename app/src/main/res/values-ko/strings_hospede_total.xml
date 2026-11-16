@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede com limpeza total (degrau 3). -->
+<resources>
+    <string name="hos_total">전체 정리</string>
+    <string name="hos_total_det">체크아웃 시 스트리밍 앱뿐 아니라 TV의 모든 앱 데이터를 지웁니다. Google 서비스와 설정은 유지됩니다.</string>
+</resources>

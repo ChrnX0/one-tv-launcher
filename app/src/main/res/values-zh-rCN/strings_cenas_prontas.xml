@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cenas prontas sem voz (degrau 3, CenasProntas.kt). -->
+<resources>
+    <string name="cpr_secao">现成场景</string>
+    <string name="cpr_dormir">睡觉</string>
+    <string name="cpr_dormir_det">夜间滤镜，调低音量，30 分钟后关电视</string>
+    <string name="cpr_novela">电视剧</string>
+    <string name="cpr_novela_det">你的频道，正常色彩</string>
+    <string name="cpr_jogo">比赛</string>
+    <string name="cpr_jogo_det">你的体育频道，音量调高</string>
+    <string name="cpr_canal">“%1$s”用哪个频道？</string>
+    <string name="cpr_canal_dica">频道名称或编号</string>
+</resources>

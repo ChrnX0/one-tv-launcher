@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Relatar um problema pelo celular (degrau 3, RelatarProblema.kt). -->
+<resources>
+    <string name="rel_titulo">Laporkan masalah</string>
+    <string name="rel_linha_det">QR membuka formulir di ponsel, data teknis sudah terisi</string>
+    <string name="rel_texto">Arahkan kamera ponsel ke kode. Tulis apa yang terjadi lalu kirim. Nama, akun, jaringan, dan kota Anda tidak ikut terkirim.</string>
+    <string name="rel_vai_junto">Yang ikut terkirim</string>
+</resources>

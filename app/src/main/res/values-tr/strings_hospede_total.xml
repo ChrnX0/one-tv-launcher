@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede com limpeza total (degrau 3). -->
+<resources>
+    <string name="hos_total">Tam temizlik</string>
+    <string name="hos_total_det">Çıkışta yalnızca yayın uygulamalarının değil, TV’deki tüm uygulamaların verisini siler. Google hizmetleri ve Ayarlar kalır.</string>
+</resources>

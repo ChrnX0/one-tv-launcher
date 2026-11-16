@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Relatar um problema pelo celular (degrau 3, RelatarProblema.kt). -->
+<resources>
+    <string name="rel_titulo">报告问题</string>
+    <string name="rel_linha_det">扫码在手机上打开表单，技术信息已填好</string>
+    <string name="rel_texto">用手机相机对准二维码。写下发生了什么并发送。不会附带你的姓名、账号、网络和城市。</string>
+    <string name="rel_vai_junto">附带的内容</string>
+</resources>

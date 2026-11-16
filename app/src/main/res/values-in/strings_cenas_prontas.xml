@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cenas prontas sem voz (degrau 3, CenasProntas.kt). -->
+<resources>
+    <string name="cpr_secao">Adegan siap pakai</string>
+    <string name="cpr_dormir">Tidur</string>
+    <string name="cpr_dormir_det">Filter malam, volume lebih kecil, TV mati dalam 30 menit</string>
+    <string name="cpr_novela">Sinetron</string>
+    <string name="cpr_novela_det">Saluran Anda, warna normal</string>
+    <string name="cpr_jogo">Pertandingan</string>
+    <string name="cpr_jogo_det">Saluran olahraga Anda, lebih keras</string>
+    <string name="cpr_canal">Saluran apa untuk “%1$s”?</string>
+    <string name="cpr_canal_dica">Nama atau nomor saluran</string>
+</resources>
