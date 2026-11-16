@@ -122,4 +122,22 @@ class LgNetcastTest {
         assertEquals(1, LgNetcast.TECLA_ENERGIA)
         assertTrue(LgNetcast.corpoTecla(LgNetcast.TECLA_ENERGIA).endsWith("<value>1</value></command>"))
     }
+
+    @Test fun despertadorSobeAosPoucosAteVolumeFixo() {
+        // Opções nunca passam do teto (o alarme que foi a 66 acordou a casa).
+        assertTrue(LgNetcast.OPCOES_ALARME.all { it in 1..LgNetcast.TETO_ALARME })
+        assertEquals(30, LgNetcast.alvoFixoAlarme(70))
+        assertEquals(1, LgNetcast.alvoFixoAlarme(0))
+        // Começa em 5; rampa 0 vai direto; alvo menor que 5 começa no alvo.
+        assertEquals(5, LgNetcast.inicioRampaAlarme(15, 60))
+        assertEquals(15, LgNetcast.inicioRampaAlarme(15, 0))
+        assertEquals(3, LgNetcast.inicioRampaAlarme(3, 60))
+        // 5 -> 15 em 60 s: 10 passos de 6 s; nunca menos de 1 s entre teclas.
+        assertEquals(6000L, LgNetcast.intervaloRampaMs(60, 5, 15))
+        assertEquals(1000L, LgNetcast.intervaloRampaMs(10, 5, 30))
+        assertEquals(0L, LgNetcast.intervaloRampaMs(60, 15, 15))
+        // Alguém mexeu no volume durante a subida.
+        assertFalse(LgNetcast.mexeramNaRampa(9, 8))
+        assertTrue(LgNetcast.mexeramNaRampa(2, 8))
+    }
 }

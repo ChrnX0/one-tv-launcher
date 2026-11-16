@@ -166,6 +166,13 @@ object AlarmeGarantia {
     /** O que o alarme mudou no volume, para devolver depois. */
     class Volume(val original: Int, val definido: Int?, val tirouMudo: Boolean, val lg: VolumeLg.Mudanca? = null)
 
+    /** Volume FINAL da LG no despertador (escala 0-100 dela), quando há LG pareada. */
+    const val CHAVE_VOLUME_LG = "volume_lg_alarme"
+    fun volumeLg(ctx: Context): Int = LgNetcast.alvoFixoAlarme(
+        ctx.getSharedPreferences(PREFS_DESPERTADOR, Context.MODE_PRIVATE).getInt(CHAVE_VOLUME_LG, LgNetcast.PADRAO_ALARME))
+    fun definirVolumeLg(ctx: Context, v: Int) =
+        ctx.getSharedPreferences(PREFS_DESPERTADOR, Context.MODE_PRIVATE).edit().putInt(CHAVE_VOLUME_LG, LgNetcast.alvoFixoAlarme(v)).apply()
+
     fun volumeMinimo(ctx: Context): Int =
         ctx.getSharedPreferences(PREFS_DESPERTADOR, Context.MODE_PRIVATE).getInt(CHAVE_VOLUME, VolumeAlarme.PADRAO)
 
@@ -177,15 +184,16 @@ object AlarmeGarantia {
      * continua valendo: ela mexe no volume do PRÓPRIO som (5% a 100%), por cima deste volume da TV.
      * null = não mexeu em nada (mínimo desligado, ou volume fixo: aí quem manda é a TV pelo HDMI-CEC).
      */
-    fun subirVolume(ctx: Context): Volume? {
-        val pct = volumeMinimo(ctx)
-        if (pct <= 0) return null
-        // LG pareada (ideia 49): o volume do Android não chega na TV pelo HDMI; sobe o da própria LG, em segundo plano.
-        // Só com a chave própria ligada (desligada por padrão: ver VolumeLg.alarmeLigado) e com teto de 30 na LG.
+    fun subirVolume(ctx: Context, rampaSeg: Int = 0): Volume? {
+        // LG pareada (ideia 49): o volume do Android não chega na TV pelo HDMI; a própria LG começa baixo e sobe aos
+        // poucos (na [rampaSeg] do alarme) até o volume fixo escolhido ([volumeLg], no máximo 30), em segundo plano.
         val lg = if (VolumeLg.configurado(ctx) && VolumeLg.alarmeLigado(ctx)) VolumeLg.Mudanca().also { m ->
             val app = ctx.applicationContext
-            Fundo.rodar("Alarme-lg") { VolumeLg.subirAlarme(app, pct, m) }
+            val alvo = volumeLg(ctx)
+            Fundo.rodar("Alarme-lg") { VolumeLg.subirAlarme(app, alvo, rampaSeg, m) }
         } else null
+        val pct = volumeMinimo(ctx)
+        if (pct <= 0) return lg?.let { Volume(-1, null, false, it) }
         val am = ctx.getSystemService(AudioManager::class.java) ?: return lg?.let { Volume(-1, null, false, it) }
         return try {
             val s = AudioManager.STREAM_MUSIC   // o som do alarme sai pela mídia (ver SomAlarme)

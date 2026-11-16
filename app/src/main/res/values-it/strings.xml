@@ -194,6 +194,7 @@
     <string name="al_perdido_um">La sveglia delle %1$s non ha suonato perché la TV era spenta.</string>
     <string name="al_perdido_varios">Le sveglie delle %1$s non hanno suonato perché la TV era spenta.</string>
     <string name="al_perdido_e">e</string>
+    <string name="al_volume_tv">Volume della TV quando suona: parte basso e sale fino a %1$d</string>
     <string name="al_volume_min">Volume minimo quando suona: %1$s</string>
     <string name="al_volume_nao_mexe">non cambiare</string>
     <string name="pp_sem_conta">Nessun account Google</string>

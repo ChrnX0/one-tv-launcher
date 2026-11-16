@@ -194,6 +194,7 @@
     <string name="al_perdido_um">La alarma de las %1$s no sonó porque la TV estaba apagada.</string>
     <string name="al_perdido_varios">Las alarmas de las %1$s no sonaron porque la TV estaba apagada.</string>
     <string name="al_perdido_e">y</string>
+    <string name="al_volume_tv">Volumen de la TV al sonar: empieza bajo y sube hasta %1$d</string>
     <string name="al_volume_min">Volumen mínimo al sonar: %1$s</string>
     <string name="al_volume_nao_mexe">no cambiar</string>
     <string name="pp_sem_conta">Sin cuenta de Google</string>

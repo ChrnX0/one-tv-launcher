@@ -194,6 +194,7 @@
     <string name="al_perdido_um">Alarm %1$s tidak berbunyi karena TV mati.</string>
     <string name="al_perdido_varios">Alarm %1$s tidak berbunyi karena TV mati.</string>
     <string name="al_perdido_e">dan</string>
+    <string name="al_volume_tv">Volume TV saat berbunyi: mulai pelan dan naik sampai %1$d</string>
     <string name="al_volume_min">Volume minimum saat berbunyi: %1$s</string>
     <string name="al_volume_nao_mexe">jangan diubah</string>
     <string name="pp_sem_conta">Tidak ada akun Google</string>

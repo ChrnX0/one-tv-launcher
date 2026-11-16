@@ -91,6 +91,31 @@ object LgNetcast {
     /** Teclas por rodada antes de ler o volume de novo: em rajada a LG acelera (42 teclas subiram 58 pontos). */
     const val TECLAS_POR_RODADA = 3
 
+    /**
+     * Despertador com a LG (16/11/2026, pedido do dono): começa baixo e sobe aos poucos até um volume FIXO escolhido nas
+     * configurações do alarme (não "só se estiver baixo"). Opções do volume final, na escala 0-100 da LG; todas ≤ [TETO_ALARME].
+     */
+    val OPCOES_ALARME = listOf(10, 15, 20, 25, 30)
+    const val PADRAO_ALARME = 15
+    /** Volume da LG em que o toque começa (ou o final, se for menor). */
+    const val INICIO_ALARME = 5
+
+    /** O volume final escolhido, dentro de 1..[TETO_ALARME] (um valor velho ou estranho nas prefs não passa do teto). */
+    fun alvoFixoAlarme(escolhido: Int): Int = escolhido.coerceIn(1, TETO_ALARME)
+
+    /** Onde a subida começa: [INICIO_ALARME], ou já o [alvo] se a rampa é 0 ("tocar direto") ou o alvo é menor. */
+    fun inicioRampaAlarme(alvo: Int, rampaSeg: Int): Int = if (rampaSeg <= 0) alvo else minOf(INICIO_ALARME, alvo)
+
+    /** De quanto em quanto tempo sobe 1 ponto para ir de [inicio] a [alvo] em [rampaSeg] (no mínimo 1 s entre teclas). */
+    fun intervaloRampaMs(rampaSeg: Int, inicio: Int, alvo: Int): Long {
+        val passos = alvo - inicio
+        if (passos <= 0 || rampaSeg <= 0) return 0L
+        return maxOf(1000L, rampaSeg * 1000L / passos)
+    }
+
+    /** Durante a subida: alguém mexeu no volume (passou mais de 2 pontos do que esperávamos)? Então paramos de subir. */
+    fun mexeramNaRampa(lido: Int, esperado: Int): Boolean = Math.abs(lido - esperado) > 2
+
     /** Para quanto o despertador sobe a LG: o mínimo [pct] do máximo, limitado a [TETO_ALARME]; null = não mexe. */
     fun alvoAlarme(atual: Int, maximo: Int, pct: Int): Int? {
         if (maximo <= 0 || pct <= 0) return null

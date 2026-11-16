@@ -194,6 +194,7 @@
     <string name="al_perdido_um">TV の電源が切れていたため、%1$s のアラームが鳴りませんでした。</string>
     <string name="al_perdido_varios">TV の電源が切れていたため、%1$s のアラームが鳴りませんでした。</string>
     <string name="al_perdido_e">と</string>
+    <string name="al_volume_tv">鳴るときのテレビ音量：小さく始まり %1$d まで上がります</string>
     <string name="al_volume_min">鳴るときの最小音量: %1$s</string>
     <string name="al_volume_nao_mexe">変更しない</string>
     <string name="pp_sem_conta">Google アカウントなし</string>

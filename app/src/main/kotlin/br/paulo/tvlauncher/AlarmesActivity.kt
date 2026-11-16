@@ -169,8 +169,13 @@ class AlarmesActivity : Activity() {
      * as opções; "não mexer" deixa o volume e o mudo da TV como estiverem.
      */
     private fun linhaVolume(): View {
-        fun rotulo(pct: Int) = getString(R.string.al_volume_min, if (pct <= 0) getString(R.string.al_volume_nao_mexe) else "$pct%")
-        val t = texto(17f, textoClaro, fonteMedia).apply { text = rotulo(AlarmeGarantia.volumeMinimo(this@AlarmesActivity)) }
+        // LG pareada: o volume que conta é o da LG (o do Android é fixo no HDMI). A linha escolhe o volume FINAL da LG;
+        // o toque começa baixo e sobe até ele na rampa de cada alarme.
+        val lg = VolumeLg.configurado(this) && VolumeLg.alarmeLigado(this)
+        fun rotulo(pct: Int) = if (lg) getString(R.string.al_volume_tv, pct)
+            else getString(R.string.al_volume_min, if (pct <= 0) getString(R.string.al_volume_nao_mexe) else "$pct%")
+        fun atual() = if (lg) AlarmeGarantia.volumeLg(this) else AlarmeGarantia.volumeMinimo(this)
+        val t = texto(17f, textoClaro, fonteMedia).apply { text = rotulo(atual()) }
         return LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
@@ -180,10 +185,10 @@ class AlarmesActivity : Activity() {
             background = Estilo.superficie(context, false)
             setOnFocusChangeListener { v, f -> Estilo.focarLinha(v, f) }   // foco padrão: pílula branca, texto escuro
             setOnClickListener {
-                val atual = AlarmeGarantia.volumeMinimo(this@AlarmesActivity)
-                val opcoes = VolumeAlarme.OPCOES
-                val novo = opcoes[(opcoes.indexOf(atual).coerceAtLeast(0) + 1) % opcoes.size]
-                AlarmeGarantia.definirVolumeMinimo(this@AlarmesActivity, novo)
+                val opcoes = if (lg) LgNetcast.OPCOES_ALARME else VolumeAlarme.OPCOES
+                val novo = opcoes[(opcoes.indexOf(atual()).coerceAtLeast(0) + 1) % opcoes.size]
+                if (lg) AlarmeGarantia.definirVolumeLg(this@AlarmesActivity, novo)
+                else AlarmeGarantia.definirVolumeMinimo(this@AlarmesActivity, novo)
                 t.text = rotulo(novo)
             }
             addView(t)

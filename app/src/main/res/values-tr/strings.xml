@@ -194,6 +194,7 @@
     <string name="al_perdido_um">%1$s alarmı TV kapalı olduğu için çalmadı.</string>
     <string name="al_perdido_varios">%1$s alarmları TV kapalı olduğu için çalmadı.</string>
     <string name="al_perdido_e">ve</string>
+    <string name="al_volume_tv">Çalarken TV sesi: düşük başlar, %1$d seviyesine çıkar</string>
     <string name="al_volume_min">Çalarken en düşük ses: %1$s</string>
     <string name="al_volume_nao_mexe">değiştirme</string>
     <string name="pp_sem_conta">Google hesabı yok</string>
