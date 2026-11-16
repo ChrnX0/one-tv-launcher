@@ -56,10 +56,10 @@ object PainelArquivos {
     // ---------------------------------------------------------------- caminhos
 
     /** O arquivo de verdade para o caminho relativo [rel], ou Erro 400/404. [deveExistir]=false para criar. */
-    fun resolver(rel: String?, deveExistir: Boolean = true): File {
+    fun resolver(rel: String?, deveExistir: Boolean = true, base: File = raiz()): File {
         val limpo = (rel ?: "").trim('/')
         if (!ChecagensPainel.caminhoRelativoValido(limpo)) throw Erro(400, "caminho inválido")
-        val raiz = raiz().canonicalFile
+        val raiz = base.canonicalFile   // [base]: a memória interna ou, na unidade de rede, um pendrive (MtpArmazem)
         val f = if (limpo.isEmpty()) raiz else File(raiz, limpo)
         // canonicalPath resolve links simbólicos: um link dentro de Download apontando para fora não passa.
         val real = f.canonicalPath
@@ -68,7 +68,8 @@ object PainelArquivos {
         return f
     }
 
-    private fun relativo(f: File): String = f.canonicalPath.removePrefix(raiz().canonicalPath).trim('/')
+    private fun relativo(f: File, base: File = raiz()): String =
+        f.canonicalPath.removePrefix(base.canonicalPath).replace(File.separatorChar, '/').trim('/')
 
     // ---------------------------------------------------------------- listar
 
@@ -155,21 +156,21 @@ object PainelArquivos {
 
     // ---------------------------------------------------------------- nova pasta e apagar
 
-    fun criarPasta(rel: String?, nome: String?) {
+    fun criarPasta(rel: String?, nome: String?, base: File = raiz()) {
         if (!ChecagensPainel.nomeArquivoValido(nome)) throw Erro(400, "nome de pasta inválido")
-        val pasta = resolver(rel)
+        val pasta = resolver(rel, base = base)
         val nova = File(pasta, nome!!)
         if (nova.exists()) throw Erro(409, "já existe \"$nome\"")
         if (!nova.mkdir()) throw Erro(500, "o Android não deixou criar a pasta")
     }
 
     /** Apaga um arquivo ou uma pasta com tudo dentro. Não deixa apagar a raiz nem as pastas padrão do topo. */
-    fun apagar(ctx: Context, rel: String?): Int = apagar(rel) { avisarGaleria(ctx, it) }
+    fun apagar(ctx: Context, rel: String?): Int = apagar(rel, { avisarGaleria(ctx, it) })
 
     /** O mesmo, com quem avisar a galeria trocável (a unidade de rede roda também no teste JVM, sem Android). */
-    fun apagar(rel: String?, avisar: (File) -> Unit): Int {
-        val f = resolver(rel)
-        val r = relativo(f)
+    fun apagar(rel: String?, avisar: (File) -> Unit, base: File = raiz()): Int {
+        val f = resolver(rel, base = base)
+        val r = relativo(f, base)
         if (r.isEmpty()) throw Erro(400, "a raiz não se apaga")
         if (!r.contains('/') && f.isDirectory && ChecagensPainel.pastaPadraoTopo(r)) throw Erro(400, "a pasta \"$r\" é do sistema: apague o que tem dentro dela")
         val n = apagarTudo(f)
@@ -185,20 +186,20 @@ object PainelArquivos {
      * destino que já existe (nunca sobrescreve). Devolve o caminho relativo novo.
      */
     fun mover(ctx: Context, rel: String?, pastaDestino: String?, novoNome: String?): String =
-        mover(rel, pastaDestino, novoNome) { avisarGaleria(ctx, it) }
+        mover(rel, pastaDestino, novoNome, { avisarGaleria(ctx, it) })
 
-    fun mover(rel: String?, pastaDestino: String?, novoNome: String?, avisar: (File) -> Unit): String {
+    fun mover(rel: String?, pastaDestino: String?, novoNome: String?, avisar: (File) -> Unit, base: File = raiz()): String {
         if (!ChecagensPainel.nomeArquivoValido(novoNome)) throw Erro(400, "nome inválido")
-        val origem = resolver(rel)
-        val r = relativo(origem)
+        val origem = resolver(rel, base = base)
+        val r = relativo(origem, base)
         if (r.isEmpty()) throw Erro(400, "a raiz não se move")
         if (!r.contains('/') && origem.isDirectory && ChecagensPainel.pastaPadraoTopo(r)) throw Erro(400, "a pasta \"$r\" é do sistema e fica onde está")
-        val destino = resolver(pastaDestino)
+        val destino = resolver(pastaDestino, base = base)
         if (!destino.isDirectory) throw Erro(400, "o destino não é uma pasta")
         // Pasta para dentro dela mesma (ou de uma subpasta dela) sumiria do mapa: o rename falharia ou faria um laço.
         if (origem.isDirectory && ChecagensPainel.dentroDe(destino.canonicalPath, origem.canonicalPath))
             throw Erro(400, "não dá para mover uma pasta para dentro dela mesma")
-        if (relativo(destino).isEmpty() && novoNome!!.lowercase() in ChecagensPainel.PASTAS_FECHADAS) throw Erro(400, "nome reservado")
+        if (relativo(destino, base).isEmpty() && novoNome!!.lowercase() in ChecagensPainel.PASTAS_FECHADAS) throw Erro(400, "nome reservado")
         val final = File(destino, novoNome!!)
         if (final.canonicalPath == origem.canonicalPath) return r
         // Só troca de maiúscula/minúscula ("foto.JPG" -> "foto.jpg"): o sistema de arquivos da TV não diferencia, e o
@@ -213,7 +214,7 @@ object PainelArquivos {
         if (!ok) throw Erro(500, "o Android não deixou mover/renomear")
         avisar(origem)
         avisar(final)
-        return relativo(final)
+        return relativo(final, base)
     }
 
     /**

@@ -11,7 +11,7 @@ import java.net.MulticastSocket
 import java.net.NetworkInterface
 
 /**
- * Manda e responde os pacotes SSDP (Ssdp.kt) para a TV aparecer na tela "Rede" do Windows como "<nome> · arquivos".
+ * Manda e responde os pacotes SSDP (Ssdp.kt) para a TV aparecer na tela "Rede" do Windows como "<nome> · painel".
  * Só com a unidade de rede ligada (liga e desliga junto com o AnuncioDav).
  *
  * Porta 1900: o Chromecast embutido (mediashell) já escuta nela (medido na Sala em 14/11/2026). Com reuseAddress os dois
@@ -71,6 +71,16 @@ object AnuncioUpnp {
         } catch (e: Exception) { Log.i(TAG, "porta 1900 ocupada, só anúncios: $e"); null }
         escuta = s
         try {
+            // O servidor MTP acabou de subir (processo novo, atualização do launcher): o Windows ainda acha que a conexão
+            // antiga vale. "Saí" + "estou aqui" do aparelho MTP faz ele soltar e reconectar sozinho (ver Ssdp.avisoDoAparelho).
+            // Com alguém já conectado (este anúncio religou sem o servidor cair) não mexe: derrubaria uma cópia no meio.
+            val (uMtp, lMtp, _) = aparelhos[1]
+            if (!MtpNaRede.temSessao()) {
+                mandar(listOf(Ssdp.avisoDoAparelho(uMtp, lMtp, false)), grupo, Ssdp.PORTA)
+                Thread.sleep(Ssdp.PAUSA_RECONEXAO_MS)
+            }
+            mandar(listOf(Ssdp.avisoDoAparelho(uMtp, lMtp, true)), grupo, Ssdp.PORTA)
+            Thread.sleep(300)
             mandar(anuncios(true), grupo, Ssdp.PORTA)
             var ultimo = System.currentTimeMillis()
             val buf = ByteArray(2048)

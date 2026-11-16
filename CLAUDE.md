@@ -89,7 +89,9 @@ It is off by default and needs the resident's consent on the TV: never turn it o
 - Network drive (one switch, off by default). Windows: MTP over IP (`MtpIp.kt` pure responder + `MtpNaRede.kt`, port 15740,
   announced by SSDP as `urn:microsoft-com:device:mtp:1` in `Ssdp.kt`/`AnuncioUpnp.kt`), so the TV shows in "This PC" like
   a phone; no password (the protocol has none): LAN only + an on-screen "Allow?" per computer (`mtp_permitidos` prefs,
-  out of the backup). Whole server runs in `MtpIpTest`; real client: `gphoto2 --port ptpip:127.0.0.1` against
+  out of the backup). Each mounted USB drive is its own MTP storage (`MtpArmazem`, hot-plug via StoreAdded/StoreRemoved).
+  Windows reconnects after a launcher restart only on a single `uuid:<udn>` byebye + alive (`Ssdp.avisoDoAparelho`); brand
+  icon in `assets/upnp/`. Real-Windows findings and the PC bench (`MtpBancadaWindowsTest`): `docs/unidade-de-rede.md`. Whole server runs in `MtpIpTest`; real client: `gphoto2 --port ptpip:127.0.0.1` against
   `ONETV_MTP_SERVIR=1`. Mac/Linux/phones: WebDAV, `PainelDav.kt` at `https://<tv>:8444/dav/`, password = panel PIN with
   the same lockout; pure logic `DavLogica.kt`, server test `DavServidorTest`; `/unidade/conectar.cmd` (`ConectorWindows.kt`)
   maps it on Windows with a drive letter. SMB is impossible (port 445 < 1024): `docs/unidade-de-rede.md`.
