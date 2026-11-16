@@ -458,7 +458,9 @@ class PlayerListaTela(
             detDescricao.text = ""
         } else {
             detTitulo.text = atual.titulo
-            val faltam = ((atual.fim - agora) / 60_000L).coerceAtLeast(0)
+            // Arredonda para cima, como a linha do canal (BarraTempo.duracao): antes o detalhe dizia "faltam 8 min" ao lado
+            // de "faltam 9 min" na lista (Sala, 16/11/2026). A unidade fica na frase traduzida.
+            val faltam = ((atual.fim - agora + 59_999L) / 60_000L).coerceAtLeast(1)
             detHorario.text = act.getString(R.string.player_horario, hora.format(Date(atual.inicio)), hora.format(Date(atual.fim)), faltam) +
                 (atual.categoria.takeIf { it.isNotEmpty() }?.let { "  ·  $it" } ?: "")
             detBarra.visibility = View.VISIBLE
