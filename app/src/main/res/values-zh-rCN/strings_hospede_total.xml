@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede com limpeza total (degrau 3). -->
+<resources>
+    <string name="hos_total">全部清除</string>
+    <string name="hos_total_det">退房时清除电视上所有应用的数据，不只是视频应用。保留 Google 服务和设置。</string>
+</resources>

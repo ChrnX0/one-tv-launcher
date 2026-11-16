@@ -15,13 +15,18 @@ class HospedeRegrasTest {
         clear(); set(2026, Calendar.NOVEMBER, dia, hora, min)
     }.timeInMillis
 
-    @Test fun limpaSoInstaladosForaDoSistema() {
-        val inst = setOf("com.netflix.ninja", "com.disney.disneyplus", "com.google.android.youtube.tvkids", "br.paulo.tvlauncher")
-        val sistema = setOf("com.google.android.youtube.tvkids")
-        assertEquals(listOf("com.disney.disneyplus", "com.netflix.ninja"), HospedeRegras.paraLimpar(null, inst, sistema))
-        // A lista escolhida pelo dono vale no lugar da conhecida.
-        assertEquals(listOf("br.paulo.tvlauncher"), HospedeRegras.paraLimpar(setOf("br.paulo.tvlauncher", "x.nao.instalado"), inst, sistema))
-        assertTrue(HospedeRegras.paraLimpar(emptySet(), inst, sistema).isEmpty())
+    @Test fun limpaSoAppsDaTvForaDosProtegidos() {
+        val tv = setOf("com.netflix.ninja", "com.disney.disneyplus", "com.google.android.youtube.tvkids", "br.paulo.tvlauncher",
+            "com.google.android.apps.tv.launcherx", "com.android.vending", "com.exemplo.jogo")
+        val nosso = setOf("br.paulo.tvlauncher")
+        // Netflix de fábrica também entra (degrau 3); o YouTube Kids está na lista conhecida.
+        assertEquals(listOf("com.disney.disneyplus", "com.google.android.youtube.tvkids", "com.netflix.ninja"), HospedeRegras.paraLimpar(null, tv, nosso))
+        // A lista escolhida pelo dono vale no lugar da conhecida, mas nunca limpa o launcher nem um app protegido.
+        assertEquals(listOf("com.exemplo.jogo"), HospedeRegras.paraLimpar(setOf("br.paulo.tvlauncher", "com.android.vending", "com.exemplo.jogo", "x.nao.instalado"), tv, nosso))
+        assertTrue(HospedeRegras.paraLimpar(emptySet(), tv, nosso).isEmpty())
+        // Limpeza total: todos os apps da TV, menos o nosso e os protegidos.
+        assertEquals(listOf("com.disney.disneyplus", "com.exemplo.jogo", "com.google.android.youtube.tvkids", "com.netflix.ninja"),
+            HospedeRegras.paraLimpar(null, tv, nosso, total = true))
     }
 
     @Test fun saidaNaHoraCerta() {

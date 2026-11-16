@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede com limpeza total (degrau 3). -->
+<resources>
+    <string name="hos_total">すべて消去</string>
+    <string name="hos_total_det">チェックアウト時に、動画アプリだけでなくテレビのすべてのアプリのデータを消去します。Google サービスと設定は残ります。</string>
+</resources>

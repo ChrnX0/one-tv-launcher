@@ -338,6 +338,21 @@
             android:exported="false"
             android:launchMode="singleTask"
             android:label="@string/seg_titulo" />
+        <!-- Degrau 3: família conectada, o QR do link de fotos e recados (FamiliaConectada.kt) -->
+        <activity
+            android:name=".FamiliaConectadaActivity"
+            android:exported="false"
+            android:label="@string/famc_titulo" />
+        <!-- Degrau 3: plugins de terceiros, o OK do dono por plugin (PluginsTv.kt) -->
+        <activity
+            android:name=".PluginsActivity"
+            android:exported="false"
+            android:label="@string/plg_titulo" />
+        <!-- Degrau 3: relatar um problema pelo celular (RelatarProblema.kt) -->
+        <activity
+            android:name=".RelatarProblemaActivity"
+            android:exported="false"
+            android:label="@string/rel_titulo" />
         <!-- Modo hóspede (degrau 2, ModoHospede.kt): boas-vindas uma vez por estadia e o alarme da hora da saída -->
         <activity
             android:name=".HospedeBoasVindasActivity"

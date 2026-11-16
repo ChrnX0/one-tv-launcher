@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede com limpeza total (degrau 3). -->
+<resources>
+    <string name="hos_total">تنظيف كامل</string>
+    <string name="hos_total_det">عند المغادرة يمسح بيانات كل تطبيقات التلفاز، لا تطبيقات البث فقط. تبقى خدمات Google والإعدادات.</string>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plugins de terceiros na HOME (degrau 3, PluginsTv.kt) -->
+<resources>
+    <string name="plg_titulo">الإضافات</string>
+    <string name="plg_cfg_det">بطاقات من تطبيقات أخرى في صف المشاهدة. كل واحدة تحتاج موافقتك.</string>
+    <string name="plg_det">فعّل فقط التطبيقات التي تثق بها. الإضافة ترسل نصًا قصيرًا فقط ولا ترى تطبيقاتك أو حساباتك.</string>
+    <string name="plg_nenhum">لا توجد إضافات مثبتة. الإضافات تطبيقات من مطورين آخرين تعرض بطاقة هنا، مثل نتيجة مباراة أو سعر.</string>
+    <string name="plg_ligado">مفعّل</string>
+    <string name="plg_desligado">متوقف</string>
+    <string name="plg_limite">بحد أقصى %1$d إضافات في المرة. أوقف واحدة أولًا.</string>
+    <string name="plg_seguranca">إذا حُدّثت إضافة بتوقيع مختلف، تختفي حتى تسمح بها من جديد.</string>
+</resources>

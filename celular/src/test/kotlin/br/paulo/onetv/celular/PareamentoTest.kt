@@ -61,6 +61,23 @@ class PareamentoTest {
         assertEquals(emptyList<Pareamento.Tv>(), Pareamento.deJson("lixo"))
     }
 
+    @Test fun `varias casas - mesmo IP em casas diferentes sao duas TVs`() {
+        val sala = Pareamento.Tv("Sala", "192.168.1.50")
+        val praia = Pareamento.Tv("Praia", "192.168.1.50", casa = "Praia")
+        var l = Pareamento.guardar(Pareamento.guardar(emptyList(), sala), praia)
+        assertEquals(2, l.size)
+        assertEquals(listOf("Praia", ""), Pareamento.casas(l))
+        assertEquals(2, Pareamento.porCasa(l).size)
+        assertTrue(Pareamento.chave(sala) != Pareamento.chave(praia))
+        // A mesma TV (nome no Tailscale) lida de novo em outro IP é atualizada, não duplicada.
+        val a = Pareamento.Tv("Sala", "192.168.1.50", ts = "onetv-sala.tail1.ts.net")
+        l = Pareamento.guardar(Pareamento.guardar(emptyList(), a), a.copy(ip = "192.168.0.9"))
+        assertEquals(1, l.size); assertEquals("192.168.0.9", l[0].ip)
+        assertEquals(l, Pareamento.deJson(Pareamento.paraJson(l)))
+        assertEquals("Casa da mãe", Pareamento.nomeCasa("  Casa   da mãe <>"))
+        assertEquals("Praia", Pareamento.deJson(Pareamento.paraJson(listOf(praia)))[0].casa)
+    }
+
     @Test fun `volume do celular vira tecla da TV`() {
         assertEquals("volume+", Pareamento.teclaDoVolume(true)); assertEquals("volume-", Pareamento.teclaDoVolume(false))
     }

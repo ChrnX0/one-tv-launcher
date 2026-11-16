@@ -42,7 +42,9 @@ object BackupCompleto {
      * "confirmacoes" (restaurar um backup não pode liberar nada sem o PIN, ver ConfirmacoesTv), "painel_log" (registro),
      * "atualizador", "aviso_tv" e "loja_curada" (estado passageiro ou cache baixado de novo).
      */
-    internal val FORA_DE_PROPOSITO = setOf("confirmacoes", "emprestimo_shell", "emprestimo_dono",   // empréstimos: restaurar não pode ligar poder emprestado sem o PIN (e o uid de cada app muda entre aparelhos)
+    internal val FORA_DE_PROPOSITO = setOf("confirmacoes", "familia_link", "plugins",   // plugins: o OK vale para o certificado desta TV
+          // degrau 3: o link da família não viaja no backup (restaurar = link novo)
+        "emprestimo_shell", "emprestimo_dono",   // empréstimos: restaurar não pode ligar poder emprestado sem o PIN (e o uid de cada app muda entre aparelhos)
         "mtp_permitidos", "painel_log", "atualizador", "aviso_tv", "loja_curada",
         "compatibilidade",   // medidas do "acordar" deste aparelho (CompatibilidadeTv): de outro aparelho não valem
         "aot",   // versão já compilada (CompilarAot): é do APK instalado, não da configuração

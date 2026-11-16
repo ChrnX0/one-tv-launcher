@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nada sai da sua casa (degrau 3): o compromisso de privacidade, o mesmo texto do site. -->
+<resources>
+    <string name="nsc_titulo">Niente esce da casa tua</string>
+    <string name="nsc_det">Nessun account da noi, nessun nostro server, nessuna pubblicità</string>
+    <string name="nsc_texto">Nessun account da noi, nessun nostro server, nessuna pubblicità, nessun tracciamento dell’uso.\n\nImpostazioni, foto, messaggi e backup restano su questa TV, o in un tuo account se lo colleghi.\n\nLa TV parla solo con i servizi che attivi, come il meteo o le copertine dei film. L’informativa sulla privacy del sito li elenca tutti.</string>
+</resources>

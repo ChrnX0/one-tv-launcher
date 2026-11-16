@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede com limpeza total (degrau 3). -->
+<resources>
+    <string name="hos_total">Pulizia totale</string>
+    <string name="hos_total_det">Alla partenza cancella i dati di tutte le app della TV, non solo quelle di streaming. Servizi Google e Impostazioni restano.</string>
+</resources>

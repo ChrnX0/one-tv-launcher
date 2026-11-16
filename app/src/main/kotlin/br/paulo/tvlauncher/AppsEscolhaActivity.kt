@@ -59,7 +59,8 @@ class AppsEscolhaActivity : Activity() {
                 val pkg = it.activityInfo.packageName
                 pkg != packageName && pkg != Config.PACOTE_CONFIG &&
                     ((it.activityInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0 ||
-                        (modo != MODO_HOSPEDE && pkg in Config.SEMPRE_MOSTRAR))   // app do sistema não se limpa
+                        // Hóspede (degrau 3): apps de fábrica também (a Netflix vem de fábrica), menos os protegidos.
+                        (if (modo == MODO_HOSPEDE) pkg !in HospedeRegras.PROTEGIDOS else pkg in Config.SEMPRE_MOSTRAR))
             }
             .map { it.activityInfo.packageName to it.loadLabel(pm).toString() }
             .distinctBy { it.first }

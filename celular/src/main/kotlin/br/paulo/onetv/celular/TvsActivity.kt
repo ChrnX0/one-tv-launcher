@@ -64,9 +64,14 @@ class TvsActivity : Activity() {
         lista.removeAllViews()
         val salvas = Tvs.lista(this)
         if (salvas.isEmpty()) lista.addView(Visual.texto(this, getString(R.string.cel_vazio), 17f, Visual.TEXTO_2))
-        for (tv in salvas) lista.addView(linha(tv.nome.ifEmpty { tv.ip },
-            getString(if (tv.fp.isNotEmpty()) R.string.cel_pareada_segura else R.string.cel_pareada_http, tv.ip),
-            { abrir(tv) }, { esquecer(tv) }))
+        // Várias casas (degrau 3): com mais de uma casa, as TVs aparecem agrupadas, com o nome da casa em cima.
+        val grupos = Pareamento.porCasa(salvas)
+        for ((casa, tvs) in grupos) {
+            if (grupos.size > 1) lista.addView(Visual.texto(this, nomeDaCasa(casa), 15f, Visual.TEXTO_2).apply { setPadding(0, dp(10), 0, dp(6)) })
+            for (tv in tvs) lista.addView(linha(tv.nome.ifEmpty { tv.ip },
+                getString(if (tv.fp.isNotEmpty()) R.string.cel_pareada_segura else R.string.cel_pareada_http, tv.ip),
+                { abrir(tv) }, { esquecer(tv) }))
+        }
         val novas = achadas.filterKeys { ip -> salvas.none { it.ip == ip } }
         if (novas.isNotEmpty()) {
             lista.addView(Visual.texto(this, getString(R.string.cel_na_rede), 15f, Visual.TEXTO_2).apply { setPadding(0, dp(18), 0, dp(6)) })
@@ -93,12 +98,13 @@ class TvsActivity : Activity() {
 
     private fun esquecer(tv: Pareamento.Tv) {
         AlertDialog.Builder(this).setTitle(tv.nome.ifEmpty { tv.ip }).setMessage(R.string.cel_esquecer_explica)
-            .setPositiveButton(R.string.cel_esquecer) { _, _ -> Tvs.esquecer(this, tv.ip); desenhar() }
+            .setPositiveButton(R.string.cel_esquecer) { _, _ -> Tvs.esquecer(this, tv); desenhar() }
             .setNegativeButton(android.R.string.cancel, null).show()
     }
 
     private fun abrir(tv: Pareamento.Tv, lido: Pareamento.Lido? = null) {
         val i = Intent(this, PainelActivity::class.java).putExtra(PainelActivity.EXTRA_IP, tv.ip)
+            .putExtra(PainelActivity.EXTRA_CHAVE, Pareamento.chave(tv))
         if (lido != null) i.putExtra(PainelActivity.EXTRA_FRAGMENTO, Pareamento.fragmento(lido))
         compartilhado?.let { c ->
             i.putExtra(PainelActivity.EXTRA_TITULO, c.getStringExtra(Intent.EXTRA_SUBJECT).orEmpty())
@@ -125,12 +131,40 @@ class TvsActivity : Activity() {
             AlertDialog.Builder(this).setMessage(R.string.cel_qr_invalido).setPositiveButton(android.R.string.ok, null).show()
             return
         }
-        val antiga = Tvs.porIp(this, lido.ip)
+        val salvas = Tvs.lista(this)
+        // A mesma TV de antes: pelo nome no Tailscale (único) ou, numa casa só, pelo IP. Com várias casas o IP não basta.
+        val antiga = salvas.firstOrNull { lido.ts.isNotEmpty() && it.ts == lido.ts }
+            ?: salvas.filter { it.ip == lido.ip }.takeIf { it.size == 1 && Pareamento.casas(salvas).size <= 1 }?.first()
         val nome = achadas[lido.ip] ?: antiga?.nome ?: "TV"
-        // Lido na tela da TV: este é o certificado em que o app passa a confiar (e só nele).
-        val tv = Pareamento.Tv(nome, lido.ip, lido.fp.ifEmpty { antiga?.fp.orEmpty() }, lido.ts.ifEmpty { antiga?.ts.orEmpty() })
-        Tvs.guardar(this, tv)
-        abrir(tv, lido)
+        fun salvar(casa: String) {
+            // Lido na tela da TV: este é o certificado em que o app passa a confiar (e só nele).
+            val tv = Pareamento.Tv(nome, lido.ip, lido.fp.ifEmpty { antiga?.fp.orEmpty() }, lido.ts.ifEmpty { antiga?.ts.orEmpty() },
+                antiga?.id.orEmpty(), casa)
+            Tvs.guardar(this, tv)
+            abrir(tv, lido)
+        }
+        // TV conhecida, ou a primeira TV do app: sem pergunta. TV nova com outras já salvas: "Em qual casa fica?"
+        if (antiga != null || salvas.isEmpty()) salvar(antiga?.casa.orEmpty()) else perguntarCasa(salvas) { salvar(it) }
+    }
+
+    /** Nome mostrado da casa ("" = a casa sem nome, "Casa"). */
+    private fun nomeDaCasa(casa: String) = casa.ifEmpty { getString(R.string.cel_casa_padrao) }
+
+    /** Escolher uma das casas salvas ou dar nome a uma nova (outra casa, a dos pais, a praia). */
+    private fun perguntarCasa(salvas: List<Pareamento.Tv>, aoEscolher: (String) -> Unit) {
+        val casas = Pareamento.casas(salvas)
+        val itens = (casas.map { nomeDaCasa(it) } + getString(R.string.cel_casa_nova)).toTypedArray()
+        AlertDialog.Builder(this).setTitle(R.string.cel_casa_qual).setItems(itens) { _, i ->
+            if (i < casas.size) { aoEscolher(casas[i]); return@setItems }
+            val campo = android.widget.EditText(this).apply { setHint(R.string.cel_casa_dica); isSingleLine = true }
+            AlertDialog.Builder(this).setTitle(R.string.cel_casa_nova).setView(campo)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    val n = Pareamento.nomeCasa(campo.text.toString())
+                    // Sem nome, ou um nome igual a uma casa existente: fica nela (não cria duas casas iguais).
+                    aoEscolher(n)
+                }
+                .setNegativeButton(android.R.string.cancel, null).show()
+        }.setNegativeButton(android.R.string.cancel, null).show()
     }
 
     // ---------------------------------------------------------------- mDNS

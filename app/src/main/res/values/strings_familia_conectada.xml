@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Família conectada (degrau 3, FamiliaConectada.kt): fotos e recados dos parentes por um link. -->
+<resources>
+    <string name="famc_titulo">Family link</string>
+    <string name="famc_det">Children and grandchildren send photos and notes to this TV with a link, no account needed</string>
+    <string name="famc_ligado">On: OK shows the QR code to share again</string>
+    <string name="famc_texto">Scan the code with your phone and send the link to the family (WhatsApp, email). Whoever has the link can send photos and notes: they show up on the screen and on the screensaver. Nothing goes through our servers.</string>
+    <string name="famc_sem_tunel">This uses access from outside the home (Tailscale), which is not set up on this TV yet. Set it up in Settings › Remote access, then come back here.</string>
+    <string name="famc_trocar">New link</string>
+    <string name="famc_trocar_det">The old link stops working right away</string>
+    <string name="famc_desligar">Turn off</string>
+    <string name="famc_alguem">Family</string>
+    <string name="famc_de">From %1$s</string>
+</resources>

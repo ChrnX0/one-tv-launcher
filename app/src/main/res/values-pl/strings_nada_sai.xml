@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nada sai da sua casa (degrau 3): o compromisso de privacidade, o mesmo texto do site. -->
+<resources>
+    <string name="nsc_titulo">Nic nie wychodzi z twojego domu</string>
+    <string name="nsc_det">Bez konta u nas, bez naszego serwera, bez reklam</string>
+    <string name="nsc_texto">Bez konta u nas, bez naszego serwera, bez reklam, bez śledzenia użycia.\n\nUstawienia, zdjęcia, notatki i kopie zapasowe zostają na tym telewizorze albo na twoim koncie, jeśli je połączysz.\n\nTelewizor łączy się tylko z usługami, które włączysz, np. pogodą czy okładkami filmów. Polityka prywatności na stronie wymienia każdą z nich.</string>
+</resources>

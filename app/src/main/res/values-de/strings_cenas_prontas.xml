@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cenas prontas sem voz (degrau 3, CenasProntas.kt). -->
+<resources>
+    <string name="cpr_secao">Fertige Szenen</string>
+    <string name="cpr_dormir">Schlafen</string>
+    <string name="cpr_dormir_det">Nachtfilter, leiser, der Fernseher schaltet sich in 30 Min. aus</string>
+    <string name="cpr_novela">Serie</string>
+    <string name="cpr_novela_det">Dein Sender, normale Farben</string>
+    <string name="cpr_jogo">Spiel</string>
+    <string name="cpr_jogo_det">Dein Sportsender, lauter</string>
+    <string name="cpr_canal">Welcher Sender für „%1$s“?</string>
+    <string name="cpr_canal_dica">Name oder Nummer des Senders</string>
+</resources>

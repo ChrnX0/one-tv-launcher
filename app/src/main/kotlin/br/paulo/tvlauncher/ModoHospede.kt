@@ -31,6 +31,7 @@ object ModoHospede {
     private const val APPS = "hospede_apps"
     private const val BOAS_VINDAS = "hospede_boas_vindas"
     private const val ULTIMA = "hospede_ultima_limpeza"
+    private const val TOTAL = "hospede_total"   // degrau 3: limpeza total (todos os apps da TV)
     const val ACAO_SAIDA = "br.paulo.tvlauncher.HOSPEDE_SAIDA"
 
     private fun prefs(ctx: Context) = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
@@ -133,14 +134,22 @@ object ModoHospede {
 
     fun marcado(ctx: Context, pacote: String) = pacote in (escolhidos(ctx) ?: paraLimpar(ctx).toSet())
 
-    /** Os apps que a limpeza vai apagar agora (instalados, fora do sistema). */
-    fun paraLimpar(ctx: Context): List<String> {
+    /** Os apps que a limpeza vai apagar agora (os que têm ícone na TV, menos os protegidos; HospedeRegras.paraLimpar). */
+    fun paraLimpar(ctx: Context): List<String> =
+        HospedeRegras.paraLimpar(escolhidos(ctx), lancaveis(ctx), setOf(ctx.packageName, Config.PACOTE_CONFIG), total(ctx))
+
+    /** Os apps com ícone na TV (leanback, e os de celular que a TV abre). */
+    fun lancaveis(ctx: Context): Set<String> {
         val pm = ctx.packageManager
-        val apps = try { pm.getInstalledApplications(0) } catch (_: Exception) { emptyList() }
-        val instalados = apps.map { it.packageName }.toSet()
-        val sistema = apps.filter { it.flags and ApplicationInfo.FLAG_SYSTEM != 0 }.map { it.packageName }.toSet() + ctx.packageName
-        return HospedeRegras.paraLimpar(escolhidos(ctx), instalados, sistema)
+        fun de(cat: String) = try {
+            pm.queryIntentActivities(android.content.Intent(android.content.Intent.ACTION_MAIN).addCategory(cat), 0).map { it.activityInfo.packageName }
+        } catch (_: Exception) { emptyList() }
+        return (de(android.content.Intent.CATEGORY_LEANBACK_LAUNCHER) + de(android.content.Intent.CATEGORY_LAUNCHER)).toSet()
     }
+
+    /** Degrau 3, "limpeza total": sem lista escolhida, apaga os dados de TODOS os apps da TV (menos os protegidos). */
+    fun total(ctx: Context) = prefs(ctx).getBoolean(TOTAL, false)
+    fun definirTotal(ctx: Context, sim: Boolean) { prefs(ctx).edit().putBoolean(TOTAL, sim).remove(APPS).apply() }
 
     /**
      * Fim da estadia: apaga os dados dos apps, desmarca a saída e deixa as boas-vindas para o próximo. Lento (até 30 s

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede com limpeza total (degrau 3). -->
+<resources>
+    <string name="hos_total">Pełne czyszczenie</string>
+    <string name="hos_total_det">Przy wymeldowaniu usuwa dane wszystkich aplikacji, nie tylko streamingu. Usługi Google i Ustawienia zostają.</string>
+</resources>

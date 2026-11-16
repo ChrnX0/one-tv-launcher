@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Família conectada (degrau 3, FamiliaConectada.kt): fotos e recados dos parentes por um link. -->
+<resources>
+    <string name="famc_titulo">العائلة المتصلة</string>
+    <string name="famc_det">يرسل الأبناء والأحفاد صورًا ورسائل إلى هذا التلفاز عبر رابط، دون حساب</string>
+    <string name="famc_ligado">مفعّل: يعرض OK رمز QR لمشاركته مرة أخرى</string>
+    <string name="famc_texto">امسح الرمز بالهاتف وأرسل الرابط إلى العائلة (واتساب، بريد). من لديه الرابط يرسل صورًا ورسائل: تظهر على الشاشة وفي شاشة التوقف. لا شيء يمر عبر خوادمنا.</string>
+    <string name="famc_sem_tunel">يستخدم هذا الوصول من خارج المنزل (Tailscale)، وهو غير مُعد بعد على هذا التلفاز. أعدّه في الإعدادات › الوصول عن بُعد ثم عد إلى هنا.</string>
+    <string name="famc_trocar">رابط جديد</string>
+    <string name="famc_trocar_det">يتوقف الرابط القديم عن العمل فورًا</string>
+    <string name="famc_desligar">إيقاف</string>
+    <string name="famc_alguem">العائلة</string>
+    <string name="famc_de">من %1$s</string>
+</resources>

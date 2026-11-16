@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cenas prontas sem voz (degrau 3, CenasProntas.kt). -->
+<resources>
+    <string name="cpr_secao">おすすめシーン</string>
+    <string name="cpr_dormir">おやすみ</string>
+    <string name="cpr_dormir_det">夜間フィルター、音量を下げ、30分後にテレビをオフ</string>
+    <string name="cpr_novela">ドラマ</string>
+    <string name="cpr_novela_det">いつものチャンネル、通常の色</string>
+    <string name="cpr_jogo">試合</string>
+    <string name="cpr_jogo_det">スポーツチャンネル、音量アップ</string>
+    <string name="cpr_canal">「%1$s」のチャンネルは？</string>
+    <string name="cpr_canal_dica">チャンネル名または番号</string>
+</resources>

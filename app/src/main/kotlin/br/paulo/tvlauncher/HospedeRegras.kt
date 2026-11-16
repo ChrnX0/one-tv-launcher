@@ -41,9 +41,26 @@ object HospedeRegras {
     const val HORA_PADRAO = 11
     const val MAX_DIAS = 14
 
-    /** Os pacotes que a limpeza apaga: a lista escolhida (ou a conhecida), só instalados e fora do sistema, em ordem. */
-    fun paraLimpar(escolhidos: Set<String>?, instalados: Set<String>, sistema: Set<String>): List<String> =
-        (escolhidos ?: APPS_CONHECIDOS.toSet()).filter { it in instalados && it !in sistema }.distinct().sorted()
+    /**
+     * Nunca se limpam: o que mantém a TV funcionando (serviços do Google, Play, a tela inicial da Google, que guarda o
+     * Gemini e a escolha de conta, as Configurações, o assistente). O nosso pacote entra por fora (ModoHospede).
+     */
+    val PROTEGIDOS = setOf(
+        "android", "com.google.android.gms", "com.google.android.gsf", "com.android.vending",
+        "com.google.android.apps.tv.launcherx", "com.google.android.tvlauncher", "com.android.tv.settings", "com.android.settings",
+        "com.google.android.katniss", "com.google.android.tvrecommendations", "com.google.android.packageinstaller",
+        "com.android.packageinstaller", "com.google.android.apps.tv.dreamx", "com.google.android.tungsten.setupwraith",
+    )
+
+    /**
+     * Os pacotes que a limpeza apaga, em ordem. [lancaveis] = os apps que aparecem na TV (têm ícone); só eles entram, e
+     * nunca um [PROTEGIDOS]. Degrau 3 (16/11/2026): apps de fábrica também entram (a Netflix vem de fábrica em muitos
+     * aparelhos, e antes ficava de fora). Base: a lista que o dono escolheu; sem escolha, com [total] = todos os apps
+     * da TV ("limpeza total"), senão os conhecidos de streaming.
+     */
+    fun paraLimpar(escolhidos: Set<String>?, lancaveis: Set<String>, protegidos: Set<String>, total: Boolean = false): List<String> =
+        (escolhidos ?: if (total) lancaveis else APPS_CONHECIDOS.toSet())
+            .filter { it in lancaveis && it !in protegidos && it !in PROTEGIDOS }.distinct().sorted()
 
     /** A hora da saída: [dias] depois de hoje (0 = hoje), às [hora]:00 no fuso [zona]. */
     fun saidaEm(agora: Long, dias: Int, hora: Int, zona: TimeZone): Long = Calendar.getInstance(zona).apply {

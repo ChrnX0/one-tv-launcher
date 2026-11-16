@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cenas prontas sem voz (degrau 3, CenasProntas.kt). -->
+<resources>
+    <string name="cpr_secao">مشاهد جاهزة</string>
+    <string name="cpr_dormir">النوم</string>
+    <string name="cpr_dormir_det">فلتر ليلي، صوت أخفض، يُطفأ التلفاز بعد 30 دقيقة</string>
+    <string name="cpr_novela">مسلسل</string>
+    <string name="cpr_novela_det">قناتك، بألوان عادية</string>
+    <string name="cpr_jogo">مباراة</string>
+    <string name="cpr_jogo_det">قناتك الرياضية، بصوت أعلى</string>
+    <string name="cpr_canal">أي قناة لـ «%1$s»؟</string>
+    <string name="cpr_canal_dica">اسم القناة أو رقمها</string>
+</resources>

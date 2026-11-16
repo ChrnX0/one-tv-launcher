@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cenas prontas sem voz (degrau 3, CenasProntas.kt). -->
+<resources>
+    <string name="cpr_secao">기본 장면</string>
+    <string name="cpr_dormir">취침</string>
+    <string name="cpr_dormir_det">야간 필터, 볼륨 낮춤, 30분 뒤 TV 꺼짐</string>
+    <string name="cpr_novela">드라마</string>
+    <string name="cpr_novela_det">내 채널, 기본 색상</string>
+    <string name="cpr_jogo">경기</string>
+    <string name="cpr_jogo_det">스포츠 채널, 볼륨 크게</string>
+    <string name="cpr_canal">‘%1$s’에 쓸 채널은?</string>
+    <string name="cpr_canal_dica">채널 이름 또는 번호</string>
+</resources>

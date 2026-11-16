@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plugin kit · One TV Launcher</title>
+<meta name="description" content="How to put a card from your Android TV app on the One TV Launcher home screen.">
+<link rel="stylesheet" href="estilo.css">
+<style>
+/* Kit do desenvolvedor de plugins (degrau 3, P6). Contrato em PluginCartao.kt; a HOME desenha o cartão. */
+pre{background:rgba(127,127,127,.1);border-radius:.6rem;padding:.9rem 1rem;overflow-x:auto;font-size:.9rem}
+code{font-size:.9em}
+table{border-collapse:collapse;width:100%}td,th{text-align:left;padding:.35rem .5rem;border-bottom:1px solid rgba(127,127,127,.3);vertical-align:top}
+</style></head>
+<body><main>
+<nav><a href="./">Home</a><a href="compatibility.html">Compatibility</a><a href="plugins.html" aria-current="page">Plugins</a>
+<a href="privacy.html">Privacy</a></nav>
+<h1>Put your app's card on the home screen</h1>
+<p>A plugin is your own Android TV app. It sends one short card (a title, a big value, a line of detail, a color) and
+the launcher draws it at the end of the <b>Watch</b> row, in its own style and with large letters. You never draw on
+the home screen, and the launcher never sends you anything about the person's apps, accounts or channels.</p>
+
+<h2>1. Declare a provider</h2>
+<pre>&lt;provider
+    android:name=".CardProvider"
+    android:authorities="com.example.score.card"
+    android:exported="true"&gt;
+    &lt;intent-filter&gt;
+        &lt;action android:name="tv.sofaly.plugin.CARTAO" /&gt;
+    &lt;/intent-filter&gt;
+&lt;/provider&gt;</pre>
+
+<h2>2. Answer <code>content://&lt;authority&gt;/cartao</code> with one row</h2>
+<table>
+<tr><th>Column</th><th>Limit</th><th>Meaning</th></tr>
+<tr><td><code>titulo</code></td><td>30 chars</td><td>Card title, e.g. "Match score".</td></tr>
+<tr><td><code>valor</code></td><td>12 chars</td><td>The big value, e.g. "2 x 1", "18°", "$5.42".</td></tr>
+<tr><td><code>detalhe</code></td><td>80 chars</td><td>Shown at the top of the screen when the card has focus.</td></tr>
+<tr><td><code>cor</code></td><td><code>#RRGGBB</code></td><td>Background color. Transparency is ignored.</td></tr>
+<tr><td><code>acao</code></td><td>500 chars, optional</td><td>An <code>intent:</code> URI opened on OK. It must stay inside your own package: no
+<code>component=</code>, no selector, no other <code>package=</code>. Without it, OK opens your app.</td></tr>
+</table>
+<pre>class CardProvider : ContentProvider() {
+    override fun onCreate() = true
+    override fun query(uri: Uri, p: Array&lt;String&gt;?, s: String?, a: Array&lt;String&gt;?, o: String?): Cursor =
+        MatrixCursor(arrayOf("titulo", "valor", "detalhe", "cor", "acao")).apply {
+            addRow(arrayOf("Match score", "2 x 1", "Second half, 40 min", "#1E8E3E", null))
+        }
+    // insert/update/delete/getType: return null or 0
+}</pre>
+<p>Control characters and extra spaces are removed, and longer text is cut. A row with neither a title nor a value is ignored.</p>
+
+<h2>3. What the person sees</h2>
+<ul>
+<li>Nothing appears until the person turns your plugin on in <b>Settings › Appearance › Plugins</b>, which asks for the parental PIN.</li>
+<li>The OK is tied to your signing certificate. An update signed with another key is turned off until the person allows it again.</li>
+<li>At most 3 plugins are shown. Each read has a 2-second limit, done away from the screen thread: a slow plugin is skipped, never waited for.</li>
+<li>The card is read again every time the person returns to the home screen. Keep <code>query</code> fast and local (cache your data).</li>
+</ul>
+<p>Questions or a plugin to show? Open an issue on the project page.</p>
+</main></body></html>

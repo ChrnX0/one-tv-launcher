@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cenas prontas sem voz (degrau 3, CenasProntas.kt). -->
+<resources>
+    <string name="cpr_secao">Hazır sahneler</string>
+    <string name="cpr_dormir">Uyku</string>
+    <string name="cpr_dormir_det">Gece filtresi, daha düşük ses, TV 30 dk sonra kapanır</string>
+    <string name="cpr_novela">Dizi</string>
+    <string name="cpr_novela_det">Kanalınız, normal renkler</string>
+    <string name="cpr_jogo">Maç</string>
+    <string name="cpr_jogo_det">Spor kanalınız, daha yüksek ses</string>
+    <string name="cpr_canal">“%1$s” için hangi kanal?</string>
+    <string name="cpr_canal_dica">Kanal adı veya numarası</string>
+</resources>

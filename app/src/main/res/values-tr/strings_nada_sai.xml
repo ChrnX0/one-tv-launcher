@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nada sai da sua casa (degrau 3): o compromisso de privacidade, o mesmo texto do site. -->
+<resources>
+    <string name="nsc_titulo">Hiçbir şey evinizden çıkmaz</string>
+    <string name="nsc_det">Bizde hesap yok, sunucumuz yok, reklam yok</string>
+    <string name="nsc_texto">Bizde hesap yok, sunucumuz yok, reklam yok, kullanım takibi yok.\n\nAyarlarınız, fotoğraflarınız, notlarınız ve yedekleriniz bu TV’de ya da bağlarsanız kendi hesabınızda kalır.\n\nTV yalnızca açtığınız hizmetlerle konuşur, örneğin hava durumu veya film kapakları. Sitedeki gizlilik politikası her birini listeler.</string>
+</resources>
