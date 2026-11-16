@@ -12,6 +12,17 @@ updates:
     groups:
       tudo-junto:                 # todas as atualizações no mesmo PR, em vez de um PR por biblioteca
         patterns: ["*"]
+    # 16/11/2026: o salto para AGP 9 / Gradle 9 / Kotlin 2.4 (PR #147) não compila sem migração. Essa migração é um
+    # trabalho à parte; até lá o PR mensal traz só as bibliotecas, sem esses três (que ficam travados aqui).
+    ignore:
+      - dependency-name: "com.android.application"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "com.android.library"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "org.jetbrains.kotlin.android"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "gradle-wrapper"
+        update-types: ["version-update:semver-major"]
     commit-message:
       prefix: "deps"
   # Faxina de 14/11/2026 (ideia 73): o túnel (Go, tunel/go.mod, Tailscale) e as Actions do GitHub também,

@@ -92,8 +92,9 @@ class JogosActivity : Activity() {
             isSmoothScrollingEnabled = true
             addView(coluna)
             // Corta embaixo: a fileira de baixo não passa por cima da barra de dicas (achado do teste de tela, ideia 96).
-            // Dos lados e em cima fica a folga para o card com foco crescer.
-            addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ -> v.clipBounds = android.graphics.Rect(-dp(40), -dp(40), v.width + dp(40), v.height) }
+            // Corta em cima também (16/11/2026): com folga de 40 dp em cima, as fileiras roladas apareciam numa faixa por
+            // cima do destaque. O card com foco cresce 8% (~5 dp) e cabe no padding E2 de `coluna`. Dos lados fica a folga.
+            addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ -> v.clipBounds = android.graphics.Rect(-dp(40), 0, v.width + dp(40), v.height) }
         }, LinearLayout.LayoutParams(-1, 0, 1f))
         conteudo.addView(Estilo.barraDicas(this,
             "◀ ▶" to getString(R.string.jogos_tecla_escolher),
