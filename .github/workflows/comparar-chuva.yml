@@ -22,4 +22,4 @@ jobs:
         env:
           WEATHERAPI_CHAVE: ${{ secrets.WEATHERAPI_CHAVE }}
         run: |
-          if [ -f ferramentas/clima/previsao.csv ]; then python3 ferramentas/clima/comparar_chuva.py verificar; else python3 ferramentas/clima/comparar_chuva.py prever; fi
+          python3 ferramentas/clima/comparar_chuva.py met

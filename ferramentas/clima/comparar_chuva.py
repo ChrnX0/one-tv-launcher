@@ -73,7 +73,7 @@ def resumo(linhas):
 def verificar():
     # Chuva observada: ERA5 pelo arquivo do Open-Meteo (atraso de ~5 dias).
     linhas = list(csv.DictReader(open("ferramentas/clima/previsao.csv")))
-    bs = {"wa": [], "om": []}
+    bs = {"wa": [], "om": [], "met": []}
     for nome, (lat, lon) in CIDADES.items():
         ls = [l for l in linhas if l["cidade"] == nome]
         if not ls: continue
@@ -82,19 +82,51 @@ def verificar():
                                     "start_date": ini, "end_date": fim, "models": "era5"})
         d = pegar("https://archive-api.open-meteo.com/v1/archive?" + q)["hourly"]
         obs = dict(zip(d["time"], d["precipitation"]))
-        b = {"wa": [], "om": []}
+        b = {"wa": [], "om": [], "met": []}
         for l in ls:
             o = obs.get(l["hora_local"])
             if o is None: continue
             choveu = 1.0 if o >= 0.1 else 0.0
-            for k, c in (("wa", "wa_chance"), ("om", "om_chance")):
+            if not l.get("met_chance"): continue  # só horas com as três fontes, para o placar ser justo
+            for k, c in (("wa", "wa_chance"), ("om", "om_chance"), ("met", "met_chance")):
                 b[k].append((float(l[c]) / 100 - choveu) ** 2)
         for k in b: bs[k] += b[k]
         if b["wa"]:
-            print(f"{nome}: Brier WA {sum(b['wa'])/len(b['wa']):.3f} | Brier OM {sum(b['om'])/len(b['om'])/1:.3f} "
+            print(f"{nome}: Brier WA {sum(b['wa'])/len(b['wa']):.3f} | OM {sum(b['om'])/len(b['om']):.3f} | MET {sum(b['met'])/len(b['met']):.3f} "
                   f"| horas com chuva observada {sum(1 for l in ls if (obs.get(l['hora_local']) or 0) >= 0.1)}")
     if bs["wa"]:
-        print(f"TOTAL (menor = melhor): Brier WA {sum(bs['wa'])/len(bs['wa']):.3f} | Brier OM {sum(bs['om'])/len(bs['om']):.3f}")
+        print(f"TOTAL (menor = melhor): Brier WA {sum(bs['wa'])/len(bs['wa']):.3f} | OM {sum(bs['om'])/len(bs['om']):.3f} "
+              f"| MET {sum(bs['met'])/len(bs['met']):.3f} | horas: {len(bs['wa'])}")
+
+FUSO = {"Manaus": -4}  # as outras capitais do teste estão em UTC-3 (sem horário de verão)
+
+def met():
+    # MET Norway (locationforecast/complete) para as mesmas cidades e horas do previsao.csv; acrescenta 2 colunas.
+    # Fora da Escandinávia costuma não vir probability_of_precipitation: aí a chance vira 100 se prevê >= 0,1 mm, senão 0.
+    linhas = list(csv.DictReader(open("ferramentas/clima/previsao.csv")))
+    por = {}
+    for nome, (lat, lon) in CIDADES.items():
+        req = urllib.request.Request(f"https://api.met.no/weatherapi/locationforecast/2.0/complete?lat={lat}&lon={lon}",
+                                     headers={"User-Agent": "Sofaly-teste-clima/1.0 github.com/ChrnX0/one-tv-launcher"})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            d = json.load(r)
+        tem_prob = 0
+        for t in d["properties"]["timeseries"]:
+            n1 = t["data"].get("next_1_hours")
+            if not n1: continue
+            utc = datetime.strptime(t["time"], "%Y-%m-%dT%H:%M:%SZ")
+            local = (utc + timedelta(hours=FUSO.get(nome, -3))).strftime("%Y-%m-%dT%H:%M")
+            mm = n1["details"].get("precipitation_amount", 0.0)
+            prob = n1["details"].get("probability_of_precipitation")
+            if prob is not None: tem_prob += 1
+            por[(nome, local)] = (prob if prob is not None else (100 if mm >= 0.1 else 0), mm)
+        print(f"{nome}: horas com probability_of_precipitation do MET: {tem_prob}")
+    out = io.StringIO()
+    w = csv.writer(out); w.writerow(list(linhas[0].keys()) + ["met_chance", "met_mm"])
+    for l in linhas:
+        m = por.get((l["cidade"], l["hora_local"]), ("", ""))
+        w.writerow(list(l.values()) + list(m))
+    print("=====CSV=====\n" + out.getvalue() + "=====FIM=====")
 
 def checar():
     # Só confere (16/11) se o secret é a chave pura e se a API aceita; não imprime nada da chave.
@@ -110,4 +142,4 @@ def checar():
         print("consulta:", e.code, e.read()[:200].decode(errors="replace"))
 
 if __name__ == "__main__":
-    {"prever": prever, "verificar": verificar, "checar": checar}[sys.argv[1] if len(sys.argv) > 1 else "prever"]()
+    {"prever": prever, "verificar": verificar, "checar": checar, "met": met}[sys.argv[1] if len(sys.argv) > 1 else "prever"]()
