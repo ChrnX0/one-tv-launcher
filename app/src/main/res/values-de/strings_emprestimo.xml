@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_emprestimo.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="emp_secao">Systemrechte ausleihen</string>
+    <string name="emp_titulo">Die Shell an andere Apps ausleihen (Shizuku)</string>
+    <string name="emp_titulo_det">Apps für Shizuku funktionieren, ohne es zu installieren. Jede App fragt beim ersten Mal auf dem Fernseher, mit der PIN.</string>
+    <string name="emp_modo_desligado">Aus</string>
+    <string name="emp_modo_sob_demanda">Wenn eine App es braucht</string>
+    <string name="emp_modo_sempre">Immer an</string>
+    <string name="emp_oficial">Die Shizuku-App ist auf diesem Fernseher installiert, daher hält sich der Launcher heraus. Deinstalliere sie, um die des Launchers zu nutzen.</string>
+    <string name="emp_plano">Teil der kostenpflichtigen Pläne.</string>
+    <string name="emp_negar">Ablehnen</string>
+    <string name="emp_permitir">Immer erlauben</string>
+    <string name="emp_pedido_titulo">%1$s erlauben, die Systemrechte des Launchers zu nutzen?</string>
+    <string name="emp_pedido_texto">Die App kann dann tun, was adb tut: Apps installieren und entfernen, Systemeinstellungen ändern und mehr. Erlaube nur Apps, denen du vertraust. Du kannst es später im Web-Panel widerrufen.</string>
+    <string name="emp_pin_titulo">Panel-PIN zum Erlauben</string>
+    <string name="emp_sem_pin">Lege zuerst die Panel-PIN fest (Einstellungen, Web-Panel).</string>
+    <string name="emd_titulo">Die Eigentümerkontrolle an andere Apps ausleihen (Dhizuku)</string>
+    <string name="emd_titulo_det">Apps für Dhizuku nutzen die Eigentümerkontrolle des Launchers. Jede App fragt auf dem Fernseher, mit der PIN. Keine kann den Launcher als Eigentümer entfernen oder den Fernseher löschen.</string>
+    <string name="emd_ligado">An</string>
+    <string name="emd_sem_dono">Der Launcher ist nicht der Eigentümer (Device Owner) dieses Fernsehers, es gibt also nichts auszuleihen.</string>
+    <string name="emd_pedido_titulo">%1$s erlauben, die Eigentümerkontrolle des Launchers zu nutzen?</string>
+    <string name="emd_pedido_texto">Mit „Erlauben“ kann die App Apps ausblenden und sperren und die Berechtigungen und Regeln des Fernsehers ändern, aber nie den Launcher als Eigentümer entfernen oder den Fernseher löschen. „Volle Macht“ lässt die App als Launcher laufen und seine Daten lesen: nur für Apps, denen du voll vertraust. Du kannst es im Web-Panel widerrufen.</string>
+    <string name="emd_total">Volle Macht</string>
+    <string name="emd_pin_total">VOLLE MACHT: Die App liest die Daten des Launchers. Panel-PIN</string>
+</resources>
