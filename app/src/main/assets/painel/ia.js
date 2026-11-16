@@ -93,7 +93,7 @@
   }
 
   function iniciar() {
-    if (!$('abaIa')) return;
+    if (!$('iaCopiar')) return;
     $('iaHostAdicionar').onclick = () => {
       const h = $('iaHostNovo').value.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/.*$/, '');
       if (h && !hosts.includes(h)) salvarHosts(hosts.concat(h));

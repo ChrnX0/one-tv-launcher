@@ -19,10 +19,18 @@ let escolhido = 0;
 /** Monta a lista de tudo que dá para achar: abas (da navegação), ações e apps (se a lista já veio). */
 function todosOsItens() {
   const r = [];
-  for (const b of document.querySelectorAll('nav.abas .aba')) {
-    if (b.dataset.aba === 'mais') continue;
-    const nome = b.querySelector('span:not(.ic)')?.textContent || b.textContent;
-    r.push({ tipo: 'Aba', nome, icone: b.querySelector('.ic svg') || '›', fazer: () => mudarAba(b.dataset.aba) });
+  // Painel v3: as 4 seções, as páginas (linhas de "Na TV" e "Configurações") e cada cartão pelo título dele,
+  // para achar "Hora de dormir" sem saber em que página mora.
+  for (const b of document.querySelectorAll('nav.abas .aba:not(.sub), .linha-hub')) {
+    const nome = b.querySelector('.t')?.textContent || b.querySelector('span:not(.ic)')?.textContent || b.textContent;
+    r.push({ tipo: 'Página', nome, icone: b.querySelector('.ic svg') || '›', fazer: () => mudarAba(b.dataset.aba) });
+  }
+  for (const h of document.querySelectorAll('.painel-aba .cartao[id] > h2')) {
+    const cartao = h.parentElement;
+    if (cartao.hidden) continue;
+    const pagina = cartao.closest('.painel-aba');
+    const onde = pagina.querySelector('.titulo-pagina')?.textContent || '';
+    r.push({ tipo: onde, nome: h.textContent, icone: '›', fazer: () => irPara('x.' + cartao.id) });
   }
   for (const [nome, tecla, icone] of ACOES_BUSCA) {
     r.push({ tipo: 'Ação', nome, icone, fazer: async () => { await chamar('POST', '/api/tela/tecla', { tecla }); aviso(nome + ': feito.', 'ok'); } });

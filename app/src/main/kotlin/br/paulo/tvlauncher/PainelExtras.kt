@@ -305,6 +305,8 @@ object PainelExtras {
     private fun estado(app: Context): JSONObject = JSONObject()
         .put("chaves", JSONObject().apply { Extras.Chave.values().forEach { put(it.name, Extras.ligado(app, it)) } })
         .put("comPin", JSONArray(CHAVES_COM_PIN.map { it.name }))
+        // Painel v3 (16/11/2026): em que aba das Configurações da TV cada chave mora, para o painel mostrá-la no mesmo lugar.
+        .put("abas", JSONObject().apply { ExtrasAbas.MAPA.forEach { (chave, aba) -> put(chave, aba.name) } })
         .put("filtro", JSONObject()
             .put("inicio", Extras.numero(app, FiltroNoturno.CHAVE_INICIO, FiltroNoturno.PADRAO_INICIO))
             .put("fim", Extras.numero(app, FiltroNoturno.CHAVE_FIM, FiltroNoturno.PADRAO_FIM))

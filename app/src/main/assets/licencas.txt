@@ -119,6 +119,10 @@ Manrope, de Mikhail Sharanda (telas da TV e painel web)
   https://github.com/sharanda/manrope
   Licença SIL Open Font License 1.1 (OFL).
 
+Nunito, de Vernon Adams e colaboradores (marca Sofaly e títulos do painel web)
+  https://github.com/googlefonts/nunito
+  Licença SIL Open Font License 1.1 (OFL).
+
 Fraunces, da Undercase Type (protetor de tela)
   https://github.com/undercasetype/Fraunces
   Licença SIL Open Font License 1.1 (OFL).

@@ -11,9 +11,10 @@ class DestinoPainelTest {
 
     @Test fun semDestinoEhOQrDeSempre() = assertEquals("#qr=$codigo", DestinoPainel.fragmento(codigo, null))
 
-    @Test fun destinoComCartaoEAbaSo() {
-        assertEquals("#qr=$codigo&ir=extras.cartaoCasa", DestinoPainel.fragmento(codigo, DestinoPainel.CASA))
-        assertEquals("#qr=$codigo&ir=fotos", DestinoPainel.fragmento(codigo, DestinoPainel.FOTOS))
+    @Test fun destinoComPaginaECartao() {
+        // Painel v3 (16/11/2026): a página segue as abas das Configurações da TV; o cartão leva direto ao lugar certo.
+        assertEquals("#qr=$codigo&ir=casa.cartaoCasa", DestinoPainel.fragmento(codigo, DestinoPainel.CASA))
+        assertEquals("#qr=$codigo&ir=avancado.cartaoRoteadorUniFi", DestinoPainel.fragmento(codigo, DestinoPainel.ROTEADOR))
     }
 
     @Test fun porNome() {

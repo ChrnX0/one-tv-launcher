@@ -3,8 +3,8 @@
 // 2) Tela "A TV não respondeu" (offline.html) quando o app abre e a TV está fora do ar, no lugar do erro do navegador.
 // 3) Avisos da TV no celular (Web Push, 12/11/2026): só recebe o push e mostra a notificação.
 // Nada do painel fica guardado além da tela de fora do ar: dados e páginas sempre vêm da TV (Cache-Control no-store).
-const CACHE = 'onetv-fora-do-ar-1';
-const FORA_DO_AR = ['/offline.html', '/style.css', '/icone-192.png', '/manrope-400.woff2', '/manrope-600.woff2'];
+const CACHE = 'sofaly-fora-do-ar-2';
+const FORA_DO_AR = ['/offline.html', '/style.css', '/icone-192.png', '/manrope-400.woff2', '/manrope-600.woff2', '/nunito.woff2'];
 
 self.addEventListener('install', (ev) => {
   ev.waitUntil(caches.open(CACHE).then((c) => c.addAll(FORA_DO_AR)).then(() => self.skipWaiting()));
@@ -35,10 +35,10 @@ self.addEventListener('fetch', (ev) => {
 // Tipos de Avisos.kt -> aba do painel. Tipo desconhecido (TV mais nova que este painel) abre o início.
 const ABA_DO_AVISO = {
   LEMBRETE: 'controle', AJUDA: 'controle', PRESENCA: 'controle', TV_MADRUGADA: 'controle', ALARME_PERDIDO: 'controle',
-  CHUVA: 'controle', ERRO_NOVO: 'saude', DESEMPENHO: 'saude', ARMAZENAMENTO: 'saude', INTERNET_VOLTOU: 'rede',
+  CHUVA: 'controle', ERRO_NOVO: 'sistema', DESEMPENHO: 'sistema', ARMAZENAMENTO: 'sistema', INTERNET_VOLTOU: 'avancado',
   VERSAO_NOVA: 'inicio', DIGITAR: 'controle',   // ideia 57: "Digitar na TV" abre o Controle
   // Cuidar de longe: o pedido de ajuda (AJUDA, acima) abre o Controle com a foto; os outros, o cartão de configuração.
-  LEMBRETE_CUIDAR: 'extras', TV_NAO_LIGOU: 'controle', CUIDAR: 'extras',
+  LEMBRETE_CUIDAR: 'familia', TV_NAO_LIGOU: 'controle', CUIDAR: 'familia',   // painel v3: páginas = abas da TV
 };
 
 // A TV cifra o aviso (Web Push, RFC 8291) com a chave deste navegador; o serviço de push do Google só vê bytes.

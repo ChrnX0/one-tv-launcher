@@ -20,36 +20,8 @@ function aviso(texto, tipo) {
   setTimeout(() => { t.classList.remove('visivel'); setTimeout(() => t.remove(), 300); }, tipo === 'erro' ? 7000 : 4000);
 }
 
-// ---------- tela "Mais" (celular) ----------
-
-/**
- * Monta os blocos da tela "Mais" a partir da própria navegação: cada título (nav-titulo) vira um grupo e cada aba
- * que não é principal vira um bloco. Assim, uma aba nova aparece aqui sozinha, sem editar este arquivo.
- */
-function montarMais() {
-  const grade = $('gradeMais');
-  grade.replaceChildren();
-  let grupo = null;
-  for (const el of document.querySelectorAll('nav.abas > *')) {
-    if (el.classList.contains('nav-titulo')) {
-      const h = document.createElement('h2');
-      h.className = 'titulo-grupo';
-      h.textContent = el.textContent;
-      grupo = document.createElement('div');
-      grupo.className = 'blocos';
-      grade.append(h, grupo);
-    } else if (el.classList.contains('aba') && !el.classList.contains('principal')) {
-      if (!grupo) { grupo = document.createElement('div'); grupo.className = 'blocos'; grade.appendChild(grupo); }
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'bloco';
-      b.dataset.aba = el.dataset.aba;   // o clique cai no ouvinte único do app.js
-      b.append(...[...el.childNodes].map((n) => n.cloneNode(true)));
-      grupo.appendChild(b);
-    }
-  }
-}
-montarMais();
+// A tela "Mais" do celular saiu no painel v3 (16/11/2026): as 4 seções cabem na barra de baixo e as páginas internas
+// ficam em listas dentro de "Na TV" e "Configurações" (index.html, .lista-hub).
 
 // ---------- tela Início ----------
 
@@ -166,7 +138,7 @@ ligarEventos();
 setInterval(() => {
   if (document.visibilityState !== 'visible' || $('telaPainel').hidden) return;
   if (!$('abaInicio').hidden) carregarInicio();
-  else if (!$('abaSaude').hidden) chamar('GET', '/api/saude?rapido=1').then((s) => desenharNumeros(s)).catch(() => {});
+  else if (abaAberta('saude')) chamar('GET', '/api/saude?rapido=1').then((s) => desenharNumeros(s)).catch(() => {});
 }, 20000);
 
 // Miniatura da tela da TV no cartão "Agora na TV" (13/11/2026): uma foto só, ao abrir o Início (a aba Controle é que

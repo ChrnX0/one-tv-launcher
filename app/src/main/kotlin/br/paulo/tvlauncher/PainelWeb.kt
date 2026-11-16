@@ -1040,6 +1040,8 @@ object PainelWeb {
         // Fonte Manrope (a mesma da TV), só as letras latinas: 12 KB cada (visual de 13/11/2026).
         "/manrope-400.woff2" to ("manrope-400.woff2" to "font/woff2"),
         "/manrope-600.woff2" to ("manrope-600.woff2" to "font/woff2"),
+        // Nunito (a letra da marca Sofaly), só títulos e o nome; variável, letras latinas (16/11/2026).
+        "/nunito.woff2" to ("nunito.woff2" to "font/woff2"),
         "/offline.html" to ("offline.html" to "text/html; charset=utf-8"),   // tela "A TV não respondeu" do app instalado (sw.js)
     )
 
