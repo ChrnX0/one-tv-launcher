@@ -26,4 +26,5 @@ Decidido em 16/11/2026 (thread "Estudar o Stremio para inspirar a Sofaly", opç�
 - `AddonsActivity.kt` (`:player`): catálogos, busca, episódios, fontes; toca em `VodActivity.abrirAddon` com a posição
   guardada em `addon:<videoId>`; próximo episódio com `Conforto.contagem` e o mesmo `bingeGroup`.
 - `PainelAddons.kt` + `assets/painel/addons.js`: `GET /api/addons`, `POST /api/addons/instalar` e `/remover` (PIN).
+- QR: botão "Ler QR" do painel (só em https, porta 8444): BarcodeDetector do navegador ou `assets/painel/jsqr.js` (jsQR 1.4.0, Apache 2.0, licença em `jsqr-LICENSE.txt`, carregado só quando precisa). O QR só preenche o campo.
 - Termos: `site/terms.html`, seção 4.

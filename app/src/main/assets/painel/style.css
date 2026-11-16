@@ -686,3 +686,7 @@ body.ocupado::before { opacity: 1; animation: carregando 1.1s linear infinite; }
 .poderes-primeira li.feito { opacity: .85; }
 .poderes-primeira li .ok { margin-right: 8px; color: var(--acento); }
 .poderes-primeira li p { margin: 8px 0 10px; font-size: 16px; line-height: 1.45; }
+
+/* Leitor de QR do cartão Addons (addons.js, 16/11/2026). */
+.qr-camera { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; margin: 8px 0; }
+.qr-camera video { width: 100%; max-width: 360px; border-radius: 12px; background: #000; }

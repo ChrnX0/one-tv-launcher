@@ -1016,6 +1016,7 @@ object PainelWeb {
         "/chave.js" to ("chave.js" to "text/javascript; charset=utf-8"),   // ideia 99: entrar com a digital
         "/emprestimo.js" to ("emprestimo.js" to "text/javascript; charset=utf-8"),   // shell emprestado (Shizuku)
         "/addons.js" to ("addons.js" to "text/javascript; charset=utf-8"),   // addons no formato do Stremio (16/11/2026)
+        "/jsqr.js" to ("jsqr.js" to "text/javascript; charset=utf-8"),   // leitor de QR (jsQR 1.4.0, Apache 2.0) para o celular sem BarcodeDetector
         "/primeira.js" to ("primeira.js" to "text/javascript; charset=utf-8"),   // ideia 97: assistente da 1ª configuração
         "/certificado.js" to ("certificado.js" to "text/javascript; charset=utf-8"),   // cartão "Instalar como app (https)"
         // "Adicionar à tela inicial" no celular: nome, ícone e atalhos (10/11/2026).

@@ -684,7 +684,12 @@
         <form id="formAddon" class="form-pasta" autocomplete="off">
           <input id="urlAddon" type="url" inputmode="url" autocomplete="off" placeholder="https://…/manifest.json" aria-label="Endereço do addon">
           <button type="submit" class="botao-primario">Instalar</button>
+          <button type="button" id="btnQrAddon" class="botao-secundario">Ler QR</button>
         </form>
+        <div id="qrAddon" class="qr-camera" hidden>
+          <video id="videoQrAddon" muted playsinline aria-label="Câmera lendo o QR do addon"></video>
+          <button type="button" id="btnFecharQrAddon" class="botao-secundario">Fechar câmera</button>
+        </div>
         <p class="aviso-curto" id="termosAddons"></p>
         <label><input id="aceiteAddons" type="checkbox"> Li e aceito: quem instala responde pelo conteúdo do addon</label>
         <p class="aviso" id="statusAddons" hidden></p>

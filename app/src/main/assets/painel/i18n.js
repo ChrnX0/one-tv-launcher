@@ -1206,6 +1206,12 @@
 "O addon não respondeu. Confira o endereço e tente de novo.": "The addon didn't answer. Check the address and try again.",
 "Aceite os termos para instalar.": "Accept the terms to install.",
 "Addons são feitos por terceiros. A Sofaly não cria, não hospeda e não confere o que eles mostram. Quem instala um addon responde pelo conteúdo dele e por ter direito de assistir. A Sofaly só toca vídeo por link direto: fontes de torrent e P2P são ignoradas.": "Addons are made by third parties. Sofaly doesn't create, host or check what they show. Whoever installs an addon is responsible for its content and for having the right to watch it. Sofaly only plays direct video links: torrent and P2P sources are ignored.",
+"Ler QR": "Scan QR",
+"Fechar câmera": "Close camera",
+"Câmera lendo o QR do addon": "Camera reading the addon QR",
+"Para ler QR, abra o painel pelo endereço https (porta 8444). No http o navegador não libera a câmera.": "To scan a QR, open the panel at its https address (port 8444). Over http the browser won't allow the camera.",
+"Não consegui abrir a câmera. Confira se o navegador tem permissão para usá-la.": "Couldn't open the camera. Check that the browser is allowed to use it.",
+"QR lido. Confira o endereço e toque em Instalar.": "QR read. Check the address and tap Install.",
 };
   const P = [
 ["^(.+) sai da TV\\.$",
