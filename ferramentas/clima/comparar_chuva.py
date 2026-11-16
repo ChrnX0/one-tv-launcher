@@ -97,7 +97,7 @@ def verificar():
         print(f"TOTAL (menor = melhor): Brier WA {sum(bs['wa'])/len(bs['wa']):.3f} | Brier OM {sum(bs['om'])/len(bs['om']):.3f}")
 
 def checar():
-    # Só confere se o secret é a chave pura e se a API aceita; não imprime nada da chave.
+    # Só confere (16/11) se o secret é a chave pura e se a API aceita; não imprime nada da chave.
     import re
     chave = os.environ["WEATHERAPI_CHAVE"].strip()
     print("formato de chave pura (30-32 letras/numeros):", "SIM" if re.fullmatch(r"[0-9a-zA-Z]{30,32}", chave) else "NAO")
