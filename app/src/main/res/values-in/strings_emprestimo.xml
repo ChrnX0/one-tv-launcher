@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_emprestimo.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="emp_secao">Pinjamkan hak sistem</string>
+    <string name="emp_titulo">Pinjamkan shell ke aplikasi lain (Shizuku)</string>
+    <string name="emp_titulo_det">Aplikasi yang dibuat untuk Shizuku berjalan tanpa memasangnya. Setiap aplikasi meminta di TV, dengan PIN, pada kali pertama.</string>
+    <string name="emp_modo_desligado">Mati</string>
+    <string name="emp_modo_sob_demanda">Saat aplikasi membutuhkannya</string>
+    <string name="emp_modo_sempre">Selalu aktif</string>
+    <string name="emp_oficial">Aplikasi Shizuku terpasang di TV ini, jadi launcher tidak ikut campur. Copot aplikasi itu untuk memakai yang ada di launcher.</string>
+    <string name="emp_plano">Bagian dari paket berbayar.</string>
+    <string name="emp_negar">Tolak</string>
+    <string name="emp_permitir">Selalu izinkan</string>
+    <string name="emp_pedido_titulo">Izinkan %1$s memakai hak sistem launcher?</string>
+    <string name="emp_pedido_texto">Aplikasi akan bisa melakukan apa yang dilakukan adb: memasang dan menghapus aplikasi, mengubah setelan sistem, dan lainnya. Izinkan hanya aplikasi yang Anda percaya. Anda bisa mencabutnya nanti di panel web.</string>
+    <string name="emp_pin_titulo">PIN panel untuk mengizinkan</string>
+    <string name="emp_sem_pin">Atur dulu PIN panel (Setelan, Panel web).</string>
+    <string name="emd_titulo">Pinjamkan kendali pemilik ke aplikasi lain (Dhizuku)</string>
+    <string name="emd_titulo_det">Aplikasi yang dibuat untuk Dhizuku memakai kendali pemilik launcher. Setiap aplikasi meminta di TV, dengan PIN. Tidak ada yang bisa mencopot launcher sebagai pemilik atau menghapus TV.</string>
+    <string name="emd_ligado">Aktif</string>
+    <string name="emd_sem_dono">Launcher bukan pemilik (Device Owner) TV ini, jadi tidak ada yang bisa dipinjamkan.</string>
+    <string name="emd_pedido_titulo">Izinkan %1$s memakai kendali pemilik launcher?</string>
+    <string name="emd_pedido_texto">Dengan “Izinkan”, aplikasi bisa menyembunyikan dan memblokir aplikasi serta mengubah izin dan aturan TV, tetapi tidak pernah mencopot launcher sebagai pemilik atau menghapus TV. “Kuasa penuh” membuat aplikasi berjalan sebagai launcher dan membaca datanya: hanya untuk aplikasi yang sepenuhnya Anda percaya. Anda bisa mencabutnya di panel web.</string>
+    <string name="emd_total">Kuasa penuh</string>
+    <string name="emd_pin_total">KUASA PENUH: aplikasi akan membaca data launcher. PIN panel</string>
+</resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_emprestimo.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="emp_secao">إعارة صلاحيات النظام</string>
+    <string name="emp_titulo">إعارة الواجهة البرمجية (Shell) لتطبيقات أخرى (Shizuku)</string>
+    <string name="emp_titulo_det">تعمل التطبيقات المصممة لـ Shizuku دون تثبيته. كل تطبيق يطلب الإذن على التلفاز، مع رمز PIN، في المرة الأولى.</string>
+    <string name="emp_modo_desligado">متوقف</string>
+    <string name="emp_modo_sob_demanda">عندما يحتاجه تطبيق</string>
+    <string name="emp_modo_sempre">مفعّل دائمًا</string>
+    <string name="emp_oficial">تطبيق Shizuku مثبّت على هذا التلفاز، لذلك لا يتدخل المشغّل. أزل تثبيته لاستخدام ما في المشغّل.</string>
+    <string name="emp_plano">ضمن الخطط المدفوعة.</string>
+    <string name="emp_negar">رفض</string>
+    <string name="emp_permitir">السماح دائمًا</string>
+    <string name="emp_pedido_titulo">هل تسمح لـ %1$s باستخدام صلاحيات النظام الخاصة بالمشغّل؟</string>
+    <string name="emp_pedido_texto">سيتمكن التطبيق من فعل ما يفعله adb: تثبيت التطبيقات وإزالتها وتغيير إعدادات النظام وغير ذلك. اسمح فقط للتطبيقات التي تثق بها. يمكنك إلغاء ذلك لاحقًا من لوحة الويب.</string>
+    <string name="emp_pin_titulo">رمز PIN للوحة للسماح</string>
+    <string name="emp_sem_pin">عيّن رمز PIN للوحة أولًا (الإعدادات، لوحة الويب).</string>
+    <string name="emd_titulo">إعارة تحكم المالك لتطبيقات أخرى (Dhizuku)</string>
+    <string name="emd_titulo_det">تستخدم التطبيقات المصممة لـ Dhizuku تحكم المالك الخاص بالمشغّل. كل تطبيق يطلب على التلفاز مع رمز PIN. لا يستطيع أي منها إزالة المشغّل كمالك أو مسح التلفاز.</string>
+    <string name="emd_ligado">مفعّل</string>
+    <string name="emd_sem_dono">المشغّل ليس مالك (Device Owner) هذا التلفاز، لذا لا يوجد ما يُعار.</string>
+    <string name="emd_pedido_titulo">هل تسمح لـ %1$s باستخدام تحكم المالك الخاص بالمشغّل؟</string>
+    <string name="emd_pedido_texto">مع «سماح» يستطيع التطبيق إخفاء التطبيقات وحظرها وتغيير أذونات التلفاز وقواعده، لكنه لا يستطيع أبدًا إزالة المشغّل كمالك أو مسح التلفاز. «الصلاحية الكاملة» تجعل التطبيق يعمل كالمشغّل ويقرأ بياناته: فقط للتطبيقات التي تثق بها تمامًا. يمكنك إلغاء ذلك من لوحة الويب.</string>
+    <string name="emd_total">الصلاحية الكاملة</string>
+    <string name="emd_pin_total">الصلاحية الكاملة: سيقرأ التطبيق بيانات المشغّل. رمز PIN للوحة</string>
+</resources>
