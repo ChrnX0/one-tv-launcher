@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Modo infantil por idade: a classificação indicativa de todos os filmes e séries é buscada de madrugada, aos poucos, e não só 300 a cada vez que Filmes abre. Na primeira noite o “Até 12 anos” já passa a mostrar o catálogo inteiro que tem classificação</item>
         <item>Filmes e Séries: a nota agora vem do Trakt (para todos, sem conta), buscada de madrugada; a nota do IMDb saiu, porque o IMDb só permite em app não comercial</item>
         <item>“Também em” na ficha e “Em outros lugares” na Busca ficam desligados por enquanto: esses dados são da JustWatch e pedem contrato. A Busca continua oferecendo procurar no YouTube, Netflix e Prime Video</item>
         <item>Família conectada (Configurações › Família): um link sem conta para os netos mandarem fotos e recados que aparecem na TV</item>
@@ -192,6 +193,7 @@
         <item>Protetor de tela com widgets novos, de letra maior: escolha Faixa de vidro (as próximas horas numa curva, com a hora do sol), Cartões (agora, horas, hoje e amanhã) ou Sem caixa (a temperatura grande e o tempo numa frase) em Configurações › Tela e energia › Widgets do protetor, ou no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Modo infantil por idade</item>
         <item>Nota do Trakt</item>
         <item>Família conectada</item>
         <item>Cenas prontas</item>
@@ -339,6 +341,7 @@
         <item>Em Configurações › Tela e energia, OK em Widgets do protetor até o estilo que quiser e espere o protetor aparecer</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Depois de uma noite, com o modo infantil ligado e “Até 12 anos”, Filmes mostra vários filmes livres e até 12 anos (e nenhum para maiores)?</item>
         <item>Na manhã depois de instalar, abra um filme da sua lista: a ficha mostra “Trakt NN%” e não mostra “IMDb” nem “Também em”?</item>
         <item>Em Configurações › Família › Família conectada, aparece o QR? Mandando uma foto pelo link no celular, ela aparece na TV?</item>
         <item>Em Cenas, aparecem Dormir, Novela e Jogo em “Cenas prontas”? Criando Dormir, ela entra na lista e roda com OK?</item>
