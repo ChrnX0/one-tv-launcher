@@ -7,3 +7,11 @@
 .pagina-cert .botao-primario { display: inline-block; text-decoration: none; }
 .pagina-cert .impressao { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; word-break: break-all; }
 .pagina-cert .alerta { color: var(--perigo, #ff6b6b); }
+/* 16/11/2026: o sistema do aparelho vem primeiro (classe "primeiro", posta pelo servidor), e o "já está pronto?" do cadeado.js. */
+.pagina-cert .sistemas { display: flex; flex-direction: column; gap: 8px; }
+.pagina-cert .so { border: 1px solid var(--borda-forte, rgba(255,255,255,.16)); border-radius: 10px; padding: 8px 12px; }
+.pagina-cert .so.primeiro { order: -1; }
+.pagina-cert .so summary { cursor: pointer; font-weight: 600; font-size: 17px; padding: 4px 0; }
+.pagina-cert .estado-cadeado .texto { font-size: 17px; margin: 0 0 8px; }
+.pagina-cert .estado-cadeado.ok { border-color: var(--ok, #3ecf8e); }
+.pagina-cert [hidden] { display: none !important; }

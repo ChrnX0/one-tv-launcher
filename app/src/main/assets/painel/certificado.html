@@ -4,18 +4,26 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<title>Instalar o painel como app</title>
+<title>Abrir o painel com cadeado</title>
 <meta name="theme-color" content="#0e1015">
 <link rel="icon" type="image/png" href="/icone-192.png">
 <link rel="stylesheet" href="/style.css">
 <link rel="stylesheet" href="/certificado.css">
 </head>
-<body>
-<!-- Passo a passo do https (PainelTls.kt). Preenchida no servidor por PaginaCertificado.kt: sem script. -->
+<body data-pagina="certificado">
+<!-- Passo a passo do https (PainelTls.kt). Preenchida no servidor por PaginaCertificado.kt (funciona sem script);
+     cadeado.js só acrescenta o "já está pronto?" que confere sozinho. O sistema do aparelho (pelo User-Agent) vem
+     primeiro e aberto; os outros ficam fechados embaixo. -->
 <main class="pagina-cert">
-  <h1>Instalar o painel como app</h1>
-  <p class="aviso">Para virar app no celular ou no PC, o painel precisa abrir com cadeado (https). A TV fez um certificado
-    só dela; cada aparelho instala esse certificado uma vez.</p>
+  <h1>Abrir o painel com cadeado</h1>
+  <p class="aviso">Com cadeado (https) o painel vira app no celular e no PC, e a conversa com a TV vai cifrada. A TV fez
+    um certificado só dela; cada aparelho instala esse arquivo <b>uma vez</b>. Depois disso o painel abre com cadeado
+    sozinho, mesmo se você digitar o endereço sem cadeado.</p>
+
+  <div class="cartao estado-cadeado" id="estadoCadeado" hidden>
+    <p class="texto">Conferindo este aparelho…</p>
+    <p><a class="botao-primario" href="{{ENDERECO}}" hidden>Abrir o painel com cadeado</a></p>
+  </div>
 
 <!--se:naopronto-->
   <div class="cartao">
@@ -28,9 +36,8 @@
   <div class="cartao">
     <h2>1. Baixe o certificado</h2>
     <p><a class="botao-primario" href="/certificado.crt" download="one-tv-painel.crt">Baixar certificado</a></p>
-    <p class="aviso">Confira a impressão digital. Ela também aparece no painel aberto em outro aparelho:</p>
+    <p class="aviso">Válido até {{VALIDO_ATE}}. Impressão digital (confere com a do painel em outro aparelho):</p>
     <p class="impressao">{{IMPRESSAO}}</p>
-    <p class="aviso">Válido até {{VALIDO_ATE}}.</p>
 <!--se:vencendo-->
     <p class="alerta">Faltam {{DIAS}} dias para vencer. Gere um novo no painel (Extras, cartão "Instalar como app") e instale de novo.</p>
 <!--fim:vencendo-->
@@ -38,29 +45,58 @@
 
   <div class="cartao">
     <h2>2. Instale no aparelho</h2>
-    <h3>Android (Chrome)</h3>
-    <ol>
-      <li>Abra as <b>Configurações</b> do celular e procure por <b>certificado</b>.</li>
-      <li>Toque em <b>Instalar um certificado</b> e depois em <b>Certificado de CA</b> (aparece um aviso: toque em <b>Instalar mesmo assim</b>).</li>
-      <li>Escolha o arquivo <b>one-tv-painel.crt</b> na pasta Downloads e confirme com o bloqueio de tela.</li>
-    </ol>
-    <h3>Windows (Chrome ou Edge)</h3>
-    <ol>
-      <li>Dê dois cliques no arquivo baixado e clique em <b>Instalar Certificado</b>.</li>
-      <li>Escolha <b>Usuário Atual</b>, depois <b>Colocar todos os certificados no repositório a seguir</b>, <b>Procurar</b> e
-        <b>Autoridades de Certificação Raiz Confiáveis</b>.</li>
-      <li>Avance, clique em <b>Concluir</b> e em <b>Sim</b> no aviso. Feche e abra o navegador.</li>
-    </ol>
-    <h3>iPhone ou iPad (Safari)</h3>
-    <ol>
-      <li>Baixe pelo Safari e permita. Em <b>Ajustes</b>, toque em <b>Perfil Baixado</b> e em <b>Instalar</b>.</li>
-      <li>Em <b>Ajustes &gt; Geral &gt; Sobre &gt; Ajustes de Confiança de Certificados</b>, ligue o certificado <b>One TV</b>.</li>
-    </ol>
-    <h3>Mac</h3>
-    <ol>
-      <li>Abra o arquivo (vai para o <b>Acesso às Chaves</b>), dê dois cliques no certificado <b>One TV</b> e, em
-        <b>Confiança</b>, escolha <b>Sempre Confiar</b>.</li>
-    </ol>
+    <p class="aviso">Seu aparelho parece ser: <b>{{SISTEMA}}</b>. Os outros estão fechados mais abaixo.</p>
+    <div class="sistemas">
+    <details class="so {{PRIMEIRO_ANDROID}}" {{ABERTO_ANDROID}}>
+      <summary>Android (celular ou tablet)</summary>
+      <ol>
+        <li>Abra as <b>Configurações</b> do celular e, na busca do topo, digite <b>certificado</b>.</li>
+        <li>Toque em <b>Instalar certificado</b> (ou <b>Instalar um certificado</b>) e escolha <b>Certificado de CA</b>.
+          Aparece um aviso: toque em <b>Instalar mesmo assim</b>.</li>
+        <li>Escolha <b>one-tv-painel.crt</b> na pasta <b>Downloads</b>. O Android pede o PIN, padrão ou digital da tela
+          de bloqueio (se o celular não tiver, ele pede para criar um).</li>
+        <li>Volte para esta página no <b>Chrome</b>.</li>
+      </ol>
+    </details>
+    <details class="so {{PRIMEIRO_IOS}}" {{ABERTO_IOS}}>
+      <summary>iPhone ou iPad</summary>
+      <ol>
+        <li>Abra esta página no <b>Safari</b>, toque em <b>Baixar certificado</b> e em <b>Permitir</b>.</li>
+        <li>Abra <b>Ajustes</b>. Logo no topo aparece <b>Perfil Baixado</b>: toque nele, em <b>Instalar</b> (três vezes) e
+          digite o código do iPhone.</li>
+        <li>Ainda em Ajustes: <b>Geral › Sobre › Ajustes de Confiança de Certificados</b> e ligue a chave do certificado
+          da TV. Sem este passo o cadeado não funciona.</li>
+        <li>Volte para esta página no Safari.</li>
+      </ol>
+    </details>
+    <details class="so {{PRIMEIRO_WINDOWS}}" {{ABERTO_WINDOWS}}>
+      <summary>Windows (Chrome ou Edge)</summary>
+      <ol>
+        <li>Abra o arquivo baixado (dois cliques) e clique em <b>Instalar Certificado…</b></li>
+        <li>Deixe <b>Usuário Atual</b> e clique em <b>Avançar</b>. Escolha <b>Colocar todos os certificados no
+          repositório a seguir</b>, clique em <b>Procurar</b> e escolha <b>Autoridades de Certificação Raiz
+          Confiáveis</b>.</li>
+        <li>Clique em <b>Avançar</b>, <b>Concluir</b> e <b>Sim</b> no aviso de segurança.</li>
+        <li>Feche <b>todas</b> as janelas do navegador e abra esta página de novo.</li>
+      </ol>
+    </details>
+    <details class="so {{PRIMEIRO_MAC}}" {{ABERTO_MAC}}>
+      <summary>Mac</summary>
+      <ol>
+        <li>Abra o arquivo baixado: ele vai para o app <b>Acesso às Chaves</b> (pode pedir a senha do Mac).</li>
+        <li>Dê dois cliques no certificado da TV, abra <b>Confiança</b> e, em <b>Ao usar este certificado</b>, escolha
+          <b>Sempre Confiar</b>. Feche a janela e digite a senha do Mac.</li>
+        <li>Volte para esta página (no Safari ou no Chrome).</li>
+      </ol>
+    </details>
+    <details class="so">
+      <summary>Firefox (em qualquer computador)</summary>
+      <ol>
+        <li>Se o Firefox continuar sem cadeado depois do passo do sistema: <b>Configurações › Privacidade e Segurança ›
+          Ver certificados › Autoridades › Importar</b>, escolha o arquivo e marque <b>Confiar para identificar sites</b>.</li>
+      </ol>
+    </details>
+    </div>
   </div>
 
   <div class="cartao">
@@ -83,5 +119,6 @@
   </div>
   <p><a href="/">Voltar ao painel</a></p>
 </main>
+<script src="/cadeado.js"></script>
 </body>
 </html>

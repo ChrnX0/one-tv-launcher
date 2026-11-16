@@ -24,7 +24,7 @@ CP="$CACHE/junit-4.13.2.jar:$CACHE/hamcrest-core-1.3.jar:$CACHE/json-20240303.ja
 # teste -> arquivos de produção que ele usa (acrescente aqui quando um teste novo for puro)
 declare -A FONTES=(
   [FimDoVideoTest]="FimDoVideo"
-  [PainelHttpTest]="PainelHttp"
+  [PainelHttpTest]="PainelHttp PainelSeguranca JsonSeguro"
   [PainelSegurancaTest]="PainelSeguranca PainelHttp JsonSeguro"
   [PrimeiraConfigTest]="PainelSeguranca PainelHttp JsonSeguro"
   [McpAutorizacaoTest]="McpAutorizacao"
@@ -32,7 +32,7 @@ declare -A FONTES=(
   [PainelHtmlTest]=""
   [ConfirmacoesTest]="Confirmacoes"
   [CertificadoX509Test]="CertificadoX509"
-  [PaginaCertificadoTest]="PaginaCertificado"
+  [PaginaCertificadoTest]="PaginaCertificado PainelHttp PainelSeguranca JsonSeguro"
   [DriveRegrasTest]="DriveRegras BackupNoturnoRegras"
   [CanalAtualizacaoTest]="CanalAtualizacao"
   [TeclaFalsaTest]="TeclaFalsa"

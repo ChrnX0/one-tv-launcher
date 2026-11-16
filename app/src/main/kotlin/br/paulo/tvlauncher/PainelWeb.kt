@@ -323,9 +323,9 @@ object PainelWeb {
         else ChecagensPainel.hostPermitido(host, nomesPermitidos(), Config.PAINEL_PORTA) || ChecagensPainel.viaHttps(host, nomesHttps())
 
     /** Página do passo a passo (assets/painel/certificado.html), com os dados do certificado já preenchidos. */
-    private fun paginaCertificado(): Resposta {
+    private fun paginaCertificado(agente: String?): Resposta {
         val modelo = app.assets.open("painel/certificado.html").use { it.readBytes() }.toString(Charsets.UTF_8)
-        val html = PainelTls.estado(app, ipsDaRede(), ligadoTls()).let { PaginaCertificado.preencher(modelo, it, it.optString("nome")) }
+        val html = PainelTls.estado(app, ipsDaRede(), ligadoTls()).let { PaginaCertificado.preencher(modelo, it, it.optString("nome"), agente) }
         return Resposta(200, "text/html; charset=utf-8", html.toByteArray())
     }
 
@@ -652,7 +652,7 @@ object PainelWeb {
         // https na rede de casa (PainelTls): passo a passo, o arquivo para instalar e o estado. Livres como a página:
         // o certificado é público por natureza e é preciso baixá-lo ANTES de conseguir entrar pelo https.
         if (req.metodo == "GET") when (req.caminho) {
-            "/certificado" -> return paginaCertificado()
+            "/certificado" -> return paginaCertificado(req.cabecalho("user-agent"))
             // A TV na tela "Rede" do Windows (Ssdp/AnuncioUpnp): a descrição do aparelho e a página que o duplo clique
             // abre. Livres como a do certificado (não dizem nada além do endereço); só com a unidade de rede ligada.
             Ssdp.CAMINHO_DESCRICAO -> if (PainelDav.ligado(app)) return descricaoUpnp(host)
@@ -1012,6 +1012,7 @@ object PainelWeb {
         "/emprestimo.js" to ("emprestimo.js" to "text/javascript; charset=utf-8"),   // shell emprestado (Shizuku)
         "/primeira.js" to ("primeira.js" to "text/javascript; charset=utf-8"),   // ideia 97: assistente da 1ª configuração
         "/certificado.js" to ("certificado.js" to "text/javascript; charset=utf-8"),   // cartão "Instalar como app (https)"
+        "/cadeado.js" to ("cadeado.js" to "text/javascript; charset=utf-8"),   // leva ao https quem já confia (16/11/2026)
         // "Adicionar à tela inicial" no celular: nome, ícone e atalhos (10/11/2026).
         "/manifest.webmanifest" to ("manifest.webmanifest" to "application/manifest+json; charset=utf-8"),
         "/icone-192.png" to ("icone-192.png" to "image/png"),
