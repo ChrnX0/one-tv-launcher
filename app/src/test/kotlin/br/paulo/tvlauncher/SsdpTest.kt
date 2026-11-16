@@ -76,4 +76,10 @@ class SsdpTest {
             doc.getElementsByTagNameNS("http://schemas.microsoft.com/windows/pnpx/2005/11", "X_compatibleId").item(0).textContent)
         javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(Ssdp.SERVICO_MTP.byteInputStream())
     }
+
+    @Test fun nomeEmEsteComputadorLevaAMarcaNaFrente() {
+        assertEquals("Sofaly · Sala de estar", Ssdp.nomeNaUnidade(" Sala de estar "))
+        assertEquals("Sofaly da sala", Ssdp.nomeNaUnidade("Sofaly da sala"))   // sem marca repetida
+        assertTrue(Ssdp.nomeNaUnidade("x".repeat(200)).length <= 60)
+    }
 }

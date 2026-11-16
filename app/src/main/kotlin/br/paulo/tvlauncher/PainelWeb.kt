@@ -343,7 +343,7 @@ object PainelWeb {
     private fun descricaoMtp(host: String?): Resposta {
         val pagina = "http://${host ?: (ipsDaRede().minOrNull() + ":" + Config.PAINEL_PORTA)}/"
         val id = PainelVizinhos.idDaTv(app)
-        val xml = Ssdp.descricaoMtp(PainelVizinhos.nomeDaTv(app).take(60), Ssdp.uuidMtp(id), pagina, id)
+        val xml = Ssdp.descricaoMtp(Ssdp.nomeNaUnidade(PainelVizinhos.nomeDaTv(app)), Ssdp.uuidMtp(id), pagina, id)
         return Resposta(200, "text/xml; charset=utf-8", xml.toByteArray())
     }
 

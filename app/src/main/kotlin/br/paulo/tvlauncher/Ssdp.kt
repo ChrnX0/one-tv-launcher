@@ -138,6 +138,16 @@ object Ssdp {
      */
     fun nomeVisivel(nomeTv: String): String = "${nomeTv.take(45)} · painel"
 
+    /**
+     * O nome da TV em "Este Computador" (16/11/2026): "Sofaly · Sala de estar". Com a marca na frente, as TVs da
+     * casa ficam juntas na lista (ordem alfabética); o Windows não tem pasta que agrupe aparelhos MTP.
+     */
+    fun nomeNaUnidade(nomeTv: String): String {
+        val n = nomeTv.trim()
+        // quem já pôs a marca no nome da TV não ganha "Sofaly · Sofaly"
+        return if (n.startsWith(MARCA, ignoreCase = true)) n.take(60) else "$MARCA · ${n.take(48)}"
+    }
+
     /** uuid estável para esta TV (o Windows não duplica o ícone a cada religada), derivado do id curto da TV. */
     fun uuid(idTv: String): String = java.util.UUID.nameUUIDFromBytes("onetv-unidade-$idTv".toByteArray()).toString()
 }
