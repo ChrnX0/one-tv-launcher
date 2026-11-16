@@ -150,4 +150,50 @@ class CanalBuscaTest {
         val json = CanalBusca.acoesDaVoz(CanalBusca.PedidoVoz.Tocar("globo \"x\""))
         assertEquals("globo \"x\"", (ComandosIa.conferir(json, emptyMap()).acoes.single() as ComandosIa.Acao.TocarCanal).pedido)
     }
+
+    // 16/11/2026, Sala: "globo" abriu a "TV Globo HD" do grupo Portugal (nome igual) em vez da Globo do Brasil.
+    private val salaPaises = listOf(
+        canal("p:1", "TV Globo HD", 2003, grupo = "Portugal"),
+        canal("b:1", "Globo SP FHD", 2, grupo = "Globo"),
+        canal("b:2", "Globo SP HD", 4, grupo = "Globo"),
+        canal("b:3", "GloboNews HD", 401, grupo = "Notícias"),
+        canal("p:2", "SIC HD", 2010, grupo = "Portugal"),
+        canal("b:4", "Canal Brasil HD", 70, grupo = "Filmes"),
+        canal("u:1", "USA: Fox News", 900, grupo = "Notícias"),
+    )
+
+    private fun noPais(termo: String, pais: String?) = CanalBusca.buscar(salaPaises, termo, paisUsuario = pais).firstOrNull()?.canal?.id
+
+    @Test fun preferePaisDoUsuario() {
+        assertEquals("b:1", noPais("globo", "BR"))
+        assertEquals("p:1", noPais("globo", "PT"))
+        assertEquals("p:1", noPais("globo", null))      // sem país conhecido: como antes, o nome igual
+    }
+
+    @Test fun paisDitoNoPedidoGanha() {
+        assertEquals("p:1", noPais("globo portugal", "BR"))
+        assertEquals("p:1", noPais("globo de portugal", "BR"))
+        assertEquals("b:1", noPais("globo brasil", "PT"))
+    }
+
+    @Test fun palavraDePaisDentroDoNomeContinuaAchando() {
+        assertEquals("b:4", noPais("canal brasil", "BR"))
+        assertEquals("b:4", noPais("canal brasil", "PT"))
+    }
+
+    @Test fun canalSoDeOutroPaisAindaAcha() {
+        assertEquals("p:2", noPais("sic", "BR"))
+        assertEquals("u:1", noPais("fox news", "BR"))
+    }
+
+    @Test fun paisDoCanal() {
+        assertEquals("PT", CanalBusca.paisDoCanal(salaPaises[0]))
+        assertEquals("US", CanalBusca.paisDoCanal(salaPaises[6]))
+        assertNull(CanalBusca.paisDoCanal(salaPaises[1]))
+    }
+
+    @Test fun escolherUsaOPais() {
+        val e = CanalBusca.escolher(salaPaises, "globo", { true }, "BR")
+        assertEquals("b:1", (e as CanalBusca.Escolha.Achou).canal.id)
+    }
 }

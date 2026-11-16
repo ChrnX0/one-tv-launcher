@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Channel asked by name (Claude or voice): you get the one from the TV’s country. “Globo” in Brazil opens the local Globo, not TV Globo Portugal; for another country, say it too (“Globo Portugal”)</item>
         <item>Picture calibration: the “75% color bars” pattern no longer closes the launcher</item>
         <item>Movies: the director comes from TMDB (Dune shows Denis Villeneuve), no longer the wrong name from the list</item>
         <item>Movies and Series: an audio track with no language shows as “Track”, no longer “und”</item>
@@ -178,6 +179,7 @@
         <item>Screensaver with new, larger widgets: pick Glass strip (the next hours on a curve, with the sun time), Cards (now, hours, today and tomorrow) or No box (big temperature and the weather in one sentence) in Settings › Screen and power › Screensaver widgets, or in the panel</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>canal_do_pais</item>
         <item>calibracao_barras</item>
         <item>diretor_tmdb</item>
         <item>audio_sem_idioma</item>
@@ -311,6 +313,7 @@
         <item>protetor_widgets</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Channel from your country</item>
         <item>75% color bars</item>
         <item>Movie director</item>
         <item>Audio track with no language</item>
@@ -444,6 +447,7 @@
         <item>In Settings › Screen and power, press OK on Screensaver widgets until the style you want, then wait for the screensaver</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Ask Claude to “put on Globo”: does the Brazilian Globo open? And does “Globo Portugal” open the Portuguese one?</item>
         <item>In Settings › Display and power › Calibration, choose “75% color bars”: does the pattern show without the launcher closing?</item>
         <item>In Movies, open Dune: does the detail page show Denis Villeneuve as the director?</item>
         <item>On a movie whose audio has no language, open Audio: does it show “Track” instead of “und”?</item>
