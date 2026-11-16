@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Confortos do estudo do Stremio (16/11/2026): Conforto.kt, ConfigLauncherActivity, SincronizarActivity. -->
+<resources>
+    <string name="cf_resumo_escondido">Описание скрыто, пока вы не посмотрите</string>
+    <string name="cf_spoiler">Скрывать описания непросмотренных серий</string>
+    <string name="cf_spoiler_det">Описание появится только после начала серии</string>
+    <string name="cf_segundo">Второй язык</string>
+    <string name="cf_segundo_det">Используется, если в видео нет звука или субтитров на языке телевизора</string>
+    <string name="cf_nenhum">Нет</string>
+    <string name="cf_proximo">Отсчёт до следующей серии</string>
+    <string name="cf_proximo_det">Сколько ждать, прежде чем следующая серия начнётся сама</string>
+    <string name="cf_proximo_nao">Не запускать само</string>
+    <string name="cf_segundos">%1$d с</string>
+    <string name="cf_consent_titulo">Отправлять данные в %1$s?</string>
+    <string name="cf_consent_texto">Если включить, в %1$s через интернет будут отправляться названия, которые вы отмечаете и смотрите на этом телевизоре, и место, где вы остановились. Они хранятся в вашем аккаунте %1$s по его правилам конфиденциальности. Отключить можно в любой момент.</string>
+    <string name="cf_consent_sim">Согласен</string>
+</resources>

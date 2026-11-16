@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Confortos do estudo do Stremio (16/11/2026): Conforto.kt, ConfigLauncherActivity, SincronizarActivity. -->
+<resources>
+    <string name="cf_resumo_escondido">الملخص مخفي حتى تشاهده</string>
+    <string name="cf_spoiler">إخفاء ملخص الحلقات غير المشاهدة</string>
+    <string name="cf_spoiler_det">يظهر الملخص فقط بعد بدء الحلقة</string>
+    <string name="cf_segundo">اللغة الثانية</string>
+    <string name="cf_segundo_det">تُستخدم عندما لا يحتوي الفيديو على صوت أو ترجمة بلغة التلفزيون</string>
+    <string name="cf_nenhum">لا شيء</string>
+    <string name="cf_proximo">العد التنازلي للحلقة التالية</string>
+    <string name="cf_proximo_det">مدة الانتظار قبل أن تبدأ الحلقة التالية تلقائيًا</string>
+    <string name="cf_proximo_nao">لا تبدأ تلقائيًا</string>
+    <string name="cf_segundos">%1$d ث</string>
+    <string name="cf_consent_titulo">إرسال البيانات إلى %1$s؟</string>
+    <string name="cf_consent_texto">عند التفعيل تُرسَل إلى %1$s عبر الإنترنت العناوين التي تحددها وتشاهدها على هذا التلفزيون والموضع الذي توقفت عنده. تُحفظ في حسابك على %1$s وفق قواعد الخصوصية الخاصة به. يمكنك الإيقاف في أي وقت.</string>
+    <string name="cf_consent_sim">أوافق</string>
+</resources>

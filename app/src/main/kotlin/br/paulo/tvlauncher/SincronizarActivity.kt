@@ -23,6 +23,7 @@ import br.paulo.tvlauncher.SincronizarFilmes.ListaFora
 class SincronizarActivity : Activity() {
     companion object {
         private const val EXTRA = "servico"
+        const val PREFS_CONSENTIMENTO = "sync_consentimento"
         fun abrir(ctx: Context, s: Servico) = ctx.startActivity(Intent(ctx, SincronizarActivity::class.java).putExtra(EXTRA, s.id))
     }
 
@@ -87,10 +88,14 @@ class SincronizarActivity : Activity() {
                 fun proxima() = (i++ == focar)
                 if (servico != Servico.MDBLIST) {
                     val nInteresses = getString(if (servico == Servico.SIMKL) R.string.sync_interesses_simkl else R.string.sync_interesses)
-                    linha(nInteresses, getString(R.string.sync_interesses_det), ligado(o.interesses), proxima()) { mudar(0) { it.copy(interesses = !it.interesses) } }
+                    // As três que MANDAM dados para fora pedem o consentimento antes de ligar (consentirEntao). Assistidos só traz.
+                    linha(nInteresses, getString(R.string.sync_interesses_det), ligado(o.interesses), proxima()) {
+                        consentirEntao(!o.interesses) { mudar(0) { it.copy(interesses = !it.interesses) } } }
                     linha(getString(R.string.sync_assistidos), getString(R.string.sync_assistidos_det), ligado(o.assistidos), proxima()) { mudar(1) { it.copy(assistidos = !it.assistidos) } }
-                    linha(getString(R.string.sync_continuar), getString(R.string.sync_continuar_det), ligado(o.continuar), proxima()) { mudar(2) { it.copy(continuar = !it.continuar) } }
-                    linha(getString(R.string.sync_contar, servico.nome), getString(R.string.sync_contar_det), ligado(o.contar), proxima()) { mudar(3) { it.copy(contar = !it.contar) } }
+                    linha(getString(R.string.sync_continuar), getString(R.string.sync_continuar_det), ligado(o.continuar), proxima()) {
+                        consentirEntao(!o.continuar) { mudar(2) { it.copy(continuar = !it.continuar) } } }
+                    linha(getString(R.string.sync_contar, servico.nome), getString(R.string.sync_contar_det), ligado(o.contar), proxima()) {
+                        consentirEntao(!o.contar) { mudar(3) { it.copy(contar = !it.contar) } } }
                 }
                 if (servico != Servico.SIMKL) {
                     val det = if (listas.isEmpty()) getString(R.string.sync_listas_nenhuma) else getString(R.string.sync_listas_n, listas.size, listas.joinToString(", ") { it.nome })
@@ -108,6 +113,21 @@ class SincronizarActivity : Activity() {
                 })
             }
         }
+    }
+
+    /**
+     * Consentimento por serviço (16/11/2026, como os "addons de rastreamento" do Stremio): antes de ligar a primeira opção
+     * que manda dados desta TV para o Trakt/Simkl, a pessoa lê o que vai e aceita. Vale para o serviço até sair da conta
+     * (sair apaga o aceite: a próxima conta pergunta de novo). Desligar nunca pergunta. Fica fora do backup (prefs próprio).
+     */
+    private fun consentirEntao(ligando: Boolean, acao: () -> Unit) {
+        val prefs = getSharedPreferences(PREFS_CONSENTIMENTO, MODE_PRIVATE)
+        if (!ligando || prefs.getBoolean(servico.name, false)) { acao(); return }
+        CaixaTv(this).setTitle(getString(R.string.cf_consent_titulo, servico.nome))
+            .setMessage(getString(R.string.cf_consent_texto, servico.nome))
+            .setPositiveButton(getString(R.string.cf_consent_sim)) { _, _ -> prefs.edit().putBoolean(servico.name, true).apply(); acao() }
+            .setNegativeButton(getString(R.string.sv_cancelar), null)
+            .show()
     }
 
     private fun mudar(foco: Int, f: (SincronizarFilmes.Opcoes) -> SincronizarFilmes.Opcoes) {
@@ -130,6 +150,7 @@ class SincronizarActivity : Activity() {
             .setPositiveButton(getString(R.string.sv_sair)) { _, _ ->
                 rede.execute {
                     ServicosContas.sair(this, servico); ServicosSync.esquecer(this, servico)
+                    getSharedPreferences(PREFS_CONSENTIMENTO, MODE_PRIVATE).edit().remove(servico.name).apply()
                     ui.post { if (!isDestroyed) finish() }
                 }
             }

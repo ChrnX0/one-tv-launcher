@@ -52,6 +52,8 @@ object BackupCompleto {
         "roteiro",   // respostas do "Conferir na TV" (ConferirTvActivity): valem só para a versão em que foram dadas
         // Cuidar de longe (CuidarDeLongeTv): o consentimento é de quem mora com ESTA TV; restaurar em outra não pode levá-lo.
         "cuidar_de_longe",
+        // Aceite de mandar dados ao Trakt/Simkl (SincronizarActivity, 16/11/2026): é de quem está nesta TV; restaurar pergunta de novo.
+        "sync_consentimento",
         "timer",   // timer é passageiro: restaurar um backup feito com o timer correndo o armaria de novo sem ninguém pedir
         "player_pin", "config_pin",   // erros do PIN no player e nas Configurações (TentativasPin): passageiro, e restaurar não pode zerar nem prender ninguém
         "despertador_estado",   // próximo toque anotado (AlarmeGarantia): um antigo restaurado daria aviso falso de alarme perdido

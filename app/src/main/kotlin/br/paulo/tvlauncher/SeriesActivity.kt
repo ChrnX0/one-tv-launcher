@@ -889,7 +889,11 @@ class SeriesActivity : Activity() {
      * [focarEpisodio]: abre direto na lista, com o foco nesse episódio. Os dados chegam aos poucos e cada um redesenha:
      * o foco fica onde estava (na mesma ação, ou no mesmo episódio).
      */
+    /** Chave "esconder resumo de episódio não visto" ([Conforto]), relida a cada vez que a ficha é desenhada. */
+    private var semSpoiler = false
+
     private fun desenharFicha(focarEpisodio: Int? = null) {
+        semSpoiler = Conforto.semSpoiler(this)
         val s = aberta ?: return
         val f = fichaAberta
         val focoAntes = painel.findFocus()
@@ -1076,9 +1080,14 @@ class SeriesActivity : Activity() {
         val topo = v.getChildAt(0) as LinearLayout
         (topo.getChildAt(0) as TextView).text = ep.numero.toString()
         (topo.getChildAt(1) as TextView).text = Series.tituloCurto(s.nome, ep.titulo)
-        (v.getChildAt(1) as TextView).apply { text = ep.sinopse; visibility = if (ep.sinopse.isEmpty()) View.GONE else View.VISIBLE }
-        val barra = v.getChildAt(2) as BarraTempo.Barra
         val pos = posicoes[ep.chave(s.fonteId)]
+        // Esconder spoiler (16/11/2026, ideia do Stremio): episódio nunca aberto não mostra o resumo, se a chave estiver ligada.
+        val escondido = ep.sinopse.isNotEmpty() && ConfortoRegras.esconderResumo(semSpoiler, pos != null)
+        (v.getChildAt(1) as TextView).apply {
+            text = if (escondido) getString(R.string.cf_resumo_escondido) else ep.sinopse
+            visibility = if (ep.sinopse.isEmpty()) View.GONE else View.VISIBLE
+        }
+        val barra = v.getChildAt(2) as BarraTempo.Barra
         if (pos != null && pos.duracao > 0) { barra.visibility = View.VISIBLE; barra.fracao = BarraTempo.fracao(pos.ms, pos.duracao) }
         else barra.visibility = View.INVISIBLE
         // À direita do nome: "faltam 35 min · termina às 17:28" se começou, "visto" se acabou, senão a duração.
@@ -1186,7 +1195,8 @@ class SeriesActivity : Activity() {
                 val prox = if (terminou && s != null && f != null && ep != null) Series.proximo(f, ep) else null
                 // Ideia 19 (14/11/2026): antes o próximo começava na hora. Agora: contagem de 10 s com cancelar; depois de
                 // 3 seguidos sem tecla, pergunta "ainda está assistindo?"; e nada segue se era para desligar ao fim.
-                val passo = FimDoVideo.depois(terminou, prox != null, desligou, seguidos)
+                val contagem = Conforto.contagem(this)
+                val passo = FimDoVideo.depois(terminou, prox != null, desligou, seguidos, contagem)
                 if (prox != null && s != null && passo != FimDoVideo.Passo.NADA && passo != FimDoVideo.Passo.DESLIGAR) {
                     temporada = prox.temporada; desenharFicha()
                     avisarProximo(s, prox, perguntar = passo == FimDoVideo.Passo.PERGUNTAR)
@@ -1197,13 +1207,14 @@ class SeriesActivity : Activity() {
     }
 
     /**
-     * Ideia 19: cartão por cima da ficha antes do próximo episódio. [perguntar] = false: "Assistir agora · 10 s" contando e
+     * Ideia 19: cartão por cima da ficha antes do próximo episódio. [perguntar] = false: "Assistir agora · 10 s" contando
+     * (os segundos vêm das Configurações desde 16/11/2026, [Conforto.contagem]) e
      * começa sozinho no zero; VOLTAR ou "Cancelar" fica na ficha. [perguntar] = true: "Ainda está assistindo?" sem contagem.
      */
     private fun avisarProximo(s: Serie, prox: Episodio, perguntar: Boolean) {
         avisoProximo?.dismiss()
         val d = android.app.Dialog(this)
-        var resta = FimDoVideo.CONTAGEM_S
+        var resta = Conforto.contagem(this).takeIf { it > 0 } ?: FimDoVideo.CONTAGEM_S
         val parar = Estilo.botao(this, getString(R.string.vod_proximo_cancelar), primario = false)
         val ver = Estilo.botao(this, if (perguntar) getString(R.string.vod_proximo_continuar) else getString(R.string.vod_proximo_agora, resta))
         val tique = object : Runnable {

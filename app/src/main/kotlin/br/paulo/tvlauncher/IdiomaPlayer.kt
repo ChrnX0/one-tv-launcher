@@ -61,20 +61,23 @@ object IdiomaPlayer {
      * Aplica a preferência quando as faixas chegam: escolhe o áudio e liga (ou não) a legenda no idioma da TV
      * ([idioma], 2 letras; ideia 25). Devolve os parâmetros novos, ou null se não há o que mudar.
      */
-    fun aplicar(t: Tracks, atual: TrackSelectionParameters, pref: Idioma.Pref, idioma: String = idiomaDaTv()): TrackSelectionParameters? {
+    fun aplicar(t: Tracks, atual: TrackSelectionParameters, pref: Idioma.Pref, idioma: String = idiomaDaTv(),
+                segundo: String? = null): TrackSelectionParameters? {
         val audios = faixas(t, C.TRACK_TYPE_AUDIO)
         val b = atual.buildUpon()
         var mudou = false
-        val escolhido = Idioma.escolherAudio(audios.map { (g, i) -> faixa(g.getTrackFormat(i)) }, pref, idioma)?.let { audios[it] }
+        val escolhido = Idioma.escolherAudio(audios.map { (g, i) -> faixa(g.getTrackFormat(i)) }, pref, idioma, segundo)?.let { audios[it] }
         if (escolhido != null && !escolhido.first.isTrackSelected(escolhido.second)) {
             b.setOverrideForType(TrackSelectionOverride(escolhido.first.mediaTrackGroup, escolhido.second)); mudou = true
         }
         val audio = escolhido ?: audios.firstOrNull { (g, i) -> g.isTrackSelected(i) }
         // Sem faixa de áudio identificada (ainda), não mexe na legenda: decidir às cegas ligaria legenda em filme dublado.
         if (audio == null) return if (mudou) b.build() else null
-        val audioDaTv = Idioma.eDoIdioma(faixa(audio.first.getTrackFormat(audio.second)), idioma)
+        val fAudio = faixa(audio.first.getTrackFormat(audio.second))
+        val audioDaTv = Idioma.eDoIdioma(fAudio, idioma)
+        val noSegundo = segundo != null && Idioma.eDoIdioma(fAudio, segundo)
         val textos = faixas(t, C.TRACK_TYPE_TEXT)
-        val leg = Idioma.escolherLegenda(textos.map { (g, i) -> faixa(g.getTrackFormat(i)) }, audioDaTv, idioma)?.let { textos[it] }
+        val leg = Idioma.escolherLegenda(textos.map { (g, i) -> faixa(g.getTrackFormat(i)) }, audioDaTv, idioma, segundo, noSegundo)?.let { textos[it] }
         if (leg != null) {
             b.setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false).setOverrideForType(TrackSelectionOverride(leg.first.mediaTrackGroup, leg.second))
             mudou = true

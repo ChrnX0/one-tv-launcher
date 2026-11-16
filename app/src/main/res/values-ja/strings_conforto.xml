@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Confortos do estudo do Stremio (16/11/2026): Conforto.kt, ConfigLauncherActivity, SincronizarActivity. -->
+<resources>
+    <string name="cf_resumo_escondido">見るまであらすじを隠しています</string>
+    <string name="cf_spoiler">未視聴エピソードのあらすじを隠す</string>
+    <string name="cf_spoiler_det">あらすじはエピソードを始めてから表示されます</string>
+    <string name="cf_segundo">第2言語</string>
+    <string name="cf_segundo_det">動画にテレビの言語の音声や字幕がないときに使います</string>
+    <string name="cf_nenhum">なし</string>
+    <string name="cf_proximo">次のエピソードのカウントダウン</string>
+    <string name="cf_proximo_det">次のエピソードが自動で始まるまでの待ち時間</string>
+    <string name="cf_proximo_nao">自動で始めない</string>
+    <string name="cf_segundos">%1$d 秒</string>
+    <string name="cf_consent_titulo">%1$s にデータを送りますか？</string>
+    <string name="cf_consent_texto">オンにすると、このテレビでマークした作品・視聴した作品と止めた位置が、インターネット経由で %1$s に送られます。データは %1$s のアカウントに、同社のプライバシー規約に従って保存されます。いつでもオフにできます。</string>
+    <string name="cf_consent_sim">同意する</string>
+</resources>

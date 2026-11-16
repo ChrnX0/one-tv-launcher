@@ -393,6 +393,31 @@ class ConfigLauncherActivity : Activity() {
             linhaQuadros.ligado(TaxaQuadros.alternar(this))
         }
         c.addView(linhaQuadros)
+        // Confortos do estudo do Stremio (16/11/2026; Conforto.kt): esconder spoiler, segundo idioma e a contagem do próximo.
+        lateinit var linhaSpoiler: LinhaCfg
+        linhaSpoiler = linha(getString(R.string.cf_spoiler), getString(R.string.cf_spoiler_det), chave = Conforto.semSpoiler(this)) {
+            linhaSpoiler.ligado(Conforto.alternarSpoiler(this))
+        }
+        c.addView(linhaSpoiler)
+        fun rotuloSegundo(cod: String?) = cod?.let { Conforto.nomeIdioma(it) } ?: getString(R.string.cf_nenhum)
+        lateinit var linhaSegundo: LinhaCfg
+        linhaSegundo = linha(getString(R.string.cf_segundo), getString(R.string.cf_segundo_det), valor = rotuloSegundo(Conforto.segundoIdioma(this))) {
+            val opcoes = listOf<String?>(null) + ConfortoRegras.SEGUNDOS
+            val atualS = Conforto.segundoIdioma(this)
+            Estilo.lista(this, getString(R.string.cf_segundo), opcoes.map { rotuloSegundo(it) }, listOf(opcoes.indexOf(atualS).coerceAtLeast(0))) { i ->
+                Conforto.definirSegundo(this, opcoes[i]); linhaSegundo.valor(rotuloSegundo(opcoes[i]))
+            }
+        }
+        c.addView(linhaSegundo)
+        fun rotuloContagem(s: Int) = if (s <= 0) getString(R.string.cf_proximo_nao) else getString(R.string.cf_segundos, s)
+        lateinit var linhaContagem: LinhaCfg
+        linhaContagem = linha(getString(R.string.cf_proximo), getString(R.string.cf_proximo_det), valor = rotuloContagem(Conforto.contagem(this))) {
+            val v = ConfortoRegras.CONTAGENS
+            Estilo.lista(this, getString(R.string.cf_proximo), v.map { rotuloContagem(it) }, listOf(v.indexOf(Conforto.contagem(this)).coerceAtLeast(0))) { i ->
+                Conforto.definirContagem(this, v[i]); linhaContagem.valor(rotuloContagem(v[i]))
+            }
+        }
+        c.addView(linhaContagem)
         // Foto da conta Google na bolinha do perfil (FotoPerfil, 13/11/2026): abre a tela do código para o celular.
         secao(c, getString(R.string.fp_secao))
         c.addView(linha(getString(R.string.fp_linha), getString(R.string.fp_linha_det), seta = true) {

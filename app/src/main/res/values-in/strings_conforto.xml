@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Confortos do estudo do Stremio (16/11/2026): Conforto.kt, ConfigLauncherActivity, SincronizarActivity. -->
+<resources>
+    <string name="cf_resumo_escondido">Ringkasan disembunyikan sampai Anda menontonnya</string>
+    <string name="cf_spoiler">Sembunyikan ringkasan episode yang belum ditonton</string>
+    <string name="cf_spoiler_det">Ringkasan baru muncul setelah Anda memulai episode</string>
+    <string name="cf_segundo">Bahasa kedua</string>
+    <string name="cf_segundo_det">Dipakai jika video tidak punya audio atau subtitle dalam bahasa TV</string>
+    <string name="cf_nenhum">Tidak ada</string>
+    <string name="cf_proximo">Hitung mundur episode berikutnya</string>
+    <string name="cf_proximo_det">Berapa lama menunggu sebelum episode berikutnya mulai sendiri</string>
+    <string name="cf_proximo_nao">Jangan mulai sendiri</string>
+    <string name="cf_segundos">%1$d dtk</string>
+    <string name="cf_consent_titulo">Kirim data ke %1$s?</string>
+    <string name="cf_consent_texto">Jika diaktifkan, judul yang Anda tandai dan tonton di TV ini serta titik terakhir Anda berhenti dikirim ke %1$s lewat internet. Data disimpan di akun %1$s Anda sesuai aturan privasinya. Anda bisa mematikannya kapan saja.</string>
+    <string name="cf_consent_sim">Saya setuju</string>
+</resources>

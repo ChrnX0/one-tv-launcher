@@ -141,6 +141,8 @@ class VodActivity : Activity() {
     private var quadrosDecididos = false   // ideia 86: o modo da tela (24 Hz para filme) já foi pedido para este vídeo
     // Preferência de áudio deste título (Idioma), lida do disco fora da thread da tela antes de o vídeo começar.
     @Volatile private var prefIdioma = Idioma.Pref.DUBLADO
+    /** Segundo idioma de áudio/legenda (Conforto, 16/11/2026), já sem o idioma da TV; null = nenhum. */
+    @Volatile private var segundoIdioma: String? = null
     private var chaveIdioma = ""
     // Ideia 25: idioma do sistema da TV ("pt", "en", "es"): "dublado" e a legenda automática seguem ele.
     private val idiomaTv by lazy { IdiomaPlayer.idiomaDaTv() }
@@ -294,6 +296,7 @@ class VodActivity : Activity() {
                 if (tipo == TIPO_EPISODIO) Series.urlEpisodio(conta, id, ext) else Vod.urlFilme(conta, Filme(id, fonte, "", extensao = ext))
             }
             prefIdioma = IdiomaPlayer.prefs(this).para(chaveIdioma)
+            segundoIdioma = ConfortoRegras.segundoUtil(Conforto.segundoIdioma(this), idiomaTv)
             // Ideia 90: tradução que ficou pela metade (o player fechou no meio) é refeita; a metade não fica valendo.
             if (LegendaTraduzida.pelaMetade(this, chave)) LegendaBaixar.apagar(this, chave)
             val leg = LegendaBaixar.guardada(this, chave)
@@ -372,7 +375,8 @@ class VodActivity : Activity() {
         // escolhidos quando as faixas chegam (onTracksChanged + IdiomaPlayer.aplicar). Nos dois casos, a legenda no idioma
         // da TV só liga se o áudio não for desse idioma.
         p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
-            .setPreferredAudioLanguage(if (prefIdioma == Idioma.Pref.DUBLADO) idiomaTv else null).build()
+            .setPreferredAudioLanguages(*(if (prefIdioma == Idioma.Pref.DUBLADO) listOfNotNull(idiomaTv, segundoIdioma) else emptyList()).toTypedArray())
+            .build()
         legendaDecidida = false   // player novo (voltou de outra tela): as faixas são escolhidas de novo
         p.addListener(ouvinte)
         p.setMediaItem(item(u), retomarEm)
@@ -684,7 +688,7 @@ class VodActivity : Activity() {
             if (legendaDecidida || faixas.groups.none { it.type == C.TRACK_TYPE_AUDIO }) return
             legendaDecidida = true
             val p = player ?: return
-            IdiomaPlayer.aplicar(faixas, p.trackSelectionParameters, prefIdioma, idiomaTv)?.let { p.trackSelectionParameters = it }
+            IdiomaPlayer.aplicar(faixas, p.trackSelectionParameters, prefIdioma, idiomaTv, segundoIdioma)?.let { p.trackSelectionParameters = it }
             talvezLegendaAuto(faixas)
         }
     }
