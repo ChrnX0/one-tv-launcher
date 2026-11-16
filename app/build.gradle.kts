@@ -145,6 +145,17 @@ dependencies {
     // Shell proprio MARCO 2: cliente ADB embutido (pareamento + TLS + shell). Licenca Apache-2.0 (opcao da dupla).
     implementation("com.github.MuntashirAkon:libadb-android:3.1.1")
     implementation("com.github.MuntashirAkon:sun-security-android:1.1")
+
+    // Empréstimo de shell (15/11/2026, "poder máximo"): o servidor do Shizuku EMBUTIDO. As classes do servidor
+    // precisam estar no APK do launcher, porque o processo shizuku_server é iniciado com
+    // `app_process -Djava.class.path=<este APK>`. "provider" + "api" = o lado gerente: recebe o binder do servidor.
+    implementation(project(":server"))
+    implementation(project(":provider"))
+    implementation(project(":api"))
+    // Empréstimo do Device Owner (Dhizuku, 15/11/2026): servidor vendorizado (MIT, dhizuku/NOTICE.md) e a HiddenApiBypass
+    // (Apache-2.0) só para ler o mapa de métodos do IDevicePolicyManager no filtro (FiltroDpm.kt).
+    implementation(project(":dhizuku-server_api"))
+    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:6.1")
     // conscrypt-android SAIU (04/11/2026, -1,28 MB de lib nativa): sem ela a libadb usa o TLS 1.3 do próprio Android
     // (SslUtils: SSLContext.getInstance("TLSv1.3"), Android 10+) e, no pareamento, a exportKeyingMaterial da
     // conscrypt da plataforma. Testado na TV: ver o commit.

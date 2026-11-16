@@ -224,9 +224,33 @@ class ConfigLauncherActivity : Activity() {
 
     /** Redesenha a aba atual no lugar (depois de voltar de outra tela ou de mudar algo que mexe em várias linhas). */
     private fun recarregarAba() {
-        val tinhaFocoNoConteudo = conteudo.hasFocus()
+        // 15/11/2026 (visto na Sala): tirar as linhas com o foco numa delas deixava o Android escolher outro foco, às
+        // vezes outra aba do menu, que então abria (Avançado > ligar um empréstimo > caía em "TV e filmes" com o foco
+        // numa linha de lá, e o próximo OK mudava uma opção que ninguém escolheu). Agora o foco espera na aba atual e
+        // volta para a MESMA linha (pela posição) depois de redesenhar.
+        val antes = focaveis(conteudo)
+        val focado = conteudo.findFocus()
+        val indice = antes.indexOfFirst { it === focado || (focado != null && ehAncestral(it, focado)) }
+        val tinhaFocoNoConteudo = focado != null
+        if (tinhaFocoNoConteudo) itensMenu[abaAtual].requestFocus()
         mostrarAba(abaAtual)
-        if (tinhaFocoNoConteudo) conteudo.post { entrarNoConteudo() }
+        if (tinhaFocoNoConteudo) conteudo.post {
+            val depois = focaveis(conteudo)
+            (depois.getOrNull(indice) ?: depois.firstOrNull())?.requestFocus()
+        }
+    }
+
+    private fun focaveis(v: View, r: MutableList<View> = mutableListOf()): List<View> {
+        if (v.visibility != View.VISIBLE) return r
+        if (v.isFocusable) { r += v; return r }
+        if (v is ViewGroup) for (k in 0 until v.childCount) focaveis(v.getChildAt(k), r)
+        return r
+    }
+
+    private fun ehAncestral(pai: View, filho: View): Boolean {
+        var p = filho.parent
+        while (p != null) { if (p === pai) return true; p = p.parent }
+        return false
     }
 
     private fun entrarNoConteudo() {
@@ -729,6 +753,42 @@ class ConfigLauncherActivity : Activity() {
             }, lp())
         }
         c.addView(info(getString(R.string.cl_perguntar_tv), getString(R.string.cl_perguntar_tv_det)), lp())
+    }
+
+    /**
+     * Emprestar o shell a outros apps (15/11/2026, "poder máximo"; ver ShizukuEmbutido). Desligado de fábrica. Ligar pede
+     * o PIN (liberar mais); desligar não. Cada app ainda pede na TV, com PIN, na primeira vez.
+     */
+    private fun emprestimoShell(c: LinearLayout) {
+        secao(c, getString(R.string.emp_secao))
+        val modo = ShizukuEmbutido.modo(this)
+        val rotulo = when (modo) {
+            RegrasEmprestimo.Modo.DESLIGADO -> getString(R.string.emp_modo_desligado)
+            RegrasEmprestimo.Modo.SOB_DEMANDA -> getString(R.string.emp_modo_sob_demanda)
+            RegrasEmprestimo.Modo.SEMPRE -> getString(R.string.emp_modo_sempre)
+        }
+        c.addView(linha(getString(R.string.emp_titulo), getString(R.string.emp_titulo_det), valor = rotulo) {
+            val proximo = RegrasEmprestimo.Modo.values()[(modo.ordinal + 1) % RegrasEmprestimo.Modo.values().size]
+            val gravar = { ShizukuEmbutido.definirModo(this, proximo); recarregarAba() }
+            if (modo == RegrasEmprestimo.Modo.DESLIGADO) pedirPinParental(getString(R.string.cl_pin_liberar), gravar) else gravar()
+        }, lp())
+        when (ShizukuEmbutido.parado(this)) {
+            RegrasEmprestimo.Parado.SHIZUKU_OFICIAL -> c.addView(info(getString(R.string.emp_titulo), getString(R.string.emp_oficial)), lp())
+            RegrasEmprestimo.Parado.PLANO -> c.addView(info(getString(R.string.emp_titulo), getString(R.string.emp_plano)), lp())
+            else -> {}
+        }
+        // Device Owner emprestado (Dhizuku, DonoEmprestado.kt). Ligar pede o PIN; desligar vale na hora para todos os apps.
+        val donoLigado = DonoEmprestado.ligado(this)
+        c.addView(linha(getString(R.string.emd_titulo), getString(R.string.emd_titulo_det),
+            valor = getString(if (donoLigado) R.string.emd_ligado else R.string.emp_modo_desligado)) {
+            val gravar = { DonoEmprestado.definirLigado(this, !donoLigado); recarregarAba() }
+            if (!donoLigado) pedirPinParental(getString(R.string.cl_pin_liberar), gravar) else gravar()
+        }, lp())
+        if (donoLigado) when (DonoEmprestado.parado(this)) {
+            RegrasDono.Parado.SEM_DONO -> c.addView(info(getString(R.string.emd_titulo), getString(R.string.emd_sem_dono)), lp())
+            RegrasDono.Parado.PLANO -> c.addView(info(getString(R.string.emd_titulo), getString(R.string.emp_plano)), lp())
+            else -> {}
+        }
     }
 
     // ================================================================ aba: Aparência
@@ -1292,6 +1352,7 @@ class ConfigLauncherActivity : Activity() {
         extrasDaAba(c, ExtrasAbas.Aba.SISTEMA, comSecao = false)
 
         confirmacoes(c)
+        emprestimoShell(c)
 
         // Apps ocultos pelo Device Owner (Config.APPS_OCULTAR/PrivilegioDO.ocultar): libera a memória sem desinstalar.
         // Chave ligada = app visível.

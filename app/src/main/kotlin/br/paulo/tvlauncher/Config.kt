@@ -60,9 +60,8 @@ object Config {
     // (inclusive na troca de tema) e listava aparelhos de outros da rede no log.
     const val SHELL_PROPRIO_DIAG = false
     // Shell próprio automático (ver GuardiaoShizuku.kt): true = o launcher se reconecta sozinho ao adb local (boot, Wi-Fi
-    // voltou, a cada 10 min) e se reconcede o que falta (autocura). Até 12/11/2026 isto também subia o servidor do Shizuku
-    // embutido, com três modos (desligado, sob demanda, sempre); o servidor saiu: o APK não instalava onde o app Shizuku
-    // já existe (as mesmas permissões declaradas), e nenhum app da Sala usava o servidor (conferido em 12/11/2026).
+    // voltou, a cada 10 min) e se reconcede o que falta (autocura). O servidor do Shizuku embutido (emprestar o shell a
+    // outros apps) tem chave própria nas Configurações, desligada de fábrica: ver ShizukuEmbutido.kt.
     const val SHELL_AUTOMATICO = true
     // VPN_FIXA: app que o Device Owner fixa como "VPN sempre ativa" (sem lockdown: se cair, a TV segue com internet).
     // 04/11/2026: o app AdGuard VPN, decisão do dono — a VPN própria do launcher (IKEv2) foi aposentada.

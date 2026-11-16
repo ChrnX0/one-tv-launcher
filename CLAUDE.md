@@ -43,8 +43,15 @@ and `values-pt/` (Portuguese); the app follows the TV's system language. Read `R
    `Congelar.kt` (`pm disable-user` via shell), `TravaSemDono.kt`, `GuardarDadosActivity`.
 2. **Own shell (uid 2000)**: built-in ADB client (`AdbConnectionManager.kt`, libadb-android) pairs with the TV's
    wireless debugging (SPAKE2) and connects to itself over TLS. Pairing without a PC: `PareamentoNaTv.kt` reads the
-   code from the screen through accessibility. `GuardiaoShizuku.kt` (historical name; Shizuku was removed) is the single
-   adb queue with self-healing. `org/conscrypt/` bridges `SSLSockets.exportKeyingMaterial` for the pairing.
+   code from the screen through accessibility. `GuardiaoShizuku.kt` (historical name) is the single
+   adb queue with self-healing. **Lending the shell** (15/11/2026, `ShizukuEmbutido.kt`, off by default, Extras/paid plan):
+   the vendored Shizuku server (`shizuku/`, see `shizuku/NOTICE.md`) is started through that queue; the APK must **never
+   define** `moe.shizuku.*` permissions (that blocked installing next to the Shizuku app; `RegrasEmprestimoTest` checks it).
+   Clients are authorized only through the server's config after the panel PIN on the TV (`PedidoShizukuActivity`). **Lending the Device Owner** (same date, `DonoEmprestado.kt`, off by default, paid plan, only while we ARE owner):
+   built-in Dhizuku server (`dhizuku/server_api`, MIT, own `DhizukuProcess` instead of the LGPL AndroidAppProcess), provider
+   `<pkg>.dhizuku_server.provider`, PIN on the TV (`PedidoDhizukuActivity`). Without "full power" a client only reaches
+   `IDevicePolicyManager`, through `FiltroDpm`/`RegrasDono` (never wipe/clear owner/transfer; never target our package;
+   unreadable call = denied). "Full power" (process, user service, delegated scopes, other binders) is per app with PIN. `org/conscrypt/` bridges `SSLSockets.exportKeyingMaterial` for the pairing.
 3. **Accessibility service** (`AutorizaShizukuService.kt`, historical name): remote keys, HOME short/long press,
    window watcher that keeps our HOME on top.
 

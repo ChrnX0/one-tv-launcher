@@ -1,0 +1,24 @@
+// Dhizuku SERVER_API (MIT, ver ../NOTICE.md): o launcher, que já é o Device Owner, faz o papel de servidor do Dhizuku
+// e empresta o dono a outros apps. Configuração comum (compileSdk, Java 21) no build.gradle.kts raiz.
+plugins {
+    id("com.android.library")
+}
+
+android {
+    namespace = 'com.rosan.dhizuku.server_api'
+    defaultConfig {
+        buildConfigField 'String', 'SERVICE_VERSION_NAME', '"0.2.0"'
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+    buildFeatures {
+        buildConfig = true
+        aidl = true
+    }
+}
+
+dependencies {
+    // Lado cliente (AIDL e constantes). MIT, sem dependências. Mesma versão que o SERVER_API 0.2.0 publica.
+    api "io.github.iamr0s:Dhizuku-API:2.7.0"
+    // tv-launcher: a origem usa io.github.iamr0s:AndroidAppProcess (LGPL-3.0) só pelo DhizukuProcess; trocado por um
+    // DhizukuProcess próprio (mesmo nome e métodos), para nada LGPL entrar no APK.
+}

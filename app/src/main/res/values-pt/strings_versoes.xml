@@ -14,6 +14,9 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Emprestar o shell: apps feitos para o Shizuku funcionam sem instalar o Shizuku (desligado de fábrica; Configurações › Emprestar poderes do sistema). Cada app pede na TV com o PIN do painel, e o painel web (Extras) mostra quem tem acesso e revoga</item>
+        <item>Emprestar o controle de dono: apps feitos para o Dhizuku usam o Device Owner do launcher (desligado de fábrica; mesmo lugar). Cada app pede na TV com o PIN; nenhum consegue tirar o dono do launcher nem apagar a TV. “Poder total” é por app, com PIN e aviso</item>
+        <item>Menus e listas que rolam (como “Áudio e legenda” do player e as pastas): os itens não passam mais por cima do título; nos menus, as bordas esmaecem quando há mais itens</item>
         <item>Arranjo dos apps: escolha entre a fileira de sempre e uma grade com todos os apps à vista (Configurações › Aparência)</item>
         <item>Tamanho dos cartões: Normal ou Grande, e cartões transparentes fora do foco (em Extras); tudo começa desligado</item>
         <item>Pacotes de ícones: instale um pacote de ícones da Play e escolha em Configurações › Aparência</item>
@@ -157,6 +160,8 @@
         <item>Protetor de tela com widgets novos, de letra maior: escolha Faixa de vidro (as próximas horas numa curva, com a hora do sol), Cartões (agora, horas, hoje e amanhã) ou Sem caixa (a temperatura grande e o tempo numa frase) em Configurações › Tela e energia › Widgets do protetor, ou no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Emprestar o shell (Shizuku)</item>
+        <item>Emprestar o controle de dono (Dhizuku)</item>
         <item>Apps em grade</item>
         <item>Cartões grandes</item>
         <item>Compartilhar visual</item>
@@ -280,6 +285,8 @@
         <item>Em Configurações › Tela e energia, OK em Widgets do protetor até o estilo que quiser e espere o protetor aparecer</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Com o PIN do painel definido, em Configurações › Emprestar poderes do sistema, mude "Emprestar o shell" para Sempre ligado. Abra um app feito para o Shizuku: a TV pergunta, aceita o PIN e o app funciona? Depois revogue no painel web (Extras) e volte para Desligado.</item>
+        <item>Em Configurações › Emprestar poderes do sistema, ligue “Emprestar o controle de dono”. Abra um app feito para o Dhizuku (ex.: OwnDroid ou App Manager): a TV pergunta, aceita o PIN com “Permitir sempre” e o app funciona? No painel web (Extras) ele aparece; revogue e desligue a opção de novo.</item>
         <item>Em Configurações › Aparência, mude Arranjo dos apps para Grade. Na tela inicial, ▲ ▼ ◀ ▶ andam pela grade sem pular para o relógio, e o VOLTAR para Fileira deixa tudo como antes?</item>
         <item>Em Configurações › Aparência, mude Tamanho dos cartões para Grande. Os cartões ficam maiores, sem cortar embaixo, e voltar para Normal deixa como antes?</item>
         <item>Em Configurações › Aparência › Compartilhar visual, aparece um QR que o celular consegue ler?</item>
