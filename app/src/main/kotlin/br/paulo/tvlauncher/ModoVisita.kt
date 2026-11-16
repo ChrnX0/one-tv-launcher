@@ -21,6 +21,9 @@ object ModoVisita {
     fun ativo(ctx: Context): Boolean = prefs(ctx).getBoolean(ATIVO, false)
 
     fun definir(ctx: Context, ligado: Boolean) {
+        // Modo hóspede (degrau 2): enquanto ele estiver ligado, a visita não desliga por aqui. Quem desliga é
+        // ModoHospede.desligar (depois do PIN na TV, ou pelo painel/adb, que já são autenticados).
+        if (!ligado && ModoHospede.ativo(ctx)) return
         prefs(ctx).edit().putBoolean(ATIVO, ligado).apply()
         Perfil.ativa(ctx)   // ideia 11: na visita, favoritos e "continuar" voltam a ser os compartilhados (e saindo, os do perfil)
     }

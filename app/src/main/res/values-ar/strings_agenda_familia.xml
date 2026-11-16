@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda da família (degrau 2, 16/11/2026): AgendaFamiliaActivity e Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="agf_titulo">جدول العائلة</string>
+    <string name="agf_sub">في الوقت المحدد ينتقل التلفاز تلقائيًا إلى ذلك الملف. ملف الطفل يشغّل وضع الأطفال ووقت النوم.</string>
+    <string name="agf_cfg_det">التبديلات المحددة: %1$d. يتغير الملف تلقائيًا في الموعد.</string>
+    <string name="agf_adicionar">إضافة تبديل</string>
+    <string name="agf_adicionar_det">ملف من، وأي أيام، وفي أي ساعة.</string>
+    <string name="agf_quem">التبديل إلى ملف من؟</string>
+    <string name="agf_dias">أي أيام؟</string>
+    <string name="agf_hora">في أي ساعة؟</string>
+    <string name="agf_todos">كل يوم</string>
+    <string name="agf_uteis">من الاثنين إلى الجمعة</string>
+    <string name="agf_fds">السبت والأحد</string>
+    <string name="agf_alguns">بعض الأيام</string>
+    <string name="agf_apagar">حذف هذا التبديل؟</string>
+    <string name="agf_apagar_sim">حذف</string>
+    <string name="agf_cheia">الجدول ممتلئ (12 تبديلًا).</string>
+    <string name="agf_sem_contas">لا توجد ملفات على هذا التلفاز بعد (حسابات Google).</string>
+</resources>

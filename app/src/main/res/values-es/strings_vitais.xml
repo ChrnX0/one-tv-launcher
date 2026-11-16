@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Vitals locais (degrau 2, item 8): quedas e travadas do launcher nos últimos 7 dias (Diagnóstico). -->
+<resources>
+    <string name="vit_titulo">Estabilidad del launcher (7 días)</string>
+    <string name="vit_ok">Ningún cierre ni bloqueo. Días de uso: %1$d.</string>
+    <string name="vit_problemas">Cierres: %1$d. Bloqueos: %2$d. Vistos en pantalla: %3$d. Días con problemas: %4$d de %5$d.</string>
+</resources>

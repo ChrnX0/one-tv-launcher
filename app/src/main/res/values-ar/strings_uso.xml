@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
+<resources>
+    <string name="uso_titulo">طريقة استخدام هذا التلفاز</string>
+    <string name="uso_det">البسيط يُخفي التبويبات التقنية (المنزل، عن بُعد، متقدم). لا يُطفأ شيء.</string>
+    <string name="uso_simples">بسيط</string>
+    <string name="uso_completo">كامل</string>
+    <string name="uso_cuida">لشخص أعتني به</string>
+    <string name="uso_pergunta">كيف سيُستخدم هذا التلفاز؟</string>
+    <string name="uso_pergunta_det">يمكنك تغييره لاحقًا من الإعدادات &gt; النظام.</string>
+    <string name="uso_simples_det">شاشة رئيسية جميلة فقط: التطبيقات والساعة والطقس. خيارات أقل في الإعدادات.</string>
+    <string name="uso_completo_det">كل شيء: التحكم من الهاتف، أجهزة المنزل، محرك الشبكة والخيارات المتقدمة.</string>
+    <string name="uso_cuida_det">تلفاز الوالدين أو الأجداد: سهل لهم، وأنت تساعد من هاتفك عن بُعد.</string>
+    <string name="uso_cuidar_longe">الرعاية عن بُعد</string>
+    <string name="uso_cuidar_longe_det">مُطفأ حتى يوافق ساكن المنزل على التلفاز.</string>
+    <string name="uso_cartoes">بطاقات كبيرة على الشاشة الرئيسية</string>
+    <string name="uso_cartoes_det">تطبيقات قليلة كبيرة، ويُقرأ الاسم بصوت عالٍ، وزر \"طلب المساعدة\". إيقافه يطلب الرمز.</string>
+    <string name="uso_trocar_det">الآن: %1$s. اضغط OK للاختيار من جديد.</string>
+</resources>

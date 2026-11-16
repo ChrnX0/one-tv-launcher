@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo de segurança da HOME (degrau 2, 16/11/2026): HomeSeguraActivity. -->
+<resources>
+    <string name="seg_titulo">Güvenli mod</string>
+    <string name="seg_texto">Ana ekran art arda %1$d kez durdu. TV\'yi kullanmaya devam edebilmeniz için bu onun basit bir sürümü.</string>
+    <string name="seg_procurar">Düzeltilmiş sürümü ara</string>
+    <string name="seg_procurar_det">Varsa şimdi indirilir ve kurulur.</string>
+    <string name="seg_procurando">Yeni sürüm aranıyor…</string>
+    <string name="seg_normal">Normal ana ekranı dene</string>
+    <string name="seg_normal_det">3 kez daha durursa bu ekran geri gelir.</string>
+    <string name="seg_config_tv">TV ayarları</string>
+    <string name="seg_erro">Neyin yanlış gittiğini gör</string>
+    <string name="seg_erro_det">Kaydedilen hatalarla tanılama.</string>
+    <string name="seg_apps">Uygulamalar</string>
+</resources>

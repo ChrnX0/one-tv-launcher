@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo de segurança da HOME (degrau 2, 16/11/2026): HomeSeguraActivity. -->
+<resources>
+    <string name="seg_titulo">Modalità provvisoria</string>
+    <string name="seg_texto">La schermata iniziale si è fermata %1$d volte di fila. Questa è una versione semplice per continuare a usare la TV.</string>
+    <string name="seg_procurar">Cerca una versione corretta</string>
+    <string name="seg_procurar_det">Se c\'è, viene scaricata e installata ora.</string>
+    <string name="seg_procurando">Ricerca di una nuova versione…</string>
+    <string name="seg_normal">Prova la schermata iniziale normale</string>
+    <string name="seg_normal_det">Se si ferma altre 3 volte, questa schermata torna.</string>
+    <string name="seg_config_tv">Impostazioni TV</string>
+    <string name="seg_erro">Vedi cosa è andato storto</string>
+    <string name="seg_erro_det">Diagnostica, con gli errori salvati.</string>
+    <string name="seg_apps">App</string>
+</resources>

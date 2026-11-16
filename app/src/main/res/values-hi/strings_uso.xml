@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
+<resources>
+    <string name="uso_titulo">यह टीवी कैसे इस्तेमाल होता है</string>
+    <string name="uso_det">सरल तकनीकी टैब (घर, रिमोट, उन्नत) छिपाता है। कुछ भी बंद नहीं होता।</string>
+    <string name="uso_simples">सरल</string>
+    <string name="uso_completo">पूरा</string>
+    <string name="uso_cuida">जिनकी मैं देखभाल करता हूँ, उनके लिए</string>
+    <string name="uso_pergunta">यह टीवी कैसे इस्तेमाल होगा?</string>
+    <string name="uso_pergunta_det">इसे बाद में सेटिंग &gt; सिस्टम में बदल सकते हैं।</string>
+    <string name="uso_simples_det">बस एक सुंदर होम स्क्रीन: ऐप, घड़ी और मौसम। सेटिंग में कम विकल्प।</string>
+    <string name="uso_completo_det">सब कुछ: फ़ोन से नियंत्रण, घर के उपकरण, नेटवर्क ड्राइव और उन्नत विकल्प।</string>
+    <string name="uso_cuida_det">माता-पिता या दादा-दादी का टीवी: उनके लिए आसान, और आप दूर से फ़ोन से मदद करें।</string>
+    <string name="uso_cuidar_longe">दूर से देखभाल</string>
+    <string name="uso_cuidar_longe_det">जब तक वहाँ रहने वाले टीवी पर सहमति न दें, बंद रहेगा।</string>
+    <string name="uso_cartoes">होम स्क्रीन पर बड़े कार्ड</string>
+    <string name="uso_cartoes_det">कुछ बड़े ऐप, नाम बोलकर सुनाया जाता है और \"मदद माँगें\" बटन। बंद करने पर PIN माँगा जाता है।</string>
+    <string name="uso_trocar_det">अभी: %1$s। फिर से चुनने के लिए OK।</string>
+</resources>

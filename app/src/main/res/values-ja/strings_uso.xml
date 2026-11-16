@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
+<resources>
+    <string name="uso_titulo">このテレビの使い方</string>
+    <string name="uso_det">シンプルでは技術的なタブ（ホーム、リモート、詳細）を隠します。何もオフにはなりません。</string>
+    <string name="uso_simples">シンプル</string>
+    <string name="uso_completo">フル</string>
+    <string name="uso_cuida">見守る家族のため</string>
+    <string name="uso_pergunta">このテレビをどう使いますか？</string>
+    <string name="uso_pergunta_det">あとで［設定］&gt;［システム］から変更できます。</string>
+    <string name="uso_simples_det">きれいなホーム画面だけ：アプリ、時計、天気。設定の項目は少なめ。</string>
+    <string name="uso_completo_det">すべて：スマホからの操作、家の機器、ネットワークドライブ、詳細設定。</string>
+    <string name="uso_cuida_det">両親や祖父母のテレビ：本人には簡単に、あなたは離れた所からスマホで手伝えます。</string>
+    <string name="uso_cuidar_longe">離れて見守る</string>
+    <string name="uso_cuidar_longe_det">住んでいる人がテレビで同意するまでオフです。</string>
+    <string name="uso_cartoes">ホーム画面に大きなカード</string>
+    <string name="uso_cartoes_det">大きなアプリを少しだけ、名前を読み上げ、「助けを呼ぶ」ボタン付き。オフにするにはPINが必要です。</string>
+    <string name="uso_trocar_det">現在：%1$s。OKで選び直します。</string>
+</resources>

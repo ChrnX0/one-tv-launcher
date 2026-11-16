@@ -22,11 +22,14 @@ class AppsEscolhaActivity : Activity() {
         const val MODO_OCULTOS = "ocultos"
         const val MODO_VISITA = "visita"
         const val MODO_JOGOS = "jogos"
+        /** Modo hóspede (degrau 2): os apps que a limpeza da saída apaga (ModoHospede). */
+        const val MODO_HOSPEDE = "hospede"
     }
 
     private lateinit var coluna: LinearLayout
     private var modo = MODO_OCULTOS
     private val linhas = mutableListOf<Pair<TextView, () -> String>>()
+    @Volatile private var hospede: MutableSet<String> = HashSet()   // MODO_HOSPEDE: lido uma vez fora da tela
 
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
@@ -35,6 +38,7 @@ class AppsEscolhaActivity : Activity() {
         val visita = modo == MODO_VISITA
         val (raiz, col) = when (modo) {
             MODO_JOGOS -> Estilo.telaLista(this, getString(R.string.jogos_escolher), getString(R.string.jogos_escolher_sub))
+            MODO_HOSPEDE -> Estilo.telaLista(this, getString(R.string.hos_apps), getString(R.string.hos_apps_sub))
             else -> Estilo.telaLista(this, getString(if (visita) R.string.cl_apps_visita else R.string.oc_titulo),
                 getString(if (visita) R.string.cfg2_apps_visita_sub else R.string.oc_subtitulo))
         }
@@ -54,16 +58,19 @@ class AppsEscolhaActivity : Activity() {
             .filter {
                 val pkg = it.activityInfo.packageName
                 pkg != packageName && pkg != Config.PACOTE_CONFIG &&
-                    ((it.activityInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0 || pkg in Config.SEMPRE_MOSTRAR)
+                    ((it.activityInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0 ||
+                        (modo != MODO_HOSPEDE && pkg in Config.SEMPRE_MOSTRAR))   // app do sistema não se limpa
             }
             .map { it.activityInfo.packageName to it.loadLabel(pm).toString() }
             .distinctBy { it.first }
             .sortedBy { it.second.lowercase() }
+            .also { if (modo == MODO_HOSPEDE) hospede = (ModoHospede.escolhidos(this) ?: ModoHospede.paraLimpar(this).toSet()).toMutableSet() }
             .also { l -> if (modo == MODO_JOGOS) l.forEach { JogosTv.ehJogo(this, it.first) } }   // deixa a resposta em cache, fora da tela
     } catch (_: Exception) { emptyList() }
 
     private fun marcado(pacote: String): Boolean = when (modo) {
         MODO_VISITA -> ModoVisita.escondeNaVisita(this, pacote)
+        MODO_HOSPEDE -> pacote in hospede
         MODO_JOGOS -> JogosTv.ehJogo(this, pacote)
         else -> pacote in Organizacao.ocultos(this)
     }
@@ -71,6 +78,7 @@ class AppsEscolhaActivity : Activity() {
     private fun alternar(pacote: String) {
         if (modo == MODO_JOGOS) JogosTv.escolher(this, pacote, if (marcado(pacote)) Jogos.FORA else Jogos.grupo(pacote, emptyMap()).name)
         else if (modo == MODO_VISITA) ModoVisita.alternar(this, pacote)
+        else if (modo == MODO_HOSPEDE) { if (ModoHospede.alternarApp(this, pacote)) hospede.add(pacote) else hospede.remove(pacote) }
         else if (pacote in Organizacao.ocultos(this)) Organizacao.mostrar(this, pacote) else Organizacao.ocultar(this, pacote)
     }
 

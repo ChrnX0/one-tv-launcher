@@ -31,6 +31,7 @@ object BackupCompleto {
     internal val PREFS_EXTRAS = listOf("player", "painel_seguro", "mcp_seguro", "unifi_seguro", "tunel_seguro",
         "extras", "cenas", "casa_ha", "modo_visita", "aviso_chuva", "aviso_temperatura", "clima",
         "jogos",   // card Jogos (14/11/2026): grupos escolhidos, IP e app do PC
+        "agenda_perfis",   // agenda da família (degrau 2, 16/11/2026): perfil troca sozinho no horário
         "gravacao",   // gravação (14/11/2026): a pasta da rede de reserva
         "nuvem",   // Na rede › OneDrive/Dropbox (14/11/2026): o id do app Microsoft e a chave do Dropbox que o dono digitou
         "sincronizar_filmes",   // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas

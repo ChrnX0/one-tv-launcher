@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda da família (degrau 2, 16/11/2026): AgendaFamiliaActivity e Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="agf_titulo">Aile programı</string>
+    <string name="agf_sub">Belirlenen saatte TV kendiliğinden o profile geçer. Çocuk profili çocuk modunu ve uyku saatini açar.</string>
+    <string name="agf_cfg_det">Planlanan geçiş: %1$d. Profil saatinde kendiliğinden değişir.</string>
+    <string name="agf_adicionar">Geçiş ekle</string>
+    <string name="agf_adicionar_det">Kimin profili, hangi günler ve saat kaçta.</string>
+    <string name="agf_quem">Kimin profiline geçilsin?</string>
+    <string name="agf_dias">Hangi günler?</string>
+    <string name="agf_hora">Saat kaçta?</string>
+    <string name="agf_todos">Her gün</string>
+    <string name="agf_uteis">Pazartesi–Cuma</string>
+    <string name="agf_fds">Cumartesi ve Pazar</string>
+    <string name="agf_alguns">Bazı günler</string>
+    <string name="agf_apagar">Bu geçiş silinsin mi?</string>
+    <string name="agf_apagar_sim">Sil</string>
+    <string name="agf_cheia">Program dolu (12 geçiş).</string>
+    <string name="agf_sem_contas">Bu TV\'de henüz profil yok (Google hesapları).</string>
+</resources>

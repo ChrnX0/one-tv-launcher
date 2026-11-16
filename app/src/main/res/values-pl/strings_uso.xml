@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
+<resources>
+    <string name="uso_titulo">Jak używany jest ten telewizor</string>
+    <string name="uso_det">Prosty ukrywa karty techniczne (Dom, Zdalnie, Zaawansowane). Nic nie jest wyłączane.</string>
+    <string name="uso_simples">Prosty</string>
+    <string name="uso_completo">Pełny</string>
+    <string name="uso_cuida">Dla osoby, którą się opiekuję</string>
+    <string name="uso_pergunta">Jak będzie używany ten telewizor?</string>
+    <string name="uso_pergunta_det">Możesz to później zmienić w Ustawienia &gt; System.</string>
+    <string name="uso_simples_det">Po prostu ładny ekran główny: aplikacje, zegar i pogoda. Mniej opcji w Ustawieniach.</string>
+    <string name="uso_completo_det">Wszystko: sterowanie z telefonu, urządzenia domowe, dysk sieciowy i opcje zaawansowane.</string>
+    <string name="uso_cuida_det">Telewizor rodziców lub dziadków: łatwy dla nich, a ty pomagasz z telefonu, z daleka.</string>
+    <string name="uso_cuidar_longe">Opieka na odległość</string>
+    <string name="uso_cuidar_longe_det">Wyłączone, dopóki mieszkająca tam osoba nie zgodzi się na telewizorze.</string>
+    <string name="uso_cartoes">Duże karty na ekranie głównym</string>
+    <string name="uso_cartoes_det">Kilka dużych aplikacji, nazwa czytana na głos i przycisk \"Poproś o pomoc\". Wyłączenie wymaga PIN-u.</string>
+    <string name="uso_trocar_det">Teraz: %1$s. OK, aby wybrać ponownie.</string>
+</resources>

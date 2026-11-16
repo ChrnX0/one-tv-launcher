@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda da família (degrau 2, 16/11/2026): AgendaFamiliaActivity e Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="agf_titulo">Family schedule</string>
+    <string name="agf_sub">At the set time, the TV switches to that profile by itself. A child profile turns on kids mode and bedtime.</string>
+    <string name="agf_cfg_det">Switches set: %1$d. The profile changes by itself at the set time.</string>
+    <string name="agf_adicionar">Add a switch</string>
+    <string name="agf_adicionar_det">Whose profile, which days and what time.</string>
+    <string name="agf_quem">Switch to whose profile?</string>
+    <string name="agf_dias">Which days?</string>
+    <string name="agf_hora">What time?</string>
+    <string name="agf_todos">Every day</string>
+    <string name="agf_uteis">Monday to Friday</string>
+    <string name="agf_fds">Saturday and Sunday</string>
+    <string name="agf_alguns">Some days</string>
+    <string name="agf_apagar">Delete this switch?</string>
+    <string name="agf_apagar_sim">Delete</string>
+    <string name="agf_cheia">The schedule is full (12 switches).</string>
+    <string name="agf_sem_contas">There are no profiles on this TV yet (Google accounts).</string>
+</resources>

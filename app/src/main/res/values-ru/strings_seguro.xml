@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo de segurança da HOME (degrau 2, 16/11/2026): HomeSeguraActivity. -->
+<resources>
+    <string name="seg_titulo">Безопасный режим</string>
+    <string name="seg_texto">Главный экран остановился %1$d раза подряд. Это его простая версия, чтобы вы могли пользоваться телевизором.</string>
+    <string name="seg_procurar">Найти исправленную версию</string>
+    <string name="seg_procurar_det">Если она есть, она скачается и установится сейчас.</string>
+    <string name="seg_procurando">Ищем новую версию…</string>
+    <string name="seg_normal">Попробовать обычный главный экран</string>
+    <string name="seg_normal_det">Если он остановится ещё 3 раза, этот экран вернётся.</string>
+    <string name="seg_config_tv">Настройки телевизора</string>
+    <string name="seg_erro">Посмотреть, что пошло не так</string>
+    <string name="seg_erro_det">Диагностика с сохранёнными ошибками.</string>
+    <string name="seg_apps">Приложения</string>
+</resources>

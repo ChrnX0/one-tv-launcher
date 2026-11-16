@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda da família (degrau 2, 16/11/2026): AgendaFamiliaActivity e Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="agf_titulo">家族のスケジュール</string>
+    <string name="agf_sub">決めた時刻に、テレビが自動でそのプロフィールに切り替わります。子どものプロフィールではキッズモードと就寝時間がオンになります。</string>
+    <string name="agf_cfg_det">予定の切り替え：%1$d。決めた時刻にプロフィールが自動で変わります。</string>
+    <string name="agf_adicionar">切り替えを追加</string>
+    <string name="agf_adicionar_det">誰のプロフィールか、何曜日か、何時か。</string>
+    <string name="agf_quem">誰のプロフィールに切り替えますか？</string>
+    <string name="agf_dias">何曜日？</string>
+    <string name="agf_hora">何時？</string>
+    <string name="agf_todos">毎日</string>
+    <string name="agf_uteis">月曜〜金曜</string>
+    <string name="agf_fds">土曜と日曜</string>
+    <string name="agf_alguns">一部の曜日</string>
+    <string name="agf_apagar">この切り替えを削除しますか？</string>
+    <string name="agf_apagar_sim">削除</string>
+    <string name="agf_cheia">スケジュールがいっぱいです（12件）。</string>
+    <string name="agf_sem_contas">このテレビにはまだプロフィール（Googleアカウント）がありません。</string>
+</resources>

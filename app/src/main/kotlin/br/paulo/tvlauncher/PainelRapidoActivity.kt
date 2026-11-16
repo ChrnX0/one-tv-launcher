@@ -564,8 +564,9 @@ class PainelRapidoActivity : Activity() {
             abrirEFechar(Intent(this, AlarmesActivity::class.java))
         }
         tVisita = tile("visita", getString(R.string.pr_visita)) {
-            ModoVisita.definir(this, !ModoVisita.ativo(this))
-            mostrarVisita()
+            // Modo hóspede (degrau 2): a visita só sai com o PIN, e sai junto com o hóspede.
+            if (ModoHospede.ativo(this)) ModoHospede.desligarComPin(this) { mostrarVisita() }
+            else { ModoVisita.definir(this, !ModoVisita.ativo(this)); mostrarVisita() }
         }
         mostrarVisita()
         // Casa (13/11/2026): as luzes e cenas do Home Assistant (CasaActivity), no lugar do "Google Home" do painel

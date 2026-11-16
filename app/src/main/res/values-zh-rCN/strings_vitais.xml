@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Vitals locais (degrau 2, item 8): quedas e travadas do launcher nos últimos 7 dias (Diagnóstico). -->
+<resources>
+    <string name="vit_titulo">启动器稳定性（7 天）</string>
+    <string name="vit_ok">没有崩溃或卡死。使用天数：%1$d</string>
+    <string name="vit_problemas">崩溃：%1$d。卡死：%2$d。在屏幕上出现：%3$d。有问题的天数：%4$d / %5$d</string>
+</resources>

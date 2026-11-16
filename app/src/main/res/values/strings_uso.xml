@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
+<resources>
+    <string name="uso_titulo">How this TV is used</string>
+    <string name="uso_det">Simple hides the technical tabs (Home, Remote, Advanced). Nothing is turned off.</string>
+    <string name="uso_simples">Simple</string>
+    <string name="uso_completo">Complete</string>
+    <string name="uso_cuida">For someone I look after</string>
+    <string name="uso_pergunta">How will this TV be used?</string>
+    <string name="uso_pergunta_det">You can change this later in Settings &gt; System.</string>
+    <string name="uso_simples_det">Just a beautiful home screen: apps, clock and weather. Fewer options in Settings.</string>
+    <string name="uso_completo_det">Everything: remote control from the phone, home devices, network drive and advanced options.</string>
+    <string name="uso_cuida_det">The TV of parents or grandparents: easy for them, and you help from your phone, from far away.</string>
+    <string name="uso_cuidar_longe">Look after from far away</string>
+    <string name="uso_cuidar_longe_det">Off until the person who lives there agrees on the TV.</string>
+    <string name="uso_cartoes">Big cards on the home screen</string>
+    <string name="uso_cartoes_det">A few big apps, names read aloud and a \"Get help\" button. Turning it off asks for the PIN.</string>
+    <string name="uso_trocar_det">Now: %1$s. OK to choose again.</string>
+</resources>

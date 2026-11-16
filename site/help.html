@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One TV help</title>
+<meta name="description" content="The One TV Launcher manual, opened from the QR code on the TV.">
+<style>
+  /* Ajuda por QR (degrau 2, 16/11/2026). A TV mostra um QR com help.html?l=<idioma>&t=<assunto>; o texto vem de
+     ajuda/<idioma>.json, gerado do próprio app por scripts/gerar-ajuda-site.py (o mesmo texto da aba Ajuda da TV).
+     Letra grande: quem lê no celular muitas vezes é quem tem dificuldade de ler a TV. */
+  :root { color-scheme: dark; }
+  [hidden] { display: none !important; }
+  body { margin: 0; padding: 24px 16px 48px; font: 20px/1.55 system-ui, sans-serif; background: #0d1216; color: #e8eeea; }
+  main { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 30px; line-height: 1.25; margin: 0 0 6px; }
+  .resumo { color: #c8d2cd; margin: 0 0 20px; }
+  .texto { white-space: pre-line; background: #ffffff10; border: 1px solid #ffffff30; border-radius: 16px; padding: 16px 18px; }
+  h2 { font-size: 22px; margin: 32px 0 10px; }
+  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+  a { color: #7fd6c2; }
+  ul a { display: block; padding: 12px 14px; border-radius: 12px; background: #ffffff0c; text-decoration: none; }
+  ul a[aria-current] { background: #7fd6c233; }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="titulo">One TV help</h1>
+  <p class="resumo" id="resumo"></p>
+  <div class="texto" id="texto" hidden></div>
+  <h2 id="outros">Help</h2>
+  <ul id="lista"></ul>
+</main>
+<script>
+(async () => {
+  const p = new URLSearchParams(location.search);
+  const pedido = (p.get("l") || navigator.language || "en");
+  const idiomas = ["en", "pt", "pt-PT", "es", "de", "fr", "it", "ru", "pl", "tr", "ja", "zh", "ko", "hi", "id", "ar"];
+  const curto = pedido.split("-")[0].toLowerCase();
+  const l = idiomas.includes(pedido) ? pedido : (curto === "in" ? "id" : (idiomas.includes(curto) ? curto : "en"));
+  document.documentElement.lang = l;
+  if (l === "ar") document.documentElement.dir = "rtl";
+  let d;
+  try { d = await (await fetch("ajuda/" + l + ".json")).json(); }
+  catch (e) { d = await (await fetch("ajuda/en.json")).json(); }
+  const ordem = ["controle", "inicio", "painel", "voz", "clima", "protetor", "relogio", "tv", "filmes", "servicos", "jogos",
+    "familia", "casa", "lg", "celular", "unidade", "claude", "backup", "sistema"].filter(k => d.topicos[k]);
+  const t = ordem.includes(p.get("t")) ? p.get("t") : null;
+  document.getElementById("outros").textContent = d.aba;
+  if (t) {
+    const x = d.topicos[t];
+    document.title = x.titulo + " · One TV";
+    document.getElementById("titulo").textContent = x.titulo;
+    document.getElementById("resumo").textContent = x.resumo;
+    const caixa = document.getElementById("texto");
+    caixa.textContent = x.texto; caixa.hidden = false;
+  } else {
+    document.getElementById("titulo").textContent = "One TV · " + d.aba;
+  }
+  const lista = document.getElementById("lista");
+  for (const k of ordem) {
+    const a = document.createElement("a");
+    a.href = "?l=" + encodeURIComponent(l) + "&t=" + k;
+    a.textContent = d.topicos[k].titulo;
+    if (k === t) a.setAttribute("aria-current", "page");
+    const li = document.createElement("li"); li.appendChild(a); lista.appendChild(li);
+  }
+})();
+</script>
+</body>
+</html>

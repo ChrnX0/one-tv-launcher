@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede (degrau 2, 16/11/2026): ModoHospede, HospedeBoasVindasActivity, Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="hos_titulo">房客模式</string>
+    <string name="hos_det">用于出租房：退房时清除房客的登录。关闭时需要 PIN。</string>
+    <string name="hos_pin_sair">退出房客模式的 PIN</string>
+    <string name="hos_pin_config">打开设置的 PIN</string>
+    <string name="hos_saida">房客退房</string>
+    <string name="hos_saida_det">到这个时间会清理流媒体应用。按 OK 更改日期。</string>
+    <string name="hos_saida_nenhuma">未设置</string>
+    <string name="hos_saida_hoje">今天 %1$s</string>
+    <string name="hos_saida_amanha">明天 %1$s</string>
+    <string name="hos_saida_dia">%1$s %2$s</string>
+    <string name="hos_hora">退房时间</string>
+    <string name="hos_hora_det">按 OK 更改时间（8:00 至 14:00）。</string>
+    <string name="hos_regras">房屋守则</string>
+    <string name="hos_regras_vazio">还没有。会显示在欢迎屏幕上。</string>
+    <string name="hos_regras_dica">例如：22 点后保持安静。11 点退房。</string>
+    <string name="hos_apps">退房时清理的应用</string>
+    <string name="hos_apps_det">会清除所选应用的登录和历史。流媒体应用已默认选中。</string>
+    <string name="hos_apps_sub">按 OK 选中或取消。系统应用无法清理。</string>
+    <string name="hos_encerrar">立即结束入住</string>
+    <string name="hos_encerrar_det">立即清理应用，并为下一位房客准备欢迎屏幕。</string>
+    <string name="hos_encerrar_pergunta">现在清除房客应用的登录和历史吗？此操作无法撤销。</string>
+    <string name="hos_encerrar_sim">清除</string>
+    <string name="hos_limpando">正在清理…</string>
+    <string name="hos_limpou">已清理应用：%1$d</string>
+    <string name="hos_limpou_falhas">已清理应用：%1$d。失败：%2$s</string>
+    <string name="hos_ultima">上次清理：%1$s</string>
+    <string name="hos_bv_titulo">欢迎！</string>
+    <string name="hos_bv_regras">房屋守则</string>
+    <string name="hos_bv_privacidade">放心登录你的应用：退房时，流媒体应用的登录和历史会自动清除。</string>
+    <string name="hos_bv_ok">开始</string>
+    <string name="hos_bv_wifi">Wi-Fi</string>
+</resources>

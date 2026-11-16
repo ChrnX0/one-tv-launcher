@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda da família (degrau 2, 16/11/2026): AgendaFamiliaActivity e Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="agf_titulo">가족 일정</string>
+    <string name="agf_sub">정해진 시간이 되면 TV가 알아서 그 프로필로 바뀝니다. 어린이 프로필은 어린이 모드와 취침 시간을 켭니다.</string>
+    <string name="agf_cfg_det">예약된 전환: %1$d. 정해진 시간에 프로필이 알아서 바뀝니다.</string>
+    <string name="agf_adicionar">전환 추가</string>
+    <string name="agf_adicionar_det">누구의 프로필, 어떤 요일, 몇 시.</string>
+    <string name="agf_quem">누구의 프로필로 바꿀까요?</string>
+    <string name="agf_dias">어떤 요일?</string>
+    <string name="agf_hora">몇 시?</string>
+    <string name="agf_todos">매일</string>
+    <string name="agf_uteis">월요일~금요일</string>
+    <string name="agf_fds">토요일과 일요일</string>
+    <string name="agf_alguns">일부 요일</string>
+    <string name="agf_apagar">이 전환을 삭제할까요?</string>
+    <string name="agf_apagar_sim">삭제</string>
+    <string name="agf_cheia">일정이 가득 찼습니다(12개).</string>
+    <string name="agf_sem_contas">이 TV에는 아직 프로필(Google 계정)이 없습니다.</string>
+</resources>

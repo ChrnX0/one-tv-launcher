@@ -44,6 +44,8 @@ object RegistroErros {
             try { gravar(app, t.name, e) } catch (_: Throwable) {}
             // Atualização vigiada: conta a queda (2 em 10 min logo depois de atualizar = versão ruim).
             try { VigiaAtualizacao.aoCair(app, e) } catch (_: Throwable) {}
+            // Modo de segurança da HOME (degrau 2): 3 quedas seguidas antes de a HOME firmar = HOME mínima.
+            try { ModoSeguro.aoCair(app) } catch (_: Throwable) {}
             anterior?.uncaughtException(t, e)
         }
     }

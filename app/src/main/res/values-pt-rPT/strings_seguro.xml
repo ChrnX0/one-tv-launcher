@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo de segurança da HOME (degrau 2, 16/11/2026): HomeSeguraActivity. -->
+<resources>
+    <string name="seg_titulo">Modo de segurança</string>
+    <string name="seg_texto">O ecrã inicial parou %1$d vezes seguidas. Esta é uma versão simples dele, para continuar a usar a TV.</string>
+    <string name="seg_procurar">Procurar versão corrigida</string>
+    <string name="seg_procurar_det">Se houver, transfere e instala agora.</string>
+    <string name="seg_procurando">A procurar versão nova…</string>
+    <string name="seg_normal">Tentar o ecrã inicial normal</string>
+    <string name="seg_normal_det">Se parar mais 3 vezes, este ecrã volta.</string>
+    <string name="seg_config_tv">Definições da TV</string>
+    <string name="seg_erro">Ver o que correu mal</string>
+    <string name="seg_erro_det">Diagnóstico, com os erros guardados.</string>
+    <string name="seg_apps">Apps</string>
+</resources>

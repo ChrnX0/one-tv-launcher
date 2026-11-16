@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo de segurança da HOME (degrau 2, 16/11/2026): HomeSeguraActivity. -->
+<resources>
+    <string name="seg_titulo">Safe mode</string>
+    <string name="seg_texto">The home screen stopped %1$d times in a row. This is a simple version of it, so you can keep using the TV.</string>
+    <string name="seg_procurar">Look for a fixed version</string>
+    <string name="seg_procurar_det">If there is one, it downloads and installs now.</string>
+    <string name="seg_procurando">Looking for a new version…</string>
+    <string name="seg_normal">Try the normal home screen</string>
+    <string name="seg_normal_det">If it stops 3 more times, this screen comes back.</string>
+    <string name="seg_config_tv">TV settings</string>
+    <string name="seg_erro">See what went wrong</string>
+    <string name="seg_erro_det">Diagnostics, with the saved errors.</string>
+    <string name="seg_apps">Apps</string>
+</resources>

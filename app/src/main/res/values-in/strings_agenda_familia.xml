@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda da família (degrau 2, 16/11/2026): AgendaFamiliaActivity e Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="agf_titulo">Jadwal keluarga</string>
+    <string name="agf_sub">Pada jam yang diatur, TV otomatis beralih ke profil itu. Profil anak menyalakan mode anak dan jam tidur.</string>
+    <string name="agf_cfg_det">Pergantian terjadwal: %1$d. Profil berganti sendiri sesuai jam.</string>
+    <string name="agf_adicionar">Tambah pergantian</string>
+    <string name="agf_adicionar_det">Profil siapa, hari apa, dan jam berapa.</string>
+    <string name="agf_quem">Beralih ke profil siapa?</string>
+    <string name="agf_dias">Hari apa saja?</string>
+    <string name="agf_hora">Jam berapa?</string>
+    <string name="agf_todos">Setiap hari</string>
+    <string name="agf_uteis">Senin sampai Jumat</string>
+    <string name="agf_fds">Sabtu dan Minggu</string>
+    <string name="agf_alguns">Beberapa hari</string>
+    <string name="agf_apagar">Hapus pergantian ini?</string>
+    <string name="agf_apagar_sim">Hapus</string>
+    <string name="agf_cheia">Jadwal penuh (12 pergantian).</string>
+    <string name="agf_sem_contas">Belum ada profil di TV ini (akun Google).</string>
+</resources>

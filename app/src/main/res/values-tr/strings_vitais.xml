@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Vitals locais (degrau 2, item 8): quedas e travadas do launcher nos últimos 7 dias (Diagnóstico). -->
+<resources>
+    <string name="vit_titulo">Başlatıcı kararlılığı (7 gün)</string>
+    <string name="vit_ok">Çökme veya donma yok. Kullanım günü: %1$d.</string>
+    <string name="vit_problemas">Çökme: %1$d. Donma: %2$d. Ekranda görülen: %3$d. Sorunlu gün: %4$d / %5$d.</string>
+</resources>

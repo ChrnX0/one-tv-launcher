@@ -1,10 +1,13 @@
 // Primeira configuração pelo celular (ideia 97, 14/11/2026). A TV sem PIN mostra um QR (EntrarPeloQrActivity) que abre
-// "/#primeira=<código>". Aqui, 5 passos, um por vez e com letra grande (quem usa nem sempre é de tecnologia):
+// "/#primeira=<código>". Aqui, 6 passos, um por vez e com letra grande (quem usa nem sempre é de tecnologia):
 //   1. PIN: com o código do QR, cria o PIN e já entra (POST /api/primeira; PrimeiraConfig.kt). Sem volta: depois do
 //      PIN, o resto usa a sessão normal do painel e as mesmas rotas das outras abas.
 //   2. Idioma: o launcher segue o idioma do Android (nunca um fixo); o botão abre na TV a tela de idioma do sistema.
 //      E o áudio preferido em filmes e séries (o mesmo campo "audio" da aba Configurações).
-//   3. TV ao vivo: a conta de canais (/api/tv/contas, a mesma da aba TV).
+//   3. Modo completo (degrau 2, item 6): teclas, opções do desenvolvedor, parear o shell e o dono do aparelho, um por
+//      vez. O botão abre a tela na TV (POST /api/primeira/poderes); a pessoa confirma com o controle; o celular
+//      pergunta o estado a cada 3 s e passa sozinho para o próximo (PrimeiraPoderes.kt decide qual é).
+//   3b. TV ao vivo: a conta de canais (/api/tv/contas, a mesma da aba TV).
 //   4. Cidade: /api/clima, a mesma da aba Configurações.
 //   5. Serviços: o cartão de Serviços da aba Configurações vem emprestado para cá e volta no fim.
 // Usa as funções globais do app.js: $, chamar, mostrar, confirmar, PrecisaPin, textoErro, abrirPainel, carregarServicos.
@@ -13,6 +16,7 @@
 const PASSOS_PRIMEIRA = [
   { id: 'pin', titulo: 'Crie um PIN' },
   { id: 'idioma', titulo: 'Idioma' },
+  { id: 'poderes', titulo: 'Modo completo', pular: true },
   { id: 'tv', titulo: 'TV ao vivo', pular: true },
   { id: 'cidade', titulo: 'Sua cidade', pular: true },
   { id: 'servicos', titulo: 'Filmes e séries', fim: true },
@@ -48,7 +52,57 @@ function mostrarPassoPrimeira() {
   $('btnPrimeiraVoltar').hidden = primeira.passo < 2;   // depois do PIN criado, não volta para ele
   if (p.id === 'pin') $('primeiraPin').focus();
   if (p.id === 'servicos') emprestarServicos();
+  if (p.id === 'poderes') vigiarPoderes(); else pararPoderes();
 }
+
+// ---- Modo completo: o que cada passo pede na TV (o texto acompanha a tela que abre lá).
+const PODERES = [
+  { id: 'teclas', nome: 'Teclas do controle', faz: 'Na TV, abra o One TV na lista da Acessibilidade e ligue.' },
+  { id: 'dev', nome: 'Opções do desenvolvedor', faz: 'Na TV, desça até "Build do Android TV" e aperte OK 7 vezes.' },
+  { id: 'parear', nome: 'Parear com a TV', faz: 'Na TV, ligue "Depuração sem fio" e entre em "Parear dispositivo com código". A TV lê o código sozinha.' },
+  { id: 'dono', nome: 'Dono do aparelho (opcional)', faz: 'Na TV, escolha "Tornar o launcher dono do aparelho" e confirme. A conta Google fica.' },
+];
+let vigiaPoderes = 0;
+
+function desenharPoderes(e) {
+  const feito = { teclas: e.teclas, dev: e.dev, parear: e.shell, dono: e.dono };
+  const lista = $('primeiraPoderes');
+  lista.textContent = '';
+  for (const p of PODERES) {
+    const li = document.createElement('li');
+    li.className = feito[p.id] ? 'feito' : (p.id === e.proximo ? 'agora' : '');
+    if (feito[p.id]) { const v = document.createElement('span'); v.className = 'ok'; v.textContent = '✓'; li.appendChild(v); }
+    const nome = document.createElement('strong');
+    nome.textContent = p.nome;   // separado do ✓: o i18n.js traduz o texto inteiro do nó
+    li.appendChild(nome);
+    if (p.id === e.proximo) {   // só o passo da vez tem texto e botão: um por vez, sem pensar
+      const t = document.createElement('p'); t.textContent = p.faz; li.appendChild(t);
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'botao-secundario'; b.textContent = 'Abrir na TV';
+      b.addEventListener('click', async () => {
+        try { await chamar('POST', '/api/primeira/poderes', { passo: p.id }); aviso('Abriu na TV. Use o controle.', 'ok'); }
+        catch (err) { mostrar($('erroPrimeira'), textoErro(err)); }
+      });
+      li.appendChild(b);
+    }
+    lista.appendChild(li);
+  }
+  $('primeiraPoderesPronto').hidden = !!e.proximo;
+}
+
+async function lerPoderes() {
+  try {
+    // fetch direto (sem o "ocupado" do chamar): é a consulta de fundo a cada 3 s.
+    const r = await fetch('/api/primeira/poderes', { headers: { 'X-Painel': '1' }, credentials: 'same-origin', cache: 'no-store' });
+    if (r.ok) desenharPoderes(await r.json());
+  } catch (e) { /* a TV pode estar reiniciando o serviço: tenta de novo na próxima */ }
+}
+function vigiarPoderes() {
+  pararPoderes();
+  lerPoderes();
+  vigiaPoderes = setInterval(lerPoderes, 3000);
+}
+function pararPoderes() { if (vigiaPoderes) { clearInterval(vigiaPoderes); vigiaPoderes = 0; } }
 
 async function prepararPassos() {
   // O que a TV já tem (idioma do Android, áudio, cidade, contas): cada passo mostra antes de perguntar.
@@ -125,6 +179,7 @@ async function gravarPassoPrimeira() {
 }
 
 async function terminarPrimeira() {
+  pararPoderes();
   devolverServicos();
   $('telaPrimeira').hidden = true;
   await abrirPainel();

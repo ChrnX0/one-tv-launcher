@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede (degrau 2, 16/11/2026): ModoHospede, HospedeBoasVindasActivity, Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="hos_titulo">Modo huésped</string>
+    <string name="hos_det">Para alquiler: los inicios de sesión del huésped se borran al salir. Para apagarlo, pide el PIN.</string>
+    <string name="hos_pin_sair">PIN para salir del modo huésped</string>
+    <string name="hos_pin_config">PIN para abrir los ajustes</string>
+    <string name="hos_saida">Salida del huésped</string>
+    <string name="hos_saida_det">A esta hora se limpian las apps de streaming. OK cambia el día.</string>
+    <string name="hos_saida_nenhuma">Sin fijar</string>
+    <string name="hos_saida_hoje">Hoy a las %1$s</string>
+    <string name="hos_saida_amanha">Mañana a las %1$s</string>
+    <string name="hos_saida_dia">%1$s a las %2$s</string>
+    <string name="hos_hora">Hora de salida</string>
+    <string name="hos_hora_det">OK cambia la hora (8:00 a 14:00).</string>
+    <string name="hos_regras">Normas de la casa</string>
+    <string name="hos_regras_vazio">Ninguna todavía. Aparecen en la bienvenida.</string>
+    <string name="hos_regras_dica">Ej.: Silencio después de las 22 h. Salida a las 11 h.</string>
+    <string name="hos_apps">Apps que se limpian al salir</string>
+    <string name="hos_apps_det">Se borran los inicios de sesión y el historial de las apps marcadas. Las de streaming ya vienen marcadas.</string>
+    <string name="hos_apps_sub">OK marca o desmarca. Las apps del sistema no se pueden limpiar.</string>
+    <string name="hos_encerrar">Terminar la estancia ahora</string>
+    <string name="hos_encerrar_det">Limpia las apps ahora y prepara la bienvenida del próximo huésped.</string>
+    <string name="hos_encerrar_pergunta">¿Borrar ahora los inicios de sesión y el historial de las apps del huésped? No se puede deshacer.</string>
+    <string name="hos_encerrar_sim">Borrar</string>
+    <string name="hos_limpando">Limpiando…</string>
+    <string name="hos_limpou">Apps limpiadas: %1$d.</string>
+    <string name="hos_limpou_falhas">Apps limpiadas: %1$d. Fallaron: %2$s</string>
+    <string name="hos_ultima">Última limpieza: %1$s</string>
+    <string name="hos_bv_titulo">¡Bienvenido!</string>
+    <string name="hos_bv_regras">Normas de la casa</string>
+    <string name="hos_bv_privacidade">Inicia sesión en tus apps sin miedo: al salir, los inicios de sesión y el historial de las apps de streaming se borran solos.</string>
+    <string name="hos_bv_ok">Empezar</string>
+    <string name="hos_bv_wifi">Wi-Fi</string>
+</resources>
