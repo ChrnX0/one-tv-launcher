@@ -136,7 +136,7 @@ object Ssdp {
      * clique abre o painel. Era "· arquivos" e abria a página /unidade; trocado em 16/11/2026 porque os arquivos já
      * aparecem sozinhos em Este Computador e o dono esperava o painel ali. Até 60 letras.
      */
-    fun nomeVisivel(nomeTv: String): String = "${nomeTv.take(45)} · painel"
+    fun nomeVisivel(nomeTv: String): String = "${nomeNaUnidade(nomeTv).take(50)} · painel"   // "Sofaly · Sala · painel"
 
     /**
      * O nome da TV em "Este Computador" (16/11/2026): "Sofaly · Sala de estar". Com a marca na frente, as TVs da

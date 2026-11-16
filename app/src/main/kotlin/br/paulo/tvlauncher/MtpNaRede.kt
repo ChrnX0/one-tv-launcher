@@ -4,9 +4,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.database.ContentObserver
 import android.os.Build
 import android.os.Environment
 import android.os.storage.StorageManager
+import android.provider.Settings
 import android.util.Log
 import java.net.ServerSocket
 import java.nio.ByteBuffer
@@ -33,6 +35,9 @@ object MtpNaRede {
     @Volatile private var armazens: List<MtpArmazem> = listOf(MtpArmazem.interno())
     private var receptor: BroadcastReceiver? = null
     private var ondeRegistrei: Context? = null   // o contexto do app (não de uma tela): pode ficar guardado
+    // Nome da TV trocado nas configurações (16/11/2026): o computador só relê o nome quando o aparelho "volta".
+    private var vigiaNome: ContentObserver? = null
+    @Volatile private var nomeAnunciado = ""
 
     /** A memória interna + os pendrives montados agora. O nome de cada pendrive vem do Android, no idioma da TV. */
     private fun lerArmazens(app: Context): List<MtpArmazem> {
@@ -110,6 +115,23 @@ object MtpNaRede {
             addDataScheme("file")   // estes avisos trazem o caminho do volume como "file://..."; sem isto o filtro não casa
         }
         try { app.registerReceiver(r, filtro); receptor = r; ondeRegistrei = app } catch (e: Exception) { Log.w(TAG, "avisos de pendrive: $e") }
+        nomeAnunciado = PainelVizinhos.nomeDaTv(app)
+        if (vigiaNome == null) {
+            // ContentObserver: o Android chama onChange quando o valor "device_name" das configurações muda
+            val v = object : ContentObserver(null) {
+                override fun onChange(selfChange: Boolean) {
+                    if (PainelVizinhos.nomeDaTv(app) == nomeAnunciado || servico == null) return
+                    // fora da thread que avisou: religar fecha portas e escreve na rede
+                    Thread({
+                        Log.i(TAG, "nome da TV mudou: anunciando de novo")
+                        desligar(); ligar(app)
+                        AnuncioUpnp.desligar(); AnuncioUpnp.ligar(app)   // o adeus + o olá fazem o Windows reler a descrição
+                    }, "Mtp-nome").apply { isDaemon = true }.start()
+                }
+            }
+            try { app.contentResolver.registerContentObserver(Settings.Global.getUriFor("device_name"), false, v); vigiaNome = v }
+            catch (e: Exception) { Log.w(TAG, "vigia do nome: $e") }
+        }
         Log.i(TAG, "MTP pela rede ligado na porta ${PtpIp.PORTA}")
     }
 
