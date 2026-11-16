@@ -84,7 +84,8 @@ object MtpNaRede {
         val u = UUID.fromString(Ssdp.uuidMtp(id))
         val guid = ByteBuffer.allocate(16).putLong(u.mostSignificantBits).putLong(u.leastSignificantBits).array()
         val versao = try { app.packageManager.getPackageInfo(app.packageName, 0).versionName ?: "1" } catch (_: Exception) { "1" }
-        val ap = Mtp.Aparelho(PainelVizinhos.nomeDaTv(app), Build.MODEL ?: "Android TV", versao, id, guid)
+        val icone = try { app.assets.open("upnp/sofaly.ico").use { it.readBytes() } } catch (_: Exception) { null }
+        val ap = Mtp.Aparelho(PainelVizinhos.nomeDaTv(app), Build.MODEL ?: "Android TV", versao, id, guid, icone)
         armazens = try { lerArmazens(app) } catch (_: Exception) { listOf(MtpArmazem.interno()) }
         val s = MtpServico(ss, ap, MtpLoja({ armazens }) { PainelArquivos.avisarGaleria(app, it) },
             aceitaRede = { PainelWeb.daRedeDeCasa(it) },

@@ -73,7 +73,7 @@ object Ssdp {
         return "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<root xmlns=\"urn:schemas-upnp-org:device-1-0\">" +
             "<specVersion><major>1</major><minor>0</minor></specVersion><device>" +
             "<deviceType>$TIPO</deviceType><friendlyName>${e(nome)}</friendlyName>" +
-            "<manufacturer>One TV Launcher</manufacturer><modelName>One TV Launcher</modelName>" +
+            "<manufacturer>$MARCA</manufacturer><modelName>$MARCA</modelName>$ICONES" +
             "<modelDescription>${e("Arquivos da TV pela rede (WebDAV)")}</modelDescription>" +
             "<UDN>uuid:${e(uuid)}</UDN><presentationURL>${e(pagina)}</presentationURL></device></root>\n"
     }
@@ -85,6 +85,15 @@ object Ssdp {
      * a TV vira um dispositivo portátil, como um celular no cabo; os arquivos vão pela porta 15740 (MtpIp.kt).
      */
     const val TIPO_MTP = "urn:microsoft-com:device:mtp:1"
+
+    /** O nome do produto (16/11/2026), que o Windows mostra como fabricante e modelo do aparelho. */
+    const val MARCA = "Sofaly"
+    /** O ícone da marca que o Windows mostra na tela "Rede" (arquivos em assets/upnp, servidos pelo painel). */
+    const val CAMINHO_ICONES = "/upnp/"
+    val ARQUIVOS_ICONE = mapOf("sofaly-48.png" to 48, "sofaly-120.png" to 120)
+    val ICONES = "<iconList>" + ARQUIVOS_ICONE.entries.joinToString("") { (arq, lado) ->
+        "<icon><mimetype>image/png</mimetype><width>$lado</width><height>$lado</height><depth>32</depth><url>$CAMINHO_ICONES$arq</url></icon>"
+    } + "</iconList>"
     const val CAMINHO_MTP = "/upnp/onetv-mtp.xml"
     const val CAMINHO_MTP_SERVICO = "/upnp/onetv-mtp-servico.xml"
 
@@ -104,7 +113,7 @@ object Ssdp {
             "<pnpx:X_deviceCategory>MediaDevices</pnpx:X_deviceCategory>" +
             "<df:X_deviceCategory>Multimedia.DMP</df:X_deviceCategory>" +
             "<deviceType>$TIPO_MTP</deviceType><friendlyName>${e(nome)}</friendlyName>" +
-            "<manufacturer>One TV Launcher</manufacturer><modelName>One TV Launcher</modelName>" +
+            "<manufacturer>$MARCA</manufacturer><modelName>$MARCA</modelName>$ICONES" +
             "<modelDescription>${e("Arquivos da TV")}</modelDescription><serialNumber>${e(serie)}</serialNumber>" +
             "<UDN>uuid:${e(uuid)}</UDN><serviceList><service>" +
             "<serviceType>urn:microsoft-com:service:MtpNullService:1</serviceType>" +

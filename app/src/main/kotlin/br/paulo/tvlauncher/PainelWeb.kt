@@ -658,6 +658,9 @@ object PainelWeb {
             Ssdp.CAMINHO_DESCRICAO -> if (PainelDav.ligado(app)) return descricaoUpnp(host)
             "/unidade" -> if (PainelDav.ligado(app)) return paginaUnidade()
             Ssdp.CAMINHO_MTP -> if (PainelDav.ligado(app)) return descricaoMtp(host)
+            // o ícone da marca que as descrições acima apontam (só os nomes da lista: nada de caminho vindo de fora)
+            in Ssdp.ARQUIVOS_ICONE.keys.map { Ssdp.CAMINHO_ICONES + it } -> if (PainelDav.ligado(app)) return Resposta(200, "image/png",
+                app.assets.open("upnp/" + req.caminho.removePrefix(Ssdp.CAMINHO_ICONES)).use { it.readBytes() }, mapOf("Cache-Control" to "max-age=86400"))
             Ssdp.CAMINHO_MTP_SERVICO -> if (PainelDav.ligado(app)) return Resposta(200, "text/xml; charset=utf-8", Ssdp.SERVICO_MTP.toByteArray())
             // O .cmd roda como administrador e instala um certificado no Windows: só sai pela porta https (15/11/2026).
             // Pelo http, alguém no meio do caminho trocaria o certificado de dentro dele; lá, manda para o https.

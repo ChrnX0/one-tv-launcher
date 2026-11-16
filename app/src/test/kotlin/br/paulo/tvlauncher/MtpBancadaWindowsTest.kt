@@ -24,6 +24,8 @@ import java.net.ServerSocket
  * ONETV_BANCADA_ARMAZENS="nome|volume|0;nome|volume|1" já sobe com esses armazenamentos a mais.
  */
 class MtpBancadaWindowsTest {
+    private companion object { const val NOME = "Bancada Sofaly" }
+
     @Test fun bancada() {
         val ip = System.getenv("ONETV_BANCADA_IP")
         Assume.assumeTrue(ip != null)
@@ -55,12 +57,13 @@ class MtpBancadaWindowsTest {
                     anotar("http $linha de ${c.inetAddress.hostAddress}")
                     val caminho = linha.split(" ").getOrElse(1) { "" }
                     val corpo = when (caminho) {
-                        Ssdp.CAMINHO_MTP -> Ssdp.descricaoMtp("Bancada One TV", uuid(), "http://$ip:$portaHttp/", "bancada-1")
+                        Ssdp.CAMINHO_MTP -> Ssdp.descricaoMtp(NOME, uuid(), "http://$ip:$portaHttp/", "bancada-1")
                         Ssdp.CAMINHO_MTP_SERVICO -> Ssdp.SERVICO_MTP
                         else -> null
                     }
-                    val b = (corpo ?: "nada").toByteArray()
-                    c.getOutputStream().write(("HTTP/1.1 ${if (corpo == null) "404 Not Found" else "200 OK"}\r\nContent-Type: text/xml; charset=utf-8\r\n" +
+                    val icone = Ssdp.ARQUIVOS_ICONE.keys.firstOrNull { Ssdp.CAMINHO_ICONES + it == caminho }?.let { File("src/main/assets/upnp/$it").readBytes() }
+                    val b = icone ?: (corpo ?: "nada").toByteArray()
+                    c.getOutputStream().write(("HTTP/1.1 ${if (corpo == null && icone == null) "404 Not Found" else "200 OK"}\r\nContent-Type: ${if (icone != null) "image/png" else "text/xml; charset=utf-8"}\r\n" +
                         "Content-Length: ${b.size}\r\nConnection: close\r\n\r\n").toByteArray() + b)
                     c.getOutputStream().flush()
                 } catch (_: Exception) {} finally { try { c.close() } catch (_: Exception) {} }
@@ -96,7 +99,8 @@ class MtpBancadaWindowsTest {
         }.apply { isDaemon = true }.start()
 
         // O servidor MTP, que sobe e cai a pedido.
-        val ap = Mtp.Aparelho("Bancada One TV", "One TV", "1", "bancada-1", ByteArray(16) { (it + 40).toByte() })
+        val ap = Mtp.Aparelho(NOME, "Bancada", "1", "bancada-1", ByteArray(16) { (it + 40).toByte() },
+            File("src/main/assets/upnp/sofaly.ico").takeIf { it.isFile }?.readBytes())
         var servico: MtpServico? = null
         val armazens = java.util.concurrent.CopyOnWriteArrayList(listOf(MtpArmazem.interno()))
         var pendrives = 0

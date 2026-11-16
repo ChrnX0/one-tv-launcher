@@ -183,6 +183,9 @@ object Mtp {
 
     /** Propriedade do aparelho: o nome amigável (o que aparece em Este Computador). */
     const val PA_NOME = 0xD402
+    /** Propriedade do aparelho: o ícone (um arquivo .ico inteiro), que o Windows mostra em Este Computador. */
+    const val PA_ICONE = 0xD405
+    const val T_BYTES = 0x4002   // lista de bytes
 
     /** Um armazém só: a memória interna. O número é (unidade física 1, partição 1). */
     const val ARMAZEM = 0x00010001
@@ -193,7 +196,11 @@ object Mtp {
     const val EV_ARMAZEM_ENTROU = 0x4004
     const val EV_ARMAZEM_SAIU = 0x4005
 
-    class Aparelho(val nome: String, val modelo: String, val versao: String, val serie: String, val guid: ByteArray)
+    class Aparelho(val nome: String, val modelo: String, val versao: String, val serie: String, val guid: ByteArray,
+                   val icone: ByteArray? = null)
+
+    /** Uma lista de bytes no formato do MTP: quantos, depois eles. */
+    fun listaBytes(b: ByteArray): ByteArray = Escritor().u32(b.size).cru(b).bytes()
 
     /** Escreve números little-endian e textos do MTP num vetor de bytes. */
     class Escritor {
@@ -265,10 +272,10 @@ object Mtp {
         .u16(0)                        // modo de funcionamento padrão
         .lista16(OPERACOES)
         .lista16(intArrayOf(EV_ARMAZEM_ENTROU, EV_ARMAZEM_SAIU))   // eventos: só pendrive que entra ou sai
-        .lista16(intArrayOf(PA_NOME))
+        .lista16(if (a.icone != null) intArrayOf(PA_NOME, PA_ICONE) else intArrayOf(PA_NOME))
         .lista16(intArrayOf())         // formatos de captura (não somos câmera)
         .lista16(intArrayOf(F_INDEFINIDO, F_PASTA) + FORMATOS.values.distinct().sorted().toIntArray())
-        .texto("One TV Launcher").texto(a.modelo).texto(a.versao).texto(a.serie)
+        .texto(Ssdp.MARCA).texto(a.modelo).texto(a.versao).texto(a.serie)
         .bytes()
 
     fun infoArmazem(total: Long, livre: Long, nome: String, volume: String = VOLUME_INTERNO, removivel: Boolean = false): ByteArray = Escritor()
@@ -760,13 +767,18 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
                 responder(cod, tid)
             }
             Mtp.OP_DESC_PROP_APARELHO ->
-                if (p[0] != Mtp.PA_NOME) responder(Mtp.PROP_APARELHO_INVALIDA, tid)
+                if (p[0] == Mtp.PA_ICONE && ap.icone != null) {
+                    // código, tipo, só leitura, valor de fábrica (vazio), valor de agora, sem lista de valores permitidos
+                    mandar(tid, Mtp.Escritor().u16(Mtp.PA_ICONE).u16(Mtp.T_BYTES).u8(0).u32(0).cru(Mtp.listaBytes(ap.icone)).u8(0).bytes())
+                    responder(Mtp.OK, tid)
+                } else if (p[0] != Mtp.PA_NOME) responder(Mtp.PROP_APARELHO_INVALIDA, tid)
                 else {
                     mandar(tid, Mtp.Escritor().u16(Mtp.PA_NOME).u16(Mtp.T_TEXTO).u8(0).texto(ap.nome).texto(ap.nome).u8(0).bytes())
                     responder(Mtp.OK, tid)
                 }
             Mtp.OP_VALOR_PROP_APARELHO ->
-                if (p[0] != Mtp.PA_NOME) responder(Mtp.PROP_APARELHO_INVALIDA, tid)
+                if (p[0] == Mtp.PA_ICONE && ap.icone != null) { mandar(tid, Mtp.listaBytes(ap.icone)); responder(Mtp.OK, tid) }
+                else if (p[0] != Mtp.PA_NOME) responder(Mtp.PROP_APARELHO_INVALIDA, tid)
                 else { mandar(tid, Mtp.Escritor().texto(ap.nome).bytes()); responder(Mtp.OK, tid) }
             Mtp.OP_PROPS_DO_FORMATO -> { mandar(tid, Mtp.Escritor().lista16(Mtp.PROPS.keys.toIntArray()).bytes()); responder(Mtp.OK, tid) }
             Mtp.OP_DESC_PROP -> {
@@ -921,9 +933,9 @@ class MtpServico(
                 val aberta = sessoes[l.u32()]?.takeIf { it.ip == c.inetAddress.hostAddress && it.evento.compareAndSet(null, c) }
                 if (aberta == null) { PtpIp.escrever(s, PtpIp.INICIO_RECUSADO, Mtp.Escritor().u32(1).bytes()); s.flush(); return }
                 val sessao = aberta.sessao
-                PtpIp.escrever(s, PtpIp.INICIO_EVENTO_OK, ByteArray(0)); s.flush()
+                // o "ok" sai antes de qualquer aviso: quem avisa (avisarArmazem) espera esta trava
+                synchronized(s) { PtpIp.escrever(s, PtpIp.INICIO_EVENTO_OK, ByteArray(0)); s.flush(); aberta.saida = s }
                 c.soTimeout = 0
-                aberta.saida = s
                 while (true) {
                     val (t, b) = try { PtpIp.ler(e) } catch (_: EOFException) { return }
                     when (t) {
