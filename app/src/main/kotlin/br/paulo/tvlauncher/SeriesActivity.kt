@@ -43,6 +43,7 @@ class SeriesActivity : Activity() {
     private companion object {
         const val ANTERIORMENTE_OFF = "anteriormente_off"   // prefs "player" (vai no backup): o dono desligou o resumo
         const val MAX_NOVIDADES = 15
+        const val ESPERA_EXTERNO_MS = 150L   // quanto a ficha do servidor espera pela de fora antes de desenhar sozinha
         const val MIN_PULAR = 30
         const val BUSCAR = "*buscar"
         const val FILTRO = "*filtro"
@@ -771,7 +772,8 @@ class SeriesActivity : Activity() {
         // de 50-110 ms na TV (medido em 15/11/2026). Agora os que chegam juntos viram um só.
         painel.removeAllViews(); painel.visibility = View.VISIBLE; painel.requestFocus()
         telaDeTras.visibility = View.INVISIBLE
-        tela.removeCallbacks(desenhoPendente); tela.postDelayed(desenhoPendente, 250)
+        pedirDesenho(250)
+        val externoVem = InfoExternaCache.temTmdb() || InfoExternaCache.temNotas(this)
         Fundo.rodar {
             val f = PlayerCarga.fichaSerie(this, s)
             tela.post {
@@ -779,24 +781,36 @@ class SeriesActivity : Activity() {
                 fichaAberta = f
                 atualizarProgresso(s, f)
                 temporada = ultimos[s.chave]?.temporada?.takeIf { f?.temporadas?.containsKey(it) == true } ?: f?.temporadas?.keys?.firstOrNull() ?: 1
-                pedirDesenho()
+                // A ficha de fora costuma chegar ~50 ms depois: espera um pouco por ela para desenhar uma vez só.
+                pedirDesenho(if (externoVem && externo?.first !== s) ESPERA_EXTERNO_MS else 0)
             }
             // Ficha de fora, depois da do servidor; sem chave nenhuma, não faz nada.
-            if (InfoExternaCache.temTmdb() || InfoExternaCache.temNotas(this)) {
+            if (externoVem) {
                 val g = InfoExternaCache.resolver(this, s.chave, s.nome, s.ano, true, f?.tmdb ?: s.tmdb)
-                tela.post { if (!isDestroyed && aberta === s) { externo = s to g; pedirDesenho() } }
+                tela.post {
+                    if (isDestroyed || aberta !== s) return@post
+                    // Reaberta (volta do vídeo): a mesma ficha de fora de antes não muda nada na tela, não redesenha.
+                    val mudou = externo?.let { it.first !== s || it.second != g } ?: true
+                    externo = s to g
+                    if (mudou || desenhoMarcado) pedirDesenho()
+                }
                 val id = g.tmdb
                 if (f != null && id != null) tela.post { if (!isDestroyed && aberta === s) trazerEpisodiosVistos(s, f, id) }
             }
         }
     }
 
-    /** Um desenho da ficha no próximo giro da tela; vários pedidos seguidos (dados que chegam juntos) viram um só. */
-    private val desenhoPendente = Runnable { if (aberta != null && !isDestroyed) desenharFicha() }
-    private fun pedirDesenho() { tela.removeCallbacks(desenhoPendente); tela.post(desenhoPendente) }
+    /**
+     * Um desenho da ficha no próximo giro da tela (ou daqui a [espera] ms); vários pedidos seguidos viram um só.
+     * Cada desenho refaz a ficha inteira (16-27 ms de tela na TV da Sala, medido em 16/11/2026 com atrace): servidor e
+     * TMDB chegando 40-50 ms um do outro eram dois desenhos e um tranco a mais.
+     */
+    private var desenhoMarcado = false
+    private val desenhoPendente = Runnable { desenhoMarcado = false; if (aberta != null && !isDestroyed) desenharFicha() }
+    private fun pedirDesenho(espera: Long = 0) { desenhoMarcado = true; tela.removeCallbacks(desenhoPendente); tela.postDelayed(desenhoPendente, espera) }
 
     private fun fecharFicha() {
-        tela.removeCallbacks(desenhoPendente)
+        tela.removeCallbacks(desenhoPendente); desenhoMarcado = false
         aberta = null; fichaAberta = null; verEpisodios = false; painel.visibility = View.GONE; painel.removeAllViews()
         telaDeTras.visibility = View.VISIBLE
         if (naGrade.isNotEmpty()) grade.requestFocus() else coluna.focar()

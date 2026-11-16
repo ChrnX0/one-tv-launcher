@@ -50,6 +50,7 @@ import java.util.Locale
 class FilmesActivity : Activity() {
     private companion object {
         const val MIN_PULAR = 30   // grade menor que isso se anda no controle mesmo
+        const val ESPERA_EXTERNO_MS = 150L   // quanto a ficha do servidor espera pela de fora antes de desenhar sozinha
         const val BUSCAR = "*buscar"
         const val CONTINUAR = "*continuar"
         const val INTERESSES = "*interesses"
@@ -775,12 +776,15 @@ class FilmesActivity : Activity() {
             val vis = filmes
             Fundo.rodar {
                 val col = FilmesFiltro.colecao(vis, f)
-                tela.post { if (!isDestroyed && ficha === f) { colecaoFicha = f to col; if (col.size > 1) pedirDesenho() } }
+                // Com um desenho já marcado, a coleção entra nele (os dados são lidos na hora de desenhar).
+                tela.post { if (!isDestroyed && ficha === f) { colecaoFicha = f to col; if (col.size > 1 && !desenhoMarcado) pedirDesenho() } }
             }
         }
+        val externoVem = InfoExternaCache.temTmdb() || InfoExternaCache.temNotas(this)
         Fundo.rodar {
             val info = PlayerCarga.fichaFilme(this, f)
-            tela.post { if (!isDestroyed && ficha === f) { fichaInfo = info; pedirDesenho() } }
+            // A ficha de fora costuma chegar ~50 ms depois: espera um pouco por ela para desenhar uma vez só.
+            tela.post { if (!isDestroyed && ficha === f) { fichaInfo = info; pedirDesenho(if (externoVem && externo?.first !== f) ESPERA_EXTERNO_MS else 0) } }
             buscarExterno(f, info)
         }
     }
@@ -802,18 +806,23 @@ class FilmesActivity : Activity() {
         }
         tela.post {
             if (isDestroyed || ficha !== f) return@post
+            // Reaberta (volta do vídeo ou do Elenco): a mesma ficha de fora de antes não muda nada na tela, não redesenha.
+            val mudou = externo?.let { it.first !== f || it.second != g } != false || sagaExterna?.second != saga
             externo = f to g
             sagaExterna = saga?.let { f to it }
-            pedirDesenho()
+            if (mudou || desenhoMarcado) pedirDesenho()
         }
     }
 
     /** Os dados que chegam juntos (servidor, coleção, TMDB) viram um desenho só da ficha, mantendo o foco (15/11/2026). */
-    private val desenhoPendente = Runnable { ficha?.takeIf { !isDestroyed }?.let { desenharFicha(it, fichaInfo, manterFoco = true) } }
-    private fun pedirDesenho() { tela.removeCallbacks(desenhoPendente); tela.post(desenhoPendente) }
+    // Cada desenho refaz a ficha inteira (16-27 ms de tela na TV da Sala, atrace de 16/11/2026): servidor e TMDB chegando
+    // 40-50 ms um do outro eram dois desenhos e um tranco a mais. [espera]: adia o desenho; um pedido novo substitui.
+    private var desenhoMarcado = false
+    private val desenhoPendente = Runnable { desenhoMarcado = false; ficha?.takeIf { !isDestroyed }?.let { desenharFicha(it, fichaInfo, manterFoco = true) } }
+    private fun pedirDesenho(espera: Long = 0) { desenhoMarcado = true; tela.removeCallbacks(desenhoPendente); tela.postDelayed(desenhoPendente, espera) }
 
     private fun fecharFicha() {
-        tela.removeCallbacks(desenhoPendente)
+        tela.removeCallbacks(desenhoPendente); desenhoMarcado = false
         ficha = null; painelFicha.visibility = View.GONE; painelFicha.removeAllViews()
         telaDeTras.visibility = View.VISIBLE
         if (naGrade.isNotEmpty()) grade.requestFocus() else coluna.focar()
