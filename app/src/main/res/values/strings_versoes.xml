@@ -17,7 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Alarm with an LG NetCast TV: the LG starts low (5) and rises step by step, over the alarm's ramp, to a fixed volume you choose in Alarms (“TV volume when ringing”, 10 to 30); when it stops, the volume goes back</item>
+        <item>Alarm with an LG NetCast TV: the LG starts low (5) and rises step by step, over the alarm\'s ramp, to a fixed volume you choose in Alarms (“TV volume when ringing”, 10 to 30); when it stops, the volume goes back</item>
         <item>Sleep timer: the LG now turns off first and the Chromecast 2 s later, so the LG no longer shows its input-selection screen before going to standby</item>
         <item>14 more languages: Spanish, French, German, Italian, Polish, Russian, Turkish, Indonesian, Hindi, Arabic, Japanese, Korean, Chinese and Portuguese (Portugal). The launcher follows the TV language (Settings › System › Language)</item>
         <item>Care from afar (off by default; Settings › Family): hold BACK for 3 s to send a help request to family phones, reminders with “Done” that warn if not confirmed, and a notice when the TV was not turned on at the usual time. Turning it on needs the consent of whoever lives with the TV, given with the remote</item>
