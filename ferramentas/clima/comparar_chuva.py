@@ -8,7 +8,7 @@ Modos:
   verificar  -> lê o CSV salvo (ferramentas/clima/previsao.csv) e compara com a chuva que caiu,
                 tirada da reanálise ERA5 (arquivo do Open-Meteo, fonte independente dos dois modelos).
 """
-import csv, io, json, os, sys, urllib.parse, urllib.request
+import csv, io, json, os, sys, urllib.error, urllib.parse, urllib.request
 from datetime import datetime, timedelta, timezone
 
 CIDADES = {  # coordenadas públicas do centro de cada capital
@@ -18,8 +18,13 @@ CIDADES = {  # coordenadas públicas do centro de cada capital
 
 def pegar(url):
     req = urllib.request.Request(url, headers={"User-Agent": "Sofaly-teste-clima/1.0"})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return json.load(r)
+    try:
+        with urllib.request.urlopen(req, timeout=30) as r:
+            return json.load(r)
+    except urllib.error.HTTPError as e:
+        # A mensagem de erro da API não repete a chave; ajuda a saber se é chave errada ou ainda não ativa.
+        print(f"HTTP {e.code} em {url.split('?')[0]}: {e.read()[:300].decode(errors='replace')}")
+        raise
 
 def weatherapi(lat, lon, chave):
     # Só campos do Free: forecast 3 dias, hour[].chance_of_rain e precip_mm.
@@ -36,7 +41,8 @@ def openmeteo(lat, lon):
     return {t: (p, mm) for t, p, mm in zip(d["time"], d["precipitation_probability"], d["precipitation"])}, r["utc_offset_seconds"]
 
 def prever():
-    chave = os.environ["WEATHERAPI_CHAVE"]
+    chave = os.environ["WEATHERAPI_CHAVE"].strip().strip('"').strip("'")
+    print(f"chave: {len(chave)} caracteres, so letras/numeros: {chave.isalnum()}")
     linhas = []
     for nome, (lat, lon) in CIDADES.items():
         wa = weatherapi(lat, lon, chave)
