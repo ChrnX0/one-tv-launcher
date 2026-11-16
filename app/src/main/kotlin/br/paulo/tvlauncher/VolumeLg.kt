@@ -152,7 +152,7 @@ object VolumeLg {
 
     /**
      * Despertador: tira do mudo, põe a LG em [LgNetcast.inicioRampaAlarme] e sobe 1 ponto por vez até [alvo] em
-     * [rampaSeg] segundos (rampa 0 = vai direto ao alvo). A LG pode estar ligando agora (o CEC acabou de acordá-la e a
+     * [rampaSeg] segundos (no mínimo 60 s, ver LgNetcast.rampaLg). A LG pode estar ligando agora (o CEC acabou de acordá-la e a
      * rede dela demora mais de 37 s): tenta por até [esperaMs]. Se alguém mexer no volume durante a subida, para de
      * subir. Anota o que fez em [m].
      */
@@ -160,21 +160,22 @@ object VolumeLg {
         val fim = SystemClock.elapsedRealtime() + esperaMs
         val inicio: Int
         val ate = LgNetcast.alvoFixoAlarme(alvo)
+        val rampa = LgNetcast.rampaLg(rampaSeg)
         while (true) {
             if (m.cancelado) return
             val comecou = synchronized(trava) {
                 val v = lerNivel(ctx) ?: return@synchronized false
                 if (v.mudo && apertar(ctx, LgNetcast.TECLA_MUDO, 1)) m.tirouMudo = true
                 m.original = v.nivel
-                m.definido = ajustar(ctx, LgNetcast.inicioRampaAlarme(ate, rampaSeg), soDescer = false)
-                Log.i(TAG, "alarme: volume ${v.nivel} -> ${m.definido}, sobe até $ate em ${rampaSeg}s${if (m.tirouMudo) " (tirou do mudo)" else ""}")
+                m.definido = ajustar(ctx, LgNetcast.inicioRampaAlarme(ate), soDescer = false)
+                Log.i(TAG, "alarme: volume ${v.nivel} -> ${m.definido}, sobe até $ate em ${rampa}s${if (m.tirouMudo) " (tirou do mudo)" else ""}")
                 true
             }
             if (comecou) { inicio = m.definido ?: return; break }
             if (SystemClock.elapsedRealtime() > fim) { Log.i(TAG, "alarme: a LG não respondeu em ${esperaMs / 1000}s"); return }
             SystemClock.sleep(5000)
         }
-        val passo = LgNetcast.intervaloRampaMs(rampaSeg, inicio, ate)
+        val passo = LgNetcast.intervaloRampaMs(rampa, inicio, ate)
         var esperado = inicio
         while (esperado < ate && !m.cancelado) {
             SystemClock.sleep(passo)

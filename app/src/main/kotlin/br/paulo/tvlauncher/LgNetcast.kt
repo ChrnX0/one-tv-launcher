@@ -103,8 +103,15 @@ object LgNetcast {
     /** O volume final escolhido, dentro de 1..[TETO_ALARME] (um valor velho ou estranho nas prefs não passa do teto). */
     fun alvoFixoAlarme(escolhido: Int): Int = escolhido.coerceIn(1, TETO_ALARME)
 
-    /** Onde a subida começa: [INICIO_ALARME], ou já o [alvo] se a rampa é 0 ("tocar direto") ou o alvo é menor. */
-    fun inicioRampaAlarme(alvo: Int, rampaSeg: Int): Int = if (rampaSeg <= 0) alvo else minOf(INICIO_ALARME, alvo)
+    /**
+     * Na LG a subida é SEMPRE gradual (pedido do dono, 16/11): um alarme com rampa 0 ("tocar direto", o padrão dos
+     * alarmes novos) sobe a LG em [RAMPA_MIN_LG_SEG]. A rampa escolhida, se maior, vale.
+     */
+    const val RAMPA_MIN_LG_SEG = 60
+    fun rampaLg(rampaSeg: Int): Int = maxOf(rampaSeg, RAMPA_MIN_LG_SEG)
+
+    /** Onde a subida começa: [INICIO_ALARME], ou já o [alvo] se ele for menor. */
+    fun inicioRampaAlarme(alvo: Int): Int = minOf(INICIO_ALARME, alvo)
 
     /** De quanto em quanto tempo sobe 1 ponto para ir de [inicio] a [alvo] em [rampaSeg] (no mínimo 1 s entre teclas). */
     fun intervaloRampaMs(rampaSeg: Int, inicio: Int, alvo: Int): Long {
