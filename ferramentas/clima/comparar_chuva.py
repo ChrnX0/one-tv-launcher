@@ -43,6 +43,13 @@ def openmeteo(lat, lon):
 def prever():
     chave = os.environ["WEATHERAPI_CHAVE"].strip().strip('"').strip("'")
     print(f"chave: {len(chave)} caracteres, so letras/numeros: {chave.isalnum()}")
+    if not chave.isalnum():
+        # O secret veio com algo a mais (URL, "key=", texto). Tenta achar a chave dentro, sem imprimir nada dela.
+        import re
+        achadas = re.findall(r"[0-9a-fA-F]{30,32}", chave)
+        print(f"trechos com cara de chave dentro do secret: {len(achadas)}; outros caracteres: "
+              f"{sorted(set(c for c in chave if not c.isalnum()))}")
+        if achadas: chave = achadas[0]
     linhas = []
     for nome, (lat, lon) in CIDADES.items():
         wa = weatherapi(lat, lon, chave)
