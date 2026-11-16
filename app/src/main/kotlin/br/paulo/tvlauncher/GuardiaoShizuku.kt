@@ -252,6 +252,14 @@ object GuardiaoShizuku {
             ServidorShizuku.executar(app, m, "appops set $p GET_USAGE_STATS allow")
             if (ServidorShizuku.executar(app, m, "appops get $p GET_USAGE_STATS")?.contains("allow") == true) feito += "GET_USAGE_STATS"
         }
+        // Build da Play (sem USE_EXACT_ALARM): "Alarmes e lembretes" pelo shell, para o despertador tocar na hora certa.
+        if (android.os.Build.VERSION.SDK_INT >= 31 &&
+            app.getSystemService(android.app.AlarmManager::class.java)?.canScheduleExactAlarms() == false) {
+            ServidorShizuku.executar(app, m, "appops set $p SCHEDULE_EXACT_ALARM allow")
+            if (app.getSystemService(android.app.AlarmManager::class.java)?.canScheduleExactAlarms() == true) {
+                feito += "SCHEDULE_EXACT_ALARM"; Despertador.agendar(app)
+            }
+        }
         for (perm in Diagnostico.PERMISSOES_SHELL)
             if (!tem(perm)) {
                 ServidorShizuku.executar(app, m, "pm grant $p $perm")

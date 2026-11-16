@@ -62,6 +62,11 @@ android {
         // com consentimento (regra de stalkerware). Build da Play = `-Pplay`: só fica o pedido de ajuda (77); o aviso à
         // família do lembrete (78) e da TV que não ligou (79) só existe no APK do site.
         buildConfigField("boolean", "CUIDAR_FAMILIA", (!project.hasProperty("play")).toString())
+        // Build da Play (`-Pplay`, 16/11/2026): o produto Sofaly. PLAY liga a cobrança da Play e desliga o que a loja
+        // não aceita (atualizador do GitHub, instalar APK). CLIMA_MET: previsão pelo MET Norway (uso comercial liberado);
+        // o APK do site segue na Open-Meteo (grátis só sem fim comercial) com a mediana de 3 modelos. Ver ClimaMet.kt.
+        buildConfigField("boolean", "PLAY", project.hasProperty("play").toString())
+        buildConfigField("boolean", "CLIMA_MET", (project.hasProperty("play") || pessoal.getProperty("clima_fonte")?.trim() == "met").toString())
         for (k in listOf("TMDB_CHAVE", "TRAKT_ID", "TRAKT_SEGREDO", "SIMKL_ID", "OPENSUBTITLES_CHAVE")) buildConfigField("String", k, chaveApp(k))
     }
 
@@ -126,6 +131,19 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName(if (keystoreDoAmbiente != null) "release" else "debug")
         }
+    }
+
+    // Build da Play (`./gradlew bundleRelease -Pplay`, 16/11/2026): o produto Sofaly. Package PRÓPRIO, decidido em 16/11/2026
+    // e que nunca mais pode mudar depois de publicado; o namespace do código continua br.paulo.tvlauncher e a Sala segue
+    // com applicationId br.paulo.tvlauncher (ver CLAUDE.md). Por cima do manifesto principal entra src/play/AndroidManifest.xml
+    // (tira as permissões que a loja recusa) e a lista de cidades offline (src/play/assets, CidadesOffline.kt).
+    // Sem flavor de propósito: com flavor todas as tarefas mudariam de nome (assembleRelease, testReleaseUnitTest) e os
+    // workflows e scripts da Sala quebrariam.
+    if (project.hasProperty("play")) {
+        defaultConfig.applicationId = "tv.sofaly.launcher"
+        sourceSets.getByName("main").assets.srcDir("src/play/assets")
+        sourceSets.getByName("release").manifest.srcFile("src/play/AndroidManifest.xml")
+        sourceSets.getByName("debug").manifest.srcFile("src/play/AndroidManifest.xml")
     }
 
     compileOptions {

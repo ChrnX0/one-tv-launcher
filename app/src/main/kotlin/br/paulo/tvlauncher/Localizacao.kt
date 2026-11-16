@@ -28,7 +28,7 @@ object Localizacao {
     fun atual(ctx: Context, httpGet: (String) -> String?): Ponto? {
         val ponto = doAparelho(ctx)
             ?: LocalClima.ler(ctx)?.let { Ponto(it.lat, it.lon, "endereço cadastrado", it.nome) }
-            ?: porIp(httpGet)
+            ?: (if (BuildConfig.PLAY) peloFuso(ctx) else porIp(httpGet))
             ?: ultimo(ctx)
         // Só a fonte, nunca as coordenadas (13/11/2026): o logcat vai para relatórios de bug e o produto é público.
         Log.i("TvLauncher.Local", ponto?.let { "localização pela fonte: ${it.fonte.substringBefore(" (")}" } ?: "sem localização")
@@ -56,6 +56,15 @@ object Localizacao {
             .minByOrNull { it.accuracy } ?: return null
         return Ponto(melhor.latitude, melhor.longitude, "Wi-Fi do Android, ±${melhor.accuracy.toInt()} m")
     }
+
+    /**
+     * Build da Play: no lugar do IP (o ipwho.is grátis é só sem fim comercial), a maior cidade do fuso horário da TV.
+     * Erra de cidade com facilidade (o fuso de São Paulo cobre metade do Brasil): é só para a HOME não ficar sem clima
+     * até alguém dizer a cidade. Nada sai da TV.
+     */
+    private fun peloFuso(ctx: Context): Ponto? =
+        CidadesOffline.doFuso(CidadesOffline.lista(ctx), java.util.TimeZone.getDefault().id)
+            ?.let { Ponto(it.lat, it.lon, "fuso horário", it.nome) }
 
     private fun porIp(httpGet: (String) -> String?): Ponto? {
         guardadoIp?.let { return it }
