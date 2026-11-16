@@ -71,18 +71,33 @@ object FichaAcoes {
                     isDuplicateParentStateEnabled = true
                 }, LinearLayout.LayoutParams(dp(ctx, ICONE_DP), dp(ctx, ICONE_DP)).apply { marginEnd = dp(ctx, 12) })
             }
-            addView(TextView(ctx).apply {
+            val rotulo = TextView(ctx).apply {
                 text = texto.removePrefix("▶").trim(); textSize = TEXTO_SP; typeface = Fontes.manrope(500); maxLines = 2; ellipsize = TextUtils.TruncateAt.END
                 setLineSpacing(0f, 0.95f)
                 isDuplicateParentStateEnabled = true
                 setTextColor(CORES_TEXTO)
-            }, LinearLayout.LayoutParams(0, -2, 1f))
-            if (!detalhe.isNullOrEmpty()) addView(TextView(ctx).apply {
-                text = detalhe; textSize = DETALHE_SP; maxLines = 1; isDuplicateParentStateEnabled = true
+            }
+            val det = detalhe?.takeIf { it.isNotEmpty() }?.let { d -> TextView(ctx).apply {
+                text = d; textSize = DETALHE_SP; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; isDuplicateParentStateEnabled = true
                 setTextColor(ColorStateList(arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf()), intArrayOf(Estilo.TEXTO_NO_FOCO_2, Estilo.TEXTO_3)))
-            }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(ctx, 8) })
+            } }
+            if (det != null && detalheEmbaixo(detalhe)) {
+                // Detalhe comprido ("Temporada 1") vai embaixo do texto: à direita ele apertava o texto e "Episódios" quebrava
+                // no meio da palavra ("Episódio" / "s"), visto na Sala em 16/11/2026.
+                addView(LinearLayout(ctx).apply {
+                    orientation = LinearLayout.VERTICAL; isDuplicateParentStateEnabled = true
+                    addView(rotulo, LinearLayout.LayoutParams(-1, -2))
+                    addView(det, LinearLayout.LayoutParams(-1, -2))
+                }, LinearLayout.LayoutParams(0, -2, 1f))
+            } else {
+                addView(rotulo, LinearLayout.LayoutParams(0, -2, 1f))
+                if (det != null) addView(det, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(ctx, 8) })
+            }
             setOnClickListener { aoApertar() }
         }
+
+    /** Detalhe que vai embaixo do texto, e não à direita: o que passa de 5 caracteres (um "16:48" ou "6" fica à direita). */
+    fun detalheEmbaixo(detalhe: String?): Boolean = (detalhe?.length ?: 0) > 5
 
     /** A coluna das ações (rola sozinha com o foco se não couber). Devolve (o que vai na tela, onde pôr as ações). */
     fun coluna(ctx: Context): Pair<ScrollView, LinearLayout> {

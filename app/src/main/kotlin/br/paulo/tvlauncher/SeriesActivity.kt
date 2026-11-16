@@ -146,7 +146,9 @@ class SeriesActivity : Activity() {
         raiz.addView(colunas, FrameLayout.LayoutParams(-1, -1))
         telaDeTras = colunas
         // Focável: enquanto a ficha carrega, o foco sai da grade de baixo (senão ▲▼ mexeriam nela por trás).
-        painel = FrameLayout(this).apply { visibility = View.GONE; background = Estilo.fundoTela(context); isFocusable = true }
+        // Sem fundo próprio (16/11/2026): com a ficha aberta a grade de trás fica INVISIBLE e o grafite da raiz aparece. Antes
+        // eram dois fundos de tela cheia, um sobre o outro (overdraw visto na Sala), no quadro mais caro, o de abrir a ficha.
+        painel = FrameLayout(this).apply { visibility = View.GONE; isFocusable = true }
         raiz.addView(painel, FrameLayout.LayoutParams(-1, -1))
         aviso = TextView(this).apply {
             textSize = 18f; setTextColor(papel); gravity = Gravity.CENTER

@@ -51,7 +51,9 @@ class FichaAcoesTelaTest {
         )
         itens.forEach { (t, d, m) -> FichaAcoes.adicionar(acoes, FichaAcoes.acao(a, t, d, m) {}) }
         val raiz = FrameLayout(a).apply { background = Estilo.fundoTela(a); setPadding(Estilo.dp(a, 48), Estilo.dp(a, 36), 0, 0) }
-        raiz.addView(col, FrameLayout.LayoutParams(Estilo.dp(a, FichaAcoes.LARGURA_DP) + Estilo.dp(a, 48), -1))
+        // A coluna na largura de verdade (a ficha usa LARGURA_DP): antes somava os 48 dp da margem e ficava 288 dp, larga
+        // demais para pegar o "Episódio" / "s" que a Sala mostrou com 240 dp (16/11/2026).
+        raiz.addView(col, FrameLayout.LayoutParams(Estilo.dp(a, FichaAcoes.LARGURA_DP), -1))
         a.setContentView(raiz)
         acoes.getChildAt(0).apply { isFocusableInTouchMode = true; requestFocus() }
         val larg = Estilo.dp(a, 360); val alt = Estilo.dp(a, 540)
@@ -59,12 +61,19 @@ class FichaAcoesTelaTest {
         raiz.layout(0, 0, larg, alt)
         val foto = Bitmap.createBitmap(larg, alt, Bitmap.Config.ARGB_8888).also { raiz.draw(Canvas(it)) }
         File("build/telas").apply { mkdirs() }.let { File(it, "ficha-acoes-$idioma.png") }.outputStream().use { foto.compress(Bitmap.CompressFormat.PNG, 100, it) }
-        for (i in 0 until acoes.childCount) {
-            val linha = acoes.getChildAt(i) as LinearLayout
-            for (k in 0 until linha.childCount) (linha.getChildAt(k) as? TextView)?.let { t ->
-                val l = t.layout
-                val cortado = l != null && l.lineCount > 0 && l.getEllipsisCount(l.lineCount - 1) > 0
-                assertTrue("[$idioma] cortado: \"${t.text}\"", !cortado)
+        fun textos(v: View): List<TextView> = when (v) {
+            is TextView -> listOf(v)
+            is android.view.ViewGroup -> (0 until v.childCount).flatMap { textos(v.getChildAt(it)) }
+            else -> emptyList()
+        }
+        for (i in 0 until acoes.childCount) textos(acoes.getChildAt(i)).forEach { t ->
+            val l = t.layout
+            val cortado = l != null && l.lineCount > 0 && l.getEllipsisCount(l.lineCount - 1) > 0
+            assertTrue("[$idioma] cortado: \"${t.text}\"", !cortado)
+            // Quebra só entre palavras (na Sala, 16/11/2026, "Episódios" quebrava em "Episódio" / "s").
+            if (l != null) for (n in 0 until l.lineCount - 1) {
+                val fim = l.getLineEnd(n)
+                assertTrue("[$idioma] palavra partida: \"${t.text}\"", fim <= 0 || fim >= t.text.length || t.text[fim - 1].isWhitespace() || t.text[fim].isWhitespace() || t.text[fim - 1] == '-')
             }
         }
     }
