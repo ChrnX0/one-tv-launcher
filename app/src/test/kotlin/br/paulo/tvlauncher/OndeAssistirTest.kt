@@ -24,6 +24,11 @@ class OndeAssistirTest {
         assertEquals("Apple TV", OndeAssistir.limparNome("Apple TV Amazon Channel"))
         assertEquals("Paramount Plus", OndeAssistir.limparNome("Paramount Plus Apple TV Channel"))
         assertEquals("Netflix", OndeAssistir.limparNome("Netflix basic with Ads"))
+        assertEquals("Netflix", OndeAssistir.limparNome("Netflix Standard with Ads"))
+        assertEquals("Netflix", OndeAssistir.limparNome("Netflix Standard"))
+        val n = """{"results":{"BR":{"flatrate":[{"provider_name":"Netflix","display_priority":1},
+            {"provider_name":"MUBI","display_priority":2}],"ads":[{"provider_name":"Netflix Standard with Ads","display_priority":3}]}}}"""
+        assertEquals(listOf("Netflix", "MUBI"), OndeAssistir.lerProvedores(n, "BR"))
         val j = """{"results":{"BR":{"flatrate":[{"provider_name":"Apple TV","display_priority":1},
             {"provider_name":"Apple TV Amazon Channel","display_priority":5}]}}}"""
         assertEquals(listOf("Apple TV"), OndeAssistir.lerProvedores(j, "BR"))
