@@ -39,6 +39,7 @@ class MtpBancadaWindowsTest {
         fun uuid() = Ssdp.uuidMtp(semente)
         val local = "http://$ip:$portaHttp${Ssdp.CAMINHO_MTP}"
         var responder = true
+        var validade = (System.getenv("ONETV_BANCADA_VALIDADE") ?: "1800").toInt()
 
         // A descrição do aparelho (o que o LOCATION do anúncio aponta): um HTTP mínimo, um pedido por conexão.
         val http = ServerSocket(portaHttp, 8, InetAddress.getByName(ip))
@@ -70,7 +71,7 @@ class MtpBancadaWindowsTest {
             val b = it.toByteArray(Charsets.US_ASCII); envio.send(DatagramPacket(b, b.size, para, porta))
         }
         fun anunciar(vivo: Boolean) {
-            repeat(2) { mandar(Ssdp.notify(uuid(), local, vivo, Ssdp.TIPO_MTP), grupo, Ssdp.PORTA) }
+            repeat(2) { mandar(Ssdp.notify(uuid(), local, vivo, Ssdp.TIPO_MTP, validade), grupo, Ssdp.PORTA) }
             anotar(if (vivo) "alive enviado (${uuid()})" else "byebye enviado (${uuid()})")
         }
         val escuta = try {
@@ -86,7 +87,7 @@ class MtpBancadaWindowsTest {
                 val p = DatagramPacket(buf, buf.size)
                 try { escuta.receive(p) } catch (_: Exception) { break }
                 if (!responder || p.address !is java.net.Inet4Address) continue
-                val r = Ssdp.respostas(String(p.data, 0, p.length, Charsets.US_ASCII), uuid(), local, Ssdp.TIPO_MTP)
+                val r = Ssdp.respostas(String(p.data, 0, p.length, Charsets.US_ASCII), uuid(), local, Ssdp.TIPO_MTP, validade)
                 if (r.isNotEmpty()) { mandar(r, p.address, p.port); anotar("busca respondida a ${p.address.hostAddress} (${r.size})") }
             }
         }.apply { isDaemon = true }.start()
@@ -123,6 +124,7 @@ class MtpBancadaWindowsTest {
                     "alive" -> anunciar(true)
                     "uuid" -> { semente = partes.getOrElse(1) { "bancada" }; anotar("uuid agora ${uuid()}") }
                     "responder" -> { responder = partes.getOrNull(1) == "sim"; anotar("responder=$responder") }
+                    "validade" -> { validade = partes[1].toInt(); anotar("validade=$validade") }
                     "sair" -> { anunciar(false); parar(); http.close(); PainelArquivos.raizTeste = null; return }
                     else -> anotar("comando desconhecido")
                 }

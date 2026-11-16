@@ -28,9 +28,9 @@ object Ssdp {
     )
 
     /** NOTIFY multicast: ssdp:alive (estou aqui) ou ssdp:byebye (saí). */
-    fun notify(uuid: String, local: String, vivo: Boolean, tipo: String = TIPO): List<String> = alvos(uuid, tipo).map { (nt, usn) ->
+    fun notify(uuid: String, local: String, vivo: Boolean, tipo: String = TIPO, validade: Int = VALIDADE_S): List<String> = alvos(uuid, tipo).map { (nt, usn) ->
         "NOTIFY * HTTP/1.1\r\nHOST: $GRUPO:$PORTA\r\n" +
-            (if (vivo) "CACHE-CONTROL: max-age=$VALIDADE_S\r\nLOCATION: $local\r\nSERVER: $SERVIDOR\r\n" else "") +
+            (if (vivo) "CACHE-CONTROL: max-age=$validade\r\nLOCATION: $local\r\nSERVER: $SERVIDOR\r\n" else "") +
             "NT: $nt\r\nNTS: ${if (vivo) "ssdp:alive" else "ssdp:byebye"}\r\nUSN: $usn\r\n\r\n"
     }
 
@@ -38,7 +38,7 @@ object Ssdp {
      * Resposta (unicast) a uma busca M-SEARCH, ou lista vazia se a busca não é por nós. Busca malformada, sem
      * MAN: "ssdp:discover" ou grande demais: nada.
      */
-    fun respostas(pedido: String, uuid: String, local: String, tipo: String = TIPO): List<String> {
+    fun respostas(pedido: String, uuid: String, local: String, tipo: String = TIPO, validade: Int = VALIDADE_S): List<String> {
         if (pedido.length > 2048) return emptyList()
         val linhas = pedido.split("\r\n", "\n")
         if (!linhas.first().trim().equals("M-SEARCH * HTTP/1.1", ignoreCase = true)) return emptyList()
@@ -47,7 +47,7 @@ object Ssdp {
         val st = cab["ST"] ?: return emptyList()
         val escolhidos = if (st == "ssdp:all") alvos(uuid, tipo) else alvos(uuid, tipo).filter { it.first == st }
         return escolhidos.map { (nt, usn) ->
-            "HTTP/1.1 200 OK\r\nCACHE-CONTROL: max-age=$VALIDADE_S\r\nEXT:\r\nLOCATION: $local\r\nSERVER: $SERVIDOR\r\n" +
+            "HTTP/1.1 200 OK\r\nCACHE-CONTROL: max-age=$validade\r\nEXT:\r\nLOCATION: $local\r\nSERVER: $SERVIDOR\r\n" +
                 "ST: $nt\r\nUSN: $usn\r\n\r\n"
         }
     }
