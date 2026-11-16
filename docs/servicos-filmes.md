@@ -18,8 +18,8 @@ Ela fica dentro do APK (dá para extrair, como em todo app aberto, Kodi incluíd
 | `SIMKL_ID` | simkl.com/settings/developer › Create new app | Client ID |
 | `OPENSUBTITLES_CHAVE` | opensubtitles.com/consumers › New consumer | API Key |
 
-O MDBList não tem chave de aplicativo: a chave é da conta de cada pessoa. É um extra opcional (Rotten Tomatoes,
-Letterboxd, Metacritic) que a pessoa conecta na TV pelo QR (Configurações › TV e filmes › Serviços de filmes e séries) ou
+O MDBList não tem chave de aplicativo: a chave é da conta de cada pessoa. É um extra opcional (só as listas
+dela, como o Top 250, viram categorias) que a pessoa conecta na TV pelo QR (Configurações › TV e filmes › Serviços de filmes e séries) ou
 colando a chave no painel web. A nota do Trakt vale para todos sem login (só o `TRAKT_ID` do app): de madrugada a TV
 pergunta ao Trakt (`/search/tmdb/{id}?extended=full`, até 600 títulos por noite, cada nota vale 30 dias).
 
@@ -27,6 +27,9 @@ Fora desde 16/11/2026, porque o app vai ser vendido: **IMDb** (os dados, inclusi
 para uso pessoal e não comercial: data.imdb.com e Conditions of Use do imdb.com; licença comercial por contrato) e
 **"Onde assistir" da JustWatch** (vinha pelo TMDB; a JustWatch só libera para parceiros com contrato). O código do "Onde
 assistir" ficou, desligado em `OndeAssistir.JUSTWATCH_LIBERADO`: ligar só com permissão por escrito do TMDB ou da JustWatch.
+Também fora (16/11/2026): as notas de **Rotten Tomatoes, Metacritic e Letterboxd** que vinham pelo MDBList (o MDBList só
+repassa; os donos licenciam por contrato: RT/Metacritic via Fandango/Fandom, Letterboxd API só por pedido). O MDBList ficou
+só para listas.
 
 Campos dos formulários:
 - **Trakt**: App name `One TV Launcher`; App type Development (até 16 pessoas; peça Production antes de vender); Redirect URIs

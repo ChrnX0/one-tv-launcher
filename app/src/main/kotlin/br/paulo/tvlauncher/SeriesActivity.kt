@@ -65,7 +65,7 @@ class SeriesActivity : Activity() {
     private val fonteMedia = Fontes.manrope(500)
 
     private var series: List<Serie> = emptyList()      // o que a tela mostra (sem as categorias ocultas, até o PIN)
-    // Ficha de fora (TMDB: sinopse, próximo episódio; MDBList: notas) da série aberta (InfoExterna, 14/11/2026).
+    // Ficha de fora (TMDB: sinopse, próximo episódio; Trakt: nota) da série aberta (InfoExterna, 14/11/2026).
     private var externo: Pair<Serie, InfoExterna.Guardado>? = null
     /** Listas de fora escolhidas (Trakt, MDBList) com os itens: viram categorias em LISTAS (fatia 3). */
     @Volatile private var listasFora: List<Pair<SincronizarFilmes.ListaFora, List<SincronizarFilmes.Item>>> = emptyList()
@@ -577,7 +577,7 @@ class SeriesActivity : Activity() {
     private fun proximoCurto(s: Serie): String? = proximos[s.chave]?.takeIf { s.chave in interesses }
         ?.let { InfoExterna.quandoCurto(it, hoje, getString(R.string.ext_hoje), getString(R.string.ext_amanha)) }
 
-    /** Notas de fora (Trakt, RT...) e "Novo episódio sexta, 20/11" para a faixa da ficha rápida; lidas no Fundo. */
+    /** Nota de fora (Trakt) e "Novo episódio sexta, 20/11" para a faixa da ficha rápida; lidas no Fundo. */
     private val extRapidas = object : LinkedHashMap<String, String>(64, 0.75f, true) {
         override fun removeEldestEntry(e: MutableMap.MutableEntry<String, String>) = size > 40
     }
@@ -781,7 +781,7 @@ class SeriesActivity : Activity() {
         painel.removeAllViews(); painel.visibility = View.VISIBLE; painel.requestFocus()
         telaDeTras.visibility = View.INVISIBLE
         pedirDesenho(250)
-        val externoVem = InfoExternaCache.temTmdb() || InfoExternaCache.temNotas(this)
+        val externoVem = InfoExternaCache.temTmdb()
         Fundo.rodar {
             val f = PlayerCarga.fichaSerie(this, s)
             tela.post {
@@ -955,7 +955,7 @@ class SeriesActivity : Activity() {
         texto.addView(TextView(this).apply { text = dados; textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(8), 0, 0); maxLines = 1; ellipsize = TextUtils.TruncateAt.END })
         var txtSinopse: TextView? = null
         if (!verEpisodios) {
-            // De fora: notas (MDBList) e "Novo episódio sexta, 21/11 (T2E5)" (TMDB), numa linha, em âmbar.
+            // De fora: nota (Trakt) e "Novo episódio sexta, 21/11 (T2E5)" (TMDB), numa linha, em âmbar.
             val proximo = ext?.detalhe?.proximo?.let {
                 InfoExterna.textoProximo(it, java.time.LocalDate.now(), getString(R.string.ext_proximo), getString(R.string.ext_hoje), getString(R.string.ext_amanha))
             }

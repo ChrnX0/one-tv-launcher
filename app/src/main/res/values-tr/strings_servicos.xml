@@ -7,7 +7,7 @@
     <string name="sv_linha_det">Trakt, Simkl, MDBList, TMDB ve OpenSubtitles</string>
     <string name="sv_trakt_det">İzlediklerinizi ve izleme listenizi telefonunuzla eşitler</string>
     <string name="sv_simkl_det">Trakt gibi, anime için de harika. Birini veya ikisini kullanın</string>
-    <string name="sv_mdblist_det">İsteğe bağlı: Rotten Tomatoes, Letterboxd ve Metacritic puanları ile Top 250 gibi listeler</string>
+    <string name="sv_mdblist_det">İsteğe bağlı: Top 250 gibi listeleriniz Filmler ve Diziler’de kategori olur</string>
     <string name="sv_tmdb_det">TV dilinde konu, oyuncular ve sonraki bölüm tarihi</string>
     <string name="sv_os_det">Çevrimiçi altyazılar. Hesapsız: günde 5. Ücretsiz hesapla: 20</string>
     <string name="sv_desligado">Oturum aç</string>
@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">Yeni böl. %1$s</string>
     <string name="ext_hoje">bugün</string>
     <string name="ext_amanha">yarın</string>
-    <string name="sv_mdblist_passos">İsteğe bağlı: Trakt puanına (onsuz da çalışır) Rotten Tomatoes, Letterboxd ve Metacritic ekler.\n1. Telefon kamerasını soldaki koda tutun ve giriş yapın (veya ücretsiz bir hesap oluşturun). Sayfanın sonunda API Access\'e dokunun, anahtar yoksa oluşturun ve kopyalayın.\n2. Sağdaki koda tutun: web paneli Ayarlar’da açılır. Anahtarı MDBList altına yapıştırın ve Anahtarı kaydet’e dokunun.\n3. TV hemen denetler ve bu ekran kendiliğinden devam eder.</string>
+    <string name="sv_mdblist_passos">İsteğe bağlı: MDBList listeleriniz (Top 250 gibi) Filmler ve Diziler’de kategori olur.\n1. Telefon kamerasını soldaki koda tutun ve giriş yapın (veya ücretsiz bir hesap oluşturun). Sayfanın sonunda API Access\'e dokunun, anahtar yoksa oluşturun ve kopyalayın.\n2. Sağdaki koda tutun: web paneli Ayarlar’da açılır. Anahtarı MDBList altına yapıştırın ve Anahtarı kaydet’e dokunun.\n3. TV hemen denetler ve bu ekran kendiliğinden devam eder.</string>
     <string name="sv_mdblist_qr1">MDBList anahtar sayfası</string>
     <string name="sv_mdblist_qr2">Web paneli (%1$s)</string>
     <string name="sv_mdblist_digitar">Anahtarı buraya yazın</string>

@@ -7,7 +7,7 @@ import java.util.Locale
 
 /**
  * Ficha e notas de fora (fatia 2 dos serviços de filmes e séries, 14/11/2026): TMDB (sinopse, elenco, próximo episódio,
- * coleção), Trakt (nota para todos) e MDBList (Rotten Tomatoes, Metacritic, Letterboxd). Só lógica pura (sem Android), testada em
+ * coleção) e Trakt (nota para todos). Só lógica pura (sem Android), testada em
  * InfoExternaTest; quem fala com a rede e guarda no disco é o [InfoExternaCache].
  *
  * O id de cada título: 1º o `tmdb`/`tmdb_id` que o Xtream manda (lista ou ficha), 2º a busca no TMDB pelo nome limpo +
@@ -15,14 +15,11 @@ import java.util.Locale
  */
 object InfoExterna {
     const val TMDB_API = "https://api.themoviedb.org/3"
-    const val MDBLIST_API = ServicosFilmes.MDBLIST_API
 
     /** Quanto tempo a ficha e as notas de fora valem no disco antes de pedir de novo. */
     const val VALIDADE_MS = 30L * 24 * 3_600_000
     /** Série com próximo episódio marcado: a data pode mudar; pede de novo depois de 3 dias. */
     const val VALIDADE_SERIE_NO_AR_MS = 3L * 24 * 3_600_000
-    /** Notas por pedido em lote no MDBList (a doc não fixa o máximo do /{provider}/{type}/; 100 é o do /rating). */
-    const val LOTE_MDBLIST = 100
     /** Formato da ficha guardada: 2 = com trailer (15/11/2026). Ficha de formato antigo é pedida de novo. */
     const val VERSAO_DETALHE = 3   // 3: diretor do TMDB (16/11/2026)
 
@@ -200,77 +197,25 @@ object InfoExterna {
     /** A chave nome+ano que [contarNaLista] usa para cada título da lista. */
     fun chaveNomeAno(nome: String, ano: Int?): String = Idioma.chaveTitulo(nome) + "|" + (ano ?: 0)
 
-    // ================================================================ MDBList (notas)
+    // ================================================================ notas
 
     /**
-     * As notas que mostramos. Escalas: Trakt 0-10, RT e Metacritic 0-100, Letterboxd 0-5. Null = não veio.
-     * Sem IMDb desde 16/11/2026: a nota do IMDb só pode ser usada fora de produto comercial (data.imdb.com e Conditions
-     * of Use do imdb.com), e o app vai ser vendido. Nem o arquivo público nem a que o MDBList repassa.
+     * A nota que mostramos: só a do Trakt (0-10), que permite uso comercial. Fora desde 16/11/2026, porque o app vai ser
+     * vendido e nenhum deles libera sem contrato: IMDb (data.imdb.com, Conditions of Use), Rotten Tomatoes (API só para
+     * parceiros, Fandango/Fabric), Metacritic (sem API pública; Fabric/Fandom) e Letterboxd (API por pedido). O MDBList
+     * repassava os quatro; ele continua só para as listas da pessoa.
      */
-    data class Notas(val trakt: Float? = null, val rt: Int? = null, val metacritic: Int? = null, val letterboxd: Float? = null) {
-        val vazia: Boolean get() = trakt == null && rt == null && metacritic == null && letterboxd == null
-        /**
-         * A nota da estrela (16/11/2026, pedido do dono): média de Trakt, Metacritic e Letterboxd, todos de 0 a 10. O Rotten
-         * Tomatoes fica fora: "85%" é a fração de críticos que gostaram, não uma nota (puxaria a média para cima); só
-         * entra quando é a única. Sem votos por site no MDBList, não dá para pesar.
-         */
-        val media: Float? get() {
-            val notas = listOfNotNull(trakt, metacritic?.div(10f), letterboxd?.times(2))
-            return if (notas.isNotEmpty()) notas.sum() / notas.size else rt?.div(10f)
-        }
+    data class Notas(val trakt: Float? = null) {
+        val vazia: Boolean get() = trakt == null
+        /** A nota da estrela (0 a 10). */
+        val media: Float? get() = trakt
         /** Uma nota de 0 a 10 para ordenar e filtrar: a mesma da estrela. */
         val de0a10: Float? get() = media
     }
 
-    fun urlLoteMdblist(chave: String, serie: Boolean): String =
-        "$MDBLIST_API/tmdb/${if (serie) "show" else "movie"}/?apikey=${cod(chave)}"
-
-    fun corpoLoteMdblist(ids: Collection<Int>): String = JSONObject().put("ids", JSONArray(ids.take(LOTE_MDBLIST))).toString()
-
-    /**
-     * Lê "ratings":[{"source":"tomatoes","value":93}...] de um item do MDBList. O "imdb" que vem junto é ignorado de
-     * propósito (uso comercial proibido, ver [Notas]); a do Trakt vem do próprio Trakt ([lerNotaTrakt]).
-     */
-    fun lerNotas(item: JSONObject): Notas {
-        val r = item.optJSONArray("ratings") ?: return Notas()
-        var rt: Int? = null; var mc: Int? = null; var lb: Float? = null
-        for (i in 0 until r.length()) {
-            val o = r.optJSONObject(i) ?: continue
-            if (o.isNull("value")) continue
-            val v = o.optDouble("value", Double.NaN).takeIf { !it.isNaN() && it > 0 } ?: continue
-            when (o.optString("source").lowercase()) {
-                "tomatoes" -> rt = v.toInt().takeIf { it in 0..100 }
-                "metacritic" -> mc = v.toInt().takeIf { it in 0..100 }
-                "letterboxd" -> lb = v.toFloat().takeIf { it <= 5f }
-            }
-        }
-        return Notas(null, rt, mc, lb)
-    }
-
-    /** O id TMDB de um item do lote (ids.tmdb, ou tmdb_id / tmdbid conforme a versão da API). */
-    fun tmdbDoItem(item: JSONObject): Int? =
-        item.optJSONObject("ids")?.optInt("tmdb")?.takeIf { it > 0 }
-            ?: item.optInt("tmdb_id").takeIf { it > 0 } ?: item.optInt("tmdbid").takeIf { it > 0 }
-
-    /** Resposta do lote: id TMDB -> notas (itens sem id ou sem nota ficam de fora). */
-    fun lerLote(json: String): Map<Int, Notas> {
-        val a = runCatching { JSONArray(json) }.getOrNull() ?: return emptyMap()
-        val saida = HashMap<Int, Notas>()
-        for (i in 0 until a.length()) {
-            val o = a.optJSONObject(i) ?: continue
-            val id = tmdbDoItem(o) ?: continue
-            saida[id] = lerNotas(o)
-        }
-        return saida
-    }
-
-    /** "Trakt 78% · Rotten Tomatoes 93% · Letterboxd 3,9" (só as que vieram; números no formato da TV). O Trakt mostra em %, como no site dele. */
-    fun textoNotas(n: Notas, l: Locale = Locale.getDefault()): String = listOfNotNull(
-        n.trakt?.let { "Trakt " + Math.round(it * 10) + "%" },
-        n.rt?.let { "Rotten Tomatoes $it%" },
-        n.metacritic?.let { "Metacritic $it" },
-        n.letterboxd?.let { "Letterboxd " + String.format(l, "%.1f", it) },
-    ).joinToString("  ·  ")
+    /** "Trakt 78%" (o Trakt mostra em %, como no site dele). */
+    fun textoNotas(n: Notas, @Suppress("UNUSED_PARAMETER") l: Locale = Locale.getDefault()): String =
+        listOfNotNull(n.trakt?.let { "Trakt " + Math.round(it * 10) + "%" }).joinToString("  ·  ")
 
     // ================================================================ cache
 
@@ -287,13 +232,11 @@ object InfoExterna {
         val recusados: Set<Int> = emptySet(),
         val detalhe: Detalhe? = null,
         val detalheEm: Long = 0,
-        val notas: Notas? = null,
-        val notasEm: Long = 0,
         val buscaEm: Long = 0,   // última busca sem resultado (não buscar de novo a cada abertura)
     )
 
-    /** As notas para mostrar: a do Trakt (todos) com as do MDBList (se a pessoa conectou). */
-    fun notasDe(g: Guardado): Notas = (g.notas ?: Notas()).copy(trakt = g.traktNota)
+    /** As notas para mostrar: a do Trakt (todos, sem login). */
+    fun notasDe(g: Guardado): Notas = Notas(g.traktNota)
 
     fun guardadoParaJson(g: Guardado): JSONObject = JSONObject().apply {
         g.tmdb?.let { put("t", it) }
@@ -312,10 +255,6 @@ object InfoExterna {
                 })
             put("de", g.detalheEm)
         }
-        g.notas?.let { n ->
-            put("n", JSONObject().apply { n.rt?.let { put("r", it) }; n.metacritic?.let { put("m", it) }; n.letterboxd?.let { put("l", it.toDouble()) } })
-            put("ne", g.notasEm)
-        }
     }
 
     fun guardadoDeJson(o: JSONObject): Guardado {
@@ -330,14 +269,11 @@ object InfoExterna {
         }
         // Ficha guardada antes do trailer (sem "v"): vale até a próxima abertura, que pede de novo ao TMDB.
         val detEm = if (o.optJSONObject("d")?.optInt("v") == VERSAO_DETALHE) o.optLong("de") else 0L
-        // "iv" (nota do arquivo do IMDb) e "n.i" (IMDb pelo MDBList) de versões antigas: lidos não, somem na próxima gravação.
-        val notas = o.optJSONObject("n")?.let { n ->
-            Notas(null, n.optInt("r", -1).takeIf { it >= 0 },
-                n.optInt("m", -1).takeIf { it >= 0 }, n.optDouble("l", Double.NaN).takeIf { !it.isNaN() }?.toFloat())
-        }
+        // "iv" (arquivo do IMDb) e "n"/"ne" (notas do MDBList: IMDb, RT, Metacritic, Letterboxd) de versões antigas:
+        // não são lidos e somem na próxima gravação.
         val rec = o.optJSONArray("x")?.let { x -> (0 until x.length()).map { x.optInt(it) }.filter { it > 0 }.toSet() }.orEmpty()
         return Guardado(tmdb, o.optString("im"), o.optDouble("tv", Double.NaN).takeIf { !it.isNaN() }?.toFloat(), o.optLong("te"),
-            rec, det, detEm, notas, o.optLong("ne"), o.optLong("b"))
+            rec, det, detEm, o.optLong("b"))
     }
 
     // ================================================================ Trakt: nota para todos
@@ -351,7 +287,7 @@ object InfoExterna {
     fun urlTraktPorTmdb(id: Int, serie: Boolean): String =
         "${ServicosFilmes.TRAKT_API}/search/tmdb/$id?type=${if (serie) "show" else "movie"}&extended=full"
 
-    /** Nota válida por 30 dias (como as do MDBList); série no ar não muda tanto que valha pedir antes. */
+    /** Nota válida por 30 dias (como a ficha); série no ar não muda tanto que valha pedir antes. */
     const val TRAKT_VALIDADE_MS = 30L * 24 * 3_600_000
     /** Com menos votos que isto a nota não diz muito (título quase sem público): não mostramos. */
     const val TRAKT_MIN_VOTOS = 20

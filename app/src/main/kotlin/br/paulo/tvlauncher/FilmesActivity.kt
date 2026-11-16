@@ -71,7 +71,7 @@ class FilmesActivity : Activity() {
     private val fonteMedia = Fontes.manrope(500)
 
     private var filmes: List<Filme> = emptyList()      // o que a tela mostra (sem as categorias ocultas, até o PIN)
-    // Notas de fora (Trakt e MDBList, InfoExterna): valem no Filtro (nota mínima) e na ordem "Nota".
+    // Nota de fora (Trakt, InfoExterna): valem no Filtro (nota mínima) e na ordem "Nota".
     @Volatile private var notasFora: Map<String, Float> = emptyMap()
     /** Listas de fora escolhidas (Trakt, MDBList) com os itens: viram categorias em LISTAS (fatia 3, esboço listas-a.png). */
     @Volatile private var listasFora: List<Pair<SincronizarFilmes.ListaFora, List<SincronizarFilmes.Item>>> = emptyList()
@@ -281,14 +281,6 @@ class FilmesActivity : Activity() {
                 intent.getStringExtra(BuscaUnica.EXTRA_TERMO)?.trim()?.takeIf { it.isNotEmpty() }?.let { t -> termo = t; chave = BUSCA }
                 // A 1ª conta (ocultas, contagens, ordem) também sai da thread da tela; o "Carregando" fica até ela chegar.
                 recalcular(ModoGrade.NOVA, inicial = true) { aviso.visibility = View.GONE; grade.requestFocus() }
-                // Notas da grade em lote (MDBList), para os filmes com id do TMDB conhecido; no máximo 20 pedidos por dia.
-                if (InfoExternaCache.temNotas(this)) Fundo.rodar("filmes-notas") {
-                    val ids = InfoExternaCache.idsConhecidos(this, f.map { it.chave to it.tmdb })
-                    if (InfoExternaCache.notasEmLote(this, ids.map { Triple(it.first, it.second, false) }) > 0) {
-                        notasFora = InfoExternaCache.notas(this)
-                        tela.post { if (!isDestroyed) recalcular(ModoGrade.IGUAL) }
-                    }
-                }
                 sincronizarFora(f, forcar = false)
                 classificarIdades(f)
                 // O índice das versões sai depois da grade na tela (é a parte demorada; a ficha funciona sem ele).
@@ -706,7 +698,7 @@ class FilmesActivity : Activity() {
     private val fichasRapidas = object : LinkedHashMap<String, FichaFilme?>(64, 0.75f, true) {
         override fun removeEldestEntry(e: MutableMap.MutableEntry<String, FichaFilme?>) = size > 60
     }
-    /** Notas de fora (Trakt, Rotten Tomatoes...) já guardadas, para a faixa da ficha rápida; lidas no Fundo. */
+    /** Nota de fora (Trakt) já guardada, para a faixa da ficha rápida; lidas no Fundo. */
     private val extRapidas = object : LinkedHashMap<String, String>(64, 0.75f, true) {
         override fun removeEldestEntry(e: MutableMap.MutableEntry<String, String>) = size > 60
     }
@@ -789,7 +781,7 @@ class FilmesActivity : Activity() {
                 tela.post { if (!isDestroyed && ficha === f) { colecaoFicha = f to col; if (col.size > 1 && !desenhoMarcado) pedirDesenho() } }
             }
         }
-        val externoVem = InfoExternaCache.temTmdb() || InfoExternaCache.temNotas(this)
+        val externoVem = InfoExternaCache.temTmdb()
         Fundo.rodar {
             val info = PlayerCarga.fichaFilme(this, f)
             // A ficha de fora chega 50-400 ms depois (mais com MDBList/Simkl): espera por ela para desenhar uma vez só.
@@ -800,10 +792,10 @@ class FilmesActivity : Activity() {
 
     /**
      * Ficha de fora (fatia 2, 14/11/2026): TMDB (sinopse no idioma da TV quando a lista não tem, elenco, saga) e as notas
-     * do MDBList. Roda fora da tela, depois da ficha do servidor; sem chave nenhuma, não faz nada.
+     * do Trakt (já guardada de madrugada). Roda fora da tela, depois da ficha do servidor; sem chave nenhuma, não faz nada.
      */
     private fun buscarExterno(f: Filme, info: FichaFilme?) {
-        if (!InfoExternaCache.temTmdb() && !InfoExternaCache.temNotas(this)) return
+        if (!InfoExternaCache.temTmdb()) return
         val g = InfoExternaCache.resolver(this, f.chave, f.nome, f.ano ?: info?.lancamento?.take(4)?.toIntOrNull(), false, info?.tmdb ?: f.tmdb)
         val saga = g.detalhe?.colecao?.let { c ->
             val partes = InfoExternaCache.colecao(c.id).takeIf { it.size > 1 } ?: return@let null
@@ -905,7 +897,7 @@ class FilmesActivity : Activity() {
             rotuloVersao(Idioma.versao(f.nome, f.grupo)),
         ).joinToString("   ·   ")
         texto.addView(TextView(this).apply { text = dados; textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(10), 0, 0) })
-        // Notas de fora (Trakt e MDBList): "Trakt 78% · Rotten Tomatoes 93% · Letterboxd 3,9", em âmbar como a estrela.
+        // Nota de fora (Trakt): "Trakt 78%", em âmbar como a estrela.
         ext?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { n ->
             texto.addView(TextView(this).apply { text = InfoExterna.textoNotas(n); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPadding(0, dp(6), 0, 0) })
         }

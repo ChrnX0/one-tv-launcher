@@ -9,15 +9,14 @@ import java.io.File
 /**
  * Disco e rede da ficha e das notas de fora ([InfoExterna]). Tudo aqui bloqueia (rede): chamar fora da thread da tela.
  *
- * files/player/externo.json: por título do catálogo, o id do TMDB, a ficha resumida e as notas, cada uma com a data.
- * Vale 30 dias (série no ar: 3). Nunca pede a cada foco: a ficha pede ao abrir; as notas da grade vêm em lote, no máximo
- * [LOTES_POR_DIA] pedidos por dia (a cota grátis do MDBList, 1.000 por dia, é por conta e dividida entre as TVs).
+ * files/player/externo.json: por título do catálogo, o id do TMDB, a ficha resumida e a nota do Trakt, cada uma com a
+ * data. Vale 30 dias (série no ar: 3). Nunca pede a cada foco: a ficha pede ao abrir; a nota do Trakt vem de madrugada
+ * ([noturnoTrakt]).
  */
 object InfoExternaCache {
     private const val TAG = "TvLauncher.InfoExterna"
     private const val ARQUIVO = "externo.json"
     private const val MAX_TITULOS = 6000
-    private const val LOTES_POR_DIA = 20
     private const val BUSCA_DE_NOVO_MS = 7L * 24 * 3_600_000
 
     private val trava = Any()
@@ -37,7 +36,6 @@ object InfoExternaCache {
 
     private fun chaves() = ServicosContas.chavesApp()
     fun temTmdb(): Boolean = chaves().tmdb.isNotBlank()
-    fun temNotas(ctx: Context): Boolean = ServicosContas.chaveMdblist(ctx) != null
     private fun agente() = ServicosFilmes.agente(BuildConfig.VERSION_CODE)
 
     // ================================================================ disco
@@ -101,7 +99,7 @@ object InfoExternaCache {
     /** O que já está guardado (sem rede). Rápido: pode chamar da tela depois da primeira leitura. */
     fun guardado(ctx: Context, chave: String): Guardado? = synchronized(trava) { mapa(ctx)[chave] }
 
-    /** Nota de 0 a 10 de fora (Trakt, MDBList), para o Filtro e a ordem. Só o que está guardado. */
+    /** Nota de 0 a 10 de fora (Trakt), para o Filtro e a ordem. Só o que está guardado. */
     fun notas(ctx: Context): Map<String, Float> = synchronized(trava) {
         mapa(ctx).mapNotNull { (k, g) -> InfoExterna.notasDe(g).de0a10?.let { k to it } }.toMap()
     }
@@ -117,7 +115,7 @@ object InfoExternaCache {
     // ================================================================ ficha (ao abrir)
 
     /**
-     * Garante id, ficha do TMDB e notas do MDBList de um título, se vencidos. [tmdbConhecido] = o que o Xtream mandou.
+     * Garante id e ficha do TMDB de um título, se vencidos. [tmdbConhecido] = o que o Xtream mandou.
      * Devolve o que ficou guardado (pode ser vazio: sem chave, sem rede ou sem casar o nome).
      */
     fun resolver(ctx: Context, chave: String, nome: String, ano: Int?, serie: Boolean, tmdbConhecido: Int?): Guardado {
@@ -128,7 +126,7 @@ object InfoExternaCache {
         val idioma = InfoExterna.idiomaTmdb()
         // 1. O id: o do Xtream vale mais (a não ser que a pessoa tenha recusado); depois o já achado; depois a busca.
         val doXtream = tmdbConhecido?.takeIf { it !in g.recusados }
-        if (doXtream != null && doXtream != g.tmdb) g = mudar(app, chave) { it.copy(tmdb = doXtream, detalhe = null, detalheEm = 0, notas = null, notasEm = 0) }
+        if (doXtream != null && doXtream != g.tmdb) g = mudar(app, chave) { it.copy(tmdb = doXtream, detalhe = null, detalheEm = 0, traktNota = null, traktEm = 0) }
         if (g.tmdb == null && k.tmdb.isNotBlank() && agora - g.buscaEm > BUSCA_DE_NOVO_MS) {
             val limpo = LegendaExterna.nomeDeBusca(Vod.nomeLimpo(nome)).ifBlank { Vod.nomeLimpo(nome) }
             val achado = runCatching {
@@ -150,8 +148,6 @@ object InfoExternaCache {
                 g = mudar(app, chave) { it.copy(detalhe = d, detalheEm = agora, imdb = d.imdb.ifBlank { it.imdb }) }
             }
         }.onFailure { Log.w(TAG, "ficha: ${it.javaClass.simpleName}") }
-        // 3. Notas (um lote de 1).
-        if (InfoExterna.vencido(g.notasEm, agora)) notasEmLote(app, listOf(Triple(chave, id, serie)), contarCota = false)
         return guardado(app, chave) ?: g
     }
 
@@ -214,53 +210,6 @@ object InfoExternaCache {
     /** Filmes e séries do TMDB com o termo (para achar o que não está na lista). Bloqueia (rede). */
     fun buscarFora(termo: String): List<OndeAssistir.Achado> =
         tmdb("multi:${termo.lowercase()}", { OndeAssistir.urlBusca(it, termo, InfoExterna.idiomaTmdb()) }, OndeAssistir::lerBusca).orEmpty()
-
-    // ================================================================ notas em lote (grade)
-
-    private fun prefs(ctx: Context) = ctx.getSharedPreferences("info_externa", Context.MODE_PRIVATE)
-
-    /** Cabe mais um lote hoje? (conta por dia, em UTC como a cota do MDBList) */
-    private fun cabeLote(ctx: Context): Boolean {
-        val dia = System.currentTimeMillis() / 86_400_000
-        val p = prefs(ctx)
-        val n = if (p.getLong("dia", -1) == dia) p.getInt("lotes", 0) else 0
-        if (n >= LOTES_POR_DIA) return false
-        p.edit().putLong("dia", dia).putInt("lotes", n + 1).apply()
-        return true
-    }
-
-    /**
-     * Notas de vários títulos (chave, id TMDB, é série) com nota vencida: pedidos de até 100 ids. Devolve quantos
-     * ganharam nota. [contarCota] = false só na ficha aberta (um título, a pessoa pediu).
-     */
-    fun notasEmLote(ctx: Context, itens: List<Triple<String, Int, Boolean>>, contarCota: Boolean = true): Int {
-        val app = ctx.applicationContext
-        val chave = ServicosContas.chaveMdblist(app) ?: return 0
-        val agora = System.currentTimeMillis()
-        val vencidos = itens.filter { (k, _, _) -> InfoExterna.vencido(guardado(app, k)?.notasEm ?: 0, agora) }
-        var n = 0
-        for ((serie, grupo) in vencidos.groupBy { it.third }) for (lote in grupo.chunked(InfoExterna.LOTE_MDBLIST)) {
-            if (contarCota && !cabeLote(app)) return n
-            val r = runCatching {
-                ServicosContas.pedir(InfoExterna.urlLoteMdblist(chave, serie), mapOf("User-Agent" to agente(), "Content-Type" to "application/json"),
-                    InfoExterna.corpoLoteMdblist(lote.map { it.second }))
-            }.getOrNull() ?: return n
-            if (r.codigo == 429) { Log.i(TAG, "MDBList: limite"); return n }
-            if (r.codigo !in 200..299) { Log.w(TAG, "MDBList: ${r.codigo}"); return n }
-            val notas = InfoExterna.lerLote(r.corpo)
-            synchronized(trava) {
-                val m = mapa(app)
-                for ((k, id, _) in lote) {
-                    val g = m[k] ?: Guardado(tmdb = id)
-                    // Sem nota no MDBList: guarda vazio com a data, para não perguntar de novo por 30 dias.
-                    por(m, k, g.copy(tmdb = g.tmdb ?: id, notas = notas[id] ?: InfoExterna.Notas(), notasEm = agora))
-                    if (notas[id]?.vazia == false) n++
-                }
-                gravar(app)
-            }
-        }
-        return n
-    }
 
     // ================================================================ Nota do Trakt (manutenção da noite)
 
