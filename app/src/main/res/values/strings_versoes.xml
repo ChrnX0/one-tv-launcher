@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Games: when the rows scroll, they no longer show over the highlighted game at the top</item>
         <item>Kids mode by age: the age rating of every movie and series is fetched overnight, a little at a time, not just 300 each time Movies opens. After the first night “Up to 12” already shows the whole rated catalog</item>
         <item>Movies and Series: the rating now comes from Trakt (for everyone, no account), fetched at night; the IMDb rating is gone, because IMDb only allows it in non-commercial apps</item>
         <item>“Also on” in the details and “Elsewhere” in Search are off for now: that data belongs to JustWatch and needs a contract. Search still offers to look in YouTube, Netflix and Prime Video</item>

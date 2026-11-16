@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Jogos: ao rolar as fileiras, elas não aparecem mais por cima do jogo em destaque no alto</item>
         <item>Modo infantil por idade: a classificação indicativa de todos os filmes e séries é buscada de madrugada, aos poucos, e não só 300 a cada vez que Filmes abre. Na primeira noite o “Até 12 anos” já passa a mostrar o catálogo inteiro que tem classificação</item>
         <item>Filmes e Séries: a nota agora vem do Trakt (para todos, sem conta), buscada de madrugada; a nota do IMDb saiu, porque o IMDb só permite em app não comercial</item>
         <item>“Também em” na ficha e “Em outros lugares” na Busca ficam desligados por enquanto: esses dados são da JustWatch e pedem contrato. A Busca continua oferecendo procurar no YouTube, Netflix e Prime Video</item>
