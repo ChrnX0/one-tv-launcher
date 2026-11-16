@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sofaly Extras: só o mínimo. Nada de acessibilidade, leitor de notificações, SMS ou instalar apps. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-feature android:name="android.software.leanback" android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+    <!-- Voltar a conferir depois de a TV reiniciar. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Os dois pacotes do launcher: o da Play (Sofaly) e o do site. -->
+    <queries>
+        <package android:name="tv.sofaly.launcher" />
+        <package android:name="br.paulo.tvlauncher" />
+    </queries>
+
+    <application
+        android:label="@string/nome"
+        android:icon="@drawable/icone"
+        android:banner="@drawable/icone"
+        android:allowBackup="false"
+        android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
+
+        <activity android:name=".ExtrasActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Cartão na HOME do launcher (contrato PluginCartao). É também por ele que o dono dá o OK com PIN. -->
+        <provider android:name=".CartaoProvider" android:authorities="tv.sofaly.extras.cartao" android:exported="true">
+            <intent-filter><action android:name="tv.sofaly.plugin.CARTAO" /></intent-filter>
+        </provider>
+
+        <receiver android:name=".ConferirReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="tv.sofaly.extras.CONFERIR" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

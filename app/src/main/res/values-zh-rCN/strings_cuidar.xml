@@ -97,4 +97,12 @@
     <string name="cuidar_push_teste_titulo">测试</string>
     <string name="cuidar_push_teste">电视 %1$s 的提醒会发到这里。</string>
     <string name="cuidar_desligar_pergunta">要关闭吗？%1$s 会收到最后一条提醒，告知已关闭。</string>
+    <string name="cuidar_item_bem">当对方在电视上按下“我很好”时</string>
+    <string name="cuidar_aviso_bem">今天的“我很好”</string>
+    <string name="cuidar_aviso_bem_det">每天电视第一次打开时询问；只有按下按钮才会发送</string>
+    <string name="cuidar_bem_pergunta">告诉%1$s一切都好吗？</string>
+    <string name="cuidar_bem_sim">我很好</string>
+    <string name="cuidar_bem_nao">暂不</string>
+    <string name="cuidar_push_bem_titulo">一切都好</string>
+    <string name="cuidar_push_bem">电视 %1$s 前的人报了平安（%2$s）。</string>
 </resources>

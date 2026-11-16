@@ -17,7 +17,7 @@ import java.util.TimeZone
  *
  * Em vez de reescrever a HOME, a Previsão e os avisos, este arquivo CONVERTE a resposta do MET no mesmo formato que o
  * resto do código já lê da Open-Meteo (current / hourly / daily, horas locais "2026-11-16T15:00"). Quem escolhe a fonte
- * é [BuildConfig.CLIMA_MET] (ligado no build da Play; o APK do site segue na Open-Meteo com a mediana de 3 modelos).
+ * é [BuildConfig.CLIMA_MET] (desligado por padrão em 16/11/2026: fonte do clima do produto ainda em estudo; liga com -Pclima_met).
  *
  * Diferenças que ficam (verificado na resposta real de 16/11/2026, Ribeirão Preto):
  *  - Fora da Escandinávia o MET NÃO manda chance de chuva. A chance aqui é ESTIMADA pela chuva prevista em mm e pelo

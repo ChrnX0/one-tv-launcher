@@ -97,4 +97,12 @@
     <string name="cuidar_push_teste_titulo">Test</string>
     <string name="cuidar_push_teste">Powiadomienia z telewizora %1$s docierają tutaj.</string>
     <string name="cuidar_desligar_pergunta">Wyłączyć? %1$s dostanie ostatnie powiadomienie, że zostało wyłączone.</string>
+    <string name="cuidar_item_bem">Gdy osoba naciśnie „Wszystko dobrze” na telewizorze</string>
+    <string name="cuidar_aviso_bem">„Wszystko dobrze” dnia</string>
+    <string name="cuidar_aviso_bem_det">Przy pierwszym włączeniu w ciągu dnia telewizor pyta; wysyła tylko przycisk</string>
+    <string name="cuidar_bem_pergunta">Dać znać %1$s, że wszystko w porządku?</string>
+    <string name="cuidar_bem_sim">Wszystko dobrze</string>
+    <string name="cuidar_bem_nao">Nie teraz</string>
+    <string name="cuidar_push_bem_titulo">Wszystko w porządku</string>
+    <string name="cuidar_push_bem">Osoba przy telewizorze %1$s dała znać, że wszystko dobrze (%2$s).</string>
 </resources>

@@ -97,4 +97,12 @@
     <string name="cuidar_push_teste_titulo">टेस्ट</string>
     <string name="cuidar_push_teste">टीवी %1$s की सूचनाएं यहां आती हैं।</string>
     <string name="cuidar_desligar_pergunta">बंद करें? %1$s को एक आखिरी सूचना मिलेगी कि यह बंद कर दिया गया।</string>
+    <string name="cuidar_item_bem">जब व्यक्ति टीवी पर “मैं ठीक हूँ” दबाए</string>
+    <string name="cuidar_aviso_bem">दिन का “मैं ठीक हूँ”</string>
+    <string name="cuidar_aviso_bem_det">दिन में पहली बार टीवी चालू होने पर पूछता है; सिर्फ़ बटन भेजता है</string>
+    <string name="cuidar_bem_pergunta">%1$s को बताएँ कि सब ठीक है?</string>
+    <string name="cuidar_bem_sim">मैं ठीक हूँ</string>
+    <string name="cuidar_bem_nao">अभी नहीं</string>
+    <string name="cuidar_push_bem_titulo">सब ठीक है</string>
+    <string name="cuidar_push_bem">टीवी %1$s पर मौजूद व्यक्ति ने बताया कि वे ठीक हैं (%2$s)।</string>
 </resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nome">Sofaly Extras</string>
+    <string name="carregando">Checking…</string>
+    <string name="sem_launcher">Sofaly is not installed on this TV. Extras only works together with it.</string>
+    <string name="sem_ok">Allow Extras in Sofaly: Settings › Home screen › Plugins (asks for the PIN).</string>
+    <string name="sem_aviso">Allowed. Now turn on “When the TV is not turned on by the usual time” in Sofaly › Care from afar. The person at home must accept it on the TV.</string>
+    <string name="tudo_certo">All set. If the TV is not turned on by the usual time, %1$s will be notified.</string>
+    <string name="cartao_ligado">“TV not turned on” notice is on</string>
+    <string name="cartao_desligado">Turn on in Care from afar</string>
+</resources>

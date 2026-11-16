@@ -1,6 +1,6 @@
 — Dados —
 
-Previsão do tempo: MET Norway (https://api.met.no). Data from MET Norway, sob CC BY 4.0.
+Previsão do tempo: Open-Meteo (https://open-meteo.com), dados sob CC BY 4.0. [FONTE EM ESTUDO: trocar antes de publicar]
 Observação do aeroporto (METAR): Aviation Weather Center, NOAA (domínio público dos EUA).
 Cidades e fusos horários: GeoNames (https://www.geonames.org), sob CC BY 4.0. A busca de cidade fica na TV.
 Fichas, pôsteres, elenco, classificação e notas de filmes e séries: Trakt (https://trakt.tv).

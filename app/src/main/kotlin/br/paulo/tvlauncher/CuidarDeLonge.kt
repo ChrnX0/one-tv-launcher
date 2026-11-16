@@ -29,14 +29,28 @@ import java.util.TimeZone
  * Aqui mora só a lógica, sem Android, para testar no computador (CuidarDeLongeTest). O resto: CuidarDeLongeTv.
  */
 object CuidarDeLonge {
-    enum class Aviso { AJUDA, LEMBRETE, NAO_LIGOU }
+    /**
+     * ESTOU_BEM (16/11/2026, a 79 da Play): na primeira vez que a TV acende no dia, ela pergunta "Avisar Ana que está tudo
+     * bem?" e só a resposta da PESSOA manda o aviso. Nada sai sem o botão: é o oposto de vigiar, e por isso cabe na Play.
+     */
+    enum class Aviso { AJUDA, LEMBRETE, NAO_LIGOU, ESTOU_BEM }
 
-    /** Avisos que esta build oferece. [familia] false (build da Play) = só o pedido de ajuda, que parte da própria pessoa. */
-    fun permitidos(familia: Boolean): Set<Aviso> = if (familia) Aviso.values().toSet() else setOf(Aviso.AJUDA)
+    /**
+     * Avisos que esta build oferece. [familia] false (build da Play) = só o que parte da própria pessoa (ajuda e "estou
+     * bem"). [extras] = o plugin Extras (app separado, baixado no site) está autorizado: ele traz de volta o "não ligou"
+     * automático (79), que a Play não aceita dentro do app.
+     */
+    fun permitidos(familia: Boolean, extras: Boolean = false): Set<Aviso> = when {
+        familia -> Aviso.values().toSet()
+        extras -> setOf(Aviso.AJUDA, Aviso.ESTOU_BEM, Aviso.NAO_LIGOU)
+        else -> setOf(Aviso.AJUDA, Aviso.ESTOU_BEM)
+    }
 
     /** Tira os avisos que a build não oferece. Mudar os avisos muda a assinatura: um aceite antigo deixa de valer. */
-    fun limitar(c: Config, familia: Boolean): Config =
-        if (c.avisos.all { it in permitidos(familia) }) c else c.copy(avisos = c.avisos.filter { it in permitidos(familia) }.toSet())
+    fun limitar(c: Config, familia: Boolean, extras: Boolean = false): Config =
+        if (c.avisos.all { it in permitidos(familia, extras) }) c else c.copy(avisos = c.avisos.filter { it in permitidos(familia, extras) }.toSet())
+
+    fun chaveBem(dia: Int) = "bem@$dia"
 
     /**
      * Tecla que, segurada [SEGURAR_MS], pede ajuda. VOLTAR é o padrão: é a tecla que todo mundo acha, e ninguém a segura
@@ -274,6 +288,8 @@ object CuidarDeLonge {
         data class Mostrar(val lembrete: Lembrete, val momento: Long, val chave: String) : Acao()
         data class AvisarLembrete(val lembrete: Lembrete, val momento: Long, val chave: String) : Acao()
         data class AvisarNaoLigou(val dia: Int, val chave: String) : Acao()
+        /** Primeira vez que a TV acende no dia: perguntar "Estou bem?" (só a pessoa manda o aviso). */
+        data class PerguntarEstouBem(val dia: Int, val chave: String) : Acao()
     }
 
     private fun podeTentar(m: Marca, agora: Long) =
@@ -299,6 +315,10 @@ object CuidarDeLonge {
             val k = chaveTv(hoje)
             if (alvo != null && hoje !in e.ligadas && minutoDoDia(agora, fuso) in alvo..LIMITE_AVISO_MIN && podeTentar(e.marca(k), agora))
                 r += Acao.AvisarNaoLigou(hoje, k)
+        }
+        if (ativo(c, Aviso.ESTOU_BEM) && ligadaAgora && minutoDoDia(agora, fuso) in INICIO_DIA_MIN..LIMITE_AVISO_MIN) {
+            val k = chaveBem(dia(agora, fuso))
+            if (e.marca(k).mostrado == 0L) r += Acao.PerguntarEstouBem(dia(agora, fuso), k)
         }
         return r
     }

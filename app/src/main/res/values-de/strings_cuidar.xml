@@ -97,4 +97,12 @@
     <string name="cuidar_push_teste_titulo">Test</string>
     <string name="cuidar_push_teste">Hinweise vom Fernseher %1$s kommen hier an.</string>
     <string name="cuidar_desligar_pergunta">Ausschalten? %1$s bekommt einen letzten Hinweis, dass es ausgeschaltet wurde.</string>
+    <string name="cuidar_item_bem">Wenn die Person auf dem Fernseher „Mir geht es gut“ drückt</string>
+    <string name="cuidar_aviso_bem">„Mir geht es gut“ des Tages</string>
+    <string name="cuidar_aviso_bem_det">Beim ersten Einschalten am Tag fragt der Fernseher; nur die Taste sendet</string>
+    <string name="cuidar_bem_pergunta">%1$s Bescheid geben, dass alles gut ist?</string>
+    <string name="cuidar_bem_sim">Mir geht es gut</string>
+    <string name="cuidar_bem_nao">Jetzt nicht</string>
+    <string name="cuidar_push_bem_titulo">Alles in Ordnung</string>
+    <string name="cuidar_push_bem">Die Person am Fernseher %1$s hat gemeldet, dass es ihr gut geht (%2$s).</string>
 </resources>

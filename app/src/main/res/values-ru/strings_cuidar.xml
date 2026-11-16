@@ -97,4 +97,12 @@
     <string name="cuidar_push_teste_titulo">Тест</string>
     <string name="cuidar_push_teste">Уведомления с телевизора %1$s приходят сюда.</string>
     <string name="cuidar_desligar_pergunta">Выключить? %1$s получит последнее уведомление о выключении.</string>
+    <string name="cuidar_item_bem">Когда человек нажмёт «Всё хорошо» на телевизоре</string>
+    <string name="cuidar_aviso_bem">«Всё хорошо» за день</string>
+    <string name="cuidar_aviso_bem_det">При первом включении за день телевизор спрашивает; отправляет только кнопка</string>
+    <string name="cuidar_bem_pergunta">Сообщить %1$s, что всё хорошо?</string>
+    <string name="cuidar_bem_sim">Всё хорошо</string>
+    <string name="cuidar_bem_nao">Не сейчас</string>
+    <string name="cuidar_push_bem_titulo">Всё хорошо</string>
+    <string name="cuidar_push_bem">Человек у телевизора %1$s сообщил, что всё хорошо (%2$s).</string>
 </resources>

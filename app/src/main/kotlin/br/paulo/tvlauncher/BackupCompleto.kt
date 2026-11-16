@@ -48,6 +48,7 @@ object BackupCompleto {
         "mtp_permitidos", "painel_log", "atualizador", "aviso_tv", "loja_curada",
         "compatibilidade",   // medidas do "acordar" deste aparelho (CompatibilidadeTv): de outro aparelho não valem
         "aot",   // versão já compilada (CompilarAot): é do APK instalado, não da configuração
+        "cobranca",   // plano comprado (CobrancaPlay): vem sempre da Play, nunca de um backup (restaurar não pode virar Ultra)
         "roteiro",   // respostas do "Conferir na TV" (ConferirTvActivity): valem só para a versão em que foram dadas
         // Cuidar de longe (CuidarDeLongeTv): o consentimento é de quem mora com ESTA TV; restaurar em outra não pode levá-lo.
         "cuidar_de_longe",

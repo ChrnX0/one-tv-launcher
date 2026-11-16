@@ -30,6 +30,9 @@ object Localizacao {
             ?: LocalClima.ler(ctx)?.let { Ponto(it.lat, it.lon, "endereço cadastrado", it.nome) }
             ?: (if (BuildConfig.PLAY) peloFuso(ctx) else porIp(httpGet))
             ?: ultimo(ctx)
+        // Build da Play: só a localização APROXIMADA sai da TV (2 casas, ~1 km) para os serviços de clima. Assim a ficha
+        // "Segurança dos dados" diz "localização aproximada" com verdade; a previsão não muda a 1 km.
+        if (BuildConfig.PLAY && ponto != null) return Ponto(arredondar(ponto.lat), arredondar(ponto.lon), ponto.fonte, ponto.nome)
         // Só a fonte, nunca as coordenadas (13/11/2026): o logcat vai para relatórios de bug e o produto é público.
         Log.i("TvLauncher.Local", ponto?.let { "localização pela fonte: ${it.fonte.substringBefore(" (")}" } ?: "sem localização")
         return ponto
@@ -76,6 +79,8 @@ object Localizacao {
             null
         }
     }
+
+    fun arredondar(v: Double): Double = Math.round(v * 100) / 100.0
 
     /** Distância aproximada em km entre dois pontos (boa para escolher a estação mais perto). */
     fun km(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {

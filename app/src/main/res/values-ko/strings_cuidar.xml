@@ -97,4 +97,12 @@
     <string name="cuidar_push_teste_titulo">테스트</string>
     <string name="cuidar_push_teste">TV %1$s의 알림이 여기로 옵니다.</string>
     <string name="cuidar_desligar_pergunta">끌까요? %1$s 님에게 꺼졌다는 마지막 알림이 갑니다.</string>
+    <string name="cuidar_item_bem">TV에서 “잘 지내요”를 누르면</string>
+    <string name="cuidar_aviso_bem">오늘의 “잘 지내요”</string>
+    <string name="cuidar_aviso_bem_det">하루 중 TV를 처음 켤 때 묻고, 버튼을 눌러야만 보냅니다</string>
+    <string name="cuidar_bem_pergunta">%1$s님에게 잘 지낸다고 알릴까요?</string>
+    <string name="cuidar_bem_sim">잘 지내요</string>
+    <string name="cuidar_bem_nao">나중에</string>
+    <string name="cuidar_push_bem_titulo">잘 지내요</string>
+    <string name="cuidar_push_bem">TV %1$s 앞에 있는 분이 잘 지낸다고 알렸습니다(%2$s).</string>
 </resources>

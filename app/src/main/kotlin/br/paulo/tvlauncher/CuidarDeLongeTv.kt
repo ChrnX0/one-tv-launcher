@@ -41,7 +41,7 @@ object CuidarDeLongeTv {
     // ---------------------------------------------------------------- configuração e estado
 
     fun config(ctx: Context): CuidarDeLonge.Config =
-        CuidarDeLonge.limitar(CuidarDeLonge.deJson(prefs(ctx).getString("config", null)), BuildConfig.CUIDAR_FAMILIA)
+        CuidarDeLonge.limitar(CuidarDeLonge.deJson(prefs(ctx).getString("config", null)), BuildConfig.CUIDAR_FAMILIA, ExtrasPlugin.autorizado(ctx))
 
     @Synchronized
     fun mudar(ctx: Context, f: (CuidarDeLonge.Config) -> CuidarDeLonge.Config): CuidarDeLonge.Config {
@@ -239,7 +239,12 @@ object CuidarDeLongeTv {
                 PainelArmazem.registrar(app, "tv", "cuidar de longe: lembrete das ${CuidarDeLonge.textoHora(a.momento, fuso)} não confirmado",
                     "${r.first} de ${r.second} aceitos")
             }
-            is CuidarDeLonge.Acao.AvisarNaoLigou -> if (permitido) {
+            is CuidarDeLonge.Acao.PerguntarEstouBem -> {
+                mudarEstado(app) { CuidarDeLonge.anotarMostrado(it, a.chave, agora) }
+                principal.post { abrir(app, CuidarTelaActivity.MODO_ESTOU_BEM, a.chave) }
+            }
+            // Build da Play: o "não ligou" automático só sai quando o plugin Extras pede (rodarNaoLigou), nunca sozinho.
+            is CuidarDeLonge.Acao.AvisarNaoLigou -> if (permitido && (BuildConfig.CUIDAR_FAMILIA || pedidoDoExtras)) {
                 val costume = CuidarDeLonge.horaCostume(c, estado(app).ligadas, a.dia) ?: 0
                 val r = Avisos.enviarPara(app, c.aparelhos, "TV_NAO_LIGOU", app.getString(R.string.cuidar_push_nao_ligou_titulo),
                     app.getString(R.string.cuidar_push_nao_ligou, nomeTv(app), "%02d:%02d".format(costume / 60, costume % 60)))
@@ -248,6 +253,31 @@ object CuidarDeLongeTv {
             }
         }
         agendar(app)
+    }
+
+    @Volatile private var pedidoDoExtras = false
+
+    /**
+     * O plugin Extras (app separado) pediu a conferência do "não ligou" (79). BLOQUEIA (rede). Só com o plugin autorizado
+     * pelo dono (PIN) e o aviso aceito na TV pela pessoa; a regra (hora de costume, margem) é a mesma de sempre.
+     */
+    fun rodarNaoLigou(ctx: Context): Boolean {
+        val app = ctx.applicationContext
+        if (!ExtrasPlugin.autorizado(app) || !ativo(app, CuidarDeLonge.Aviso.NAO_LIGOU)) return false
+        synchronized(this) { pedidoDoExtras = true; try { rodar(app) } finally { pedidoDoExtras = false } }
+        return true
+    }
+
+    /** "Estou bem" apertado na TV: avisa os aparelhos. BLOQUEIA (rede). Devolve (aceitos, total). */
+    fun mandarEstouBem(ctx: Context, chave: String): Pair<Int, Int> {
+        val app = ctx.applicationContext
+        val c = config(app)
+        if (!ativo(app, CuidarDeLonge.Aviso.ESTOU_BEM)) return 0 to 0
+        mudarEstado(app) { CuidarDeLonge.anotarConfirmado(it, chave, System.currentTimeMillis()) }
+        val r = Avisos.enviarPara(app, c.aparelhos, "ESTOU_BEM", app.getString(R.string.cuidar_push_bem_titulo),
+            app.getString(R.string.cuidar_push_bem, nomeTv(app), CuidarDeLonge.textoHora(System.currentTimeMillis(), fuso)))
+        PainelArmazem.registrar(app, "tv", "cuidar de longe: estou bem", "${r.first} de ${r.second} aceitos")
+        return r
     }
 
     /** "Feito" no lembrete. */

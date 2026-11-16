@@ -23,5 +23,6 @@ class CobrancaPlayTest {
         assertFalse("relógio que voltou não estende", CobrancaPlay.guardadoValido(agora + 60_000, agora))
     }
 
-    @Test fun foraDaPlayNadaECobrado() = assertFalse(Planos.VENDA_ATIVA)
+    /** Venda só no build da Play; o APK do site (Sala) nunca cobra. */
+    @Test fun vendaSoNaPlay() = assertEquals(BuildConfig.PLAY, Planos.VENDA_ATIVA)
 }

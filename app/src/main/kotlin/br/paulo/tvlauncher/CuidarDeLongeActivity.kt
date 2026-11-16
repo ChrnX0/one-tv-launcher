@@ -80,7 +80,8 @@ class CuidarDeLongeActivity : Activity() {
         val tecla = getString(if (c.tecla == CuidarDeLonge.Tecla.OK) R.string.cuidar_tecla_ok else R.string.cuidar_tecla_voltar)
         linha(getString(R.string.cuidar_aviso_ajuda), getString(R.string.cuidar_aviso_ajuda_det, tecla), sim(CuidarDeLonge.Aviso.AJUDA in c.avisos)) { alternar(CuidarDeLonge.Aviso.AJUDA) }
         if (BuildConfig.CUIDAR_FAMILIA) linha(getString(R.string.cuidar_aviso_lembrete), getString(R.string.cuidar_aviso_lembrete_det, c.prazoMin), sim(CuidarDeLonge.Aviso.LEMBRETE in c.avisos)) { alternar(CuidarDeLonge.Aviso.LEMBRETE) }
-        if (BuildConfig.CUIDAR_FAMILIA) linha(getString(R.string.cuidar_aviso_nao_ligou), getString(R.string.cuidar_aviso_nao_ligou_det), sim(CuidarDeLonge.Aviso.NAO_LIGOU in c.avisos)) { alternar(CuidarDeLonge.Aviso.NAO_LIGOU) }
+        if (BuildConfig.CUIDAR_FAMILIA || ExtrasPlugin.autorizado(this)) linha(getString(R.string.cuidar_aviso_nao_ligou), getString(R.string.cuidar_aviso_nao_ligou_det), sim(CuidarDeLonge.Aviso.NAO_LIGOU in c.avisos)) { alternar(CuidarDeLonge.Aviso.NAO_LIGOU) }
+        linha(getString(R.string.cuidar_aviso_bem), getString(R.string.cuidar_aviso_bem_det), sim(CuidarDeLonge.Aviso.ESTOU_BEM in c.avisos)) { alternar(CuidarDeLonge.Aviso.ESTOU_BEM) }
         if (c.aparelhos.isNotEmpty()) linha(getString(R.string.cuidar_testar), getString(R.string.cuidar_testar_det)) { testar() }
 
         secao(getString(R.string.cuidar_sec_ajuda))
