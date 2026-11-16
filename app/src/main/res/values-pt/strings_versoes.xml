@@ -14,7 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Despertador com a LG NetCast: a LG começa baixa (5) e sobe aos poucos, na rampa do alarme, até um volume fixo escolhido em Despertador (“Volume da TV ao tocar”, de 10 a 30); ao parar, o volume volta</item>
+        <item>Despertador com a LG NetCast: a LG começa baixa (5) e sobe aos poucos (na rampa do alarme, no mínimo 1 minuto) até um volume fixo escolhido em Despertador (“Volume da TV ao tocar”, de 10 a 30); ao parar, o volume volta</item>
         <item>Timer de sono: a LG agora desliga primeiro e o Chromecast 2 s depois, então a LG não mostra mais a tela de seleção de entradas antes de entrar em standby</item>
         <item>Mais 14 idiomas: espanhol, francês, alemão, italiano, polonês, russo, turco, indonésio, híndi, árabe, japonês, coreano, chinês e português de Portugal. O launcher segue o idioma da TV (Configurações › Sistema › Idioma)</item>
         <item>Cuidar de longe (desligado de fábrica; Configurações › Família): segure VOLTAR 3 s para mandar um pedido de ajuda ao celular da família, lembretes com “Feito” que avisam se ninguém confirmar e um aviso quando a TV não foi ligada no horário de sempre. Para ligar, quem mora com a TV dá o consentimento com o controle</item>
