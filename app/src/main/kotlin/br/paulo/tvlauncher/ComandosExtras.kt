@@ -83,6 +83,14 @@ object ComandosExtras {
         // Roda a manutenção noturna agora. Numa thread própria: pode passar de 90 s (shell + limpeza de cache), mais que o
         // limite de um broadcast; o relatório sai depois por "saude" (campo "manutencao").
         "manutencao" -> { val app = ctx.applicationContext; Fundo.rodar("Manutencao-adb") { ManutencaoNoturna.rodar(app) }; "iniciado; ver depois com saude" }
+        // Modo infantil por idade: quantos títulos já têm classificação; "--ez rodar true" classifica agora (a mesma
+        // rotina da madrugada, numa thread própria; o fim sai no log TvLauncher.Idades).
+        "idades" -> {
+            val app = ctx.applicationContext
+            if (i.getBooleanExtra("rodar", false)) Fundo.rodar("Idades-adb") { IdadesTmdb.catalogo(app) }
+            val (f, s) = IdadesTmdb.contagem(app)
+            "filmes=$f series=$s" + if (i.getBooleanExtra("rodar", false)) " (classificando)" else ""
+        }
         "manutencao_resumo" -> { ManutencaoNoturna.talvezMostrarResumo(ctx); "ok" }   // mostra o resumo (se tiver algo e a HOME na frente)
         "consumo" -> ConsumoRedeTv.texto(ctx, i.getIntExtra("dias", 1))
         "tocando" -> TocandoAgoraTv.texto(ctx)

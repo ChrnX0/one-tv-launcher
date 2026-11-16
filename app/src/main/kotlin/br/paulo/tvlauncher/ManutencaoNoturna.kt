@@ -131,6 +131,20 @@ object ManutencaoNoturna {
             // Nota do Trakt (InfoExternaCache, no lugar do IMDb desde 16/11/2026): também fora do relatório.
             runCatching { InfoExternaCache.noturnoTrakt(app) }
         } finally { try { trava?.release() } catch (_: Exception) {} }
+        idades(app)
+    }
+
+    /**
+     * Classificação indicativa do catálogo inteiro (modo infantil por idade; IdadesTmdb.catalogo), com trava própria de
+     * até [IdadesTmdb.PRAZO_MS]. Para se alguém acender a tela; o que faltar fica para a noite seguinte.
+     */
+    private fun idades(app: Context) {
+        val trava = try {
+            app.getSystemService(PowerManager::class.java).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "tvlauncher:manutencao-idades")
+                .apply { acquire(IdadesTmdb.PRAZO_MS + 60_000L) }
+        } catch (e: Exception) { null }
+        try { runCatching { IdadesTmdb.catalogo(app) { telaAcesa(app) } } }
+        finally { try { trava?.release() } catch (_: Exception) {} }
     }
 
     private fun passo(nome: String, corpo: () -> Pair<ManutencaoRegras.Resultado, String>): ManutencaoRegras.Passo = try {

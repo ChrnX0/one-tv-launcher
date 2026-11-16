@@ -45,8 +45,48 @@ object IdadesTmdb {
         return Filtro(r.idadeMax, r.infantis, duras, idades(ctx, serie))
     }
 
-    /** Pergunta ao TMDB a classificação dos [ids] ainda não sabidos (ou vencidos), no máximo [POR_VEZ]. Bloqueia (rede). Devolve quantos mudaram. */
-    fun classificar(ctx: Context, serie: Boolean, ids: Collection<Int>): Int {
+    // ---------------------------------------------------------------- catálogo inteiro de madrugada (16/11/2026)
+    // Só pela abertura de Filmes (300 por vez), 21 mil filmes levavam ~70 aberturas: o "Até 12 anos" da Sala mostrava
+    // 1 filme. Agora a manutenção da madrugada classifica tudo aos poucos. O TMDB limita a VELOCIDADE (~40 pedidos/s,
+    // sem teto diário): um pedido por vez, com [INTERVALO_MS] entre eles, fica bem abaixo disso.
+    private const val INTERVALO_MS = 50L          // no máximo 20 pedidos/s (na prática menos: cada pedido espera a resposta)
+    private const val LOTE = 500                  // grava o arquivo a cada lote: uma noite interrompida não perde o feito
+    const val PRAZO_MS = 40L * 60_000             // por noite; o que faltar continua na seguinte
+    @Volatile private var rodando = false
+
+    /**
+     * Classifica os filmes e as séries guardados (só o cache, nada é baixado da lista) que têm id do TMDB, até [prazoMs]
+     * ou até [parar] dizer que a TV voltou a ser usada. Categorias adultas ficam de fora (nunca aparecem mesmo).
+     * Bloqueia (rede). Devolve quantos títulos ganharam classificação.
+     */
+    fun catalogo(ctx: Context, prazoMs: Long = PRAZO_MS, parar: () -> Boolean = { false }): Int {
+        if (rodando) return 0
+        rodando = true
+        try {
+            val fim = System.currentTimeMillis() + prazoMs
+            val filmes = runCatching { PlayerCarga.filmes(ctx, soCache = true) }.getOrDefault(emptyList())
+                .filter { !PlayerFiltro.ehAdulto(it.grupo) }.mapNotNull { it.tmdb ?: InfoExternaCache.guardado(ctx, it.chave)?.tmdb }
+            val series = runCatching { PlayerCarga.series(ctx, soCache = true) }.getOrDefault(emptyList())
+                .filter { !PlayerFiltro.ehAdulto(it.grupo) }.mapNotNull { it.tmdb ?: InfoExternaCache.guardado(ctx, it.chave)?.tmdb }
+            var total = 0
+            for ((serie, ids) in listOf(false to filmes, true to series)) {
+                while (System.currentTimeMillis() < fim && !parar()) {
+                    val n = classificar(ctx, serie, ids, LOTE, INTERVALO_MS, fim, parar)
+                    total += n
+                    if (n == 0) break   // nada faltando, sem rede, ou o TMDB pediu calma (429): para por hoje
+                }
+            }
+            Log.i(TAG, "madrugada: $total classificados (${filmes.size} filmes e ${series.size} séries com id do TMDB)")
+            return total
+        } finally { rodando = false }
+    }
+
+    /** Quantos títulos já têm classificação guardada (filmes, séries), para o EXTRAS "idades". */
+    fun contagem(ctx: Context): Pair<Int, Int> = idades(ctx, false).size to idades(ctx, true).size
+
+    /** Pergunta ao TMDB a classificação dos [ids] ainda não sabidos (ou vencidos), no máximo [limite]. Bloqueia (rede). Devolve quantos mudaram. */
+    fun classificar(ctx: Context, serie: Boolean, ids: Collection<Int>, limite: Int = POR_VEZ, intervaloMs: Long = 0L,
+                    ate: Long = Long.MAX_VALUE, parar: () -> Boolean = { false }): Int {
         val k = ServicosContas.chavesApp().tmdb.takeIf { it.isNotBlank() } ?: return 0
         val agora = System.currentTimeMillis()
         val tipo = if (serie) "s" else "f"
@@ -54,11 +94,13 @@ object IdadesTmdb {
         val faltam = ids.asSequence().distinct().filter { id ->
             val a = conhecidos.optJSONArray(id.toString()) ?: return@filter true
             agora - a.optLong(1) > if (a.optInt(0, Classificacao.SEM) >= 0) VALE_MS else SEM_VALE_MS
-        }.take(POR_VEZ).toList()
+        }.take(limite).toList()
         if (faltam.isEmpty()) return 0
         val achados = HashMap<Int, Int>()
         val agente = ServicosFilmes.agente(BuildConfig.VERSION_CODE)
         for (id in faltam) {
+            if (System.currentTimeMillis() >= ate || parar()) break
+            if (intervaloMs > 0) Thread.sleep(intervaloMs)
             val r = runCatching { ServicosContas.pedir(if (serie) Classificacao.urlSerie(k, id) else Classificacao.urlFilme(k, id), InfoExterna.tmdbCabecalhos(k, agente)) }
                 .onFailure { Log.w(TAG, "classificar: ${it.javaClass.simpleName}") }.getOrNull() ?: break   // sem rede: para e tenta na próxima
             if (r.codigo == 429) break
