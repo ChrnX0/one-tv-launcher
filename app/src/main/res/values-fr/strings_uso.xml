@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
+<resources>
+    <string name="uso_titulo">Utilisation de cette TV</string>
+    <string name="uso_det">Simple masque les onglets techniques (Maison, À distance, Avancé). Rien n\'est désactivé.</string>
+    <string name="uso_simples">Simple</string>
+    <string name="uso_completo">Complet</string>
+    <string name="uso_cuida">Pour un proche dont je m\'occupe</string>
+    <string name="uso_pergunta">Comment cette TV sera-t-elle utilisée ?</string>
+    <string name="uso_pergunta_det">Vous pourrez changer plus tard dans Paramètres &gt; Système.</string>
+    <string name="uso_simples_det">Juste un bel écran d\'accueil : applis, heure et météo. Moins d\'options dans les Paramètres.</string>
+    <string name="uso_completo_det">Tout : contrôle depuis le téléphone, appareils de la maison, lecteur réseau et options avancées.</string>
+    <string name="uso_cuida_det">La TV des parents ou grands-parents : facile pour eux, et vous aidez à distance depuis le téléphone.</string>
+    <string name="uso_cuidar_longe">Veiller à distance</string>
+    <string name="uso_cuidar_longe_det">Désactivé tant que la personne qui vit là n\'a pas accepté sur la TV.</string>
+    <string name="uso_cartoes">Grandes cartes sur l\'écran d\'accueil</string>
+    <string name="uso_cartoes_det">Quelques grandes applis, nom lu à voix haute et bouton \"Demander de l\'aide\". Pour désactiver, le PIN est demandé.</string>
+    <string name="uso_trocar_det">Actuellement : %1$s. OK pour choisir à nouveau.</string>
+</resources>

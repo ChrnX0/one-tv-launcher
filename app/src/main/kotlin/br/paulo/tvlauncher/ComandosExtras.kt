@@ -108,6 +108,15 @@ object ComandosExtras {
         "roteiro" -> ConferirTvActivity.relatorio(ctx)
         "compat" -> CompatibilidadeTv.json(ctx).toString(2)   // relatório da página "Funciona no seu aparelho?"
         "compat_texto" -> CompatibilidadeTv.texto(ctx)
+        // Modo de segurança da HOME (degrau 2): ligar à mão para ver a HOME mínima; sair; estado.
+        "modo_seguro_testar" -> { ModoSeguro.ligarParaTeste(ctx); "modo de segurança ligado: aperte HOME" }
+        "modo_seguro_sair" -> { ModoSeguro.sair(ctx); "modo de segurança desligado" }
+        "modo_seguro" -> if (ModoSeguro.ativo(ctx)) "ligado" else "desligado"
+        // Modo hóspede (degrau 2). O adb já é autenticado: desligar aqui não pede o PIN.
+        "hospede" -> "ativo=${ModoHospede.ativo(ctx)} saida=${ModoHospede.textoSaida(ctx)} apps=${ModoHospede.paraLimpar(ctx)} ultima=${ModoHospede.ultimaLimpeza(ctx)}"
+        "hospede_ligar" -> { ModoHospede.ligar(ctx); "modo hóspede ligado" }
+        "hospede_desligar" -> { ModoHospede.desligar(ctx); "modo hóspede desligado" }
+        "hospede_encerrar" -> { val app = ctx.applicationContext; Fundo.rodar("hospede-adb") { ModoHospede.encerrarEstadia(app) }; "limpando; ver depois com hospede" }
         "planos" -> abrir(ctx, ConhecerProActivity::class.java)   // tela "Conhecer o Pro" (venda ainda desligada)
         "planos_texto" -> Planos.texto(Planos.atual(ctx))
         "visual" -> VisualCodigoTv.link(ctx)   // tema por QR: o link com o código do visual desta TV

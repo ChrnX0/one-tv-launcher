@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede (degrau 2, 16/11/2026): ModoHospede, HospedeBoasVindasActivity, Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="hos_titulo">Modalità ospite</string>
+    <string name="hos_det">Per affitti: gli accessi dell\'ospite vengono cancellati alla partenza. Per spegnerlo serve il PIN.</string>
+    <string name="hos_pin_sair">PIN per uscire dalla modalità ospite</string>
+    <string name="hos_pin_config">PIN per aprire le impostazioni</string>
+    <string name="hos_saida">Partenza dell\'ospite</string>
+    <string name="hos_saida_det">A quest\'ora le app di streaming vengono ripulite. OK cambia il giorno.</string>
+    <string name="hos_saida_nenhuma">Non impostata</string>
+    <string name="hos_saida_hoje">Oggi alle %1$s</string>
+    <string name="hos_saida_amanha">Domani alle %1$s</string>
+    <string name="hos_saida_dia">%1$s alle %2$s</string>
+    <string name="hos_hora">Ora della partenza</string>
+    <string name="hos_hora_det">OK cambia l\'ora (8:00–14:00).</string>
+    <string name="hos_regras">Regole della casa</string>
+    <string name="hos_regras_vazio">Ancora nessuna. Compaiono nel benvenuto.</string>
+    <string name="hos_regras_dica">Es.: Silenzio dopo le 22. Partenza alle 11.</string>
+    <string name="hos_apps">App ripulite alla partenza</string>
+    <string name="hos_apps_det">Accessi e cronologia delle app selezionate vengono cancellati. Quelle di streaming sono già selezionate.</string>
+    <string name="hos_apps_sub">OK seleziona o deseleziona. Le app di sistema non si possono ripulire.</string>
+    <string name="hos_encerrar">Termina il soggiorno ora</string>
+    <string name="hos_encerrar_det">Ripulisce le app ora e prepara il benvenuto per il prossimo ospite.</string>
+    <string name="hos_encerrar_pergunta">Cancellare ora accessi e cronologia delle app dell\'ospite? Non si può annullare.</string>
+    <string name="hos_encerrar_sim">Cancella</string>
+    <string name="hos_limpando">Pulizia in corso…</string>
+    <string name="hos_limpou">App ripulite: %1$d.</string>
+    <string name="hos_limpou_falhas">App ripulite: %1$d. Non riuscite: %2$s</string>
+    <string name="hos_ultima">Ultima pulizia: %1$s</string>
+    <string name="hos_bv_titulo">Benvenuto!</string>
+    <string name="hos_bv_regras">Regole della casa</string>
+    <string name="hos_bv_privacidade">Accedi alle tue app senza pensieri: alla partenza, accessi e cronologia delle app di streaming vengono cancellati da soli.</string>
+    <string name="hos_bv_ok">Inizia</string>
+    <string name="hos_bv_wifi">Wi-Fi</string>
+</resources>

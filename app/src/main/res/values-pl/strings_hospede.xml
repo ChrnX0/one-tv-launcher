@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede (degrau 2, 16/11/2026): ModoHospede, HospedeBoasVindasActivity, Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="hos_titulo">Tryb gościa</string>
+    <string name="hos_det">Na wynajem: logowania gościa są usuwane przy wymeldowaniu. Wyłączenie wymaga PIN-u.</string>
+    <string name="hos_pin_sair">PIN, aby wyjść z trybu gościa</string>
+    <string name="hos_pin_config">PIN, aby otworzyć ustawienia</string>
+    <string name="hos_saida">Wymeldowanie gościa</string>
+    <string name="hos_saida_det">O tej godzinie aplikacje streamingowe są czyszczone. OK zmienia dzień.</string>
+    <string name="hos_saida_nenhuma">Nie ustawiono</string>
+    <string name="hos_saida_hoje">Dziś o %1$s</string>
+    <string name="hos_saida_amanha">Jutro o %1$s</string>
+    <string name="hos_saida_dia">%1$s o %2$s</string>
+    <string name="hos_hora">Godzina wymeldowania</string>
+    <string name="hos_hora_det">OK zmienia godzinę (8:00–14:00).</string>
+    <string name="hos_regras">Zasady domu</string>
+    <string name="hos_regras_vazio">Jeszcze brak. Pojawiają się na powitaniu.</string>
+    <string name="hos_regras_dica">Np.: Cisza po 22:00. Wymeldowanie o 11:00.</string>
+    <string name="hos_apps">Aplikacje czyszczone przy wymeldowaniu</string>
+    <string name="hos_apps_det">Logowania i historia zaznaczonych aplikacji są usuwane. Aplikacje streamingowe są już zaznaczone.</string>
+    <string name="hos_apps_sub">OK zaznacza lub odznacza. Aplikacji systemowych nie można wyczyścić.</string>
+    <string name="hos_encerrar">Zakończ pobyt teraz</string>
+    <string name="hos_encerrar_det">Czyści aplikacje teraz i przygotowuje powitanie dla następnego gościa.</string>
+    <string name="hos_encerrar_pergunta">Usunąć teraz logowania i historię aplikacji gościa? Tego nie można cofnąć.</string>
+    <string name="hos_encerrar_sim">Usuń</string>
+    <string name="hos_limpando">Czyszczenie…</string>
+    <string name="hos_limpou">Wyczyszczone aplikacje: %1$d.</string>
+    <string name="hos_limpou_falhas">Wyczyszczone aplikacje: %1$d. Nie udało się: %2$s</string>
+    <string name="hos_ultima">Ostatnie czyszczenie: %1$s</string>
+    <string name="hos_bv_titulo">Witamy!</string>
+    <string name="hos_bv_regras">Zasady domu</string>
+    <string name="hos_bv_privacidade">Loguj się do swoich aplikacji bez obaw: przy wymeldowaniu logowania i historia aplikacji streamingowych są usuwane automatycznie.</string>
+    <string name="hos_bv_ok">Zaczynamy</string>
+    <string name="hos_bv_wifi">Wi-Fi</string>
+</resources>

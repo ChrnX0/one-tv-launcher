@@ -91,6 +91,7 @@ class MainActivity : Activity() {
     private val textoSuave: Int get() = if (tema == Tema.ESCURO) 0xFF93A19A.toInt() else 0xFFCFD9D4.toInt()
     // O visual escolhido no menu do perfil (Tema.kt). Lido no onCreate; trocar de tema recria a tela.
     private var tema = Tema.ESCURO
+    private var desviadaParaSegura = false   // modo de segurança: o onCreate parou cedo (nada foi montado)
     private var assinaturaFundo = ""   // "Meu fundo": arquivo|brilho|contraste quando a tela foi montada
     private var idiomaMontado = ""     // idioma em que a tela foi montada (locale está em configChanges: não recria sozinha)
     private var assinaturaLayout = ""  // layout flexível (LayoutHome): tamanho|transparente quando a tela foi montada
@@ -283,6 +284,8 @@ class MainActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Modo de segurança (degrau 2): a HOME caiu 3 vezes seguidas nesta versão -> HOME mínima no lugar desta.
+        if (ModoSeguro.desviar(this)) { desviadaParaSegura = true; return }
         DesempenhoTv.criou()   // guarda de desempenho (12/11/2026): o 1º quadro depois disto dá o tempo de abertura
         tema = Tema.atual(this)
         assinaturaFundo = FundoMeuDados.assinatura(this)
@@ -320,6 +323,14 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        if (desviadaParaSegura) return
+        ModoSeguro.aoRetomarHome(this)   // 30 s de pé = a HOME firmou (zera a conta de quedas seguidas)
+        ModoHospede.talvezBoasVindas(this)   // modo hóspede: boas-vindas uma vez por estadia
+        ModoHospede.conferirSaida(this)      // e a saída que passou com a TV fora da tomada
+        // Agenda da família (degrau 2): a troca de perfil que passou com a TV desligada (o alarme não veio).
+        Fundo.rodar("agenda-perfis") {
+            if (AgendaPerfisTv.conferir(applicationContext)) runOnUiThread { if (!isDestroyed) { atualizarFotoPerfil(); reorganizar() } }
+        }
         // O tema agora só troca na tela separada de Configurações do launcher (ConfigLauncherActivity), que não
         // tem como chamar recreate() nesta Activity diretamente — então aqui a gente mesmo percebe a troca ao voltar.
         if (Tema.atual(this) != tema) { recreate(); return }
@@ -374,6 +385,8 @@ class MainActivity : Activity() {
 
     override fun onPause() {
         super.onPause()
+        ModoSeguro.aoPausarHome()
+        if (desviadaParaSegura) return
         focoTopo = currentFocus?.takeIf { f -> generateSequence(f.parent) { it.parent }.any { it === topoRaiz } }
         DesempenhoTv.desligar(this)
         if (::capa.isInitialized) capa.parar()   // zoom da cena: não fica pedindo quadro com a HOME por trás de um app
@@ -947,9 +960,10 @@ class MainActivity : Activity() {
             .setMessage(getString(R.string.home_visita_msg))
             .setNegativeButton(getString(R.string.home_continuar), null)
             .setPositiveButton(getString(R.string.home_sair)) { _, _ ->
-                ModoVisita.definir(this, false)
-                atualizarFotoPerfil()
-                reorganizar()   // os apps já estão carregados: só refaz a linha
+                val voltar = { atualizarFotoPerfil(); reorganizar() }   // os apps já estão carregados: só refaz a linha
+                // Modo hóspede (degrau 2): sair pede o PIN do painel.
+                if (ModoHospede.ativo(this)) ModoHospede.desligarComPin(this) { voltar() }
+                else { ModoVisita.definir(this, false); voltar() }
             }
             .show()
         dialogo.getButton(AlertDialog.BUTTON_NEGATIVE)?.requestFocus()

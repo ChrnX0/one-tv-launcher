@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
+<resources>
+    <string name="uso_titulo">Come si usa questa TV</string>
+    <string name="uso_det">Semplice nasconde le schede tecniche (Casa, Remoto, Avanzate). Non si spegne nulla.</string>
+    <string name="uso_simples">Semplice</string>
+    <string name="uso_completo">Completo</string>
+    <string name="uso_cuida">Per una persona di cui mi prendo cura</string>
+    <string name="uso_pergunta">Come verrà usata questa TV?</string>
+    <string name="uso_pergunta_det">Puoi cambiarlo dopo in Impostazioni &gt; Sistema.</string>
+    <string name="uso_simples_det">Solo una bella schermata iniziale: app, ora e meteo. Meno opzioni nelle Impostazioni.</string>
+    <string name="uso_completo_det">Tutto: controllo dal telefono, dispositivi di casa, unità di rete e opzioni avanzate.</string>
+    <string name="uso_cuida_det">La TV di genitori o nonni: facile per loro, e tu aiuti dal telefono, da lontano.</string>
+    <string name="uso_cuidar_longe">Prendersi cura da lontano</string>
+    <string name="uso_cuidar_longe_det">Spento finché chi abita lì non accetta sulla TV.</string>
+    <string name="uso_cartoes">Schede grandi nella schermata iniziale</string>
+    <string name="uso_cartoes_det">Poche app grandi, nome letto ad alta voce e pulsante \"Chiedi aiuto\". Per spegnerlo serve il PIN.</string>
+    <string name="uso_trocar_det">Ora: %1$s. OK per scegliere di nuovo.</string>
+</resources>

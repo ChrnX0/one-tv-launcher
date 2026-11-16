@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda da família (degrau 2, 16/11/2026): AgendaFamiliaActivity e Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="agf_titulo">Семейное расписание</string>
+    <string name="agf_sub">В заданное время телевизор сам переключается на этот профиль. Детский профиль включает детский режим и время сна.</string>
+    <string name="agf_cfg_det">Запланировано смен: %1$d. Профиль меняется сам в нужное время.</string>
+    <string name="agf_adicionar">Добавить смену</string>
+    <string name="agf_adicionar_det">Чей профиль, в какие дни и в какое время.</string>
+    <string name="agf_quem">На чей профиль переключить?</string>
+    <string name="agf_dias">В какие дни?</string>
+    <string name="agf_hora">В какое время?</string>
+    <string name="agf_todos">Каждый день</string>
+    <string name="agf_uteis">С понедельника по пятницу</string>
+    <string name="agf_fds">Суббота и воскресенье</string>
+    <string name="agf_alguns">Некоторые дни</string>
+    <string name="agf_apagar">Удалить эту смену?</string>
+    <string name="agf_apagar_sim">Удалить</string>
+    <string name="agf_cheia">Расписание заполнено (12 смен).</string>
+    <string name="agf_sem_contas">На этом телевизоре пока нет профилей (аккаунтов Google).</string>
+</resources>

@@ -332,6 +332,28 @@
             android:name=".EntrarPeloQrActivity"
             android:exported="false"
             android:label="@string/lbl_entrar_celular" />
+        <!-- Modo de segurança: HOME mínima depois de 3 quedas seguidas da HOME (ModoSeguro.kt) -->
+        <activity
+            android:name=".HomeSeguraActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:label="@string/seg_titulo" />
+        <!-- Modo hóspede (degrau 2, ModoHospede.kt): boas-vindas uma vez por estadia e o alarme da hora da saída -->
+        <activity
+            android:name=".HospedeBoasVindasActivity"
+            android:exported="false"
+            android:label="@string/hos_titulo" />
+        <receiver
+            android:name=".HospedeReceiver"
+            android:exported="false" />
+        <!-- Agenda da família (degrau 2, AgendaPerfisTv.kt): a tela e o alarme da troca de perfil -->
+        <activity
+            android:name=".AgendaFamiliaActivity"
+            android:exported="false"
+            android:label="@string/agf_titulo" />
+        <receiver
+            android:name=".AgendaPerfisReceiver"
+            android:exported="false" />
         <!-- "Vindo do Projectivy?": migração guiada, uma vez (VindoDoProjectivyActivity.kt) -->
         <activity
             android:name=".VindoDoProjectivyActivity"

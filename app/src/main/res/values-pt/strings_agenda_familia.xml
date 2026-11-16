@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda da família (degrau 2, 16/11/2026): AgendaFamiliaActivity e Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="agf_titulo">Agenda da família</string>
+    <string name="agf_sub">No horário marcado, a TV troca sozinha para o perfil. Perfil de criança liga o modo infantil e a hora de dormir.</string>
+    <string name="agf_cfg_det">Trocas marcadas: %1$d. O perfil troca sozinho no horário.</string>
+    <string name="agf_adicionar">Adicionar troca</string>
+    <string name="agf_adicionar_det">De quem, que dias e que hora.</string>
+    <string name="agf_quem">Trocar para o perfil de quem?</string>
+    <string name="agf_dias">Quais dias?</string>
+    <string name="agf_hora">Que horas?</string>
+    <string name="agf_todos">Todos os dias</string>
+    <string name="agf_uteis">Segunda a sexta</string>
+    <string name="agf_fds">Sábado e domingo</string>
+    <string name="agf_alguns">Alguns dias</string>
+    <string name="agf_apagar">Apagar esta troca?</string>
+    <string name="agf_apagar_sim">Apagar</string>
+    <string name="agf_cheia">A agenda está cheia (12 trocas).</string>
+    <string name="agf_sem_contas">Ainda não há perfis nesta TV (contas Google).</string>
+</resources>

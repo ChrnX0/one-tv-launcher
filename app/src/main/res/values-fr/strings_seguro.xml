@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo de segurança da HOME (degrau 2, 16/11/2026): HomeSeguraActivity. -->
+<resources>
+    <string name="seg_titulo">Mode sans échec</string>
+    <string name="seg_texto">L\'écran d\'accueil s\'est arrêté %1$d fois de suite. Voici une version simple pour continuer à utiliser la TV.</string>
+    <string name="seg_procurar">Chercher une version corrigée</string>
+    <string name="seg_procurar_det">S\'il y en a une, elle est téléchargée et installée maintenant.</string>
+    <string name="seg_procurando">Recherche d\'une nouvelle version…</string>
+    <string name="seg_normal">Essayer l\'écran d\'accueil normal</string>
+    <string name="seg_normal_det">S\'il s\'arrête encore 3 fois, cet écran revient.</string>
+    <string name="seg_config_tv">Paramètres de la TV</string>
+    <string name="seg_erro">Voir ce qui n\'a pas marché</string>
+    <string name="seg_erro_det">Diagnostic, avec les erreurs enregistrées.</string>
+    <string name="seg_apps">Applis</string>
+</resources>

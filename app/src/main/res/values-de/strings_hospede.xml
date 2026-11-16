@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede (degrau 2, 16/11/2026): ModoHospede, HospedeBoasVindasActivity, Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="hos_titulo">Gastmodus</string>
+    <string name="hos_det">Für Ferienwohnungen: Anmeldungen der Gäste werden beim Check-out gelöscht. Ausschalten verlangt die PIN.</string>
+    <string name="hos_pin_sair">PIN zum Beenden des Gastmodus</string>
+    <string name="hos_pin_config">PIN zum Öffnen der Einstellungen</string>
+    <string name="hos_saida">Abreise des Gastes</string>
+    <string name="hos_saida_det">Zu dieser Zeit werden die Streaming-Apps geleert. OK ändert den Tag.</string>
+    <string name="hos_saida_nenhuma">Nicht festgelegt</string>
+    <string name="hos_saida_hoje">Heute um %1$s</string>
+    <string name="hos_saida_amanha">Morgen um %1$s</string>
+    <string name="hos_saida_dia">%1$s um %2$s</string>
+    <string name="hos_hora">Abreisezeit</string>
+    <string name="hos_hora_det">OK ändert die Uhrzeit (8:00 bis 14:00).</string>
+    <string name="hos_regras">Hausregeln</string>
+    <string name="hos_regras_vazio">Noch keine. Sie erscheinen auf dem Begrüßungsbildschirm.</string>
+    <string name="hos_regras_dica">Z. B.: Ruhe ab 22 Uhr. Abreise um 11 Uhr.</string>
+    <string name="hos_apps">Beim Check-out geleerte Apps</string>
+    <string name="hos_apps_det">Anmeldungen und Verlauf der markierten Apps werden gelöscht. Streaming-Apps sind vorausgewählt.</string>
+    <string name="hos_apps_sub">OK markiert oder entfernt. System-Apps lassen sich nicht leeren.</string>
+    <string name="hos_encerrar">Aufenthalt jetzt beenden</string>
+    <string name="hos_encerrar_det">Leert die Apps jetzt und bereitet die Begrüßung für den nächsten Gast vor.</string>
+    <string name="hos_encerrar_pergunta">Anmeldungen und Verlauf der Gast-Apps jetzt löschen? Das lässt sich nicht rückgängig machen.</string>
+    <string name="hos_encerrar_sim">Löschen</string>
+    <string name="hos_limpando">Wird geleert…</string>
+    <string name="hos_limpou">Geleerte Apps: %1$d.</string>
+    <string name="hos_limpou_falhas">Geleerte Apps: %1$d. Fehlgeschlagen: %2$s</string>
+    <string name="hos_ultima">Letzte Leerung: %1$s</string>
+    <string name="hos_bv_titulo">Willkommen!</string>
+    <string name="hos_bv_regras">Hausregeln</string>
+    <string name="hos_bv_privacidade">Melden Sie sich ohne Sorge an: Beim Check-out werden Anmeldungen und Verlauf der Streaming-Apps automatisch gelöscht.</string>
+    <string name="hos_bv_ok">Los geht\'s</string>
+    <string name="hos_bv_wifi">WLAN</string>
+</resources>

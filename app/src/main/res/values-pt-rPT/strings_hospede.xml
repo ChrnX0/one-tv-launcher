@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede (degrau 2, 16/11/2026): ModoHospede, HospedeBoasVindasActivity, Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="hos_titulo">Modo hóspede</string>
+    <string name="hos_det">Para casa de aluguer: os logins do hóspede são apagados na saída. Para desligar, pede o PIN.</string>
+    <string name="hos_pin_sair">PIN para sair do modo hóspede</string>
+    <string name="hos_pin_config">PIN para abrir as definições</string>
+    <string name="hos_saida">Saída do hóspede</string>
+    <string name="hos_saida_det">A esta hora, as apps de streaming são limpas. OK muda o dia.</string>
+    <string name="hos_saida_nenhuma">Não marcada</string>
+    <string name="hos_saida_hoje">Hoje às %1$s</string>
+    <string name="hos_saida_amanha">Amanhã às %1$s</string>
+    <string name="hos_saida_dia">%1$s às %2$s</string>
+    <string name="hos_hora">Hora da saída</string>
+    <string name="hos_hora_det">OK muda a hora (8:00 a 14:00).</string>
+    <string name="hos_regras">Regras da casa</string>
+    <string name="hos_regras_vazio">Nenhuma ainda. Aparecem nas boas-vindas.</string>
+    <string name="hos_regras_dica">Ex.: Silêncio depois das 22 h. Saída às 11 h.</string>
+    <string name="hos_apps">Apps limpas na saída</string>
+    <string name="hos_apps_det">Logins e histórico das apps marcadas são apagados. As de streaming já vêm marcadas.</string>
+    <string name="hos_apps_sub">OK marca ou desmarca. Apps do sistema não podem ser limpas.</string>
+    <string name="hos_encerrar">Terminar estadia agora</string>
+    <string name="hos_encerrar_det">Limpa as apps agora e prepara as boas-vindas do próximo hóspede.</string>
+    <string name="hos_encerrar_pergunta">Apagar agora os logins e o histórico das apps do hóspede? Não tem volta.</string>
+    <string name="hos_encerrar_sim">Apagar</string>
+    <string name="hos_limpando">A limpar…</string>
+    <string name="hos_limpou">Apps limpas: %1$d.</string>
+    <string name="hos_limpou_falhas">Apps limpas: %1$d. Falharam: %2$s</string>
+    <string name="hos_ultima">Última limpeza: %1$s</string>
+    <string name="hos_bv_titulo">Bem-vindo!</string>
+    <string name="hos_bv_regras">Regras da casa</string>
+    <string name="hos_bv_privacidade">Entre nas suas apps sem receio: na saída, os logins e o histórico das apps de streaming são apagados automaticamente.</string>
+    <string name="hos_bv_ok">Começar</string>
+    <string name="hos_bv_wifi">Wi-Fi</string>
+</resources>

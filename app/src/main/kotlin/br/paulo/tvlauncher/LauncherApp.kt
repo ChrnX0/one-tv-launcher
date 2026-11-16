@@ -61,6 +61,8 @@ class LauncherApp : Application() {
             // Ideias de 12/11/2026: lembretes reagendados (atualizar o app apaga os alarmes), aviso no celular de versão
             // nova e de erro novo, e a guarda de desempenho (anota a versão para comparar os quadros com a anterior).
             Fundo.rodar("ideias-12-11") { runCatching { IdeiasInicio.aoIniciar(this) } }
+            // Modo hóspede (degrau 2): atualizar o app apaga os alarmes; reagenda a hora da saída.
+            Fundo.rodar("hospede") { runCatching { ModoHospede.agendar(this) }; runCatching { AgendaPerfisTv.agendar(this) } }
         }
         BuildInfo.versao = BuildConfig.VERSION_NAME   // o MCP informa a versão no "initialize"
     }

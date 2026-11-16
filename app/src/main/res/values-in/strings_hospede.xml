@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede (degrau 2, 16/11/2026): ModoHospede, HospedeBoasVindasActivity, Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="hos_titulo">Mode tamu</string>
+    <string name="hos_det">Untuk sewa: login tamu dihapus saat check-out. Mematikannya meminta PIN.</string>
+    <string name="hos_pin_sair">PIN untuk keluar dari mode tamu</string>
+    <string name="hos_pin_config">PIN untuk membuka setelan</string>
+    <string name="hos_saida">Check-out tamu</string>
+    <string name="hos_saida_det">Pada waktu ini aplikasi streaming dibersihkan. OK mengganti hari.</string>
+    <string name="hos_saida_nenhuma">Belum diatur</string>
+    <string name="hos_saida_hoje">Hari ini pukul %1$s</string>
+    <string name="hos_saida_amanha">Besok pukul %1$s</string>
+    <string name="hos_saida_dia">%1$s pukul %2$s</string>
+    <string name="hos_hora">Jam check-out</string>
+    <string name="hos_hora_det">OK mengganti jam (8:00–14:00).</string>
+    <string name="hos_regras">Aturan rumah</string>
+    <string name="hos_regras_vazio">Belum ada. Muncul di layar sambutan.</string>
+    <string name="hos_regras_dica">Contoh: Tenang setelah pukul 22.00. Check-out pukul 11.00.</string>
+    <string name="hos_apps">Aplikasi yang dibersihkan saat check-out</string>
+    <string name="hos_apps_det">Login dan riwayat aplikasi yang ditandai dihapus. Aplikasi streaming sudah ditandai.</string>
+    <string name="hos_apps_sub">OK menandai atau melepas. Aplikasi sistem tidak bisa dibersihkan.</string>
+    <string name="hos_encerrar">Akhiri menginap sekarang</string>
+    <string name="hos_encerrar_det">Membersihkan aplikasi sekarang dan menyiapkan sambutan untuk tamu berikutnya.</string>
+    <string name="hos_encerrar_pergunta">Hapus login dan riwayat aplikasi tamu sekarang? Ini tidak bisa dibatalkan.</string>
+    <string name="hos_encerrar_sim">Hapus</string>
+    <string name="hos_limpando">Membersihkan…</string>
+    <string name="hos_limpou">Aplikasi dibersihkan: %1$d.</string>
+    <string name="hos_limpou_falhas">Aplikasi dibersihkan: %1$d. Gagal: %2$s</string>
+    <string name="hos_ultima">Pembersihan terakhir: %1$s</string>
+    <string name="hos_bv_titulo">Selamat datang!</string>
+    <string name="hos_bv_regras">Aturan rumah</string>
+    <string name="hos_bv_privacidade">Masuk ke aplikasi Anda tanpa khawatir: saat check-out, login dan riwayat aplikasi streaming dihapus otomatis.</string>
+    <string name="hos_bv_ok">Mulai</string>
+    <string name="hos_bv_wifi">Wi-Fi</string>
+</resources>

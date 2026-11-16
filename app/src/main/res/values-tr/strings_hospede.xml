@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede (degrau 2, 16/11/2026): ModoHospede, HospedeBoasVindasActivity, Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="hos_titulo">Misafir modu</string>
+    <string name="hos_det">Kiralık evler için: misafirin oturumları çıkışta silinir. Kapatmak PIN ister.</string>
+    <string name="hos_pin_sair">Misafir modundan çıkmak için PIN</string>
+    <string name="hos_pin_config">Ayarları açmak için PIN</string>
+    <string name="hos_saida">Misafir çıkışı</string>
+    <string name="hos_saida_det">Bu saatte yayın uygulamaları temizlenir. OK günü değiştirir.</string>
+    <string name="hos_saida_nenhuma">Ayarlanmadı</string>
+    <string name="hos_saida_hoje">Bugün %1$s</string>
+    <string name="hos_saida_amanha">Yarın %1$s</string>
+    <string name="hos_saida_dia">%1$s %2$s</string>
+    <string name="hos_hora">Çıkış saati</string>
+    <string name="hos_hora_det">OK saati değiştirir (8:00–14:00).</string>
+    <string name="hos_regras">Ev kuralları</string>
+    <string name="hos_regras_vazio">Henüz yok. Karşılama ekranında görünür.</string>
+    <string name="hos_regras_dica">Örn.: 22.00\'den sonra sessizlik. Çıkış 11.00\'de.</string>
+    <string name="hos_apps">Çıkışta temizlenen uygulamalar</string>
+    <string name="hos_apps_det">İşaretli uygulamaların oturumları ve geçmişi silinir. Yayın uygulamaları zaten işaretli.</string>
+    <string name="hos_apps_sub">OK işaretler ya da kaldırır. Sistem uygulamaları temizlenemez.</string>
+    <string name="hos_encerrar">Konaklamayı şimdi bitir</string>
+    <string name="hos_encerrar_det">Uygulamaları şimdi temizler ve sonraki misafir için karşılamayı hazırlar.</string>
+    <string name="hos_encerrar_pergunta">Misafir uygulamalarının oturumları ve geçmişi şimdi silinsin mi? Geri alınamaz.</string>
+    <string name="hos_encerrar_sim">Sil</string>
+    <string name="hos_limpando">Temizleniyor…</string>
+    <string name="hos_limpou">Temizlenen uygulama: %1$d.</string>
+    <string name="hos_limpou_falhas">Temizlenen uygulama: %1$d. Başarısız: %2$s</string>
+    <string name="hos_ultima">Son temizlik: %1$s</string>
+    <string name="hos_bv_titulo">Hoş geldiniz!</string>
+    <string name="hos_bv_regras">Ev kuralları</string>
+    <string name="hos_bv_privacidade">Uygulamalarınıza gönül rahatlığıyla girin: çıkışta yayın uygulamalarının oturumları ve geçmişi kendiliğinden silinir.</string>
+    <string name="hos_bv_ok">Başla</string>
+    <string name="hos_bv_wifi">Wi-Fi</string>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
+<resources>
+    <string name="uso_titulo">이 TV의 사용 방식</string>
+    <string name="uso_det">간단은 기술 탭(홈, 원격, 고급)을 숨깁니다. 꺼지는 것은 없습니다.</string>
+    <string name="uso_simples">간단</string>
+    <string name="uso_completo">전체</string>
+    <string name="uso_cuida">내가 돌보는 사람용</string>
+    <string name="uso_pergunta">이 TV를 어떻게 쓰시나요?</string>
+    <string name="uso_pergunta_det">나중에 설정 &gt; 시스템에서 바꿀 수 있습니다.</string>
+    <string name="uso_simples_det">예쁜 홈 화면만: 앱, 시계, 날씨. 설정 항목이 줄어듭니다.</string>
+    <string name="uso_completo_det">전체: 휴대폰 제어, 집 안 기기, 네트워크 드라이브, 고급 옵션.</string>
+    <string name="uso_cuida_det">부모님이나 조부모님의 TV: 그분들에겐 쉽게, 당신은 멀리서 휴대폰으로 도와요.</string>
+    <string name="uso_cuidar_longe">멀리서 돌보기</string>
+    <string name="uso_cuidar_longe_det">그곳에 사는 분이 TV에서 동의할 때까지 꺼져 있습니다.</string>
+    <string name="uso_cartoes">홈 화면에 큰 카드</string>
+    <string name="uso_cartoes_det">큰 앱 몇 개, 이름 읽어 주기, \"도움 요청\" 버튼. 끄려면 PIN이 필요합니다.</string>
+    <string name="uso_trocar_det">현재: %1$s. OK를 눌러 다시 선택.</string>
+</resources>

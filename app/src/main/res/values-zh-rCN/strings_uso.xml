@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
+<resources>
+    <string name="uso_titulo">这台电视的用法</string>
+    <string name="uso_det">简单模式会隐藏技术选项卡（家居、远程、高级），不会关闭任何功能。</string>
+    <string name="uso_simples">简单</string>
+    <string name="uso_completo">完整</string>
+    <string name="uso_cuida">给我照顾的人</string>
+    <string name="uso_pergunta">这台电视将如何使用？</string>
+    <string name="uso_pergunta_det">之后可在“设置 &gt; 系统”中更改。</string>
+    <string name="uso_simples_det">只是一个漂亮的主屏幕：应用、时钟和天气。设置中的选项更少。</string>
+    <string name="uso_completo_det">全部功能：手机控制、家居设备、网络驱动器和高级选项。</string>
+    <string name="uso_cuida_det">父母或祖父母的电视：他们用起来简单，你可以在远处用手机帮忙。</string>
+    <string name="uso_cuidar_longe">远程关照</string>
+    <string name="uso_cuidar_longe_det">在住在那里的人在电视上同意之前保持关闭。</string>
+    <string name="uso_cartoes">主屏幕大卡片</string>
+    <string name="uso_cartoes_det">少量大应用，名称朗读，并有“求助”按钮。关闭时需要 PIN。</string>
+    <string name="uso_trocar_det">当前：%1$s。按 OK 重新选择。</string>
+</resources>

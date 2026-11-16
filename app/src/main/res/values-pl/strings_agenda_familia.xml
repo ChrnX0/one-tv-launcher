@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda da família (degrau 2, 16/11/2026): AgendaFamiliaActivity e Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="agf_titulo">Plan rodzinny</string>
+    <string name="agf_sub">O ustalonej godzinie telewizor sam przełącza się na ten profil. Profil dziecka włącza tryb dziecięcy i porę snu.</string>
+    <string name="agf_cfg_det">Zaplanowane zmiany: %1$d. Profil zmienia się sam o czasie.</string>
+    <string name="agf_adicionar">Dodaj zmianę</string>
+    <string name="agf_adicionar_det">Czyj profil, w które dni i o której.</string>
+    <string name="agf_quem">Przełączyć na czyj profil?</string>
+    <string name="agf_dias">W które dni?</string>
+    <string name="agf_hora">O której?</string>
+    <string name="agf_todos">Codziennie</string>
+    <string name="agf_uteis">Od poniedziałku do piątku</string>
+    <string name="agf_fds">Sobota i niedziela</string>
+    <string name="agf_alguns">Niektóre dni</string>
+    <string name="agf_apagar">Usunąć tę zmianę?</string>
+    <string name="agf_apagar_sim">Usuń</string>
+    <string name="agf_cheia">Plan jest pełny (12 zmian).</string>
+    <string name="agf_sem_contas">Na tym telewizorze nie ma jeszcze profili (kont Google).</string>
+</resources>

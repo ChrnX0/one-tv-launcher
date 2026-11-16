@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede (degrau 2, 16/11/2026): ModoHospede, HospedeBoasVindasActivity, Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="hos_titulo">ゲストモード</string>
+    <string name="hos_det">貸し出し用：チェックアウト時にゲストのログインを消去します。オフにするにはPINが必要です。</string>
+    <string name="hos_pin_sair">ゲストモードを終了するPIN</string>
+    <string name="hos_pin_config">設定を開くPIN</string>
+    <string name="hos_saida">ゲストのチェックアウト</string>
+    <string name="hos_saida_det">この時刻に動画アプリを消去します。OKで日付を変更。</string>
+    <string name="hos_saida_nenhuma">未設定</string>
+    <string name="hos_saida_hoje">今日 %1$s</string>
+    <string name="hos_saida_amanha">明日 %1$s</string>
+    <string name="hos_saida_dia">%1$s %2$s</string>
+    <string name="hos_hora">チェックアウト時刻</string>
+    <string name="hos_hora_det">OKで時刻を変更（8:00〜14:00）。</string>
+    <string name="hos_regras">ハウスルール</string>
+    <string name="hos_regras_vazio">まだありません。ようこそ画面に表示されます。</string>
+    <string name="hos_regras_dica">例：22時以降はお静かに。チェックアウトは11時。</string>
+    <string name="hos_apps">チェックアウト時に消去するアプリ</string>
+    <string name="hos_apps_det">チェックしたアプリのログインと履歴を消去します。動画アプリは最初からチェック済み。</string>
+    <string name="hos_apps_sub">OKでチェックの切り替え。システムアプリは消去できません。</string>
+    <string name="hos_encerrar">今すぐ滞在を終了</string>
+    <string name="hos_encerrar_det">今すぐアプリを消去し、次のゲストのようこそ画面を準備します。</string>
+    <string name="hos_encerrar_pergunta">ゲストのアプリのログインと履歴を今すぐ消去しますか？元に戻せません。</string>
+    <string name="hos_encerrar_sim">消去</string>
+    <string name="hos_limpando">消去中…</string>
+    <string name="hos_limpou">消去したアプリ：%1$d</string>
+    <string name="hos_limpou_falhas">消去したアプリ：%1$d。失敗：%2$s</string>
+    <string name="hos_ultima">最後の消去：%1$s</string>
+    <string name="hos_bv_titulo">ようこそ！</string>
+    <string name="hos_bv_regras">ハウスルール</string>
+    <string name="hos_bv_privacidade">安心してアプリにログインしてください。チェックアウト時に動画アプリのログインと履歴は自動で消去されます。</string>
+    <string name="hos_bv_ok">はじめる</string>
+    <string name="hos_bv_wifi">Wi-Fi</string>
+</resources>

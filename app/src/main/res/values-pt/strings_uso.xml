@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
+<resources>
+    <string name="uso_titulo">Como esta TV é usada</string>
+    <string name="uso_det">Simples esconde as abas técnicas (Casa, Remoto, Avançado). Nada é desligado.</string>
+    <string name="uso_simples">Simples</string>
+    <string name="uso_completo">Completo</string>
+    <string name="uso_cuida">Para quem eu cuido</string>
+    <string name="uso_pergunta">Como esta TV vai ser usada?</string>
+    <string name="uso_pergunta_det">Dá para trocar depois em Configurações &gt; Sistema.</string>
+    <string name="uso_simples_det">Só uma tela inicial bonita: apps, hora e clima. Menos opções nas Configurações.</string>
+    <string name="uso_completo_det">Tudo: controle pelo celular, aparelhos da casa, unidade de rede e opções avançadas.</string>
+    <string name="uso_cuida_det">A TV dos pais ou avós: fácil para eles, e você ajuda pelo celular, de longe.</string>
+    <string name="uso_cuidar_longe">Cuidar de longe</string>
+    <string name="uso_cuidar_longe_det">Desligado até quem mora aí aceitar na TV.</string>
+    <string name="uso_cartoes">Cartões grandes na tela inicial</string>
+    <string name="uso_cartoes_det">Poucos apps grandes, nome falado e botão \"Pedir ajuda\". Para desligar, pede o PIN.</string>
+    <string name="uso_trocar_det">Agora: %1$s. OK para escolher de novo.</string>
+</resources>

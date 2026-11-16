@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo de segurança da HOME (degrau 2, 16/11/2026): HomeSeguraActivity. -->
+<resources>
+    <string name="seg_titulo">安全模式</string>
+    <string name="seg_texto">主屏幕连续停止了 %1$d 次。这是它的简单版本，让你可以继续使用电视。</string>
+    <string name="seg_procurar">查找修复版本</string>
+    <string name="seg_procurar_det">如果有，会立即下载并安装。</string>
+    <string name="seg_procurando">正在查找新版本…</string>
+    <string name="seg_normal">尝试正常主屏幕</string>
+    <string name="seg_normal_det">如果再停止 3 次，会回到这个屏幕。</string>
+    <string name="seg_config_tv">电视设置</string>
+    <string name="seg_erro">查看出了什么问题</string>
+    <string name="seg_erro_det">诊断，含已保存的错误。</string>
+    <string name="seg_apps">应用</string>
+</resources>

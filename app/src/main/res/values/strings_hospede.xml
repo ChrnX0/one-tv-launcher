@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede (degrau 2, 16/11/2026): ModoHospede, HospedeBoasVindasActivity, Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="hos_titulo">Guest mode</string>
+    <string name="hos_det">For rentals: guest logins are erased at check-out. Turning it off asks for the PIN.</string>
+    <string name="hos_pin_sair">PIN to leave guest mode</string>
+    <string name="hos_pin_config">PIN to open the settings</string>
+    <string name="hos_saida">Guest check-out</string>
+    <string name="hos_saida_det">At this time, the streaming apps are cleaned. OK changes the day.</string>
+    <string name="hos_saida_nenhuma">Not set</string>
+    <string name="hos_saida_hoje">Today at %1$s</string>
+    <string name="hos_saida_amanha">Tomorrow at %1$s</string>
+    <string name="hos_saida_dia">%1$s at %2$s</string>
+    <string name="hos_hora">Check-out time</string>
+    <string name="hos_hora_det">OK changes the hour (8:00 to 14:00).</string>
+    <string name="hos_regras">House rules</string>
+    <string name="hos_regras_vazio">None yet. They appear on the welcome screen.</string>
+    <string name="hos_regras_dica">E.g.: Quiet after 10 pm. Check-out at 11 am.</string>
+    <string name="hos_apps">Apps to clean at check-out</string>
+    <string name="hos_apps_det">Logins and history of the marked apps are erased. Streaming apps come marked.</string>
+    <string name="hos_apps_sub">OK marks or unmarks. System apps cannot be cleaned.</string>
+    <string name="hos_encerrar">End the stay now</string>
+    <string name="hos_encerrar_det">Cleans the apps now and gets the welcome ready for the next guest.</string>
+    <string name="hos_encerrar_pergunta">Erase logins and history of the guest apps now? This cannot be undone.</string>
+    <string name="hos_encerrar_sim">Erase</string>
+    <string name="hos_limpando">Cleaning…</string>
+    <string name="hos_limpou">Apps cleaned: %1$d.</string>
+    <string name="hos_limpou_falhas">Apps cleaned: %1$d. Failed: %2$s</string>
+    <string name="hos_ultima">Last cleaning: %1$s</string>
+    <string name="hos_bv_titulo">Welcome!</string>
+    <string name="hos_bv_regras">House rules</string>
+    <string name="hos_bv_privacidade">Sign in to your apps without worry: at check-out, the logins and history of the streaming apps are erased automatically.</string>
+    <string name="hos_bv_ok">Start</string>
+    <string name="hos_bv_wifi">Wi-Fi</string>
+</resources>

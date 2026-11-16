@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda da família (degrau 2, 16/11/2026): AgendaFamiliaActivity e Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="agf_titulo">परिवार का कार्यक्रम</string>
+    <string name="agf_sub">तय समय पर टीवी अपने-आप उस प्रोफ़ाइल पर चला जाता है। बच्चे की प्रोफ़ाइल बच्चों का मोड और सोने का समय चालू करती है।</string>
+    <string name="agf_cfg_det">तय बदलाव: %1$d। प्रोफ़ाइल समय पर अपने-आप बदलती है।</string>
+    <string name="agf_adicionar">बदलाव जोड़ें</string>
+    <string name="agf_adicionar_det">किसकी प्रोफ़ाइल, कौन-से दिन और किस समय।</string>
+    <string name="agf_quem">किसकी प्रोफ़ाइल पर जाएँ?</string>
+    <string name="agf_dias">कौन-से दिन?</string>
+    <string name="agf_hora">किस समय?</string>
+    <string name="agf_todos">हर दिन</string>
+    <string name="agf_uteis">सोमवार से शुक्रवार</string>
+    <string name="agf_fds">शनिवार और रविवार</string>
+    <string name="agf_alguns">कुछ दिन</string>
+    <string name="agf_apagar">यह बदलाव मिटाएँ?</string>
+    <string name="agf_apagar_sim">मिटाएँ</string>
+    <string name="agf_cheia">कार्यक्रम भर गया है (12 बदलाव)।</string>
+    <string name="agf_sem_contas">इस टीवी पर अभी कोई प्रोफ़ाइल (Google खाता) नहीं है।</string>
+</resources>

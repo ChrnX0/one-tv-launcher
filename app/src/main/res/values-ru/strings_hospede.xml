@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede (degrau 2, 16/11/2026): ModoHospede, HospedeBoasVindasActivity, Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="hos_titulo">Режим гостя</string>
+    <string name="hos_det">Для аренды: входы гостя в аккаунты стираются при выезде. Для отключения нужен PIN.</string>
+    <string name="hos_pin_sair">PIN для выхода из режима гостя</string>
+    <string name="hos_pin_config">PIN для открытия настроек</string>
+    <string name="hos_saida">Выезд гостя</string>
+    <string name="hos_saida_det">В это время приложения стриминга очищаются. OK меняет день.</string>
+    <string name="hos_saida_nenhuma">Не задано</string>
+    <string name="hos_saida_hoje">Сегодня в %1$s</string>
+    <string name="hos_saida_amanha">Завтра в %1$s</string>
+    <string name="hos_saida_dia">%1$s в %2$s</string>
+    <string name="hos_hora">Время выезда</string>
+    <string name="hos_hora_det">OK меняет час (с 8:00 до 14:00).</string>
+    <string name="hos_regras">Правила дома</string>
+    <string name="hos_regras_vazio">Пока нет. Они показываются на приветствии.</string>
+    <string name="hos_regras_dica">Напр.: тишина после 22:00. Выезд в 11:00.</string>
+    <string name="hos_apps">Приложения, очищаемые при выезде</string>
+    <string name="hos_apps_det">Входы и история отмеченных приложений стираются. Приложения стриминга уже отмечены.</string>
+    <string name="hos_apps_sub">OK отмечает или снимает отметку. Системные приложения очистить нельзя.</string>
+    <string name="hos_encerrar">Завершить проживание сейчас</string>
+    <string name="hos_encerrar_det">Очищает приложения сейчас и готовит приветствие следующему гостю.</string>
+    <string name="hos_encerrar_pergunta">Стереть сейчас входы и историю приложений гостя? Это нельзя отменить.</string>
+    <string name="hos_encerrar_sim">Стереть</string>
+    <string name="hos_limpando">Очистка…</string>
+    <string name="hos_limpou">Очищено приложений: %1$d.</string>
+    <string name="hos_limpou_falhas">Очищено приложений: %1$d. Не удалось: %2$s</string>
+    <string name="hos_ultima">Последняя очистка: %1$s</string>
+    <string name="hos_bv_titulo">Добро пожаловать!</string>
+    <string name="hos_bv_regras">Правила дома</string>
+    <string name="hos_bv_privacidade">Входите в свои приложения спокойно: при выезде входы и история приложений стриминга стираются автоматически.</string>
+    <string name="hos_bv_ok">Начать</string>
+    <string name="hos_bv_wifi">Wi-Fi</string>
+</resources>
