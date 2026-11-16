@@ -363,7 +363,12 @@ object PlayerCarga {
         }
         if (!forcar && arquivo.exists() && agora - arquivo.lastModified() < VALIDADE_GUIA) {
             // Banco vazio, cortado ou de outra versão (abrirGuia = null) não vale como "fresco": cai para baixar de novo.
-            abrirGuia(arquivo)?.let { return it }
+            // Fresco pela data mas sem NENHUM programa passando agora (visto na Sala 16/11/2026: todo canal "Sem guia de
+            // programação" até forçar o download, que trouxe 1232 canais com programa): baixa de novo, no máximo 1 vez por hora.
+            abrirGuia(arquivo)?.let { g ->
+                if (agora - ultimaTentativaGuia < 3_600_000L || g.comProgramaAgora(agora).isNotEmpty()) return g
+                Log.i(TAG, "guia sem nada passando agora: baixando de novo")
+            }
         }
         val guardar = !forcar
         ultimaTentativaGuia = agora   // antes do "sem tvg-id" abaixo: senão cada zapping abria uma thread à toa
