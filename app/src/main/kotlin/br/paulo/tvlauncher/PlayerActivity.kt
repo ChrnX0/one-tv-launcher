@@ -189,6 +189,9 @@ class PlayerActivity : Activity() {
         val c = PlayerFiltro.aplicar(canais, PlayerFiltro.Filtro(ocultas = filtro.ocultas, parental = parental)).firstOrNull { it.id == id }
             ?: return false
         if (filtro.ativo) { filtro = filtro.copy(qualidade = null, pais = null); refiltrar() }
+        // Pedido de fora com a lista/guia aberta (visto na Sala 16/11/2026: "Troque sozinho na hora" trocou por baixo da
+        // lista, que seguia mostrando o canal antigo como "assistindo"; um OK ali voltava para ele): fecha antes.
+        grade.fechar(); lista.fechar()
         sintonizar(c)
         return true
     }
