@@ -47,6 +47,12 @@ object SonoSuave {
     private var pelicula: View? = null
     private var volumeAntes = -1
     @Volatile private var lgAntes = -1   // volume da LG quando começou (-1 = sem LG ou ainda não leu)
+
+    /**
+     * Para quem vai desligar a LG (Desligamento): pega o volume dela de antes e tira daqui, assim o [parar] não tenta
+     * devolver o volume a uma LG já desligada. -1 = nada a devolver.
+     */
+    fun tomarLgAntes(): Int { val v = lgAntes; lgAntes = -1; return v }
     private var fim = 0L
     private var inicio = 0L
 

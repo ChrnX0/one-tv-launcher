@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Sleep timer: the LG now turns off first and the Chromecast 2 s later, so the LG no longer shows its input-selection screen before going to standby</item>
         <item>14 more languages: Spanish, French, German, Italian, Polish, Russian, Turkish, Indonesian, Hindi, Arabic, Japanese, Korean, Chinese and Portuguese (Portugal). The launcher follows the TV language (Settings › System › Language)</item>
         <item>Care from afar (off by default; Settings › Family): hold BACK for 3 s to send a help request to family phones, reminders with “Done” that warn if not confirmed, and a notice when the TV was not turned on at the usual time. Turning it on needs the consent of whoever lives with the TV, given with the remote</item>
         <item>Weather in the screensaver: the “sunset 18:29” label no longer covers the rain bar of the next hour</item>
@@ -435,7 +436,7 @@
         <item>Did each page open without a stutter, and did BACK return to the same poster?</item>
         <item>In the web panel, turn the network drive off and on again: when turning it on, did the panel ask for the PIN?</item>
         <item>Open Movies and a movie card: do the IMDb ratings still show?</item>
-        <item>Say “Ok Google, open Turn off in 2 minutes” (or set the sleep timer): about 15 s after the screen goes dark, did the LG turn off by itself?</item>
+        <item>Say “Ok Google, open Turn off in 2 minutes” (or set the sleep timer): did the LG turn off by itself first, with no input-selection screen, and then the Chromecast?</item>
         <item>With the screensaver up, ask from the phone or panel to open the Forecast: did the TV ask first (and open only after OK)?</item>
         <item>Create two routines for the same minute (e.g. turn on and open an app): did both run?</item>
         <item>Let an alarm ring, press Snooze, then turn the alarm off: did the snooze go away and not ring again?</item>

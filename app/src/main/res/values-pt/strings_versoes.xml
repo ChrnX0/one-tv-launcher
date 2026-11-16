@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Timer de sono: a LG agora desliga primeiro e o Chromecast 2 s depois, então a LG não mostra mais a tela de seleção de entradas antes de entrar em standby</item>
         <item>Mais 14 idiomas: espanhol, francês, alemão, italiano, polonês, russo, turco, indonésio, híndi, árabe, japonês, coreano, chinês e português de Portugal. O launcher segue o idioma da TV (Configurações › Sistema › Idioma)</item>
         <item>Cuidar de longe (desligado de fábrica; Configurações › Família): segure VOLTAR 3 s para mandar um pedido de ajuda ao celular da família, lembretes com “Feito” que avisam se ninguém confirmar e um aviso quando a TV não foi ligada no horário de sempre. Para ligar, quem mora com a TV dá o consentimento com o controle</item>
         <item>Previsão no protetor: o “pôr 18:29” não fica mais em cima da barra de chuva da hora seguinte</item>
@@ -305,7 +306,7 @@
         <item>Cada ficha abriu sem travadinha, e o VOLTAR voltou para o mesmo pôster?</item>
         <item>No painel web, desligue e ligue de novo a unidade de rede: ao ligar, o painel pediu o PIN?</item>
         <item>Abra Filmes e a ficha de um filme: as notas do IMDb continuam aparecendo?</item>
-        <item>Marque o timer de sono para 2 minutos: uns 15 s depois que a tela apagar, a LG desligou sozinha?</item>
+        <item>Marque o timer de sono para 2 minutos: a LG desligou sozinha primeiro, sem mostrar a tela de entradas, e o Chromecast logo depois?</item>
         <item>Com o protetor aberto, peça pelo celular ou painel para abrir a Previsão: a TV perguntou antes (e só abriu depois do OK)?</item>
         <item>Crie duas rotinas para o mesmo minuto (ex.: ligar e abrir um app): as duas rodaram?</item>
         <item>Toque um despertador, aperte Soneca e depois desligue o alarme: a soneca sumiu e não tocou de novo?</item>
