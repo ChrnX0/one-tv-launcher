@@ -34,5 +34,5 @@ dependencies {
     implementation(project(":provider"))
     // Teste do Dhizuku embutido (15/11/2026): cliente igual aos apps feitos para o Dhizuku.
     implementation("io.github.iamr0s:Dhizuku-API:2.7.0")
-    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:6.1")
+    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:6.2")
 }

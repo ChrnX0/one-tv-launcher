@@ -155,7 +155,7 @@ dependencies {
     // Empréstimo do Device Owner (Dhizuku, 15/11/2026): servidor vendorizado (MIT, dhizuku/NOTICE.md) e a HiddenApiBypass
     // (Apache-2.0) só para ler o mapa de métodos do IDevicePolicyManager no filtro (FiltroDpm.kt).
     implementation(project(":dhizuku-server_api"))
-    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:6.1")
+    implementation("org.lsposed.hiddenapibypass:hiddenapibypass:6.2")
     // conscrypt-android SAIU (04/11/2026, -1,28 MB de lib nativa): sem ela a libadb usa o TLS 1.3 do próprio Android
     // (SslUtils: SSLContext.getInstance("TLSv1.3"), Android 10+) e, no pareamento, a exportKeyingMaterial da
     // conscrypt da plataforma. Testado na TV: ver o commit.
@@ -199,7 +199,7 @@ dependencies {
     // Teste de tela por foto (ideia 96, 14/11/2026): o Robolectric desenha as telas de verdade (gráficos nativos) no
     // computador, sem emulador. Só roda com -Ptelas (ver tasks.withType<Test> abaixo): o "Build e Release" não paga isso.
     // Sem o conscrypt do Robolectric: ele é assinado e briga com a ponte nossa em org/conscrypt (mesmo pacote).
-    testImplementation("org.robolectric:robolectric:4.16") { exclude(group = "org.conscrypt") }
+    testImplementation("org.robolectric:robolectric:4.18") { exclude(group = "org.conscrypt") }
 }
 
 // Ideia 96: os testes de tela (pasta telas/) baixam o Android do Robolectric (~150 MB na primeira vez) e levam minutos.
