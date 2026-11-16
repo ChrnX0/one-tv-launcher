@@ -96,5 +96,18 @@ def verificar():
     if bs["wa"]:
         print(f"TOTAL (menor = melhor): Brier WA {sum(bs['wa'])/len(bs['wa']):.3f} | Brier OM {sum(bs['om'])/len(bs['om']):.3f}")
 
+def checar():
+    # Só confere se o secret é a chave pura e se a API aceita; não imprime nada da chave.
+    import re
+    chave = os.environ["WEATHERAPI_CHAVE"].strip()
+    print("formato de chave pura (30-32 letras/numeros):", "SIM" if re.fullmatch(r"[0-9a-zA-Z]{30,32}", chave) else "NAO")
+    q = urllib.parse.urlencode({"key": chave, "q": "-23.55,-46.63"})
+    try:
+        with urllib.request.urlopen(urllib.request.Request("https://api.weatherapi.com/v1/current.json?" + q,
+                headers={"User-Agent": "Sofaly-teste-clima/1.0"}), timeout=30) as r:
+            print("consulta:", r.status)
+    except urllib.error.HTTPError as e:
+        print("consulta:", e.code, e.read()[:200].decode(errors="replace"))
+
 if __name__ == "__main__":
-    {"prever": prever, "verificar": verificar}[sys.argv[1] if len(sys.argv) > 1 else "prever"]()
+    {"prever": prever, "verificar": verificar, "checar": checar}[sys.argv[1] if len(sys.argv) > 1 else "prever"]()
