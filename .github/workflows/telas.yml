@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
@@ -49,11 +49,11 @@ jobs:
           yes | "$SDKM" --licenses > /dev/null || true
           "$SDKM" "platforms;android-36" "build-tools;36.0.0"
 
-      - uses: gradle/actions/setup-gradle@v5
+      - uses: gradle/actions/setup-gradle@v6
 
       # O Android que o Robolectric desenha (android-all-instrumented) vem do Maven para ~/.m2: guardar evita baixar
       # ~150 MB a cada execução.
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ~/.m2/repository/org/robolectric
           key: robolectric-${{ hashFiles('app/build.gradle.kts') }}
@@ -68,7 +68,7 @@ jobs:
         if: always()
         run: cat app/build/telas/relatorio-*.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || echo "Sem relatório (o teste não chegou a rodar)." >> "$GITHUB_STEP_SUMMARY"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: telas
