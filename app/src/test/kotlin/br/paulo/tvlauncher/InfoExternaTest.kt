@@ -63,6 +63,16 @@ class InfoExternaTest {
         assertNull(InfoExterna.lerDetalhe("{}", false))
     }
 
+    @Test fun diretorVemDoTmdbEFicaGuardado() {
+        // Getúlio (2014): o provedor dizia "Gigi Soares"; o TMDB tem João Jardim no crew.
+        val f = InfoExterna.lerDetalhe("""{"id":10,"credits":{"cast":[{"name":"Tony Ramos"}],"crew":[
+            {"name":"George Moura","job":"Screenplay"},{"name":"João Jardim","job":"Director"},{"name":"João Jardim","job":"Director"}]}}""", false)!!
+        assertEquals("João Jardim", f.diretor)
+        val g = InfoExterna.guardadoDeJson(InfoExterna.guardadoParaJson(InfoExterna.Guardado(tmdb = 10, detalhe = f, detalheEm = 1L)))
+        assertEquals("João Jardim", g.detalhe?.diretor)
+        assertEquals("", InfoExterna.lerDetalhe("""{"id":1,"credits":{"crew":[{"name":"X","job":"Director"}]}}""", serie = true)!!.diretor)
+    }
+
     @Test fun trailerDoTmdb() {
         val v = org.json.JSONArray("""[
             {"site":"YouTube","type":"Featurette","key":"abcdefgh1","iso_639_1":"pt"},

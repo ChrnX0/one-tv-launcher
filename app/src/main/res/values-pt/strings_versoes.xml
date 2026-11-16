@@ -14,6 +14,14 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Calibração da imagem: o padrão “Barras de cor 75%” não fecha mais o launcher</item>
+        <item>Filmes: o diretor vem do TMDB (Duna mostra Denis Villeneuve), não mais do nome errado da lista</item>
+        <item>Filmes e Séries: faixa de áudio sem idioma aparece como “Faixa”, e não mais “und”</item>
+        <item>TV ao vivo: na troca automática de canal (lembrete de programa), a lista e a grade fecham antes de sintonizar</item>
+        <item>TV ao vivo: “faltam N min” na lista bate com o tempo da barra do programa</item>
+        <item>Guia de programação: se o guia baixado não tem nada passando agora, baixa de novo (no máximo uma vez por hora)</item>
+        <item>Rádios: o texto de enchimento que algumas rádios mandam no lugar da música não aparece mais como nome da música</item>
+        <item>“Também em”: Netflix com anúncios e os planos da Netflix aparecem uma vez só, como Netflix</item>
         <item>Despertador com a LG NetCast: a LG começa baixa (5) e sobe aos poucos (na rampa do alarme, no mínimo 1 minuto) até um volume fixo escolhido em Despertador (“Volume da TV ao tocar”, de 10 a 30); ao parar, o volume volta</item>
         <item>Timer de sono: a LG agora desliga primeiro e o Chromecast 2 s depois, então a LG não mostra mais a tela de seleção de entradas antes de entrar em standby</item>
         <item>Mais 14 idiomas: espanhol, francês, alemão, italiano, polonês, russo, turco, indonésio, híndi, árabe, japonês, coreano, chinês e português de Portugal. O launcher segue o idioma da TV (Configurações › Sistema › Idioma)</item>
@@ -167,6 +175,11 @@
         <item>Protetor de tela com widgets novos, de letra maior: escolha Faixa de vidro (as próximas horas numa curva, com a hora do sol), Cartões (agora, horas, hoje e amanhã) ou Sem caixa (a temperatura grande e o tempo numa frase) em Configurações › Tela e energia › Widgets do protetor, ou no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Barras de cor 75%</item>
+        <item>Diretor do filme</item>
+        <item>Faixa de áudio sem idioma</item>
+        <item>Troca automática de canal</item>
+        <item>Minutos que faltam</item>
         <item>Despertador sobe aos poucos na LG</item>
         <item>Idiomas novos</item>
         <item>Cuidar de longe</item>
@@ -295,6 +308,11 @@
         <item>Em Configurações › Tela e energia, OK em Widgets do protetor até o estilo que quiser e espere o protetor aparecer</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Em Configurações › Tela e energia › Calibração, escolha “Barras de cor 75%”: o padrão aparece e o launcher não fecha?</item>
+        <item>Em Filmes, abra Duna: a ficha mostra Denis Villeneuve como diretor?</item>
+        <item>Num filme cujo áudio não tem idioma, abra Áudio: aparece “Faixa” em vez de “und”?</item>
+        <item>Marque um lembrete de programa com troca automática e deixe a lista de canais aberta: na hora, a lista fecha e o canal certo fica sintonizado?</item>
+        <item>Na lista de canais da TV ao vivo, o “faltam N min” bate com o tempo mostrado na barra do programa?</item>
         <item>Com a TV desligada, marque um alarme para daqui a 2 minutos com rampa de 60 s: o Chromecast e a LG ligaram, e o som começou baixo e subiu aos poucos até o volume escolhido no Despertador?</item>
         <item>Troque o idioma da TV (configurações da TV › Sistema › Idioma) para espanhol, por exemplo: a tela inicial e as Configurações aparecem nesse idioma sem texto cortado? Volte depois.</item>
         <item>Em Configurações › Família › Cuidar de longe, a tela de consentimento abre e o “Concordo” só funciona com o controle? Ligado, segurar VOLTAR 3 s pergunta “Mandar um pedido de ajuda?” e o VOLTAR curto continua voltando? Desligue de novo depois.</item>

@@ -270,8 +270,9 @@ class RadioActivity : Activity() {
                 .setContentType(androidx.media3.common.C.AUDIO_CONTENT_TYPE_MUSIC).build(), true)
             p.addListener(object : Player.Listener {
                 override fun onMediaMetadataChanged(m: MediaMetadata) {
-                    // ICY "StreamTitle" (Artista - Música) chega como título; algumas rádios mandam o próprio nome: ignora.
-                    val t = listOfNotNull(m.title?.toString(), m.artist?.toString()).filter { it.isNotBlank() && !it.equals(r.nome, true) }
+                    // ICY "StreamTitle" (Artista - Música) chega como título; algumas rádios mandam o próprio nome ou um texto
+                    // de espera ("Now Playing info goes here"): ignora (Radios.musicaUtil).
+                    val t = listOfNotNull(m.title?.toString(), m.artist?.toString()).filter { Radios.musicaUtil(it, r.nome) }
                         .distinct().joinToString(" · ")
                     if (t != musica) { musica = t; veuMusica.text = t; montar() }
                 }

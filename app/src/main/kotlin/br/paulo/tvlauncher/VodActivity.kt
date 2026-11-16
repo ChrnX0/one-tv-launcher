@@ -52,6 +52,8 @@ import java.util.Locale
 @androidx.annotation.OptIn(markerClass = [UnstableApi::class])
 class VodActivity : Activity() {
     companion object {
+        /** Códigos ISO 639-2 que não dizem idioma: indefinido, vários, sem fala, outros. */
+        private val SEM_IDIOMA = setOf("und", "mul", "zxx", "mis")
         private const val EXTRA_FONTE = "fonte"
         private const val EXTRA_ID = "id"
         private const val EXTRA_EXT = "ext"
@@ -491,7 +493,9 @@ class VodActivity : Activity() {
     }
 
     private fun nomeFaixa(f: androidx.media3.common.Format): String {
-        val idioma = f.language?.let { Locale.forLanguageTag(it).getDisplayLanguage(Locale.getDefault()).ifEmpty { it } } ?: getString(R.string.vod_faixa)
+        // "und"/"mul"/"zxx" (idioma não marcado no arquivo) apareciam crus: "Áudio: und" na Sala (16/11/2026).
+        val idioma = f.language?.takeUnless { it.isBlank() || it.lowercase() in SEM_IDIOMA }
+            ?.let { Locale.forLanguageTag(it).getDisplayLanguage(Locale.getDefault()).ifEmpty { it } } ?: getString(R.string.vod_faixa)
         return listOfNotNull(idioma, f.label?.takeIf { it.isNotBlank() && it != idioma }).joinToString(" · ")
     }
 
@@ -774,8 +778,7 @@ class VodActivity : Activity() {
             for (i in 0 until grupo.length) {
                 if (!grupo.isTrackSupported(i)) continue
                 val f = grupo.getTrackFormat(i)
-                val idioma = f.language?.let { Locale.forLanguageTag(it).getDisplayLanguage(Locale.getDefault()).ifEmpty { it } } ?: getString(R.string.vod_faixa)
-                val nome = listOfNotNull(idioma, f.label?.takeIf { it.isNotBlank() && it != idioma }).joinToString(" · ")
+                val nome = nomeFaixa(f)
                 val prefixo = getString(if (tipo == C.TRACK_TYPE_AUDIO) R.string.vod_audio else R.string.vod_legenda)
                 val g = grupo.mediaTrackGroup; val indice = i
                 opcoes += Opcao("$prefixo: $nome", grupo.isTrackSelected(i)) {

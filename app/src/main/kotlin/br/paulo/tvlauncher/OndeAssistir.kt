@@ -36,7 +36,9 @@ object OndeAssistir {
      * "Netflix basic with Ads" e "Amazon Prime Video with Ads" viram o nome do serviço; "Apple TV Amazon Channel" (o canal
      * de um serviço dentro de outro) vira o serviço, para não repetir "Apple TV · Apple TV Amazon" (visto em 16/11/2026).
      */
-    fun limparNome(n: String): String = n.replace(Regex("(?i)\\s+(basic\\s+)?with\\s+ads$"), "")
+    // "Netflix Standard with Ads" virava "Netflix Standard" ao lado de "Netflix" (Busca, Sala 16/11/2026): o plano sai também.
+    fun limparNome(n: String): String = n.replace(Regex("(?i)\\s+((basic|standard)\\s+)?with\\s+ads$"), "")
+        .replace(Regex("(?i)^netflix\\s+(basic|standard|premium)$"), "Netflix")
         .replace(Regex("(?i)\\s+(amazon|apple\\s*tv|roku\\s+premium)\\s+channels?$"), "")
         .replace(Regex("(?i)^amazon\\s+prime video$"), "Prime Video").trim()
 
