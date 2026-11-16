@@ -96,7 +96,7 @@ class BuscaActivity : Activity() {
             val listaApps = apps()
             Dados(canais, BuscaUnica.indexar(canais) { it.nome }, BuscaUnica.indexar(filmes) { it.nome },
                 BuscaUnica.indexar(series) { it.nome }, BuscaUnica.indexar(listaApps) { it.second }, titulosDoGuia(canais),
-                listaApps.map { it.first }.toSet(),
+                comGoogleTv(this, listaApps.map { it.first }.toSet()),
                 // Ideia 82: ids TMDB do catálogo inteiro (com as ocultas: o que está escondido não vira "fora da sua lista").
                 idsDoCatalogo(false), idsDoCatalogo(true))
                 .also { Log.i(TAG, "índice: ${canais.size} canais, ${filmes.size} filmes, ${series.size} séries, " +
@@ -105,7 +105,7 @@ class BuscaActivity : Activity() {
             Log.w(TAG, "carregar: $e")
             val listaApps = apps()
             Dados(emptyList(), emptyList(), emptyList(), emptyList(), BuscaUnica.indexar(listaApps) { it.second }, emptyMap(),
-                listaApps.map { it.first }.toSet())
+                comGoogleTv(this, listaApps.map { it.first }.toSet()))
         }
         dados = d
         ui.post { if (!isFinishing) buscarJa() }
@@ -191,10 +191,11 @@ class BuscaActivity : Activity() {
         }
         val apps = BuscaUnica.filtrarIndice(d.iApps, termo).first
         if (apps.isNotEmpty()) grupos += Grupo("Apps", apps.map { (pacote, nome) -> Item(nome, "App") { abrirApp(pacote) } })
-        // Ideia 14: no fim, continuar a busca no YouTube, Netflix e Prime Video (só os instalados). Mesma linha dos apps.
+        // Ideia 14: no fim, continuar a busca no Google TV, YouTube, Netflix e Prime Video (só os instalados). Mesma linha dos apps.
         val outros = BuscaOutrosApps.montar(termo, d.instalados)
         if (outros.isNotEmpty()) grupos += Grupo(getString(R.string.bu_outros_apps), outros.map { p ->
             Item(getString(when (p.destino.chave) {
+                "googletv" -> R.string.bu_outro_googletv
                 "youtube" -> R.string.bu_outro_youtube
                 "netflix" -> R.string.bu_outro_netflix
                 else -> R.string.bu_outro_prime
@@ -313,15 +314,28 @@ class BuscaActivity : Activity() {
      * busca: abre o app, e o termo fica para a pessoa digitar lá.
      */
     private fun procurarEm(p: BuscaOutrosApps.Pedido) {
-        val i = Intent(Intent.ACTION_SEARCH).setPackage(p.destino.pacote).putExtra(SearchManager.QUERY, p.termo)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        if (i.resolveActivity(packageManager) == null) {
-            Log.i(TAG, "sem ACTION_SEARCH em ${p.destino.pacote}: abre o app"); abrirApp(p.destino.pacote); return
-        }
-        try { startActivity(i) } catch (e: Exception) { Log.w(TAG, "busca em ${p.destino.pacote}: ${e.javaClass.simpleName}"); abrirApp(p.destino.pacote) }
+        if (!procurarEm(this, p)) abrirApp(p.destino.pacote)
     }
 
     private fun hora(ms: Long) = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(ms))
 
-    companion object { private const val TAG = "TvLauncher.Busca" }
+    companion object {
+        private const val TAG = "TvLauncher.Busca"
+
+        /** A busca do Google TV (katniss) não é app de tela inicial: entra na lista de instalados à parte. */
+        fun temGoogleTv(ctx: android.content.Context): Boolean =
+            runCatching { ctx.packageManager.getPackageInfo(BuscaOutrosApps.PACOTE_GOOGLE_TV, 0); true }.getOrDefault(false)
+
+        fun comGoogleTv(ctx: android.content.Context, apps: Set<String>): Set<String> =
+            if (temGoogleTv(ctx)) apps + BuscaOutrosApps.PACOTE_GOOGLE_TV else apps
+
+        /** Abre a busca do app do [p] (ação e extra do pedido, pacote fixo). false se o app não atende. */
+        fun procurarEm(ctx: android.content.Context, p: BuscaOutrosApps.Pedido): Boolean {
+            check(BuscaOutrosApps.ACAO == Intent.ACTION_SEARCH && BuscaOutrosApps.ACAO_GLOBAL == SearchManager.INTENT_ACTION_GLOBAL_SEARCH &&
+                BuscaOutrosApps.EXTRA_TERMO == SearchManager.QUERY)
+            val i = Intent(p.acao).setPackage(p.destino.pacote).putExtra(p.extra, p.termo).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            if (i.resolveActivity(ctx.packageManager) == null) { Log.i(TAG, "sem ${p.acao} em ${p.destino.pacote}"); return false }
+            return try { ctx.startActivity(i); true } catch (e: Exception) { Log.w(TAG, "busca em ${p.destino.pacote}: ${e.javaClass.simpleName}"); false }
+        }
+    }
 }

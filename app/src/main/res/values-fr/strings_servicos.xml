@@ -7,7 +7,7 @@
     <string name="sv_linha_det">Trakt, Simkl, MDBList, TMDB et OpenSubtitles</string>
     <string name="sv_trakt_det">Synchronise ce que vous avez vu et votre liste À voir avec votre téléphone</string>
     <string name="sv_simkl_det">Comme Trakt, aussi idéal pour les animes. Utilisez l’un ou les deux</string>
-    <string name="sv_mdblist_det">Facultatif : notes Rotten Tomatoes, Letterboxd et Metacritic, et des listes comme le Top 250</string>
+    <string name="sv_mdblist_det">Facultatif : vos listes, comme le Top 250, deviennent des catégories dans Films et Séries</string>
     <string name="sv_tmdb_det">Résumé, distribution et date du prochain épisode, dans la langue de la TV</string>
     <string name="sv_os_det">Sous-titres en ligne. Sans compte : 5 par jour. Avec un compte gratuit : 20</string>
     <string name="sv_desligado">Se connecter</string>
@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">Nouvel ép. %1$s</string>
     <string name="ext_hoje">aujourd’hui</string>
     <string name="ext_amanha">demain</string>
-    <string name="sv_mdblist_passos">Facultatif : ajoute Rotten Tomatoes, Letterboxd et Metacritic à la note Trakt (qui fonctionne déjà sans).\n1. Pointez l’appareil photo du téléphone vers le code de gauche et connectez-vous (ou créez un compte gratuit). En bas de la page, touchez API Access, générez la clé s’il n’y en a pas encore et copiez-la.\n2. Pointez vers le code de droite : le panneau web s’ouvre sur Paramètres. Collez la clé sous MDBList et touchez Enregistrer la clé.\n3. La TV la vérifie aussitôt et cet écran continue tout seul.</string>
+    <string name="sv_mdblist_passos">Facultatif : vos listes MDBList (comme le Top 250) deviennent des catégories dans Films et Séries.\n1. Pointez l’appareil photo du téléphone vers le code de gauche et connectez-vous (ou créez un compte gratuit). En bas de la page, touchez API Access, générez la clé s’il n’y en a pas encore et copiez-la.\n2. Pointez vers le code de droite : le panneau web s’ouvre sur Paramètres. Collez la clé sous MDBList et touchez Enregistrer la clé.\n3. La TV la vérifie aussitôt et cet écran continue tout seul.</string>
     <string name="sv_mdblist_qr1">Page de la clé MDBList</string>
     <string name="sv_mdblist_qr2">Panneau web (%1$s)</string>
     <string name="sv_mdblist_digitar">Saisir la clé ici</string>

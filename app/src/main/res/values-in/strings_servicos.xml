@@ -7,7 +7,7 @@
     <string name="sv_linha_det">Trakt, Simkl, MDBList, TMDB, dan OpenSubtitles</string>
     <string name="sv_trakt_det">Menyelaraskan yang Anda tonton dan daftar tontonan dengan ponsel</string>
     <string name="sv_simkl_det">Seperti Trakt, juga bagus untuk anime. Pakai salah satu atau keduanya</string>
-    <string name="sv_mdblist_det">Opsional: rating Rotten Tomatoes, Letterboxd, dan Metacritic, serta daftar seperti Top 250</string>
+    <string name="sv_mdblist_det">Opsional: daftar Anda, seperti Top 250, menjadi kategori di Film dan Serial</string>
     <string name="sv_tmdb_det">Alur cerita, pemeran, dan tanggal episode berikutnya, dalam bahasa TV</string>
     <string name="sv_os_det">Subtitle online. Tanpa akun: 5 per hari. Dengan akun gratis: 20</string>
     <string name="sv_desligado">Masuk</string>
@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">Ep. baru %1$s</string>
     <string name="ext_hoje">hari ini</string>
     <string name="ext_amanha">besok</string>
-    <string name="sv_mdblist_passos">Opsional: menambahkan Rotten Tomatoes, Letterboxd, dan Metacritic ke rating Trakt (yang sudah berfungsi tanpanya).\n1. Arahkan kamera ponsel ke kode di kiri lalu masuk (atau buat akun gratis). Di bagian bawah halaman, ketuk API Access, buat kuncinya jika belum ada, lalu salin.\n2. Arahkan ke kode di kanan: panel web terbuka di Setelan. Tempel kunci di bawah MDBList dan ketuk Simpan kunci.\n3. TV langsung memeriksanya dan layar ini berlanjut sendiri.</string>
+    <string name="sv_mdblist_passos">Opsional: daftar MDBList Anda (seperti Top 250) menjadi kategori di Film dan Serial.\n1. Arahkan kamera ponsel ke kode di kiri lalu masuk (atau buat akun gratis). Di bagian bawah halaman, ketuk API Access, buat kuncinya jika belum ada, lalu salin.\n2. Arahkan ke kode di kanan: panel web terbuka di Setelan. Tempel kunci di bawah MDBList dan ketuk Simpan kunci.\n3. TV langsung memeriksanya dan layar ini berlanjut sendiri.</string>
     <string name="sv_mdblist_qr1">Halaman kunci MDBList</string>
     <string name="sv_mdblist_qr2">Panel web (%1$s)</string>
     <string name="sv_mdblist_digitar">Ketik kunci di sini</string>

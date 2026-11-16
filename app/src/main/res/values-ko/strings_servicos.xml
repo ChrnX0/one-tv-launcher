@@ -7,7 +7,7 @@
     <string name="sv_linha_det">Trakt, Simkl, MDBList, TMDB, OpenSubtitles</string>
     <string name="sv_trakt_det">시청한 항목과 보고 싶은 목록을 휴대폰과 동기화</string>
     <string name="sv_simkl_det">Trakt와 비슷하며 애니메이션에도 좋습니다. 하나 또는 둘 다 사용</string>
-    <string name="sv_mdblist_det">선택 사항: Rotten Tomatoes, Letterboxd, Metacritic 평점과 Top 250 같은 목록</string>
+    <string name="sv_mdblist_det">선택 사항: Top 250 같은 내 목록이 영화와 시리즈의 카테고리가 됩니다</string>
     <string name="sv_tmdb_det">TV 언어로 줄거리, 출연진, 다음 에피소드 날짜</string>
     <string name="sv_os_det">온라인 자막. 계정 없이: 하루 5개. 무료 계정: 20개</string>
     <string name="sv_desligado">로그인</string>
@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">새 에피소드 %1$s</string>
     <string name="ext_hoje">오늘</string>
     <string name="ext_amanha">내일</string>
-    <string name="sv_mdblist_passos">선택 사항: Trakt 평점(이것 없이도 작동)에 Rotten Tomatoes, Letterboxd, Metacritic을 추가합니다.\n1. 휴대폰 카메라로 왼쪽 코드를 스캔하고 로그인하세요(또는 무료 계정 만들기). 페이지 맨 아래에서 API Access를 누르고, 키가 없으면 생성한 뒤 복사하세요.\n2. 오른쪽 코드를 스캔하세요: 웹 패널의 설정이 열립니다. MDBList에 키를 붙여 넣고 키 저장을 누르세요.\n3. TV가 바로 확인하고 이 화면이 자동으로 진행됩니다.</string>
+    <string name="sv_mdblist_passos">선택 사항: MDBList 목록(Top 250 등)이 영화와 시리즈의 카테고리가 됩니다.\n1. 휴대폰 카메라로 왼쪽 코드를 스캔하고 로그인하세요(또는 무료 계정 만들기). 페이지 맨 아래에서 API Access를 누르고, 키가 없으면 생성한 뒤 복사하세요.\n2. 오른쪽 코드를 스캔하세요: 웹 패널의 설정이 열립니다. MDBList에 키를 붙여 넣고 키 저장을 누르세요.\n3. TV가 바로 확인하고 이 화면이 자동으로 진행됩니다.</string>
     <string name="sv_mdblist_qr1">MDBList 키 페이지</string>
     <string name="sv_mdblist_qr2">웹 패널(%1$s)</string>
     <string name="sv_mdblist_digitar">여기에 키를 입력하세요</string>

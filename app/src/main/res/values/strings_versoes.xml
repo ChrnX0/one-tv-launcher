@@ -21,7 +21,8 @@
         <item>Movies and Series: the details open lighter (one full-screen background instead of two) and “Episodes” no longer breaks in the middle of the word; long details like “Season 1” go under the button name</item>
         <item>Games: when the rows scroll, they no longer show over the highlighted game at the top</item>
         <item>Kids mode by age: the age rating of every movie and series is fetched overnight, a little at a time, not just 300 each time Movies opens. After the first night “Up to 12” already shows the whole rated catalog</item>
-        <item>Movies and Series: the rating now comes from Trakt (for everyone, no account), fetched at night; the IMDb rating is gone, because IMDb only allows it in non-commercial apps</item>
+        <item>Movies and Series: the rating now comes from Trakt (for everyone, no account), fetched at night; the IMDb, Rotten Tomatoes, Metacritic and Letterboxd ratings are gone, because their owners don’t allow them in a paid app without a contract. MDBList now only brings your lists</item>
+        <item>Movies and Series: the Simkl community rating shows next to Trakt’s (for everyone, no account, fetched at night), and “Where to watch” in the details opens the Google TV search, which shows where the title streams. Search also offers “Search on Google TV”</item>
         <item>“Also on” in the details and “Elsewhere” in Search are off for now: that data belongs to JustWatch and needs a contract. Search still offers to look in YouTube, Netflix and Prime Video</item>
         <item>Connected family (Settings › Family): a link with no account so grandchildren can send photos and notes that show on the TV</item>
         <item>Ready-made scenes: Sleep, Soap opera and Game in Scenes, created with one OK</item>
@@ -201,6 +202,8 @@
     <string-array name="roteiro_ids" translatable="false">
         <item>idades_madrugada</item>
         <item>notas_trakt</item>
+        <item>notas_simkl</item>
+        <item>onde_assistir</item>
         <item>d3_familia</item>
         <item>d3_cenas_prontas</item>
         <item>d3_hospede_total</item>
@@ -349,6 +352,8 @@
     <string-array name="roteiro_titulos">
         <item>Kids mode by age</item>
         <item>Trakt rating</item>
+        <item>Simkl rating</item>
+        <item>Where to watch</item>
         <item>Connected family</item>
         <item>Ready-made scenes</item>
         <item>Guest: full cleanup</item>
@@ -497,6 +502,8 @@
     <string-array name="roteiro_perguntas">
         <item>After one night, with kids mode on and “Up to 12”, does Movies show many films rated up to 12 (and none for adults)?</item>
         <item>The morning after installing, open a movie from your list: does the details page show “Trakt NN%” and no “IMDb” or “Also on”?</item>
+        <item>The morning after installing, open a popular movie: next to the Trakt rating, does “Simkl 8.1” (or similar) appear?</item>
+        <item>In the details of a movie or series, does “Where to watch” open the Google TV search with that title and show where it streams? And BACK returns to the details?</item>
         <item>In Settings › Family › Connected family, does the QR appear? Sending a photo through the link on a phone, does it show on the TV?</item>
         <item>In Scenes, do Sleep, Soap opera and Game appear under “Ready-made scenes”? After creating Sleep, is it in the list and does OK run it?</item>
         <item>In Guest mode, does the list of apps to clean also show Netflix and YouTube?</item>

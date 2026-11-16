@@ -7,7 +7,7 @@
     <string name="sv_linha_det">Trakt, Simkl, MDBList, TMDB और OpenSubtitles</string>
     <string name="sv_trakt_det">आपने क्या देखा और देखने की सूची फ़ोन के साथ सिंक रखता है</string>
     <string name="sv_simkl_det">Trakt जैसा, एनीमे के लिए भी बढ़िया। एक या दोनों इस्तेमाल करें</string>
-    <string name="sv_mdblist_det">वैकल्पिक: Rotten Tomatoes, Letterboxd और Metacritic रेटिंग, और Top 250 जैसी सूचियाँ</string>
+    <string name="sv_mdblist_det">वैकल्पिक: Top 250 जैसी आपकी सूचियाँ फ़िल्मों और सीरीज़ में श्रेणियाँ बनती हैं</string>
     <string name="sv_tmdb_det">कहानी, कलाकार और अगले एपिसोड की तारीख़, TV की भाषा में</string>
     <string name="sv_os_det">ऑनलाइन सबटाइटल। बिना खाते के: दिन में 5। मुफ़्त खाते से: 20</string>
     <string name="sv_desligado">साइन इन करें</string>
@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">नया एप. %1$s</string>
     <string name="ext_hoje">आज</string>
     <string name="ext_amanha">कल</string>
-    <string name="sv_mdblist_passos">वैकल्पिक: Trakt रेटिंग (जो इसके बिना भी चलती है) में Rotten Tomatoes, Letterboxd और Metacritic जोड़ता है।\n1. फ़ोन कैमरा बाएँ कोड पर रखें और साइन इन करें (या मुफ़्त खाता बनाएँ)। पेज के आख़िर में API Access पर टैप करें, कुंजी न हो तो बनाएँ, और उसे कॉपी करें।\n2. दाएँ कोड पर रखें: वेब पैनल सेटिंग्स पर खुलता है। MDBList में कुंजी चिपकाएँ और कुंजी सेव करें दबाएँ।\n3. TV तुरंत जाँचता है और यह स्क्रीन अपने-आप आगे बढ़ती है।</string>
+    <string name="sv_mdblist_passos">वैकल्पिक: आपकी MDBList सूचियाँ (जैसे Top 250) फ़िल्मों और सीरीज़ में श्रेणियाँ बनती हैं।\n1. फ़ोन कैमरा बाएँ कोड पर रखें और साइन इन करें (या मुफ़्त खाता बनाएँ)। पेज के आख़िर में API Access पर टैप करें, कुंजी न हो तो बनाएँ, और उसे कॉपी करें।\n2. दाएँ कोड पर रखें: वेब पैनल सेटिंग्स पर खुलता है। MDBList में कुंजी चिपकाएँ और कुंजी सेव करें दबाएँ।\n3. TV तुरंत जाँचता है और यह स्क्रीन अपने-आप आगे बढ़ती है।</string>
     <string name="sv_mdblist_qr1">MDBList कुंजी पेज</string>
     <string name="sv_mdblist_qr2">वेब पैनल (%1$s)</string>
     <string name="sv_mdblist_digitar">कुंजी यहाँ टाइप करें</string>

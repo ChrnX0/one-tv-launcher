@@ -36,6 +36,15 @@ object FichaAcoes {
     private val CORES_TEXTO = ColorStateList(arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf()), intArrayOf(Estilo.TEXTO_NO_FOCO, Estilo.TEXTO))
     private val CORES_ICONE = ColorStateList(arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf()), intArrayOf(Estilo.TEXTO_NO_FOCO, Estilo.TEXTO_2))
 
+    /**
+     * "Onde assistir" (16/11/2026, no lugar do "Também em" da JustWatch): abre a busca do Google TV com o nome e o ano,
+     * que mostra em quais serviços o título está. Sem o Google TV, nada (a ação não aparece).
+     */
+    fun ondeAssistir(ctx: Context, acoes: LinearLayout, nome: String, ano: Int?, temGoogleTv: Boolean) {
+        val p = BuscaOutrosApps.ondeAssistir(Vod.nomeLimpo(nome), ano, if (temGoogleTv) setOf(BuscaOutrosApps.PACOTE_GOOGLE_TV) else emptySet()) ?: return
+        adicionar(acoes, acao(ctx, ctx.getString(R.string.onde_assistir_botao), marca = "onde") { BuscaActivity.procurarEm(ctx, p) })
+    }
+
     /** O ícone de cada ação, pela marca (a mesma usada para devolver o foco depois de redesenhar). */
     fun iconeDe(marca: String): IconeFicha.Tipo? = when (marca) {
         "continuar", "assistir" -> IconeFicha.Tipo.PLAY
@@ -48,6 +57,7 @@ object FichaAcoes {
         "colecao" -> IconeFicha.Tipo.COLECAO
         "sinopse" -> IconeFicha.Tipo.SINOPSE
         "naoeeste" -> IconeFicha.Tipo.NAO_E_ESTE
+        "onde" -> IconeFicha.Tipo.ONDE
         else -> null
     }
 

@@ -97,6 +97,8 @@
         <package android:name="com.google.android.youtube.tv" />
         <package android:name="com.netflix.ninja" />
         <package android:name="com.amazon.amazonvideo.livingroom" />
+        <!-- Busca do Google TV ("Onde assistir" da ficha e da Busca, 16/11/2026): BuscaOutrosApps.PACOTE_GOOGLE_TV. -->
+        <package android:name="com.google.android.katniss" />
         <!-- Pacotes de ícones (PacoteIconesRegras.ACOES): sem isto, no Android 11+ nenhum pacote aparece na lista. -->
         <intent><action android:name="org.adw.launcher.THEMES" /></intent>
         <intent><action android:name="com.novalauncher.THEME" /></intent>

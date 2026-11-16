@@ -18,11 +18,20 @@ object BuscaOutrosApps {
     /** Termo mais comprido que isto é cortado (ninguém digita isso no controle; evita mandar texto colado enorme). */
     const val MAX_TERMO = 100
 
+    /**
+     * A busca do Google TV (16/11/2026, no lugar do "Onde assistir" da JustWatch): mostra em quais serviços o título está,
+     * sem dado de terceiros no nosso app. Quem atende é o app de busca do Google TV (katniss), pela busca global do
+     * Android (SearchManager.INTENT_ACTION_GLOBAL_SEARCH; conferido na Sala: é o único que atende essa ação).
+     */
+    const val ACAO_GLOBAL = "android.search.action.GLOBAL_SEARCH"
+    const val PACOTE_GOOGLE_TV = "com.google.android.katniss"
+
     /** Um app que recebe a busca. [chave] escolhe a frase traduzida ("no YouTube", "na Netflix"...). */
-    data class Destino(val chave: String, val pacote: String)
+    data class Destino(val chave: String, val pacote: String, val acao: String = ACAO)
 
     /** Na ordem em que aparecem. Pacotes das versões de TV (o YouTube de TV não é com.google.android.youtube). */
     val DESTINOS = listOf(
+        Destino("googletv", PACOTE_GOOGLE_TV, ACAO_GLOBAL),
         Destino("youtube", "com.google.android.youtube.tv"),
         Destino("netflix", "com.netflix.ninja"),
         Destino("prime", "com.amazon.amazonvideo.livingroom"),
@@ -38,6 +47,16 @@ object BuscaOutrosApps {
     /** As linhas a acrescentar: uma por destino instalado ([instalados] = pacotes), na ordem de [DESTINOS]. */
     fun montar(termo: String, instalados: Set<String>): List<Pedido> {
         val t = limpar(termo) ?: return emptyList()
-        return DESTINOS.filter { it.pacote in instalados }.map { Pedido(it, t) }
+        return DESTINOS.filter { it.pacote in instalados }.map { Pedido(it, t, it.acao) }
+    }
+
+    /**
+     * "Onde assistir" da ficha: a busca do Google TV com o nome do título (e o ano, que separa refilmagens). null sem o
+     * Google TV instalado (a ficha não mostra o botão).
+     */
+    fun ondeAssistir(nome: String, ano: Int?, instalados: Set<String>): Pedido? {
+        if (PACOTE_GOOGLE_TV !in instalados) return null
+        val t = limpar(listOfNotNull(nome, ano?.toString()).joinToString(" ")) ?: return null
+        return Pedido(DESTINOS.first { it.chave == "googletv" }, t, ACAO_GLOBAL)
     }
 }

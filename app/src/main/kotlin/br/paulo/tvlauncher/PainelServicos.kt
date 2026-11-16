@@ -22,7 +22,7 @@ object PainelServicos {
     private val FRASES = mapOf(
         Servico.TRAKT to "Deixa o que você viu e a sua lista iguais aos do celular.",
         Servico.SIMKL to "Igual ao Trakt, ótimo também para anime. Use um ou os dois.",
-        Servico.MDBLIST to "Opcional: notas do Rotten Tomatoes, Letterboxd e Metacritic, e listas como o Top 250.",
+        Servico.MDBLIST to "Opcional: listas como o Top 250 viram categorias em Filmes e Séries.",
         Servico.TMDB to "Sinopse, elenco e data do próximo episódio, no idioma da TV.",
         Servico.OPENSUBTITLES to "Legendas da internet. Sem conta: 5 por dia. Com conta grátis: 20.",
     )

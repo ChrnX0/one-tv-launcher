@@ -7,7 +7,7 @@
     <string name="sv_linha_det">Trakt وSimkl وMDBList وTMDB وOpenSubtitles</string>
     <string name="sv_trakt_det">يبقي ما شاهدته وقائمة المشاهدة متزامنين مع هاتفك</string>
     <string name="sv_simkl_det">مثل Trakt، ورائع أيضًا للأنمي. استخدم أحدهما أو كليهما</string>
-    <string name="sv_mdblist_det">اختياري: تقييمات Rotten Tomatoes وLetterboxd وMetacritic، وقوائم مثل Top 250</string>
+    <string name="sv_mdblist_det">اختياري: تصبح قوائمك، مثل Top 250، فئات في الأفلام والمسلسلات</string>
     <string name="sv_tmdb_det">القصة وطاقم التمثيل وموعد الحلقة التالية، بلغة التلفزيون</string>
     <string name="sv_os_det">ترجمات على الإنترنت. بلا حساب: 5 يوميًا. بحساب مجاني: 20</string>
     <string name="sv_desligado">تسجيل الدخول</string>
@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">حلقة جديدة %1$s</string>
     <string name="ext_hoje">اليوم</string>
     <string name="ext_amanha">غدًا</string>
-    <string name="sv_mdblist_passos">اختياري: يضيف Rotten Tomatoes وLetterboxd وMetacritic إلى تقييم Trakt (الذي يعمل بدونه).\n1. وجّه كاميرا الهاتف إلى الرمز الأيسر وسجّل الدخول (أو أنشئ حسابًا مجانيًا). في آخر الصفحة، اضغط API Access، وأنشئ المفتاح إن لم يكن موجودًا، ثم انسخه.\n2. وجّهها إلى الرمز الأيمن: تُفتح لوحة الويب على الإعدادات. الصق المفتاح تحت MDBList وانقر حفظ المفتاح.\n3. يتحقق التلفزيون منه فورًا وتستمر هذه الشاشة وحدها.</string>
+    <string name="sv_mdblist_passos">اختياري: تصبح قوائمك في MDBList (مثل Top 250) فئات في الأفلام والمسلسلات.\n1. وجّه كاميرا الهاتف إلى الرمز الأيسر وسجّل الدخول (أو أنشئ حسابًا مجانيًا). في آخر الصفحة، اضغط API Access، وأنشئ المفتاح إن لم يكن موجودًا، ثم انسخه.\n2. وجّهها إلى الرمز الأيمن: تُفتح لوحة الويب على الإعدادات. الصق المفتاح تحت MDBList وانقر حفظ المفتاح.\n3. يتحقق التلفزيون منه فورًا وتستمر هذه الشاشة وحدها.</string>
     <string name="sv_mdblist_qr1">صفحة مفتاح MDBList</string>
     <string name="sv_mdblist_qr2">لوحة الويب (%1$s)</string>
     <string name="sv_mdblist_digitar">اكتب المفتاح هنا</string>

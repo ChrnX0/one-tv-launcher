@@ -2,6 +2,7 @@
 <!-- Tradução (zh-rCN) de values/strings_busca2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="bu_outros_apps">在其他应用中</string>
+    <string name="bu_outro_googletv">在 Google TV 搜索“%1$s”</string>
     <string name="bu_outro_youtube">在 YouTube 搜索“%1$s”</string>
     <string name="bu_outro_netflix">在 Netflix 搜索“%1$s”</string>
     <string name="bu_outro_prime">在 Prime Video 搜索“%1$s”</string>
