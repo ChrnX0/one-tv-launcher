@@ -24,7 +24,8 @@ class BootReceiver : BroadcastReceiver() {
         Log.i(TAG, "recebido: ${intent.action}")   // prova no log de que o boot chegou (o receiver exige DUMP desde 04/11)
         Privilegio.religarDepuracaoSemFio(context)
         Privilegio.vigiarDepuracaoSemFio(context)   // e continua de olho: o Android pode desligá-la logo depois, no boot
-        Rotinas.agendar(context)   // idem para as rotinas por horário (Rotinas.kt)
+        Rotinas.agendar(context)
+        runCatching { CuidarDeLongeTv.agendar(context) }   // Cuidar de longe: o próximo lembrete/aviso   // idem para as rotinas por horário (Rotinas.kt)
         Despertador.agendar(context)   // o Android esquece os alarmes agendados quando reinicia
         // ...e o agendar também confere se algum alarme passou da hora com a TV desligada: toca já (até 15 min) ou
         // mostra o aviso "não tocou porque a TV estava desligada" (AlarmeGarantia.conferir).

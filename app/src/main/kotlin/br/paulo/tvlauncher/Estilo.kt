@@ -102,6 +102,12 @@ object Estilo {
         const val DICA = 12.5f          // linha de teclas no rodapé; era 11
         // Grade de pôsteres e painel do canal
         const val CARD = 14.5f          // nome embaixo do pôster; era 12
+        // Pergunta grande do "Cuidar de longe" (15/11/2026): para quem lê com dificuldade, de longe, às vezes com pressa.
+        const val PERGUNTA = 40f        // "Mandar pedido de ajuda para Ana?"
+        const val PERGUNTA_TEXTO = 24f  // a explicação embaixo
+        const val PERGUNTA_BOTAO = 26f  // Mandar / Desistir, Feito / Depois
+        const val PERGUNTA_MENOR = 32f  // pergunta com lista embaixo (consentimento): ainda o TITULO da ficha
+        const val PERGUNTA_ITEM = 20f   // itens da lista do consentimento
         const val COLUNA_CATEGORIAS = 230   // largura (dp) da coluna esquerda do player (14/11/2026; era 210)
         const val GRADE_COLUNAS = 5     // pôsteres por linha em Filmes e Séries; eram 6 (pôster ~20% maior)
         const val POSTER_ALTURA = 180   // dp; era 150 (mantém a proporção 2:3 com 5 colunas)

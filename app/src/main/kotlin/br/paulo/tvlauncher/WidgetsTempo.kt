@@ -82,4 +82,22 @@ object WidgetsTempo {
         if (ms < ini || ms > fim) return null
         return (ms - ini).toFloat() / (fim - ini)
     }
+
+    /**
+     * Onde escrever o "pôr 18:29" (ou "nasce") na faixa das barras de chuva sem cobrir nenhuma barra (foto da Sala,
+     * 15/11/2026: o rótulo ficava em cima da barra das 20h). Tenta à direita do risco, depois à esquerda, e por fim
+     * centraliza no vão entre as duas barras vizinhas. Devolve o x da esquerda do texto.
+     * [barras] = x do centro de cada barra desenhada; [meia] = meia largura da barra + folga; [w] = largura da curva.
+     */
+    fun xRotuloSol(xSol: Float, largura: Float, barras: List<Float>, meia: Float, folga: Float, w: Float): Float {
+        fun livre(tx: Float) = tx >= 0f && tx + largura <= w && barras.none { b -> b + meia > tx && b - meia < tx + largura }
+        val direita = xSol + folga
+        if (livre(direita)) return direita
+        val esquerda = xSol - folga - largura
+        if (livre(esquerda)) return esquerda
+        // Vão entre a barra de cada lado do risco (ou a borda da curva, se não houver barra).
+        val ini = (barras.filter { it <= xSol }.maxOrNull()?.plus(meia)) ?: 0f
+        val fim = (barras.filter { it > xSol }.minOrNull()?.minus(meia)) ?: w
+        return ((ini + fim - largura) / 2f).coerceIn(0f, (w - largura).coerceAtLeast(0f))
+    }
 }

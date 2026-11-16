@@ -1,6 +1,17 @@
 # Regras do R8 para o build release (04/11/2026). Sem elas o release quebra em silencio:
 
-# (Até 12/11/2026 havia aqui as regras do servidor do Shizuku embutido, que saiu.)
+# Servidor do Shizuku embutido (voltou em 15/11/2026): o processo shizuku_server é iniciado por
+# `app_process ... rikka.shizuku.server.ShizukuService` (nome da classe em texto, fora do app) e fala por AIDL/binder
+# com o launcher e com os apps clientes.
+-keep class rikka.shizuku.** { *; }
+-keep class moe.shizuku.** { *; }
+-keep class rikka.rish.** { *; }
+-keep class rikka.parcelablelist.** { *; }
+-keep class dev.rikka.** { *; }
+-keep class rikka.hidden.** { *; }
+-dontwarn rikka.**
+-dontwarn moe.shizuku.**
+-dontwarn dev.rikka.**
 # As APIs escondidas do Android (stubs so de compilacao, "compileOnly hidden-stub") nao existem no classpath do R8.
 -dontwarn android.**
 -dontwarn com.android.internal.**
