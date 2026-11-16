@@ -200,22 +200,25 @@ object InfoExterna {
     // ================================================================ notas
 
     /**
-     * A nota que mostramos: só a do Trakt (0-10), que permite uso comercial. Fora desde 16/11/2026, porque o app vai ser
+     * As notas que mostramos: Trakt e Simkl (0-10), que permitem uso comercial (Simkl: grátis até US$ 150/mês de receita;
+     * acima disso, licença). A do Simkl entrou em 16/11/2026 para o Trakt não ficar sozinho. Fora desde 16/11/2026, porque o app vai ser
      * vendido e nenhum deles libera sem contrato: IMDb (data.imdb.com, Conditions of Use), Rotten Tomatoes (API só para
      * parceiros, Fandango/Fabric), Metacritic (sem API pública; Fabric/Fandom) e Letterboxd (API por pedido). O MDBList
      * repassava os quatro; ele continua só para as listas da pessoa.
      */
-    data class Notas(val trakt: Float? = null) {
-        val vazia: Boolean get() = trakt == null
-        /** A nota da estrela (0 a 10). */
-        val media: Float? get() = trakt
+    data class Notas(val trakt: Float? = null, val simkl: Float? = null) {
+        val vazia: Boolean get() = trakt == null && simkl == null
+        /** A nota da estrela (0 a 10): a média das que houver. */
+        val media: Float? get() = listOfNotNull(trakt, simkl).takeIf { it.isNotEmpty() }?.average()?.toFloat()
         /** Uma nota de 0 a 10 para ordenar e filtrar: a mesma da estrela. */
         val de0a10: Float? get() = media
     }
 
-    /** "Trakt 78%" (o Trakt mostra em %, como no site dele). */
-    fun textoNotas(n: Notas, @Suppress("UNUSED_PARAMETER") l: Locale = Locale.getDefault()): String =
-        listOfNotNull(n.trakt?.let { "Trakt " + Math.round(it * 10) + "%" }).joinToString("  ·  ")
+    /** "Trakt 78%  ·  Simkl 8,1": cada uma como no site dela (o Trakt em %, o Simkl de 0 a 10). */
+    fun textoNotas(n: Notas, l: Locale = Locale.getDefault()): String = listOfNotNull(
+        n.trakt?.let { "Trakt " + Math.round(it * 10) + "%" },
+        n.simkl?.let { "Simkl " + String.format(l, "%.1f", it) },
+    ).joinToString("  ·  ")
 
     // ================================================================ cache
 
@@ -229,20 +232,26 @@ object InfoExterna {
         val imdb: String = "",          // id do IMDb (tt...), só como identificador (casar com Trakt/Simkl); nenhuma informação do IMDb
         val traktNota: Float? = null,   // nota do Trakt (0-10), vale para todos, sem login; pedida de madrugada
         val traktEm: Long = 0,          // quando a nota do Trakt foi pedida (0 = nunca)
+        val simkl: Int? = null,         // id do Simkl (do /redirect), para não perguntar de novo
+        val simklNota: Float? = null,   // nota da comunidade do Simkl (0-10), sem login; pedida de madrugada
+        val simklEm: Long = 0,          // quando a nota do Simkl foi pedida (0 = nunca)
         val recusados: Set<Int> = emptySet(),
         val detalhe: Detalhe? = null,
         val detalheEm: Long = 0,
         val buscaEm: Long = 0,   // última busca sem resultado (não buscar de novo a cada abertura)
     )
 
-    /** As notas para mostrar: a do Trakt (todos, sem login). */
-    fun notasDe(g: Guardado): Notas = Notas(g.traktNota)
+    /** As notas para mostrar: Trakt e Simkl (todos, sem login). */
+    fun notasDe(g: Guardado): Notas = Notas(g.traktNota, g.simklNota)
 
     fun guardadoParaJson(g: Guardado): JSONObject = JSONObject().apply {
         g.tmdb?.let { put("t", it) }
         if (g.imdb.isNotBlank()) put("im", g.imdb)
         g.traktNota?.let { put("tv", it.toDouble()) }
         if (g.traktEm > 0) put("te", g.traktEm)
+        g.simkl?.let { put("sk", it) }
+        g.simklNota?.let { put("sv", it.toDouble()) }
+        if (g.simklEm > 0) put("se", g.simklEm)
         if (g.recusados.isNotEmpty()) put("x", JSONArray(g.recusados.toList()))
         if (g.buscaEm > 0) put("b", g.buscaEm)
         g.detalhe?.let { d ->
@@ -273,6 +282,7 @@ object InfoExterna {
         // não são lidos e somem na próxima gravação.
         val rec = o.optJSONArray("x")?.let { x -> (0 until x.length()).map { x.optInt(it) }.filter { it > 0 }.toSet() }.orEmpty()
         return Guardado(tmdb, o.optString("im"), o.optDouble("tv", Double.NaN).takeIf { !it.isNaN() }?.toFloat(), o.optLong("te"),
+            o.optInt("sk").takeIf { it > 0 }, o.optDouble("sv", Double.NaN).takeIf { !it.isNaN() }?.toFloat(), o.optLong("se"),
             rec, det, detEm, o.optLong("b"))
     }
 
@@ -302,6 +312,38 @@ object InfoExterna {
             return@runCatching if (o.optInt("votes", 0) >= TRAKT_MIN_VOTOS) nota.toFloat() else null
         }
         null
+    }.getOrNull()
+
+    // ================================================================ Simkl: nota da comunidade para todos
+
+    /*
+     * 16/11/2026. Sem login, só o client_id do app (api.simkl.org/api-reference/ratings): o TMDB vira id do Simkl pelo
+     * GET /redirect?to=simkl&type=movie|tv&tmdb=N (301 com Location https://simkl.com/movies/{id}/{slug}), e a nota vem
+     * em GET /movies/{id} ou /tv/{id} ("ratings":{"simkl":{"rating":8.6,"votes":15265},"imdb":{...}}; a ficha fica em
+     * cache no Cloudflare). O bloco "imdb" que vem junto é IGNORADO (dado do IMDb, uso comercial proibido).
+     */
+    fun urlSimklRedirect(tmdb: Int, serie: Boolean, clienteId: String, versao: Int): String =
+        ServicosFilmes.simklUrl("/redirect", clienteId, versao, "to=simkl&type=${if (serie) "tv" else "movie"}&tmdb=$tmdb")
+
+    fun urlSimklFicha(simkl: Int, serie: Boolean, clienteId: String, versao: Int): String =
+        ServicosFilmes.simklUrl(if (serie) "/tv/$simkl" else "/movies/$simkl", clienteId, versao)
+
+    /** O id do Simkl no Location do /redirect; null se não veio (título que o Simkl não tem). Anime também vale. */
+    fun idSimklDoLocal(local: String?, serie: Boolean): Int? {
+        val m = Regex("simkl\\.com/(movies|tv|anime)/(\\d+)").find(local ?: return null) ?: return null
+        if (!serie && m.groupValues[1] != "movies") return null   // pediu filme, veio série
+        if (serie && m.groupValues[1] == "movies") return null
+        return m.groupValues[2].toIntOrNull()?.takeIf { it > 0 }
+    }
+
+    const val SIMKL_VALIDADE_MS = TRAKT_VALIDADE_MS
+    const val SIMKL_MIN_VOTOS = TRAKT_MIN_VOTOS
+
+    /** A nota da comunidade (0-10); null sem nota, com poucos votos ou resposta estranha. Só o bloco "simkl". */
+    fun lerNotaSimkl(json: String): Float? = runCatching {
+        val s = JSONObject(json).optJSONObject("ratings")?.optJSONObject("simkl") ?: return@runCatching null
+        val nota = s.optDouble("rating", Double.NaN).takeIf { !it.isNaN() && it > 0 && it <= 10 } ?: return@runCatching null
+        if (s.optInt("votes", 0) >= SIMKL_MIN_VOTOS) nota.toFloat() else null
     }.getOrNull()
 
     /** Id do IMDb (tt...) como IDENTIFICADOR, para casar títulos com Trakt e Simkl. Não é informação do IMDb. */

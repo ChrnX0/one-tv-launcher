@@ -101,8 +101,32 @@ class InfoExternaTest {
         assertEquals(2 to 3, InfoExterna.contarNaLista(partes, setOf(438631), setOf(InfoExterna.chaveNomeAno("Duna: Parte Dois", 2024))))
     }
 
+    @Test fun notaDoSimkl() {
+        val ficha = """{"title":"Inception","ratings":{"simkl":{"rating":8.6,"votes":15265},"imdb":{"rating":8.8,"votes":2889060}}}"""
+        assertEquals(8.6f, InfoExterna.lerNotaSimkl(ficha)!!, 0.001f)
+        assertNull(InfoExterna.lerNotaSimkl("""{"ratings":{"imdb":{"rating":8.8,"votes":2889060}}}"""))   // o do IMDb nunca entra
+        assertNull(InfoExterna.lerNotaSimkl("""{"ratings":{"simkl":{"rating":9.9,"votes":3}}}"""))   // poucos votos
+        assertNull(InfoExterna.lerNotaSimkl("lixo"))
+        assertEquals(472214, InfoExterna.idSimklDoLocal("https://simkl.com/movies/472214/inception", serie = false))
+        assertEquals(17465, InfoExterna.idSimklDoLocal("https://simkl.com/tv/17465/game-of-thrones", serie = true))
+        assertEquals(37226, InfoExterna.idSimklDoLocal("https://simkl.com/anime/37226/sword-art-online", serie = true))
+        assertNull(InfoExterna.idSimklDoLocal("https://simkl.com/tv/17465/x", serie = false))   // pediu filme, veio série
+        assertNull(InfoExterna.idSimklDoLocal("https://simkl.com/movies/1/x", serie = true))
+        assertNull(InfoExterna.idSimklDoLocal(null, serie = false)); assertNull(InfoExterna.idSimklDoLocal("https://simkl.com/", serie = false))
+        val u = InfoExterna.urlSimklRedirect(1399, serie = true, clienteId = "c", versao = 1)
+        assertTrue(u, u.startsWith("https://api.simkl.com/redirect?client_id=c&app-name=sofaly&app-version=1.0.1&"))
+        assertTrue(u, u.endsWith("&to=simkl&type=tv&tmdb=1399"))
+        assertTrue(InfoExterna.urlSimklFicha(27205, serie = false, clienteId = "c", versao = 1).startsWith("https://api.simkl.com/movies/27205?"))
+        // As duas notas: estrela = média; texto como em cada site.
+        val n = InfoExterna.Notas(trakt = 8.0f, simkl = 8.6f)
+        assertEquals("Trakt 80%  ·  Simkl 8,6", InfoExterna.textoNotas(n, Locale("pt", "BR")))
+        assertEquals("Trakt 80%  ·  Simkl 8.6", InfoExterna.textoNotas(n, Locale.US))
+        assertEquals(8.3f, n.media!!, 0.001f)
+        assertEquals("Simkl 7.0", InfoExterna.textoNotas(InfoExterna.Notas(simkl = 7f), Locale.US))
+    }
+
     @Test fun notasSoDoTrakt() {
-        // Rotten Tomatoes, Metacritic e Letterboxd saíram (16/11/2026, licença comercial): só o Trakt.
+        // Rotten Tomatoes, Metacritic e Letterboxd saíram (16/11/2026, licença comercial): Trakt (e Simkl, acima).
         val n = InfoExterna.Notas(trakt = 8.0f)
         assertEquals("Trakt 80%", InfoExterna.textoNotas(n, Locale("pt", "BR")))
         assertEquals(8.0f, n.de0a10!!, 0.001f)
@@ -120,10 +144,10 @@ class InfoExternaTest {
     }
 
     @Test fun guardadoIdaEVolta() {
-        val g = InfoExterna.Guardado(tmdb = 10, imdb = "tt0111161", traktNota = 8.7f, traktEm = 300, recusados = setOf(3, 4),
+        val g = InfoExterna.Guardado(tmdb = 10, imdb = "tt0111161", traktNota = 8.7f, traktEm = 300, simkl = 55, simklNota = 7.9f, simklEm = 400, recusados = setOf(3, 4),
             detalhe = InfoExterna.Detalhe(10, "tt1", "sinopse", listOf("A", "B"), listOf("Drama"), InfoExterna.Colecao(7, "Saga"), InfoExterna.ProximoEp("2026-11-21", 1, 2), true, "abcdefgh12"),
             detalheEm = 100)
-        assertEquals(8.7f, InfoExterna.notasDe(g).trakt)
+        assertEquals(8.7f, InfoExterna.notasDe(g).trakt); assertEquals(7.9f, InfoExterna.notasDe(g).simkl)
         assertEquals(g, InfoExterna.guardadoDeJson(InfoExterna.guardadoParaJson(g)))
         val vazio = InfoExterna.Guardado(recusados = setOf(9), buscaEm = 5)
         assertEquals(vazio, InfoExterna.guardadoDeJson(InfoExterna.guardadoParaJson(vazio)))

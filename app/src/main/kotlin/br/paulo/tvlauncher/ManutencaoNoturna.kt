@@ -130,6 +130,8 @@ object ManutencaoNoturna {
             runCatching { ServicosContas.renovarSePreciso(app) }
             // Nota do Trakt (InfoExternaCache, no lugar do IMDb desde 16/11/2026): também fora do relatório.
             runCatching { InfoExternaCache.noturnoTrakt(app) }
+            // Nota da comunidade do Simkl (16/11/2026), do mesmo jeito.
+            runCatching { InfoExternaCache.noturnoSimkl(app) }
         } finally { try { trava?.release() } catch (_: Exception) {} }
         idades(app)
     }

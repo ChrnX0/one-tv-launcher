@@ -22,6 +22,12 @@ O MDBList não tem chave de aplicativo: a chave é da conta de cada pessoa. É u
 dela, como o Top 250, viram categorias) que a pessoa conecta na TV pelo QR (Configurações › TV e filmes › Serviços de filmes e séries) ou
 colando a chave no painel web. A nota do Trakt vale para todos sem login (só o `TRAKT_ID` do app): de madrugada a TV
 pergunta ao Trakt (`/search/tmdb/{id}?extended=full`, até 600 títulos por noite, cada nota vale 30 dias).
+A nota da comunidade do Simkl (16/11/2026) também vale para todos sem login (só o `SIMKL_ID`): de madrugada,
+`/redirect?to=simkl&type=movie|tv&tmdb={id}` (301; o id do Simkl vem no Location e fica guardado) e depois `/movies/{id}`
+ou `/tv/{id}` (cache do Cloudflare), até 400 títulos por noite, 30 dias. Só o bloco `ratings.simkl`; o `ratings.imdb` que
+vem junto é ignorado. Grátis enquanto o app faturar menos de US$ 150/mês; acima disso, licença do Simkl.
+"Onde assistir" (no lugar do da JustWatch) é só um botão que abre a busca do Google TV (`com.google.android.katniss`,
+`android.search.action.GLOBAL_SEARCH` + `query`) com nome e ano: nenhum dado de terceiros passa pelo app.
 
 Fora desde 16/11/2026, porque o app vai ser vendido: **IMDb** (os dados, inclusive a nota que o MDBList repassa, são só
 para uso pessoal e não comercial: data.imdb.com e Conditions of Use do imdb.com; licença comercial por contrato) e

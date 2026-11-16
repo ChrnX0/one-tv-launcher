@@ -9,9 +9,9 @@ import java.io.File
 /**
  * Disco e rede da ficha e das notas de fora ([InfoExterna]). Tudo aqui bloqueia (rede): chamar fora da thread da tela.
  *
- * files/player/externo.json: por título do catálogo, o id do TMDB, a ficha resumida e a nota do Trakt, cada uma com a
+ * files/player/externo.json: por título do catálogo, o id do TMDB, a ficha resumida e as notas do Trakt e do Simkl, com a
  * data. Vale 30 dias (série no ar: 3). Nunca pede a cada foco: a ficha pede ao abrir; a nota do Trakt vem de madrugada
- * ([noturnoTrakt]).
+ * ([noturnoTrakt], [noturnoSimkl]).
  */
 object InfoExternaCache {
     private const val TAG = "TvLauncher.InfoExterna"
@@ -126,7 +126,7 @@ object InfoExternaCache {
         val idioma = InfoExterna.idiomaTmdb()
         // 1. O id: o do Xtream vale mais (a não ser que a pessoa tenha recusado); depois o já achado; depois a busca.
         val doXtream = tmdbConhecido?.takeIf { it !in g.recusados }
-        if (doXtream != null && doXtream != g.tmdb) g = mudar(app, chave) { it.copy(tmdb = doXtream, detalhe = null, detalheEm = 0, traktNota = null, traktEm = 0) }
+        if (doXtream != null && doXtream != g.tmdb) g = mudar(app, chave) { it.copy(tmdb = doXtream, detalhe = null, detalheEm = 0, traktNota = null, traktEm = 0, simkl = null, simklNota = null, simklEm = 0) }
         if (g.tmdb == null && k.tmdb.isNotBlank() && agora - g.buscaEm > BUSCA_DE_NOVO_MS) {
             val limpo = LegendaExterna.nomeDeBusca(Vod.nomeLimpo(nome)).ifBlank { Vod.nomeLimpo(nome) }
             val achado = runCatching {
@@ -223,20 +223,8 @@ object InfoExternaCache {
     fun noturnoTrakt(ctx: Context): Int {
         val app = ctx.applicationContext
         val id = chaves().traktId.takeIf { it.isNotBlank() } ?: return -1
-        val filmes = runCatching { PlayerCarga.filmes(app, soCache = true) }.getOrDefault(emptyList())
-        val series = runCatching { PlayerCarga.series(app, soCache = true) }.getOrDefault(emptyList())
-        if (filmes.isEmpty() && series.isEmpty()) return -1
         val agora = System.currentTimeMillis()
-        val marcados = PlayerArmazem.interesses(app, false) + PlayerArmazem.interesses(app, true) + PlayerArmazem.posicoes(app).keys
-        val fila = (filmes.map { Triple(it.chave, it.tmdb, false) to it.adicionado } + series.map { Triple(it.chave, it.tmdb, true) to it.atualizada })
-            .sortedWith(compareBy({ it.first.first !in marcados }, { -it.second }))
-            .map { it.first }
-            .mapNotNull { (ch, t, s) ->
-                val g = guardado(app, ch); val tmdb = t ?: g?.tmdb ?: return@mapNotNull null
-                if (agora - (g?.traktEm ?: 0) in 0 until InfoExterna.TRAKT_VALIDADE_MS) null else Triple(ch, tmdb, s)
-            }
-            .distinctBy { it.first }
-            .take(MAX_TRAKT_POR_NOITE)
+        val fila = filaDaNoite(app, MAX_TRAKT_POR_NOITE) { agora - (it?.traktEm ?: 0) in 0 until InfoExterna.TRAKT_VALIDADE_MS } ?: return -1
         val cab = ServicosFilmes.traktCabecalhos(id, BuildConfig.VERSION_CODE)
         var n = 0
         for ((ch, tmdb, serie) in fila) {
@@ -258,6 +246,73 @@ object InfoExternaCache {
     }
 
     private const val MAX_TRAKT_POR_NOITE = 600
+
+    /**
+     * Os títulos da lista com id do TMDB (da lista ou já achado) que ainda não estão [emDia]: primeiro os que a pessoa
+     * marcou, depois os mais novos; no máximo [max]. null sem lista. (chave, tmdb, série)
+     */
+    private fun filaDaNoite(app: Context, max: Int, emDia: (Guardado?) -> Boolean): List<Triple<String, Int, Boolean>>? {
+        val filmes = runCatching { PlayerCarga.filmes(app, soCache = true) }.getOrDefault(emptyList())
+        val series = runCatching { PlayerCarga.series(app, soCache = true) }.getOrDefault(emptyList())
+        if (filmes.isEmpty() && series.isEmpty()) return null
+        val marcados = PlayerArmazem.interesses(app, false) + PlayerArmazem.interesses(app, true) + PlayerArmazem.posicoes(app).keys
+        return (filmes.map { Triple(it.chave, it.tmdb, false) to it.adicionado } + series.map { Triple(it.chave, it.tmdb, true) to it.atualizada })
+            .sortedWith(compareBy({ it.first.first !in marcados }, { -it.second }))
+            .map { it.first }
+            .mapNotNull { (ch, t, s) ->
+                val g = guardado(app, ch); val tmdb = t ?: g?.tmdb ?: return@mapNotNull null
+                if (emDia(g)) null else Triple(ch, tmdb, s)
+            }
+            .distinctBy { it.first }
+            .take(max)
+    }
+
+    // ================================================================ Nota do Simkl (manutenção da noite)
+
+    /**
+     * Nota da comunidade do Simkl para todos, sem login (16/11/2026). Como a do Trakt: de madrugada, até
+     * [MAX_SIMKL_POR_NOITE] títulos, cada nota vale 30 dias. Duas perguntas por título na primeira vez (/redirect para
+     * achar o id do Simkl, depois a ficha, que fica em cache no Cloudflare); depois só a ficha. Para no primeiro erro ou
+     * limite (429). Devolve quantos ganharam nota, ou -1 sem chave/lista. Bloqueia (rede).
+     */
+    fun noturnoSimkl(ctx: Context): Int {
+        val app = ctx.applicationContext
+        val cliente = chaves().simklId.takeIf { it.isNotBlank() } ?: return -1
+        val agora = System.currentTimeMillis()
+        val fila = filaDaNoite(app, MAX_SIMKL_POR_NOITE) { agora - (it?.simklEm ?: 0) in 0 until InfoExterna.SIMKL_VALIDADE_MS } ?: return -1
+        val versao = BuildConfig.VERSION_CODE
+        val cab = ServicosFilmes.simklCabecalhos(cliente, versao)
+        var n = 0
+        for ((ch, tmdb, serie) in fila) {
+            var simkl = guardado(app, ch)?.simkl
+            if (simkl == null) {
+                val r = runCatching { ServicosContas.pedir(InfoExterna.urlSimklRedirect(tmdb, serie, cliente, versao), cab) }.getOrNull() ?: break
+                if (r.codigo == 429) { Log.i(TAG, "Simkl: limite"); break }
+                simkl = if (r.codigo in 300..399) InfoExterna.idSimklDoLocal(r.local, serie) else null
+                if (simkl == null && r.codigo !in 300..499) { Log.w(TAG, "Simkl redirect: ${r.codigo}"); break }
+                Thread.sleep(300)
+            }
+            var nota: Float? = null
+            if (simkl != null) {
+                val r = runCatching { ServicosContas.pedir(InfoExterna.urlSimklFicha(simkl, serie, cliente, versao), cab) }.getOrNull() ?: break
+                if (r.codigo == 429) { Log.i(TAG, "Simkl: limite"); break }
+                if (r.codigo !in 200..299 && r.codigo != 404) { Log.w(TAG, "Simkl: ${r.codigo}"); break }
+                nota = InfoExterna.lerNotaSimkl(r.corpo)
+            }
+            if (nota != null) n++
+            synchronized(trava) {
+                val m = mapa(app); val g = m[ch] ?: Guardado()
+                // Sem nota (o Simkl não tem ou poucos votos): guarda a data, para não perguntar de novo por 30 dias.
+                por(m, ch, g.copy(tmdb = g.tmdb ?: tmdb, simkl = simkl, simklNota = nota, simklEm = agora))
+            }
+            Thread.sleep(500)
+        }
+        synchronized(trava) { gravar(app) }
+        Log.i(TAG, "Simkl: $n notas de ${fila.size} títulos")
+        return n
+    }
+
+    private const val MAX_SIMKL_POR_NOITE = 400
 
     /** Os títulos da grade que têm id TMDB (da lista ou já achado) para o lote: chave -> id. */
     fun idsConhecidos(ctx: Context, itens: List<Pair<String, Int?>>): List<Pair<String, Int>> = synchronized(trava) {

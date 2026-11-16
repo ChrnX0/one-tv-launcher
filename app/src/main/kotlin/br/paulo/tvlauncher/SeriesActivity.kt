@@ -889,6 +889,9 @@ class SeriesActivity : Activity() {
      * [focarEpisodio]: abre direto na lista, com o foco nesse episódio. Os dados chegam aos poucos e cada um redesenha:
      * o foco fica onde estava (na mesma ação, ou no mesmo episódio).
      */
+    /** Tem a busca do Google TV? (botão "Onde assistir" da ficha; conferido uma vez por tela.) */
+    private val googleTv by lazy { BuscaActivity.temGoogleTv(this) }
+
     private fun desenharFicha(focarEpisodio: Int? = null) {
         val s = aberta ?: return
         val f = fichaAberta
@@ -932,6 +935,7 @@ class SeriesActivity : Activity() {
         tmdbDe(s, f)?.takeIf { ElencoActivity.disponivel(it) }?.let { id ->
             FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.elenco_botao), marca = "elenco") { ElencoActivity.abrir(this, id, serie = true, nome = Vod.nomeLimpo(s.nome)) })
         }
+        FichaAcoes.ondeAssistir(this, acoes, s.nome, s.ano, googleTv)
         val acaoSinopse = sinopse?.let { txt ->
             FichaAcoes.acao(this, getString(R.string.series_sinopse_mais), marca = "sinopse") { FichaAcoes.mostrarSinopse(this, Vod.nomeLimpo(s.nome), txt) }
                 .also { FichaAcoes.adicionar(acoes, it); it.visibility = if (verEpisodios) View.VISIBLE else View.GONE }

@@ -2,6 +2,7 @@
 <!-- Tradução (ko) de values/strings_busca2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="bu_outros_apps">다른 앱에서</string>
+    <string name="bu_outro_googletv">Google TV에서 “%1$s” 검색</string>
     <string name="bu_outro_youtube">YouTube에서 “%1$s” 검색</string>
     <string name="bu_outro_netflix">Netflix에서 “%1$s” 검색</string>
     <string name="bu_outro_prime">Prime Video에서 “%1$s” 검색</string>

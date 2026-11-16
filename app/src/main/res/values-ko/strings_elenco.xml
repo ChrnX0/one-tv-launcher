@@ -43,4 +43,5 @@
     <string name="series_episodios">에피소드</string>
     <string name="series_trocar_temporada">시즌 변경</string>
     <string name="fechar">닫기</string>
+    <string name="onde_assistir_botao">시청할 곳</string>
 </resources>

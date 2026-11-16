@@ -15,7 +15,7 @@ import android.graphics.drawable.Drawable
  * botão: [setTintList] com um ColorStateList (escuro na faixa branca do foco, claro fora dela).
  */
 class IconeFicha(private val tipo: Tipo) : Drawable() {
-    enum class Tipo { PLAY, COMECO, EPISODIOS, TEMPORADAS, TRAILER, ELENCO, VERSAO, COLECAO, SINOPSE, NAO_E_ESTE }
+    enum class Tipo { PLAY, COMECO, EPISODIOS, TEMPORADAS, TRAILER, ELENCO, VERSAO, COLECAO, SINOPSE, NAO_E_ESTE, ONDE }
 
     private var cores: ColorStateList? = null
     private val traco = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -64,6 +64,9 @@ class IconeFicha(private val tipo: Tipo) : Drawable() {
             }
             Tipo.NAO_E_ESTE -> {   // círculo com X
                 c.drawCircle(12f, 12f, 8.5f, traco); c.drawLine(9f, 9f, 15f, 15f, traco); c.drawLine(15f, 9f, 9f, 15f, traco)
+            }
+            Tipo.ONDE -> {   // lupa
+                c.drawCircle(10.5f, 10.5f, 6.5f, traco); c.drawLine(15.2f, 15.2f, 20f, 20f, traco)
             }
         }
         c.restore()

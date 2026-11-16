@@ -2,6 +2,7 @@
 <!-- Tradução (tr) de values/strings_busca2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="bu_outros_apps">Diğer uygulamalarda</string>
+    <string name="bu_outro_googletv">Google TV’de «%1$s» ara</string>
     <string name="bu_outro_youtube">YouTube’da «%1$s» ara</string>
     <string name="bu_outro_netflix">Netflix’te «%1$s» ara</string>
     <string name="bu_outro_prime">Prime Video’da «%1$s» ara</string>

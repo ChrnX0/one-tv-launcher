@@ -271,7 +271,8 @@ object ServicosContas {
 
     // ================================================================ rede
 
-    class Resposta(val codigo: Int, val corpo: String)
+    /** [local]: o cabeçalho Location (redirecionamento não é seguido; o /redirect do Simkl manda o id nele). */
+    class Resposta(val codigo: Int, val corpo: String, val local: String? = null)
 
     /** GET (sem corpo) ou POST (com corpo JSON). Só https; sem seguir redirecionamento. */
     fun pedir(url: String, cabecalhos: Map<String, String>, corpo: String? = null): Resposta {
@@ -288,7 +289,7 @@ object ServicosContas {
             val codigo = c.responseCode
             val fluxo = if (codigo in 200..299) c.inputStream else c.errorStream
             val texto = fluxo?.use { String(lerAte(it, 2_000_000)) }.orEmpty()
-            return Resposta(codigo, texto)
+            return Resposta(codigo, texto, c.getHeaderField("Location"))
         } finally { c.disconnect() }
     }
 

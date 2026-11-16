@@ -834,6 +834,9 @@ class FilmesActivity : Activity() {
      * nada sai cortado da tela nem é empurrado quando um dado chega depois); à direita título, dados, pôster e sinopse.
      * Os dados chegam aos poucos (servidor, coleção, TMDB) e cada um redesenha: o foco fica na mesma ação.
      */
+    /** Tem a busca do Google TV? (botão "Onde assistir" da ficha; conferido uma vez por tela.) */
+    private val googleTv by lazy { BuscaActivity.temGoogleTv(this) }
+
     private fun desenharFicha(f: Filme, info: FichaFilme?, manterFoco: Boolean) {
         val focoAntes = if (manterFoco) (painelFicha.findFocus()?.tag as? String) else null
         painelFicha.removeAllViews()
@@ -860,6 +863,7 @@ class FilmesActivity : Activity() {
         (f.tmdb ?: info?.tmdb ?: ext?.tmdb)?.takeIf { ElencoActivity.disponivel(it) }?.let { id ->
             FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.elenco_botao), marca = "elenco") { ElencoActivity.abrir(this, id, serie = false, nome = Vod.nomeLimpo(f.nome)) })
         }
+        FichaAcoes.ondeAssistir(this, acoes, f.nome, f.ano ?: info?.lancamento?.take(4)?.toIntOrNull(), googleTv)
         // O mesmo filme na outra versão do catálogo (dublado x legendado): abre a ficha dela.
         outraVersao(f)?.let { o ->
             val r = if (Idioma.versao(o.nome, o.grupo) == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
