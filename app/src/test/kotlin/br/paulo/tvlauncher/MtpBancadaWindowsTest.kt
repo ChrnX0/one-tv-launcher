@@ -124,6 +124,8 @@ class MtpBancadaWindowsTest {
                     "alive" -> anunciar(true)
                     "uuid" -> { semente = partes.getOrElse(1) { "bancada" }; anotar("uuid agora ${uuid()}") }
                     "responder" -> { responder = partes.getOrNull(1) == "sim"; anotar("responder=$responder") }
+                    "bye1" -> { mandar(listOf(Ssdp.avisoDoAparelho(uuid(), local, false)), grupo, Ssdp.PORTA); anotar("bye1 enviado") }
+                    "alive1" -> { mandar(listOf(Ssdp.avisoDoAparelho(uuid(), local, true, validade)), grupo, Ssdp.PORTA); anotar("alive1 enviado") }
                     "validade" -> { validade = partes[1].toInt(); anotar("validade=$validade") }
                     "sair" -> { anunciar(false); parar(); http.close(); PainelArquivos.raizTeste = null; return }
                     else -> anotar("comando desconhecido")

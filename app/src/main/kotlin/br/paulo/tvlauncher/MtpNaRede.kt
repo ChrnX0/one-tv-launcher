@@ -32,7 +32,11 @@ object MtpNaRede {
         prefs(ctx).edit().clear().apply()
         val ligado = servico != null
         desligar()
-        if (ligado) ligar(ctx)
+        if (ligado) {
+            ligar(ctx)
+            // o anúncio recomeça junto: é ele que manda o Windows largar a conexão que acabamos de derrubar
+            AnuncioUpnp.desligar(); AnuncioUpnp.ligar(ctx)
+        }
     }
 
     @Synchronized fun ligar(ctx: Context) {
@@ -56,6 +60,9 @@ object MtpNaRede {
         }, "Mtp-servidor").apply { isDaemon = true }.start()
         Log.i(TAG, "MTP pela rede ligado na porta ${PtpIp.PORTA}")
     }
+
+    /** Há algum computador conectado agora? */
+    fun temSessao(): Boolean = servico?.temConexao() == true
 
     @Synchronized fun desligar() {
         servico?.parar()

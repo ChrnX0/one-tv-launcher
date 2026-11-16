@@ -794,6 +794,8 @@ class MtpServico(
     }
 
     /** Derruba tudo (a chave foi desligada, ou um computador perdeu a permissão). */
+    fun temConexao(): Boolean = abertas.isNotEmpty()
+
     fun parar() {
         try { ss.close() } catch (_: IOException) {}
         for (c in abertas) try { c.close() } catch (_: IOException) {}

@@ -35,6 +35,21 @@ object Ssdp {
     }
 
     /**
+     * Um aviso só, o do próprio aparelho (NT = uuid). Medido em 16/11/2026 com Windows 11 e a TV de verdade: é ESTE
+     * pacote, sozinho, que o Windows obedece na hora. Com "saí" ele solta o aparelho em menos de 1 s; com "estou aqui"
+     * 2 s depois ele reconecta em ~1,5 s. A rajada dos três anúncios começando pelo upnp:rootdevice não fazia nem uma
+     * coisa nem outra (5 tentativas). Serve para o Windows largar a conexão velha quando o launcher reinicia: sem isso
+     * ele fica preso nela e mostra a memória da TV vazia até alguém reiniciar o dispositivo à mão.
+     */
+    fun avisoDoAparelho(uuid: String, local: String, vivo: Boolean, validade: Int = VALIDADE_S): String =
+        "NOTIFY * HTTP/1.1\r\nHOST: $GRUPO:$PORTA\r\n" +
+            (if (vivo) "CACHE-CONTROL: max-age=$validade\r\nLOCATION: $local\r\nSERVER: $SERVIDOR\r\n" else "") +
+            "NT: uuid:$uuid\r\nNTS: ${if (vivo) "ssdp:alive" else "ssdp:byebye"}\r\nUSN: uuid:$uuid\r\n\r\n"
+
+    /** Espera entre o "saí" e o "estou aqui" da reconexão (2 s funcionou; menos não foi medido). */
+    const val PAUSA_RECONEXAO_MS = 2000L
+
+    /**
      * Resposta (unicast) a uma busca M-SEARCH, ou lista vazia se a busca não é por nós. Busca malformada, sem
      * MAN: "ssdp:discover" ou grande demais: nada.
      */

@@ -71,6 +71,16 @@ object AnuncioUpnp {
         } catch (e: Exception) { Log.i(TAG, "porta 1900 ocupada, só anúncios: $e"); null }
         escuta = s
         try {
+            // O servidor MTP acabou de subir (processo novo, atualização do launcher): o Windows ainda acha que a conexão
+            // antiga vale. "Saí" + "estou aqui" do aparelho MTP faz ele soltar e reconectar sozinho (ver Ssdp.avisoDoAparelho).
+            // Com alguém já conectado (este anúncio religou sem o servidor cair) não mexe: derrubaria uma cópia no meio.
+            val (uMtp, lMtp, _) = aparelhos[1]
+            if (!MtpNaRede.temSessao()) {
+                mandar(listOf(Ssdp.avisoDoAparelho(uMtp, lMtp, false)), grupo, Ssdp.PORTA)
+                Thread.sleep(Ssdp.PAUSA_RECONEXAO_MS)
+            }
+            mandar(listOf(Ssdp.avisoDoAparelho(uMtp, lMtp, true)), grupo, Ssdp.PORTA)
+            Thread.sleep(300)
             mandar(anuncios(true), grupo, Ssdp.PORTA)
             var ultimo = System.currentTimeMillis()
             val buf = ByteArray(2048)
