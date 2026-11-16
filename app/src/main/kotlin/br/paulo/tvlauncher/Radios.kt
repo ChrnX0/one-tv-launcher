@@ -35,6 +35,16 @@ object Radios {
     data class Radio(val id: String, val nome: String, val url: String, val pais: String = "", val tags: String = "",
                      val bitrate: Int = 0, val codec: String = "")
 
+    // ---------------------------------------------------------------- puro: o que está tocando
+
+    // Textos que algumas rádios mandam no lugar da música (visto na Sala 16/11/2026: "Now Playing info goes here").
+    private val SEM_MUSICA = Regex("""(?i)^\s*(now playing( info)?( goes here)?|unknown( artist| title)?|untitled|no title|""" +
+        """advert(isement)?|sem t[ií]tulo|desconhecido|[-–—·.:|\s]*)\s*$""")
+
+    /** O texto do ICY serve para "tocando agora"? Não vale vazio, o próprio nome da rádio nem texto de espera. */
+    fun musicaUtil(t: String?, nomeRadio: String): Boolean =
+        !t.isNullOrBlank() && !t.trim().equals(nomeRadio.trim(), ignoreCase = true) && !SEM_MUSICA.matches(t)
+
     // ---------------------------------------------------------------- puro: endereços
 
     private fun q(s: String) = URLEncoder.encode(s, "UTF-8")
