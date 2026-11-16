@@ -11,7 +11,7 @@ import java.net.MulticastSocket
 import java.net.NetworkInterface
 
 /**
- * Manda e responde os pacotes SSDP (Ssdp.kt) para a TV aparecer na tela "Rede" do Windows como "<nome> · arquivos".
+ * Manda e responde os pacotes SSDP (Ssdp.kt) para a TV aparecer na tela "Rede" do Windows como "<nome> · painel".
  * Só com a unidade de rede ligada (liga e desliga junto com o AnuncioDav).
  *
  * Porta 1900: o Chromecast embutido (mediashell) já escuta nela (medido na Sala em 14/11/2026). Com reuseAddress os dois

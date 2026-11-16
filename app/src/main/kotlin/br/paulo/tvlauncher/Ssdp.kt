@@ -3,7 +3,7 @@ package br.paulo.tvlauncher
 /**
  * A TV na tela "Rede" do Windows (14/11/2026, pedido do dono). O Windows lista ali os aparelhos UPnP que se anunciam
  * por SSDP (mensagens UDP para 239.255.255.250:1900); é assim que o Chromecast embutido já aparece como "Sala de estar".
- * Anunciamos um aparelho a mais, "<nome da TV> · arquivos", cujo duplo clique abre a página /unidade (o endereço para
+ * Anunciamos um aparelho a mais, "<nome da TV> · painel", cujo duplo clique abre o painel (era a página /unidade, com o endereço para
  * mapear a unidade de rede e o passo a passo). Abrir direto como PASTA ali o Windows só faz com SMB na porta 445, que o
  * Android não deixa usar (docs/unidade-de-rede.md).
  *
@@ -74,7 +74,7 @@ object Ssdp {
             "<specVersion><major>1</major><minor>0</minor></specVersion><device>" +
             "<deviceType>$TIPO</deviceType><friendlyName>${e(nome)}</friendlyName>" +
             "<manufacturer>$MARCA</manufacturer><modelName>$MARCA</modelName>$ICONES" +
-            "<modelDescription>${e("Arquivos da TV pela rede (WebDAV)")}</modelDescription>" +
+            "<modelDescription>${e("Painel da TV no navegador")}</modelDescription>" +
             "<UDN>uuid:${e(uuid)}</UDN><presentationURL>${e(pagina)}</presentationURL></device></root>\n"
     }
 
@@ -131,8 +131,12 @@ object Ssdp {
 
     fun uuidMtp(idTv: String): String = java.util.UUID.nameUUIDFromBytes("onetv-mtp-$idTv".toByteArray()).toString()
 
-    /** Nome que aparece no Windows: o da TV + "arquivos" (o Chromecast já usa o nome sozinho). Até 60 letras. */
-    fun nomeVisivel(nomeTv: String): String = "${nomeTv.take(45)} · arquivos"
+    /**
+     * Nome que aparece na tela "Rede" do Windows: o da TV + "painel" (o Chromecast já usa o nome sozinho). O duplo
+     * clique abre o painel. Era "· arquivos" e abria a página /unidade; trocado em 16/11/2026 porque os arquivos já
+     * aparecem sozinhos em Este Computador e o dono esperava o painel ali. Até 60 letras.
+     */
+    fun nomeVisivel(nomeTv: String): String = "${nomeTv.take(45)} · painel"
 
     /** uuid estável para esta TV (o Windows não duplica o ícone a cada religada), derivado do id curto da TV. */
     fun uuid(idTv: String): String = java.util.UUID.nameUUIDFromBytes("onetv-unidade-$idTv".toByteArray()).toString()

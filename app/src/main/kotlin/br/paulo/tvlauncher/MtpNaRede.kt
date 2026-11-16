@@ -34,11 +34,11 @@ object MtpNaRede {
     private var receptor: BroadcastReceiver? = null
     private var ondeRegistrei: Context? = null   // o contexto do app (não de uma tela): pode ficar guardado
 
-    /** A memória interna + os pendrives montados agora. Os nomes vêm do Android, já no idioma da TV. */
+    /** A memória interna + os pendrives montados agora. O nome de cada pendrive vem do Android, no idioma da TV. */
     private fun lerArmazens(app: Context): List<MtpArmazem> {
         val sm = (if (Build.VERSION.SDK_INT >= 30) app.getSystemService(StorageManager::class.java) else null)
             ?: return listOf(MtpArmazem.interno())
-        val saida = arrayListOf(MtpArmazem.interno(sm.primaryStorageVolume.getDescription(app) ?: "Internal storage"))
+        val saida = arrayListOf(MtpArmazem.interno())   // nome fixo: é o que a Ajuda cita, nos 14 idiomas
         for (v in sm.storageVolumes) {
             if (v.isPrimary || v.state != Environment.MEDIA_MOUNTED) continue
             val dir = v.directory ?: continue          // a pasta de verdade (/storage/XXXX-XXXX)

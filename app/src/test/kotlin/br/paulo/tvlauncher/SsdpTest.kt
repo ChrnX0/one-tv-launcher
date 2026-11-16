@@ -52,9 +52,9 @@ class SsdpTest {
     }
 
     @Test fun descricaoEscapaONome() {
-        val x = Ssdp.descricao(Ssdp.nomeVisivel("Sala & <Cozinha>"), uuid, "http://192.0.2.10:8080/unidade")
-        assertTrue("<friendlyName>Sala &amp; &lt;Cozinha&gt; · arquivos</friendlyName>" in x)
-        assertTrue("<presentationURL>http://192.0.2.10:8080/unidade</presentationURL>" in x)
+        val x = Ssdp.descricao(Ssdp.nomeVisivel("Sala & <Cozinha>"), uuid, "http://192.0.2.10:8080/")
+        assertTrue("<friendlyName>Sala &amp; &lt;Cozinha&gt; · painel</friendlyName>" in x)
+        assertTrue("<presentationURL>http://192.0.2.10:8080/</presentationURL>" in x)
         assertTrue("<UDN>uuid:$uuid</UDN>" in x)
         assertTrue("<deviceType>${Ssdp.TIPO}</deviceType>" in x)
     }
