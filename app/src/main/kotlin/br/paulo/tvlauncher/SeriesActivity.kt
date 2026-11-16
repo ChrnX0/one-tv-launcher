@@ -43,7 +43,7 @@ class SeriesActivity : Activity() {
     private companion object {
         const val ANTERIORMENTE_OFF = "anteriormente_off"   // prefs "player" (vai no backup): o dono desligou o resumo
         const val MAX_NOVIDADES = 15
-        const val ESPERA_EXTERNO_MS = 150L   // quanto a ficha do servidor espera pela de fora antes de desenhar sozinha
+        const val ESPERA_EXTERNO_MS = 400L   // quanto a ficha do servidor espera pela de fora (com MDBList/Simkl ligados ela vem 150-400 ms depois, medido 16/11)
         const val MIN_PULAR = 30
         const val BUSCAR = "*buscar"
         const val FILTRO = "*filtro"
@@ -781,7 +781,7 @@ class SeriesActivity : Activity() {
                 fichaAberta = f
                 atualizarProgresso(s, f)
                 temporada = ultimos[s.chave]?.temporada?.takeIf { f?.temporadas?.containsKey(it) == true } ?: f?.temporadas?.keys?.firstOrNull() ?: 1
-                // A ficha de fora costuma chegar ~50 ms depois: espera um pouco por ela para desenhar uma vez só.
+                // A ficha de fora chega 50-400 ms depois (mais com MDBList/Simkl): espera por ela para desenhar uma vez só.
                 pedirDesenho(if (externoVem && externo?.first !== s) ESPERA_EXTERNO_MS else 0)
             }
             // Ficha de fora, depois da do servidor; sem chave nenhuma, não faz nada.

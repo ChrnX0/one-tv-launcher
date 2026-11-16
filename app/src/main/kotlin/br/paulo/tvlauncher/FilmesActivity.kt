@@ -50,7 +50,7 @@ import java.util.Locale
 class FilmesActivity : Activity() {
     private companion object {
         const val MIN_PULAR = 30   // grade menor que isso se anda no controle mesmo
-        const val ESPERA_EXTERNO_MS = 150L   // quanto a ficha do servidor espera pela de fora antes de desenhar sozinha
+        const val ESPERA_EXTERNO_MS = 400L   // quanto a ficha do servidor espera pela de fora (com MDBList/Simkl ligados ela vem 150-400 ms depois, medido 16/11)
         const val BUSCAR = "*buscar"
         const val CONTINUAR = "*continuar"
         const val INTERESSES = "*interesses"
@@ -783,7 +783,7 @@ class FilmesActivity : Activity() {
         val externoVem = InfoExternaCache.temTmdb() || InfoExternaCache.temNotas(this)
         Fundo.rodar {
             val info = PlayerCarga.fichaFilme(this, f)
-            // A ficha de fora costuma chegar ~50 ms depois: espera um pouco por ela para desenhar uma vez só.
+            // A ficha de fora chega 50-400 ms depois (mais com MDBList/Simkl): espera por ela para desenhar uma vez só.
             tela.post { if (!isDestroyed && ficha === f) { fichaInfo = info; pedirDesenho(if (externoVem && externo?.first !== f) ESPERA_EXTERNO_MS else 0) } }
             buscarExterno(f, info)
         }
