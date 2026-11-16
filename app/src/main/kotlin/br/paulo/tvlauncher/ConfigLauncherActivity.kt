@@ -243,6 +243,14 @@ class ConfigLauncherActivity : Activity() {
         conteudo.addView(Estilo.texto(this, Estilo.Papel.TITULO, aba.titulo).apply { setPadding(dp(8), dp(4), 0, 0) })
         conteudo.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, aba.explica).apply { setPadding(dp(8), dp(6), 0, dp(12)) })
         aba.montar(conteudo)
+        // Ajuda por QR (degrau 2): no fim de cada aba, o assunto do manual dela, com o QR para ler no celular.
+        AjudaQr.topicoDaAba(i)?.let { id ->
+            val n = Manual.TOPICOS.indexOf(id)
+            if (n >= 0) conteudo.addView(linha(getString(R.string.ajq_linha), getString(R.string.ajq_linha_det,
+                AjudaActivity.texto(this, id, Manual.Parte.TITULO)), seta = true) {
+                startActivity(Intent(this, AjudaActivity::class.java).putExtra(AjudaActivity.EXTRA_TOPICO, n))
+            }, LinearLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(16); bottomMargin = dp(8) })
+        }
     }
 
     /** Redesenha a aba atual no lugar (depois de voltar de outra tela ou de mudar algo que mexe em várias linhas). */

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuda por QR (degrau 2, 16/11/2026): AjudaActivity e a última linha de cada aba das Configurações. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="ajq_linha">इस टैब की मदद</string>
+    <string name="ajq_linha_det">मैनुअल में \"%1$s\", फ़ोन पर पढ़ने के लिए QR कोड के साथ।</string>
+    <string name="ajq_celular">फ़ोन पर</string>
+</resources>
