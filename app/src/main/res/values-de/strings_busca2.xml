@@ -2,6 +2,7 @@
 <!-- Tradução (de) de values/strings_busca2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="bu_outros_apps">In anderen Apps</string>
+    <string name="bu_outro_googletv">„%1$s“ auf Google TV suchen</string>
     <string name="bu_outro_youtube">„%1$s“ auf YouTube suchen</string>
     <string name="bu_outro_netflix">„%1$s“ auf Netflix suchen</string>
     <string name="bu_outro_prime">„%1$s“ auf Prime Video suchen</string>

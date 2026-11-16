@@ -101,29 +101,37 @@ class InfoExternaTest {
         assertEquals(2 to 3, InfoExterna.contarNaLista(partes, setOf(438631), setOf(InfoExterna.chaveNomeAno("Duna: Parte Dois", 2024))))
     }
 
-    @Test fun notasDoMdblist() {
-        val lote = """[{"title":"Dune","ids":{"imdb":"tt1160419","tmdb":438631},"ratings":[
-            {"source":"imdb","value":8.0,"score":80,"votes":900000},{"source":"tomatoes","value":83},{"source":"metacritic","value":74},
-            {"source":"letterboxd","value":3.9},{"source":"trakt","value":82},{"source":"rogerebert","value":null}]},
-            {"title":"Sem notas","ids":{"tmdb":5},"ratings":[]},{"title":"sem id","ratings":[]}]"""
-        val m = InfoExterna.lerLote(lote)
-        assertEquals(setOf(438631, 5), m.keys)
-        val n = m[438631]!!
-        assertNull(n.trakt)   // o "imdb" do MDBList é ignorado (uso comercial proibido) e a do Trakt vem do próprio Trakt
-        assertEquals(83, n.rt); assertEquals(74, n.metacritic); assertEquals(3.9f, n.letterboxd)
-        assertTrue(m[5]!!.vazia)
-        assertEquals("Rotten Tomatoes 83%  ·  Metacritic 74  ·  Letterboxd 3,9", InfoExterna.textoNotas(n, Locale("pt", "BR")))
-        assertFalse(InfoExterna.textoNotas(n).contains("IMDb"))
-        val comTrakt = n.copy(trakt = 8.0f)
-        assertEquals("Trakt 80%  ·  Rotten Tomatoes 83%  ·  Metacritic 74  ·  Letterboxd 3,9", InfoExterna.textoNotas(comTrakt, Locale("pt", "BR")))
-        // A estrela: média de Trakt 8,0, Metacritic 74 (7,4) e Letterboxd 3,9 (7,8); o Rotten Tomatoes fica fora.
-        assertEquals(7.733f, comTrakt.de0a10!!, 0.001f)
-        assertEquals(7.2f, InfoExterna.Notas(trakt = 7.4f, rt = 85, metacritic = 70).media!!, 0.001f)
-        assertEquals(8.5f, InfoExterna.Notas(rt = 85).media!!, 0.001f)   // só o Rotten: ele vale
-        assertNull(InfoExterna.Notas().media)
-        assertEquals(7.8f, InfoExterna.Notas(letterboxd = 3.9f).de0a10!!, 0.001f)
-        assertEquals("""{"ids":[1,2]}""", InfoExterna.corpoLoteMdblist(listOf(1, 2)))
-        assertEquals("https://api.mdblist.com/tmdb/show/?apikey=k", InfoExterna.urlLoteMdblist("k", true))
+    @Test fun notaDoSimkl() {
+        val ficha = """{"title":"Inception","ratings":{"simkl":{"rating":8.6,"votes":15265},"imdb":{"rating":8.8,"votes":2889060}}}"""
+        assertEquals(8.6f, InfoExterna.lerNotaSimkl(ficha)!!, 0.001f)
+        assertNull(InfoExterna.lerNotaSimkl("""{"ratings":{"imdb":{"rating":8.8,"votes":2889060}}}"""))   // o do IMDb nunca entra
+        assertNull(InfoExterna.lerNotaSimkl("""{"ratings":{"simkl":{"rating":9.9,"votes":3}}}"""))   // poucos votos
+        assertNull(InfoExterna.lerNotaSimkl("lixo"))
+        assertEquals(472214, InfoExterna.idSimklDoLocal("https://simkl.com/movies/472214/inception", serie = false))
+        assertEquals(17465, InfoExterna.idSimklDoLocal("https://simkl.com/tv/17465/game-of-thrones", serie = true))
+        assertEquals(37226, InfoExterna.idSimklDoLocal("https://simkl.com/anime/37226/sword-art-online", serie = true))
+        assertNull(InfoExterna.idSimklDoLocal("https://simkl.com/tv/17465/x", serie = false))   // pediu filme, veio série
+        assertNull(InfoExterna.idSimklDoLocal("https://simkl.com/movies/1/x", serie = true))
+        assertNull(InfoExterna.idSimklDoLocal(null, serie = false)); assertNull(InfoExterna.idSimklDoLocal("https://simkl.com/", serie = false))
+        val u = InfoExterna.urlSimklRedirect(1399, serie = true, clienteId = "c", versao = 1)
+        assertTrue(u, u.startsWith("https://api.simkl.com/redirect?client_id=c&app-name=sofaly&app-version=1.0.1&"))
+        assertTrue(u, u.endsWith("&to=simkl&type=tv&tmdb=1399"))
+        assertTrue(InfoExterna.urlSimklFicha(27205, serie = false, clienteId = "c", versao = 1).startsWith("https://api.simkl.com/movies/27205?"))
+        // As duas notas: estrela = média; texto como em cada site.
+        val n = InfoExterna.Notas(trakt = 8.0f, simkl = 8.6f)
+        assertEquals("Trakt 80%  ·  Simkl 8,6", InfoExterna.textoNotas(n, Locale("pt", "BR")))
+        assertEquals("Trakt 80%  ·  Simkl 8.6", InfoExterna.textoNotas(n, Locale.US))
+        assertEquals(8.3f, n.media!!, 0.001f)
+        assertEquals("Simkl 7.0", InfoExterna.textoNotas(InfoExterna.Notas(simkl = 7f), Locale.US))
+    }
+
+    @Test fun notasSoDoTrakt() {
+        // Rotten Tomatoes, Metacritic e Letterboxd saíram (16/11/2026, licença comercial): Trakt (e Simkl, acima).
+        val n = InfoExterna.Notas(trakt = 8.0f)
+        assertEquals("Trakt 80%", InfoExterna.textoNotas(n, Locale("pt", "BR")))
+        assertEquals(8.0f, n.de0a10!!, 0.001f)
+        assertTrue(InfoExterna.Notas().vazia); assertNull(InfoExterna.Notas().media)
+        assertEquals("", InfoExterna.textoNotas(InfoExterna.Notas()))
     }
 
     @Test fun validade() {
@@ -136,11 +144,10 @@ class InfoExternaTest {
     }
 
     @Test fun guardadoIdaEVolta() {
-        val g = InfoExterna.Guardado(tmdb = 10, imdb = "tt0111161", traktNota = 8.7f, traktEm = 300, recusados = setOf(3, 4),
+        val g = InfoExterna.Guardado(tmdb = 10, imdb = "tt0111161", traktNota = 8.7f, traktEm = 300, simkl = 55, simklNota = 7.9f, simklEm = 400, recusados = setOf(3, 4),
             detalhe = InfoExterna.Detalhe(10, "tt1", "sinopse", listOf("A", "B"), listOf("Drama"), InfoExterna.Colecao(7, "Saga"), InfoExterna.ProximoEp("2026-11-21", 1, 2), true, "abcdefgh12"),
-            detalheEm = 100, notas = InfoExterna.Notas(null, 90, null, 3.5f), notasEm = 200)
-        assertEquals(8.7f, InfoExterna.notasDe(g).trakt)   // a do Trakt entra junto com as do MDBList
-        assertEquals(90, InfoExterna.notasDe(g).rt)
+            detalheEm = 100)
+        assertEquals(8.7f, InfoExterna.notasDe(g).trakt); assertEquals(7.9f, InfoExterna.notasDe(g).simkl)
         assertEquals(g, InfoExterna.guardadoDeJson(InfoExterna.guardadoParaJson(g)))
         val vazio = InfoExterna.Guardado(recusados = setOf(9), buscaEm = 5)
         assertEquals(vazio, InfoExterna.guardadoDeJson(InfoExterna.guardadoParaJson(vazio)))
@@ -180,10 +187,11 @@ class InfoExternaTest {
         assertNull(InfoExterna.lerNotaTrakt("[]", serie = false)); assertNull(InfoExterna.lerNotaTrakt("lixo", serie = false))
         assertEquals("https://api.trakt.tv/search/tmdb/1399?type=show&extended=full", InfoExterna.urlTraktPorTmdb(1399, serie = true))
         assertTrue(InfoExterna.idImdbValido("tt0111161")); assertFalse(InfoExterna.idImdbValido("-"))
-        // Guardado de versão antiga, com a nota do arquivo do IMDb ("iv") e IMDb pelo MDBList ("n.i"): nada disso volta.
+        // Guardado de versão antiga, com a nota do arquivo do IMDb ("iv") e as do MDBList ("n"): nada disso volta.
         val velho = InfoExterna.guardadoDeJson(org.json.JSONObject("""{"t":10,"im":"tt0111161","iv":9.3,"n":{"i":8.0,"r":90},"ne":5}"""))
-        assertNull(velho.traktNota); assertEquals(90, velho.notas?.rt); assertNull(velho.notas?.trakt)
-        assertFalse(InfoExterna.guardadoParaJson(velho).toString().contains("\"iv\""))
+        assertNull(velho.traktNota); assertTrue(InfoExterna.notasDe(velho).vazia)
+        val json = InfoExterna.guardadoParaJson(velho).toString()
+        assertFalse(json.contains("\"iv\"")); assertFalse(json.contains("\"n\""))
     }
 
     @Test fun ondeAssistirDesligado() {

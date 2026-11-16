@@ -7,7 +7,7 @@
     <string name="sv_linha_det">Trakt、Simkl、MDBList、TMDB 和 OpenSubtitles</string>
     <string name="sv_trakt_det">与手机同步你看过的内容和待看清单</string>
     <string name="sv_simkl_det">类似 Trakt，也非常适合动漫。可用其一或两者都用</string>
-    <string name="sv_mdblist_det">可选：烂番茄、Letterboxd 和 Metacritic 评分，以及 Top 250 等榜单</string>
+    <string name="sv_mdblist_det">可选：你的榜单（如 Top 250）会成为电影和剧集中的分类</string>
     <string name="sv_tmdb_det">以电视语言显示剧情、演员和下一集日期</string>
     <string name="sv_os_det">在线字幕。无账号：每天 5 个。免费账号：20 个</string>
     <string name="sv_desligado">登录</string>
@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">新一集 %1$s</string>
     <string name="ext_hoje">今天</string>
     <string name="ext_amanha">明天</string>
-    <string name="sv_mdblist_passos">可选：在 Trakt 评分（无需它也能用）之外添加烂番茄、Letterboxd 和 Metacritic。\n1. 用手机摄像头扫描左侧代码并登录（或创建免费账号）。在页面底部点按 API Access，如果还没有密钥就生成一个，然后复制。\n2. 扫描右侧代码：网页面板会打开“设置”。在 MDBList 下粘贴密钥并点按“保存密钥”。\n3. 电视会立即检查，此界面会自动继续。</string>
+    <string name="sv_mdblist_passos">可选：你的 MDBList 榜单（如 Top 250）会成为电影和剧集中的分类。\n1. 用手机摄像头扫描左侧代码并登录（或创建免费账号）。在页面底部点按 API Access，如果还没有密钥就生成一个，然后复制。\n2. 扫描右侧代码：网页面板会打开“设置”。在 MDBList 下粘贴密钥并点按“保存密钥”。\n3. 电视会立即检查，此界面会自动继续。</string>
     <string name="sv_mdblist_qr1">MDBList 密钥页面</string>
     <string name="sv_mdblist_qr2">网页面板（%1$s）</string>
     <string name="sv_mdblist_digitar">在这里输入密钥</string>

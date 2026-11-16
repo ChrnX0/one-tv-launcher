@@ -7,7 +7,7 @@
     <string name="sv_linha_det">Trakt, Simkl, MDBList, TMDB i OpenSubtitles</string>
     <string name="sv_trakt_det">Synchronizuje obejrzane i listę do obejrzenia z Twoim telefonem</string>
     <string name="sv_simkl_det">Jak Trakt, świetny też do anime. Użyj jednego lub obu</string>
-    <string name="sv_mdblist_det">Opcjonalnie: oceny Rotten Tomatoes, Letterboxd i Metacritic oraz listy takie jak Top 250</string>
+    <string name="sv_mdblist_det">Opcjonalnie: twoje listy, np. Top 250, stają się kategoriami w Filmach i Serialach</string>
     <string name="sv_tmdb_det">Fabuła, obsada i data następnego odcinka, w języku telewizora</string>
     <string name="sv_os_det">Napisy online. Bez konta: 5 dziennie. Z bezpłatnym kontem: 20</string>
     <string name="sv_desligado">Zaloguj się</string>
@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">Nowy odcinek %1$s</string>
     <string name="ext_hoje">dziś</string>
     <string name="ext_amanha">jutro</string>
-    <string name="sv_mdblist_passos">Opcjonalnie: dodaje Rotten Tomatoes, Letterboxd i Metacritic do oceny Trakt (która działa już bez tego).\n1. Skieruj aparat telefonu na kod po lewej i zaloguj się (lub utwórz bezpłatne konto). Na dole strony stuknij API Access, wygeneruj klucz, jeśli go jeszcze nie ma, i skopiuj go.\n2. Skieruj na kod po prawej: panel WWW otworzy się na Ustawieniach. Wklej klucz w sekcji MDBList i stuknij Zapisz klucz.\n3. Telewizor od razu go sprawdzi, a ten ekran sam przejdzie dalej.</string>
+    <string name="sv_mdblist_passos">Opcjonalnie: twoje listy MDBList (np. Top 250) stają się kategoriami w Filmach i Serialach.\n1. Skieruj aparat telefonu na kod po lewej i zaloguj się (lub utwórz bezpłatne konto). Na dole strony stuknij API Access, wygeneruj klucz, jeśli go jeszcze nie ma, i skopiuj go.\n2. Skieruj na kod po prawej: panel WWW otworzy się na Ustawieniach. Wklej klucz w sekcji MDBList i stuknij Zapisz klucz.\n3. Telewizor od razu go sprawdzi, a ten ekran sam przejdzie dalej.</string>
     <string name="sv_mdblist_qr1">Strona klucza MDBList</string>
     <string name="sv_mdblist_qr2">Panel WWW (%1$s)</string>
     <string name="sv_mdblist_digitar">Wpisz klucz tutaj</string>

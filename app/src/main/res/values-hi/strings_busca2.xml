@@ -2,6 +2,7 @@
 <!-- Tradução (hi) de values/strings_busca2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="bu_outros_apps">दूसरे ऐप में</string>
+    <string name="bu_outro_googletv">Google TV पर “%1$s” खोजें</string>
     <string name="bu_outro_youtube">YouTube पर “%1$s” खोजें</string>
     <string name="bu_outro_netflix">Netflix पर “%1$s” खोजें</string>
     <string name="bu_outro_prime">Prime Video पर “%1$s” खोजें</string>

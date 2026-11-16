@@ -18,7 +18,8 @@
         <item>Filmes e Séries: a ficha abre mais leve (um fundo de tela cheia em vez de dois) e “Episódios” não quebra mais no meio da palavra; detalhes compridos como “Temporada 1” vão embaixo do nome do botão</item>
         <item>Jogos: ao rolar as fileiras, elas não aparecem mais por cima do jogo em destaque no alto</item>
         <item>Modo infantil por idade: a classificação indicativa de todos os filmes e séries é buscada de madrugada, aos poucos, e não só 300 a cada vez que Filmes abre. Na primeira noite o “Até 12 anos” já passa a mostrar o catálogo inteiro que tem classificação</item>
-        <item>Filmes e Séries: a nota agora vem do Trakt (para todos, sem conta), buscada de madrugada; a nota do IMDb saiu, porque o IMDb só permite em app não comercial</item>
+        <item>Filmes e Séries: a nota agora vem do Trakt (para todos, sem conta), buscada de madrugada; as notas do IMDb, Rotten Tomatoes, Metacritic e Letterboxd saíram, porque os donos não permitem em app pago sem contrato. O MDBList agora só traz as suas listas</item>
+        <item>Filmes e Séries: a nota da comunidade do Simkl aparece ao lado da do Trakt (para todos, sem conta, buscada de madrugada), e “Onde assistir” na ficha abre a busca do Google TV, que mostra onde o título passa. A Busca também oferece “Procurar no Google TV”</item>
         <item>“Também em” na ficha e “Em outros lugares” na Busca ficam desligados por enquanto: esses dados são da JustWatch e pedem contrato. A Busca continua oferecendo procurar no YouTube, Netflix e Prime Video</item>
         <item>Família conectada (Configurações › Família): um link sem conta para os netos mandarem fotos e recados que aparecem na TV</item>
         <item>Cenas prontas: Dormir, Novela e Jogo em Cenas, criadas com um OK</item>
@@ -198,6 +199,8 @@
     <string-array name="roteiro_titulos">
         <item>Modo infantil por idade</item>
         <item>Nota do Trakt</item>
+        <item>Nota do Simkl</item>
+        <item>Onde assistir</item>
         <item>Família conectada</item>
         <item>Cenas prontas</item>
         <item>Hóspede: limpeza total</item>
@@ -346,6 +349,8 @@
     <string-array name="roteiro_perguntas">
         <item>Depois de uma noite, com o modo infantil ligado e “Até 12 anos”, Filmes mostra vários filmes livres e até 12 anos (e nenhum para maiores)?</item>
         <item>Na manhã depois de instalar, abra um filme da sua lista: a ficha mostra “Trakt NN%” e não mostra “IMDb” nem “Também em”?</item>
+        <item>Na manhã depois de instalar, abra um filme conhecido: ao lado da nota do Trakt aparece “Simkl 8,1” (ou parecido)?</item>
+        <item>Na ficha de um filme ou série, “Onde assistir” abre a busca do Google TV com aquele título e mostra onde ele passa? E o VOLTAR traz de volta à ficha?</item>
         <item>Em Configurações › Família › Família conectada, aparece o QR? Mandando uma foto pelo link no celular, ela aparece na TV?</item>
         <item>Em Cenas, aparecem Dormir, Novela e Jogo em “Cenas prontas”? Criando Dormir, ela entra na lista e roda com OK?</item>
         <item>No Modo hóspede, a escolha de apps a limpar mostra também a Netflix e o YouTube?</item>

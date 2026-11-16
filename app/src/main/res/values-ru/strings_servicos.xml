@@ -7,7 +7,7 @@
     <string name="sv_linha_det">Trakt, Simkl, MDBList, TMDB и OpenSubtitles</string>
     <string name="sv_trakt_det">Синхронизирует просмотренное и «Хочу посмотреть» с телефоном</string>
     <string name="sv_simkl_det">Как Trakt, отлично подходит и для аниме. Используйте один или оба</string>
-    <string name="sv_mdblist_det">Необязательно: рейтинги Rotten Tomatoes, Letterboxd и Metacritic и списки вроде Top 250</string>
+    <string name="sv_mdblist_det">Необязательно: ваши списки, например Top 250, становятся категориями в Фильмах и Сериалах</string>
     <string name="sv_tmdb_det">Описание, актёры и дата следующей серии на языке ТВ</string>
     <string name="sv_os_det">Субтитры из интернета. Без аккаунта: 5 в день. С бесплатным аккаунтом: 20</string>
     <string name="sv_desligado">Войти</string>
@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">Новая серия %1$s</string>
     <string name="ext_hoje">сегодня</string>
     <string name="ext_amanha">завтра</string>
-    <string name="sv_mdblist_passos">Необязательно: добавляет Rotten Tomatoes, Letterboxd и Metacritic к рейтингу Trakt (он уже работает без этого).\n1. Наведите камеру телефона на код слева и войдите (или создайте бесплатный аккаунт). Внизу страницы нажмите API Access, создайте ключ, если его ещё нет, и скопируйте его.\n2. Наведите на код справа: веб-панель откроется на «Настройках». Вставьте ключ в разделе MDBList и нажмите «Сохранить ключ».\n3. ТВ сразу его проверит, и экран продолжит сам.</string>
+    <string name="sv_mdblist_passos">Необязательно: ваши списки MDBList (например, Top 250) становятся категориями в Фильмах и Сериалах.\n1. Наведите камеру телефона на код слева и войдите (или создайте бесплатный аккаунт). Внизу страницы нажмите API Access, создайте ключ, если его ещё нет, и скопируйте его.\n2. Наведите на код справа: веб-панель откроется на «Настройках». Вставьте ключ в разделе MDBList и нажмите «Сохранить ключ».\n3. ТВ сразу его проверит, и экран продолжит сам.</string>
     <string name="sv_mdblist_qr1">Страница ключа MDBList</string>
     <string name="sv_mdblist_qr2">Веб-панель (%1$s)</string>
     <string name="sv_mdblist_digitar">Введите ключ здесь</string>

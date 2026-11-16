@@ -7,7 +7,7 @@
     <string name="sv_linha_det">Trakt, Simkl, MDBList, TMDB e OpenSubtitles</string>
     <string name="sv_trakt_det">Tiene sincronizzati con il telefono ciò che hai visto e la tua lista Da vedere</string>
     <string name="sv_simkl_det">Come Trakt, ottimo anche per gli anime. Usane uno o entrambi</string>
-    <string name="sv_mdblist_det">Facoltativo: voti di Rotten Tomatoes, Letterboxd e Metacritic, e liste come la Top 250</string>
+    <string name="sv_mdblist_det">Facoltativo: le tue liste, come la Top 250, diventano categorie in Film e Serie</string>
     <string name="sv_tmdb_det">Trama, cast e data del prossimo episodio, nella lingua della TV</string>
     <string name="sv_os_det">Sottotitoli online. Senza account: 5 al giorno. Con un account gratuito: 20</string>
     <string name="sv_desligado">Accedi</string>
@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">Nuovo ep. %1$s</string>
     <string name="ext_hoje">oggi</string>
     <string name="ext_amanha">domani</string>
-    <string name="sv_mdblist_passos">Facoltativo: aggiunge Rotten Tomatoes, Letterboxd e Metacritic al voto Trakt (che funziona già senza).\n1. Inquadra con la fotocamera del telefono il codice a sinistra e accedi (o crea un account gratuito). In fondo alla pagina tocca API Access, genera la chiave se non c’è ancora e copiala.\n2. Inquadra il codice a destra: il pannello web si apre su Impostazioni. Incolla la chiave sotto MDBList e tocca Salva chiave.\n3. La TV la verifica subito e questa schermata prosegue da sola.</string>
+    <string name="sv_mdblist_passos">Facoltativo: le tue liste MDBList (come la Top 250) diventano categorie in Film e Serie.\n1. Inquadra con la fotocamera del telefono il codice a sinistra e accedi (o crea un account gratuito). In fondo alla pagina tocca API Access, genera la chiave se non c’è ancora e copiala.\n2. Inquadra il codice a destra: il pannello web si apre su Impostazioni. Incolla la chiave sotto MDBList e tocca Salva chiave.\n3. La TV la verifica subito e questa schermata prosegue da sola.</string>
     <string name="sv_mdblist_qr1">Pagina della chiave MDBList</string>
     <string name="sv_mdblist_qr2">Pannello web (%1$s)</string>
     <string name="sv_mdblist_digitar">Digita qui la chiave</string>

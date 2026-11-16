@@ -141,7 +141,7 @@ Obras de arte dos fundos: The Metropolitan Museum of Art, Open Access (CC0).
 Localização aproximada pelo IP: ipwho.is.
 Fichas de filmes e séries: TMDB (https://www.themoviedb.org). This product uses the TMDB API but is not endorsed
   or certified by TMDB.
-Notas: Trakt (https://trakt.tv). One TV Launcher uses Trakt but is not endorsed or certified by Trakt. Simkl: https://simkl.com.
+Notas: Trakt (https://trakt.tv). One TV Launcher uses Trakt but is not endorsed or certified by Trakt. Nota da comunidade: Simkl (https://simkl.com).
 Legendas: Subtitles provided by OpenSubtitles.com (https://www.opensubtitles.com). Cada legenda fica só na TV de quem pediu.
 Rádios: Radio Browser (https://www.radio-browser.info).
 Endereço pelo nome: dados © colaboradores do OpenStreetMap (https://www.openstreetmap.org/copyright), pelo Nominatim.
