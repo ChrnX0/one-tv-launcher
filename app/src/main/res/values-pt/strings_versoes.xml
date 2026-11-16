@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Canal pedido por nome (Claude ou voz): vem o do país da TV. “Globo” no Brasil abre a Globo daqui, não a TV Globo de Portugal; para outro país, diga junto (“Globo Portugal”)</item>
         <item>Calibração da imagem: o padrão “Barras de cor 75%” não fecha mais o launcher</item>
         <item>Filmes: o diretor vem do TMDB (Duna mostra Denis Villeneuve), não mais do nome errado da lista</item>
         <item>Filmes e Séries: faixa de áudio sem idioma aparece como “Faixa”, e não mais “und”</item>
@@ -175,6 +176,7 @@
         <item>Protetor de tela com widgets novos, de letra maior: escolha Faixa de vidro (as próximas horas numa curva, com a hora do sol), Cartões (agora, horas, hoje e amanhã) ou Sem caixa (a temperatura grande e o tempo numa frase) em Configurações › Tela e energia › Widgets do protetor, ou no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Canal do país</item>
         <item>Barras de cor 75%</item>
         <item>Diretor do filme</item>
         <item>Faixa de áudio sem idioma</item>
@@ -308,6 +310,7 @@
         <item>Em Configurações › Tela e energia, OK em Widgets do protetor até o estilo que quiser e espere o protetor aparecer</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Peça ao Claude “coloca na Globo”: abre a Globo do Brasil? E “Globo Portugal” abre a de Portugal?</item>
         <item>Em Configurações › Tela e energia › Calibração, escolha “Barras de cor 75%”: o padrão aparece e o launcher não fecha?</item>
         <item>Em Filmes, abra Duna: a ficha mostra Denis Villeneuve como diretor?</item>
         <item>Num filme cujo áudio não tem idioma, abra Áudio: aparece “Faixa” em vez de “und”?</item>

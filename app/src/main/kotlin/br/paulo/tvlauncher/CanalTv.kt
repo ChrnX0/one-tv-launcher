@@ -29,7 +29,8 @@ object CanalTv {
             val ocultas = PlayerFiltro.ocultasEfetivas(canais, PlayerArmazem.gruposEscondidos(app), PlayerArmazem.gruposLiberados(app))
             val parental = PlayerArmazem.parental(app)
             CanalBusca.Dados(canais, { c -> c.grupo.trim() !in ocultas && !ControleParental.bloqueado(c, parental) },
-                { ids -> PlayerCarga.guiaDoCache(app, ids) })
+                { ids -> PlayerCarga.guiaDoCache(app, ids) },
+                java.util.Locale.getDefault().country.ifEmpty { null })   // "globo" no Brasil = a Globo daqui (16/11/2026)
         } catch (e: Exception) {
             Log.w(TAG, "canais: ${e.javaClass.simpleName}")
             null

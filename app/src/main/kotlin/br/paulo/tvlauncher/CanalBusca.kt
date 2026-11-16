@@ -24,8 +24,46 @@ object CanalBusca {
     private val NUMEROS = mapOf("um" to "1", "uma" to "1", "dois" to "2", "duas" to "2", "tres" to "3", "quatro" to "4",
         "cinco" to "5", "seis" to "6", "sete" to "7", "oito" to "8", "nove" to "9", "dez" to "10")
 
-    /** Um canal encontrado e o quanto o nome bateu (maior = melhor). */
-    class Achado(val canal: Canal, val nota: Int)
+    /** Um canal encontrado, o quanto o nome bateu (maior = melhor) e se é do país pedido (2), sem país (1) ou de outro (0). */
+    class Achado(val canal: Canal, val nota: Int, val lugar: Int = 1)
+
+    // ---------------------------------------------------------------- país (16/11/2026)
+    // "globo" abria a "TV Globo HD" do grupo Portugal (nome igual, nota 1000) em vez da Globo do Brasil ("Globo SP FHD",
+    // nota 800), visto na Sala. Regra do dono: o canal é o do país de quem usa, a não ser que a pessoa diga outro
+    // ("globo portugal").
+
+    /** Palavras de país no grupo ("Portugal", "Canais USA") ou no pedido, para a sigla ISO (a do Locale). */
+    private val PAISES = mapOf(
+        "brasil" to "BR", "brazil" to "BR", "br" to "BR", "brasileiro" to "BR", "brasileira" to "BR",
+        "portugal" to "PT", "pt" to "PT", "portugues" to "PT", "portuguesa" to "PT",
+        "usa" to "US", "eua" to "US", "us" to "US", "uk" to "GB", "inglaterra" to "GB", "england" to "GB",
+        "argentina" to "AR", "mexico" to "MX", "chile" to "CL", "colombia" to "CO", "uruguai" to "UY", "uruguay" to "UY",
+        "paraguai" to "PY", "paraguay" to "PY", "peru" to "PE", "espanha" to "ES", "espana" to "ES", "spain" to "ES",
+        "franca" to "FR", "france" to "FR", "italia" to "IT", "italy" to "IT", "alemanha" to "DE", "germany" to "DE",
+        "canada" to "CA", "angola" to "AO", "mocambique" to "MZ",
+    )
+    /** Siglas de 3 letras do prefixo ("BRA: x") para as de 2 do Locale. */
+    private val SIGLAS3 = mapOf("BRA" to "BR", "POR" to "PT", "PRT" to "PT", "USA" to "US", "GBR" to "GB", "ARG" to "AR",
+        "MEX" to "MX", "ESP" to "ES", "FRA" to "FR", "ITA" to "IT", "DEU" to "DE", "GER" to "DE", "CAN" to "CA")
+
+    private fun sigla(s: String): String = s.uppercase().let { SIGLAS3[it] ?: if (it == "UK") "GB" else it }
+
+    /** O país do canal: o prefixo do nome/grupo ("BR: x"), senão uma palavra de país no grupo ou no nome. Nulo = não diz. */
+    fun paisDoCanal(c: Canal): String? {
+        PlayerFiltro.pais(c)?.let { return sigla(it) }
+        for (texto in listOf(c.grupo, c.nome)) {
+            PlayerFiltro.normalizar(texto).split(' ').firstNotNullOfOrNull { PAISES[it] }?.let { return it }
+        }
+        return null
+    }
+
+    /** "globo portugal" -> ("globo", "PT"). Sem palavra de país, ou só ela ("portugal"), o pedido fica como veio. */
+    fun separarPais(termo: String): Pair<String, String?> {
+        val palavras = PlayerFiltro.normalizar(termo).split(' ').filter { it.isNotEmpty() }
+        val pais = palavras.firstNotNullOfOrNull { PAISES[it] } ?: return termo to null
+        val resto = palavras.filter { PAISES[it] == null }
+        return if (resto.isEmpty()) termo to null else resto.joinToString(" ") to pais
+    }
 
     /** Chave de comparação de um texto: "BR: TV Globo HD" -> "globo"; "SporTV 2" -> "sportv 2". */
     fun chave(texto: String, pais: String? = null): String {
@@ -87,7 +125,17 @@ object CanalBusca {
      * número do canal; se nenhum canal tiver aquele número, tenta como nome. Empate: o nome com menos palavras sobrando,
      * depois o número menor (o canal "principal" costuma vir antes na lista).
      */
-    fun buscar(canais: List<Canal>, termo: String, max: Int = 5): List<Achado> {
+    fun buscar(canais: List<Canal>, termo: String, max: Int = 5, paisUsuario: String? = null): List<Achado> {
+        val (semPais, paisPedido) = separarPais(termo.take(MAX_TERMO))
+        val alvo = paisPedido ?: paisUsuario
+        if (paisPedido == null) return buscarCom(canais, termo, max, alvo)
+        // A palavra de país pode ser parte do nome ("Canal Brasil", "Rede Brasil"): o pedido inteiro vale antes, se
+        // achar de verdade um canal daquele país; senão, sem a palavra ("globo portugal" -> "globo" de Portugal).
+        val inteiro = buscarCom(canais, termo, max, alvo)
+        return if (inteiro.any { it.nota >= 500 && it.lugar == 2 }) inteiro else buscarCom(canais, semPais, max, alvo)
+    }
+
+    private fun buscarCom(canais: List<Canal>, termo: String, max: Int, pais: String?): List<Achado> {
         val t = chave(termo.take(MAX_TERMO))
         if (t.isEmpty()) return emptyList()
         if (t.all { it.isDigit() } && t.length <= 6) {
@@ -95,13 +143,21 @@ object CanalBusca {
             val porNumero = canais.filter { it.numero == n }
             if (porNumero.isNotEmpty()) return porNumero.take(max).map { Achado(it, 1000) }
         }
+        // País que vale: o dito no pedido, senão o do usuário. Canal desse país = 2, sem país = 1, de outro = 0.
+        val alvo = pais?.takeIf { it.isNotBlank() }?.uppercase()
+        fun lugar(c: Canal): Int = if (alvo == null) 1 else when (paisDoCanal(c)) { alvo -> 2; null -> 1; else -> 0 }
         val palavrasTermo = t.split(' ').size
+        // Ordem: 1º os que batem de verdade (nota 500+: nome igual, começo, todas as palavras) antes dos parecidos
+        // (erro de digitação); dentro deles, o país; depois a nota. Assim "globo" no Brasil vai para a Globo SP, não para
+        // a TV Globo de Portugal; e um "sic" certo de Portugal ainda ganha de um canal brasileiro só parecido.
         return canais.asSequence()
-            .map { c -> val k = chave(c.nome, PlayerFiltro.pais(c)); Triple(c, nota(t, k), k.split(' ').size) }
-            .filter { it.second > 0 }
-            .sortedWith(compareByDescending<Triple<Canal, Int, Int>> { it.second }
-                .thenBy { Math.abs(it.third - palavrasTermo) }.thenBy { it.first.numero })
-            .take(max).map { Achado(it.first, it.second) }.toList()
+            .map { c -> val k = chave(c.nome, PlayerFiltro.pais(c)); val nt = nota(t, k); Pair(c, nt) to k.split(' ').size }
+            .filter { it.first.second > 0 }
+            .map { (cn, palavras) -> Triple(Achado(cn.first, cn.second, lugar(cn.first)), palavras, cn.second >= 500) }
+            .sortedWith(compareByDescending<Triple<Achado, Int, Boolean>> { it.third }.thenByDescending { it.first.lugar }
+                .thenByDescending { it.first.nota }
+                .thenBy { Math.abs(it.second - palavrasTermo) }.thenBy { it.first.canal.numero })
+            .take(max).map { it.first }.toList()
     }
 
     /** O resultado de procurar um canal para tocar (ou ver o guia). */
@@ -116,10 +172,10 @@ object CanalBusca {
      * resultado estiver bloqueado e não houver outro permitido tão bom quanto ele, a resposta é [Escolha.Bloqueado]:
      * não toca e também não cai num canal parecido (pedir "Playboy" e ganhar outro canal seria pior).
      */
-    fun escolher(canais: List<Canal>, termo: String, permitido: (Canal) -> Boolean): Escolha {
-        val achados = buscar(canais, termo, max = 50)
+    fun escolher(canais: List<Canal>, termo: String, permitido: (Canal) -> Boolean, paisUsuario: String? = null): Escolha {
+        val achados = buscar(canais, termo, max = 50, paisUsuario = paisUsuario)
         val melhor = achados.firstOrNull() ?: return Escolha.NaoAchou
-        val c = achados.firstOrNull { it.nota == melhor.nota && permitido(it.canal) } ?: return Escolha.Bloqueado
+        val c = achados.firstOrNull { it.nota == melhor.nota && it.lugar == melhor.lugar && permitido(it.canal) } ?: return Escolha.Bloqueado
         return Escolha.Achou(c.canal)
     }
 
@@ -191,7 +247,8 @@ object CanalBusca {
     // ---------------------------------------------------------------- resolver as ações do catálogo
 
     /** O que a TV sabe dos canais na hora de resolver um pedido. [guia] é lido só se alguma ação precisar. */
-    class Dados(val canais: List<Canal>, val permitido: (Canal) -> Boolean, val guia: (Set<String>) -> Guia)
+    class Dados(val canais: List<Canal>, val permitido: (Canal) -> Boolean, val guia: (Set<String>) -> Guia,
+        val paisUsuario: String? = null)   // sigla do país da TV (Locale), para preferir o canal de lá
 
     /**
      * Troca as ações "tocar_canal"/"o_que_passa" ainda sem canal (como saem do ComandosIa.conferir) pelas resolvidas:
@@ -204,7 +261,7 @@ object CanalBusca {
         var guia: Guia? = null
         // Cada pedido é procurado UMA vez (a busca compara com todos os canais): o guia usa as mesmas escolhas.
         val escolhas = HashMap<String, Escolha>()
-        fun escolha(pedido: String) = escolhas.getOrPut(pedido) { escolher(dados!!.canais, pedido, dados.permitido) }
+        fun escolha(pedido: String) = escolhas.getOrPut(pedido) { escolher(dados!!.canais, pedido, dados.permitido, dados.paisUsuario) }
         for (a in plano.acoes) {
             val (tipo, pedido) = when (a) {
                 is ComandosIa.Acao.TocarCanal -> "tocar_canal" to a.pedido
