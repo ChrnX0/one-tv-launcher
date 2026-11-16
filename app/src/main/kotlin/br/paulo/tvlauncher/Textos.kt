@@ -5,7 +5,10 @@ package br.paulo.tvlauncher
  * em [LauncherApp.instancia] logo que o processo do launcher abre. O idioma vem do aparelho: inglês é o padrão
  * (res/values), português fica em res/values-pt (vale para pt-BR e pt-PT).
  */
-fun txt(id: Int, vararg args: Any): String = LauncherApp.instancia.getString(id, *args)
+// Sem argumentos, NÃO passa pelo String.format: "Barras de cor 75%" derrubava o launcher ao abrir a Calibração
+// (UnknownFormatConversionException no onDraw, Sala 16/11/2026). getString(id, *vazio) formata mesmo assim.
+fun txt(id: Int, vararg args: Any): String =
+    if (args.isEmpty()) LauncherApp.instancia.getString(id) else LauncherApp.instancia.getString(id, *args)
 
 /** Plural traduzido (res/values/plurals): "1 minute" / "5 minutes", "1 minuto" / "5 minutos". */
 fun txtN(id: Int, n: Int): String = LauncherApp.instancia.resources.getQuantityString(id, n, n)
