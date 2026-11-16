@@ -77,3 +77,24 @@ como o celular dele aparece em Este Computador.
   antiga da Microsoft, não de um teste.
 - **Limites:** sem eventos (arquivo criado na TV aparece no Windows ao atualizar a pasta); leitura aos pedaços só até
   4 GB de deslocamento (o arquivo inteiro baixa sem limite); sem miniaturas.
+
+## Windows de verdade: o que foi medido (16/11/2026)
+
+Medido com a TV da Sala e com uma bancada (`MtpBancadaWindowsTest`, o servidor rodando num PC com Windows 11).
+
+- **Instalação sozinha:** em rede Privada o Windows instala a TV sem ninguém pedir (evento 4001 do NcdAutoSetup).
+- **Reconexão:** quando o launcher reiniciava, o Windows ficava com a pasta vazia até reiniciarem o dispositivo. O que
+  faz o Windows largar e reconectar é UM aviso só, com `NT`/`USN` iguais a `uuid:<udn>`: `ssdp:byebye` (larga em menos
+  de 1 s) e, 2 s depois, `ssdp:alive` (reconecta em ~1,5 s). A rajada normal de três avisos não faz isso.
+  `Ssdp.avisoDoAparelho`, mandado por `AnuncioUpnp` ao subir quando não há computador conectado.
+- **O Windows ignora avisos vindos do próprio PC:** a bancada precisa de "Adicionar dispositivo" à mão e de
+  `pnputil /restart-device "SWD\DAFUPNPPROVIDER\UUID:<udn>"` (administrador) depois de cada reinício dela.
+- **Pendrives:** cada volume montado vira um armazenamento separado (`MtpArmazem`; a memória interna é 0x00010001, os
+  pendrives 0x00020001, 0x00030001...). Entrar e sair é avisado ao computador (eventos StoreAdded/StoreRemoved pela
+  conexão de eventos). Mover entre armazenamentos é recusado: o computador copia e apaga.
+- **Marca:** fabricante/modelo "Sofaly", `iconList` na descrição UPnP (tela Rede) e o ícone `.ico` como propriedade
+  do aparelho MTP (0xD405), em `assets/upnp/`.
+- **Duplo clique abrindo "Documentos":** não é do servidor. Acontece quando outro gerenciador de arquivos (o app
+  Files) fica registrado em `HKCU\Software\Classes\Folder\shell\open\command`: ele recebe o caminho
+  `...\SID-{10001,...}`, que o Windows não sabe reabrir, e cai em Documentos. O Explorador direto abre certo. Trocar o
+  identificador de volume do armazenamento não muda nada (testado com quatro valores).
