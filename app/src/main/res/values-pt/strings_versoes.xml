@@ -36,6 +36,7 @@
         <item>LG ligada pelo controle dela: se ela abrir na entrada do Chromecast, o Chromecast acorda sozinho em até uns 20 s (antes a tela ficava preta até trocar a entrada). Na antena ou em outra entrada, nada muda. Precisa da LG pareada pela rede</item>
         <item>Séries e Filmes: abrir um título ficou mais liso; a ficha se desenha uma vez quando os dados chegam (os dados do servidor esperam até 0,4 s pelas notas e pelo TMDB), e a grade de trás não é mais redesenhada</item>
         <item>Filmes e Séries: a ★ passa a ser a média do IMDb, Metacritic e Letterboxd (a nota da lista de canais só vale quando não há nenhuma); “Também em” não repete mais o mesmo serviço (Apple TV · Apple TV Amazon)</item>
+        <item>Filmes e Séries: a coluna de opções da ficha ficou mais fina, com ícones, e só a opção com foco fica destacada; as informações ganharam espaço</item>
         <item>Login do Claude no navegador em inglês ou português, conforme o idioma do navegador; o painel web em inglês também traduz as mensagens de erro, e os erros das contas de filmes saem no idioma da TV</item>
         <item>Segurança: ligar a unidade de rede pelo painel pede o PIN; o conector do Windows só baixa pelo https; outro aparelho da casa não trava mais o painel, o login do Claude nem a cópia de arquivos do seu computador (cada computador continua entrando com o próprio “Permitir?”)</item>
         <item>A manutenção da madrugada termina antes de a família ligar a TV, e as notas do IMDb dos filmes não somem mais</item>
