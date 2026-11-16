@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">Новая серия %1$s</string>
     <string name="ext_hoje">сегодня</string>
     <string name="ext_amanha">завтра</string>
-    <string name="sv_mdblist_passos">Необязательно: добавляет Rotten Tomatoes, Letterboxd и Metacritic к рейтингу IMDb (он уже работает без этого).\n1. Наведите камеру телефона на код слева, создайте бесплатный аккаунт и скопируйте ключ API.\n2. Наведите на код справа: веб-панель откроется на «Настройках». Вставьте ключ в разделе MDBList и нажмите «Сохранить ключ».\n3. ТВ сразу его проверит, и экран продолжит сам.</string>
+    <string name="sv_mdblist_passos">Необязательно: добавляет Rotten Tomatoes, Letterboxd и Metacritic к рейтингу IMDb (он уже работает без этого).\n1. Наведите камеру телефона на код слева и войдите (или создайте бесплатный аккаунт). Внизу страницы нажмите API Access, создайте ключ, если его ещё нет, и скопируйте его.\n2. Наведите на код справа: веб-панель откроется на «Настройках». Вставьте ключ в разделе MDBList и нажмите «Сохранить ключ».\n3. ТВ сразу его проверит, и экран продолжит сам.</string>
     <string name="sv_mdblist_qr1">Страница ключа MDBList</string>
     <string name="sv_mdblist_qr2">Веб-панель (%1$s)</string>
     <string name="sv_mdblist_digitar">Введите ключ здесь</string>

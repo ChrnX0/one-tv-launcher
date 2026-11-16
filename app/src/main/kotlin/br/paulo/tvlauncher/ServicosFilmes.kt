@@ -227,7 +227,7 @@ object ServicosFilmes {
     // ---------------------------------------------------------------- MDBList (api.mdblist.com/docs)
 
     const val MDBLIST_API = "https://api.mdblist.com"
-    const val MDBLIST_PREFERENCIAS = "https://mdblist.com/preferences/"
+    const val MDBLIST_PREFERENCIAS = "https://mdblist.com/preferences/#api"   // a âncora leva perto de "API Access" (no fim da página)
 
     /** A chave pessoal do MDBList: letras e números, ~25 caracteres. Aceita uma faixa larga, sem espaços. */
     fun mdblistChaveValida(chave: String): Boolean = chave.trim().matches(Regex("[A-Za-z0-9]{16,64}"))

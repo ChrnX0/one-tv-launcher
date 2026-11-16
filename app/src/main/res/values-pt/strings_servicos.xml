@@ -48,7 +48,7 @@
     <string name="ext_proximo_curto">Novo ep. %1$s</string>
     <string name="ext_hoje">hoje</string>
     <string name="ext_amanha">amanhã</string>
-    <string name="sv_mdblist_passos">Opcional: soma Rotten Tomatoes, Letterboxd e Metacritic à nota do IMDb (que já funciona sem isto).\n1. Aponte a câmera do celular para o código da esquerda, crie uma conta grátis e copie a API key.\n2. Aponte para o código da direita: o painel web abre em Configurações. Cole a chave em MDBList e toque em Gravar chave.\n3. A TV confere na hora e esta tela continua sozinha.</string>
+    <string name="sv_mdblist_passos">Opcional: soma Rotten Tomatoes, Letterboxd e Metacritic à nota do IMDb (que já funciona sem isto).\n1. Aponte a câmera do celular para o código da esquerda e entre (ou crie uma conta grátis). No fim da página, toque em API Access, gere a chave se ainda não tiver e copie.\n2. Aponte para o código da direita: o painel web abre em Configurações. Cole a chave em MDBList e toque em Gravar chave.\n3. A TV confere na hora e esta tela continua sozinha.</string>
     <string name="sv_mdblist_qr1">Página da chave no MDBList</string>
     <string name="sv_mdblist_qr2">Painel web (%1$s)</string>
     <string name="sv_mdblist_digitar">Digitar a chave aqui</string>
