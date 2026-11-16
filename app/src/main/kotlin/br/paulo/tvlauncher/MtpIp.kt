@@ -187,6 +187,11 @@ object Mtp {
     /** Um armazém só: a memória interna. O número é (unidade física 1, partição 1). */
     const val ARMAZEM = 0x00010001
     const val TODOS = -1   // 0xFFFFFFFF
+    const val VOLUME_INTERNO = "onetv"
+
+    // Avisos que a TV manda ao computador pela conexão de eventos
+    const val EV_ARMAZEM_ENTROU = 0x4004
+    const val EV_ARMAZEM_SAIU = 0x4005
 
     class Aparelho(val nome: String, val modelo: String, val versao: String, val serie: String, val guid: ByteArray)
 
@@ -259,27 +264,27 @@ object Mtp {
         .texto("microsoft.com: 1.0;")
         .u16(0)                        // modo de funcionamento padrão
         .lista16(OPERACOES)
-        .lista16(intArrayOf())         // eventos: nenhum (o computador relê a pasta quando a pessoa atualiza)
+        .lista16(intArrayOf(EV_ARMAZEM_ENTROU, EV_ARMAZEM_SAIU))   // eventos: só pendrive que entra ou sai
         .lista16(intArrayOf(PA_NOME))
         .lista16(intArrayOf())         // formatos de captura (não somos câmera)
         .lista16(intArrayOf(F_INDEFINIDO, F_PASTA) + FORMATOS.values.distinct().sorted().toIntArray())
         .texto("One TV Launcher").texto(a.modelo).texto(a.versao).texto(a.serie)
         .bytes()
 
-    fun infoArmazem(total: Long, livre: Long, nome: String): ByteArray = Escritor()
-        .u16(0x0003)                   // memória fixa
+    fun infoArmazem(total: Long, livre: Long, nome: String, volume: String = VOLUME_INTERNO, removivel: Boolean = false): ByteArray = Escritor()
+        .u16(if (removivel) 0x0004 else 0x0003)   // memória fixa, ou de tirar (pendrive)
         .u16(0x0002)                   // sistema de arquivos com pastas
         .u16(0x0000)                   // leitura e escrita
         .u64(total).u64(livre).u32(TODOS)
-        .texto(nome).texto("onetv")
+        .texto(nome).texto(volume)
         .bytes()
 
-    class Objeto(val handle: Int, val pai: Int, val nome: String, val pasta: Boolean, val tamanho: Long, val modificado: Long, val idFixo: ByteArray) {
+    class Objeto(val handle: Int, val pai: Int, val nome: String, val pasta: Boolean, val tamanho: Long, val modificado: Long, val idFixo: ByteArray, val armazem: Int = ARMAZEM) {
         val formato get() = formato(nome, pasta)
     }
 
     fun infoObjeto(o: Objeto): ByteArray = Escritor()
-        .u32(ARMAZEM).u16(o.formato).u16(0)
+        .u32(o.armazem).u16(o.formato).u16(0)
         .u32(if (o.tamanho > 0xFFFFFFFFL) -1 else o.tamanho.toInt())   // 4 GB ou mais: o tamanho certo vai na propriedade
         .u16(0).u32(0).u32(0).u32(0)   // miniatura: não há
         .u32(0).u32(0).u32(0)          // imagem: largura, altura, bits
@@ -290,7 +295,7 @@ object Mtp {
 
     fun valorProp(w: Escritor, o: Objeto, prop: Int): Boolean {
         when (prop) {
-            P_ARMAZEM -> w.u32(ARMAZEM)
+            P_ARMAZEM -> w.u32(o.armazem)
             P_FORMATO -> w.u16(o.formato)
             P_PROTECAO -> w.u16(0)
             P_TAMANHO -> w.u64(o.tamanho)
@@ -356,22 +361,39 @@ object Mtp {
  * computador só fala por esses números. O caminho de verdade nunca vem do computador: ele manda só um handle que nós
  * demos e, ao criar, um nome solto (conferido por nomeArquivoValido). Não há como pedir "../../algo".
  */
-class MtpLoja(private val avisar: (File) -> Unit) {
+class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.interno()) }, private val avisar: (File) -> Unit) {
     companion object {
         /** Teto de objetos numa resposta só (pasta gigante ou "liste tudo"): protege a memória da TV. */
         const val MAX_OBJETOS = 20_000
     }
 
+    // A "chave" de um objeto é "<número do armazenamento em hexa>|<caminho relativo dentro dele>" ("10001|Download/a.txt").
     private val porCaminho = HashMap<String, Int>()
     private val porHandle = HashMap<Int, String>()
     private var proximo = 1
 
-    class Pendente(val handle: Int, val pasta: File, val nome: String, val tamanho: Long, val modificado: Long?)
+    class Pendente(val handle: Int, val pasta: File, val nome: String, val tamanho: Long, val modificado: Long?, val armazem: MtpArmazem)
 
-    @Synchronized private fun handleDe(rel: String): Int = porCaminho.getOrPut(rel) { val h = proximo++; porHandle[h] = rel; h }
-    @Synchronized private fun relDe(h: Int): String? = porHandle[h]
-    @Synchronized private fun esquecer(rel: String) {
-        val alvo = porCaminho.keys.filter { it == rel || it.startsWith("$rel/") }
+    /** Os armazenamentos de agora (a memória interna e os pendrives espetados). */
+    fun armazens(): List<MtpArmazem> = fonte()
+    fun armazem(id: Int): MtpArmazem? = armazens().firstOrNull { it.id == id }
+
+    private fun qualquer(arm: Int) = arm == 0 || arm == Mtp.TODOS
+    private fun chave(a: MtpArmazem, rel: String) = "%x|%s".format(a.id, rel)
+    private fun relDa(chave: String) = chave.substring(chave.indexOf('|') + 1)
+    private fun filho(chave: String, nome: String) = if (relDa(chave).isEmpty()) chave + nome else "$chave/$nome"
+    /** O armazenamento de uma chave, ou null se ele já saiu (pendrive tirado). */
+    private fun armazemDa(chave: String): MtpArmazem? = armazem(chave.substring(0, chave.indexOf('|')).toInt(16))
+
+    @Synchronized private fun handleDe(chave: String): Int = porCaminho.getOrPut(chave) { val h = proximo++; porHandle[h] = chave; h }
+    @Synchronized private fun chaveDe(h: Int): String? = porHandle[h]
+    @Synchronized private fun esquecer(chave: String) {
+        val alvo = porCaminho.keys.filter { it == chave || it.startsWith("$chave/") }
+        for (r in alvo) porCaminho.remove(r)?.let { porHandle.remove(it) }
+    }
+    /** O pendrive saiu: os números dos arquivos dele deixam de valer. */
+    @Synchronized fun esquecerArmazem(id: Int) {
+        val alvo = porCaminho.keys.filter { it.startsWith("%x|".format(id)) }
         for (r in alvo) porCaminho.remove(r)?.let { porHandle.remove(it) }
     }
     /** Depois de mover/renomear: os handles continuam valendo, com o caminho novo. */
@@ -385,57 +407,77 @@ class MtpLoja(private val avisar: (File) -> Unit) {
         }
     }
 
-    private fun arquivoDe(rel: String): File? = try { PainelArquivos.resolver(rel) } catch (_: PainelArquivos.Erro) { esquecer(rel); null }
-
-    private fun paiDe(rel: String): Int = if ('/' in rel) handleDe(rel.substringBeforeLast('/')) else 0
-
-    private fun idFixo(rel: String): ByteArray = MessageDigest.getInstance("MD5").digest(rel.toByteArray())
-
-    private fun objeto(rel: String, f: File): Mtp.Objeto =
-        Mtp.Objeto(handleDe(rel), paiDe(rel), f.name, f.isDirectory, if (f.isFile) f.length() else 0, f.lastModified(), idFixo(rel))
-
-    /** O caminho relativo da pasta [pai] (0 ou TODOS = a raiz), ou null se o handle não é uma pasta nossa. */
-    private fun relDaPasta(pai: Int): String? {
-        if (pai == 0 || pai == Mtp.TODOS) return ""
-        val rel = relDe(pai) ?: return null
-        return if (arquivoDe(rel)?.isDirectory == true) rel else null
+    private fun arquivoDe(chave: String): File? {
+        val a = armazemDa(chave) ?: run { esquecer(chave); return null }
+        return try { PainelArquivos.resolver(relDa(chave), base = a.raiz()) } catch (_: PainelArquivos.Erro) { esquecer(chave); null }
     }
 
-    private fun listar(rel: String): List<Pair<String, File>> {
-        val pasta = arquivoDe(rel) ?: return emptyList()
+    private fun paiDe(chave: String): Int = if ('/' in relDa(chave)) handleDe(chave.substringBeforeLast('/')) else 0
+
+    /** O identificador que não muda entre conexões. Na memória interna segue o de sempre (só o caminho). */
+    private fun idFixo(a: MtpArmazem, rel: String): ByteArray =
+        MessageDigest.getInstance("MD5").digest((if (a.id == Mtp.ARMAZEM) rel else "${a.volume}|$rel").toByteArray())
+
+    private fun objeto(chave: String, f: File, a: MtpArmazem): Mtp.Objeto =
+        Mtp.Objeto(handleDe(chave), paiDe(chave), f.name, f.isDirectory, if (f.isFile) f.length() else 0, f.lastModified(), idFixo(a, relDa(chave)), a.id)
+
+    /** A chave da pasta [pai] (0 ou TODOS = a raiz do armazenamento [arm]), ou null se não é uma pasta nossa. */
+    private fun pasta(arm: Int, pai: Int): String? {
+        if (pai == 0 || pai == Mtp.TODOS) return (if (qualquer(arm)) armazens().firstOrNull() else armazem(arm))?.let { chave(it, "") }
+        val c = chaveDe(pai) ?: return null
+        return if (arquivoDe(c)?.isDirectory == true) c else null
+    }
+
+    private fun listar(chave: String): List<Pair<String, File>> {
+        val pasta = arquivoDe(chave) ?: return emptyList()
+        val naRaiz = relDa(chave).isEmpty()
         return (pasta.listFiles() ?: emptyArray()).filter {
-            !(rel.isEmpty() && it.name.lowercase() in ChecagensPainel.PASTAS_FECHADAS) &&
+            !(naRaiz && it.name.lowercase() in ChecagensPainel.PASTAS_FECHADAS) &&
                 ChecagensPainel.nomeArquivoValido(it.name) && !DavLogica.escondido(it.name)
         }.sortedWith(compareBy<File>({ !it.isDirectory }, { it.name.lowercase() }))
-            .map { (if (rel.isEmpty()) it.name else "$rel/${it.name}") to it }
+            .map { filho(chave, it.name) to it }
     }
 
-    fun objeto(h: Int): Mtp.Objeto? { val rel = relDe(h) ?: return null; val f = arquivoDe(rel) ?: return null; return objeto(rel, f) }
-    fun arquivo(h: Int): File? = relDe(h)?.let { arquivoDe(it) }
+    private fun objetos(chave: String): List<Mtp.Objeto> {
+        val a = armazemDa(chave) ?: return emptyList()
+        return listar(chave).take(MAX_OBJETOS).map { (c, f) -> objeto(c, f, a) }
+    }
 
-    /** Os objetos dentro de [pai], ou null se [pai] não é pasta. */
-    fun filhos(pai: Int): List<Mtp.Objeto>? {
-        val rel = relDaPasta(pai) ?: return null
-        return listar(rel).take(MAX_OBJETOS).map { (r, f) -> objeto(r, f) }
+    fun objeto(h: Int): Mtp.Objeto? {
+        val c = chaveDe(h) ?: return null; val f = arquivoDe(c) ?: return null
+        return objeto(c, f, armazemDa(c) ?: return null)
+    }
+    fun arquivo(h: Int): File? = chaveDe(h)?.let { arquivoDe(it) }
+
+    /** As raízes pedidas: a de [arm], ou as de todos os armazenamentos. */
+    private fun raizes(arm: Int): List<String> = (if (qualquer(arm)) armazens() else listOfNotNull(armazem(arm))).map { chave(it, "") }
+
+    /** Os objetos dentro de [pai] (0 ou TODOS = a raiz de [arm], ou de todos), ou null se [pai] não é pasta. */
+    fun filhos(arm: Int, pai: Int): List<Mtp.Objeto>? {
+        if (pai == 0 || pai == Mtp.TODOS) return raizes(arm).flatMap { objetos(it) }.take(MAX_OBJETOS)
+        return objetos(pasta(arm, pai) ?: return null)
     }
 
     /** Tudo, pasta por pasta (alguns programas pedem a árvore inteira de uma vez), até [MAX_OBJETOS]. */
-    fun todos(): List<Mtp.Objeto> {
+    fun todos(arm: Int): List<Mtp.Objeto> {
         val saida = ArrayList<Mtp.Objeto>()
-        val fila = ArrayDeque(listOf(""))
+        val fila = ArrayDeque(raizes(arm))
         while (fila.isNotEmpty() && saida.size < MAX_OBJETOS) {
-            for ((r, f) in listar(fila.removeFirst())) {
+            val c0 = fila.removeFirst()
+            val a = armazemDa(c0) ?: continue
+            for ((c, f) in listar(c0)) {
                 if (saida.size >= MAX_OBJETOS) break
-                saida.add(objeto(r, f))
+                saida.add(objeto(c, f, a))
                 // link simbólico de pasta: não entra (o resolver já barra o que aponta para fora; isto evita laço)
-                if (f.isDirectory && !java.nio.file.Files.isSymbolicLink(f.toPath())) fila.add(r)
+                if (f.isDirectory && !java.nio.file.Files.isSymbolicLink(f.toPath())) fila.add(c)
             }
         }
         return saida
     }
 
-    fun total(): Long = PainelArquivos.raiz().totalSpace
-    fun livre(): Long = PainelArquivos.livre()
+    fun total(a: MtpArmazem): Long = a.raiz().totalSpace
+    /** Na memória interna sobra sempre a folga do sistema (PainelArquivos.livre); no pendrive vale o espaço todo. */
+    fun livre(a: MtpArmazem): Long = if (a.id == Mtp.ARMAZEM) PainelArquivos.livre() else a.raiz().usableSpace
 
     /** Código MTP para um erro do PainelArquivos. */
     private fun codigo(e: PainelArquivos.Erro): Int = when (e.codigo) {
@@ -443,40 +485,48 @@ class MtpLoja(private val avisar: (File) -> Unit) {
     }
 
     fun apagar(h: Int): Int {
-        val rel = relDe(h) ?: return Mtp.HANDLE_INVALIDO
-        return try { PainelArquivos.apagar(rel, avisar); esquecer(rel); Mtp.OK } catch (e: PainelArquivos.Erro) { codigo(e) }
+        val c = chaveDe(h) ?: return Mtp.HANDLE_INVALIDO
+        val a = armazemDa(c) ?: return Mtp.HANDLE_INVALIDO
+        return try { PainelArquivos.apagar(relDa(c), avisar, a.raiz()); esquecer(c); Mtp.OK } catch (e: PainelArquivos.Erro) { codigo(e) }
     }
 
-    /** Move para a pasta [novoPai] e/ou troca o nome ([novoNome] null = mantém). */
-    fun mover(h: Int, novoPai: Int?, novoNome: String?): Int {
-        val rel = relDe(h) ?: return Mtp.HANDLE_INVALIDO
-        val destino = if (novoPai == null) rel.substringBeforeLast('/', "") else relDaPasta(novoPai) ?: return Mtp.PAI_INVALIDO
+    /**
+     * Move para a pasta [novoPai] de [novoArm] e/ou troca o nome ([novoNome] null = mantém; [novoPai] null = mesma
+     * pasta). Só dentro do mesmo armazenamento: entre a memória e o pendrive o computador copia e apaga.
+     */
+    fun mover(h: Int, novoArm: Int, novoPai: Int?, novoNome: String?): Int {
+        val c = chaveDe(h) ?: return Mtp.HANDLE_INVALIDO
+        val a = armazemDa(c) ?: return Mtp.HANDLE_INVALIDO
+        val rel = relDa(c)
+        val destino = if (novoPai == null) chave(a, rel.substringBeforeLast('/', "")) else pasta(novoArm, novoPai) ?: return Mtp.PAI_INVALIDO
+        if (armazemDa(destino)?.id != a.id) return Mtp.PARAMETRO_NAO_SUPORTADO
         return try {
-            val novo = PainelArquivos.mover(rel, destino, novoNome ?: rel.substringAfterLast('/'), avisar)
-            trocar(rel, novo); Mtp.OK
+            val novo = PainelArquivos.mover(rel, relDa(destino), novoNome ?: rel.substringAfterLast('/'), avisar, a.raiz())
+            trocar(c, chave(a, novo)); Mtp.OK
         } catch (e: PainelArquivos.Erro) { codigo(e) }
     }
 
-    /** Pasta nova: criada na hora. Devolve (código, handle). */
-    fun criarPasta(pai: Int, nome: String): Pair<Int, Int> {
-        val rel = relDaPasta(pai) ?: return Mtp.PAI_INVALIDO to 0
-        if (rel.isEmpty() && nome.lowercase() in ChecagensPainel.PASTAS_FECHADAS) return Mtp.NEGADO to 0
+    /** Pasta nova: criada na hora. Devolve (código, handle, armazenamento). */
+    fun criarPasta(arm: Int, pai: Int, nome: String): Triple<Int, Int, Int> {
+        val c = pasta(arm, pai) ?: return Triple(Mtp.PAI_INVALIDO, 0, 0)
+        val a = armazemDa(c) ?: return Triple(Mtp.PAI_INVALIDO, 0, 0)
+        if (relDa(c).isEmpty() && nome.lowercase() in ChecagensPainel.PASTAS_FECHADAS) return Triple(Mtp.NEGADO, 0, 0)
         return try {
-            PainelArquivos.criarPasta(rel, nome)
-            Mtp.OK to handleDe(if (rel.isEmpty()) nome else "$rel/$nome")
-        } catch (e: PainelArquivos.Erro) { codigo(e) to 0 }
+            PainelArquivos.criarPasta(relDa(c), nome, a.raiz())
+            Triple(Mtp.OK, handleDe(filho(c, nome)), a.id)
+        } catch (e: PainelArquivos.Erro) { Triple(codigo(e), 0, 0) }
     }
 
     /** Arquivo novo: só reserva o handle; os bytes chegam na operação seguinte ([receber]). */
-    fun prepararArquivo(pai: Int, novo: Mtp.Novo): Pair<Int, Pendente?> {
-        val rel = relDaPasta(pai) ?: return Mtp.PAI_INVALIDO to null
+    fun prepararArquivo(arm: Int, pai: Int, novo: Mtp.Novo): Pair<Int, Pendente?> {
+        val c = pasta(arm, pai) ?: return Mtp.PAI_INVALIDO to null
+        val a = armazemDa(c) ?: return Mtp.PAI_INVALIDO to null
         if (!ChecagensPainel.nomeArquivoValido(novo.nome) || DavLogica.escondido(novo.nome)) return Mtp.NEGADO to null
-        if (rel.isEmpty() && novo.nome.lowercase() in ChecagensPainel.PASTAS_FECHADAS) return Mtp.NEGADO to null
-        val pasta = arquivoDe(rel) ?: return Mtp.PAI_INVALIDO to null
+        if (relDa(c).isEmpty() && novo.nome.lowercase() in ChecagensPainel.PASTAS_FECHADAS) return Mtp.NEGADO to null
+        val pasta = arquivoDe(c) ?: return Mtp.PAI_INVALIDO to null
         if (File(pasta, novo.nome).exists()) return Mtp.NEGADO to null   // nunca sobrescreve: o Windows apaga antes, se a pessoa mandar
-        if (novo.tamanho > livre()) return Mtp.CHEIO to null
-        val h = handleDe(if (rel.isEmpty()) novo.nome else "$rel/${novo.nome}")
-        return Mtp.OK to Pendente(h, pasta, novo.nome, novo.tamanho, novo.modificado)
+        if (novo.tamanho > livre(a)) return Mtp.CHEIO to null
+        return Mtp.OK to Pendente(handleDe(filho(c, novo.nome)), pasta, novo.nome, novo.tamanho, novo.modificado, a)
     }
 
     /**
@@ -503,7 +553,20 @@ class MtpLoja(private val avisar: (File) -> Unit) {
     }
 
     /** O envio não aconteceu: o handle reservado deixa de existir. */
-    fun desistir(p: Pendente) { relDe(p.handle)?.let { if (!File(p.pasta, p.nome).exists()) esquecer(it) } }
+    fun desistir(p: Pendente) { chaveDe(p.handle)?.let { if (!File(p.pasta, p.nome).exists()) esquecer(it) } }
+}
+
+/**
+ * Um armazenamento que o computador vê como unidade separada: a memória interna ou um pendrive espetado na TV.
+ * [id] é o número do MTP (unidade física nos 16 bits de cima, partição 1 embaixo); [volume] é o texto com que o
+ * computador reconhece o mesmo armazenamento depois; [raiz] devolve a pasta de verdade.
+ */
+class MtpArmazem(val id: Int, val nome: String, val volume: String, val removivel: Boolean, val raiz: () -> File) {
+    companion object {
+        fun interno(nome: String = "Armazenamento interno") = MtpArmazem(Mtp.ARMAZEM, nome, Mtp.VOLUME_INTERNO, false) { PainelArquivos.raiz() }
+        /** O número do enésimo pendrive (1, 2, 3...): 0x00020001, 0x00030001... */
+        fun idDoPendrive(n: Int) = ((n + 1) shl 16) or 1
+    }
 }
 
 /** A conversa com UM computador, depois do aperto de mão: lê operações e responde, até a conexão fechar. */
@@ -636,14 +699,15 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
             Mtp.OP_INFO_APARELHO -> { mandar(tid, Mtp.infoAparelho(ap)); responder(Mtp.OK, tid) }
             Mtp.OP_ABRIR_SESSAO -> if (aberta) responder(Mtp.SESSAO_JA_ABERTA, tid) else { aberta = true; responder(Mtp.OK, tid) }
             Mtp.OP_FECHAR_SESSAO -> { aberta = false; responder(Mtp.OK, tid) }
-            Mtp.OP_ARMAZENS -> { mandar(tid, Mtp.Escritor().lista32(listOf(Mtp.ARMAZEM)).bytes()); responder(Mtp.OK, tid) }
-            Mtp.OP_INFO_ARMAZEM ->
-                if (p[0] != Mtp.ARMAZEM) responder(Mtp.ARMAZEM_INVALIDO, tid)
-                else { mandar(tid, Mtp.infoArmazem(loja.total(), loja.livre(), "Armazenamento interno")); responder(Mtp.OK, tid) }
+            Mtp.OP_ARMAZENS -> { mandar(tid, Mtp.Escritor().lista32(loja.armazens().map { it.id }).bytes()); responder(Mtp.OK, tid) }
+            Mtp.OP_INFO_ARMAZEM -> {
+                val a = loja.armazem(p[0]) ?: return responder(Mtp.ARMAZEM_INVALIDO, tid)
+                mandar(tid, Mtp.infoArmazem(loja.total(a), loja.livre(a), a.nome, a.volume, a.removivel)); responder(Mtp.OK, tid)
+            }
             Mtp.OP_HANDLES, Mtp.OP_QUANTOS -> {
-                if (p[0] != Mtp.ARMAZEM && p[0] != Mtp.TODOS) return responder(Mtp.ARMAZEM_INVALIDO, tid)
+                if (p[0] != Mtp.TODOS && loja.armazem(p[0]) == null) return responder(Mtp.ARMAZEM_INVALIDO, tid)
                 // pai 0 = "tudo, em todas as pastas"; pai FFFFFFFF = só a raiz; outro = só aquela pasta
-                var lista = (if (p[2] == 0) loja.todos() else loja.filhos(p[2])) ?: return responder(Mtp.PAI_INVALIDO, tid)
+                var lista = (if (p[2] == 0) loja.todos(p[0]) else loja.filhos(p[0], p[2])) ?: return responder(Mtp.PAI_INVALIDO, tid)
                 if (p[1] != 0) lista = lista.filter { it.formato == p[1] }
                 if (op == Mtp.OP_QUANTOS) return responder(Mtp.OK, tid, lista.size)
                 mandar(tid, Mtp.Escritor().lista32(lista.map { it.handle }).bytes()); responder(Mtp.OK, tid)
@@ -664,24 +728,24 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
             }
             Mtp.OP_MINIATURA -> responder(Mtp.SEM_MINIATURA, tid)
             Mtp.OP_APAGAR -> responder(loja.apagar(p[0]), tid)
-            Mtp.OP_MOVER -> if (p[1] != Mtp.ARMAZEM) responder(Mtp.ARMAZEM_INVALIDO, tid) else responder(loja.mover(p[0], p[2], null), tid)
+            Mtp.OP_MOVER -> if (loja.armazem(p[1]) == null) responder(Mtp.ARMAZEM_INVALIDO, tid) else responder(loja.mover(p[0], p[1], p[2], null), tid)
             Mtp.OP_MANDAR_INFO, Mtp.OP_MANDAR_LISTA_PROPS -> {
                 val dados = receberPequeno(tid)
                 pendente?.let { loja.desistir(it) }; pendente = null
-                if (p[0] != 0 && p[0] != Mtp.ARMAZEM) return responder(Mtp.ARMAZEM_INVALIDO, tid)
+                if (p[0] != 0 && loja.armazem(p[0]) == null) return responder(Mtp.ARMAZEM_INVALIDO, tid)
                 val novo = try {
                     if (op == Mtp.OP_MANDAR_INFO) Mtp.lerInfoObjeto(dados)
                     else Mtp.lerListaProps(dados, p[2], (p[3].toLong() shl 32) or (p[4].toLong() and 0xFFFFFFFFL))
                 } catch (_: IOException) { return responder(Mtp.DADOS_INVALIDOS, tid) }
                 val paiDito = if (p[1] == 0) Mtp.TODOS else p[1]
                 if (novo.formato == Mtp.F_PASTA) {
-                    val (cod, h) = loja.criarPasta(p[1], novo.nome)
-                    return if (cod == Mtp.OK) responder(cod, tid, Mtp.ARMAZEM, paiDito, h) else responder(cod, tid)
+                    val (cod, h, arm) = loja.criarPasta(p[0], p[1], novo.nome)
+                    return if (cod == Mtp.OK) responder(cod, tid, arm, paiDito, h) else responder(cod, tid)
                 }
-                val (cod, pend) = loja.prepararArquivo(p[1], novo)
+                val (cod, pend) = loja.prepararArquivo(p[0], p[1], novo)
                 if (pend == null) return responder(cod, tid)
                 pendente = pend
-                responder(Mtp.OK, tid, Mtp.ARMAZEM, paiDito, pend.handle)
+                responder(Mtp.OK, tid, pend.armazem.id, paiDito, pend.handle)
             }
             Mtp.OP_MANDAR_OBJETO -> {
                 val pend = pendente
@@ -689,7 +753,7 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
                 if (pend == null) { receber(tid, Long.MAX_VALUE, Nada); return responder(Mtp.SEM_INFO_ANTES, tid) }
                 val cod = try {
                     // teto: o tamanho combinado ou, se o computador não disse, o espaço livre de agora
-                    loja.receber(pend) { saida -> receber(tid, if (pend.tamanho >= 0) pend.tamanho else loja.livre(), saida) }
+                    loja.receber(pend) { saida -> receber(tid, if (pend.tamanho >= 0) pend.tamanho else loja.livre(pend.armazem), saida) }
                 } catch (e: Cancelou) { loja.desistir(pend); throw e
                 } catch (e: IOException) { loja.desistir(pend); throw e }
                 if (cod != Mtp.OK) loja.desistir(pend)
@@ -719,7 +783,7 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
                 val dados = receberPequeno(tid)
                 if (p[1] != Mtp.P_ARQUIVO) return responder(if (p[1] in Mtp.PROPS) Mtp.NEGADO else Mtp.PROP_INVALIDA, tid)
                 val nome = try { Mtp.Leitor(dados).texto() } catch (_: IOException) { return responder(Mtp.DADOS_INVALIDOS, tid) }
-                responder(loja.mover(p[0], null, nome), tid)
+                responder(loja.mover(p[0], 0, null, nome), tid)
             }
             Mtp.OP_LISTA_PROPS -> {
                 // p: handle, formato, propriedade (FFFFFFFF = todas), grupo, profundidade
@@ -728,8 +792,8 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
                     else if (p[2] in Mtp.PROPS) listOf(p[2]) else return responder(Mtp.PROP_INVALIDA, tid)
                 var objs: List<Mtp.Objeto> = when {
                     p[4] == 0 && p[0] != 0 && p[0] != Mtp.TODOS -> listOf(loja.objeto(p[0]) ?: return responder(Mtp.HANDLE_INVALIDO, tid))
-                    p[4] == 1 -> loja.filhos(p[0]) ?: return responder(Mtp.HANDLE_INVALIDO, tid)
-                    (p[4] == 0 || p[4] == Mtp.TODOS) && (p[0] == 0 || p[0] == Mtp.TODOS) -> loja.todos()
+                    p[4] == 1 -> loja.filhos(Mtp.TODOS, p[0]) ?: return responder(Mtp.HANDLE_INVALIDO, tid)
+                    (p[4] == 0 || p[4] == Mtp.TODOS) && (p[0] == 0 || p[0] == Mtp.TODOS) -> loja.todos(Mtp.TODOS)
                     else -> return responder(Mtp.PROFUNDIDADE_NAO_SUPORTADA, tid)
                 }
                 if (p[1] != 0) objs = objs.filter { it.formato == p[1] }
@@ -764,7 +828,11 @@ class MtpServico(
     }
 
     /** Uma sessão aberta pela conexão de comandos, com o IP de quem passou pelo "Permitir?" e a conexão de eventos dela. */
-    private class Aberta(val sessao: MtpSessao, val ip: String) { val evento = java.util.concurrent.atomic.AtomicReference<Socket?>(null) }
+    private class Aberta(val sessao: MtpSessao, val ip: String) {
+        val evento = java.util.concurrent.atomic.AtomicReference<Socket?>(null)
+        /** Por onde a TV avisa o computador (pendrive entrou/saiu). Quem escreve trava nela: duas threads escrevem. */
+        @Volatile var saida: OutputStream? = null
+    }
 
     private val sessoes = ConcurrentHashMap<Int, Aberta>()
     private val sorteio = java.security.SecureRandom()
@@ -795,6 +863,17 @@ class MtpServico(
 
     /** Derruba tudo (a chave foi desligada, ou um computador perdeu a permissão). */
     fun temConexao(): Boolean = abertas.isNotEmpty()
+
+    /** Avisa todos os computadores conectados: o armazenamento [id] entrou ou saiu (pendrive espetado/tirado). */
+    fun avisarArmazem(id: Int, entrou: Boolean) {
+        if (!entrou) loja.esquecerArmazem(id)
+        val corpo = Mtp.Escritor().u16(if (entrou) Mtp.EV_ARMAZEM_ENTROU else Mtp.EV_ARMAZEM_SAIU).u32(-1).u32(id).bytes()
+        for (a in sessoes.values) {
+            val s = a.saida ?: continue
+            try { synchronized(s) { PtpIp.escrever(s, PtpIp.EVENTO, corpo); s.flush() } } catch (_: IOException) {}
+        }
+        registro("armazenamento %X %s".format(id, if (entrou) "entrou" else "saiu"))
+    }
 
     fun parar() {
         try { ss.close() } catch (_: IOException) {}
@@ -844,11 +923,12 @@ class MtpServico(
                 val sessao = aberta.sessao
                 PtpIp.escrever(s, PtpIp.INICIO_EVENTO_OK, ByteArray(0)); s.flush()
                 c.soTimeout = 0
+                aberta.saida = s
                 while (true) {
                     val (t, b) = try { PtpIp.ler(e) } catch (_: EOFException) { return }
                     when (t) {
                         PtpIp.CANCELAR -> if (b.size >= 4) sessao.cancelada = Mtp.Leitor(b).u32()
-                        PtpIp.SONDA -> { PtpIp.escrever(s, PtpIp.SONDA_OK, ByteArray(0)); s.flush() }
+                        PtpIp.SONDA -> synchronized(s) { PtpIp.escrever(s, PtpIp.SONDA_OK, ByteArray(0)); s.flush() }
                     }
                 }
             }

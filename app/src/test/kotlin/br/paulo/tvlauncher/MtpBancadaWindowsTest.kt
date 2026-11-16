@@ -18,7 +18,10 @@ import java.net.ServerSocket
  *
  * Não roda nos testes normais: só com ONETV_BANCADA_IP=<IPv4 do PC na rede>. Comandos: uma linha por vez no arquivo
  * ONETV_BANCADA_PASTA/cmd.txt (o teste lê e apaga); o que acontece vai para ONETV_BANCADA_PASTA/log.txt.
- *   mtp_parar | mtp_subir | byebye | alive | uuid <texto> | responder sim|nao | sair
+ *   mtp_parar | mtp_subir | byebye | alive | bye1 | alive1 | uuid <texto> | responder sim|nao | validade <n> | sair
+ *   armazem <nome>|<volume>|<0 ou 1 = de tirar>   (um armazenamento a mais, avisado ao Windows na hora)
+ *   tirar <número do armazenamento em hexa>
+ * ONETV_BANCADA_ARMAZENS="nome|volume|0;nome|volume|1" já sobe com esses armazenamentos a mais.
  */
 class MtpBancadaWindowsTest {
     @Test fun bancada() {
@@ -95,10 +98,20 @@ class MtpBancadaWindowsTest {
         // O servidor MTP, que sobe e cai a pedido.
         val ap = Mtp.Aparelho("Bancada One TV", "One TV", "1", "bancada-1", ByteArray(16) { (it + 40).toByte() })
         var servico: MtpServico? = null
+        val armazens = java.util.concurrent.CopyOnWriteArrayList(listOf(MtpArmazem.interno()))
+        var pendrives = 0
+        fun novoArmazem(texto: String): MtpArmazem {
+            val (nome, volume, tirar) = (texto.split("|") + listOf("", "", "")).take(3)
+            val n = ++pendrives
+            val dir = File(pasta, "armazem-$n").apply { mkdirs() }
+            File(dir, "Pasta $n").mkdir(); File(dir, "Pasta $n/dentro.txt").writeText("armazem $n"); File(dir, "solto-$n.txt").writeText("x")
+            return MtpArmazem(MtpArmazem.idDoPendrive(n), nome.ifEmpty { "Pendrive $n" }, volume, tirar == "1") { dir }.also { armazens.add(it) }
+        }
+        System.getenv("ONETV_BANCADA_ARMAZENS")?.split(";")?.filter { it.isNotBlank() }?.forEach { novoArmazem(it) }
         fun subir() {
             if (servico != null) return
             val ss = ServerSocket(PtpIp.PORTA, 16, InetAddress.getByName(ip))
-            val s = MtpServico(ss, ap, MtpLoja {}, { true }, { _, _, _ -> true }, { anotar("mtp $it") })
+            val s = MtpServico(ss, ap, MtpLoja({ armazens.toList() }) {}, { true }, { _, _, _ -> true }, { anotar("mtp $it") })
             servico = s
             Thread { s.rodar() }.apply { isDaemon = true }.start()
             anotar("mtp no ar em $ip:${PtpIp.PORTA}")
@@ -126,6 +139,8 @@ class MtpBancadaWindowsTest {
                     "responder" -> { responder = partes.getOrNull(1) == "sim"; anotar("responder=$responder") }
                     "bye1" -> { mandar(listOf(Ssdp.avisoDoAparelho(uuid(), local, false)), grupo, Ssdp.PORTA); anotar("bye1 enviado") }
                     "alive1" -> { mandar(listOf(Ssdp.avisoDoAparelho(uuid(), local, true, validade)), grupo, Ssdp.PORTA); anotar("alive1 enviado") }
+                    "armazem" -> { val a = novoArmazem(partes.getOrElse(1) { "" }); servico?.avisarArmazem(a.id, true); anotar("armazem %X = ${a.nome} | ${a.volume}".format(a.id)) }
+                    "tirar" -> { val id = partes[1].toInt(16); armazens.removeIf { it.id == id }; servico?.avisarArmazem(id, false) }
                     "validade" -> { validade = partes[1].toInt(); anotar("validade=$validade") }
                     "sair" -> { anunciar(false); parar(); http.close(); PainelArquivos.raizTeste = null; return }
                     else -> anotar("comando desconhecido")
