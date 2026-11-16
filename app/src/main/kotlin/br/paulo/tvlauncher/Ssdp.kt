@@ -88,7 +88,7 @@ object Ssdp {
 
     /** O nome do produto (16/11/2026), que o Windows mostra como fabricante e modelo do aparelho. */
     const val MARCA = "Sofaly"
-    /** O ícone da marca que o Windows mostra na tela "Rede" (arquivos em assets/upnp, servidos pelo painel). */
+    /** O ícone da marca na descrição UPnP (assets/upnp, servidos pelo painel). O Windows 11 não o busca (medido 16/11/2026). */
     const val CAMINHO_ICONES = "/upnp/"
     val ARQUIVOS_ICONE = mapOf("sofaly-48.png" to 48, "sofaly-120.png" to 120)
     val ICONES = "<iconList>" + ARQUIVOS_ICONE.entries.joinToString("") { (arq, lado) ->

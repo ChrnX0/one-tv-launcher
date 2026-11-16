@@ -92,8 +92,10 @@ Medido com a TV da Sala e com uma bancada (`MtpBancadaWindowsTest`, o servidor r
 - **Pendrives:** cada volume montado vira um armazenamento separado (`MtpArmazem`; a memória interna é 0x00010001, os
   pendrives 0x00020001, 0x00030001...). Entrar e sair é avisado ao computador (eventos StoreAdded/StoreRemoved pela
   conexão de eventos). Mover entre armazenamentos é recusado: o computador copia e apaga.
-- **Marca:** fabricante/modelo "Sofaly", `iconList` na descrição UPnP (tela Rede) e o ícone `.ico` como propriedade
-  do aparelho MTP (0xD405), em `assets/upnp/`.
+- **Marca:** fabricante/modelo "Sofaly", `iconList` na descrição UPnP e o ícone `.ico` como propriedade do aparelho
+  MTP (0xD405), em `assets/upnp/`. **Medido: o Windows 11 não pede nenhum dos dois** (nem em Este Computador nem em
+  Rede; a bancada registrou só o pedido da propriedade 0xD402 e da descrição). O ícone fica para os clientes que o
+  leem (outros sistemas); no Windows o desenho continua o genérico de dispositivo portátil.
 - **Duplo clique abrindo "Documentos":** não é do servidor. Acontece quando outro gerenciador de arquivos (o app
   Files) fica registrado em `HKCU\Software\Classes\Folder\shell\open\command`: ele recebe o caminho
   `...\SID-{10001,...}`, que o Windows não sabe reabrir, e cai em Documentos. O Explorador direto abre certo. Trocar o

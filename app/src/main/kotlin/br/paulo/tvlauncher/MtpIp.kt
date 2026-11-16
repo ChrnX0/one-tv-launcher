@@ -183,7 +183,7 @@ object Mtp {
 
     /** Propriedade do aparelho: o nome amigável (o que aparece em Este Computador). */
     const val PA_NOME = 0xD402
-    /** Propriedade do aparelho: o ícone (um arquivo .ico inteiro), que o Windows mostra em Este Computador. */
+    /** Propriedade do aparelho: o ícone (um arquivo .ico inteiro). O Windows 11 não a pede (medido 16/11/2026); outros leem. */
     const val PA_ICONE = 0xD405
     const val T_BYTES = 0x4002   // lista de bytes
 
