@@ -704,6 +704,11 @@ object PainelWeb {
                 if (req.metodo == "POST") corpoJson(req) else null, sessoes.elevada(token), ip)
                 ?.let { return json(it.first, it.second) }
         }
+        if (req.caminho == "/api/addons" || req.caminho.startsWith("/api/addons/")) {   // 16/11/2026: PainelAddons.kt
+            PainelAddons.rotear(app, req.metodo, req.caminho.removePrefix("/api/addons"),
+                if (req.metodo == "POST") corpoJson(req) else null, sessoes.elevada(token), ip)
+                ?.let { return json(it.first, it.second) }
+        }
         if (req.caminho.startsWith("/api/extras/")) {   // ideias de 10/11/2026: PainelExtras.kt
             if (req.caminho == "/api/extras/video" && req.metodo == "GET")
                 return Resposta(200, null, ByteArray(0), fluxo = { PainelExtras.video(app, it) })
@@ -1010,6 +1015,7 @@ object PainelWeb {
         "/controle.js" to ("controle.js" to "text/javascript; charset=utf-8"),   // digitar ao vivo e touchpad
         "/chave.js" to ("chave.js" to "text/javascript; charset=utf-8"),   // ideia 99: entrar com a digital
         "/emprestimo.js" to ("emprestimo.js" to "text/javascript; charset=utf-8"),   // shell emprestado (Shizuku)
+        "/addons.js" to ("addons.js" to "text/javascript; charset=utf-8"),   // addons no formato do Stremio (16/11/2026)
         "/primeira.js" to ("primeira.js" to "text/javascript; charset=utf-8"),   // ideia 97: assistente da 1ª configuração
         "/certificado.js" to ("certificado.js" to "text/javascript; charset=utf-8"),   // cartão "Instalar como app (https)"
         // "Adicionar à tela inicial" no celular: nome, ícone e atalhos (10/11/2026).

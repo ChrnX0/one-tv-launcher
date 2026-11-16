@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Addons no formato do Stremio, só HTTP (16/11/2026): AddonsActivity, ConfigLauncherActivity, MainActivity. -->
+<resources>
+    <string name="ad_titulo">Аддоны</string>
+    <string name="ad_destaque">Фильмы и сериалы из ваших аддонов</string>
+    <string name="ad_vazio">Аддонов пока нет. Добавьте в веб-панели (Настройки, Аддоны). Здесь воспроизводятся только прямые ссылки на видео (HTTP): торрент и P2P не поддерживаются.</string>
+    <string name="ad_resumo">Каталоги ваших аддонов. Аддоны делают третьи лица: кто устанавливает аддон, тот отвечает за его содержимое.</string>
+    <string name="ad_buscar">Поиск</string>
+    <string name="ad_buscar_dica">Название фильма или сериала</string>
+    <string name="ad_carregando">Загрузка…</string>
+    <string name="ad_falhou">Аддон не ответил. Попробуйте чуть позже.</string>
+    <string name="ad_nada">Здесь пусто.</string>
+    <string name="ad_mais">Ещё</string>
+    <string name="ad_tipo_filmes">Фильмы</string>
+    <string name="ad_tipo_series">Сериалы</string>
+    <string name="ad_tipo_canais">Каналы</string>
+    <string name="ad_temporada">Сезон %1$d</string>
+    <string name="ad_especiais">Спецвыпуски</string>
+    <string name="ad_episodio">%1$d. %2$s</string>
+    <string name="ad_sem_fontes">Нет источника, который здесь воспроизводится. Sofaly воспроизводит только прямые ссылки на видео (HTTP).</string>
+    <string name="ad_fontes_resumo">Выберите источник</string>
+    <string name="ad_dica_voltar">назад</string>
+    <string name="ad_cfg_det">Установленные аддоны. Добавлять — через веб-панель.</string>
+    <string name="ad_cfg_como">Чтобы добавить аддон, откройте веб-панель телевизора на телефоне или компьютере, перейдите в Настройки, Аддоны, вставьте адрес, оканчивающийся на manifest.json, и подтвердите PIN-кодом.</string>
+    <string name="ad_cfg_remover_qual">Какой аддон удалить?</string>
+    <string name="ad_cfg_remover">%1$s будет удалён с этого телевизора.</string>
+    <string name="ad_cfg_remover_sim">Удалить</string>
+</resources>

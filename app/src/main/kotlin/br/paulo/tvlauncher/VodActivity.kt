@@ -60,6 +60,8 @@ class VodActivity : Activity() {
         private const val EXTRA_TITULO = "titulo"
         private const val EXTRA_TIPO = "tipo"
         private const val EXTRA_URL = "url"
+        private const val EXTRA_CHAVE_POS = "chave_pos"     // addons: a posição guardada por esta chave, não pelo endereço
+        private const val EXTRA_CABECALHOS = "cabecalhos"   // addons: User-Agent/Referer que o addon pediu
         // De quem é a escolha de áudio (Idioma): o filme, ou a SÉRIE inteira (o próximo episódio segue a mesma escolha).
         private const val EXTRA_IDIOMA = "idioma"
         // O que procurar no OpenSubtitles (LegendaExterna): nome limpo, ano, e temporada/episódio nas séries.
@@ -94,6 +96,20 @@ class VodActivity : Activity() {
         fun abrirUrl(ctx: Context, url: String, titulo: String) {
             ctx.startActivity(Intent(ctx, VodActivity::class.java)
                 .putExtra(EXTRA_TIPO, TIPO_FILME).putExtra(EXTRA_URL, url).putExtra(EXTRA_TITULO, titulo))
+        }
+
+        /**
+         * Fonte de um addon (16/11/2026, AddonsActivity): endereço http(s) direto, a posição guardada pelo id do vídeo no
+         * addon ([chavePos], ex.: "addon:tt123:1:2"; o endereço muda a cada pedido) e os cabeçalhos que o addon pediu
+         * (só os de [AddonsProtocolo.cabecalhoPermitido]). Com resultado: o fim do episódio decide o próximo.
+         */
+        fun abrirAddon(act: Activity, codigo: Int, url: String, titulo: String, chavePos: String, episodio: Boolean,
+                       cabecalhos: Map<String, String>) {
+            val b = android.os.Bundle()
+            cabecalhos.filterKeys { AddonsProtocolo.cabecalhoPermitido(it) }.forEach { (k, v) -> b.putString(k, v) }
+            act.startActivityForResult(Intent(act, VodActivity::class.java)
+                .putExtra(EXTRA_TIPO, if (episodio) TIPO_EPISODIO else TIPO_FILME).putExtra(EXTRA_URL, url).putExtra(EXTRA_TITULO, titulo)
+                .putExtra(EXTRA_CHAVE_POS, chavePos).putExtra(EXTRA_CABECALHOS, b), codigo)
         }
 
         /** Endereço da rede com resultado (ideia 29: a pasta do "Na rede" emenda o próximo arquivo). */
@@ -212,7 +228,11 @@ class VodActivity : Activity() {
         val ext = intent.getStringExtra(EXTRA_EXT).orEmpty()
         // Endereço da rede (ver FontesMidia: nenhum leva senha nem token). A posição salva usa o próprio endereço como chave.
         val direto = intent.getStringExtra(EXTRA_URL)?.takeIf { FontesMidia.aceito(it) }
-        chave = if (direto != null) "rede:${direto.hashCode()}" else chave(tipo, fonte, id)
+        val chavePos = intent.getStringExtra(EXTRA_CHAVE_POS)?.takeIf { it.startsWith("addon:") && direto != null }
+        chave = chavePos ?: if (direto != null) "rede:${direto.hashCode()}" else chave(tipo, fonte, id)
+        val cabAddon = intent.getBundleExtra(EXTRA_CABECALHOS)?.let { b ->
+            b.keySet().filter { AddonsProtocolo.cabecalhoPermitido(it) }.mapNotNull { k -> b.getString(k)?.let { k to it } }.toMap()
+        }.orEmpty()
         chaveIdioma = intent.getStringExtra(EXTRA_IDIOMA)?.takeIf { it.isNotEmpty() } ?: chave
         serie = tipo == TIPO_EPISODIO && !intent.getStringExtra(EXTRA_IDIOMA).isNullOrEmpty()
         podeSondar = direto != null
@@ -316,7 +336,7 @@ class VodActivity : Activity() {
                 pintarLegenda()
                 abertura = ab
                 relato = tocavel?.relato
-                cabecalhos = tocavel?.cabecalhos ?: m3u?.second?.takeIf { it.isNotBlank() }?.let { mapOf("User-Agent" to it) }.orEmpty()
+                cabecalhos = tocavel?.cabecalhos?.takeIf { it.isNotEmpty() } ?: cabAddon.takeIf { it.isNotEmpty() } ?: m3u?.second?.takeIf { it.isNotBlank() }?.let { mapOf("User-Agent" to it) }.orEmpty()
                 tocar()
             }
         }

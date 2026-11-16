@@ -35,7 +35,8 @@ object BackupCompleto {
         "gravacao",   // gravação (14/11/2026): a pasta da rede de reserva
         "nuvem",   // Na rede › OneDrive/Dropbox (14/11/2026): o id do app Microsoft e a chave do Dropbox que o dono digitou
         "sincronizar_filmes",   // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
-        "pacote_icones", "fundo_meu")   // degrau 1 (15/11/2026): pacote de ícones e "Meu fundo" (caminho, brilho, contraste)
+        "pacote_icones", "fundo_meu",   // degrau 1 (15/11/2026): pacote de ícones e "Meu fundo" (caminho, brilho, contraste)
+        "addons")   // addons no protocolo do Stremio (16/11/2026): a lista instalada e o aceite dos termos
     // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
     /**
      * Preferências que NÃO vão, de propósito (o teste BackupCompletoTest confere que nenhuma outra ficou esquecida):

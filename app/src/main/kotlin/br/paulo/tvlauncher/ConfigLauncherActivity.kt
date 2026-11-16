@@ -418,6 +418,24 @@ class ConfigLauncherActivity : Activity() {
             }
         }
         c.addView(linhaContagem)
+        // Addons (16/11/2026): ver e remover aqui; instalar é pelo painel web (colar endereço é penoso no controle).
+        fun rotuloAddons() = AddonsTv.instalados(this).size.let { if (it == 0) getString(R.string.cf_nenhum) else it.toString() }
+        lateinit var linhaAddons: LinhaCfg
+        linhaAddons = linha(getString(R.string.ad_titulo), getString(R.string.ad_cfg_det), valor = rotuloAddons()) {
+            val todos = AddonsTv.instalados(this)
+            if (todos.isEmpty()) {
+                CaixaTv(this).setTitle(getString(R.string.ad_titulo)).setMessage(getString(R.string.ad_cfg_como))
+                    .setPositiveButton(getString(android.R.string.ok), null).show()
+                return@linha
+            }
+            Estilo.lista(this, getString(R.string.ad_cfg_remover_qual), todos.map { it.m.nome }, emptyList()) { i ->
+                val a = todos[i]
+                CaixaTv(this).setTitle(a.m.nome).setMessage(getString(R.string.ad_cfg_remover, a.m.nome))
+                    .setPositiveButton(getString(R.string.ad_cfg_remover_sim)) { _, _ -> AddonsTv.remover(this, a.base); linhaAddons.valor(rotuloAddons()) }
+                    .setNegativeButton(getString(R.string.sv_cancelar), null).show()
+            }
+        }
+        c.addView(linhaAddons)
         // Foto da conta Google na bolinha do perfil (FotoPerfil, 13/11/2026): abre a tela do código para o celular.
         secao(c, getString(R.string.fp_secao))
         c.addView(linha(getString(R.string.fp_linha), getString(R.string.fp_linha_det), seta = true) {

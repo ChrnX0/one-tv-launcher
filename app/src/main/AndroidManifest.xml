@@ -216,6 +216,14 @@
             android:excludeFromRecents="true"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection"
             android:theme="@style/One.Tela" />
+        <!-- Addons compatíveis com o Stremio, só vídeo HTTP (16/11/2026, AddonsActivity.kt); toca na VodActivity. -->
+        <activity
+            android:name=".AddonsActivity"
+            android:process=":player"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection"
+            android:theme="@style/One.Tela" />
         <activity
             android:name=".VodActivity"
             android:process=":player"

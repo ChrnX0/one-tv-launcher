@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Addons no formato do Stremio, só HTTP (16/11/2026): AddonsActivity, ConfigLauncherActivity, MainActivity. -->
+<resources>
+    <string name="ad_titulo">애드온</string>
+    <string name="ad_destaque">내 애드온의 영화와 시리즈</string>
+    <string name="ad_vazio">아직 애드온이 없습니다. 웹 패널(설정, 애드온)에서 추가하세요. 여기서는 직접 동영상 링크(HTTP)만 재생됩니다. 토렌트와 P2P는 지원하지 않습니다.</string>
+    <string name="ad_resumo">내 애드온의 카탈로그입니다. 애드온은 제3자가 만듭니다. 애드온을 설치한 사람이 그 콘텐츠에 책임을 집니다.</string>
+    <string name="ad_buscar">검색</string>
+    <string name="ad_buscar_dica">영화 또는 시리즈 이름</string>
+    <string name="ad_carregando">불러오는 중…</string>
+    <string name="ad_falhou">애드온이 응답하지 않았습니다. 잠시 후 다시 시도하세요.</string>
+    <string name="ad_nada">여기에는 아무것도 없습니다.</string>
+    <string name="ad_mais">더 보기</string>
+    <string name="ad_tipo_filmes">영화</string>
+    <string name="ad_tipo_series">시리즈</string>
+    <string name="ad_tipo_canais">채널</string>
+    <string name="ad_temporada">시즌 %1$d</string>
+    <string name="ad_especiais">스페셜</string>
+    <string name="ad_episodio">%1$d. %2$s</string>
+    <string name="ad_sem_fontes">여기서 재생되는 소스가 없습니다. Sofaly는 직접 동영상 링크(HTTP)만 재생합니다.</string>
+    <string name="ad_fontes_resumo">소스 선택</string>
+    <string name="ad_dica_voltar">뒤로</string>
+    <string name="ad_cfg_det">설치된 애드온. 추가는 웹 패널에서 하세요.</string>
+    <string name="ad_cfg_como">애드온을 추가하려면 휴대폰이나 컴퓨터에서 TV의 웹 패널을 열고 설정, 애드온으로 가서 manifest.json으로 끝나는 주소를 붙여넣고 PIN으로 확인하세요.</string>
+    <string name="ad_cfg_remover_qual">어떤 애드온을 삭제할까요?</string>
+    <string name="ad_cfg_remover">%1$s이(가) 이 TV에서 삭제됩니다.</string>
+    <string name="ad_cfg_remover_sim">삭제</string>
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Addons no formato do Stremio, só HTTP (16/11/2026): AddonsActivity, ConfigLauncherActivity, MainActivity. -->
+<resources>
+    <string name="ad_titulo">Addons</string>
+    <string name="ad_destaque">Filmes e séries dos teus addons</string>
+    <string name="ad_vazio">Ainda não há addons. Adiciona no painel web (Definições, Addons). Aqui só se reproduz vídeo por ligação direta (HTTP): torrent e P2P não são aceites.</string>
+    <string name="ad_resumo">Catálogos dos teus addons. Os addons são feitos por terceiros: quem instala responde pelo conteúdo.</string>
+    <string name="ad_buscar">Pesquisar</string>
+    <string name="ad_buscar_dica">Nome do filme ou da série</string>
+    <string name="ad_carregando">A carregar…</string>
+    <string name="ad_falhou">O addon não respondeu. Tenta de novo daqui a pouco.</string>
+    <string name="ad_nada">Nada aqui.</string>
+    <string name="ad_mais">Mais</string>
+    <string name="ad_tipo_filmes">Filmes</string>
+    <string name="ad_tipo_series">Séries</string>
+    <string name="ad_tipo_canais">Canais</string>
+    <string name="ad_temporada">Temporada %1$d</string>
+    <string name="ad_especiais">Especiais</string>
+    <string name="ad_episodio">%1$d. %2$s</string>
+    <string name="ad_sem_fontes">Nenhuma fonte que funcione aqui. A Sofaly só reproduz vídeo por ligação direta (HTTP).</string>
+    <string name="ad_fontes_resumo">Escolhe uma fonte</string>
+    <string name="ad_dica_voltar">voltar</string>
+    <string name="ad_cfg_det">Addons instalados. Para adicionar, usa o painel web.</string>
+    <string name="ad_cfg_como">Para adicionar um addon, abre o painel web da TV no telemóvel ou no computador, vai a Definições, Addons, cola o endereço que termina em manifest.json e confirma com o PIN.</string>
+    <string name="ad_cfg_remover_qual">Remover qual addon?</string>
+    <string name="ad_cfg_remover">%1$s vai sair desta TV.</string>
+    <string name="ad_cfg_remover_sim">Remover</string>
+</resources>
