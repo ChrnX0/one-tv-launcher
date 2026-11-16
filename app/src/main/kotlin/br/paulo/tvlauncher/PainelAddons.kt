@@ -21,12 +21,13 @@ object PainelAddons {
     private fun pin() = 403 to JSONObject().put("erro", "confirme o PIN").put("precisaPin", true)
 
     /**
-     * Nome vindo do addon (terceiro) para o registro do painel, que também chega ao Diário e à ferramenta MCP diario_tv:
-     * sem caracteres de controle, no máximo 40 caracteres e entre aspas JSON, para ser lido como dado e nunca como
-     * instrução (achado do code scanning no PR #176).
+     * O que vai ao registro do painel, que também chega ao Diário e à ferramenta MCP diario_tv: só o servidor do
+     * endereço do addon, com letras, números, ponto e hífen (até 60). O nome livre do manifesto é texto de terceiro e
+     * poderia trazer instrução para um modelo que leia o diário; por isso não vai ao registro (code scanning, PR #176).
      */
-    fun nomeParaRegistro(nome: String): String =
-        JSONObject.quote(nome.filter { !it.isISOControl() && Character.getType(it) != Character.FORMAT.toInt() }.trim().take(40))
+    fun rotuloParaRegistro(base: String): String =
+        base.substringAfter("://").substringBefore('/').substringBefore('?').substringBefore('#')
+            .lowercase().filter { it in 'a'..'z' || it in '0'..'9' || it == '.' || it == '-' || it == ':' }.take(60).ifEmpty { "?" }
 
     fun estado(app: Context): JSONObject = JSONObject()
         .put("aceite", AddonsTv.aceitou(app))
@@ -49,7 +50,7 @@ object PainelAddons {
                 if (corpo?.optBoolean("aceite") == true) AddonsTv.aceitar(app)
                 when (val r = AddonsTv.instalar(app, url)) {
                     is AddonsTv.Resultado.Ok -> {
-                        PainelArmazem.registrar(app, ip, "addon instalado: ${nomeParaRegistro(r.i.m.nome)}", "ok")
+                        PainelArmazem.registrar(app, ip, "addon instalado: ${rotuloParaRegistro(r.i.base)}", "ok")
                         ok(estado(app).put("instalado", r.i.m.nome))
                     }
                     is AddonsTv.Resultado.Recusado -> erro(422, "addon recusado", r.motivo.name)
@@ -63,7 +64,7 @@ object PainelAddons {
                 val base = corpo?.optString("base").orEmpty()
                 val a = AddonsTv.instalados(app).firstOrNull { it.base == base } ?: return erro(404, "addon não instalado", "INVALIDO")
                 AddonsTv.remover(app, base)
-                PainelArmazem.registrar(app, ip, "addon removido: ${nomeParaRegistro(a.m.nome)}", "ok")
+                PainelArmazem.registrar(app, ip, "addon removido: ${rotuloParaRegistro(a.base)}", "ok")
                 ok(estado(app))
             }
             else -> null
