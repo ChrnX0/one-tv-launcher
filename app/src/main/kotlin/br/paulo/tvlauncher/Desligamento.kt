@@ -75,19 +75,33 @@ object Desligamento {
     fun duracaoTexto(minutos: Int): String = duracaoFalada(minutos * 60)   // no idioma da TV (Textos.kt)
 
     /**
-     * A LG ignora o standby do CEC (verificado 14/11/2026): o Chromecast dorme e ela fica acesa. Se ela está pareada,
-     * 15 s depois (o volume dela já voltou, ver SonoSuave.parar) aperta a energia pela rede. Não desliga se alguém
-     * acordou o Chromecast nesse meio-tempo.
+     * Hora de desligar. A LG ignora o standby do CEC (verificado 14/11/2026), então, se ela está pareada, ela desliga
+     * PRIMEIRO pela rede (com o volume de antes devolvido) e o Chromecast apaga [DEPOIS_DA_LG_MS] depois. Na ordem
+     * inversa (16/11) a LG ficava 15 s sem sinal e mostrava a tela de entradas antes de desligar. Se a LG não
+     * responder, o Chromecast apaga mesmo assim, no máximo [PRAZO_LG_MS] depois.
+     * Chamar na thread principal (o volume de antes do SonoSuave é lido aqui).
      */
-    fun desligarLg(ctx: Context) {
+    fun desligarTudo(ctx: Context) {
         val app = ctx.applicationContext
-        if (!VolumeLg.configurado(app) || !VolumeLg.desligarJunto(app)) return
-        Handler(Looper.getMainLooper()).postDelayed({
-            if (telaAcesa(app)) { Log.i(TAG, "LG fica ligada: acordaram o Chromecast"); return@postDelayed }
-            Fundo.rodar("Desligar-lg") { Log.i(TAG, "LG desligada pela rede: ${VolumeLg.desligar(app)}") }
-        }, LG_ESPERA_MS)
+        val ui = Handler(Looper.getMainLooper())
+        val feito = java.util.concurrent.atomic.AtomicBoolean(false)
+        val apagar = Runnable {
+            if (!feito.compareAndSet(false, true)) return@Runnable
+            apagarTela(app)
+            SonoSuave.parar(app, esperarMs = 8_000L)   // a película sai e o volume do Android volta depois que dormiu
+        }
+        if (!VolumeLg.configurado(app) || !VolumeLg.desligarJunto(app)) { apagar.run(); return }
+        val lgAntes = SonoSuave.tomarLgAntes()
+        ui.postDelayed(apagar, PRAZO_LG_MS)   // garantia: a LG sumiu da rede ou demorou
+        Fundo.rodar("Desligar-lg") {
+            if (lgAntes > 0) VolumeLg.irPara(app, lgAntes)
+            val ok = VolumeLg.desligar(app)
+            Log.i(TAG, "LG desligada pela rede: $ok")
+            ui.postDelayed(apagar, if (ok) DEPOIS_DA_LG_MS else 0L)
+        }
     }
-    private const val LG_ESPERA_MS = 15_000L
+    private const val DEPOIS_DA_LG_MS = 2_000L
+    private const val PRAZO_LG_MS = 25_000L
 
     internal fun telaAcesa(ctx: Context) = ctx.getSystemService(PowerManager::class.java).isInteractive
 
@@ -128,9 +142,7 @@ class DesligamentoReceiver : BroadcastReceiver() {
             Desligamento.ACAO_SUAVE -> if (Desligamento.telaAcesa(ctx)) SonoSuave.comecar(ctx, marcado)
             Desligamento.ACAO_DESLIGAR -> {
                 ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().remove(Desligamento.CHAVE).apply()
-                Desligamento.apagarTela(ctx)
-                SonoSuave.parar(ctx, esperarMs = 8_000L)   // a película sai e o volume volta depois que a TV dormiu
-                Desligamento.desligarLg(ctx)
+                Desligamento.desligarTudo(ctx)   // LG primeiro (pela rede), depois o Chromecast
             }
         }
     }
