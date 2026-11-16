@@ -97,4 +97,12 @@
     <string name="cuidar_push_teste_titulo">Test</string>
     <string name="cuidar_push_teste">Notices from the TV %1$s arrive here.</string>
     <string name="cuidar_desligar_pergunta">Turn off? %1$s will get one last notice saying it was turned off.</string>
+    <string name="cuidar_item_bem">When the person presses “I’m fine” on the TV</string>
+    <string name="cuidar_aviso_bem">“I’m fine” of the day</string>
+    <string name="cuidar_aviso_bem_det">The first time the TV turns on each day, it asks; only the button sends</string>
+    <string name="cuidar_bem_pergunta">Let %1$s know everything is fine?</string>
+    <string name="cuidar_bem_sim">I’m fine</string>
+    <string name="cuidar_bem_nao">Not now</string>
+    <string name="cuidar_push_bem_titulo">All is well</string>
+    <string name="cuidar_push_bem">The person at TV %1$s said they are fine (%2$s).</string>
 </resources>

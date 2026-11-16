@@ -110,4 +110,9 @@
     <string name="lh_arranjo_det">옆으로 스크롤되는 한 줄, 또는 모든 앱이 보이는 격자.</string>
     <string name="lh_fileira">한 줄</string>
     <string name="lh_grade">격자</string>
+    <string name="pl_assinar">구독하기</string>
+    <string name="pl_assinar_preco">구독하기 · %1$s</string>
+    <string name="pl_seu_plano">내 요금제</string>
+    <string name="pl_loja_indisponivel">Google Play에서 구매를 열지 못했습니다. 인터넷을 확인하고 다시 시도하세요.</string>
+    <string name="atu_pela_play">업데이트는 Google Play에서 받습니다.</string>
 </resources>

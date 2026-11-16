@@ -110,4 +110,9 @@
     <string name="lh_arranjo_det">Eine Reihe, die seitlich scrollt, oder ein Raster mit allen Apps im Blick.</string>
     <string name="lh_fileira">Reihe</string>
     <string name="lh_grade">Raster</string>
+    <string name="pl_assinar">Abonnieren</string>
+    <string name="pl_assinar_preco">Abonnieren · %1$s</string>
+    <string name="pl_seu_plano">Ihr Tarif</string>
+    <string name="pl_loja_indisponivel">Google Play konnte den Kauf nicht öffnen. Prüfen Sie das Internet und versuchen Sie es erneut.</string>
+    <string name="atu_pela_play">Updates kommen über Google Play.</string>
 </resources>

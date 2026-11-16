@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Build da Play (`-Pplay`, 16/11/2026): este manifesto entra por cima do principal e TIRA o que a loja não aceita
+  num launcher (decisões da venda, memória "DECISÕES DA PLAY/VENDA"). O resto dos poderes fica e vai declarado ao
+  revisor (docs/play/notas-ao-revisor.md).
+  - REQUEST_INSTALL_PACKAGES: só para app cuja função principal é instalar apps. O launcher não se atualiza (a loja
+    atualiza) e o painel instala APK pelo shell próprio (`pm install`, PainelApps.instalarPeloShell).
+  - MANAGE_EXTERNAL_STORAGE: só para gerenciador de arquivos/backup. A aba Arquivos e a unidade de rede usam o shell.
+  - QUERY_ALL_PACKAGES: o <queries> do principal já cobre os apps da TV (LEANBACK_LAUNCHER) e os pacotes citados;
+    abaixo entra também LAUNCHER (apps de celular instalados na TV).
+  - USE_EXACT_ALARM: só para app de despertador/agenda como função principal. Fica SCHEDULE_EXACT_ALARM em todas as
+    versões ("Alarmes e lembretes", liberado pelo shell próprio); sem ela o alarme toca com folga (Despertador.kt).
+  - READ_LOGS / DUMP / WRITE_SECURE_SETTINGS / PACKAGE_USAGE_STATS ficam: só valem se o shell próprio conceder.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" tools:node="remove" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:node="remove" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:node="remove" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" tools:node="remove" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" tools:remove="android:maxSdkVersion" />
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+    </queries>
+</manifest>

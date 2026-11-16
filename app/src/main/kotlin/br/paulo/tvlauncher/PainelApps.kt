@@ -223,7 +223,9 @@ object PainelApps {
      */
     fun instalar(ctx: Context, entrada: java.io.InputStream, tamanho: Long): Instalado {
         if (tamanho <= 0 || tamanho > LIMITE_APK) return Instalado(null, null, null, "tamanho de APK inválido")
-        if (!PrivilegioDO.somosDonos(ctx)) return Instalado(null, null, null, "o launcher não é mais o dono do aparelho (Device Owner)")
+        // Build da Play: sem REQUEST_INSTALL_PACKAGES (a loja só aceita para quem instala apps como função principal);
+        // instala pelo shell próprio (`pm install`, alternativa aprovada 16/11/2026). Com dono ou sem dono.
+        if (!BuildConfig.PLAY && !PrivilegioDO.somosDonos(ctx)) return Instalado(null, null, null, "o launcher não é mais o dono do aparelho (Device Owner)")
         if (ctx.cacheDir.usableSpace < tamanho * 2 + (200L shl 20)) return Instalado(null, null, null, "falta espaço na TV para instalar")
         // Nome único: duas instalações ao mesmo tempo (duas abas) não escrevem no mesmo arquivo.
         val tmp = java.io.File.createTempFile("painel-instalar", ".apk", ctx.cacheDir)
@@ -250,6 +252,8 @@ object PainelApps {
             val nome = try { info.applicationInfo?.loadLabel(pm)?.toString() } catch (e: Exception) { null } ?: pacote
             val versao = info.versionName ?: ""
             if (pacote == ctx.packageName) return Instalado(pacote, nome, versao, "o próprio launcher não se atualiza pelo painel (use o build3.ps1 no PC)")
+
+            if (BuildConfig.PLAY) return Instalado(pacote, nome, versao, instalarPeloShell(ctx, partes))
 
             val instalador = pm.packageInstaller
             val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL).apply {
@@ -297,6 +301,42 @@ object PainelApps {
             tmp.delete()
             pastaPartes.deleteRecursively()
         }
+    }
+
+    /**
+     * Build da Play: copia as partes para a pasta do app no armazenamento externo (a única que o shell, uid 2000,
+     * consegue ler) e instala com `pm install-create / install-write / install-commit`, uma sessão para todas as partes.
+     * null = instalou; senão o motivo. Apaga as cópias no fim.
+     */
+    private fun instalarPeloShell(ctx: Context, partes: List<Pair<String, java.io.File>>): String? {
+        val pasta = java.io.File(ctx.getExternalFilesDir(null) ?: return "sem armazenamento para o shell ler", "instalar")
+        pasta.mkdirs()
+        try {
+            val copias = partes.mapIndexed { i, (nomeParte, arq) ->
+                val destino = java.io.File(pasta, "p$i.apk"); arq.copyTo(destino, overwrite = true); nomeParte to destino
+            }
+            val total = copias.sumOf { it.second.length() }
+            val criada = GuardiaoShizuku.comando(ctx, "pm install-create -r -S $total")
+                ?: return "o shell do launcher não está ligado (Configurações › Sistema › Shell)"
+            val sessao = Regex("\\[(\\d+)]").find(criada)?.groupValues?.get(1) ?: return "o Android recusou: ${criada.trim().take(120)}"
+            for ((i, par) in copias.withIndex()) {
+                val (nomeParte, arq) = par
+                val nomeSeguro = nomeParte.filter { it.isLetterOrDigit() || it in "._-" }.ifEmpty { "p$i.apk" }
+                val r = GuardiaoShizuku.comando(ctx, "pm install-write -S ${arq.length()} $sessao $nomeSeguro '${arq.absolutePath}'", 120_000) ?: ""
+                if (!r.contains("Success")) {
+                    GuardiaoShizuku.comando(ctx, "pm install-abandon $sessao")
+                    return "o Android recusou: ${r.trim().take(120)}"
+                }
+            }
+            val fim = GuardiaoShizuku.comando(ctx, "pm install-commit $sessao", 180_000) ?: return "o shell caiu no meio da instalação"
+            return when {
+                fim.contains("Success") -> null
+                fim.contains("INSTALL_FAILED_UPDATE_INCOMPATIBLE") -> "já existe uma versão deste app com outra assinatura (desinstale a antiga antes)"
+                fim.contains("INSTALL_FAILED_NO_MATCHING_ABIS") -> "o APK não é compatível com esta TV (ex.: feito só para 64 bits)"
+                fim.contains("INSTALL_FAILED_INSUFFICIENT_STORAGE") -> "falta espaço na TV"
+                else -> "o Android recusou: ${fim.trim().take(120)}"
+            }
+        } finally { pasta.deleteRecursively() }
     }
 
     /**

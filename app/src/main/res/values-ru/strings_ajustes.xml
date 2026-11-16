@@ -110,4 +110,9 @@
     <string name="lh_arranjo_det">Ряд с прокруткой в сторону или сетка, где видны все приложения.</string>
     <string name="lh_fileira">Ряд</string>
     <string name="lh_grade">Сетка</string>
+    <string name="pl_assinar">Оформить подписку</string>
+    <string name="pl_assinar_preco">Оформить · %1$s</string>
+    <string name="pl_seu_plano">Ваш тариф</string>
+    <string name="pl_loja_indisponivel">Google Play не открыл покупку. Проверьте интернет и попробуйте снова.</string>
+    <string name="atu_pela_play">Обновления приходят через Google Play.</string>
 </resources>

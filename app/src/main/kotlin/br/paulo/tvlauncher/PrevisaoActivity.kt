@@ -187,7 +187,7 @@ class PrevisaoActivity : Activity() {
     private fun carregar(): Dados? {
         val ponto = Localizacao.atual(this) { httpGet(it) } ?: return null
         val unidade = if (Config.USAR_FAHRENHEIT) "&temperature_unit=fahrenheit" else ""
-        val j = JSONObject(httpGet(
+        val j = if (BuildConfig.CLIMA_MET) ClimaMet.previsao(ponto.lat, ponto.lon, desdeAgora = false) ?: return null else JSONObject(httpGet(
             "https://api.open-meteo.com/v1/forecast?latitude=${ponto.lat}&longitude=${ponto.lon}" +
                 "&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,pressure_msl,wind_speed_10m,wind_direction_10m,is_day" +
                 "&hourly=temperature_2m,precipitation_probability,weather_code,wind_speed_10m,visibility,dew_point_2m,uv_index" +
@@ -196,7 +196,8 @@ class PrevisaoActivity : Activity() {
         ) ?: return null)
         val c = j.getJSONObject("current"); val h = j.getJSONObject("hourly"); val d = j.getJSONObject("daily")
         fun <T> lista(o: JSONObject, k: String, f: (org.json.JSONArray, Int) -> T) = o.getJSONArray(k).let { a -> (0 until a.length()).map { f(a, it) } }
-        val aqi = try {
+        // Qualidade do ar só existe na Open-Meteo; no MET (build da Play) o cartão some.
+        val aqi = if (BuildConfig.CLIMA_MET) null else try {
             JSONObject(httpGet("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${ponto.lat}&longitude=${ponto.lon}&current=us_aqi")
                 ?: "{}").optJSONObject("current")?.optInt("us_aqi", -1)?.takeIf { it >= 0 }
         } catch (e: Exception) { null }

@@ -32,7 +32,8 @@ object ClimaFontes {
             "&hourly=precipitation_probability,temperature_2m,weather_code&forecast_hours=24" +
             "&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max" +
             "&timezone=auto&forecast_days=${FaixaDias.DIAS}$unidade"
-        val json = JSONObject(httpGet(url) ?: return null)
+        val json = if (BuildConfig.CLIMA_MET) ClimaMet.previsao(ponto.lat, ponto.lon, desdeAgora = true) ?: return null
+            else JSONObject(httpGet(url) ?: return null)
         val atual = json.getJSONObject("current")
         val dia = json.getJSONObject("daily")
         // Temperatura: a MEDIDA na estacao do aeroporto (METAR) vence a do modelo da Open-Meteo. Em 31/10 as 16:15
@@ -42,7 +43,7 @@ object ClimaFontes {
         val nova = medidaAeroporto(ponto) ?: medidaAeroporto(ponto)   // uma segunda tentativa
         if (nova != null) { ultimaMedida = nova; ultimaMedidaMs = System.currentTimeMillis() }
         val medida = nova ?: ultimaMedida?.takeIf { System.currentTimeMillis() - ultimaMedidaMs < 60 * 60_000L }
-        registrarComparacao(ctx, ponto, nova)
+        if (!BuildConfig.CLIMA_MET) registrarComparacao(ctx, ponto, nova)
         // Umidade: a do aeroporto (calculada da temperatura e do ponto de orvalho medidos); sem ela, a do modelo.
         val umidade = medida?.umidade ?: atual.optInt("relative_humidity_2m", -1).takeIf { it >= 0 }
         val temp = medida?.temp ?: Math.round(atual.getDouble("temperature_2m")).toInt()
@@ -82,7 +83,7 @@ object ClimaFontes {
         // Chance de chuva: a MEDIANA de ECMWF+ICON+GFS, nao o best_match (≈ECMWF) sozinho. Medido no CSV de comparacao:
         // em horas que o aeroporto marcou SEM chuva, o ECMWF deu 49-75% enquanto ICON/GFS davam 10-18%. A mediana
         // dos tres descarta esse exagero. Se a chamada multi-modelo falhar, cai no best_match da chamada principal.
-        val medModelo = chuvaMediana(ponto)
+        val medModelo = if (BuildConfig.CLIMA_MET) null else chuvaMediana(ponto)   // MET: um modelo só, a chance já vem no hourly
         val horasData: List<String>; val horasChuva: List<Int>
         if (medModelo != null) { horasData = medModelo.horas; horasChuva = medModelo.chuva }
         else {

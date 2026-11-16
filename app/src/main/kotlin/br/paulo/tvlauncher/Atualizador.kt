@@ -103,7 +103,8 @@ object Atualizador {
         val app = ctx.applicationContext
         // Aviso de "versão ruim" que não pôde aparecer na abertura (acessibilidade ainda desligada): tenta de novo aqui.
         VigiaAtualizacao.avisarSePendente(app)
-        if (!Config.ATUALIZACAO_AUTOMATICA || android.os.Build.VERSION.SDK_INT < 28) return
+        // Build da Play: quem atualiza é a própria loja (a política proíbe app que se atualiza por fora). Ver AtualizacaoPlay.kt.
+        if (BuildConfig.PLAY || !Config.ATUALIZACAO_AUTOMATICA || android.os.Build.VERSION.SDK_INT < 28) return
         if (System.currentTimeMillis() - prefs(app).getLong(ULTIMA, 0) < INTERVALO_MS) return
         if (telaAcesa(app)) return   // espera a tela apagar: instalar reinicia o launcher
         // Confirmações: "Bloqueado" = só confere e avisa (fica pendente para o "Instalar agora" das Configurações).
@@ -117,6 +118,7 @@ object Atualizador {
      * de instalar, porque alguém pode ter ligado a TV durante o download.
      */
     fun verificar(ctx: Context, instalar: Boolean, soComTelaApagada: Boolean = false, fim: ((String) -> Unit)? = null) {
+        if (BuildConfig.PLAY) { fim?.invoke(txt(R.string.atu_pela_play)); return }
         val app = ctx.applicationContext
         if (android.os.Build.VERSION.SDK_INT < 28) { fim?.invoke(txt(R.string.atu_android9)); return }
         if (!ocupado.compareAndSet(false, true)) { fim?.invoke(txt(R.string.atu_ocupado)); return }

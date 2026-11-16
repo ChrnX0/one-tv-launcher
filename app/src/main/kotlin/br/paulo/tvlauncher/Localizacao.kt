@@ -28,8 +28,11 @@ object Localizacao {
     fun atual(ctx: Context, httpGet: (String) -> String?): Ponto? {
         val ponto = doAparelho(ctx)
             ?: LocalClima.ler(ctx)?.let { Ponto(it.lat, it.lon, "endereço cadastrado", it.nome) }
-            ?: porIp(httpGet)
+            ?: (if (BuildConfig.PLAY) peloFuso(ctx) else porIp(httpGet))
             ?: ultimo(ctx)
+        // Build da Play: só a localização APROXIMADA sai da TV (2 casas, ~1 km) para os serviços de clima. Assim a ficha
+        // "Segurança dos dados" diz "localização aproximada" com verdade; a previsão não muda a 1 km.
+        if (BuildConfig.PLAY && ponto != null) return Ponto(arredondar(ponto.lat), arredondar(ponto.lon), ponto.fonte, ponto.nome)
         // Só a fonte, nunca as coordenadas (13/11/2026): o logcat vai para relatórios de bug e o produto é público.
         Log.i("TvLauncher.Local", ponto?.let { "localização pela fonte: ${it.fonte.substringBefore(" (")}" } ?: "sem localização")
         return ponto
@@ -57,6 +60,15 @@ object Localizacao {
         return Ponto(melhor.latitude, melhor.longitude, "Wi-Fi do Android, ±${melhor.accuracy.toInt()} m")
     }
 
+    /**
+     * Build da Play: no lugar do IP (o ipwho.is grátis é só sem fim comercial), a maior cidade do fuso horário da TV.
+     * Erra de cidade com facilidade (o fuso de São Paulo cobre metade do Brasil): é só para a HOME não ficar sem clima
+     * até alguém dizer a cidade. Nada sai da TV.
+     */
+    private fun peloFuso(ctx: Context): Ponto? =
+        CidadesOffline.doFuso(CidadesOffline.lista(ctx), java.util.TimeZone.getDefault().id)
+            ?.let { Ponto(it.lat, it.lon, "fuso horário", it.nome) }
+
     private fun porIp(httpGet: (String) -> String?): Ponto? {
         guardadoIp?.let { return it }
         return try {
@@ -67,6 +79,8 @@ object Localizacao {
             null
         }
     }
+
+    fun arredondar(v: Double): Double = Math.round(v * 100) / 100.0
 
     /** Distância aproximada em km entre dois pontos (boa para escolher a estação mais perto). */
     fun km(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {

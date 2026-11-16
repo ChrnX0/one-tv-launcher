@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nome">Sofaly Extras</string>
+    <string name="carregando">Conferindo…</string>
+    <string name="sem_launcher">A Sofaly não está instalada nesta TV. O Extras só funciona junto com ela.</string>
+    <string name="sem_ok">Autorize o Extras na Sofaly: Configurações › Tela inicial › Plugins (pede o PIN).</string>
+    <string name="sem_aviso">Autorizado. Agora ligue “Quando a TV não for ligada até a hora de costume” em Sofaly › Cuidar de longe. Quem mora na casa precisa aceitar na TV.</string>
+    <string name="tudo_certo">Tudo certo. Se a TV não for ligada até a hora de costume, %1$s recebe o aviso.</string>
+    <string name="cartao_ligado">Aviso de “TV não ligou” ligado</string>
+    <string name="cartao_desligado">Ligue em Cuidar de longe</string>
+</resources>

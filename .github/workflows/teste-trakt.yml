@@ -1,0 +1,24 @@
+# Teste do Trakt com 20 títulos (16/11/2026): roda scripts/teste-trakt.py com o secret TRAKT_ID e escreve a tabela no
+# resumo do job. Só leitura na API do Trakt; não compila nada. Roda à mão ou quando o script muda numa branch claude/**.
+name: Teste do Trakt
+on:
+  workflow_dispatch:
+  push:
+    branches: ['claude/**']
+    paths: ['scripts/teste-trakt.py', '.github/workflows/teste-trakt.yml']
+permissions:
+  contents: read
+jobs:
+  trakt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Testar 20 títulos
+        env:
+          TRAKT_ID: ${{ secrets.TRAKT_ID }}
+        run: python3 scripts/teste-trakt.py | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: trakt-resultado
+          path: trakt-resultado.json

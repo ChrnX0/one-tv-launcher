@@ -62,7 +62,17 @@ android {
         // com consentimento (regra de stalkerware). Build da Play = `-Pplay`: só fica o pedido de ajuda (77); o aviso à
         // família do lembrete (78) e da TV que não ligou (79) só existe no APK do site.
         buildConfigField("boolean", "CUIDAR_FAMILIA", (!project.hasProperty("play")).toString())
-        for (k in listOf("TMDB_CHAVE", "TRAKT_ID", "TRAKT_SEGREDO", "SIMKL_ID", "OPENSUBTITLES_CHAVE")) buildConfigField("String", k, chaveApp(k))
+        // Build da Play (`-Pplay`, 16/11/2026): o produto Sofaly. PLAY liga a cobrança da Play e desliga o que a loja
+        // não aceita (atualizador do GitHub, instalar APK). CLIMA_MET: previsão pelo MET Norway (uso comercial liberado).
+        // DESLIGADO por padrão também na Play (16/11/2026, Paulo: "o MET Norway não supre tudo"; fonte do clima em
+        // estudo). Para testar: -Pclima_met ou clima_fonte=met no pessoal.properties. Ver ClimaMet.kt.
+        buildConfigField("boolean", "PLAY", project.hasProperty("play").toString())
+        buildConfigField("boolean", "CLIMA_MET", (project.hasProperty("clima_met") || pessoal.getProperty("clima_fonte")?.trim() == "met").toString())
+        // Build da Play: sem TMDB (chave pessoal; uso comercial pede contrato) e sem Simkl (licença não cobre app vendido)
+        // até haver licença. O Trakt (conta Standard) e o OpenSubtitles (login do próprio usuário) ficam. Ver venda/licencas-custos.md.
+        val semLicencaNaPlay = setOf("TMDB_CHAVE", "SIMKL_ID")
+        for (k in listOf("TMDB_CHAVE", "TRAKT_ID", "TRAKT_SEGREDO", "SIMKL_ID", "OPENSUBTITLES_CHAVE"))
+            buildConfigField("String", k, if (project.hasProperty("play") && k in semLicencaNaPlay) "\"\"" else chaveApp(k))
     }
 
     // Um APK por arquitetura (12/11/2026, pedido do dono: versões de 32 e 64 bits no GitHub).
@@ -128,6 +138,19 @@ android {
         }
     }
 
+    // Build da Play (`./gradlew bundleRelease -Pplay`, 16/11/2026): o produto Sofaly. Package PRÓPRIO, decidido em 16/11/2026
+    // e que nunca mais pode mudar depois de publicado; o namespace do código continua br.paulo.tvlauncher e a Sala segue
+    // com applicationId br.paulo.tvlauncher (ver CLAUDE.md). Por cima do manifesto principal entra src/play/AndroidManifest.xml
+    // (tira as permissões que a loja recusa) e a lista de cidades offline (src/play/assets, CidadesOffline.kt).
+    // Sem flavor de propósito: com flavor todas as tarefas mudariam de nome (assembleRelease, testReleaseUnitTest) e os
+    // workflows e scripts da Sala quebrariam.
+    if (project.hasProperty("play")) {
+        defaultConfig.applicationId = "tv.sofaly.launcher"
+        sourceSets.getByName("main").assets.srcDir("src/play/assets")
+        sourceSets.getByName("release").manifest.srcFile("src/play/AndroidManifest.xml")
+        sourceSets.getByName("debug").manifest.srcFile("src/play/AndroidManifest.xml")
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -167,6 +190,9 @@ dependencies {
     // O src/main/baseline-prof.txt vai dentro do APK, e este pacote grava o perfil na pasta do app quando ele abre
     // (ou pelo broadcast INSTALL_PROFILE, usado pelo build3.ps1). Depois o compile -m speed-profile passa a valer.
     implementation("androidx.profileinstaller:profileinstaller:1.4.1")
+    // Cobrança da Play (16/11/2026, CobrancaPlay.kt): só é usada no build -Pplay; no APK do site o cliente nunca liga.
+    // A Play exige a versão 8 ou mais nova da biblioteca nos apps novos.
+    implementation("com.android.billingclient:billing:8.3.0")
     // QR code (login do Tailscale e endereço do MCP na tela da TV e no painel). Só o núcleo, sem câmera.
     implementation("com.google.zxing:core:3.5.4")
 

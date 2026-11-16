@@ -137,7 +137,10 @@ object Timer {
         val am = ctx.getSystemService(AlarmManager::class.java) ?: return
         try {
             am.setAlarmClock(AlarmManager.AlarmClockInfo(fim, null), pendente(ctx))
-        } catch (e: SecurityException) { Log.w(TAG, "sem permissão de alarme exato: $e") }
+        } catch (e: SecurityException) {
+            Log.w(TAG, "sem permissão de alarme exato: $e")   // build da Play sem a permissão: alarme com folga
+            runCatching { am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, fim, pendente(ctx)) }
+        }
     }
 
     /**

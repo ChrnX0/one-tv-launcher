@@ -110,4 +110,9 @@
     <string name="lh_arranjo_det">Una fila que se desplaza de lado, o una cuadrícula con todas las apps a la vista.</string>
     <string name="lh_fileira">Fila</string>
     <string name="lh_grade">Cuadrícula</string>
+    <string name="pl_assinar">Suscribirse</string>
+    <string name="pl_assinar_preco">Suscribirse · %1$s</string>
+    <string name="pl_seu_plano">Tu plan</string>
+    <string name="pl_loja_indisponivel">Google Play no abrió la compra. Revisa internet e inténtalo de nuevo.</string>
+    <string name="atu_pela_play">Las actualizaciones llegan por Google Play.</string>
 </resources>

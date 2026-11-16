@@ -97,4 +97,12 @@
     <string name="cuidar_push_teste_titulo">Test</string>
     <string name="cuidar_push_teste">Les alertes de la TV %1$s arrivent ici.</string>
     <string name="cuidar_desligar_pergunta">Désactiver ? %1$s recevra une dernière alerte indiquant que c’est désactivé.</string>
+    <string name="cuidar_item_bem">Quand la personne appuie sur « Je vais bien » sur la TV</string>
+    <string name="cuidar_aviso_bem">« Je vais bien » du jour</string>
+    <string name="cuidar_aviso_bem_det">Au premier allumage de la journée, la TV demande ; seul le bouton envoie</string>
+    <string name="cuidar_bem_pergunta">Prévenir %1$s que tout va bien ?</string>
+    <string name="cuidar_bem_sim">Je vais bien</string>
+    <string name="cuidar_bem_nao">Pas maintenant</string>
+    <string name="cuidar_push_bem_titulo">Tout va bien</string>
+    <string name="cuidar_push_bem">La personne devant la TV %1$s a indiqué qu’elle va bien (%2$s).</string>
 </resources>

@@ -97,4 +97,12 @@
     <string name="cuidar_push_teste_titulo">テスト</string>
     <string name="cuidar_push_teste">TV %1$s からの通知はここに届きます。</string>
     <string name="cuidar_desligar_pergunta">オフにしますか? %1$s にオフになったことを知らせる最後の通知が届きます。</string>
+    <string name="cuidar_item_bem">テレビで「元気です」が押されたとき</string>
+    <string name="cuidar_aviso_bem">今日の「元気です」</string>
+    <string name="cuidar_aviso_bem_det">その日最初にテレビがついたときに確認します。送るのはボタンだけです</string>
+    <string name="cuidar_bem_pergunta">%1$s さんに「元気です」と伝えますか？</string>
+    <string name="cuidar_bem_sim">元気です</string>
+    <string name="cuidar_bem_nao">今はしない</string>
+    <string name="cuidar_push_bem_titulo">元気です</string>
+    <string name="cuidar_push_bem">テレビ %1$s の前の方から「元気です」と連絡がありました（%2$s）。</string>
 </resources>

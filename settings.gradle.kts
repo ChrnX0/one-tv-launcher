@@ -34,6 +34,7 @@ dependencyResolutionManagement {
 rootProject.name = "one-tv-launcher"
 include(":app")
 include(":celular")   // ideia 101: app de celular (casca fina do painel)
+include(":extras")    // plugin Sofaly Extras (16/11/2026): app separado do site, ver extras/build.gradle.kts
 
 // Servidor do Shizuku embutido (fork thedjchi, ver shizuku/NOTICE.md). Saiu em 12/11/2026 (o APK definia as permissões
 // do Shizuku e não instalava onde o app Shizuku existia) e voltou em 15/11/2026 SEM definir permissão nenhuma: o

@@ -90,6 +90,9 @@
         <package android:name="com.google.android.apps.tv.launcherx" />
         <!-- Projectivy instalado = oferece a migração guiada (VindoDoProjectivyActivity). -->
         <package android:name="com.spocky.projengmenu" />
+        <!-- Plugins de cartão (PluginCartao) e o plugin Extras: no build da Play não há QUERY_ALL_PACKAGES. -->
+        <intent><action android:name="tv.sofaly.plugin.CARTAO" /></intent>
+        <package android:name="tv.sofaly.extras" />
         <!-- Busca que continua nos outros apps (ideia 14): BuscaOutrosApps.DESTINOS. -->
         <package android:name="com.google.android.youtube.tv" />
         <package android:name="com.netflix.ninja" />
@@ -785,6 +788,8 @@
         </receiver>
         <!-- Hora ou fuso mudou (acerto pela rede, horário de verão): reagenda despertadores e rotinas (auditoria 10/11/2026).
              TIME_SET e TIMEZONE_CHANGED estão na lista de exceções: chegam a um receiver declarado no manifesto. -->
+        <!-- Plugin Extras (app separado, ExtrasPlugin.kt): só responde ao pacote tv.sofaly.extras autorizado pelo dono. -->
+        <provider android:name=".ExtrasProvider" android:authorities="${applicationId}.extras" android:exported="true" />
         <receiver android:name=".HoraMudouReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.TIME_SET" />

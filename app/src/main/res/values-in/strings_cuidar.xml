@@ -97,4 +97,12 @@
     <string name="cuidar_push_teste_titulo">Uji</string>
     <string name="cuidar_push_teste">Pemberitahuan dari TV %1$s sampai di sini.</string>
     <string name="cuidar_desligar_pergunta">Matikan? %1$s akan menerima satu pemberitahuan terakhir bahwa ini dimatikan.</string>
+    <string name="cuidar_item_bem">Saat orang menekan “Saya baik” di TV</string>
+    <string name="cuidar_aviso_bem">“Saya baik” hari ini</string>
+    <string name="cuidar_aviso_bem_det">Saat TV pertama kali menyala setiap hari, TV bertanya; hanya tombol yang mengirim</string>
+    <string name="cuidar_bem_pergunta">Beri tahu %1$s bahwa semua baik-baik saja?</string>
+    <string name="cuidar_bem_sim">Saya baik</string>
+    <string name="cuidar_bem_nao">Nanti saja</string>
+    <string name="cuidar_push_bem_titulo">Semua baik</string>
+    <string name="cuidar_push_bem">Orang di TV %1$s memberi tahu bahwa ia baik-baik saja (%2$s).</string>
 </resources>

@@ -110,4 +110,9 @@
     <string name="lh_arranjo_det">बगल में स्क्रॉल होने वाली एक पंक्ति, या सभी ऐप एक साथ दिखाने वाला ग्रिड।</string>
     <string name="lh_fileira">पंक्ति</string>
     <string name="lh_grade">ग्रिड</string>
+    <string name="pl_assinar">सदस्यता लें</string>
+    <string name="pl_assinar_preco">सदस्यता लें · %1$s</string>
+    <string name="pl_seu_plano">आपका प्लान</string>
+    <string name="pl_loja_indisponivel">Google Play ख़रीद नहीं खोल सका। इंटरनेट जाँचें और फिर कोशिश करें।</string>
+    <string name="atu_pela_play">अपडेट Google Play से आते हैं।</string>
 </resources>

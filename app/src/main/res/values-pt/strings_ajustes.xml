@@ -116,4 +116,9 @@
     <string name="lh_arranjo_det">Uma fileira que rola de lado, ou uma grade com todos os apps à vista.</string>
     <string name="lh_fileira">Fileira</string>
     <string name="lh_grade">Grade</string>
+    <string name="pl_assinar">Assinar</string>
+    <string name="pl_assinar_preco">Assinar · %1$s</string>
+    <string name="pl_seu_plano">Seu plano</string>
+    <string name="pl_loja_indisponivel">A Google Play não abriu a compra. Confira a internet e tente de novo.</string>
+    <string name="atu_pela_play">As atualizações vêm pela Google Play.</string>
 </resources>

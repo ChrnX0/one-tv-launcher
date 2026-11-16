@@ -110,4 +110,9 @@
     <string name="lh_arranjo_det">Une rangée qui défile sur le côté, ou une grille avec toutes les applis visibles.</string>
     <string name="lh_fileira">Rangée</string>
     <string name="lh_grade">Grille</string>
+    <string name="pl_assinar">S’abonner</string>
+    <string name="pl_assinar_preco">S’abonner · %1$s</string>
+    <string name="pl_seu_plano">Votre forfait</string>
+    <string name="pl_loja_indisponivel">Google Play n’a pas pu ouvrir l’achat. Vérifiez internet et réessayez.</string>
+    <string name="atu_pela_play">Les mises à jour arrivent par Google Play.</string>
 </resources>

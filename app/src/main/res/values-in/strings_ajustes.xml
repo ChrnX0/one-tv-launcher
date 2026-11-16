@@ -110,4 +110,9 @@
     <string name="lh_arranjo_det">Satu baris yang bergulir ke samping, atau kisi dengan semua aplikasi terlihat.</string>
     <string name="lh_fileira">Baris</string>
     <string name="lh_grade">Kisi</string>
+    <string name="pl_assinar">Berlangganan</string>
+    <string name="pl_assinar_preco">Berlangganan · %1$s</string>
+    <string name="pl_seu_plano">Paket Anda</string>
+    <string name="pl_loja_indisponivel">Google Play tidak dapat membuka pembelian. Periksa internet dan coba lagi.</string>
+    <string name="atu_pela_play">Pembaruan datang dari Google Play.</string>
 </resources>

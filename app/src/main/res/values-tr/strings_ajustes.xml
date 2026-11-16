@@ -110,4 +110,9 @@
     <string name="lh_arranjo_det">Yana kayan bir sıra ya da tüm uygulamaların göründüğü bir ızgara.</string>
     <string name="lh_fileira">Sıra</string>
     <string name="lh_grade">Izgara</string>
+    <string name="pl_assinar">Abone ol</string>
+    <string name="pl_assinar_preco">Abone ol · %1$s</string>
+    <string name="pl_seu_plano">Planınız</string>
+    <string name="pl_loja_indisponivel">Google Play satın almayı açamadı. İnterneti kontrol edip tekrar deneyin.</string>
+    <string name="atu_pela_play">Güncellemeler Google Play üzerinden gelir.</string>
 </resources>

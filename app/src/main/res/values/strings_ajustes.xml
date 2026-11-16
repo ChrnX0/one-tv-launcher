@@ -116,4 +116,9 @@
     <string name="lh_arranjo_det">A row that scrolls sideways, or a grid with all apps in view.</string>
     <string name="lh_fileira">Row</string>
     <string name="lh_grade">Grid</string>
+    <string name="pl_assinar">Subscribe</string>
+    <string name="pl_assinar_preco">Subscribe · %1$s</string>
+    <string name="pl_seu_plano">Your plan</string>
+    <string name="pl_loja_indisponivel">Google Play could not open the purchase. Check the internet and try again.</string>
+    <string name="atu_pela_play">Updates come from Google Play.</string>
 </resources>

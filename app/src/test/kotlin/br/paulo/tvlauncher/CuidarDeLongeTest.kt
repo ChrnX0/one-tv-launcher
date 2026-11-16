@@ -33,10 +33,13 @@ class CuidarDeLongeTest {
         assertEquals(CuidarDeLonge.Falta.NOME, CuidarDeLonge.falta(c))
     }
 
-    @Test fun buildDaPlaySoOferecePedidoDeAjuda() {
+    /** Play: pedido de ajuda e "estou bem" (os dois só saem quando a pessoa aperta); com o plugin Extras, também "não ligou". */
+    @Test fun buildDaPlaySoOfereceOQueAPessoaAperta() {
         assertEquals(aceita, CuidarDeLonge.limitar(aceita, familia = true))
         val play = CuidarDeLonge.limitar(aceita, familia = false)
-        assertEquals(setOf(Aviso.AJUDA), play.avisos)
+        assertEquals(aceita.avisos.filter { it == Aviso.AJUDA || it == Aviso.ESTOU_BEM }.toSet(), play.avisos)
+        assertFalse(Aviso.NAO_LIGOU in play.avisos)
+        assertTrue(Aviso.NAO_LIGOU in CuidarDeLonge.limitar(aceita, familia = false, extras = true).avisos || Aviso.NAO_LIGOU !in aceita.avisos)
         // o aceite era para os 3 avisos: com menos avisos a assinatura muda e a TV pergunta de novo
         assertFalse(CuidarDeLonge.consentido(play))
         Aviso.values().forEach { assertFalse(CuidarDeLonge.ativo(play, it)) }

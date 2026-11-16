@@ -97,4 +97,12 @@
     <string name="cuidar_push_teste_titulo">تجربة</string>
     <string name="cuidar_push_teste">تصل تنبيهات التلفاز %1$s إلى هنا.</string>
     <string name="cuidar_desligar_pergunta">إيقاف؟ سيتلقى %1$s تنبيهًا أخيرًا بأنه أُوقف.</string>
+    <string name="cuidar_item_bem">عندما يضغط الشخص «أنا بخير» على التلفاز</string>
+    <string name="cuidar_aviso_bem">«أنا بخير» اليومية</string>
+    <string name="cuidar_aviso_bem_det">عند أول تشغيل للتلفاز في اليوم يسأل؛ الزر وحده يرسل</string>
+    <string name="cuidar_bem_pergunta">هل نُبلغ %1$s أن كل شيء على ما يرام؟</string>
+    <string name="cuidar_bem_sim">أنا بخير</string>
+    <string name="cuidar_bem_nao">ليس الآن</string>
+    <string name="cuidar_push_bem_titulo">كل شيء بخير</string>
+    <string name="cuidar_push_bem">أبلغ الشخص أمام التلفاز %1$s أنه بخير (%2$s).</string>
 </resources>

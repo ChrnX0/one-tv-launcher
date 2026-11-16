@@ -97,4 +97,12 @@
     <string name="cuidar_push_teste_titulo">Test</string>
     <string name="cuidar_push_teste">%1$s TV’sinin bildirimleri buraya gelir.</string>
     <string name="cuidar_desligar_pergunta">Kapatılsın mı? %1$s kapatıldığını bildiren son bir bildirim alacak.</string>
+    <string name="cuidar_item_bem">Kişi TV’de “İyiyim”e bastığında</string>
+    <string name="cuidar_aviso_bem">Günün “İyiyim” mesajı</string>
+    <string name="cuidar_aviso_bem_det">TV gün içinde ilk açıldığında sorar; yalnızca düğme gönderir</string>
+    <string name="cuidar_bem_pergunta">%1$s kişisine her şeyin yolunda olduğunu bildirelim mi?</string>
+    <string name="cuidar_bem_sim">İyiyim</string>
+    <string name="cuidar_bem_nao">Şimdi değil</string>
+    <string name="cuidar_push_bem_titulo">Her şey yolunda</string>
+    <string name="cuidar_push_bem">%1$s TV’sindeki kişi iyi olduğunu bildirdi (%2$s).</string>
 </resources>

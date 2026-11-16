@@ -47,7 +47,8 @@ object LocalClima {
 
     /** CEP + número -> coordenadas (rede: fora da thread da tela) e grava. Devolve o lugar gravado ou o erro. */
     fun definirPorCep(ctx: Context, cep: String?, numero: String?): Result<Lugar> =
-        Endereco.buscar(cep, numero) { Endereco.httpGet(it) }.map { a ->
+        // Play: sem Nominatim (não serve a app pago); a coordenada vem da lista de cidades do APK (precisão de cidade).
+        Endereco.buscar(cep, numero, if (BuildConfig.PLAY) CidadesOffline.lista(ctx) else null) { Endereco.httpGet(it) }.map { a ->
             Lugar(a.nome, a.lat, a.lon, Endereco.limparCep(cep).orEmpty(), Endereco.limparNumero(numero).orEmpty())
                 .also { gravar(ctx, it) }
         }
@@ -57,7 +58,8 @@ object LocalClima {
      * caminho mais preciso aqui (chega no bairro ou na rua); a cidade é um segundo caminho, não uma troca.
      */
     fun definirPorCidade(ctx: Context, cidade: String?): Result<Lugar> =
-        Endereco.buscarCidade(cidade, java.util.Locale.getDefault().language.ifEmpty { "en" }) { Endereco.httpGet(it) }
+        (if (BuildConfig.PLAY) Endereco.buscarCidadeOffline(cidade, CidadesOffline.lista(ctx))
+        else Endereco.buscarCidade(cidade, java.util.Locale.getDefault().language.ifEmpty { "en" }) { Endereco.httpGet(it) })
             .map { a -> Lugar(a.nome, a.lat, a.lon).also { gravar(ctx, it) } }
 
     /** "Centro · CEP 14015-060, nº 100" (para as telas). */

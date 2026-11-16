@@ -110,4 +110,9 @@
     <string name="lh_arranjo_det">Una fila che scorre di lato, o una griglia con tutte le app in vista.</string>
     <string name="lh_fileira">Fila</string>
     <string name="lh_grade">Griglia</string>
+    <string name="pl_assinar">Abbonati</string>
+    <string name="pl_assinar_preco">Abbonati · %1$s</string>
+    <string name="pl_seu_plano">Il tuo piano</string>
+    <string name="pl_loja_indisponivel">Google Play non ha aperto l’acquisto. Controlla internet e riprova.</string>
+    <string name="atu_pela_play">Gli aggiornamenti arrivano da Google Play.</string>
 </resources>

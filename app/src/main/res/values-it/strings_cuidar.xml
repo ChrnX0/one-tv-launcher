@@ -97,4 +97,12 @@
     <string name="cuidar_push_teste_titulo">Prova</string>
     <string name="cuidar_push_teste">Gli avvisi della TV %1$s arrivano qui.</string>
     <string name="cuidar_desligar_pergunta">Disattivare? %1$s riceverà un ultimo avviso che è stato disattivato.</string>
+    <string name="cuidar_item_bem">Quando la persona preme “Sto bene” sulla TV</string>
+    <string name="cuidar_aviso_bem">“Sto bene” del giorno</string>
+    <string name="cuidar_aviso_bem_det">La prima volta che la TV si accende ogni giorno, chiede; solo il pulsante invia</string>
+    <string name="cuidar_bem_pergunta">Avvisare %1$s che va tutto bene?</string>
+    <string name="cuidar_bem_sim">Sto bene</string>
+    <string name="cuidar_bem_nao">Non ora</string>
+    <string name="cuidar_push_bem_titulo">Tutto bene</string>
+    <string name="cuidar_push_bem">Chi è alla TV %1$s ha detto che sta bene (%2$s).</string>
 </resources>

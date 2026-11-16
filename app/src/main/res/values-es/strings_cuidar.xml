@@ -97,4 +97,12 @@
     <string name="cuidar_push_teste_titulo">Prueba</string>
     <string name="cuidar_push_teste">Los avisos de la TV %1$s llegan aquí.</string>
     <string name="cuidar_desligar_pergunta">¿Desactivar? %1$s recibirá un último aviso diciendo que se desactivó.</string>
+    <string name="cuidar_item_bem">Cuando la persona pulse “Estoy bien” en la TV</string>
+    <string name="cuidar_aviso_bem">“Estoy bien” del día</string>
+    <string name="cuidar_aviso_bem_det">La primera vez que la TV se enciende cada día, pregunta; solo el botón envía</string>
+    <string name="cuidar_bem_pergunta">¿Avisar a %1$s que todo está bien?</string>
+    <string name="cuidar_bem_sim">Estoy bien</string>
+    <string name="cuidar_bem_nao">Ahora no</string>
+    <string name="cuidar_push_bem_titulo">Todo bien</string>
+    <string name="cuidar_push_bem">Quien está en la TV %1$s avisó que está bien (%2$s).</string>
 </resources>

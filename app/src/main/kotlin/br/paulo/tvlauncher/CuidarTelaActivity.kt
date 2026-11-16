@@ -35,6 +35,7 @@ class CuidarTelaActivity : Activity() {
         const val MODO_CONSENTIMENTO = "consentimento"
         const val MODO_AJUDA = "ajuda"
         const val MODO_LEMBRETE = "lembrete"
+        const val MODO_ESTOU_BEM = "estou_bem"
         private const val FECHAR_MS = 30_000L
     }
 
@@ -51,6 +52,7 @@ class CuidarTelaActivity : Activity() {
             MODO_CONSENTIMENTO -> consentimento()
             MODO_AJUDA -> ajuda()
             MODO_LEMBRETE -> lembrete()
+            MODO_ESTOU_BEM -> estouBem()
             else -> finish()
         }
     }
@@ -147,6 +149,7 @@ class CuidarTelaActivity : Activity() {
                 CuidarDeLonge.Aviso.AJUDA -> getString(R.string.cuidar_item_ajuda, getString(if (c.tecla == CuidarDeLonge.Tecla.OK) R.string.cuidar_tecla_ok else R.string.cuidar_tecla_voltar))
                 CuidarDeLonge.Aviso.LEMBRETE -> getString(R.string.cuidar_item_lembrete, c.prazoMin)
                 CuidarDeLonge.Aviso.NAO_LIGOU -> getString(R.string.cuidar_item_nao_ligou)
+                CuidarDeLonge.Aviso.ESTOU_BEM -> getString(R.string.cuidar_item_bem)
             }
         }
         val nao = botao(getString(R.string.cuidar_nao_aceito), false) { finish() }
@@ -198,6 +201,31 @@ class CuidarTelaActivity : Activity() {
                     getString(if (total == 0) R.string.cuidar_sem_aparelho else R.string.cuidar_sem_internet))
             }
         }
+    }
+
+    // ---------------------------------------------------------------- 79 da Play: estou bem
+
+    /** Primeira vez que a TV acende no dia: "Avisar Ana que está tudo bem?". Foco em "Estou bem"; VOLTAR = agora não. */
+    private fun estouBem() {
+        val chave = intent.getStringExtra(EXTRA_CHAVE).orEmpty()
+        val c = CuidarDeLongeTv.config(this)
+        if (chave.isEmpty() || !CuidarDeLongeTv.ativo(this, CuidarDeLonge.Aviso.ESTOU_BEM)) { finish(); return }
+        val agoraNao = botao(getString(R.string.cuidar_bem_nao), false) { finish() }
+        val bem = botao(getString(R.string.cuidar_bem_sim), true) {
+            mandou = true
+            montar(null, getString(R.string.cuidar_mandando), null, emptyList(), null)
+            val app = applicationContext
+            Fundo.rodar("cuidar-bem") {
+                val (aceitos, total) = try { CuidarDeLongeTv.mandarEstouBem(app, chave) } catch (e: Exception) { 0 to 0 }
+                ui.post {
+                    if (isFinishing || isDestroyed) return@post
+                    if (aceitos > 0) resultado(getString(R.string.cuidar_avisado, c.nome), null)
+                    else resultado(getString(R.string.cuidar_nao_avisado, c.nome),
+                        getString(if (total == 0) R.string.cuidar_sem_aparelho else R.string.cuidar_sem_internet))
+                }
+            }
+        }
+        montar(null, getString(R.string.cuidar_bem_pergunta, c.nome), null, listOf(agoraNao, bem), bem)
     }
 
     // ---------------------------------------------------------------- 78: lembrete

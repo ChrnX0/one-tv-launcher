@@ -108,6 +108,14 @@ object Endereco {
         return Result.success(achado)
     }
 
+    /** O mesmo que [buscarCidade], na lista de cidades do APK (build da Play): nada sai da TV. */
+    fun buscarCidadeOffline(nomeTexto: String?, lista: List<CidadesOffline.Cidade>): Result<Achado> {
+        val nome = nomeTexto.orEmpty().filter { !it.isISOControl() }.trim()
+        if (nome.length !in 2..80) return Result.failure(IllegalArgumentException("nome de cidade inválido"))
+        val c = CidadesOffline.buscar(lista, nome) ?: return Result.failure(IllegalStateException("cidade não encontrada"))
+        return Result.success(Achado(LocalClima.limparNome(CidadesOffline.rotulo(c)), c.lat, c.lon, "cidade"))
+    }
+
     /** Nome curto que aparece na previsão: o bairro (ou a rua, ou a cidade). */
     fun nome(c: Cep): String = LocalClima.limparNome(c.bairro.ifBlank { c.rua.ifBlank { c.cidade } })
 
@@ -115,11 +123,17 @@ object Endereco {
      * CEP + número -> coordenadas. [httpGet] recebe a URL e o User-Agent. Devolve o achado ou a mensagem de erro
      * (para o painel e a tela de Configurações mostrarem).
      */
-    fun buscar(cepTexto: String?, numeroTexto: String?, httpGet: (String) -> String?): Result<Achado> {
+    fun buscar(cepTexto: String?, numeroTexto: String?, offline: List<CidadesOffline.Cidade>? = null,
+               httpGet: (String) -> String?): Result<Achado> {
         val cep = limparCep(cepTexto) ?: return Result.failure(IllegalArgumentException("CEP inválido: são 8 números"))
         val numero = limparNumero(numeroTexto) ?: return Result.failure(IllegalArgumentException("número inválido"))
         val c = httpGet("https://viacep.com.br/ws/$cep/json/")?.let { lerViaCep(it) }
             ?: return Result.failure(IllegalStateException("CEP não encontrado (ou sem internet)"))
+        if (offline != null) {   // build da Play: só ViaCEP + lista do APK, sem Nominatim
+            val cidade = CidadesOffline.noBrasil(offline, c.cidade, c.uf)
+                ?: return Result.failure(IllegalStateException("não achei essa cidade na lista"))
+            return Result.success(Achado(nome(c), cidade.lat, cidade.lon, "cidade"))
+        }
         for ((url, precisao) in consultas(c, numero)) {
             val ponto = httpGet(url)?.let { lerNominatim(it) } ?: continue
             return Result.success(Achado(nome(c), ponto.first, ponto.second, precisao))

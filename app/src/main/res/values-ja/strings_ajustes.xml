@@ -110,4 +110,9 @@
     <string name="lh_arranjo_det">横にスクロールする 1 列、またはすべてのアプリが見えるグリッド。</string>
     <string name="lh_fileira">1 列</string>
     <string name="lh_grade">グリッド</string>
+    <string name="pl_assinar">登録する</string>
+    <string name="pl_assinar_preco">登録する · %1$s</string>
+    <string name="pl_seu_plano">ご利用中のプラン</string>
+    <string name="pl_loja_indisponivel">Google Play で購入画面を開けませんでした。インターネットを確認してもう一度お試しください。</string>
+    <string name="atu_pela_play">アップデートは Google Play から届きます。</string>
 </resources>

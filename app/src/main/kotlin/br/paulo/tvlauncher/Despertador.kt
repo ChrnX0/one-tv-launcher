@@ -150,7 +150,9 @@ object Despertador {
             am.setAlarmClock(AlarmManager.AlarmClockInfo(prox.second, mostrar), toque)
             Log.i(TAG, "proximo: ${prox.first.hora}:${"%02d".format(prox.first.minuto)} (id ${prox.first.id}) em ${(prox.second - System.currentTimeMillis()) / 60000} min")
         } catch (e: SecurityException) {
+            // Build da Play (sem USE_EXACT_ALARM) antes de alguém liberar "Alarmes e lembretes": toca com até ~10 min de folga.
             Log.w(TAG, "sem permissao de alarme exato: $e")
+            runCatching { am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, prox.second, toque) }
         }
     }
 
