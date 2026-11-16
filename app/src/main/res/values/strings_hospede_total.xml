@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede com limpeza total (degrau 3). -->
+<resources>
+    <string name="hos_total">Full cleanup</string>
+    <string name="hos_total_det">At check-out, clears the data of every app on the TV, not just streaming. Google services and Settings are kept.</string>
+</resources>

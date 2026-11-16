@@ -581,7 +581,7 @@ object Estilo {
      * OK numa linha fecha e chama [aoEscolher]; VOLTAR fecha sem escolher.
      */
     fun lista(ctx: Context, titulo: CharSequence, itens: List<CharSequence>, marcadas: Collection<Int> = emptyList(),
-              aoFechar: (() -> Unit)? = null, aoEscolher: (Int) -> Unit): android.app.Dialog {
+              aoFechar: (() -> Unit)? = null, rodape: CharSequence? = null, aoEscolher: (Int) -> Unit): android.app.Dialog {
         val d = android.app.Dialog(ctx)
         val linhas = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
@@ -609,6 +609,8 @@ object Estilo {
             addView(texto(ctx, Papel.TITULO, titulo).apply { textSize = 22f; maxLines = 2; ellipsize = TextUtils.TruncateAt.END },
                 LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = dp(ctx, E2) })
             addView(rolagem, LinearLayout.LayoutParams(-1, -2))
+            // Crédito de quem forneceu os itens (ex.: "Subtitles provided by OpenSubtitles.com"), embaixo, discreto.
+            if (rodape != null) addView(texto(ctx, Papel.LEGENDA, rodape), LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(ctx, E2) })
         }
         d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
         d.setContentView(cartao)

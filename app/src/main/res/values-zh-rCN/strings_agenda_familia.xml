@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda da família (degrau 2, 16/11/2026): AgendaFamiliaActivity e Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="agf_titulo">家庭日程</string>
+    <string name="agf_sub">到了设定时间，电视会自动切换到该个人资料。儿童资料会开启儿童模式和就寝时间。</string>
+    <string name="agf_cfg_det">已设切换：%1$d。个人资料会按时自动切换。</string>
+    <string name="agf_adicionar">添加切换</string>
+    <string name="agf_adicionar_det">谁的资料、哪几天、几点。</string>
+    <string name="agf_quem">切换到谁的资料？</string>
+    <string name="agf_dias">哪几天？</string>
+    <string name="agf_hora">几点？</string>
+    <string name="agf_todos">每天</string>
+    <string name="agf_uteis">周一至周五</string>
+    <string name="agf_fds">周六和周日</string>
+    <string name="agf_alguns">部分日子</string>
+    <string name="agf_apagar">删除这个切换吗？</string>
+    <string name="agf_apagar_sim">删除</string>
+    <string name="agf_cheia">日程已满（12 个切换）。</string>
+    <string name="agf_sem_contas">这台电视还没有个人资料（Google 帐号）。</string>
+</resources>

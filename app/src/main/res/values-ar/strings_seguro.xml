@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo de segurança da HOME (degrau 2, 16/11/2026): HomeSeguraActivity. -->
+<resources>
+    <string name="seg_titulo">الوضع الآمن</string>
+    <string name="seg_texto">توقفت الشاشة الرئيسية %1$d مرات متتالية. هذه نسخة بسيطة منها لتواصل استخدام التلفاز.</string>
+    <string name="seg_procurar">البحث عن نسخة مصححة</string>
+    <string name="seg_procurar_det">إن وُجدت، تُنزَّل وتُثبَّت الآن.</string>
+    <string name="seg_procurando">جارٍ البحث عن نسخة جديدة…</string>
+    <string name="seg_normal">تجربة الشاشة الرئيسية العادية</string>
+    <string name="seg_normal_det">إذا توقفت 3 مرات أخرى، تعود هذه الشاشة.</string>
+    <string name="seg_config_tv">إعدادات التلفاز</string>
+    <string name="seg_erro">عرض سبب المشكلة</string>
+    <string name="seg_erro_det">التشخيص مع الأخطاء المحفوظة.</string>
+    <string name="seg_apps">التطبيقات</string>
+</resources>

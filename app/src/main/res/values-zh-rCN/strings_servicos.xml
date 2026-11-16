@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">新一集 %1$s</string>
     <string name="ext_hoje">今天</string>
     <string name="ext_amanha">明天</string>
-    <string name="sv_mdblist_passos">可选：在 IMDb 评分（无需它也能用）之外添加烂番茄、Letterboxd 和 Metacritic。\n1. 用手机摄像头扫描左侧代码并登录（或创建免费账号）。在页面底部点按 API Access，如果还没有密钥就生成一个，然后复制。\n2. 扫描右侧代码：网页面板会打开“设置”。在 MDBList 下粘贴密钥并点按“保存密钥”。\n3. 电视会立即检查，此界面会自动继续。</string>
+    <string name="sv_mdblist_passos">可选：在 Trakt 评分（无需它也能用）之外添加烂番茄、Letterboxd 和 Metacritic。\n1. 用手机摄像头扫描左侧代码并登录（或创建免费账号）。在页面底部点按 API Access，如果还没有密钥就生成一个，然后复制。\n2. 扫描右侧代码：网页面板会打开“设置”。在 MDBList 下粘贴密钥并点按“保存密钥”。\n3. 电视会立即检查，此界面会自动继续。</string>
     <string name="sv_mdblist_qr1">MDBList 密钥页面</string>
     <string name="sv_mdblist_qr2">网页面板（%1$s）</string>
     <string name="sv_mdblist_digitar">在这里输入密钥</string>

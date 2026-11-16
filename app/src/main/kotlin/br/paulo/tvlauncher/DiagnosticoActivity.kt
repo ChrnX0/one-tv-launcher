@@ -175,6 +175,7 @@ class DiagnosticoActivity : Activity() {
      */
     private fun mostrarErrosDoLauncher() {
         secao(getString(R.string.diag_erros))
+        VitaisTv.item(this).let { adicionar(info(it.titulo, it.detalhe, it.nivel)) }   // degrau 2: quedas e travadas dos últimos 7 dias (VitaisLocais.kt)
         val erros = RegistroErros.listar(this)
         if (erros.isEmpty()) { adicionar(info(getString(R.string.diag_sem_erros), getString(R.string.diag_sem_erros_det, RegistroErros.MAXIMO), 0)); return }
         for (e in erros) {

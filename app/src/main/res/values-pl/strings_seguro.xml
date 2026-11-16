@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo de segurança da HOME (degrau 2, 16/11/2026): HomeSeguraActivity. -->
+<resources>
+    <string name="seg_titulo">Tryb awaryjny</string>
+    <string name="seg_texto">Ekran główny zatrzymał się %1$d razy z rzędu. To jego prosta wersja, żebyś mógł dalej korzystać z telewizora.</string>
+    <string name="seg_procurar">Szukaj poprawionej wersji</string>
+    <string name="seg_procurar_det">Jeśli jest, zostanie teraz pobrana i zainstalowana.</string>
+    <string name="seg_procurando">Szukam nowej wersji…</string>
+    <string name="seg_normal">Spróbuj zwykłego ekranu głównego</string>
+    <string name="seg_normal_det">Jeśli zatrzyma się jeszcze 3 razy, ten ekran wróci.</string>
+    <string name="seg_config_tv">Ustawienia telewizora</string>
+    <string name="seg_erro">Zobacz, co poszło nie tak</string>
+    <string name="seg_erro_det">Diagnostyka z zapisanymi błędami.</string>
+    <string name="seg_apps">Aplikacje</string>
+</resources>

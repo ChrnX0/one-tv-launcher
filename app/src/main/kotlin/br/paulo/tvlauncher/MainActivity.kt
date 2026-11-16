@@ -91,6 +91,7 @@ class MainActivity : Activity() {
     private val textoSuave: Int get() = if (tema == Tema.ESCURO) 0xFF93A19A.toInt() else 0xFFCFD9D4.toInt()
     // O visual escolhido no menu do perfil (Tema.kt). Lido no onCreate; trocar de tema recria a tela.
     private var tema = Tema.ESCURO
+    private var desviadaParaSegura = false   // modo de segurança: o onCreate parou cedo (nada foi montado)
     private var assinaturaFundo = ""   // "Meu fundo": arquivo|brilho|contraste quando a tela foi montada
     private var idiomaMontado = ""     // idioma em que a tela foi montada (locale está em configChanges: não recria sozinha)
     private var assinaturaLayout = ""  // layout flexível (LayoutHome): tamanho|transparente quando a tela foi montada
@@ -283,6 +284,8 @@ class MainActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Modo de segurança (degrau 2): a HOME caiu 3 vezes seguidas nesta versão -> HOME mínima no lugar desta.
+        if (ModoSeguro.desviar(this)) { desviadaParaSegura = true; return }
         DesempenhoTv.criou()   // guarda de desempenho (12/11/2026): o 1º quadro depois disto dá o tempo de abertura
         tema = Tema.atual(this)
         assinaturaFundo = FundoMeuDados.assinatura(this)
@@ -320,6 +323,14 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        if (desviadaParaSegura) return
+        ModoSeguro.aoRetomarHome(this)   // 30 s de pé = a HOME firmou (zera a conta de quedas seguidas)
+        ModoHospede.talvezBoasVindas(this)   // modo hóspede: boas-vindas uma vez por estadia
+        ModoHospede.conferirSaida(this)      // e a saída que passou com a TV fora da tomada
+        // Agenda da família (degrau 2): a troca de perfil que passou com a TV desligada (o alarme não veio).
+        Fundo.rodar("agenda-perfis") {
+            if (AgendaPerfisTv.conferir(applicationContext)) runOnUiThread { if (!isDestroyed) { atualizarFotoPerfil(); reorganizar() } }
+        }
         // O tema agora só troca na tela separada de Configurações do launcher (ConfigLauncherActivity), que não
         // tem como chamar recreate() nesta Activity diretamente — então aqui a gente mesmo percebe a troca ao voltar.
         if (Tema.atual(this) != tema) { recreate(); return }
@@ -374,6 +385,8 @@ class MainActivity : Activity() {
 
     override fun onPause() {
         super.onPause()
+        ModoSeguro.aoPausarHome()
+        if (desviadaParaSegura) return
         focoTopo = currentFocus?.takeIf { f -> generateSequence(f.parent) { it.parent }.any { it === topoRaiz } }
         DesempenhoTv.desligar(this)
         if (::capa.isInitialized) capa.parar()   // zoom da cena: não fica pedindo quadro com a HOME por trás de um app
@@ -947,9 +960,10 @@ class MainActivity : Activity() {
             .setMessage(getString(R.string.home_visita_msg))
             .setNegativeButton(getString(R.string.home_continuar), null)
             .setPositiveButton(getString(R.string.home_sair)) { _, _ ->
-                ModoVisita.definir(this, false)
-                atualizarFotoPerfil()
-                reorganizar()   // os apps já estão carregados: só refaz a linha
+                val voltar = { atualizarFotoPerfil(); reorganizar() }   // os apps já estão carregados: só refaz a linha
+                // Modo hóspede (degrau 2): sair pede o PIN do painel.
+                if (ModoHospede.ativo(this)) ModoHospede.desligarComPin(this) { voltar() }
+                else { ModoVisita.definir(this, false); voltar() }
             }
             .show()
         dialogo.getButton(AlertDialog.BUTTON_NEGATIVE)?.requestFocus()
@@ -1149,8 +1163,9 @@ class MainActivity : Activity() {
                 lista = montarEntradas(instalados)
                 desenhar()
                 // Medir para não deixar crescer: a thread da tela também atende as teclas do controle.
-                android.util.Log.i("TvLauncher.Apps", "preencherApps: carregar=${t1 - t0} ms (fora da tela), " +
-                    "desenhar=${android.os.SystemClock.elapsedRealtime() - t1} ms")
+                val desenhou = android.os.SystemClock.elapsedRealtime() - t1
+                android.util.Log.i("TvLauncher.Apps", "preencherApps: carregar=${t1 - t0} ms (fora da tela), desenhar=$desenhou ms")
+                LevezaTv.anotarHome(t1 - t0, desenhou)   // números de leveza (degrau 2): `EXTRAS --es o leveza`
             }
         }
     }
@@ -1608,6 +1623,10 @@ class MainActivity : Activity() {
             fichaSerie = serie?.ficha
             posicoesHome = if (temVod) PlayerArmazem.posicoes(this) else emptyMap()
             ui.post { if (!isDestroyed) desenharContinuar(temTv, temVod, ultimo) }
+            // Plugins (degrau 3, PluginsTv): desenha já com os cartões da última leitura e só redesenha se mudaram. Sem
+            // plugin permitido, cartoes() volta na hora; com plugin, cada um tem 2 s de prazo (aqui, fora da tela).
+            val novos = PluginsTv.cartoes(this)
+            if (novos != cartoesPlugin) { cartoesPlugin = novos; ui.post { if (!isDestroyed) desenharContinuar(temTv, temVod, ultimo) } }
             montarCapasAtalho()
             carregarArte(IconeApp.Tipo.FILMES, filme)
             carregarArte(IconeApp.Tipo.SERIES, serie)
@@ -1740,6 +1759,8 @@ class MainActivity : Activity() {
             mostrarDestaque(null, getString(R.string.home_card_jogos), resumoJogos())
             mostrarCapaAtalho(IconeApp.Tipo.JOGOS)
         }) { abrirCatalogo(JogosActivity::class.java) }, quadrado = true)
+        // Plugins de terceiros (degrau 3): no fim da linha, no máximo 3, desenhados por NÓS com os dados que o plugin mandou.
+        for (c in cartoesPlugin) adicionar(cartaoPlugin(c), quadrado = true)
         rotuloContinuar?.text = getString(if (JogosTv.cardLigado(this)) R.string.home_linha_continuar_jogos else R.string.home_linha_continuar)
         // O card Buscar saiu (12/11/2026, dono): a lupa do topo abre a mesma busca única, e a linha ganha espaço.
         // O card "AO VIVO · Canal N" saiu (10/11/2026): abria o mesmo player, no mesmo último canal, que o card TV.
@@ -1840,6 +1861,55 @@ class MainActivity : Activity() {
                 if (temFoco) aoFocar()
             }
         }
+
+    /** Cartões dos plugins permitidos (PluginsTv), da última leitura na filaApps. */
+    @Volatile private var cartoesPlugin: List<PluginCartao.Cartao> = emptyList()
+
+    /**
+     * O cartão de um plugin: do tamanho de um app, na cor que o plugin pediu (sempre opaca), com o VALOR grande no meio
+     * (letra grande: "2 x 1", "18°") e o título embaixo. O detalhe vai para o destaque quando o cartão ganha o foco.
+     */
+    private fun cartaoPlugin(c: PluginCartao.Cartao): View = FrameLayout(this).apply {
+        isFocusable = true
+        isClickable = true
+        contentDescription = listOf(c.titulo, c.valor).filter { it.isNotEmpty() }.joinToString(": ")
+        clipToOutline = true
+        outlineProvider = object : ViewOutlineProvider() {
+            override fun getOutline(v: View, o: Outline) = o.setRoundRect(0, 0, v.width, v.height, dp(Estilo.RAIO).toFloat())
+        }
+        background = GradientDrawable(GradientDrawable.Orientation.TL_BR, intArrayOf(Estilo.matiz(c.cor, 0.6f), Estilo.matiz(c.cor, 0.4f)))
+        if (c.valor.isNotEmpty()) addView(TextView(this@MainActivity).apply {
+            text = c.valor
+            setTextColor(Estilo.TEXTO)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
+            typeface = Estilo.fonte(700)
+            includeFontPadding = false
+            maxLines = 1
+            ellipsize = android.text.TextUtils.TruncateAt.END
+        }, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.TOP or Gravity.START).apply { setMargins(dp(12), dp(10), dp(8), dp(8)) })
+        addView(TextView(this@MainActivity).apply {
+            text = c.titulo
+            setTextColor(Estilo.TEXTO)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f)
+            typeface = Estilo.fonte(600)
+            includeFontPadding = false
+            maxLines = 1
+            ellipsize = android.text.TextUtils.TruncateAt.END
+        }, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(12), dp(8), dp(8), dp(10)) })
+        setOnClickListener { PluginsTv.abrir(this@MainActivity, c) }
+        setOnFocusChangeListener { v, temFoco ->
+            v.foreground = if (temFoco) GradientDrawable().apply {
+                cornerRadius = dp(Estilo.RAIO).toFloat(); setStroke(dp(3), CorDoFundo.foco(context, Estilo.FOCO))
+            } else null
+            val e = if (temFoco) Estilo.ESCALA_CARD else 1f
+            v.animate().scaleX(e).scaleY(e).translationZ(if (temFoco) dp(8).toFloat() else 0f).setDuration(Estilo.FOCO_MS).start()
+            if (temFoco) {
+                mostrarDestaque(null, c.titulo.ifEmpty { c.valor }, c.detalhe.ifEmpty { null })
+                capaPedida = null
+                capa.mostrar(null, intArrayOf(Estilo.matiz(c.cor, 0.6f), Estilo.matiz(c.cor, 0.35f)))
+            }
+        }
+    }
 
     /** "ASSISTIR" ou "ASSISTIR E JOGAR" (com o card Jogos), em cima da linha dos atalhos. */
     private var rotuloContinuar: TextView? = null

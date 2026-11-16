@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Vitals locais (degrau 2, item 8): quedas e travadas do launcher nos últimos 7 dias (Diagnóstico). -->
+<resources>
+    <string name="vit_titulo">लॉन्चर की स्थिरता (7 दिन)</string>
+    <string name="vit_ok">कोई क्रैश या अटकना नहीं। उपयोग के दिन: %1$d</string>
+    <string name="vit_problemas">क्रैश: %1$d। अटकना: %2$d। स्क्रीन पर दिखे: %3$d। समस्या वाले दिन: %5$d में से %4$d।</string>
+</resources>

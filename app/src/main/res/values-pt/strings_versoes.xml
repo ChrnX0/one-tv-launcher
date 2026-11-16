@@ -15,6 +15,22 @@
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
         <item>Modo infantil por idade: a classificação indicativa de todos os filmes e séries é buscada de madrugada, aos poucos, e não só 300 a cada vez que Filmes abre. Na primeira noite o “Até 12 anos” já passa a mostrar o catálogo inteiro que tem classificação</item>
+        <item>Filmes e Séries: a nota agora vem do Trakt (para todos, sem conta), buscada de madrugada; a nota do IMDb saiu, porque o IMDb só permite em app não comercial</item>
+        <item>“Também em” na ficha e “Em outros lugares” na Busca ficam desligados por enquanto: esses dados são da JustWatch e pedem contrato. A Busca continua oferecendo procurar no YouTube, Netflix e Prime Video</item>
+        <item>Família conectada (Configurações › Família): um link sem conta para os netos mandarem fotos e recados que aparecem na TV</item>
+        <item>Cenas prontas: Dormir, Novela e Jogo em Cenas, criadas com um OK</item>
+        <item>Modo hóspede: a limpeza na saída agora inclui os apps que vieram de fábrica, como a Netflix, e pode limpar tudo de uma vez</item>
+        <item>Relatar um problema (Configurações › Sistema): um QR leva ao celular, que mostra exatamente o que vai ser enviado</item>
+        <item>“Nada sai da sua casa” (Configurações › Sistema): o que fica só na TV, explicado em poucas linhas</item>
+        <item>Plugins (Configurações › Aparência): outros apps podem pôr um cartão na linha Assistir, cada um só com o seu OK</item>
+        <item>App do celular: várias casas, com as TVs agrupadas por casa</item>
+        <item>Modo de segurança: se a tela inicial parar 3 vezes em 15 minutos, abre uma versão simples dela, com os apps e o botão “Procurar versão corrigida”</item>
+        <item>Primeira abertura: a TV pergunta como é usada (Simples, Completo ou Cuidar de alguém) e mostra só o que serve. Dá para trocar em Configurações › Sistema</item>
+        <item>Modo hóspede (Configurações › Família): pede o PIN para sair, mostra as boas-vindas com as regras da casa e o Wi-Fi, e na saída apaga os logins dos apps escolhidos</item>
+        <item>Agenda da família: o perfil da TV troca sozinho no horário marcado (por exemplo, o perfil das crianças de segunda a sexta às 14h)</item>
+        <item>Ajuda por QR: cada aba das Configurações tem a linha “Ajuda desta aba”, com um QR que abre a ajuda no celular, no idioma da TV</item>
+        <item>Primeira configuração pelo celular: o novo passo “Modo completo” guia, um por vez, as teclas do controle, as opções do desenvolvedor, o pareamento e o dono do aparelho</item>
+        <item>Diagnóstico: “Estabilidade do launcher (7 dias)” conta as quedas e travadas da tela inicial</item>
         <item>Canal pedido por nome (Claude ou voz): vem o do país da TV. “Globo” no Brasil abre a Globo daqui, não a TV Globo de Portugal; para outro país, diga junto (“Globo Portugal”)</item>
         <item>Calibração da imagem: o padrão “Barras de cor 75%” não fecha mais o launcher</item>
         <item>Filmes: o diretor vem do TMDB (Duna mostra Denis Villeneuve), não mais do nome errado da lista</item>
@@ -178,6 +194,19 @@
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Modo infantil por idade</item>
+        <item>Nota do Trakt</item>
+        <item>Família conectada</item>
+        <item>Cenas prontas</item>
+        <item>Hóspede: limpeza total</item>
+        <item>Relatar problema</item>
+        <item>Nada sai da sua casa</item>
+        <item>Plugins</item>
+        <item>Modo de segurança</item>
+        <item>Como esta TV é usada</item>
+        <item>Modo hóspede</item>
+        <item>Agenda da família</item>
+        <item>Ajuda por QR</item>
+        <item>Estabilidade do launcher</item>
         <item>Canal do país</item>
         <item>Barras de cor 75%</item>
         <item>Diretor do filme</item>
@@ -313,6 +342,19 @@
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Depois de uma noite, com o modo infantil ligado e “Até 12 anos”, Filmes mostra vários filmes livres e até 12 anos (e nenhum para maiores)?</item>
+        <item>Na manhã depois de instalar, abra um filme da sua lista: a ficha mostra “Trakt NN%” e não mostra “IMDb” nem “Também em”?</item>
+        <item>Em Configurações › Família › Família conectada, aparece o QR? Mandando uma foto pelo link no celular, ela aparece na TV?</item>
+        <item>Em Cenas, aparecem Dormir, Novela e Jogo em “Cenas prontas”? Criando Dormir, ela entra na lista e roda com OK?</item>
+        <item>No Modo hóspede, a escolha de apps a limpar mostra também a Netflix e o YouTube?</item>
+        <item>Em Configurações › Sistema › Relatar um problema, aparece o QR e o texto que vai junto?</item>
+        <item>Em Configurações › Sistema, “Nada sai da sua casa” abre um texto curto e legível?</item>
+        <item>Em Configurações › Aparência › Plugins, a TV pede o PIN e mostra “Nenhum plugin instalado”?</item>
+        <item>Com o comando de teste do modo de segurança, ao voltar à HOME aparece a tela simples com os apps? E “Tentar a tela inicial normal” volta para a de sempre?</item>
+        <item>Em Configurações › Sistema, troque “Como esta TV é usada” para Simples: as abas Casa e automações, Acesso remoto e Avançado somem? Depois volte para Completo</item>
+        <item>Em Configurações › Família, ligue o Modo hóspede e volte à HOME: aparecem as boas-vindas? Para desligar, a TV pede o PIN?</item>
+        <item>Em Família › Agenda da família, marque outro perfil para o próximo horário: na hora, o perfil trocou sozinho?</item>
+        <item>Em qualquer aba das Configurações, a última linha “Ajuda desta aba” mostra um QR que abre a ajuda certa no celular?</item>
+        <item>Em Configurações › Sistema › Diagnosticar a TV, a seção de erros mostra “Estabilidade do launcher (7 dias)”?</item>
         <item>Peça ao Claude “coloca na Globo”: abre a Globo do Brasil? E “Globo Portugal” abre a de Portugal?</item>
         <item>Em Configurações › Tela e energia › Calibração, escolha “Barras de cor 75%”: o padrão aparece e o launcher não fecha?</item>
         <item>Em Filmes, abra Duna: a ficha mostra Denis Villeneuve como diretor?</item>
@@ -348,7 +390,7 @@
         <item>Abra um filme ou episódio sem legenda em português: em uns 20 s aparece a legenda marcada “Tradução automática”, e o filme continua sem travar?</item>
         <item>Apareceram o código e o QR, o celular aprovou e a TV mostrou a conta conectada?</item>
         <item>O código entrou em simkl.com/pin e a TV mostrou a conta conectada?</item>
-        <item>Apareceram sinopse, nota do IMDb e “Também em: …”?</item>
+        <item>Apareceram sinopse e a nota do Trakt?</item>
         <item>Apareceram as fotos e, embaixo, outros títulos dele que estão na sua lista?</item>
         <item>Só apareceram filmes até 10 anos (e os sem classificação das categorias infantis)?</item>
         <item>Em poucos segundos apareceu “Legenda baixada automaticamente” e ela ligou sozinha?</item>

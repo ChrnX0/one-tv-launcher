@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">Neue Folge %1$s</string>
     <string name="ext_hoje">heute</string>
     <string name="ext_amanha">morgen</string>
-    <string name="sv_mdblist_passos">Optional: ergänzt die IMDb-Bewertung (die schon ohne funktioniert) um Rotten Tomatoes, Letterboxd und Metacritic.\n1. Richte die Handykamera auf den linken Code und melde dich an (oder erstelle ein kostenloses Konto). Tippe unten auf der Seite auf API Access, erzeuge den Schlüssel, falls noch keiner da ist, und kopiere ihn.\n2. Richte sie auf den rechten Code: das Web-Panel öffnet sich bei Einstellungen. Füge den Schlüssel unter MDBList ein und tippe auf Schlüssel speichern.\n3. Der Fernseher prüft ihn sofort und dieser Bildschirm geht von selbst weiter.</string>
+    <string name="sv_mdblist_passos">Optional: ergänzt die Trakt-Bewertung (die schon ohne funktioniert) um Rotten Tomatoes, Letterboxd und Metacritic.\n1. Richte die Handykamera auf den linken Code und melde dich an (oder erstelle ein kostenloses Konto). Tippe unten auf der Seite auf API Access, erzeuge den Schlüssel, falls noch keiner da ist, und kopiere ihn.\n2. Richte sie auf den rechten Code: das Web-Panel öffnet sich bei Einstellungen. Füge den Schlüssel unter MDBList ein und tippe auf Schlüssel speichern.\n3. Der Fernseher prüft ihn sofort und dieser Bildschirm geht von selbst weiter.</string>
     <string name="sv_mdblist_qr1">Seite des MDBList-Schlüssels</string>
     <string name="sv_mdblist_qr2">Web-Panel (%1$s)</string>
     <string name="sv_mdblist_digitar">Schlüssel hier eingeben</string>

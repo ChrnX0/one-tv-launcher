@@ -100,6 +100,16 @@ class ConfigLauncherActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         abaAtual = (savedInstanceState?.getInt(EXTRA_ABA) ?: intent.getIntExtra(EXTRA_ABA, 0)).coerceIn(0, abas.size - 1)
+        // Modo hóspede (degrau 2): as Configurações só abrem com o PIN (o hóspede não desliga a limpeza nem mexe na TV).
+        if (ModoHospede.ativo(this) && savedInstanceState == null) {
+            setContentView(View(this).apply { background = Estilo.fundoTela(context) })
+            PinNaTela.pedir(this, getString(R.string.hos_pin_config), aoCancelar = { finish() }) { pinValidoAte = System.currentTimeMillis() + PIN_VALE_MS; abrirTela() }
+            return
+        }
+        abrirTela()
+    }
+
+    private fun abrirTela() {
         setContentView(montarTela())
         mostrarAba(abaAtual)
         itensMenu[abaAtual].post { itensMenu[abaAtual].requestFocus() }
@@ -124,7 +134,7 @@ class ConfigLauncherActivity : Activity() {
 
     override fun onRestart() {
         super.onRestart()
-        if (reconstruirAoVoltar) { reconstruirAoVoltar = false; recarregarAba() }
+        if (reconstruirAoVoltar && ::conteudo.isInitialized) { reconstruirAoVoltar = false; recarregarAba() }
     }
 
     @Deprecated("Activity simples, sem AndroidX")
@@ -147,6 +157,7 @@ class ConfigLauncherActivity : Activity() {
         val colunas = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false }
         menu = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false; setPadding(0, dp(4), 0, dp(4)) }
         abas.forEachIndexed { i, aba -> menu.addView(itemMenu(i, aba), LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(4) }) }
+        mostrarAbasDoUso()
         colunas.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(menu)
             // Igual ao conteúdo: corta embaixo (a última aba não passa por cima da barra de dicas; achado do teste de tela,
             // ideia 96) e deixa 16 dp dos lados para a pílula com foco crescer.
@@ -175,6 +186,18 @@ class ConfigLauncherActivity : Activity() {
         mostrarDica(noMenu = true)
         return raiz
     }
+
+    /** Uso "Simples"/"Para quem cuida" (UsoTv, degrau 2): as abas técnicas somem do menu (a aberta agora fica). */
+    private fun mostrarAbasDoUso() {
+        val uso = UsoTv.atual(this)
+        itensMenu.forEachIndexed { i, t -> t.visibility = if (UsoTv.mostraAba(uso, i) || i == abaAtual) View.VISIBLE else View.GONE }
+    }
+
+    private fun nomeUso(u: UsoTv) = getString(when (u) {
+        UsoTv.SIMPLES -> R.string.uso_simples
+        UsoTv.COMPLETO -> R.string.uso_completo
+        UsoTv.CUIDA -> R.string.uso_cuida
+    })
 
     private fun itemMenu(i: Int, aba: Aba): TextView = TextView(this).apply {
         text = aba.titulo
@@ -220,6 +243,14 @@ class ConfigLauncherActivity : Activity() {
         conteudo.addView(Estilo.texto(this, Estilo.Papel.TITULO, aba.titulo).apply { setPadding(dp(8), dp(4), 0, 0) })
         conteudo.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, aba.explica).apply { setPadding(dp(8), dp(6), 0, dp(12)) })
         aba.montar(conteudo)
+        // Ajuda por QR (degrau 2): no fim de cada aba, o assunto do manual dela, com o QR para ler no celular.
+        AjudaQr.topicoDaAba(i)?.let { id ->
+            val n = Manual.TOPICOS.indexOf(id)
+            if (n >= 0) conteudo.addView(linha(getString(R.string.ajq_linha), getString(R.string.ajq_linha_det,
+                AjudaActivity.texto(this, id, Manual.Parte.TITULO)), seta = true) {
+                startActivity(Intent(this, AjudaActivity::class.java).putExtra(AjudaActivity.EXTRA_TOPICO, n))
+            }, LinearLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(16); bottomMargin = dp(8) })
+        }
     }
 
     /** Redesenha a aba atual no lugar (depois de voltar de outra tela ou de mudar algo que mexe em várias linhas). */
@@ -282,6 +313,7 @@ class ConfigLauncherActivity : Activity() {
 
     /** ◀ nas opções volta ao menu; ▶ no menu entra nas opções; ▲▼ não escapam de um lado para o outro. */
     override fun dispatchKeyEvent(e: KeyEvent): Boolean {
+        if (!::conteudo.isInitialized) return super.dispatchKeyEvent(e)   // modo hóspede: ainda esperando o PIN
         if (e.keyCode == KeyEvent.KEYCODE_BACK && e.action == KeyEvent.ACTION_UP && engoliuVoltar) { engoliuVoltar = false; return true }
         if (e.action == KeyEvent.ACTION_DOWN) {
             val foco = currentFocus
@@ -798,6 +830,13 @@ class ConfigLauncherActivity : Activity() {
             reconstruirAoVoltar = true
             startActivity(Intent(this, VindoDoProjectivyActivity::class.java))
         }, lp())
+        // Plugins (degrau 3, PluginsTv): cartões de outros apps na linha Assistir. Ligar um plugin pede o PIN parental.
+        c.addView(linha(getString(R.string.plg_titulo), getString(R.string.plg_cfg_det), seta = true) {
+            pedirPinParental(getString(R.string.plg_titulo)) {
+                reconstruirAoVoltar = true
+                startActivity(Intent(this, PluginsActivity::class.java))
+            }
+        }, lp())
         lateinit var linhaTema: LinhaCfg
         linhaTema = linha(getString(R.string.cl_tema), getString(R.string.cfg_tema_det), valor = Tema.atual(this).nome) {
             Tema.proximo(this)
@@ -979,6 +1018,21 @@ class ConfigLauncherActivity : Activity() {
     /** Família (14/11/2026): o controle parental e, embaixo, as visitas (modo visita e os apps que ele esconde). */
     private fun abaFamilia(c: LinearLayout) {
         abaParental(c)
+        // Agenda da família (degrau 2, AgendaPerfisTv): o perfil troca sozinho no horário. Atrás do PIN dos pais.
+        c.addView(linha(getString(R.string.agf_titulo), getString(R.string.agf_cfg_det, AgendaPerfisTv.lista(this).size), seta = true) {
+            pedirPinParental {
+                reconstruirAoVoltar = true
+                startActivity(Intent(this, AgendaFamiliaActivity::class.java))
+            }
+        }, lp())
+        // Família conectada (degrau 3, FamiliaConectada.kt): filhos e netos mandam foto e recado por um link. Atrás do PIN
+        // dos pais (o link abre a TV para quem o tiver). Abrir a tela liga o link; "Desligar" lá dentro desliga.
+        c.addView(linha(getString(R.string.famc_titulo), getString(if (FamiliaConectada.ligado(this)) R.string.famc_ligado else R.string.famc_det), seta = true) {
+            pedirPinParental {
+                reconstruirAoVoltar = true
+                startActivity(Intent(this, FamiliaConectadaActivity::class.java))
+            }
+        }, lp())
         // Cuidar de longe (ideias 77-79, 15/11/2026): pedido de ajuda, lembrete com aviso, TV que não ligou. Desligado de fábrica.
         secao(c, getString(R.string.cuidar_titulo))
         c.addView(linha(getString(R.string.cuidar_titulo), getString(
@@ -1008,6 +1062,76 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linha(getString(R.string.cl_apps_visita), getString(R.string.cfg2_apps_visita_det), seta = true) {
             startActivity(Intent(this, AppsEscolhaActivity::class.java).putExtra(AppsEscolhaActivity.EXTRA_MODO, AppsEscolhaActivity.MODO_VISITA))
         }, lp())
+        secaoHospede(c)
+    }
+
+    /**
+     * Modo hóspede (degrau 2, 16/11/2026, casa de aluguel): ModoHospede.kt. Ligar é livre; desligar pede o PIN. A saída
+     * e a hora mudam com OK (ciclos curtos, sem teclado); as regras da casa abrem um campo de texto.
+     */
+    private fun secaoHospede(c: LinearLayout) {
+        secao(c, getString(R.string.hos_titulo))
+        lateinit var chave: LinhaCfg
+        chave = linha(getString(R.string.hos_titulo), getString(R.string.hos_det), chave = ModoHospede.ativo(this)) {
+            if (ModoHospede.ativo(this)) ModoHospede.desligarComPin(this) { recarregarAba() }
+            else { ModoHospede.ligar(this); recarregarAba() }
+        }
+        c.addView(chave, lp())
+        lateinit var linhaSaida: LinhaCfg
+        linhaSaida = linha(getString(R.string.hos_saida), getString(R.string.hos_saida_det), valor = ModoHospede.textoSaida(this)) {
+            ModoHospede.proximaSaida(this); linhaSaida.valor(ModoHospede.textoSaida(this))
+        }
+        c.addView(linhaSaida, lp())
+        lateinit var linhaHora: LinhaCfg
+        linhaHora = linha(getString(R.string.hos_hora), getString(R.string.hos_hora_det), valor = "%02d:00".format(ModoHospede.hora(this))) {
+            ModoHospede.proximaHora(this)
+            linhaHora.valor("%02d:00".format(ModoHospede.hora(this))); linhaSaida.valor(ModoHospede.textoSaida(this))
+        }
+        c.addView(linhaHora, lp())
+        c.addView(linha(getString(R.string.hos_regras), ModoHospede.regras(this).ifBlank { getString(R.string.hos_regras_vazio) }, seta = true) {
+            pedirRegrasHospede()
+        }, lp())
+        // Degrau 3: limpeza total = todos os apps da TV (menos os que mantêm a TV funcionando). Ligar desfaz a lista escolhida.
+        lateinit var linhaTotal: LinhaCfg
+        linhaTotal = linha(getString(R.string.hos_total), getString(R.string.hos_total_det), chave = ModoHospede.total(this)) {
+            val novo = !ModoHospede.total(this)
+            ModoHospede.definirTotal(this, novo)
+            linhaTotal.ligado(novo)
+        }
+        c.addView(linhaTotal, lp())
+        c.addView(linha(getString(R.string.hos_apps), getString(R.string.hos_apps_det), seta = true) {
+            reconstruirAoVoltar = true
+            startActivity(Intent(this, AppsEscolhaActivity::class.java).putExtra(AppsEscolhaActivity.EXTRA_MODO, AppsEscolhaActivity.MODO_HOSPEDE))
+        }, lp())
+        lateinit var linhaEncerrar: LinhaCfg
+        linhaEncerrar = linha(getString(R.string.hos_encerrar), ModoHospede.ultimaLimpeza(this)?.let { getString(R.string.hos_ultima, it) }
+            ?: getString(R.string.hos_encerrar_det), seta = true) {
+            CaixaTv(this).setTitle(getString(R.string.hos_encerrar)).setMessage(getString(R.string.hos_encerrar_pergunta))
+                .setNegativeButton(getString(R.string.cl_cancelar), null)
+                .setPositiveButton(getString(R.string.hos_encerrar_sim)) { _, _ ->
+                    linhaEncerrar.detalhe(getString(R.string.hos_limpando))
+                    val app = applicationContext
+                    Fundo.rodar("hospede-encerrar") {
+                        val r = ModoHospede.encerrarEstadia(app)
+                        runOnUiThread { if (!isDestroyed) { linhaEncerrar.detalhe(r); linhaSaida.valor(ModoHospede.textoSaida(this)) } }
+                    }
+                }.show().getButton(android.content.DialogInterface.BUTTON_NEGATIVE)?.requestFocus()
+        }
+        c.addView(linhaEncerrar, lp())
+    }
+
+    /** As regras da casa (até 600 letras), mostradas nas boas-vindas do hóspede. */
+    private fun pedirRegrasHospede() {
+        val campo = android.widget.EditText(this).apply {
+            setText(ModoHospede.regras(this@ConfigLauncherActivity)); hint = getString(R.string.hos_regras_dica)
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE or android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+            minLines = 3; maxLines = 6
+            filters = arrayOf(android.text.InputFilter.LengthFilter(600))
+        }
+        CaixaTv(this).setTitle(getString(R.string.hos_regras)).setView(FrameLayout(this).apply { setPadding(dp(20), dp(8), dp(20), 0); addView(campo) })
+            .setNegativeButton(getString(R.string.cl_cancelar), null)
+            .setPositiveButton("OK") { _, _ -> ModoHospede.definirRegras(this, campo.text.toString()); recarregarAba() }
+            .show()
     }
 
     /** Casa e automações (14/11/2026): automações, a tela Casa e o que se configura pelo celular. */
@@ -1252,9 +1376,27 @@ class ConfigLauncherActivity : Activity() {
     // ================================================================ aba: Sistema
 
     private fun abaSistema(c: LinearLayout) {
+        // Degrau 2 (UsoTv): Simples / Completo / Para quem cuida. OK troca; as abas técnicas aparecem ou somem na hora.
+        lateinit var linhaUso: LinhaCfg
+        linhaUso = linha(getString(R.string.uso_titulo), getString(R.string.uso_det), valor = nomeUso(UsoTv.atual(this))) {
+            val novo = UsoTv.proximo(UsoTv.atual(this))
+            UsoTv.escolher(this, novo)
+            linhaUso.valor(nomeUso(novo))
+            mostrarAbasDoUso()
+        }
+        c.addView(linhaUso, lp())
         // Diagnóstico de 1 botão (04/11/2026): o 1º da aba, para ser o OK mais rápido quando "o app parou".
         c.addView(linha(getString(R.string.cfg_diag), getString(R.string.cfg_diag_det), seta = true) {
             startActivity(Intent(this, DiagnosticoActivity::class.java))
+        }, lp())
+        // Degrau 3: "Nada sai da sua casa", o compromisso de privacidade em uma tela (o mesmo texto do site).
+        c.addView(linha(getString(R.string.nsc_titulo), getString(R.string.nsc_det), seta = true) {
+            CaixaTv(this).setTitle(getString(R.string.nsc_titulo)).setMessage(getString(R.string.nsc_texto))
+                .setPositiveButton("OK", null).show()
+        }, lp())
+        // Degrau 3: relatar um problema pelo celular (QR com os dados técnicos, RelatarProblema.kt).
+        c.addView(linha(getString(R.string.rel_titulo), getString(R.string.rel_linha_det), seta = true) {
+            startActivity(Intent(this, RelatarProblemaActivity::class.java))
         }, lp())
         // Backup noturno cifrado (BackupNoturno.kt): as opções ficam numa tela própria; ao voltar, o resumo se atualiza.
         c.addView(linha(getString(R.string.bkn_titulo), BackupNoturno.resumo(this), seta = true) {

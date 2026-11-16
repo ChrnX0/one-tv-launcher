@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
+<resources>
+    <string name="uso_titulo">Cómo se usa esta TV</string>
+    <string name="uso_det">Sencillo oculta las pestañas técnicas (Casa, Remoto, Avanzado). No se apaga nada.</string>
+    <string name="uso_simples">Sencillo</string>
+    <string name="uso_completo">Completo</string>
+    <string name="uso_cuida">Para alguien a quien cuido</string>
+    <string name="uso_pergunta">¿Cómo se va a usar esta TV?</string>
+    <string name="uso_pergunta_det">Puedes cambiarlo después en Ajustes &gt; Sistema.</string>
+    <string name="uso_simples_det">Solo una pantalla de inicio bonita: apps, hora y clima. Menos opciones en Ajustes.</string>
+    <string name="uso_completo_det">Todo: control desde el móvil, aparatos de casa, unidad de red y opciones avanzadas.</string>
+    <string name="uso_cuida_det">La TV de padres o abuelos: fácil para ellos, y tú ayudas desde el móvil, a distancia.</string>
+    <string name="uso_cuidar_longe">Cuidar a distancia</string>
+    <string name="uso_cuidar_longe_det">Apagado hasta que quien vive ahí lo acepte en la TV.</string>
+    <string name="uso_cartoes">Tarjetas grandes en la pantalla de inicio</string>
+    <string name="uso_cartoes_det">Pocas apps grandes, nombre leído en voz alta y botón \"Pedir ayuda\". Para apagarlo, pide el PIN.</string>
+    <string name="uso_trocar_det">Ahora: %1$s. OK para elegir de nuevo.</string>
+</resources>

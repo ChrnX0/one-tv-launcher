@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
+<resources>
+    <string name="uso_titulo">Как используется этот телевизор</string>
+    <string name="uso_det">Простой скрывает технические вкладки (Дом, Удалённо, Дополнительно). Ничего не отключается.</string>
+    <string name="uso_simples">Простой</string>
+    <string name="uso_completo">Полный</string>
+    <string name="uso_cuida">Для близкого, о котором я забочусь</string>
+    <string name="uso_pergunta">Как будет использоваться этот телевизор?</string>
+    <string name="uso_pergunta_det">Это можно изменить позже в Настройки &gt; Система.</string>
+    <string name="uso_simples_det">Просто красивый главный экран: приложения, часы и погода. Меньше пунктов в настройках.</string>
+    <string name="uso_completo_det">Всё: управление с телефона, устройства дома, сетевой диск и дополнительные настройки.</string>
+    <string name="uso_cuida_det">Телевизор родителей или бабушки с дедушкой: им просто, а вы помогаете с телефона издалека.</string>
+    <string name="uso_cuidar_longe">Забота на расстоянии</string>
+    <string name="uso_cuidar_longe_det">Выключено, пока живущий там человек не согласится на телевизоре.</string>
+    <string name="uso_cartoes">Крупные карточки на главном экране</string>
+    <string name="uso_cartoes_det">Несколько крупных приложений, название озвучивается, кнопка «Позвать на помощь». Для отключения нужен PIN.</string>
+    <string name="uso_trocar_det">Сейчас: %1$s. OK — выбрать заново.</string>
+</resources>

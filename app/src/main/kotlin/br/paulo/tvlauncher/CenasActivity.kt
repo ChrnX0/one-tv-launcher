@@ -42,8 +42,39 @@ class CenasActivity : Activity() {
                 finish()
             }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { bottomMargin = dp(8) })
         }
+        // Degrau 3: as cenas prontas que ainda não existem, com um OK (as que pedem canal perguntam o nome antes).
+        val nomes = mapOf(CenasProntas.Modelo.DORMIR to getString(R.string.cpr_dormir),
+            CenasProntas.Modelo.NOVELA to getString(R.string.cpr_novela), CenasProntas.Modelo.JOGO to getString(R.string.cpr_jogo))
+        val faltam = CenasProntas.faltando(nomes, cenas.map { it.nome })
+        if (faltam.isNotEmpty()) lista.addView(Estilo.secao(this, getString(R.string.cpr_secao)))
+        for (m in faltam) {
+            val det = getString(when (m) { CenasProntas.Modelo.DORMIR -> R.string.cpr_dormir_det
+                CenasProntas.Modelo.NOVELA -> R.string.cpr_novela_det; CenasProntas.Modelo.JOGO -> R.string.cpr_jogo_det })
+            lista.addView(linha(nomes.getValue(m), det) {
+                if (m.pedeCanal) pedirCanal(nomes.getValue(m)) { canal -> criar(m, nomes.getValue(m), canal) } else criar(m, nomes.getValue(m), null)
+            }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { bottomMargin = dp(8) })
+        }
         setContentView(raiz)
         lista.getChildAt(0)?.requestFocus()
+    }
+
+    private fun pedirCanal(titulo: String, aoEscolher: (String) -> Unit) {
+        val campo = android.widget.EditText(this).apply {
+            hint = getString(R.string.cpr_canal_dica); isSingleLine = true
+            filters = arrayOf(android.text.InputFilter.LengthFilter(CanalBusca.MAX_TERMO))
+        }
+        CaixaTv(this).setTitle(getString(R.string.cpr_canal, titulo))
+            .setView(android.widget.FrameLayout(this).apply { setPadding(dp(20), dp(8), dp(20), 0); addView(campo) })
+            .setNegativeButton(getString(R.string.cl_cancelar), null)
+            .setPositiveButton("OK") { _, _ -> campo.text.toString().trim().takeIf { it.isNotEmpty() }?.let(aoEscolher) }
+            .show()
+    }
+
+    /** Cria a cena e reabre a tela (a nova aparece em cima, pronta para o OK). O token do link não é mostrado aqui. */
+    private fun criar(m: CenasProntas.Modelo, nome: String, canal: String?) {
+        val r = Cenas.criar(this, nome, CenasProntas.acoes(m, canal), Cenas.appsInstalados(this))
+        if (r.startsWith("erro:")) { android.widget.Toast.makeText(this, r.removePrefix("erro:").trim(), android.widget.Toast.LENGTH_LONG).show(); return }
+        recreate()
     }
 
     private fun linha(titulo: String, detalhe: String, aoClicar: () -> Unit): TextView = TextView(this).apply {

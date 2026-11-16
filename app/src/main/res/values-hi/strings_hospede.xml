@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede (degrau 2, 16/11/2026): ModoHospede, HospedeBoasVindasActivity, Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="hos_titulo">मेहमान मोड</string>
+    <string name="hos_det">किराये के घर के लिए: चेक-आउट पर मेहमान के लॉगिन मिटा दिए जाते हैं। बंद करने पर PIN माँगा जाता है।</string>
+    <string name="hos_pin_sair">मेहमान मोड छोड़ने का PIN</string>
+    <string name="hos_pin_config">सेटिंग खोलने का PIN</string>
+    <string name="hos_saida">मेहमान का चेक-आउट</string>
+    <string name="hos_saida_det">इस समय स्ट्रीमिंग ऐप साफ़ होते हैं। OK से दिन बदलें।</string>
+    <string name="hos_saida_nenhuma">तय नहीं</string>
+    <string name="hos_saida_hoje">आज %1$s बजे</string>
+    <string name="hos_saida_amanha">कल %1$s बजे</string>
+    <string name="hos_saida_dia">%1$s, %2$s बजे</string>
+    <string name="hos_hora">चेक-आउट का समय</string>
+    <string name="hos_hora_det">OK से समय बदलें (8:00 से 14:00)।</string>
+    <string name="hos_regras">घर के नियम</string>
+    <string name="hos_regras_vazio">अभी कोई नहीं। ये स्वागत स्क्रीन पर दिखते हैं।</string>
+    <string name="hos_regras_dica">जैसे: रात 10 बजे के बाद शांति। चेक-आउट सुबह 11 बजे।</string>
+    <string name="hos_apps">चेक-आउट पर साफ़ होने वाले ऐप</string>
+    <string name="hos_apps_det">चुने गए ऐप के लॉगिन और इतिहास मिटते हैं। स्ट्रीमिंग ऐप पहले से चुने रहते हैं।</string>
+    <string name="hos_apps_sub">OK से चुनें या हटाएँ। सिस्टम ऐप साफ़ नहीं हो सकते।</string>
+    <string name="hos_encerrar">ठहराव अभी खत्म करें</string>
+    <string name="hos_encerrar_det">अभी ऐप साफ़ करता है और अगले मेहमान का स्वागत तैयार करता है।</string>
+    <string name="hos_encerrar_pergunta">मेहमान ऐप के लॉगिन और इतिहास अभी मिटाएँ? यह वापस नहीं होगा।</string>
+    <string name="hos_encerrar_sim">मिटाएँ</string>
+    <string name="hos_limpando">साफ़ हो रहा है…</string>
+    <string name="hos_limpou">साफ़ हुए ऐप: %1$d।</string>
+    <string name="hos_limpou_falhas">साफ़ हुए ऐप: %1$d। नहीं हुए: %2$s</string>
+    <string name="hos_ultima">पिछली सफ़ाई: %1$s</string>
+    <string name="hos_bv_titulo">स्वागत है!</string>
+    <string name="hos_bv_regras">घर के नियम</string>
+    <string name="hos_bv_privacidade">बेझिझक अपने ऐप में लॉगिन करें: चेक-आउट पर स्ट्रीमिंग ऐप के लॉगिन और इतिहास अपने-आप मिट जाते हैं।</string>
+    <string name="hos_bv_ok">शुरू करें</string>
+    <string name="hos_bv_wifi">वाई-फ़ाई</string>
+</resources>

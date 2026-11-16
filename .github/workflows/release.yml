@@ -168,6 +168,8 @@ jobs:
           echo "commit=$COMMIT" >> "$GITHUB_OUTPUT"
           # Notas do Release (em inglês), com o número da build e o commit.
           sed -e "s/{BUILD}/$CODIGO/g" -e "s/{COMMIT}/${COMMIT::7}/g" .github/release-notes.md > publicar/notas.md
+          # Números de leveza (degrau 2): tamanho dos APKs em tabela no fim das notas + leveza.json (asset; o site lê).
+          python3 scripts/numeros-leveza.py publicar/$NOME.apk publicar/$NOME-arm64.apk "$CODIGO" publicar/leveza.json >> publicar/notas.md
 
       - uses: actions/upload-artifact@v5
         with:
@@ -208,7 +210,7 @@ jobs:
           EXTRA=""; [ -f one-tv-celular.apk ] && EXTRA="one-tv-celular.apk one-tv-celular.apk.sha256"
           gh release create "v$V" $MARCA \
             "$NOME.apk" "$NOME.apk.sha256" \
-            "$NOME-arm64.apk" "$NOME-arm64.apk.sha256" $EXTRA \
+            "$NOME-arm64.apk" "$NOME-arm64.apk.sha256" leveza.json $EXTRA \
             --repo "$DESTINO" \
             --title "One TV Launcher 1.0 (build $V)" \
             --notes-file notas.md \

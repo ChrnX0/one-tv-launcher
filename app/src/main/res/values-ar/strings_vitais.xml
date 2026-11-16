@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Vitals locais (degrau 2, item 8): quedas e travadas do launcher nos últimos 7 dias (Diagnóstico). -->
+<resources>
+    <string name="vit_titulo">استقرار المشغّل (7 أيام)</string>
+    <string name="vit_ok">لا أعطال ولا تجمّد. أيام الاستخدام: %1$d.</string>
+    <string name="vit_problemas">الأعطال: %1$d. التجمّد: %2$d. ظهرت على الشاشة: %3$d. أيام فيها مشكلة: %4$d من %5$d.</string>
+</resources>

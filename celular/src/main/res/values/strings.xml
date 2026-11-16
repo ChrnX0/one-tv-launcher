@@ -16,4 +16,8 @@
     <string name="cel_aponte">Point at the code on the TV</string>
     <string name="cel_qr_invalido">This is not a code from the TV. On the TV, open Settings › Remote access › Sign in with your phone.</string>
     <string name="cel_cert_outro">The TV answered with a different certificate. If you renewed it, read the QR code again.</string>
+    <string name="cel_casa_padrao">Home</string>
+    <string name="cel_casa_qual">Which home is this TV in?</string>
+    <string name="cel_casa_nova">Another home…</string>
+    <string name="cel_casa_dica">e.g. Beach house, Mom\'s</string>
 </resources>

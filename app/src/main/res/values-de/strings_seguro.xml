@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo de segurança da HOME (degrau 2, 16/11/2026): HomeSeguraActivity. -->
+<resources>
+    <string name="seg_titulo">Abgesicherter Modus</string>
+    <string name="seg_texto">Der Startbildschirm ist %1$d-mal hintereinander abgestürzt. Dies ist eine einfache Version, damit Sie den Fernseher weiter nutzen können.</string>
+    <string name="seg_procurar">Nach korrigierter Version suchen</string>
+    <string name="seg_procurar_det">Falls vorhanden, wird sie jetzt geladen und installiert.</string>
+    <string name="seg_procurando">Suche nach neuer Version…</string>
+    <string name="seg_normal">Normalen Startbildschirm versuchen</string>
+    <string name="seg_normal_det">Stürzt er noch 3-mal ab, kommt dieser Bildschirm zurück.</string>
+    <string name="seg_config_tv">TV-Einstellungen</string>
+    <string name="seg_erro">Sehen, was schiefging</string>
+    <string name="seg_erro_det">Diagnose mit den gespeicherten Fehlern.</string>
+    <string name="seg_apps">Apps</string>
+</resources>

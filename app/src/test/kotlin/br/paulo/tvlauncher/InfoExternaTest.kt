@@ -109,12 +109,16 @@ class InfoExternaTest {
         val m = InfoExterna.lerLote(lote)
         assertEquals(setOf(438631, 5), m.keys)
         val n = m[438631]!!
-        assertEquals(8.0f, n.imdb); assertEquals(83, n.rt); assertEquals(74, n.metacritic); assertEquals(3.9f, n.letterboxd)
+        assertNull(n.trakt)   // o "imdb" do MDBList é ignorado (uso comercial proibido) e a do Trakt vem do próprio Trakt
+        assertEquals(83, n.rt); assertEquals(74, n.metacritic); assertEquals(3.9f, n.letterboxd)
         assertTrue(m[5]!!.vazia)
-        assertEquals("IMDb 8,0  ·  Rotten Tomatoes 83%  ·  Metacritic 74  ·  Letterboxd 3,9", InfoExterna.textoNotas(n, Locale("pt", "BR")))
-        // A estrela: média de IMDb 8,0, Metacritic 74 (7,4) e Letterboxd 3,9 (7,8); o Rotten Tomatoes fica fora.
-        assertEquals(7.733f, n.de0a10!!, 0.001f)
-        assertEquals(7.2f, InfoExterna.Notas(imdb = 7.4f, rt = 85, metacritic = 70).media!!, 0.001f)   // Noturno, 16/11
+        assertEquals("Rotten Tomatoes 83%  ·  Metacritic 74  ·  Letterboxd 3,9", InfoExterna.textoNotas(n, Locale("pt", "BR")))
+        assertFalse(InfoExterna.textoNotas(n).contains("IMDb"))
+        val comTrakt = n.copy(trakt = 8.0f)
+        assertEquals("Trakt 80%  ·  Rotten Tomatoes 83%  ·  Metacritic 74  ·  Letterboxd 3,9", InfoExterna.textoNotas(comTrakt, Locale("pt", "BR")))
+        // A estrela: média de Trakt 8,0, Metacritic 74 (7,4) e Letterboxd 3,9 (7,8); o Rotten Tomatoes fica fora.
+        assertEquals(7.733f, comTrakt.de0a10!!, 0.001f)
+        assertEquals(7.2f, InfoExterna.Notas(trakt = 7.4f, rt = 85, metacritic = 70).media!!, 0.001f)
         assertEquals(8.5f, InfoExterna.Notas(rt = 85).media!!, 0.001f)   // só o Rotten: ele vale
         assertNull(InfoExterna.Notas().media)
         assertEquals(7.8f, InfoExterna.Notas(letterboxd = 3.9f).de0a10!!, 0.001f)
@@ -132,11 +136,11 @@ class InfoExternaTest {
     }
 
     @Test fun guardadoIdaEVolta() {
-        val g = InfoExterna.Guardado(tmdb = 10, imdb = "tt0111161", imdbNota = 9.3f, recusados = setOf(3, 4),
+        val g = InfoExterna.Guardado(tmdb = 10, imdb = "tt0111161", traktNota = 8.7f, traktEm = 300, recusados = setOf(3, 4),
             detalhe = InfoExterna.Detalhe(10, "tt1", "sinopse", listOf("A", "B"), listOf("Drama"), InfoExterna.Colecao(7, "Saga"), InfoExterna.ProximoEp("2026-11-21", 1, 2), true, "abcdefgh12"),
             detalheEm = 100, notas = InfoExterna.Notas(null, 90, null, 3.5f), notasEm = 200)
-        assertEquals(9.3f, InfoExterna.notasDe(g).imdb)   // sem IMDb do MDBList, vale o do arquivo público
-        assertEquals(7f, InfoExterna.notasDe(g.copy(notas = InfoExterna.Notas(imdb = 7f))).imdb)
+        assertEquals(8.7f, InfoExterna.notasDe(g).trakt)   // a do Trakt entra junto com as do MDBList
+        assertEquals(90, InfoExterna.notasDe(g).rt)
         assertEquals(g, InfoExterna.guardadoDeJson(InfoExterna.guardadoParaJson(g)))
         val vazio = InfoExterna.Guardado(recusados = setOf(9), buscaEm = 5)
         assertEquals(vazio, InfoExterna.guardadoDeJson(InfoExterna.guardadoParaJson(vazio)))
@@ -167,13 +171,24 @@ class InfoExternaTest {
         assertEquals(listOf(a, b), Vod.ordenar(listOf(b, a), Vod.Ordem.NOTA, mapOf(a.chave to 9.5f)))
     }
 
-    @Test fun arquivoDoImdb() {
-        val linhas = sequenceOf("tconst\taverageRating\tnumVotes", "tt0000001\t5.7\t2240", "tt0111161\t9.3\t3000000", "tt0000009\t5.0\t10", "lixo")
-        assertEquals(mapOf("tt0111161" to 9.3f), InfoExterna.filtrarImdb(linhas, setOf("tt0111161", "tt0000009")))   // 10 votos: fora
-        assertNull(InfoExterna.lerLinhaImdb("tconst\taverageRating\tnumVotes"))
+    @Test fun notaDoTrakt() {
+        val filme = """[{"type":"movie","score":1000,"movie":{"title":"Fight Club","year":1999,"rating":8.6,"votes":40000,"ids":{"trakt":432,"tmdb":550}}}]"""
+        assertEquals(8.6f, InfoExterna.lerNotaTrakt(filme, serie = false)!!, 0.001f)
+        assertNull(InfoExterna.lerNotaTrakt(filme, serie = true))   // pediu série, veio filme
+        assertNull(InfoExterna.lerNotaTrakt("""[{"type":"show","show":{"rating":9.0,"votes":3}}]""", serie = true))   // poucos votos
+        assertNull(InfoExterna.lerNotaTrakt("""[{"type":"show","show":{"rating":0,"votes":300}}]""", serie = true))
+        assertNull(InfoExterna.lerNotaTrakt("[]", serie = false)); assertNull(InfoExterna.lerNotaTrakt("lixo", serie = false))
+        assertEquals("https://api.trakt.tv/search/tmdb/1399?type=show&extended=full", InfoExterna.urlTraktPorTmdb(1399, serie = true))
         assertTrue(InfoExterna.idImdbValido("tt0111161")); assertFalse(InfoExterna.idImdbValido("-"))
-        assertEquals("tt0111161", InfoExterna.lerIdImdb("""{"id":278,"imdb_id":"tt0111161"}"""))
-        assertNull(InfoExterna.lerIdImdb("""{"id":1,"imdb_id":null}"""))
+        // Guardado de versão antiga, com a nota do arquivo do IMDb ("iv") e IMDb pelo MDBList ("n.i"): nada disso volta.
+        val velho = InfoExterna.guardadoDeJson(org.json.JSONObject("""{"t":10,"im":"tt0111161","iv":9.3,"n":{"i":8.0,"r":90},"ne":5}"""))
+        assertNull(velho.traktNota); assertEquals(90, velho.notas?.rt); assertNull(velho.notas?.trakt)
+        assertFalse(InfoExterna.guardadoParaJson(velho).toString().contains("\"iv\""))
+    }
+
+    @Test fun ondeAssistirDesligado() {
+        // JustWatch (via TMDB) só com contrato: fica desligado até ter resposta por escrito (16/11/2026).
+        assertFalse(OndeAssistir.JUSTWATCH_LIBERADO)
     }
 
     @Test fun candidatoSemTitulo() {

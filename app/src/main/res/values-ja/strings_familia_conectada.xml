@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Família conectada (degrau 3, FamiliaConectada.kt): fotos e recados dos parentes por um link. -->
+<resources>
+    <string name="famc_titulo">家族リンク</string>
+    <string name="famc_det">子どもや孫がリンクからこのテレビに写真やメッセージを送れます。アカウント不要</string>
+    <string name="famc_ligado">オン：OKで共有用のQRコードを再表示</string>
+    <string name="famc_texto">スマホでコードを読み取り、リンクを家族に送ってください（WhatsApp、メール）。リンクを持つ人が写真やメッセージを送ると、画面とスクリーンセーバーに表示されます。当社のサーバーは通りません。</string>
+    <string name="famc_sem_tunel">家の外からのアクセス（Tailscale）を使いますが、このテレビではまだ設定されていません。設定 › リモートアクセスで設定してから戻ってください。</string>
+    <string name="famc_trocar">リンクを変更</string>
+    <string name="famc_trocar_det">古いリンクはすぐに使えなくなります</string>
+    <string name="famc_desligar">オフにする</string>
+    <string name="famc_alguem">家族</string>
+    <string name="famc_de">%1$sから</string>
+</resources>

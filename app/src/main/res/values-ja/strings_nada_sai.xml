@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nada sai da sua casa (degrau 3): o compromisso de privacidade, o mesmo texto do site. -->
+<resources>
+    <string name="nsc_titulo">データは家の外に出ません</string>
+    <string name="nsc_det">当社アカウントなし、当社サーバーなし、広告なし</string>
+    <string name="nsc_texto">当社のアカウント、当社のサーバー、広告、利用状況の追跡はありません。\n\n設定、写真、メモ、バックアップはこのテレビ、または接続したご自身のアカウントに保存されます。\n\nテレビは天気や映画のポスターなど、オンにしたサービスとだけ通信します。サイトのプライバシーポリシーにすべて記載しています。</string>
+</resources>

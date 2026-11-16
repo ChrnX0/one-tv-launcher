@@ -99,6 +99,11 @@ object CompatibilidadeTv {
         )
     }
 
-    fun json(ctx: Context) = Compatibilidade.json(fatos(ctx), System.currentTimeMillis())
+    fun json(ctx: Context) = Compatibilidade.json(fatos(ctx), System.currentTimeMillis()).also { j ->
+        // Números de leveza (degrau 2): memória e tempo da HOME vão junto para a página pública (só medidas).
+        val l = LevezaTv.json(ctx)
+        j.put("leveza", org.json.JSONObject().put("memoriaMb", l.get("memoriaMb")).put("apkMb", l.get("apkMb"))
+            .put("homeCarregarMs", l.get("homeCarregarMs")).put("homeDesenharMs", l.get("homeDesenharMs")))
+    }
     fun texto(ctx: Context) = Compatibilidade.texto(fatos(ctx))
 }

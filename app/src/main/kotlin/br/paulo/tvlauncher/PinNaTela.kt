@@ -17,11 +17,13 @@ object PinNaTela {
     private fun gravar(ctx: Context, e: TentativasPin.Estado) =
         prefs(ctx).edit().putInt("erros", e.erros).putLong("ate", e.bloqueadoAte).putLong("ultimo", e.ultimoErro).apply()
 
-    fun pedir(tela: Activity, titulo: String, aoAcertar: () -> Unit) {
+    /** [aoCancelar]: o diálogo fechou sem acertar (Cancelar, BACK, PIN errado ou sem PIN definido). */
+    fun pedir(tela: Activity, titulo: String, aoCancelar: (() -> Unit)? = null, aoAcertar: () -> Unit) {
+        var acertou = false
         fun aviso(t: String) = Toast.makeText(tela, t, Toast.LENGTH_LONG).show()
-        if (!PainelArmazem.temPin(tela)) { aviso(tela.getString(R.string.emp_sem_pin)); return }
+        if (!PainelArmazem.temPin(tela)) { aviso(tela.getString(R.string.emp_sem_pin)); aoCancelar?.invoke(); return }
         val espera = TentativasPin.espera(ler(tela), System.currentTimeMillis())
-        if (espera > 0) { aviso(tela.getString(R.string.player_pin_espere, TentativasPin.minutos(espera))); return }
+        if (espera > 0) { aviso(tela.getString(R.string.player_pin_espere, TentativasPin.minutos(espera))); aoCancelar?.invoke(); return }
         val dp = { v: Int -> TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), tela.resources.displayMetrics).toInt() }
         val campo = android.widget.EditText(tela).apply {
             inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_VARIATION_PASSWORD
@@ -32,12 +34,13 @@ object PinNaTela {
             val certo = PainelArmazem.conferirPin(tela, pin)
             tela.runOnUiThread {
                 if (tela.isDestroyed || tela.isFinishing) return@runOnUiThread
-                if (certo) { gravar(tela, TentativasPin.acertou()); aoAcertar() }
+                if (certo) { acertou = true; gravar(tela, TentativasPin.acertou()); aoAcertar() }
                 else {
                     val e = TentativasPin.errou(ler(tela), System.currentTimeMillis())
                     gravar(tela, e)
                     val falta = TentativasPin.espera(e, System.currentTimeMillis())
                     aviso(if (falta > 0) tela.getString(R.string.player_pin_espere, TentativasPin.minutos(falta)) else tela.getString(R.string.player_pin_errado))
+                    aoCancelar?.invoke()
                 }
             }
         }
@@ -45,8 +48,9 @@ object PinNaTela {
             .setTitle(titulo)
             .setView(android.widget.FrameLayout(tela).apply { setPadding(dp(20), dp(8), dp(20), 0); addView(campo) })
             .setPositiveButton("OK") { _, _ -> conferir(campo.text.toString()) }
-            .setNegativeButton(tela.getString(R.string.cl_cancelar), null)
+            .setNegativeButton(tela.getString(R.string.cl_cancelar)) { _, _ -> aoCancelar?.invoke() }
             .create()
+        d.setOnCancelListener { if (!acertou) aoCancelar?.invoke() }   // BACK
         campo.setOnEditorActionListener { _, acao, _ ->
             if (acao == android.view.inputmethod.EditorInfo.IME_ACTION_DONE || acao == android.view.inputmethod.EditorInfo.IME_ACTION_GO) {
                 d.dismiss(); conferir(campo.text.toString()); true

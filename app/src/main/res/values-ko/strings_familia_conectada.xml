@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Família conectada (degrau 3, FamiliaConectada.kt): fotos e recados dos parentes por um link. -->
+<resources>
+    <string name="famc_titulo">가족 연결</string>
+    <string name="famc_det">자녀와 손주가 링크로 이 TV에 사진과 메시지를 보냅니다. 계정 필요 없음</string>
+    <string name="famc_ligado">켜짐: OK를 누르면 공유할 QR 코드를 다시 보여 줍니다</string>
+    <string name="famc_texto">휴대폰으로 코드를 스캔해 가족에게 링크를 보내세요(WhatsApp, 이메일). 링크가 있는 사람이 사진과 메시지를 보내면 화면과 화면 보호기에 나타납니다. 우리 서버를 거치지 않습니다.</string>
+    <string name="famc_sem_tunel">집 밖에서의 접속(Tailscale)이 필요한데 이 TV에는 아직 설정되지 않았습니다. 설정 › 원격 액세스에서 설정한 뒤 돌아오세요.</string>
+    <string name="famc_trocar">새 링크</string>
+    <string name="famc_trocar_det">이전 링크는 바로 작동이 멈춥니다</string>
+    <string name="famc_desligar">끄기</string>
+    <string name="famc_alguem">가족</string>
+    <string name="famc_de">%1$s 님이 보냄</string>
+</resources>

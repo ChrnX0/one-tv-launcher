@@ -24,6 +24,8 @@ import android.widget.Toast
 class PainelActivity : Activity() {
     companion object {
         const val EXTRA_IP = "ip"
+        /** Pareamento.chave da TV salva (várias casas: o IP sozinho pode ser de outra casa). */
+        const val EXTRA_CHAVE = "chave"
         const val EXTRA_FRAGMENTO = "fragmento"
         const val EXTRA_TITULO = "titulo"
         const val EXTRA_TEXTO = "texto"
@@ -39,7 +41,7 @@ class PainelActivity : Activity() {
         window.statusBarColor = Visual.FUNDO
         window.navigationBarColor = Visual.FUNDO
         val ip = intent.getStringExtra(EXTRA_IP)
-        tv = Tvs.porIp(this, ip) ?: ip?.takeIf { Pareamento.privado(it) }?.let { Pareamento.Tv("TV", it) } ?: run { finish(); return }
+        tv = Tvs.porChave(this, intent.getStringExtra(EXTRA_CHAVE)) ?: Tvs.porIp(this, ip) ?: ip?.takeIf { Pareamento.privado(it) }?.let { Pareamento.Tv("TV", it) } ?: run { finish(); return }
         web = WebView(this).apply {
             setBackgroundColor(Visual.FUNDO)
             settings.javaScriptEnabled = true      // o painel é uma página com scripts

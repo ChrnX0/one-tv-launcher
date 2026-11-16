@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nada sai da sua casa (degrau 3): o compromisso de privacidade, o mesmo texto do site. -->
+<resources>
+    <string name="nsc_titulo">数据不出家门</string>
+    <string name="nsc_det">无需我们的账号，没有我们的服务器，没有广告</string>
+    <string name="nsc_texto">无需我们的账号，没有我们的服务器，没有广告，不追踪使用情况。\n\n你的设置、照片、留言和备份都保存在这台电视上，或你自己连接的账号里。\n\n电视只连接你开启的服务，例如天气或电影海报。网站上的隐私政策逐一列出。</string>
+</resources>

@@ -87,7 +87,7 @@ object TunelTailscale {
     /** Liga ou desliga conforme o MCP. Idempotente; chamar de qualquer thread. */
     @Synchronized fun ajustar(ctx: Context) {
         val app = ctx.applicationContext
-        querRodando = McpServidor.ligado(app) && binario(app).exists()
+        querRodando = McpServidor.precisaServidor(app) && binario(app).exists()
         if (querRodando && vigia?.isAlive != true) {
             vigia = Thread({ vigiar(app) }, "Tunel-vigia").apply { isDaemon = true; start() }
         } else if (!querRodando) {

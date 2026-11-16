@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ajuda por QR (degrau 2, 16/11/2026): AjudaActivity e a última linha de cada aba das Configurações. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="ajq_linha">Ajuda deste separador</string>
+    <string name="ajq_linha_det">\"%1$s\" no manual, com um QR para ler no telemóvel.</string>
+    <string name="ajq_celular">No telemóvel</string>
+</resources>

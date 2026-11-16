@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo de segurança da HOME (degrau 2, 16/11/2026): HomeSeguraActivity. -->
+<resources>
+    <string name="seg_titulo">सुरक्षित मोड</string>
+    <string name="seg_texto">होम स्क्रीन लगातार %1$d बार बंद हुई। यह उसका आसान रूप है, ताकि आप टीवी चलाते रहें।</string>
+    <string name="seg_procurar">सुधरा हुआ संस्करण खोजें</string>
+    <string name="seg_procurar_det">अगर है, तो अभी डाउनलोड होकर इंस्टॉल होगा।</string>
+    <string name="seg_procurando">नया संस्करण खोजा जा रहा है…</string>
+    <string name="seg_normal">सामान्य होम स्क्रीन आज़माएँ</string>
+    <string name="seg_normal_det">अगर 3 बार और बंद हुई, तो यह स्क्रीन लौट आएगी।</string>
+    <string name="seg_config_tv">टीवी सेटिंग</string>
+    <string name="seg_erro">देखें क्या गड़बड़ हुई</string>
+    <string name="seg_erro_det">सहेजी गई गड़बड़ियों के साथ जाँच।</string>
+    <string name="seg_apps">ऐप</string>
+</resources>

@@ -18,6 +18,22 @@
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
         <item>Kids mode by age: the age rating of every movie and series is fetched overnight, a little at a time, not just 300 each time Movies opens. After the first night “Up to 12” already shows the whole rated catalog</item>
+        <item>Movies and Series: the rating now comes from Trakt (for everyone, no account), fetched at night; the IMDb rating is gone, because IMDb only allows it in non-commercial apps</item>
+        <item>“Also on” in the details and “Elsewhere” in Search are off for now: that data belongs to JustWatch and needs a contract. Search still offers to look in YouTube, Netflix and Prime Video</item>
+        <item>Connected family (Settings › Family): a link with no account so grandchildren can send photos and notes that show on the TV</item>
+        <item>Ready-made scenes: Sleep, Soap opera and Game in Scenes, created with one OK</item>
+        <item>Guest mode: checkout cleanup now includes preinstalled apps such as Netflix, and can clear everything at once</item>
+        <item>Report a problem (Settings › System): a QR code opens it on your phone, showing exactly what will be sent</item>
+        <item>“Nothing leaves your home” (Settings › System): what stays only on the TV, in a few lines</item>
+        <item>Plugins (Settings › Appearance): other apps can add a card to the Watch row, each one only with your OK</item>
+        <item>Phone app: several homes, with TVs grouped by home</item>
+        <item>Safe mode: if the home screen stops 3 times in 15 minutes, a simple version of it opens, with your apps and a “Look for a fixed version” button</item>
+        <item>First launch: the TV asks how it is used (Simple, Complete or Caring for someone) and shows only what fits. You can change it in Settings › System</item>
+        <item>Guest mode (Settings › Family): asks for the PIN to leave, shows a welcome with the house rules and the Wi-Fi, and at check-out clears the sign-ins of the chosen apps</item>
+        <item>Family schedule: the TV profile switches by itself at the set time (for example, the kids’ profile on weekdays at 2 PM)</item>
+        <item>Help by QR: every Settings tab has a “Help for this tab” row with a QR code that opens the help on your phone, in the TV’s language</item>
+        <item>First setup from the phone: the new “Full mode” step guides the remote keys, developer options, pairing and device owner, one at a time</item>
+        <item>Diagnostics: “Launcher stability (7 days)” counts the home screen’s crashes and freezes</item>
         <item>Channel asked by name (Claude or voice): you get the one from the TV’s country. “Globo” in Brazil opens the local Globo, not TV Globo Portugal; for another country, say it too (“Globo Portugal”)</item>
         <item>Picture calibration: the “75% color bars” pattern no longer closes the launcher</item>
         <item>Movies: the director comes from TMDB (Dune shows Denis Villeneuve), no longer the wrong name from the list</item>
@@ -181,6 +197,19 @@
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>idades_madrugada</item>
+        <item>notas_trakt</item>
+        <item>d3_familia</item>
+        <item>d3_cenas_prontas</item>
+        <item>d3_hospede_total</item>
+        <item>d3_relatar</item>
+        <item>d3_nada_sai</item>
+        <item>d3_plugins</item>
+        <item>d2_modo_seguro</item>
+        <item>d2_uso_tv</item>
+        <item>d2_hospede</item>
+        <item>d2_agenda_familia</item>
+        <item>d2_ajuda_qr</item>
+        <item>d2_estabilidade</item>
         <item>canal_do_pais</item>
         <item>calibracao_barras</item>
         <item>diretor_tmdb</item>
@@ -316,6 +345,19 @@
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Kids mode by age</item>
+        <item>Trakt rating</item>
+        <item>Connected family</item>
+        <item>Ready-made scenes</item>
+        <item>Guest: full cleanup</item>
+        <item>Report a problem</item>
+        <item>Nothing leaves your home</item>
+        <item>Plugins</item>
+        <item>Safe mode</item>
+        <item>How this TV is used</item>
+        <item>Guest mode</item>
+        <item>Family schedule</item>
+        <item>Help by QR</item>
+        <item>Launcher stability</item>
         <item>Channel from your country</item>
         <item>75% color bars</item>
         <item>Movie director</item>
@@ -451,6 +493,19 @@
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>After one night, with kids mode on and “Up to 12”, does Movies show many films rated up to 12 (and none for adults)?</item>
+        <item>The morning after installing, open a movie from your list: does the details page show “Trakt NN%” and no “IMDb” or “Also on”?</item>
+        <item>In Settings › Family › Connected family, does the QR appear? Sending a photo through the link on a phone, does it show on the TV?</item>
+        <item>In Scenes, do Sleep, Soap opera and Game appear under “Ready-made scenes”? After creating Sleep, is it in the list and does OK run it?</item>
+        <item>In Guest mode, does the list of apps to clean also show Netflix and YouTube?</item>
+        <item>In Settings › System › Report a problem, do the QR and the text that goes with it appear?</item>
+        <item>In Settings › System, does “Nothing leaves your home” open a short, readable text?</item>
+        <item>In Settings › Appearance › Plugins, does the TV ask for the PIN and show “No plugin installed”?</item>
+        <item>With the safe mode test command, does the simple screen with your apps appear when you go back HOME? And does “Try the normal home screen” bring back the usual one?</item>
+        <item>In Settings › System, switch “How this TV is used” to Simple: do the Home and automations, Remote access and Advanced tabs disappear? Then switch back to Complete</item>
+        <item>In Settings › Family, turn on Guest mode and go back HOME: does the welcome screen appear? To turn it off, does the TV ask for the PIN?</item>
+        <item>In Family › Family schedule, set another profile for the next time slot: at that time, did the profile switch by itself?</item>
+        <item>In any Settings tab, does the last row “Help for this tab” show a QR code that opens the right help on your phone?</item>
+        <item>In Settings › System › Diagnose the TV, does the errors section show “Launcher stability (7 days)”?</item>
         <item>Ask Claude to “put on Globo”: does the Brazilian Globo open? And does “Globo Portugal” open the Portuguese one?</item>
         <item>In Settings › Display and power › Calibration, choose “75% color bars”: does the pattern show without the launcher closing?</item>
         <item>In Movies, open Dune: does the detail page show Denis Villeneuve as the director?</item>
@@ -486,7 +541,7 @@
         <item>Open a movie or episode that has no subtitles in your language: within about 20 s, do subtitles marked “Automatic translation” appear, and does the movie keep playing without stuttering?</item>
         <item>Did the code and QR show up, the phone approve it and the TV show the account connected?</item>
         <item>Did the code work at simkl.com/pin and the TV show the account connected?</item>
-        <item>Did the plot, the IMDb rating and “Also on: …” show up?</item>
+        <item>Did the plot and the Trakt rating show up?</item>
         <item>Did the photos show up and, below, other titles of theirs that are in your list?</item>
         <item>Did only movies up to 10 show up (plus unrated ones from kids categories)?</item>
         <item>Within a few seconds did “Subtitle downloaded automatically” show and turn on by itself?</item>

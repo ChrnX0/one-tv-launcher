@@ -31,6 +31,7 @@ object BackupCompleto {
     internal val PREFS_EXTRAS = listOf("player", "painel_seguro", "mcp_seguro", "unifi_seguro", "tunel_seguro",
         "extras", "cenas", "casa_ha", "modo_visita", "aviso_chuva", "aviso_temperatura", "clima",
         "jogos",   // card Jogos (14/11/2026): grupos escolhidos, IP e app do PC
+        "agenda_perfis",   // agenda da família (degrau 2, 16/11/2026): perfil troca sozinho no horário
         "gravacao",   // gravação (14/11/2026): a pasta da rede de reserva
         "nuvem",   // Na rede › OneDrive/Dropbox (14/11/2026): o id do app Microsoft e a chave do Dropbox que o dono digitou
         "sincronizar_filmes",   // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
@@ -41,7 +42,9 @@ object BackupCompleto {
      * "confirmacoes" (restaurar um backup não pode liberar nada sem o PIN, ver ConfirmacoesTv), "painel_log" (registro),
      * "atualizador", "aviso_tv" e "loja_curada" (estado passageiro ou cache baixado de novo).
      */
-    internal val FORA_DE_PROPOSITO = setOf("confirmacoes", "emprestimo_shell", "emprestimo_dono",   // empréstimos: restaurar não pode ligar poder emprestado sem o PIN (e o uid de cada app muda entre aparelhos)
+    internal val FORA_DE_PROPOSITO = setOf("confirmacoes", "familia_link", "plugins",   // plugins: o OK vale para o certificado desta TV
+          // degrau 3: o link da família não viaja no backup (restaurar = link novo)
+        "emprestimo_shell", "emprestimo_dono",   // empréstimos: restaurar não pode ligar poder emprestado sem o PIN (e o uid de cada app muda entre aparelhos)
         "mtp_permitidos", "painel_log", "atualizador", "aviso_tv", "loja_curada",
         "compatibilidade",   // medidas do "acordar" deste aparelho (CompatibilidadeTv): de outro aparelho não valem
         "aot",   // versão já compilada (CompilarAot): é do APK instalado, não da configuração
@@ -71,7 +74,7 @@ object BackupCompleto {
         // Ideias 35 e 41 (14/11/2026): a central de avisos da TV (passageira) e as medidas de espaço livre por dia (valem
         // só para o armazenamento deste aparelho).
         "aviso_tv_historico", "saude_tendencia",
-        // "info_externa" (serviços de filmes, 14/11/2026): só contadores de cota e a data da última nota do IMDb.
+        // "info_externa" (serviços de filmes, 14/11/2026): só contadores de cota e a data da última nota do IMDb (que saiu em 16/11/2026).
         "info_externa")
     /** Chaves que o Keystore cifrou: não servem em outra instalação. O valor em claro vai em "segredos". */
     private val CHAVES_DO_KEYSTORE = setOf("chave_cifrada", "chave_iv") + CasaHA.CHAVES_DO_KEYSTORE

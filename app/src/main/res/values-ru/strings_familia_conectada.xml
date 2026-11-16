@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Família conectada (degrau 3, FamiliaConectada.kt): fotos e recados dos parentes por um link. -->
+<resources>
+    <string name="famc_titulo">Связь с семьёй</string>
+    <string name="famc_det">Дети и внуки присылают фото и записки на этот телевизор по ссылке, без аккаунта</string>
+    <string name="famc_ligado">Включено: OK покажет QR-код, чтобы поделиться снова</string>
+    <string name="famc_texto">Отсканируйте код телефоном и отправьте ссылку семье (WhatsApp, почта). У кого есть ссылка, тот присылает фото и записки: они появляются на экране и в заставке. Ничего не идёт через наши серверы.</string>
+    <string name="famc_sem_tunel">Нужен доступ извне (Tailscale), он ещё не настроен на этом телевизоре. Настройте его в Настройки › Удалённый доступ и вернитесь сюда.</string>
+    <string name="famc_trocar">Новая ссылка</string>
+    <string name="famc_trocar_det">Старая ссылка сразу перестанет работать</string>
+    <string name="famc_desligar">Выключить</string>
+    <string name="famc_alguem">Семья</string>
+    <string name="famc_de">От: %1$s</string>
+</resources>

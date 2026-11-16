@@ -33,7 +33,7 @@ class ServicosFilmesTest {
     @Test fun cabecalhosDoTrakt() {
         val c = ServicosFilmes.traktCabecalhos("abc", 457800, "tok")
         assertEquals("2", c["trakt-api-version"]); assertEquals("abc", c["trakt-api-key"])
-        assertEquals("Bearer tok", c["Authorization"]); assertEquals("OneTVLauncher v1.0 (457800)", c["User-Agent"])
+        assertEquals("Bearer tok", c["Authorization"]); assertEquals("Sofaly v1.0 (457800)", c["User-Agent"])
         assertNull(ServicosFilmes.traktCabecalhos("abc", 1)["Authorization"])
     }
 
@@ -70,7 +70,7 @@ class ServicosFilmesTest {
         assertNull(ServicosFilmes.simklLerCodigo("""{"error":"invalid_client"}"""))
         assertEquals("client_id=id%20x&scope=media%3Aread%20media%3Awrite", ServicosFilmes.simklCorpoCodigo("id x"))
         assertTrue(ServicosFilmes.simklCorpoEspera("dc", "id").startsWith("grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code&client_id=id"))
-        assertEquals("https://api.simkl.com/users/settings?client_id=a&app-name=onetvlauncher&app-version=1.0.7", ServicosFilmes.simklUrlUsuario("a", 7))
+        assertEquals("https://api.simkl.com/users/settings?client_id=a&app-name=sofaly&app-version=1.0.7", ServicosFilmes.simklUrlUsuario("a", 7))
     }
 
     @Test fun esperaDoSimkl() {

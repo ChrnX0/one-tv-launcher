@@ -1078,8 +1078,8 @@ function desenharServicos(r) {
       campo.type = 'password'; campo.autocomplete = 'off'; campo.placeholder = 'Chave da API do MDBList'; campo.setAttribute('aria-label', 'Chave da API do MDBList');
       const ajuda = document.createElement('p'); ajuda.className = 'aviso-curto';
       const l = document.createElement('a'); l.href = 'https://mdblist.com/preferences/'; l.target = '_blank'; l.rel = 'noopener'; l.textContent = 'mdblist.com/preferences';
-      ajuda.append('Opcional: soma Rotten Tomatoes, Letterboxd e Metacritic à nota do IMDb. 1. Abra ', l, ' e entre (ou crie uma conta grátis). 2. No fim da página, toque em API Access, gere a chave se ainda não tiver e copie. 3. Cole aqui e grave: a TV confere na hora.');
-      // Opcional (a nota do IMDb já vem sem conta): 3 passos, sem digitar no controle da TV.
+      ajuda.append('Opcional: soma Rotten Tomatoes, Letterboxd e Metacritic à nota do Trakt. 1. Abra ', l, ' e entre (ou crie uma conta grátis). 2. No fim da página, toque em API Access, gere a chave se ainda não tiver e copie. 3. Cole aqui e grave: a TV confere na hora.');
+      // Opcional (a nota do Trakt já vem sem conta): 3 passos, sem digitar no controle da TV.
       const extra = document.createElement('div');
       bloco.append(extra);
       extra.append(ajuda, campo, botao('Gravar chave', () => {

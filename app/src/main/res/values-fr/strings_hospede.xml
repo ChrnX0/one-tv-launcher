@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede (degrau 2, 16/11/2026): ModoHospede, HospedeBoasVindasActivity, Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="hos_titulo">Mode invité</string>
+    <string name="hos_det">Pour la location : les connexions de l\'invité sont effacées au départ. Pour désactiver, le PIN est demandé.</string>
+    <string name="hos_pin_sair">PIN pour quitter le mode invité</string>
+    <string name="hos_pin_config">PIN pour ouvrir les paramètres</string>
+    <string name="hos_saida">Départ de l\'invité</string>
+    <string name="hos_saida_det">À cette heure, les applis de streaming sont nettoyées. OK change le jour.</string>
+    <string name="hos_saida_nenhuma">Non définie</string>
+    <string name="hos_saida_hoje">Aujourd\'hui à %1$s</string>
+    <string name="hos_saida_amanha">Demain à %1$s</string>
+    <string name="hos_saida_dia">%1$s à %2$s</string>
+    <string name="hos_hora">Heure du départ</string>
+    <string name="hos_hora_det">OK change l\'heure (8:00 à 14:00).</string>
+    <string name="hos_regras">Règles de la maison</string>
+    <string name="hos_regras_vazio">Aucune pour l\'instant. Elles s\'affichent à l\'accueil.</string>
+    <string name="hos_regras_dica">Ex. : Silence après 22 h. Départ à 11 h.</string>
+    <string name="hos_apps">Applis nettoyées au départ</string>
+    <string name="hos_apps_det">Les connexions et l\'historique des applis cochées sont effacés. Les applis de streaming sont déjà cochées.</string>
+    <string name="hos_apps_sub">OK coche ou décoche. Les applis système ne peuvent pas être nettoyées.</string>
+    <string name="hos_encerrar">Terminer le séjour maintenant</string>
+    <string name="hos_encerrar_det">Nettoie les applis maintenant et prépare l\'accueil du prochain invité.</string>
+    <string name="hos_encerrar_pergunta">Effacer maintenant les connexions et l\'historique des applis de l\'invité ? C\'est irréversible.</string>
+    <string name="hos_encerrar_sim">Effacer</string>
+    <string name="hos_limpando">Nettoyage…</string>
+    <string name="hos_limpou">Applis nettoyées : %1$d.</string>
+    <string name="hos_limpou_falhas">Applis nettoyées : %1$d. Échecs : %2$s</string>
+    <string name="hos_ultima">Dernier nettoyage : %1$s</string>
+    <string name="hos_bv_titulo">Bienvenue !</string>
+    <string name="hos_bv_regras">Règles de la maison</string>
+    <string name="hos_bv_privacidade">Connectez-vous à vos applis sans crainte : au départ, les connexions et l\'historique des applis de streaming sont effacés automatiquement.</string>
+    <string name="hos_bv_ok">Commencer</string>
+    <string name="hos_bv_wifi">Wi-Fi</string>
+</resources>

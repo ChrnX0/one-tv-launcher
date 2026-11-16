@@ -30,6 +30,7 @@ class AjudaActivity : Activity() {
     private lateinit var tResumo: TextView
     private lateinit var tCorpo: TextView
     private lateinit var rolagem: ScrollView
+    private lateinit var qr: android.widget.ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +45,20 @@ class AjudaActivity : Activity() {
         }
         tTitulo = Estilo.tituloTela(this, "")
         tResumo = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { setPadding(0, dp(4), 0, 0) }
-        raiz.addView(tTitulo)
-        raiz.addView(tResumo)
+        // Ajuda por QR (degrau 2): à direita do título, o QR do mesmo assunto no site, para ler no celular.
+        val topo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = android.view.Gravity.CENTER_VERTICAL }
+        val textos = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; addView(tTitulo); addView(tResumo) }
+        topo.addView(textos, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        qr = android.widget.ImageView(this)
+        val ladoQr = dp(104)
+        topo.addView(LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL; gravity = android.view.Gravity.CENTER_HORIZONTAL
+            addView(qr, LinearLayout.LayoutParams(ladoQr, ladoQr))
+            addView(Estilo.texto(this@AjudaActivity, Estilo.Papel.LEGENDA, getString(R.string.ajq_celular)).apply {
+                gravity = android.view.Gravity.CENTER; setPadding(0, dp(4), 0, 0)
+            })
+        }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginStart = dp(24) })
+        raiz.addView(topo)
         // Corpo: cor cheia (não a apagada das legendas) e entrelinha folgada, para ler de longe.
         tCorpo = Estilo.texto(this, Estilo.Papel.CORPO).apply {
             textSize = 20f
@@ -77,6 +90,7 @@ class AjudaActivity : Activity() {
         tTitulo.text = texto(this, id, Manual.Parte.TITULO)
         tResumo.text = getString(R.string.aj_posicao, atual + 1, Manual.TOPICOS.size) + "  ·  " + texto(this, id, Manual.Parte.RESUMO)
         tCorpo.text = texto(this, id, Manual.Parte.TEXTO)
+        qr.setImageBitmap(QrCodigo.bitmap(AjudaQr.link(this, id), Estilo.dp(this, 104)))
         rolagem.scrollTo(0, 0)
         UsoLocal.contar(this, "ajuda:$id")   // ideia 67: que assuntos são lidos (só nesta TV)
     }

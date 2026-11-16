@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Família conectada (degrau 3, FamiliaConectada.kt): fotos e recados dos parentes por um link. -->
+<resources>
+    <string name="famc_titulo">परिवार से जुड़ें</string>
+    <string name="famc_det">बच्चे और पोते-पोतियाँ एक लिंक से इस TV पर फ़ोटो और संदेश भेजते हैं, बिना खाते के</string>
+    <string name="famc_ligado">चालू: OK दबाने पर साझा करने के लिए QR फिर दिखेगा</string>
+    <string name="famc_texto">फ़ोन से कोड स्कैन करें और लिंक परिवार को भेजें (WhatsApp, ईमेल)। जिसके पास लिंक है वह फ़ोटो और संदेश भेज सकता है: वे स्क्रीन और स्क्रीनसेवर पर दिखते हैं। कुछ भी हमारे सर्वर से नहीं गुज़रता।</string>
+    <string name="famc_sem_tunel">इसके लिए घर के बाहर से पहुँच (Tailscale) चाहिए, जो इस TV पर अभी सेट नहीं है। सेटिंग › रिमोट एक्सेस में सेट करें और यहाँ लौटें।</string>
+    <string name="famc_trocar">नया लिंक</string>
+    <string name="famc_trocar_det">पुराना लिंक तुरंत काम करना बंद कर देगा</string>
+    <string name="famc_desligar">बंद करें</string>
+    <string name="famc_alguem">परिवार</string>
+    <string name="famc_de">%1$s की ओर से</string>
+</resources>

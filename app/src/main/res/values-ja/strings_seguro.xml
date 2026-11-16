@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo de segurança da HOME (degrau 2, 16/11/2026): HomeSeguraActivity. -->
+<resources>
+    <string name="seg_titulo">セーフモード</string>
+    <string name="seg_texto">ホーム画面が%1$d回続けて停止しました。テレビを使い続けられるように、簡単な画面を表示しています。</string>
+    <string name="seg_procurar">修正版を探す</string>
+    <string name="seg_procurar_det">あれば、今すぐダウンロードしてインストールします。</string>
+    <string name="seg_procurando">新しいバージョンを探しています…</string>
+    <string name="seg_normal">通常のホーム画面を試す</string>
+    <string name="seg_normal_det">さらに3回停止すると、この画面に戻ります。</string>
+    <string name="seg_config_tv">テレビの設定</string>
+    <string name="seg_erro">問題の内容を見る</string>
+    <string name="seg_erro_det">保存されたエラーを含む診断。</string>
+    <string name="seg_apps">アプリ</string>
+</resources>

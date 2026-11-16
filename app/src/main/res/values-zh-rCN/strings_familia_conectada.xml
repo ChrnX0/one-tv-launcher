@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Família conectada (degrau 3, FamiliaConectada.kt): fotos e recados dos parentes por um link. -->
+<resources>
+    <string name="famc_titulo">家人连线</string>
+    <string name="famc_det">子女和孙辈通过链接给这台电视发照片和留言，无需账号</string>
+    <string name="famc_ligado">已开启：按 OK 再次显示二维码以便分享</string>
+    <string name="famc_texto">用手机扫码，把链接发给家人（WhatsApp、邮件）。有链接的人就能发照片和留言，会显示在屏幕和屏保上。不经过我们的服务器。</string>
+    <string name="famc_sem_tunel">这需要从家外访问（Tailscale），但这台电视还没设置。请在设置 › 远程访问中设置，然后回到这里。</string>
+    <string name="famc_trocar">更换链接</string>
+    <string name="famc_trocar_det">旧链接立即失效</string>
+    <string name="famc_desligar">关闭</string>
+    <string name="famc_alguem">家人</string>
+    <string name="famc_de">来自 %1$s</string>
+</resources>

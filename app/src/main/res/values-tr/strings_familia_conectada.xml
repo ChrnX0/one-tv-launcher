@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Família conectada (degrau 3, FamiliaConectada.kt): fotos e recados dos parentes por um link. -->
+<resources>
+    <string name="famc_titulo">Aile bağlantısı</string>
+    <string name="famc_det">Çocuklar ve torunlar bir bağlantıyla bu TV’ye fotoğraf ve not gönderir, hesap gerekmez</string>
+    <string name="famc_ligado">Açık: OK, tekrar paylaşmak için QR kodunu gösterir</string>
+    <string name="famc_texto">Kodu telefonla okutun ve bağlantıyı aileye gönderin (WhatsApp, e-posta). Bağlantısı olan fotoğraf ve not gönderir: ekranda ve ekran koruyucuda görünür. Hiçbir şey sunucularımızdan geçmez.</string>
+    <string name="famc_sem_tunel">Bu, evin dışından erişimi (Tailscale) kullanır; bu TV’de henüz kurulmadı. Ayarlar › Uzaktan erişim bölümünden kurup buraya dönün.</string>
+    <string name="famc_trocar">Yeni bağlantı</string>
+    <string name="famc_trocar_det">Eski bağlantı hemen çalışmaz olur</string>
+    <string name="famc_desligar">Kapat</string>
+    <string name="famc_alguem">Aile</string>
+    <string name="famc_de">%1$s gönderdi</string>
+</resources>

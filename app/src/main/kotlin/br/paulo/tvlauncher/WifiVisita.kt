@@ -54,6 +54,12 @@ object WifiVisita {
     }
 
     /** A caixa com o QR, o nome da rede e a senha escrita (para quem não tem câmera). */
+    /** O texto do QR do Wi-Fi das visitas (boas-vindas do modo hóspede), ou null se não configurado. */
+    fun textoQr(ctx: Context): String? = if (configurado(ctx)) WifiVisitaQr.texto(rede(ctx), senha(ctx)) else null
+
+    /** A senha, para escrever embaixo do QR (quem não tem leitor). */
+    fun senhaVisivel(ctx: Context): String = senha(ctx)
+
     fun mostrarQr(a: Activity) {
         if (!configurado(a)) return
         val lado = (a.resources.displayMetrics.heightPixels * 0.45f).toInt()

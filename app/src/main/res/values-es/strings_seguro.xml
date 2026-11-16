@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo de segurança da HOME (degrau 2, 16/11/2026): HomeSeguraActivity. -->
+<resources>
+    <string name="seg_titulo">Modo seguro</string>
+    <string name="seg_texto">La pantalla de inicio se detuvo %1$d veces seguidas. Esta es una versión sencilla para que puedas seguir usando la TV.</string>
+    <string name="seg_procurar">Buscar una versión corregida</string>
+    <string name="seg_procurar_det">Si hay una, se descarga e instala ahora.</string>
+    <string name="seg_procurando">Buscando una versión nueva…</string>
+    <string name="seg_normal">Probar la pantalla de inicio normal</string>
+    <string name="seg_normal_det">Si se detiene 3 veces más, esta pantalla vuelve.</string>
+    <string name="seg_config_tv">Ajustes de la TV</string>
+    <string name="seg_erro">Ver qué salió mal</string>
+    <string name="seg_erro_det">Diagnóstico, con los errores guardados.</string>
+    <string name="seg_apps">Apps</string>
+</resources>

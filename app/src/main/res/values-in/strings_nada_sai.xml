@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nada sai da sua casa (degrau 3): o compromisso de privacidade, o mesmo texto do site. -->
+<resources>
+    <string name="nsc_titulo">Tidak ada yang keluar dari rumah Anda</string>
+    <string name="nsc_det">Tanpa akun kami, tanpa server kami, tanpa iklan</string>
+    <string name="nsc_texto">Tanpa akun kami, tanpa server kami, tanpa iklan, tanpa pelacakan pemakaian.\n\nPengaturan, foto, catatan, dan cadangan Anda tetap di TV ini, atau di akun Anda sendiri jika Anda menghubungkannya.\n\nTV hanya berkomunikasi dengan layanan yang Anda nyalakan, seperti cuaca atau poster film. Kebijakan privasi di situs mencantumkan semuanya.</string>
+</resources>

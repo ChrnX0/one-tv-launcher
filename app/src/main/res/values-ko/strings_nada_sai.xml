@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nada sai da sua casa (degrau 3): o compromisso de privacidade, o mesmo texto do site. -->
+<resources>
+    <string name="nsc_titulo">집 밖으로 나가는 것은 없습니다</string>
+    <string name="nsc_det">우리 계정 없음, 우리 서버 없음, 광고 없음</string>
+    <string name="nsc_texto">우리 계정도, 우리 서버도, 광고도, 사용 추적도 없습니다.\n\n설정, 사진, 메모, 백업은 이 TV 또는 직접 연결한 본인 계정에 남습니다.\n\nTV는 날씨나 영화 포스터처럼 켜 둔 서비스와만 통신합니다. 사이트의 개인정보 처리방침에 하나하나 적혀 있습니다.</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Nada sai da sua casa (degrau 3): o compromisso de privacidade, o mesmo texto do site. -->
+<resources>
+    <string name="nsc_titulo">لا شيء يخرج من منزلك</string>
+    <string name="nsc_det">لا حساب لدينا، لا خادم لنا، لا إعلانات</string>
+    <string name="nsc_texto">لا حساب لدينا، لا خادم لنا، لا إعلانات، لا تتبّع للاستخدام.\n\nتبقى إعداداتك وصورك وملاحظاتك ونسخك الاحتياطية على هذا التلفاز، أو في حسابك الخاص إن ربطته.\n\nلا يتصل التلفاز إلا بالخدمات التي تشغّلها، مثل الطقس أو ملصقات الأفلام. وتذكر سياسة الخصوصية في الموقع كل واحدة منها.</string>
+</resources>

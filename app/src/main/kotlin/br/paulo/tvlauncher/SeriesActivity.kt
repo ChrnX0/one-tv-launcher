@@ -575,7 +575,7 @@ class SeriesActivity : Activity() {
     private fun proximoCurto(s: Serie): String? = proximos[s.chave]?.takeIf { s.chave in interesses }
         ?.let { InfoExterna.quandoCurto(it, hoje, getString(R.string.ext_hoje), getString(R.string.ext_amanha)) }
 
-    /** Notas de fora (IMDb, RT...) e "Novo episódio sexta, 20/11" para a faixa da ficha rápida; lidas no Fundo. */
+    /** Notas de fora (Trakt, RT...) e "Novo episódio sexta, 20/11" para a faixa da ficha rápida; lidas no Fundo. */
     private val extRapidas = object : LinkedHashMap<String, String>(64, 0.75f, true) {
         override fun removeEldestEntry(e: MutableMap.MutableEntry<String, String>) = size > 40
     }
@@ -958,8 +958,8 @@ class SeriesActivity : Activity() {
             listOfNotNull(ext?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { InfoExterna.textoNotas(it) }, proximo).takeIf { it.isNotEmpty() }?.let { partes ->
                 texto.addView(TextView(this).apply { text = partes.joinToString("   ·   "); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPadding(0, dp(6), 0, 0); maxLines = 2 })
             }
-            // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch), preenchido quando chegar; some se não tiver.
-            tmdbDe(s, f)?.takeIf { InfoExternaCache.temTmdb() }?.let { id ->
+            // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch). DESLIGADO (OndeAssistir.JUSTWATCH_LIBERADO): licença.
+            tmdbDe(s, f)?.takeIf { OndeAssistir.JUSTWATCH_LIBERADO && InfoExternaCache.temTmdb() }?.let { id ->
                 val linhaOnde = TextView(this).apply { textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(6), 0, 0); visibility = View.GONE; maxLines = 1 }
                 texto.addView(linhaOnde)
                 Fundo.rodar { InfoExternaCache.provedores(id, serie = true).takeIf { it.isNotEmpty() }?.let { p ->

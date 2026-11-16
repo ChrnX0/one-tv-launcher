@@ -140,10 +140,9 @@ Observação do aeroporto (METAR): Aviation Weather Center, NOAA (domínio públ
 Obras de arte dos fundos: The Metropolitan Museum of Art, Open Access (CC0).
 Localização aproximada pelo IP: ipwho.is.
 Fichas de filmes e séries: TMDB (https://www.themoviedb.org). This product uses the TMDB API but is not endorsed
-  or certified by TMDB. "Onde assistir": dados da JustWatch (https://www.justwatch.com), via TMDB.
-Notas do IMDb: IMDb Non-Commercial Datasets (https://developer.imdb.com/non-commercial-datasets/), uso pessoal.
-One TV Launcher uses Trakt but is not endorsed or certified by Trakt (https://trakt.tv). Simkl: https://simkl.com.
-Legendas: OpenSubtitles.com (https://www.opensubtitles.com).
+  or certified by TMDB.
+Notas: Trakt (https://trakt.tv). One TV Launcher uses Trakt but is not endorsed or certified by Trakt. Simkl: https://simkl.com.
+Legendas: Subtitles provided by OpenSubtitles.com (https://www.opensubtitles.com). Cada legenda fica só na TV de quem pediu.
 Rádios: Radio Browser (https://www.radio-browser.info).
 Endereço pelo nome: dados © colaboradores do OpenStreetMap (https://www.openstreetmap.org/copyright), pelo Nominatim.
 Endereço pelo CEP: ViaCEP (https://viacep.com.br).

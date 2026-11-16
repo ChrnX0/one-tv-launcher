@@ -564,14 +564,15 @@ class PainelRapidoActivity : Activity() {
             abrirEFechar(Intent(this, AlarmesActivity::class.java))
         }
         tVisita = tile("visita", getString(R.string.pr_visita)) {
-            ModoVisita.definir(this, !ModoVisita.ativo(this))
-            mostrarVisita()
+            // Modo hóspede (degrau 2): a visita só sai com o PIN, e sai junto com o hóspede.
+            if (ModoHospede.ativo(this)) ModoHospede.desligarComPin(this) { mostrarVisita() }
+            else { ModoVisita.definir(this, !ModoVisita.ativo(this)); mostrarVisita() }
         }
         mostrarVisita()
         // Casa (13/11/2026): as luzes e cenas do Home Assistant (CasaActivity), no lugar do "Google Home" do painel
         // do Google (a tela da casa do Google não tem intent público; ver Home.abrirGoogleHome).
         val casa = tile("casa", getString(R.string.pr_casa)) { abrirEFechar(Intent(this, CasaActivity::class.java)) }
-        // Cenas (14/11/2026, ideia 4): só com alguma cena criada (painel web > Extras > Cenas).
+        // Cenas (14/11/2026, ideia 4; degrau 3: sempre, com as cenas prontas Dormir, Novela e Jogo).
         val cenas = tile("cena", getString(R.string.pr_cenas)) { abrirEFechar(Intent(this, CenasActivity::class.java)) }
         // Ideia 42 (14/11/2026): filtro noturno e DNS também podem virar bloco; quais e em que ordem é escolha de
         // quem usa (Configurações > Aparência > Blocos do painel rápido, PainelBlocos). Sem escolha = o painel de antes.
@@ -588,7 +589,7 @@ class PainelRapidoActivity : Activity() {
         val visiveis = PainelBlocos.visiveis(PainelBlocosTv.escolhidos(this)) { id ->
             when (id) {
                 "casa" -> CasaHA.configurado(this)
-                "cenas" -> Cenas.lista(this).isNotEmpty()
+                "cenas" -> true   // degrau 3: a tela Cenas oferece as prontas (Dormir, Novela, Jogo) mesmo sem nenhuma criada
                 else -> id in porId
             }
         }

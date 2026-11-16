@@ -38,14 +38,14 @@ object ServicosFilmes {
             Servico.TMDB -> tmdb.isNotBlank()
             Servico.OPENSUBTITLES -> openSubtitles.isNotBlank()
             // A chave é da pessoa (mdblist.com/preferences): o MDBList não tem chave de app. Decisão do dono (14/11): extra
-            // opcional, com passo a passo fácil (QR para o site, colar pelo painel). A nota do IMDb vem do arquivo público.
+            // opcional, com passo a passo fácil (QR para o site, colar pelo painel). A nota do Trakt vem para todos (InfoExternaCache.noturnoTrakt).
             Servico.MDBLIST -> true
         }
     }
 
-    const val APP_NOME = "OneTVLauncher"
+    const val APP_NOME = "Sofaly"   // o nome do produto (16/11/2026); antes "OneTVLauncher"
 
-    /** "OneTVLauncher v1.0 (457800)": o OpenSubtitles e o Trakt pedem o nome e a versão do app no User-Agent. */
+    /** "Sofaly v1.0 (457800)": o OpenSubtitles e o Trakt pedem o nome e a versão do app no User-Agent. */
     fun agente(versao: Int): String = "$APP_NOME v1.0 ($versao)"
 
     private fun cod(v: String) = URLEncoder.encode(v, "UTF-8").replace("+", "%20")

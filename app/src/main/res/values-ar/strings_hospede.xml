@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede (degrau 2, 16/11/2026): ModoHospede, HospedeBoasVindasActivity, Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="hos_titulo">وضع الضيف</string>
+    <string name="hos_det">للإيجار: تُمسح حسابات الضيف عند المغادرة. إيقافه يطلب الرمز.</string>
+    <string name="hos_pin_sair">رمز الخروج من وضع الضيف</string>
+    <string name="hos_pin_config">رمز فتح الإعدادات</string>
+    <string name="hos_saida">مغادرة الضيف</string>
+    <string name="hos_saida_det">في هذا الوقت تُنظَّف تطبيقات البث. OK لتغيير اليوم.</string>
+    <string name="hos_saida_nenhuma">غير محددة</string>
+    <string name="hos_saida_hoje">اليوم الساعة %1$s</string>
+    <string name="hos_saida_amanha">غدًا الساعة %1$s</string>
+    <string name="hos_saida_dia">%1$s الساعة %2$s</string>
+    <string name="hos_hora">وقت المغادرة</string>
+    <string name="hos_hora_det">OK لتغيير الساعة (من 8:00 إلى 14:00).</string>
+    <string name="hos_regras">قواعد المنزل</string>
+    <string name="hos_regras_vazio">لا شيء بعد. تظهر في شاشة الترحيب.</string>
+    <string name="hos_regras_dica">مثال: الهدوء بعد الساعة 10 مساءً. المغادرة الساعة 11 صباحًا.</string>
+    <string name="hos_apps">التطبيقات التي تُنظَّف عند المغادرة</string>
+    <string name="hos_apps_det">تُمسح حسابات وسجل التطبيقات المحددة. تطبيقات البث محددة مسبقًا.</string>
+    <string name="hos_apps_sub">OK للتحديد أو الإلغاء. لا يمكن تنظيف تطبيقات النظام.</string>
+    <string name="hos_encerrar">إنهاء الإقامة الآن</string>
+    <string name="hos_encerrar_det">ينظّف التطبيقات الآن ويجهّز الترحيب للضيف التالي.</string>
+    <string name="hos_encerrar_pergunta">مسح حسابات وسجل تطبيقات الضيف الآن؟ لا يمكن التراجع.</string>
+    <string name="hos_encerrar_sim">مسح</string>
+    <string name="hos_limpando">جارٍ التنظيف…</string>
+    <string name="hos_limpou">التطبيقات المنظَّفة: %1$d.</string>
+    <string name="hos_limpou_falhas">التطبيقات المنظَّفة: %1$d. فشلت: %2$s</string>
+    <string name="hos_ultima">آخر تنظيف: %1$s</string>
+    <string name="hos_bv_titulo">أهلًا بك!</string>
+    <string name="hos_bv_regras">قواعد المنزل</string>
+    <string name="hos_bv_privacidade">سجّل الدخول إلى تطبيقاتك بلا قلق: عند المغادرة تُمسح حسابات وسجل تطبيقات البث تلقائيًا.</string>
+    <string name="hos_bv_ok">ابدأ</string>
+    <string name="hos_bv_wifi">الواي فاي</string>
+</resources>

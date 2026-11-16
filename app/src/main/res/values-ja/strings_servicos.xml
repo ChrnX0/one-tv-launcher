@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">新エピ %1$s</string>
     <string name="ext_hoje">今日</string>
     <string name="ext_amanha">明日</string>
-    <string name="sv_mdblist_passos">任意: IMDb 評価（キーなしでも使えます）に Rotten Tomatoes、Letterboxd、Metacritic を追加します。\n1. スマートフォンのカメラを左のコードに向けてログインします（または無料アカウントを作成）。ページの一番下で API Access をタップし、キーがなければ生成してコピーします。\n2. 右のコードに向けると、ウェブパネルの「設定」が開きます。MDBList の欄にキーを貼り付けて「キーを保存」をタップします。\n3. TV がすぐに確認し、この画面は自動的に進みます。</string>
+    <string name="sv_mdblist_passos">任意: Trakt 評価（キーなしでも使えます）に Rotten Tomatoes、Letterboxd、Metacritic を追加します。\n1. スマートフォンのカメラを左のコードに向けてログインします（または無料アカウントを作成）。ページの一番下で API Access をタップし、キーがなければ生成してコピーします。\n2. 右のコードに向けると、ウェブパネルの「設定」が開きます。MDBList の欄にキーを貼り付けて「キーを保存」をタップします。\n3. TV がすぐに確認し、この画面は自動的に進みます。</string>
     <string name="sv_mdblist_qr1">MDBList のキーのページ</string>
     <string name="sv_mdblist_qr2">ウェブパネル（%1$s）</string>
     <string name="sv_mdblist_digitar">ここにキーを入力</string>

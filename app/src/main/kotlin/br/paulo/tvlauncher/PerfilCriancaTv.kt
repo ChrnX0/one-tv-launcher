@@ -69,6 +69,20 @@ object PerfilCriancaTv {
     }
 
     /**
+     * Troca pela agenda da família (AgendaPerfisTv, degrau 2): sem PIN, porque quem marcou o horário foi o adulto,
+     * atrás do PIN. Entra/sai das regras de criança como a troca à mão e mostra o mesmo aviso curto.
+     */
+    fun trocarSemPin(ctx: Context, de: String?, para: String) {
+        val criancas = criancas(ctx)
+        val t = PerfilCrianca.decidir(de?.let(PerfilDados::sanitizar), PerfilDados.sanitizar(para), criancas, PainelArmazem.temPin(ctx))
+        Perfil.definirAtiva(ctx, para)
+        if (t.restaurar) sair(ctx)
+        if (t.ligar) entrar(ctx)
+        AvisoTv.rapido(ctx, ctx.getString(R.string.perfil_aviso_titulo, PerfilCrianca.nomeCurto(para)),
+            ctx.getString(if (PerfilDados.sanitizar(para) in criancas) R.string.perfil_aviso_crianca else R.string.perfil_aviso_texto), 5)
+    }
+
+    /**
      * Liga/desliga a marca de criança de [conta] (pede o PIN dos pais; sem PIN definido, só avisa como definir). Se a
      * conta é a ativa, aplica na hora (marcar = entrar; desmarcar = sair). [aoFim] recebe a marca nova (ou a de antes).
      */

@@ -43,7 +43,7 @@ object ManutencaoNoturna {
     private const val ESPACO_MINIMO = 1L shl 30            // 1 GB: abaixo disso, limpa o cache dos apps
     private const val ESPACO_CRITICO = 500L shl 20          // 500 MB: abaixo disso depois da limpeza = avisa
     private const val MAX_ESPERA_MS = 3 * 60_000L           // os passos da manutenção não seguram o aparelho acordado mais que isso
-    private const val MAX_REDE_MS = 15 * 60_000L            // a parte de rede (Trakt, IMDb semanal), depois dos passos
+    private const val MAX_REDE_MS = 15 * 60_000L            // a parte de rede (token e nota do Trakt), depois dos passos
 
     private val principal = Handler(Looper.getMainLooper())
     private var ouvindoTela = false
@@ -116,7 +116,7 @@ object ManutencaoNoturna {
     }
 
     /**
-     * A parte de rede, DEPOIS dos passos e com trava própria (15/11/2026). Antes vinha primeiro: o IMDb semanal (até
+     * A parte de rede, DEPOIS dos passos e com trava própria (15/11/2026). Antes vinha primeiro: o IMDb semanal, hoje nota do Trakt (até
      * 1.500 perguntas ao TMDB + ~9 MB) passava dos 3 min de [MAX_ESPERA_MS], o aparelho dormia no meio e o resto
      * (autoconserto, limpeza) só rodava de manhã, com a família ligando a TV.
      */
@@ -128,8 +128,8 @@ object ManutencaoNoturna {
         try {
             // Token do Trakt (ServicosContas): renova antes de vencer. Fora do relatório (não é manutenção da TV).
             runCatching { ServicosContas.renovarSePreciso(app) }
-            // Nota do IMDb (arquivo público, 1x por semana; InfoExternaCache): também fora do relatório.
-            runCatching { InfoExternaCache.semanalImdb(app) }
+            // Nota do Trakt (InfoExternaCache, no lugar do IMDb desde 16/11/2026): também fora do relatório.
+            runCatching { InfoExternaCache.noturnoTrakt(app) }
         } finally { try { trava?.release() } catch (_: Exception) {} }
         idades(app)
     }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plugins de terceiros na HOME (degrau 3, PluginsTv.kt) -->
+<resources>
+    <string name="plg_titulo">Eklentiler</string>
+    <string name="plg_cfg_det">İzle satırında diğer uygulamaların kartları. Her biri onayınızı ister.</string>
+    <string name="plg_det">Yalnızca güvendiğiniz uygulamaları açın. Eklenti sadece kısa bir metin gönderir; uygulamalarınızı ve hesaplarınızı göremez.</string>
+    <string name="plg_nenhum">Yüklü eklenti yok. Eklentiler, burada maç skoru veya fiyat gibi bir kart gösteren başka geliştiricilerin uygulamalarıdır.</string>
+    <string name="plg_ligado">Açık</string>
+    <string name="plg_desligado">Kapalı</string>
+    <string name="plg_limite">Aynı anda en fazla %1$d eklenti. Önce birini kapatın.</string>
+    <string name="plg_seguranca">Bir eklenti farklı bir imzayla güncellenirse, siz tekrar izin verene kadar kaybolur.</string>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cenas prontas sem voz (degrau 3, CenasProntas.kt). -->
+<resources>
+    <string name="cpr_secao">Готовые сцены</string>
+    <string name="cpr_dormir">Сон</string>
+    <string name="cpr_dormir_det">Ночной фильтр, тише, телевизор выключится через 30 мин</string>
+    <string name="cpr_novela">Сериал</string>
+    <string name="cpr_novela_det">Ваш канал, обычные цвета</string>
+    <string name="cpr_jogo">Матч</string>
+    <string name="cpr_jogo_det">Ваш спортивный канал, громче</string>
+    <string name="cpr_canal">Какой канал для «%1$s»?</string>
+    <string name="cpr_canal_dica">Название или номер канала</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo de segurança da HOME (degrau 2, 16/11/2026): HomeSeguraActivity. -->
+<resources>
+    <string name="seg_titulo">Mode aman</string>
+    <string name="seg_texto">Layar beranda berhenti %1$d kali berturut-turut. Ini versi sederhananya agar Anda tetap bisa memakai TV.</string>
+    <string name="seg_procurar">Cari versi perbaikan</string>
+    <string name="seg_procurar_det">Jika ada, langsung diunduh dan dipasang.</string>
+    <string name="seg_procurando">Mencari versi baru…</string>
+    <string name="seg_normal">Coba layar beranda normal</string>
+    <string name="seg_normal_det">Jika berhenti 3 kali lagi, layar ini kembali.</string>
+    <string name="seg_config_tv">Setelan TV</string>
+    <string name="seg_erro">Lihat apa yang salah</string>
+    <string name="seg_erro_det">Diagnostik, dengan galat yang tersimpan.</string>
+    <string name="seg_apps">Aplikasi</string>
+</resources>

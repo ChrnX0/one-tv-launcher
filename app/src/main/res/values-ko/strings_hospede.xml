@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede (degrau 2, 16/11/2026): ModoHospede, HospedeBoasVindasActivity, Configurações > Família. Ordem: en pt ptPT es de fr it ru pl tr ja zh ko hi in ar. -->
+<resources>
+    <string name="hos_titulo">게스트 모드</string>
+    <string name="hos_det">임대용: 체크아웃 때 게스트 로그인을 지웁니다. 끄려면 PIN이 필요합니다.</string>
+    <string name="hos_pin_sair">게스트 모드 종료 PIN</string>
+    <string name="hos_pin_config">설정 열기 PIN</string>
+    <string name="hos_saida">게스트 체크아웃</string>
+    <string name="hos_saida_det">이 시간에 스트리밍 앱을 정리합니다. OK로 날짜 변경.</string>
+    <string name="hos_saida_nenhuma">설정 안 됨</string>
+    <string name="hos_saida_hoje">오늘 %1$s</string>
+    <string name="hos_saida_amanha">내일 %1$s</string>
+    <string name="hos_saida_dia">%1$s %2$s</string>
+    <string name="hos_hora">체크아웃 시간</string>
+    <string name="hos_hora_det">OK로 시간 변경(8:00~14:00).</string>
+    <string name="hos_regras">숙소 규칙</string>
+    <string name="hos_regras_vazio">아직 없습니다. 환영 화면에 표시됩니다.</string>
+    <string name="hos_regras_dica">예: 밤 10시 이후 정숙. 체크아웃 오전 11시.</string>
+    <string name="hos_apps">체크아웃 때 정리할 앱</string>
+    <string name="hos_apps_det">표시한 앱의 로그인과 기록이 지워집니다. 스트리밍 앱은 미리 표시되어 있습니다.</string>
+    <string name="hos_apps_sub">OK로 표시하거나 해제합니다. 시스템 앱은 정리할 수 없습니다.</string>
+    <string name="hos_encerrar">지금 숙박 종료</string>
+    <string name="hos_encerrar_det">지금 앱을 정리하고 다음 게스트를 위한 환영 화면을 준비합니다.</string>
+    <string name="hos_encerrar_pergunta">게스트 앱의 로그인과 기록을 지금 지울까요? 되돌릴 수 없습니다.</string>
+    <string name="hos_encerrar_sim">지우기</string>
+    <string name="hos_limpando">정리 중…</string>
+    <string name="hos_limpou">정리한 앱: %1$d</string>
+    <string name="hos_limpou_falhas">정리한 앱: %1$d. 실패: %2$s</string>
+    <string name="hos_ultima">마지막 정리: %1$s</string>
+    <string name="hos_bv_titulo">환영합니다!</string>
+    <string name="hos_bv_regras">숙소 규칙</string>
+    <string name="hos_bv_privacidade">안심하고 앱에 로그인하세요. 체크아웃 때 스트리밍 앱의 로그인과 기록이 자동으로 지워집니다.</string>
+    <string name="hos_bv_ok">시작</string>
+    <string name="hos_bv_wifi">Wi-Fi</string>
+</resources>

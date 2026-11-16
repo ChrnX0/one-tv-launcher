@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Vitals locais (degrau 2, item 8): quedas e travadas do launcher nos últimos 7 dias (Diagnóstico). -->
+<resources>
+    <string name="vit_titulo">Stabilitas launcher (7 hari)</string>
+    <string name="vit_ok">Tidak ada crash atau macet. Hari pemakaian: %1$d.</string>
+    <string name="vit_problemas">Crash: %1$d. Macet: %2$d. Terlihat di layar: %3$d. Hari bermasalah: %4$d dari %5$d.</string>
+</resources>

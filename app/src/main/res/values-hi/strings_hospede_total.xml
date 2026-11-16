@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Modo hóspede com limpeza total (degrau 3). -->
+<resources>
+    <string name="hos_total">पूरी सफ़ाई</string>
+    <string name="hos_total_det">चेक-आउट पर सिर्फ़ स्ट्रीमिंग नहीं, TV के सभी ऐप का डेटा मिटाता है। Google सेवाएँ और सेटिंग रहती हैं।</string>
+</resources>

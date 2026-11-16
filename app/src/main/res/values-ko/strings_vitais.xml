@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Vitals locais (degrau 2, item 8): quedas e travadas do launcher nos últimos 7 dias (Diagnóstico). -->
+<resources>
+    <string name="vit_titulo">런처 안정성(7일)</string>
+    <string name="vit_ok">충돌이나 멈춤이 없습니다. 사용한 날: %1$d</string>
+    <string name="vit_problemas">충돌: %1$d. 멈춤: %2$d. 화면에서 발생: %3$d. 문제 있던 날: %5$d일 중 %4$d일</string>
+</resources>
