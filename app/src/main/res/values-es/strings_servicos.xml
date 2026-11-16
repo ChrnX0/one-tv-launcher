@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">Ep. nuevo %1$s</string>
     <string name="ext_hoje">hoy</string>
     <string name="ext_amanha">mañana</string>
-    <string name="sv_mdblist_passos">Opcional: suma Rotten Tomatoes, Letterboxd y Metacritic a la calificación de IMDb (que ya funciona sin esto).\n1. Apunta la cámara del teléfono al código de la izquierda e inicia sesión (o crea una cuenta gratis). Al final de la página, toca API Access, genera la clave si aún no tienes y cópiala.\n2. Apunta al código de la derecha: el panel web abre en Ajustes. Pega la clave en MDBList y toca Guardar clave.\n3. La TV la comprueba al momento y esta pantalla sigue sola.</string>
+    <string name="sv_mdblist_passos">Opcional: suma Rotten Tomatoes, Letterboxd y Metacritic a la calificación de Trakt (que ya funciona sin esto).\n1. Apunta la cámara del teléfono al código de la izquierda e inicia sesión (o crea una cuenta gratis). Al final de la página, toca API Access, genera la clave si aún no tienes y cópiala.\n2. Apunta al código de la derecha: el panel web abre en Ajustes. Pega la clave en MDBList y toca Guardar clave.\n3. La TV la comprueba al momento y esta pantalla sigue sola.</string>
     <string name="sv_mdblist_qr1">Página de la clave de MDBList</string>
     <string name="sv_mdblist_qr2">Panel web (%1$s)</string>
     <string name="sv_mdblist_digitar">Escribir la clave aquí</string>

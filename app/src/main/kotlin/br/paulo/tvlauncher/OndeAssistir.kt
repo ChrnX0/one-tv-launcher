@@ -10,6 +10,14 @@ import org.json.JSONObject
  * Só assinatura e grátis (flatrate, free, ads); aluguel e compra ficam de fora.
  */
 object OndeAssistir {
+    /**
+     * DESLIGADO desde 16/11/2026 (app vai ser vendido). Os provedores do TMDB vêm da JustWatch, e a JustWatch só libera
+     * os dados para parceiros com contrato (apis.justwatch.com/docs/api); o TMDB exige atribuição e não diz que o uso
+     * comercial está coberto (developer.themoviedb.org/reference/movie-watch-providers). Ligar só com resposta POR
+     * ESCRITO do TMDB (no contrato comercial, plano Ultra) ou da JustWatch. Desligado: a ficha não mostra "Também em" e a
+     * Busca não mostra "Em outros lugares"; a Busca continua oferecendo procurar no YouTube, Netflix e Prime Video.
+     */
+    const val JUSTWATCH_LIBERADO = false
     const val MAX_PROVEDORES = 4
     const val MAX_FORA = 5
 

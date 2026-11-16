@@ -1011,7 +1011,7 @@ class VodActivity : Activity() {
                         r.onSuccess { (f, bate) ->
                             legendaArquivo = f; legendaTraduzida = false; atrasoLegenda = 0
                             LegendaTraduzida.esquecer(this, k)
-                            avisoBreve(getString(if (bate) R.string.legenda_auto_pronta else R.string.legenda_auto_pronta_nome))
+                            avisoBreve(getString(if (bate) R.string.legenda_auto_pronta else R.string.legenda_auto_pronta_nome) + " · " + LegendaExterna.CREDITO)
                             recarregarComLegenda()
                         }
                     }
@@ -1035,7 +1035,7 @@ class VodActivity : Activity() {
             if (isDestroyed || chave != k || pararTraducao.get()) return@post
             if (legendaArquivo != null && !legendaTraduzida) return@post   // a pessoa já escolheu outra
             legendaArquivo = f; legendaTraduzida = true; atrasoLegenda = 0
-            avisoBreve(getString(aviso))
+            avisoBreve(getString(aviso) + " · " + LegendaExterna.CREDITO)   // a original veio do OpenSubtitles
             recarregarComLegenda()
         }
         LegendaTraduzida.traduzir(this, k, origem, idiomaTv, pos, pararTraducao,
@@ -1060,7 +1060,7 @@ class VodActivity : Activity() {
                         listOfNotNull(c.idioma.uppercase(), c.nome, "↓ ${c.baixadas}", if (c.surdos) getString(R.string.legenda_surdos) else null)
                             .joinToString("  ·  ")
                     }
-                    Estilo.lista(this, getString(R.string.legenda_escolher, b.nome), rotulos) { i -> baixarLegenda(lista[i]) }
+                    Estilo.lista(this, getString(R.string.legenda_escolher, b.nome), rotulos, rodape = LegendaExterna.CREDITO) { i -> baixarLegenda(lista[i]) }
                 }
             }
         }
@@ -1077,7 +1077,7 @@ class VodActivity : Activity() {
                 r.onFailure { avisoBreve((it as? LegendaBaixar.Falha)?.message ?: getString(R.string.legenda_erro)) }
                 r.onSuccess { f ->
                     pararTraducao.set(true); LegendaTraduzida.esquecer(this, k)   // a escolhida pela pessoa vale mais que a tradução
-                    legendaArquivo = f; legendaTraduzida = false; atrasoLegenda = 0; avisoBreve(getString(R.string.legenda_pronta)); recarregarComLegenda()
+                    legendaArquivo = f; legendaTraduzida = false; atrasoLegenda = 0; avisoBreve(getString(R.string.legenda_pronta) + " · " + LegendaExterna.CREDITO); recarregarComLegenda()
                 }
             }
         }

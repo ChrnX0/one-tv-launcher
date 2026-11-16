@@ -20,9 +20,13 @@ Ela fica dentro do APK (dá para extrair, como em todo app aberto, Kodi incluíd
 
 O MDBList não tem chave de aplicativo: a chave é da conta de cada pessoa. É um extra opcional (Rotten Tomatoes,
 Letterboxd, Metacritic) que a pessoa conecta na TV pelo QR (Configurações › TV e filmes › Serviços de filmes e séries) ou
-colando a chave no painel web. A nota do IMDb vale para todos sem chave: a TV baixa o arquivo público
-`title.ratings.tsv.gz` (datasets.imdbws.com, ~9 MB, uso pessoal e não comercial) uma vez por semana, de madrugada,
-e guarda só as notas dos títulos da lista.
+colando a chave no painel web. A nota do Trakt vale para todos sem login (só o `TRAKT_ID` do app): de madrugada a TV
+pergunta ao Trakt (`/search/tmdb/{id}?extended=full`, até 600 títulos por noite, cada nota vale 30 dias).
+
+Fora desde 16/11/2026, porque o app vai ser vendido: **IMDb** (os dados, inclusive a nota que o MDBList repassa, são só
+para uso pessoal e não comercial: data.imdb.com e Conditions of Use do imdb.com; licença comercial por contrato) e
+**"Onde assistir" da JustWatch** (vinha pelo TMDB; a JustWatch só libera para parceiros com contrato). O código do "Onde
+assistir" ficou, desligado em `OndeAssistir.JUSTWATCH_LIBERADO`: ligar só com permissão por escrito do TMDB ou da JustWatch.
 
 Campos dos formulários:
 - **Trakt**: App name `One TV Launcher`; App type Development (até 16 pessoas; peça Production antes de vender); Redirect URIs

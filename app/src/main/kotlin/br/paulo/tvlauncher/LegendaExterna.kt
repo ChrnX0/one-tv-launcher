@@ -14,7 +14,15 @@ import java.net.URLEncoder
  */
 object LegendaExterna {
     const val BASE = "https://api.opensubtitles.com/api/v1"
-    const val AGENTE = "OneTVLauncher v1.0"   // a API exige um User-Agent com o nome do app
+    // A API exige um User-Agent com o nome do app; o produto se chama Sofaly (16/11/2026).
+    const val AGENTE = "Sofaly v1.0"
+    /**
+     * Crédito obrigatório para chave grátis, "onde as legendas são procuradas ou escolhidas" (termos para integradores do
+     * OpenSubtitles, 13/10/2026: opensubtitles.stoplight.io, "Terms of use for integrators"). Texto exato, em inglês, em
+     * todos os idiomas. Os mesmos termos pedem: login da própria pessoa para passar de 5 por dia (ServicosContas),
+     * legenda guardada só na TV de quem pediu (LegendaBaixar) e tradução só para essa pessoa (LegendaTraduzida).
+     */
+    const val CREDITO = "Subtitles provided by OpenSubtitles.com"
     const val IDIOMAS = "pt-br,pt-pt"   // TV em português (o caso de sempre); os outros idiomas: idiomasBusca()
     const val MAX_SRT = 2_000_000             // legenda de 3 h tem ~150 KB; acima disso não é legenda
     const val MAX_RESULTADOS = 12

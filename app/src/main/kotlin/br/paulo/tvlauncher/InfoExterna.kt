@@ -7,7 +7,7 @@ import java.util.Locale
 
 /**
  * Ficha e notas de fora (fatia 2 dos serviços de filmes e séries, 14/11/2026): TMDB (sinopse, elenco, próximo episódio,
- * coleção) e MDBList (notas do IMDb, Rotten Tomatoes, Metacritic, Letterboxd). Só lógica pura (sem Android), testada em
+ * coleção), Trakt (nota para todos) e MDBList (Rotten Tomatoes, Metacritic, Letterboxd). Só lógica pura (sem Android), testada em
  * InfoExternaTest; quem fala com a rede e guarda no disco é o [InfoExternaCache].
  *
  * O id de cada título: 1º o `tmdb`/`tmdb_id` que o Xtream manda (lista ou ficha), 2º a busca no TMDB pelo nome limpo +
@@ -202,16 +202,20 @@ object InfoExterna {
 
     // ================================================================ MDBList (notas)
 
-    /** As notas que mostramos. Escalas: IMDb 0-10, RT e Metacritic 0-100, Letterboxd 0-5. Null = não veio. */
-    data class Notas(val imdb: Float? = null, val rt: Int? = null, val metacritic: Int? = null, val letterboxd: Float? = null) {
-        val vazia: Boolean get() = imdb == null && rt == null && metacritic == null && letterboxd == null
+    /**
+     * As notas que mostramos. Escalas: Trakt 0-10, RT e Metacritic 0-100, Letterboxd 0-5. Null = não veio.
+     * Sem IMDb desde 16/11/2026: a nota do IMDb só pode ser usada fora de produto comercial (data.imdb.com e Conditions
+     * of Use do imdb.com), e o app vai ser vendido. Nem o arquivo público nem a que o MDBList repassa.
+     */
+    data class Notas(val trakt: Float? = null, val rt: Int? = null, val metacritic: Int? = null, val letterboxd: Float? = null) {
+        val vazia: Boolean get() = trakt == null && rt == null && metacritic == null && letterboxd == null
         /**
-         * A nota da estrela (16/11/2026, pedido do dono): média de IMDb, Metacritic e Letterboxd, todos de 0 a 10. O Rotten
+         * A nota da estrela (16/11/2026, pedido do dono): média de Trakt, Metacritic e Letterboxd, todos de 0 a 10. O Rotten
          * Tomatoes fica fora: "85%" é a fração de críticos que gostaram, não uma nota (puxaria a média para cima); só
          * entra quando é a única. Sem votos por site no MDBList, não dá para pesar.
          */
         val media: Float? get() {
-            val notas = listOfNotNull(imdb, metacritic?.div(10f), letterboxd?.times(2))
+            val notas = listOfNotNull(trakt, metacritic?.div(10f), letterboxd?.times(2))
             return if (notas.isNotEmpty()) notas.sum() / notas.size else rt?.div(10f)
         }
         /** Uma nota de 0 a 10 para ordenar e filtrar: a mesma da estrela. */
@@ -223,22 +227,24 @@ object InfoExterna {
 
     fun corpoLoteMdblist(ids: Collection<Int>): String = JSONObject().put("ids", JSONArray(ids.take(LOTE_MDBLIST))).toString()
 
-    /** Lê "ratings":[{"source":"imdb","value":7.8}, {"source":"tomatoes","value":93}...] de um item do MDBList. */
+    /**
+     * Lê "ratings":[{"source":"tomatoes","value":93}...] de um item do MDBList. O "imdb" que vem junto é ignorado de
+     * propósito (uso comercial proibido, ver [Notas]); a do Trakt vem do próprio Trakt ([lerNotaTrakt]).
+     */
     fun lerNotas(item: JSONObject): Notas {
         val r = item.optJSONArray("ratings") ?: return Notas()
-        var imdb: Float? = null; var rt: Int? = null; var mc: Int? = null; var lb: Float? = null
+        var rt: Int? = null; var mc: Int? = null; var lb: Float? = null
         for (i in 0 until r.length()) {
             val o = r.optJSONObject(i) ?: continue
             if (o.isNull("value")) continue
             val v = o.optDouble("value", Double.NaN).takeIf { !it.isNaN() && it > 0 } ?: continue
             when (o.optString("source").lowercase()) {
-                "imdb" -> imdb = v.toFloat().takeIf { it <= 10f }
                 "tomatoes" -> rt = v.toInt().takeIf { it in 0..100 }
                 "metacritic" -> mc = v.toInt().takeIf { it in 0..100 }
                 "letterboxd" -> lb = v.toFloat().takeIf { it <= 5f }
             }
         }
-        return Notas(imdb, rt, mc, lb)
+        return Notas(null, rt, mc, lb)
     }
 
     /** O id TMDB de um item do lote (ids.tmdb, ou tmdb_id / tmdbid conforme a versão da API). */
@@ -258,9 +264,9 @@ object InfoExterna {
         return saida
     }
 
-    /** "IMDb 7,8 · Rotten Tomatoes 93% · Letterboxd 3,9" (só as que vieram; números no formato da TV). */
+    /** "Trakt 78% · Rotten Tomatoes 93% · Letterboxd 3,9" (só as que vieram; números no formato da TV). O Trakt mostra em %, como no site dele. */
     fun textoNotas(n: Notas, l: Locale = Locale.getDefault()): String = listOfNotNull(
-        n.imdb?.let { "IMDb " + String.format(l, "%.1f", it) },
+        n.trakt?.let { "Trakt " + Math.round(it * 10) + "%" },
         n.rt?.let { "Rotten Tomatoes $it%" },
         n.metacritic?.let { "Metacritic $it" },
         n.letterboxd?.let { "Letterboxd " + String.format(l, "%.1f", it) },
@@ -275,8 +281,9 @@ object InfoExterna {
     /** O que fica guardado por título (chave do catálogo: "fonte:f123" / "fonte:s45"). */
     data class Guardado(
         val tmdb: Int? = null,
-        val imdb: String = "",          // id do IMDb (tt...), do TMDB: liga o título ao arquivo público de notas
-        val imdbNota: Float? = null,    // nota do arquivo público do IMDb (semanal), vale para todos, sem chave
+        val imdb: String = "",          // id do IMDb (tt...), só como identificador (casar com Trakt/Simkl); nenhuma informação do IMDb
+        val traktNota: Float? = null,   // nota do Trakt (0-10), vale para todos, sem login; pedida de madrugada
+        val traktEm: Long = 0,          // quando a nota do Trakt foi pedida (0 = nunca)
         val recusados: Set<Int> = emptySet(),
         val detalhe: Detalhe? = null,
         val detalheEm: Long = 0,
@@ -285,16 +292,14 @@ object InfoExterna {
         val buscaEm: Long = 0,   // última busca sem resultado (não buscar de novo a cada abertura)
     )
 
-    /** As notas para mostrar: as do MDBList (se a pessoa conectou) com a do IMDb do arquivo público quando faltar. */
-    fun notasDe(g: Guardado): Notas {
-        val n = g.notas ?: Notas()
-        return if (n.imdb == null && g.imdbNota != null) n.copy(imdb = g.imdbNota) else n
-    }
+    /** As notas para mostrar: a do Trakt (todos) com as do MDBList (se a pessoa conectou). */
+    fun notasDe(g: Guardado): Notas = (g.notas ?: Notas()).copy(trakt = g.traktNota)
 
     fun guardadoParaJson(g: Guardado): JSONObject = JSONObject().apply {
         g.tmdb?.let { put("t", it) }
         if (g.imdb.isNotBlank()) put("im", g.imdb)
-        g.imdbNota?.let { put("iv", it.toDouble()) }
+        g.traktNota?.let { put("tv", it.toDouble()) }
+        if (g.traktEm > 0) put("te", g.traktEm)
         if (g.recusados.isNotEmpty()) put("x", JSONArray(g.recusados.toList()))
         if (g.buscaEm > 0) put("b", g.buscaEm)
         g.detalhe?.let { d ->
@@ -308,7 +313,7 @@ object InfoExterna {
             put("de", g.detalheEm)
         }
         g.notas?.let { n ->
-            put("n", JSONObject().apply { n.imdb?.let { put("i", it.toDouble()) }; n.rt?.let { put("r", it) }; n.metacritic?.let { put("m", it) }; n.letterboxd?.let { put("l", it.toDouble()) } })
+            put("n", JSONObject().apply { n.rt?.let { put("r", it) }; n.metacritic?.let { put("m", it) }; n.letterboxd?.let { put("l", it.toDouble()) } })
             put("ne", g.notasEm)
         }
     }
@@ -325,53 +330,46 @@ object InfoExterna {
         }
         // Ficha guardada antes do trailer (sem "v"): vale até a próxima abertura, que pede de novo ao TMDB.
         val detEm = if (o.optJSONObject("d")?.optInt("v") == VERSAO_DETALHE) o.optLong("de") else 0L
+        // "iv" (nota do arquivo do IMDb) e "n.i" (IMDb pelo MDBList) de versões antigas: lidos não, somem na próxima gravação.
         val notas = o.optJSONObject("n")?.let { n ->
-            Notas(n.optDouble("i", Double.NaN).takeIf { !it.isNaN() }?.toFloat(), n.optInt("r", -1).takeIf { it >= 0 },
+            Notas(null, n.optInt("r", -1).takeIf { it >= 0 },
                 n.optInt("m", -1).takeIf { it >= 0 }, n.optDouble("l", Double.NaN).takeIf { !it.isNaN() }?.toFloat())
         }
         val rec = o.optJSONArray("x")?.let { x -> (0 until x.length()).map { x.optInt(it) }.filter { it > 0 }.toSet() }.orEmpty()
-        return Guardado(tmdb, o.optString("im"), o.optDouble("iv", Double.NaN).takeIf { !it.isNaN() }?.toFloat(), rec, det, detEm,
-            notas, o.optLong("ne"), o.optLong("b"))
+        return Guardado(tmdb, o.optString("im"), o.optDouble("tv", Double.NaN).takeIf { !it.isNaN() }?.toFloat(), o.optLong("te"),
+            rec, det, detEm, notas, o.optLong("ne"), o.optLong("b"))
     }
 
-    // ================================================================ IMDb: arquivo público de notas
+    // ================================================================ Trakt: nota para todos
 
     /**
-     * datasets.imdbws.com/title.ratings.tsv.gz (~9 MB, conferido em 14/11/2026; "tconst averageRating numVotes"),
-     * para uso pessoal e não comercial (data.imdb.com/non-commercial-datasets). Cada TV baixa o seu, 1x por semana.
+     * Nota do Trakt no lugar da do IMDb (16/11/2026). O Trakt permite uso comercial, em app grátis ou pago, sem contrato
+     * (developer.trakt.tv/docs/api-use-policy), pedindo a frase "uses Trakt but is not endorsed" (licencas.txt). Só a chave
+     * do app (trakt-api-key), sem login da pessoa. GET /search/tmdb/{id}?type=movie|show&extended=full devolve
+     * [{"type":"movie","movie":{"title",...,"rating":8.4,"votes":1234,"ids":{...}}}].
      */
-    const val IMDB_NOTAS = "https://datasets.imdbws.com/title.ratings.tsv.gz"
-    const val IMDB_VALIDADE_MS = 7L * 24 * 3_600_000
-    /** Com menos votos que isto a nota não diz muito (filme quase sem público): não mostramos. */
-    const val IMDB_MIN_VOTOS = 50
+    fun urlTraktPorTmdb(id: Int, serie: Boolean): String =
+        "${ServicosFilmes.TRAKT_API}/search/tmdb/$id?type=${if (serie) "show" else "movie"}&extended=full"
 
-    fun idImdbValido(id: String): Boolean = id.matches(Regex("tt\\d{5,10}"))
+    /** Nota válida por 30 dias (como as do MDBList); série no ar não muda tanto que valha pedir antes. */
+    const val TRAKT_VALIDADE_MS = 30L * 24 * 3_600_000
+    /** Com menos votos que isto a nota não diz muito (título quase sem público): não mostramos. */
+    const val TRAKT_MIN_VOTOS = 20
 
-    /** Uma linha do arquivo: "tt0111161\t9.3\t3000000" -> (id, nota). Cabeçalho, poucos votos ou lixo: null. */
-    fun lerLinhaImdb(linha: String): Pair<String, Float>? {
-        val p = linha.split('\t')
-        if (p.size < 3 || !p[0].startsWith("tt")) return null
-        val nota = p[1].toFloatOrNull()?.takeIf { it in 0f..10f } ?: return null
-        val votos = p[2].trim().toIntOrNull() ?: return null
-        return if (votos >= IMDB_MIN_VOTOS) p[0] to nota else null
-    }
-
-    /** Passa pelo arquivo inteiro (linha a linha, sem guardar) e devolve só as notas dos [ids] pedidos. */
-    fun filtrarImdb(linhas: Sequence<String>, ids: Set<String>): Map<String, Float> {
-        val saida = HashMap<String, Float>()
-        if (ids.isEmpty()) return saida
-        for (l in linhas) {
-            val tab = l.indexOf('\t'); if (tab <= 0) continue
-            if (l.substring(0, tab) !in ids) continue
-            lerLinhaImdb(l)?.let { saida[it.first] = it.second }
-            if (saida.size == ids.size) break
+    /** A nota (0-10) do primeiro resultado do tipo pedido; null se não achou, poucos votos ou resposta estranha. */
+    fun lerNotaTrakt(json: String, serie: Boolean): Float? = runCatching {
+        val a = JSONArray(json)
+        val tipo = if (serie) "show" else "movie"
+        for (i in 0 until a.length()) {
+            val o = a.optJSONObject(i)?.takeIf { it.optString("type") == tipo }?.optJSONObject(tipo) ?: continue
+            val nota = o.optDouble("rating", Double.NaN).takeIf { !it.isNaN() && it > 0 && it <= 10 } ?: return@runCatching null
+            return@runCatching if (o.optInt("votes", 0) >= TRAKT_MIN_VOTOS) nota.toFloat() else null
         }
-        return saida
-    }
+        null
+    }.getOrNull()
 
-    fun urlIdsExternos(chave: String, id: Int, serie: Boolean): String = tmdbUrl(if (serie) "/tv/$id/external_ids" else "/movie/$id/external_ids", chave)
-
-    fun lerIdImdb(json: String): String? = runCatching { JSONObject(json).optString("imdb_id") }.getOrNull()?.takeIf { idImdbValido(it) }
+    /** Id do IMDb (tt...) como IDENTIFICADOR, para casar títulos com Trakt e Simkl. Não é informação do IMDb. */
+    fun idImdbValido(id: String): Boolean = id.matches(Regex("tt\\d{5,10}"))
 
     // ================================================================ próximo episódio
 

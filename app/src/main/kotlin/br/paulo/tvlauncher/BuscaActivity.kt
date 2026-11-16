@@ -121,7 +121,7 @@ class BuscaActivity : Activity() {
      * busca do app quando ele está instalado. Pede à rede: só quando a pessoa para de digitar (a busca já espera 700 ms).
      */
     private fun foraDaLista(d: Dados, termo: String): List<Item> {
-        if (termo.length < 3 || !InfoExternaCache.temTmdb() || PlayerArmazem.parental(this).infantil) return emptyList()
+        if (!OndeAssistir.JUSTWATCH_LIBERADO || termo.length < 3 || !InfoExternaCache.temTmdb() || PlayerArmazem.parental(this).infantil) return emptyList()
         val fora = OndeAssistir.foraDaLista(InfoExternaCache.buscarFora(termo), d.idsFilmes, d.idsSeries)
         return fora.mapNotNull { a ->
             val onde = InfoExternaCache.provedores(a.tmdb, a.serie).takeIf { it.isNotEmpty() } ?: return@mapNotNull null

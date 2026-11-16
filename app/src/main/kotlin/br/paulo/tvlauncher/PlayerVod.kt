@@ -289,7 +289,7 @@ object Vod {
 
     enum class Ordem { RECENTES, NOME, NOTA, ANO }
 
-    /** [notasFora]: nota de 0 a 10 de fora (IMDb pelo MDBList, InfoExterna) por chave; vale mais que a da lista. */
+    /** [notasFora]: nota de 0 a 10 de fora (Trakt e MDBList, InfoExterna) por chave; vale mais que a da lista. */
     fun ordenar(filmes: List<Filme>, ordem: Ordem, notasFora: Map<String, Float> = emptyMap()): List<Filme> = when (ordem) {
         Ordem.RECENTES -> filmes.sortedByDescending { it.adicionado }
         Ordem.NOME -> ordenarPorNome(filmes) { it.nome }

@@ -60,7 +60,7 @@ class ColunaCategorias(
      * Uma linha. [icone]: IconePlayer.Tipo ou IconeMidia.Tipo (null = sem ícone). [quantos] < 0 = sem número.
      * [novos] > 0 = etiqueta "+N" (títulos novos desde a última visita). [destaque] = cor de atenção mesmo sem estar
      * escolhida (ex.: Filtro ativo). [detalhe] = texto curto no lugar do número (ex.: o filtro em vigor).
-     * [etiqueta] = selo antes do nome (listas de fora: "Trakt", "IMDb"; esboço listas-a.png).
+     * [etiqueta] = selo antes do nome (listas de fora: "Trakt", "MDBList"; esboço listas-a.png).
      */
     data class Linha(
         val chave: String, val nome: String, val quantos: Int = -1, val icone: Any? = null,

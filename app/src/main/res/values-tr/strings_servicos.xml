@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">Yeni böl. %1$s</string>
     <string name="ext_hoje">bugün</string>
     <string name="ext_amanha">yarın</string>
-    <string name="sv_mdblist_passos">İsteğe bağlı: IMDb puanına (onsuz da çalışır) Rotten Tomatoes, Letterboxd ve Metacritic ekler.\n1. Telefon kamerasını soldaki koda tutun ve giriş yapın (veya ücretsiz bir hesap oluşturun). Sayfanın sonunda API Access\'e dokunun, anahtar yoksa oluşturun ve kopyalayın.\n2. Sağdaki koda tutun: web paneli Ayarlar’da açılır. Anahtarı MDBList altına yapıştırın ve Anahtarı kaydet’e dokunun.\n3. TV hemen denetler ve bu ekran kendiliğinden devam eder.</string>
+    <string name="sv_mdblist_passos">İsteğe bağlı: Trakt puanına (onsuz da çalışır) Rotten Tomatoes, Letterboxd ve Metacritic ekler.\n1. Telefon kamerasını soldaki koda tutun ve giriş yapın (veya ücretsiz bir hesap oluşturun). Sayfanın sonunda API Access\'e dokunun, anahtar yoksa oluşturun ve kopyalayın.\n2. Sağdaki koda tutun: web paneli Ayarlar’da açılır. Anahtarı MDBList altına yapıştırın ve Anahtarı kaydet’e dokunun.\n3. TV hemen denetler ve bu ekran kendiliğinden devam eder.</string>
     <string name="sv_mdblist_qr1">MDBList anahtar sayfası</string>
     <string name="sv_mdblist_qr2">Web paneli (%1$s)</string>
     <string name="sv_mdblist_digitar">Anahtarı buraya yazın</string>

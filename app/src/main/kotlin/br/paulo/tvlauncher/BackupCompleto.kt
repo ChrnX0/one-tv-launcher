@@ -74,7 +74,7 @@ object BackupCompleto {
         // Ideias 35 e 41 (14/11/2026): a central de avisos da TV (passageira) e as medidas de espaço livre por dia (valem
         // só para o armazenamento deste aparelho).
         "aviso_tv_historico", "saude_tendencia",
-        // "info_externa" (serviços de filmes, 14/11/2026): só contadores de cota e a data da última nota do IMDb.
+        // "info_externa" (serviços de filmes, 14/11/2026): só contadores de cota e a data da última nota do IMDb (que saiu em 16/11/2026).
         "info_externa")
     /** Chaves que o Keystore cifrou: não servem em outra instalação. O valor em claro vai em "segredos". */
     private val CHAVES_DO_KEYSTORE = setOf("chave_cifrada", "chave_iv") + CasaHA.CHAVES_DO_KEYSTORE
