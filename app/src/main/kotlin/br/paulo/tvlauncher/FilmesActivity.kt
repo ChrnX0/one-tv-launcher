@@ -690,7 +690,7 @@ class FilmesActivity : Activity() {
         }
         val info = fichasRapidas[f.chave]
         val pos = posicoes[f.chave]?.takeIf { p -> p.duracao > 0 }
-        painel.mostrarFoco(Estilo.infoFoco(Vod.nomeLimpo(f.nome), f.nota, listOfNotNull(
+        painel.mostrarFoco(Estilo.infoFoco(Vod.nomeLimpo(f.nome), notaRapida[f.chave] ?: f.nota, listOfNotNull(
             f.ano?.toString(),
             info?.duracaoMin?.let { if (it >= 60) "${it / 60} h ${"%02d".format(it % 60)}" else "$it min" },
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(f.grupo).ifEmpty { null },
@@ -708,6 +708,10 @@ class FilmesActivity : Activity() {
     private val extRapidas = object : LinkedHashMap<String, String>(64, 0.75f, true) {
         override fun removeEldestEntry(e: MutableMap.MutableEntry<String, String>) = size > 60
     }
+    /** A média das notas de fora (a estrela), quando há; sem ela, a estrela é a da lista de canais. */
+    private val notaRapida = object : LinkedHashMap<String, Float>(64, 0.75f, true) {
+        override fun removeEldestEntry(e: MutableMap.MutableEntry<String, Float>) = size > 60
+    }
     @Volatile private var focoRapido: Filme? = null   // lido também no Fundo: o pôster ainda em foco?
     private val lerFichaRapida = Runnable {
         val f = focoRapido ?: return@Runnable
@@ -715,10 +719,13 @@ class FilmesActivity : Activity() {
             // Sem ficha no disco (título nunca aberto, ou aberto antes de 14/11, quando a ficha ainda não ficava no disco):
             // pede ao servidor, só se o foco ainda está nele (parou o dedo). A resposta fica no disco para a próxima vez.
             val info = PlayerCarga.fichaFilmeGuardada(this, f) ?: if (focoRapido === f) PlayerCarga.fichaFilme(this, f) else null
-            val ext = InfoExternaCache.guardado(this, f.chave)?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { InfoExterna.textoNotas(it) }.orEmpty()
+            val notas = InfoExternaCache.guardado(this, f.chave)?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }
+            val ext = notas?.let { InfoExterna.textoNotas(it) }.orEmpty()
+            val media = notas?.media
             tela.post {
                 if (isDestroyed) return@post
                 fichasRapidas[f.chave] = info; extRapidas[f.chave] = ext
+                if (media != null) notaRapida[f.chave] = media else notaRapida.remove(f.chave)
                 if (naGrade.getOrNull(grade.selectedItemPosition) === f) mostrarFocado(f)
             }
         }
@@ -890,7 +897,7 @@ class FilmesActivity : Activity() {
         val dados = listOfNotNull(
             (f.ano?.toString() ?: info?.lancamento?.take(4)?.takeIf { it.isNotEmpty() }),
             info?.duracaoMin?.let { if (it >= 60) "${it / 60} h ${it % 60} min" else "$it min" },
-            f.nota?.let { "★ %.1f".format(Locale.getDefault(), it) },
+            (ext?.let { InfoExterna.notasDe(it).media } ?: f.nota)?.let { "★ %.1f".format(Locale.getDefault(), it) },
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(f.grupo).ifEmpty { null },
             rotuloVersao(Idioma.versao(f.nome, f.grupo)),
         ).joinToString("   ·   ")

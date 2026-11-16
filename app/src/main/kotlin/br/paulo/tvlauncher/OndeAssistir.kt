@@ -32,8 +32,13 @@ object OndeAssistir {
         todos.sortedBy { it.first }.map { it.second }.distinct().take(MAX_PROVEDORES)
     }.getOrDefault(emptyList())
 
-    /** "Netflix basic with Ads" e "Amazon Prime Video with Ads" viram o nome do serviço. */
-    fun limparNome(n: String): String = n.replace(Regex("(?i)\\s+(basic\\s+)?with\\s+ads$"), "").replace(Regex("(?i)^amazon\\s+prime video$"), "Prime Video").trim()
+    /**
+     * "Netflix basic with Ads" e "Amazon Prime Video with Ads" viram o nome do serviço; "Apple TV Amazon Channel" (o canal
+     * de um serviço dentro de outro) vira o serviço, para não repetir "Apple TV · Apple TV Amazon" (visto em 16/11/2026).
+     */
+    fun limparNome(n: String): String = n.replace(Regex("(?i)\\s+(basic\\s+)?with\\s+ads$"), "")
+        .replace(Regex("(?i)\\s+(amazon|apple\\s*tv|roku\\s+premium)\\s+channels?$"), "")
+        .replace(Regex("(?i)^amazon\\s+prime video$"), "Prime Video").trim()
 
     /**
      * O app de TV de cada serviço, para o OK abrir a busca nele. Só os pacotes conferidos (os mesmos da busca que continua

@@ -559,7 +559,7 @@ class SeriesActivity : Activity() {
         tela.removeCallbacks(lerFichaRapida)
         if (s == null) { painelInfo.mostrarFoco(if (chave == INTERESSES) getString(R.string.filmes_interesses_vazio) else "", ""); return }
         val info = fichasRapidas[s.chave]
-        painelInfo.mostrarFoco(Estilo.infoFoco(Vod.nomeLimpo(s.nome), s.nota, listOfNotNull(
+        painelInfo.mostrarFoco(Estilo.infoFoco(Vod.nomeLimpo(s.nome), notaRapida[s.chave] ?: s.nota, listOfNotNull(
             s.ano?.toString(),
             info?.temporadas?.size?.takeIf { it > 0 }?.let { resources.getQuantityString(R.plurals.series_temporadas, it, it) },
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(s.grupo).ifEmpty { null },
@@ -579,6 +579,10 @@ class SeriesActivity : Activity() {
     private val extRapidas = object : LinkedHashMap<String, String>(64, 0.75f, true) {
         override fun removeEldestEntry(e: MutableMap.MutableEntry<String, String>) = size > 40
     }
+    /** A média das notas de fora (a estrela), quando há; sem ela, a estrela é a da lista de canais. */
+    private val notaRapida = object : LinkedHashMap<String, Float>(64, 0.75f, true) {
+        override fun removeEldestEntry(e: MutableMap.MutableEntry<String, Float>) = size > 40
+    }
 
     private val fichasRapidas = object : LinkedHashMap<String, FichaSerie?>(64, 0.75f, true) {
         override fun removeEldestEntry(e: MutableMap.MutableEntry<String, FichaSerie?>) = size > 40
@@ -591,9 +595,11 @@ class SeriesActivity : Activity() {
             // Sem ficha no disco: pede ao servidor se o foco ainda está nela (mesmo motivo de Filmes).
             val info = (PlayerCarga.fichaSerieGuardada(this, s) ?: if (focoRapido === s) PlayerCarga.fichaSerie(this, s) else null)?.let { f -> f.copy(temporadas = f.temporadas.mapValues { emptyList() }, cenas = emptyList()) }
             val ext = textoExtRapido(s.chave, serie = true)
+            val media = InfoExternaCache.guardado(this, s.chave)?.let { InfoExterna.notasDe(it).media }
             tela.post {
                 if (isDestroyed) return@post
                 fichasRapidas[s.chave] = info; extRapidas[s.chave] = ext
+                if (media != null) notaRapida[s.chave] = media else notaRapida.remove(s.chave)
                 if (naGrade.getOrNull(grade.selectedItemPosition) === s) mostrarFocado(s)
             }
         }
@@ -936,7 +942,7 @@ class SeriesActivity : Activity() {
         val texto = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         texto.addView(TextView(this).apply { text = Vod.nomeLimpo(s.nome); textSize = Estilo.Leitura.TITULO; typeface = fonteMedia; setTextColor(papel); maxLines = if (verEpisodios) 1 else 2; ellipsize = TextUtils.TruncateAt.END })
         val dados = listOfNotNull(s.ano?.toString(), f?.temporadas?.size?.takeIf { it > 0 }?.let { resources.getQuantityString(R.plurals.series_temporadas, it, it) },
-            s.nota?.let { "★ %.1f".format(Locale.getDefault(), it) }, f?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(s.grupo).ifEmpty { null },
+            (ext?.let { InfoExterna.notasDe(it).media } ?: s.nota)?.let { "★ %.1f".format(Locale.getDefault(), it) }, f?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(s.grupo).ifEmpty { null },
             when (Idioma.versao(s.nome, s.grupo)) {
                 Idioma.Versao.LEGENDADA -> getString(R.string.idioma_legendado)
                 Idioma.Versao.DUBLADA -> getString(R.string.idioma_dublado_curto)

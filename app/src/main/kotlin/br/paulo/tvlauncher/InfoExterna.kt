@@ -199,8 +199,17 @@ object InfoExterna {
     /** As notas que mostramos. Escalas: IMDb 0-10, RT e Metacritic 0-100, Letterboxd 0-5. Null = não veio. */
     data class Notas(val imdb: Float? = null, val rt: Int? = null, val metacritic: Int? = null, val letterboxd: Float? = null) {
         val vazia: Boolean get() = imdb == null && rt == null && metacritic == null && letterboxd == null
-        /** Uma nota de 0 a 10 para ordenar e filtrar: IMDb; sem ele, Letterboxd x 2; sem ele, RT / 10. */
-        val de0a10: Float? get() = imdb ?: letterboxd?.times(2) ?: rt?.div(10f) ?: metacritic?.div(10f)
+        /**
+         * A nota da estrela (16/11/2026, pedido do dono): média de IMDb, Metacritic e Letterboxd, todos de 0 a 10. O Rotten
+         * Tomatoes fica fora: "85%" é a fração de críticos que gostaram, não uma nota (puxaria a média para cima); só
+         * entra quando é a única. Sem votos por site no MDBList, não dá para pesar.
+         */
+        val media: Float? get() {
+            val notas = listOfNotNull(imdb, metacritic?.div(10f), letterboxd?.times(2))
+            return if (notas.isNotEmpty()) notas.sum() / notas.size else rt?.div(10f)
+        }
+        /** Uma nota de 0 a 10 para ordenar e filtrar: a mesma da estrela. */
+        val de0a10: Float? get() = media
     }
 
     fun urlLoteMdblist(chave: String, serie: Boolean): String =

@@ -102,7 +102,11 @@ class InfoExternaTest {
         assertEquals(8.0f, n.imdb); assertEquals(83, n.rt); assertEquals(74, n.metacritic); assertEquals(3.9f, n.letterboxd)
         assertTrue(m[5]!!.vazia)
         assertEquals("IMDb 8,0  ·  Rotten Tomatoes 83%  ·  Metacritic 74  ·  Letterboxd 3,9", InfoExterna.textoNotas(n, Locale("pt", "BR")))
-        assertEquals(8.0f, n.de0a10)
+        // A estrela: média de IMDb 8,0, Metacritic 74 (7,4) e Letterboxd 3,9 (7,8); o Rotten Tomatoes fica fora.
+        assertEquals(7.733f, n.de0a10!!, 0.001f)
+        assertEquals(7.2f, InfoExterna.Notas(imdb = 7.4f, rt = 85, metacritic = 70).media!!, 0.001f)   // Noturno, 16/11
+        assertEquals(8.5f, InfoExterna.Notas(rt = 85).media!!, 0.001f)   // só o Rotten: ele vale
+        assertNull(InfoExterna.Notas().media)
         assertEquals(7.8f, InfoExterna.Notas(letterboxd = 3.9f).de0a10!!, 0.001f)
         assertEquals("""{"ids":[1,2]}""", InfoExterna.corpoLoteMdblist(listOf(1, 2)))
         assertEquals("https://api.mdblist.com/tmdb/show/?apikey=k", InfoExterna.urlLoteMdblist("k", true))
