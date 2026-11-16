@@ -623,7 +623,7 @@ class FilmesActivity : Activity() {
             val v = reuso ?: novoCard()
             val c = v.tag as Card
             val f = naGrade[p]
-            c.nome.text = Vod.nomeLimpo(f.nome)
+            c.nome.text = Vod.nomeTela(f.nome, f.ano)
             val pos = posicoes[f.chave]
             if (Vod.deveRetomar(pos) && pos!!.duracao > 0) {
                 c.barra.visibility = View.VISIBLE; c.barra.fracao = BarraTempo.fracao(pos.ms, pos.duracao)
@@ -692,7 +692,7 @@ class FilmesActivity : Activity() {
         }
         val info = fichasRapidas[f.chave]
         val pos = posicoes[f.chave]?.takeIf { p -> p.duracao > 0 }
-        painel.mostrarFoco(Estilo.infoFoco(Vod.nomeLimpo(f.nome), notaRapida[f.chave] ?: f.nota, listOfNotNull(
+        painel.mostrarFoco(Estilo.infoFoco(Vod.nomeTela(f.nome, f.ano), notaRapida[f.chave] ?: f.nota, listOfNotNull(
             f.ano?.toString(),
             info?.duracaoMin?.let { if (it >= 60) "${it / 60} h ${"%02d".format(it % 60)}" else "$it min" },
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(f.grupo).ifEmpty { null },
@@ -895,12 +895,13 @@ class FilmesActivity : Activity() {
         val direita = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(36), 0, 0, 0) }
         val topo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
         val texto = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        texto.addView(TextView(this).apply { text = Vod.nomeLimpo(f.nome); textSize = Estilo.Leitura.TITULO; typeface = fonteMedia; setTextColor(papel); maxLines = 3; ellipsize = TextUtils.TruncateAt.END })
+        texto.addView(TextView(this).apply { text = Vod.nomeTela(f.nome, f.ano); textSize = Estilo.Leitura.TITULO; typeface = fonteMedia; setTextColor(papel); maxLines = 3; ellipsize = TextUtils.TruncateAt.END })
         val dados = listOfNotNull(
             (f.ano?.toString() ?: info?.lancamento?.take(4)?.takeIf { it.isNotEmpty() }),
             info?.duracaoMin?.let { if (it >= 60) "${it / 60} h ${it % 60} min" else "$it min" },
             (ext?.let { InfoExterna.notasDe(it).media } ?: f.nota)?.let { "★ %.1f".format(Locale.getDefault(), it) },
-            info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(f.grupo).ifEmpty { null },
+            // Gêneros do TMDB primeiro (no idioma da TV); os do servidor costumam vir em inglês.
+            ext?.detalhe?.generos?.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(f.grupo).ifEmpty { null },
             rotuloVersao(Idioma.versao(f.nome, f.grupo)),
         ).joinToString("   ·   ")
         texto.addView(TextView(this).apply { text = dados; textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(10), 0, 0) })

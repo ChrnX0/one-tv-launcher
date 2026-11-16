@@ -137,4 +137,14 @@ class PlayerVodTest {
         assertEquals(20_000, o.size)
         assertTrue("ordem por nome levou $ms ms", ms < 600)
     }
+
+    @Test fun nomeTelaTiraSoOAnoDoProprioTitulo() {
+        assertEquals("O Senhor dos Anéis: Os Anéis de Poder", Vod.nomeTela("O Senhor dos Anéis: Os Anéis de Poder 2022", 2022))
+        assertEquals("Mulher-Maravilha 1984", Vod.nomeTela("Mulher-Maravilha 1984", 2020))
+        assertEquals("1917", Vod.nomeTela("1917", 2019))
+        assertEquals("1917", Vod.nomeTela("1917", 1917))
+        assertEquals("Duna", Vod.nomeTela("BR: Duna (2021)", 2021))
+        assertEquals("Série 2022", Vod.nomeTela("Série 2022", null))
+        assertEquals("Blade Runner 2049", Vod.nomeTela("Blade Runner 2049", 2017))
+    }
 }

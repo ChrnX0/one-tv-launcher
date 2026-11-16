@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Filmes e Séries: o nome não repete mais o ano (“Os Anéis de Poder 2022”) e os gêneros vêm no idioma da TV quando o TMDB tem a ficha</item>
         <item>Filmes e Séries: a ficha abre mais leve (um fundo de tela cheia em vez de dois) e “Episódios” não quebra mais no meio da palavra; detalhes compridos como “Temporada 1” vão embaixo do nome do botão</item>
         <item>Jogos: ao rolar as fileiras, elas não aparecem mais por cima do jogo em destaque no alto</item>
         <item>Modo infantil por idade: a classificação indicativa de todos os filmes e séries é buscada de madrugada, aos poucos, e não só 300 a cada vez que Filmes abre. Na primeira noite o “Até 12 anos” já passa a mostrar o catálogo inteiro que tem classificação</item>

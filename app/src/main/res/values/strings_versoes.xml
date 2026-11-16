@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Movies and Series: the name no longer repeats the year (“The Rings of Power 2022”) and genres come in the TV’s language when TMDB has the details</item>
         <item>Movies and Series: the details open lighter (one full-screen background instead of two) and “Episodes” no longer breaks in the middle of the word; long details like “Season 1” go under the button name</item>
         <item>Games: when the rows scroll, they no longer show over the highlighted game at the top</item>
         <item>Kids mode by age: the age rating of every movie and series is fetched overnight, a little at a time, not just 300 each time Movies opens. After the first night “Up to 12” already shows the whole rated catalog</item>

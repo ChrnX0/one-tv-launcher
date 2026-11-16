@@ -561,7 +561,7 @@ class SeriesActivity : Activity() {
         tela.removeCallbacks(lerFichaRapida)
         if (s == null) { painelInfo.mostrarFoco(if (chave == INTERESSES) getString(R.string.filmes_interesses_vazio) else "", ""); return }
         val info = fichasRapidas[s.chave]
-        painelInfo.mostrarFoco(Estilo.infoFoco(Vod.nomeLimpo(s.nome), notaRapida[s.chave] ?: s.nota, listOfNotNull(
+        painelInfo.mostrarFoco(Estilo.infoFoco(Vod.nomeTela(s.nome, s.ano), notaRapida[s.chave] ?: s.nota, listOfNotNull(
             s.ano?.toString(),
             info?.temporadas?.size?.takeIf { it > 0 }?.let { resources.getQuantityString(R.plurals.series_temporadas, it, it) },
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(s.grupo).ifEmpty { null },
@@ -684,7 +684,7 @@ class SeriesActivity : Activity() {
             val v = reuso ?: novoCard()
             val c = v.tag as Card
             val s = naGrade[p]
-            c.nome.text = Vod.nomeLimpo(s.nome)
+            c.nome.text = Vod.nomeTela(s.nome, s.ano)
             c.sub.text = ultimos[s.chave]?.let { "T${it.temporada}E${it.numero}" }.orEmpty()
             c.sub.visibility = if (c.sub.text.isEmpty()) View.GONE else View.VISIBLE
             // Etiqueta: "20 de 62" episódios vistos (sem número de %) ou "Finalizado". Sem conta ainda (ficha nunca aberta
@@ -942,9 +942,11 @@ class SeriesActivity : Activity() {
         val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(if (acoes.childCount > 0) dp(36) else 0, 0, 0, 0) }
         val topo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
         val texto = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        texto.addView(TextView(this).apply { text = Vod.nomeLimpo(s.nome); textSize = Estilo.Leitura.TITULO; typeface = fonteMedia; setTextColor(papel); maxLines = if (verEpisodios) 1 else 2; ellipsize = TextUtils.TruncateAt.END })
+        texto.addView(TextView(this).apply { text = Vod.nomeTela(s.nome, s.ano); textSize = Estilo.Leitura.TITULO; typeface = fonteMedia; setTextColor(papel); maxLines = if (verEpisodios) 1 else 2; ellipsize = TextUtils.TruncateAt.END })
         val dados = listOfNotNull(s.ano?.toString(), f?.temporadas?.size?.takeIf { it > 0 }?.let { resources.getQuantityString(R.plurals.series_temporadas, it, it) },
-            (ext?.let { InfoExterna.notasDe(it).media } ?: s.nota)?.let { "★ %.1f".format(Locale.getDefault(), it) }, f?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(s.grupo).ifEmpty { null },
+            (ext?.let { InfoExterna.notasDe(it).media } ?: s.nota)?.let { "★ %.1f".format(Locale.getDefault(), it) },
+            // Gêneros do TMDB primeiro: vêm no idioma da TV; os do servidor vinham em inglês ("Action & Adventure", Sala 16/11).
+            ext?.detalhe?.generos?.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: f?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(s.grupo).ifEmpty { null },
             when (Idioma.versao(s.nome, s.grupo)) {
                 Idioma.Versao.LEGENDADA -> getString(R.string.idioma_legendado)
                 Idioma.Versao.DUBLADA -> getString(R.string.idioma_dublado_curto)

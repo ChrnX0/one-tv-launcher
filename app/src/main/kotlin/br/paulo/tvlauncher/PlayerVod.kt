@@ -88,6 +88,20 @@ object Vod {
         nome.replace(reAno, "").replace(rePrefixoPais, "").replace(reEspacos, " ").trim()
             .ifEmpty { nome.trim() }
 
+    /**
+     * Nome para a tela quando o ano já aparece ao lado: além do [nomeLimpo], tira um ano solto no fim do nome SÓ se for o
+     * próprio [ano] do título ("O Senhor dos Anéis: Os Anéis de Poder 2022" com ano 2022, visto na Sala em 16/11/2026).
+     * "Mulher-Maravilha 1984" (ano 2020) e "1917" (nada antes do número) ficam como estão.
+     */
+    fun nomeTela(nome: String, ano: Int?): String {
+        val limpo = nomeLimpo(nome)
+        if (ano == null) return limpo
+        val m = reAnoSolto.find(limpo) ?: return limpo
+        if (m.groupValues[2].toIntOrNull() != ano) return limpo
+        return m.groupValues[1].trimEnd(' ', '-', '–', ':', ',').ifEmpty { limpo }
+    }
+    private val reAnoSolto = Regex("""^(.*\S)\s+((?:19|20)\d{2})$""")
+
     // Compiladas uma vez (13/11/2026): antes eram 2 Regex novas a cada chamada, e nomeLimpo roda para cada card desenhado
     // e para cada filme na ordem por nome.
     private val rePrefixoPais = Regex("""^\s*[\[(|]?[A-Z]{2,3}[\])|]?\s*[:|\-]\s*""")
