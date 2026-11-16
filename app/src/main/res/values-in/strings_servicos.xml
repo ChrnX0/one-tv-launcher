@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">Ep. baru %1$s</string>
     <string name="ext_hoje">hari ini</string>
     <string name="ext_amanha">besok</string>
-    <string name="sv_mdblist_passos">Opsional: menambahkan Rotten Tomatoes, Letterboxd, dan Metacritic ke rating IMDb (yang sudah berfungsi tanpanya).\n1. Arahkan kamera ponsel ke kode di kiri, buat akun gratis, dan salin kunci API.\n2. Arahkan ke kode di kanan: panel web terbuka di Setelan. Tempel kunci di bawah MDBList dan ketuk Simpan kunci.\n3. TV langsung memeriksanya dan layar ini berlanjut sendiri.</string>
+    <string name="sv_mdblist_passos">Opsional: menambahkan Rotten Tomatoes, Letterboxd, dan Metacritic ke rating IMDb (yang sudah berfungsi tanpanya).\n1. Arahkan kamera ponsel ke kode di kiri lalu masuk (atau buat akun gratis). Di bagian bawah halaman, ketuk API Access, buat kuncinya jika belum ada, lalu salin.\n2. Arahkan ke kode di kanan: panel web terbuka di Setelan. Tempel kunci di bawah MDBList dan ketuk Simpan kunci.\n3. TV langsung memeriksanya dan layar ini berlanjut sendiri.</string>
     <string name="sv_mdblist_qr1">Halaman kunci MDBList</string>
     <string name="sv_mdblist_qr2">Panel web (%1$s)</string>
     <string name="sv_mdblist_digitar">Ketik kunci di sini</string>

@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">새 에피소드 %1$s</string>
     <string name="ext_hoje">오늘</string>
     <string name="ext_amanha">내일</string>
-    <string name="sv_mdblist_passos">선택 사항: IMDb 평점(이것 없이도 작동)에 Rotten Tomatoes, Letterboxd, Metacritic을 추가합니다.\n1. 휴대폰 카메라로 왼쪽 코드를 스캔하여 무료 계정을 만들고 API 키를 복사하세요.\n2. 오른쪽 코드를 스캔하세요: 웹 패널의 설정이 열립니다. MDBList에 키를 붙여 넣고 키 저장을 누르세요.\n3. TV가 바로 확인하고 이 화면이 자동으로 진행됩니다.</string>
+    <string name="sv_mdblist_passos">선택 사항: IMDb 평점(이것 없이도 작동)에 Rotten Tomatoes, Letterboxd, Metacritic을 추가합니다.\n1. 휴대폰 카메라로 왼쪽 코드를 스캔하고 로그인하세요(또는 무료 계정 만들기). 페이지 맨 아래에서 API Access를 누르고, 키가 없으면 생성한 뒤 복사하세요.\n2. 오른쪽 코드를 스캔하세요: 웹 패널의 설정이 열립니다. MDBList에 키를 붙여 넣고 키 저장을 누르세요.\n3. TV가 바로 확인하고 이 화면이 자동으로 진행됩니다.</string>
     <string name="sv_mdblist_qr1">MDBList 키 페이지</string>
     <string name="sv_mdblist_qr2">웹 패널(%1$s)</string>
     <string name="sv_mdblist_digitar">여기에 키를 입력하세요</string>
