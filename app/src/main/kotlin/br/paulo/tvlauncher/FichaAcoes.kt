@@ -21,36 +21,66 @@ import android.widget.TextView
  * à direita as informações. Peças comuns às duas telas.
  */
 object FichaAcoes {
+    // Coluna fina com ícones (16/11/2026, pedido do dono: "mais bonitinha e ocupando menos espaço"): 330 -> 240 dp, e o
+    // que sobra vai para as informações. Só a ação com foco tem fundo (faixa branca, a coisa mais óbvia da tela); as
+    // outras são ícone + texto, sem caixa. Texto longo (alemão, "Continuar T1E1") quebra em 2 linhas em vez de cortar.
     /** Largura da coluna de ações (dp). */
-    const val LARGURA_DP = 330
-    const val ALTURA_DP = 54
-    const val TEXTO_SP = 20f
-    const val DETALHE_SP = 15f
+    const val LARGURA_DP = 240
+    const val ALTURA_DP = 48
+    const val TEXTO_SP = 19f
+    const val DETALHE_SP = 14f
+    const val ICONE_DP = 22
 
     private fun dp(ctx: Context, v: Int) = Estilo.dp(ctx, v)
 
+    private val CORES_TEXTO = ColorStateList(arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf()), intArrayOf(Estilo.TEXTO_NO_FOCO, Estilo.TEXTO))
+    private val CORES_ICONE = ColorStateList(arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf()), intArrayOf(Estilo.TEXTO_NO_FOCO, Estilo.TEXTO_2))
+
+    /** O ícone de cada ação, pela marca (a mesma usada para devolver o foco depois de redesenhar). */
+    fun iconeDe(marca: String): IconeFicha.Tipo? = when (marca) {
+        "continuar", "assistir" -> IconeFicha.Tipo.PLAY
+        "comeco" -> IconeFicha.Tipo.COMECO
+        "episodios" -> IconeFicha.Tipo.EPISODIOS
+        "temporadas" -> IconeFicha.Tipo.TEMPORADAS
+        "trailer" -> IconeFicha.Tipo.TRAILER
+        "elenco" -> IconeFicha.Tipo.ELENCO
+        "versao" -> IconeFicha.Tipo.VERSAO
+        "colecao" -> IconeFicha.Tipo.COLECAO
+        "sinopse" -> IconeFicha.Tipo.SINOPSE
+        "naoeeste" -> IconeFicha.Tipo.NAO_E_ESTE
+        else -> null
+    }
+
     /**
-     * Uma ação: faixa larga com o texto à esquerda e um detalhe curto à direita ("de 7:01", "Temporada 2").
-     * Com foco: branca e texto escuro (o foco é a coisa mais óbvia da tela); sem foco: apagada.
+     * Uma ação: ícone, texto e um detalhe curto à direita ("16:48", "Temporada 2"). Com foco: faixa branca e tudo
+     * escuro; sem foco: só ícone e texto, sem caixa. O "▶" do começo do texto vira o ícone.
      */
     fun acao(ctx: Context, texto: String, detalhe: String? = null, marca: String, aoApertar: () -> Unit): LinearLayout =
         LinearLayout(ctx).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
-            setPadding(dp(ctx, 20), 0, dp(ctx, 18), 0)
+            minimumHeight = dp(ctx, ALTURA_DP)
+            setPadding(dp(ctx, 16), dp(ctx, 6), dp(ctx, 16), dp(ctx, 6))
             isFocusable = true; isClickable = true; tag = marca
             background = StateListDrawable().apply {
-                addState(intArrayOf(android.R.attr.state_focused), GradientDrawable().apply { cornerRadius = dp(ctx, 14).toFloat(); setColor(Estilo.TEXTO) })
-                addState(intArrayOf(), GradientDrawable().apply { cornerRadius = dp(ctx, 14).toFloat(); setColor(Estilo.SUPERFICIE); setStroke(dp(ctx, 1), Estilo.BORDA) })
+                addState(intArrayOf(android.R.attr.state_focused), GradientDrawable().apply { cornerRadius = dp(ctx, 24).toFloat(); setColor(Estilo.TEXTO) })
+                addState(intArrayOf(), ColorDrawable(Color.TRANSPARENT))
+            }
+            iconeDe(marca)?.let { tipo ->
+                addView(android.widget.ImageView(ctx).apply {
+                    setImageDrawable(IconeFicha(tipo).apply { setTintList(CORES_ICONE) })
+                    isDuplicateParentStateEnabled = true
+                }, LinearLayout.LayoutParams(dp(ctx, ICONE_DP), dp(ctx, ICONE_DP)).apply { marginEnd = dp(ctx, 12) })
             }
             addView(TextView(ctx).apply {
-                text = texto; textSize = TEXTO_SP; typeface = Fontes.manrope(500); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
+                text = texto.removePrefix("▶").trim(); textSize = TEXTO_SP; typeface = Fontes.manrope(500); maxLines = 2; ellipsize = TextUtils.TruncateAt.END
+                setLineSpacing(0f, 0.95f)
                 isDuplicateParentStateEnabled = true
-                setTextColor(ColorStateList(arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf()), intArrayOf(Estilo.TEXTO_NO_FOCO, Estilo.TEXTO)))
+                setTextColor(CORES_TEXTO)
             }, LinearLayout.LayoutParams(0, -2, 1f))
             if (!detalhe.isNullOrEmpty()) addView(TextView(ctx).apply {
                 text = detalhe; textSize = DETALHE_SP; maxLines = 1; isDuplicateParentStateEnabled = true
                 setTextColor(ColorStateList(arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf()), intArrayOf(Estilo.TEXTO_NO_FOCO_2, Estilo.TEXTO_3)))
-            }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(ctx, 10) })
+            }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(ctx, 8) })
             setOnClickListener { aoApertar() }
         }
 
@@ -63,7 +93,7 @@ object FichaAcoes {
 
     fun adicionar(lista: LinearLayout, v: LinearLayout) {
         val ctx = lista.context
-        lista.addView(v, LinearLayout.LayoutParams(-1, dp(ctx, ALTURA_DP)).apply { if (lista.childCount > 0) topMargin = dp(ctx, 10) })
+        lista.addView(v, LinearLayout.LayoutParams(-1, -2).apply { if (lista.childCount > 0) topMargin = dp(ctx, 6) })
     }
 
     /** A sinopse cortada passou de [linhas]? Só se sabe depois de desenhada. */

@@ -851,7 +851,7 @@ class FilmesActivity : Activity() {
         val (colAcoes, acoes) = FichaAcoes.coluna(this)
         val primeiro: View
         if (Vod.deveRetomar(pos)) {
-            primeiro = FichaAcoes.acao(this, getString(R.string.filmes_continuar_de, relogio(pos!!.ms)), marca = "continuar") { tocar(f, doComeco = false) }
+            primeiro = FichaAcoes.acao(this, getString(R.string.filmes_continuar), relogio(pos!!.ms), marca = "continuar") { tocar(f, doComeco = false) }
             FichaAcoes.adicionar(acoes, primeiro)
             FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.filmes_do_comeco), marca = "comeco") { tocar(f, doComeco = true) })
         } else {
