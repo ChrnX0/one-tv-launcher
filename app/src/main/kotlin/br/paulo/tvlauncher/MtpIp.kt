@@ -511,6 +511,11 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
     /** Número da transação que o computador mandou cancelar (chega pela conexão de eventos, noutra thread). */
     @Volatile var cancelada = 0
 
+    companion object {
+        /** Só para a bancada de testes: recebe cada pedido e cada resposta (código e parâmetros). Na TV fica nulo. */
+        @Volatile var rastro: ((String) -> Unit)? = null
+    }
+
     private var aberta = false
     private var pendente: MtpLoja.Pendente? = null
     private val bloco = ByteArray(256 * 1024)
@@ -530,12 +535,14 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
     private fun responder(codigo: Int, tid: Int, vararg params: Int) {
         val w = Mtp.Escritor().u16(codigo).u32(tid)
         params.forEach { w.u32(it) }
+        rastro?.invoke("  <- %04X %s".format(codigo, params.joinToString(" ") { "%X".format(it) }))
         PtpIp.escrever(s, PtpIp.RESPOSTA, w.bytes())
         s.flush()
     }
 
     /** Fase de dados para o computador: um bloco pequeno, inteiro. */
     private fun mandar(tid: Int, dados: ByteArray) {
+        rastro?.invoke("  dados ${dados.size} B: " + dados.take(96).joinToString("") { "%02x".format(it) })
         PtpIp.escrever(s, PtpIp.DADOS_COMECO, Mtp.Escritor().u32(tid).u64(dados.size.toLong()).bytes())
         PtpIp.escrever(s, PtpIp.DADOS_FIM, Mtp.Escritor().u32(tid).cru(dados).bytes())
     }
@@ -608,6 +615,7 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
         val op = l.u16()
         val tid = l.u32()
         val p = IntArray(5) { if (l.resto >= 4) l.u32() else 0 }
+        rastro?.invoke("op %04X fase=%d %s".format(op, fase, p.joinToString(" ") { "%X".format(it) }))
         try {
             if (!aberta && op != Mtp.OP_INFO_APARELHO && op != Mtp.OP_ABRIR_SESSAO) {
                 if (fase == 2) receber(tid, Long.MAX_VALUE, Nada)
