@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Vitals locais (degrau 2, item 8): quedas e travadas do launcher nos últimos 7 dias (Diagnóstico). -->
+<resources>
+    <string name="vit_titulo">ランチャーの安定性（7日間）</string>
+    <string name="vit_ok">クラッシュもフリーズもありません。使用日数: %1$d</string>
+    <string name="vit_problemas">クラッシュ: %1$d。フリーズ: %2$d。画面で発生: %3$d。問題のあった日: %5$d日中%4$d日</string>
+</resources>

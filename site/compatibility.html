@@ -37,6 +37,7 @@ code{font-size:.9em;word-break:break-all}
 <li data-t="t_estavel"><b>24 h stable</b>: no crash in 24 hours of use.</li>
 <li data-t="t_telas"><b>Screens</b>: no cut or overlapping text (checked on a computer for each release).</li>
 </ul>
+<p class="sub" id="leveza" hidden></p>
 <input class="busca" id="busca" type="search" autocomplete="off" placeholder="Find your device" aria-label="Find your device">
 <p id="carregando" data-t="carregando">Loading…</p>
 <div class="lista" id="lista"></div>
@@ -67,6 +68,7 @@ const T = {
     em_teste: "Em teste", planejado: "Na fila",
     home: "Botão Home", acordar: "Acorda rápido", estavel: "24 h estável", telas: "Telas",
     stick: "Stick", box: "Caixinha", tv: "TV", medido: "Medido em",
+    memoria: "Memória da tela inicial", homeTempo: "Montar a tela inicial", baixar: "Download da última versão",
   },
   en: {
     busca: "Find your device", trocar: "Português",
@@ -74,6 +76,7 @@ const T = {
     em_teste: "Testing", planejado: "Queued",
     home: "Home button", acordar: "Fast wake", estavel: "24 h stable", telas: "Screens",
     stick: "Stick", box: "Box", tv: "TV", medido: "Measured on",
+    memoria: "Home screen memory", homeTempo: "Building the home screen", baixar: "Latest version download",
   },
 };
 const ORIGINAL = {};
@@ -102,6 +105,7 @@ function cartao(a) {
     corpo = `<p class="sub">Android ${esc(ap.android)} · ${esc(ap.ramMb)} MB RAM · ${ap.processo64 ? "64-bit" : "32-bit"}</p>
       <ul class="testes">${r.testes.map(x => `<li class="${x.veredito}"><b>${x.veredito === "PASSOU" ? "✓" : x.veredito === "FALHOU" ? "✗" : "…"}</b>
       <span>${esc(t(x.id))}: ${esc(t(x.veredito))}</span><span class="num">${esc(numero(x.id, r))}</span></li>`).join("")}</ul>
+      ${r.leveza ? `<p class="sub">${esc(t("memoria"))}: ${esc(r.leveza.memoriaMb)} MB${r.leveza.homeCarregarMs != null ? ` · ${esc(t("homeTempo"))}: ${esc(r.leveza.homeCarregarMs + r.leveza.homeDesenharMs)} ms` : ""}</p>` : ""}
       <p class="sub">${esc(t("medido"))} ${esc(dataLocal(r.medidoEm))} · v${esc(r.app.versionCode)}</p>`;
   }
   return `<article class="cartao"><h2>${esc(a.nome)}</h2>
@@ -119,7 +123,16 @@ function desenhar() {
   document.getElementById("lista").innerHTML = vis.map(cartao).join("");
   document.getElementById("vazio").hidden = vis.length > 0 || !aparelhos.length;
   document.getElementById("data").textContent = atualizado;
+  const lev = document.getElementById("leveza");
+  lev.hidden = !tamanhos; if (tamanhos) lev.textContent = `${t("baixar")}: ${tamanhos}`;
 }
+// Números de leveza (degrau 2): o tamanho dos APKs vem do Release mais recente, sem nada digitado à mão.
+let tamanhos = "";
+fetch("https://api.github.com/repos/ChrnX0/one-tv-launcher/releases/latest").then(r => r.json()).then(r => {
+  const mb = n => { const a = (r.assets || []).find(x => x.name === n); return a ? (a.size / 1048576).toFixed(1) + " MB" : null; };
+  const p = [mb("one-tv-launcher.apk") && "32-bit " + mb("one-tv-launcher.apk"), mb("one-tv-launcher-arm64.apk") && "64-bit " + mb("one-tv-launcher-arm64.apk")].filter(Boolean);
+  if (p.length) { tamanhos = p.join(" · ") + " (v" + String(r.tag_name).replace(/^v/, "") + ")"; desenhar(); }
+}).catch(() => {});
 
 document.getElementById("trocar").addEventListener("click", e => {
   e.preventDefault(); idioma = idioma === "pt" ? "en" : "pt";

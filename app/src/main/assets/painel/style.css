@@ -679,3 +679,10 @@ body.ocupado::before { opacity: 1; animation: carregando 1.1s linear infinite; }
 
 /* Cuidar de longe: foto da tela no momento do pedido de ajuda (aba Controle) */
 .foto-ajuda { display: block; width: 100%; max-width: 640px; aspect-ratio: 16 / 9; object-fit: contain; border-radius: 8px; background: var(--superficie2); }
+/* Modo completo no assistente (degrau 2, item 6): um passo por vez; o da vez ganha texto e botão. */
+.poderes-primeira { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.poderes-primeira li { padding: 12px 14px; border-radius: 12px; border: 1px solid var(--borda-forte); background: var(--superficie); font-size: 17px; opacity: .6; }
+.poderes-primeira li.agora { opacity: 1; border: 2px solid var(--acento); }
+.poderes-primeira li.feito { opacity: .85; }
+.poderes-primeira li .ok { margin-right: 8px; color: var(--acento); }
+.poderes-primeira li p { margin: 8px 0 10px; font-size: 16px; line-height: 1.45; }

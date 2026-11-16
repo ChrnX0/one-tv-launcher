@@ -875,6 +875,11 @@ object PainelWeb {
             "/api/chave/apagar" -> if (req.metodo == "POST") return apagarChave(req, token, ip)
             "/api/primeira/tv" -> if (req.metodo == "GET") return json(200, primeiraEstado())
             "/api/primeira/idioma-tv" -> if (req.metodo == "POST") return abrirIdiomaNaTv(ip)
+            // Degrau 2, item 6: o celular guia o "modo completo" (teclas, opções do desenvolvedor, parear, dono).
+            "/api/primeira/poderes" -> when (req.metodo) {
+                "GET" -> return json(200, PrimeiraPoderes.json(estadoPoderes()))
+                "POST" -> return fazerPoderNaTv(req, ip)
+            }
             "/api/config" -> when (req.metodo) {
                 "GET" -> return json(200, PainelConfig.estado(app))
                 "POST" -> {
@@ -1315,6 +1320,38 @@ object PainelWeb {
             .put("audio", if (IdiomaPlayer.prefs(app).padrao == Idioma.Pref.ORIGINAL) "original" else "dublado")
             .put("cidade", LocalClima.ler(app)?.let { LocalClima.descrever(it) } ?: JSONObject.NULL)
             .put("contasTv", PlayerArmazem.fontes(app).size)
+    }
+
+    private fun estadoPoderes() = PrimeiraPoderes.Estado(
+        teclas = AutorizaShizukuService.instancia != null,
+        dev = Settings.Global.getInt(app.contentResolver, Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0) == 1,
+        shell = SaudeAcesso.shellEsperado(app),
+        dono = PrivilegioDO.somosDonos(app))
+
+    /**
+     * Abre NA TV a tela do passo pedido (só abre telas: quem confirma é a pessoa, com o controle). O dono do aparelho
+     * nunca liga daqui: abre as boas-vindas, onde a pergunta (com o aviso das contas) é respondida na TV.
+     */
+    private fun fazerPoderNaTv(req: Requisicao, ip: String): Resposta {
+        val passo = PrimeiraPoderes.Passo.de(corpoJson(req)?.optString("passo")) ?: return erro(400, "passo desconhecido")
+        val i = { acao: String -> android.content.Intent(acao).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK) }
+        return try {
+            when (passo) {
+                PrimeiraPoderes.Passo.TECLAS -> app.startActivity(i(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                PrimeiraPoderes.Passo.DEV -> app.startActivity(i(Settings.ACTION_DEVICE_INFO_SETTINGS))
+                PrimeiraPoderes.Passo.PAREAR -> {
+                    // A janela do pareamento é do serviço de acessibilidade: monta na thread da tela.
+                    if (AutorizaShizukuService.instancia == null) return erro(409, "ligue antes as teclas do controle (passo 1)")
+                    android.os.Handler(android.os.Looper.getMainLooper()).post { PareamentoNaTv.comecar(app) }
+                }
+                PrimeiraPoderes.Passo.DONO -> app.startActivity(android.content.Intent(app, BoasVindasActivity::class.java)
+                    .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
+            }
+            PainelArmazem.registrar(app, ip, "abrir na TV: ${passo.id}", "ok")
+            json(200, JSONObject().put("ok", true))
+        } catch (e: Exception) {
+            erro(500, "não consegui abrir na TV; faça pelo controle, em Configurações")
+        }
     }
 
     private fun abrirIdiomaNaTv(ip: String): Resposta = try {

@@ -14,6 +14,13 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Modo de segurança: se a tela inicial parar 3 vezes em 15 minutos, abre uma versão simples dela, com os apps e o botão “Procurar versão corrigida”</item>
+        <item>Primeira abertura: a TV pergunta como é usada (Simples, Completo ou Cuidar de alguém) e mostra só o que serve. Dá para trocar em Configurações › Sistema</item>
+        <item>Modo hóspede (Configurações › Família): pede o PIN para sair, mostra as boas-vindas com as regras da casa e o Wi-Fi, e na saída apaga os logins dos apps escolhidos</item>
+        <item>Agenda da família: o perfil da TV troca sozinho no horário marcado (por exemplo, o perfil das crianças de segunda a sexta às 14h)</item>
+        <item>Ajuda por QR: cada aba das Configurações tem a linha “Ajuda desta aba”, com um QR que abre a ajuda no celular, no idioma da TV</item>
+        <item>Primeira configuração pelo celular: o novo passo “Modo completo” guia, um por vez, as teclas do controle, as opções do desenvolvedor, o pareamento e o dono do aparelho</item>
+        <item>Diagnóstico: “Estabilidade do launcher (7 dias)” conta as quedas e travadas da tela inicial</item>
         <item>Canal pedido por nome (Claude ou voz): vem o do país da TV. “Globo” no Brasil abre a Globo daqui, não a TV Globo de Portugal; para outro país, diga junto (“Globo Portugal”)</item>
         <item>Calibração da imagem: o padrão “Barras de cor 75%” não fecha mais o launcher</item>
         <item>Filmes: o diretor vem do TMDB (Duna mostra Denis Villeneuve), não mais do nome errado da lista</item>
@@ -176,6 +183,12 @@
         <item>Protetor de tela com widgets novos, de letra maior: escolha Faixa de vidro (as próximas horas numa curva, com a hora do sol), Cartões (agora, horas, hoje e amanhã) ou Sem caixa (a temperatura grande e o tempo numa frase) em Configurações › Tela e energia › Widgets do protetor, ou no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Modo de segurança</item>
+        <item>Como esta TV é usada</item>
+        <item>Modo hóspede</item>
+        <item>Agenda da família</item>
+        <item>Ajuda por QR</item>
+        <item>Estabilidade do launcher</item>
         <item>Canal do país</item>
         <item>Barras de cor 75%</item>
         <item>Diretor do filme</item>
@@ -310,6 +323,12 @@
         <item>Em Configurações › Tela e energia, OK em Widgets do protetor até o estilo que quiser e espere o protetor aparecer</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Com o comando de teste do modo de segurança, ao voltar à HOME aparece a tela simples com os apps? E “Tentar a tela inicial normal” volta para a de sempre?</item>
+        <item>Em Configurações › Sistema, troque “Como esta TV é usada” para Simples: as abas Casa e automações, Acesso remoto e Avançado somem? Depois volte para Completo</item>
+        <item>Em Configurações › Família, ligue o Modo hóspede e volte à HOME: aparecem as boas-vindas? Para desligar, a TV pede o PIN?</item>
+        <item>Em Família › Agenda da família, marque outro perfil para o próximo horário: na hora, o perfil trocou sozinho?</item>
+        <item>Em qualquer aba das Configurações, a última linha “Ajuda desta aba” mostra um QR que abre a ajuda certa no celular?</item>
+        <item>Em Configurações › Sistema › Diagnosticar a TV, a seção de erros mostra “Estabilidade do launcher (7 dias)”?</item>
         <item>Peça ao Claude “coloca na Globo”: abre a Globo do Brasil? E “Globo Portugal” abre a de Portugal?</item>
         <item>Em Configurações › Tela e energia › Calibração, escolha “Barras de cor 75%”: o padrão aparece e o launcher não fecha?</item>
         <item>Em Filmes, abra Duna: a ficha mostra Denis Villeneuve como diretor?</item>

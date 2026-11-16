@@ -1163,8 +1163,9 @@ class MainActivity : Activity() {
                 lista = montarEntradas(instalados)
                 desenhar()
                 // Medir para não deixar crescer: a thread da tela também atende as teclas do controle.
-                android.util.Log.i("TvLauncher.Apps", "preencherApps: carregar=${t1 - t0} ms (fora da tela), " +
-                    "desenhar=${android.os.SystemClock.elapsedRealtime() - t1} ms")
+                val desenhou = android.os.SystemClock.elapsedRealtime() - t1
+                android.util.Log.i("TvLauncher.Apps", "preencherApps: carregar=${t1 - t0} ms (fora da tela), desenhar=$desenhou ms")
+                LevezaTv.anotarHome(t1 - t0, desenhou)   // números de leveza (degrau 2): `EXTRAS --es o leveza`
             }
         }
     }

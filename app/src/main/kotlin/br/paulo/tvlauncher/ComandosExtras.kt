@@ -111,6 +111,8 @@ object ComandosExtras {
         // Modo de segurança da HOME (degrau 2): ligar à mão para ver a HOME mínima; sair; estado.
         "modo_seguro_testar" -> { ModoSeguro.ligarParaTeste(ctx); "modo de segurança ligado: aperte HOME" }
         "modo_seguro_sair" -> { ModoSeguro.sair(ctx); "modo de segurança desligado" }
+        "leveza" -> LevezaTv.json(ctx).toString()   // degrau 2: memória e tempo da HOME (volte à HOME umas vezes antes)
+        "vitais" -> VitaisTv.textoAdb(ctx)   // degrau 2: quedas e travadas do launcher por dia (VitaisLocais.kt)
         "modo_seguro" -> if (ModoSeguro.ativo(ctx)) "ligado" else "desligado"
         // Modo hóspede (degrau 2). O adb já é autenticado: desligar aqui não pede o PIN.
         "hospede" -> "ativo=${ModoHospede.ativo(ctx)} saida=${ModoHospede.textoSaida(ctx)} apps=${ModoHospede.paraLimpar(ctx)} ultima=${ModoHospede.ultimaLimpeza(ctx)}"
