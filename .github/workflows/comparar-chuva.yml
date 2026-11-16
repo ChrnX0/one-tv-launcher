@@ -1,0 +1,25 @@
+# Teste de escolha de fornecedor de clima (16/11/2026): WeatherAPI (Free) x Open-Meteo, chance de chuva por hora
+# em 5 capitais. Não faz parte do build. Roda só por push no branch do teste; apagar depois da escolha.
+name: Comparar chuva
+
+on:
+  push:
+    branches: [claude/project-thread-4qkng5]
+    paths: ['ferramentas/clima/**', '.github/workflows/comparar-chuva.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  comparar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Comparar
+        env:
+          WEATHERAPI_CHAVE: ${{ secrets.WEATHERAPI_CHAVE }}
+        run: |
+          if [ -f ferramentas/clima/previsao.csv ]; then python3 ferramentas/clima/comparar_chuva.py verificar; else python3 ferramentas/clima/comparar_chuva.py prever; fi
