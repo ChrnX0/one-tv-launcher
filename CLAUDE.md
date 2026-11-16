@@ -9,6 +9,10 @@ and `values-pt/` (Portuguese); the app follows the TV's system language. Read `R
 - **Never change `applicationId` (`br.paulo.tvlauncher`), the Kotlin namespace, or the `AdminReceiver` component name.**
   Installed TVs have this exact component as Device Owner; a different package/component is a different app and the
   owner can only be restored with a factory reset.
+- **Product package decided 16/11/2026: `tv.sofaly.launcher`** (product name "Sofaly"). It is ONLY for the new product
+  app (Play Store), as a separate build/flavor added when the Play version is built; the Kotlin namespace stays
+  `br.paulo.tvlauncher`. The build that the installed TVs (Sala) receive keeps `applicationId br.paulo.tvlauncher`
+  until a planned reset. Once published on Play the package can never change.
 - **Never uninstall the launcher or clear its data on a TV**, and never run `dpm remove-active-admin`, `MASTER_CLEAR`,
   `wipe` or `reboot recovery`. If `adb install -r` fails because of the signature, stop: don't uninstall to "fix" it.
 - **Release tag = `v<versionCode>`** (e.g. `v455713`). `Atualizador.kt` reads the number from the tag; a tag like
