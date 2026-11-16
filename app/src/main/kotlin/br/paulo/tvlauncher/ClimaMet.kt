@@ -136,6 +136,15 @@ object ClimaMet {
         return maxOf(pelaQuantia, peloSimbolo)
     }
 
+    /**
+     * Suaviza a chance hora a hora: cada hora fica com o maior entre ela e 80% das vizinhas (1 h antes e depois).
+     * Chuva prevista às 21 h quer dizer "pode chover por volta das 21 h", não "zero às 20 h". Inferência, como [chanceDaChuva].
+     */
+    fun suavizar(c: List<Int>): List<Int> = c.indices.map { i ->
+        val viz = maxOf(c.getOrElse(i - 1) { 0 }, c.getOrElse(i + 1) { 0 })
+        maxOf(c[i], Math.round(viz * 0.8).toInt())
+    }
+
     /** Visibilidade estimada (m) pela fração da área com neblina; o MET não manda visibilidade. 10 km = "10+ km" na tela. */
     fun visibilidade(neblina: Double): Double = when {
         neblina.isNaN() -> 10000.0
@@ -187,13 +196,19 @@ object ClimaMet {
         // Por dia (data local): temperaturas vistas, chances, códigos de dia claro, chuva em mm.
         class Acum { var max = Double.NaN; var min = Double.NaN; val chances = ArrayList<Int>(); var codigo = -1; var mm = 0.0 }
         val porDia = LinkedHashMap<String, Acum>()
-        var ms = meiaNoite
         val ultimoMs = passos.last().ms + 6 * 3_600_000L
+        // Chance de cada hora primeiro, depois suavizada ([suavizar]): a estimativa por mm pula de 0% a 75% de uma hora
+        // para a outra (visto em 16/11/2026 contra a Open-Meteo), o que faria a HOME e o aviso de chuva piscarem.
+        val brutas = ArrayList<Int>()
+        run { var m = meiaNoite; while (m < ultimoMs) { val p = passoEm(m); brutas += chanceDaChuva(p.mm / p.horas, codigoWmo(p.simbolo)); m += 3_600_000L } }
+        val chances = suavizar(brutas)
+        var ms = meiaNoite
+        var idx = 0
         while (porDia.size <= dias && ms < ultimoMs) {
             val p = passoEm(ms)
             val cod = codigoWmo(p.simbolo)
             val mmHora = p.mm / p.horas
-            val chance = chanceDaChuva(mmHora, cod)
+            val chance = chances[idx++]
             val dataLocal = soDia.format(java.util.Date(ms))
             val temp = p.inst.optDouble("air_temperature")
             val a = porDia.getOrPut(dataLocal) { Acum() }

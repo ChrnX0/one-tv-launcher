@@ -16,7 +16,7 @@ TITULOS = [
     ("movie", "tmdb:157336", "Interestelar"), ("movie", "tmdb:603", "Matrix"), ("movie", "tmdb:598", "Cidade de Deus"),
     ("movie", "tmdb:666", "Central do Brasil"), ("movie", "tmdb:7347", "Tropa de Elite"), ("movie", "tmdb:1022789", "Divertida Mente 2"),
     ("movie", "tmdb:157433", "Pet Sematary (2019)"), ("movie", "tmdb:1184918", "Robô Selvagem"), ("movie", "tmdb:129", "A Viagem de Chihiro"),
-    ("movie", "tmdb:1000837", "Ainda Estou Aqui"), ("movie", "tmdb:9802", "O Auto da Compadecida"),
+    ("movie", "tmdb:1000837", "Ainda Estou Aqui"), ("movie", "tmdb:550", "Clube da Luta"),
     ("show", "tmdb:1396", "Breaking Bad"), ("show", "tmdb:1399", "Game of Thrones"), ("show", "tmdb:66732", "Stranger Things"),
     ("show", "tmdb:71446", "La Casa de Papel"), ("show", "tmdb:82856", "The Mandalorian"), ("show", "tmdb:76479", "The Boys"),
     ("show", "tmdb:94997", "A Casa do Dragão"), ("show", "tmdb:63351", "Narcos"), ("show", "tmdb:1416", "Grey's Anatomy"),

@@ -1,0 +1,12 @@
+— Dados —
+
+Previsão do tempo: MET Norway (https://api.met.no). Data from MET Norway, sob CC BY 4.0.
+Observação do aeroporto (METAR): Aviation Weather Center, NOAA (domínio público dos EUA).
+Cidades e fusos horários: GeoNames (https://www.geonames.org), sob CC BY 4.0. A busca de cidade fica na TV.
+Fichas, pôsteres, elenco, classificação e notas de filmes e séries: Trakt (https://trakt.tv).
+  Sofaly uses Trakt but is not endorsed or certified by Trakt.
+Legendas: Subtitles provided by OpenSubtitles.com (https://www.opensubtitles.com), com a conta da própria pessoa.
+  Cada legenda fica só na TV de quem pediu.
+Obras de arte dos fundos: The Metropolitan Museum of Art, Open Access (CC0).
+Rádios: Radio Browser (https://www.radio-browser.info).
+Endereço pelo CEP: ViaCEP (https://viacep.com.br).

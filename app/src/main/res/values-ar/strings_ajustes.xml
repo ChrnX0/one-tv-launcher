@@ -110,4 +110,9 @@
     <string name="lh_arranjo_det">صف يمرّ جانبيًا، أو شبكة تظهر فيها كل التطبيقات.</string>
     <string name="lh_fileira">صف</string>
     <string name="lh_grade">شبكة</string>
+    <string name="pl_assinar">اشترك</string>
+    <string name="pl_assinar_preco">اشترك · %1$s</string>
+    <string name="pl_seu_plano">خطتك</string>
+    <string name="pl_loja_indisponivel">تعذّر على Google Play فتح الشراء. تحقق من الإنترنت وحاول مرة أخرى.</string>
+    <string name="atu_pela_play">تصل التحديثات عبر Google Play.</string>
 </resources>

@@ -31,6 +31,11 @@ class ClimaMetTest {
         assertEquals(90, ClimaMet.chanceDaChuva(2.0, 63))
     }
 
+    @Test fun suavizaVizinhas() {
+        assertEquals(listOf(60, 75, 60, 0), ClimaMet.suavizar(listOf(0, 75, 0, 0)))
+        assertEquals(listOf(55, 55, 44), ClimaMet.suavizar(listOf(55, 55, 0)))
+    }
+
     @Test fun coordenadaComNoMaximo4Casas() {
         assertEquals("-15.7942", ClimaMet.coord(-15.794213))
         assertEquals("-47.88", ClimaMet.coord(-47.88))

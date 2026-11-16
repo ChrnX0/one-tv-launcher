@@ -9,12 +9,12 @@ import android.content.Context
  * aprovados pelo Paulo ("Grátis e Premium" e "Estratégia: Básico, Pro e Ultra", 15/11/2026) e mora só na tabela
  * [MINIMO]: mudar um recurso de plano é mudar uma linha.
  *
- * HOJE NADA É BLOQUEADO: [VENDA_ATIVA] = false faz [atual] responder ULTRA para todo mundo. Pagamento (Play Billing,
- * licença externa) ainda não foi decidido; quando for, só [atual] passa a ler a compra. Puro (PlanosTest), menos [atual].
+ * Venda (16/11/2026): só no build da Play ([VENDA_ATIVA] = BuildConfig.PLAY), pela cobrança da Play (CobrancaPlay.kt).
+ * O APK do site e a Sala continuam Ultra para todo mundo. Puro (PlanosTest), menos [atual].
  */
 object Planos {
-    /** Liga a cobrança. Enquanto false, todo aparelho é tratado como Ultra (nada muda para quem já usa). */
-    const val VENDA_ATIVA = false
+    /** Liga a cobrança: só no build da Play. Fora dele, todo aparelho é tratado como Ultra (nada muda para a Sala). */
+    val VENDA_ATIVA: Boolean get() = BuildConfig.PLAY
     const val PAGINA = "https://chrnx0.github.io/one-tv-launcher/plans.html"
 
     enum class Plano { BASICO, PRO, ULTRA }
@@ -53,8 +53,7 @@ object Planos {
     val TEMAS_BASICO = setOf(Tema.ESCURO.name, Tema.GALERIA.name)
 
     /** O plano deste aparelho. Sem venda ativa: Ultra. Com venda: virá da compra (ainda não existe). */
-    @Suppress("KotlinConstantConditions")
-    fun atual(@Suppress("UNUSED_PARAMETER") ctx: Context): Plano = if (!VENDA_ATIVA) Plano.ULTRA else Plano.BASICO
+    fun atual(ctx: Context): Plano = if (!VENDA_ATIVA) Plano.ULTRA else CobrancaPlay.planoGuardado(ctx)
 
     fun permite(ctx: Context, r: Recurso) = permite(atual(ctx), r)
 

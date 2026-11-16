@@ -67,7 +67,11 @@ android {
         // o APK do site segue na Open-Meteo (grátis só sem fim comercial) com a mediana de 3 modelos. Ver ClimaMet.kt.
         buildConfigField("boolean", "PLAY", project.hasProperty("play").toString())
         buildConfigField("boolean", "CLIMA_MET", (project.hasProperty("play") || pessoal.getProperty("clima_fonte")?.trim() == "met").toString())
-        for (k in listOf("TMDB_CHAVE", "TRAKT_ID", "TRAKT_SEGREDO", "SIMKL_ID", "OPENSUBTITLES_CHAVE")) buildConfigField("String", k, chaveApp(k))
+        // Build da Play: sem TMDB (chave pessoal; uso comercial pede contrato) e sem Simkl (licença não cobre app vendido)
+        // até haver licença. O Trakt (conta Standard) e o OpenSubtitles (login do próprio usuário) ficam. Ver venda/licencas-custos.md.
+        val semLicencaNaPlay = setOf("TMDB_CHAVE", "SIMKL_ID")
+        for (k in listOf("TMDB_CHAVE", "TRAKT_ID", "TRAKT_SEGREDO", "SIMKL_ID", "OPENSUBTITLES_CHAVE"))
+            buildConfigField("String", k, if (project.hasProperty("play") && k in semLicencaNaPlay) "\"\"" else chaveApp(k))
     }
 
     // Um APK por arquitetura (12/11/2026, pedido do dono: versões de 32 e 64 bits no GitHub).
@@ -185,6 +189,9 @@ dependencies {
     // O src/main/baseline-prof.txt vai dentro do APK, e este pacote grava o perfil na pasta do app quando ele abre
     // (ou pelo broadcast INSTALL_PROFILE, usado pelo build3.ps1). Depois o compile -m speed-profile passa a valer.
     implementation("androidx.profileinstaller:profileinstaller:1.4.1")
+    // Cobrança da Play (16/11/2026, CobrancaPlay.kt): só é usada no build -Pplay; no APK do site o cliente nunca liga.
+    // A Play exige a versão 8 ou mais nova da biblioteca nos apps novos.
+    implementation("com.android.billingclient:billing:8.3.0")
     // QR code (login do Tailscale e endereço do MCP na tela da TV e no painel). Só o núcleo, sem câmera.
     implementation("com.google.zxing:core:3.5.4")
 

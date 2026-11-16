@@ -110,4 +110,9 @@
     <string name="lh_arranjo_det">Rząd przewijany w bok albo siatka ze wszystkimi aplikacjami na widoku.</string>
     <string name="lh_fileira">Rząd</string>
     <string name="lh_grade">Siatka</string>
+    <string name="pl_assinar">Subskrybuj</string>
+    <string name="pl_assinar_preco">Subskrybuj · %1$s</string>
+    <string name="pl_seu_plano">Twój plan</string>
+    <string name="pl_loja_indisponivel">Google Play nie otworzył zakupu. Sprawdź internet i spróbuj ponownie.</string>
+    <string name="atu_pela_play">Aktualizacje przychodzą z Google Play.</string>
 </resources>

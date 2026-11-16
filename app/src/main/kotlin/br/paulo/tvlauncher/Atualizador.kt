@@ -118,7 +118,7 @@ object Atualizador {
      * de instalar, porque alguém pode ter ligado a TV durante o download.
      */
     fun verificar(ctx: Context, instalar: Boolean, soComTelaApagada: Boolean = false, fim: ((String) -> Unit)? = null) {
-        if (BuildConfig.PLAY) { fim?.invoke("no app da Play a atualização vem pela loja"); return }
+        if (BuildConfig.PLAY) { fim?.invoke(txt(R.string.atu_pela_play)); return }
         val app = ctx.applicationContext
         if (android.os.Build.VERSION.SDK_INT < 28) { fim?.invoke(txt(R.string.atu_android9)); return }
         if (!ocupado.compareAndSet(false, true)) { fim?.invoke(txt(R.string.atu_ocupado)); return }

@@ -110,4 +110,9 @@
     <string name="lh_arranjo_det">横向滚动的一行,或显示所有应用的网格。</string>
     <string name="lh_fileira">单行</string>
     <string name="lh_grade">网格</string>
+    <string name="pl_assinar">订阅</string>
+    <string name="pl_assinar_preco">订阅 · %1$s</string>
+    <string name="pl_seu_plano">你的方案</string>
+    <string name="pl_loja_indisponivel">Google Play 无法打开购买页面。请检查网络后重试。</string>
+    <string name="atu_pela_play">更新通过 Google Play 提供。</string>
 </resources>
