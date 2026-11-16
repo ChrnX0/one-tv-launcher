@@ -92,6 +92,7 @@ class MainActivity : Activity() {
     // O visual escolhido no menu do perfil (Tema.kt). Lido no onCreate; trocar de tema recria a tela.
     private var tema = Tema.ESCURO
     private var assinaturaFundo = ""   // "Meu fundo": arquivo|brilho|contraste quando a tela foi montada
+    private var idiomaMontado = ""     // idioma em que a tela foi montada (locale está em configChanges: não recria sozinha)
     private var assinaturaLayout = ""  // layout flexível (LayoutHome): tamanho|transparente quando a tela foi montada
     private val fonteLeve by lazy { Fontes.display(this, tema) }   // hora e temperatura
     private val fonteUi by lazy { Fontes.ui(this, tema) }
@@ -285,6 +286,7 @@ class MainActivity : Activity() {
         DesempenhoTv.criou()   // guarda de desempenho (12/11/2026): o 1º quadro depois disto dá o tempo de abertura
         tema = Tema.atual(this)
         assinaturaFundo = FundoMeuDados.assinatura(this)
+        idiomaMontado = idiomaAtual()
         assinaturaLayout = "${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}"
         setContentView(montarTela())
         window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, novo ->
@@ -310,11 +312,19 @@ class MainActivity : Activity() {
         VindoDoProjectivyActivity.talvezMostrar(this)   // Projectivy no aparelho: migração guiada, uma vez
     }
 
+    override fun onConfigurationChanged(novo: android.content.res.Configuration) {
+        super.onConfigurationChanged(novo)
+        // Idioma trocado com a HOME na frente: remonta já, sem esperar a próxima volta.
+        if (idiomaMontado.isNotEmpty() && idiomaAtual() != idiomaMontado) recreate()
+    }
+
     override fun onResume() {
         super.onResume()
         // O tema agora só troca na tela separada de Configurações do launcher (ConfigLauncherActivity), que não
         // tem como chamar recreate() nesta Activity diretamente — então aqui a gente mesmo percebe a troca ao voltar.
         if (Tema.atual(this) != tema) { recreate(); return }
+        // Trocou o idioma (do sistema ou só do launcher): textos já montados (data, destaque) ficavam no antigo.
+        if (idiomaAtual() != idiomaMontado) { recreate(); return }
         if (tema == Tema.MEU && FundoMeuDados.assinatura(this) != assinaturaFundo) { recreate(); return }   // outro arquivo/brilho
         if ("${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}" != assinaturaLayout) { recreate(); return }   // cartões mudaram
         // Modo simples (12/11/2026, ideia 10; desligado por padrão): a HOME vira a tela de cards grandes.
