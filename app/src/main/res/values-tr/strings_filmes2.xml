@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_filmes2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="filmes_filtro">Filtre</string>
+    <string name="filmes_filtro_titulo">Filmleri filtrele</string>
+    <string name="filmes_filtro_cabecalho">%1$s · FİLTRE: %2$s</string>
+    <string name="filmes_filtro_genero">Tür: %1$s</string>
+    <string name="filmes_filtro_epoca">Dönem: %1$s</string>
+    <string name="filmes_filtro_nota">En düşük puan: %1$s</string>
+    <string name="filmes_filtro_nao_vistos">Yalnızca izlenmemiş: %1$s</string>
+    <string name="filmes_filtro_limpar">Filtreyi temizle</string>
+    <string name="filmes_filtro_qualquer">Herhangi</string>
+    <string name="filmes_filtro_sim">Evet</string>
+    <string name="filmes_filtro_nao">Hayır</string>
+    <string name="filmes_filtro_decada">%1$d’ler</string>
+    <string name="filmes_filtro_nota_min">%1$d+</string>
+    <string name="filmes_filtro_nao_vistos_curto">izlenmemiş</string>
+    <string name="filmes_filtro_sem_genero">Bu listenin hiçbir kategorisi bir tür adı içermiyor</string>
+    <string name="filmes_filtro_vazio">Bu kategoride bu filtreye uyan film yok</string>
+    <string name="filmes_sorteio">Beni şaşırt</string>
+    <string name="filmes_sorteio_vazio">Burada seçilecek film yok</string>
+    <string name="filmes_colecao">Bu filmin serisi</string>
+    <string name="filmes_colecao_cat">Seri: %1$s</string>
+    <string name="genero_acao">Aksiyon</string>
+    <string name="genero_aventura">Macera</string>
+    <string name="genero_comedia">Komedi</string>
+    <string name="genero_drama">Dram</string>
+    <string name="genero_terror">Korku</string>
+    <string name="genero_suspense">Gerilim</string>
+    <string name="genero_romance">Romantik</string>
+    <string name="genero_ficcao">Bilim kurgu</string>
+    <string name="genero_fantasia">Fantastik</string>
+    <string name="genero_animacao">Animasyon</string>
+    <string name="genero_infantil">Çocuk ve aile</string>
+    <string name="genero_documentario">Belgesel</string>
+    <string name="genero_crime">Suç</string>
+    <string name="genero_guerra">Savaş</string>
+    <string name="genero_faroeste">Western</string>
+    <string name="genero_musical">Müzikal</string>
+</resources>

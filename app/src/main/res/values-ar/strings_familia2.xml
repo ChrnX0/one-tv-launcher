@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_familia2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="an_rotulo">عيد ميلاد</string>
+    <string name="an_hoje">اليوم عيد ميلاد %s</string>
+    <string name="an_amanha">غدًا عيد ميلاد %s</string>
+    <string name="tp_calor">حر شديد</string>
+    <string name="tp_calor_texto">حتى %d° اليوم · اشرب الماء</string>
+    <string name="tp_frio">برد شديد</string>
+    <string name="tp_frio_texto">حتى %d° الليلة · ارتدِ ملابس دافئة</string>
+    <string name="tp_cfg">تنبيه الحر والبرد</string>
+    <string name="tp_cfg_det">بطاقة فوق أي تطبيق عندما يبلغ اليوم %1$d° أو تنخفض الليلة إلى %2$d°</string>
+    <string name="mu_ok_lido">OK يضع علامة مقروء</string>
+    <string name="mu_ok_nao_lido">مقروءة · OK يضع علامة غير مقروء</string>
+    <string name="mu_lido_desc">رسالة، مقروءة: %s. OK يضع علامة غير مقروء.</string>
+    <string name="mu_nao_lido_desc">رسالة: %s. OK يضع علامة مقروء.</string>
+    <string name="mu_apagar">حذف الرسالة: %s</string>
+    <string name="extras_RETROSPECTIVA_ANO">تلفزيونك هذا العام (في ديسمبر، على شاشة التوقف)</string>
+    <string name="extras_CARTOES_TRANSPARENTES">بطاقات تطبيقات شفافة عندما لا تكون محددة</string>
+    <string name="extras_ENTRADAS_TV">مداخل HDMI في صف التطبيقات (فقط في أجهزة التلفزيون ذات المداخل)</string>
+    <string name="ra_titulo">تلفزيونك في %d</string>
+    <string name="ra_canal">القناة المفضلة: %1$s (%2$s)</string>
+    <string name="ra_coluna">الراديو</string>
+    <string name="ra_dica_ouvir">استماع</string>
+    <string name="ra_dica_favoritar">مفضلة</string>
+    <string name="ra_carregando">جارٍ تحميل المحطات…</string>
+    <string name="ra_subtitulo">محطات من كل أنحاء العالم · 1–9 على جهاز التحكم تشغّل مفضلاتك</string>
+    <string name="ra_sem_catalogo">كتالوج الراديو لم يستجب. مفضلاتك ما زالت تعمل.</string>
+    <string name="ra_nada">لم يُعثر على محطة.</string>
+    <string name="ra_continuar">متابعة</string>
+    <string name="ra_pausar">إيقاف مؤقت</string>
+    <string name="ra_favoritas">المفضلة</string>
+    <string name="ra_procurar">بحث</string>
+    <string name="ra_buscar">البحث بالاسم</string>
+    <string name="ra_buscar_det">أي محطة في العالم</string>
+    <string name="ra_generos">الأنواع</string>
+    <string name="ra_paises">بلد آخر</string>
+    <string name="ra_paises_det">البلدان ذات المحطات الأكثر</string>
+    <string name="ra_perto">بالقرب منك</string>
+    <string name="ra_mais_ouvidas">الأكثر استماعًا في %s</string>
+    <string name="ra_mundo">الأكثر استماعًا في العالم</string>
+    <string name="ra_resultado">بحث: %s</string>
+    <string name="ra_favoritada">أُضيفت إلى المفضلة</string>
+    <string name="ra_desfavoritada">أُزيلت من المفضلة</string>
+    <string name="ra_falhou">هذه المحطة لا تبث الآن. جرّب أخرى.</string>
+    <plurals name="an_anos">
+        <item quantity="zero">يبلغ %d عام</item>
+        <item quantity="one">يبلغ عامًا واحدًا</item>
+        <item quantity="two">يبلغ عامين</item>
+        <item quantity="few">يبلغ %d أعوام</item>
+        <item quantity="many">يبلغ %d عامًا</item>
+        <item quantity="other">يبلغ %d عام</item>
+    </plurals>
+</resources>

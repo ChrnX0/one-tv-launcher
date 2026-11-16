@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_protetor_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pt_dica_dispensar">OK हटाता है · ◀ ▶ चलें</string>
+    <string name="pt_dica_pausar">OK रोकता या जारी रखता है · ◀ ▶ चलें</string>
+    <string name="pt_dica_andar">◀ ▶ चलें · दूसरी कुंजियाँ बंद करती हैं</string>
+    <string name="rede_fotos_usar">इन फ़ोटो को स्क्रीन सेवर में इस्तेमाल करें</string>
+    <string name="rede_fotos_parar">इन फ़ोटो को स्क्रीन सेवर में इस्तेमाल करना बंद करें</string>
+    <string name="rede_fotos_usando">फ़ोटो कॉपी हो रही हैं। स्क्रीन सेवर अगली बार शुरू होने पर दिखेंगी।</string>
+    <string name="rede_fotos_paradas">स्क्रीन सेवर अब इस फ़ोल्डर को इस्तेमाल नहीं करता।</string>
+    <string name="rede_continuar">देखना जारी रखें</string>
+    <string name="rede_recentes">हाल ही में जोड़े गए</string>
+    <string name="rede_buscar">खोजें</string>
+    <string name="rede_buscar_explica">इस सर्वर की फ़िल्में, शो, एपिसोड और संगीत।</string>
+    <string name="rede_buscar_campo">नाम</string>
+    <string name="rede_buscar_curto">कम से कम 2 अक्षर टाइप करें।</string>
+    <string name="rede_proximo_em">अगला: %1$s, %2$d s में · OK अभी शुरू करता है · कोई और कुंजी रद्द करती है</string>
+    <string name="rede_ainda_assistindo">अब भी देख रहे हैं? OK से %1$s शुरू</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="one">%1$d फ़ोटो · TV पर कॉपी, कंप्यूटर बंद होने पर भी चलती है</item>
+        <item quantity="other">%1$d फ़ोटो · TV पर कॉपी, कंप्यूटर बंद होने पर भी चलती हैं</item>
+    </plurals>
+</resources>

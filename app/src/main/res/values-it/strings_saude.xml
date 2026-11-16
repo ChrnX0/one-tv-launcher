@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (it) de values/strings_saude.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="saude_titulo">Accesso remoto interrotto</string>
+    <string name="saude_texto_shell">L’accesso della TV a se stessa è caduto %1$d min fa (pannello, Claude e correzioni automatiche si fermano). Premi Abbina di nuovo o vai in Impostazioni › Sistema › Abbina senza PC.</string>
+    <string name="saude_texto_tunel">Claude via internet non è in linea. Premi Connetti per vedere cosa manca, o vai in Impostazioni › Accesso remoto.</string>
+    <string name="saude_parear">Abbina di nuovo</string>
+    <string name="saude_conectar">Connetti</string>
+    <string name="saude_depois">Non ora</string>
+    <string name="saude_acao_shell">Abbina di nuovo: Impostazioni › Sistema › Abbina senza PC</string>
+    <string name="saude_acao_tunel">Connetti di nuovo: Impostazioni › Accesso remoto › Connetti</string>
+    <string name="mnt_titulo">Manutenzione notturna</string>
+    <string name="mnt_consertei">Sistemato:</string>
+    <string name="mnt_falhou">Impossibile sistemare:</string>
+    <string name="mnt_acesso">accesso remoto</string>
+    <string name="mnt_permissoes">permessi</string>
+    <string name="mnt_agendamentos">sveglie e routine</string>
+    <string name="mnt_espaco">spazio libero</string>
+</resources>

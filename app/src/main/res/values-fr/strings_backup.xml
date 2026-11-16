@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (fr) de values/strings_backup.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="bkn_titulo">Sauvegarde automatique</string>
+    <string name="bkn_explica">Chaque nuit, quand la TV est inactive, enregistre une sauvegarde complète protégée par votre mot de passe. Les 7 dernières sont gardées. Notez le mot de passe : sans lui, la sauvegarde ne s’ouvre pas.</string>
+    <string name="bkn_ligado">activée</string>
+    <string name="bkn_desligado">désactivée</string>
+    <string name="bkn_sem_senha">désactivée · définissez d’abord le mot de passe de sauvegarde</string>
+    <string name="bkn_senha">Mot de passe de sauvegarde</string>
+    <string name="bkn_senha_ok">défini · OK change</string>
+    <string name="bkn_senha_falta">non défini · OK définit</string>
+    <string name="bkn_senha_nova">Mot de passe de sauvegarde (8 caractères ou plus)</string>
+    <string name="bkn_senha_repetir">Saisissez à nouveau le mot de passe</string>
+    <string name="bkn_senha_curta">Le mot de passe doit avoir de 8 à 128 caractères.</string>
+    <string name="bkn_senha_diferente">Les deux mots de passe ne correspondent pas.</string>
+    <string name="bkn_senha_gravada">Mot de passe enregistré. Gardez-le en lieu sûr.</string>
+    <string name="bkn_senha_erro">Impossible d’enregistrer le mot de passe.</string>
+    <string name="bkn_horario">Heure</string>
+    <string name="bkn_extra">Copie supplémentaire</string>
+    <string name="bkn_destino_tv">TV uniquement</string>
+    <string name="bkn_destino_pendrive">Clé USB</string>
+    <string name="bkn_destino_nas">NAS (%1$s)</string>
+    <string name="bkn_agora">Sauvegarder maintenant</string>
+    <string name="bkn_ultimo">Dernière</string>
+    <string name="bkn_nunca">jamais</string>
+    <string name="bkn_pin">PIN pour modifier la sauvegarde</string>
+</resources>

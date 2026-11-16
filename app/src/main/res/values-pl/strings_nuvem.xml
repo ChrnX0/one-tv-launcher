@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_nuvem.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_sub_nuvem">Filmy, muzyka i zdjęcia z Twojej chmury</string>
+    <string name="rede_nuvem_seguir">Dalej</string>
+    <string name="rede_nuvem_entrar">Zaloguj się</string>
+    <string name="rede_nuvem_pedindo">Pobieranie kodu…</string>
+    <string name="rede_nuvem_esperando">Czekam na potwierdzenie na telefonie…</string>
+    <string name="rede_nuvem_salvando">Logowanie…</string>
+    <string name="rede_nuvem_recusado">Serwis odmówił. Sprawdź identyfikator aplikacji i spróbuj ponownie.</string>
+    <string name="rede_erro_nuvem_login">Uprawnienie tego konta wygasło lub zostało usunięte. Usuń konto (przytrzymaj OK) i zaloguj się ponownie.</string>
+    <string name="rede_od_titulo">OneDrive: Twoja aplikacja w Microsoft</string>
+    <string name="rede_od_explica">Raz, na komputerze: entra.microsoft.com › Rejestracje aplikacji › Nowa rejestracja. Jako typ kont wybierz ten, który obejmuje osobiste konta Microsoft. Potem w Uwierzytelnianiu włącz „Zezwalaj na przepływy klientów publicznych”. Skopiuj „Identyfikator aplikacji (klienta)” i wpisz go tutaj (możesz pisać z telefonu, w panelu).</string>
+    <string name="rede_od_id">Identyfikator aplikacji (klienta)</string>
+    <string name="rede_od_id_erro">Identyfikator wygląda tak: 00000000-0000-0000-0000-000000000000.</string>
+    <string name="rede_od_codigo_explica">Na telefonie lub komputerze otwórz microsoft.com/link (lub skieruj aparat na QR) i wpisz kod poniżej. Telewizor prosi tylko o odczyt plików.</string>
+    <string name="rede_od_erro_app">Microsoft nie przyjął tej aplikacji. Sprawdź identyfikator i czy „Zezwalaj na przepływy klientów publicznych” jest włączone.</string>
+    <string name="rede_dbx_explica">Raz, na komputerze: dropbox.com/developers/apps › Create app › Scoped access › Full Dropbox. W zakładce Permissions zaznacz files.metadata.read, files.content.read i account_info.read (oraz files.content.write, jeśli chcesz nocną kopię w Dropbox) i zapisz (Submit). Skopiuj „App key” i wpisz go tutaj.</string>
+    <string name="rede_dbx_chave">App key</string>
+    <string name="rede_dbx_chave_erro">App key ma tylko małe litery i cyfry.</string>
+    <string name="rede_dbx_codigo_explica">Skieruj aparat telefonu na QR, zaloguj się do Dropbox i stuknij Zezwól. Dropbox pokaże kod: wpisz go tutaj (możesz pisać z telefonu, w panelu).</string>
+    <string name="rede_dbx_codigo">Kod Dropbox</string>
+    <string name="rede_dbx_codigo_erro">Wpisz cały kod pokazany przez Dropbox.</string>
+    <string name="rede_box_explica">Raz, na komputerze: app.box.com/developers/console › Create New App › Custom App › User Authentication (OAuth 2.0). W zakładce Configuration, w OAuth 2.0 Redirect URI, wpisz %1$s, zaznacz „Read all files and folders” (oraz „Write all files and folders”, jeśli chcesz nocną kopię w Box). Zapisz, a potem skopiuj tutaj Client ID i Client Secret.</string>
+    <string name="rede_box_id">Client ID</string>
+    <string name="rede_box_segredo">Client Secret</string>
+    <string name="rede_box_erro">Client ID i Client Secret mają tylko litery i cyfry. Skopiuj oba z zakładki Configuration.</string>
+    <string name="rede_volta_sem_rede">Telewizor nie jest w sieci domowej. Podłącz go i spróbuj ponownie.</string>
+    <string name="rede_volta_explica">Skieruj aparat telefonu, który jest w tym samym Wi‑Fi co telewizor, na QR, zaloguj się do %1$s i zezwól na dostęp. Telefon sam wróci do telewizora: nic nie trzeba wpisywać.</string>
+    <string name="rede_volta_porta">Port %1$d na telewizorze jest zajęty. Zamknij inne aplikacje i spróbuj ponownie.</string>
+    <string name="rede_gd_explica">Raz, na komputerze, w swoim projekcie Google Cloud (console.cloud.google.com): APIs &amp; Services › Library › włącz „Google Drive API”. W Google Auth Platform › Data Access dodaj zakres …/auth/drive.readonly. W Clients › Create client › Web application, w Authorized redirect URIs wpisz %1$s. Skopiuj tutaj Client ID i Client secret.</string>
+    <string name="rede_gd_id">Client ID (…apps.googleusercontent.com)</string>
+    <string name="rede_gd_segredo">Client secret</string>
+    <string name="rede_gd_erro">Skopiuj oba ze strony klienta: ID kończy się na .apps.googleusercontent.com, a sekret zwykle zaczyna się od GOCSPX-.</string>
+    <string name="rede_gd_aviso">Jeśli Google mówi, że aplikacja nie jest zweryfikowana, stuknij Zaawansowane › Przejdź do (to Twoja własna aplikacja).</string>
+</resources>

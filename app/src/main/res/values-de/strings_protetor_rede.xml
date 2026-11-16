@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_protetor_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pt_dica_dispensar">OK verwirft · ◀ ▶ wechseln</string>
+    <string name="pt_dica_pausar">OK pausiert oder setzt fort · ◀ ▶ wechseln</string>
+    <string name="pt_dica_andar">◀ ▶ wechseln · andere Tasten schließen</string>
+    <string name="rede_fotos_usar">Diese Fotos im Bildschirmschoner verwenden</string>
+    <string name="rede_fotos_parar">Diese Fotos nicht mehr im Bildschirmschoner verwenden</string>
+    <string name="rede_fotos_usando">Fotos werden kopiert. Sie erscheinen beim nächsten Start des Bildschirmschoners.</string>
+    <string name="rede_fotos_paradas">Der Bildschirmschoner nutzt diesen Ordner nicht mehr.</string>
+    <string name="rede_continuar">Weiterschauen</string>
+    <string name="rede_recentes">Zuletzt hinzugefügt</string>
+    <string name="rede_buscar">Suche</string>
+    <string name="rede_buscar_explica">Filme, Serien, Folgen und Musik auf diesem Server.</string>
+    <string name="rede_buscar_campo">Name</string>
+    <string name="rede_buscar_curto">Gib mindestens 2 Buchstaben ein.</string>
+    <string name="rede_proximo_em">Als Nächstes: %1$s in %2$d s · OK startet jetzt · jede andere Taste bricht ab</string>
+    <string name="rede_ainda_assistindo">Schaust du noch? OK startet %1$s</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="one">%1$d Foto · auf den Fernseher kopiert, funktioniert bei ausgeschaltetem Computer</item>
+        <item quantity="other">%1$d Fotos · auf den Fernseher kopiert, funktioniert bei ausgeschaltetem Computer</item>
+    </plurals>
+</resources>

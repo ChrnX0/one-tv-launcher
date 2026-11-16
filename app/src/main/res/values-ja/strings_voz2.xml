@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_voz2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="lbl_voz_filmes">映画</string>
+    <string name="lbl_voz_series">シリーズ</string>
+    <string name="lbl_voz_na_rede">ネットワークメディア</string>
+    <string name="lbl_voz_casa">ホームコントロール</string>
+    <string name="lbl_voz_busca">検索</string>
+    <string name="lbl_voz_mural">ボード</string>
+    <string name="voz_mural_desligado">家族ボードはオフです（または TV がゲストモードです）。</string>
+</resources>

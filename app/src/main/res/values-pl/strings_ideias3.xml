@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_ideias3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="extras_SONO_SUAVE">Łagodne wyłączanie (wyłącznik przyciemnia ekran i ścisza dźwięk)</string>
+    <string name="extras_MURAL">Tablica rodzinna na wygaszaczu</string>
+    <string name="extras_PRESENCA">Wyłącz, gdy wszyscy wyjdą z domu (router UniFi)</string>
+    <string name="extras_HOJE_NA_TV">„Dziś w TV” na ekranie Wyszukiwania</string>
+    <string name="extras_RETROSPECTIVA">Tygodniowe podsumowanie (niedziela wieczorem)</string>
+    <string name="extras_MODO_SIMPLES">Tryb prosty (duże karty, czytane nazwy)</string>
+</resources>

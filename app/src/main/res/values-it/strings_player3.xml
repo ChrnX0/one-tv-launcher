@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (it) de values/strings_player3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="abertura_marcar_inicio">Segna qui l’inizio della sigla (%1$s)</string>
+    <string name="abertura_marcar_fim">Segna qui la fine della sigla (%1$s)</string>
+    <string name="abertura_apagar">Elimina il segno della sigla</string>
+    <string name="abertura_inicio_marcado">Inizio della sigla segnato a %1$s. Ora segna la fine nel menu ▼</string>
+    <string name="abertura_salva">Sigla salvata: da %1$s a %2$s. I prossimi episodi offriranno di saltarla</string>
+    <string name="abertura_falta_inicio">Segna prima l’inizio della sigla</string>
+    <string name="abertura_invalida">Non sembra una sigla: deve durare da 10 s a 5 min e iniziare nei primi 15 min</string>
+    <string name="abertura_apagada">Segno della sigla eliminato</string>
+    <string name="abertura_pular">Salta sigla · OK</string>
+</resources>

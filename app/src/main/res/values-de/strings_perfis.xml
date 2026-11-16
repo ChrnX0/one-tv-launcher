@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_perfis.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="perfil_aviso_titulo">Profil: %1$s</string>
+    <string name="perfil_aviso_texto">Favoriten, Weiterschauen und App-Reihenfolge dieses Profils</string>
+    <string name="perfil_aviso_crianca">Kinderprofil: Kindermodus und Schlafenszeit eingeschaltet</string>
+    <string name="perfil_crianca">Kinderprofil</string>
+    <string name="perfil_crianca_linha">Kinderprofil · %1$s: %2$s</string>
+    <string name="perfil_crianca_nao">Aus</string>
+    <string name="perfil_crianca_sem_pin">Lege zuerst die PIN des Web-Panels fest: sie ist die Eltern-PIN, die das Kinderprofil schützt</string>
+    <string name="perfil_pin_sair">Eltern-PIN zum Verlassen des Kinderprofils</string>
+    <string name="perfil_pin_marcar">Eltern-PIN zum Ändern des Kinderprofils</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_acessivel.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acess_legenda_fundo">ترجمة بخلفية سوداء</string>
+    <string name="acess_legenda_amarela">ترجمة صفراء</string>
+    <string name="acess_volume">صوت متوازن بين القنوات</string>
+    <string name="acess_voz">أصوات أوضح</string>
+    <string name="acess_volume_ligado">الصوت المتوازن مفعّل: القنوات والأفلام الهادئة تصبح أعلى</string>
+    <string name="acess_volume_desligado">الصوت المتوازن متوقف</string>
+    <string name="acess_voz_ligado">الأصوات الأوضح مفعّلة</string>
+    <string name="acess_voz_desligado">الأصوات الأوضح متوقفة</string>
+    <string name="acess_config_titulo">الصوت والترجمة</string>
+    <string name="acess_config_texto">لمن يرى أو يسمع بصعوبة. موجود أيضًا في قائمة ▼ في المشغّل.</string>
+</resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (it) de values/strings_emprestimo.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="emp_secao">Prestare i poteri di sistema</string>
+    <string name="emp_titulo">Prestare la shell ad altre app (Shizuku)</string>
+    <string name="emp_titulo_det">Le app fatte per Shizuku funzionano senza installarlo. Ogni app lo chiede sulla TV, con il PIN, la prima volta.</string>
+    <string name="emp_modo_desligado">Disattivato</string>
+    <string name="emp_modo_sob_demanda">Quando un’app ne ha bisogno</string>
+    <string name="emp_modo_sempre">Sempre attivo</string>
+    <string name="emp_oficial">L’app Shizuku è installata su questa TV, quindi il launcher non interferisce. Disinstallala per usare quella del launcher.</string>
+    <string name="emp_plano">Parte dei piani a pagamento.</string>
+    <string name="emp_negar">Nega</string>
+    <string name="emp_permitir">Consenti sempre</string>
+    <string name="emp_pedido_titulo">Consentire a %1$s di usare i poteri di sistema del launcher?</string>
+    <string name="emp_pedido_texto">L’app potrà fare ciò che fa adb: installare e rimuovere app, cambiare le impostazioni di sistema e altro. Consenti solo app di cui ti fidi. Puoi revocarlo in seguito nel pannello web.</string>
+    <string name="emp_pin_titulo">PIN del pannello per consentire</string>
+    <string name="emp_sem_pin">Imposta prima il PIN del pannello (Impostazioni, Pannello web).</string>
+    <string name="emd_titulo">Prestare il controllo da proprietario ad altre app (Dhizuku)</string>
+    <string name="emd_titulo_det">Le app fatte per Dhizuku usano il controllo da proprietario del launcher. Ogni app lo chiede sulla TV, con il PIN. Nessuna può rimuovere il launcher come proprietario o cancellare la TV.</string>
+    <string name="emd_ligado">Attivo</string>
+    <string name="emd_sem_dono">Il launcher non è il proprietario (Device Owner) di questa TV, quindi non c’è nulla da prestare.</string>
+    <string name="emd_pedido_titulo">Consentire a %1$s di usare il controllo da proprietario del launcher?</string>
+    <string name="emd_pedido_texto">Con “Consenti”, l’app può nascondere e bloccare app e cambiare permessi e regole della TV, ma mai rimuovere il launcher come proprietario o cancellare la TV. “Potere totale” fa girare l’app come il launcher e le fa leggere i suoi dati: solo per app di cui ti fidi del tutto. Puoi revocarlo nel pannello web.</string>
+    <string name="emd_total">Potere totale</string>
+    <string name="emd_pin_total">POTERE TOTALE: l’app leggerà i dati del launcher. PIN del pannello</string>
+</resources>

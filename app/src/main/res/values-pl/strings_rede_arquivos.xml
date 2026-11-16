@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_rede_arquivos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_secao_na_tv">Podłączone do telewizora</string>
+    <string name="rede_sub_usb">Pendrive · filmy, muzyka i zdjęcia</string>
+    <string name="rede_acao_arquivos">FTP, SFTP lub NFS</string>
+    <string name="rede_sub_arquivos">NAS, router z dyskiem, komputer z Linuksem lub Mac</string>
+    <string name="rede_arq_explica">Zacznij adres od protokołu: sftp://nas/Filmy · ftp://192.168.0.10 · ftps://nas/Wideo · nfs://nas/volume1/video. SFTP i FTPS są szyfrowane; zwykły FTP wysyła hasło bez szyfrowania, więc używaj go tylko w domu. NFS nie ma hasła: NAS musi zezwalać na IP telewizora i połączenia z portów nieuprzywilejowanych.</string>
+    <string name="rede_arq_endereco">Adres (sftp://, ftp://, ftps:// lub nfs://)</string>
+    <string name="rede_arq_usuario">Nazwa użytkownika (NFS: numer użytkownika, opcjonalnie)</string>
+    <string name="rede_arq_endereco_erro">Zacznij od sftp://, ftp://, ftps:// lub nfs://, potem serwer i folder. Nazwa użytkownika i hasło idą do osobnych pól.</string>
+    <string name="rede_erro_nfs_porta">Serwer NFS odrzucił telewizor. Na NAS zezwól na połączenia z portów nieuprzywilejowanych (Linux: opcja „insecure” w /etc/exports).</string>
+    <string name="rede_erro_nfs_ip">Serwer NFS nie zezwolił temu telewizorowi. Na NAS dodaj IP telewizora (lub sieć domową) do reguły NFS tego folderu.</string>
+    <string name="rede_erro_chave_mudou">Klucz tego serwera zmienił się od czasu dodania. Jeśli przeinstalowałeś serwer, usuń go tutaj i dodaj ponownie; jeśli nie, ktoś może się pod niego podszywać.</string>
+    <string name="rede_erro_usb_acesso">Telewizor nie dał launcherowi dostępu do pendrive’a. Spróbuj za chwilę.</string>
+</resources>

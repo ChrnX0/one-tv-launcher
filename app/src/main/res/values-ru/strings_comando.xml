@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_comando.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="cc_vazia">Напишите, что должен сделать ТВ</string>
+    <string name="cc_nao_entendi">Я не понял. Попробуйте, например:</string>
+    <string name="cc_exemplo_1">включи Globo</string>
+    <string name="cc_exemplo_2">открой YouTube</string>
+    <string name="cc_exemplo_3">выключи через 30 минут</string>
+    <string name="cc_abrindo">Открываю %1$s</string>
+    <string name="cc_canal">Включаю %1$s</string>
+    <string name="cc_o_que_passa">Что идёт на %1$s</string>
+    <string name="cc_timer">Напоминание через %1$d мин</string>
+    <string name="cc_desligar">ТВ выключится через %1$d мин</string>
+    <string name="cc_desligar_cancelar">Таймер сна отменён</string>
+    <string name="cc_volume_subir">Громкость выше</string>
+    <string name="cc_volume_descer">Громкость ниже</string>
+    <string name="cc_mudo">Без звука вкл/выкл</string>
+    <string name="cc_pausar">Пауза</string>
+    <string name="cc_continuar">Воспроизведение</string>
+    <string name="cc_tela_previsao">прогноз</string>
+    <string name="cc_tela_agenda">календарь</string>
+    <string name="cc_tela_despertador">будильники</string>
+    <string name="cc_tela_configuracoes">настройки лаунчера</string>
+    <string name="cc_tela_inicio">главный экран</string>
+    <string name="cc_confirme_na_tv">%1$s: подтвердите кнопкой OK на ТВ</string>
+    <string name="cc_nao_fiz">%1$s: не выполнено (%2$s)</string>
+    <string name="cc_aviso_titulo">Панель на телефоне</string>
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_ideia72.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l72_abrir">%1$s を開く</string>
+    <string name="l72_tela_previsao">天気予報</string>
+    <string name="l72_tela_agenda">カレンダー</string>
+    <string name="l72_tela_despertador">目覚まし</string>
+    <string name="l72_tela_configuracoes">ランチャーの設定</string>
+    <string name="l72_tela_inicio">ホーム画面</string>
+    <string name="l72_despertador">%1$s にアラームを作成（%2$s）</string>
+    <string name="l72_dias_uma">1 回のみ</string>
+    <string name="l72_dias_todos">毎日</string>
+    <string name="l72_dias_uteis">月〜金</string>
+    <string name="l72_dias_fds">週末</string>
+    <string name="l72_dias_nomes">日,月,火,水,木,金,土</string>
+    <string name="l72_vol_subir">音量を上げる</string>
+    <string name="l72_vol_descer">音量を下げる</string>
+    <string name="l72_vol_mudo">ミュート/解除</string>
+    <string name="l72_vezes">（%1$d 回）</string>
+    <string name="l72_midia_pausar">一時停止</string>
+    <string name="l72_midia_tocar">再生を再開</string>
+    <string name="l72_midia_proxima">次へ</string>
+    <string name="l72_midia_anterior">前へ</string>
+    <string name="l72_visita_liga">ゲストモードをオン</string>
+    <string name="l72_visita_desliga">ゲストモードをオフ</string>
+    <string name="l72_canal_pedido">チャンネル %1$s に切り替え</string>
+    <string name="l72_canal">チャンネル %1$d（%2$s）に切り替え</string>
+    <string name="l72_o_que_passa">%1$s で放送中の番組を見る</string>
+    <string name="l72_casa_ligar">オン</string>
+    <string name="l72_casa_desligar">オフ</string>
+    <string name="l72_casa_alternar">切り替え</string>
+    <string name="l72_casa">%1$s %2$s（ホーム）</string>
+    <string name="l72_guia_vazio">%1$s: 番組表に何もありません。</string>
+    <string name="l72_guia_agora">%1$s で放送中: %2$s（%3$s まで）</string>
+    <string name="l72_guia_nada_agora">%1$s: 現在、番組表に何もありません</string>
+    <string name="l72_guia_depois">次: %1$s（%2$s）</string>
+    <string name="l75_pilula">再生中: %1$s、%2$s。OK で一時停止/再開、OK 長押しでアプリを開きます</string>
+</resources>

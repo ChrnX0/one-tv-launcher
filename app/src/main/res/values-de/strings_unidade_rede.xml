@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_unidade_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="ur_secao">Netzlaufwerk</string>
+    <string name="ur_titulo">Fernseher als Netzlaufwerk zeigen</string>
+    <string name="ur_det">Aus. Der Fernseher erscheint unter Windows von selbst in Dieser PC, wie ein Handy, und als Netzwerkordner auf Mac, Linux und Handys.</string>
+    <string name="ur_painel">Schalte zuerst das Web-Panel oben ein (es nutzt dieselbe PIN und die https-Adresse).</string>
+    <string name="ur_https">Warte auf die https-Adresse des Panels (das Zertifikat wird etwa 1 Minute nach dem Einschalten des Panels erstellt).</string>
+    <string name="ur_abra">An. Unter Windows erscheint der Fernseher in Dieser PC (beim ersten Mal fragt er für jeden Computer auf dem Bildschirm). Mac, Linux und Handy: %1$s · Passwort: die Panel-PIN.</string>
+    <string name="mtp_pergunta_titulo">Ein Computer fragt nach den Dateien des Fernsehers</string>
+    <string name="mtp_pergunta">„%1$s“ möchte die Dateien im Speicher des Fernsehers über das Heimnetz sehen und kopieren. Diesen Computer erlauben?</string>
+    <string name="mtp_pcs">Erlaubte Computer</string>
+    <string name="mtp_pcs_nenhum">Noch keine. Der Fernseher fragt auf dem Bildschirm, wenn ein Computer die Dateien anfordert.</string>
+    <string name="mtp_pcs_lista">%1$s · OK vergisst alle (jeder fragt erneut)</string>
+    <string name="mtp_pcs_esquecidos">Computer vergessen</string>
+</resources>

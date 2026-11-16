@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_filmes2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="filmes_filtro">Фильтр</string>
+    <string name="filmes_filtro_titulo">Фильтр фильмов</string>
+    <string name="filmes_filtro_cabecalho">%1$s · ФИЛЬТР: %2$s</string>
+    <string name="filmes_filtro_genero">Жанр: %1$s</string>
+    <string name="filmes_filtro_epoca">Период: %1$s</string>
+    <string name="filmes_filtro_nota">Мин. рейтинг: %1$s</string>
+    <string name="filmes_filtro_nao_vistos">Только непросмотренные: %1$s</string>
+    <string name="filmes_filtro_limpar">Сбросить фильтр</string>
+    <string name="filmes_filtro_qualquer">Любой</string>
+    <string name="filmes_filtro_sim">Да</string>
+    <string name="filmes_filtro_nao">Нет</string>
+    <string name="filmes_filtro_decada">%1$d-е</string>
+    <string name="filmes_filtro_nota_min">%1$d+</string>
+    <string name="filmes_filtro_nao_vistos_curto">непросмотренные</string>
+    <string name="filmes_filtro_sem_genero">Ни одна категория этого списка не указывает жанр</string>
+    <string name="filmes_filtro_vazio">В этой категории нет фильмов под этот фильтр</string>
+    <string name="filmes_sorteio">Удиви меня</string>
+    <string name="filmes_sorteio_vazio">Здесь не из чего выбирать</string>
+    <string name="filmes_colecao">Коллекция этого фильма</string>
+    <string name="filmes_colecao_cat">Коллекция: %1$s</string>
+    <string name="genero_acao">Боевик</string>
+    <string name="genero_aventura">Приключения</string>
+    <string name="genero_comedia">Комедия</string>
+    <string name="genero_drama">Драма</string>
+    <string name="genero_terror">Ужасы</string>
+    <string name="genero_suspense">Триллер</string>
+    <string name="genero_romance">Мелодрама</string>
+    <string name="genero_ficcao">Фантастика</string>
+    <string name="genero_fantasia">Фэнтези</string>
+    <string name="genero_animacao">Мультфильм</string>
+    <string name="genero_infantil">Детское и семейное</string>
+    <string name="genero_documentario">Документальный</string>
+    <string name="genero_crime">Криминал</string>
+    <string name="genero_guerra">Военный</string>
+    <string name="genero_faroeste">Вестерн</string>
+    <string name="genero_musical">Мюзикл</string>
+</resources>

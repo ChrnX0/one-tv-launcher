@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (it) de values/strings_unidade_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="ur_secao">Unità di rete</string>
+    <string name="ur_titulo">Mostra la TV come unità di rete</string>
+    <string name="ur_det">Disattiva. La TV compare da sola in Questo PC su Windows, come un telefono, e come cartella di rete su Mac, Linux e telefoni.</string>
+    <string name="ur_painel">Attiva prima il pannello web qui sopra (usa lo stesso PIN e l’indirizzo https).</string>
+    <string name="ur_https">In attesa dell’indirizzo https del pannello (il certificato viene creato circa 1 minuto dopo l’attivazione del pannello).</string>
+    <string name="ur_abra">Attiva. Su Windows la TV compare in Questo PC (la TV chiede sullo schermo la prima volta per ogni computer). Mac, Linux e telefono: %1$s · password: il PIN del pannello.</string>
+    <string name="mtp_pergunta_titulo">Un computer chiede i file della TV</string>
+    <string name="mtp_pergunta">«%1$s» vuole vedere e copiare i file della memoria della TV tramite la rete di casa. Consentire questo computer?</string>
+    <string name="mtp_pcs">Computer consentiti</string>
+    <string name="mtp_pcs_nenhum">Ancora nessuno. La TV chiede sullo schermo quando un computer richiede i file.</string>
+    <string name="mtp_pcs_lista">%1$s · OK li dimentica tutti (ognuno chiederà di nuovo)</string>
+    <string name="mtp_pcs_esquecidos">Computer dimenticati</string>
+</resources>

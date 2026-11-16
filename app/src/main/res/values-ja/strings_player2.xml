@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_player2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="vod_tentando">接続が切れました。再試行中（%1$d / %2$d）…</string>
+    <string name="vod_proximo_episodio">次のエピソード</string>
+    <string name="vod_proximo_agora">今すぐ見る · %1$d 秒</string>
+    <string name="vod_proximo_cancelar">キャンセル</string>
+    <string name="vod_proximo_continuar">見続ける</string>
+    <string name="vod_ainda_assistindo">まだ見ていますか？</string>
+    <string name="vod_ainda_assistindo_texto">リモコンに触れないまま数話が再生されたので、次のエピソードは待機しています。</string>
+    <string name="vod_desligar_ao_fim">終わったら TV を消す</string>
+    <string name="vod_desligar_ao_fim_ligado">終わったら TV が消えます</string>
+    <string name="vod_desligar_ao_fim_desligado">終わっても TV はついたままです</string>
+    <string name="vod_legenda_tamanho_opcao">字幕サイズ: %1$s</string>
+    <string name="vod_legenda_tamanho_titulo">字幕サイズ</string>
+    <string-array name="vod_legenda_tamanhos">
+        <item>小</item>
+        <item>標準</item>
+        <item>大</item>
+        <item>特大</item>
+    </string-array>
+</resources>

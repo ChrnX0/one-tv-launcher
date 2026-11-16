@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_player3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="abertura_marcar_inicio">Отметить начало заставки здесь (%1$s)</string>
+    <string name="abertura_marcar_fim">Отметить конец заставки здесь (%1$s)</string>
+    <string name="abertura_apagar">Удалить отметку заставки</string>
+    <string name="abertura_inicio_marcado">Начало заставки отмечено на %1$s. Теперь отметьте конец в меню ▼</string>
+    <string name="abertura_salva">Заставка сохранена: с %1$s по %2$s. Следующие серии предложат её пропустить</string>
+    <string name="abertura_falta_inicio">Сначала отметьте начало заставки</string>
+    <string name="abertura_invalida">Не похоже на заставку: она должна длиться от 10 с до 5 мин и начинаться в первые 15 мин</string>
+    <string name="abertura_apagada">Отметка заставки удалена</string>
+    <string name="abertura_pular">Пропустить заставку · OK</string>
+</resources>

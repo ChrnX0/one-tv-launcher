@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_elenco.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="elenco_botao">演员</string>
+    <string name="elenco_titulo">演员</string>
+    <string name="elenco_carregando">正在加载演员…</string>
+    <string name="elenco_vazio">TMDB 没有此作品的演员信息。</string>
+    <string name="elenco_dica">在人物之间移动：下方显示他们参演的、你清单中也有的其他作品。</string>
+    <string name="elenco_na_lista">你清单中的其他作品</string>
+    <string name="elenco_procurando">正在你的清单中查找…</string>
+    <string name="elenco_nada_na_lista">你的清单中没有此人参演的其他作品。</string>
+    <string name="elenco_filme">电影</string>
+    <string name="elenco_serie">剧集</string>
+    <string name="elenco_opcao_player">演员（这位演员是谁？）</string>
+    <string name="anteriormente_titulo">%1$s 前情提要</string>
+    <string name="anteriormente_assistir">观看 %1$s</string>
+    <string name="anteriormente_pular_sempre">不再显示</string>
+    <string name="anteriormente_desligado">已关闭前情提要。如需重新开启：在某一集上长按 OK。</string>
+    <string name="anteriormente_ligar">显示“前情提要”</string>
+    <string name="idade_titulo">儿童模式年龄上限</string>
+    <string name="idade_det">分级不超过此年龄的电影和剧集会在任何类别中显示（TMDB 分级）。无分级的只出现在儿童类别中。</string>
+    <string name="idade_so_categorias">仅儿童类别</string>
+    <string name="idade_livre">所有年龄</string>
+    <string name="idade_anos">最高 %1$d 岁</string>
+    <string name="onde_tambem_em">也可在：%1$s（JustWatch）</string>
+    <string name="onde_fora">不在你的清单中 · 在 %1$s 上</string>
+    <string name="onde_grupo">其他平台（JustWatch）</string>
+    <string name="legenda_auto_pronta">已自动下载字幕（为此文件制作）· 按 ▼ 更改</string>
+    <string name="legenda_auto_pronta_nome">已自动下载字幕 · 按 ▼ 更改或调整延迟</string>
+    <string name="legenda_auto_opcao">自动下载字幕</string>
+    <string name="legenda_auto_ligada">缺少字幕时将自动下载</string>
+    <string name="legenda_auto_desligada">自动字幕已关闭</string>
+    <string name="legenda_trad_rotulo">自动翻译</string>
+    <string name="legenda_trad_traduzindo">没有你的语言的字幕：正在电视上翻译英文字幕…</string>
+    <string name="legenda_trad_parcial">字幕已在电视上翻译（自动翻译）。其余部分继续翻译中。</string>
+    <string name="legenda_trad_pronta">字幕翻译完成</string>
+    <string name="legenda_trad_opcao">缺少字幕时在电视上翻译</string>
+    <string name="legenda_trad_ligada">缺少字幕时将在电视上翻译</string>
+    <string name="legenda_trad_desligada">将不再翻译字幕</string>
+    <string name="series_sinopse_mais">完整简介</string>
+    <string name="series_sinopse_menos">简短简介</string>
+    <string name="series_continuar_curto">▶  继续 %1$s</string>
+    <string name="series_episodios">剧集列表</string>
+    <string name="series_trocar_temporada">切换季</string>
+    <string name="fechar">关闭</string>
+</resources>

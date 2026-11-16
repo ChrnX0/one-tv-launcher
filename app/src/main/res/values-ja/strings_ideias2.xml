@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_ideias2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dormir_titulo">就寝時間</string>
+    <string name="dormir_texto">このアプリは今は使えません。おやすみなさい！</string>
+    <string name="dormir_pin">就寝時間を変更するための PIN</string>
+    <string name="dormir_inicio">就寝時間: 開始</string>
+    <string name="dormir_fim">就寝時間: 終了</string>
+    <string name="dormir_teto">就寝時間: 最大音量</string>
+    <string name="recado_link_titulo">メッセージ</string>
+    <string name="extras_HORA_DORMIR">就寝時間（許可したアプリのみ、音量制限）</string>
+    <string name="extras_TOCANDO_AGORA">再生中（再生中のものを読み取る）</string>
+    <string name="extras_MODO_LEVE">軽量モード（アニメーションを短く）</string>
+    <string name="extras_SOM_NAVEGACAO">操作音</string>
+    <string name="extras_RECADO_LINK">リンクでメッセージ（Home Assistant、TvOverlay）</string>
+    <string name="extras_caches">アプリのキャッシュを消去</string>
+    <string name="extras_livre">空き %1$s</string>
+    <string name="extras_consumo">アプリごとのインターネット使用量（7 日間）</string>
+    <string name="extras_tocando">再生中</string>
+    <string name="extras_aguarde">少々お待ちください…</string>
+    <string name="dormir_dia">就寝時間: 曜日</string>
+    <string name="dormir_todos">すべて（標準）</string>
+    <string name="dormir_proprio">個別のスケジュール</string>
+    <string name="dormir_segue">標準に従う</string>
+    <string name="dormir_voltar_padrao">就寝時間: この曜日を標準に戻す</string>
+    <string name="extras_VER_TELA">Claude に画面を見せる（MCP ver_tela、TV にお知らせが表示されます）</string>
+    <string name="casa_titulo">ホーム</string>
+    <string name="casa_sem_config">スマートフォンのパネルで Home Assistant を設定してください: 追加機能タブ、ホームカード。</string>
+    <string name="casa_carregando">デバイスを読み込み中…</string>
+    <string name="casa_vazio">Home Assistant に照明、プラグ、シーンがありません。</string>
+    <string name="casa_google_home">Google Home</string>
+    <string name="casa_google_home_det">Google の照明とカメラ</string>
+    <string name="casa_resumo">Home Assistant · %2$d 台中 %1$d 台がオン</string>
+    <string name="casa_resumo_so_cenas">Home Assistant · シーン %1$d 個</string>
+    <string name="casa_secao_cenas">シーンとスクリプト</string>
+    <string name="casa_secao_aparelhos">デバイス</string>
+    <string name="casa_secao_google">Google</string>
+    <string name="casa_sem_comodo">部屋なし</string>
+    <string name="casa_ligado">オン</string>
+    <string name="casa_desligado">オフ</string>
+    <string name="casa_aberta">開</string>
+    <string name="casa_fechada">閉</string>
+    <string name="casa_rodar">OK で実行</string>
+    <string name="casa_indisponivel">利用不可</string>
+    <string name="casa_sem_config_titulo">ホームを接続</string>
+    <string name="casa_dica_acionar">オン/オフ</string>
+    <string name="casa_erro_simples">Home Assistant が応答しませんでした。サーバーがオンか確認して、もう一度お試しください。</string>
+    <string name="casa_erro">Home Assistant が応答しませんでした: %1$s</string>
+    <string name="casa_ligado_pct">オン · %1$d%%</string>
+    <string name="casa_brilho_ajuste">明るさ %1$d%% · ◀ ▶</string>
+    <string name="casa_dica_brilho">明るさ</string>
+    <string name="casa_tecla_segurar_ok">OK 長押し</string>
+</resources>

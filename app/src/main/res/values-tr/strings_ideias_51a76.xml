@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_ideias_51a76.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l51_ensaio_ok">geri yükleme denetimi geçti</string>
+    <string name="l51_ensaio_falhou">kaydedilen kopya geri yüklenemezdi (%1$s)</string>
+    <string name="l51_wifi_titulo">Misafir Wi-Fi’si</string>
+    <string name="l51_wifi_nao">ayarlanmadı: bir kez yazın, misafirler QR’ı tarasın</string>
+    <string name="l51_wifi_dica">Yönlendiricinizin misafir ağını kullanın: odadaki herkes şifreyi ekranda okuyabilir.</string>
+    <string name="l51_wifi_rede">Ağ adı</string>
+    <string name="l51_wifi_senha">Şifre</string>
+    <string name="l51_wifi_invalido">Ad en fazla 32 karakter; şifre boş (açık ağ) veya 8 ile 63 karakter arası.</string>
+    <string name="l51_wifi_qr_titulo">Misafir Wi-Fi QR’ını göster</string>
+    <string name="l51_uso_titulo">Neler kullanılıyor</string>
+    <string name="l51_uso_det">Kullanıma göre ekranlar ve ayarlar, yalnızca bu TV’de sayılır (hiçbir şey dışarı çıkmaz)</string>
+    <string name="l51_uso_vazio">Henüz bir şey sayılmadı. Birkaç gün sonra dönün.</string>
+    <string name="l51_uso_tela">ekran</string>
+    <string name="l51_uso_opcao">ayar</string>
+    <string name="l51_uso_linha">%1$s (%2$s): %3$s, %4$s</string>
+    <string name="l51_uso_hoje">son: bugün</string>
+    <string name="l51_uso_ontem">son: dün</string>
+    <string name="l51_uso_dias">son: %d gün önce</string>
+    <string name="l51_tela_Main">Ana ekran</string>
+    <string name="l51_tela_Dream">Ekran koruyucu</string>
+    <string name="l51_tela_Filmes">Filmler</string>
+    <string name="l51_tela_Series">Diziler</string>
+    <string name="l51_tela_Jogos">Oyunlar</string>
+    <string name="l51_tela_Player">Canlı TV ve videolar</string>
+    <string name="l51_tela_PainelRapido">Hızlı panel</string>
+    <string name="l51_tela_Vod">Liste kataloğu</string>
+    <string name="l51_tela_Previsao">Hava tahmini</string>
+    <string name="l51_tela_Elenco">Oyuncular</string>
+    <string name="l51_tela_ConfigLauncher">Ayarlar</string>
+    <string name="l51_tela_MidiaRede">Ağda</string>
+    <string name="l51_tela_Calendario">Takvim</string>
+    <string name="l51_tela_Gravacoes">Kayıtlar</string>
+    <string name="l51_tela_Busca">Arama</string>
+    <string name="l51_tela_Casa">Evim</string>
+    <string name="l51_tela_AlarmeTocando">Çalan alarm</string>
+    <string name="l51_tela_Radio">Radyo</string>
+    <string name="l51_tela_Diagnostico">Teşhis</string>
+    <string name="l51_uso_zerar">Sıfırla</string>
+    <string name="l51_digitar_titulo">TV’de yaz</string>
+    <string name="l51_digitar_texto">%1$s içinde bir metin kutusu açık. Buradan yazmak için dokunun.</string>
+    <string name="casa_temp_ajuste">%1$s · ◀ ▶</string>
+    <string name="casa_ambiente">oda %1$s</string>
+    <string name="casa_movimento">Hareket</string>
+    <string name="casa_sem_movimento">Hareket yok</string>
+    <string name="casa_molhado">Islak</string>
+    <string name="casa_seco">Kuru</string>
+    <string name="casa_fumaca">Duman!</string>
+    <string name="casa_sem_fumaca">Duman yok</string>
+    <string name="casa_dica_temp">sıcaklık</string>
+    <string name="casa_camera_abrindo">Kamera açılıyor…</string>
+    <string name="casa_camera_ver">TV’de göster</string>
+    <plurals name="l51_uso_vezes">
+        <item quantity="one">%d kez</item>
+        <item quantity="other">%d kez</item>
+    </plurals>
+</resources>

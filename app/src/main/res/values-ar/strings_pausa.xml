@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_pausa.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pausa_pausar">إيقاف التلفزيون المباشر مؤقتًا</string>
+    <string name="pausa_continuar">استئناف</string>
+    <string name="pausa_ao_vivo">العودة إلى المباشر</string>
+    <string name="pausa_selo">⏸ متوقف مؤقتًا · OK يستأنف</string>
+    <string name="pausa_atrasado_min">متأخر %1$d د · ▶ مباشر</string>
+    <string name="pausa_atrasado_seg">متأخر %1$d ث · ▶ مباشر</string>
+    <string name="pausa_voltou">توقف أطول مما تتسع له الذاكرة: العودة إلى المباشر</string>
+</resources>

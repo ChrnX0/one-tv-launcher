@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_ideias_51a76.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l51_ensaio_ok">проверка восстановления пройдена</string>
+    <string name="l51_ensaio_falhou">сохранённая копия не восстановится (%1$s)</string>
+    <string name="l51_wifi_titulo">Гостевой Wi-Fi</string>
+    <string name="l51_wifi_nao">не задан: введите один раз, и гости сканируют QR</string>
+    <string name="l51_wifi_dica">Используйте гостевую сеть роутера: любой в комнате сможет прочитать пароль на экране.</string>
+    <string name="l51_wifi_rede">Имя сети</string>
+    <string name="l51_wifi_senha">Пароль</string>
+    <string name="l51_wifi_invalido">Имя до 32 символов; пароль пустой (открытая сеть) или от 8 до 63 символов.</string>
+    <string name="l51_wifi_qr_titulo">Показать QR гостевого Wi-Fi</string>
+    <string name="l51_uso_titulo">Что используется</string>
+    <string name="l51_uso_det">Экраны и параметры по частоте использования, считаются только на этом ТВ (ничего не отправляется)</string>
+    <string name="l51_uso_vazio">Пока ничего не подсчитано. Загляните через несколько дней.</string>
+    <string name="l51_uso_tela">экран</string>
+    <string name="l51_uso_opcao">параметр</string>
+    <string name="l51_uso_linha">%1$s (%2$s): %3$s, %4$s</string>
+    <string name="l51_uso_hoje">последний раз сегодня</string>
+    <string name="l51_uso_ontem">последний раз вчера</string>
+    <string name="l51_uso_dias">последний раз %d дн. назад</string>
+    <string name="l51_tela_Main">Главный экран</string>
+    <string name="l51_tela_Dream">Заставка</string>
+    <string name="l51_tela_Filmes">Фильмы</string>
+    <string name="l51_tela_Series">Сериалы</string>
+    <string name="l51_tela_Jogos">Игры</string>
+    <string name="l51_tela_Player">ТВ и видео</string>
+    <string name="l51_tela_PainelRapido">Быстрая панель</string>
+    <string name="l51_tela_Vod">Каталог плейлиста</string>
+    <string name="l51_tela_Previsao">Прогноз погоды</string>
+    <string name="l51_tela_Elenco">В ролях</string>
+    <string name="l51_tela_ConfigLauncher">Настройки</string>
+    <string name="l51_tela_MidiaRede">В сети</string>
+    <string name="l51_tela_Calendario">Календарь</string>
+    <string name="l51_tela_Gravacoes">Записи</string>
+    <string name="l51_tela_Busca">Поиск</string>
+    <string name="l51_tela_Casa">Мой дом</string>
+    <string name="l51_tela_AlarmeTocando">Звонящий будильник</string>
+    <string name="l51_tela_Radio">Радио</string>
+    <string name="l51_tela_Diagnostico">Диагностика</string>
+    <string name="l51_uso_zerar">Сбросить</string>
+    <string name="l51_digitar_titulo">Ввод на ТВ</string>
+    <string name="l51_digitar_texto">В %1$s открыто поле ввода. Нажмите, чтобы печатать отсюда.</string>
+    <string name="casa_temp_ajuste">%1$s · ◀ ▶</string>
+    <string name="casa_ambiente">в комнате %1$s</string>
+    <string name="casa_movimento">Движение</string>
+    <string name="casa_sem_movimento">Нет движения</string>
+    <string name="casa_molhado">Мокро</string>
+    <string name="casa_seco">Сухо</string>
+    <string name="casa_fumaca">Дым!</string>
+    <string name="casa_sem_fumaca">Нет дыма</string>
+    <string name="casa_dica_temp">температура</string>
+    <string name="casa_camera_abrindo">Открываю камеру…</string>
+    <string name="casa_camera_ver">Показать на ТВ</string>
+    <plurals name="l51_uso_vezes">
+        <item quantity="one">%d раз</item>
+        <item quantity="few">%d раза</item>
+        <item quantity="many">%d раз</item>
+        <item quantity="other">%d раза</item>
+    </plurals>
+</resources>

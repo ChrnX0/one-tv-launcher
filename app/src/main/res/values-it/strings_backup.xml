@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (it) de values/strings_backup.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="bkn_titulo">Backup automatico</string>
+    <string name="bkn_explica">Ogni notte, mentre la TV è inattiva, salva un backup completo protetto dalla tua password. Si conservano gli ultimi 7. Annota la password: senza di essa il backup non si può aprire.</string>
+    <string name="bkn_ligado">attivo</string>
+    <string name="bkn_desligado">disattivo</string>
+    <string name="bkn_sem_senha">disattivo · imposta prima la password del backup</string>
+    <string name="bkn_senha">Password del backup</string>
+    <string name="bkn_senha_ok">impostata · OK cambia</string>
+    <string name="bkn_senha_falta">non impostata · OK imposta</string>
+    <string name="bkn_senha_nova">Password del backup (8 o più caratteri)</string>
+    <string name="bkn_senha_repetir">Digita di nuovo la password</string>
+    <string name="bkn_senha_curta">La password deve avere da 8 a 128 caratteri.</string>
+    <string name="bkn_senha_diferente">Le due password non coincidono.</string>
+    <string name="bkn_senha_gravada">Password salvata. Conservala in un posto sicuro.</string>
+    <string name="bkn_senha_erro">Impossibile salvare la password.</string>
+    <string name="bkn_horario">Orario</string>
+    <string name="bkn_extra">Copia extra</string>
+    <string name="bkn_destino_tv">Solo TV</string>
+    <string name="bkn_destino_pendrive">Chiavetta USB</string>
+    <string name="bkn_destino_nas">NAS (%1$s)</string>
+    <string name="bkn_agora">Esegui backup ora</string>
+    <string name="bkn_ultimo">Ultimo</string>
+    <string name="bkn_nunca">mai</string>
+    <string name="bkn_pin">PIN per cambiare il backup</string>
+</resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_emprestimo.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="emp_secao">Pożyczanie uprawnień systemowych</string>
+    <string name="emp_titulo">Pożycz powłokę innym aplikacjom (Shizuku)</string>
+    <string name="emp_titulo_det">Aplikacje stworzone dla Shizuku działają bez jego instalowania. Każda aplikacja za pierwszym razem pyta na telewizorze, z PIN-em.</string>
+    <string name="emp_modo_desligado">Wyłączone</string>
+    <string name="emp_modo_sob_demanda">Gdy aplikacja tego potrzebuje</string>
+    <string name="emp_modo_sempre">Zawsze włączone</string>
+    <string name="emp_oficial">Na tym telewizorze jest zainstalowana aplikacja Shizuku, więc launcher jej nie przeszkadza. Odinstaluj ją, aby używać wbudowanej w launcher.</string>
+    <string name="emp_plano">Część płatnych planów.</string>
+    <string name="emp_negar">Odmów</string>
+    <string name="emp_permitir">Zawsze zezwalaj</string>
+    <string name="emp_pedido_titulo">Zezwolić %1$s na używanie uprawnień systemowych launchera?</string>
+    <string name="emp_pedido_texto">Aplikacja będzie mogła robić to, co adb: instalować i usuwać aplikacje, zmieniać ustawienia systemu i więcej. Zezwalaj tylko zaufanym aplikacjom. Możesz to później cofnąć w panelu WWW.</string>
+    <string name="emp_pin_titulo">PIN panelu, aby zezwolić</string>
+    <string name="emp_sem_pin">Najpierw ustaw PIN panelu (Ustawienia, Panel WWW).</string>
+    <string name="emd_titulo">Pożycz kontrolę właściciela innym aplikacjom (Dhizuku)</string>
+    <string name="emd_titulo_det">Aplikacje stworzone dla Dhizuku używają kontroli właściciela launchera. Każda aplikacja pyta na telewizorze, z PIN-em. Żadna nie może odebrać launcherowi roli właściciela ani wyczyścić telewizora.</string>
+    <string name="emd_ligado">Włączone</string>
+    <string name="emd_sem_dono">Launcher nie jest właścicielem (Device Owner) tego telewizora, więc nie ma czego pożyczać.</string>
+    <string name="emd_pedido_titulo">Zezwolić %1$s na używanie kontroli właściciela launchera?</string>
+    <string name="emd_pedido_texto">Z „Zezwól” aplikacja może ukrywać i blokować aplikacje oraz zmieniać uprawnienia i reguły telewizora, ale nigdy nie odbierze launcherowi roli właściciela ani nie wyczyści telewizora. „Pełna moc” pozwala aplikacji działać jako launcher i czytać jego dane: tylko dla aplikacji, którym w pełni ufasz. Możesz to cofnąć w panelu WWW.</string>
+    <string name="emd_total">Pełna moc</string>
+    <string name="emd_pin_total">PEŁNA MOC: aplikacja odczyta dane launchera. PIN panelu</string>
+</resources>

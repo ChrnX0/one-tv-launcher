@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_acoes.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acao_recado">메시지 “%1$s” 표시</string>
+    <string name="acao_timer">%1$d분 타이머</string>
+    <string name="acao_timer_nome">%1$d분 타이머(“%2$s”)</string>
+    <string name="acao_desligar_em">%1$d분 후 TV 끄기</string>
+    <string name="acao_desligar_cancelar">취침 타이머 취소</string>
+    <string name="acao_filtro_ligar">야간 필터 켜기</string>
+    <string name="acao_filtro_desligar">야간 필터 끄기</string>
+    <string name="acao_filtro_sem_servico">야간 필터에는 접근성 서비스가 필요합니다</string>
+    <string name="acao_rodar_cena">장면 “%1$s” 실행</string>
+    <string name="acao_cena_nao_existe">장면 “%1$s”이(가) 없습니다</string>
+    <string name="acao_cena_em_cena">장면은 다른 장면을 실행할 수 없습니다</string>
+    <string name="acao_mural_compras">장보기 목록에 “%1$s” 추가</string>
+    <string name="acao_mural_recado">가족 게시판에 “%1$s” 고정</string>
+    <string name="acao_tocar_titulo">“%1$s” 찾아서 재생</string>
+    <string name="acao_tocar">%1$s 재생</string>
+    <string name="acao_continuar">재생 중이던 항목 계속</string>
+    <string name="acao_proximo">다음 에피소드 재생</string>
+    <string name="acao_proximo_de">%1$s 다음 에피소드</string>
+    <string name="acao_o_que_via">재생 중이던 항목 보기</string>
+    <string name="acao_vendo">마지막 시청: %1$s</string>
+    <string name="acao_vendo_nada">영화와 시리즈에서 아직 시청한 항목이 없습니다.</string>
+    <string name="rot_cena_uma">장면 실행</string>
+    <string name="rot_cena">장면 실행: %1$s</string>
+    <string name="rot_cena_linha">장면: %1$s</string>
+    <string name="rot_cena_sem">먼저 장면을 만드세요(웹 패널 › 부가 기능 › 장면)</string>
+    <string name="al_cena">중지 시 장면: %1$s</string>
+    <string name="lbl_cenas">장면</string>
+    <string name="pr_cenas">장면</string>
+    <string name="cenas_titulo">장면</string>
+    <string name="cenas_det">OK로 장면 실행. 웹 패널 › 부가 기능 › 장면에서 만들고 편집하세요.</string>
+    <string name="cenas_vazio">아직 장면이 없습니다. 웹 패널 › 부가 기능 › 장면에서 만드세요.</string>
+    <string name="tec_titulo">리모컨 버튼</string>
+    <string name="tec_det">Netflix와 YouTube는 모든 화면에서 작동하고, 컬러 키와 숫자는 홈 화면에서만 작동합니다.</string>
+    <string name="tec_nova">+ 버튼 설정</string>
+    <string name="tec_nova_det">그런 다음 리모컨 버튼을 누르세요</string>
+    <string name="tec_aperte">버튼을 누르세요</string>
+    <string name="tec_aperte_det">Netflix, YouTube, 컬러 키 또는 숫자. 뒤로를 누르면 취소.</string>
+    <string name="tec_nao_pode">%1$s은(는) 변경할 수 없습니다(TV 사용에 필요함). 다른 버튼을 사용하세요.</string>
+    <string name="tec_so_home">홈 화면에서만 작동합니다(앱과 플레이어에서는 원래 기능 유지).</string>
+    <string name="tec_toda_tela">모든 화면에서 작동합니다.</string>
+    <string name="tec_toque">누르기</string>
+    <string name="tec_segurar">길게 누르기</string>
+    <string name="tec_duplo">두 번 누르기</string>
+    <string name="tec_padrao">기본값(저장된 앱, 3초 길게 = 선택)</string>
+    <string name="tec_cena">장면 %1$s</string>
+    <string name="tec_salvo">%1$s 저장됨</string>
+    <string name="tec_apagar">이 버튼 지우기</string>
+    <string name="tec_vermelha">빨간색</string>
+    <string name="tec_verde">녹색</string>
+    <string name="tec_amarela">노란색</string>
+    <string name="tec_azul">파란색</string>
+    <string name="aut_titulo">자동화</string>
+    <string name="aut_det">TV가 스스로 하는 모든 것: 정해진 시간, 버튼, 어떤 일이 생길 때, 링크로.</string>
+    <string name="aut_cfg_det">시간, 리모컨 버튼, 이벤트, 장면 링크</string>
+    <string name="aut_horario">정해진 시간에</string>
+    <string name="aut_botao">버튼을 누를 때</string>
+    <string name="aut_evento">어떤 일이 생길 때(장면 실행)</string>
+    <string name="aut_link">링크로</string>
+    <string name="aut_link_det">웹 패널 › 부가 기능 › 장면에서 만들고 편집</string>
+    <string name="ev_midia_tocou">영화 또는 동영상 시작됨</string>
+    <string name="ev_midia_pausou">영화 또는 동영상 일시정지 또는 종료됨</string>
+    <string name="ev_tv_ligou">TV가 켜짐</string>
+    <string name="ev_todos_sairam">모두 외출함(재실 감지)</string>
+    <string name="ev_chuva">비가 올 예정</string>
+    <plurals name="cenas_acoes">
+        <item quantity="other">동작 %d개</item>
+    </plurals>
+    <plurals name="aut_links">
+        <item quantity="other">링크가 있는 장면 %d개</item>
+    </plurals>
+</resources>

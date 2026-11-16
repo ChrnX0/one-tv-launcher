@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_ideias_80_88.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="si_sem_internet">Tidak ada internet</string>
+    <string name="si_funcionam">Masih berjalan: %1$s</string>
+    <string name="si_pendrive">Flashdisk</string>
+    <string name="ad_pergunta">Masih menonton?</string>
+</resources>

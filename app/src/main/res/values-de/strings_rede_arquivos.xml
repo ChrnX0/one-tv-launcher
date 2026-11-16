@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_rede_arquivos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_secao_na_tv">Am Fernseher angeschlossen</string>
+    <string name="rede_sub_usb">USB-Stick · Videos, Musik und Fotos</string>
+    <string name="rede_acao_arquivos">FTP, SFTP oder NFS</string>
+    <string name="rede_sub_arquivos">NAS, Router mit Laufwerk, Linux- oder Mac-Computer</string>
+    <string name="rede_arq_explica">Beginne die Adresse mit dem Protokoll: sftp://nas/Filme · ftp://192.168.0.10 · ftps://nas/Videos · nfs://nas/volume1/video. SFTP und FTPS sind verschlüsselt; einfaches FTP sendet das Passwort unverschlüsselt, also nur zu Hause nutzen. NFS hat kein Passwort: das NAS muss die IP des Fernsehers und Verbindungen von nicht privilegierten Ports erlauben.</string>
+    <string name="rede_arq_endereco">Adresse (sftp://, ftp://, ftps:// oder nfs://)</string>
+    <string name="rede_arq_usuario">Benutzername (NFS: Benutzernummer, optional)</string>
+    <string name="rede_arq_endereco_erro">Beginne mit sftp://, ftp://, ftps:// oder nfs://, gefolgt von Server und Ordner. Benutzername und Passwort kommen in eigene Felder.</string>
+    <string name="rede_erro_nfs_porta">Der NFS-Server hat den Fernseher abgelehnt. Erlaube auf dem NAS Verbindungen von nicht privilegierten Ports (Linux: die Option „insecure“ in /etc/exports).</string>
+    <string name="rede_erro_nfs_ip">Der NFS-Server hat diesen Fernseher nicht erlaubt. Füge auf dem NAS die IP des Fernsehers (oder dein Heimnetz) zur NFS-Regel dieses Ordners hinzu.</string>
+    <string name="rede_erro_chave_mudou">Der Schlüssel dieses Servers hat sich seit dem Hinzufügen geändert. Hast du den Server neu installiert, entferne ihn hier und füge ihn erneut hinzu; wenn nicht, gibt sich vielleicht jemand als er aus.</string>
+    <string name="rede_erro_usb_acesso">Der Fernseher hat dem Launcher keinen Zugriff auf den USB-Stick gegeben. Versuch es gleich noch einmal.</string>
+</resources>

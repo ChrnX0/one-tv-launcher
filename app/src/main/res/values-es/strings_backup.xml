@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_backup.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="bkn_titulo">Copia automática</string>
+    <string name="bkn_explica">Cada noche, mientras la TV está inactiva, guarda una copia completa cerrada con tu contraseña. Se guardan las últimas 7. Anota la contraseña: sin ella la copia no se puede abrir.</string>
+    <string name="bkn_ligado">activada</string>
+    <string name="bkn_desligado">desactivada</string>
+    <string name="bkn_sem_senha">desactivada · define primero la contraseña de la copia</string>
+    <string name="bkn_senha">Contraseña de la copia</string>
+    <string name="bkn_senha_ok">definida · OK la cambia</string>
+    <string name="bkn_senha_falta">sin definir · OK la define</string>
+    <string name="bkn_senha_nova">Contraseña de la copia (8 caracteres o más)</string>
+    <string name="bkn_senha_repetir">Escribe la contraseña otra vez</string>
+    <string name="bkn_senha_curta">La contraseña necesita de 8 a 128 caracteres.</string>
+    <string name="bkn_senha_diferente">Las dos contraseñas no coinciden.</string>
+    <string name="bkn_senha_gravada">Contraseña guardada. Guárdala en un lugar seguro.</string>
+    <string name="bkn_senha_erro">No se pudo guardar la contraseña.</string>
+    <string name="bkn_horario">Hora</string>
+    <string name="bkn_extra">Copia extra</string>
+    <string name="bkn_destino_tv">Solo la TV</string>
+    <string name="bkn_destino_pendrive">Memoria USB</string>
+    <string name="bkn_destino_nas">NAS (%1$s)</string>
+    <string name="bkn_agora">Copiar ahora</string>
+    <string name="bkn_ultimo">Última</string>
+    <string name="bkn_nunca">nunca</string>
+    <string name="bkn_pin">PIN para cambiar la copia</string>
+</resources>

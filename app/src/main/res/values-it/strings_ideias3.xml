@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (it) de values/strings_ideias3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="extras_SONO_SUAVE">Spegnimento dolce (il timer abbassa luminosità e volume)</string>
+    <string name="extras_MURAL">Bacheca di famiglia sul salvaschermo</string>
+    <string name="extras_PRESENCA">Spegni quando tutti escono di casa (router UniFi)</string>
+    <string name="extras_HOJE_NA_TV">«Oggi in TV» nella schermata di Ricerca</string>
+    <string name="extras_RETROSPECTIVA">Riepilogo settimanale (domenica sera)</string>
+    <string name="extras_MODO_SIMPLES">Modalità semplice (schede grandi, nomi letti ad alta voce)</string>
+</resources>

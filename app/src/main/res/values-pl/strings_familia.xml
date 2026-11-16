@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_familia.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="fam_pin">PIN dziecięcy</string>
+    <string name="fam_pin_det">Drugi PIN do odblokowywania kanałów, ukrytych kategorii i pory snu przy dzieciach. PIN panelu nadal działa wszędzie.</string>
+    <string name="fam_pin_ok">PIN dziecięcy zapisany</string>
+    <string name="fam_pin_igual">PIN dziecięcy musi różnić się od PIN-u panelu</string>
+    <string name="fam_trocar">Zmień PIN dziecięcy</string>
+    <string name="fam_apagar">Usuń PIN dziecięcy</string>
+    <string name="fam_apagado">PIN dziecięcy usunięty: teraz odblokowuje tylko PIN panelu</string>
+    <string name="extras_TEMPO_TELA">Dzienny czas przed ekranem (gdy się skończy, otwierają się tylko dozwolone aplikacje)</string>
+    <string name="tela_titulo">Czas przed ekranem</string>
+    <string name="tela_acabou">Dzisiejszy czas przed ekranem się skończył. Do jutra!</string>
+    <string name="tela_5min">Zostało dziś 5 minut czasu przed ekranem</string>
+    <string name="tela_pin">PIN do zmiany czasu przed ekranem</string>
+    <string name="tela_cota_linha">Czas przed ekranem dziennie: %1$s (zostało dziś: %2$s)</string>
+    <string name="tela_mais">Daj dziś jeszcze %1$d min</string>
+    <string name="tela_mais_ok">Jeszcze %1$d min na dziś</string>
+    <string name="tela_h">h</string>
+    <string name="tela_min">min</string>
+    <string name="extras_AGENDA_TODAS">Kalendarz wszystkich kont Google telewizora razem</string>
+    <string name="cal_todas_contas">Wszystkie konta na telewizorze (%1$d)</string>
+    <string name="tm_tempo_esgotado">Czas minął</string>
+    <string name="painel_desligado_pin">Panel WWW wyłączony: zbyt wiele błędnych PIN-ów</string>
+    <string name="tm_crono">Stoper</string>
+    <string name="tm_crono_iniciar">Uruchom stoper</string>
+    <string name="tm_crono_parar">Zatrzymaj stoper</string>
+    <string name="tm_crono_comecou">Stoper uruchomiony: widać go na ekranie głównym</string>
+    <string name="tm_crono_marcou">Stoper zatrzymany na %1$s</string>
+    <string name="som_canal">Ostatni kanał telewizji na żywo</string>
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_ideia72.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l72_abrir">Открыть %1$s</string>
+    <string name="l72_tela_previsao">прогноз погоды</string>
+    <string name="l72_tela_agenda">календарь</string>
+    <string name="l72_tela_despertador">будильник</string>
+    <string name="l72_tela_configuracoes">настройки лаунчера</string>
+    <string name="l72_tela_inicio">главный экран</string>
+    <string name="l72_despertador">Создать будильник на %1$s (%2$s)</string>
+    <string name="l72_dias_uma">один раз</string>
+    <string name="l72_dias_todos">каждый день</string>
+    <string name="l72_dias_uteis">пн–пт</string>
+    <string name="l72_dias_fds">по выходным</string>
+    <string name="l72_dias_nomes">Вс,Пн,Вт,Ср,Чт,Пт,Сб</string>
+    <string name="l72_vol_subir">Прибавить громкость</string>
+    <string name="l72_vol_descer">Убавить громкость</string>
+    <string name="l72_vol_mudo">Выключить/включить звук</string>
+    <string name="l72_vezes">(%1$d раз)</string>
+    <string name="l72_midia_pausar">Пауза</string>
+    <string name="l72_midia_tocar">Продолжить воспроизведение</string>
+    <string name="l72_midia_proxima">Следующий</string>
+    <string name="l72_midia_anterior">Предыдущий</string>
+    <string name="l72_visita_liga">Включить гостевой режим</string>
+    <string name="l72_visita_desliga">Выключить гостевой режим</string>
+    <string name="l72_canal_pedido">Переключить на канал %1$s</string>
+    <string name="l72_canal">Переключить на канал %1$d (%2$s)</string>
+    <string name="l72_o_que_passa">Посмотреть, что идёт на %1$s</string>
+    <string name="l72_casa_ligar">Включить</string>
+    <string name="l72_casa_desligar">Выключить</string>
+    <string name="l72_casa_alternar">Переключить</string>
+    <string name="l72_casa">%1$s %2$s (дом)</string>
+    <string name="l72_guia_vazio">%1$s: в программе пусто.</string>
+    <string name="l72_guia_agora">%1$s сейчас: %2$s (до %3$s)</string>
+    <string name="l72_guia_nada_agora">%1$s: сейчас в программе ничего</string>
+    <string name="l72_guia_depois">Далее: %1$s (%2$s)</string>
+    <string name="l75_pilula">Сейчас играет: %1$s, %2$s. OK — пауза или продолжить; удерживайте OK, чтобы открыть приложение</string>
+</resources>

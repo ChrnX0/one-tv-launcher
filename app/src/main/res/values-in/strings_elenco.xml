@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_elenco.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="elenco_botao">Pemeran</string>
+    <string name="elenco_titulo">Pemeran</string>
+    <string name="elenco_carregando">Memuat pemeran…</string>
+    <string name="elenco_vazio">TMDB tidak punya pemeran untuk judul ini.</string>
+    <string name="elenco_dica">Telusuri orang-orangnya: di bawah, judul lain yang mereka bintangi yang ada di daftar Anda.</string>
+    <string name="elenco_na_lista">Juga di daftar Anda</string>
+    <string name="elenco_procurando">Mencari di daftar Anda…</string>
+    <string name="elenco_nada_na_lista">Tidak ada judul lain dengan orang ini di daftar Anda.</string>
+    <string name="elenco_filme">Film</string>
+    <string name="elenco_serie">Serial</string>
+    <string name="elenco_opcao_player">Pemeran (siapa aktor ini?)</string>
+    <string name="anteriormente_titulo">Sebelumnya di %1$s</string>
+    <string name="anteriormente_assistir">Tonton %1$s</string>
+    <string name="anteriormente_pular_sempre">Jangan tampilkan</string>
+    <string name="anteriormente_desligado">Rekap dimatikan. Untuk menyalakannya lagi: tahan OK pada episode.</string>
+    <string name="anteriormente_ligar">Tampilkan rekap “Sebelumnya”</string>
+    <string name="idade_titulo">Usia maksimum di mode anak</string>
+    <string name="idade_det">Film dan serial dengan rating hingga usia ini tampil dari kategori mana pun (rating TMDB). Yang tanpa rating hanya di kategori anak.</string>
+    <string name="idade_so_categorias">Hanya kategori anak</string>
+    <string name="idade_livre">Semua usia</string>
+    <string name="idade_anos">Hingga %1$d tahun</string>
+    <string name="onde_tambem_em">Juga di: %1$s (JustWatch)</string>
+    <string name="onde_fora">Tidak ada di daftar Anda · di %1$s</string>
+    <string name="onde_grupo">Di tempat lain (JustWatch)</string>
+    <string name="legenda_auto_pronta">Subtitle diunduh otomatis (dibuat untuk file ini) · ▼ untuk mengganti</string>
+    <string name="legenda_auto_pronta_nome">Subtitle diunduh otomatis · ▼ untuk mengganti atau mengatur jeda</string>
+    <string name="legenda_auto_opcao">Unduh subtitle otomatis</string>
+    <string name="legenda_auto_ligada">Subtitle akan diunduh jika tidak ada</string>
+    <string name="legenda_auto_desligada">Subtitle otomatis dimatikan</string>
+    <string name="legenda_trad_rotulo">Terjemahan otomatis</string>
+    <string name="legenda_trad_traduzindo">Tidak ada subtitle dalam bahasa Anda: menerjemahkan subtitle bahasa Inggris di TV…</string>
+    <string name="legenda_trad_parcial">Subtitle diterjemahkan di TV (terjemahan otomatis). Sisanya terus diterjemahkan.</string>
+    <string name="legenda_trad_pronta">Terjemahan subtitle selesai</string>
+    <string name="legenda_trad_opcao">Terjemahkan subtitle di TV jika tidak ada</string>
+    <string name="legenda_trad_ligada">Subtitle akan diterjemahkan di TV jika tidak ada</string>
+    <string name="legenda_trad_desligada">Subtitle tidak akan diterjemahkan lagi</string>
+    <string name="series_sinopse_mais">Sinopsis lengkap</string>
+    <string name="series_sinopse_menos">Sinopsis singkat</string>
+    <string name="series_continuar_curto">▶  Lanjutkan %1$s</string>
+    <string name="series_episodios">Episode</string>
+    <string name="series_trocar_temporada">Ganti musim</string>
+    <string name="fechar">Tutup</string>
+</resources>

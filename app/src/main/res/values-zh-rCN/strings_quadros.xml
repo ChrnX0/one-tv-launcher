@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_quadros.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="quadros_opcao">电影使用原始帧率（24 Hz）</string>
+    <string name="quadros_det">播放电影时电视切换到 24 Hz，镜头移动时画面不会卡顿。开始时屏幕会黑 1 到 2 秒。不用于电视直播。</string>
+    <string name="quadros_ligado">电影帧率已开启：从下一个视频开始生效</string>
+    <string name="quadros_desligado">电影帧率已关闭</string>
+</resources>

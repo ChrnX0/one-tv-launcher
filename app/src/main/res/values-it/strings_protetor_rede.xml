@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (it) de values/strings_protetor_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pt_dica_dispensar">OK chiude · ◀ ▶ spostano</string>
+    <string name="pt_dica_pausar">OK mette in pausa o riprende · ◀ ▶ spostano</string>
+    <string name="pt_dica_andar">◀ ▶ spostano · gli altri tasti chiudono</string>
+    <string name="rede_fotos_usar">Usa queste foto nel salvaschermo</string>
+    <string name="rede_fotos_parar">Smetti di usare queste foto nel salvaschermo</string>
+    <string name="rede_fotos_usando">Copia delle foto in corso. Compariranno al prossimo avvio del salvaschermo.</string>
+    <string name="rede_fotos_paradas">Il salvaschermo non usa più questa cartella.</string>
+    <string name="rede_continuar">Continua a guardare</string>
+    <string name="rede_recentes">Aggiunti di recente</string>
+    <string name="rede_buscar">Cerca</string>
+    <string name="rede_buscar_explica">Film, serie, episodi e musica su questo server.</string>
+    <string name="rede_buscar_campo">Nome</string>
+    <string name="rede_buscar_curto">Digita almeno 2 lettere.</string>
+    <string name="rede_proximo_em">Dopo: %1$s tra %2$d s · OK avvia ora · qualsiasi altro tasto annulla</string>
+    <string name="rede_ainda_assistindo">Stai ancora guardando? OK avvia %1$s</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="one">%1$d foto · copiata sulla TV, funziona a computer spento</item>
+        <item quantity="other">%1$d foto · copiate sulla TV, funzionano a computer spento</item>
+    </plurals>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_protetor_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pt_dica_dispensar">OK يتجاهل · ◀ ▶ تنقّل</string>
+    <string name="pt_dica_pausar">OK يوقف مؤقتًا أو يستأنف · ◀ ▶ تنقّل</string>
+    <string name="pt_dica_andar">◀ ▶ تنقّل · الأزرار الأخرى تغلق</string>
+    <string name="rede_fotos_usar">استخدام هذه الصور في شاشة التوقف</string>
+    <string name="rede_fotos_parar">التوقف عن استخدام هذه الصور في شاشة التوقف</string>
+    <string name="rede_fotos_usando">جارٍ نسخ الصور. تظهر في المرة القادمة التي تبدأ فيها شاشة التوقف.</string>
+    <string name="rede_fotos_paradas">لم تعد شاشة التوقف تستخدم هذا المجلد.</string>
+    <string name="rede_continuar">متابعة المشاهدة</string>
+    <string name="rede_recentes">أُضيف مؤخرًا</string>
+    <string name="rede_buscar">بحث</string>
+    <string name="rede_buscar_explica">أفلام وبرامج وحلقات وموسيقى على هذا الخادم.</string>
+    <string name="rede_buscar_campo">الاسم</string>
+    <string name="rede_buscar_curto">اكتب حرفين على الأقل.</string>
+    <string name="rede_proximo_em">التالي: %1$s خلال %2$d ث · OK يبدأ الآن · أي زر آخر يلغي</string>
+    <string name="rede_ainda_assistindo">هل ما زلت تشاهد؟ OK يبدأ %1$s</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="zero">%1$d صورة · منسوخة إلى التلفزيون، تعمل والكمبيوتر مطفأ</item>
+        <item quantity="one">صورة واحدة · منسوخة إلى التلفزيون، تعمل والكمبيوتر مطفأ</item>
+        <item quantity="two">صورتان · منسوختان إلى التلفزيون، تعملان والكمبيوتر مطفأ</item>
+        <item quantity="few">%1$d صور · منسوخة إلى التلفزيون، تعمل والكمبيوتر مطفأ</item>
+        <item quantity="many">%1$d صورة · منسوخة إلى التلفزيون، تعمل والكمبيوتر مطفأ</item>
+        <item quantity="other">%1$d صورة · منسوخة إلى التلفزيون، تعمل والكمبيوتر مطفأ</item>
+    </plurals>
+</resources>

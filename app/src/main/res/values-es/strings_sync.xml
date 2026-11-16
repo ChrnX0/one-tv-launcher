@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_sync.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="sync_sub">Sesión iniciada como %1$s. Lo que la TV mantiene al día con tu teléfono.</string>
+    <string name="sync_sub_mdblist">Sesión iniciada como %1$s. Tus listas de MDBList pueden aparecer en el catálogo.</string>
+    <string name="sync_ultima">Última sincronización: %1$s</string>
+    <string name="sync_nunca">Aún no se sincronizó</string>
+    <string name="sync_interesses">Para ver ⇄ Watchlist</string>
+    <string name="sync_interesses_simkl">Para ver ⇄ Plan to watch</string>
+    <string name="sync_interesses_det">Lo que marcas aquí aparece allá, y al revés</string>
+    <string name="sync_assistidos">Vistos ← Historial</string>
+    <string name="sync_assistidos_det">Trae lo que ya viste en el teléfono o en otro lugar</string>
+    <string name="sync_continuar">Continuar ⇄ Donde paraste</string>
+    <string name="sync_continuar_det">Para en el teléfono y sigue en la TV en el mismo punto</string>
+    <string name="sync_contar">Contarle a %1$s lo que veo aquí</string>
+    <string name="sync_contar_det">Envía “viendo ahora” y “visto” mientras se reproduce. Nunca en modo invitado ni en un perfil infantil.</string>
+    <string name="sync_listas">Listas en el catálogo</string>
+    <string name="sync_listas_nenhuma">Ninguna elegida</string>
+    <string name="sync_listas_n">%1$d elegidas: %2$s</string>
+    <string name="sync_listas_sub">Aparecen en LISTAS, bajo Todos, con solo los títulos que tiene tu lista. Hasta %1$d.</string>
+    <string name="sync_listas_carregando">Cargando tus listas…</string>
+    <string name="sync_listas_vazio">No se encontraron listas. Crea o marca con me gusta una lista en Trakt o MDBList y vuelve aquí.</string>
+    <string name="sync_listas_cheio">Hasta %1$d listas</string>
+    <string name="sync_lista_itens">%1$d títulos</string>
+    <string name="sync_agora">Sincronizar ahora</string>
+    <string name="sync_agora_det">También pasa solo al abrir Películas o Series</string>
+    <string name="sync_rodando">Sincronizando…</string>
+    <string name="sync_feito">Sincronizado</string>
+    <string name="sync_sair">Cerrar sesión en %1$s</string>
+    <string name="sync_bloqueado">En pausa: el modo invitado o un perfil infantil está activo.</string>
+    <string name="sync_outro_perfil">En pausa: la sincronización pertenece a otro perfil.</string>
+    <string name="sync_trakt_cheia">Tu lista de Trakt está llena (las cuentas gratis guardan 100). El launcher sigue solo en la TV.</string>
+    <string name="sync_ligado">Activado</string>
+    <string name="sync_desligado">Desactivado</string>
+    <string name="sync_fonte_trakt">Datos de Trakt (trakt.tv)</string>
+    <string name="sync_fonte_simkl">Datos de Simkl (simkl.com)</string>
+    <string name="sync_n_de">%1$d de %2$d en tu lista</string>
+    <string name="sync_continuando">Siguiendo donde paraste en el otro dispositivo</string>
+</resources>

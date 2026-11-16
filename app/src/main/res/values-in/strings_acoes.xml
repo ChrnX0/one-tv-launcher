@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_acoes.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acao_recado">Tampilkan pesan “%1$s”</string>
+    <string name="acao_timer">Timer %1$d menit</string>
+    <string name="acao_timer_nome">Timer %1$d menit (“%2$s”)</string>
+    <string name="acao_desligar_em">Matikan TV dalam %1$d mnt</string>
+    <string name="acao_desligar_cancelar">Batalkan timer tidur</string>
+    <string name="acao_filtro_ligar">Nyalakan filter malam</string>
+    <string name="acao_filtro_desligar">Matikan filter malam</string>
+    <string name="acao_filtro_sem_servico">filter malam memerlukan layanan aksesibilitas</string>
+    <string name="acao_rodar_cena">Jalankan adegan “%1$s”</string>
+    <string name="acao_cena_nao_existe">adegan “%1$s” tidak ada</string>
+    <string name="acao_cena_em_cena">adegan tidak bisa menjalankan adegan lain</string>
+    <string name="acao_mural_compras">Tambahkan “%1$s” ke daftar belanja</string>
+    <string name="acao_mural_recado">Sematkan “%1$s” di papan keluarga</string>
+    <string name="acao_tocar_titulo">Cari dan putar “%1$s”</string>
+    <string name="acao_tocar">Putar %1$s</string>
+    <string name="acao_continuar">Lanjutkan yang sedang diputar</string>
+    <string name="acao_proximo">Putar episode berikutnya</string>
+    <string name="acao_proximo_de">Episode berikutnya dari %1$s</string>
+    <string name="acao_o_que_via">Lihat yang sedang diputar</string>
+    <string name="acao_vendo">Terakhir ditonton: %1$s</string>
+    <string name="acao_vendo_nada">Belum ada yang ditonton di Film dan Serial.</string>
+    <string name="rot_cena_uma">Jalankan adegan</string>
+    <string name="rot_cena">Jalankan adegan: %1$s</string>
+    <string name="rot_cena_linha">Adegan: %1$s</string>
+    <string name="rot_cena_sem">Buat adegan dulu (panel web › Ekstra › Adegan)</string>
+    <string name="al_cena">Adegan saat berhenti: %1$s</string>
+    <string name="lbl_cenas">Adegan</string>
+    <string name="pr_cenas">Adegan</string>
+    <string name="cenas_titulo">Adegan</string>
+    <string name="cenas_det">OK menjalankan adegan. Buat dan edit di panel web › Ekstra › Adegan.</string>
+    <string name="cenas_vazio">Belum ada adegan. Buat di panel web › Ekstra › Adegan.</string>
+    <string name="tec_titulo">Tombol remote</string>
+    <string name="tec_det">Netflix dan YouTube berfungsi di layar mana pun; tombol berwarna dan angka hanya di layar utama.</string>
+    <string name="tec_nova">+ Atur tombol</string>
+    <string name="tec_nova_det">Lalu tekan tombol di remote</string>
+    <string name="tec_aperte">Tekan tombolnya</string>
+    <string name="tec_aperte_det">Netflix, YouTube, tombol berwarna, atau angka. BACK membatalkan.</string>
+    <string name="tec_nao_pode">%1$s tidak bisa diubah (diperlukan untuk memakai TV). Coba tombol lain.</string>
+    <string name="tec_so_home">Hanya berfungsi di layar utama (di aplikasi dan pemutar tombol ini tetap pada fungsinya sendiri).</string>
+    <string name="tec_toda_tela">Berfungsi di layar mana pun.</string>
+    <string name="tec_toque">Tekan</string>
+    <string name="tec_segurar">Tahan</string>
+    <string name="tec_duplo">Tekan dua kali</string>
+    <string name="tec_padrao">bawaan (aplikasi tersimpan; tahan 3 dtk = pilih)</string>
+    <string name="tec_cena">adegan %1$s</string>
+    <string name="tec_salvo">%1$s disimpan</string>
+    <string name="tec_apagar">Kosongkan tombol ini</string>
+    <string name="tec_vermelha">Merah</string>
+    <string name="tec_verde">Hijau</string>
+    <string name="tec_amarela">Kuning</string>
+    <string name="tec_azul">Biru</string>
+    <string name="aut_titulo">Otomatisasi</string>
+    <string name="aut_det">Semua yang dilakukan TV sendiri: pada jam tertentu, lewat tombol, saat sesuatu terjadi, dan lewat tautan.</string>
+    <string name="aut_cfg_det">Jam, tombol remote, peristiwa, dan tautan adegan</string>
+    <string name="aut_horario">Saat tiba waktunya</string>
+    <string name="aut_botao">Saat tombol ditekan</string>
+    <string name="aut_evento">Saat sesuatu terjadi (menjalankan adegan)</string>
+    <string name="aut_link">Lewat tautan</string>
+    <string name="aut_link_det">Buat dan edit di panel web › Ekstra › Adegan</string>
+    <string name="ev_midia_tocou">Film atau video dimulai</string>
+    <string name="ev_midia_pausou">Film atau video dijeda atau selesai</string>
+    <string name="ev_tv_ligou">TV dinyalakan</string>
+    <string name="ev_todos_sairam">Semua orang pergi (kehadiran)</string>
+    <string name="ev_chuva">Hujan akan turun</string>
+    <plurals name="cenas_acoes">
+        <item quantity="other">%d tindakan</item>
+    </plurals>
+    <plurals name="aut_links">
+        <item quantity="other">%d adegan dengan tautan</item>
+    </plurals>
+</resources>

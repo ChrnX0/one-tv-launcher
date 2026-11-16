@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_ideias.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dns_voltou_anterior">Das neue DNS hat nicht geantwortet. Zurück zum vorherigen.</string>
+    <string name="teclas_titulo">Tastentester</string>
+    <string name="teclas_instrucao">Drücke die Tasten der Fernbedienung. Jede Taste erscheint hier. HOME beendet.</string>
+    <string name="teclas_vazio">Noch keine Tasten.</string>
+    <string name="trava_home_titulo">PIN zum Ändern von HOME</string>
+    <string name="trava_home_errado">Falsche PIN</string>
+    <string name="extras_cfg_det">Zeiten für Nachtfilter und Schlafenszeit, Tastentester, Kalibrierung und weitere Werkzeuge</string>
+    <string name="extras_titulo">Extras</string>
+    <string name="extras_ligado">an</string>
+    <string name="extras_desligado">aus</string>
+    <string name="extras_JANELA_OTA">Systemupdates nur nachts (3 bis 5 Uhr)</string>
+    <string name="extras_TRAVAR_CRITICOS">„Beenden erzwingen“ und „Daten löschen“ für Launcher und VPN sperren</string>
+    <string name="extras_PIN_HOME">PIN zum Ändern von HOME verlangen</string>
+    <string name="extras_FILTRO_NOTURNO">Nachtfilter (wärmerer Bildschirm)</string>
+    <string name="extras_COR_DO_FUNDO">Akzentfarbe aus dem Hintergrundbild (Design Galerie)</string>
+    <string name="extras_DEBLOAT_POS_OTA">App-Aufräumen nach einem Systemupdate wiederholen</string>
+    <string name="extras_filtro_horario">Filter: %1$s bis %2$s, Stärke %3$d%%</string>
+    <string name="extras_filtro_inicio">Filter beginnt</string>
+    <string name="extras_filtro_fim">Filter endet</string>
+    <string name="extras_filtro_forca">Filterstärke</string>
+    <string name="extras_teclas">Tastentester öffnen</string>
+    <string name="extras_calibracao">Bildkalibrierungsmuster öffnen</string>
+    <string name="extras_acordar_pc">Computer wecken (Wake-on-LAN)</string>
+    <string name="extras_acordar_sem_mac">Die MAC des Computers fehlt (Panel oder adb)</string>
+    <string name="extras_acordar_ok">Paket gesendet</string>
+    <string name="extras_acordar_falhou">Konnte nicht senden</string>
+    <string name="extras_ota_pendente">Systemupdate wartet auf das Zeitfenster</string>
+    <string name="extras_ota_nenhuma">Kein ausstehendes Systemupdate</string>
+    <string name="guardar_dados_titulo">Launcher-Daten geschützt</string>
+    <string name="guardar_dados_texto">Das Löschen der Daten würde Einstellungen, Wecker und die Kopplung des Launchers mit dem Fernseher entfernen. Nichts wurde gelöscht. Für einen Neuanfang nutze das Backup im Panel oder einen Computer (adb).</string>
+    <string name="dono_titulo">Launcher zum Device Owner machen</string>
+    <string name="dono_texto">Das schaltet Google für ein paar Sekunden aus (das Konto bleibt und kommt von selbst zurück) und macht den Launcher zum Device Owner: Apps ausblenden, HOME festlegen und Beenden oder Löschen sperren. Mach es, wenn niemand den Fernseher nutzt.</string>
+    <string name="dono_usuarios">Die zusätzlichen Benutzer des Fernsehers werden ebenfalls ENTFERNT, mit ihren Daten: %s.</string>
+    <string name="dono_ok">Zum Owner machen</string>
+    <string name="dono_andando">Launcher wird zum Owner … (bis zu 1 Minute)</string>
+    <string name="dono_sem_shell">Die eigene Shell hat nicht geantwortet. Koppeln unter Einstellungen &gt; Launcher-Shell.</string>
+    <string name="bv_dev">Entwickleroptionen einschalten</string>
+    <string name="bv_dev_det">Geh unter Info nach unten zu „Android TV OS-Build“ und drücke 7-mal OK. Dann komm hierher zurück.</string>
+    <string name="bv_parear">Launcher mit dem Fernseher koppeln</string>
+    <string name="bv_parear_det">Öffnet die Entwickleroptionen: schalte „Debugging über WLAN“ ein und öffne „Gerät mit Kopplungscode koppeln“. Der Launcher liest den Code selbst.</string>
+    <string name="bv_dono">Launcher zum Device Owner machen</string>
+    <string name="bv_dono_det">Blendet Apps aus, legt HOME fest und sperrt Beenden oder Löschen. Google ist ein paar Sekunden aus; das Konto bleibt.</string>
+    <string name="extras_DIARIO_DNS">DNS-Tagebuch pro App (nur auf dem Fernseher, 7 Tage)</string>
+    <string name="extras_diario_ver">Heutiges DNS-Tagebuch zeigen</string>
+    <string name="extras_diario_apagar">DNS-Tagebuch löschen</string>
+    <string name="extras_diario_apagado">Tagebuch gelöscht</string>
+</resources>

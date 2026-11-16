@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_ideias3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="extras_SONO_SUAVE">Мягкое выключение (таймер сна приглушает экран и громкость)</string>
+    <string name="extras_MURAL">Семейная доска на заставке</string>
+    <string name="extras_PRESENCA">Выключать, когда все ушли из дома (роутер UniFi)</string>
+    <string name="extras_HOJE_NA_TV">«Сегодня по ТВ» на экране Поиска</string>
+    <string name="extras_RETROSPECTIVA">Недельный итог (вечер воскресенья)</string>
+    <string name="extras_MODO_SIMPLES">Простой режим (крупные карточки, озвучка названий)</string>
+</resources>

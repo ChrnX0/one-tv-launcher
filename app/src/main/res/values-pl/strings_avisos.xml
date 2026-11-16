@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_avisos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rd_voltou_titulo">Internet wrócił</string>
+    <string name="rd_voltou_texto">Nie działał przez %1$s (od %2$s). Prawdopodobna przyczyna: %3$s.</string>
+    <string name="rd_causa_wifi">telewizor stracił Wi-Fi</string>
+    <string name="rd_causa_provedor">dostawca internetu lub router</string>
+    <string name="rd_min">%1$d min</string>
+    <string name="rd_h_min">%1$d h %2$d min</string>
+    <string name="rd_disco_titulo">Pamięć telewizora się zapełnia</string>
+    <string name="rd_disco_texto">W tym tempie zapełni się za około %1$d dni (wolne %2$d MB). Wyczyść pamięć podręczną aplikacji lub usuń nieużywane aplikacje.</string>
+    <string name="pr_avisos_tv">Z telewizora</string>
+    <string name="mural_riscar">Skreśl %1$s</string>
+</resources>

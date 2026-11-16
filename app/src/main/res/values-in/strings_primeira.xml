@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_primeira.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pc_titulo">Atur dengan ponsel</string>
+    <string name="pc_linha_det">Disarankan. Arahkan kamera ponsel ke kode: PIN, bahasa, TV langsung, kota, dan layanan film, dalam 5 langkah.</string>
+    <string name="pc_instrucoes">Arahkan kamera ponsel ke kode di sebelah ini. Ponsel membuka pengaturan 5 langkah.\n\nPonsel harus berada di Wi-Fi rumah. Biarkan layar ini terbuka sampai Anda membuat PIN di ponsel (sisa %1$s).</string>
+    <string name="pc_entrou">Lanjutkan di ponsel.</string>
+    <string name="pc_venceu">Kode kedaluwarsa.\nTekan \"%1$s\" untuk menampilkan kode baru.</string>
+    <string name="pc_sem_rede">TV tidak berada di jaringan.\nHubungkan ke Wi-Fi rumah lalu coba lagi.</string>
+</resources>

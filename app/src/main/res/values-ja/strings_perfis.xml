@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_perfis.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="perfil_aviso_titulo">プロフィール: %1$s</string>
+    <string name="perfil_aviso_texto">このプロフィールのお気に入り、続きを見る、アプリの並び順</string>
+    <string name="perfil_aviso_crianca">子どもプロフィール: キッズモードと就寝時間をオンにしました</string>
+    <string name="perfil_crianca">子どもプロフィール</string>
+    <string name="perfil_crianca_linha">子どもプロフィール · %1$s: %2$s</string>
+    <string name="perfil_crianca_nao">オフ</string>
+    <string name="perfil_crianca_sem_pin">先にウェブパネルの PIN を設定してください: それが子どもプロフィールを守る保護者の PIN です</string>
+    <string name="perfil_pin_sair">子どもプロフィールを終了するための保護者の PIN</string>
+    <string name="perfil_pin_marcar">子どもプロフィールを変更するための保護者の PIN</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_ideias_80_88.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="si_sem_internet">इंटरनेट नहीं</string>
+    <string name="si_funcionam">अब भी चल रहा: %1$s</string>
+    <string name="si_pendrive">USB ड्राइव</string>
+    <string name="ad_pergunta">क्या आप अब भी देख रहे हैं?</string>
+</resources>

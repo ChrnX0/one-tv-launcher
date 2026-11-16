@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (fr) de values/strings_ideias.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dns_voltou_anterior">Le nouveau DNS n’a pas répondu. Retour au précédent.</string>
+    <string name="teclas_titulo">Testeur de touches</string>
+    <string name="teclas_instrucao">Appuyez sur les boutons de la télécommande. Chaque touche s’affiche ici. HOME quitte.</string>
+    <string name="teclas_vazio">Aucune touche pour l’instant.</string>
+    <string name="trava_home_titulo">PIN pour changer HOME</string>
+    <string name="trava_home_errado">PIN incorrect</string>
+    <string name="extras_cfg_det">Horaires du filtre de nuit et de l’heure du coucher, testeur de touches, calibrage et autres outils</string>
+    <string name="extras_titulo">Extras</string>
+    <string name="extras_ligado">activé</string>
+    <string name="extras_desligado">désactivé</string>
+    <string name="extras_JANELA_OTA">Mises à jour système uniquement la nuit (3 h à 5 h)</string>
+    <string name="extras_TRAVAR_CRITICOS">Bloquer « Forcer l’arrêt » et « Effacer les données » pour le launcher et le VPN</string>
+    <string name="extras_PIN_HOME">Demander le PIN pour changer HOME</string>
+    <string name="extras_FILTRO_NOTURNO">Filtre de nuit (écran plus chaud)</string>
+    <string name="extras_COR_DO_FUNDO">Couleur d’accent tirée du fond d’écran (thème Galerie)</string>
+    <string name="extras_DEBLOAT_POS_OTA">Refaire le nettoyage des apps après une mise à jour système</string>
+    <string name="extras_filtro_horario">Filtre : %1$s à %2$s, intensité %3$d%%</string>
+    <string name="extras_filtro_inicio">Début du filtre</string>
+    <string name="extras_filtro_fim">Fin du filtre</string>
+    <string name="extras_filtro_forca">Intensité du filtre</string>
+    <string name="extras_teclas">Ouvrir le testeur de touches</string>
+    <string name="extras_calibracao">Ouvrir les mires de calibrage de l’image</string>
+    <string name="extras_acordar_pc">Réveiller l’ordinateur (Wake-on-LAN)</string>
+    <string name="extras_acordar_sem_mac">L’adresse MAC de l’ordinateur manque (panneau ou adb)</string>
+    <string name="extras_acordar_ok">Paquet envoyé</string>
+    <string name="extras_acordar_falhou">Envoi impossible</string>
+    <string name="extras_ota_pendente">Mise à jour système en attente du créneau</string>
+    <string name="extras_ota_nenhuma">Aucune mise à jour système en attente</string>
+    <string name="guardar_dados_titulo">Données du launcher protégées</string>
+    <string name="guardar_dados_texto">Effacer les données supprimerait les paramètres, les réveils et l’appairage du launcher avec la TV. Rien n’a été supprimé. Pour repartir de zéro, utilisez la sauvegarde du panneau ou un ordinateur (adb).</string>
+    <string name="dono_titulo">Faire du launcher le device owner</string>
+    <string name="dono_texto">Cela désactive Google quelques secondes (le compte est conservé et revient tout seul) et fait du launcher le device owner : masquer des apps, fixer HOME et bloquer l’arrêt ou l’effacement. Faites-le quand personne n’utilise la TV.</string>
+    <string name="dono_usuarios">Les utilisateurs supplémentaires de la TV seront aussi SUPPRIMÉS, avec leurs données : %s.</string>
+    <string name="dono_ok">Faire owner</string>
+    <string name="dono_andando">Le launcher devient owner… (jusqu’à 1 minute)</string>
+    <string name="dono_sem_shell">Le shell intégré n’a pas répondu. Appairez-le dans Paramètres &gt; Shell du launcher.</string>
+    <string name="bv_dev">Activer les options pour les développeurs</string>
+    <string name="bv_dev_det">Dans À propos, descendez jusqu’à « Build de l’OS Android TV » et appuyez 7 fois sur OK. Puis revenez ici.</string>
+    <string name="bv_parear">Appairer le launcher avec la TV</string>
+    <string name="bv_parear_det">Ouvre les options pour les développeurs : activez « Débogage sans fil » et ouvrez « Associer l’appareil avec un code d’association ». Le launcher lit le code tout seul.</string>
+    <string name="bv_dono">Faire du launcher le device owner</string>
+    <string name="bv_dono_det">Masque des apps, fixe HOME et bloque l’arrêt ou l’effacement. Google se désactive quelques secondes ; le compte reste.</string>
+    <string name="extras_DIARIO_DNS">Journal DNS par app (gardé sur la TV uniquement, 7 jours)</string>
+    <string name="extras_diario_ver">Afficher le journal DNS du jour</string>
+    <string name="extras_diario_apagar">Supprimer le journal DNS</string>
+    <string name="extras_diario_apagado">Journal supprimé</string>
+</resources>

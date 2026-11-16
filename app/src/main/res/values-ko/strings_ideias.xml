@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_ideias.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dns_voltou_anterior">새 DNS가 응답하지 않았습니다. 이전 DNS로 되돌렸습니다.</string>
+    <string name="teclas_titulo">키 테스터</string>
+    <string name="teclas_instrucao">리모컨 버튼을 누르세요. 누른 키가 여기에 표시됩니다. 홈을 누르면 나갑니다.</string>
+    <string name="teclas_vazio">아직 누른 키가 없습니다.</string>
+    <string name="trava_home_titulo">홈 화면 변경 시 PIN</string>
+    <string name="trava_home_errado">PIN이 틀렸습니다</string>
+    <string name="extras_cfg_det">야간 필터 및 취침 시간, 키 테스터, 화면 보정 및 기타 도구</string>
+    <string name="extras_titulo">부가 기능</string>
+    <string name="extras_ligado">켜짐</string>
+    <string name="extras_desligado">꺼짐</string>
+    <string name="extras_JANELA_OTA">시스템 업데이트는 밤에만(오전 3시~5시)</string>
+    <string name="extras_TRAVAR_CRITICOS">런처와 VPN의 ‘강제 종료’와 ‘데이터 삭제’ 차단</string>
+    <string name="extras_PIN_HOME">홈 화면 변경 시 PIN 요구</string>
+    <string name="extras_FILTRO_NOTURNO">야간 필터(화면을 따뜻하게)</string>
+    <string name="extras_COR_DO_FUNDO">배경화면에서 강조 색상 가져오기(갤러리 테마)</string>
+    <string name="extras_DEBLOAT_POS_OTA">시스템 업데이트 후 앱 정리 다시 실행</string>
+    <string name="extras_filtro_horario">필터: %1$s~%2$s, 강도 %3$d%%</string>
+    <string name="extras_filtro_inicio">필터 시작</string>
+    <string name="extras_filtro_fim">필터 종료</string>
+    <string name="extras_filtro_forca">필터 강도</string>
+    <string name="extras_teclas">키 테스터 열기</string>
+    <string name="extras_calibracao">화면 보정 패턴 열기</string>
+    <string name="extras_acordar_pc">컴퓨터 깨우기(Wake-on-LAN)</string>
+    <string name="extras_acordar_sem_mac">컴퓨터의 MAC 주소가 없습니다(패널 또는 adb)</string>
+    <string name="extras_acordar_ok">패킷을 보냈습니다</string>
+    <string name="extras_acordar_falhou">보낼 수 없습니다</string>
+    <string name="extras_ota_pendente">시스템 업데이트가 시간대를 기다리는 중</string>
+    <string name="extras_ota_nenhuma">대기 중인 시스템 업데이트 없음</string>
+    <string name="guardar_dados_titulo">런처 데이터 보호됨</string>
+    <string name="guardar_dados_texto">데이터를 지우면 설정, 알람, 런처와 TV의 페어링이 삭제됩니다. 아무것도 삭제되지 않았습니다. 처음부터 시작하려면 패널 백업이나 컴퓨터(adb)를 사용하세요.</string>
+    <string name="dono_titulo">런처를 기기 소유자로 설정</string>
+    <string name="dono_texto">몇 초 동안 Google을 끄고(계정은 유지되며 자동으로 돌아옴) 런처를 기기 소유자로 만듭니다: 앱 숨기기, 홈 화면 고정, 중지 또는 삭제 차단. 아무도 TV를 사용하지 않을 때 하세요.</string>
+    <string name="dono_usuarios">TV의 추가 사용자도 데이터와 함께 삭제됩니다: %s.</string>
+    <string name="dono_ok">소유자로 설정</string>
+    <string name="dono_andando">런처를 소유자로 설정하는 중…(최대 1분)</string>
+    <string name="dono_sem_shell">자체 셸이 응답하지 않았습니다. 설정 &gt; 런처 셸에서 페어링하세요.</string>
+    <string name="bv_dev">개발자 옵션 켜기</string>
+    <string name="bv_dev_det">정보에서 ‘Android TV OS 빌드’로 내려가 OK를 7번 누르세요. 그런 다음 여기로 돌아오세요.</string>
+    <string name="bv_parear">런처와 TV 페어링</string>
+    <string name="bv_parear_det">개발자 옵션이 열립니다: ‘무선 디버깅’을 켜고 ‘페어링 코드로 기기 페어링’을 여세요. 런처가 코드를 자동으로 읽습니다.</string>
+    <string name="bv_dono">런처를 기기 소유자로 설정</string>
+    <string name="bv_dono_det">앱 숨기기, 홈 화면 고정, 중지 또는 삭제 차단. Google이 몇 초 동안 꺼지며 계정은 유지됩니다.</string>
+    <string name="extras_DIARIO_DNS">앱별 DNS 기록(TV에만 보관, 7일)</string>
+    <string name="extras_diario_ver">오늘의 DNS 기록 보기</string>
+    <string name="extras_diario_apagar">DNS 기록 삭제</string>
+    <string name="extras_diario_apagado">기록이 삭제됨</string>
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_coluna.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="coluna_listas">LİSTELER</string>
+    <string name="coluna_novos">+%1$s</string>
+    <string name="coluna_filtro">Filtre</string>
+    <string name="coluna_esportes">Spor</string>
+    <string name="coluna_guia">Yayın akışı</string>
+    <string name="coluna_filtro_titulo">Filtre</string>
+    <string name="coluna_filtro_ordem">Sıralama: %1$s</string>
+    <string name="coluna_filtro_combinado">Tür, dönem, puan, izlenmemiş…</string>
+    <string name="coluna_filtro_combinado_ativo">Filtre: %1$s</string>
+    <string name="coluna_filtro_limpar">Filtreyi temizle</string>
+    <string name="coluna_filtro_sortear">Beni şaşırt</string>
+    <string name="coluna_filtro_ocultas_mostrar">Gizli kategorileri göster (PIN)</string>
+    <string name="coluna_filtro_ocultas_esconder">Gizli kategorileri yeniden gizle</string>
+    <string name="coluna_menu_assistido">İzlendi olarak işaretle</string>
+    <string name="coluna_menu_nao_assistido">İzlenmedi olarak işaretle</string>
+    <string name="coluna_menu_tirar_continuar">İzlemeye devam et’ten çıkar</string>
+    <string name="coluna_menu_por_interesse">İzleme listesine ekle</string>
+    <string name="coluna_menu_tirar_interesse">İzleme listesinden çıkar</string>
+    <string name="coluna_marcado_assistido">%1$s izlendi olarak işaretlendi</string>
+    <string name="coluna_marcado_nao_assistido">%1$s izlenmedi olarak işaretlendi</string>
+    <string name="coluna_tirado_continuar">%1$s İzlemeye devam et’ten çıkarıldı</string>
+    <string name="coluna_etiqueta_concluida">Bitti</string>
+    <string name="coluna_etiqueta_nova_temporada">Yeni sezon</string>
+    <string name="coluna_etiqueta_novos">Yeni bölümler</string>
+    <string name="coluna_letra_titulo">Harfe git</string>
+    <string name="coluna_letra">Bir harfe git</string>
+    <string name="coluna_ao_vivo">CANLI</string>
+    <string name="coluna_ao_vivo_primeiro">Önce canlı</string>
+    <string name="coluna_tv_titulo">TV</string>
+    <string name="coluna_gravacoes">Kayıtlar</string>
+    <plurals name="coluna_etiqueta_n_novos">
+        <item quantity="one">%d yeni bölüm</item>
+        <item quantity="other">%d yeni bölüm</item>
+    </plurals>
+</resources>

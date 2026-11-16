@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (fr) de values/strings_drive.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="drv_titulo">Compte Google Drive</string>
+    <string name="drv_destino">Google Drive</string>
+    <string name="drv_conta">Compte Google Drive</string>
+    <string name="drv_nao_conectada">non connecté</string>
+    <string name="drv_passos">1. Sur votre téléphone, ouvrez %1$s (ou pointez l’appareil photo vers le code à droite).\n2. Connectez-vous avec un compte Google présent sur cette TV et saisissez :\n\n%2$s\n\n3. Autorisez l’accès à Google Drive. La TV ne voit que les fichiers qu’elle crée elle-même (le dossier OneTV-backup), jamais le reste de votre Drive.\n\nCet écran continue tout seul.</string>
+    <string name="drv_ok">C’est fait : %1$s est connecté. Choisissez « Google Drive » dans la ligne Copie supplémentaire pour que la sauvegarde nocturne y aille aussi.</string>
+    <string name="drv_sem_google">La connexion Google n’est pas encore configurée sur cette TV.\n\nConfigurez-la dans le panneau web > onglet Claude (votre propre client OAuth, type « TVs and Limited Input devices »), activez l’API Google Drive dans le même projet Google Cloud et revenez ici.</string>
+    <string name="drv_desconectar_pergunta">Déconnecter %1$s ? Les copies déjà dans Google Drive y restent ; la TV n’en envoie plus de nouvelles.</string>
+    <string name="drv_desconectar">Déconnecter</string>
+    <string name="drv_restaurar">Restaurer depuis Google Drive</string>
+    <string name="drv_precisa_conta">Connectez d’abord le compte Google Drive (ligne ci-dessus).</string>
+    <string name="drv_falhou">Ça n’a pas marché : %1$s</string>
+    <string name="drv_nenhuma">Il n’y a encore aucune copie dans le dossier OneTV-backup de Google Drive.</string>
+    <string name="drv_escolha">Quelle copie ?</string>
+    <string name="drv_senha">Mot de passe de la sauvegarde</string>
+    <string name="drv_senha_errada">Mauvais mot de passe de sauvegarde (ou fichier modifié). Rien n’a été restauré.</string>
+    <string name="drv_restaurado">Restauré. Le launcher redémarre dans un instant.</string>
+</resources>

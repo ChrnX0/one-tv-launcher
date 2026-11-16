@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_drive.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="drv_titulo">Google-Drive-Konto</string>
+    <string name="drv_destino">Google Drive</string>
+    <string name="drv_conta">Google-Drive-Konto</string>
+    <string name="drv_nao_conectada">nicht verbunden</string>
+    <string name="drv_passos">1. Öffne auf dem Handy %1$s (oder richte die Kamera auf den Code rechts).\n2. Melde dich mit einem Google-Konto an, das auf diesem Fernseher ist, und gib ein:\n\n%2$s\n\n3. Erlaube den Zugriff auf Google Drive. Der Fernseher sieht nur die Dateien, die er selbst erstellt (den Ordner OneTV-backup), nie den Rest deines Drive.\n\nDieser Bildschirm geht von selbst weiter.</string>
+    <string name="drv_ok">Fertig: %1$s ist verbunden. Wähle „Google Drive“ in der Zeile Zusätzliche Kopie, damit das nächtliche Backup auch dorthin geht.</string>
+    <string name="drv_sem_google">Die Google-Anmeldung ist auf diesem Fernseher noch nicht eingerichtet.\n\nRichte sie im Web-Panel › Tab Claude ein (dein eigener OAuth-Client, Typ „TVs and Limited Input devices“), schalte die Google Drive API im selben Google-Cloud-Projekt ein und komm hierher zurück.</string>
+    <string name="drv_desconectar_pergunta">%1$s trennen? Die Kopien in Google Drive bleiben dort; der Fernseher sendet keine neuen mehr.</string>
+    <string name="drv_desconectar">Trennen</string>
+    <string name="drv_restaurar">Aus Google Drive wiederherstellen</string>
+    <string name="drv_precisa_conta">Verbinde zuerst das Google-Drive-Konto (Zeile oben).</string>
+    <string name="drv_falhou">Hat nicht geklappt: %1$s</string>
+    <string name="drv_nenhuma">Im Ordner OneTV-backup in Google Drive gibt es noch keine Kopien.</string>
+    <string name="drv_escolha">Welche Kopie?</string>
+    <string name="drv_senha">Passwort des Backups</string>
+    <string name="drv_senha_errada">Falsches Backup-Passwort (oder die Datei wurde verändert). Nichts wurde wiederhergestellt.</string>
+    <string name="drv_restaurado">Wiederhergestellt. Der Launcher startet gleich neu.</string>
+</resources>

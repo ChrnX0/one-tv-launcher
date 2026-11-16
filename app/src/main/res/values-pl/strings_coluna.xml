@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_coluna.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="coluna_listas">LISTY</string>
+    <string name="coluna_novos">+%1$s</string>
+    <string name="coluna_filtro">Filtr</string>
+    <string name="coluna_esportes">Sport</string>
+    <string name="coluna_guia">Program</string>
+    <string name="coluna_filtro_titulo">Filtr</string>
+    <string name="coluna_filtro_ordem">Sortuj: %1$s</string>
+    <string name="coluna_filtro_combinado">Gatunek, epoka, ocena, nieobejrzane…</string>
+    <string name="coluna_filtro_combinado_ativo">Filtr: %1$s</string>
+    <string name="coluna_filtro_limpar">Wyczyść filtr</string>
+    <string name="coluna_filtro_sortear">Zaskocz mnie</string>
+    <string name="coluna_filtro_ocultas_mostrar">Pokaż ukryte kategorie (PIN)</string>
+    <string name="coluna_filtro_ocultas_esconder">Ponownie ukryj ukryte kategorie</string>
+    <string name="coluna_menu_assistido">Oznacz jako obejrzane</string>
+    <string name="coluna_menu_nao_assistido">Oznacz jako nieobejrzane</string>
+    <string name="coluna_menu_tirar_continuar">Usuń z Kontynuuj oglądanie</string>
+    <string name="coluna_menu_por_interesse">Dodaj do obejrzenia</string>
+    <string name="coluna_menu_tirar_interesse">Usuń z listy do obejrzenia</string>
+    <string name="coluna_marcado_assistido">%1$s oznaczono jako obejrzane</string>
+    <string name="coluna_marcado_nao_assistido">%1$s oznaczono jako nieobejrzane</string>
+    <string name="coluna_tirado_continuar">%1$s usunięto z Kontynuuj oglądanie</string>
+    <string name="coluna_etiqueta_concluida">Zakończony</string>
+    <string name="coluna_etiqueta_nova_temporada">Nowy sezon</string>
+    <string name="coluna_etiqueta_novos">Nowe odcinki</string>
+    <string name="coluna_letra_titulo">Przejdź do litery</string>
+    <string name="coluna_letra">Przejdź do litery</string>
+    <string name="coluna_ao_vivo">NA ŻYWO</string>
+    <string name="coluna_ao_vivo_primeiro">Najpierw na żywo</string>
+    <string name="coluna_tv_titulo">TV</string>
+    <string name="coluna_gravacoes">Nagrania</string>
+    <plurals name="coluna_etiqueta_n_novos">
+        <item quantity="one">%d nowy odcinek</item>
+        <item quantity="few">%d nowe odcinki</item>
+        <item quantity="many">%d nowych odcinków</item>
+        <item quantity="other">%d nowego odcinka</item>
+    </plurals>
+</resources>

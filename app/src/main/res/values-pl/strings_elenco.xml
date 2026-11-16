@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_elenco.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="elenco_botao">Obsada</string>
+    <string name="elenco_titulo">Obsada</string>
+    <string name="elenco_carregando">Ładowanie obsady…</string>
+    <string name="elenco_vazio">TMDB nie ma obsady tego tytułu.</string>
+    <string name="elenco_dica">Przechodź między osobami: poniżej, w czym jeszcze grają z tego, co jest na Twojej liście.</string>
+    <string name="elenco_na_lista">Także na Twojej liście</string>
+    <string name="elenco_procurando">Szukanie na Twojej liście…</string>
+    <string name="elenco_nada_na_lista">Nic więcej z tą osobą na Twojej liście.</string>
+    <string name="elenco_filme">Film</string>
+    <string name="elenco_serie">Serial</string>
+    <string name="elenco_opcao_player">Obsada (kto to za aktor?)</string>
+    <string name="anteriormente_titulo">Poprzednio w %1$s</string>
+    <string name="anteriormente_assistir">Oglądaj %1$s</string>
+    <string name="anteriormente_pular_sempre">Nigdy nie pokazuj</string>
+    <string name="anteriormente_desligado">Streszczenia wyłączone. Aby je włączyć: przytrzymaj OK na odcinku.</string>
+    <string name="anteriormente_ligar">Pokazuj streszczenia „Poprzednio”</string>
+    <string name="idade_titulo">Maksymalny wiek w trybie dziecięcym</string>
+    <string name="idade_det">Filmy i seriale z kategorią wiekową do tego wieku pojawiają się z każdej kategorii (klasyfikacja TMDB). Bez klasyfikacji tylko w kategoriach dziecięcych.</string>
+    <string name="idade_so_categorias">Tylko kategorie dziecięce</string>
+    <string name="idade_livre">Bez ograniczeń</string>
+    <string name="idade_anos">Do %1$d lat</string>
+    <string name="onde_tambem_em">Także na: %1$s (JustWatch)</string>
+    <string name="onde_fora">Nie ma na Twojej liście · na %1$s</string>
+    <string name="onde_grupo">Gdzie indziej (JustWatch)</string>
+    <string name="legenda_auto_pronta">Napisy pobrane automatycznie (zrobione dla tego pliku) · ▼, by zmienić</string>
+    <string name="legenda_auto_pronta_nome">Napisy pobrane automatycznie · ▼, by zmienić lub dostosować opóźnienie</string>
+    <string name="legenda_auto_opcao">Pobieraj napisy automatycznie</string>
+    <string name="legenda_auto_ligada">Napisy będą pobierane, gdy ich brakuje</string>
+    <string name="legenda_auto_desligada">Automatyczne napisy wyłączone</string>
+    <string name="legenda_trad_rotulo">Tłumaczenie automatyczne</string>
+    <string name="legenda_trad_traduzindo">Brak napisów w Twoim języku: tłumaczenie angielskich na telewizorze…</string>
+    <string name="legenda_trad_parcial">Napisy przetłumaczone na telewizorze (tłumaczenie automatyczne). Reszta wciąż się tłumaczy.</string>
+    <string name="legenda_trad_pronta">Tłumaczenie napisów zakończone</string>
+    <string name="legenda_trad_opcao">Tłumacz napisy na telewizorze, gdy ich brakuje</string>
+    <string name="legenda_trad_ligada">Napisy będą tłumaczone na telewizorze, gdy ich brakuje</string>
+    <string name="legenda_trad_desligada">Napisy nie będą już tłumaczone</string>
+    <string name="series_sinopse_mais">Pełny opis</string>
+    <string name="series_sinopse_menos">Krótszy opis</string>
+    <string name="series_continuar_curto">▶  Kontynuuj %1$s</string>
+    <string name="series_episodios">Odcinki</string>
+    <string name="series_trocar_temporada">Zmień sezon</string>
+    <string name="fechar">Zamknij</string>
+</resources>

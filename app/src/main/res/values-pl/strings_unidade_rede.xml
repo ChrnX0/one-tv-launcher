@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_unidade_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="ur_secao">Dysk sieciowy</string>
+    <string name="ur_titulo">Pokazuj telewizor jako dysk sieciowy</string>
+    <string name="ur_det">Wył. Telewizor sam pojawia się w Ten komputer w Windows, jak telefon, i jako folder sieciowy na Mac, Linux i telefonach.</string>
+    <string name="ur_painel">Najpierw włącz panel WWW powyżej (używa tego samego PIN-u i adresu https).</string>
+    <string name="ur_https">Czekanie na adres https panelu (certyfikat powstaje około 1 minuty po włączeniu panelu).</string>
+    <string name="ur_abra">Wł. W Windows telewizor pojawia się w Ten komputer (za pierwszym razem dla każdego komputera telewizor pyta na ekranie). Mac, Linux i telefon: %1$s · hasło: PIN panelu.</string>
+    <string name="mtp_pergunta_titulo">Komputer prosi o pliki telewizora</string>
+    <string name="mtp_pergunta">„%1$s” chce przeglądać i kopiować pliki z pamięci telewizora przez sieć domową. Zezwolić temu komputerowi?</string>
+    <string name="mtp_pcs">Dozwolone komputery</string>
+    <string name="mtp_pcs_nenhum">Jeszcze brak. Telewizor pyta na ekranie, gdy komputer prosi o pliki.</string>
+    <string name="mtp_pcs_lista">%1$s · OK zapomina wszystkie (każdy zapyta ponownie)</string>
+    <string name="mtp_pcs_esquecidos">Komputery zapomniane</string>
+</resources>

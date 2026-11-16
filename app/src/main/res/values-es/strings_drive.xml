@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_drive.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="drv_titulo">Cuenta de Google Drive</string>
+    <string name="drv_destino">Google Drive</string>
+    <string name="drv_conta">Cuenta de Google Drive</string>
+    <string name="drv_nao_conectada">no conectada</string>
+    <string name="drv_passos">1. En tu teléfono, abre %1$s (o apunta la cámara al código de la derecha).\n2. Inicia sesión con una cuenta de Google que esté en esta TV y escribe:\n\n%2$s\n\n3. Permite el acceso a Google Drive. La TV solo ve los archivos que ella misma crea (la carpeta OneTV-backup), nunca el resto de tu Drive.\n\nEsta pantalla sigue sola.</string>
+    <string name="drv_ok">Listo: %1$s está conectada. Elige \"Google Drive\" en la línea Copia extra para que la copia nocturna también vaya ahí.</string>
+    <string name="drv_sem_google">El inicio de sesión de Google aún no está configurado en esta TV.\n\nConfigúralo en el panel web > pestaña Claude (tu propio cliente OAuth, tipo \"TVs and Limited Input devices\"), activa la API de Google Drive en el mismo proyecto de Google Cloud y vuelve aquí.</string>
+    <string name="drv_desconectar_pergunta">¿Desconectar %1$s? Las copias que ya están en Google Drive se quedan allí; la TV deja de enviar nuevas.</string>
+    <string name="drv_desconectar">Desconectar</string>
+    <string name="drv_restaurar">Restaurar desde Google Drive</string>
+    <string name="drv_precisa_conta">Conecta primero la cuenta de Google Drive (línea de arriba).</string>
+    <string name="drv_falhou">No funcionó: %1$s</string>
+    <string name="drv_nenhuma">Aún no hay copias en la carpeta OneTV-backup de Google Drive.</string>
+    <string name="drv_escolha">¿Qué copia?</string>
+    <string name="drv_senha">Contraseña de la copia</string>
+    <string name="drv_senha_errada">Contraseña de la copia incorrecta (o el archivo se modificó). No se restauró nada.</string>
+    <string name="drv_restaurado">Restaurado. El launcher se reinicia en un momento.</string>
+</resources>

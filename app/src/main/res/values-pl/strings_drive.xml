@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_drive.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="drv_titulo">Konto Dysku Google</string>
+    <string name="drv_destino">Dysk Google</string>
+    <string name="drv_conta">Konto Dysku Google</string>
+    <string name="drv_nao_conectada">niepołączone</string>
+    <string name="drv_passos">1. Na telefonie otwórz %1$s (lub skieruj aparat na kod po prawej).\n2. Zaloguj się kontem Google, które jest na tym telewizorze, i wpisz:\n\n%2$s\n\n3. Zezwól na dostęp do Dysku Google. Telewizor widzi tylko pliki, które sam tworzy (folder OneTV-backup), nigdy reszty Twojego Dysku.\n\nTen ekran sam przejdzie dalej.</string>
+    <string name="drv_ok">Gotowe: %1$s jest połączone. Wybierz „Dysk Google” w wierszu Dodatkowa kopia, by nocna kopia trafiała też tam.</string>
+    <string name="drv_sem_google">Logowanie Google nie jest jeszcze skonfigurowane na tym telewizorze.\n\nSkonfiguruj je w panelu WWW > zakładka Claude (własny klient OAuth, typ „TVs and Limited Input devices”), włącz Google Drive API w tym samym projekcie Google Cloud i wróć tutaj.</string>
+    <string name="drv_desconectar_pergunta">Odłączyć %1$s? Kopie już zapisane na Dysku Google tam zostaną; telewizor przestanie wysyłać nowe.</string>
+    <string name="drv_desconectar">Odłącz</string>
+    <string name="drv_restaurar">Przywróć z Dysku Google</string>
+    <string name="drv_precisa_conta">Najpierw połącz konto Dysku Google (wiersz powyżej).</string>
+    <string name="drv_falhou">Nie zadziałało: %1$s</string>
+    <string name="drv_nenhuma">W folderze OneTV-backup na Dysku Google nie ma jeszcze kopii.</string>
+    <string name="drv_escolha">Która kopia?</string>
+    <string name="drv_senha">Hasło kopii</string>
+    <string name="drv_senha_errada">Błędne hasło kopii (lub plik został zmieniony). Nic nie przywrócono.</string>
+    <string name="drv_restaurado">Przywrócono. Launcher za chwilę uruchomi się ponownie.</string>
+</resources>

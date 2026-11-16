@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_ideia72.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l72_abrir">%1$s 열기</string>
+    <string name="l72_tela_previsao">일기 예보</string>
+    <string name="l72_tela_agenda">캘린더</string>
+    <string name="l72_tela_despertador">알람</string>
+    <string name="l72_tela_configuracoes">런처 설정</string>
+    <string name="l72_tela_inicio">홈 화면</string>
+    <string name="l72_despertador">%1$s에 알람 만들기(%2$s)</string>
+    <string name="l72_dias_uma">한 번</string>
+    <string name="l72_dias_todos">매일</string>
+    <string name="l72_dias_uteis">월~금</string>
+    <string name="l72_dias_fds">주말</string>
+    <string name="l72_dias_nomes">일,월,화,수,목,금,토</string>
+    <string name="l72_vol_subir">볼륨 높이기</string>
+    <string name="l72_vol_descer">볼륨 낮추기</string>
+    <string name="l72_vol_mudo">음소거/해제</string>
+    <string name="l72_vezes">(%1$d번)</string>
+    <string name="l72_midia_pausar">일시정지</string>
+    <string name="l72_midia_tocar">재생 재개</string>
+    <string name="l72_midia_proxima">다음</string>
+    <string name="l72_midia_anterior">이전</string>
+    <string name="l72_visita_liga">게스트 모드 켜기</string>
+    <string name="l72_visita_desliga">게스트 모드 끄기</string>
+    <string name="l72_canal_pedido">채널 %1$s(으)로 전환</string>
+    <string name="l72_canal">채널 %1$d(%2$s)(으)로 전환</string>
+    <string name="l72_o_que_passa">%1$s에서 방송 중인 것 보기</string>
+    <string name="l72_casa_ligar">켜기</string>
+    <string name="l72_casa_desligar">끄기</string>
+    <string name="l72_casa_alternar">전환</string>
+    <string name="l72_casa">%1$s %2$s(홈)</string>
+    <string name="l72_guia_vazio">%1$s: 편성표에 내용이 없습니다.</string>
+    <string name="l72_guia_agora">%1$s 지금: %2$s(%3$s까지)</string>
+    <string name="l72_guia_nada_agora">%1$s: 지금 편성표에 내용이 없음</string>
+    <string name="l72_guia_depois">다음: %1$s(%2$s)</string>
+    <string name="l75_pilula">지금 재생 중: %1$s, %2$s. OK로 일시정지 또는 재개, OK 길게 누르면 앱 열기</string>
+</resources>

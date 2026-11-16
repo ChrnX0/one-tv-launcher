@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_comando.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="cc_vazia">اكتب ما تريد أن يفعله التلفزيون</string>
+    <string name="cc_nao_entendi">لم أفهم. جرّب شيئًا مثل:</string>
+    <string name="cc_exemplo_1">شغّل Globo</string>
+    <string name="cc_exemplo_2">افتح YouTube</string>
+    <string name="cc_exemplo_3">أطفئ بعد 30 دقيقة</string>
+    <string name="cc_abrindo">جارٍ فتح %1$s</string>
+    <string name="cc_canal">جارٍ تشغيل %1$s</string>
+    <string name="cc_o_que_passa">ماذا يُعرض على %1$s</string>
+    <string name="cc_timer">تذكير بعد %1$d دقيقة</string>
+    <string name="cc_desligar">سينطفئ التلفزيون بعد %1$d دقيقة</string>
+    <string name="cc_desligar_cancelar">أُلغي مؤقت السكون</string>
+    <string name="cc_volume_subir">رفع الصوت</string>
+    <string name="cc_volume_descer">خفض الصوت</string>
+    <string name="cc_mudo">كتم/إلغاء الكتم</string>
+    <string name="cc_pausar">إيقاف مؤقت</string>
+    <string name="cc_continuar">تشغيل</string>
+    <string name="cc_tela_previsao">التوقعات</string>
+    <string name="cc_tela_agenda">التقويم</string>
+    <string name="cc_tela_despertador">المنبّهات</string>
+    <string name="cc_tela_configuracoes">إعدادات المشغّل</string>
+    <string name="cc_tela_inicio">الشاشة الرئيسية</string>
+    <string name="cc_confirme_na_tv">%1$s: أكّد بـOK على التلفزيون</string>
+    <string name="cc_nao_fiz">%1$s: لم يُنفَّذ (%2$s)</string>
+    <string name="cc_aviso_titulo">لوحة الهاتف</string>
+</resources>

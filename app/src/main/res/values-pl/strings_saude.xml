@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_saude.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="saude_titulo">Dostęp zdalny przestał działać</string>
+    <string name="saude_texto_shell">Dostęp telewizora do samego siebie zerwał się %1$d min temu (panel, Claude i automatyczne naprawy stają). Naciśnij Sparuj ponownie lub przejdź do Ustawienia › System › Paruj bez komputera.</string>
+    <string name="saude_texto_tunel">Claude przez internet jest offline. Naciśnij Połącz, by zobaczyć, czego brakuje, lub przejdź do Ustawienia › Dostęp zdalny.</string>
+    <string name="saude_parear">Sparuj ponownie</string>
+    <string name="saude_conectar">Połącz</string>
+    <string name="saude_depois">Nie teraz</string>
+    <string name="saude_acao_shell">Sparuj ponownie: Ustawienia › System › Paruj bez komputera</string>
+    <string name="saude_acao_tunel">Połącz ponownie: Ustawienia › Dostęp zdalny › Połącz</string>
+    <string name="mnt_titulo">Nocna konserwacja</string>
+    <string name="mnt_consertei">Naprawiono:</string>
+    <string name="mnt_falhou">Nie udało się naprawić:</string>
+    <string name="mnt_acesso">dostęp zdalny</string>
+    <string name="mnt_permissoes">uprawnienia</string>
+    <string name="mnt_agendamentos">budziki i harmonogramy</string>
+    <string name="mnt_espaco">wolne miejsce</string>
+</resources>

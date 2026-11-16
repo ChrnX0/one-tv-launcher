@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_pausa.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pausa_pausar">Wstrzymaj telewizję na żywo</string>
+    <string name="pausa_continuar">Wznów</string>
+    <string name="pausa_ao_vivo">Powrót na żywo</string>
+    <string name="pausa_selo">⏸ WSTRZYMANO · OK wznawia</string>
+    <string name="pausa_atrasado_min">%1$d MIN OPÓŹNIENIA · ▶ na żywo</string>
+    <string name="pausa_atrasado_seg">%1$d S OPÓŹNIENIA · ▶ na żywo</string>
+    <string name="pausa_voltou">Pauza dłuższa, niż mieści pamięć: powrót na żywo</string>
+</resources>

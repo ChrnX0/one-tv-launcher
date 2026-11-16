@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_nuvem.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_sub_nuvem">Video, musik, dan foto dari cloud Anda</string>
+    <string name="rede_nuvem_seguir">Lanjutkan</string>
+    <string name="rede_nuvem_entrar">Masuk</string>
+    <string name="rede_nuvem_pedindo">Meminta kode…</string>
+    <string name="rede_nuvem_esperando">Menunggu Anda mengonfirmasi di ponsel…</string>
+    <string name="rede_nuvem_salvando">Masuk…</string>
+    <string name="rede_nuvem_recusado">Layanan menolak. Periksa id aplikasi lalu coba lagi.</string>
+    <string name="rede_erro_nuvem_login">Izin akun ini kedaluwarsa atau dicabut. Hapus akun (tahan OK) lalu masuk lagi.</string>
+    <string name="rede_od_titulo">OneDrive: aplikasi Anda di Microsoft</string>
+    <string name="rede_od_explica">Sekali saja, di komputer: entra.microsoft.com › App registrations › New registration. Untuk jenis akun, pilih yang mencakup akun Microsoft pribadi. Lalu, di Authentication, aktifkan “Allow public client flows”. Salin “Application (client) ID” dan ketik di sini (Anda bisa mengetik dari ponsel, di panel).</string>
+    <string name="rede_od_id">Application (client) ID</string>
+    <string name="rede_od_id_erro">ID terlihat seperti 00000000-0000-0000-0000-000000000000.</string>
+    <string name="rede_od_codigo_explica">Di ponsel atau komputer, buka microsoft.com/link (atau arahkan kamera ke QR) dan ketik kode di bawah. TV hanya meminta izin membaca file.</string>
+    <string name="rede_od_erro_app">Microsoft tidak menerima aplikasi ini. Periksa ID-nya dan pastikan “Allow public client flows” aktif.</string>
+    <string name="rede_dbx_explica">Sekali saja, di komputer: dropbox.com/developers/apps › Create app › Scoped access › Full Dropbox. Di tab Permissions, centang files.metadata.read, files.content.read, dan account_info.read (dan files.content.write, jika ingin cadangan malam di Dropbox) lalu simpan (Submit). Salin “App key” dan ketik di sini.</string>
+    <string name="rede_dbx_chave">App key</string>
+    <string name="rede_dbx_chave_erro">App key hanya berisi huruf kecil dan angka.</string>
+    <string name="rede_dbx_codigo_explica">Arahkan kamera ponsel ke QR, masuk ke Dropbox, dan ketuk Allow. Dropbox menampilkan kode: ketik di sini (Anda bisa mengetik dari ponsel, di panel).</string>
+    <string name="rede_dbx_codigo">Kode Dropbox</string>
+    <string name="rede_dbx_codigo_erro">Ketik seluruh kode yang ditampilkan Dropbox.</string>
+    <string name="rede_box_explica">Sekali saja, di komputer: app.box.com/developers/console › Create New App › Custom App › User Authentication (OAuth 2.0). Di tab Configuration, pada OAuth 2.0 Redirect URI, isi %1$s centang “Read all files and folders” (dan “Write all files and folders”, jika ingin cadangan malam di Box). Simpan, lalu salin Client ID dan Client Secret ke sini.</string>
+    <string name="rede_box_id">Client ID</string>
+    <string name="rede_box_segredo">Client Secret</string>
+    <string name="rede_box_erro">Client ID dan Client Secret hanya berisi huruf dan angka. Salin keduanya dari tab Configuration.</string>
+    <string name="rede_volta_sem_rede">TV tidak berada di jaringan rumah. Hubungkan lalu coba lagi.</string>
+    <string name="rede_volta_explica">Arahkan kamera ponsel yang berada di Wi‑Fi yang sama dengan TV ke QR, masuk ke %1$s, dan izinkan akses. Ponsel kembali ke TV sendiri: tidak perlu mengetik apa pun.</string>
+    <string name="rede_volta_porta">Port %1$d di TV sedang dipakai. Tutup aplikasi lain lalu coba lagi.</string>
+    <string name="rede_gd_explica">Sekali saja, di komputer, di proyek Google Cloud Anda (console.cloud.google.com): APIs &amp; Services › Library › aktifkan “Google Drive API”. Di Google Auth Platform › Data Access, tambahkan scope …/auth/drive.readonly. Di Clients › Create client › Web application, pada Authorized redirect URIs isi %1$s. Salin Client ID dan Client secret ke sini.</string>
+    <string name="rede_gd_id">Client ID (…apps.googleusercontent.com)</string>
+    <string name="rede_gd_segredo">Client secret</string>
+    <string name="rede_gd_erro">Salin keduanya dari halaman klien: ID berakhir dengan .apps.googleusercontent.com dan secret biasanya diawali GOCSPX-.</string>
+    <string name="rede_gd_aviso">Jika Google bilang aplikasi belum diverifikasi, ketuk Advanced › Go to (itu aplikasi Anda sendiri).</string>
+</resources>

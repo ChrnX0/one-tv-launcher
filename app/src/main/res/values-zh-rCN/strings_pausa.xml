@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_pausa.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pausa_pausar">暂停直播</string>
+    <string name="pausa_continuar">继续</string>
+    <string name="pausa_ao_vivo">回到直播</string>
+    <string name="pausa_selo">⏸ 已暂停 · 按 OK 继续</string>
+    <string name="pausa_atrasado_min">落后 %1$d 分钟 · ▶ 直播</string>
+    <string name="pausa_atrasado_seg">落后 %1$d 秒 · ▶ 直播</string>
+    <string name="pausa_voltou">暂停时间超过缓存上限：已回到直播</string>
+</resources>

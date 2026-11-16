@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_acoes.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acao_recado">Показать сообщение «%1$s»</string>
+    <string name="acao_timer">Таймер на %1$d мин</string>
+    <string name="acao_timer_nome">Таймер на %1$d мин («%2$s»)</string>
+    <string name="acao_desligar_em">Выключить ТВ через %1$d мин</string>
+    <string name="acao_desligar_cancelar">Отменить таймер сна</string>
+    <string name="acao_filtro_ligar">Включить ночной фильтр</string>
+    <string name="acao_filtro_desligar">Выключить ночной фильтр</string>
+    <string name="acao_filtro_sem_servico">ночному фильтру нужна служба специальных возможностей</string>
+    <string name="acao_rodar_cena">Запустить сцену «%1$s»</string>
+    <string name="acao_cena_nao_existe">сцены «%1$s» не существует</string>
+    <string name="acao_cena_em_cena">сцена не может запускать другую сцену</string>
+    <string name="acao_mural_compras">Добавить «%1$s» в список покупок</string>
+    <string name="acao_mural_recado">Закрепить «%1$s» на семейной доске</string>
+    <string name="acao_tocar_titulo">Найти и воспроизвести «%1$s»</string>
+    <string name="acao_tocar">Воспроизвести %1$s</string>
+    <string name="acao_continuar">Продолжить то, что играло</string>
+    <string name="acao_proximo">Включить следующую серию</string>
+    <string name="acao_proximo_de">Следующая серия %1$s</string>
+    <string name="acao_o_que_via">Посмотреть, что играло</string>
+    <string name="acao_vendo">Последнее: %1$s</string>
+    <string name="acao_vendo_nada">В Фильмах и Сериалах ещё ничего не смотрели.</string>
+    <string name="rot_cena_uma">Запустить сцену</string>
+    <string name="rot_cena">Запустить сцену: %1$s</string>
+    <string name="rot_cena_linha">Сцена: %1$s</string>
+    <string name="rot_cena_sem">Сначала создайте сцену (веб-панель › Дополнительно › Сцены)</string>
+    <string name="al_cena">Сцена при остановке: %1$s</string>
+    <string name="lbl_cenas">Сцены</string>
+    <string name="pr_cenas">Сцены</string>
+    <string name="cenas_titulo">Сцены</string>
+    <string name="cenas_det">OK запускает сцену. Создавайте и меняйте их в веб-панели › Дополнительно › Сцены.</string>
+    <string name="cenas_vazio">Сцен пока нет. Создайте сцену в веб-панели › Дополнительно › Сцены.</string>
+    <string name="tec_titulo">Кнопки пульта</string>
+    <string name="tec_det">Netflix и YouTube работают на любом экране; цветные кнопки и цифры — только на главном.</string>
+    <string name="tec_nova">+ Настроить кнопку</string>
+    <string name="tec_nova_det">Затем нажмите кнопку на пульте</string>
+    <string name="tec_aperte">Нажмите кнопку</string>
+    <string name="tec_aperte_det">Netflix, YouTube, цветная кнопка или цифра. НАЗАД отменяет.</string>
+    <string name="tec_nao_pode">%1$s изменить нельзя (она нужна для работы ТВ). Попробуйте другую кнопку.</string>
+    <string name="tec_so_home">Работает только на главном экране (в приложениях и плеере сохраняет свою функцию).</string>
+    <string name="tec_toda_tela">Работает на любом экране.</string>
+    <string name="tec_toque">Нажатие</string>
+    <string name="tec_segurar">Удержание</string>
+    <string name="tec_duplo">Двойное нажатие</string>
+    <string name="tec_padrao">по умолчанию (сохранённое приложение; удержание 3 с = выбор)</string>
+    <string name="tec_cena">сцена %1$s</string>
+    <string name="tec_salvo">%1$s сохранено</string>
+    <string name="tec_apagar">Сбросить эту кнопку</string>
+    <string name="tec_vermelha">Красная</string>
+    <string name="tec_verde">Зелёная</string>
+    <string name="tec_amarela">Жёлтая</string>
+    <string name="tec_azul">Синяя</string>
+    <string name="aut_titulo">Автоматизация</string>
+    <string name="aut_det">Всё, что ТВ делает сам: по времени, по кнопке, по событию и по ссылке.</string>
+    <string name="aut_cfg_det">Время, кнопки пульта, события и ссылки сцен</string>
+    <string name="aut_horario">По времени</string>
+    <string name="aut_botao">По нажатию кнопки</string>
+    <string name="aut_evento">По событию (запускает сцену)</string>
+    <string name="aut_link">По ссылке</string>
+    <string name="aut_link_det">Создавайте и меняйте в веб-панели › Дополнительно › Сцены</string>
+    <string name="ev_midia_tocou">Фильм или видео запущено</string>
+    <string name="ev_midia_pausou">Фильм или видео на паузе или закончилось</string>
+    <string name="ev_tv_ligou">ТВ включился</string>
+    <string name="ev_todos_sairam">Все ушли (присутствие)</string>
+    <string name="ev_chuva">Скоро дождь</string>
+    <plurals name="cenas_acoes">
+        <item quantity="one">%d действие</item>
+        <item quantity="few">%d действия</item>
+        <item quantity="many">%d действий</item>
+        <item quantity="other">%d действия</item>
+    </plurals>
+    <plurals name="aut_links">
+        <item quantity="one">%d сцена со ссылкой</item>
+        <item quantity="few">%d сцены со ссылкой</item>
+        <item quantity="many">%d сцен со ссылкой</item>
+        <item quantity="other">%d сцены со ссылкой</item>
+    </plurals>
+</resources>

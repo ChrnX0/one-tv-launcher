@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pt-rPT) de values/strings_protetor_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pt_dica_dispensar">OK dispensa · ◀ ▶ andam</string>
+    <string name="pt_dica_pausar">OK pausa ou retoma · ◀ ▶ andam</string>
+    <string name="pt_dica_andar">◀ ▶ andam · outra tecla fecha</string>
+    <string name="rede_fotos_usar">Usar estas fotos no protetor de ecrã</string>
+    <string name="rede_fotos_parar">Parar de usar estas fotos no protetor</string>
+    <string name="rede_fotos_usando">A copiar as fotos. Elas aparecem na próxima vez que o protetor abrir.</string>
+    <string name="rede_fotos_paradas">O protetor deixou de usar esta pasta.</string>
+    <string name="rede_continuar">Continuar a assistir</string>
+    <string name="rede_recentes">Adicionados há pouco</string>
+    <string name="rede_buscar">Pesquisar</string>
+    <string name="rede_buscar_explica">Filmes, séries, episódios e músicas deste servidor.</string>
+    <string name="rede_buscar_campo">Nome</string>
+    <string name="rede_buscar_curto">Introduza pelo menos 2 letras.</string>
+    <string name="rede_proximo_em">Próximo: %1$s em %2$d s · OK começa agora · outra tecla cancela</string>
+    <string name="rede_ainda_assistindo">Ainda está a assistir? OK começa %1$s</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="one">%1$d foto · copiada para a TV, funciona com o computador desligado</item>
+        <item quantity="other">%1$d fotos · copiadas para a TV, funciona com o computador desligado</item>
+    </plurals>
+</resources>

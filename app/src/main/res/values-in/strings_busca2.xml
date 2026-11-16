@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_busca2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="bu_outros_apps">Di aplikasi lain</string>
+    <string name="bu_outro_youtube">Cari “%1$s” di YouTube</string>
+    <string name="bu_outro_netflix">Cari “%1$s” di Netflix</string>
+    <string name="bu_outro_prime">Cari “%1$s” di Prime Video</string>
+    <string name="bu_outro_det">Membuka pencarian aplikasi itu sendiri</string>
+</resources>

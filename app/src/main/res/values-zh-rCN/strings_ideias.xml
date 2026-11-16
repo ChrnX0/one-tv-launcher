@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_ideias.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dns_voltou_anterior">新 DNS 无响应。已切回之前的 DNS。</string>
+    <string name="teclas_titulo">按键测试器</string>
+    <string name="teclas_instrucao">按遥控器上的按钮。每个按键都会显示在这里。按主屏幕键退出。</string>
+    <string name="teclas_vazio">还没有按键。</string>
+    <string name="trava_home_titulo">更改主屏幕需要 PIN</string>
+    <string name="trava_home_errado">PIN 错误</string>
+    <string name="extras_cfg_det">夜间滤镜和就寝时间、按键测试器、校准及其他工具</string>
+    <string name="extras_titulo">附加功能</string>
+    <string name="extras_ligado">开</string>
+    <string name="extras_desligado">关</string>
+    <string name="extras_JANELA_OTA">系统更新仅在夜间进行（凌晨 3 点到 5 点）</string>
+    <string name="extras_TRAVAR_CRITICOS">阻止对启动器和 VPN 执行“强行停止”和“清除数据”</string>
+    <string name="extras_PIN_HOME">更改主屏幕时要求 PIN</string>
+    <string name="extras_FILTRO_NOTURNO">夜间滤镜（屏幕偏暖）</string>
+    <string name="extras_COR_DO_FUNDO">从壁纸取强调色（画廊主题）</string>
+    <string name="extras_DEBLOAT_POS_OTA">系统更新后重新清理应用</string>
+    <string name="extras_filtro_horario">滤镜：%1$s 至 %2$s，强度 %3$d%%</string>
+    <string name="extras_filtro_inicio">滤镜开始</string>
+    <string name="extras_filtro_fim">滤镜结束</string>
+    <string name="extras_filtro_forca">滤镜强度</string>
+    <string name="extras_teclas">打开按键测试器</string>
+    <string name="extras_calibracao">打开画面校准图</string>
+    <string name="extras_acordar_pc">唤醒电脑（Wake-on-LAN）</string>
+    <string name="extras_acordar_sem_mac">缺少电脑的 MAC 地址（面板或 adb）</string>
+    <string name="extras_acordar_ok">数据包已发送</string>
+    <string name="extras_acordar_falhou">无法发送</string>
+    <string name="extras_ota_pendente">系统更新正在等待时间窗口</string>
+    <string name="extras_ota_nenhuma">没有待处理的系统更新</string>
+    <string name="guardar_dados_titulo">启动器数据已受保护</string>
+    <string name="guardar_dados_texto">清除数据会删除设置、闹钟以及启动器与电视的配对。没有删除任何内容。如需从头开始，请使用面板备份或电脑（adb）。</string>
+    <string name="dono_titulo">将启动器设为设备所有者</string>
+    <string name="dono_texto">这会让 Google 关闭几秒钟（账号会保留并自动恢复），并将启动器设为设备所有者：隐藏应用、固定主屏幕以及阻止停止或清除。请在没人使用电视时操作。</string>
+    <string name="dono_usuarios">电视上的其他用户及其数据也将被删除：%s。</string>
+    <string name="dono_ok">设为所有者</string>
+    <string name="dono_andando">正在将启动器设为所有者…（最多 1 分钟）</string>
+    <string name="dono_sem_shell">自有 Shell 无响应。请在 设置 > 启动器 Shell 中配对。</string>
+    <string name="bv_dev">开启开发者选项</string>
+    <string name="bv_dev_det">在“关于”中向下找到“Android TV OS 版本”，按 OK 7 次。然后回到这里。</string>
+    <string name="bv_parear">将启动器与电视配对</string>
+    <string name="bv_parear_det">打开开发者选项：开启“无线调试”并打开“使用配对码配对设备”。启动器会自动读取代码。</string>
+    <string name="bv_dono">将启动器设为设备所有者</string>
+    <string name="bv_dono_det">隐藏应用、固定主屏幕并阻止停止或清除。Google 会关闭几秒钟；账号会保留。</string>
+    <string name="extras_DIARIO_DNS">按应用记录 DNS 日志（仅保存在电视上，7 天）</string>
+    <string name="extras_diario_ver">查看今天的 DNS 日志</string>
+    <string name="extras_diario_apagar">删除 DNS 日志</string>
+    <string name="extras_diario_apagado">日志已删除</string>
+</resources>

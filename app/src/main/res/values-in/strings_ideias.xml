@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_ideias.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dns_voltou_anterior">DNS baru tidak menjawab. Kembali ke yang sebelumnya.</string>
+    <string name="teclas_titulo">Penguji tombol</string>
+    <string name="teclas_instrucao">Tekan tombol remote. Tiap tombol muncul di sini. HOME keluar.</string>
+    <string name="teclas_vazio">Belum ada tombol.</string>
+    <string name="trava_home_titulo">PIN untuk mengganti HOME</string>
+    <string name="trava_home_errado">PIN salah</string>
+    <string name="extras_cfg_det">Jam filter malam dan waktu tidur, penguji tombol, kalibrasi, dan alat lain</string>
+    <string name="extras_titulo">Ekstra</string>
+    <string name="extras_ligado">aktif</string>
+    <string name="extras_desligado">nonaktif</string>
+    <string name="extras_JANELA_OTA">Pembaruan sistem hanya di malam hari (pukul 3 sampai 5)</string>
+    <string name="extras_TRAVAR_CRITICOS">Blokir \"Paksa berhenti\" dan \"Hapus data\" untuk launcher dan VPN</string>
+    <string name="extras_PIN_HOME">Minta PIN untuk mengganti HOME</string>
+    <string name="extras_FILTRO_NOTURNO">Filter malam (layar lebih hangat)</string>
+    <string name="extras_COR_DO_FUNDO">Warna aksen dari wallpaper (tema Galeri)</string>
+    <string name="extras_DEBLOAT_POS_OTA">Ulangi pembersihan aplikasi setelah pembaruan sistem</string>
+    <string name="extras_filtro_horario">Filter: %1$s sampai %2$s, kekuatan %3$d%%</string>
+    <string name="extras_filtro_inicio">Filter mulai</string>
+    <string name="extras_filtro_fim">Filter berakhir</string>
+    <string name="extras_filtro_forca">Kekuatan filter</string>
+    <string name="extras_teclas">Buka penguji tombol</string>
+    <string name="extras_calibracao">Buka pola kalibrasi gambar</string>
+    <string name="extras_acordar_pc">Bangunkan komputer (Wake-on-LAN)</string>
+    <string name="extras_acordar_sem_mac">MAC komputer belum ada (panel atau adb)</string>
+    <string name="extras_acordar_ok">Paket terkirim</string>
+    <string name="extras_acordar_falhou">Tidak bisa mengirim</string>
+    <string name="extras_ota_pendente">Pembaruan sistem menunggu jendela waktunya</string>
+    <string name="extras_ota_nenhuma">Tidak ada pembaruan sistem tertunda</string>
+    <string name="guardar_dados_titulo">Data launcher dilindungi</string>
+    <string name="guardar_dados_texto">Menghapus data akan menghapus setelan, alarm, dan pemasangan launcher dengan TV. Tidak ada yang dihapus. Untuk mulai dari awal, gunakan cadangan panel atau komputer (adb).</string>
+    <string name="dono_titulo">Jadikan launcher device owner</string>
+    <string name="dono_texto">Ini mematikan Google selama beberapa detik (akun tetap ada dan kembali sendiri) dan menjadikan launcher device owner: menyembunyikan aplikasi, mengunci HOME, dan memblokir hentikan atau hapus data. Lakukan saat tidak ada yang memakai TV.</string>
+    <string name="dono_usuarios">Pengguna tambahan di TV juga akan DIHAPUS, beserta datanya: %s.</string>
+    <string name="dono_ok">Jadikan owner</string>
+    <string name="dono_andando">Menjadikan launcher owner… (hingga 1 menit)</string>
+    <string name="dono_sem_shell">Shell sendiri tidak menjawab. Pasangkan di Setelan > Shell launcher.</string>
+    <string name="bv_dev">Aktifkan opsi developer</string>
+    <string name="bv_dev_det">Di Tentang, turun ke "Android TV OS build" dan tekan OK 7 kali. Lalu kembali ke sini.</string>
+    <string name="bv_parear">Pasangkan launcher dengan TV</string>
+    <string name="bv_parear_det">Membuka Opsi developer: aktifkan "Wireless debugging" dan buka "Pair device with pairing code". Launcher membaca kodenya sendiri.</string>
+    <string name="bv_dono">Jadikan launcher device owner</string>
+    <string name="bv_dono_det">Menyembunyikan aplikasi, mengunci HOME, dan memblokir hentikan atau hapus data. Google mati selama beberapa detik; akun tetap ada.</string>
+    <string name="extras_DIARIO_DNS">Buku harian DNS per aplikasi (hanya disimpan di TV, 7 hari)</string>
+    <string name="extras_diario_ver">Tampilkan buku harian DNS hari ini</string>
+    <string name="extras_diario_apagar">Hapus buku harian DNS</string>
+    <string name="extras_diario_apagado">Buku harian dihapus</string>
+</resources>

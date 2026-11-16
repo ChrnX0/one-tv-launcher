@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_familia.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="fam_pin">PIN الأطفال</string>
+    <string name="fam_pin_det">PIN ثانٍ لفتح القنوات والفئات المخفية ووقت النوم أمام الأطفال. PIN اللوحة يعمل في كل مكان.</string>
+    <string name="fam_pin_ok">تم حفظ PIN الأطفال</string>
+    <string name="fam_pin_igual">يجب أن يختلف PIN الأطفال عن PIN اللوحة</string>
+    <string name="fam_trocar">تغيير PIN الأطفال</string>
+    <string name="fam_apagar">إزالة PIN الأطفال</string>
+    <string name="fam_apagado">أُزيل PIN الأطفال: الآن PIN اللوحة وحده يفتح</string>
+    <string name="extras_TEMPO_TELA">وقت الشاشة اليومي (عند انتهائه تُفتح التطبيقات المسموحة فقط)</string>
+    <string name="tela_titulo">وقت الشاشة</string>
+    <string name="tela_acabou">انتهى وقت الشاشة لليوم. نراك غدًا!</string>
+    <string name="tela_5min">بقيت 5 دقائق من وقت الشاشة اليوم</string>
+    <string name="tela_pin">PIN لتغيير وقت الشاشة</string>
+    <string name="tela_cota_linha">وقت الشاشة يوميًا: %1$s (المتبقي اليوم: %2$s)</string>
+    <string name="tela_mais">امنح %1$d دقيقة إضافية اليوم</string>
+    <string name="tela_mais_ok">%1$d دقيقة إضافية لليوم</string>
+    <string name="tela_h">س</string>
+    <string name="tela_min">د</string>
+    <string name="extras_AGENDA_TODAS">تقويم كل حسابات Google على التلفزيون معًا</string>
+    <string name="cal_todas_contas">كل الحسابات على التلفزيون (%1$d)</string>
+    <string name="tm_tempo_esgotado">انتهى الوقت</string>
+    <string name="painel_desligado_pin">أُوقفت لوحة الويب: PIN خاطئ مرات كثيرة</string>
+    <string name="tm_crono">ساعة الإيقاف</string>
+    <string name="tm_crono_iniciar">بدء ساعة الإيقاف</string>
+    <string name="tm_crono_parar">إيقاف ساعة الإيقاف</string>
+    <string name="tm_crono_comecou">بدأت ساعة الإيقاف: تظهر في الشاشة الرئيسية</string>
+    <string name="tm_crono_marcou">توقفت ساعة الإيقاف عند %1$s</string>
+    <string name="som_canal">آخر قناة في التلفزيون المباشر</string>
+</resources>

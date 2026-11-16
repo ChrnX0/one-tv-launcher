@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (it) de values/strings_acoes.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acao_recado">Mostra il messaggio “%1$s”</string>
+    <string name="acao_timer">Timer di %1$d minuti</string>
+    <string name="acao_timer_nome">Timer di %1$d minuti (“%2$s”)</string>
+    <string name="acao_desligar_em">Spegni la TV tra %1$d min</string>
+    <string name="acao_desligar_cancelar">Annulla il timer di spegnimento</string>
+    <string name="acao_filtro_ligar">Attiva il filtro notturno</string>
+    <string name="acao_filtro_desligar">Disattiva il filtro notturno</string>
+    <string name="acao_filtro_sem_servico">il filtro notturno richiede il servizio di accessibilità</string>
+    <string name="acao_rodar_cena">Esegui la scena “%1$s”</string>
+    <string name="acao_cena_nao_existe">la scena “%1$s” non esiste</string>
+    <string name="acao_cena_em_cena">una scena non può eseguire un’altra scena</string>
+    <string name="acao_mural_compras">Aggiungi “%1$s” alla lista della spesa</string>
+    <string name="acao_mural_recado">Appendi “%1$s” alla bacheca di famiglia</string>
+    <string name="acao_tocar_titulo">Trova e riproduci “%1$s”</string>
+    <string name="acao_tocar">Riproduci %1$s</string>
+    <string name="acao_continuar">Riprendi ciò che era in riproduzione</string>
+    <string name="acao_proximo">Riproduci l’episodio successivo</string>
+    <string name="acao_proximo_de">Episodio successivo di %1$s</string>
+    <string name="acao_o_que_via">Vedi cosa era in riproduzione</string>
+    <string name="acao_vendo">Ultimo visto: %1$s</string>
+    <string name="acao_vendo_nada">Niente ancora visto in Film e Serie.</string>
+    <string name="rot_cena_uma">Esegui una scena</string>
+    <string name="rot_cena">Esegui scena: %1$s</string>
+    <string name="rot_cena_linha">Scena: %1$s</string>
+    <string name="rot_cena_sem">Crea prima una scena (pannello web › Extra › Scene)</string>
+    <string name="al_cena">Scena allo stop: %1$s</string>
+    <string name="lbl_cenas">Scene</string>
+    <string name="pr_cenas">Scene</string>
+    <string name="cenas_titulo">Scene</string>
+    <string name="cenas_det">OK esegue la scena. Creale e modificale nel pannello web › Extra › Scene.</string>
+    <string name="cenas_vazio">Nessuna scena. Creane una nel pannello web › Extra › Scene.</string>
+    <string name="tec_titulo">Tasti del telecomando</string>
+    <string name="tec_det">Netflix e YouTube funzionano in ogni schermata; tasti colorati e numeri solo nella schermata Home.</string>
+    <string name="tec_nova">+ Configura un tasto</string>
+    <string name="tec_nova_det">Poi premi il tasto sul telecomando</string>
+    <string name="tec_aperte">Premi il tasto</string>
+    <string name="tec_aperte_det">Netflix, YouTube, un tasto colorato o un numero. INDIETRO annulla.</string>
+    <string name="tec_nao_pode">%1$s non si può cambiare (serve per usare la TV). Prova un altro tasto.</string>
+    <string name="tec_so_home">Funziona solo nella schermata Home (nelle app e nel player mantiene la sua funzione).</string>
+    <string name="tec_toda_tela">Funziona in ogni schermata.</string>
+    <string name="tec_toque">Pressione</string>
+    <string name="tec_segurar">Pressione lunga</string>
+    <string name="tec_duplo">Doppia pressione</string>
+    <string name="tec_padrao">predefinito (app salvata; tieni premuto 3 s = scegli)</string>
+    <string name="tec_cena">scena %1$s</string>
+    <string name="tec_salvo">%1$s salvato</string>
+    <string name="tec_apagar">Azzera questo tasto</string>
+    <string name="tec_vermelha">Rosso</string>
+    <string name="tec_verde">Verde</string>
+    <string name="tec_amarela">Giallo</string>
+    <string name="tec_azul">Blu</string>
+    <string name="aut_titulo">Automazioni</string>
+    <string name="aut_det">Tutto ciò che la TV fa da sola: a un orario, con un tasto, quando succede qualcosa e tramite link.</string>
+    <string name="aut_cfg_det">Orari, tasti del telecomando, eventi e link delle scene</string>
+    <string name="aut_horario">All’orario</string>
+    <string name="aut_botao">Alla pressione di un tasto</string>
+    <string name="aut_evento">Quando succede qualcosa (esegue una scena)</string>
+    <string name="aut_link">Tramite link</string>
+    <string name="aut_link_det">Crea e modifica nel pannello web › Extra › Scene</string>
+    <string name="ev_midia_tocou">Film o video avviato</string>
+    <string name="ev_midia_pausou">Film o video in pausa o finito</string>
+    <string name="ev_tv_ligou">La TV si è accesa</string>
+    <string name="ev_todos_sairam">Tutti sono usciti (presenza)</string>
+    <string name="ev_chuva">Pioggia in arrivo</string>
+    <plurals name="cenas_acoes">
+        <item quantity="one">%d azione</item>
+        <item quantity="other">%d azioni</item>
+    </plurals>
+    <plurals name="aut_links">
+        <item quantity="one">%d scena con link</item>
+        <item quantity="other">%d scene con link</item>
+    </plurals>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_unidade_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="ur_secao">Unidad de red</string>
+    <string name="ur_titulo">Mostrar la TV como unidad de red</string>
+    <string name="ur_det">Desactivado. La TV aparece sola en Este equipo en Windows, como un teléfono, y como carpeta de red en Mac, Linux y teléfonos.</string>
+    <string name="ur_painel">Activa primero el panel web de arriba (usa el mismo PIN y la dirección https).</string>
+    <string name="ur_https">Esperando la dirección https del panel (el certificado se crea más o menos 1 minuto después de activar el panel).</string>
+    <string name="ur_abra">Activado. En Windows la TV aparece en Este equipo (la TV pregunta en pantalla la primera vez en cada computadora). Mac, Linux y teléfono: %1$s · contraseña: el PIN del panel.</string>
+    <string name="mtp_pergunta_titulo">Una computadora pide los archivos de la TV</string>
+    <string name="mtp_pergunta">“%1$s” quiere ver y copiar los archivos del almacenamiento de la TV por la red de casa. ¿Permitir esta computadora?</string>
+    <string name="mtp_pcs">Computadoras permitidas</string>
+    <string name="mtp_pcs_nenhum">Ninguna aún. La TV pregunta en pantalla cuando una computadora pide los archivos.</string>
+    <string name="mtp_pcs_lista">%1$s · OK olvida todas (cada una vuelve a preguntar)</string>
+    <string name="mtp_pcs_esquecidos">Computadoras olvidadas</string>
+</resources>

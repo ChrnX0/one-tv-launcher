@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_ideias_80_88.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="si_sem_internet">인터넷 없음</string>
+    <string name="si_funcionam">계속 작동 중: %1$s</string>
+    <string name="si_pendrive">USB 드라이브</string>
+    <string name="ad_pergunta">아직 보고 계세요?</string>
+</resources>

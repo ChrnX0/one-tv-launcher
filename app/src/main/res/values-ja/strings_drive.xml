@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_drive.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="drv_titulo">Google ドライブのアカウント</string>
+    <string name="drv_destino">Google ドライブ</string>
+    <string name="drv_conta">Google ドライブのアカウント</string>
+    <string name="drv_nao_conectada">未接続</string>
+    <string name="drv_passos">1. スマートフォンで %1$s を開きます（または右のコードにカメラを向けます）。\n2. この TV にある Google アカウントでログインし、次を入力します:\n\n%2$s\n\n3. Google ドライブへのアクセスを許可します。TV が見られるのは自分で作成したファイル（OneTV-backup フォルダ）だけで、ドライブの他の部分は見られません。\n\nこの画面は自動的に進みます。</string>
+    <string name="drv_ok">完了: %1$s を接続しました。夜間のバックアップもそこに送るには、「追加コピー」の行で「Google ドライブ」を選んでください。</string>
+    <string name="drv_sem_google">この TV ではまだ Google ログインが設定されていません。\n\nウェブパネル > Claude タブで設定し（独自の OAuth クライアント、種類は「TVs and Limited Input devices」）、同じ Google Cloud プロジェクトで Google Drive API をオンにしてから、ここに戻ってください。</string>
+    <string name="drv_desconectar_pergunta">%1$s を切断しますか？ すでに Google ドライブにあるコピーは残ります。TV は新しいコピーを送らなくなります。</string>
+    <string name="drv_desconectar">切断</string>
+    <string name="drv_restaurar">Google ドライブから復元</string>
+    <string name="drv_precisa_conta">先に Google ドライブのアカウントを接続してください（上の行）。</string>
+    <string name="drv_falhou">うまくいきませんでした: %1$s</string>
+    <string name="drv_nenhuma">Google ドライブの OneTV-backup フォルダにはまだコピーがありません。</string>
+    <string name="drv_escolha">どのコピーにしますか？</string>
+    <string name="drv_senha">バックアップのパスワード</string>
+    <string name="drv_senha_errada">バックアップのパスワードが違います（またはファイルが変更されています）。何も復元されませんでした。</string>
+    <string name="drv_restaurado">復元しました。まもなくランチャーが再起動します。</string>
+</resources>

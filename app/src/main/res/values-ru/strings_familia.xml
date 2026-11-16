@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_familia.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="fam_pin">Детский PIN</string>
+    <string name="fam_pin_det">Второй PIN, чтобы открыть каналы, скрытые категории и время сна при детях. PIN панели по-прежнему работает везде.</string>
+    <string name="fam_pin_ok">Детский PIN сохранён</string>
+    <string name="fam_pin_igual">Детский PIN должен отличаться от PIN панели</string>
+    <string name="fam_trocar">Сменить детский PIN</string>
+    <string name="fam_apagar">Удалить детский PIN</string>
+    <string name="fam_apagado">Детский PIN удалён: теперь открывает только PIN панели</string>
+    <string name="extras_TEMPO_TELA">Дневное экранное время (когда закончится, открываются только разрешённые приложения)</string>
+    <string name="tela_titulo">Экранное время</string>
+    <string name="tela_acabou">Экранное время на сегодня закончилось. До завтра!</string>
+    <string name="tela_5min">На сегодня осталось 5 минут экранного времени</string>
+    <string name="tela_pin">PIN для изменения экранного времени</string>
+    <string name="tela_cota_linha">Экранное время в день: %1$s (осталось сегодня: %2$s)</string>
+    <string name="tela_mais">Добавить %1$d мин сегодня</string>
+    <string name="tela_mais_ok">+%1$d мин на сегодня</string>
+    <string name="tela_h">ч</string>
+    <string name="tela_min">мин</string>
+    <string name="extras_AGENDA_TODAS">Календарь всех аккаунтов Google на ТВ вместе</string>
+    <string name="cal_todas_contas">Все аккаунты на ТВ (%1$d)</string>
+    <string name="tm_tempo_esgotado">Время вышло</string>
+    <string name="painel_desligado_pin">Веб-панель выключена: слишком много неверных PIN</string>
+    <string name="tm_crono">Секундомер</string>
+    <string name="tm_crono_iniciar">Запустить секундомер</string>
+    <string name="tm_crono_parar">Остановить секундомер</string>
+    <string name="tm_crono_comecou">Секундомер запущен: он виден на главном экране</string>
+    <string name="tm_crono_marcou">Секундомер остановлен на %1$s</string>
+    <string name="som_canal">Последний канал ТВ</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_primeira.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pc_titulo">用手机设置</string>
+    <string name="pc_linha_det">推荐。用手机摄像头扫描代码：PIN、语言、电视直播、城市和影视服务，共 5 步。</string>
+    <string name="pc_instrucoes">用手机摄像头扫描旁边的代码。手机会打开 5 步设置。\n\n手机必须连接家庭 Wi-Fi。在手机上创建 PIN 之前，请保持此界面打开（剩余 %1$s）。</string>
+    <string name="pc_entrou">请在手机上继续。</string>
+    <string name="pc_venceu">代码已过期。\n按“%1$s”显示新代码。</string>
+    <string name="pc_sem_rede">电视未连接网络。\n请连接家庭 Wi-Fi 后重试。</string>
+</resources>

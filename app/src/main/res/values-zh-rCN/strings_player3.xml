@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_player3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="abertura_marcar_inicio">在此标记片头开始（%1$s）</string>
+    <string name="abertura_marcar_fim">在此标记片头结束（%1$s）</string>
+    <string name="abertura_apagar">删除片头标记</string>
+    <string name="abertura_inicio_marcado">片头开始已标记在 %1$s。现在请在 ▼ 菜单中标记结束</string>
+    <string name="abertura_salva">片头已保存：%1$s 至 %2$s。后续剧集会提示跳过</string>
+    <string name="abertura_falta_inicio">请先标记片头开始</string>
+    <string name="abertura_invalida">这看起来不像片头：长度须在 10 秒到 5 分钟之间，且在前 15 分钟内开始</string>
+    <string name="abertura_apagada">片头标记已删除</string>
+    <string name="abertura_pular">跳过片头 · OK</string>
+</resources>

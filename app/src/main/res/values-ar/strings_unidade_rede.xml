@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_unidade_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="ur_secao">محرك الشبكة</string>
+    <string name="ur_titulo">إظهار التلفزيون كمحرك شبكة</string>
+    <string name="ur_det">متوقف. يظهر التلفزيون وحده في This PC على Windows، مثل هاتف، وكمجلد شبكة على Mac وLinux والهواتف.</string>
+    <string name="ur_painel">فعّل لوحة الويب أعلاه أولًا (تستخدم PIN نفسه وعنوان https).</string>
+    <string name="ur_https">بانتظار عنوان https للوحة (تُنشأ الشهادة بعد نحو دقيقة من تفعيل اللوحة).</string>
+    <string name="ur_abra">مفعّل. على Windows يظهر التلفزيون في This PC (يسأل التلفزيون على الشاشة في المرة الأولى لكل كمبيوتر). Mac وLinux والهاتف: %1$s · كلمة المرور: PIN اللوحة.</string>
+    <string name="mtp_pergunta_titulo">كمبيوتر يطلب ملفات التلفزيون</string>
+    <string name="mtp_pergunta">“%1$s” يريد رؤية الملفات في ذاكرة التلفزيون ونسخها عبر شبكة المنزل. السماح لهذا الكمبيوتر؟</string>
+    <string name="mtp_pcs">أجهزة الكمبيوتر المسموح بها</string>
+    <string name="mtp_pcs_nenhum">لا شيء بعد. يسأل التلفزيون على الشاشة عندما يطلب كمبيوتر الملفات.</string>
+    <string name="mtp_pcs_lista">%1$s · OK ينسى الكل (كل واحد يسأل مجددًا)</string>
+    <string name="mtp_pcs_esquecidos">نُسيت أجهزة الكمبيوتر</string>
+</resources>

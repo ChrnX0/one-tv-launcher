@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_ideia72.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l72_abrir">Otwórz %1$s</string>
+    <string name="l72_tela_previsao">prognozę pogody</string>
+    <string name="l72_tela_agenda">kalendarz</string>
+    <string name="l72_tela_despertador">budzik</string>
+    <string name="l72_tela_configuracoes">Ustawienia launchera</string>
+    <string name="l72_tela_inicio">ekran główny</string>
+    <string name="l72_despertador">Utwórz budzik na %1$s (%2$s)</string>
+    <string name="l72_dias_uma">raz</string>
+    <string name="l72_dias_todos">codziennie</string>
+    <string name="l72_dias_uteis">pon.–pt.</string>
+    <string name="l72_dias_fds">weekendy</string>
+    <string name="l72_dias_nomes">Nd,Pn,Wt,Śr,Cz,Pt,Sb</string>
+    <string name="l72_vol_subir">Zwiększ głośność</string>
+    <string name="l72_vol_descer">Zmniejsz głośność</string>
+    <string name="l72_vol_mudo">Wycisz/przywróć dźwięk</string>
+    <string name="l72_vezes">(%1$d razy)</string>
+    <string name="l72_midia_pausar">Pauza</string>
+    <string name="l72_midia_tocar">Wznów odtwarzanie</string>
+    <string name="l72_midia_proxima">Następny</string>
+    <string name="l72_midia_anterior">Poprzedni</string>
+    <string name="l72_visita_liga">Włącz tryb gościa</string>
+    <string name="l72_visita_desliga">Wyłącz tryb gościa</string>
+    <string name="l72_canal_pedido">Przełącz na kanał %1$s</string>
+    <string name="l72_canal">Przełącz na kanał %1$d (%2$s)</string>
+    <string name="l72_o_que_passa">Zobacz, co leci na %1$s</string>
+    <string name="l72_casa_ligar">Włącz</string>
+    <string name="l72_casa_desligar">Wyłącz</string>
+    <string name="l72_casa_alternar">Przełącz</string>
+    <string name="l72_casa">%1$s %2$s (dom)</string>
+    <string name="l72_guia_vazio">%1$s: nic w programie.</string>
+    <string name="l72_guia_agora">%1$s teraz: %2$s (do %3$s)</string>
+    <string name="l72_guia_nada_agora">%1$s: teraz nic w programie</string>
+    <string name="l72_guia_depois">Następnie: %1$s (%2$s)</string>
+    <string name="l75_pilula">Teraz odtwarzane: %1$s, %2$s. OK wstrzymuje lub wznawia; przytrzymaj OK, by otworzyć aplikację</string>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (fr) de values/strings_unidade_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="ur_secao">Lecteur réseau</string>
+    <string name="ur_titulo">Afficher la TV comme lecteur réseau</string>
+    <string name="ur_det">Désactivé. La TV apparaît toute seule dans Ce PC sous Windows, comme un téléphone, et comme dossier réseau sur Mac, Linux et téléphones.</string>
+    <string name="ur_painel">Activez d’abord le panneau web ci-dessus (il utilise le même PIN et l’adresse https).</string>
+    <string name="ur_https">En attente de l’adresse https du panneau (le certificat est créé environ 1 minute après l’activation du panneau).</string>
+    <string name="ur_abra">Activé. Sous Windows, la TV apparaît dans Ce PC (la TV demande à l’écran la première fois pour chaque ordinateur). Mac, Linux et téléphone : %1$s · mot de passe : le PIN du panneau.</string>
+    <string name="mtp_pergunta_titulo">Un ordinateur demande les fichiers de la TV</string>
+    <string name="mtp_pergunta">« %1$s » veut voir et copier les fichiers du stockage de la TV via le réseau domestique. Autoriser cet ordinateur ?</string>
+    <string name="mtp_pcs">Ordinateurs autorisés</string>
+    <string name="mtp_pcs_nenhum">Aucun pour l’instant. La TV demande à l’écran quand un ordinateur réclame les fichiers.</string>
+    <string name="mtp_pcs_lista">%1$s · OK les oublie tous (chacun redemandera)</string>
+    <string name="mtp_pcs_esquecidos">Ordinateurs oubliés</string>
+</resources>

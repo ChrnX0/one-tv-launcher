@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_acessivel.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acess_legenda_fundo">Субтитры на чёрном фоне</string>
+    <string name="acess_legenda_amarela">Жёлтые субтитры</string>
+    <string name="acess_volume">Одинаковая громкость каналов</string>
+    <string name="acess_voz">Чёткие голоса</string>
+    <string name="acess_volume_ligado">Одинаковая громкость вкл: тихие каналы и фильмы станут громче</string>
+    <string name="acess_volume_desligado">Одинаковая громкость выкл</string>
+    <string name="acess_voz_ligado">Чёткие голоса вкл</string>
+    <string name="acess_voz_desligado">Чёткие голоса выкл</string>
+    <string name="acess_config_titulo">Звук и субтитры</string>
+    <string name="acess_config_texto">Для тех, кто хуже видит или слышит. Также в меню ▼ плеера.</string>
+</resources>

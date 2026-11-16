@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_unidade_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="ur_secao">नेटवर्क ड्राइव</string>
+    <string name="ur_titulo">TV को नेटवर्क ड्राइव की तरह दिखाएँ</string>
+    <string name="ur_det">बंद। TV Windows में इस PC में फ़ोन की तरह अपने-आप दिखता है, और Mac, Linux और फ़ोन पर नेटवर्क फ़ोल्डर की तरह।</string>
+    <string name="ur_painel">पहले ऊपर का वेब पैनल चालू करें (यह वही PIN और https पता इस्तेमाल करता है)।</string>
+    <string name="ur_https">पैनल के https पते का इंतज़ार (पैनल चालू करने के लगभग 1 मिनट बाद प्रमाणपत्र बनता है)।</string>
+    <string name="ur_abra">चालू। Windows पर TV इस PC में दिखता है (हर कंप्यूटर के लिए पहली बार TV स्क्रीन पर पूछता है)। Mac, Linux और फ़ोन: %1$s · पासवर्ड: पैनल PIN।</string>
+    <string name="mtp_pergunta_titulo">एक कंप्यूटर TV की फ़ाइलें माँग रहा है</string>
+    <string name="mtp_pergunta">“%1$s” घरेलू नेटवर्क पर TV स्टोरेज की फ़ाइलें देखना और कॉपी करना चाहता है। इस कंप्यूटर को अनुमति दें?</string>
+    <string name="mtp_pcs">अनुमत कंप्यूटर</string>
+    <string name="mtp_pcs_nenhum">अभी कोई नहीं। कोई कंप्यूटर फ़ाइलें माँगेगा तो TV स्क्रीन पर पूछेगा।</string>
+    <string name="mtp_pcs_lista">%1$s · OK सब भूल जाता है (हर एक फिर पूछेगा)</string>
+    <string name="mtp_pcs_esquecidos">कंप्यूटर भुला दिए गए</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_acessivel.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acess_legenda_fundo">검은 배경 자막</string>
+    <string name="acess_legenda_amarela">노란색 자막</string>
+    <string name="acess_volume">채널 간 균일한 볼륨</string>
+    <string name="acess_voz">더 선명한 음성</string>
+    <string name="acess_volume_ligado">균일한 볼륨 켜짐: 소리가 작은 채널과 영화가 더 커짐</string>
+    <string name="acess_volume_desligado">균일한 볼륨 꺼짐</string>
+    <string name="acess_voz_ligado">더 선명한 음성 켜짐</string>
+    <string name="acess_voz_desligado">더 선명한 음성 꺼짐</string>
+    <string name="acess_config_titulo">소리 및 자막</string>
+    <string name="acess_config_texto">잘 보이지 않거나 잘 들리지 않는 분을 위해. 플레이어의 ▼ 메뉴에도 있습니다.</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (it) de values/strings_primeira.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pc_titulo">Configura con il telefono</string>
+    <string name="pc_linha_det">Consigliato. Inquadra un codice con la fotocamera del telefono: PIN, lingua, TV in diretta, città e servizi per film, in 5 passi.</string>
+    <string name="pc_instrucoes">Inquadra con la fotocamera del telefono il codice qui accanto. Il telefono apre una configurazione in 5 passi.\n\nIl telefono deve essere sul Wi-Fi di casa. Tieni aperta questa schermata finché non crei il PIN sul telefono (mancano %1$s).</string>
+    <string name="pc_entrou">Continua sul telefono.</string>
+    <string name="pc_venceu">Il codice è scaduto.\nPremi «%1$s» per mostrarne uno nuovo.</string>
+    <string name="pc_sem_rede">La TV non è su nessuna rete.\nCollegala al Wi-Fi di casa e riprova.</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_quadros.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="quadros_opcao">Фильмы с родной частотой кадров (24 Гц)</string>
+    <string name="quadros_det">ТВ переключается на 24 Гц во время фильма, чтобы изображение не дёргалось при движении камеры. В начале экран гаснет на 1–2 с. Для ТВ-эфира не используется.</string>
+    <string name="quadros_ligado">Частота кадров фильмов вкл: действует со следующего видео</string>
+    <string name="quadros_desligado">Частота кадров фильмов выкл</string>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_voz2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="lbl_voz_filmes">Filmy</string>
+    <string name="lbl_voz_series">Seriale</string>
+    <string name="lbl_voz_na_rede">Media w sieci</string>
+    <string name="lbl_voz_casa">Sterowanie domem</string>
+    <string name="lbl_voz_busca">Wyszukiwanie</string>
+    <string name="lbl_voz_mural">Tablica</string>
+    <string name="voz_mural_desligado">Tablica rodzinna jest wyłączona (lub telewizor jest w trybie gościa).</string>
+</resources>

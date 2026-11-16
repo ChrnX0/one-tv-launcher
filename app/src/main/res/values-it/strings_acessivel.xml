@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (it) de values/strings_acessivel.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acess_legenda_fundo">Sottotitoli con sfondo nero</string>
+    <string name="acess_legenda_amarela">Sottotitoli gialli</string>
+    <string name="acess_volume">Volume uniforme tra i canali</string>
+    <string name="acess_voz">Voci più chiare</string>
+    <string name="acess_volume_ligado">Volume uniforme attivo: canali e film bassi diventano più forti</string>
+    <string name="acess_volume_desligado">Volume uniforme disattivo</string>
+    <string name="acess_voz_ligado">Voci più chiare attive</string>
+    <string name="acess_voz_desligado">Voci più chiare disattive</string>
+    <string name="acess_config_titulo">Audio e sottotitoli</string>
+    <string name="acess_config_texto">Per chi vede o sente meno bene. Anche nel menu ▼ del player.</string>
+</resources>

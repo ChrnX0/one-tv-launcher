@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (fr) de values/strings_quadros.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="quadros_opcao">Films à leur propre fréquence d’images (24 Hz)</string>
+    <string name="quadros_det">La TV passe à 24 Hz pendant le film, pour que l’image ne saccade pas dans les mouvements de caméra. L’écran devient noir 1 à 2 s au début. Pas utilisé pour la TV en direct.</string>
+    <string name="quadros_ligado">Fréquence des films activée : s’applique à partir de la prochaine vidéo</string>
+    <string name="quadros_desligado">Fréquence des films désactivée</string>
+</resources>

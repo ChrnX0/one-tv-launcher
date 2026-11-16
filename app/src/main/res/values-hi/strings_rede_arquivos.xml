@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_rede_arquivos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_secao_na_tv">TV में लगा</string>
+    <string name="rede_sub_usb">USB ड्राइव · वीडियो, संगीत और फ़ोटो</string>
+    <string name="rede_acao_arquivos">FTP, SFTP या NFS</string>
+    <string name="rede_sub_arquivos">NAS, ड्राइव वाला राउटर, Linux या Mac कंप्यूटर</string>
+    <string name="rede_arq_explica">पता प्रोटोकॉल से शुरू करें: sftp://nas/Movies · ftp://192.168.0.10 · ftps://nas/Videos · nfs://nas/volume1/video। SFTP और FTPS एन्क्रिप्टेड हैं; सामान्य FTP पासवर्ड बिना एन्क्रिप्शन भेजता है, इसलिए इसे सिर्फ़ घर पर इस्तेमाल करें। NFS में पासवर्ड नहीं है: NAS को TV का IP और गैर-विशेषाधिकार पोर्ट से कनेक्शन की अनुमति देनी होगी।</string>
+    <string name="rede_arq_endereco">पता (sftp://, ftp://, ftps:// या nfs://)</string>
+    <string name="rede_arq_usuario">यूज़रनेम (NFS: यूज़र नंबर, वैकल्पिक)</string>
+    <string name="rede_arq_endereco_erro">sftp://, ftp://, ftps:// या nfs:// से शुरू करें, फिर सर्वर और फ़ोल्डर। यूज़रनेम और पासवर्ड अपने-अपने खानों में।</string>
+    <string name="rede_erro_nfs_porta">NFS सर्वर ने TV को मना किया। NAS पर गैर-विशेषाधिकार पोर्ट से कनेक्शन की अनुमति दें (Linux: /etc/exports में “insecure” विकल्प)।</string>
+    <string name="rede_erro_nfs_ip">NFS सर्वर ने इस TV को अनुमति नहीं दी। NAS पर इस फ़ोल्डर के NFS नियम में TV का IP (या आपका घरेलू नेटवर्क) जोड़ें।</string>
+    <string name="rede_erro_chave_mudou">जोड़ने के बाद से इस सर्वर की कुंजी बदल गई है। अगर आपने सर्वर फिर इंस्टॉल किया, तो इसे यहाँ हटाकर फिर जोड़ें; नहीं तो कोई इसका रूप धर रहा हो सकता है।</string>
+    <string name="rede_erro_usb_acesso">TV ने लॉन्चर को USB ड्राइव की पहुँच नहीं दी। थोड़ी देर में फिर कोशिश करें।</string>
+</resources>

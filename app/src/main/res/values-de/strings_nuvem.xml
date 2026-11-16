@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_nuvem.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_sub_nuvem">Videos, Musik und Fotos aus deiner Cloud</string>
+    <string name="rede_nuvem_seguir">Weiter</string>
+    <string name="rede_nuvem_entrar">Anmelden</string>
+    <string name="rede_nuvem_pedindo">Code wird angefordert …</string>
+    <string name="rede_nuvem_esperando">Warte auf deine Bestätigung am Handy …</string>
+    <string name="rede_nuvem_salvando">Anmeldung läuft …</string>
+    <string name="rede_nuvem_recusado">Der Dienst hat abgelehnt. Prüfe die App-ID und versuch es erneut.</string>
+    <string name="rede_erro_nuvem_login">Die Berechtigung dieses Kontos ist abgelaufen oder wurde entfernt. Entferne das Konto (OK halten) und melde dich erneut an.</string>
+    <string name="rede_od_titulo">OneDrive: deine App bei Microsoft</string>
+    <string name="rede_od_explica">Einmal, auf einem Computer: entra.microsoft.com › App registrations › New registration. Wähle bei den Kontotypen den, der persönliche Microsoft-Konten einschließt. Schalte dann unter Authentication „Allow public client flows“ ein. Kopiere die „Application (client) ID“ und gib sie hier ein (du kannst vom Handy aus im Panel tippen).</string>
+    <string name="rede_od_id">Application (client) ID</string>
+    <string name="rede_od_id_erro">Die ID sieht so aus: 00000000-0000-0000-0000-000000000000.</string>
+    <string name="rede_od_codigo_explica">Öffne auf Handy oder Computer microsoft.com/link (oder richte die Kamera auf den QR) und gib den Code unten ein. Der Fernseher bittet nur darum, Dateien zu lesen.</string>
+    <string name="rede_od_erro_app">Microsoft hat diese App nicht akzeptiert. Prüfe die ID und dass „Allow public client flows“ an ist.</string>
+    <string name="rede_dbx_explica">Einmal, auf einem Computer: dropbox.com/developers/apps › Create app › Scoped access › Full Dropbox. Hake im Tab Permissions files.metadata.read, files.content.read und account_info.read an (und files.content.write, wenn das nächtliche Backup in Dropbox soll) und speichere (Submit). Kopiere den „App key“ und gib ihn hier ein.</string>
+    <string name="rede_dbx_chave">App key</string>
+    <string name="rede_dbx_chave_erro">Der App key hat nur Kleinbuchstaben und Zahlen.</string>
+    <string name="rede_dbx_codigo_explica">Richte die Handykamera auf den QR, melde dich bei Dropbox an und tippe auf Allow. Dropbox zeigt einen Code: gib ihn hier ein (du kannst vom Handy aus im Panel tippen).</string>
+    <string name="rede_dbx_codigo">Dropbox-Code</string>
+    <string name="rede_dbx_codigo_erro">Gib den ganzen Code ein, den Dropbox gezeigt hat.</string>
+    <string name="rede_box_explica">Einmal, auf einem Computer: app.box.com/developers/console › Create New App › Custom App › User Authentication (OAuth 2.0). Trage im Tab Configuration unter OAuth 2.0 Redirect URI %1$s ein, hake „Read all files and folders“ an (und „Write all files and folders“, wenn das nächtliche Backup in Box soll). Speichere und kopiere dann Client ID und Client Secret hierher.</string>
+    <string name="rede_box_id">Client ID</string>
+    <string name="rede_box_segredo">Client Secret</string>
+    <string name="rede_box_erro">Client ID und Client Secret haben nur Buchstaben und Zahlen. Kopiere beide aus dem Tab Configuration.</string>
+    <string name="rede_volta_sem_rede">Der Fernseher ist nicht im Heimnetz. Verbinde ihn und versuch es erneut.</string>
+    <string name="rede_volta_explica">Richte die Kamera eines Handys im selben WLAN wie der Fernseher auf den QR, melde dich bei %1$s an und erlaube den Zugriff. Das Handy kehrt von selbst zum Fernseher zurück: nichts zu tippen.</string>
+    <string name="rede_volta_porta">Port %1$d auf dem Fernseher ist belegt. Schließe andere Apps und versuch es erneut.</string>
+    <string name="rede_gd_explica">Einmal, auf einem Computer, in deinem Google-Cloud-Projekt (console.cloud.google.com): APIs &amp; Services › Library › „Google Drive API“ einschalten. Füge unter Google Auth Platform › Data Access den Bereich …/auth/drive.readonly hinzu. Trage unter Clients › Create client › Web application bei Authorized redirect URIs %1$s ein. Kopiere Client ID und Client secret hierher.</string>
+    <string name="rede_gd_id">Client ID (…apps.googleusercontent.com)</string>
+    <string name="rede_gd_segredo">Client secret</string>
+    <string name="rede_gd_erro">Kopiere beide von der Client-Seite: die ID endet auf .apps.googleusercontent.com und das Secret beginnt meist mit GOCSPX-.</string>
+    <string name="rede_gd_aviso">Sagt Google, die App sei nicht verifiziert, tippe auf Erweitert › Weiter zu (es ist deine eigene App).</string>
+</resources>

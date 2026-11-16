@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_rede_arquivos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_secao_na_tv">موصول بالتلفزيون</string>
+    <string name="rede_sub_usb">ذاكرة USB · فيديوهات وموسيقى وصور</string>
+    <string name="rede_acao_arquivos">FTP أو SFTP أو NFS</string>
+    <string name="rede_sub_arquivos">NAS، راوتر بقرص، كمبيوتر Linux أو Mac</string>
+    <string name="rede_arq_explica">ابدأ العنوان بالبروتوكول: sftp://nas/Movies · ftp://192.168.0.10 · ftps://nas/Videos · nfs://nas/volume1/video. SFTP وFTPS مشفّران؛ FTP العادي يرسل كلمة المرور بلا تشفير، فاستخدمه في المنزل فقط. NFS بلا كلمة مرور: يجب أن يسمح NAS بعنوان IP للتلفزيون وبالاتصالات من منافذ غير مميزة.</string>
+    <string name="rede_arq_endereco">العنوان (sftp:// أو ftp:// أو ftps:// أو nfs://)</string>
+    <string name="rede_arq_usuario">اسم المستخدم (NFS: رقم المستخدم، اختياري)</string>
+    <string name="rede_arq_endereco_erro">ابدأ بـsftp:// أو ftp:// أو ftps:// أو nfs://، ثم الخادم والمجلد. اسم المستخدم وكلمة المرور في حقليهما.</string>
+    <string name="rede_erro_nfs_porta">رفض خادم NFS التلفزيون. على NAS، اسمح بالاتصالات من منافذ غير مميزة (Linux: الخيار \"insecure\" في /etc/exports).</string>
+    <string name="rede_erro_nfs_ip">لم يسمح خادم NFS لهذا التلفزيون. على NAS، أضف عنوان IP للتلفزيون (أو شبكة منزلك) إلى قاعدة NFS لهذا المجلد.</string>
+    <string name="rede_erro_chave_mudou">تغيّر مفتاح هذا الخادم منذ إضافته. إذا أعدت تثبيت الخادم، أزله من هنا وأضفه مجددًا؛ وإلا فقد يكون أحدهم ينتحل صفته.</string>
+    <string name="rede_erro_usb_acesso">لم يمنح التلفزيون المشغّل الوصول إلى ذاكرة USB. حاول مجددًا بعد لحظة.</string>
+</resources>

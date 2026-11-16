@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_voz2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="lbl_voz_filmes">Filmler</string>
+    <string name="lbl_voz_series">Diziler</string>
+    <string name="lbl_voz_na_rede">Ağdaki medya</string>
+    <string name="lbl_voz_casa">Ev kontrolü</string>
+    <string name="lbl_voz_busca">Arama</string>
+    <string name="lbl_voz_mural">Pano</string>
+    <string name="voz_mural_desligado">Aile panosu kapalı (veya TV misafir modunda).</string>
+</resources>

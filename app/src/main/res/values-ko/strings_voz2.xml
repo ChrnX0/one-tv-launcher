@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_voz2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="lbl_voz_filmes">영화</string>
+    <string name="lbl_voz_series">시리즈</string>
+    <string name="lbl_voz_na_rede">네트워크 미디어</string>
+    <string name="lbl_voz_casa">홈 제어</string>
+    <string name="lbl_voz_busca">검색</string>
+    <string name="lbl_voz_mural">게시판</string>
+    <string name="voz_mural_desligado">가족 게시판이 꺼져 있습니다(또는 TV가 게스트 모드입니다).</string>
+</resources>

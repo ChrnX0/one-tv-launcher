@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_emprestimo.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="emp_secao">Prestar poderes del sistema</string>
+    <string name="emp_titulo">Prestar el shell a otras apps (Shizuku)</string>
+    <string name="emp_titulo_det">Las apps hechas para Shizuku funcionan sin instalarlo. Cada app lo pide en la TV, con el PIN, la primera vez.</string>
+    <string name="emp_modo_desligado">Desactivado</string>
+    <string name="emp_modo_sob_demanda">Cuando una app lo necesite</string>
+    <string name="emp_modo_sempre">Siempre activado</string>
+    <string name="emp_oficial">La app Shizuku está instalada en esta TV, así que el launcher no interfiere. Desinstálala para usar la del launcher.</string>
+    <string name="emp_plano">Parte de los planes de pago.</string>
+    <string name="emp_negar">Rechazar</string>
+    <string name="emp_permitir">Permitir siempre</string>
+    <string name="emp_pedido_titulo">¿Permitir que %1$s use los poderes del sistema del launcher?</string>
+    <string name="emp_pedido_texto">La app podrá hacer lo mismo que adb: instalar y quitar apps, cambiar ajustes del sistema y más. Permite solo apps de confianza. Puedes revocarlo después en el panel web.</string>
+    <string name="emp_pin_titulo">PIN del panel para permitir</string>
+    <string name="emp_sem_pin">Primero define el PIN del panel (Ajustes, Panel web).</string>
+    <string name="emd_titulo">Prestar el control de propietario a otras apps (Dhizuku)</string>
+    <string name="emd_titulo_det">Las apps hechas para Dhizuku usan el control de propietario del launcher. Cada app lo pide en la TV, con el PIN. Ninguna puede quitar al launcher como propietario ni borrar la TV.</string>
+    <string name="emd_ligado">Activado</string>
+    <string name="emd_sem_dono">El launcher no es el propietario (Device Owner) de esta TV, así que no hay nada que prestar.</string>
+    <string name="emd_pedido_titulo">¿Permitir que %1$s use el control de propietario del launcher?</string>
+    <string name="emd_pedido_texto">Con “Permitir”, la app puede ocultar y bloquear apps y cambiar los permisos y reglas de la TV, pero nunca quitar al launcher como propietario ni borrar la TV. “Poder total” deja que la app funcione como el launcher y lea sus datos: solo para apps de total confianza. Puedes revocarlo en el panel web.</string>
+    <string name="emd_total">Poder total</string>
+    <string name="emd_pin_total">PODER TOTAL: la app leerá los datos del launcher. PIN del panel</string>
+</resources>

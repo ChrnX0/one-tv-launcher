@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_nuvem.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_sub_nuvem">你云端的视频、音乐和照片</string>
+    <string name="rede_nuvem_seguir">继续</string>
+    <string name="rede_nuvem_entrar">登录</string>
+    <string name="rede_nuvem_pedindo">正在请求代码…</string>
+    <string name="rede_nuvem_esperando">正在等待你在手机上确认…</string>
+    <string name="rede_nuvem_salvando">正在登录…</string>
+    <string name="rede_nuvem_recusado">服务拒绝了请求。请检查应用 ID 后重试。</string>
+    <string name="rede_erro_nuvem_login">此账号的授权已过期或被撤销。请移除账号（长按 OK）并重新登录。</string>
+    <string name="rede_od_titulo">OneDrive：你在 Microsoft 的应用</string>
+    <string name="rede_od_explica">在电脑上操作一次：entra.microsoft.com › 应用注册 › 新注册。账户类型选择包含个人 Microsoft 账户的那一项。然后在“身份验证”下开启“允许公共客户端流”。复制“应用程序(客户端) ID”并在这里输入（可以在面板中用手机输入）。</string>
+    <string name="rede_od_id">应用程序(客户端) ID</string>
+    <string name="rede_od_id_erro">ID 的格式类似 00000000-0000-0000-0000-000000000000。</string>
+    <string name="rede_od_codigo_explica">在手机或电脑上打开 microsoft.com/link（或用摄像头扫描二维码），并输入下方代码。电视只请求读取文件。</string>
+    <string name="rede_od_erro_app">Microsoft 不接受此应用。请检查 ID 以及“允许公共客户端流”是否已开启。</string>
+    <string name="rede_dbx_explica">在电脑上操作一次：dropbox.com/developers/apps › Create app › Scoped access › Full Dropbox。在 Permissions 标签页中勾选 files.metadata.read、files.content.read 和 account_info.read（如需将夜间备份存到 Dropbox，再勾选 files.content.write），然后保存（Submit）。复制“App key”并在这里输入。</string>
+    <string name="rede_dbx_chave">App key</string>
+    <string name="rede_dbx_chave_erro">App key 只包含小写字母和数字。</string>
+    <string name="rede_dbx_codigo_explica">用手机摄像头扫描二维码，登录 Dropbox 并点按“允许”。Dropbox 会显示一个代码：在这里输入（可以在面板中用手机输入）。</string>
+    <string name="rede_dbx_codigo">Dropbox 代码</string>
+    <string name="rede_dbx_codigo_erro">请输入 Dropbox 显示的完整代码。</string>
+    <string name="rede_box_explica">在电脑上操作一次：app.box.com/developers/console › Create New App › Custom App › User Authentication (OAuth 2.0)。在 Configuration 标签页的 OAuth 2.0 Redirect URI 中填入 %1$s，勾选“Read all files and folders”（如需将夜间备份存到 Box，再勾选“Write all files and folders”）。保存后，将 Client ID 和 Client Secret 复制到这里。</string>
+    <string name="rede_box_id">Client ID</string>
+    <string name="rede_box_segredo">Client Secret</string>
+    <string name="rede_box_erro">Client ID 和 Client Secret 只包含字母和数字。请从 Configuration 标签页复制两者。</string>
+    <string name="rede_volta_sem_rede">电视不在家庭网络中。请连接后重试。</string>
+    <string name="rede_volta_explica">用与电视连接同一 Wi‑Fi 的手机摄像头扫描二维码，登录 %1$s 并允许访问。手机会自动回到电视：无需输入任何内容。</string>
+    <string name="rede_volta_porta">电视上的端口 %1$d 被占用。请关闭其他应用后重试。</string>
+    <string name="rede_gd_explica">在电脑上操作一次，在你的 Google Cloud 项目（console.cloud.google.com）中：APIs &amp; Services › Library › 开启“Google Drive API”。在 Google Auth Platform › Data Access 中添加 …/auth/drive.readonly 范围。在 Clients › Create client › Web application 的 Authorized redirect URIs 中填入 %1$s。将 Client ID 和 Client secret 复制到这里。</string>
+    <string name="rede_gd_id">Client ID（…apps.googleusercontent.com）</string>
+    <string name="rede_gd_segredo">Client secret</string>
+    <string name="rede_gd_erro">请从客户端页面复制两者：ID 以 .apps.googleusercontent.com 结尾，密钥通常以 GOCSPX- 开头。</string>
+    <string name="rede_gd_aviso">如果 Google 提示应用未经验证，请点按 高级 › 转至（这是你自己的应用）。</string>
+</resources>

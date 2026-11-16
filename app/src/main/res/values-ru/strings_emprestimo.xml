@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_emprestimo.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="emp_secao">Одолжить системные права</string>
+    <string name="emp_titulo">Одолжить оболочку другим приложениям (Shizuku)</string>
+    <string name="emp_titulo_det">Приложения для Shizuku работают без его установки. Каждое приложение в первый раз спрашивает на телевизоре, с PIN-кодом.</string>
+    <string name="emp_modo_desligado">Выключено</string>
+    <string name="emp_modo_sob_demanda">Когда это нужно приложению</string>
+    <string name="emp_modo_sempre">Всегда включено</string>
+    <string name="emp_oficial">На этом телевизоре установлено приложение Shizuku, поэтому лаунчер ему не мешает. Удалите его, чтобы пользоваться встроенным в лаунчер.</string>
+    <string name="emp_plano">Входит в платные планы.</string>
+    <string name="emp_negar">Запретить</string>
+    <string name="emp_permitir">Разрешать всегда</string>
+    <string name="emp_pedido_titulo">Разрешить %1$s пользоваться системными правами лаунчера?</string>
+    <string name="emp_pedido_texto">Приложение сможет делать то же, что adb: устанавливать и удалять приложения, менять системные настройки и многое другое. Разрешайте только приложениям, которым доверяете. Отозвать доступ можно позже в веб-панели.</string>
+    <string name="emp_pin_titulo">PIN-код панели для разрешения</string>
+    <string name="emp_sem_pin">Сначала задайте PIN-код панели (Настройки, Веб-панель).</string>
+    <string name="emd_titulo">Одолжить права владельца другим приложениям (Dhizuku)</string>
+    <string name="emd_titulo_det">Приложения для Dhizuku используют права владельца лаунчера. Каждое приложение спрашивает на телевизоре, с PIN-кодом. Ни одно не может лишить лаунчер прав владельца или стереть телевизор.</string>
+    <string name="emd_ligado">Включено</string>
+    <string name="emd_sem_dono">Лаунчер не является владельцем (Device Owner) этого телевизора, поэтому одалживать нечего.</string>
+    <string name="emd_pedido_titulo">Разрешить %1$s пользоваться правами владельца лаунчера?</string>
+    <string name="emd_pedido_texto">С «Разрешить» приложение может скрывать и блокировать приложения и менять разрешения и правила телевизора, но никогда не лишит лаунчер прав владельца и не сотрёт телевизор. «Полная власть» позволяет приложению работать от имени лаунчера и читать его данные: только для приложений, которым вы полностью доверяете. Отозвать доступ можно в веб-панели.</string>
+    <string name="emd_total">Полная власть</string>
+    <string name="emd_pin_total">ПОЛНАЯ ВЛАСТЬ: приложение будет читать данные лаунчера. PIN-код панели</string>
+</resources>

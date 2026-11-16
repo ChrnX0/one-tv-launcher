@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (fr) de values/strings_pausa.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pausa_pausar">Mettre le direct en pause</string>
+    <string name="pausa_continuar">Reprendre</string>
+    <string name="pausa_ao_vivo">Retour au direct</string>
+    <string name="pausa_selo">⏸ EN PAUSE · OK reprend</string>
+    <string name="pausa_atrasado_min">%1$d MIN DE RETARD · ▶ direct</string>
+    <string name="pausa_atrasado_seg">%1$d S DE RETARD · ▶ direct</string>
+    <string name="pausa_voltou">Pause plus longue que ce que la mémoire garde : retour au direct</string>
+</resources>

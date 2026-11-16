@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_saude.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="saude_titulo">توقف الوصول عن بُعد</string>
+    <string name="saude_texto_shell">انقطع وصول التلفزيون إلى نفسه منذ %1$d د (اللوحة وClaude والإصلاحات التلقائية متوقفة). اضغط أعد الإقران أو انتقل إلى الإعدادات › النظام › الإقران بدون كمبيوتر.</string>
+    <string name="saude_texto_tunel">Claude عبر الإنترنت غير متصل. اضغط اتصال لترى ما ينقص، أو انتقل إلى الإعدادات › الوصول عن بُعد.</string>
+    <string name="saude_parear">أعد الإقران</string>
+    <string name="saude_conectar">اتصال</string>
+    <string name="saude_depois">ليس الآن</string>
+    <string name="saude_acao_shell">أعد الإقران: الإعدادات › النظام › الإقران بدون كمبيوتر</string>
+    <string name="saude_acao_tunel">أعد الاتصال: الإعدادات › الوصول عن بُعد › اتصال</string>
+    <string name="mnt_titulo">الصيانة الليلية</string>
+    <string name="mnt_consertei">تم إصلاح:</string>
+    <string name="mnt_falhou">تعذّر إصلاح:</string>
+    <string name="mnt_acesso">الوصول عن بُعد</string>
+    <string name="mnt_permissoes">الأذونات</string>
+    <string name="mnt_agendamentos">المنبّهات والروتينات</string>
+    <string name="mnt_espaco">المساحة المتاحة</string>
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pt-rPT) de values/strings_pausa.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pausa_pausar">Pausar o em direto</string>
+    <string name="pausa_continuar">Continuar</string>
+    <string name="pausa_ao_vivo">Voltar em direto</string>
+    <string name="pausa_selo">⏸ PAUSADO · OK continua</string>
+    <string name="pausa_atrasado_min">ATRASADO %1$d MIN · ▶ em direto</string>
+    <string name="pausa_atrasado_seg">ATRASADO %1$d S · ▶ em direto</string>
+    <string name="pausa_voltou">A pausa passou do que cabe na memória: voltou ao direto</string>
+</resources>

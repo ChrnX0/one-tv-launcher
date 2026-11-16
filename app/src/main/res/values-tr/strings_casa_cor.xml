@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_casa_cor.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="casa_dica_brilho_cor">parlaklık ve renk</string>
+    <string name="casa_brilho_ajuste_cor">Parlaklık %%%1$d · ◀ ▶ · renk ▲ ▼</string>
+    <string name="casa_cor_ajuste">%1$s · ▲ ▼</string>
+    <string name="casa_cor_quente">Sıcak beyaz</string>
+    <string name="casa_cor_neutra">Nötr beyaz</string>
+    <string name="casa_cor_fria">Soğuk beyaz</string>
+    <string name="casa_cor_vermelho">Kırmızı</string>
+    <string name="casa_cor_laranja">Turuncu</string>
+    <string name="casa_cor_amarelo">Sarı</string>
+    <string name="casa_cor_verde">Yeşil</string>
+    <string name="casa_cor_azul">Mavi</string>
+    <string name="casa_cor_roxo">Mor</string>
+    <string name="casa_cor_rosa">Pembe</string>
+</resources>

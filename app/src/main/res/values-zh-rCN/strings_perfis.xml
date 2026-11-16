@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_perfis.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="perfil_aviso_titulo">个人资料：%1$s</string>
+    <string name="perfil_aviso_texto">此个人资料的收藏、继续观看和应用顺序</string>
+    <string name="perfil_aviso_crianca">儿童资料：已开启儿童模式和就寝时间</string>
+    <string name="perfil_crianca">儿童资料</string>
+    <string name="perfil_crianca_linha">儿童资料 · %1$s：%2$s</string>
+    <string name="perfil_crianca_nao">关</string>
+    <string name="perfil_crianca_sem_pin">请先设置网页面板 PIN：它就是保护儿童资料的家长 PIN</string>
+    <string name="perfil_pin_sair">退出儿童资料需要家长 PIN</string>
+    <string name="perfil_pin_marcar">更改儿童资料需要家长 PIN</string>
+</resources>

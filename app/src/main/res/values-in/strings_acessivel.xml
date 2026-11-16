@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_acessivel.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acess_legenda_fundo">Subtitle dengan latar hitam</string>
+    <string name="acess_legenda_amarela">Subtitle kuning</string>
+    <string name="acess_volume">Volume rata antar saluran</string>
+    <string name="acess_voz">Suara lebih jelas</string>
+    <string name="acess_volume_ligado">Volume rata aktif: saluran dan film yang pelan jadi lebih keras</string>
+    <string name="acess_volume_desligado">Volume rata nonaktif</string>
+    <string name="acess_voz_ligado">Suara lebih jelas aktif</string>
+    <string name="acess_voz_desligado">Suara lebih jelas nonaktif</string>
+    <string name="acess_config_titulo">Suara dan subtitle</string>
+    <string name="acess_config_texto">Untuk yang kurang jelas melihat atau mendengar. Juga ada di menu ▼ pemutar.</string>
+</resources>

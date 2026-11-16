@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_coluna.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="coluna_listas">СПИСКИ</string>
+    <string name="coluna_novos">+%1$s</string>
+    <string name="coluna_filtro">Фильтр</string>
+    <string name="coluna_esportes">Спорт</string>
+    <string name="coluna_guia">Программа</string>
+    <string name="coluna_filtro_titulo">Фильтр</string>
+    <string name="coluna_filtro_ordem">Порядок: %1$s</string>
+    <string name="coluna_filtro_combinado">Жанр, эпоха, рейтинг, непросмотренные…</string>
+    <string name="coluna_filtro_combinado_ativo">Фильтр: %1$s</string>
+    <string name="coluna_filtro_limpar">Сбросить фильтр</string>
+    <string name="coluna_filtro_sortear">Удиви меня</string>
+    <string name="coluna_filtro_ocultas_mostrar">Показать скрытые категории (PIN)</string>
+    <string name="coluna_filtro_ocultas_esconder">Снова скрыть скрытые категории</string>
+    <string name="coluna_menu_assistido">Отметить просмотренным</string>
+    <string name="coluna_menu_nao_assistido">Отметить непросмотренным</string>
+    <string name="coluna_menu_tirar_continuar">Убрать из «Продолжить просмотр»</string>
+    <string name="coluna_menu_por_interesse">Добавить в «Хочу посмотреть»</string>
+    <string name="coluna_menu_tirar_interesse">Убрать из «Хочу посмотреть»</string>
+    <string name="coluna_marcado_assistido">%1$s отмечено просмотренным</string>
+    <string name="coluna_marcado_nao_assistido">%1$s отмечено непросмотренным</string>
+    <string name="coluna_tirado_continuar">%1$s убрано из «Продолжить просмотр»</string>
+    <string name="coluna_etiqueta_concluida">Завершён</string>
+    <string name="coluna_etiqueta_nova_temporada">Новый сезон</string>
+    <string name="coluna_etiqueta_novos">Новые серии</string>
+    <string name="coluna_letra_titulo">Перейти к букве</string>
+    <string name="coluna_letra">Перейти к букве</string>
+    <string name="coluna_ao_vivo">ЭФИР</string>
+    <string name="coluna_ao_vivo_primeiro">Сначала эфир</string>
+    <string name="coluna_tv_titulo">ТВ</string>
+    <string name="coluna_gravacoes">Записи</string>
+    <plurals name="coluna_etiqueta_n_novos">
+        <item quantity="one">%d новая серия</item>
+        <item quantity="few">%d новые серии</item>
+        <item quantity="many">%d новых серий</item>
+        <item quantity="other">%d новой серии</item>
+    </plurals>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_avisos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rd_voltou_titulo">Internet ist zurück</string>
+    <string name="rd_voltou_texto">Es war %1$s weg (seit %2$s). Wahrscheinliche Ursache: %3$s.</string>
+    <string name="rd_causa_wifi">der Fernseher hat das WLAN verloren</string>
+    <string name="rd_causa_provedor">Internetanbieter oder Router</string>
+    <string name="rd_min">%1$d Min.</string>
+    <string name="rd_h_min">%1$d h %2$d Min.</string>
+    <string name="rd_disco_titulo">Der Speicher des Fernsehers wird voll</string>
+    <string name="rd_disco_texto">In diesem Tempo ist er in etwa %1$d Tagen voll (%2$d MB frei). Leere App-Caches oder entferne Apps, die du nicht nutzt.</string>
+    <string name="pr_avisos_tv">Vom Fernseher</string>
+    <string name="mural_riscar">%1$s durchstreichen</string>
+</resources>

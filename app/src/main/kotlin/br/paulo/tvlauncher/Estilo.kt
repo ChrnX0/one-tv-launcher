@@ -407,6 +407,10 @@ object Estilo {
      */
     fun tituloTela(ctx: Context, titulo: String): TextView = texto(ctx, Papel.TITULO, titulo).apply {
         maxLines = 1; ellipsize = TextUtils.TruncateAt.END
+        // Título sempre à esquerda, como no inglês: em árabe o texto se alinharia à direita e ficaria por baixo do
+        // relógio do canto (o app não espelha o layout; o manifest não declara supportsRtl, e por isso o Android ignora
+        // textAlignment: só a gravidade ABSOLUTA, LEFT em vez de START, segura o alinhamento).
+        gravity = (gravity and android.view.Gravity.VERTICAL_GRAVITY_MASK) or android.view.Gravity.LEFT
     }
 
     /** Entrada suave de uma tela/painel: some → aparece em [TRANSICAO_MS], subindo 12 dp. */

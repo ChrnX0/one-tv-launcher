@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_drive.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="drv_titulo">Google Drive खाता</string>
+    <string name="drv_destino">Google Drive</string>
+    <string name="drv_conta">Google Drive खाता</string>
+    <string name="drv_nao_conectada">कनेक्टेड नहीं</string>
+    <string name="drv_passos">1. फ़ोन पर %1$s खोलें (या कैमरा दाईं ओर के कोड पर रखें)।\n2. इस TV पर मौजूद Google खाते से साइन इन करें और टाइप करें:\n\n%2$s\n\n3. Google Drive की पहुँच दें। TV सिर्फ़ अपनी बनाई फ़ाइलें (OneTV-backup फ़ोल्डर) देखता है, आपके Drive का बाकी हिस्सा कभी नहीं।\n\nयह स्क्रीन अपने-आप आगे बढ़ती है।</string>
+    <string name="drv_ok">हो गया: %1$s कनेक्ट है। अतिरिक्त कॉपी पंक्ति में “Google Drive” चुनें ताकि रात का बैकअप वहाँ भी जाए।</string>
+    <string name="drv_sem_google">इस TV पर अभी Google साइन-इन सेट नहीं है।\n\nइसे वेब पैनल › Claude टैब में सेट करें (आपका अपना OAuth क्लाइंट, “TVs and Limited Input devices” प्रकार), उसी Google Cloud प्रोजेक्ट में Google Drive API चालू करें और यहाँ लौटें।</string>
+    <string name="drv_desconectar_pergunta">%1$s डिस्कनेक्ट करें? Google Drive में पहले से मौजूद कॉपियाँ वहीं रहेंगी; TV नई भेजना बंद कर देगा।</string>
+    <string name="drv_desconectar">डिस्कनेक्ट करें</string>
+    <string name="drv_restaurar">Google Drive से रीस्टोर करें</string>
+    <string name="drv_precisa_conta">पहले Google Drive खाता जोड़ें (ऊपर की पंक्ति)।</string>
+    <string name="drv_falhou">काम नहीं हुआ: %1$s</string>
+    <string name="drv_nenhuma">Google Drive के OneTV-backup फ़ोल्डर में अभी कोई कॉपी नहीं है।</string>
+    <string name="drv_escolha">कौन सी कॉपी?</string>
+    <string name="drv_senha">बैकअप का पासवर्ड</string>
+    <string name="drv_senha_errada">ग़लत बैकअप पासवर्ड (या फ़ाइल बदली गई)। कुछ रीस्टोर नहीं हुआ।</string>
+    <string name="drv_restaurado">रीस्टोर हो गया। लॉन्चर थोड़ी देर में फिर शुरू होगा।</string>
+</resources>

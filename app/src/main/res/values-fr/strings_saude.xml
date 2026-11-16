@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (fr) de values/strings_saude.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="saude_titulo">Accès à distance arrêté</string>
+    <string name="saude_texto_shell">L’accès de la TV à elle-même est tombé il y a %1$d min (panneau, Claude et réparations automatiques s’arrêtent). Appuyez sur Réappairer ou allez dans Paramètres › Système › Appairer sans PC.</string>
+    <string name="saude_texto_tunel">Claude via internet est hors ligne. Appuyez sur Connecter pour voir ce qui manque, ou allez dans Paramètres › Accès à distance.</string>
+    <string name="saude_parear">Réappairer</string>
+    <string name="saude_conectar">Connecter</string>
+    <string name="saude_depois">Pas maintenant</string>
+    <string name="saude_acao_shell">Réappairer : Paramètres › Système › Appairer sans PC</string>
+    <string name="saude_acao_tunel">Reconnecter : Paramètres › Accès à distance › Connecter</string>
+    <string name="mnt_titulo">Maintenance de nuit</string>
+    <string name="mnt_consertei">Réparé :</string>
+    <string name="mnt_falhou">Non réparé :</string>
+    <string name="mnt_acesso">accès à distance</string>
+    <string name="mnt_permissoes">autorisations</string>
+    <string name="mnt_agendamentos">réveils et routines</string>
+    <string name="mnt_espaco">espace libre</string>
+</resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_familia2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="an_rotulo">Geburtstag</string>
+    <string name="an_hoje">Heute hat %s Geburtstag</string>
+    <string name="an_amanha">Morgen hat %s Geburtstag</string>
+    <string name="tp_calor">Große Hitze</string>
+    <string name="tp_calor_texto">Bis zu %d° heute · Trink Wasser</string>
+    <string name="tp_frio">Große Kälte</string>
+    <string name="tp_frio_texto">Bis zu %d° heute Nacht · Zieh dich warm an</string>
+    <string name="tp_cfg">Hitze- und Kältewarnung</string>
+    <string name="tp_cfg_det">Eine Karte über jeder App, wenn es heute %1$d° erreicht oder heute Nacht auf %2$d° fällt</string>
+    <string name="mu_ok_lido">OK markiert als gelesen</string>
+    <string name="mu_ok_nao_lido">Gelesen · OK markiert als ungelesen</string>
+    <string name="mu_lido_desc">Nachricht, gelesen: %s. OK markiert als ungelesen.</string>
+    <string name="mu_nao_lido_desc">Nachricht: %s. OK markiert als gelesen.</string>
+    <string name="mu_apagar">Nachricht löschen: %s</string>
+    <string name="extras_RETROSPECTIVA_ANO">Dein Fernsehjahr (im Dezember, im Bildschirmschoner)</string>
+    <string name="extras_CARTOES_TRANSPARENTES">Durchsichtige App-Karten, wenn nicht ausgewählt</string>
+    <string name="extras_ENTRADAS_TV">HDMI-Eingänge in der App-Reihe (nur bei Fernsehern mit Eingängen)</string>
+    <string name="ra_titulo">Dein Fernsehen %d</string>
+    <string name="ra_canal">Lieblingssender: %1$s (%2$s)</string>
+    <string name="ra_coluna">Radio</string>
+    <string name="ra_dica_ouvir">hören</string>
+    <string name="ra_dica_favoritar">Favorit</string>
+    <string name="ra_carregando">Sender werden geladen …</string>
+    <string name="ra_subtitulo">Sender aus aller Welt · 1–9 auf der Fernbedienung spielen deine Favoriten</string>
+    <string name="ra_sem_catalogo">Der Radiokatalog hat nicht geantwortet. Deine Favoriten funktionieren weiter.</string>
+    <string name="ra_nada">Kein Sender gefunden.</string>
+    <string name="ra_continuar">weiter</string>
+    <string name="ra_pausar">pausieren</string>
+    <string name="ra_favoritas">Favoriten</string>
+    <string name="ra_procurar">Finden</string>
+    <string name="ra_buscar">Nach Name suchen</string>
+    <string name="ra_buscar_det">Jeder Sender der Welt</string>
+    <string name="ra_generos">Genres</string>
+    <string name="ra_paises">Anderes Land</string>
+    <string name="ra_paises_det">Die Länder mit den meisten Sendern</string>
+    <string name="ra_perto">In deiner Nähe</string>
+    <string name="ra_mais_ouvidas">Meistgehört in %s</string>
+    <string name="ra_mundo">Meistgehört weltweit</string>
+    <string name="ra_resultado">Suche: %s</string>
+    <string name="ra_favoritada">Zu Favoriten hinzugefügt</string>
+    <string name="ra_desfavoritada">Aus Favoriten entfernt</string>
+    <string name="ra_falhou">Dieser Sender spielt gerade nicht. Versuch einen anderen.</string>
+    <plurals name="an_anos">
+        <item quantity="one">wird %d</item>
+        <item quantity="other">wird %d</item>
+    </plurals>
+</resources>

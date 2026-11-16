@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_ideias2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dormir_titulo">सोने का समय</string>
+    <string name="dormir_texto">यह ऐप अभी अनुमत नहीं है। शुभ रात्रि!</string>
+    <string name="dormir_pin">सोने का समय बदलने के लिए PIN</string>
+    <string name="dormir_inicio">सोने का समय: शुरू</string>
+    <string name="dormir_fim">सोने का समय: ख़त्म</string>
+    <string name="dormir_teto">सोने का समय: अधिकतम वॉल्यूम</string>
+    <string name="recado_link_titulo">संदेश</string>
+    <string name="extras_HORA_DORMIR">सोने का समय (सिर्फ़ अनुमत ऐप, सीमित वॉल्यूम)</string>
+    <string name="extras_TOCANDO_AGORA">अभी चल रहा (जो चल रहा है उसे पढ़ता है)</string>
+    <string name="extras_MODO_LEVE">हल्का मोड (छोटे एनिमेशन)</string>
+    <string name="extras_SOM_NAVEGACAO">नेविगेशन ध्वनि</string>
+    <string name="extras_RECADO_LINK">लिंक से संदेश (Home Assistant, TvOverlay)</string>
+    <string name="extras_caches">ऐप कैश साफ़ करें</string>
+    <string name="extras_livre">%1$s ख़ाली</string>
+    <string name="extras_consumo">हर ऐप का इंटरनेट (7 दिन)</string>
+    <string name="extras_tocando">अभी चल रहा</string>
+    <string name="extras_aguarde">एक पल…</string>
+    <string name="dormir_dia">सोने का समय: दिन</string>
+    <string name="dormir_todos">सभी (डिफ़ॉल्ट)</string>
+    <string name="dormir_proprio">अपना शेड्यूल</string>
+    <string name="dormir_segue">डिफ़ॉल्ट के अनुसार</string>
+    <string name="dormir_voltar_padrao">सोने का समय: इस दिन को डिफ़ॉल्ट पर लौटाएँ</string>
+    <string name="extras_VER_TELA">Claude को स्क्रीन देखने दें (MCP ver_tela; TV सूचना दिखाता है)</string>
+    <string name="casa_titulo">घर</string>
+    <string name="casa_sem_config">फ़ोन पैनल में Home Assistant सेट करें: एक्स्ट्रा टैब, घर कार्ड।</string>
+    <string name="casa_carregando">डिवाइस लोड हो रहे हैं…</string>
+    <string name="casa_vazio">Home Assistant में कोई लाइट, प्लग या सीन नहीं।</string>
+    <string name="casa_google_home">Google Home</string>
+    <string name="casa_google_home_det">Google लाइट और कैमरे</string>
+    <string name="casa_resumo">Home Assistant · %2$d में से %1$d चालू</string>
+    <string name="casa_resumo_so_cenas">Home Assistant · %1$d सीन</string>
+    <string name="casa_secao_cenas">सीन और स्क्रिप्ट</string>
+    <string name="casa_secao_aparelhos">डिवाइस</string>
+    <string name="casa_secao_google">Google</string>
+    <string name="casa_sem_comodo">बिना कमरा</string>
+    <string name="casa_ligado">चालू</string>
+    <string name="casa_desligado">बंद</string>
+    <string name="casa_aberta">खुला</string>
+    <string name="casa_fechada">बंद</string>
+    <string name="casa_rodar">चलाने के लिए OK</string>
+    <string name="casa_indisponivel">उपलब्ध नहीं</string>
+    <string name="casa_sem_config_titulo">अपना घर जोड़ें</string>
+    <string name="casa_dica_acionar">चालू या बंद</string>
+    <string name="casa_erro_simples">Home Assistant ने जवाब नहीं दिया। जाँचें कि उसका सर्वर चालू है और फिर कोशिश करें।</string>
+    <string name="casa_erro">Home Assistant ने जवाब नहीं दिया: %1$s</string>
+    <string name="casa_ligado_pct">चालू · %1$d%%</string>
+    <string name="casa_brilho_ajuste">चमक %1$d%% · ◀ ▶</string>
+    <string name="casa_dica_brilho">चमक</string>
+    <string name="casa_tecla_segurar_ok">OK दबाए रखें</string>
+</resources>

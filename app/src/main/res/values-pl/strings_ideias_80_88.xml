@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_ideias_80_88.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="si_sem_internet">Brak internetu</string>
+    <string name="si_funcionam">Nadal działa: %1$s</string>
+    <string name="si_pendrive">Pendrive</string>
+    <string name="ad_pergunta">Nadal oglądasz?</string>
+</resources>

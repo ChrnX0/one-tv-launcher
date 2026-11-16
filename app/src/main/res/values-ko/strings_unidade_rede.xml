@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_unidade_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="ur_secao">네트워크 드라이브</string>
+    <string name="ur_titulo">TV를 네트워크 드라이브로 표시</string>
+    <string name="ur_det">꺼짐. TV가 휴대폰처럼 Windows의 ‘내 PC’에 자동으로 나타나고, Mac, Linux, 휴대폰에서는 네트워크 폴더로 나타납니다.</string>
+    <string name="ur_painel">먼저 위의 웹 패널을 켜세요(같은 PIN과 https 주소를 사용).</string>
+    <string name="ur_https">패널의 https 주소를 기다리는 중(패널을 켜고 약 1분 후 인증서가 생성됨).</string>
+    <string name="ur_abra">켜짐. Windows에서는 TV가 ‘내 PC’에 나타납니다(컴퓨터마다 처음에 TV가 화면에서 묻습니다). Mac, Linux, 휴대폰: %1$s · 비밀번호: 패널 PIN.</string>
+    <string name="mtp_pergunta_titulo">컴퓨터가 TV 파일을 요청하고 있습니다</string>
+    <string name="mtp_pergunta">“%1$s”이(가) 홈 네트워크를 통해 TV 저장소의 파일을 보고 복사하려고 합니다. 이 컴퓨터를 허용할까요?</string>
+    <string name="mtp_pcs">허용된 컴퓨터</string>
+    <string name="mtp_pcs_nenhum">아직 없습니다. 컴퓨터가 파일을 요청하면 TV가 화면에서 묻습니다.</string>
+    <string name="mtp_pcs_lista">%1$s · OK로 모두 잊기(각 컴퓨터가 다시 묻게 됨)</string>
+    <string name="mtp_pcs_esquecidos">컴퓨터를 잊었습니다</string>
+</resources>

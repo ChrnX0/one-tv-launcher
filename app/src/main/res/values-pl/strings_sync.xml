@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_sync.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="sync_sub">Zalogowano jako %1$s. Co telewizor synchronizuje z Twoim telefonem.</string>
+    <string name="sync_sub_mdblist">Zalogowano jako %1$s. Twoje listy MDBList mogą pojawić się w katalogu.</string>
+    <string name="sync_ultima">Ostatnia synchronizacja: %1$s</string>
+    <string name="sync_nunca">Jeszcze nie synchronizowano</string>
+    <string name="sync_interesses">Do obejrzenia ⇄ Watchlist</string>
+    <string name="sync_interesses_simkl">Do obejrzenia ⇄ Plan to watch</string>
+    <string name="sync_interesses_det">Co zaznaczysz tutaj, pojawi się tam, i odwrotnie</string>
+    <string name="sync_assistidos">Obejrzane ← Historia</string>
+    <string name="sync_assistidos_det">Przenosi to, co już obejrzałeś na telefonie lub gdzie indziej</string>
+    <string name="sync_continuar">Kontynuuj ⇄ Miejsce zatrzymania</string>
+    <string name="sync_continuar_det">Zatrzymane na telefonie – telewizor wznawia od tego samego miejsca</string>
+    <string name="sync_contar">Informuj %1$s, co tu oglądam</string>
+    <string name="sync_contar_det">Wysyła „teraz oglądam” i „obejrzane” podczas odtwarzania. Nigdy w trybie gościa ani na profilu dziecka.</string>
+    <string name="sync_listas">Listy w katalogu</string>
+    <string name="sync_listas_nenhuma">Nic nie wybrano</string>
+    <string name="sync_listas_n">Wybrane: %1$d: %2$s</string>
+    <string name="sync_listas_sub">Pojawiają się w LISTACH pod „Wszystkie”, tylko z tytułami z Twojej listy. Do %1$d.</string>
+    <string name="sync_listas_carregando">Ładowanie Twoich list…</string>
+    <string name="sync_listas_vazio">Nie znaleziono list. Utwórz lub polub listę na Trakt lub MDBList i wróć tutaj.</string>
+    <string name="sync_listas_cheio">Najwyżej %1$d list</string>
+    <string name="sync_lista_itens">tytuły: %1$d</string>
+    <string name="sync_agora">Synchronizuj teraz</string>
+    <string name="sync_agora_det">Dzieje się też samo przy otwieraniu Filmów lub Seriali</string>
+    <string name="sync_rodando">Synchronizowanie…</string>
+    <string name="sync_feito">Zsynchronizowano</string>
+    <string name="sync_sair">Wyloguj z %1$s</string>
+    <string name="sync_bloqueado">Wstrzymano: włączony tryb gościa lub profil dziecka.</string>
+    <string name="sync_outro_perfil">Wstrzymano: synchronizacja należy do innego profilu.</string>
+    <string name="sync_trakt_cheia">Twoja lista Trakt jest pełna (darmowe konta mieszczą 100). Launcher kontynuuje tylko na telewizorze.</string>
+    <string name="sync_ligado">Wł.</string>
+    <string name="sync_desligado">Wył.</string>
+    <string name="sync_fonte_trakt">Dane z Trakt (trakt.tv)</string>
+    <string name="sync_fonte_simkl">Dane z Simkl (simkl.com)</string>
+    <string name="sync_n_de">%1$d z %2$d na Twojej liście</string>
+    <string name="sync_continuando">Kontynuuję od miejsca zatrzymania na innym urządzeniu</string>
+</resources>

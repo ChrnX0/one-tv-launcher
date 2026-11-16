@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_ideias2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dormir_titulo">Pora snu</string>
+    <string name="dormir_texto">Ta aplikacja nie jest teraz dozwolona. Dobranoc!</string>
+    <string name="dormir_pin">PIN do zmiany pory snu</string>
+    <string name="dormir_inicio">Pora snu: początek</string>
+    <string name="dormir_fim">Pora snu: koniec</string>
+    <string name="dormir_teto">Pora snu: maks. głośność</string>
+    <string name="recado_link_titulo">Wiadomość</string>
+    <string name="extras_HORA_DORMIR">Pora snu (tylko dozwolone aplikacje, ograniczona głośność)</string>
+    <string name="extras_TOCANDO_AGORA">Teraz odtwarzane (odczytuje, co gra)</string>
+    <string name="extras_MODO_LEVE">Tryb lekki (krótsze animacje)</string>
+    <string name="extras_SOM_NAVEGACAO">Dźwięk nawigacji</string>
+    <string name="extras_RECADO_LINK">Wiadomość przez link (Home Assistant, TvOverlay)</string>
+    <string name="extras_caches">Wyczyść pamięć podręczną aplikacji</string>
+    <string name="extras_livre">wolne: %1$s</string>
+    <string name="extras_consumo">Internet według aplikacji (7 dni)</string>
+    <string name="extras_tocando">Teraz odtwarzane</string>
+    <string name="extras_aguarde">Chwileczkę…</string>
+    <string name="dormir_dia">Pora snu: dzień</string>
+    <string name="dormir_todos">wszystkie (domyślnie)</string>
+    <string name="dormir_proprio">własny harmonogram</string>
+    <string name="dormir_segue">według domyślnego</string>
+    <string name="dormir_voltar_padrao">Pora snu: przywróć domyślne dla tego dnia</string>
+    <string name="extras_VER_TELA">Pozwól Claude widzieć ekran (MCP ver_tela; telewizor pokazuje komunikat)</string>
+    <string name="casa_titulo">Dom</string>
+    <string name="casa_sem_config">Skonfiguruj Home Assistant w panelu na telefonie: zakładka Dodatki, karta Dom.</string>
+    <string name="casa_carregando">Ładowanie urządzeń…</string>
+    <string name="casa_vazio">Brak świateł, gniazdek i scen w Home Assistant.</string>
+    <string name="casa_google_home">Google Home</string>
+    <string name="casa_google_home_det">Światła i kamery Google</string>
+    <string name="casa_resumo">Home Assistant · włączone %1$d z %2$d</string>
+    <string name="casa_resumo_so_cenas">Home Assistant · sceny: %1$d</string>
+    <string name="casa_secao_cenas">Sceny i skrypty</string>
+    <string name="casa_secao_aparelhos">Urządzenia</string>
+    <string name="casa_secao_google">Google</string>
+    <string name="casa_sem_comodo">Bez pomieszczenia</string>
+    <string name="casa_ligado">Wł.</string>
+    <string name="casa_desligado">Wył.</string>
+    <string name="casa_aberta">Otwarte</string>
+    <string name="casa_fechada">Zamknięte</string>
+    <string name="casa_rodar">OK, by uruchomić</string>
+    <string name="casa_indisponivel">Niedostępne</string>
+    <string name="casa_sem_config_titulo">Połącz swój dom</string>
+    <string name="casa_dica_acionar">włącz lub wyłącz</string>
+    <string name="casa_erro_simples">Home Assistant nie odpowiedział. Sprawdź, czy jego serwer jest włączony, i spróbuj ponownie.</string>
+    <string name="casa_erro">Home Assistant nie odpowiedział: %1$s</string>
+    <string name="casa_ligado_pct">Wł. · %1$d%%</string>
+    <string name="casa_brilho_ajuste">Jasność %1$d%% · ◀ ▶</string>
+    <string name="casa_dica_brilho">jasność</string>
+    <string name="casa_tecla_segurar_ok">PRZYTRZYMAJ OK</string>
+</resources>

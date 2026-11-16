@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_coluna.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="coluna_listas">목록</string>
+    <string name="coluna_novos">+%1$s</string>
+    <string name="coluna_filtro">필터</string>
+    <string name="coluna_esportes">스포츠</string>
+    <string name="coluna_guia">편성표</string>
+    <string name="coluna_filtro_titulo">필터</string>
+    <string name="coluna_filtro_ordem">정렬: %1$s</string>
+    <string name="coluna_filtro_combinado">장르, 시대, 평점, 안 본 것…</string>
+    <string name="coluna_filtro_combinado_ativo">필터: %1$s</string>
+    <string name="coluna_filtro_limpar">필터 지우기</string>
+    <string name="coluna_filtro_sortear">무작위로 고르기</string>
+    <string name="coluna_filtro_ocultas_mostrar">숨긴 카테고리 표시(PIN)</string>
+    <string name="coluna_filtro_ocultas_esconder">숨긴 카테고리 다시 숨기기</string>
+    <string name="coluna_menu_assistido">시청함으로 표시</string>
+    <string name="coluna_menu_nao_assistido">시청 안 함으로 표시</string>
+    <string name="coluna_menu_tirar_continuar">이어서 보기에서 삭제</string>
+    <string name="coluna_menu_por_interesse">보고 싶은 목록에 추가</string>
+    <string name="coluna_menu_tirar_interesse">보고 싶은 목록에서 삭제</string>
+    <string name="coluna_marcado_assistido">%1$s을(를) 시청함으로 표시함</string>
+    <string name="coluna_marcado_nao_assistido">%1$s을(를) 시청 안 함으로 표시함</string>
+    <string name="coluna_tirado_continuar">%1$s을(를) 이어서 보기에서 삭제함</string>
+    <string name="coluna_etiqueta_concluida">완결</string>
+    <string name="coluna_etiqueta_nova_temporada">새 시즌</string>
+    <string name="coluna_etiqueta_novos">새 에피소드</string>
+    <string name="coluna_letra_titulo">글자로 이동</string>
+    <string name="coluna_letra">글자로 이동</string>
+    <string name="coluna_ao_vivo">실시간</string>
+    <string name="coluna_ao_vivo_primeiro">실시간 먼저</string>
+    <string name="coluna_tv_titulo">TV</string>
+    <string name="coluna_gravacoes">녹화</string>
+    <plurals name="coluna_etiqueta_n_novos">
+        <item quantity="other">새 에피소드 %d개</item>
+    </plurals>
+</resources>

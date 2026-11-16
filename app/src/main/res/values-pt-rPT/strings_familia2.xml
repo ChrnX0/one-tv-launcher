@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pt-rPT) de values/strings_familia2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="an_rotulo">Aniversário</string>
+    <string name="an_hoje">Hoje é aniversário de %s</string>
+    <string name="an_amanha">Amanhã é aniversário de %s</string>
+    <string name="tp_calor">Calor forte</string>
+    <string name="tp_calor_texto">Até %d° hoje · Beba água</string>
+    <string name="tp_frio">Frio forte</string>
+    <string name="tp_frio_texto">Até %d° esta noite · Agasalhe-se</string>
+    <string name="tp_cfg">Aviso de calor e frio</string>
+    <string name="tp_cfg_det">Um cartão por cima de qualquer app quando hoje chega a %1$d° ou a noite cai a %2$d°</string>
+    <string name="mu_ok_lido">OK marca como lido</string>
+    <string name="mu_ok_nao_lido">Lido · OK marca como não lido</string>
+    <string name="mu_lido_desc">Recado lido: %s. OK marca como não lido.</string>
+    <string name="mu_nao_lido_desc">Recado: %s. OK marca como lido.</string>
+    <string name="mu_apagar">Apagar recado: %s</string>
+    <string name="extras_RETROSPECTIVA_ANO">Sua TV no ano (em dezembro, no protetor)</string>
+    <string name="extras_CARTOES_TRANSPARENTES">Cartões de app transparentes fora do foco</string>
+    <string name="extras_ENTRADAS_TV">Entradas HDMI na linha de apps (só em TV com entrada)</string>
+    <string name="ra_titulo">Sua TV em %d</string>
+    <string name="ra_canal">Canal favorito: %1$s (%2$s)</string>
+    <string name="ra_coluna">Rádios</string>
+    <string name="ra_dica_ouvir">ouvir</string>
+    <string name="ra_dica_favoritar">favoritar</string>
+    <string name="ra_carregando">A carregar as rádios…</string>
+    <string name="ra_subtitulo">Rádios do mundo todo · 1 a 9 no comando tocam as favoritas</string>
+    <string name="ra_sem_catalogo">O catálogo de rádios não respondeu. As favoritas continuam a funcionar.</string>
+    <string name="ra_nada">Nenhuma rádio encontrada.</string>
+    <string name="ra_continuar">continuar</string>
+    <string name="ra_pausar">pausar</string>
+    <string name="ra_favoritas">Favoritas</string>
+    <string name="ra_procurar">Procurar</string>
+    <string name="ra_buscar">Pesquisar pelo nome</string>
+    <string name="ra_buscar_det">Qualquer rádio do mundo</string>
+    <string name="ra_generos">Géneros</string>
+    <string name="ra_paises">Outro país</string>
+    <string name="ra_paises_det">Os países com mais rádios</string>
+    <string name="ra_perto">Perto de si</string>
+    <string name="ra_mais_ouvidas">Mais ouvidas: %s</string>
+    <string name="ra_mundo">Mais ouvidas no mundo</string>
+    <string name="ra_resultado">Pesquisa: %s</string>
+    <string name="ra_favoritada">Entrou nas favoritas</string>
+    <string name="ra_desfavoritada">Saiu das favoritas</string>
+    <string name="ra_falhou">Esta rádio não está a tocar agora. Tente outra.</string>
+    <plurals name="an_anos">
+        <item quantity="one">faz %d ano</item>
+        <item quantity="other">faz %d anos</item>
+    </plurals>
+</resources>

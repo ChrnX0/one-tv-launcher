@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_rede_arquivos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_secao_na_tv">TV’ye takılı</string>
+    <string name="rede_sub_usb">USB bellek · videolar, müzikler ve fotoğraflar</string>
+    <string name="rede_acao_arquivos">FTP, SFTP veya NFS</string>
+    <string name="rede_sub_arquivos">NAS, diskli yönlendirici, Linux veya Mac bilgisayar</string>
+    <string name="rede_arq_explica">Adresi protokolle başlatın: sftp://nas/Filmler · ftp://192.168.0.10 · ftps://nas/Videolar · nfs://nas/volume1/video. SFTP ve FTPS şifrelidir; düz FTP şifreyi şifrelemeden gönderir, yalnızca evde kullanın. NFS’te şifre yoktur: NAS, TV’nin IP’sine ve ayrıcalıksız portlardan bağlantılara izin vermelidir.</string>
+    <string name="rede_arq_endereco">Adres (sftp://, ftp://, ftps:// veya nfs://)</string>
+    <string name="rede_arq_usuario">Kullanıcı adı (NFS: kullanıcı numarası, isteğe bağlı)</string>
+    <string name="rede_arq_endereco_erro">sftp://, ftp://, ftps:// veya nfs:// ile başlayın, ardından sunucu ve klasör gelir. Kullanıcı adı ve şifre kendi alanlarına girilir.</string>
+    <string name="rede_erro_nfs_porta">NFS sunucusu TV’yi reddetti. NAS’ta ayrıcalıksız portlardan bağlantılara izin verin (Linux: /etc/exports içindeki «insecure» seçeneği).</string>
+    <string name="rede_erro_nfs_ip">NFS sunucusu bu TV’ye izin vermedi. NAS’ta TV’nin IP’sini (veya ev ağınızı) bu klasörün NFS kuralına ekleyin.</string>
+    <string name="rede_erro_chave_mudou">Bu sunucunun anahtarı eklendiğinden beri değişti. Sunucuyu yeniden kurduysanız burada kaldırıp yeniden ekleyin; kurmadıysanız biri onun kimliğine bürünüyor olabilir.</string>
+    <string name="rede_erro_usb_acesso">TV, launcher’a USB bellek erişimi vermedi. Biraz sonra yeniden deneyin.</string>
+</resources>

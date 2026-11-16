@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_acoes.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acao_recado">显示留言“%1$s”</string>
+    <string name="acao_timer">%1$d 分钟定时器</string>
+    <string name="acao_timer_nome">%1$d 分钟定时器（“%2$s”）</string>
+    <string name="acao_desligar_em">%1$d 分钟后关闭电视</string>
+    <string name="acao_desligar_cancelar">取消睡眠定时器</string>
+    <string name="acao_filtro_ligar">开启夜间滤镜</string>
+    <string name="acao_filtro_desligar">关闭夜间滤镜</string>
+    <string name="acao_filtro_sem_servico">夜间滤镜需要无障碍服务</string>
+    <string name="acao_rodar_cena">运行场景“%1$s”</string>
+    <string name="acao_cena_nao_existe">场景“%1$s”不存在</string>
+    <string name="acao_cena_em_cena">场景不能运行另一个场景</string>
+    <string name="acao_mural_compras">将“%1$s”加入购物清单</string>
+    <string name="acao_mural_recado">将“%1$s”贴到家庭留言板</string>
+    <string name="acao_tocar_titulo">查找并播放“%1$s”</string>
+    <string name="acao_tocar">播放 %1$s</string>
+    <string name="acao_continuar">继续播放之前的内容</string>
+    <string name="acao_proximo">播放下一集</string>
+    <string name="acao_proximo_de">%1$s 的下一集</string>
+    <string name="acao_o_que_via">查看之前在播放什么</string>
+    <string name="acao_vendo">最近观看：%1$s</string>
+    <string name="acao_vendo_nada">在电影和剧集中还没有观看过任何内容。</string>
+    <string name="rot_cena_uma">运行场景</string>
+    <string name="rot_cena">运行场景：%1$s</string>
+    <string name="rot_cena_linha">场景：%1$s</string>
+    <string name="rot_cena_sem">请先创建场景（网页面板 › 附加功能 › 场景）</string>
+    <string name="al_cena">停止时的场景：%1$s</string>
+    <string name="lbl_cenas">场景</string>
+    <string name="pr_cenas">场景</string>
+    <string name="cenas_titulo">场景</string>
+    <string name="cenas_det">按 OK 运行场景。在网页面板 › 附加功能 › 场景中创建和编辑。</string>
+    <string name="cenas_vazio">还没有场景。请在网页面板 › 附加功能 › 场景中创建。</string>
+    <string name="tec_titulo">遥控器按钮</string>
+    <string name="tec_det">Netflix 和 YouTube 在任何界面都有效；彩色键和数字键仅在主屏幕有效。</string>
+    <string name="tec_nova">+ 设置按钮</string>
+    <string name="tec_nova_det">然后按遥控器上的按钮</string>
+    <string name="tec_aperte">请按按钮</string>
+    <string name="tec_aperte_det">Netflix、YouTube、彩色键或数字键。按返回键取消。</string>
+    <string name="tec_nao_pode">%1$s 无法更改（使用电视需要它）。请换一个按钮。</string>
+    <string name="tec_so_home">仅在主屏幕有效（在应用和播放器中保留原功能）。</string>
+    <string name="tec_toda_tela">在任何界面都有效。</string>
+    <string name="tec_toque">按下</string>
+    <string name="tec_segurar">长按</string>
+    <string name="tec_duplo">连按两次</string>
+    <string name="tec_padrao">默认（已保存的应用；长按 3 秒 = 选择）</string>
+    <string name="tec_cena">场景 %1$s</string>
+    <string name="tec_salvo">已保存 %1$s</string>
+    <string name="tec_apagar">清除此按钮</string>
+    <string name="tec_vermelha">红色</string>
+    <string name="tec_verde">绿色</string>
+    <string name="tec_amarela">黄色</string>
+    <string name="tec_azul">蓝色</string>
+    <string name="aut_titulo">自动化</string>
+    <string name="aut_det">电视自动执行的所有操作：定时、按键、事件触发和通过链接。</string>
+    <string name="aut_cfg_det">定时、遥控器按钮、事件和场景链接</string>
+    <string name="aut_horario">到点时</string>
+    <string name="aut_botao">按下按钮时</string>
+    <string name="aut_evento">发生某事时（运行场景）</string>
+    <string name="aut_link">通过链接</string>
+    <string name="aut_link_det">在网页面板 › 附加功能 › 场景中创建和编辑</string>
+    <string name="ev_midia_tocou">电影或视频开始播放</string>
+    <string name="ev_midia_pausou">电影或视频暂停或结束</string>
+    <string name="ev_tv_ligou">电视已开机</string>
+    <string name="ev_todos_sairam">所有人都已离开（在家检测）</string>
+    <string name="ev_chuva">即将下雨</string>
+    <plurals name="cenas_acoes">
+        <item quantity="other">%d 个操作</item>
+    </plurals>
+    <plurals name="aut_links">
+        <item quantity="other">%d 个带链接的场景</item>
+    </plurals>
+</resources>

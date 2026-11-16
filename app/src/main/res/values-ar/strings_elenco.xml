@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_elenco.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="elenco_botao">طاقم التمثيل</string>
+    <string name="elenco_titulo">طاقم التمثيل</string>
+    <string name="elenco_carregando">جارٍ تحميل طاقم التمثيل…</string>
+    <string name="elenco_vazio">لا يملك TMDB طاقم تمثيل لهذا العنوان.</string>
+    <string name="elenco_dica">تنقّل بين الأشخاص: في الأسفل، أعمال أخرى لهم موجودة في قائمتك.</string>
+    <string name="elenco_na_lista">موجود أيضًا في قائمتك</string>
+    <string name="elenco_procurando">جارٍ البحث في قائمتك…</string>
+    <string name="elenco_nada_na_lista">لا شيء آخر مع هذا الشخص في قائمتك.</string>
+    <string name="elenco_filme">فيلم</string>
+    <string name="elenco_serie">مسلسل</string>
+    <string name="elenco_opcao_player">طاقم التمثيل (من هذا الممثل؟)</string>
+    <string name="anteriormente_titulo">في الحلقات السابقة من %1$s</string>
+    <string name="anteriormente_assistir">شاهد %1$s</string>
+    <string name="anteriormente_pular_sempre">لا تُظهر أبدًا</string>
+    <string name="anteriormente_desligado">أُوقفت الملخصات. لتفعيلها مجددًا: اضغط مطولًا على OK على حلقة.</string>
+    <string name="anteriormente_ligar">إظهار ملخصات “في الحلقات السابقة”</string>
+    <string name="idade_titulo">العمر الأقصى في وضع الأطفال</string>
+    <string name="idade_det">الأفلام والمسلسلات المصنّفة حتى هذا العمر تظهر من أي فئة (تصنيف TMDB). وغير المصنّفة فقط في فئات الأطفال.</string>
+    <string name="idade_so_categorias">فئات الأطفال فقط</string>
+    <string name="idade_livre">كل الأعمار</string>
+    <string name="idade_anos">حتى %1$d سنة</string>
+    <string name="onde_tambem_em">متوفر أيضًا على: %1$s (JustWatch)</string>
+    <string name="onde_fora">ليس في قائمتك · على %1$s</string>
+    <string name="onde_grupo">في مكان آخر (JustWatch)</string>
+    <string name="legenda_auto_pronta">ترجمة نُزّلت تلقائيًا (معدّة لهذا الملف) · ▼ للتغيير</string>
+    <string name="legenda_auto_pronta_nome">ترجمة نُزّلت تلقائيًا · ▼ للتغيير أو ضبط التأخير</string>
+    <string name="legenda_auto_opcao">تنزيل الترجمات تلقائيًا</string>
+    <string name="legenda_auto_ligada">ستُنزَّل الترجمات عند غيابها</string>
+    <string name="legenda_auto_desligada">أُوقفت الترجمات التلقائية</string>
+    <string name="legenda_trad_rotulo">ترجمة آلية</string>
+    <string name="legenda_trad_traduzindo">لا ترجمة بلغتك: جارٍ ترجمة الإنجليزية على التلفزيون…</string>
+    <string name="legenda_trad_parcial">ترجمة مترجمة على التلفزيون (ترجمة آلية). الباقي يُترجم تباعًا.</string>
+    <string name="legenda_trad_pronta">انتهت ترجمة الترجمة</string>
+    <string name="legenda_trad_opcao">ترجمة الترجمات على التلفزيون عند غيابها</string>
+    <string name="legenda_trad_ligada">ستُترجم الترجمات على التلفزيون عند غيابها</string>
+    <string name="legenda_trad_desligada">لن تُترجم الترجمات بعد الآن</string>
+    <string name="series_sinopse_mais">الملخص الكامل</string>
+    <string name="series_sinopse_menos">ملخص أقصر</string>
+    <string name="series_continuar_curto">▶  متابعة %1$s</string>
+    <string name="series_episodios">الحلقات</string>
+    <string name="series_trocar_temporada">تغيير الموسم</string>
+    <string name="fechar">إغلاق</string>
+</resources>

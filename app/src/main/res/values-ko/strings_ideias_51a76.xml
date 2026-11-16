@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_ideias_51a76.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l51_ensaio_ok">복원 확인 통과</string>
+    <string name="l51_ensaio_falhou">저장된 사본을 복원할 수 없음(%1$s)</string>
+    <string name="l51_wifi_titulo">게스트 Wi-Fi</string>
+    <string name="l51_wifi_nao">설정 안 됨: 한 번 입력하면 방문자가 QR을 스캔</string>
+    <string name="l51_wifi_dica">라우터의 게스트 네트워크를 사용하세요: 방 안의 누구나 화면에서 비밀번호를 볼 수 있습니다.</string>
+    <string name="l51_wifi_rede">네트워크 이름</string>
+    <string name="l51_wifi_senha">비밀번호</string>
+    <string name="l51_wifi_invalido">이름은 최대 32자, 비밀번호는 비워 두거나(개방형 네트워크) 8~63자.</string>
+    <string name="l51_wifi_qr_titulo">게스트 Wi-Fi QR 표시</string>
+    <string name="l51_uso_titulo">자주 사용하는 항목</string>
+    <string name="l51_uso_det">사용 빈도별 화면과 설정, 이 TV에서만 집계(외부로 나가지 않음)</string>
+    <string name="l51_uso_vazio">아직 집계된 것이 없습니다. 며칠 후 다시 확인하세요.</string>
+    <string name="l51_uso_tela">화면</string>
+    <string name="l51_uso_opcao">설정</string>
+    <string name="l51_uso_linha">%1$s(%2$s): %3$s, %4$s</string>
+    <string name="l51_uso_hoje">마지막: 오늘</string>
+    <string name="l51_uso_ontem">마지막: 어제</string>
+    <string name="l51_uso_dias">마지막: %d일 전</string>
+    <string name="l51_tela_Main">홈 화면</string>
+    <string name="l51_tela_Dream">화면 보호기</string>
+    <string name="l51_tela_Filmes">영화</string>
+    <string name="l51_tela_Series">시리즈</string>
+    <string name="l51_tela_Jogos">게임</string>
+    <string name="l51_tela_Player">실시간 TV 및 동영상</string>
+    <string name="l51_tela_PainelRapido">빠른 패널</string>
+    <string name="l51_tela_Vod">목록 카탈로그</string>
+    <string name="l51_tela_Previsao">일기 예보</string>
+    <string name="l51_tela_Elenco">출연</string>
+    <string name="l51_tela_ConfigLauncher">설정</string>
+    <string name="l51_tela_MidiaRede">네트워크</string>
+    <string name="l51_tela_Calendario">캘린더</string>
+    <string name="l51_tela_Gravacoes">녹화</string>
+    <string name="l51_tela_Busca">검색</string>
+    <string name="l51_tela_Casa">우리 집</string>
+    <string name="l51_tela_AlarmeTocando">알람 울림</string>
+    <string name="l51_tela_Radio">라디오</string>
+    <string name="l51_tela_Diagnostico">진단</string>
+    <string name="l51_uso_zerar">초기화</string>
+    <string name="l51_digitar_titulo">TV에 입력</string>
+    <string name="l51_digitar_texto">%1$s에 텍스트 상자가 열려 있습니다. 눌러서 여기에서 입력하세요.</string>
+    <string name="casa_temp_ajuste">%1$s · ◀ ▶</string>
+    <string name="casa_ambiente">실내 %1$s</string>
+    <string name="casa_movimento">움직임 감지</string>
+    <string name="casa_sem_movimento">움직임 없음</string>
+    <string name="casa_molhado">젖음</string>
+    <string name="casa_seco">건조</string>
+    <string name="casa_fumaca">연기 감지!</string>
+    <string name="casa_sem_fumaca">연기 없음</string>
+    <string name="casa_dica_temp">온도</string>
+    <string name="casa_camera_abrindo">카메라 여는 중…</string>
+    <string name="casa_camera_ver">TV에 표시</string>
+    <plurals name="l51_uso_vezes">
+        <item quantity="other">%d회</item>
+    </plurals>
+</resources>

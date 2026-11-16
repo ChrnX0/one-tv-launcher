@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_protetor_rede.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pt_dica_dispensar">OK odrzuca · ◀ ▶ przesuwają</string>
+    <string name="pt_dica_pausar">OK wstrzymuje lub wznawia · ◀ ▶ przesuwają</string>
+    <string name="pt_dica_andar">◀ ▶ przesuwają · inne przyciski zamykają</string>
+    <string name="rede_fotos_usar">Użyj tych zdjęć w wygaszaczu</string>
+    <string name="rede_fotos_parar">Przestań używać tych zdjęć w wygaszaczu</string>
+    <string name="rede_fotos_usando">Kopiowanie zdjęć. Pojawią się przy następnym uruchomieniu wygaszacza.</string>
+    <string name="rede_fotos_paradas">Wygaszacz nie używa już tego folderu.</string>
+    <string name="rede_continuar">Kontynuuj oglądanie</string>
+    <string name="rede_recentes">Ostatnio dodane</string>
+    <string name="rede_buscar">Szukaj</string>
+    <string name="rede_buscar_explica">Filmy, seriale, odcinki i muzyka na tym serwerze.</string>
+    <string name="rede_buscar_campo">Nazwa</string>
+    <string name="rede_buscar_curto">Wpisz co najmniej 2 litery.</string>
+    <string name="rede_proximo_em">Następnie: %1$s za %2$d s · OK zaczyna teraz · każdy inny przycisk anuluje</string>
+    <string name="rede_ainda_assistindo">Nadal oglądasz? OK uruchamia %1$s</string>
+    <plurals name="rede_fotos_sub">
+        <item quantity="one">%1$d zdjęcie · skopiowane na telewizor, działa przy wyłączonym komputerze</item>
+        <item quantity="few">%1$d zdjęcia · skopiowane na telewizor, działa przy wyłączonym komputerze</item>
+        <item quantity="many">%1$d zdjęć · skopiowane na telewizor, działa przy wyłączonym komputerze</item>
+        <item quantity="other">%1$d zdjęcia · skopiowane na telewizor, działa przy wyłączonym komputerze</item>
+    </plurals>
+</resources>

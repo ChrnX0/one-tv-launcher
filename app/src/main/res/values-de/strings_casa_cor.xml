@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_casa_cor.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="casa_dica_brilho_cor">Helligkeit und Farbe</string>
+    <string name="casa_brilho_ajuste_cor">Helligkeit %1$d%% · ◀ ▶ · Farbe ▲ ▼</string>
+    <string name="casa_cor_ajuste">%1$s · ▲ ▼</string>
+    <string name="casa_cor_quente">Warmweiß</string>
+    <string name="casa_cor_neutra">Neutralweiß</string>
+    <string name="casa_cor_fria">Kaltweiß</string>
+    <string name="casa_cor_vermelho">Rot</string>
+    <string name="casa_cor_laranja">Orange</string>
+    <string name="casa_cor_amarelo">Gelb</string>
+    <string name="casa_cor_verde">Grün</string>
+    <string name="casa_cor_azul">Blau</string>
+    <string name="casa_cor_roxo">Lila</string>
+    <string name="casa_cor_rosa">Rosa</string>
+</resources>

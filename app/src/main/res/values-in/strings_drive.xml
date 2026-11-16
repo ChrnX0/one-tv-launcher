@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_drive.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="drv_titulo">Akun Google Drive</string>
+    <string name="drv_destino">Google Drive</string>
+    <string name="drv_conta">Akun Google Drive</string>
+    <string name="drv_nao_conectada">tidak terhubung</string>
+    <string name="drv_passos">1. Di ponsel, buka %1$s (atau arahkan kamera ke kode di kanan).\n2. Masuk dengan akun Google yang ada di TV ini lalu ketik:\n\n%2$s\n\n3. Izinkan akses ke Google Drive. TV hanya melihat file yang dibuatnya sendiri (folder OneTV-backup), tidak pernah sisa Drive Anda.\n\nLayar ini berlanjut sendiri.</string>
+    <string name="drv_ok">Selesai: %1$s terhubung. Pilih \"Google Drive\" di baris Salinan tambahan agar cadangan malam juga dikirim ke sana.</string>
+    <string name="drv_sem_google">Login Google belum diatur di TV ini.\n\nAtur di panel web > tab Claude (klien OAuth Anda sendiri, jenis \"TVs and Limited Input devices\"), aktifkan Google Drive API di proyek Google Cloud yang sama, lalu kembali ke sini.</string>
+    <string name="drv_desconectar_pergunta">Putuskan %1$s? Salinan yang sudah ada di Google Drive tetap di sana; TV berhenti mengirim yang baru.</string>
+    <string name="drv_desconectar">Putuskan</string>
+    <string name="drv_restaurar">Pulihkan dari Google Drive</string>
+    <string name="drv_precisa_conta">Hubungkan akun Google Drive dulu (baris di atas).</string>
+    <string name="drv_falhou">Tidak berhasil: %1$s</string>
+    <string name="drv_nenhuma">Belum ada salinan di folder OneTV-backup di Google Drive.</string>
+    <string name="drv_escolha">Salinan yang mana?</string>
+    <string name="drv_senha">Kata sandi cadangan</string>
+    <string name="drv_senha_errada">Kata sandi cadangan salah (atau file sudah diubah). Tidak ada yang dipulihkan.</string>
+    <string name="drv_restaurado">Dipulihkan. Launcher dimulai ulang sebentar lagi.</string>
+</resources>

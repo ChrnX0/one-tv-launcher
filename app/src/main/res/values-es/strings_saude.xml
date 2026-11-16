@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_saude.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="saude_titulo">El acceso remoto se detuvo</string>
+    <string name="saude_texto_shell">El acceso de la TV a sí misma se cayó hace %1$d min (el panel, Claude y las reparaciones automáticas se detienen). Pulsa Vincular de nuevo o ve a Ajustes › Sistema › Vincular sin PC.</string>
+    <string name="saude_texto_tunel">Claude por internet está desconectado. Pulsa Conectar para ver qué falta, o ve a Ajustes › Acceso remoto.</string>
+    <string name="saude_parear">Vincular de nuevo</string>
+    <string name="saude_conectar">Conectar</string>
+    <string name="saude_depois">Ahora no</string>
+    <string name="saude_acao_shell">Vincular de nuevo: Ajustes › Sistema › Vincular sin PC</string>
+    <string name="saude_acao_tunel">Conectar de nuevo: Ajustes › Acceso remoto › Conectar</string>
+    <string name="mnt_titulo">Mantenimiento nocturno</string>
+    <string name="mnt_consertei">Reparado:</string>
+    <string name="mnt_falhou">No se pudo reparar:</string>
+    <string name="mnt_acesso">acceso remoto</string>
+    <string name="mnt_permissoes">permisos</string>
+    <string name="mnt_agendamentos">alarmas y rutinas</string>
+    <string name="mnt_espaco">espacio libre</string>
+</resources>

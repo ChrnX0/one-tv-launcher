@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ar) de values/strings_ideias3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="extras_SONO_SUAVE">الإطفاء التدريجي (مؤقت السكون يعتّم الشاشة ويخفض الصوت)</string>
+    <string name="extras_MURAL">لوحة العائلة على شاشة التوقف</string>
+    <string name="extras_PRESENCA">الإطفاء عندما يغادر الجميع المنزل (راوتر UniFi)</string>
+    <string name="extras_HOJE_NA_TV">\"اليوم على التلفزيون\" في شاشة البحث</string>
+    <string name="extras_RETROSPECTIVA">الملخص الأسبوعي (ليلة الأحد)</string>
+    <string name="extras_MODO_SIMPLES">الوضع البسيط (بطاقات كبيرة، نطق الأسماء)</string>
+</resources>

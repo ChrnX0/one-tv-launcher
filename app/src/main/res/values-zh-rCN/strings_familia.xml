@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_familia.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="fam_pin">儿童 PIN</string>
+    <string name="fam_pin_det">第二个 PIN，可在孩子面前解锁频道、隐藏的类别和就寝时间。面板 PIN 在所有地方依然有效。</string>
+    <string name="fam_pin_ok">儿童 PIN 已保存</string>
+    <string name="fam_pin_igual">儿童 PIN 必须与面板 PIN 不同</string>
+    <string name="fam_trocar">更改儿童 PIN</string>
+    <string name="fam_apagar">删除儿童 PIN</string>
+    <string name="fam_apagado">儿童 PIN 已删除：现在只能用面板 PIN 解锁</string>
+    <string name="extras_TEMPO_TELA">每日屏幕时间（用完后只能打开允许的应用）</string>
+    <string name="tela_titulo">屏幕时间</string>
+    <string name="tela_acabou">今天的屏幕时间已用完。明天见！</string>
+    <string name="tela_5min">今天的屏幕时间还剩 5 分钟</string>
+    <string name="tela_pin">更改屏幕时间需要 PIN</string>
+    <string name="tela_cota_linha">每日屏幕时间：%1$s（今天剩余：%2$s）</string>
+    <string name="tela_mais">今天再给 %1$d 分钟</string>
+    <string name="tela_mais_ok">今天增加了 %1$d 分钟</string>
+    <string name="tela_h">小时</string>
+    <string name="tela_min">分钟</string>
+    <string name="extras_AGENDA_TODAS">合并电视上所有 Google 账号的日历</string>
+    <string name="cal_todas_contas">电视上的所有账号（%1$d）</string>
+    <string name="tm_tempo_esgotado">时间到</string>
+    <string name="painel_desligado_pin">网页面板已关闭：PIN 错误次数过多</string>
+    <string name="tm_crono">秒表</string>
+    <string name="tm_crono_iniciar">开始秒表</string>
+    <string name="tm_crono_parar">停止秒表</string>
+    <string name="tm_crono_comecou">秒表已开始：显示在主屏幕上</string>
+    <string name="tm_crono_marcou">秒表停在 %1$s</string>
+    <string name="som_canal">上次看的直播频道</string>
+</resources>

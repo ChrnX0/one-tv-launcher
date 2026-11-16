@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_ideias3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="extras_SONO_SUAVE">Sanftes Ausschalten (der Timer dunkelt den Bildschirm ab und senkt die Lautstärke)</string>
+    <string name="extras_MURAL">Familienpinnwand im Bildschirmschoner</string>
+    <string name="extras_PRESENCA">Ausschalten, wenn alle das Haus verlassen (UniFi-Router)</string>
+    <string name="extras_HOJE_NA_TV">„Heute im TV“ auf dem Suchbildschirm</string>
+    <string name="extras_RETROSPECTIVA">Wochenrückblick (Sonntagabend)</string>
+    <string name="extras_MODO_SIMPLES">Einfacher Modus (große Karten, Namen werden vorgelesen)</string>
+</resources>

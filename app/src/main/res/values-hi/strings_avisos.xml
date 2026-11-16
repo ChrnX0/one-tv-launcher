@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_avisos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rd_voltou_titulo">इंटरनेट वापस आ गया</string>
+    <string name="rd_voltou_texto">यह %1$s तक बंद था (%2$s से)। संभावित कारण: %3$s।</string>
+    <string name="rd_causa_wifi">TV का Wi-Fi छूट गया</string>
+    <string name="rd_causa_provedor">इंटरनेट प्रदाता या राउटर</string>
+    <string name="rd_min">%1$d मिनट</string>
+    <string name="rd_h_min">%1$d घंटे %2$d मिनट</string>
+    <string name="rd_disco_titulo">TV स्टोरेज भर रहा है</string>
+    <string name="rd_disco_texto">इसी रफ़्तार से यह लगभग %1$d दिनों में भर जाएगा (%2$d MB ख़ाली)। ऐप कैश साफ़ करें या जो ऐप इस्तेमाल नहीं करते उन्हें हटाएँ।</string>
+    <string name="pr_avisos_tv">TV से</string>
+    <string name="mural_riscar">%1$s काटें</string>
+</resources>

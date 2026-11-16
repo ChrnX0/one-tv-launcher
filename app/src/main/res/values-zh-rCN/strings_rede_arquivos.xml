@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_rede_arquivos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_secao_na_tv">插在电视上</string>
+    <string name="rede_sub_usb">U 盘 · 视频、音乐和照片</string>
+    <string name="rede_acao_arquivos">FTP、SFTP 或 NFS</string>
+    <string name="rede_sub_arquivos">NAS、带硬盘的路由器、Linux 或 Mac 电脑</string>
+    <string name="rede_arq_explica">地址以协议开头：sftp://nas/Movies · ftp://192.168.0.10 · ftps://nas/Videos · nfs://nas/volume1/video。SFTP 和 FTPS 是加密的；普通 FTP 以明文发送密码，因此只在家里使用。NFS 没有密码：NAS 必须允许电视的 IP 以及来自非特权端口的连接。</string>
+    <string name="rede_arq_endereco">地址（sftp://、ftp://、ftps:// 或 nfs://）</string>
+    <string name="rede_arq_usuario">用户名（NFS：用户编号，可选）</string>
+    <string name="rede_arq_endereco_erro">以 sftp://、ftp://、ftps:// 或 nfs:// 开头，后面跟服务器和文件夹。用户名和密码填在各自的字段中。</string>
+    <string name="rede_erro_nfs_porta">NFS 服务器拒绝了电视。请在 NAS 上允许来自非特权端口的连接（Linux：/etc/exports 中的“insecure”选项）。</string>
+    <string name="rede_erro_nfs_ip">NFS 服务器不允许此电视。请在 NAS 上将电视的 IP（或你的家庭网络）添加到此文件夹的 NFS 规则中。</string>
+    <string name="rede_erro_chave_mudou">此服务器的密钥自添加以来已更改。如果你重装了服务器，请在这里删除后重新添加；否则可能有人在冒充它。</string>
+    <string name="rede_erro_usb_acesso">电视没有授予启动器访问 U 盘的权限。请稍后重试。</string>
+</resources>

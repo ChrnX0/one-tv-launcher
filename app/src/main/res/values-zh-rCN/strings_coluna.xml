@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_coluna.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="coluna_listas">清单</string>
+    <string name="coluna_novos">+%1$s</string>
+    <string name="coluna_filtro">筛选</string>
+    <string name="coluna_esportes">体育</string>
+    <string name="coluna_guia">节目指南</string>
+    <string name="coluna_filtro_titulo">筛选</string>
+    <string name="coluna_filtro_ordem">排序：%1$s</string>
+    <string name="coluna_filtro_combinado">类型、年代、评分、未看…</string>
+    <string name="coluna_filtro_combinado_ativo">筛选：%1$s</string>
+    <string name="coluna_filtro_limpar">清除筛选</string>
+    <string name="coluna_filtro_sortear">随便看看</string>
+    <string name="coluna_filtro_ocultas_mostrar">显示隐藏的类别（PIN）</string>
+    <string name="coluna_filtro_ocultas_esconder">再次隐藏隐藏的类别</string>
+    <string name="coluna_menu_assistido">标记为已看</string>
+    <string name="coluna_menu_nao_assistido">标记为未看</string>
+    <string name="coluna_menu_tirar_continuar">从“继续观看”中移除</string>
+    <string name="coluna_menu_por_interesse">加入待看清单</string>
+    <string name="coluna_menu_tirar_interesse">移出待看清单</string>
+    <string name="coluna_marcado_assistido">已将 %1$s 标记为已看</string>
+    <string name="coluna_marcado_nao_assistido">已将 %1$s 标记为未看</string>
+    <string name="coluna_tirado_continuar">已将 %1$s 从“继续观看”中移除</string>
+    <string name="coluna_etiqueta_concluida">已完结</string>
+    <string name="coluna_etiqueta_nova_temporada">新一季</string>
+    <string name="coluna_etiqueta_novos">新剧集</string>
+    <string name="coluna_letra_titulo">跳到字母</string>
+    <string name="coluna_letra">跳到某个字母</string>
+    <string name="coluna_ao_vivo">直播</string>
+    <string name="coluna_ao_vivo_primeiro">直播优先</string>
+    <string name="coluna_tv_titulo">电视</string>
+    <string name="coluna_gravacoes">录制</string>
+    <plurals name="coluna_etiqueta_n_novos">
+        <item quantity="other">%d 集新剧集</item>
+    </plurals>
+</resources>

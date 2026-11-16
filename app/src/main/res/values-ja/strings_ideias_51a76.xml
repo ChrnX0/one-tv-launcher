@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_ideias_51a76.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="l51_ensaio_ok">復元チェックに合格</string>
+    <string name="l51_ensaio_falhou">保存したコピーは復元できません（%1$s）</string>
+    <string name="l51_wifi_titulo">ゲスト用 Wi-Fi</string>
+    <string name="l51_wifi_nao">未設定: 一度入力すれば、ゲストは QR を読み取るだけです</string>
+    <string name="l51_wifi_dica">ルーターのゲストネットワークを使ってください: 部屋にいる誰でも画面でパスワードを読めます。</string>
+    <string name="l51_wifi_rede">ネットワーク名</string>
+    <string name="l51_wifi_senha">パスワード</string>
+    <string name="l51_wifi_invalido">名前は 32 文字まで。パスワードは空（オープンネットワーク）か 8〜63 文字。</string>
+    <string name="l51_wifi_qr_titulo">ゲスト用 Wi-Fi の QR を表示</string>
+    <string name="l51_uso_titulo">よく使われるもの</string>
+    <string name="l51_uso_det">使用回数順の画面と設定。この TV でのみ集計します（外部には送られません）</string>
+    <string name="l51_uso_vazio">まだ集計がありません。数日後に戻ってきてください。</string>
+    <string name="l51_uso_tela">画面</string>
+    <string name="l51_uso_opcao">設定</string>
+    <string name="l51_uso_linha">%1$s（%2$s）: %3$s、%4$s</string>
+    <string name="l51_uso_hoje">最終: 今日</string>
+    <string name="l51_uso_ontem">最終: 昨日</string>
+    <string name="l51_uso_dias">最終: %d 日前</string>
+    <string name="l51_tela_Main">ホーム画面</string>
+    <string name="l51_tela_Dream">スクリーンセーバー</string>
+    <string name="l51_tela_Filmes">映画</string>
+    <string name="l51_tela_Series">番組</string>
+    <string name="l51_tela_Jogos">ゲーム</string>
+    <string name="l51_tela_Player">ライブ TV と動画</string>
+    <string name="l51_tela_PainelRapido">クイックパネル</string>
+    <string name="l51_tela_Vod">リストのカタログ</string>
+    <string name="l51_tela_Previsao">天気予報</string>
+    <string name="l51_tela_Elenco">キャスト</string>
+    <string name="l51_tela_ConfigLauncher">設定</string>
+    <string name="l51_tela_MidiaRede">ネットワーク</string>
+    <string name="l51_tela_Calendario">カレンダー</string>
+    <string name="l51_tela_Gravacoes">録画</string>
+    <string name="l51_tela_Busca">検索</string>
+    <string name="l51_tela_Casa">マイホーム</string>
+    <string name="l51_tela_AlarmeTocando">アラーム鳴動中</string>
+    <string name="l51_tela_Radio">ラジオ</string>
+    <string name="l51_tela_Diagnostico">診断</string>
+    <string name="l51_uso_zerar">リセット</string>
+    <string name="l51_digitar_titulo">TV に入力</string>
+    <string name="l51_digitar_texto">%1$s でテキスト入力欄が開いています。タップするとここから入力できます。</string>
+    <string name="casa_temp_ajuste">%1$s · ◀ ▶</string>
+    <string name="casa_ambiente">室温 %1$s</string>
+    <string name="casa_movimento">動きあり</string>
+    <string name="casa_sem_movimento">動きなし</string>
+    <string name="casa_molhado">水濡れ</string>
+    <string name="casa_seco">乾燥</string>
+    <string name="casa_fumaca">煙！</string>
+    <string name="casa_sem_fumaca">煙なし</string>
+    <string name="casa_dica_temp">温度</string>
+    <string name="casa_camera_abrindo">カメラを開いています…</string>
+    <string name="casa_camera_ver">TV に表示</string>
+    <plurals name="l51_uso_vezes">
+        <item quantity="other">%d 回</item>
+    </plurals>
+</resources>

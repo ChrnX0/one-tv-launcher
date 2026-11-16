@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_avisos.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rd_voltou_titulo">인터넷이 다시 연결됨</string>
+    <string name="rd_voltou_texto">%1$s 동안 끊겨 있었습니다(%2$s부터). 추정 원인: %3$s.</string>
+    <string name="rd_causa_wifi">TV의 Wi-Fi 연결이 끊김</string>
+    <string name="rd_causa_provedor">인터넷 통신사 또는 라우터</string>
+    <string name="rd_min">%1$d분</string>
+    <string name="rd_h_min">%1$d시간 %2$d분</string>
+    <string name="rd_disco_titulo">TV 저장 공간이 가득 차고 있음</string>
+    <string name="rd_disco_texto">이 속도라면 약 %1$d일 후 가득 찹니다(여유 공간 %2$d MB). 앱 캐시를 지우거나 사용하지 않는 앱을 제거하세요.</string>
+    <string name="pr_avisos_tv">TV에서</string>
+    <string name="mural_riscar">%1$s 지우기</string>
+</resources>

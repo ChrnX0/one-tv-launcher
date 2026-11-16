@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_acessivel.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acess_legenda_fundo">黑底字幕</string>
+    <string name="acess_legenda_amarela">黄色字幕</string>
+    <string name="acess_volume">频道间音量一致</string>
+    <string name="acess_voz">人声更清晰</string>
+    <string name="acess_volume_ligado">音量一致已开启：声音小的频道和电影会变大</string>
+    <string name="acess_volume_desligado">音量一致已关闭</string>
+    <string name="acess_voz_ligado">人声更清晰已开启</string>
+    <string name="acess_voz_desligado">人声更清晰已关闭</string>
+    <string name="acess_config_titulo">声音和字幕</string>
+    <string name="acess_config_texto">为视力或听力较弱的人准备。播放器的 ▼ 菜单中也有。</string>
+</resources>

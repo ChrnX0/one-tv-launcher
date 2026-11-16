@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_primeira.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pc_titulo">फ़ोन से सेट करें</string>
+    <string name="pc_linha_det">सुझाया गया। फ़ोन कैमरा एक कोड पर रखें: PIN, भाषा, लाइव TV, शहर और फ़िल्म सेवाएँ, 5 चरणों में।</string>
+    <string name="pc_instrucoes">फ़ोन कैमरा बगल के कोड पर रखें। फ़ोन 5 चरणों वाला सेटअप खोलता है।\n\nफ़ोन घर के Wi-Fi पर होना चाहिए। फ़ोन पर PIN बनाने तक यह स्क्रीन खुली रखें (%1$s बाकी)।</string>
+    <string name="pc_entrou">फ़ोन पर जारी रखें।</string>
+    <string name="pc_venceu">कोड की अवधि ख़त्म।\nनया दिखाने के लिए “%1$s” दबाएँ।</string>
+    <string name="pc_sem_rede">TV किसी नेटवर्क पर नहीं है।\nइसे घर के Wi-Fi से जोड़ें और फिर कोशिश करें।</string>
+</resources>

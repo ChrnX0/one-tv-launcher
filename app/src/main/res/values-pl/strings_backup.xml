@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (pl) de values/strings_backup.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="bkn_titulo">Automatyczna kopia zapasowa</string>
+    <string name="bkn_explica">Co noc, gdy telewizor jest bezczynny, zapisuje pełną kopię zabezpieczoną Twoim hasłem. Przechowywanych jest 7 ostatnich. Zapisz hasło: bez niego kopii nie da się otworzyć.</string>
+    <string name="bkn_ligado">wł.</string>
+    <string name="bkn_desligado">wył.</string>
+    <string name="bkn_sem_senha">wył. · najpierw ustaw hasło kopii</string>
+    <string name="bkn_senha">Hasło kopii</string>
+    <string name="bkn_senha_ok">ustawione · OK zmienia</string>
+    <string name="bkn_senha_falta">nieustawione · OK ustawia</string>
+    <string name="bkn_senha_nova">Hasło kopii (8 lub więcej znaków)</string>
+    <string name="bkn_senha_repetir">Wpisz hasło ponownie</string>
+    <string name="bkn_senha_curta">Hasło musi mieć od 8 do 128 znaków.</string>
+    <string name="bkn_senha_diferente">Hasła się nie zgadzają.</string>
+    <string name="bkn_senha_gravada">Hasło zapisane. Przechowuj je w bezpiecznym miejscu.</string>
+    <string name="bkn_senha_erro">Nie udało się zapisać hasła.</string>
+    <string name="bkn_horario">Godzina</string>
+    <string name="bkn_extra">Dodatkowa kopia</string>
+    <string name="bkn_destino_tv">Tylko telewizor</string>
+    <string name="bkn_destino_pendrive">Pendrive</string>
+    <string name="bkn_destino_nas">NAS (%1$s)</string>
+    <string name="bkn_agora">Utwórz kopię teraz</string>
+    <string name="bkn_ultimo">Ostatnia</string>
+    <string name="bkn_nunca">nigdy</string>
+    <string name="bkn_pin">PIN do zmiany kopii</string>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_backup.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="bkn_titulo">自動バックアップ</string>
+    <string name="bkn_explica">毎晩、TV が使われていない間に、パスワードで保護した完全バックアップを保存します。最新 7 つを保持します。パスワードを書き留めてください。パスワードがないとバックアップは開けません。</string>
+    <string name="bkn_ligado">オン</string>
+    <string name="bkn_desligado">オフ</string>
+    <string name="bkn_sem_senha">オフ · 先にバックアップのパスワードを設定してください</string>
+    <string name="bkn_senha">バックアップのパスワード</string>
+    <string name="bkn_senha_ok">設定済み · OK で変更</string>
+    <string name="bkn_senha_falta">未設定 · OK で設定</string>
+    <string name="bkn_senha_nova">バックアップのパスワード（8 文字以上）</string>
+    <string name="bkn_senha_repetir">パスワードをもう一度入力</string>
+    <string name="bkn_senha_curta">パスワードは 8〜128 文字にしてください。</string>
+    <string name="bkn_senha_diferente">2 つのパスワードが一致しません。</string>
+    <string name="bkn_senha_gravada">パスワードを保存しました。安全な場所に保管してください。</string>
+    <string name="bkn_senha_erro">パスワードを保存できませんでした。</string>
+    <string name="bkn_horario">時刻</string>
+    <string name="bkn_extra">追加コピー</string>
+    <string name="bkn_destino_tv">TV のみ</string>
+    <string name="bkn_destino_pendrive">USB メモリ</string>
+    <string name="bkn_destino_nas">NAS（%1$s）</string>
+    <string name="bkn_agora">今すぐバックアップ</string>
+    <string name="bkn_ultimo">前回</string>
+    <string name="bkn_nunca">なし</string>
+    <string name="bkn_pin">バックアップの変更に PIN</string>
+</resources>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (tr) de values/strings_ideias2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dormir_titulo">Yatma saati</string>
+    <string name="dormir_texto">Bu uygulamaya şu an izin verilmiyor. İyi geceler!</string>
+    <string name="dormir_pin">Yatma saatini değiştirmek için PIN</string>
+    <string name="dormir_inicio">Yatma saati: başlangıç</string>
+    <string name="dormir_fim">Yatma saati: bitiş</string>
+    <string name="dormir_teto">Yatma saati: en yüksek ses</string>
+    <string name="recado_link_titulo">Mesaj</string>
+    <string name="extras_HORA_DORMIR">Yatma saati (yalnızca izin verilen uygulamalar, sınırlı ses)</string>
+    <string name="extras_TOCANDO_AGORA">Şimdi çalıyor (çalanı okur)</string>
+    <string name="extras_MODO_LEVE">Hafif mod (daha kısa animasyonlar)</string>
+    <string name="extras_SOM_NAVEGACAO">Gezinme sesi</string>
+    <string name="extras_RECADO_LINK">Bağlantıyla mesaj (Home Assistant, TvOverlay)</string>
+    <string name="extras_caches">Uygulama önbelleklerini temizle</string>
+    <string name="extras_livre">%1$s boş</string>
+    <string name="extras_consumo">Uygulama başına internet (7 gün)</string>
+    <string name="extras_tocando">Şimdi çalıyor</string>
+    <string name="extras_aguarde">Bir dakika…</string>
+    <string name="dormir_dia">Yatma saati: gün</string>
+    <string name="dormir_todos">tümü (varsayılan)</string>
+    <string name="dormir_proprio">kendi programı</string>
+    <string name="dormir_segue">varsayılanı izler</string>
+    <string name="dormir_voltar_padrao">Yatma saati: bu günü varsayılana döndür</string>
+    <string name="extras_VER_TELA">Claude ekranı görebilsin (MCP ver_tela; TV bir uyarı gösterir)</string>
+    <string name="casa_titulo">Ev</string>
+    <string name="casa_sem_config">Home Assistant’ı telefon panelinde ayarlayın: Ekstralar sekmesi, Ev kartı.</string>
+    <string name="casa_carregando">Cihazlar yükleniyor…</string>
+    <string name="casa_vazio">Home Assistant’ta ışık, priz veya sahne yok.</string>
+    <string name="casa_google_home">Google Home</string>
+    <string name="casa_google_home_det">Google ışıkları ve kameraları</string>
+    <string name="casa_resumo">Home Assistant · %2$d cihazdan %1$d tanesi açık</string>
+    <string name="casa_resumo_so_cenas">Home Assistant · %1$d sahne</string>
+    <string name="casa_secao_cenas">Sahneler ve betikler</string>
+    <string name="casa_secao_aparelhos">Cihazlar</string>
+    <string name="casa_secao_google">Google</string>
+    <string name="casa_sem_comodo">Oda yok</string>
+    <string name="casa_ligado">Açık</string>
+    <string name="casa_desligado">Kapalı</string>
+    <string name="casa_aberta">Açık</string>
+    <string name="casa_fechada">Kapalı</string>
+    <string name="casa_rodar">Çalıştırmak için OK</string>
+    <string name="casa_indisponivel">Kullanılamıyor</string>
+    <string name="casa_sem_config_titulo">Evinizi bağlayın</string>
+    <string name="casa_dica_acionar">aç veya kapat</string>
+    <string name="casa_erro_simples">Home Assistant yanıt vermedi. Sunucusunun açık olduğunu kontrol edin ve yeniden deneyin.</string>
+    <string name="casa_erro">Home Assistant yanıt vermedi: %1$s</string>
+    <string name="casa_ligado_pct">Açık · %%%1$d</string>
+    <string name="casa_brilho_ajuste">Parlaklık %%%1$d · ◀ ▶</string>
+    <string name="casa_dica_brilho">parlaklık</string>
+    <string name="casa_tecla_segurar_ok">OK’Yİ BASILI TUT</string>
+</resources>

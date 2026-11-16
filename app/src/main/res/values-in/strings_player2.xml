@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_player2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="vod_tentando">Koneksi terputus. Mencoba lagi (%1$d dari %2$d)…</string>
+    <string name="vod_proximo_episodio">Episode berikutnya</string>
+    <string name="vod_proximo_agora">Tonton sekarang · %1$d dtk</string>
+    <string name="vod_proximo_cancelar">Batal</string>
+    <string name="vod_proximo_continuar">Terus menonton</string>
+    <string name="vod_ainda_assistindo">Masih menonton?</string>
+    <string name="vod_ainda_assistindo_texto">Beberapa episode diputar tanpa ada yang menyentuh remote, jadi episode berikutnya menunggu Anda.</string>
+    <string name="vod_desligar_ao_fim">Matikan TV saat ini selesai</string>
+    <string name="vod_desligar_ao_fim_ligado">TV mati saat ini selesai</string>
+    <string name="vod_desligar_ao_fim_desligado">TV tetap menyala saat ini selesai</string>
+    <string name="vod_legenda_tamanho_opcao">Ukuran subtitle: %1$s</string>
+    <string name="vod_legenda_tamanho_titulo">Ukuran subtitle</string>
+    <string-array name="vod_legenda_tamanhos">
+        <item>Kecil</item>
+        <item>Normal</item>
+        <item>Besar</item>
+        <item>Sangat besar</item>
+    </string-array>
+</resources>

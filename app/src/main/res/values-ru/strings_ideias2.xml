@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ru) de values/strings_ideias2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="dormir_titulo">Время сна</string>
+    <string name="dormir_texto">Это приложение сейчас не разрешено. Спокойной ночи!</string>
+    <string name="dormir_pin">PIN для изменения времени сна</string>
+    <string name="dormir_inicio">Время сна: начало</string>
+    <string name="dormir_fim">Время сна: конец</string>
+    <string name="dormir_teto">Время сна: макс. громкость</string>
+    <string name="recado_link_titulo">Сообщение</string>
+    <string name="extras_HORA_DORMIR">Время сна (только разрешённые приложения, ограниченная громкость)</string>
+    <string name="extras_TOCANDO_AGORA">Сейчас играет (читает, что воспроизводится)</string>
+    <string name="extras_MODO_LEVE">Лёгкий режим (короче анимации)</string>
+    <string name="extras_SOM_NAVEGACAO">Звук навигации</string>
+    <string name="extras_RECADO_LINK">Сообщение по ссылке (Home Assistant, TvOverlay)</string>
+    <string name="extras_caches">Очистить кеш приложений</string>
+    <string name="extras_livre">свободно %1$s</string>
+    <string name="extras_consumo">Интернет по приложениям (7 дней)</string>
+    <string name="extras_tocando">Сейчас играет</string>
+    <string name="extras_aguarde">Минутку…</string>
+    <string name="dormir_dia">Время сна: день</string>
+    <string name="dormir_todos">все (по умолчанию)</string>
+    <string name="dormir_proprio">своё расписание</string>
+    <string name="dormir_segue">как по умолчанию</string>
+    <string name="dormir_voltar_padrao">Время сна: сбросить этот день к умолчанию</string>
+    <string name="extras_VER_TELA">Разрешить Claude видеть экран (MCP ver_tela; ТВ показывает оповещение)</string>
+    <string name="casa_titulo">Дом</string>
+    <string name="casa_sem_config">Настройте Home Assistant в панели на телефоне: вкладка «Дополнительно», карточка «Дом».</string>
+    <string name="casa_carregando">Загрузка устройств…</string>
+    <string name="casa_vazio">В Home Assistant нет света, розеток или сцен.</string>
+    <string name="casa_google_home">Google Home</string>
+    <string name="casa_google_home_det">Свет и камеры Google</string>
+    <string name="casa_resumo">Home Assistant · включено %1$d из %2$d</string>
+    <string name="casa_resumo_so_cenas">Home Assistant · сцен: %1$d</string>
+    <string name="casa_secao_cenas">Сцены и скрипты</string>
+    <string name="casa_secao_aparelhos">Устройства</string>
+    <string name="casa_secao_google">Google</string>
+    <string name="casa_sem_comodo">Без комнаты</string>
+    <string name="casa_ligado">Вкл</string>
+    <string name="casa_desligado">Выкл</string>
+    <string name="casa_aberta">Открыто</string>
+    <string name="casa_fechada">Закрыто</string>
+    <string name="casa_rodar">OK — запустить</string>
+    <string name="casa_indisponivel">Недоступно</string>
+    <string name="casa_sem_config_titulo">Подключите свой дом</string>
+    <string name="casa_dica_acionar">вкл. или выкл.</string>
+    <string name="casa_erro_simples">Home Assistant не ответил. Проверьте, что сервер включён, и попробуйте снова.</string>
+    <string name="casa_erro">Home Assistant не ответил: %1$s</string>
+    <string name="casa_ligado_pct">Вкл · %1$d%%</string>
+    <string name="casa_brilho_ajuste">Яркость %1$d%% · ◀ ▶</string>
+    <string name="casa_dica_brilho">яркость</string>
+    <string name="casa_tecla_segurar_ok">УДЕРЖИВАЙТЕ OK</string>
+</resources>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_elenco.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="elenco_botao">Reparto</string>
+    <string name="elenco_titulo">Reparto</string>
+    <string name="elenco_carregando">Cargando el reparto…</string>
+    <string name="elenco_vazio">TMDB no tiene reparto para este título.</string>
+    <string name="elenco_dica">Recorre las personas: abajo, en qué más aparecen que esté en tu lista.</string>
+    <string name="elenco_na_lista">También en tu lista</string>
+    <string name="elenco_procurando">Buscando en tu lista…</string>
+    <string name="elenco_nada_na_lista">Nada más con esta persona en tu lista.</string>
+    <string name="elenco_filme">Película</string>
+    <string name="elenco_serie">Serie</string>
+    <string name="elenco_opcao_player">Reparto (¿quién es este actor?)</string>
+    <string name="anteriormente_titulo">Anteriormente en %1$s</string>
+    <string name="anteriormente_assistir">Ver %1$s</string>
+    <string name="anteriormente_pular_sempre">No mostrar nunca</string>
+    <string name="anteriormente_desligado">Resúmenes desactivados. Para activarlos de nuevo: mantén OK en un episodio.</string>
+    <string name="anteriormente_ligar">Mostrar los resúmenes “Anteriormente”</string>
+    <string name="idade_titulo">Edad máxima en modo infantil</string>
+    <string name="idade_det">Las películas y series clasificadas hasta esta edad aparecen desde cualquier categoría (clasificación de TMDB). Las sin clasificación, solo en categorías infantiles.</string>
+    <string name="idade_so_categorias">Solo categorías infantiles</string>
+    <string name="idade_livre">Todo público</string>
+    <string name="idade_anos">Hasta %1$d años</string>
+    <string name="onde_tambem_em">También en: %1$s (JustWatch)</string>
+    <string name="onde_fora">No está en tu lista · en %1$s</string>
+    <string name="onde_grupo">En otros lugares (JustWatch)</string>
+    <string name="legenda_auto_pronta">Subtítulos descargados automáticamente (hechos para este archivo) · ▼ para cambiar</string>
+    <string name="legenda_auto_pronta_nome">Subtítulos descargados automáticamente · ▼ para cambiar o ajustar el retraso</string>
+    <string name="legenda_auto_opcao">Descargar subtítulos automáticamente</string>
+    <string name="legenda_auto_ligada">Los subtítulos se descargarán cuando falten</string>
+    <string name="legenda_auto_desligada">Subtítulos automáticos desactivados</string>
+    <string name="legenda_trad_rotulo">Traducción automática</string>
+    <string name="legenda_trad_traduzindo">No hay subtítulos en tu idioma: traduciendo los de inglés en la TV…</string>
+    <string name="legenda_trad_parcial">Subtítulos traducidos en la TV (traducción automática). El resto se sigue traduciendo.</string>
+    <string name="legenda_trad_pronta">Traducción de subtítulos terminada</string>
+    <string name="legenda_trad_opcao">Traducir subtítulos en la TV cuando falten</string>
+    <string name="legenda_trad_ligada">Los subtítulos se traducirán en la TV cuando falten</string>
+    <string name="legenda_trad_desligada">Los subtítulos ya no se traducirán</string>
+    <string name="series_sinopse_mais">Sinopsis completa</string>
+    <string name="series_sinopse_menos">Sinopsis más corta</string>
+    <string name="series_continuar_curto">▶  Continuar %1$s</string>
+    <string name="series_episodios">Episodios</string>
+    <string name="series_trocar_temporada">Cambiar temporada</string>
+    <string name="fechar">Cerrar</string>
+</resources>

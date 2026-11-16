@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (it) de values/strings_drive.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="drv_titulo">Account Google Drive</string>
+    <string name="drv_destino">Google Drive</string>
+    <string name="drv_conta">Account Google Drive</string>
+    <string name="drv_nao_conectada">non connesso</string>
+    <string name="drv_passos">1. Sul telefono apri %1$s (o inquadra con la fotocamera il codice a destra).\n2. Accedi con un account Google presente su questa TV e digita:\n\n%2$s\n\n3. Consenti l’accesso a Google Drive. La TV vede solo i file che crea lei stessa (la cartella OneTV-backup), mai il resto del tuo Drive.\n\nQuesta schermata prosegue da sola.</string>
+    <string name="drv_ok">Fatto: %1$s è connesso. Scegli «Google Drive» nella riga Copia extra perché il backup notturno vada anche lì.</string>
+    <string name="drv_sem_google">L’accesso Google non è ancora configurato su questa TV.\n\nConfiguralo nel pannello web > scheda Claude (il tuo client OAuth, tipo «TVs and Limited Input devices»), attiva l’API di Google Drive nello stesso progetto Google Cloud e torna qui.</string>
+    <string name="drv_desconectar_pergunta">Disconnettere %1$s? Le copie già su Google Drive restano lì; la TV smette di inviarne di nuove.</string>
+    <string name="drv_desconectar">Disconnetti</string>
+    <string name="drv_restaurar">Ripristina da Google Drive</string>
+    <string name="drv_precisa_conta">Collega prima l’account Google Drive (riga sopra).</string>
+    <string name="drv_falhou">Non ha funzionato: %1$s</string>
+    <string name="drv_nenhuma">Non ci sono ancora copie nella cartella OneTV-backup di Google Drive.</string>
+    <string name="drv_escolha">Quale copia?</string>
+    <string name="drv_senha">Password del backup</string>
+    <string name="drv_senha_errada">Password del backup errata (o il file è stato modificato). Non è stato ripristinato nulla.</string>
+    <string name="drv_restaurado">Ripristinato. Il launcher si riavvia tra un momento.</string>
+</resources>

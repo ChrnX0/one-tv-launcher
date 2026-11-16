@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_player3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="abertura_marcar_inicio">Vorspannbeginn hier markieren (%1$s)</string>
+    <string name="abertura_marcar_fim">Vorspannende hier markieren (%1$s)</string>
+    <string name="abertura_apagar">Vorspannmarke löschen</string>
+    <string name="abertura_inicio_marcado">Vorspannbeginn bei %1$s markiert. Markiere jetzt das Ende im Menü ▼</string>
+    <string name="abertura_salva">Vorspann gespeichert: %1$s bis %2$s. Die nächsten Folgen bieten an, ihn zu überspringen</string>
+    <string name="abertura_falta_inicio">Markiere zuerst den Vorspannbeginn</string>
+    <string name="abertura_invalida">Das sieht nicht wie ein Vorspann aus: er muss 10 s bis 5 Min. dauern und in den ersten 15 Min. beginnen</string>
+    <string name="abertura_apagada">Vorspannmarke gelöscht</string>
+    <string name="abertura_pular">Vorspann überspringen · OK</string>
+</resources>

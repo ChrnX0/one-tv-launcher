@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_comando.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="cc_vazia">Ketik yang ingin dilakukan TV</string>
+    <string name="cc_nao_entendi">Saya tidak mengerti. Coba seperti:</string>
+    <string name="cc_exemplo_1">putar Globo</string>
+    <string name="cc_exemplo_2">buka YouTube</string>
+    <string name="cc_exemplo_3">matikan dalam 30 menit</string>
+    <string name="cc_abrindo">Membuka %1$s</string>
+    <string name="cc_canal">Memutar %1$s</string>
+    <string name="cc_o_que_passa">Yang tayang di %1$s</string>
+    <string name="cc_timer">Pengingat dalam %1$d menit</string>
+    <string name="cc_desligar">TV mati dalam %1$d menit</string>
+    <string name="cc_desligar_cancelar">Timer tidur dibatalkan</string>
+    <string name="cc_volume_subir">Volume naik</string>
+    <string name="cc_volume_descer">Volume turun</string>
+    <string name="cc_mudo">Bisukan/bunyikan</string>
+    <string name="cc_pausar">Menjeda</string>
+    <string name="cc_continuar">Memutar</string>
+    <string name="cc_tela_previsao">prakiraan</string>
+    <string name="cc_tela_agenda">kalender</string>
+    <string name="cc_tela_despertador">alarm</string>
+    <string name="cc_tela_configuracoes">setelan launcher</string>
+    <string name="cc_tela_inicio">layar utama</string>
+    <string name="cc_confirme_na_tv">%1$s: konfirmasi dengan OK di TV</string>
+    <string name="cc_nao_fiz">%1$s: tidak dilakukan (%2$s)</string>
+    <string name="cc_aviso_titulo">Panel ponsel</string>
+</resources>

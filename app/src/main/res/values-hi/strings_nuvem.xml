@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_nuvem.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_sub_nuvem">आपके क्लाउड के वीडियो, संगीत और फ़ोटो</string>
+    <string name="rede_nuvem_seguir">जारी रखें</string>
+    <string name="rede_nuvem_entrar">साइन इन करें</string>
+    <string name="rede_nuvem_pedindo">कोड माँगा जा रहा है…</string>
+    <string name="rede_nuvem_esperando">फ़ोन पर आपकी पुष्टि का इंतज़ार…</string>
+    <string name="rede_nuvem_salvando">साइन इन हो रहा है…</string>
+    <string name="rede_nuvem_recusado">सेवा ने मना किया। ऐप id जाँचें और फिर कोशिश करें।</string>
+    <string name="rede_erro_nuvem_login">इस खाते की अनुमति समाप्त हो गई या हटा दी गई। खाता हटाएँ (OK दबाए रखें) और फिर साइन इन करें।</string>
+    <string name="rede_od_titulo">OneDrive: Microsoft पर आपका ऐप</string>
+    <string name="rede_od_explica">एक बार, कंप्यूटर पर: entra.microsoft.com › App registrations › New registration। खाता प्रकारों में वह चुनें जिसमें निजी Microsoft खाते शामिल हों। फिर Authentication में “Allow public client flows” चालू करें। “Application (client) ID” कॉपी करके यहाँ टाइप करें (पैनल में फ़ोन से टाइप कर सकते हैं)।</string>
+    <string name="rede_od_id">Application (client) ID</string>
+    <string name="rede_od_id_erro">ID ऐसा दिखता है: 00000000-0000-0000-0000-000000000000।</string>
+    <string name="rede_od_codigo_explica">फ़ोन या कंप्यूटर पर microsoft.com/link खोलें (या कैमरा QR पर रखें) और नीचे का कोड टाइप करें। TV सिर्फ़ फ़ाइलें पढ़ने की अनुमति माँगता है।</string>
+    <string name="rede_od_erro_app">Microsoft ने यह ऐप स्वीकार नहीं किया। ID जाँचें और कि “Allow public client flows” चालू है।</string>
+    <string name="rede_dbx_explica">एक बार, कंप्यूटर पर: dropbox.com/developers/apps › Create app › Scoped access › Full Dropbox। Permissions टैब में files.metadata.read, files.content.read और account_info.read चुनें (और files.content.write, अगर रात का बैकअप Dropbox में चाहिए) और सेव करें (Submit)। “App key” कॉपी करके यहाँ टाइप करें।</string>
+    <string name="rede_dbx_chave">App key</string>
+    <string name="rede_dbx_chave_erro">App key में सिर्फ़ छोटे अक्षर और अंक होते हैं।</string>
+    <string name="rede_dbx_codigo_explica">फ़ोन कैमरा QR पर रखें, Dropbox में साइन इन करें और Allow दबाएँ। Dropbox एक कोड दिखाता है: उसे यहाँ टाइप करें (पैनल में फ़ोन से टाइप कर सकते हैं)।</string>
+    <string name="rede_dbx_codigo">Dropbox कोड</string>
+    <string name="rede_dbx_codigo_erro">Dropbox का दिखाया पूरा कोड टाइप करें।</string>
+    <string name="rede_box_explica">एक बार, कंप्यूटर पर: app.box.com/developers/console › Create New App › Custom App › User Authentication (OAuth 2.0)। Configuration टैब में OAuth 2.0 Redirect URI में %1$s डालें, “Read all files and folders” चुनें (और “Write all files and folders”, अगर रात का बैकअप Box में चाहिए)। सेव करें, फिर Client ID और Client Secret यहाँ कॉपी करें।</string>
+    <string name="rede_box_id">Client ID</string>
+    <string name="rede_box_segredo">Client Secret</string>
+    <string name="rede_box_erro">Client ID और Client Secret में सिर्फ़ अक्षर और अंक होते हैं। दोनों Configuration टैब से कॉपी करें।</string>
+    <string name="rede_volta_sem_rede">TV घरेलू नेटवर्क पर नहीं है। इसे जोड़ें और फिर कोशिश करें।</string>
+    <string name="rede_volta_explica">TV वाले Wi‑Fi पर मौजूद फ़ोन का कैमरा QR पर रखें, %1$s में साइन इन करें और पहुँच दें। फ़ोन अपने-आप TV पर लौटता है: कुछ टाइप नहीं करना।</string>
+    <string name="rede_volta_porta">TV पर पोर्ट %1$d व्यस्त है। दूसरे ऐप बंद करें और फिर कोशिश करें।</string>
+    <string name="rede_gd_explica">एक बार, कंप्यूटर पर, आपके Google Cloud प्रोजेक्ट (console.cloud.google.com) में: APIs &amp; Services › Library › “Google Drive API” चालू करें। Google Auth Platform › Data Access में …/auth/drive.readonly स्कोप जोड़ें। Clients › Create client › Web application में Authorized redirect URIs में %1$s डालें। Client ID और Client secret यहाँ कॉपी करें।</string>
+    <string name="rede_gd_id">Client ID (…apps.googleusercontent.com)</string>
+    <string name="rede_gd_segredo">Client secret</string>
+    <string name="rede_gd_erro">दोनों क्लाइंट पेज से कॉपी करें: ID .apps.googleusercontent.com पर ख़त्म होता है और secret आम तौर पर GOCSPX- से शुरू होता है।</string>
+    <string name="rede_gd_aviso">अगर Google कहे कि ऐप सत्यापित नहीं है, तो Advanced › Go to दबाएँ (यह आपका अपना ऐप है)।</string>
+</resources>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_familia2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="an_rotulo">생일</string>
+    <string name="an_hoje">오늘은 %s의 생일입니다</string>
+    <string name="an_amanha">내일은 %s의 생일입니다</string>
+    <string name="tp_calor">폭염</string>
+    <string name="tp_calor_texto">오늘 최고 %d° · 물을 충분히 드세요</string>
+    <string name="tp_frio">한파</string>
+    <string name="tp_frio_texto">오늘 밤 최저 %d° · 따뜻하게 입으세요</string>
+    <string name="tp_cfg">더위 및 추위 알림</string>
+    <string name="tp_cfg_det">오늘 %1$d°에 도달하거나 오늘 밤 %2$d°까지 내려가면 모든 앱 위에 카드 표시</string>
+    <string name="mu_ok_lido">OK로 읽음 표시</string>
+    <string name="mu_ok_nao_lido">읽음 · OK로 읽지 않음 표시</string>
+    <string name="mu_lido_desc">메시지, 읽음: %s. OK로 읽지 않음 표시.</string>
+    <string name="mu_nao_lido_desc">메시지: %s. OK로 읽음 표시.</string>
+    <string name="mu_apagar">메시지 삭제: %s</string>
+    <string name="extras_RETROSPECTIVA_ANO">올해의 내 TV(12월에 화면 보호기에서)</string>
+    <string name="extras_CARTOES_TRANSPARENTES">선택되지 않았을 때 앱 카드를 반투명하게</string>
+    <string name="extras_ENTRADAS_TV">앱 줄에 HDMI 입력 표시(입력 단자가 있는 TV만)</string>
+    <string name="ra_titulo">%d년 나의 TV</string>
+    <string name="ra_canal">가장 많이 본 채널: %1$s(%2$s)</string>
+    <string name="ra_coluna">라디오</string>
+    <string name="ra_dica_ouvir">듣기</string>
+    <string name="ra_dica_favoritar">즐겨찾기</string>
+    <string name="ra_carregando">방송국 로드 중…</string>
+    <string name="ra_subtitulo">전 세계 방송국 · 리모컨의 1–9로 즐겨찾기 재생</string>
+    <string name="ra_sem_catalogo">라디오 카탈로그가 응답하지 않았습니다. 즐겨찾기는 계속 작동합니다.</string>
+    <string name="ra_nada">방송국을 찾을 수 없습니다.</string>
+    <string name="ra_continuar">계속</string>
+    <string name="ra_pausar">일시정지</string>
+    <string name="ra_favoritas">즐겨찾기</string>
+    <string name="ra_procurar">찾기</string>
+    <string name="ra_buscar">이름으로 검색</string>
+    <string name="ra_buscar_det">전 세계 모든 방송국</string>
+    <string name="ra_generos">장르</string>
+    <string name="ra_paises">다른 국가</string>
+    <string name="ra_paises_det">방송국이 가장 많은 국가</string>
+    <string name="ra_perto">내 주변</string>
+    <string name="ra_mais_ouvidas">%s에서 가장 많이 듣는 방송국</string>
+    <string name="ra_mundo">전 세계에서 가장 많이 듣는 방송국</string>
+    <string name="ra_resultado">검색: %s</string>
+    <string name="ra_favoritada">즐겨찾기에 추가됨</string>
+    <string name="ra_desfavoritada">즐겨찾기에서 삭제됨</string>
+    <string name="ra_falhou">이 방송국은 지금 재생되지 않습니다. 다른 방송국을 선택하세요.</string>
+    <plurals name="an_anos">
+        <item quantity="other">%d세가 됨</item>
+    </plurals>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_casa_cor.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="casa_dica_brilho_cor">चमक और रंग</string>
+    <string name="casa_brilho_ajuste_cor">चमक %1$d%% · ◀ ▶ · रंग ▲ ▼</string>
+    <string name="casa_cor_ajuste">%1$s · ▲ ▼</string>
+    <string name="casa_cor_quente">गर्म सफ़ेद</string>
+    <string name="casa_cor_neutra">सामान्य सफ़ेद</string>
+    <string name="casa_cor_fria">ठंडा सफ़ेद</string>
+    <string name="casa_cor_vermelho">लाल</string>
+    <string name="casa_cor_laranja">नारंगी</string>
+    <string name="casa_cor_amarelo">पीला</string>
+    <string name="casa_cor_verde">हरा</string>
+    <string name="casa_cor_azul">नीला</string>
+    <string name="casa_cor_roxo">बैंगनी</string>
+    <string name="casa_cor_rosa">गुलाबी</string>
+</resources>

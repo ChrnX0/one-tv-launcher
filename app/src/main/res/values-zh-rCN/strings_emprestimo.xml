@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_emprestimo.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="emp_secao">借出系统权限</string>
+    <string name="emp_titulo">把 Shell 借给其他应用 (Shizuku)</string>
+    <string name="emp_titulo_det">为 Shizuku 制作的应用无需安装 Shizuku 即可运行。每个应用第一次使用时会在电视上请求，并需要 PIN。</string>
+    <string name="emp_modo_desligado">关闭</string>
+    <string name="emp_modo_sob_demanda">应用需要时</string>
+    <string name="emp_modo_sempre">始终开启</string>
+    <string name="emp_oficial">这台电视已安装 Shizuku 应用，所以启动器不会干预。卸载它即可使用启动器自带的。</string>
+    <string name="emp_plano">属于付费方案。</string>
+    <string name="emp_negar">拒绝</string>
+    <string name="emp_permitir">始终允许</string>
+    <string name="emp_pedido_titulo">允许 %1$s 使用启动器的系统权限吗？</string>
+    <string name="emp_pedido_texto">该应用将能做 adb 能做的事：安装和删除应用、更改系统设置等。只允许你信任的应用。之后可以在网页面板中撤销。</string>
+    <string name="emp_pin_titulo">输入面板 PIN 以允许</string>
+    <string name="emp_sem_pin">请先设置面板 PIN（设置，网页面板）。</string>
+    <string name="emd_titulo">把所有者控制权借给其他应用 (Dhizuku)</string>
+    <string name="emd_titulo_det">为 Dhizuku 制作的应用会使用启动器的所有者控制权。每个应用都会在电视上请求，并需要 PIN。任何应用都不能移除启动器的所有者身份或清除电视。</string>
+    <string name="emd_ligado">开启</string>
+    <string name="emd_sem_dono">启动器不是这台电视的所有者 (Device Owner)，所以没有可借出的权限。</string>
+    <string name="emd_pedido_titulo">允许 %1$s 使用启动器的所有者控制权吗？</string>
+    <string name="emd_pedido_texto">选择“允许”后，该应用可以隐藏和屏蔽应用，并更改电视的权限和规则，但绝不能移除启动器的所有者身份或清除电视。“完全权限”让应用以启动器身份运行并读取其数据：只给你完全信任的应用。可以在网页面板中撤销。</string>
+    <string name="emd_total">完全权限</string>
+    <string name="emd_pin_total">完全权限：该应用将读取启动器的数据。面板 PIN</string>
+</resources>

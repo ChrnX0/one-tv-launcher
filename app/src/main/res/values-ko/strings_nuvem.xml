@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_nuvem.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="rede_sub_nuvem">클라우드의 동영상, 음악, 사진</string>
+    <string name="rede_nuvem_seguir">계속</string>
+    <string name="rede_nuvem_entrar">로그인</string>
+    <string name="rede_nuvem_pedindo">코드 요청 중…</string>
+    <string name="rede_nuvem_esperando">휴대폰에서 확인하기를 기다리는 중…</string>
+    <string name="rede_nuvem_salvando">로그인 중…</string>
+    <string name="rede_nuvem_recusado">서비스가 거부했습니다. 앱 ID를 확인하고 다시 시도하세요.</string>
+    <string name="rede_erro_nuvem_login">이 계정의 권한이 만료되었거나 삭제되었습니다. 계정을 삭제하고(OK 길게) 다시 로그인하세요.</string>
+    <string name="rede_od_titulo">OneDrive: Microsoft의 내 앱</string>
+    <string name="rede_od_explica">컴퓨터에서 한 번만: entra.microsoft.com › 앱 등록 › 새 등록. 계정 유형은 개인 Microsoft 계정이 포함된 항목을 선택하세요. 그런 다음 인증에서 ‘공용 클라이언트 흐름 허용’을 켜세요. ‘애플리케이션(클라이언트) ID’를 복사하여 여기에 입력하세요(패널에서 휴대폰으로 입력 가능).</string>
+    <string name="rede_od_id">애플리케이션(클라이언트) ID</string>
+    <string name="rede_od_id_erro">ID 형식은 00000000-0000-0000-0000-000000000000과 같습니다.</string>
+    <string name="rede_od_codigo_explica">휴대폰이나 컴퓨터에서 microsoft.com/link를 열고(또는 카메라로 QR 스캔) 아래 코드를 입력하세요. TV는 파일 읽기 권한만 요청합니다.</string>
+    <string name="rede_od_erro_app">Microsoft가 이 앱을 허용하지 않았습니다. ID와 ‘공용 클라이언트 흐름 허용’이 켜져 있는지 확인하세요.</string>
+    <string name="rede_dbx_explica">컴퓨터에서 한 번만: dropbox.com/developers/apps › Create app › Scoped access › Full Dropbox. Permissions 탭에서 files.metadata.read, files.content.read, account_info.read를 체크하고(매일 밤 백업을 Dropbox에 저장하려면 files.content.write도) 저장(Submit)하세요. ‘App key’를 복사하여 여기에 입력하세요.</string>
+    <string name="rede_dbx_chave">App key</string>
+    <string name="rede_dbx_chave_erro">App key는 영문 소문자와 숫자로만 이루어져 있습니다.</string>
+    <string name="rede_dbx_codigo_explica">휴대폰 카메라로 QR을 스캔하고 Dropbox에 로그인한 뒤 허용을 누르세요. Dropbox가 코드를 표시합니다: 여기에 입력하세요(패널에서 휴대폰으로 입력 가능).</string>
+    <string name="rede_dbx_codigo">Dropbox 코드</string>
+    <string name="rede_dbx_codigo_erro">Dropbox가 표시한 코드 전체를 입력하세요.</string>
+    <string name="rede_box_explica">컴퓨터에서 한 번만: app.box.com/developers/console › Create New App › Custom App › User Authentication (OAuth 2.0). Configuration 탭의 OAuth 2.0 Redirect URI에 %1$s을(를) 넣고 ‘Read all files and folders’를 체크하세요(매일 밤 백업을 Box에 저장하려면 ‘Write all files and folders’도). 저장한 후 Client ID와 Client Secret을 여기에 복사하세요.</string>
+    <string name="rede_box_id">Client ID</string>
+    <string name="rede_box_segredo">Client Secret</string>
+    <string name="rede_box_erro">Client ID와 Client Secret은 영문자와 숫자로만 이루어져 있습니다. Configuration 탭에서 둘 다 복사하세요.</string>
+    <string name="rede_volta_sem_rede">TV가 홈 네트워크에 연결되어 있지 않습니다. 연결 후 다시 시도하세요.</string>
+    <string name="rede_volta_explica">TV와 같은 Wi‑Fi에 연결된 휴대폰 카메라로 QR을 스캔하고 %1$s에 로그인한 뒤 액세스를 허용하세요. 휴대폰이 자동으로 TV로 돌아오며 아무것도 입력할 필요가 없습니다.</string>
+    <string name="rede_volta_porta">TV의 포트 %1$d이(가) 사용 중입니다. 다른 앱을 닫고 다시 시도하세요.</string>
+    <string name="rede_gd_explica">컴퓨터에서 한 번만, Google Cloud 프로젝트(console.cloud.google.com)에서: APIs &amp; Services › Library › ‘Google Drive API’ 켜기. Google Auth Platform › Data Access에서 …/auth/drive.readonly 범위를 추가하세요. Clients › Create client › Web application의 Authorized redirect URIs에 %1$s을(를) 넣으세요. Client ID와 Client secret을 여기에 복사하세요.</string>
+    <string name="rede_gd_id">Client ID(…apps.googleusercontent.com)</string>
+    <string name="rede_gd_segredo">Client secret</string>
+    <string name="rede_gd_erro">클라이언트 페이지에서 둘 다 복사하세요: ID는 .apps.googleusercontent.com으로 끝나고, secret은 보통 GOCSPX-로 시작합니다.</string>
+    <string name="rede_gd_aviso">Google이 앱이 확인되지 않았다고 하면 고급 › 이동(내 앱입니다)을 누르세요.</string>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ja) de values/strings_acessivel.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acess_legenda_fundo">黒背景の字幕</string>
+    <string name="acess_legenda_amarela">黄色の字幕</string>
+    <string name="acess_volume">チャンネル間の音量をそろえる</string>
+    <string name="acess_voz">声を聞き取りやすく</string>
+    <string name="acess_volume_ligado">音量そろえ オン: 音の小さいチャンネルや映画が大きくなります</string>
+    <string name="acess_volume_desligado">音量そろえ オフ</string>
+    <string name="acess_voz_ligado">声を聞き取りやすく: オン</string>
+    <string name="acess_voz_desligado">声を聞き取りやすく: オフ</string>
+    <string name="acess_config_titulo">音声と字幕</string>
+    <string name="acess_config_texto">目や耳が不自由な方向け。プレーヤーの ▼ メニューにもあります。</string>
+</resources>

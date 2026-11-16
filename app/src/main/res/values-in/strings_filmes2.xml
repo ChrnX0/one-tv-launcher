@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (in) de values/strings_filmes2.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="filmes_filtro">Filter</string>
+    <string name="filmes_filtro_titulo">Filter film</string>
+    <string name="filmes_filtro_cabecalho">%1$s · FILTER: %2$s</string>
+    <string name="filmes_filtro_genero">Genre: %1$s</string>
+    <string name="filmes_filtro_epoca">Periode: %1$s</string>
+    <string name="filmes_filtro_nota">Rating minimum: %1$s</string>
+    <string name="filmes_filtro_nao_vistos">Hanya yang belum ditonton: %1$s</string>
+    <string name="filmes_filtro_limpar">Hapus filter</string>
+    <string name="filmes_filtro_qualquer">Semua</string>
+    <string name="filmes_filtro_sim">Ya</string>
+    <string name="filmes_filtro_nao">Tidak</string>
+    <string name="filmes_filtro_decada">%1$d-an</string>
+    <string name="filmes_filtro_nota_min">%1$d+</string>
+    <string name="filmes_filtro_nao_vistos_curto">belum ditonton</string>
+    <string name="filmes_filtro_sem_genero">Tidak ada kategori di daftar ini yang menyebut genre</string>
+    <string name="filmes_filtro_vazio">Tidak ada film yang cocok dengan filter ini di kategori ini</string>
+    <string name="filmes_sorteio">Kejutkan saya</string>
+    <string name="filmes_sorteio_vazio">Tidak ada film untuk dipilih di sini</string>
+    <string name="filmes_colecao">Koleksi film ini</string>
+    <string name="filmes_colecao_cat">Koleksi: %1$s</string>
+    <string name="genero_acao">Aksi</string>
+    <string name="genero_aventura">Petualangan</string>
+    <string name="genero_comedia">Komedi</string>
+    <string name="genero_drama">Drama</string>
+    <string name="genero_terror">Horor</string>
+    <string name="genero_suspense">Thriller</string>
+    <string name="genero_romance">Romantis</string>
+    <string name="genero_ficcao">Fiksi ilmiah</string>
+    <string name="genero_fantasia">Fantasi</string>
+    <string name="genero_animacao">Animasi</string>
+    <string name="genero_infantil">Anak dan keluarga</string>
+    <string name="genero_documentario">Dokumenter</string>
+    <string name="genero_crime">Kriminal</string>
+    <string name="genero_guerra">Perang</string>
+    <string name="genero_faroeste">Western</string>
+    <string name="genero_musical">Musikal</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_ideias3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="extras_SONO_SUAVE">धीमा बंद (स्लीप टाइमर स्क्रीन धीमी और वॉल्यूम कम करता है)</string>
+    <string name="extras_MURAL">स्क्रीन सेवर पर परिवार बोर्ड</string>
+    <string name="extras_PRESENCA">सबके घर से जाने पर बंद करें (UniFi राउटर)</string>
+    <string name="extras_HOJE_NA_TV">खोज स्क्रीन में “आज TV पर”</string>
+    <string name="extras_RETROSPECTIVA">साप्ताहिक सार (रविवार रात)</string>
+    <string name="extras_MODO_SIMPLES">आसान मोड (बड़े कार्ड, बोले गए नाम)</string>
+</resources>

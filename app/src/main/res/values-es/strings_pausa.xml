@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_pausa.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pausa_pausar">Pausar la TV en vivo</string>
+    <string name="pausa_continuar">Continuar</string>
+    <string name="pausa_ao_vivo">Volver al vivo</string>
+    <string name="pausa_selo">⏸ EN PAUSA · OK continúa</string>
+    <string name="pausa_atrasado_min">%1$d MIN ATRASADO · ▶ en vivo</string>
+    <string name="pausa_atrasado_seg">%1$d S ATRASADO · ▶ en vivo</string>
+    <string name="pausa_voltou">En pausa más de lo que cabe en la memoria: de vuelta al vivo</string>
+</resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (ko) de values/strings_emprestimo.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="emp_secao">시스템 권한 빌려주기</string>
+    <string name="emp_titulo">다른 앱에 셸 빌려주기 (Shizuku)</string>
+    <string name="emp_titulo_det">Shizuku용 앱이 Shizuku를 설치하지 않아도 작동합니다. 각 앱은 처음에 TV에서 PIN과 함께 요청합니다.</string>
+    <string name="emp_modo_desligado">끔</string>
+    <string name="emp_modo_sob_demanda">앱이 필요할 때</string>
+    <string name="emp_modo_sempre">항상 켬</string>
+    <string name="emp_oficial">이 TV에 Shizuku 앱이 설치되어 있어 런처는 관여하지 않습니다. 런처의 기능을 쓰려면 그 앱을 제거하세요.</string>
+    <string name="emp_plano">유료 요금제에 포함됩니다.</string>
+    <string name="emp_negar">거부</string>
+    <string name="emp_permitir">항상 허용</string>
+    <string name="emp_pedido_titulo">%1$s에서 런처의 시스템 권한을 사용하도록 허용할까요?</string>
+    <string name="emp_pedido_texto">앱이 adb처럼 앱 설치와 삭제, 시스템 설정 변경 등을 할 수 있게 됩니다. 신뢰하는 앱만 허용하세요. 나중에 웹 패널에서 취소할 수 있습니다.</string>
+    <string name="emp_pin_titulo">허용하려면 패널 PIN</string>
+    <string name="emp_sem_pin">먼저 패널 PIN을 설정하세요 (설정, 웹 패널).</string>
+    <string name="emd_titulo">다른 앱에 소유자 권한 빌려주기 (Dhizuku)</string>
+    <string name="emd_titulo_det">Dhizuku용 앱이 런처의 소유자 권한을 사용합니다. 각 앱은 TV에서 PIN과 함께 요청합니다. 어떤 앱도 런처를 소유자에서 제거하거나 TV를 초기화할 수 없습니다.</string>
+    <string name="emd_ligado">켬</string>
+    <string name="emd_sem_dono">런처가 이 TV의 소유자(Device Owner)가 아니므로 빌려줄 것이 없습니다.</string>
+    <string name="emd_pedido_titulo">%1$s에서 런처의 소유자 권한을 사용하도록 허용할까요?</string>
+    <string name="emd_pedido_texto">“허용”하면 앱이 앱을 숨기거나 차단하고 TV의 권한과 규칙을 바꿀 수 있지만, 런처를 소유자에서 제거하거나 TV를 초기화할 수는 없습니다. “전체 권한”은 앱이 런처로 실행되어 데이터를 읽게 합니다. 완전히 신뢰하는 앱에만 사용하세요. 웹 패널에서 취소할 수 있습니다.</string>
+    <string name="emd_total">전체 권한</string>
+    <string name="emd_pin_total">전체 권한: 앱이 런처의 데이터를 읽습니다. 패널 PIN</string>
+</resources>

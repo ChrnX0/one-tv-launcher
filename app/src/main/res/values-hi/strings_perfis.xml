@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (hi) de values/strings_perfis.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="perfil_aviso_titulo">प्रोफ़ाइल: %1$s</string>
+    <string name="perfil_aviso_texto">इस प्रोफ़ाइल के पसंदीदा, जारी रखें और ऐप क्रम</string>
+    <string name="perfil_aviso_crianca">बच्चे की प्रोफ़ाइल: बच्चों का मोड और सोने का समय चालू</string>
+    <string name="perfil_crianca">बच्चे की प्रोफ़ाइल</string>
+    <string name="perfil_crianca_linha">बच्चे की प्रोफ़ाइल · %1$s: %2$s</string>
+    <string name="perfil_crianca_nao">बंद</string>
+    <string name="perfil_crianca_sem_pin">पहले वेब पैनल PIN सेट करें: यही माता-पिता का PIN है जो बच्चे की प्रोफ़ाइल की रक्षा करता है</string>
+    <string name="perfil_pin_sair">बच्चे की प्रोफ़ाइल से निकलने के लिए माता-पिता का PIN</string>
+    <string name="perfil_pin_marcar">बच्चे की प्रोफ़ाइल बदलने के लिए माता-पिता का PIN</string>
+</resources>

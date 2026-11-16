@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_ideias3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="extras_SONO_SUAVE">温和关机（睡眠定时器调暗屏幕并降低音量）</string>
+    <string name="extras_MURAL">屏保上的家庭留言板</string>
+    <string name="extras_PRESENCA">所有人离家时关机（UniFi 路由器）</string>
+    <string name="extras_HOJE_NA_TV">搜索界面中的“今日电视”</string>
+    <string name="extras_RETROSPECTIVA">每周回顾（周日晚上）</string>
+    <string name="extras_MODO_SIMPLES">简易模式（大卡片，朗读名称）</string>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_drive.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="drv_titulo">Google 云端硬盘账号</string>
+    <string name="drv_destino">Google 云端硬盘</string>
+    <string name="drv_conta">Google 云端硬盘账号</string>
+    <string name="drv_nao_conectada">未连接</string>
+    <string name="drv_passos">1. 在手机上打开 %1$s（或用摄像头扫描右侧二维码）。\n2. 用此电视上的 Google 账号登录并输入：\n\n%2$s\n\n3. 允许访问 Google 云端硬盘。电视只能看到它自己创建的文件（OneTV-backup 文件夹），绝不会看到云端硬盘中的其他内容。\n\n此界面会自动继续。</string>
+    <string name="drv_ok">完成：%1$s 已连接。在“额外副本”一行中选择“Google 云端硬盘”，夜间备份也会存到那里。</string>
+    <string name="drv_sem_google">此电视尚未设置 Google 登录。\n\n请在网页面板 > Claude 标签页中设置（使用你自己的 OAuth 客户端，类型为“TVs and Limited Input devices”），在同一个 Google Cloud 项目中开启 Google Drive API，然后回到这里。</string>
+    <string name="drv_desconectar_pergunta">断开 %1$s？已在 Google 云端硬盘中的副本会保留；电视将不再发送新的副本。</string>
+    <string name="drv_desconectar">断开连接</string>
+    <string name="drv_restaurar">从 Google 云端硬盘恢复</string>
+    <string name="drv_precisa_conta">请先连接 Google 云端硬盘账号（上面一行）。</string>
+    <string name="drv_falhou">未成功：%1$s</string>
+    <string name="drv_nenhuma">Google 云端硬盘的 OneTV-backup 文件夹中还没有副本。</string>
+    <string name="drv_escolha">选择哪个副本？</string>
+    <string name="drv_senha">备份密码</string>
+    <string name="drv_senha_errada">备份密码错误（或文件已被修改）。未恢复任何内容。</string>
+    <string name="drv_restaurado">已恢复。启动器即将重启。</string>
+</resources>

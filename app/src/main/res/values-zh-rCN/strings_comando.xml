@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (zh-rCN) de values/strings_comando.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="cc_vazia">输入你想让电视做的事</string>
+    <string name="cc_nao_entendi">没听懂。可以试试这样说：</string>
+    <string name="cc_exemplo_1">放 Globo</string>
+    <string name="cc_exemplo_2">打开 YouTube</string>
+    <string name="cc_exemplo_3">30 分钟后关机</string>
+    <string name="cc_abrindo">正在打开 %1$s</string>
+    <string name="cc_canal">正在切换到 %1$s</string>
+    <string name="cc_o_que_passa">%1$s 正在播什么</string>
+    <string name="cc_timer">%1$d 分钟后提醒</string>
+    <string name="cc_desligar">电视将在 %1$d 分钟后关闭</string>
+    <string name="cc_desligar_cancelar">睡眠定时器已取消</string>
+    <string name="cc_volume_subir">调高音量</string>
+    <string name="cc_volume_descer">调低音量</string>
+    <string name="cc_mudo">静音开/关</string>
+    <string name="cc_pausar">正在暂停</string>
+    <string name="cc_continuar">正在播放</string>
+    <string name="cc_tela_previsao">天气预报</string>
+    <string name="cc_tela_agenda">日历</string>
+    <string name="cc_tela_despertador">闹钟</string>
+    <string name="cc_tela_configuracoes">启动器设置</string>
+    <string name="cc_tela_inicio">主屏幕</string>
+    <string name="cc_confirme_na_tv">%1$s：请在电视上按 OK 确认</string>
+    <string name="cc_nao_fiz">%1$s：未执行（%2$s）</string>
+    <string name="cc_aviso_titulo">手机面板</string>
+</resources>

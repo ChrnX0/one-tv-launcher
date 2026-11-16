@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (es) de values/strings_acessivel.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="acess_legenda_fundo">Subtítulos con fondo negro</string>
+    <string name="acess_legenda_amarela">Subtítulos amarillos</string>
+    <string name="acess_volume">Volumen parejo entre canales</string>
+    <string name="acess_voz">Voces más claras</string>
+    <string name="acess_volume_ligado">Volumen parejo activado: canales y películas bajos suben</string>
+    <string name="acess_volume_desligado">Volumen parejo desactivado</string>
+    <string name="acess_voz_ligado">Voces más claras activadas</string>
+    <string name="acess_voz_desligado">Voces más claras desactivadas</string>
+    <string name="acess_config_titulo">Sonido y subtítulos</string>
+    <string name="acess_config_texto">Para quien ve u oye menos. También en el menú ▼ del reproductor.</string>
+</resources>

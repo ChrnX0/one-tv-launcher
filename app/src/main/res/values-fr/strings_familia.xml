@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (fr) de values/strings_familia.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="fam_pin">PIN enfants</string>
+    <string name="fam_pin_det">Un second PIN pour débloquer les chaînes, les catégories masquées et l’heure du coucher devant les enfants. Le PIN du panneau fonctionne toujours partout.</string>
+    <string name="fam_pin_ok">PIN enfants enregistré</string>
+    <string name="fam_pin_igual">Le PIN enfants doit être différent du PIN du panneau</string>
+    <string name="fam_trocar">Changer le PIN enfants</string>
+    <string name="fam_apagar">Retirer le PIN enfants</string>
+    <string name="fam_apagado">PIN enfants retiré : seul le PIN du panneau débloque désormais</string>
+    <string name="extras_TEMPO_TELA">Temps d’écran quotidien (une fois épuisé, seules les apps autorisées s’ouvrent)</string>
+    <string name="tela_titulo">Temps d’écran</string>
+    <string name="tela_acabou">Le temps d’écran du jour est terminé. À demain !</string>
+    <string name="tela_5min">Il reste 5 minutes de temps d’écran aujourd’hui</string>
+    <string name="tela_pin">PIN pour changer le temps d’écran</string>
+    <string name="tela_cota_linha">Temps d’écran par jour : %1$s (reste aujourd’hui : %2$s)</string>
+    <string name="tela_mais">Donner %1$d minutes de plus aujourd’hui</string>
+    <string name="tela_mais_ok">%1$d minutes de plus pour aujourd’hui</string>
+    <string name="tela_h">h</string>
+    <string name="tela_min">min</string>
+    <string name="extras_AGENDA_TODAS">Agenda de tous les comptes Google de la TV ensemble</string>
+    <string name="cal_todas_contas">Tous les comptes de la TV (%1$d)</string>
+    <string name="tm_tempo_esgotado">Le temps est écoulé</string>
+    <string name="painel_desligado_pin">Panneau web désactivé : PIN erroné trop de fois</string>
+    <string name="tm_crono">Chronomètre</string>
+    <string name="tm_crono_iniciar">Démarrer le chronomètre</string>
+    <string name="tm_crono_parar">Arrêter le chronomètre</string>
+    <string name="tm_crono_comecou">Chronomètre démarré : il s’affiche sur l’accueil</string>
+    <string name="tm_crono_marcou">Chronomètre arrêté à %1$s</string>
+    <string name="som_canal">Dernière chaîne de TV en direct</string>
+</resources>

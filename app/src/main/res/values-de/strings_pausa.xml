@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (de) de values/strings_pausa.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="pausa_pausar">Live-TV pausieren</string>
+    <string name="pausa_continuar">Fortsetzen</string>
+    <string name="pausa_ao_vivo">Zurück zu Live</string>
+    <string name="pausa_selo">⏸ PAUSIERT · OK setzt fort</string>
+    <string name="pausa_atrasado_min">%1$d MIN. ZURÜCK · ▶ Live</string>
+    <string name="pausa_atrasado_seg">%1$d S ZURÜCK · ▶ Live</string>
+    <string name="pausa_voltou">Länger pausiert, als der Speicher fasst: zurück zu Live</string>
+</resources>

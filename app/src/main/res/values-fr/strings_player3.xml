@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tradução (fr) de values/strings_player3.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
+<resources>
+    <string name="abertura_marcar_inicio">Marquer ici le début du générique (%1$s)</string>
+    <string name="abertura_marcar_fim">Marquer ici la fin du générique (%1$s)</string>
+    <string name="abertura_apagar">Supprimer la marque du générique</string>
+    <string name="abertura_inicio_marcado">Début du générique marqué à %1$s. Marquez maintenant la fin dans le menu ▼</string>
+    <string name="abertura_salva">Générique enregistré : %1$s à %2$s. Les épisodes suivants proposeront de le passer</string>
+    <string name="abertura_falta_inicio">Marquez d’abord le début du générique</string>
+    <string name="abertura_invalida">Ça ne ressemble pas à un générique : il doit durer de 10 s à 5 min et commencer dans les 15 premières minutes</string>
+    <string name="abertura_apagada">Marque du générique supprimée</string>
+    <string name="abertura_pular">Passer le générique · OK</string>
+</resources>
