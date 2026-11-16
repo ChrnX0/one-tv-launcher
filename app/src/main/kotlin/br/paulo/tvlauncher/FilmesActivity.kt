@@ -149,7 +149,9 @@ class FilmesActivity : Activity() {
         colunas.addView(direita, LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(16) })
         raiz.addView(colunas, FrameLayout.LayoutParams(-1, -1))
         telaDeTras = colunas
-        painelFicha = FrameLayout(this).apply { visibility = View.GONE; background = Estilo.fundoTela(context) }
+        // Sem fundo próprio (16/11/2026): a grade de trás fica INVISIBLE com a ficha aberta e o grafite da raiz aparece
+        // (eram dois fundos de tela cheia, um sobre o outro, no quadro de abrir a ficha).
+        painelFicha = FrameLayout(this).apply { visibility = View.GONE }
         raiz.addView(painelFicha, FrameLayout.LayoutParams(-1, -1))
         aviso = TextView(this).apply {
             textSize = 18f; setTextColor(papel); gravity = Gravity.CENTER; background = vidro(16)
