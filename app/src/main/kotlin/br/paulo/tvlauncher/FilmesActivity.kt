@@ -71,7 +71,7 @@ class FilmesActivity : Activity() {
     private val fonteMedia = Fontes.manrope(500)
 
     private var filmes: List<Filme> = emptyList()      // o que a tela mostra (sem as categorias ocultas, até o PIN)
-    // Notas de fora (IMDb pelo MDBList, InfoExterna): valem no Filtro (nota mínima) e na ordem "Nota".
+    // Notas de fora (Trakt e MDBList, InfoExterna): valem no Filtro (nota mínima) e na ordem "Nota".
     @Volatile private var notasFora: Map<String, Float> = emptyMap()
     /** Listas de fora escolhidas (Trakt, MDBList) com os itens: viram categorias em LISTAS (fatia 3, esboço listas-a.png). */
     @Volatile private var listasFora: List<Pair<SincronizarFilmes.ListaFora, List<SincronizarFilmes.Item>>> = emptyList()
@@ -704,7 +704,7 @@ class FilmesActivity : Activity() {
     private val fichasRapidas = object : LinkedHashMap<String, FichaFilme?>(64, 0.75f, true) {
         override fun removeEldestEntry(e: MutableMap.MutableEntry<String, FichaFilme?>) = size > 60
     }
-    /** Notas de fora (IMDb, Rotten Tomatoes...) já guardadas, para a faixa da ficha rápida; lidas no Fundo. */
+    /** Notas de fora (Trakt, Rotten Tomatoes...) já guardadas, para a faixa da ficha rápida; lidas no Fundo. */
     private val extRapidas = object : LinkedHashMap<String, String>(64, 0.75f, true) {
         override fun removeEldestEntry(e: MutableMap.MutableEntry<String, String>) = size > 60
     }
@@ -902,12 +902,12 @@ class FilmesActivity : Activity() {
             rotuloVersao(Idioma.versao(f.nome, f.grupo)),
         ).joinToString("   ·   ")
         texto.addView(TextView(this).apply { text = dados; textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(10), 0, 0) })
-        // Notas de fora (MDBList): "IMDb 7,8 · Rotten Tomatoes 93% · Letterboxd 3,9", em âmbar como a estrela.
+        // Notas de fora (Trakt e MDBList): "Trakt 78% · Rotten Tomatoes 93% · Letterboxd 3,9", em âmbar como a estrela.
         ext?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { n ->
             texto.addView(TextView(this).apply { text = InfoExterna.textoNotas(n); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPadding(0, dp(6), 0, 0) })
         }
-        // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch), preenchido quando chegar; some se não tiver.
-        (f.tmdb ?: info?.tmdb ?: ext?.tmdb)?.takeIf { InfoExternaCache.temTmdb() }?.let { id ->
+        // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch). DESLIGADO (OndeAssistir.JUSTWATCH_LIBERADO): licença.
+        (f.tmdb ?: info?.tmdb ?: ext?.tmdb)?.takeIf { OndeAssistir.JUSTWATCH_LIBERADO && InfoExternaCache.temTmdb() }?.let { id ->
             val linhaOnde = TextView(this).apply { textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(6), 0, 0); visibility = View.GONE; maxLines = 2 }
             texto.addView(linhaOnde)
             Fundo.rodar { InfoExternaCache.provedores(id, serie = false).takeIf { it.isNotEmpty() }?.let { p ->

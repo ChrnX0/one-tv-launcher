@@ -25,8 +25,8 @@ object InfoExternaCache {
     private val colecoes = HashMap<Int, List<InfoExterna.Candidato>>()
 
     /*
-     * Dois processos usam este arquivo (15/11/2026): o da HOME (manutenção da noite, IMDb semanal, busca) e o do player
-     * (Filmes e Séries). Antes cada um lia uma vez e gravava o mapa inteiro por cima do outro: notas do IMDb e ids do
+     * Dois processos usam este arquivo (15/11/2026): o da HOME (manutenção da noite, nota do Trakt, busca) e o do player
+     * (Filmes e Séries). Antes cada um lia uma vez e gravava o mapa inteiro por cima do outro: notas e ids do
      * TMDB sumiam e a cota do TMDB era gasta de novo. Agora: [sujos] guarda o que mudou AQUI desde a última gravação;
      * gravar trava o arquivo entre processos, relê o disco se outro processo gravou, põe os sujos por cima e grava.
      * E a leitura confere (no máximo a cada 2 s) se o arquivo mudou, para não usar um mapa velho por horas.
@@ -101,7 +101,7 @@ object InfoExternaCache {
     /** O que já está guardado (sem rede). Rápido: pode chamar da tela depois da primeira leitura. */
     fun guardado(ctx: Context, chave: String): Guardado? = synchronized(trava) { mapa(ctx)[chave] }
 
-    /** Nota de 0 a 10 de fora (IMDb...), para o Filtro e a ordem. Só o que está guardado. */
+    /** Nota de 0 a 10 de fora (Trakt, MDBList), para o Filtro e a ordem. Só o que está guardado. */
     fun notas(ctx: Context): Map<String, Float> = synchronized(trava) {
         mapa(ctx).mapNotNull { (k, g) -> InfoExterna.notasDe(g).de0a10?.let { k to it } }.toMap()
     }
@@ -207,7 +207,7 @@ object InfoExternaCache {
     private fun paisTv() = OndeAssistir.pais(java.util.Locale.getDefault().country)
 
     /** Os serviços de assinatura/grátis onde o título está, no país da TV (vazio: nenhum ou sem chave). Bloqueia (rede). */
-    fun provedores(id: Int, serie: Boolean): List<String> = paisTv().let { pais ->
+    fun provedores(id: Int, serie: Boolean): List<String> = if (!OndeAssistir.JUSTWATCH_LIBERADO) emptyList() else paisTv().let { pais ->
         tmdb("prov:$serie:$id:$pais", { OndeAssistir.urlProvedores(it, id, serie) }) { OndeAssistir.lerProvedores(it, pais) }.orEmpty()
     }
 
@@ -262,68 +262,53 @@ object InfoExternaCache {
         return n
     }
 
-    // ================================================================ IMDb semanal (manutenção da noite)
+    // ================================================================ Nota do Trakt (manutenção da noite)
 
     /**
-     * Nota do IMDb para todos, sem chave (pedido do dono, 14/11/2026): 1x por semana, de madrugada. 1. Para os títulos da
-     * lista com id do TMDB e sem id do IMDb, pergunta ao TMDB (no máximo [MAX_IDS_POR_NOITE], primeiro os que a pessoa
-     * marcou, depois os mais novos na lista). 2. Baixa o arquivo público do IMDb e guarda só as notas desses ids.
-     * Devolve quantos títulos têm nota do IMDb depois. Bloqueia (rede, ~9 MB).
+     * Nota do Trakt para todos, sem login (16/11/2026, no lugar do arquivo do IMDb, que é só para uso não comercial).
+     * De madrugada, para os títulos da lista com id do TMDB (da lista ou já achado) e nota vencida, uma pergunta por
+     * título ao Trakt, no máximo [MAX_TRAKT_POR_NOITE], primeiro os que a pessoa marcou e depois os mais novos. Ritmo de
+     * ~1,4 por segundo: o limite do Trakt é 500 GET a cada 5 min por chave e IP (developer.trakt.tv/docs/rate-limiting).
+     * Devolve quantos ganharam nota, ou -1 sem chave/lista. Bloqueia (rede).
      */
-    fun semanalImdb(ctx: Context, forcar: Boolean = false): Int {
+    fun noturnoTrakt(ctx: Context): Int {
         val app = ctx.applicationContext
-        val p = prefs(app)
-        val agora = System.currentTimeMillis()
-        if (!forcar && agora - p.getLong("imdb_em", 0) < InfoExterna.IMDB_VALIDADE_MS) return -1
+        val id = chaves().traktId.takeIf { it.isNotBlank() } ?: return -1
         val filmes = runCatching { PlayerCarga.filmes(app, soCache = true) }.getOrDefault(emptyList())
         val series = runCatching { PlayerCarga.series(app, soCache = true) }.getOrDefault(emptyList())
         if (filmes.isEmpty() && series.isEmpty()) return -1
+        val agora = System.currentTimeMillis()
         val marcados = PlayerArmazem.interesses(app, false) + PlayerArmazem.interesses(app, true) + PlayerArmazem.posicoes(app).keys
-        // 1. ids do IMDb que faltam (pelo TMDB).
-        val k = chaves()
-        if (k.tmdb.isNotBlank()) {
-            val faltam = (filmes.map { Triple(it.chave, it.tmdb, false) to it.adicionado } + series.map { Triple(it.chave, it.tmdb, true) to it.atualizada })
-                .sortedWith(compareBy({ it.first.first !in marcados }, { -it.second }))
-                .map { it.first }
-                .mapNotNull { (ch, t, s) -> val g = guardado(app, ch); val id = t ?: g?.tmdb; if (id != null && g?.imdb.isNullOrBlank()) Triple(ch, id, s) else null }
-                .take(MAX_IDS_POR_NOITE)
-            for ((ch, id, s) in faltam) {
-                val imdb = runCatching {
-                    val r = ServicosContas.pedir(InfoExterna.urlIdsExternos(k.tmdb, id, s), InfoExterna.tmdbCabecalhos(k.tmdb, agente()))
-                    if (r.codigo == 429) return@runCatching null
-                    if (r.codigo in 200..299) InfoExterna.lerIdImdb(r.corpo) else null
-                }.getOrNull()
-                synchronized(trava) {
-                    val m = mapa(app); val g = m[ch] ?: Guardado()
-                    por(m, ch, g.copy(tmdb = g.tmdb ?: id, imdb = imdb ?: g.imdb.ifBlank { "-" }))   // "-" = o TMDB não tem: não perguntar de novo
-                }
-                Thread.sleep(120)   // ~8 por segundo: bem abaixo do limite do TMDB
+        val fila = (filmes.map { Triple(it.chave, it.tmdb, false) to it.adicionado } + series.map { Triple(it.chave, it.tmdb, true) to it.atualizada })
+            .sortedWith(compareBy({ it.first.first !in marcados }, { -it.second }))
+            .map { it.first }
+            .mapNotNull { (ch, t, s) ->
+                val g = guardado(app, ch); val tmdb = t ?: g?.tmdb ?: return@mapNotNull null
+                if (agora - (g?.traktEm ?: 0) in 0 until InfoExterna.TRAKT_VALIDADE_MS) null else Triple(ch, tmdb, s)
             }
-            synchronized(trava) { gravar(app) }
+            .distinctBy { it.first }
+            .take(MAX_TRAKT_POR_NOITE)
+        val cab = ServicosFilmes.traktCabecalhos(id, BuildConfig.VERSION_CODE)
+        var n = 0
+        for ((ch, tmdb, serie) in fila) {
+            val r = runCatching { ServicosContas.pedir(InfoExterna.urlTraktPorTmdb(tmdb, serie), cab) }.getOrNull() ?: break
+            if (r.codigo == 429) { Log.i(TAG, "Trakt: limite"); break }
+            if (r.codigo !in 200..299) { Log.w(TAG, "Trakt: ${r.codigo}"); break }
+            val nota = InfoExterna.lerNotaTrakt(r.corpo, serie)
+            if (nota != null) n++
+            synchronized(trava) {
+                val m = mapa(app); val g = m[ch] ?: Guardado()
+                // Sem nota (não achou ou poucos votos): guarda a data, para não perguntar de novo por 30 dias.
+                por(m, ch, g.copy(tmdb = g.tmdb ?: tmdb, traktNota = nota, traktEm = agora))
+            }
+            Thread.sleep(700)
         }
-        // 2. o arquivo do IMDb.
-        val porImdb = synchronized(trava) { mapa(app).entries.filter { InfoExterna.idImdbValido(it.value.imdb) }.groupBy({ it.value.imdb }, { it.key }) }
-        if (porImdb.isEmpty()) { p.edit().putLong("imdb_em", agora).apply(); return 0 }
-        val notas = runCatching {
-            val c = java.net.URL(InfoExterna.IMDB_NOTAS).openConnection() as java.net.HttpURLConnection
-            try {
-                c.connectTimeout = 15_000; c.readTimeout = 60_000; c.instanceFollowRedirects = false
-                c.setRequestProperty("User-Agent", agente())
-                check(c.responseCode in 200..299) { "IMDb ${c.responseCode}" }
-                java.util.zip.GZIPInputStream(c.inputStream).bufferedReader().useLines { InfoExterna.filtrarImdb(it, porImdb.keys) }
-            } finally { c.disconnect() }
-        }.onFailure { Log.w(TAG, "IMDb: ${it.javaClass.simpleName}") }.getOrNull() ?: return -1
-        synchronized(trava) {
-            val m = mapa(app)
-            for ((imdb, chaves) in porImdb) for (ch in chaves) m[ch]?.let { m[ch] = it.copy(imdbNota = notas[imdb]); sujos.add(ch) }
-            gravar(app)
-        }
-        p.edit().putLong("imdb_em", agora).apply()
-        Log.i(TAG, "IMDb: ${notas.size} notas de ${porImdb.size} títulos")
-        return notas.size
+        synchronized(trava) { gravar(app) }
+        Log.i(TAG, "Trakt: $n notas de ${fila.size} títulos")
+        return n
     }
 
-    private const val MAX_IDS_POR_NOITE = 1500
+    private const val MAX_TRAKT_POR_NOITE = 600
 
     /** Os títulos da grade que têm id TMDB (da lista ou já achado) para o lote: chave -> id. */
     fun idsConhecidos(ctx: Context, itens: List<Pair<String, Int?>>): List<Pair<String, Int>> = synchronized(trava) {

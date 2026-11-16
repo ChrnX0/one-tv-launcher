@@ -47,7 +47,7 @@
     <string name="ext_proximo_curto">Nouvel ép. %1$s</string>
     <string name="ext_hoje">aujourd’hui</string>
     <string name="ext_amanha">demain</string>
-    <string name="sv_mdblist_passos">Facultatif : ajoute Rotten Tomatoes, Letterboxd et Metacritic à la note IMDb (qui fonctionne déjà sans).\n1. Pointez l’appareil photo du téléphone vers le code de gauche et connectez-vous (ou créez un compte gratuit). En bas de la page, touchez API Access, générez la clé s’il n’y en a pas encore et copiez-la.\n2. Pointez vers le code de droite : le panneau web s’ouvre sur Paramètres. Collez la clé sous MDBList et touchez Enregistrer la clé.\n3. La TV la vérifie aussitôt et cet écran continue tout seul.</string>
+    <string name="sv_mdblist_passos">Facultatif : ajoute Rotten Tomatoes, Letterboxd et Metacritic à la note Trakt (qui fonctionne déjà sans).\n1. Pointez l’appareil photo du téléphone vers le code de gauche et connectez-vous (ou créez un compte gratuit). En bas de la page, touchez API Access, générez la clé s’il n’y en a pas encore et copiez-la.\n2. Pointez vers le code de droite : le panneau web s’ouvre sur Paramètres. Collez la clé sous MDBList et touchez Enregistrer la clé.\n3. La TV la vérifie aussitôt et cet écran continue tout seul.</string>
     <string name="sv_mdblist_qr1">Page de la clé MDBList</string>
     <string name="sv_mdblist_qr2">Panneau web (%1$s)</string>
     <string name="sv_mdblist_digitar">Saisir la clé ici</string>

@@ -14,6 +14,8 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Filmes e Séries: a nota agora vem do Trakt (para todos, sem conta), buscada de madrugada; a nota do IMDb saiu, porque o IMDb só permite em app não comercial</item>
+        <item>“Também em” na ficha e “Em outros lugares” na Busca ficam desligados por enquanto: esses dados são da JustWatch e pedem contrato. A Busca continua oferecendo procurar no YouTube, Netflix e Prime Video</item>
         <item>Família conectada (Configurações › Família): um link sem conta para os netos mandarem fotos e recados que aparecem na TV</item>
         <item>Cenas prontas: Dormir, Novela e Jogo em Cenas, criadas com um OK</item>
         <item>Modo hóspede: a limpeza na saída agora inclui os apps que vieram de fábrica, como a Netflix, e pode limpar tudo de uma vez</item>
@@ -190,6 +192,7 @@
         <item>Protetor de tela com widgets novos, de letra maior: escolha Faixa de vidro (as próximas horas numa curva, com a hora do sol), Cartões (agora, horas, hoje e amanhã) ou Sem caixa (a temperatura grande e o tempo numa frase) em Configurações › Tela e energia › Widgets do protetor, ou no painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Nota do Trakt</item>
         <item>Família conectada</item>
         <item>Cenas prontas</item>
         <item>Hóspede: limpeza total</item>
@@ -336,6 +339,7 @@
         <item>Em Configurações › Tela e energia, OK em Widgets do protetor até o estilo que quiser e espere o protetor aparecer</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Na manhã depois de instalar, abra um filme da sua lista: a ficha mostra “Trakt NN%” e não mostra “IMDb” nem “Também em”?</item>
         <item>Em Configurações › Família › Família conectada, aparece o QR? Mandando uma foto pelo link no celular, ela aparece na TV?</item>
         <item>Em Cenas, aparecem Dormir, Novela e Jogo em “Cenas prontas”? Criando Dormir, ela entra na lista e roda com OK?</item>
         <item>No Modo hóspede, a escolha de apps a limpar mostra também a Netflix e o YouTube?</item>
@@ -383,7 +387,7 @@
         <item>Abra um filme ou episódio sem legenda em português: em uns 20 s aparece a legenda marcada “Tradução automática”, e o filme continua sem travar?</item>
         <item>Apareceram o código e o QR, o celular aprovou e a TV mostrou a conta conectada?</item>
         <item>O código entrou em simkl.com/pin e a TV mostrou a conta conectada?</item>
-        <item>Apareceram sinopse, nota do IMDb e “Também em: …”?</item>
+        <item>Apareceram sinopse e a nota do Trakt?</item>
         <item>Apareceram as fotos e, embaixo, outros títulos dele que estão na sua lista?</item>
         <item>Só apareceram filmes até 10 anos (e os sem classificação das categorias infantis)?</item>
         <item>Em poucos segundos apareceu “Legenda baixada automaticamente” e ela ligou sozinha?</item>
