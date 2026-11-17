@@ -60,6 +60,61 @@ public class RemoteProcess extends IDhizukuRemoteProcess.Stub {
         mProcess.destroy();
     }
 
+    /**
+     * Revogar o app (17/11/2026, launcher): encerra o processo E os filhos/netos dele (o destroy() só manda SIGTERM ao
+     * pid direto, e um "sh -c ..." deixava os netos rodando com o uid do launcher). Acha os descendentes pelo ppid em
+     * /proc e manda SIGKILL a todos (mesmo uid: o sistema deixa).
+     */
+    void encerrarTudo() {
+        int pid = pid(mProcess);
+        if (pid > 0) {
+            java.util.List<Integer> alvos = new java.util.ArrayList<>();
+            alvos.add(pid);
+            java.util.Map<Integer, java.util.List<Integer>> filhos = filhosPorPai();
+            for (int i = 0; i < alvos.size(); i++) {
+                java.util.List<Integer> f = filhos.get(alvos.get(i));
+                if (f != null) for (Integer c : f) if (!alvos.contains(c)) alvos.add(c);
+            }
+            for (int i = alvos.size() - 1; i >= 0; i--) {
+                if (alvos.get(i) == android.os.Process.myPid()) continue;   // nunca o próprio launcher
+                try { android.os.Process.sendSignal(alvos.get(i), android.os.Process.SIGNAL_KILL); } catch (Throwable ignored) { }
+            }
+        }
+        try { if (android.os.Build.VERSION.SDK_INT >= 26) mProcess.destroyForcibly(); else mProcess.destroy(); } catch (Throwable ignored) { }
+    }
+
+    private static int pid(Process p) {
+        for (String campo : new String[]{"pid", "handle"}) {
+            try {
+                java.lang.reflect.Field f = p.getClass().getDeclaredField(campo);
+                f.setAccessible(true);
+                return ((Number) f.get(p)).intValue();
+            } catch (Throwable ignored) { }
+        }
+        return -1;
+    }
+
+    /** ppid -> pids, lido de /proc/<pid>/stat (campo 4; o nome entre parênteses pode ter espaços). */
+    private static java.util.Map<Integer, java.util.List<Integer>> filhosPorPai() {
+        java.util.Map<Integer, java.util.List<Integer>> r = new java.util.HashMap<>();
+        java.io.File[] dirs = new java.io.File("/proc").listFiles();
+        if (dirs == null) return r;
+        for (java.io.File d : dirs) {
+            int pid;
+            try { pid = Integer.parseInt(d.getName()); } catch (NumberFormatException e) { continue; }
+            try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(new java.io.File(d, "stat")))) {
+                String s = br.readLine();
+                if (s == null) continue;
+                String[] campos = s.substring(s.lastIndexOf(')') + 2).split(" ");
+                int ppid = Integer.parseInt(campos[1]);
+                java.util.List<Integer> l = r.get(ppid);
+                if (l == null) { l = new java.util.ArrayList<>(); r.put(ppid, l); }
+                l.add(pid);
+            } catch (Throwable ignored) { }
+        }
+        return r;
+    }
+
     @Override
     public boolean alive() throws RemoteException {
         try {

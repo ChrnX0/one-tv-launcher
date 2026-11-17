@@ -47,7 +47,7 @@ object DonoEmprestado {
         if (p == RegrasDono.Parado.NAO) {
             if (limpos) prefs(ctx).edit().putBoolean("escopos_limpos", false).apply()
         } else if (!limpos && p != RegrasDono.Parado.SEM_DONO) {
-            apps(ctx).forEach { tirarEscopos(ctx, it.pacote) }
+            apps(ctx).forEach { tirarEscopos(ctx, it.pacote); encerrar(ctx, it.uid) }
             prefs(ctx).edit().putBoolean("escopos_limpos", true).apply()
             anotar(ctx, "parado (${p.name.lowercase()}): escopos delegados tirados")
         }
@@ -100,15 +100,29 @@ object DonoEmprestado {
     @Synchronized fun definirTotal(ctx: Context, pacote: String, total: Boolean): Boolean {
         val atual = mapa(ctx).values.firstOrNull { it.pacote == pacote } ?: return false
         gravar(ctx, mapa(ctx).values.filter { it.pacote != pacote } + atual.copy(total = total))
-        if (!total) tirarEscopos(ctx, pacote)
+        if (!total) { tirarEscopos(ctx, pacote); encerrar(ctx, atual.uid) }
         anotar(ctx, "poder total de $pacote: $total")
         return true
     }
 
     @Synchronized fun revogar(ctx: Context, pacote: String) {
+        val uid = mapa(ctx).values.firstOrNull { it.pacote == pacote }?.uid
         gravar(ctx, mapa(ctx).values.filter { it.pacote != pacote })
         tirarEscopos(ctx, pacote)
+        if (uid != null) encerrar(ctx, uid)
         anotar(ctx, "revogado $pacote")
+    }
+
+    /**
+     * Revogar não fecha só a porta (17/11/2026, decisão do Paulo "estuda e aplica o melhor"): os processos que o app
+     * abriu com o nosso uid (remote_process, com filhos) e os UserServices dele são encerrados na hora. Os que ainda
+     * estão no meio de uma chamada terminam nela; nenhuma chamada nova passa (porUid já não acha o app).
+     */
+    private fun encerrar(ctx: Context, uid: Int) {
+        Fundo.rodar("dono-encerrar") {
+            try { com.rosan.dhizuku.server_api.DhizukuService.encerrarDoUid(uid); anotar(ctx, "encerrado o que uid=$uid rodava") }
+            catch (e: Throwable) { anotar(ctx, "não encerrei uid=$uid: $e") }
+        }
     }
 
     /** Escopos delegados ficam no sistema mesmo depois de revogar: zera (só o dono pode). */
