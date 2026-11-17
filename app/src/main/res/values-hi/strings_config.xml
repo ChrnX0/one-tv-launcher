@@ -176,6 +176,7 @@
     <string name="cl_ativos">%1$d सक्रिय</string>
     <string name="cl_revogados">रद्द</string>
     <string name="cl_visivel">TV पर दिखता है</string>
+    <string name="cl_escondido">TV पर छिपा हुआ</string>
     <string name="cl_limpeza">पहले से इंस्टॉल ऐप की सफ़ाई</string>
     <string name="cl_nenhum_liberado">अभी कोई ऐप साफ़ नहीं हुआ</string>
     <string name="cl_nenhum_liberado_det">सिर्फ़ इस TV पर एक-एक करके जाँचे ऐप दिखते हैं (Debloat.kt देखें)</string>

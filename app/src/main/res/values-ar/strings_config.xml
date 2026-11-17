@@ -176,6 +176,7 @@
     <string name="cl_ativos">%1$d نشط</string>
     <string name="cl_revogados">أُلغي</string>
     <string name="cl_visivel">ظاهر على التلفزيون</string>
+    <string name="cl_escondido">مخفي على التلفزيون</string>
     <string name="cl_limpeza">تنظيف التطبيقات المثبتة مسبقًا</string>
     <string name="cl_nenhum_liberado">لم يُنظَّف أي تطبيق بعد</string>
     <string name="cl_nenhum_liberado_det">تظهر فقط التطبيقات التي اختُبرت واحدًا واحدًا على هذا التلفزيون (انظر Debloat.kt)</string>

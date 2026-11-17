@@ -176,6 +176,7 @@
     <string name="cl_ativos">%1$d개 사용 중</string>
     <string name="cl_revogados">취소됨</string>
     <string name="cl_visivel">TV에 표시됨</string>
+    <string name="cl_escondido">TV에서 숨김</string>
     <string name="cl_limpeza">사전 설치 앱 정리</string>
     <string name="cl_nenhum_liberado">아직 정리 가능한 앱 없음</string>
     <string name="cl_nenhum_liberado_det">이 TV에서 하나씩 테스트한 앱만 표시됩니다(Debloat.kt 참조)</string>

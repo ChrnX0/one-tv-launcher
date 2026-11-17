@@ -176,6 +176,7 @@
     <string name="cl_ativos">Ativos: %1$d</string>
     <string name="cl_revogados">revogados</string>
     <string name="cl_visivel">visível na TV</string>
+    <string name="cl_escondido">escondido na TV</string>
     <string name="cl_limpeza">Limpeza de apps de fábrica</string>
     <string name="cl_nenhum_liberado">Nenhum app liberado ainda</string>
     <string name="cl_nenhum_liberado_det">Só entram apps testados um a um nesta TV (ver Debloat.kt)</string>

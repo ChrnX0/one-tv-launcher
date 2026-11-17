@@ -176,6 +176,7 @@
     <string name="cl_ativos">%1$d 个有效</string>
     <string name="cl_revogados">已撤销</string>
     <string name="cl_visivel">在电视上可见</string>
+    <string name="cl_escondido">已在电视上隐藏</string>
     <string name="cl_limpeza">预装应用清理</string>
     <string name="cl_nenhum_liberado">还没有可清理的应用</string>
     <string name="cl_nenhum_liberado_det">只显示在此电视上逐一测试过的应用（见 Debloat.kt）</string>

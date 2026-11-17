@@ -176,6 +176,7 @@
     <string name="cl_ativos">%1$d etkin</string>
     <string name="cl_revogados">iptal edildi</string>
     <string name="cl_visivel">TV’de görünür</string>
+    <string name="cl_escondido">TV’de gizli</string>
     <string name="cl_limpeza">Önceden yüklü uygulama temizliği</string>
     <string name="cl_nenhum_liberado">Henüz temizlenen uygulama yok</string>
     <string name="cl_nenhum_liberado_det">Yalnızca bu TV’de tek tek test edilen uygulamalar görünür (bkz. Debloat.kt)</string>

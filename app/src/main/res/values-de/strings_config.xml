@@ -176,6 +176,7 @@
     <string name="cl_ativos">%1$d aktiv</string>
     <string name="cl_revogados">widerrufen</string>
     <string name="cl_visivel">auf dem Fernseher sichtbar</string>
+    <string name="cl_escondido">auf dem Fernseher ausgeblendet</string>
     <string name="cl_limpeza">Aufräumen vorinstallierter Apps</string>
     <string name="cl_nenhum_liberado">Noch keine Apps freigegeben</string>
     <string name="cl_nenhum_liberado_det">Nur einzeln auf diesem Fernseher getestete Apps erscheinen (siehe Debloat.kt)</string>

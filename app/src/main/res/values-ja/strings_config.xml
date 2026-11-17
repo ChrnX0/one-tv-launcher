@@ -176,6 +176,7 @@
     <string name="cl_ativos">有効 %1$d 件</string>
     <string name="cl_revogados">取り消し済み</string>
     <string name="cl_visivel">TV に表示</string>
+    <string name="cl_escondido">TV で非表示</string>
     <string name="cl_limpeza">プリインストールアプリの整理</string>
     <string name="cl_nenhum_liberado">整理対象のアプリはまだありません</string>
     <string name="cl_nenhum_liberado_det">この TV で 1 つずつテストしたアプリだけが表示されます（Debloat.kt を参照）</string>
