@@ -44,6 +44,14 @@ class ConectorWindowsTest {
         assertTrue("net use %LETRA% \"%ALVO%\"" in s)
     }
 
+    @Test fun rotuloDaUnidadeVaiEmNumerosESoAscii() {
+        val l = ConectorWindows.linhaDoRotulo("Sofaly · Sala \" & calc")
+        assertTrue("83,111,102,97,108,121,32,183,32" in l)             // "Sofaly · " letra por letra
+        assertFalse("calc" in l); assertTrue(l.all { it.code < 128 })   // nada do nome entra como texto
+        val s = ConectorWindows.script("192.168.1.50", 8444, pem, "Sofaly · Sala")!!
+        assertTrue(l.substringBefore("-join") in s && s.all { it.code < 128 })
+    }
+
     @Test fun recusaHostQueViraComando() {
         assertNull(ConectorWindows.script("tv\" & calc & \"", 8444, pem))
         assertNull(ConectorWindows.script("tv%TEMP%", 8444, pem))

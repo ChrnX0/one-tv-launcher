@@ -365,7 +365,7 @@ object PainelWeb {
     private fun conectorWindows(): Resposta {
         val pem = PainelTls.pemDaCa() ?: return erro(503, "o certificado ainda não foi gerado; tente em 1 minuto")
         val host = hostConector()
-        val texto = ConectorWindows.script(host, PainelTls.PORTA, pem) ?: return erro(503, "não consegui montar o conector")
+        val texto = ConectorWindows.script(host, PainelTls.PORTA, pem, Ssdp.nomeNaUnidade(PainelVizinhos.nomeDaTv(app))) ?: return erro(503, "não consegui montar o conector")
         return Resposta(200, "application/octet-stream", texto.toByteArray(Charsets.US_ASCII),
             mapOf("Content-Disposition" to "attachment; filename=\"${ConectorWindows.ARQUIVO}\"", "Cache-Control" to "no-store"))
     }

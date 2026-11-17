@@ -35,12 +35,26 @@ object ConectorWindows {
      * O texto do .cmd (linhas com CRLF, que o cmd.exe exige para os rótulos). null se o host ou o PEM não servem.
      * Sem acentos nos textos: o cmd.exe usa a página de código antiga do Windows.
      */
-    fun script(host: String, porta: Int, pemCa: String): String? {
+    /**
+     * A linha que dá nome à unidade no Explorer ("Sofaly · Sala de estar" no lugar de "dav (\\192...)"), pedido do
+     * dono em 17/11/2026. Usa o mesmo caminho de quem renomeia com F2. O nome vai como lista de números (um por
+     * letra): o .cmd só aceita ASCII e assim nenhum caractere do nome da TV vira comando.
+     */
+    fun linhaDoRotulo(rotulo: String): String {
+        val codigos = rotulo.take(60).map { it.code }.joinToString(",")
+        val d = '$'
+        return "powershell -NoProfile -Command \"${d}n=New-Object -ComObject WScript.Network;${d}d=${d}n.EnumNetworkDrives();" +
+            "for(${d}i=0;${d}i -lt ${d}d.Count();${d}i+=2){if(${d}d.Item(${d}i) -and ${d}d.Item(${d}i+1) -eq '%ALVO%'){" +
+            "(New-Object -ComObject Shell.Application).NameSpace(${d}d.Item(${d}i)+'\\').Self.Name=-join[char[]]($codigos)}}\" >nul 2>&1"
+    }
+
+    fun script(host: String, porta: Int, pemCa: String, rotulo: String = ""): String? {
         if (!hostValido(host) || porta !in 1..65535) return null
         val linhas = linhasDoPem(pemCa)
         // base64 puro: nada que o cmd.exe interprete (%, &, |, parênteses) pode entrar no arquivo.
         if (linhas.isEmpty() || linhas.any { l -> !l.all { it.isLetterOrDigit() && it.code < 128 || it in "+/=" } }) return null
         val digital = try { digital(pemCa) } catch (_: Exception) { return null }
+        val linhaRotulo = if (rotulo.isBlank()) "rem (sem nome para a unidade)" else linhaDoRotulo(rotulo)
         val t = """
 @echo off
 rem One TV - liga a TV como unidade de rede neste PC (duplo clique).
@@ -87,6 +101,7 @@ if errorlevel 1 (
   exit /b 1
 )
 :abrir
+$linhaRotulo
 start "" explorer.exe "%ALVO%"
 exit /b 0
 
