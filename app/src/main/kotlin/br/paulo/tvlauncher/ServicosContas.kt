@@ -203,6 +203,8 @@ object ServicosContas {
         }
         if (s == Servico.OPENSUBTITLES) LegendaBaixar.esquecerToken()
         definir(ctx, s, null)
+        // A nota do Simkl só aparece com a conta conectada (licença; InfoExternaCache.noturnoSimkl).
+        if (s == Servico.SIMKL && !Config.SIMKL_NOTA_SEM_LOGIN) runCatching { InfoExternaCache.esquecerSimkl(ctx) }
     }
 
     /** A chave do MDBList da pessoa (opcional). Null = não conectou. */

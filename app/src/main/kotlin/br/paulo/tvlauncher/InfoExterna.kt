@@ -233,7 +233,7 @@ object InfoExterna {
         val traktNota: Float? = null,   // nota do Trakt (0-10), vale para todos, sem login; pedida de madrugada
         val traktEm: Long = 0,          // quando a nota do Trakt foi pedida (0 = nunca)
         val simkl: Int? = null,         // id do Simkl (do /redirect), para não perguntar de novo
-        val simklNota: Float? = null,   // nota da comunidade do Simkl (0-10), sem login; pedida de madrugada
+        val simklNota: Float? = null,   // nota da comunidade do Simkl (0-10), só com a conta Simkl da pessoa; de madrugada
         val simklEm: Long = 0,          // quando a nota do Simkl foi pedida (0 = nunca)
         val recusados: Set<Int> = emptySet(),
         val detalhe: Detalhe? = null,
@@ -241,7 +241,7 @@ object InfoExterna {
         val buscaEm: Long = 0,   // última busca sem resultado (não buscar de novo a cada abertura)
     )
 
-    /** As notas para mostrar: Trakt e Simkl (todos, sem login). */
+    /** As notas para mostrar: Trakt (todos, sem login) e Simkl (só existe com a conta conectada; InfoExternaCache). */
     fun notasDe(g: Guardado): Notas = Notas(g.traktNota, g.simklNota)
 
     fun guardadoParaJson(g: Guardado): JSONObject = JSONObject().apply {

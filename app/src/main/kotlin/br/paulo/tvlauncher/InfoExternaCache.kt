@@ -270,18 +270,25 @@ object InfoExternaCache {
     // ================================================================ Nota do Simkl (manutenção da noite)
 
     /**
-     * Nota da comunidade do Simkl para todos, sem login (16/11/2026). Como a do Trakt: de madrugada, até
-     * [MAX_SIMKL_POR_NOITE] títulos, cada nota vale 30 dias. Duas perguntas por título na primeira vez (/redirect para
-     * achar o id do Simkl, depois a ficha, que fica em cache no Cloudflare); depois só a ficha. Para no primeiro erro ou
-     * limite (429). Devolve quantos ganharam nota, ou -1 sem chave/lista. Bloqueia (rede).
+     * Nota da comunidade do Simkl, SÓ para quem conectou a própria conta Simkl (17/11/2026), salvo com
+     * [Config.SIMKL_NOTA_SEM_LOGIN]. A Simkl respondeu que sincronizar a conta da pessoa não pede licença comercial, mas
+     * mostrar a nota sem login pede; então o pedido vai com o token da pessoa e, sem conta (e sem a licença), nada é
+     * pedido e as notas guardadas são apagadas ([esquecerSimkl]). Como a do
+     * Trakt: de madrugada, até [MAX_SIMKL_POR_NOITE] títulos, cada nota vale 30 dias. Duas perguntas por título na
+     * primeira vez (/redirect para achar o id do Simkl, depois a ficha); depois só a ficha. Para no primeiro erro ou
+     * limite (429). Devolve quantos ganharam nota, ou -1 sem chave/conta/lista. Bloqueia (rede).
      */
     fun noturnoSimkl(ctx: Context): Int {
         val app = ctx.applicationContext
         val cliente = chaves().simklId.takeIf { it.isNotBlank() } ?: return -1
+        // Sem a conta Simkl da pessoa e sem a licença ([Config.SIMKL_NOTA_SEM_LOGIN]): nenhum pedido, e some a nota que
+        // tiver ficado (de antes de 17/11/2026 ou de quem saiu). Com a licença, sem conta pede só com a chave do app.
+        val token = ServicosContas.conta(app, ServicosFilmes.Servico.SIMKL)?.acesso?.takeIf { it.isNotBlank() }
+        if (token == null && !Config.SIMKL_NOTA_SEM_LOGIN) { esquecerSimkl(app); return -1 }
         val agora = System.currentTimeMillis()
         val fila = filaDaNoite(app, MAX_SIMKL_POR_NOITE) { agora - (it?.simklEm ?: 0) in 0 until InfoExterna.SIMKL_VALIDADE_MS } ?: return -1
         val versao = BuildConfig.VERSION_CODE
-        val cab = ServicosFilmes.simklCabecalhos(cliente, versao)
+        val cab = ServicosFilmes.simklCabecalhos(cliente, versao, token)
         var n = 0
         for ((ch, tmdb, serie) in fila) {
             var simkl = guardado(app, ch)?.simkl
@@ -313,6 +320,20 @@ object InfoExternaCache {
     }
 
     private const val MAX_SIMKL_POR_NOITE = 400
+
+    /** Apaga a nota do Simkl de todos os títulos (fica o id, que é só identificador). Sem rede. */
+    fun esquecerSimkl(ctx: Context) {
+        val app = ctx.applicationContext
+        synchronized(trava) {
+            val m = mapa(app)
+            val com = m.filterValues { it.simklNota != null || it.simklEm > 0 }.keys.toList()
+            if (com.isEmpty()) return
+            // No lugar (sem [por]: não muda a ordem de quem sai primeiro), mas marcado, para a releitura não desfazer.
+            for (ch in com) m[ch]?.let { m[ch] = it.copy(simklNota = null, simklEm = 0); sujos.add(ch) }
+            gravar(app)
+            Log.i(TAG, "Simkl: ${com.size} notas apagadas (sem conta)")
+        }
+    }
 
     /** Os títulos da grade que têm id TMDB (da lista ou já achado) para o lote: chave -> id. */
     fun idsConhecidos(ctx: Context, itens: List<Pair<String, Int?>>): List<Pair<String, Int>> = synchronized(trava) {

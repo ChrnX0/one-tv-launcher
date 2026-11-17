@@ -55,6 +55,12 @@ object Config {
     // --- Device Owner (ver PrivilegioDO.kt) ---
     // FIXAR_PROTETOR: o app aponta o screensaver do sistema para o nosso ProtetorTela (aposenta o dreamx, ~59 MB).
     const val FIXAR_PROTETOR = true
+
+    // Nota da comunidade do Simkl para quem NÃO conectou a conta Simkl (pedida com a chave do app, sem login).
+    // A Simkl disse (17/11/2026, Discord) que isso exige licença comercial; sincronizar a conta da pessoa não exige.
+    // false = só com a conta conectada (e a nota guardada some de quem não tem conta). Virar para true só com a
+    // licença comercial da Simkl assinada (preço perguntado em 17/11/2026).
+    const val SIMKL_NOTA_SEM_LOGIN = false
     // Shell proprio (ver ShellProprio.kt) MARCO 1: so loga a chave do app e a porta do adb descoberta por mDNS. Diagnostico.
     // false desde 04/11/2026: quem conecta agora e o GuardiaoShizuku; o diagnostico ligava 2 buscas mDNS a cada onCreate
     // (inclusive na troca de tema) e listava aparelhos de outros da rede no log.
