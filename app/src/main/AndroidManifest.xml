@@ -111,6 +111,7 @@
     <!-- android:name: LauncherApp liga o registro local de erros (RegistroErros.kt) em todo processo do app. -->
     <application
         android:name=".LauncherApp"
+        android:supportsRtl="true"
         android:allowBackup="false"
         android:networkSecurityConfig="@xml/rede"
         android:icon="@mipmap/ic_onetv"

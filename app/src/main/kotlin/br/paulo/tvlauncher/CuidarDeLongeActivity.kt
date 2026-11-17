@@ -39,7 +39,7 @@ class CuidarDeLongeActivity : Activity() {
         lista.addView(l, Estilo.lpLinha(this))
     }
 
-    private fun secao(nome: String) = lista.addView(Estilo.secao(this, nome).apply { setPadding(Estilo.dp(context, 8), Estilo.dp(context, Estilo.E3), 0, Estilo.dp(context, Estilo.E1)) })
+    private fun secao(nome: String) = lista.addView(Estilo.secao(this, nome).apply { setPaddingRelative(Estilo.dp(context, 8), Estilo.dp(context, Estilo.E3), 0, Estilo.dp(context, Estilo.E1)) })
 
     private fun sim(b: Boolean) = getString(if (b) R.string.cuidar_sim else R.string.cuidar_nao)
     private fun hhmm(min: Int) = "%02d:%02d".format(min / 60, min % 60)
@@ -93,7 +93,7 @@ class CuidarDeLongeActivity : Activity() {
 
         secao(getString(R.string.cuidar_sec_lembretes))
         if (c.lembretes.isEmpty()) lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.cuidar_sem_lembretes)).apply {
-            textSize = Estilo.Leitura.ITEM_DETALHE; setPadding(Estilo.dp(context, 8), 0, 0, 0) })
+            textSize = Estilo.Leitura.ITEM_DETALHE; setPaddingRelative(Estilo.dp(context, 8), 0, 0, 0) })
         for (l in c.lembretes) linha("${l.hhmm}  ${l.texto}", diasTexto(l.dias)) {
             Estilo.lista(this, "${l.hhmm}  ${l.texto}", listOf(getString(R.string.cuidar_apagar), getString(R.string.cuidar_cancelar))) { i ->
                 if (i == 0) { CuidarDeLongeTv.mudar(this) { it.copy(lembretes = CuidarDeLonge.removerLembrete(it.lembretes, l.id)) }; montar() }
@@ -147,7 +147,7 @@ class CuidarDeLongeActivity : Activity() {
             textSize = Estilo.Leitura.ITEM + 2
         }
         CaixaTv(this).setTitle(getString(R.string.cuidar_nome)).setView(LinearLayout(this).apply {
-            setPadding(48, 16, 48, 0); addView(campo)
+            setPaddingRelative(48, 16, 48, 0); addView(campo)
         }).setPositiveButton(getString(R.string.cuidar_ok)) { _, _ ->
             CuidarDeLongeTv.mudar(this) { it.copy(nome = CuidarDeLonge.limparNome(campo.text.toString())) }; montar()
         }.setNegativeButton(getString(R.string.cuidar_cancelar), null).show()

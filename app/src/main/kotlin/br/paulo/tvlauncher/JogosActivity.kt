@@ -169,7 +169,7 @@ class JogosActivity : Activity() {
         orientation = LinearLayout.VERTICAL
         clipChildren = false; clipToPadding = false
         background = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(0x52000000, 0x38000000))
-        setPadding(dp(30), dp(Estilo.MARGEM_VERTICAL), dp(20), dp(16))
+        setPaddingRelative(dp(30), dp(Estilo.MARGEM_VERTICAL), dp(20), dp(16))
 
         // "Jogos" com o ponto da marca.
         addView(LinearLayout(this@JogosActivity).apply {
@@ -192,7 +192,7 @@ class JogosActivity : Activity() {
         cab.addView(Estilo.secao(this@JogosActivity, getString(R.string.turma_titulo)))
         turmaNome = Estilo.texto(this@JogosActivity, Estilo.Papel.LEGENDA).apply {
             textSize = 14f; maxLines = 1; ellipsize = TextUtils.TruncateAt.END
-            setPadding(dp(6), 0, 0, dp(Estilo.E1 - 1))
+            setPaddingRelative(dp(6), 0, 0, dp(Estilo.E1 - 1))
         }
         cab.addView(turmaNome, LinearLayout.LayoutParams(0, -2, 1f))
         addView(cab, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(4) })
@@ -240,7 +240,7 @@ class JogosActivity : Activity() {
         orientation = LinearLayout.HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
         background = Estilo.fundo(this@JogosActivity, Estilo.SUPERFICIE_ALTA, Estilo.RAIO)
-        setPadding(dp(12), dp(10), dp(12), dp(10))
+        setPaddingRelative(dp(12), dp(10), dp(12), dp(10))
         if (esquerda != null) addView(esquerda, LinearLayout.LayoutParams(dp(34), dp(34)).apply { marginEnd = dp(12) })
         else addView(View(this@JogosActivity), LinearLayout.LayoutParams(0, 0))
         addView(LinearLayout(this@JogosActivity).apply {
@@ -297,7 +297,7 @@ class JogosActivity : Activity() {
                 orientation = LinearLayout.VERTICAL
                 isFocusable = true; isClickable = true
                 background = Estilo.fundo(this@JogosActivity, 0x2234C77B, Estilo.RAIO, 0x4434C77B)
-                setPadding(dp(14), dp(12), dp(14), dp(12))
+                setPaddingRelative(dp(14), dp(12), dp(14), dp(12))
                 Estilo.focoCard(this)
                 setOnClickListener { mostrarQrGrande(sala, servidor) }
             }
@@ -313,7 +313,7 @@ class JogosActivity : Activity() {
             qr = ImageView(this).apply {
                 setImageBitmap(QrCodigo.bitmap(TurmaDiscord.linkSala(servidor, sala.id), dp(QR)))
                 background = Estilo.fundo(this@JogosActivity, 0xFFFFFFFF.toInt(), 10)
-                setPadding(dp(5), dp(5), dp(5), dp(5))
+                setPaddingRelative(dp(5), dp(5), dp(5), dp(5))
                 contentDescription = getString(R.string.turma_qr_dica)
             }
             meio.addView(qr, LinearLayout.LayoutParams(dp(QR), dp(QR)).apply { marginStart = dp(10) })
@@ -379,7 +379,7 @@ class JogosActivity : Activity() {
         }, LinearLayout.LayoutParams(0, -2, 1f))
     }
 
-    private fun legenda(t: String) = Estilo.texto(this, Estilo.Papel.LEGENDA, t).apply { textSize = 14f; setPadding(dp(4), dp(6), 0, 0) }
+    private fun legenda(t: String) = Estilo.texto(this, Estilo.Papel.LEGENDA, t).apply { textSize = 14f; setPaddingRelative(dp(4), dp(6), 0, 0) }
 
     /** Cartão focável com título e explicação (configurar a turma, widget desligado, sem rede). */
     private fun cartaoAcao(titulo: String, texto: String, ao: () -> Unit): View {
@@ -387,7 +387,7 @@ class JogosActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             isFocusable = true; isClickable = true
             background = Estilo.vidro(this@JogosActivity)
-            setPadding(dp(14), dp(12), dp(14), dp(14))
+            setPaddingRelative(dp(14), dp(12), dp(14), dp(14))
             addView(Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO, titulo).apply { textSize = 17f; typeface = Estilo.fonte(700) })
             addView(Estilo.texto(this@JogosActivity, Estilo.Papel.LEGENDA, texto).apply { textSize = 14f; setLineSpacing(0f, 1.15f) },
                 LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(6) })
@@ -437,7 +437,7 @@ class JogosActivity : Activity() {
             addView(ImageView(this@JogosActivity).apply {
                 setImageBitmap(QrCodigo.bitmap(TurmaDiscord.linkSala(servidor, sala.id), dp(240)))
                 background = Estilo.fundo(this@JogosActivity, 0xFFFFFFFF.toInt(), 12)
-                setPadding(dp(10), dp(10), dp(10), dp(10))
+                setPaddingRelative(dp(10), dp(10), dp(10), dp(10))
             }, LinearLayout.LayoutParams(dp(240), dp(240)))
             addView(Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO, getString(R.string.turma_qr_dica)).apply { textSize = 18f; gravity = Gravity.CENTER },
                 LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(Estilo.E2) })
@@ -451,13 +451,13 @@ class JogosActivity : Activity() {
     private fun montarDireita(): LinearLayout = LinearLayout(this).apply {
         orientation = LinearLayout.VERTICAL
         clipChildren = false; clipToPadding = false
-        setPadding(dp(28), dp(Estilo.MARGEM_VERTICAL + 6), dp(Estilo.MARGEM_LATERAL), dp(14))
+        setPaddingRelative(dp(28), dp(Estilo.MARGEM_VERTICAL + 6), dp(Estilo.MARGEM_LATERAL), dp(14))
 
         // Topo: CONTINUAR · rede · hora.
         addView(LinearLayout(this@JogosActivity).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            addView(Estilo.secao(this@JogosActivity, getString(R.string.jogos_continuar)).apply { setPadding(dp(4), 0, 0, 0) },
+            addView(Estilo.secao(this@JogosActivity, getString(R.string.jogos_continuar)).apply { setPaddingRelative(dp(4), 0, 0, 0) },
                 LinearLayout.LayoutParams(0, -2, 1f))
             chipRede = Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO).apply { textSize = 16f }
             addView(chipRede)
@@ -468,7 +468,7 @@ class JogosActivity : Activity() {
 
         // A fileira de jogos.
         fila = LinearLayout(this@JogosActivity).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false; gravity = Gravity.CENTER_VERTICAL }
-        addView(rolagem(fila).apply { setPadding(dp(8), dp(16), dp(8), dp(16)) }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(4) })
+        addView(rolagem(fila).apply { setPaddingRelative(dp(8), dp(16), dp(8), dp(16)) }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(4) })
 
         // Ações do jogo em foco + quem da turma está jogando.
         val acoes = LinearLayout(this@JogosActivity).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; clipChildren = false }
@@ -477,11 +477,11 @@ class JogosActivity : Activity() {
             setOnClickListener { atual?.let { abrirJogo(it) } }
         }
         botaoPc = Estilo.botao(this@JogosActivity, "⏻  " + getString(R.string.jogos_ligar_pc_jogar), primario = false).apply {
-            textSize = 18f; id = View.generateViewId(); setPadding(dp(22), dp(11), dp(22), dp(11))
+            textSize = 18f; id = View.generateViewId(); setPaddingRelative(dp(22), dp(11), dp(22), dp(11))
             setOnClickListener { jogarNoPc(atual?.pacote) }
         }
         botaoChamar = Estilo.botao(this@JogosActivity, getString(R.string.turma_chamar), primario = false).apply {
-            textSize = 18f; id = View.generateViewId(); setPadding(dp(22), dp(11), dp(22), dp(11))
+            textSize = 18f; id = View.generateViewId(); setPaddingRelative(dp(22), dp(11), dp(22), dp(11))
             setOnClickListener { chamarTurma(atual?.nome) }
         }
         frase = Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO).apply { textSize = 16f; setTextColor(Estilo.TEXTO_2); maxLines = 2 }
@@ -489,7 +489,7 @@ class JogosActivity : Activity() {
         acoes.addView(botaoPc, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(Estilo.E2) })
         acoes.addView(botaoChamar, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(Estilo.E2) })
         acoes.addView(frase, LinearLayout.LayoutParams(0, -2, 1f).apply { marginStart = dp(Estilo.E3) })
-        addView(acoes, LinearLayout.LayoutParams(-1, -2).apply { leftMargin = dp(8) })
+        addView(acoes, LinearLayout.LayoutParams(-1, -2).apply { marginStart = dp(8) })
 
         addView(View(this@JogosActivity), LinearLayout.LayoutParams(-1, 0, 1f))
 
@@ -498,15 +498,15 @@ class JogosActivity : Activity() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             clipChildren = false
-            addView(Estilo.secao(this@JogosActivity, getString(R.string.jogos_por_tipo)).apply { setPadding(dp(4), 0, dp(Estilo.E2), 0) })
+            addView(Estilo.secao(this@JogosActivity, getString(R.string.jogos_por_tipo)).apply { setPaddingRelative(dp(4), 0, dp(Estilo.E2), 0) })
             chips = LinearLayout(this@JogosActivity).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false }
-            addView(rolagem(chips).apply { setPadding(dp(6), dp(8), dp(6), dp(8)) }, LinearLayout.LayoutParams(0, -2, 1f))
+            addView(rolagem(chips).apply { setPaddingRelative(dp(6), dp(8), dp(6), dp(8)) }, LinearLayout.LayoutParams(0, -2, 1f))
         })
         addView(Estilo.barraDicas(this@JogosActivity,
             "◀ ▶" to getString(R.string.jogos_tecla_escolher),
             "OK" to getString(R.string.jogos_tecla_jogar),
             getString(R.string.jogos_tecla_segurar) to getString(R.string.jogos_tecla_opcoes)),
-            LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(Estilo.E1); leftMargin = dp(4) })
+            LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(Estilo.E1); marginStart = dp(4) })
     }
 
     private fun atualizarRede() {
@@ -641,7 +641,7 @@ class JogosActivity : Activity() {
         if (daTurma.isNotEmpty()) baixo.addView(Estilo.texto(this@JogosActivity, Estilo.Papel.LEGENDA, getString(R.string.turma_aqui, daTurma.size)).apply {
             textSize = 13f; typeface = Estilo.fonte(700); setTextColor(Estilo.TEXTO)
             background = Estilo.fundo(this@JogosActivity, 0x66000000, Estilo.RAIO_PILULA)
-            setPadding(dp(10), dp(4), dp(10), dp(4))
+            setPaddingRelative(dp(10), dp(4), dp(10), dp(4))
         }, LinearLayout.LayoutParams(-2, -2).apply { bottomMargin = dp(8) })
         baixo.addView(Estilo.texto(this@JogosActivity, Estilo.Papel.TITULO, j.nome).apply {
             textSize = 19f; typeface = Estilo.fonte(800); maxLines = 2; ellipsize = TextUtils.TruncateAt.END
@@ -716,7 +716,7 @@ class JogosActivity : Activity() {
         chips.removeAllViews()
         val grupos = jogos.groupBy { it.grupo }
         fun chip(rotulo: String, marcado: Boolean, ao: () -> Unit) = Estilo.botao(this, (if (marcado) "✓ " else "") + rotulo, primario = marcado).apply {
-            textSize = 16f; setPadding(dp(18), dp(9), dp(18), dp(9))
+            textSize = 16f; setPaddingRelative(dp(18), dp(9), dp(18), dp(9))
             setOnClickListener { ao() }
             chips.addView(this, LinearLayout.LayoutParams(-2, -2).apply { marginEnd = dp(Estilo.E1 + 4) })
         }
@@ -775,7 +775,7 @@ class JogosActivity : Activity() {
     /** Pílula na cor da marca (Jogar, Chamar a turma no painel). Foco = branco, como todo botão do app. */
     private fun botaoMarca(rotulo: String): TextView = Estilo.botao(this, rotulo).apply {
         textSize = 18f; typeface = Estilo.fonte(800)
-        setPadding(dp(26), dp(11), dp(26), dp(11))
+        setPaddingRelative(dp(26), dp(11), dp(26), dp(11))
         val normal = Estilo.fundo(this@JogosActivity, MARCA, Estilo.RAIO_PILULA)
         background = normal
         val base = onFocusChangeListener

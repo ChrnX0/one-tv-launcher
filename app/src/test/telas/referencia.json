@@ -1,4 +1,151 @@
 {
+ "ar\/ajuda": {
+  "menorSp": 11,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/ajuda-ac": {
+  "menorSp": 11,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/boas-vindas": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/configuracoes": {
+  "menorSp": 11,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/configuracoes-ac": {
+  "menorSp": 11,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/despertador": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/entrar-celular": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/filmes": {
+  "menorSp": 12.5,
+  "foco": false,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/home": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/home-ac": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/home-grade": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/home-grande": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/jogos": {
+  "menorSp": 11,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [
+   "Moonlight × اعرض أصدقاءك من Discord",
+   "اعرض أصدقاءك من Discord × من الكمبيوتر والجهاز المنزلي"
+  ],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/placar": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/placar-ac": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/planos": {
+  "menorSp": 13,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/previsao": {
+  "menorSp": 18,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "ar\/series": {
+  "menorSp": 12.5,
+  "foco": false,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
  "en\/ajuda": {
   "menorSp": 11,
   "foco": true,

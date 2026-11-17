@@ -34,11 +34,11 @@ class PlacarActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         raiz.addView(Estilo.tituloTela(this, getString(R.string.elv_placar_titulo)))
         raiz.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.elv_placar_sub)).apply {
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f); setPadding(0, dp(6), 0, 0)
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f); setPaddingRelative(0, dp(6), 0, 0)
         })
         lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false }
         raiz.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(lista) },
@@ -87,14 +87,14 @@ class PlacarActivity : Activity() {
         lista.removeAllViews()
         var primeira: View? = null
         if (falhas.isNotEmpty()) {
-            lista.addView(Estilo.secao(this, getString(R.string.elv_f_titulo)).apply { setPadding(dp(4), 0, 0, dp(8)) })
+            lista.addView(Estilo.secao(this, getString(R.string.elv_f_titulo)).apply { setPaddingRelative(dp(4), 0, 0, dp(8)) })
             for (f in falhas) {
                 val l = linha(FalhasTv.frase(this, f), FalhasTv.causa(this, f), "▶  " + FalhasTv.botao(this, f), false, falha = true)
                 l.setOnClickListener { FalhasTv.consertar(this, f) }
                 lista.addView(l, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { bottomMargin = dp(8) })
                 if (primeira == null) primeira = l
             }
-            lista.addView(Estilo.secao(this, getString(R.string.elv_placar_titulo)).apply { setPadding(dp(4), dp(12), 0, dp(8)) })
+            lista.addView(Estilo.secao(this, getString(R.string.elv_placar_titulo)).apply { setPaddingRelative(dp(4), dp(12), 0, dp(8)) })
         }
         linhas.forEachIndexed { i, l ->
             val medida = when {
@@ -130,8 +130,8 @@ class PlacarActivity : Activity() {
             null -> Triple("—", "", Estilo.TEXTO_3)
         }
         val tTitulo = Estilo.texto(this, Estilo.Papel.CORPO, titulo).apply { setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f) }
-        val tDetalhe = Estilo.texto(this, Estilo.Papel.LEGENDA, detalhe).apply { setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f); setPadding(0, dp(4), 0, 0) }
-        val tMedida = Estilo.texto(this, Estilo.Papel.CORPO, medida).apply { setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f); setPadding(0, dp(6), 0, 0) }
+        val tDetalhe = Estilo.texto(this, Estilo.Papel.LEGENDA, detalhe).apply { setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f); setPaddingRelative(0, dp(4), 0, 0) }
+        val tMedida = Estilo.texto(this, Estilo.Papel.CORPO, medida).apply { setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f); setPaddingRelative(0, dp(6), 0, 0) }
         val tSinal = TextView(this).apply {
             text = if (palavra.isEmpty()) sinal else "$sinal  $palavra"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f); typeface = Fontes.nunito(700); setTextColor(cor); gravity = Gravity.END
@@ -139,7 +139,7 @@ class PlacarActivity : Activity() {
         return LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            setPadding(dp(Estilo.E3), dp(14), dp(Estilo.E3), dp(14))
+            setPaddingRelative(dp(Estilo.E3), dp(14), dp(Estilo.E3), dp(14))
             isFocusable = true
             background = Estilo.fundo(context, Estilo.SUPERFICIE, Estilo.RAIO, Estilo.BORDA)
             addView(LinearLayout(context).apply { orientation = LinearLayout.VERTICAL; addView(tTitulo); addView(tDetalhe); addView(tMedida) },

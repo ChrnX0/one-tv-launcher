@@ -67,17 +67,17 @@ class DnsActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)   // o grafite da HOME (sistema de design)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         raiz.addView(Estilo.tituloTela(this, getString(R.string.cfg_dns)))
-        txtStatus = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { setPadding(0, dp(4), 0, dp(Estilo.E2)); maxLines = 2 }
+        txtStatus = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { setPaddingRelative(0, dp(4), 0, dp(Estilo.E2)); maxLines = 2 }
         raiz.addView(txtStatus)
 
         lista = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             clipChildren = false   // a linha focada cresce um pouco; sem isso as bordas seriam cortadas
             clipToPadding = false   // sem isto o Android ainda corta o que passa da margem
-            setPadding(dp(8), dp(4), dp(8), dp(4))   // folga lateral: a linha focada cresce 2% e a borda seria cortada
+            setPaddingRelative(dp(8), dp(4), dp(8), dp(4))   // folga lateral: a linha focada cresce 2% e a borda seria cortada
         }
         val rolagem = ScrollView(this).apply {
             isVerticalScrollBarEnabled = false
@@ -87,7 +87,7 @@ class DnsActivity : Activity() {
         raiz.addView(rolagem, LinearLayout.LayoutParams(MATCH, 0, 1f))
         raiz.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.dns_dica)).apply {
             setTextColor(Estilo.TEXTO_3)
-            setPadding(0, dp(10), 0, 0)
+            setPaddingRelative(0, dp(10), 0, 0)
         })
         return raiz
     }
@@ -128,7 +128,7 @@ class DnsActivity : Activity() {
     }
 
     private fun secao(titulo: String) {
-        lista.addView(Estilo.secao(this, titulo).apply { setPadding(dp(4), dp(Estilo.E2), 0, dp(Estilo.E1)) })
+        lista.addView(Estilo.secao(this, titulo).apply { setPaddingRelative(dp(4), dp(Estilo.E2), 0, dp(Estilo.E1)) })
     }
 
     /** Uma linha da lista: marca (●/○), nome e detalhe. [aoSegurar] é opcional (só os servidores salvos têm). */
@@ -154,7 +154,7 @@ class DnsActivity : Activity() {
             gravity = Gravity.CENTER_VERTICAL
             isFocusable = true
             isClickable = true
-            setPadding(dp(20), dp(12), dp(20), dp(12))
+            setPaddingRelative(dp(20), dp(12), dp(20), dp(12))
             background = vidro(false)
             addView(marca)
             addView(coluna, LinearLayout.LayoutParams(0, WRAP, 1f))
@@ -222,7 +222,7 @@ class DnsActivity : Activity() {
         }
         val caixa = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(24), dp(8), dp(24), 0)
+            setPaddingRelative(dp(24), dp(8), dp(24), 0)
             addView(campoNome)
             addView(campoEndereco)
         }

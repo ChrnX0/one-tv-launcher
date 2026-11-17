@@ -92,7 +92,7 @@ object PareamentoNaTv {
         fun tecla(rotulo: String, aoApertar: () -> Unit) = TextView(app).apply {
             text = rotulo; textSize = 20f; setTextColor(Color.WHITE); gravity = Gravity.CENTER
             isFocusable = true
-            setPadding(dp(app, 10), dp(app, 8), dp(app, 10), dp(app, 8))
+            setPaddingRelative(dp(app, 10), dp(app, 8), dp(app, 10), dp(app, 8))
             setTextColor(Estilo.textoFoco())   // foco branco: o texto escurece (sistema de design)
             background = StateListDrawable().apply {
                 addState(intArrayOf(android.R.attr.state_focused), GradientDrawable().apply { cornerRadius = dp(app, 10).toFloat(); setColor(Estilo.FOCO) })
@@ -127,7 +127,7 @@ object PareamentoNaTv {
 
         val painel = LinearLayout(app).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(app, 20), dp(app, 16), dp(app, 20), dp(app, 16))
+            setPaddingRelative(dp(app, 20), dp(app, 16), dp(app, 20), dp(app, 16))
             background = GradientDrawable().apply { cornerRadius = dp(app, 18).toFloat(); setColor(0xF01C2024.toInt()) }
             addView(texto(app.getString(R.string.pn_titulo), 20f))
             addView(linhaPorta)

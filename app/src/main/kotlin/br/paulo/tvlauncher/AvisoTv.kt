@@ -219,7 +219,7 @@ object AvisoTv {
             if (icone == null) (getChildAt(0).layoutParams as LinearLayout.LayoutParams).apply { width = dp(8); height = dp(8); marginEnd = dp(10) }
             if (cartao) {
                 background = Estilo.vidro(svc, Estilo.RAIO)
-                setPadding(dp(14), dp(12), dp(16), dp(12))
+                setPaddingRelative(dp(14), dp(12), dp(16), dp(12))
                 gravity = Gravity.TOP
             }
             addView(coluna, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))

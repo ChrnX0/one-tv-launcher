@@ -95,7 +95,7 @@ class GravacoesActivity : Activity() {
         }
         coluna.addView(Estilo.secao(this, getString(R.string.grv_gravadas)))
         if (gravadas.isEmpty()) coluna.addView(Estilo.texto(this, Estilo.Papel.LEGENDA,
-            getString(if (destino == null) R.string.grv_vazio_sem_destino else R.string.grv_vazio)).apply { setPadding(0, Estilo.dp(this@GravacoesActivity, 8), 0, 0) })
+            getString(if (destino == null) R.string.grv_vazio_sem_destino else R.string.grv_vazio)).apply { setPaddingRelative(0, Estilo.dp(this@GravacoesActivity, 8), 0, 0) })
         for (g in gravadas) {
             val partes = if (g.partes.size > 1) " · " + getString(R.string.grv_partes, g.partes.size) else ""
             linha("gr:" + g.partes.first(), g.titulo, listOfNotNull(g.inicio?.let { "${dia(it)} ${Gravacoes.hora(it)}" }, gb(g.bytes)).joinToString(" · ") + partes,

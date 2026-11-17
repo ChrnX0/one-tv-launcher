@@ -69,7 +69,7 @@ object FichaAcoes {
         LinearLayout(ctx).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
             minimumHeight = dp(ctx, ALTURA_DP)
-            setPadding(dp(ctx, 16), dp(ctx, 6), dp(ctx, 16), dp(ctx, 6))
+            setPaddingRelative(dp(ctx, 16), dp(ctx, 6), dp(ctx, 16), dp(ctx, 6))
             isFocusable = true; isClickable = true; tag = marca
             background = StateListDrawable().apply {
                 addState(intArrayOf(android.R.attr.state_focused), GradientDrawable().apply { cornerRadius = dp(ctx, 24).toFloat(); setColor(Estilo.TEXTO) })

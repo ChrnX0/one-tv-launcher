@@ -66,7 +66,7 @@ class BloqueioCanaisActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)   // o grafite da HOME (sistema de design)
-            setPadding(dp(72), dp(40), dp(72), dp(24))
+            setPaddingRelative(dp(72), dp(40), dp(72), dp(24))
         }
         raiz.addView(TextView(this).apply { text = if (modoInfantis) getString(R.string.infantil_titulo) else getString(R.string.lbl_canais_bloqueados); textSize = 32f; typeface = fonteLeve; setTextColor(papel) })
         subtitulo = TextView(this).apply { textSize = 15f; setTextColor(suave); text = if (modoInfantis) getString(R.string.infantil_carregando) else getString(R.string.bc_carregando) }
@@ -81,7 +81,7 @@ class BloqueioCanaisActivity : Activity() {
         raiz.addView(TextView(this).apply {
             text = if (modoInfantis) getString(R.string.infantil_dica)
                 else getString(R.string.bc_dica)
-            textSize = 11f; setTextColor(apagado); setPadding(0, dp(10), 0, 0)
+            textSize = 11f; setTextColor(apagado); setPaddingRelative(0, dp(10), 0, 0)
         })
         setContentView(raiz)
 
@@ -251,7 +251,7 @@ class BloqueioCanaisActivity : Activity() {
 
     private fun item() = TextView(this).apply {
         textSize = 17f; typeface = fonteMedia; maxLines = 1; ellipsize = TextUtils.TruncateAt.END
-        gravity = Gravity.CENTER_VERTICAL; setPadding(dp(16), dp(10), dp(16), dp(10))
+        gravity = Gravity.CENTER_VERTICAL; setPaddingRelative(dp(16), dp(10), dp(16), dp(10))
     }
 
     private fun lista() = ListView(this).apply {
@@ -267,9 +267,9 @@ class BloqueioCanaisActivity : Activity() {
     private fun coluna(titulo: String, l: ListView) = LinearLayout(this).apply {
         orientation = LinearLayout.VERTICAL
         background = vidro(false)
-        setPadding(dp(10), dp(10), dp(10), dp(10))
+        setPaddingRelative(dp(10), dp(10), dp(10), dp(10))
         addView(TextView(this@BloqueioCanaisActivity).apply {
-            text = titulo; textSize = 13f; typeface = fonteMedia; setTextColor(suave); letterSpacing = 0.12f; setPadding(dp(16), dp(4), 0, dp(8))
+            text = titulo; textSize = 13f; typeface = fonteMedia; setTextColor(suave); letterSpacing = 0.12f; setPaddingRelative(dp(16), dp(4), 0, dp(8))
         })
         addView(l, LinearLayout.LayoutParams(-1, 0, 1f))
     }

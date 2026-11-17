@@ -91,6 +91,10 @@ class TelasTest {
     @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
     @Test fun portugues() = conferir("pt")
 
+    /** Elevação 16.8: árabe espelhado de verdade (as telas de View e as desenhadas à mão). */
+    @Config(qualifiers = "ar-ldrtl-w960dp-h540dp-land-television-xhdpi")
+    @Test fun arabe() = conferir("ar")
+
     private fun conferir(idioma: String) {
         // Na TV não existe "modo toque": sem isto o requestFocus() das telas não pega e o foco parece sumido.
         InstrumentationRegistry.getInstrumentation().setInTouchMode(false)

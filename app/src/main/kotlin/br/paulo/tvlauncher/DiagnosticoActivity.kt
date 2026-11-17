@@ -76,14 +76,14 @@ class DiagnosticoActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)   // o grafite da HOME (sistema de design)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         raiz.addView(Estilo.tituloTela(this, getString(R.string.diag_titulo)))
         lista = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             clipChildren = false
             clipToPadding = false
-            setPadding(0, dp(4), 0, dp(4))
+            setPaddingRelative(0, dp(4), 0, dp(4))
         }
         raiz.addView(ScrollView(this).apply {
             isVerticalScrollBarEnabled = false
@@ -194,11 +194,11 @@ class DiagnosticoActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)   // o grafite da HOME (sistema de design)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         raiz.addView(Estilo.tituloTela(this, titulo))
         raiz.addView(Estilo.texto(this, Estilo.Papel.LEGENDA).apply { text = getString(R.string.diag_rodape, subtitulo) })
-        val corpo = texto(15f, textoClaro, Typeface.MONOSPACE).apply { text = conteudo; setPadding(dp(8), dp(8), dp(8), dp(8)) }
+        val corpo = texto(15f, textoClaro, Typeface.MONOSPACE).apply { text = conteudo; setPaddingRelative(dp(8), dp(8), dp(8), dp(8)) }
         val rolagem = ScrollView(this).apply { isFocusable = true; addView(corpo) }
         raiz.addView(rolagem, LinearLayout.LayoutParams(MATCH, 0, 1f).apply { topMargin = dp(16) })
         noDetalhe = true
@@ -223,11 +223,11 @@ class DiagnosticoActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)   // o grafite da HOME (sistema de design)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         raiz.addView(Estilo.tituloTela(this, nome))
         raiz.addView(Estilo.texto(this, Estilo.Papel.LEGENDA).apply { text = getString(R.string.diag_rodape, pacote) })
-        val corpo = texto(15f, textoClaro, Typeface.MONOSPACE).apply { text = sb; setPadding(dp(8), dp(8), dp(8), dp(8)) }
+        val corpo = texto(15f, textoClaro, Typeface.MONOSPACE).apply { text = sb; setPaddingRelative(dp(8), dp(8), dp(8), dp(8)) }
         val rolagem = ScrollView(this).apply {
             isFocusable = true
             isVerticalScrollBarEnabled = true
@@ -263,7 +263,7 @@ class DiagnosticoActivity : Activity() {
 
     private fun info(titulo: String, detalhe: String, nivel: Int = -1): TextView = TextView(this).apply {
         montarLinha(titulo, detalhe, nivel)
-        setPadding(dp(20), dp(10), dp(20), dp(10))
+        setPaddingRelative(dp(20), dp(10), dp(20), dp(10))
     }
 
     private fun TextView.mostrar(item: Diagnostico.Item) = montarLinha(item.titulo, item.detalhe, item.nivel, hasFocus())
@@ -295,7 +295,7 @@ class DiagnosticoActivity : Activity() {
         text = sb
         maxLines = 3
         ellipsize = TextUtils.TruncateAt.END
-        setPadding(dp(20), dp(14), dp(20), dp(14))
+        setPaddingRelative(dp(20), dp(14), dp(20), dp(14))
     }
 
     private fun dp(valor: Int): Int = (valor * resources.displayMetrics.density + 0.5f).toInt()

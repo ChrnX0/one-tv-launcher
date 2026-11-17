@@ -18,7 +18,7 @@ class ConhecerProActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         raiz.addView(Estilo.tituloTela(this, getString(R.string.pl_titulo)))
         raiz.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.pl_texto)),
@@ -32,7 +32,7 @@ class ConhecerProActivity : Activity() {
         )) {
             val cartao = LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
-                setPadding(dp(16), dp(14), dp(16), dp(14))
+                setPaddingRelative(dp(16), dp(14), dp(16), dp(14))
                 background = Estilo.fundo(context, if (plano == atual) 0x33FFFFFF else 0x1AFFFFFF, Estilo.RAIO, Estilo.VIDRO_BORDA)
                 addView(Estilo.texto(context, Estilo.Papel.TITULO, getString(nome)).apply { textSize = 22f })
                 addView(Estilo.texto(context, Estilo.Papel.CORPO, getString(itens)).apply { setLineSpacing(0f, 1.3f) },

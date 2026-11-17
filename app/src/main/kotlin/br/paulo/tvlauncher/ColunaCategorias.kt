@@ -87,7 +87,7 @@ class ColunaCategorias(
     private val rola get() = listas[2]
     private val tituloListas = TextView(act).apply {
         text = act.getString(R.string.coluna_listas); textSize = Estilo.Leitura.ROTULO; typeface = Fontes.nunito(600)
-        letterSpacing = 0.12f; setTextColor(apagado); setPadding(dp(14), dp(14), dp(10), dp(4))
+        letterSpacing = 0.12f; setTextColor(apagado); setPaddingRelative(dp(14), dp(14), dp(10), dp(4))
     }
     private val divisoria = View(act).apply { setBackgroundColor(Estilo.BORDA) }
 
@@ -101,17 +101,17 @@ class ColunaCategorias(
     val raiz: LinearLayout = LinearLayout(act).apply {
         orientation = LinearLayout.VERTICAL
         addView(LinearLayout(act).apply {
-            orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(0, 0, 0, dp(10))
+            orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPaddingRelative(0, 0, 0, dp(10))
             addView(TextView(act).apply {
                 text = titulo; textSize = 24f; typeface = Fontes.nunito(700); setTextColor(papel); maxLines = 1
-                ellipsize = TextUtils.TruncateAt.END; setPadding(dp(6), 0, dp(6), 0)
+                ellipsize = TextUtils.TruncateAt.END; setPaddingRelative(dp(6), 0, dp(6), 0)
             }, LinearLayout.LayoutParams(0, -2, 1f))
             addView(caixaBotoes, LinearLayout.LayoutParams(-2, -2))
         })
         // O bloco fixo de ações numa caixa própria, um pouco mais clara que o fundo (o esboço aprovado).
         addView(acoes.apply {
             background = GradientDrawable().apply { cornerRadius = dp(14).toFloat(); setColor(Estilo.SUPERFICIE); setStroke(dp(1), Estilo.BORDA) }
-            setPadding(dp(4), dp(4), dp(4), dp(4)); clipToPadding = false
+            setPaddingRelative(dp(4), dp(4), dp(4), dp(4)); clipToPadding = false
         }, LinearLayout.LayoutParams(-1, 0))
         addView(tituloListas)
         addView(fixas, LinearLayout.LayoutParams(-1, 0))
@@ -251,14 +251,14 @@ class ColunaCategorias(
 
     private fun novaLinha(altura: Int): View {
         val linha = LinearLayout(act).apply {
-            orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(dp(12), 0, dp(12), 0)
+            orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPaddingRelative(dp(12), 0, dp(12), 0)
             layoutParams = AbsListView.LayoutParams(-1, altura)
         }
         val icone = ImageView(act)
         linha.addView(icone, LinearLayout.LayoutParams(dp((18 * escala).toInt()), dp((18 * escala).toInt())).apply { marginEnd = dp(12) })
         // Selo do serviço (listas de fora): fundo claro, letra escura, pequeno.
         val etiqueta = TextView(act).apply {
-            textSize = 11f * escala; typeface = Fontes.nunito(700); setTextColor(Estilo.FUNDO); setPadding(dp(6), dp(1), dp(6), dp(1))
+            textSize = 11f * escala; typeface = Fontes.nunito(700); setTextColor(Estilo.FUNDO); setPaddingRelative(dp(6), dp(1), dp(6), dp(1))
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(COR_ETIQUETA) }
             visibility = View.GONE
         }
@@ -267,7 +267,7 @@ class ColunaCategorias(
         linha.addView(nome, LinearLayout.LayoutParams(0, -2, 1f))
         // "+12": títulos novos desde a última visita, numa pílula verde (esboço direita-filmes.png).
         val novos = TextView(act).apply {
-            textSize = 11.5f; typeface = Fontes.nunito(700); setTextColor(Estilo.FUNDO); setPadding(dp(6), dp(1), dp(6), dp(1))
+            textSize = 11.5f; typeface = Fontes.nunito(700); setTextColor(Estilo.FUNDO); setPaddingRelative(dp(6), dp(1), dp(6), dp(1))
             background = GradientDrawable().apply { cornerRadius = dp(8).toFloat(); setColor(COR_NOVOS) }
         }
         linha.addView(novos, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(6) })

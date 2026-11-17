@@ -272,7 +272,7 @@ class TimerActivity : Activity() {
             orientation = android.widget.LinearLayout.VERTICAL
             gravity = android.view.Gravity.CENTER_HORIZONTAL
             clipChildren = false; clipToPadding = false
-            setPadding(dp(Estilo.E6 - 8), dp(Estilo.E3 + 8), dp(Estilo.E6 - 8), dp(Estilo.E3 + 8))
+            setPaddingRelative(dp(Estilo.E6 - 8), dp(Estilo.E3 + 8), dp(Estilo.E6 - 8), dp(Estilo.E3 + 8))
             background = Estilo.fundo(this@TimerActivity, Estilo.CARTAO, Estilo.RAIO, Estilo.VIDRO_BORDA)
             addView(Estilo.texto(this@TimerActivity, Estilo.Papel.SECAO, "Timer"),
                 android.widget.LinearLayout.LayoutParams(-2, -2).apply { bottomMargin = dp(Estilo.E1) })

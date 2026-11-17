@@ -81,7 +81,7 @@ class PrevisaoActivity : Activity() {
         coluna = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             clipChildren = false
-            setPadding(dp(Grade.MARGEM), dp(28), dp(Grade.MARGEM), dp(60))
+            setPaddingRelative(dp(Grade.MARGEM), dp(28), dp(Grade.MARGEM), dp(60))
         }
         rolagem = Rolagem(this).apply {
             isVerticalScrollBarEnabled = false
@@ -258,15 +258,15 @@ class PrevisaoActivity : Activity() {
         val iconeAgora = IconesClima.chave(d.codigo, d.eDia, chovendo)
         val cabecalho = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
         cabecalho.addView(IconesClima.imagem(this, iconeAgora), LinearLayout.LayoutParams(dp(132), dp(132)))
-        val txt = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(18), 0, 0, 0) }
+        val txt = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(18), 0, 0, 0) }
         txt.addView(texto(84f, Estilo.TEXTO, fonteLeve).apply { text = "$tempAgora°"; includeFontPadding = false })
         txt.addView(texto(24f, Estilo.TEXTO, fonteMedia).apply { text = IconesClima.texto(d.codigo, chovendo) })
         txt.addView(texto(16f, textoSuave).apply {
             text = getString(R.string.pv_max_min, maxHoje, minHoje, sensacao)
-            setPadding(0, dp(4), 0, 0)
+            setPaddingRelative(0, dp(4), 0, 0)
         })
         // O lugar escolhido no painel (LocalClima.kt), para não haver dúvida de onde é a previsão.
-        d.ponto.nome?.let { nome -> txt.addView(texto(16f, textoSuave).apply { text = nome; setPadding(0, dp(4), 0, 0) }) }
+        d.ponto.nome?.let { nome -> txt.addView(texto(16f, textoSuave).apply { text = nome; setPaddingRelative(0, dp(4), 0, 0) }) }
         cabecalho.addView(txt, LinearLayout.LayoutParams(0, -2, 1f))
         // Hora e data no canto, iguais às da HOME e das outras telas (Moldura). Ficam DENTRO do cabeçalho: a tela inteira
         // rola, e um relógio fixo por cima ficaria em cima dos cartões. 48 dp de altura = a mesma linha da HOME.
@@ -282,7 +282,7 @@ class PrevisaoActivity : Activity() {
             val item = LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL
                 gravity = Gravity.CENTER_HORIZONTAL
-                setPadding(dp(4), dp(8), dp(4), dp(8))
+                setPaddingRelative(dp(4), dp(8), dp(4), dp(8))
                 isFocusable = true
                 background = itemFoco(false)
                 setOnFocusChangeListener { v, f -> v.background = itemFoco(f); if (f) focarCartao(horas) }
@@ -319,7 +319,7 @@ class PrevisaoActivity : Activity() {
             dias.addView(LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
                 gravity = Gravity.CENTER_VERTICAL
-                setPadding(0, dp(3), 0, dp(3))
+                setPaddingRelative(0, dp(3), 0, dp(3))
                 addView(texto(17f, Estilo.TEXTO, fonteMedia).apply { text = nome }, LinearLayout.LayoutParams(dp(110), -2))
                 addView(IconesClima.imagem(this@PrevisaoActivity, IconesClima.chave(d.dCodigo[i], true, false)), LinearLayout.LayoutParams(dp(34), dp(34)))
                 addView(texto(15f, azulChuva).apply { text = "${d.dChuva[i]}%"; gravity = Gravity.END }, LinearLayout.LayoutParams(dp(56), -2))
@@ -353,7 +353,7 @@ class PrevisaoActivity : Activity() {
         linhas.forEach { l ->
             detalhes.addView(LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
-                setPadding(0, dp(8), 0, dp(4))
+                setPaddingRelative(0, dp(8), 0, dp(4))
                 l.forEach { (rot, valor, extra) -> addView(tile(rot, valor, extra.first, extra.second), LinearLayout.LayoutParams(0, -2, 1f)) }
             })
         }
@@ -365,12 +365,12 @@ class PrevisaoActivity : Activity() {
         if (d.aqi != null) {
             val (rot, cor) = rotuloAqi(d.aqi)
             ar.addView(LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(0, dp(6), 0, dp(6))
+                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPaddingRelative(0, dp(6), 0, dp(6))
                 addView(texto(44f, cor, fonteLeve).apply { text = "${d.aqi}"; includeFontPadding = false })
-                addView(texto(18f, Estilo.TEXTO, fonteMedia).apply { text = rot; setPadding(dp(12), 0, 0, 0) })
+                addView(texto(18f, Estilo.TEXTO, fonteMedia).apply { text = rot; setPaddingRelative(dp(12), 0, 0, 0) })
             })
             ar.addView(BarraAqi(this, d.aqi), LinearLayout.LayoutParams(-1, dp(8)))
-        } else ar.addView(texto(15f, textoSuave).apply { text = getString(R.string.pv_sem_dados); setPadding(0, dp(10), 0, 0) })
+        } else ar.addView(texto(15f, textoSuave).apply { text = getString(R.string.pv_sem_dados); setPaddingRelative(0, dp(10), 0, 0) })
 
         val sol = cartao(getString(R.string.pt_sol))
         val nascerMin = minutos(d.dNascer[0]); val poenteMin = minutos(d.dPoente[0])
@@ -386,10 +386,10 @@ class PrevisaoActivity : Activity() {
         val agoraMs = System.currentTimeMillis()
         val partes = Lua.resumo(agoraMs, d.ponto.lat).split("  ·  ")
         lua.addView(LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(0, dp(6), 0, 0)
+            orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPaddingRelative(0, dp(6), 0, 0)
             addView(IconesClima.imagem(this@PrevisaoActivity, Lua.chaveIcone(agoraMs, d.ponto.lat)), LinearLayout.LayoutParams(dp(60), dp(60)))
             addView(LinearLayout(this@PrevisaoActivity).apply {
-                orientation = LinearLayout.VERTICAL; setPadding(dp(10), 0, 0, 0)
+                orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(10), 0, 0, 0)
                 addView(texto(17f, Estilo.TEXTO, fonteMedia).apply { text = partes[0].substringAfter("  ").trim() })
                 addView(texto(14f, textoSuave).apply { text = "${partes.getOrElse(1) { "" }} · ${partes.getOrElse(2) { "" }}" })
             })
@@ -410,13 +410,13 @@ class PrevisaoActivity : Activity() {
 
     private fun tile(rotulo: String, valor: String, icone: String, extra: String): View = LinearLayout(this).apply {
         orientation = LinearLayout.VERTICAL
-        setPadding(0, 0, dp(10), 0)
+        setPaddingRelative(0, 0, dp(10), 0)
         addView(LinearLayout(this@PrevisaoActivity).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
             addView(IconesClima.imagem(this@PrevisaoActivity, IconesClima.PREFIXO + "3d/" + icone), LinearLayout.LayoutParams(dp(22), dp(22)))
-            addView(texto(13f, textoSuave).apply { text = rotulo; setPadding(dp(6), 0, 0, 0); maxLines = 1 })
+            addView(texto(13f, textoSuave).apply { text = rotulo; setPaddingRelative(dp(6), 0, 0, 0); maxLines = 1 })
         })
-        addView(texto(26f, Estilo.TEXTO, fonteMedia).apply { text = valor; setPadding(0, dp(4), 0, 0); maxLines = 1 })
+        addView(texto(26f, Estilo.TEXTO, fonteMedia).apply { text = valor; setPaddingRelative(0, dp(4), 0, 0); maxLines = 1 })
         addView(texto(13f, textoSuave).apply { text = extra.ifEmpty { " " } })
     }
 
@@ -443,7 +443,7 @@ class PrevisaoActivity : Activity() {
     /** Um cartão com título. [focavel]: o cartão inteiro é um ponto de parada (a faixa de horas tem os próprios itens). */
     private fun cartao(titulo: String, focavel: Boolean = true) = LinearLayout(this).apply {
         orientation = LinearLayout.VERTICAL
-        setPadding(dp(20), dp(14), dp(20), dp(14))
+        setPaddingRelative(dp(20), dp(14), dp(20), dp(14))
         background = fundoCartao(false)
         if (focavel) {
             isFocusable = true
@@ -485,14 +485,16 @@ class PrevisaoActivity : Activity() {
     /** Área azul da chance de chuva (0-100%) nas próximas horas, com linhas em 0/50/100% e a hora a cada 4 pontos. */
     private class GraficoChuva(ctx: Context, val valores: List<Int>, val horas: List<Int>) : View(ctx) {
         private val p = Paint(Paint.ANTI_ALIAS_FLAG)
-        override fun onDraw(c: Canvas) {
+        override fun onDraw(c: Canvas) = Rtl.espelhar(this, c) { desenhar(c) }   // 16.8: o tempo anda para a esquerda no árabe
+        private fun desenhar(c: Canvas) {
+            val rtl = Rtl.ehRtl(this)
             val d = resources.displayMetrics.density
             val esq = 34 * d; val dir = width - 6 * d; val topo = 6 * d; val base = height - 20 * d
             p.textSize = 11 * d; p.strokeWidth = d
             for (v in intArrayOf(0, 50, 100)) {
                 val y = base - (base - topo) * v / 100f
                 p.color = 0x33FFFFFF; p.style = Paint.Style.STROKE; c.drawLine(esq, y, dir, y, p)
-                p.color = 0xB3FFFFFF.toInt(); p.style = Paint.Style.FILL; c.drawText("$v%", 0f, y + 4 * d, p)
+                p.color = 0xB3FFFFFF.toInt(); p.style = Paint.Style.FILL; Rtl.texto(c, rtl, "$v%", 0f, y + 4 * d, p)
             }
             if (valores.size < 2) return
             val passo = (dir - esq) / (valores.size - 1)
@@ -507,7 +509,7 @@ class PrevisaoActivity : Activity() {
             c.drawPath(area, p); p.shader = null
             p.style = Paint.Style.STROKE; p.strokeWidth = 2.5f * d; p.color = 0xFF8EC5FF.toInt(); c.drawPath(linha, p)
             p.style = Paint.Style.FILL; p.color = 0xB3FFFFFF.toInt(); p.textAlign = Paint.Align.CENTER
-            for (i in valores.indices step 4) c.drawText("${horas[i]}h", esq + passo * i, height - 4 * d, p)
+            for (i in valores.indices step 4) Rtl.texto(c, rtl, "${horas[i]}h", esq + passo * i, height - 4 * d, p)
             p.textAlign = Paint.Align.LEFT
         }
     }
@@ -515,7 +517,8 @@ class PrevisaoActivity : Activity() {
     /** Barra da faixa mín–máx do dia, na escala da semana toda (azul-frio na esquerda, laranja-quente na direita). */
     private class BarraTemp(ctx: Context, val mn: Double, val mx: Double, val gMin: Double, val gMax: Double) : View(ctx) {
         private val p = Paint(Paint.ANTI_ALIAS_FLAG)
-        override fun onDraw(c: Canvas) {
+        override fun onDraw(c: Canvas) = Rtl.espelhar(this, c) { desenhar(c) }   // 16.8: o tempo anda para a esquerda no árabe
+        private fun desenhar(c: Canvas) {
             val h = height.toFloat(); val esc = max(1.0, gMax - gMin)
             p.color = 0x28FFFFFF; c.drawRoundRect(RectF(0f, 0f, width.toFloat(), h), h / 2, h / 2, p)
             val x1 = (((mn - gMin) / esc) * width).toFloat(); val x2 = max(x1 + h, (((mx - gMin) / esc) * width).toFloat())
@@ -527,7 +530,8 @@ class PrevisaoActivity : Activity() {
     /** Escala de 0 a 300+ do índice de qualidade do ar (verde a vinho) com um marcador onde o valor está. */
     private class BarraAqi(ctx: Context, val aqi: Int) : View(ctx) {
         private val p = Paint(Paint.ANTI_ALIAS_FLAG)
-        override fun onDraw(c: Canvas) {
+        override fun onDraw(c: Canvas) = Rtl.espelhar(this, c) { desenhar(c) }   // 16.8: o tempo anda para a esquerda no árabe
+        private fun desenhar(c: Canvas) {
             val h = height.toFloat()
             p.shader = LinearGradient(0f, 0f, width.toFloat(), 0f,
                 intArrayOf(0xFF7BE0A0.toInt(), 0xFFF2E26B.toInt(), 0xFFFFB566.toInt(), 0xFFFF7A6B.toInt(), 0xFFD08CFF.toInt()), null, Shader.TileMode.CLAMP)
@@ -540,7 +544,8 @@ class PrevisaoActivity : Activity() {
     /** O arco do sol: tracejado do nascer ao pôr, com o sol (bolinha amarela) na posição de agora ([fracao] 0 = nascer, 1 = pôr). */
     private class ArcoSol(ctx: Context, val fracao: Float) : View(ctx) {
         private val p = Paint(Paint.ANTI_ALIAS_FLAG)
-        override fun onDraw(c: Canvas) {
+        override fun onDraw(c: Canvas) = Rtl.espelhar(this, c) { desenhar(c) }   // 16.8: o tempo anda para a esquerda no árabe
+        private fun desenhar(c: Canvas) {
             val d = resources.displayMetrics.density
             val raioX = width / 2f - 12 * d; val raioY = height - 10 * d; val cx = width / 2f; val cy = height - 4 * d
             p.style = Paint.Style.STROKE; p.strokeWidth = 2 * d; p.color = 0x55FFFFFF

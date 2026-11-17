@@ -87,7 +87,7 @@ class CuidarTelaActivity : Activity() {
     private fun botao(rotulo: String, primario: Boolean, acao: (() -> Unit)?): TextView = Estilo.botao(this, rotulo, primario).apply {
         textSize = Estilo.Leitura.PERGUNTA_BOTAO
         minWidth = dp(220)
-        setPadding(dp(Estilo.E3 + 8), dp(18), dp(Estilo.E3 + 8), dp(18))
+        setPaddingRelative(dp(Estilo.E3 + 8), dp(18), dp(Estilo.E3 + 8), dp(18))
         if (acao != null) setOnClickListener { acao() }
     }
 
@@ -128,7 +128,7 @@ class CuidarTelaActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL
             clipChildren = false; clipToPadding = false
-            setPadding(dp(Estilo.E6), dp(Estilo.E3 + 4), dp(Estilo.E6), dp(Estilo.E3 + 4))
+            setPaddingRelative(dp(Estilo.E6), dp(Estilo.E3 + 4), dp(Estilo.E6), dp(Estilo.E3 + 4))
             background = Estilo.fundo(context, Estilo.CARTAO, Estilo.RAIO, Estilo.VIDRO_BORDA)
             addView(rolagem, LinearLayout.LayoutParams(-1, -2))
             if (botoes.isNotEmpty()) addView(LinearLayout(context).apply {

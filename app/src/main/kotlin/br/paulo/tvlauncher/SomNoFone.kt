@@ -209,7 +209,7 @@ object SomNoFone {
         fun atualizar() { ouvindoTxt.text = a.getString(R.string.fone_ouvindo, ouvindo, SomNoFoneRegras.MAX_CELULARES) }
         val col = LinearLayout(a).apply {
             orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_HORIZONTAL
-            setPadding(dp(40), dp(32), dp(40), dp(32))
+            setPaddingRelative(dp(40), dp(32), dp(40), dp(32))
             background = Estilo.vidro(a, 24)
             addView(TextView(a).apply { text = a.getString(R.string.fone_titulo); textSize = 30f; setTextColor(Estilo.TEXTO); typeface = Fontes.nunito(700); gravity = Gravity.CENTER })
             addView(TextView(a).apply { text = a.getString(R.string.fone_texto, SomNoFoneRegras.MAX_CELULARES); textSize = 20f; setTextColor(Estilo.TEXTO_2); gravity = Gravity.CENTER },
@@ -220,7 +220,7 @@ object SomNoFone {
             addView(ouvindoTxt, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(10) })
             val fechar = Estilo.botao(a, a.getString(R.string.fone_fechar), primario = false).apply { setOnClickListener { d.dismiss() } }
             val parar = Estilo.botao(a, a.getString(R.string.fone_parar)).apply { setOnClickListener { parar(); d.dismiss() } }
-            addView(LinearLayout(a).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER; addView(fechar); addView(parar, LinearLayout.LayoutParams(-2, -2).apply { leftMargin = dp(16) }) },
+            addView(LinearLayout(a).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER; addView(fechar); addView(parar, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(16) }) },
                 LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(20) })
             fechar.post { fechar.requestFocus() }
         }

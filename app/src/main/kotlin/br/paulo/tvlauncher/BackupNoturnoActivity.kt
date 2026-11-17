@@ -197,7 +197,7 @@ class BackupNoturnoActivity : Activity() {
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
             isSingleLine = true
         }
-        val moldura = FrameLayout(this).apply { setPadding(dp(20), dp(8), dp(20), 0); addView(campo) }
+        val moldura = FrameLayout(this).apply { setPaddingRelative(dp(20), dp(8), dp(20), 0); addView(campo) }
         val d = CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert).setTitle(titulo).setView(moldura)
             .setPositiveButton(android.R.string.ok) { _, _ -> ok(campo.text.toString()) }
             .setNegativeButton(android.R.string.cancel, null).create()

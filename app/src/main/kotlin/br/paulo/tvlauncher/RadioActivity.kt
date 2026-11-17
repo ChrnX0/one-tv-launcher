@@ -213,7 +213,7 @@ class RadioActivity : Activity() {
 
     private fun pedirNome() {
         val campo = EditText(this).apply { inputType = InputType.TYPE_CLASS_TEXT; isSingleLine = true; textSize = 20f }
-        val moldura = FrameLayout(this).apply { setPadding(Estilo.dp(this@RadioActivity, 20), Estilo.dp(this@RadioActivity, 8), Estilo.dp(this@RadioActivity, 20), 0); addView(campo) }
+        val moldura = FrameLayout(this).apply { setPaddingRelative(Estilo.dp(this@RadioActivity, 20), Estilo.dp(this@RadioActivity, 8), Estilo.dp(this@RadioActivity, 20), 0); addView(campo) }
         val d = CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert).setTitle(getString(R.string.ra_buscar)).setView(moldura)
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 val t = campo.text.toString().trim()

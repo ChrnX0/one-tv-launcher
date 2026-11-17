@@ -288,12 +288,12 @@ class ProtetorTela : DreamService() {
             addView(TextView(this@ProtetorTela).apply { text = emoji; setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f); gravity = Gravity.CENTER })
             addView(TextView(this@ProtetorTela).apply {
                 text = valor; setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f); setTextColor(0xE6E8EEEA.toInt())
-                typeface = fonteMedia; gravity = Gravity.CENTER; maxLines = 2; setPadding(0, dp(6), 0, 0)
+                typeface = fonteMedia; gravity = Gravity.CENTER; maxLines = 2; setPaddingRelative(0, dp(6), 0, 0)
                 setLineSpacing(0f, 0.95f)   // nascer/pôr em 2 linhas; o quadrado tem altura fixa, então não desalinha os outros
             })
             addView(TextView(this@ProtetorTela).apply {
                 text = rotulo.uppercase(); setTextSize(TypedValue.COMPLEX_UNIT_SP, 10f); setTextColor(0x80E8EEEA.toInt())
-                letterSpacing = 0.06f; gravity = Gravity.CENTER; maxLines = 2; setPadding(dp(8), dp(3), dp(8), 0)   // nome da fase da lua pode ser longo
+                letterSpacing = 0.06f; gravity = Gravity.CENTER; maxLines = 2; setPaddingRelative(dp(8), dp(3), dp(8), 0)   // nome da fase da lua pode ser longo
             })
         }
 

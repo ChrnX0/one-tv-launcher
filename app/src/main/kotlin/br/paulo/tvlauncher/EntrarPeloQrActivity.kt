@@ -56,16 +56,16 @@ class EntrarPeloQrActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             background = Estilo.fundoTela(context)   // o grafite da HOME (sistema de design)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
             gravity = Gravity.CENTER_VERTICAL
         }
         val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         titulo = Estilo.tituloTela(this, "")   // título e texto nos papéis do sistema de design
-        texto = Estilo.texto(this, Estilo.Papel.CORPO).apply { setTextColor(Estilo.TEXTO_2); setPadding(0, dp(16), dp(32), 0); setLineSpacing(0f, 1.2f) }
+        texto = Estilo.texto(this, Estilo.Papel.CORPO).apply { setTextColor(Estilo.TEXTO_2); setPaddingRelative(0, dp(16), dp(32), 0); setLineSpacing(0f, 1.2f) }
         col.addView(titulo); col.addView(texto)
         val botoes = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
         outro = botao(getString(R.string.qr_gerar_outro)) { gerar() }
-        botoes.addView(outro, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { rightMargin = dp(16) })
+        botoes.addView(outro, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginEnd = dp(16) })
         val fechar = botao(getString(R.string.qr_fechar)) { finish() }
         botoes.addView(fechar)
         col.addView(botoes, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { topMargin = dp(24) })

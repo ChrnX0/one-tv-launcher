@@ -260,7 +260,7 @@ class VodActivity : Activity() {
             FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM).apply { setMargins(dp(32), 0, dp(32), dp(26)) })
         aviso = TextView(this).apply {
             textSize = 18f; setTextColor(papel); gravity = Gravity.CENTER; background = vidro(16)
-            setPadding(dp(24), dp(16), dp(24), dp(16)); text = getString(R.string.vod_carregando)
+            setPaddingRelative(dp(24), dp(16), dp(24), dp(16)); text = getString(R.string.vod_carregando)
         }
         raiz.addView(aviso, FrameLayout.LayoutParams(-2, -2, Gravity.CENTER))
         // Legenda em imagem (14/11/2026): desenhada dentro da área do vídeo, por baixo da barra e dos avisos.
@@ -276,7 +276,7 @@ class VodActivity : Activity() {
             textSize = FimDoVideo.LEGENDA_PADRAO.toFloat(); setTextColor(Color.WHITE); gravity = Gravity.CENTER; visibility = View.GONE
             typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
             setShadowLayer(8f, 0f, 2f, Color.BLACK)
-            setPadding(dp(18), dp(6), dp(18), dp(6))
+            setPaddingRelative(dp(18), dp(6), dp(18), dp(6))
             background = GradientDrawable().apply { cornerRadius = dp(8).toFloat(); setColor(0x8C000000.toInt()) }
         }
         raiz.addView(legenda, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL).apply { setMargins(dp(96), 0, dp(96), dp(56)) })
@@ -291,7 +291,7 @@ class VodActivity : Activity() {
         pilulaPular = TextView(this).apply {
             textSize = 18f; setTextColor(papel); visibility = View.GONE; text = getString(R.string.abertura_pular)
             typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
-            setPadding(dp(22), dp(12), dp(22), dp(12))
+            setPaddingRelative(dp(22), dp(12), dp(22), dp(12))
             background = GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(0xD90E1020.toInt()); setStroke(dp(2), coral) }
         }
         raiz.addView(pilulaPular, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.END).apply { setMargins(0, 0, dp(48), dp(170)) })
@@ -300,7 +300,7 @@ class VodActivity : Activity() {
             textSize = FimDoVideo.LEGENDA_PADRAO.toFloat(); setTextColor(Color.WHITE); gravity = Gravity.CENTER; visibility = View.GONE
             typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
             setShadowLayer(8f, 0f, 2f, Color.BLACK)
-            setPadding(dp(18), dp(6), dp(18), dp(6))
+            setPaddingRelative(dp(18), dp(6), dp(18), dp(6))
             background = GradientDrawable().apply { cornerRadius = dp(8).toFloat(); setColor(0x8C000000.toInt()) }
         }
         raiz.addView(legenda2, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL).apply { setMargins(dp(96), dp(40), dp(96), 0) })
@@ -308,14 +308,14 @@ class VodActivity : Activity() {
         miniatura = ImageView(this).apply {
             visibility = View.GONE; scaleType = ImageView.ScaleType.FIT_XY
             background = GradientDrawable().apply { setColor(Color.BLACK); setStroke(dp(2), coral) }
-            setPadding(dp(2), dp(2), dp(2), dp(2))
+            setPaddingRelative(dp(2), dp(2), dp(2), dp(2))
         }
         raiz.addView(miniatura, FrameLayout.LayoutParams(dp(tamMiniatura.first), dp(tamMiniatura.second), Gravity.BOTTOM or Gravity.START)
             .apply { setMargins(dp(32), 0, 0, dp(176)) })
         // Ideia 8: quadro técnico, em cima à esquerda.
         infoTec = TextView(this).apply {
             textSize = 13f; setTextColor(papel); visibility = View.GONE; typeface = Typeface.MONOSPACE
-            setPadding(dp(14), dp(10), dp(14), dp(10)); background = vidro(12)
+            setPaddingRelative(dp(14), dp(10), dp(14), dp(10)); background = vidro(12)
         }
         raiz.addView(infoTec, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.START).apply { setMargins(dp(32), dp(28), 0, 0) })
         setContentView(raiz)
@@ -1327,7 +1327,7 @@ class VodActivity : Activity() {
 
     private fun montarBarra(t: String): View {
         barra = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL; background = vidro(18); setPadding(dp(20), dp(16), dp(20), dp(14))
+            orientation = LinearLayout.VERTICAL; background = vidro(18); setPaddingRelative(dp(20), dp(16), dp(20), dp(14))
         }
         val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
         titulo = TextView(this).apply {

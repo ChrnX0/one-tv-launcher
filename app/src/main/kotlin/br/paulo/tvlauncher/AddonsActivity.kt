@@ -82,16 +82,16 @@ class AddonsActivity : Activity() {
         val raiz = FrameLayout(this).apply { background = Estilo.fundoTela(this@AddonsActivity) }
         val coluna = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
             clipToPadding = false
         }
         trilha = Estilo.texto(this, Estilo.Papel.SECAO).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.START; visibility = View.GONE }
-        titulo = Estilo.tituloTela(this, getString(R.string.ad_titulo)).apply { setPadding(0, dp(4), 0, 0) }
-        aviso = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { setPadding(0, dp(Estilo.E1), 0, dp(Estilo.E2)); textSize = 15f }
+        titulo = Estilo.tituloTela(this, getString(R.string.ad_titulo)).apply { setPaddingRelative(0, dp(4), 0, 0) }
+        aviso = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { setPaddingRelative(0, dp(Estilo.E1), 0, dp(Estilo.E2)); textSize = 15f }
         lista = ListView(this).apply {
             divider = null; dividerHeight = dp(6); isVerticalScrollBarEnabled = false; itemsCanFocus = false
             selector = android.graphics.drawable.ColorDrawable(Color.TRANSPARENT)
-            clipToPadding = false; setPadding(dp(18), dp(4), dp(18), dp(4))
+            clipToPadding = false; setPaddingRelative(dp(18), dp(4), dp(18), dp(4))
             adapter = adaptador
             onItemClickListener = AdapterView.OnItemClickListener { _, _, pos, _ -> abrir(pos) }
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -100,12 +100,12 @@ class AddonsActivity : Activity() {
             }
             setOnFocusChangeListener { _, _ -> pintarFoco() }
         }
-        dicas = FrameLayout(this).apply { setPadding(0, dp(Estilo.E2), 0, 0) }
+        dicas = FrameLayout(this).apply { setPaddingRelative(0, dp(Estilo.E2), 0, 0) }
         coluna.addView(trilha); coluna.addView(titulo); coluna.addView(aviso)
-        ficha = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; visibility = View.GONE; setPadding(dp(Estilo.E2), dp(4), 0, 0) }
+        ficha = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; visibility = View.GONE; setPaddingRelative(dp(Estilo.E2), dp(4), 0, 0) }
         fichaCapa = ImageView(this).apply { scaleType = ImageView.ScaleType.FIT_START; adjustViewBounds = true }
-        fichaTitulo = Estilo.texto(this, Estilo.Papel.CORPO).apply { maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(Estilo.E1), 0, 0) }
-        fichaTexto = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { maxLines = 9; ellipsize = TextUtils.TruncateAt.END; setLineSpacing(0f, 1.2f); setPadding(0, dp(6), 0, 0) }
+        fichaTitulo = Estilo.texto(this, Estilo.Papel.CORPO).apply { maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPaddingRelative(0, dp(Estilo.E1), 0, 0) }
+        fichaTexto = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { maxLines = 9; ellipsize = TextUtils.TruncateAt.END; setLineSpacing(0f, 1.2f); setPaddingRelative(0, dp(6), 0, 0) }
         ficha.addView(fichaCapa, LinearLayout.LayoutParams(dp(200), dp(300)))
         ficha.addView(fichaTitulo); ficha.addView(fichaTexto)
         val miolo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
@@ -353,7 +353,7 @@ class AddonsActivity : Activity() {
         val cartao = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundo(this@AddonsActivity, 0xF2141A24.toInt(), Estilo.RAIO, Estilo.VIDRO_BORDA)
-            setPadding(dp(Estilo.E3 + 4), dp(Estilo.E3), dp(Estilo.E3 + 4), dp(Estilo.E3))
+            setPaddingRelative(dp(Estilo.E3 + 4), dp(Estilo.E3), dp(Estilo.E3 + 4), dp(Estilo.E3))
             clipChildren = false; clipToPadding = false
         }
         cartao.addView(Estilo.texto(this, Estilo.Papel.CORPO, getString(R.string.ad_buscar)))
@@ -475,12 +475,12 @@ class AddonsActivity : Activity() {
             tag = TAG_LINHA
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
             minimumHeight = dp(56)
-            setPadding(dp(Estilo.E2 + 4), dp(10), dp(Estilo.E2 + 4), dp(10))
+            setPaddingRelative(dp(Estilo.E2 + 4), dp(10), dp(Estilo.E2 + 4), dp(10))
             addView(ImageView(ctx), LinearLayout.LayoutParams(dp(24), dp(24)).apply { marginEnd = dp(Estilo.E2) })
             addView(LinearLayout(ctx).apply {
                 orientation = LinearLayout.VERTICAL
                 addView(Estilo.texto(ctx, Estilo.Papel.CORPO).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END })
-                addView(Estilo.texto(ctx, Estilo.Papel.LEGENDA).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(3), 0, 0) })
+                addView(Estilo.texto(ctx, Estilo.Papel.LEGENDA).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPaddingRelative(0, dp(3), 0, 0) })
             }, LinearLayout.LayoutParams(0, -2, 1f))
             background = Estilo.superficie(ctx, false)
         }

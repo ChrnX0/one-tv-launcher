@@ -59,7 +59,7 @@ class BuscaActivity : Activity() {
             textSize = 20f
             typeface = Estilo.fonte(500)
             background = Estilo.fundo(context, Estilo.SUPERFICIE_ALTA, Estilo.RAIO_PILULA, Estilo.BORDA)
-            setPadding(dp(22), dp(14), dp(22), dp(14))
+            setPaddingRelative(dp(22), dp(14), dp(22), dp(14))
             setOnEditorActionListener { _, acao, _ ->
                 if (acao == EditorInfo.IME_ACTION_SEARCH || acao == EditorInfo.IME_ACTION_DONE) { buscarJa(); true } else false
             }
@@ -350,14 +350,14 @@ class BuscaActivity : Activity() {
         lista.removeAllViews()
         // Só as linhas "Procurar no YouTube..." (ideia 14): o "nada encontrado" continua aparecendo, em cima delas.
         if (grupos.size == 1 && grupos[0].nome == getString(R.string.bu_outros_apps))
-            lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.bu_nada, termo)).apply { setPadding(dp(4), dp(Estilo.E3), 0, dp(Estilo.E3)) })
+            lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.bu_nada, termo)).apply { setPaddingRelative(dp(4), dp(Estilo.E3), 0, dp(Estilo.E3)) })
         if (grupos.isEmpty()) {
             val msg = when {
                 termo.length >= 2 -> getString(R.string.bu_nada, termo)
                 Extras.ligado(this, Extras.Chave.HOJE_NA_TV) -> getString(R.string.bu_digite) + " " + getString(R.string.bu_sem_sugestoes)
                 else -> getString(R.string.bu_digite)
             }
-            lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, msg).apply { setPadding(dp(4), dp(Estilo.E3), 0, 0) })
+            lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, msg).apply { setPaddingRelative(dp(4), dp(Estilo.E3), 0, 0) })
             return
         }
         for (g in grupos) {

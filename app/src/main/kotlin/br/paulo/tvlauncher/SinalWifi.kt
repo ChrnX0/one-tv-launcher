@@ -23,7 +23,9 @@ class SinalWifi(contexto: Context) : View(contexto) {
         invalidate()   // pede para a tela redesenhar
     }
 
-    override fun onDraw(tela: Canvas) {
+    override fun onDraw(tela: Canvas) = Rtl.espelhar(this, tela) { desenhar(tela) }   // 16.8
+
+    private fun desenhar(tela: Canvas) {
         // 4 barras de largura "l" e 3 vãos de 0,6 l: 4l + 1,8l = 5,8l = largura total.
         val l = width / 5.8f
         val vao = l * 0.6f

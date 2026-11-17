@@ -176,14 +176,14 @@ class ConfigLauncherActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)   // o grafite da HOME (sistema de design)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL - 7))   // a mesma margem da HOME
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL - 7))   // a mesma margem da HOME
             // A pílula com foco cresce 2% e passa um pouco da margem: sem isto a borda esquerda dela saía cortada (TV, 10/11/2026).
             clipChildren = false; clipToPadding = false
         }
         raiz.addView(Estilo.tituloTela(this, getString(R.string.cfg_titulo)))
 
         val colunas = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false }
-        menu = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false; setPadding(0, dp(4), 0, dp(4)) }
+        menu = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false; setPaddingRelative(0, dp(4), 0, dp(4)) }
         menu.addView(itemDaBusca(), LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(10) })
         abas.forEachIndexed { i, aba -> menu.addView(itemMenu(i, aba), LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(4) }) }
         mostrarAbasDoUso()
@@ -197,7 +197,7 @@ class ConfigLauncherActivity : Activity() {
         conteudo = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             clipChildren = false; clipToPadding = false
-            setPadding(dp(12), dp(4), dp(24), dp(24))
+            setPaddingRelative(dp(12), dp(4), dp(24), dp(24))
         }
         rolagem = ScrollView(this).apply {
             isVerticalScrollBarEnabled = false; clipChildren = false; isSmoothScrollingEnabled = true; addView(conteudo)
@@ -210,7 +210,7 @@ class ConfigLauncherActivity : Activity() {
 
         // Dica fixa das teclas (mesmo jeito das dicas do player: 11sp, cor apagada). Muda com o lado em foco.
         // Barra de dicas do controle (componente padrão do sistema de design). Muda com o lado em foco.
-        dica = FrameLayout(this).apply { setPadding(0, dp(12), 0, 0) }
+        dica = FrameLayout(this).apply { setPaddingRelative(0, dp(12), 0, 0) }
         raiz.addView(dica)
         mostrarDica(noMenu = true)
         return raiz
@@ -231,7 +231,7 @@ class ConfigLauncherActivity : Activity() {
     private fun itemMenu(i: Int, aba: Aba): TextView = TextView(this).apply {
         text = aba.titulo
         Estilo.aplicar(this, Estilo.Papel.CORPO)
-        setPadding(dp(20), dp(11), dp(20), dp(11))
+        setPaddingRelative(dp(20), dp(11), dp(20), dp(11))
         maxLines = 1; ellipsize = TextUtils.TruncateAt.END
         isFocusable = true; isClickable = true
         pintarItemMenu(this, foco = false, escolhido = i == abaAtual)
@@ -269,8 +269,8 @@ class ConfigLauncherActivity : Activity() {
         conteudo.removeAllViews()
         rolagem.scrollTo(0, 0)
         val aba = abas[i]
-        conteudo.addView(Estilo.texto(this, Estilo.Papel.TITULO, aba.titulo).apply { setPadding(dp(8), dp(4), 0, 0) })
-        conteudo.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, aba.explica).apply { setPadding(dp(8), dp(6), 0, dp(12)) })
+        conteudo.addView(Estilo.texto(this, Estilo.Papel.TITULO, aba.titulo).apply { setPaddingRelative(dp(8), dp(4), 0, 0) })
+        conteudo.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, aba.explica).apply { setPaddingRelative(dp(8), dp(6), 0, dp(12)) })
         aba.montar(conteudo)
         // Ajuda por QR (degrau 2): no fim de cada aba, o assunto do manual dela, com o QR para ler no celular.
         AjudaQr.topicoDaAba(i)?.let { id ->
@@ -509,7 +509,7 @@ class ConfigLauncherActivity : Activity() {
         val usuario = campo(getString(R.string.cl_os_usuario), T or android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS)
         val senha = campo(getString(R.string.cl_os_senha), T or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD)
         val caixa = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL; setPadding(48, 16, 48, 0)
+            orientation = LinearLayout.VERTICAL; setPaddingRelative(48, 16, 48, 0)
             if (erro != null) addView(Estilo.texto(this@ConfigLauncherActivity, Estilo.Papel.LEGENDA, erro).apply { setTextColor(coral) })
             addView(chave); addView(usuario); addView(senha)
         }
@@ -660,7 +660,7 @@ class ConfigLauncherActivity : Activity() {
             T or android.text.InputType.TYPE_TEXT_VARIATION_URI, antes?.getOrNull(3))
         val caixa = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(48, 16, 48, 0)
+            setPaddingRelative(48, 16, 48, 0)
             if (erro != null) addView(Estilo.texto(this@ConfigLauncherActivity, Estilo.Papel.LEGENDA, erro).apply { setTextColor(coral) })
             addView(endereco)
             if (xtream) { addView(usuario); addView(senha); addView(reservas) }
@@ -1302,7 +1302,7 @@ class ConfigLauncherActivity : Activity() {
             minLines = 3; maxLines = 6
             filters = arrayOf(android.text.InputFilter.LengthFilter(600))
         }
-        CaixaTv(this).setTitle(getString(R.string.hos_regras)).setView(FrameLayout(this).apply { setPadding(dp(20), dp(8), dp(20), 0); addView(campo) })
+        CaixaTv(this).setTitle(getString(R.string.hos_regras)).setView(FrameLayout(this).apply { setPaddingRelative(dp(20), dp(8), dp(20), 0); addView(campo) })
             .setNegativeButton(getString(R.string.cl_cancelar), null)
             .setPositiveButton("OK") { _, _ -> ModoHospede.definirRegras(this, campo.text.toString()); recarregarAba() }
             .show()
@@ -1858,7 +1858,7 @@ class ConfigLauncherActivity : Activity() {
             filters = arrayOf(android.text.InputFilter.LengthFilter(PinSeguro.MAX_DIGITOS))
             setSingleLine()
         }
-        val moldura = FrameLayout(this).apply { setPadding(dp(20), dp(8), dp(20), 0); addView(campo) }
+        val moldura = FrameLayout(this).apply { setPaddingRelative(dp(20), dp(8), dp(20), 0); addView(campo) }
         val d = CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert)
             .setTitle(titulo)
             .setView(moldura)
@@ -1887,7 +1887,7 @@ class ConfigLauncherActivity : Activity() {
         val numero = campo(getString(R.string.cl_numero_casa), 6, atual?.numero.orEmpty())
         val caixa = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(48, 16, 48, 0)
+            setPaddingRelative(48, 16, 48, 0)
             addView(cep); addView(numero)
         }
         CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert)
@@ -1961,7 +1961,7 @@ class ConfigLauncherActivity : Activity() {
     private fun itemDaBusca(): TextView = TextView(this).apply {
         text = "⌕  " + getString(R.string.elv_aj_buscar)
         Estilo.aplicar(this, Estilo.Papel.CORPO)
-        setPadding(dp(20), dp(11), dp(20), dp(11))
+        setPaddingRelative(dp(20), dp(11), dp(20), dp(11))
         maxLines = 1; ellipsize = TextUtils.TruncateAt.END
         isFocusable = true; isClickable = true
         pintarItemMenu(this, foco = false, escolhido = false)
@@ -1979,15 +1979,15 @@ class ConfigLauncherActivity : Activity() {
         itensMenu.forEachIndexed { j, t -> pintarItemMenu(t, foco = t.hasFocus(), escolhido = false) }
         conteudo.removeAllViews()
         rolagem.scrollTo(0, 0)
-        conteudo.addView(Estilo.texto(this, Estilo.Papel.TITULO, getString(R.string.elv_aj_buscar)).apply { setPadding(dp(8), dp(4), 0, 0) })
-        conteudo.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.elv_aj_explica)).apply { setPadding(dp(8), dp(6), 0, dp(12)) })
+        conteudo.addView(Estilo.texto(this, Estilo.Papel.TITULO, getString(R.string.elv_aj_buscar)).apply { setPaddingRelative(dp(8), dp(4), 0, 0) })
+        conteudo.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.elv_aj_explica)).apply { setPaddingRelative(dp(8), dp(6), 0, dp(12)) })
         val campo = android.widget.EditText(this).apply {
             hint = getString(R.string.elv_aj_dica)
             setSingleLine()
             inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
             setTextColor(Estilo.TEXTO); setHintTextColor(Estilo.TEXTO_3); textSize = 20f
             background = Estilo.fundo(context, Estilo.SUPERFICIE_ALTA, Estilo.RAIO_PILULA, Estilo.BORDA)
-            setPadding(dp(22), dp(14), dp(22), dp(14))
+            setPaddingRelative(dp(22), dp(14), dp(22), dp(14))
         }
         campoBusca = campo
         conteudo.addView(campo, LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(12) })
@@ -2101,20 +2101,20 @@ class ConfigLauncherActivity : Activity() {
     private fun cartao() = LinearLayout(this).apply {
         orientation = LinearLayout.VERTICAL
         background = vidro(false)
-        setPadding(dp(24), dp(12), dp(24), dp(12))
+        setPaddingRelative(dp(24), dp(12), dp(24), dp(12))
     }
 
     /** "Rótulo ........ valor" numa linha do cartão. [cor] pinta o valor (alerta). */
     private fun valor(rotulo: String, valor: String, cor: Int? = null) = LinearLayout(this).apply {
         orientation = LinearLayout.HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
-        setPadding(0, dp(6), 0, dp(6))
+        setPaddingRelative(0, dp(6), 0, dp(6))
         addView(texto(16f, textoSuave, fonteMedia).apply { text = rotulo }, LinearLayout.LayoutParams(dp(230), WRAP))
         addView(texto(16f, cor ?: textoClaro, fonteMedia).apply { text = valor; maxLines = 3; ellipsize = TextUtils.TruncateAt.END },
             LinearLayout.LayoutParams(0, WRAP, 1f))
     }
 
-    private fun secao(c: LinearLayout, titulo: String) = c.addView(Estilo.secao(this, titulo).apply { setPadding(dp(8), dp(Estilo.E3), 0, dp(Estilo.E1)) })
+    private fun secao(c: LinearLayout, titulo: String) = c.addView(Estilo.secao(this, titulo).apply { setPaddingRelative(dp(8), dp(Estilo.E3), 0, dp(Estilo.E1)) })
 
     private fun lp() = LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(8) }
 
@@ -2137,7 +2137,7 @@ class ConfigLauncherActivity : Activity() {
     private inner class LinhaCfg(ctx: Context, focavel: Boolean) : LinearLayout(ctx) {
         private val tTitulo = Estilo.texto(ctx, Estilo.Papel.CORPO).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
         private val tDetalhe = Estilo.texto(ctx, Estilo.Papel.LEGENDA).apply {
-            maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(4), 0, 0)
+            maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPaddingRelative(0, dp(4), 0, 0)
         }
         private var tSeta: TextView? = null
         private var focada = false
@@ -2150,7 +2150,7 @@ class ConfigLauncherActivity : Activity() {
         init {
             orientation = HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            setPadding(dp(Estilo.E3), dp(14), dp(Estilo.E3), dp(14))
+            setPaddingRelative(dp(Estilo.E3), dp(14), dp(Estilo.E3), dp(14))
             val textos = LinearLayout(ctx).apply { orientation = VERTICAL; addView(tTitulo); addView(tDetalhe) }
             addView(textos, LayoutParams(0, WRAP, 1f))
             addView(direita, LayoutParams(WRAP, WRAP).apply { marginStart = dp(16) })

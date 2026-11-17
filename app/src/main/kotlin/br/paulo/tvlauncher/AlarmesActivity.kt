@@ -119,13 +119,13 @@ class AlarmesActivity : Activity() {
         conteudo.removeAllViews()
         val coluna = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(Grade.MARGEM), dp(Grade.TOPO), dp(Grade.MARGEM), dp(Grade.TOPO))
+            setPaddingRelative(dp(Grade.MARGEM), dp(Grade.TOPO), dp(Grade.MARGEM), dp(Grade.TOPO))
         }
         coluna.addView(Estilo.tituloTela(this, getString(R.string.al_titulo)))
         val prox = Despertador.proximo(this)
         coluna.addView(texto(16f, textoSuave).apply {
             text = if (prox == null) getString(R.string.al_nenhum) else getString(R.string.al_proximo, quando(prox.second))
-            setPadding(0, dp(4), 0, dp(20))
+            setPaddingRelative(0, dp(4), 0, dp(20))
         })
         val novo = linha(null)
         coluna.addView(novo, larguraLinha())
@@ -143,7 +143,7 @@ class AlarmesActivity : Activity() {
     private fun linha(a: Despertador.Alarme?): View = LinearLayout(this).apply {
         orientation = LinearLayout.HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
-        setPadding(dp(22), dp(14), dp(22), dp(14))
+        setPaddingRelative(dp(22), dp(14), dp(22), dp(14))
         isFocusable = true
         isClickable = true
         background = Estilo.superficie(context, false)
@@ -179,7 +179,7 @@ class AlarmesActivity : Activity() {
         return LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            setPadding(dp(22), dp(14), dp(22), dp(14))
+            setPaddingRelative(dp(22), dp(14), dp(22), dp(14))
             isFocusable = true
             isClickable = true
             background = Estilo.superficie(context, false)
@@ -214,12 +214,12 @@ class AlarmesActivity : Activity() {
 
         val coluna = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(Grade.MARGEM), dp(Grade.TOPO), dp(Grade.MARGEM), dp(Grade.TOPO))
+            setPaddingRelative(dp(Grade.MARGEM), dp(Grade.TOPO), dp(Grade.MARGEM), dp(Grade.TOPO))
         }
         coluna.addView(Estilo.tituloTela(this, if (a == null) getString(R.string.al_novo) else getString(R.string.al_editar)))
         coluna.addView(texto(15f, textoSuave).apply {
             text = getString(R.string.al_editor_dica)
-            setPadding(0, dp(4), 0, dp(18))
+            setPaddingRelative(0, dp(4), 0, dp(18))
         })
 
         // Hora e minuto: dois números grandes; com foco, ▲▼ mudam o valor (e dão a volta: 23 -> 0).
@@ -246,14 +246,14 @@ class AlarmesActivity : Activity() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             addView(txtHora, LinearLayout.LayoutParams(dp(130), ViewGroup.LayoutParams.WRAP_CONTENT))
-            addView(texto(64f, Estilo.TEXTO, fonteLeve).apply { text = ":"; setPadding(dp(8), 0, dp(8), 0) })
+            addView(texto(64f, Estilo.TEXTO, fonteLeve).apply { text = ":"; setPaddingRelative(dp(8), 0, dp(8), 0) })
             addView(txtMin, LinearLayout.LayoutParams(dp(130), ViewGroup.LayoutParams.WRAP_CONTENT))
         })
 
         // Dias da semana: 7 bolinhas (D S T Q Q S S); OK liga/desliga. Nenhum marcado = toca uma vez só.
-        val legendaDias = texto(15f, textoSuave).apply { setPadding(0, dp(10), 0, 0) }
+        val legendaDias = texto(15f, textoSuave).apply { setPaddingRelative(0, dp(10), 0, 0) }
         fun atualizarLegenda() { legendaDias.text = Despertador.diasTexto(this, dias) }
-        val linhaDias = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(0, dp(20), 0, 0) }
+        val linhaDias = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPaddingRelative(0, dp(20), 0, 0) }
         Despertador.NOMES_DIAS.forEachIndexed { i, nome ->
             val bit = 1 shl i
             val b = texto(18f, Estilo.TEXTO, fonteMedia).apply {
@@ -289,7 +289,7 @@ class AlarmesActivity : Activity() {
         coluna.addView(nome, LinearLayout.LayoutParams(dp(Grade.largura(5)), ViewGroup.LayoutParams.WRAP_CONTENT).apply { topMargin = dp(16) })
 
         // Som e rampa: botões que giram entre as opções com OK. "Ouvir" toca o som escolhido por 4 s.
-        val linhaSom = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(0, dp(16), 0, 0) }
+        val linhaSom = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPaddingRelative(0, dp(16), 0, 0) }
         lateinit var btSom: TextView
         lateinit var btRampa: TextView
         btSom = botao(getString(R.string.al_som, SomAlarme.NOMES[som])) { som = (som + 1) % SomAlarme.NOMES.size; btSom.text = getString(R.string.al_som, SomAlarme.NOMES[som]) }
@@ -319,7 +319,7 @@ class AlarmesActivity : Activity() {
         coluna.addView(linhaSom)
 
         // Botões: Salvar · Ligado/Desligado · Apagar (só se já existe) · Cancelar
-        val botoes = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(0, dp(24), 0, 0) }
+        val botoes = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPaddingRelative(0, dp(24), 0, 0) }
         val salvar = botao(getString(R.string.rot_salvar)) {
             Despertador.salvar(this, Despertador.Alarme(a?.id ?: 0, hora, minuto, dias, nome.text.toString().trim(), ativo, som, rampa, bomDia, cena))
             pararPrevia()
@@ -366,7 +366,7 @@ class AlarmesActivity : Activity() {
         gravity = Gravity.CENTER
         isFocusable = true
         includeFontPadding = false
-        setPadding(0, dp(8), 0, dp(8))
+        setPaddingRelative(0, dp(8), 0, dp(8))
         background = Estilo.superficie(context, false)
         setOnFocusChangeListener { v, f -> Estilo.focarLinha(v, f) }   // foco padrão: pílula branca, texto escuro
     }
@@ -374,7 +374,7 @@ class AlarmesActivity : Activity() {
     private fun botao(rotulo: String, aoClicar: () -> Unit) = texto(17f, Estilo.TEXTO, fonteMedia).apply {
         text = rotulo
         gravity = Gravity.CENTER
-        setPadding(dp(12), dp(14), dp(12), dp(14))
+        setPaddingRelative(dp(12), dp(14), dp(12), dp(14))
         isFocusable = true
         isClickable = true
         background = Estilo.superficie(context, false)

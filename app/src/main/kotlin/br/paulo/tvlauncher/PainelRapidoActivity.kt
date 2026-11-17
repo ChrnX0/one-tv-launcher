@@ -197,7 +197,7 @@ class PainelRapidoActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             clipChildren = false
             clipToPadding = false
-            setPadding(dp(12), dp(20), dp(12), dp(12))
+            setPaddingRelative(dp(12), dp(20), dp(12), dp(12))
         }
         conteudo.addView(cabecalho())
         linhaPerfis = perfis().apply { visibility = View.GONE }
@@ -292,7 +292,7 @@ class PainelRapidoActivity : Activity() {
         val linhaInfo = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            setPadding(dp(6), dp(4), dp(6), 0)
+            setPaddingRelative(dp(6), dp(4), dp(6), 0)
             addView(txtData)
             addView(sepClima)
             addView(imgClima, LinearLayout.LayoutParams(dp(16), dp(16)).apply { marginEnd = dp(4) })
@@ -319,7 +319,7 @@ class PainelRapidoActivity : Activity() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             clipChildren = false
-            setPadding(dp(6), 0, dp(4), 0)
+            setPaddingRelative(dp(6), 0, dp(4), 0)
             addView(txtHora, LinearLayout.LayoutParams(0, -2, 1f))
             // Modo visita: nada de Configurações nem de trocar perfil.
             if (!visita) {
@@ -424,7 +424,7 @@ class PainelRapidoActivity : Activity() {
             isHorizontalScrollBarEnabled = false
             clipChildren = false
             clipToPadding = false
-            setPadding(dp(4), dp(4), dp(4), dp(4))
+            setPaddingRelative(dp(4), dp(4), dp(4), dp(4))
             addView(bolinhas)
         }
         // "Perfil de criança" (ideia 11): vale para a última bolinha com foco (de início, a ativa). Mudar pede o PIN dos pais.
@@ -435,7 +435,7 @@ class PainelRapidoActivity : Activity() {
             maxLines = 1
             ellipsize = TextUtils.TruncateAt.END
             typeface = Estilo.fonte(500)
-            setPadding(dp(Estilo.E2 - 4), dp(7), dp(Estilo.E2 - 4), dp(7))
+            setPaddingRelative(dp(Estilo.E2 - 4), dp(7), dp(Estilo.E2 - 4), dp(7))
             background = Estilo.fundo(this@PainelRapidoActivity, Estilo.SUPERFICIE, Estilo.RAIO_PILULA)
             setOnClickListener {
                 val conta = alvoCrianca ?: return@setOnClickListener
@@ -471,7 +471,7 @@ class PainelRapidoActivity : Activity() {
     private fun bolinhaPerfil(dentro: View, eAtiva: Boolean, aoClicar: () -> Unit) = FrameLayout(this).apply {
         isFocusable = true
         isClickable = true
-        setPadding(dp(4), dp(4), dp(4), dp(4))
+        setPaddingRelative(dp(4), dp(4), dp(4), dp(4))
         background = anelPerfil(false, eAtiva)
         addView(dentro, FrameLayout.LayoutParams(-1, -1))
         setOnClickListener { aoClicar() }
@@ -515,7 +515,7 @@ class PainelRapidoActivity : Activity() {
             gravity = Gravity.CENTER_VERTICAL
             clipChildren = false
             visibility = View.GONE
-            setPadding(dp(Estilo.E2 - 4), dp(Estilo.E2 - 4), dp(Estilo.E2 - 4), dp(Estilo.E2 - 4))
+            setPaddingRelative(dp(Estilo.E2 - 4), dp(Estilo.E2 - 4), dp(Estilo.E2 - 4), dp(Estilo.E2 - 4))
             background = Estilo.superficie(this@PainelRapidoActivity, false)
             addView(imgMidiaApp, LinearLayout.LayoutParams(dp(40), dp(40)).apply { marginEnd = dp(Estilo.E2 - 4) })
             addView(textos, LinearLayout.LayoutParams(0, -2, 1f))
@@ -642,7 +642,7 @@ class PainelRapidoActivity : Activity() {
             gravity = Gravity.CENTER_VERTICAL
             isFocusable = true
             isClickable = true
-            setPadding(dp(12), 0, dp(6), 0)
+            setPaddingRelative(dp(12), 0, dp(6), 0)
             addView(icone, LinearLayout.LayoutParams(dp(18), dp(18)).apply { marginEnd = dp(9) })
             addView(textos, LinearLayout.LayoutParams(0, -2, 1f))
             setOnClickListener { aoClicar() }
@@ -795,7 +795,7 @@ class PainelRapidoActivity : Activity() {
             isFocusable = true
             isClickable = true
             typeface = Estilo.fonte(500)
-            setPadding(dp(Estilo.E2 - 4), dp(7), dp(Estilo.E2 - 4), dp(7))
+            setPaddingRelative(dp(Estilo.E2 - 4), dp(7), dp(Estilo.E2 - 4), dp(7))
             background = Estilo.fundo(this@PainelRapidoActivity, Estilo.SUPERFICIE, Estilo.RAIO_PILULA)
             setOnClickListener {
                 NotificacoesTv.atuais.forEach { OuvinteNotificacoes.dispensar(it.chave) }
@@ -882,7 +882,7 @@ class PainelRapidoActivity : Activity() {
             gravity = Gravity.CENTER_VERTICAL
             isFocusable = true
             isClickable = true
-            setPadding(dp(Estilo.E2 - 4), dp(Estilo.E1 + 4), dp(Estilo.E2 - 4), dp(Estilo.E1 + 4))
+            setPaddingRelative(dp(Estilo.E2 - 4), dp(Estilo.E1 + 4), dp(Estilo.E2 - 4), dp(Estilo.E1 + 4))
             background = Estilo.superficie(this@PainelRapidoActivity, false)
             addView(icone, LinearLayout.LayoutParams(dp(28), dp(28)).apply { marginEnd = dp(Estilo.E2 - 4) })
             addView(textos, LinearLayout.LayoutParams(0, -2, 1f))
@@ -924,7 +924,7 @@ class PainelRapidoActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             isFocusable = true
             isClickable = true
-            setPadding(dp(Estilo.E2 - 4), dp(Estilo.E1 + 4), dp(Estilo.E2 - 4), dp(Estilo.E1 + 4))
+            setPaddingRelative(dp(Estilo.E2 - 4), dp(Estilo.E1 + 4), dp(Estilo.E2 - 4), dp(Estilo.E1 + 4))
             background = Estilo.superficie(this@PainelRapidoActivity, false)
             addView(texto)
             addView(Estilo.texto(this@PainelRapidoActivity, Estilo.Papel.LEGENDA,
@@ -963,7 +963,7 @@ class PainelRapidoActivity : Activity() {
         maxLines = 2
         ellipsize = TextUtils.TruncateAt.END
         contentDescription = getString(R.string.mural_riscar, item)
-        setPadding(dp(Estilo.E2 - 4), dp(Estilo.E1 + 4), dp(Estilo.E2 - 4), dp(Estilo.E1 + 4))
+        setPaddingRelative(dp(Estilo.E2 - 4), dp(Estilo.E1 + 4), dp(Estilo.E2 - 4), dp(Estilo.E1 + 4))
         background = Estilo.superficie(this@PainelRapidoActivity, false)
         setOnFocusChangeListener { v, foco ->
             Estilo.focarLinha(v, foco)

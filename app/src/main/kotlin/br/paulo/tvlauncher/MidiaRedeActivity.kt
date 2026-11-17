@@ -112,16 +112,16 @@ class MidiaRedeActivity : Activity() {
         val raiz = FrameLayout(this).apply { background = Estilo.fundoTela(this@MidiaRedeActivity) }
         val coluna = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
             clipToPadding = false   // a lista entra 12 dp na margem (folga do foco); sem isso a margem cortava a pílula
         }
         trilha = Estilo.texto(this, Estilo.Papel.SECAO).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.START; visibility = View.GONE }
-        titulo = Estilo.tituloTela(this, getString(R.string.rede_titulo)).apply { setPadding(0, dp(4), 0, 0) }
-        aviso = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { setPadding(0, dp(Estilo.E1), 0, dp(Estilo.E2)); textSize = 15f }
+        titulo = Estilo.tituloTela(this, getString(R.string.rede_titulo)).apply { setPaddingRelative(0, dp(4), 0, 0) }
+        aviso = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { setPaddingRelative(0, dp(Estilo.E1), 0, dp(Estilo.E2)); textSize = 15f }
         lista = ListView(this).apply {
             divider = null; dividerHeight = dp(6); isVerticalScrollBarEnabled = false; itemsCanFocus = false
             selector = android.graphics.drawable.ColorDrawable(Color.TRANSPARENT)
-            clipToPadding = false; setPadding(dp(18), dp(4), dp(18), dp(4))   // a linha com foco cresce 2%: folga para não cortar
+            clipToPadding = false; setPaddingRelative(dp(18), dp(4), dp(18), dp(4))   // a linha com foco cresce 2%: folga para não cortar
             adapter = adaptador
             onItemClickListener = AdapterView.OnItemClickListener { _, _, pos, _ -> abrir(pos) }
             // "Segurar" que não vem do controle (acessibilidade, leitor de tela, MCP): o mesmo remover do segure OK.
@@ -136,13 +136,13 @@ class MidiaRedeActivity : Activity() {
             }
             setOnFocusChangeListener { _, _ -> pintarFoco() }
         }
-        dicas = FrameLayout(this).apply { setPadding(0, dp(Estilo.E2), 0, 0) }
+        dicas = FrameLayout(this).apply { setPaddingRelative(0, dp(Estilo.E2), 0, 0) }
         coluna.addView(trilha); coluna.addView(titulo); coluna.addView(aviso)
         // Lista à esquerda e, quando o item tem pôster ou sinopse (Jellyfin, Emby, Plex, DLNA com capa), a ficha à direita.
-        ficha = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; visibility = View.GONE; setPadding(dp(Estilo.E2), dp(4), 0, 0) }
+        ficha = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; visibility = View.GONE; setPaddingRelative(dp(Estilo.E2), dp(4), 0, 0) }
         fichaCapa = ImageView(this).apply { scaleType = ImageView.ScaleType.FIT_START; adjustViewBounds = true }
-        fichaTitulo = Estilo.texto(this, Estilo.Papel.CORPO).apply { maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(Estilo.E1), 0, 0) }
-        fichaTexto = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { maxLines = 9; ellipsize = TextUtils.TruncateAt.END; setLineSpacing(0f, 1.2f); setPadding(0, dp(6), 0, 0) }
+        fichaTitulo = Estilo.texto(this, Estilo.Papel.CORPO).apply { maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPaddingRelative(0, dp(Estilo.E1), 0, 0) }
+        fichaTexto = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { maxLines = 9; ellipsize = TextUtils.TruncateAt.END; setLineSpacing(0f, 1.2f); setPaddingRelative(0, dp(6), 0, 0) }
         ficha.addView(fichaCapa, LinearLayout.LayoutParams(dp(200), dp(300)))
         ficha.addView(fichaTitulo); ficha.addView(fichaTexto)
         val miolo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
@@ -578,7 +578,7 @@ class MidiaRedeActivity : Activity() {
         val cartao = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundo(this@MidiaRedeActivity, 0xF2141A24.toInt(), Estilo.RAIO, Estilo.VIDRO_BORDA)
-            setPadding(dp(Estilo.E3 + 4), dp(Estilo.E3), dp(Estilo.E3 + 4), dp(Estilo.E3))
+            setPaddingRelative(dp(Estilo.E3 + 4), dp(Estilo.E3), dp(Estilo.E3 + 4), dp(Estilo.E3))
         }
         conteudo(cartao)
         soltarRecorte(cartao); cartao.clipToPadding = false   // o botão com foco cresce 8% e saía cortado (visto na TV)
@@ -608,15 +608,15 @@ class MidiaRedeActivity : Activity() {
         abrirPainel { c ->
             c.addView(Estilo.texto(this, Estilo.Papel.TITULO, tituloP).apply { textSize = 22f })
             c.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, explica).apply {
-                setLineSpacing(0f, 1.2f); setPadding(0, dp(Estilo.E1), 0, dp(Estilo.E2))
+                setLineSpacing(0f, 1.2f); setPaddingRelative(0, dp(Estilo.E1), 0, dp(Estilo.E2))
             })
             val edits = campos.map { f -> campoTexto(f).also { c.addView(it, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = dp(10) }) } }
-            val erro = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { setTextColor(Estilo.ERRO); visibility = View.GONE; setPadding(0, dp(4), 0, 0) }
+            val erro = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { setTextColor(Estilo.ERRO); visibility = View.GONE; setPaddingRelative(0, dp(4), 0, 0) }
             c.addView(erro)
             val ok = Estilo.botao(this, rotulo, primario = true)
             val cancelar = Estilo.botao(this, getString(R.string.rede_cancelar), primario = false).apply { setOnClickListener { fecharPainel() } }
             c.addView(LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END; setPadding(0, dp(Estilo.E2), 0, 0)
+                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END; setPaddingRelative(0, dp(Estilo.E2), 0, 0)
                 addView(cancelar); addView(ok, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(Estilo.E2) })
             })
             ok.id = View.generateViewId()
@@ -651,7 +651,7 @@ class MidiaRedeActivity : Activity() {
         imeOptions = EditorInfo.IME_ACTION_NEXT or EditorInfo.IME_FLAG_NO_EXTRACT_UI
         hint = f.dica; setText(f.inicial)
         setHintTextColor(Estilo.TEXTO_3)
-        setPadding(dp(Estilo.E2), dp(12), dp(Estilo.E2), dp(12))
+        setPaddingRelative(dp(Estilo.E2), dp(12), dp(Estilo.E2), dp(12))
         val normal = Estilo.fundo(context, Estilo.SUPERFICIE, Estilo.RAIO_PEQUENO + 4, Estilo.BORDA)
         val focado = Estilo.fundo(context, Estilo.SUPERFICIE_ALTA, Estilo.RAIO_PEQUENO + 4, Estilo.FOCO, 2)
         background = normal
@@ -663,7 +663,7 @@ class MidiaRedeActivity : Activity() {
         abrirPainel(520) { p ->
             p.addView(Estilo.texto(this, Estilo.Papel.TITULO, getString(R.string.rede_remover_titulo, c.nome)).apply { textSize = 22f })
             p.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.rede_remover_explica)).apply {
-                setLineSpacing(0f, 1.2f); setPadding(0, dp(Estilo.E1), 0, dp(Estilo.E3))
+                setLineSpacing(0f, 1.2f); setPaddingRelative(0, dp(Estilo.E1), 0, dp(Estilo.E3))
             })
             val cancelar = Estilo.botao(this, getString(R.string.rede_cancelar), primario = false).apply { setOnClickListener { fecharPainel() } }
             val remover = Estilo.botao(this, getString(R.string.rede_remover), primario = true).apply {
@@ -865,21 +865,21 @@ class MidiaRedeActivity : Activity() {
         lateinit var deNovo: TextView
         abrirPainel(720) { p ->
             p.addView(Estilo.texto(this, Estilo.Papel.TITULO, getString(R.string.rede_plex_titulo)).apply { textSize = 22f })
-            val corpo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(0, dp(Estilo.E2), 0, 0) }
+            val corpo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPaddingRelative(0, dp(Estilo.E2), 0, 0) }
             val esquerda = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
             esquerda.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.rede_plex_explica)).apply { setLineSpacing(0f, 1.25f); textSize = 15f })
-            codigoTv = Estilo.texto(this, Estilo.Papel.DISPLAY, "····").apply { letterSpacing = 0.25f; setPadding(0, dp(Estilo.E2), 0, dp(Estilo.E1)) }
+            codigoTv = Estilo.texto(this, Estilo.Papel.DISPLAY, "····").apply { letterSpacing = 0.25f; setPaddingRelative(0, dp(Estilo.E2), 0, dp(Estilo.E1)) }
             esquerda.addView(codigoTv)
             estado = Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.rede_plex_pedindo))
             esquerda.addView(estado)
             corpo.addView(esquerda, LinearLayout.LayoutParams(0, -2, 1f))
-            qr = ImageView(this).apply { visibility = View.INVISIBLE; background = Estilo.fundo(this@MidiaRedeActivity, Color.WHITE, Estilo.RAIO_PEQUENO) ; setPadding(dp(6), dp(6), dp(6), dp(6)) }
+            qr = ImageView(this).apply { visibility = View.INVISIBLE; background = Estilo.fundo(this@MidiaRedeActivity, Color.WHITE, Estilo.RAIO_PEQUENO) ; setPaddingRelative(dp(6), dp(6), dp(6), dp(6)) }
             corpo.addView(qr, LinearLayout.LayoutParams(dp(168), dp(168)).apply { marginStart = dp(Estilo.E3) })
             p.addView(corpo)
             deNovo = Estilo.botao(this, getString(R.string.rede_plex_outro), primario = true).apply { visibility = View.GONE; setOnClickListener { loginPlex() } }
             val fechar = Estilo.botao(this, getString(R.string.rede_cancelar), primario = false).apply { setOnClickListener { fecharPainel() } }
             p.addView(LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END; setPadding(0, dp(Estilo.E3), 0, 0)
+                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END; setPaddingRelative(0, dp(Estilo.E3), 0, 0)
                 addView(fechar); addView(deNovo, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(Estilo.E2) })
             })
             fechar.requestFocus()
@@ -968,21 +968,21 @@ class MidiaRedeActivity : Activity() {
         lateinit var estado: TextView
         abrirPainel(720) { p ->
             p.addView(Estilo.texto(this, Estilo.Papel.TITULO, "OneDrive").apply { textSize = 22f })
-            val corpo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(0, dp(Estilo.E2), 0, 0) }
+            val corpo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPaddingRelative(0, dp(Estilo.E2), 0, 0) }
             val esquerda = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
             esquerda.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.rede_od_codigo_explica)).apply { setLineSpacing(0f, 1.25f); textSize = 15f })
-            codigoTv = Estilo.texto(this, Estilo.Papel.DISPLAY, "····").apply { letterSpacing = 0.2f; setPadding(0, dp(Estilo.E2), 0, dp(Estilo.E1)) }
+            codigoTv = Estilo.texto(this, Estilo.Papel.DISPLAY, "····").apply { letterSpacing = 0.2f; setPaddingRelative(0, dp(Estilo.E2), 0, dp(Estilo.E1)) }
             esquerda.addView(codigoTv)
             estado = Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.rede_nuvem_pedindo))
             esquerda.addView(estado)
             corpo.addView(esquerda, LinearLayout.LayoutParams(0, -2, 1f))
             runCatching { QrCodigo.bitmap(Nuvem.MS_PAGINA, dp(156)) }.getOrNull()?.let { bmp ->
-                corpo.addView(ImageView(this).apply { setImageBitmap(bmp); background = Estilo.fundo(this@MidiaRedeActivity, Color.WHITE, Estilo.RAIO_PEQUENO); setPadding(dp(6), dp(6), dp(6), dp(6)) },
+                corpo.addView(ImageView(this).apply { setImageBitmap(bmp); background = Estilo.fundo(this@MidiaRedeActivity, Color.WHITE, Estilo.RAIO_PEQUENO); setPaddingRelative(dp(6), dp(6), dp(6), dp(6)) },
                     LinearLayout.LayoutParams(dp(168), dp(168)).apply { marginStart = dp(Estilo.E3) })
             }
             p.addView(corpo)
             val fechar = Estilo.botao(this, getString(R.string.rede_cancelar), primario = false).apply { setOnClickListener { fecharPainel() } }
-            p.addView(LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END; setPadding(0, dp(Estilo.E3), 0, 0); addView(fechar) })
+            p.addView(LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END; setPaddingRelative(0, dp(Estilo.E3), 0, 0); addView(fechar) })
             fechar.requestFocus()
         }
         Thread {
@@ -1043,23 +1043,23 @@ class MidiaRedeActivity : Activity() {
         lateinit var ok: TextView
         abrirPainel(760) { p ->
             p.addView(Estilo.texto(this, Estilo.Papel.TITULO, "Dropbox").apply { textSize = 22f })
-            val corpo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(0, dp(Estilo.E2), 0, 0) }
+            val corpo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPaddingRelative(0, dp(Estilo.E2), 0, 0) }
             val esquerda = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
             esquerda.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.rede_dbx_codigo_explica)).apply { setLineSpacing(0f, 1.25f); textSize = 15f })
             campo = campoTexto(Campo(getString(R.string.rede_dbx_codigo)))
             esquerda.addView(campo, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(Estilo.E2) })
-            estado = Estilo.texto(this, Estilo.Papel.LEGENDA, "").apply { setPadding(0, dp(Estilo.E1), 0, 0) }
+            estado = Estilo.texto(this, Estilo.Papel.LEGENDA, "").apply { setPaddingRelative(0, dp(Estilo.E1), 0, 0) }
             esquerda.addView(estado)
             corpo.addView(esquerda, LinearLayout.LayoutParams(0, -2, 1f))
             runCatching { QrCodigo.bitmap(pagina, dp(156)) }.getOrNull()?.let { bmp ->
-                corpo.addView(ImageView(this).apply { setImageBitmap(bmp); background = Estilo.fundo(this@MidiaRedeActivity, Color.WHITE, Estilo.RAIO_PEQUENO); setPadding(dp(6), dp(6), dp(6), dp(6)) },
+                corpo.addView(ImageView(this).apply { setImageBitmap(bmp); background = Estilo.fundo(this@MidiaRedeActivity, Color.WHITE, Estilo.RAIO_PEQUENO); setPaddingRelative(dp(6), dp(6), dp(6), dp(6)) },
                     LinearLayout.LayoutParams(dp(168), dp(168)).apply { marginStart = dp(Estilo.E3) })
             }
             p.addView(corpo)
             val fechar = Estilo.botao(this, getString(R.string.rede_cancelar), primario = false).apply { setOnClickListener { fecharPainel() } }
             ok = Estilo.botao(this, getString(R.string.rede_nuvem_entrar), primario = true)
             p.addView(LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END; setPadding(0, dp(Estilo.E3), 0, 0)
+                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END; setPaddingRelative(0, dp(Estilo.E3), 0, 0)
                 addView(fechar); addView(ok, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(Estilo.E2) })
             })
             ok.id = View.generateViewId(); campo.nextFocusDownId = ok.id
@@ -1147,20 +1147,20 @@ class MidiaRedeActivity : Activity() {
         lateinit var estado: TextView
         abrirPainel(720) { p ->
             p.addView(Estilo.texto(this, Estilo.Papel.TITULO, servico).apply { textSize = 22f })
-            val corpo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(0, dp(Estilo.E2), 0, 0) }
+            val corpo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPaddingRelative(0, dp(Estilo.E2), 0, 0) }
             val esquerda = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
             esquerda.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, explica).apply { setLineSpacing(0f, 1.25f); textSize = 15f })
-            estado = Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.rede_nuvem_esperando)).apply { setPadding(0, dp(Estilo.E2), 0, 0) }
+            estado = Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.rede_nuvem_esperando)).apply { setPaddingRelative(0, dp(Estilo.E2), 0, 0) }
             esquerda.addView(estado)
             corpo.addView(esquerda, LinearLayout.LayoutParams(0, -2, 1f))
             runCatching { QrCodigo.bitmap(pagina, dp(156)) }.getOrNull()?.let { bmp ->
-                corpo.addView(ImageView(this).apply { setImageBitmap(bmp); background = Estilo.fundo(this@MidiaRedeActivity, Color.WHITE, Estilo.RAIO_PEQUENO); setPadding(dp(6), dp(6), dp(6), dp(6)) },
+                corpo.addView(ImageView(this).apply { setImageBitmap(bmp); background = Estilo.fundo(this@MidiaRedeActivity, Color.WHITE, Estilo.RAIO_PEQUENO); setPaddingRelative(dp(6), dp(6), dp(6), dp(6)) },
                     LinearLayout.LayoutParams(dp(168), dp(168)).apply { marginStart = dp(Estilo.E3) })
             }
             p.addView(corpo)
             // Fechar o painel (Cancelar ou Voltar) liga cancelarPlex: o porto fecha em até 1 s.
             val fechar = Estilo.botao(this, getString(R.string.rede_cancelar), primario = false).apply { setOnClickListener { fecharPainel() } }
-            p.addView(LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END; setPadding(0, dp(Estilo.E3), 0, 0); addView(fechar) })
+            p.addView(LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END; setPaddingRelative(0, dp(Estilo.E3), 0, 0); addView(fechar) })
             fechar.requestFocus()
         }
         Thread {
@@ -1318,12 +1318,12 @@ class MidiaRedeActivity : Activity() {
             tag = TAG_LINHA
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
             minimumHeight = dp(56)
-            setPadding(dp(Estilo.E2 + 4), dp(10), dp(Estilo.E2 + 4), dp(10))
+            setPaddingRelative(dp(Estilo.E2 + 4), dp(10), dp(Estilo.E2 + 4), dp(10))
             addView(ImageView(ctx), LinearLayout.LayoutParams(dp(24), dp(24)).apply { marginEnd = dp(Estilo.E2) })
             addView(LinearLayout(ctx).apply {
                 orientation = LinearLayout.VERTICAL
                 addView(Estilo.texto(ctx, Estilo.Papel.CORPO).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END })
-                addView(Estilo.texto(ctx, Estilo.Papel.LEGENDA).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(3), 0, 0) })
+                addView(Estilo.texto(ctx, Estilo.Papel.LEGENDA).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPaddingRelative(0, dp(3), 0, 0) })
             }, LinearLayout.LayoutParams(0, -2, 1f))
             addView(Estilo.texto(ctx, Estilo.Papel.CORPO), LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(Estilo.E2) })
             background = Estilo.superficie(ctx, false)

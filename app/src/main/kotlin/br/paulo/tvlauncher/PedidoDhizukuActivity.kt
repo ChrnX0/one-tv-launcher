@@ -54,7 +54,7 @@ class PedidoDhizukuActivity : Activity() {
             textSize = 20f
             typeface = Fontes.uiMedia(this@PedidoDhizukuActivity, tema)
             gravity = Gravity.CENTER
-            setPadding(dp(24), dp(14), dp(24), dp(14))
+            setPaddingRelative(dp(24), dp(14), dp(24), dp(14))
             isFocusable = true
             background = StateListDrawable().apply {
                 addState(intArrayOf(android.R.attr.state_focused),
@@ -75,7 +75,7 @@ class PedidoDhizukuActivity : Activity() {
         val painel = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL
-            setPadding(dp(32), dp(28), dp(32), dp(24))
+            setPaddingRelative(dp(32), dp(28), dp(32), dp(24))
             background = GradientDrawable().apply { cornerRadius = dp(22).toFloat(); setColor(0xF01C2024.toInt()) }
             addView(ImageView(this@PedidoDhizukuActivity).apply { setImageDrawable(ai.loadIcon(packageManager)) },
                 LinearLayout.LayoutParams(dp(64), dp(64)).apply { bottomMargin = dp(14) })
