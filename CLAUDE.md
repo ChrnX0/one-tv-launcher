@@ -80,6 +80,9 @@ It is off by default and needs the resident's consent on the TV: never turn it o
 - Panel: `PainelWeb.kt` on port 8080 (ports < 1024 are not allowed for apps). Pure logic with JVM tests in
   `PainelHttp.kt` / `PainelSeguranca.kt`. LAN only, Host/Origin checks, `X-Painel: 1` on POST, HttpOnly SameSite=Strict
   cookie, PBKDF2 PIN, growing lockout; destructive actions ask for the PIN again. Frontend in `assets/painel/`.
+  Panel text is written in Portuguese; `i18n.js` picks the browser language and loads `i18n-<l>.js` (14 languages,
+  one line per text: Portuguese key -> translation, plus `P` regexes for assembled phrases). A new panel text needs a
+  line in all 14 files (`PainelI18nTest` checks they match) and each file must be in `TIPOS` in `PainelWeb.kt`.
 - HTTPS at home (for installing the panel as a PWA): same panel also on port 8444 (8443 is taken by the built-in Chromecast, `mediashell`) with a certificate the TV generates on
   first use (`PainelTls.kt` + `CertificadoX509.kt`, SAN `tv`, `tv.lan`, `tv.local` + the TV's IP, names in
   `Config.PAINEL_NOMES_HTTPS`; the base name can be changed in the panel, e.g. `tv-sala`, and is stored in prefs

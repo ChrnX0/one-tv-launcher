@@ -154,6 +154,11 @@ kbd { font: 600 12px/1 "Manrope", system-ui, sans-serif; padding: 4px 6px; borde
   font-size: 16px; font-weight: 700; text-decoration: none; line-height: 1;
   transition: background-color .15s, border-color .15s, color .15s, transform .06s;
 }
+/* Em outras línguas o rótulo pode ser bem mais longo ("Verbindung zum Fernseher wird wiederhergestellt"): no
+   celular o botão quebra a linha em vez de passar da tela (17/11/2026). */
+@media (max-width: 600px) {
+  .botao-primario, .botao-secundario, .botao-perigo { white-space: normal; text-align: center; line-height: 1.2; max-width: 100%; }
+}
 /* Ação principal = pílula branca, como o foco na TV */
 .botao-primario { background: var(--acento); color: var(--acento-texto); }
 .botao-primario:hover { background: var(--acento-hover); }
@@ -555,7 +560,7 @@ body.ocupado::before { opacity: 1; animation: carregando 1.1s linear infinite; }
 .dpad button:hover { color: var(--texto); background: var(--superficie2); }
 .dpad .ok { background: var(--foco); color: var(--foco-texto); font-weight: 700; font-size: 15px; }
 .dpad .ok:hover { background: var(--foco-hover); color: var(--foco-texto); }
-.teclas { display: grid; grid-template-columns: repeat(3, minmax(90px, 1fr)); gap: 8px; width: 100%; max-width: 420px; }
+.teclas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; width: 100%; max-width: 420px; }
 .touchpad { width: 100%; max-width: 420px; height: 150px; border-radius: var(--raio); border: 1px dashed var(--borda-forte);
   background: var(--superficie); display: grid; place-items: center;
   color: var(--texto-fraco); font-size: 15px; text-align: center; padding: 12px; touch-action: none; user-select: none; cursor: grab; }
