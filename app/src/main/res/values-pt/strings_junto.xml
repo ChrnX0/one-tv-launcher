@@ -4,7 +4,7 @@
     <string name="junto_titulo">Assistir junto</string>
     <string name="junto_menu">Assistir junto com outra TV</string>
     <string name="junto_escolher">Chamar qual TV?</string>
-    <string name="junto_sem_tvs">Nenhuma outra TV ligada. Ligue \"TVs da família\" na outra TV também.</string>
+    <string name="junto_sem_tvs">Nenhuma outra TV ligada nesta conta Tailscale. Ligue \"TVs da família\" na outra TV também.</string>
     <string name="junto_sem_titulo">Este vídeo não dá para dividir: a outra TV não acharia o mesmo título.</string>
     <string name="junto_convidou">Convite mandado para %1$s. Quando lá começar o mesmo título, as duas TVs andam juntas.</string>
     <string name="junto_falhou">Não deu para falar com %1$s. Ela está ligada, com \"TVs da família\" ligado?</string>
@@ -19,7 +19,8 @@
     <string name="junto_sair">Sair do assistir junto</string>
     <string name="junto_sem_canal">Este canal não está na lista desta TV.</string>
     <string name="junto_tvs">TVs da família</string>
-    <string name="junto_tvs_det">As TVs da mesma conta podem assistir junto e passar um vídeo de uma para outra. Só vão comandos, nunca o vídeo.</string>
+    <string name="junto_tvs_det">As TVs da mesma conta Tailscale podem assistir junto e passar um vídeo de uma para outra. Só vão comandos, nunca o vídeo. TV de parente com outra conta ainda não entra.</string>
+    <string name="junto_outro_episodio">%1$s já está na T%2$d E%3$d. Quando esta TV chegar lá, vocês voltam a andar juntos.</string>
     <string name="cont_titulo">Continuar em outra TV</string>
     <string name="cont_menu">Enviar para outra TV</string>
     <string name="cont_escolher">Enviar para qual TV?</string>

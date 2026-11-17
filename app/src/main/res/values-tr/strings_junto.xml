@@ -19,7 +19,8 @@
     <string name="junto_sair">Birlikte izlemeden çık</string>
     <string name="junto_sem_canal">Bu kanal bu TV\'nin listesinde yok.</string>
     <string name="junto_tvs">Aile TV\'leri</string>
-    <string name="junto_tvs_det">Aynı hesaptaki TV\'ler birlikte izleyebilir ve videoyu birbirine aktarabilir. Yalnızca komutlar gider, video asla.</string>
+    <string name="junto_tvs_det">Aynı hesaptaki TV\'ler birlikte izleyebilir ve videoyu birbirine aktarabilir. Yalnızca komutlar gider, video asla. Yalnızca aynı Tailscale hesabındaki TV\'ler; başka hesaptaki bir akrabanın TV\'si henüz katılamaz.</string>
+    <string name="junto_outro_episodio">%1$s zaten S%2$d B%3$d\'de. Bu TV oraya gelince yine birlikte olursunuz.</string>
     <string name="cont_titulo">Başka TV\'de devam et</string>
     <string name="cont_menu">Başka TV\'ye gönder</string>
     <string name="cont_escolher">Hangi TV\'ye gönderilsin?</string>

@@ -19,7 +19,8 @@
     <string name="junto_sair">साथ देखना छोड़ें</string>
     <string name="junto_sem_canal">यह चैनल इस टीवी की सूची में नहीं है।</string>
     <string name="junto_tvs">परिवार के टीवी</string>
-    <string name="junto_tvs_det">एक ही खाते के टीवी साथ देख सकते हैं और वीडियो आगे दे सकते हैं। सिर्फ़ आदेश जाते हैं, वीडियो कभी नहीं।</string>
+    <string name="junto_tvs_det">एक ही खाते के टीवी साथ देख सकते हैं और वीडियो आगे दे सकते हैं। सिर्फ़ आदेश जाते हैं, वीडियो कभी नहीं। सिर्फ़ एक ही Tailscale खाते के टीवी; दूसरे खाते वाले रिश्तेदार का टीवी अभी नहीं जुड़ सकता।</string>
+    <string name="junto_outro_episodio">%1$s पहले से S%2$d E%3$d पर है। यह टीवी वहां पहुंचते ही फिर साथ चलेंगे।</string>
     <string name="cont_titulo">दूसरे टीवी पर जारी रखें</string>
     <string name="cont_menu">दूसरे टीवी पर भेजें</string>
     <string name="cont_escolher">किस टीवी पर भेजें?</string>

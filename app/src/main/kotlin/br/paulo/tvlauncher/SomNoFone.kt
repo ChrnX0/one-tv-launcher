@@ -61,6 +61,15 @@ object SomNoFone {
         } catch (e: Exception) { Log.w(TAG, "porta: ${e.javaClass.simpleName}"); null }
     }
 
+    // Players abertos (VodActivity/PlayerActivity, via JuntoNoPlayer). Fechou o último: para depois de [FOLGA_MS],
+    // para o próximo episódio (que abre um player novo) não derrubar quem está ouvindo (4c/4d, 17/11/2026).
+    private const val FOLGA_MS = 20_000L
+    private var players = 0
+    private val principal by lazy { android.os.Handler(android.os.Looper.getMainLooper()) }
+    private val pararSemPlayer = Runnable { if (players == 0) parar() }
+    fun playerAbriu() { players++; principal.removeCallbacks(pararSemPlayer) }
+    fun playerFechou() { players = (players - 1).coerceAtLeast(0); if (players == 0) principal.postDelayed(pararSemPlayer, FOLGA_MS) }
+
     fun parar() {
         val s = servidor ?: return
         servidor = null; token = null
@@ -255,4 +264,19 @@ class ProcessadorFone : BaseAudioProcessor() {
         if (SomNoFone.tvMuda) { repeat(n) { saida.put(0) }; dados.position(dados.limit()) } else saida.put(dados)
         saida.flip()
     }
+}
+
+/**
+ * A corrente de áudio do player com o [ProcessadorFone] no FIM, depois do Sonic (velocidade): assim o som do fone sai
+ * na mesma velocidade da TV (1,25x, 1,5x...). Antes (17/11 madrugada) ele ficava antes do Sonic e saía em 1x.
+ * O fone não muda o número de quadros, então duração e quadros pulados vêm da corrente padrão.
+ */
+class CorrenteComFone(private val base: androidx.media3.exoplayer.audio.DefaultAudioSink.DefaultAudioProcessorChain,
+                      private val fone: ProcessadorFone) : androidx.media3.common.audio.AudioProcessorChain {
+    private val todos: Array<AudioProcessor> = base.audioProcessors + fone
+    override fun getAudioProcessors(): Array<AudioProcessor> = todos
+    override fun applyPlaybackParameters(p: androidx.media3.common.PlaybackParameters) = base.applyPlaybackParameters(p)
+    override fun applySkipSilenceEnabled(ligado: Boolean) = base.applySkipSilenceEnabled(ligado)
+    override fun getMediaDuration(duracaoTocada: Long) = base.getMediaDuration(duracaoTocada)
+    override fun getSkippedOutputFrameCount() = base.skippedOutputFrameCount
 }

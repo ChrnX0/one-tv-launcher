@@ -19,7 +19,8 @@
     <string name="junto_sair">Esci da guardare insieme</string>
     <string name="junto_sem_canal">Questo canale non è nell\'elenco di questa TV.</string>
     <string name="junto_tvs">TV della famiglia</string>
-    <string name="junto_tvs_det">Le TV dello stesso account possono guardare insieme e passarsi un video. Viaggiano solo comandi, mai il video.</string>
+    <string name="junto_tvs_det">Le TV dello stesso account possono guardare insieme e passarsi un video. Viaggiano solo comandi, mai il video. Solo TV dello stesso account Tailscale; la TV di un parente con un altro account non può ancora unirsi.</string>
+    <string name="junto_outro_episodio">%1$s è già a S%2$d E%3$d. Quando questa TV ci arriva, tornerete insieme.</string>
     <string name="cont_titulo">Continua su un\'altra TV</string>
     <string name="cont_menu">Invia a un\'altra TV</string>
     <string name="cont_escolher">Inviare a quale TV?</string>

@@ -19,7 +19,8 @@
     <string name="junto_sair">退出一起看</string>
     <string name="junto_sem_canal">这个频道不在这台电视的列表中。</string>
     <string name="junto_tvs">家庭电视</string>
-    <string name="junto_tvs_det">同一账户的电视可以一起看，也能把视频接力到另一台。只传指令，从不传视频。</string>
+    <string name="junto_tvs_det">同一账户的电视可以一起看，也能把视频接力到另一台。只传指令，从不传视频。仅限同一 Tailscale 账户的电视；亲友用其他账户的电视暂时无法加入。</string>
+    <string name="junto_outro_episodio">%1$s 已经在第 %2$d 季第 %3$d 集。这台电视播到那里时会再次同步。</string>
     <string name="cont_titulo">在另一台电视继续</string>
     <string name="cont_menu">发送到另一台电视</string>
     <string name="cont_escolher">发送到哪台电视？</string>

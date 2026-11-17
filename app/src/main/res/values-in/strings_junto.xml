@@ -19,7 +19,8 @@
     <string name="junto_sair">Keluar dari nonton bareng</string>
     <string name="junto_sem_canal">Saluran ini tidak ada di daftar TV ini.</string>
     <string name="junto_tvs">TV keluarga</string>
-    <string name="junto_tvs_det">TV di akun yang sama bisa nonton bareng dan meneruskan video. Hanya perintah yang dikirim, bukan videonya.</string>
+    <string name="junto_tvs_det">TV di akun yang sama bisa nonton bareng dan meneruskan video. Hanya perintah yang dikirim, bukan videonya. Hanya TV di akun Tailscale yang sama; TV kerabat dengan akun lain belum bisa bergabung.</string>
+    <string name="junto_outro_episodio">%1$s sudah di S%2$d E%3$d. Saat TV ini sampai di sana, kalian bersama lagi.</string>
     <string name="cont_titulo">Lanjutkan di TV lain</string>
     <string name="cont_menu">Kirim ke TV lain</string>
     <string name="cont_escolher">Kirim ke TV mana?</string>

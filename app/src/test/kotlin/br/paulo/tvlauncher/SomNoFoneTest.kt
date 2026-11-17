@@ -105,3 +105,15 @@ class MuralParaIaTest {
         assertEquals(Mural.paraJson(c).toString(), Mural.paraIa(c, marcarComoDados = false).toString())
     }
 }
+
+/** 4d (17/11/2026): o processador do fone fica DEPOIS do Sonic, para sair na velocidade da TV. */
+class CorrenteComFoneTest {
+    @Test fun foneEhOUltimoDepoisDoSonic() {
+        val fone = ProcessadorFone()
+        val c = CorrenteComFone(androidx.media3.exoplayer.audio.DefaultAudioSink.DefaultAudioProcessorChain(ProcessadorDialogo(false)), fone)
+        val p = c.audioProcessors
+        assertTrue(p.last() === fone)
+        assertTrue(p[p.size - 2] is androidx.media3.common.audio.SonicAudioProcessor)
+        assertEquals(1.5f, c.applyPlaybackParameters(androidx.media3.common.PlaybackParameters(1.5f)).speed, 0.001f)
+    }
+}

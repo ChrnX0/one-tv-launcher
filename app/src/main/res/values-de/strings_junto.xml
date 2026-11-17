@@ -19,7 +19,8 @@
     <string name="junto_sair">Gemeinsames Schauen beenden</string>
     <string name="junto_sem_canal">Dieser Sender ist nicht in der Liste dieses TVs.</string>
     <string name="junto_tvs">Familien-TVs</string>
-    <string name="junto_tvs_det">TVs desselben Kontos können gemeinsam schauen und ein Video weitergeben. Nur Befehle werden gesendet, nie das Video.</string>
+    <string name="junto_tvs_det">TVs desselben Kontos können gemeinsam schauen und ein Video weitergeben. Nur Befehle werden gesendet, nie das Video. Nur TVs im selben Tailscale-Konto; der TV von Verwandten mit anderem Konto kann noch nicht mitmachen.</string>
+    <string name="junto_outro_episodio">%1$s ist schon bei S%2$d F%3$d. Sobald dieser TV dort ist, geht es wieder gemeinsam weiter.</string>
     <string name="cont_titulo">Auf anderem TV weiterschauen</string>
     <string name="cont_menu">An anderen TV senden</string>
     <string name="cont_escolher">An welchen TV senden?</string>

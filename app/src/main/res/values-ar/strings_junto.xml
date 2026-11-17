@@ -19,7 +19,8 @@
     <string name="junto_sair">إنهاء المشاهدة معًا</string>
     <string name="junto_sem_canal">هذه القناة ليست في قائمة هذا التلفاز.</string>
     <string name="junto_tvs">تلفزيونات العائلة</string>
-    <string name="junto_tvs_det">يمكن لتلفزيونات الحساب نفسه المشاهدة معًا وتمرير الفيديو. تنتقل الأوامر فقط، وليس الفيديو أبدًا.</string>
+    <string name="junto_tvs_det">يمكن لتلفزيونات الحساب نفسه المشاهدة معًا وتمرير الفيديو. تنتقل الأوامر فقط، وليس الفيديو أبدًا. فقط تلفزيونات حساب Tailscale نفسه؛ تلفاز قريب بحساب آخر لا يمكنه الانضمام بعد.</string>
+    <string name="junto_outro_episodio">%1$s في الموسم %2$d الحلقة %3$d. عندما يصل هذا التلفاز إليها ستعودان معًا.</string>
     <string name="cont_titulo">المتابعة على تلفاز آخر</string>
     <string name="cont_menu">أرسل إلى تلفاز آخر</string>
     <string name="cont_escolher">إلى أي تلفاز ترسل؟</string>

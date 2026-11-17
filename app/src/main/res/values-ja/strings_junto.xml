@@ -19,7 +19,8 @@
     <string name="junto_sair">一緒に見るのをやめる</string>
     <string name="junto_sem_canal">このチャンネルはこのテレビのリストにありません。</string>
     <string name="junto_tvs">家族のテレビ</string>
-    <string name="junto_tvs_det">同じアカウントのテレビ同士で一緒に見たり、続きを渡したりできます。送るのは操作だけで、映像は送りません。</string>
+    <string name="junto_tvs_det">同じアカウントのテレビ同士で一緒に見たり、続きを渡したりできます。送るのは操作だけで、映像は送りません。同じTailscaleアカウントのテレビだけです。別アカウントの親せきのテレビはまだ参加できません。</string>
+    <string name="junto_outro_episodio">%1$sはもうS%2$d E%3$dです。このテレビが追いつくと、また一緒に動きます。</string>
     <string name="cont_titulo">別のテレビで続きを見る</string>
     <string name="cont_menu">別のテレビに送る</string>
     <string name="cont_escolher">どのテレビに送りますか？</string>

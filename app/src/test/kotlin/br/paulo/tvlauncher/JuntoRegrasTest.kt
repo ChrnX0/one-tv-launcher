@@ -107,3 +107,18 @@ class JuntoRegrasTest {
         assertEquals("1:02:03", JuntoRegras.tempo(3_723_000)); assertEquals("4:05", JuntoRegras.tempo(245_000))
     }
 }
+
+/** 4c (17/11/2026): a sessão segue para o episódio seguinte da mesma série. */
+class JuntoEpisodioTest {
+    @Test fun mesmaSerieOutroEpisodioVale() {
+        val s = "tmdb:serie:1399:s1e2"
+        assertTrue(JuntoRegras.valeNaSessao(s, "tmdb:serie:1399:s1e3"))
+        assertTrue(JuntoRegras.valeNaSessao(s, "tmdb:serie:1399:s2e1"))
+        assertFalse(JuntoRegras.valeNaSessao(s, "tmdb:serie:1400:s1e3"))
+        assertFalse(JuntoRegras.valeNaSessao(s, "tmdb:filme:1399"))
+        assertTrue(JuntoRegras.valeNaSessao("canal:globo", "canal:sbt"))
+        assertFalse(JuntoRegras.valeNaSessao("tmdb:filme:603", "tmdb:filme:604"))
+        assertEquals(1 to 3, JuntoRegras.episodio("tmdb:serie:1399:s1e3"))
+        assertNull(JuntoRegras.episodio("tmdb:serie:1399"))
+    }
+}

@@ -19,7 +19,8 @@
     <string name="junto_sair">Quitter le visionnage ensemble</string>
     <string name="junto_sem_canal">Cette chaîne n\'est pas dans la liste de cette TV.</string>
     <string name="junto_tvs">TV de la famille</string>
-    <string name="junto_tvs_det">Les TV du même compte peuvent regarder ensemble et se passer une vidéo. Seules les commandes circulent, jamais la vidéo.</string>
+    <string name="junto_tvs_det">Les TV du même compte peuvent regarder ensemble et se passer une vidéo. Seules les commandes circulent, jamais la vidéo. Seulement les TV du même compte Tailscale ; la TV d\'un proche avec un autre compte ne peut pas encore rejoindre.</string>
+    <string name="junto_outro_episodio">%1$s est déjà à S%2$d É%3$d. Quand cette TV y arrivera, vous serez de nouveau ensemble.</string>
     <string name="cont_titulo">Continuer sur une autre TV</string>
     <string name="cont_menu">Envoyer vers une autre TV</string>
     <string name="cont_escolher">Envoyer vers quelle TV ?</string>

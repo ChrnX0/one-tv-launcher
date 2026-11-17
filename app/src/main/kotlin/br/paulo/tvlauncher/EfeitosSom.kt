@@ -109,7 +109,7 @@ class EfeitosSom {
             return object : RenderizadoresPlayer(ctx, atrasoMs(ctx), ass, segunda) {
                 override fun buildAudioSink(context: Context, enableFloatOutput: Boolean, enableAudioTrackPlaybackParams: Boolean): AudioSink? {
                     val b = DefaultAudioSink.Builder(context).setEnableAudioTrackPlaybackParams(enableAudioTrackPlaybackParams)
-                        .setAudioProcessors(arrayOf(ProcessadorDialogo(dialogo), ProcessadorFone()))   // ProcessadorFone: som no fone (degrau 4)
+                        .setAudioProcessorChain(CorrenteComFone(DefaultAudioSink.DefaultAudioProcessorChain(ProcessadorDialogo(dialogo)), ProcessadorFone()))
                     return if (!pcm) b.setEnableFloatOutput(enableFloatOutput).build()
                     else b.setAudioCapabilities(AudioCapabilities.DEFAULT_AUDIO_CAPABILITIES).setEnableFloatOutput(false).build()
                 }

@@ -4,7 +4,7 @@
     <string name="junto_titulo">Watch together</string>
     <string name="junto_menu">Watch together with another TV</string>
     <string name="junto_escolher">Which TV to invite?</string>
-    <string name="junto_sem_tvs">No other TV online. Turn on \"Family TVs\" on the other TV too.</string>
+    <string name="junto_sem_tvs">No other TV online on this Tailscale account. Turn on \"Family TVs\" on the other TV too.</string>
     <string name="junto_sem_titulo">This video can\'t be shared: the other TV couldn\'t find the same title.</string>
     <string name="junto_convidou">Invite sent to %1$s. When they start the same title, both TVs move together.</string>
     <string name="junto_falhou">Couldn\'t reach %1$s. Is it on, with \"Family TVs\" turned on?</string>
@@ -19,7 +19,8 @@
     <string name="junto_sair">Leave watching together</string>
     <string name="junto_sem_canal">This channel isn\'t in this TV\'s list.</string>
     <string name="junto_tvs">Family TVs</string>
-    <string name="junto_tvs_det">TVs on the same account can watch together and pass a video along. Only commands travel, never the video.</string>
+    <string name="junto_tvs_det">TVs on the same Tailscale account can watch together and pass a video along. Only commands travel, never the video. A relative\'s TV on another account can\'t join yet.</string>
+    <string name="junto_outro_episodio">%1$s is already on S%2$d E%3$d. When this TV gets there, you\'ll be together again.</string>
     <string name="cont_titulo">Continue on another TV</string>
     <string name="cont_menu">Send to another TV</string>
     <string name="cont_escolher">Send to which TV?</string>

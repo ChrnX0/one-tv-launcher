@@ -101,6 +101,26 @@ object JuntoRegras {
         else -> null
     }
 
+    /** "tmdb:serie:1399:s1e3" -> (1, 3); outra coisa -> null. */
+    fun episodio(chave: String?): Pair<Int, Int>? {
+        val m = Regex("^tmdb:serie:\\d+:s(\\d+)e(\\d+)$").find(chave ?: return null) ?: return null
+        return m.groupValues[1].toInt() to m.groupValues[2].toInt()
+    }
+
+    /** Mesma série (episódios podem ser outros): a sessão segue para o episódio seguinte (4c, 17/11/2026). */
+    fun mesmaSerie(a: String?, b: String?): Boolean {
+        if (tipoDaChave(a) != Tipo.SERIE || tipoDaChave(b) != Tipo.SERIE) return false
+        fun serie(c: String) = c.split(':').getOrNull(2)
+        return serie(a!!) != null && serie(a) == serie(b!!)
+    }
+
+    /** A chave vinda da outra TV vale para esta sessão? Mesmo título, qualquer canal (sessão de canal) ou a mesma série. */
+    fun valeNaSessao(chaveSessao: String, recebida: String?): Boolean = when (tipoDaChave(chaveSessao)) {
+        Tipo.CANAL -> tipoDaChave(recebida) == Tipo.CANAL
+        Tipo.SERIE -> recebida == chaveSessao || mesmaSerie(chaveSessao, recebida)
+        else -> recebida == chaveSessao
+    }
+
     /** Ao vivo não tem posição para acertar: só "mesmo canal" e as reações. */
     fun acertaPosicao(chave: String?) = tipoDaChave(chave).let { it != null && it != Tipo.CANAL }
 

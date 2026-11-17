@@ -117,7 +117,7 @@ object SessaoJunto {
         val e = JuntoRegras.eventoDeJson(corpo) ?: return 400 to JSONObject().put("erro", "evento")
         if (!JuntoRegras.novoEvento(s.seqRecebido, e.seq)) return 200 to JSONObject().put("ok", true)   // atrasado: ignora
         s.seqRecebido = e.seq; s.ultimo = System.currentTimeMillis()
-        if (JuntoRegras.tipoDaChave(s.chave) == JuntoRegras.Tipo.CANAL && JuntoRegras.tipoDaChave(e.chave) == JuntoRegras.Tipo.CANAL) s.chave = e.chave!!
+        if (e.chave != null && e.chave != s.chave && JuntoRegras.valeNaSessao(s.chave, e.chave)) s.chave = e.chave
         if (!s.aceita) {
             s.aceita = true
             AvisoTv.rapido(app, app.getString(R.string.junto_titulo), app.getString(R.string.junto_entrou, JuntoRegras.nomeBonito(s.par)))
@@ -151,11 +151,10 @@ object SessaoJunto {
             "evento" -> {
                 val s = atual ?: return
                 val e = JuntoRegras.eventoDeJson(i.getStringExtra("evento")?.let { JsonSeguro.objeto(it) }) ?: return
-                // Filme/série/arquivo: só vale o MESMO título. Canal: qualquer canal (quem troca, a outra TV acompanha).
-                val canal = JuntoRegras.tipoDaChave(s.chave) == JuntoRegras.Tipo.CANAL
-                if (canal && JuntoRegras.tipoDaChave(e.chave) != JuntoRegras.Tipo.CANAL) return
-                if (!canal && e.chave != s.chave) return
-                if (canal) s.chave = e.chave!!
+                // Filme/arquivo: só o MESMO título. Canal: qualquer canal (a outra TV acompanha). Série: qualquer episódio
+                // da mesma série (a sessão segue para o próximo episódio).
+                if (!JuntoRegras.valeNaSessao(s.chave, e.chave)) return
+                s.chave = e.chave!!
                 Fundo.rodar("junto-evento") {
                     val r = EntreTvs.chamar(app, s.par, "/junto/${s.token}/evento", JuntoRegras.eventoParaJson(e.copy(atrasoMs = s.atraso)))
                     if (r.codigo == 200) s.atraso = JuntoRegras.atraso(r.ms)
@@ -205,6 +204,7 @@ class JuntoNoPlayer(private val a: Activity, private val aplicar: (tocando: Bool
     @Volatile var chaveSessao: String? = null; private set
     @Volatile var par: String? = null; private set
     private var chaveLocal: String? = null
+    private var avisadoEpisodio: String? = null
     private var seq = System.currentTimeMillis()   // cresce mesmo entre telas
     private var caladoAte = 0L
     private val tela = android.os.Handler(android.os.Looper.getMainLooper())
@@ -221,7 +221,16 @@ class JuntoNoPlayer(private val a: Activity, private val aplicar: (tocando: Bool
                 caladoAte = System.currentTimeMillis() + ECO_MS
                 trocarCanal.invoke(canalLa.removePrefix("canal:")); return
             }
-            if (e == null || !ativa || e.chave != chaveLocal) return
+            if (e == null || !ativa) return
+            // Série: a outra TV já está em outro episódio. Avisa uma vez; quando este player chegar lá, voltam a andar juntas.
+            if (e.chave != chaveLocal && JuntoRegras.mesmaSerie(e.chave, chaveLocal) && e.chave != avisadoEpisodio) {
+                avisadoEpisodio = e.chave
+                JuntoRegras.episodio(e.chave)?.let { (t, ep) ->
+                    android.widget.Toast.makeText(a, a.getString(R.string.junto_outro_episodio, par ?: "", t, ep), android.widget.Toast.LENGTH_LONG).show()
+                }
+                return
+            }
+            if (e.chave != chaveLocal) return
             val alvo = JuntoRegras.alvo(posicao(), e.posMs, e.tocando, e.atrasoMs, 0, e.chave)
             if (alvo == null && e.tocando == tocandoAgora()) return
             caladoAte = System.currentTimeMillis() + ECO_MS
@@ -237,6 +246,7 @@ class JuntoNoPlayer(private val a: Activity, private val aplicar: (tocando: Bool
     }
 
     fun ligar() {
+        SomNoFone.playerAbriu()
         val f = IntentFilter(SessaoJunto.ACAO_REMOTO)
         if (Build.VERSION.SDK_INT >= 33) a.registerReceiver(receptor, f, Context.RECEIVER_NOT_EXPORTED) else a.registerReceiver(receptor, f)
         local("consultar")
@@ -244,7 +254,7 @@ class JuntoNoPlayer(private val a: Activity, private val aplicar: (tocando: Bool
     }
 
     fun desligar() {
-        SomNoFone.parar()   // som no fone vive só enquanto o player está aberto (fechou: o som volta para a TV)
+        SomNoFone.playerFechou()   // som no fone vive enquanto há player (com folga para o próximo episódio)
         tela.removeCallbacks(pulso)
         try { a.unregisterReceiver(receptor) } catch (_: Exception) {}
     }

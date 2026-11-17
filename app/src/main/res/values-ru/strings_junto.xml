@@ -19,7 +19,8 @@
     <string name="junto_sair">Выйти из совместного просмотра</string>
     <string name="junto_sem_canal">Этого канала нет в списке этого ТВ.</string>
     <string name="junto_tvs">ТВ семьи</string>
-    <string name="junto_tvs_det">ТВ одного аккаунта могут смотреть вместе и передавать видео. Передаются только команды, не само видео.</string>
+    <string name="junto_tvs_det">ТВ одного аккаунта могут смотреть вместе и передавать видео. Передаются только команды, не само видео. Только ТВ одного аккаунта Tailscale; ТВ родственника с другим аккаунтом пока не может присоединиться.</string>
+    <string name="junto_outro_episodio">%1$s уже на С%2$d Э%3$d. Когда этот ТВ дойдёт туда, вы снова будете вместе.</string>
     <string name="cont_titulo">Продолжить на другом ТВ</string>
     <string name="cont_menu">Отправить на другой ТВ</string>
     <string name="cont_escolher">На какой ТВ отправить?</string>

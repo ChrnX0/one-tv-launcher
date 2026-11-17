@@ -45,4 +45,10 @@ blocked by default and need the PIN.
 
 **8. Subscriptions** — Pro and Ultra are sold only with Google Play Billing. No external payment links.
 
+**9. Family features (off by default)** — "Family TVs" lets TVs on the same Tailscale account sync pause/position
+and pass "continue watching" between them; only commands travel, never video. "Sound on headphones" serves the
+app's OWN player audio over the home LAN (private IPs only, port 8097) to up to 4 phones while the user keeps it on;
+no MediaProjection, no other apps' audio. "Video message" accepts a ≤30 s video from family via the home's own link,
+only after the resident turns it on, and stores it on the TV only. No new Android permissions.
+
 Test access: no account needed. To see the help-from-afar flow, open Settings › Care from afar.

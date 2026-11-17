@@ -19,7 +19,8 @@
     <string name="junto_sair">Zakończ wspólne oglądanie</string>
     <string name="junto_sem_canal">Tego kanału nie ma na liście tego TV.</string>
     <string name="junto_tvs">TV rodziny</string>
-    <string name="junto_tvs_det">TV z tego samego konta mogą oglądać razem i przekazywać film. Wysyłane są tylko polecenia, nigdy wideo.</string>
+    <string name="junto_tvs_det">TV z tego samego konta mogą oglądać razem i przekazywać film. Wysyłane są tylko polecenia, nigdy wideo. Tylko TV z tego samego konta Tailscale; TV krewnego z innym kontem nie może jeszcze dołączyć.</string>
+    <string name="junto_outro_episodio">%1$s jest już w S%2$d O%3$d. Gdy ten TV tam dotrze, znów będziecie razem.</string>
     <string name="cont_titulo">Kontynuuj na innym TV</string>
     <string name="cont_menu">Wyślij na inny TV</string>
     <string name="cont_escolher">Na który TV wysłać?</string>
