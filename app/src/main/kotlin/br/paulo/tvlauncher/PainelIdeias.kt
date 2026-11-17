@@ -12,6 +12,9 @@ import org.json.JSONObject
  * com PIN, que mora no [PainelExtras].
  */
 object PainelIdeias {
+    /** Importar a lista OPML do app de podcast do celular: corpo maior que o comum (PainelWeb.limiteCorpo). */
+    const val ROTA_OPML = "/api/extras/ideias/podcasts/opml"
+    const val LIMITE_OPML = 512 * 1024
     private fun ok(o: JSONObject = JSONObject()) = 200 to o.put("ok", true)
     private fun erro(codigo: Int, msg: String) = codigo to JSONObject().put("erro", msg)
 
@@ -117,6 +120,25 @@ object PainelIdeias {
                 PainelArmazem.registrar(app, ip, "rádios favoritas: ${nova.size}", "ok")
                 ok(JSONObject().put("lista", Radios.paraJson(nova)))
             }
+            // ---- Ouvir parte 2 (17/11/2026): podcasts. Colar o feed, tirar, importar e exportar a lista (OPML).
+            post && r == "podcasts" -> {
+                val o = corpo ?: return erro(400, "JSON inválido")
+                when (o.optString("acao")) {
+                    "colar" -> Podcasts.adicionar(app, o.optString("url")).getOrElse { return erro(400, it.message ?: "inválido") }
+                    "remover" -> Podcasts.desassinar(app, o.optString("url"))
+                    else -> return erro(400, "acao: colar ou remover")
+                }
+                PainelArmazem.registrar(app, ip, "podcasts: ${Podcasts.assinaturas(app).size}", "ok")
+                ok(JSONObject().put("lista", podcastsJson(app)))
+            }
+            post && r == "podcasts/opml" -> {
+                val texto = corpo?.optString("opml").orEmpty()
+                if (texto.isBlank()) return erro(400, "lista vazia")
+                val (assinados, falharam) = Podcasts.importarOpml(app, texto)
+                PainelArmazem.registrar(app, ip, "podcasts importados: $assinados (falharam $falharam)", "ok")
+                ok(JSONObject().put("assinados", assinados).put("falharam", falharam).put("lista", podcastsJson(app)))
+            }
+            get && r == "podcasts/opml" -> ok(JSONObject().put("opml", Podcasts.exportarOpml(app)))
             // ---- 7. presença
             get && r == "presenca" -> ok(Presenca.json(app))   // chama o roteador: thread do pedido
             post && r == "presenca" -> {
@@ -142,6 +164,10 @@ object PainelIdeias {
         }
     }
 
+    private fun podcastsJson(app: Context): JSONArray = JSONArray().apply {
+        Podcasts.assinaturas(app).forEach { a -> put(JSONObject().put("url", a.url).put("titulo", a.titulo).put("autor", a.autor)) }
+    }
+
     private fun estado(app: Context): JSONObject {
         val instalados = ModoSimples.instalados(app)
         return JSONObject()
@@ -151,6 +177,7 @@ object PainelIdeias {
             .put("mural", Mural.paraJson(Mural.ler(app)))
             .put("aniversarios", Aniversarios.paraJson(Aniversarios.ler(app)))
             .put("radios", Radios.paraJson(Radios.favoritas(app)))
+            .put("podcasts", podcastsJson(app))
             .put("presenca", JSONArray(Presenca.escolhidos(app).toList()))
             .put("presencaOutras", JSONObject().put("entidades", Presenca.entidades(app).joinToString(", ")).put("ips", Presenca.ips(app).joinToString(", ")))
             .put("retrospectiva", Retrospectiva.ultimaMedida(app)?.let { Retrospectiva.paraJson(it).put("linhas", JSONArray(Retrospectiva.linhas(it).toList())) } ?: JSONObject.NULL)

@@ -588,7 +588,14 @@ class MainActivity : Activity() {
                 barrasTocando.tocando = !barrasTocando.tocando   // resposta na hora; o aviso da sessão confirma
                 filaApps.execute { runCatching { TocandoAgoraTv.controlar(this@MainActivity, "alternar") } }
             }
-            setOnLongClickListener { pacoteTocando?.let { abrir(it) }; true }
+            setOnLongClickListener {
+                // A nossa rádio (Ouvir, 17/11/2026): abrir a tela dela ou parar. Outro app: abre o app, como antes.
+                if (tocandoNosso) Estilo.lista(this@MainActivity, txtTocandoTitulo.text, listOf(getString(if (tipoNosso == "podcast") R.string.pod_abrir_tela else R.string.ouv_abrir), getString(R.string.ra_parar))) { i ->
+                    if (i == 0) runCatching { startActivity(Intent(this@MainActivity, if (tipoNosso == "podcast") PodcastsActivity::class.java else RadioActivity::class.java)) }
+                    else { OuvirEstado.comandar(this@MainActivity, OuvirEstado.PARAR); mostrarTocando(null, null) }
+                } else pacoteTocando?.let { abrir(it) }
+                true
+            }
         }
         capsulaTocando = capsula().apply {
             visibility = View.GONE
@@ -1011,6 +1018,7 @@ class MainActivity : Activity() {
         val CORES_FILMES = intArrayOf(0xFF4C9BFF.toInt(), 0xFF1A3F8F.toInt())   // azul
         val CORES_REDE = intArrayOf(0xFF2FBF8F.toInt(), 0xFF0E5A45.toInt())     // verde
         val CORES_JOGOS = intArrayOf(0xFFF5A524.toInt(), 0xFF7A4A0E.toInt())    // âmbar (card Jogos, 14/11/2026)
+        val CORES_OUVIR = intArrayOf(0xFF4A8BFF.toInt(), 0xFF123A7A.toInt())    // azul (card Ouvir, 17/11/2026)
         const val PREFS_CRUZ = "cruz"   // cruz: o último item escolhido em cada categoria (id da categoria -> id do item)
         const val LARGURA_ARTE = 640   // px da arte de filme/série no fundo (ver carregarArte)
         /** Frase curta embaixo do nome de cada app da HOME. Pacote novo na TV: acrescentar aqui (e nas strings). */
@@ -1356,6 +1364,8 @@ class MainActivity : Activity() {
     private lateinit var txtTocandoTitulo: TextView
     private lateinit var txtTocandoSub: TextView
     private var pacoteTocando: String? = null
+    private var tocandoNosso = false   // a pílula é a nossa rádio (OuvirServico), não outro app
+    private var tipoNosso = ""          // "radio" ou "podcast"
     private var capaTocandoDe: String? = null   // pacote + título da capa na tela (não redesenha a mesma)
     private val vigiaTocando by lazy { TocandoAgoraTv.Vigia(this) { ui.removeCallbacks(tarefaTocando); ui.post(tarefaTocando) } }
 
@@ -1374,10 +1384,11 @@ class MainActivity : Activity() {
             if (pilulaTocando.hasFocus()) linhaApps.requestFocus()   // o foco não pode ficar numa pílula invisível
             capsulaTocando.visibility = View.GONE
             barrasTocando.tocando = false
-            pacoteTocando = null; capaTocandoDe = null; capaTocando.setImageDrawable(null)
+            pacoteTocando = null; capaTocandoDe = null; capaTocando.setImageDrawable(null); tocandoNosso = false
             return
         }
         pacoteTocando = p.pacote
+        tocandoNosso = p.nosso; tipoNosso = p.tipoNosso
         txtTocandoTitulo.text = p.titulo
         txtTocandoSub.text = p.subtitulo
         barrasTocando.tocando = p.tocando
@@ -1388,7 +1399,8 @@ class MainActivity : Activity() {
         }
         pilulaTocando.contentDescription = getString(R.string.l75_pilula, p.titulo, p.subtitulo)
         capsulaTocando.visibility = View.VISIBLE
-        if (!p.tocando) ui.postDelayed(tarefaTocando, 60_000)
+        // Pausada: some sozinha depois do prazo. A nossa rádio: confere também tocando (se o ":player" cair, não há aviso).
+        if (!p.tocando || p.nosso) ui.postDelayed(tarefaTocando, 60_000)
     }
 
     /** Ideia 93: aniversário hoje ou amanhã (lista da TV). Mais de um: o primeiro e "+N". */
@@ -1698,6 +1710,7 @@ class MainActivity : Activity() {
                 montar(IconeApp.Tipo.FILMES, CORES_FILMES)
                 montar(IconeApp.Tipo.REDE, CORES_REDE)
                 montar(IconeApp.Tipo.JOGOS, CORES_JOGOS)
+                montar(IconeApp.Tipo.OUVIR, CORES_OUVIR)
                 // O card já em foco quando a capa ficou pronta: troca o degradê pelo ícone na hora.
                 ui.post { if (!isDestroyed) (currentFocus?.getTag(R.id.tag_capa_atalho) as? IconeApp.Tipo)?.let { mostrarCapaAtalho(it) } }
             } finally { montandoCapas = false }
@@ -1717,6 +1730,7 @@ class MainActivity : Activity() {
             IconeApp.Tipo.FILMES -> CORES_FILMES
             IconeApp.Tipo.REDE -> CORES_REDE
             IconeApp.Tipo.JOGOS -> CORES_JOGOS
+            IconeApp.Tipo.OUVIR -> CORES_OUVIR
             else -> CapaFoco.CORES_TV
         }
         capa.mostrar(img, if (img == null) cores else null)
@@ -1767,6 +1781,11 @@ class MainActivity : Activity() {
             mostrarDestaque(null, getString(R.string.home_card_rede), getString(R.string.home_destaque_rede))
             mostrarCapaAtalho(IconeApp.Tipo.REDE)
         }) { abrirCatalogo(MidiaRedeActivity::class.java) }, quadrado = true)   // quadrado também (dono, 07/11)
+        // Ouvir (17/11/2026, Paulo escolheu "cartão próprio"): rádio + podcasts. Com um episódio tocando, abre os podcasts.
+        if (Extras.ligado(this, Extras.Chave.CARD_OUVIR)) adicionar(cartaoAtalho(getString(R.string.home_card_ouvir), IconeApp.Tipo.OUVIR, CORES_OUVIR, {
+            mostrarDestaque(null, getString(R.string.home_card_ouvir), getString(R.string.home_destaque_ouvir))
+            mostrarCapaAtalho(IconeApp.Tipo.OUVIR)
+        }) { abrirCatalogo(if (tocandoNosso && tipoNosso == "podcast") PodcastsActivity::class.java else RadioActivity::class.java) }, quadrado = true)
         // Jogos (14/11/2026, dono): sempre presente, depois de Na rede; os apps de jogo saem da linha de apps.
         if (JogosTv.cardLigado(this)) adicionar(cartaoAtalho(getString(R.string.home_card_jogos), IconeApp.Tipo.JOGOS, CORES_JOGOS, {
             mostrarDestaque(null, getString(R.string.home_card_jogos), resumoJogos())
@@ -2636,11 +2655,15 @@ class MainActivity : Activity() {
             icCruz("plugin:${p.pacote}:$i", IconeCruz.Tipo.PLUGIN), { PluginsTv.abrir(this, p) })
         categoria(CruzLogica.Categoria.ASSISTIR, R.string.cruz_assistir, IconeCruz.Tipo.ASSISTIR, assistir)
 
-        // Ouvir: as rádios (catálogo mundial, sem conta). Podcasts entram com o #189.
+        // Ouvir: as rádios (catálogo mundial, sem conta) e os podcasts (plano Básico, Paulo 17/11/2026).
         categoria(CruzLogica.Categoria.OUVIR, R.string.cruz_ouvir, IconeCruz.Tipo.OUVIR, listOf(
             HomeCruz.Item("radio", getString(R.string.cruz_radio), getString(R.string.cruz_radio_sub), icCruz("radio", IconeCruz.Tipo.RADIO), {
                 try { startActivity(Intent(this, RadioActivity::class.java)) }
                 catch (e: Exception) { Log.w("TvLauncher.Cruz", "rádio não abriu: ${e.javaClass.simpleName}") }
+            }),
+            HomeCruz.Item("podcasts", getString(R.string.pod_titulo), getString(R.string.ra_podcasts_det), icCruz("podcasts", IconeCruz.Tipo.PODCASTS), {
+                try { startActivity(Intent(this, PodcastsActivity::class.java)) }
+                catch (e: Exception) { Log.w("TvLauncher.Cruz", "podcasts não abriram: ${e.javaClass.simpleName}") }
             })))
 
         // Jogar: o hub de Jogos (com o card Jogos ligado, os apps de jogo moram só nele) e o Sofá, que abre a mesma tela

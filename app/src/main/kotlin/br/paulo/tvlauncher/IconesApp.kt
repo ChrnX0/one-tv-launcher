@@ -16,7 +16,7 @@ import android.graphics.drawable.Drawable
  * Ficam num arquivo separado do [IconeLinha] só para não mexer no arquivo do protetor (outra frente de trabalho).
  */
 class IconeApp(private val tipo: Tipo, private val cor: Int = 0xFFFFFFFF.toInt()) : Drawable() {
-    enum class Tipo { TV, SERIES, FILMES, REDE, MICROFONE, TIMER, SEM_REDE, AVISO, BUSCA, JOGOS }
+    enum class Tipo { TV, SERIES, FILMES, REDE, MICROFONE, TIMER, SEM_REDE, AVISO, BUSCA, JOGOS, OUVIR }
 
     private val traco = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE; strokeWidth = 1.6f; strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND; color = cor
@@ -89,6 +89,12 @@ class IconeApp(private val tipo: Tipo, private val cor: Int = 0xFFFFFFFF.toInt()
                 c.drawPath(p, traco)
                 c.drawLine(5.5f, 11f, 9.5f, 11f, traco); c.drawLine(7.5f, 9f, 7.5f, 13f, traco)
                 c.drawCircle(15.5f, 11.8f, 1f, cheio); c.drawCircle(18f, 10f, 1f, cheio)
+            }
+            Tipo.OUVIR -> {   // fone de ouvido: arco por cima e as duas conchas
+                c.drawArc(RectF(4f, 4f, 20f, 20f), 180f, 180f, false, traco)
+                c.drawLine(4f, 12f, 4f, 15f, traco); c.drawLine(20f, 12f, 20f, 15f, traco)
+                c.drawRoundRect(RectF(3f, 13f, 8f, 20.5f), 2f, 2f, cheio)
+                c.drawRoundRect(RectF(16f, 13f, 21f, 20.5f), 2f, 2f, cheio)
             }
         }
         c.restore()

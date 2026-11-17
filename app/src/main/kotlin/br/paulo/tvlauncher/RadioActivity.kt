@@ -14,11 +14,6 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
-import androidx.media3.common.PlaybackException
-import androidx.media3.common.Player
-import androidx.media3.exoplayer.ExoPlayer
 import java.util.Locale
 
 /**
@@ -28,10 +23,21 @@ import java.util.Locale
  *  - Favoritas (números 1–9 do controle tocam direto), Buscar por nome, Gêneros, Outro país.
  *  - Perto de você (100 km da TV) e as mais ouvidas do país da TV. O resultado de uma busca aparece no alto.
  * Segurar OK numa rádio = favoritar/desfavoritar. Tocando e sem tecla por [ESCURECER_MS], a tela escurece (o som segue);
- * qualquer tecla acende. Sair da tela para o som. Catálogo e espelhos: [Radios].
+ * qualquer tecla acende. Catálogo e espelhos: [Radios].
+ *
+ * Desde 17/11/2026 ("Ouvir" parte 1) quem toca é o [OuvirServico]: sair da tela NÃO para o som (segue na HOME e no
+ * protetor, com a pílula "Tocando" e as teclas ⏯ do controle). A linha "Parar" e o ajuste "Ao sair desta tela" (que
+ * volta ao jeito antigo) ficam aqui. Esta tela só mostra o estado do serviço; não tem player próprio.
  */
 class RadioActivity : Activity() {
-    companion object { private const val ESCURECER_MS = 3 * 60_000L }
+    companion object {
+        private const val ESCURECER_MS = 3 * 60_000L
+        private const val PREFS = "ouvir"   // no backup completo (BackupCompleto.PREFS_EXTRAS)
+        private const val CHAVE_CONTINUAR = "continuar_fora"
+        /** Sair da tela deixa o som tocando? Padrão sim. Prefs lidas só no ":player". */
+        fun continuarFora(ctx: android.content.Context) =
+            ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getBoolean(CHAVE_CONTINUAR, true)
+    }
 
     private val ui = Handler(Looper.getMainLooper())
     private lateinit var coluna: LinearLayout
@@ -39,15 +45,17 @@ class RadioActivity : Activity() {
     private lateinit var veu: LinearLayout
     private lateinit var veuNome: TextView
     private lateinit var veuMusica: TextView
-    private var player: ExoPlayer? = null
-    private var tocando: Radios.Radio? = null
-    private var musica: String = ""
+    private val tocando: Radios.Radio? get() = OuvirServico.instancia?.radio
+    private val musica: String get() = OuvirServico.instancia?.musica.orEmpty()
+    /** O que a tela mostrou por último (id, música, pausado): só redesenha a lista quando muda. */
+    private var visto: Triple<String?, String, Boolean>? = null
+    private val mudou: () -> Unit = { aoMudarSom() }
     private var favoritas: List<Radios.Radio> = emptyList()
     private var perto: List<Radios.Radio>? = null
     private var doPais: List<Radios.Radio>? = null
     private var resultado: Pair<String, List<Radios.Radio>>? = null
     private val pais: String = Locale.getDefault().country.uppercase().takeIf { it.length == 2 } ?: ""
-    private val escurecer = Runnable { if (tocando != null && player?.isPlaying == true) veu.visibility = View.VISIBLE }
+    private val escurecer = Runnable { if (OuvirServico.instancia?.tocando == true) veu.visibility = View.VISIBLE }
 
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
@@ -82,14 +90,38 @@ class RadioActivity : Activity() {
         Fundo.rodar("radios") { val f = Radios.favoritas(app); runOnUiThread { if (!isDestroyed && f != favoritas) { favoritas = f; montar() } } }
     }
 
-    override fun onStop() {
-        super.onStop()
-        parar()   // saiu da tela (HOME, outro app, tela apagou): o rádio para, como o vídeo do player
-        // Redesenha já: na volta, a linha "● Tocando / Pausar" de uma rádio que parou não pode continuar na lista.
-        if (!isFinishing) montar()
+    override fun onStart() {
+        super.onStart()
+        OuvirServico.ouvir(mudou)
+        aoMudarSom()   // pode ter mudado com a tela atrás (pausado pela HOME, parado pelo protetor)
     }
 
-    override fun onDestroy() { ui.removeCallbacksAndMessages(null); parar(); super.onDestroy() }
+    override fun onStop() {
+        super.onStop()
+        OuvirServico.esquecer(mudou)
+        if (!::veu.isInitialized) return   // fechada pela atualização no onCreate
+        ui.removeCallbacks(escurecer)
+        veu.visibility = View.GONE
+        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        // O jeito antigo, para quem escolheu: sair da tela para o som. Tela que só apagou também conta (o serviço já para).
+        if (!continuarFora(this)) OuvirServico.instancia?.parar()
+    }
+
+    override fun onDestroy() { ui.removeCallbacksAndMessages(null); OuvirServico.esquecer(mudou); super.onDestroy() }
+
+    /** O serviço mudou (tocou, pausou, música nova, parou): véu, tela acesa e a lista. */
+    private fun aoMudarSom() {
+        if (isDestroyed || !::veu.isInitialized) return
+        val s = OuvirServico.instancia
+        val r = s?.radio
+        veuNome.text = r?.nome.orEmpty(); veuMusica.text = s?.musica.orEmpty()
+        // Tela acesa só com o som saindo E esta tela na frente; fora dela, o protetor de tela entra normalmente.
+        if (s?.tocando == true) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        else window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        if (r == null) { ui.removeCallbacks(escurecer); veu.visibility = View.GONE }
+        val agora = Triple(r?.id, s?.musica.orEmpty(), s?.pausado == true)
+        if (agora != visto) { visto = agora; montar(); mexeu() }
+    }
 
     override fun dispatchKeyEvent(e: KeyEvent): Boolean {
         if (e.action == KeyEvent.ACTION_DOWN) {
@@ -148,13 +180,19 @@ class RadioActivity : Activity() {
         coluna.removeAllViews()
         tocando?.let { r ->
             linha("tocando", "● " + r.nome, musica.ifEmpty { detalhe(r) },
-                getString(if (player?.isPlaying == false) R.string.ra_continuar else R.string.ra_pausar), cor = Estilo.ATENCAO,
+                getString(if (OuvirServico.instancia?.pausado == true) R.string.ra_continuar else R.string.ra_pausar), cor = Estilo.ATENCAO,
                 ok = { alternarPausa() }, segurar = { favoritar(r) })
+            linha("parar", "■ " + getString(R.string.ra_parar),
+                getString(if (continuarFora(this)) R.string.ra_parar_det else R.string.ra_parar_det_antigo), null,
+                ok = { OuvirServico.instancia?.parar() }, segurar = null)
         }
         resultado?.let { (titulo, lista) ->
             coluna.addView(Estilo.secao(this, titulo))
             lista.forEach { linhaRadio("res:", it) }
         }
+        // Podcasts (Paulo, 17/11/2026: no plano Básico; a tela "Ouvir" = rádio + podcasts, aberta pelo cartão da HOME).
+        linha("podcasts", getString(R.string.pod_titulo), getString(R.string.ra_podcasts_det), null,
+            ok = { startActivity(android.content.Intent(this, PodcastsActivity::class.java)) }, segurar = null)
         if (favoritas.isNotEmpty()) {
             coluna.addView(Estilo.secao(this, getString(R.string.ra_favoritas)))
             favoritas.forEachIndexed { i, r -> linhaRadio("fav:", r, numero = if (i < 9) i + 1 else null) }
@@ -172,6 +210,13 @@ class RadioActivity : Activity() {
             coluna.addView(Estilo.secao(this, if (nomePais.isEmpty()) getString(R.string.ra_mundo) else getString(R.string.ra_mais_ouvidas, nomePais)))
             l.forEach { linhaRadio("pais:", it) }
         }
+        coluna.addView(Estilo.secao(this, getString(R.string.ra_ajustes)))
+        linha("ao_sair", getString(R.string.ra_ao_sair), getString(R.string.ra_ao_sair_det),
+            getString(if (continuarFora(this)) R.string.ra_ao_sair_continua else R.string.ra_ao_sair_para),
+            ok = {
+                getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean(CHAVE_CONTINUAR, !continuarFora(this)).apply()
+                montar()
+            }, segurar = null)
         val filhos = (0 until coluna.childCount).map { coluna.getChildAt(it) }
         val alvo = if (focarResultado) filhos.firstOrNull { (it.tag as? String)?.startsWith("res:") == true }
             else filhos.firstOrNull { it.tag != null && it.tag == focoAntes }
@@ -253,54 +298,14 @@ class RadioActivity : Activity() {
         }
     }
 
-    // ---------------------------------------------------------------- som
+    // ---------------------------------------------------------------- som (quem toca é o OuvirServico)
 
     private fun tocar(r: Radios.Radio) {
-        if (tocando?.id == r.id && player != null) { alternarPausa(); return }
-        parar()
-        tocando = r; musica = ""
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        val http = androidx.media3.datasource.DefaultHttpDataSource.Factory().setUserAgent("onetv-launcher/1")
-            .setAllowCrossProtocolRedirects(true).setConnectTimeoutMs(10_000).setReadTimeoutMs(20_000)
-        val item = MediaItem.Builder().setUri(r.url).apply {
-            if (r.url.substringBefore('?').endsWith(".m3u8", ignoreCase = true)) setMimeType(androidx.media3.common.MimeTypes.APPLICATION_M3U8)
-        }.build()
-        player = ExoPlayer.Builder(this).build().also { p ->
-            p.setAudioAttributes(androidx.media3.common.AudioAttributes.Builder().setUsage(androidx.media3.common.C.USAGE_MEDIA)
-                .setContentType(androidx.media3.common.C.AUDIO_CONTENT_TYPE_MUSIC).build(), true)
-            p.addListener(object : Player.Listener {
-                override fun onMediaMetadataChanged(m: MediaMetadata) {
-                    // ICY "StreamTitle" (Artista - Música) chega como título; algumas rádios mandam o próprio nome ou um texto
-                    // de espera ("Now Playing info goes here"): ignora (Radios.musicaUtil).
-                    val t = listOfNotNull(m.title?.toString(), m.artist?.toString()).filter { Radios.musicaUtil(it, r.nome) }
-                        .distinct().joinToString(" · ")
-                    if (t != musica) { musica = t; veuMusica.text = t; montar() }
-                }
-                override fun onIsPlayingChanged(isPlaying: Boolean) { montar(); mexeu() }
-                override fun onPlayerError(error: PlaybackException) {
-                    AvisoTv.rapido(this@RadioActivity, r.nome, getString(R.string.ra_falhou), 6)
-                    parar(); montar()
-                }
-            })
-            p.setMediaSource(androidx.media3.exoplayer.source.DefaultMediaSourceFactory(http).createMediaSource(item))
-            p.prepare(); p.playWhenReady = true
-        }
+        if (tocando?.id == r.id) { alternarPausa(); return }
+        OuvirServico.tocarRadio(this, r)
         veuNome.text = r.nome; veuMusica.text = ""
-        montar()
         mexeu()
-        Fundo.rodar("radios") { Radios.contarClique(r) }
     }
 
-    private fun alternarPausa() {
-        val p = player ?: return
-        p.playWhenReady = !p.playWhenReady
-    }
-
-    private fun parar() {
-        ui.removeCallbacks(escurecer)
-        player?.release(); player = null
-        tocando = null; musica = ""
-        if (::veu.isInitialized) veu.visibility = View.GONE
-        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
+    private fun alternarPausa() { OuvirServico.instancia?.alternar() }
 }

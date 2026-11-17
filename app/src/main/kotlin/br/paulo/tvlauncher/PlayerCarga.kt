@@ -483,9 +483,11 @@ object PlayerCarga {
      * Trocar o nome é tudo ou nada: ou fica o arquivo antigo inteiro, ou o novo inteiro.
      */
     internal fun gravarAtomico(arquivo: File, texto: String) {
-        val tmp = File(arquivo.path + ".tmp")
+        // Nome temporário único (dois processos gravando o mesmo arquivo não disputam o mesmo .tmp) e fsync antes de
+        // trocar (queda de energia logo depois não deixa o arquivo vazio).
+        val tmp = File(arquivo.path + ".tmp-" + java.util.UUID.randomUUID().toString().take(8))
         runCatching {
-            tmp.writeText(texto)
+            java.io.FileOutputStream(tmp).use { o -> o.write(texto.toByteArray(Charsets.UTF_8)); o.fd.sync() }
             if (!tmp.renameTo(arquivo)) tmp.delete()
         }.onFailure { tmp.delete() }
     }
