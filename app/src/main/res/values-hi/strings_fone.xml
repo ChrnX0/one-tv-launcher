@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Som no fone (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="fone_menu">हेडफ़ोन में आवाज़ (फ़ोन)</string>
+    <string name="fone_titulo">हेडफ़ोन में आवाज़</string>
+    <string name="fone_texto">घर के वाई-फ़ाई वाले फ़ोन से स्कैन करें और हेडफ़ोन लगाएं। अधिकतम %1$d फ़ोन। कोई सुन रहा हो तो टीवी चुप रहेगा; पेज बंद करने पर आवाज़ लौटेगी।</string>
+    <string name="fone_ouvindo">सुन रहे हैं: %2$d में से %1$d</string>
+    <string name="fone_fechar">बंद करें</string>
+    <string name="fone_parar">रोकें</string>
+    <string name="fone_sem_rede">टीवी घर के नेटवर्क पर नहीं है।</string>
+</resources>

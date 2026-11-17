@@ -112,6 +112,12 @@ class VodActivity : Activity() {
                 .putExtra(EXTRA_CHAVE_POS, chavePos).putExtra(EXTRA_CABECALHOS, b), codigo)
         }
 
+        /** "Continuar de onde parou?" vindo de outra TV da casa (degrau 4): o mesmo endereço, a partir de [posMs]. */
+        fun abrirUrlEm(ctx: Context, url: String, titulo: String, posMs: Long) {
+            ctx.startActivity(Intent(ctx, VodActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(EXTRA_TIPO, TIPO_FILME).putExtra(EXTRA_URL, url).putExtra(EXTRA_TITULO, titulo).putExtra("inicio_ms", posMs))
+        }
+
         /** Endereço da rede com resultado (ideia 29: a pasta do "Na rede" emenda o próximo arquivo). */
         fun abrirUrlComResultado(act: Activity, codigo: Int, url: String, titulo: String) {
             act.startActivityForResult(Intent(act, VodActivity::class.java)
@@ -235,6 +241,7 @@ class VodActivity : Activity() {
         }.orEmpty()
         chaveIdioma = intent.getStringExtra(EXTRA_IDIOMA)?.takeIf { it.isNotEmpty() } ?: chave
         serie = tipo == TIPO_EPISODIO && !intent.getStringExtra(EXTRA_IDIOMA).isNullOrEmpty()
+        ligarJunto(direto)
         podeSondar = direto != null
 
         val raiz = FrameLayout(this).apply { setBackgroundColor(Color.BLACK) }
@@ -325,7 +332,8 @@ class VodActivity : Activity() {
             val atraso = getSharedPreferences("player", MODE_PRIVATE).getLong("atraso:$chave", 0L)
             // Ideia 21: tamanho da legenda escolhido no ▼ (vale para todos os vídeos).
             val tamLeg = FimDoVideo.tamanhoLegenda(getSharedPreferences("player", MODE_PRIVATE).getInt("legenda_sp", FimDoVideo.LEGENDA_PADRAO))
-            val pos = if (intent.getBooleanExtra("do_comeco", false)) 0L else Vod.inicio(PlayerArmazem.posicoes(this)[chave], episodio = tipo == TIPO_EPISODIO)
+            val pos = intent.getLongExtra("inicio_ms", -1L).takeIf { it >= 0 }
+                ?: if (intent.getBooleanExtra("do_comeco", false)) 0L else Vod.inicio(PlayerArmazem.posicoes(this)[chave], episodio = tipo == TIPO_EPISODIO)
             val ab = if (serie) AberturaSerie.deTexto(getSharedPreferences("player", MODE_PRIVATE)
                 .getString(AberturaSerie.chave(chaveIdioma), null)) else null
             tela.post {
@@ -363,6 +371,7 @@ class VodActivity : Activity() {
     }
 
     override fun onDestroy() {
+        junto?.desligar()
         pararTraducao.set(true); tela.removeCallbacksAndMessages(null)
         sonda?.fechar(); sonda = null
         super.onDestroy()
@@ -635,6 +644,9 @@ class VodActivity : Activity() {
     }
 
     private val ouvinte = object : Player.Listener {
+        override fun onPositionDiscontinuity(velha: Player.PositionInfo, nova: Player.PositionInfo, motivo: Int) {
+            if (motivo == Player.DISCONTINUITY_REASON_SEEK) player?.let { junto?.mudou(it.isPlaying || it.playWhenReady, nova.positionMs) }
+        }
         override fun onCues(cues: CueGroup) {
             legendaImg.mostrar(cues.cues)
             val t = cues.cues.filter { it.bitmap == null }.mapNotNull { it.text }.joinToString("\n")
@@ -671,6 +683,7 @@ class VodActivity : Activity() {
         }
         override fun onIsPlayingChanged(tocando: Boolean) {
             Gatilhos.avisarDoPlayer(this@VodActivity, tocando); atualizarBarra(); if (!tocando) mostrarBarra(fixa = true) else mostrarBarra()
+            player?.let { junto?.mudou(tocando, it.currentPosition) }
             // Trakt/Simkl: começou ou voltou a tocar = "vendo agora"; pausou no meio = pausa (o fim é tratado no avisar).
             val p = player ?: return
             if (avisouInicio && p.playbackState == Player.STATE_READY) contarFora(if (tocando) ServicosSync.Momento.COMECOU else ServicosSync.Momento.PAUSOU, p.currentPosition)
@@ -887,8 +900,31 @@ class VodActivity : Activity() {
             opcoes += Opcao(getString(R.string.abertura_marcar_fim, agora)) { marcarAbertura(inicio = false) }
             if (abertura != null) opcoes += Opcao(getString(R.string.abertura_apagar)) { apagarAbertura() }
         }
+        opcoes += Opcao(getString(R.string.fone_menu), SomNoFone.ligado) { SomNoFone.janela(this) }
+        if (EntreTvs.ligado(this)) {
+            val titulo = intent.getStringExtra(EXTRA_TITULO).orEmpty()
+            opcoes += Opcao(getString(R.string.junto_menu)) { junto?.menu(titulo, JuntoTvsProvider.tvs(this)) }
+            opcoes += Opcao(getString(R.string.cont_menu)) {
+                junto?.enviarPara(titulo, JuntoTvsProvider.tvs(this), p.currentPosition, intent.getStringExtra(EXTRA_URL))
+            }
+        }
         Estilo.lista(this, getString(R.string.vod_faixas), opcoes.map { it.rotulo },
             opcoes.indices.filter { opcoes[it].marcada }) { i -> opcoes[i].aplicar() }
+    }
+
+    // ---------------------------------------------------------------- sessão junto (degrau 4, SessaoJunto.kt)
+
+    private var junto: JuntoNoPlayer? = null
+
+    /** Liga a ponte com a outra TV: a chave diz o que toca aqui; pausa e pulos de lá chegam pelo [JuntoNoPlayer.aplicar]. */
+    private fun ligarJunto(direto: String?) {
+        val b = buscaLegenda()
+        junto = JuntoNoPlayer(this, aplicar = { tocando, alvo ->
+            player?.let { p -> if (alvo != null) p.seekTo(alvo); p.playWhenReady = tocando; mostrarBarra() }
+        }, posicao = { player?.currentPosition ?: 0L }, tocandoAgora = { player?.isPlaying == true }).also {
+            it.tocandoTitulo(JuntoRegras.chaveVod(b.tmdb, b.temporada, b.episodio, direto ?: intent.getStringExtra(EXTRA_TITULO)))
+            it.ligar()
+        }
     }
 
     // ---------------------------------------------------------------- ideia 24: pular abertura

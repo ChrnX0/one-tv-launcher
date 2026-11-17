@@ -46,7 +46,7 @@ object McpIdeias {
             }
             "mural" -> {
                 val acao = a.optString("acao")
-                if (acao == "ver") return Mural.paraJson(Mural.ler(app)).toString()
+                if (acao == "ver") return Mural.paraIa(Mural.ler(app), BuildConfig.PLAY).toString()
                 val l = Mural.lista(a.optString("lista").ifEmpty { "compras" }) ?: erro("lista: compras ou recados")
                 Mural.paraJson(when (acao) {
                     "adicionar" -> Mural.editar(app) { Mural.adicionar(it, l, a.optString("texto")) }

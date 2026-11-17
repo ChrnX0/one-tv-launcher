@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Som no fone (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="fone_menu">Dźwięk w słuchawkach (telefon)</string>
+    <string name="fone_titulo">Dźwięk w słuchawkach</string>
+    <string name="fone_texto">Zeskanuj telefonem w domowym Wi-Fi i podłącz słuchawki. Do %1$d telefonów. TV milczy, gdy ktoś słucha; zamknięcie strony przywraca dźwięk.</string>
+    <string name="fone_ouvindo">Słucha: %1$d z %2$d</string>
+    <string name="fone_fechar">Zamknij</string>
+    <string name="fone_parar">Zatrzymaj</string>
+    <string name="fone_sem_rede">TV nie jest w sieci domowej.</string>
+</resources>

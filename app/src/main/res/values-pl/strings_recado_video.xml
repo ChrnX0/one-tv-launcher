@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Recado em vídeo (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="vid_de">Film od: %1$s</string>
+    <string name="vid_mural">wysłał(a) film</string>
+    <string name="vid_onde">Aby obejrzeć: Ustawienia › Rodzina › Filmy rodziny.</string>
+    <string name="vid_depois">Później</string>
+    <string name="vid_assistir">Obejrzyj</string>
+    <string name="vid_ok_para_assistir">Naciśnij OK, aby obejrzeć.</string>
+    <string name="vid_lista">Filmy rodziny</string>
+    <string name="vid_lista_det">Wysłane przez link rodziny. Każdy zostaje 30 dni. Przytrzymaj OK, aby usunąć.</string>
+    <string name="vid_nenhum">Nie ma jeszcze filmów.</string>
+    <string name="vid_apagar">Usuń film</string>
+    <string name="vid_aceitar">Przyjmuj filmy</string>
+    <string name="vid_aceitar_det">Rodzina może wysyłać filmy do 30 sekund. Nigdy nie włączają się same.</string>
+    <string name="vid_quantos">Filmy: %1$d</string>
+</resources>

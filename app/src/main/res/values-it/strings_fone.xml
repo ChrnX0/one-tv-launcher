@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Som no fone (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="fone_menu">Audio nelle cuffie (telefono)</string>
+    <string name="fone_titulo">Audio nelle cuffie</string>
+    <string name="fone_texto">Inquadra con un telefono sul Wi-Fi di casa e collega le cuffie. Fino a %1$d telefoni. La TV resta muta mentre qualcuno ascolta; chiudere la pagina riporta l\'audio.</string>
+    <string name="fone_ouvindo">In ascolto: %1$d su %2$d</string>
+    <string name="fone_fechar">Chiudi</string>
+    <string name="fone_parar">Ferma</string>
+    <string name="fone_sem_rede">La TV non è sulla rete di casa.</string>
+</resources>

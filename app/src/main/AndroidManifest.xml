@@ -356,6 +356,35 @@
             android:name=".FamiliaConectadaActivity"
             android:exported="false"
             android:label="@string/famc_titulo" />
+        <!-- Degrau 4: receitas prontas ("Para quem é esta TV?", Receitas.kt / ReceitasTv.kt) -->
+        <activity
+            android:name=".ReceitasActivity"
+            android:exported="false"
+            android:label="@string/rec_titulo" />
+        <!-- Degrau 4: recado em vídeo da família conectada (cartão "OK para assistir" e a lista; RecadoVideo.kt) -->
+        <activity
+            android:name=".RecadoVideoActivity"
+            android:exported="false"
+            android:label="@string/vid_lista" />
+        <!-- Degrau 4: Sessão junto e Continuar em outra TV (SessaoJunto.kt, ContinuarOutraTv.kt). Nada exportado:
+             o player (processo :player) fala com o principal por broadcast/provider do próprio app. -->
+        <activity
+            android:name=".SessaoJuntoActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:label="@string/junto_titulo" />
+        <activity
+            android:name=".ContinuarActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:label="@string/cont_titulo" />
+        <receiver
+            android:name=".JuntoReceiver"
+            android:exported="false" />
+        <provider
+            android:name=".JuntoTvsProvider"
+            android:authorities="${applicationId}.juntotvs"
+            android:exported="false" />
         <!-- Degrau 3: plugins de terceiros, o OK do dono por plugin (PluginsTv.kt) -->
         <activity
             android:name=".PluginsActivity"

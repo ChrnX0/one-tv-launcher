@@ -153,6 +153,8 @@ object TunelTailscale {
             ipDaRede()?.let { env["TUNEL_PAINEL"] = "$it:${Config.PAINEL_PORTA}" }
             AtalhosTunel.ler(atalhos(app))?.takeIf { it.isNotEmpty() }?.let { env["TUNEL_ATALHOS"] = AtalhosTunel.paraAmbiente(it) }
         }
+        // Degrau 4: Sessão junto / Continuar em outra TV precisam só da lista de TVs da conta (sem o painel na rede).
+        if (EntreTvs.ligado(app)) env["TUNEL_PARES"] = "1"
         val p = pb.start()
         // mcp-10: publica o processo sob a MESMA trava de ajustar/esquecer e confere de novo. Se o MCP foi desligado
         // enquanto o programa subia, o destroy deles pegou "processo" ainda nulo; sem esta conferência o túnel ficava

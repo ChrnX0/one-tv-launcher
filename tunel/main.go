@@ -172,6 +172,10 @@ func main() {
 		} else {
 			go listarPares(lc)
 		}
+	} else if os.Getenv("TUNEL_PARES") == "1" {
+		// Degrau 4 (Sessão junto / Continuar em outra TV): só a LISTA de aparelhos da conta, sem abrir o painel na rede
+		// Tailscale. O launcher usa os nomes "onetv-*" para achar as outras TVs da família.
+		go listarPares(lc)
 	}
 	if atalhos := os.Getenv("TUNEL_ATALHOS"); atalhos != "" {
 		for _, a := range strings.Split(atalhos, ",") {

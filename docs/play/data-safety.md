@@ -18,5 +18,8 @@ passa pelo aparelho não conta como "coletado". Marquei de forma conservadora.
 | Diagnóstico / falhas | Não | o registro de erros fica na TV; "Relatar problema" só se a pessoa enviar |
 | Mensagens (push à família) | Compartilhado, opcional | texto curto do aviso vai pelo serviço de push do navegador do celular |
 | Compras | Coletado pela Google Play (não por nós) | o app só lê o plano |
+| Vídeos (recado em vídeo, degrau 4) | Não (fica na TV) | opt-in de quem mora; vídeo de até 30 s mandado pela família pelo link da casa, guardado só na TV e apagado em 30 dias |
+| Áudio (som no fone, degrau 4) | Não | o som do nosso player vai do aparelho para celulares da MESMA rede de casa, só enquanto a pessoa pede; não passa por servidor |
+| Atividade (sessão junto / continuar em outra TV, degrau 4) | Não | opt-in "TVs da família": título, posição e pausa vão direto de uma TV da casa para outra da mesma conta Tailscale |
 
 Política de privacidade: [privacidade-sofaly.md](privacidade-sofaly.md) publicada no site antes de enviar.

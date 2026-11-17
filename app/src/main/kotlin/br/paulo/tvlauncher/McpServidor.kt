@@ -65,7 +65,7 @@ object McpServidor {
     fun ligado(ctx: Context): Boolean = prefs(ctx).getBoolean("ligado", false)
 
     /** O servidor (e o túnel) sobem com o MCP ligado OU com o link da família ligado (degrau 3). As rotas do MCP ainda conferem [ligado]. */
-    fun precisaServidor(ctx: Context): Boolean = ligado(ctx) || FamiliaConectada.ligado(ctx)
+    fun precisaServidor(ctx: Context): Boolean = ligado(ctx) || FamiliaConectada.ligado(ctx) || EntreTvs.ligado(ctx)
 
     /** Ferramenta executar_shell (dono, 09/11/2026: "controle total", sem trava). Ligada por padrão; a chave nas
      *  Configurações é o botão de desligar. */
@@ -160,22 +160,26 @@ object McpServidor {
         try {
             c.soTimeout = TEMPO_LEITURA_MS
             // Prazo total (mcp-2): o soTimeout vale por leitura; sem isto, 1 byte a cada 19 s segurava a thread por dias.
-            val entrada = EntradaComPrazo(c.getInputStream(), PRAZO_PEDIDO_MS).buffered(8192)
+            val comPrazo = EntradaComPrazo(c.getInputStream(), PRAZO_PEDIDO_MS)
+            val entrada = comPrazo.buffered(8192)
             val saida = c.getOutputStream().buffered(16 * 1024)
             val r = try {
                 // Família conectada (degrau 3): só a rota da foto aceita corpo maior (a foto chega já reduzida pelo celular).
                 // O limite maior só vale com o token certo: antes, qualquer um na internet fazia a TV ler ~3 MB antes
                 // de o token ser conferido (o pedido recusado depois em familia(), mas a leitura já tinha acontecido).
+                // Degrau 4: o vídeo NÃO é lido para a memória; vai direto da conexão para o disco (RecadoVideo.receber),
+                // e o prazo maior também só vale com o token certo.
                 val req = PainelHttp.lerCabecalhos(entrada).also {
-                    val fotoDaFamilia = FamiliaConectada.Regras.rota(it.caminho)
-                        ?.let { (t, _) -> FamiliaConectada.Regras.confere(t, FamiliaConectada.token(app)) } == true
-                    it.lerCorpo(if (fotoDaFamilia) FamiliaConectada.MAX_FOTO + 1024 else LIMITE_CORPO)
+                    val rota = FamiliaConectada.Regras.rota(it.caminho)
+                    val daFamilia = rota?.let { (t, _) -> FamiliaConectada.Regras.confere(t, FamiliaConectada.token(app)) } == true
+                    if (rota?.second == "video") { if (daFamilia) comPrazo.estender(RecadoVideo.PRAZO_ENVIO_MS) }
+                    else it.lerCorpo(if (daFamilia) FamiliaConectada.MAX_FOTO + 1024 else LIMITE_CORPO)
                 }
                 // painel-1: as rotas que montam JSON (/register e /mcp) só recebem JSON estrito e raso, SEM depender do
                 // Content-Type (antes, sem esse cabeçalho a checagem era pulada e "[[[[..." derrubava o launcher).
                 if (req.metodo == "POST" && req.caminho in ROTAS_JSON && !JsonSeguro.valido(req.corpoTexto()))
                     json(400, JSONObject().put("erro", "JSON inválido"))
-                else try { rotear(req) } catch (e: Exception) {
+                else try { rotear(req, entrada) } catch (e: Exception) {
                     Log.w(TAG, "erro em ${req.metodo} ${req.caminho}: ${e.javaClass.simpleName}")
                     json(500, JSONObject().put("erro", "erro na TV"))
                 } catch (e: StackOverflowError) {
@@ -202,11 +206,25 @@ object McpServidor {
         return if (ok) "https://$host" else null
     }
 
-    private fun rotear(req: Requisicao): Resposta {
+    private fun rotear(req: Requisicao, corpo: java.io.InputStream): Resposta {
         // Família conectada (degrau 3): não depende do MCP ligado, só do link (FamiliaConectada.kt).
         FamiliaConectada.Regras.rota(req.caminho)?.let { (token, acao) ->
             if (base(req) == null) return json(421, JSONObject().put("erro", "nome desconhecido"))
-            return familia(req, token, acao)
+            return familia(req, token, acao, corpo)
+        }
+        // Entre TVs da conta (degrau 4: Sessão junto e Continuar em outra TV): opt-in próprio (EntreTvs), sem o MCP.
+        JuntoRegras.rota(req.caminho)?.let { (token, acao) ->
+            if (base(req) == null) return json(421, JSONObject().put("erro", "nome desconhecido"))
+            val o = if (req.metodo == "POST") JsonSeguro.objeto(req.corpoTexto()) else null
+            val (cod, r) = when {
+                acao == "convite" && req.metodo == "POST" -> SessaoJunto.receberConvite(app, o)
+                acao == "continuar" && req.metodo == "POST" -> ContinuarOutraTv.receber(app, o)
+                acao == "estado" && req.metodo == "GET" -> if (EntreTvs.ligado(app)) SessaoJunto.estado(token) else 403 to JSONObject().put("erro", "desligado")
+                (acao == "evento" || acao == "sair") && req.metodo == "POST" ->
+                    if (EntreTvs.ligado(app)) SessaoJunto.receberEvento(app, token, acao, o) else 403 to JSONObject().put("erro", "desligado")
+                else -> 405 to JSONObject().put("erro", "método")
+            }
+            return json(cod, r, CABECALHOS_FAMILIA)
         }
         if (!ligado(app)) return json(503, JSONObject().put("erro", "MCP desligado na TV"))
         val base = base(req) ?: return json(421, JSONObject().put("erro", "nome desconhecido"))
@@ -241,9 +259,9 @@ object McpServidor {
     /** O link vai num QR e numa mensagem: não deixar o token sair como Referer nem a página ficar em cache ou busca. */
     private val CABECALHOS_FAMILIA = mapOf("Cache-Control" to "no-store", "Referrer-Policy" to "no-referrer", "X-Robots-Tag" to "noindex",
         "X-Content-Type-Options" to "nosniff", "X-Frame-Options" to "DENY",
-        "Content-Security-Policy" to "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src blob: data:; connect-src 'self'; form-action 'none'; frame-ancestors 'none'; base-uri 'none'")
+        "Content-Security-Policy" to "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src blob: data:; media-src blob:; connect-src 'self'; form-action 'none'; frame-ancestors 'none'; base-uri 'none'")
 
-    private fun familia(req: Requisicao, token: String, acao: String): Resposta {
+    private fun familia(req: Requisicao, token: String, acao: String, corpo: java.io.InputStream): Resposta {
         if (!FamiliaConectada.Regras.confere(token, FamiliaConectada.token(app))) {
             return if (acao.isEmpty() && req.metodo == "GET") Resposta(404, "text/html; charset=utf-8",
                 "<!doctype html><meta name=viewport content='width=device-width'><p style='font:20px sans-serif;padding:24px'>Link off · Link desligado</p>".toByteArray(), CABECALHOS_FAMILIA)
@@ -256,12 +274,17 @@ object McpServidor {
                 val o = JsonSeguro.objeto(req.corpoTexto()) ?: return json(400, JSONObject().put("erro", "json"), CABECALHOS_FAMILIA)
                 FamiliaConectada.receber(app, o.optString("nome"), o.optString("texto"), null)
             }
+            // Degrau 4: o que a página precisa saber (o botão "Gravar vídeo" só aparece com os vídeos aceitos na TV).
+            acao == "estado" && req.metodo == "GET" -> return json(200, JSONObject().put("video", RecadoVideo.aceita(app))
+                .put("maxSegundos", RecadoVideo.MAX_SEGUNDOS).put("maxBytes", RecadoVideo.MAX_BYTES), CABECALHOS_FAMILIA)
+            acao == "video" && req.metodo == "POST" ->
+                RecadoVideo.receber(app, req.consulta["nome"], req.consulta["texto"]?.takeIf { it.isNotBlank() }, corpo, req.tamanho)
             acao == "foto" && req.metodo == "POST" ->
                 FamiliaConectada.receber(app, req.consulta["nome"], req.consulta["texto"]?.takeIf { it.isNotBlank() }, req.lerCorpo(FamiliaConectada.MAX_FOTO + 1024))
             else -> return json(405, JSONObject(), CABECALHOS_FAMILIA)
         }
         return if (r == null) json(200, JSONObject().put("ok", true), CABECALHOS_FAMILIA)
-        else json(if (r == "limite") 429 else 400, JSONObject().put("erro", r), CABECALHOS_FAMILIA)
+        else json(when (r) { "limite" -> 429; "tamanho" -> 413; "desligado" -> 403; else -> 400 }, JSONObject().put("erro", r), CABECALHOS_FAMILIA)
     }
 
     // ---------------------------------------------------------------- MCP
@@ -443,6 +466,9 @@ internal class EntradaComPrazo(
     private val relogio: () -> Long = System::currentTimeMillis,
 ) : InputStream() {
     private var limite = Long.MAX_VALUE
+
+    /** Recado em vídeo (degrau 4): só essa rota ganha mais tempo, contado a partir de agora. */
+    fun estender(ms: Long) { limite = relogio() + ms }
 
     private fun conferir() {
         if (limite == Long.MAX_VALUE) limite = relogio() + prazoMs

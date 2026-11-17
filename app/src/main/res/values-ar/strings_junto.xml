@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sessão junto e Continuar em outra TV (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="junto_titulo">المشاهدة معًا</string>
+    <string name="junto_menu">شاهد مع تلفاز آخر</string>
+    <string name="junto_escolher">أي تلفاز تدعو؟</string>
+    <string name="junto_sem_tvs">لا يوجد تلفاز آخر متصل. فعّل «تلفزيونات العائلة» في التلفاز الآخر أيضًا.</string>
+    <string name="junto_sem_titulo">لا يمكن مشاركة هذا الفيديو: التلفاز الآخر لن يجد العنوان نفسه.</string>
+    <string name="junto_convidou">أُرسلت الدعوة إلى %1$s. عند تشغيل العنوان نفسه هناك، يسير التلفازان معًا.</string>
+    <string name="junto_falhou">تعذّر الوصول إلى %1$s. هل هو مُشغَّل مع تفعيل «تلفزيونات العائلة»؟</string>
+    <string name="junto_convite_titulo">%1$s يدعوك للمشاهدة معًا</string>
+    <string name="junto_convite_texto">%1$s\n\nافتح العنوان نفسه هنا وسيتوقف التلفازان ويسيران معًا.</string>
+    <string name="junto_convite_canal">%1$s\n\nبث مباشر: يبقى التلفازان على القناة نفسها. من يغيّرها يتبعه الآخر.</string>
+    <string name="junto_entrar">انضم</string>
+    <string name="junto_agora_nao">ليس الآن</string>
+    <string name="junto_entrou">انضم %1$s. الإيقاف والمتابعة يسريان الآن على الاثنين.</string>
+    <string name="junto_saiu">غادر %1$s. يتابع هذا التلفاز وحده.</string>
+    <string name="junto_com">معًا مع %1$s</string>
+    <string name="junto_sair">إنهاء المشاهدة معًا</string>
+    <string name="junto_sem_canal">هذه القناة ليست في قائمة هذا التلفاز.</string>
+    <string name="junto_tvs">تلفزيونات العائلة</string>
+    <string name="junto_tvs_det">يمكن لتلفزيونات الحساب نفسه المشاهدة معًا وتمرير الفيديو. تنتقل الأوامر فقط، وليس الفيديو أبدًا. فقط تلفزيونات حساب Tailscale نفسه؛ تلفاز قريب بحساب آخر لا يمكنه الانضمام بعد.</string>
+    <string name="junto_outro_episodio">%1$s في الموسم %2$d الحلقة %3$d. عندما يصل هذا التلفاز إليها ستعودان معًا.</string>
+    <string name="cont_titulo">المتابعة على تلفاز آخر</string>
+    <string name="cont_menu">أرسل إلى تلفاز آخر</string>
+    <string name="cont_escolher">إلى أي تلفاز ترسل؟</string>
+    <string name="cont_enviado">تم الإرسال. سيسأل %1$s إن كنت تريد المتابعة من هنا.</string>
+    <string name="cont_falhou">تعذّر الإرسال إلى %1$s. هل هو مُشغَّل مع تفعيل «تلفزيونات العائلة»؟</string>
+    <string name="cont_pergunta">المتابعة من حيث توقفت؟</string>
+    <string name="cont_texto">%1$s\nتوقف عند %2$s على %3$s.</string>
+    <string name="cont_texto_canal">%1$s\nكان يعمل على %3$s. افتح القناة نفسها هنا؟</string>
+    <string name="cont_continuar">متابعة</string>
+    <string name="cont_buscar">ابحث عنه هنا</string>
+</resources>

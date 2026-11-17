@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Receitas prontas (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="rec_titulo">Dla kogo jest ten telewizor?</string>
+    <string name="rec_subtitulo">Jedno OK i telewizor jest gotowy. Możesz to cofnąć w każdej chwili.</string>
+    <string name="rec_vo">Telewizor babci</string>
+    <string name="rec_vo_det">Duże karty z czytanymi nazwami, większy tekst i przycisk Poproś o pomoc.</string>
+    <string name="rec_criancas">Telewizor dzieci</string>
+    <string name="rec_criancas_det">Tylko treści dla dzieci, pora snu i karta Gry.</string>
+    <string name="rec_gamer">Telewizor gracza</string>
+    <string name="rec_gamer_det">Karta Gry, tryb gry (bez wygaszacza i powiadomień w trakcie gry), a pad otwiera Gry.</string>
+    <string name="rec_aluguel">Telewizor na wynajem</string>
+    <string name="rec_aluguel_det">Tryb gościa: powitanie, nic osobistego na ekranie głównym i czyszczenie przy wymeldowaniu.</string>
+    <string name="rec_desfazer">Cofnij</string>
+    <string name="rec_desfazer_det">Przywróć wszystko sprzed: %1$s.</string>
+    <string name="rec_ja_esta">Ten telewizor już jest tak ustawiony.</string>
+    <string name="rec_aviso_prende">Tryb prosty zamyka się tylko PIN-em. Upewnij się, że ktoś w domu go zna.</string>
+    <string name="rec_aviso_sem_pin">Nie ma jeszcze PIN-u, więc każdy może to wyłączyć. Utwórz go w panelu na telefonie.</string>
+    <string name="rec_aviso_plano">Wymaga płatnego planu, więc zostaje wyłączone: %1$s.</string>
+    <string name="rec_voltar">Wstecz</string>
+    <string name="rec_aplicar">Zastosuj</string>
+    <string name="rec_pin">PIN do zmiany ustawień telewizora</string>
+    <string name="rec_pronto">Gotowe</string>
+    <string name="rec_aplicada">Telewizor jest gotowy</string>
+    <string name="rec_aplicada_det">Zmieniło się coś, czego nie chcesz? Cofnij przywróci wszystko.</string>
+    <string name="rec_desfeita">Wszystko wróciło do poprzedniego stanu.</string>
+    <string name="rec_linha">%1$s: %2$s</string>
+    <string name="rec_ligado">wł.</string>
+    <string name="rec_desligado">wył.</string>
+    <string name="rec_aj_hospede">Tryb gościa</string>
+    <string name="rec_aj_visita">Tryb wizyty</string>
+    <string name="rec_aj_simples">Tryb prosty</string>
+    <string name="rec_aj_infantil">Tryb dziecięcy</string>
+    <string name="rec_aj_dormir">Pora snu</string>
+    <string name="rec_aj_texto">Rozmiar tekstu</string>
+    <string name="rec_aj_ler_foco">Czytaj na głos zaznaczony element</string>
+    <string name="rec_aj_som">Dźwięk kliknięcia przy każdym klawiszu</string>
+    <string name="rec_aj_jogos">Karta Gry</string>
+    <string name="rec_aj_modo_jogo">Tryb gry</string>
+    <string name="rec_aj_controle">Pad otwiera Gry</string>
+</resources>

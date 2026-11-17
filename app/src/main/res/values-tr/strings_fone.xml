@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Som no fone (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="fone_menu">Ses kulaklıkta (telefon)</string>
+    <string name="fone_titulo">Ses kulaklıkta</string>
+    <string name="fone_texto">Ev Wi-Fi\'ındaki bir telefonla tarayın ve kulaklığı takın. En fazla %1$d telefon. Biri dinlerken TV sessiz kalır; sayfayı kapatınca ses geri gelir.</string>
+    <string name="fone_ouvindo">Dinleyen: %1$d / %2$d</string>
+    <string name="fone_fechar">Kapat</string>
+    <string name="fone_parar">Durdur</string>
+    <string name="fone_sem_rede">TV ev ağında değil.</string>
+</resources>

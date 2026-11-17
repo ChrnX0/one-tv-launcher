@@ -21,7 +21,7 @@
   input[type=text], textarea { font: inherit; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--borda); background: transparent; color: inherit; width: 100%; }
   textarea { min-height: 110px; resize: vertical; }
   .foto { display: grid; gap: 10px; }
-  .foto img { max-width: 100%; border-radius: 12px; }
+  .foto img, .foto video { max-width: 100%; border-radius: 12px; }
   button { font: inherit; font-weight: 600; min-height: 54px; border-radius: 14px; border: 0; cursor: pointer; }
   .principal { background: var(--acento); color: #fff; }
   @media (prefers-color-scheme: dark) { .principal { color: #0b0f17; } }
@@ -42,6 +42,10 @@
       <button type="button" class="secundario" id="btnFoto"></button>
       <input type="file" id="arquivo" accept="image/*" hidden>
       <img id="previa" alt="" hidden>
+      <!-- Degrau 4: recado em vídeo (só aparece se a TV aceitar vídeos; RecadoVideo.kt) -->
+      <button type="button" class="secundario" id="btnVideo" hidden></button>
+      <input type="file" id="arqVideo" accept="video/mp4,video/quicktime,video/webm,video/*" capture="user" hidden>
+      <video id="previaVideo" controls playsinline muted hidden></video>
     </div>
     <button type="submit" class="principal" id="enviar"></button>
     <p class="msg" id="msg" role="status" aria-live="polite"></p>
@@ -68,11 +72,31 @@ const T = {
   id: ["Kirim ke TV", "Pesan dan foto Anda langsung muncul di TV keluarga.", "Nama Anda", "Pesan", "Tambah foto", "Ganti foto", "Kirim", "Mengirim…", "Terkirim! Sudah ada di TV.", "Tulis pesan atau tambahkan foto.", "Terlalu banyak kiriman hari ini. Coba lagi besok.", "Tautan ini sudah dimatikan.", "Foto itu tidak bisa. Coba foto lain.", "Tidak berhasil. Periksa internet lalu coba lagi."],
   ar: ["أرسل إلى التلفاز", "تظهر رسالتك وصورتك فورًا على تلفاز العائلة.", "اسمك", "رسالة", "أضف صورة", "غيّر الصورة", "إرسال", "جارٍ الإرسال…", "تم الإرسال! إنها على التلفاز الآن.", "اكتب رسالة أو أضف صورة.", "إرسالات كثيرة اليوم. حاول غدًا.", "تم إيقاف هذا الرابط.", "لم تنجح هذه الصورة. جرّب صورة أخرى.", "لم ينجح الأمر. تحقق من الإنترنت وحاول مرة أخرى."],
 };
+// Degrau 4 (vídeo): gravar, trocar, longo, grande, limite do dia, não deu, TV não aceita, enviando (%).
+const V = {
+  en: ["Record a video (up to 30 s)", "Record again", "This video is longer than 30 seconds. Record a shorter one.", "This video is too big (over 20 MB). Record a shorter one.", "Too many videos today (5 a day). Try again tomorrow.", "That video didn’t work. Try recording again.", "The TV is not accepting videos right now.", "Sending video… %"],
+  pt: ["Gravar vídeo (até 30 s)", "Gravar de novo", "Este vídeo passa de 30 segundos. Grave um mais curto.", "Este vídeo é grande demais (mais de 20 MB). Grave um mais curto.", "Muitos vídeos hoje (5 por dia). Tente amanhã.", "Esse vídeo não deu certo. Tente gravar de novo.", "A TV não está aceitando vídeos agora.", "Enviando o vídeo… %"],
+  "pt-PT": ["Gravar vídeo (até 30 s)", "Gravar de novo", "Este vídeo tem mais de 30 segundos. Grave um mais curto.", "Este vídeo é demasiado grande (mais de 20 MB). Grave um mais curto.", "Demasiados vídeos hoje (5 por dia). Tente amanhã.", "Esse vídeo não funcionou. Tente gravar de novo.", "A TV não está a aceitar vídeos agora.", "A enviar o vídeo… %"],
+  es: ["Grabar video (hasta 30 s)", "Grabar de nuevo", "Este video dura más de 30 segundos. Graba uno más corto.", "Este video es demasiado grande (más de 20 MB). Graba uno más corto.", "Demasiados videos hoy (5 al día). Inténtalo mañana.", "Ese video no funcionó. Intenta grabar de nuevo.", "La TV no está aceptando videos ahora.", "Enviando el video… %"],
+  de: ["Video aufnehmen (bis 30 s)", "Neu aufnehmen", "Das Video ist länger als 30 Sekunden. Nimm ein kürzeres auf.", "Das Video ist zu groß (über 20 MB). Nimm ein kürzeres auf.", "Zu viele Videos heute (5 pro Tag). Versuch es morgen.", "Das Video ging nicht. Nimm es nochmal auf.", "Der Fernseher nimmt gerade keine Videos an.", "Video wird gesendet… %"],
+  fr: ["Enregistrer une vidéo (30 s max.)", "Recommencer", "Cette vidéo dépasse 30 secondes. Enregistrez-en une plus courte.", "Cette vidéo est trop lourde (plus de 20 Mo). Enregistrez-en une plus courte.", "Trop de vidéos aujourd’hui (5 par jour). Réessayez demain.", "Cette vidéo n’a pas marché. Réessayez.", "La télé n’accepte pas de vidéos pour le moment.", "Envoi de la vidéo… %"],
+  it: ["Registra un video (fino a 30 s)", "Registra di nuovo", "Questo video supera i 30 secondi. Registrane uno più corto.", "Questo video è troppo grande (oltre 20 MB). Registrane uno più corto.", "Troppi video oggi (5 al giorno). Riprova domani.", "Quel video non va. Prova a registrare di nuovo.", "La TV ora non accetta video.", "Invio del video… %"],
+  ru: ["Записать видео (до 30 с)", "Записать заново", "Видео длиннее 30 секунд. Запишите покороче.", "Видео слишком большое (больше 20 МБ). Запишите покороче.", "Сегодня слишком много видео (5 в день). Попробуйте завтра.", "Это видео не подошло. Попробуйте записать снова.", "Телевизор сейчас не принимает видео.", "Отправка видео… %"],
+  pl: ["Nagraj film (do 30 s)", "Nagraj ponownie", "Ten film ma ponad 30 sekund. Nagraj krótszy.", "Ten film jest za duży (ponad 20 MB). Nagraj krótszy.", "Za dużo filmów dzisiaj (5 dziennie). Spróbuj jutro.", "Ten film nie zadziałał. Spróbuj nagrać ponownie.", "Telewizor nie przyjmuje teraz filmów.", "Wysyłanie filmu… %"],
+  tr: ["Video kaydet (en fazla 30 sn)", "Tekrar kaydet", "Bu video 30 saniyeden uzun. Daha kısa bir tane kaydet.", "Bu video çok büyük (20 MB’tan fazla). Daha kısa bir tane kaydet.", "Bugün çok fazla video (günde 5). Yarın dene.", "Bu video olmadı. Tekrar kaydetmeyi dene.", "TV şu anda video kabul etmiyor.", "Video gönderiliyor… %"],
+  ja: ["動画を撮る（30秒まで）", "撮り直す", "この動画は30秒を超えています。短く撮り直してください。", "この動画は大きすぎます（20MB超）。短く撮り直してください。", "今日は動画が多すぎます（1日5本まで）。明日お試しください。", "その動画は使えません。もう一度撮ってください。", "テレビは今、動画を受け付けていません。", "動画を送信中… %"],
+  zh: ["录视频（最长 30 秒）", "重新录", "这个视频超过 30 秒，请录短一点。", "这个视频太大（超过 20 MB），请录短一点。", "今天视频太多（每天 5 个），请明天再试。", "这个视频不行，请重新录。", "电视现在不接收视频。", "正在发送视频… %"],
+  ko: ["동영상 찍기 (30초까지)", "다시 찍기", "이 동영상은 30초가 넘어요. 더 짧게 찍어 주세요.", "이 동영상은 너무 커요(20MB 초과). 더 짧게 찍어 주세요.", "오늘 동영상이 너무 많아요(하루 5개). 내일 다시 해 보세요.", "그 동영상은 안 돼요. 다시 찍어 보세요.", "TV가 지금은 동영상을 받지 않아요.", "동영상 보내는 중… %"],
+  hi: ["वीडियो रिकॉर्ड करें (30 सेकंड तक)", "फिर से रिकॉर्ड करें", "यह वीडियो 30 सेकंड से लंबा है। छोटा रिकॉर्ड करें।", "यह वीडियो बहुत बड़ा है (20 MB से ज़्यादा)। छोटा रिकॉर्ड करें।", "आज बहुत वीडियो भेजे गए (दिन में 5)। कल कोशिश करें।", "यह वीडियो नहीं चला। फिर से रिकॉर्ड करें।", "TV अभी वीडियो नहीं ले रहा है।", "वीडियो भेजा जा रहा है… %"],
+  id: ["Rekam video (maks. 30 dtk)", "Rekam ulang", "Video ini lebih dari 30 detik. Rekam yang lebih pendek.", "Video ini terlalu besar (lebih dari 20 MB). Rekam yang lebih pendek.", "Terlalu banyak video hari ini (5 per hari). Coba besok.", "Video itu tidak bisa. Coba rekam lagi.", "TV sedang tidak menerima video.", "Mengirim video… %"],
+  ar: ["سجّل فيديو (حتى 30 ثانية)", "سجّل من جديد", "هذا الفيديو أطول من 30 ثانية. سجّل فيديو أقصر.", "هذا الفيديو كبير جدًا (أكثر من 20 ميغابايت). سجّل فيديو أقصر.", "فيديوهات كثيرة اليوم (5 في اليوم). حاول غدًا.", "لم ينجح هذا الفيديو. حاول التسجيل مجددًا.", "التلفاز لا يقبل الفيديوهات الآن.", "جارٍ إرسال الفيديو… %"],
+};
 const K = ["titulo", "sub", "lNome", "lTexto", "foto", "trocar", "enviar", "enviando", "ok", "vazio", "limite", "desligado", "erroFoto", "rede"];
 const pedido = (navigator.language || "en");
 const curto = pedido.split("-")[0].toLowerCase();
 const lang = T[pedido] ? pedido : (/^pt-(pt|ao|mz)$/i.test(pedido) ? "pt-PT" : (curto === "in" ? "id" : (T[curto] ? curto : "en")));
 const t = Object.fromEntries(K.map((k, i) => [k, T[lang][i]]));
+const v = Object.fromEntries(["gravar", "regravar", "longo", "grande", "limiteVideo", "erroVideo", "videoDesligado", "enviandoVideo"].map((k, i) => [k, V[lang][i]]));
 document.documentElement.lang = lang;
 if (lang === "ar") document.documentElement.dir = "rtl";
 document.title = t.titulo;
@@ -82,6 +106,43 @@ $("btnFoto").textContent = t.foto; $("enviar").textContent = t.enviar;
 try { $("nome").value = localStorage.getItem("nome") || ""; } catch (e) {}
 const base = location.pathname.replace(/\/+$/, "");
 let foto = null;   // Blob JPEG já reduzido
+let video = null;  // File do vídeo (até 30 s e 20 MB, conferido aqui e de novo na TV)
+const MAX_S = 30, MAX_B = 20 * 1024 * 1024;
+
+// A TV aceita vídeos? (opt-in de quem mora lá). Sem resposta, o botão fica escondido.
+fetch(base + "/estado").then((r) => r.ok ? r.json() : {}).then((j) => {
+  if (j && j.video) { $("btnVideo").textContent = v.gravar; $("btnVideo").hidden = false; }
+}).catch(() => {});
+$("btnVideo").addEventListener("click", () => $("arqVideo").click());
+$("arqVideo").addEventListener("change", async () => {
+  const f = $("arqVideo").files[0];
+  video = null; $("previaVideo").hidden = true;
+  if (!f) return;
+  if (f.size > MAX_B) { mensagem(v.grande, "erro"); return; }
+  const url = URL.createObjectURL(f);
+  const dur = await new Promise((ok) => {
+    const el = $("previaVideo");
+    el.onloadedmetadata = () => ok(el.duration); el.onerror = () => ok(NaN); el.src = url;
+  });
+  // Duração desconhecida (alguns navegadores dão Infinity no WebM): a TV confere de novo.
+  if (isFinite(dur) && dur > MAX_S + 1) { mensagem(v.longo, "erro"); return; }
+  video = f; $("previaVideo").hidden = false; $("btnVideo").textContent = v.regravar; mensagem("", "");
+  // Vídeo e foto não vão juntos: o vídeo ganha.
+  foto = null; $("previa").hidden = true; $("arquivo").value = ""; $("btnFoto").textContent = t.foto;
+});
+
+/** Envia o vídeo cru (direto para o disco da TV), com a porcentagem na tela. */
+function enviarVideo(nome, texto) {
+  return new Promise((ok) => {
+    const x = new XMLHttpRequest();
+    x.open("POST", base + "/video?" + new URLSearchParams({ nome, texto }));
+    x.setRequestHeader("Content-Type", video.type || "video/mp4");
+    x.upload.onprogress = (e) => { if (e.lengthComputable) mensagem(v.enviandoVideo.replace("%", Math.round(100 * e.loaded / e.total) + "%"), ""); };
+    x.onload = () => { let j = {}; try { j = JSON.parse(x.responseText); } catch (e) {} ok({ ok: x.status === 200, erro: j.erro }); };
+    x.onerror = () => ok({ ok: false, erro: "rede" });
+    x.send(video);
+  });
+}
 
 $("btnFoto").addEventListener("click", () => $("arquivo").click());
 $("arquivo").addEventListener("change", async () => {
@@ -113,10 +174,18 @@ function mensagem(texto, classe) { const m = $("msg"); m.textContent = texto; m.
 $("form").addEventListener("submit", async (ev) => {
   ev.preventDefault();
   const nome = $("nome").value.trim(), texto = $("texto").value.trim();
-  if (!texto && !foto) { mensagem(t.vazio, "erro"); return; }
+  if (!texto && !foto && !video) { mensagem(t.vazio, "erro"); return; }
   try { localStorage.setItem("nome", nome); } catch (e) {}
   $("enviar").disabled = true; mensagem(t.enviando, "");
   try {
+    if (video) {
+      const r = await enviarVideo(nome, texto);
+      if (r.ok) {
+        mensagem(t.ok, "ok");
+        $("texto").value = ""; video = null; $("previaVideo").hidden = true; $("arqVideo").value = ""; $("btnVideo").textContent = v.gravar;
+      } else mensagem({ limite: v.limiteVideo, desligado: v.videoDesligado, tamanho: v.grande, duracao: v.longo, video: v.erroVideo }[r.erro] || t.rede, "erro");
+      return;
+    }
     const r = foto
       ? await fetch(base + "/foto?" + new URLSearchParams({ nome, texto }), { method: "POST", headers: { "Content-Type": "image/jpeg" }, body: foto })
       : await fetch(base + "/recado", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nome, texto }) });
