@@ -91,10 +91,10 @@ background color). No photo, name, account or network goes in it.</p>
 <script>
 "use strict";
 const T = {
-  en: {copiar: "Copy code", copiado: "Copied", tema: "Theme", ESCURO: "Dark", GALERIA: "Gallery", MEU: "My background",
+  en: {copiar: "Copy code", copiado: "Copied", tema: "Theme", ESCURO: "Dark", GALERIA: "Gallery", CEU: "Real sky", MEU: "My background",
        texto: "Text", t100: "normal", t110: "large", t120: "larger", cor: "Background in the app's color",
        sim: "on", nao: "off", icones: "Icon pack", nenhum: "none", brilho: "Brightness", contraste: "Contrast"},
-  pt: {copiar: "Copiar código", copiado: "Copiado", tema: "Tema", ESCURO: "Escuro", GALERIA: "Galeria", MEU: "Meu fundo",
+  pt: {copiar: "Copiar código", copiado: "Copiado", tema: "Tema", ESCURO: "Escuro", GALERIA: "Galeria", CEU: "Céu de verdade", MEU: "Meu fundo",
        texto: "Texto", t100: "normal", t110: "grande", t120: "maior", cor: "Fundo na cor do app",
        sim: "ligado", nao: "desligado", icones: "Pacote de ícones", nenhum: "nenhum", brilho: "Brilho", contraste: "Contraste",
        recebido_titulo: "A TV mandou este visual para você", titulo: "Visuais prontos",
@@ -123,7 +123,7 @@ function decodificar(s) {
 }
 function linhas(j) {
   const r = [], liga = v => t(v ? "sim" : "nao");
-  if (["ESCURO", "GALERIA", "MEU"].includes(j.t)) r.push(t("tema") + ": " + t(j.t));
+  if (["ESCURO", "GALERIA", "CEU", "MEU"].includes(j.t)) r.push(t("tema") + ": " + t(j.t));
   if ([100, 110, 120].includes(j.x)) r.push(t("texto") + ": " + t("t" + j.x));
   if (typeof j.c === "boolean") r.push(t("cor") + ": " + liga(j.c));
   if (typeof j.i === "string") r.push(t("icones") + ": " + (j.i || t("nenhum")));
