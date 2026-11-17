@@ -432,6 +432,7 @@
     <string name="home_destaque_pilha">%1$d 个应用 · ▼ 切换最前面的应用</string>
     <string name="player_carregando">正在加载频道…</string>
     <string name="player_carregando_canal">正在加载频道…</string>
+    <string name="vod_carregando">正在加载视频…</string>
     <string name="player_sem_canais">尚未添加频道列表。</string>
     <string name="player_tentando">频道 %1$d 没有信号。正在重试…</string>
     <string name="player_sem_sinal">频道 %1$d 无响应。请用 ▲ ▼ 或 OK 选择其他频道。</string>
@@ -439,6 +440,7 @@
     <string name="player_ao_vivo">直播</string>
     <string name="player_a_seguir">接下来：%1$s</string>
     <string name="player_teclas">▲ ▼ 频道 · OK 频道列表 · 长按 OK 2 秒：收藏 · ◀ 上一个频道 · ▶▶ 选项 · 返回 退出</string>
+    <string name="player_teclas_pausa">⏯ 或 OK 继续 · ▶ 选项（回到直播） · ▲ ▼ 频道 · 返回 退出</string>
     <string name="player_cat_busca">搜索：%1$s</string>
     <string name="player_acao_buscar">搜索</string>
     <string name="player_acao_filtros">筛选</string>

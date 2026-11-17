@@ -223,7 +223,7 @@ class VodActivity : Activity() {
             FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM).apply { setMargins(dp(32), 0, dp(32), dp(26)) })
         aviso = TextView(this).apply {
             textSize = 18f; setTextColor(papel); gravity = Gravity.CENTER; background = vidro(16)
-            setPadding(dp(24), dp(16), dp(24), dp(16)); text = getString(R.string.player_carregando_canal)
+            setPadding(dp(24), dp(16), dp(24), dp(16)); text = getString(R.string.vod_carregando)
         }
         raiz.addView(aviso, FrameLayout.LayoutParams(-2, -2, Gravity.CENTER))
         // Legenda em imagem (14/11/2026): desenhada dentro da área do vídeo, por baixo da barra e dos avisos.
@@ -627,7 +627,7 @@ class VodActivity : Activity() {
                         continuarDeFora()
                     }
                 }
-                Player.STATE_BUFFERING -> mostrarAviso(getString(R.string.player_carregando_canal))
+                Player.STATE_BUFFERING -> mostrarAviso(getString(R.string.vod_carregando))
                 Player.STATE_ENDED -> {
                     salvar(terminou = true)
                     // Posição = duração: o servidor marca como visto e tira do "Continuar assistindo".

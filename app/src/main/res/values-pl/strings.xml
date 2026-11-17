@@ -432,6 +432,7 @@
     <string name="home_destaque_pilha">%1$d aplikacji · ▼ zmienia pierwszą</string>
     <string name="player_carregando">Ładowanie kanałów…</string>
     <string name="player_carregando_canal">Ładowanie kanału…</string>
+    <string name="vod_carregando">Wczytywanie wideo…</string>
     <string name="player_sem_canais">Nie dodano jeszcze listy kanałów.</string>
     <string name="player_tentando">Brak sygnału na kanale %1$d. Ponawianie…</string>
     <string name="player_sem_sinal">Kanał %1$d nie odpowiedział. Wybierz inny przez ▲ ▼ lub OK.</string>
@@ -439,6 +440,7 @@
     <string name="player_ao_vivo">NA ŻYWO</string>
     <string name="player_a_seguir">następnie: %1$s</string>
     <string name="player_teclas">▲ ▼ kanał · OK lista kanałów · przytrzymaj OK 2 s: ulubiony · ◀ poprzedni kanał · ▶▶ opcje · WSTECZ wyjście</string>
+    <string name="player_teclas_pausa">⏯ lub OK wznów · ▶ opcje (powrót na żywo) · ▲ ▼ kanał · WSTECZ wyjście</string>
     <string name="player_cat_busca">Szukaj: %1$s</string>
     <string name="player_acao_buscar">Szukaj</string>
     <string name="player_acao_filtros">Filtry</string>

@@ -1546,7 +1546,9 @@ class MainActivity : Activity() {
                 getString(if (serie) R.string.home_destaque_series else R.string.home_destaque_filmes))
             return
         }
-        val pos = posicoesHome[f.chave]?.takeIf { it.duracao > 0 }
+        // Só "continue de onde parou" quando a ficha de Filmes também oferece Continuar (Vod.deveRetomar: 1 min ou mais):
+        // com 20 s vistos a HOME dizia "continue" e a ficha "Assistir" do começo (visto na Sala, 17/11/2026).
+        val pos = posicoesHome[f.chave]?.takeIf { it.duracao > 0 && (serie || Vod.deveRetomar(it)) }
         val sub = when {
             serie -> getString(R.string.home_dest_serie, f.episodio)
             pos != null -> getString(R.string.home_dest_filme)   // o "faltam" já vai na linha de baixo

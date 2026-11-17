@@ -1360,6 +1360,8 @@ class ConfigLauncherActivity : Activity() {
     private fun extrasDaAba(c: LinearLayout, aba: ExtrasAbas.Aba, comSecao: Boolean = true) {
         val porNome = Extras.Chave.values().associateBy { it.name }
         val chaves = ExtrasAbas.daAba(aba, porNome.keys).mapNotNull { porNome[it] }
+            // "Entradas HDMI" num Chromecast (sem entrada) era uma chave que não faz nada (visto na Sala, 17/11/2026).
+            .filter { it != Extras.Chave.ENTRADAS_TV || EntradasTv.existe(this) }
         if (chaves.isEmpty()) return
         if (comSecao) secao(c, getString(R.string.cfg_extras_secao))
         for (k in chaves) {

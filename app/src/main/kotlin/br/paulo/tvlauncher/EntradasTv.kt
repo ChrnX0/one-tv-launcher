@@ -27,10 +27,7 @@ object EntradasTv {
     /** Só as entradas físicas (HDMI, AV, componente...). Os sintonizadores de apps (IPTV, canais) ficam de fora. */
     fun listar(ctx: Context): List<Entrada> {
         if (!Extras.ligado(ctx, Extras.Chave.ENTRADAS_TV)) return emptyList()
-        val tim = ctx.getSystemService(Context.TV_INPUT_SERVICE) as? TvInputManager ?: return emptyList()
-        return runCatching { tim.tvInputList }.getOrDefault(emptyList())
-            .filter { it.isPassthroughInput && it.type != TvInputInfo.TYPE_TUNER }
-            .filter { runCatching { !it.isHidden(ctx) }.getOrDefault(true) }
+        return fisicas(ctx)
             .sortedWith(compareBy({ it.type }, { it.id }))
             .map { i ->
                 val nome = runCatching { i.loadCustomLabel(ctx)?.toString() }.getOrNull()?.takeIf { it.isNotBlank() }
@@ -38,6 +35,16 @@ object EntradasTv {
                 Entrada(PREFIXO + i.id, nome, runCatching { i.loadIcon(ctx) }.getOrNull())
             }
     }
+
+    private fun fisicas(ctx: Context): List<TvInputInfo> {
+        val tim = ctx.getSystemService(Context.TV_INPUT_SERVICE) as? TvInputManager ?: return emptyList()
+        return runCatching { tim.tvInputList }.getOrDefault(emptyList())
+            .filter { it.isPassthroughInput && it.type != TvInputInfo.TYPE_TUNER }
+            .filter { runCatching { !it.isHidden(ctx) }.getOrDefault(true) }
+    }
+
+    /** O aparelho tem entrada física? Sem ela (Chromecast, caixinha) a chave nem aparece nas Configurações. */
+    fun existe(ctx: Context) = fisicas(ctx).isNotEmpty()
 
     /** Abre a entrada pela chave "entrada:<id>". false = o aparelho não sabe abrir (a HOME não faz nada). */
     fun abrir(ctx: Context, chave: String): Boolean {

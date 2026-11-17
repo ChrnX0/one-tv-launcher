@@ -432,6 +432,7 @@
     <string name="home_destaque_pilha">%1$d Apps · ▼ wechselt die vordere</string>
     <string name="player_carregando">Sender werden geladen …</string>
     <string name="player_carregando_canal">Sender wird geladen …</string>
+    <string name="vod_carregando">Video wird geladen…</string>
     <string name="player_sem_canais">Noch keine Senderliste hinzugefügt.</string>
     <string name="player_tentando">Kein Signal auf Sender %1$d. Neuer Versuch …</string>
     <string name="player_sem_sinal">Sender %1$d hat nicht geantwortet. Wähle mit ▲ ▼ oder OK einen anderen.</string>
@@ -439,6 +440,7 @@
     <string name="player_ao_vivo">LIVE</string>
     <string name="player_a_seguir">danach: %1$s</string>
     <string name="player_teclas">▲ ▼ Sender · OK Senderliste · OK 2 s halten: Favorit · ◀ vorheriger Sender · ▶▶ Optionen · ZURÜCK beenden</string>
+    <string name="player_teclas_pausa">⏯ oder OK weiter · ▶ Optionen (zurück zu live) · ▲ ▼ Sender · ZURÜCK beenden</string>
     <string name="player_cat_busca">Suche: %1$s</string>
     <string name="player_acao_buscar">Suchen</string>
     <string name="player_acao_filtros">Filter</string>

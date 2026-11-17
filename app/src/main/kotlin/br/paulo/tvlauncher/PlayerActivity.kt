@@ -102,6 +102,7 @@ class PlayerActivity : Activity() {
     private lateinit var infoTitulo: TextView
     private lateinit var infoLinha: TextView
     private lateinit var infoHora: TextView
+    private lateinit var infoTeclas: TextView   // a linha de teclas muda no pausado e no passado (as teclas mudam)
     private lateinit var infoProgresso: ProgressBar
     private lateinit var vivo: TextView
     private lateinit var lista: PlayerListaTela
@@ -539,9 +540,10 @@ class PlayerActivity : Activity() {
             progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA)
         }
         info.addView(infoProgresso, LinearLayout.LayoutParams(-1, dp(4)).apply { topMargin = dp(12) })
-        info.addView(TextView(this).apply {
+        infoTeclas = TextView(this).apply {
             text = getString(R.string.player_teclas); textSize = 14f; setTextColor(Estilo.TEXTO_3)
-        }, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(10) })
+        }
+        info.addView(infoTeclas, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(10) })
         return info
     }
 
@@ -601,6 +603,10 @@ class PlayerActivity : Activity() {
         atualizarSelo()
         val c = atual ?: return
         val hora = SimpleDateFormat("HH:mm", Locale.getDefault())
+        // Pausado, a linha dizia "OK lista de canais", mas o OK continua (visto na Sala, 17/11/2026).
+        // No passado (TV de volta) as teclas já vão na linha de baixo (tvv_teclas): a linha fixa some.
+        infoTeclas.visibility = if (arquivo != null) View.GONE else View.VISIBLE
+        infoTeclas.setText(if (pausa.pausado) R.string.player_teclas_pausa else R.string.player_teclas)
         arquivo?.let { a -> infoDoArquivo(c, a, hora); return }
         vivo.text = "● " + getString(R.string.player_ao_vivo)
         vivo.setTextColor(Estilo.ERRO)
@@ -616,10 +622,12 @@ class PlayerActivity : Activity() {
         val atualProg = prog.firstOrNull()?.takeIf { agora >= it.inicio }
         infoNumero.text = c.numero.toString()
         infoTitulo.text = atualProg?.titulo ?: c.nome
-        val partes = mutableListOf(c.nome)
+        // Sem programa agora o título já é o nome do canal: não repetir embaixo ("TV Globo HD / TV Globo HD").
+        val partes = if (atualProg != null) mutableListOf(c.nome) else mutableListOf()
         atualProg?.let { partes += "${hora.format(Date(it.inicio))} – ${hora.format(Date(it.fim))}" }
         prog.getOrNull(if (atualProg != null) 1 else 0)?.let { partes += getString(R.string.player_a_seguir, it.titulo) }
         infoLinha.text = partes.joinToString("  ·  ")
+        infoLinha.visibility = if (partes.isEmpty()) View.GONE else View.VISIBLE
         // Quanto falta do programa de agora, como no card TV da HOME.
         infoHora.text = atualProg?.let { getString(R.string.home_faltam, minutosTexto(((it.fim - agora + 59_999) / 60_000).toInt())) + "  ·  " }
             .orEmpty() + hora.format(Date(agora))
@@ -658,7 +666,7 @@ class PlayerActivity : Activity() {
             if (EfeitosSom.vozClara(this)) marcadas += itens.size
             itens += getString(R.string.acess_voz) to { alternarSom(c, PlayerAcessivel.VOZ_CLARA) }
         }
-        Estilo.lista(this, c.nome, itens.map { it.first }, marcadas) { i -> itens[i].second() }
+        Estilo.lista(this, c.nome, itens.map { it.first }, marcadas, focoNaMarcada = false) { i -> itens[i].second() }
     }
 
     /**
@@ -863,6 +871,7 @@ class PlayerActivity : Activity() {
         infoTitulo.text = a.titulo
         infoLinha.text = listOf(c.nome, "${diaCurto(a.inicio)} ${hora.format(Date(a.inicio))} – ${hora.format(Date(a.fim))}",
             getString(R.string.tvv_teclas)).joinToString("  ·  ")
+        infoLinha.visibility = View.VISIBLE
         val pos = avanco.alvo.takeIf { it >= 0 } ?: player?.currentPosition ?: 0   // segurando ◀ ▶: mostra para onde vai
         infoHora.text = hora.format(Date(a.inicio + pos))
         infoProgresso.visibility = View.VISIBLE
