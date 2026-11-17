@@ -99,7 +99,18 @@ object RegistroErros {
         todos.dropLast(maximo).forEach { it.delete() }
     }
 
-    class Entrada(val arquivo: File, val quando: Long, val resumo: String, val texto: String)
+    class Entrada(val arquivo: File, val quando: Long, val resumo: String, val texto: String) {
+        /** O erro foi gravado por esta versão ([codigo] = versionCode)? */
+        fun daVersao(codigo: Long) = daVersao(texto, codigo)
+    }
+
+    /**
+     * Pelo cabeçalho do arquivo ("Versão do launcher: 1.0 (460575)"). O relatório de compatibilidade e o "Relatar um
+     * problema" só contam erros da versão instalada: uma queda da versão anterior, já corrigida, fazia o Chromecast
+     * aparecer como "estável: falhou" (visto na Sala, 17/11/2026). Puro (RegistroErrosTest).
+     */
+    fun daVersao(texto: String, codigo: Long): Boolean =
+        texto.lineSequence().firstOrNull { it.startsWith("Versão do launcher: ") }?.trim()?.endsWith("($codigo)") == true
 
     /** Os erros gravados, do mais recente para o mais antigo. */
     fun listar(ctx: Context): List<Entrada> {

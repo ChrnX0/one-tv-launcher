@@ -1040,6 +1040,17 @@
         <button type="button" class="botao-secundario" id="btnSimplesSalvar">Salvar apps</button>
         <p id="statusSimples" class="aviso" hidden></p>
       </div>
+      <!-- Tema por QR (degrau 1, VisualCodigo.kt): o visual de outra TV, lido pelo QR "Compartilhar visual" (site/visual.html) -->
+      <div class="cartao">
+        <h2>Visual de outra TV</h2>
+        <p class="aviso">Cole o código ou o link do QR "Compartilhar visual" de outra TV: tema, tamanho do texto e dos cartões. Fotos e vídeos não vêm junto.</p>
+        <div class="barra-acoes">
+          <input id="codigoVisual" type="text" maxlength="1200" placeholder="onetv-visual:1:…" aria-label="Código do visual">
+          <button type="button" class="botao-secundario" id="btnVisualAplicar">Aplicar nesta TV</button>
+          <button type="button" class="botao-secundario" id="btnVisualCopiar">Copiar o desta TV</button>
+        </div>
+        <p id="statusVisual" class="aviso" hidden></p>
+      </div>
       <div class="cartao">
         <h2>Instalar como app (https)</h2>
         <p class="aviso">Com o certificado que a TV fez instalado no aparelho, o painel abre com cadeado e vira app no celular e no PC.</p>

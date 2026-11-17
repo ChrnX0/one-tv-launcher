@@ -127,7 +127,7 @@ class FamiliaConectadaActivity : Activity() {
         col.addView(Estilo.tituloTela(this, getString(R.string.famc_titulo)))
         col.addView(Estilo.texto(this, Estilo.Papel.CORPO, getString(if (link != null) R.string.famc_texto else R.string.famc_sem_tunel)).apply { textSize = 20f },
             LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(16) })
-        val pronto = Estilo.linhaOpcao(this, getString(R.string.hos_bv_ok)).apply { setOnClickListener { finish() } }
+        val pronto = Estilo.linhaOpcao(this, getString(R.string.fp_fechar)).apply { setOnClickListener { finish() } }   // era "Começar"
         col.addView(pronto, LinearLayout.LayoutParams(dp(300), -2).apply { topMargin = dp(20) })
         col.addView(Estilo.linhaOpcao(this, getString(R.string.famc_trocar), getString(R.string.famc_trocar_det)).apply {
             setOnClickListener { FamiliaConectada.novoLink(this@FamiliaConectadaActivity); recreate() }

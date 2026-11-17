@@ -73,7 +73,7 @@ object CompatibilidadeTv {
         }.getOrDefault(false)
         val googleTv = runCatching { pm.getPackageInfo(Home.LAUNCHERX, 0); true }.getOrDefault(false)
         val agora = System.currentTimeMillis()
-        val quedas = runCatching { RegistroErros.listar(ctx).count { agora - it.quando < 24 * 3_600_000L } }.getOrDefault(0)
+        val quedas = runCatching { RegistroErros.listar(ctx).count { agora - it.quando < 24 * 3_600_000L && it.daVersao(BuildConfig.VERSION_CODE.toLong()) } }.getOrDefault(0)
         return Compatibilidade.Fatos(
             fabricante = Build.MANUFACTURER ?: "?",
             modelo = Build.MODEL ?: "?",
