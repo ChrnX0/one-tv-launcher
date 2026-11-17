@@ -14,34 +14,18 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Tela inicial nova, em cruz: Continuar, Assistir, Ouvir, Jogar e Aplicativos numa linha. ◀ ▶ troca de grupo, ▲ ▼ escolhe dentro dele, e o item escolhido aparece grande no cruzamento</item>
-        <item>Cada grupo lembra o último item escolhido. A tela abre em Assistir › TV; HOME volta para Assistir e, apertado de novo, para a TV</item>
-        <item>Aplicativos mostra os 8 apps mais usados e, no fim, “Todos os apps” com a grade completa para ver, mover e esconder</item>
-        <item>Ícones da tela inicial em três estilos: Objeto, Símbolo ou Duotom (Configurações › Tela inicial)</item>
-        <item>Barra de cima em quatro jeitos (Configurações › Tela inicial): Recua (só a hora e o tempo; ▲ traz perfil, busca e voz), Leve (sem cápsulas), Relógio grande no canto de baixo, ou as Cápsulas de antes</item>
-        <item>Arte do item em foco atrás da cruz, à direita: a cena do último filme ou série, o banner do app, a cor do grupo. Dá para desligar</item>
-        <item>Segurar OK num app da tela inicial abre as opções dele (esconder ou desinstalar)</item>
+        <item>Parear sem PC agora confirma na tela: aparece um aviso grande “Pareado com sucesso ✓” e, depois, se o shell próprio do launcher está funcionando</item>
+        <item>Tela inicial mais fluida: andar pela cruz redesenha menos a cada quadro</item>
+        <item>Copiar arquivos do computador para a TV pela unidade de rede ficou mais rápido (disco e rede trabalham ao mesmo tempo)</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Abre em TV</item>
-        <item>Andar na cruz</item>
-        <item>Botão HOME</item>
-        <item>Aplicativos</item>
-        <item>Segurar OK</item>
-        <item>Estilo dos ícones</item>
-        <item>Rapidez</item>
-        <item>Barra de cima</item>
-        <item>Arte do item</item>
+        <item>Pareamento confirmado</item>
+        <item>Cruz fluida</item>
+        <item>Cópia mais rápida</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Ao apertar HOME, a tela nova abre em Assistir com a TV em destaque?</item>
-        <item>Com ◀ ▶ troca de grupo e com ▲ ▼ escolhe dentro dele, e o grupo lembra o último item ao voltar?</item>
-        <item>Em outro grupo, HOME volta para Assistir; apertando HOME de novo, vai para a TV?</item>
-        <item>Em Aplicativos aparecem os apps mais usados e, no fim, “Todos os apps” abre a grade completa?</item>
-        <item>Segurando OK num app em Aplicativos, aparecem as opções Esconder e Desinstalar?</item>
-        <item>Em Configurações › Tela inicial, trocar entre Objeto, Símbolo e Duotom muda os ícones da cruz?</item>
-        <item>Andar pela cruz com as setas é fluido, sem travar nem pular quadros?</item>
-        <item>Com a cruz em foco, no alto aparecem só a hora e o tempo; ▲ no primeiro item traz a barra inteira e ▼ volta?</item>
-        <item>Andando pela cruz, a arte à direita acompanha o item (cena da série, banner do app)?</item>
+        <item>Depois de parear em Configurações › Avançado › Parear sem PC, apareceu o aviso “Pareado com sucesso ✓” e depois “Tudo pronto”?</item>
+        <item>Andar pela cruz com as setas está fluido, sem engasgar?</item>
+        <item>Copiar um arquivo grande do computador para a TV (Este Computador › TV) foi mais rápido que antes?</item>
     </string-array>
 </resources>

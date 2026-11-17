@@ -17,45 +17,23 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>New cross-shaped home screen: Continue, Watch, Listen, Play and Apps in one row. ◀ ▶ changes group, ▲ ▼ picks inside it, and the chosen item shows large where they cross</item>
-        <item>Each group remembers its last item. The screen opens on Watch › TV; HOME goes back to Watch and, pressed again, to TV</item>
-        <item>Apps shows your 8 most used apps and, at the end, “All apps” with the full grid to see, move and hide them</item>
-        <item>Home screen icons in three styles: Object, Symbol or Duotone (Settings › Home screen)</item>
-        <item>Top bar in four ways (Settings › Home screen): Steps back (only time and weather; ▲ brings profile, search and voice), Light (no capsules), Big clock in the bottom corner, or the old Capsules</item>
-        <item>Art of the item in focus behind the cross, on the right: the scene of the last movie or series, the app banner, the group color. It can be turned off</item>
-        <item>Holding OK on an app on the home screen opens its options (hide or uninstall)</item>
+        <item>Pair without a PC now confirms on screen: a big “Paired successfully ✓” notice, and then whether the launcher’s own shell is working</item>
+        <item>Smoother home screen: moving through the cross redraws less on each frame</item>
+        <item>Copying files from the computer to the TV over the network drive is faster (disk and network work at the same time)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>cruz_abre</item>
-        <item>cruz_navegar</item>
-        <item>cruz_home</item>
-        <item>cruz_apps</item>
-        <item>cruz_opcoes</item>
-        <item>cruz_icones</item>
-        <item>cruz_fluida</item>
-        <item>cruz_barra</item>
-        <item>cruz_arte</item>
+        <item>pareamento_ok</item>
+        <item>cruz_fluida2</item>
+        <item>rede_rapida</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Opens on TV</item>
-        <item>Moving in the cross</item>
-        <item>HOME button</item>
-        <item>Apps</item>
-        <item>Hold OK</item>
-        <item>Icon style</item>
-        <item>Speed</item>
-        <item>Top bar</item>
-        <item>Item art</item>
+        <item>Pairing confirmed</item>
+        <item>Smooth cross</item>
+        <item>Faster copy</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>When you press HOME, does the new screen open on Watch with TV highlighted?</item>
-        <item>Does ◀ ▶ change group and ▲ ▼ pick inside it, and does the group remember its last item when you come back?</item>
-        <item>From another group, does HOME go back to Watch, and pressing HOME again go to TV?</item>
-        <item>Does Apps show the most used apps and, at the end, does “All apps” open the full grid?</item>
-        <item>Holding OK on an app in Apps, do the Hide and Uninstall options appear?</item>
-        <item>In Settings › Home screen, does switching between Object, Symbol and Duotone change the cross icons?</item>
-        <item>Is moving around the cross with the arrows smooth, without stutters or skipped frames?</item>
-        <item>With the cross in focus, only time and weather show at the top; pressing ▲ on the first item brings the whole bar and ▼ returns?</item>
-        <item>While moving in the cross, the art on the right follows the item (series scene, app banner)?</item>
+        <item>After pairing in Settings › Advanced › Pair without a PC, did a “Paired successfully ✓” notice appear, followed by “All set”?</item>
+        <item>Moving through the cross with the arrows is smooth, without stutter?</item>
+        <item>Copying a big file from the computer to the TV (This PC › TV) went faster than before?</item>
     </string-array>
 </resources>
