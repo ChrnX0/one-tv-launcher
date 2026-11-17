@@ -58,4 +58,7 @@
     <string name="sv_f_longo">Benutzername oder Passwort zu lang</string>
     <string name="sv_f_senha">falscher Benutzername oder falsches Passwort</string>
     <string name="sv_f_gravar">konnte nicht auf dem Fernseher gespeichert werden. Versuch es erneut.</string>
+    <!-- Ficha sem a conta Simkl: convite para conectar (a nota do Simkl só aparece com a conta; licença). -->
+    <string name="sv_simkl_convite">Simkl-Bewertung</string>
+    <string name="sv_simkl_convite_det">Konto verbinden</string>
 </resources>

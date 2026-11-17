@@ -58,4 +58,7 @@
     <string name="sv_f_longo">za długa nazwa użytkownika lub hasło</string>
     <string name="sv_f_senha">błędna nazwa użytkownika lub hasło</string>
     <string name="sv_f_gravar">nie udało się zapisać na telewizorze. Spróbuj ponownie.</string>
+    <!-- Ficha sem a conta Simkl: convite para conectar (a nota do Simkl só aparece com a conta; licença). -->
+    <string name="sv_simkl_convite">Ocena Simkl</string>
+    <string name="sv_simkl_convite_det">Połącz konto</string>
 </resources>

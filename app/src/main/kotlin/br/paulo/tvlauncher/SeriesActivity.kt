@@ -936,6 +936,7 @@ class SeriesActivity : Activity() {
             FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.elenco_botao), marca = "elenco") { ElencoActivity.abrir(this, id, serie = true, nome = Vod.nomeLimpo(s.nome)) })
         }
         FichaAcoes.ondeAssistir(this, acoes, s.nome, s.ano, googleTv)
+        FichaAcoes.conviteSimkl(this, acoes)
         val acaoSinopse = sinopse?.let { txt ->
             FichaAcoes.acao(this, getString(R.string.series_sinopse_mais), marca = "sinopse") { FichaAcoes.mostrarSinopse(this, Vod.nomeLimpo(s.nome), txt) }
                 .also { FichaAcoes.adicionar(acoes, it); it.visibility = if (verEpisodios) View.VISIBLE else View.GONE }

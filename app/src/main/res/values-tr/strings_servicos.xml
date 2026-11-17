@@ -58,4 +58,7 @@
     <string name="sv_f_longo">kullanıcı adı veya şifre çok uzun</string>
     <string name="sv_f_senha">yanlış kullanıcı adı veya şifre</string>
     <string name="sv_f_gravar">TV’ye kaydedilemedi. Yeniden deneyin.</string>
+    <!-- Ficha sem a conta Simkl: convite para conectar (a nota do Simkl só aparece com a conta; licença). -->
+    <string name="sv_simkl_convite">Simkl puanı</string>
+    <string name="sv_simkl_convite_det">Hesabınızı bağlayın</string>
 </resources>

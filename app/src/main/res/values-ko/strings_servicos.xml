@@ -58,4 +58,7 @@
     <string name="sv_f_longo">사용자 이름 또는 비밀번호가 너무 깁니다</string>
     <string name="sv_f_senha">사용자 이름 또는 비밀번호가 틀렸습니다</string>
     <string name="sv_f_gravar">TV에 저장할 수 없습니다. 다시 시도하세요.</string>
+    <!-- Ficha sem a conta Simkl: convite para conectar (a nota do Simkl só aparece com a conta; licença). -->
+    <string name="sv_simkl_convite">Simkl 평점</string>
+    <string name="sv_simkl_convite_det">계정 연결</string>
 </resources>

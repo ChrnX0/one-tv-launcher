@@ -59,4 +59,7 @@
     <string name="sv_f_longo">user name or password too long</string>
     <string name="sv_f_senha">wrong user name or password</string>
     <string name="sv_f_gravar">could not save it on the TV. Try again.</string>
+    <!-- Ficha sem a conta Simkl: convite para conectar (a nota do Simkl só aparece com a conta; licença). -->
+    <string name="sv_simkl_convite">Simkl rating</string>
+    <string name="sv_simkl_convite_det">Connect your account</string>
 </resources>

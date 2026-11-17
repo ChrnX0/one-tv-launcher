@@ -864,6 +864,7 @@ class FilmesActivity : Activity() {
             FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.elenco_botao), marca = "elenco") { ElencoActivity.abrir(this, id, serie = false, nome = Vod.nomeLimpo(f.nome)) })
         }
         FichaAcoes.ondeAssistir(this, acoes, f.nome, f.ano ?: info?.lancamento?.take(4)?.toIntOrNull(), googleTv)
+        FichaAcoes.conviteSimkl(this, acoes)
         // O mesmo filme na outra versão do catálogo (dublado x legendado): abre a ficha dela.
         outraVersao(f)?.let { o ->
             val r = if (Idioma.versao(o.nome, o.grupo) == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
