@@ -49,6 +49,9 @@ concurrency:
 
 jobs:
   build:
+    # 17/11/2026: a chave de assinatura e as chaves dos serviços ficam no Environment "publicar" (só main + aprovação do
+    # Paulo), não nos segredos do repositório: um workflow alterado numa branch não consegue lê-las. PR = sem Environment.
+    environment: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && 'publicar' || '' }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
     outputs:
@@ -188,6 +191,7 @@ jobs:
   publicar:
     needs: build
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && needs.build.outputs.tem_chave == '1'
+    environment: espelho   # PUBLICO_TOKEN (só main, sem segunda aprovação: o build já foi aprovado)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
