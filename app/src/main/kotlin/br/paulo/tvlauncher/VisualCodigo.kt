@@ -21,7 +21,7 @@ object VisualCodigo {
     /** Prefixo dos códigos gerados antes de 17/11/2026: só leitura. */
     const val PREFIXO_ANTIGO = "onetv-visual:1:"
     const val MAX_CHARS = 1200
-    val TEMAS = setOf("ESCURO", "GALERIA", "MEU")
+    val TEMAS = setOf("ESCURO", "GALERIA", "CEU", "MEU")   // CEU: "Céu de verdade" (#180)
 
     data class Visual(
         val tema: String? = null,

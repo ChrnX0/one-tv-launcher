@@ -60,11 +60,11 @@ cards). No photo, name, account or network goes in it.</p>
 <script>
 "use strict";
 const T = {
-  en: {copiar: "Copy code", copiado: "Copied", tema: "Theme", ESCURO: "Dark", GALERIA: "Gallery", MEU: "My background",
+  en: {copiar: "Copy code", copiado: "Copied", tema: "Theme", ESCURO: "Dark", GALERIA: "Gallery", CEU: "Real sky", MEU: "My background",
        texto: "Text", t100: "normal", t110: "large", t120: "larger", cartoes: "App cards", c100: "normal", c115: "large",
        grade: "Arrangement", gsim: "grid", gnao: "row", transp: "See-through cards", cor: "Background in the app's color",
        sim: "on", nao: "off", icones: "Icon pack", nenhum: "none", pilhas: "Automatic stacks", brilho: "Brightness", contraste: "Contrast"},
-  pt: {copiar: "Copiar código", copiado: "Copiado", tema: "Tema", ESCURO: "Escuro", GALERIA: "Galeria", MEU: "Meu fundo",
+  pt: {copiar: "Copiar código", copiado: "Copiado", tema: "Tema", ESCURO: "Escuro", GALERIA: "Galeria", CEU: "Céu de verdade", MEU: "Meu fundo",
        texto: "Texto", t100: "normal", t110: "grande", t120: "maior", cartoes: "Cartões dos apps", c100: "normal", c115: "grandes",
        grade: "Arranjo", gsim: "grade", gnao: "fileira", transp: "Cartões transparentes", cor: "Fundo na cor do app",
        sim: "ligado", nao: "desligado", icones: "Pacote de ícones", nenhum: "nenhum", pilhas: "Pilhas automáticas", brilho: "Brilho", contraste: "Contraste",
@@ -94,7 +94,7 @@ function decodificar(s) {
 }
 function linhas(j) {
   const r = [], liga = v => t(v ? "sim" : "nao");
-  if (["ESCURO", "GALERIA", "MEU"].includes(j.t)) r.push(t("tema") + ": " + t(j.t));
+  if (["ESCURO", "GALERIA", "CEU", "MEU"].includes(j.t)) r.push(t("tema") + ": " + t(j.t));
   if ([100, 110, 120].includes(j.x)) r.push(t("texto") + ": " + t("t" + j.x));
   if ([100, 115].includes(j.s)) r.push(t("cartoes") + ": " + t("c" + j.s));
   if (typeof j.g === "boolean") r.push(t("grade") + ": " + t(j.g ? "gsim" : "gnao"));
