@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor: variações de cada elemento (17/11/2026). -->
+<resources>
+    <string name="pv2_est_avisos">通知样式</string>
+    <string name="pv2_est_avisos_det">消息和提醒的显示方式 · 按 OK 更改</string>
+    <string name="pv2_av_cartoes">玻璃卡片</string>
+    <string name="pv2_av_lista">无框列表</string>
+    <string name="pv2_av_um">逐条显示</string>
+    <string name="pv2_est_textos">问候和日期样式</string>
+    <string name="pv2_est_textos_det">按 OK 更改</string>
+    <string name="pv2_tx_moderno">现代</string>
+    <string name="pv2_tx_serifa">衬线</string>
+    <string name="pv2_tx_maiusculas">宽距大写</string>
+    <string name="pv2_est_linhas">天气行样式</string>
+    <string name="pv2_est_linhas_det">天气短句和趣闻 · 按 OK 更改</string>
+    <string name="pv2_ln_icones">带图标</string>
+    <string name="pv2_ln_vidro">深色玻璃底</string>
+    <string name="pv2_ln_texto">仅文字</string>
+    <string name="pv2_est_credito">照片署名样式</string>
+    <string name="pv2_est_credito_det">按 OK 更改</string>
+    <string name="pv2_cr_etiqueta">标签</string>
+    <string name="pv2_cr_discreto">低调</string>
+    <string name="cl_widget_linha">单行</string>
+    <string name="cl_widget_grande">大号</string>
+    <string name="pv2_widget_det">五种样式 · 按 OK 更改</string>
+</resources>

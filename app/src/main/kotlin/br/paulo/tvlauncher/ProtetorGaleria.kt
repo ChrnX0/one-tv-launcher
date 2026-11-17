@@ -74,6 +74,9 @@ class ProtetorGaleria(
     private val posicao = Protetor.POSICAO.ler(ctx)
     private val fator = Protetor.fatorTamanho(Protetor.TAMANHO.ler(ctx))
     private val modoMostrar = Protetor.MOSTRAR.ler(ctx)
+    private val estiloAvisos = Protetor.AVISOS.ler(ctx)
+    private val estiloTextos = Protetor.TEXTOS.ler(ctx)
+    private val estiloCredito = Protetor.CREDITO.ler(ctx)
     private fun liga(e: Protetor.Elemento) = Protetor.ligado(ctx, e)
     /** O resto está à mostra? null = ainda não decidido (primeira vez, sem animação). */
     private var infoVisivel: Boolean? = null
@@ -330,6 +333,15 @@ class ProtetorGaleria(
         topo.addView(relogio, lpGrupo())
         data = texto("", 16f, m500).apply { setPadding(recuo, 0, 0, 0) }
         topo.addView(data, lpGrupo().apply { topMargin = dp(8) })
+        // Variação da saudação e da data (17/11/2026, Protetor.TEXTOS).
+        when (estiloTextos) {
+            Protetor.TEXTOS_SERIFA -> {
+                saudacao.typeface = fraunces; saudacao.isAllCaps = false; saudacao.letterSpacing = 0f; saudacao.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+                data.typeface = fraunces; data.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
+            }
+            Protetor.TEXTOS_MAIUSCULAS -> { data.isAllCaps = true; data.letterSpacing = 0.16f; data.typeface = m600; data.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13f) }
+        }
+        listOf(saudacao, data).forEach { it.sombrear() }
         // Compromissos de hoje logo abaixo da data (dono, 10/11: "o calendário poderia ficar junto da data").
         agenda = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; setPadding(recuo, 0, 0, 0) }
         topo.addView(agenda, lpGrupo())
@@ -337,7 +349,7 @@ class ProtetorGaleria(
         progressoCheio = View(ctx).apply { background = arredondado(branco, 2f) }
         progresso.addView(progressoCheio, FrameLayout.LayoutParams(0, -1))
         topo.addView(progresso, LinearLayout.LayoutParams(dp(180), dp(2)).apply { topMargin = dp(11); leftMargin = recuo; if (centro) gravity = Gravity.CENTER_HORIZONTAL })
-        linhasTempo = LinhasTempo(ctx, m400, m600).apply { if (centro) gravity = Gravity.CENTER_HORIZONTAL }
+        linhasTempo = LinhasTempo(ctx, m400, m600).apply { if (centro) gravity = Gravity.CENTER_HORIZONTAL; estilo(Protetor.LINHAS.ler(ctx)) }
         topo.addView(linhasTempo, lpGrupo().apply { topMargin = dp(20); leftMargin = recuo })
         camadaInfo.addView(topo, when (posicao) {
             Protetor.POS_BAIXO -> FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply {
@@ -471,6 +483,12 @@ class ProtetorGaleria(
             linhaUnica(); alpha = 0.7f; gravity = Gravity.END
         }, LinearLayout.LayoutParams(-2, -2).apply { gravity = Gravity.END })
         (fundoTerra?.legenda() ?: fundo?.legenda(agora))?.let { (titulo, autor) ->
+            if (estiloCredito == Protetor.CREDITO_DISCRETO) {
+                // Uma linha só, pequena e apagada (17/11/2026): o crédito fica, sem chamar atenção.
+                etiquetaObra.addView(texto("$titulo  ·  $autor", 12f, m400).apply { linhaUnica(); alpha = 0.6f; gravity = Gravity.END; sombrear() },
+                    LinearLayout.LayoutParams(-2, -2).apply { gravity = Gravity.END })
+                return@let
+            }
             etiquetaObra.addView(texto(titulo, 11.5f, fraunces).apply { linhaUnica(); gravity = Gravity.END; setShadowLayer(dp(10).toFloat(), 0f, 0f, 0x99000000.toInt()) },
                 LinearLayout.LayoutParams(-2, -2).apply { gravity = Gravity.END })
             etiquetaObra.addView(texto(autor, 8.5f, m400).apply { linhaUnica(); alpha = 0.85f; gravity = Gravity.END; setShadowLayer(dp(10).toFloat(), 0f, 0f, 0x99000000.toInt()) },
@@ -597,10 +615,15 @@ class ProtetorGaleria(
         colunaAvisos.removeAllViews()
         cartoesAtuais = cartoes
         if (escolhido >= cartoes.size) escolhido = cartoes.size - 1   // o marcado sumiu (dispensado ou vencido)
-        // Só 3 à vista; com ◀ ▶ a janela anda para o marcado continuar visível.
-        val inicio = TeclasProtetor.inicioJanela(escolhido, cartoes.size, 3)
-        cartoes.drop(inicio).take(3).forEachIndexed { i, c ->
-            val v = cartao(c)
+        // Só 3 à vista; com ◀ ▶ a janela anda para o marcado continuar visível. "Um por vez" (17/11/2026): 1 à vista,
+        // trocando a cada 8 s ([rodarAviso]); com ◀ ▶ fica no marcado.
+        val visiveis = if (estiloAvisos == Protetor.AVISOS_UM) 1 else 3
+        val inicio = if (visiveis == 1 && escolhido < 0) (if (cartoes.isEmpty()) 0 else rodizio % cartoes.size)
+            else TeclasProtetor.inicioJanela(escolhido, cartoes.size, visiveis)
+        colunaAvisos.removeCallbacks(rodarAviso)
+        if (visiveis == 1 && cartoes.size > 1) colunaAvisos.postDelayed(rodarAviso, 8_000)
+        cartoes.drop(inicio).take(visiveis).forEachIndexed { i, c ->
+            val v = if (estiloAvisos == Protetor.AVISOS_LISTA) linhaAviso(c) else cartao(c)
             if (escolhido >= 0) {
                 if (inicio + i == escolhido) v.foreground = GradientDrawable().apply {
                     cornerRadius = dp(13).toFloat(); setStroke(dp(2), 0xE6FFFFFF.toInt())
@@ -608,8 +631,8 @@ class ProtetorGaleria(
             }
             colunaAvisos.addView(v, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = dp(7) })
         }
-        val fora = cartoes.size - inicio - 3
-        if (fora > 0) colunaAvisos.addView(texto(ctx.getString(R.string.pg_mais_notif, fora), 8f, m500).apply {
+        val fora = cartoes.size - inicio - visiveis
+        if (fora > 0 && visiveis > 1) colunaAvisos.addView(texto(ctx.getString(R.string.pg_mais_notif, fora), 8f, m500).apply {
             alpha = 0.8f; gravity = Gravity.END; setPadding(0, 0, dp(4), 0)
         }, LinearLayout.LayoutParams(-1, -2))
         // Dica do que o OK faz, só com um cartão marcado (o protetor parado continua limpo).
@@ -623,6 +646,33 @@ class ProtetorGaleria(
                 alpha = 0.85f; gravity = Gravity.END; setPadding(0, dp(2), dp(4), 0); sombrear()
             }, LinearLayout.LayoutParams(-1, -2))
         }
+    }
+
+    /** "Um por vez": o próximo aviso, com o mesmo esmaecer da curiosidade. */
+    private var rodizio = 0
+    private val rodarAviso = Runnable {
+        colunaAvisos.animate().alpha(0f).setDuration(450).withLayer().withEndAction {
+            rodizio++; montarAvisos()
+            colunaAvisos.animate().alpha(1f).setDuration(650).withLayer().start()
+        }.start()
+    }
+
+    /** Avisos sem caixa (17/11/2026, "Lista"): ícone, título e texto soltos, alinhados à direita, com sombra nas letras. */
+    private fun linhaAviso(c: Cartao): View = LinearLayout(ctx).apply {
+        orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL or Gravity.END; setPadding(dp(6), dp(4), dp(6), dp(4))
+        val tx = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; gravity = Gravity.END }
+        tx.addView(texto(listOf(c.app, c.tempo).filter { it.isNotEmpty() }.joinToString("  ·  "), 12f, m600).apply {
+            letterSpacing = 0.1f; isAllCaps = true; alpha = 0.75f; linhaUnica(); gravity = Gravity.END; sombrear()
+        }, LinearLayout.LayoutParams(-2, -2).apply { gravity = Gravity.END })
+        tx.addView(texto(c.titulo, 14f, m600).apply { linhaUnica(); gravity = Gravity.END; sombrear() },
+            LinearLayout.LayoutParams(-2, -2).apply { gravity = Gravity.END; topMargin = dp(2) })
+        if (c.texto.isNotEmpty()) tx.addView(texto(c.texto, 12f, m400).apply { linhaUnica(); alpha = 0.85f; gravity = Gravity.END; sombrear() },
+            LinearLayout.LayoutParams(-2, -2).apply { gravity = Gravity.END; topMargin = dp(1) })
+        addView(tx, LinearLayout.LayoutParams(0, -2, 1f))
+        val ic = FrameLayout(ctx)
+        if (c.icone != null) ic.addView(ImageView(ctx).apply { setImageDrawable(c.icone) }, FrameLayout.LayoutParams(dp(22), dp(22), Gravity.CENTER))
+        else ic.addView(texto(c.emoji ?: "", 16f, m400).apply { gravity = Gravity.CENTER }, FrameLayout.LayoutParams(-1, -1))
+        addView(ic, LinearLayout.LayoutParams(dp(26), dp(26)).apply { leftMargin = dp(10) })
     }
 
     private fun cartao(c: Cartao): View = Vidro(ctx, vidro, 13f).apply {
@@ -778,7 +828,7 @@ class ProtetorGaleria(
         fundoTerra?.soltar()
         NotificacoesTv.parar(aoMudarNotificacoes)
         if (::linhasTempo.isInitialized) linhasTempo.soltar()
-        if (::colunaAvisos.isInitialized) { colunaAvisos.removeCallbacks(tirarAvisoVencido); colunaAvisos.removeCallbacks(releTocando); colunaAvisos.removeCallbacks(limparMarca) }
+        if (::colunaAvisos.isInitialized) { colunaAvisos.removeCallbacks(tirarAvisoVencido); colunaAvisos.removeCallbacks(releTocando); colunaAvisos.removeCallbacks(limparMarca); colunaAvisos.removeCallbacks(rodarAviso) }
         vidro.soltar()
         fundo?.let { f -> (0 until f.childCount).map { f.getChildAt(it) }.filterIsInstance<ImageView>().forEach { it.setImageDrawable(null) } }
     }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor: variações de cada elemento (17/11/2026). -->
+<resources>
+    <string name="pv2_est_avisos">Style des avis</string>
+    <string name="pv2_est_avisos_det">comment messages et rappels s’affichent · OK change</string>
+    <string name="pv2_av_cartoes">Cartes en verre</string>
+    <string name="pv2_av_lista">Liste sans cadre</string>
+    <string name="pv2_av_um">Un à la fois</string>
+    <string name="pv2_est_textos">Style du salut et de la date</string>
+    <string name="pv2_est_textos_det">OK change</string>
+    <string name="pv2_tx_moderno">Moderne</string>
+    <string name="pv2_tx_serifa">Avec empattements</string>
+    <string name="pv2_tx_maiusculas">Capitales espacées</string>
+    <string name="pv2_est_linhas">Style de la ligne météo</string>
+    <string name="pv2_est_linhas_det">la phrase météo et l’anecdote · OK change</string>
+    <string name="pv2_ln_icones">Avec icônes</string>
+    <string name="pv2_ln_vidro">Sur verre sombre</string>
+    <string name="pv2_ln_texto">Texte seul</string>
+    <string name="pv2_est_credito">Style du crédit photo</string>
+    <string name="pv2_est_credito_det">OK change</string>
+    <string name="pv2_cr_etiqueta">Étiquette</string>
+    <string name="pv2_cr_discreto">Discret</string>
+    <string name="cl_widget_linha">Une ligne</string>
+    <string name="cl_widget_grande">Grand</string>
+    <string name="pv2_widget_det">cinq styles · OK change</string>
+</resources>

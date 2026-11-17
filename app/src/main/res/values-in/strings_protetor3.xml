@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor: variações de cada elemento (17/11/2026). -->
+<resources>
+    <string name="pv2_est_avisos">Gaya pemberitahuan</string>
+    <string name="pv2_est_avisos_det">cara pesan dan pengingat tampil · OK mengubah</string>
+    <string name="pv2_av_cartoes">Kartu kaca</string>
+    <string name="pv2_av_lista">Daftar tanpa kotak</string>
+    <string name="pv2_av_um">Satu per satu</string>
+    <string name="pv2_est_textos">Gaya sapaan dan tanggal</string>
+    <string name="pv2_est_textos_det">OK mengubah</string>
+    <string name="pv2_tx_moderno">Modern</string>
+    <string name="pv2_tx_serifa">Serif</string>
+    <string name="pv2_tx_maiusculas">Kapital renggang</string>
+    <string name="pv2_est_linhas">Gaya baris cuaca</string>
+    <string name="pv2_est_linhas_det">kalimat cuaca dan fakta menarik · OK mengubah</string>
+    <string name="pv2_ln_icones">Dengan ikon</string>
+    <string name="pv2_ln_vidro">Di atas kaca gelap</string>
+    <string name="pv2_ln_texto">Teks saja</string>
+    <string name="pv2_est_credito">Gaya kredit foto</string>
+    <string name="pv2_est_credito_det">OK mengubah</string>
+    <string name="pv2_cr_etiqueta">Label</string>
+    <string name="pv2_cr_discreto">Samar</string>
+    <string name="cl_widget_linha">Satu baris</string>
+    <string name="cl_widget_grande">Besar</string>
+    <string name="pv2_widget_det">lima gaya · OK mengubah</string>
+</resources>
