@@ -64,13 +64,16 @@ class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
     private fun faixa(d: Dados): View {
         val caixa = Vidro(ctx, vidro, 18f)
         val linha = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(22), dp(14), dp(22), dp(14)) }
+        // Sem a curva das próximas horas, nenhuma zona dava a altura (todas "-1" numa linha "-2"): a faixa virava um traço
+        // vazio de 28 dp (visto no teste de telas do protetor v2, 17/11/2026). Aí as zonas medem a si mesmas.
+        val alturaZona = if (d.marcas.size >= 2) -1 else -2
         // Agora
         linha.addView(zona(R.string.pw_agora, LinearLayout(ctx).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
             addView(iconeClima(d.codigo, d.eDia, d.chovendo), LinearLayout.LayoutParams(dp(46), dp(46)))
             addView(texto("${d.temp}°", 46f, m500).apply { letterSpacing = -0.03f }, lp(10))
             addView(duasLinhas(IconesClima.texto(d.codigo, d.chovendo), maxMin(d), 14f, 12f, 150), lp(12))
-        }), LinearLayout.LayoutParams(-2, -1))
+        }), LinearLayout.LayoutParams(-2, alturaZona))
         linha.addView(divisoria(), LinearLayout.LayoutParams(dp(1), -1).apply { leftMargin = dp(22); rightMargin = dp(22) })
         // Próximas horas (curva)
         if (d.marcas.size >= 2) {
@@ -84,7 +87,7 @@ class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
                 orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
                 addView(iconeClima(a.codigo, true, false), LinearLayout.LayoutParams(dp(36), dp(36)))
                 addView(duasLinhas("${a.max}° / ${a.min}°", a.chuva?.let { ctx.getString(R.string.pw_chuva_pct, it) }, 20f, 12f, 190), lp(10))
-            }), LinearLayout.LayoutParams(-2, -1))
+            }), LinearLayout.LayoutParams(-2, alturaZona))
         }
         caixa.addView(linha, FrameLayout.LayoutParams(-1, -2))
         return caixa

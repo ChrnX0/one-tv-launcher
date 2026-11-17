@@ -149,5 +149,7 @@ Endereço pelo CEP: ViaCEP (https://viacep.com.br).
 Céu de verdade e protetor: nuvens do satélite GOES (NOAA, domínio público dos EUA) pelo NASA GIBS
   (https://earthdata.nasa.gov/gibs); mapa Natural Earth (https://www.naturalearthdata.com, domínio público);
   órbita da Estação Espacial (TLE do NORAD) pelo CelesTrak (https://celestrak.org).
+Protetor "A Terra vista do espaço": fotos tiradas pelos astronautas da Estação Espacial, NASA (https://images.nasa.gov;
+  sem direito autoral nos EUA, crédito à NASA; a NASA não apoia nem endossa este app).
 
 Os sons do despertador foram gerados pelo próprio projeto.

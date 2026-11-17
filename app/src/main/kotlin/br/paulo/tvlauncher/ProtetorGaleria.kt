@@ -32,6 +32,11 @@ import java.util.concurrent.ExecutorService
  *   ([WidgetsProtetor], 15/11/2026: faixa de vidro, cartões ou sem caixa); acima deles, a obra do dia.
  * O vidro é a própria pintura desfocada atrás de cada painel ([Vidro]).
  *
+ * Protetor v2 (17/11/2026, protótipo "Protetor Vivo 2" aprovado por Paulo): fundo opcional "A Terra vista do espaço"
+ * ([FundoTerra]); o relógio em 6 estilos ([RelogioProtetor]), em 3 posições e 2 tamanhos; cada elemento liga e desliga;
+ * e o resto pode ficar escondido ("só a hora", o padrão): a 1ª tecla do controle mostra tudo por 15 s, a hora desliza
+ * para dar lugar e as informações entram em cascata ([revelar]). Escolhas em [Protetor].
+ *
  * Quem cria e destrói é o [ProtetorTela]. [montar] monta a tela; [atualizar] relê clima, avisos e a obra do dia.
  * Agenda, desfoque e decodificação da pintura saem da thread da tela pelo [carregador].
  */
@@ -41,6 +46,8 @@ class ProtetorGaleria(
     private val wallpaperEscuro: Boolean = false,
     /** Tema Céu de verdade (17/11/2026): mapa da região, cidade e nuvens do satélite ([DesenhoCeu]) no lugar da pintura. */
     private val ceuDeVerdade: Boolean = false,
+    /** Fundo "A Terra vista do espaço" (17/11/2026): as fotos da NASA no lugar do fundo do tema. */
+    private val terra: Boolean = false,
 ) {
     private val m200: Typeface = Fontes.manrope(ctx, 200)
     private val m400: Typeface = Fontes.manrope(ctx, 400)
@@ -57,7 +64,21 @@ class ProtetorGaleria(
     private val widgets by lazy { WidgetsProtetor(ctx, vidro) }
     private lateinit var raiz: FrameLayout
     private lateinit var saudacao: TextView
-    private lateinit var hora: TextView
+    private lateinit var relogio: RelogioProtetor
+    private lateinit var grupo: LinearLayout
+    private var veuBaixo: View? = null
+    private var veuCanto: View? = null
+    private var fundoTerra: FundoTerra? = null
+    // Escolhas das Configurações (lidas ao abrir; mudar vale no próximo protetor).
+    private val estiloRelogio = Protetor.relogio(ctx, Locale.getDefault().language)
+    private val posicao = Protetor.POSICAO.ler(ctx)
+    private val fator = Protetor.fatorTamanho(Protetor.TAMANHO.ler(ctx))
+    private val modoMostrar = Protetor.MOSTRAR.ler(ctx)
+    private fun liga(e: Protetor.Elemento) = Protetor.ligado(ctx, e)
+    /** O resto está à mostra? null = ainda não decidido (primeira vez, sem animação). */
+    private var infoVisivel: Boolean? = null
+    private var teclaAte = 0L
+    private val abertoEm = System.currentTimeMillis()
     private lateinit var data: TextView
     private lateinit var agenda: LinearLayout
     private lateinit var progresso: FrameLayout
@@ -85,16 +106,24 @@ class ProtetorGaleria(
             // Pintura nova -> gera o vidro desfocado dela fora da thread da tela e redesenha os painéis.
             f.aoTrocarImagem = { bmp -> if (!carregador.isShutdown) carregador.execute { vidro.preparar(bmp) { raiz.post { vidro.redesenhar() } } } }
         } else null
-        if (!comPintura && wallpaperEscuro) montarWallpaperEscuro(raiz)
+        if (terra) montarTerra(raiz)
+        else if (!comPintura && wallpaperEscuro) montarWallpaperEscuro(raiz)
         if (!comPintura && ceuDeVerdade) montarCeu(raiz)
         // Véu leve só no canto da hora: relógio branco continua legível sobre um céu claro de pintura.
         // Radial a partir do canto: o degradê linear numa caixa deixava uma emenda visível na borda dela (foto de 10/11).
-        raiz.addView(View(ctx).apply {
+        // Protetor v2: o véu acompanha a posição da hora (canto de baixo, centro ou canto de cima).
+        veuCanto = View(ctx).apply {
             background = GradientDrawable().apply {
-                gradientType = GradientDrawable.RADIAL_GRADIENT; setGradientCenter(0f, 0f); gradientRadius = dp(620).toFloat()
-                colors = intArrayOf(0x66000000, 0x26000000, 0x00000000)
+                gradientType = GradientDrawable.RADIAL_GRADIENT; gradientRadius = dp(620).toFloat()
+                when (posicao) {
+                    Protetor.POS_BAIXO -> setGradientCenter(0f, 1f)
+                    Protetor.POS_CENTRO -> { setGradientCenter(0.5f, 0.5f); gradientRadius = dp(480).toFloat() }
+                    else -> setGradientCenter(0f, 0f)
+                }
+                colors = if (posicao == Protetor.POS_CENTRO) intArrayOf(0x4D000000, 0x1A000000, 0x00000000) else intArrayOf(0x66000000, 0x26000000, 0x00000000)
             }
-        }, FrameLayout.LayoutParams(-1, -1))
+        }
+        raiz.addView(veuCanto, FrameLayout.LayoutParams(-1, -1))
 
         camadaInfo = FrameLayout(ctx)
         montarTopo()
@@ -104,9 +133,10 @@ class ProtetorGaleria(
         })
         // Sem caixa (12/11/2026, dono: "a B na proposta da C"): a linha de baixo fica solta sobre a pintura, legível por
         // um véu escuro que sobe do pé da tela (fica na raiz, parado: não anda com o anti-burn-in) e uma sombra nas letras.
-        raiz.addView(View(ctx).apply {
+        veuBaixo = View(ctx).apply {
             background = GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, intArrayOf(0x9E000000.toInt(), 0x4D000000, 0x00000000))
-        }, raiz.childCount - 1, FrameLayout.LayoutParams(-1, dp(190), Gravity.BOTTOM))
+        }
+        raiz.addView(veuBaixo, raiz.childCount - 1, FrameLayout.LayoutParams(-1, dp(190), Gravity.BOTTOM))
         barra = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.BOTTOM; clipChildren = false }
         camadaInfo.addView(barra, FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM).apply {
             leftMargin = dp(Estilo.MARGEM_LATERAL); rightMargin = dp(Estilo.MARGEM_LATERAL); bottomMargin = dp(Estilo.MARGEM_VERTICAL)
@@ -122,10 +152,115 @@ class ProtetorGaleria(
         atualizar()
         releTocando.run()
         tique.run()
+        aplicarElementos()
         // Entrada suave: as informações aparecem em 1,5 s depois da pintura.
         camadaInfo.alpha = 0f
         camadaInfo.animate().alpha(1f).setStartDelay(600).setDuration(1500).withLayer().start()
         fundo?.let { kenBurns(it) }
+        // O grupo da hora se reposiciona quando muda de tamanho (agenda, frase e curiosidade chegam depois).
+        grupo.addOnLayoutChangeListener { _, _, t, _, b, _, ot, _, ob -> if (b - t != ob - ot) posicionarGrupo(true) }
+        barra.addOnLayoutChangeListener { _, _, t, _, b, _, ot, _, ob -> if (b - t != ob - ot) posicionarGrupo(true) }
+        conferirMostrar.run()
+    }
+
+    /**
+     * Fundo "A Terra vista do espaço": a foto nova vira o vidro dos painéis e a legenda troca junto.
+     */
+    private fun montarTerra(raiz: FrameLayout) {
+        val f = FundoTerra(ctx) { t -> if (!carregador.isShutdown) carregador.execute(t) }
+        raiz.addView(f, FrameLayout.LayoutParams(-1, -1))
+        vidro.matrizNaTela = { f.matrizNaTela() }
+        f.aoPasso = { vidro.redesenhar() }
+        f.aoTrocarImagem = { bmp ->
+            if (!carregador.isShutdown) carregador.execute { vidro.preparar(bmp) { raiz.post { vidro.redesenhar() } } }
+            montarEtiqueta(System.currentTimeMillis())
+        }
+        fundoTerra = f
+    }
+
+    // ------------------------------------------------------------------ protetor v2: elementos, "só a hora" e a hora que desliza
+    /** Liga e desliga cada elemento conforme as Configurações. A hora sempre fica. */
+    private fun aplicarElementos() {
+        saudacao.visibility = if (liga(Protetor.Elemento.SAUDACAO)) View.VISIBLE else View.GONE
+        data.visibility = if (liga(Protetor.Elemento.DATA)) View.VISIBLE else View.GONE
+        agenda.visibility = if (liga(Protetor.Elemento.AGENDA)) View.VISIBLE else View.GONE
+        colunaAvisos.visibility = if (liga(Protetor.Elemento.AVISOS)) View.VISIBLE else View.GONE
+        val widget = liga(Protetor.Elemento.WIDGET)
+        barra.visibility = if (widget) View.VISIBLE else View.GONE
+        veuBaixo?.visibility = if (widget) View.VISIBLE else View.GONE
+        etiquetaObra.visibility = if (liga(Protetor.Elemento.CREDITO)) View.VISIBLE else View.GONE
+        linhasTempo.comFrase = liga(Protetor.Elemento.FRASE)
+        linhasTempo.comCuriosidades = liga(Protetor.Elemento.CURIOSIDADES)
+    }
+
+    /** O que some no "só a hora" (na ordem em que entra de volta). */
+    private fun infoViews(): List<View> = listOfNotNull(saudacao, data, agenda, progresso, linhasTempo, colunaAvisos, etiquetaObra, barra, veuBaixo)
+
+    /** O resto está escondido agora? (a 1ª tecla então só mostra; [TeclasProtetor]). */
+    val oculto: Boolean get() = infoVisivel == false
+
+    /** Uma tecla do controle: mostra tudo por 15 s (cada tecla renova o prazo). */
+    fun tecla() {
+        teclaAte = System.currentTimeMillis() + Protetor.TECLA_MS
+        conferirMostrar.run()
+    }
+
+    /** Uma vez por segundo: o modo (só a hora / de vez em quando / sempre) decide se o resto aparece. */
+    private val conferirMostrar = object : Runnable {
+        override fun run() {
+            if (!::grupo.isInitialized) return
+            grupo.removeCallbacks(this)
+            val v = Protetor.infoVisivel(modoMostrar, System.currentTimeMillis(), teclaAte, abertoEm)
+            if (v != infoVisivel) revelar(v, animar = infoVisivel != null)
+            if (modoMostrar != Protetor.MOSTRAR_SEMPRE) grupo.postDelayed(this, 1000)
+        }
+    }
+
+    /**
+     * Mostra ou esconde o resto. Entrando: cada elemento sobe 10 dp e acende, um depois do outro (90 ms de intervalo).
+     * Saindo: todos apagam mais depressa. withLayer: cada elemento vira uma textura durante a animação (a sombra das
+     * letras não é redesenhada a cada quadro; ver o comentário de 12/11/2026 no ProtetorTela).
+     */
+    private fun revelar(mostrar: Boolean, animar: Boolean) {
+        infoVisivel = mostrar
+        val sobe = dp(10).toFloat()
+        infoViews().forEachIndexed { i, v ->
+            v.animate().cancel()
+            if (!animar) { v.alpha = if (mostrar) 1f else 0f; v.translationY = 0f; return@forEachIndexed }
+            if (mostrar) {
+                v.translationY = sobe
+                v.animate().alpha(1f).translationY(0f).setStartDelay(250L + i * 90L).setDuration(900)
+                    .setInterpolator(android.view.animation.DecelerateInterpolator(1.6f)).withLayer().start()
+            } else {
+                v.animate().alpha(0f).translationY(sobe / 2).setStartDelay(i * 40L).setDuration(600).withLayer().start()
+            }
+        }
+        if (escolhido >= 0 && !mostrar) { escolhido = -1; montarAvisos() }
+        posicionarGrupo(animar)
+    }
+
+    /**
+     * Onde o grupo da hora fica: escondido o resto, a hora vai para o canto (ou o centro) sozinha; à mostra, o grupo
+     * inteiro aparece, e embaixo ele sobe para dar lugar aos widgets do tempo. Desliza em 1,4 s.
+     */
+    private fun posicionarGrupo(animar: Boolean) {
+        if (!::grupo.isInitialized || grupo.height == 0) { if (::grupo.isInitialized) grupo.post { if (grupo.height > 0) posicionarGrupo(false) }; return }
+        val mostrar = infoVisivel != false
+        val barraAlt = if (barra.visibility == View.VISIBLE) barra.height else 0
+        val dy: Float = when (posicao) {
+            Protetor.POS_BAIXO -> if (!mostrar) (grupo.height - relogio.bottom).toFloat()
+                else if (barraAlt > 0) -(barraAlt + dp(22)).toFloat() else 0f
+            Protetor.POS_CENTRO -> {
+                val alto = raiz.height
+                val alvo = if (!mostrar) alto / 2f - (relogio.top + relogio.height / 2f)
+                    else ((alto - barraAlt - dp(Estilo.MARGEM_VERTICAL) - grupo.height) / 2f).coerceAtLeast(dp(28).toFloat())
+                alvo - grupo.top
+            }
+            else -> if (!mostrar) -relogio.top.toFloat() else 0f
+        }
+        grupo.animate().cancel()
+        if (!animar) { grupo.translationY = dy; return }
+        grupo.animate().translationY(dy).setDuration(1400).setInterpolator(android.view.animation.DecelerateInterpolator(1.4f)).withLayer().start()
     }
 
     /**
@@ -180,42 +315,49 @@ class ProtetorGaleria(
 
     // ------------------------------------------------------------------ topo: saudação, hora, data, linha do dia
     private fun montarTopo() {
-        val topo = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL }
-        saudacao = texto("", 9f, m500).apply { letterSpacing = 0.24f; isAllCaps = true; alpha = 0.85f; setPadding(dp(6), 0, 0, 0) }
-        topo.addView(saudacao, LinearLayout.LayoutParams(-2, -2).apply { bottomMargin = dp(2) })
-        hora = texto("", 125f, m200).apply { letterSpacing = -0.045f; setShadowLayer(dp(15).toFloat(), 0f, dp(1).toFloat(), sombra) }
-        topo.addView(hora, LinearLayout.LayoutParams(-2, -2))
-        data = texto("", 15f, m500).apply { setPadding(dp(6), 0, 0, 0) }
-        topo.addView(data, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(6) })
+        val centro = posicao == Protetor.POS_CENTRO
+        val topo = LinearLayout(ctx).apply {
+            orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false
+            if (centro) gravity = Gravity.CENTER_HORIZONTAL
+        }
+        grupo = topo
+        val recuo = if (centro) 0 else dp(6)
+        fun lpGrupo() = LinearLayout.LayoutParams(-2, -2).apply { if (centro) gravity = Gravity.CENTER_HORIZONTAL }
+        // Saudação: 12 sp (era 9): letra grande para quem enxerga pouco; com a hora sozinha, ela só aparece com o resto.
+        saudacao = texto("", 12f, m500).apply { letterSpacing = 0.24f; isAllCaps = true; alpha = 0.85f; setPadding(recuo, 0, 0, 0) }
+        topo.addView(saudacao, lpGrupo().apply { bottomMargin = dp(4) })
+        relogio = RelogioProtetor(ctx, estiloRelogio, fator, centro)
+        topo.addView(relogio, lpGrupo())
+        data = texto("", 16f, m500).apply { setPadding(recuo, 0, 0, 0) }
+        topo.addView(data, lpGrupo().apply { topMargin = dp(8) })
         // Compromissos de hoje logo abaixo da data (dono, 10/11: "o calendário poderia ficar junto da data").
-        agenda = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(6), 0, 0, 0) }
-        topo.addView(agenda, LinearLayout.LayoutParams(-2, -2))
+        agenda = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; setPadding(recuo, 0, 0, 0) }
+        topo.addView(agenda, lpGrupo())
         progresso = FrameLayout(ctx).apply { background = arredondado(0x40FFFFFF, 2f); clipToOutline = true }
         progressoCheio = View(ctx).apply { background = arredondado(branco, 2f) }
         progresso.addView(progressoCheio, FrameLayout.LayoutParams(0, -1))
-        topo.addView(progresso, LinearLayout.LayoutParams(dp(180), dp(2)).apply { topMargin = dp(11); leftMargin = dp(6) })
-        linhasTempo = LinhasTempo(ctx, m400, m600)
-        topo.addView(linhasTempo, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(20); leftMargin = dp(6) })
-        camadaInfo.addView(topo, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.START).apply {
-            leftMargin = dp(36); topMargin = dp(26)
+        topo.addView(progresso, LinearLayout.LayoutParams(dp(180), dp(2)).apply { topMargin = dp(11); leftMargin = recuo; if (centro) gravity = Gravity.CENTER_HORIZONTAL })
+        linhasTempo = LinhasTempo(ctx, m400, m600).apply { if (centro) gravity = Gravity.CENTER_HORIZONTAL }
+        topo.addView(linhasTempo, lpGrupo().apply { topMargin = dp(20); leftMargin = recuo })
+        camadaInfo.addView(topo, when (posicao) {
+            Protetor.POS_BAIXO -> FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply {
+                leftMargin = dp(36); bottomMargin = dp(Estilo.MARGEM_VERTICAL)
+            }
+            Protetor.POS_CENTRO -> FrameLayout.LayoutParams(-1, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL)
+            else -> FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.START).apply { leftMargin = dp(36); topMargin = dp(26) }
         })
     }
+
+    private var primeiroTique = true
 
     /** A cada virada de minuto: hora, saudação, data e a linha do dia. */
     private val tique = object : Runnable {
         override fun run() {
             val agora = System.currentTimeMillis()
             val c = Calendar.getInstance().apply { timeInMillis = agora }
-            val h = SimpleDateFormat("HH", Locale.getDefault()).format(Date(agora))
-            val m = SimpleDateFormat("mm", Locale.getDefault()).format(Date(agora))
-            // Hora cheia (Manrope 600) e minuto fino (200), com os dois-pontos apagados: o contraste é o desenho.
-            hora.text = SpannableStringBuilder().apply {
-                append(h); if (android.os.Build.VERSION.SDK_INT >= 28) setSpan(TypefaceSpan(m600), 0, length, 0)
-                // Espaço finíssimo (U+200A) só antes: com as letras apertadas, o ":" encostava no "6" (e o espaço fino
-                // U+2009 dos dois lados ficou largo demais na foto de 10/11).
-                val i = length; append("\u200A:"); setSpan(ForegroundColorSpan(0xB3FFFFFF.toInt()), i, length, 0)
-                append(m)
-            }
+            // O relógio no estilo escolhido (RelogioProtetor; o "fino" é o desenho de antes). Esmaece na virada do minuto.
+            relogio.atualizar(agora, animar = primeiroTique.not())
+            primeiroTique = false
             saudacao.text = ctx.getString(when (c.get(Calendar.HOUR_OF_DAY)) {
                 in 5..11 -> R.string.pg_bom_dia
                 in 12..17 -> R.string.pg_boa_tarde
@@ -227,9 +369,9 @@ class ProtetorGaleria(
             val frac = Astronomia.nascerEPor(agora, lat, lon)?.let { (nasce, poe) ->
                 if (agora in nasce..poe) (agora - nasce).toFloat() / (poe - nasce) else null
             }
-            progresso.visibility = if (frac == null) View.GONE else View.VISIBLE
+            progresso.visibility = if (frac == null || !liga(Protetor.Elemento.LINHA_DIA)) View.GONE else View.VISIBLE
             if (frac != null) progressoCheio.layoutParams = (progressoCheio.layoutParams as FrameLayout.LayoutParams).apply { width = (dp(180) * frac).toInt() }
-            hora.postDelayed(this, 60_000 - agora % 60_000 + 50)
+            relogio.postDelayed(this, 60_000 - agora % 60_000 + 50)
         }
     }
 
@@ -240,6 +382,7 @@ class ProtetorGaleria(
         val clima = ctx.getSharedPreferences("clima", Context.MODE_PRIVATE)
         val estado = EstadoCeu(agora, lat, lon, clima.getInt("codigo", 0), clima.getBoolean("chovendo", false))
         fundo?.atualizar(estado)
+        fundoTerra?.atualizar(estado)
         redesenharCeu(estado)
         montarBarra(agora, lat, lon)
         montarAvisos()
@@ -317,13 +460,17 @@ class ProtetorGaleria(
                 clima.getInt("amanha_chuva", -1).takeIf { it >= 0 }, clima.getInt("amanha_codigo", 0)) else null,
         )
         barra.addView(widgets.montar(Protetor.widget(ctx), dados), LinearLayout.LayoutParams(0, -2, 1f))
-        // A obra do dia: etiqueta de museu logo acima da linha, à direita.
+        montarEtiqueta(agora)
+    }
+
+    /** A obra do dia (ou a foto da Terra, ou o crédito do céu): etiqueta de museu logo acima da linha, à direita. */
+    private fun montarEtiqueta(agora: Long) {
         etiquetaObra.removeAllViews()
         // Céu de verdade: no lugar da etiqueta da obra, o crédito das nuvens e do mapa (NOAA/NASA e Natural Earth pedem).
         if (imagemCeu != null) etiquetaObra.addView(texto(ctx.getString(R.string.ceu_credito), 8f, m400).apply {
             linhaUnica(); alpha = 0.7f; gravity = Gravity.END
         }, LinearLayout.LayoutParams(-2, -2).apply { gravity = Gravity.END })
-        fundo?.legenda(agora)?.let { (titulo, autor) ->
+        (fundoTerra?.legenda() ?: fundo?.legenda(agora))?.let { (titulo, autor) ->
             etiquetaObra.addView(texto(titulo, 11.5f, fraunces).apply { linhaUnica(); gravity = Gravity.END; setShadowLayer(dp(10).toFloat(), 0f, 0f, 0x99000000.toInt()) },
                 LinearLayout.LayoutParams(-2, -2).apply { gravity = Gravity.END })
             etiquetaObra.addView(texto(autor, 8.5f, m400).apply { linhaUnica(); alpha = 0.85f; gravity = Gravity.END; setShadowLayer(dp(10).toFloat(), 0f, 0f, 0x99000000.toInt()) },
@@ -626,7 +773,9 @@ class ProtetorGaleria(
 
     fun soltar() {
         animador?.let { (v, r) -> v.removeCallbacks(r) }; animador = null
-        if (::hora.isInitialized) hora.removeCallbacks(tique)
+        if (::relogio.isInitialized) { relogio.removeCallbacks(tique); relogio.soltar() }
+        if (::grupo.isInitialized) grupo.removeCallbacks(conferirMostrar)
+        fundoTerra?.soltar()
         NotificacoesTv.parar(aoMudarNotificacoes)
         if (::linhasTempo.isInitialized) linhasTempo.soltar()
         if (::colunaAvisos.isInitialized) { colunaAvisos.removeCallbacks(tirarAvisoVencido); colunaAvisos.removeCallbacks(releTocando); colunaAvisos.removeCallbacks(limparMarca) }

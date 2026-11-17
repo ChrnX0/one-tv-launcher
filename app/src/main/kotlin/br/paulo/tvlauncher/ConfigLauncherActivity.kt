@@ -967,6 +967,58 @@ class ConfigLauncherActivity : Activity() {
 
     // ================================================================ aba: Tela e energia
 
+    /**
+     * Protetor v2 (17/11/2026, protótipo "Protetor Vivo 2"): fundo, relógio (estilo, lugar, tamanho), quando o resto
+     * aparece e o liga/desliga de cada elemento. OK passa para a próxima opção; vale no próximo protetor ([Protetor]).
+     */
+    private fun protetorV2(c: LinearLayout) {
+        fun escolha(titulo: Int, detalhe: Int, e: Protetor.Escolha, rotulos: Map<String, Int>) {
+            lateinit var l: LinhaCfg
+            l = linha(getString(titulo), getString(detalhe), valor = getString(rotulos.getValue(e.ler(this)))) {
+                val novo = e.proximo(e.ler(this)); e.gravar(this, novo); l.valor(getString(rotulos.getValue(novo)))
+            }
+            c.addView(l, lp())
+        }
+        escolha(R.string.pv2_fundo, R.string.pv2_fundo_det, Protetor.FUNDO,
+            mapOf(Protetor.FUNDO_TEMA to R.string.pv2_fundo_tema, Protetor.FUNDO_TERRA to R.string.pv2_fundo_terra))
+        // Relógio: a lista depende da língua da TV ("por extenso" só em português).
+        val lingua = java.util.Locale.getDefault().language
+        val nomesRelogio = mapOf(Protetor.REL_FINO to R.string.pv2_rel_fino, Protetor.REL_EDITORIAL to R.string.pv2_rel_editorial,
+            Protetor.REL_MONUMENTAL to R.string.pv2_rel_monumental, Protetor.REL_PONTEIROS to R.string.pv2_rel_ponteiros,
+            Protetor.REL_EXTENSO to R.string.pv2_rel_extenso, Protetor.REL_EMPILHADO to R.string.pv2_rel_empilhado)
+        lateinit var linhaRel: LinhaCfg
+        linhaRel = linha(getString(R.string.pv2_relogio), getString(R.string.pv2_relogio_det),
+            valor = getString(nomesRelogio.getValue(Protetor.relogio(this, lingua)))) {
+            val novo = Protetor.proximoRelogio(Protetor.relogio(this, lingua), lingua)
+            Protetor.RELOGIO.gravar(this, novo); linhaRel.valor(getString(nomesRelogio.getValue(novo)))
+        }
+        c.addView(linhaRel, lp())
+        escolha(R.string.pv2_posicao, R.string.pv2_posicao_det, Protetor.POSICAO,
+            mapOf(Protetor.POS_ALTO to R.string.pv2_pos_alto, Protetor.POS_BAIXO to R.string.pv2_pos_baixo, Protetor.POS_CENTRO to R.string.pv2_pos_centro))
+        escolha(R.string.pv2_tamanho, R.string.pv2_tamanho_det, Protetor.TAMANHO,
+            mapOf("normal" to R.string.pv2_tam_normal, "grande" to R.string.pv2_tam_grande))
+        escolha(R.string.pv2_mostrar, R.string.pv2_mostrar_det, Protetor.MOSTRAR,
+            mapOf(Protetor.MOSTRAR_SO_HORA to R.string.pv2_mostrar_so, Protetor.MOSTRAR_DE_VEZ to R.string.pv2_mostrar_vez,
+                Protetor.MOSTRAR_SEMPRE to R.string.pv2_mostrar_sempre))
+    }
+
+    /** Liga/desliga de cada elemento do protetor (a hora não desliga), numa seção no fim da aba. */
+    private fun protetorElementos(c: LinearLayout) {
+        secao(c, getString(R.string.pv2_elementos))
+        val nomes = mapOf(Protetor.Elemento.SAUDACAO to R.string.pv2_el_saudacao, Protetor.Elemento.DATA to R.string.pv2_el_data,
+            Protetor.Elemento.LINHA_DIA to R.string.pv2_el_linha_dia, Protetor.Elemento.AGENDA to R.string.pv2_el_agenda,
+            Protetor.Elemento.FRASE to R.string.pv2_el_frase, Protetor.Elemento.CURIOSIDADES to R.string.pv2_el_curiosidades,
+            Protetor.Elemento.AVISOS to R.string.pv2_el_avisos, Protetor.Elemento.WIDGET to R.string.pv2_el_widget,
+            Protetor.Elemento.CREDITO to R.string.pv2_el_credito)
+        Protetor.Elemento.entries.forEach { e ->
+            lateinit var l: LinhaCfg
+            l = linha(getString(nomes.getValue(e)), getString(R.string.pv2_el_det), chave = Protetor.ligado(this, e)) {
+                Protetor.alternar(this, e); l.ligado(Protetor.ligado(this, e))
+            }
+            c.addView(l, lp())
+        }
+    }
+
     private fun abaEnergia(c: LinearLayout) {
         // OK passa para a próxima opção da lista e grava na hora.
         val opcoes = listOf(60_000, 5 * 60_000, 10 * 60_000, 15 * 60_000, 30 * 60_000, Int.MAX_VALUE)
@@ -995,6 +1047,7 @@ class ConfigLauncherActivity : Activity() {
             linhaBarra.valor(rotuloBarra(novo))
         }
         c.addView(linhaBarra, lp())
+        protetorV2(c)
         // (11/11/2026) Saiu a linha "Estilo do protetor": o protetor é um só (o da Galeria) e o TEMA decide o fundo
         // (pintura na Galeria, wallpaper escuro no Escuro). O "clássico" escolhido por engano deixava o Escuro diferente.
         // Desligar sozinha (AutoDesligar): depois de X min sem ninguém apertar o controle, avisa por 60 s e apaga a TV.
@@ -1010,6 +1063,7 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linhaDesligar, lp())
         linhaQr(c, DestinoPainel.FOTOS, R.string.qrd_fotos, R.string.qrd_fotos_det)
         linhaQr(c, DestinoPainel.MURAL, R.string.qrd_mural, R.string.qrd_mural_det)
+        protetorElementos(c)
         extrasDaAba(c, ExtrasAbas.Aba.ENERGIA)
     }
 
