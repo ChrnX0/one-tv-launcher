@@ -200,6 +200,8 @@ dependencies {
     // mais comum de canal ao vivo; .ts direto (Xtream) já vem no exoplayer. Sem o media3-ui: a tela é nossa (Views).
     implementation("androidx.media3:media3-exoplayer:1.11.1")
     implementation("androidx.media3:media3-exoplayer-hls:1.11.1")
+    // Sessão de mídia dos players (SessaoMidia.kt, 17/11/2026): o sistema, o Gemini e o MCP passam a ver o que toca.
+    implementation("androidx.media3:media3-session:1.11.1")
     // Ideia 90: tradução de legenda NA TV (ML Kit, offline; modelo de ~30 MB baixado no primeiro uso). +~12 MB no APK.
     implementation("com.google.mlkit:translate:17.0.3")
     // Player completo (15/11/2026): FFmpeg (LGPL-2.1) e libass compilados por nós (nativo/compilar.sh), com cola própria

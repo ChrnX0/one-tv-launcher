@@ -22,6 +22,8 @@
     <string name="coluna_marcado_assistido">%1$s ditandai sudah ditonton</string>
     <string name="coluna_marcado_nao_assistido">%1$s ditandai belum ditonton</string>
     <string name="coluna_tirado_continuar">%1$s dihapus dari Lanjutkan menonton</string>
+    <string name="coluna_menu_tirar_home">Hapus dari layar utama</string>
+    <string name="coluna_tirado_home">%1$s dihapus dari layar utama</string>
     <string name="coluna_etiqueta_concluida">Selesai</string>
     <string name="coluna_etiqueta_nova_temporada">Musim baru</string>
     <string name="coluna_etiqueta_novos">Episode baru</string>

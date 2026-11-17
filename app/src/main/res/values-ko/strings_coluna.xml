@@ -22,6 +22,8 @@
     <string name="coluna_marcado_assistido">%1$s을(를) 시청함으로 표시함</string>
     <string name="coluna_marcado_nao_assistido">%1$s을(를) 시청 안 함으로 표시함</string>
     <string name="coluna_tirado_continuar">%1$s을(를) 이어서 보기에서 삭제함</string>
+    <string name="coluna_menu_tirar_home">홈 화면에서 제거</string>
+    <string name="coluna_tirado_home">%1$s 홈 화면에서 제거됨</string>
     <string name="coluna_etiqueta_concluida">완결</string>
     <string name="coluna_etiqueta_nova_temporada">새 시즌</string>
     <string name="coluna_etiqueta_novos">새 에피소드</string>

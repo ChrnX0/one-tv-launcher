@@ -24,6 +24,7 @@ import android.widget.TextView
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.TrackSelectionOverride
@@ -196,6 +197,7 @@ class VodActivity : Activity() {
     private lateinit var video: SurfaceView
     private lateinit var barra: LinearLayout
     private lateinit var titulo: TextView
+    private val sessao by lazy { SessaoMidia(this, "vod", soControle = true) }
     private lateinit var tempo: TextView
     private lateinit var progresso: ProgressBar
     private lateinit var aviso: TextView
@@ -335,6 +337,7 @@ class VodActivity : Activity() {
         player?.let { avisar(FontesMidia.Momento.PAROU, it.currentPosition) }
         avisouInicio = false
         efeitos.soltar()
+        sessao.soltar()
         player?.let { retomarEm = it.currentPosition; it.release() }
         player = null
     }
@@ -379,6 +382,7 @@ class VodActivity : Activity() {
         p.prepare()
         p.playWhenReady = true
         player = p
+        sessao.ligar(p)   // o sistema, o Gemini e o MCP passam a ver o filme (SessaoMidia)
         tela.removeCallbacks(salvarDepois); tela.postDelayed(salvarDepois, SALVAR_MS)
         mostrarBarra()
         vigiarAbertura()
@@ -389,7 +393,7 @@ class VodActivity : Activity() {
     private fun refazerPlayer() {
         val p = player ?: return
         efeitos.soltar()
-        retomarEm = p.currentPosition; p.release(); player = null
+        sessao.soltar(); retomarEm = p.currentPosition; p.release(); player = null
         tocar()
     }
 
@@ -564,6 +568,7 @@ class VodActivity : Activity() {
     /** O vídeo e, se houver, a legenda baixada junto (o Media3 a trata como mais uma faixa de legenda). */
     private fun item(u: String): MediaItem {
         val b = MediaItem.Builder().setUri(u)
+            .setMediaMetadata(MediaMetadata.Builder().setTitle(intent.getStringExtra(EXTRA_TITULO).orEmpty()).build())
         val legendas = ArrayList<MediaItem.SubtitleConfiguration>()
         legendaArquivo?.let { f ->
             legendas += MediaItem.SubtitleConfiguration.Builder(android.net.Uri.fromFile(f))
@@ -1131,7 +1136,7 @@ class VodActivity : Activity() {
         val p = player ?: return
         if (antes != depois) {
             efeitos.soltar()
-            retomarEm = p.currentPosition; p.release(); player = null
+            sessao.soltar(); retomarEm = p.currentPosition; p.release(); player = null
             tocar()
         } else efeitos.aplicar(p.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
     }

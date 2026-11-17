@@ -118,6 +118,22 @@ class GravacaoTest {
         assertArrayEquals(junto, vistos.toByteArray())   // o player recebe exatamente o que foi gravado
     }
 
+    @Test fun quedaAbrePedacoNovoESoGravaPacotesInteiros() {
+        // Sala, 17/11/2026: a reconexão ia para o mesmo arquivo; o relógio do vídeo recomeçava e o pacote cortado
+        // desalinhava o resto (1 h aparecia como 5:36:28). Agora: parte nova, e o pedaço de pacote cortado fica de fora.
+        val r = Relogio(); var aberturas = 0
+        val primeiro = ByteArray(1000) { 1 }
+        val segundo = ByteArray(3000) { (it % 100).toByte() }
+        val pedacos = ArrayList<ByteArrayOutputStream>()
+        val res = Gravador({ aberturas++; if (aberturas == 1) canal(r, primeiro + ByteArray(10), min, falharEm = 1000) else canal(r, segundo, min) },
+            { ByteArrayOutputStream().also { pedacos += it } }, { Long.MAX_VALUE }, { r.agora }, fimMs = 4 * min, esperar = {}).rodar()
+        assertEquals(Gravador.Motivo.FIM, res.motivo)
+        assertEquals(2, res.partes)
+        assertEquals(5 * 188, pedacos[0].size())          // 1000 bytes = 5 pacotes + 60 cortados (descartados)
+        assertArrayEquals(segundo, pedacos[1].toByteArray())   // a 2ª conexão inteira, com o fim do arquivo
+        assertEquals(5L * 188 + 3000, res.bytes)
+    }
+
     @Test fun reconectaQuandoACaiEDesisteDepoisDeOito() {
         val r = Relogio(); var aberturas = 0; val esperas = ArrayList<Long>()
         val g = Gravador({ aberturas++; canal(r, ByteArray(3000), min, falharEm = if (aberturas == 1) 1000 else -1) },
