@@ -286,6 +286,8 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         // Modo de segurança (degrau 2): a HOME caiu 3 vezes seguidas nesta versão -> HOME mínima no lugar desta.
         if (ModoSeguro.desviar(this)) { desviadaParaSegura = true; return }
+        // Elevação 2.11: só a organização (ordem, pilhas, ocultos); o resto que a HOME grava é estado da tela.
+        VigiaDesfazer.ligar(this, getString(R.string.desf_rot_organizar), setOf(DesfazerRegras.Categoria.ORGANIZACAO))
         DesempenhoTv.criou()   // guarda de desempenho (12/11/2026): o 1º quadro depois disto dá o tempo de abertura
         tema = Tema.atual(this)
         assinaturaFundo = FundoMeuDados.assinatura(this)

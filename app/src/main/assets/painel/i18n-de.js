@@ -1,5 +1,18 @@
 // Painel em de (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Desfazer uma mudança":"Eine Änderung rückgängig machen",
+"O que foi mudado nas telas da TV (Configurações, organização dos apps, automações e limpeza). Desfazer volta ao que era antes.":"Was auf den TV-Bildschirmen geändert wurde (Einstellungen, App-Anordnung, Automationen und Aufräumen). Rückgängig stellt den vorherigen Zustand wieder her.",
+"Desfazer":"Rückgängig",
+"Desfeita":"Rückgängig gemacht",
+"Nenhuma mudança para desfazer.":"Keine Änderungen zum Rückgängigmachen.",
+"Desfeito.":"Rückgängig gemacht.",
+"Desfeito em parte: algumas coisas já tinham mudado de novo.":"Teilweise rückgängig gemacht: einiges hatte sich schon wieder geändert.",
+"Ajuste":"Einstellung",
+"Organização":"Anordnung",
+"Automação":"Automation",
+"Limpeza":"Aufräumen",
+"nada a desfazer":"nichts rückgängig zu machen",
+"id inválido":"ungültige ID",
 "APK do computador, loja curada e projetos do GitHub":"APK vom Computer, ausgewählter Store und GitHub-Projekte",
 "Abrir, esconder, parar e desinstalar":"Öffnen, ausblenden, beenden und deinstallieren",
 "As mesmas abas das Configurações da TV: o que mudar aqui aparece lá, e o contrário também.":"Dieselben Tabs wie in den Einstellungen des Fernsehers: Was du hier änderst, erscheint dort, und umgekehrt.",

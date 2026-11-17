@@ -1,5 +1,18 @@
 // Painel em tr (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Desfazer uma mudança":"Bir değişikliği geri al",
+"O que foi mudado nas telas da TV (Configurações, organização dos apps, automações e limpeza). Desfazer volta ao que era antes.":"TV ekranlarında değiştirilenler (Ayarlar, uygulama düzeni, otomasyonlar ve temizlik). Geri al, her şeyi önceki hâline getirir.",
+"Desfazer":"Geri al",
+"Desfeita":"Geri alındı",
+"Nenhuma mudança para desfazer.":"Geri alınacak değişiklik yok.",
+"Desfeito.":"Geri alındı.",
+"Desfeito em parte: algumas coisas já tinham mudado de novo.":"Kısmen geri alındı: bazı şeyler yeniden değişmişti.",
+"Ajuste":"Ayar",
+"Organização":"Düzen",
+"Automação":"Otomasyon",
+"Limpeza":"Temizlik",
+"nada a desfazer":"geri alınacak bir şey yok",
+"id inválido":"geçersiz id",
 "APK do computador, loja curada e projetos do GitHub":"Bilgisayardan APK, seçili mağaza ve GitHub projeleri",
 "Abrir, esconder, parar e desinstalar":"Aç, gizle, durdur ve kaldır",
 "As mesmas abas das Configurações da TV: o que mudar aqui aparece lá, e o contrário também.":"TV Ayarları ile aynı sekmeler: burada değiştirdiğiniz orada görünür, tersi de geçerli.",

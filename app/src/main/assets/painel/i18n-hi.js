@@ -1,5 +1,18 @@
 // Painel em hi (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Desfazer uma mudança":"कोई बदलाव पूर्ववत करें",
+"O que foi mudado nas telas da TV (Configurações, organização dos apps, automações e limpeza). Desfazer volta ao que era antes.":"टीवी की स्क्रीन पर जो बदला गया (सेटिंग्स, ऐप्स का क्रम, ऑटोमेशन और सफ़ाई)। पूर्ववत करने से सब पहले जैसा हो जाता है।",
+"Desfazer":"पूर्ववत करें",
+"Desfeita":"पूर्ववत हुआ",
+"Nenhuma mudança para desfazer.":"पूर्ववत करने के लिए कोई बदलाव नहीं।",
+"Desfeito.":"पूर्ववत हो गया।",
+"Desfeito em parte: algumas coisas já tinham mudado de novo.":"आंशिक रूप से पूर्ववत: कुछ चीज़ें फिर से बदल चुकी थीं।",
+"Ajuste":"सेटिंग",
+"Organização":"क्रम",
+"Automação":"ऑटोमेशन",
+"Limpeza":"सफ़ाई",
+"nada a desfazer":"पूर्ववत करने को कुछ नहीं",
+"id inválido":"अमान्य id",
 "APK do computador, loja curada e projetos do GitHub":"कंप्यूटर से APK, चुना हुआ स्टोर और GitHub प्रोजेक्ट",
 "Abrir, esconder, parar e desinstalar":"खोलें, छिपाएँ, रोकें और अनइंस्टॉल करें",
 "As mesmas abas das Configurações da TV: o que mudar aqui aparece lá, e o contrário também.":"TV की सेटिंग्स जैसे ही टैब: यहाँ जो बदलेंगे वह वहाँ दिखेगा, और उल्टा भी।",

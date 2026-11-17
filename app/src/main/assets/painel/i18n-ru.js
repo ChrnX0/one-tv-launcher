@@ -1,5 +1,18 @@
 // Painel em ru (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Desfazer uma mudança":"Отменить изменение",
+"O que foi mudado nas telas da TV (Configurações, organização dos apps, automações e limpeza). Desfazer volta ao que era antes.":"Что было изменено на экранах телевизора (Настройки, порядок приложений, автоматизации и очистка). Отмена возвращает всё как было.",
+"Desfazer":"Отменить",
+"Desfeita":"Отменено",
+"Nenhuma mudança para desfazer.":"Нет изменений для отмены.",
+"Desfeito.":"Отменено.",
+"Desfeito em parte: algumas coisas já tinham mudado de novo.":"Отменено частично: некоторые вещи уже снова изменились.",
+"Ajuste":"Настройка",
+"Organização":"Порядок",
+"Automação":"Автоматизация",
+"Limpeza":"Очистка",
+"nada a desfazer":"нечего отменять",
+"id inválido":"неверный id",
 "APK do computador, loja curada e projetos do GitHub":"APK с компьютера, подборка приложений и проекты с GitHub",
 "Abrir, esconder, parar e desinstalar":"Открыть, скрыть, остановить и удалить",
 "As mesmas abas das Configurações da TV: o que mudar aqui aparece lá, e o contrário também.":"Те же вкладки, что в настройках телевизора: что вы измените здесь, появится там, и наоборот.",

@@ -1,5 +1,18 @@
 // Painel em ja (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Desfazer uma mudança":"変更を元に戻す",
+"O que foi mudado nas telas da TV (Configurações, organização dos apps, automações e limpeza). Desfazer volta ao que era antes.":"テレビの画面で変更したこと（設定、アプリの並び、オートメーション、お掃除）。元に戻すと前の状態に戻ります。",
+"Desfazer":"元に戻す",
+"Desfeita":"元に戻しました",
+"Nenhuma mudança para desfazer.":"元に戻す変更はありません。",
+"Desfeito.":"元に戻しました。",
+"Desfeito em parte: algumas coisas já tinham mudado de novo.":"一部だけ元に戻しました：いくつかは既にまた変わっていました。",
+"Ajuste":"設定",
+"Organização":"並び",
+"Automação":"オートメーション",
+"Limpeza":"お掃除",
+"nada a desfazer":"元に戻すものはありません",
+"id inválido":"無効な id",
 "APK do computador, loja curada e projetos do GitHub":"パソコンからの APK、厳選ストア、GitHub のプロジェクト",
 "Abrir, esconder, parar e desinstalar":"開く、隠す、停止、アンインストール",
 "As mesmas abas das Configurações da TV: o que mudar aqui aparece lá, e o contrário também.":"テレビの設定と同じタブです。ここで変えた内容はテレビにも反映され、その逆も同じです。",

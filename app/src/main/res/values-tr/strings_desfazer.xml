@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 2.11: Desfazer em tudo (Desfazer.kt). -->
+<resources>
+    <string name="desf_diario">Değişiklik (%1$s): %2$s</string>
+    <string name="desf_diario_desfeito">Geri alındı: %1$s</string>
+    <string name="desf_ocultou">%1$s gizlendi</string>
+    <string name="desf_mostrou">%1$s yeniden gösterildi</string>
+    <string name="desf_cat_ajuste">Ayar</string>
+    <string name="desf_cat_organizacao">Düzen</string>
+    <string name="desf_cat_automacao">Otomasyon</string>
+    <string name="desf_cat_limpeza">Temizlik</string>
+    <string name="desf_nada">Geri alınacak bir şey yok (zaten geri alındı).</string>
+    <string name="desf_feito">Geri alındı. Her şey eskisi gibi.</string>
+    <string name="desf_parcial">Kısmen geri alındı: yeniden değişmiş ve olduğu gibi kalan öğe: %1$d.</string>
+    <string name="desf_barra">Değişti: %1$s</string>
+    <string name="desf_botao">Geri al</string>
+    <string name="desf_tela">Son değişiklikler</string>
+    <string name="desf_tela_det">Son 7 günde değiştirilenler. Birinde OK, onu eski hâline getirir.</string>
+    <string name="desf_tela_vazia">Son 7 günde değişiklik yok.</string>
+    <string name="desf_ja_desfeita">geri alındı</string>
+    <string name="desf_rot_config">Ayarlar</string>
+    <string name="desf_rot_automacoes">Otomasyonlar</string>
+    <string name="desf_rot_rotinas">Rutinler</string>
+    <string name="desf_rot_apps">Uygulama listesi</string>
+    <string name="desf_rot_organizar">Ana ekran uygulamaları</string>
+</resources>

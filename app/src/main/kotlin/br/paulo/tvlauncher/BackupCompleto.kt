@@ -47,6 +47,7 @@ object BackupCompleto {
     internal val FORA_DE_PROPOSITO = setOf("confirmacoes", "familia_link", "plugins",   // plugins: o OK vale para o certificado desta TV
           // degrau 3: o link da família não viaja no backup (restaurar = link novo)
         "emprestimo_shell", "emprestimo_dono",   // empréstimos: restaurar não pode ligar poder emprestado sem o PIN (e o uid de cada app muda entre aparelhos)
+        "desfazer",   // elevação 2.11: os passos de desfazer são desta TV e destes dias
         "nao_perturbe", "config_busca",   // elevação 11.4/12.2: fila de avisos guardados e "mexidos há pouco" são passageiros
         "mtp_permitidos", "painel_log", "atualizador", "aviso_tv", "loja_curada",
         "ceu",   // cache do TLE da Estação Espacial (protetor com tempo): renovado a cada 12 h, de outro aparelho não vale

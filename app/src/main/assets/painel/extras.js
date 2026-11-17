@@ -654,8 +654,41 @@ $('btnDiario').addEventListener('click', async () => {
       return `${quando}  ${NOMES_ORIGEM[i.origem] || i.origem}  ${i.acao}${i.resultado ? ' → ' + i.resultado : ''}`;
     });
     mostrar($('saidaDiario'), linhas.length ? linhas.join('\n') : 'Nada no diário ainda.');
+    desenharDesfazer(d.passos || []);
   } catch (e) { mostrar($('saidaDiario'), textoErro(e)); }
 });
+
+// Elevação 2.11: cada mudança feita nas telas da TV, com "Desfazer" (pede o PIN; PainelExtras "desfazer").
+const NOMES_CATEGORIA = { ajuste: 'Ajuste', organizacao: 'Organização', automacao: 'Automação', limpeza: 'Limpeza' };
+
+function desenharDesfazer(passos) {
+  const lista = $('listaDesfazer');
+  lista.replaceChildren();
+  lista.hidden = false;
+  if (!passos.length) { const p = document.createElement('p'); p.className = 'aviso'; p.textContent = 'Nenhuma mudança para desfazer.'; lista.append(p); return; }
+  for (const p of passos) {
+    const linha = document.createElement('div'); linha.className = 'linha-registro';
+    const titulo = document.createElement('strong'); titulo.textContent = p.rotulo;
+    const quando = new Date(p.quando).toLocaleString(undefined, { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+    const det = document.createElement('span'); det.textContent = (NOMES_CATEGORIA[p.categoria] || p.categoria) + ' · ' + quando;
+    linha.append(titulo, det);
+    if (p.desfeito) {
+      const s = document.createElement('span'); s.className = 'aviso'; s.textContent = 'Desfeita'; linha.append(s);
+    } else {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'botao-secundario'; b.textContent = 'Desfazer';
+      b.addEventListener('click', async () => {
+        try {
+          const r = await comPin('Desfazer', p.rotulo, 'Desfazer', () => chamar('POST', '/api/extras/desfazer', { id: p.id }));
+          if (!r) return;
+          mostrar($('statusDesfazer'), r.ficaram ? 'Desfeito em parte: algumas coisas já tinham mudado de novo.' : 'Desfeito.');
+          $('btnDiario').click();
+        } catch (e) { mostrar($('statusDesfazer'), textoErro(e)); }
+      });
+      linha.append(b);
+    }
+    lista.append(linha);
+  }
+}
 
 $('btnWebhook').addEventListener('click', async () => {
   const url = $('campoWebhook').value.trim();

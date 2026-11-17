@@ -23,6 +23,11 @@ import android.widget.TextView
  * Volta a desenhar no onResume, para mostrar o que os editores mudaram. Visual igual ao das Rotinas.
  */
 class AutomacoesActivity : Activity() {
+    override fun onCreate(b: android.os.Bundle?) {
+        super.onCreate(b)
+        VigiaDesfazer.ligar(this, getString(R.string.desf_rot_automacoes)) { desenhar() }   // elevação 2.11
+    }
+
     override fun onResume() {
         super.onResume()
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)

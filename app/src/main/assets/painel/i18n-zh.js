@@ -1,5 +1,18 @@
 // Painel em zh (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Desfazer uma mudança":"撤销一项更改",
+"O que foi mudado nas telas da TV (Configurações, organização dos apps, automações e limpeza). Desfazer volta ao que era antes.":"在电视屏幕上更改的内容（设置、应用排列、自动化和清理）。撤销会恢复到之前的样子。",
+"Desfazer":"撤销",
+"Desfeita":"已撤销",
+"Nenhuma mudança para desfazer.":"没有可撤销的更改。",
+"Desfeito.":"已撤销。",
+"Desfeito em parte: algumas coisas já tinham mudado de novo.":"部分撤销：有些内容已经再次更改。",
+"Ajuste":"设置",
+"Organização":"排列",
+"Automação":"自动化",
+"Limpeza":"清理",
+"nada a desfazer":"没有可撤销的内容",
+"id inválido":"无效的 id",
 "APK do computador, loja curada e projetos do GitHub":"电脑上的 APK、精选商店和 GitHub 项目",
 "Abrir, esconder, parar e desinstalar":"打开、隐藏、停止和卸载",
 "As mesmas abas das Configurações da TV: o que mudar aqui aparece lá, e o contrário também.":"与电视设置相同的标签页：在这里更改的内容会出现在电视上，反之亦然。",

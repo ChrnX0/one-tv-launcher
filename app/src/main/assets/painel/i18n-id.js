@@ -1,5 +1,18 @@
 // Painel em id (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Desfazer uma mudança":"Urungkan perubahan",
+"O que foi mudado nas telas da TV (Configurações, organização dos apps, automações e limpeza). Desfazer volta ao que era antes.":"Apa yang diubah di layar TV (Setelan, susunan aplikasi, otomatisasi, dan pembersihan). Urungkan mengembalikannya seperti semula.",
+"Desfazer":"Urungkan",
+"Desfeita":"Sudah diurungkan",
+"Nenhuma mudança para desfazer.":"Tidak ada perubahan untuk diurungkan.",
+"Desfeito.":"Sudah diurungkan.",
+"Desfeito em parte: algumas coisas já tinham mudado de novo.":"Diurungkan sebagian: beberapa hal sudah berubah lagi.",
+"Ajuste":"Setelan",
+"Organização":"Susunan",
+"Automação":"Otomatisasi",
+"Limpeza":"Pembersihan",
+"nada a desfazer":"tidak ada yang bisa diurungkan",
+"id inválido":"id tidak valid",
 "APK do computador, loja curada e projetos do GitHub":"APK dari komputer, toko pilihan, dan proyek GitHub",
 "Abrir, esconder, parar e desinstalar":"Buka, sembunyikan, hentikan, dan copot",
 "As mesmas abas das Configurações da TV: o que mudar aqui aparece lá, e o contrário também.":"Tab yang sama dengan Setelan TV: yang Anda ubah di sini muncul di sana, begitu juga sebaliknya.",

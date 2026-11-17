@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 2.11: Desfazer em tudo (Desfazer.kt). -->
+<resources>
+    <string name="desf_diario">Modifica (%1$s): %2$s</string>
+    <string name="desf_diario_desfeito">Annullato: %1$s</string>
+    <string name="desf_ocultou">Nascosto %1$s</string>
+    <string name="desf_mostrou">Mostrato di nuovo %1$s</string>
+    <string name="desf_cat_ajuste">Impostazione</string>
+    <string name="desf_cat_organizacao">Organizzazione</string>
+    <string name="desf_cat_automacao">Automazione</string>
+    <string name="desf_cat_limpeza">Pulizia</string>
+    <string name="desf_nada">Niente da annullare (già annullato).</string>
+    <string name="desf_feito">Annullato. Tutto è tornato com\'era.</string>
+    <string name="desf_parcial">Annullato in parte: %1$d elemento/i era/no cambiato/i di nuovo e resta/no così.</string>
+    <string name="desf_barra">Modificato: %1$s</string>
+    <string name="desf_botao">Annulla</string>
+    <string name="desf_tela">Modifiche recenti</string>
+    <string name="desf_tela_det">Ciò che è cambiato negli ultimi 7 giorni. OK su una la riporta com\'era.</string>
+    <string name="desf_tela_vazia">Nessuna modifica negli ultimi 7 giorni.</string>
+    <string name="desf_ja_desfeita">annullata</string>
+    <string name="desf_rot_config">Impostazioni</string>
+    <string name="desf_rot_automacoes">Automazioni</string>
+    <string name="desf_rot_rotinas">Routine</string>
+    <string name="desf_rot_apps">Elenco app</string>
+    <string name="desf_rot_organizar">App della schermata iniziale</string>
+</resources>

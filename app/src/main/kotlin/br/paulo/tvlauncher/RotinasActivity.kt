@@ -45,6 +45,7 @@ class RotinasActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
+        VigiaDesfazer.ligar(this, getString(R.string.desf_rot_rotinas))   // elevação 2.11
         if (intent.hasExtra(EXTRA_ROTINA)) {
             direto = true
             val id = intent.getIntExtra(EXTRA_ROTINA, -1)

@@ -112,6 +112,8 @@ class ConfigLauncherActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Elevação 2.11: toda mudança feita aqui vira um passo com "Desfazer" por 10 s (Desfazer.kt).
+        VigiaDesfazer.ligar(this, getString(R.string.desf_rot_config)) { if (::conteudo.isInitialized) recarregarAba() }
         abaAtual = (savedInstanceState?.getInt(EXTRA_ABA) ?: intent.getIntExtra(EXTRA_ABA, 0)).coerceIn(0, abas.size - 1)
         // Modo hóspede (degrau 2): as Configurações só abrem com o PIN (o hóspede não desliga a limpeza nem mexe na TV).
         // "liberado" vem do estado salvo só quando a tela foi recriada com o PIN já certo (controle/teclado ligado, giro);
@@ -1619,6 +1621,10 @@ class ConfigLauncherActivity : Activity() {
         val novidades = Novidades.itens(this)
         if (novidades.isNotEmpty()) c.addView(linha(getString(R.string.ver_novidades),
             getString(R.string.ver_novidades_det, novidades.size, versaoInstalada().toString()), seta = true) { Novidades.mostrar(this) }, lp())
+        // Elevação 2.11: as mudanças dos últimos 7 dias, com OK para desfazer cada uma (Desfazer.kt).
+        c.addView(linha(getString(R.string.desf_tela), getString(R.string.desf_tela_det), seta = true) {
+            TelaMudancas.abrir(this) { recarregarAba() }
+        }, lp())
         val idsRoteiro = ConferirTvActivity.ids(this)
         if (idsRoteiro.isNotEmpty()) c.addView(linha(getString(R.string.ver_conferir), getString(R.string.ver_conferir_det,
             RoteiroConferencia.conferidos(ConferirTvActivity.estado(this), idsRoteiro), idsRoteiro.size), seta = true) {
@@ -1722,10 +1728,13 @@ class ConfigLauncherActivity : Activity() {
                     val ocultar = !PrivilegioDO.estaOculto(app, item.pacote)
                     val mudou = Debloat.definir(app, item.pacote, ocultar)
                     val ocultoAgora = PrivilegioDO.estaOculto(app, item.pacote)
+                    // Elevação 2.11: a limpeza desfaz pela ação contrária (mostrar o que ocultou e vice-versa).
+                    val passo = if (mudou) Desfazer.registrarLimpeza(app, item.pacote, nomeDebloat(item), ocultar) else null
                     runOnUiThread {
                         if (isDestroyed) return@runOnUiThread
                         if (mudou) linhaApp.ligado(!ocultoAgora)
                         else linhaApp.detalhe(getString(R.string.cl_nao_mudou))
+                        passo?.let { BarraDesfazer.mostrar(this, it) { recarregarAba() } }
                     }
                 }
             }
@@ -1758,9 +1767,14 @@ class ConfigLauncherActivity : Activity() {
             linhaDesfazer = linha(getString(R.string.cl_mostrar_todos), getString(R.string.cl_mostrar_todos_det), seta = true) {
                 val app = applicationContext
                 Fundo.rodar {
+                    val antes = Debloat.ocultosPorAqui(app)
                     val n = Debloat.desfazerTudo(app)
+                    val voltaram = antes.filter { !PrivilegioDO.estaOculto(app, it) }
+                    val passo = Desfazer.registrar(app, DesfazerRegras.Categoria.LIMPEZA, getString(R.string.cl_mostrar_todos),
+                        emptyList(), voltaram.map { DesfazerRegras.reversoDe(it, ocultou = false) })
                     runOnUiThread {
                         if (isDestroyed) return@runOnUiThread
+                        passo?.let { BarraDesfazer.mostrar(this, it) { recarregarAba() } }
                         linhaDesfazer.detalhe(getString(R.string.cl_apps_de_volta, n))
                         ui.postDelayed({ if (!isDestroyed) recarregarAba() }, 1200)
                     }

@@ -1,5 +1,18 @@
 // Painel em ar (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Desfazer uma mudança":"التراجع عن تغيير",
+"O que foi mudado nas telas da TV (Configurações, organização dos apps, automações e limpeza). Desfazer volta ao que era antes.":"ما تم تغييره في شاشات التلفاز (الإعدادات وترتيب التطبيقات والأتمتة والتنظيف). التراجع يعيده كما كان.",
+"Desfazer":"تراجع",
+"Desfeita":"تم التراجع",
+"Nenhuma mudança para desfazer.":"لا توجد تغييرات للتراجع عنها.",
+"Desfeito.":"تم التراجع.",
+"Desfeito em parte: algumas coisas já tinham mudado de novo.":"تم التراجع جزئيًا: بعض الأشياء تغيّرت مرة أخرى.",
+"Ajuste":"إعداد",
+"Organização":"ترتيب",
+"Automação":"أتمتة",
+"Limpeza":"تنظيف",
+"nada a desfazer":"لا شيء للتراجع عنه",
+"id inválido":"معرّف غير صالح",
 "APK do computador, loja curada e projetos do GitHub":"APK من الكمبيوتر، ومتجر مختار، ومشاريع GitHub",
 "Abrir, esconder, parar e desinstalar":"فتح وإخفاء وإيقاف وإلغاء تثبيت",
 "As mesmas abas das Configurações da TV: o que mudar aqui aparece lá, e o contrário também.":"نفس علامات تبويب إعدادات التلفزيون: ما تغيّره هنا يظهر هناك، والعكس صحيح.",

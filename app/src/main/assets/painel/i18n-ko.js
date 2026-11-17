@@ -1,5 +1,18 @@
 // Painel em ko (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Desfazer uma mudança":"변경 되돌리기",
+"O que foi mudado nas telas da TV (Configurações, organização dos apps, automações e limpeza). Desfazer volta ao que era antes.":"TV 화면에서 바꾼 것(설정, 앱 정리, 자동화, 정리하기). 되돌리면 이전 상태로 돌아갑니다.",
+"Desfazer":"되돌리기",
+"Desfeita":"되돌림",
+"Nenhuma mudança para desfazer.":"되돌릴 변경이 없습니다.",
+"Desfeito.":"되돌렸습니다.",
+"Desfeito em parte: algumas coisas já tinham mudado de novo.":"일부만 되돌렸습니다: 일부는 이미 다시 바뀌었습니다.",
+"Ajuste":"설정",
+"Organização":"정리",
+"Automação":"자동화",
+"Limpeza":"정리하기",
+"nada a desfazer":"되돌릴 것이 없음",
+"id inválido":"잘못된 id",
 "APK do computador, loja curada e projetos do GitHub":"컴퓨터의 APK, 엄선한 스토어, GitHub 프로젝트",
 "Abrir, esconder, parar e desinstalar":"열기, 숨기기, 중지, 제거",
 "As mesmas abas das Configurações da TV: o que mudar aqui aparece lá, e o contrário também.":"TV 설정과 같은 탭입니다. 여기서 바꾸면 TV에도 나타나고, 반대도 마찬가지입니다.",

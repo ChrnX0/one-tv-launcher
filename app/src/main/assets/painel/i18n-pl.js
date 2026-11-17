@@ -1,5 +1,18 @@
 // Painel em pl (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Desfazer uma mudança":"Cofnij zmianę",
+"O que foi mudado nas telas da TV (Configurações, organização dos apps, automações e limpeza). Desfazer volta ao que era antes.":"Co zostało zmienione na ekranach telewizora (Ustawienia, układ aplikacji, automatyzacje i porządki). Cofnij przywraca poprzedni stan.",
+"Desfazer":"Cofnij",
+"Desfeita":"Cofnięta",
+"Nenhuma mudança para desfazer.":"Brak zmian do cofnięcia.",
+"Desfeito.":"Cofnięto.",
+"Desfeito em parte: algumas coisas já tinham mudado de novo.":"Cofnięto częściowo: niektóre rzeczy zdążyły się znowu zmienić.",
+"Ajuste":"Ustawienie",
+"Organização":"Układ",
+"Automação":"Automatyzacja",
+"Limpeza":"Porządki",
+"nada a desfazer":"nic do cofnięcia",
+"id inválido":"nieprawidłowy id",
 "APK do computador, loja curada e projetos do GitHub":"APK z komputera, wybrany sklep i projekty z GitHuba",
 "Abrir, esconder, parar e desinstalar":"Otwieranie, ukrywanie, zatrzymywanie i odinstalowywanie",
 "As mesmas abas das Configurações da TV: o que mudar aqui aparece lá, e o contrário também.":"Te same karty co w Ustawieniach telewizora: to, co zmienisz tutaj, pojawi się tam, i odwrotnie.",

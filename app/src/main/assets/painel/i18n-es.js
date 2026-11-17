@@ -1,5 +1,18 @@
 // Painel em es (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Desfazer uma mudança":"Deshacer un cambio",
+"O que foi mudado nas telas da TV (Configurações, organização dos apps, automações e limpeza). Desfazer volta ao que era antes.":"Lo que se cambió en las pantallas de la TV (Ajustes, organización de apps, automatizaciones y limpieza). Deshacer lo deja como estaba.",
+"Desfazer":"Deshacer",
+"Desfeita":"Deshecho",
+"Nenhuma mudança para desfazer.":"No hay cambios para deshacer.",
+"Desfeito.":"Deshecho.",
+"Desfeito em parte: algumas coisas já tinham mudado de novo.":"Deshecho en parte: algunas cosas ya habían cambiado otra vez.",
+"Ajuste":"Ajuste",
+"Organização":"Organización",
+"Automação":"Automatización",
+"Limpeza":"Limpieza",
+"nada a desfazer":"nada que deshacer",
+"id inválido":"id no válido",
 "APK do computador, loja curada e projetos do GitHub":"APK desde el ordenador, tienda seleccionada y proyectos de GitHub",
 "Abrir, esconder, parar e desinstalar":"Abrir, ocultar, detener y desinstalar",
 "As mesmas abas das Configurações da TV: o que mudar aqui aparece lá, e o contrário também.":"Las mismas pestañas que los Ajustes de la TV: lo que cambies aquí aparece allí, y al revés también.",

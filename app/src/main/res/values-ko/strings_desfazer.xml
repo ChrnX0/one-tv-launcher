@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 2.11: Desfazer em tudo (Desfazer.kt). -->
+<resources>
+    <string name="desf_diario">변경(%1$s): %2$s</string>
+    <string name="desf_diario_desfeito">되돌림: %1$s</string>
+    <string name="desf_ocultou">%1$s 숨김</string>
+    <string name="desf_mostrou">%1$s 다시 표시</string>
+    <string name="desf_cat_ajuste">설정</string>
+    <string name="desf_cat_organizacao">정리</string>
+    <string name="desf_cat_automacao">자동화</string>
+    <string name="desf_cat_limpeza">정리하기</string>
+    <string name="desf_nada">되돌릴 것이 없습니다(이미 되돌림).</string>
+    <string name="desf_feito">되돌렸습니다. 모두 이전 상태입니다.</string>
+    <string name="desf_parcial">일부만 되돌림: %1$d개 항목은 다시 바뀌어 그대로 둡니다.</string>
+    <string name="desf_barra">변경됨: %1$s</string>
+    <string name="desf_botao">되돌리기</string>
+    <string name="desf_tela">최근 변경</string>
+    <string name="desf_tela_det">최근 7일 동안 바꾼 것. 하나에서 OK를 누르면 이전 상태로 돌아갑니다.</string>
+    <string name="desf_tela_vazia">최근 7일 동안 변경이 없습니다.</string>
+    <string name="desf_ja_desfeita">되돌림</string>
+    <string name="desf_rot_config">설정</string>
+    <string name="desf_rot_automacoes">자동화</string>
+    <string name="desf_rot_rotinas">루틴</string>
+    <string name="desf_rot_apps">앱 목록</string>
+    <string name="desf_rot_organizar">홈 화면 앱</string>
+</resources>
