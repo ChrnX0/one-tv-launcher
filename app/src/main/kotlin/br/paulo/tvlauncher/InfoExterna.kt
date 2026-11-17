@@ -109,6 +109,12 @@ object InfoExterna {
         return casam.sortedWith(compareBy<Candidato>({ if (ano != null && it.ano == ano) 0 else 1 }, { -it.popularidade })).firstOrNull()
     }
 
+    private const val POSTER = "https://image.tmdb.org/t/p/w342"
+
+    /** Pôster só de um caminho do TMDB conferido ("/abc_D-1.jpg"); qualquer outra coisa vira vazio (nada de endereço de fora). */
+    fun urlPoster(caminho: String?): String =
+        caminho?.takeIf { it.matches(Regex("/[A-Za-z0-9_-]+\\.(jpg|png)")) }?.let { POSTER + it }.orEmpty()
+
     /** Próximo episódio de uma série no ar (TMDB next_episode_to_air). */
     data class ProximoEp(val data: String, val temporada: Int, val numero: Int)
 
@@ -128,6 +134,10 @@ object InfoExterna {
         val trailer: String = "",
         /** Direção (filme): crew "Director" do TMDB. Vence a do provedor, que errou na Sala (Getúlio: "Gigi Soares"). */
         val diretor: String = "",
+        /** Pôster (elevação 8.2): endereço do image.tmdb.org, só montado a partir de um caminho conferido. */
+        val poster: String = "",
+        /** Quantas temporadas a série tem (0 = filme ou não informado). */
+        val temporadas: Int = 0,
     ) {
         val linkTrailer: String get() = if (trailer.isEmpty()) "" else "https://www.youtube.com/watch?v=$trailer"
     }
@@ -171,7 +181,8 @@ object InfoExterna {
         }
         Detalhe(id, imdb, o.optString("overview").trim().take(1500), elenco, generos.take(3), col, prox,
             noAr = serie && (o.optBoolean("in_production") || prox != null),
-            trailer = escolherTrailer(o.optJSONObject("videos")?.optJSONArray("results"), idiomaTmdb()), diretor = diretor)
+            trailer = escolherTrailer(o.optJSONObject("videos")?.optJSONArray("results"), idiomaTmdb()), diretor = diretor,
+            poster = urlPoster(o.optString("poster_path")), temporadas = if (serie) o.optInt("number_of_seasons").coerceAtLeast(0) else 0)
     }.getOrNull()
 
     /** As partes da coleção: (id TMDB, título, ano), do mais antigo ao mais novo. */
@@ -259,6 +270,8 @@ object InfoExterna {
                 .put("ar", d.noAr).put("v", VERSAO_DETALHE).apply {
                     if (d.trailer.isNotEmpty()) put("tr", d.trailer)
                     if (d.diretor.isNotEmpty()) put("dr", d.diretor)
+                    if (d.poster.isNotEmpty()) put("po", d.poster)
+                    if (d.temporadas > 0) put("nt", d.temporadas)
                     d.colecao?.let { put("c", it.id).put("cn", it.nome) }
                     d.proximo?.let { put("pd", it.data).put("pt", it.temporada).put("pe", it.numero) }
                 })
@@ -274,7 +287,7 @@ object InfoExterna {
             Detalhe(tmdb, d.optString("i"), d.optString("s"), lista(d.optJSONArray("e")), lista(d.optJSONArray("g")),
                 d.optInt("c").takeIf { it > 0 }?.let { Colecao(it, d.optString("cn")) },
                 d.optString("pd").takeIf { it.isNotBlank() }?.let { ProximoEp(it, d.optInt("pt"), d.optInt("pe")) }, d.optBoolean("ar"),
-                d.optString("tr"), d.optString("dr"))
+                d.optString("tr"), d.optString("dr"), urlPoster(d.optString("po").removePrefix(POSTER)), d.optInt("nt"))
         }
         // Ficha guardada antes do trailer (sem "v"): vale até a próxima abertura, que pede de novo ao TMDB.
         val detEm = if (o.optJSONObject("d")?.optInt("v") == VERSAO_DETALHE) o.optLong("de") else 0L

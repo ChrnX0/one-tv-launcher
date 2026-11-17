@@ -62,13 +62,19 @@ class MidiaRedeActivity : Activity() {
     private class FotosNoProtetor(val origem: FotosRede.Origem, val quantas: Int)
     /** "Buscar" na raiz de um Jellyfin, Emby ou Plex (ideia 29). */
     private class Buscar(val origem: Origem)
+    /** Elevação 8.2: a linha que liga/desliga pôster e sinopse do TMDB para os vídeos das pastas. */
+    private object LigarCatalogo
+    /** Ficha de um vídeo de pasta achada no TMDB (null no mapa = procurou e não achou). */
+    private class FichaPasta(val titulo: String, val texto: String, val poster: String)
 
     /** O que a lista mostra: um nome de grupo (não focável) ou uma linha. */
     private class Secao(val nome: String)
     private class Linha(val icone: IconeMidia.Tipo, val titulo: String, val sub: String?, val valor: String?, val alvo: Any)
 
     /** Um nível da navegação: o que está na lista e onde o foco estava (para voltar no mesmo lugar). */
-    private class Nivel(val titulo: String, val origem: Origem?, val itens: List<Any>, var foco: Int = -1)
+    private class Nivel(val titulo: String, val origem: Origem?, val itens: List<Any>, var foco: Int = -1,
+                        /** Elevação 8.2: o que o leitor de nomes entendeu de cada vídeo deste nível. */
+                        val lidos: Map<Upnp.Entrada, LeitorNomes.Lido> = emptyMap())
 
     private val tela = Handler(Looper.getMainLooper())
     private val rede = Executors.newSingleThreadExecutor()
@@ -99,6 +105,7 @@ class MidiaRedeActivity : Activity() {
     private val capas = Executors.newSingleThreadExecutor()
     private val cacheCapas = android.util.LruCache<String, Bitmap>(12)
     private var capaPedida: String? = null
+    private val fichasPasta = HashMap<String, FichaPasta?>()
     /** O que está tocando a partir desta tela: posição na lista do nível e o tipo (vídeo ou música). */
     private var tocandoPos = -1
     private var tocandoTipo: Upnp.Tipo? = null
@@ -128,7 +135,9 @@ class MidiaRedeActivity : Activity() {
             onItemLongClickListener = AdapterView.OnItemLongClickListener { _, _, pos, _ ->
                 val conta = pilha.size == 1 && (pilha[0].itens.getOrNull(pos) as? Linha)?.alvo is ContaMidia
                 if (conta) confirmarRemover(pos)
-                conta
+                val lido = !conta && pilha.size > 1 && CatalogoPasta.ligado(this@MidiaRedeActivity) && videoLido(pos)
+                if (lido) corrigirCasamento(pos)
+                conta || lido
             }
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p: AdapterView<*>?, v: View?, pos: Int, id: Long) = pintarFoco()
@@ -308,7 +317,14 @@ class MidiaRedeActivity : Activity() {
                 pilha.last().foco = lista.selectedItemPosition
                 val buscar = if (id == "" && (origem is Origem.Jelly || origem is Origem.PlexO))
                     listOf(Linha(IconeMidia.Tipo.LUPA, getString(R.string.rede_buscar), null, null, Buscar(origem))) else emptyList()
-                pilha += Nivel(nome, origem, buscar + linhaFotos(origem, id, nome, entradas) + entradas.map { linhaEntrada(it) })
+                // Elevação 8.2: vídeos de pasta (não Jellyfin/Plex, que já têm ficha) ganham título, temporada e episódio.
+                val pastas = pilha.drop(2).map { it.titulo } + nome
+                val lidos = if (origem is Origem.Jelly || origem is Origem.PlexO) emptyMap() else entradas
+                    .filter { !it.pasta && it.tipo == Upnp.Tipo.VIDEO }
+                    .mapNotNull { e -> LeitorNomes.ler(e.titulo, pastas).takeIf { CatalogoPasta.leuAlgo(e.titulo, it) }?.let { e to it } }.toMap()
+                val ordem = if (lidos.isEmpty()) entradas else CatalogoPasta.ordenar(entradas, { it.pasta }, { lidos[it] })
+                val catalogo = if (lidos.isNotEmpty() && InfoExternaCache.temTmdb()) listOf(linhaCatalogo()) else emptyList()
+                pilha += Nivel(nome, origem, buscar + catalogo + linhaFotos(origem, id, nome, entradas) + ordem.map { linhaEntrada(it, lidos[it]) }, lidos = lidos)
                 desenhar(if (entradas.isEmpty()) getString(R.string.rede_vazia) else resources.getQuantityString(R.plurals.rede_itens, entradas.size, entradas.size))
             }
         }
@@ -339,11 +355,118 @@ class MidiaRedeActivity : Activity() {
         val usando = FotosRede.origem(this)?.let { it.conta == f.origem.conta && it.caminho == f.origem.caminho } == true
         FotosRede.escolher(this, if (usando) null else f.origem)
         val nivel = pilha.lastOrNull() ?: return
-        pilha[pilha.lastIndex] = Nivel(nivel.titulo, nivel.origem, nivel.itens.toMutableList().also { it[pos] = linhaFotos(f) }, pos)
+        pilha[pilha.lastIndex] = Nivel(nivel.titulo, nivel.origem, nivel.itens.toMutableList().also { it[pos] = linhaFotos(f) }, pos, nivel.lidos)
         desenhar(getString(if (usando) R.string.rede_fotos_paradas else R.string.rede_fotos_usando))
     }
 
-    private fun linhaEntrada(e: Upnp.Entrada): Linha {
+    // ---------------------------------------------------------------- elevação 8.2: a pasta vira catálogo
+
+    private fun linhaCatalogo(): Linha = Linha(IconeMidia.Tipo.VIDEO, getString(R.string.elv_cat_titulo), getString(R.string.elv_cat_explica),
+        getString(if (CatalogoPasta.ligado(this)) R.string.elv_cat_ligado else R.string.elv_cat_desligado), LigarCatalogo)
+
+    private fun alternarCatalogo(pos: Int) {
+        CatalogoPasta.definir(this, !CatalogoPasta.ligado(this))
+        val nivel = pilha.lastOrNull() ?: return
+        pilha[pilha.lastIndex] = Nivel(nivel.titulo, nivel.origem, nivel.itens.toMutableList().also { it[pos] = linhaCatalogo() }, pos, nivel.lidos)
+        desenhar(aviso.text.toString())
+    }
+
+    /** "Breaking Bad · T2 E5", "Frieren · Episódio 7", "Duna (2021)". */
+    private fun rotulo(l: LeitorNomes.Lido): String = when {
+        l.temporada != null && l.episodio != null -> getString(R.string.elv_cat_ep, l.nome, l.temporada, l.episodio) +
+            (if (l.episodios.size > 1) "–" + l.episodios.last() else "")
+        l.episodio != null -> getString(R.string.elv_cat_so_ep, l.nome, l.episodio)
+        l.temporada != null -> getString(R.string.elv_cat_temporada, l.nome, l.temporada)
+        l.data != null -> "${l.nome} · ${l.data}"
+        l.ano != null -> getString(R.string.elv_cat_filme_ano, l.nome, l.ano)
+        else -> l.nome
+    }
+
+    /** Ficha de um vídeo de pasta: pôster, sinopse (do episódio, se for série) e temporadas, pelo cache do TMDB. */
+    private fun fichaDaPasta(lido: LeitorNomes.Lido) {
+        val b = CatalogoPasta.busca(lido, CatalogoPasta.nomeCorrigido(this, lido))
+        if (b == null) { ficha.visibility = View.GONE; capaPedida = null; return }
+        val chave = b.chave + (lido.temporada?.let { ":$it" } ?: "") + (lido.episodio?.let { "x$it" } ?: "")
+        ficha.visibility = View.VISIBLE
+        fichaTitulo.text = rotulo(lido)
+        capaPedida = chave
+        if (fichasPasta.containsKey(chave)) { mostrarFichaPasta(fichasPasta[chave]); return }
+        fichaTexto.text = getString(R.string.elv_cat_procurando); fichaTexto.visibility = View.VISIBLE
+        fichaCapa.setImageDrawable(null); fichaCapa.visibility = View.GONE
+        if (capas.isShutdown) return
+        val app = applicationContext
+        capas.execute {
+            if (capaPedida != chave) return@execute   // o foco já andou: não pergunta
+            val f = runCatching {
+                val g = InfoExternaCache.resolver(app, b.chave, b.nome, b.ano, b.serie, null)
+                val d = g.detalhe ?: return@runCatching null
+                val t = lido.temporada; val n = lido.episodio
+                val ep = if (b.serie && t != null && n != null) InfoExternaCache.episodio(d.tmdb, t, n) else null
+                val temporadas = if (d.temporadas > 0) getString(R.string.elv_cat_n_temporadas, d.temporadas) else null
+                val texto = listOfNotNull(ep?.first?.takeIf { it.isNotBlank() }, ep?.second ?: d.sinopse.takeIf { it.isNotBlank() }, temporadas).joinToString("\n\n")
+                FichaPasta(rotulo(lido), texto, d.poster)
+            }.getOrNull()
+            if (f != null && f.poster.isNotEmpty() && cacheCapas.get(f.poster) == null)
+                runCatching { baixarCapa(null, f.poster) }.getOrNull()?.let { bmp -> tela.post { cacheCapas.put(f.poster, bmp); if (capaPedida == chave) mostrarFichaPasta(f) } }
+            tela.post {
+                if (isDestroyed) return@post
+                fichasPasta[chave] = f
+                if (capaPedida == chave) mostrarFichaPasta(f)
+            }
+        }
+    }
+
+    private fun mostrarFichaPasta(f: FichaPasta?) {
+        fichaTexto.visibility = View.VISIBLE
+        fichaTexto.text = f?.texto?.ifBlank { null } ?: getString(R.string.elv_cat_nada)
+        val bmp = f?.poster?.takeIf { it.isNotEmpty() }?.let { cacheCapas.get(it) }
+        fichaCapa.visibility = if (bmp == null) View.GONE else View.VISIBLE
+        if (bmp != null) fichaCapa.setImageBitmap(bmp) else fichaCapa.setImageDrawable(null)
+    }
+
+    /** Segurar OK num vídeo lido: corrigir o casamento ("não é este" ou escrever o nome certo). */
+    private fun corrigirCasamento(pos: Int) {
+        val nivel = pilha.lastOrNull() ?: return
+        val e = (nivel.itens.getOrNull(pos) as? Linha)?.alvo as? Upnp.Entrada ?: return
+        val lido = nivel.lidos[e] ?: return
+        val b = CatalogoPasta.busca(lido, CatalogoPasta.nomeCorrigido(this, lido))
+        fun esquecer() { fichasPasta.keys.removeAll { b != null && it.startsWith(b.chave) } }
+        abrirPainel(600) { p ->
+            p.addView(Estilo.texto(this, Estilo.Papel.TITULO, getString(R.string.elv_cat_corrigir_titulo, rotulo(lido))).apply { textSize = 22f })
+            p.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.elv_cat_corrigir_explica)).apply {
+                setLineSpacing(0f, 1.2f); setPaddingRelative(0, dp(Estilo.E1), 0, dp(Estilo.E3))
+            })
+            val cancelar = Estilo.botao(this, getString(R.string.rede_cancelar), primario = false).apply { setOnClickListener { fecharPainel() } }
+            val escrever = Estilo.botao(this, getString(R.string.elv_cat_escrever), primario = false).apply {
+                setOnClickListener {
+                    val inicial = CatalogoPasta.nomeCorrigido(this@MidiaRedeActivity, lido) ?: listOfNotNull(lido.nome, lido.ano?.toString()).joinToString(" ")
+                    formulario(getString(R.string.elv_cat_corrigir_titulo, rotulo(lido)), getString(R.string.elv_cat_corrigir_explica),
+                        listOf(Campo(getString(R.string.elv_cat_campo), inicial = inicial)), getString(R.string.elv_cat_salvar)) { v, fim ->
+                        esquecer()
+                        CatalogoPasta.corrigirNome(this@MidiaRedeActivity, lido, v[0])
+                        fim(null); atualizarFicha()
+                    }
+                }
+            }
+            val naoE = Estilo.botao(this, getString(R.string.elv_cat_nao_e), primario = true).apply {
+                isEnabled = b != null
+                setOnClickListener {
+                    if (b == null) return@setOnClickListener
+                    val app = applicationContext
+                    capas.execute { InfoExternaCache.recusar(app, b.chave); tela.post { if (!isDestroyed) { esquecer(); fecharPainel(); atualizarFicha() } } }
+                }
+            }
+            p.addView(LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END
+                addView(cancelar)
+                addView(escrever, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(Estilo.E2) })
+                addView(naoE, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(Estilo.E2) })
+            })
+            (if (b != null) naoE else escrever).requestFocus()
+        }
+    }
+
+    private fun linhaEntrada(e: Upnp.Entrada, lido: LeitorNomes.Lido? = null): Linha {
         val icone = when {
             e.pasta && (e.id == Jellyfin.CONTINUAR || e.id == Plex.CONTINUAR) -> IconeMidia.Tipo.CONTINUAR
             e.pasta && (e.id == Jellyfin.RECENTES || e.id == Plex.RECENTES) -> IconeMidia.Tipo.NOVOS
@@ -355,7 +478,8 @@ class MidiaRedeActivity : Activity() {
                 Upnp.Tipo.OUTRO -> IconeMidia.Tipo.ARQUIVO
             }
         }
-        return Linha(icone, tituloEntrada(e), null, null, e)
+        // Vídeo lido (8.2): o título limpo em cima, o nome do arquivo embaixo (a pessoa ainda acha o arquivo dela).
+        return if (lido != null) Linha(icone, rotulo(lido), e.titulo, null, e) else Linha(icone, tituloEntrada(e), null, null, e)
     }
 
     /** As pastas especiais vêm do servidor com nome fixo em português: aqui ganham o nome no idioma da TV (lista e título). */
@@ -381,6 +505,9 @@ class MidiaRedeActivity : Activity() {
     private fun atualizarFicha() {
         val nivel = pilha.lastOrNull()
         val e = (nivel?.itens?.getOrNull(lista.selectedItemPosition) as? Linha)?.alvo as? Upnp.Entrada
+        if (e != null && e.capa == null && e.sinopse == null && lista.hasFocus() && CatalogoPasta.ligado(this)) {
+            nivel.lidos[e]?.let { fichaDaPasta(it); return }
+        }
         if (e == null || (e.capa == null && e.sinopse == null) || !lista.hasFocus()) { ficha.visibility = View.GONE; capaPedida = null; return }
         ficha.visibility = View.VISIBLE
         fichaTitulo.text = e.titulo
@@ -405,7 +532,8 @@ class MidiaRedeActivity : Activity() {
     }
 
     private fun baixarCapa(origem: Origem?, capa: String): Bitmap? {
-        val c = when (origem) {
+        // Pôster do TMDB (8.2): só o endereço montado por InfoExterna.urlPoster (https, image.tmdb.org).
+        val c = if (capa.startsWith("https://image.tmdb.org/t/p/")) URL(capa).openConnection() as HttpURLConnection else when (origem) {
             is Origem.Jelly -> (URL(origem.c.servidor + capa).openConnection() as HttpURLConnection).apply {
                 setRequestProperty("Authorization", Jellyfin.cabecalho(aparelho(), origem.c.token)) }
             is Origem.PlexO -> (URL(origem.c.servidor + capa).openConnection() as HttpURLConnection).apply {
@@ -498,6 +626,7 @@ class MidiaRedeActivity : Activity() {
             Acao.PROCURAR -> procurar()
             is FotosNoProtetor -> alternarFotos(pos, e)
             is Buscar -> buscar(e)
+            LigarCatalogo -> alternarCatalogo(pos)
             is Upnp.Entrada -> when {
                 e.pasta -> entrar(nivel.origem ?: return, e.id, tituloEntrada(e))
                 e.tipo == Upnp.Tipo.FOTO -> mostrarFoto(nivel.origem, e)
@@ -519,6 +648,8 @@ class MidiaRedeActivity : Activity() {
         dicas.removeAllViews()
         dicas.addView(if (pilha.size == 1) Estilo.barraDicas(this, "OK" to getString(R.string.rede_dica_abrir),
             getString(R.string.rede_tecla_segurar) to getString(R.string.rede_dica_remover), getString(R.string.rede_tecla_voltar) to getString(R.string.rede_dica_sair))
+        else if (nivel.lidos.isNotEmpty() && CatalogoPasta.ligado(this)) Estilo.barraDicas(this, "OK" to getString(R.string.rede_dica_abrir),
+            getString(R.string.rede_tecla_segurar) to getString(R.string.elv_cat_dica), getString(R.string.rede_tecla_voltar) to getString(R.string.rede_dica_subir))
         else Estilo.barraDicas(this, "OK" to getString(R.string.rede_dica_abrir), getString(R.string.rede_tecla_voltar) to getString(R.string.rede_dica_subir)))
         if (camada.visibility != View.VISIBLE) lista.requestFocus()
         lista.post { pintarFoco() }
@@ -554,7 +685,18 @@ class MidiaRedeActivity : Activity() {
             pilha.size == 1 && (pilha[0].itens.getOrNull(lista.selectedItemPosition) as? Linha)?.alvo is ContaMidia) {
             return segurar.tratar(e, aoCurto = { abrir(lista.selectedItemPosition) }, aoSegurar = { confirmarRemover(lista.selectedItemPosition) })
         }
+        // Segurar OK num vídeo lido (8.2), com o pôster ligado: corrigir o casamento.
+        if (SegurarOk.ehOk(e.keyCode) && lista.hasFocus() && foto.visibility != View.VISIBLE && camada.visibility != View.VISIBLE &&
+            pilha.size > 1 && CatalogoPasta.ligado(this) && videoLido(lista.selectedItemPosition)) {
+            return segurar.tratar(e, aoCurto = { abrir(lista.selectedItemPosition) }, aoSegurar = { corrigirCasamento(lista.selectedItemPosition) })
+        }
         return super.dispatchKeyEvent(e)
+    }
+
+    private fun videoLido(pos: Int): Boolean {
+        val nivel = pilha.lastOrNull() ?: return false
+        val e = (nivel.itens.getOrNull(pos) as? Linha)?.alvo as? Upnp.Entrada ?: return false
+        return nivel.lidos.containsKey(e)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {

@@ -9,4 +9,24 @@
     <string name="elv_ad_det">Pick the audio track that describes the scene whenever there is one</string>
     <string name="elv_sdh_titulo">Subtitles for the deaf</string>
     <string name="elv_sdh_det">Always show subtitles with sounds ([door slams]) in the TV language, even when dubbed</string>
+
+    <!-- Elevação 8.2: a pasta vira catálogo -->
+    <string name="elv_cat_titulo">Poster and synopsis for the videos</string>
+    <string name="elv_cat_explica">Only the title goes to TMDB, never the folder or the server</string>
+    <string name="elv_cat_ligado">On</string>
+    <string name="elv_cat_desligado">Off</string>
+    <string name="elv_cat_ep">%1$s · S%2$d E%3$d</string>
+    <string name="elv_cat_so_ep">%1$s · Episode %2$d</string>
+    <string name="elv_cat_temporada">%1$s · Season %2$d</string>
+    <string name="elv_cat_filme_ano">%1$s (%2$d)</string>
+    <string name="elv_cat_n_temporadas">Seasons: %d</string>
+    <string name="elv_cat_procurando">Looking for the poster…</string>
+    <string name="elv_cat_nada">Nothing found on TMDB. Hold OK to type the right name.</string>
+    <string name="elv_cat_corrigir_titulo">Fix: %s</string>
+    <string name="elv_cat_corrigir_explica">Wrong poster or synopsis? Ask for the next result, or type the right name and year. An empty name goes back to automatic.</string>
+    <string name="elv_cat_nao_e">Not this one</string>
+    <string name="elv_cat_escrever">Type the name</string>
+    <string name="elv_cat_campo">Name and year, e.g. Dune 2021</string>
+    <string name="elv_cat_salvar">Save</string>
+    <string name="elv_cat_dica">fix</string>
 </resources>
