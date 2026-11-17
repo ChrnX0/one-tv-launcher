@@ -14,7 +14,7 @@
     <string name="rec_desfazer">元に戻す</string>
     <string name="rec_desfazer_det">「%1$s」の前の状態にすべて戻します。</string>
     <string name="rec_ja_esta">このテレビはすでにこの設定です。</string>
-    <string name="rec_aviso_prende">シンプルモードはPINでしか終了できません。家の誰かがPINを知っているか確認してください。</string>
+    <string name="rec_aviso_prende">かんたん画面はPINでしか終了できません。家の誰かがPINを知っているか確認してください。</string>
     <string name="rec_aviso_sem_pin">まだPINがないので、誰でもこれをオフにできます。スマホのパネルでPINを作ってください。</string>
     <string name="rec_aviso_plano">有料プランが必要なのでオフのままです：%1$s。</string>
     <string name="rec_voltar">戻る</string>
@@ -29,7 +29,7 @@
     <string name="rec_desligado">オフ</string>
     <string name="rec_aj_hospede">ゲストモード</string>
     <string name="rec_aj_visita">来客モード</string>
-    <string name="rec_aj_simples">シンプルモード</string>
+    <string name="rec_aj_simples">かんたん画面</string>
     <string name="rec_aj_infantil">キッズモード</string>
     <string name="rec_aj_dormir">おやすみ時間</string>
     <string name="rec_aj_texto">文字の大きさ</string>

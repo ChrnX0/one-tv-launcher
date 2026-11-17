@@ -26,7 +26,7 @@ const NOMES_CHAVES = {
   ENTRADAS_TV: 'Entradas HDMI na linha de apps (só em TV com entrada)',
   NAO_PERTURBE: 'Não perturbe (avisos esperam durante filme, madrugada ou visita)',
   ABERTURA_PRONTA: 'Pular abertura (IntroDB: pergunta onde fica a abertura do episódio)',
-  MODO_SIMPLES: 'Modo simples (cards grandes no lugar da HOME)',
+  MODO_SIMPLES: 'Tela fácil (cards grandes no lugar da HOME)',
   TEMPO_TELA: 'Tempo de tela por dia (acabou, só os apps liberados abrem)',
   AGENDA_TODAS: 'Agenda de todas as contas Google da TV juntas',
   LER_FOCO: 'Ler em voz alta o que está em foco nas telas do launcher',

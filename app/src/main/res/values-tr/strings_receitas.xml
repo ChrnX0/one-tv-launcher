@@ -14,7 +14,7 @@
     <string name="rec_desfazer">Geri al</string>
     <string name="rec_desfazer_det">Her şeyi %1$s öncesine döndür.</string>
     <string name="rec_ja_esta">Bu TV zaten böyle ayarlı.</string>
-    <string name="rec_aviso_prende">Basit mod yalnızca PIN ile kapanır. Evde birinin PIN\'i bildiğinden emin ol.</string>
+    <string name="rec_aviso_prende">Kolay ekran yalnızca PIN ile kapanır. Evde birinin PIN\'i bildiğinden emin ol.</string>
     <string name="rec_aviso_sem_pin">Henüz PIN yok, bu yüzden bunu herkes kapatabilir. Telefondaki panelden bir PIN oluştur.</string>
     <string name="rec_aviso_plano">Ücretli plan gerekiyor, bu yüzden kapalı kalıyor: %1$s.</string>
     <string name="rec_voltar">Geri</string>
@@ -29,7 +29,7 @@
     <string name="rec_desligado">kapalı</string>
     <string name="rec_aj_hospede">Misafir modu</string>
     <string name="rec_aj_visita">Ziyaret modu</string>
-    <string name="rec_aj_simples">Basit mod</string>
+    <string name="rec_aj_simples">Kolay ekran</string>
     <string name="rec_aj_infantil">Çocuk modu</string>
     <string name="rec_aj_dormir">Uyku saati</string>
     <string name="rec_aj_texto">Yazı boyutu</string>

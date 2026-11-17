@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pergunta única da primeira abertura (T3, 17/11/2026): BoasVindasActivity + PrimeiraPergunta. -->
+<resources>
+    <string name="pp_det">إجابة واحدة تضبط القائمة والشاشة. يمكنك تغييرها لاحقًا من الإعدادات › النظام.</string>
+    <string name="pp_casa">للبيت كله</string>
+    <string name="pp_vo_det">بطاقات كبيرة مع نطق الأسماء وخط أكبر، وأنت تساعد من هاتفك عن بُعد.</string>
+</resources>

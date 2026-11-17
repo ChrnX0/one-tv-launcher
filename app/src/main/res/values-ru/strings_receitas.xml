@@ -14,7 +14,7 @@
     <string name="rec_desfazer">Отменить</string>
     <string name="rec_desfazer_det">Вернуть всё как было до «%1$s».</string>
     <string name="rec_ja_esta">Телевизор уже так настроен.</string>
-    <string name="rec_aviso_prende">Простой режим выключается только PIN-кодом. Убедитесь, что кто-то в доме его знает.</string>
+    <string name="rec_aviso_prende">Простой экран выключается только PIN-кодом. Убедитесь, что кто-то в доме его знает.</string>
     <string name="rec_aviso_sem_pin">PIN-кода ещё нет, поэтому выключить это может кто угодно. Создайте его в панели на телефоне.</string>
     <string name="rec_aviso_plano">Нужен платный тариф, поэтому останется выключенным: %1$s.</string>
     <string name="rec_voltar">Назад</string>
@@ -29,7 +29,7 @@
     <string name="rec_desligado">выкл.</string>
     <string name="rec_aj_hospede">Режим гостя</string>
     <string name="rec_aj_visita">Режим визита</string>
-    <string name="rec_aj_simples">Простой режим</string>
+    <string name="rec_aj_simples">Простой экран</string>
     <string name="rec_aj_infantil">Детский режим</string>
     <string name="rec_aj_dormir">Время сна</string>
     <string name="rec_aj_texto">Размер текста</string>

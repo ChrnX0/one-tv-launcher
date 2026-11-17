@@ -14,7 +14,7 @@
     <string name="rec_desfazer">되돌리기</string>
     <string name="rec_desfazer_det">%1$s 전 상태로 모두 되돌려요.</string>
     <string name="rec_ja_esta">이 TV는 이미 이렇게 설정돼 있어요.</string>
-    <string name="rec_aviso_prende">간단 모드는 PIN으로만 끌 수 있어요. 집에 PIN을 아는 사람이 있는지 확인하세요.</string>
+    <string name="rec_aviso_prende">쉬운 화면은 PIN으로만 끌 수 있어요. 집에 PIN을 아는 사람이 있는지 확인하세요.</string>
     <string name="rec_aviso_sem_pin">아직 PIN이 없어서 누구나 끌 수 있어요. 휴대폰 패널에서 PIN을 만드세요.</string>
     <string name="rec_aviso_plano">유료 요금제가 필요해서 꺼진 채로 둬요: %1$s.</string>
     <string name="rec_voltar">뒤로</string>
@@ -29,7 +29,7 @@
     <string name="rec_desligado">끔</string>
     <string name="rec_aj_hospede">게스트 모드</string>
     <string name="rec_aj_visita">방문 모드</string>
-    <string name="rec_aj_simples">간단 모드</string>
+    <string name="rec_aj_simples">쉬운 화면</string>
     <string name="rec_aj_infantil">어린이 모드</string>
     <string name="rec_aj_dormir">잘 시간</string>
     <string name="rec_aj_texto">글자 크기</string>

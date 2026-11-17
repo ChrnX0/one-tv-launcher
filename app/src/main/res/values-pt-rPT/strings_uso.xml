@@ -2,8 +2,8 @@
 <!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
 <resources>
     <string name="uso_titulo">Como esta TV é usada</string>
-    <string name="uso_det">Simples esconde os separadores técnicos (Casa, Remoto, Avançado). Nada é desligado.</string>
-    <string name="uso_simples">Simples</string>
+    <string name="uso_det">Essencial esconde os separadores técnicos (Casa, Remoto, Avançado). Nada é desligado.</string>
+    <string name="uso_simples">Essencial</string>
     <string name="uso_completo">Completo</string>
     <string name="uso_cuida">Para quem eu cuido</string>
     <string name="uso_pergunta">Como vai ser usada esta TV?</string>

@@ -14,7 +14,7 @@
     <string name="rec_desfazer">Undo</string>
     <string name="rec_desfazer_det">Put everything back as it was before %1$s.</string>
     <string name="rec_ja_esta">This TV is already set up like this.</string>
-    <string name="rec_aviso_prende">Simple mode only closes with the PIN. Make sure someone in the house knows it.</string>
+    <string name="rec_aviso_prende">Easy screen only closes with the PIN. Make sure someone in the house knows it.</string>
     <string name="rec_aviso_sem_pin">There is no PIN yet, so anyone can turn this off. Create one in the phone panel.</string>
     <string name="rec_aviso_plano">Needs a paid plan, so it stays off: %1$s.</string>
     <string name="rec_voltar">Back</string>
@@ -29,7 +29,7 @@
     <string name="rec_desligado">off</string>
     <string name="rec_aj_hospede">Guest mode</string>
     <string name="rec_aj_visita">Visitor mode</string>
-    <string name="rec_aj_simples">Simple mode</string>
+    <string name="rec_aj_simples">Easy screen</string>
     <string name="rec_aj_infantil">Kids mode</string>
     <string name="rec_aj_dormir">Bedtime</string>
     <string name="rec_aj_texto">Text size</string>

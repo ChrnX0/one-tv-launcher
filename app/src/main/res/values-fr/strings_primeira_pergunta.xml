@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pergunta única da primeira abertura (T3, 17/11/2026): BoasVindasActivity + PrimeiraPergunta. -->
+<resources>
+    <string name="pp_det">Une seule réponse règle le menu et l’écran. Modifiable plus tard dans Réglages › Système.</string>
+    <string name="pp_casa">Pour toute la maison</string>
+    <string name="pp_vo_det">Grandes cartes avec les noms lus à voix haute et texte plus grand, et vous aidez depuis votre téléphone, à distance.</string>
+</resources>

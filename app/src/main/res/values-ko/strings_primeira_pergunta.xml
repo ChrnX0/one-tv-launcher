@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pergunta única da primeira abertura (T3, 17/11/2026): BoasVindasActivity + PrimeiraPergunta. -->
+<resources>
+    <string name="pp_det">답 하나로 메뉴와 화면이 정해져요. 나중에 설정 › 시스템에서 바꿀 수 있어요.</string>
+    <string name="pp_casa">온 가족용</string>
+    <string name="pp_vo_det">이름을 읽어 주는 큰 카드와 큰 글씨, 그리고 멀리서 휴대폰으로 도와줄 수 있어요.</string>
+</resources>
