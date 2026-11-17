@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Recado em vídeo (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="vid_de">%1$s का वीडियो</string>
+    <string name="vid_mural">ने एक वीडियो भेजा</string>
+    <string name="vid_onde">देखने के लिए: सेटिंग्स › परिवार › परिवार के वीडियो।</string>
+    <string name="vid_depois">बाद में</string>
+    <string name="vid_assistir">देखें</string>
+    <string name="vid_ok_para_assistir">देखने के लिए OK दबाएँ।</string>
+    <string name="vid_lista">परिवार के वीडियो</string>
+    <string name="vid_lista_det">परिवार लिंक से भेजे गए। हर वीडियो 30 दिन रहता है। मिटाने के लिए OK दबाए रखें।</string>
+    <string name="vid_nenhum">अभी कोई वीडियो नहीं।</string>
+    <string name="vid_apagar">वीडियो मिटाएँ</string>
+    <string name="vid_aceitar">वीडियो लें</string>
+    <string name="vid_aceitar_det">परिवार 30 सेकंड तक के वीडियो भेज सकता है। वे अपने आप कभी नहीं चलते।</string>
+    <string name="vid_quantos">वीडियो: %1$d</string>
+</resources>

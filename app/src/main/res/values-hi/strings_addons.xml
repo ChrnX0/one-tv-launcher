@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Addons no formato do Stremio, só HTTP (16/11/2026): AddonsActivity, ConfigLauncherActivity, MainActivity. -->
+<resources>
+    <string name="ad_titulo">ऐड-ऑन</string>
+    <string name="ad_destaque">आपके ऐड-ऑन से फ़िल्में और सीरीज़</string>
+    <string name="ad_vazio">अभी कोई ऐड-ऑन नहीं। वेब पैनल (सेटिंग्स, ऐड-ऑन) में जोड़ें। यहाँ सिर्फ़ सीधे वीडियो लिंक (HTTP) चलते हैं: टॉरेंट और P2P समर्थित नहीं हैं।</string>
+    <string name="ad_resumo">आपके ऐड-ऑन के कैटलॉग। ऐड-ऑन तीसरे पक्ष बनाते हैं: जो ऐड-ऑन इंस्टॉल करता है, उसकी सामग्री की ज़िम्मेदारी उसी की है।</string>
+    <string name="ad_buscar">खोजें</string>
+    <string name="ad_buscar_dica">फ़िल्म या सीरीज़ का नाम</string>
+    <string name="ad_carregando">लोड हो रहा है…</string>
+    <string name="ad_falhou">ऐड-ऑन ने जवाब नहीं दिया। थोड़ी देर में फिर कोशिश करें।</string>
+    <string name="ad_nada">यहाँ कुछ नहीं है।</string>
+    <string name="ad_mais">और</string>
+    <string name="ad_tipo_filmes">फ़िल्में</string>
+    <string name="ad_tipo_series">सीरीज़</string>
+    <string name="ad_tipo_canais">चैनल</string>
+    <string name="ad_temporada">सीज़न %1$d</string>
+    <string name="ad_especiais">विशेष</string>
+    <string name="ad_episodio">%1$d. %2$s</string>
+    <string name="ad_sem_fontes">यहाँ चलने वाला कोई स्रोत नहीं। Sofaly सिर्फ़ सीधे वीडियो लिंक (HTTP) चलाता है।</string>
+    <string name="ad_fontes_resumo">स्रोत चुनें</string>
+    <string name="ad_dica_voltar">वापस</string>
+    <string name="ad_cfg_det">इंस्टॉल किए गए ऐड-ऑन। जोड़ने के लिए वेब पैनल इस्तेमाल करें।</string>
+    <string name="ad_cfg_como">ऐड-ऑन जोड़ने के लिए फ़ोन या कंप्यूटर पर टीवी का वेब पैनल खोलें, सेटिंग्स, ऐड-ऑन में जाएँ, manifest.json पर ख़त्म होने वाला पता चिपकाएँ और PIN से पुष्टि करें।</string>
+    <string name="ad_cfg_remover_qual">कौन-सा ऐड-ऑन हटाएँ?</string>
+    <string name="ad_cfg_remover">%1$s इस टीवी से हटा दिया जाएगा।</string>
+    <string name="ad_cfg_remover_sim">हटाएँ</string>
+</resources>

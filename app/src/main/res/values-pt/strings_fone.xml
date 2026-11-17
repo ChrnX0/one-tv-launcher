@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Som no fone (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="fone_menu">Som no fone (celular)</string>
+    <string name="fone_titulo">Som no fone</string>
+    <string name="fone_texto">Aponte a câmera de um celular no Wi-Fi de casa e ligue o fone. Até %1$d celulares. A TV fica muda enquanto alguém ouve; fechar a página traz o som de volta.</string>
+    <string name="fone_ouvindo">Ouvindo: %1$d de %2$d</string>
+    <string name="fone_fechar">Fechar</string>
+    <string name="fone_parar">Parar</string>
+    <string name="fone_sem_rede">A TV não está na rede de casa.</string>
+</resources>

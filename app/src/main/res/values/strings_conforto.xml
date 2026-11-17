@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Confortos do estudo do Stremio (16/11/2026): Conforto.kt, ConfigLauncherActivity, SincronizarActivity. -->
+<resources>
+    <string name="cf_resumo_escondido">Summary hidden until you watch it</string>
+    <string name="cf_spoiler">Hide summaries of unwatched episodes</string>
+    <string name="cf_spoiler_det">A summary only shows after you start the episode</string>
+    <string name="cf_segundo">Second language</string>
+    <string name="cf_segundo_det">Used when a video has no audio or subtitles in the TV\'s language</string>
+    <string name="cf_nenhum">None</string>
+    <string name="cf_proximo">Next episode countdown</string>
+    <string name="cf_proximo_det">How long to wait before the next episode starts on its own</string>
+    <string name="cf_proximo_nao">Don\'t start on its own</string>
+    <string name="cf_segundos">%1$d s</string>
+    <string name="cf_consent_titulo">Send data to %1$s?</string>
+    <string name="cf_consent_texto">Turning this on sends to %1$s over the internet: the titles you mark and watch on this TV and where you stopped. They are kept in your %1$s account under %1$s\'s privacy rules. You can turn it off at any time.</string>
+    <string name="cf_consent_sim">I agree</string>
+</resources>

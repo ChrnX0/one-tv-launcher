@@ -432,6 +432,7 @@
     <string name="home_destaque_pilha">앱 %1$d개 · ▼로 맨 앞 앱 바꾸기</string>
     <string name="player_carregando">채널 로드 중…</string>
     <string name="player_carregando_canal">채널 로드 중…</string>
+    <string name="vod_carregando">동영상 불러오는 중…</string>
     <string name="player_sem_canais">아직 추가된 채널 목록이 없습니다.</string>
     <string name="player_tentando">채널 %1$d 신호 없음. 다시 시도 중…</string>
     <string name="player_sem_sinal">채널 %1$d이(가) 응답하지 않았습니다. ▲ ▼ 또는 OK로 다른 채널을 선택하세요.</string>
@@ -439,6 +440,7 @@
     <string name="player_ao_vivo">실시간</string>
     <string name="player_a_seguir">다음: %1$s</string>
     <string name="player_teclas">▲ ▼ 채널 · OK 채널 목록 · OK 2초 길게: 즐겨찾기 · ◀ 이전 채널 · ▶▶ 옵션 · 뒤로 나가기</string>
+    <string name="player_teclas_pausa">⏯ 또는 OK 이어 보기 · ▶ 옵션(실시간으로 돌아가기) · ▲ ▼ 채널 · 뒤로 나가기</string>
     <string name="player_cat_busca">검색: %1$s</string>
     <string name="player_acao_buscar">검색</string>
     <string name="player_acao_filtros">필터</string>

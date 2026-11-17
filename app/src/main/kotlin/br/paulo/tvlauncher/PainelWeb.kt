@@ -323,15 +323,18 @@ object PainelWeb {
         else ChecagensPainel.hostPermitido(host, nomesPermitidos(), Config.PAINEL_PORTA) || ChecagensPainel.viaHttps(host, nomesHttps())
 
     /** Página do passo a passo (assets/painel/certificado.html), com os dados do certificado já preenchidos. */
-    private fun paginaCertificado(): Resposta {
+    private fun paginaCertificado(agente: String?): Resposta {
         val modelo = app.assets.open("painel/certificado.html").use { it.readBytes() }.toString(Charsets.UTF_8)
-        val html = PainelTls.estado(app, ipsDaRede(), ligadoTls()).let { PaginaCertificado.preencher(modelo, it, it.optString("nome")) }
+        val html = PainelTls.estado(app, ipsDaRede(), ligadoTls()).let { PaginaCertificado.preencher(modelo, it, it.optString("nome"), agente) }
         return Resposta(200, "text/html; charset=utf-8", html.toByteArray())
     }
 
-    /** O XML do aparelho UPnP. A página aponta para o mesmo host que o Windows usou para buscar o XML (o IP da TV). */
+    /**
+     * O XML do aparelho UPnP. O duplo clique abre o painel, no mesmo host que o Windows usou para buscar o XML (o IP da
+     * TV). Pelo http de propósito: o https da TV só abre sem aviso de segurança em quem já instalou o certificado dela.
+     */
     private fun descricaoUpnp(host: String?): Resposta {
-        val pagina = "http://${host ?: (ipsDaRede().minOrNull() + ":" + Config.PAINEL_PORTA)}/unidade"
+        val pagina = "http://${host ?: (ipsDaRede().minOrNull() + ":" + Config.PAINEL_PORTA)}/"
         val xml = Ssdp.descricao(Ssdp.nomeVisivel(PainelVizinhos.nomeDaTv(app)), Ssdp.uuid(PainelVizinhos.idDaTv(app)), pagina)
         return Resposta(200, "text/xml; charset=utf-8", xml.toByteArray())
     }
@@ -340,7 +343,7 @@ object PainelWeb {
     private fun descricaoMtp(host: String?): Resposta {
         val pagina = "http://${host ?: (ipsDaRede().minOrNull() + ":" + Config.PAINEL_PORTA)}/"
         val id = PainelVizinhos.idDaTv(app)
-        val xml = Ssdp.descricaoMtp(PainelVizinhos.nomeDaTv(app).take(60), Ssdp.uuidMtp(id), pagina, id)
+        val xml = Ssdp.descricaoMtp(Ssdp.nomeNaUnidade(PainelVizinhos.nomeDaTv(app)), Ssdp.uuidMtp(id), pagina, id)
         return Resposta(200, "text/xml; charset=utf-8", xml.toByteArray())
     }
 
@@ -362,7 +365,7 @@ object PainelWeb {
     private fun conectorWindows(): Resposta {
         val pem = PainelTls.pemDaCa() ?: return erro(503, "o certificado ainda não foi gerado; tente em 1 minuto")
         val host = hostConector()
-        val texto = ConectorWindows.script(host, PainelTls.PORTA, pem) ?: return erro(503, "não consegui montar o conector")
+        val texto = ConectorWindows.script(host, PainelTls.PORTA, pem, Ssdp.nomeNaUnidade(PainelVizinhos.nomeDaTv(app))) ?: return erro(503, "não consegui montar o conector")
         return Resposta(200, "application/octet-stream", texto.toByteArray(Charsets.US_ASCII),
             mapOf("Content-Disposition" to "attachment; filename=\"${ConectorWindows.ARQUIVO}\"", "Cache-Control" to "no-store"))
     }
@@ -653,12 +656,15 @@ object PainelWeb {
         // https na rede de casa (PainelTls): passo a passo, o arquivo para instalar e o estado. Livres como a página:
         // o certificado é público por natureza e é preciso baixá-lo ANTES de conseguir entrar pelo https.
         if (req.metodo == "GET") when (req.caminho) {
-            "/certificado" -> return paginaCertificado()
+            "/certificado" -> return paginaCertificado(req.cabecalho("user-agent"))
             // A TV na tela "Rede" do Windows (Ssdp/AnuncioUpnp): a descrição do aparelho e a página que o duplo clique
             // abre. Livres como a do certificado (não dizem nada além do endereço); só com a unidade de rede ligada.
             Ssdp.CAMINHO_DESCRICAO -> if (PainelDav.ligado(app)) return descricaoUpnp(host)
             "/unidade" -> if (PainelDav.ligado(app)) return paginaUnidade()
             Ssdp.CAMINHO_MTP -> if (PainelDav.ligado(app)) return descricaoMtp(host)
+            // o ícone da marca que as descrições acima apontam (só os nomes da lista: nada de caminho vindo de fora)
+            in Ssdp.ARQUIVOS_ICONE.keys.map { Ssdp.CAMINHO_ICONES + it } -> if (PainelDav.ligado(app)) return Resposta(200, "image/png",
+                app.assets.open("upnp/" + req.caminho.removePrefix(Ssdp.CAMINHO_ICONES)).use { it.readBytes() }, mapOf("Cache-Control" to "max-age=86400"))
             Ssdp.CAMINHO_MTP_SERVICO -> if (PainelDav.ligado(app)) return Resposta(200, "text/xml; charset=utf-8", Ssdp.SERVICO_MTP.toByteArray())
             // O .cmd roda como administrador e instala um certificado no Windows: só sai pela porta https (15/11/2026).
             // Pelo http, alguém no meio do caminho trocaria o certificado de dentro dele; lá, manda para o https.
@@ -702,6 +708,11 @@ object PainelWeb {
         }
         if (req.caminho == "/api/cuidar" || req.caminho.startsWith("/api/cuidar/")) {
             PainelCuidar.rotear(app, req.metodo, req.caminho.removePrefix("/api/cuidar"),
+                if (req.metodo == "POST") corpoJson(req) else null, sessoes.elevada(token), ip)
+                ?.let { return json(it.first, it.second) }
+        }
+        if (req.caminho == "/api/addons" || req.caminho.startsWith("/api/addons/")) {   // 16/11/2026: PainelAddons.kt
+            PainelAddons.rotear(app, req.metodo, req.caminho.removePrefix("/api/addons"),
                 if (req.metodo == "POST") corpoJson(req) else null, sessoes.elevada(token), ip)
                 ?.let { return json(it.first, it.second) }
         }
@@ -925,8 +936,18 @@ object PainelWeb {
             "/api/perfil" -> if (req.metodo == "GET") return json(200, JSONObject().put("google", LoginGoogle.configurado(app))
                 .put("contas", org.json.JSONArray().apply {
                     for (c in Perfil.contas(app)) put(JSONObject().put("conta", c)
-                        .put("foto", FotoPerfil.arquivo(app, c)?.lastModified() ?: 0L).put("manual", FotoPerfil.manual(app, c)))
+                        .put("foto", FotoPerfil.arquivo(app, c)?.lastModified() ?: 0L).put("manual", FotoPerfil.manual(app, c))
+                        .put("nome", Perfil.nomeGuardado(app, c) ?: ""))
                 }))
+            // Nome do perfil (17/11/2026): o que a TV mostra na bolinha e nos avisos, no lugar do usuário do e-mail.
+            "/api/perfil/nome" -> if (req.metodo == "POST") {
+                val o = corpoJson(req) ?: return erro(400, "corpo inválido")
+                val conta = Perfil.contas(app).firstOrNull { it.equals(o.optString("conta"), ignoreCase = true) }
+                    ?: return erro(404, "essa conta não está nesta TV")
+                Perfil.definirNome(app, conta, o.optString("nome"))
+                PainelArmazem.registrar(app, ip, "nome do perfil", "ok")   // sem o e-mail nem o nome no registro
+                return json(200, JSONObject().put("ok", true).put("nome", Perfil.nome(app, conta)))
+            }
             "/api/perfil/foto" -> {
                 val conta = Perfil.contas(app).firstOrNull { it.equals(req.consulta["conta"], ignoreCase = true) }
                     ?: return erro(404, "essa conta não está nesta TV")
@@ -1002,7 +1023,21 @@ object PainelWeb {
     private val TIPOS = mapOf(
         "/" to ("index.html" to "text/html; charset=utf-8"),
         "/app.js" to ("app.js" to "text/javascript; charset=utf-8"),
-        "/i18n.js" to ("i18n.js" to "text/javascript; charset=utf-8"),   // ideia 76: painel em inglês
+        "/i18n.js" to ("i18n.js" to "text/javascript; charset=utf-8"),   // ideia 76: escolhe a língua do navegador
+        "/i18n-en.js" to ("i18n-en.js" to "text/javascript; charset=utf-8"),   // as 14 línguas do app (17/11/2026)
+        "/i18n-es.js" to ("i18n-es.js" to "text/javascript; charset=utf-8"),
+        "/i18n-fr.js" to ("i18n-fr.js" to "text/javascript; charset=utf-8"),
+        "/i18n-de.js" to ("i18n-de.js" to "text/javascript; charset=utf-8"),
+        "/i18n-it.js" to ("i18n-it.js" to "text/javascript; charset=utf-8"),
+        "/i18n-pl.js" to ("i18n-pl.js" to "text/javascript; charset=utf-8"),
+        "/i18n-ru.js" to ("i18n-ru.js" to "text/javascript; charset=utf-8"),
+        "/i18n-tr.js" to ("i18n-tr.js" to "text/javascript; charset=utf-8"),
+        "/i18n-ar.js" to ("i18n-ar.js" to "text/javascript; charset=utf-8"),
+        "/i18n-hi.js" to ("i18n-hi.js" to "text/javascript; charset=utf-8"),
+        "/i18n-id.js" to ("i18n-id.js" to "text/javascript; charset=utf-8"),
+        "/i18n-ja.js" to ("i18n-ja.js" to "text/javascript; charset=utf-8"),
+        "/i18n-ko.js" to ("i18n-ko.js" to "text/javascript; charset=utf-8"),
+        "/i18n-zh.js" to ("i18n-zh.js" to "text/javascript; charset=utf-8"),
         "/style.css" to ("style.css" to "text/css; charset=utf-8"),
         "/extras.js" to ("extras.js" to "text/javascript; charset=utf-8"),
         "/ui.js" to ("ui.js" to "text/javascript; charset=utf-8"),   // casca do painel: navegação, Início, avisos
@@ -1011,8 +1046,11 @@ object PainelWeb {
         "/controle.js" to ("controle.js" to "text/javascript; charset=utf-8"),   // digitar ao vivo e touchpad
         "/chave.js" to ("chave.js" to "text/javascript; charset=utf-8"),   // ideia 99: entrar com a digital
         "/emprestimo.js" to ("emprestimo.js" to "text/javascript; charset=utf-8"),   // shell emprestado (Shizuku)
+        "/addons.js" to ("addons.js" to "text/javascript; charset=utf-8"),   // addons no formato do Stremio (16/11/2026)
+        "/jsqr.js" to ("jsqr.js" to "text/javascript; charset=utf-8"),   // leitor de QR (jsQR 1.4.0, Apache 2.0) para o celular sem BarcodeDetector
         "/primeira.js" to ("primeira.js" to "text/javascript; charset=utf-8"),   // ideia 97: assistente da 1ª configuração
         "/certificado.js" to ("certificado.js" to "text/javascript; charset=utf-8"),   // cartão "Instalar como app (https)"
+        "/cadeado.js" to ("cadeado.js" to "text/javascript; charset=utf-8"),   // leva ao https quem já confia (16/11/2026)
         // "Adicionar à tela inicial" no celular: nome, ícone e atalhos (10/11/2026).
         "/manifest.webmanifest" to ("manifest.webmanifest" to "application/manifest+json; charset=utf-8"),
         "/icone-192.png" to ("icone-192.png" to "image/png"),
@@ -1028,6 +1066,8 @@ object PainelWeb {
         // Fonte Manrope (a mesma da TV), só as letras latinas: 12 KB cada (visual de 13/11/2026).
         "/manrope-400.woff2" to ("manrope-400.woff2" to "font/woff2"),
         "/manrope-600.woff2" to ("manrope-600.woff2" to "font/woff2"),
+        // Nunito (a letra da marca Sofaly), só títulos e o nome; variável, letras latinas (16/11/2026).
+        "/nunito.woff2" to ("nunito.woff2" to "font/woff2"),
         "/offline.html" to ("offline.html" to "text/html; charset=utf-8"),   // tela "A TV não respondeu" do app instalado (sw.js)
     )
 

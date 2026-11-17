@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Addons no formato do Stremio, só HTTP (16/11/2026): AddonsActivity, ConfigLauncherActivity, MainActivity. -->
+<resources>
+    <string name="ad_titulo">アドオン</string>
+    <string name="ad_destaque">アドオンの映画とシリーズ</string>
+    <string name="ad_vazio">アドオンはまだありません。Webパネル（設定、アドオン）で追加してください。ここで再生できるのは直接の動画リンク（HTTP）だけです。トレントとP2Pには対応していません。</string>
+    <string name="ad_resumo">アドオンのカタログ。アドオンは第三者が作っています。アドオンの内容は、インストールした人が責任を負います。</string>
+    <string name="ad_buscar">検索</string>
+    <string name="ad_buscar_dica">映画やシリーズの名前</string>
+    <string name="ad_carregando">読み込み中…</string>
+    <string name="ad_falhou">アドオンが応答しませんでした。少ししてからもう一度お試しください。</string>
+    <string name="ad_nada">何もありません。</string>
+    <string name="ad_mais">もっと見る</string>
+    <string name="ad_tipo_filmes">映画</string>
+    <string name="ad_tipo_series">シリーズ</string>
+    <string name="ad_tipo_canais">チャンネル</string>
+    <string name="ad_temporada">シーズン %1$d</string>
+    <string name="ad_especiais">特別編</string>
+    <string name="ad_episodio">%1$d. %2$s</string>
+    <string name="ad_sem_fontes">ここで再生できるソースがありません。Sofaly は直接の動画リンク（HTTP）だけを再生します。</string>
+    <string name="ad_fontes_resumo">ソースを選択</string>
+    <string name="ad_dica_voltar">戻る</string>
+    <string name="ad_cfg_det">インストール済みのアドオン。追加はWebパネルから。</string>
+    <string name="ad_cfg_como">アドオンを追加するには、スマートフォンかパソコンでテレビのWebパネルを開き、設定、アドオンに進み、manifest.json で終わるアドレスを貼り付けて PIN で確認します。</string>
+    <string name="ad_cfg_remover_qual">どのアドオンを削除しますか？</string>
+    <string name="ad_cfg_remover">%1$s をこのテレビから削除します。</string>
+    <string name="ad_cfg_remover_sim">削除</string>
+</resources>

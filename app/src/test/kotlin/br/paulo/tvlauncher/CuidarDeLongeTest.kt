@@ -26,6 +26,14 @@ class CuidarDeLongeTest {
 
     // ---------------------------------------------------------------- consentimento
 
+    @Test fun horaDoLembreteNoDiaDoHorarioDeVerao() {
+        // Nova York, 08/03/2026: o relógio pula de 02:00 para 03:00. O lembrete das 09:00 continua às 09:00 do relógio.
+        val ny = TimeZone.getTimeZone("America/New_York")
+        val ms = CuidarDeLonge.instante(20260308, 9 * 60, ny)
+        assertEquals(LocalDateTime.of(2026, 3, 8, 9, 0), java.time.Instant.ofEpochMilli(ms).atZone(ny.toZoneId()).toLocalDateTime())
+        assertEquals(9 * 60, CuidarDeLonge.minutoDoDia(ms, ny))
+    }
+
     @Test fun deFabricaNadaSai() {
         val c = Config()
         assertFalse(CuidarDeLonge.consentido(c))
@@ -292,5 +300,12 @@ class CuidarDeLongeTest {
         s.tecla = 23
         s.evento(23, true, 0, 0) {}
         assertTrue(s.venceu(3000))
+    }
+
+    @Test fun soTeclaDeGenteAceitaOConsentimento() {
+        assertTrue(CuidarDeLonge.teclaDeGente(7, 0x101))                 // controle do Chromecast (aparelho próprio)
+        assertTrue(CuidarDeLonge.teclaDeGente(-1, 0x02000001))           // controle da LG pelo HDMI-CEC
+        assertFalse(CuidarDeLonge.teclaDeGente(-1, 0x101))               // input keyevent do shell (teclado virtual)
+        assertFalse(CuidarDeLonge.teclaDeGente(0, 0x101))
     }
 }

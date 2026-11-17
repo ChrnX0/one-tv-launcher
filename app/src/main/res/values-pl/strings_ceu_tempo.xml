@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor que reage ao tempo, caminho 2 (17/11/2026): frase do tempo, curiosidades do céu e o tema "Céu de verdade". -->
+<resources>
+    <string name="tema_ceu">Prawdziwe niebo</string>
+    <string name="ceu_credito">Chmury: NOAA GOES / NASA GIBS · Mapa: Natural Earth</string>
+    <string name="ft_chuva_min">Deszcz za około %1$d min</string>
+    <string name="ft_para_min">Deszcz ustanie za około %1$d min</string>
+    <string name="ft_chuva_hora">Deszcz około %1$s</string>
+    <string name="ft_para_hora">Deszcz ustanie około %1$s</string>
+    <string name="ft_chuva_segue">Deszcz przez najbliższe godziny</string>
+    <string name="ft_trovoada">Burza około %1$s</string>
+    <string name="ft_geada_hoje">Przymrozek dziś w nocy: chroń rośliny</string>
+    <string name="ft_geada_manha">Mroźny poranek: ubierz się ciepło</string>
+    <string name="ft_calor">Upał dziś (%1$d°): pij wodę</string>
+    <string name="ft_neblina">Mgła: uwaga na drodze</string>
+    <string name="ft_noite_fria">Zimna noc (%1$d°): ubierz się ciepło</string>
+    <string name="ft_secar">Dobry dzień na suszenie prania</string>
+    <string name="ft_amanha_chove">Jutro prawdopodobnie deszcz (%1$d%%)</string>
+    <string name="ft_ceu_limpo">Bezchmurnie: dobra noc na gwiazdy</string>
+    <string name="cu_uv_agora">UV %1$d teraz</string>
+    <string name="cu_uv_amanha">UV %1$d jutro</string>
+    <string name="cu_uv_faixa">kapelusz i krem od %1$s do %2$s</string>
+    <string name="cu_uv_d2">krem z filtrem, jeśli wychodzisz</string>
+    <string name="cu_uv_d3">kapelusz i krem</string>
+    <string name="cu_uv_d4">unikaj słońca w południe</string>
+    <string name="cu_uv_d5">zostań w cieniu</string>
+    <string name="cu_ar_2">Umiarkowane powietrze</string>
+    <string name="cu_ar_3">Powietrze złe dla wrażliwych</string>
+    <string name="cu_ar_4">Złe powietrze</string>
+    <string name="cu_ar_5">Bardzo złe powietrze</string>
+    <string name="cu_ar_6">Niebezpieczne powietrze</string>
+    <string name="cu_ar_d2">astma: okna zamknięte dziś</string>
+    <string name="cu_ar_d3">unikaj ćwiczeń na zewnątrz</string>
+    <string name="cu_ar_d4">wszyscy: mniej czasu na zewnątrz</string>
+    <string name="cu_ar_d5">zostań w domu, okna zamknięte</string>
+    <string name="cu_estacao">Stacja kosmiczna o %1$s</string>
+    <string name="cu_estacao_d">%1$d min · %2$s → %3$s</string>
+    <string name="cu_meteoros">Deszcz meteorów dziś w nocy</string>
+    <string name="cu_meteoros_d">%1$s · do %2$d na godzinę</string>
+    <string name="cu_eclipse">Zaćmienie Słońca %1$s</string>
+    <string name="cu_eclipse_d">nigdy nie patrz prosto w słońce</string>
+    <string name="cu_lua_cheia">Pełnia dziś</string>
+    <string name="cu_superlua">Superpełnia dziś</string>
+    <string name="cu_lua_cheia_d">wschodzi na wschodzie o zmierzchu</string>
+    <string name="cu_lua_nova">Nów</string>
+    <string name="cu_lua_nova_d">ciemne niebo: najlepsze na gwiazdy</string>
+    <string name="cu_planeta">%1$s wysoko o %2$s</string>
+    <string-array name="ceu_rumos">
+        <item>północ</item>
+        <item>północny wschód</item>
+        <item>wschód</item>
+        <item>południowy wschód</item>
+        <item>południe</item>
+        <item>południowy zachód</item>
+        <item>zachód</item>
+        <item>północny zachód</item>
+    </string-array>
+    <string-array name="ceu_olhe">
+        <item>patrz na północ</item>
+        <item>patrz na północny wschód</item>
+        <item>patrz na wschód</item>
+        <item>patrz na południowy wschód</item>
+        <item>patrz na południe</item>
+        <item>patrz na południowy zachód</item>
+        <item>patrz na zachód</item>
+        <item>patrz na północny zachód</item>
+    </string-array>
+    <string-array name="ceu_planetas">
+        <item>Wenus</item>
+        <item>Mars</item>
+        <item>Jowisz</item>
+        <item>Saturn</item>
+    </string-array>
+    <string-array name="ceu_meteoros">
+        <item>Kwadrantydy</item>
+        <item>Lirydy</item>
+        <item>Eta Akwarydy</item>
+        <item>Delta Akwarydy</item>
+        <item>Perseidy</item>
+        <item>Orionidy</item>
+        <item>Leonidy</item>
+        <item>Geminidy</item>
+    </string-array>
+</resources>

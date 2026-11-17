@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Confortos do estudo do Stremio (16/11/2026): Conforto.kt, ConfigLauncherActivity, SincronizarActivity. -->
+<resources>
+    <string name="cf_resumo_escondido">सारांश तब तक छिपा है जब तक आप देख न लें</string>
+    <string name="cf_spoiler">न देखे गए एपिसोड का सारांश छिपाएँ</string>
+    <string name="cf_spoiler_det">सारांश एपिसोड शुरू करने के बाद ही दिखता है</string>
+    <string name="cf_segundo">दूसरी भाषा</string>
+    <string name="cf_segundo_det">जब वीडियो में टीवी की भाषा में ऑडियो या उपशीर्षक न हों, तब इस्तेमाल होती है</string>
+    <string name="cf_nenhum">कोई नहीं</string>
+    <string name="cf_proximo">अगले एपिसोड की उलटी गिनती</string>
+    <string name="cf_proximo_det">अगला एपिसोड अपने आप शुरू होने से पहले कितना इंतज़ार करें</string>
+    <string name="cf_proximo_nao">अपने आप शुरू न करें</string>
+    <string name="cf_segundos">%1$d से</string>
+    <string name="cf_consent_titulo">%1$s को डेटा भेजें?</string>
+    <string name="cf_consent_texto">इसे चालू करने पर इस टीवी पर आपके चिह्नित और देखे गए शीर्षक और जहाँ आप रुके थे, इंटरनेट से %1$s को भेजे जाते हैं। ये आपके %1$s खाते में उसकी निजता नीति के अनुसार रहते हैं। आप कभी भी इसे बंद कर सकते हैं।</string>
+    <string name="cf_consent_sim">मैं सहमत हूँ</string>
+</resources>

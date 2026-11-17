@@ -30,6 +30,7 @@
     <string name="casa_vazio">No hay luces, enchufes ni escenas en Home Assistant.</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Luces y cámaras de Google</string>
+    <string name="casa_google_home_vazio">Esta cuenta de Google no tiene casa en Google Home</string>
     <string name="casa_resumo">Home Assistant · %1$d de %2$d encendidos</string>
     <string name="casa_resumo_so_cenas">Home Assistant · %1$d escenas</string>
     <string name="casa_secao_cenas">Escenas y scripts</string>

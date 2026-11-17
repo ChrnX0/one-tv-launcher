@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Receitas prontas (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="rec_titulo">यह टीवी किसके लिए है?</string>
+    <string name="rec_subtitulo">एक OK से टीवी तैयार। जब चाहें वापस कर सकते हैं।</string>
+    <string name="rec_vo">दादी का टीवी</string>
+    <string name="rec_vo_det">बड़े कार्ड जिनका नाम बोला जाता है, बड़े अक्षर और मदद माँगें बटन।</string>
+    <string name="rec_criancas">बच्चों का टीवी</string>
+    <string name="rec_criancas_det">सिर्फ़ बच्चों की सामग्री, सोने का समय और गेम्स कार्ड।</string>
+    <string name="rec_gamer">गेमर का टीवी</string>
+    <string name="rec_gamer_det">गेम्स कार्ड, गेम मोड (खेलते समय स्क्रीनसेवर और सूचनाएँ नहीं) और गेमपैड से गेम्स खुलते हैं।</string>
+    <string name="rec_aluguel">किराये वाला टीवी</string>
+    <string name="rec_aluguel_det">मेहमान मोड: स्वागत, होम स्क्रीन पर कुछ भी निजी नहीं और चेक-आउट पर सफ़ाई।</string>
+    <string name="rec_desfazer">वापस करें</string>
+    <string name="rec_desfazer_det">%1$s से पहले जैसा सब कुछ वापस करें।</string>
+    <string name="rec_ja_esta">यह टीवी पहले से ऐसे ही सेट है।</string>
+    <string name="rec_aviso_prende">सरल मोड सिर्फ़ PIN से बंद होता है। पक्का करें कि घर में किसी को PIN पता हो।</string>
+    <string name="rec_aviso_sem_pin">अभी PIN नहीं है, इसलिए कोई भी इसे बंद कर सकता है। फ़ोन पैनल में PIN बनाएँ।</string>
+    <string name="rec_aviso_plano">पेड प्लान चाहिए, इसलिए बंद रहेगा: %1$s।</string>
+    <string name="rec_voltar">वापस</string>
+    <string name="rec_aplicar">लागू करें</string>
+    <string name="rec_pin">टीवी की सेटिंग बदलने के लिए PIN</string>
+    <string name="rec_pronto">हो गया</string>
+    <string name="rec_aplicada">आपका टीवी तैयार है</string>
+    <string name="rec_aplicada_det">कुछ ऐसा बदला जो नहीं चाहिए था? वापस करें से सब पहले जैसा हो जाएगा।</string>
+    <string name="rec_desfeita">सब कुछ पहले जैसा हो गया।</string>
+    <string name="rec_linha">%1$s: %2$s</string>
+    <string name="rec_ligado">चालू</string>
+    <string name="rec_desligado">बंद</string>
+    <string name="rec_aj_hospede">मेहमान मोड</string>
+    <string name="rec_aj_visita">विज़िटर मोड</string>
+    <string name="rec_aj_simples">सरल मोड</string>
+    <string name="rec_aj_infantil">बच्चों का मोड</string>
+    <string name="rec_aj_dormir">सोने का समय</string>
+    <string name="rec_aj_texto">अक्षरों का आकार</string>
+    <string name="rec_aj_ler_foco">चुनी हुई चीज़ बोलकर पढ़ें</string>
+    <string name="rec_aj_som">हर बटन पर क्लिक की आवाज़</string>
+    <string name="rec_aj_jogos">गेम्स कार्ड</string>
+    <string name="rec_aj_modo_jogo">गेम मोड</string>
+    <string name="rec_aj_controle">गेमपैड से गेम्स खुलें</string>
+</resources>

@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK değiştirir · bunlar misafir modu açıkken kaybolur</string>
     <string name="cfg2_some_visita">misafirlerden gizli</string>
     <string name="cfg2_fica_visita">kalır</string>
-    <string name="cfg2_casa_det">Home Assistant’ınızın ışıkları, prizleri ve sahneleri</string>
+    <string name="cfg2_casa_det">Google Home veya Home Assistant’tan ışıklar, prizler ve sahneler</string>
     <string name="oc_titulo">Gizli uygulamalar</string>
     <string name="oc_subtitulo">OK bir uygulamayı ana ekranda gösterir veya gizler · gizliler önce gelir</string>
     <string name="oc_nenhum">Gizli uygulama yok · seçmek için OK</string>
@@ -91,7 +91,7 @@
     <string name="vp_pronto_det">Ana ekrana git.</string>
     <string name="vq_titulo">Görünümü paylaş</string>
     <string name="vq_det">Bu TV’nin görünümünü içeren bir QR kod gösterir: tema, metin boyutu, simgeler.</string>
-    <string name="vq_texto">Saklamak veya One TV kullanan birine göndermek için telefonunuzla tarayın.</string>
+    <string name="vq_texto">Saklamak veya Sofaly kullanan birine göndermek için telefonunuzla tarayın.</string>
     <string name="vq_fechar">Kapat</string>
     <string name="lh_titulo">Uygulama kartı boyutu</string>
     <string name="lh_det">Büyük kartlar koltuktan daha kolay görünür.</string>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor: variações de cada elemento (17/11/2026). -->
+<resources>
+    <string name="pv2_est_avisos">Estilo de los avisos</string>
+    <string name="pv2_est_avisos_det">cómo aparecen mensajes y recordatorios · OK cambia</string>
+    <string name="pv2_av_cartoes">Tarjetas de vidrio</string>
+    <string name="pv2_av_lista">Lista sin caja</string>
+    <string name="pv2_av_um">Uno a la vez</string>
+    <string name="pv2_est_textos">Estilo del saludo y la fecha</string>
+    <string name="pv2_est_textos_det">OK cambia</string>
+    <string name="pv2_tx_moderno">Moderno</string>
+    <string name="pv2_tx_serifa">Con serifa</string>
+    <string name="pv2_tx_maiusculas">Mayúsculas espaciadas</string>
+    <string name="pv2_est_linhas">Estilo de la línea del tiempo</string>
+    <string name="pv2_est_linhas_det">la frase del tiempo y la curiosidad · OK cambia</string>
+    <string name="pv2_ln_icones">Con iconos</string>
+    <string name="pv2_ln_vidro">Sobre vidrio oscuro</string>
+    <string name="pv2_ln_texto">Solo texto</string>
+    <string name="pv2_est_credito">Estilo del crédito de la foto</string>
+    <string name="pv2_est_credito_det">OK cambia</string>
+    <string name="pv2_cr_etiqueta">Etiqueta</string>
+    <string name="pv2_cr_discreto">Discreto</string>
+    <string name="cl_widget_linha">Una línea</string>
+    <string name="cl_widget_grande">Grande</string>
+    <string name="pv2_widget_det">cinco estilos · OK cambia</string>
+</resources>

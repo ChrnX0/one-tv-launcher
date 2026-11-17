@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
+<resources>
+    <string name="jogos_no_sofa">Sul divano</string>
+    <string name="jogos_continuar">Continua</string>
+    <string name="jogos_controle_pronto">pronto</string>
+    <string name="jogos_controle_carregar">da ricaricare</string>
+    <string name="jogos_parear_um">Associa un controller</string>
+    <string name="jogos_todos">Tutti</string>
+    <string name="turma_titulo">La tua compagnia</string>
+    <string name="turma_online">%1$d online</string>
+    <string name="turma_mais_online">+ %1$d online</string>
+    <string name="turma_na_voz">In vocale</string>
+    <string name="turma_ausente">assente</string>
+    <string name="turma_ocupado">occupato</string>
+    <string name="turma_status_online">online</string>
+    <string name="turma_ninguem">Nessuno online adesso</string>
+    <string name="turma_procurando">Cerco la tua compagnia…</string>
+    <string name="turma_sem_rede">Nessuna connessione a Discord adesso.</string>
+    <string name="turma_mostrar_titulo">Mostra la tua compagnia di Discord</string>
+    <string name="turma_mostrar_texto">Guarda sulla TV chi è online, chi gioca e chi è in vocale.</string>
+    <string name="turma_desligado_titulo">Il widget del server è disattivato</string>
+    <string name="turma_desligado_texto">In Discord: Impostazioni server, Widget, attiva Abilita widget del server.</string>
+    <string name="turma_qr_dica">Inquadra con il telefono per entrare in vocale. Si parla dal telefono.</string>
+    <string name="turma_aqui">%1$d della compagnia qui</string>
+    <string name="turma_jogando">%1$s gioca a %2$s</string>
+    <string name="turma_dois">%1$s e %2$s</string>
+    <string name="turma_e_mais">%1$s e altri %2$d</string>
+    <string name="turma_chamar">Chiama la compagnia</string>
+    <string name="turma_chamar_pergunta">Inviare nel canale Discord?</string>
+    <string name="turma_chamado_jogo">🎮 Giochiamo a %1$s? Sono sulla TV.</string>
+    <string name="turma_chamado">🎮 Giochiamo? Sono sulla TV.</string>
+    <string name="turma_mandar">Invia</string>
+    <string name="turma_enviado">La compagnia è stata chiamata su Discord.</string>
+    <string name="turma_espere">Aspetta un minuto prima di chiamare di nuovo.</string>
+    <string name="turma_falhou">Discord non l’ha ricevuto. Controlla internet o il webhook.</string>
+    <string name="turma_config_titulo">La tua compagnia di Discord</string>
+    <string name="turma_config_texto">1. In Discord: Impostazioni server, Widget, attiva Abilita widget del server.\n2. Nella stessa pagina, copia l’ID del server e scrivilo qui.\n\nPer il pulsante Chiama la compagnia, incolla il webhook di un canale nel pannello web della TV.</string>
+    <string name="turma_config_dica">ID del server (solo numeri)</string>
+    <string name="turma_config_guardar">Salva</string>
+    <string name="turma_config_tirar">Togli la compagnia</string>
+    <string name="turma_id_invalido">Questo non è un ID di server Discord (da 17 a 20 cifre).</string>
+</resources>

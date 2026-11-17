@@ -15,6 +15,11 @@ import java.net.URLEncoder
  * Android, modelo, uso da TV, quedas da semana e o tipo do último erro). Nada de nome, conta, rede, IP ou cidade, e a
  * tela mostra o texto inteiro que vai junto, antes de a pessoa enviar (ela ainda escreve o que aconteceu).
  * A montagem do texto e do link é pura (RelatarProblemaTest).
+ *
+ * 17/11/2026 (revisão dos degraus, item 2a): quem não é técnico não tem conta no GitHub, e o repositório de código vai
+ * fechar. Com um e-mail de suporte no build (BuildConfig.SUPORTE_EMAIL), o QR vira um "mailto:" que abre o app de
+ * e-mail do celular já preenchido; sem ele, continua o formulário do GitHub. Quando o servidor da Sofaly existir, o
+ * formulário sem conta entra aqui como terceira opção, na frente das duas.
  */
 object RelatarProblema {
     data class Dados(val versao: String, val codigo: Long, val android: String, val modelo: String, val uso: String,
@@ -37,15 +42,26 @@ object RelatarProblema {
     fun tipoDoErro(resumo: String): String =
         Regex("""([A-Za-z_$][\w$]*(?:Exception|Error))""").find(resumo)?.groupValues?.get(1) ?: "?"
 
-    fun link(repo: String, d: Dados): String {
-        fun c(t: String) = URLEncoder.encode(t, "UTF-8").replace("+", "%20")
-        return "https://github.com/$repo/issues/new?title=${c("[TV] ")}&labels=tv&body=${c(corpo(d))}"
-    }
+    private fun c(t: String) = URLEncoder.encode(t, "UTF-8").replace("+", "%20")
+
+    fun link(repo: String, d: Dados): String =
+        "https://github.com/$repo/issues/new?title=${c("[TV] ")}&labels=tv&body=${c(corpo(d))}"
+
+    /** E-mail plausível (um @, domínio com ponto, sem espaço nem caractere que quebre o mailto). */
+    fun emailValido(e: String) = Regex("""^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)+$""").matches(e.trim())
+
+    /** O link do e-mail: assunto com versão e modelo (a caixa de entrada já separa por aparelho), corpo igual ao do GitHub. */
+    fun mailto(email: String, d: Dados): String =
+        "mailto:${email.trim()}?subject=${c("[TV] ${d.modelo} · ${d.codigo}")}&body=${c(corpo(d).replace("**", ""))}"
+
+    /** Qual link vai no QR: e-mail se houver um válido no build; senão o GitHub. */
+    fun destino(email: String, repo: String, d: Dados): String =
+        if (emailValido(email)) mailto(email, d) else link(repo, d)
 
     fun dados(ctx: Context): Dados {
         val v = VitaisTv.resumo7(ctx)
         return Dados(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE.toLong(), Build.VERSION.RELEASE ?: "?", Build.MODEL ?: "?",
-            UsoTv.atual(ctx).name.lowercase(), v.quedas, v.travadas, RegistroErros.listar(ctx).firstOrNull()?.resumo)
+            UsoTv.atual(ctx).name.lowercase(), v.quedas, v.travadas, RegistroErros.listar(ctx).firstOrNull { it.daVersao(BuildConfig.VERSION_CODE.toLong()) }?.resumo)
     }
 }
 
@@ -68,11 +84,11 @@ class RelatarProblemaActivity : Activity() {
         // O que vai junto, sem o cabeçalho em branco para a pessoa escrever.
         texto.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, RelatarProblema.corpo(d).substringAfter("---\n").trim()).apply { textSize = 17f },
             LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(6) })
-        val ok = Estilo.linhaOpcao(this, getString(R.string.hos_bv_ok)).apply { setOnClickListener { finish() } }
+        val ok = Estilo.linhaOpcao(this, getString(R.string.fp_fechar)).apply { setOnClickListener { finish() } }   // era "Começar" (texto das boas-vindas do hóspede)
         texto.addView(ok, LinearLayout.LayoutParams(dp(220), -2).apply { topMargin = dp(20) })
         raiz.addView(texto, LinearLayout.LayoutParams(0, -2, 1f))
         val lado = (resources.displayMetrics.heightPixels * 0.5f).toInt()
-        raiz.addView(ImageView(this).apply { setImageBitmap(QrCodigo.bitmap(RelatarProblema.link(Config.ATUALIZACAO_REPO, d), lado)) },
+        raiz.addView(ImageView(this).apply { setImageBitmap(QrCodigo.bitmap(RelatarProblema.destino(BuildConfig.SUPORTE_EMAIL, Config.ATUALIZACAO_REPO, d), lado)) },
             LinearLayout.LayoutParams(lado, lado).apply { marginStart = dp(40) })
         setContentView(raiz)
         ok.requestFocus()

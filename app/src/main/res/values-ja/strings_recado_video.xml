@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Recado em vídeo (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="vid_de">%1$sさんからの動画</string>
+    <string name="vid_mural">動画を送りました</string>
+    <string name="vid_onde">見るには：設定 › 家族 › 家族の動画。</string>
+    <string name="vid_depois">あとで</string>
+    <string name="vid_assistir">見る</string>
+    <string name="vid_ok_para_assistir">OKを押すと再生します。</string>
+    <string name="vid_lista">家族の動画</string>
+    <string name="vid_lista_det">家族のリンクから届いた動画。それぞれ30日間残ります。OK長押しで削除。</string>
+    <string name="vid_nenhum">まだ動画はありません。</string>
+    <string name="vid_apagar">動画を削除</string>
+    <string name="vid_aceitar">動画を受け取る</string>
+    <string name="vid_aceitar_det">家族が30秒までの動画を送れます。勝手に再生されることはありません。</string>
+    <string name="vid_quantos">動画：%1$d</string>
+</resources>

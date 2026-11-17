@@ -11,14 +11,14 @@
   um endereço https; esta página só repassa o celular para a TV na rede de casa:
   http://<IP local>:<porto>/volta?code=...&state=<número>. Não guarda nem envia nada a mais ninguém. O código vale
   pouco tempo e não serve sem o segredo do app (que só a TV tem).
-  Só aceita IP de rede local (10.x, 172.16-31.x, 192.168.x), para não virar um redirecionador aberto.
+  Só aceita IP de rede local (10.x, 172.16-31.x, 192.168.x), sem zero à esquerda (010 seria lido como octal e viraria um IP público), para não virar um redirecionador aberto.
 -->
 <script>
 (function () {
   var q = new URLSearchParams(location.search);
   var msg = document.getElementById('msg');
   function falha(en, pt) { msg.innerHTML = ''; msg.append(en, document.createElement('br')); var s = document.createElement('span'); s.className = 'data'; s.textContent = pt; msg.append(s); }
-  var m = /^([0-9a-f]{32})_(\d{1,3}(?:\.\d{1,3}){3})_(\d{2,5})$/.exec(q.get('state') || '');
+  var m = /^([0-9a-f]{32})_((?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})_([1-9]\d{1,4})$/.exec(q.get('state') || '');
   if (!m) { falha('This link is not from your TV. Start again on the TV.', 'Este link não veio da sua TV. Comece de novo na TV.'); return; }
   var o = m[2].split('.').map(Number), porta = Number(m[3]);
   var local = o.every(function (n) { return n <= 255; }) &&

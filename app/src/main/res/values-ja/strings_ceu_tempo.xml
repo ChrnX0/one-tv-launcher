@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor que reage ao tempo, caminho 2 (17/11/2026): frase do tempo, curiosidades do céu e o tema "Céu de verdade". -->
+<resources>
+    <string name="tema_ceu">本物の空</string>
+    <string name="ceu_credito">雲: NOAA GOES / NASA GIBS · 地図: Natural Earth</string>
+    <string name="ft_chuva_min">あと約%1$d分で雨</string>
+    <string name="ft_para_min">あと約%1$d分で雨がやみます</string>
+    <string name="ft_chuva_hora">%1$sごろ雨</string>
+    <string name="ft_para_hora">%1$sごろ雨がやみます</string>
+    <string name="ft_chuva_segue">この先数時間は雨</string>
+    <string name="ft_trovoada">%1$sごろ雷雨のおそれ</string>
+    <string name="ft_geada_hoje">今夜は霜: 植物を守って</string>
+    <string name="ft_geada_manha">霜の朝: 暖かくして</string>
+    <string name="ft_calor">今日は猛暑(%1$d°): 水分補給を</string>
+    <string name="ft_neblina">霧: 運転に注意</string>
+    <string name="ft_noite_fria">冷える夜(%1$d°): 暖かくして</string>
+    <string name="ft_secar">洗濯物がよく乾く日</string>
+    <string name="ft_amanha_chove">明日は雨の見込み(%1$d%%)</string>
+    <string name="ft_ceu_limpo">晴れた夜空: 星を見るのに最適</string>
+    <string name="cu_uv_agora">現在のUV %1$d</string>
+    <string name="cu_uv_amanha">明日のUV %1$d</string>
+    <string name="cu_uv_faixa">%1$sから%2$sは帽子と日焼け止め</string>
+    <string name="cu_uv_d2">外出時は日焼け止めを</string>
+    <string name="cu_uv_d3">帽子と日焼け止め</string>
+    <string name="cu_uv_d4">正午の日差しを避けて</string>
+    <string name="cu_uv_d5">日陰にいましょう</string>
+    <string name="cu_ar_2">空気: 普通</string>
+    <string name="cu_ar_3">空気: 敏感な人に悪い</string>
+    <string name="cu_ar_4">空気: 悪い</string>
+    <string name="cu_ar_5">空気: とても悪い</string>
+    <string name="cu_ar_6">空気: 危険</string>
+    <string name="cu_ar_d2">ぜんそくの方は今日は窓を閉めて</string>
+    <string name="cu_ar_d3">屋外での運動は控えて</string>
+    <string name="cu_ar_d4">全員: 外出を短く</string>
+    <string name="cu_ar_d5">屋内で窓を閉めて</string>
+    <string name="cu_estacao">宇宙ステーション %1$s</string>
+    <string name="cu_estacao_d">%1$d分 · %2$s → %3$s</string>
+    <string name="cu_meteoros">今夜は流星群</string>
+    <string name="cu_meteoros_d">%1$s · 真夜中過ぎに1時間に最大%2$d個</string>
+    <string name="cu_eclipse">日食 %1$s</string>
+    <string name="cu_eclipse_d">太陽を直接見ないで</string>
+    <string name="cu_lua_cheia">今夜は満月</string>
+    <string name="cu_superlua">今夜はスーパームーン</string>
+    <string name="cu_lua_cheia_d">夕暮れに東から昇ります</string>
+    <string name="cu_lua_nova">新月</string>
+    <string name="cu_lua_nova_d">暗い空: 星を見るのに最適</string>
+    <string name="cu_planeta">%1$s %2$sに高く</string>
+    <string-array name="ceu_rumos">
+        <item>北</item>
+        <item>北東</item>
+        <item>東</item>
+        <item>南東</item>
+        <item>南</item>
+        <item>南西</item>
+        <item>西</item>
+        <item>北西</item>
+    </string-array>
+    <string-array name="ceu_olhe">
+        <item>北を見て</item>
+        <item>北東を見て</item>
+        <item>東を見て</item>
+        <item>南東を見て</item>
+        <item>南を見て</item>
+        <item>南西を見て</item>
+        <item>西を見て</item>
+        <item>北西を見て</item>
+    </string-array>
+    <string-array name="ceu_planetas">
+        <item>金星</item>
+        <item>火星</item>
+        <item>木星</item>
+        <item>土星</item>
+    </string-array>
+    <string-array name="ceu_meteoros">
+        <item>しぶんぎ座流星群</item>
+        <item>4月こと座流星群</item>
+        <item>みずがめ座η流星群</item>
+        <item>みずがめ座δ南流星群</item>
+        <item>ペルセウス座流星群</item>
+        <item>オリオン座流星群</item>
+        <item>しし座流星群</item>
+        <item>ふたご座流星群</item>
+    </string-array>
+</resources>

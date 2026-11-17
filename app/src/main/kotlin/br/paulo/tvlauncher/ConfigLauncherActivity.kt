@@ -46,6 +46,7 @@ class ConfigLauncherActivity : Activity() {
         const val ABA_CONTA = 1
         const val ABA_AVANCADO = 8
         private const val PIN_VALE_MS = 2 * 60_000L   // depois de acertar o PIN aqui, 2 min sem pedir de novo
+        private const val ESTADO_LIBERADO = "hospede_liberado"
     }
 
     private val trabalho = Executors.newSingleThreadExecutor()   // rede, PBKDF2 e PackageManager fora da thread da tela
@@ -60,8 +61,8 @@ class ConfigLauncherActivity : Activity() {
     private val destaque = Estilo.ACENTO
     private val ambar = Estilo.ATENCAO
     private val coral = Estilo.ERRO
-    private val fonteLeve = Fontes.manrope(200)
-    private val fonteMedia = Fontes.manrope(500)
+    private val fonteLeve = Fontes.nunito(200)
+    private val fonteMedia = Fontes.nunito(500)
 
     /** Uma aba do menu: título, explicação curta (aparece no alto do conteúdo) e quem monta o conteúdo. */
     private class Aba(val titulo: String, val explica: String, val montar: (LinearLayout) -> Unit)
@@ -93,6 +94,7 @@ class ConfigLauncherActivity : Activity() {
     private val itensMenu = ArrayList<TextView>()
     private var reconstruirAoVoltar = false   // voltou de outra tela (Android, canais bloqueados): redesenha a aba
     private var pinValidoAte = 0L
+    private var liberadoHospede = false   // modo hóspede: o PIN já foi acertado nesta visita às Configurações
     // Erros do PIN guardados (TentativasPin, como no player): fechar e abrir as Configurações não dá mais 5 tentativas.
     // Preferência própria do processo da HOME ("config_pin"); a do player ("player_pin") é do processo ":player".
     private val prefsPin by lazy { getSharedPreferences("config_pin", MODE_PRIVATE) }
@@ -101,12 +103,21 @@ class ConfigLauncherActivity : Activity() {
         super.onCreate(savedInstanceState)
         abaAtual = (savedInstanceState?.getInt(EXTRA_ABA) ?: intent.getIntExtra(EXTRA_ABA, 0)).coerceIn(0, abas.size - 1)
         // Modo hóspede (degrau 2): as Configurações só abrem com o PIN (o hóspede não desliga a limpeza nem mexe na TV).
-        if (ModoHospede.ativo(this) && savedInstanceState == null) {
-            setContentView(View(this).apply { background = Estilo.fundoTela(context) })
-            PinNaTela.pedir(this, getString(R.string.hos_pin_config), aoCancelar = { finish() }) { pinValidoAte = System.currentTimeMillis() + PIN_VALE_MS; abrirTela() }
-            return
-        }
+        // "liberado" vem do estado salvo só quando a tela foi recriada com o PIN já certo (controle/teclado ligado, giro);
+        // antes valia "savedInstanceState == null", e qualquer recriação abria sem PIN (achado de 17/11/2026).
+        liberadoHospede = savedInstanceState?.getBoolean(ESTADO_LIBERADO, false) ?: false
+        if (ModoHospede.ativo(this) && !liberadoHospede) { pedirPinHospede(); return }
         abrirTela()
+    }
+
+    /** Tela vazia + PIN; acertou = libera e desenha; errou ou cancelou = fecha. */
+    private fun pedirPinHospede() {
+        setContentView(View(this).apply { background = Estilo.fundoTela(context) })
+        PinNaTela.pedir(this, getString(R.string.hos_pin_config), aoCancelar = { finish() }) {
+            liberadoHospede = true
+            pinValidoAte = System.currentTimeMillis() + PIN_VALE_MS
+            abrirTela()
+        }
     }
 
     private fun abrirTela() {
@@ -118,6 +129,7 @@ class ConfigLauncherActivity : Activity() {
     override fun onSaveInstanceState(estado: Bundle) {
         super.onSaveInstanceState(estado)
         estado.putInt(EXTRA_ABA, abaAtual)
+        estado.putBoolean(ESTADO_LIBERADO, liberadoHospede)
     }
 
     override fun onDestroy() {
@@ -130,10 +142,14 @@ class ConfigLauncherActivity : Activity() {
     override fun onStop() {
         super.onStop()
         pinValidoAte = 0L   // saiu da tela: o PIN vale de novo só depois de digitar
+        // Saiu de verdade (HOME, outro app; não é só a tela sendo recriada): no modo hóspede, voltar pede o PIN de novo.
+        if (!isChangingConfigurations) liberadoHospede = false
     }
 
     override fun onRestart() {
         super.onRestart()
+        // Volta pelos recentes ou pelo botão voltar de outra tela: com o hóspede ligado, o PIN de novo.
+        if (ModoHospede.ativo(this) && !liberadoHospede) { pedirPinHospede(); return }
         if (reconstruirAoVoltar && ::conteudo.isInitialized) { reconstruirAoVoltar = false; recarregarAba() }
     }
 
@@ -145,6 +161,7 @@ class ConfigLauncherActivity : Activity() {
     // ================================================================ esqueleto: menu à esquerda, conteúdo à direita
 
     private fun montarTela(): View {
+        itensMenu.clear()   // a tela pode ser montada de novo (PIN do hóspede ao voltar): o menu antigo sai da lista
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)   // o grafite da HOME (sistema de design)
@@ -393,6 +410,49 @@ class ConfigLauncherActivity : Activity() {
             linhaQuadros.ligado(TaxaQuadros.alternar(this))
         }
         c.addView(linhaQuadros)
+        // Confortos do estudo do Stremio (16/11/2026; Conforto.kt): esconder spoiler, segundo idioma e a contagem do próximo.
+        lateinit var linhaSpoiler: LinhaCfg
+        linhaSpoiler = linha(getString(R.string.cf_spoiler), getString(R.string.cf_spoiler_det), chave = Conforto.semSpoiler(this)) {
+            linhaSpoiler.ligado(Conforto.alternarSpoiler(this))
+        }
+        c.addView(linhaSpoiler)
+        fun rotuloSegundo(cod: String?) = cod?.let { Conforto.nomeIdioma(it) } ?: getString(R.string.cf_nenhum)
+        lateinit var linhaSegundo: LinhaCfg
+        linhaSegundo = linha(getString(R.string.cf_segundo), getString(R.string.cf_segundo_det), valor = rotuloSegundo(Conforto.segundoIdioma(this))) {
+            val opcoes = listOf<String?>(null) + ConfortoRegras.SEGUNDOS
+            val atualS = Conforto.segundoIdioma(this)
+            Estilo.lista(this, getString(R.string.cf_segundo), opcoes.map { rotuloSegundo(it) }, listOf(opcoes.indexOf(atualS).coerceAtLeast(0))) { i ->
+                Conforto.definirSegundo(this, opcoes[i]); linhaSegundo.valor(rotuloSegundo(opcoes[i]))
+            }
+        }
+        c.addView(linhaSegundo)
+        fun rotuloContagem(s: Int) = if (s <= 0) getString(R.string.cf_proximo_nao) else getString(R.string.cf_segundos, s)
+        lateinit var linhaContagem: LinhaCfg
+        linhaContagem = linha(getString(R.string.cf_proximo), getString(R.string.cf_proximo_det), valor = rotuloContagem(Conforto.contagem(this))) {
+            val v = ConfortoRegras.CONTAGENS
+            Estilo.lista(this, getString(R.string.cf_proximo), v.map { rotuloContagem(it) }, listOf(v.indexOf(Conforto.contagem(this)).coerceAtLeast(0))) { i ->
+                Conforto.definirContagem(this, v[i]); linhaContagem.valor(rotuloContagem(v[i]))
+            }
+        }
+        c.addView(linhaContagem)
+        // Addons (16/11/2026): ver e remover aqui; instalar é pelo painel web (colar endereço é penoso no controle).
+        fun rotuloAddons() = AddonsTv.instalados(this).size.let { if (it == 0) getString(R.string.cf_nenhum) else it.toString() }
+        lateinit var linhaAddons: LinhaCfg
+        linhaAddons = linha(getString(R.string.ad_titulo), getString(R.string.ad_cfg_det), valor = rotuloAddons()) {
+            val todos = AddonsTv.instalados(this)
+            if (todos.isEmpty()) {
+                CaixaTv(this).setTitle(getString(R.string.ad_titulo)).setMessage(getString(R.string.ad_cfg_como))
+                    .setPositiveButton(getString(android.R.string.ok), null).show()
+                return@linha
+            }
+            Estilo.lista(this, getString(R.string.ad_cfg_remover_qual), todos.map { it.m.nome }, emptyList()) { i ->
+                val a = todos[i]
+                CaixaTv(this).setTitle(a.m.nome).setMessage(getString(R.string.ad_cfg_remover, a.m.nome))
+                    .setPositiveButton(getString(R.string.ad_cfg_remover_sim)) { _, _ -> AddonsTv.remover(this, a.base); linhaAddons.valor(rotuloAddons()) }
+                    .setNegativeButton(getString(R.string.sv_cancelar), null).show()
+            }
+        }
+        c.addView(linhaAddons)
         // Foto da conta Google na bolinha do perfil (FotoPerfil, 13/11/2026): abre a tela do código para o celular.
         secao(c, getString(R.string.fp_secao))
         c.addView(linha(getString(R.string.fp_linha), getString(R.string.fp_linha_det), seta = true) {
@@ -832,7 +892,8 @@ class ConfigLauncherActivity : Activity() {
         }, lp())
         // Plugins (degrau 3, PluginsTv): cartões de outros apps na linha Assistir. Ligar um plugin pede o PIN parental.
         c.addView(linha(getString(R.string.plg_titulo), getString(R.string.plg_cfg_det), seta = true) {
-            pedirPinParental(getString(R.string.plg_titulo)) {
+            // Título padrão ("PIN do controle parental"): só "Plugins" sobre um campo vazio não dizia o que digitar (Sala, 17/11).
+            pedirPinParental {
                 reconstruirAoVoltar = true
                 startActivity(Intent(this, PluginsActivity::class.java))
             }
@@ -854,7 +915,11 @@ class ConfigLauncherActivity : Activity() {
                     if (isDestroyed) return@post
                     if (arquivos.isEmpty()) { aviso(getString(R.string.fm_vazio)); return@post }
                     val atual = FundoMeuDados.arquivo(this)
-                    Estilo.lista(this, getString(R.string.fm_titulo), listOf(getString(R.string.fm_nenhum)) + arquivos.map { it.name },
+                    // Mesmo nome em pastas diferentes (ex.: Download/v1.png e Pictures/v1.png): mostra a pasta junto,
+                    // senão a lista tem duas linhas iguais e não dá para saber qual é qual (visto na Sala, 17/11/2026).
+                    val repetidos = arquivos.groupingBy { it.name }.eachCount().filterValues { it > 1 }.keys
+                    val nomes = arquivos.map { f -> if (f.name in repetidos) "${f.parentFile?.name ?: "?"}/${f.name}" else f.name }
+                    Estilo.lista(this, getString(R.string.fm_titulo), listOf(getString(R.string.fm_nenhum)) + nomes,
                         marcadas = listOf(arquivos.indexOfFirst { it == atual } + 1)) { i ->
                         FundoMeuDados.definirArquivo(this, arquivos.getOrNull(i - 1))
                         Tema.definir(this, if (i == 0) Tema.ESCURO else Tema.MEU)
@@ -886,8 +951,41 @@ class ConfigLauncherActivity : Activity() {
             TamanhoTexto.definir(this, TamanhoTexto.proximo(TamanhoTexto.atual(this)))
             recreate()
         }, lp())
-        // Fileira ou grade (layout flexível, LayoutHome): a HOME se refaz ao voltar.
-        c.addView(linha(getString(R.string.lh_arranjo), getString(R.string.lh_arranjo_det),
+        // Tela inicial em cruz (17/11/2026): a única; aqui só o desenho dos ícones (Objeto ou Símbolo). A HOME se refaz ao voltar.
+        // Fileira ou grade só valia para a tela antiga (que só volta por adb).
+        if (LayoutHome.cruz(this)) {
+            fun rotuloIcones() = getString(when (LayoutHome.iconesCruz(this)) {
+                IconeCruz.Estilo.OBJETO -> R.string.cruz_objeto
+                IconeCruz.Estilo.SIMBOLO -> R.string.cruz_simbolo
+                IconeCruz.Estilo.DUOTOM -> R.string.cruz_duotom
+            })
+            lateinit var linhaIcones: LinhaCfg
+            linhaIcones = linha(getString(R.string.cruz_icones), getString(R.string.cruz_icones_det), valor = rotuloIcones()) {
+                LayoutHome.proximoIconesCruz(this)
+                linhaIcones.valor(rotuloIcones())
+            }
+            c.addView(linhaIcones, lp())
+            // Barra de cima (Recua, Leve, Relógio grande ou a de sempre) e a arte do item em foco atrás da cruz.
+            fun rotuloBarra() = getString(when (LayoutHome.barraCruz(this)) {
+                LayoutHome.BarraCruz.RECUA -> R.string.cruz_barra_recua
+                LayoutHome.BarraCruz.LEVE -> R.string.cruz_barra_leve
+                LayoutHome.BarraCruz.RELOGIO -> R.string.cruz_barra_relogio
+                LayoutHome.BarraCruz.HOJE -> R.string.cruz_barra_capsulas
+            })
+            lateinit var linhaBarra: LinhaCfg
+            linhaBarra = linha(getString(R.string.cruz_barra), getString(R.string.cruz_barra_det), valor = rotuloBarra()) {
+                LayoutHome.proximaBarraCruz(this)
+                linhaBarra.valor(rotuloBarra())
+            }
+            c.addView(linhaBarra, lp())
+            fun rotuloArte() = getString(if (LayoutHome.arteCruz(this)) R.string.cruz_ligada else R.string.cruz_desligada)
+            lateinit var linhaArte: LinhaCfg
+            linhaArte = linha(getString(R.string.cruz_arte), getString(R.string.cruz_arte_det), valor = rotuloArte()) {
+                LayoutHome.definirArteCruz(this, !LayoutHome.arteCruz(this))
+                linhaArte.valor(rotuloArte())
+            }
+            c.addView(linhaArte, lp())
+        } else c.addView(linha(getString(R.string.lh_arranjo), getString(R.string.lh_arranjo_det),
             valor = getString(if (LayoutHome.grade(this)) R.string.lh_grade else R.string.lh_fileira)) {
             LayoutHome.definirGrade(this, !LayoutHome.grade(this))
             recarregarAba()
@@ -909,6 +1007,13 @@ class ConfigLauncherActivity : Activity() {
             linhaPacote.valor(rotuloPacote())   // a HOME redesenha sozinha ao voltar: o pacote entra na chave do cache
         }
         c.addView(linhaPacote, lp())
+        // Visuais prontos (revisão dos degraus, 1b, 17/11/2026): cada OK aplica o próximo da lista (VisualCodigo.PRONTOS).
+        fun rotuloPronto() = VisualCodigo.prontoAtual(VisualCodigoTv.atual(this))?.let { nomePronto(it.id) } ?: getString(R.string.vpr_meu)
+        c.addView(linha(getString(R.string.vpr_titulo), getString(R.string.vpr_det), valor = rotuloPronto()) {
+            val p = VisualCodigo.proximoPronto(VisualCodigoTv.atual(this))
+            VisualCodigoTv.aplicar(this, VisualCodigo.codificar(p.visual))
+            recreate()   // tema e tamanho do texto mudam a própria tela de Configurações
+        }, lp())
         // Tema por QR (degrau 1, 15/11/2026): mostra o código do visual desta TV num QR; o celular abre a página pública.
         c.addView(linha(getString(R.string.vq_titulo), getString(R.string.vq_det), seta = true) { mostrarQrVisual() }, lp())
         // Apps ocultos (14/11/2026): o card "Ocultos (N)" saiu da HOME; mostrar de volta é aqui.
@@ -967,6 +1072,70 @@ class ConfigLauncherActivity : Activity() {
 
     // ================================================================ aba: Tela e energia
 
+    /**
+     * Protetor v2 (17/11/2026, protótipo "Protetor Vivo 2"): fundo, relógio (estilo, lugar, tamanho), quando o resto
+     * aparece e o liga/desliga de cada elemento. OK passa para a próxima opção; vale no próximo protetor ([Protetor]).
+     */
+    private fun protetorV2(c: LinearLayout) {
+        fun escolha(titulo: Int, detalhe: Int, e: Protetor.Escolha, rotulos: Map<String, Int>) {
+            lateinit var l: LinhaCfg
+            l = linha(getString(titulo), getString(detalhe), valor = getString(rotulos.getValue(e.ler(this)))) {
+                val novo = e.proximo(e.ler(this)); e.gravar(this, novo); l.valor(getString(rotulos.getValue(novo)))
+            }
+            c.addView(l, lp())
+        }
+        escolha(R.string.pv2_fundo, R.string.pv2_fundo_det, Protetor.FUNDO,
+            mapOf(Protetor.FUNDO_TEMA to R.string.pv2_fundo_tema, Protetor.FUNDO_TERRA to R.string.pv2_fundo_terra))
+        // Relógio: a lista depende da língua da TV ("por extenso" só em português).
+        val lingua = java.util.Locale.getDefault().language
+        val nomesRelogio = mapOf(Protetor.REL_FINO to R.string.pv2_rel_fino, Protetor.REL_EDITORIAL to R.string.pv2_rel_editorial,
+            Protetor.REL_MONUMENTAL to R.string.pv2_rel_monumental, Protetor.REL_PONTEIROS to R.string.pv2_rel_ponteiros,
+            Protetor.REL_EXTENSO to R.string.pv2_rel_extenso, Protetor.REL_EMPILHADO to R.string.pv2_rel_empilhado)
+        lateinit var linhaRel: LinhaCfg
+        linhaRel = linha(getString(R.string.pv2_relogio), getString(R.string.pv2_relogio_det),
+            valor = getString(nomesRelogio.getValue(Protetor.relogio(this, lingua)))) {
+            val novo = Protetor.proximoRelogio(Protetor.relogio(this, lingua), lingua)
+            Protetor.RELOGIO.gravar(this, novo); linhaRel.valor(getString(nomesRelogio.getValue(novo)))
+        }
+        c.addView(linhaRel, lp())
+        escolha(R.string.pv2_posicao, R.string.pv2_posicao_det, Protetor.POSICAO,
+            mapOf(Protetor.POS_ALTO to R.string.pv2_pos_alto, Protetor.POS_BAIXO to R.string.pv2_pos_baixo, Protetor.POS_CENTRO to R.string.pv2_pos_centro))
+        escolha(R.string.pv2_tamanho, R.string.pv2_tamanho_det, Protetor.TAMANHO,
+            mapOf("normal" to R.string.pv2_tam_normal, "grande" to R.string.pv2_tam_grande))
+        escolha(R.string.pv2_mostrar, R.string.pv2_mostrar_det, Protetor.MOSTRAR,
+            mapOf(Protetor.MOSTRAR_SO_HORA to R.string.pv2_mostrar_so, Protetor.MOSTRAR_DE_VEZ to R.string.pv2_mostrar_vez,
+                Protetor.MOSTRAR_SEMPRE to R.string.pv2_mostrar_sempre))
+        // Variações de cada elemento (17/11/2026, Paulo: "variações também para o clima e todos os outros").
+        escolha(R.string.pv2_est_avisos, R.string.pv2_est_avisos_det, Protetor.AVISOS,
+            mapOf(Protetor.AVISOS_CARTOES to R.string.pv2_av_cartoes, Protetor.AVISOS_LISTA to R.string.pv2_av_lista,
+                Protetor.AVISOS_UM to R.string.pv2_av_um))
+        escolha(R.string.pv2_est_textos, R.string.pv2_est_textos_det, Protetor.TEXTOS,
+            mapOf(Protetor.TEXTOS_MODERNO to R.string.pv2_tx_moderno, Protetor.TEXTOS_SERIFA to R.string.pv2_tx_serifa,
+                Protetor.TEXTOS_MAIUSCULAS to R.string.pv2_tx_maiusculas))
+        escolha(R.string.pv2_est_linhas, R.string.pv2_est_linhas_det, Protetor.LINHAS,
+            mapOf(Protetor.LINHAS_ICONES to R.string.pv2_ln_icones, Protetor.LINHAS_VIDRO to R.string.pv2_ln_vidro,
+                Protetor.LINHAS_TEXTO to R.string.pv2_ln_texto))
+        escolha(R.string.pv2_est_credito, R.string.pv2_est_credito_det, Protetor.CREDITO,
+            mapOf(Protetor.CREDITO_ETIQUETA to R.string.pv2_cr_etiqueta, Protetor.CREDITO_DISCRETO to R.string.pv2_cr_discreto))
+    }
+
+    /** Liga/desliga de cada elemento do protetor (a hora não desliga), numa seção no fim da aba. */
+    private fun protetorElementos(c: LinearLayout) {
+        secao(c, getString(R.string.pv2_elementos))
+        val nomes = mapOf(Protetor.Elemento.SAUDACAO to R.string.pv2_el_saudacao, Protetor.Elemento.DATA to R.string.pv2_el_data,
+            Protetor.Elemento.LINHA_DIA to R.string.pv2_el_linha_dia, Protetor.Elemento.AGENDA to R.string.pv2_el_agenda,
+            Protetor.Elemento.FRASE to R.string.pv2_el_frase, Protetor.Elemento.CURIOSIDADES to R.string.pv2_el_curiosidades,
+            Protetor.Elemento.AVISOS to R.string.pv2_el_avisos, Protetor.Elemento.WIDGET to R.string.pv2_el_widget,
+            Protetor.Elemento.CREDITO to R.string.pv2_el_credito)
+        Protetor.Elemento.entries.forEach { e ->
+            lateinit var l: LinhaCfg
+            l = linha(getString(nomes.getValue(e)), getString(R.string.pv2_el_det), chave = Protetor.ligado(this, e)) {
+                Protetor.alternar(this, e); l.ligado(Protetor.ligado(this, e))
+            }
+            c.addView(l, lp())
+        }
+    }
+
     private fun abaEnergia(c: LinearLayout) {
         // OK passa para a próxima opção da lista e grava na hora.
         val opcoes = listOf(60_000, 5 * 60_000, 10 * 60_000, 15 * 60_000, 30 * 60_000, Int.MAX_VALUE)
@@ -985,16 +1154,19 @@ class ConfigLauncherActivity : Activity() {
         fun rotuloBarra(v: String) = getString(when (v) {
             Protetor.WIDGET_CARTOES -> R.string.cl_widget_cartoes
             Protetor.WIDGET_SOLTO -> R.string.cl_widget_solto
+            Protetor.WIDGET_LINHA -> R.string.cl_widget_linha
+            Protetor.WIDGET_GRANDE -> R.string.cl_widget_grande
             else -> R.string.cl_widget_faixa
         })
         lateinit var linhaBarra: LinhaCfg
-        linhaBarra = linha(getString(R.string.cl_linha_baixo), getString(R.string.cl_linha_baixo_det),
+        linhaBarra = linha(getString(R.string.cl_linha_baixo), getString(R.string.pv2_widget_det),
             valor = rotuloBarra(Protetor.widget(this))) {
             val novo = Protetor.proximoWidget(Protetor.widget(this))
             Protetor.definirWidget(this, novo)
             linhaBarra.valor(rotuloBarra(novo))
         }
         c.addView(linhaBarra, lp())
+        protetorV2(c)
         // (11/11/2026) Saiu a linha "Estilo do protetor": o protetor é um só (o da Galeria) e o TEMA decide o fundo
         // (pintura na Galeria, wallpaper escuro no Escuro). O "clássico" escolhido por engano deixava o Escuro diferente.
         // Desligar sozinha (AutoDesligar): depois de X min sem ninguém apertar o controle, avisa por 60 s e apaga a TV.
@@ -1010,6 +1182,7 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linhaDesligar, lp())
         linhaQr(c, DestinoPainel.FOTOS, R.string.qrd_fotos, R.string.qrd_fotos_det)
         linhaQr(c, DestinoPainel.MURAL, R.string.qrd_mural, R.string.qrd_mural_det)
+        protetorElementos(c)
         extrasDaAba(c, ExtrasAbas.Aba.ENERGIA)
     }
 
@@ -1074,7 +1247,8 @@ class ConfigLauncherActivity : Activity() {
         lateinit var chave: LinhaCfg
         chave = linha(getString(R.string.hos_titulo), getString(R.string.hos_det), chave = ModoHospede.ativo(this)) {
             if (ModoHospede.ativo(this)) ModoHospede.desligarComPin(this) { recarregarAba() }
-            else { ModoHospede.ligar(this); recarregarAba() }
+            else if (ModoHospede.ligar(this)) recarregarAba()
+            else android.widget.Toast.makeText(this, getString(R.string.emp_sem_pin), android.widget.Toast.LENGTH_LONG).show()   // sem PIN o modo trancaria a TV
         }
         c.addView(chave, lp())
         lateinit var linhaSaida: LinhaCfg
@@ -1355,6 +1529,8 @@ class ConfigLauncherActivity : Activity() {
     private fun extrasDaAba(c: LinearLayout, aba: ExtrasAbas.Aba, comSecao: Boolean = true) {
         val porNome = Extras.Chave.values().associateBy { it.name }
         val chaves = ExtrasAbas.daAba(aba, porNome.keys).mapNotNull { porNome[it] }
+            // "Entradas HDMI" num Chromecast (sem entrada) era uma chave que não faz nada (visto na Sala, 17/11/2026).
+            .filter { it != Extras.Chave.ENTRADAS_TV || EntradasTv.existe(this) }
         if (chaves.isEmpty()) return
         if (comSecao) secao(c, getString(R.string.cfg_extras_secao))
         for (k in chaves) {
@@ -1385,6 +1561,10 @@ class ConfigLauncherActivity : Activity() {
             mostrarAbasDoUso()
         }
         c.addView(linhaUso, lp())
+        // Degrau 4: receitas prontas ("Para quem é esta TV?"), com Desfazer (ReceitasTv.kt).
+        c.addView(linha(getString(R.string.rec_titulo), getString(R.string.rec_subtitulo), seta = true) {
+            startActivity(Intent(this, ReceitasActivity::class.java))
+        }, lp())
         // Diagnóstico de 1 botão (04/11/2026): o 1º da aba, para ser o OK mais rápido quando "o app parou".
         c.addView(linha(getString(R.string.cfg_diag), getString(R.string.cfg_diag_det), seta = true) {
             startActivity(Intent(this, DiagnosticoActivity::class.java))
@@ -1502,10 +1682,16 @@ class ConfigLauncherActivity : Activity() {
             secao(c, getString(R.string.cfg2_sec_ocultos_sistema))
             Config.APPS_OCULTAR.forEach { pacote ->
                 val rotulo = try {
-                    packageManager.getApplicationLabel(packageManager.getApplicationInfo(pacote, 0)).toString()
+                    // MATCH_UNINSTALLED_PACKAGES: oculto pelo dono, o app some do getApplicationInfo comum e a linha mostrava
+                    // "com.google.android.apps.tv.dreamx" em vez do nome (Sala, 17/11/2026).
+                    packageManager.getApplicationLabel(packageManager.getApplicationInfo(pacote,
+                        android.content.pm.PackageManager.MATCH_UNINSTALLED_PACKAGES)).toString()
                 } catch (e: Exception) { pacote }
                 lateinit var linhaApp: LinhaCfg
-                linhaApp = linha(rotulo, getString(R.string.cl_visivel), chave = !PrivilegioDO.estaOculto(this, pacote)) {
+                // O detalhe acompanha a chave: dizia "visível na TV" também com o app escondido (Sala, 17/11/2026).
+                fun detalheApp(visivel: Boolean) = getString(if (visivel) R.string.cl_visivel else R.string.cl_escondido)
+                val visivelAgora = !PrivilegioDO.estaOculto(this, pacote)
+                linhaApp = linha(rotulo, detalheApp(visivelAgora), chave = visivelAgora) {
                     // Fora da thread da tela: sem Device Owner o ocultar passa pelo shell e pode demorar (Congelar.kt).
                     val app = applicationContext
                     Fundo.rodar {
@@ -1514,7 +1700,7 @@ class ConfigLauncherActivity : Activity() {
                         val ocultoAgora = PrivilegioDO.estaOculto(app, pacote)
                         runOnUiThread {
                             if (isDestroyed) return@runOnUiThread
-                            if (mudou) linhaApp.ligado(!ocultoAgora) else linhaApp.detalhe(getString(R.string.cfg_nao_mudou_do))
+                            if (mudou) { linhaApp.ligado(!ocultoAgora); linhaApp.detalhe(detalheApp(!ocultoAgora)) } else linhaApp.detalhe(getString(R.string.cfg_nao_mudou_do))
                         }
                     }
                 }
@@ -1882,7 +2068,7 @@ class ConfigLauncherActivity : Activity() {
         /** Interruptor: ligado = acento (no foco, acento escuro); desligado = trilho apagado. */
         private fun pintarChave(sim: Boolean) {
             trilho?.background = Estilo.fundo(context,
-                when { sim && focada -> Estilo.ACENTO_NO_FOCO; sim -> Estilo.ACENTO; focada -> 0x330B0F17; else -> 0x33FFFFFF },
+                when { sim && focada -> Estilo.ACENTO_NO_FOCO; sim -> Estilo.ACENTO; focada -> 0x330E1020; else -> 0x33FFFFFF },
                 Estilo.RAIO_PILULA)
             bolinha?.background = GradientDrawable().apply {
                 shape = GradientDrawable.OVAL
@@ -1892,7 +2078,11 @@ class ConfigLauncherActivity : Activity() {
 
         /** Mostra o valor atual à direita (ex.: "5 min", "Escuro"). */
         fun valor(v: String) {
-            val t = tValor ?: Estilo.texto(context, Estilo.Papel.CORPO).also { direita.removeAllViews(); direita.addView(it); tValor = it }
+            // Uma linha só e largura com teto: um valor longo (ex.: nome de arquivo do "Meu fundo") espremia o título
+            // em "Meu…" (visto na Sala, 17/11/2026). MIDDLE guarda o começo, a extensão e o "›".
+            val t = tValor ?: Estilo.texto(context, Estilo.Papel.CORPO).apply {
+                setSingleLine(true); ellipsize = TextUtils.TruncateAt.MIDDLE; maxWidth = dp(360)
+            }.also { direita.removeAllViews(); direita.addView(it); tValor = it }
             t.text = "$v  ›"
             pintarTextos()
         }
@@ -1903,6 +2093,12 @@ class ConfigLauncherActivity : Activity() {
             pintarTextos()
         }
     }
+
+    private fun nomePronto(id: String) = getString(when (id) {
+        "leitura" -> R.string.vpr_leitura; "galeria" -> R.string.vpr_galeria; "galeria_grande" -> R.string.vpr_galeria_grande
+        "grade" -> R.string.vpr_grade; "grade_grande" -> R.string.vpr_grade_grande; "cores" -> R.string.vpr_cores
+        "cinema" -> R.string.vpr_cinema; else -> R.string.vpr_classico
+    })
 
     /** O QR do "Compartilhar visual": cartão por cima, com o link curto embaixo para quem não tem leitor de QR. */
     private fun mostrarQrVisual() {

@@ -20,12 +20,15 @@ val pessoal = Properties().apply {
 }
 // Texto Java entre aspas, com \ e " escapados (senão um valor com aspas quebra a compilação do BuildConfig).
 fun textoJava(v: String) = "\"" + v.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
-fun pessoalTexto(chave: String, padrao: String = "") = textoJava(pessoal.getProperty(chave, padrao).trim())
+// Build da Play (-Pplay, 17/11/2026): sai do PC do dono, que tem o pessoal.properties; cidade, coordenadas, apps fixos,
+// METAR e eclipses dele NÃO podem ir para o app de todos os clientes. Na Play só as chaves de serviço (chaveApp) vêm de lá.
+val dadosPessoais = if (project.hasProperty("play")) Properties() else pessoal
+fun pessoalTexto(chave: String, padrao: String = "") = textoJava(dadosPessoais.getProperty(chave, padrao).trim())
 // Chaves dos APLICATIVOS de filmes e séries (ServicosFilmes.kt, 14/11/2026): uma por projeto, nunca no git. No PC vêm do
 // pessoal.properties; no GitHub Actions, das variáveis de ambiente que o release.yml preenche com os secrets de mesmo nome.
 // Sem a chave, o serviço some da tela do launcher.
 fun chaveApp(nome: String) = textoJava((System.getenv(nome) ?: pessoal.getProperty(nome.lowercase(), "")).trim())
-fun pessoalNumero(chave: String, padrao: Double) = (pessoal.getProperty(chave)?.trim()?.toDoubleOrNull() ?: padrao).toString()
+fun pessoalNumero(chave: String, padrao: Double) = (dadosPessoais.getProperty(chave)?.trim()?.toDoubleOrNull() ?: padrao).toString()
 
 android {
     namespace = "br.paulo.tvlauncher"
@@ -51,7 +54,7 @@ android {
         buildConfigField("String", "CIDADE", pessoalTexto("cidade"))
         buildConfigField("double", "LATITUDE", pessoalNumero("latitude", 0.0))
         buildConfigField("double", "LONGITUDE", pessoalNumero("longitude", 0.0))
-        buildConfigField("boolean", "USAR_FAHRENHEIT", (pessoal.getProperty("fahrenheit")?.trim() == "true").toString())
+        buildConfigField("boolean", "USAR_FAHRENHEIT", (dadosPessoais.getProperty("fahrenheit")?.trim() == "true").toString())
         buildConfigField("String", "ESTACAO_METAR", pessoalTexto("estacao_metar"))
         buildConfigField("String", "APPS_FIXOS", pessoalTexto("apps_fixos"))
         buildConfigField("String", "APPS_ORDEM", pessoalTexto("apps_ordem",
@@ -73,6 +76,11 @@ android {
         val semLicencaNaPlay = setOf("TMDB_CHAVE", "SIMKL_ID")
         for (k in listOf("TMDB_CHAVE", "TRAKT_ID", "TRAKT_SEGREDO", "SIMKL_ID", "OPENSUBTITLES_CHAVE"))
             buildConfigField("String", k, if (project.hasProperty("play") && k in semLicencaNaPlay) "\"\"" else chaveApp(k))
+        // Degrau 2a (17/11/2026): e-mail que recebe o "Relatar um problema" (quem não tem conta no GitHub). Fora do git:
+        // Padrão = o e-mail do produto (Paulo, 17/11/2026: contact@sofaly.tv). pessoal.properties "suporte_email" ou a
+        // variável SUPORTE_EMAIL do repo trocam; um valor inválido faz o QR voltar ao formulário do GitHub.
+        buildConfigField("String", "SUPORTE_EMAIL", textoJava((System.getenv("SUPORTE_EMAIL")?.takeIf { it.isNotBlank() }
+            ?: pessoal.getProperty("suporte_email")?.takeIf { it.isNotBlank() } ?: "contact@sofaly.tv").trim()))
     }
 
     // Um APK por arquitetura (12/11/2026, pedido do dono: versões de 32 e 64 bits no GitHub).
@@ -200,6 +208,8 @@ dependencies {
     // mais comum de canal ao vivo; .ts direto (Xtream) já vem no exoplayer. Sem o media3-ui: a tela é nossa (Views).
     implementation("androidx.media3:media3-exoplayer:1.11.1")
     implementation("androidx.media3:media3-exoplayer-hls:1.11.1")
+    // Sessão de mídia dos players (SessaoMidia.kt, 17/11/2026): o sistema, o Gemini e o MCP passam a ver o que toca.
+    implementation("androidx.media3:media3-session:1.11.1")
     // Ideia 90: tradução de legenda NA TV (ML Kit, offline; modelo de ~30 MB baixado no primeiro uso). +~12 MB no APK.
     implementation("com.google.mlkit:translate:17.0.3")
     // Player completo (15/11/2026): FFmpeg (LGPL-2.1) e libass compilados por nós (nativo/compilar.sh), com cola própria

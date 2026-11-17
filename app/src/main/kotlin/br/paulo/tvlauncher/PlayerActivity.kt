@@ -22,6 +22,7 @@ import android.widget.TextView
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -54,6 +55,7 @@ import java.util.Locale
 class PlayerActivity : Activity() {
     companion object {
         const val EXTRA_CANAL = "canal"   // id do canal para abrir (vazio = o último assistido)
+        const val EXTRA_CANAL_NOME = "canal_nome"   // nome normalizado (JuntoRegras.normalizarCanal), vindo de outra TV da casa
         private const val ESCONDER_INFO_MS = 5_000L
         private const val ESPERA_NUMERO_MS = 1_500L
         private const val SEGURAR_FAVORITO_MS = 2_000L   // segurar OK este tempo põe/tira dos favoritos
@@ -84,6 +86,7 @@ class PlayerActivity : Activity() {
     private var visivel = false   // entre onStart e onStop: fora disso nada toca (nem a nova tentativa atrasada)
     private var modoImagem = PlayerImagem.Modo.AJUSTAR
     // TV de volta: o programa do passado que está tocando no lugar do ao vivo (null = ao vivo) e o que veio do servidor
+    private val sessao by lazy { SessaoMidia(this, "tv", soControle = false) }
     private var arquivo: TvDeVolta.Programa? = null
     private var arquivoLista: List<TvDeVolta.Programa> = emptyList()
     private var arquivoFuso: java.util.TimeZone = java.util.TimeZone.getDefault()
@@ -94,7 +97,7 @@ class PlayerActivity : Activity() {
     private val papel = Estilo.TEXTO       // cores do sistema de design (Estilo)
     private val suave = Estilo.TEXTO_2
     private val ambar = Estilo.ATENCAO
-    private val fonteMedia = Fontes.manrope(500)
+    private val fonteMedia = Fontes.nunito(500)
 
     private lateinit var video: SurfaceView
     private lateinit var info: LinearLayout
@@ -102,6 +105,7 @@ class PlayerActivity : Activity() {
     private lateinit var infoTitulo: TextView
     private lateinit var infoLinha: TextView
     private lateinit var infoHora: TextView
+    private lateinit var infoTeclas: TextView   // a linha de teclas muda no pausado e no passado (as teclas mudam)
     private lateinit var infoProgresso: ProgressBar
     private lateinit var vivo: TextView
     private lateinit var lista: PlayerListaTela
@@ -122,11 +126,15 @@ class PlayerActivity : Activity() {
         // Selo de gravação (pedido do dono, 15/11/2026): fica no canto de cima mesmo com a faixa escondida. Entra antes da
         // lista e do guia, que cobrem o selo quando abertos.
         seloGravando = TextView(this).apply {
-            textSize = 20f; typeface = Fontes.manrope(700); setTextColor(Estilo.ERRO); background = vidro(Estilo.RAIO)
+            textSize = 20f; typeface = Fontes.nunito(700); setTextColor(Estilo.ERRO); background = vidro(Estilo.RAIO)
             setPadding(dp(18), dp(8), dp(18), dp(10)); visibility = View.GONE
         }
         raiz.addView(seloGravando, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, dp(28), dp(Estilo.MARGEM_LATERAL), 0) })
         janelas = PlayerJanelas(this)
+        // Sessão junto (degrau 4): canal ao vivo = "mesmo canal" + reações; quem troca, a outra TV acompanha.
+        junto = JuntoNoPlayer(this, aplicar = { _, _ -> }, posicao = { 0L }, tocandoAgora = { player?.isPlaying == true },
+            trocarCanal = { nome -> juntoCanal(nome) }).also { it.ligar() }
+        intent.getStringExtra(EXTRA_CANAL_NOME)?.let { juntoPendente = it }
         lista = PlayerListaTela(this, aoAssistir = { c, chave -> escolherNaLista(c, chave) }, aoFavoritar = { alternarFavorito(it) }, simples = simples,
             aoBuscar = { buscar() }, aoFiltros = { abrirFiltros() }, aoOcultarGrupo = { alternarOculto(it) },
             aoGuia = { cs, nome -> abrirGrade(cs, nome) },
@@ -137,7 +145,7 @@ class PlayerActivity : Activity() {
             aoFechar = { grade.fechar(); if (lista.aberta) lista.voltarFoco() })
         raiz.addView(grade, FrameLayout.LayoutParams(-1, -1))
         numero = TextView(this).apply {
-            textSize = 56f; typeface = Fontes.manrope(600); setTextColor(papel); background = vidro(Estilo.RAIO)
+            textSize = 56f; typeface = Fontes.nunito(600); setTextColor(papel); background = vidro(Estilo.RAIO)
             setPadding(dp(22), dp(6), dp(22), dp(10)); visibility = View.GONE
         }
         raiz.addView(numero, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.START).apply { setMargins(dp(Estilo.MARGEM_LATERAL), dp(28), 0, 0) })
@@ -204,11 +212,13 @@ class PlayerActivity : Activity() {
         // Saiu da tela (HOME, outro app): solta o vídeo na hora (e a pausa curta junto: ela não sobrevive a sair).
         contarCanal(null)   // ideia 92: fecha os minutos do canal que estava tocando
         efeitos.soltar()
+        sessao.soltar()
         player?.release(); player = null
         pausa.descartar()   // a pausa curta é só memória do player: saiu, acabou
     }
 
     override fun onDestroy() {
+        junto?.desligar()
         Gravacoes.esquecer(mudouGravacao)
         tela.removeCallbacksAndMessages(null)
         disco.shutdown()   // não "Now": deixa terminar a última gravação (canal, recentes)
@@ -258,6 +268,7 @@ class PlayerActivity : Activity() {
                 if (externo != null) { if (!tocarPedido(externo)) mostrarAviso(getString(R.string.player_bloqueado)); return@post }
                 val pedido = Gravacoes.atual?.canalId ?: PlayerArmazem.ultimoCanal(this)   // gravando: abre no que grava
                 sintonizar(visiveis.firstOrNull { it.id == pedido } ?: visiveis.first(), guardarAnterior = false)
+                juntoPendente?.let { juntoPendente = null; juntoCanal(it) }
             }
             // O guia vem depois: pode levar alguns segundos (arquivo grande) e o canal já está tocando.
             val g = PlayerCarga.guia(this, lidos)
@@ -299,6 +310,7 @@ class PlayerActivity : Activity() {
         if (guardarAnterior && atual != null && atual?.id != c.id) anterior = atual
         atual = c
         contarCanal(c)
+        junto?.let { j -> j.tocandoTitulo(JuntoRegras.chave(JuntoRegras.Tipo.CANAL, null, nome = c.nome)); j.mudou(true, 0) }
         arquivo = null; atualizarSelo()   // trocar de canal (ou voltar ao player) é sempre ao vivo
         tentativas = 0
         gravarUltimo(c)
@@ -326,6 +338,7 @@ class PlayerActivity : Activity() {
             efeitos.aplicar(novo.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
             novo.addListener(ouvinte)
             player = novo
+            sessao.ligar(novo)   // o sistema, o Gemini e o MCP passam a ver o canal (só leitura: SessaoMidia)
         }
         // Algumas listas exigem um User-Agent próprio por canal: por isso a fábrica é montada a cada troca.
         val http = DefaultHttpDataSource.Factory()
@@ -338,6 +351,10 @@ class PlayerActivity : Activity() {
             if (deGravacao) setMimeType(MimeTypes.VIDEO_MP2T)
             // .m3u8 = HLS. Sem extensão conhecida, o Media3 descobre sozinho pelo conteúdo (ex.: .ts do Xtream).
             else if (url.substringBefore('?').endsWith(".m3u8", ignoreCase = true)) setMimeType(MimeTypes.APPLICATION_M3U8)
+            // O que a sessão de mídia mostra: o canal e, se o guia souber, o programa de agora.
+            val agora = System.currentTimeMillis()
+            val prog = c.guiaId.takeIf { it.isNotEmpty() }?.let { guia.proximos(it, agora, 1) }?.firstOrNull()?.takeIf { agora >= it.inicio }
+            setMediaMetadata(MediaMetadata.Builder().setTitle(c.nome).setArtist(prog?.titulo).setStation(c.nome).build())
         }.build()
         val fonte = if (deGravacao) FontePastas.Fabrica(this, http) else http
         p.setMediaSource(DefaultMediaSourceFactory(fonte).createMediaSource(item))
@@ -516,7 +533,7 @@ class PlayerActivity : Activity() {
         }
         val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
         infoNumero = TextView(this).apply {
-            textSize = 22f; typeface = Fontes.manrope(600); setTextColor(Estilo.FUNDO); gravity = Gravity.CENTER
+            textSize = 22f; typeface = Fontes.nunito(600); setTextColor(Estilo.FUNDO); gravity = Gravity.CENTER
             background = Estilo.fundo(context, ambar, Estilo.RAIO_PEQUENO)
             // Largura conforme o número: canal 1655 quebrava em "165 / 5" na caixa fixa de 48 dp (visto na Sala, 14/11/2026).
             maxLines = 1; minWidth = dp(48); setPadding(dp(8), 0, dp(8), 0)
@@ -539,9 +556,10 @@ class PlayerActivity : Activity() {
             progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA)
         }
         info.addView(infoProgresso, LinearLayout.LayoutParams(-1, dp(4)).apply { topMargin = dp(12) })
-        info.addView(TextView(this).apply {
+        infoTeclas = TextView(this).apply {
             text = getString(R.string.player_teclas); textSize = 14f; setTextColor(Estilo.TEXTO_3)
-        }, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(10) })
+        }
+        info.addView(infoTeclas, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(10) })
         return info
     }
 
@@ -601,6 +619,10 @@ class PlayerActivity : Activity() {
         atualizarSelo()
         val c = atual ?: return
         val hora = SimpleDateFormat("HH:mm", Locale.getDefault())
+        // Pausado, a linha dizia "OK lista de canais", mas o OK continua (visto na Sala, 17/11/2026).
+        // No passado (TV de volta) as teclas já vão na linha de baixo (tvv_teclas): a linha fixa some.
+        infoTeclas.visibility = if (arquivo != null) View.GONE else View.VISIBLE
+        infoTeclas.setText(if (pausa.pausado) R.string.player_teclas_pausa else R.string.player_teclas)
         arquivo?.let { a -> infoDoArquivo(c, a, hora); return }
         vivo.text = "● " + getString(R.string.player_ao_vivo)
         vivo.setTextColor(Estilo.ERRO)
@@ -616,10 +638,12 @@ class PlayerActivity : Activity() {
         val atualProg = prog.firstOrNull()?.takeIf { agora >= it.inicio }
         infoNumero.text = c.numero.toString()
         infoTitulo.text = atualProg?.titulo ?: c.nome
-        val partes = mutableListOf(c.nome)
+        // Sem programa agora o título já é o nome do canal: não repetir embaixo ("TV Globo HD / TV Globo HD").
+        val partes = if (atualProg != null) mutableListOf(c.nome) else mutableListOf()
         atualProg?.let { partes += "${hora.format(Date(it.inicio))} – ${hora.format(Date(it.fim))}" }
         prog.getOrNull(if (atualProg != null) 1 else 0)?.let { partes += getString(R.string.player_a_seguir, it.titulo) }
         infoLinha.text = partes.joinToString("  ·  ")
+        infoLinha.visibility = if (partes.isEmpty()) View.GONE else View.VISIBLE
         // Quanto falta do programa de agora, como no card TV da HOME.
         infoHora.text = atualProg?.let { getString(R.string.home_faltam, minutosTexto(((it.fim - agora + 59_999) / 60_000).toInt())) + "  ·  " }
             .orEmpty() + hora.format(Date(agora))
@@ -658,7 +682,26 @@ class PlayerActivity : Activity() {
             if (EfeitosSom.vozClara(this)) marcadas += itens.size
             itens += getString(R.string.acess_voz) to { alternarSom(c, PlayerAcessivel.VOZ_CLARA) }
         }
-        Estilo.lista(this, c.nome, itens.map { it.first }, marcadas) { i -> itens[i].second() }
+        if (SomNoFone.ligado) marcadas += itens.size
+        itens += getString(R.string.fone_menu) to { SomNoFone.janela(this) }
+        if (EntreTvs.ligado(this)) {
+            itens += getString(R.string.junto_menu) to { junto?.menu(c.nome, JuntoTvsProvider.tvs(this)) }
+            itens += getString(R.string.cont_menu) to { junto?.enviarPara(c.nome, JuntoTvsProvider.tvs(this), 0L, null) }
+        }
+        Estilo.lista(this, c.nome, itens.map { it.first }, marcadas, focoNaMarcada = false) { i -> itens[i].second() }
+    }
+
+    // ---------------------------------------------------------------- sessão junto (degrau 4)
+
+    private var junto: JuntoNoPlayer? = null
+    private var juntoPendente: String? = null   // canal pedido pela outra TV antes da lista carregar
+
+    /** A outra TV está no canal [nome] (normalizado): procura pelo nome aqui (o id muda de lista para lista). */
+    private fun juntoCanal(nome: String) {
+        if (visiveis.isEmpty()) { juntoPendente = nome; return }
+        val c = visiveis.firstOrNull { JuntoRegras.normalizarCanal(it.nome) == nome }
+        if (c == null) { mostrarAviso(getString(R.string.junto_sem_canal)); return }
+        if (c.id != atual?.id) { grade.fechar(); lista.fechar(); sintonizar(c) }
     }
 
     /**
@@ -675,7 +718,7 @@ class PlayerActivity : Activity() {
         }))
         val p = player ?: return
         if (antes != depois && arquivo == null) {
-            efeitos.soltar(); pausa.descartar(); p.release(); player = null
+            efeitos.soltar(); pausa.descartar(); sessao.soltar(); p.release(); player = null
             tocar(c)
         } else efeitos.aplicar(p.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
     }
@@ -863,6 +906,7 @@ class PlayerActivity : Activity() {
         infoTitulo.text = a.titulo
         infoLinha.text = listOf(c.nome, "${diaCurto(a.inicio)} ${hora.format(Date(a.inicio))} – ${hora.format(Date(a.fim))}",
             getString(R.string.tvv_teclas)).joinToString("  ·  ")
+        infoLinha.visibility = View.VISIBLE
         val pos = avanco.alvo.takeIf { it >= 0 } ?: player?.currentPosition ?: 0   // segurando ◀ ▶: mostra para onde vai
         infoHora.text = hora.format(Date(a.inicio + pos))
         infoProgresso.visibility = View.VISIBLE

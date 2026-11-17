@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Confortos do estudo do Stremio (16/11/2026): Conforto.kt, ConfigLauncherActivity, SincronizarActivity. -->
+<resources>
+    <string name="cf_resumo_escondido">시청하기 전까지 줄거리를 숨깁니다</string>
+    <string name="cf_spoiler">보지 않은 에피소드의 줄거리 숨기기</string>
+    <string name="cf_spoiler_det">줄거리는 에피소드를 시작한 뒤에만 표시됩니다</string>
+    <string name="cf_segundo">두 번째 언어</string>
+    <string name="cf_segundo_det">동영상에 TV 언어의 오디오나 자막이 없을 때 사용합니다</string>
+    <string name="cf_nenhum">없음</string>
+    <string name="cf_proximo">다음 에피소드 카운트다운</string>
+    <string name="cf_proximo_det">다음 에피소드가 자동으로 시작되기 전 대기 시간</string>
+    <string name="cf_proximo_nao">자동으로 시작하지 않음</string>
+    <string name="cf_segundos">%1$d초</string>
+    <string name="cf_consent_titulo">%1$s에 데이터를 보낼까요?</string>
+    <string name="cf_consent_texto">켜면 이 TV에서 표시하거나 시청한 작품과 멈춘 위치가 인터넷을 통해 %1$s(으)로 전송됩니다. 데이터는 %1$s 계정에 해당 서비스의 개인정보 규칙에 따라 보관됩니다. 언제든지 끌 수 있습니다.</string>
+    <string name="cf_consent_sim">동의합니다</string>
+</resources>

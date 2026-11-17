@@ -64,10 +64,20 @@ object CobrancaPlay {
     @Volatile private var cliente: BillingClient? = null
     @Volatile private var detalhes: Map<String, ProductDetails> = emptyMap()
     @Volatile private var aoMudar: ((Planos.Plano) -> Unit)? = null
+    /** As assinaturas ATIVAS da última consulta completa (para trocar de plano em vez de abrir uma 2ª assinatura). */
+    @Volatile private var ativas: List<Purchase> = emptyList()
 
     private fun cliente(ctx: Context): BillingClient = cliente ?: synchronized(this) {
         cliente ?: BillingClient.newBuilder(ctx.applicationContext)
-            .setListener { r, compras -> if (r.responseCode == BillingClient.BillingResponseCode.OK) tratar(ctx.applicationContext, compras.orEmpty()) }
+            // A lista do listener é PARCIAL (só a compra que acabou de acontecer): reconhece e então pergunta tudo de
+            // novo. Antes o plano era calculado dela e uma compra pendente (ou um Pro comprado por quem tem Ultra)
+            // rebaixava quem já paga.
+            .setListener { r, compras ->
+                if (r.responseCode == BillingClient.BillingResponseCode.OK) {
+                    reconhecer(compras.orEmpty())
+                    atualizar(ctx.applicationContext)   // tratar() avisa a tela (aoMudar)
+                }
+            }
             .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
             .enableAutoServiceReconnection()
             .build().also { cliente = it }
@@ -105,15 +115,22 @@ object CobrancaPlay {
 
     /** Compras que chegaram (da consulta ou da tela de compra): reconhece as novas e recalcula o plano. */
     private fun tratar(ctx: Context, compras: List<Purchase>) {
-        val ativas = compras.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }
-        for (p in ativas) if (!p.isAcknowledged) {
+        val ativasAgora = reconhecer(compras)
+        ativas = ativasAgora
+        val plano = planoDasCompras(ativasAgora.flatMap { it.products })
+        guardar(ctx, plano)
+        aoMudar?.invoke(plano)
+    }
+
+    /** Reconhece (acknowledge) as compras novas. Devolve as ativas (compradas, não pendentes). */
+    private fun reconhecer(compras: List<Purchase>): List<Purchase> {
+        val ativasAgora = compras.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }
+        for (p in ativasAgora) if (!p.isAcknowledged) {
             cliente?.acknowledgePurchase(AcknowledgePurchaseParams.newBuilder().setPurchaseToken(p.purchaseToken).build()) { r ->
                 Log.i(TAG, "reconhecida: ${r.responseCode}")
             }
         }
-        val plano = planoDasCompras(ativas.flatMap { it.products })
-        guardar(ctx, plano)
-        aoMudar?.invoke(plano)
+        return ativasAgora
     }
 
     /** Preço do primeiro plano-base do produto, já formatado pela Play ("R$ 9,90"); null antes da Play responder. */
@@ -129,8 +146,17 @@ object CobrancaPlay {
         val d = detalhes[produto] ?: return false
         val oferta = d.subscriptionOfferDetails?.firstOrNull()?.offerToken ?: return false
         aoMudar = { p -> a.runOnUiThread { mudou(p) } }
-        val params = BillingFlowParams.newBuilder().setProductDetailsParamsList(listOf(
-            BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(d).setOfferToken(oferta).build())).build()
+        val construtor = BillingFlowParams.newBuilder().setProductDetailsParamsList(listOf(
+            BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(d).setOfferToken(oferta).build()))
+        // Já assina o OUTRO plano: é troca, não uma 2ª assinatura (antes, Pro -> Ultra cobrava os dois).
+        // Subir para o Ultra: vale na hora, pagando a diferença; descer para o Pro: vale na próxima renovação.
+        ativas.firstOrNull { produto !in it.products && it.products.any { p -> p == PRODUTO_PRO || p == PRODUTO_ULTRA } }?.let { velha ->
+            val modo = if (produto == PRODUTO_ULTRA) BillingFlowParams.SubscriptionUpdateParams.ReplacementMode.CHARGE_PRORATED_PRICE
+                else BillingFlowParams.SubscriptionUpdateParams.ReplacementMode.DEFERRED
+            construtor.setSubscriptionUpdateParams(BillingFlowParams.SubscriptionUpdateParams.newBuilder()
+                .setOldPurchaseToken(velha.purchaseToken).setSubscriptionReplacementMode(modo).build())
+        }
+        val params = construtor.build()
         val r = cliente(a).launchBillingFlow(a, params)
         return r.responseCode == BillingClient.BillingResponseCode.OK
     }

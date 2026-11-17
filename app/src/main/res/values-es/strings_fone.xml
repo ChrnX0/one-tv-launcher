@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Som no fone (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="fone_menu">Sonido en auriculares (móvil)</string>
+    <string name="fone_titulo">Sonido en auriculares</string>
+    <string name="fone_texto">Escanea con un móvil en el Wi-Fi de casa y conecta los auriculares. Hasta %1$d móviles. La TV se silencia mientras alguien escucha; al cerrar la página vuelve el sonido.</string>
+    <string name="fone_ouvindo">Escuchando: %1$d de %2$d</string>
+    <string name="fone_fechar">Cerrar</string>
+    <string name="fone_parar">Detener</string>
+    <string name="fone_sem_rede">La TV no está en la red de casa.</string>
+</resources>

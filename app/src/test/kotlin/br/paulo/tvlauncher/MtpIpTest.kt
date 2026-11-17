@@ -30,13 +30,15 @@ class MtpIpTest {
     private lateinit var servico: MtpServico
     private val pedidos = ArrayList<String>()
     @Volatile private var deixa = true
-    private val ap = Mtp.Aparelho("Sala de teste", "One TV", "1", "abc", ByteArray(16) { it.toByte() })
+    private val ap = Mtp.Aparelho("Sala de teste", "One TV", "1", "abc", ByteArray(16) { it.toByte() }, byteArrayOf(0, 0, 1, 0, 9))
+    /** Os pendrives "espetados" no teste. */
+    private val pendrives = java.util.concurrent.CopyOnWriteArrayList<MtpArmazem>()
 
     private fun subir(pasta: File, porta: Int = 0) {
         raiz = pasta
         PainelArquivos.raizTeste = raiz
         ss = ServerSocket(porta, 16, InetAddress.getLoopbackAddress())
-        servico = MtpServico(ss, ap, MtpLoja {}, { true }, { id, nome, _ -> synchronized(pedidos) { pedidos.add("$id $nome") }; deixa })
+        servico = MtpServico(ss, ap, MtpLoja({ listOf(MtpArmazem.interno()) + pendrives }) {}, { true }, { id, nome, _ -> synchronized(pedidos) { pedidos.add("$id $nome") }; deixa })
         Thread { servico.rodar() }.apply { isDaemon = true }.start()
     }
 
@@ -139,6 +141,57 @@ class MtpIpTest {
         assertEquals(listOf("ola.txt"), pc.handles(d).map { pc.nome(it) })   // o .parcial escondido não aparece
         // "tudo de uma vez" (pai 0) traz a árvore inteira
         assertEquals(3, pc.handles(0).size)
+        pc.fechar()
+    }
+
+    @Test fun pendriveViraArmazenamentoSeparadoEAvisaQuandoEntraESai() {
+        val pen = Files.createTempDirectory("pen").toFile()
+        File(pen, "Fotos").mkdir(); File(pen, "Fotos/a.jpg").writeText("jpg"); File(pen, "Android").mkdir()
+        val pc = Pc(); pc.entrar(); pc.op(Mtp.OP_ABRIR_SESSAO, 1)
+        fun lista(r: Triple<Int, List<Int>, ByteArray>) = Mtp.Leitor(r.third).let { l -> List(l.u32()) { l.u32() } }
+        fun evento(): Pair<Int, Int> {
+            val (t, b) = PtpIp.ler(pc.ev!!.getInputStream()); assertEquals(PtpIp.EVENTO, t)
+            val l = Mtp.Leitor(b); val cod = l.u16(); l.u32(); return cod to l.u32()
+        }
+        assertEquals(listOf(Mtp.ARMAZEM), lista(pc.op(Mtp.OP_ARMAZENS)))
+        // espeta o pendrive: o computador é avisado e passa a ver dois armazenamentos
+        val a = MtpArmazem(MtpArmazem.idDoPendrive(1), "Pendrive", "8991-1F25", true) { pen }
+        pendrives.add(a); servico.avisarArmazem(a.id, true)
+        assertEquals(Mtp.EV_ARMAZEM_ENTROU to 0x20001, evento())
+        assertEquals(listOf(Mtp.ARMAZEM, 0x20001), lista(pc.op(Mtp.OP_ARMAZENS)))
+        val info = Mtp.Leitor(pc.op(Mtp.OP_INFO_ARMAZEM, a.id).third)
+        assertEquals(0x0004, info.u16())   // de tirar
+        // cada um lista só o que é seu; a pasta Android do pendrive também fica de fora
+        val noPen = lista(pc.op(Mtp.OP_HANDLES, a.id, 0, Mtp.TODOS))
+        assertEquals(listOf("Fotos"), noPen.map { pc.nome(it) })
+        assertEquals(listOf("Download", "Movies"), lista(pc.op(Mtp.OP_HANDLES, Mtp.ARMAZEM, 0, Mtp.TODOS)).map { pc.nome(it) })
+        assertEquals(a.id, Mtp.Leitor(pc.op(Mtp.OP_INFO_OBJETO, noPen[0]).third).u32())
+        assertEquals(listOf("a.jpg"), pc.handles(noPen[0]).map { pc.nome(it) })
+        // grava no pendrive
+        val r = pc.op(Mtp.OP_MANDAR_INFO, a.id, noPen[0], mandar = infoPara("b.txt", 3))
+        assertEquals(Mtp.OK, r.first); assertEquals(a.id, r.second[0])
+        assertEquals(Mtp.OK, pc.op(Mtp.OP_MANDAR_OBJETO, mandar = "abc".toByteArray()).first)
+        assertEquals("abc", File(pen, "Fotos/b.txt").readText())
+        // mover do pendrive para a memória interna: recusado (o computador copia e apaga)
+        val d = pc.achar(Mtp.TODOS, "Download")
+        assertTrue(pc.op(Mtp.OP_MOVER, r.second[2], Mtp.ARMAZEM, d).first != Mtp.OK)
+        assertTrue(File(pen, "Fotos/b.txt").exists())
+        // tira o pendrive: aviso, e os números dele deixam de valer
+        pendrives.clear(); servico.avisarArmazem(a.id, false)
+        assertEquals(Mtp.EV_ARMAZEM_SAIU to 0x20001, evento())
+        assertEquals(Mtp.HANDLE_INVALIDO, pc.op(Mtp.OP_INFO_OBJETO, noPen[0]).first)
+        assertEquals(Mtp.ARMAZEM_INVALIDO, pc.op(Mtp.OP_INFO_ARMAZEM, a.id).first)
+        assertEquals(listOf("Download", "Movies"), pc.handles(Mtp.TODOS).map { pc.nome(it) })
+        pc.fechar(); pen.deleteRecursively()
+    }
+
+    @Test fun iconeDaMarcaVaiComoPropriedadeDoAparelho() {
+        val pc = Pc(); pc.entrar(); pc.op(Mtp.OP_ABRIR_SESSAO, 1)
+        val v = pc.op(Mtp.OP_VALOR_PROP_APARELHO, Mtp.PA_ICONE)
+        assertEquals(Mtp.OK, v.first)
+        assertArrayEquals(Mtp.listaBytes(ap.icone!!), v.third)
+        val d = Mtp.Leitor(pc.op(Mtp.OP_DESC_PROP_APARELHO, Mtp.PA_ICONE).third)
+        assertEquals(Mtp.PA_ICONE, d.u16()); assertEquals(Mtp.T_BYTES, d.u16())
         pc.fechar()
     }
 

@@ -82,7 +82,10 @@ class WidgetsTempoTest {
         assertEquals(Protetor.WIDGET_SOLTO, Protetor.normalizarWidget("solto"))
         assertEquals(Protetor.WIDGET_CARTOES, Protetor.proximoWidget(Protetor.WIDGET_FAIXA))
         assertEquals(Protetor.WIDGET_SOLTO, Protetor.proximoWidget(Protetor.WIDGET_CARTOES))
-        assertEquals(Protetor.WIDGET_FAIXA, Protetor.proximoWidget(Protetor.WIDGET_SOLTO))
+        // 17/11/2026: depois do "solto" vêm "linha" e "grande" (variações do Paulo); do último volta à faixa.
+        assertEquals(Protetor.WIDGET_LINHA, Protetor.proximoWidget(Protetor.WIDGET_SOLTO))
+        assertEquals(Protetor.WIDGET_GRANDE, Protetor.proximoWidget(Protetor.WIDGET_LINHA))
+        assertEquals(Protetor.WIDGET_FAIXA, Protetor.proximoWidget(Protetor.WIDGET_GRANDE))
     }
 
     @Test fun rotuloDoSolNaoCobreBarra() {

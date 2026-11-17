@@ -432,6 +432,7 @@
     <string name="home_destaque_pilha">%1$d ऐप · ▼ सामने वाला बदलता है</string>
     <string name="player_carregando">चैनल लोड हो रहे हैं…</string>
     <string name="player_carregando_canal">चैनल लोड हो रहा है…</string>
+    <string name="vod_carregando">वीडियो लोड हो रहा है…</string>
     <string name="player_sem_canais">अभी कोई चैनल सूची नहीं जोड़ी गई।</string>
     <string name="player_tentando">चैनल %1$d पर सिग्नल नहीं। फिर कोशिश हो रही है…</string>
     <string name="player_sem_sinal">चैनल %1$d ने जवाब नहीं दिया। ▲ ▼ या OK से दूसरा चुनें।</string>
@@ -439,6 +440,7 @@
     <string name="player_ao_vivo">लाइव</string>
     <string name="player_a_seguir">अगला: %1$s</string>
     <string name="player_teclas">▲ ▼ चैनल · OK चैनल सूची · OK 2 s दबाए रखें: पसंदीदा · ◀ पिछला चैनल · ▶▶ विकल्प · BACK बाहर</string>
+    <string name="player_teclas_pausa">⏯ या OK जारी रखें · ▶ विकल्प (लाइव पर लौटें) · ▲ ▼ चैनल · BACK बाहर</string>
     <string name="player_cat_busca">खोज: %1$s</string>
     <string name="player_acao_buscar">खोजें</string>
     <string name="player_acao_filtros">फ़िल्टर</string>

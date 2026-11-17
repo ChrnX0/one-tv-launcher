@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor: variações de cada elemento (17/11/2026). -->
+<resources>
+    <string name="pv2_est_avisos">Bildirim stili</string>
+    <string name="pv2_est_avisos_det">mesajlar ve hatırlatıcılar nasıl görünür · OK değiştirir</string>
+    <string name="pv2_av_cartoes">Cam kartlar</string>
+    <string name="pv2_av_lista">Kutusuz liste</string>
+    <string name="pv2_av_um">Birer birer</string>
+    <string name="pv2_est_textos">Selam ve tarih stili</string>
+    <string name="pv2_est_textos_det">OK değiştirir</string>
+    <string name="pv2_tx_moderno">Modern</string>
+    <string name="pv2_tx_serifa">Serifli</string>
+    <string name="pv2_tx_maiusculas">Aralıklı büyük harf</string>
+    <string name="pv2_est_linhas">Hava satırı stili</string>
+    <string name="pv2_est_linhas_det">hava cümlesi ve ilginç bilgi · OK değiştirir</string>
+    <string name="pv2_ln_icones">Simgeli</string>
+    <string name="pv2_ln_vidro">Koyu cam üzerinde</string>
+    <string name="pv2_ln_texto">Yalnız metin</string>
+    <string name="pv2_est_credito">Fotoğraf kaynağı stili</string>
+    <string name="pv2_est_credito_det">OK değiştirir</string>
+    <string name="pv2_cr_etiqueta">Etiket</string>
+    <string name="pv2_cr_discreto">Sade</string>
+    <string name="cl_widget_linha">Tek satır</string>
+    <string name="cl_widget_grande">Büyük</string>
+    <string name="pv2_widget_det">beş stil · OK değiştirir</string>
+</resources>

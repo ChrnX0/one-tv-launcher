@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Recado em vídeo (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="vid_de">Видео от: %1$s</string>
+    <string name="vid_mural">прислал(а) видео</string>
+    <string name="vid_onde">Посмотреть: Настройки › Семья › Видео семьи.</string>
+    <string name="vid_depois">Позже</string>
+    <string name="vid_assistir">Смотреть</string>
+    <string name="vid_ok_para_assistir">Нажмите OK, чтобы посмотреть.</string>
+    <string name="vid_lista">Видео семьи</string>
+    <string name="vid_lista_det">Присланы по семейной ссылке. Каждое хранится 30 дней. Удерживайте OK, чтобы удалить.</string>
+    <string name="vid_nenhum">Видео пока нет.</string>
+    <string name="vid_apagar">Удалить видео</string>
+    <string name="vid_aceitar">Принимать видео</string>
+    <string name="vid_aceitar_det">Семья может присылать видео до 30 секунд. Сами они не включаются.</string>
+    <string name="vid_quantos">Видео: %1$d</string>
+</resources>

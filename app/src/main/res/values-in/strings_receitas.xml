@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Receitas prontas (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="rec_titulo">TV ini untuk siapa?</string>
+    <string name="rec_subtitulo">Satu OK dan TV siap. Bisa dibatalkan kapan saja.</string>
+    <string name="rec_vo">TV Nenek</string>
+    <string name="rec_vo_det">Kartu besar dengan nama dibacakan, teks lebih besar, dan tombol Minta bantuan.</string>
+    <string name="rec_criancas">TV Anak-anak</string>
+    <string name="rec_criancas_det">Hanya konten anak, jam tidur, dan kartu Game.</string>
+    <string name="rec_gamer">TV Gamer</string>
+    <string name="rec_gamer_det">Kartu Game, mode game (tanpa screensaver atau notifikasi saat bermain), dan gamepad membuka Game.</string>
+    <string name="rec_aluguel">TV Sewaan</string>
+    <string name="rec_aluguel_det">Mode tamu: sambutan, tidak ada yang pribadi di layar utama, dan dibersihkan saat check-out.</string>
+    <string name="rec_desfazer">Urungkan</string>
+    <string name="rec_desfazer_det">Kembalikan semuanya seperti sebelum %1$s.</string>
+    <string name="rec_ja_esta">TV ini sudah diatur seperti ini.</string>
+    <string name="rec_aviso_prende">Mode sederhana hanya bisa ditutup dengan PIN. Pastikan ada orang di rumah yang tahu PIN-nya.</string>
+    <string name="rec_aviso_sem_pin">Belum ada PIN, jadi siapa pun bisa mematikannya. Buat PIN di panel ponsel.</string>
+    <string name="rec_aviso_plano">Perlu paket berbayar, jadi tetap mati: %1$s.</string>
+    <string name="rec_voltar">Kembali</string>
+    <string name="rec_aplicar">Terapkan</string>
+    <string name="rec_pin">PIN untuk mengubah pengaturan TV</string>
+    <string name="rec_pronto">Selesai</string>
+    <string name="rec_aplicada">TV Anda siap</string>
+    <string name="rec_aplicada_det">Ada yang berubah tanpa diinginkan? Urungkan mengembalikan semuanya.</string>
+    <string name="rec_desfeita">Semuanya kembali seperti semula.</string>
+    <string name="rec_linha">%1$s: %2$s</string>
+    <string name="rec_ligado">aktif</string>
+    <string name="rec_desligado">nonaktif</string>
+    <string name="rec_aj_hospede">Mode tamu</string>
+    <string name="rec_aj_visita">Mode kunjungan</string>
+    <string name="rec_aj_simples">Mode sederhana</string>
+    <string name="rec_aj_infantil">Mode anak</string>
+    <string name="rec_aj_dormir">Jam tidur</string>
+    <string name="rec_aj_texto">Ukuran teks</string>
+    <string name="rec_aj_ler_foco">Bacakan yang sedang dipilih</string>
+    <string name="rec_aj_som">Bunyi klik tiap tombol</string>
+    <string name="rec_aj_jogos">Kartu Game</string>
+    <string name="rec_aj_modo_jogo">Mode game</string>
+    <string name="rec_aj_controle">Gamepad membuka Game</string>
+</resources>

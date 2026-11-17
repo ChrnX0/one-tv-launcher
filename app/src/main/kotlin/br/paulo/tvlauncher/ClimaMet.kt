@@ -19,7 +19,7 @@ import java.util.TimeZone
  * resto do código já lê da Open-Meteo (current / hourly / daily, horas locais "2026-11-16T15:00"). Quem escolhe a fonte
  * é [BuildConfig.CLIMA_MET] (desligado por padrão em 16/11/2026: fonte do clima do produto ainda em estudo; liga com -Pclima_met).
  *
- * Diferenças que ficam (verificado na resposta real de 16/11/2026, Ribeirão Preto):
+ * Diferenças que ficam (verificado na resposta real de 16/11/2026, uma cidade do Brasil):
  *  - Fora da Escandinávia o MET NÃO manda chance de chuva. A chance aqui é ESTIMADA pela chuva prevista em mm e pelo
  *    símbolo (ver [chanceDaChuva]); é inferência, comparar com o Google antes de confiar.
  *  - Sem visibilidade: vira estimativa pela fração de neblina ([visibilidade]). Sem qualidade do ar (o cartão some).

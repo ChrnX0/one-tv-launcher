@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Som no fone (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="fone_menu">イヤホンで聞く（スマホ）</string>
+    <string name="fone_titulo">イヤホンで聞く</string>
+    <string name="fone_texto">家のWi-Fiにつないだスマホで読み取り、イヤホンを挿してください。最大%1$d台。聞いている間テレビは無音になり、ページを閉じると音が戻ります。</string>
+    <string name="fone_ouvindo">聞いている人：%1$d／%2$d</string>
+    <string name="fone_fechar">閉じる</string>
+    <string name="fone_parar">停止</string>
+    <string name="fone_sem_rede">テレビが家のネットワークにつながっていません。</string>
+</resources>

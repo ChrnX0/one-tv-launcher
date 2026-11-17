@@ -22,6 +22,8 @@
     <string name="coluna_marcado_assistido">%1$s oznaczono jako obejrzane</string>
     <string name="coluna_marcado_nao_assistido">%1$s oznaczono jako nieobejrzane</string>
     <string name="coluna_tirado_continuar">%1$s usunięto z Kontynuuj oglądanie</string>
+    <string name="coluna_menu_tirar_home">Usuń z ekranu głównego</string>
+    <string name="coluna_tirado_home">%1$s usunięto z ekranu głównego</string>
     <string name="coluna_etiqueta_concluida">Zakończony</string>
     <string name="coluna_etiqueta_nova_temporada">Nowy sezon</string>
     <string name="coluna_etiqueta_novos">Nowe odcinki</string>

@@ -32,15 +32,18 @@ class FfVideoDecodificador(formato: Format, tamanhoEntrada: Int, threads: Int) :
 
     companion object { private const val BUFFERS = 8 }
 
-    private val codec = FfCodecs.video(formato.sampleMimeType, formato.codecs) ?: throw FfErro("sem codec para ${formato.sampleMimeType}")
+    /** Falha na criação: solta a thread que o SimpleDecoder já começou (ver FfAudioDecodificador.falhar). */
+    private fun falhar(motivo: String): Nothing { super.release(); throw FfErro(motivo) }
+
+    private val codec = FfCodecs.video(formato.sampleMimeType, formato.codecs) ?: falhar("sem codec para ${formato.sampleMimeType}")
     @Volatile private var modo = C.VIDEO_OUTPUT_MODE_NONE
     private var ctx: Long
 
     init {
-        if (!FfNativo.disponivel) throw FfErro("FFmpeg não carregou")
+        if (!FfNativo.disponivel) falhar("FFmpeg não carregou")
         ctx = FfNativo.videoAbrir(codec, FfCodecs.extra(formato.sampleMimeType, formato.initializationData),
             maxOf(formato.width, 0), maxOf(formato.height, 0), threads)
-        if (ctx == 0L) throw FfErro("FFmpeg não abriu $codec")
+        if (ctx == 0L) falhar("FFmpeg não abriu $codec")
         setInitialInputBufferSize(tamanhoEntrada)
     }
 

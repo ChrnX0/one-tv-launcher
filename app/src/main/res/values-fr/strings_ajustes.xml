@@ -41,11 +41,11 @@
     <string name="cfg2_apps_visita_sub">OK bascule · celles-ci disparaissent en mode invité</string>
     <string name="cfg2_some_visita">masquée pour les invités</string>
     <string name="cfg2_fica_visita">reste</string>
-    <string name="cfg2_casa_det">Lampes, prises et scènes de votre Home Assistant</string>
+    <string name="cfg2_casa_det">Lampes, prises et scènes de Google Home ou Home Assistant</string>
     <string name="oc_titulo">Apps masquées</string>
     <string name="oc_subtitulo">OK affiche ou masque une app sur l’accueil · les masquées d’abord</string>
     <string name="oc_nenhum">Aucune app masquée · OK pour choisir</string>
-    <string name="oc_quantos">%1$d masquée(s) · OK pour les réafficher</string>
+    <string name="oc_quantos">Masquées : %1$d · OK pour les réafficher</string>
     <string name="oc_oculto">masquée</string>
     <string name="oc_aparece">sur l’accueil</string>
     <string name="oc_aviso_titulo">App masquée</string>
@@ -91,7 +91,7 @@
     <string name="vp_pronto_det">Aller à l’écran d’accueil.</string>
     <string name="vq_titulo">Partager le style</string>
     <string name="vq_det">Affiche un QR code avec le style de ce téléviseur : thème, taille du texte, icônes.</string>
-    <string name="vq_texto">Scannez-le avec votre téléphone pour le garder ou l’envoyer à quelqu’un qui a One TV.</string>
+    <string name="vq_texto">Scannez-le avec votre téléphone pour le garder ou l’envoyer à quelqu’un qui a Sofaly.</string>
     <string name="vq_fechar">Fermer</string>
     <string name="lh_titulo">Taille des cartes d’applis</string>
     <string name="lh_det">Les grandes cartes se voient mieux depuis le canapé.</string>

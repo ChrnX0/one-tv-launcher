@@ -33,10 +33,15 @@ object InfoTecnica {
         "audio/vorbis" to "Vorbis", "audio/flac" to "FLAC", "audio/raw" to "PCM",
     )
 
-    /** Quem está decodificando: "chip da TV" (MediaCodec), "FFmpeg" (nosso) ou "direto para a TV" (Dolby/DTS sem decodificar). */
+    /**
+     * Quem está decodificando: "chip da TV" (MediaCodec do fabricante), "Android" (decodificador de software do sistema:
+     * c2.android.*, OMX.google.*, android.*; 17/11/2026 o Vorbis aparecia como "chip da TV"), "FFmpeg" (nosso).
+     */
     fun quem(decodificador: String?, rotuloChip: String, rotuloFfmpeg: String): String = when {
         decodificador == null -> "—"
         decodificador.startsWith("ffmpeg") || decodificador.startsWith("Ff") -> rotuloFfmpeg
+        decodificador.startsWith("c2.android.") || decodificador.startsWith("OMX.google.") || decodificador.startsWith("android.") ->
+            "Android (${decodificador.removePrefix("OMX.google.").removePrefix("c2.android.").removePrefix("android.").take(28)})"
         else -> "$rotuloChip (${decodificador.removePrefix("OMX.").removePrefix("c2.").take(28)})"
     }
 
@@ -45,19 +50,20 @@ object InfoTecnica {
     }
 
     /** As linhas do quadro, já prontas. Rótulos traduzidos chegam de fora ([r]). */
-    fun linhas(e: Estado, r: Rotulos): List<String> {
+    fun linhas(e: Estado, r: Rotulos, local: Locale = Locale.getDefault()): List<String> {
+        // Números no formato da TV (17/11/2026: "Reserva: 13.3 s" com a TV em português).
         val l = ArrayList<String>()
-        val qps = if (e.qps > 0) String.format(Locale.ROOT, " %.3g %s", e.qps, r.qps) else ""
+        val qps = if (e.qps > 0) String.format(local, " %.3g %s", e.qps, r.qps) else ""
         if (e.videoMime != null) {
             l += "${r.video}: ${formato(e.videoMime, e.videoCodecs)} ${e.largura}×${e.altura}$qps · ${quem(e.decodVideo, r.chip, r.ffmpeg)}"
             l += "${r.perdidos}: ${e.perdidos}"
         }
         if (e.audioMime != null) {
-            val taxa = if (e.taxa > 0) " ${e.taxa / 1000.0} kHz".replace(".0 kHz", " kHz") else ""
+            val taxa = if (e.taxa > 0) " ${String.format(local, "%.1f", e.taxa / 1000.0)} kHz".replace(Regex("[.,]0 kHz"), " kHz") else ""
             l += "${r.audio}: ${formato(e.audioMime, e.audioCodecs)} ${canais(e.canais, r)}$taxa · ${quem(e.decodAudio, r.chip, r.ffmpeg)}"
         }
-        if (e.bitrate > 0) l += "${r.taxaBits}: ${String.format(Locale.ROOT, "%.1f", e.bitrate / 1_000_000.0)} Mb/s"
-        l += "${r.buffer}: ${String.format(Locale.ROOT, "%.1f", e.bufferMs / 1000.0)} s"
+        if (e.bitrate > 0) l += "${r.taxaBits}: ${String.format(local, "%.1f", e.bitrate / 1_000_000.0)} Mb/s"
+        l += "${r.buffer}: ${String.format(local, "%.1f", e.bufferMs / 1000.0)} s"
         if (e.atrasoAudioMs != 0) l += "${r.atraso}: ${if (e.atrasoAudioMs > 0) "+" else ""}${e.atrasoAudioMs} ms"
         if (e.dialogoAlto) l += r.dialogo
         l += "FFmpeg ${e.ffmpeg}"

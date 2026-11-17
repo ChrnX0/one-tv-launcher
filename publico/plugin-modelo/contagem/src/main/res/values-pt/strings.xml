@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nome">Contagem regressiva</string>
+    <string name="titulo_padrao">Faltam</string>
+    <string name="escolha">OK para escolher a data</string>
+    <string name="hoje">É hoje!</string>
+    <string name="passou">Já passou. OK para escolher outra data</string>
+    <string name="salvar">Salvar</string>
+    <plurals name="faltam"><item quantity="one">Falta %d dia</item><item quantity="other">Faltam %d dias</item></plurals>
+</resources>

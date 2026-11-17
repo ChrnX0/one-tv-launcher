@@ -52,7 +52,7 @@ object IdadesTmdb {
     private const val INTERVALO_MS = 50L          // no máximo 20 pedidos/s (na prática menos: cada pedido espera a resposta)
     private const val LOTE = 500                  // grava o arquivo a cada lote: uma noite interrompida não perde o feito
     const val PRAZO_MS = 40L * 60_000             // por noite; o que faltar continua na seguinte
-    @Volatile private var rodando = false
+    private val rodando = java.util.concurrent.atomic.AtomicBoolean(false)   // a madrugada e o EXTRAS "idades" juntos: só um laço
 
     /**
      * Classifica os filmes e as séries guardados (só o cache, nada é baixado da lista) que têm id do TMDB, até [prazoMs]
@@ -60,14 +60,13 @@ object IdadesTmdb {
      * Bloqueia (rede). Devolve quantos títulos ganharam classificação.
      */
     fun catalogo(ctx: Context, prazoMs: Long = PRAZO_MS, parar: () -> Boolean = { false }): Int {
-        if (rodando) return 0
-        rodando = true
+        if (!rodando.compareAndSet(false, true)) return 0
         try {
             val fim = System.currentTimeMillis() + prazoMs
             val filmes = runCatching { PlayerCarga.filmes(ctx, soCache = true) }.getOrDefault(emptyList())
-                .filter { !PlayerFiltro.ehAdulto(it.grupo) }.mapNotNull { it.tmdb ?: InfoExternaCache.guardado(ctx, it.chave)?.tmdb }
+                .filter { !PlayerFiltro.ehAdulto(it.grupo) }.mapNotNull { InfoExternaCache.tmdbSemRede(ctx, it.chave, it.tmdb) }
             val series = runCatching { PlayerCarga.series(ctx, soCache = true) }.getOrDefault(emptyList())
-                .filter { !PlayerFiltro.ehAdulto(it.grupo) }.mapNotNull { it.tmdb ?: InfoExternaCache.guardado(ctx, it.chave)?.tmdb }
+                .filter { !PlayerFiltro.ehAdulto(it.grupo) }.mapNotNull { InfoExternaCache.tmdbSemRede(ctx, it.chave, it.tmdb) }
             var total = 0
             for ((serie, ids) in listOf(false to filmes, true to series)) {
                 while (System.currentTimeMillis() < fim && !parar()) {
@@ -78,7 +77,7 @@ object IdadesTmdb {
             }
             Log.i(TAG, "madrugada: $total classificados (${filmes.size} filmes e ${series.size} séries com id do TMDB)")
             return total
-        } finally { rodando = false }
+        } finally { rodando.set(false) }
     }
 
     /** Quantos títulos já têm classificação guardada (filmes, séries), para o EXTRAS "idades". */

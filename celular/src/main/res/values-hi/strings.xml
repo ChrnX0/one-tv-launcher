@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App do celular (revisão dos degraus, T5, 17/11/2026). Caminho do menu = o mesmo texto da TV neste idioma. -->
+<resources>
+    <string name="cel_titulo">आपके टीवी</string>
+    <string name="cel_mandar_para">किस टीवी पर भेजें?</string>
+    <string name="cel_ler_qr">टीवी का QR कोड पढ़ें</string>
+    <string name="cel_vazio">अभी कोई टीवी नहीं है। टीवी पर सेटिंग्स › रिमोट एक्सेस › फ़ोन से साइन इन करें खोलें, फिर नीचे वाला बटन दबाएँ और कैमरा कोड की ओर करें।</string>
+    <string name="cel_pareada_segura">%1$s · सुरक्षित कनेक्शन</string>
+    <string name="cel_pareada_http">%1$s · घर का नेटवर्क</string>
+    <string name="cel_na_rede">नेटवर्क पर मिले</string>
+    <string name="cel_achada">%1$s · अभी जोड़ा नहीं गया</string>
+    <string name="cel_achada_explica">सुरक्षित कनेक्शन के लिए QR कोड एक बार पढ़ें: टीवी पर, सेटिंग्स › रिमोट एक्सेस › फ़ोन से साइन इन करें। या अभी खोलें और PIN से लॉग इन करें।</string>
+    <string name="cel_abrir_pin">PIN से खोलें</string>
+    <string name="cel_esquecer">भूल जाएँ</string>
+    <string name="cel_esquecer_explica">यह फ़ोन इस टीवी को भूल जाएगा। फिर से इस्तेमाल करने के लिए QR कोड पढ़ें।</string>
+    <string name="cel_aponte">टीवी पर दिख रहे कोड की ओर करें</string>
+    <string name="cel_qr_invalido">यह टीवी का कोड नहीं है। टीवी पर सेटिंग्स › रिमोट एक्सेस › फ़ोन से साइन इन करें खोलें।</string>
+    <string name="cel_cert_outro">टीवी ने दूसरे प्रमाणपत्र से जवाब दिया। अगर आपने उसे नया किया है, तो QR कोड फिर से पढ़ें।</string>
+    <string name="cel_casa_padrao">घर</string>
+    <string name="cel_casa_qual">यह टीवी किस घर में है?</string>
+    <string name="cel_casa_nova">दूसरा घर…</string>
+    <string name="cel_casa_dica">जैसे: समुद्र वाला घर, माँ का घर</string>
+</resources>

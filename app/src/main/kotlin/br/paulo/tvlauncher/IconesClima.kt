@@ -57,7 +57,9 @@ object IconesClima {
             codigo == 1 -> if (dia) "sun_behind_small_cloud" else "lua_nuvem_pouca"
             codigo == 2 -> if (dia) "sun_behind_cloud" else "lua_nuvem_muita"
             codigo == 3 -> "cloud"
-            codigo == 45 || codigo == 48 -> "fog"
+            // Neblina usa a nuvem: o "fog" do Fluent é um quadrado branco de nuvens e, pequeno na pílula do topo, parecia
+            // um ícone quebrado (visto na Sala, 17/11/2026). O texto ao lado já diz "Neblina".
+            codigo == 45 || codigo == 48 -> "cloud"
             codigo == 51 || codigo == 53 || codigo == 61 || codigo == 80 -> if (dia) "sun_behind_rain_cloud" else "cloud_with_rain"
             codigo in 55..67 || codigo == 81 || codigo == 82 -> "cloud_with_rain"
             codigo in 71..77 || codigo == 85 || codigo == 86 -> "cloud_with_snow"

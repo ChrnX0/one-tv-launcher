@@ -36,7 +36,8 @@ object Launcher {
     fun conferir(ctx: Context): Boolean = chamar(ctx, "conferir_nao_ligou")?.getBoolean("aceito") == true
 
     /**
-     * Confere a cada 30 min (alarme inexato: não acorda a TV à toa e não pede permissão de alarme exato). O launcher só
+     * Confere a cada 30 min (alarme inexato, sem permissão de alarme exato). RTC_WAKEUP de propósito: o "não ligou"
+     * é justamente com a TV dormindo; um RTC simples só conferiria quando alguém ligasse a TV. O launcher só
      * avisa entre a hora de costume + margem e 23:30, uma vez por dia.
      */
     fun agendar(ctx: Context) {

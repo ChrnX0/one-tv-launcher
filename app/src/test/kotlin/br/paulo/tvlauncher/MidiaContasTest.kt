@@ -41,6 +41,8 @@ class MidiaContasTest {
     @Test fun tipoPeloNome() {
         assertEquals(Upnp.Tipo.VIDEO, MidiaContas.tipoPorNome("Filme.MKV"))
         assertEquals(Upnp.Tipo.AUDIO, MidiaContas.tipoPorNome("a.flac"))
+        assertEquals(Upnp.Tipo.AUDIO, MidiaContas.tipoPorNome("Canyon-5.1-48khz-448kbit.ac3"))   // Sala, 17/11/2026
+        assertEquals(Upnp.Tipo.VIDEO, MidiaContas.tipoPorNome("velho.rmvb"))
         assertEquals(Upnp.Tipo.FOTO, MidiaContas.tipoPorNome("f.jpeg"))
         assertEquals(Upnp.Tipo.OUTRO, MidiaContas.tipoPorNome("leia-me"))
         assertEquals("a/b", MidiaContas.juntar("/a/", "/b"))

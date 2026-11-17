@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor que reage ao tempo, caminho 2 (17/11/2026): frase do tempo, curiosidades do céu e o tema "Céu de verdade". -->
+<resources>
+    <string name="tema_ceu">진짜 하늘</string>
+    <string name="ceu_credito">구름: NOAA GOES / NASA GIBS · 지도: Natural Earth</string>
+    <string name="ft_chuva_min">약 %1$d분 후 비</string>
+    <string name="ft_para_min">약 %1$d분 후 비 그침</string>
+    <string name="ft_chuva_hora">%1$s쯤 비</string>
+    <string name="ft_para_hora">%1$s쯤 비 그침</string>
+    <string name="ft_chuva_segue">앞으로 몇 시간 비</string>
+    <string name="ft_trovoada">%1$s쯤 뇌우 가능</string>
+    <string name="ft_geada_hoje">오늘 밤 서리: 식물을 보호하세요</string>
+    <string name="ft_geada_manha">서리 내린 아침: 따뜻하게 입으세요</string>
+    <string name="ft_calor">오늘 매우 더움(%1$d°): 물을 드세요</string>
+    <string name="ft_neblina">안개: 운전 조심</string>
+    <string name="ft_noite_fria">추운 밤(%1$d°): 따뜻하게 입으세요</string>
+    <string name="ft_secar">빨래 말리기 좋은 날</string>
+    <string name="ft_amanha_chove">내일 비 가능성(%1$d%%)</string>
+    <string name="ft_ceu_limpo">맑은 하늘: 별 보기 좋은 밤</string>
+    <string name="cu_uv_agora">지금 자외선 %1$d</string>
+    <string name="cu_uv_amanha">내일 자외선 %1$d</string>
+    <string name="cu_uv_faixa">%1$s~%2$s 모자와 선크림</string>
+    <string name="cu_uv_d2">외출 시 선크림</string>
+    <string name="cu_uv_d3">모자와 선크림</string>
+    <string name="cu_uv_d4">한낮 햇볕을 피하세요</string>
+    <string name="cu_uv_d5">그늘에 계세요</string>
+    <string name="cu_ar_2">공기 보통</string>
+    <string name="cu_ar_3">민감군에게 나쁜 공기</string>
+    <string name="cu_ar_4">나쁜 공기</string>
+    <string name="cu_ar_5">매우 나쁜 공기</string>
+    <string name="cu_ar_6">위험한 공기</string>
+    <string name="cu_ar_d2">천식: 오늘은 창문을 닫으세요</string>
+    <string name="cu_ar_d3">야외 운동을 피하세요</string>
+    <string name="cu_ar_d4">모두: 바깥 시간을 줄이세요</string>
+    <string name="cu_ar_d5">실내에서 창문을 닫으세요</string>
+    <string name="cu_estacao">우주정거장 %1$s</string>
+    <string name="cu_estacao_d">%1$d분 · %2$s → %3$s</string>
+    <string name="cu_meteoros">오늘 밤 유성우</string>
+    <string name="cu_meteoros_d">%1$s · 자정 이후 시간당 최대 %2$d개</string>
+    <string name="cu_eclipse">일식 %1$s</string>
+    <string name="cu_eclipse_d">태양을 절대 직접 보지 마세요</string>
+    <string name="cu_lua_cheia">오늘 밤 보름달</string>
+    <string name="cu_superlua">오늘 밤 슈퍼문</string>
+    <string name="cu_lua_cheia_d">해 질 녘 동쪽에서 떠요</string>
+    <string name="cu_lua_nova">그믐달(신월)</string>
+    <string name="cu_lua_nova_d">어두운 하늘: 별 보기에 최고</string>
+    <string name="cu_planeta">%1$s %2$s에 높이</string>
+    <string-array name="ceu_rumos">
+        <item>북</item>
+        <item>북동</item>
+        <item>동</item>
+        <item>남동</item>
+        <item>남</item>
+        <item>남서</item>
+        <item>서</item>
+        <item>북서</item>
+    </string-array>
+    <string-array name="ceu_olhe">
+        <item>북쪽을 보세요</item>
+        <item>북동쪽을 보세요</item>
+        <item>동쪽을 보세요</item>
+        <item>남동쪽을 보세요</item>
+        <item>남쪽을 보세요</item>
+        <item>남서쪽을 보세요</item>
+        <item>서쪽을 보세요</item>
+        <item>북서쪽을 보세요</item>
+    </string-array>
+    <string-array name="ceu_planetas">
+        <item>금성</item>
+        <item>화성</item>
+        <item>목성</item>
+        <item>토성</item>
+    </string-array>
+    <string-array name="ceu_meteoros">
+        <item>사분의자리 유성우</item>
+        <item>거문고자리 유성우</item>
+        <item>물병자리 에타 유성우</item>
+        <item>물병자리 델타 유성우</item>
+        <item>페르세우스자리 유성우</item>
+        <item>오리온자리 유성우</item>
+        <item>사자자리 유성우</item>
+        <item>쌍둥이자리 유성우</item>
+    </string-array>
+</resources>

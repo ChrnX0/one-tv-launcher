@@ -24,6 +24,7 @@ concurrency:
 jobs:
   copiar:
     if: vars.REPO_PUBLICO != '' && github.ref == 'refs/heads/main'
+    environment: espelho   # PUBLICO_TOKEN mora no Environment (só main)
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

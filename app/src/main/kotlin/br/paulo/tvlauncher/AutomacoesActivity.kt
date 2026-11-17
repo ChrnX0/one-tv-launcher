@@ -98,7 +98,9 @@ class AutomacoesActivity : Activity() {
 
         setContentView(raiz)
         val alvo = (0 until lista.childCount).map { lista.getChildAt(it) }.firstOrNull { (it.tag as? Linha)?.chave == focoAntes }
-        (alvo ?: (0 until lista.childCount).map { lista.getChildAt(it) }.firstOrNull { it.isFocusable })?.requestFocus()
+        // Depois do layout (Sala, 17/11/2026): pedido aqui direto, a tela abria sem nenhuma linha em foco e o 1º ▼ só achava a 1ª.
+        val primeira = alvo ?: (0 until lista.childCount).map { lista.getChildAt(it) }.firstOrNull { it.isFocusable }
+        lista.post { primeira?.requestFocus() }
     }
 
     private fun nomeGesto(g: RemapTeclas.Gesto) = getString(when (g) {

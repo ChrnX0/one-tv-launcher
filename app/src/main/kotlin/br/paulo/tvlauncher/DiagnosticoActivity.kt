@@ -40,7 +40,7 @@ class DiagnosticoActivity : Activity() {
     private val textoClaro = Estilo.TEXTO
     private val textoSuave = Estilo.TEXTO_2
     private val cores = intArrayOf(Estilo.ACENTO, Estilo.ATENCAO, Estilo.ERRO)   // ok, atenção, falha
-    private val fonteMedia = Fontes.manrope(600)
+    private val fonteMedia = Fontes.nunito(600)
 
     private lateinit var principal: View
     private lateinit var lista: LinearLayout

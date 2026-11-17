@@ -180,6 +180,8 @@ object LoginGoogle {
         if (email.isEmpty() || !u.optBoolean("email_verified", false)) { s.estado = Estado.RECUSADO; s.mensagem = "o Google não confirmou o e-mail"; return }
         val daTv = contasDaTv(app)
         if (email in daTv) {
+            // O nome da pessoa vem junto (escopo "profile"): o primeiro nome cabe na bolinha; sem ele, o nome inteiro.
+            Perfil.doLogin(app, email, u.optString("given_name").ifBlank { u.optString("name") })
             // O Google já manda o endereço da foto junto ("picture", por causa do escopo "profile"): aproveitamos para a
             // bolinha do perfil (FotoPerfil). Na tela "Buscar foto da conta" a foto vem ANTES do OK (a tela espera por
             // ela); no login do conector vem depois, para não atrasar quem está entrando.

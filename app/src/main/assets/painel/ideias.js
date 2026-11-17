@@ -190,11 +190,11 @@ $('arquivoOpml').addEventListener('change', async (ev) => {
   ev.target.value = '';
   if (!arq) return;
   if (arq.size > 500 * 1024) { mostrar($('statusPodcasts'), 'Lista grande demais.'); return; }
-  mostrar($('statusPodcasts'), 'Importando (a TV lê cada feed; pode levar um minuto)…');
+  mostrar($('statusPodcasts'), 'Importando…');
   try {
     const r = await ideias('POST', 'podcasts/opml', { opml: await arq.text() });
     desenharPodcasts(r.lista);
-    mostrar($('statusPodcasts'), r.falharam ? `Seguindo ${r.assinados}. Não abriram: ${r.falharam}.` : `Seguindo ${r.assinados}.`);
+    mostrar($('statusPodcasts'), r.falharam ? `Seguindo ${r.assinados}. Ficaram de fora: ${r.falharam}.` : `Seguindo ${r.assinados}.`);
   } catch (err) { mostrar($('statusPodcasts'), textoErro(err)); }
 });
 
@@ -331,4 +331,25 @@ $('btnSimplesSalvar').addEventListener('click', async () => {
     const r = await ideias('POST', 'simples', { apps });
     mostrar($('statusSimples'), r.apps.length ? r.apps.length + ' app(s) salvos.' : 'Sem apps marcados: vão os mais usados.');
   } catch (err) { mostrar($('statusSimples'), textoErro(err)); }
+});
+
+// ---------- visual de outra TV (tema por QR, degrau 1) ----------
+// POST/GET /api/extras/ideias/visual (PainelIdeias.kt). Aceita o código puro ou o link inteiro do QR (VisualCodigo.decodificar).
+
+$('btnVisualAplicar').addEventListener('click', async () => {
+  const codigo = $('codigoVisual').value.trim();
+  if (!codigo) { mostrar($('statusVisual'), 'Cole o código ou o link primeiro.'); return; }
+  try {
+    await ideias('POST', 'visual', { codigo });
+    mostrar($('statusVisual'), 'Visual aplicado. Volte à tela inicial da TV para ver.');
+    $('codigoVisual').value = '';
+  } catch (err) { mostrar($('statusVisual'), textoErro(err)); }
+});
+
+$('btnVisualCopiar').addEventListener('click', async () => {
+  try {
+    const r = await ideias('GET', 'visual');
+    try { await navigator.clipboard.writeText(r.link); mostrar($('statusVisual'), 'Link do visual desta TV copiado.'); }
+    catch (_) { $('codigoVisual').value = r.link; mostrar($('statusVisual'), 'Copie o link do campo acima.'); }
+  } catch (err) { mostrar($('statusVisual'), textoErro(err)); }
 });

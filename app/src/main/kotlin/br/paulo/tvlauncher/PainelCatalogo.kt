@@ -22,10 +22,10 @@ import android.widget.TextView
  */
 class PainelCatalogo(private val act: Activity) {
     private val titulo = TextView(act).apply {
-        textSize = TITULO_SP; typeface = Fontes.manrope(700); setTextColor(Estilo.TEXTO); maxLines = 1
+        textSize = TITULO_SP; typeface = Fontes.nunito(700); setTextColor(Estilo.TEXTO); maxLines = 1
         ellipsize = TextUtils.TruncateAt.END
     }
-    private val quantos = TextView(act).apply { textSize = TITULO_SP; typeface = Fontes.manrope(500); setTextColor(Estilo.TEXTO_2); maxLines = 1 }
+    private val quantos = TextView(act).apply { textSize = TITULO_SP; typeface = Fontes.nunito(500); setTextColor(Estilo.TEXTO_2); maxLines = 1 }
     private val pilulas = LinearLayout(act).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
     private val info = TextView(act).apply { textSize = Estilo.Leitura.FOCADO; setTextColor(Estilo.TEXTO_2); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
     private val sinopse = TextView(act).apply {
@@ -56,7 +56,7 @@ class PainelCatalogo(private val act: Activity) {
         this.pilulas.removeAllViews()
         pilulas.forEach { (t, destaque) ->
             this.pilulas.addView(TextView(act).apply {
-                text = t; textSize = PILULA_SP; typeface = Fontes.manrope(600); maxLines = 1
+                text = t; textSize = PILULA_SP; typeface = Fontes.nunito(600); maxLines = 1
                 setTextColor(if (destaque) Estilo.FUNDO else Estilo.TEXTO)
                 setPadding(dp(14), dp(5), dp(14), dp(6))
                 background = GradientDrawable().apply { cornerRadius = dp(18).toFloat(); setColor(if (destaque) Estilo.ATENCAO else Estilo.SUPERFICIE_ALTA) }
@@ -90,7 +90,7 @@ class PainelCatalogo(private val act: Activity) {
             val grade = android.widget.GridLayout(act).apply { columnCount = COLUNAS_LETRAS; useDefaultMargins = false }
             val celulas = ColunaRegras.LETRAS.map { letra ->
                 TextView(act).apply {
-                    text = letra.toString(); textSize = LETRA_SP; typeface = Fontes.manrope(700); gravity = Gravity.CENTER
+                    text = letra.toString(); textSize = LETRA_SP; typeface = Fontes.nunito(700); gravity = Gravity.CENTER
                     isFocusable = true; isClickable = true
                     val normal = GradientDrawable().apply { cornerRadius = dp(12).toFloat(); setColor(Estilo.SUPERFICIE_ALTA) }
                     val foco = GradientDrawable().apply { cornerRadius = dp(12).toFloat(); setColor(Estilo.FOCO) }
@@ -104,7 +104,7 @@ class PainelCatalogo(private val act: Activity) {
                 orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_HORIZONTAL
                 setPadding(dp(28), dp(24), dp(28), dp(28))
                 background = Estilo.fundo(act, Estilo.CARTAO, Estilo.RAIO, Estilo.VIDRO_BORDA)
-                addView(TextView(act).apply { text = act.getString(R.string.coluna_letra_titulo); textSize = TITULO_SP; typeface = Fontes.manrope(700); setTextColor(Estilo.TEXTO) },
+                addView(TextView(act).apply { text = act.getString(R.string.coluna_letra_titulo); textSize = TITULO_SP; typeface = Fontes.nunito(700); setTextColor(Estilo.TEXTO) },
                     LinearLayout.LayoutParams(-2, -2).apply { bottomMargin = dp(16) })
                 addView(grade)
             }

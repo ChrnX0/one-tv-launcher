@@ -41,11 +41,11 @@
     <string name="cfg2_apps_visita_sub">OK cambia · queste spariscono quando la modalità ospiti è attiva</string>
     <string name="cfg2_some_visita">nascosta agli ospiti</string>
     <string name="cfg2_fica_visita">resta</string>
-    <string name="cfg2_casa_det">Luci, prese e scene del tuo Home Assistant</string>
+    <string name="cfg2_casa_det">Luci, prese e scene di Google Home o Home Assistant</string>
     <string name="oc_titulo">App nascoste</string>
     <string name="oc_subtitulo">OK mostra o nasconde un’app nella schermata Home · le nascoste vengono prima</string>
     <string name="oc_nenhum">Nessuna app nascosta · OK per scegliere</string>
-    <string name="oc_quantos">%1$d nascoste · OK per mostrarle di nuovo</string>
+    <string name="oc_quantos">Nascoste: %1$d · OK per mostrarle di nuovo</string>
     <string name="oc_oculto">nascosta</string>
     <string name="oc_aparece">nella schermata Home</string>
     <string name="oc_aviso_titulo">App nascosta</string>
@@ -91,7 +91,7 @@
     <string name="vp_pronto_det">Vai alla schermata Home.</string>
     <string name="vq_titulo">Condividi l’aspetto</string>
     <string name="vq_det">Mostra un codice QR con l’aspetto di questa TV: tema, dimensione del testo, icone.</string>
-    <string name="vq_texto">Scansionalo con il telefono per conservarlo o inviarlo a chi ha One TV.</string>
+    <string name="vq_texto">Scansionalo con il telefono per conservarlo o inviarlo a chi ha Sofaly.</string>
     <string name="vq_fechar">Chiudi</string>
     <string name="lh_titulo">Dimensione delle schede app</string>
     <string name="lh_det">Le schede più grandi si vedono meglio dal divano.</string>

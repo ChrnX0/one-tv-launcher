@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela inicial em cruz (17/11/2026). -->
+<resources>
+    <string name="cruz_continuar">Continuar</string>
+    <string name="cruz_assistir">Ver</string>
+    <string name="cruz_ouvir">Escuchar</string>
+    <string name="cruz_jogar">Jugar</string>
+    <string name="cruz_aplicativos">Aplicaciones</string>
+    <string name="cruz_todos_apps">Todas las apps</string>
+    <string name="cruz_todos_apps_sub">Ver, mover y ocultar las apps</string>
+    <string name="cruz_radio">Radio</string>
+    <string name="cruz_radio_sub">Emisoras de todo el mundo</string>
+    <string name="cruz_filme">Película</string>
+    <string name="cruz_jogo">Juego</string>
+    <string name="cruz_icones">Iconos de la pantalla de inicio</string>
+    <string name="cruz_icones_det">Dibujo de Ver, Escuchar y Jugar</string>
+    <string name="cruz_objeto">Objeto</string>
+    <string name="cruz_simbolo">Símbolo</string>
+    <string name="cruz_duotom">Bitono</string>
+    <string name="cruz_barra">Barra superior</string>
+    <string name="cruz_barra_det">Perfil, búsqueda, voz, clima y reloj</string>
+    <string name="cruz_barra_recua">Se retira</string>
+    <string name="cruz_barra_leve">Ligera</string>
+    <string name="cruz_barra_relogio">Reloj grande</string>
+    <string name="cruz_barra_capsulas">Cápsulas</string>
+    <string name="cruz_arte">Arte del elemento enfocado</string>
+    <string name="cruz_arte_det">Detrás de la cruz, a la derecha</string>
+    <string name="cruz_ligada">Activada</string>
+    <string name="cruz_desligada">Desactivada</string>
+</resources>

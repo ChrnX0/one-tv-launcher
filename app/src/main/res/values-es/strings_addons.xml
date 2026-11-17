@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Addons no formato do Stremio, só HTTP (16/11/2026): AddonsActivity, ConfigLauncherActivity, MainActivity. -->
+<resources>
+    <string name="ad_titulo">Addons</string>
+    <string name="ad_destaque">Películas y series de tus addons</string>
+    <string name="ad_vazio">Aún no hay addons. Añade uno en el panel web (Ajustes, Addons). Aquí solo se reproduce vídeo por enlace directo (HTTP): torrent y P2P no son compatibles.</string>
+    <string name="ad_resumo">Catálogos de tus addons. Los addons son de terceros: quien instala uno responde por su contenido.</string>
+    <string name="ad_buscar">Buscar</string>
+    <string name="ad_buscar_dica">Nombre de la película o serie</string>
+    <string name="ad_carregando">Cargando…</string>
+    <string name="ad_falhou">El addon no respondió. Inténtalo de nuevo en un momento.</string>
+    <string name="ad_nada">Nada aquí.</string>
+    <string name="ad_mais">Más</string>
+    <string name="ad_tipo_filmes">Películas</string>
+    <string name="ad_tipo_series">Series</string>
+    <string name="ad_tipo_canais">Canales</string>
+    <string name="ad_temporada">Temporada %1$d</string>
+    <string name="ad_especiais">Especiales</string>
+    <string name="ad_episodio">%1$d. %2$s</string>
+    <string name="ad_sem_fontes">No hay ninguna fuente que se reproduzca aquí. Sofaly solo reproduce vídeo por enlace directo (HTTP).</string>
+    <string name="ad_fontes_resumo">Elige una fuente</string>
+    <string name="ad_dica_voltar">volver</string>
+    <string name="ad_cfg_det">Addons instalados. Para añadir uno, usa el panel web.</string>
+    <string name="ad_cfg_como">Para añadir un addon, abre el panel web del televisor en el móvil o el ordenador, ve a Ajustes, Addons, pega la dirección que termina en manifest.json y confirma con el PIN.</string>
+    <string name="ad_cfg_remover_qual">¿Qué addon quitar?</string>
+    <string name="ad_cfg_remover">%1$s se quitará de este televisor.</string>
+    <string name="ad_cfg_remover_sim">Quitar</string>
+</resources>

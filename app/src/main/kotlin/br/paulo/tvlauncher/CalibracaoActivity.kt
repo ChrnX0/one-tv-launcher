@@ -101,10 +101,15 @@ private class PadraoView(ctx: Context) : View(ctx) {
                 p.isAntiAlias = true
             }
         }
-        // Sempre branco: o título fica na faixa de cima (0 a 20% da altura), que é preta em todos os padrões. O preto
-        // do padrão 3 sumia no fundo preto.
+        // Título branco numa tarja preta: as barras de cor e as linhas de 1 pixel ocupam a tela inteira, e o branco sumia
+        // em cima da barra cinza e das linhas (Sala, 17/11/2026). A tarja cobre só o texto.
+        val titulo = "${atual + 1}/${Calibracao.NOMES.size}  ${Calibracao.NOMES[atual]}   ◀ ▶"
+        val x = w * 0.06f; val y = h * 0.10f
+        val folga = txt.textSize * 0.4f
+        p.color = Color.argb(220, 0, 0, 0)
+        c.drawRoundRect(x - folga, y + txt.ascent() - folga, x + txt.measureText(titulo) + folga, y + txt.descent() + folga, folga, folga, p)
         txt.color = Color.WHITE
-        c.drawText("${atual + 1}/${Calibracao.NOMES.size}  ${Calibracao.NOMES[atual]}   ◀ ▶", w * 0.06f, h * 0.10f, txt)
+        c.drawText(titulo, x, y, txt)
     }
 
     private fun faixas(c: Canvas, niveis: List<Int>, w: Float, h: Float, rotulos: Boolean = false) {

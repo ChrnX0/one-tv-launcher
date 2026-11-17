@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Som no fone (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="fone_menu">Ton über Kopfhörer (Handy)</string>
+    <string name="fone_titulo">Ton über Kopfhörer</string>
+    <string name="fone_texto">Mit einem Handy im WLAN zu Hause scannen und Kopfhörer anschließen. Bis zu %1$d Handys. Der TV ist stumm, solange jemand zuhört; Seite schließen bringt den Ton zurück.</string>
+    <string name="fone_ouvindo">Hören zu: %1$d von %2$d</string>
+    <string name="fone_fechar">Schließen</string>
+    <string name="fone_parar">Beenden</string>
+    <string name="fone_sem_rede">Der TV ist nicht im Heimnetz.</string>
+</resources>

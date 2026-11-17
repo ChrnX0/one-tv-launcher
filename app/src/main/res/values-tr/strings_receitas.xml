@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Receitas prontas (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="rec_titulo">Bu TV kimin için?</string>
+    <string name="rec_subtitulo">Tek bir OK ile TV hazır. İstediğin zaman geri alabilirsin.</string>
+    <string name="rec_vo">Büyükanne TV\'si</string>
+    <string name="rec_vo_det">Adı sesli okunan büyük kartlar, daha büyük yazı ve Yardım iste düğmesi.</string>
+    <string name="rec_criancas">Çocukların TV\'si</string>
+    <string name="rec_criancas_det">Yalnızca çocuk içeriği, uyku saati ve Oyunlar kartı.</string>
+    <string name="rec_gamer">Oyuncu TV\'si</string>
+    <string name="rec_gamer_det">Oyunlar kartı, oyun modu (oyun sırasında ekran koruyucu ve uyarı yok) ve oyun kumandası Oyunlar\'ı açar.</string>
+    <string name="rec_aluguel">Kiralık ev TV\'si</string>
+    <string name="rec_aluguel_det">Misafir modu: karşılama, ana ekranda kişisel bir şey yok ve çıkışta temizlik.</string>
+    <string name="rec_desfazer">Geri al</string>
+    <string name="rec_desfazer_det">Her şeyi %1$s öncesine döndür.</string>
+    <string name="rec_ja_esta">Bu TV zaten böyle ayarlı.</string>
+    <string name="rec_aviso_prende">Basit mod yalnızca PIN ile kapanır. Evde birinin PIN\'i bildiğinden emin ol.</string>
+    <string name="rec_aviso_sem_pin">Henüz PIN yok, bu yüzden bunu herkes kapatabilir. Telefondaki panelden bir PIN oluştur.</string>
+    <string name="rec_aviso_plano">Ücretli plan gerekiyor, bu yüzden kapalı kalıyor: %1$s.</string>
+    <string name="rec_voltar">Geri</string>
+    <string name="rec_aplicar">Uygula</string>
+    <string name="rec_pin">TV ayarını değiştirmek için PIN</string>
+    <string name="rec_pronto">Tamam</string>
+    <string name="rec_aplicada">TV\'n hazır</string>
+    <string name="rec_aplicada_det">İstemediğin bir şey mi değişti? Geri al her şeyi eski haline getirir.</string>
+    <string name="rec_desfeita">Her şey eski haline döndü.</string>
+    <string name="rec_linha">%1$s: %2$s</string>
+    <string name="rec_ligado">açık</string>
+    <string name="rec_desligado">kapalı</string>
+    <string name="rec_aj_hospede">Misafir modu</string>
+    <string name="rec_aj_visita">Ziyaret modu</string>
+    <string name="rec_aj_simples">Basit mod</string>
+    <string name="rec_aj_infantil">Çocuk modu</string>
+    <string name="rec_aj_dormir">Uyku saati</string>
+    <string name="rec_aj_texto">Yazı boyutu</string>
+    <string name="rec_aj_ler_foco">Seçili olanı sesli oku</string>
+    <string name="rec_aj_som">Her tuşta tık sesi</string>
+    <string name="rec_aj_jogos">Oyunlar kartı</string>
+    <string name="rec_aj_modo_jogo">Oyun modu</string>
+    <string name="rec_aj_controle">Oyun kumandası Oyunlar\'ı açar</string>
+</resources>

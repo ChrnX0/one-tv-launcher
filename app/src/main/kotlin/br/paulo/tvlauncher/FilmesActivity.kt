@@ -68,7 +68,7 @@ class FilmesActivity : Activity() {
     private val apagado = Estilo.TEXTO_3
     private val ambar = Estilo.ATENCAO
     private val verdeEtiqueta = 0xE62E7D4F.toInt()
-    private val fonteMedia = Fontes.manrope(500)
+    private val fonteMedia = Fontes.nunito(500)
 
     private var filmes: List<Filme> = emptyList()      // o que a tela mostra (sem as categorias ocultas, até o PIN)
     // Nota de fora (Trakt, InfoExterna): valem no Filtro (nota mínima) e na ordem "Nota".
@@ -299,7 +299,7 @@ class FilmesActivity : Activity() {
     /** Chave, id TMDB (da lista ou já achado) e nome+ano de cada filme, para cruzar com as listas de fora. Fora da tela. */
     private fun titulosDoCatalogo(vis: List<Filme>): List<SincronizarFilmes.Titulo> =
         cacheTitulos?.takeIf { it.first === vis }?.second ?: vis.map {
-            SincronizarFilmes.Titulo(it.chave, it.tmdb ?: InfoExternaCache.guardado(this, it.chave)?.tmdb, InfoExterna.chaveNomeAno(Vod.nomeLimpo(it.nome), it.ano))
+            SincronizarFilmes.Titulo(it.chave, InfoExternaCache.tmdbSemRede(this, it.chave, it.tmdb), InfoExterna.chaveNomeAno(Vod.nomeLimpo(it.nome), it.ano))
         }.also { cacheTitulos = vis to it }
 
     private fun etiquetaLista(l: SincronizarFilmes.ListaFora) = if (l.servico == "trakt") "Trakt" else "MDBList"
@@ -352,7 +352,7 @@ class FilmesActivity : Activity() {
     private var cacheVisiveis: Triple<List<Filme>, Set<String>, List<Filme>>? = null
     @Volatile private var cacheIdade: IdadesTmdb.Filtro? = null
 
-    private fun tmdbDe(f: Filme): Int? = f.tmdb ?: InfoExternaCache.guardado(this, f.chave)?.tmdb
+    private fun tmdbDe(f: Filme): Int? = InfoExternaCache.tmdbSemRede(this, f.chave, f.tmdb)
 
     /** Ideia 91: com idade máxima, pergunta ao TMDB a classificação dos que faltam (infantis primeiro) e refaz a grade. */
     private fun classificarIdades(f: List<Filme>) {
@@ -543,6 +543,11 @@ class FilmesActivity : Activity() {
         if (Vod.finalizado(pos)) opcoes += getString(R.string.coluna_menu_nao_assistido) to {
             mudarPosicoes(f, { Vod.esquecer(it, f.chave) }, R.string.coluna_marcado_nao_assistido)
         }
+        // Destaque da HOME é este filme: dá para tirar (aberto por engano, ou não quer que apareça para as visitas).
+        if (PlayerArmazem.capaHome(this, serie = false).ficha?.chave == f.chave) opcoes += getString(R.string.coluna_menu_tirar_home) to {
+            Fundo.rodar { PlayerArmazem.tirarCapaHome(this, serie = false, chave = f.chave) }
+            avisoBreve(getString(R.string.coluna_tirado_home, Vod.nomeLimpo(f.nome)))
+        }
         Estilo.lista(this, Vod.nomeLimpo(f.nome), opcoes.map { it.first }) { i -> opcoes[i].second() }
     }
 
@@ -627,7 +632,7 @@ class FilmesActivity : Activity() {
             if (pct == null) c.etiqueta.visibility = View.GONE else {
                 c.etiqueta.visibility = View.VISIBLE
                 c.etiqueta.text = when (pct) { 100 -> getString(R.string.filmes_assistido); else -> getString(R.string.tempo_faltam, BarraTempo.duracao(pos!!.duracao - pos.ms)) }
-                (c.etiqueta.background as GradientDrawable).setColor(if (pct == 100) verdeEtiqueta else 0xD90B0F17.toInt())
+                (c.etiqueta.background as GradientDrawable).setColor(if (pct == 100) verdeEtiqueta else 0xD90E1020.toInt())
             }
             c.estrela.visibility = if (f.chave in interesses) View.VISIBLE else View.GONE
             PlayerLogos.carregar(this@FilmesActivity, f.capa, c.capa, lado = 360)
@@ -650,12 +655,12 @@ class FilmesActivity : Activity() {
         moldura.addView(capa, FrameLayout.LayoutParams(-1, -1))
         val etiqueta = TextView(this).apply {
             textSize = 11f; typeface = fonteMedia; setTextColor(papel); setPadding(dp(7), dp(2), dp(7), dp(2))
-            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90B0F17.toInt()) }
+            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
         }
         moldura.addView(etiqueta, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(5), 0, 0, dp(5)) })
         val estrela = TextView(this).apply {
             text = "★"; textSize = 15f; setTextColor(ambar); setPadding(dp(6), dp(1), dp(6), dp(2))
-            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90B0F17.toInt()) }
+            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
         }
         moldura.addView(estrela, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, dp(5), dp(5), 0) })
         val nome = TituloCard(this, Estilo.Leitura.CARD).apply { setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END }
@@ -871,7 +876,10 @@ class FilmesActivity : Activity() {
         }
         // Ideia 23: os outros filmes com o mesmo nome-base (sequências, dublado e legendado) viram uma categoria na grade.
         colecaoFicha?.takeIf { it.first === f && it.second.size > 1 }?.second?.let { lista ->
-            FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.filmes_colecao), lista.size.toString(), "colecao") { abrirColecao(lista) })
+            // O número conta FILMES, não versões: Duna, Duna LEG e Duna 4K são um só (Sala, 17/11/2026: "Coleção 6" ao
+            // lado de "Duna · 2 de 3 na sua lista" confundia). A categoria aberta continua com todas as versões.
+            val filmes = FilmesFiltro.quantosFilmes(lista)
+            FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.filmes_colecao), filmes.toString(), "colecao") { abrirColecao(lista) })
         }
         val sinopse = info?.sinopse?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.sinopse?.takeIf { it.isNotEmpty() }
         val acaoSinopse = sinopse?.let { txt ->
@@ -939,7 +947,10 @@ class FilmesActivity : Activity() {
             TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.25f); maxLines = 5; ellipsize = TextUtils.TruncateAt.END }
                 .also { t -> corpo.addView(t) }
         }
-        (ext?.detalhe?.diretor?.takeIf { it.isNotEmpty() } ?: info?.diretor?.takeIf { it.isNotEmpty() })?.let { corpo.addView(rotuloValor(getString(R.string.filmes_direcao), it).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }) }
+        // Direção: a do TMDB. A do servidor só quando o TMDB já respondeu sem ela (ou não há TMDB): antes ela aparecia
+        // primeiro e trocava ao chegar o TMDB, às vezes errada (Sala, 17/11/2026: Duna mostrou "Cliff Lanning").
+        val tmdbPendente = ext == null && InfoExternaCache.temTmdb()
+        (ext?.detalhe?.diretor?.takeIf { it.isNotEmpty() } ?: info?.diretor?.takeIf { it.isNotEmpty() && !tmdbPendente })?.let { corpo.addView(rotuloValor(getString(R.string.filmes_direcao), it).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }) }
         (info?.elenco?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.elenco?.takeIf { it.isNotEmpty() }?.joinToString(", "))
             ?.let { corpo.addView(rotuloValor(getString(R.string.filmes_elenco), it).apply { maxLines = 2; ellipsize = TextUtils.TruncateAt.END }) }
         direita.addView(corpo, LinearLayout.LayoutParams(-1, 0, 1f))
@@ -1109,7 +1120,7 @@ class FilmesActivity : Activity() {
         if (paraHome) Fundo.rodar { PlayerArmazem.definirCapaHome(this, serie = false, poster = capa, cenas = cenas, ficha = fichaHome) }
         VodActivity.abrir(this, VodActivity.TIPO_FILME, f.fonteId, f.id, f.extensao, Vod.nomeLimpo(f.nome), doComeco,
             busca = LegendaExterna.Busca(LegendaExterna.nomeDeBusca(f.nome), f.ano,
-                tmdb = f.tmdb ?: externo?.takeIf { it.first === f }?.second?.tmdb))
+                tmdb = f.tmdb ?: externo?.takeIf { it.first === f }?.second?.tmdb, versao = Idioma.versao(f.nome, f.grupo)))
     }
 
     private fun botao(texto: String, marca: String, aoApertar: () -> Unit) = TextView(this).apply {
@@ -1155,7 +1166,7 @@ class FilmesActivity : Activity() {
     }
 
     private fun rotulo(t: String) = TextView(this).apply {
-        text = t; textSize = Estilo.Leitura.ROTULO; typeface = Fontes.manrope(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
+        text = t; textSize = Estilo.Leitura.ROTULO; typeface = Fontes.nunito(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
         setPadding(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
     }
 
@@ -1164,7 +1175,7 @@ class FilmesActivity : Activity() {
         return if (s >= 3600) String.format(Locale.ROOT, "%d:%02d:%02d", s / 3600, s / 60 % 60, s % 60) else String.format(Locale.ROOT, "%d:%02d", s / 60, s % 60)
     }
 
-    private fun vidro(raio: Int) = GradientDrawable().apply { cornerRadius = dp(raio).toFloat(); setColor(0xD90B0F17.toInt()); setStroke(dp(1), Estilo.SUPERFICIE_ALTA) }
+    private fun vidro(raio: Int) = GradientDrawable().apply { cornerRadius = dp(raio).toFloat(); setColor(0xD90E1020.toInt()); setStroke(dp(1), Estilo.SUPERFICIE_ALTA) }
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density + 0.5f).toInt()
 }

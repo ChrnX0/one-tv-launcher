@@ -1,15 +1,15 @@
 {
-  "name": "One TV",
-  "short_name": "One TV",
-  "description": "Controle e administração da TV da sala pelo celular ou computador.",
+  "name": "Sofaly",
+  "short_name": "Sofaly",
+  "description": "Controle e configurações da TV pelo celular ou computador.",
   "id": "/",
   "start_url": "/#inicio",
   "scope": "/",
   "display": "standalone",
   "display_override": ["standalone"],
   "orientation": "any",
-  "background_color": "#0b0f17",
-  "theme_color": "#0b0f17",
+  "background_color": "#121528",
+  "theme_color": "#121528",
   "lang": "pt-BR",
   "icons": [
     { "src": "/icone-192.png", "sizes": "192x192", "type": "image/png" },
@@ -19,6 +19,6 @@
   "share_target": { "action": "/", "method": "GET", "params": { "title": "titulo", "text": "texto", "url": "url" } },
   "shortcuts": [
     { "name": "Controle", "url": "/#controle", "icons": [{ "src": "/icone-192.png", "sizes": "192x192" }] },
-    { "name": "Arquivos", "url": "/#arquivos", "icons": [{ "src": "/icone-192.png", "sizes": "192x192" }] }
+    { "name": "Configurações", "url": "/#ajustes", "icons": [{ "src": "/icone-192.png", "sizes": "192x192" }] }
   ]
 }

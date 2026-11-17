@@ -41,7 +41,7 @@
     <string name="sv_conferindo">%1$s에서 확인 중…</string>
     <string name="sv_limite_dia">오늘의 자막 한도가 끝났습니다. 24시간 후에 다시 채워집니다(OpenSubtitles 계정이 있으면 하루 20개).</string>
     <string name="sv_tmdb_atribuicao">이 제품은 TMDB API를 사용하지만 TMDB의 보증이나 인증을 받지 않았습니다.</string>
-    <string name="ext_saga">%1$s: 내 목록의 %3$d편 중 %2$d번째</string>
+    <string name="ext_saga">%1$s · %3$d편 중 %2$d편이 내 목록에 있음</string>
     <string name="ext_nao_e_este">이 영화가 아님</string>
     <string name="ext_proximo">새 에피소드 %1$s(S%2$dE%3$d)</string>
     <string name="ext_proximo_curto">새 에피소드 %1$s</string>

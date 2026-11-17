@@ -229,6 +229,7 @@ object GuardiaoShizuku {
      *  - SYSTEM_ALERT_WINDOW (janela flutuante do pareamento sem PC, ver PareamentoNaTv);
      *  - WRITE_SECURE_SETTINGS (religar acessibilidade e depuração sem fio, DNS) — caso tenha sido revogada;
      *  - GET_USAGE_STATS (ordenar apps por uso);
+     *  - PLAY_AUDIO de volta a allow (gravado como "default", o launcher inteiro ficava mudo; 17/11/2026);
      *  - READ_LOGS e DUMP (tela de Diagnóstico: ler os crashes de outros apps e por que o Android os fechou);
      *  - administrador do aparelho (trava de "Forçar parada" sem Device Owner, ver TravaSemDono).
      *  Só escreve se ainda não estiver concedido.
@@ -251,6 +252,18 @@ object GuardiaoShizuku {
         if (!uso.contains("allow")) {
             ServidorShizuku.executar(app, m, "appops set $p GET_USAGE_STATS allow")
             if (ServidorShizuku.executar(app, m, "appops get $p GET_USAGE_STATS")?.contains("allow") == true) feito += "GET_USAGE_STATS"
+        }
+        // Som (17/11/2026, Sala): PLAY_AUDIO ficou gravado como "default" (modo 3) para o launcher. Quem gravou foi a receita
+        // de teste de madrugada ("appops ... PLAY_AUDIO ignore" para silenciar e "... default" para "restaurar").
+        // O Android só deixa tocar com "allow", então TODO som nosso (TV ao vivo, filmes, despertador) saía mudo
+        // (dumpsys audio: mutedState:appOps; audioflinger: ganho -inf), e os outros apps tocavam normal. Sem registro
+        // ("No operations") vale o padrão, que é allow; qualquer outro modo volta para allow.
+        val som = ServidorShizuku.executar(app, m, "appops get $p PLAY_AUDIO") ?: ""
+        val mudo = Regex("PLAY_AUDIO: (?!allow)")
+        if (mudo.containsMatchIn(som)) {
+            ServidorShizuku.executar(app, m, "appops set $p PLAY_AUDIO allow")
+            val depois = ServidorShizuku.executar(app, m, "appops get $p PLAY_AUDIO")
+            if (depois != null && !mudo.containsMatchIn(depois)) feito += "PLAY_AUDIO"
         }
         // Build da Play (sem USE_EXACT_ALARM): "Alarmes e lembretes" pelo shell, para o despertador tocar na hora certa.
         if (android.os.Build.VERSION.SDK_INT >= 31 &&

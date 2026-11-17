@@ -28,12 +28,13 @@ import java.util.Locale
  *    o nascer/pôr do sol riscado na hora certa ([CurvaHoras]).
  *  - CARTOES: quatro cartões de vidro: agora, próximas horas, hoje (sol, lua, umidade, chuva) e amanhã.
  *  - SOLTO: sem caixa; a temperatura grande, o tempo dito numa frase ("Chuva fraca até umas 3h") e as horas à direita.
+ *  - LINHA e GRANDE (17/11/2026): tudo numa linha; ou a temperatura enorme e fina à direita.
  * Quem chama é o [ProtetorGaleria]; os dados vêm prontos em [Dados] (a lógica pura está em [WidgetsTempo]).
  */
 class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
-    private val m400: Typeface = Fontes.manrope(ctx, 400)
-    private val m500: Typeface = Fontes.manrope(ctx, 500)
-    private val m600: Typeface = Fontes.manrope(ctx, 600)
+    private val m400: Typeface = Fontes.nunito(ctx, 400)
+    private val m500: Typeface = Fontes.nunito(ctx, 500)
+    private val m600: Typeface = Fontes.nunito(ctx, 600)
     private val branco = 0xFFFFFFFF.toInt()
     private val azulChuva = 0xFF9CC2FF.toInt()
     private val amarelo = 0xFFFFD66B.toInt()
@@ -57,20 +58,74 @@ class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
         !d.temClima -> semClima(d)
         estilo == Protetor.WIDGET_CARTOES -> cartoes(d)
         estilo == Protetor.WIDGET_SOLTO -> solto(d)
+        estilo == Protetor.WIDGET_LINHA -> umaLinha(d)
+        estilo == Protetor.WIDGET_GRANDE -> grande(d)
         else -> faixa(d)
+    }
+
+    // ------------------------------------------------------------------ 4) uma linha só (17/11/2026)
+    /**
+     * Tudo numa linha, sem caixa: céu e temperatura de agora com o tempo dito numa frase à esquerda; amanhã e o sol à
+     * direita. O mais discreto dos cinco: pouco mais de 40 dp de altura.
+     */
+    private fun umaLinha(d: Dados): View {
+        val linha = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
+        linha.addView(iconeClima(d.codigo, d.eDia, d.chovendo), LinearLayout.LayoutParams(dp(38), dp(38)))
+        linha.addView(texto("${d.temp}°", 32f, m500).apply { letterSpacing = -0.03f; sombrear() }, lp(10))
+        linha.addView(texto(fraseDoTempo(d), 16f, m500).apply { linhaUnica(); maxWidth = dp(360); alpha = 0.92f; sombrear() }, lp(14))
+        linha.addView(View(ctx), LinearLayout.LayoutParams(0, 1, 1f))
+        d.amanha?.let { a ->
+            linha.addView(texto(ctx.getString(R.string.pg_amanha), 13f, m600).apply { isAllCaps = true; letterSpacing = 0.14f; alpha = 0.7f; sombrear() })
+            linha.addView(iconeClima(a.codigo, true, false), LinearLayout.LayoutParams(dp(26), dp(26)).apply { leftMargin = dp(10) })
+            linha.addView(texto("${a.max}° / ${a.min}°", 17f, m600).apply { sombrear() }, lp(8))
+        }
+        d.nascerPor?.let { (n, p) ->
+            linha.addView(View(ctx).apply { setBackgroundColor(0x40FFFFFF) }, LinearLayout.LayoutParams(dp(1), dp(22)).apply { leftMargin = dp(18); rightMargin = dp(18) })
+            linha.addView(ImageView(ctx).apply { setImageDrawable(IconeLinha(IconeLinha.Tipo.HORIZONTE, cor = amarelo)) }, LinearLayout.LayoutParams(dp(20), dp(20)))
+            linha.addView(texto("${hm.format(Date(n))} – ${hm.format(Date(p))}", 16f, m500).apply { sombrear() }, lp(8))
+        }
+        return linha
+    }
+
+    // ------------------------------------------------------------------ 5) temperatura grande (17/11/2026)
+    /**
+     * Sem caixa, à direita: a temperatura enorme e fina (Manrope 200), como um segundo relógio, e embaixo o céu de agora
+     * e a máxima/mínima. Combina com o relógio no canto de cima ou no centro.
+     */
+    private fun grande(d: Dados): View {
+        val linha = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.BOTTOM }
+        linha.addView(View(ctx), LinearLayout.LayoutParams(0, 1, 1f))
+        val col = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; gravity = Gravity.END }
+        col.addView(LinearLayout(ctx).apply {
+            orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
+            addView(iconeClima(d.codigo, d.eDia, d.chovendo), LinearLayout.LayoutParams(dp(54), dp(54)))
+            addView(texto("${d.temp}°", 84f, Fontes.nunito(ctx, 200)).apply { letterSpacing = -0.05f; sombrear() }, lp(10))
+        }, LinearLayout.LayoutParams(-2, -2).apply { gravity = Gravity.END })
+        col.addView(texto(fraseDoTempo(d), 16f, m600).apply { linhaUnica(); maxWidth = dp(420); gravity = Gravity.END; sombrear() },
+            LinearLayout.LayoutParams(-2, -2).apply { gravity = Gravity.END; topMargin = dp(2) })
+        d.amanha?.let { a ->
+            col.addView(texto(ctx.getString(R.string.pw_amanha_frase, a.max, IconesClima.texto(a.codigo).replaceFirstChar { it.lowercase(Locale.getDefault()) }),
+                14f, m500).apply { linhaUnica(); maxWidth = dp(420); alpha = 0.85f; gravity = Gravity.END; sombrear() },
+                LinearLayout.LayoutParams(-2, -2).apply { gravity = Gravity.END; topMargin = dp(4) })
+        }
+        linha.addView(col)
+        return linha
     }
 
     // ------------------------------------------------------------------ 1) faixa de vidro
     private fun faixa(d: Dados): View {
         val caixa = Vidro(ctx, vidro, 18f)
         val linha = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(22), dp(14), dp(22), dp(14)) }
+        // Sem a curva das próximas horas, nenhuma zona dava a altura (todas "-1" numa linha "-2"): a faixa virava um traço
+        // vazio de 28 dp (visto no teste de telas do protetor v2, 17/11/2026). Aí as zonas medem a si mesmas.
+        val alturaZona = if (d.marcas.size >= 2) -1 else -2
         // Agora
         linha.addView(zona(R.string.pw_agora, LinearLayout(ctx).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
             addView(iconeClima(d.codigo, d.eDia, d.chovendo), LinearLayout.LayoutParams(dp(46), dp(46)))
             addView(texto("${d.temp}°", 46f, m500).apply { letterSpacing = -0.03f }, lp(10))
             addView(duasLinhas(IconesClima.texto(d.codigo, d.chovendo), maxMin(d), 14f, 12f, 150), lp(12))
-        }), LinearLayout.LayoutParams(-2, -1))
+        }), LinearLayout.LayoutParams(-2, alturaZona))
         linha.addView(divisoria(), LinearLayout.LayoutParams(dp(1), -1).apply { leftMargin = dp(22); rightMargin = dp(22) })
         // Próximas horas (curva)
         if (d.marcas.size >= 2) {
@@ -84,7 +139,7 @@ class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
                 orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
                 addView(iconeClima(a.codigo, true, false), LinearLayout.LayoutParams(dp(36), dp(36)))
                 addView(duasLinhas("${a.max}° / ${a.min}°", a.chuva?.let { ctx.getString(R.string.pw_chuva_pct, it) }, 20f, 12f, 190), lp(10))
-            }), LinearLayout.LayoutParams(-2, -1))
+            }), LinearLayout.LayoutParams(-2, alturaZona))
         }
         caixa.addView(linha, FrameLayout.LayoutParams(-1, -2))
         return caixa

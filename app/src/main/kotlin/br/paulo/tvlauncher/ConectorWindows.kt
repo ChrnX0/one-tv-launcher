@@ -10,6 +10,7 @@ import java.util.Base64
  * o certificado da TV em Máquina Local, o serviço WebClient ligado (vem parado e não liga sozinho) e o limite de
  * 50 MB por arquivo. Este arquivo .cmd, que a própria TV entrega em /unidade/conectar.cmd, faz as três e mapeia a
  * unidade: duplo clique, um "Sim" do Windows, usuário e PIN.
+ * A letra é S (de Sofaly, pedido do dono em 17/11/2026); ocupada, Y; ocupadas as duas, a que o Windows der.
  *
  * Só texto, sem Android, para os testes JVM (ConectorWindowsTest).
  */
@@ -34,12 +35,26 @@ object ConectorWindows {
      * O texto do .cmd (linhas com CRLF, que o cmd.exe exige para os rótulos). null se o host ou o PEM não servem.
      * Sem acentos nos textos: o cmd.exe usa a página de código antiga do Windows.
      */
-    fun script(host: String, porta: Int, pemCa: String): String? {
+    /**
+     * A linha que dá nome à unidade no Explorer ("Sofaly · Sala de estar" no lugar de "dav (\\192...)"), pedido do
+     * dono em 17/11/2026. Usa o mesmo caminho de quem renomeia com F2. O nome vai como lista de números (um por
+     * letra): o .cmd só aceita ASCII e assim nenhum caractere do nome da TV vira comando.
+     */
+    fun linhaDoRotulo(rotulo: String): String {
+        val codigos = rotulo.take(60).map { it.code }.joinToString(",")
+        val d = '$'
+        return "powershell -NoProfile -Command \"${d}n=New-Object -ComObject WScript.Network;${d}d=${d}n.EnumNetworkDrives();" +
+            "for(${d}i=0;${d}i -lt ${d}d.Count();${d}i+=2){if(${d}d.Item(${d}i) -and ${d}d.Item(${d}i+1) -eq '%ALVO%'){" +
+            "(New-Object -ComObject Shell.Application).NameSpace(${d}d.Item(${d}i)+'\\').Self.Name=-join[char[]]($codigos)}}\" >nul 2>&1"
+    }
+
+    fun script(host: String, porta: Int, pemCa: String, rotulo: String = ""): String? {
         if (!hostValido(host) || porta !in 1..65535) return null
         val linhas = linhasDoPem(pemCa)
         // base64 puro: nada que o cmd.exe interprete (%, &, |, parênteses) pode entrar no arquivo.
         if (linhas.isEmpty() || linhas.any { l -> !l.all { it.isLetterOrDigit() && it.code < 128 || it in "+/=" } }) return null
         val digital = try { digital(pemCa) } catch (_: Exception) { return null }
+        val linhaRotulo = if (rotulo.isBlank()) "rem (sem nome para a unidade)" else linhaDoRotulo(rotulo)
         val t = """
 @echo off
 rem One TV - liga a TV como unidade de rede neste PC (duplo clique).
@@ -73,7 +88,12 @@ echo.
 echo Usuario: digite  tv
 echo Senha:   o PIN do painel da TV ^(nao aparece enquanto digita^)
 echo.
-net use * "%ALVO%" /savecred /persistent:yes
+rem A letra: S, de Sofaly; se estiver ocupada, Y; se nao, a que o Windows escolher.
+rem O espaco antes da letra e de proposito: sem ele, "Unidades:" e "Drives:" casam com "S:".
+set "LETRA=*"
+(fsutil fsinfo drives & net use) 2>nul | find /i " Y:" >nul || set "LETRA=Y:"
+(fsutil fsinfo drives & net use) 2>nul | find /i " S:" >nul || set "LETRA=S:"
+net use %LETRA% "%ALVO%" /savecred /persistent:yes
 if errorlevel 1 (
   echo.
   echo Nao mapeou. Confira o PIN e se a chave "Unidade de rede" esta ligada na TV.
@@ -81,6 +101,7 @@ if errorlevel 1 (
   exit /b 1
 )
 :abrir
+$linhaRotulo
 start "" explorer.exe "%ALVO%"
 exit /b 0
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App do celular (revisão dos degraus, T5, 17/11/2026). Caminho do menu = o mesmo texto da TV neste idioma. -->
+<resources>
+    <string name="cel_titulo">你的电视</string>
+    <string name="cel_mandar_para">发送到哪台电视？</string>
+    <string name="cel_ler_qr">扫描电视上的二维码</string>
+    <string name="cel_vazio">还没有电视。在电视上打开 设置 › 远程访问 › 用手机登录，然后点下面的按钮，把摄像头对准二维码。</string>
+    <string name="cel_pareada_segura">%1$s · 安全连接</string>
+    <string name="cel_pareada_http">%1$s · 家庭网络</string>
+    <string name="cel_na_rede">在网络中找到</string>
+    <string name="cel_achada">%1$s · 尚未配对</string>
+    <string name="cel_achada_explica">为了安全连接，请扫描一次二维码：在电视上打开 设置 › 远程访问 › 用手机登录。也可以现在打开并用 PIN 登录。</string>
+    <string name="cel_abrir_pin">用 PIN 打开</string>
+    <string name="cel_esquecer">忘记</string>
+    <string name="cel_esquecer_explica">这部手机将忘记这台电视。要再次使用，请扫描二维码。</string>
+    <string name="cel_aponte">对准电视上的二维码</string>
+    <string name="cel_qr_invalido">这不是电视的二维码。请在电视上打开 设置 › 远程访问 › 用手机登录。</string>
+    <string name="cel_cert_outro">电视用另一个证书回应。如果你更新过证书，请重新扫描二维码。</string>
+    <string name="cel_casa_padrao">家</string>
+    <string name="cel_casa_qual">这台电视在哪个家？</string>
+    <string name="cel_casa_nova">其他家…</string>
+    <string name="cel_casa_dica">例如：海边的家、妈妈家</string>
+</resources>

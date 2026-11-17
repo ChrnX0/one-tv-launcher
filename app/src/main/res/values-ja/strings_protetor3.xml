@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor: variações de cada elemento (17/11/2026). -->
+<resources>
+    <string name="pv2_est_avisos">お知らせのスタイル</string>
+    <string name="pv2_est_avisos_det">メッセージやリマインダーの表示方法 · OK で変更</string>
+    <string name="pv2_av_cartoes">ガラスのカード</string>
+    <string name="pv2_av_lista">枠なしのリスト</string>
+    <string name="pv2_av_um">1 件ずつ</string>
+    <string name="pv2_est_textos">あいさつと日付のスタイル</string>
+    <string name="pv2_est_textos_det">OK で変更</string>
+    <string name="pv2_tx_moderno">モダン</string>
+    <string name="pv2_tx_serifa">明朝体風</string>
+    <string name="pv2_tx_maiusculas">字間の広い大文字</string>
+    <string name="pv2_est_linhas">天気の行のスタイル</string>
+    <string name="pv2_est_linhas_det">天気のひとことと豆知識 · OK で変更</string>
+    <string name="pv2_ln_icones">アイコン付き</string>
+    <string name="pv2_ln_vidro">暗いガラスの上</string>
+    <string name="pv2_ln_texto">文字だけ</string>
+    <string name="pv2_est_credito">写真クレジットのスタイル</string>
+    <string name="pv2_est_credito_det">OK で変更</string>
+    <string name="pv2_cr_etiqueta">ラベル</string>
+    <string name="pv2_cr_discreto">控えめ</string>
+    <string name="cl_widget_linha">1 行</string>
+    <string name="cl_widget_grande">大きく</string>
+    <string name="pv2_widget_det">5 つのスタイル · OK で変更</string>
+</resources>

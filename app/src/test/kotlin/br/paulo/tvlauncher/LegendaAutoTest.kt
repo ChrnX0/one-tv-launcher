@@ -52,5 +52,11 @@ class LegendaAutoTest {
         assertFalse(Idioma.faltaLegenda(en, listOf(Idioma.Faixa("pt-BR")), "pt"))  // já tem legenda
         assertTrue(Idioma.faltaLegenda(en, listOf(Idioma.Faixa("pt", forcada = true)), "pt"))   // só a forçada
         assertFalse(Idioma.faltaLegenda(null, emptyList(), "pt"))                   // sem áudio identificado
+        // Sem idioma no áudio (Duna dublada da Sala, 17/11/2026): só a marca da lista decide.
+        val und = Idioma.Faixa("und"); val nada = Idioma.Faixa(null)
+        assertFalse(Idioma.faltaLegenda(und, emptyList(), "pt"))
+        assertFalse(Idioma.faltaLegenda(nada, emptyList(), "pt", Idioma.Versao.DUBLADA))
+        assertTrue(Idioma.faltaLegenda(und, emptyList(), "pt", Idioma.Versao.LEGENDADA))
+        assertTrue(Idioma.faltaLegenda(en, emptyList(), "pt", Idioma.Versao.DUBLADA))   // a faixa diz inglês: vale a faixa
     }
 }

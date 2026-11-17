@@ -7,13 +7,14 @@ package br.paulo.tvlauncher
  * rola até o cartão. Objeto puro, testado na JVM.
  */
 enum class DestinoPainel(val aba: String, val cartao: String = "") {
-    CASA("extras", "cartaoCasa"),
-    CENAS("extras", "cartaoCenas"),
-    TIME("extras", "cartaoTime"),
-    MURAL("extras", "cartaoMural"),
-    CUIDAR("extras", "cartaoCuidar"),   // Cuidar de longe (15/11/2026): lembretes e quem recebe
-    FOTOS("fotos"),
-    ROTEADOR("roteador");
+    // Painel v3 (16/11/2026): as páginas do painel seguem as abas das Configurações da TV.
+    CASA("casa", "cartaoCasa"),
+    CENAS("casa", "cartaoCenas"),
+    TIME("casa", "cartaoTime"),
+    MURAL("energia", "cartaoMural"),
+    CUIDAR("familia", "cartaoCuidar"),   // Cuidar de longe (15/11/2026): lembretes e quem recebe
+    FOTOS("energia", "cartaoFotosDoProtetorDeTela"),
+    ROTEADOR("avancado", "cartaoRoteadorUniFi");
 
     /** O pedaço `ir=` do endereço: "extras.cartaoCasa" ou só "fotos". */
     val ir: String get() = if (cartao.isEmpty()) aba else "$aba.$cartao"

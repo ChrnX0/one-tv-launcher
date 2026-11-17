@@ -115,8 +115,12 @@ Apache Commons Net (FTP e FTPS), da Apache Software Foundation
 
 — Fontes dos temas —
 
-Manrope, de Mikhail Sharanda (telas da TV e painel web)
+Manrope, de Mikhail Sharanda (painel web, letra de reserva)
   https://github.com/sharanda/manrope
+  Licença SIL Open Font License 1.1 (OFL).
+
+Nunito, de Vernon Adams e colaboradores (telas da TV, marca Sofaly e painel web)
+  https://github.com/googlefonts/nunito
   Licença SIL Open Font License 1.1 (OFL).
 
 Fraunces, da Undercase Type (protetor de tela)
@@ -146,5 +150,10 @@ Legendas: Subtitles provided by OpenSubtitles.com (https://www.opensubtitles.com
 Rádios: Radio Browser (https://www.radio-browser.info).
 Endereço pelo nome: dados © colaboradores do OpenStreetMap (https://www.openstreetmap.org/copyright), pelo Nominatim.
 Endereço pelo CEP: ViaCEP (https://viacep.com.br).
+Céu de verdade e protetor: nuvens do satélite GOES (NOAA, domínio público dos EUA) pelo NASA GIBS
+  (https://earthdata.nasa.gov/gibs); mapa Natural Earth (https://www.naturalearthdata.com, domínio público);
+  órbita da Estação Espacial (TLE do NORAD) pelo CelesTrak (https://celestrak.org).
+Protetor "A Terra vista do espaço": fotos tiradas pelos astronautas da Estação Espacial, NASA (https://images.nasa.gov;
+  sem direito autoral nos EUA, crédito à NASA; a NASA não apoia nem endossa este app).
 
 Os sons do despertador foram gerados pelo próprio projeto.

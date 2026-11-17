@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Recado em vídeo (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="vid_de">%1$s님이 보낸 동영상</string>
+    <string name="vid_mural">동영상을 보냈어요</string>
+    <string name="vid_onde">보려면: 설정 › 가족 › 가족 동영상.</string>
+    <string name="vid_depois">나중에</string>
+    <string name="vid_assistir">보기</string>
+    <string name="vid_ok_para_assistir">OK를 누르면 재생돼요.</string>
+    <string name="vid_lista">가족 동영상</string>
+    <string name="vid_lista_det">가족 링크로 보낸 동영상. 각각 30일 동안 남아요. OK를 길게 누르면 삭제돼요.</string>
+    <string name="vid_nenhum">아직 동영상이 없어요.</string>
+    <string name="vid_apagar">동영상 삭제</string>
+    <string name="vid_aceitar">동영상 받기</string>
+    <string name="vid_aceitar_det">가족이 30초까지 동영상을 보낼 수 있어요. 저절로 재생되지 않아요.</string>
+    <string name="vid_quantos">동영상: %1$d</string>
+</resources>

@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK يبدّل · هذه تختفي أثناء تفعيل وضع الضيوف</string>
     <string name="cfg2_some_visita">مخفي عن الضيوف</string>
     <string name="cfg2_fica_visita">يبقى</string>
-    <string name="cfg2_casa_det">أضواء ومقابس ومشاهد Home Assistant الخاص بك</string>
+    <string name="cfg2_casa_det">الأضواء والمقابس والمشاهد من Google Home أو Home Assistant</string>
     <string name="oc_titulo">التطبيقات المخفية</string>
     <string name="oc_subtitulo">OK يُظهر تطبيقًا في الشاشة الرئيسية أو يخفيه · المخفية تأتي أولًا</string>
     <string name="oc_nenhum">لا تطبيقات مخفية · OK للاختيار</string>
@@ -91,7 +91,7 @@
     <string name="vp_pronto_det">الانتقال إلى الشاشة الرئيسية.</string>
     <string name="vq_titulo">مشاركة المظهر</string>
     <string name="vq_det">يعرض رمز QR بمظهر هذا التلفزيون: السمة وحجم النص والأيقونات.</string>
-    <string name="vq_texto">امسحه بهاتفك للاحتفاظ به أو إرساله إلى شخص يستخدم One TV.</string>
+    <string name="vq_texto">امسحه بهاتفك للاحتفاظ به أو إرساله إلى شخص يستخدم Sofaly.</string>
     <string name="vq_fechar">إغلاق</string>
     <string name="lh_titulo">حجم بطاقات التطبيقات</string>
     <string name="lh_det">البطاقات الأكبر أسهل رؤيةً من الأريكة.</string>

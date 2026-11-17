@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- App de TV: sem tela de toque e sem exigir o Leanback (roda também em box comum). -->
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+    <uses-feature android:name="android.software.leanback" android:required="false" />
+
+    <application android:label="@string/nome" android:banner="@drawable/banner" android:icon="@drawable/banner"
+        android:allowBackup="true" android:supportsRtl="true">
+
+        <!-- A tela onde a pessoa escolhe a data. É ela que abre quando a pessoa dá OK no cartão. -->
+        <activity android:name=".EscolherDataActivity" android:exported="true"
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- O CONTRATO: um provider exportado com esta action. O launcher pergunta content://<authorities>/cartao. -->
+        <provider android:name=".CartaoProvider" android:authorities="tv.sofaly.exemplo.contagem.cartao"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="tv.sofaly.plugin.CARTAO" />
+            </intent-filter>
+        </provider>
+    </application>
+</manifest>

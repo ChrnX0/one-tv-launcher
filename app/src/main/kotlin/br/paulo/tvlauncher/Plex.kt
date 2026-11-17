@@ -83,12 +83,12 @@ object Plex {
 
     /** Cabeçalhos que o Plex exige de todo app. [aparelho] = identificador fixo desta TV. */
     fun cabecalhos(aparelho: String, token: String = ""): Map<String, String> = buildMap {
-        put("X-Plex-Product", "One TV Launcher")
+        put("X-Plex-Product", "Sofaly")
         put("X-Plex-Version", "1.0")
         put("X-Plex-Client-Identifier", aparelho)
         put("X-Plex-Platform", "Android")
         put("X-Plex-Device", "Android TV")
-        put("X-Plex-Device-Name", "One TV")
+        put("X-Plex-Device-Name", "Sofaly")
         put("Accept", "application/json")
         if (token.isNotEmpty()) put("X-Plex-Token", token)
     }

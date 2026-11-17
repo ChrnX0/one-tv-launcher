@@ -62,7 +62,7 @@ class SeriesActivity : Activity() {
     private val apagado = Estilo.TEXTO_3
     private val ambar = Estilo.ATENCAO
     private val verdeEtiqueta = 0xE62E7D4F.toInt()
-    private val fonteMedia = Fontes.manrope(500)
+    private val fonteMedia = Fontes.nunito(500)
 
     private var series: List<Serie> = emptyList()      // o que a tela mostra (sem as categorias ocultas, até o PIN)
     // Ficha de fora (TMDB: sinopse, próximo episódio; Trakt: nota) da série aberta (InfoExterna, 14/11/2026).
@@ -152,7 +152,7 @@ class SeriesActivity : Activity() {
         raiz.addView(painel, FrameLayout.LayoutParams(-1, -1))
         aviso = TextView(this).apply {
             textSize = 18f; setTextColor(papel); gravity = Gravity.CENTER
-            background = GradientDrawable().apply { cornerRadius = dp(16).toFloat(); setColor(0xD90B0F17.toInt()) }
+            background = GradientDrawable().apply { cornerRadius = dp(16).toFloat(); setColor(0xD90E1020.toInt()) }
             setPadding(dp(24), dp(16), dp(24), dp(16)); text = getString(R.string.series_carregando)
         }
         raiz.addView(aviso, FrameLayout.LayoutParams(-2, -2, Gravity.CENTER))
@@ -709,7 +709,7 @@ class SeriesActivity : Activity() {
                 c.etiqueta.setTextColor(if (novo) Estilo.FUNDO else if (marcado) ambar else papel)
                 (c.etiqueta.background as GradientDrawable).setColor(when (etq) {
                     EtiquetaSerie.Concluida -> verdeEtiqueta
-                    null -> 0xD90B0F17.toInt()
+                    null -> 0xD90E1020.toInt()
                     else -> ambar
                 })
             }
@@ -739,12 +739,12 @@ class SeriesActivity : Activity() {
         moldura.addView(capa, FrameLayout.LayoutParams(-1, -1))
         val estrela = TextView(this).apply {
             text = "★"; textSize = 15f; setTextColor(ambar); setPadding(dp(6), dp(1), dp(6), dp(2))
-            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90B0F17.toInt()) }
+            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
         }
         moldura.addView(estrela, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, dp(5), dp(5), 0) })
         val etiqueta = TextView(this).apply {
             textSize = 11f; typeface = fonteMedia; setTextColor(papel); setPadding(dp(7), dp(2), dp(7), dp(2))
-            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90B0F17.toInt()) }
+            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
         }
         moldura.addView(etiqueta, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(5), 0, 0, dp(5)) })
         // Nome e "T2E5" em cima do pôster, encostados nele (a linha do episódio some quando não há).
@@ -889,10 +889,13 @@ class SeriesActivity : Activity() {
      * [focarEpisodio]: abre direto na lista, com o foco nesse episódio. Os dados chegam aos poucos e cada um redesenha:
      * o foco fica onde estava (na mesma ação, ou no mesmo episódio).
      */
+    /** Chave "esconder resumo de episódio não visto" ([Conforto]), relida a cada vez que a ficha é desenhada. */
+    private var semSpoiler = false
     /** Tem a busca do Google TV? (botão "Onde assistir" da ficha; conferido uma vez por tela.) */
     private val googleTv by lazy { BuscaActivity.temGoogleTv(this) }
 
     private fun desenharFicha(focarEpisodio: Int? = null) {
+        semSpoiler = Conforto.semSpoiler(this)
         val s = aberta ?: return
         val f = fichaAberta
         val focoAntes = painel.findFocus()
@@ -1070,7 +1073,7 @@ class SeriesActivity : Activity() {
         val v = (reuso as? LinearLayout) ?: LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL; setPadding(dp(12), dp(8), dp(12), dp(8))
             val topo = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
-            topo.addView(TextView(context).apply { textSize = Estilo.Leitura.ITEM; typeface = Fontes.manrope(600); setTextColor(ambar) }, LinearLayout.LayoutParams(dp(48), -2))
+            topo.addView(TextView(context).apply { textSize = Estilo.Leitura.ITEM; typeface = Fontes.nunito(600); setTextColor(ambar) }, LinearLayout.LayoutParams(dp(48), -2))
             topo.addView(TextView(context).apply { textSize = Estilo.Leitura.ITEM; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }, LinearLayout.LayoutParams(0, -2, 1f))
             topo.addView(TextView(context).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(apagado) })
             addView(topo)
@@ -1080,9 +1083,14 @@ class SeriesActivity : Activity() {
         val topo = v.getChildAt(0) as LinearLayout
         (topo.getChildAt(0) as TextView).text = ep.numero.toString()
         (topo.getChildAt(1) as TextView).text = Series.tituloCurto(s.nome, ep.titulo)
-        (v.getChildAt(1) as TextView).apply { text = ep.sinopse; visibility = if (ep.sinopse.isEmpty()) View.GONE else View.VISIBLE }
-        val barra = v.getChildAt(2) as BarraTempo.Barra
         val pos = posicoes[ep.chave(s.fonteId)]
+        // Esconder spoiler (16/11/2026, ideia do Stremio): episódio nunca aberto não mostra o resumo, se a chave estiver ligada.
+        val escondido = ep.sinopse.isNotEmpty() && ConfortoRegras.esconderResumo(semSpoiler, pos != null)
+        (v.getChildAt(1) as TextView).apply {
+            text = if (escondido) getString(R.string.cf_resumo_escondido) else ep.sinopse
+            visibility = if (ep.sinopse.isEmpty()) View.GONE else View.VISIBLE
+        }
+        val barra = v.getChildAt(2) as BarraTempo.Barra
         if (pos != null && pos.duracao > 0) { barra.visibility = View.VISIBLE; barra.fracao = BarraTempo.fracao(pos.ms, pos.duracao) }
         else barra.visibility = View.INVISIBLE
         // À direita do nome: "faltam 35 min · termina às 17:28" se começou, "visto" se acabou, senão a duração.
@@ -1167,7 +1175,7 @@ class SeriesActivity : Activity() {
         VodActivity.abrirComResultado(this, CODIGO_VIDEO, VodActivity.TIPO_EPISODIO, s.fonteId, ep.id, ep.extensao,
             "${Vod.nomeLimpo(s.nome)} · ${ep.rotulo} · ${Series.tituloCurto(s.nome, ep.titulo)}", doComeco, chaveIdioma = s.chave,
             busca = LegendaExterna.Busca(LegendaExterna.nomeDeBusca(s.nome), temporada = ep.temporada, episodio = ep.numero,
-                tmdb = s.tmdb ?: externo?.takeIf { it.first.chave == s.chave }?.second?.tmdb))
+                tmdb = s.tmdb ?: externo?.takeIf { it.first.chave == s.chave }?.second?.tmdb, versao = Idioma.versao(s.nome, s.grupo)))
     }
 
     // API antiga (deprecated), mas é a que existe numa Activity comum, sem AndroidX.
@@ -1190,7 +1198,8 @@ class SeriesActivity : Activity() {
                 val prox = if (terminou && s != null && f != null && ep != null) Series.proximo(f, ep) else null
                 // Ideia 19 (14/11/2026): antes o próximo começava na hora. Agora: contagem de 10 s com cancelar; depois de
                 // 3 seguidos sem tecla, pergunta "ainda está assistindo?"; e nada segue se era para desligar ao fim.
-                val passo = FimDoVideo.depois(terminou, prox != null, desligou, seguidos)
+                val contagem = Conforto.contagem(this)
+                val passo = FimDoVideo.depois(terminou, prox != null, desligou, seguidos, contagem)
                 if (prox != null && s != null && passo != FimDoVideo.Passo.NADA && passo != FimDoVideo.Passo.DESLIGAR) {
                     temporada = prox.temporada; desenharFicha()
                     avisarProximo(s, prox, perguntar = passo == FimDoVideo.Passo.PERGUNTAR)
@@ -1201,13 +1210,14 @@ class SeriesActivity : Activity() {
     }
 
     /**
-     * Ideia 19: cartão por cima da ficha antes do próximo episódio. [perguntar] = false: "Assistir agora · 10 s" contando e
+     * Ideia 19: cartão por cima da ficha antes do próximo episódio. [perguntar] = false: "Assistir agora · 10 s" contando
+     * (os segundos vêm das Configurações desde 16/11/2026, [Conforto.contagem]) e
      * começa sozinho no zero; VOLTAR ou "Cancelar" fica na ficha. [perguntar] = true: "Ainda está assistindo?" sem contagem.
      */
     private fun avisarProximo(s: Serie, prox: Episodio, perguntar: Boolean) {
         avisoProximo?.dismiss()
         val d = android.app.Dialog(this)
-        var resta = FimDoVideo.CONTAGEM_S
+        var resta = Conforto.contagem(this).takeIf { it > 0 } ?: FimDoVideo.CONTAGEM_S
         val parar = Estilo.botao(this, getString(R.string.vod_proximo_cancelar), primario = false)
         val ver = Estilo.botao(this, if (perguntar) getString(R.string.vod_proximo_continuar) else getString(R.string.vod_proximo_agora, resta))
         val tique = object : Runnable {
@@ -1274,7 +1284,7 @@ class SeriesActivity : Activity() {
     }
 
     private fun rotulo(t: String) = TextView(this).apply {
-        text = t; textSize = Estilo.Leitura.ROTULO; typeface = Fontes.manrope(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
+        text = t; textSize = Estilo.Leitura.ROTULO; typeface = Fontes.nunito(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
         setPadding(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
     }
 

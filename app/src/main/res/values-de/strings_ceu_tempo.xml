@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor que reage ao tempo, caminho 2 (17/11/2026): frase do tempo, curiosidades do céu e o tema "Céu de verdade". -->
+<resources>
+    <string name="tema_ceu">Echter Himmel</string>
+    <string name="ceu_credito">Wolken: NOAA GOES / NASA GIBS · Karte: Natural Earth</string>
+    <string name="ft_chuva_min">Regen in etwa %1$d Min.</string>
+    <string name="ft_para_min">Regen hört in etwa %1$d Min. auf</string>
+    <string name="ft_chuva_hora">Regen gegen %1$s</string>
+    <string name="ft_para_hora">Regen hört gegen %1$s auf</string>
+    <string name="ft_chuva_segue">Regen in den nächsten Stunden</string>
+    <string name="ft_trovoada">Gewitter gegen %1$s möglich</string>
+    <string name="ft_geada_hoje">Frost heute Nacht: Pflanzen schützen</string>
+    <string name="ft_geada_manha">Frostiger Morgen: warm anziehen</string>
+    <string name="ft_calor">Sehr heiß heute (%1$d°): viel trinken</string>
+    <string name="ft_neblina">Nebel: Vorsicht auf der Straße</string>
+    <string name="ft_noite_fria">Kalte Nacht (%1$d°): warm anziehen</string>
+    <string name="ft_secar">Guter Tag zum Wäschetrocknen</string>
+    <string name="ft_amanha_chove">Morgen wahrscheinlich Regen (%1$d %%)</string>
+    <string name="ft_ceu_limpo">Klarer Himmel: gute Nacht für Sterne</string>
+    <string name="cu_uv_agora">UV %1$d jetzt</string>
+    <string name="cu_uv_amanha">UV %1$d morgen</string>
+    <string name="cu_uv_faixa">Hut und Sonnencreme von %1$s bis %2$s</string>
+    <string name="cu_uv_d2">Sonnencreme, wenn Sie rausgehen</string>
+    <string name="cu_uv_d3">Hut und Sonnencreme</string>
+    <string name="cu_uv_d4">Mittagssonne meiden</string>
+    <string name="cu_uv_d5">im Schatten bleiben</string>
+    <string name="cu_ar_2">Mäßige Luft</string>
+    <string name="cu_ar_3">Luft schlecht für Empfindliche</string>
+    <string name="cu_ar_4">Schlechte Luft</string>
+    <string name="cu_ar_5">Sehr schlechte Luft</string>
+    <string name="cu_ar_6">Gefährliche Luft</string>
+    <string name="cu_ar_d2">Asthma: Fenster heute zu</string>
+    <string name="cu_ar_d3">kein Sport im Freien</string>
+    <string name="cu_ar_d4">alle: weniger Zeit draußen</string>
+    <string name="cu_ar_d5">drinnen bleiben, Fenster zu</string>
+    <string name="cu_estacao">Raumstation um %1$s</string>
+    <string name="cu_estacao_d">%1$d Min. · %2$s → %3$s</string>
+    <string name="cu_meteoros">Sternschnuppen heute Nacht</string>
+    <string name="cu_meteoros_d">%1$s · bis %2$d pro Stunde</string>
+    <string name="cu_eclipse">Sonnenfinsternis %1$s</string>
+    <string name="cu_eclipse_d">nie direkt in die Sonne schauen</string>
+    <string name="cu_lua_cheia">Vollmond heute</string>
+    <string name="cu_superlua">Supermond heute</string>
+    <string name="cu_lua_cheia_d">geht abends im Osten auf</string>
+    <string name="cu_lua_nova">Neumond</string>
+    <string name="cu_lua_nova_d">dunkler Himmel: ideal für Sterne</string>
+    <string name="cu_planeta">%1$s hoch um %2$s</string>
+    <string-array name="ceu_rumos">
+        <item>Norden</item>
+        <item>Nordosten</item>
+        <item>Osten</item>
+        <item>Südosten</item>
+        <item>Süden</item>
+        <item>Südwesten</item>
+        <item>Westen</item>
+        <item>Nordwesten</item>
+    </string-array>
+    <string-array name="ceu_olhe">
+        <item>nach Norden schauen</item>
+        <item>nach Nordosten schauen</item>
+        <item>nach Osten schauen</item>
+        <item>nach Südosten schauen</item>
+        <item>nach Süden schauen</item>
+        <item>nach Südwesten schauen</item>
+        <item>nach Westen schauen</item>
+        <item>nach Nordwesten schauen</item>
+    </string-array>
+    <string-array name="ceu_planetas">
+        <item>Venus</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+    </string-array>
+    <string-array name="ceu_meteoros">
+        <item>Quadrantiden</item>
+        <item>Lyriden</item>
+        <item>Eta-Aquariiden</item>
+        <item>Delta-Aquariiden</item>
+        <item>Perseiden</item>
+        <item>Orioniden</item>
+        <item>Leoniden</item>
+        <item>Geminiden</item>
+    </string-array>
+</resources>

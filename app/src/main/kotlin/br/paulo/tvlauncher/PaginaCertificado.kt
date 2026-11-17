@@ -11,9 +11,29 @@ import java.util.Locale
  *
  * No modelo: {{CHAVE}} vira o valor (sempre escapado para HTML) e <!--se:x-->…<!--fim:x--> some quando a condição x
  * é falsa. Condições: pronto, naopronto, comip (o IP atual está no certificado), vencendo (faltam menos de 60 dias).
+ *
+ * 16/11/2026: o passo a passo do sistema de quem abriu a página ([sistema], pelo User-Agent) vem primeiro e aberto
+ * ({{PRIMEIRO_X}} vira a classe "primeiro" e {{ABERTO_X}} vira "open"); os outros ficam fechados embaixo.
  */
 object PaginaCertificado {
-    fun preencher(modelo: String, estado: JSONObject, nome: String): String {
+    enum class Sistema(val rotulo: String) { ANDROID("Android"), IOS("iPhone ou iPad"), WINDOWS("Windows"), MAC("Mac"), OUTRO("outro") }
+
+    /**
+     * O sistema pelo User-Agent. A ordem importa: o Android e o iPhone também dizem "Linux"/"Mac OS X" no texto. O iPad
+     * novo se apresenta como Mac: cai em MAC, e o passo do iPhone continua logo abaixo.
+     */
+    fun sistema(agente: String?): Sistema {
+        val a = agente ?: return Sistema.OUTRO
+        return when {
+            a.contains("Android") -> Sistema.ANDROID
+            a.contains("iPhone") || a.contains("iPad") || a.contains("iPod") -> Sistema.IOS
+            a.contains("Windows") -> Sistema.WINDOWS
+            a.contains("Macintosh") || a.contains("Mac OS X") -> Sistema.MAC
+            else -> Sistema.OUTRO
+        }
+    }
+
+    fun preencher(modelo: String, estado: JSONObject, nome: String, agente: String? = null): String {
         val pronto = estado.optBoolean("pronto") && estado.optBoolean("ligado")
         val dias = estado.optLong("diasRestantes", Long.MAX_VALUE)
         val condicoes = mapOf(
@@ -37,7 +57,11 @@ object PaginaCertificado {
             "DIAS" to (if (dias == Long.MAX_VALUE) "" else dias.toString()),
             "NOME" to nome,
         )
-        for ((k, v) in valores) html = html.replace("{{$k}}", escapar(v))
+        val meu = sistema(agente)
+        val porSistema = Sistema.entries.filter { it != Sistema.OUTRO }.flatMap { so ->
+            listOf("PRIMEIRO_${so.name}" to (if (so == meu) "primeiro" else ""), "ABERTO_${so.name}" to (if (so == meu) "open" else ""))
+        } + ("SISTEMA" to (if (meu == Sistema.OUTRO) "não reconhecido (abra o seu abaixo)" else meu.rotulo))
+        for ((k, v) in valores + porSistema) html = html.replace("{{$k}}", escapar(v))
         return html
     }
 

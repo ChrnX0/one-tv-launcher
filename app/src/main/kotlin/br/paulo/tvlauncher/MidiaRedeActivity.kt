@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 /**
  * Mídias da rede (card "Na rede" da HOME). 07/11/2026: DLNA, pasta compartilhada e Jellyfin. 10/11/2026: Plex (login
  * por código), Emby, WebDAV/Nextcloud, link de vídeo ou lista M3U, computadores com pasta compartilhada achados sozinhos,
- * e a tela inteira no sistema de design (Estilo.kt: Manrope, linha que vira pílula branca no foco, ícones de linha).
+ * e a tela inteira no sistema de design (Estilo.kt: Nunito, linha que vira pílula branca no foco, ícones de linha).
  *
  *   Na rede
  *   SEUS SERVIDORES   o que a pessoa já adicionou (OK abre; segurar OK 2 s = remover)
@@ -512,8 +512,11 @@ class MidiaRedeActivity : Activity() {
         // No 1º item, setSelection rolava o nome do grupo ("SEUS SERVIDORES") para fora: mostra a lista desde o topo.
         if (alvo >= 0 && nivel.itens.take(alvo).all { it is Secao }) lista.setSelectionFromTop(alvo, alturaSecoes(alvo)) else lista.setSelection(maxOf(0, alvo))
         dicas.removeAllViews()
-        dicas.addView(if (pilha.size == 1) Estilo.barraDicas(this, "OK" to getString(R.string.rede_dica_abrir),
+        // "segure OK remover" só quando há conta salva para remover (Sala, 17/11/2026: aparecia só com o pendrive, que não sai).
+        val temConta = nivel.itens.any { (it as? Linha)?.alvo is ContaMidia }
+        dicas.addView(if (pilha.size == 1 && temConta) Estilo.barraDicas(this, "OK" to getString(R.string.rede_dica_abrir),
             getString(R.string.rede_tecla_segurar) to getString(R.string.rede_dica_remover), getString(R.string.rede_tecla_voltar) to getString(R.string.rede_dica_sair))
+        else if (pilha.size == 1) Estilo.barraDicas(this, "OK" to getString(R.string.rede_dica_abrir), getString(R.string.rede_tecla_voltar) to getString(R.string.rede_dica_sair))
         else Estilo.barraDicas(this, "OK" to getString(R.string.rede_dica_abrir), getString(R.string.rede_tecla_voltar) to getString(R.string.rede_dica_subir)))
         if (camada.visibility != View.VISIBLE) lista.requestFocus()
         lista.post { pintarFoco() }
@@ -642,7 +645,7 @@ class MidiaRedeActivity : Activity() {
             f.endereco -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI
             else -> InputType.TYPE_CLASS_TEXT
         }
-        typeface = Estilo.fonte(Estilo.Papel.CORPO.peso)   // o tipo "senha" troca a fonte por monoespaçada: volta a Manrope
+        typeface = Estilo.fonte(Estilo.Papel.CORPO.peso)   // o tipo "senha" troca a fonte por monoespaçada: volta a Nunito
         imeOptions = EditorInfo.IME_ACTION_NEXT or EditorInfo.IME_FLAG_NO_EXTRACT_UI
         hint = f.dica; setText(f.inicial)
         setHintTextColor(Estilo.TEXTO_3)

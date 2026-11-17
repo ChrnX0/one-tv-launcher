@@ -19,6 +19,7 @@ permissions:
 jobs:
   promover:
     if: github.ref == 'refs/heads/main'
+    environment: espelho   # PUBLICO_TOKEN mora no Environment (só main)
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -35,5 +36,9 @@ jobs:
           if ! printf '%s' "$TAG" | grep -Eq '^v[0-9]+$'; then echo "::error::tag inválida: use v<versionCode>"; exit 1; fi
           PRE=$(gh release view "$TAG" --repo "$DESTINO" --json isPrerelease --jq .isPrerelease)
           if [ "$PRE" != "true" ]; then echo "::error::$TAG não é pré-lançamento (já é de todos?)"; exit 1; fi
+          # Promover um teste mais velho que o Release de todos faria o "latest" andar para trás.
+          ATUAL=$(gh release view --repo "$DESTINO" --json tagName --jq .tagName 2>/dev/null || true)
+          if printf '%s' "$ATUAL" | grep -Eq '^v[0-9]+$' && [ "${TAG#v}" -le "${ATUAL#v}" ]; then
+            echo "::error::$TAG é mais antigo que o Release de todos ($ATUAL)"; exit 1; fi
           gh release edit "$TAG" --repo "$DESTINO" --prerelease=false --latest
           gh release view "$TAG" --repo "$DESTINO" --json tagName,isPrerelease,publishedAt

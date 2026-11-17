@@ -2,7 +2,7 @@
 <!-- Tradução (ar) de values/strings_config.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="cl_aba_conta">التلفزيون والأفلام</string>
-    <string name="cl_aba_conta_det">حساب IPTV المحفوظ على هذا التلفزيون: الحالة والانتهاء والاتصالات</string>
+    <string name="cl_aba_conta_det">حساب IPTV وخدمات الأفلام والمسلسلات والصوت والترجمة</string>
     <string name="cl_aba_parental">الرقابة الأبوية</string>
     <string name="cl_aba_parental_det">اقفل القنوات بـPIN: تختفي من القائمة ولا تُشغَّل</string>
     <string name="cl_aba_aparencia">المظهر</string>
@@ -176,6 +176,7 @@
     <string name="cl_ativos">%1$d نشط</string>
     <string name="cl_revogados">أُلغي</string>
     <string name="cl_visivel">ظاهر على التلفزيون</string>
+    <string name="cl_escondido">مخفي على التلفزيون</string>
     <string name="cl_limpeza">تنظيف التطبيقات المثبتة مسبقًا</string>
     <string name="cl_nenhum_liberado">لم يُنظَّف أي تطبيق بعد</string>
     <string name="cl_nenhum_liberado_det">تظهر فقط التطبيقات التي اختُبرت واحدًا واحدًا على هذا التلفزيون (انظر Debloat.kt)</string>

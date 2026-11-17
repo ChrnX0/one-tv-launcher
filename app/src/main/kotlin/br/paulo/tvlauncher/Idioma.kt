@@ -94,8 +94,14 @@ object Idioma {
      * Ideia 89: falta legenda? O áudio tocando NÃO é do idioma da TV e não há legenda completa (não forçada) nele. Sem áudio
      * identificado, não decide (false): baixar às cegas gastaria o limite diário em filme dublado.
      */
-    fun faltaLegenda(audio: Faixa?, textos: List<Faixa>, idioma: String = "pt"): Boolean =
-        audio != null && !eDoIdioma(audio, idioma) && textos.none { eDoIdioma(it, idioma) && !it.forcada }
+    // Áudio SEM idioma marcado ("und"/vazio, comum nas listas IPTV) não é "de fora": a Duna dublada da Sala (17/11/2026)
+    // ganhava legenda baixada por cima da dublagem, que não batia com a fala. Sem idioma, só a marca da lista decide
+    // ([versao]: "LEG"/"Legendado" = original com legenda a baixar); sem marca, não baixa (a busca manual continua no ▼).
+    fun faltaLegenda(audio: Faixa?, textos: List<Faixa>, idioma: String = "pt", versao: Versao = Versao.DESCONHECIDA): Boolean {
+        if (audio == null || eDoIdioma(audio, idioma)) return false
+        if (!eOutraLingua(audio, idioma) && versao != Versao.LEGENDADA) return false
+        return textos.none { eDoIdioma(it, idioma) && !it.forcada }
+    }
 
     fun eDoIdioma(f: Faixa, idioma: String = "pt"): Boolean {
         val l = f.idioma?.lowercase()
@@ -118,10 +124,12 @@ object Idioma {
      * Qual áudio tocar. Dublado: o primeiro no idioma da TV. Original: a faixa padrão do arquivo se não for o idioma da TV;
      * senão a primeira de outra língua. Null = deixar o que o player escolheu (só tem uma faixa, ou nada bate).
      */
-    fun escolherAudio(faixas: List<Faixa>, pref: Pref, idioma: String = "pt"): Int? {
+    fun escolherAudio(faixas: List<Faixa>, pref: Pref, idioma: String = "pt", segundo: String? = null): Int? {
         if (faixas.size < 2) return null
         return when (pref) {
+            // Segundo idioma (16/11/2026, [Conforto]): sem áudio no idioma da TV, o do segundo idioma.
             Pref.DUBLADO -> faixas.indexOfFirst { eDoIdioma(it, idioma) }.takeIf { it >= 0 }
+                ?: segundo?.let { s -> faixas.indexOfFirst { eDoIdioma(it, s) }.takeIf { it >= 0 } }
             Pref.ORIGINAL -> faixas.indexOfFirst { it.padrao && eOutraLingua(it, idioma) }.takeIf { it >= 0 }
                 ?: faixas.indexOfFirst { eOutraLingua(it, idioma) }.takeIf { it >= 0 }
         }
@@ -132,12 +140,17 @@ object Idioma {
      * "forçada", que traduz placa e fala em outra língua, se houver). Áudio em outra língua: a legenda completa no idioma
      * da TV; sem ela, a forçada nesse idioma. Null = sem legenda.
      */
-    fun escolherLegenda(faixas: List<Faixa>, audioPortugues: Boolean, idioma: String = "pt"): Int? {
+    fun escolherLegenda(faixas: List<Faixa>, audioPortugues: Boolean, idioma: String = "pt", segundo: String? = null,
+                        audioNoSegundo: Boolean = false): Int? {
         // Quem baixou uma legenda quer vê-la, mesmo com o áudio dublado (ex.: o arquivo só tem a faixa dublada).
         faixas.indexOfFirst { it.externa }.takeIf { it >= 0 }?.let { return it }
         val daTv = faixas.withIndex().filter { eDoIdioma(it.value, idioma) }
         if (audioPortugues) return daTv.firstOrNull { it.value.forcada }?.index
-        return (daTv.firstOrNull { !it.value.forcada } ?: daTv.firstOrNull())?.index
+        (daTv.firstOrNull { !it.value.forcada } ?: daTv.firstOrNull())?.let { return it.index }
+        // Segundo idioma (16/11/2026): sem legenda no idioma da TV, a completa no segundo idioma. Não liga se o áudio já
+        // está nele (seria legenda da mesma fala).
+        if (segundo == null || audioNoSegundo) return null
+        return faixas.withIndex().firstOrNull { eDoIdioma(it.value, segundo) && !it.value.forcada }?.index
     }
 
     /** A escolha manual de áudio (menu ▼) vira a preferência do título: idioma da TV = dublado, outra língua = original. */

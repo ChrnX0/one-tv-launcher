@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Recado em vídeo (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="vid_de">%1$s 发来的视频</string>
+    <string name="vid_mural">发来一个视频</string>
+    <string name="vid_onde">观看：设置 › 家人 › 家人视频。</string>
+    <string name="vid_depois">稍后</string>
+    <string name="vid_assistir">观看</string>
+    <string name="vid_ok_para_assistir">按 OK 观看。</string>
+    <string name="vid_lista">家人视频</string>
+    <string name="vid_lista_det">通过家人链接发来。每个保留 30 天。长按 OK 删除。</string>
+    <string name="vid_nenhum">还没有视频。</string>
+    <string name="vid_apagar">删除视频</string>
+    <string name="vid_aceitar">接收视频</string>
+    <string name="vid_aceitar_det">家人可以发送最长 30 秒的视频。视频绝不会自动播放。</string>
+    <string name="vid_quantos">视频：%1$d</string>
+</resources>

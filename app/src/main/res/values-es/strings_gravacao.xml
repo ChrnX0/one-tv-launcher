@@ -60,7 +60,7 @@
     <string name="grv_apagar_pergunta">¿Borrar \"%1$s\"? No se puede deshacer.</string>
     <string name="grv_reserva_secao">Sin memoria USB</string>
     <string name="grv_reserva">Carpeta de red</string>
-    <string name="grv_reserva_explica">Dónde grabar cuando no hay memoria USB conectada (una carpeta de Windows/NAS de En la red)</string>
+    <string name="grv_reserva_explica">Dónde grabar cuando no hay memoria USB conectada (una carpeta de Windows o NAS de “En la red”)</string>
     <string name="grv_nenhuma">Ninguna</string>
     <string name="grv_sem_smb">Agrega primero una carpeta de Windows/NAS (SMB) en En la red.</string>
     <string name="grv_amanha">Mañana</string>

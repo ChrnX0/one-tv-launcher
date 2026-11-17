@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor que reage ao tempo, caminho 2 (17/11/2026): frase do tempo, curiosidades do céu e o tema "Céu de verdade". -->
+<resources>
+    <string name="tema_ceu">असली आसमान</string>
+    <string name="ceu_credito">बादल: NOAA GOES / NASA GIBS · नक्शा: Natural Earth</string>
+    <string name="ft_chuva_min">लगभग %1$d मिनट में बारिश</string>
+    <string name="ft_para_min">लगभग %1$d मिनट में बारिश रुकेगी</string>
+    <string name="ft_chuva_hora">लगभग %1$s बजे बारिश</string>
+    <string name="ft_para_hora">लगभग %1$s बजे बारिश रुकेगी</string>
+    <string name="ft_chuva_segue">अगले कुछ घंटे बारिश</string>
+    <string name="ft_trovoada">लगभग %1$s बजे आंधी-तूफ़ान</string>
+    <string name="ft_geada_hoje">आज रात पाला: पौधों को बचाएँ</string>
+    <string name="ft_geada_manha">पाले वाली सुबह: गर्म कपड़े पहनें</string>
+    <string name="ft_calor">आज बहुत गर्मी (%1$d°): पानी पिएँ</string>
+    <string name="ft_neblina">कोहरा: सड़क पर सावधान</string>
+    <string name="ft_noite_fria">ठंडी रात (%1$d°): गर्म कपड़े पहनें</string>
+    <string name="ft_secar">कपड़े सुखाने के लिए अच्छा दिन</string>
+    <string name="ft_amanha_chove">कल बारिश की संभावना (%1$d%%)</string>
+    <string name="ft_ceu_limpo">साफ़ आसमान: तारे देखने की अच्छी रात</string>
+    <string name="cu_uv_agora">UV अभी %1$d</string>
+    <string name="cu_uv_amanha">UV कल %1$d</string>
+    <string name="cu_uv_faixa">%1$s से %2$s तक टोपी और सनस्क्रीन</string>
+    <string name="cu_uv_d2">बाहर जाएँ तो सनस्क्रीन</string>
+    <string name="cu_uv_d3">टोपी और सनस्क्रीन</string>
+    <string name="cu_uv_d4">दोपहर की धूप से बचें</string>
+    <string name="cu_uv_d5">छाँव में रहें</string>
+    <string name="cu_ar_2">मध्यम हवा</string>
+    <string name="cu_ar_3">संवेदनशील लोगों के लिए खराब हवा</string>
+    <string name="cu_ar_4">खराब हवा</string>
+    <string name="cu_ar_5">बहुत खराब हवा</string>
+    <string name="cu_ar_6">खतरनाक हवा</string>
+    <string name="cu_ar_d2">दमा: आज खिड़कियाँ बंद रखें</string>
+    <string name="cu_ar_d3">बाहर व्यायाम न करें</string>
+    <string name="cu_ar_d4">सभी: बाहर कम समय</string>
+    <string name="cu_ar_d5">घर में रहें, खिड़कियाँ बंद</string>
+    <string name="cu_estacao">अंतरिक्ष स्टेशन %1$s बजे</string>
+    <string name="cu_estacao_d">%1$d मिनट · %2$s → %3$s</string>
+    <string name="cu_meteoros">आज रात उल्का वर्षा</string>
+    <string name="cu_meteoros_d">%1$s · घंटे में %2$d तक</string>
+    <string name="cu_eclipse">सूर्य ग्रहण %1$s</string>
+    <string name="cu_eclipse_d">सूरज को कभी सीधे न देखें</string>
+    <string name="cu_lua_cheia">आज पूर्णिमा</string>
+    <string name="cu_superlua">आज सुपरमून</string>
+    <string name="cu_lua_cheia_d">शाम को पूर्व में उगता है</string>
+    <string name="cu_lua_nova">अमावस्या</string>
+    <string name="cu_lua_nova_d">अँधेरा आसमान: तारों के लिए सबसे अच्छा</string>
+    <string name="cu_planeta">%1$s %2$s बजे ऊँचा</string>
+    <string-array name="ceu_rumos">
+        <item>उत्तर</item>
+        <item>उत्तर-पूर्व</item>
+        <item>पूर्व</item>
+        <item>दक्षिण-पूर्व</item>
+        <item>दक्षिण</item>
+        <item>दक्षिण-पश्चिम</item>
+        <item>पश्चिम</item>
+        <item>उत्तर-पश्चिम</item>
+    </string-array>
+    <string-array name="ceu_olhe">
+        <item>उत्तर की ओर देखें</item>
+        <item>उत्तर-पूर्व की ओर देखें</item>
+        <item>पूर्व की ओर देखें</item>
+        <item>दक्षिण-पूर्व की ओर देखें</item>
+        <item>दक्षिण की ओर देखें</item>
+        <item>दक्षिण-पश्चिम की ओर देखें</item>
+        <item>पश्चिम की ओर देखें</item>
+        <item>उत्तर-पश्चिम की ओर देखें</item>
+    </string-array>
+    <string-array name="ceu_planetas">
+        <item>शुक्र</item>
+        <item>मंगल</item>
+        <item>बृहस्पति</item>
+        <item>शनि</item>
+    </string-array>
+    <string-array name="ceu_meteoros">
+        <item>क्वाड्रेंटिड्स</item>
+        <item>लिरिड्स</item>
+        <item>ईटा एक्वेरिड्स</item>
+        <item>डेल्टा एक्वेरिड्स</item>
+        <item>पर्सिड्स</item>
+        <item>ओरियोनिड्स</item>
+        <item>लियोनिड्स</item>
+        <item>जेमिनिड्स</item>
+    </string-array>
+</resources>

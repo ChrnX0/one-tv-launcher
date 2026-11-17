@@ -118,6 +118,13 @@ object PainelExtras {
                 PainelArmazem.registrar(app, ip, "extras: MAC do computador guardado", "ok")
                 ok(estado(app))
             }
+            // Turma do Discord da tela Jogos: o webhook nunca volta inteiro para o navegador (só se existe).
+            get && rota == "turma" -> ok(JSONObject().put("servidor", TurmaDiscordTv.servidor(app)).put("webhook", TurmaDiscordTv.temWebhook(app)))
+            post && rota == "turma" -> {
+                corpo?.optString("servidor", null)?.let { if (!TurmaDiscordTv.guardarServidor(app, it)) return erro(400, "ID do servidor inválido (17 a 20 números)") }
+                corpo?.optString("webhook", null)?.let { if (!TurmaDiscordTv.guardarWebhook(app, it)) return erro(400, "Webhook inválido (https://discord.com/api/webhooks/...)") }
+                ok(JSONObject().put("servidor", TurmaDiscordTv.servidor(app)).put("webhook", TurmaDiscordTv.temWebhook(app)))
+            }
             post && rota == "acordar" -> {
                 val r = AcordarPc.acordar(app)
                 PainelArmazem.registrar(app, ip, "acordar o computador", if (r) "enviado" else "falhou")
@@ -305,6 +312,8 @@ object PainelExtras {
     private fun estado(app: Context): JSONObject = JSONObject()
         .put("chaves", JSONObject().apply { Extras.Chave.values().forEach { put(it.name, Extras.ligado(app, it)) } })
         .put("comPin", JSONArray(CHAVES_COM_PIN.map { it.name }))
+        // Painel v3 (16/11/2026): em que aba das Configurações da TV cada chave mora, para o painel mostrá-la no mesmo lugar.
+        .put("abas", JSONObject().apply { ExtrasAbas.MAPA.forEach { (chave, aba) -> put(chave, aba.name) } })
         .put("filtro", JSONObject()
             .put("inicio", Extras.numero(app, FiltroNoturno.CHAVE_INICIO, FiltroNoturno.PADRAO_INICIO))
             .put("fim", Extras.numero(app, FiltroNoturno.CHAVE_FIM, FiltroNoturno.PADRAO_FIM))

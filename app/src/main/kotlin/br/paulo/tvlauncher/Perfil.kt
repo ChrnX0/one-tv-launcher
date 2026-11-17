@@ -97,6 +97,45 @@ object Perfil {
     /** "fulano@gmail.com" -> "fulano". */
     fun usuario(conta: String): String = conta.substringBefore('@')
 
+    // Nome da pessoa (17/11/2026, Sala: os perfis apareciam como "solbadiali", o usuário do e-mail). O Android não dá
+    // o nome da conta Google a quem é de fora do Google; ele chega pelo login Google (campo "given_name"/"name") ou
+    // pelo painel web. Fica só na TV, num arquivo de preferências próprio.
+    private const val PREFS_NOMES = "perfil_nomes"
+    const val MAX_NOME = 30
+
+    /** O nome para mostrar: o guardado, ou o usuário do e-mail. */
+    fun nome(contexto: Context, conta: String): String =
+        contexto.getSharedPreferences(PREFS_NOMES, Context.MODE_PRIVATE).getString(conta.lowercase(), null)
+            ?.takeIf { it.isNotBlank() } ?: usuario(conta)
+
+    /** Só o nome guardado (null se não tem). */
+    fun nomeGuardado(contexto: Context, conta: String): String? =
+        contexto.getSharedPreferences(PREFS_NOMES, Context.MODE_PRIVATE).getString(conta.lowercase(), null)
+
+    /** Nome limpo: sem quebras nem caracteres de controle, espaços juntados, até [MAX_NOME]. null = vazio. Puro. */
+    fun limparNome(bruto: String?): String? {
+        val t = (bruto ?: "").filter { !it.isISOControl() }.trim().replace(Regex("\\s+"), " ")
+        return t.take(MAX_NOME).trim().ifEmpty { null }
+    }
+
+    /**
+     * Guarda (ou apaga, com vazio) o nome de [conta]. [manual] = veio do painel; um nome do painel não é trocado depois
+     * pelo do login Google ([doLogin]).
+     */
+    fun definirNome(contexto: Context, conta: String, nome: String?, manual: Boolean = true) {
+        val k = conta.lowercase(); val n = limparNome(nome)
+        contexto.getSharedPreferences(PREFS_NOMES, Context.MODE_PRIVATE).edit().apply {
+            if (n == null) { remove(k); remove("manual|$k") } else { putString(k, n); if (manual) putBoolean("manual|$k", true) }
+        }.apply()
+    }
+
+    /** O login Google trouxe o nome: guarda, a menos que a pessoa já tenha escolhido um pelo painel. */
+    fun doLogin(contexto: Context, conta: String, nome: String?) {
+        val p = contexto.getSharedPreferences(PREFS_NOMES, Context.MODE_PRIVATE)
+        if (p.getBoolean("manual|" + conta.lowercase(), false)) return
+        if (limparNome(nome) != null) definirNome(contexto, conta, nome, manual = false)
+    }
+
     /**
      * Cache dos avatares já desenhados (04/11/2026): o onResume da HOME redesenhava a bolinha toda vez — decodificar a
      * foto, recortar e escalar na thread da tela. A chave inclui o caminho e a data da foto, então trocar a foto por
@@ -166,7 +205,7 @@ object Perfil {
         if (letra.isNotEmpty()) {
             tinta.textSize = lado * 0.5f
             tinta.textAlign = Paint.Align.CENTER
-            tinta.typeface = Fontes.manrope(500)
+            tinta.typeface = Fontes.nunito(500)
             val y = lado / 2f - (tinta.descent() + tinta.ascent()) / 2f   // centraliza na vertical
             tela.drawText(letra, lado / 2f, y, tinta)
         } else {
