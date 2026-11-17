@@ -10,3 +10,7 @@ Legendas: Subtitles provided by OpenSubtitles.com (https://www.opensubtitles.com
 Obras de arte dos fundos: The Metropolitan Museum of Art, Open Access (CC0).
 Rádios: Radio Browser (https://www.radio-browser.info).
 Endereço pelo CEP: ViaCEP (https://viacep.com.br).
+Céu de verdade e protetor: nuvens do satélite GOES (NOAA, domínio público dos EUA) pelo NASA GIBS
+  (https://earthdata.nasa.gov/gibs); mapa Natural Earth (https://www.naturalearthdata.com, domínio público);
+  órbita da Estação Espacial (TLE do NORAD) pelo CelesTrak (https://celestrak.org).
+

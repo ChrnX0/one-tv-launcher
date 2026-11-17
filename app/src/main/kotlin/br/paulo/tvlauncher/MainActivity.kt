@@ -2596,6 +2596,8 @@ class MainActivity : Activity() {
                         .putFloat("lat", r.ponto.lat.toFloat()).putFloat("lon", r.ponto.lon.toFloat())
                         .putInt("max", r.max).putInt("min", r.min).putString("linha", r.linha)
                         .putString("horas", r.horas)   // próximas horas: a barra do protetor
+                        // Protetor que reage ao tempo (FonteTempoGuardado): UV, chuva de 15 em 15 min e ar.
+                        .putString("uv", r.uv).putString("chuva15", r.chuva15).putInt("aqi", r.aqi ?: -1)
                         .putString("idioma", idiomaAtual())   // a linha é texto pronto nesse idioma
                         .putLong("em", System.currentTimeMillis()).apply()
                     txtMax.text = "↑ ${r.max}°"

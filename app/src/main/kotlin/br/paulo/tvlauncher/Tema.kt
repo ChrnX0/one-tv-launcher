@@ -9,10 +9,11 @@ import android.graphics.Typeface
  *    caminhando na tela, a partir da posição real do sol e do clima (era o antigo tema "Céu ao vivo"; hoje é
  *    parte fixa do Escuro, não existe mais como opção separada).
  *  - GALERIA: uma pintura de domínio público por dia (acervo aberto do The Met), com etiqueta de museu.
+ *  - CEU ("Céu de verdade", 17/11/2026): o mapa da região com a cidade e as nuvens de agora (CeuDeVerdade.kt).
  * Fonte: a Manrope em todos (res/font, licença SIL Open Font); o tema muda só o fundo.
  */
 enum class Tema(private val rotulo: Int) {
-    ESCURO(R.string.tema_escuro), GALERIA(R.string.tema_galeria),
+    ESCURO(R.string.tema_escuro), GALERIA(R.string.tema_galeria), CEU(R.string.tema_ceu),
     /** "Meu fundo" (degrau 1, 15/11/2026): foto, GIF ou vídeo da pessoa (FundoMeu.kt). Só entra na volta com arquivo escolhido. */
     MEU(R.string.tema_meu);
 

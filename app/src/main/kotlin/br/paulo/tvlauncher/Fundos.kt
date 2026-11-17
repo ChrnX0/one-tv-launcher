@@ -384,6 +384,7 @@ class FundoGaleria(ctx: Context, private val emSegundoPlano: (() -> Unit) -> Uni
 fun criarFundo(ctx: Context, t: Tema, decoracao: Boolean = true, emSegundoPlano: (() -> Unit) -> Unit): View = when (t) {
     Tema.GALERIA -> FundoGaleria(ctx, emSegundoPlano, comEtiqueta = decoracao)
     Tema.ESCURO -> FundoEscuro(ctx, comArco = decoracao)
+    Tema.CEU -> FundoCeu(ctx, emSegundoPlano)
     Tema.MEU -> FundoMeu(ctx, emSegundoPlano)
 }.also {
     // Camada de hardware: a GPU guarda o fundo pronto numa textura e so o "cola" a cada quadro. Sem isto, os degrades

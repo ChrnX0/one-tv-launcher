@@ -50,7 +50,7 @@ object Planos {
     /** Quantas TVs da mesma casa a compra cobre. */
     fun tvsPorCompra(plano: Plano) = if (plano == Plano.ULTRA) 3 else 1
     /** Temas liberados no Básico (os outros pedem o Pro). */
-    val TEMAS_BASICO = setOf(Tema.ESCURO.name, Tema.GALERIA.name)
+    val TEMAS_BASICO = setOf(Tema.ESCURO.name, Tema.GALERIA.name, Tema.CEU.name)   // Céu: satélite e mapa sem custo
 
     /** O plano deste aparelho. Sem venda ativa: Ultra. Com venda: virá da compra (ainda não existe). */
     fun atual(ctx: Context): Plano = if (!VENDA_ATIVA) Plano.ULTRA else CobrancaPlay.planoGuardado(ctx)

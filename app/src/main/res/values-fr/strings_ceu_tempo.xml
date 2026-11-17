@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor que reage ao tempo, caminho 2 (17/11/2026): frase do tempo, curiosidades do céu e o tema "Céu de verdade". -->
+<resources>
+    <string name="tema_ceu">Ciel réel</string>
+    <string name="ceu_credito">Nuages : NOAA GOES / NASA GIBS · Carte : Natural Earth</string>
+    <string name="ft_chuva_min">Pluie dans environ %1$d min</string>
+    <string name="ft_para_min">La pluie s\'arrête dans environ %1$d min</string>
+    <string name="ft_chuva_hora">Pluie vers %1$s</string>
+    <string name="ft_para_hora">La pluie s\'arrête vers %1$s</string>
+    <string name="ft_chuva_segue">Pluie pour les prochaines heures</string>
+    <string name="ft_trovoada">Orage probable vers %1$s</string>
+    <string name="ft_geada_hoje">Gel cette nuit : protégez les plantes</string>
+    <string name="ft_geada_manha">Matin de gel : couvrez-vous</string>
+    <string name="ft_calor">Très chaud aujourd\'hui (%1$d°) : buvez de l\'eau</string>
+    <string name="ft_neblina">Brouillard : prudence sur la route</string>
+    <string name="ft_noite_fria">Nuit froide (%1$d°) : couvrez-vous</string>
+    <string name="ft_secar">Bonne journée pour sécher le linge</string>
+    <string name="ft_amanha_chove">Pluie probable demain (%1$d %%)</string>
+    <string name="ft_ceu_limpo">Ciel dégagé : belle nuit pour les étoiles</string>
+    <string name="cu_uv_agora">UV %1$d maintenant</string>
+    <string name="cu_uv_amanha">UV %1$d demain</string>
+    <string name="cu_uv_faixa">chapeau et crème de %1$s à %2$s</string>
+    <string name="cu_uv_d2">crème solaire si vous sortez</string>
+    <string name="cu_uv_d3">chapeau et crème solaire</string>
+    <string name="cu_uv_d4">évitez le soleil de midi</string>
+    <string name="cu_uv_d5">restez à l\'ombre</string>
+    <string name="cu_ar_2">Air moyen</string>
+    <string name="cu_ar_3">Air mauvais pour les personnes sensibles</string>
+    <string name="cu_ar_4">Air mauvais</string>
+    <string name="cu_ar_5">Air très mauvais</string>
+    <string name="cu_ar_6">Air dangereux</string>
+    <string name="cu_ar_d2">asthme : fenêtres fermées aujourd\'hui</string>
+    <string name="cu_ar_d3">évitez le sport dehors</string>
+    <string name="cu_ar_d4">tout le monde : moins de temps dehors</string>
+    <string name="cu_ar_d5">restez chez vous, fenêtres fermées</string>
+    <string name="cu_estacao">Station spatiale à %1$s</string>
+    <string name="cu_estacao_d">%1$d min · %2$s → %3$s</string>
+    <string name="cu_meteoros">Pluie d\'étoiles filantes cette nuit</string>
+    <string name="cu_meteoros_d">%1$s · jusqu\'à %2$d par heure</string>
+    <string name="cu_eclipse">Éclipse de Soleil %1$s</string>
+    <string name="cu_eclipse_d">ne regardez jamais le soleil en face</string>
+    <string name="cu_lua_cheia">Pleine lune ce soir</string>
+    <string name="cu_superlua">Super lune ce soir</string>
+    <string name="cu_lua_cheia_d">se lève à l\'est à la tombée de la nuit</string>
+    <string name="cu_lua_nova">Nouvelle lune</string>
+    <string name="cu_lua_nova_d">ciel noir : idéal pour les étoiles</string>
+    <string name="cu_planeta">%1$s haut à %2$s</string>
+    <string-array name="ceu_rumos">
+        <item>nord</item>
+        <item>nord-est</item>
+        <item>est</item>
+        <item>sud-est</item>
+        <item>sud</item>
+        <item>sud-ouest</item>
+        <item>ouest</item>
+        <item>nord-ouest</item>
+    </string-array>
+    <string-array name="ceu_olhe">
+        <item>regardez au nord</item>
+        <item>regardez au nord-est</item>
+        <item>regardez à l\'est</item>
+        <item>regardez au sud-est</item>
+        <item>regardez au sud</item>
+        <item>regardez au sud-ouest</item>
+        <item>regardez à l\'ouest</item>
+        <item>regardez au nord-ouest</item>
+    </string-array>
+    <string-array name="ceu_planetas">
+        <item>Vénus</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturne</item>
+    </string-array>
+    <string-array name="ceu_meteoros">
+        <item>Quadrantides</item>
+        <item>Lyrides</item>
+        <item>Êta Aquarides</item>
+        <item>Delta Aquarides</item>
+        <item>Perséides</item>
+        <item>Orionides</item>
+        <item>Léonides</item>
+        <item>Géminides</item>
+    </string-array>
+</resources>
