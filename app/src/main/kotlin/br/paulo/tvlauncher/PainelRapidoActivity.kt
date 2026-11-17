@@ -50,7 +50,7 @@ import java.util.concurrent.Executors
  *
  * Quem abre: a bolinha do perfil na HOME, o HOME segurado (BotoesControle) e, se algo abrir o painel do Google por outro
  * caminho, o vigia de janelas troca pelo nosso (Home.janelaApareceu). Voltar ou abrir qualquer coisa fecha.
- * Sistema de design: Estilo (Manrope, vidro, foco de linha = pílula branca, acento só para "ligado", 8/16 dp).
+ * Sistema de design: Estilo (Nunito, vidro, foco de linha = pílula branca, acento só para "ligado", 8/16 dp).
  */
 class PainelRapidoActivity : Activity() {
     companion object {
@@ -93,7 +93,7 @@ class PainelRapidoActivity : Activity() {
         /** Fundo do painel: azul-ardósia escuro e opaco, como o do Google (e próximo do FUNDO do launcher). */
         private const val FUNDO_PAINEL = 0xFF151C25.toInt()
         /** Ícone de tile desligado: o texto do sistema a 85%. */
-        private const val ICONE_APAGADO = 0xD9F2F5F3.toInt()
+        private const val ICONE_APAGADO = 0xD9F4F1EC.toInt()
     }
 
     /** Um tile: a casca focável, o ícone, o nome e o detalhe (some quando vazio). [ligado] pinta ícone e detalhe de acento. */
@@ -607,7 +607,7 @@ class PainelRapidoActivity : Activity() {
 
     /**
      * Um tile no molde do Google: ícone solto (18 dp) à esquerda; nome (14 sp) e, só quando diz algo, o detalhe (12 sp).
-     * Medido com a Manrope: sobram ~74 dp para o texto; "Bluetooth" tem 65 e "Amanhã 06:30" ~70.
+     * Medido com a Nunito: sobram ~74 dp para o texto; "Bluetooth" tem 65 e "Amanhã 06:30" ~70.
      */
     private fun tile(tipoIcone: String, titulo: String, aoClicar: () -> Unit): Tile {
         val icone = IconeCard(this, tipoIcone)

@@ -62,8 +62,8 @@ class PrevisaoActivity : Activity() {
     // Cores e fontes do sistema de design (Estilo); o azul da chuva e a escala do ar são cores de dado, ficam.
     private val textoSuave = Estilo.TEXTO_2
     private val azulChuva = 0xFF8EC5FF.toInt()
-    private val fonteMedia = Fontes.manrope(600)
-    private val fonteLeve = Fontes.manrope(200)
+    private val fonteMedia = Fontes.nunito(600)
+    private val fonteLeve = Fontes.nunito(200)
 
     private lateinit var raiz: FrameLayout
     private lateinit var rolagem: ScrollView

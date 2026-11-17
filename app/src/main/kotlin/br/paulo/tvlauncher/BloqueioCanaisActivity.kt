@@ -47,8 +47,8 @@ class BloqueioCanaisActivity : Activity() {
     private val apagado = Estilo.TEXTO_3
     private val coral = Estilo.ERRO
     private val verde = Estilo.ACENTO
-    private val fonteLeve = Fontes.manrope(200)
-    private val fonteMedia = Fontes.manrope(500)
+    private val fonteLeve = Fontes.nunito(200)
+    private val fonteMedia = Fontes.nunito(500)
 
     private var regras = ControleParental.Regras()
     private var canais: List<Canal> = emptyList()

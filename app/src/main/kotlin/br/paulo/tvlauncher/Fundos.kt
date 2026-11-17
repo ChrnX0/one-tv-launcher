@@ -326,7 +326,7 @@ class FundoGaleria(ctx: Context, private val emSegundoPlano: (() -> Unit) -> Uni
             if (italico) sb.setSpan(android.text.style.StyleSpan(Typeface.ITALIC), ini, sb.length, 0)
         }
         parte(o.titulo + "\n", 17f, serif)   // a Fraunces já é itálica: sem StyleSpan, senão o Android inclina de novo
-        parte("${o.artista}, ${o.ano}\n", 13f, Fontes.manrope(context, 400))
+        parte("${o.artista}, ${o.ano}\n", 13f, Fontes.nunito(context, 400))
         parte(context.getString(R.string.fg_etiqueta), 9f, Fontes.uiMedia(context, Tema.GALERIA))
         etiqueta.text = sb
         etiqueta.setLineSpacing(0f, 1.1f)

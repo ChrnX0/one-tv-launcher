@@ -61,9 +61,9 @@ class ProtetorTela : DreamService() {
 
         // "sans-serif-rounded" existe como variação do Roboto Flex desde o Android 12; onde não existir, o
         // sistema cai sozinho na fonte padrão (sem crash) e só a hora deixa de ficar arredondada.
-        val fonteRelogio = Fontes.manrope(500)
-        val fonteMedia = Fontes.manrope(500)
-        val fonteLeve = Fontes.manrope(200)
+        val fonteRelogio = Fontes.nunito(500)
+        val fonteMedia = Fontes.nunito(500)
+        val fonteLeve = Fontes.nunito(200)
 
         coluna = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -221,7 +221,7 @@ class ProtetorTela : DreamService() {
     private lateinit var blocoDados: LinearLayout
     private val atualizarDados = object : Runnable {
         override fun run() {
-            montarDados(Fontes.manrope(500), Fontes.manrope(200))
+            montarDados(Fontes.nunito(500), Fontes.nunito(200))
             ui.postDelayed(this, ATUALIZAR_MS)
         }
     }

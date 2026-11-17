@@ -31,9 +31,9 @@ import java.util.Locale
  * Quem chama é o [ProtetorGaleria]; os dados vêm prontos em [Dados] (a lógica pura está em [WidgetsTempo]).
  */
 class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
-    private val m400: Typeface = Fontes.manrope(ctx, 400)
-    private val m500: Typeface = Fontes.manrope(ctx, 500)
-    private val m600: Typeface = Fontes.manrope(ctx, 600)
+    private val m400: Typeface = Fontes.nunito(ctx, 400)
+    private val m500: Typeface = Fontes.nunito(ctx, 500)
+    private val m600: Typeface = Fontes.nunito(ctx, 600)
     private val branco = 0xFFFFFFFF.toInt()
     private val azulChuva = 0xFF9CC2FF.toInt()
     private val amarelo = 0xFFFFD66B.toInt()

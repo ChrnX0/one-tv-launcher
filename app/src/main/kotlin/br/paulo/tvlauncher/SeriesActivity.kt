@@ -62,7 +62,7 @@ class SeriesActivity : Activity() {
     private val apagado = Estilo.TEXTO_3
     private val ambar = Estilo.ATENCAO
     private val verdeEtiqueta = 0xE62E7D4F.toInt()
-    private val fonteMedia = Fontes.manrope(500)
+    private val fonteMedia = Fontes.nunito(500)
 
     private var series: List<Serie> = emptyList()      // o que a tela mostra (sem as categorias ocultas, até o PIN)
     // Ficha de fora (TMDB: sinopse, próximo episódio; Trakt: nota) da série aberta (InfoExterna, 14/11/2026).
@@ -152,7 +152,7 @@ class SeriesActivity : Activity() {
         raiz.addView(painel, FrameLayout.LayoutParams(-1, -1))
         aviso = TextView(this).apply {
             textSize = 18f; setTextColor(papel); gravity = Gravity.CENTER
-            background = GradientDrawable().apply { cornerRadius = dp(16).toFloat(); setColor(0xD90B0F17.toInt()) }
+            background = GradientDrawable().apply { cornerRadius = dp(16).toFloat(); setColor(0xD90E1020.toInt()) }
             setPadding(dp(24), dp(16), dp(24), dp(16)); text = getString(R.string.series_carregando)
         }
         raiz.addView(aviso, FrameLayout.LayoutParams(-2, -2, Gravity.CENTER))
@@ -709,7 +709,7 @@ class SeriesActivity : Activity() {
                 c.etiqueta.setTextColor(if (novo) Estilo.FUNDO else if (marcado) ambar else papel)
                 (c.etiqueta.background as GradientDrawable).setColor(when (etq) {
                     EtiquetaSerie.Concluida -> verdeEtiqueta
-                    null -> 0xD90B0F17.toInt()
+                    null -> 0xD90E1020.toInt()
                     else -> ambar
                 })
             }
@@ -739,12 +739,12 @@ class SeriesActivity : Activity() {
         moldura.addView(capa, FrameLayout.LayoutParams(-1, -1))
         val estrela = TextView(this).apply {
             text = "★"; textSize = 15f; setTextColor(ambar); setPadding(dp(6), dp(1), dp(6), dp(2))
-            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90B0F17.toInt()) }
+            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
         }
         moldura.addView(estrela, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, dp(5), dp(5), 0) })
         val etiqueta = TextView(this).apply {
             textSize = 11f; typeface = fonteMedia; setTextColor(papel); setPadding(dp(7), dp(2), dp(7), dp(2))
-            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90B0F17.toInt()) }
+            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
         }
         moldura.addView(etiqueta, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(5), 0, 0, dp(5)) })
         // Nome e "T2E5" em cima do pôster, encostados nele (a linha do episódio some quando não há).
@@ -1073,7 +1073,7 @@ class SeriesActivity : Activity() {
         val v = (reuso as? LinearLayout) ?: LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL; setPadding(dp(12), dp(8), dp(12), dp(8))
             val topo = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
-            topo.addView(TextView(context).apply { textSize = Estilo.Leitura.ITEM; typeface = Fontes.manrope(600); setTextColor(ambar) }, LinearLayout.LayoutParams(dp(48), -2))
+            topo.addView(TextView(context).apply { textSize = Estilo.Leitura.ITEM; typeface = Fontes.nunito(600); setTextColor(ambar) }, LinearLayout.LayoutParams(dp(48), -2))
             topo.addView(TextView(context).apply { textSize = Estilo.Leitura.ITEM; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }, LinearLayout.LayoutParams(0, -2, 1f))
             topo.addView(TextView(context).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(apagado) })
             addView(topo)
@@ -1284,7 +1284,7 @@ class SeriesActivity : Activity() {
     }
 
     private fun rotulo(t: String) = TextView(this).apply {
-        text = t; textSize = Estilo.Leitura.ROTULO; typeface = Fontes.manrope(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
+        text = t; textSize = Estilo.Leitura.ROTULO; typeface = Fontes.nunito(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
         setPadding(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
     }
 

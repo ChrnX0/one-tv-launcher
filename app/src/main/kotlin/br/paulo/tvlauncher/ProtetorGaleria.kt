@@ -49,10 +49,10 @@ class ProtetorGaleria(
     /** Fundo "A Terra vista do espaço" (17/11/2026): as fotos da NASA no lugar do fundo do tema. */
     private val terra: Boolean = false,
 ) {
-    private val m200: Typeface = Fontes.manrope(ctx, 200)
-    private val m400: Typeface = Fontes.manrope(ctx, 400)
-    private val m500: Typeface = Fontes.manrope(ctx, 500)
-    private val m600: Typeface = Fontes.manrope(ctx, 600)
+    private val m200: Typeface = Fontes.nunito(ctx, 200)
+    private val m400: Typeface = Fontes.nunito(ctx, 400)
+    private val m500: Typeface = Fontes.nunito(ctx, 500)
+    private val m600: Typeface = Fontes.nunito(ctx, 600)
     private val fraunces: Typeface = Fontes.fraunces(ctx)
     private val branco = 0xFFFFFFFF.toInt()
     private val sombra = 0x59000000

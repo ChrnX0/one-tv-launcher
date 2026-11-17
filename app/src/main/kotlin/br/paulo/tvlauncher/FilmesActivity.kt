@@ -68,7 +68,7 @@ class FilmesActivity : Activity() {
     private val apagado = Estilo.TEXTO_3
     private val ambar = Estilo.ATENCAO
     private val verdeEtiqueta = 0xE62E7D4F.toInt()
-    private val fonteMedia = Fontes.manrope(500)
+    private val fonteMedia = Fontes.nunito(500)
 
     private var filmes: List<Filme> = emptyList()      // o que a tela mostra (sem as categorias ocultas, até o PIN)
     // Nota de fora (Trakt, InfoExterna): valem no Filtro (nota mínima) e na ordem "Nota".
@@ -627,7 +627,7 @@ class FilmesActivity : Activity() {
             if (pct == null) c.etiqueta.visibility = View.GONE else {
                 c.etiqueta.visibility = View.VISIBLE
                 c.etiqueta.text = when (pct) { 100 -> getString(R.string.filmes_assistido); else -> getString(R.string.tempo_faltam, BarraTempo.duracao(pos!!.duracao - pos.ms)) }
-                (c.etiqueta.background as GradientDrawable).setColor(if (pct == 100) verdeEtiqueta else 0xD90B0F17.toInt())
+                (c.etiqueta.background as GradientDrawable).setColor(if (pct == 100) verdeEtiqueta else 0xD90E1020.toInt())
             }
             c.estrela.visibility = if (f.chave in interesses) View.VISIBLE else View.GONE
             PlayerLogos.carregar(this@FilmesActivity, f.capa, c.capa, lado = 360)
@@ -650,12 +650,12 @@ class FilmesActivity : Activity() {
         moldura.addView(capa, FrameLayout.LayoutParams(-1, -1))
         val etiqueta = TextView(this).apply {
             textSize = 11f; typeface = fonteMedia; setTextColor(papel); setPadding(dp(7), dp(2), dp(7), dp(2))
-            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90B0F17.toInt()) }
+            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
         }
         moldura.addView(etiqueta, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(5), 0, 0, dp(5)) })
         val estrela = TextView(this).apply {
             text = "★"; textSize = 15f; setTextColor(ambar); setPadding(dp(6), dp(1), dp(6), dp(2))
-            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90B0F17.toInt()) }
+            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
         }
         moldura.addView(estrela, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, dp(5), dp(5), 0) })
         val nome = TituloCard(this, Estilo.Leitura.CARD).apply { setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END }
@@ -1155,7 +1155,7 @@ class FilmesActivity : Activity() {
     }
 
     private fun rotulo(t: String) = TextView(this).apply {
-        text = t; textSize = Estilo.Leitura.ROTULO; typeface = Fontes.manrope(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
+        text = t; textSize = Estilo.Leitura.ROTULO; typeface = Fontes.nunito(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
         setPadding(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
     }
 
@@ -1164,7 +1164,7 @@ class FilmesActivity : Activity() {
         return if (s >= 3600) String.format(Locale.ROOT, "%d:%02d:%02d", s / 3600, s / 60 % 60, s % 60) else String.format(Locale.ROOT, "%d:%02d", s / 60, s % 60)
     }
 
-    private fun vidro(raio: Int) = GradientDrawable().apply { cornerRadius = dp(raio).toFloat(); setColor(0xD90B0F17.toInt()); setStroke(dp(1), Estilo.SUPERFICIE_ALTA) }
+    private fun vidro(raio: Int) = GradientDrawable().apply { cornerRadius = dp(raio).toFloat(); setColor(0xD90E1020.toInt()); setStroke(dp(1), Estilo.SUPERFICIE_ALTA) }
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density + 0.5f).toInt()
 }

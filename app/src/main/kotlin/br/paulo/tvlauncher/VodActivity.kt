@@ -284,7 +284,7 @@ class VodActivity : Activity() {
             textSize = 18f; setTextColor(papel); visibility = View.GONE; text = getString(R.string.abertura_pular)
             typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
             setPadding(dp(22), dp(12), dp(22), dp(12))
-            background = GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(0xD90B0F17.toInt()); setStroke(dp(2), coral) }
+            background = GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(0xD90E1020.toInt()); setStroke(dp(2), coral) }
         }
         raiz.addView(pilulaPular, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.END).apply { setMargins(0, 0, dp(48), dp(170)) })
         // Ideia 6: a segunda legenda fica em cima (a primeira continua embaixo), com o mesmo estilo.
@@ -1227,7 +1227,7 @@ class VodActivity : Activity() {
         }
         val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
         titulo = TextView(this).apply {
-            text = t; textSize = 20f; typeface = Fontes.manrope(500); setTextColor(papel)
+            text = t; textSize = 20f; typeface = Fontes.nunito(500); setTextColor(papel)
             maxLines = 1; ellipsize = TextUtils.TruncateAt.END
         }
         linha.addView(titulo, LinearLayout.LayoutParams(0, -2, 1f))
@@ -1292,7 +1292,7 @@ class VodActivity : Activity() {
     private fun esconderAviso() { aviso.visibility = View.GONE }
 
     private fun vidro(raio: Int) = GradientDrawable().apply {
-        cornerRadius = dp(raio).toFloat(); setColor(0xD90B0F17.toInt()); setStroke(dp(1), Estilo.SUPERFICIE_ALTA)
+        cornerRadius = dp(raio).toFloat(); setColor(0xD90E1020.toInt()); setStroke(dp(1), Estilo.SUPERFICIE_ALTA)
     }
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density + 0.5f).toInt()

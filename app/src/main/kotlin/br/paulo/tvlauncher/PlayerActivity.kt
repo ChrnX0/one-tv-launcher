@@ -95,7 +95,7 @@ class PlayerActivity : Activity() {
     private val papel = Estilo.TEXTO       // cores do sistema de design (Estilo)
     private val suave = Estilo.TEXTO_2
     private val ambar = Estilo.ATENCAO
-    private val fonteMedia = Fontes.manrope(500)
+    private val fonteMedia = Fontes.nunito(500)
 
     private lateinit var video: SurfaceView
     private lateinit var info: LinearLayout
@@ -124,7 +124,7 @@ class PlayerActivity : Activity() {
         // Selo de gravação (pedido do dono, 15/11/2026): fica no canto de cima mesmo com a faixa escondida. Entra antes da
         // lista e do guia, que cobrem o selo quando abertos.
         seloGravando = TextView(this).apply {
-            textSize = 20f; typeface = Fontes.manrope(700); setTextColor(Estilo.ERRO); background = vidro(Estilo.RAIO)
+            textSize = 20f; typeface = Fontes.nunito(700); setTextColor(Estilo.ERRO); background = vidro(Estilo.RAIO)
             setPadding(dp(18), dp(8), dp(18), dp(10)); visibility = View.GONE
         }
         raiz.addView(seloGravando, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, dp(28), dp(Estilo.MARGEM_LATERAL), 0) })
@@ -143,7 +143,7 @@ class PlayerActivity : Activity() {
             aoFechar = { grade.fechar(); if (lista.aberta) lista.voltarFoco() })
         raiz.addView(grade, FrameLayout.LayoutParams(-1, -1))
         numero = TextView(this).apply {
-            textSize = 56f; typeface = Fontes.manrope(600); setTextColor(papel); background = vidro(Estilo.RAIO)
+            textSize = 56f; typeface = Fontes.nunito(600); setTextColor(papel); background = vidro(Estilo.RAIO)
             setPadding(dp(22), dp(6), dp(22), dp(10)); visibility = View.GONE
         }
         raiz.addView(numero, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.START).apply { setMargins(dp(Estilo.MARGEM_LATERAL), dp(28), 0, 0) })
@@ -525,7 +525,7 @@ class PlayerActivity : Activity() {
         }
         val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
         infoNumero = TextView(this).apply {
-            textSize = 22f; typeface = Fontes.manrope(600); setTextColor(Estilo.FUNDO); gravity = Gravity.CENTER
+            textSize = 22f; typeface = Fontes.nunito(600); setTextColor(Estilo.FUNDO); gravity = Gravity.CENTER
             background = Estilo.fundo(context, ambar, Estilo.RAIO_PEQUENO)
             // Largura conforme o número: canal 1655 quebrava em "165 / 5" na caixa fixa de 48 dp (visto na Sala, 14/11/2026).
             maxLines = 1; minWidth = dp(48); setPadding(dp(8), 0, dp(8), 0)

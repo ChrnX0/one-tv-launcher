@@ -211,7 +211,7 @@ object SomNoFone {
             orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_HORIZONTAL
             setPadding(dp(40), dp(32), dp(40), dp(32))
             background = Estilo.vidro(a, 24)
-            addView(TextView(a).apply { text = a.getString(R.string.fone_titulo); textSize = 30f; setTextColor(Estilo.TEXTO); typeface = Fontes.manrope(700); gravity = Gravity.CENTER })
+            addView(TextView(a).apply { text = a.getString(R.string.fone_titulo); textSize = 30f; setTextColor(Estilo.TEXTO); typeface = Fontes.nunito(700); gravity = Gravity.CENTER })
             addView(TextView(a).apply { text = a.getString(R.string.fone_texto, SomNoFoneRegras.MAX_CELULARES); textSize = 20f; setTextColor(Estilo.TEXTO_2); gravity = Gravity.CENTER },
                 LinearLayout.LayoutParams(dp(560), -2).apply { topMargin = dp(12) })
             addView(ImageView(a).apply { setImageBitmap(QrCodigo.bitmap(url, 480)) }, LinearLayout.LayoutParams(dp(220), dp(220)).apply { topMargin = dp(20) })

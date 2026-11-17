@@ -61,8 +61,8 @@ class ConfigLauncherActivity : Activity() {
     private val destaque = Estilo.ACENTO
     private val ambar = Estilo.ATENCAO
     private val coral = Estilo.ERRO
-    private val fonteLeve = Fontes.manrope(200)
-    private val fonteMedia = Fontes.manrope(500)
+    private val fonteLeve = Fontes.nunito(200)
+    private val fonteMedia = Fontes.nunito(500)
 
     /** Uma aba do menu: título, explicação curta (aparece no alto do conteúdo) e quem monta o conteúdo. */
     private class Aba(val titulo: String, val explica: String, val montar: (LinearLayout) -> Unit)
@@ -2015,7 +2015,7 @@ class ConfigLauncherActivity : Activity() {
         /** Interruptor: ligado = acento (no foco, acento escuro); desligado = trilho apagado. */
         private fun pintarChave(sim: Boolean) {
             trilho?.background = Estilo.fundo(context,
-                when { sim && focada -> Estilo.ACENTO_NO_FOCO; sim -> Estilo.ACENTO; focada -> 0x330B0F17; else -> 0x33FFFFFF },
+                when { sim && focada -> Estilo.ACENTO_NO_FOCO; sim -> Estilo.ACENTO; focada -> 0x330E1020; else -> 0x33FFFFFF },
                 Estilo.RAIO_PILULA)
             bolinha?.background = GradientDrawable().apply {
                 shape = GradientDrawable.OVAL

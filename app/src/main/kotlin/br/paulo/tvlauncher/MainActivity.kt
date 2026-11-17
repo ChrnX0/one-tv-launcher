@@ -568,7 +568,7 @@ class MainActivity : Activity() {
             clipToOutline = true
         }
         barrasTocando = BarrasSom(this)
-        val corSub = 0xB3F2F5F3.toInt()
+        val corSub = 0xB3F4F1EC.toInt()
         txtTocandoTitulo = texto(12.5f, Estilo.TEXTO, Typeface.create(fonteUi, Typeface.BOLD)).apply {
             includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(220)
         }
@@ -822,7 +822,7 @@ class MainActivity : Activity() {
             background = GradientDrawable().apply {
                 cornerRadius = dp(22).toFloat()
                 setColor(0xE60E1311.toInt())
-                setStroke(dp(1), 0x667FD6C2)
+                setStroke(dp(1), 0x66FF6A2B)
             }
         }
 
@@ -1814,7 +1814,7 @@ class MainActivity : Activity() {
                 maxLines = if (aoVivo) 3 else 1
                 ellipsize = TextUtils.TruncateAt.END
                 setPadding(dp(8), dp(3), dp(8), dp(3))
-                if (!aoVivo) background = GradientDrawable().apply { cornerRadius = dp(5).toFloat(); setColor(0xBF0B0F17.toInt()) }
+                if (!aoVivo) background = GradientDrawable().apply { cornerRadius = dp(5).toFloat(); setColor(0xBF0E1020.toInt()) }
             }, FrameLayout.LayoutParams(WRAP, WRAP, if (aoVivo) Gravity.CENTER_VERTICAL or Gravity.START else Gravity.BOTTOM or Gravity.START).apply {
                 setMargins(dp(8), dp(8), dp(8), dp(8))
             })
@@ -1987,7 +1987,7 @@ class MainActivity : Activity() {
     private fun miniaturaTv(): View = TextView(this).apply {
         text = "TV"
         textSize = 19f   // disco de 56 dp (layout Palco)
-        typeface = Fontes.manrope(600)
+        typeface = Fontes.nunito(600)
         setTextColor(Color.WHITE)
         gravity = Gravity.CENTER
         background = GradientDrawable(GradientDrawable.Orientation.TL_BR, intArrayOf(0xFFFF7A6E.toInt(), 0xFFC0392B.toInt()))
@@ -2352,7 +2352,7 @@ class MainActivity : Activity() {
         // ficando branco ja mostram onde esta, como no Google TV de referencia. O fio fino continua sempre
         // (nao so no foco): e o que impede um icone escuro (ex.: Netflix) de sumir no fundo.
         (grupo?.getChildAt(0))?.foreground = when {
-            movendo -> contorno(corMover, 0x2E7FD6C2, 3)
+            movendo -> contorno(corMover, 0x2EFF6A2B, 3)
             // O anel fica FORA do retângulo, com 2 dp de folga escura: num banner branco (Netflix, YouTube) um anel colado
             // na borda sumia (visto na Sala, 06/11 noite).
             focado -> android.graphics.drawable.InsetDrawable(contorno(Color.WHITE, Color.TRANSPARENT, 3), dp(1))

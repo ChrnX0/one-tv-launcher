@@ -50,13 +50,13 @@ class RelogioProtetor(ctx: Context, private val estilo: String, private val fato
                 gravity = if (centro) Gravity.CENTER_HORIZONTAL else Gravity.START
                 when (estilo) {
                     Protetor.REL_EDITORIAL -> { typeface = Fontes.fraunces300(ctx); tamanho(140f); letterSpacing = -0.02f }
-                    Protetor.REL_MONUMENTAL -> { typeface = Fontes.manrope(ctx, 600); tamanho(178f); letterSpacing = -0.06f }
+                    Protetor.REL_MONUMENTAL -> { typeface = Fontes.nunito(ctx, 600); tamanho(178f); letterSpacing = -0.06f }
                     Protetor.REL_EXTENSO -> {
                         typeface = Fontes.fraunces(ctx); tamanho(50f); letterSpacing = -0.01f
                         setLineSpacing(0f, 1.02f); maxWidth = dp(620 * fator)
                     }
-                    Protetor.REL_EMPILHADO -> { typeface = Fontes.manrope(ctx, 200); tamanho(104f); letterSpacing = -0.03f; setLineSpacing(0f, 0.82f) }
-                    else -> { typeface = Fontes.manrope(ctx, 200); tamanho(125f); letterSpacing = -0.045f }
+                    Protetor.REL_EMPILHADO -> { typeface = Fontes.nunito(ctx, 200); tamanho(104f); letterSpacing = -0.03f; setLineSpacing(0f, 0.82f) }
+                    else -> { typeface = Fontes.nunito(ctx, 200); tamanho(125f); letterSpacing = -0.045f }
                 }
             }
             addView(texto, LayoutParams(-2, -2, if (centro) Gravity.CENTER_HORIZONTAL else Gravity.START))
@@ -99,13 +99,13 @@ class RelogioProtetor(ctx: Context, private val estilo: String, private val fato
                 }
             }
             Protetor.REL_EMPILHADO -> SpannableStringBuilder(hh).apply {
-                if (android.os.Build.VERSION.SDK_INT >= 28) setSpan(TypefaceSpan(Fontes.manrope(context, 600)), 0, length, 0)
+                if (android.os.Build.VERSION.SDK_INT >= 28) setSpan(TypefaceSpan(Fontes.nunito(context, 600)), 0, length, 0)
                 val i = length; append("\n").append(mm)
                 setSpan(ForegroundColorSpan(0x9EFFFFFF.toInt()), i, length, 0)
             }
             else -> SpannableStringBuilder().apply {
                 // Fino (o de antes): hora cheia forte, minuto fino, ":" apagado com um espaço finíssimo antes.
-                append(hh); if (android.os.Build.VERSION.SDK_INT >= 28) setSpan(TypefaceSpan(Fontes.manrope(context, 600)), 0, length, 0)
+                append(hh); if (android.os.Build.VERSION.SDK_INT >= 28) setSpan(TypefaceSpan(Fontes.nunito(context, 600)), 0, length, 0)
                 val i = length; append(" :"); setSpan(ForegroundColorSpan(0xB3FFFFFF.toInt()), i, length, 0)
                 append(mm)
             }

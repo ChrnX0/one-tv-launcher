@@ -31,7 +31,7 @@ object Estilo {
     // Formato 0xAARRGGBB: os dois primeiros dígitos são a opacidade (FF = sólido, 00 = invisível).
 
     /** Fundo de toda tela sem imagem atrás (era o fundo mais usado no código antigo). */
-    const val FUNDO = 0xFF0B0F17.toInt()
+    const val FUNDO = 0xFF0E1020.toInt()
     /** Superfície de card/linha em tela lisa: branco a 6%. */
     const val SUPERFICIE = 0x0FFFFFFF
     /** Superfície um nível acima (linha focada sem virar pílula, chip ativo): branco a 12%. */
@@ -39,33 +39,33 @@ object Estilo {
     /** Fio de borda das superfícies: branco a 8%. */
     const val BORDA = 0x14FFFFFF
     /** Vidro (sobre imagem): tinta escura translúcida + fio claro. Igual à pílula da HOME que o dono aprovou. */
-    const val VIDRO_TINTA = 0x8C0B0F17.toInt()
+    const val VIDRO_TINTA = 0x8C0E1020.toInt()
     const val VIDRO_BORDA = 0x38FFFFFF
 
     /** Texto: principal, explicação (70%) e rótulo apagado (48%). Nunca branco puro em bloco grande: cansa a vista. */
-    const val TEXTO = 0xFFF2F5F3.toInt()
-    const val TEXTO_2 = 0xB3F2F5F3.toInt()
-    const val TEXTO_3 = 0x7AF2F5F3.toInt()
+    const val TEXTO = 0xFFF4F1EC.toInt()
+    const val TEXTO_2 = 0xB3F4F1EC.toInt()
+    const val TEXTO_3 = 0x7AF4F1EC.toInt()
     /** Texto em cima do foco branco (linha de lista focada). */
-    const val TEXTO_NO_FOCO = 0xFF0B0F17.toInt()
-    const val TEXTO_NO_FOCO_2 = 0xA60B0F17.toInt()
+    const val TEXTO_NO_FOCO = 0xFF0E1020.toInt()
+    const val TEXTO_NO_FOCO_2 = 0xA60E1020.toInt()
 
     /** O ÚNICO acento: "ligado", valor escolhido, progresso. Foco NÃO usa acento: foco é branco. */
-    const val ACENTO = 0xFF7FD6C2.toInt()
+    const val ACENTO = 0xFFFF6A2B.toInt()
     /** Acento legível sobre o foco branco. */
-    const val ACENTO_NO_FOCO = 0xFF1F6F5D.toInt()
+    const val ACENTO_NO_FOCO = 0xFFCE3D00.toInt()
     /** Semânticas: atenção (chuva, vencimento) e erro/ao vivo. Não contam como acento. */
     const val ATENCAO = 0xFFF5B544.toInt()
-    const val ERRO = 0xFFFF6B5E.toInt()
+    const val ERRO = 0xFFFF5252.toInt()
     /** Foco: branco. A TV é vista a 3 m; o foco tem que ser a coisa mais óbvia da tela. */
     const val FOCO = 0xFFFFFFFF.toInt()
 
-    // ------------------------------------------------------------------ tipografia (5 papéis, Manrope)
+    // ------------------------------------------------------------------ tipografia (5 papéis, Nunito)
 
-    /** Papel do texto: tamanho em sp, peso da Manrope e cor. Caixa alta + espaçamento só na SECAO. */
+    /** Papel do texto: tamanho em sp, peso pedido (escala antiga 400-600; [Fontes.nunito] sobe um degrau) e cor. Caixa alta + espaçamento só na SECAO. */
     enum class Papel(val sp: Float, val peso: Int, val cor: Int, val caixaAlta: Boolean = false, val espaco: Float = 0f) {
         /** Hora, temperatura grande. */
-        DISPLAY(56f, 200, TEXTO),
+        DISPLAY(56f, 800, TEXTO),
         /** Título de tela, nome do item em destaque. */
         TITULO(28f, 600, TEXTO),
         /** Linhas, cards, botões. */
@@ -76,7 +76,7 @@ object Estilo {
         SECAO(12f, 600, TEXTO_3, caixaAlta = true, espaco = 0.14f),
     }
 
-    fun fonte(peso: Int): Typeface = Fontes.manrope(peso)
+    fun fonte(peso: Int): Typeface = Fontes.nunito(peso)
 
     /**
      * Filmes, Séries e TV ao vivo (13/11/2026: letra maior para ler a 3 m). São telas de LER, a 3 m do sofá, então
@@ -534,7 +534,7 @@ object Estilo {
     /** Escurecido atrás de um diálogo: a tela de trás fica visível mas não compete. */
     const val VEU = 0xB3000000.toInt()
     /** Cartão de diálogo: quase opaco (lê-se por cima de qualquer coisa), com o fio do vidro. */
-    const val CARTAO = 0xF5141A23.toInt()
+    const val CARTAO = 0xF5191C30.toInt()
 
     /**
      * Diálogo único (perguntas por cima de qualquer tela: confirmar, permitir, aviso parado). Cartão opaco no padrão
