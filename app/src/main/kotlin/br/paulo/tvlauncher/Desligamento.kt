@@ -25,6 +25,8 @@ import android.util.Log
 object Desligamento {
     private const val TAG = "TvLauncher.Desligar"
     const val CHAVE = "desligar_em"
+    /** Quantos minutos foram escolhidos na última marcação: o painel rápido avança a partir dele (15 → 30 → ...). */
+    const val CHAVE_MIN = "desligar_min"
     const val ACAO_AVISO = "br.paulo.tvlauncher.DESLIGAR_AVISO"
     const val ACAO_DESLIGAR = "br.paulo.tvlauncher.DESLIGAR_AGORA"
     /** Desligar suave (12/11/2026): 5 min antes, a tela escurece e o volume desce aos poucos (SonoSuave). */
@@ -36,10 +38,14 @@ object Desligamento {
     /** Quando a TV vai desligar (ms desde 1970), ou null se não há timer de sono. */
     fun marcado(ctx: Context): Long? = prefs(ctx).getLong(CHAVE, 0).takeIf { it > System.currentTimeMillis() }
 
+    /** Os minutos escolhidos no timer que está valendo (null sem timer ou se foi marcado antes desta chave existir). */
+    fun escolhido(ctx: Context): Int? =
+        if (marcado(ctx) == null) null else prefs(ctx).getInt(CHAVE_MIN, 0).takeIf { it > 0 }
+
     /** Marca para daqui a [minutos]. Marcar de novo substitui o anterior (não soma). */
     fun agendar(ctx: Context, minutos: Int) {
         val em = System.currentTimeMillis() + minutos * 60_000L
-        prefs(ctx).edit().putLong(CHAVE, em).apply()
+        prefs(ctx).edit().putLong(CHAVE, em).putInt(CHAVE_MIN, minutos).apply()
         val am = ctx.getSystemService(AlarmManager::class.java)
         // setExactAndAllowWhileIdle: na hora exata mesmo com o aparelho em repouso (o app tem USE_EXACT_ALARM).
         if (minutos >= 2) am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, em - AVISO_MS, pendente(ctx, ACAO_AVISO))
@@ -55,7 +61,7 @@ object Desligamento {
     /** Desmarca. Devolve true se havia algo marcado. */
     fun cancelar(ctx: Context): Boolean {
         val havia = marcado(ctx) != null
-        prefs(ctx).edit().remove(CHAVE).apply()
+        prefs(ctx).edit().remove(CHAVE).remove(CHAVE_MIN).apply()
         val am = ctx.getSystemService(AlarmManager::class.java)
         am.cancel(pendente(ctx, ACAO_AVISO))
         am.cancel(pendente(ctx, ACAO_DESLIGAR))

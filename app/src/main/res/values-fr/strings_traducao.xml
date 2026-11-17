@@ -133,9 +133,9 @@
     <string name="bu_canais">Chaînes</string>
     <string name="bu_canal_n">Chaîne %1$s</string>
     <string name="bu_no_guia">Dans le guide</string>
-    <string name="bu_ver_filmes">Voir tous les %1$s dans Films</string>
+    <string name="bu_ver_filmes">Tout voir dans Films (%1$s)</string>
     <string name="bu_ver_filmes_det">Ouvre le catalogue de films avec cette recherche</string>
-    <string name="bu_ver_series">Voir tous les %1$s dans Séries</string>
+    <string name="bu_ver_series">Tout voir dans Séries (%1$s)</string>
     <string name="bu_ver_series_det">Ouvre le catalogue de séries avec cette recherche</string>
     <string name="bu_agora">Maintenant</string>
     <string name="bu_lembrete_sim">Rappel réglé</string>

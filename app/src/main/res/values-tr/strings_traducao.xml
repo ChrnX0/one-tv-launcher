@@ -133,9 +133,9 @@
     <string name="bu_canais">Kanallar</string>
     <string name="bu_canal_n">Kanal %1$s</string>
     <string name="bu_no_guia">Yayın akışında</string>
-    <string name="bu_ver_filmes">Filmler’de tüm %1$s sonuçlarını gör</string>
+    <string name="bu_ver_filmes">Tümünü Filmler’de gör (%1$s)</string>
     <string name="bu_ver_filmes_det">Film kataloğunu bu aramayla açar</string>
-    <string name="bu_ver_series">Diziler’de tüm %1$s sonuçlarını gör</string>
+    <string name="bu_ver_series">Tümünü Diziler’de gör (%1$s)</string>
     <string name="bu_ver_series_det">Dizi kataloğunu bu aramayla açar</string>
     <string name="bu_agora">Şimdi</string>
     <string name="bu_lembrete_sim">Hatırlatma kuruldu</string>

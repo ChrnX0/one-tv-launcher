@@ -133,9 +133,9 @@
     <string name="bu_canais">चैनल</string>
     <string name="bu_canal_n">चैनल %1$s</string>
     <string name="bu_no_guia">गाइड में</string>
-    <string name="bu_ver_filmes">फ़िल्मों में सब %1$s देखें</string>
+    <string name="bu_ver_filmes">फ़िल्मों में सब देखें (%1$s)</string>
     <string name="bu_ver_filmes_det">इस खोज के साथ फ़िल्म कैटलॉग खोलता है</string>
-    <string name="bu_ver_series">सीरीज़ में सब %1$s देखें</string>
+    <string name="bu_ver_series">सीरीज़ में सब देखें (%1$s)</string>
     <string name="bu_ver_series_det">इस खोज के साथ सीरीज़ कैटलॉग खोलता है</string>
     <string name="bu_agora">अभी</string>
     <string name="bu_lembrete_sim">रिमाइंडर सेट</string>

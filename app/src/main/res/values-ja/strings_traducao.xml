@@ -133,9 +133,9 @@
     <string name="bu_canais">チャンネル</string>
     <string name="bu_canal_n">チャンネル %1$s</string>
     <string name="bu_no_guia">番組表</string>
-    <string name="bu_ver_filmes">映画で %1$s をすべて表示</string>
+    <string name="bu_ver_filmes">映画ですべて表示（%1$s）</string>
     <string name="bu_ver_filmes_det">この検索で映画カタログを開きます</string>
-    <string name="bu_ver_series">シリーズで %1$s をすべて表示</string>
+    <string name="bu_ver_series">シリーズですべて表示（%1$s）</string>
     <string name="bu_ver_series_det">この検索でシリーズカタログを開きます</string>
     <string name="bu_agora">放送中</string>
     <string name="bu_lembrete_sim">お知らせを設定しました</string>
