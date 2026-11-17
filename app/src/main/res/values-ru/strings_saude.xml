@@ -2,12 +2,12 @@
 <!-- Tradução (ru) de values/strings_saude.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="saude_titulo">Удалённый доступ остановлен</string>
-    <string name="saude_texto_shell">Доступ ТВ к самому себе пропал %1$d мин назад (панель, Claude и автоисправления остановлены). Нажмите «Сопрячь снова» или перейдите в Настройки › Система › Сопряжение без ПК.</string>
+    <string name="saude_texto_shell">Доступ ТВ к самому себе пропал %1$d мин назад (панель, Claude и автоисправления остановлены). Нажмите «Сопрячь снова» или перейдите в Настройки › Расширенные › Сопряжение без ПК.</string>
     <string name="saude_texto_tunel">Claude через интернет не в сети. Нажмите «Подключить», чтобы увидеть, чего не хватает, или перейдите в Настройки › Удалённый доступ.</string>
     <string name="saude_parear">Сопрячь снова</string>
     <string name="saude_conectar">Подключить</string>
     <string name="saude_depois">Не сейчас</string>
-    <string name="saude_acao_shell">Сопрячь снова: Настройки › Система › Сопряжение без ПК</string>
+    <string name="saude_acao_shell">Сопрячь снова: Настройки › Расширенные › Сопряжение без ПК</string>
     <string name="saude_acao_tunel">Подключить снова: Настройки › Удалённый доступ › Подключить</string>
     <string name="mnt_titulo">Ночное обслуживание</string>
     <string name="mnt_consertei">Исправлено:</string>

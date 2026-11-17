@@ -2,12 +2,12 @@
 <!-- Tradução (de) de values/strings_saude.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="saude_titulo">Fernzugriff gestoppt</string>
-    <string name="saude_texto_shell">Der Zugriff des Fernsehers auf sich selbst ist vor %1$d Min. ausgefallen (Panel, Claude und automatische Reparaturen stoppen). Drücke Erneut koppeln oder geh zu Einstellungen › System › Ohne PC koppeln.</string>
+    <string name="saude_texto_shell">Der Zugriff des Fernsehers auf sich selbst ist vor %1$d Min. ausgefallen (Panel, Claude und automatische Reparaturen stoppen). Drücke Erneut koppeln oder geh zu Einstellungen › Erweitert › Ohne PC koppeln.</string>
     <string name="saude_texto_tunel">Claude über das Internet ist offline. Drücke Verbinden, um zu sehen, was fehlt, oder geh zu Einstellungen › Fernzugriff.</string>
     <string name="saude_parear">Erneut koppeln</string>
     <string name="saude_conectar">Verbinden</string>
     <string name="saude_depois">Nicht jetzt</string>
-    <string name="saude_acao_shell">Erneut koppeln: Einstellungen › System › Ohne PC koppeln</string>
+    <string name="saude_acao_shell">Erneut koppeln: Einstellungen › Erweitert › Ohne PC koppeln</string>
     <string name="saude_acao_tunel">Erneut verbinden: Einstellungen › Fernzugriff › Verbinden</string>
     <string name="mnt_titulo">Nächtliche Wartung</string>
     <string name="mnt_consertei">Repariert:</string>
