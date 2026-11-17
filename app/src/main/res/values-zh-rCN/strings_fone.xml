@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Som no fone (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="fone_menu">用耳机听（手机）</string>
+    <string name="fone_titulo">用耳机听</string>
+    <string name="fone_texto">用连着家里 Wi-Fi 的手机扫码，插上耳机。最多 %1$d 部手机。有人在听时电视静音；关闭页面声音就回来。</string>
+    <string name="fone_ouvindo">正在听：%1$d / %2$d</string>
+    <string name="fone_fechar">关闭</string>
+    <string name="fone_parar">停止</string>
+    <string name="fone_sem_rede">电视不在家庭网络中。</string>
+</resources>

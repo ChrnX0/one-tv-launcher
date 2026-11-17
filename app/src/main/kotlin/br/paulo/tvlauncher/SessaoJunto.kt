@@ -244,6 +244,7 @@ class JuntoNoPlayer(private val a: Activity, private val aplicar: (tocando: Bool
     }
 
     fun desligar() {
+        SomNoFone.parar()   // som no fone vive só enquanto o player está aberto (fechou: o som volta para a TV)
         tela.removeCallbacks(pulso)
         try { a.unregisterReceiver(receptor) } catch (_: Exception) {}
     }

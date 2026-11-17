@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Sofaly</title>
+<style>
+  /* Som no fone (degrau 4). Servida pela TV (SomNoFone.kt), só na rede de casa. Letra grande, um botão. */
+  :root { --fundo:#0b0f17; --cartao:#151b26; --texto:#f2f5f3; --texto2:#b3bab6; --marca:#FF6A2B; --borda:#2a3240; }
+  @media (prefers-color-scheme: light) { :root { --fundo:#f6f6f4; --cartao:#ffffff; --texto:#14181f; --texto2:#4a525e; --marca:#CE3D00; --borda:#d9dce0; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--fundo); color:var(--texto); font:20px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width:520px; margin:0 auto; padding:24px 16px 40px; }
+  h1 { font-size:30px; margin:8px 0 6px; }
+  p { color:var(--texto2); margin:0 0 18px; }
+  button { width:100%; min-height:64px; border:0; border-radius:999px; font:600 24px system-ui, sans-serif; cursor:pointer; }
+  #ouvir { background:var(--marca); color:#fff; }
+  #ouvir.parar { background:var(--cartao); color:var(--texto); border:2px solid var(--borda); }
+  .cartao { background:var(--cartao); border:1px solid var(--borda); border-radius:20px; padding:18px; margin-top:20px; }
+  label { display:flex; justify-content:space-between; align-items:center; gap:12px; font-weight:600; }
+  input[type=range] { width:100%; margin:14px 0 4px; accent-color:var(--marca); height:32px; }
+  input[type=checkbox] { width:28px; height:28px; accent-color:var(--marca); }
+  .mini { font-size:16px; color:var(--texto2); }
+  #estado { font-weight:600; margin-top:16px; min-height:30px; }
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="titulo"></h1>
+  <p id="explica"></p>
+  <button id="ouvir" type="button"></button>
+  <div id="estado" role="status" aria-live="polite"></div>
+  <div class="cartao">
+    <label for="atraso"><span id="rotAtraso"></span><span id="valAtraso"></span></label>
+    <input id="atraso" type="range" min="-200" max="800" step="10">
+    <div class="mini" id="dicaAtraso"></div>
+  </div>
+  <div class="cartao">
+    <label><span id="rotTv"></span><input id="tv" type="checkbox"></label>
+  </div>
+</main>
+<script>
+"use strict";
+// Textos (14 idiomas; o da TV vale para a TV, aqui vale o do celular). Tradução por IA, sem revisão de nativo.
+const T = {
+  en:["Sound on headphones","Plug in your headphones and tap Listen. Only on the home Wi-Fi.","Listen","Stop","Delay","If the voice comes before the lips, raise it; if after, lower it.","Sound on the TV too","Connecting…","Playing","Connection lost. Tap Listen again.","Already 4 phones listening.","The TV is not playing anything right now."],
+  pt:["Som no fone","Ligue o fone e toque em Ouvir. Só no Wi-Fi de casa.","Ouvir","Parar","Atraso","Se a voz vem antes da boca, aumente; se vem depois, diminua.","Som na TV também","Conectando…","Tocando","A conexão caiu. Toque em Ouvir de novo.","Já tem 4 celulares ouvindo.","A TV não está tocando nada agora."],
+  es:["Sonido en auriculares","Conecta los auriculares y toca Escuchar. Solo en el Wi-Fi de casa.","Escuchar","Detener","Retraso","Si la voz llega antes que los labios, súbelo; si llega después, bájalo.","Sonido también en la TV","Conectando…","Sonando","Se perdió la conexión. Toca Escuchar otra vez.","Ya hay 4 móviles escuchando.","La TV no está reproduciendo nada ahora."],
+  de:["Ton über Kopfhörer","Kopfhörer anschließen und auf Hören tippen. Nur im WLAN zu Hause.","Hören","Stopp","Verzögerung","Kommt die Stimme vor den Lippen, erhöhen; danach, verringern.","Ton auch am TV","Verbinde…","Läuft","Verbindung verloren. Tippe erneut auf Hören.","Es hören schon 4 Handys zu.","Der TV spielt gerade nichts ab."],
+  fr:["Son dans les écouteurs","Branchez vos écouteurs et touchez Écouter. Uniquement sur le Wi-Fi de la maison.","Écouter","Arrêter","Décalage","Si la voix arrive avant les lèvres, augmentez ; après, diminuez.","Son aussi sur la TV","Connexion…","Lecture","Connexion perdue. Touchez Écouter à nouveau.","4 téléphones écoutent déjà.","La TV ne lit rien pour le moment."],
+  it:["Audio nelle cuffie","Collega le cuffie e tocca Ascolta. Solo sul Wi-Fi di casa.","Ascolta","Ferma","Ritardo","Se la voce arriva prima delle labbra, aumenta; se dopo, diminuisci.","Audio anche sulla TV","Connessione…","In riproduzione","Connessione persa. Tocca di nuovo Ascolta.","Ci sono già 4 telefoni in ascolto.","La TV non sta riproducendo nulla ora."],
+  ru:["Звук в наушники","Подключите наушники и нажмите «Слушать». Только в домашнем Wi-Fi.","Слушать","Стоп","Задержка","Если голос раньше губ — увеличьте; если позже — уменьшите.","Звук и на ТВ","Подключение…","Играет","Связь потеряна. Нажмите «Слушать» снова.","Уже слушают 4 телефона.","Сейчас ТВ ничего не воспроизводит."],
+  pl:["Dźwięk w słuchawkach","Podłącz słuchawki i dotknij Słuchaj. Tylko w domowym Wi-Fi.","Słuchaj","Stop","Opóźnienie","Jeśli głos jest przed ruchem ust, zwiększ; jeśli po, zmniejsz.","Dźwięk także w TV","Łączenie…","Gra","Połączenie zerwane. Dotknij Słuchaj ponownie.","Słuchają już 4 telefony.","TV teraz niczego nie odtwarza."],
+  tr:["Ses kulaklıkta","Kulaklığı takın ve Dinle'ye dokunun. Yalnızca ev Wi-Fi'ında.","Dinle","Durdur","Gecikme","Ses dudaklardan önce geliyorsa artırın; sonra geliyorsa azaltın.","Ses TV'de de","Bağlanıyor…","Çalıyor","Bağlantı koptu. Tekrar Dinle'ye dokunun.","Zaten 4 telefon dinliyor.","TV şu anda bir şey oynatmıyor."],
+  ja:["イヤホンで聞く","イヤホンを挿して「聞く」を押してください。家のWi-Fiでのみ使えます。","聞く","停止","遅延","声が口の動きより早いなら上げ、遅いなら下げます。","テレビからも音を出す","接続中…","再生中","接続が切れました。もう一度「聞く」を押してください。","すでに4台が聞いています。","テレビは今何も再生していません。"],
+  zh:["用耳机听","插上耳机，点“收听”。仅限家里的 Wi-Fi。","收听","停止","延迟","声音比口型早就调大，晚就调小。","电视也出声","连接中…","播放中","连接断开。请再点一次“收听”。","已有 4 部手机在听。","电视现在没有在播放。"],
+  ko:["이어폰으로 듣기","이어폰을 꽂고 듣기를 누르세요. 집 Wi-Fi에서만 돼요.","듣기","중지","지연","목소리가 입보다 빠르면 올리고, 느리면 내리세요.","TV에서도 소리","연결 중…","재생 중","연결이 끊겼어요. 듣기를 다시 누르세요.","이미 4대가 듣고 있어요.","지금 TV에서 재생 중인 게 없어요."],
+  hi:["हेडफ़ोन में आवाज़","हेडफ़ोन लगाएं और सुनें दबाएं। सिर्फ़ घर के वाई-फ़ाई पर।","सुनें","रोकें","देरी","आवाज़ होंठों से पहले आए तो बढ़ाएं; बाद में आए तो घटाएं।","टीवी पर भी आवाज़","जुड़ रहा है…","चल रहा है","कनेक्शन टूट गया। फिर से सुनें दबाएं।","पहले से 4 फ़ोन सुन रहे हैं।","टीवी अभी कुछ नहीं चला रहा।"],
+  id:["Suara di headset","Pasang headset dan ketuk Dengarkan. Hanya di Wi-Fi rumah.","Dengarkan","Berhenti","Jeda","Jika suara mendahului bibir, naikkan; jika terlambat, turunkan.","Suara juga di TV","Menghubungkan…","Memutar","Koneksi terputus. Ketuk Dengarkan lagi.","Sudah ada 4 ponsel mendengarkan.","TV sedang tidak memutar apa pun."],
+  ar:["الصوت في السماعة","صِل السماعة واضغط استماع. على شبكة المنزل فقط.","استماع","إيقاف","التأخير","إن سبق الصوتُ الشفاه فزِد، وإن تأخر فأنقِص.","الصوت على التلفاز أيضًا","جارٍ الاتصال…","يعمل","انقطع الاتصال. اضغط استماع مجددًا.","هناك 4 هواتف تستمع بالفعل.","التلفاز لا يشغّل شيئًا الآن."],
+};
+const lang = (navigator.language || "en").toLowerCase();
+const L = T[lang.slice(0, 2) === "in" ? "id" : lang.slice(0, 2)] || T.en;
+document.documentElement.lang = lang.slice(0, 2);
+if (lang.startsWith("ar")) document.documentElement.dir = "rtl";
+const $ = id => document.getElementById(id);
+$("titulo").textContent = L[0]; $("explica").textContent = L[1]; $("ouvir").textContent = L[2];
+$("rotAtraso").textContent = L[4]; $("dicaAtraso").textContent = L[5]; $("rotTv").textContent = L[6];
+
+const base = location.pathname.replace(/\/+$/, "");
+let atraso = 250;
+try { const v = parseInt(localStorage.getItem("fone_atraso"), 10); if (!isNaN(v)) atraso = v; } catch (e) {}
+const faixa = $("atraso");
+function mostrarAtraso() { $("valAtraso").textContent = atraso + " ms"; faixa.value = atraso; }
+faixa.addEventListener("input", () => { atraso = parseInt(faixa.value, 10); mostrarAtraso(); try { localStorage.setItem("fone_atraso", atraso); } catch (e) {} });
+
+$("tv").addEventListener("change", e => { fetch(base + "/tv?tambem=" + (e.target.checked ? 1 : 0), { cache: "no-store" }).catch(() => {}); });
+
+let ctx = null, leitor = null, tocando = false, desloc = 0, proximo = 0;
+
+// Acerta o relógio com a TV: 8 idas e voltas, fica a mais rápida (SomNoFoneRegras.deslocamento).
+async function acertarRelogio() {
+  let melhor = null, info = null;
+  for (let i = 0; i < 8; i++) {
+    const e = performance.now();
+    const r = await fetch(base + "/hora", { cache: "no-store" });
+    const j = await r.json();
+    const c = performance.now();
+    if (!melhor || c - e < melhor.rtt) melhor = { rtt: c - e, d: j.t - (e + c) / 2 };
+    info = j;
+  }
+  desloc = melhor.d;
+  return info;
+}
+
+function estado(t) { $("estado").textContent = t; }
+
+async function ouvir() {
+  if (tocando) { parar(); return; }
+  tocando = true;
+  $("ouvir").textContent = L[3]; $("ouvir").classList.add("parar");
+  estado(L[7]);
+  try {
+    ctx = ctx || new (window.AudioContext || window.webkitAudioContext)({ latencyHint: "interactive" });
+    await ctx.resume();
+    const info = await acertarRelogio();
+    if (info && typeof info.tv === "boolean") $("tv").checked = info.tv;
+    if (info && info.atraso && localStorage.getItem("fone_atraso") === null) { atraso = info.atraso; mostrarAtraso(); }
+    const r = await fetch(base + "/som", { cache: "no-store" });
+    if (r.status === 429) throw new Error("limite");
+    if (!r.ok || !r.body) throw new Error("rede");
+    leitor = r.body.getReader();
+    estado(L[8]);
+    let resto = new Uint8Array(0), semSom = 0;
+    for (;;) {
+      const { value, done } = await leitor.read();
+      if (done) break;
+      const junto = new Uint8Array(resto.length + value.length); junto.set(resto); junto.set(value, resto.length);
+      let p = 0;
+      const dv = new DataView(junto.buffer);
+      while (junto.length - p >= 16) {
+        const hora = Number(dv.getBigInt64(p)), taxa = dv.getInt32(p + 8), n = dv.getInt32(p + 12);
+        if (junto.length - p - 16 < n) break;
+        if (n > 0) { tocarPedaco(hora, taxa, junto, p + 16, n); semSom = 0; } else if (++semSom === 3) estado(L[11]);
+        if (n > 0 && semSom === 0 && $("estado").textContent !== L[8]) estado(L[8]);
+        p += 16 + n;
+      }
+      resto = junto.slice(p);
+    }
+    if (tocando) { estado(L[9]); parar(true); }
+  } catch (e) {
+    estado(e.message === "limite" ? L[10] : L[9]);
+    parar(true);
+  }
+}
+
+// Toca o pedaço na hora marcada: hora da TV -> relógio do celular, mais o atraso, menos a latência de saída daqui.
+function tocarPedaco(hora, taxa, b, ini, n) {
+  const quadros = n / 4;
+  const buf = ctx.createBuffer(2, quadros, taxa);
+  const l = buf.getChannelData(0), r = buf.getChannelData(1);
+  const dv = new DataView(b.buffer, ini, n);
+  for (let i = 0; i < quadros; i++) { l[i] = dv.getInt16(i * 4, true) / 32768; r[i] = dv.getInt16(i * 4 + 2, true) / 32768; }
+  const saida = (ctx.outputLatency || ctx.baseLatency || 0);
+  let quando = ctx.currentTime + ((hora - desloc + atraso) - performance.now()) / 1000 - saida;
+  // Atrasado demais: descarta (melhor um buraco de 20 ms que ir ficando para trás). Emenda com o anterior se colar.
+  if (quando < ctx.currentTime - 0.02) return;
+  if (Math.abs(quando - proximo) < 0.008) quando = proximo;
+  if (quando < ctx.currentTime) quando = ctx.currentTime;
+  const s = ctx.createBufferSource(); s.buffer = buf; s.connect(ctx.destination); s.start(quando);
+  proximo = quando + buf.duration;
+}
+
+function parar(silencioso) {
+  tocando = false;
+  try { leitor && leitor.cancel(); } catch (e) {}
+  leitor = null;
+  $("ouvir").textContent = L[2]; $("ouvir").classList.remove("parar");
+  if (!silencioso) estado("");
+}
+
+$("ouvir").addEventListener("click", ouvir);
+mostrarAtraso();
+</script>
+</body>
+</html>

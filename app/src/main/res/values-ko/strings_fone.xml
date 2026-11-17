@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Som no fone (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="fone_menu">이어폰으로 듣기(휴대폰)</string>
+    <string name="fone_titulo">이어폰으로 듣기</string>
+    <string name="fone_texto">집 Wi-Fi에 연결된 휴대폰으로 스캔하고 이어폰을 꽂으세요. 최대 %1$d대. 누군가 듣는 동안 TV는 조용하고, 페이지를 닫으면 소리가 돌아와요.</string>
+    <string name="fone_ouvindo">듣는 중: %1$d / %2$d</string>
+    <string name="fone_fechar">닫기</string>
+    <string name="fone_parar">중지</string>
+    <string name="fone_sem_rede">TV가 집 네트워크에 없어요.</string>
+</resources>

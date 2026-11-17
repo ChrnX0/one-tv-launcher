@@ -876,6 +876,7 @@ class VodActivity : Activity() {
             opcoes += Opcao(getString(R.string.abertura_marcar_fim, agora)) { marcarAbertura(inicio = false) }
             if (abertura != null) opcoes += Opcao(getString(R.string.abertura_apagar)) { apagarAbertura() }
         }
+        opcoes += Opcao(getString(R.string.fone_menu), SomNoFone.ligado) { SomNoFone.janela(this) }
         if (EntreTvs.ligado(this)) {
             val titulo = intent.getStringExtra(EXTRA_TITULO).orEmpty()
             opcoes += Opcao(getString(R.string.junto_menu)) { junto?.menu(titulo, JuntoTvsProvider.tvs(this)) }

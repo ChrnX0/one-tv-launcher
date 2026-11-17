@@ -666,6 +666,8 @@ class PlayerActivity : Activity() {
             if (EfeitosSom.vozClara(this)) marcadas += itens.size
             itens += getString(R.string.acess_voz) to { alternarSom(c, PlayerAcessivel.VOZ_CLARA) }
         }
+        if (SomNoFone.ligado) marcadas += itens.size
+        itens += getString(R.string.fone_menu) to { SomNoFone.janela(this) }
         if (EntreTvs.ligado(this)) {
             itens += getString(R.string.junto_menu) to { junto?.menu(c.nome, JuntoTvsProvider.tvs(this)) }
             itens += getString(R.string.cont_menu) to { junto?.enviarPara(c.nome, JuntoTvsProvider.tvs(this), 0L, null) }
