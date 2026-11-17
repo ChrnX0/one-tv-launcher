@@ -1,0 +1,22 @@
+# Testes do servidor da Sofaly (carteiro em JS + DNS em Go). Só roda em PR que mexe em servidor/.
+name: Servidor
+
+on:
+  pull_request:
+    paths: ['servidor/**', '.github/workflows/servidor.yml']
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Carteiro (regras puras)
+        working-directory: servidor/carteiro
+        run: node --test
+      - uses: actions/setup-go@v5
+        with: { go-version-file: servidor/dns/go.mod, cache-dependency-path: servidor/dns/go.sum }
+      - name: DNS
+        working-directory: servidor/dns
+        run: go vet ./... && go test ./...
