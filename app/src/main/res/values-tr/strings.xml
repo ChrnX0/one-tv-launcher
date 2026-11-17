@@ -432,6 +432,7 @@
     <string name="home_destaque_pilha">%1$d uygulama · ▼ öndekini değiştirir</string>
     <string name="player_carregando">Kanallar yükleniyor…</string>
     <string name="player_carregando_canal">Kanal yükleniyor…</string>
+    <string name="vod_carregando">Video yükleniyor…</string>
     <string name="player_sem_canais">Henüz kanal listesi eklenmedi.</string>
     <string name="player_tentando">%1$d kanalında sinyal yok. Yeniden deneniyor…</string>
     <string name="player_sem_sinal">%1$d kanalı yanıt vermedi. ▲ ▼ veya OK ile başka birini seçin.</string>
@@ -439,6 +440,7 @@
     <string name="player_ao_vivo">CANLI</string>
     <string name="player_a_seguir">sonraki: %1$s</string>
     <string name="player_teclas">▲ ▼ kanal · OK kanal listesi · OK 2 sn basılı: favori · ◀ önceki kanal · ▶▶ seçenekler · GERİ çık</string>
+    <string name="player_teclas_pausa">⏯ veya OK devam · ▶ seçenekler (canlıya dön) · ▲ ▼ kanal · GERİ çık</string>
     <string name="player_cat_busca">Ara: %1$s</string>
     <string name="player_acao_buscar">Ara</string>
     <string name="player_acao_filtros">Filtreler</string>

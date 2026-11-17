@@ -45,7 +45,7 @@ object RelatarProblema {
     fun dados(ctx: Context): Dados {
         val v = VitaisTv.resumo7(ctx)
         return Dados(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE.toLong(), Build.VERSION.RELEASE ?: "?", Build.MODEL ?: "?",
-            UsoTv.atual(ctx).name.lowercase(), v.quedas, v.travadas, RegistroErros.listar(ctx).firstOrNull()?.resumo)
+            UsoTv.atual(ctx).name.lowercase(), v.quedas, v.travadas, RegistroErros.listar(ctx).firstOrNull { it.daVersao(BuildConfig.VERSION_CODE.toLong()) }?.resumo)
     }
 }
 
@@ -68,7 +68,7 @@ class RelatarProblemaActivity : Activity() {
         // O que vai junto, sem o cabeçalho em branco para a pessoa escrever.
         texto.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, RelatarProblema.corpo(d).substringAfter("---\n").trim()).apply { textSize = 17f },
             LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(6) })
-        val ok = Estilo.linhaOpcao(this, getString(R.string.hos_bv_ok)).apply { setOnClickListener { finish() } }
+        val ok = Estilo.linhaOpcao(this, getString(R.string.fp_fechar)).apply { setOnClickListener { finish() } }   // era "Começar" (texto das boas-vindas do hóspede)
         texto.addView(ok, LinearLayout.LayoutParams(dp(220), -2).apply { topMargin = dp(20) })
         raiz.addView(texto, LinearLayout.LayoutParams(0, -2, 1f))
         val lado = (resources.displayMetrics.heightPixels * 0.5f).toInt()

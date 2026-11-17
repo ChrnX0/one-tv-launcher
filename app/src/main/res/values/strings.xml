@@ -490,6 +490,7 @@
     <string name="home_destaque_pilha">%1$d apps · ▼ switches the front one</string>
     <string name="player_carregando">Loading channels…</string>
     <string name="player_carregando_canal">Loading channel…</string>
+    <string name="vod_carregando">Loading video…</string>
     <string name="player_sem_canais">No channel list added yet.</string>
     <string name="player_tentando">No signal on channel %1$d. Trying again…</string>
     <string name="player_sem_sinal">Channel %1$d did not respond. Pick another with ▲ ▼ or OK.</string>
@@ -497,6 +498,7 @@
     <string name="player_ao_vivo">LIVE</string>
     <string name="player_a_seguir">next: %1$s</string>
     <string name="player_teclas">▲ ▼ channel · OK channel list · hold OK 2 s: favorite · ◀ previous channel · ▶▶ options · BACK exit</string>
+    <string name="player_teclas_pausa">⏯ or OK resume · ▶ options (back to live) · ▲ ▼ channel · BACK exit</string>
     <string name="player_cat_busca">Search: %1$s</string>
     <string name="player_acao_buscar">Search</string>
     <string name="player_acao_filtros">Filters</string>

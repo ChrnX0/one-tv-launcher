@@ -26,7 +26,7 @@
         <item>Modo hóspede: a limpeza na saída agora inclui os apps que vieram de fábrica, como a Netflix, e pode limpar tudo de uma vez</item>
         <item>Relatar um problema (Configurações › Sistema): um QR leva ao celular, que mostra exatamente o que vai ser enviado</item>
         <item>“Nada sai da sua casa” (Configurações › Sistema): o que fica só na TV, explicado em poucas linhas</item>
-        <item>Plugins (Configurações › Aparência): outros apps podem pôr um cartão na linha Assistir, cada um só com o seu OK</item>
+        <item>Plugins (Configurações › Tela inicial): outros apps podem pôr um cartão na linha Assistir, cada um só com o seu OK</item>
         <item>App do celular: várias casas, com as TVs agrupadas por casa</item>
         <item>Modo de segurança: se a tela inicial parar 3 vezes em 15 minutos, abre uma versão simples dela, com os apps e o botão “Procurar versão corrigida”</item>
         <item>Primeira abertura: a TV pergunta como é usada (Simples, Completo ou Cuidar de alguém) e mostra só o que serve. Dá para trocar em Configurações › Sistema</item>
@@ -52,9 +52,9 @@
         <item>Emprestar o shell: apps feitos para o Shizuku funcionam sem instalar o Shizuku (desligado de fábrica; Configurações › Emprestar poderes do sistema). Cada app pede na TV com o PIN do painel, e o painel web (Extras) mostra quem tem acesso e revoga</item>
         <item>Emprestar o controle de dono: apps feitos para o Dhizuku usam o Device Owner do launcher (desligado de fábrica; mesmo lugar). Cada app pede na TV com o PIN; nenhum consegue tirar o dono do launcher nem apagar a TV. “Poder total” é por app, com PIN e aviso</item>
         <item>Menus e listas que rolam (como “Áudio e legenda” do player e as pastas): os itens não passam mais por cima do título; nos menus, as bordas esmaecem quando há mais itens</item>
-        <item>Arranjo dos apps: escolha entre a fileira de sempre e uma grade com todos os apps à vista (Configurações › Aparência)</item>
+        <item>Arranjo dos apps: escolha entre a fileira de sempre e uma grade com todos os apps à vista (Configurações › Tela inicial)</item>
         <item>Tamanho dos cartões: Normal ou Grande, e cartões transparentes fora do foco (em Extras); tudo começa desligado</item>
-        <item>Pacotes de ícones: instale um pacote de ícones da Play e escolha em Configurações › Aparência</item>
+        <item>Pacotes de ícones: instale um pacote de ícones da Play e escolha em Configurações › Tela inicial</item>
         <item>Meu fundo: sua foto, GIF ou vídeo atrás da tela inicial, com brilho e contraste (coloque o arquivo na pasta Fundo, Pictures ou Movies)</item>
         <item>Compartilhar visual: um QR com o tema, o tamanho e os ícones desta TV, para guardar ou mandar para outra One TV</item>
         <item>Entradas HDMI e AV aparecem como cartões na linha de apps, nas TVs que têm entrada</item>
@@ -134,7 +134,7 @@
         <item>“Na rede” com cara de catálogo: pôster e sinopse ao lado da lista, Adicionados há pouco, Buscar no Jellyfin, Emby e Plex, e a pasta emenda o próximo vídeo ou música</item>
         <item>Configurações: cada chave de Extras agora mora na aba dela, em “Mais opções”</item>
         <item>Configurações: linhas com QR que abre o painel web já em cenas, Home Assistant, fotos, mural, meu time ou roteador</item>
-        <item>Painel rápido: escolha os blocos e a ordem (Configurações &gt; Aparência), com os blocos novos Filtro noturno e DNS</item>
+        <item>Painel rápido: escolha os blocos e a ordem (Configurações &gt; Tela inicial), com os blocos novos Filtro noturno e DNS</item>
         <item>Digitar com acento pelo celular e pelo Claude (ç, ã, é chegam como foram digitados)</item>
         <item>Wi-Fi das visitas em QR: Configurações &gt; Visitas e rotinas; no modo visita, o Wi-Fi do painel rápido mostra o QR</item>
         <item>O backup noturno agora confere toda noite se a cópia gravada restauraria</item>
@@ -291,7 +291,7 @@
         <item>Em “Na rede”, abra um servidor Jellyfin ou Plex, use Buscar e Adicionados há pouco, e toque um vídeo de uma pasta</item>
         <item>Abra Configurações &gt; Tela e energia e desça até o fim</item>
         <item>Abra Configurações &gt; Visitas e rotinas e rotinas &gt; Cenas pelo celular e leia o código</item>
-        <item>Em Configurações &gt; Aparência &gt; Blocos do painel rápido, mostre Filtro noturno e suba ele ao topo; depois segure HOME</item>
+        <item>Em Configurações &gt; Tela inicial &gt; Blocos do painel rápido, mostre Filtro noturno e suba ele ao topo; depois segure HOME</item>
         <item>Digite “ação” na busca da TV pelo painel do celular</item>
         <item>Preencha Configurações &gt; Visitas e rotinas &gt; Wi-Fi das visitas, ligue o modo visita e aperte Wi-Fi no painel rápido</item>
         <item>Configurações &gt; Sistema &gt; Backup automático &gt; Fazer agora</item>
@@ -356,7 +356,7 @@
         <item>No Modo hóspede, a escolha de apps a limpar mostra também a Netflix e o YouTube?</item>
         <item>Em Configurações › Sistema › Relatar um problema, aparece o QR e o texto que vai junto?</item>
         <item>Em Configurações › Sistema, “Nada sai da sua casa” abre um texto curto e legível?</item>
-        <item>Em Configurações › Aparência › Plugins, a TV pede o PIN e mostra “Nenhum plugin instalado”?</item>
+        <item>Em Configurações › Tela inicial › Plugins, a TV pede o PIN e mostra “Nenhum plugin instalado”?</item>
         <item>Com o comando de teste do modo de segurança, ao voltar à HOME aparece a tela simples com os apps? E “Tentar a tela inicial normal” volta para a de sempre?</item>
         <item>Em Configurações › Sistema, troque “Como esta TV é usada” para Simples: as abas Casa e automações, Acesso remoto e Avançado somem? Depois volte para Completo</item>
         <item>Em Configurações › Família, ligue o Modo hóspede e volte à HOME: aparecem as boas-vindas? Para desligar, a TV pede o PIN?</item>
@@ -374,9 +374,9 @@
         <item>Em Configurações › Família › Cuidar de longe, a tela de consentimento abre e o “Concordo” só funciona com o controle? Ligado, segurar VOLTAR 3 s pergunta “Mandar um pedido de ajuda?” e o VOLTAR curto continua voltando? Desligue de novo depois.</item>
         <item>Com o PIN do painel definido, em Configurações › Emprestar poderes do sistema, mude "Emprestar o shell" para Sempre ligado. Abra um app feito para o Shizuku: a TV pergunta, aceita o PIN e o app funciona? Depois revogue no painel web (Extras) e volte para Desligado.</item>
         <item>Em Configurações › Emprestar poderes do sistema, ligue “Emprestar o controle de dono”. Abra um app feito para o Dhizuku (ex.: OwnDroid ou App Manager): a TV pergunta, aceita o PIN com “Permitir sempre” e o app funciona? No painel web (Extras) ele aparece; revogue e desligue a opção de novo.</item>
-        <item>Em Configurações › Aparência, mude Arranjo dos apps para Grade. Na tela inicial, ▲ ▼ ◀ ▶ andam pela grade sem pular para o relógio, e o VOLTAR para Fileira deixa tudo como antes?</item>
-        <item>Em Configurações › Aparência, mude Tamanho dos cartões para Grande. Os cartões ficam maiores, sem cortar embaixo, e voltar para Normal deixa como antes?</item>
-        <item>Em Configurações › Aparência › Compartilhar visual, aparece um QR que o celular consegue ler?</item>
+        <item>Em Configurações › Tela inicial, mude Arranjo dos apps para Grade. Na tela inicial, ▲ ▼ ◀ ▶ andam pela grade sem pular para o relógio, e o VOLTAR para Fileira deixa tudo como antes?</item>
+        <item>Em Configurações › Tela inicial, mude Tamanho dos cartões para Grande. Os cartões ficam maiores, sem cortar embaixo, e voltar para Normal deixa como antes?</item>
+        <item>Em Configurações › Tela inicial › Compartilhar visual, aparece um QR que o celular consegue ler?</item>
         <item>Abra um vídeo com legenda ASS (anime). A legenda aparece com as cores e posições certas, e muda de tamanho no ▼ › Tamanho da legenda?</item>
         <item>Num filme 5.1, ligue ▼ › Diálogo mais alto. O filme volta no mesmo ponto e as falas ficam mais fáceis de ouvir?</item>
         <item>Num vídeo da rede ou das pastas, segure ▶. Aparece a imagem do ponto para onde vai, acima da barra?</item>

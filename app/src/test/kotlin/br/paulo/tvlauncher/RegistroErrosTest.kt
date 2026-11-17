@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
@@ -20,6 +21,14 @@ class RegistroErrosTest {
         assertTrue(t.contains("Thread: main"))
         assertTrue(t.contains("Erro: IllegalArgumentException: x"))
         assertTrue(t.contains("at br.paulo.tvlauncher.RegistroErrosTest"))
+    }
+
+    @Test fun daVersaoPeloCabecalho() {
+        val t = RegistroErros.montarTexto(0L, "1.0 (460575)", "Android 14 · Chromecast", "main", IllegalStateException("x"))
+        assertTrue(RegistroErros.daVersao(t, 460575L))
+        assertFalse(RegistroErros.daVersao(t, 460046L))
+        assertFalse(RegistroErros.daVersao(t, 60575L))   // não casa só o fim do número
+        assertFalse(RegistroErros.daVersao("sem cabeçalho", 460575L))
     }
 
     @Test fun nomeOrdenaPeloTempo() {

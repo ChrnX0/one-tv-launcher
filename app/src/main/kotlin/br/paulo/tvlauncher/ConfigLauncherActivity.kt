@@ -892,7 +892,8 @@ class ConfigLauncherActivity : Activity() {
         }, lp())
         // Plugins (degrau 3, PluginsTv): cartões de outros apps na linha Assistir. Ligar um plugin pede o PIN parental.
         c.addView(linha(getString(R.string.plg_titulo), getString(R.string.plg_cfg_det), seta = true) {
-            pedirPinParental(getString(R.string.plg_titulo)) {
+            // Título padrão ("PIN do controle parental"): só "Plugins" sobre um campo vazio não dizia o que digitar (Sala, 17/11).
+            pedirPinParental {
                 reconstruirAoVoltar = true
                 startActivity(Intent(this, PluginsActivity::class.java))
             }
@@ -914,7 +915,11 @@ class ConfigLauncherActivity : Activity() {
                     if (isDestroyed) return@post
                     if (arquivos.isEmpty()) { aviso(getString(R.string.fm_vazio)); return@post }
                     val atual = FundoMeuDados.arquivo(this)
-                    Estilo.lista(this, getString(R.string.fm_titulo), listOf(getString(R.string.fm_nenhum)) + arquivos.map { it.name },
+                    // Mesmo nome em pastas diferentes (ex.: Download/v1.png e Pictures/v1.png): mostra a pasta junto,
+                    // senão a lista tem duas linhas iguais e não dá para saber qual é qual (visto na Sala, 17/11/2026).
+                    val repetidos = arquivos.groupingBy { it.name }.eachCount().filterValues { it > 1 }.keys
+                    val nomes = arquivos.map { f -> if (f.name in repetidos) "${f.parentFile?.name ?: "?"}/${f.name}" else f.name }
+                    Estilo.lista(this, getString(R.string.fm_titulo), listOf(getString(R.string.fm_nenhum)) + nomes,
                         marcadas = listOf(arquivos.indexOfFirst { it == atual } + 1)) { i ->
                         FundoMeuDados.definirArquivo(this, arquivos.getOrNull(i - 1))
                         Tema.definir(this, if (i == 0) Tema.ESCURO else Tema.MEU)
@@ -1470,6 +1475,8 @@ class ConfigLauncherActivity : Activity() {
     private fun extrasDaAba(c: LinearLayout, aba: ExtrasAbas.Aba, comSecao: Boolean = true) {
         val porNome = Extras.Chave.values().associateBy { it.name }
         val chaves = ExtrasAbas.daAba(aba, porNome.keys).mapNotNull { porNome[it] }
+            // "Entradas HDMI" num Chromecast (sem entrada) era uma chave que não faz nada (visto na Sala, 17/11/2026).
+            .filter { it != Extras.Chave.ENTRADAS_TV || EntradasTv.existe(this) }
         if (chaves.isEmpty()) return
         if (comSecao) secao(c, getString(R.string.cfg_extras_secao))
         for (k in chaves) {
@@ -2011,7 +2018,11 @@ class ConfigLauncherActivity : Activity() {
 
         /** Mostra o valor atual à direita (ex.: "5 min", "Escuro"). */
         fun valor(v: String) {
-            val t = tValor ?: Estilo.texto(context, Estilo.Papel.CORPO).also { direita.removeAllViews(); direita.addView(it); tValor = it }
+            // Uma linha só e largura com teto: um valor longo (ex.: nome de arquivo do "Meu fundo") espremia o título
+            // em "Meu…" (visto na Sala, 17/11/2026). MIDDLE guarda o começo, a extensão e o "›".
+            val t = tValor ?: Estilo.texto(context, Estilo.Papel.CORPO).apply {
+                setSingleLine(true); ellipsize = TextUtils.TruncateAt.MIDDLE; maxWidth = dp(360)
+            }.also { direita.removeAllViews(); direita.addView(it); tValor = it }
             t.text = "$v  ›"
             pintarTextos()
         }

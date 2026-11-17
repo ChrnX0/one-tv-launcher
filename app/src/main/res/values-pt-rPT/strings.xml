@@ -432,6 +432,7 @@
     <string name="home_destaque_pilha">%1$d apps · ▼ troca o da frente</string>
     <string name="player_carregando">A carregar os canais…</string>
     <string name="player_carregando_canal">A carregar o canal…</string>
+    <string name="vod_carregando">A carregar o vídeo…</string>
     <string name="player_sem_canais">Nenhuma lista de canais cadastrada ainda.</string>
     <string name="player_tentando">Sem sinal no canal %1$d. A tentar de novo…</string>
     <string name="player_sem_sinal">O canal %1$d não respondeu. Escolha outro com ▲ ▼ ou OK.</string>
@@ -439,6 +440,7 @@
     <string name="player_ao_vivo">EM DIRETO</string>
     <string name="player_a_seguir">a seguir: %1$s</string>
     <string name="player_teclas">▲ ▼ canal · OK lista de canais · segure OK 2 s: favoritar · ◀ canal anterior · ▶▶ opções · VOLTAR sair</string>
+    <string name="player_teclas_pausa">⏯ ou OK continua · ▶ opções (voltar ao direto) · ▲ ▼ canal · VOLTAR sair</string>
     <string name="player_cat_busca">Pesquisa: %1$s</string>
     <string name="player_acao_buscar">Pesquisar</string>
     <string name="player_acao_filtros">Filtros</string>

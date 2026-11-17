@@ -29,7 +29,7 @@
         <item>Guest mode: checkout cleanup now includes preinstalled apps such as Netflix, and can clear everything at once</item>
         <item>Report a problem (Settings › System): a QR code opens it on your phone, showing exactly what will be sent</item>
         <item>“Nothing leaves your home” (Settings › System): what stays only on the TV, in a few lines</item>
-        <item>Plugins (Settings › Appearance): other apps can add a card to the Watch row, each one only with your OK</item>
+        <item>Plugins (Settings › Home screen): other apps can add a card to the Watch row, each one only with your OK</item>
         <item>Phone app: several homes, with TVs grouped by home</item>
         <item>Safe mode: if the home screen stops 3 times in 15 minutes, a simple version of it opens, with your apps and a “Look for a fixed version” button</item>
         <item>First launch: the TV asks how it is used (Simple, Complete or Caring for someone) and shows only what fits. You can change it in Settings › System</item>
@@ -55,9 +55,9 @@
         <item>Lend the shell: apps made for Shizuku work without installing Shizuku (off by default; Settings › Lend system powers). Each app asks on the TV with the panel PIN, and the web panel (Extras) shows who has access and revokes it</item>
         <item>Lend owner control: apps made for Dhizuku use the launcher\'s Device Owner (off by default; same place). Each app asks on the TV with the PIN; none can remove the launcher as owner or wipe the TV. “Full power” is per app, with the PIN and a warning</item>
         <item>Scrolling menus and lists (like the player’s “Audio and subtitles” and folders): items no longer slide over the title; in menus, the edges fade when there are more items</item>
-        <item>App layout: choose between the usual row and a grid with every app in view (Settings › Appearance)</item>
+        <item>App layout: choose between the usual row and a grid with every app in view (Settings › Home screen)</item>
         <item>Card size: Normal or Large, plus see-through cards when not selected (in Extras); everything starts off</item>
-        <item>Icon packs: install an icon pack from Play and pick it in Settings › Appearance</item>
+        <item>Icon packs: install an icon pack from Play and pick it in Settings › Home screen</item>
         <item>My background: your photo, GIF or video behind the home screen, with brightness and contrast (put the file in the Fundo, Pictures or Movies folder)</item>
         <item>Share look: a QR code with this TV\'s theme, text size and icons, to keep or send to another One TV</item>
         <item>HDMI and AV inputs show up as cards in the app row, on TVs that have inputs</item>
@@ -137,7 +137,7 @@
         <item>“Network” looks like a catalog: poster and synopsis beside the list, Recently added, Search on Jellyfin, Emby and Plex, and a folder plays the next video or song</item>
         <item>Settings: each Extras switch now lives in its own tab, under “More options”</item>
         <item>Settings: lines with a QR code that opens the web panel straight on scenes, Home Assistant, photos, family board, my team or router</item>
-        <item>Quick panel: choose its tiles and their order (Settings &gt; Appearance), with new Night filter and DNS tiles</item>
+        <item>Quick panel: choose its tiles and their order (Settings &gt; Home screen), with new Night filter and DNS tiles</item>
         <item>Type with accents from your phone and from Claude (ç, ã, é arrive as typed)</item>
         <item>Guest Wi-Fi as a QR: Settings &gt; Guests and routines; in guest mode, Wi-Fi in the quick panel shows the QR</item>
         <item>The nightly backup now checks every night that the saved copy would restore</item>
@@ -444,7 +444,7 @@
         <item>In “Network”, open a Jellyfin or Plex server, try Search and Recently added, and play a video from a folder</item>
         <item>Open Settings &gt; Screen and power and go to the end</item>
         <item>Open Settings &gt; Guests and routines &gt; Scenes from your phone, and scan the code</item>
-        <item>In Settings &gt; Appearance &gt; Quick panel tiles, show Night filter and move it to the top; then hold HOME</item>
+        <item>In Settings &gt; Home screen &gt; Quick panel tiles, show Night filter and move it to the top; then hold HOME</item>
         <item>Type “ação” in the TV search from the phone panel</item>
         <item>Set Settings &gt; Guests and routines &gt; Guest Wi-Fi, turn guest mode on and press Wi-Fi in the quick panel</item>
         <item>Settings &gt; System &gt; Automatic backup &gt; Back up now</item>
@@ -509,7 +509,7 @@
         <item>In Guest mode, does the list of apps to clean also show Netflix and YouTube?</item>
         <item>In Settings › System › Report a problem, do the QR and the text that goes with it appear?</item>
         <item>In Settings › System, does “Nothing leaves your home” open a short, readable text?</item>
-        <item>In Settings › Appearance › Plugins, does the TV ask for the PIN and show “No plugin installed”?</item>
+        <item>In Settings › Home screen › Plugins, does the TV ask for the PIN and show “No plugin installed”?</item>
         <item>With the safe mode test command, does the simple screen with your apps appear when you go back HOME? And does “Try the normal home screen” bring back the usual one?</item>
         <item>In Settings › System, switch “How this TV is used” to Simple: do the Home and automations, Remote access and Advanced tabs disappear? Then switch back to Complete</item>
         <item>In Settings › Family, turn on Guest mode and go back HOME: does the welcome screen appear? To turn it off, does the TV ask for the PIN?</item>
@@ -527,9 +527,9 @@
         <item>In Settings › Family › Care from afar, does the consent screen open and does “I agree” only work with the remote? With it on, does holding BACK for 3 s ask “Send a help request?” and a short BACK still go back? Turn it off again afterwards.</item>
         <item>With the panel PIN set, in Settings › Lend system powers, switch "Lend the shell" to Always on. Open an app made for Shizuku: does the TV ask, accept the PIN and the app work? Then revoke it in the web panel (Extras) and switch it back Off.</item>
         <item>In Settings › Lend system powers, turn on “Lend owner control”. Open an app made for Dhizuku (e.g. OwnDroid or App Manager): does the TV ask, accept the PIN with “Allow always” and the app work? In the web panel (Extras) it shows up; revoke it and turn the option off again.</item>
-        <item>In Settings › Appearance, set App layout to Grid. On the home screen, do ▲ ▼ ◀ ▶ move through the grid without jumping to the clock, and does switching back to Row leave everything as before?</item>
-        <item>In Settings › Appearance, set Card size to Large. Are the cards bigger, not cut off at the bottom, and does going back to Normal leave things as before?</item>
-        <item>In Settings › Appearance › Share look, does a QR code appear that your phone can read?</item>
+        <item>In Settings › Home screen, set App layout to Grid. On the home screen, do ▲ ▼ ◀ ▶ move through the grid without jumping to the clock, and does switching back to Row leave everything as before?</item>
+        <item>In Settings › Home screen, set Card size to Large. Are the cards bigger, not cut off at the bottom, and does going back to Normal leave things as before?</item>
+        <item>In Settings › Home screen › Share look, does a QR code appear that your phone can read?</item>
         <item>Open a video with ASS subtitles (anime). Do the subtitles show with the right colors and positions, and change size in ▼ › Subtitle size?</item>
         <item>In a 5.1 movie, turn on ▼ › Louder dialogue. Does the movie come back at the same point, with speech easier to hear?</item>
         <item>In a network or folder video, hold ▶. Does a picture of where you are going show above the bar?</item>

@@ -581,7 +581,8 @@ object Estilo {
      * OK numa linha fecha e chama [aoEscolher]; VOLTAR fecha sem escolher.
      */
     fun lista(ctx: Context, titulo: CharSequence, itens: List<CharSequence>, marcadas: Collection<Int> = emptyList(),
-              aoFechar: (() -> Unit)? = null, rodape: CharSequence? = null, aoEscolher: (Int) -> Unit): android.app.Dialog {
+              aoFechar: (() -> Unit)? = null, rodape: CharSequence? = null, focoNaMarcada: Boolean = true,
+              aoEscolher: (Int) -> Unit): android.app.Dialog {
         val d = android.app.Dialog(ctx)
         val linhas = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
@@ -620,7 +621,11 @@ object Estilo {
             setDimAmount(0.6f)
             setLayout(dp(ctx, 600), ViewGroup.LayoutParams.WRAP_CONTENT)
         }
-        d.setOnShowListener { (marcadas.firstOrNull { it in vistas.indices }?.let { vistas[it] } ?: vistas.firstOrNull())?.requestFocus() }
+        // focoNaMarcada: numa escolha única o foco começa na opção atual; numa lista de liga/desliga (opções do player)
+        // começa no topo, senão o foco caía no meio da lista, no primeiro efeito ligado (visto na Sala, 17/11/2026).
+        d.setOnShowListener {
+            (marcadas.firstOrNull { focoNaMarcada && it in vistas.indices }?.let { vistas[it] } ?: vistas.firstOrNull())?.requestFocus()
+        }
         if (aoFechar != null) d.setOnDismissListener { aoFechar() }
         d.show()
         return d
