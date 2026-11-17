@@ -905,6 +905,8 @@ class FilmesActivity : Activity() {
         // Nota de fora (Trakt): "Trakt 78%", em âmbar como a estrela.
         ext?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { n ->
             texto.addView(TextView(this).apply { text = InfoExterna.textoNotas(n); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPadding(0, dp(6), 0, 0) })
+            // Atribuição da nota do Simkl na ficha (17/11/2026): "Dados de Simkl (simkl.com)", discreta.
+            if (n.simkl != null) texto.addView(TextView(this).apply { text = getString(R.string.sync_fonte_simkl); textSize = Estilo.Leitura.DADOS * 0.8f; setTextColor(suave); setPadding(0, dp(2), 0, 0) })
         }
         // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch). DESLIGADO (OndeAssistir.JUSTWATCH_LIBERADO): licença.
         (f.tmdb ?: info?.tmdb ?: ext?.tmdb)?.takeIf { OndeAssistir.JUSTWATCH_LIBERADO && InfoExternaCache.temTmdb() }?.let { id ->
