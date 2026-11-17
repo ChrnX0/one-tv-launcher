@@ -128,6 +128,7 @@ object ComandosExtras {
         "vitais" -> VitaisTv.textoAdb(ctx)   // degrau 2: quedas e travadas do launcher por dia (VitaisLocais.kt)
         // Elevação, onda 0: placar dos 7 pilares (JSON + séries cruas); a tela "Como esta TV está indo"; antes e depois da limpeza.
         "placar" -> MedidasTv.textoAdb(ctx)
+        "falhas" -> FalhasTv.textoAdb(ctx)   // elevação 2.3: estados de falha de agora (frase + botão)
         "placar_tela" -> abrir(ctx, PlacarActivity::class.java)
         "limpeza_medir" -> { Fundo.rodar("limpeza-medir") { LimpezaMedida.medirAgora(ctx) }; "medindo (abre os 3 apps mais usados)" }
         // Bancada da madrugada (elevação 2.2, scripts/bancada.py): só roda em aparelho marcado. NUNCA marcar a Sala.

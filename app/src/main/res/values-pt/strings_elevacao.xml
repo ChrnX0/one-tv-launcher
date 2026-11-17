@@ -72,4 +72,28 @@
     <string name="elv_aj_nada">Nada encontrado para “%1$s”</string>
     <string name="elv_aj_nada_det">Tente outra palavra, ou procure nas abas à esquerda</string>
     <string name="elv_aj_sinonimos">fonte,letra,texto,tamanho,maior,menor;wifi,wi-fi,rede,internet,conexao;protetor,descanso,tela de descanso,parada;senha,pin,codigo;som,volume,audio;hora,horario,relogio;clima,tempo,previsao,temperatura;idioma,lingua;criança,crianca,infantil,parental,filho,filhos;visita,visitas,hospede,convidado;atualizacao,atualizar,versao,novidade;backup,copia,copia de seguranca,restaurar;celular,telefone,fone;luz,lampada,casa;desligar,dormir,timer,energia;canal,canais,tv,ao vivo;filme,filmes,serie,series;legenda,legendas;despertador,alarme,acordar;foto,fotos,imagem,fundo,papel de parede</string>
+    <!-- 2.3 falhas em uma frase -->
+    <string name="elv_f_titulo">Precisa de atenção</string>
+    <string name="elv_f_canal_caiu_frase">Este canal não está chegando agora</string>
+    <string name="elv_f_canal_caiu_causa">O provedor do canal parou de mandar. Costuma voltar sozinho.</string>
+    <string name="elv_f_canal_caiu_botao">Ver outro canal</string>
+    <string name="elv_f_lista_venceu_frase">A sua lista de canais venceu</string>
+    <string name="elv_f_lista_venceu_causa">A conta com quem vende a lista acabou ou foi recusada.</string>
+    <string name="elv_f_lista_venceu_botao">Abrir a conta</string>
+    <string name="elv_f_relogio_errado_frase">O relógio da TV está errado</string>
+    <string name="elv_f_relogio_errado_causa">Com a hora errada, o guia e os sites seguros falham.</string>
+    <string name="elv_f_relogio_errado_botao">Acertar o relógio</string>
+    <string name="elv_f_disco_cheio_frase">A TV está ficando sem espaço</string>
+    <string name="elv_f_disco_cheio_causa">Sem espaço, o guia, as gravações e as atualizações não são gravados.</string>
+    <string name="elv_f_disco_cheio_botao">Liberar espaço</string>
+    <string name="elv_f_shell_parado_frase">Os poderes extras da TV pararam</string>
+    <string name="elv_f_shell_parado_causa">A depuração sem fio foi desligada ou o pareamento se perdeu.</string>
+    <string name="elv_f_shell_parado_botao">Religar</string>
+    <string name="elv_f_tunel_sem_login_frase">O acesso de fora de casa espera um login</string>
+    <string name="elv_f_tunel_sem_login_causa">O login do Tailscale venceu.</string>
+    <string name="elv_f_tunel_sem_login_botao">Entrar de novo</string>
+    <string name="elv_f_backup_falhou_frase">O backup da noite não roda há 2 dias</string>
+    <string name="elv_f_backup_falhou_causa">O destino não respondeu ou a senha mudou.</string>
+    <string name="elv_f_backup_falhou_botao">Fazer backup agora</string>
+    <string name="elv_f_religando">Religando: leva até um minuto</string>
 </resources>

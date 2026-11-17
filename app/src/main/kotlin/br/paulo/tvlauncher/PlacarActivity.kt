@@ -46,7 +46,15 @@ class PlacarActivity : Activity() {
         setContentView(raiz)
         // Sete arquivos de poucos centésimos de KB: ler na hora custa menos que um quadro e a tela já abre completa.
         val linhas = runCatching { MedidasTv.linhas(this) }.getOrElse { Placar.linhas(Placar.Entradas()) }
-        desenhar(linhas, runCatching { VitaisTv.resumo30(this) }.getOrNull())
+        val quedas = runCatching { VitaisTv.resumo30(this) }.getOrNull()
+        // Elevação 2.3: o que precisa de atenção vem antes dos pilares. Sem rede primeiro (abre na hora); depois, com a
+        // hora da internet (relógio errado), redesenha se mudou.
+        val falhas = runCatching { FalhasTv.atuais(this, comRede = false) }.getOrDefault(emptyList())
+        desenhar(linhas, quedas, falhas)
+        Fundo.rodar("placar-falhas") {
+            val comRede = runCatching { FalhasTv.atuais(this, comRede = true) }.getOrNull() ?: return@rodar
+            if (comRede != falhas) runOnUiThread { if (!isDestroyed) desenhar(linhas, quedas, comRede) }
+        }
     }
 
     private fun nome(p: Placar.Pilar) = getString(when (p) {
@@ -75,8 +83,19 @@ class PlacarActivity : Activity() {
         is Placar.Numero.Quedas -> resources.getQuantityString(R.plurals.elv_quedas, n.quedas, n.quedas, n.dias)
     }
 
-    private fun desenhar(linhas: List<Placar.Linha>, quedas: VitaisLocais.Resumo?) {
+    private fun desenhar(linhas: List<Placar.Linha>, quedas: VitaisLocais.Resumo?, falhas: List<Falhas.Tipo> = emptyList()) {
         lista.removeAllViews()
+        var primeira: View? = null
+        if (falhas.isNotEmpty()) {
+            lista.addView(Estilo.secao(this, getString(R.string.elv_f_titulo)).apply { setPadding(dp(4), 0, 0, dp(8)) })
+            for (f in falhas) {
+                val l = linha(FalhasTv.frase(this, f), FalhasTv.causa(this, f), "▶  " + FalhasTv.botao(this, f), false, falha = true)
+                l.setOnClickListener { FalhasTv.consertar(this, f) }
+                lista.addView(l, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { bottomMargin = dp(8) })
+                if (primeira == null) primeira = l
+            }
+            lista.addView(Estilo.secao(this, getString(R.string.elv_placar_titulo)).apply { setPadding(dp(4), dp(12), 0, dp(8)) })
+        }
         linhas.forEachIndexed { i, l ->
             val medida = when {
                 l.numero == null -> getString(R.string.elv_nao_medido)
@@ -98,15 +117,16 @@ class PlacarActivity : Activity() {
             }
             val linha = linha("${i + 1}. ${nome(l.pilar)}", detalhe, medida, l.dentro)
             lista.addView(linha, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { bottomMargin = dp(8) })
-            if (i == 0) { linha.requestFocus(); linha.post { linha.requestFocus() } }
+            if (i == 0 && primeira == null) primeira = linha
         }
+        primeira?.let { v -> v.requestFocus(); v.post { v.requestFocus() } }
     }
 
     /** Linha focável (a lista rola pelo foco); sinal + palavra à direita, nunca só a cor. */
-    private fun linha(titulo: String, detalhe: String, medida: String, dentro: Boolean?): View {
+    private fun linha(titulo: String, detalhe: String, medida: String, dentro: Boolean?, falha: Boolean = false): View {
         val (sinal, palavra, cor) = when (dentro) {
             true -> Triple("✓", getString(R.string.elv_dentro), Estilo.ACENTO)
-            false -> Triple("!", getString(R.string.elv_fora), Estilo.ATENCAO)
+            false -> Triple("!", if (falha) "" else getString(R.string.elv_fora), Estilo.ATENCAO)
             null -> Triple("—", "", Estilo.TEXTO_3)
         }
         val tTitulo = Estilo.texto(this, Estilo.Papel.CORPO, titulo).apply { setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f) }

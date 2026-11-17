@@ -418,6 +418,29 @@ class PlayerActivity : Activity() {
             } else {
                 cronCanal.cancelar()
                 mostrarAviso(getString(R.string.player_sem_sinal, c.numero))
+                avisarFalha(c, erro)
+            }
+        }
+    }
+
+    /**
+     * Elevação 2.3: o canal não voltou nem na reserva. Uma frase, a causa e um botão (lista vencida -> conta; canal
+     * caído -> ver outro), em vez de só "sem sinal". Uma caixa por canal (zapear por canais caídos não empilha caixas).
+     */
+    private var falhaAvisadaEm: String? = null
+    private fun avisarFalha(c: Canal, erro: PlaybackException) {
+        if (falhaAvisadaEm == c.id || Gravacoes.atual != null) return
+        falhaAvisadaEm = c.id
+        var x: Throwable? = erro
+        var codigo: Int? = null
+        while (x != null && codigo == null) { codigo = (x as? androidx.media3.datasource.HttpDataSource.InvalidResponseCodeException)?.responseCode; x = x.cause }
+        Fundo.rodar("falha-canal") {
+            val agora = System.currentTimeMillis()
+            val v = runCatching { PlayerArmazem.vencimentos(this) }.getOrDefault(emptyList())
+            val tipo = Falhas.doPlayer(codigo, v.isNotEmpty() && v.all { it.second * 1000 < agora })
+            tela.post {
+                if (isDestroyed || atual?.id != c.id) return@post
+                FalhasTv.mostrar(this, tipo) { abrirLista() }
             }
         }
     }

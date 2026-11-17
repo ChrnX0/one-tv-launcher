@@ -45,6 +45,7 @@ class ConfigLauncherActivity : Activity() {
         const val EXTRA_ABA = "aba"   // índice da aba para abrir (ex.: o atalho "Conta" de outra tela)
         /** Índices das abas que outras telas abrem direto (a ordem mudou em 14/11/2026: use estes, não números). */
         const val ABA_CONTA = 1
+        const val ABA_REMOTO = 5
         const val ABA_AVANCADO = 8
         private const val PIN_VALE_MS = 2 * 60_000L   // depois de acertar o PIN aqui, 2 min sem pedir de novo
         private const val ESTADO_LIBERADO = "hospede_liberado"

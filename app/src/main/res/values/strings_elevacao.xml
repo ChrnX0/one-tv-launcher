@@ -73,4 +73,28 @@
     <string name="elv_aj_nada">Nothing found for “%1$s”</string>
     <string name="elv_aj_nada_det">Try another word, or look in the tabs on the left</string>
     <string name="elv_aj_sinonimos">font,letter,text,size,bigger,smaller;wifi,wi-fi,network,internet,connection;screensaver,screen saver,saver,idle,rest;password,pin,code;sound,volume,audio;time,clock,hour;weather,forecast,temperature;language,idiom;kids,child,children,parental;guest,visitor,visit;update,version,new;backup,copy,restore;phone,mobile,cell;light,lamp,home,house;sleep,turn off,timer,energy,power;channel,tv,live;movie,film,series,show;subtitle,caption,captions;alarm,wake,alarm clock;photo,picture,image,background,wallpaper</string>
+    <!-- 2.3 falhas em uma frase -->
+    <string name="elv_f_titulo">Needs attention</string>
+    <string name="elv_f_canal_caiu_frase">This channel is not coming in right now</string>
+    <string name="elv_f_canal_caiu_causa">The channel\'s provider stopped sending it. It usually comes back on its own.</string>
+    <string name="elv_f_canal_caiu_botao">Watch another channel</string>
+    <string name="elv_f_lista_venceu_frase">Your channel list has expired</string>
+    <string name="elv_f_lista_venceu_causa">The account with whoever sells the list ran out or was refused.</string>
+    <string name="elv_f_lista_venceu_botao">Open the account</string>
+    <string name="elv_f_relogio_errado_frase">The TV\'s clock is wrong</string>
+    <string name="elv_f_relogio_errado_causa">With the wrong time, the guide and secure sites fail.</string>
+    <string name="elv_f_relogio_errado_botao">Set the clock</string>
+    <string name="elv_f_disco_cheio_frase">The TV is running out of space</string>
+    <string name="elv_f_disco_cheio_causa">Without space, the guide, recordings and updates cannot be saved.</string>
+    <string name="elv_f_disco_cheio_botao">Free up space</string>
+    <string name="elv_f_shell_parado_frase">The TV\'s extra powers stopped</string>
+    <string name="elv_f_shell_parado_causa">Wireless debugging was turned off or the pairing was lost.</string>
+    <string name="elv_f_shell_parado_botao">Turn them back on</string>
+    <string name="elv_f_tunel_sem_login_frase">Access from outside home is waiting for a login</string>
+    <string name="elv_f_tunel_sem_login_causa">The Tailscale login expired.</string>
+    <string name="elv_f_tunel_sem_login_botao">Log in again</string>
+    <string name="elv_f_backup_falhou_frase">The night backup has not run for 2 days</string>
+    <string name="elv_f_backup_falhou_causa">The destination was unreachable or the password changed.</string>
+    <string name="elv_f_backup_falhou_botao">Back up now</string>
+    <string name="elv_f_religando">Turning them back on: it takes up to a minute</string>
 </resources>
