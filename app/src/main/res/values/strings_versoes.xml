@@ -29,6 +29,11 @@
         <item>Games in the Couch design: controls in view, tall cards, By type and the crew from your Discord server</item>
         <item>Ready-made looks (Settings › Home screen) and “Look from another TV” in the panel: paste the code from another TV\'s QR or from the site</item>
         <item>Report a problem now goes by e-mail, no GitHub account needed; the Sofaly name shows in the app and its texts</item>
+        <item>Settings and the TV screens in the Cinema+ look: Night background, Sofaly orange highlight and the Nunito font, matching the phone panel</item>
+        <item>Screensaver: different styles for the weather, alerts, greeting with the date, the timeline and the photo credit</item>
+        <item>Quick panel: the Timer moves on from the chosen option and Audio opens Audio output; Scenes say what they do</item>
+        <item>Player: downloaded subtitles no longer show over a dubbed movie; recordings have the right length; the system media controls work in the players; .ac3 and .rmvb files play</item>
+        <item>Forecast: “Today · X% rain” is the highest chance for the rest of the day, and rain and visibility use the language\'s decimal separator</item>
         <item>Fixes: Wi-Fi repair without a restart loop, the alarm really stops when you stop it, a network drop in AVI/WMV no longer ends the video, GIF and video in My background without running out of memory, focus in the player options and keys while paused</item>
         <item>Movies and Series: the name no longer repeats the year (“The Rings of Power 2022”) and genres come in the TV’s language when TMDB has the details</item>
         <item>Movies and Series: the details open lighter (one full-screen background instead of two) and “Episodes” no longer breaks in the middle of the word; long details like “Season 1” go under the button name</item>

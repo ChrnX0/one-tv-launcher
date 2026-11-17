@@ -26,6 +26,11 @@
         <item>Jogos no desenho Sofá: controles à vista, cards altos, Por tipo e a turma do seu servidor do Discord</item>
         <item>Visuais prontos (Configurações › Tela inicial) e “Visual de outra TV” no painel: cole o código do QR de outra TV ou do site</item>
         <item>Relatar um problema agora vai por e-mail, sem precisar de conta no GitHub; o nome Sofaly aparece no app e nos textos</item>
+        <item>Configurações e as telas da TV no visual Cinema+: fundo Noite, destaque laranja Sofaly e a letra Nunito, iguais ao painel do celular</item>
+        <item>Protetor: estilos diferentes para o clima, os avisos, a saudação com a data, a linha do tempo e o crédito da foto</item>
+        <item>Painel rápido: o Timer avança a partir da opção escolhida e Áudio abre a Saída de áudio; as Cenas dizem o que fazem</item>
+        <item>Player: legenda baixada não aparece mais por cima de filme dublado; gravações com a duração certa; os controles de mídia do sistema funcionam nos players; arquivos .ac3 e .rmvb tocam</item>
+        <item>Previsão: “Hoje · X% de chuva” é a maior chance do resto do dia, e chuva e visibilidade usam a vírgula do idioma (4,1 mm)</item>
         <item>Correções: reparo do Wi-Fi sem ciclo de reinício, o alarme para de verdade quando você para, queda de rede em AVI/WMV não encerra o vídeo, GIF e vídeo no Meu fundo sem estourar a memória, foco nas opções do player e teclas com o vídeo pausado</item>
         <item>Filmes e Séries: o nome não repete mais o ano (“Os Anéis de Poder 2022”) e os gêneros vêm no idioma da TV quando o TMDB tem a ficha</item>
         <item>Filmes e Séries: a ficha abre mais leve (um fundo de tela cheia em vez de dois) e “Episódios” não quebra mais no meio da palavra; detalhes compridos como “Temporada 1” vão embaixo do nome do botão</item>
