@@ -138,9 +138,12 @@ class ProtetorTela : DreamService() {
         val raiz = FrameLayout(this).apply { setBackgroundColor(0xFF15140F.toInt()) }
         // O fundo segue o TEMA da HOME (dono, 10 e 11/11/2026): Galeria = a pintura do dia; Escuro = o MESMO protetor,
         // só trocando a pintura pelo wallpaper escuro da HOME (sem mudar mais nada do estilo). Fotos do painel valem nos dois.
-        val galeriaNaHome = Tema.atual(this) == Tema.GALERIA
+        val tema = Tema.atual(this)
+        val galeriaNaHome = tema == Tema.GALERIA
+        // Céu de verdade (17/11/2026): o mesmo protetor, com o mapa e as nuvens de agora no lugar da pintura.
+        val ceu = fotos.isEmpty() && tema == Tema.CEU
         val g = ProtetorGaleria(this, carregador, comPintura = fotos.isEmpty() && galeriaNaHome,
-            wallpaperEscuro = fotos.isEmpty() && !galeriaNaHome)
+            wallpaperEscuro = fotos.isEmpty() && !galeriaNaHome && !ceu, ceuDeVerdade = ceu)
         if (fotos.isNotEmpty()) {
             for (v in camadas) raiz.addView(v.apply { scaleType = ImageView.ScaleType.CENTER_CROP; alpha = 0f }, FrameLayout.LayoutParams(-1, -1))
             raiz.addView(View(this).apply {

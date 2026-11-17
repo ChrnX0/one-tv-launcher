@@ -39,6 +39,8 @@ class ProtetorGaleria(
     private val ctx: Context, private val carregador: ExecutorService, private val comPintura: Boolean,
     /** Tema Escuro (dono, 11/11/2026): o MESMO protetor, só que com o wallpaper escuro da HOME no lugar da pintura. */
     private val wallpaperEscuro: Boolean = false,
+    /** Tema Céu de verdade (17/11/2026): mapa da região, cidade e nuvens do satélite ([DesenhoCeu]) no lugar da pintura. */
+    private val ceuDeVerdade: Boolean = false,
 ) {
     private val m200: Typeface = Fontes.manrope(ctx, 200)
     private val m400: Typeface = Fontes.manrope(ctx, 400)
@@ -63,6 +65,10 @@ class ProtetorGaleria(
     private lateinit var colunaAvisos: LinearLayout
     private lateinit var barra: LinearLayout
     private lateinit var etiquetaObra: LinearLayout
+    /** Caminho 2 (17/11/2026): a frase do tempo e uma curiosidade por vez, embaixo da data ([LinhasTempo]). */
+    private lateinit var linhasTempo: LinhasTempo
+    /** De onde vem o tempo: trocar a fonte do produto não mexe no protetor ([FonteTempo]). */
+    private val fonteTempo: FonteTempo = FonteTempoGuardado(ctx)
 
     // Avisos que vêm da thread de fundo (despertador e agenda).
     private var despertador: Long? = null
@@ -80,6 +86,7 @@ class ProtetorGaleria(
             f.aoTrocarImagem = { bmp -> if (!carregador.isShutdown) carregador.execute { vidro.preparar(bmp) { raiz.post { vidro.redesenhar() } } } }
         } else null
         if (!comPintura && wallpaperEscuro) montarWallpaperEscuro(raiz)
+        if (!comPintura && ceuDeVerdade) montarCeu(raiz)
         // Véu leve só no canto da hora: relógio branco continua legível sobre um céu claro de pintura.
         // Radial a partir do canto: o degradê linear numa caixa deixava uma emenda visível na borda dela (foto de 10/11).
         raiz.addView(View(ctx).apply {
@@ -141,6 +148,36 @@ class ProtetorGaleria(
         if (!carregador.isShutdown) carregador.execute { vidro.preparar(bmp) { raiz.post { vidro.redesenhar() } } }
     }
 
+    private var imagemCeu: ImageView? = null
+    private var ceuFeitoEm = 0L
+
+    /**
+     * Céu de verdade: a imagem do [DesenhoCeu] (960x540) onde a pintura ficaria, e o vidro dos painéis desfoca ela, como
+     * no Escuro. A imagem é refeita fora da thread da tela a cada [atualizar] (15 min), com as nuvens novas do satélite.
+     */
+    private fun montarCeu(raiz: FrameLayout) {
+        val img = ImageView(ctx).apply { scaleType = ImageView.ScaleType.FIT_XY; setBackgroundColor(0xFF0E1A2C.toInt()) }
+        raiz.addView(img, FrameLayout.LayoutParams(-1, -1))
+        imagemCeu = img
+        vidro.matrizNaTela = {
+            if (img.width == 0) null else Matrix().apply {
+                setScale(img.width / 960f, img.height / 540f)
+                val loc = IntArray(2); img.getLocationOnScreen(loc); postTranslate(loc[0].toFloat(), loc[1].toFloat())
+            }
+        }
+    }
+
+    private fun redesenharCeu(e: EstadoCeu) {
+        val img = imagemCeu ?: return
+        if (carregador.isShutdown || System.currentTimeMillis() - ceuFeitoEm < 10 * 60_000L) return
+        ceuFeitoEm = System.currentTimeMillis()
+        carregador.execute {
+            val bmp = try { DesenhoCeu.imagem(ctx, 960, 540, e) } catch (ex: Throwable) { android.util.Log.w(TAG, "céu: $ex"); null } ?: return@execute
+            vidro.preparar(bmp) { raiz.post { vidro.redesenhar() } }
+            img.post { img.setImageBitmap(bmp) }
+        }
+    }
+
     // ------------------------------------------------------------------ topo: saudação, hora, data, linha do dia
     private fun montarTopo() {
         val topo = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL }
@@ -157,6 +194,8 @@ class ProtetorGaleria(
         progressoCheio = View(ctx).apply { background = arredondado(branco, 2f) }
         progresso.addView(progressoCheio, FrameLayout.LayoutParams(0, -1))
         topo.addView(progresso, LinearLayout.LayoutParams(dp(180), dp(2)).apply { topMargin = dp(11); leftMargin = dp(6) })
+        linhasTempo = LinhasTempo(ctx, m400, m600)
+        topo.addView(linhasTempo, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(20); leftMargin = dp(6) })
         camadaInfo.addView(topo, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.START).apply {
             leftMargin = dp(36); topMargin = dp(26)
         })
@@ -199,10 +238,45 @@ class ProtetorGaleria(
         val agora = System.currentTimeMillis()
         val (lat, lon) = lugar()
         val clima = ctx.getSharedPreferences("clima", Context.MODE_PRIVATE)
-        fundo?.atualizar(EstadoCeu(agora, lat, lon, clima.getInt("codigo", 0), clima.getBoolean("chovendo", false)))
+        val estado = EstadoCeu(agora, lat, lon, clima.getInt("codigo", 0), clima.getBoolean("chovendo", false))
+        fundo?.atualizar(estado)
+        redesenharCeu(estado)
         montarBarra(agora, lat, lon)
         montarAvisos()
         carregarAvisos(agora)
+        carregarTempo(agora)
+    }
+
+    /**
+     * Frase e curiosidades fora da thread da tela: a passagem da Estação pode baixar o TLE e faz ~3 mil contas de órbita,
+     * e os planetas mais ~400. Tudo cabe em poucos ms num aparelho de 32 bits, mas não na thread das teclas.
+     */
+    private fun carregarTempo(agora: Long) {
+        if (carregador.isShutdown) return
+        carregador.execute {
+            val t = try { fonteTempo.ler(agora) } catch (e: Exception) { null }
+            val (lat, lon) = lugar()
+            val estacao = try { EstacaoEspacial.proxima(ctx, agora, lat, lon) } catch (e: Exception) { android.util.Log.w(TAG, "estação: $e"); null }
+            val eclipses = try { Config.ECLIPSES_SOLARES.map { it.inicioMs } } catch (e: Exception) { emptyList() }
+            val frase = t?.let { try { FraseTempo.escolher(it) } catch (e: Exception) { null } }
+            // Sem clima recente, o céu da noite ainda vale (Estação, meteoros, Lua, planetas não dependem da previsão).
+            val base = t ?: TempoAgora(agora = agora, lat = lat, lon = lon, codigo = 0)
+            val lista = try { Curiosidades.montar(base, estacao, eclipses) } catch (e: Exception) { android.util.Log.w(TAG, "curiosidades: $e"); emptyList() }
+            val icone = t?.let { iconeDaFrase(it, frase) }
+            raiz.post { if (::linhasTempo.isInitialized) linhasTempo.mostrar(t, frase, lista, icone) }
+        }
+    }
+
+    /** O ícone colorido ao lado da frase: o da chuva quando a frase fala de chuva; senão o céu de agora. */
+    private fun iconeDaFrase(t: TempoAgora, f: FraseTempo.Frase?): Drawable? {
+        val dia = Astronomia.eDia(t.agora, t.lat, t.lon, true)
+        val codigo = when (f) {
+            is FraseTempo.Frase.ChuvaEmMinutos, is FraseTempo.Frase.ParaEmMinutos, is FraseTempo.Frase.ChuvaPorVolta,
+            is FraseTempo.Frase.ParaPorVolta, FraseTempo.Frase.ChuvaSegue, is FraseTempo.Frase.AmanhaChove -> 61
+            is FraseTempo.Frase.Trovoada -> 95
+            else -> t.codigo
+        }
+        return try { IconesClima.bitmap(ctx, IconesClima.chave(codigo, dia, codigo == 61 || codigo == 95))?.let { android.graphics.drawable.BitmapDrawable(ctx.resources, it) } } catch (e: Exception) { null }
     }
 
     private fun lugar(): Pair<Double, Double> {
@@ -245,6 +319,10 @@ class ProtetorGaleria(
         barra.addView(widgets.montar(Protetor.widget(ctx), dados), LinearLayout.LayoutParams(0, -2, 1f))
         // A obra do dia: etiqueta de museu logo acima da linha, à direita.
         etiquetaObra.removeAllViews()
+        // Céu de verdade: no lugar da etiqueta da obra, o crédito das nuvens e do mapa (NOAA/NASA e Natural Earth pedem).
+        if (imagemCeu != null) etiquetaObra.addView(texto(ctx.getString(R.string.ceu_credito), 8f, m400).apply {
+            linhaUnica(); alpha = 0.7f; gravity = Gravity.END
+        }, LinearLayout.LayoutParams(-2, -2).apply { gravity = Gravity.END })
         fundo?.legenda(agora)?.let { (titulo, autor) ->
             etiquetaObra.addView(texto(titulo, 11.5f, fraunces).apply { linhaUnica(); gravity = Gravity.END; setShadowLayer(dp(10).toFloat(), 0f, 0f, 0x99000000.toInt()) },
                 LinearLayout.LayoutParams(-2, -2).apply { gravity = Gravity.END })
@@ -550,6 +628,7 @@ class ProtetorGaleria(
         animador?.let { (v, r) -> v.removeCallbacks(r) }; animador = null
         if (::hora.isInitialized) hora.removeCallbacks(tique)
         NotificacoesTv.parar(aoMudarNotificacoes)
+        if (::linhasTempo.isInitialized) linhasTempo.soltar()
         if (::colunaAvisos.isInitialized) { colunaAvisos.removeCallbacks(tirarAvisoVencido); colunaAvisos.removeCallbacks(releTocando); colunaAvisos.removeCallbacks(limparMarca) }
         vidro.soltar()
         fundo?.let { f -> (0 until f.childCount).map { f.getChildAt(it) }.filterIsInstance<ImageView>().forEach { it.setImageDrawable(null) } }

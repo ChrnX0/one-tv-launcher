@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor que reage ao tempo, caminho 2 (17/11/2026): frase do tempo, curiosidades do céu e o tema "Céu de verdade". -->
+<resources>
+    <string name="tema_ceu">Langit asli</string>
+    <string name="ceu_credito">Awan: NOAA GOES / NASA GIBS · Peta: Natural Earth</string>
+    <string name="ft_chuva_min">Hujan sekitar %1$d menit lagi</string>
+    <string name="ft_para_min">Hujan reda sekitar %1$d menit lagi</string>
+    <string name="ft_chuva_hora">Hujan sekitar pukul %1$s</string>
+    <string name="ft_para_hora">Hujan reda sekitar pukul %1$s</string>
+    <string name="ft_chuva_segue">Hujan selama beberapa jam ke depan</string>
+    <string name="ft_trovoada">Badai petir sekitar pukul %1$s</string>
+    <string name="ft_geada_hoje">Embun beku malam ini: lindungi tanaman</string>
+    <string name="ft_geada_manha">Pagi berembun beku: pakai baju hangat</string>
+    <string name="ft_calor">Sangat panas hari ini (%1$d°): minum air</string>
+    <string name="ft_neblina">Kabut: hati-hati di jalan</string>
+    <string name="ft_noite_fria">Malam dingin (%1$d°): pakai baju hangat</string>
+    <string name="ft_secar">Hari yang baik untuk menjemur pakaian</string>
+    <string name="ft_amanha_chove">Besok kemungkinan hujan (%1$d%%)</string>
+    <string name="ft_ceu_limpo">Langit cerah: malam yang baik untuk bintang</string>
+    <string name="cu_uv_agora">UV %1$d sekarang</string>
+    <string name="cu_uv_amanha">UV %1$d besok</string>
+    <string name="cu_uv_faixa">topi dan tabir surya pukul %1$s sampai %2$s</string>
+    <string name="cu_uv_d2">tabir surya kalau keluar</string>
+    <string name="cu_uv_d3">topi dan tabir surya</string>
+    <string name="cu_uv_d4">hindari matahari siang</string>
+    <string name="cu_uv_d5">tetap di tempat teduh</string>
+    <string name="cu_ar_2">Udara sedang</string>
+    <string name="cu_ar_3">Udara buruk bagi yang sensitif</string>
+    <string name="cu_ar_4">Udara buruk</string>
+    <string name="cu_ar_5">Udara sangat buruk</string>
+    <string name="cu_ar_6">Udara berbahaya</string>
+    <string name="cu_ar_d2">asma: jendela tertutup hari ini</string>
+    <string name="cu_ar_d3">hindari olahraga di luar</string>
+    <string name="cu_ar_d4">semua: kurangi waktu di luar</string>
+    <string name="cu_ar_d5">tetap di rumah, jendela tertutup</string>
+    <string name="cu_estacao">Stasiun Luar Angkasa pukul %1$s</string>
+    <string name="cu_estacao_d">%1$d menit · %2$s → %3$s</string>
+    <string name="cu_meteoros">Hujan meteor malam ini</string>
+    <string name="cu_meteoros_d">%1$s · hingga %2$d per jam</string>
+    <string name="cu_eclipse">Gerhana Matahari %1$s</string>
+    <string name="cu_eclipse_d">jangan pernah menatap matahari langsung</string>
+    <string name="cu_lua_cheia">Bulan purnama malam ini</string>
+    <string name="cu_superlua">Supermoon malam ini</string>
+    <string name="cu_lua_cheia_d">terbit di timur saat senja</string>
+    <string name="cu_lua_nova">Bulan baru</string>
+    <string name="cu_lua_nova_d">langit gelap: terbaik untuk bintang</string>
+    <string name="cu_planeta">%1$s tinggi pukul %2$s</string>
+    <string-array name="ceu_rumos">
+        <item>utara</item>
+        <item>timur laut</item>
+        <item>timur</item>
+        <item>tenggara</item>
+        <item>selatan</item>
+        <item>barat daya</item>
+        <item>barat</item>
+        <item>barat laut</item>
+    </string-array>
+    <string-array name="ceu_olhe">
+        <item>lihat ke utara</item>
+        <item>lihat ke timur laut</item>
+        <item>lihat ke timur</item>
+        <item>lihat ke tenggara</item>
+        <item>lihat ke selatan</item>
+        <item>lihat ke barat daya</item>
+        <item>lihat ke barat</item>
+        <item>lihat ke barat laut</item>
+    </string-array>
+    <string-array name="ceu_planetas">
+        <item>Venus</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturnus</item>
+    </string-array>
+    <string-array name="ceu_meteoros">
+        <item>Quadrantid</item>
+        <item>Lyrid</item>
+        <item>Eta Aquarid</item>
+        <item>Delta Aquarid</item>
+        <item>Perseid</item>
+        <item>Orionid</item>
+        <item>Leonid</item>
+        <item>Geminid</item>
+    </string-array>
+</resources>

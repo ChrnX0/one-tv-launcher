@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor que reage ao tempo, caminho 2 (17/11/2026): frase do tempo, curiosidades do céu e o tema "Céu de verdade". -->
+<resources>
+    <string name="tema_ceu">真实天空</string>
+    <string name="ceu_credito">云图: NOAA GOES / NASA GIBS · 地图: Natural Earth</string>
+    <string name="ft_chuva_min">约%1$d分钟后下雨</string>
+    <string name="ft_para_min">约%1$d分钟后雨停</string>
+    <string name="ft_chuva_hora">%1$s左右下雨</string>
+    <string name="ft_para_hora">%1$s左右雨停</string>
+    <string name="ft_chuva_segue">未来几小时有雨</string>
+    <string name="ft_trovoada">%1$s左右可能有雷雨</string>
+    <string name="ft_geada_hoje">今晚有霜冻: 保护好植物</string>
+    <string name="ft_geada_manha">霜冻的早晨: 注意保暖</string>
+    <string name="ft_calor">今天很热(%1$d°): 多喝水</string>
+    <string name="ft_neblina">有雾: 开车小心</string>
+    <string name="ft_noite_fria">夜里冷(%1$d°): 注意保暖</string>
+    <string name="ft_secar">适合晾衣服的好天气</string>
+    <string name="ft_amanha_chove">明天可能下雨(%1$d%%)</string>
+    <string name="ft_ceu_limpo">晴朗夜空: 看星星的好夜晚</string>
+    <string name="cu_uv_agora">现在紫外线 %1$d</string>
+    <string name="cu_uv_amanha">明天紫外线 %1$d</string>
+    <string name="cu_uv_faixa">%1$s到%2$s戴帽子、涂防晒</string>
+    <string name="cu_uv_d2">出门请涂防晒</string>
+    <string name="cu_uv_d3">帽子和防晒霜</string>
+    <string name="cu_uv_d4">避开正午阳光</string>
+    <string name="cu_uv_d5">待在阴凉处</string>
+    <string name="cu_ar_2">空气质量一般</string>
+    <string name="cu_ar_3">对敏感人群不健康</string>
+    <string name="cu_ar_4">空气不健康</string>
+    <string name="cu_ar_5">空气非常不健康</string>
+    <string name="cu_ar_6">空气危险</string>
+    <string name="cu_ar_d2">哮喘患者: 今天关好窗</string>
+    <string name="cu_ar_d3">避免户外运动</string>
+    <string name="cu_ar_d4">所有人: 减少外出</string>
+    <string name="cu_ar_d5">待在室内, 关好窗</string>
+    <string name="cu_estacao">空间站 %1$s</string>
+    <string name="cu_estacao_d">%1$d分钟 · %2$s → %3$s</string>
+    <string name="cu_meteoros">今晚有流星雨</string>
+    <string name="cu_meteoros_d">%1$s · 午夜后每小时最多%2$d颗</string>
+    <string name="cu_eclipse">日食 %1$s</string>
+    <string name="cu_eclipse_d">切勿直视太阳</string>
+    <string name="cu_lua_cheia">今晚满月</string>
+    <string name="cu_superlua">今晚超级月亮</string>
+    <string name="cu_lua_cheia_d">黄昏时从东方升起</string>
+    <string name="cu_lua_nova">新月</string>
+    <string name="cu_lua_nova_d">夜空黑暗: 最适合看星星</string>
+    <string name="cu_planeta">%1$s %2$s 高挂</string>
+    <string-array name="ceu_rumos">
+        <item>北</item>
+        <item>东北</item>
+        <item>东</item>
+        <item>东南</item>
+        <item>南</item>
+        <item>西南</item>
+        <item>西</item>
+        <item>西北</item>
+    </string-array>
+    <string-array name="ceu_olhe">
+        <item>朝北看</item>
+        <item>朝东北看</item>
+        <item>朝东看</item>
+        <item>朝东南看</item>
+        <item>朝南看</item>
+        <item>朝西南看</item>
+        <item>朝西看</item>
+        <item>朝西北看</item>
+    </string-array>
+    <string-array name="ceu_planetas">
+        <item>金星</item>
+        <item>火星</item>
+        <item>木星</item>
+        <item>土星</item>
+    </string-array>
+    <string-array name="ceu_meteoros">
+        <item>象限仪座流星雨</item>
+        <item>天琴座流星雨</item>
+        <item>宝瓶座η流星雨</item>
+        <item>宝瓶座δ流星雨</item>
+        <item>英仙座流星雨</item>
+        <item>猎户座流星雨</item>
+        <item>狮子座流星雨</item>
+        <item>双子座流星雨</item>
+    </string-array>
+</resources>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor que reage ao tempo, caminho 2 (17/11/2026): frase do tempo, curiosidades do céu e o tema "Céu de verdade". -->
+<resources>
+    <string name="tema_ceu">Настоящее небо</string>
+    <string name="ceu_credito">Облака: NOAA GOES / NASA GIBS · Карта: Natural Earth</string>
+    <string name="ft_chuva_min">Дождь примерно через %1$d мин</string>
+    <string name="ft_para_min">Дождь закончится примерно через %1$d мин</string>
+    <string name="ft_chuva_hora">Дождь около %1$s</string>
+    <string name="ft_para_hora">Дождь закончится около %1$s</string>
+    <string name="ft_chuva_segue">Дождь в ближайшие часы</string>
+    <string name="ft_trovoada">Гроза около %1$s</string>
+    <string name="ft_geada_hoje">Заморозки ночью: укройте растения</string>
+    <string name="ft_geada_manha">Морозное утро: одевайтесь теплее</string>
+    <string name="ft_calor">Сильная жара сегодня (%1$d°): пейте воду</string>
+    <string name="ft_neblina">Туман: осторожно на дороге</string>
+    <string name="ft_noite_fria">Холодная ночь (%1$d°): одевайтесь теплее</string>
+    <string name="ft_secar">Хороший день, чтобы сушить бельё</string>
+    <string name="ft_amanha_chove">Завтра вероятен дождь (%1$d%%)</string>
+    <string name="ft_ceu_limpo">Ясное небо: хорошая ночь для звёзд</string>
+    <string name="cu_uv_agora">УФ %1$d сейчас</string>
+    <string name="cu_uv_amanha">УФ %1$d завтра</string>
+    <string name="cu_uv_faixa">шляпа и крем с %1$s до %2$s</string>
+    <string name="cu_uv_d2">крем от солнца, если выходите</string>
+    <string name="cu_uv_d3">шляпа и крем</string>
+    <string name="cu_uv_d4">избегайте полуденного солнца</string>
+    <string name="cu_uv_d5">оставайтесь в тени</string>
+    <string name="cu_ar_2">Умеренный воздух</string>
+    <string name="cu_ar_3">Воздух вреден для чувствительных</string>
+    <string name="cu_ar_4">Плохой воздух</string>
+    <string name="cu_ar_5">Очень плохой воздух</string>
+    <string name="cu_ar_6">Опасный воздух</string>
+    <string name="cu_ar_d2">астма: окна сегодня закрыты</string>
+    <string name="cu_ar_d3">не занимайтесь спортом на улице</string>
+    <string name="cu_ar_d4">всем: меньше времени на улице</string>
+    <string name="cu_ar_d5">оставайтесь дома, окна закрыты</string>
+    <string name="cu_estacao">Космическая станция в %1$s</string>
+    <string name="cu_estacao_d">%1$d мин · %2$s → %3$s</string>
+    <string name="cu_meteoros">Звездопад сегодня ночью</string>
+    <string name="cu_meteoros_d">%1$s · до %2$d в час</string>
+    <string name="cu_eclipse">Солнечное затмение %1$s</string>
+    <string name="cu_eclipse_d">не смотрите на солнце</string>
+    <string name="cu_lua_cheia">Полнолуние сегодня</string>
+    <string name="cu_superlua">Суперлуние сегодня</string>
+    <string name="cu_lua_cheia_d">восходит на востоке в сумерках</string>
+    <string name="cu_lua_nova">Новолуние</string>
+    <string name="cu_lua_nova_d">тёмное небо: лучше всего для звёзд</string>
+    <string name="cu_planeta">%1$s высоко в %2$s</string>
+    <string-array name="ceu_rumos">
+        <item>север</item>
+        <item>северо-восток</item>
+        <item>восток</item>
+        <item>юго-восток</item>
+        <item>юг</item>
+        <item>юго-запад</item>
+        <item>запад</item>
+        <item>северо-запад</item>
+    </string-array>
+    <string-array name="ceu_olhe">
+        <item>смотрите на север</item>
+        <item>смотрите на северо-восток</item>
+        <item>смотрите на восток</item>
+        <item>смотрите на юго-восток</item>
+        <item>смотрите на юг</item>
+        <item>смотрите на юго-запад</item>
+        <item>смотрите на запад</item>
+        <item>смотрите на северо-запад</item>
+    </string-array>
+    <string-array name="ceu_planetas">
+        <item>Венера</item>
+        <item>Марс</item>
+        <item>Юпитер</item>
+        <item>Сатурн</item>
+    </string-array>
+    <string-array name="ceu_meteoros">
+        <item>Квадрантиды</item>
+        <item>Лириды</item>
+        <item>Эта-Аквариды</item>
+        <item>Дельта-Аквариды</item>
+        <item>Персеиды</item>
+        <item>Ориониды</item>
+        <item>Леониды</item>
+        <item>Геминиды</item>
+    </string-array>
+</resources>

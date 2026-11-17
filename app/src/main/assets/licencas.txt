@@ -146,5 +146,8 @@ Legendas: Subtitles provided by OpenSubtitles.com (https://www.opensubtitles.com
 Rádios: Radio Browser (https://www.radio-browser.info).
 Endereço pelo nome: dados © colaboradores do OpenStreetMap (https://www.openstreetmap.org/copyright), pelo Nominatim.
 Endereço pelo CEP: ViaCEP (https://viacep.com.br).
+Céu de verdade e protetor: nuvens do satélite GOES (NOAA, domínio público dos EUA) pelo NASA GIBS
+  (https://earthdata.nasa.gov/gibs); mapa Natural Earth (https://www.naturalearthdata.com, domínio público);
+  órbita da Estação Espacial (TLE do NORAD) pelo CelesTrak (https://celestrak.org).
 
 Os sons do despertador foram gerados pelo próprio projeto.
