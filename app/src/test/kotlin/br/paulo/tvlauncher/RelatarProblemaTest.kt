@@ -24,4 +24,17 @@ class RelatarProblemaTest {
         assertFalse(l.contains(" ")); assertFalse(l.contains("\n"))
         assertTrue(l.length < 1500)   // QR legível e URL aceita pelo GitHub
     }
+
+    @Test fun emailQuandoHouver() {
+        val m = RelatarProblema.destino("suporte@exemplo.com", "ChrnX0/one-tv-launcher", d)
+        assertTrue(m.startsWith("mailto:suporte@exemplo.com?subject="))
+        assertFalse(m.contains(" ")); assertFalse(m.contains("\n")); assertFalse(m.contains("Ana"))
+        assertTrue(m.contains("460100")); assertFalse(m.contains("**"))
+        assertTrue(m.length < 1200)   // QR ainda legível de longe
+    }
+
+    @Test fun semEmailOuInvalidoVoltaAoGithub() {
+        for (e in listOf("", "  ", "sem-arroba", "a@b", "x@y.com?bcc=z@w.com", "a b@c.com"))
+            assertTrue(e, RelatarProblema.destino(e, "ChrnX0/one-tv-launcher", d).startsWith("https://github.com/"))
+    }
 }

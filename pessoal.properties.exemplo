@@ -36,3 +36,7 @@ trakt_id=
 trakt_segredo=
 simkl_id=
 opensubtitles_chave=
+
+# E-mail que recebe o "Relatar um problema" da TV (o QR abre o app de e-mail do celular, sem conta no GitHub).
+# Vazio = o QR abre o formulário de issue do repositório público, como antes.
+suporte_email=

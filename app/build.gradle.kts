@@ -73,6 +73,9 @@ android {
         val semLicencaNaPlay = setOf("TMDB_CHAVE", "SIMKL_ID")
         for (k in listOf("TMDB_CHAVE", "TRAKT_ID", "TRAKT_SEGREDO", "SIMKL_ID", "OPENSUBTITLES_CHAVE"))
             buildConfigField("String", k, if (project.hasProperty("play") && k in semLicencaNaPlay) "\"\"" else chaveApp(k))
+        // Degrau 2a (17/11/2026): e-mail que recebe o "Relatar um problema" (quem não tem conta no GitHub). Fora do git:
+        // pessoal.properties "suporte_email" ou a variável SUPORTE_EMAIL do repo no release.yml. Vazio = QR do GitHub.
+        buildConfigField("String", "SUPORTE_EMAIL", chaveApp("SUPORTE_EMAIL"))
     }
 
     // Um APK por arquitetura (12/11/2026, pedido do dono: versões de 32 e 64 bits no GitHub).
