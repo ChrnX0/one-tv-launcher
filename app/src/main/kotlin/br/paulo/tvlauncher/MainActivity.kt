@@ -1937,6 +1937,18 @@ class MainActivity : Activity() {
     @Volatile private var ultimoJogo: Pair<String, String>? = null
 
     /** A frase do card Jogos em foco: "3 jogos · 1 controle ligado" ou, sem jogos, o que o card oferece. */
+    /** Linha de baixo do item "Sofá": a turma do Discord (última vista na tela Jogos) ou os controles ligados. */
+    private fun resumoSofa(): String {
+        val t = (TurmaDiscordTv.guardado(this) as? TurmaDiscordTv.Estado.Pronta)?.turma
+        if (t != null) {
+            val sala = t.salas.firstOrNull()
+            return if (sala != null) getString(R.string.cruz_sofa_voz, sala.membros.size, sala.nome)
+                else listOf(t.servidor, getString(R.string.turma_online, t.online)).filter { it.isNotEmpty() }.joinToString(" · ")
+        }
+        val controles = runCatching { JogosTv.controles().size }.getOrDefault(0)
+        return if (controles > 0) resources.getQuantityString(R.plurals.jogos_controles, controles, controles) else getString(R.string.cruz_sofa_sub)
+    }
+
     private fun resumoJogos(): String {
         val controles = runCatching { JogosTv.controles().size }.getOrDefault(0)
         if (jogosNaTv == 0 && controles == 0) return getString(R.string.home_destaque_jogos_vazio)
@@ -2631,10 +2643,15 @@ class MainActivity : Activity() {
                 catch (e: Exception) { Log.w("TvLauncher.Cruz", "rádio não abriu: ${e.javaClass.simpleName}") }
             })))
 
-        // Jogar: o hub de Jogos (com o card Jogos ligado, os apps de jogo moram só nele). Sofá entra com o #183.
+        // Jogar: o hub de Jogos (com o card Jogos ligado, os apps de jogo moram só nele) e o Sofá, que abre a mesma tela
+        // já no painel dos controles e da turma do Discord (#183).
         if (JogosTv.cardLigado(this)) categoria(CruzLogica.Categoria.JOGAR, R.string.cruz_jogar, IconeCruz.Tipo.JOGAR, listOf(
             HomeCruz.Item("jogos", getString(R.string.home_card_jogos), resumoJogos(), icCruz("jogos", IconeCruz.Tipo.JOGOS),
-                { abrirCatalogo(JogosActivity::class.java) })))
+                { abrirCatalogo(JogosActivity::class.java) }),
+            HomeCruz.Item("sofa", getString(R.string.cruz_sofa), resumoSofa(), icCruz("sofa", IconeCruz.Tipo.SOFA), {
+                try { startActivity(Intent(this, JogosActivity::class.java).putExtra(JogosActivity.EXTRA_SOFA, true)) }
+                catch (e: Exception) { Log.w("TvLauncher.Cruz", "sofá não abriu: ${e.javaClass.simpleName}") }
+            })))
 
         // Aplicativos: os 8 mais usados (os mesmos apps visíveis da grade, pilhas abertas) e "Todos os apps".
         val porPacote = HashMap<String, Item>()

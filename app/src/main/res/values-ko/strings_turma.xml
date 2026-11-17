@@ -40,4 +40,7 @@
     <string name="turma_config_guardar">저장</string>
     <string name="turma_config_tirar">친구들 빼기</string>
     <string name="turma_id_invalido">Discord 서버 ID가 아니에요 (17~20자리).</string>
+    <string name="cruz_sofa">소파</string>
+    <string name="cruz_sofa_sub">컨트롤러와 Discord 친구들</string>
+    <string name="cruz_sofa_voz">음성 중 %1$d명 · %2$s</string>
 </resources>
