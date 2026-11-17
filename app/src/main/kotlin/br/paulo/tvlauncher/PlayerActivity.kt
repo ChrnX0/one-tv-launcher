@@ -70,6 +70,10 @@ class PlayerActivity : Activity() {
     private var atual: Canal? = null
     private var anterior: Canal? = null
     private var tentativas = 0
+    /** Elevação 5.2: ids e endereços que já caíram nesta sequência de reservas (zera quando a pessoa troca de canal). */
+    private val reservaTentados = HashSet<String>()
+    private var trocandoPorReserva = false
+    private var avisoReservaAte = 0L   // o aviso da reserva fica legível mesmo depois que o canal novo começa
     private var digitado = ""
     private var favoritos: Set<String> = emptySet()
     private var perfilCarregado = ""   // de que perfil são os [favoritos] na memória (ideia 11)
@@ -310,12 +314,13 @@ class PlayerActivity : Activity() {
 
     // ---------------------------------------------------------------- vídeo
 
-    private fun sintonizar(c: Canal, guardarAnterior: Boolean = true) {
+    private fun sintonizar(c: Canal, guardarAnterior: Boolean = true, teclaEm: Long = android.os.SystemClock.elapsedRealtime()) {
         // Gravando outro canal: a lista só deixa 1 conexão. Pergunta antes de trocar (docs/gravacao.md, item 4).
         Gravacoes.atual?.let { g -> if (g.canalId != c.id && visivel) { conflitoGravacao(c, g); return } }
         if (guardarAnterior && atual != null && atual?.id != c.id) anterior = atual
         atual = c
-        cronCanal.tecla(c.id, android.os.SystemClock.elapsedRealtime())
+        cronCanal.tecla(c.id, teclaEm)
+        if (!trocandoPorReserva) reservaTentados.clear()
         contarCanal(c)
         junto?.let { j -> j.tocandoTitulo(JuntoRegras.chave(JuntoRegras.Tipo.CANAL, null, nome = c.nome)); j.mudou(true, 0) }
         arquivo = null; atualizarSelo()   // trocar de canal (ou voltar ao player) é sempre ao vivo
@@ -372,7 +377,7 @@ class PlayerActivity : Activity() {
     private val ouvinte = object : Player.Listener {
         override fun onPlaybackStateChanged(estado: Int) {
             when (estado) {
-                Player.STATE_READY -> { tentativas = 0; esconderAviso() }
+                Player.STATE_READY -> { tentativas = 0; if (android.os.SystemClock.elapsedRealtime() >= avisoReservaAte) esconderAviso() }
                 Player.STATE_BUFFERING -> if (aviso.visibility != View.VISIBLE) tela.postDelayed(avisoCarregando, 1_500)
                 Player.STATE_ENDED -> if (arquivo != null) fimDoArquivo()
                 else -> {}
@@ -408,11 +413,28 @@ class PlayerActivity : Activity() {
                     if (atual?.id != c.id || arquivo !== prog) return@postDelayed
                     if (prog != null) tocarArquivo(prog, p.currentPosition) else tocar(c)
                 }, 2_000L shl (tentativas - 1))   // 2, 4, 8 s
+            } else if (trocarPorReserva(c)) {
+                return
             } else {
                 cronCanal.cancelar()
                 mostrarAviso(getString(R.string.player_sem_sinal, c.numero))
             }
         }
+    }
+
+    /**
+     * Elevação 5.2: caiu 3 vezes, toca a próxima variante do mesmo canal (HD/SD/Alt, ou o de outra conta) que ainda
+     * não falhou e avisa em uma linha. Nunca no passado (TV de volta) nem gravando (a conexão é da gravação).
+     */
+    private fun trocarPorReserva(c: Canal): Boolean {
+        if (arquivo != null || Gravacoes.atual != null) return false
+        reservaTentados += c.id; reservaTentados += c.url
+        val alt = CanalReserva.proxima(visiveis, c, reservaTentados) { !ControleParental.bloqueado(it, parental) } ?: return false
+        trocandoPorReserva = true
+        try { sintonizar(alt, guardarAnterior = false) } finally { trocandoPorReserva = false }
+        avisoReservaAte = android.os.SystemClock.elapsedRealtime() + 5_000
+        mostrarAvisoBreve(getString(R.string.elv_reserva, c.nome, alt.nome), 5_000)
+        return true
     }
 
     private val avisoCarregando = Runnable {
@@ -436,8 +458,9 @@ class PlayerActivity : Activity() {
         if (arquivo != null && teclaArquivo(keyCode, event)) return true
         if (arquivo == null && teclaPausa(keyCode)) return true
         when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_CHANNEL_UP -> { zapear(+1); return true }
-            KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_CHANNEL_DOWN -> { zapear(-1); return true }
+            // Elevação 5.14: troca ao SOLTAR; segurando, a faixa passa pelos canais sem trocar o vídeo (onKeyUp).
+            KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_CHANNEL_UP -> { zapeio.apertou(+1, event.repeatCount, event.eventTime)?.let { previa(it) }; return true }
+            KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_CHANNEL_DOWN -> { zapeio.apertou(-1, event.repeatCount, event.eventTime)?.let { previa(it) }; return true }
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
                 // Só chega aqui com um número digitado (o resto do OK é tratado em dispatchKeyEvent).
                 if (digitado.isNotEmpty()) confirmarNumero()
@@ -476,6 +499,18 @@ class PlayerActivity : Activity() {
 
     /** Soltou ◀ ▶ no passado depois de segurar: o vídeo pula uma vez só, para onde a faixa mostrou. */
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_CHANNEL_UP, KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_CHANNEL_DOWN -> {
+                if (grade.aberta || lista.aberta || arquivo != null) { zapeio.cancelar(); return super.onKeyUp(keyCode, event) }
+                val segurou = zapeio.segurando
+                val p = zapeio.soltou()
+                // O cronômetro da troca (5.1) começa na tecla DESCENDO, não ao soltar: o número do placar é o que a pessoa sente.
+                val desde = android.os.SystemClock.elapsedRealtime() - (android.os.SystemClock.uptimeMillis() - event.downTime)
+                if (p != null) zapear(p, if (segurou) android.os.SystemClock.elapsedRealtime() else desde)
+                else if (segurou) mostrarInfo()   // voltou ao mesmo canal segurando: a faixa volta a ser a dele
+                return true
+            }
+        }
         if (arquivo != null) when (keyCode) {
             KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> {
                 val ir = avanco.soltou()
@@ -513,9 +548,21 @@ class PlayerActivity : Activity() {
     }
 
     /** ▲ sobe o número do canal (como num controle de TV comum), dentro da categoria escolhida na lista. */
-    private fun zapear(passo: Int) {
+    private fun zapear(passo: Int, teclaEm: Long = android.os.SystemClock.elapsedRealtime()) {
         val onde = PlayerLista.listaDeZapping(visiveis, categoria, favoritos, recentes, atual)
-        PlayerDados.vizinho(onde, atual, passo)?.let { sintonizar(it) }
+        PlayerDados.vizinho(onde, atual, passo)?.let { sintonizar(it, teclaEm = teclaEm) }
+    }
+
+    /** Elevação 5.14: a faixa mostra o canal [passo] à frente, sem trocar o vídeo. */
+    private val zapeio = Zapeio()
+    private fun previa(passo: Int) {
+        if (lista.aberta || grade.aberta) return
+        val onde = PlayerLista.listaDeZapping(visiveis, categoria, favoritos, recentes, atual)
+        val c = PlayerDados.vizinho(onde, atual, passo) ?: return
+        atualizarInfo(previa = c)
+        info.visibility = View.VISIBLE
+        tela.removeCallbacks(esconderInfo)
+        tela.postDelayed(esconderInfo, ESCONDER_INFO_MS)
     }
 
     private fun digitar(d: String) {
@@ -633,24 +680,25 @@ class PlayerActivity : Activity() {
         gravar { PlayerArmazem.definirUltimoCanal(this, c, programas) }
     }
 
-    private fun atualizarInfo() {
+    private fun atualizarInfo(previa: Canal? = null) {
         atualizarSelo()
-        val c = atual ?: return
+        val c = previa ?: atual ?: return
         val hora = SimpleDateFormat("HH:mm", Locale.getDefault())
         // Pausado, a linha dizia "OK lista de canais", mas o OK continua (visto na Sala, 17/11/2026).
         // No passado (TV de volta) as teclas já vão na linha de baixo (tvv_teclas): a linha fixa some.
         infoTeclas.visibility = if (arquivo != null) View.GONE else View.VISIBLE
         infoTeclas.setText(if (pausa.pausado) R.string.player_teclas_pausa else R.string.player_teclas)
-        arquivo?.let { a -> infoDoArquivo(c, a, hora); return }
+        if (previa == null) arquivo?.let { a -> infoDoArquivo(c, a, hora); return }
         vivo.text = "● " + getString(R.string.player_ao_vivo)
         vivo.setTextColor(Estilo.ERRO)
+        if (previa != null) { vivo.text = getString(R.string.elv_zap_solte); vivo.setTextColor(Estilo.ACENTO); infoTeclas.visibility = View.GONE }
         Gravacoes.atual?.takeIf { it.canalId == c.id }?.let { vivo.text = "● " + getString(R.string.grv_selo, Gravacoes.hora(it.fim)) }
-        if (pausa.ativa) {   // pausado ou atrasado: âmbar, como o passado do TV de volta
+        if (previa == null && pausa.ativa) {   // pausado ou atrasado: âmbar, como o passado do TV de volta
             vivo.text = if (pausa.pausado) getString(R.string.pausa_selo)
                 else PausaAoVivo.textoAtraso(pausa.atrasoMs, getString(R.string.pausa_atrasado_min), getString(R.string.pausa_atrasado_seg))
             vivo.setTextColor(Estilo.ATENCAO)
         }
-        gravarUltimo(c)   // o guia pode ter acabado de carregar, ou o programa ter mudado
+        if (previa == null) gravarUltimo(c)   // o guia pode ter acabado de carregar, ou o programa ter mudado
         val agora = System.currentTimeMillis()
         val prog = c.guiaId.takeIf { it.isNotEmpty() }?.let { guia.proximos(it, agora, 2) }.orEmpty()
         val atualProg = prog.firstOrNull()?.takeIf { agora >= it.inicio }

@@ -77,7 +77,7 @@ object Idioma {
     }
 
     /** "pt-BR" → "pt", "eng" → "en", "pob" → "pt". Null = sem idioma ("und", vazio). */
-    private fun normalizar(l: String?): String? {
+    fun normalizar(l: String?): String? {
         val x = l?.trim()?.lowercase()?.takeIf { it.isNotEmpty() && it != "und" } ?: return null
         val base = x.substringBefore('-').substringBefore('_')
         return if (base.length == 3) tres[base] ?: base else base

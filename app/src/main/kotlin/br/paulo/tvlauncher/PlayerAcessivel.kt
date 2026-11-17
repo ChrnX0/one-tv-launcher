@@ -12,6 +12,7 @@ object PlayerAcessivel {
     const val PREFS = "player"
     const val LEGENDA_FUNDO = "legenda_fundo"       // fundo preto opaco atrás da letra
     const val LEGENDA_AMARELA = "legenda_amarela"   // letra amarela no lugar da branca
+    const val LEGENDA_ALTO = "legenda_alto"         // elevação 6.5: legenda em cima (placar de jogo, letreiro embaixo)
     const val VOLUME_IGUAL = "volume_igual"         // compressor: o baixo sobe, o alto não passa do limite
     const val VOZ_CLARA = "voz_clara"               // equalizador que realça a faixa da fala
 

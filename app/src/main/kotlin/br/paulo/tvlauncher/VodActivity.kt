@@ -212,6 +212,8 @@ class VodActivity : Activity() {
     private var perdidos = 0
     // Ideia 24: abertura marcada na série (AberturaSerie) e a pílula "Pular abertura · OK".
     private var serie = false              // episódio aberto pela tela de séries (com a chave da série)
+    /** Elevação 6.4: o que a pessoa escolheu para esta série (legenda, velocidade, atraso da legenda). */
+    private var memSerie: MemoriaSerie.Escolha? = null
     private var abertura: AberturaSerie.Marca? = null
     private var avisouPulo = false         // a pílula já apareceu neste trecho (some depois de 8 s e não volta até sair dele)
     private lateinit var pilulaPular: TextView
@@ -333,7 +335,16 @@ class VodActivity : Activity() {
             val leg = LegendaBaixar.guardada(this, chave)
             val trad = leg != null && LegendaTraduzida.ehTraducao(this, chave)
             val aoLado = direto?.let { runCatching { acharAoLado(it) }.getOrNull() }.orEmpty()
-            val atraso = getSharedPreferences("player", MODE_PRIVATE).getLong("atraso:$chave", 0L)
+            var atraso = getSharedPreferences("player", MODE_PRIVATE).getLong("atraso:$chave", 0L)
+            val mem = if (serie) MemoriaSerieTv.ler(this, chaveIdioma) else null
+            // Elevação 6.4: episódio novo da série, com legenda baixada e sem atraso próprio: vale o atraso da série.
+            var legFinal = leg
+            if (leg != null && atraso == 0L) mem?.atrasoLegendaMs?.takeIf { it != 0L }?.let { ms ->
+                LegendaBaixar.ajustar(this, chave, ms)?.let { f ->
+                    legFinal = f; atraso = ms
+                    getSharedPreferences("player", MODE_PRIVATE).edit().putLong("atraso:$chave", ms).apply()
+                }
+            }
             // Ideia 21: tamanho da legenda escolhido no ▼ (vale para todos os vídeos).
             val tamLeg = FimDoVideo.tamanhoLegenda(getSharedPreferences("player", MODE_PRIVATE).getInt("legenda_sp", FimDoVideo.LEGENDA_PADRAO))
             val pos = intent.getLongExtra("inicio_ms", -1L).takeIf { it >= 0 }
@@ -343,7 +354,8 @@ class VodActivity : Activity() {
             tela.post {
                 if (isDestroyed) return@post
                 if (endereco == null) { mostrarAviso(getString(R.string.vod_sem_conta)); return@post }
-                url = endereco; retomarEm = pos; legendaArquivo = leg; legendaTraduzida = trad; atrasoLegenda = atraso; legendasAoLado = aoLado
+                url = endereco; retomarEm = pos; legendaArquivo = legFinal; legendaTraduzida = trad; atrasoLegenda = atraso; legendasAoLado = aoLado
+                memSerie = mem
                 tamLegendaSp = tamLeg; legenda.textSize = tamLeg.toFloat(); legenda2.textSize = tamLeg.toFloat(); assAjustes.escala(FimDoVideo.escalaAss(tamLeg))
                 pintarLegenda()
                 abertura = ab
@@ -734,8 +746,31 @@ class VodActivity : Activity() {
             legendaDecidida = true
             val p = player ?: return
             IdiomaPlayer.aplicar(faixas, p.trackSelectionParameters, prefIdioma, idiomaTv, segundoIdioma)?.let { p.trackSelectionParameters = it }
+            aplicarMemoriaSerie(p, faixas)
             talvezLegendaAuto(faixas)
         }
+    }
+
+    /** Elevação 6.4: a velocidade e a legenda que a pessoa escolheu nesta série voltam sozinhas no episódio seguinte. */
+    private fun aplicarMemoriaSerie(p: ExoPlayer, faixas: Tracks) {
+        val m = memSerie ?: return
+        MemoriaSerie.velocidadeValida(m.velocidade, PlayerImagem.VELOCIDADES.toList())?.let { if (it != p.playbackParameters.speed) p.setPlaybackSpeed(it) }
+        if (legendaArquivo != null) return   // legenda baixada para este episódio: ela manda
+        val textos = faixas.groups.filter { it.type == C.TRACK_TYPE_TEXT }.flatMap { g -> (0 until g.length).filter { g.isTrackSupported(it) }.map { g to it } }
+        when (val i = MemoriaSerie.legenda(m, textos.map { (g, j) -> g.getTrackFormat(j).language })) {
+            null -> {}
+            -1 -> p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true).build()
+            else -> { val (g, j) = textos[i]
+                p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
+                    .setOverrideForType(TrackSelectionOverride(g.mediaTrackGroup, j)).build() }
+        }
+    }
+
+    private fun lembrarSerie(f: (MemoriaSerie.Escolha) -> MemoriaSerie.Escolha) {
+        if (!serie) return
+        val k = chaveIdioma
+        memSerie = f(memSerie ?: MemoriaSerie.Escolha())
+        Fundo.rodar("memoria-serie") { MemoriaSerieTv.lembrar(this, k, f) }
     }
 
     private val salvarDepois: Runnable = object : Runnable {
@@ -837,6 +872,7 @@ class VodActivity : Activity() {
                         Fundo.rodar { IdiomaPlayer.lembrar(this, chaveIdioma, pref) }
                     }
                     if (tipo == C.TRACK_TYPE_TEXT && f.id != null && f.id == segunda.id) { segunda.id = null; legenda2.visibility = View.GONE; seletor?.atualizar() }
+                    if (tipo == C.TRACK_TYPE_TEXT) Idioma.normalizar(f.language)?.let { l -> lembrarSerie { it.copy(legenda = l) } }
                     p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
                         .setTrackTypeDisabled(tipo, false)
                         .setOverrideForType(TrackSelectionOverride(g, indice)).build()
@@ -847,6 +883,7 @@ class VodActivity : Activity() {
         val comLegenda = legendaArquivo != null || p.currentTracks.groups.any { it.type == C.TRACK_TYPE_TEXT && it.isSelected }
         opcoes += Opcao(semLegenda, marcada = !comLegenda) {
             p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true).build()
+            lembrarSerie { it.copy(legenda = "") }
             // A baixada também sai: antes ela voltava na próxima vez que o filme abria (Sala, 17/11/2026). O "já tentei a
             // automática" fica, então ela não é baixada de novo sozinha; "Buscar legenda" continua trazendo outra.
             if (legendaArquivo != null) {
@@ -882,11 +919,18 @@ class VodActivity : Activity() {
         // Ideia 5: capítulos do arquivo (MKV, MP4, WMV). ⏭ ⏮ do controle também pulam entre eles.
         if (capitulos.size >= 2) opcoes += Opcao(getString(R.string.vod_capitulos_opcao, capitulos.size)) { escolherCapitulo() }
         // Para quem enxerga e ouve pior (14/11/2026): ligar/desligar, vale para todos os vídeos e canais.
-        opcoes += Opcao(getString(R.string.acess_legenda_fundo), EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_FUNDO)) {
-            EfeitosSom.alternar(this, PlayerAcessivel.LEGENDA_FUNDO); pintarLegenda()
+        // Elevação 6.5: três estilos prontos (as mesmas duas chaves de antes) e a posição, um OK por vez.
+        val estiloLeg = EstiloLegenda.de(EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_FUNDO), EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_AMARELA))
+        opcoes += Opcao(getString(R.string.elv_leg_estilo, nomeEstiloLegenda(estiloLeg))) {
+            val novo = EstiloLegenda.proximo(estiloLeg)
+            EfeitosSom.definir(this, PlayerAcessivel.LEGENDA_FUNDO, novo.fundoPreto)
+            EfeitosSom.definir(this, PlayerAcessivel.LEGENDA_AMARELA, novo.amarela)
+            pintarLegenda(); avisoBreve(getString(R.string.elv_leg_estilo, nomeEstiloLegenda(novo)))
         }
-        opcoes += Opcao(getString(R.string.acess_legenda_amarela), EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_AMARELA)) {
-            EfeitosSom.alternar(this, PlayerAcessivel.LEGENDA_AMARELA); pintarLegenda()
+        val emCima = EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_ALTO)
+        opcoes += Opcao(getString(R.string.elv_leg_posicao, getString(if (emCima) R.string.elv_leg_em_cima else R.string.elv_leg_embaixo))) {
+            val agora = EfeitosSom.alternar(this, PlayerAcessivel.LEGENDA_ALTO); pintarLegenda()
+            avisoBreve(getString(R.string.elv_leg_posicao, getString(if (agora) R.string.elv_leg_em_cima else R.string.elv_leg_embaixo)))
         }
         if (EfeitosSom.disponivel()) {
             opcoes += Opcao(getString(R.string.acess_volume), EfeitosSom.volumeIgual(this)) { alternarSom(PlayerAcessivel.VOLUME_IGUAL) }
@@ -1177,6 +1221,7 @@ class VodActivity : Activity() {
             Fundo.rodar {
                 val f = LegendaBaixar.ajustar(this, k, ms)
                 getSharedPreferences("player", MODE_PRIVATE).edit().putLong("atraso:$k", ms).apply()
+                tela.post { lembrarSerie { it.copy(atrasoLegendaMs = ms) } }
                 tela.post { if (!isDestroyed && f != null) { legendaArquivo = f; atrasoLegenda = ms; recarregarComLegenda() } }
             }
         }
@@ -1186,7 +1231,7 @@ class VodActivity : Activity() {
         val p = player ?: return
         val v = PlayerImagem.VELOCIDADES
         Estilo.lista(this, getString(R.string.velocidade_titulo), v.map { PlayerImagem.rotuloVelocidade(it) },
-            listOf(v.indexOfFirst { it == p.playbackParameters.speed })) { i -> p.setPlaybackSpeed(v[i]) }
+            listOf(v.indexOfFirst { it == p.playbackParameters.speed })) { i -> p.setPlaybackSpeed(v[i]); lembrarSerie { it.copy(velocidade = v[i]) } }
     }
 
     /** Cores da legenda conforme as chaves (PlayerAcessivel.legenda): padrão = branca com fundo leve, como antes. */
@@ -1195,7 +1240,20 @@ class VodActivity : Activity() {
         legenda.setTextColor(c.texto)
         (legenda.background as? GradientDrawable)?.setColor(c.fundo)
         if (c.sombra) legenda.setShadowLayer(8f, 0f, 2f, Color.BLACK) else legenda.setShadowLayer(0f, 0f, 0f, 0)
+        // Elevação 6.5: em cima ou embaixo (a legenda em imagem, PGS/ASS, segue a posição que o próprio arquivo manda).
+        val alto = EfeitosSom.ligado(this, PlayerAcessivel.LEGENDA_ALTO)
+        (legenda.layoutParams as? FrameLayout.LayoutParams)?.let { lp ->
+            lp.gravity = (if (alto) Gravity.TOP else Gravity.BOTTOM) or Gravity.CENTER_HORIZONTAL
+            lp.setMargins(dp(96), if (alto) dp(56) else 0, dp(96), if (alto) 0 else dp(56))
+            legenda.layoutParams = lp
+        }
     }
+
+    private fun nomeEstiloLegenda(e: EstiloLegenda.Estilo) = getString(when (e) {
+        EstiloLegenda.Estilo.PADRAO -> R.string.elv_leg_padrao
+        EstiloLegenda.Estilo.ALTO_CONTRASTE -> R.string.elv_leg_contraste
+        EstiloLegenda.Estilo.AMARELA -> R.string.elv_leg_amarela
+    })
 
     /**
      * Liga/desliga volume parecido ou voz mais clara. Se mudar entre "som direto para a TV" e "som decodificado aqui"

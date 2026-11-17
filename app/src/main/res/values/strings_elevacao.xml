@@ -38,4 +38,13 @@
     <string name="elv_lp_igual">No difference big enough to measure</string>
     <string name="elv_agora">just now</string>
     <string name="elv_sem_quedas">No crashes or freezes in %1$d days</string>
+    <string name="elv_reserva">%1$s dropped. Playing %2$s instead.</string>
+    <string name="elv_zap_solte">Release to watch</string>
+    <string name="elv_leg_estilo">Subtitle style: %1$s</string>
+    <string name="elv_leg_padrao">standard</string>
+    <string name="elv_leg_contraste">high contrast</string>
+    <string name="elv_leg_amarela">yellow</string>
+    <string name="elv_leg_posicao">Subtitle position: %1$s</string>
+    <string name="elv_leg_embaixo">bottom</string>
+    <string name="elv_leg_em_cima">top</string>
 </resources>
