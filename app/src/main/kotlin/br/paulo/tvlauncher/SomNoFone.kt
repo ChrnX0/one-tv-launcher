@@ -200,6 +200,7 @@ object SomNoFone {
 
     /** "Som no fone" no menu do player: liga e mostra o QR; "Parar" desliga. */
     fun janela(a: Activity) {
+        if (!PlanosTv.pedir(a, Planos.Recurso.SOM_NO_FONE)) return   // plano: Pro
         val url = ligar(a) ?: run {
             android.widget.Toast.makeText(a, a.getString(R.string.fone_sem_rede), android.widget.Toast.LENGTH_LONG).show(); return
         }

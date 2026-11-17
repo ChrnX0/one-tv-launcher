@@ -142,7 +142,7 @@ object RecadoVideo {
      */
     fun receber(ctx: Context, nomeBruto: String?, textoBruto: String?, entrada: InputStream, tamanho: Long): String? {
         val app = ctx.applicationContext
-        if (!aceita(app)) return "desligado"
+        if (!aceita(app) || !Planos.permite(app, Planos.Recurso.RECADO_VIDEO)) return "desligado"   // plano: Pro
         if (!Regras.tamanhoOk(tamanho)) return "tamanho"
         val dir = pasta(app) ?: return "disco"
         if (dir.usableSpace < tamanho + 50L * 1024 * 1024) return "disco"

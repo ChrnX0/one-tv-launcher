@@ -68,7 +68,7 @@ object PluginsTv {
     /** Os cartões dos plugins permitidos (no máximo 3). Bloqueia até 2 s por plugin: chamar FORA da thread da tela. */
     fun cartoes(ctx: Context): List<PluginCartao.Cartao> {
         val ok = permitidos(ctx)
-        if (ok.isEmpty()) return emptyList()
+        if (ok.isEmpty() || !Planos.permite(ctx, Planos.Recurso.PLUGINS)) return emptyList()   // plano: Pro
         return instalados(ctx).filter { PluginCartao.permitido(ok, it.pacote, certificado(ctx, it.pacote)) }
             .take(PluginCartao.MAX_PLUGINS).mapNotNull { p ->
                 val f = leitor.submit<PluginCartao.Cartao?> { ler(ctx, p) }
@@ -114,6 +114,7 @@ class PluginsActivity : Activity() {
             coluna.addView(Estilo.linhaOpcao(this, p.nome, p.pacote, valor).apply {
                 setOnClickListener {
                     val novo = !PluginsTv.permitido(this@PluginsActivity, p.pacote)
+                    if (novo && !PlanosTv.pedir(this@PluginsActivity, Planos.Recurso.PLUGINS)) return@setOnClickListener   // ligar: Pro
                     if (!PluginsTv.definir(this@PluginsActivity, p.pacote, novo))
                         android.widget.Toast.makeText(this@PluginsActivity, getString(R.string.plg_limite, PluginCartao.MAX_PLUGINS), android.widget.Toast.LENGTH_LONG).show()
                     pintar()

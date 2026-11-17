@@ -44,7 +44,8 @@ object ContinuarOutraTv {
     /** POST /continuar vindo de outra TV da conta. */
     fun receber(ctx: Context, corpo: JSONObject?): Pair<Int, JSONObject> {
         val app = ctx.applicationContext
-        if (!EntreTvs.ligado(app)) return 403 to JSONObject().put("erro", "desligado")
+        if (!EntreTvs.ligado(app) || !Planos.permite(app, Planos.Recurso.CONTINUAR_OUTRA_TV))   // plano: Pro
+            return 403 to JSONObject().put("erro", "desligado")
         val c = JuntoRegras.continuarDeJson(corpo) ?: return 400 to JSONObject().put("erro", "pedido")
         if (EntreTvs.outras(app).none { it.host == c.de }) return 403 to JSONObject().put("erro", "tv")
         pendente = c to System.currentTimeMillis()

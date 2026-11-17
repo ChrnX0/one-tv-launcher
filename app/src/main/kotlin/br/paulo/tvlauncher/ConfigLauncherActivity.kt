@@ -1168,6 +1168,8 @@ class ConfigLauncherActivity : Activity() {
         // Família conectada (degrau 3, FamiliaConectada.kt): filhos e netos mandam foto e recado por um link. Atrás do PIN
         // dos pais (o link abre a TV para quem o tiver). Abrir a tela liga o link; "Desligar" lá dentro desliga.
         c.addView(linha(getString(R.string.famc_titulo), getString(if (FamiliaConectada.ligado(this)) R.string.famc_ligado else R.string.famc_det), seta = true) {
+            // Plano (17/11/2026): o link de fora de casa é Pro; quem já ligou antes ainda entra para DESLIGAR.
+            if (!FamiliaConectada.ligado(this) && !PlanosTv.pedir(this, Planos.Recurso.FAMILIA_LINK)) return@linha
             pedirPinParental {
                 reconstruirAoVoltar = true
                 startActivity(Intent(this, FamiliaConectadaActivity::class.java))

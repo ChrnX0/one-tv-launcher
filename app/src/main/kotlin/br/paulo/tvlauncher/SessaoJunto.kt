@@ -284,6 +284,7 @@ class JuntoNoPlayer(private val a: Activity, private val aplicar: (tocando: Bool
 
     /** "Enviar para outra TV" (ContinuarOutraTv): escolhe a TV e manda título, posição e, se for da rede da casa, o endereço. */
     fun enviarPara(titulo: String, tvs: List<String>, posMs: Long, url: String?) {
+        if (!PlanosTv.pedir(a, Planos.Recurso.CONTINUAR_OUTRA_TV)) return   // plano: Pro
         val chave = chaveLocal ?: run { android.widget.Toast.makeText(a, a.getString(R.string.junto_sem_titulo), android.widget.Toast.LENGTH_LONG).show(); return }
         if (tvs.isEmpty()) { Estilo.lista(a, a.getString(R.string.cont_titulo), listOf(a.getString(R.string.junto_sem_tvs))) {}; return }
         Estilo.lista(a, a.getString(R.string.cont_escolher), tvs.map(JuntoRegras::nomeBonito)) { i ->
@@ -309,6 +310,9 @@ class JuntoNoPlayer(private val a: Activity, private val aplicar: (tocando: Bool
             }
             return
         }
+        // Plano: só quem CONVIDA precisa do Ultra; aceitar um convite (receberConvite) fica livre, para a sessão juntar
+        // quem tem plano menor (Paulo, 17/11/2026: Ultra = sessão junto).
+        if (!PlanosTv.pedir(a, Planos.Recurso.SESSAO_JUNTO)) return
         if (tvs.isEmpty()) {
             Estilo.lista(a, a.getString(R.string.junto_titulo), listOf(a.getString(R.string.junto_sem_tvs))) {}
             return

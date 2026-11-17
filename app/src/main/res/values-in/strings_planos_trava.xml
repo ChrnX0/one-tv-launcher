@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Travas de plano (PlanosTv.pedir, revisão dos degraus T2, 17/11/2026). -->
+<resources>
+    <string name="plt_titulo">Bagian dari paket %1$s</string>
+    <string name="plt_texto">Fitur ini ada di paket %1$s. Lihat paket di TV dan beli lewat ponsel.</string>
+    <string name="plt_ver">Lihat paket</string>
+    <string name="plt_agora_nao">Nanti saja</string>
+</resources>
