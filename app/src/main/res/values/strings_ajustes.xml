@@ -49,7 +49,7 @@
     <string name="oc_titulo">Hidden apps</string>
     <string name="oc_subtitulo">OK shows or hides an app on the home screen · hidden ones come first</string>
     <string name="oc_nenhum">No hidden apps · OK to choose</string>
-    <string name="oc_quantos">%1$d hidden · OK to show them again</string>
+    <string name="oc_quantos">Hidden: %1$d · OK to show them again</string>
     <string name="oc_oculto">hidden</string>
     <string name="oc_aparece">on the home screen</string>
     <string name="oc_aviso_titulo">App hidden</string>

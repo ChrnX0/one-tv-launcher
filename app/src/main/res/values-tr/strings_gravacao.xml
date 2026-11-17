@@ -60,7 +60,7 @@
     <string name="grv_apagar_pergunta">«%1$s» silinsin mi? Bu geri alınamaz.</string>
     <string name="grv_reserva_secao">USB bellek olmadan</string>
     <string name="grv_reserva">Ağ klasörü</string>
-    <string name="grv_reserva_explica">USB bellek takılı değilken nereye kaydedilecek (Ağda’dan bir Windows/NAS klasörü)</string>
+    <string name="grv_reserva_explica">USB bellek takılı değilken nereye kaydedilecek (“Ağda” bölümünden bir Windows veya NAS klasörü)</string>
     <string name="grv_nenhuma">Yok</string>
     <string name="grv_sem_smb">Önce Ağda’ya bir Windows/NAS (SMB) klasörü ekleyin.</string>
     <string name="grv_amanha">Yarın</string>

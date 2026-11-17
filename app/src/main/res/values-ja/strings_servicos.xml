@@ -41,7 +41,7 @@
     <string name="sv_conferindo">%1$s で確認中…</string>
     <string name="sv_limite_dia">1 日の字幕の上限に達しました。24 時間後にリセットされます（OpenSubtitles アカウントがあれば 1 日 20 件）。</string>
     <string name="sv_tmdb_atribuicao">この製品は TMDB API を使用していますが、TMDB による承認または認定を受けたものではありません。</string>
-    <string name="ext_saga">%1$s: リストに %3$d 作品中 %2$d 作品</string>
+    <string name="ext_saga">%1$s · リストに %3$d 作品中 %2$d 作品</string>
     <string name="ext_nao_e_este">この映画ではない</string>
     <string name="ext_proximo">新エピソード %1$s（S%2$dE%3$d）</string>
     <string name="ext_proximo_curto">新エピ %1$s</string>

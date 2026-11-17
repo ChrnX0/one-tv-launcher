@@ -1649,7 +1649,10 @@ class ConfigLauncherActivity : Activity() {
             secao(c, getString(R.string.cfg2_sec_ocultos_sistema))
             Config.APPS_OCULTAR.forEach { pacote ->
                 val rotulo = try {
-                    packageManager.getApplicationLabel(packageManager.getApplicationInfo(pacote, 0)).toString()
+                    // MATCH_UNINSTALLED_PACKAGES: oculto pelo dono, o app some do getApplicationInfo comum e a linha mostrava
+                    // "com.google.android.apps.tv.dreamx" em vez do nome (Sala, 17/11/2026).
+                    packageManager.getApplicationLabel(packageManager.getApplicationInfo(pacote,
+                        android.content.pm.PackageManager.MATCH_UNINSTALLED_PACKAGES)).toString()
                 } catch (e: Exception) { pacote }
                 lateinit var linhaApp: LinhaCfg
                 linhaApp = linha(rotulo, getString(R.string.cl_visivel), chave = !PrivilegioDO.estaOculto(this, pacote)) {

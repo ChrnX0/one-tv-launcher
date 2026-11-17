@@ -133,9 +133,9 @@
     <string name="bu_canais">Saluran</string>
     <string name="bu_canal_n">Saluran %1$s</string>
     <string name="bu_no_guia">Di panduan</string>
-    <string name="bu_ver_filmes">Lihat semua %1$s di Film</string>
+    <string name="bu_ver_filmes">Lihat semua di Film (%1$s)</string>
     <string name="bu_ver_filmes_det">Membuka katalog film dengan pencarian ini</string>
-    <string name="bu_ver_series">Lihat semua %1$s di Serial</string>
+    <string name="bu_ver_series">Lihat semua di Serial (%1$s)</string>
     <string name="bu_ver_series_det">Membuka katalog serial dengan pencarian ini</string>
     <string name="bu_agora">Sekarang</string>
     <string name="bu_lembrete_sim">Pengingat diatur</string>
@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">Hampir hitam</string>
     <string name="cb_quase_branco">Hampir putih</string>
     <string name="cb_bordas">Tepi</string>
-    <string name="cb_barras">Bar warna 75%</string>
+    <string name="cb_barras" formatted="false">Bar warna 75%</string>
     <string name="cb_linhas">Garis 1 piksel</string>
     <string name="ad_ninguem">Tidak ada yang menyentuh remote selama %1$s.\nTekan tombol apa pun untuk terus menonton.</string>
     <string name="ad_vai_desligar">TV akan mati dalam %1$d dtk</string>

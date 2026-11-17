@@ -41,7 +41,7 @@
     <string name="sv_conferindo">%1$s से जाँचा जा रहा है…</string>
     <string name="sv_limite_dia">आज की सबटाइटल सीमा ख़त्म। यह 24 घंटे में फिर भरती है (OpenSubtitles खाते से दिन में 20)।</string>
     <string name="sv_tmdb_atribuicao">यह उत्पाद TMDB API इस्तेमाल करता है पर TMDB द्वारा समर्थित या प्रमाणित नहीं है।</string>
-    <string name="ext_saga">%1$s: आपकी सूची में %3$d में से %2$d</string>
+    <string name="ext_saga">%1$s · आपकी सूची में %3$d में से %2$d</string>
     <string name="ext_nao_e_este">यह फ़िल्म नहीं</string>
     <string name="ext_proximo">नया एपिसोड %1$s (S%2$dE%3$d)</string>
     <string name="ext_proximo_curto">नया एप. %1$s</string>

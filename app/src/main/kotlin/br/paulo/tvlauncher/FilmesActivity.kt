@@ -543,6 +543,11 @@ class FilmesActivity : Activity() {
         if (Vod.finalizado(pos)) opcoes += getString(R.string.coluna_menu_nao_assistido) to {
             mudarPosicoes(f, { Vod.esquecer(it, f.chave) }, R.string.coluna_marcado_nao_assistido)
         }
+        // Destaque da HOME é este filme: dá para tirar (aberto por engano, ou não quer que apareça para as visitas).
+        if (PlayerArmazem.capaHome(this, serie = false).ficha?.chave == f.chave) opcoes += getString(R.string.coluna_menu_tirar_home) to {
+            Fundo.rodar { PlayerArmazem.tirarCapaHome(this, serie = false, chave = f.chave) }
+            avisoBreve(getString(R.string.coluna_tirado_home, Vod.nomeLimpo(f.nome)))
+        }
         Estilo.lista(this, Vod.nomeLimpo(f.nome), opcoes.map { it.first }) { i -> opcoes[i].second() }
     }
 
@@ -1109,7 +1114,7 @@ class FilmesActivity : Activity() {
         if (paraHome) Fundo.rodar { PlayerArmazem.definirCapaHome(this, serie = false, poster = capa, cenas = cenas, ficha = fichaHome) }
         VodActivity.abrir(this, VodActivity.TIPO_FILME, f.fonteId, f.id, f.extensao, Vod.nomeLimpo(f.nome), doComeco,
             busca = LegendaExterna.Busca(LegendaExterna.nomeDeBusca(f.nome), f.ano,
-                tmdb = f.tmdb ?: externo?.takeIf { it.first === f }?.second?.tmdb))
+                tmdb = f.tmdb ?: externo?.takeIf { it.first === f }?.second?.tmdb, versao = Idioma.versao(f.nome, f.grupo)))
     }
 
     private fun botao(texto: String, marca: String, aoApertar: () -> Unit) = TextView(this).apply {

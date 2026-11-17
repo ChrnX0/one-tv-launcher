@@ -22,6 +22,8 @@
     <string name="coluna_marcado_assistido">%1$s izlendi olarak işaretlendi</string>
     <string name="coluna_marcado_nao_assistido">%1$s izlenmedi olarak işaretlendi</string>
     <string name="coluna_tirado_continuar">%1$s İzlemeye devam et’ten çıkarıldı</string>
+    <string name="coluna_menu_tirar_home">Ana ekrandan kaldır</string>
+    <string name="coluna_tirado_home">%1$s ana ekrandan kaldırıldı</string>
     <string name="coluna_etiqueta_concluida">Bitti</string>
     <string name="coluna_etiqueta_nova_temporada">Yeni sezon</string>
     <string name="coluna_etiqueta_novos">Yeni bölümler</string>

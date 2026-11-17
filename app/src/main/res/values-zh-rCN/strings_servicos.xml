@@ -41,7 +41,7 @@
     <string name="sv_conferindo">正在向 %1$s 核对…</string>
     <string name="sv_limite_dia">今日字幕配额已用完。24 小时后恢复（使用 OpenSubtitles 账号每天 20 个）。</string>
     <string name="sv_tmdb_atribuicao">本产品使用 TMDB API，但未经 TMDB 认可或认证。</string>
-    <string name="ext_saga">%1$s：你的清单中 %3$d 部里的第 %2$d 部</string>
+    <string name="ext_saga">%1$s · 共 %3$d 部，你的清单里有 %2$d 部</string>
     <string name="ext_nao_e_este">不是这部电影</string>
     <string name="ext_proximo">新一集 %1$s（S%2$dE%3$d）</string>
     <string name="ext_proximo_curto">新一集 %1$s</string>

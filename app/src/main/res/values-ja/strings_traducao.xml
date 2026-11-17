@@ -133,9 +133,9 @@
     <string name="bu_canais">チャンネル</string>
     <string name="bu_canal_n">チャンネル %1$s</string>
     <string name="bu_no_guia">番組表</string>
-    <string name="bu_ver_filmes">映画で %1$s をすべて表示</string>
+    <string name="bu_ver_filmes">映画ですべて表示（%1$s）</string>
     <string name="bu_ver_filmes_det">この検索で映画カタログを開きます</string>
-    <string name="bu_ver_series">シリーズで %1$s をすべて表示</string>
+    <string name="bu_ver_series">シリーズですべて表示（%1$s）</string>
     <string name="bu_ver_series_det">この検索でシリーズカタログを開きます</string>
     <string name="bu_agora">放送中</string>
     <string name="bu_lembrete_sim">お知らせを設定しました</string>
@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">黒に近い</string>
     <string name="cb_quase_branco">白に近い</string>
     <string name="cb_bordas">端</string>
-    <string name="cb_barras">75% カラーバー</string>
+    <string name="cb_barras" formatted="false">75% カラーバー</string>
     <string name="cb_linhas">1 ピクセルの線</string>
     <string name="ad_ninguem">%1$s の間、誰もリモコンに触れていません。\n見続けるには何かボタンを押してください。</string>
     <string name="ad_vai_desligar">%1$d 秒後に TV の電源が切れます</string>

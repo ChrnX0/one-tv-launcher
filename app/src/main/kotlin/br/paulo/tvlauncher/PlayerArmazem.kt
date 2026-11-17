@@ -224,6 +224,19 @@ object PlayerArmazem {
         gravarArquivo(ctx, "capas_home.json", o.put(if (serie) "serie" else "filme", item).toString())
     }
 
+    /**
+     * Tira o destaque da HOME quando ele é deste filme/série (17/11/2026: 20 s de um filme aberto por engano viravam o
+     * destaque até o próximo filme, sem jeito de tirar). O card volta ao convite padrão.
+     */
+    fun tirarCapaHome(ctx: Context, serie: Boolean, chave: String): Boolean {
+        val o = runCatching { JSONObject(lerArquivo(ctx, "capas_home.json") ?: "{}") }.getOrDefault(JSONObject())
+        val tipo = if (serie) "serie" else "filme"
+        if (chave.isEmpty() || o.optJSONObject(tipo)?.optJSONObject("ficha")?.optString("chave") != chave) return false
+        o.remove(tipo)
+        gravarArquivo(ctx, "capas_home.json", o.toString())
+        return true
+    }
+
     /** Quantos episódios de cada série já foram vistos (chave = Serie.chave), para a etiqueta e os "Assistidos". */
     fun progressoSeries(ctx: Context): Map<String, ProgressoSerie> = Series.progressoDeJson(lerArquivo(ctx, "series_progresso.json"))
     fun definirProgressoSeries(ctx: Context, p: Map<String, ProgressoSerie>) = gravarArquivo(ctx, "series_progresso.json", Series.progressoParaJson(p))

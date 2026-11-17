@@ -104,7 +104,7 @@
     <string name="cl_acao_mcp_acoes">AI がリクエストする操作</string>
     <string name="cl_acao_mcp_acoes_det">アプリを開く、音量、アラームなど、決められた一覧の操作。</string>
     <string name="cl_acao_mcp_shell">AI からのシェルコマンド</string>
-    <string name="cl_acao_mcp_shell_det">adb のように TV のシェルで任意のコマンドを実行。最も危険な操作です。</string>
+    <string name="cl_acao_mcp_shell_det">Adb のように TV のシェルで任意のコマンドを実行。最も危険な操作です。</string>
     <string name="cl_acao_instalar">アプリをインストール</string>
     <string name="cl_acao_instalar_det">パネルから送られた APK（PIN に加えて）。</string>
     <string name="cl_acao_remover">アプリのアンインストール、停止、データ消去</string>

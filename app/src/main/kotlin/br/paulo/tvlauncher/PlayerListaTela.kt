@@ -355,8 +355,9 @@ class PlayerListaTela(
             l.numero.setTextColor(if (c.id == atualId) ambar else papel)
             l.nome.text = c.nome
             l.sub.text = when {
-                c.id == atualId -> act.getString(R.string.player_assistindo) + (prog?.let { " · ${it.titulo}" } ?: "")
+                // O número em âmbar já marca o canal atual; "assistindo · " cortava o nome do programa (Sala, 17/11/2026).
                 prog != null -> prog.titulo
+                c.id == atualId -> act.getString(R.string.player_assistindo)
                 else -> PlayerLista.nomeExibido(c.grupo)
             }
             // Barra do programa + "faltam 22 min" à direita do nome dele (13/11/2026).

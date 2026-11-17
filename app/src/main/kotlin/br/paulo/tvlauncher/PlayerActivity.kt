@@ -22,6 +22,7 @@ import android.widget.TextView
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -85,6 +86,7 @@ class PlayerActivity : Activity() {
     private var visivel = false   // entre onStart e onStop: fora disso nada toca (nem a nova tentativa atrasada)
     private var modoImagem = PlayerImagem.Modo.AJUSTAR
     // TV de volta: o programa do passado que está tocando no lugar do ao vivo (null = ao vivo) e o que veio do servidor
+    private val sessao by lazy { SessaoMidia(this, "tv", soControle = false) }
     private var arquivo: TvDeVolta.Programa? = null
     private var arquivoLista: List<TvDeVolta.Programa> = emptyList()
     private var arquivoFuso: java.util.TimeZone = java.util.TimeZone.getDefault()
@@ -210,6 +212,7 @@ class PlayerActivity : Activity() {
         // Saiu da tela (HOME, outro app): solta o vídeo na hora (e a pausa curta junto: ela não sobrevive a sair).
         contarCanal(null)   // ideia 92: fecha os minutos do canal que estava tocando
         efeitos.soltar()
+        sessao.soltar()
         player?.release(); player = null
         pausa.descartar()   // a pausa curta é só memória do player: saiu, acabou
     }
@@ -335,6 +338,7 @@ class PlayerActivity : Activity() {
             efeitos.aplicar(novo.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
             novo.addListener(ouvinte)
             player = novo
+            sessao.ligar(novo)   // o sistema, o Gemini e o MCP passam a ver o canal (só leitura: SessaoMidia)
         }
         // Algumas listas exigem um User-Agent próprio por canal: por isso a fábrica é montada a cada troca.
         val http = DefaultHttpDataSource.Factory()
@@ -347,6 +351,10 @@ class PlayerActivity : Activity() {
             if (deGravacao) setMimeType(MimeTypes.VIDEO_MP2T)
             // .m3u8 = HLS. Sem extensão conhecida, o Media3 descobre sozinho pelo conteúdo (ex.: .ts do Xtream).
             else if (url.substringBefore('?').endsWith(".m3u8", ignoreCase = true)) setMimeType(MimeTypes.APPLICATION_M3U8)
+            // O que a sessão de mídia mostra: o canal e, se o guia souber, o programa de agora.
+            val agora = System.currentTimeMillis()
+            val prog = c.guiaId.takeIf { it.isNotEmpty() }?.let { guia.proximos(it, agora, 1) }?.firstOrNull()?.takeIf { agora >= it.inicio }
+            setMediaMetadata(MediaMetadata.Builder().setTitle(c.nome).setArtist(prog?.titulo).setStation(c.nome).build())
         }.build()
         val fonte = if (deGravacao) FontePastas.Fabrica(this, http) else http
         p.setMediaSource(DefaultMediaSourceFactory(fonte).createMediaSource(item))
@@ -710,7 +718,7 @@ class PlayerActivity : Activity() {
         }))
         val p = player ?: return
         if (antes != depois && arquivo == null) {
-            efeitos.soltar(); pausa.descartar(); p.release(); player = null
+            efeitos.soltar(); pausa.descartar(); sessao.soltar(); p.release(); player = null
             tocar(c)
         } else efeitos.aplicar(p.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
     }

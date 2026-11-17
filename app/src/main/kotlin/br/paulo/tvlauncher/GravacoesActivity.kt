@@ -172,7 +172,12 @@ class GravacoesActivity : Activity() {
 
     // ---------------------------------------------------------------- textos
 
-    private fun gb(bytes: Long): String = if (bytes < 0) "?" else String.format(Locale.getDefault(), "%.1f GB", bytes / 1e9)
+    // Abaixo de 0,1 GB em MB: uma gravação que falhou no começo aparecia como "0,0 GB" (visto na Sala, 17/11/2026).
+    private fun gb(bytes: Long): String = when {
+        bytes < 0 -> "?"
+        bytes < 100_000_000L -> String.format(Locale.getDefault(), "%d MB", (bytes + 999_999) / 1_000_000)
+        else -> String.format(Locale.getDefault(), "%.1f GB", bytes / 1e9)
+    }
 
     private fun dia(ms: Long): String = when (Datas.diasAte(ms, System.currentTimeMillis())) {
         0L -> getString(R.string.tvv_hoje)

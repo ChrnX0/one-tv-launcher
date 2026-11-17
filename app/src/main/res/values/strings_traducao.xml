@@ -153,9 +153,9 @@
     <string name="bu_canais">Channels</string>
     <string name="bu_canal_n">Channel %1$s</string>
     <string name="bu_no_guia">In the guide</string>
-    <string name="bu_ver_filmes">See all %1$s in Movies</string>
+    <string name="bu_ver_filmes">See all in Movies (%1$s)</string>
     <string name="bu_ver_filmes_det">Opens the movie catalog with this search</string>
-    <string name="bu_ver_series">See all %1$s in Series</string>
+    <string name="bu_ver_series">See all in Series (%1$s)</string>
     <string name="bu_ver_series_det">Opens the series catalog with this search</string>
     <plurals name="bu_canais_n">
         <item quantity="one">%d channel</item>
@@ -183,7 +183,7 @@
     <string name="bc_limite">block limit reached</string>
     <string name="bc_parental_on">parental control ON</string>
     <string name="bc_parental_off">parental control off (blocking only applies after you turn it on)</string>
-    <string name="bc_resumo">%1$d of %2$d channels blocked · %3$d whole category(ies) · %4$s</string>
+    <string name="bc_resumo">%1$d of %2$d channels blocked · whole categories: %3$d · %4$s</string>
     <string name="bc_todas">All (%1$d)</string>
     <string name="bc_outros">Other</string>
     <string name="bc_bloqueada">blocked</string>

@@ -2591,7 +2591,7 @@ class MainActivity : Activity() {
                     getSharedPreferences("clima", MODE_PRIVATE).edit()
                         .putInt("temp", r.temp).putBoolean("chovendo", r.chovendo)
                         .putInt("codigo", r.codigo).putBoolean("eDia", r.eDia)
-                        .putInt("umidade", r.umidade ?: -1).putInt("chuva", r.picoChuva)
+                        .putInt("umidade", r.umidade ?: -1).putInt("chuva", r.chuvaHoje)
                         .putInt("max", r.max).putInt("min", r.min)   // máxima e mínima de hoje: a barra do protetor mostra
                         .apply { r.amanha?.let { (aMax, aMin, aCod, aChuva) ->   // previsão de amanhã: a barra do protetor
                             putInt("amanha_max", aMax).putInt("amanha_min", aMin).putInt("amanha_codigo", aCod).putInt("amanha_chuva", aChuva) } }

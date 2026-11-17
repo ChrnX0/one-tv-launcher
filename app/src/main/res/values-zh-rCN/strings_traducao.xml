@@ -133,9 +133,9 @@
     <string name="bu_canais">频道</string>
     <string name="bu_canal_n">频道 %1$s</string>
     <string name="bu_no_guia">节目指南中</string>
-    <string name="bu_ver_filmes">在电影中查看全部“%1$s”</string>
+    <string name="bu_ver_filmes">在电影中查看全部（%1$s）</string>
     <string name="bu_ver_filmes_det">用此搜索打开电影片库</string>
-    <string name="bu_ver_series">在剧集中查看全部“%1$s”</string>
+    <string name="bu_ver_series">在剧集中查看全部（%1$s）</string>
     <string name="bu_ver_series_det">用此搜索打开剧集片库</string>
     <string name="bu_agora">现在</string>
     <string name="bu_lembrete_sim">已设置提醒</string>
@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">近黑</string>
     <string name="cb_quase_branco">近白</string>
     <string name="cb_bordas">边缘</string>
-    <string name="cb_barras">75% 彩条</string>
+    <string name="cb_barras" formatted="false">75% 彩条</string>
     <string name="cb_linhas">1 像素线条</string>
     <string name="ad_ninguem">已有 %1$s 没人碰遥控器。\n按任意键继续观看。</string>
     <string name="ad_vai_desligar">电视将在 %1$d 秒后关闭</string>

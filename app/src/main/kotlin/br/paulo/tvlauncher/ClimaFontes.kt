@@ -17,7 +17,9 @@ object ClimaFontes {
         val amanha: List<Int>?, val codigo: Int, val chovendo: Boolean, val eDia: Boolean, val picoChuva: Int,
         val linha: String, val icone: String, val horas: String = "",
         /** Protetor que reage ao tempo (17/11/2026): UV hora a hora, chuva de 15 em 15 min e ar ([SeriesTempo]); vazio/nulo = a fonte não tem. */
-        val uv: String = "", val chuva15: String = "", val aqi: Int? = null)
+        val uv: String = "", val chuva15: String = "", val aqi: Int? = null,
+        /** Chance de chuva do resto de hoje (a maior), para "Hoje · X% de chuva" (#185). */
+        val chuvaHoje: Int = picoChuva)
 
     @Volatile private var ultimaMedida: Medida? = null   // a última leitura boa do aeroporto
     @Volatile private var ultimaMedidaMs = 0L
@@ -103,6 +105,12 @@ object ClimaFontes {
             val p = horasChuva[i]
             if (p >= 40) { primeira = i; picoChuva = p; break }
         }
+        // A maior chance de chuva no RESTO de hoje (da hora atual até meia-noite). É o "Hoje · X% de chuva" do protetor e o
+        // chance_chuva_pct do MCP; antes eles recebiam o picoChuva (a 1ª hora >= 40%, ou 0), e o protetor dizia "0% de
+        // chuva" num dia com 47% à tarde (visto na Sala, 17/11/2026).
+        val horaAgora = atual.optString("time", "").take(13)   // "2026-11-17T09"
+        val chuvaHoje = horasChuva.indices.filter { it < horasData.size && horasData[it].startsWith(hoje) && horasData[it].take(13) >= horaAgora }
+            .maxOfOrNull { horasChuva[it] } ?: picoChuva
         val textoLinha = when {
             chovendoAgora -> ctx.getString(R.string.home_chovendo)
             primeira == 0 -> ctx.getString(R.string.home_chuva_agora, descricao, picoChuva)
@@ -118,7 +126,7 @@ object ClimaFontes {
         return Resultado(ponto, temp, umidade, max, min, amanha, codigo, chovendoAgora, eDia, picoChuva, textoLinha, icone,
             proximasHoras(json, atual.optString("time", ""), horasData, horasChuva),
             uv = serie(json.optJSONObject("hourly"), "uv_index"), chuva15 = serie(json.optJSONObject("minutely_15"), "precipitation", -15 * 60_000L),
-            aqi = if (BuildConfig.CLIMA_MET) null else qualidadeDoAr(ponto))
+            aqi = if (BuildConfig.CLIMA_MET) null else qualidadeDoAr(ponto), chuvaHoje = chuvaHoje)
     }
 
     /**

@@ -22,6 +22,8 @@
     <string name="coluna_marcado_assistido">%1$s marked as watched</string>
     <string name="coluna_marcado_nao_assistido">%1$s marked as not watched</string>
     <string name="coluna_tirado_continuar">%1$s removed from Continue watching</string>
+    <string name="coluna_menu_tirar_home">Remove from Home screen</string>
+    <string name="coluna_tirado_home">%1$s removed from the Home screen</string>
     <string name="coluna_etiqueta_concluida">Finished</string>
     <string name="coluna_etiqueta_nova_temporada">New season</string>
     <string name="coluna_etiqueta_novos">New episodes</string>

@@ -10,10 +10,10 @@
     <string name="cfg_vpn_adguard">" — AdGuard VPN app, always on · OK opens the app"</string>
     <string name="cfg_titulo">Settings</string>
     <string name="cfg_diag">Diagnose the TV</string>
-    <string name="cfg_diag_det">internet, DNS, VPN and why an app stopped — all at once</string>
+    <string name="cfg_diag_det">Internet, DNS, VPN and why an app stopped — all at once</string>
     <string name="cfg_sec_aparencia">Appearance</string>
     <string name="cfg_tema">Theme: %1$s</string>
-    <string name="cfg_tema_det">switches to the next look</string>
+    <string name="cfg_tema_det">Switches to the next look</string>
     <string name="cfg_pilhas">Automatic stacks</string>
     <string name="cfg_pilhas_on">on: loose apps group by category (video, music, games…) · OK turns off</string>
     <string name="cfg_pilhas_off">off · OK turns on (the stacks you made stay)</string>
@@ -27,19 +27,19 @@
     <string name="cfg_visita_on">on — profile, calendar and the apps marked below are hidden · OK turns off</string>
     <string name="cfg_visita_off">off — OK hides the profile, the calendar and the apps marked below</string>
     <string name="cfg_rotinas">Routines</string>
-    <string name="cfg_rotinas_det">turn on, open an app or turn off the TV at a set time</string>
+    <string name="cfg_rotinas_det">Turn on, open an app or turn off the TV at a set time</string>
     <string name="cfg_sec_atualizacao">Updates</string>
     <string name="cfg_atualizar">Check for a new version</string>
-    <string name="cfg_atualizar_det">version %1$s · %2$s · OK checks now</string>
+    <string name="cfg_atualizar_det">Version %1$s · %2$s · OK checks now</string>
     <string name="cfg_procurando">checking GitHub…</string>
     <string name="cfg_instalar">Install version %1$d now</string>
-    <string name="cfg_instalar_det">the launcher closes and comes back by itself in a few seconds · OK installs</string>
+    <string name="cfg_instalar_det">The launcher closes and comes back by itself in a few seconds · OK installs</string>
     <string name="cfg_instalando">downloading and checking…</string>
     <string name="cfg_sec_rede">Network</string>
     <string name="cfg_dns">Private DNS</string>
     <string name="cfg_dns_caiu">" · %1$s did not answer, switched back to automatic"</string>
     <string name="cfg_velocidade">Test internet speed</string>
-    <string name="cfg_velocidade_det">downloads 25 MB and measures</string>
+    <string name="cfg_velocidade_det">Downloads 25 MB and measures</string>
     <string name="cfg_testando">Testing…</string>
     <string name="cfg_sec_ocultos">Hidden apps</string>
     <string name="cfg_oculto">hidden — OK shows</string>
@@ -55,7 +55,7 @@
     <string name="cfg_shell_nunca">not paired yet: use \"Pair without a PC\" below</string>
     <string name="cfg_sec_shizuku">Launcher shell (Wi-Fi ADB)</string>
     <string name="cfg_parear">Pair without a PC</string>
-    <string name="cfg_parear_det">opens the Android pairing screen with a launcher keypad on top</string>
+    <string name="cfg_parear_det">Opens the Android pairing screen with a launcher keypad on top</string>
     <string name="cfg_acess_off">the launcher accessibility service is off</string>
     <string name="cfg_sec_diagnostico">Diagnostics</string>
     <string name="cfg_versao">Launcher version</string>
@@ -67,7 +67,7 @@
     <string name="cfg_calculando">computing…</string>
     <string name="cfg_erro">error: %1$s</string>
     <string name="cfg_licencas">Licenses and credits</string>
-    <string name="cfg_licencas_det">third-party code, fonts, icons and data used here</string>
+    <string name="cfg_licencas_det">Third-party code, fonts, icons and data used here</string>
     <string name="cfg_some_visita">hidden in guest mode — OK keeps it</string>
     <string name="cfg_aparece_visita">shown in guest mode — OK hides it</string>
     <string name="cfg_permitido">allowed — OK revokes</string>
@@ -94,9 +94,9 @@
     <string name="bv_titulo">Welcome</string>
     <string name="bv_texto">The home screen, clock, weather, alarm and screen saver already work. Turn on the rest here if you want (%1$s).</string>
     <string name="bv_comecar">Start</string>
-    <string name="bv_comecar_det">goes to the home screen</string>
+    <string name="bv_comecar_det">Goes to the home screen</string>
     <string name="bv_perm">Turn on calendar, location and accounts</string>
-    <string name="bv_perm_det">calendar events, weather for your city, account initial on the profile</string>
+    <string name="bv_perm_det">Calendar events, weather for your city, account initial on the profile</string>
     <string name="bv_teclas">Turn on the key service</string>
     <string name="bv_teclas_det">Accessibility &gt; Launcher: makes HOME always come back here</string>
     <string name="bv_tudo">See everything you can turn on</string>
@@ -114,7 +114,7 @@
     <string name="rot_nenhuma">no routine on</string>
     <string name="rot_proxima">next: %1$s</string>
     <string name="rot_nova_mais">+ New routine</string>
-    <string name="rot_nova_det">turn on, open an app or turn off at a set time</string>
+    <string name="rot_nova_det">Turn on, open an app or turn off at a set time</string>
     <string name="rot_desligada_sufixo">" · off"</string>
     <string name="rot_nova">New routine</string>
     <string name="rot_editar">Edit routine</string>
@@ -131,7 +131,7 @@
     <string name="rot_dias_det">OK: every day, Mon to Fri, weekend, once</string>
     <string name="rot_ok_muda">OK changes</string>
     <string name="rot_app_det">OK or ▶ next · ◀ previous</string>
-    <string name="rot_ocioso_det">does not interrupt someone watching</string>
+    <string name="rot_ocioso_det">Does not interrupt someone watching</string>
     <string name="rot_ativa_det">OK turns this routine on/off</string>
     <string name="rot_salvar">Save</string>
     <string name="rot_escolha_app">Choose the app</string>
@@ -433,19 +433,19 @@
     <!-- DiagnosticoActivity.kt -->
     <string name="diag_titulo">Diagnostics</string>
     <string name="diag_refazer">Check again</string>
-    <string name="diag_refazer_det">runs all the checks again</string>
+    <string name="diag_refazer_det">Runs all the checks again</string>
     <string name="diag_verificando">checking…</string>
     <string name="diag_apps">Apps (last 7 days)</string>
     <string name="diag_lendo">Reading the app history</string>
     <string name="diag_sem_perm">No permission to read other apps\' crashes</string>
-    <string name="diag_sem_perm_det">the launcher grants itself READ_LOGS and DUMP through its own shell; wait a few minutes or restart the TV</string>
+    <string name="diag_sem_perm_det">The launcher grants itself READ_LOGS and DUMP through its own shell; wait a few minutes or restart the TV</string>
     <string name="diag_nada">nothing recorded</string>
     <string name="diag_erros">Launcher errors (recorded by it)</string>
     <string name="diag_sem_erros">No errors recorded</string>
-    <string name="diag_sem_erros_det">the launcher keeps its last %1$d crashes here</string>
+    <string name="diag_sem_erros_det">The launcher keeps its last %1$d crashes here</string>
     <string name="diag_erro">Launcher error</string>
     <string name="diag_apagar">Delete recorded errors</string>
-    <string name="diag_apagar_det">clears the list above (touches nothing else)</string>
+    <string name="diag_apagar_det">Clears the list above (touches nothing else)</string>
     <string name="diag_rodape">%1$s · arrows scroll · BACK returns</string>
     <string name="diag_app_ok">No crash, freeze or abnormal exit in the last 7 days.\n\nIf the app opens but loads nothing, the problem is usually the network: see the Network section on the previous screen.</string>
     <!-- Atualizador.kt -->
@@ -586,7 +586,7 @@
     <string name="cfg_infantil_ligado">on · only the %d kids categories show; the rest asks for the PIN</string>
     <string name="cfg_infantil_desligado">off · %d categories marked as kids</string>
     <string name="cfg_infantil_escolher">Choose kids categories</string>
-    <string name="cfg_infantil_escolher_det">apply to Live TV, Movies and Series</string>
+    <string name="cfg_infantil_escolher_det">Apply to Live TV, Movies and Series</string>
     <string name="player_grupo_oculto">%1$s hidden. To see it: Filters, show hidden.</string>
     <string name="player_grupo_mostrado">%1$s is visible again.</string>
     <string name="player_categorias">CATEGORIES</string>

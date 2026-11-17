@@ -344,10 +344,10 @@ class PrevisaoActivity : Activity() {
                 Triple(getString(R.string.pv_uv), "${Math.round(uv).toInt()}", "sun" to rotuloUv(uv)),
             ),
             listOf(
-                Triple(getString(R.string.pv_visib), if (vis >= 10) "10+ km" else "${"%.1f".format(Locale.US, vis)} km", "eye" to ""),
+                Triple(getString(R.string.pv_visib), if (vis >= 10) "10+ km" else "${"%.1f".format(Locale.getDefault(), vis)} km", "eye" to ""),
                 Triple(getString(R.string.pv_orvalho), "${Math.round(d.hOrvalho.getOrElse(i0) { d.temp }).toInt()}°", "droplet" to ""),
                 Triple(getString(R.string.pv_pressao), "${Math.round(d.pressao).toInt()} hPa", "cloud" to ""),
-                Triple(getString(R.string.pv_chuva_hoje), "${"%.1f".format(Locale.US, d.dChuvaMm)} mm", "cloud_with_rain" to ""),
+                Triple(getString(R.string.pv_chuva_hoje), "${"%.1f".format(Locale.getDefault(), d.dChuvaMm)} mm", "cloud_with_rain" to ""),
             ),
         )
         linhas.forEach { l ->

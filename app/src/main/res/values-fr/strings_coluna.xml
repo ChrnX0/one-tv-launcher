@@ -22,6 +22,8 @@
     <string name="coluna_marcado_assistido">%1$s marqué comme vu</string>
     <string name="coluna_marcado_nao_assistido">%1$s marqué comme non vu</string>
     <string name="coluna_tirado_continuar">%1$s retiré de Reprendre</string>
+    <string name="coluna_menu_tirar_home">Retirer de l\'écran d\'accueil</string>
+    <string name="coluna_tirado_home">%1$s retiré de l\'écran d\'accueil</string>
     <string name="coluna_etiqueta_concluida">Terminée</string>
     <string name="coluna_etiqueta_nova_temporada">Nouvelle saison</string>
     <string name="coluna_etiqueta_novos">Nouveaux épisodes</string>

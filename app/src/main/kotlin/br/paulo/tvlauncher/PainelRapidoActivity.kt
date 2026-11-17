@@ -63,10 +63,18 @@ class PainelRapidoActivity : Activity() {
 
         /** Opções do timer de suspensão, em minutos: cada OK passa para a próxima; depois da última, desliga. */
         val OPCOES_TIMER = listOf(15, 30, 60, 90, 120)
+        /** Diálogo "Saída de áudio" da SystemUI de TV (Android 14 do Chromecast; visto na Sala em 17/11/2026). */
+        const val SAIDA_AUDIO = "com.android.systemui.TV_MEDIA_OUTPUT_DIALOG"
 
-        /** A próxima opção do timer, dado quanto falta agora (null = sem timer). null na saída = desligar. Puro. */
-        fun proximoTimer(faltamMin: Int?): Int? =
-            if (faltamMin == null) OPCOES_TIMER.first() else OPCOES_TIMER.firstOrNull { it > faltamMin }
+        /**
+         * O próximo passo do botão Timer: avança a partir do que foi ESCOLHIDO (15 → 30 → 60 → 90 → 120 → desligado).
+         * Pelo tempo que falta não dava: 1 min depois de marcar 15 faltavam 14 e o OK voltava a marcar 15 (Sala, 17/11).
+         * [faltamMin] só vale para timer antigo, sem o escolhido guardado. null na saída = desligar o timer. Puro.
+         */
+        fun proximoTimer(escolhidoMin: Int?, faltamMin: Int? = null): Int? {
+            val base = escolhidoMin ?: faltamMin ?: return OPCOES_TIMER.first()
+            return OPCOES_TIMER.firstOrNull { it > base }
+        }
 
         /**
          * `service call` deu certo? A 1ª palavra da resposta é o código de erro: 00000000 = ok; uma exceção (sem permissão,
@@ -559,7 +567,13 @@ class PainelRapidoActivity : Activity() {
             ui.postDelayed({ Desligamento.apagarTela(app) }, 300)
         }
         val protetor = tile("protetor", getString(R.string.pr_protetor)) { ligarProtetor() }
-        tAudio = tile("audio", getString(R.string.pp_audio)) { abrirEFechar(Intent(Settings.ACTION_SOUND_SETTINGS)) }
+        // Áudio (17/11/2026): a "Saída de áudio" do sistema (a mesma do painel do Google: TV, fone, caixa Bluetooth).
+        // Antes abria Tela e som, que começa em HDMI-CEC e deixa o som lá embaixo. Sem esse diálogo (ou sem permissão
+        // para abri-lo), volta para Tela e som.
+        tAudio = tile("audio", getString(R.string.pp_audio)) {
+            try { startActivity(Intent(SAIDA_AUDIO).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); finish() }
+            catch (_: Exception) { abrirEFechar(Intent(Settings.ACTION_SOUND_SETTINGS)) }
+        }
         tDespertador = tile("despertador", getString(R.string.pr_despertador)) {
             abrirEFechar(Intent(this, AlarmesActivity::class.java))
         }
@@ -687,10 +701,9 @@ class PainelRapidoActivity : Activity() {
 
     /** Timer de suspensão (Desligamento.kt): cada OK passa para a próxima opção (15, 30, 60, 90, 120 min, desligado). */
     private fun trocarTimer() {
-        // Arredonda para CIMA: com 15 min marcados, um instante depois faltam 14,9; arredondando para baixo dava 14 e o
-        // próximo voltava a ser 15, e o OK nunca passava de 15 nem desligava (achado na Sala, 11/11).
+        // O que falta (arredondado para cima) só serve de base para um timer marcado antes de guardarmos o escolhido.
         val faltam = Desligamento.marcado(this)?.let { ((it - System.currentTimeMillis() + 59_999) / 60_000).toInt() }
-        val proximo = proximoTimer(faltam)
+        val proximo = proximoTimer(Desligamento.escolhido(this), faltam)
         if (proximo == null) Desligamento.cancelar(this) else Desligamento.agendar(this, proximo)
         mostrarTimer()
     }

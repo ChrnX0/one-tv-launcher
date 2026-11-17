@@ -94,8 +94,14 @@ object Idioma {
      * Ideia 89: falta legenda? O áudio tocando NÃO é do idioma da TV e não há legenda completa (não forçada) nele. Sem áudio
      * identificado, não decide (false): baixar às cegas gastaria o limite diário em filme dublado.
      */
-    fun faltaLegenda(audio: Faixa?, textos: List<Faixa>, idioma: String = "pt"): Boolean =
-        audio != null && !eDoIdioma(audio, idioma) && textos.none { eDoIdioma(it, idioma) && !it.forcada }
+    // Áudio SEM idioma marcado ("und"/vazio, comum nas listas IPTV) não é "de fora": a Duna dublada da Sala (17/11/2026)
+    // ganhava legenda baixada por cima da dublagem, que não batia com a fala. Sem idioma, só a marca da lista decide
+    // ([versao]: "LEG"/"Legendado" = original com legenda a baixar); sem marca, não baixa (a busca manual continua no ▼).
+    fun faltaLegenda(audio: Faixa?, textos: List<Faixa>, idioma: String = "pt", versao: Versao = Versao.DESCONHECIDA): Boolean {
+        if (audio == null || eDoIdioma(audio, idioma)) return false
+        if (!eOutraLingua(audio, idioma) && versao != Versao.LEGENDADA) return false
+        return textos.none { eDoIdioma(it, idioma) && !it.forcada }
+    }
 
     fun eDoIdioma(f: Faixa, idioma: String = "pt"): Boolean {
         val l = f.idioma?.lowercase()

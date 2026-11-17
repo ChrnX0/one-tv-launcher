@@ -14,7 +14,7 @@ import android.widget.TextView
 /**
  * Tela "Cenas" na TV (14/11/2026, ideia 4). Antes a cena só rodava por link; agora também pelo controle: abre pelo
  * tile Cenas do painel rápido ou por voz ("Ok Google, abrir Cenas", alias VozCenas em AtalhoVozActivity).
- * Uma linha por cena (nome + quantas ações); OK roda pelo mesmo caminho do link ([Cenas.rodar] → PedidoIa, com as
+ * Uma linha por cena (nome + o que ela faz); OK roda pelo mesmo caminho do link ([Cenas.rodar] → PedidoIa, com as
  * Confirmações e o aviso do que fez) e fecha a tela, para a cena abrir o que precisar por cima da HOME.
  * Criar e editar continua no painel web (Extras › Cenas): montar ação por ação com o controle seria lento demais.
  * Visual igual ao das Rotinas (Estilo), copiado de propósito.
@@ -35,9 +35,13 @@ class CenasActivity : Activity() {
         val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(8), dp(4), dp(8), dp(4)); clipChildren = false; clipToPadding = false }
         raiz.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(lista) },
             LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f).apply { topMargin = dp(16) })
+        // O que a cena faz, em vez de "3 ações" (Sala, 17/11/2026: as prontas diziam o que faziam e, criadas, viravam um
+        // número). As mesmas frases do aviso que a TV mostra ao rodar; sem conseguir ler, fica a contagem.
+        val apps = if (cenas.isEmpty()) emptyMap() else Cenas.appsInstalados(this)
         for (c in cenas) {
             val n = Cenas.contarAcoes(c.acoes)
-            lista.addView(linha(c.nome, resources.getQuantityString(R.plurals.cenas_acoes, n, n)) {
+            val faz = try { ComandosIa.conferir(c.acoes, apps).acoes.joinToString(" · ") { it.descricao } } catch (_: Exception) { "" }
+            lista.addView(linha(c.nome, faz.ifEmpty { resources.getQuantityString(R.plurals.cenas_acoes, n, n) }) {
                 Fundo.rodar { Cenas.rodar(applicationContext, c.nome, "tela") }   // lê disco e confere: fora da thread da tela
                 finish()
             }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { bottomMargin = dp(8) })

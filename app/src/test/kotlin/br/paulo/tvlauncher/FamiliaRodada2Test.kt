@@ -114,7 +114,8 @@ class FamiliaRodada2Test {
           {"stationuuid":"u1","name":" Rádio  A ","url":"http://x/a.pls","url_resolved":"https://s.example/a","countrycode":"BR","tags":"mpb,pop,rock,jazz","bitrate":128,"codec":"MP3","lastcheckok":1},
           {"stationuuid":"u2","name":"Rádio A","url_resolved":"https://s.example/a","lastcheckok":1},
           {"stationuuid":"u3","name":"Quebrada","url_resolved":"https://s.example/q","lastcheckok":0},
-          {"stationuuid":"u4","name":"Sem url","url_resolved":"ftp://x","lastcheckok":1}]"""
+          {"stationuuid":"u4","name":"Sem url","url_resolved":"ftp://x","lastcheckok":1},
+          {"stationuuid":"u5","name":"rádio a","url_resolved":"https://outro.example/a2","countrycode":"BR","lastcheckok":1}]"""
         val l = Radios.estacoes(json)
         assertEquals(1, l.size)
         assertEquals(Radios.Radio("u1", "Rádio A", "https://s.example/a", "BR", "mpb, pop, rock", 128, "MP3"), l[0])
