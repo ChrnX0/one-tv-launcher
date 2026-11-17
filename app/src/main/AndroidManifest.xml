@@ -351,6 +351,15 @@
             android:name=".EntrarPeloQrActivity"
             android:exported="false"
             android:label="@string/lbl_entrar_celular" />
+        <!-- Elevação 19.7: TV nova em 2 min (receber da TV antiga e a fila dos apps) -->
+        <activity
+            android:name=".ReceberTvActivity"
+            android:exported="false"
+            android:label="@string/mtv_titulo" />
+        <activity
+            android:name=".FilaAppsActivity"
+            android:exported="false"
+            android:label="@string/mtv_fila_titulo" />
         <!-- Modo de segurança: HOME mínima depois de 3 quedas seguidas da HOME (ModoSeguro.kt) -->
         <activity
             android:name=".HomeSeguraActivity"

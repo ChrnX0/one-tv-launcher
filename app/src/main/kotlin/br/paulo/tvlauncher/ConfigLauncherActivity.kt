@@ -1625,6 +1625,17 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linha(getString(R.string.desf_tela), getString(R.string.desf_tela_det), seta = true) {
             TelaMudancas.abrir(this) { recarregarAba() }
         }, lp())
+        // Elevação 19.7: TV nova em 2 min (esta TV recebe tudo de outra) e, depois, a fila dos apps que faltam.
+        c.addView(linha(getString(R.string.mtv_titulo), getString(R.string.mtv_cfg_det), seta = true) {
+            reconstruirAoVoltar = true
+            startActivity(Intent(this, ReceberTvActivity::class.java))
+        }, lp())
+        MudarDeTv.faltam(this).takeIf { it > 0 }?.let { n ->
+            c.addView(linha(getString(R.string.mtv_fila_titulo), getString(R.string.mtv_fila_cfg_det, n), seta = true) {
+                reconstruirAoVoltar = true
+                startActivity(Intent(this, FilaAppsActivity::class.java))
+            }, lp())
+        }
         val idsRoteiro = ConferirTvActivity.ids(this)
         if (idsRoteiro.isNotEmpty()) c.addView(linha(getString(R.string.ver_conferir), getString(R.string.ver_conferir_det,
             RoteiroConferencia.conferidos(ConferirTvActivity.estado(this), idsRoteiro), idsRoteiro.size), seta = true) {

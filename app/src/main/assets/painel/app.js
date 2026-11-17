@@ -834,6 +834,56 @@ $('btnLerRecuperacao').addEventListener('click', async () => {
   passo();
 });
 
+// ---------- levar para uma TV nova (elevação 19.7; PainelWeb "/api/mudar/enviar", MudarDeTv.kt) ----------
+let qrMudarFluxo = null;
+function pararQrMudar() {
+  if (qrMudarFluxo) { qrMudarFluxo.getTracks().forEach((t) => t.stop()); qrMudarFluxo = null; }
+  $('videoQrMudarTv').srcObject = null;
+  $('qrMudarTv').hidden = true;
+}
+$('btnFecharQrMudarTv').addEventListener('click', pararQrMudar);
+document.addEventListener('aba', () => { if (paginaAtual !== 'sistema') pararQrMudar(); });
+$('btnLerMudarTv').addEventListener('click', async () => {
+  const status = $('statusMudarTv');
+  if (!window.isSecureContext || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    mostrar(status, 'Para ler QR, abra o painel pelo endereço https (porta 8444). No http o navegador não libera a câmera.');
+    return;
+  }
+  try { qrMudarFluxo = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false }); }
+  catch (e) { mostrar(status, 'Não consegui abrir a câmera. Confira se o navegador tem permissão para usá-la.'); return; }
+  const video = $('videoQrMudarTv');
+  $('qrMudarTv').hidden = false;
+  video.srcObject = qrMudarFluxo;
+  await video.play().catch(() => {});
+  let ler;
+  try { ler = await leitorQr(video); } catch (e) { pararQrMudar(); mostrar(status, textoErro(e)); return; }
+  const passo = async () => {
+    if (!qrMudarFluxo) return;
+    let texto = '';
+    try { texto = await ler(); } catch (e) { texto = ''; }
+    // Só o QR da tela "Trazer de outra TV" ("SOFALY-TV <ip>:<porta> <código>"); outro QR é ignorado.
+    if (/^SOFALY-TV \S+ [0-9A-Z-]{16,}$/.test(texto.trim().toUpperCase())) {
+      pararQrMudar();
+      $('codigoMudarTv').value = texto.trim();
+      mostrar(status, 'QR da TV nova lido.');
+      return;
+    }
+    setTimeout(passo, 250);
+  };
+  passo();
+});
+$('btnEnviarMudarTv').addEventListener('click', async () => {
+  const status = $('statusMudarTv');
+  const codigo = $('codigoMudarTv').value.trim();
+  if (codigo.length < 20) { mostrar(status, 'Digite o endereço e o código que aparecem na TV nova.'); return; }
+  mostrar(status, '');
+  // Leva os segredos da casa para outro aparelho: a TV pede o PIN de novo (como baixar o backup completo).
+  const r = await confirmar('Levar tudo para a TV nova?',
+    'Vão as configurações, o PIN, os canais e as contas desta TV, cifrados só para aquela TV. Esta TV continua como está.',
+    'Enviar', () => chamar('POST', '/api/mudar/enviar', { codigo }), false);
+  if (r) { $('codigoMudarTv').value = ''; mostrar(status, 'Pronto: a TV nova recebeu tudo e está reiniciando.'); }
+});
+
 $('btnBaixarCompleto').addEventListener('click', async () => {
   const status = $('statusBaixarCompleto');
   const senha = $('senhaBackupCompleto').value;

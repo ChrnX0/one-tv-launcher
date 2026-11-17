@@ -98,6 +98,15 @@
   "contraste": [],
   "semNome": []
  },
+ "ar\/fila-apps": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
  "ar\/filmes": {
   "menorSp": 12.5,
   "foco": false,
@@ -151,6 +160,15 @@
    "Moonlight × اعرض أصدقاءك من Discord",
    "اعرض أصدقاءك من Discord × من الكمبيوتر والجهاز المنزلي"
   ],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "ar\/mudar-tv": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
   "soCor": [],
   "contraste": [],
   "semNome": []
@@ -308,6 +326,15 @@
   "contraste": [],
   "semNome": []
  },
+ "en\/fila-apps": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
  "en\/filmes": {
   "menorSp": 12.5,
   "foco": false,
@@ -355,6 +382,15 @@
  },
  "en\/jogos": {
   "menorSp": 11,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "en\/mudar-tv": {
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -515,6 +551,15 @@
   "contraste": [],
   "semNome": []
  },
+ "pt\/fila-apps": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
  "pt\/filmes": {
   "menorSp": 12.5,
   "foco": false,
@@ -562,6 +607,15 @@
  },
  "pt\/jogos": {
   "menorSp": 11,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "pt\/mudar-tv": {
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],

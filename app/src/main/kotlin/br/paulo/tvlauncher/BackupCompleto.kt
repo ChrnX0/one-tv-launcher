@@ -49,6 +49,7 @@ object BackupCompleto {
           // degrau 3: o link da família não viaja no backup (restaurar = link novo)
         "emprestimo_shell", "emprestimo_dono",   // empréstimos: restaurar não pode ligar poder emprestado sem o PIN (e o uid de cada app muda entre aparelhos)
         "painel_papeis",   // elevação 18.1: convites (família/convidado) não viajam: restaurar não pode reabrir acesso revogado
+        "mudar_tv",   // elevação 19.7: a fila dos apps que faltam é desta TV, depois de receber de outra
         "desfazer",   // elevação 2.11: os passos de desfazer são desta TV e destes dias
         "nao_perturbe", "config_busca",   // elevação 11.4/12.2: fila de avisos guardados e "mexidos há pouco" são passageiros
         "mtp_permitidos", "painel_log", "atualizador", "aviso_tv", "loja_curada",

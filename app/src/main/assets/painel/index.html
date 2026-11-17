@@ -1042,6 +1042,23 @@
         </div>
         <p id="statusRecuperacao" class="aviso" hidden></p>
       </div>
+      <div id="cartaoMudarTv" class="cartao">
+        <h2>Levar para uma TV nova</h2>
+        <p class="aviso">Na TV nova, abra Configurações › Sistema › Trazer de outra TV (na primeira vez, o botão está na
+          tela do QR). Leia o QR que aparece nela ou digite o endereço e o código. Vão as configurações, o PIN, os canais e
+          a lista de apps, cifrados só para aquela TV; lá os apps voltam em fila, pela Play Store.</p>
+        <input id="codigoMudarTv" type="text" maxlength="80" autocomplete="off" spellcheck="false"
+               placeholder="192.168.1.50 ABCD-EFGH-JKMN-PQRS" aria-label="Endereço e código da TV nova">
+        <div class="barra-acoes">
+          <button type="button" class="botao-secundario" id="btnLerMudarTv">Ler o QR da TV nova</button>
+          <button type="button" class="botao-primario" id="btnEnviarMudarTv">Enviar</button>
+        </div>
+        <div id="qrMudarTv" class="qr-camera" hidden>
+          <video id="videoQrMudarTv" muted playsinline aria-label="Câmera lendo o QR da TV nova"></video>
+          <button type="button" id="btnFecharQrMudarTv" class="botao-secundario">Fechar câmera</button>
+        </div>
+        <p id="statusMudarTv" class="aviso" hidden></p>
+      </div>
       <div id="cartaoCopiasAutomaticas" class="cartao">
         <h2>Cópias automáticas</h2>
         <p class="aviso">A TV guarda sozinha uma cópia por dia (as últimas 7), só quando algo mudou. Baixe uma para

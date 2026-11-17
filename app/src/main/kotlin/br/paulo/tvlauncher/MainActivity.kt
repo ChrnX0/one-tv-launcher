@@ -329,6 +329,7 @@ class MainActivity : Activity() {
         ModoSeguro.aoRetomarHome(this)   // 30 s de pé = a HOME firmou (zera a conta de quedas seguidas)
         ModoHospede.talvezBoasVindas(this)   // modo hóspede: boas-vindas uma vez por estadia
         ModoHospede.conferirSaida(this)      // e a saída que passou com a TV fora da tomada
+        MudarDeTv.abrirFilaSePendente(this)  // elevação 19.7: veio tudo de outra TV; a fila dos apps abre uma vez
         // Agenda da família (degrau 2): a troca de perfil que passou com a TV desligada (o alarme não veio).
         Fundo.rodar("agenda-perfis") {
             if (AgendaPerfisTv.conferir(applicationContext)) runOnUiThread { if (!isDestroyed) { atualizarFotoPerfil(); reorganizar() } }

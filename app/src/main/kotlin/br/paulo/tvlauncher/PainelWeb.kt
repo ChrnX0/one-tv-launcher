@@ -151,7 +151,8 @@ object PainelWeb {
     @Synchronized fun ajustar(ctx: Context) {
         app = ctx.applicationContext
         // Sem PIN, só abre no modo da primeira configuração (tela do QR na TV): o assistente cria o PIN pelo celular.
-        val deve = PainelArmazem.podeLigar(app) || (modoPrimeira && !PainelArmazem.temPin(app))
+        val deve = PainelArmazem.podeLigar(app) || (modoPrimeira && !PainelArmazem.temPin(app)) ||
+            MudarDeTv.recebendo()   // elevação 19.7: só enquanto a tela "Trazer de outra TV" está aberta
         if (deve && !ligado() && !iniciando) iniciar() else if (!deve && (ligado() || iniciando)) parar()
     }
 
@@ -614,6 +615,7 @@ object PainelWeb {
         "/api/backup/restaurar" -> BackupConfig.LIMITE_BYTES
         PainelExtras.ROTA_FOTO -> PainelExtras.LIMITE_FOTO
         "/api/backup/completo/restaurar" -> BackupCompleto.LIMITE_BYTES * 2 + 1024   // o cofre em Base64 + a senha
+        "/api/mudar/receber" -> BackupCompleto.LIMITE_BYTES * 4   // elevação 19.7: o cofre + a lista de apps, cifrados e em Base64
         else -> LIMITE_CORPO
     }
 
@@ -630,6 +632,16 @@ object PainelWeb {
         if (req.metodo == "POST" &&
             (!ChecagensPainel.origemPermitida(req.cabecalho("origin"), host) || req.cabecalho("x-painel") != "1"))
             return erro(403, "pedido de fora do painel")
+        // Elevação 19.7: a TV antiga manda o envelope sem sessão (ela não tem o PIN desta). O segredo do QR é conferido
+        // AQUI, antes de ler o corpo: chute errado não gasta memória, e depois de 5 erros a porta fecha.
+        if (req.caminho == "/api/mudar/receber" && req.metodo == "POST") {
+            if (!MudarDeTv.recebendo()) return erro(410, "esta TV não está esperando (abra 'Trazer de outra TV' nela)")
+            return when (MudarDeTv.conferirSegredo(req.cabecalho("x-mudar"))) {
+                MudarDeTvRegras.Conferencia.OK -> null
+                MudarDeTvRegras.Conferencia.ERRADO -> erro(403, "código errado")
+                MudarDeTvRegras.Conferencia.VENCIDO -> erro(410, "o código venceu; gere outro na TV nova")
+            }
+        }
         if (req.tamanho > LIMITE_CORPO &&
             !sessoes.existe(PainelHttp.cookie(req.cabecalho("cookie"), COOKIE))) return erro(401, "entre com o PIN")
         return null
@@ -683,6 +695,11 @@ object PainelWeb {
             "/api/entrar" -> if (req.metodo == "POST") return entrar(req, ip)
             "/api/entrar-qr" -> if (req.metodo == "POST") return entrarPeloQr(req, ip)
             "/api/convite/entrar" -> if (req.metodo == "POST") return entrarPorConvite(req, ip)   // elevação 18.1
+            // Elevação 19.7 (TV nova): a chave pública e o envelope, livres de sessão mas só com a tela aberta na TV.
+            // O segredo do envelope já foi conferido em antesDoCorpo.
+            "/api/mudar/chave" -> if (req.metodo == "GET") return MudarDeTv.chavePublica()?.takeIf { MudarDeTv.recebendo() }
+                ?.let { json(200, JSONObject().put("publica", it)) } ?: erro(410, "esta TV não está esperando")
+            "/api/mudar/receber" -> if (req.metodo == "POST") return receberDeOutraTv(req, ip)
             "/api/primeira" -> if (req.metodo == "POST") return primeiraConfig(req, ip)   // ideia 97: cria o PIN
             // Ideia 99: digital do celular (passkey), só pelo https do Tailscale. Estado e desafio são livres como a
             // página de entrar; a entrada confere a assinatura.
@@ -753,6 +770,7 @@ object PainelWeb {
             // Backup completo e cifrado (BackupCompleto.kt): leva segredos, então baixar também pede o PIN de novo.
             "/api/backup/completo" -> if (req.metodo == "POST") return backupCompleto(req, token, ip)
             "/api/backup/recuperacao" -> return recuperacao(req, token, ip)
+            "/api/mudar/enviar" -> if (req.metodo == "POST") return enviarParaTvNova(req, token, ip)   // elevação 19.7
             "/api/backup/completo/restaurar" -> if (req.metodo == "POST") return restaurarCompleto(req, token, ip)
             // Backup automático (BackupAutomatico.kt): as cópias diárias guardadas na TV.
             "/api/backup/automaticos" -> if (req.metodo == "GET") return json(200, JSONObject().put("copias",
@@ -1718,6 +1736,42 @@ object PainelWeb {
         // ele (AutorizaShizukuService.onServiceConnected) que reabre o painel mesmo sem a HOME na frente. As sessões caem.
         Handler(Looper.getMainLooper()).postDelayed({ Process.killProcess(Process.myPid()) }, 1500)
         return json(200, JSONObject().put("ok", true).put("chaves", n).put("reiniciando", true))
+    }
+
+    /**
+     * Elevação 19.7, TV antiga: manda tudo (backup completo + lista de apps) para a TV nova do código. Leva os segredos
+     * da casa para outro aparelho: só com o PIN confirmado de novo, como baixar o backup completo.
+     */
+    private fun enviarParaTvNova(req: Requisicao, token: String?, ip: String): Resposta {
+        if (!sessoes.elevada(token)) return precisaPin()
+        val codigo = corpoJson(req)?.optString("codigo").orEmpty()
+        val de = try { MudarDeTv.enviar(app, codigo) } catch (e: IllegalArgumentException) {
+            PainelArmazem.registrar(app, ip, "levar para TV nova", "recusado: ${e.message}")
+            return erro(400, e.message ?: "não deu")
+        } catch (e: Exception) {
+            PainelArmazem.registrar(app, ip, "levar para TV nova", "falhou: $e")
+            return erro(500, "não deu para montar o envio (${e.javaClass.simpleName})")
+        }
+        PainelArmazem.registrar(app, ip, "levar para TV nova", "ok")
+        return json(200, JSONObject().put("ok", true).put("de", de))
+    }
+
+    /** Elevação 19.7, TV nova: o envelope chegou (segredo já conferido). Restaura e reinicia, como o restaurar. */
+    private fun receberDeOutraTv(req: Requisicao, ip: String): Resposta {
+        val de = try { MudarDeTv.receber(app, req.corpoTexto()) } catch (e: CofreBackup.SenhaErrada) {
+            return erro(400, "o envelope não abriu")
+        } catch (e: IllegalArgumentException) {
+            PainelArmazem.registrar(app, ip, "trazer de outra TV", "recusado: ${e.message}")
+            return erro(400, "a TV nova recusou: ${e.message}")
+        } catch (e: MudarDeTv.NaoEsperando) {
+            return erro(410, "esta TV não está esperando")
+        } catch (e: Exception) {
+            PainelArmazem.registrar(app, ip, "trazer de outra TV", "falhou: $e")
+            return erro(500, "a restauração falhou na TV nova (${e.javaClass.simpleName}); nada mudou")
+        }
+        PainelArmazem.registrar(app, ip, "trazer de outra TV", "ok")
+        Handler(Looper.getMainLooper()).postDelayed({ Process.killProcess(Process.myPid()) }, 4000)   // a tela mostra "Pronto" antes
+        return json(200, JSONObject().put("ok", true).put("de", PainelVizinhos.nomeDaTv(app)))
     }
 
     // ---------------------------------------------------------------- fase 2: permissões

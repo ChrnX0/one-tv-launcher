@@ -70,6 +70,9 @@ class TelasTest {
         "busca" to br.paulo.tvlauncher.BuscaActivity::class.java,
         "diagnostico" to br.paulo.tvlauncher.DiagnosticoActivity::class.java,
         "radio" to br.paulo.tvlauncher.RadioActivity::class.java,
+        // Elevação 19.7: TV nova em 2 min (o QR para receber e a fila dos apps).
+        "mudar-tv" to br.paulo.tvlauncher.ReceberTvActivity::class.java,
+        "fila-apps" to br.paulo.tvlauncher.FilaAppsActivity::class.java,
         // Elevação 16.3: as mesmas telas com o alto contraste ligado; todo texto tem que passar de 7:1 ("contraste").
         "home-ac" to MainActivity::class.java,
         "configuracoes-ac" to ConfigLauncherActivity::class.java,

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 19.7: TV nova em 2 min (MudarDeTv, ReceberTvActivity, FilaAppsActivity). -->
+<resources>
+    <string name="mtv_titulo">दूसरे टीवी से लाएँ</string>
+    <string name="mtv_qr_desc">दूसरे टीवी की सेटिंग्स लाने के लिए QR</string>
+    <string name="mtv_instrucoes">पुराने टीवी पर पैनल (फ़ोन या कंप्यूटर) खोलें, सिस्टम › बैकअप › \"नए टीवी पर ले जाएँ\" में जाएँ और यह QR स्कैन करें या नीचे का कोड लिखें।\nसब कुछ एन्क्रिप्ट होकर सिर्फ़ इसी टीवी पर जाता है। कोड %1$s तक मान्य है।</string>
+    <string name="mtv_recebendo">प्राप्त हो रहा है… टीवी बंद न करें।</string>
+    <string name="mtv_pronto">%1$s से सब कुछ आ गया। टीवी अभी रीस्टार्ट होगा; फिर आपके ऐप एक-एक करके लौटेंगे।</string>
+    <string name="mtv_erro">नहीं हुआ: %1$s\nइस टीवी पर कुछ नहीं बदला। फिर से कोशिश के लिए \"%2$s\" दबाएँ।</string>
+    <string name="mtv_venceu">कोड की अवधि ख़त्म (10 मिनट मान्य)।\nनया दिखाने के लिए \"%1$s\" दबाएँ।</string>
+    <string name="mtv_cfg_det">पुराने टीवी की सेटिंग्स, PIN, चैनल और ऐप 2 मिनट में, एक QR से</string>
+    <string name="mtv_fila_titulo">आपके ऐप लौट रहे हैं</string>
+    <string name="mtv_fila_texto">ऐप %1$d / %2$d. Play Store में खोलें और इंस्टॉल दबाएँ; लौटने पर अगला दिखेगा।</string>
+    <string name="mtv_fila_abrir">Play Store में खोलें</string>
+    <string name="mtv_fila_pular">छोड़ें</string>
+    <string name="mtv_fila_depois">बाद में</string>
+    <string name="mtv_fila_fim">दूसरे टीवी के सभी ऐप यहाँ हैं।</string>
+    <string name="mtv_fila_cfg_det">दूसरे टीवी के %1$d ऐप अभी इंस्टॉल करने बाकी हैं</string>
+    <string name="mtv_diario">%1$s से लाया गया: सेटिंग्स बहाल, %2$d ऐप इंस्टॉल करने हैं</string>
+    <string name="mtv_diario_enviado">नए टीवी पर भेजा: सेटिंग्स और %1$d ऐप</string>
+</resources>

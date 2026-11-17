@@ -37,6 +37,8 @@ class EntrarPeloQrActivity : Activity() {
     private lateinit var texto: TextView
     private lateinit var qr: ImageView
     private lateinit var outro: TextView
+    /** Elevação 19.7: TV sem PIN pode, em vez de configurar do zero, trazer tudo de outra TV. */
+    private lateinit var deOutra: TextView
     private var geradoEm = 0L       // quando o código atual foi gerado (0 = nenhum)
     private var terminou = false
     /** TV sem PIN: assistente da primeira configuração em vez de "Entrar pelo celular". Decidido a cada gerar(). */
@@ -59,15 +61,21 @@ class EntrarPeloQrActivity : Activity() {
             setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
             gravity = Gravity.CENTER_VERTICAL
         }
-        val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        // O botão com foco cresce um pouco (Estilo.botao): sem isto a borda esquerda dele saía cortada.
+        val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false }
+        raiz.clipChildren = false; raiz.clipToPadding = false
         titulo = Estilo.tituloTela(this, "")   // título e texto nos papéis do sistema de design
         texto = Estilo.texto(this, Estilo.Papel.CORPO).apply { setTextColor(Estilo.TEXTO_2); setPaddingRelative(0, dp(16), dp(32), 0); setLineSpacing(0f, 1.2f) }
         col.addView(titulo); col.addView(texto)
-        val botoes = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
+        val botoes = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false; clipToPadding = false }
         outro = botao(getString(R.string.qr_gerar_outro)) { gerar() }
         botoes.addView(outro, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginEnd = dp(16) })
         val fechar = botao(getString(R.string.qr_fechar)) { finish() }
         botoes.addView(fechar)
+        deOutra = botao(getString(R.string.mtv_titulo)) {
+            startActivity(android.content.Intent(this, ReceberTvActivity::class.java)); finish()
+        }.apply { visibility = View.GONE }
+        botoes.addView(deOutra, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginStart = dp(16) })
         col.addView(botoes, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { topMargin = dp(24) })
         raiz.addView(col, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         qr = ImageView(this).apply { scaleType = ImageView.ScaleType.FIT_CENTER }
@@ -93,6 +101,7 @@ class EntrarPeloQrActivity : Activity() {
     private fun gerar() {
         terminou = false
         primeira = !PainelArmazem.temPin(this)
+        deOutra.visibility = if (primeira) View.VISIBLE else View.GONE
         val link = if (primeira) PainelWeb.linkPrimeiraConfig(this)
             else PainelWeb.linkEntradaQr(DestinoPainel.porNome(intent.getStringExtra(EXTRA_DESTINO)))
         titulo.text = if (primeira) getString(R.string.pc_titulo)

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 19.7: TV nova em 2 min (MudarDeTv, ReceberTvActivity, FilaAppsActivity). -->
+<resources>
+    <string name="mtv_titulo">Bawa dari TV lain</string>
+    <string name="mtv_qr_desc">QR untuk membawa setelan dari TV lain</string>
+    <string name="mtv_instrucoes">Di TV LAMA, buka panel (ponsel atau komputer), masuk ke Sistem › Cadangan › \"Pindahkan ke TV baru\" lalu pindai QR ini atau ketik kode di bawah.\nSemuanya dikirim terenkripsi, hanya ke TV ini. Kode berlaku %1$s.</string>
+    <string name="mtv_recebendo">Menerima… jangan matikan TV.</string>
+    <string name="mtv_pronto">Semua sudah datang dari %1$s. TV dimulai ulang sekarang; lalu aplikasi Anda kembali satu per satu.</string>
+    <string name="mtv_erro">Gagal: %1$s\nTidak ada yang berubah di TV ini. Tekan \"%2$s\" untuk mencoba lagi.</string>
+    <string name="mtv_venceu">Kode kedaluwarsa (berlaku 10 menit).\nTekan \"%1$s\" untuk menampilkan yang baru.</string>
+    <string name="mtv_cfg_det">Setelan, PIN, saluran, dan aplikasi TV lama dalam 2 menit, dengan QR</string>
+    <string name="mtv_fila_titulo">Aplikasi Anda kembali</string>
+    <string name="mtv_fila_texto">Aplikasi %1$d dari %2$d. Buka di Play Store dan tekan Instal; saat kembali, yang berikutnya muncul.</string>
+    <string name="mtv_fila_abrir">Buka di Play Store</string>
+    <string name="mtv_fila_pular">Lewati</string>
+    <string name="mtv_fila_depois">Nanti</string>
+    <string name="mtv_fila_fim">Semua aplikasi dari TV lain sudah ada di sini.</string>
+    <string name="mtv_fila_cfg_det">Masih %1$d aplikasi dari TV lain untuk diinstal</string>
+    <string name="mtv_diario">Dibawa dari %1$s: setelan dipulihkan, %2$d aplikasi untuk diinstal</string>
+    <string name="mtv_diario_enviado">Dikirim ke TV baru: setelan dan %1$d aplikasi</string>
+</resources>
