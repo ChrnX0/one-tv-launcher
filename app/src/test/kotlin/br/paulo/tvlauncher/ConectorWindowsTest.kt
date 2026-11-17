@@ -35,6 +35,15 @@ class ConectorWindowsTest {
         assertTrue(s.all { it.code < 128 })
     }
 
+    @Test fun letraPreferidaEhSDepoisYDepoisAQueOWindowsDer() {
+        val s = ConectorWindows.script("192.168.1.50", 8444, pem)!!
+        val padrao = s.indexOf("set \"LETRA=*\""); val y = s.indexOf("set \"LETRA=Y:\""); val l = s.indexOf("set \"LETRA=S:\"")
+        assertTrue(padrao in 0 until y && y < l)   // a última que vale é a S
+        // com espaço na frente: "Unidades:" / "Drives:" do fsutil terminam em "s:" (medido num Windows 11 em português)
+        assertTrue("find /i \" S:\"" in s && "find /i \" Y:\"" in s)
+        assertTrue("net use %LETRA% \"%ALVO%\"" in s)
+    }
+
     @Test fun recusaHostQueViraComando() {
         assertNull(ConectorWindows.script("tv\" & calc & \"", 8444, pem))
         assertNull(ConectorWindows.script("tv%TEMP%", 8444, pem))

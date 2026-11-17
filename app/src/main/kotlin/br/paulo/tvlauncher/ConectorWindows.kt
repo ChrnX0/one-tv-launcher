@@ -10,6 +10,7 @@ import java.util.Base64
  * o certificado da TV em Máquina Local, o serviço WebClient ligado (vem parado e não liga sozinho) e o limite de
  * 50 MB por arquivo. Este arquivo .cmd, que a própria TV entrega em /unidade/conectar.cmd, faz as três e mapeia a
  * unidade: duplo clique, um "Sim" do Windows, usuário e PIN.
+ * A letra é S (de Sofaly, pedido do dono em 17/11/2026); ocupada, Y; ocupadas as duas, a que o Windows der.
  *
  * Só texto, sem Android, para os testes JVM (ConectorWindowsTest).
  */
@@ -73,7 +74,12 @@ echo.
 echo Usuario: digite  tv
 echo Senha:   o PIN do painel da TV ^(nao aparece enquanto digita^)
 echo.
-net use * "%ALVO%" /savecred /persistent:yes
+rem A letra: S, de Sofaly; se estiver ocupada, Y; se nao, a que o Windows escolher.
+rem O espaco antes da letra e de proposito: sem ele, "Unidades:" e "Drives:" casam com "S:".
+set "LETRA=*"
+(fsutil fsinfo drives & net use) 2>nul | find /i " Y:" >nul || set "LETRA=Y:"
+(fsutil fsinfo drives & net use) 2>nul | find /i " S:" >nul || set "LETRA=S:"
+net use %LETRA% "%ALVO%" /savecred /persistent:yes
 if errorlevel 1 (
   echo.
   echo Nao mapeou. Confira o PIN e se a chave "Unidade de rede" esta ligada na TV.
