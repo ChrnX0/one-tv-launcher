@@ -91,7 +91,7 @@
     <string name="vp_pronto_det">Przejdź do ekranu głównego.</string>
     <string name="vq_titulo">Udostępnij wygląd</string>
     <string name="vq_det">Pokazuje kod QR z wyglądem tego telewizora: motyw, rozmiar tekstu, ikony.</string>
-    <string name="vq_texto">Zeskanuj go telefonem, aby go zachować lub wysłać komuś z One TV.</string>
+    <string name="vq_texto">Zeskanuj go telefonem, aby go zachować lub wysłać komuś z Sofaly.</string>
     <string name="vq_fechar">Zamknij</string>
     <string name="lh_titulo">Rozmiar kart aplikacji</string>
     <string name="lh_det">Większe karty lepiej widać z kanapy.</string>

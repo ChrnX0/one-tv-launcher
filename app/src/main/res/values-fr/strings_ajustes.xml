@@ -91,7 +91,7 @@
     <string name="vp_pronto_det">Aller à l’écran d’accueil.</string>
     <string name="vq_titulo">Partager le style</string>
     <string name="vq_det">Affiche un QR code avec le style de ce téléviseur : thème, taille du texte, icônes.</string>
-    <string name="vq_texto">Scannez-le avec votre téléphone pour le garder ou l’envoyer à quelqu’un qui a One TV.</string>
+    <string name="vq_texto">Scannez-le avec votre téléphone pour le garder ou l’envoyer à quelqu’un qui a Sofaly.</string>
     <string name="vq_fechar">Fermer</string>
     <string name="lh_titulo">Taille des cartes d’applis</string>
     <string name="lh_det">Les grandes cartes se voient mieux depuis le canapé.</string>

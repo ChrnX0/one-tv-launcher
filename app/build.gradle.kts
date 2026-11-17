@@ -74,8 +74,10 @@ android {
         for (k in listOf("TMDB_CHAVE", "TRAKT_ID", "TRAKT_SEGREDO", "SIMKL_ID", "OPENSUBTITLES_CHAVE"))
             buildConfigField("String", k, if (project.hasProperty("play") && k in semLicencaNaPlay) "\"\"" else chaveApp(k))
         // Degrau 2a (17/11/2026): e-mail que recebe o "Relatar um problema" (quem não tem conta no GitHub). Fora do git:
-        // pessoal.properties "suporte_email" ou a variável SUPORTE_EMAIL do repo no release.yml. Vazio = QR do GitHub.
-        buildConfigField("String", "SUPORTE_EMAIL", chaveApp("SUPORTE_EMAIL"))
+        // Padrão = o e-mail do produto (Paulo, 17/11/2026: contact@sofaly.tv). pessoal.properties "suporte_email" ou a
+        // variável SUPORTE_EMAIL do repo trocam; um valor inválido faz o QR voltar ao formulário do GitHub.
+        buildConfigField("String", "SUPORTE_EMAIL", textoJava((System.getenv("SUPORTE_EMAIL")?.takeIf { it.isNotBlank() }
+            ?: pessoal.getProperty("suporte_email")?.takeIf { it.isNotBlank() } ?: "contact@sofaly.tv").trim()))
     }
 
     // Um APK por arquitetura (12/11/2026, pedido do dono: versões de 32 e 64 bits no GitHub).

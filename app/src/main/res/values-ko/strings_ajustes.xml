@@ -91,7 +91,7 @@
     <string name="vp_pronto_det">홈 화면으로 이동합니다.</string>
     <string name="vq_titulo">모양 공유</string>
     <string name="vq_det">이 TV의 모양(테마, 글자 크기, 아이콘)을 QR 코드로 보여 줍니다.</string>
-    <string name="vq_texto">휴대폰으로 스캔해 보관하거나 One TV를 쓰는 사람에게 보내세요.</string>
+    <string name="vq_texto">휴대폰으로 스캔해 보관하거나 Sofaly를 쓰는 사람에게 보내세요.</string>
     <string name="vq_fechar">닫기</string>
     <string name="lh_titulo">앱 카드 크기</string>
     <string name="lh_det">카드가 크면 소파에서도 잘 보입니다.</string>

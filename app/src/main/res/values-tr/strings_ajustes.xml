@@ -91,7 +91,7 @@
     <string name="vp_pronto_det">Ana ekrana git.</string>
     <string name="vq_titulo">Görünümü paylaş</string>
     <string name="vq_det">Bu TV’nin görünümünü içeren bir QR kod gösterir: tema, metin boyutu, simgeler.</string>
-    <string name="vq_texto">Saklamak veya One TV kullanan birine göndermek için telefonunuzla tarayın.</string>
+    <string name="vq_texto">Saklamak veya Sofaly kullanan birine göndermek için telefonunuzla tarayın.</string>
     <string name="vq_fechar">Kapat</string>
     <string name="lh_titulo">Uygulama kartı boyutu</string>
     <string name="lh_det">Büyük kartlar koltuktan daha kolay görünür.</string>
