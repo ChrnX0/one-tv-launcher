@@ -45,6 +45,7 @@ const comPin = (titulo, texto, ok, fazer) => confirmar(titulo, texto, ok, fazer)
 // O mudarAba do app.js avisa com o evento "aba": aqui carrega a nossa, e para o vídeo ao sair dela.
 document.addEventListener('aba', (ev) => {
   if (ev.detail === 'extras') carregarExtras(); else pararVideo();
+  if (ev.detail === 'controle') chamar('GET', '/api/extras/estado').then((e) => { if (e.chaves.TOCANDO_AGORA) verTocando(); }).catch(() => {});
 });
 
 async function carregarExtras() {
@@ -53,27 +54,56 @@ async function carregarExtras() {
 
 // ---------- chaves ----------
 
+/** Uma chave (liga/desliga) com o rótulo; muda na TV na hora, com o PIN quando a TV exige. */
+function linhaChave(chave, ligado, e) {
+  const rotulo = document.createElement('label');
+  rotulo.className = 'linha-chave';
+  const caixa = document.createElement('input');
+  caixa.type = 'checkbox';
+  caixa.setAttribute('role', 'switch');
+  caixa.checked = ligado;
+  const estado = document.createElement('span');
+  estado.className = 'estado-chave';
+  const pintar = () => { estado.textContent = caixa.checked ? 'Ligado' : 'Desligado'; estado.classList.toggle('ligado', caixa.checked); };
+  pintar();
+  caixa.addEventListener('change', async () => {
+    pintar();
+    const mudar = () => chamar('POST', '/api/extras/chave', { chave, ligado: caixa.checked });
+    try {
+      const r = e.comPin.includes(chave)
+        ? await comPin('Mudar chave', NOMES_CHAVES[chave] || chave, caixa.checked ? 'Ligar' : 'Desligar', mudar)
+        : await mudar();
+      if (!r) { caixa.checked = !caixa.checked; pintar(); return; }   // cancelou
+      carregarChaves(r);
+    } catch (err) { caixa.checked = !caixa.checked; pintar(); aviso(textoErro(err), 'erro'); }
+  });
+  const nome = document.createElement('span');
+  nome.className = 'nome-chave';
+  nome.textContent = (NOMES_CHAVES[chave] || chave) + (e.comPin.includes(chave) ? ' (PIN)' : '');
+  rotulo.append(nome, estado, caixa);
+  return rotulo;
+}
+
+/**
+ * Painel v3 (16/11/2026): cada chave aparece na página do mesmo assunto em que a TV a mostra (ExtrasAbas.kt, que o
+ * servidor manda em "abas"): um cartão "Ligar e desligar" com data-chaves="APARENCIA" etc. As que não têm página
+ * (sistema, rede, ou chave nova que a TV ainda não pôs em nenhuma aba) ficam em Avançado › Outros recursos.
+ */
 async function carregarChaves(dados) {
   const e = dados || await chamar('GET', '/api/extras/estado');
+  const abas = e.abas || {};
+  const lugar = {};
+  for (const c of document.querySelectorAll('.chaves-pagina[data-chaves]')) {
+    for (const a of c.dataset.chaves.split(' ')) lugar[a] = c;
+    c.querySelector('.lista-chaves').replaceChildren();
+    c.hidden = true;
+  }
   const lista = $('chavesExtras');
   lista.replaceChildren();
   for (const [chave, ligado] of Object.entries(e.chaves)) {
-    const rotulo = document.createElement('label');
-    const caixa = document.createElement('input');
-    caixa.type = 'checkbox';
-    caixa.checked = ligado;
-    caixa.addEventListener('change', async () => {
-      const mudar = () => chamar('POST', '/api/extras/chave', { chave, ligado: caixa.checked });
-      try {
-        const r = e.comPin.includes(chave)
-          ? await comPin('Mudar chave', NOMES_CHAVES[chave] || chave, caixa.checked ? 'Ligar' : 'Desligar', mudar)
-          : await mudar();
-        if (!r) { caixa.checked = !caixa.checked; return; }   // cancelou
-        carregarChaves(r);
-      } catch (err) { caixa.checked = !caixa.checked; mostrar($('statusExtras'), textoErro(err)); }
-    });
-    rotulo.append(caixa, ' ' + (NOMES_CHAVES[chave] || chave) + (e.comPin.includes(chave) ? ' (PIN)' : ''));
-    lista.append(rotulo);
+    const cartao = lugar[abas[chave]];
+    if (cartao) { cartao.querySelector('.lista-chaves').append(linhaChave(chave, ligado, e)); cartao.hidden = false; }
+    else lista.append(linhaChave(chave, ligado, e));
   }
   $('filtroInicio').value = hhmm(e.filtro.inicio);
   $('filtroFim').value = hhmm(e.filtro.fim);
@@ -155,8 +185,8 @@ function pararVideo() {
   $(alvo.parar).hidden = true;
 }
 
-$('btnVideoExtras').addEventListener('click', () => verAoVivo());
-$('btnPararVideoExtras').addEventListener('click', pararVideo);
+$('btnVideoExtras')?.addEventListener('click', () => verAoVivo());   // o cartão "Tela ao vivo" juntou-se ao Controle (painel v3)
+$('btnPararVideoExtras')?.addEventListener('click', pararVideo);
 
 // ---------- recado com foto (a página reduz a foto antes de mandar) ----------
 
@@ -508,13 +538,13 @@ $('btnTeclas').addEventListener('click', async () => {
       const r = await chamar('GET', '/api/extras/teclas');
       saida.textContent = r.teclas.length ? r.teclas.map((t) => `${t.nome} (${t.codigo}) ${t.acao}${t.remapeada ? ' remapeada' : ''} · ${t.aparelho}`).join('\n')
         : 'Armado. Aperte os botões do controle...';
-      if (Date.now() < fim && !$('abaExtras').hidden) setTimeout(ler, 1000);
+      if (Date.now() < fim && abaAberta('extras')) setTimeout(ler, 1000);
     };
     ler();
   } catch (e) { mostrar($('saidaExtras'), textoErro(e)); }
 });
 
-$('btnDiario').addEventListener('click', async () => {
+$('btnDiarioDns').addEventListener('click', async () => {
   try {
     const r = await comPin('Diário de DNS', 'Ver os nomes que cada app consultou hoje?', 'Ver', () => chamar('GET', '/api/extras/diario'));
     if (!r) return;

@@ -1012,7 +1012,21 @@ object PainelWeb {
     private val TIPOS = mapOf(
         "/" to ("index.html" to "text/html; charset=utf-8"),
         "/app.js" to ("app.js" to "text/javascript; charset=utf-8"),
-        "/i18n.js" to ("i18n.js" to "text/javascript; charset=utf-8"),   // ideia 76: painel em inglês
+        "/i18n.js" to ("i18n.js" to "text/javascript; charset=utf-8"),   // ideia 76: escolhe a língua do navegador
+        "/i18n-en.js" to ("i18n-en.js" to "text/javascript; charset=utf-8"),   // as 14 línguas do app (17/11/2026)
+        "/i18n-es.js" to ("i18n-es.js" to "text/javascript; charset=utf-8"),
+        "/i18n-fr.js" to ("i18n-fr.js" to "text/javascript; charset=utf-8"),
+        "/i18n-de.js" to ("i18n-de.js" to "text/javascript; charset=utf-8"),
+        "/i18n-it.js" to ("i18n-it.js" to "text/javascript; charset=utf-8"),
+        "/i18n-pl.js" to ("i18n-pl.js" to "text/javascript; charset=utf-8"),
+        "/i18n-ru.js" to ("i18n-ru.js" to "text/javascript; charset=utf-8"),
+        "/i18n-tr.js" to ("i18n-tr.js" to "text/javascript; charset=utf-8"),
+        "/i18n-ar.js" to ("i18n-ar.js" to "text/javascript; charset=utf-8"),
+        "/i18n-hi.js" to ("i18n-hi.js" to "text/javascript; charset=utf-8"),
+        "/i18n-id.js" to ("i18n-id.js" to "text/javascript; charset=utf-8"),
+        "/i18n-ja.js" to ("i18n-ja.js" to "text/javascript; charset=utf-8"),
+        "/i18n-ko.js" to ("i18n-ko.js" to "text/javascript; charset=utf-8"),
+        "/i18n-zh.js" to ("i18n-zh.js" to "text/javascript; charset=utf-8"),
         "/style.css" to ("style.css" to "text/css; charset=utf-8"),
         "/extras.js" to ("extras.js" to "text/javascript; charset=utf-8"),
         "/ui.js" to ("ui.js" to "text/javascript; charset=utf-8"),   // casca do painel: navegação, Início, avisos
@@ -1040,6 +1054,8 @@ object PainelWeb {
         // Fonte Manrope (a mesma da TV), só as letras latinas: 12 KB cada (visual de 13/11/2026).
         "/manrope-400.woff2" to ("manrope-400.woff2" to "font/woff2"),
         "/manrope-600.woff2" to ("manrope-600.woff2" to "font/woff2"),
+        // Nunito (a letra da marca Sofaly), só títulos e o nome; variável, letras latinas (16/11/2026).
+        "/nunito.woff2" to ("nunito.woff2" to "font/woff2"),
         "/offline.html" to ("offline.html" to "text/html; charset=utf-8"),   // tela "A TV não respondeu" do app instalado (sw.js)
     )
 

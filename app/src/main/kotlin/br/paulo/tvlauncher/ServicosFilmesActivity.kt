@@ -175,7 +175,7 @@ class ServicosFilmesActivity : Activity() {
         }
         qrs.addView(qr(ServicosFilmes.MDBLIST_PREFERENCIAS, getString(R.string.sv_mdblist_qr1)))
         PainelWeb.endereco()?.let { end ->
-            qrs.addView(qr(end + "#config", getString(R.string.sv_mdblist_qr2, end.removePrefix("http://").trimEnd('/'))),
+            qrs.addView(qr(end + "#tvfilmes", getString(R.string.sv_mdblist_qr2, end.removePrefix("http://").trimEnd('/'))),
                 LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(48) })
         }
         tela.addView(qrs)
