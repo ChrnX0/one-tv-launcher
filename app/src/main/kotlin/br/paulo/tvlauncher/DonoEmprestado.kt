@@ -40,7 +40,9 @@ object DonoEmprestado {
 
     fun apps(ctx: Context): List<App> = mapa(ctx).values.sortedBy { it.pacote }
 
-    private fun mapa(ctx: Context): Map<Int, App> {
+    // @Synchronized (mapa e gravar): sem trava, uma thread de binder podia regravar o cache antigo logo depois de um
+    // revogar, e o app revogado continuava autorizado até o processo morrer.
+    @Synchronized private fun mapa(ctx: Context): Map<Int, App> {
         cache?.let { return it }
         val r = HashMap<Int, App>()
         try {
@@ -55,7 +57,7 @@ object DonoEmprestado {
         return r
     }
 
-    private fun gravar(ctx: Context, apps: Collection<App>) {
+    @Synchronized private fun gravar(ctx: Context, apps: Collection<App>) {
         val o = JSONObject()
         apps.forEach { o.put(it.pacote, JSONObject().put("uid", it.uid).put("total", it.total)) }
         prefs(ctx).edit().putString("apps", o.toString()).commit()
@@ -72,14 +74,14 @@ object DonoEmprestado {
         return if (pacotes != null && app.pacote in pacotes) app else null
     }
 
-    fun autorizar(ctx: Context, pacote: String, uid: Int, total: Boolean) {
+    @Synchronized fun autorizar(ctx: Context, pacote: String, uid: Int, total: Boolean) {
         val apps = mapa(ctx).values.filter { it.pacote != pacote } + App(pacote, uid, total)
         gravar(ctx, apps)
         anotar(ctx, "autorizado $pacote uid=$uid total=$total")
     }
 
     /** Liga/desliga o poder total de um app já autorizado. Desligar tira também os escopos que ele delegou a si. */
-    fun definirTotal(ctx: Context, pacote: String, total: Boolean): Boolean {
+    @Synchronized fun definirTotal(ctx: Context, pacote: String, total: Boolean): Boolean {
         val atual = mapa(ctx).values.firstOrNull { it.pacote == pacote } ?: return false
         gravar(ctx, mapa(ctx).values.filter { it.pacote != pacote } + atual.copy(total = total))
         if (!total) tirarEscopos(ctx, pacote)
@@ -87,7 +89,7 @@ object DonoEmprestado {
         return true
     }
 
-    fun revogar(ctx: Context, pacote: String) {
+    @Synchronized fun revogar(ctx: Context, pacote: String) {
         gravar(ctx, mapa(ctx).values.filter { it.pacote != pacote })
         tirarEscopos(ctx, pacote)
         anotar(ctx, "revogado $pacote")
