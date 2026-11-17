@@ -53,10 +53,11 @@
     <string name="pod_falhou">यह एपिसोड अभी नहीं चल रहा। बाद में फिर कोशिश करें।</string>
     <string name="pod_abrir_tela">पॉडकास्ट स्क्रीन खोलें</string>
     <string name="ra_podcasts_det">आप जिन शो, समाचार और बातचीत को फ़ॉलो करते हैं</string>
-    <string name="ra_podcasts_previa">पॉडकास्ट (पूर्वावलोकन)</string>
-    <string name="ra_podcasts_previa_det">इस स्क्रीन पर पॉडकास्ट पंक्ति दिखाता है</string>
     <string name="pod_procurar">खोजें</string>
     <string name="pod_buscar">पॉडकास्ट खोजें</string>
     <string name="pod_em_alta">आपके देश में लोकप्रिय</string>
     <string name="pod_atribuicao">खोज: Podcast Index</string>
+    <string name="home_card_ouvir">सुनें</string>
+    <string name="home_destaque_ouvir">रेडियो और पॉडकास्ट</string>
+    <string name="extras_CARD_OUVIR">होम स्क्रीन पर सुनें कार्ड (रेडियो और पॉडकास्ट)</string>
 </resources>

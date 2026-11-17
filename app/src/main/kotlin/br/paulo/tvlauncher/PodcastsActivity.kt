@@ -213,7 +213,8 @@ class PodcastsActivity : Activity() {
             val det = listOfNotNull(a.autor.ifEmpty { null }, f?.episodios?.firstOrNull()?.let { quando(it.dataMs) }?.let { getString(R.string.pod_ultimo, it) })
             linha("pod:${a.url}", a.titulo, det.joinToString(" · "), null, ok = { aberto = a.url; montar() }, segurar = { menuPodcast(a) })
         }
-        if (PodcastBusca.disponivel()) {
+        // Buscar é do Pro (Paulo, 17/11/2026); seguir pelo endereço ou pelo OPML é do Básico.
+        if (PodcastBusca.disponivel() && Planos.permite(this, Planos.Recurso.PODCAST_BUSCA)) {
             // Busca pelo servidor nosso (Podcast Index). A atribuição vai na explicação, como os termos pedem.
             secao(getString(R.string.pod_procurar))
             linha("buscar", getString(R.string.pod_buscar), getString(R.string.pod_atribuicao), null, ok = { pedirBusca() }, segurar = null)

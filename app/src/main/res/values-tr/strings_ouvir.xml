@@ -53,10 +53,11 @@
     <string name="pod_falhou">Bu bölüm şu anda çalmıyor. Daha sonra tekrar deneyin.</string>
     <string name="pod_abrir_tela">Podcast ekranını aç</string>
     <string name="ra_podcasts_det">Takip ettiğiniz programlar, haberler ve sohbetler</string>
-    <string name="ra_podcasts_previa">Podcast\'ler (önizleme)</string>
-    <string name="ra_podcasts_previa_det">Bu ekranda Podcast\'ler satırını gösterir</string>
     <string name="pod_procurar">Bul</string>
     <string name="pod_buscar">Podcast ara</string>
     <string name="pod_em_alta">Ülkenizde popüler</string>
     <string name="pod_atribuicao">Arama: Podcast Index</string>
+    <string name="home_card_ouvir">Dinle</string>
+    <string name="home_destaque_ouvir">Radyo ve podcast\'ler</string>
+    <string name="extras_CARD_OUVIR">Ana ekranda Dinle kartı (radyo ve podcast\'ler)</string>
 </resources>

@@ -53,10 +53,11 @@
     <string name="pod_falhou">Cet épisode ne se lit pas pour le moment. Réessayez plus tard.</string>
     <string name="pod_abrir_tela">Ouvrir l\'écran des podcasts</string>
     <string name="ra_podcasts_det">Émissions, actualités et discussions que vous suivez</string>
-    <string name="ra_podcasts_previa">Podcasts (aperçu)</string>
-    <string name="ra_podcasts_previa_det">Affiche la ligne Podcasts sur cet écran</string>
     <string name="pod_procurar">Trouver</string>
     <string name="pod_buscar">Rechercher des podcasts</string>
     <string name="pod_em_alta">Populaires dans votre pays</string>
     <string name="pod_atribuicao">Recherche : Podcast Index</string>
+    <string name="home_card_ouvir">Écouter</string>
+    <string name="home_destaque_ouvir">Radio et podcasts</string>
+    <string name="extras_CARD_OUVIR">Carte Écouter sur l\'écran d\'accueil (radio et podcasts)</string>
 </resources>

@@ -53,10 +53,11 @@
     <string name="pod_falhou">Episode ini tidak bisa diputar sekarang. Coba lagi nanti.</string>
     <string name="pod_abrir_tela">Buka layar podcast</string>
     <string name="ra_podcasts_det">Acara, berita, dan obrolan yang Anda ikuti</string>
-    <string name="ra_podcasts_previa">Podcast (pratinjau)</string>
-    <string name="ra_podcasts_previa_det">Menampilkan baris Podcast di layar ini</string>
     <string name="pod_procurar">Cari</string>
     <string name="pod_buscar">Cari podcast</string>
     <string name="pod_em_alta">Populer di negara Anda</string>
     <string name="pod_atribuicao">Pencarian: Podcast Index</string>
+    <string name="home_card_ouvir">Dengarkan</string>
+    <string name="home_destaque_ouvir">Radio dan podcast</string>
+    <string name="extras_CARD_OUVIR">Kartu Dengarkan di layar utama (radio dan podcast)</string>
 </resources>

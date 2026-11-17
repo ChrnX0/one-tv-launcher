@@ -53,10 +53,11 @@
     <string name="pod_falhou">このエピソードは現在再生できません。後でもう一度お試しください。</string>
     <string name="pod_abrir_tela">ポッドキャスト画面を開く</string>
     <string name="ra_podcasts_det">フォロー中の番組、ニュース、トーク</string>
-    <string name="ra_podcasts_previa">ポッドキャスト（プレビュー）</string>
-    <string name="ra_podcasts_previa_det">この画面にポッドキャストの行を表示します</string>
     <string name="pod_procurar">探す</string>
     <string name="pod_buscar">ポッドキャストを検索</string>
     <string name="pod_em_alta">あなたの国で人気</string>
     <string name="pod_atribuicao">検索: Podcast Index</string>
+    <string name="home_card_ouvir">聴く</string>
+    <string name="home_destaque_ouvir">ラジオとポッドキャスト</string>
+    <string name="extras_CARD_OUVIR">ホーム画面の「聴く」カード（ラジオとポッドキャスト）</string>
 </resources>

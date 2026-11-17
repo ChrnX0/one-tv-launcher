@@ -53,10 +53,11 @@
     <string name="pod_falhou">이 에피소드는 지금 재생되지 않습니다. 나중에 다시 시도하세요.</string>
     <string name="pod_abrir_tela">팟캐스트 화면 열기</string>
     <string name="ra_podcasts_det">팔로우하는 프로그램, 뉴스, 대담</string>
-    <string name="ra_podcasts_previa">팟캐스트(미리보기)</string>
-    <string name="ra_podcasts_previa_det">이 화면에 팟캐스트 줄을 표시합니다</string>
     <string name="pod_procurar">찾기</string>
     <string name="pod_buscar">팟캐스트 검색</string>
     <string name="pod_em_alta">내 나라 인기 팟캐스트</string>
     <string name="pod_atribuicao">검색: Podcast Index</string>
+    <string name="home_card_ouvir">듣기</string>
+    <string name="home_destaque_ouvir">라디오 및 팟캐스트</string>
+    <string name="extras_CARD_OUVIR">홈 화면의 듣기 카드(라디오 및 팟캐스트)</string>
 </resources>

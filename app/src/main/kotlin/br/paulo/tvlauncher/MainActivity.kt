@@ -1010,6 +1010,7 @@ class MainActivity : Activity() {
         val CORES_FILMES = intArrayOf(0xFF4C9BFF.toInt(), 0xFF1A3F8F.toInt())   // azul
         val CORES_REDE = intArrayOf(0xFF2FBF8F.toInt(), 0xFF0E5A45.toInt())     // verde
         val CORES_JOGOS = intArrayOf(0xFFF5A524.toInt(), 0xFF7A4A0E.toInt())    // âmbar (card Jogos, 14/11/2026)
+        val CORES_OUVIR = intArrayOf(0xFF4A8BFF.toInt(), 0xFF123A7A.toInt())    // azul (card Ouvir, 17/11/2026)
         const val LARGURA_ARTE = 640   // px da arte de filme/série no fundo (ver carregarArte)
         /** Frase curta embaixo do nome de cada app da HOME. Pacote novo na TV: acrescentar aqui (e nas strings). */
         val DESCRICAO_APPS = mapOf(
@@ -1697,6 +1698,7 @@ class MainActivity : Activity() {
                 montar(IconeApp.Tipo.FILMES, CORES_FILMES)
                 montar(IconeApp.Tipo.REDE, CORES_REDE)
                 montar(IconeApp.Tipo.JOGOS, CORES_JOGOS)
+                montar(IconeApp.Tipo.OUVIR, CORES_OUVIR)
                 // O card já em foco quando a capa ficou pronta: troca o degradê pelo ícone na hora.
                 ui.post { if (!isDestroyed) (currentFocus?.getTag(R.id.tag_capa_atalho) as? IconeApp.Tipo)?.let { mostrarCapaAtalho(it) } }
             } finally { montandoCapas = false }
@@ -1716,6 +1718,7 @@ class MainActivity : Activity() {
             IconeApp.Tipo.FILMES -> CORES_FILMES
             IconeApp.Tipo.REDE -> CORES_REDE
             IconeApp.Tipo.JOGOS -> CORES_JOGOS
+            IconeApp.Tipo.OUVIR -> CORES_OUVIR
             else -> CapaFoco.CORES_TV
         }
         capa.mostrar(img, if (img == null) cores else null)
@@ -1765,6 +1768,11 @@ class MainActivity : Activity() {
             mostrarDestaque(null, getString(R.string.home_card_rede), getString(R.string.home_destaque_rede))
             mostrarCapaAtalho(IconeApp.Tipo.REDE)
         }) { abrirCatalogo(MidiaRedeActivity::class.java) }, quadrado = true)   // quadrado também (dono, 07/11)
+        // Ouvir (17/11/2026, Paulo escolheu "cartão próprio"): rádio + podcasts. Com um episódio tocando, abre os podcasts.
+        if (Extras.ligado(this, Extras.Chave.CARD_OUVIR)) adicionar(cartaoAtalho(getString(R.string.home_card_ouvir), IconeApp.Tipo.OUVIR, CORES_OUVIR, {
+            mostrarDestaque(null, getString(R.string.home_card_ouvir), getString(R.string.home_destaque_ouvir))
+            mostrarCapaAtalho(IconeApp.Tipo.OUVIR)
+        }) { abrirCatalogo(if (tocandoNosso && tipoNosso == "podcast") PodcastsActivity::class.java else RadioActivity::class.java) }, quadrado = true)
         // Jogos (14/11/2026, dono): sempre presente, depois de Na rede; os apps de jogo saem da linha de apps.
         if (JogosTv.cardLigado(this)) adicionar(cartaoAtalho(getString(R.string.home_card_jogos), IconeApp.Tipo.JOGOS, CORES_JOGOS, {
             mostrarDestaque(null, getString(R.string.home_card_jogos), resumoJogos())

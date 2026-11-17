@@ -34,10 +34,6 @@ class RadioActivity : Activity() {
         private const val ESCURECER_MS = 3 * 60_000L
         private const val PREFS = "ouvir"   // no backup completo (BackupCompleto.PREFS_EXTRAS)
         private const val CHAVE_CONTINUAR = "continuar_fora"
-        private const val CHAVE_PODCASTS = "podcasts_previa"
-        /** Podcasts em prévia (17/11/2026): a linha aparece aqui até o dono decidir o lugar e o plano. Padrão desligado. */
-        fun podcastsLigados(ctx: android.content.Context) =
-            ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getBoolean(CHAVE_PODCASTS, false)
         /** Sair da tela deixa o som tocando? Padrão sim. Prefs lidas só no ":player". */
         fun continuarFora(ctx: android.content.Context) =
             ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getBoolean(CHAVE_CONTINUAR, true)
@@ -194,12 +190,13 @@ class RadioActivity : Activity() {
             coluna.addView(Estilo.secao(this, titulo))
             lista.forEach { linhaRadio("res:", it) }
         }
+        // Podcasts (Paulo, 17/11/2026: no plano Básico; a tela "Ouvir" = rádio + podcasts, aberta pelo cartão da HOME).
+        linha("podcasts", getString(R.string.pod_titulo), getString(R.string.ra_podcasts_det), null,
+            ok = { startActivity(android.content.Intent(this, PodcastsActivity::class.java)) }, segurar = null)
         if (favoritas.isNotEmpty()) {
             coluna.addView(Estilo.secao(this, getString(R.string.ra_favoritas)))
             favoritas.forEachIndexed { i, r -> linhaRadio("fav:", r, numero = if (i < 9) i + 1 else null) }
         }
-        if (podcastsLigados(this)) linha("podcasts", getString(R.string.pod_titulo), getString(R.string.ra_podcasts_det), null,
-            ok = { startActivity(android.content.Intent(this, PodcastsActivity::class.java)) }, segurar = null)
         coluna.addView(Estilo.secao(this, getString(R.string.ra_procurar)))
         linha("buscar", getString(R.string.ra_buscar), getString(R.string.ra_buscar_det), null, ok = { pedirNome() }, segurar = null)
         linha("generos", getString(R.string.ra_generos), Radios.GENEROS.take(5).joinToString(", ") + "…", null, ok = { escolherGenero() }, segurar = null)
@@ -218,12 +215,6 @@ class RadioActivity : Activity() {
             getString(if (continuarFora(this)) R.string.ra_ao_sair_continua else R.string.ra_ao_sair_para),
             ok = {
                 getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean(CHAVE_CONTINUAR, !continuarFora(this)).apply()
-                montar()
-            }, segurar = null)
-        linha("podcasts_previa", getString(R.string.ra_podcasts_previa), getString(R.string.ra_podcasts_previa_det),
-            getString(if (podcastsLigados(this)) R.string.pod_ligado else R.string.pod_desligado),
-            ok = {
-                getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean(CHAVE_PODCASTS, !podcastsLigados(this)).apply()
                 montar()
             }, segurar = null)
         val filhos = (0 until coluna.childCount).map { coluna.getChildAt(it) }

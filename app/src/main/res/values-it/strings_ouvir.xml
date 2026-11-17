@@ -53,10 +53,11 @@
     <string name="pod_falhou">Questo episodio non si riproduce ora. Riprova più tardi.</string>
     <string name="pod_abrir_tela">Apri la schermata dei podcast</string>
     <string name="ra_podcasts_det">Programmi, notizie e conversazioni che segui</string>
-    <string name="ra_podcasts_previa">Podcast (anteprima)</string>
-    <string name="ra_podcasts_previa_det">Mostra la riga Podcast in questa schermata</string>
     <string name="pod_procurar">Trova</string>
     <string name="pod_buscar">Cerca podcast</string>
     <string name="pod_em_alta">Popolari nel tuo paese</string>
     <string name="pod_atribuicao">Ricerca: Podcast Index</string>
+    <string name="home_card_ouvir">Ascolta</string>
+    <string name="home_destaque_ouvir">Radio e podcast</string>
+    <string name="extras_CARD_OUVIR">Scheda Ascolta nella schermata Home (radio e podcast)</string>
 </resources>

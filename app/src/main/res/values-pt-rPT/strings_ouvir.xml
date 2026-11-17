@@ -53,10 +53,11 @@
     <string name="pod_falhou">Este episódio não está a tocar agora. Tente mais tarde.</string>
     <string name="pod_abrir_tela">Abrir o ecrã de podcasts</string>
     <string name="ra_podcasts_det">Programas, notícias e conversas que segue</string>
-    <string name="ra_podcasts_previa">Podcasts (pré-visualização)</string>
-    <string name="ra_podcasts_previa_det">Mostra a linha Podcasts neste ecrã</string>
     <string name="pod_procurar">Procurar</string>
     <string name="pod_buscar">Pesquisar podcasts</string>
     <string name="pod_em_alta">Em destaque no seu país</string>
     <string name="pod_atribuicao">Pesquisa: Podcast Index</string>
+    <string name="home_card_ouvir">Ouvir</string>
+    <string name="home_destaque_ouvir">Rádio e podcasts</string>
+    <string name="extras_CARD_OUVIR">Cartão Ouvir no ecrã inicial (rádio e podcasts)</string>
 </resources>

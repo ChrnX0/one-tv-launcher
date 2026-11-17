@@ -53,10 +53,11 @@
     <string name="pod_falhou">Этот выпуск сейчас не воспроизводится. Попробуйте позже.</string>
     <string name="pod_abrir_tela">Открыть экран подкастов</string>
     <string name="ra_podcasts_det">Передачи, новости и беседы, на которые вы подписаны</string>
-    <string name="ra_podcasts_previa">Подкасты (предварительно)</string>
-    <string name="ra_podcasts_previa_det">Показывает строку «Подкасты» на этом экране</string>
     <string name="pod_procurar">Найти</string>
     <string name="pod_buscar">Поиск подкастов</string>
     <string name="pod_em_alta">Популярное в вашей стране</string>
     <string name="pod_atribuicao">Поиск: Podcast Index</string>
+    <string name="home_card_ouvir">Слушать</string>
+    <string name="home_destaque_ouvir">Радио и подкасты</string>
+    <string name="extras_CARD_OUVIR">Карточка «Слушать» на главном экране (радио и подкасты)</string>
 </resources>

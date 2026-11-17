@@ -53,10 +53,11 @@
     <string name="pod_falhou">Diese Folge spielt gerade nicht. Versuch es später noch einmal.</string>
     <string name="pod_abrir_tela">Podcast-Bildschirm öffnen</string>
     <string name="ra_podcasts_det">Sendungen, Nachrichten und Gespräche, denen du folgst</string>
-    <string name="ra_podcasts_previa">Podcasts (Vorschau)</string>
-    <string name="ra_podcasts_previa_det">Zeigt die Zeile Podcasts auf diesem Bildschirm</string>
     <string name="pod_procurar">Finden</string>
     <string name="pod_buscar">Podcasts suchen</string>
     <string name="pod_em_alta">Beliebt in deinem Land</string>
     <string name="pod_atribuicao">Suche: Podcast Index</string>
+    <string name="home_card_ouvir">Hören</string>
+    <string name="home_destaque_ouvir">Radio und Podcasts</string>
+    <string name="extras_CARD_OUVIR">Karte „Hören“ auf dem Startbildschirm (Radio und Podcasts)</string>
 </resources>
