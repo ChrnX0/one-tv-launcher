@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Travas de plano (PlanosTv.pedir, revisão dos degraus T2, 17/11/2026). -->
+<resources>
+    <string name="plt_titulo">Входит в тариф %1$s</string>
+    <string name="plt_texto">Эта функция есть в тарифе %1$s. Посмотрите тарифы на телевизоре и купите на телефоне.</string>
+    <string name="plt_ver">Посмотреть тарифы</string>
+    <string name="plt_agora_nao">Не сейчас</string>
+</resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Travas de plano (PlanosTv.pedir, revisão dos degraus T2, 17/11/2026). -->
+<resources>
+    <string name="plt_titulo">%1$s プランの機能</string>
+    <string name="plt_texto">この機能は %1$s プランに含まれます。テレビでプランを確認し、スマートフォンで購入できます。</string>
+    <string name="plt_ver">プランを見る</string>
+    <string name="plt_agora_nao">今はしない</string>
+</resources>

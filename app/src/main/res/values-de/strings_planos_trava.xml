@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Travas de plano (PlanosTv.pedir, revisão dos degraus T2, 17/11/2026). -->
+<resources>
+    <string name="plt_titulo">Teil des Tarifs %1$s</string>
+    <string name="plt_texto">Das ist im Tarif %1$s enthalten. Sieh dir die Tarife am Fernseher an und kaufe am Handy.</string>
+    <string name="plt_ver">Tarife ansehen</string>
+    <string name="plt_agora_nao">Jetzt nicht</string>
+</resources>

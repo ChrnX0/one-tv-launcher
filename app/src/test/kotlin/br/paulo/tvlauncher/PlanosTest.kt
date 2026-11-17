@@ -7,6 +7,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.io.File
 
 class PlanosTest {
     @Test fun vendaDesligadaNaoBloqueiaNada() = assertFalse("ligar a venda é decisão do Paulo", Planos.VENDA_ATIVA)
@@ -35,5 +36,14 @@ class PlanosTest {
     @Test fun fontesPagas() {
         for (r in listOf(Recurso.FICHAS_TMDB, Recurso.CLIMA_PRO, Recurso.SIMKL_NOTA_TODOS)) assertEquals(r.name, Plano.PRO, Planos.MINIMO[r])
         assertEquals(Plano.ULTRA, Planos.MINIMO[Recurso.CLIMA_3_MODELOS])
+    }
+
+    /** Toda função paga dos degraus 3 e 4 que já existe na TV tem a trava ligada em algum lugar do código. */
+    @Test fun travasLigadas() {
+        val codigo = File("src/main/kotlin/br/paulo/tvlauncher").walkTopDown().filter { it.isFile && it.name.endsWith(".kt") && it.name != "Planos.kt" }
+            .joinToString("\n") { it.readText() }
+        for (r in listOf(Recurso.FAMILIA_LINK, Recurso.RECADO_VIDEO, Recurso.SOM_NO_FONE, Recurso.CONTINUAR_OUTRA_TV,
+            Recurso.PLUGINS, Recurso.SESSAO_JUNTO))
+            assertTrue("sem trava: ${r.name}", codigo.contains("Planos.Recurso.${r.name}"))
     }
 }
