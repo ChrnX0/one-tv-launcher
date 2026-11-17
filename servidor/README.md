@@ -52,7 +52,7 @@ cláusulas-padrão da ANPD (Res. 19/2024). Caixas de casas brasileiras ficam nos
 ```sh
 cd servidor/carteiro && node --test                  # regras puras (assinatura, ids, códigos)
 npx wrangler dev --local --port 8787 &               # carteiro simulado na máquina
-node test/ponta-a-ponta.mjs http://127.0.0.1:8787    # encontro, caixa, WebSocket, TXT, recusa sem assinatura
+node ponta-a-ponta.mjs      http://127.0.0.1:8787    # encontro, caixa, WebSocket, TXT, recusa sem assinatura
 cd ../dns && go test ./...                           # nomes, servidor DNS de verdade, leitura do TXT
 ```
 

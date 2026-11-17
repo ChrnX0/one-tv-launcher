@@ -1,8 +1,8 @@
 // Teste de ponta a ponta contra o carteiro rodando (local ou de verdade). Não roda no `node --test`.
-//   npx wrangler dev --local --port 8787 &   (dentro de servidor/carteiro)
-//   node test/ponta-a-ponta.mjs http://127.0.0.1:8787
+//   npx wrangler dev --local --port 8787 &   (dentro de servidor/carteiro; fica fora de test/ porque precisa do carteiro de pé)
+//   node ponta-a-ponta.mjs http://127.0.0.1:8787
 import assert from 'node:assert/strict';
-import { textoAssinado, idDaChave } from '../src/regras.js';
+import { textoAssinado, idDaChave } from './src/regras.js';
 
 const BASE = process.argv[2] ?? 'http://127.0.0.1:8787';
 
