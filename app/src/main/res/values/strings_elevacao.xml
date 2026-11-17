@@ -64,4 +64,13 @@
     <string name="elv_bf_procurar_radio_det">Stations from all over the world</string>
     <string name="elv_bf_procurar_rede">“%1$s” in your network files</string>
     <string name="elv_bf_procurar_rede_det">On your Jellyfin, Emby or Plex</string>
+    <!-- 12.2 busca nos ajustes -->
+    <string name="elv_aj_buscar">Search settings</string>
+    <string name="elv_aj_explica">Type a word: the name of the option or another word for it (\"font\" finds the text size)</string>
+    <string name="elv_aj_dica">For example: font, Wi-Fi, screensaver</string>
+    <string name="elv_aj_recentes">Changed recently</string>
+    <string name="elv_aj_recentes_vazio">The options you change appear here, the latest first</string>
+    <string name="elv_aj_nada">Nothing found for “%1$s”</string>
+    <string name="elv_aj_nada_det">Try another word, or look in the tabs on the left</string>
+    <string name="elv_aj_sinonimos">font,letter,text,size,bigger,smaller;wifi,wi-fi,network,internet,connection;screensaver,screen saver,saver,idle,rest;password,pin,code;sound,volume,audio;time,clock,hour;weather,forecast,temperature;language,idiom;kids,child,children,parental;guest,visitor,visit;update,version,new;backup,copy,restore;phone,mobile,cell;light,lamp,home,house;sleep,turn off,timer,energy,power;channel,tv,live;movie,film,series,show;subtitle,caption,captions;alarm,wake,alarm clock;photo,picture,image,background,wallpaper</string>
 </resources>

@@ -63,4 +63,13 @@
     <string name="elv_bf_procurar_radio_det">Rádios do mundo inteiro</string>
     <string name="elv_bf_procurar_rede">“%1$s” nos arquivos da rede</string>
     <string name="elv_bf_procurar_rede_det">No seu Jellyfin, Emby ou Plex</string>
+    <!-- 12.2 busca nos ajustes -->
+    <string name="elv_aj_buscar">Buscar nos ajustes</string>
+    <string name="elv_aj_explica">Escreva uma palavra: o nome da opção ou outra palavra para ela (\"fonte\" acha o tamanho do texto)</string>
+    <string name="elv_aj_dica">Por exemplo: fonte, Wi-Fi, protetor</string>
+    <string name="elv_aj_recentes">Mexidos há pouco</string>
+    <string name="elv_aj_recentes_vazio">As opções que você mudar aparecem aqui, a última primeiro</string>
+    <string name="elv_aj_nada">Nada encontrado para “%1$s”</string>
+    <string name="elv_aj_nada_det">Tente outra palavra, ou procure nas abas à esquerda</string>
+    <string name="elv_aj_sinonimos">fonte,letra,texto,tamanho,maior,menor;wifi,wi-fi,rede,internet,conexao;protetor,descanso,tela de descanso,parada;senha,pin,codigo;som,volume,audio;hora,horario,relogio;clima,tempo,previsao,temperatura;idioma,lingua;criança,crianca,infantil,parental,filho,filhos;visita,visitas,hospede,convidado;atualizacao,atualizar,versao,novidade;backup,copia,copia de seguranca,restaurar;celular,telefone,fone;luz,lampada,casa;desligar,dormir,timer,energia;canal,canais,tv,ao vivo;filme,filmes,serie,series;legenda,legendas;despertador,alarme,acordar;foto,fotos,imagem,fundo,papel de parede</string>
 </resources>

@@ -2,6 +2,7 @@ package br.paulo.tvlauncher
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.util.Log
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
@@ -47,6 +48,9 @@ class ConfigLauncherActivity : Activity() {
         const val ABA_AVANCADO = 8
         private const val PIN_VALE_MS = 2 * 60_000L   // depois de acertar o PIN aqui, 2 min sem pedir de novo
         private const val ESTADO_LIBERADO = "hospede_liberado"
+        private const val TAG = "TvLauncher.Config"
+        /** [abaMontada] quando o conteúdo mostra a busca nos ajustes (12.2), não uma aba. */
+        private const val BUSCA = -2
     }
 
     private val trabalho = Executors.newSingleThreadExecutor()   // rede, PBKDF2 e PackageManager fora da thread da tela
@@ -87,6 +91,12 @@ class ConfigLauncherActivity : Activity() {
 
     private var abaAtual = 0
     private var abaMontada = -1   // qual aba está desenhada no conteúdo agora
+    // Elevação 12.2: busca nos ajustes. [indexando] = a aba sendo montada só para o índice (-1 = montagem de verdade).
+    private var indexando = -1
+    private var indice: List<BuscaAjustes.Entrada>? = null
+    private var itemBusca: TextView? = null
+    private var campoBusca: android.widget.EditText? = null
+    private val prefsBusca by lazy { getSharedPreferences("config_busca", MODE_PRIVATE) }
     private lateinit var menu: LinearLayout
     private lateinit var conteudo: LinearLayout
     private lateinit var rolagem: ScrollView
@@ -173,6 +183,7 @@ class ConfigLauncherActivity : Activity() {
 
         val colunas = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false }
         menu = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false; setPadding(0, dp(4), 0, dp(4)) }
+        menu.addView(itemDaBusca(), LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(10) })
         abas.forEachIndexed { i, aba -> menu.addView(itemMenu(i, aba), LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(4) }) }
         mostrarAbasDoUso()
         colunas.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(menu)
@@ -337,9 +348,12 @@ class ConfigLauncherActivity : Activity() {
             val noConteudo = foco != null && foco.dentroDe(conteudo)
             val noMenu = foco != null && foco.dentroDe(menu)
             when (e.keyCode) {
-                KeyEvent.KEYCODE_DPAD_LEFT -> if (noConteudo) { itensMenu[abaAtual].requestFocus(); return true }
-                KeyEvent.KEYCODE_BACK -> if (noConteudo) { engoliuVoltar = true; itensMenu[abaAtual].requestFocus(); return true }
-                KeyEvent.KEYCODE_DPAD_RIGHT -> if (noMenu) { entrarNoConteudo(); return true }
+                KeyEvent.KEYCODE_DPAD_LEFT -> if (noConteudo && foco !is android.widget.EditText) { voltarAoMenu(); return true }
+                KeyEvent.KEYCODE_BACK -> if (noConteudo) { engoliuVoltar = true; voltarAoMenu(); return true }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> if (noMenu) {
+                    if (foco === itemBusca) { if (abaMontada != BUSCA) mostrarBusca(); campoBusca?.requestFocus() } else entrarNoConteudo()
+                    return true
+                }
                 KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> if (foco != null && (noConteudo || noMenu)) {
                     val dir = if (e.keyCode == KeyEvent.KEYCODE_DPAD_UP) View.FOCUS_UP else View.FOCUS_DOWN
                     val prox = foco.focusSearch(dir)
@@ -1918,6 +1932,119 @@ class ConfigLauncherActivity : Activity() {
         else -> if (resources.configuration.locales[0].language == "pt") i.perde else i.perdeEn ?: i.perde
     }
 
+    // ================================================================ busca nos ajustes (elevação 12.2)
+
+    private val indiceMontando = ArrayList<BuscaAjustes.Entrada>()
+
+    private fun voltarAoMenu() { (if (abaMontada == BUSCA) itemBusca else itensMenu[abaAtual])?.requestFocus() }
+
+    /** "Buscar" no alto do menu: foco nele mostra a caixa e a lista "mexidos há pouco" no lugar da aba. */
+    private fun itemDaBusca(): TextView = TextView(this).apply {
+        text = "⌕  " + getString(R.string.elv_aj_buscar)
+        Estilo.aplicar(this, Estilo.Papel.CORPO)
+        setPadding(dp(20), dp(11), dp(20), dp(11))
+        maxLines = 1; ellipsize = TextUtils.TruncateAt.END
+        isFocusable = true; isClickable = true
+        pintarItemMenu(this, foco = false, escolhido = false)
+        setOnFocusChangeListener { v, temFoco ->
+            pintarItemMenu(this, foco = temFoco, escolhido = abaMontada == BUSCA)
+            if (temFoco) { ui.removeCallbacks(trocarAba); if (abaMontada != BUSCA) mostrarBusca(); mostrarDica(noMenu = true) }
+            v.animate().scaleX(if (temFoco) Estilo.ESCALA_LINHA else 1f).scaleY(if (temFoco) Estilo.ESCALA_LINHA else 1f).setDuration(Estilo.FOCO_MS).start()
+        }
+        setOnClickListener { if (abaMontada != BUSCA) mostrarBusca(); campoBusca?.requestFocus() }
+        itemBusca = this
+    }
+
+    private fun mostrarBusca() {
+        abaMontada = BUSCA
+        itensMenu.forEachIndexed { j, t -> pintarItemMenu(t, foco = t.hasFocus(), escolhido = false) }
+        conteudo.removeAllViews()
+        rolagem.scrollTo(0, 0)
+        conteudo.addView(Estilo.texto(this, Estilo.Papel.TITULO, getString(R.string.elv_aj_buscar)).apply { setPadding(dp(8), dp(4), 0, 0) })
+        conteudo.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.elv_aj_explica)).apply { setPadding(dp(8), dp(6), 0, dp(12)) })
+        val campo = android.widget.EditText(this).apply {
+            hint = getString(R.string.elv_aj_dica)
+            setSingleLine()
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+            setTextColor(Estilo.TEXTO); setHintTextColor(Estilo.TEXTO_3); textSize = 20f
+            background = Estilo.fundo(context, Estilo.SUPERFICIE_ALTA, Estilo.RAIO_PILULA, Estilo.BORDA)
+            setPadding(dp(22), dp(14), dp(22), dp(14))
+        }
+        campoBusca = campo
+        conteudo.addView(campo, LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(12) })
+        val resultados = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false }
+        conteudo.addView(resultados, LinearLayout.LayoutParams(MATCH, WRAP))
+        fun desenhar() {
+            val termo = campo.text.toString().trim()
+            resultados.removeAllViews()
+            if (termo.length < 2) {
+                val rec = BuscaAjustes.ler(prefsBusca.getString("recentes", null)).filter { it.aba in abas.indices }
+                if (rec.isEmpty()) { resultados.addView(info(getString(R.string.elv_aj_recentes), getString(R.string.elv_aj_recentes_vazio)), lp()); return }
+                secao(resultados, getString(R.string.elv_aj_recentes))
+                val agora = System.currentTimeMillis()
+                rec.forEach { r ->
+                    val quando = android.text.format.DateUtils.getRelativeTimeSpanString(r.em, agora, android.text.format.DateUtils.MINUTE_IN_MILLIS)
+                    resultados.addView(linha(r.titulo, "${abas[r.aba].titulo} · $quando", seta = true) { irPara(r.aba, r.titulo) }, lp())
+                }
+                return
+            }
+            val achados = BuscaAjustes.procurar(indiceDosAjustes(), termo, BuscaAjustes.grupos(getString(R.string.elv_aj_sinonimos)))
+            if (achados.isEmpty()) { resultados.addView(info(getString(R.string.elv_aj_nada, termo), getString(R.string.elv_aj_nada_det)), lp()); return }
+            achados.forEach { e -> resultados.addView(linha(e.titulo, "${abas[e.aba].titulo} · ${e.detalhe}", seta = true) { irPara(e.aba, e.titulo) }, lp()) }
+        }
+        val adiada = Runnable { if (abaMontada == BUSCA) desenhar() }
+        campo.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(t: CharSequence?, a: Int, b: Int, c: Int) {}
+            override fun onTextChanged(t: CharSequence?, a: Int, b: Int, c: Int) {}
+            override fun afterTextChanged(t: android.text.Editable?) { ui.removeCallbacks(adiada); ui.postDelayed(adiada, 300) }
+        })
+        desenhar()
+    }
+
+    /**
+     * O índice: cada aba montada uma vez num lugar fora da tela, guardando o título e a explicação de cada linha (é o
+     * mesmo que a pessoa vê ao descer o menu). Montado na primeira busca e guardado enquanto a tela estiver aberta.
+     */
+    private fun indiceDosAjustes(): List<BuscaAjustes.Entrada> {
+        indice?.let { return it }
+        val t0 = System.currentTimeMillis()
+        indiceMontando.clear()
+        abas.forEachIndexed { i, aba ->
+            indexando = i
+            try { aba.montar(LinearLayout(this)) } catch (e: Exception) { Log.w(TAG, "índice da aba $i: ${e.javaClass.simpleName}") }
+        }
+        indexando = -1
+        return indiceMontando.toList().also { indice = it; Log.i(TAG, "índice dos ajustes: ${it.size} linhas em ${System.currentTimeMillis() - t0} ms") }
+    }
+
+    /** Abre a aba [aba] e põe o foco na linha [titulo] (rolando até ela). */
+    private fun irPara(aba: Int, titulo: String) {
+        abaAtual = aba
+        mostrarAba(aba)
+        mostrarAbasDoUso()
+        itensMenu.forEachIndexed { j, t -> pintarItemMenu(t, foco = false, escolhido = j == abaAtual) }
+        itemBusca?.let { pintarItemMenu(it, foco = false, escolhido = false) }
+        conteudo.post {
+            val alvo = focaveis(conteudo).firstOrNull { temTexto(it, titulo) } ?: primeiroFocavel(conteudo)
+            alvo?.requestFocus()
+            alvo?.let { v -> rolagem.post {
+                val r = android.graphics.Rect(); v.getDrawingRect(r); conteudo.offsetDescendantRectToMyCoords(v, r)
+                rolagem.smoothScrollTo(0, (r.top - dp(80)).coerceAtLeast(0))
+            } }
+        }
+    }
+
+    private fun temTexto(v: View, t: String): Boolean = when (v) {
+        is TextView -> v.text?.toString() == t
+        is ViewGroup -> (0 until v.childCount).any { temTexto(v.getChildAt(it), t) }
+        else -> false
+    }
+
+    private fun lembrarRecente(aba: Int, titulo: String) {
+        val l = BuscaAjustes.lembrar(BuscaAjustes.ler(prefsBusca.getString("recentes", null)), aba, titulo, System.currentTimeMillis())
+        prefsBusca.edit().putString("recentes", BuscaAjustes.texto(l)).apply()
+    }
+
     // ================================================================ peças
 
     @Suppress("DEPRECATION")
@@ -1935,11 +2062,16 @@ class ConfigLauncherActivity : Activity() {
     private fun linha(titulo: String, detalhe: String, chave: Boolean? = null, valor: String? = null, seta: Boolean = false,
                       aoClicar: () -> Unit): LinhaCfg =
         LinhaCfg(this, focavel = true).apply {
+            if (indexando >= 0) indiceMontando += BuscaAjustes.Entrada(indexando, titulo, detalhe)
             montarLinha(titulo, detalhe)
             if (chave != null) ligado(chave)
             if (valor != null) this.valor(valor)
             if (seta && chave == null && valor == null) this.seta()
-            setOnClickListener { UsoLocal.contar(this@ConfigLauncherActivity, "opcao:$titulo"); aoClicar() }   // ideia 67
+            setOnClickListener {
+                UsoLocal.contar(this@ConfigLauncherActivity, "opcao:$titulo")   // ideia 67
+                if (abaMontada >= 0) lembrarRecente(abaMontada, titulo)          // elevação 12.2: "mexidos há pouco"
+                aoClicar()
+            }
         }
 
     /** Uma linha só informativa, sem foco nem clique (para ler, não para apertar OK). */
