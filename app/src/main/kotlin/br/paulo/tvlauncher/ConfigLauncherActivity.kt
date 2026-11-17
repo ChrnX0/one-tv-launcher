@@ -46,6 +46,7 @@ class ConfigLauncherActivity : Activity() {
         const val ABA_CONTA = 1
         const val ABA_AVANCADO = 8
         private const val PIN_VALE_MS = 2 * 60_000L   // depois de acertar o PIN aqui, 2 min sem pedir de novo
+        private const val ESTADO_LIBERADO = "hospede_liberado"
     }
 
     private val trabalho = Executors.newSingleThreadExecutor()   // rede, PBKDF2 e PackageManager fora da thread da tela
@@ -93,6 +94,7 @@ class ConfigLauncherActivity : Activity() {
     private val itensMenu = ArrayList<TextView>()
     private var reconstruirAoVoltar = false   // voltou de outra tela (Android, canais bloqueados): redesenha a aba
     private var pinValidoAte = 0L
+    private var liberadoHospede = false   // modo hóspede: o PIN já foi acertado nesta visita às Configurações
     // Erros do PIN guardados (TentativasPin, como no player): fechar e abrir as Configurações não dá mais 5 tentativas.
     // Preferência própria do processo da HOME ("config_pin"); a do player ("player_pin") é do processo ":player".
     private val prefsPin by lazy { getSharedPreferences("config_pin", MODE_PRIVATE) }
@@ -101,12 +103,21 @@ class ConfigLauncherActivity : Activity() {
         super.onCreate(savedInstanceState)
         abaAtual = (savedInstanceState?.getInt(EXTRA_ABA) ?: intent.getIntExtra(EXTRA_ABA, 0)).coerceIn(0, abas.size - 1)
         // Modo hóspede (degrau 2): as Configurações só abrem com o PIN (o hóspede não desliga a limpeza nem mexe na TV).
-        if (ModoHospede.ativo(this) && savedInstanceState == null) {
-            setContentView(View(this).apply { background = Estilo.fundoTela(context) })
-            PinNaTela.pedir(this, getString(R.string.hos_pin_config), aoCancelar = { finish() }) { pinValidoAte = System.currentTimeMillis() + PIN_VALE_MS; abrirTela() }
-            return
-        }
+        // "liberado" vem do estado salvo só quando a tela foi recriada com o PIN já certo (controle/teclado ligado, giro);
+        // antes valia "savedInstanceState == null", e qualquer recriação abria sem PIN (achado de 17/11/2026).
+        liberadoHospede = savedInstanceState?.getBoolean(ESTADO_LIBERADO, false) ?: false
+        if (ModoHospede.ativo(this) && !liberadoHospede) { pedirPinHospede(); return }
         abrirTela()
+    }
+
+    /** Tela vazia + PIN; acertou = libera e desenha; errou ou cancelou = fecha. */
+    private fun pedirPinHospede() {
+        setContentView(View(this).apply { background = Estilo.fundoTela(context) })
+        PinNaTela.pedir(this, getString(R.string.hos_pin_config), aoCancelar = { finish() }) {
+            liberadoHospede = true
+            pinValidoAte = System.currentTimeMillis() + PIN_VALE_MS
+            abrirTela()
+        }
     }
 
     private fun abrirTela() {
@@ -118,6 +129,7 @@ class ConfigLauncherActivity : Activity() {
     override fun onSaveInstanceState(estado: Bundle) {
         super.onSaveInstanceState(estado)
         estado.putInt(EXTRA_ABA, abaAtual)
+        estado.putBoolean(ESTADO_LIBERADO, liberadoHospede)
     }
 
     override fun onDestroy() {
@@ -130,10 +142,14 @@ class ConfigLauncherActivity : Activity() {
     override fun onStop() {
         super.onStop()
         pinValidoAte = 0L   // saiu da tela: o PIN vale de novo só depois de digitar
+        // Saiu de verdade (HOME, outro app; não é só a tela sendo recriada): no modo hóspede, voltar pede o PIN de novo.
+        if (!isChangingConfigurations) liberadoHospede = false
     }
 
     override fun onRestart() {
         super.onRestart()
+        // Volta pelos recentes ou pelo botão voltar de outra tela: com o hóspede ligado, o PIN de novo.
+        if (ModoHospede.ativo(this) && !liberadoHospede) { pedirPinHospede(); return }
         if (reconstruirAoVoltar && ::conteudo.isInitialized) { reconstruirAoVoltar = false; recarregarAba() }
     }
 
@@ -145,6 +161,7 @@ class ConfigLauncherActivity : Activity() {
     // ================================================================ esqueleto: menu à esquerda, conteúdo à direita
 
     private fun montarTela(): View {
+        itensMenu.clear()   // a tela pode ser montada de novo (PIN do hóspede ao voltar): o menu antigo sai da lista
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)   // o grafite da HOME (sistema de design)
@@ -1117,7 +1134,8 @@ class ConfigLauncherActivity : Activity() {
         lateinit var chave: LinhaCfg
         chave = linha(getString(R.string.hos_titulo), getString(R.string.hos_det), chave = ModoHospede.ativo(this)) {
             if (ModoHospede.ativo(this)) ModoHospede.desligarComPin(this) { recarregarAba() }
-            else { ModoHospede.ligar(this); recarregarAba() }
+            else if (ModoHospede.ligar(this)) recarregarAba()
+            else android.widget.Toast.makeText(this, getString(R.string.emp_sem_pin), android.widget.Toast.LENGTH_LONG).show()   // sem PIN o modo trancaria a TV
         }
         c.addView(chave, lp())
         lateinit var linhaSaida: LinhaCfg

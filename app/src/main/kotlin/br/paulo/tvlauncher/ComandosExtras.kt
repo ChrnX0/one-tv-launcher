@@ -124,7 +124,7 @@ object ComandosExtras {
         "modo_seguro" -> if (ModoSeguro.ativo(ctx)) "ligado" else "desligado"
         // Modo hóspede (degrau 2). O adb já é autenticado: desligar aqui não pede o PIN.
         "hospede" -> "ativo=${ModoHospede.ativo(ctx)} saida=${ModoHospede.textoSaida(ctx)} apps=${ModoHospede.paraLimpar(ctx)} ultima=${ModoHospede.ultimaLimpeza(ctx)}"
-        "hospede_ligar" -> { ModoHospede.ligar(ctx); "modo hóspede ligado" }
+        "hospede_ligar" -> if (ModoHospede.ligar(ctx)) "modo hóspede ligado" else "sem PIN do painel: defina o PIN antes de ligar o modo hóspede"
         "hospede_desligar" -> { ModoHospede.desligar(ctx); "modo hóspede desligado" }
         "hospede_encerrar" -> { val app = ctx.applicationContext; Fundo.rodar("hospede-adb") { ModoHospede.encerrarEstadia(app) }; "limpando; ver depois com hospede" }
         "planos" -> abrir(ctx, ConhecerProActivity::class.java)   // tela "Conhecer o Pro" (venda ainda desligada)
