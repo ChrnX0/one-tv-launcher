@@ -213,7 +213,7 @@ class MtpIpTest {
     @Test fun enviaRenomeiaMoveEApaga() {
         val pc = Pc(); pc.entrar(); pc.op(Mtp.OP_ABRIR_SESSAO, 1)
         val movies = pc.achar(Mtp.TODOS, "Movies")
-        val conteudo = ByteArray(300_000) { (it % 251).toByte() }
+        val conteudo = ByteArray(2_500_000) { (it % 251).toByte() }
         val r = pc.op(Mtp.OP_MANDAR_INFO, Mtp.ARMAZEM, movies, mandar = infoPara("novo vídeo.mp4", conteudo.size))
         assertEquals(Mtp.OK, r.first)
         val h = r.second[2]
@@ -353,5 +353,28 @@ class MtpIpTest {
         subir(File(System.getenv("ONETV_MTP_RAIZ") ?: error("ONETV_MTP_RAIZ")).apply { mkdirs() }, PtpIp.PORTA)
         println("MTP/IP de teste em 127.0.0.1:${PtpIp.PORTA} (pasta $raiz)")
         Thread.sleep(Long.MAX_VALUE)
+    }
+
+    @Test fun escritaAdiantadaEntregaTudoNaOrdemMesmoComDiscoLento() {
+        val dados = ByteArray(3 * 1024 * 1024 + 123).also { java.util.Random(7).nextBytes(it) }
+        val lento = object : java.io.ByteArrayOutputStream() {
+            override fun write(b: ByteArray, off: Int, len: Int) { Thread.sleep(2); super.write(b, off, len) }
+        }
+        EscritaAdiantada(lento, blocos = 3, tamanho = 64 * 1024).use { e ->
+            var o = 0
+            while (o < dados.size) { val n = minOf(100_000, dados.size - o); e.write(dados, o, n); o += n }   // pedaços desalinhados
+        }
+        assertTrue(dados.contentEquals(lento.toByteArray()))
+    }
+
+    @Test fun escritaAdiantadaRepassaOErroDoDiscoSemTravar() {
+        val cheio = object : java.io.OutputStream() {
+            override fun write(b: Int) {}
+            override fun write(b: ByteArray, off: Int, len: Int) { throw java.io.IOException("sem espaço") }
+        }
+        val e = EscritaAdiantada(cheio, blocos = 2, tamanho = 1024)
+        val erro = try { repeat(100) { e.write(ByteArray(1024)) }; e.close(); null } catch (x: java.io.IOException) { x }
+        assertEquals("sem espaço", erro?.message)
+        try { e.close() } catch (_: java.io.IOException) {}   // fechar depois do erro não trava
     }
 }
