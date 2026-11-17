@@ -55,4 +55,8 @@
     <string name="ra_podcasts_det">你关注的节目、新闻和访谈</string>
     <string name="ra_podcasts_previa">播客（预览）</string>
     <string name="ra_podcasts_previa_det">在此屏幕上显示“播客”一行</string>
+    <string name="pod_procurar">查找</string>
+    <string name="pod_buscar">搜索播客</string>
+    <string name="pod_em_alta">你所在国家的热门</string>
+    <string name="pod_atribuicao">搜索：Podcast Index</string>
 </resources>

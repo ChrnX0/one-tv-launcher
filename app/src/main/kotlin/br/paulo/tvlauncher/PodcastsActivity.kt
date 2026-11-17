@@ -31,6 +31,8 @@ class PodcastsActivity : Activity() {
     private var feeds: Map<String, PodcastFeed.Feed> = emptyMap()
     private var posicoes: Map<String, Podcasts.Posicao> = emptyMap()
     private var protegido = false
+    /** Resultado da busca (título da seção, lista), só com a busca ligada ([PodcastBusca]). */
+    private var resultados: Pair<String, List<PodcastBusca.Resultado>>? = null
     /** O podcast aberto (lista de episódios), ou null = a tela principal. */
     private var aberto: String? = null
     private val mudou: () -> Unit = { aoMudarSom() }
@@ -166,6 +168,14 @@ class PodcastsActivity : Activity() {
     }
 
     private fun montarPrincipal() {
+        resultados?.let { (titulo, lista) ->
+            secao(titulo)
+            lista.filter { !(protegido && it.explicito) }.forEach { r ->
+                val seguido = assinaturas.any { it.url == r.url }
+                linha("busca:${r.url}", r.titulo, r.autor, if (seguido) "✓" else null,
+                    ok = { if (seguido) { aberto = r.url; montar() } else adicionar(r.url) }, segurar = null)
+            }
+        }
         val assinados = assinaturas.map { it.url }.toSet()
         val cont = Podcasts.continuar(posicoes, assinados)
             .mapNotNull { p -> feeds[p.feed]?.episodios?.firstOrNull { it.guid == p.guid }?.let { Triple(p.feed, it, p) } }
@@ -195,6 +205,14 @@ class PodcastsActivity : Activity() {
             val f = feeds[a.url]
             val det = listOfNotNull(a.autor.ifEmpty { null }, f?.episodios?.firstOrNull()?.let { quando(it.dataMs) }?.let { getString(R.string.pod_ultimo, it) })
             linha("pod:${a.url}", a.titulo, det.joinToString(" · "), null, ok = { aberto = a.url; montar() }, segurar = { menuPodcast(a) })
+        }
+        if (PodcastBusca.disponivel()) {
+            // Busca pelo servidor nosso (Podcast Index). A atribuição vai na explicação, como os termos pedem.
+            secao(getString(R.string.pod_procurar))
+            linha("buscar", getString(R.string.pod_buscar), getString(R.string.pod_atribuicao), null, ok = { pedirBusca() }, segurar = null)
+            linha("em_alta", getString(R.string.pod_em_alta), getString(R.string.pod_atribuicao), null, ok = {
+                procurar(getString(R.string.pod_em_alta)) { PodcastBusca.emAlta(Locale.getDefault().language) }
+            }, segurar = null)
         }
         secao(getString(R.string.pod_adicionar))
         linha("colar", getString(R.string.pod_colar), getString(R.string.pod_colar_det), null, ok = { pedirEndereco() }, segurar = null)
@@ -295,6 +313,34 @@ class PodcastsActivity : Activity() {
             .setNegativeButton(android.R.string.cancel, null).create()
         d.setOnShowListener { campo.requestFocus() }
         d.show()
+    }
+
+    private fun pedirBusca() {
+        val campo = EditText(this).apply { inputType = InputType.TYPE_CLASS_TEXT; isSingleLine = true; textSize = 20f }
+        val moldura = FrameLayout(this).apply { setPadding(Estilo.dp(this@PodcastsActivity, 20), Estilo.dp(this@PodcastsActivity, 8), Estilo.dp(this@PodcastsActivity, 20), 0); addView(campo) }
+        val d = CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert).setTitle(getString(R.string.pod_buscar)).setView(moldura)
+            .setPositiveButton(android.R.string.ok) { _, _ ->
+                val t = campo.text.toString().trim()
+                if (t.length >= 2) procurar(getString(R.string.ra_resultado, t)) { PodcastBusca.buscar(t, Locale.getDefault().language) }
+            }
+            .setNegativeButton(android.R.string.cancel, null).create()
+        d.setOnShowListener { campo.requestFocus() }
+        d.show()
+    }
+
+    private fun procurar(titulo: String, buscar: () -> List<PodcastBusca.Resultado>) {
+        subtitulo.text = getString(R.string.ra_carregando)
+        val app = applicationContext
+        Fundo.rodar("podcast") {
+            val r = runCatching(buscar).getOrDefault(emptyList())
+            runOnUiThread {
+                if (isDestroyed) return@runOnUiThread
+                subtitulo.text = getString(R.string.pod_subtitulo)
+                resultados = titulo to r
+                if (r.isEmpty()) AvisoTv.rapido(app, titulo, getString(R.string.ra_nada), 5)
+                montar()
+            }
+        }
     }
 
     private fun adicionar(url: String) {

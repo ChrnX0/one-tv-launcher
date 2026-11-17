@@ -55,4 +55,8 @@
     <string name="ra_podcasts_det">Takip ettiğiniz programlar, haberler ve sohbetler</string>
     <string name="ra_podcasts_previa">Podcast\'ler (önizleme)</string>
     <string name="ra_podcasts_previa_det">Bu ekranda Podcast\'ler satırını gösterir</string>
+    <string name="pod_procurar">Bul</string>
+    <string name="pod_buscar">Podcast ara</string>
+    <string name="pod_em_alta">Ülkenizde popüler</string>
+    <string name="pod_atribuicao">Arama: Podcast Index</string>
 </resources>

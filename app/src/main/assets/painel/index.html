@@ -1001,6 +1001,20 @@
         <div id="itensRadios" class="lista-registro"></div>
         <p id="statusRadios" class="aviso" hidden></p>
       </div>
+      <div class="cartao" id="cartaoPodcasts">
+        <h2>Podcasts</h2>
+        <p class="aviso">Na TV: TV ao vivo › Rádios › Podcasts (prévia; ligue em Rádios › Ajustes). Cole o endereço do feed RSS de um podcast, ou importe a lista do seu app de podcast do celular (arquivo OPML, no app: Ajustes › Exportar). Os episódios tocam direto do servidor de quem publica.</p>
+        <form id="formPodcast" class="barra-acoes">
+          <input id="urlPodcast" type="url" maxlength="2000" placeholder="https://.../feed.xml" aria-label="Endereço do feed">
+          <button type="submit" class="botao-secundario">Seguir na TV</button>
+        </form>
+        <div class="barra-acoes">
+          <label class="botao-secundario">Importar lista (OPML) <input id="arquivoOpml" type="file" accept=".opml,.xml,text/xml,application/xml" hidden></label>
+          <button id="exportarOpml" type="button" class="botao-secundario">Exportar lista (OPML)</button>
+        </div>
+        <div id="itensPodcasts" class="lista-registro"></div>
+        <p id="statusPodcasts" class="aviso" hidden></p>
+      </div>
       <div class="cartao" id="cartaoAniversarios">
         <h2>Aniversários</h2>
         <p class="aviso">Na véspera e no dia, a HOME e o protetor de tela mostram "Hoje é aniversário de…". Com o ano, mostra também a idade.</p>

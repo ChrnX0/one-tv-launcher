@@ -610,6 +610,7 @@ object PainelWeb {
     private fun limiteCorpo(caminho: String): Int = when (caminho) {
         "/api/backup/restaurar" -> BackupConfig.LIMITE_BYTES
         PainelExtras.ROTA_FOTO -> PainelExtras.LIMITE_FOTO
+        PainelIdeias.ROTA_OPML -> PainelIdeias.LIMITE_OPML
         "/api/backup/completo/restaurar" -> BackupCompleto.LIMITE_BYTES * 2 + 1024   // o cofre em Base64 + a senha
         else -> LIMITE_CORPO
     }

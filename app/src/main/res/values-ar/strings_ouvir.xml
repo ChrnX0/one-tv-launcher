@@ -55,4 +55,8 @@
     <string name="ra_podcasts_det">البرامج والأخبار والحوارات التي تتابعها</string>
     <string name="ra_podcasts_previa">البودكاست (معاينة)</string>
     <string name="ra_podcasts_previa_det">يعرض سطر البودكاست في هذه الشاشة</string>
+    <string name="pod_procurar">البحث</string>
+    <string name="pod_buscar">البحث عن بودكاست</string>
+    <string name="pod_em_alta">الأكثر رواجًا في بلدك</string>
+    <string name="pod_atribuicao">البحث: Podcast Index</string>
 </resources>

@@ -55,4 +55,8 @@
     <string name="ra_podcasts_det">Передачи, новости и беседы, на которые вы подписаны</string>
     <string name="ra_podcasts_previa">Подкасты (предварительно)</string>
     <string name="ra_podcasts_previa_det">Показывает строку «Подкасты» на этом экране</string>
+    <string name="pod_procurar">Найти</string>
+    <string name="pod_buscar">Поиск подкастов</string>
+    <string name="pod_em_alta">Популярное в вашей стране</string>
+    <string name="pod_atribuicao">Поиск: Podcast Index</string>
 </resources>

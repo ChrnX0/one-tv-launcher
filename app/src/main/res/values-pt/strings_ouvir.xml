@@ -55,4 +55,8 @@
     <string name="ra_podcasts_det">Programas, notícias e conversas que você segue</string>
     <string name="ra_podcasts_previa">Podcasts (prévia)</string>
     <string name="ra_podcasts_previa_det">Mostra a linha Podcasts nesta tela</string>
+    <string name="pod_procurar">Procurar</string>
+    <string name="pod_buscar">Buscar podcasts</string>
+    <string name="pod_em_alta">Em alta no seu país</string>
+    <string name="pod_atribuicao">Busca: Podcast Index</string>
 </resources>

@@ -55,4 +55,8 @@
     <string name="ra_podcasts_det">フォロー中の番組、ニュース、トーク</string>
     <string name="ra_podcasts_previa">ポッドキャスト（プレビュー）</string>
     <string name="ra_podcasts_previa_det">この画面にポッドキャストの行を表示します</string>
+    <string name="pod_procurar">探す</string>
+    <string name="pod_buscar">ポッドキャストを検索</string>
+    <string name="pod_em_alta">あなたの国で人気</string>
+    <string name="pod_atribuicao">検索: Podcast Index</string>
 </resources>

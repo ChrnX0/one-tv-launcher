@@ -55,4 +55,8 @@
     <string name="ra_podcasts_det">Audycje, wiadomości i rozmowy, które obserwujesz</string>
     <string name="ra_podcasts_previa">Podcasty (podgląd)</string>
     <string name="ra_podcasts_previa_det">Pokazuje wiersz Podcasty na tym ekranie</string>
+    <string name="pod_procurar">Znajdź</string>
+    <string name="pod_buscar">Szukaj podcastów</string>
+    <string name="pod_em_alta">Popularne w Twoim kraju</string>
+    <string name="pod_atribuicao">Wyszukiwanie: Podcast Index</string>
 </resources>

@@ -55,4 +55,8 @@
     <string name="ra_podcasts_det">Acara, berita, dan obrolan yang Anda ikuti</string>
     <string name="ra_podcasts_previa">Podcast (pratinjau)</string>
     <string name="ra_podcasts_previa_det">Menampilkan baris Podcast di layar ini</string>
+    <string name="pod_procurar">Cari</string>
+    <string name="pod_buscar">Cari podcast</string>
+    <string name="pod_em_alta">Populer di negara Anda</string>
+    <string name="pod_atribuicao">Pencarian: Podcast Index</string>
 </resources>

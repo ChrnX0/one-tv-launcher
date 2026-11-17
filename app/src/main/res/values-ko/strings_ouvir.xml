@@ -55,4 +55,8 @@
     <string name="ra_podcasts_det">팔로우하는 프로그램, 뉴스, 대담</string>
     <string name="ra_podcasts_previa">팟캐스트(미리보기)</string>
     <string name="ra_podcasts_previa_det">이 화면에 팟캐스트 줄을 표시합니다</string>
+    <string name="pod_procurar">찾기</string>
+    <string name="pod_buscar">팟캐스트 검색</string>
+    <string name="pod_em_alta">내 나라 인기 팟캐스트</string>
+    <string name="pod_atribuicao">검색: Podcast Index</string>
 </resources>
