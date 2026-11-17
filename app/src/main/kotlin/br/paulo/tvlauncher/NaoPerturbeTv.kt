@@ -30,7 +30,7 @@ object NaoPerturbeTv {
         val pr = ctx.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val fila = NaoPerturbe.guardar(NaoPerturbe.ler(pr.getString("fila", null)), NaoPerturbe.Guardado(titulo, texto, System.currentTimeMillis()))
         pr.edit().putString("fila", NaoPerturbe.texto(fila)).putString("motivo", m.name).apply()
-        Log.i(TAG, "segurado ($m): $titulo")
+        Log.i(TAG, "segurado (motivo=$m, tipo=$tipo)")   // sem o título: aviso pode ter conteúdo pessoal
         return true
     }
 
