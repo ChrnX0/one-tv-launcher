@@ -83,7 +83,8 @@ object BackupCompleto {
     /** Arquivos pequenos do player (files/player). O contas.json fica de fora: vai decifrado em "segredos". */
     val ARQUIVOS_PLAYER = listOf("favoritos.json", "recentes.json", "ocultas.json", "liberadas.json", "posicoes.json",
         "interesses_series.json", "interesses_filmes.json", "series_ultimos.json", "series_progresso.json",
-        "parental.json", "ultimo.json", "radios.json", "ano_canais.json")   // rodada 2: rádios favoritas, minutos por canal
+        "parental.json", "ultimo.json", "radios.json", "ano_canais.json",
+        "podcasts.json", "podcast_posicoes.json")   // rodada 2: rádios favoritas, minutos por canal
     private const val ESTADO_TUNEL = "tailscaled.state"
     /** No máximo tantas cópias por perfil vão no backup (8 contas x 5 arquivos já sobra). */
     private const val MAX_COPIAS_PERFIL = 64
