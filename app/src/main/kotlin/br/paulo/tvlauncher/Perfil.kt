@@ -166,7 +166,7 @@ object Perfil {
         if (letra.isNotEmpty()) {
             tinta.textSize = lado * 0.5f
             tinta.textAlign = Paint.Align.CENTER
-            tinta.typeface = Fontes.manrope(500)
+            tinta.typeface = Fontes.nunito(500)
             val y = lado / 2f - (tinta.descent() + tinta.ascent()) / 2f   // centraliza na vertical
             tela.drawText(letra, lado / 2f, y, tinta)
         } else {

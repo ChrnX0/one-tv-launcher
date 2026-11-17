@@ -41,7 +41,7 @@ class CalendarioActivity : Activity() {
     private val textoClaro = Estilo.TEXTO
     private val textoSuave = Estilo.TEXTO_2
     private val destaque = Estilo.ACENTO
-    private val fonteMedia = Fontes.manrope(600)
+    private val fonteMedia = Fontes.nunito(600)
     private val pt = Locale.getDefault()   // o idioma da TV (era fixo em pt-BR)
     private val ui = Handler(Looper.getMainLooper())
     private val mes = Calendar.getInstance()   // o mês mostrado na grade

@@ -30,8 +30,8 @@ class AlarmesActivity : Activity() {
     private val textoClaro = Estilo.TEXTO
     private val textoSuave = Estilo.TEXTO_2
     private val verde = Estilo.ACENTO
-    private val fonteLeve = Fontes.manrope(200)
-    private val fonteMedia = Fontes.manrope(600)
+    private val fonteLeve = Fontes.nunito(200)
+    private val fonteMedia = Fontes.nunito(600)
     private lateinit var conteudo: FrameLayout
     private var editando = false
     /** A prévia do som do Ouvir (editor). Para no Voltar, ao sair da tela e 4 s depois de começar. */

@@ -71,7 +71,7 @@ class ColunaCategorias(
     private val papel = Estilo.TEXTO
     private val apagado = Estilo.TEXTO_3
     private val ambar = Estilo.ATENCAO
-    private val fonteMedia = Fontes.manrope(500)
+    private val fonteMedia = Fontes.nunito(500)
 
     private var grupos: Array<List<Linha>> = arrayOf(emptyList(), emptyList(), emptyList())
     /** A categoria cujo catálogo está à direita (cor de atenção). */
@@ -86,7 +86,7 @@ class ColunaCategorias(
     private val fixas get() = listas[1]
     private val rola get() = listas[2]
     private val tituloListas = TextView(act).apply {
-        text = act.getString(R.string.coluna_listas); textSize = Estilo.Leitura.ROTULO; typeface = Fontes.manrope(600)
+        text = act.getString(R.string.coluna_listas); textSize = Estilo.Leitura.ROTULO; typeface = Fontes.nunito(600)
         letterSpacing = 0.12f; setTextColor(apagado); setPadding(dp(14), dp(14), dp(10), dp(4))
     }
     private val divisoria = View(act).apply { setBackgroundColor(Estilo.BORDA) }
@@ -103,7 +103,7 @@ class ColunaCategorias(
         addView(LinearLayout(act).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(0, 0, 0, dp(10))
             addView(TextView(act).apply {
-                text = titulo; textSize = 24f; typeface = Fontes.manrope(700); setTextColor(papel); maxLines = 1
+                text = titulo; textSize = 24f; typeface = Fontes.nunito(700); setTextColor(papel); maxLines = 1
                 ellipsize = TextUtils.TruncateAt.END; setPadding(dp(6), 0, dp(6), 0)
             }, LinearLayout.LayoutParams(0, -2, 1f))
             addView(caixaBotoes, LinearLayout.LayoutParams(-2, -2))
@@ -258,7 +258,7 @@ class ColunaCategorias(
         linha.addView(icone, LinearLayout.LayoutParams(dp((18 * escala).toInt()), dp((18 * escala).toInt())).apply { marginEnd = dp(12) })
         // Selo do serviço (listas de fora): fundo claro, letra escura, pequeno.
         val etiqueta = TextView(act).apply {
-            textSize = 11f * escala; typeface = Fontes.manrope(700); setTextColor(Estilo.FUNDO); setPadding(dp(6), dp(1), dp(6), dp(1))
+            textSize = 11f * escala; typeface = Fontes.nunito(700); setTextColor(Estilo.FUNDO); setPadding(dp(6), dp(1), dp(6), dp(1))
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(COR_ETIQUETA) }
             visibility = View.GONE
         }
@@ -267,7 +267,7 @@ class ColunaCategorias(
         linha.addView(nome, LinearLayout.LayoutParams(0, -2, 1f))
         // "+12": títulos novos desde a última visita, numa pílula verde (esboço direita-filmes.png).
         val novos = TextView(act).apply {
-            textSize = 11.5f; typeface = Fontes.manrope(700); setTextColor(Estilo.FUNDO); setPadding(dp(6), dp(1), dp(6), dp(1))
+            textSize = 11.5f; typeface = Fontes.nunito(700); setTextColor(Estilo.FUNDO); setPadding(dp(6), dp(1), dp(6), dp(1))
             background = GradientDrawable().apply { cornerRadius = dp(8).toFloat(); setColor(COR_NOVOS) }
         }
         linha.addView(novos, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(6) })

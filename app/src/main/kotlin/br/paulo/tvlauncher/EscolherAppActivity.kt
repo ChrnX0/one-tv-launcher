@@ -63,7 +63,7 @@ class EscolherAppActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(24), dp(20), dp(24), dp(20))
             // Janela por cima do que estiver na tela: o mesmo vidro escuro das pílulas e avisos (sistema de design).
-            background = Estilo.fundo(context, 0xF20B0F17.toInt(), Estilo.RAIO, Estilo.VIDRO_BORDA)
+            background = Estilo.fundo(context, 0xF20E1020.toInt(), Estilo.RAIO, Estilo.VIDRO_BORDA)
             addView(Estilo.texto(this@EscolherAppActivity, Estilo.Papel.TITULO, getString(R.string.esc_botao, botao.nome)),
                 LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { bottomMargin = dp(12) })
             addView(ScrollView(this@EscolherAppActivity).apply { clipChildren = false; isVerticalScrollBarEnabled = false; addView(lista) })

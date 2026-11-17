@@ -13,7 +13,7 @@ import kotlin.math.sin
 
 /**
  * Ícones de linha do protetor (10/11/2026, dono: "tem que melhorar esses ícones" — os emojis destoavam do vidro e da
- * Manrope). Desenhados em código, num quadro de 24×24 unidades, traço branco de 1,6 com pontas redondas: ficam nítidos
+ * Nunito). Desenhados em código, num quadro de 24×24 unidades, traço branco de 1,6 com pontas redondas: ficam nítidos
  * em qualquer tamanho, sem arquivo de imagem nem licença de terceiros.
  *
  * A lua é desenhada na fase de verdade ([fracaoLua]: 0 = nova, 0,5 = cheia), espelhada no hemisfério sul.

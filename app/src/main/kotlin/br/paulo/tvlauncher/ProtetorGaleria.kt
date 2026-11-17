@@ -40,10 +40,10 @@ class ProtetorGaleria(
     /** Tema Escuro (dono, 11/11/2026): o MESMO protetor, só que com o wallpaper escuro da HOME no lugar da pintura. */
     private val wallpaperEscuro: Boolean = false,
 ) {
-    private val m200: Typeface = Fontes.manrope(ctx, 200)
-    private val m400: Typeface = Fontes.manrope(ctx, 400)
-    private val m500: Typeface = Fontes.manrope(ctx, 500)
-    private val m600: Typeface = Fontes.manrope(ctx, 600)
+    private val m200: Typeface = Fontes.nunito(ctx, 200)
+    private val m400: Typeface = Fontes.nunito(ctx, 400)
+    private val m500: Typeface = Fontes.nunito(ctx, 500)
+    private val m600: Typeface = Fontes.nunito(ctx, 600)
     private val fraunces: Typeface = Fontes.fraunces(ctx)
     private val branco = 0xFFFFFFFF.toInt()
     private val sombra = 0x59000000
@@ -169,7 +169,7 @@ class ProtetorGaleria(
             val c = Calendar.getInstance().apply { timeInMillis = agora }
             val h = SimpleDateFormat("HH", Locale.getDefault()).format(Date(agora))
             val m = SimpleDateFormat("mm", Locale.getDefault()).format(Date(agora))
-            // Hora cheia (Manrope 600) e minuto fino (200), com os dois-pontos apagados: o contraste é o desenho.
+            // Hora cheia (Nunito 800) e minuto mais leve (600), com os dois-pontos apagados: o contraste é o desenho.
             hora.text = SpannableStringBuilder().apply {
                 append(h); if (android.os.Build.VERSION.SDK_INT >= 28) setSpan(TypefaceSpan(m600), 0, length, 0)
                 // Espaço finíssimo (U+200A) só antes: com as letras apertadas, o ":" encostava no "6" (e o espaço fino
