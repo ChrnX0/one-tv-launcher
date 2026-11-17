@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação (17/11/2026, ondas 2): tradução de values/strings_elevacao2.xml. -->
+<resources>
+    <string name="elv_ac_titulo">高对比度</string>
+    <string name="elv_ac_det">所有界面文字更亮、边框更清晰（至少 7:1）</string>
+    <string name="elv_ad_titulo">口述影像</string>
+    <string name="elv_ad_det">有描述画面的音轨时就选它</string>
+    <string name="elv_sdh_titulo">听障字幕</string>
+    <string name="elv_sdh_det">即使是配音版，也始终以电视语言显示带声音描述的字幕（[关门声]）</string>
+    <string name="elv_cat_titulo">视频的海报和简介</string>
+    <string name="elv_cat_explica">只把片名发给 TMDB，绝不发送文件夹或服务器</string>
+    <string name="elv_cat_ligado">开</string>
+    <string name="elv_cat_desligado">关</string>
+    <string name="elv_cat_ep">%1$s · 第%2$d季 第%3$d集</string>
+    <string name="elv_cat_so_ep">%1$s · 第%2$d集</string>
+    <string name="elv_cat_temporada">%1$s · 第%2$d季</string>
+    <string name="elv_cat_filme_ano">%1$s（%2$d）</string>
+    <string name="elv_cat_n_temporadas">季数：%d</string>
+    <string name="elv_cat_procurando">正在查找海报…</string>
+    <string name="elv_cat_nada">TMDB 上没找到。长按 OK 输入正确名称。</string>
+    <string name="elv_cat_corrigir_titulo">更正：%s</string>
+    <string name="elv_cat_corrigir_explica">海报或简介不对？换下一个结果，或输入正确的名称和年份。名称留空即恢复自动。</string>
+    <string name="elv_cat_nao_e">不是这个</string>
+    <string name="elv_cat_escrever">输入名称</string>
+    <string name="elv_cat_campo">名称和年份，例如：沙丘 2021</string>
+    <string name="elv_cat_salvar">保存</string>
+    <string name="elv_cat_dica">更正</string>
+    <string name="elv_bib_lista">列表</string>
+    <string name="elv_bib_pasta">文件夹</string>
+    <string name="elv_bib_servidor">服务器</string>
+    <string name="elv_bib_nuvem">云端</string>
+    <string name="elv_bib_addon">插件</string>
+</resources>
