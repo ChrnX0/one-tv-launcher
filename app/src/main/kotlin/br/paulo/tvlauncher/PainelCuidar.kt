@@ -67,7 +67,7 @@ object PainelCuidar {
                 val texto = Recado.limpar(corpo?.optString("texto")) ?: return erro(400, "recado vazio ou longo demais (até ${Recado.MAX_CARACTERES} letras)")
                 val c = CuidarDeLongeTv.config(app)
                 AvisoTv.mostrar(app, c.nome.ifEmpty { app.getString(R.string.cuidar_titulo) }, texto, 300, som = true, guardarSeApagada = true,
-                    fica = AvisoRegras.Fica.ATENCAO)
+                    fica = AvisoRegras.Fica.ATENCAO, prioridade = NaoPerturbe.Tipo.ALERTA_OFICIAL)   // quem cuida de longe respondeu: passa
                 PainelArmazem.registrar(app, ip, "cuidar de longe: resposta na TV", "ok")
                 ok(app)
             }

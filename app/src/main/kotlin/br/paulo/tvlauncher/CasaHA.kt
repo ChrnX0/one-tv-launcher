@@ -505,7 +505,8 @@ object CasaHA {
     /** Ideia 52: a foto de agora da câmera, por 30 s, por cima do que estiver passando. Bloqueia (rede): fora da tela. */
     fun mostrarCamera(ctx: Context, camera: String, nome: String) {
         val foto = RecadoImagem.decodificar(fotoCamera(ctx, camera)) ?: throw Erro("a câmera não mandou foto")
-        AvisoTv.mostrar(ctx, nome.take(60), "", 30, som = false, guardarSeApagada = false, imagem = foto)
+        AvisoTv.mostrar(ctx, nome.take(60), "", 30, som = false, guardarSeApagada = false, imagem = foto,
+            prioridade = NaoPerturbe.Tipo.CAMPAINHA)   // a pessoa pediu para ver a câmera agora
     }
 
     private fun estadoNome(ctx: Context, id: String): String? = try {
@@ -567,7 +568,7 @@ object CasaHA {
         val camera = texto(ctx, CHAVE_CAMERA)
         val foto = if (camera.isEmpty()) null else try { fotoCamera(ctx, camera) } catch (e: Exception) { null }
         AvisoTv.mostrar(ctx, ctx.getString(R.string.casa_campainha), ctx.getString(R.string.casa_alguem_porta), 30, som = true, guardarSeApagada = false,
-            imagem = foto?.let { RecadoImagem.decodificar(it) }, fica = AvisoRegras.Fica.ATENCAO)
+            imagem = foto?.let { RecadoImagem.decodificar(it) }, fica = AvisoRegras.Fica.ATENCAO, prioridade = NaoPerturbe.Tipo.CAMPAINHA)
     }
 
     /** Publica sensor.tv_<nome> no Home Assistant quando muda, e de novo a cada 5 min (o HA esquece ao reiniciar). */

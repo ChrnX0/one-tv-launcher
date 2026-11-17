@@ -96,4 +96,10 @@
     <string name="elv_f_backup_falhou_causa">O destino não respondeu ou a senha mudou.</string>
     <string name="elv_f_backup_falhou_botao">Fazer backup agora</string>
     <string name="elv_f_religando">Religando: leva até um minuto</string>
+    <!-- 11.4 não perturbe -->
+    <string name="extras_NAO_PERTURBE">Não perturbe: durante filme, de madrugada ou com visita, os avisos esperam e voltam num resumo (despertador e campainha sempre aparecem)</string>
+    <plurals name="elv_np_resumo_filme"><item quantity="one">Enquanto você assistia: %1$d aviso</item><item quantity="other">Enquanto você assistia: %1$d avisos</item></plurals>
+    <plurals name="elv_np_resumo_noite"><item quantity="one">Durante a noite: %1$d aviso</item><item quantity="other">Durante a noite: %1$d avisos</item></plurals>
+    <plurals name="elv_np_resumo_visita"><item quantity="one">Durante a visita: %1$d aviso</item><item quantity="other">Durante a visita: %1$d avisos</item></plurals>
+    <string name="elv_np_mais">mais %1$d</string>
 </resources>

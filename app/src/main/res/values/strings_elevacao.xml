@@ -97,4 +97,10 @@
     <string name="elv_f_backup_falhou_causa">The destination was unreachable or the password changed.</string>
     <string name="elv_f_backup_falhou_botao">Back up now</string>
     <string name="elv_f_religando">Turning them back on: it takes up to a minute</string>
+    <!-- 11.4 não perturbe -->
+    <string name="extras_NAO_PERTURBE">Do not disturb: during a movie, late at night or with guests, notices wait and come back in a summary (alarm and doorbell always show)</string>
+    <plurals name="elv_np_resumo_filme"><item quantity="one">While you were watching: %1$d notice</item><item quantity="other">While you were watching: %1$d notices</item></plurals>
+    <plurals name="elv_np_resumo_noite"><item quantity="one">During the night: %1$d notice</item><item quantity="other">During the night: %1$d notices</item></plurals>
+    <plurals name="elv_np_resumo_visita"><item quantity="one">During the visit: %1$d notice</item><item quantity="other">During the visit: %1$d notices</item></plurals>
+    <string name="elv_np_mais">+%1$d more</string>
 </resources>

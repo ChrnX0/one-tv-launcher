@@ -77,6 +77,9 @@ object Extras {
         ENTRADAS_TV(true),
         /** Cartões de app transparentes fora do foco (layout flexível, LayoutHome). Desligado de fábrica. */
         CARTOES_TRANSPARENTES(false),
+        // Elevação, onda 1 (17/11/2026)
+        /** 11.4 Não perturbe: durante filme, de madrugada ou com visita, os avisos esperam e voltam num resumo. */
+        NAO_PERTURBE(false),
     }
 
     /**

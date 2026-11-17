@@ -50,7 +50,7 @@ object HoraDormirTv {
         if (agora - ultimoAviso > 10_000) {
             ultimoAviso = agora
             AvisoTv.mostrar(servico, servico.getString(R.string.dormir_titulo), servico.getString(R.string.dormir_texto), 8,
-                som = false, guardarSeApagada = false)
+                som = false, guardarSeApagada = false, prioridade = NaoPerturbe.Tipo.REGRA)
         }
     }
 

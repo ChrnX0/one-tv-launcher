@@ -144,7 +144,8 @@ object AlarmeGarantia {
     }
 
     private fun tentarAviso(app: Context, texto: String, tentativa: Int) {
-        val r = try { AvisoTv.mostrar(app, app.getString(R.string.al_titulo), texto, 60, som = true, guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO) }
+        val r = try { AvisoTv.mostrar(app, app.getString(R.string.al_titulo), texto, 60, som = true, guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO,
+            prioridade = NaoPerturbe.Tipo.ALARME) }
             catch (e: Exception) { Log.w(TAG, "aviso de alarme perdido: $e"); AvisoTv.Resultado.SEM_ACESSIBILIDADE }
         if (r == AvisoTv.Resultado.SEM_ACESSIBILIDADE && tentativa < 12) {
             principal.postDelayed({ tentarAviso(app, texto, tentativa + 1) }, 15_000)
