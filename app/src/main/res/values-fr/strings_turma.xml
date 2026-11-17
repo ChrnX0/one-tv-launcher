@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
+<resources>
+    <string name="jogos_no_sofa">Sur le canapé</string>
+    <string name="jogos_continuar">Continuer</string>
+    <string name="jogos_controle_pronto">prête</string>
+    <string name="jogos_controle_carregar">à recharger</string>
+    <string name="jogos_parear_um">Associer une manette</string>
+    <string name="jogos_todos">Tous</string>
+    <string name="turma_titulo">Votre bande</string>
+    <string name="turma_online">%1$d en ligne</string>
+    <string name="turma_mais_online">+ %1$d en ligne</string>
+    <string name="turma_na_voz">En vocal</string>
+    <string name="turma_ausente">absent</string>
+    <string name="turma_ocupado">occupé</string>
+    <string name="turma_status_online">en ligne</string>
+    <string name="turma_ninguem">Personne en ligne pour l’instant</string>
+    <string name="turma_procurando">Recherche de votre bande…</string>
+    <string name="turma_sem_rede">Pas de connexion à Discord pour l’instant.</string>
+    <string name="turma_mostrar_titulo">Afficher votre bande Discord</string>
+    <string name="turma_mostrar_texto">Voyez sur la TV qui est en ligne, qui joue et qui est en vocal.</string>
+    <string name="turma_desligado_titulo">Le widget du serveur est désactivé</string>
+    <string name="turma_desligado_texto">Dans Discord : Paramètres du serveur, Widget, activez Activer le widget du serveur.</string>
+    <string name="turma_qr_dica">Visez ici avec votre téléphone pour rejoindre le vocal. On parle sur le téléphone.</string>
+    <string name="turma_aqui">%1$d de votre bande ici</string>
+    <string name="turma_jogando">%1$s joue à %2$s</string>
+    <string name="turma_dois">%1$s et %2$s</string>
+    <string name="turma_e_mais">%1$s et %2$d autres</string>
+    <string name="turma_chamar">Appeler la bande</string>
+    <string name="turma_chamar_pergunta">Envoyer sur le salon Discord ?</string>
+    <string name="turma_chamado_jogo">🎮 On joue à %1$s ? Je suis sur la TV.</string>
+    <string name="turma_chamado">🎮 On joue ? Je suis sur la TV.</string>
+    <string name="turma_mandar">Envoyer</string>
+    <string name="turma_enviado">Votre bande a été appelée sur Discord.</string>
+    <string name="turma_espere">Attendez une minute avant de rappeler.</string>
+    <string name="turma_falhou">Discord n’a rien reçu. Vérifiez internet ou le webhook.</string>
+    <string name="turma_config_titulo">Votre bande Discord</string>
+    <string name="turma_config_texto">1. Dans Discord : Paramètres du serveur, Widget, activez Activer le widget du serveur.\n2. Sur la même page, copiez l’ID du serveur et tapez-le ici.\n\nPour le bouton Appeler la bande, collez le webhook d’un salon dans le panneau web de la TV.</string>
+    <string name="turma_config_dica">ID du serveur (chiffres seulement)</string>
+    <string name="turma_config_guardar">Enregistrer</string>
+    <string name="turma_config_tirar">Retirer la bande</string>
+    <string name="turma_id_invalido">Ce n’est pas un ID de serveur Discord (17 à 20 chiffres).</string>
+</resources>
