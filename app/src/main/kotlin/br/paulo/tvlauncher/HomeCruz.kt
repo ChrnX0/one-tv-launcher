@@ -336,10 +336,13 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             if (alfa == 0f) v.visibility = View.INVISIBLE
             return
         }
-        v.animate().translationX(x).translationY(y).alpha(alfa).scaleX(escala).scaleY(escala)
+        val a = v.animate().translationX(x).translationY(y).alpha(alfa).scaleX(escala).scaleY(escala)
             .setDuration(ANIMA_MS).setInterpolator(interp)
             .withEndAction { if (alfa == 0f) v.visibility = View.INVISIBLE }
-            .start()
+        // Escala ou transparência mudando: anima numa camada de GPU (texto e vetor rasterizados UMA vez, não a cada
+        // quadro). Foi a cauda lenta medida na Sala (p95 42 ms, "Slow issue draw commands"). Só translação não precisa.
+        if (v.scaleX != escala || v.alpha != alfa) a.withLayer()
+        a.start()
     }
 
     // ------------------------------------------------------------------ TalkBack

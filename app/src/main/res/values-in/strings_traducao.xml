@@ -227,6 +227,10 @@
     <string name="pn_nao_achei">belum menemukan layar pemasangan</string>
     <string name="pn_6">kodenya 6 digit</string>
     <string name="pn_pareado">terpasang! memeriksa shell…</string>
+    <string name="pn_ok_titulo">Berhasil dipasangkan ✓</string>
+    <string name="pn_ok_texto">Berhasil! Launcher sudah terhubung ke TV. Menghubungkan shell-nya sendiri…</string>
+    <string name="pn_ok_shell">Semua siap: shell milik launcher berfungsi.</string>
+    <string name="pn_ok_lento">Dipasangkan. Shell belum merespons; launcher terus mencoba sendiri.</string>
     <string name="pn_codigo">Kode: %1$s</string>
     <string name="pn_achada">Layar pemasangan ditemukan (port %1$d). Ketik kodenya:</string>
     <string name="pn_falhou">gagal: %1$s</string>

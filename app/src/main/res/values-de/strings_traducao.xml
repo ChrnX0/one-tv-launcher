@@ -227,6 +227,10 @@
     <string name="pn_nao_achei">Kopplungsbildschirm noch nicht gefunden</string>
     <string name="pn_6">der Code hat 6 Ziffern</string>
     <string name="pn_pareado">gekoppelt! Shell wird geprüft …</string>
+    <string name="pn_ok_titulo">Erfolgreich gekoppelt ✓</string>
+    <string name="pn_ok_texto">Geschafft! Der Launcher ist mit dem Fernseher verbunden. Eigene Shell wird verbunden…</string>
+    <string name="pn_ok_shell">Alles bereit: Die eigene Shell des Launchers funktioniert.</string>
+    <string name="pn_ok_lento">Gekoppelt. Die Shell hat noch nicht geantwortet; der Launcher versucht es weiter.</string>
     <string name="pn_codigo">Code: %1$s</string>
     <string name="pn_achada">Kopplungsbildschirm gefunden (Port %1$d). Gib den Code ein:</string>
     <string name="pn_falhou">fehlgeschlagen: %1$s</string>

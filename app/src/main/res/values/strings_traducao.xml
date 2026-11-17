@@ -255,6 +255,10 @@
     <string name="pn_nao_achei">haven\'t found the pairing screen yet</string>
     <string name="pn_6">the code has 6 digits</string>
     <string name="pn_pareado">paired! checking the shell…</string>
+    <string name="pn_ok_titulo">Paired successfully ✓</string>
+    <string name="pn_ok_texto">Done! The launcher is now connected to the TV. Connecting its own shell…</string>
+    <string name="pn_ok_shell">All set: the launcher\'s own shell is working.</string>
+    <string name="pn_ok_lento">Paired. The shell hasn\'t answered yet; the launcher keeps trying on its own.</string>
     <string name="pn_codigo">Code: %1$s</string>
     <string name="pn_achada">Pairing screen found (port %1$d). Type the code:</string>
     <string name="pn_falhou">failed: %1$s</string>
