@@ -38,6 +38,7 @@ const RESPOSTAS = {
   '/api/apps': { apps: [{ pacote: 'com.exemplo.video', nome: 'Vídeo', oculto: false, sistema: false }] },
   '/api/tvs': { tvs: [] },
   '/api/extras/diario-tv': { itens: [], webhook: '', origens: [], ultimo: '', passos: [] },
+  '/api/papeis': { convites: [{ id: 'ab12cd34', papel: 'convidado', criado: 1795000000000, vence: 1795086400000 }, { id: 'ef56ab78', papel: 'familia', criado: 1795000000000, vence: null }] },
 };
 const servidor = http.createServer((req, res) => {
   const url = new URL(req.url, 'http://x');

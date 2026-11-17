@@ -147,6 +147,7 @@ async function atualizarEstado() {
   const e = await chamar('GET', '/api/estado');
   if (!e.logado) { mostrarEntrar(); return; }
   ultimoEstado = e;
+  aplicarPapel(e);
   $('nomeAparelho').textContent = e.aparelho;
   document.title = e.aparelho;
   aplicarNaTela(e.naTela);
@@ -252,8 +253,18 @@ const abaAberta = (antiga) => !$('telaPainel').hidden && (PAGINAS[paginaAtual]?.
  * Mostra uma página e esconde as outras. [historico]=false quando veio do botão Voltar do navegador (não empilha de
  * novo). O endereço ganha "#nome": recarregar a página ou mandar o link abre na mesma página.
  */
+// Elevação 18.1: família e visita veem só as páginas do papel (a TV também barra cada pedido, PapeisPainel.kt).
+let paginasDoPapel = [];
+function aplicarPapel(e) {
+  paginasDoPapel = Array.isArray(e.paginas) ? e.paginas : [];
+  document.body.dataset.papel = e.papel || 'dono';
+  for (const b of document.querySelectorAll('.aba[data-aba]'))
+    b.hidden = paginasDoPapel.length > 0 && !paginasDoPapel.includes(b.dataset.aba);
+}
+
 function mudarAba(nome, historico = true) {
   nome = APELIDOS[nome] || nome;
+  if (paginasDoPapel.length && !paginasDoPapel.includes(nome)) nome = paginasDoPapel[0];
   if (!nome || !PAGINAS[nome] || !$(idDaAba(nome))) nome = 'inicio';
   paginaAtual = nome;
   const secao = PAGINAS[nome].grupo || nome;
@@ -696,6 +707,53 @@ async function baixar(caminho, nome, status) {
   }
 }
 $('btnBaixar').addEventListener('click', () => baixar('/api/backup', 'launcher-backup.json', $('statusBaixar')));
+// ---------- convites: família e visita de um dia (elevação 18.1; PainelWeb "/api/papeis") ----------
+const NOMES_PAPEL = { familia: 'Família', convidado: 'Visita de um dia' };
+async function carregarConvites() {
+  const lista = $('listaConvites');
+  let r;
+  try { r = await chamar('GET', '/api/papeis'); } catch (e) { mostrar($('statusConvites'), textoErro(e)); return; }
+  lista.replaceChildren();
+  const convites = (r && r.convites) || [];
+  if (!convites.length) { const p = document.createElement('p'); p.className = 'aviso'; p.textContent = 'Nenhum convite ativo.'; lista.append(p); return; }
+  for (const c of convites) {
+    const linha = document.createElement('div'); linha.className = 'linha-registro';
+    const t = document.createElement('strong'); t.textContent = NOMES_PAPEL[c.papel] || c.papel;
+    const d = document.createElement('span');
+    d.textContent = c.vence ? 'Convite vence em ' + new Date(c.vence).toLocaleString(undefined, { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+      : 'Convite criado em ' + new Date(c.criado).toLocaleDateString();
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'botao-secundario'; b.textContent = 'Revogar';
+    b.addEventListener('click', async () => {
+      const ok = await confirmar('Revogar convite?', 'Quem entrou por convite sai do painel agora.', 'Revogar',
+        () => chamar('POST', '/api/papeis/revogar', { id: c.id }));
+      if (ok) carregarConvites();
+    });
+    linha.append(t, d, b);
+    lista.append(linha);
+  }
+}
+document.addEventListener('aba', (ev) => { if (ev.detail === 'remoto' && document.body.dataset.papel === 'dono') carregarConvites(); });
+async function criarConvite(papel) {
+  const r = await confirmar('Criar convite?', papel === 'convidado'
+    ? 'Quem abrir o link usa o controle remoto e abre apps até amanhã neste horário.'
+    : 'Quem abrir o link usa o controle remoto, abre apps e manda recados e fotos, até você revogar.',
+    'Criar', () => chamar('POST', '/api/papeis/convite', { papel }));
+  if (!r) return;
+  $('qrConvite').src = 'data:image/png;base64,' + r.qr;
+  $('linkConvite').textContent = r.link;
+  $('mostraConvite').hidden = false;
+  carregarConvites();
+}
+$('btnConviteFamilia').addEventListener('click', () => criarConvite('familia'));
+$('btnConviteVisita').addEventListener('click', () => criarConvite('convidado'));
+$('btnCopiarConvite').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText($('linkConvite').textContent); mostrar($('statusConvites'), 'Link copiado.'); }
+  catch (e) { mostrar($('statusConvites'), 'Não deu para copiar: selecione o link e copie.'); }
+});
+$('btnFecharConvite').addEventListener('click', () => {
+  $('mostraConvite').hidden = true; $('qrConvite').removeAttribute('src'); $('linkConvite').textContent = '';
+});
+
 // ---------- chave de recuperação do backup (elevação 19.6; PainelWeb "/api/backup/recuperacao") ----------
 async function carregarRecuperacao() {
   try {
@@ -2728,6 +2786,13 @@ async function enviarCompartilhado() {
 
 (async () => {
   if (location.hash.startsWith('#primeira=')) return;   // ideia 97: o assistente da 1ª configuração (primeira.js) cuida
+  // Elevação 18.1: link de convite (família ou visita). O código sai do endereço na hora (não fica no histórico).
+  if (location.hash.startsWith('#convite=')) {
+    const codigo = location.hash.slice('#convite='.length);
+    history.replaceState(null, '', location.pathname);
+    try { await chamar('POST', '/api/convite/entrar', { codigo }); await abrirPainel(); return; }
+    catch (e) { mostrarEntrar(textoErro(e)); return; }
+  }
   const qr = pegarCodigoQr();
   if (qr && await entrarPeloQr(qr)) return;
   try {

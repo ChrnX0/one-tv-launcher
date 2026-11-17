@@ -794,6 +794,26 @@
                placeholder="PIN novo de novo" aria-label="PIN novo de novo">
         <button type="button" class="botao-secundario" id="btnPinPainel">Trocar o PIN</button>
       </div>
+      <div id="cartaoOutrasPessoas" class="cartao">
+        <h2>Acesso de outras pessoas</h2>
+        <p class="aviso">Mande um convite em vez do PIN. Família: controle remoto, abrir apps, recados e fotos, até você revogar.
+          Visita de um dia: só o controle remoto e abrir apps, e o convite vence em 24 horas. Nenhum dos dois mexe em
+          configurações, backup ou apps instalados.</p>
+        <div class="barra-acoes">
+          <button type="button" class="botao-secundario" id="btnConviteFamilia">Convite para a família</button>
+          <button type="button" class="botao-secundario" id="btnConviteVisita">Convite de um dia (visita)</button>
+        </div>
+        <div id="mostraConvite" class="recuperacao" hidden>
+          <img id="qrConvite" alt="QR do convite" width="240" height="240">
+          <code id="linkConvite"></code>
+          <div class="barra-acoes">
+            <button type="button" class="botao-primario" id="btnCopiarConvite">Copiar o link</button>
+            <button type="button" class="botao-secundario" id="btnFecharConvite">Fechar</button>
+          </div>
+        </div>
+        <div id="listaConvites" class="lista-registro"></div>
+        <p id="statusConvites" class="aviso" hidden></p>
+      </div>
       <div id="cartaoInstalarComoAppHttps" class="cartao">
         <h2>Instalar como app (https)</h2>
         <p class="aviso">Com o certificado que a TV fez instalado no aparelho, o painel abre com cadeado e vira app no celular e no PC.</p>

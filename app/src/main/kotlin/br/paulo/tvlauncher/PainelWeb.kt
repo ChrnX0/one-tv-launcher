@@ -682,6 +682,7 @@ object PainelWeb {
             "/api/eventos" -> if (req.metodo == "GET") return eventos(token)
             "/api/entrar" -> if (req.metodo == "POST") return entrar(req, ip)
             "/api/entrar-qr" -> if (req.metodo == "POST") return entrarPeloQr(req, ip)
+            "/api/convite/entrar" -> if (req.metodo == "POST") return entrarPorConvite(req, ip)   // elevação 18.1
             "/api/primeira" -> if (req.metodo == "POST") return primeiraConfig(req, ip)   // ideia 97: cria o PIN
             // Ideia 99: digital do celular (passkey), só pelo https do Tailscale. Estado e desafio são livres como a
             // página de entrar; a entrada confere a assinatura.
@@ -700,6 +701,17 @@ object PainelWeb {
         if (req.caminho == "/api/tvs" && req.metodo == "GET")
             return if (sessoes.existe(token)) json(200, PainelVizinhos.json(app)) else erro(401, "entre com o PIN")
         if (!sessoes.valida(token)) return erro(401, "entre com o PIN")
+        // Elevação 18.1: a trava do papel (família, convidado) vale para TODA rota daqui para baixo, antes de qualquer
+        // leitura ou ação. O que não está na lista do papel é negado (PapeisPainel.permite).
+        val papel = sessoes.papel(token) ?: return erro(401, "entre com o PIN")
+        if (!PapeisPainel.permite(papel, req.metodo, req.caminho))
+            return erro(403, "seu acesso a esta TV não inclui isto") { put("papel", papel.chave) }
+        when (req.caminho) {
+            "/api/papeis" -> if (req.metodo == "GET") return json(200, JSONObject().put("convites",
+                JSONArray().apply { convites().forEach { put(PapeisPainel.publico(it)) } }))
+            "/api/papeis/convite" -> if (req.metodo == "POST") return criarConvite(req, token, ip, https, host)
+            "/api/papeis/revogar" -> if (req.metodo == "POST") return revogarConvite(req, token, ip)
+        }
         // Cuidar de longe (ideias 77-79, PainelCuidar.kt). A foto do pedido de ajuda é imagem: sai daqui mesmo.
         if (req.caminho == "/api/cuidar/foto" && req.metodo == "GET") {
             val f = CuidarDeLongeTv.fotoAjuda(app) ?: return erro(404, "sem foto de pedido de ajuda nas últimas 24 h")
@@ -1083,6 +1095,8 @@ object PainelWeb {
             o.put("aparelho", Settings.Global.getString(app.contentResolver, "device_name") ?: "TV")
             o.put("naTela", PainelApps.naTela(app))
             o.put("elevada", sessoes.elevada(token))
+            val papel = sessoes.papel(token) ?: PapeisPainel.Papel.DONO
+            o.put("papel", papel.chave).put("paginas", JSONArray(PapeisPainel.paginas(papel)))
         }
         return json(200, o)
     }
@@ -1401,6 +1415,41 @@ object PainelWeb {
     }
 
     private fun precisaPin() = erro(403, "confirme o PIN") { put("precisaPin", true) }
+
+    // ---------------------------------------------------------------- papéis e convites (elevação 18.1, PapeisPainel)
+
+    private fun prefsPapeis() = app.getSharedPreferences("painel_papeis", android.content.Context.MODE_PRIVATE)
+    @Synchronized private fun convites() = PapeisPainel.validos(PapeisPainel.deJson(prefsPapeis().getString("convites", null)), System.currentTimeMillis())
+    @Synchronized private fun salvarConvites(l: List<PapeisPainel.Convite>) { prefsPapeis().edit().putString("convites", PapeisPainel.paraJson(l)).commit() }
+
+    private fun criarConvite(req: Requisicao, token: String?, ip: String, https: Boolean, host: String?): Resposta {
+        if (!sessoes.elevada(token)) return precisaPin()
+        val papel = PapeisPainel.Papel.de(corpoJson(req)?.optString("papel"))?.takeIf { it != PapeisPainel.Papel.DONO }
+            ?: return erro(400, "papel inválido")
+        val (codigo, lista) = synchronized(this) { PapeisPainel.criar(convites(), papel, System.currentTimeMillis()).also { salvarConvites(it.second) } }
+        val link = (if (https) "https://" else "http://") + host + "/#convite=" + codigo
+        PainelArmazem.registrar(app, ip, "convite criado", papel.chave)   // o código nunca vai para o registro
+        return json(200, JSONObject().put("link", link).put("papel", papel.chave)
+            .put("qr", java.util.Base64.getEncoder().encodeToString(QrCodigo.png(link, 480))), mapOf("Cache-Control" to "no-store"))
+    }
+
+    private fun revogarConvite(req: Requisicao, token: String?, ip: String): Resposta {
+        if (!sessoes.elevada(token)) return precisaPin()
+        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
+        synchronized(this) { salvarConvites(if (o.optBoolean("todos")) emptyList() else PapeisPainel.revogar(convites(), o.optString("id"))) }
+        sessoes.encerrarConvidados()
+        PainelArmazem.registrar(app, ip, "convite revogado", if (o.optBoolean("todos")) "todos" else o.optString("id").take(8))
+        return json(200, JSONObject().put("ok", true))
+    }
+
+    /** Entrar pelo link do convite: sessão do papel do convite (convidado: cai quando o convite vence). */
+    private fun entrarPorConvite(req: Requisicao, ip: String): Resposta {
+        val c = PapeisPainel.usar(convites(), corpoJson(req)?.optString("codigo"), System.currentTimeMillis())
+            ?: return erro(401, "convite vencido ou revogado")
+        val token = sessoes.criar(elevada = false, papel = c.papel, venceEm = c.vence ?: Long.MAX_VALUE)
+        PainelArmazem.registrar(app, ip, "entrou por convite", c.papel.chave)
+        return json(200, JSONObject().put("ok", true).put("papel", c.papel.chave), cookieSessao(token))
+    }
 
     /**
      * Confirmações (ConfirmacoesTv): com o modo "Perguntar na TV", mostra a pergunta e espera até 60 s (esta requisição
