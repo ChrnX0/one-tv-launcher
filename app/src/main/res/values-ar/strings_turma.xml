@@ -40,4 +40,7 @@
     <string name="turma_config_guardar">حفظ</string>
     <string name="turma_config_tirar">إزالة الأصدقاء</string>
     <string name="turma_id_invalido">هذا ليس معرّف خادم Discord (من 17 إلى 20 رقمًا).</string>
+    <string name="cruz_sofa">الأريكة</string>
+    <string name="cruz_sofa_sub">وحدات التحكم وأصدقاؤك على Discord</string>
+    <string name="cruz_sofa_voz">%1$d في الصوت · %2$s</string>
 </resources>

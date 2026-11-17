@@ -40,4 +40,7 @@
     <string name="turma_config_guardar">Simpan</string>
     <string name="turma_config_tirar">Hapus geng</string>
     <string name="turma_id_invalido">Ini bukan ID server Discord (17 sampai 20 angka).</string>
+    <string name="cruz_sofa">Sofa</string>
+    <string name="cruz_sofa_sub">Kontroler dan geng Discord-mu</string>
+    <string name="cruz_sofa_voz">%1$d di voice · %2$s</string>
 </resources>
