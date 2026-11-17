@@ -134,6 +134,8 @@ jobs:
           TRAKT_SEGREDO: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && secrets.TRAKT_SEGREDO || '' }}
           SIMKL_ID: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && secrets.SIMKL_ID || '' }}
           OPENSUBTITLES_CHAVE: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && secrets.OPENSUBTITLES_CHAVE || '' }}
+          # Para onde vai o "Relatar um problema" (RelatarProblema.kt). Variável do repo, não secret: o e-mail aparece no QR.
+          SUPORTE_EMAIL: ${{ vars.SUPORTE_EMAIL || '' }}
         run: |
           chmod +x gradlew
           # Ideia 101: o app de celular sai junto (mesma chave). Num "commit=" antigo sem a pasta celular/, só o launcher.

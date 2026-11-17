@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Ideia 72 (14/11/2026): o que a TV mostra antes de executar uma ação do catálogo (ComandosIa), no idioma da TV. -->
 <resources>
-    <string name="app_nome" translatable="false">One TV Launcher</string>
+    <string name="app_nome" translatable="false">Sofaly</string>
     <string name="l72_abrir">Open %1$s</string>
     <string name="l72_tela_previsao">the weather forecast</string>
     <string name="l72_tela_agenda">the calendar</string>

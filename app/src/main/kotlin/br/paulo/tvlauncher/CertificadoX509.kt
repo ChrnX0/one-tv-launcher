@@ -55,7 +55,7 @@ object CertificadoX509 {
         val chaveSrv = novaChave(aleatorio)
         val inicio = agora - 24 * 3600_000L                    // um dia antes: relógio do celular um pouco atrás
         val fim = agora + DIAS_VALIDADE * 24 * 3600_000L
-        val nomeCa = nome("One TV $rotulo (painel)".take(60))
+        val nomeCa = nome("Sofaly $rotulo (painel)".take(60))
         val nomeSrv = nome(nomes.first())
         val skiCa = idChave(chaveCa)
         val skiSrv = idChave(chaveSrv)
@@ -151,7 +151,7 @@ object CertificadoX509 {
 
     /** CN (e O fixo), em UTF8String. */
     private fun nome(cn: String): ByteArray = seq(
-        set(seq(oid(OID_O), tlv(0x0c, "One TV Launcher".toByteArray(Charsets.UTF_8)))),
+        set(seq(oid(OID_O), tlv(0x0c, "Sofaly".toByteArray(Charsets.UTF_8)))),
         set(seq(oid(OID_CN), tlv(0x0c, cn.toByteArray(Charsets.UTF_8)))),
     )
 

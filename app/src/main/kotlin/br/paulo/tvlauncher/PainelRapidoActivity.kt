@@ -816,7 +816,7 @@ class PainelRapidoActivity : Activity() {
         // sumiam quando o seguinte chegava. OK mostra de novo na tela; o X tira da lista.
         if (daTv.isNotEmpty()) {
             listaAvisos.addView(Estilo.secao(this, getString(R.string.pr_avisos_tv).uppercase() + " · ${daTv.size}"))
-            val app = "One TV"   // nome do produto, não traduz
+            val app = "Sofaly"   // nome do produto, não traduz
             for ((i, h) in daTv.withIndex()) {
                 val a = NotificacoesTv.Aviso("tv:${h.quando}", packageName, app, h.titulo, h.texto, h.quando)
                 listaAvisos.addView(linhaAviso(a, agora,

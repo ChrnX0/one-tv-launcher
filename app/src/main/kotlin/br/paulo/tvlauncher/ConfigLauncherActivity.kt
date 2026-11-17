@@ -974,6 +974,13 @@ class ConfigLauncherActivity : Activity() {
             linhaPacote.valor(rotuloPacote())   // a HOME redesenha sozinha ao voltar: o pacote entra na chave do cache
         }
         c.addView(linhaPacote, lp())
+        // Visuais prontos (revisão dos degraus, 1b, 17/11/2026): cada OK aplica o próximo da lista (VisualCodigo.PRONTOS).
+        fun rotuloPronto() = VisualCodigo.prontoAtual(VisualCodigoTv.atual(this))?.let { nomePronto(it.id) } ?: getString(R.string.vpr_meu)
+        c.addView(linha(getString(R.string.vpr_titulo), getString(R.string.vpr_det), valor = rotuloPronto()) {
+            val p = VisualCodigo.proximoPronto(VisualCodigoTv.atual(this))
+            VisualCodigoTv.aplicar(this, VisualCodigo.codificar(p.visual))
+            recreate()   // tema e tamanho do texto mudam a própria tela de Configurações
+        }, lp())
         // Tema por QR (degrau 1, 15/11/2026): mostra o código do visual desta TV num QR; o celular abre a página pública.
         c.addView(linha(getString(R.string.vq_titulo), getString(R.string.vq_det), seta = true) { mostrarQrVisual() }, lp())
         // Apps ocultos (14/11/2026): o card "Ocultos (N)" saiu da HOME; mostrar de volta é aqui.
@@ -2033,6 +2040,12 @@ class ConfigLauncherActivity : Activity() {
             pintarTextos()
         }
     }
+
+    private fun nomePronto(id: String) = getString(when (id) {
+        "leitura" -> R.string.vpr_leitura; "galeria" -> R.string.vpr_galeria; "galeria_grande" -> R.string.vpr_galeria_grande
+        "grade" -> R.string.vpr_grade; "grade_grande" -> R.string.vpr_grade_grande; "cores" -> R.string.vpr_cores
+        "cinema" -> R.string.vpr_cinema; else -> R.string.vpr_classico
+    })
 
     /** O QR do "Compartilhar visual": cartão por cima, com o link curto embaixo para quem não tem leitor de QR. */
     private fun mostrarQrVisual() {

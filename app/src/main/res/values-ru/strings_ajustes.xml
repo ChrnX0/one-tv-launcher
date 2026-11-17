@@ -91,7 +91,7 @@
     <string name="vp_pronto_det">Перейти на главный экран.</string>
     <string name="vq_titulo">Поделиться оформлением</string>
     <string name="vq_det">Показывает QR-код с оформлением этого ТВ: тема, размер текста, значки.</string>
-    <string name="vq_texto">Отсканируйте его телефоном, чтобы сохранить или отправить тому, у кого есть One TV.</string>
+    <string name="vq_texto">Отсканируйте его телефоном, чтобы сохранить или отправить тому, у кого есть Sofaly.</string>
     <string name="vq_fechar">Закрыть</string>
     <string name="lh_titulo">Размер карточек приложений</string>
     <string name="lh_det">Крупные карточки лучше видно с дивана.</string>

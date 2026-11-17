@@ -20,4 +20,12 @@ class PlanosTest {
         assertEquals(1, Planos.listasIptv(Plano.BASICO)); assertEquals(3, Planos.tvsPorCompra(Plano.ULTRA))
         assertEquals(Recurso.values().size, Planos.MINIMO.size)   // todo recurso tem dono
     }
+
+    /** Degraus 3 e 4 (Paulo, 17/11/2026): Pro o que a TV faz sozinha; Ultra o que tem custo no servidor. */
+    @Test fun divisaoDosDegraus3e4() {
+        for (r in listOf(Recurso.FAMILIA_LINK, Recurso.RECADO_VIDEO, Recurso.SOM_NO_FONE, Recurso.CONTINUAR_OUTRA_TV, Recurso.PLUGINS))
+            assertEquals(r.name, Plano.PRO, Planos.MINIMO[r])
+        for (r in listOf(Recurso.VARIAS_CASAS, Recurso.SESSAO_JUNTO, Recurso.SERVIDOR_SOFALY))
+            assertEquals(r.name, Plano.ULTRA, Planos.MINIMO[r])
+    }
 }

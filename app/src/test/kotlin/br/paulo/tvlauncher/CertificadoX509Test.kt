@@ -33,7 +33,7 @@ class CertificadoX509Test {
         e.servidor.verify(e.ca.publicKey)    // e o servidor
         assertEquals(e.ca.subjectX500Principal, e.servidor.issuerX500Principal)
         assertEquals(3, e.servidor.version)
-        assertTrue(e.ca.subjectX500Principal.name.contains("One TV Sala (painel)"))
+        assertTrue(e.ca.subjectX500Principal.name.contains("Sofaly Sala (painel)"))
     }
 
     @Test fun caEhCaEServidorNao() {

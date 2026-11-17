@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App do celular (revisão dos degraus, T5, 17/11/2026). Caminho do menu = o mesmo texto da TV neste idioma. -->
+<resources>
+    <string name="cel_titulo">Tus TV</string>
+    <string name="cel_mandar_para">¿A qué TV enviar?</string>
+    <string name="cel_ler_qr">Leer el código QR de la TV</string>
+    <string name="cel_vazio">Todavía no hay ninguna TV. En la TV, abre Ajustes › Acceso remoto › Iniciar sesión con tu teléfono; luego toca el botón de abajo y apunta la cámara al código.</string>
+    <string name="cel_pareada_segura">%1$s · conexión segura</string>
+    <string name="cel_pareada_http">%1$s · red de casa</string>
+    <string name="cel_na_rede">Encontradas en la red</string>
+    <string name="cel_achada">%1$s · aún sin vincular</string>
+    <string name="cel_achada_explica">Para una conexión segura, lee el código QR una vez: en la TV, Ajustes › Acceso remoto › Iniciar sesión con tu teléfono. O ábrela ahora y entra con el PIN.</string>
+    <string name="cel_abrir_pin">Abrir con el PIN</string>
+    <string name="cel_esquecer">Olvidar</string>
+    <string name="cel_esquecer_explica">Este teléfono olvida esta TV. Para usarla de nuevo, lee el código QR.</string>
+    <string name="cel_aponte">Apunta al código de la TV</string>
+    <string name="cel_qr_invalido">Este no es un código de la TV. En la TV, abre Ajustes › Acceso remoto › Iniciar sesión con tu teléfono.</string>
+    <string name="cel_cert_outro">La TV respondió con otro certificado. Si lo renovaste, lee el código QR de nuevo.</string>
+    <string name="cel_casa_padrao">Casa</string>
+    <string name="cel_casa_qual">¿En qué casa está esta TV?</string>
+    <string name="cel_casa_nova">Otra casa…</string>
+    <string name="cel_casa_dica">p. ej.: Playa, Casa de mamá</string>
+</resources>

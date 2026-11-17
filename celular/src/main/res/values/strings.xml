@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="cel_nome">One TV</string>
+    <string name="cel_nome" translatable="false">Sofaly</string>
     <string name="cel_titulo">Your TVs</string>
     <string name="cel_mandar_para">Send to which TV?</string>
     <string name="cel_ler_qr">Read the TV\'s QR code</string>
