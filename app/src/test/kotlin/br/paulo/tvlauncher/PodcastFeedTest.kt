@@ -102,6 +102,13 @@ class PodcastFeedTest {
     }
 
     @Test
+    fun feedCortadoNoMeioValeComOQueLeu() {
+        // Feed real maior que o limite chega cortado (medido 17/11/2026: 20,7 MB). Os episódios inteiros já lidos valem.
+        val cortado = feed.substring(0, feed.indexOf("<title>Repetido"))
+        assertEquals(listOf("ep-2", "ep-1"), PodcastFeed.ler(parser(cortado))!!.episodios.map { it.guid })
+    }
+
+    @Test
     fun duracoes() {
         assertEquals(3600, PodcastFeed.duracao("3600"))
         assertEquals(90, PodcastFeed.duracao("1:30"))

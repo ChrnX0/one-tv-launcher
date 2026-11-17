@@ -14,12 +14,15 @@ import java.util.Locale
  * (podcast:transcript = transcrição, podcast:chapters = capítulos, podcast:locked).
  *
  * Proteções (feed inválido ou gigante não pode derrubar a tela): no máximo [MAX_EPISODIOS] episódios, textos cortados,
- * endereços só http(s), e quem baixa corta o arquivo em [MAX_BYTES].
+ * endereços só http(s), e quem baixa corta o arquivo em [MAX_BYTES]. Feed cortado (ou com erro no meio) vale com os
+ * episódios lidos até ali: feeds reais de podcast antigo passam de 20 MB (medido 17/11/2026: um de 20,7 MB, o Nerdcast
+ * com 8,9 MB), quase sempre com o mais novo primeiro. A leitura para em [MAX_LIDOS] episódios.
  */
 object PodcastFeed {
     const val MAX_EPISODIOS = 300
     const val MAX_BYTES = 8L * 1024 * 1024
     const val MAX_OPML = 500
+    const val MAX_LIDOS = 600
     private const val MAX_TEXTO = 600
 
     data class Transcricao(val url: String, val tipo: String, val idioma: String)
@@ -56,8 +59,8 @@ object PodcastFeed {
         var e: MutableMap<String, String>? = null
         var transcricoes = ArrayList<Transcricao>()
         val pilha = ArrayList<String>()
-        var tipo = p.eventType
-        while (tipo != XmlPullParser.END_DOCUMENT) {
+        var tipo = try { p.eventType } catch (_: Exception) { XmlPullParser.END_DOCUMENT }
+        while (tipo != XmlPullParser.END_DOCUMENT && episodios.size < MAX_LIDOS) {
             when (tipo) {
                 XmlPullParser.START_TAG -> {
                     val n = p.name.lowercase()
@@ -121,7 +124,8 @@ object PodcastFeed {
                     }
                 }
             }
-            tipo = p.next()
+            // Erro no meio (arquivo cortado no limite, XML quebrado): fica com o que já leu.
+            tipo = try { p.next() } catch (_: Exception) { XmlPullParser.END_DOCUMENT }
         }
         if (!temCanal || episodios.isEmpty()) return null
         return Feed(limpar(titulo, 200), limpar(autor, 200), limpar(descricao, MAX_TEXTO), capa.takeIf { urlValida(it) }.orEmpty(),

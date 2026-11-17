@@ -225,8 +225,7 @@ object Podcasts {
                     }
                     cod != 200 -> return Leitura.Erro("o servidor respondeu $cod")
                 }
-                val tam = c.contentLengthLong
-                if (tam > PodcastFeed.MAX_BYTES) return Leitura.Erro("feed grande demais")
+                // Feed maior que o limite: lê só o começo (o mais novo vem primeiro); PodcastFeed.ler aceita o corte.
                 val f = c.inputStream.use { e ->
                     val p = android.util.Xml.newPullParser()
                     p.setInput(Limitado(e, PodcastFeed.MAX_BYTES), null)
