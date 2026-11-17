@@ -362,6 +362,27 @@ class VodActivity : Activity() {
                 relato = tocavel?.relato
                 cabecalhos = tocavel?.cabecalhos?.takeIf { it.isNotEmpty() } ?: cabAddon.takeIf { it.isNotEmpty() } ?: m3u?.second?.takeIf { it.isNotBlank() }?.let { mapOf("User-Agent" to it) }.orEmpty()
                 tocar()
+                buscarAberturaPronta(ab)
+            }
+        }
+    }
+
+    /**
+     * Elevação 6.3: a abertura deste episódio marcada pela comunidade (IntroDB). Chega depois do vídeo começar (o
+     * pedido nunca atrasa o play) e vale antes da marcação manual da série, que é uma só para todos os episódios e
+     * fica de reserva. Se a pessoa marcou à mão enquanto o pedido ia, vale o que ela marcou.
+     */
+    private fun buscarAberturaPronta(manual: AberturaSerie.Marca?) {
+        if (!serie) return
+        val b = runCatching { buscaLegenda() }.getOrNull() ?: return
+        val tmdb = b.tmdb ?: return
+        if (!b.eEpisodio) return
+        Fundo.rodar("abertura-pronta") {
+            val m = runCatching { AberturaProntaTv.buscar(this, tmdb, b.temporada!!, b.episodio!!) }.getOrNull() ?: return@rodar
+            tela.post {
+                if (isDestroyed) return@post
+                if (abertura !== manual && !aberturaDoArquivo) return@post   // a pessoa marcou enquanto isso
+                abertura = m; aberturaDoArquivo = false; vigiarAbertura()
             }
         }
     }
