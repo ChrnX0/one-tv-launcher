@@ -33,7 +33,13 @@ class FfAudioDecodificador(formato: Format, tamanhoEntrada: Int, private val pcm
 
     companion object { private const val BUFFERS = 16 }
 
-    private val codec = FfCodecs.audio(formato.sampleMimeType, formato.codecs) ?: throw FfErro("sem codec para ${formato.sampleMimeType}")
+    /**
+     * Falha na criação: o SimpleDecoder já deu start na thread dele no construtor; sem este release a thread e os
+     * buffers ficavam vivos para sempre (um vazamento a cada nova tentativa do player).
+     */
+    private fun falhar(motivo: String): Nothing { super.release(); throw FfErro(motivo) }
+
+    private val codec = FfCodecs.audio(formato.sampleMimeType, formato.codecs) ?: falhar("sem codec para ${formato.sampleMimeType}")
     private val extra = FfCodecs.extra(formato.sampleMimeType, formato.initializationData)
     private val taxaDeclarada = formato.sampleRate
     private val canaisDeclarados = formato.channelCount
@@ -46,10 +52,10 @@ class FfAudioDecodificador(formato: Format, tamanhoEntrada: Int, private val pcm
     init { setInitialInputBufferSize(tamanhoEntrada) }
 
     private fun abrir(): Long {
-        if (!FfNativo.disponivel) throw FfErro("FFmpeg não carregou")
+        if (!FfNativo.disponivel) falhar("FFmpeg não carregou")
         val c = FfNativo.audioAbrir(codec, extra, maxOf(taxaDeclarada, 0), maxOf(canaisDeclarados, 0), pcmFloat,
             contener[0], bitrate, contener[1])
-        if (c == 0L) throw FfErro("FFmpeg não abriu $codec")
+        if (c == 0L) falhar("FFmpeg não abriu $codec")
         return c
     }
 
