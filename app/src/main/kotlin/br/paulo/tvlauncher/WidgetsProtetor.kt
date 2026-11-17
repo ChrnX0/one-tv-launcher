@@ -99,7 +99,7 @@ class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
         col.addView(LinearLayout(ctx).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
             addView(iconeClima(d.codigo, d.eDia, d.chovendo), LinearLayout.LayoutParams(dp(54), dp(54)))
-            addView(texto("${d.temp}°", 84f, Fontes.manrope(ctx, 200)).apply { letterSpacing = -0.05f; sombrear() }, lp(10))
+            addView(texto("${d.temp}°", 84f, Fontes.nunito(ctx, 200)).apply { letterSpacing = -0.05f; sombrear() }, lp(10))
         }, LinearLayout.LayoutParams(-2, -2).apply { gravity = Gravity.END })
         col.addView(texto(fraseDoTempo(d), 16f, m600).apply { linhaUnica(); maxWidth = dp(420); gravity = Gravity.END; sombrear() },
             LinearLayout.LayoutParams(-2, -2).apply { gravity = Gravity.END; topMargin = dp(2) })

@@ -76,7 +76,7 @@ class ProtetorTempoTelaTest {
             val d = a.resources.displayMetrics.density
             val raiz = FrameLayout(a)
             raiz.addView(ImageView(a).apply { scaleType = ImageView.ScaleType.FIT_XY; setImageBitmap(fundo) }, FrameLayout.LayoutParams(-1, -1))
-            val linhas = LinhasTempo(a, Fontes.manrope(a, 400), Fontes.manrope(a, 600))
+            val linhas = LinhasTempo(a, Fontes.nunito(a, 400), Fontes.nunito(a, 600))
             // Mesmo lugar do protetor: 36 + 6 dp da esquerda, embaixo da data (~230 dp do topo).
             raiz.addView(linhas, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.START).apply {
                 leftMargin = (42 * d).toInt(); topMargin = (230 * d).toInt()
