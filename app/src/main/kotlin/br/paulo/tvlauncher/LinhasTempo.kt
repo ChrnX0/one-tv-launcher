@@ -96,6 +96,9 @@ class LinhasTempo(private val ctx: Context, private val m400: Typeface, private 
     private val bolinhas: LinearLayout
     private var itens: List<Curiosidades.Item> = emptyList()
     private var atual = 0
+    /** Liga/desliga de cada linha nas Configurações (protetor v2, 17/11/2026). Desligada = some mesmo com dado. */
+    var comFrase = true
+    var comCuriosidades = true
 
     init {
         orientation = VERTICAL
@@ -127,14 +130,16 @@ class LinhasTempo(private val ctx: Context, private val m400: Typeface, private 
             t != null -> IconesClima.texto(t.codigo)   // nada especial a dizer: o céu de agora
             else -> null
         }
-        linhaFrase.visibility = if (textoFrase == null) GONE else VISIBLE
+        val fraseVisivel = textoFrase != null && comFrase
+        linhaFrase.visibility = if (fraseVisivel) VISIBLE else GONE
         frase.text = textoFrase ?: ""
         iconeFrase.setImageDrawable(iconeCeu); iconeFrase.visibility = if (iconeCeu == null) GONE else VISIBLE
         val mudou = lista != itens
         itens = lista
         if (mudou) atual = 0
-        linhaCurio.visibility = if (itens.isEmpty()) GONE else VISIBLE
-        visibility = if (textoFrase == null && itens.isEmpty()) GONE else VISIBLE
+        val curioVisivel = itens.isNotEmpty() && comCuriosidades
+        linhaCurio.visibility = if (curioVisivel) VISIBLE else GONE
+        visibility = if (!fraseVisivel && !curioVisivel) GONE else VISIBLE
         desenharCuriosidade()
         removeCallbacks(trocar)
         if (itens.size > 1) postDelayed(trocar, TROCA_MS)
@@ -142,7 +147,7 @@ class LinhasTempo(private val ctx: Context, private val m400: Typeface, private 
 
     private val trocar = object : Runnable {
         override fun run() {
-            if (itens.size < 2) return
+            if (itens.size < 2 || !comCuriosidades) return
             // Esmaece, troca e volta: nada pisca na tela parada.
             linhaCurio.animate().alpha(0f).setDuration(500).withEndAction {
                 atual = (atual + 1) % itens.size

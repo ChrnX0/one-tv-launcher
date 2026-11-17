@@ -53,4 +53,15 @@ class TeclasProtetorTest {
         assertEquals(0, TeclasProtetor.inicioJanela(-1, 5, 3))
         assertEquals(0, TeclasProtetor.inicioJanela(2, 3, 3))
     }
+
+    /** Protetor v2, "só a hora" (17/11/2026): com tudo escondido, a 1ª tecla só mostra; Voltar fecha; volume age. */
+    @Test fun comTudoEscondidoA1aTeclaSoMostra() {
+        fun o(t: Int) = TeclasProtetor.acao(t, 3, null, true, oculto = true)
+        assertEquals(Acao.MOSTRAR, o(KeyEvent.KEYCODE_DPAD_CENTER))
+        assertEquals(Acao.MOSTRAR, o(KeyEvent.KEYCODE_DPAD_RIGHT))
+        assertEquals(Acao.MOSTRAR, o(KeyEvent.KEYCODE_DPAD_DOWN))
+        assertEquals(Acao.FECHAR, o(KeyEvent.KEYCODE_BACK))
+        assertEquals(Acao.DEIXAR_PASSAR, o(KeyEvent.KEYCODE_VOLUME_UP))
+        assertEquals(Acao.ALTERNAR_MUSICA, o(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE))
+    }
 }

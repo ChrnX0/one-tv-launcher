@@ -85,4 +85,7 @@ object Fontes {
 
     /** Fraunces itálica (serifa "de museu", OFL): o nome da obra no protetor. */
     fun fraunces(ctx: Context): Typeface = carregar(ctx, "fraunces_italic.ttf")
+
+    /** Fraunces reta, peso 300 (OFL): o relógio "Editorial" do protetor (17/11/2026). */
+    fun fraunces300(ctx: Context): Typeface = carregar(ctx, "fraunces_300.ttf")
 }
