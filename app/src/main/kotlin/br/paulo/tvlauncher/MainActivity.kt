@@ -2524,11 +2524,18 @@ class MainActivity : Activity() {
         if (recolher == barraRecolhida && animar) return
         barraRecolhida = recolher
         val d = if (animar) 220L else 0L
+        fun mexer(v: View, fica: Boolean) =
+            v.animate().alpha(if (!recolher || fica) 1f else 0f).translationY(if (recolher && !fica) -dp(24).toFloat() else 0f).setDuration(d).start()
         for (i in 0 until topo.childCount) {
             val v = topo.getChildAt(i)
             // Recua: a direita (hora, e a temperatura) fica; Relógio: some tudo (a hora está grande embaixo).
             val fica = recolher && i == 2 && barraCruz == LayoutHome.BarraCruz.RECUA
-            v.animate().alpha(if (!recolher || fica) 1f else 0f).translationY(if (recolher && !fica) -dp(24).toFloat() else 0f).setDuration(d).start()
+            // A pílula "Tocando agora" nunca some com a barra (visto na TV 17/11/2026: estava na árvore de acessibilidade,
+            // mas invisível): o grupo dela fica, e só os vizinhos (busca, clima, avisos) recolhem.
+            if (v is ViewGroup && capsulaTocando.parent === v) {
+                v.animate().cancel(); v.alpha = 1f; v.translationY = 0f
+                for (j in 0 until v.childCount) v.getChildAt(j).let { mexer(it, fica || it === capsulaTocando) }
+            } else mexer(v, fica)
         }
         tempoCruz?.animate()?.alpha(if (recolher) 1f else 0f)?.setDuration(d)?.start()
         relogioCruz?.animate()?.alpha(if (recolher) 1f else 0.35f)?.setDuration(d)?.start()
