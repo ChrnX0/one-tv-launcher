@@ -271,14 +271,15 @@ class DiagnosticoActivity : Activity() {
     /** O que a linha mostra, guardado na própria linha para remontar com as cores certas quando o foco muda. */
     private data class Conteudo(val titulo: String, val detalhe: String, val nivel: Int)
 
-    /** "● Título" (bolinha na cor do nível; -1 = sem bolinha) e o detalhe embaixo, menor e suave. */
+    /** "✓ Título" (sinal e cor do nível; -1 = sem sinal) e o detalhe embaixo, menor e suave. */
     private fun TextView.montarLinha(titulo: String, detalhe: String, nivel: Int, foco: Boolean = false) {
         tag = Conteudo(titulo, detalhe, nivel)
         val claro = if (foco) Estilo.TEXTO_NO_FOCO else textoClaro
         val suave = if (foco) Estilo.TEXTO_NO_FOCO_2 else textoSuave
         val sb = SpannableStringBuilder()
         if (nivel in 0..2) {
-            sb.append("● ")
+            // Elevação 16.4: o sinal muda com o nível (✓ ok, ! atenção, ✕ falha), além da cor.
+            sb.append(arrayOf(CorSegura.SINAL_OK, CorSegura.SINAL_ATENCAO, CorSegura.SINAL_FALHA)[nivel] + "  ")
             sb.setSpan(ForegroundColorSpan(if (foco) Estilo.TEXTO_NO_FOCO else cores[nivel]), 0, sb.length, 0)
             sb.setSpan(AbsoluteSizeSpan(dp(18), false), 0, sb.length, 0)
         }

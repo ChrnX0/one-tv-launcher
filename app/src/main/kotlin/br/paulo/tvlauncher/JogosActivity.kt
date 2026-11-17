@@ -352,6 +352,11 @@ class JogosActivity : Activity() {
                     TurmaDiscord.Status.AUSENTE -> Estilo.ATENCAO
                     TurmaDiscord.Status.OCUPADO -> Estilo.ERRO
                 }, Estilo.RAIO_PILULA, Estilo.FUNDO, 2)
+                contentDescription = getString(when (m.status) {   // 16.1/16.4: a bolinha diz o status ao leitor de tela
+                    TurmaDiscord.Status.ONLINE -> R.string.turma_status_online
+                    TurmaDiscord.Status.AUSENTE -> R.string.turma_ausente
+                    TurmaDiscord.Status.OCUPADO -> R.string.turma_ocupado
+                })
             }, FrameLayout.LayoutParams(dp(12), dp(12), Gravity.BOTTOM or Gravity.END))
         }
         addView(avatar, LinearLayout.LayoutParams(dp(34), dp(34)).apply { marginEnd = dp(10) })
@@ -360,11 +365,13 @@ class JogosActivity : Activity() {
             addView(Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO, m.nome).apply {
                 textSize = 17f; typeface = Estilo.fonte(700); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
             })
-            val sub = m.jogo ?: getString(when (m.status) {
+            val status = getString(when (m.status) {
                 TurmaDiscord.Status.ONLINE -> R.string.turma_status_online
                 TurmaDiscord.Status.AUSENTE -> R.string.turma_ausente
                 TurmaDiscord.Status.OCUPADO -> R.string.turma_ocupado
             })
+            // Elevação 16.4: jogando e ausente/ocupado, a palavra do status vai junto (a bolinha sozinha era só cor).
+            val sub = when { m.jogo == null -> status; m.status == TurmaDiscord.Status.ONLINE -> m.jogo; else -> "$status · ${m.jogo}" }
             addView(Estilo.texto(this@JogosActivity, Estilo.Papel.LEGENDA, sub).apply {
                 textSize = 14f; maxLines = 1; ellipsize = TextUtils.TruncateAt.END
                 if (m.jogo != null) setTextColor(Estilo.TEXTO)
