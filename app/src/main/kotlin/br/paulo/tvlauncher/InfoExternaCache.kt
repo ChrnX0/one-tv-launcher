@@ -293,7 +293,10 @@ object InfoExternaCache {
     // ================================================================ Nota do Simkl (manutenção da noite)
 
     /**
-     * Nota da comunidade do Simkl para todos, sem login (16/11/2026). Como a do Trakt: de madrugada, até
+     * Nota da comunidade do Simkl, SÓ para quem conectou a própria conta Simkl (17/11/2026), salvo com a licença e o
+     * plano Pro ([DataSources.simklSemLogin], 19/11/2026). A Simkl respondeu que sincronizar a conta da pessoa não pede
+     * licença comercial, mas mostrar a nota sem login pede; então o pedido vai com o token da pessoa e, sem conta (e sem a
+     * licença), nada é pedido e as notas guardadas são apagadas ([esquecerSimkl]). Como a do Trakt: de madrugada, até
      * [MAX_SIMKL_POR_NOITE] títulos, cada nota vale 30 dias. Uma pergunta por título (a ficha, em cache no Cloudflare). O
      * id do Simkl vem do que já sabemos (catálogo e biblioteca da pessoa); só título nunca visto passa pelo /redirect,
      * uma vez por id TMDB (pedido do Simkl, 18/11/2026). Para no primeiro erro ou
@@ -302,10 +305,14 @@ object InfoExternaCache {
     fun noturnoSimkl(ctx: Context): Int {
         val app = ctx.applicationContext
         val cliente = chaves().simklId.takeIf { it.isNotBlank() } ?: return -1
+        // Sem a conta Simkl da pessoa e sem a licença: nenhum pedido, e some a nota que tiver ficado (de antes de
+        // 17/11/2026 ou de quem saiu). Com a licença (Pro), sem conta pede só com a chave do app.
+        val token = ServicosContas.conta(app, ServicosFilmes.Servico.SIMKL)?.acesso?.takeIf { it.isNotBlank() }
+        if (token == null && !DataSources.simklSemLogin(app)) { esquecerSimkl(app); return -1 }
         val agora = System.currentTimeMillis()
         val fila = filaDaNoite(app, MAX_SIMKL_POR_NOITE) { agora - (it?.simklEm ?: 0) in 0 until InfoExterna.SIMKL_VALIDADE_MS } ?: return -1
         val versao = BuildConfig.VERSION_CODE
-        val cab = ServicosFilmes.simklCabecalhos(cliente, versao)
+        val cab = ServicosFilmes.simklCabecalhos(cliente, versao, token)
         // Ids já sabidos (catálogo + biblioteca da pessoa): o /redirect é busca ao vivo sem cache no Simkl e os ids não
         // mudam, então só pergunta por título nunca visto, e uma vez por id TMDB (não uma por versão). 18/11/2026.
         val conhecidos = InfoExterna.simklConhecidos(simklDoCatalogo(app), runCatching { ServicosSync.idsSimklDaBiblioteca(app) }.getOrDefault(emptyMap()))
@@ -358,6 +365,20 @@ object InfoExternaCache {
     }
 
     private const val MAX_SIMKL_POR_NOITE = 400
+
+    /** Apaga a nota do Simkl de todos os títulos (fica o id, que é só identificador). Sem rede. */
+    fun esquecerSimkl(ctx: Context) {
+        val app = ctx.applicationContext
+        synchronized(trava) {
+            val m = mapa(app)
+            val com = m.filterValues { it.simklNota != null || it.simklEm > 0 }.keys.toList()
+            if (com.isEmpty()) return
+            // No lugar (sem [por]: não muda a ordem de quem sai primeiro), mas marcado, para a releitura não desfazer.
+            for (ch in com) m[ch]?.let { m[ch] = it.copy(simklNota = null, simklEm = 0); sujos.add(ch) }
+            gravar(app)
+            Log.i(TAG, "Simkl: ${com.size} notas apagadas (sem conta)")
+        }
+    }
 
     /** Os títulos da grade que têm id TMDB (da lista ou já achado) para o lote: chave -> id. */
     fun idsConhecidos(ctx: Context, itens: List<Pair<String, Int?>>): List<Pair<String, Int>> = synchronized(trava) {
