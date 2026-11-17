@@ -42,6 +42,8 @@
     <symbol id="i-vol-mais" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 12h5M18.5 9.5v5"/></symbol>
     <symbol id="i-mudo" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="m16 9.5 5 5M21 9.5l-5 5"/></symbol>
     <symbol id="i-anterior" viewBox="0 0 24 24"><path d="M14.5 5.5 8 12l6.5 6.5"/></symbol>
+    <symbol id="i-retroceder" viewBox="0 0 24 24"><path d="M12 6 6 12l6 6M19 6l-6 6 6 6"/></symbol>
+    <symbol id="i-avancar" viewBox="0 0 24 24"><path d="M12 6l6 6-6 6M5 6l6 6-6 6"/></symbol>
     <symbol id="i-seguinte" viewBox="0 0 24 24"><path d="M9.5 5.5 16 12l-6.5 6.5"/></symbol>
     <symbol id="i-loja" viewBox="0 0 24 24"><path d="M5 8.5h14l-1 11a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 19.5z"/><path d="M9 11V7a3 3 0 0 1 6 0v4"/></symbol>
     <symbol id="i-paleta" viewBox="0 0 24 24"><path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.3 0 1.8-.9 1.4-1.9-.5-1.1.2-2.3 1.5-2.3H17a3.5 3.5 0 0 0 3.5-3.5c0-5.2-3.8-9.3-8.5-9.3z"/><path d="M7.5 11.5h.01M10 7.5h.01M14.5 7.5h.01" stroke-width="2.6"/></symbol>
@@ -133,7 +135,7 @@
   <div id="telaPainel" hidden>
     <header class="topo">
       <div class="marca">
-        <img class="logo" src="icone-192.png" alt="" width="36" height="36">
+        <svg class="logo-marca" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 14 20 6M40 14l6-9"/><rect x="8" y="14" width="48" height="34" rx="7"/><path d="M8 30H4v14h4M56 30h4v14h-4M16 48l-3 10M48 48l3 10M16 27q0-6 6-6"/></svg>
         <div>
           <h1 id="nomeAparelho">Chromecast</h1>
           <p id="naTela" class="aviso-curto"></p>
@@ -254,7 +256,7 @@
         <p class="aviso-curto so-pc">No teclado: setas, Enter = OK, Esc = voltar, espaço = tocar/pausar, + e − = volume.</p>
         <div class="teclas">
           <button data-tecla="voltar">Voltar</button><button data-tecla="inicio">Início</button><button data-tecla="menu">Menu</button>
-          <button data-tecla="retroceder" aria-label="Retroceder">⏪</button><button data-tecla="play" aria-label="Tocar ou pausar">⏯</button><button data-tecla="avancar" aria-label="Avançar">⏩</button>
+          <button data-tecla="retroceder" aria-label="Retroceder"><svg class="i" aria-hidden="true"><use href="#i-retroceder"/></svg></button><button data-tecla="play" aria-label="Tocar ou pausar"><svg class="i" aria-hidden="true"><use href="#i-tocar"/></svg></button><button data-tecla="avancar" aria-label="Avançar"><svg class="i" aria-hidden="true"><use href="#i-avancar"/></svg></button>
           <button data-tecla="volume-">Vol −</button><button data-tecla="volume+">Vol +</button><button data-tecla="mudo">Mudo</button>
           <button data-tecla="ligar">Acordar</button><button data-tecla="apagar">Dormir</button><button id="btnReiniciarTv" class="botao-perigo">Reiniciar TV</button>
         </div>
@@ -295,7 +297,7 @@
         <p id="tocandoExtras" class="aviso">Ligue a chave "Tocando agora" para ver o que está tocando.</p>
         <div class="barra-acoes">
           <button type="button" class="botao-secundario" data-tocando="anterior" aria-label="Anterior">⏮</button>
-          <button type="button" class="botao-secundario" data-tocando="alternar" aria-label="Tocar ou pausar">⏯</button>
+          <button type="button" class="botao-secundario" data-tocando="alternar" aria-label="Tocar ou pausar"><svg class="i" aria-hidden="true"><use href="#i-tocar"/></svg></button>
           <button type="button" class="botao-secundario" data-tocando="proxima" aria-label="Próxima">⏭</button>
           <button type="button" class="botao-secundario" id="btnTocando">Atualizar</button>
         </div>
