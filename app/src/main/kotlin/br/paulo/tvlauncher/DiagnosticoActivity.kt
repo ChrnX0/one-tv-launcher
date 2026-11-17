@@ -105,7 +105,8 @@ class DiagnosticoActivity : Activity() {
         val resumo = info(getString(R.string.diag_resumo), getString(R.string.diag_verificando)).also { adicionar(it) }
         // "A internet caiu? Em uma frase" (InternetEmUmaFrase): junta histórico, roteador, DNS e teste HTTP. Thread
         // própria para não esperar na fila das 4 verificações acima.
-        val frase = info(getString(R.string.diag_frase), getString(R.string.diag_verificando)).also { adicionar(it) }
+        // A frase com a causa e os sinais passa de 3 linhas quando algo falha (DNS, provedor): cortada, perdia a causa.
+        val frase = info(getString(R.string.diag_frase), getString(R.string.diag_verificando)).also { longas += it; adicionar(it) }
         fraseEmCurso?.cancel(true)   // "Verificar de novo" não empilha medições: a anterior é largada
         fraseEmCurso = frasePool.submit {
             val r = try { DiagnosticoInternet.explicar(applicationContext) } catch (e: Exception) { null }
@@ -261,6 +262,9 @@ class DiagnosticoActivity : Activity() {
         }
     }
 
+    /** Linhas que podem passar de 3 linhas (a frase da internet). */
+    private val longas = HashSet<TextView>()
+
     private fun info(titulo: String, detalhe: String, nivel: Int = -1): TextView = TextView(this).apply {
         montarLinha(titulo, detalhe, nivel)
         setPaddingRelative(dp(20), dp(10), dp(20), dp(10))
@@ -293,7 +297,7 @@ class DiagnosticoActivity : Activity() {
         sb.setSpan(AbsoluteSizeSpan(dp(14), false), ini, sb.length, 0)
         sb.setSpan(ForegroundColorSpan(suave), ini, sb.length, 0)
         text = sb
-        maxLines = 3
+        maxLines = if (this in longas) 8 else 3
         ellipsize = TextUtils.TruncateAt.END
         setPaddingRelative(dp(20), dp(14), dp(20), dp(14))
     }
