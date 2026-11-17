@@ -290,7 +290,7 @@ class MainActivity : Activity() {
         tema = Tema.atual(this)
         assinaturaFundo = FundoMeuDados.assinatura(this)
         idiomaMontado = idiomaAtual()
-        assinaturaLayout = "${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}"
+        assinaturaLayout = "${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}|${LayoutHome.cruz(this)}|${LayoutHome.iconesCruz(this)}|${LayoutHome.barraCruz(this)}|${LayoutHome.arteCruz(this)}"
         setContentView(montarTela())
         window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, novo ->
             if (novo != null && novo !== bolinhaPerfil) voltarAoPerfil = false
@@ -337,7 +337,7 @@ class MainActivity : Activity() {
         // Trocou o idioma (do sistema ou só do launcher): textos já montados (data, destaque) ficavam no antigo.
         if (idiomaAtual() != idiomaMontado) { recreate(); return }
         if (tema == Tema.MEU && FundoMeuDados.assinatura(this) != assinaturaFundo) { recreate(); return }   // outro arquivo/brilho
-        if ("${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}" != assinaturaLayout) { recreate(); return }   // cartões mudaram
+        if ("${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}|${LayoutHome.cruz(this)}|${LayoutHome.iconesCruz(this)}|${LayoutHome.barraCruz(this)}|${LayoutHome.arteCruz(this)}" != assinaturaLayout) { recreate(); return }   // cartões mudaram
         // Modo simples (12/11/2026, ideia 10; desligado por padrão): a HOME vira a tela de cards grandes.
         if (ModoSimples.ligado(this)) {
             try { startActivity(Intent(this, ModoSimplesActivity::class.java)); return } catch (_: Exception) {}
@@ -427,6 +427,8 @@ class MainActivity : Activity() {
             indiceFoco = 0
             focoTopo = null
             voltarAoPerfil = false   // HOME de novo depois de bolinha > Configurações: o foco vai ao 1º app (home-12)
+            // Cruz: HOME vai para Assistir; HOME de novo, para a TV (CruzLogica). Fecha o "Todos os apps".
+            cruz?.let { c -> if (todosAbertos) fecharTodos(); c.home(); c.requestFocus() }
         }
     }
 
@@ -734,7 +736,7 @@ class MainActivity : Activity() {
         val topoCaixa = TOPO_PALCO + ALTURA_TOPO + 12
         raiz.addView(FrameLayout(this).apply {
             clipChildren = false
-            if (emGrade) visibility = View.GONE   // grade: a ficha sai e o Continuar sobe para o lugar dela (LayoutHome)
+            if (emGrade || emCruz) visibility = View.GONE   // grade e cruz: a ficha sai e o Continuar sobe para o lugar dela (LayoutHome)
             addView(destaque, FrameLayout.LayoutParams(MATCH, WRAP, Gravity.BOTTOM))
         }, FrameLayout.LayoutParams(dp(Grade.largura(10)), dp(TOPO_DESTAQUE - topoCaixa)).apply {
             leftMargin = dp(Grade.MARGEM)
@@ -748,8 +750,12 @@ class MainActivity : Activity() {
         val folga = 24
         // Grade (LayoutHome): o Continuar sobe para logo abaixo do topo e a grade começa embaixo dele, até o fim da tela.
         val topoContinuar = if (emGrade) LayoutHome.TOPO_CONTINUAR_GRADE else TOPO_CONTINUAR
-        val linhaDosApps = if (emGrade) topoContinuar + ALTURA_CONTINUAR + descer + 28 else LINHA_APPS_HOME + descer
-        if (emGrade) {
+        val linhaDosApps = when {
+            emCruz -> TOPO_PALCO + ALTURA_TOPO + 60   // "Todos os apps" da cruz: a grade logo abaixo da barra de cima
+            emGrade -> topoContinuar + ALTURA_CONTINUAR + descer + 28
+            else -> LINHA_APPS_HOME + descer
+        }
+        if (gradeDosApps) {
             linhaApps = GradeApps(this, LayoutHome.colunas(passoCartao, Grade.MARGEM), dp(12))
             rolagem = ScrollView(this).apply {
                 clipChildren = false
@@ -777,8 +783,9 @@ class MainActivity : Activity() {
             raiz.addView(rolagem, FrameLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(linhaDosApps - folga) })
         }
         // Título "APPS" em cima da linha, como o "CONTINUAR" (esboço do dono, 06/11 noite).
-        raiz.addView(texto(12f, textoSuave, fonteUi).apply {
-            text = getString(R.string.home_linha_apps)
+        raiz.addView(texto(if (emCruz) 20f else 12f, if (emCruz) Estilo.ACENTO else textoSuave, fonteUi).apply {
+            rotuloApps = this
+            text = if (emCruz) getString(R.string.cruz_todos_apps).uppercase() else getString(R.string.home_linha_apps)
             letterSpacing = 0.1f
             if (tema != Tema.ESCURO) setShadowLayer(dp(6).toFloat(), 0f, 0f, 0x99000000.toInt())
         }, FrameLayout.LayoutParams(WRAP, WRAP).apply { leftMargin = dp(Grade.MARGEM); topMargin = dp(linhaDosApps - 32) })
@@ -831,7 +838,8 @@ class MainActivity : Activity() {
         fundo = vivo
         // Sem fundo preto aqui (nem na janela, ver onCreate): o fundo vivo já cobre a tela inteira e é opaco. Cada camada
         // de tela cheia a mais é a GPU pintando 1920x1080 de novo A CADA QUADRO (medido: 3 camadas, 22 ms por quadro).
-        capa = CapaFoco(this).apply { desligada = tema == Tema.GALERIA || tema == Tema.MEU }   // Galeria: a obra é o fundo, sem brilho por cima
+        capa = CapaFoco(this).apply { desligada = tema == Tema.GALERIA || tema == Tema.MEU || (emCruz && !LayoutHome.arteCruz(this@MainActivity)) }   // Galeria: a obra é o fundo, sem brilho por cima
+        if (emCruz) montarCruz(raiz)
         conteudo = raiz
         return FrameLayout(this).apply {
             clipChildren = false   // a tela que sobe (Continuar) desenha o que estava abaixo da borda
@@ -1003,6 +1011,7 @@ class MainActivity : Activity() {
         val CORES_FILMES = intArrayOf(0xFF4C9BFF.toInt(), 0xFF1A3F8F.toInt())   // azul
         val CORES_REDE = intArrayOf(0xFF2FBF8F.toInt(), 0xFF0E5A45.toInt())     // verde
         val CORES_JOGOS = intArrayOf(0xFFF5A524.toInt(), 0xFF7A4A0E.toInt())    // âmbar (card Jogos, 14/11/2026)
+        const val PREFS_CRUZ = "cruz"   // cruz: o último item escolhido em cada categoria (id da categoria -> id do item)
         const val LARGURA_ARTE = 640   // px da arte de filme/série no fundo (ver carregarArte)
         /** Frase curta embaixo do nome de cada app da HOME. Pacote novo na TV: acrescentar aqui (e nas strings). */
         val DESCRICAO_APPS = mapOf(
@@ -1196,6 +1205,7 @@ class MainActivity : Activity() {
             prenderBordas()
             ultimaAssinatura = assinatura
         }
+        if (emCruz) { atualizarCruz(); if (!todosAbertos) return }
         if (cards.isEmpty()) return
         if (atalhoAberto >= 0) return   // voltando de TV/Séries/Filmes: o foco volta para aquele card (desenharContinuar)
         linhaApps.post {
@@ -1727,6 +1737,7 @@ class MainActivity : Activity() {
     }
 
     private fun desenharContinuar(temTv: Boolean, temVod: Boolean, ultimo: PlayerArmazem.Ultimo?) {
+        if (emCruz) { ultimoTv = ultimo; cruzTemTv = temTv; cruzTemVod = temVod; cruzContinuarLido = true; atualizarCruz(); return }
         val focoAqui = linhaContinuar.hasFocus()
         linhaContinuar.removeAllViews()
         // quadrado = true: os atalhos (TV, Séries, Filmes, Na rede). Desde 12/11/2026 (dono) eles têm o tamanho e o
@@ -2102,7 +2113,7 @@ class MainActivity : Activity() {
         val token = atual.tag as? String ?: return false
         val pilha = lista.firstOrNull { it.token == token } as? Entrada.Pilha ?: return false
         // Grade (LayoutHome): com uma fileira embaixo, ▼ desce para ela; só troca o app da frente na última fileira.
-        if (emGrade && atual.focusSearch(View.FOCUS_DOWN)?.let { dentro(it, linhaApps) } == true) return false
+        if (gradeDosApps && atual.focusSearch(View.FOCUS_DOWN)?.let { dentro(it, linhaApps) } == true) return false
         if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) girarPilha(pilha, +1)
         return true
     }
@@ -2375,6 +2386,10 @@ class MainActivity : Activity() {
     private val descer by lazy { LayoutHome.acrescimo(tamanhoCartoes) }
     private val transparente by lazy { LayoutHome.transparente(this) }
     private val emGrade by lazy { LayoutHome.grade(this) }
+    /** Tela inicial em cruz (17/11/2026): a única tela inicial; a antiga só volta por adb (LayoutHome.cruz). */
+    private val emCruz by lazy { LayoutHome.cruz(this) }
+    /** Os apps em grade: no modo grade da HOME antiga e no "Todos os apps" da cruz. */
+    private val gradeDosApps get() = emGrade || emCruz
     /** Passo de um cartão na fila (largura + anel dos dois lados + margem): o mesmo na fileira e na grade. */
     private val passoCartao get() = RET_L + 2 * ANEL + 4
 
@@ -2388,6 +2403,289 @@ class MainActivity : Activity() {
         setStroke(dp(espessura), cor)
     }
 
+    // ---------------------------------------------------------------- tela inicial em cruz (17/11/2026)
+    // A cruz (HomeCruz) é montada com os MESMOS dados da HOME antiga: preencherContinuar (TV, Séries, Filmes, plugins) e
+    // preencherApps (apps em ordem, ocultos, modo visita, Jogos). A grade dos apps continua sendo montada, escondida: é a
+    // tela "Todos os apps" (com mover, ocultar e pilhas de hoje).
+
+    private var cruz: HomeCruz? = null
+    private var rotuloApps: TextView? = null
+    /** "Todos os apps" aberto: a cruz some e a grade dos apps aparece; Voltar ou HOME fecham. */
+    private var todosAbertos = false
+    private var cruzTemTv = false
+    private var cruzTemVod = false
+    /** A 1ª leitura do player chegou (sem ela a cruz montaria sem a TV e pularia de lugar logo depois). */
+    private var cruzContinuarLido = false
+    private val estiloCruz by lazy { LayoutHome.iconesCruz(this) }
+    /** Um desenho por lugar (id): a mesma instância volta a cada atualização (HomeCruz só troca o que mudou). */
+    private val iconesCruz = HashMap<String, android.graphics.drawable.Drawable>()
+    /** Cópia do ícone de um app para a cruz: um Drawable não pode estar em duas views (o card da grade usa o original). */
+    private val iconesAppCruz = java.util.WeakHashMap<Item, android.graphics.drawable.Drawable>()
+
+    private fun icCruz(lugar: String, tipo: IconeCruz.Tipo) = iconesCruz.getOrPut(lugar) { IconeCruz(tipo, estiloCruz) }
+    private fun icApp(item: Item) = iconesAppCruz.getOrPut(item) { item.icone.constantState?.newDrawable(resources) ?: item.icone }
+
+    private fun montarCruz(raiz: FrameLayout) {
+        rolagem.visibility = View.GONE
+        rotuloApps?.visibility = View.GONE
+        caixaContinuar.visibility = View.GONE
+        val prefs = getSharedPreferences(PREFS_CRUZ, MODE_PRIVATE)
+        val c = HomeCruz(this, fonteUi, Typeface.create(fonteUi, Typeface.BOLD))
+        c.lembrados = CruzLogica.Categoria.entries.mapNotNull { k -> prefs.getString(k.id, null)?.let { k.id to it } }.toMap()
+        c.aoAbrir = { cat, item -> prefs.edit().putString(cat.id, item).apply() }   // cada categoria lembra o último escolhido
+        raiz.addView(c, 0, FrameLayout.LayoutParams(MATCH, MATCH))   // atrás da barra de cima (o véu não a escurece)
+        cruz = c
+        c.id = View.generateViewId()
+        c.aoMudar = { _, item -> arteDoItem(item) }
+        c.aoSubirTopo = { ui.post { bolinhaPerfil?.requestFocus() } }   // ▲ no 1º item: o perfil, 1º da barra
+        montarBarraCruz(raiz, c)
+    }
+
+    // ------------------------------------------------------------------ barra de cima e arte do item, na cruz
+
+    private val barraCruz by lazy { LayoutHome.barraCruz(this) }
+    private var relogioCruz: View? = null       // relógio grande (barra RELOGIO), no canto livre de baixo
+    private var tempoCruz: TextView? = null     // "27°" ao lado da hora, com a barra recolhida
+    private var barraRecolhida = false
+
+    /**
+     * Aplica o estilo da barra de cima escolhido em Configurações (LayoutHome.BarraCruz). Recua e Relógio: com a cruz em
+     * foco, a barra some (fica só a hora, ou nada no Relógio); o foco subindo para ela a traz de volta e a cruz desce 34 dp.
+     * Leve: a barra fica, sem as cápsulas de vidro. As views somem só por alpha (continuam focáveis: o ▲ precisa achá-las).
+     */
+    private fun montarBarraCruz(raiz: FrameLayout, c: HomeCruz) {
+        val topo = topoRaiz as? ViewGroup ?: return
+        // ▼ em qualquer item da barra volta para a cruz (ela ocupa a tela inteira: a busca de foco "para baixo" não a acha).
+        fun descer(v: View) {
+            if (v.isFocusable) v.nextFocusDownId = c.id
+            if (v is ViewGroup) for (i in 0 until v.childCount) descer(v.getChildAt(i))
+        }
+        descer(topo)
+        if (barraCruz == LayoutHome.BarraCruz.HOJE) return
+        val esquerda = topo.getChildAt(1) as? ViewGroup
+        val direita = topo.getChildAt(2) as? LinearLayout
+        if (barraCruz == LayoutHome.BarraCruz.LEVE) {
+            esquerda?.let { e -> for (i in 0 until e.childCount) e.getChildAt(i).background = null }
+            return
+        }
+        // Recua: a temperatura entra ao lado da hora enquanto a barra está recolhida.
+        if (barraCruz == LayoutHome.BarraCruz.RECUA && direita != null) {
+            val t = texto(18f, textoClaro, fonteUi).apply { includeFontPadding = false; text = txtTemp.text; alpha = 0f }
+            direita.addView(t, 0, LinearLayout.LayoutParams(WRAP, WRAP).apply { marginEnd = dp(4) })
+            txtTemp.addTextChangedListener(espelho { t.text = "${txtTemp.text}  ·" })
+            t.text = "${txtTemp.text}  ·"
+            tempoCruz = t
+        }
+        if (barraCruz == LayoutHome.BarraCruz.RELOGIO) relogioCruz = montarRelogioCruz().also {
+            raiz.addView(it, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.BOTTOM or Gravity.END).apply {
+                rightMargin = dp(Grade.MARGEM); bottomMargin = dp(40)
+            })
+        }
+        window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, novo ->
+            if (novo == null || todosAbertos) return@addOnGlobalFocusChangeListener
+            recolherBarra(novo === c)
+        }
+        recolherBarra(true, animar = false)
+    }
+
+    private fun recolherBarra(recolher: Boolean, animar: Boolean = true) {
+        val topo = topoRaiz as? ViewGroup ?: return
+        if (recolher == barraRecolhida && animar) return
+        barraRecolhida = recolher
+        val d = if (animar) 220L else 0L
+        for (i in 0 until topo.childCount) {
+            val v = topo.getChildAt(i)
+            // Recua: a direita (hora, e a temperatura) fica; Relógio: some tudo (a hora está grande embaixo).
+            val fica = recolher && i == 2 && barraCruz == LayoutHome.BarraCruz.RECUA
+            v.animate().alpha(if (!recolher || fica) 1f else 0f).translationY(if (recolher && !fica) -dp(24).toFloat() else 0f).setDuration(d).start()
+        }
+        tempoCruz?.animate()?.alpha(if (recolher) 1f else 0f)?.setDuration(d)?.start()
+        relogioCruz?.animate()?.alpha(if (recolher) 1f else 0.35f)?.setDuration(d)?.start()
+        cruz?.animate()?.translationY(if (recolher) 0f else dp(34).toFloat())?.setDuration(d)?.start()
+    }
+
+    /** Relógio grande da barra RELOGIO: hora, data por extenso e o tempo de agora (espelha a pílula do clima). */
+    private fun montarRelogioCruz(): View = LinearLayout(this).apply {
+        orientation = LinearLayout.VERTICAL
+        gravity = Gravity.END
+        val sombra = 0x99000000.toInt()
+        addView(RelogioTela(this@MainActivity, data = false).apply {
+            format12Hour = "HH:mm"; format24Hour = "HH:mm"
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 72f)
+            setTextColor(Color.WHITE)
+            typeface = Typeface.create(fonteUi, Typeface.NORMAL)
+            letterSpacing = -0.02f
+            includeFontPadding = false
+            setShadowLayer(dp(10).toFloat(), 0f, 0f, sombra)
+        })
+        val padrao = android.text.format.DateFormat.getBestDateTimePattern(resources.configuration.locales[0], "EEEEdMMMM")
+        addView(RelogioTela(this@MainActivity, data = true).apply {
+            format12Hour = padrao; format24Hour = padrao
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
+            setTextColor(Color.WHITE)
+            typeface = Typeface.create(fonteUi, Typeface.BOLD)
+            setShadowLayer(dp(8).toFloat(), 0f, 0f, sombra)
+        }, LinearLayout.LayoutParams(WRAP, WRAP).apply { topMargin = dp(6) })
+        val clima = texto(18f, textoClaro, fonteUi).apply { setShadowLayer(dp(8).toFloat(), 0f, 0f, sombra); maxLines = 1 }
+        fun copiar() { clima.text = listOf(txtTemp.text, txtChuva.text).filter { it.isNotBlank() && it != "…" }.joinToString(" · ") }
+        txtTemp.addTextChangedListener(espelho { copiar() })
+        txtChuva.addTextChangedListener(espelho { copiar() })
+        copiar()
+        addView(clima, LinearLayout.LayoutParams(WRAP, WRAP).apply { topMargin = dp(2) })
+    }
+
+    private fun espelho(acao: () -> Unit) = object : android.text.TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+        override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+        override fun afterTextChanged(s: android.text.Editable?) = acao()
+    }
+
+    /**
+     * Arte do item em foco (LayoutHome.arteCruz): a mesma capa à direita da tela antiga (CapaFoco, meia resolução,
+     * escurecida), agora seguindo o item da cruz. TV, Séries, Filmes, Na rede e Jogos usam a arte do card (Séries e
+     * Filmes: a cena do último título); um app, o banner dele; o resto, o degradê da cor do grupo.
+     */
+    private fun arteDoItem(item: HomeCruz.Item) {
+        if (capa.desligada) return
+        val id = item.id
+        when {
+            id == "tv" || id == "c:tv" -> mostrarCapaAtalho(IconeApp.Tipo.TV)
+            id == "series" || id == "c:serie" -> mostrarCapaAtalho(IconeApp.Tipo.SERIES)
+            id == "filmes" || id == "c:filme" -> mostrarCapaAtalho(IconeApp.Tipo.FILMES)
+            id == "rede" -> mostrarCapaAtalho(IconeApp.Tipo.REDE)
+            id == "jogos" || id == "c:jogo" -> mostrarCapaAtalho(IconeApp.Tipo.JOGOS)
+            id.startsWith("app:") -> mostrarCapaDoApp(id.removePrefix("app:"), null)
+            else -> {
+                capaPedida = null
+                val cor = when (cruz?.categoriaAtual()?.cat) {
+                    CruzLogica.Categoria.OUVIR -> 0xFF2C6E68.toInt()
+                    CruzLogica.Categoria.JOGAR -> 0xFF3A3F9E.toInt()
+                    CruzLogica.Categoria.APLICATIVOS -> 0xFF3A3640.toInt()
+                    else -> 0xFF8A4A2A.toInt()
+                }
+                capa.mostrar(null, intArrayOf(Estilo.matiz(cor, 0.6f), Estilo.matiz(cor, 0.35f)))
+            }
+        }
+    }
+
+    /** Refaz a lista da cruz com os dados de agora. Barato: a HomeCruz só recria views quando os ids mudam. */
+    private fun atualizarCruz() {
+        val c = cruz ?: return
+        if (!cruzContinuarLido) return
+        val agora = System.currentTimeMillis()
+        val programa = ultimoTv?.programas?.firstOrNull { it.inicio <= agora && agora < it.fim && it.titulo.isNotBlank() }
+        fun faltaFilme(f: PlayerArmazem.FichaHome): String? = posicoesHome[f.chave]?.takeIf { it.duracao > 0 && Vod.deveRetomar(it) }
+            ?.let { ((it.duracao - it.ms) / 60_000).toInt() }?.takeIf { it > 0 }?.let { getString(R.string.home_faltam, duracaoTexto(it)) }
+        val cats = ArrayList<HomeCruz.Categoria>()
+        fun categoria(k: CruzLogica.Categoria, nome: Int, tipo: IconeCruz.Tipo, itens: List<HomeCruz.Item>) {
+            if (itens.isNotEmpty()) cats += HomeCruz.Categoria(k, getString(nome), icCruz("cat:" + k.id, tipo), itens)
+        }
+
+        // Continuar: o que o "Continuar" de hoje sabe (último canal, última série, último filme, último jogo). Quando a fila
+        // única da elevação (2.8/3.8) existir, ela entra aqui.
+        val continuar = ArrayList<HomeCruz.Item>()
+        ultimoTv?.let { u ->
+            continuar += HomeCruz.Item("c:tv", programa?.titulo ?: u.nome.ifBlank { getString(R.string.home_card_tv) },
+                getString(R.string.home_dest_tv, u.numero), icCruz("c:tv", IconeCruz.Tipo.TV), { abrirTv() })
+        }
+        if (cruzTemVod) {
+            fichaSerie?.let { f -> continuar += HomeCruz.Item("c:serie", f.titulo, f.episodio.ifEmpty { getString(R.string.home_card_series) },
+                icCruz("c:serie", IconeCruz.Tipo.SERIES), { abrirCatalogo(SeriesActivity::class.java) }) }
+            fichaFilme?.let { f -> continuar += HomeCruz.Item("c:filme", f.titulo,
+                listOfNotNull(getString(R.string.cruz_filme), faltaFilme(f)).joinToString(" · "),
+                icCruz("c:filme", IconeCruz.Tipo.FILMES), { abrirCatalogo(FilmesActivity::class.java) }) }
+        }
+        ultimoJogo?.let { (pacote, nome) ->
+            val icone = instalados.firstOrNull { it.pacote == pacote }?.let { icApp(it) } ?: icCruz("c:jogo", IconeCruz.Tipo.JOGOS)
+            continuar += HomeCruz.Item("c:jogo", nome, getString(R.string.cruz_jogo), icone, { abrir(pacote) })
+        }
+        categoria(CruzLogica.Categoria.CONTINUAR, R.string.cruz_continuar, IconeCruz.Tipo.CONTINUAR, continuar)
+
+        // Assistir: os cards de hoje (TV, Séries, Filmes, Na rede, Addons, plugins), cada um só se o recurso existe.
+        val assistir = ArrayList<HomeCruz.Item>()
+        if (cruzTemTv) assistir += HomeCruz.Item("tv", getString(R.string.home_card_tv),
+            listOfNotNull(ultimoTv?.let { getString(R.string.home_dest_tv, it.numero) }, programa?.titulo).joinToString(" · ")
+                .ifEmpty { getString(R.string.home_destaque_tv_sub) },
+            icCruz("tv", IconeCruz.Tipo.TV), { abrirTv() })
+        if (cruzTemVod) {
+            assistir += HomeCruz.Item("series", getString(R.string.home_card_series),
+                fichaSerie?.let { listOf(it.titulo, it.episodio).filter { s -> s.isNotEmpty() }.joinToString(" · ") } ?: getString(R.string.home_destaque_series),
+                icCruz("series", IconeCruz.Tipo.SERIES), { abrirCatalogo(SeriesActivity::class.java) })
+            assistir += HomeCruz.Item("filmes", getString(R.string.home_card_filmes),
+                fichaFilme?.let { f -> listOfNotNull(f.titulo, faltaFilme(f)).joinToString(" · ") } ?: getString(R.string.home_destaque_filmes),
+                icCruz("filmes", IconeCruz.Tipo.FILMES), { abrirCatalogo(FilmesActivity::class.java) })
+        }
+        assistir += HomeCruz.Item("rede", getString(R.string.home_card_rede), getString(R.string.home_destaque_rede),
+            icCruz("rede", IconeCruz.Tipo.REDE), { abrirCatalogo(MidiaRedeActivity::class.java) })
+        if (AddonsTv.instalados(this).isNotEmpty()) assistir += HomeCruz.Item("addons", getString(R.string.ad_titulo),
+            getString(R.string.ad_destaque), icCruz("addons", IconeCruz.Tipo.ADDONS), { abrirCatalogo(AddonsActivity::class.java) })
+        for ((i, p) in cartoesPlugin.withIndex()) assistir += HomeCruz.Item("plugin:${p.pacote}:$i", p.titulo.ifEmpty { p.valor },
+            if (p.titulo.isEmpty()) p.detalhe else listOf(p.valor, p.detalhe).filter { it.isNotEmpty() }.joinToString(" · "),
+            icCruz("plugin:${p.pacote}:$i", IconeCruz.Tipo.PLUGIN), { PluginsTv.abrir(this, p) })
+        categoria(CruzLogica.Categoria.ASSISTIR, R.string.cruz_assistir, IconeCruz.Tipo.ASSISTIR, assistir)
+
+        // Ouvir: as rádios (catálogo mundial, sem conta). Podcasts entram com o #189.
+        categoria(CruzLogica.Categoria.OUVIR, R.string.cruz_ouvir, IconeCruz.Tipo.OUVIR, listOf(
+            HomeCruz.Item("radio", getString(R.string.cruz_radio), getString(R.string.cruz_radio_sub), icCruz("radio", IconeCruz.Tipo.RADIO), {
+                try { startActivity(Intent(this, RadioActivity::class.java)) }
+                catch (e: Exception) { Log.w("TvLauncher.Cruz", "rádio não abriu: ${e.javaClass.simpleName}") }
+            })))
+
+        // Jogar: o hub de Jogos (com o card Jogos ligado, os apps de jogo moram só nele). Sofá entra com o #183.
+        if (JogosTv.cardLigado(this)) categoria(CruzLogica.Categoria.JOGAR, R.string.cruz_jogar, IconeCruz.Tipo.JOGAR, listOf(
+            HomeCruz.Item("jogos", getString(R.string.home_card_jogos), resumoJogos(), icCruz("jogos", IconeCruz.Tipo.JOGOS),
+                { abrirCatalogo(JogosActivity::class.java) })))
+
+        // Aplicativos: os 8 mais usados (os mesmos apps visíveis da grade, pilhas abertas) e "Todos os apps".
+        val porPacote = HashMap<String, Item>()
+        for (e in lista) when (e) {
+            is Entrada.App -> porPacote[e.item.pacote] = e.item
+            is Entrada.Pilha -> for (it in e.itens) porPacote[it.pacote] = it
+            else -> {}
+        }
+        val apps = CruzLogica.appsDaColuna(porPacote.keys.toList(), ultimoUso).map { id ->
+            if (id == CruzLogica.ID_TODOS_APPS) HomeCruz.Item(id, getString(R.string.cruz_todos_apps), getString(R.string.cruz_todos_apps_sub),
+                icCruz(id, IconeCruz.Tipo.TODOS_APPS), { abrirTodos() })
+            else porPacote.getValue(id).let { app ->
+                HomeCruz.Item("app:$id", app.nome, subApp(id, app.nome), icApp(app), { abrir(id) }, opcoes = { menuAppCruz(id) })
+            }
+        }
+        categoria(CruzLogica.Categoria.APLICATIVOS, R.string.cruz_aplicativos, IconeCruz.Tipo.APLICATIVOS, apps)
+
+        c.definir(cats)
+        if (focoInicialNaTv && !todosAbertos) { focoInicialNaTv = false; c.requestFocus() }
+        else if (currentFocus == null && !todosAbertos) c.requestFocus()
+    }
+
+    private fun abrirTodos() {
+        val c = cruz ?: return
+        todosAbertos = true
+        c.visibility = View.GONE
+        rotuloApps?.visibility = View.VISIBLE
+        rolagem.visibility = View.VISIBLE
+        rolagem.scrollTo(0, 0)
+        linhaApps.post { linhaApps.getChildAt(0)?.requestFocus() }
+    }
+
+    private fun fecharTodos() {
+        val c = cruz ?: return
+        if (modoMover) cancelarMover()
+        todosAbertos = false
+        rolagem.visibility = View.GONE
+        rotuloApps?.visibility = View.GONE
+        c.visibility = View.VISIBLE
+        c.requestFocus()
+    }
+
+    /** Segurar OK num app da cruz: as opções de hoje que fazem sentido fora da grade (ocultar, desinstalar). */
+    private fun menuAppCruz(pacote: String) {
+        if (TravaHome.precisaPin(this)) { TravaHome.comPin(this) { menuAppCruz(pacote) }; return }
+        val opcoes = mutableListOf(Opcao(getString(R.string.home_ocultar)) { Organizacao.ocultar(this, pacote); atualizarAposMudanca(null); avisarOculto() })
+        if (PainelApps.podeDesinstalar(this, pacote)) opcoes += Opcao(getString(R.string.home_desinstalar)) { confirmarDesinstalar(pacote) }
+        val titulo = nomeDe(pacote) + if (PainelApps.eSistema(this, pacote)) getString(R.string.home_app_sistema) else ""
+        menuAberto = Estilo.lista(this, titulo, opcoes.map { it.rotulo }) { i -> opcoes[i].acao() }
+    }
+
     /**
      * No modo mover: ◀ ▶ andam uma posição, OK confirma, Voltar cancela,
      * ▲ oculta o app (só card solto) e ▼ volta à ordem automática.
@@ -2396,6 +2694,8 @@ class MainActivity : Activity() {
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         val confirma = event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER
         if (!modoMover) {
+            // Cruz: Voltar no "Todos os apps" volta para a cruz (na cruz, Voltar não faz nada).
+            if (todosAbertos && event.keyCode == KeyEvent.KEYCODE_BACK) { if (event.action == KeyEvent.ACTION_UP) fecharTodos(); return true }
             if (tratarSegurar(event, currentFocus)) return true
             if (trocarDaFrente(event)) return true
             return super.dispatchKeyEvent(event)

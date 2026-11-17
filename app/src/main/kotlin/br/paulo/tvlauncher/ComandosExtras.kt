@@ -40,6 +40,7 @@ import java.io.File
  * Conferência (14/11/2026):
  *  - tecla --es tecla HOME [--el ms 1500]   entrega uma tecla falsa ao funil das teclas da acessibilidade (TeclaFalsa).
  *    Aceita o nome sem "KEYCODE_" ou o número. Ex.: HOME segurado = --es tecla HOME --el ms 1500.
+ *  - home_antiga --ez ligar true|false   saída de emergência: volta a HOME antiga (sem a cruz) até a Cruz passar no aceite
  *  - roteiro               respostas do roteiro "Conferir na TV" desta versão (JSON; ver RoteiroConferencia)
  * Compatibilidade (15/11/2026, degrau 1 contra o Projectivy):
  *  - compat                JSON do aparelho para a página "Funciona no seu aparelho?" (Compatibilidade.kt)
@@ -113,6 +114,8 @@ object ComandosExtras {
             Extras.definirTexto(ctx, HoraDormir.CHAVE_PERMITIDOS, it) }.ifEmpty { "lista vazia: só os essenciais abrem" }
         "recado_link" -> PainelExtras.novoLinkRecado(ctx)
         "tecla" -> teclaFalsa(i)
+        // Tela inicial em cruz (17/11/2026): saída de emergência para a HOME antiga até a Cruz passar no aceite na TV.
+        "home_antiga" -> { LayoutHome.definirAntiga(ctx, i.getBooleanExtra("ligar", false)); "cruz=${LayoutHome.cruz(ctx)} (aperte HOME)" }
         // Cuidar de longe (ideias 77-79): estado, rodar o relógio agora, abrir a pergunta de consentimento, teste de envio.
         "cuidar" -> CuidarDeLongeTv.texto(ctx)
         "cuidar_rodar" -> { val app = ctx.applicationContext; Fundo.rodar("cuidar-adb") { CuidarDeLongeTv.rodar(app) }; "rodando; ver depois com cuidar" }
