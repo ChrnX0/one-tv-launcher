@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Addons no formato do Stremio, só HTTP (16/11/2026): AddonsActivity, ConfigLauncherActivity, MainActivity. -->
+<resources>
+    <string name="ad_titulo">插件</string>
+    <string name="ad_destaque">来自插件的电影和剧集</string>
+    <string name="ad_vazio">还没有插件。请在网页面板（设置、插件）中添加。这里只播放直接视频链接（HTTP）：不支持种子和 P2P。</string>
+    <string name="ad_resumo">你的插件目录。插件由第三方制作：安装插件的人对其内容负责。</string>
+    <string name="ad_buscar">搜索</string>
+    <string name="ad_buscar_dica">电影或剧集名称</string>
+    <string name="ad_carregando">正在加载…</string>
+    <string name="ad_falhou">插件没有响应。请稍后再试。</string>
+    <string name="ad_nada">这里什么都没有。</string>
+    <string name="ad_mais">更多</string>
+    <string name="ad_tipo_filmes">电影</string>
+    <string name="ad_tipo_series">剧集</string>
+    <string name="ad_tipo_canais">频道</string>
+    <string name="ad_temporada">第 %1$d 季</string>
+    <string name="ad_especiais">特别篇</string>
+    <string name="ad_episodio">%1$d. %2$s</string>
+    <string name="ad_sem_fontes">没有可在此播放的来源。Sofaly 只播放直接视频链接（HTTP）。</string>
+    <string name="ad_fontes_resumo">选择来源</string>
+    <string name="ad_dica_voltar">返回</string>
+    <string name="ad_cfg_det">已安装的插件。要添加，请使用网页面板。</string>
+    <string name="ad_cfg_como">要添加插件，请在手机或电脑上打开电视的网页面板，进入设置、插件，粘贴以 manifest.json 结尾的地址，并用 PIN 确认。</string>
+    <string name="ad_cfg_remover_qual">要移除哪个插件？</string>
+    <string name="ad_cfg_remover">将从这台电视移除 %1$s。</string>
+    <string name="ad_cfg_remover_sim">移除</string>
+</resources>

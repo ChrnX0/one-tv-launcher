@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Som no fone (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="fone_menu">Suara di headset (ponsel)</string>
+    <string name="fone_titulo">Suara di headset</string>
+    <string name="fone_texto">Pindai dengan ponsel di Wi-Fi rumah dan pasang headset. Hingga %1$d ponsel. TV diam selama ada yang mendengar; menutup halaman mengembalikan suara.</string>
+    <string name="fone_ouvindo">Mendengarkan: %1$d dari %2$d</string>
+    <string name="fone_fechar">Tutup</string>
+    <string name="fone_parar">Hentikan</string>
+    <string name="fone_sem_rede">TV tidak ada di jaringan rumah.</string>
+</resources>

@@ -28,6 +28,8 @@ object FamiliaConectada {
 
     object Regras {
         private val TOKEN = Regex("^[0-9a-f]{32}$")
+        /** Ações do link. Degrau 4: "video" (RecadoVideo) e "estado" (a página pergunta se os vídeos estão aceitos). */
+        val ACOES = setOf("recado", "foto", "video", "estado")
 
         fun tokenValido(t: String?) = t != null && TOKEN.matches(t)
 
@@ -35,13 +37,13 @@ object FamiliaConectada {
         fun confere(pedido: String?, guardado: String?): Boolean =
             tokenValido(pedido) && tokenValido(guardado) && MessageDigest.isEqual(pedido!!.toByteArray(), guardado!!.toByteArray())
 
-        /** "/familia/<token>" e "/familia/<token>/recado|foto" -> (token, ação); "" = a página. Null = não é nosso. */
+        /** "/familia/<token>" e "/familia/<token>/recado|foto|video|estado" -> (token, ação); "" = a página. Null = não é nosso. */
         fun rota(caminho: String): Pair<String, String>? {
             val p = caminho.removePrefix("/familia/").takeIf { it != caminho } ?: return null
             val partes = p.trimEnd('/').split('/')
             return when {
                 partes.size == 1 -> partes[0] to ""
-                partes.size == 2 && partes[1] in setOf("recado", "foto") -> partes[0] to partes[1]
+                partes.size == 2 && partes[1] in ACOES -> partes[0] to partes[1]
                 else -> null
             }
         }
@@ -127,8 +129,22 @@ class FamiliaConectadaActivity : Activity() {
         col.addView(Estilo.tituloTela(this, getString(R.string.famc_titulo)))
         col.addView(Estilo.texto(this, Estilo.Papel.CORPO, getString(if (link != null) R.string.famc_texto else R.string.famc_sem_tunel)).apply { textSize = 20f },
             LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(16) })
-        val pronto = Estilo.linhaOpcao(this, getString(R.string.hos_bv_ok)).apply { setOnClickListener { finish() } }
+        val pronto = Estilo.linhaOpcao(this, getString(R.string.fp_fechar)).apply { setOnClickListener { finish() } }   // era "Começar"
         col.addView(pronto, LinearLayout.LayoutParams(dp(300), -2).apply { topMargin = dp(20) })
+        // Degrau 4: recado em vídeo. Opt-in de quem mora aqui (desligado de fábrica) e a lista dos que chegaram.
+        col.addView(Estilo.linhaOpcao(this, getString(R.string.vid_aceitar), getString(R.string.vid_aceitar_det),
+            Estilo.valor(this, getString(if (RecadoVideo.aceita(this)) R.string.rec_ligado else R.string.rec_desligado), seta = false)).apply {
+            setOnClickListener { RecadoVideo.definirAceita(this@FamiliaConectadaActivity, !RecadoVideo.aceita(this@FamiliaConectadaActivity)); recreate() }
+        }, LinearLayout.LayoutParams(dp(300), -2).apply { topMargin = dp(8) })
+        if (RecadoVideo.lista(this).isNotEmpty()) col.addView(Estilo.linhaOpcao(this, getString(R.string.vid_lista),
+            getString(R.string.vid_quantos, RecadoVideo.lista(this).size)).apply {
+            setOnClickListener { startActivity(android.content.Intent(this@FamiliaConectadaActivity, RecadoVideoActivity::class.java)) }
+        }, LinearLayout.LayoutParams(dp(300), -2).apply { topMargin = dp(8) })
+        // Degrau 4: as TVs da mesma conta conversam (Sessão junto, Continuar em outra TV). Opt-in, desligado de fábrica.
+        col.addView(Estilo.linhaOpcao(this, getString(R.string.junto_tvs), getString(R.string.junto_tvs_det),
+            Estilo.valor(this, getString(if (EntreTvs.ligado(this)) R.string.rec_ligado else R.string.rec_desligado), seta = false)).apply {
+            setOnClickListener { EntreTvs.definir(this@FamiliaConectadaActivity, !EntreTvs.ligado(this@FamiliaConectadaActivity)); recreate() }
+        }, LinearLayout.LayoutParams(dp(300), -2).apply { topMargin = dp(8) })
         col.addView(Estilo.linhaOpcao(this, getString(R.string.famc_trocar), getString(R.string.famc_trocar_det)).apply {
             setOnClickListener { FamiliaConectada.novoLink(this@FamiliaConectadaActivity); recreate() }
         }, LinearLayout.LayoutParams(dp(300), -2).apply { topMargin = dp(8) })

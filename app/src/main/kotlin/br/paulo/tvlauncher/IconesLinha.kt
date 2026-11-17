@@ -13,14 +13,16 @@ import kotlin.math.sin
 
 /**
  * Ícones de linha do protetor (10/11/2026, dono: "tem que melhorar esses ícones" — os emojis destoavam do vidro e da
- * Manrope). Desenhados em código, num quadro de 24×24 unidades, traço branco de 1,6 com pontas redondas: ficam nítidos
+ * Nunito). Desenhados em código, num quadro de 24×24 unidades, traço branco de 1,6 com pontas redondas: ficam nítidos
  * em qualquer tamanho, sem arquivo de imagem nem licença de terceiros.
  *
  * A lua é desenhada na fase de verdade ([fracaoLua]: 0 = nova, 0,5 = cheia), espelhada no hemisfério sul.
  */
 class IconeLinha(private val tipo: Tipo, private val fracaoLua: Double = 0.0, private val sul: Boolean = false,
                  private val cor: Int = 0xFFFFFFFF.toInt()) : Drawable() {
-    enum class Tipo { HORIZONTE, LUA, GOTA, CHUVA, CALENDARIO, DESPERTADOR, RECADO }
+    enum class Tipo { HORIZONTE, LUA, GOTA, CHUVA, CALENDARIO, DESPERTADOR, RECADO,
+        /** Protetor que reage ao tempo (17/11/2026): sol (UV), folha (ar), satélite (Estação Espacial), estrela (céu). */
+        SOL, FOLHA, SATELITE, ESTRELA }
 
     private val traco = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE; strokeWidth = 1.6f; strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND; color = cor
@@ -79,6 +81,34 @@ class IconeLinha(private val tipo: Tipo, private val fracaoLua: Double = 0.0, pr
                 c.drawLine(12f, 13f, 12f, 9.5f, traco); c.drawLine(12f, 13f, 14.5f, 14.5f, traco)
                 c.drawLine(4f, 6f, 6.5f, 3.5f, traco); c.drawLine(20f, 6f, 17.5f, 3.5f, traco)
                 c.drawLine(7.5f, 19.5f, 6f, 21f, traco); c.drawLine(16.5f, 19.5f, 18f, 21f, traco)
+            }
+            Tipo.SOL -> {
+                c.drawCircle(12f, 12f, 4.5f, traco)
+                for (k in 0 until 8) {
+                    val r = k * PI / 4
+                    c.drawLine((12 + 7 * cos(r)).toFloat(), (12 + 7 * sin(r)).toFloat(), (12 + 9.5 * cos(r)).toFloat(), (12 + 9.5 * sin(r)).toFloat(), traco)
+                }
+            }
+            Tipo.FOLHA -> {
+                // Folha inclinada com a nervura do meio.
+                p.reset(); p.moveTo(4f, 20f)
+                p.cubicTo(4f, 9f, 10f, 4f, 20f, 4f); p.cubicTo(20f, 14f, 15f, 20f, 4f, 20f)
+                c.drawPath(p, traco)
+                c.drawLine(4f, 20f, 14f, 10f, traco)
+            }
+            Tipo.SATELITE -> {
+                // Corpo no meio e dois painéis solares, como a Estação vista de longe.
+                c.drawRoundRect(RectF(9.5f, 9.5f, 14.5f, 14.5f), 1f, 1f, cheio)
+                c.drawRect(RectF(1.5f, 8f, 7.5f, 16f), traco); c.drawRect(RectF(16.5f, 8f, 22.5f, 16f), traco)
+                c.drawLine(4.5f, 8f, 4.5f, 16f, traco); c.drawLine(19.5f, 8f, 19.5f, 16f, traco)
+                c.drawLine(7.5f, 12f, 9.5f, 12f, traco); c.drawLine(14.5f, 12f, 16.5f, 12f, traco)
+            }
+            Tipo.ESTRELA -> {
+                // Estrela de quatro pontas (brilho) e uma pequena ao lado.
+                p.reset(); p.moveTo(10f, 3f)
+                p.quadTo(11f, 10f, 17f, 11f); p.quadTo(11f, 12f, 10f, 19f); p.quadTo(9f, 12f, 3f, 11f); p.quadTo(9f, 10f, 10f, 3f)
+                c.drawPath(p, traco)
+                c.drawCircle(18.5f, 18.5f, 1.3f, cheio)
             }
         }
         c.restore()

@@ -47,6 +47,7 @@ object PlayerCarga {
         File(PlayerArmazem.pasta(ctx), "$id.series.json").delete()
         // O guia é de todas as contas juntas: refaz na próxima abertura.
         synchronized(this) { ultimaTentativaGuia = 0L }
+        marcaTentativa(ctx).delete()
         GuiaBanco.apagar(arquivoGuia(ctx)); guiaJsonAntigo(ctx).delete(); arquivoAdiante(ctx).delete()
     }
 
@@ -294,6 +295,18 @@ object PlayerCarga {
     @Volatile private var ultimaTentativaGuia = 0L
 
     /**
+     * A última tentativa de QUALQUER processo (o :player e a HOME baixam o guia cada um): a data de um arquivo vazio
+     * na pasta do player. Antes era só a variável do processo, e cada processo novo baixava o guia inteiro de novo
+     * (até 150 MB) quando o fornecedor atrasa o XMLTV.
+     */
+    private fun marcaTentativa(ctx: Context) = File(PlayerArmazem.pasta(ctx), "guia.tentativa")
+    private fun ultimaTentativa(ctx: Context) = maxOf(ultimaTentativaGuia, marcaTentativa(ctx).lastModified())
+    private fun anotarTentativa(ctx: Context, agora: Long) {
+        ultimaTentativaGuia = agora
+        runCatching { marcaTentativa(ctx).let { if (!it.exists()) it.createNewFile(); it.setLastModified(agora) } }
+    }
+
+    /**
      * Percorre o guia guardado (nunca baixa): cada programa que começa entre [desde] e [ate]. Abre só para leitura e
      * fecha no fim. false = sem guia. Para os lembretes do "Meu time" (LembretesTv). Disco: FORA da thread da tela.
      */
@@ -323,7 +336,7 @@ object PlayerCarga {
         val agora = System.currentTimeMillis()
         val arquivo = arquivoGuia(ctx)
         val velho = !arquivo.exists() || agora - arquivo.lastModified() >= VALIDADE_GUIA
-        return velho && agora - ultimaTentativaGuia >= 3_600_000L
+        return velho && agora - ultimaTentativa(ctx) >= 3_600_000L
     }
 
     /**
@@ -366,12 +379,12 @@ object PlayerCarga {
             // Fresco pela data mas sem NENHUM programa passando agora (visto na Sala 16/11/2026: todo canal "Sem guia de
             // programação" até forçar o download, que trouxe 1232 canais com programa): baixa de novo, no máximo 1 vez por hora.
             abrirGuia(arquivo)?.let { g ->
-                if (agora - ultimaTentativaGuia < 3_600_000L || g.comProgramaAgora(agora).isNotEmpty()) return g
+                if (agora - ultimaTentativa(ctx) < 3_600_000L || g.comProgramaAgora(agora).isNotEmpty()) return g
                 Log.i(TAG, "guia sem nada passando agora: baixando de novo")
             }
         }
         val guardar = !forcar
-        ultimaTentativaGuia = agora   // antes do "sem tvg-id" abaixo: senão cada zapping abria uma thread à toa
+        anotarTentativa(ctx, agora)   // antes do "sem tvg-id" abaixo: senão cada zapping abria uma thread à toa
         val ids = canais.mapNotNull { it.guiaId.ifEmpty { null } }.toSet()
         if (ids.isEmpty()) return Guia(emptyList())
         // Grava num arquivo temporário com nome único (o player e a HOME são processos diferentes e podem baixar ao

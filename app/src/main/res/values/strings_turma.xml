@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
+<resources>
+    <string name="jogos_no_sofa">On the couch</string>
+    <string name="jogos_continuar">Continue</string>
+    <string name="jogos_controle_pronto">ready</string>
+    <string name="jogos_controle_carregar">charge soon</string>
+    <string name="jogos_parear_um">Pair a controller</string>
+    <string name="jogos_todos">All</string>
+    <string name="turma_titulo">Your crew</string>
+    <string name="turma_online">%1$d online</string>
+    <string name="turma_mais_online">+ %1$d online</string>
+    <string name="turma_na_voz">In voice</string>
+    <string name="turma_ausente">away</string>
+    <string name="turma_ocupado">busy</string>
+    <string name="turma_status_online">online</string>
+    <string name="turma_ninguem">Nobody online right now</string>
+    <string name="turma_procurando">Looking for your crew…</string>
+    <string name="turma_sem_rede">No connection to Discord right now.</string>
+    <string name="turma_mostrar_titulo">Show your Discord crew</string>
+    <string name="turma_mostrar_texto">See on the TV who is online, playing and in voice.</string>
+    <string name="turma_desligado_titulo">The server widget is off</string>
+    <string name="turma_desligado_texto">In Discord: Server Settings, Widget, turn on Enable Server Widget.</string>
+    <string name="turma_qr_dica">Point your phone here to join the voice chat. The talking happens on the phone.</string>
+    <string name="turma_aqui">%1$d of your crew here</string>
+    <string name="turma_jogando">%1$s playing %2$s</string>
+    <string name="turma_dois">%1$s and %2$s</string>
+    <string name="turma_e_mais">%1$s and %2$d more</string>
+    <string name="turma_chamar">Call the crew</string>
+    <string name="turma_chamar_pergunta">Send to the Discord channel?</string>
+    <string name="turma_chamado_jogo">🎮 Who’s up for %1$s? I’m on the TV.</string>
+    <string name="turma_chamado">🎮 Who’s up for a game? I’m on the TV.</string>
+    <string name="turma_mandar">Send</string>
+    <string name="turma_enviado">Your crew was called on Discord.</string>
+    <string name="turma_espere">Wait a minute before calling again.</string>
+    <string name="turma_falhou">Discord didn’t get it. Check the internet or the webhook.</string>
+    <string name="turma_config_titulo">Your Discord crew</string>
+    <string name="turma_config_texto">1. In Discord: Server Settings, Widget, turn on Enable Server Widget.\n2. On the same page, copy the Server ID and type it here.\n\nFor the Call the crew button, paste a channel webhook in the TV’s web panel.</string>
+    <string name="turma_config_dica">Server ID (numbers only)</string>
+    <string name="turma_config_guardar">Save</string>
+    <string name="turma_config_tirar">Remove the crew</string>
+    <string name="turma_id_invalido">This is not a Discord server ID (17 to 20 digits).</string>
+</resources>

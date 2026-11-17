@@ -29,6 +29,7 @@ object HospedeRegras {
         "com.spotify.tv.android",                         // Spotify
         "com.crunchyroll.crunchyroid",                    // Crunchyroll
         "tv.pluto.android",                               // Pluto TV
+        "com.google.android.youtube.tv",                  // YouTube (onde o hóspede mais entra com a conta dele; 17/11/2026)
         "com.google.android.apps.youtube.music",          // YouTube Music
         "com.google.android.youtube.tvkids",              // YouTube Kids
         "com.peacocktv.peacockandroid",                   // Peacock

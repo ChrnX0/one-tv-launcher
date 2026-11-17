@@ -28,6 +28,14 @@ object Planos {
         CUIDAR_DE_LONGE,
         // Extras (15/11/2026): emprestar o shell e o Device Owner a outros apps (ShizukuEmbutido, depois o Dhizuku).
         PODER_EMPRESTADO,
+        // Degraus 3 e 4: divisão escolhida pelo Paulo em 17/11/2026 (revisão dos degraus, T2). Ficam no Básico (por isso
+        // não estão aqui): receitas prontas, cenas prontas, relatar problema, hóspede, recado e foto da família DENTRO de casa.
+        /** Pro: o link da família (recado e foto de fora de casa, FamiliaConectada). */
+        FAMILIA_LINK,
+        /** Pro: recado em vídeo, som no fone, continuar em outra TV, plugins na tela inicial. */
+        RECADO_VIDEO, SOM_NO_FONE, CONTINUAR_OUTRA_TV, PLUGINS,
+        /** Ultra: várias casas no app do celular, sessão junto e o que usar o servidor da Sofaly (custo recorrente). */
+        VARIAS_CASAS, SESSAO_JUNTO, SERVIDOR_SOFALY,
     }
 
     /** O plano mínimo de cada recurso. O que não está aqui é do Básico (tela inicial, protetor, despertador, player...). */
@@ -41,6 +49,9 @@ object Planos {
         Recurso.CLIMA_3_MODELOS to Plano.ULTRA, Recurso.FICHAS_TMDB to Plano.ULTRA,
         Recurso.LEGENDA_AUTOMATICA to Plano.ULTRA, Recurso.SUPORTE_COM_PRAZO to Plano.ULTRA,
         Recurso.CUIDAR_DE_LONGE to Plano.ULTRA,
+        Recurso.FAMILIA_LINK to Plano.PRO, Recurso.RECADO_VIDEO to Plano.PRO, Recurso.SOM_NO_FONE to Plano.PRO,
+        Recurso.CONTINUAR_OUTRA_TV to Plano.PRO, Recurso.PLUGINS to Plano.PRO,
+        Recurso.VARIAS_CASAS to Plano.ULTRA, Recurso.SESSAO_JUNTO to Plano.ULTRA, Recurso.SERVIDOR_SOFALY to Plano.ULTRA,
     )
 
     fun permite(plano: Plano, r: Recurso) = plano.ordinal >= (MINIMO[r] ?: Plano.BASICO).ordinal
@@ -50,7 +61,7 @@ object Planos {
     /** Quantas TVs da mesma casa a compra cobre. */
     fun tvsPorCompra(plano: Plano) = if (plano == Plano.ULTRA) 3 else 1
     /** Temas liberados no Básico (os outros pedem o Pro). */
-    val TEMAS_BASICO = setOf(Tema.ESCURO.name, Tema.GALERIA.name)
+    val TEMAS_BASICO = setOf(Tema.ESCURO.name, Tema.GALERIA.name, Tema.CEU.name)   // Céu: satélite e mapa sem custo
 
     /** O plano deste aparelho. Sem venda ativa: Ultra. Com venda: virá da compra (ainda não existe). */
     fun atual(ctx: Context): Plano = if (!VENDA_ATIVA) Plano.ULTRA else CobrancaPlay.planoGuardado(ctx)

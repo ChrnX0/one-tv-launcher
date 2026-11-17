@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor que reage ao tempo, caminho 2 (17/11/2026): frase do tempo, curiosidades do céu e o tema "Céu de verdade". -->
+<resources>
+    <string name="tema_ceu">Céu de verdade</string>
+    <string name="ceu_credito">Nuvens: NOAA GOES / NASA GIBS · Mapa: Natural Earth</string>
+    <string name="ft_chuva_min">Chuva a chegar dentro de uns %1$d min</string>
+    <string name="ft_para_min">A chuva para em uns %1$d min</string>
+    <string name="ft_chuva_hora">Chuva por volta das %1$s</string>
+    <string name="ft_para_hora">A chuva para por volta das %1$s</string>
+    <string name="ft_chuva_segue">Chuva pelas próximas horas</string>
+    <string name="ft_trovoada">Trovoada por volta das %1$s</string>
+    <string name="ft_geada_hoje">Geada hoje à noite: proteja as plantas</string>
+    <string name="ft_geada_manha">Manhã de geada: agasalhe-se</string>
+    <string name="ft_calor">Calor forte hoje (%1$d°): beba água</string>
+    <string name="ft_neblina">Neblina: cuidado na estrada</string>
+    <string name="ft_noite_fria">Noite fria (%1$d°): agasalhe-se</string>
+    <string name="ft_secar">Bom dia para secar a roupa</string>
+    <string name="ft_amanha_chove">Amanhã deve chover (%1$d%%)</string>
+    <string name="ft_ceu_limpo">Céu limpo: noite boa para ver estrelas</string>
+    <string name="cu_uv_agora">UV %1$d agora</string>
+    <string name="cu_uv_amanha">UV %1$d amanhã</string>
+    <string name="cu_uv_faixa">chapéu e protetor das %1$s às %2$s</string>
+    <string name="cu_uv_d2">protetor solar se for sair</string>
+    <string name="cu_uv_d3">chapéu e protetor</string>
+    <string name="cu_uv_d4">evite o sol do meio-dia</string>
+    <string name="cu_uv_d5">fique na sombra</string>
+    <string name="cu_ar_2">Ar moderado</string>
+    <string name="cu_ar_3">Ar mau para sensíveis</string>
+    <string name="cu_ar_4">Ar mau</string>
+    <string name="cu_ar_5">Ar muito mau</string>
+    <string name="cu_ar_6">Ar perigoso</string>
+    <string name="cu_ar_d2">quem tem asma: janela fechada hoje</string>
+    <string name="cu_ar_d3">evite exercício na rua</string>
+    <string name="cu_ar_d4">todos: menos tempo na rua</string>
+    <string name="cu_ar_d5">fique em casa, janelas fechadas</string>
+    <string name="cu_estacao">Estação Espacial às %1$s</string>
+    <string name="cu_estacao_d">%1$d min · %2$s → %3$s</string>
+    <string name="cu_meteoros">Chuva de meteoros hoje</string>
+    <string name="cu_meteoros_d">%1$s · até %2$d por hora</string>
+    <string name="cu_eclipse">Eclipse do Sol %1$s</string>
+    <string name="cu_eclipse_d">nunca olhe direto para o sol</string>
+    <string name="cu_lua_cheia">Lua cheia hoje</string>
+    <string name="cu_superlua">Superlua hoje</string>
+    <string name="cu_lua_cheia_d">nasce no leste ao anoitecer</string>
+    <string name="cu_lua_nova">Lua nova</string>
+    <string name="cu_lua_nova_d">céu escuro: melhor para estrelas</string>
+    <string name="cu_planeta">%1$s alto às %2$s</string>
+    <string-array name="ceu_rumos">
+        <item>norte</item>
+        <item>nordeste</item>
+        <item>leste</item>
+        <item>sudeste</item>
+        <item>sul</item>
+        <item>sudoeste</item>
+        <item>oeste</item>
+        <item>noroeste</item>
+    </string-array>
+    <string-array name="ceu_olhe">
+        <item>olhe para o norte</item>
+        <item>olhe para o nordeste</item>
+        <item>olhe para o leste</item>
+        <item>olhe para o sudeste</item>
+        <item>olhe para o sul</item>
+        <item>olhe para o sudoeste</item>
+        <item>olhe para o oeste</item>
+        <item>olhe para o noroeste</item>
+    </string-array>
+    <string-array name="ceu_planetas">
+        <item>Vénus</item>
+        <item>Marte</item>
+        <item>Júpiter</item>
+        <item>Saturno</item>
+    </string-array>
+    <string-array name="ceu_meteoros">
+        <item>Quadrântidas</item>
+        <item>Líridas</item>
+        <item>Eta Aquáridas</item>
+        <item>Delta Aquáridas</item>
+        <item>Perseidas</item>
+        <item>Oriónidas</item>
+        <item>Leónidas</item>
+        <item>Geminídeas</item>
+    </string-array>
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App do celular (revisão dos degraus, T5, 17/11/2026). Caminho do menu = o mesmo texto da TV neste idioma. -->
+<resources>
+    <string name="cel_titulo">Deine Fernseher</string>
+    <string name="cel_mandar_para">An welchen Fernseher senden?</string>
+    <string name="cel_ler_qr">QR-Code des Fernsehers lesen</string>
+    <string name="cel_vazio">Noch kein Fernseher. Öffne auf dem Fernseher Einstellungen › Fernzugriff › Mit dem Handy anmelden, tippe dann unten auf die Schaltfläche und richte die Kamera auf den Code.</string>
+    <string name="cel_pareada_segura">%1$s · sichere Verbindung</string>
+    <string name="cel_pareada_http">%1$s · Heimnetz</string>
+    <string name="cel_na_rede">Im Netzwerk gefunden</string>
+    <string name="cel_achada">%1$s · noch nicht gekoppelt</string>
+    <string name="cel_achada_explica">Für eine sichere Verbindung den QR-Code einmal lesen: auf dem Fernseher Einstellungen › Fernzugriff › Mit dem Handy anmelden. Oder jetzt öffnen und mit der PIN anmelden.</string>
+    <string name="cel_abrir_pin">Mit PIN öffnen</string>
+    <string name="cel_esquecer">Vergessen</string>
+    <string name="cel_esquecer_explica">Dieses Handy vergisst diesen Fernseher. Um ihn wieder zu nutzen, lies den QR-Code.</string>
+    <string name="cel_aponte">Auf den Code am Fernseher richten</string>
+    <string name="cel_qr_invalido">Das ist kein Code vom Fernseher. Öffne auf dem Fernseher Einstellungen › Fernzugriff › Mit dem Handy anmelden.</string>
+    <string name="cel_cert_outro">Der Fernseher hat mit einem anderen Zertifikat geantwortet. Wenn du es erneuert hast, lies den QR-Code noch einmal.</string>
+    <string name="cel_casa_padrao">Zuhause</string>
+    <string name="cel_casa_qual">In welchem Zuhause steht dieser Fernseher?</string>
+    <string name="cel_casa_nova">Anderes Zuhause…</string>
+    <string name="cel_casa_dica">z. B. Strandhaus, Bei Mama</string>
+</resources>

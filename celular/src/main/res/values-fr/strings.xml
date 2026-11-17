@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App do celular (revisão dos degraus, T5, 17/11/2026). Caminho do menu = o mesmo texto da TV neste idioma. -->
+<resources>
+    <string name="cel_titulo">Vos téléviseurs</string>
+    <string name="cel_mandar_para">Envoyer vers quel téléviseur ?</string>
+    <string name="cel_ler_qr">Lire le code QR du téléviseur</string>
+    <string name="cel_vazio">Aucun téléviseur pour l’instant. Sur le téléviseur, ouvrez Paramètres › Accès à distance › Se connecter avec le téléphone, puis touchez le bouton ci-dessous et visez le code avec l’appareil photo.</string>
+    <string name="cel_pareada_segura">%1$s · connexion sécurisée</string>
+    <string name="cel_pareada_http">%1$s · réseau de la maison</string>
+    <string name="cel_na_rede">Trouvés sur le réseau</string>
+    <string name="cel_achada">%1$s · pas encore associé</string>
+    <string name="cel_achada_explica">Pour une connexion sécurisée, lisez le code QR une fois : sur le téléviseur, Paramètres › Accès à distance › Se connecter avec le téléphone. Ou ouvrez-le maintenant avec le code PIN.</string>
+    <string name="cel_abrir_pin">Ouvrir avec le code PIN</string>
+    <string name="cel_esquecer">Oublier</string>
+    <string name="cel_esquecer_explica">Ce téléphone oublie ce téléviseur. Pour l’utiliser à nouveau, lisez le code QR.</string>
+    <string name="cel_aponte">Visez le code sur le téléviseur</string>
+    <string name="cel_qr_invalido">Ce n’est pas un code du téléviseur. Sur le téléviseur, ouvrez Paramètres › Accès à distance › Se connecter avec le téléphone.</string>
+    <string name="cel_cert_outro">Le téléviseur a répondu avec un autre certificat. Si vous l’avez renouvelé, lisez à nouveau le code QR.</string>
+    <string name="cel_casa_padrao">Maison</string>
+    <string name="cel_casa_qual">Dans quelle maison se trouve ce téléviseur ?</string>
+    <string name="cel_casa_nova">Autre maison…</string>
+    <string name="cel_casa_dica">ex. : Maison de plage, Chez maman</string>
+</resources>

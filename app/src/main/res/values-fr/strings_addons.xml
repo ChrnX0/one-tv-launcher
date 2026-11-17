@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Addons no formato do Stremio, só HTTP (16/11/2026): AddonsActivity, ConfigLauncherActivity, MainActivity. -->
+<resources>
+    <string name="ad_titulo">Addons</string>
+    <string name="ad_destaque">Films et séries de vos addons</string>
+    <string name="ad_vazio">Aucun addon pour l\'instant. Ajoutez-en un dans le panneau web (Réglages, Addons). Seules les vidéos en lien direct (HTTP) sont lues ici : torrent et P2P ne sont pas pris en charge.</string>
+    <string name="ad_resumo">Catalogues de vos addons. Les addons sont faits par des tiers : qui en installe un est responsable de son contenu.</string>
+    <string name="ad_buscar">Rechercher</string>
+    <string name="ad_buscar_dica">Nom du film ou de la série</string>
+    <string name="ad_carregando">Chargement…</string>
+    <string name="ad_falhou">L\'addon n\'a pas répondu. Réessayez dans un instant.</string>
+    <string name="ad_nada">Rien ici.</string>
+    <string name="ad_mais">Plus</string>
+    <string name="ad_tipo_filmes">Films</string>
+    <string name="ad_tipo_series">Séries</string>
+    <string name="ad_tipo_canais">Chaînes</string>
+    <string name="ad_temporada">Saison %1$d</string>
+    <string name="ad_especiais">Épisodes spéciaux</string>
+    <string name="ad_episodio">%1$d. %2$s</string>
+    <string name="ad_sem_fontes">Aucune source lisible ici. Sofaly ne lit que les vidéos en lien direct (HTTP).</string>
+    <string name="ad_fontes_resumo">Choisissez une source</string>
+    <string name="ad_dica_voltar">retour</string>
+    <string name="ad_cfg_det">Addons installés. Pour en ajouter, utilisez le panneau web.</string>
+    <string name="ad_cfg_como">Pour ajouter un addon, ouvrez le panneau web du téléviseur sur votre téléphone ou ordinateur, allez dans Réglages, Addons, collez l\'adresse qui se termine par manifest.json et confirmez avec le PIN.</string>
+    <string name="ad_cfg_remover_qual">Quel addon retirer ?</string>
+    <string name="ad_cfg_remover">%1$s sera retiré de ce téléviseur.</string>
+    <string name="ad_cfg_remover_sim">Retirer</string>
+</resources>

@@ -30,8 +30,9 @@ object LegendaExterna {
     /** O que procurar: filme (nome + ano) ou episódio (nome da série + temporada + episódio). */
     /** [tmdb] = id TMDB do filme ou da série (fatia 3: o player conta ao Trakt/Simkl o que está passando). */
     /** [hash] = o "moviehash" do arquivo (ideia 89): acha a legenda feita para ESTE arquivo, com o tempo certo. */
+    /** [versao]: a marca da lista ("LEG", "Dublado"); decide a legenda automática quando o áudio não diz o idioma. */
     data class Busca(val nome: String, val ano: Int? = null, val temporada: Int? = null, val episodio: Int? = null, val tmdb: Int? = null,
-                     val hash: String? = null) {
+                     val hash: String? = null, val versao: Idioma.Versao = Idioma.Versao.DESCONHECIDA) {
         val eEpisodio get() = temporada != null && episodio != null
     }
 

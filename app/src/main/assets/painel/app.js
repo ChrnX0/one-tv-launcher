@@ -190,11 +190,15 @@ setInterval(() => {
  * O que carregar ao abrir cada aba. Aba nova: basta a <section id="abaNome"> + um botão data-aba="nome"; se precisar
  * carregar algo, ou põe aqui, ou escuta o evento "aba" (document.addEventListener('aba', e => e.detail === 'nome' ...)),
  * como o extras.js faz. Assim um PR novo não precisa mexer nesta função (menos conflito entre PRs).
+ * Painel v3 (16/11/2026): as chaves daqui são os nomes ANTIGOS das abas ("config", "extras"...). Cada página nova diz
+ * em PAGINAS quais deles ela acorda, porque os cartões de uma aba antiga foram para páginas diferentes.
  */
 const AO_ABRIR = {
   apps: () => carregarApps(),
   tv: () => carregarTv(),
-  controle: () => { atualizarFoto(); carregarClima(); carregarAutoDesligar(); },
+  controle: () => atualizarFoto(),
+  clima: () => carregarClima(),
+  desligar: () => carregarAutoDesligar(),
   saude: () => carregarSaude(),
   fotos: () => { carregarFotos(); carregarPerfis(); },
   rede: () => carregarRede(),
@@ -206,27 +210,69 @@ const AO_ABRIR = {
   arquivos: () => abrirPasta(pastaAtual),
 };
 
+/**
+ * Painel v3 (16/11/2026): 5 seções na navegação (Início, Controle, Na TV, Casa e família, Ajustes) e páginas dentro
+ * delas. [grupo] = a seção que fica acesa na navegação; [acorda] = os nomes antigos de aba cujo carregamento roda (AO_ABRIR
+ * acima e o evento "aba" que extras.js, ideias.js, addons.js... escutam). Uma página com cartões que vieram do antigo
+ * Extras acorda "extras", e assim os scripts deles continuam iguais.
+ */
+const PAGINAS = {
+  inicio: { acorda: ['inicio'] },
+  controle: { acorda: ['controle'] },
+  natv: { acorda: [] },
+  apps: { grupo: 'natv', acorda: ['apps'] },
+  loja: { grupo: 'natv', acorda: ['extras'] },
+  arquivos: { grupo: 'natv', acorda: ['arquivos'] },
+  // Configurações: as mesmas abas da TV, na mesma ordem (ConfigLauncherActivity.abas). Pedido do Paulo (16/11/2026):
+  // "o painel web tem que ser muito parecido com o painel de configurações do launcher na TV".
+  ajustes: { acorda: [] },
+  telainicial: { grupo: 'ajustes', acorda: ['config', 'clima', 'extras'] },
+  tvfilmes: { grupo: 'ajustes', acorda: ['tv', 'config', 'extras', 'fotos'] },
+  familia: { grupo: 'ajustes', acorda: ['config', 'extras'] },
+  energia: { grupo: 'ajustes', acorda: ['config', 'desligar', 'fotos', 'extras'] },
+  casa: { grupo: 'ajustes', acorda: ['extras'] },
+  remoto: { grupo: 'ajustes', acorda: ['config', 'extras', 'claude', 'ia', 'registro'] },
+  sistema: { grupo: 'ajustes', acorda: ['saude', 'extras', 'backup'] },
+  avancado: { grupo: 'ajustes', acorda: ['rede', 'roteador', 'config', 'extras'] },
+};
+/** Nomes antigos (links salvos, avisos do celular, QR das Configurações da TV de versões anteriores). */
+const APELIDOS = {
+  extras: 'ajustes', config: 'ajustes', mais: 'ajustes', claude: 'remoto', ia: 'remoto', registro: 'remoto', roteador: 'avancado',
+  rede: 'avancado', saude: 'sistema', backup: 'sistema', tv: 'tvfilmes', fotos: 'energia',
+};
+
 /** "arquivos" -> "abaArquivos" (o id da <section>). */
 const idDaAba = (nome) => 'aba' + nome.charAt(0).toUpperCase() + nome.slice(1);
 
+let paginaAtual = 'inicio';
+/** A página aberta tem os cartões da aba antiga [antiga]? (Para os relógios que só atualizam com a aba à vista.) */
+const abaAberta = (antiga) => !$('telaPainel').hidden && (PAGINAS[paginaAtual]?.acorda || []).includes(antiga);
+
 /**
- * Mostra uma aba e esconde as outras. [historico]=false quando veio do botão Voltar do navegador (não empilha de
- * novo). O endereço ganha "#nome": recarregar a página ou mandar o link abre na mesma aba.
+ * Mostra uma página e esconde as outras. [historico]=false quando veio do botão Voltar do navegador (não empilha de
+ * novo). O endereço ganha "#nome": recarregar a página ou mandar o link abre na mesma página.
  */
 function mudarAba(nome, historico = true) {
-  if (!nome || !$(idDaAba(nome))) nome = 'inicio';
+  nome = APELIDOS[nome] || nome;
+  if (!nome || !PAGINAS[nome] || !$(idDaAba(nome))) nome = 'inicio';
+  paginaAtual = nome;
+  const secao = PAGINAS[nome].grupo || nome;
   for (const b of document.querySelectorAll('.aba')) {
-    const ativa = b.dataset.aba === nome
-      // no celular, "Mais" fica aceso enquanto se está numa aba que mora dentro dele
-      || (b.dataset.aba === 'mais' && !document.querySelector(`.aba.principal[data-aba="${nome}"]`));
+    // Seção (Início, Controle, Na TV, Configurações) acende pelo grupo; página da coluna do computador, só ela.
+    const ativa = b.dataset.aba === (b.classList.contains('sub') ? nome : secao);
     b.classList.toggle('ativa', ativa);
     if (ativa) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
   }
   for (const s of document.querySelectorAll('.painel-aba')) s.hidden = s.id !== idDaAba(nome);
   if (nome !== 'controle') pararFoto();
-  const carregar = AO_ABRIR[nome];
-  if (carregar) Promise.resolve().then(carregar).catch((e) => console.warn(nome, e));
-  document.dispatchEvent(new CustomEvent('aba', { detail: nome }));
+  const acorda = PAGINAS[nome].acorda;
+  // Primeiro um evento com o nome da própria página (quem escuta "sair de X" para o que estava fazendo), depois os antigos.
+  if (!acorda.includes(nome)) document.dispatchEvent(new CustomEvent('aba', { detail: nome }));
+  for (const antiga of acorda) {
+    const carregar = AO_ABRIR[antiga];
+    if (carregar) Promise.resolve().then(carregar).catch((e) => console.warn(antiga, e));
+    document.dispatchEvent(new CustomEvent('aba', { detail: antiga }));
+  }
   if (historico && location.hash !== '#' + nome) history.pushState(null, '', '#' + nome);
   window.scrollTo(0, 0);
 }
@@ -849,7 +895,7 @@ function desenharDriveLogin(l) {
     if (l.codigo !== qrDriveAtual) $('driveQr').src = '/api/backup/drive/qr?t=' + Date.now();
     qrDriveAtual = l.codigo;
     // Confere a cada 3 s só com a aba à vista (a consulta renova a sessão do painel).
-    if (!$('abaBackup').hidden && document.visibilityState === 'visible') timerDrive = setTimeout(acompanharDrive, 3000);
+    if (abaAberta('backup') && document.visibilityState === 'visible') timerDrive = setTimeout(acompanharDrive, 3000);
     return;
   }
   qrDriveAtual = null;
@@ -1100,7 +1146,7 @@ function desenharServicos(r) {
     caixa.appendChild(bloco);
   }
   // Confere a cada 3 s só com a aba à vista, enquanto algum login espera o celular.
-  if (esperando && (!$('abaConfig').hidden || !$('telaPrimeira').hidden) && document.visibilityState === 'visible') timerServicos = setTimeout(carregarServicos, 3000);
+  if (esperando && (abaAberta('config') || !$('telaPrimeira').hidden) && document.visibilityState === 'visible') timerServicos = setTimeout(carregarServicos, 3000);
 }
 
 // Sincronização de uma conta conectada (a mesma tela SincronizarActivity da TV). Tudo começa desligado; LIGAR pede o PIN.
@@ -1421,6 +1467,17 @@ async function carregarPerfis() {
     const nome = document.createElement('span');
     nome.className = 'nome';
     nome.textContent = c.conta + (c.foto ? (c.manual ? ' · foto enviada por você' : ' · foto da conta Google') : ' · sem foto');
+    // Nome que a TV mostra no lugar do usuário do e-mail (Perfil.nome).
+    const apelido = document.createElement('input');
+    apelido.type = 'text'; apelido.maxLength = 30; apelido.value = c.nome || '';
+    apelido.placeholder = c.conta.split('@')[0];
+    apelido.setAttribute('aria-label', 'Nome na TV');
+    apelido.addEventListener('change', async () => {
+      try {
+        const r2 = await chamar('POST', '/api/perfil/nome', { conta: c.conta, nome: apelido.value });
+        mostrar($('statusPerfil'), `Na TV este perfil aparece como “${r2.nome}”.`);
+      } catch (e) { mostrar($('statusPerfil'), textoErro(e)); }
+    });
     const escolher = document.createElement('input');
     escolher.type = 'file'; escolher.accept = 'image/jpeg,image/png,image/webp'; escolher.hidden = true;
     escolher.addEventListener('change', async () => {
@@ -1436,7 +1493,7 @@ async function carregarPerfis() {
     const enviar = document.createElement('button');
     enviar.type = 'button'; enviar.className = 'botao-primario'; enviar.textContent = c.foto ? 'Trocar foto…' : 'Enviar foto…';
     enviar.addEventListener('click', () => escolher.click());
-    linha.append(rosto, nome, escolher, enviar);
+    linha.append(rosto, nome, apelido, escolher, enviar);
     if (c.foto) {
       const tirar = document.createElement('button');
       tirar.type = 'button'; tirar.className = 'link'; tirar.textContent = 'remover';
@@ -1736,7 +1793,7 @@ function desenharMcp(r) {
   clearTimeout(timerMcp);
   // Só com a página à vista: a consulta renova a sessão, e com a aba do navegador escondida ela nunca venceria.
   // Ao voltar a ficar visível, o visibilitychange (fim do arquivo) recomeça.
-  if (!$('abaClaude').hidden && document.visibilityState === 'visible' && r.passo.id !== 'pronto' && r.passo.id !== 'desligado') timerMcp = setTimeout(carregarMcp, 3000);
+  if (abaAberta('claude') && document.visibilityState === 'visible' && r.passo.id !== 'pronto' && r.passo.id !== 'desligado') timerMcp = setTimeout(carregarMcp, 3000);
 }
 
 async function carregarMcp() {
@@ -2289,8 +2346,8 @@ async function atualizarFoto() {
 }
 document.addEventListener('visibilitychange', () => {
   if (!$('abaControle').hidden) atualizarFoto();
-  if (!$('abaClaude').hidden && document.visibilityState === 'visible' && !$('telaPainel').hidden) carregarMcp();
-  if (!$('abaBackup').hidden && document.visibilityState === 'visible' && !$('telaPainel').hidden && !$('driveLogin').hidden) acompanharDrive();
+  if (abaAberta('claude') && document.visibilityState === 'visible' && !$('telaPainel').hidden) carregarMcp();
+  if (abaAberta('backup') && document.visibilityState === 'visible' && !$('telaPainel').hidden && !$('driveLogin').hidden) acompanharDrive();
 });
 
 for (const b of document.querySelectorAll('[data-tecla]')) {
@@ -2529,7 +2586,7 @@ for (const b of document.querySelectorAll('.periodo')) {
   });
 }
 $('btnAtualizarRede').addEventListener('click', () => carregarRede());
-window.addEventListener('resize', () => { if (!$('abaRede').hidden) carregarRede(); });
+window.addEventListener('resize', () => { if (abaAberta('rede')) carregarRede(); });
 
 // ---------- início ----------
 
@@ -2550,8 +2607,9 @@ function pegarCodigoQr() {
 function irPara(ir) {
   if (!ir) return;
   const [aba, cartao] = ir.split('.');
-  mudarAba(aba);
   const alvo = cartao && $(cartao);
+  const pagina = alvo && alvo.closest('.painel-aba');
+  mudarAba(pagina ? pagina.id.slice(3).charAt(0).toLowerCase() + pagina.id.slice(4) : aba);
   if (!alvo) return;
   setTimeout(() => {
     alvo.scrollIntoView({ behavior: 'smooth', block: 'start' });

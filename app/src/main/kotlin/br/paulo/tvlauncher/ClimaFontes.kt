@@ -15,7 +15,11 @@ object ClimaFontes {
     /** O que a HOME mostra e guarda nas prefs "clima". [amanha] = máx, mín, código, chance (nulo sem o 2º dia). */
     class Resultado(val ponto: Localizacao.Ponto, val temp: Int, val umidade: Int?, val max: Int, val min: Int,
         val amanha: List<Int>?, val codigo: Int, val chovendo: Boolean, val eDia: Boolean, val picoChuva: Int,
-        val linha: String, val icone: String, val horas: String = "")
+        val linha: String, val icone: String, val horas: String = "",
+        /** Protetor que reage ao tempo (17/11/2026): UV hora a hora, chuva de 15 em 15 min e ar ([SeriesTempo]); vazio/nulo = a fonte não tem. */
+        val uv: String = "", val chuva15: String = "", val aqi: Int? = null,
+        /** Chance de chuva do resto de hoje (a maior), para "Hoje · X% de chuva" (#185). */
+        val chuvaHoje: Int = picoChuva)
 
     @Volatile private var ultimaMedida: Medida? = null   // a última leitura boa do aeroporto
     @Volatile private var ultimaMedidaMs = 0L
@@ -29,7 +33,8 @@ object ClimaFontes {
         val url = "https://api.open-meteo.com/v1/forecast" +
             "?latitude=${ponto.lat}&longitude=${ponto.lon}" +
             "&current=temperature_2m,relative_humidity_2m,weather_code,precipitation,is_day" +
-            "&hourly=precipitation_probability,temperature_2m,weather_code&forecast_hours=24" +
+            "&hourly=precipitation_probability,temperature_2m,weather_code,uv_index&forecast_hours=24" +
+            "&minutely_15=precipitation&forecast_minutely_15=12" +   // chuva nas próximas 3 h, para "chega em uns 25 min"
             "&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max" +
             "&timezone=auto&forecast_days=${FaixaDias.DIAS}$unidade"
         val json = if (BuildConfig.CLIMA_MET) ClimaMet.previsao(ponto.lat, ponto.lon, desdeAgora = true) ?: return null
@@ -100,6 +105,12 @@ object ClimaFontes {
             val p = horasChuva[i]
             if (p >= 40) { primeira = i; picoChuva = p; break }
         }
+        // A maior chance de chuva no RESTO de hoje (da hora atual até meia-noite). É o "Hoje · X% de chuva" do protetor e o
+        // chance_chuva_pct do MCP; antes eles recebiam o picoChuva (a 1ª hora >= 40%, ou 0), e o protetor dizia "0% de
+        // chuva" num dia com 47% à tarde (visto na Sala, 17/11/2026).
+        val horaAgora = atual.optString("time", "").take(13)   // "2026-11-17T09"
+        val chuvaHoje = horasChuva.indices.filter { it < horasData.size && horasData[it].startsWith(hoje) && horasData[it].take(13) >= horaAgora }
+            .maxOfOrNull { horasChuva[it] } ?: picoChuva
         val textoLinha = when {
             chovendoAgora -> ctx.getString(R.string.home_chovendo)
             primeira == 0 -> ctx.getString(R.string.home_chuva_agora, descricao, picoChuva)
@@ -113,7 +124,39 @@ object ClimaFontes {
         // IconesClima.aparar na pilha da thread principal). Na tela, bitmap() já acha pronto no cache.
         if (IconesClima.ehIcone(icone)) IconesClima.bitmap(ctx, icone)
         return Resultado(ponto, temp, umidade, max, min, amanha, codigo, chovendoAgora, eDia, picoChuva, textoLinha, icone,
-            proximasHoras(json, atual.optString("time", ""), horasData, horasChuva))
+            proximasHoras(json, atual.optString("time", ""), horasData, horasChuva),
+            uv = serie(json.optJSONObject("hourly"), "uv_index"), chuva15 = serie(json.optJSONObject("minutely_15"), "precipitation", -15 * 60_000L),
+            aqi = if (BuildConfig.CLIMA_MET) null else qualidadeDoAr(ponto), chuvaHoje = chuvaHoje)
+    }
+
+    /**
+     * Uma série da resposta ("time" + [campo]) no formato de [SeriesTempo]. Vazio se a fonte não mandou. [desloca]: a chuva
+     * de 15 min da Open-Meteo é a soma dos 15 min ANTERIORES ao horário (li em open-meteo.com/en/docs); -15 min faz o
+     * instante virar o começo do bloco, como [FraseTempo] espera. (Fora dos EUA e da Europa central o dado de 15 min é a
+     * hora a hora interpolada pela própria Open-Meteo: a frase de minutos fica menos precisa ali.)
+     */
+    private fun serie(bloco: JSONObject?, campo: String, desloca: Long = 0L): String = try {
+        val t = bloco?.optJSONArray("time"); val v = bloco?.optJSONArray(campo)
+        if (t == null || v == null) "" else SeriesTempo.escrever((0 until minOf(t.length(), v.length())).mapNotNull { i ->
+            if (v.isNull(i)) null else SeriesTempo.msLocal(t.getString(i))?.let { (it + desloca) to v.getDouble(i) }
+        })
+    } catch (e: Exception) { "" }
+
+    @Volatile private var arGuardado: Pair<Long, Int?>? = null
+
+    /**
+     * Qualidade do ar (índice americano) da Open-Meteo, a mesma da tela de Previsão; uma vez por hora no máximo (o dado
+     * muda devagar). Só no build que usa a Open-Meteo: a fonte do produto ainda não tem ar (o cartão some).
+     */
+    private fun qualidadeDoAr(ponto: Localizacao.Ponto): Int? {
+        val agora = System.currentTimeMillis()
+        arGuardado?.let { (em, v) -> if (agora - em < 60 * 60_000L) return v }
+        val v = try {
+            JSONObject(httpGet("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${ponto.lat}&longitude=${ponto.lon}&current=us_aqi")
+                ?: return arGuardado?.second).optJSONObject("current")?.optInt("us_aqi", -1)?.takeIf { it >= 0 }
+        } catch (e: Exception) { return arGuardado?.second }
+        arGuardado = agora to v
+        return v
     }
 
     /**

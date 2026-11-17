@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Recado em vídeo (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="vid_de">فيديو من %1$s</string>
+    <string name="vid_mural">أرسل فيديو</string>
+    <string name="vid_onde">للمشاهدة: الإعدادات › العائلة › فيديوهات العائلة.</string>
+    <string name="vid_depois">لاحقًا</string>
+    <string name="vid_assistir">شاهد</string>
+    <string name="vid_ok_para_assistir">اضغط OK للمشاهدة.</string>
+    <string name="vid_lista">فيديوهات العائلة</string>
+    <string name="vid_lista_det">أُرسلت عبر رابط العائلة. يبقى كل فيديو 30 يومًا. اضغط OK مطولًا للحذف.</string>
+    <string name="vid_nenhum">لا توجد فيديوهات بعد.</string>
+    <string name="vid_apagar">حذف الفيديو</string>
+    <string name="vid_aceitar">قبول الفيديوهات</string>
+    <string name="vid_aceitar_det">يمكن للعائلة إرسال فيديوهات حتى 30 ثانية. لا تُشغَّل وحدها أبدًا.</string>
+    <string name="vid_quantos">الفيديوهات: %1$d</string>
+</resources>

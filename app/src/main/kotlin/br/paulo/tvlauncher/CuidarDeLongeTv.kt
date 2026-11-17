@@ -109,6 +109,8 @@ object CuidarDeLongeTv {
 
     // ---------------------------------------------------------------- 77: pedido de ajuda
 
+    /** A pergunta do consentimento está na frente (CuidarTelaActivity): o shell do MCP recusa comandos enquanto isso. */
+    @Volatile var consentimentoNaTela = false
     @Volatile private var ajudaLigada = false
     @Volatile private var teclaAjuda = CuidarDeLonge.Tecla.VOLTAR.codigo
     private val segurar = CuidarDeLonge.Segurar()
@@ -217,14 +219,24 @@ object CuidarDeLongeTv {
      * Faz o que está devido agora. BLOQUEIA (rede, nos avisos): fora da thread principal. Chamado pelo alarme, pela tela
      * acendendo e pelo adb (`EXTRAS --es o cuidar_rodar`).
      */
-    @Synchronized
-    fun rodar(ctx: Context) {
+    /**
+     * Trava só do [rodar] (os avisos vão pela rede, até 25 s por aparelho). Antes era a do objeto, a mesma de [mudar] e
+     * [mudarEstado]: o "Feito" e o "Aceito", na thread da tela, esperavam a rede e davam ANR.
+     */
+    private val travaRodar = Any()
+
+    fun rodar(ctx: Context) = synchronized(travaRodar) { rodarTravado(ctx) }
+
+    private fun rodarTravado(ctx: Context) {
         val app = ctx.applicationContext
         val agora = System.currentTimeMillis()
         val acesa = telaAcesa(app)
         if (acesa) mudarEstado(app) { it.copy(ligadas = CuidarDeLonge.anotarLigou(it.ligadas, agora, fuso)) }
         val c = config(app)
         val permitido = Planos.permite(app, Planos.Recurso.CUIDAR_DE_LONGE)
+        // O plano pode ter mudado desde iniciar() (compra, ou o relógio certo depois de um boot sem rede): a tecla de
+        // ajuda segue o plano de agora, sem esperar alguém mexer na configuração.
+        ajudaLigada = permitido && CuidarDeLonge.ativo(c, CuidarDeLonge.Aviso.AJUDA)
         for (a in CuidarDeLonge.devidos(c, estado(app), agora, fuso, ligadaAgora = acesa)) when (a) {
             is CuidarDeLonge.Acao.Mostrar -> {
                 // Tela apagada e "acender" desligado: espera a TV ligar (tvLigou roda de novo), até 2 h depois da hora.
@@ -264,7 +276,7 @@ object CuidarDeLongeTv {
     fun rodarNaoLigou(ctx: Context): Boolean {
         val app = ctx.applicationContext
         if (!ExtrasPlugin.autorizado(app) || !ativo(app, CuidarDeLonge.Aviso.NAO_LIGOU)) return false
-        synchronized(this) { pedidoDoExtras = true; try { rodar(app) } finally { pedidoDoExtras = false } }
+        synchronized(travaRodar) { pedidoDoExtras = true; try { rodarTravado(app) } finally { pedidoDoExtras = false } }
         return true
     }
 
@@ -327,6 +339,9 @@ object CuidarDeLongeTv {
             .put("falta", CuidarDeLonge.falta(c)?.name ?: JSONObject.NULL)
             .put("plano", Planos.permite(app, Planos.Recurso.CUIDAR_DE_LONGE))
             .put("familia", BuildConfig.CUIDAR_FAMILIA)   // false na build da Play: só o pedido de ajuda
+            // Os avisos que esta build oferece: o painel mostra exatamente estes (antes faltava o "Estou bem" e
+            // gravar pelo painel o apagava, mudando a configuração e derrubando o consentimento sem avisar).
+            .put("oferecidos", JSONArray(CuidarDeLonge.permitidos(BuildConfig.CUIDAR_FAMILIA, ExtrasPlugin.autorizado(app)).map { it.name }))
             .put("disponiveis", JSONArray().apply { aparelhos(app).forEach { (id, nome) -> put(JSONObject().put("id", id).put("nome", nome)) } })
             .put("costume", CuidarDeLonge.horaCostume(c, e.ligadas, hoje) ?: JSONObject.NULL)
             .put("amostras", e.ligadas.keys.count { it < hoje })

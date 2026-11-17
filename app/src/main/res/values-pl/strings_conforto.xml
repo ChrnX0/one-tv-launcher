@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Confortos do estudo do Stremio (16/11/2026): Conforto.kt, ConfigLauncherActivity, SincronizarActivity. -->
+<resources>
+    <string name="cf_resumo_escondido">Opis ukryty, dopóki nie obejrzysz</string>
+    <string name="cf_spoiler">Ukrywaj opisy nieobejrzanych odcinków</string>
+    <string name="cf_spoiler_det">Opis pojawia się dopiero po rozpoczęciu odcinka</string>
+    <string name="cf_segundo">Drugi język</string>
+    <string name="cf_segundo_det">Używany, gdy wideo nie ma dźwięku ani napisów w języku telewizora</string>
+    <string name="cf_nenhum">Brak</string>
+    <string name="cf_proximo">Odliczanie do następnego odcinka</string>
+    <string name="cf_proximo_det">Jak długo czekać, zanim następny odcinek włączy się sam</string>
+    <string name="cf_proximo_nao">Nie włączaj samo</string>
+    <string name="cf_segundos">%1$d s</string>
+    <string name="cf_consent_titulo">Wysyłać dane do %1$s?</string>
+    <string name="cf_consent_texto">Po włączeniu do %1$s przez internet trafiają tytuły, które oznaczasz i oglądasz na tym telewizorze, oraz miejsce, w którym skończyłeś. Są przechowywane na Twoim koncie %1$s zgodnie z jego zasadami prywatności. Możesz to wyłączyć w każdej chwili.</string>
+    <string name="cf_consent_sim">Zgadzam się</string>
+</resources>

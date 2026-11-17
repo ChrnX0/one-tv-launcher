@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Addons no formato do Stremio, só HTTP (16/11/2026): AddonsActivity, ConfigLauncherActivity, MainActivity. -->
+<resources>
+    <string name="ad_titulo">الإضافات</string>
+    <string name="ad_destaque">أفلام ومسلسلات من إضافاتك</string>
+    <string name="ad_vazio">لا توجد إضافات بعد. أضف واحدة من لوحة الويب (الإعدادات، الإضافات). لا يُشغَّل هنا إلا الفيديو عبر رابط مباشر (HTTP): التورنت وP2P غير مدعومين.</string>
+    <string name="ad_resumo">كتالوجات إضافاتك. الإضافات من جهات خارجية: من يثبّت إضافة يتحمّل مسؤولية محتواها.</string>
+    <string name="ad_buscar">بحث</string>
+    <string name="ad_buscar_dica">اسم الفيلم أو المسلسل</string>
+    <string name="ad_carregando">جارٍ التحميل…</string>
+    <string name="ad_falhou">لم تستجب الإضافة. حاول مرة أخرى بعد قليل.</string>
+    <string name="ad_nada">لا شيء هنا.</string>
+    <string name="ad_mais">المزيد</string>
+    <string name="ad_tipo_filmes">أفلام</string>
+    <string name="ad_tipo_series">مسلسلات</string>
+    <string name="ad_tipo_canais">قنوات</string>
+    <string name="ad_temporada">الموسم %1$d</string>
+    <string name="ad_especiais">حلقات خاصة</string>
+    <string name="ad_episodio">%1$d. %2$s</string>
+    <string name="ad_sem_fontes">لا يوجد مصدر يعمل هنا. لا تشغّل Sofaly إلا الفيديو عبر رابط مباشر (HTTP).</string>
+    <string name="ad_fontes_resumo">اختر مصدرًا</string>
+    <string name="ad_dica_voltar">رجوع</string>
+    <string name="ad_cfg_det">الإضافات المثبتة. للإضافة استخدم لوحة الويب.</string>
+    <string name="ad_cfg_como">لإضافة إضافة، افتح لوحة الويب الخاصة بالتلفزيون على الهاتف أو الكمبيوتر، وانتقل إلى الإعدادات، الإضافات، والصق العنوان الذي ينتهي بـ manifest.json وأكّد برمز PIN.</string>
+    <string name="ad_cfg_remover_qual">أي إضافة تريد إزالتها؟</string>
+    <string name="ad_cfg_remover">ستُزال %1$s من هذا التلفزيون.</string>
+    <string name="ad_cfg_remover_sim">إزالة</string>
+</resources>

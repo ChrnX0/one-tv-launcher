@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Confortos do estudo do Stremio (16/11/2026): Conforto.kt, ConfigLauncherActivity, SincronizarActivity. -->
+<resources>
+    <string name="cf_resumo_escondido">Özet, izleyene kadar gizli</string>
+    <string name="cf_spoiler">İzlenmemiş bölümlerin özetini gizle</string>
+    <string name="cf_spoiler_det">Özet ancak bölümü başlattıktan sonra görünür</string>
+    <string name="cf_segundo">İkinci dil</string>
+    <string name="cf_segundo_det">Videoda TV dilinde ses veya altyazı yoksa kullanılır</string>
+    <string name="cf_nenhum">Yok</string>
+    <string name="cf_proximo">Sonraki bölüm geri sayımı</string>
+    <string name="cf_proximo_det">Sonraki bölüm kendiliğinden başlamadan önce ne kadar beklensin</string>
+    <string name="cf_proximo_nao">Kendiliğinden başlatma</string>
+    <string name="cf_segundos">%1$d sn</string>
+    <string name="cf_consent_titulo">%1$s hizmetine veri gönderilsin mi?</string>
+    <string name="cf_consent_texto">Bunu açınca bu TV\'de işaretlediğin ve izlediğin başlıklar ve kaldığın yer internet üzerinden %1$s hizmetine gönderilir. %1$s hesabında, onun gizlilik kurallarına göre saklanır. İstediğin zaman kapatabilirsin.</string>
+    <string name="cf_consent_sim">Kabul ediyorum</string>
+</resources>

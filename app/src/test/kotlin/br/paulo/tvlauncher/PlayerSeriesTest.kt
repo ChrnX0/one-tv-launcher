@@ -62,6 +62,20 @@ class PlayerSeriesTest {
         assertTrue(Series.registrarUltimo(muitas, "novo", UltimoEpisodio("e", 1, 1, "", "mp4", 999)).size == 200)
     }
 
+    @Test fun continuarSobeComEpisodioNovo() {
+        // A foi vista agora há pouco; B foi vista há muito tempo, mas o servidor publicou episódio depois da conta.
+        val a = Serie("1", "a", "A", atualizada = 100)
+        val b = Serie("2", "a", "B", atualizada = 2_000_000)                       // segundos
+        val u = mapOf(a.chave to UltimoEpisodio("x", 1, 1, "", "mp4", 1_500_000_000L), // ms
+                      b.chave to UltimoEpisodio("y", 1, 1, "", "mp4", 10L))
+        val semNovidade = mapOf(b.chave to ProgressoSerie(2, 5, 2_000_000, 0, 0, 1))
+        assertEquals(listOf("1", "2"), Series.continuar(listOf(a, b), u, semNovidade).map { it.id })
+        val comNovidade = mapOf(b.chave to ProgressoSerie(2, 5, 1_000_000, 0, 0, 1))
+        assertEquals(listOf("2", "1"), Series.continuar(listOf(a, b), u, comNovidade).map { it.id })
+        // Nada visto (vistos = 0): a publicação não conta, fica pela última vez aberta.
+        assertEquals(10L, Series.ordemContinuar(b, u[b.chave], ProgressoSerie(0, 5, 1_000_000, 0, 0, 1)))
+    }
+
     @Test fun assistidosEFinalizado() {
         val serie = Serie("5", "a1", "A Série", atualizada = 100)
         val vista = mapOf("a1:e11" to Posicao(2_700_000, 2_700_000, 1))                 // T1E1 até o fim
@@ -77,6 +91,13 @@ class PlayerSeriesTest {
         assertEquals(100, Series.percentual(serie, p3))                                  // 3 de 3: Finalizado
         // Posições velhas sumiram do arquivo: o visto continua visto (total igual).
         assertEquals(3, Series.progressoDaFicha(serie, ficha, emptyMap(), p3)!!.vistos)
+        // Sala 17/11/2026: conta velha "1 de 3" com só o T1E1 começado (não visto) e nada antes dele: volta a 0.
+        val velha = ProgressoSerie(1, 3, 100)
+        val soComecou = mapOf("a1:e11" to Posicao(1_000_000, 2_700_000, 5))
+        assertEquals(0, Series.progressoDaFicha(serie, ficha, soComecou, velha)!!.vistos)
+        // Assistiu T1E1 e T1E2 (posições sumiram), está no T2E1 começado: mantém os 2.
+        val noT2 = mapOf("a1:e21" to Posicao(60_000, 2_700_000, 9))
+        assertEquals(2, Series.progressoDaFicha(serie, ficha, noT2, ProgressoSerie(2, 3, 100))!!.vistos)
         // Episódio novo no servidor depois da conta: deixa de ser Finalizado.
         assertEquals(99, Series.percentual(serie.copy(atualizada = 200), p3))
         // Finalizada sai do "continuar" e fica nos "assistidos".

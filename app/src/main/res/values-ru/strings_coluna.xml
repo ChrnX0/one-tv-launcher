@@ -22,6 +22,8 @@
     <string name="coluna_marcado_assistido">%1$s отмечено просмотренным</string>
     <string name="coluna_marcado_nao_assistido">%1$s отмечено непросмотренным</string>
     <string name="coluna_tirado_continuar">%1$s убрано из «Продолжить просмотр»</string>
+    <string name="coluna_menu_tirar_home">Убрать с главного экрана</string>
+    <string name="coluna_tirado_home">%1$s убран с главного экрана</string>
     <string name="coluna_etiqueta_concluida">Завершён</string>
     <string name="coluna_etiqueta_nova_temporada">Новый сезон</string>
     <string name="coluna_etiqueta_novos">Новые серии</string>

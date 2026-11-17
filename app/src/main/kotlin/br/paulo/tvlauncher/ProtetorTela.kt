@@ -61,9 +61,9 @@ class ProtetorTela : DreamService() {
 
         // "sans-serif-rounded" existe como variação do Roboto Flex desde o Android 12; onde não existir, o
         // sistema cai sozinho na fonte padrão (sem crash) e só a hora deixa de ficar arredondada.
-        val fonteRelogio = Fontes.manrope(500)
-        val fonteMedia = Fontes.manrope(500)
-        val fonteLeve = Fontes.manrope(200)
+        val fonteRelogio = Fontes.nunito(500)
+        val fonteMedia = Fontes.nunito(500)
+        val fonteLeve = Fontes.nunito(200)
 
         coluna = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -138,9 +138,15 @@ class ProtetorTela : DreamService() {
         val raiz = FrameLayout(this).apply { setBackgroundColor(0xFF15140F.toInt()) }
         // O fundo segue o TEMA da HOME (dono, 10 e 11/11/2026): Galeria = a pintura do dia; Escuro = o MESMO protetor,
         // só trocando a pintura pelo wallpaper escuro da HOME (sem mudar mais nada do estilo). Fotos do painel valem nos dois.
-        val galeriaNaHome = Tema.atual(this) == Tema.GALERIA
-        val g = ProtetorGaleria(this, carregador, comPintura = fotos.isEmpty() && galeriaNaHome,
-            wallpaperEscuro = fotos.isEmpty() && !galeriaNaHome)
+        val tema = Tema.atual(this)
+        val galeriaNaHome = tema == Tema.GALERIA
+        // Céu de verdade (17/11/2026): o mesmo protetor, com o mapa e as nuvens de agora no lugar da pintura.
+        // Protetor v2 (17/11/2026): fundo "A Terra vista do espaço" (fotos da NASA) escolhido nas Configurações vale em
+        // qualquer tema; fotos enviadas pelo painel continuam ganhando de tudo.
+        val terra = fotos.isEmpty() && Protetor.FUNDO.ler(this) == Protetor.FUNDO_TERRA
+        val ceu = fotos.isEmpty() && !terra && tema == Tema.CEU
+        val g = ProtetorGaleria(this, carregador, comPintura = fotos.isEmpty() && !terra && galeriaNaHome,
+            wallpaperEscuro = fotos.isEmpty() && !terra && !galeriaNaHome && !ceu, ceuDeVerdade = ceu, terra = terra)
         if (fotos.isNotEmpty()) {
             for (v in camadas) raiz.addView(v.apply { scaleType = ImageView.ScaleType.CENTER_CROP; alpha = 0f }, FrameLayout.LayoutParams(-1, -1))
             raiz.addView(View(this).apply {
@@ -215,7 +221,7 @@ class ProtetorTela : DreamService() {
     private lateinit var blocoDados: LinearLayout
     private val atualizarDados = object : Runnable {
         override fun run() {
-            montarDados(Fontes.manrope(500), Fontes.manrope(200))
+            montarDados(Fontes.nunito(500), Fontes.nunito(200))
             ui.postDelayed(this, ATUALIZAR_MS)
         }
     }
@@ -309,11 +315,14 @@ class ProtetorTela : DreamService() {
     override fun dispatchKeyEvent(event: android.view.KeyEvent): Boolean {
         val g = galeria
         val musica = g?.haMusica ?: (event.keyCode in TECLAS_MUSICA && temMusica())
-        val acao = TeclasProtetor.acao(event.keyCode, g?.totalCartoes ?: 0, g?.tipoEscolhido, musica)
+        val acao = TeclasProtetor.acao(event.keyCode, g?.totalCartoes ?: 0, g?.tipoEscolhido, musica, oculto = g?.oculto == true)
         if (acao == TeclasProtetor.Acao.DEIXAR_PASSAR) return super.dispatchKeyEvent(event)
         // Age na descida; a subida da mesma tecla é engolida (senão cairia no app que volta para a frente).
         if (event.action != android.view.KeyEvent.ACTION_DOWN || event.repeatCount > 0) return true
+        // Toda tecla que não fecha renova os 15 s em que o resto fica à mostra ("só a hora", protetor v2).
+        if (acao != TeclasProtetor.Acao.FECHAR) g?.tecla()
         when (acao) {
+            TeclasProtetor.Acao.MOSTRAR -> Unit   // a 1ª tecla com tudo escondido só mostra (g.tecla() acima)
             TeclasProtetor.Acao.ANTERIOR -> g?.mover(-1)
             TeclasProtetor.Acao.PROXIMO -> g?.mover(1)
             TeclasProtetor.Acao.DISPENSAR -> g?.dispensarEscolhido()

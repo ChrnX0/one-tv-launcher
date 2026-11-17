@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
+<resources>
+    <string name="jogos_no_sofa">소파에</string>
+    <string name="jogos_continuar">이어서</string>
+    <string name="jogos_controle_pronto">준비됨</string>
+    <string name="jogos_controle_carregar">곧 충전</string>
+    <string name="jogos_parear_um">컨트롤러 페어링</string>
+    <string name="jogos_todos">전체</string>
+    <string name="turma_titulo">내 친구들</string>
+    <string name="turma_online">%1$d명 온라인</string>
+    <string name="turma_mais_online">+ %1$d명 온라인</string>
+    <string name="turma_na_voz">음성 중</string>
+    <string name="turma_ausente">자리 비움</string>
+    <string name="turma_ocupado">다른 용무 중</string>
+    <string name="turma_status_online">온라인</string>
+    <string name="turma_ninguem">지금은 아무도 온라인이 아니에요</string>
+    <string name="turma_procurando">친구들을 찾는 중…</string>
+    <string name="turma_sem_rede">지금은 Discord에 연결할 수 없어요.</string>
+    <string name="turma_mostrar_titulo">Discord 친구들 보기</string>
+    <string name="turma_mostrar_texto">누가 온라인인지, 무엇을 하는지, 음성 중인지 TV에서 보세요.</string>
+    <string name="turma_desligado_titulo">서버 위젯이 꺼져 있어요</string>
+    <string name="turma_desligado_texto">Discord에서: 서버 설정, 위젯, 서버 위젯 활성화를 켜세요.</string>
+    <string name="turma_qr_dica">휴대폰을 여기에 비추면 음성에 들어가요. 대화는 휴대폰으로 해요.</string>
+    <string name="turma_aqui">친구 %1$d명이 여기에</string>
+    <string name="turma_jogando">%1$s님이 %2$s 플레이 중</string>
+    <string name="turma_dois">%1$s, %2$s</string>
+    <string name="turma_e_mais">%1$s 외 %2$d명</string>
+    <string name="turma_chamar">친구들 부르기</string>
+    <string name="turma_chamar_pergunta">Discord 채널로 보낼까요?</string>
+    <string name="turma_chamado_jogo">🎮 %1$s 같이 할 사람? TV 앞에 있어.</string>
+    <string name="turma_chamado">🎮 게임 같이 할 사람? TV 앞에 있어.</string>
+    <string name="turma_mandar">보내기</string>
+    <string name="turma_enviado">Discord에서 친구들을 불렀어요.</string>
+    <string name="turma_espere">다시 부르려면 1분 기다리세요.</string>
+    <string name="turma_falhou">Discord가 받지 못했어요. 인터넷이나 웹후크를 확인하세요.</string>
+    <string name="turma_config_titulo">Discord 친구들</string>
+    <string name="turma_config_texto">1. Discord에서: 서버 설정, 위젯, 서버 위젯 활성화를 켜세요.\n2. 같은 페이지에서 서버 ID를 복사해 여기에 입력하세요.\n\n친구들 부르기 버튼은 TV 웹 패널에 채널 웹후크를 붙여 넣으세요.</string>
+    <string name="turma_config_dica">서버 ID (숫자만)</string>
+    <string name="turma_config_guardar">저장</string>
+    <string name="turma_config_tirar">친구들 빼기</string>
+    <string name="turma_id_invalido">Discord 서버 ID가 아니에요 (17~20자리).</string>
+</resources>

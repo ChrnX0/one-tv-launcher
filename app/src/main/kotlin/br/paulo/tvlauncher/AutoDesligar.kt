@@ -104,6 +104,9 @@ object AutoDesligar {
     /** O aviso de "vai desligar" está na tela agora. */
     fun avisoNaTela() = janela != null
 
+    /** Há quanto tempo ninguém aperta tecla (controle, painel, MCP). Usado também pelo reparo do Wi-Fi. */
+    fun semTeclaMs(): Long = SystemClock.elapsedRealtime() - ultima
+
     /** Alguém mexeu (tecla do controle ou do painel). Barato: só a hora. */
     fun atividade() {
         ultima = SystemClock.elapsedRealtime()
@@ -222,6 +225,13 @@ object AutoDesligar {
     fun desligar() {
         val a = app ?: return
         ultimoDesligamento = System.currentTimeMillis()
+        // 17/11/2026 (decisão do Paulo): a LG pareada desliga junto, primeiro, se estiver na entrada do Chromecast (a LG
+        // ignora o standby do CEC; antes ela ficava acesa sem sinal). Em outra entrada, só o Chromecast apaga.
+        val feito = java.util.concurrent.atomic.AtomicBoolean(false)
+        Desligamento.lgPrimeiro(a, 0, Runnable { if (feito.compareAndSet(false, true)) apagarChromecast(a) })
+    }
+
+    private fun apagarChromecast(a: Context) {
         val caminhos = listOf<Pair<String, () -> Boolean>>(
             "acessibilidade" to {
                 AutorizaShizukuService.instancia?.performGlobalAction(AccessibilityService.GLOBAL_ACTION_LOCK_SCREEN) == true

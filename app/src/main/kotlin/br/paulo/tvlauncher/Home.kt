@@ -90,12 +90,27 @@ object Home {
         while (no != null && !no.isClickable) no = no.parent   // o texto fica dentro do tile; quem recebe o clique é ele
         if (no != null && no.performAction(AccessibilityNodeInfo.ACTION_CLICK)) {
             tocarCasaAte = 0L
+            marcarGoogleHome(servico, true)
             Log.i(TAG, "tile Google Home tocado no painel do Google")
             return
         }
         if (tentativa < 8) principal.postDelayed({ tocarTileCasa(tentativa + 1) }, 300)
-        else Log.i(TAG, "painel do Google sem o tile Google Home (conta sem casa?)")
+        else {
+            // Conta sem casa no Google Home (Sala, 17/11/2026): o painel do Google abria sem luz nem câmera e ninguém
+            // dizia por quê. Agora avisa, e o cartão da tela Casa passa a dizer isso (tocar nele tenta de novo).
+            Log.i(TAG, "painel do Google sem o tile Google Home (conta sem casa?)")
+            tocarCasaAte = 0L
+            marcarGoogleHome(servico, false)
+            AvisoTv.rapido(servico, servico.getString(R.string.casa_google_home), servico.getString(R.string.casa_google_home_vazio), 6)
+        }
     }
+
+    private fun marcarGoogleHome(ctx: Context, tem: Boolean) =
+        ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().putBoolean("google_home_sem_casa", !tem).apply()
+
+    /** O painel do Google já foi aberto e não tinha o Google Home (conta sem casa)? */
+    fun googleHomeSemCasa(ctx: Context): Boolean =
+        ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).getBoolean("google_home_sem_casa", false)
 
     /**
      * Chamado quando uma janela aparece: se for a HOME do launcherx, traz a nossa por cima; se for o painel dele

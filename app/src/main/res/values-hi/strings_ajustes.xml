@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK बदलता है · मेहमान मोड चालू रहने पर ये गायब होते हैं</string>
     <string name="cfg2_some_visita">मेहमानों से छिपा</string>
     <string name="cfg2_fica_visita">रहता है</string>
-    <string name="cfg2_casa_det">आपके Home Assistant की लाइट, प्लग और सीन</string>
+    <string name="cfg2_casa_det">Google Home या Home Assistant की लाइट, प्लग और सीन</string>
     <string name="oc_titulo">छिपे ऐप</string>
     <string name="oc_subtitulo">OK होम स्क्रीन पर ऐप दिखाता या छिपाता है · छिपे ऐप पहले आते हैं</string>
     <string name="oc_nenhum">कोई छिपा ऐप नहीं · चुनने के लिए OK</string>
@@ -91,7 +91,7 @@
     <string name="vp_pronto_det">होम स्क्रीन पर जाएँ।</string>
     <string name="vq_titulo">लुक शेयर करें</string>
     <string name="vq_det">इस टीवी के लुक वाला QR कोड दिखाता है: थीम, टेक्स्ट का आकार, आइकन।</string>
-    <string name="vq_texto">इसे रखने या One TV वाले किसी व्यक्ति को भेजने के लिए फ़ोन से स्कैन करें।</string>
+    <string name="vq_texto">इसे रखने या Sofaly वाले किसी व्यक्ति को भेजने के लिए फ़ोन से स्कैन करें।</string>
     <string name="vq_fechar">बंद करें</string>
     <string name="lh_titulo">ऐप कार्ड का आकार</string>
     <string name="lh_det">बड़े कार्ड सोफ़े से आसानी से दिखते हैं।</string>

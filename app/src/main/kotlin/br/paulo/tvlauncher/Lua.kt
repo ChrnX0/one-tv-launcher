@@ -1,7 +1,6 @@
 package br.paulo.tvlauncher
 
 import kotlin.math.PI
-import kotlin.math.ceil
 import kotlin.math.cos
 import kotlin.math.roundToInt
 
@@ -62,11 +61,21 @@ object Lua {
         val diasParaCheia = if (idade < metade) metade - idade else CICLO_DIAS - idade + metade
         val diasParaNova = CICLO_DIAS - idade
         val proxima = if (diasParaCheia <= diasParaNova) {
-            txt(R.string.lua_cheia_em, ceil(diasParaCheia).toInt())
+            txt(R.string.lua_cheia_em, diasNoCalendario(agoraMs, diasParaCheia))
         } else {
-            txt(R.string.lua_nova_em, ceil(diasParaNova).toInt())
+            txt(R.string.lua_nova_em, diasNoCalendario(agoraMs, diasParaNova))
         }
         return "${emoji(agoraMs, latitude)}  ${NOMES[indiceDaFase(idade)]}  ·  $iluminada%  ·  $proxima"
+    }
+
+    /**
+     * Em quantos dias do calendário cai o evento (no fuso da TV). Antes era o teto das horas: a cheia de 24/11 aparecia
+     * "em 8 d" no dia 17 (faltavam 7,1 dias; Sala, 17/11/2026). Mínimo 1: no próprio dia o nome da fase já diz.
+     */
+    fun diasNoCalendario(agoraMs: Long, dias: Double, fuso: java.util.TimeZone = java.util.TimeZone.getDefault()): Int {
+        val evento = agoraMs + (dias * 86_400_000).toLong()
+        fun dia(ms: Long) = Math.floorDiv(ms + fuso.getOffset(ms), 86_400_000L)
+        return maxOf(1, (dia(evento) - dia(agoraMs)).toInt())
     }
 
     /** Versão curta, para caber no meio do topo: "🌖  Minguante gibosa  ·  70%" (sem o "nova em 10 d"). */

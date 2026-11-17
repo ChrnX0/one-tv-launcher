@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App do celular (revisão dos degraus, T5, 17/11/2026). Caminho do menu = o mesmo texto da TV neste idioma. -->
+<resources>
+    <string name="cel_titulo">Ваши телевизоры</string>
+    <string name="cel_mandar_para">На какой телевизор отправить?</string>
+    <string name="cel_ler_qr">Считать QR-код телевизора</string>
+    <string name="cel_vazio">Телевизоров пока нет. На телевизоре откройте Настройки › Удалённый доступ › Вход с телефона, затем нажмите кнопку ниже и наведите камеру на код.</string>
+    <string name="cel_pareada_segura">%1$s · защищённое соединение</string>
+    <string name="cel_pareada_http">%1$s · домашняя сеть</string>
+    <string name="cel_na_rede">Найдены в сети</string>
+    <string name="cel_achada">%1$s · ещё не сопряжён</string>
+    <string name="cel_achada_explica">Для защищённого соединения считайте QR-код один раз: на телевизоре Настройки › Удалённый доступ › Вход с телефона. Или откройте сейчас и войдите по PIN-коду.</string>
+    <string name="cel_abrir_pin">Открыть по PIN-коду</string>
+    <string name="cel_esquecer">Забыть</string>
+    <string name="cel_esquecer_explica">Этот телефон забудет этот телевизор. Чтобы снова им пользоваться, считайте QR-код.</string>
+    <string name="cel_aponte">Наведите на код на телевизоре</string>
+    <string name="cel_qr_invalido">Это не код телевизора. На телевизоре откройте Настройки › Удалённый доступ › Вход с телефона.</string>
+    <string name="cel_cert_outro">Телевизор ответил другим сертификатом. Если вы его обновили, считайте QR-код ещё раз.</string>
+    <string name="cel_casa_padrao">Дом</string>
+    <string name="cel_casa_qual">В каком доме этот телевизор?</string>
+    <string name="cel_casa_nova">Другой дом…</string>
+    <string name="cel_casa_dica">напр.: Дача, У мамы</string>
+</resources>

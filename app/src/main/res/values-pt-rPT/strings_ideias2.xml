@@ -29,7 +29,8 @@
     <string name="casa_carregando">A buscar os aparelhos…</string>
     <string name="casa_vazio">Nenhuma luz, tomada ou cena no Home Assistant.</string>
     <string name="casa_google_home">Google Home</string>
-    <string name="casa_google_home_det">luzes e câmaras do Google</string>
+    <string name="casa_google_home_det">Luzes e câmaras do Google</string>
+    <string name="casa_google_home_vazio">Esta conta Google não tem casa no Google Home</string>
     <string name="casa_resumo">Home Assistant · %1$d de %2$d ligados</string>
     <string name="casa_resumo_so_cenas">Home Assistant · %1$d cenas</string>
     <string name="casa_secao_cenas">Cenas e rotinas</string>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor: variações de cada elemento (17/11/2026). -->
+<resources>
+    <string name="pv2_est_avisos">Стиль уведомлений</string>
+    <string name="pv2_est_avisos_det">как показываются сообщения и напоминания · OK меняет</string>
+    <string name="pv2_av_cartoes">Стеклянные карточки</string>
+    <string name="pv2_av_lista">Список без рамки</string>
+    <string name="pv2_av_um">По одному</string>
+    <string name="pv2_est_textos">Стиль приветствия и даты</string>
+    <string name="pv2_est_textos_det">OK меняет</string>
+    <string name="pv2_tx_moderno">Современный</string>
+    <string name="pv2_tx_serifa">С засечками</string>
+    <string name="pv2_tx_maiusculas">Разреженные прописные</string>
+    <string name="pv2_est_linhas">Стиль строки погоды</string>
+    <string name="pv2_est_linhas_det">фраза о погоде и интересный факт · OK меняет</string>
+    <string name="pv2_ln_icones">Со значками</string>
+    <string name="pv2_ln_vidro">На тёмном стекле</string>
+    <string name="pv2_ln_texto">Только текст</string>
+    <string name="pv2_est_credito">Стиль подписи к фото</string>
+    <string name="pv2_est_credito_det">OK меняет</string>
+    <string name="pv2_cr_etiqueta">Табличка</string>
+    <string name="pv2_cr_discreto">Незаметный</string>
+    <string name="cl_widget_linha">Одна строка</string>
+    <string name="cl_widget_grande">Крупный</string>
+    <string name="pv2_widget_det">пять стилей · OK меняет</string>
+</resources>

@@ -22,6 +22,8 @@
     <string name="coluna_marcado_assistido">%1$s を視聴済みにしました</string>
     <string name="coluna_marcado_nao_assistido">%1$s を未視聴にしました</string>
     <string name="coluna_tirado_continuar">%1$s を「続きを見る」から削除しました</string>
+    <string name="coluna_menu_tirar_home">ホーム画面から外す</string>
+    <string name="coluna_tirado_home">%1$s をホーム画面から外しました</string>
     <string name="coluna_etiqueta_concluida">完結</string>
     <string name="coluna_etiqueta_nova_temporada">新シーズン</string>
     <string name="coluna_etiqueta_novos">新エピソード</string>

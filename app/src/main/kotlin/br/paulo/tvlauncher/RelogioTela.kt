@@ -21,11 +21,11 @@ class RelogioTela(ctx: Context, private val data: Boolean) : TextClock(ctx) {
         val i = s.indexOf(':')
         if (i < 0 || Build.VERSION.SDK_INT < 28) return super.setText(texto, tipo)
         val sb = SpannableStringBuilder()
-        sb.append(s.substring(0, i)); sb.setSpan(TypefaceSpan(Fontes.manrope(600)), 0, sb.length, 0)
+        sb.append(s.substring(0, i)); sb.setSpan(TypefaceSpan(Fontes.nunito(600)), 0, sb.length, 0)
         val ini = sb.length
         sb.append(" : "); sb.setSpan(ForegroundColorSpan(0x99FFFFFF.toInt()), ini, sb.length, 0)
         val iniMin = sb.length
-        sb.append(s.substring(i + 1)); sb.setSpan(TypefaceSpan(Fontes.manrope(200)), iniMin, sb.length, 0)
+        sb.append(s.substring(i + 1)); sb.setSpan(TypefaceSpan(Fontes.nunito(200)), iniMin, sb.length, 0)
         super.setText(sb, BufferType.SPANNABLE)
     }
 }

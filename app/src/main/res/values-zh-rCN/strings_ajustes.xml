@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">按 OK 切换 · 这些应用在访客模式开启时隐藏</string>
     <string name="cfg2_some_visita">对访客隐藏</string>
     <string name="cfg2_fica_visita">保留</string>
-    <string name="cfg2_casa_det">你的 Home Assistant 中的灯、插座和场景</string>
+    <string name="cfg2_casa_det">Google Home 或 Home Assistant 中的灯、插座和场景</string>
     <string name="oc_titulo">隐藏的应用</string>
     <string name="oc_subtitulo">按 OK 在主屏幕上显示或隐藏应用 · 隐藏的排在前面</string>
     <string name="oc_nenhum">没有隐藏的应用 · 按 OK 选择</string>
@@ -91,7 +91,7 @@
     <string name="vp_pronto_det">前往主屏幕。</string>
     <string name="vq_titulo">分享外观</string>
     <string name="vq_det">显示一个包含这台电视外观的二维码:主题、文字大小、图标。</string>
-    <string name="vq_texto">用手机扫描即可保存,或发送给使用 One TV 的人。</string>
+    <string name="vq_texto">用手机扫描即可保存,或发送给使用 Sofaly 的人。</string>
     <string name="vq_fechar">关闭</string>
     <string name="lh_titulo">应用卡片大小</string>
     <string name="lh_det">卡片更大,坐在沙发上也更容易看清。</string>

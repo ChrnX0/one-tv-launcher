@@ -9,10 +9,11 @@ import android.graphics.Typeface
  *    caminhando na tela, a partir da posição real do sol e do clima (era o antigo tema "Céu ao vivo"; hoje é
  *    parte fixa do Escuro, não existe mais como opção separada).
  *  - GALERIA: uma pintura de domínio público por dia (acervo aberto do The Met), com etiqueta de museu.
- * Fonte: a Manrope em todos (res/font, licença SIL Open Font); o tema muda só o fundo.
+ *  - CEU ("Céu de verdade", 17/11/2026): o mapa da região com a cidade e as nuvens de agora (CeuDeVerdade.kt).
+ * Fonte: a Nunito em todos (visual Cinema+) (res/font, licença SIL Open Font); o tema muda só o fundo.
  */
 enum class Tema(private val rotulo: Int) {
-    ESCURO(R.string.tema_escuro), GALERIA(R.string.tema_galeria),
+    ESCURO(R.string.tema_escuro), GALERIA(R.string.tema_galeria), CEU(R.string.tema_ceu),
     /** "Meu fundo" (degrau 1, 15/11/2026): foto, GIF ou vídeo da pessoa (FundoMeu.kt). Só entra na volta com arquivo escolhido. */
     MEU(R.string.tema_meu);
 
@@ -56,32 +57,34 @@ object Fontes {
             }
         }
 
-    // Sistema de design (10/11/2026, dono: "conciso e coerente"): os dois temas usam a MESMA fonte, a Manrope. O tema muda
-    // o fundo, não a letra. Antes: Roboto Light no Escuro, Cormorant/Figtree na Galeria. O parâmetro [tema] ficou para
-    // não mexer em quem já chama; não muda mais nada.
-    @Suppress("UNUSED_PARAMETER") fun display(ctx: Context, tema: Tema): Typeface = manrope(ctx, 200)
-    @Suppress("UNUSED_PARAMETER") fun ui(ctx: Context, tema: Tema): Typeface = manrope(ctx, 400)
-    @Suppress("UNUSED_PARAMETER") fun uiMedia(ctx: Context, tema: Tema): Typeface = manrope(ctx, 500)
+    // Sistema de design: os temas usam a MESMA fonte; o tema muda o fundo, não a letra. Visual Cinema+ (17/11/2026, dono
+    // aprovou): Nunito, a mesma do painel web no celular e no PC, então TV, celular e PC têm a mesma cara. Títulos pesados
+    // (800) no lugar da Manrope fina. O parâmetro [tema] ficou para não mexer em quem já chama; não muda mais nada.
+    @Suppress("UNUSED_PARAMETER") fun display(ctx: Context, tema: Tema): Typeface = nunito(ctx, 800)
+    @Suppress("UNUSED_PARAMETER") fun ui(ctx: Context, tema: Tema): Typeface = nunito(ctx, 400)
+    @Suppress("UNUSED_PARAMETER") fun uiMedia(ctx: Context, tema: Tema): Typeface = nunito(ctx, 500)
 
     /**
-     * Manrope (sem serifa geométrica, Google Fonts, licença OFL) em pesos fixos: 200, 400, 500 ou 600. Usada no protetor
-     * de tela (ProtetorGaleria). Arquivos estáticos (um por peso) porque o Google só entrega a versão variável em woff2,
-     * que o Android não lê.
+     * Nunito (sem serifa arredondada, licença OFL) em 3 pesos fixos. O pedido segue a escala antiga (200 a 600) e cai um
+     * degrau acima, porque a Nunito do Cinema+ é mais encorpada: texto comum (até 450) = 600, médio (até 550) = 700,
+     * destaque = 800. Arquivos estáticos (um por peso) tirados da variável oficial: o Android 9+ só lê variável por XML.
      */
-    fun manrope(ctx: Context, peso: Int): Typeface = cache.getOrPut("manrope|$peso") {
+    fun nunito(ctx: Context, peso: Int): Typeface = cache.getOrPut("nunito|$peso") {
         // Os arquivos moram em res/font (não em assets) para o tema do app usar a mesma família como fonte padrão.
         val id = when {
-            peso <= 300 -> R.font.manrope_200
-            peso <= 450 -> R.font.manrope_400
-            peso <= 550 -> R.font.manrope_500
-            else -> R.font.manrope_600
+            peso <= 450 -> R.font.nunito_600
+            peso <= 550 -> R.font.nunito_700
+            else -> R.font.nunito_800
         }
         try { ctx.resources.getFont(id) } catch (e: Exception) { Typeface.DEFAULT }
     }
 
     /** O mesmo, sem precisar de um Context à mão (usa o do app). Serve nos lugares que só tinham Typeface.create(...). */
-    fun manrope(peso: Int): Typeface = manrope(LauncherApp.instancia, peso)
+    fun nunito(peso: Int): Typeface = nunito(LauncherApp.instancia, peso)
 
     /** Fraunces itálica (serifa "de museu", OFL): o nome da obra no protetor. */
     fun fraunces(ctx: Context): Typeface = carregar(ctx, "fraunces_italic.ttf")
+
+    /** Fraunces reta, peso 300 (OFL): o relógio "Editorial" do protetor (17/11/2026). */
+    fun fraunces300(ctx: Context): Typeface = carregar(ctx, "fraunces_300.ttf")
 }

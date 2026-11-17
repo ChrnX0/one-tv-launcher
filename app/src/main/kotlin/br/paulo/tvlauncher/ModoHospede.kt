@@ -39,11 +39,17 @@ object ModoHospede {
 
     fun ativo(ctx: Context) = prefs(ctx).getBoolean(ATIVO, false)
 
-    /** Liga o modo (livre). Desligar é [desligarComPin] (na TV) ou [desligar] (painel/adb, que já são autenticados). */
-    fun ligar(ctx: Context) {
+    /**
+     * Liga o modo. Desligar é [desligarComPin] (na TV) ou [desligar] (painel/adb, que já são autenticados).
+     * Sem PIN do painel definido NÃO liga (17/11/2026): com o hóspede ligado as Configurações e a saída do modo pedem o
+     * PIN, e sem PIN nenhum dos dois abriria mais pela TV. Devolve se ligou.
+     */
+    fun ligar(ctx: Context): Boolean {
+        if (!PainelArmazem.temPin(ctx)) return false
         prefs(ctx).edit().putBoolean(ATIVO, true).putBoolean(BOAS_VINDAS, true).apply()
         ModoVisita.definir(ctx, true)
         agendar(ctx)
+        return true
     }
 
     fun desligar(ctx: Context) {
@@ -189,9 +195,9 @@ object ModoHospede {
 class HospedeReceiver : BroadcastReceiver() {
     override fun onReceive(ctx: Context, intent: Intent) {
         if (intent.action != ModoHospede.ACAO_SAIDA || !ModoHospede.ativo(ctx)) return
-        val pronto = goAsync()
-        Fundo.rodar("hospede-saida") {
-            try { ModoHospede.encerrarEstadia(ctx) } finally { pronto.finish() }
-        }
+        // Sem goAsync: a limpeza total pode levar minutos (até 30 s por app) e passava do prazo de 60 s do broadcast
+        // (ANR). O processo do launcher fica vivo pelo serviço de acessibilidade, então a thread termina o trabalho.
+        val app = ctx.applicationContext
+        Fundo.rodar("hospede-saida") { ModoHospede.encerrarEstadia(app) }
     }
 }

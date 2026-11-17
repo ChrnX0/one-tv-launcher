@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Receitas prontas (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="rec_titulo">这台电视给谁用？</string>
+    <string name="rec_subtitulo">按一次 OK 就能设好电视，随时可以撤销。</string>
+    <string name="rec_vo">奶奶的电视</string>
+    <string name="rec_vo_det">大卡片并朗读名称，字更大，还有“求助”按钮。</string>
+    <string name="rec_criancas">孩子的电视</string>
+    <string name="rec_criancas_det">只有儿童内容、睡觉时间和“游戏”卡片。</string>
+    <string name="rec_gamer">玩家的电视</string>
+    <string name="rec_gamer_det">“游戏”卡片、游戏模式（玩游戏时没有屏保和提醒），手柄一连就打开游戏。</string>
+    <string name="rec_aluguel">出租房的电视</string>
+    <string name="rec_aluguel_det">访客模式：欢迎页，主屏不显示个人内容，退房时清理。</string>
+    <string name="rec_desfazer">撤销</string>
+    <string name="rec_desfazer_det">全部恢复到“%1$s”之前的样子。</string>
+    <string name="rec_ja_esta">这台电视已经是这样设置的。</string>
+    <string name="rec_aviso_prende">简易模式只能用 PIN 退出。请确认家里有人知道 PIN。</string>
+    <string name="rec_aviso_sem_pin">还没有 PIN，谁都能把它关掉。请在手机面板里设置 PIN。</string>
+    <string name="rec_aviso_plano">需要付费方案，因此保持关闭：%1$s。</string>
+    <string name="rec_voltar">返回</string>
+    <string name="rec_aplicar">应用</string>
+    <string name="rec_pin">更改电视设置需要 PIN</string>
+    <string name="rec_pronto">完成</string>
+    <string name="rec_aplicada">电视设置好了</string>
+    <string name="rec_aplicada_det">改了不想要的？撤销会把一切恢复原样。</string>
+    <string name="rec_desfeita">一切都恢复原样了。</string>
+    <string name="rec_linha">%1$s：%2$s</string>
+    <string name="rec_ligado">开</string>
+    <string name="rec_desligado">关</string>
+    <string name="rec_aj_hospede">访客模式</string>
+    <string name="rec_aj_visita">来客模式</string>
+    <string name="rec_aj_simples">简易模式</string>
+    <string name="rec_aj_infantil">儿童模式</string>
+    <string name="rec_aj_dormir">睡觉时间</string>
+    <string name="rec_aj_texto">文字大小</string>
+    <string name="rec_aj_ler_foco">朗读选中的内容</string>
+    <string name="rec_aj_som">每次按键有点击声</string>
+    <string name="rec_aj_jogos">“游戏”卡片</string>
+    <string name="rec_aj_modo_jogo">游戏模式</string>
+    <string name="rec_aj_controle">手柄打开“游戏”</string>
+</resources>

@@ -40,11 +40,34 @@ object RegrasDono {
         "wipeData", "wipeDataWithReason", "clearDeviceOwner", "clearProfileOwner", "transferOwnership",
         "removeActiveAdmin", "forceRemoveActiveAdmin", "setDeviceOwner", "setProfileOwner",
         "setFactoryResetProtectionPolicy", "setOrganizationOwnedProfile", "setActiveAdmin",
+        // Depuração 17/11/2026: senha com apagamento (token + senha + "apagar após 1 erro" = a TV se apaga e perde o
+        // dono) e usuários novos (criar e trocar tira a TV do usuário em que o launcher é a HOME).
+        "setResetPasswordToken", "resetPasswordWithToken", "resetPassword", "setMaximumFailedPasswordsForWipe",
+        "createAndManageUser", "switchUser",
     )
 
     /** Métodos do DPM que dão poder fora do filtro (o delegado chama o sistema direto): só com poder total. */
     val SO_PODER_TOTAL = setOf("setDelegatedScopes", "setDelegatedCertInstaller", "setCertInstallerPackage",
-        "setDelegatedCertInstallerPackage")
+        "setDelegatedCertInstallerPackage", "setApplicationRestrictionsManagingPackage",
+        // Depuração 17/11/2026: estes TROCAM a lista inteira (ou a VPN/HOME fixa). Olhar só se o launcher está na lista
+        // nova não basta: uma lista sem ele apaga a proteção dele (botões travados, teclado e acessibilidade
+        // permitidos, VPN fixa, HOME persistente). E a leitura dos alvos não separa sempre o pacote alvo do
+        // callerPackage. Então só com poder total (falha segura: sem ele, a chamada é negada).
+        "setUserControlDisabledPackages", "setPermittedInputMethods", "setPermittedAccessibilityServices",
+        "setKeepUninstalledPackages", "setLockTaskPackages", "setMeteredDataDisabledPackages", "setAlwaysOnVpnPackage",
+        "addPersistentPreferredActivity", "clearPackagePersistentPreferredActivities")
+
+    /**
+     * Configurações e restrições que derrubariam o shell próprio do launcher (depuração sem fio): com estes nomes nos
+     * argumentos, a chamada é negada sem poder total.
+     */
+    val CHAVES_DO_SHELL = setOf("adb_enabled", "adb_wifi_enabled", "development_settings_enabled", "no_debugging_features")
+
+    /** Métodos que mudam configuração ou restrição do sistema: os argumentos são lidos para achar [CHAVES_DO_SHELL]. */
+    private val MEXE_EM_AJUSTE = Regex("^(setGlobalSetting|setSecureSetting|setSystemSetting|addUserRestriction.*|" +
+        "setUserRestriction.*|clearUserRestriction.*)$")
+
+    fun mexeEmAjuste(metodo: String) = MEXE_EM_AJUSTE.matches(metodo)
 
     /** Métodos que miram um pacote: negados quando o alvo é o launcher. */
     private val MEXE_EM_PACOTE = Regex(
@@ -66,11 +89,16 @@ object RegrasDono {
      * tem o mapa), [alvos] = pacotes que a chamada mira (null se os argumentos não puderam ser lidos), [nosso] = pacote
      * do launcher.
      */
-    fun transacao(descritor: String?, metodo: String?, alvos: List<String>?, nosso: String, poderTotal: Boolean): Veredito {
+    fun transacao(descritor: String?, metodo: String?, alvos: List<String>?, nosso: String, poderTotal: Boolean,
+                  textos: List<String>? = null): Veredito {
         if (descritor != DPM) return if (poderTotal) Veredito.PASSA else Veredito.BLOQUEIA
         if (metodo == null) return Veredito.BLOQUEIA_SEM_MAPA
         if (metodo in SEMPRE_BLOQUEADOS) return Veredito.BLOQUEIA
         if (metodo in SO_PODER_TOTAL && !poderTotal) return Veredito.BLOQUEIA
+        if (!poderTotal && mexeEmAjuste(metodo)) {
+            if (textos == null) return Veredito.BLOQUEIA_SEM_MAPA
+            if (textos.any { it in CHAVES_DO_SHELL }) return Veredito.BLOQUEIA
+        }
         if (poderTotal || !mexeEmPacote(metodo)) return Veredito.PASSA
         if (alvos == null) return Veredito.BLOQUEIA_SEM_MAPA
         return if (nosso in alvos) Veredito.BLOQUEIA else Veredito.PASSA
@@ -89,6 +117,11 @@ object RegrasDono {
      * o admin (1º) e o callerPackage (2º, quando há outro texto depois) são do próprio launcher e não contam. Sem outro
      * texto, o 2º É o alvo (ex.: clearApplicationUserData(admin, packageName, callback)).
      */
+    /** Todos os textos dos argumentos (nomes de configuração/restrição), sem a regra do callerPackage de [alvos]. */
+    fun textos(args: List<Arg>): List<String> = args.flatMap { a ->
+        when (a) { is Arg.Texto -> listOfNotNull(a.v); is Arg.Textos -> a.v.filterNotNull(); else -> emptyList() }
+    }
+
     fun alvos(args: List<Arg>): List<String> {
         val temAdmin = args.firstOrNull() is Arg.Componente
         val textos = args.count { it is Arg.Texto || it is Arg.Textos }

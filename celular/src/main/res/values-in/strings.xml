@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App do celular (revisão dos degraus, T5, 17/11/2026). Caminho do menu = o mesmo texto da TV neste idioma. -->
+<resources>
+    <string name="cel_titulo">TV Anda</string>
+    <string name="cel_mandar_para">Kirim ke TV mana?</string>
+    <string name="cel_ler_qr">Pindai kode QR di TV</string>
+    <string name="cel_vazio">Belum ada TV. Di TV, buka Setelan › Akses jarak jauh › Masuk dengan ponsel, lalu ketuk tombol di bawah dan arahkan kamera ke kode.</string>
+    <string name="cel_pareada_segura">%1$s · koneksi aman</string>
+    <string name="cel_pareada_http">%1$s · jaringan rumah</string>
+    <string name="cel_na_rede">Ditemukan di jaringan</string>
+    <string name="cel_achada">%1$s · belum dipasangkan</string>
+    <string name="cel_achada_explica">Untuk koneksi aman, pindai kode QR sekali: di TV, Setelan › Akses jarak jauh › Masuk dengan ponsel. Atau buka sekarang dan masuk dengan PIN.</string>
+    <string name="cel_abrir_pin">Buka dengan PIN</string>
+    <string name="cel_esquecer">Lupakan</string>
+    <string name="cel_esquecer_explica">Ponsel ini melupakan TV ini. Untuk memakainya lagi, pindai kode QR.</string>
+    <string name="cel_aponte">Arahkan ke kode di TV</string>
+    <string name="cel_qr_invalido">Ini bukan kode dari TV. Di TV, buka Setelan › Akses jarak jauh › Masuk dengan ponsel.</string>
+    <string name="cel_cert_outro">TV menjawab dengan sertifikat lain. Jika Anda memperbaruinya, pindai kode QR lagi.</string>
+    <string name="cel_casa_padrao">Rumah</string>
+    <string name="cel_casa_qual">TV ini ada di rumah mana?</string>
+    <string name="cel_casa_nova">Rumah lain…</string>
+    <string name="cel_casa_dica">mis.: Rumah pantai, Rumah ibu</string>
+</resources>

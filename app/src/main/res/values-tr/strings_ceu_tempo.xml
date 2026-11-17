@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor que reage ao tempo, caminho 2 (17/11/2026): frase do tempo, curiosidades do céu e o tema "Céu de verdade". -->
+<resources>
+    <string name="tema_ceu">Gerçek gökyüzü</string>
+    <string name="ceu_credito">Bulutlar: NOAA GOES / NASA GIBS · Harita: Natural Earth</string>
+    <string name="ft_chuva_min">Yağmur yaklaşık %1$d dk içinde</string>
+    <string name="ft_para_min">Yağmur yaklaşık %1$d dk içinde diner</string>
+    <string name="ft_chuva_hora">Yağmur saat %1$s civarı</string>
+    <string name="ft_para_hora">Yağmur saat %1$s civarı diner</string>
+    <string name="ft_chuva_segue">Önümüzdeki saatlerde yağmur</string>
+    <string name="ft_trovoada">Saat %1$s civarı fırtına</string>
+    <string name="ft_geada_hoje">Bu gece don: bitkileri koruyun</string>
+    <string name="ft_geada_manha">Donlu sabah: sıkı giyinin</string>
+    <string name="ft_calor">Bugün çok sıcak (%1$d°): su için</string>
+    <string name="ft_neblina">Sis: yolda dikkatli olun</string>
+    <string name="ft_noite_fria">Soğuk gece (%1$d°): sıkı giyinin</string>
+    <string name="ft_secar">Çamaşır kurutmak için güzel gün</string>
+    <string name="ft_amanha_chove">Yarın yağmur bekleniyor (%%%1$d)</string>
+    <string name="ft_ceu_limpo">Açık gökyüzü: yıldızlar için güzel gece</string>
+    <string name="cu_uv_agora">UV şimdi %1$d</string>
+    <string name="cu_uv_amanha">UV yarın %1$d</string>
+    <string name="cu_uv_faixa">%1$s ile %2$s arası şapka ve krem</string>
+    <string name="cu_uv_d2">dışarı çıkarsanız güneş kremi</string>
+    <string name="cu_uv_d3">şapka ve güneş kremi</string>
+    <string name="cu_uv_d4">öğle güneşinden kaçının</string>
+    <string name="cu_uv_d5">gölgede kalın</string>
+    <string name="cu_ar_2">Orta hava kalitesi</string>
+    <string name="cu_ar_3">Hassas kişiler için kötü hava</string>
+    <string name="cu_ar_4">Kötü hava</string>
+    <string name="cu_ar_5">Çok kötü hava</string>
+    <string name="cu_ar_6">Tehlikeli hava</string>
+    <string name="cu_ar_d2">astım: bugün pencereler kapalı</string>
+    <string name="cu_ar_d3">dışarıda spor yapmayın</string>
+    <string name="cu_ar_d4">herkes: dışarıda daha az zaman</string>
+    <string name="cu_ar_d5">evde kalın, pencereler kapalı</string>
+    <string name="cu_estacao">Uzay İstasyonu saat %1$s</string>
+    <string name="cu_estacao_d">%1$d dk · %2$s → %3$s</string>
+    <string name="cu_meteoros">Bu gece meteor yağmuru</string>
+    <string name="cu_meteoros_d">%1$s · saatte %2$d taneye kadar</string>
+    <string name="cu_eclipse">Güneş tutulması %1$s</string>
+    <string name="cu_eclipse_d">güneşe asla doğrudan bakmayın</string>
+    <string name="cu_lua_cheia">Bu gece dolunay</string>
+    <string name="cu_superlua">Bu gece süper ay</string>
+    <string name="cu_lua_cheia_d">akşam doğudan doğar</string>
+    <string name="cu_lua_nova">Yeni ay</string>
+    <string name="cu_lua_nova_d">karanlık gökyüzü: yıldızlar için en iyisi</string>
+    <string name="cu_planeta">%1$s saat %2$s yüksekte</string>
+    <string-array name="ceu_rumos">
+        <item>kuzey</item>
+        <item>kuzeydoğu</item>
+        <item>doğu</item>
+        <item>güneydoğu</item>
+        <item>güney</item>
+        <item>güneybatı</item>
+        <item>batı</item>
+        <item>kuzeybatı</item>
+    </string-array>
+    <string-array name="ceu_olhe">
+        <item>kuzeye bakın</item>
+        <item>kuzeydoğuya bakın</item>
+        <item>doğuya bakın</item>
+        <item>güneydoğuya bakın</item>
+        <item>güneye bakın</item>
+        <item>güneybatıya bakın</item>
+        <item>batıya bakın</item>
+        <item>kuzeybatıya bakın</item>
+    </string-array>
+    <string-array name="ceu_planetas">
+        <item>Venüs</item>
+        <item>Mars</item>
+        <item>Jüpiter</item>
+        <item>Satürn</item>
+    </string-array>
+    <string-array name="ceu_meteoros">
+        <item>Kuadrantidler</item>
+        <item>Liridler</item>
+        <item>Eta Akuaridler</item>
+        <item>Delta Akuaridler</item>
+        <item>Perseidler</item>
+        <item>Orionidler</item>
+        <item>Leonidler</item>
+        <item>Geminidler</item>
+    </string-array>
+</resources>

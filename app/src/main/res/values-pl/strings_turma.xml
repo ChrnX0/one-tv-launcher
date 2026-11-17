@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
+<resources>
+    <string name="jogos_no_sofa">Na kanapie</string>
+    <string name="jogos_continuar">Kontynuuj</string>
+    <string name="jogos_controle_pronto">gotowy</string>
+    <string name="jogos_controle_carregar">naładuj wkrótce</string>
+    <string name="jogos_parear_um">Sparuj kontroler</string>
+    <string name="jogos_todos">Wszystkie</string>
+    <string name="turma_titulo">Twoja ekipa</string>
+    <string name="turma_online">Online: %1$d</string>
+    <string name="turma_mais_online">+ %1$d online</string>
+    <string name="turma_na_voz">Na głosowym</string>
+    <string name="turma_ausente">zaraz wracam</string>
+    <string name="turma_ocupado">zajęty</string>
+    <string name="turma_status_online">online</string>
+    <string name="turma_ninguem">Teraz nikogo nie ma online</string>
+    <string name="turma_procurando">Szukam ekipy…</string>
+    <string name="turma_sem_rede">Brak połączenia z Discordem.</string>
+    <string name="turma_mostrar_titulo">Pokaż swoją ekipę z Discorda</string>
+    <string name="turma_mostrar_texto">Zobacz na TV, kto jest online, w co gra i kto jest na głosowym.</string>
+    <string name="turma_desligado_titulo">Widżet serwera jest wyłączony</string>
+    <string name="turma_desligado_texto">W Discordzie: Ustawienia serwera, Widżet, włącz Włącz widżet serwera.</string>
+    <string name="turma_qr_dica">Skieruj tu telefon, aby dołączyć do kanału głosowego. Rozmowa idzie przez telefon.</string>
+    <string name="turma_aqui">Z ekipy tutaj: %1$d</string>
+    <string name="turma_jogando">%1$s gra w %2$s</string>
+    <string name="turma_dois">%1$s i %2$s</string>
+    <string name="turma_e_mais">%1$s i %2$d innych</string>
+    <string name="turma_chamar">Zawołaj ekipę</string>
+    <string name="turma_chamar_pergunta">Wysłać na kanał Discorda?</string>
+    <string name="turma_chamado_jogo">🎮 Gramy w %1$s? Jestem przy TV.</string>
+    <string name="turma_chamado">🎮 Gramy? Jestem przy TV.</string>
+    <string name="turma_mandar">Wyślij</string>
+    <string name="turma_enviado">Ekipa została zawołana na Discordzie.</string>
+    <string name="turma_espere">Poczekaj minutę, zanim zawołasz znowu.</string>
+    <string name="turma_falhou">Discord nie odebrał. Sprawdź internet lub webhook.</string>
+    <string name="turma_config_titulo">Twoja ekipa z Discorda</string>
+    <string name="turma_config_texto">1. W Discordzie: Ustawienia serwera, Widżet, włącz Włącz widżet serwera.\n2. Na tej samej stronie skopiuj ID serwera i wpisz je tutaj.\n\nDla przycisku Zawołaj ekipę wklej webhook kanału w panelu web telewizora.</string>
+    <string name="turma_config_dica">ID serwera (tylko cyfry)</string>
+    <string name="turma_config_guardar">Zapisz</string>
+    <string name="turma_config_tirar">Usuń ekipę</string>
+    <string name="turma_id_invalido">To nie jest ID serwera Discorda (17 do 20 cyfr).</string>
+</resources>

@@ -95,13 +95,22 @@ object LgNetcast {
      * Despertador com a LG (16/11/2026, pedido do dono): começa baixo e sobe aos poucos até um volume FIXO escolhido nas
      * configurações do alarme (não "só se estiver baixo"). Opções do volume final, na escala 0-100 da LG; todas ≤ [TETO_ALARME].
      */
-    val OPCOES_ALARME = listOf(10, 15, 20, 25, 30)
+    val OPCOES_ALARME = listOf(NAO_MEXER, 10, 15, 20, 25, 30)
     const val PADRAO_ALARME = 15
     /** Volume da LG em que o toque começa (ou o final, se for menor). */
     const val INICIO_ALARME = 5
 
-    /** O volume final escolhido, dentro de 1..[TETO_ALARME] (um valor velho ou estranho nas prefs não passa do teto). */
-    fun alvoFixoAlarme(escolhido: Int): Int = escolhido.coerceIn(1, TETO_ALARME)
+    /**
+     * "Não mexer" na LG (17/11/2026): quem tinha escolhido "não mexer" no volume mínimo passava a ter a LG subindo até
+     * 15 depois de parear. 0 = o despertador não toca no volume da LG (nem no do Android, que é fixo no HDMI).
+     */
+    const val NAO_MEXER = 0
+
+    /** O volume final escolhido: [NAO_MEXER] ou 1..[TETO_ALARME] (um valor velho ou estranho nas prefs não passa do teto). */
+    fun alvoFixoAlarme(escolhido: Int): Int = if (escolhido <= NAO_MEXER) NAO_MEXER else escolhido.coerceAtMost(TETO_ALARME)
+
+    /** Sem escolha gravada para a LG: herda o "não mexer" do volume mínimo; senão o [PADRAO_ALARME]. */
+    fun volumeLgInicial(minimoPct: Int): Int = if (minimoPct <= 0) NAO_MEXER else PADRAO_ALARME
 
     /**
      * Na LG a subida é SEMPRE gradual (pedido do dono, 16/11): um alarme com rampa 0 ("tocar direto", o padrão dos
@@ -165,6 +174,13 @@ object LgNetcast {
         if (nome.isNotEmpty() && e.rotulo.trim().equals(nome, ignoreCase = true)) return true
         return !aprendida.isNullOrBlank() && e.nome.equals(aprendida, ignoreCase = true)
     }
+
+    /**
+     * Timer de sono / "desligar sem uso" (17/11/2026): desligar a LG junto só se ela está na entrada do Chromecast.
+     * Sem leitura (null) = não: quem está na antena não perde o programa por causa de um pedido que falhou.
+     */
+    fun desligarLgJunto(e: Entrada?, nossoNome: String?, aprendida: String?): Boolean =
+        e != null && entradaDoChromecast(e, nossoNome, aprendida)
 
     /**
      * Quando conferir a entrada ([AcordarComLg]): [ver] recebe cada leitura "LG na rede?" e devolve true quando ela

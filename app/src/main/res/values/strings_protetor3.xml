@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor: variações de cada elemento (17/11/2026). -->
+<resources>
+    <string name="pv2_est_avisos">Notices style</string>
+    <string name="pv2_est_avisos_det">how messages and reminders appear · OK changes</string>
+    <string name="pv2_av_cartoes">Glass cards</string>
+    <string name="pv2_av_lista">List without box</string>
+    <string name="pv2_av_um">One at a time</string>
+    <string name="pv2_est_textos">Greeting and date style</string>
+    <string name="pv2_est_textos_det">OK changes</string>
+    <string name="pv2_tx_moderno">Modern</string>
+    <string name="pv2_tx_serifa">Serif</string>
+    <string name="pv2_tx_maiusculas">Spaced capitals</string>
+    <string name="pv2_est_linhas">Weather line style</string>
+    <string name="pv2_est_linhas_det">the weather phrase and the fun fact · OK changes</string>
+    <string name="pv2_ln_icones">With icons</string>
+    <string name="pv2_ln_vidro">On dark glass</string>
+    <string name="pv2_ln_texto">Text only</string>
+    <string name="pv2_est_credito">Photo credit style</string>
+    <string name="pv2_est_credito_det">OK changes</string>
+    <string name="pv2_cr_etiqueta">Label</string>
+    <string name="pv2_cr_discreto">Discreet</string>
+    <string name="cl_widget_linha">Single line</string>
+    <string name="cl_widget_grande">Large</string>
+    <string name="pv2_widget_det">five styles · OK changes</string>
+</resources>

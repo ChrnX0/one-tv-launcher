@@ -16,9 +16,10 @@
         <activity
             android:name=".TesteActivity"
             android:exported="true">
+            <!-- Sem LEANBACK_LAUNCHER (17/11/2026): ferramenta de teste não aparece entre os apps da tela inicial (apareceu na
+                 Sala). Abre só pelo "am start -n" do README. -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
 

@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK переключает · эти исчезают в гостевом режиме</string>
     <string name="cfg2_some_visita">скрыто от гостей</string>
     <string name="cfg2_fica_visita">остаётся</string>
-    <string name="cfg2_casa_det">Свет, розетки и сцены вашего Home Assistant</string>
+    <string name="cfg2_casa_det">Свет, розетки и сцены из Google Home или Home Assistant</string>
     <string name="oc_titulo">Скрытые приложения</string>
     <string name="oc_subtitulo">OK показывает или скрывает приложение на главном · скрытые идут первыми</string>
     <string name="oc_nenhum">Нет скрытых приложений · OK, чтобы выбрать</string>
@@ -91,7 +91,7 @@
     <string name="vp_pronto_det">Перейти на главный экран.</string>
     <string name="vq_titulo">Поделиться оформлением</string>
     <string name="vq_det">Показывает QR-код с оформлением этого ТВ: тема, размер текста, значки.</string>
-    <string name="vq_texto">Отсканируйте его телефоном, чтобы сохранить или отправить тому, у кого есть One TV.</string>
+    <string name="vq_texto">Отсканируйте его телефоном, чтобы сохранить или отправить тому, у кого есть Sofaly.</string>
     <string name="vq_fechar">Закрыть</string>
     <string name="lh_titulo">Размер карточек приложений</string>
     <string name="lh_det">Крупные карточки лучше видно с дивана.</string>

@@ -21,7 +21,7 @@ object Endereco {
     data class Cep(val cep: String, val rua: String, val bairro: String, val cidade: String, val uf: String)
     data class Achado(val nome: String, val lat: Double, val lon: Double, val precisao: String)
 
-    /** Só os 8 dígitos ("14015-060" -> "14015060"); null se não for um CEP. */
+    /** Só os 8 dígitos ("01001-000" -> "01001000"); null se não for um CEP. */
     fun limparCep(texto: String?): String? = texto.orEmpty().filter { it.isDigit() }.takeIf { it.length == 8 }
 
     /** Número da casa: até 6 dígitos (aceita vazio = sem número). Null se tiver lixo. */
@@ -134,7 +134,9 @@ object Endereco {
                 ?: return Result.failure(IllegalStateException("não achei essa cidade na lista"))
             return Result.success(Achado(nome(c), cidade.lat, cidade.lon, "cidade"))
         }
-        for ((url, precisao) in consultas(c, numero)) {
+        for ((i, consulta) in consultas(c, numero).withIndex()) {
+            val (url, precisao) = consulta
+            if (i > 0) Thread.sleep(1100)   // regra do Nominatim: no máximo 1 pedido por segundo (o User-Agent é o mesmo em toda TV)
             val ponto = httpGet(url)?.let { lerNominatim(it) } ?: continue
             return Result.success(Achado(nome(c), ponto.first, ponto.second, precisao))
         }

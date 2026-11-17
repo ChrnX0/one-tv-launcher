@@ -60,7 +60,7 @@
     <string name="grv_apagar_pergunta">Supprimer « %1$s » ? C’est irréversible.</string>
     <string name="grv_reserva_secao">Sans clé USB</string>
     <string name="grv_reserva">Dossier réseau</string>
-    <string name="grv_reserva_explica">Où enregistrer quand aucune clé USB n’est branchée (un dossier Windows/NAS de Réseau)</string>
+    <string name="grv_reserva_explica">Où enregistrer quand aucune clé USB n’est branchée (un dossier Windows ou NAS de « Réseau »)</string>
     <string name="grv_nenhuma">Aucun</string>
     <string name="grv_sem_smb">Ajoutez d’abord un dossier Windows/NAS (SMB) dans Réseau.</string>
     <string name="grv_amanha">Demain</string>

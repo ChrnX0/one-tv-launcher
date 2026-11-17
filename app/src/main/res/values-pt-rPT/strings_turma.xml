@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
+<resources>
+    <string name="jogos_no_sofa">No sofá</string>
+    <string name="jogos_continuar">Continuar</string>
+    <string name="jogos_controle_pronto">pronto</string>
+    <string name="jogos_controle_carregar">carregar em breve</string>
+    <string name="jogos_parear_um">Emparelhar um comando</string>
+    <string name="jogos_todos">Todos</string>
+    <string name="turma_titulo">O seu grupo</string>
+    <string name="turma_online">%1$d online</string>
+    <string name="turma_mais_online">+ %1$d online</string>
+    <string name="turma_na_voz">Em voz</string>
+    <string name="turma_ausente">ausente</string>
+    <string name="turma_ocupado">ocupado</string>
+    <string name="turma_status_online">online</string>
+    <string name="turma_ninguem">Ninguém online agora</string>
+    <string name="turma_procurando">À procura do grupo…</string>
+    <string name="turma_sem_rede">Sem ligação ao Discord agora.</string>
+    <string name="turma_mostrar_titulo">Mostre o seu grupo do Discord</string>
+    <string name="turma_mostrar_texto">Veja na TV quem está online, a jogar e em voz.</string>
+    <string name="turma_desligado_titulo">O widget do servidor está desligado</string>
+    <string name="turma_desligado_texto">No Discord: Definições do servidor, Widget, ative Ativar widget do servidor.</string>
+    <string name="turma_qr_dica">Aponte o telemóvel para entrar na voz. A conversa é feita no telemóvel.</string>
+    <string name="turma_aqui">%1$d do grupo aqui</string>
+    <string name="turma_jogando">%1$s a jogar %2$s</string>
+    <string name="turma_dois">%1$s e %2$s</string>
+    <string name="turma_e_mais">%1$s e mais %2$d</string>
+    <string name="turma_chamar">Chamar o grupo</string>
+    <string name="turma_chamar_pergunta">Enviar para o canal do Discord?</string>
+    <string name="turma_chamado_jogo">🎮 Vamos jogar %1$s? Estou na TV.</string>
+    <string name="turma_chamado">🎮 Vamos jogar? Estou na TV.</string>
+    <string name="turma_mandar">Enviar</string>
+    <string name="turma_enviado">O grupo foi chamado no Discord.</string>
+    <string name="turma_espere">Espere um minuto para chamar de novo.</string>
+    <string name="turma_falhou">O Discord não recebeu. Verifique a internet ou o webhook.</string>
+    <string name="turma_config_titulo">O seu grupo do Discord</string>
+    <string name="turma_config_texto">1. No Discord: Definições do servidor, Widget, ative Ativar widget do servidor.\n2. Na mesma página, copie o ID do servidor e escreva-o aqui.\n\nPara o botão Chamar o grupo, cole o webhook de um canal no painel web da TV.</string>
+    <string name="turma_config_dica">ID do servidor (só números)</string>
+    <string name="turma_config_guardar">Guardar</string>
+    <string name="turma_config_tirar">Remover o grupo</string>
+    <string name="turma_id_invalido">Isto não é um ID de servidor do Discord (17 a 20 números).</string>
+</resources>

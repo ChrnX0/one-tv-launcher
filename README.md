@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="../../releases/latest"><img src="https://img.shields.io/github/v/release/ChrnX0/one-tv-launcher?label=download&style=for-the-badge&color=2bb39a" alt="Download"></a>
-  <img src="https://img.shields.io/badge/Android%20TV-8.0%2B-3ddc84?style=for-the-badge&logo=android&logoColor=white" alt="Android TV 8.0+">
+  <img src="https://img.shields.io/badge/Android%20TV-10%2B-3ddc84?style=for-the-badge&logo=android&logoColor=white" alt="Android TV 10+">
   <img src="https://img.shields.io/badge/Kotlin-Views-7f52ff?style=for-the-badge&logo=kotlin&logoColor=white" alt="Kotlin">
   <img src="https://img.shields.io/badge/ads-zero-e5484d?style=for-the-badge" alt="Zero ads">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-proprietary-555?style=for-the-badge" alt="License: proprietary"></a>

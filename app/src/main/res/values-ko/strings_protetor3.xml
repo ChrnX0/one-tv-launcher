@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor: variações de cada elemento (17/11/2026). -->
+<resources>
+    <string name="pv2_est_avisos">알림 스타일</string>
+    <string name="pv2_est_avisos_det">메시지와 미리 알림이 보이는 방식 · OK로 변경</string>
+    <string name="pv2_av_cartoes">유리 카드</string>
+    <string name="pv2_av_lista">테두리 없는 목록</string>
+    <string name="pv2_av_um">하나씩</string>
+    <string name="pv2_est_textos">인사와 날짜 스타일</string>
+    <string name="pv2_est_textos_det">OK로 변경</string>
+    <string name="pv2_tx_moderno">모던</string>
+    <string name="pv2_tx_serifa">세리프</string>
+    <string name="pv2_tx_maiusculas">넓은 대문자</string>
+    <string name="pv2_est_linhas">날씨 줄 스타일</string>
+    <string name="pv2_est_linhas_det">날씨 문장과 상식 · OK로 변경</string>
+    <string name="pv2_ln_icones">아이콘 포함</string>
+    <string name="pv2_ln_vidro">어두운 유리 위</string>
+    <string name="pv2_ln_texto">글자만</string>
+    <string name="pv2_est_credito">사진 출처 스타일</string>
+    <string name="pv2_est_credito_det">OK로 변경</string>
+    <string name="pv2_cr_etiqueta">라벨</string>
+    <string name="pv2_cr_discreto">은은하게</string>
+    <string name="cl_widget_linha">한 줄</string>
+    <string name="cl_widget_grande">크게</string>
+    <string name="pv2_widget_det">5가지 스타일 · OK로 변경</string>
+</resources>

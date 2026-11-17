@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nome">Lua de hoje</string>
+    <string name="cheia_hoje">Lua cheia hoje à noite</string>
+    <plurals name="ate_cheia"><item quantity="one">Lua cheia em %d dia</item><item quantity="other">Lua cheia em %d dias</item></plurals>
+    <string-array name="fases">
+        <item>Lua nova</item><item>Lua crescente</item><item>Quarto crescente</item><item>Crescente gibosa</item>
+        <item>Lua cheia</item><item>Minguante gibosa</item><item>Quarto minguante</item><item>Lua minguante</item>
+    </string-array>
+</resources>

@@ -22,6 +22,8 @@
     <string name="coluna_marcado_assistido">تم وضع علامة مُشاهَد على %1$s</string>
     <string name="coluna_marcado_nao_assistido">تم وضع علامة غير مُشاهَد على %1$s</string>
     <string name="coluna_tirado_continuar">أُزيل %1$s من متابعة المشاهدة</string>
+    <string name="coluna_menu_tirar_home">إزالة من الشاشة الرئيسية</string>
+    <string name="coluna_tirado_home">تمت إزالة %1$s من الشاشة الرئيسية</string>
     <string name="coluna_etiqueta_concluida">انتهى</string>
     <string name="coluna_etiqueta_nova_temporada">موسم جديد</string>
     <string name="coluna_etiqueta_novos">حلقات جديدة</string>

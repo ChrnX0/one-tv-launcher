@@ -133,9 +133,9 @@
     <string name="bu_canais">القنوات</string>
     <string name="bu_canal_n">القناة %1$s</string>
     <string name="bu_no_guia">في الدليل</string>
-    <string name="bu_ver_filmes">عرض كل %1$s في الأفلام</string>
+    <string name="bu_ver_filmes">عرض الكل في الأفلام (%1$s)</string>
     <string name="bu_ver_filmes_det">يفتح كتالوج الأفلام بهذا البحث</string>
-    <string name="bu_ver_series">عرض كل %1$s في المسلسلات</string>
+    <string name="bu_ver_series">عرض الكل في المسلسلات (%1$s)</string>
     <string name="bu_ver_series_det">يفتح كتالوج المسلسلات بهذا البحث</string>
     <string name="bu_agora">الآن</string>
     <string name="bu_lembrete_sim">تم ضبط التذكير</string>
@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">قريب من الأسود</string>
     <string name="cb_quase_branco">قريب من الأبيض</string>
     <string name="cb_bordas">الحواف</string>
-    <string name="cb_barras">أشرطة ألوان 75%</string>
+    <string name="cb_barras" formatted="false">أشرطة ألوان 75%</string>
     <string name="cb_linhas">خطوط بعرض بكسل واحد</string>
     <string name="ad_ninguem">لم يلمس أحد جهاز التحكم منذ %1$s.\nاضغط أي زر لمواصلة المشاهدة.</string>
     <string name="ad_vai_desligar">سينطفئ التلفزيون بعد %1$d ث</string>

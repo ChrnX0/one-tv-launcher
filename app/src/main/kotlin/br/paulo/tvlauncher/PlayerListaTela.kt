@@ -63,7 +63,7 @@ class PlayerListaTela(
     private val suave = Estilo.TEXTO_2
     private val apagado = Estilo.TEXTO_3
     private val ambar = Estilo.ATENCAO
-    private val fonteMedia = Fontes.manrope(500)
+    private val fonteMedia = Fontes.nunito(500)
     private val hora = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     private var canais: List<Canal> = emptyList()
@@ -355,8 +355,9 @@ class PlayerListaTela(
             l.numero.setTextColor(if (c.id == atualId) ambar else papel)
             l.nome.text = c.nome
             l.sub.text = when {
-                c.id == atualId -> act.getString(R.string.player_assistindo) + (prog?.let { " · ${it.titulo}" } ?: "")
+                // O número em âmbar já marca o canal atual; "assistindo · " cortava o nome do programa (Sala, 17/11/2026).
                 prog != null -> prog.titulo
+                c.id == atualId -> act.getString(R.string.player_assistindo)
                 else -> PlayerLista.nomeExibido(c.grupo)
             }
             // Barra do programa + "faltam 22 min" à direita do nome dele (13/11/2026).
@@ -377,7 +378,7 @@ class PlayerListaTela(
             setPadding(dp(10), dp(7), dp(12), dp(7))
             layoutParams = AbsListView.LayoutParams(-1, dp((70 * escala).toInt()))   // 58 -> 70: letra maior e barra de 5 dp (13/11/2026)
         }
-        val numero = TextView(act).apply { textSize = Estilo.Leitura.ITEM * escala; typeface = Fontes.manrope(600); gravity = Gravity.CENTER }
+        val numero = TextView(act).apply { textSize = Estilo.Leitura.ITEM * escala; typeface = Fontes.nunito(600); gravity = Gravity.CENTER }
         linha.addView(numero, LinearLayout.LayoutParams(dp(50), -2))
         val logo = ImageView(act).apply {
             scaleType = ImageView.ScaleType.FIT_CENTER
@@ -389,7 +390,7 @@ class PlayerListaTela(
         val nome = TextView(act).apply { textSize = Estilo.Leitura.ITEM * escala; typeface = fonteMedia; setTextColor(papel); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
         // "AO VIVO" em vermelho forte, letra branca, ao lado do nome (Esportes; acréscimo 4 do painel, 14/11/2026).
         val vivo = TextView(act).apply {
-            text = act.getString(R.string.coluna_ao_vivo); textSize = Estilo.Leitura.ITEM_DETALHE; typeface = Fontes.manrope(700)
+            text = act.getString(R.string.coluna_ao_vivo); textSize = Estilo.Leitura.ITEM_DETALHE; typeface = Fontes.nunito(700)
             setTextColor(0xFFFFFFFF.toInt()); setPadding(dp(8), dp(1), dp(8), dp(2)); visibility = View.GONE
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(COR_AO_VIVO) }
         }
@@ -500,7 +501,7 @@ class PlayerListaTela(
     }
 
     private fun rotulo() = TextView(act).apply {
-        textSize = Estilo.Leitura.ROTULO; typeface = Fontes.manrope(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
+        textSize = Estilo.Leitura.ROTULO; typeface = Fontes.nunito(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
         setPadding(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
     }
 

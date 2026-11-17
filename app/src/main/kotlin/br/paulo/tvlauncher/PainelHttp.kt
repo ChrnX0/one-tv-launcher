@@ -255,10 +255,13 @@ object PainelHttp {
      * Cabeçalhos de segurança que vão em TODA resposta. A CSP só deixa a página carregar arquivos do próprio painel
      * (nada de script de fora, nada de script inline) e proíbe abrir o painel dentro de iframe de outro site
      * (clickjacking). no-store: nada do painel fica no cache do navegador, exceto o que a rota liberar (ícones).
+     * connect-src também aceita o https da porta 8444 em qualquer nome (16/11/2026, cadeado.js): o painel aberto em http testa se o aparelho
+     * já confia no certificado da TV pedindo um ícone ao https dela, e só então leva para lá. Script de fora continua
+     * proibido (script-src 'self'), então isto não abre caminho para mandar dados a outro lugar.
      */
     val CABECALHOS_SEGURANCA = linkedMapOf(
         "Content-Security-Policy" to "default-src 'self'; img-src 'self' blob:; style-src 'self'; script-src 'self'; " +
-            "connect-src 'self'; media-src 'self' blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
+            "connect-src 'self' https://*:${ChecagensPainel.PORTA_HTTPS_CASA}; media-src 'self' blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
         "X-Content-Type-Options" to "nosniff",
         "X-Frame-Options" to "DENY",
         "Referrer-Policy" to "no-referrer",

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Som no fone (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="fone_menu">Son dans les écouteurs (téléphone)</string>
+    <string name="fone_titulo">Son dans les écouteurs</string>
+    <string name="fone_texto">Scannez avec un téléphone sur le Wi-Fi de la maison et branchez les écouteurs. Jusqu\'à %1$d téléphones. La TV se tait pendant l\'écoute ; fermer la page rend le son.</string>
+    <string name="fone_ouvindo">À l\'écoute : %1$d sur %2$d</string>
+    <string name="fone_fechar">Fermer</string>
+    <string name="fone_parar">Arrêter</string>
+    <string name="fone_sem_rede">La TV n\'est pas sur le réseau de la maison.</string>
+</resources>

@@ -49,6 +49,9 @@ concurrency:
 
 jobs:
   build:
+    # 17/11/2026: a chave de assinatura e as chaves dos serviços ficam no Environment "publicar" (só main + aprovação do
+    # Paulo), não nos segredos do repositório: um workflow alterado numa branch não consegue lê-las. PR = sem Environment.
+    environment: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && 'publicar' || '' }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
     outputs:
@@ -69,7 +72,8 @@ jobs:
           ALVO: ${{ inputs.commit }}
         run: |
           if ! printf '%s' "$ALVO" | grep -Eq '^[0-9a-f]{7,40}$'; then echo "::error::commit inválido: use o hash"; exit 1; fi
-          git fetch --no-tags origin main
+          # Sem "git fetch" aqui: o fetch-depth 0 já trouxe a origin/main, e com persist-credentials false um fetch
+          # falharia quando o repo do código for privado.
           if ! git merge-base --is-ancestor "$ALVO" origin/main; then echo "::error::$ALVO não está na main"; exit 1; fi
           git checkout --detach "$ALVO"
           echo "Republicando $(git log -1 --format='%h %s' HEAD)"
@@ -120,15 +124,18 @@ jobs:
 
       - name: Compilar o release
         env:
-          ASSINATURA_SENHA: ${{ secrets.ASSINATURA_SENHA }}
-          ASSINATURA_ALIAS: ${{ secrets.ASSINATURA_ALIAS }}
+          # Segredos só no build que publica (manual, na main): PR e dispatch em outra branch compilam sem eles.
+          ASSINATURA_SENHA: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && secrets.ASSINATURA_SENHA || '' }}
+          ASSINATURA_ALIAS: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && secrets.ASSINATURA_ALIAS || '' }}
           # Chaves dos aplicativos de filmes e séries (ServicosFilmes.kt): só no build que publica. Sem o secret, o
           # serviço some da tela (docs/servicos-filmes.md diz como criar cada uma).
-          TMDB_CHAVE: ${{ github.event_name == 'workflow_dispatch' && secrets.TMDB_CHAVE || '' }}
-          TRAKT_ID: ${{ github.event_name == 'workflow_dispatch' && secrets.TRAKT_ID || '' }}
-          TRAKT_SEGREDO: ${{ github.event_name == 'workflow_dispatch' && secrets.TRAKT_SEGREDO || '' }}
-          SIMKL_ID: ${{ github.event_name == 'workflow_dispatch' && secrets.SIMKL_ID || '' }}
-          OPENSUBTITLES_CHAVE: ${{ github.event_name == 'workflow_dispatch' && secrets.OPENSUBTITLES_CHAVE || '' }}
+          TMDB_CHAVE: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && secrets.TMDB_CHAVE || '' }}
+          TRAKT_ID: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && secrets.TRAKT_ID || '' }}
+          TRAKT_SEGREDO: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && secrets.TRAKT_SEGREDO || '' }}
+          SIMKL_ID: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && secrets.SIMKL_ID || '' }}
+          OPENSUBTITLES_CHAVE: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && secrets.OPENSUBTITLES_CHAVE || '' }}
+          # Para onde vai o "Relatar um problema" (RelatarProblema.kt). Variável do repo, não secret: o e-mail aparece no QR.
+          SUPORTE_EMAIL: ${{ vars.SUPORTE_EMAIL || '' }}
         run: |
           chmod +x gradlew
           # Ideia 101: o app de celular sai junto (mesma chave). Num "commit=" antigo sem a pasta celular/, só o launcher.
@@ -155,9 +162,14 @@ jobs:
           CODIGO=$("$AAPT" dump badging publicar/$NOME.apk | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p")
           C64=$("$AAPT" dump badging publicar/$NOME-arm64.apk | sed -n "s/.*versionCode='\([0-9]*\)'.*/\1/p")
           if [ "$CODIGO" != "$C64" ]; then echo "::error::versionCode diferente: 32=$CODIGO 64=$C64"; exit 1; fi
+          # Sem número lido, a tag sairia "v" e nenhuma TV atualizaria (Atualizador.kt lê o número da tag).
+          if ! printf '%s' "$CODIGO" | grep -Eq '^[0-9]+$'; then echo "::error::versionCode não lido do APK"; exit 1; fi
           for APK in "$NOME.apk" "$NOME-arm64.apk"; do
             # Cada APK só pode ter as libs da própria arquitetura (confere o splits).
             unzip -l "publicar/$APK" | grep -o 'lib/[^/]*/' | sort -u | tr '\n' ' '; echo " <- $APK"
+            # O compilarTunel só avisa quando o go build falha: aqui um Release sem o túnel (MCP pela internet) não sai.
+            if [ -d tunel ] && ! unzip -l "publicar/$APK" | grep -q 'libtsnet.so'; then
+              echo "::error::$APK saiu sem libtsnet.so (go build falhou?)"; exit 1; fi
             (cd publicar && sha256sum "$APK" | cut -d' ' -f1 > "$APK.sha256")
             echo "$APK  versionCode=$CODIGO  tamanho=$(stat -c%s "publicar/$APK") bytes  sha256=$(cat "publicar/$APK.sha256")"
           done
@@ -169,7 +181,8 @@ jobs:
           # Notas do Release (em inglês), com o número da build e o commit.
           sed -e "s/{BUILD}/$CODIGO/g" -e "s/{COMMIT}/${COMMIT::7}/g" .github/release-notes.md > publicar/notas.md
           # Números de leveza (degrau 2): tamanho dos APKs em tabela no fim das notas + leveza.json (asset; o site lê).
-          python3 scripts/numeros-leveza.py publicar/$NOME.apk publicar/$NOME-arm64.apk "$CODIGO" publicar/leveza.json >> publicar/notas.md
+          # Num "commit=" anterior a 16/11 o script não existe: publica sem a tabela (o asset leveza.json fica de fora).
+          [ -f scripts/numeros-leveza.py ] && python3 scripts/numeros-leveza.py publicar/$NOME.apk publicar/$NOME-arm64.apk "$CODIGO" publicar/leveza.json >> publicar/notas.md
 
       - uses: actions/upload-artifact@v7
         with:
@@ -180,6 +193,7 @@ jobs:
   publicar:
     needs: build
     if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && needs.build.outputs.tem_chave == '1'
+    environment: espelho   # PUBLICO_TOKEN (só main, sem segunda aprovação: o build já foi aprovado)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -208,9 +222,10 @@ jobs:
           # O commit só existe no repo do código: no repo público a tag nasce no main dele (o número vem da tag).
           if [ "$DESTINO" = "$GITHUB_REPOSITORY" ]; then ALVO_TAG="--target $COMMIT"; else ALVO_TAG=""; fi
           EXTRA=""; [ -f one-tv-celular.apk ] && EXTRA="one-tv-celular.apk one-tv-celular.apk.sha256"
+          [ -f leveza.json ] && EXTRA="$EXTRA leveza.json"
           gh release create "v$V" $MARCA \
             "$NOME.apk" "$NOME.apk.sha256" \
-            "$NOME-arm64.apk" "$NOME-arm64.apk.sha256" leveza.json $EXTRA \
+            "$NOME-arm64.apk" "$NOME-arm64.apk.sha256" $EXTRA \
             --repo "$DESTINO" \
             --title "One TV Launcher 1.0 (build $V)" \
             --notes-file notas.md \

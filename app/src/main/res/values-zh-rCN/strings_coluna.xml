@@ -22,6 +22,8 @@
     <string name="coluna_marcado_assistido">已将 %1$s 标记为已看</string>
     <string name="coluna_marcado_nao_assistido">已将 %1$s 标记为未看</string>
     <string name="coluna_tirado_continuar">已将 %1$s 从“继续观看”中移除</string>
+    <string name="coluna_menu_tirar_home">从主屏幕移除</string>
+    <string name="coluna_tirado_home">已从主屏幕移除 %1$s</string>
     <string name="coluna_etiqueta_concluida">已完结</string>
     <string name="coluna_etiqueta_nova_temporada">新一季</string>
     <string name="coluna_etiqueta_novos">新剧集</string>

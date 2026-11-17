@@ -2,7 +2,7 @@
 <!-- Tradução (ko) de values/strings_config.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="cl_aba_conta">TV 및 영화</string>
-    <string name="cl_aba_conta_det">이 TV에 저장된 IPTV 계정: 상태, 만료, 연결 수</string>
+    <string name="cl_aba_conta_det">IPTV 계정, 영화·시리즈 서비스, 오디오와 자막</string>
     <string name="cl_aba_parental">자녀 보호</string>
     <string name="cl_aba_parental_det">PIN으로 채널 잠금: 목록에서 사라지고 재생되지 않음</string>
     <string name="cl_aba_aparencia">모양</string>
@@ -104,7 +104,7 @@
     <string name="cl_acao_mcp_acoes">AI가 요청한 동작</string>
     <string name="cl_acao_mcp_acoes_det">정해진 목록의 앱 열기, 볼륨, 알람 등.</string>
     <string name="cl_acao_mcp_shell">AI의 셸 명령</string>
-    <string name="cl_acao_mcp_shell_det">adb처럼 TV 셸에서 실행하는 모든 명령. 가장 위험한 항목입니다.</string>
+    <string name="cl_acao_mcp_shell_det">Adb처럼 TV 셸에서 실행하는 모든 명령. 가장 위험한 항목입니다.</string>
     <string name="cl_acao_instalar">앱 설치</string>
     <string name="cl_acao_instalar_det">패널에서 보낸 APK(PIN 외에 추가로).</string>
     <string name="cl_acao_remover">앱 제거, 중지 또는 데이터 삭제</string>
@@ -176,6 +176,7 @@
     <string name="cl_ativos">%1$d개 사용 중</string>
     <string name="cl_revogados">취소됨</string>
     <string name="cl_visivel">TV에 표시됨</string>
+    <string name="cl_escondido">TV에서 숨김</string>
     <string name="cl_limpeza">사전 설치 앱 정리</string>
     <string name="cl_nenhum_liberado">아직 정리 가능한 앱 없음</string>
     <string name="cl_nenhum_liberado_det">이 TV에서 하나씩 테스트한 앱만 표시됩니다(Debloat.kt 참조)</string>

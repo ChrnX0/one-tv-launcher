@@ -24,6 +24,7 @@ import android.widget.TextView
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.TrackSelectionOverride
@@ -60,6 +61,8 @@ class VodActivity : Activity() {
         private const val EXTRA_TITULO = "titulo"
         private const val EXTRA_TIPO = "tipo"
         private const val EXTRA_URL = "url"
+        private const val EXTRA_CHAVE_POS = "chave_pos"     // addons: a posição guardada por esta chave, não pelo endereço
+        private const val EXTRA_CABECALHOS = "cabecalhos"   // addons: User-Agent/Referer que o addon pediu
         // De quem é a escolha de áudio (Idioma): o filme, ou a SÉRIE inteira (o próximo episódio segue a mesma escolha).
         private const val EXTRA_IDIOMA = "idioma"
         // O que procurar no OpenSubtitles (LegendaExterna): nome limpo, ano, e temporada/episódio nas séries.
@@ -67,6 +70,7 @@ class VodActivity : Activity() {
         private const val EXTRA_LEG_ANO = "leg_ano"
         private const val EXTRA_LEG_TEMP = "leg_temp"
         private const val EXTRA_LEG_EP = "leg_ep"
+        private const val EXTRA_LEG_VERSAO = "leg_versao"
         private const val EXTRA_TMDB = "tmdb"
         private const val LEGENDA_AUTO = "legenda_auto"   // prefs "player" (ideia 89): baixar a legenda sozinho
         private const val LEGENDA_TRADUZIR = "legenda_traduzir"   // ideia 90: sem legenda no idioma da TV, traduzir a inglesa
@@ -75,6 +79,7 @@ class VodActivity : Activity() {
         /** Põe no Intent o que a busca de legenda precisa (sem nada, a busca usa o título da tela). */
         fun comBusca(i: Intent, b: LegendaExterna.Busca?): Intent = if (b == null) i else i.putExtra(EXTRA_LEG_NOME, b.nome)
             .putExtra(EXTRA_LEG_ANO, b.ano ?: 0).putExtra(EXTRA_LEG_TEMP, b.temporada ?: 0).putExtra(EXTRA_LEG_EP, b.episodio ?: 0).putExtra(EXTRA_TMDB, b.tmdb ?: 0)
+            .putExtra(EXTRA_LEG_VERSAO, b.versao.name)
         const val TIPO_FILME = "filme"
         const val TIPO_EPISODIO = "episodio"
         const val RESULTADO_TERMINOU = "terminou"
@@ -94,6 +99,26 @@ class VodActivity : Activity() {
         fun abrirUrl(ctx: Context, url: String, titulo: String) {
             ctx.startActivity(Intent(ctx, VodActivity::class.java)
                 .putExtra(EXTRA_TIPO, TIPO_FILME).putExtra(EXTRA_URL, url).putExtra(EXTRA_TITULO, titulo))
+        }
+
+        /**
+         * Fonte de um addon (16/11/2026, AddonsActivity): endereço http(s) direto, a posição guardada pelo id do vídeo no
+         * addon ([chavePos], ex.: "addon:tt123:1:2"; o endereço muda a cada pedido) e os cabeçalhos que o addon pediu
+         * (só os de [AddonsProtocolo.cabecalhoPermitido]). Com resultado: o fim do episódio decide o próximo.
+         */
+        fun abrirAddon(act: Activity, codigo: Int, url: String, titulo: String, chavePos: String, episodio: Boolean,
+                       cabecalhos: Map<String, String>) {
+            val b = android.os.Bundle()
+            cabecalhos.filterKeys { AddonsProtocolo.cabecalhoPermitido(it) }.forEach { (k, v) -> b.putString(k, v) }
+            act.startActivityForResult(Intent(act, VodActivity::class.java)
+                .putExtra(EXTRA_TIPO, if (episodio) TIPO_EPISODIO else TIPO_FILME).putExtra(EXTRA_URL, url).putExtra(EXTRA_TITULO, titulo)
+                .putExtra(EXTRA_CHAVE_POS, chavePos).putExtra(EXTRA_CABECALHOS, b), codigo)
+        }
+
+        /** "Continuar de onde parou?" vindo de outra TV da casa (degrau 4): o mesmo endereço, a partir de [posMs]. */
+        fun abrirUrlEm(ctx: Context, url: String, titulo: String, posMs: Long) {
+            ctx.startActivity(Intent(ctx, VodActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(EXTRA_TIPO, TIPO_FILME).putExtra(EXTRA_URL, url).putExtra(EXTRA_TITULO, titulo).putExtra("inicio_ms", posMs))
         }
 
         /** Endereço da rede com resultado (ideia 29: a pasta do "Na rede" emenda o próximo arquivo). */
@@ -141,6 +166,8 @@ class VodActivity : Activity() {
     private var quadrosDecididos = false   // ideia 86: o modo da tela (24 Hz para filme) já foi pedido para este vídeo
     // Preferência de áudio deste título (Idioma), lida do disco fora da thread da tela antes de o vídeo começar.
     @Volatile private var prefIdioma = Idioma.Pref.DUBLADO
+    /** Segundo idioma de áudio/legenda (Conforto, 16/11/2026), já sem o idioma da TV; null = nenhum. */
+    @Volatile private var segundoIdioma: String? = null
     private var chaveIdioma = ""
     // Ideia 25: idioma do sistema da TV ("pt", "en", "es"): "dublado" e a legenda automática seguem ele.
     private val idiomaTv by lazy { IdiomaPlayer.idiomaDaTv() }
@@ -196,6 +223,7 @@ class VodActivity : Activity() {
     private lateinit var video: SurfaceView
     private lateinit var barra: LinearLayout
     private lateinit var titulo: TextView
+    private val sessao by lazy { SessaoMidia(this, "vod", soControle = true) }
     private lateinit var tempo: TextView
     private lateinit var progresso: ProgressBar
     private lateinit var aviso: TextView
@@ -210,9 +238,14 @@ class VodActivity : Activity() {
         val ext = intent.getStringExtra(EXTRA_EXT).orEmpty()
         // Endereço da rede (ver FontesMidia: nenhum leva senha nem token). A posição salva usa o próprio endereço como chave.
         val direto = intent.getStringExtra(EXTRA_URL)?.takeIf { FontesMidia.aceito(it) }
-        chave = if (direto != null) "rede:${direto.hashCode()}" else chave(tipo, fonte, id)
+        val chavePos = intent.getStringExtra(EXTRA_CHAVE_POS)?.takeIf { it.startsWith("addon:") && direto != null }
+        chave = chavePos ?: if (direto != null) "rede:${direto.hashCode()}" else chave(tipo, fonte, id)
+        val cabAddon = intent.getBundleExtra(EXTRA_CABECALHOS)?.let { b ->
+            b.keySet().filter { AddonsProtocolo.cabecalhoPermitido(it) }.mapNotNull { k -> b.getString(k)?.let { k to it } }.toMap()
+        }.orEmpty()
         chaveIdioma = intent.getStringExtra(EXTRA_IDIOMA)?.takeIf { it.isNotEmpty() } ?: chave
         serie = tipo == TIPO_EPISODIO && !intent.getStringExtra(EXTRA_IDIOMA).isNullOrEmpty()
+        ligarJunto(direto)
         podeSondar = direto != null
 
         val raiz = FrameLayout(this).apply { setBackgroundColor(Color.BLACK) }
@@ -223,7 +256,7 @@ class VodActivity : Activity() {
             FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM).apply { setMargins(dp(32), 0, dp(32), dp(26)) })
         aviso = TextView(this).apply {
             textSize = 18f; setTextColor(papel); gravity = Gravity.CENTER; background = vidro(16)
-            setPadding(dp(24), dp(16), dp(24), dp(16)); text = getString(R.string.player_carregando_canal)
+            setPadding(dp(24), dp(16), dp(24), dp(16)); text = getString(R.string.vod_carregando)
         }
         raiz.addView(aviso, FrameLayout.LayoutParams(-2, -2, Gravity.CENTER))
         // Legenda em imagem (14/11/2026): desenhada dentro da área do vídeo, por baixo da barra e dos avisos.
@@ -255,7 +288,7 @@ class VodActivity : Activity() {
             textSize = 18f; setTextColor(papel); visibility = View.GONE; text = getString(R.string.abertura_pular)
             typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
             setPadding(dp(22), dp(12), dp(22), dp(12))
-            background = GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(0xD90B0F17.toInt()); setStroke(dp(2), coral) }
+            background = GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(0xD90E1020.toInt()); setStroke(dp(2), coral) }
         }
         raiz.addView(pilulaPular, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.END).apply { setMargins(0, 0, dp(48), dp(170)) })
         // Ideia 6: a segunda legenda fica em cima (a primeira continua embaixo), com o mesmo estilo.
@@ -294,6 +327,7 @@ class VodActivity : Activity() {
                 if (tipo == TIPO_EPISODIO) Series.urlEpisodio(conta, id, ext) else Vod.urlFilme(conta, Filme(id, fonte, "", extensao = ext))
             }
             prefIdioma = IdiomaPlayer.prefs(this).para(chaveIdioma)
+            segundoIdioma = ConfortoRegras.segundoUtil(Conforto.segundoIdioma(this), idiomaTv)
             // Ideia 90: tradução que ficou pela metade (o player fechou no meio) é refeita; a metade não fica valendo.
             if (LegendaTraduzida.pelaMetade(this, chave)) LegendaBaixar.apagar(this, chave)
             val leg = LegendaBaixar.guardada(this, chave)
@@ -302,7 +336,8 @@ class VodActivity : Activity() {
             val atraso = getSharedPreferences("player", MODE_PRIVATE).getLong("atraso:$chave", 0L)
             // Ideia 21: tamanho da legenda escolhido no ▼ (vale para todos os vídeos).
             val tamLeg = FimDoVideo.tamanhoLegenda(getSharedPreferences("player", MODE_PRIVATE).getInt("legenda_sp", FimDoVideo.LEGENDA_PADRAO))
-            val pos = if (intent.getBooleanExtra("do_comeco", false)) 0L else Vod.inicio(PlayerArmazem.posicoes(this)[chave], episodio = tipo == TIPO_EPISODIO)
+            val pos = intent.getLongExtra("inicio_ms", -1L).takeIf { it >= 0 }
+                ?: if (intent.getBooleanExtra("do_comeco", false)) 0L else Vod.inicio(PlayerArmazem.posicoes(this)[chave], episodio = tipo == TIPO_EPISODIO)
             val ab = if (serie) AberturaSerie.deTexto(getSharedPreferences("player", MODE_PRIVATE)
                 .getString(AberturaSerie.chave(chaveIdioma), null)) else null
             tela.post {
@@ -313,7 +348,7 @@ class VodActivity : Activity() {
                 pintarLegenda()
                 abertura = ab
                 relato = tocavel?.relato
-                cabecalhos = tocavel?.cabecalhos ?: m3u?.second?.takeIf { it.isNotBlank() }?.let { mapOf("User-Agent" to it) }.orEmpty()
+                cabecalhos = tocavel?.cabecalhos?.takeIf { it.isNotEmpty() } ?: cabAddon.takeIf { it.isNotEmpty() } ?: m3u?.second?.takeIf { it.isNotBlank() }?.let { mapOf("User-Agent" to it) }.orEmpty()
                 tocar()
             }
         }
@@ -335,11 +370,13 @@ class VodActivity : Activity() {
         player?.let { avisar(FontesMidia.Momento.PAROU, it.currentPosition) }
         avisouInicio = false
         efeitos.soltar()
+        sessao.soltar()
         player?.let { retomarEm = it.currentPosition; it.release() }
         player = null
     }
 
     override fun onDestroy() {
+        junto?.desligar()
         pararTraducao.set(true); tela.removeCallbacksAndMessages(null)
         sonda?.fechar(); sonda = null
         super.onDestroy()
@@ -372,13 +409,15 @@ class VodActivity : Activity() {
         // escolhidos quando as faixas chegam (onTracksChanged + IdiomaPlayer.aplicar). Nos dois casos, a legenda no idioma
         // da TV só liga se o áudio não for desse idioma.
         p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
-            .setPreferredAudioLanguage(if (prefIdioma == Idioma.Pref.DUBLADO) idiomaTv else null).build()
+            .setPreferredAudioLanguages(*(if (prefIdioma == Idioma.Pref.DUBLADO) listOfNotNull(idiomaTv, segundoIdioma) else emptyList()).toTypedArray())
+            .build()
         legendaDecidida = false   // player novo (voltou de outra tela): as faixas são escolhidas de novo
         p.addListener(ouvinte)
         p.setMediaItem(item(u), retomarEm)
         p.prepare()
         p.playWhenReady = true
         player = p
+        sessao.ligar(p)   // o sistema, o Gemini e o MCP passam a ver o filme (SessaoMidia)
         tela.removeCallbacks(salvarDepois); tela.postDelayed(salvarDepois, SALVAR_MS)
         mostrarBarra()
         vigiarAbertura()
@@ -389,7 +428,7 @@ class VodActivity : Activity() {
     private fun refazerPlayer() {
         val p = player ?: return
         efeitos.soltar()
-        retomarEm = p.currentPosition; p.release(); player = null
+        sessao.soltar(); retomarEm = p.currentPosition; p.release(); player = null
         tocar()
     }
 
@@ -495,7 +534,12 @@ class VodActivity : Activity() {
     private fun nomeFaixa(f: androidx.media3.common.Format): String {
         // "und"/"mul"/"zxx" (idioma não marcado no arquivo) apareciam crus: "Áudio: und" na Sala (16/11/2026).
         val idioma = f.language?.takeUnless { it.isBlank() || it.lowercase() in SEM_IDIOMA }
-            ?.let { Locale.forLanguageTag(it).getDisplayLanguage(Locale.getDefault()).ifEmpty { it } } ?: getString(R.string.vod_faixa)
+            ?.let { Locale.forLanguageTag(it).getDisplayLanguage(Locale.getDefault()).ifEmpty { it } }
+            // Áudio sem idioma: o formato diz mais que "Faixa" ("Áudio: Faixa" na Sala, 17/11/2026), ex. "AAC estéreo".
+            ?: f.takeIf { it.channelCount > 0 }?.let {
+                InfoTecnica.formato(it.sampleMimeType, it.codecs) + " " + InfoTecnica.canais(it.channelCount, rotulosInfo)
+            }
+            ?: getString(R.string.vod_faixa)
         return listOfNotNull(idioma, f.label?.takeIf { it.isNotBlank() && it != idioma }).joinToString(" · ")
     }
 
@@ -564,6 +608,7 @@ class VodActivity : Activity() {
     /** O vídeo e, se houver, a legenda baixada junto (o Media3 a trata como mais uma faixa de legenda). */
     private fun item(u: String): MediaItem {
         val b = MediaItem.Builder().setUri(u)
+            .setMediaMetadata(MediaMetadata.Builder().setTitle(intent.getStringExtra(EXTRA_TITULO).orEmpty()).build())
         val legendas = ArrayList<MediaItem.SubtitleConfiguration>()
         legendaArquivo?.let { f ->
             legendas += MediaItem.SubtitleConfiguration.Builder(android.net.Uri.fromFile(f))
@@ -611,6 +656,9 @@ class VodActivity : Activity() {
     }
 
     private val ouvinte = object : Player.Listener {
+        override fun onPositionDiscontinuity(velha: Player.PositionInfo, nova: Player.PositionInfo, motivo: Int) {
+            if (motivo == Player.DISCONTINUITY_REASON_SEEK) player?.let { junto?.mudou(it.isPlaying || it.playWhenReady, nova.positionMs) }
+        }
         override fun onCues(cues: CueGroup) {
             legendaImg.mostrar(cues.cues)
             val t = cues.cues.filter { it.bitmap == null }.mapNotNull { it.text }.joinToString("\n")
@@ -627,7 +675,7 @@ class VodActivity : Activity() {
                         continuarDeFora()
                     }
                 }
-                Player.STATE_BUFFERING -> mostrarAviso(getString(R.string.player_carregando_canal))
+                Player.STATE_BUFFERING -> mostrarAviso(getString(R.string.vod_carregando))
                 Player.STATE_ENDED -> {
                     salvar(terminou = true)
                     // Posição = duração: o servidor marca como visto e tira do "Continuar assistindo".
@@ -647,6 +695,7 @@ class VodActivity : Activity() {
         }
         override fun onIsPlayingChanged(tocando: Boolean) {
             Gatilhos.avisarDoPlayer(this@VodActivity, tocando); atualizarBarra(); if (!tocando) mostrarBarra(fixa = true) else mostrarBarra()
+            player?.let { junto?.mudou(tocando, it.currentPosition) }
             // Trakt/Simkl: começou ou voltou a tocar = "vendo agora"; pausou no meio = pausa (o fim é tratado no avisar).
             val p = player ?: return
             if (avisouInicio && p.playbackState == Player.STATE_READY) contarFora(if (tocando) ServicosSync.Momento.COMECOU else ServicosSync.Momento.PAUSOU, p.currentPosition)
@@ -684,7 +733,7 @@ class VodActivity : Activity() {
             if (legendaDecidida || faixas.groups.none { it.type == C.TRACK_TYPE_AUDIO }) return
             legendaDecidida = true
             val p = player ?: return
-            IdiomaPlayer.aplicar(faixas, p.trackSelectionParameters, prefIdioma, idiomaTv)?.let { p.trackSelectionParameters = it }
+            IdiomaPlayer.aplicar(faixas, p.trackSelectionParameters, prefIdioma, idiomaTv, segundoIdioma)?.let { p.trackSelectionParameters = it }
             talvezLegendaAuto(faixas)
         }
     }
@@ -798,6 +847,13 @@ class VodActivity : Activity() {
         val comLegenda = legendaArquivo != null || p.currentTracks.groups.any { it.type == C.TRACK_TYPE_TEXT && it.isSelected }
         opcoes += Opcao(semLegenda, marcada = !comLegenda) {
             p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true).build()
+            // A baixada também sai: antes ela voltava na próxima vez que o filme abria (Sala, 17/11/2026). O "já tentei a
+            // automática" fica, então ela não é baixada de novo sozinha; "Buscar legenda" continua trazendo outra.
+            if (legendaArquivo != null) {
+                val k = chave
+                legendaArquivo = null; legendaTraduzida = false
+                Fundo.rodar { LegendaBaixar.apagar(this, k) }
+            }
         }
         // Legenda da internet (OpenSubtitles, com a conta do dono) e, se já tem uma baixada, o ajuste de atraso.
         opcoes += Opcao(getString(R.string.legenda_buscar)) { buscarLegenda() }
@@ -863,8 +919,31 @@ class VodActivity : Activity() {
             opcoes += Opcao(getString(R.string.abertura_marcar_fim, agora)) { marcarAbertura(inicio = false) }
             if (abertura != null) opcoes += Opcao(getString(R.string.abertura_apagar)) { apagarAbertura() }
         }
+        opcoes += Opcao(getString(R.string.fone_menu), SomNoFone.ligado) { SomNoFone.janela(this) }
+        if (EntreTvs.ligado(this)) {
+            val titulo = intent.getStringExtra(EXTRA_TITULO).orEmpty()
+            opcoes += Opcao(getString(R.string.junto_menu)) { junto?.menu(titulo, JuntoTvsProvider.tvs(this)) }
+            opcoes += Opcao(getString(R.string.cont_menu)) {
+                junto?.enviarPara(titulo, JuntoTvsProvider.tvs(this), p.currentPosition, intent.getStringExtra(EXTRA_URL))
+            }
+        }
         Estilo.lista(this, getString(R.string.vod_faixas), opcoes.map { it.rotulo },
             opcoes.indices.filter { opcoes[it].marcada }) { i -> opcoes[i].aplicar() }
+    }
+
+    // ---------------------------------------------------------------- sessão junto (degrau 4, SessaoJunto.kt)
+
+    private var junto: JuntoNoPlayer? = null
+
+    /** Liga a ponte com a outra TV: a chave diz o que toca aqui; pausa e pulos de lá chegam pelo [JuntoNoPlayer.aplicar]. */
+    private fun ligarJunto(direto: String?) {
+        val b = buscaLegenda()
+        junto = JuntoNoPlayer(this, aplicar = { tocando, alvo ->
+            player?.let { p -> if (alvo != null) p.seekTo(alvo); p.playWhenReady = tocando; mostrarBarra() }
+        }, posicao = { player?.currentPosition ?: 0L }, tocandoAgora = { player?.isPlaying == true }).also {
+            it.tocandoTitulo(JuntoRegras.chaveVod(b.tmdb, b.temporada, b.episodio, direto ?: intent.getStringExtra(EXTRA_TITULO)))
+            it.ligar()
+        }
     }
 
     // ---------------------------------------------------------------- ideia 24: pular abertura
@@ -931,7 +1010,9 @@ class VodActivity : Activity() {
         val nome = intent.getStringExtra(EXTRA_LEG_NOME)?.takeIf { it.isNotBlank() }
             ?: LegendaExterna.nomeDeBusca(intent.getStringExtra(EXTRA_TITULO).orEmpty().substringBefore(" · "))
         fun n(k: String) = intent.getIntExtra(k, 0).takeIf { it > 0 }
-        return LegendaExterna.Busca(nome, n(EXTRA_LEG_ANO), n(EXTRA_LEG_TEMP), n(EXTRA_LEG_EP), n(EXTRA_TMDB))
+        val versao = intent.getStringExtra(EXTRA_LEG_VERSAO)?.let { v -> Idioma.Versao.entries.firstOrNull { it.name == v } }
+            ?: Idioma.Versao.DESCONHECIDA
+        return LegendaExterna.Busca(nome, n(EXTRA_LEG_ANO), n(EXTRA_LEG_TEMP), n(EXTRA_LEG_EP), n(EXTRA_TMDB), versao = versao)
     }
 
     // ---------------------------------------------------------------- Trakt/Simkl (fatia 3)
@@ -994,7 +1075,7 @@ class VodActivity : Activity() {
     private fun talvezLegendaAuto(t: Tracks) {
         if (autoTentada || legendaArquivo != null || legendasAoLado.isNotEmpty()) return
         if (!getSharedPreferences("player", MODE_PRIVATE).getBoolean(LEGENDA_AUTO, true)) return
-        if (!IdiomaPlayer.faltaLegenda(t, prefIdioma, idiomaTv)) return
+        if (!IdiomaPlayer.faltaLegenda(t, prefIdioma, idiomaTv, buscaLegenda().versao)) return
         autoTentada = true
         val k = chave; val u = url; val b = buscaLegenda()
         if (b.nome.isBlank()) return
@@ -1131,7 +1212,7 @@ class VodActivity : Activity() {
         val p = player ?: return
         if (antes != depois) {
             efeitos.soltar()
-            retomarEm = p.currentPosition; p.release(); player = null
+            sessao.soltar(); retomarEm = p.currentPosition; p.release(); player = null
             tocar()
         } else efeitos.aplicar(p.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
     }
@@ -1167,7 +1248,7 @@ class VodActivity : Activity() {
         }
         val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
         titulo = TextView(this).apply {
-            text = t; textSize = 20f; typeface = Fontes.manrope(500); setTextColor(papel)
+            text = t; textSize = 20f; typeface = Fontes.nunito(500); setTextColor(papel)
             maxLines = 1; ellipsize = TextUtils.TruncateAt.END
         }
         linha.addView(titulo, LinearLayout.LayoutParams(0, -2, 1f))
@@ -1232,7 +1313,7 @@ class VodActivity : Activity() {
     private fun esconderAviso() { aviso.visibility = View.GONE }
 
     private fun vidro(raio: Int) = GradientDrawable().apply {
-        cornerRadius = dp(raio).toFloat(); setColor(0xD90B0F17.toInt()); setStroke(dp(1), Estilo.SUPERFICIE_ALTA)
+        cornerRadius = dp(raio).toFloat(); setColor(0xD90E1020.toInt()); setStroke(dp(1), Estilo.SUPERFICIE_ALTA)
     }
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density + 0.5f).toInt()

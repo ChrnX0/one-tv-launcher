@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Protetor que reage ao tempo, caminho 2 (17/11/2026): frase do tempo, curiosidades do céu e o tema "Céu de verdade". -->
+<resources>
+    <string name="tema_ceu">السماء الحقيقية</string>
+    <string name="ceu_credito">السحب: NOAA GOES / NASA GIBS · الخريطة: Natural Earth</string>
+    <string name="ft_chuva_min">مطر خلال نحو %1$d دقيقة</string>
+    <string name="ft_para_min">يتوقف المطر خلال نحو %1$d دقيقة</string>
+    <string name="ft_chuva_hora">مطر نحو الساعة %1$s</string>
+    <string name="ft_para_hora">يتوقف المطر نحو الساعة %1$s</string>
+    <string name="ft_chuva_segue">مطر في الساعات القادمة</string>
+    <string name="ft_trovoada">عاصفة رعدية نحو الساعة %1$s</string>
+    <string name="ft_geada_hoje">صقيع الليلة: احمِ النباتات</string>
+    <string name="ft_geada_manha">صباح بارد بالصقيع: تدفأ جيدًا</string>
+    <string name="ft_calor">حر شديد اليوم (%1$d°): اشرب الماء</string>
+    <string name="ft_neblina">ضباب: انتبه على الطريق</string>
+    <string name="ft_noite_fria">ليلة باردة (%1$d°): تدفأ جيدًا</string>
+    <string name="ft_secar">يوم جيد لتجفيف الغسيل</string>
+    <string name="ft_amanha_chove">مطر محتمل غدًا (%1$d%%)</string>
+    <string name="ft_ceu_limpo">سماء صافية: ليلة جيدة لرؤية النجوم</string>
+    <string name="cu_uv_agora">الأشعة فوق البنفسجية %1$d الآن</string>
+    <string name="cu_uv_amanha">الأشعة فوق البنفسجية %1$d غدًا</string>
+    <string name="cu_uv_faixa">قبعة وواقي شمس من %1$s إلى %2$s</string>
+    <string name="cu_uv_d2">واقي شمس إذا خرجت</string>
+    <string name="cu_uv_d3">قبعة وواقي شمس</string>
+    <string name="cu_uv_d4">تجنب شمس الظهيرة</string>
+    <string name="cu_uv_d5">ابقَ في الظل</string>
+    <string name="cu_ar_2">هواء متوسط</string>
+    <string name="cu_ar_3">هواء سيئ للحساسين</string>
+    <string name="cu_ar_4">هواء سيئ</string>
+    <string name="cu_ar_5">هواء سيئ جدًا</string>
+    <string name="cu_ar_6">هواء خطر</string>
+    <string name="cu_ar_d2">مرضى الربو: النوافذ مغلقة اليوم</string>
+    <string name="cu_ar_d3">تجنب الرياضة في الخارج</string>
+    <string name="cu_ar_d4">الجميع: وقت أقل في الخارج</string>
+    <string name="cu_ar_d5">ابقَ في المنزل والنوافذ مغلقة</string>
+    <string name="cu_estacao">محطة الفضاء الساعة %1$s</string>
+    <string name="cu_estacao_d">%1$d دقيقة · %2$s ← %3$s</string>
+    <string name="cu_meteoros">زخة شهب الليلة</string>
+    <string name="cu_meteoros_d">%1$s · حتى %2$d في الساعة</string>
+    <string name="cu_eclipse">كسوف الشمس %1$s</string>
+    <string name="cu_eclipse_d">لا تنظر مباشرة إلى الشمس أبدًا</string>
+    <string name="cu_lua_cheia">بدر الليلة</string>
+    <string name="cu_superlua">قمر عملاق الليلة</string>
+    <string name="cu_lua_cheia_d">يشرق من الشرق عند الغسق</string>
+    <string name="cu_lua_nova">محاق</string>
+    <string name="cu_lua_nova_d">سماء مظلمة: الأفضل للنجوم</string>
+    <string name="cu_planeta">%1$s مرتفع الساعة %2$s</string>
+    <string-array name="ceu_rumos">
+        <item>الشمال</item>
+        <item>الشمال الشرقي</item>
+        <item>الشرق</item>
+        <item>الجنوب الشرقي</item>
+        <item>الجنوب</item>
+        <item>الجنوب الغربي</item>
+        <item>الغرب</item>
+        <item>الشمال الغربي</item>
+    </string-array>
+    <string-array name="ceu_olhe">
+        <item>انظر شمالًا</item>
+        <item>انظر نحو الشمال الشرقي</item>
+        <item>انظر شرقًا</item>
+        <item>انظر نحو الجنوب الشرقي</item>
+        <item>انظر جنوبًا</item>
+        <item>انظر نحو الجنوب الغربي</item>
+        <item>انظر غربًا</item>
+        <item>انظر نحو الشمال الغربي</item>
+    </string-array>
+    <string-array name="ceu_planetas">
+        <item>الزهرة</item>
+        <item>المريخ</item>
+        <item>المشتري</item>
+        <item>زحل</item>
+    </string-array>
+    <string-array name="ceu_meteoros">
+        <item>الربعيات</item>
+        <item>القيثاريات</item>
+        <item>إيتا الدلويات</item>
+        <item>دلتا الدلويات</item>
+        <item>البرشاويات</item>
+        <item>الجباريات</item>
+        <item>الأسديات</item>
+        <item>التوأميات</item>
+    </string-array>
+</resources>

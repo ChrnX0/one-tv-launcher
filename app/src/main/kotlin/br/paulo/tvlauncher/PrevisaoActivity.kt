@@ -62,8 +62,8 @@ class PrevisaoActivity : Activity() {
     // Cores e fontes do sistema de design (Estilo); o azul da chuva e a escala do ar são cores de dado, ficam.
     private val textoSuave = Estilo.TEXTO_2
     private val azulChuva = 0xFF8EC5FF.toInt()
-    private val fonteMedia = Fontes.manrope(600)
-    private val fonteLeve = Fontes.manrope(200)
+    private val fonteMedia = Fontes.nunito(600)
+    private val fonteLeve = Fontes.nunito(200)
 
     private lateinit var raiz: FrameLayout
     private lateinit var rolagem: ScrollView
@@ -344,10 +344,10 @@ class PrevisaoActivity : Activity() {
                 Triple(getString(R.string.pv_uv), "${Math.round(uv).toInt()}", "sun" to rotuloUv(uv)),
             ),
             listOf(
-                Triple(getString(R.string.pv_visib), if (vis >= 10) "10+ km" else "${"%.1f".format(Locale.US, vis)} km", "eye" to ""),
+                Triple(getString(R.string.pv_visib), if (vis >= 10) "10+ km" else "${"%.1f".format(Locale.getDefault(), vis)} km", "eye" to ""),
                 Triple(getString(R.string.pv_orvalho), "${Math.round(d.hOrvalho.getOrElse(i0) { d.temp }).toInt()}°", "droplet" to ""),
                 Triple(getString(R.string.pv_pressao), "${Math.round(d.pressao).toInt()} hPa", "cloud" to ""),
-                Triple(getString(R.string.pv_chuva_hoje), "${"%.1f".format(Locale.US, d.dChuvaMm)} mm", "cloud_with_rain" to ""),
+                Triple(getString(R.string.pv_chuva_hoje), "${"%.1f".format(Locale.getDefault(), d.dChuvaMm)} mm", "cloud_with_rain" to ""),
             ),
         )
         linhas.forEach { l ->

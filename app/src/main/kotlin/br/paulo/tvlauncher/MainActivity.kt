@@ -568,7 +568,7 @@ class MainActivity : Activity() {
             clipToOutline = true
         }
         barrasTocando = BarrasSom(this)
-        val corSub = 0xB3F2F5F3.toInt()
+        val corSub = 0xB3F4F1EC.toInt()
         txtTocandoTitulo = texto(12.5f, Estilo.TEXTO, Typeface.create(fonteUi, Typeface.BOLD)).apply {
             includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(220)
         }
@@ -822,7 +822,7 @@ class MainActivity : Activity() {
             background = GradientDrawable().apply {
                 cornerRadius = dp(22).toFloat()
                 setColor(0xE60E1311.toInt())
-                setStroke(dp(1), 0x667FD6C2)
+                setStroke(dp(1), 0x66FF6A2B)
             }
         }
 
@@ -1546,7 +1546,9 @@ class MainActivity : Activity() {
                 getString(if (serie) R.string.home_destaque_series else R.string.home_destaque_filmes))
             return
         }
-        val pos = posicoesHome[f.chave]?.takeIf { it.duracao > 0 }
+        // Só "continue de onde parou" quando a ficha de Filmes também oferece Continuar (Vod.deveRetomar: 1 min ou mais):
+        // com 20 s vistos a HOME dizia "continue" e a ficha "Assistir" do começo (visto na Sala, 17/11/2026).
+        val pos = posicoesHome[f.chave]?.takeIf { it.duracao > 0 && (serie || Vod.deveRetomar(it)) }
         val sub = when {
             serie -> getString(R.string.home_dest_serie, f.episodio)
             pos != null -> getString(R.string.home_dest_filme)   // o "faltam" já vai na linha de baixo
@@ -1759,6 +1761,10 @@ class MainActivity : Activity() {
             mostrarDestaque(null, getString(R.string.home_card_jogos), resumoJogos())
             mostrarCapaAtalho(IconeApp.Tipo.JOGOS)
         }) { abrirCatalogo(JogosActivity::class.java) }, quadrado = true)
+        // Addons (16/11/2026, estudo do Stremio): só aparece com pelo menos um addon instalado (painel web ou Configurações).
+        if (AddonsTv.instalados(this).isNotEmpty()) adicionar(cartaoAtalho(getString(R.string.ad_titulo), IconeApp.Tipo.FILMES, CORES_REDE, {
+            mostrarDestaque(null, getString(R.string.ad_titulo), getString(R.string.ad_destaque))
+        }) { abrirCatalogo(AddonsActivity::class.java) }, quadrado = true)
         // Plugins de terceiros (degrau 3): no fim da linha, no máximo 3, desenhados por NÓS com os dados que o plugin mandou.
         for (c in cartoesPlugin) adicionar(cartaoPlugin(c), quadrado = true)
         rotuloContinuar?.text = getString(if (JogosTv.cardLigado(this)) R.string.home_linha_continuar_jogos else R.string.home_linha_continuar)
@@ -1808,7 +1814,7 @@ class MainActivity : Activity() {
                 maxLines = if (aoVivo) 3 else 1
                 ellipsize = TextUtils.TruncateAt.END
                 setPadding(dp(8), dp(3), dp(8), dp(3))
-                if (!aoVivo) background = GradientDrawable().apply { cornerRadius = dp(5).toFloat(); setColor(0xBF0B0F17.toInt()) }
+                if (!aoVivo) background = GradientDrawable().apply { cornerRadius = dp(5).toFloat(); setColor(0xBF0E1020.toInt()) }
             }, FrameLayout.LayoutParams(WRAP, WRAP, if (aoVivo) Gravity.CENTER_VERTICAL or Gravity.START else Gravity.BOTTOM or Gravity.START).apply {
                 setMargins(dp(8), dp(8), dp(8), dp(8))
             })
@@ -1981,7 +1987,7 @@ class MainActivity : Activity() {
     private fun miniaturaTv(): View = TextView(this).apply {
         text = "TV"
         textSize = 19f   // disco de 56 dp (layout Palco)
-        typeface = Fontes.manrope(600)
+        typeface = Fontes.nunito(600)
         setTextColor(Color.WHITE)
         gravity = Gravity.CENTER
         background = GradientDrawable(GradientDrawable.Orientation.TL_BR, intArrayOf(0xFFFF7A6E.toInt(), 0xFFC0392B.toInt()))
@@ -2346,7 +2352,7 @@ class MainActivity : Activity() {
         // ficando branco ja mostram onde esta, como no Google TV de referencia. O fio fino continua sempre
         // (nao so no foco): e o que impede um icone escuro (ex.: Netflix) de sumir no fundo.
         (grupo?.getChildAt(0))?.foreground = when {
-            movendo -> contorno(corMover, 0x2E7FD6C2, 3)
+            movendo -> contorno(corMover, 0x2EFF6A2B, 3)
             // O anel fica FORA do retângulo, com 2 dp de folga escura: num banner branco (Netflix, YouTube) um anel colado
             // na borda sumia (visto na Sala, 06/11 noite).
             focado -> android.graphics.drawable.InsetDrawable(contorno(Color.WHITE, Color.TRANSPARENT, 3), dp(1))
@@ -2585,13 +2591,15 @@ class MainActivity : Activity() {
                     getSharedPreferences("clima", MODE_PRIVATE).edit()
                         .putInt("temp", r.temp).putBoolean("chovendo", r.chovendo)
                         .putInt("codigo", r.codigo).putBoolean("eDia", r.eDia)
-                        .putInt("umidade", r.umidade ?: -1).putInt("chuva", r.picoChuva)
+                        .putInt("umidade", r.umidade ?: -1).putInt("chuva", r.chuvaHoje)
                         .putInt("max", r.max).putInt("min", r.min)   // máxima e mínima de hoje: a barra do protetor mostra
                         .apply { r.amanha?.let { (aMax, aMin, aCod, aChuva) ->   // previsão de amanhã: a barra do protetor
                             putInt("amanha_max", aMax).putInt("amanha_min", aMin).putInt("amanha_codigo", aCod).putInt("amanha_chuva", aChuva) } }
                         .putFloat("lat", r.ponto.lat.toFloat()).putFloat("lon", r.ponto.lon.toFloat())
                         .putInt("max", r.max).putInt("min", r.min).putString("linha", r.linha)
                         .putString("horas", r.horas)   // próximas horas: a barra do protetor
+                        // Protetor que reage ao tempo (FonteTempoGuardado): UV, chuva de 15 em 15 min e ar.
+                        .putString("uv", r.uv).putString("chuva15", r.chuva15).putInt("aqi", r.aqi ?: -1)
                         .putString("idioma", idiomaAtual())   // a linha é texto pronto nesse idioma
                         .putLong("em", System.currentTimeMillis()).apply()
                     txtMax.text = "↑ ${r.max}°"

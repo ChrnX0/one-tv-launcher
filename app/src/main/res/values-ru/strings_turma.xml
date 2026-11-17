@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
+<resources>
+    <string name="jogos_no_sofa">На диване</string>
+    <string name="jogos_continuar">Продолжить</string>
+    <string name="jogos_controle_pronto">готов</string>
+    <string name="jogos_controle_carregar">скоро зарядить</string>
+    <string name="jogos_parear_um">Подключить геймпад</string>
+    <string name="jogos_todos">Все</string>
+    <string name="turma_titulo">Ваша компания</string>
+    <string name="turma_online">В сети: %1$d</string>
+    <string name="turma_mais_online">+ %1$d в сети</string>
+    <string name="turma_na_voz">В голосовом</string>
+    <string name="turma_ausente">нет на месте</string>
+    <string name="turma_ocupado">занят</string>
+    <string name="turma_status_online">в сети</string>
+    <string name="turma_ninguem">Сейчас никого нет в сети</string>
+    <string name="turma_procurando">Ищем вашу компанию…</string>
+    <string name="turma_sem_rede">Сейчас нет связи с Discord.</string>
+    <string name="turma_mostrar_titulo">Показать вашу компанию из Discord</string>
+    <string name="turma_mostrar_texto">Смотрите на телевизоре, кто в сети, во что играет и кто в голосовом.</string>
+    <string name="turma_desligado_titulo">Виджет сервера выключен</string>
+    <string name="turma_desligado_texto">В Discord: Настройки сервера, Виджет, включите «Включить виджет сервера».</string>
+    <string name="turma_qr_dica">Наведите телефон, чтобы зайти в голосовой канал. Разговор идёт через телефон.</string>
+    <string name="turma_aqui">Из компании здесь: %1$d</string>
+    <string name="turma_jogando">%1$s играет в %2$s</string>
+    <string name="turma_dois">%1$s и %2$s</string>
+    <string name="turma_e_mais">%1$s и ещё %2$d</string>
+    <string name="turma_chamar">Позвать компанию</string>
+    <string name="turma_chamar_pergunta">Отправить в канал Discord?</string>
+    <string name="turma_chamado_jogo">🎮 Сыграем в %1$s? Я у телевизора.</string>
+    <string name="turma_chamado">🎮 Сыграем? Я у телевизора.</string>
+    <string name="turma_mandar">Отправить</string>
+    <string name="turma_enviado">Компания позвана в Discord.</string>
+    <string name="turma_espere">Подождите минуту, прежде чем звать снова.</string>
+    <string name="turma_falhou">Discord не получил сообщение. Проверьте интернет или вебхук.</string>
+    <string name="turma_config_titulo">Ваша компания из Discord</string>
+    <string name="turma_config_texto">1. В Discord: Настройки сервера, Виджет, включите «Включить виджет сервера».\n2. На той же странице скопируйте ID сервера и введите его здесь.\n\nДля кнопки «Позвать компанию» вставьте вебхук канала в веб-панели телевизора.</string>
+    <string name="turma_config_dica">ID сервера (только цифры)</string>
+    <string name="turma_config_guardar">Сохранить</string>
+    <string name="turma_config_tirar">Убрать компанию</string>
+    <string name="turma_id_invalido">Это не ID сервера Discord (от 17 до 20 цифр).</string>
+</resources>

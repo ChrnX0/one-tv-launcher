@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App do celular (revisão dos degraus, T5, 17/11/2026). Caminho do menu = o mesmo texto da TV neste idioma. -->
+<resources>
+    <string name="cel_titulo">TV\'leriniz</string>
+    <string name="cel_mandar_para">Hangi TV\'ye gönderilsin?</string>
+    <string name="cel_ler_qr">TV\'nin QR kodunu okut</string>
+    <string name="cel_vazio">Henüz TV yok. TV\'de Ayarlar › Uzaktan erişim › Telefonla oturum aç bölümünü açın, ardından aşağıdaki düğmeye dokunup kamerayı koda tutun.</string>
+    <string name="cel_pareada_segura">%1$s · güvenli bağlantı</string>
+    <string name="cel_pareada_http">%1$s · ev ağı</string>
+    <string name="cel_na_rede">Ağda bulunanlar</string>
+    <string name="cel_achada">%1$s · henüz eşlenmedi</string>
+    <string name="cel_achada_explica">Güvenli bağlantı için QR kodunu bir kez okutun: TV\'de Ayarlar › Uzaktan erişim › Telefonla oturum aç. Ya da şimdi açıp PIN ile girin.</string>
+    <string name="cel_abrir_pin">PIN ile aç</string>
+    <string name="cel_esquecer">Unut</string>
+    <string name="cel_esquecer_explica">Bu telefon bu TV\'yi unutur. Yeniden kullanmak için QR kodunu okutun.</string>
+    <string name="cel_aponte">TV\'deki koda tutun</string>
+    <string name="cel_qr_invalido">Bu bir TV kodu değil. TV\'de Ayarlar › Uzaktan erişim › Telefonla oturum aç bölümünü açın.</string>
+    <string name="cel_cert_outro">TV başka bir sertifikayla yanıt verdi. Sertifikayı yenilediyseniz QR kodunu yeniden okutun.</string>
+    <string name="cel_casa_padrao">Ev</string>
+    <string name="cel_casa_qual">Bu TV hangi evde?</string>
+    <string name="cel_casa_nova">Başka bir ev…</string>
+    <string name="cel_casa_dica">ör. Yazlık, Annemin evi</string>
+</resources>

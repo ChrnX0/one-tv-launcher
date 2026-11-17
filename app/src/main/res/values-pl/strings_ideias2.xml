@@ -30,6 +30,7 @@
     <string name="casa_vazio">Brak świateł, gniazdek i scen w Home Assistant.</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Światła i kamery Google</string>
+    <string name="casa_google_home_vazio">To konto Google nie ma domu w Google Home</string>
     <string name="casa_resumo">Home Assistant · włączone %1$d z %2$d</string>
     <string name="casa_resumo_so_cenas">Home Assistant · sceny: %1$d</string>
     <string name="casa_secao_cenas">Sceny i skrypty</string>

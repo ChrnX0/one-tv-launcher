@@ -30,6 +30,7 @@
     <string name="casa_vazio">Home Assistant में कोई लाइट, प्लग या सीन नहीं।</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Google लाइट और कैमरे</string>
+    <string name="casa_google_home_vazio">इस Google खाते का Google Home में कोई घर नहीं है</string>
     <string name="casa_resumo">Home Assistant · %2$d में से %1$d चालू</string>
     <string name="casa_resumo_so_cenas">Home Assistant · %1$d सीन</string>
     <string name="casa_secao_cenas">सीन और स्क्रिप्ट</string>

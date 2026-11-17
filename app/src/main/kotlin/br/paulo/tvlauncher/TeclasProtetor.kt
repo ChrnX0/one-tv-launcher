@@ -9,7 +9,7 @@ import android.view.KeyEvent
  */
 object TeclasProtetor {
     /** O que a tecla faz no protetor. */
-    enum class Acao { ANTERIOR, PROXIMO, DISPENSAR, ALTERNAR_MUSICA, DEIXAR_PASSAR, FECHAR }
+    enum class Acao { ANTERIOR, PROXIMO, DISPENSAR, ALTERNAR_MUSICA, DEIXAR_PASSAR, FECHAR, MOSTRAR }
 
     /** Que cartão está escolhido: recado e notificação podem ser dispensados; "tocando agora" pausa/retoma. */
     enum class Tipo { RECADO, NOTIFICACAO, TOCANDO, OUTRO }
@@ -22,10 +22,14 @@ object TeclasProtetor {
     /**
      * [cartoes] = quantos cartões navegáveis há na tela; [escolhido] = tipo do cartão marcado (null = nenhum);
      * [haMusica] = existe uma sessão de mídia com título (tocando ou pausada).
+     * [oculto] = protetor v2 no "só a hora", com o resto escondido: a 1ª tecla só MOSTRA (por 15 s); Voltar sempre fecha,
+     * volume e mídia agem como sempre. Com o resto à mostra, as teclas fazem o de antes (a 2ª tecla fecha).
      */
-    fun acao(tecla: Int, cartoes: Int, escolhido: Tipo?, haMusica: Boolean): Acao = when {
+    fun acao(tecla: Int, cartoes: Int, escolhido: Tipo?, haMusica: Boolean, oculto: Boolean = false): Acao = when {
         tecla in VOLUME -> Acao.DEIXAR_PASSAR                       // volume não acorda a TV
         tecla in MIDIA -> if (haMusica) Acao.ALTERNAR_MUSICA else Acao.DEIXAR_PASSAR
+        tecla == KeyEvent.KEYCODE_BACK -> Acao.FECHAR
+        oculto -> Acao.MOSTRAR
         tecla == KeyEvent.KEYCODE_DPAD_LEFT && cartoes > 0 -> Acao.ANTERIOR
         tecla == KeyEvent.KEYCODE_DPAD_RIGHT && cartoes > 0 -> Acao.PROXIMO
         tecla in OK -> when (escolhido) {

@@ -125,9 +125,12 @@ class LgNetcastTest {
 
     @Test fun despertadorSobeAosPoucosAteVolumeFixo() {
         // Opções nunca passam do teto (o alarme que foi a 66 acordou a casa).
-        assertTrue(LgNetcast.OPCOES_ALARME.all { it in 1..LgNetcast.TETO_ALARME })
+        assertTrue(LgNetcast.OPCOES_ALARME.all { it == LgNetcast.NAO_MEXER || it in 1..LgNetcast.TETO_ALARME })
         assertEquals(30, LgNetcast.alvoFixoAlarme(70))
-        assertEquals(1, LgNetcast.alvoFixoAlarme(0))
+        assertEquals(LgNetcast.NAO_MEXER, LgNetcast.alvoFixoAlarme(0))
+        assertEquals(LgNetcast.NAO_MEXER, LgNetcast.alvoFixoAlarme(-3))
+        assertEquals(LgNetcast.NAO_MEXER, LgNetcast.volumeLgInicial(0))   // quem tinha "não mexer" continua sem mexer
+        assertEquals(LgNetcast.PADRAO_ALARME, LgNetcast.volumeLgInicial(30))
         // Começa em 5 (ou no alvo, se menor); rampa 0 na LG vira 60 s: sempre gradual.
         assertEquals(5, LgNetcast.inicioRampaAlarme(15))
         assertEquals(3, LgNetcast.inicioRampaAlarme(3))
@@ -140,5 +143,14 @@ class LgNetcastTest {
         // Alguém mexeu no volume durante a subida.
         assertFalse(LgNetcast.mexeramNaRampa(9, 8))
         assertTrue(LgNetcast.mexeramNaRampa(2, 8))
+    }
+
+    @Test fun desligarLgJuntoSoNaEntradaDoChromecast() {
+        val cc = LgNetcast.Entrada("HDMI1", "Sala")
+        assertTrue(LgNetcast.desligarLgJunto(cc, "Sala", null))
+        assertTrue(LgNetcast.desligarLgJunto(LgNetcast.Entrada("HDMI1", ""), null, "HDMI1"))
+        assertFalse(LgNetcast.desligarLgJunto(LgNetcast.Entrada("TV", ""), "Sala", "HDMI1"))      // antena
+        assertFalse(LgNetcast.desligarLgJunto(LgNetcast.Entrada("HDMI2", "PS4"), "Sala", "HDMI1")) // outro HDMI
+        assertFalse(LgNetcast.desligarLgJunto(null, "Sala", "HDMI1"))                               // não leu: não desliga
     }
 }

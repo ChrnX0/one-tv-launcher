@@ -1,7 +1,14 @@
 package br.paulo.tvlauncher
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.database.ContentObserver
 import android.os.Build
+import android.os.Environment
+import android.os.storage.StorageManager
+import android.provider.Settings
 import android.util.Log
 import java.net.ServerSocket
 import java.nio.ByteBuffer
@@ -22,6 +29,41 @@ object MtpNaRede {
     private const val MAX_PERMITIDOS = 50
     @Volatile private var servico: MtpServico? = null
 
+    // Pendrives (16/11/2026): cada um aparece no computador como um armazenamento separado, ao lado da memória interna.
+    /** Identificador do pendrive -> 1, 2, 3... O número não é reaproveitado enquanto o app vive (o computador guarda). */
+    private val numeros = HashMap<String, Int>()
+    @Volatile private var armazens: List<MtpArmazem> = listOf(MtpArmazem.interno())
+    private var receptor: BroadcastReceiver? = null
+    private var ondeRegistrei: Context? = null   // o contexto do app (não de uma tela): pode ficar guardado
+    // Nome da TV trocado nas configurações (16/11/2026): o computador só relê o nome quando o aparelho "volta".
+    private var vigiaNome: ContentObserver? = null
+    @Volatile private var nomeAnunciado = ""
+
+    /** A memória interna + os pendrives montados agora. O nome de cada pendrive vem do Android, no idioma da TV. */
+    private fun lerArmazens(app: Context): List<MtpArmazem> {
+        val sm = (if (Build.VERSION.SDK_INT >= 30) app.getSystemService(StorageManager::class.java) else null)
+            ?: return listOf(MtpArmazem.interno())
+        val saida = arrayListOf(MtpArmazem.interno())   // nome fixo: é o que a Ajuda cita, nos 14 idiomas
+        for (v in sm.storageVolumes) {
+            if (v.isPrimary || v.state != Environment.MEDIA_MOUNTED) continue
+            val dir = v.directory ?: continue          // a pasta de verdade (/storage/XXXX-XXXX)
+            val chave = v.uuid ?: dir.name
+            val n = synchronized(numeros) { numeros.getOrPut(chave) { numeros.size + 1 } }
+            saida.add(MtpArmazem(MtpArmazem.idDoPendrive(n), v.getDescription(app) ?: "USB", chave, true) { dir })
+        }
+        return saida
+    }
+
+    /** Relê os pendrives e avisa os computadores conectados do que entrou e do que saiu. */
+    @Synchronized private fun conferirArmazens(app: Context) {
+        val antes = armazens
+        val novo = try { lerArmazens(app) } catch (e: Exception) { Log.w(TAG, "lendo os armazenamentos: $e"); return }
+        armazens = novo
+        val s = servico ?: return
+        antes.filter { a -> novo.none { it.id == a.id } }.forEach { s.avisarArmazem(it.id, false) }
+        novo.filter { a -> antes.none { it.id == a.id } }.forEach { s.avisarArmazem(it.id, true) }
+    }
+
     private fun prefs(ctx: Context) = ctx.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
     /** Os nomes dos computadores que já foram aceitos na TV. */
@@ -32,7 +74,11 @@ object MtpNaRede {
         prefs(ctx).edit().clear().apply()
         val ligado = servico != null
         desligar()
-        if (ligado) ligar(ctx)
+        if (ligado) {
+            ligar(ctx)
+            // o anúncio recomeça junto: é ele que manda o Windows largar a conexão que acabamos de derrubar
+            AnuncioUpnp.desligar(); AnuncioUpnp.ligar(ctx)
+        }
     }
 
     @Synchronized fun ligar(ctx: Context) {
@@ -43,8 +89,10 @@ object MtpNaRede {
         val u = UUID.fromString(Ssdp.uuidMtp(id))
         val guid = ByteBuffer.allocate(16).putLong(u.mostSignificantBits).putLong(u.leastSignificantBits).array()
         val versao = try { app.packageManager.getPackageInfo(app.packageName, 0).versionName ?: "1" } catch (_: Exception) { "1" }
-        val ap = Mtp.Aparelho(PainelVizinhos.nomeDaTv(app), Build.MODEL ?: "Android TV", versao, id, guid)
-        val s = MtpServico(ss, ap, MtpLoja { PainelArquivos.avisarGaleria(app, it) },
+        val icone = try { app.assets.open("upnp/sofaly.ico").use { it.readBytes() } } catch (_: Exception) { null }
+        val ap = Mtp.Aparelho(Ssdp.nomeNaUnidade(PainelVizinhos.nomeDaTv(app)), Build.MODEL ?: "Android TV", versao, id, guid, icone)
+        armazens = try { lerArmazens(app) } catch (_: Exception) { listOf(MtpArmazem.interno()) }
+        val s = MtpServico(ss, ap, MtpLoja({ armazens }) { PainelArquivos.avisarGaleria(app, it) },
             aceitaRede = { PainelWeb.daRedeDeCasa(it) },
             permitir = { pc, nome, ip -> permitir(app, pc, nome, ip) },
             registro = { Log.i(TAG, it) })
@@ -54,12 +102,47 @@ object MtpNaRede {
             try { PainelArquivos.garantirAcesso(app) } catch (e: Exception) { Log.w(TAG, "acesso aos arquivos: $e") }
             s.rodar()
         }, "Mtp-servidor").apply { isDaemon = true }.start()
+        // Pendrive espetado ou tirado com a TV ligada: o Android avisa, e nós avisamos o computador.
+        val r = object : BroadcastReceiver() {
+            override fun onReceive(c: Context, i: Intent) {
+                // fora da thread da tela: o aviso ao computador escreve na rede
+                Thread({ conferirArmazens(app) }, "Mtp-pendrive").apply { isDaemon = true }.start()
+            }
+        }
+        val filtro = IntentFilter().apply {
+            addAction(Intent.ACTION_MEDIA_MOUNTED); addAction(Intent.ACTION_MEDIA_UNMOUNTED); addAction(Intent.ACTION_MEDIA_EJECT)
+            addAction(Intent.ACTION_MEDIA_REMOVED); addAction(Intent.ACTION_MEDIA_BAD_REMOVAL)
+            addDataScheme("file")   // estes avisos trazem o caminho do volume como "file://..."; sem isto o filtro não casa
+        }
+        try { app.registerReceiver(r, filtro); receptor = r; ondeRegistrei = app } catch (e: Exception) { Log.w(TAG, "avisos de pendrive: $e") }
+        nomeAnunciado = PainelVizinhos.nomeDaTv(app)
+        if (vigiaNome == null) {
+            // ContentObserver: o Android chama onChange quando o valor "device_name" das configurações muda
+            val v = object : ContentObserver(null) {
+                override fun onChange(selfChange: Boolean) {
+                    if (PainelVizinhos.nomeDaTv(app) == nomeAnunciado || servico == null) return
+                    // fora da thread que avisou: religar fecha portas e escreve na rede
+                    Thread({
+                        Log.i(TAG, "nome da TV mudou: anunciando de novo")
+                        desligar(); ligar(app)
+                        AnuncioUpnp.desligar(); AnuncioUpnp.ligar(app)   // o adeus + o olá fazem o Windows reler a descrição
+                    }, "Mtp-nome").apply { isDaemon = true }.start()
+                }
+            }
+            try { app.contentResolver.registerContentObserver(Settings.Global.getUriFor("device_name"), false, v); vigiaNome = v }
+            catch (e: Exception) { Log.w(TAG, "vigia do nome: $e") }
+        }
         Log.i(TAG, "MTP pela rede ligado na porta ${PtpIp.PORTA}")
     }
+
+    /** Há algum computador conectado agora? */
+    fun temSessao(): Boolean = servico?.temConexao() == true
 
     @Synchronized fun desligar() {
         servico?.parar()
         servico = null
+        receptor?.let { r -> try { ondeRegistrei?.unregisterReceiver(r) } catch (_: Exception) {} }
+        receptor = null
     }
 
     /** Computador conhecido entra direto; novo, a TV pergunta (até 60 s; sem resposta = não). */

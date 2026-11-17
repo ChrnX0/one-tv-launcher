@@ -110,7 +110,7 @@ class AlarmeTocandoActivity : Activity() {
             format12Hour = "HH:mm"; format24Hour = "HH:mm"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 120f)
             setTextColor(Estilo.TEXTO)
-            typeface = Fontes.manrope(200)
+            typeface = Fontes.nunito(200)
             includeFontPadding = false
             gravity = Gravity.CENTER   // numa coluna vertical cada linha ocupa a largura toda: o texto precisa se centralizar
         }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(8) })

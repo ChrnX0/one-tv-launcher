@@ -63,9 +63,10 @@ object FiltroDpm {
         val descritor = try { binder.interfaceDescriptor } catch (_: Throwable) { null }
         if (descritor != RegrasDono.DPM) return RegrasDono.transacao(descritor, null, null, nosso, poderTotal) to descritor
         val metodo = nome(codigo)
-        val alvos = if (metodo != null && !poderTotal && RegrasDono.mexeEmPacote(metodo))
-            carregar()?.metodos?.get(metodo)?.let { ler(it, dados) }?.let { RegrasDono.alvos(it) } else null
-        return RegrasDono.transacao(descritor, metodo, alvos, nosso, poderTotal) to metodo
+        val ler = metodo != null && !poderTotal && (RegrasDono.mexeEmPacote(metodo) || RegrasDono.mexeEmAjuste(metodo))
+        val args = if (ler) carregar()?.metodos?.get(metodo)?.let { ler(it, dados) } else null
+        return RegrasDono.transacao(descritor, metodo, args?.let { RegrasDono.alvos(it) }, nosso, poderTotal,
+            args?.let { RegrasDono.textos(it) }) to metodo
     }
 
     /** Argumentos de [m] lidos de uma cópia de [dados]; null se algum tipo não for conhecido. */

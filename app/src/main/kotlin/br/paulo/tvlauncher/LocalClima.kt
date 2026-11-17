@@ -9,7 +9,7 @@ import android.content.Context
  * Ordem da localização (Localizacao.kt): Wi-Fi do Android > ESTE endereço > IP da internet > o último ponto que deu certo.
  * Guardado nas preferências "launcher" (entra no backup do painel) e só na TV: nunca vai para o git nem para o APK.
  * Pelo adb (teste):
- *   am broadcast -a br.paulo.tvlauncher.LOCAL_CLIMA --es cep 14015060 --es numero 100 -n br.paulo.tvlauncher/.ControleShizukuAdbReceiver
+ *   am broadcast -a br.paulo.tvlauncher.LOCAL_CLIMA --es cep 01001000 --es numero 100 -n br.paulo.tvlauncher/.ControleShizukuAdbReceiver
  *   (sem --es cep = apaga o endereço)
  */
 object LocalClima {
@@ -62,7 +62,7 @@ object LocalClima {
         else Endereco.buscarCidade(cidade, java.util.Locale.getDefault().language.ifEmpty { "en" }) { Endereco.httpGet(it) })
             .map { a -> Lugar(a.nome, a.lat, a.lon).also { gravar(ctx, it) } }
 
-    /** "Centro · CEP 14015-060, nº 100" (para as telas). */
+    /** "Centro · CEP 01001-000, nº 100" (para as telas). */
     fun descrever(l: Lugar): String {
         val cep = if (l.cep.length == 8) "CEP ${l.cep.take(5)}-${l.cep.drop(5)}" else ""
         return listOf(l.nome, listOf(cep, l.numero.takeIf { it.isNotEmpty() }?.let { "nº $it" }.orEmpty()).filter { it.isNotEmpty() }.joinToString(", "))

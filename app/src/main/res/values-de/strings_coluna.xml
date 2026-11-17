@@ -22,6 +22,8 @@
     <string name="coluna_marcado_assistido">%1$s als gesehen markiert</string>
     <string name="coluna_marcado_nao_assistido">%1$s als nicht gesehen markiert</string>
     <string name="coluna_tirado_continuar">%1$s aus Weiterschauen entfernt</string>
+    <string name="coluna_menu_tirar_home">Vom Startbildschirm entfernen</string>
+    <string name="coluna_tirado_home">%1$s vom Startbildschirm entfernt</string>
     <string name="coluna_etiqueta_concluida">Abgeschlossen</string>
     <string name="coluna_etiqueta_nova_temporada">Neue Staffel</string>
     <string name="coluna_etiqueta_novos">Neue Folgen</string>

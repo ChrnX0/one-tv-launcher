@@ -45,11 +45,11 @@
     <string name="cfg2_apps_visita_sub">OK switches · these disappear while guest mode is on</string>
     <string name="cfg2_some_visita">hidden for guests</string>
     <string name="cfg2_fica_visita">stays</string>
-    <string name="cfg2_casa_det">Lights, plugs and scenes of your Home Assistant</string>
+    <string name="cfg2_casa_det">Lights, plugs and scenes from Google Home or Home Assistant</string>
     <string name="oc_titulo">Hidden apps</string>
     <string name="oc_subtitulo">OK shows or hides an app on the home screen · hidden ones come first</string>
     <string name="oc_nenhum">No hidden apps · OK to choose</string>
-    <string name="oc_quantos">%1$d hidden · OK to show them again</string>
+    <string name="oc_quantos">Hidden: %1$d · OK to show them again</string>
     <string name="oc_oculto">hidden</string>
     <string name="oc_aparece">on the home screen</string>
     <string name="oc_aviso_titulo">App hidden</string>
@@ -97,7 +97,7 @@
     <string name="vp_pronto_det">Go to the home screen.</string>
     <string name="vq_titulo">Share look</string>
     <string name="vq_det">Show a QR code with this TV\'s look: theme, text size, icons.</string>
-    <string name="vq_texto">Scan it with your phone to keep it or send it to someone with One TV.</string>
+    <string name="vq_texto">Scan it with your phone to keep it or send it to someone with Sofaly.</string>
     <string name="vq_fechar">Close</string>
     <string name="lh_titulo">App card size</string>
     <string name="lh_det">Bigger cards are easier to see from the couch.</string>

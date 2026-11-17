@@ -44,6 +44,28 @@ class RegrasDonoTest {
         assertEquals(Veredito.BLOQUEIA, RegrasDono.transacao(dpm, "setDelegatedScopes", listOf("x"), nosso, false))
     }
 
+    @Test fun depuracao17_11SemPoderTotal() {
+        // senha com apagamento e usuários novos: nunca, nem com poder total
+        for (m in listOf("setResetPasswordToken", "resetPasswordWithToken", "setMaximumFailedPasswordsForWipe", "createAndManageUser", "switchUser"))
+            for (total in listOf(false, true))
+                assertEquals(m, Veredito.BLOQUEIA, RegrasDono.transacao(dpm, m, emptyList(), nosso, total))
+        // trocam a lista inteira (ou VPN/HOME fixas): só com poder total, mesmo sem o launcher nos alvos
+        for (m in listOf("setUserControlDisabledPackages", "setPermittedAccessibilityServices", "setAlwaysOnVpnPackage",
+                "addPersistentPreferredActivity", "setApplicationRestrictionsManagingPackage")) {
+            assertEquals(m, Veredito.BLOQUEIA, RegrasDono.transacao(dpm, m, listOf("a.b"), nosso, false))
+            assertEquals(m, Veredito.PASSA, RegrasDono.transacao(dpm, m, listOf("a.b"), nosso, true))
+        }
+        // setGlobalSetting(admin, setting, value): adb_enabled derrubaria o shell próprio
+        val adb = RegrasDono.textos(listOf(Arg.Componente(nosso), Arg.Texto("adb_enabled"), Arg.Texto("0")))
+        assertEquals(Veredito.BLOQUEIA, RegrasDono.transacao(dpm, "setGlobalSetting", null, nosso, false, adb))
+        val outro = RegrasDono.textos(listOf(Arg.Componente(nosso), Arg.Texto("auto_time"), Arg.Texto("1")))
+        assertEquals(Veredito.PASSA, RegrasDono.transacao(dpm, "setGlobalSetting", null, nosso, false, outro))
+        assertEquals(Veredito.BLOQUEIA_SEM_MAPA, RegrasDono.transacao(dpm, "setGlobalSetting", null, nosso, false, null))
+        val restricao = RegrasDono.textos(listOf(Arg.Componente(nosso), Arg.Texto(nosso), Arg.Texto("no_debugging_features"), Arg.Outro))
+        assertEquals(Veredito.BLOQUEIA, RegrasDono.transacao(dpm, "addUserRestriction", null, nosso, false, restricao))
+        assertEquals(Veredito.PASSA, RegrasDono.transacao(dpm, "addUserRestriction", null, nosso, true, restricao))
+    }
+
     @Test fun semMapaNega() {
         assertEquals(Veredito.BLOQUEIA_SEM_MAPA, RegrasDono.transacao(dpm, null, null, nosso, false))
         assertEquals(Veredito.BLOQUEIA_SEM_MAPA, RegrasDono.transacao(dpm, "setApplicationHidden", null, nosso, false))

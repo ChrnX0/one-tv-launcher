@@ -22,6 +22,8 @@
     <string name="coluna_marcado_assistido">%1$s segnato come visto</string>
     <string name="coluna_marcado_nao_assistido">%1$s segnato come non visto</string>
     <string name="coluna_tirado_continuar">%1$s tolto da Continua a guardare</string>
+    <string name="coluna_menu_tirar_home">Togli dalla schermata Home</string>
+    <string name="coluna_tirado_home">%1$s tolto dalla schermata Home</string>
     <string name="coluna_etiqueta_concluida">Conclusa</string>
     <string name="coluna_etiqueta_nova_temporada">Nuova stagione</string>
     <string name="coluna_etiqueta_novos">Nuovi episodi</string>

@@ -133,9 +133,9 @@
     <string name="bu_canais">Canales</string>
     <string name="bu_canal_n">Canal %1$s</string>
     <string name="bu_no_guia">En la guía</string>
-    <string name="bu_ver_filmes">Ver los %1$s en Películas</string>
+    <string name="bu_ver_filmes">Ver todo en Películas (%1$s)</string>
     <string name="bu_ver_filmes_det">Abre el catálogo de películas con esta búsqueda</string>
-    <string name="bu_ver_series">Ver las %1$s en Series</string>
+    <string name="bu_ver_series">Ver todo en Series (%1$s)</string>
     <string name="bu_ver_series_det">Abre el catálogo de series con esta búsqueda</string>
     <string name="bu_agora">Ahora</string>
     <string name="bu_lembrete_sim">Recordatorio creado</string>
@@ -159,7 +159,7 @@
     <string name="bc_limite">se alcanzó el límite de bloqueos</string>
     <string name="bc_parental_on">control parental ACTIVADO</string>
     <string name="bc_parental_off">control parental desactivado (el bloqueo solo vale después de activarlo)</string>
-    <string name="bc_resumo">%1$d de %2$d canales bloqueados · %3$d categoría(s) completas · %4$s</string>
+    <string name="bc_resumo">%1$d de %2$d canales bloqueados · categorías completas: %3$d · %4$s</string>
     <string name="bc_todas">Todos (%1$d)</string>
     <string name="bc_outros">Otros</string>
     <string name="bc_bloqueada">bloqueada</string>
@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">Casi negro</string>
     <string name="cb_quase_branco">Casi blanco</string>
     <string name="cb_bordas">Bordes</string>
-    <string name="cb_barras">Barras de color al 75%</string>
+    <string name="cb_barras" formatted="false">Barras de color al 75%</string>
     <string name="cb_linhas">Líneas de 1 píxel</string>
     <string name="ad_ninguem">Nadie tocó el control durante %1$s.\nPulsa cualquier botón para seguir mirando.</string>
     <string name="ad_vai_desligar">La TV se apagará en %1$d s</string>

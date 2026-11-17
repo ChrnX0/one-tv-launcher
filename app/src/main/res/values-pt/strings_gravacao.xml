@@ -60,7 +60,7 @@
     <string name="grv_apagar_pergunta">Apagar \"%1$s\"? Não dá para desfazer.</string>
     <string name="grv_reserva_secao">Sem pendrive</string>
     <string name="grv_reserva">Pasta da rede</string>
-    <string name="grv_reserva_explica">Onde gravar quando não há pendrive ligado (uma pasta do Windows/NAS do Na rede)</string>
+    <string name="grv_reserva_explica">Onde gravar quando não há pendrive ligado (uma pasta do Windows ou NAS da tela “Na rede”)</string>
     <string name="grv_nenhuma">Nenhuma</string>
     <string name="grv_sem_smb">Cadastre antes uma pasta do Windows/NAS (SMB) em Na rede.</string>
     <string name="grv_amanha">Amanhã</string>

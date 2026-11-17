@@ -3,17 +3,17 @@
      e só acrescentam a fonte Manrope e a cor de fundo. Ver Estilo.kt para cores, tamanhos e componentes. -->
 <resources>
     <style name="One" parent="@android:style/Theme.Material.NoActionBar">
-        <item name="android:fontFamily">@font/manrope</item>
+        <item name="android:fontFamily">@font/nunito</item>
         <item name="android:windowBackground">@color/one_fundo</item>
         <item name="android:colorAccent">@color/one_acento</item>
     </style>
     <style name="One.Tela" parent="@android:style/Theme.Black.NoTitleBar.Fullscreen">
-        <item name="android:fontFamily">@font/manrope</item>
+        <item name="android:fontFamily">@font/nunito</item>
         <item name="android:windowBackground">@color/one_fundo</item>
     </style>
     <style name="One.Translucido" parent="@android:style/Theme.Translucent.NoTitleBar">
-        <item name="android:fontFamily">@font/manrope</item>
+        <item name="android:fontFamily">@font/nunito</item>
     </style>
-    <color name="one_fundo">#FF0B0F17</color>
-    <color name="one_acento">#FF7FD6C2</color>
+    <color name="one_fundo">#FF0E1020</color>
+    <color name="one_acento">#FFFF6A2B</color>
 </resources>

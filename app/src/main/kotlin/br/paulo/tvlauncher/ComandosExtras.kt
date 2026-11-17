@@ -17,6 +17,7 @@ import java.io.File
  *  - extras                abre a tela das chaves novas
  *  - diario_dns [--es dia AAAA-MM-DD]   as consultas de DNS mais frequentes do dia
  *  - wol_mac --es mac AA:BB:CC:DD:EE:FF   guarda o MAC do PC (fica só na TV)
+ *  - turma_id --es id <ID do servidor> / turma_webhook --es url <webhook> / turma   turma do Discord da tela Jogos
  *  - acordar_pc            manda o pacote mágico
  *  - recado_foto --es arquivo <caminho> [--es texto "..."] [--ei segundos 60]
  *  - cena --es nome <cena>   roda uma cena (ver Cenas.kt)
@@ -67,6 +68,10 @@ object ComandosExtras {
         "extras" -> abrir(ctx, ExtrasActivity::class.java)
         "diario_dns" -> DiarioDns.resumo(ctx, i.getStringExtra("dia") ?: DiarioDns.diaDe(System.currentTimeMillis()))
         "wol_mac" -> if (AcordarPc.guardarMac(ctx, i.getStringExtra("mac") ?: "")) "ok" else "MAC inválido"
+        // Turma do Discord na tela Jogos (17/11/2026): ID do servidor e webhook do "Chamar a turma" ("" apaga).
+        "turma_id" -> if (TurmaDiscordTv.guardarServidor(ctx, i.getStringExtra("id") ?: "")) "ok" else "ID inválido (17 a 20 números)"
+        "turma_webhook" -> if (TurmaDiscordTv.guardarWebhook(ctx, i.getStringExtra("url") ?: "")) "ok" else "webhook inválido (só https://discord.com/api/webhooks/...)"
+        "turma" -> "servidor=" + TurmaDiscordTv.servidor(ctx).ifEmpty { "-" } + " webhook=" + (if (TurmaDiscordTv.temWebhook(ctx)) "sim" else "não")
         "acordar_pc" -> if (AcordarPc.acordar(ctx)) "enviado" else "falhou (MAC guardado? rede?)"
         "recado_foto" -> {
             val f = File(i.getStringExtra("arquivo") ?: "")
@@ -123,8 +128,22 @@ object ComandosExtras {
         "vitais" -> VitaisTv.textoAdb(ctx)   // degrau 2: quedas e travadas do launcher por dia (VitaisLocais.kt)
         "modo_seguro" -> if (ModoSeguro.ativo(ctx)) "ligado" else "desligado"
         // Modo hóspede (degrau 2). O adb já é autenticado: desligar aqui não pede o PIN.
+        // Degrau 4: receitas prontas (Receitas.kt). receitas_aplicar --es receita VO|CRIANCAS|GAMER|ALUGUEL (adb já é do dono: sem PIN).
+        "receitas" -> ReceitasTv.estado(ctx)
+        "receitas_tela" -> abrir(ctx, ReceitasActivity::class.java)
+        "receitas_aplicar" -> Receitas.dePalavra(i.getStringExtra("receita"))?.let { r ->
+            ReceitasTv.aplicar(ctx, r).joinToString(", ") { "${it.first}=${it.second}" }.ifEmpty { "nada mudou" }
+        } ?: "receita desconhecida (VO, CRIANCAS, GAMER, ALUGUEL)"
+        "receitas_desfazer" -> ReceitasTv.desfazer(ctx).joinToString(", ") { "${it.first}=${it.second}" }.ifEmpty { "nada a desfazer" }
+        // Degrau 4: recado em vídeo. videos_aceitar --ez sim true|false liga o opt-in (adb já é do dono).
+        "videos" -> RecadoVideo.estado(ctx)
+        "videos_tela" -> abrir(ctx, RecadoVideoActivity::class.java)
+        "entre_tvs" -> "ligado=${EntreTvs.ligado(ctx)} eu=${EntreTvs.meuHost(ctx)} outras=${EntreTvs.outras(ctx)} junto=${SessaoJunto.texto()}"
+        "entre_tvs_ligar" -> { EntreTvs.definir(ctx, i.getBooleanExtra("sim", false)); "entre_tvs=${i.getBooleanExtra("sim", false)}" }
+        "junto_sair" -> { val app = ctx.applicationContext; Fundo.rodar("junto-adb") { SessaoJunto.encerrar(app, avisarOutra = true) }; "saindo" }
+        "videos_aceitar" -> { RecadoVideo.definirAceita(ctx, i.getBooleanExtra("sim", false)); RecadoVideo.estado(ctx) }
         "hospede" -> "ativo=${ModoHospede.ativo(ctx)} saida=${ModoHospede.textoSaida(ctx)} apps=${ModoHospede.paraLimpar(ctx)} ultima=${ModoHospede.ultimaLimpeza(ctx)}"
-        "hospede_ligar" -> { ModoHospede.ligar(ctx); "modo hóspede ligado" }
+        "hospede_ligar" -> if (ModoHospede.ligar(ctx)) "modo hóspede ligado" else "sem PIN do painel: defina o PIN antes de ligar o modo hóspede"
         "hospede_desligar" -> { ModoHospede.desligar(ctx); "modo hóspede desligado" }
         "hospede_encerrar" -> { val app = ctx.applicationContext; Fundo.rodar("hospede-adb") { ModoHospede.encerrarEstadia(app) }; "limpando; ver depois com hospede" }
         "planos" -> abrir(ctx, ConhecerProActivity::class.java)   // tela "Conhecer o Pro" (venda ainda desligada)

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Recado em vídeo (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="vid_de">%1$s adlı kişiden video</string>
+    <string name="vid_mural">bir video gönderdi</string>
+    <string name="vid_onde">İzlemek için: Ayarlar › Aile › Aile videoları.</string>
+    <string name="vid_depois">Sonra</string>
+    <string name="vid_assistir">İzle</string>
+    <string name="vid_ok_para_assistir">İzlemek için OK\'e bas.</string>
+    <string name="vid_lista">Aile videoları</string>
+    <string name="vid_lista_det">Aile bağlantısıyla gönderildi. Her biri 30 gün kalır. Silmek için OK\'e basılı tut.</string>
+    <string name="vid_nenhum">Henüz video yok.</string>
+    <string name="vid_apagar">Videoyu sil</string>
+    <string name="vid_aceitar">Videoları kabul et</string>
+    <string name="vid_aceitar_det">Aile 30 saniyeye kadar video gönderebilir. Asla kendi kendine oynamaz.</string>
+    <string name="vid_quantos">Videolar: %1$d</string>
+</resources>

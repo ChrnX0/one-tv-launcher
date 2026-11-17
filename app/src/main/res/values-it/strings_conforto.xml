@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Confortos do estudo do Stremio (16/11/2026): Conforto.kt, ConfigLauncherActivity, SincronizarActivity. -->
+<resources>
+    <string name="cf_resumo_escondido">Riassunto nascosto finché non lo guardi</string>
+    <string name="cf_spoiler">Nascondi il riassunto degli episodi non visti</string>
+    <string name="cf_spoiler_det">Il riassunto appare solo dopo aver iniziato l\'episodio</string>
+    <string name="cf_segundo">Seconda lingua</string>
+    <string name="cf_segundo_det">Usata quando il video non ha audio o sottotitoli nella lingua della TV</string>
+    <string name="cf_nenhum">Nessuna</string>
+    <string name="cf_proximo">Conto alla rovescia del prossimo episodio</string>
+    <string name="cf_proximo_det">Quanto attendere prima che il prossimo episodio parta da solo</string>
+    <string name="cf_proximo_nao">Non partire da solo</string>
+    <string name="cf_segundos">%1$d s</string>
+    <string name="cf_consent_titulo">Inviare dati a %1$s?</string>
+    <string name="cf_consent_texto">Attivandolo invii a %1$s via internet i titoli che segni e guardi su questa TV e il punto in cui ti sei fermato. Restano nel tuo account %1$s secondo le sue regole sulla privacy. Puoi disattivarlo in qualsiasi momento.</string>
+    <string name="cf_consent_sim">Accetto</string>
+</resources>

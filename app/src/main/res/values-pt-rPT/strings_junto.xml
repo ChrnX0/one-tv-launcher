@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sessão junto e Continuar em outra TV (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="junto_titulo">Ver juntos</string>
+    <string name="junto_menu">Ver juntos com outra TV</string>
+    <string name="junto_escolher">Convidar que TV?</string>
+    <string name="junto_sem_tvs">Nenhuma outra TV ligada. Ative \"TVs da família\" também na outra TV.</string>
+    <string name="junto_sem_titulo">Este vídeo não dá para partilhar: a outra TV não encontraria o mesmo título.</string>
+    <string name="junto_convidou">Convite enviado para %1$s. Quando lá começar o mesmo título, as duas TVs andam juntas.</string>
+    <string name="junto_falhou">Não foi possível falar com %1$s. Está ligada, com \"TVs da família\" ativo?</string>
+    <string name="junto_convite_titulo">%1$s convida para ver juntos</string>
+    <string name="junto_convite_texto">%1$s\n\nAbra este mesmo título aqui e as duas TVs vão pausar e andar juntas.</string>
+    <string name="junto_convite_canal">%1$s\n\nTV em direto: as duas TVs ficam no mesmo canal. Quem mudar, a outra acompanha.</string>
+    <string name="junto_entrar">Entrar</string>
+    <string name="junto_agora_nao">Agora não</string>
+    <string name="junto_entrou">%1$s entrou. Pausar e continuar agora valem para as duas.</string>
+    <string name="junto_saiu">%1$s saiu. Esta TV continua sozinha.</string>
+    <string name="junto_com">Junto com %1$s</string>
+    <string name="junto_sair">Sair do ver juntos</string>
+    <string name="junto_sem_canal">Este canal não está na lista desta TV.</string>
+    <string name="junto_tvs">TVs da família</string>
+    <string name="junto_tvs_det">As TVs da mesma conta Tailscale podem ver juntas e passar um vídeo de uma para outra. Só vão comandos, nunca o vídeo. TV de familiar com outra conta ainda não entra.</string>
+    <string name="junto_outro_episodio">%1$s já está na T%2$d E%3$d. Quando esta TV lá chegar, voltam a andar juntos.</string>
+    <string name="cont_titulo">Continuar noutra TV</string>
+    <string name="cont_menu">Enviar para outra TV</string>
+    <string name="cont_escolher">Enviar para que TV?</string>
+    <string name="cont_enviado">Enviado. %1$s vai perguntar se quer continuar daqui.</string>
+    <string name="cont_falhou">Não foi possível enviar para %1$s. Está ligada, com \"TVs da família\" ativo?</string>
+    <string name="cont_pergunta">Continuar de onde parou?</string>
+    <string name="cont_texto">%1$s\nparou em %2$s na %3$s.</string>
+    <string name="cont_texto_canal">%1$s\nestava a dar na %3$s. Abrir o mesmo canal aqui?</string>
+    <string name="cont_continuar">Continuar</string>
+    <string name="cont_buscar">Procurar aqui</string>
+</resources>

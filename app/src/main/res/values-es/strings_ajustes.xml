@@ -41,11 +41,11 @@
     <string name="cfg2_apps_visita_sub">OK cambia · estas desaparecen mientras el modo invitado está activo</string>
     <string name="cfg2_some_visita">oculta para invitados</string>
     <string name="cfg2_fica_visita">se queda</string>
-    <string name="cfg2_casa_det">Luces, enchufes y escenas de tu Home Assistant</string>
+    <string name="cfg2_casa_det">Luces, enchufes y escenas de Google Home o Home Assistant</string>
     <string name="oc_titulo">Apps ocultas</string>
     <string name="oc_subtitulo">OK muestra u oculta una app en el inicio · las ocultas van primero</string>
     <string name="oc_nenhum">Ninguna app oculta · OK para elegir</string>
-    <string name="oc_quantos">%1$d ocultas · OK para volver a mostrarlas</string>
+    <string name="oc_quantos">Ocultas: %1$d · OK para volver a mostrarlas</string>
     <string name="oc_oculto">oculta</string>
     <string name="oc_aparece">en el inicio</string>
     <string name="oc_aviso_titulo">App oculta</string>
@@ -91,7 +91,7 @@
     <string name="vp_pronto_det">Ir a la pantalla de inicio.</string>
     <string name="vq_titulo">Compartir aspecto</string>
     <string name="vq_det">Muestra un código QR con el aspecto de esta TV: tema, tamaño de texto, iconos.</string>
-    <string name="vq_texto">Escanéalo con el móvil para guardarlo o enviarlo a alguien con One TV.</string>
+    <string name="vq_texto">Escanéalo con el móvil para guardarlo o enviarlo a alguien con Sofaly.</string>
     <string name="vq_fechar">Cerrar</string>
     <string name="lh_titulo">Tamaño de las tarjetas de apps</string>
     <string name="lh_det">Las tarjetas más grandes se ven mejor desde el sofá.</string>

@@ -17,6 +17,25 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Stremio-format add-ons, HTTP video only (no P2P): install from the web panel or by scanning the add-on\'s QR with your phone camera</item>
+        <item>Continue watching: a new episode of a show you follow moves to the top; you can hide spoilers, pick a second subtitle language and adjust the countdown to the next one. Sharing what you watch with Trakt/Simkl now asks first</item>
+        <item>Network drive on Windows: the TV shows in This PC as “Sofaly · TV name”, comes back by itself after the launcher restarts, and each USB drive is a separate drive</item>
+        <item>New web panel: the same pages as the TV\'s Settings, in the Sofaly look, on phone and PC, in 14 languages</item>
+        <item>Panel: if you installed the TV\'s certificate it opens straight in https, with a padlock; the certificate page has step-by-step help for each system</item>
+        <item>Screensaver that reacts to the current weather, a real Sky theme, photos of Earth from space (NASA), 6 clocks, a “time only” option and a switch for each element</item>
+        <item>Ready-made recipes: one OK sets the TV up right for grandma, kids, gamers or a rental, with Undo</item>
+        <item>Connected family: grandkids can send a video message (off by default)</item>
+        <item>Player: “Sound on headphones (phone)” sends the sound to the headphones of a few phones at home while the TV stays muted; and between family TVs, “Watch together” and “Send to another TV”</item>
+        <item>Games in the Couch design: controls in view, tall cards, By type and the crew from your Discord server</item>
+        <item>Ready-made looks (Settings › Home screen) and “Look from another TV” in the panel: paste the code from another TV\'s QR or from the site</item>
+        <item>Report a problem now goes by e-mail, no GitHub account needed; the Sofaly name shows in the app and its texts</item>
+        <item>Settings and the TV screens in the Cinema+ look: Night background, Sofaly orange highlight and the Nunito font, matching the phone panel</item>
+        <item>Screensaver: different styles for the weather, alerts, greeting with the date, the timeline and the photo credit</item>
+        <item>Quick panel: the Timer moves on from the chosen option and Audio opens Audio output; Scenes say what they do</item>
+        <item>Player: downloaded subtitles no longer show over a dubbed movie; recordings have the right length; the system media controls work in the players; .ac3 and .rmvb files play</item>
+        <item>Forecast: “Today · X% rain” is the highest chance for the rest of the day, and rain and visibility use the language\'s decimal separator</item>
+        <item>Profiles: in the web panel you can choose the name the TV shows for each profile; image calibration shows its title on a band, no longer lost in the bars</item>
+        <item>Fixes: Wi-Fi repair without a restart loop, the alarm really stops when you stop it, a network drop in AVI/WMV no longer ends the video, GIF and video in My background without running out of memory, focus in the player options and keys while paused</item>
         <item>Movies and Series: the name no longer repeats the year (“The Rings of Power 2022”) and genres come in the TV’s language when TMDB has the details</item>
         <item>Movies and Series: the details open lighter (one full-screen background instead of two) and “Episodes” no longer breaks in the middle of the word; long details like “Season 1” go under the button name</item>
         <item>Games: when the rows scroll, they no longer show over the highlighted game at the top</item>
@@ -29,7 +48,7 @@
         <item>Guest mode: checkout cleanup now includes preinstalled apps such as Netflix, and can clear everything at once</item>
         <item>Report a problem (Settings › System): a QR code opens it on your phone, showing exactly what will be sent</item>
         <item>“Nothing leaves your home” (Settings › System): what stays only on the TV, in a few lines</item>
-        <item>Plugins (Settings › Appearance): other apps can add a card to the Watch row, each one only with your OK</item>
+        <item>Plugins (Settings › Home screen): other apps can add a card to the Watch row, each one only with your OK</item>
         <item>Phone app: several homes, with TVs grouped by home</item>
         <item>Safe mode: if the home screen stops 3 times in 15 minutes, a simple version of it opens, with your apps and a “Look for a fixed version” button</item>
         <item>First launch: the TV asks how it is used (Simple, Complete or Caring for someone) and shows only what fits. You can change it in Settings › System</item>
@@ -55,9 +74,9 @@
         <item>Lend the shell: apps made for Shizuku work without installing Shizuku (off by default; Settings › Lend system powers). Each app asks on the TV with the panel PIN, and the web panel (Extras) shows who has access and revokes it</item>
         <item>Lend owner control: apps made for Dhizuku use the launcher\'s Device Owner (off by default; same place). Each app asks on the TV with the PIN; none can remove the launcher as owner or wipe the TV. “Full power” is per app, with the PIN and a warning</item>
         <item>Scrolling menus and lists (like the player’s “Audio and subtitles” and folders): items no longer slide over the title; in menus, the edges fade when there are more items</item>
-        <item>App layout: choose between the usual row and a grid with every app in view (Settings › Appearance)</item>
+        <item>App layout: choose between the usual row and a grid with every app in view (Settings › Home screen)</item>
         <item>Card size: Normal or Large, plus see-through cards when not selected (in Extras); everything starts off</item>
-        <item>Icon packs: install an icon pack from Play and pick it in Settings › Appearance</item>
+        <item>Icon packs: install an icon pack from Play and pick it in Settings › Home screen</item>
         <item>My background: your photo, GIF or video behind the home screen, with brightness and contrast (put the file in the Fundo, Pictures or Movies folder)</item>
         <item>Share look: a QR code with this TV\'s theme, text size and icons, to keep or send to another One TV</item>
         <item>HDMI and AV inputs show up as cards in the app row, on TVs that have inputs</item>
@@ -137,7 +156,7 @@
         <item>“Network” looks like a catalog: poster and synopsis beside the list, Recently added, Search on Jellyfin, Emby and Plex, and a folder plays the next video or song</item>
         <item>Settings: each Extras switch now lives in its own tab, under “More options”</item>
         <item>Settings: lines with a QR code that opens the web panel straight on scenes, Home Assistant, photos, family board, my team or router</item>
-        <item>Quick panel: choose its tiles and their order (Settings &gt; Appearance), with new Night filter and DNS tiles</item>
+        <item>Quick panel: choose its tiles and their order (Settings &gt; Home screen), with new Night filter and DNS tiles</item>
         <item>Type with accents from your phone and from Claude (ç, ã, é arrive as typed)</item>
         <item>Guest Wi-Fi as a QR: Settings &gt; Guests and routines; in guest mode, Wi-Fi in the quick panel shows the QR</item>
         <item>The nightly backup now checks every night that the saved copy would restore</item>
@@ -169,7 +188,7 @@
         <item>Voice: “Ok Google, open Movies” (also Series, Network media, Home control, Search, Board) opens that launcher screen</item>
         <item>Live TV: pause any channel for up to 2 minutes (⏯, or ▶ ▶ › “Pause live TV”); OK resumes from where you stopped, ▶ goes back to live. Kept only in the player\'s memory, never on disk</item>
         <item>The web panel is in English when the phone or computer is not in Portuguese</item>
-        <item>With the TV in English, voice requests for channels ("watch Globo", "what's on SBT") work in English too, and the confirmations show up in English</item>
+        <item>With the TV in English, voice requests for channels ("watch Globo", "what\'s on SBT") work in English too, and the confirmations show up in English</item>
         <item>LG volume: the alarm never goes above 30, the volume is checked after each change, and the alarm on the LG starts turned off</item>
         <item>Real profiles: each Google account on the TV has its own channel favorites, Continue watching, last episodes, watchlist and app order; a profile can be marked as a kid profile (quick panel), which turns on kids mode and bedtime and asks the parents\' PIN to leave</item>
         <item>The launcher has its own icon and banner (in Apps and in Settings)</item>
@@ -200,6 +219,14 @@
         <item>Screensaver with new, larger widgets: pick Glass strip (the next hours on a curve, with the sun time), Cards (now, hours, today and tomorrow) or No box (big temperature and the weather in one sentence) in Settings › Screen and power › Screensaver widgets, or in the panel</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>painel_v3</item>
+        <item>painel_https</item>
+        <item>unidade_windows</item>
+        <item>pendrive_mtp</item>
+        <item>protetor_tempo</item>
+        <item>som_fone</item>
+        <item>jogos_sofa</item>
+        <item>visual_outra_tv</item>
         <item>idades_madrugada</item>
         <item>notas_trakt</item>
         <item>notas_simkl</item>
@@ -350,6 +377,14 @@
         <item>protetor_widgets</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>New panel</item>
+        <item>Panel in https</item>
+        <item>Drive on Windows</item>
+        <item>USB drive on Windows</item>
+        <item>Weather screensaver</item>
+        <item>Sound on headphones</item>
+        <item>Games on the Couch</item>
+        <item>Look from another TV</item>
         <item>Kids mode by age</item>
         <item>Trakt rating</item>
         <item>Simkl rating</item>
@@ -444,7 +479,7 @@
         <item>In “Network”, open a Jellyfin or Plex server, try Search and Recently added, and play a video from a folder</item>
         <item>Open Settings &gt; Screen and power and go to the end</item>
         <item>Open Settings &gt; Guests and routines &gt; Scenes from your phone, and scan the code</item>
-        <item>In Settings &gt; Appearance &gt; Quick panel tiles, show Night filter and move it to the top; then hold HOME</item>
+        <item>In Settings &gt; Home screen &gt; Quick panel tiles, show Night filter and move it to the top; then hold HOME</item>
         <item>Type “ação” in the TV search from the phone panel</item>
         <item>Set Settings &gt; Guests and routines &gt; Guest Wi-Fi, turn guest mode on and press Wi-Fi in the quick panel</item>
         <item>Settings &gt; System &gt; Automatic backup &gt; Back up now</item>
@@ -473,7 +508,7 @@
         <item>Say “Ok Google, open Movies” (and the others: Series, Network media, Home control, Search, Board)</item>
         <item>On a live channel without catch-up, ▶ ▶ › “Pause live TV”, wait 1 minute and press OK; then ▶ › “Back to live”</item>
         <item>Open the web panel on a browser set to English</item>
-        <item>With the TV in English, say "what's on" and a channel name</item>
+        <item>With the TV in English, say "what\'s on" and a channel name</item>
         <item>In the quick panel, open the profiles, mark one account as “Kid profile” (parents\' PIN) and switch to it; favorite a channel; then switch back to your profile</item>
         <item>Open Settings > Apps and find One TV Launcher</item>
         <item>Play a song or video, go back to the home screen and press OK on the pill</item>
@@ -500,6 +535,14 @@
         <item>In Settings › Screen and power, press OK on Screensaver widgets until the style you want, then wait for the screensaver</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Open the web panel on your phone: are the pages the same as the TV\'s Settings, in the Sofaly look, with text in the phone\'s language?</item>
+        <item>On the phone that has the TV\'s certificate installed, does the panel open in https with a padlock?</item>
+        <item>On the Windows PC, does the TV show in This PC as “Sofaly · TV name” and come back by itself after the launcher restarts?</item>
+        <item>With a USB drive in the TV, does it show in This PC as a drive separate from internal storage?</item>
+        <item>Pick the screensaver that reacts to the weather and wait for it: does it show the current weather, and do the options let you pick the clock, “time only” and turn each element off?</item>
+        <item>In a video, ▼ › Sound on headphones (phone): does the QR open on the phone, the sound play on the headphones with the TV muted, and closing the page bring the sound back?</item>
+        <item>Open Games: does the Couch design show the controls, tall cards and By type, with nothing cut off?</item>
+        <item>In the web panel › Home screen › Look from another TV, paste the code of a ready-made look from the site and apply it: does the home screen change? Then go back to your look</item>
         <item>After one night, with kids mode on and “Up to 12”, does Movies show many films rated up to 12 (and none for adults)?</item>
         <item>The morning after installing, open a movie from your list: does the details page show “Trakt NN%” and no “IMDb” or “Also on”?</item>
         <item>The morning after installing, open a popular movie: next to the Trakt rating, does “Simkl 8.1” (or similar) appear?</item>
@@ -509,7 +552,7 @@
         <item>In Guest mode, does the list of apps to clean also show Netflix and YouTube?</item>
         <item>In Settings › System › Report a problem, do the QR and the text that goes with it appear?</item>
         <item>In Settings › System, does “Nothing leaves your home” open a short, readable text?</item>
-        <item>In Settings › Appearance › Plugins, does the TV ask for the PIN and show “No plugin installed”?</item>
+        <item>In Settings › Home screen › Plugins, does the TV ask for the PIN and show “No plugin installed”?</item>
         <item>With the safe mode test command, does the simple screen with your apps appear when you go back HOME? And does “Try the normal home screen” bring back the usual one?</item>
         <item>In Settings › System, switch “How this TV is used” to Simple: do the Home and automations, Remote access and Advanced tabs disappear? Then switch back to Complete</item>
         <item>In Settings › Family, turn on Guest mode and go back HOME: does the welcome screen appear? To turn it off, does the TV ask for the PIN?</item>
@@ -527,9 +570,9 @@
         <item>In Settings › Family › Care from afar, does the consent screen open and does “I agree” only work with the remote? With it on, does holding BACK for 3 s ask “Send a help request?” and a short BACK still go back? Turn it off again afterwards.</item>
         <item>With the panel PIN set, in Settings › Lend system powers, switch "Lend the shell" to Always on. Open an app made for Shizuku: does the TV ask, accept the PIN and the app work? Then revoke it in the web panel (Extras) and switch it back Off.</item>
         <item>In Settings › Lend system powers, turn on “Lend owner control”. Open an app made for Dhizuku (e.g. OwnDroid or App Manager): does the TV ask, accept the PIN with “Allow always” and the app work? In the web panel (Extras) it shows up; revoke it and turn the option off again.</item>
-        <item>In Settings › Appearance, set App layout to Grid. On the home screen, do ▲ ▼ ◀ ▶ move through the grid without jumping to the clock, and does switching back to Row leave everything as before?</item>
-        <item>In Settings › Appearance, set Card size to Large. Are the cards bigger, not cut off at the bottom, and does going back to Normal leave things as before?</item>
-        <item>In Settings › Appearance › Share look, does a QR code appear that your phone can read?</item>
+        <item>In Settings › Home screen, set App layout to Grid. On the home screen, do ▲ ▼ ◀ ▶ move through the grid without jumping to the clock, and does switching back to Row leave everything as before?</item>
+        <item>In Settings › Home screen, set Card size to Large. Are the cards bigger, not cut off at the bottom, and does going back to Normal leave things as before?</item>
+        <item>In Settings › Home screen › Share look, does a QR code appear that your phone can read?</item>
         <item>Open a video with ASS subtitles (anime). Do the subtitles show with the right colors and positions, and change size in ▼ › Subtitle size?</item>
         <item>In a 5.1 movie, turn on ▼ › Louder dialogue. Does the movie come back at the same point, with speech easier to hear?</item>
         <item>In a network or folder video, hold ▶. Does a picture of where you are going show above the bar?</item>

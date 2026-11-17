@@ -82,7 +82,7 @@ object FichaAcoes {
                 }, LinearLayout.LayoutParams(dp(ctx, ICONE_DP), dp(ctx, ICONE_DP)).apply { marginEnd = dp(ctx, 12) })
             }
             val rotulo = TextView(ctx).apply {
-                text = texto.removePrefix("▶").trim(); textSize = TEXTO_SP; typeface = Fontes.manrope(500); maxLines = 2; ellipsize = TextUtils.TruncateAt.END
+                text = texto.removePrefix("▶").trim(); textSize = TEXTO_SP; typeface = Fontes.nunito(500); maxLines = 2; ellipsize = TextUtils.TruncateAt.END
                 setLineSpacing(0f, 0.95f)
                 isDuplicateParentStateEnabled = true
                 setTextColor(CORES_TEXTO)

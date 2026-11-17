@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Addons no formato do Stremio, só HTTP (16/11/2026): AddonsActivity, ConfigLauncherActivity, MainActivity. -->
+<resources>
+    <string name="ad_titulo">Eklentiler</string>
+    <string name="ad_destaque">Eklentilerinden film ve diziler</string>
+    <string name="ad_vazio">Henüz eklenti yok. Web panelinden ekle (Ayarlar, Eklentiler). Burada yalnızca doğrudan video bağlantıları (HTTP) oynar: torrent ve P2P desteklenmez.</string>
+    <string name="ad_resumo">Eklentilerinin katalogları. Eklentileri üçüncü kişiler yapar: eklentiyi kuran, içeriğinden sorumludur.</string>
+    <string name="ad_buscar">Ara</string>
+    <string name="ad_buscar_dica">Film veya dizi adı</string>
+    <string name="ad_carregando">Yükleniyor…</string>
+    <string name="ad_falhou">Eklenti yanıt vermedi. Biraz sonra tekrar dene.</string>
+    <string name="ad_nada">Burada bir şey yok.</string>
+    <string name="ad_mais">Daha fazla</string>
+    <string name="ad_tipo_filmes">Filmler</string>
+    <string name="ad_tipo_series">Diziler</string>
+    <string name="ad_tipo_canais">Kanallar</string>
+    <string name="ad_temporada">%1$d. sezon</string>
+    <string name="ad_especiais">Özel bölümler</string>
+    <string name="ad_episodio">%1$d. %2$s</string>
+    <string name="ad_sem_fontes">Burada oynayan kaynak yok. Sofaly yalnızca doğrudan video bağlantılarını (HTTP) oynatır.</string>
+    <string name="ad_fontes_resumo">Bir kaynak seç</string>
+    <string name="ad_dica_voltar">geri</string>
+    <string name="ad_cfg_det">Kurulu eklentiler. Eklemek için web panelini kullan.</string>
+    <string name="ad_cfg_como">Eklenti eklemek için TV\'nin web panelini telefonda veya bilgisayarda aç, Ayarlar, Eklentiler bölümüne git, manifest.json ile biten adresi yapıştır ve PIN ile onayla.</string>
+    <string name="ad_cfg_remover_qual">Hangi eklenti kaldırılsın?</string>
+    <string name="ad_cfg_remover">%1$s bu TV\'den kaldırılacak.</string>
+    <string name="ad_cfg_remover_sim">Kaldır</string>
+</resources>

@@ -133,9 +133,9 @@
     <string name="bu_canais">Kanały</string>
     <string name="bu_canal_n">Kanał %1$s</string>
     <string name="bu_no_guia">W programie</string>
-    <string name="bu_ver_filmes">Wszystkie wyniki „%1$s” w Filmach</string>
+    <string name="bu_ver_filmes">Zobacz wszystko w Filmach (%1$s)</string>
     <string name="bu_ver_filmes_det">Otwiera katalog filmów z tym wyszukiwaniem</string>
-    <string name="bu_ver_series">Wszystkie wyniki „%1$s” w Serialach</string>
+    <string name="bu_ver_series">Zobacz wszystko w Serialach (%1$s)</string>
     <string name="bu_ver_series_det">Otwiera katalog seriali z tym wyszukiwaniem</string>
     <string name="bu_agora">Teraz</string>
     <string name="bu_lembrete_sim">Przypomnienie ustawione</string>
@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">Prawie czarny</string>
     <string name="cb_quase_branco">Prawie biały</string>
     <string name="cb_bordas">Krawędzie</string>
-    <string name="cb_barras">Paski kolorów 75%</string>
+    <string name="cb_barras" formatted="false">Paski kolorów 75%</string>
     <string name="cb_linhas">Linie 1-pikselowe</string>
     <string name="ad_ninguem">Nikt nie dotykał pilota od %1$s.\nNaciśnij dowolny przycisk, by oglądać dalej.</string>
     <string name="ad_vai_desligar">Telewizor wyłączy się za %1$d s</string>

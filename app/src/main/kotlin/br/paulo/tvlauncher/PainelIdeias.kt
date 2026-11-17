@@ -50,6 +50,24 @@ object PainelIdeias {
             }
             post && r == "avisos/testar" -> ok(JSONObject().put("resultado", Avisos.testar(app)))   // bloqueia: thread do pedido
             // ---- 4. desempenho
+            // ---- degrau 4: receitas prontas. Sem a sessão elevada aqui, o que DESLIGA algo com PIN (desfazer o
+            // modo simples, o infantil...) é recusado com precisaPin e se faz na TV, que pede o PIN.
+            get && r == "receitas" -> ok(receitas(app))
+            post && r == "receitas/aplicar" -> {
+                val rec = Receitas.dePalavra(corpo?.optString("receita")) ?: return erro(400, "receita desconhecida")
+                if (Receitas.pedePin(ReceitasTv.mudancas(app, rec), PainelArmazem.temPin(app)))
+                    return 403 to JSONObject().put("erro", "faça na TV: pede o PIN").put("precisaPin", true)
+                val m = ReceitasTv.aplicar(app, rec)
+                PainelArmazem.registrar(app, ip, "receita ${rec.name}", Receitas.paraTexto(m.toMap()))
+                ok(receitas(app))
+            }
+            post && r == "receitas/desfazer" -> {
+                if (Receitas.pedePin(ReceitasTv.mudancasDesfazer(app), PainelArmazem.temPin(app)))
+                    return 403 to JSONObject().put("erro", "faça na TV: pede o PIN").put("precisaPin", true)
+                val m = ReceitasTv.desfazer(app)
+                PainelArmazem.registrar(app, ip, "receita desfeita", Receitas.paraTexto(m.toMap()))
+                ok(receitas(app))
+            }
             get && r == "desempenho" -> ok(DesempenhoTv.json(app))
             get && r == "compatibilidade" -> ok(CompatibilidadeTv.json(app))   // página "Funciona no seu aparelho?"
             // tema por QR: o código do visual desta TV e aplicar um recebido
@@ -135,10 +153,26 @@ object PainelIdeias {
             .put("radios", Radios.paraJson(Radios.favoritas(app)))
             .put("presenca", JSONArray(Presenca.escolhidos(app).toList()))
             .put("presencaOutras", JSONObject().put("entidades", Presenca.entidades(app).joinToString(", ")).put("ips", Presenca.ips(app).joinToString(", ")))
-            .put("retrospectiva", Retrospectiva.ultima(app)?.let { Retrospectiva.paraJson(it).put("linhas", JSONArray(Retrospectiva.linhas(it).toList())) } ?: JSONObject.NULL)
+            .put("retrospectiva", Retrospectiva.ultimaMedida(app)?.let { Retrospectiva.paraJson(it).put("linhas", JSONArray(Retrospectiva.linhas(it).toList())) } ?: JSONObject.NULL)
             .put("simples", JSONObject().put("apps", JSONArray(ModoSimples.escolhidos(app)))
                 .put("instalados", JSONArray().apply {
                     instalados.entries.sortedBy { it.value.lowercase() }.forEach { put(JSONObject().put("pacote", it.key).put("nome", it.value)) }
                 }))
+    }
+
+    /** Estado das receitas para o painel: as 4, a ativa, o que cada uma mudaria e os avisos. */
+    private fun receitas(app: Context): JSONObject {
+        val temPin = PainelArmazem.temPin(app)
+        val agora = ReceitasTv.ler(app)
+        val lista = JSONArray()
+        for (rec in Receitas.Receita.values()) {
+            val m = Receitas.mudancas(rec, agora, ReceitasTv.permite(app))
+            lista.put(JSONObject().put("id", rec.name).put("nome", ReceitasTv.nome(app, rec)).put("texto", ReceitasTv.explicacao(app, rec))
+                .put("muda", JSONArray(m.map { ReceitasTv.linha(app, it.first, it.second) }))
+                .put("avisos", JSONArray(Receitas.avisos(rec, agora, temPin, ReceitasTv.permite(app)).map { it.name }))
+                .put("pedePin", Receitas.pedePin(m, temPin)))
+        }
+        return JSONObject().put("receitas", lista).put("ativa", ReceitasTv.ativa(app)?.name ?: JSONObject.NULL)
+            .put("desfazer", JSONArray(ReceitasTv.mudancasDesfazer(app).map { ReceitasTv.linha(app, it.first, it.second) }))
     }
 }

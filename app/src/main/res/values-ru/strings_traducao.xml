@@ -133,9 +133,9 @@
     <string name="bu_canais">Каналы</string>
     <string name="bu_canal_n">Канал %1$s</string>
     <string name="bu_no_guia">В программе</string>
-    <string name="bu_ver_filmes">Все результаты «%1$s» в Фильмах</string>
+    <string name="bu_ver_filmes">Все в Фильмах (%1$s)</string>
     <string name="bu_ver_filmes_det">Открывает каталог фильмов с этим поиском</string>
-    <string name="bu_ver_series">Все результаты «%1$s» в Сериалах</string>
+    <string name="bu_ver_series">Все в Сериалах (%1$s)</string>
     <string name="bu_ver_series_det">Открывает каталог сериалов с этим поиском</string>
     <string name="bu_agora">Сейчас</string>
     <string name="bu_lembrete_sim">Напоминание установлено</string>
@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">Почти чёрный</string>
     <string name="cb_quase_branco">Почти белый</string>
     <string name="cb_bordas">Края</string>
-    <string name="cb_barras">Цветные полосы 75%</string>
+    <string name="cb_barras" formatted="false">Цветные полосы 75%</string>
     <string name="cb_linhas">Линии в 1 пиксель</string>
     <string name="ad_ninguem">Пульт не трогали уже %1$s.\nНажмите любую кнопку, чтобы продолжить просмотр.</string>
     <string name="ad_vai_desligar">ТВ выключится через %1$d с</string>

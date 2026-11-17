@@ -30,6 +30,17 @@ import java.util.TimeZone
  */
 object CuidarDeLonge {
     /**
+     * Tecla que pode ACEITAR o consentimento (17/11/2026, decisão do Paulo: "o que funcionar melhor").
+     *  - controle Bluetooth/IR do Chromecast: aparelho com id próprio (> 0, não o VIRTUAL_KEYBOARD -1);
+     *  - controle da própria LG pelo HDMI-CEC: o Android injeta como VIRTUAL_KEYBOARD, mas com a fonte HDMI. O
+     *    `input keyevent` do shell não tem fonte HDMI, então não passa por aqui.
+     * O que ainda imitaria uma tecla física (um aparelho virtual criado pelo shell) é barrado à parte: com a pergunta
+     * na tela, o shell do Claude recusa comandos ([CuidarDeLongeTv.consentimentoNaTela]).
+     */
+    fun teclaDeGente(deviceId: Int, source: Int, virtual: Int = -1, fonteHdmi: Int = 0x02000001): Boolean =
+        (deviceId > 0 && deviceId != virtual) || (deviceId == virtual && source and fonteHdmi == fonteHdmi)
+
+    /**
      * ESTOU_BEM (16/11/2026, a 79 da Play): na primeira vez que a TV acende no dia, ela pergunta "Avisar Ana que está tudo
      * bem?" e só a resposta da PESSOA manda o aviso. Nada sai sem o botão: é o oposto de vigiar, e por isso cabe na Play.
      */
@@ -244,8 +255,9 @@ object CuidarDeLonge {
     fun minutoDoDia(ms: Long, fuso: TimeZone): Int = Instant.ofEpochMilli(ms).atZone(fuso.toZoneId()).let { it.hour * 60 + it.minute }
     private fun data(dia: Int): LocalDate = LocalDate.of(dia / 10000, dia / 100 % 100, dia % 100)
     /** O instante de [minuto] no [dia] (AAAAMMDD), no fuso. */
+    // Hora de RELÓGIO (atTime + atZone): "meia-noite + N minutos" errava 1 h no dia da troca do horário de verão.
     fun instante(dia: Int, minuto: Int, fuso: TimeZone): Long =
-        data(dia).atStartOfDay(fuso.toZoneId()).plusMinutes(minuto.toLong()).toInstant().toEpochMilli()
+        data(dia).atTime(minuto / 60, minuto % 60).atZone(fuso.toZoneId()).toInstant().toEpochMilli()
     private fun diaDaSemana(dia: Int): Int = data(dia).dayOfWeek.value % 7   // domingo = 0, como em ProximoAlarme
 
     /** As ocorrências de [l] em [de, ate] (de hoje e de ontem, que é o que importa aqui), da mais velha para a mais nova. */

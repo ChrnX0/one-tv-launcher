@@ -133,9 +133,9 @@
     <string name="bu_canais">Sender</string>
     <string name="bu_canal_n">Sender %1$s</string>
     <string name="bu_no_guia">Im Programmführer</string>
-    <string name="bu_ver_filmes">Alle %1$s in Filme ansehen</string>
+    <string name="bu_ver_filmes">Alle in Filme ansehen (%1$s)</string>
     <string name="bu_ver_filmes_det">Öffnet den Filmkatalog mit dieser Suche</string>
-    <string name="bu_ver_series">Alle %1$s in Serien ansehen</string>
+    <string name="bu_ver_series">Alle in Serien ansehen (%1$s)</string>
     <string name="bu_ver_series_det">Öffnet den Serienkatalog mit dieser Suche</string>
     <string name="bu_agora">Jetzt</string>
     <string name="bu_lembrete_sim">Erinnerung gesetzt</string>
@@ -159,7 +159,7 @@
     <string name="bc_limite">Sperrlimit erreicht</string>
     <string name="bc_parental_on">Kindersicherung AN</string>
     <string name="bc_parental_off">Kindersicherung aus (die Sperre wirkt erst, wenn du sie einschaltest)</string>
-    <string name="bc_resumo">%1$d von %2$d Sendern gesperrt · %3$d ganze Kategorie(n) · %4$s</string>
+    <string name="bc_resumo">%1$d von %2$d Sendern gesperrt · ganze Kategorien: %3$d · %4$s</string>
     <string name="bc_todas">Alle (%1$d)</string>
     <string name="bc_outros">Andere</string>
     <string name="bc_bloqueada">gesperrt</string>
@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">Fast Schwarz</string>
     <string name="cb_quase_branco">Fast Weiß</string>
     <string name="cb_bordas">Ränder</string>
-    <string name="cb_barras">75%-Farbbalken</string>
+    <string name="cb_barras" formatted="false">75%-Farbbalken</string>
     <string name="cb_linhas">1-Pixel-Linien</string>
     <string name="ad_ninguem">Seit %1$s hat niemand die Fernbedienung berührt.\nDrücke eine beliebige Taste, um weiterzuschauen.</string>
     <string name="ad_vai_desligar">Der Fernseher schaltet sich in %1$d s aus</string>

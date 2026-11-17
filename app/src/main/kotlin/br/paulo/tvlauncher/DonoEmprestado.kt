@@ -31,16 +31,34 @@ object DonoEmprestado {
     fun definirLigado(ctx: Context, sim: Boolean) {
         prefs(ctx).edit().putBoolean("ligado", sim).apply()
         anotar(ctx, if (sim) "ligado" else "desligado")
+        if (!sim) parado(ctx)   // tira na hora os escopos que os apps de poder total delegaram a si
     }
 
     fun somosDono(ctx: Context) = PrivilegioDO.somosDonos(ctx)
 
-    fun parado(ctx: Context): RegrasDono.Parado = RegrasDono.parado(
-        ligado(ctx), Planos.permite(ctx, Planos.Recurso.PODER_EMPRESTADO), somosDono(ctx))
+    /**
+     * Também limpa os escopos delegados quando o empréstimo para (desligado ou plano perdido): um app de poder total
+     * pode ter dado a si "permission-grant", "package-access"... e esses chamam o DPM direto, sem o servidor nem o
+     * FiltroDpm. Sem dono não precisa: os escopos somem junto com o dono. Uma vez por parada (marca "escopos_limpos").
+     */
+    fun parado(ctx: Context): RegrasDono.Parado {
+        val p = RegrasDono.parado(ligado(ctx), Planos.permite(ctx, Planos.Recurso.PODER_EMPRESTADO), somosDono(ctx))
+        val limpos = prefs(ctx).getBoolean("escopos_limpos", true)
+        if (p == RegrasDono.Parado.NAO) {
+            if (limpos) prefs(ctx).edit().putBoolean("escopos_limpos", false).apply()
+        } else if (!limpos && p != RegrasDono.Parado.SEM_DONO) {
+            apps(ctx).forEach { tirarEscopos(ctx, it.pacote); encerrar(ctx, it.uid) }
+            prefs(ctx).edit().putBoolean("escopos_limpos", true).apply()
+            anotar(ctx, "parado (${p.name.lowercase()}): escopos delegados tirados")
+        }
+        return p
+    }
 
     fun apps(ctx: Context): List<App> = mapa(ctx).values.sortedBy { it.pacote }
 
-    private fun mapa(ctx: Context): Map<Int, App> {
+    // @Synchronized (mapa e gravar): sem trava, uma thread de binder podia regravar o cache antigo logo depois de um
+    // revogar, e o app revogado continuava autorizado até o processo morrer.
+    @Synchronized private fun mapa(ctx: Context): Map<Int, App> {
         cache?.let { return it }
         val r = HashMap<Int, App>()
         try {
@@ -55,7 +73,7 @@ object DonoEmprestado {
         return r
     }
 
-    private fun gravar(ctx: Context, apps: Collection<App>) {
+    @Synchronized private fun gravar(ctx: Context, apps: Collection<App>) {
         val o = JSONObject()
         apps.forEach { o.put(it.pacote, JSONObject().put("uid", it.uid).put("total", it.total)) }
         prefs(ctx).edit().putString("apps", o.toString()).commit()
@@ -72,25 +90,39 @@ object DonoEmprestado {
         return if (pacotes != null && app.pacote in pacotes) app else null
     }
 
-    fun autorizar(ctx: Context, pacote: String, uid: Int, total: Boolean) {
+    @Synchronized fun autorizar(ctx: Context, pacote: String, uid: Int, total: Boolean) {
         val apps = mapa(ctx).values.filter { it.pacote != pacote } + App(pacote, uid, total)
         gravar(ctx, apps)
         anotar(ctx, "autorizado $pacote uid=$uid total=$total")
     }
 
     /** Liga/desliga o poder total de um app já autorizado. Desligar tira também os escopos que ele delegou a si. */
-    fun definirTotal(ctx: Context, pacote: String, total: Boolean): Boolean {
+    @Synchronized fun definirTotal(ctx: Context, pacote: String, total: Boolean): Boolean {
         val atual = mapa(ctx).values.firstOrNull { it.pacote == pacote } ?: return false
         gravar(ctx, mapa(ctx).values.filter { it.pacote != pacote } + atual.copy(total = total))
-        if (!total) tirarEscopos(ctx, pacote)
+        if (!total) { tirarEscopos(ctx, pacote); encerrar(ctx, atual.uid) }
         anotar(ctx, "poder total de $pacote: $total")
         return true
     }
 
-    fun revogar(ctx: Context, pacote: String) {
+    @Synchronized fun revogar(ctx: Context, pacote: String) {
+        val uid = mapa(ctx).values.firstOrNull { it.pacote == pacote }?.uid
         gravar(ctx, mapa(ctx).values.filter { it.pacote != pacote })
         tirarEscopos(ctx, pacote)
+        if (uid != null) encerrar(ctx, uid)
         anotar(ctx, "revogado $pacote")
+    }
+
+    /**
+     * Revogar não fecha só a porta (17/11/2026, decisão do Paulo "estuda e aplica o melhor"): os processos que o app
+     * abriu com o nosso uid (remote_process, com filhos) e os UserServices dele são encerrados na hora. Os que ainda
+     * estão no meio de uma chamada terminam nela; nenhuma chamada nova passa (porUid já não acha o app).
+     */
+    private fun encerrar(ctx: Context, uid: Int) {
+        Fundo.rodar("dono-encerrar") {
+            try { com.rosan.dhizuku.server_api.DhizukuService.encerrarDoUid(uid); anotar(ctx, "encerrado o que uid=$uid rodava") }
+            catch (e: Throwable) { anotar(ctx, "não encerrei uid=$uid: $e") }
+        }
     }
 
     /** Escopos delegados ficam no sistema mesmo depois de revogar: zera (só o dono pode). */

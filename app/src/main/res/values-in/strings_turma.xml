@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hub de jogos: painel "No sofá" e "Sua turma" do Discord (17/11/2026, TurmaDiscord.kt). -->
+<resources>
+    <string name="jogos_no_sofa">Di sofa</string>
+    <string name="jogos_continuar">Lanjutkan</string>
+    <string name="jogos_controle_pronto">siap</string>
+    <string name="jogos_controle_carregar">isi daya segera</string>
+    <string name="jogos_parear_um">Pasangkan kontroler</string>
+    <string name="jogos_todos">Semua</string>
+    <string name="turma_titulo">Gengmu</string>
+    <string name="turma_online">%1$d online</string>
+    <string name="turma_mais_online">+ %1$d online</string>
+    <string name="turma_na_voz">Di voice</string>
+    <string name="turma_ausente">pergi</string>
+    <string name="turma_ocupado">sibuk</string>
+    <string name="turma_status_online">online</string>
+    <string name="turma_ninguem">Tidak ada yang online sekarang</string>
+    <string name="turma_procurando">Mencari gengmu…</string>
+    <string name="turma_sem_rede">Tidak ada koneksi ke Discord sekarang.</string>
+    <string name="turma_mostrar_titulo">Tampilkan geng Discord-mu</string>
+    <string name="turma_mostrar_texto">Lihat di TV siapa yang online, sedang main, dan ada di voice.</string>
+    <string name="turma_desligado_titulo">Widget server mati</string>
+    <string name="turma_desligado_texto">Di Discord: Pengaturan Server, Widget, nyalakan Aktifkan Widget Server.</string>
+    <string name="turma_qr_dica">Arahkan ponsel ke sini untuk masuk ke voice. Ngobrolnya lewat ponsel.</string>
+    <string name="turma_aqui">%1$d dari gengmu di sini</string>
+    <string name="turma_jogando">%1$s main %2$s</string>
+    <string name="turma_dois">%1$s dan %2$s</string>
+    <string name="turma_e_mais">%1$s dan %2$d lainnya</string>
+    <string name="turma_chamar">Panggil geng</string>
+    <string name="turma_chamar_pergunta">Kirim ke channel Discord?</string>
+    <string name="turma_chamado_jogo">🎮 Main %1$s yuk? Aku di TV.</string>
+    <string name="turma_chamado">🎮 Main yuk? Aku di TV.</string>
+    <string name="turma_mandar">Kirim</string>
+    <string name="turma_enviado">Gengmu sudah dipanggil di Discord.</string>
+    <string name="turma_espere">Tunggu satu menit sebelum memanggil lagi.</string>
+    <string name="turma_falhou">Discord tidak menerimanya. Periksa internet atau webhook.</string>
+    <string name="turma_config_titulo">Geng Discord-mu</string>
+    <string name="turma_config_texto">1. Di Discord: Pengaturan Server, Widget, nyalakan Aktifkan Widget Server.\n2. Di halaman yang sama, salin ID Server dan ketik di sini.\n\nUntuk tombol Panggil geng, tempel webhook sebuah channel di panel web TV.</string>
+    <string name="turma_config_dica">ID server (angka saja)</string>
+    <string name="turma_config_guardar">Simpan</string>
+    <string name="turma_config_tirar">Hapus geng</string>
+    <string name="turma_id_invalido">Ini bukan ID server Discord (17 sampai 20 angka).</string>
+</resources>
