@@ -401,6 +401,7 @@ traduzirPainelCom({T:{
 "Foto":"صورة",
 "Foto a cada 2 s":"صورة كل ثانيتين",
 "Foto do perfil":"صورة الملف الشخصي",
+"Nome na TV":"الاسم على التلفزيون",
 "Foto removida: a bolinha volta a mostrar a inicial.":"أزيلت الصورة: الدائرة تعرض الحرف الأول مرة أخرى.",
 "Foto trocada. Ela aparece na TV quando a tela inicial for aberta de novo.":"تغيّرت الصورة. تظهر على التلفزيون عند فتح الشاشة الرئيسية مجددًا.",
 "Fotos do protetor":"صور شاشة التوقف",
@@ -1244,6 +1245,7 @@ traduzirPainelCom({T:{
 "IP do PC (opcional, para o Jogar no PC)":"IP الكمبيوتر (اختياري، لميزة اللعب على الكمبيوتر)",
 "IP do PC":"IP الكمبيوتر",
 },P:[
+["^Na TV este perfil aparece como “(.+)”\\.$","يظهر هذا الملف الشخصي على التلفزيون باسم “$1”."],
 ["^(.+) sai da TV\\.$","أُزيل $1 من التلفزيون."],
 ["^Instalado: (.+)\\. Aparece na TV no card Addons\\.$","ثُبّت: $1. يظهر على التلفزيون في بطاقة الملحقات."],
 ["^Ligado: (.+) recebe os avisos \\(aceito na TV em (.+)\\)\\.$","مفعّلة: $1 يتلقى التنبيهات (تمت الموافقة على التلفزيون في $2)."],

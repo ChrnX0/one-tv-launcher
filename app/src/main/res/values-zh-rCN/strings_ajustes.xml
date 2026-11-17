@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">按 OK 切换 · 这些应用在访客模式开启时隐藏</string>
     <string name="cfg2_some_visita">对访客隐藏</string>
     <string name="cfg2_fica_visita">保留</string>
-    <string name="cfg2_casa_det">你的 Home Assistant 中的灯、插座和场景</string>
+    <string name="cfg2_casa_det">Google Home 或 Home Assistant 中的灯、插座和场景</string>
     <string name="oc_titulo">隐藏的应用</string>
     <string name="oc_subtitulo">按 OK 在主屏幕上显示或隐藏应用 · 隐藏的排在前面</string>
     <string name="oc_nenhum">没有隐藏的应用 · 按 OK 选择</string>

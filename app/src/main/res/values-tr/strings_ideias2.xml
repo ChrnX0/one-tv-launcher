@@ -30,6 +30,7 @@
     <string name="casa_vazio">Home Assistant’ta ışık, priz veya sahne yok.</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Google ışıkları ve kameraları</string>
+    <string name="casa_google_home_vazio">Bu Google hesabının Google Home\'da evi yok</string>
     <string name="casa_resumo">Home Assistant · %2$d cihazdan %1$d tanesi açık</string>
     <string name="casa_resumo_so_cenas">Home Assistant · %1$d sahne</string>
     <string name="casa_secao_cenas">Sahneler ve betikler</string>

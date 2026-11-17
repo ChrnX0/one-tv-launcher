@@ -57,7 +57,7 @@ object McpIdeias {
             }
             "buscar_tv" -> buscar(app, a.optString("termo")).toString()
             "semana_tv" -> JSONObject()
-                .put("semana", Retrospectiva.ultima(app)?.let { Retrospectiva.paraJson(it) } ?: JSONObject.NULL)
+                .put("semana", Retrospectiva.ultimaMedida(app)?.let { Retrospectiva.paraJson(it) } ?: JSONObject.NULL)
                 .put("desempenho", DesempenhoTv.json(app))
                 .put("compatibilidade", CompatibilidadeTv.json(app)).toString()
             else -> erro("ferramenta desconhecida")

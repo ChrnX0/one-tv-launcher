@@ -66,6 +66,22 @@ class PainelRapidoActivity : Activity() {
         /** Diálogo "Saída de áudio" da SystemUI de TV (Android 14 do Chromecast; visto na Sala em 17/11/2026). */
         const val SAIDA_AUDIO = "com.android.systemui.TV_MEDIA_OUTPUT_DIALOG"
 
+        /** Marca do X de uma linha de aviso/recado, para devolver o foco a ele depois de redesenhar a lista. */
+        const val TAG_X = "x"
+
+        /**
+         * Para qual linha da lista o foco volta depois de redesenhar. Antes ele ia sempre para a 1ª: qualquer notificação
+         * de outro app redesenhava o painel e o OK seguinte abria outro aviso (Sala, 17/11/2026: o OK no X do "Teste" abriu
+         * o "Novo login" do Google Play). Volta à mesma linha ([chave]); se ela saiu (foi dispensada), à que ficou no lugar
+         * dela ([indice]) ou à anterior focável. [tags] e [focaveis] são as linhas novas. null: nenhuma. Puro.
+         */
+        fun linhaDoFoco(tags: List<String?>, focaveis: List<Boolean>, chave: String?, indice: Int): Int? {
+            if (chave != null) tags.indexOf(chave).takeIf { it >= 0 && focaveis[it] }?.let { return it }
+            if (indice < 0 || tags.isEmpty()) return null
+            val i = minOf(indice, tags.size - 1)
+            return (i until tags.size).firstOrNull { focaveis[it] } ?: (i downTo 0).firstOrNull { focaveis[it] }
+        }
+
         /**
          * O próximo passo do botão Timer: avança a partir do que foi ESCOLHIDO (15 → 30 → 60 → 90 → 120 → desligado).
          * Pelo tempo que falta não dava: 1 min depois de marcar 15 faltavam 14 e o OK voltava a marcar 15 (Sala, 17/11).
@@ -382,7 +398,7 @@ class PainelRapidoActivity : Activity() {
     private fun perfis(): View {
         val contas = Perfil.contas(this)
         val ativa = Perfil.ativa(this, contas)
-        val legenda = Estilo.texto(this, Estilo.Papel.LEGENDA, ativa?.let { Perfil.usuario(it) } ?: getString(R.string.pp_sem_conta))
+        val legenda = Estilo.texto(this, Estilo.Papel.LEGENDA, ativa?.let { Perfil.nome(this, it) } ?: getString(R.string.pp_sem_conta))
         val bolinhas = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false }
         for (conta in contas) {
             val eAtiva = conta == ativa
@@ -401,7 +417,7 @@ class PainelRapidoActivity : Activity() {
                 v.background = anelPerfil(foco, eAtiva)
                 v.animate().scaleX(if (foco) 1.1f else 1f).scaleY(if (foco) 1.1f else 1f).setDuration(Estilo.FOCO_MS).start()
                 if (foco) {
-                    legenda.text = Perfil.usuario(conta) + if (eAtiva) getString(R.string.pp_ativo) else ""
+                    legenda.text = Perfil.nome(this, conta) + if (eAtiva) getString(R.string.pp_ativo) else ""
                     alvoCrianca = conta; mostrarCrianca()
                 }
             }
@@ -464,7 +480,7 @@ class PainelRapidoActivity : Activity() {
     private fun mostrarCrianca() {
         val t = txtCrianca ?: return
         val conta = alvoCrianca ?: return
-        t.text = getString(R.string.perfil_crianca_linha, Perfil.usuario(conta),
+        t.text = getString(R.string.perfil_crianca_linha, Perfil.nome(this, conta),
             getString(if (PerfilCriancaTv.eCrianca(this, conta)) R.string.pr_ligado else R.string.perfil_crianca_nao))
     }
 
@@ -809,13 +825,33 @@ class PainelRapidoActivity : Activity() {
         return limpar
     }
 
+    private var assinaturaAvisos: String? = null
+
     private fun preencherAvisos() {
         val focoDentro = listaAvisos.hasFocus() || limpar.hasFocus()
-        listaAvisos.removeAllViews()
         val avisos = NotificacoesTv.atuais
+        val daTv = AvisoTv.historico(this)
+        val mural = if (Extras.ligado(this, Extras.Chave.MURAL) && !ModoVisita.ativo(this)) Mural.ler(this) else Mural.Conteudo()
+        // Mudança em notificação de outro app que não aparece aqui (ou repetida): não redesenha, o foco fica onde está.
+        val assinatura = buildString {
+            append(OuvinteNotificacoes.conectado)
+            avisos.take(12).forEach { append('\u0001').append(it.chave).append('|').append(it.titulo).append('|').append(it.texto) }
+            daTv.forEach { append('\u0002').append(it.quando).append('|').append(it.titulo).append('|').append(it.texto) }
+            mural.recados.forEach { append('\u0003').append(it).append(mural.lido(it)) }
+            mural.compras.forEach { append('\u0004').append(it) }
+        }
+        if (assinatura == assinaturaAvisos && listaAvisos.childCount > 0) return
+        assinaturaAvisos = assinatura
+        // Onde estava o foco: a linha (pela marca) e se era o X dela.
+        val focado = listaAvisos.findFocus()
+        var linhaFocada: View? = focado
+        while (linhaFocada != null && linhaFocada.parent !== listaAvisos) linhaFocada = linhaFocada.parent as? View
+        val chaveFocada = linhaFocada?.tag as? String
+        val indiceFocado = linhaFocada?.let { listaAvisos.indexOfChild(it) } ?: -1
+        val noX = focado?.tag == TAG_X
+        listaAvisos.removeAllViews()
         txtSecao.text = if (avisos.isEmpty()) getString(R.string.pr_notificacoes).uppercase()
             else "${getString(R.string.pr_notificacoes).uppercase()} · ${avisos.size}"
-        val daTv = AvisoTv.historico(this)
         limpar.visibility = if (avisos.isEmpty() && daTv.isEmpty()) View.GONE else View.VISIBLE
         if (avisos.isEmpty()) {
             listaAvisos.addView(Estilo.texto(this, Estilo.Papel.LEGENDA,
@@ -841,7 +877,6 @@ class PainelRapidoActivity : Activity() {
             }
         }
         // Mural na TV (ideia 39): a lista de compras do protetor, aqui com o controle: OK risca o item.
-        val mural = if (Extras.ligado(this, Extras.Chave.MURAL) && !ModoVisita.ativo(this)) Mural.ler(this) else Mural.Conteudo()
         val compras = mural.compras
         // Ideia 95: os recados fixos, editáveis pela TV: OK marca como lido (sai do protetor), X apaga.
         if (mural.recados.isNotEmpty()) {
@@ -855,10 +890,17 @@ class PainelRapidoActivity : Activity() {
                 listaAvisos.addView(linhaCompra(item), LinearLayout.LayoutParams(-1, -2).apply { if (i > 0) topMargin = dp(Estilo.E1) })
         }
         if (focoDentro) {
-            val primeiro = (listaAvisos.getChildAt(0) as? ViewGroup)?.getChildAt(0)?.takeIf { it.isFocusable }
-            (primeiro ?: blocosNaTela.lastOrNull() ?: tVisita.casca).requestFocus()
+            val linhas = (0 until listaAvisos.childCount).map { listaAvisos.getChildAt(it) }
+            val focaveis = linhas.map { focavelDaLinha(it) != null }
+            val alvo = linhaDoFoco(linhas.map { it.tag as? String }, focaveis, chaveFocada, indiceFocado)?.let { linhas[it] }
+            val v = alvo?.let { l -> (if (noX) l.findViewWithTag<View>(TAG_X) else null) ?: focavelDaLinha(l) }
+            (v ?: blocosNaTela.lastOrNull() ?: tVisita.casca).requestFocus()
         }
     }
+
+    /** O cartão focável de uma linha da lista (a própria linha, se ela é focável; senão o 1º filho). */
+    private fun focavelDaLinha(l: View): View? =
+        if (l.isFocusable) l else (l as? ViewGroup)?.getChildAt(0)?.takeIf { it.isFocusable }
 
     private fun linhaAviso(
         a: NotificacoesTv.Aviso, agora: Long,
@@ -892,8 +934,9 @@ class PainelRapidoActivity : Activity() {
                 v.animate().scaleX(if (foco) Estilo.ESCALA_LINHA else 1f).scaleY(if (foco) Estilo.ESCALA_LINHA else 1f).setDuration(Estilo.FOCO_MS).start()
             }
         }
-        val dispensar = botaoRedondo(IconeCard(this, "fechar"), getString(R.string.pr_dispensar)) { aoDispensar() }
+        val dispensar = botaoRedondo(IconeCard(this, "fechar"), getString(R.string.pr_dispensar)) { aoDispensar() }.apply { tag = TAG_X }
         val linha = LinearLayout(this).apply {
+            tag = "n:" + a.chave
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             clipChildren = false
@@ -946,8 +989,9 @@ class PainelRapidoActivity : Activity() {
                 Mural.editar(applicationContext) { Mural.remover(it, Mural.Lista.RECADOS, recado) }
                 ui.post { if (!isFinishing) preencherAvisos() }
             }
-        }
+        }.apply { tag = TAG_X }
         return LinearLayout(this).apply {
+            tag = "r:$recado"
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             clipChildren = false
@@ -958,6 +1002,7 @@ class PainelRapidoActivity : Activity() {
 
     /** Um item da lista de compras. OK risca na hora e tira do mural meio segundo depois (dá para ver o que saiu). */
     private fun linhaCompra(item: String): View = Estilo.texto(this, Estilo.Papel.CORPO, item).apply {
+        tag = "c:$item"
         isFocusable = true
         isClickable = true
         maxLines = 2

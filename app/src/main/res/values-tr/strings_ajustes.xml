@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK değiştirir · bunlar misafir modu açıkken kaybolur</string>
     <string name="cfg2_some_visita">misafirlerden gizli</string>
     <string name="cfg2_fica_visita">kalır</string>
-    <string name="cfg2_casa_det">Home Assistant’ınızın ışıkları, prizleri ve sahneleri</string>
+    <string name="cfg2_casa_det">Google Home veya Home Assistant’tan ışıklar, prizler ve sahneler</string>
     <string name="oc_titulo">Gizli uygulamalar</string>
     <string name="oc_subtitulo">OK bir uygulamayı ana ekranda gösterir veya gizler · gizliler önce gelir</string>
     <string name="oc_nenhum">Gizli uygulama yok · seçmek için OK</string>

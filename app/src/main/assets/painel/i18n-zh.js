@@ -401,6 +401,7 @@ traduzirPainelCom({T:{
 "Foto":"照片",
 "Foto a cada 2 s":"每 2 秒一张",
 "Foto do perfil":"头像",
+"Nome na TV":"电视上的名称",
 "Foto removida: a bolinha volta a mostrar a inicial.":"照片已移除:圆圈重新显示首字母。",
 "Foto trocada. Ela aparece na TV quando a tela inicial for aberta de novo.":"照片已更换。主屏幕再次打开时在电视上显示。",
 "Fotos do protetor":"屏保照片",
@@ -1244,6 +1245,7 @@ traduzirPainelCom({T:{
 "IP do PC (opcional, para o Jogar no PC)":"电脑 IP（可选，用于“在电脑上玩”）",
 "IP do PC":"电脑 IP",
 },P:[
+["^Na TV este perfil aparece como “(.+)”\\.$","在电视上，此个人资料显示为“$1”。"],
 ["^(.+) sai da TV\\.$","$1 已从电视上移除。"],
 ["^Instalado: (.+)\\. Aparece na TV no card Addons\\.$","已安装：$1。它会显示在电视的“插件”卡片中。"],
 ["^Ligado: (.+) recebe os avisos \\(aceito na TV em (.+)\\)\\.$","已开启：$1 接收提醒（$2 在电视上同意）。"],

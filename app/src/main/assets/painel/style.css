@@ -607,6 +607,7 @@ body.ocupado::before { opacity: 1; animation: carregando 1.1s linear infinite; }
   background: var(--superficie2); border: 1px solid var(--borda-forte); display: grid; place-items: center;
   font-size: 22px; font-weight: 600; color: var(--texto); }
 .perfil-linha .nome { flex: 1 1 160px; overflow-wrap: anywhere; color: var(--texto-fraco); font-size: 16px; }
+.perfil-linha input[type=text] { flex: 1 1 140px; max-width: 220px; }
 
 .periodo.ativo { background: var(--foco); color: var(--foco-texto); border-color: transparent; }
 .resumo-rede { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-bottom: 16px; }

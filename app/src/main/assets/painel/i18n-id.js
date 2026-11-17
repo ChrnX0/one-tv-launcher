@@ -401,6 +401,7 @@ traduzirPainelCom({T:{
 "Foto":"Foto",
 "Foto a cada 2 s":"Gambar setiap 2 dtk",
 "Foto do perfil":"Foto profil",
+"Nome na TV":"Nama di TV",
 "Foto removida: a bolinha volta a mostrar a inicial.":"Foto dihapus: lingkaran kembali menampilkan inisial.",
 "Foto trocada. Ela aparece na TV quando a tela inicial for aberta de novo.":"Foto diganti. Muncul di TV saat layar utama dibuka lagi.",
 "Fotos do protetor":"Foto screensaver",
@@ -1244,6 +1245,7 @@ traduzirPainelCom({T:{
 "IP do PC (opcional, para o Jogar no PC)":"IP PC (opsional, untuk Main di PC)",
 "IP do PC":"IP PC",
 },P:[
+["^Na TV este perfil aparece como “(.+)”\\.$","Di TV, profil ini tampil sebagai “$1”."],
 ["^(.+) sai da TV\\.$","$1 dihapus dari TV."],
 ["^Instalado: (.+)\\. Aparece na TV no card Addons\\.$","Terpasang: $1. Muncul di TV pada kartu Add-on."],
 ["^Ligado: (.+) recebe os avisos \\(aceito na TV em (.+)\\)\\.$","Aktif: $1 menerima pemberitahuan (disetujui di TV pada $2)."],

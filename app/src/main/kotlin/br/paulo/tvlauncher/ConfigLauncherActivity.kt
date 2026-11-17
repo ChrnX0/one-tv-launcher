@@ -1655,7 +1655,10 @@ class ConfigLauncherActivity : Activity() {
                         android.content.pm.PackageManager.MATCH_UNINSTALLED_PACKAGES)).toString()
                 } catch (e: Exception) { pacote }
                 lateinit var linhaApp: LinhaCfg
-                linhaApp = linha(rotulo, getString(R.string.cl_visivel), chave = !PrivilegioDO.estaOculto(this, pacote)) {
+                // O detalhe acompanha a chave: dizia "visível na TV" também com o app escondido (Sala, 17/11/2026).
+                fun detalheApp(visivel: Boolean) = getString(if (visivel) R.string.cl_visivel else R.string.cl_escondido)
+                val visivelAgora = !PrivilegioDO.estaOculto(this, pacote)
+                linhaApp = linha(rotulo, detalheApp(visivelAgora), chave = visivelAgora) {
                     // Fora da thread da tela: sem Device Owner o ocultar passa pelo shell e pode demorar (Congelar.kt).
                     val app = applicationContext
                     Fundo.rodar {
@@ -1664,7 +1667,7 @@ class ConfigLauncherActivity : Activity() {
                         val ocultoAgora = PrivilegioDO.estaOculto(app, pacote)
                         runOnUiThread {
                             if (isDestroyed) return@runOnUiThread
-                            if (mudou) linhaApp.ligado(!ocultoAgora) else linhaApp.detalhe(getString(R.string.cfg_nao_mudou_do))
+                            if (mudou) { linhaApp.ligado(!ocultoAgora); linhaApp.detalhe(detalheApp(!ocultoAgora)) } else linhaApp.detalhe(getString(R.string.cfg_nao_mudou_do))
                         }
                     }
                 }

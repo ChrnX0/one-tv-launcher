@@ -142,10 +142,13 @@ object PainelArmazem {
     /** As [n] linhas mais recentes em texto curto, para a tela de Configurações. */
     fun resumoRegistro(ctx: Context, n: Int): List<String> {
         val itens = registro(ctx)
-        val formato = SimpleDateFormat("dd/MM HH:mm", Locale.forLanguageTag("pt-BR"))
+        // Data no jeito do idioma da TV (antes "dd/MM" fixo do Brasil, errado em inglês) e a origem pelo nome: o Claude
+        // aparecia ora como "internet", ora como "mcp" (Sala, 17/11/2026).
+        val formato = SimpleDateFormat(android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), "ddMMjm"), Locale.getDefault())
         return (0 until minOf(n, itens.length())).map {
             val o = itens.getJSONObject(it)
-            "${formato.format(Date(o.optLong("quando")))} ${o.optString("ip")} · ${o.optString("acao")} · ${o.optString("resultado")}"
+            val origem = when (DiarioRegras.origem(o.optString("ip"))) { "claude" -> "Claude"; "tv" -> "TV"; else -> o.optString("ip") }
+            "${formato.format(Date(o.optLong("quando")))} $origem · ${o.optString("acao")} · ${o.optString("resultado")}"
         }
     }
 }

@@ -401,6 +401,7 @@ traduzirPainelCom({T:{
 "Foto":"写真",
 "Foto a cada 2 s":"2秒ごとに1枚",
 "Foto do perfil":"プロフィール写真",
+"Nome na TV":"テレビでの名前",
 "Foto removida: a bolinha volta a mostrar a inicial.":"写真を削除しました:丸には再び頭文字が表示されます。",
 "Foto trocada. Ela aparece na TV quando a tela inicial for aberta de novo.":"写真を変更しました。ホーム画面が再び開くとテレビに表示されます。",
 "Fotos do protetor":"スクリーンセーバーの写真",
@@ -1244,6 +1245,7 @@ traduzirPainelCom({T:{
 "IP do PC (opcional, para o Jogar no PC)":"PCのIP（任意、「PCでプレイ」用）",
 "IP do PC":"PCのIP",
 },P:[
+["^Na TV este perfil aparece como “(.+)”\\.$","テレビではこのプロフィールは「$1」と表示されます。"],
 ["^(.+) sai da TV\\.$","$1 をテレビから削除しました。"],
 ["^Instalado: (.+)\\. Aparece na TV no card Addons\\.$","インストールしました: $1。テレビの「アドオン」カードに表示されます。"],
 ["^Ligado: (.+) recebe os avisos \\(aceito na TV em (.+)\\)\\.$","オン: $1 が通知を受け取ります（$2 にテレビで同意）。"],

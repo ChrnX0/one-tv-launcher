@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK cambia · queste spariscono quando la modalità ospiti è attiva</string>
     <string name="cfg2_some_visita">nascosta agli ospiti</string>
     <string name="cfg2_fica_visita">resta</string>
-    <string name="cfg2_casa_det">Luci, prese e scene del tuo Home Assistant</string>
+    <string name="cfg2_casa_det">Luci, prese e scene di Google Home o Home Assistant</string>
     <string name="oc_titulo">App nascoste</string>
     <string name="oc_subtitulo">OK mostra o nasconde un’app nella schermata Home · le nascoste vengono prima</string>
     <string name="oc_nenhum">Nessuna app nascosta · OK per scegliere</string>

@@ -401,6 +401,7 @@ traduzirPainelCom({T:{
 "Foto":"Фото",
 "Foto a cada 2 s":"Кадр каждые 2 с",
 "Foto do perfil":"Фото профиля",
+"Nome na TV":"Имя на телевизоре",
 "Foto removida: a bolinha volta a mostrar a inicial.":"Фото удалено: в кружке снова первая буква.",
 "Foto trocada. Ela aparece na TV quando a tela inicial for aberta de novo.":"Фото изменено. Оно появится на телевизоре при следующем открытии главного экрана.",
 "Fotos do protetor":"Фото заставки",
@@ -1244,6 +1245,7 @@ traduzirPainelCom({T:{
 "IP do PC (opcional, para o Jogar no PC)":"IP компьютера (необязательно, для «Играть на ПК»)",
 "IP do PC":"IP компьютера",
 },P:[
+["^Na TV este perfil aparece como “(.+)”\\.$","На телевизоре этот профиль отображается как «$1»."],
 ["^(.+) sai da TV\\.$","$1 удалено с телевизора."],
 ["^Instalado: (.+)\\. Aparece na TV no card Addons\\.$","Установлено: $1. Появляется на телевизоре в карточке «Дополнения»."],
 ["^Ligado: (.+) recebe os avisos \\(aceito na TV em (.+)\\)\\.$","Включено: $1 получает уведомления (согласие на телевизоре $2)."],

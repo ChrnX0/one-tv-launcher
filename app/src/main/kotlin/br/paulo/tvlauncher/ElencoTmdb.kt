@@ -66,6 +66,24 @@ object ElencoTmdb {
         }.distinctBy { it.id }.take(MAX_ELENCO)
     }.getOrDefault(emptyList())
 
+    // Nome em outra escrita (Sala, 17/11/2026: o Elenco de Duna mostrava "張震" numa TV em português). O TMDB guarda o
+    // nome original; os outros ("Chang Chen") ficam em also_known_as da pessoa.
+    private val IDIOMAS_OUTRA_ESCRITA = setOf("ja", "ko", "zh", "ru", "ar", "hi", "uk", "el", "he", "th", "bg", "sr")
+    private fun letraLatina(c: Char) = c.isLetter() && Character.UnicodeScript.of(c.code) == Character.UnicodeScript.LATIN
+
+    /** O nome precisa de uma versão em letras latinas? (TV num idioma de escrita latina e nome sem letra latina.) Puro. */
+    fun precisaLatino(nome: String, idioma: String): Boolean =
+        idioma.substringBefore('-').lowercase() !in IDIOMAS_OUTRA_ESCRITA && nome.any { it.isLetter() } && nome.none(::letraLatina)
+
+    fun urlPessoa(chave: String, pessoa: Int): String = InfoExterna.tmdbUrl("/person/$pessoa", chave, linkedMapOf())
+
+    /** O 1º "also_known_as" só com letras latinas, de /person/{id}. null se não houver. Puro. */
+    fun lerNomeLatino(json: String): String? = runCatching {
+        val a = JSONObject(json).optJSONArray("also_known_as") ?: return null
+        (0 until a.length()).map { a.optString(it).trim() }
+            .firstOrNull { n -> n.length in 2..60 && n.any(::letraLatina) && n.filter { it.isLetter() }.all(::letraLatina) }
+    }.getOrNull()
+
     /** Os títulos em que a pessoa atuou: (é série, id TMDB). */
     fun lerCreditos(json: String): Set<Pair<Boolean, Int>> = runCatching {
         val c = JSONObject(json).optJSONArray("cast") ?: return emptySet()

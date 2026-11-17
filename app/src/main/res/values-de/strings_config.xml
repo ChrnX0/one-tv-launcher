@@ -2,7 +2,7 @@
 <!-- Tradução (de) de values/strings_config.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="cl_aba_conta">TV und Filme</string>
-    <string name="cl_aba_conta_det">Das auf diesem Fernseher gespeicherte IPTV-Konto: Status, Ablauf und Verbindungen</string>
+    <string name="cl_aba_conta_det">IPTV-Konto, Film- und Seriendienste, Ton und Untertitel</string>
     <string name="cl_aba_parental">Kindersicherung</string>
     <string name="cl_aba_parental_det">Sender mit der PIN sperren: sie verschwinden aus der Liste und werden nicht abgespielt</string>
     <string name="cl_aba_aparencia">Darstellung</string>
@@ -176,6 +176,7 @@
     <string name="cl_ativos">%1$d aktiv</string>
     <string name="cl_revogados">widerrufen</string>
     <string name="cl_visivel">auf dem Fernseher sichtbar</string>
+    <string name="cl_escondido">auf dem Fernseher ausgeblendet</string>
     <string name="cl_limpeza">Aufräumen vorinstallierter Apps</string>
     <string name="cl_nenhum_liberado">Noch keine Apps freigegeben</string>
     <string name="cl_nenhum_liberado_det">Nur einzeln auf diesem Fernseher getestete Apps erscheinen (siehe Debloat.kt)</string>

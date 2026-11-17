@@ -30,6 +30,7 @@
     <string name="casa_vazio">لا أضواء أو مقابس أو مشاهد في Home Assistant.</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">أضواء وكاميرات Google</string>
+    <string name="casa_google_home_vazio">لا يوجد منزل لحساب Google هذا في Google Home</string>
     <string name="casa_resumo">Home Assistant · %1$d من %2$d تعمل</string>
     <string name="casa_resumo_so_cenas">Home Assistant · %1$d مشاهد</string>
     <string name="casa_secao_cenas">المشاهد والنصوص البرمجية</string>

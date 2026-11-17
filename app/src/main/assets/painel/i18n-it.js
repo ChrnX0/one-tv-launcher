@@ -401,6 +401,7 @@ traduzirPainelCom({T:{
 "Foto":"Foto",
 "Foto a cada 2 s":"Immagine ogni 2 s",
 "Foto do perfil":"Foto del profilo",
+"Nome na TV":"Nome sulla TV",
 "Foto removida: a bolinha volta a mostrar a inicial.":"Foto rimossa: il cerchio mostra di nuovo l'iniziale.",
 "Foto trocada. Ela aparece na TV quando a tela inicial for aberta de novo.":"Foto cambiata. Compare sulla TV quando la schermata Home si riapre.",
 "Fotos do protetor":"Foto del salvaschermo",
@@ -1244,6 +1245,7 @@ traduzirPainelCom({T:{
 "IP do PC (opcional, para o Jogar no PC)":"IP del PC (facoltativo, per Gioca sul PC)",
 "IP do PC":"IP del PC",
 },P:[
+["^Na TV este perfil aparece como “(.+)”\\.$","Sulla TV questo profilo appare come “$1”."],
 ["^(.+) sai da TV\\.$","$1 è stato rimosso dalla TV."],
 ["^Instalado: (.+)\\. Aparece na TV no card Addons\\.$","Installato: $1. Compare sulla TV nella scheda Add-on."],
 ["^Ligado: (.+) recebe os avisos \\(aceito na TV em (.+)\\)\\.$","Attivo: $1 riceve gli avvisi (accettato sulla TV il $2)."],

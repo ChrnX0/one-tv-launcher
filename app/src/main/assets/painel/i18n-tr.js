@@ -401,6 +401,7 @@ traduzirPainelCom({T:{
 "Foto":"Fotoğraf",
 "Foto a cada 2 s":"Her 2 sn'de bir kare",
 "Foto do perfil":"Profil fotoğrafı",
+"Nome na TV":"TV'deki ad",
 "Foto removida: a bolinha volta a mostrar a inicial.":"Fotoğraf kaldırıldı: daire yine baş harfi gösterir.",
 "Foto trocada. Ela aparece na TV quando a tela inicial for aberta de novo.":"Fotoğraf değişti. Ana ekran yeniden açıldığında TV'de görünür.",
 "Fotos do protetor":"Ekran koruyucu fotoğrafları",
@@ -1244,6 +1245,7 @@ traduzirPainelCom({T:{
 "IP do PC (opcional, para o Jogar no PC)":"PC'nin IP'si (isteğe bağlı, PC'de Oyna için)",
 "IP do PC":"PC'nin IP'si",
 },P:[
+["^Na TV este perfil aparece como “(.+)”\\.$","TV'de bu profil “$1” olarak görünür."],
 ["^(.+) sai da TV\\.$","$1 TV'den kaldırıldı."],
 ["^Instalado: (.+)\\. Aparece na TV no card Addons\\.$","Kuruldu: $1. TV'de Eklentiler kartında görünür."],
 ["^Ligado: (.+) recebe os avisos \\(aceito na TV em (.+)\\)\\.$","Açık: $1 uyarıları alıyor (TV'de $2 tarihinde kabul edildi)."],

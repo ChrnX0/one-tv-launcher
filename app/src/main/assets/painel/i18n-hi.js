@@ -401,6 +401,7 @@ traduzirPainelCom({T:{
 "Foto":"फ़ोटो",
 "Foto a cada 2 s":"हर 2 सेकंड में चित्र",
 "Foto do perfil":"प्रोफ़ाइल फ़ोटो",
+"Nome na TV":"टीवी पर नाम",
 "Foto removida: a bolinha volta a mostrar a inicial.":"फ़ोटो हटाई गई: गोले में फिर से पहला अक्षर दिखेगा।",
 "Foto trocada. Ela aparece na TV quando a tela inicial for aberta de novo.":"फ़ोटो बदली गई। होम स्क्रीन फिर खुलने पर TV पर दिखेगी।",
 "Fotos do protetor":"स्क्रीनसेवर की फ़ोटो",
@@ -1244,6 +1245,7 @@ traduzirPainelCom({T:{
 "IP do PC (opcional, para o Jogar no PC)":"PC का IP (वैकल्पिक, PC पर खेलें के लिए)",
 "IP do PC":"PC का IP",
 },P:[
+["^Na TV este perfil aparece como “(.+)”\\.$","टीवी पर यह प्रोफ़ाइल “$1” के रूप में दिखती है।"],
 ["^(.+) sai da TV\\.$","$1 TV से हटा दिया गया।"],
 ["^Instalado: (.+)\\. Aparece na TV no card Addons\\.$","इंस्टॉल हुआ: $1। यह TV पर ऐड-ऑन कार्ड में दिखता है।"],
 ["^Ligado: (.+) recebe os avisos \\(aceito na TV em (.+)\\)\\.$","चालू: $1 को सूचनाएँ मिलती हैं (TV पर $2 को सहमति दी गई)।"],

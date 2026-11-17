@@ -30,6 +30,7 @@
     <string name="casa_vazio">Home Assistant に照明、プラグ、シーンがありません。</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Google の照明とカメラ</string>
+    <string name="casa_google_home_vazio">この Google アカウントには Google Home の家がありません</string>
     <string name="casa_resumo">Home Assistant · %2$d 台中 %1$d 台がオン</string>
     <string name="casa_resumo_so_cenas">Home Assistant · シーン %1$d 個</string>
     <string name="casa_secao_cenas">シーンとスクリプト</string>

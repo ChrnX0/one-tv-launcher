@@ -30,6 +30,7 @@
     <string name="casa_vazio">Home Assistant에 조명, 플러그, 장면이 없습니다.</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Google 조명 및 카메라</string>
+    <string name="casa_google_home_vazio">이 Google 계정에는 Google Home에 집이 없습니다</string>
     <string name="casa_resumo">Home Assistant · %2$d개 중 %1$d개 켜짐</string>
     <string name="casa_resumo_so_cenas">Home Assistant · 장면 %1$d개</string>
     <string name="casa_secao_cenas">장면 및 스크립트</string>

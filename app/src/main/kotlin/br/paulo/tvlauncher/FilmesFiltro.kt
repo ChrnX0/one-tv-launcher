@@ -124,6 +124,15 @@ object FilmesFiltro {
             .sortedWith(compareBy<Filme>({ it.ano ?: Int.MAX_VALUE }, { Vod.chaveNome(it.nome) }))
     }
 
+    private val reQualidade = Regex("""[\[(]?\b(4k|uhd|2160p?|1080p?|720p?|fhd|hd|hdr10\+?|hdr|dolby vision|dv|remux)\b[\])]?""", RegexOption.IGNORE_CASE)
+
+    /**
+     * Quantos FILMES há em [lista], contando dublado, legendado e 4K do mesmo título e ano como um só (o número do
+     * botão "Coleção deste filme"; Sala, 17/11/2026: Duna dava 6 com 2 filmes e 3 versões de cada). Puro.
+     */
+    fun quantosFilmes(lista: List<Filme>): Int =
+        lista.mapTo(HashSet()) { InfoExterna.chaveNomeAno(it.nome.replace(reQualidade, " "), it.ano) }.size
+
     // ---------------------------------------------------------------- 3. sorteio
 
     /**

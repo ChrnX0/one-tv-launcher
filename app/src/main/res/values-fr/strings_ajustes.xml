@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK bascule · celles-ci disparaissent en mode invité</string>
     <string name="cfg2_some_visita">masquée pour les invités</string>
     <string name="cfg2_fica_visita">reste</string>
-    <string name="cfg2_casa_det">Lampes, prises et scènes de votre Home Assistant</string>
+    <string name="cfg2_casa_det">Lampes, prises et scènes de Google Home ou Home Assistant</string>
     <string name="oc_titulo">Apps masquées</string>
     <string name="oc_subtitulo">OK affiche ou masque une app sur l’accueil · les masquées d’abord</string>
     <string name="oc_nenhum">Aucune app masquée · OK pour choisir</string>

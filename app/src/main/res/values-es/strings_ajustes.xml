@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK cambia · estas desaparecen mientras el modo invitado está activo</string>
     <string name="cfg2_some_visita">oculta para invitados</string>
     <string name="cfg2_fica_visita">se queda</string>
-    <string name="cfg2_casa_det">Luces, enchufes y escenas de tu Home Assistant</string>
+    <string name="cfg2_casa_det">Luces, enchufes y escenas de Google Home o Home Assistant</string>
     <string name="oc_titulo">Apps ocultas</string>
     <string name="oc_subtitulo">OK muestra u oculta una app en el inicio · las ocultas van primero</string>
     <string name="oc_nenhum">Ninguna app oculta · OK para elegir</string>

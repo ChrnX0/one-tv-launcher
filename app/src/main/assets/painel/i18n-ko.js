@@ -401,6 +401,7 @@ traduzirPainelCom({T:{
 "Foto":"사진",
 "Foto a cada 2 s":"2초마다 한 장",
 "Foto do perfil":"프로필 사진",
+"Nome na TV":"TV에 표시되는 이름",
 "Foto removida: a bolinha volta a mostrar a inicial.":"사진을 삭제했습니다: 원에 다시 이니셜이 표시됩니다.",
 "Foto trocada. Ela aparece na TV quando a tela inicial for aberta de novo.":"사진을 변경했습니다. 홈 화면이 다시 열리면 TV에 표시됩니다.",
 "Fotos do protetor":"화면 보호기 사진",
@@ -1244,6 +1245,7 @@ traduzirPainelCom({T:{
 "IP do PC (opcional, para o Jogar no PC)":"PC IP(선택, PC에서 플레이용)",
 "IP do PC":"PC IP",
 },P:[
+["^Na TV este perfil aparece como “(.+)”\\.$","TV에서 이 프로필은 “$1”(으)로 표시됩니다."],
 ["^(.+) sai da TV\\.$","$1을(를) TV에서 제거했습니다."],
 ["^Instalado: (.+)\\. Aparece na TV no card Addons\\.$","설치됨: $1. TV의 애드온 카드에 표시됩니다."],
 ["^Ligado: (.+) recebe os avisos \\(aceito na TV em (.+)\\)\\.$","켜짐: $1이(가) 알림을 받습니다($2에 TV에서 동의)."],

@@ -59,7 +59,7 @@ object PerfilCriancaTv {
             Perfil.definirAtiva(act, para)
             if (t.restaurar) sair(act)
             if (t.ligar) entrar(act)
-            val nome = PerfilCrianca.nomeCurto(para)
+            val nome = Perfil.nome(act, para)
             AvisoTv.rapido(act, act.getString(R.string.perfil_aviso_titulo, nome),
                 act.getString(if (para.let(PerfilDados::sanitizar) in criancas) R.string.perfil_aviso_crianca else R.string.perfil_aviso_texto), 5)
             aoFim(true)
@@ -78,7 +78,7 @@ object PerfilCriancaTv {
         Perfil.definirAtiva(ctx, para)
         if (t.restaurar) sair(ctx)
         if (t.ligar) entrar(ctx)
-        AvisoTv.rapido(ctx, ctx.getString(R.string.perfil_aviso_titulo, PerfilCrianca.nomeCurto(para)),
+        AvisoTv.rapido(ctx, ctx.getString(R.string.perfil_aviso_titulo, Perfil.nome(ctx, para)),
             ctx.getString(if (PerfilDados.sanitizar(para) in criancas) R.string.perfil_aviso_crianca else R.string.perfil_aviso_texto), 5)
     }
 

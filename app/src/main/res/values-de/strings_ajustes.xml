@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK wechselt · diese verschwinden, solange der Gastmodus an ist</string>
     <string name="cfg2_some_visita">für Gäste ausgeblendet</string>
     <string name="cfg2_fica_visita">bleibt</string>
-    <string name="cfg2_casa_det">Lampen, Steckdosen und Szenen deines Home Assistant</string>
+    <string name="cfg2_casa_det">Lampen, Steckdosen und Szenen aus Google Home oder Home Assistant</string>
     <string name="oc_titulo">Ausgeblendete Apps</string>
     <string name="oc_subtitulo">OK zeigt oder blendet eine App auf dem Startbildschirm aus · ausgeblendete stehen oben</string>
     <string name="oc_nenhum">Keine ausgeblendeten Apps · OK zum Auswählen</string>
