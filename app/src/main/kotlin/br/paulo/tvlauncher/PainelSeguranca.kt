@@ -381,7 +381,8 @@ object ChecagensPainel {
 
     /** [canonico] (caminho real) está dentro de [raiz] (ou é ela)? Comparação por pedaço: "/a/bc" não está em "/a/b". */
     fun dentroDe(canonico: String, raiz: String): Boolean =
-        canonico == raiz || canonico.startsWith(raiz.trimEnd('/') + "/")
+        // separador do sistema: "/" no Android; a barra invertida só existe na bancada de testes rodando no Windows
+        canonico == raiz || canonico.startsWith(raiz.trimEnd(java.io.File.separatorChar) + java.io.File.separatorChar)
 
     /**
      * Texto que o painel manda digitar na TV (`input text '...'` no shell). Só letras sem acento, números, espaço e

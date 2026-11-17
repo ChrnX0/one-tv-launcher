@@ -329,9 +329,12 @@ object PainelWeb {
         return Resposta(200, "text/html; charset=utf-8", html.toByteArray())
     }
 
-    /** O XML do aparelho UPnP. A página aponta para o mesmo host que o Windows usou para buscar o XML (o IP da TV). */
+    /**
+     * O XML do aparelho UPnP. O duplo clique abre o painel, no mesmo host que o Windows usou para buscar o XML (o IP da
+     * TV). Pelo http de propósito: o https da TV só abre sem aviso de segurança em quem já instalou o certificado dela.
+     */
     private fun descricaoUpnp(host: String?): Resposta {
-        val pagina = "http://${host ?: (ipsDaRede().minOrNull() + ":" + Config.PAINEL_PORTA)}/unidade"
+        val pagina = "http://${host ?: (ipsDaRede().minOrNull() + ":" + Config.PAINEL_PORTA)}/"
         val xml = Ssdp.descricao(Ssdp.nomeVisivel(PainelVizinhos.nomeDaTv(app)), Ssdp.uuid(PainelVizinhos.idDaTv(app)), pagina)
         return Resposta(200, "text/xml; charset=utf-8", xml.toByteArray())
     }
@@ -340,7 +343,7 @@ object PainelWeb {
     private fun descricaoMtp(host: String?): Resposta {
         val pagina = "http://${host ?: (ipsDaRede().minOrNull() + ":" + Config.PAINEL_PORTA)}/"
         val id = PainelVizinhos.idDaTv(app)
-        val xml = Ssdp.descricaoMtp(PainelVizinhos.nomeDaTv(app).take(60), Ssdp.uuidMtp(id), pagina, id)
+        val xml = Ssdp.descricaoMtp(Ssdp.nomeNaUnidade(PainelVizinhos.nomeDaTv(app)), Ssdp.uuidMtp(id), pagina, id)
         return Resposta(200, "text/xml; charset=utf-8", xml.toByteArray())
     }
 
@@ -362,7 +365,7 @@ object PainelWeb {
     private fun conectorWindows(): Resposta {
         val pem = PainelTls.pemDaCa() ?: return erro(503, "o certificado ainda não foi gerado; tente em 1 minuto")
         val host = hostConector()
-        val texto = ConectorWindows.script(host, PainelTls.PORTA, pem) ?: return erro(503, "não consegui montar o conector")
+        val texto = ConectorWindows.script(host, PainelTls.PORTA, pem, Ssdp.nomeNaUnidade(PainelVizinhos.nomeDaTv(app))) ?: return erro(503, "não consegui montar o conector")
         return Resposta(200, "application/octet-stream", texto.toByteArray(Charsets.US_ASCII),
             mapOf("Content-Disposition" to "attachment; filename=\"${ConectorWindows.ARQUIVO}\"", "Cache-Control" to "no-store"))
     }
@@ -658,6 +661,9 @@ object PainelWeb {
             Ssdp.CAMINHO_DESCRICAO -> if (PainelDav.ligado(app)) return descricaoUpnp(host)
             "/unidade" -> if (PainelDav.ligado(app)) return paginaUnidade()
             Ssdp.CAMINHO_MTP -> if (PainelDav.ligado(app)) return descricaoMtp(host)
+            // o ícone da marca que as descrições acima apontam (só os nomes da lista: nada de caminho vindo de fora)
+            in Ssdp.ARQUIVOS_ICONE.keys.map { Ssdp.CAMINHO_ICONES + it } -> if (PainelDav.ligado(app)) return Resposta(200, "image/png",
+                app.assets.open("upnp/" + req.caminho.removePrefix(Ssdp.CAMINHO_ICONES)).use { it.readBytes() }, mapOf("Cache-Control" to "max-age=86400"))
             Ssdp.CAMINHO_MTP_SERVICO -> if (PainelDav.ligado(app)) return Resposta(200, "text/xml; charset=utf-8", Ssdp.SERVICO_MTP.toByteArray())
             // O .cmd roda como administrador e instala um certificado no Windows: só sai pela porta https (15/11/2026).
             // Pelo http, alguém no meio do caminho trocaria o certificado de dentro dele; lá, manda para o https.

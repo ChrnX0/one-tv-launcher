@@ -24,6 +24,17 @@ class SsdpTest {
         assertTrue(sai.all { "NTS: ssdp:byebye" in it && "LOCATION" !in it })
     }
 
+    /** Byte a byte o que foi mandado à mão (nc) na Sala em 16/11/2026 e fez o Windows 11 soltar e reconectar. */
+    @Test fun avisoDoAparelhoIgualAoMedidoNoWindows() {
+        val u = "9b2a99ef-43cc-35a3-8470-cb83ff697715"
+        val l = "http://192.0.2.10:8080/upnp/onetv-mtp.xml"
+        assertEquals("NOTIFY * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\nNT: uuid:$u\r\nNTS: ssdp:byebye\r\nUSN: uuid:$u\r\n\r\n",
+            Ssdp.avisoDoAparelho(u, l, false))
+        assertEquals("NOTIFY * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\nCACHE-CONTROL: max-age=1800\r\nLOCATION: $l\r\n" +
+            "SERVER: Android UPnP/1.0 OneTV/1.0\r\nNT: uuid:$u\r\nNTS: ssdp:alive\r\nUSN: uuid:$u\r\n\r\n",
+            Ssdp.avisoDoAparelho(u, l, true))
+    }
+
     private fun busca(st: String, man: String = "\"ssdp:discover\"") =
         "M-SEARCH * HTTP/1.1\r\nHOST: 239.255.255.250:1900\r\nMAN: $man\r\nMX: 1\r\nST: $st\r\n\r\n"
 
@@ -41,9 +52,9 @@ class SsdpTest {
     }
 
     @Test fun descricaoEscapaONome() {
-        val x = Ssdp.descricao(Ssdp.nomeVisivel("Sala & <Cozinha>"), uuid, "http://192.0.2.10:8080/unidade")
-        assertTrue("<friendlyName>Sala &amp; &lt;Cozinha&gt; · arquivos</friendlyName>" in x)
-        assertTrue("<presentationURL>http://192.0.2.10:8080/unidade</presentationURL>" in x)
+        val x = Ssdp.descricao(Ssdp.nomeVisivel("Sala & <Cozinha>"), uuid, "http://192.0.2.10:8080/")
+        assertTrue("<friendlyName>Sofaly · Sala &amp; &lt;Cozinha&gt; · painel</friendlyName>" in x)
+        assertTrue("<presentationURL>http://192.0.2.10:8080/</presentationURL>" in x)
         assertTrue("<UDN>uuid:$uuid</UDN>" in x)
         assertTrue("<deviceType>${Ssdp.TIPO}</deviceType>" in x)
     }
@@ -64,5 +75,11 @@ class SsdpTest {
         assertEquals("urn:microsoft-com:device:mtp:1",
             doc.getElementsByTagNameNS("http://schemas.microsoft.com/windows/pnpx/2005/11", "X_compatibleId").item(0).textContent)
         javax.xml.parsers.DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(Ssdp.SERVICO_MTP.byteInputStream())
+    }
+
+    @Test fun nomeEmEsteComputadorLevaAMarcaNaFrente() {
+        assertEquals("Sofaly · Sala de estar", Ssdp.nomeNaUnidade(" Sala de estar "))
+        assertEquals("Sofaly da sala", Ssdp.nomeNaUnidade("Sofaly da sala"))   // sem marca repetida
+        assertTrue(Ssdp.nomeNaUnidade("x".repeat(200)).length <= 60)
     }
 }
