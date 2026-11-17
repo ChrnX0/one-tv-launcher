@@ -241,6 +241,11 @@
             android:name=".LicencasActivity"
             android:exported="false"
             android:label="@string/lbl_licencas" />
+        <!-- Elevação 2.1 (17/11/2026): "Como esta TV está indo", o placar dos 7 pilares. -->
+        <activity
+            android:name=".PlacarActivity"
+            android:exported="false"
+            android:label="@string/elv_placar_titulo" />
         <activity
             android:name=".DiagnosticoActivity"
             android:exported="false"

@@ -42,6 +42,7 @@ class BoasVindasActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MedidasTv.instalacaoComecou(this)   // elevação 20.4: o cronômetro da instalação começa aqui (só na 1ª vez)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
         marcarVista(this)   // já na abertura: se o app cair aqui, não reabre em laço
         montar()

@@ -981,6 +981,7 @@ class MainActivity : Activity() {
 
     /** pacote -> (APK|activity, Item). Vive enquanto o processo da HOME viver (sobrevive à troca de tema). */
     private companion object {
+        @Volatile var homeFriaMedida = false   // placar (elevação 2.1): a HOME "fria" é medida uma vez por processo
         val cacheApps = HashMap<String, Pair<String, Item>>()
         // Topo C3 (12/11/2026): cápsulas de 52 dp em 24 (até 76). Ordem pedida pelo dono (12/11 tarde): nome do card em foco
         // (36 sp) e a descrição na mesma linha em 222 (até ~266), "ASSISTIR" em 290 e os cards (do tamanho dos apps) em 316
@@ -1166,6 +1167,13 @@ class MainActivity : Activity() {
                 val desenhou = android.os.SystemClock.elapsedRealtime() - t1
                 android.util.Log.i("TvLauncher.Apps", "preencherApps: carregar=${t1 - t0} ms (fora da tela), desenhar=$desenhou ms")
                 LevezaTv.anotarHome(t1 - t0, desenhou)   // números de leveza (degrau 2): `EXTRAS --es o leveza`
+                // Placar (elevação 2.1, pilar 1): volta à HOME até os apps desenhados; e, na 1ª vez do processo, desde
+                // o processo nascer (a TV ligou ou o launcher reiniciou).
+                MedidasTv.anotar(this, Placar.Chave.HOME, t1 - t0 + desenhou)
+                if (!homeFriaMedida) {
+                    homeFriaMedida = true
+                    MedidasTv.anotar(this, Placar.Chave.HOME_FRIA, android.os.SystemClock.uptimeMillis() - android.os.Process.getStartUptimeMillis())
+                }
             }
         }
     }

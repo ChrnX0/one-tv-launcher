@@ -54,6 +54,8 @@ import java.util.Locale
 @androidx.annotation.OptIn(markerClass = [UnstableApi::class])
 class PlayerActivity : Activity() {
     companion object {
+        /** Elevação 20.4: o cronômetro da instalação só é conferido uma vez por processo (o arquivo decide o resto). */
+        @Volatile private var instalacaoConferida = false
         const val EXTRA_CANAL = "canal"   // id do canal para abrir (vazio = o último assistido)
         const val EXTRA_CANAL_NOME = "canal_nome"   // nome normalizado (JuntoRegras.normalizarCanal), vindo de outra TV da casa
         private const val ESCONDER_INFO_MS = 5_000L
@@ -102,6 +104,9 @@ class PlayerActivity : Activity() {
     private lateinit var video: SurfaceView
     private lateinit var info: LinearLayout
     private lateinit var infoNumero: TextView
+    private lateinit var infoLogo: android.widget.ImageView   // elevação 5.1: o logo aparece no instante da tecla
+    /** Elevação 5.1 (placar, pilar 2): tecla até o primeiro quadro do canal. */
+    private val cronCanal = Cronometros.TrocaCanal()
     private lateinit var infoTitulo: TextView
     private lateinit var infoLinha: TextView
     private lateinit var infoHora: TextView
@@ -207,6 +212,7 @@ class PlayerActivity : Activity() {
     override fun onStop() {
         super.onStop()
         visivel = false
+        cronCanal.cancelar()
         // O PIN vale só enquanto o player está na frente: saiu (HOME, outro app, tela apagou), tranca de novo.
         if (filtro.mostrarOcultas) filtro = filtro.copy(mostrarOcultas = false)
         // Saiu da tela (HOME, outro app): solta o vídeo na hora (e a pausa curta junto: ela não sobrevive a sair).
@@ -309,6 +315,7 @@ class PlayerActivity : Activity() {
         Gravacoes.atual?.let { g -> if (g.canalId != c.id && visivel) { conflitoGravacao(c, g); return } }
         if (guardarAnterior && atual != null && atual?.id != c.id) anterior = atual
         atual = c
+        cronCanal.tecla(c.id, android.os.SystemClock.elapsedRealtime())
         contarCanal(c)
         junto?.let { j -> j.tocandoTitulo(JuntoRegras.chave(JuntoRegras.Tipo.CANAL, null, nome = c.nome)); j.mudou(true, 0) }
         arquivo = null; atualizarSelo()   // trocar de canal (ou voltar ao player) é sempre ao vivo
@@ -324,13 +331,13 @@ class PlayerActivity : Activity() {
 
     private fun tocar(c: Canal, url: String = c.url) {
         pausa.descartar(); tela.removeCallbacks(pausaEstourou)   // mídia nova: o que estava pausado na memória vai embora
-        if (!visivel) return
+        if (!visivel) { cronCanal.cancelar(); return }
         // Trava final do controle parental: canal bloqueado não toca sem o PIN, venha de onde vier o pedido.
-        if (ControleParental.bloqueado(c, parental) && !filtro.mostrarOcultas) { mostrarAviso(getString(R.string.player_bloqueado)); return }
+        if (ControleParental.bloqueado(c, parental) && !filtro.mostrarOcultas) { cronCanal.cancelar(); mostrarAviso(getString(R.string.player_bloqueado)); return }
         if (!ControleParental.bloqueado(c, parental)) lembrarRecente(c)   // bloqueado não vai para os recentes
         // Gravando: o canal que grava é lido da gravação (sem 2ª conexão); qualquer outra coisa esperaria uma conexão livre.
         val g = Gravacoes.atual
-        if (g != null && !(url == c.url && g.canalId == c.id)) { player?.stop(); mostrarAviso(getString(R.string.grv_ocupado, g.canalNome)); return }
+        if (g != null && !(url == c.url && g.canalId == c.id)) { cronCanal.cancelar(); player?.stop(); mostrarAviso(getString(R.string.grv_ocupado, g.canalNome)); return }
         deGravacao = g != null
         val p = player ?: ExoPlayer.Builder(this, EfeitosSom.fabrica(this)).setLoadControl(pausa.novaCarga()).build().also { novo ->
             novo.setVideoSurfaceView(video)
@@ -372,6 +379,14 @@ class PlayerActivity : Activity() {
             }
         }
 
+        override fun onRenderedFirstFrame() {
+            // Placar (elevação 5.1 e 20.4): só o ao vivo conta (o passado do TV de volta é outra conversa com o servidor).
+            if (arquivo != null) { cronCanal.cancelar(); return }
+            val ms = cronCanal.primeiroQuadro(atual?.id, android.os.SystemClock.elapsedRealtime()) ?: return
+            MedidasTv.anotar(this@PlayerActivity, Placar.Chave.CANAL, ms)
+            if (!instalacaoConferida) { instalacaoConferida = true; MedidasTv.primeiroCanalTocou(this@PlayerActivity) }
+        }
+
         override fun onVideoSizeChanged(v: androidx.media3.common.VideoSize) {
             tamanhoVideo = v
             PlayerImagem.aplicar(video, modoImagem, v.width, v.height, v.pixelWidthHeightRatio)
@@ -394,6 +409,7 @@ class PlayerActivity : Activity() {
                     if (prog != null) tocarArquivo(prog, p.currentPosition) else tocar(c)
                 }, 2_000L shl (tentativas - 1))   // 2, 4, 8 s
             } else {
+                cronCanal.cancelar()
                 mostrarAviso(getString(R.string.player_sem_sinal, c.numero))
             }
         }
@@ -539,6 +555,8 @@ class PlayerActivity : Activity() {
             maxLines = 1; minWidth = dp(48); setPadding(dp(8), 0, dp(8), 0)
         }
         linha.addView(infoNumero, LinearLayout.LayoutParams(-2, dp(44)).apply { marginEnd = dp(14) })
+        infoLogo = android.widget.ImageView(this).apply { scaleType = android.widget.ImageView.ScaleType.FIT_CENTER; visibility = View.GONE }
+        linha.addView(infoLogo, LinearLayout.LayoutParams(dp(64), dp(44)).apply { marginEnd = dp(14) })
         val textos = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         infoTitulo = Estilo.texto(this, Estilo.Papel.TITULO).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
         infoLinha = TextView(this).apply { textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(suave); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
@@ -637,6 +655,9 @@ class PlayerActivity : Activity() {
         val prog = c.guiaId.takeIf { it.isNotEmpty() }?.let { guia.proximos(it, agora, 2) }.orEmpty()
         val atualProg = prog.firstOrNull()?.takeIf { agora >= it.inicio }
         infoNumero.text = c.numero.toString()
+        // Logo do canal já na tecla (elevação 5.1): do cache em memória na hora; baixado, entra quando chegar.
+        if (infoLogo.tag != c.logo) PlayerLogos.carregar(this, c.logo, infoLogo)
+        infoLogo.visibility = if (c.logo.isEmpty()) View.GONE else View.VISIBLE
         infoTitulo.text = atualProg?.titulo ?: c.nome
         // Sem programa agora o título já é o nome do canal: não repetir embaixo ("TV Globo HD / TV Globo HD").
         val partes = if (atualProg != null) mutableListOf(c.nome) else mutableListOf()

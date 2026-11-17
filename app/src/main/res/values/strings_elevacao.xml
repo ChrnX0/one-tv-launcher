@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação do launcher, onda 0 (17/11/2026): placar dos 7 pilares (2.1) e antes e depois da limpeza (14.3). -->
+<resources>
+    <string name="elv_placar_titulo">How this TV is doing</string>
+    <string name="elv_placar_det">Seven promises, each with a number measured on this TV</string>
+    <string name="elv_placar_sub">Measured on this TV. Nothing here leaves the house.</string>
+    <string name="elv_pilar_liga">Turns on and is ready</string>
+    <string name="elv_pilar_ao_vivo">Live TV that does not fail</string>
+    <string name="elv_pilar_player">The best living-room player</string>
+    <string name="elv_pilar_casa">The TV that looks after the home</string>
+    <string name="elv_pilar_controle">Control from anywhere</string>
+    <string name="elv_pilar_todos">Anyone can use it</string>
+    <string name="elv_pilar_instala">Sets itself up and fixes itself</string>
+    <string name="elv_prom_liga">Home screen ready in under 1 second; no crashes in 30 days</string>
+    <string name="elv_prom_ao_vivo">Changing channel takes under 1.5 seconds, from the key to the picture</string>
+    <string name="elv_prom_player">Plays any file; right subtitles without fiddling</string>
+    <string name="elv_prom_casa">The alarm rings on time, every time</string>
+    <string name="elv_prom_controle">Panel, phone and AI do everything the remote does</string>
+    <string name="elv_prom_todos">Older people, children, guests, low vision or hearing; 14 languages</string>
+    <string name="elv_prom_instala">From the first launch to the first channel in 5 minutes</string>
+    <string name="elv_nao_medido">Not measured yet</string>
+    <string name="elv_alvo">target %1$s</string>
+    <string name="elv_n_de_n">on time %1$d of %2$d</string>
+    <string name="elv_dentro">on target</string>
+    <string name="elv_fora">off target</string>
+    <plurals name="elv_quedas">
+        <item quantity="one">%1$d crash or freeze in %2$d days</item>
+        <item quantity="other">%1$d crashes or freezes in %2$d days</item>
+    </plurals>
+    <string name="elv_lp_titulo">Measure before and after</string>
+    <string name="elv_lp_det_antes">Measure free memory and how fast your 3 most used apps open, before cleaning. They open for a few seconds.</string>
+    <string name="elv_lp_det_depois">Before is saved. Hide the apps above, then press OK to measure after.</string>
+    <string name="elv_lp_medindo">Measuring… apps may open for a few seconds</string>
+    <string name="elv_lp_mais_livre">%1$d MB more free</string>
+    <string name="elv_lp_menos_livre">%1$d MB less free</string>
+    <string name="elv_lp_mais_rapido">%1$s opens %2$s faster</string>
+    <string name="elv_lp_mais_lento">%1$s opens %2$s slower</string>
+    <string name="elv_lp_igual">No difference big enough to measure</string>
+    <string name="elv_agora">just now</string>
+    <string name="elv_sem_quedas">No crashes or freezes in %1$d days</string>
+</resources>

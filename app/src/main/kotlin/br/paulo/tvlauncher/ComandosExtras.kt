@@ -126,6 +126,14 @@ object ComandosExtras {
         "modo_seguro_sair" -> { ModoSeguro.sair(ctx); "modo de segurança desligado" }
         "leveza" -> LevezaTv.json(ctx).toString()   // degrau 2: memória e tempo da HOME (volte à HOME umas vezes antes)
         "vitais" -> VitaisTv.textoAdb(ctx)   // degrau 2: quedas e travadas do launcher por dia (VitaisLocais.kt)
+        // Elevação, onda 0: placar dos 7 pilares (JSON + séries cruas); a tela "Como esta TV está indo"; antes e depois da limpeza.
+        "placar" -> MedidasTv.textoAdb(ctx)
+        "placar_tela" -> abrir(ctx, PlacarActivity::class.java)
+        "limpeza_medir" -> { Fundo.rodar("limpeza-medir") { LimpezaMedida.medirAgora(ctx) }; "medindo (abre os 3 apps mais usados)" }
+        // Bancada da madrugada (elevação 2.2, scripts/bancada.py): só roda em aparelho marcado. NUNCA marcar a Sala.
+        "bancada" -> if (MedidasTv.bancada(ctx)) "sim" else "nao"
+        "bancada_marcar" -> { MedidasTv.marcarBancada(ctx, true); "marcado como bancada" }
+        "bancada_desmarcar" -> { MedidasTv.marcarBancada(ctx, false); "desmarcado" }
         "modo_seguro" -> if (ModoSeguro.ativo(ctx)) "ligado" else "desligado"
         // Modo hóspede (degrau 2). O adb já é autenticado: desligar aqui não pede o PIN.
         // Degrau 4: receitas prontas (Receitas.kt). receitas_aplicar --es receita VO|CRIANCAS|GAMER|ALUGUEL (adb já é do dono: sem PIN).

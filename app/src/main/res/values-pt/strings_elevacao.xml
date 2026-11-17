@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="elv_placar_titulo">Como esta TV está indo</string>
+    <string name="elv_placar_det">Sete promessas, cada uma com um número medido nesta TV</string>
+    <string name="elv_placar_sub">Medido nesta TV. Nada daqui sai de casa.</string>
+    <string name="elv_pilar_liga">Liga e está pronta</string>
+    <string name="elv_pilar_ao_vivo">TV ao vivo que não falha</string>
+    <string name="elv_pilar_player">O melhor player de sala</string>
+    <string name="elv_pilar_casa">A TV que cuida da casa</string>
+    <string name="elv_pilar_controle">Controle de qualquer lugar</string>
+    <string name="elv_pilar_todos">Qualquer pessoa usa</string>
+    <string name="elv_pilar_instala">Instala e se conserta sozinha</string>
+    <string name="elv_prom_liga">Tela inicial pronta em menos de 1 segundo; nenhuma queda em 30 dias</string>
+    <string name="elv_prom_ao_vivo">Trocar de canal leva menos de 1,5 segundo, da tecla até a imagem</string>
+    <string name="elv_prom_player">Toca qualquer arquivo; legenda certa sem mexer</string>
+    <string name="elv_prom_casa">O despertador toca na hora, todas as vezes</string>
+    <string name="elv_prom_controle">Painel, celular e IA fazem tudo o que o controle faz</string>
+    <string name="elv_prom_todos">Idoso, criança, visita, quem enxerga ou ouve mal; 14 línguas</string>
+    <string name="elv_prom_instala">Da primeira abertura ao primeiro canal em 5 minutos</string>
+    <string name="elv_nao_medido">Ainda não medido</string>
+    <string name="elv_alvo">alvo %1$s</string>
+    <string name="elv_n_de_n">na hora em %1$d de %2$d</string>
+    <string name="elv_dentro">no alvo</string>
+    <string name="elv_fora">fora do alvo</string>
+    <plurals name="elv_quedas">
+        <item quantity="one">%1$d queda ou travada em %2$d dias</item>
+        <item quantity="other">%1$d quedas ou travadas em %2$d dias</item>
+    </plurals>
+    <string name="elv_lp_titulo">Medir antes e depois</string>
+    <string name="elv_lp_det_antes">Mede a memória livre e quanto os 3 apps mais usados demoram para abrir, antes de limpar. Eles abrem por alguns segundos.</string>
+    <string name="elv_lp_det_depois">O antes está guardado. Oculte os apps acima e aperte OK para medir o depois.</string>
+    <string name="elv_lp_medindo">Medindo… os apps podem abrir por alguns segundos</string>
+    <string name="elv_lp_mais_livre">%1$d MB livres a mais</string>
+    <string name="elv_lp_menos_livre">%1$d MB livres a menos</string>
+    <string name="elv_lp_mais_rapido">%1$s abre %2$s mais rápido</string>
+    <string name="elv_lp_mais_lento">%1$s abre %2$s mais devagar</string>
+    <string name="elv_lp_igual">Sem diferença que dê para medir</string>
+    <string name="elv_agora">agora mesmo</string>
+    <string name="elv_sem_quedas">Nenhuma queda ou travada em %1$d dias</string>
+</resources>

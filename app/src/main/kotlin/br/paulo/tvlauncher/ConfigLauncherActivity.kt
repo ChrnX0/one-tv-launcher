@@ -1532,6 +1532,10 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linha(getString(R.string.rec_titulo), getString(R.string.rec_subtitulo), seta = true) {
             startActivity(Intent(this, ReceitasActivity::class.java))
         }, lp())
+        // Placar de promessas (elevação 2.1): os 7 pilares com número medido nesta TV, alvo e data.
+        c.addView(linha(getString(R.string.elv_placar_titulo), getString(R.string.elv_placar_det), seta = true) {
+            startActivity(Intent(this, PlacarActivity::class.java))
+        }, lp())
         // Diagnóstico de 1 botão (04/11/2026): o 1º da aba, para ser o OK mais rápido quando "o app parou".
         c.addView(linha(getString(R.string.cfg_diag), getString(R.string.cfg_diag_det), seta = true) {
             startActivity(Intent(this, DiagnosticoActivity::class.java))
@@ -1693,6 +1697,28 @@ class ConfigLauncherActivity : Activity() {
                 }
             }
             c.addView(linhaApp, lp())
+        }
+        // Antes e depois (elevação 14.3): memória livre e tempo de abrir os 3 apps mais usados, medidos a pedido.
+        if (limpaveis.isNotEmpty()) {
+            val antes = LimpezaMedida.antes(this)
+            val det = when {
+                antes == null -> getString(R.string.elv_lp_det_antes)
+                else -> LimpezaMedida.ultimaFrase(this) ?: getString(R.string.elv_lp_det_depois)
+            }
+            lateinit var linhaMedir: LinhaCfg
+            linhaMedir = linha(getString(R.string.elv_lp_titulo), det, seta = true) {
+                val app = applicationContext
+                val depois = LimpezaMedida.antes(app) != null
+                linhaMedir.detalhe(getString(R.string.elv_lp_medindo))
+                Fundo.rodar("limpeza-medir") {
+                    val frase = if (depois) LimpezaMedida.medirDepois(app) else { LimpezaMedida.medirAntes(app); null }
+                    runOnUiThread {
+                        if (isDestroyed) return@runOnUiThread
+                        linhaMedir.detalhe(frase ?: getString(R.string.elv_lp_det_depois))
+                    }
+                }
+            }
+            c.addView(linhaMedir, lp())
         }
         if (Debloat.ocultosPorAqui(this).isNotEmpty()) {
             lateinit var linhaDesfazer: LinhaCfg
