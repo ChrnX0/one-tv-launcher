@@ -2538,7 +2538,13 @@ class MainActivity : Activity() {
             // mas invisível): o grupo dela fica, e só os vizinhos (busca, clima, avisos) recolhem.
             if (v is ViewGroup && capsulaTocando.parent === v) {
                 v.animate().cancel(); v.alpha = 1f; v.translationY = 0f
-                for (j in 0 until v.childCount) v.getChildAt(j).let { mexer(it, fica || it === capsulaTocando) }
+                for (j in 0 until v.childCount) v.getChildAt(j).let {
+                    // Recolhida, a pílula vai para o começo da linha (onde ficavam busca e clima, agora apagados): no lugar
+                    // de sempre ela batia na temperatura que entra ao lado da hora (visto na TV, v462204).
+                    if (it === capsulaTocando) it.animate().alpha(1f).translationY(0f)
+                        .translationX(if (recolher) -it.left.toFloat() else 0f).setDuration(d).start()
+                    else mexer(it, fica)
+                }
             } else mexer(v, fica)
         }
         tempoCruz?.animate()?.alpha(if (recolher) 1f else 0f)?.setDuration(d)?.start()
