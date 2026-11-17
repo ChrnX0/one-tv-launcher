@@ -586,7 +586,14 @@ class MainActivity : Activity() {
                 barrasTocando.tocando = !barrasTocando.tocando   // resposta na hora; o aviso da sessão confirma
                 filaApps.execute { runCatching { TocandoAgoraTv.controlar(this@MainActivity, "alternar") } }
             }
-            setOnLongClickListener { pacoteTocando?.let { abrir(it) }; true }
+            setOnLongClickListener {
+                // A nossa rádio (Ouvir, 17/11/2026): abrir a tela dela ou parar. Outro app: abre o app, como antes.
+                if (tocandoNosso) Estilo.lista(this@MainActivity, txtTocandoTitulo.text, listOf(getString(R.string.ouv_abrir), getString(R.string.ra_parar))) { i ->
+                    if (i == 0) runCatching { startActivity(Intent(this@MainActivity, RadioActivity::class.java)) }
+                    else { OuvirEstado.comandar(this@MainActivity, OuvirEstado.PARAR); mostrarTocando(null, null) }
+                } else pacoteTocando?.let { abrir(it) }
+                true
+            }
         }
         capsulaTocando = capsula().apply {
             visibility = View.GONE
@@ -1346,6 +1353,7 @@ class MainActivity : Activity() {
     private lateinit var txtTocandoTitulo: TextView
     private lateinit var txtTocandoSub: TextView
     private var pacoteTocando: String? = null
+    private var tocandoNosso = false   // a pílula é a nossa rádio (OuvirServico), não outro app
     private var capaTocandoDe: String? = null   // pacote + título da capa na tela (não redesenha a mesma)
     private val vigiaTocando by lazy { TocandoAgoraTv.Vigia(this) { ui.removeCallbacks(tarefaTocando); ui.post(tarefaTocando) } }
 
@@ -1364,10 +1372,11 @@ class MainActivity : Activity() {
             if (pilulaTocando.hasFocus()) linhaApps.requestFocus()   // o foco não pode ficar numa pílula invisível
             capsulaTocando.visibility = View.GONE
             barrasTocando.tocando = false
-            pacoteTocando = null; capaTocandoDe = null; capaTocando.setImageDrawable(null)
+            pacoteTocando = null; capaTocandoDe = null; capaTocando.setImageDrawable(null); tocandoNosso = false
             return
         }
         pacoteTocando = p.pacote
+        tocandoNosso = p.nosso
         txtTocandoTitulo.text = p.titulo
         txtTocandoSub.text = p.subtitulo
         barrasTocando.tocando = p.tocando

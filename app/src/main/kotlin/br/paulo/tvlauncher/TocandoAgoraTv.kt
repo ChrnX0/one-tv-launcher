@@ -88,6 +88,10 @@ class OuvinteNotificacoes : NotificationListenerService() {
  * Tocando agora (10/11/2026, 2ª leva das ideias; li no Home Deck): título, artista e app do que está tocando (Spotify,
  * YouTube Music, o nosso player...) e controles tocar/pausar/próxima. Painel, tela Extras e adb. Desde a ideia 75
  * (14/11/2026), também uma pílula na barra do topo da HOME ([paraHome]).
+ *
+ * O NOSSO som (rádio do [OuvirServico], 17/11/2026) vem primeiro e por outro caminho ([OuvirEstado]): aparece na HOME,
+ * no protetor e no painel mesmo com a chave do Tocando agora desligada e sem o ouvinte de notificações. A sessão de
+ * mídia que o serviço também publica fica de fora da lista das outras (senão a rádio apareceria duas vezes).
  */
 object TocandoAgoraTv {
     private fun componente(ctx: Context) = ComponentName(ctx, OuvinteNotificacoes::class.java)
@@ -101,7 +105,15 @@ object TocandoAgoraTv {
 
     private fun controladores(ctx: Context): List<MediaController> = try {
         ctx.getSystemService(MediaSessionManager::class.java)?.getActiveSessions(componente(ctx)).orEmpty()
+            .filter { it.packageName != ctx.packageName }   // a nossa sessão: ver [nosso]
     } catch (e: SecurityException) { emptyList() }
+
+    /** O nosso som (rádio), ou null. Leve: um arquivo pequeno e a lista de processos do app. */
+    private fun nosso(ctx: Context): OuvirEstado.Estado? = runCatching { OuvirEstado.ler(ctx) }.getOrNull()
+    private fun rotuloNosso(ctx: Context, e: OuvirEstado.Estado) = ctx.getString(R.string.ra_coluna)
+    private fun jsonNosso(ctx: Context, e: OuvirEstado.Estado): JSONObject = JSONObject().put("app", rotuloNosso(ctx, e))
+        .put("pacote", ctx.packageName).put("titulo", e.titulo).put("artista", e.detalhe).put("tocando", e.tocando)
+        .put("nosso", true).put("tipo", e.tipo)
 
     private fun atual(ctx: Context): MediaController? {
         val cs = controladores(ctx)
@@ -113,6 +125,7 @@ object TocandoAgoraTv {
     }
 
     fun json(ctx: Context): JSONObject {
+        nosso(ctx)?.let { return jsonNosso(ctx, it).put("ligado", true) }
         if (!Extras.ligado(ctx, Extras.Chave.TOCANDO_AGORA)) return JSONObject().put("ligado", false)
         val c = atual(ctx) ?: return JSONObject().put("ligado", true).put("nada", true).put("acesso", OuvinteNotificacoes.conectado)
         val m = c.metadata
@@ -126,6 +139,7 @@ object TocandoAgoraTv {
 
     /** O que está tocando, para o painel rápido (vale mesmo com a chave do Tocando agora desligada): null = nada. */
     fun paraPainel(ctx: Context): JSONObject? {
+        nosso(ctx)?.let { return jsonNosso(ctx, it) }
         val c = atual(ctx) ?: return null
         val m = c.metadata
         val titulo = m?.getString(MediaMetadata.METADATA_KEY_TITLE).orEmpty()
@@ -138,13 +152,19 @@ object TocandoAgoraTv {
     }
 
     /** Ideia 75: o que a pílula da HOME mostra. [capa] = a arte que o app mandou (null: a HOME usa o ícone do app). */
-    class Pilula(val pacote: String, val titulo: String, val subtitulo: String, val tocando: Boolean, val capa: android.graphics.Bitmap?)
+    class Pilula(val pacote: String, val titulo: String, val subtitulo: String, val tocando: Boolean, val capa: android.graphics.Bitmap?,
+                 val nosso: Boolean = false)
 
     /**
      * Para a pílula "Tocando agora" da HOME. Null = não mostrar: chave desligada, nada tocando, sem título ou pausado há
      * mais de [TocandoAgora.PAUSADA_MAX_MS]. Fora da thread da tela (são chamadas ao sistema).
      */
     fun paraHome(ctx: Context): Pilula? {
+        // A rádio: nome da rádio no título (é o que se reconhece de longe), a música (ou "Rádio") ao lado.
+        nosso(ctx)?.let { e ->
+            return Pilula(ctx.packageName, TocandoAgora.tituloPilula(e.titulo), TocandoAgora.subtitulo(e.detalhe, rotuloNosso(ctx, e)),
+                e.tocando, null, nosso = true)
+        }
         if (!Extras.ligado(ctx, Extras.Chave.TOCANDO_AGORA)) return null
         val c = atual(ctx) ?: return null
         val m = c.metadata
@@ -185,6 +205,15 @@ object TocandoAgoraTv {
             override fun onSessionDestroyed() = pedir()
         }
         private val sessoes = MediaSessionManager.OnActiveSessionsChangedListener { l -> trocar(l.orEmpty()); pedir() }
+        /** O nosso som avisa por broadcast ([OuvirEstado.ACAO_MUDOU]); vale com ou sem o Tocando agora ligado. */
+        private val nossoMudou = object : android.content.BroadcastReceiver() {
+            override fun onReceive(c: Context, i: android.content.Intent) {
+                pedir()
+                // Pausou: confere de novo depois do prazo (a pílula some sozinha, como a dos outros apps).
+                ui.removeCallbacks(prazo); ui.postDelayed(prazo, TocandoAgora.PAUSADA_MAX_MS + 1000)
+            }
+        }
+        private var nossoLigado = false
 
         private fun trocar(l: List<MediaController>) {
             vigiados.forEach { runCatching { it.unregisterCallback(cb) } }
@@ -193,6 +222,12 @@ object TocandoAgoraTv {
         }
 
         fun ligar() {
+            if (!nossoLigado) runCatching {
+                val f = android.content.IntentFilter(OuvirEstado.ACAO_MUDOU)
+                if (android.os.Build.VERSION.SDK_INT >= 33) ctx.registerReceiver(nossoMudou, f, Context.RECEIVER_NOT_EXPORTED)
+                else ctx.registerReceiver(nossoMudou, f)
+                nossoLigado = true
+            }
             if (!Extras.ligado(ctx, Extras.Chave.TOCANDO_AGORA)) { aoMudar(); return }
             try {
                 val m = ctx.getSystemService(MediaSessionManager::class.java) ?: return
@@ -204,6 +239,7 @@ object TocandoAgoraTv {
 
         fun desligar() {
             ui.removeCallbacks(avisar); ui.removeCallbacks(prazo)
+            if (nossoLigado) { runCatching { ctx.unregisterReceiver(nossoMudou) }; nossoLigado = false }
             runCatching { ctx.getSystemService(MediaSessionManager::class.java)?.removeOnActiveSessionsChangedListener(sessoes) }
             trocar(emptyList())
         }
@@ -219,6 +255,8 @@ object TocandoAgoraTv {
 
     /** "alternar" (tocar/pausar), "proxima", "anterior". */
     fun controlar(ctx: Context, acao: String): Boolean {
+        // A rádio não tem próxima/anterior: só tocar/pausar.
+        if (nosso(ctx) != null) return acao == "alternar" && OuvirEstado.comandar(ctx, OuvirEstado.ALTERNAR)
         val c = atual(ctx) ?: return false
         val t = c.transportControls
         when (acao) {

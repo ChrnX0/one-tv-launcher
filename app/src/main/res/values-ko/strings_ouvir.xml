@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ouvir parte 1 (17/11/2026): rádio que continua fora da tela (OuvirServico, RadioActivity, pílula da HOME). -->
+<resources>
+    <string name="ra_parar">정지</string>
+    <string name="ra_parar_det">정지할 때까지 홈 화면과 화면 보호기에서 라디오가 계속 재생됩니다</string>
+    <string name="ra_parar_det_antigo">이 화면을 나가면 함께 정지됩니다</string>
+    <string name="ra_ajustes">설정</string>
+    <string name="ra_ao_sair">이 화면을 나갈 때</string>
+    <string name="ra_ao_sair_det">계속 재생되면 리모컨의 ⏯ 버튼으로 어느 화면에서나 일시정지할 수 있습니다</string>
+    <string name="ra_ao_sair_continua">계속 재생</string>
+    <string name="ra_ao_sair_para">정지</string>
+    <string name="ouv_canal">라디오 재생 중</string>
+    <string name="ouv_abrir">라디오 화면 열기</string>
+</resources>

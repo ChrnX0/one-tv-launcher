@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ouvir parte 1 (17/11/2026): rádio que continua fora da tela (OuvirServico, RadioActivity, pílula da HOME). -->
+<resources>
+    <string name="ra_parar">रोकें</string>
+    <string name="ra_parar_det">जब तक आप न रोकें, रेडियो होम स्क्रीन और स्क्रीनसेवर पर चलता रहता है</string>
+    <string name="ra_parar_det_antigo">इस स्क्रीन से बाहर जाने पर भी रुक जाता है</string>
+    <string name="ra_ajustes">सेटिंग</string>
+    <string name="ra_ao_sair">इस स्क्रीन से बाहर जाने पर</string>
+    <string name="ra_ao_sair_det">चलता रहे तो रिमोट का ⏯ किसी भी स्क्रीन से इसे रोक देता है</string>
+    <string name="ra_ao_sair_continua">चलता रहता है</string>
+    <string name="ra_ao_sair_para">रुक जाता है</string>
+    <string name="ouv_canal">रेडियो चल रहा है</string>
+    <string name="ouv_abrir">रेडियो स्क्रीन खोलें</string>
+</resources>

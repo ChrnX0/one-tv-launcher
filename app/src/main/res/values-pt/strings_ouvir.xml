@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ouvir parte 1 (17/11/2026): rádio que continua fora da tela (OuvirServico, RadioActivity, pílula da HOME). -->
+<resources>
+    <string name="ra_parar">Parar</string>
+    <string name="ra_parar_det">A rádio continua tocando na tela inicial e no protetor até você parar</string>
+    <string name="ra_parar_det_antigo">Sair desta tela também para</string>
+    <string name="ra_ajustes">Ajustes</string>
+    <string name="ra_ao_sair">Ao sair desta tela</string>
+    <string name="ra_ao_sair_det">Se continuar tocando, o ⏯ do controle pausa de qualquer tela</string>
+    <string name="ra_ao_sair_continua">continua tocando</string>
+    <string name="ra_ao_sair_para">para</string>
+    <string name="ouv_canal">Rádio tocando</string>
+    <string name="ouv_abrir">Abrir a tela da rádio</string>
+</resources>

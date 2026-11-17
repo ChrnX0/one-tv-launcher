@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ouvir parte 1 (17/11/2026): rádio que continua fora da tela (OuvirServico, RadioActivity, pílula da HOME). -->
+<resources>
+    <string name="ra_parar">停止</string>
+    <string name="ra_parar_det">在你停止之前，电台会在主屏幕和屏保中继续播放</string>
+    <string name="ra_parar_det_antigo">离开此屏幕也会停止</string>
+    <string name="ra_ajustes">设置</string>
+    <string name="ra_ao_sair">离开此屏幕时</string>
+    <string name="ra_ao_sair_det">继续播放时，在任何屏幕按遥控器的 ⏯ 都能暂停</string>
+    <string name="ra_ao_sair_continua">继续播放</string>
+    <string name="ra_ao_sair_para">停止</string>
+    <string name="ouv_canal">电台播放中</string>
+    <string name="ouv_abrir">打开电台屏幕</string>
+</resources>

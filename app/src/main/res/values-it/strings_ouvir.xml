@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ouvir parte 1 (17/11/2026): rádio que continua fora da tela (OuvirServico, RadioActivity, pílula da HOME). -->
+<resources>
+    <string name="ra_parar">Ferma</string>
+    <string name="ra_parar_det">La radio continua nella schermata iniziale e nel salvaschermo finché non la fermi</string>
+    <string name="ra_parar_det_antigo">Uscire da questa schermata la ferma anche</string>
+    <string name="ra_ajustes">Impostazioni</string>
+    <string name="ra_ao_sair">Uscendo da questa schermata</string>
+    <string name="ra_ao_sair_det">Se continua, ⏯ sul telecomando la mette in pausa da qualsiasi schermata</string>
+    <string name="ra_ao_sair_continua">continua</string>
+    <string name="ra_ao_sair_para">si ferma</string>
+    <string name="ouv_canal">Radio in riproduzione</string>
+    <string name="ouv_abrir">Apri la schermata della radio</string>
+</resources>

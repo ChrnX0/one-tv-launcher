@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ouvir parte 1 (17/11/2026): rádio que continua fora da tela (OuvirServico, RadioActivity, pílula da HOME). -->
+<resources>
+    <string name="ra_parar">Durdur</string>
+    <string name="ra_parar_det">Siz durdurana kadar radyo ana ekranda ve ekran koruyucuda çalmaya devam eder</string>
+    <string name="ra_parar_det_antigo">Bu ekrandan çıkmak da durdurur</string>
+    <string name="ra_ajustes">Ayarlar</string>
+    <string name="ra_ao_sair">Bu ekrandan çıkınca</string>
+    <string name="ra_ao_sair_det">Çalmaya devam ederse kumandadaki ⏯ her ekrandan duraklatır</string>
+    <string name="ra_ao_sair_continua">çalmaya devam eder</string>
+    <string name="ra_ao_sair_para">durur</string>
+    <string name="ouv_canal">Radyo çalıyor</string>
+    <string name="ouv_abrir">Radyo ekranını aç</string>
+</resources>

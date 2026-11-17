@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ouvir parte 1 (17/11/2026): rádio que continua fora da tela (OuvirServico, RadioActivity, pílula da HOME). -->
+<resources>
+    <string name="ra_parar">Arrêter</string>
+    <string name="ra_parar_det">La radio continue sur l\'écran d\'accueil et l\'économiseur d\'écran jusqu\'à ce que vous l\'arrêtiez</string>
+    <string name="ra_parar_det_antigo">Quitter cet écran l\'arrête aussi</string>
+    <string name="ra_ajustes">Réglages</string>
+    <string name="ra_ao_sair">En quittant cet écran</string>
+    <string name="ra_ao_sair_det">Si elle continue, ⏯ sur la télécommande la met en pause depuis n\'importe quel écran</string>
+    <string name="ra_ao_sair_continua">continue</string>
+    <string name="ra_ao_sair_para">s\'arrête</string>
+    <string name="ouv_canal">Radio en cours</string>
+    <string name="ouv_abrir">Ouvrir l\'écran de la radio</string>
+</resources>

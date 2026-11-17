@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ouvir parte 1 (17/11/2026): rádio que continua fora da tela (OuvirServico, RadioActivity, pílula da HOME). -->
+<resources>
+    <string name="ra_parar">Hentikan</string>
+    <string name="ra_parar_det">Radio tetap diputar di layar utama dan screensaver sampai Anda menghentikannya</string>
+    <string name="ra_parar_det_antigo">Keluar dari layar ini juga menghentikannya</string>
+    <string name="ra_ajustes">Setelan</string>
+    <string name="ra_ao_sair">Saat keluar dari layar ini</string>
+    <string name="ra_ao_sair_det">Jika tetap diputar, ⏯ di remote menjedanya dari layar mana pun</string>
+    <string name="ra_ao_sair_continua">tetap diputar</string>
+    <string name="ra_ao_sair_para">berhenti</string>
+    <string name="ouv_canal">Radio diputar</string>
+    <string name="ouv_abrir">Buka layar radio</string>
+</resources>

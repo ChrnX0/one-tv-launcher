@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ouvir parte 1 (17/11/2026): rádio que continua fora da tela (OuvirServico, RadioActivity, pílula da HOME). -->
+<resources>
+    <string name="ra_parar">Zatrzymaj</string>
+    <string name="ra_parar_det">Radio gra dalej na ekranie głównym i w wygaszaczu, dopóki go nie zatrzymasz</string>
+    <string name="ra_parar_det_antigo">Wyjście z tego ekranu też je zatrzymuje</string>
+    <string name="ra_ajustes">Ustawienia</string>
+    <string name="ra_ao_sair">Po wyjściu z tego ekranu</string>
+    <string name="ra_ao_sair_det">Jeśli gra dalej, ⏯ na pilocie wstrzymuje je z każdego ekranu</string>
+    <string name="ra_ao_sair_continua">gra dalej</string>
+    <string name="ra_ao_sair_para">zatrzymuje się</string>
+    <string name="ouv_canal">Gra radio</string>
+    <string name="ouv_abrir">Otwórz ekran radia</string>
+</resources>

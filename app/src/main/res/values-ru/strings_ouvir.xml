@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ouvir parte 1 (17/11/2026): rádio que continua fora da tela (OuvirServico, RadioActivity, pílula da HOME). -->
+<resources>
+    <string name="ra_parar">Стоп</string>
+    <string name="ra_parar_det">Радио продолжает играть на главном экране и в заставке, пока вы его не остановите</string>
+    <string name="ra_parar_det_antigo">Выход с этого экрана тоже его останавливает</string>
+    <string name="ra_ajustes">Настройки</string>
+    <string name="ra_ao_sair">При выходе с этого экрана</string>
+    <string name="ra_ao_sair_det">Если радио играет, ⏯ на пульте ставит его на паузу с любого экрана</string>
+    <string name="ra_ao_sair_continua">продолжает играть</string>
+    <string name="ra_ao_sair_para">останавливается</string>
+    <string name="ouv_canal">Играет радио</string>
+    <string name="ouv_abrir">Открыть экран радио</string>
+</resources>

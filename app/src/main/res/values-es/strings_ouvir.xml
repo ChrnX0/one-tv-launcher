@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ouvir parte 1 (17/11/2026): rádio que continua fora da tela (OuvirServico, RadioActivity, pílula da HOME). -->
+<resources>
+    <string name="ra_parar">Detener</string>
+    <string name="ra_parar_det">La radio sigue sonando en la pantalla de inicio y en el protector hasta que la detengas</string>
+    <string name="ra_parar_det_antigo">Salir de esta pantalla también la detiene</string>
+    <string name="ra_ajustes">Ajustes</string>
+    <string name="ra_ao_sair">Al salir de esta pantalla</string>
+    <string name="ra_ao_sair_det">Si sigue sonando, ⏯ en el control la pausa desde cualquier pantalla</string>
+    <string name="ra_ao_sair_continua">sigue sonando</string>
+    <string name="ra_ao_sair_para">se detiene</string>
+    <string name="ouv_canal">Radio sonando</string>
+    <string name="ouv_abrir">Abrir la pantalla de la radio</string>
+</resources>

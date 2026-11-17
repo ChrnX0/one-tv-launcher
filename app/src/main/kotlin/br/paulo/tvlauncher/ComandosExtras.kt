@@ -26,7 +26,7 @@ import java.io.File
  * 2ª leva (10/11/2026):
  *  - caches                limpa o cache de todos os apps
  *  - consumo [--ei dias N]  internet por app desde a meia-noite (ou N dias)
- *  - tocando · tocando_acao --es acao alternar|proxima|anterior
+ *  - tocando · tocando_acao --es acao alternar|proxima|anterior · ouvir_parar (a nossa rádio, Ouvir)
  *  - chave --es nome <CHAVE> --ez ligado true|false   (pelo adb não pede PIN: o adb já é o dono)
  *  - dormir_apps --es apps "pacote1,pacote2"
  *  - recado_link           cria (ou troca) o link do recado; devolve o token (só aparece agora)
@@ -95,6 +95,8 @@ object ComandosExtras {
         "consumo" -> ConsumoRedeTv.texto(ctx, i.getIntExtra("dias", 1))
         "tocando" -> TocandoAgoraTv.texto(ctx)
         "tocando_acao" -> if (TocandoAgoraTv.controlar(ctx, i.getStringExtra("acao") ?: "")) "ok" else "nada tocando"
+        // Ouvir (17/11/2026): o estado do nosso som aparece em "tocando"; aqui, parar de vez (alternar = tocando_acao).
+        "ouvir_parar" -> if (OuvirEstado.ler(ctx) != null && OuvirEstado.comandar(ctx, OuvirEstado.PARAR)) "ok" else "nada tocando"
         "chave" -> Extras.Chave.values().firstOrNull { it.name == i.getStringExtra("nome") }?.let { c ->
             Extras.definir(ctx, c, i.getBooleanExtra("ligado", false))
             when (c) {

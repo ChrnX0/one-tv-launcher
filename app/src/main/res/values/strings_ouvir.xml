@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ouvir parte 1 (17/11/2026): rádio que continua fora da tela (OuvirServico, RadioActivity, pílula da HOME). -->
+<resources>
+    <string name="ra_parar">Stop</string>
+    <string name="ra_parar_det">The radio keeps playing on the home screen and in the screensaver until you stop it</string>
+    <string name="ra_parar_det_antigo">Leaving this screen also stops it</string>
+    <string name="ra_ajustes">Settings</string>
+    <string name="ra_ao_sair">When you leave this screen</string>
+    <string name="ra_ao_sair_det">If it keeps playing, ⏯ on the remote pauses it from any screen</string>
+    <string name="ra_ao_sair_continua">keeps playing</string>
+    <string name="ra_ao_sair_para">stops</string>
+    <string name="ouv_canal">Radio playing</string>
+    <string name="ouv_abrir">Open the radio screen</string>
+</resources>

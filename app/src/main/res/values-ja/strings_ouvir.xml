@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ouvir parte 1 (17/11/2026): rádio que continua fora da tela (OuvirServico, RadioActivity, pílula da HOME). -->
+<resources>
+    <string name="ra_parar">停止</string>
+    <string name="ra_parar_det">停止するまで、ホーム画面とスクリーンセーバーでラジオが流れ続けます</string>
+    <string name="ra_parar_det_antigo">この画面を離れると停止します</string>
+    <string name="ra_ajustes">設定</string>
+    <string name="ra_ao_sair">この画面を離れたとき</string>
+    <string name="ra_ao_sair_det">流れ続ける場合、リモコンの ⏯ でどの画面からでも一時停止できます</string>
+    <string name="ra_ao_sair_continua">流れ続ける</string>
+    <string name="ra_ao_sair_para">停止する</string>
+    <string name="ouv_canal">ラジオ再生中</string>
+    <string name="ouv_abrir">ラジオ画面を開く</string>
+</resources>
