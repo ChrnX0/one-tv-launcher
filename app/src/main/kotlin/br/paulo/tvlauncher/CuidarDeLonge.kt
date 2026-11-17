@@ -244,8 +244,9 @@ object CuidarDeLonge {
     fun minutoDoDia(ms: Long, fuso: TimeZone): Int = Instant.ofEpochMilli(ms).atZone(fuso.toZoneId()).let { it.hour * 60 + it.minute }
     private fun data(dia: Int): LocalDate = LocalDate.of(dia / 10000, dia / 100 % 100, dia % 100)
     /** O instante de [minuto] no [dia] (AAAAMMDD), no fuso. */
+    // Hora de RELÓGIO (atTime + atZone): "meia-noite + N minutos" errava 1 h no dia da troca do horário de verão.
     fun instante(dia: Int, minuto: Int, fuso: TimeZone): Long =
-        data(dia).atStartOfDay(fuso.toZoneId()).plusMinutes(minuto.toLong()).toInstant().toEpochMilli()
+        data(dia).atTime(minuto / 60, minuto % 60).atZone(fuso.toZoneId()).toInstant().toEpochMilli()
     private fun diaDaSemana(dia: Int): Int = data(dia).dayOfWeek.value % 7   // domingo = 0, como em ProximoAlarme
 
     /** As ocorrências de [l] em [de, ate] (de hoje e de ontem, que é o que importa aqui), da mais velha para a mais nova. */

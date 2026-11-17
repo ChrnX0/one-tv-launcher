@@ -26,6 +26,14 @@ class CuidarDeLongeTest {
 
     // ---------------------------------------------------------------- consentimento
 
+    @Test fun horaDoLembreteNoDiaDoHorarioDeVerao() {
+        // Nova York, 08/03/2026: o relógio pula de 02:00 para 03:00. O lembrete das 09:00 continua às 09:00 do relógio.
+        val ny = TimeZone.getTimeZone("America/New_York")
+        val ms = CuidarDeLonge.instante(20260308, 9 * 60, ny)
+        assertEquals(LocalDateTime.of(2026, 3, 8, 9, 0), java.time.Instant.ofEpochMilli(ms).atZone(ny.toZoneId()).toLocalDateTime())
+        assertEquals(9 * 60, CuidarDeLonge.minutoDoDia(ms, ny))
+    }
+
     @Test fun deFabricaNadaSai() {
         val c = Config()
         assertFalse(CuidarDeLonge.consentido(c))

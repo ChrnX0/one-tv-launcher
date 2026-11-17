@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.drawable.ColorDrawable
 import android.media.AudioManager
 import android.media.ToneGenerator
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -55,6 +56,18 @@ class CuidarTelaActivity : Activity() {
             MODO_ESTOU_BEM -> estouBem()
             else -> finish()
         }
+    }
+
+    /**
+     * singleTop: com a tela já aberta, um 2º lembrete, o "Estou bem?" ou o pedido de ajuda chegavam aqui e eram
+     * descartados (e o lembrete já estava anotado como mostrado: a família recebia "não confirmado"). Agora a tela se
+     * refaz com o pedido novo, salvo um pedido de ajuda em andamento, que nunca é trocado.
+     */
+    override fun onNewIntent(novo: Intent) {
+        super.onNewIntent(novo)
+        if (modo == MODO_AJUDA && !mandou) return   // ajuda em andamento: fica (outra ajuda é a mesma)
+        setIntent(novo)
+        recreate()
     }
 
     override fun onDestroy() {
