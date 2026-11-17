@@ -133,6 +133,9 @@ object ComandosExtras {
         "limpeza_medir" -> { Fundo.rodar("limpeza-medir") { LimpezaMedida.medirAgora(ctx) }; "medindo (abre os 3 apps mais usados)" }
         // Bancada da madrugada (elevação 2.2, scripts/bancada.py): só roda em aparelho marcado. NUNCA marcar a Sala.
         "bancada" -> if (MedidasTv.bancada(ctx)) "sim" else "nao"
+        // Elevação 6.1: matriz "toca tudo" (scripts/amostras.py). Só na bancada; base = a pasta servida pelo PC.
+        "matriz" -> MatrizAmostrasTv.iniciar(ctx, i.getStringExtra("base"))
+        "matriz_resultado" -> MatrizAmostrasTv.resultado(ctx)
         "bancada_marcar" -> { MedidasTv.marcarBancada(ctx, true); "marcado como bancada" }
         "bancada_desmarcar" -> { MedidasTv.marcarBancada(ctx, false); "desmarcado" }
         "modo_seguro" -> if (ModoSeguro.ativo(ctx)) "ligado" else "desligado"
