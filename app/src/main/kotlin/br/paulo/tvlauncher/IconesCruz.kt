@@ -21,12 +21,14 @@ import android.graphics.drawable.Drawable
 class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJETO) : Drawable() {
 
     enum class Tipo { CONTINUAR, ASSISTIR, OUVIR, JOGAR, APLICATIVOS, TV, SERIES, FILMES, REDE, ADDONS, RADIO, PODCASTS, JOGOS, SOFA, TODOS_APPS, PLUGIN }
-    enum class Estilo { OBJETO, SIMBOLO }
+    /** [DUOTOM] (17/11/2026, 3º estilo embutido): o traço do Símbolo em branco quente sobre um halo suave na cor do grupo. */
+    enum class Estilo { OBJETO, SIMBOLO, DUOTOM }
 
     private val cheio = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL }
     private val traco = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE; strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND }
     private val p = Path()
     private val r = RectF()
+    private var corTraco = 0   // cor do símbolo nesta passada (o Duotom desenha duas: o halo na cor do grupo e o traço claro)
 
     override fun draw(c: Canvas) {
         val b = bounds
@@ -43,6 +45,18 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             val esc = minOf(b.width(), b.height()) / 24f
             c.translate((b.width() - 24f * esc) / 2f, (b.height() - 24f * esc) / 2f)
             c.scale(esc, esc)
+            if (estilo == Estilo.DUOTOM) {
+                // Halo: o mesmo símbolo deslocado 1,3 em 8 direções, numa camada com 60% de opacidade (as passadas não
+                // somam entre si). É desenhado uma vez por ícone: a cruz anda movendo as views, sem redesenhar o ícone.
+                corTraco = corDoGrupo()
+                val n = c.saveLayerAlpha(-3f, -3f, 27f, 27f, 150)
+                for (i in 0 until 8) {
+                    val a = i * Math.PI / 4
+                    c.save(); c.translate((1.3 * Math.cos(a)).toFloat(), (1.3 * Math.sin(a)).toFloat()); simbolo(c); c.restore()
+                }
+                c.restoreToCount(n)
+                corTraco = COR_CLARA
+            } else corTraco = corDoGrupo()
             simbolo(c)
         }
         c.restore()
@@ -212,15 +226,15 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
     }
 
     private fun simbolo(c: Canvas) {
-        traco.shader = null; traco.color = corDoGrupo(); traco.strokeWidth = 1.5f; traco.pathEffect = null
-        cheio.shader = null; cheio.color = corDoGrupo(); cheio.alpha = 255
+        traco.shader = null; traco.color = corTraco; traco.strokeWidth = 1.5f; traco.pathEffect = null
+        cheio.shader = null; cheio.color = corTraco; cheio.alpha = 255
         when (tipo) {
-            Tipo.ASSISTIR, Tipo.TV -> IconeApp(IconeApp.Tipo.TV, corDoGrupo()).also { it.setBounds(0, 0, 24, 24) }.draw(c)
-            Tipo.SERIES -> IconeApp(IconeApp.Tipo.SERIES, corDoGrupo()).also { it.setBounds(0, 0, 24, 24) }.draw(c)
-            Tipo.FILMES -> IconeApp(IconeApp.Tipo.FILMES, corDoGrupo()).also { it.setBounds(0, 0, 24, 24) }.draw(c)
-            Tipo.REDE -> IconeApp(IconeApp.Tipo.REDE, corDoGrupo()).also { it.setBounds(0, 0, 24, 24) }.draw(c)
-            Tipo.JOGAR, Tipo.JOGOS -> IconeApp(IconeApp.Tipo.JOGOS, corDoGrupo()).also { it.setBounds(0, 0, 24, 24) }.draw(c)
-            Tipo.PODCASTS -> IconeApp(IconeApp.Tipo.MICROFONE, corDoGrupo()).also { it.setBounds(0, 0, 24, 24) }.draw(c)
+            Tipo.ASSISTIR, Tipo.TV -> IconeApp(IconeApp.Tipo.TV, corTraco).also { it.setBounds(0, 0, 24, 24) }.draw(c)
+            Tipo.SERIES -> IconeApp(IconeApp.Tipo.SERIES, corTraco).also { it.setBounds(0, 0, 24, 24) }.draw(c)
+            Tipo.FILMES -> IconeApp(IconeApp.Tipo.FILMES, corTraco).also { it.setBounds(0, 0, 24, 24) }.draw(c)
+            Tipo.REDE -> IconeApp(IconeApp.Tipo.REDE, corTraco).also { it.setBounds(0, 0, 24, 24) }.draw(c)
+            Tipo.JOGAR, Tipo.JOGOS -> IconeApp(IconeApp.Tipo.JOGOS, corTraco).also { it.setBounds(0, 0, 24, 24) }.draw(c)
+            Tipo.PODCASTS -> IconeApp(IconeApp.Tipo.MICROFONE, corTraco).also { it.setBounds(0, 0, 24, 24) }.draw(c)
             Tipo.CONTINUAR -> {
                 c.drawCircle(12f, 12f, 9f, traco)
                 p.reset(); p.moveTo(10f, 8.5f); p.lineTo(10f, 15.5f); p.lineTo(15.5f, 12f); p.close(); c.drawPath(p, cheio)
@@ -255,4 +269,8 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
     override fun setColorFilter(cf: ColorFilter?) { cheio.colorFilter = cf; traco.colorFilter = cf }
     @Deprecated("Deprecated in Java")
     override fun getOpacity() = PixelFormat.TRANSLUCENT
+
+    private companion object {
+        const val COR_CLARA = 0xFFF4F1EC.toInt()
+    }
 }

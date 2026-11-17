@@ -16,4 +16,15 @@
     <string name="cruz_icones_det">İzle, Dinle ve Oyna çizimi</string>
     <string name="cruz_objeto">Nesne</string>
     <string name="cruz_simbolo">Sembol</string>
+    <string name="cruz_duotom">Çift renk</string>
+    <string name="cruz_barra">Üst çubuk</string>
+    <string name="cruz_barra_det">Profil, arama, ses, hava ve saat</string>
+    <string name="cruz_barra_recua">Geri çekilir</string>
+    <string name="cruz_barra_leve">Hafif</string>
+    <string name="cruz_barra_relogio">Büyük saat</string>
+    <string name="cruz_barra_capsulas">Kapsüller</string>
+    <string name="cruz_arte">Seçili öğenin görseli</string>
+    <string name="cruz_arte_det">Haçın arkasında, sağda</string>
+    <string name="cruz_ligada">Açık</string>
+    <string name="cruz_desligada">Kapalı</string>
 </resources>

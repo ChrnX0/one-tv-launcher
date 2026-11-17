@@ -55,6 +55,22 @@
   "cortes": [],
   "sobrepostos": []
  },
+ "en\/home-leve": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [
+   "Videos, music and photos from your home "
+  ],
+  "sobrepostos": []
+ },
+ "en\/home-relogio": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [
+   "Videos, music and photos from your home "
+  ],
+  "sobrepostos": []
+ },
  "en\/jogos": {
   "menorSp": 11,
   "foco": true,
@@ -129,6 +145,18 @@
  },
  "pt\/home-grande": {
   "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
+ "pt\/home-leve": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
+ "pt\/home-relogio": {
+  "menorSp": 16,
   "foco": true,
   "cortes": [],
   "sobrepostos": []

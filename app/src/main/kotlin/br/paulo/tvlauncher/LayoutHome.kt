@@ -59,8 +59,31 @@ object LayoutHome {
 
     fun definirAntiga(ctx: Context, sim: Boolean) = Extras.definirNumero(ctx, CHAVE_JEITO, if (sim) JEITO_ANTIGA else 0)
 
-    /** Estilo dos ícones da cruz: 0 = Objeto (padrão), 1 = Símbolo. */
+    /** Estilo dos ícones da cruz: 0 = Objeto (padrão), 1 = Símbolo, 2 = Duotom (o número é a ordem do enum). */
     const val CHAVE_ICONES = "cruz_icones"
-    fun iconesCruz(ctx: Context) = if (Extras.numero(ctx, CHAVE_ICONES, 0) == 1) IconeCruz.Estilo.SIMBOLO else IconeCruz.Estilo.OBJETO
-    fun definirIconesCruz(ctx: Context, e: IconeCruz.Estilo) = Extras.definirNumero(ctx, CHAVE_ICONES, if (e == IconeCruz.Estilo.SIMBOLO) 1 else 0)
+    fun iconesCruz(ctx: Context) = iconesCruz(Extras.numero(ctx, CHAVE_ICONES, 0))
+    fun iconesCruz(valor: Int) = IconeCruz.Estilo.entries.getOrElse(valor) { IconeCruz.Estilo.OBJETO }
+    fun definirIconesCruz(ctx: Context, e: IconeCruz.Estilo) = Extras.definirNumero(ctx, CHAVE_ICONES, e.ordinal)
+    fun proximoIconesCruz(ctx: Context) = IconeCruz.Estilo.entries.let { it[(iconesCruz(ctx).ordinal + 1) % it.size] }
+        .also { definirIconesCruz(ctx, it) }
+
+    /**
+     * Barra de cima na cruz (17/11/2026, Paulo: "quero todas as opções"):
+     * - [BarraCruz.RECUA] (padrão): com a cruz em foco, só hora e tempo, pequenos; ▲ traz a barra inteira e a cruz desce;
+     * - [BarraCruz.LEVE]: a barra sempre à mostra, sem as cápsulas de vidro;
+     * - [BarraCruz.RELOGIO]: como a Recua, e um relógio grande com data e tempo no canto livre de baixo;
+     * - [BarraCruz.HOJE]: a barra de cápsulas de sempre.
+     */
+    enum class BarraCruz { RECUA, LEVE, RELOGIO, HOJE }
+    const val CHAVE_BARRA = "cruz_barra"
+    fun barraCruz(ctx: Context) = barraCruz(Extras.numero(ctx, CHAVE_BARRA, 0))
+    fun barraCruz(valor: Int) = BarraCruz.entries.getOrElse(valor) { BarraCruz.RECUA }
+    fun definirBarraCruz(ctx: Context, b: BarraCruz) = Extras.definirNumero(ctx, CHAVE_BARRA, b.ordinal)
+    fun proximaBarraCruz(ctx: Context) = BarraCruz.entries.let { it[(barraCruz(ctx).ordinal + 1) % it.size] }
+        .also { definirBarraCruz(ctx, it) }
+
+    /** Arte do item em foco atrás da cruz (capa à direita, sobre o fundo escolhido em Tema). Ligada de fábrica. */
+    const val CHAVE_ARTE = "cruz_arte"
+    fun arteCruz(ctx: Context) = Extras.numero(ctx, CHAVE_ARTE, 1) != 0
+    fun definirArteCruz(ctx: Context, sim: Boolean) = Extras.definirNumero(ctx, CHAVE_ARTE, if (sim) 1 else 0)
 }

@@ -16,4 +16,15 @@
     <string name="cruz_icones_det">Rysunek dla Oglądaj, Słuchaj i Graj</string>
     <string name="cruz_objeto">Obiekt</string>
     <string name="cruz_simbolo">Symbol</string>
+    <string name="cruz_duotom">Dwukolorowy</string>
+    <string name="cruz_barra">Górny pasek</string>
+    <string name="cruz_barra_det">Profil, wyszukiwanie, głos, pogoda i zegar</string>
+    <string name="cruz_barra_recua">Chowa się</string>
+    <string name="cruz_barra_leve">Lekki</string>
+    <string name="cruz_barra_relogio">Duży zegar</string>
+    <string name="cruz_barra_capsulas">Kapsułki</string>
+    <string name="cruz_arte">Obraz wybranej pozycji</string>
+    <string name="cruz_arte_det">Za krzyżem, po prawej</string>
+    <string name="cruz_ligada">Wł.</string>
+    <string name="cruz_desligada">Wył.</string>
 </resources>

@@ -16,4 +16,15 @@
     <string name="cruz_icones_det">Gambar untuk Tonton, Dengar, dan Main</string>
     <string name="cruz_objeto">Objek</string>
     <string name="cruz_simbolo">Simbol</string>
+    <string name="cruz_duotom">Dua warna</string>
+    <string name="cruz_barra">Bilah atas</string>
+    <string name="cruz_barra_det">Profil, cari, suara, cuaca, dan jam</string>
+    <string name="cruz_barra_recua">Mundur</string>
+    <string name="cruz_barra_leve">Ringan</string>
+    <string name="cruz_barra_relogio">Jam besar</string>
+    <string name="cruz_barra_capsulas">Kapsul</string>
+    <string name="cruz_arte">Gambar item yang dipilih</string>
+    <string name="cruz_arte_det">Di belakang salib, di kanan</string>
+    <string name="cruz_ligada">Aktif</string>
+    <string name="cruz_desligada">Nonaktif</string>
 </resources>

@@ -954,13 +954,37 @@ class ConfigLauncherActivity : Activity() {
         // Tela inicial em cruz (17/11/2026): a única; aqui só o desenho dos ícones (Objeto ou Símbolo). A HOME se refaz ao voltar.
         // Fileira ou grade só valia para a tela antiga (que só volta por adb).
         if (LayoutHome.cruz(this)) {
-            fun rotuloIcones() = getString(if (LayoutHome.iconesCruz(this) == IconeCruz.Estilo.OBJETO) R.string.cruz_objeto else R.string.cruz_simbolo)
+            fun rotuloIcones() = getString(when (LayoutHome.iconesCruz(this)) {
+                IconeCruz.Estilo.OBJETO -> R.string.cruz_objeto
+                IconeCruz.Estilo.SIMBOLO -> R.string.cruz_simbolo
+                IconeCruz.Estilo.DUOTOM -> R.string.cruz_duotom
+            })
             lateinit var linhaIcones: LinhaCfg
             linhaIcones = linha(getString(R.string.cruz_icones), getString(R.string.cruz_icones_det), valor = rotuloIcones()) {
-                LayoutHome.definirIconesCruz(this, if (LayoutHome.iconesCruz(this) == IconeCruz.Estilo.OBJETO) IconeCruz.Estilo.SIMBOLO else IconeCruz.Estilo.OBJETO)
+                LayoutHome.proximoIconesCruz(this)
                 linhaIcones.valor(rotuloIcones())
             }
             c.addView(linhaIcones, lp())
+            // Barra de cima (Recua, Leve, Relógio grande ou a de sempre) e a arte do item em foco atrás da cruz.
+            fun rotuloBarra() = getString(when (LayoutHome.barraCruz(this)) {
+                LayoutHome.BarraCruz.RECUA -> R.string.cruz_barra_recua
+                LayoutHome.BarraCruz.LEVE -> R.string.cruz_barra_leve
+                LayoutHome.BarraCruz.RELOGIO -> R.string.cruz_barra_relogio
+                LayoutHome.BarraCruz.HOJE -> R.string.cruz_barra_capsulas
+            })
+            lateinit var linhaBarra: LinhaCfg
+            linhaBarra = linha(getString(R.string.cruz_barra), getString(R.string.cruz_barra_det), valor = rotuloBarra()) {
+                LayoutHome.proximaBarraCruz(this)
+                linhaBarra.valor(rotuloBarra())
+            }
+            c.addView(linhaBarra, lp())
+            fun rotuloArte() = getString(if (LayoutHome.arteCruz(this)) R.string.cruz_ligada else R.string.cruz_desligada)
+            lateinit var linhaArte: LinhaCfg
+            linhaArte = linha(getString(R.string.cruz_arte), getString(R.string.cruz_arte_det), valor = rotuloArte()) {
+                LayoutHome.definirArteCruz(this, !LayoutHome.arteCruz(this))
+                linhaArte.valor(rotuloArte())
+            }
+            c.addView(linhaArte, lp())
         } else c.addView(linha(getString(R.string.lh_arranjo), getString(R.string.lh_arranjo_det),
             valor = getString(if (LayoutHome.grade(this)) R.string.lh_grade else R.string.lh_fileira)) {
             LayoutHome.definirGrade(this, !LayoutHome.grade(this))

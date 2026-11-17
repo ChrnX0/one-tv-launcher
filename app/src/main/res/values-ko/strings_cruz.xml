@@ -16,4 +16,15 @@
     <string name="cruz_icones_det">보기·듣기·플레이 그림</string>
     <string name="cruz_objeto">사물</string>
     <string name="cruz_simbolo">기호</string>
+    <string name="cruz_duotom">투톤</string>
+    <string name="cruz_barra">상단 바</string>
+    <string name="cruz_barra_det">프로필, 검색, 음성, 날씨, 시계</string>
+    <string name="cruz_barra_recua">물러남</string>
+    <string name="cruz_barra_leve">가볍게</string>
+    <string name="cruz_barra_relogio">큰 시계</string>
+    <string name="cruz_barra_capsulas">캡슐</string>
+    <string name="cruz_arte">선택한 항목의 이미지</string>
+    <string name="cruz_arte_det">십자 뒤, 오른쪽</string>
+    <string name="cruz_ligada">켜짐</string>
+    <string name="cruz_desligada">꺼짐</string>
 </resources>

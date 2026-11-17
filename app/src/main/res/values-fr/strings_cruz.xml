@@ -16,4 +16,15 @@
     <string name="cruz_icones_det">Dessin de Regarder, Écouter et Jouer</string>
     <string name="cruz_objeto">Objet</string>
     <string name="cruz_simbolo">Symbole</string>
+    <string name="cruz_duotom">Bichrome</string>
+    <string name="cruz_barra">Barre du haut</string>
+    <string name="cruz_barra_det">Profil, recherche, voix, météo et heure</string>
+    <string name="cruz_barra_recua">Discrète</string>
+    <string name="cruz_barra_leve">Légère</string>
+    <string name="cruz_barra_relogio">Grande horloge</string>
+    <string name="cruz_barra_capsulas">Capsules</string>
+    <string name="cruz_arte">Image de l\'élément sélectionné</string>
+    <string name="cruz_arte_det">Derrière la croix, à droite</string>
+    <string name="cruz_ligada">Activée</string>
+    <string name="cruz_desligada">Désactivée</string>
 </resources>

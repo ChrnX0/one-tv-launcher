@@ -29,4 +29,14 @@ class LayoutHomeTest {
         assertTrue(LayoutHome.cruz(0)); assertTrue(LayoutHome.cruz(1)); assertTrue(LayoutHome.cruz(99))
         assertTrue(!LayoutHome.cruz(LayoutHome.JEITO_ANTIGA))
     }
+
+    @Test fun opcoesDaCruzTemPadraoEValorEstranhoVoltaAoPadrao() {
+        assertEquals(LayoutHome.BarraCruz.RECUA, LayoutHome.barraCruz(0))
+        assertEquals(LayoutHome.BarraCruz.HOJE, LayoutHome.barraCruz(3))
+        assertEquals(LayoutHome.BarraCruz.RECUA, LayoutHome.barraCruz(42))
+        assertEquals(IconeCruz.Estilo.OBJETO, LayoutHome.iconesCruz(0))
+        assertEquals(IconeCruz.Estilo.SIMBOLO, LayoutHome.iconesCruz(1))   // o 1 já gravado antes do Duotom continua Símbolo
+        assertEquals(IconeCruz.Estilo.DUOTOM, LayoutHome.iconesCruz(2))
+        assertEquals(IconeCruz.Estilo.OBJETO, LayoutHome.iconesCruz(-1))
+    }
 }

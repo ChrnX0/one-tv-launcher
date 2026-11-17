@@ -20,7 +20,9 @@
         <item>New cross-shaped home screen: Continue, Watch, Listen, Play and Apps in one row. ◀ ▶ changes group, ▲ ▼ picks inside it, and the chosen item shows large where they cross</item>
         <item>Each group remembers its last item. The screen opens on Watch › TV; HOME goes back to Watch and, pressed again, to TV</item>
         <item>Apps shows your 8 most used apps and, at the end, “All apps” with the full grid to see, move and hide them</item>
-        <item>Home screen icons in two styles, Object or Symbol (Settings › Home screen)</item>
+        <item>Home screen icons in three styles: Object, Symbol or Duotone (Settings › Home screen)</item>
+        <item>Top bar in four ways (Settings › Home screen): Steps back (only time and weather; ▲ brings profile, search and voice), Light (no capsules), Big clock in the bottom corner, or the old Capsules</item>
+        <item>Art of the item in focus behind the cross, on the right: the scene of the last movie or series, the app banner, the group color. It can be turned off</item>
         <item>Holding OK on an app on the home screen opens its options (hide or uninstall)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
@@ -31,6 +33,8 @@
         <item>cruz_opcoes</item>
         <item>cruz_icones</item>
         <item>cruz_fluida</item>
+        <item>cruz_barra</item>
+        <item>cruz_arte</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Opens on TV</item>
@@ -40,6 +44,8 @@
         <item>Hold OK</item>
         <item>Icon style</item>
         <item>Speed</item>
+        <item>Top bar</item>
+        <item>Item art</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>When you press HOME, does the new screen open on Watch with TV highlighted?</item>
@@ -47,7 +53,9 @@
         <item>From another group, does HOME go back to Watch, and pressing HOME again go to TV?</item>
         <item>Does Apps show the most used apps and, at the end, does “All apps” open the full grid?</item>
         <item>Holding OK on an app in Apps, do the Hide and Uninstall options appear?</item>
-        <item>In Settings › Home screen, does switching between Object and Symbol change the cross icons?</item>
+        <item>In Settings › Home screen, does switching between Object, Symbol and Duotone change the cross icons?</item>
         <item>Is moving around the cross with the arrows smooth, without stutters or skipped frames?</item>
+        <item>With the cross in focus, only time and weather show at the top; pressing ▲ on the first item brings the whole bar and ▼ returns?</item>
+        <item>While moving in the cross, the art on the right follows the item (series scene, app banner)?</item>
     </string-array>
 </resources>

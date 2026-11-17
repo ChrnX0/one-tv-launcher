@@ -54,6 +54,8 @@ class TelasTest {
         "home" to MainActivity::class.java,
         "home-grande" to MainActivity::class.java,   // layout flexível: cartões Grandes e transparentes (LayoutHome)
         "home-grade" to MainActivity::class.java,    // layout flexível: apps em grade (LayoutHome, GradeApps)
+        "home-leve" to MainActivity::class.java,     // cruz com a barra Leve (sem cápsulas) e ícones Duotom
+        "home-relogio" to MainActivity::class.java,  // cruz com a barra Relógio grande e ícones Símbolo
         "configuracoes" to ConfigLauncherActivity::class.java,
         "filmes" to FilmesActivity::class.java,
         "series" to SeriesActivity::class.java,
@@ -99,6 +101,16 @@ class TelasTest {
             br.paulo.tvlauncher.LayoutHome.definirGrade(app, nome == "home-grade")
             // "home" é a cruz (a única tela inicial desde 17/11/2026); grande e grade ainda medem a antiga até ela sair.
             br.paulo.tvlauncher.LayoutHome.definirAntiga(app, nome == "home-grande" || nome == "home-grade")
+            br.paulo.tvlauncher.LayoutHome.definirBarraCruz(app, when (nome) {
+                "home-leve" -> br.paulo.tvlauncher.LayoutHome.BarraCruz.LEVE
+                "home-relogio" -> br.paulo.tvlauncher.LayoutHome.BarraCruz.RELOGIO
+                else -> br.paulo.tvlauncher.LayoutHome.BarraCruz.RECUA
+            })
+            br.paulo.tvlauncher.LayoutHome.definirIconesCruz(app, when (nome) {
+                "home-leve" -> br.paulo.tvlauncher.IconeCruz.Estilo.DUOTOM
+                "home-relogio" -> br.paulo.tvlauncher.IconeCruz.Estilo.SIMBOLO
+                else -> br.paulo.tvlauncher.IconeCruz.Estilo.OBJETO
+            })
             val m = try { medir(cls, "$idioma-$nome") } catch (e: Throwable) {
                 problemas += "$chave: a tela não abriu (${e.javaClass.simpleName}: ${e.message?.take(160)})"; continue
             }

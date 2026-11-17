@@ -16,4 +16,15 @@
     <string name="cruz_icones_det">رسم المشاهدة والاستماع واللعب</string>
     <string name="cruz_objeto">شيء</string>
     <string name="cruz_simbolo">رمز</string>
+    <string name="cruz_duotom">لونان</string>
+    <string name="cruz_barra">الشريط العلوي</string>
+    <string name="cruz_barra_det">الملف والبحث والصوت والطقس والساعة</string>
+    <string name="cruz_barra_recua">يتراجع</string>
+    <string name="cruz_barra_leve">خفيف</string>
+    <string name="cruz_barra_relogio">ساعة كبيرة</string>
+    <string name="cruz_barra_capsulas">كبسولات</string>
+    <string name="cruz_arte">صورة العنصر المحدد</string>
+    <string name="cruz_arte_det">خلف الصليب، على اليمين</string>
+    <string name="cruz_ligada">تشغيل</string>
+    <string name="cruz_desligada">إيقاف</string>
 </resources>

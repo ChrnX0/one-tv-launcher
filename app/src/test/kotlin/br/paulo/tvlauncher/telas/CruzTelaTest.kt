@@ -43,6 +43,9 @@ class CruzTelaTest {
     @Config(qualifiers = "en-w960dp-h540dp-land-television-xhdpi")
     @Test fun simbolo() = conferir(IconeCruz.Estilo.SIMBOLO, "simbolo")
 
+    @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
+    @Test fun duotom() = conferir(IconeCruz.Estilo.DUOTOM, "duotom")
+
     private fun conferir(estilo: IconeCruz.Estilo, nome: String) {
         InstrumentationRegistry.getInstrumentation().setInTouchMode(false)
         saida.mkdirs()

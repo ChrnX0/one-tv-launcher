@@ -16,4 +16,15 @@
     <string name="cruz_icones_det">Dibujo de Ver, Escuchar y Jugar</string>
     <string name="cruz_objeto">Objeto</string>
     <string name="cruz_simbolo">Símbolo</string>
+    <string name="cruz_duotom">Bitono</string>
+    <string name="cruz_barra">Barra superior</string>
+    <string name="cruz_barra_det">Perfil, búsqueda, voz, clima y reloj</string>
+    <string name="cruz_barra_recua">Se retira</string>
+    <string name="cruz_barra_leve">Ligera</string>
+    <string name="cruz_barra_relogio">Reloj grande</string>
+    <string name="cruz_barra_capsulas">Cápsulas</string>
+    <string name="cruz_arte">Arte del elemento enfocado</string>
+    <string name="cruz_arte_det">Detrás de la cruz, a la derecha</string>
+    <string name="cruz_ligada">Activada</string>
+    <string name="cruz_desligada">Desactivada</string>
 </resources>

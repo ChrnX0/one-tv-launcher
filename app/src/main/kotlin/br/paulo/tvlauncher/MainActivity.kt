@@ -290,7 +290,7 @@ class MainActivity : Activity() {
         tema = Tema.atual(this)
         assinaturaFundo = FundoMeuDados.assinatura(this)
         idiomaMontado = idiomaAtual()
-        assinaturaLayout = "${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}|${LayoutHome.cruz(this)}|${LayoutHome.iconesCruz(this)}"
+        assinaturaLayout = "${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}|${LayoutHome.cruz(this)}|${LayoutHome.iconesCruz(this)}|${LayoutHome.barraCruz(this)}|${LayoutHome.arteCruz(this)}"
         setContentView(montarTela())
         window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, novo ->
             if (novo != null && novo !== bolinhaPerfil) voltarAoPerfil = false
@@ -337,7 +337,7 @@ class MainActivity : Activity() {
         // Trocou o idioma (do sistema ou só do launcher): textos já montados (data, destaque) ficavam no antigo.
         if (idiomaAtual() != idiomaMontado) { recreate(); return }
         if (tema == Tema.MEU && FundoMeuDados.assinatura(this) != assinaturaFundo) { recreate(); return }   // outro arquivo/brilho
-        if ("${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}|${LayoutHome.cruz(this)}|${LayoutHome.iconesCruz(this)}" != assinaturaLayout) { recreate(); return }   // cartões mudaram
+        if ("${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}|${LayoutHome.cruz(this)}|${LayoutHome.iconesCruz(this)}|${LayoutHome.barraCruz(this)}|${LayoutHome.arteCruz(this)}" != assinaturaLayout) { recreate(); return }   // cartões mudaram
         // Modo simples (12/11/2026, ideia 10; desligado por padrão): a HOME vira a tela de cards grandes.
         if (ModoSimples.ligado(this)) {
             try { startActivity(Intent(this, ModoSimplesActivity::class.java)); return } catch (_: Exception) {}
@@ -838,7 +838,7 @@ class MainActivity : Activity() {
         fundo = vivo
         // Sem fundo preto aqui (nem na janela, ver onCreate): o fundo vivo já cobre a tela inteira e é opaco. Cada camada
         // de tela cheia a mais é a GPU pintando 1920x1080 de novo A CADA QUADRO (medido: 3 camadas, 22 ms por quadro).
-        capa = CapaFoco(this).apply { desligada = tema == Tema.GALERIA || tema == Tema.MEU || emCruz }   // Galeria: a obra é o fundo, sem brilho por cima
+        capa = CapaFoco(this).apply { desligada = tema == Tema.GALERIA || tema == Tema.MEU || (emCruz && !LayoutHome.arteCruz(this@MainActivity)) }   // Galeria: a obra é o fundo, sem brilho por cima
         if (emCruz) montarCruz(raiz)
         conteudo = raiz
         return FrameLayout(this).apply {
@@ -2435,6 +2435,137 @@ class MainActivity : Activity() {
         c.aoAbrir = { cat, item -> prefs.edit().putString(cat.id, item).apply() }   // cada categoria lembra o último escolhido
         raiz.addView(c, 0, FrameLayout.LayoutParams(MATCH, MATCH))   // atrás da barra de cima (o véu não a escurece)
         cruz = c
+        c.id = View.generateViewId()
+        c.aoMudar = { _, item -> arteDoItem(item) }
+        c.aoSubirTopo = { ui.post { bolinhaPerfil?.requestFocus() } }   // ▲ no 1º item: o perfil, 1º da barra
+        montarBarraCruz(raiz, c)
+    }
+
+    // ------------------------------------------------------------------ barra de cima e arte do item, na cruz
+
+    private val barraCruz by lazy { LayoutHome.barraCruz(this) }
+    private var relogioCruz: View? = null       // relógio grande (barra RELOGIO), no canto livre de baixo
+    private var tempoCruz: TextView? = null     // "27°" ao lado da hora, com a barra recolhida
+    private var barraRecolhida = false
+
+    /**
+     * Aplica o estilo da barra de cima escolhido em Configurações (LayoutHome.BarraCruz). Recua e Relógio: com a cruz em
+     * foco, a barra some (fica só a hora, ou nada no Relógio); o foco subindo para ela a traz de volta e a cruz desce 34 dp.
+     * Leve: a barra fica, sem as cápsulas de vidro. As views somem só por alpha (continuam focáveis: o ▲ precisa achá-las).
+     */
+    private fun montarBarraCruz(raiz: FrameLayout, c: HomeCruz) {
+        val topo = topoRaiz as? ViewGroup ?: return
+        // ▼ em qualquer item da barra volta para a cruz (ela ocupa a tela inteira: a busca de foco "para baixo" não a acha).
+        fun descer(v: View) {
+            if (v.isFocusable) v.nextFocusDownId = c.id
+            if (v is ViewGroup) for (i in 0 until v.childCount) descer(v.getChildAt(i))
+        }
+        descer(topo)
+        if (barraCruz == LayoutHome.BarraCruz.HOJE) return
+        val esquerda = topo.getChildAt(1) as? ViewGroup
+        val direita = topo.getChildAt(2) as? LinearLayout
+        if (barraCruz == LayoutHome.BarraCruz.LEVE) {
+            esquerda?.let { e -> for (i in 0 until e.childCount) e.getChildAt(i).background = null }
+            return
+        }
+        // Recua: a temperatura entra ao lado da hora enquanto a barra está recolhida.
+        if (barraCruz == LayoutHome.BarraCruz.RECUA && direita != null) {
+            val t = texto(18f, textoClaro, fonteUi).apply { includeFontPadding = false; text = txtTemp.text; alpha = 0f }
+            direita.addView(t, 0, LinearLayout.LayoutParams(WRAP, WRAP).apply { marginEnd = dp(4) })
+            txtTemp.addTextChangedListener(espelho { t.text = "${txtTemp.text}  ·" })
+            t.text = "${txtTemp.text}  ·"
+            tempoCruz = t
+        }
+        if (barraCruz == LayoutHome.BarraCruz.RELOGIO) relogioCruz = montarRelogioCruz().also {
+            raiz.addView(it, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.BOTTOM or Gravity.END).apply {
+                rightMargin = dp(Grade.MARGEM); bottomMargin = dp(40)
+            })
+        }
+        window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, novo ->
+            if (novo == null || todosAbertos) return@addOnGlobalFocusChangeListener
+            recolherBarra(novo === c)
+        }
+        recolherBarra(true, animar = false)
+    }
+
+    private fun recolherBarra(recolher: Boolean, animar: Boolean = true) {
+        val topo = topoRaiz as? ViewGroup ?: return
+        if (recolher == barraRecolhida && animar) return
+        barraRecolhida = recolher
+        val d = if (animar) 220L else 0L
+        for (i in 0 until topo.childCount) {
+            val v = topo.getChildAt(i)
+            // Recua: a direita (hora, e a temperatura) fica; Relógio: some tudo (a hora está grande embaixo).
+            val fica = recolher && i == 2 && barraCruz == LayoutHome.BarraCruz.RECUA
+            v.animate().alpha(if (!recolher || fica) 1f else 0f).translationY(if (recolher && !fica) -dp(24).toFloat() else 0f).setDuration(d).start()
+        }
+        tempoCruz?.animate()?.alpha(if (recolher) 1f else 0f)?.setDuration(d)?.start()
+        relogioCruz?.animate()?.alpha(if (recolher) 1f else 0.35f)?.setDuration(d)?.start()
+        cruz?.animate()?.translationY(if (recolher) 0f else dp(34).toFloat())?.setDuration(d)?.start()
+    }
+
+    /** Relógio grande da barra RELOGIO: hora, data por extenso e o tempo de agora (espelha a pílula do clima). */
+    private fun montarRelogioCruz(): View = LinearLayout(this).apply {
+        orientation = LinearLayout.VERTICAL
+        gravity = Gravity.END
+        val sombra = 0x99000000.toInt()
+        addView(RelogioTela(this@MainActivity, data = false).apply {
+            format12Hour = "HH:mm"; format24Hour = "HH:mm"
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 72f)
+            setTextColor(Color.WHITE)
+            typeface = Typeface.create(fonteUi, Typeface.NORMAL)
+            letterSpacing = -0.02f
+            includeFontPadding = false
+            setShadowLayer(dp(10).toFloat(), 0f, 0f, sombra)
+        })
+        val padrao = android.text.format.DateFormat.getBestDateTimePattern(resources.configuration.locales[0], "EEEEdMMMM")
+        addView(RelogioTela(this@MainActivity, data = true).apply {
+            format12Hour = padrao; format24Hour = padrao
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
+            setTextColor(Color.WHITE)
+            typeface = Typeface.create(fonteUi, Typeface.BOLD)
+            setShadowLayer(dp(8).toFloat(), 0f, 0f, sombra)
+        }, LinearLayout.LayoutParams(WRAP, WRAP).apply { topMargin = dp(6) })
+        val clima = texto(18f, textoClaro, fonteUi).apply { setShadowLayer(dp(8).toFloat(), 0f, 0f, sombra); maxLines = 1 }
+        fun copiar() { clima.text = listOf(txtTemp.text, txtChuva.text).filter { it.isNotBlank() && it != "…" }.joinToString(" · ") }
+        txtTemp.addTextChangedListener(espelho { copiar() })
+        txtChuva.addTextChangedListener(espelho { copiar() })
+        copiar()
+        addView(clima, LinearLayout.LayoutParams(WRAP, WRAP).apply { topMargin = dp(2) })
+    }
+
+    private fun espelho(acao: () -> Unit) = object : android.text.TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+        override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+        override fun afterTextChanged(s: android.text.Editable?) = acao()
+    }
+
+    /**
+     * Arte do item em foco (LayoutHome.arteCruz): a mesma capa à direita da tela antiga (CapaFoco, meia resolução,
+     * escurecida), agora seguindo o item da cruz. TV, Séries, Filmes, Na rede e Jogos usam a arte do card (Séries e
+     * Filmes: a cena do último título); um app, o banner dele; o resto, o degradê da cor do grupo.
+     */
+    private fun arteDoItem(item: HomeCruz.Item) {
+        if (capa.desligada) return
+        val id = item.id
+        when {
+            id == "tv" || id == "c:tv" -> mostrarCapaAtalho(IconeApp.Tipo.TV)
+            id == "series" || id == "c:serie" -> mostrarCapaAtalho(IconeApp.Tipo.SERIES)
+            id == "filmes" || id == "c:filme" -> mostrarCapaAtalho(IconeApp.Tipo.FILMES)
+            id == "rede" -> mostrarCapaAtalho(IconeApp.Tipo.REDE)
+            id == "jogos" || id == "c:jogo" -> mostrarCapaAtalho(IconeApp.Tipo.JOGOS)
+            id.startsWith("app:") -> mostrarCapaDoApp(id.removePrefix("app:"), null)
+            else -> {
+                capaPedida = null
+                val cor = when (cruz?.categoriaAtual()?.cat) {
+                    CruzLogica.Categoria.OUVIR -> 0xFF2C6E68.toInt()
+                    CruzLogica.Categoria.JOGAR -> 0xFF3A3F9E.toInt()
+                    CruzLogica.Categoria.APLICATIVOS -> 0xFF3A3640.toInt()
+                    else -> 0xFF8A4A2A.toInt()
+                }
+                capa.mostrar(null, intArrayOf(Estilo.matiz(cor, 0.6f), Estilo.matiz(cor, 0.35f)))
+            }
+        }
     }
 
     /** Refaz a lista da cruz com os dados de agora. Barato: a HomeCruz só recria views quando os ids mudam. */

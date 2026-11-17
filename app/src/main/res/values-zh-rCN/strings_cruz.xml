@@ -16,4 +16,15 @@
     <string name="cruz_icones_det">\"观看\"\"收听\"\"游戏\"的图标样式</string>
     <string name="cruz_objeto">实物</string>
     <string name="cruz_simbolo">符号</string>
+    <string name="cruz_duotom">双色</string>
+    <string name="cruz_barra">顶部栏</string>
+    <string name="cruz_barra_det">个人资料、搜索、语音、天气和时钟</string>
+    <string name="cruz_barra_recua">收起</string>
+    <string name="cruz_barra_leve">轻量</string>
+    <string name="cruz_barra_relogio">大时钟</string>
+    <string name="cruz_barra_capsulas">胶囊</string>
+    <string name="cruz_arte">所选项目的图片</string>
+    <string name="cruz_arte_det">十字后方，右侧</string>
+    <string name="cruz_ligada">开</string>
+    <string name="cruz_desligada">关</string>
 </resources>

@@ -16,4 +16,15 @@
     <string name="cruz_icones_det">Рисунок для «Смотреть», «Слушать» и «Играть»</string>
     <string name="cruz_objeto">Предмет</string>
     <string name="cruz_simbolo">Символ</string>
+    <string name="cruz_duotom">Двухцветный</string>
+    <string name="cruz_barra">Верхняя панель</string>
+    <string name="cruz_barra_det">Профиль, поиск, голос, погода и часы</string>
+    <string name="cruz_barra_recua">Скрывается</string>
+    <string name="cruz_barra_leve">Лёгкая</string>
+    <string name="cruz_barra_relogio">Большие часы</string>
+    <string name="cruz_barra_capsulas">Капсулы</string>
+    <string name="cruz_arte">Картинка выбранного пункта</string>
+    <string name="cruz_arte_det">За крестом, справа</string>
+    <string name="cruz_ligada">Вкл.</string>
+    <string name="cruz_desligada">Выкл.</string>
 </resources>

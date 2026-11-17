@@ -16,4 +16,15 @@
     <string name="cruz_icones_det">देखें, सुनें और खेलें का चित्र</string>
     <string name="cruz_objeto">वस्तु</string>
     <string name="cruz_simbolo">चिह्न</string>
+    <string name="cruz_duotom">दो रंग</string>
+    <string name="cruz_barra">ऊपरी पट्टी</string>
+    <string name="cruz_barra_det">प्रोफ़ाइल, खोज, आवाज़, मौसम और घड़ी</string>
+    <string name="cruz_barra_recua">पीछे हटती है</string>
+    <string name="cruz_barra_leve">हल्की</string>
+    <string name="cruz_barra_relogio">बड़ी घड़ी</string>
+    <string name="cruz_barra_capsulas">कैप्सूल</string>
+    <string name="cruz_arte">चुने गए आइटम की तस्वीर</string>
+    <string name="cruz_arte_det">क्रॉस के पीछे, दाईं ओर</string>
+    <string name="cruz_ligada">चालू</string>
+    <string name="cruz_desligada">बंद</string>
 </resources>
