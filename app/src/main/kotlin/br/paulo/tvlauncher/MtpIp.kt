@@ -639,10 +639,18 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
     companion object {
         /** Só para a bancada de testes: recebe cada pedido e cada resposta (código e parâmetros). Na TV fica nulo. */
         @Volatile var rastro: ((String) -> Unit)? = null
+        /**
+         * Operação demorada (17/11/2026): recebe uma linha por operação que passou de [LENTA_MS], com o código, os
+         * parâmetros, quanto levou e quanto o computador ficou parado antes de pedir. Na TV vai para o logcat: é
+         * assim que se descobre se a demora de uma cópia é nossa (disco, pasta) ou do computador.
+         */
+        @Volatile var lenta: ((String) -> Unit)? = null
+        const val LENTA_MS = 300L
     }
 
     private var aberta = false
     private var pendente: MtpLoja.Pendente? = null
+    private var ultimaResposta = 0L   // relógio da última resposta, para medir o tempo parado do computador
     private val bloco = ByteArray(256 * 1024)
 
     fun rodar() {
@@ -746,7 +754,14 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
                 if (fase == 2) receber(tid, Long.MAX_VALUE, Nada)
                 return responder(Mtp.SESSAO_FECHADA, tid)
             }
-            executar(op, tid, p, fase)
+            val t0 = System.nanoTime()
+            val parado = if (ultimaResposta == 0L) 0 else (t0 - ultimaResposta) / 1_000_000
+            try { executar(op, tid, p, fase) } finally {
+                ultimaResposta = System.nanoTime()
+                val ms = (ultimaResposta - t0) / 1_000_000
+                if (ms >= LENTA_MS || parado >= 5 * LENTA_MS) lenta?.invoke("op %04X [%s] levou %d ms; computador parado antes: %d ms"
+                    .format(op, p.joinToString(" ") { "%X".format(it) }, ms, parado))
+            }
         } catch (_: Cancelou) {
             pendente?.let { loja.desistir(it) }; pendente = null
             responder(Mtp.CANCELADA, tid)
