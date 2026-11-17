@@ -31,6 +31,7 @@
         <item>Painel rápido: o Timer avança a partir da opção escolhida e Áudio abre a Saída de áudio; as Cenas dizem o que fazem</item>
         <item>Player: legenda baixada não aparece mais por cima de filme dublado; gravações com a duração certa; os controles de mídia do sistema funcionam nos players; arquivos .ac3 e .rmvb tocam</item>
         <item>Previsão: “Hoje · X% de chuva” é a maior chance do resto do dia, e chuva e visibilidade usam a vírgula do idioma (4,1 mm)</item>
+        <item>Perfis: no painel web dá para escolher o nome que a TV mostra para cada perfil; a calibração da imagem mostra o título numa tarja, sem sumir nas barras</item>
         <item>Correções: reparo do Wi-Fi sem ciclo de reinício, o alarme para de verdade quando você para, queda de rede em AVI/WMV não encerra o vídeo, GIF e vídeo no Meu fundo sem estourar a memória, foco nas opções do player e teclas com o vídeo pausado</item>
         <item>Filmes e Séries: o nome não repete mais o ano (“Os Anéis de Poder 2022”) e os gêneros vêm no idioma da TV quando o TMDB tem a ficha</item>
         <item>Filmes e Séries: a ficha abre mais leve (um fundo de tela cheia em vez de dois) e “Episódios” não quebra mais no meio da palavra; detalhes compridos como “Temporada 1” vão embaixo do nome do botão</item>
