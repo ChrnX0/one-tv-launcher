@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "❤ Vi" da família conectada (revisão dos degraus, 3a, 17/11/2026): AvisoTv.teclaOk, FamiliaVistos. -->
+<resources>
+    <string name="famc_ok_vi">OK 누르기: ❤ 봤어요</string>
+    <string name="famc_vi_ok">%1$s님이 봤다는 걸 알게 돼요</string>
+</resources>

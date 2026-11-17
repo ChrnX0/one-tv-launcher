@@ -8,8 +8,8 @@
 <style>
   /* Família conectada (degrau 3, FamiliaConectada.kt). Página do link que os parentes recebem: sem conta, sem app.
      Tudo inline (a CSP do servidor não deixa carregar nada de fora). Letra grande: quem manda pode ser a avó também. */
-  :root { color-scheme: light dark; --fundo: #f6f7f9; --cartao: #fff; --texto: #13161c; --fraco: #5b6474; --acento: #0b7a6a; --borda: #d8dce3; }
-  @media (prefers-color-scheme: dark) { :root { --fundo: #0b0f17; --cartao: #151a24; --texto: #f2f4f8; --fraco: #98a1b3; --acento: #7fd6c2; --borda: #2a3140; } }
+  :root { color-scheme: light dark; --fundo: #f6f7f9; --cartao: #fff; --texto: #13161c; --fraco: #5b6474; --acento: #CE3D00; --borda: #d8dce3; }
+  @media (prefers-color-scheme: dark) { :root { --fundo: #0b0f17; --cartao: #151a24; --texto: #f2f4f8; --fraco: #98a1b3; --acento: #FF6A2B; --borda: #2a3140; } }
   [hidden] { display: none !important; }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--fundo); color: var(--texto); font: 19px/1.5 system-ui, sans-serif; }
@@ -29,6 +29,14 @@
   .msg { font-weight: 600; margin: 0; }
   .ok { color: var(--acento); }
   .erro { color: #c62828; }
+  /* "❤ Vi" (17/11/2026): os últimos recados desta pessoa e se já foram vistos na TV. */
+  #meus { margin-top: 22px; }
+  #meus h2 { font-size: 20px; margin: 0 0 8px; }
+  #meus ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  #meus li { background: var(--cartao); border: 1px solid var(--borda); border-radius: 14px; padding: 10px 14px; display: flex; gap: 12px; justify-content: space-between; align-items: baseline; }
+  #meus .resumo { overflow-wrap: anywhere; }
+  #meus .estado { white-space: nowrap; font-weight: 600; color: var(--fraco); }
+  #meus .visto { color: var(--acento); }
 </style>
 </head>
 <body>
@@ -50,6 +58,7 @@
     <button type="submit" class="principal" id="enviar"></button>
     <p class="msg" id="msg" role="status" aria-live="polite"></p>
   </form>
+  <section id="meus" hidden><h2 id="meusTitulo"></h2><ul id="meusLista"></ul></section>
 </main>
 <script>
 'use strict';
@@ -94,8 +103,28 @@ const V = {
 const K = ["titulo", "sub", "lNome", "lTexto", "foto", "trocar", "enviar", "enviando", "ok", "vazio", "limite", "desligado", "erroFoto", "rede"];
 const pedido = (navigator.language || "en");
 const curto = pedido.split("-")[0].toLowerCase();
+// "❤ Vi" (17/11/2026): título da lista, visto, ainda não visto.
+const W = {
+  en: ["Your last messages", "❤ Seen", "Not seen yet"],
+  pt: ["Seus últimos recados", "❤ Visto", "Ainda não visto"],
+  "pt-PT": ["As suas últimas mensagens", "❤ Vista", "Ainda não vista"],
+  es: ["Tus últimos mensajes", "❤ Visto", "Aún no visto"],
+  de: ["Deine letzten Nachrichten", "❤ Gesehen", "Noch nicht gesehen"],
+  fr: ["Vos derniers messages", "❤ Vu", "Pas encore vu"],
+  it: ["I tuoi ultimi messaggi", "❤ Visto", "Non ancora visto"],
+  ru: ["Ваши последние сообщения", "❤ Просмотрено", "Ещё не видели"],
+  pl: ["Twoje ostatnie wiadomości", "❤ Zobaczone", "Jeszcze nie widziane"],
+  tr: ["Son mesajlarınız", "❤ Görüldü", "Henüz görülmedi"],
+  ja: ["最近のメッセージ", "❤ 見ました", "まだ見ていません"],
+  zh: ["你最近的留言", "❤ 已看到", "还没看到"],
+  ko: ["최근 보낸 메시지", "❤ 봤어요", "아직 안 봤어요"],
+  hi: ["आपके पिछले संदेश", "❤ देख लिया", "अभी नहीं देखा"],
+  id: ["Pesan terakhir Anda", "❤ Sudah dilihat", "Belum dilihat"],
+  ar: ["رسائلك الأخيرة", "❤ تمت رؤيتها", "لم تُرَ بعد"],
+};
 const lang = T[pedido] ? pedido : (/^pt-(pt|ao|mz)$/i.test(pedido) ? "pt-PT" : (curto === "in" ? "id" : (T[curto] ? curto : "en")));
 const t = Object.fromEntries(K.map((k, i) => [k, T[lang][i]]));
+const w = W[lang] || W.en;
 const v = Object.fromEntries(["gravar", "regravar", "longo", "grande", "limiteVideo", "erroVideo", "videoDesligado", "enviandoVideo"].map((k, i) => [k, V[lang][i]]));
 document.documentElement.lang = lang;
 if (lang === "ar") document.documentElement.dir = "rtl";
@@ -105,6 +134,35 @@ const $ = (id) => document.getElementById(id);
 $("btnFoto").textContent = t.foto; $("enviar").textContent = t.enviar;
 try { $("nome").value = localStorage.getItem("nome") || ""; } catch (e) {}
 const base = location.pathname.replace(/\/+$/, "");
+// Número aleatório deste celular (sem conta): vai junto de cada recado para a TV dizer depois se foi visto. Só este
+// celular conhece o seu; sem localStorage (aba anônima) a lista simplesmente não aparece.
+let rid = "";
+try {
+  rid = localStorage.getItem("remetente") || "";
+  if (!/^[0-9a-f]{32}$/.test(rid)) {
+    rid = Array.from(crypto.getRandomValues(new Uint8Array(16)), (b) => b.toString(16).padStart(2, "0")).join("");
+    localStorage.setItem("remetente", rid);
+  }
+} catch (e) { rid = ""; }
+function meusRecados() {
+  if (!rid) return;
+  fetch(base + "/vistos?" + new URLSearchParams({ rid })).then((r) => r.ok ? r.json() : null).then((j) => {
+    const l = (j && j.recados) || [];
+    $("meus").hidden = l.length === 0;
+    $("meusTitulo").textContent = w[0];
+    const ul = $("meusLista"); ul.textContent = "";
+    for (const x of l.slice(0, 5)) {
+      const li = document.createElement("li");
+      const a = document.createElement("span"); a.className = "resumo";
+      const quando = new Date(x.quando).toLocaleString(document.documentElement.lang, { weekday: "short", hour: "2-digit", minute: "2-digit" });
+      a.textContent = quando + " · " + x.resumo;
+      const b = document.createElement("span"); b.className = "estado" + (x.visto ? " visto" : "");
+      b.textContent = x.visto ? w[1] : w[2];
+      li.append(a, b); ul.append(li);
+    }
+  }).catch(() => {});
+}
+meusRecados();
 let foto = null;   // Blob JPEG já reduzido
 let video = null;  // File do vídeo (até 30 s e 20 MB, conferido aqui e de novo na TV)
 const MAX_S = 30, MAX_B = 20 * 1024 * 1024;
@@ -135,7 +193,7 @@ $("arqVideo").addEventListener("change", async () => {
 function enviarVideo(nome, texto) {
   return new Promise((ok) => {
     const x = new XMLHttpRequest();
-    x.open("POST", base + "/video?" + new URLSearchParams({ nome, texto }));
+    x.open("POST", base + "/video?" + new URLSearchParams({ nome, texto, rid }));
     x.setRequestHeader("Content-Type", video.type || "video/mp4");
     x.upload.onprogress = (e) => { if (e.lengthComputable) mensagem(v.enviandoVideo.replace("%", Math.round(100 * e.loaded / e.total) + "%"), ""); };
     x.onload = () => { let j = {}; try { j = JSON.parse(x.responseText); } catch (e) {} ok({ ok: x.status === 200, erro: j.erro }); };
@@ -187,11 +245,11 @@ $("form").addEventListener("submit", async (ev) => {
       return;
     }
     const r = foto
-      ? await fetch(base + "/foto?" + new URLSearchParams({ nome, texto }), { method: "POST", headers: { "Content-Type": "image/jpeg" }, body: foto })
-      : await fetch(base + "/recado", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nome, texto }) });
+      ? await fetch(base + "/foto?" + new URLSearchParams({ nome, texto, rid }), { method: "POST", headers: { "Content-Type": "image/jpeg" }, body: foto })
+      : await fetch(base + "/recado", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nome, texto, rid }) });
     const j = await r.json().catch(() => ({}));
     if (r.ok) {
-      mensagem(t.ok, "ok");
+      mensagem(t.ok, "ok"); meusRecados();
       $("texto").value = ""; foto = null; $("previa").hidden = true; $("arquivo").value = ""; $("btnFoto").textContent = t.foto;
     } else mensagem({ limite: t.limite, desligado: t.desligado, foto: t.erroFoto, vazio: t.vazio }[j.erro] || t.rede, "erro");
   } catch (e) { mensagem(t.rede, "erro"); }

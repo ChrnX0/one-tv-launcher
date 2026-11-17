@@ -42,6 +42,7 @@ object AvisoTv {
     private val principal = Handler(Looper.getMainLooper())
     private var janela: View? = null
     private var fecharDepois: Runnable? = null
+    @Volatile private var vistoAtual: String? = null   // id do recado da família na tela (OK = "❤ Vi")
     private var ouvindoTela = false
 
     enum class Resultado { MOSTRADO, GUARDADO, DESCARTADO, SEM_ACESSIBILIDADE }
@@ -56,6 +57,7 @@ object AvisoTv {
         icone: android.graphics.drawable.Drawable? = null,   // ícone de linha à esquerda (sistema de design); null = ponto de luz
         fica: AvisoRegras.Fica = AvisoRegras.Fica.PASSAGEIRO,   // quanto tempo o cartão fica no protetor (12/11/2026)
         historico: Boolean = true,   // false = confirmação curta, fora da central de avisos do painel rápido (ideia 35)
+        vistoId: String? = null,   // recado da família conectada (17/11/2026, "❤ Vi"): OK no aviso marca como visto (FamiliaVistos)
     ): Resultado {
         val app = ctx.applicationContext
         if (historico) guardarNoHistorico(app, titulo, texto)
@@ -73,11 +75,12 @@ object AvisoTv {
             if (!guardarSeApagada) return Resultado.DESCARTADO.also { Log.i(TAG, "tela apagada: aviso descartado ($titulo)") }
             app.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
                 .putString("titulo", titulo).putString("texto", texto).putInt("segundos", segundos)
-                .putBoolean("som", som).putString("fica", fica.name).putLong("em", System.currentTimeMillis()).apply()
+                .putBoolean("som", som).putString("fica", fica.name).putLong("em", System.currentTimeMillis())
+                .putString("visto", vistoId).apply()
             principal.post { esperarTelaAcender(app) }
             return Resultado.GUARDADO
         }
-        principal.post { abrirJanela(titulo, texto, segundos, som, imagem, icone) }
+        principal.post { abrirJanela(titulo, texto, segundos, som, imagem, icone, vistoId) }
         return Resultado.MOSTRADO
     }
 
@@ -113,6 +116,23 @@ object AvisoTv {
     fun dispensarDoHistorico(ctx: Context, quando: Long) { mudarHistorico(ctx) { HistoricoAvisos.remover(it, quando) }; NotificacoesTv.avisarMudanca() }
     fun limparHistorico(ctx: Context) { mudarHistorico(ctx) { emptyList() }; NotificacoesTv.avisarMudanca() }
 
+    /**
+     * OK com um recado da família na tela (17/11/2026, "❤ Vi"): marca o recado como visto, fecha o aviso e confirma.
+     * Só vale enquanto o aviso de um recado com remetente está aberto (no máximo os segundos dele); fora disso o OK
+     * segue para o app da frente, como sempre.
+     */
+    fun teclaOk(e: KeyEvent): Boolean {
+        val id = vistoAtual ?: return false
+        if (janela == null || e.keyCode !in setOf(KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER)) return false
+        if (e.action == KeyEvent.ACTION_UP) principal.post {
+            val svc = AutorizaShizukuService.instancia ?: return@post
+            fechar()
+            val quem = FamiliaVistos.marcar(svc, id)
+            rapido(svc, "❤", svc.getString(R.string.famc_vi_ok, quem ?: svc.getString(R.string.famc_alguem)), 4)
+        }
+        return true
+    }
+
     fun teclaVoltar(e: KeyEvent): Boolean {
         if (janela == null || e.keyCode != KeyEvent.KEYCODE_BACK) return false
         // Fecha no "sobe" da tecla; o "desce" também é engolido, senão o app da frente veria só metade da tecla.
@@ -147,10 +167,12 @@ object AvisoTv {
         val segundos = p.getInt("segundos", 60)
         val som = p.getBoolean("som", true)
         val fica = AvisoRegras.Fica.values().firstOrNull { it.name == p.getString("fica", null) } ?: AvisoRegras.Fica.ATENCAO
+        val visto = p.getString("visto", null)
         p.edit().clear().apply()
         if (titulo == null || texto == null || System.currentTimeMillis() - em > VALIDADE_PENDENTE_MS) return
         val h = java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault()).format(java.util.Date(em))
-        mostrar(app, app.getString(R.string.av_enviado_as, titulo, h), texto, segundos, som, guardarSeApagada = true, fica = fica)
+        mostrar(app, app.getString(R.string.av_enviado_as, titulo, h), texto, segundos, som, guardarSeApagada = true, fica = fica,
+            historico = false, vistoId = visto)   // já entrou no histórico quando chegou
     }
 
     // ---------------------------------------------------------------- janela
@@ -166,7 +188,7 @@ object AvisoTv {
      */
     private fun abrirJanela(
         titulo: String, texto: String, segundos: Int, som: Boolean,
-        imagem: android.graphics.Bitmap? = null, icone: android.graphics.drawable.Drawable? = null,
+        imagem: android.graphics.Bitmap? = null, icone: android.graphics.drawable.Drawable? = null, vistoId: String? = null,
     ) {
         val svc = AutorizaShizukuService.instancia ?: return
         fechar()   // um aviso por vez: o novo substitui o anterior
@@ -192,12 +214,16 @@ object AvisoTv {
         // Cabe numa linha = pílula. Recado comprido não cabe: aí vira cartão (raio 16, até 3 linhas), em vez de cortar
         // o texto que alguém mandou. Com foto, idem.
         val cabe = android.text.Layout.getDesiredWidth(linha, msg.paint) <= maxTexto   // mede com o negrito do nome (o measureText simples media a menos e cortava o fim, medido na TV)
-        val cartao = imagem != null || !cabe
+        val cartao = imagem != null || !cabe || vistoId != null   // recado com "OK: ❤ Vi" tem 2 linhas: sempre cartão
         if (cartao) { msg.maxLines = 3; msg.ellipsize = android.text.TextUtils.TruncateAt.END; msg.setLineSpacing(0f, 1.15f) }
         else { msg.isSingleLine = true; msg.ellipsize = android.text.TextUtils.TruncateAt.END }
         val coluna = LinearLayout(svc).apply {
             orientation = LinearLayout.VERTICAL
             addView(msg)
+            // A dica do "❤ Vi" em letra maior que o recado: é para quem está no sofá enxergar o que fazer.
+            if (vistoId != null) addView(Estilo.texto(svc, Estilo.Papel.CORPO, svc.getString(R.string.famc_ok_vi)).apply {
+                textSize = 15f; typeface = Estilo.fonte(700); setTextColor(Estilo.ACENTO)
+            }, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply { topMargin = Estilo.dp(svc, 8) })
             if (imagem != null) addView(android.widget.ImageView(svc).apply {
                 setImageBitmap(imagem); adjustViewBounds = true
                 maxHeight = (svc.resources.displayMetrics.heightPixels * 0.4).toInt()
@@ -236,6 +262,7 @@ object AvisoTv {
             Log.w(TAG, "não consegui abrir a janela: $e"); return
         }
         janela = pilula
+        vistoAtual = vistoId
         if (som) bipar()
         fecharDepois = Runnable { fechar() }.also { principal.postDelayed(it, segundos * 1000L) }
         Log.i(TAG, "aviso na tela por ${segundos}s: $titulo")
@@ -246,6 +273,7 @@ object AvisoTv {
         fecharDepois = null
         janela?.let { j -> try { j.context.getSystemService(WindowManager::class.java).removeView(j) } catch (_: Exception) {} }
         janela = null
+        vistoAtual = null
     }
 
     /** Dois bipes curtos no volume de notificação. Não pede o foco do áudio: o som do filme não pausa. */

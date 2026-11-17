@@ -272,15 +272,19 @@ object McpServidor {
                 app.assets.open("familia/index.html").use { it.readBytes() }, CABECALHOS_FAMILIA)
             acao == "recado" && req.metodo == "POST" -> {
                 val o = JsonSeguro.objeto(req.corpoTexto()) ?: return json(400, JSONObject().put("erro", "json"), CABECALHOS_FAMILIA)
-                FamiliaConectada.receber(app, o.optString("nome"), o.optString("texto"), null)
+                FamiliaConectada.receber(app, o.optString("nome"), o.optString("texto"), null, o.optString("rid"))
             }
             // Degrau 4: o que a página precisa saber (o botão "Gravar vídeo" só aparece com os vídeos aceitos na TV).
             acao == "estado" && req.metodo == "GET" -> return json(200, JSONObject().put("video", RecadoVideo.aceita(app))
                 .put("maxSegundos", RecadoVideo.MAX_SEGUNDOS).put("maxBytes", RecadoVideo.MAX_BYTES), CABECALHOS_FAMILIA)
             acao == "video" && req.metodo == "POST" ->
-                RecadoVideo.receber(app, req.consulta["nome"], req.consulta["texto"]?.takeIf { it.isNotBlank() }, corpo, req.tamanho)
+                RecadoVideo.receber(app, req.consulta["nome"], req.consulta["texto"]?.takeIf { it.isNotBlank() }, corpo, req.tamanho, req.consulta["rid"])
             acao == "foto" && req.metodo == "POST" ->
-                FamiliaConectada.receber(app, req.consulta["nome"], req.consulta["texto"]?.takeIf { it.isNotBlank() }, req.lerCorpo(FamiliaConectada.MAX_FOTO + 1024))
+                FamiliaConectada.receber(app, req.consulta["nome"], req.consulta["texto"]?.takeIf { it.isNotBlank() },
+                    req.lerCorpo(FamiliaConectada.MAX_FOTO + 1024), req.consulta["rid"])
+            // "❤ Vi" (17/11/2026): os recados DESTE remetente (o número aleatório guardado no celular dele) e se já foram vistos.
+            acao == "vistos" && req.metodo == "GET" ->
+                return json(200, JSONObject().put("recados", FamiliaVistos.doRemetente(app, req.consulta["rid"])), CABECALHOS_FAMILIA)
             else -> return json(405, JSONObject(), CABECALHOS_FAMILIA)
         }
         return if (r == null) json(200, JSONObject().put("ok", true), CABECALHOS_FAMILIA)

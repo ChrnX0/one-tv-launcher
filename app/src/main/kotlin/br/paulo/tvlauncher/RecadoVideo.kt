@@ -140,7 +140,7 @@ object RecadoVideo {
      * e guarda. Devolve null se deu certo, ou o código do erro para a página ("desligado", "tamanho", "limite",
      * "video", "duracao", "disco").
      */
-    fun receber(ctx: Context, nomeBruto: String?, textoBruto: String?, entrada: InputStream, tamanho: Long): String? {
+    fun receber(ctx: Context, nomeBruto: String?, textoBruto: String?, entrada: InputStream, tamanho: Long, rid: String? = null): String? {
         val app = ctx.applicationContext
         if (!aceita(app) || !Planos.permite(app, Planos.Recurso.RECADO_VIDEO)) return "desligado"   // plano: Pro
         if (!Regras.tamanhoOk(tamanho)) return "tamanho"
@@ -178,6 +178,7 @@ object RecadoVideo {
                 if (!tmp.renameTo(File(dir, nome))) return "disco"
                 gravarLista(app, listOf(Video(nome, quem, texto, agora, tamanho, false)) + atuais.filter { it.arquivo !in fora })
             }
+            FamiliaVistos.registrar(app, rid, quem, "🎬 " + texto, false, idFixo = nome)   // "❤ Vi": visto quando assistir
             avisar(app, quem, texto, nome)
             Log.i(TAG, "vídeo recebido: ${tamanho / 1024} KB, ${ms / 1000} s")
             return null
@@ -215,6 +216,7 @@ object RecadoVideo {
 
     fun marcarVisto(ctx: Context, arquivo: String) {
         synchronized(this) { gravarLista(ctx, lista(ctx).map { if (it.arquivo == arquivo) it.copy(visto = true) else it }) }
+        FamiliaVistos.marcar(ctx, arquivo)   // quem mandou vê "❤ Visto" na página
     }
 
     fun apagar(ctx: Context, arquivo: String) {

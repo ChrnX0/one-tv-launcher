@@ -76,6 +76,7 @@ class AutorizaShizukuService : AccessibilityService() {
         if (AutoDesligar.tecla(e)) return true
         // Cuidar de longe (77): segurar a tecla de ajuda 3 s. Toque curto passa; só depois dos 3 s a tecla é nossa.
         if (CuidarDeLongeTv.tecla(this, e)) return true
+        if (AvisoTv.teclaOk(e)) return true   // OK com um recado da família na tela: "❤ Vi" (quem mandou fica sabendo)
         if (AvisoTv.teclaVoltar(e)) return true   // VOLTAR com um recado/aviso na tela: fecha o aviso, não o filme
         if (HoraDormirTv.tecla(this, e)) return true   // hora de dormir: VOLUME + não passa do teto
         SomNavegacaoTv.tecla(this, e)   // clique de navegação (só nas telas do launcher, se ligado)
