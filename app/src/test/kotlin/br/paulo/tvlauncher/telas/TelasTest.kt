@@ -97,6 +97,8 @@ class TelasTest {
             br.paulo.tvlauncher.LayoutHome.definirTamanho(app, if (nome == "home-grande") 115 else 100)
             br.paulo.tvlauncher.Extras.definir(app, br.paulo.tvlauncher.Extras.Chave.CARTOES_TRANSPARENTES, nome == "home-grande")
             br.paulo.tvlauncher.LayoutHome.definirGrade(app, nome == "home-grade")
+            // "home" é a cruz (a única tela inicial desde 17/11/2026); grande e grade ainda medem a antiga até ela sair.
+            br.paulo.tvlauncher.LayoutHome.definirAntiga(app, nome == "home-grande" || nome == "home-grade")
             val m = try { medir(cls, "$idioma-$nome") } catch (e: Throwable) {
                 problemas += "$chave: a tela não abriu (${e.javaClass.simpleName}: ${e.message?.take(160)})"; continue
             }
@@ -125,6 +127,8 @@ class TelasTest {
 
     private fun medir(cls: Class<out Activity>, arquivo: String): Medida {
         val a = Robolectric.buildActivity(cls).setup().get()
+        // A HOME lê apps e player fora da tela e desenha depois: espera essas voltas (a cruz só aparece com elas).
+        if (cls == MainActivity::class.java) repeat(10) { Thread.sleep(100); org.robolectric.shadows.ShadowLooper.idleMainLooper(200, java.util.concurrent.TimeUnit.MILLISECONDS) }
         val raiz: View = a.window.decorView
         val foto = Bitmap.createBitmap(raiz.width, raiz.height, Bitmap.Config.ARGB_8888)
         raiz.draw(Canvas(foto))

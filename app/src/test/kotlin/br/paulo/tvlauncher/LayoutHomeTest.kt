@@ -24,4 +24,9 @@ class LayoutHomeTest {
     @Test fun estranhoVoltaAoNormal() {
         assertEquals(112, LayoutHome.largura(300)); assertEquals(100, LayoutHome.proximo(115)); assertEquals(100, LayoutHome.proximo(7))
     }
+
+    @Test fun cruzESempreAMenosQueOAdbPecaAAntiga() {
+        assertTrue(LayoutHome.cruz(0)); assertTrue(LayoutHome.cruz(1)); assertTrue(LayoutHome.cruz(99))
+        assertTrue(!LayoutHome.cruz(LayoutHome.JEITO_ANTIGA))
+    }
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela inicial em cruz (17/11/2026). -->
+<resources>
+    <string name="cruz_continuar">जारी रखें</string>
+    <string name="cruz_assistir">देखें</string>
+    <string name="cruz_ouvir">सुनें</string>
+    <string name="cruz_jogar">खेलें</string>
+    <string name="cruz_aplicativos">ऐप्स</string>
+    <string name="cruz_todos_apps">सभी ऐप्स</string>
+    <string name="cruz_todos_apps_sub">ऐप्स देखें, खिसकाएँ और छिपाएँ</string>
+    <string name="cruz_radio">रेडियो</string>
+    <string name="cruz_radio_sub">दुनिया भर के स्टेशन</string>
+    <string name="cruz_filme">फ़िल्म</string>
+    <string name="cruz_jogo">गेम</string>
+    <string name="cruz_icones">होम स्क्रीन के आइकन</string>
+    <string name="cruz_icones_det">देखें, सुनें और खेलें का चित्र</string>
+    <string name="cruz_objeto">वस्तु</string>
+    <string name="cruz_simbolo">चिह्न</string>
+</resources>

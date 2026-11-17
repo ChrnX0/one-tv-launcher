@@ -46,4 +46,21 @@ object LayoutHome {
     fun tamanho(ctx: Context) = valido(Extras.numero(ctx, CHAVE, 100))
     fun definirTamanho(ctx: Context, v: Int) = Extras.definirNumero(ctx, CHAVE, valido(v))
     fun transparente(ctx: Context) = Extras.ligado(ctx, Extras.Chave.CARTOES_TRANSPARENTES)
+
+    // ---- tela inicial em cruz (17/11/2026): a ÚNICA tela inicial (dono, 19:41Z: "aposenta a antiga"). Não há ajuste.
+    // A HOME antiga (fileira/grade) só volta por adb, como saída de emergência enquanto a Cruz não passa no teste de
+    // desempenho na TV: `EXTRAS --es o home_antiga --ez ligar true`. Depois do aceite, um PR próprio apaga a antiga.
+    const val CHAVE_JEITO = "home_jeito"
+    const val JEITO_ANTIGA = 2
+
+    /** true = Cruz (sempre, salvo a saída de emergência por adb). */
+    fun cruz(ctx: Context): Boolean = cruz(Extras.numero(ctx, CHAVE_JEITO, 0))
+    fun cruz(valorGuardado: Int): Boolean = valorGuardado != JEITO_ANTIGA
+
+    fun definirAntiga(ctx: Context, sim: Boolean) = Extras.definirNumero(ctx, CHAVE_JEITO, if (sim) JEITO_ANTIGA else 0)
+
+    /** Estilo dos ícones da cruz: 0 = Objeto (padrão), 1 = Símbolo. */
+    const val CHAVE_ICONES = "cruz_icones"
+    fun iconesCruz(ctx: Context) = if (Extras.numero(ctx, CHAVE_ICONES, 0) == 1) IconeCruz.Estilo.SIMBOLO else IconeCruz.Estilo.OBJETO
+    fun definirIconesCruz(ctx: Context, e: IconeCruz.Estilo) = Extras.definirNumero(ctx, CHAVE_ICONES, if (e == IconeCruz.Estilo.SIMBOLO) 1 else 0)
 }

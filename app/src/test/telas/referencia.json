@@ -38,7 +38,9 @@
  "en\/home": {
   "menorSp": 12,
   "foco": true,
-  "cortes": [],
+  "cortes": [
+   "Videos, music and photos from your home "
+  ],
   "sobrepostos": []
  },
  "en\/home-grade": {

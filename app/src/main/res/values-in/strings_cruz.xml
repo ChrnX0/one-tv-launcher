@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela inicial em cruz (17/11/2026). -->
+<resources>
+    <string name="cruz_continuar">Lanjutkan</string>
+    <string name="cruz_assistir">Tonton</string>
+    <string name="cruz_ouvir">Dengar</string>
+    <string name="cruz_jogar">Main</string>
+    <string name="cruz_aplicativos">Aplikasi</string>
+    <string name="cruz_todos_apps">Semua aplikasi</string>
+    <string name="cruz_todos_apps_sub">Lihat, pindahkan, dan sembunyikan aplikasi</string>
+    <string name="cruz_radio">Radio</string>
+    <string name="cruz_radio_sub">Stasiun dari seluruh dunia</string>
+    <string name="cruz_filme">Film</string>
+    <string name="cruz_jogo">Game</string>
+    <string name="cruz_icones">Ikon layar utama</string>
+    <string name="cruz_icones_det">Gambar untuk Tonton, Dengar, dan Main</string>
+    <string name="cruz_objeto">Objek</string>
+    <string name="cruz_simbolo">Simbol</string>
+</resources>

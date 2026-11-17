@@ -951,8 +951,17 @@ class ConfigLauncherActivity : Activity() {
             TamanhoTexto.definir(this, TamanhoTexto.proximo(TamanhoTexto.atual(this)))
             recreate()
         }, lp())
-        // Fileira ou grade (layout flexível, LayoutHome): a HOME se refaz ao voltar.
-        c.addView(linha(getString(R.string.lh_arranjo), getString(R.string.lh_arranjo_det),
+        // Tela inicial em cruz (17/11/2026): a única; aqui só o desenho dos ícones (Objeto ou Símbolo). A HOME se refaz ao voltar.
+        // Fileira ou grade só valia para a tela antiga (que só volta por adb).
+        if (LayoutHome.cruz(this)) {
+            fun rotuloIcones() = getString(if (LayoutHome.iconesCruz(this) == IconeCruz.Estilo.OBJETO) R.string.cruz_objeto else R.string.cruz_simbolo)
+            lateinit var linhaIcones: LinhaCfg
+            linhaIcones = linha(getString(R.string.cruz_icones), getString(R.string.cruz_icones_det), valor = rotuloIcones()) {
+                LayoutHome.definirIconesCruz(this, if (LayoutHome.iconesCruz(this) == IconeCruz.Estilo.OBJETO) IconeCruz.Estilo.SIMBOLO else IconeCruz.Estilo.OBJETO)
+                linhaIcones.valor(rotuloIcones())
+            }
+            c.addView(linhaIcones, lp())
+        } else c.addView(linha(getString(R.string.lh_arranjo), getString(R.string.lh_arranjo_det),
             valor = getString(if (LayoutHome.grade(this)) R.string.lh_grade else R.string.lh_fileira)) {
             LayoutHome.definirGrade(this, !LayoutHome.grade(this))
             recarregarAba()
