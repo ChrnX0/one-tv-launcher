@@ -545,7 +545,8 @@ class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.in
         val parcial = try { File.createTempFile(".${p.nome.take(40)}.", ".parcial", p.pasta) } catch (_: IOException) { return Mtp.NEGADO }
         try {
             FileOutputStream(parcial).use { s ->
-                val n = encher(s)
+                // Arquivo grande: a rede enche e o disco grava ao mesmo tempo (ver EscritaAdiantada). Pequeno: direto.
+                val n = if (p.tamanho in 0 until EscritaAdiantada.MINIMO) encher(s) else EscritaAdiantada(s).use { encher(it) }
                 if (p.tamanho >= 0 && n != p.tamanho) throw IOException("chegaram $n de ${p.tamanho} bytes")
                 s.fd.sync()
             }
@@ -561,6 +562,60 @@ class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.in
 
     /** O envio não aconteceu: o handle reservado deixa de existir. */
     fun desistir(p: Pendente) { chaveDe(p.handle)?.let { if (!File(p.pasta, p.nome).exists()) esquecer(it) } }
+}
+
+/**
+ * Grava em [destino] numa thread à parte enquanto quem chama continua lendo a rede (17/11/2026).
+ *
+ * Medido na TV da sala: a rede pura entregava 7,7 MB/s e a cópia para a TV fazia 5,8, porque cada pedaço esperava o
+ * disco terminar antes de ler o próximo da rede. Aqui os pedaços ficam numa fila curta (até [blocos] de [tamanho]
+ * bytes, 2 MB ao todo): a rede só para quando a fila enche. Um erro do disco aparece no write seguinte ou no close.
+ * close() espera o disco gravar tudo; quem chama ainda faz o sync do arquivo depois.
+ */
+class EscritaAdiantada(private val destino: OutputStream, private val blocos: Int = 8, private val tamanho: Int = 256 * 1024) : OutputStream() {
+    companion object { const val MINIMO = 1L shl 20 }   // abaixo de 1 MB não compensa abrir uma thread
+
+    private class Bloco(val b: ByteArray, var n: Int = 0)
+    private val fila = java.util.concurrent.ArrayBlockingQueue<Bloco>(blocos)        // cheios, esperando o disco
+    private val livres = java.util.concurrent.ArrayBlockingQueue<Bloco>(blocos)      // vazios, para reusar (sem lixo)
+    private var criados = 0
+    private val fim = Bloco(ByteArray(0))
+    @Volatile private var erro: IOException? = null
+    private var fechado = false
+    private val gravador = Thread({
+        try {
+            while (true) {
+                val x = fila.take()
+                if (x === fim) break
+                // depois de um erro só esvazia a fila: quem enche não pode ficar preso esperando lugar
+                if (erro == null) try { destino.write(x.b, 0, x.n) } catch (e: IOException) { erro = e }
+                livres.put(x)
+            }
+        } catch (_: InterruptedException) {}
+    }, "Mtp-gravador").apply { isDaemon = true; start() }
+
+    override fun write(b: Int) = write(byteArrayOf(b.toByte()), 0, 1)
+
+    override fun write(b: ByteArray, off: Int, len: Int) {
+        var o = off; var falta = len
+        while (falta > 0) {
+            erro?.let { throw it }
+            val x = livres.poll() ?: if (criados < blocos) { criados++; Bloco(ByteArray(tamanho)) } else livres.take()
+            x.n = minOf(falta, tamanho)
+            System.arraycopy(b, o, x.b, 0, x.n)
+            o += x.n; falta -= x.n
+            fila.put(x)
+        }
+    }
+
+    /** Espera o disco gravar o que está na fila. Não fecha o [destino]: quem abriu é que fecha. */
+    override fun close() {
+        if (fechado) return
+        fechado = true
+        fila.put(fim)
+        gravador.join()
+        erro?.let { throw it }
+    }
 }
 
 /**
