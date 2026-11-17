@@ -227,6 +227,10 @@
     <string name="pn_nao_achei">экран сопряжения ещё не найден</string>
     <string name="pn_6">код состоит из 6 цифр</string>
     <string name="pn_pareado">сопряжено! проверяю оболочку…</string>
+    <string name="pn_ok_titulo">Сопряжение выполнено ✓</string>
+    <string name="pn_ok_texto">Готово! Лаунчер подключён к телевизору. Подключаем его собственную оболочку…</string>
+    <string name="pn_ok_shell">Всё готово: собственная оболочка лаунчера работает.</string>
+    <string name="pn_ok_lento">Сопряжено. Оболочка ещё не ответила; лаунчер продолжает пытаться сам.</string>
     <string name="pn_codigo">Код: %1$s</string>
     <string name="pn_achada">Экран сопряжения найден (порт %1$d). Введите код:</string>
     <string name="pn_falhou">не удалось: %1$s</string>

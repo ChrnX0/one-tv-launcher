@@ -2,12 +2,12 @@
 <!-- Tradução (ko) de values/strings_saude.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="saude_titulo">원격 액세스 중지됨</string>
-    <string name="saude_texto_shell">TV의 자체 액세스가 %1$d분 전에 끊겼습니다(패널, Claude, 자동 수정이 중지됨). 다시 페어링을 누르거나 설정 › 시스템 › PC 없이 페어링으로 이동하세요.</string>
+    <string name="saude_texto_shell">TV의 자체 액세스가 %1$d분 전에 끊겼습니다(패널, Claude, 자동 수정이 중지됨). 다시 페어링을 누르거나 설정 › 고급 › PC 없이 페어링으로 이동하세요.</string>
     <string name="saude_texto_tunel">인터넷으로 Claude 사용이 오프라인입니다. 연결을 눌러 무엇이 빠졌는지 확인하거나 설정 › 원격 액세스로 이동하세요.</string>
     <string name="saude_parear">다시 페어링</string>
     <string name="saude_conectar">연결</string>
     <string name="saude_depois">나중에</string>
-    <string name="saude_acao_shell">다시 페어링: 설정 › 시스템 › PC 없이 페어링</string>
+    <string name="saude_acao_shell">다시 페어링: 설정 › 고급 › PC 없이 페어링</string>
     <string name="saude_acao_tunel">다시 연결: 설정 › 원격 액세스 › 연결</string>
     <string name="mnt_titulo">야간 점검</string>
     <string name="mnt_consertei">수정함:</string>

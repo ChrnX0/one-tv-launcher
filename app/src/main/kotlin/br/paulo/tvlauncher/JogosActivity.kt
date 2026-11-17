@@ -63,6 +63,7 @@ class JogosActivity : Activity() {
     private var aberto = false                           // painel aberto (foco nele)
     private var esperandoPc = false
     private var montado = false
+    private var abrirNoSofa = false   // veio do item "Sofá" da tela em cruz: 1º foco no painel
     private var focoPacote: String? = null   // ao redesenhar (mudou de grupo, voltou de um jogo), o foco volta no mesmo jogo
     private var qr: ImageView? = null        // QR da sala de voz (só aparece com o painel aberto)
     private var qrDica: TextView? = null
@@ -89,6 +90,7 @@ class JogosActivity : Activity() {
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro (VigiaAtualizacao)
+        abrirNoSofa = intent?.getBooleanExtra(EXTRA_SOFA, false) == true
         val raiz = FrameLayout(this).apply { background = Estilo.fundoTela(this@JogosActivity) }
         // Luz da cor do jogo em foco atrás da fileira (a tela "veste" o jogo) e um calor da marca no canto do painel.
         brilho = View(this)
@@ -282,6 +284,7 @@ class JogosActivity : Activity() {
         }
         aplicarAberto()
         if (tinhaFoco) (focavel ?: chamarPainel.takeIf { it.visibility == View.VISIBLE })?.requestFocus()
+        else if (abrirNoSofa && montado && focavel != null) { abrirNoSofa = false; focavel.requestFocus() }
         atualizarAcoes()
     }
 
@@ -414,6 +417,17 @@ class JogosActivity : Activity() {
         sofaTitulo.visibility = sofa; controlesBox.visibility = sofa
         // "Chamar a turma" do painel só com ele aberto; fechado, o mesmo botão está ao lado do Jogar.
         chamarPainel.visibility = if (aberto && turma is TurmaDiscordTv.Estado.Pronta && TurmaDiscordTv.temWebhook(this)) View.VISIBLE else View.GONE
+    }
+
+    /** O 1º focável dentro de [g] (ordem da tela). */
+    private fun achar(g: ViewGroup): View? {
+        for (i in 0 until g.childCount) {
+            val v = g.getChildAt(i)
+            if (v.visibility != View.VISIBLE) continue
+            if (v.isFocusable) return v
+            if (v is ViewGroup) achar(v)?.let { return it }
+        }
+        return null
     }
 
     private fun dentro(v: View, pai: ViewGroup): Boolean {
@@ -554,7 +568,17 @@ class JogosActivity : Activity() {
         val focoNaFila = currentFocus?.let { dentro(it, fila) } == true
         val tag = focoPacote ?: (currentFocus?.tag as? String)?.takeIf { focoNaFila }
         val alvo = redesenharFila(tag)
-        if (!montado || focoNaFila || focoPacote != null) alvo?.requestFocus()
+        if (!montado && abrirNoSofa) {
+            // Item "Sofá" da cruz: o foco começa no painel (sala de voz, configurar a turma ou parear controle).
+            // A turma ainda pode estar chegando do Discord: sem nada focável no painel, o foco fica no jogo e passa
+            // para a turma quando ela aparecer (desenharTurma).
+            val noPainel = achar(turmaBox) ?: achar(controlesBox)
+            if (noPainel != null) {
+                abrirNoSofa = false
+                alvo?.isFocusedByDefault = false
+                noPainel.isFocusedByDefault = true; noPainel.requestFocus()
+            } else alvo?.requestFocus()
+        } else if (!montado || focoNaFila || focoPacote != null) alvo?.requestFocus()
         focoPacote = null
     }
 
@@ -967,18 +991,21 @@ class JogosActivity : Activity() {
         return super.dispatchKeyEvent(event)
     }
 
-    private companion object {
+    companion object {
+        /** Abrir já no painel do sofá (item "Sofá" da coluna Jogar da tela em cruz): o foco começa na turma. */
+        const val EXTRA_SOFA = "br.paulo.tvlauncher.jogos.SOFA"
+
         /** Cor da marca Sofaly no fundo escuro (17/11/2026). Vira Estilo.ACENTO quando a marca chegar ao Estilo. */
-        const val MARCA = 0xFFFF6A2B.toInt()
-        const val VERDE = 0xFF57D98A.toInt()
-        const val LARGURA_PAINEL = 236
-        const val LARGURA_PAINEL_ABERTO = 312
-        const val CARD_L = 158
-        const val CARD_A = 232
-        const val CARD_RAIO = 18
-        const val QR = 92
-        val CORES_JOGADOR = intArrayOf(MARCA, 0xFF3D7BFF.toInt(), 0xFF2FA866.toInt(), 0xFFC98A12.toInt())
+        private const val MARCA = 0xFFFF6A2B.toInt()
+        private const val VERDE = 0xFF57D98A.toInt()
+        private const val LARGURA_PAINEL = 236
+        private const val LARGURA_PAINEL_ABERTO = 312
+        private const val CARD_L = 158
+        private const val CARD_A = 232
+        private const val CARD_RAIO = 18
+        private const val QR = 92
+        private val CORES_JOGADOR = intArrayOf(MARCA, 0xFF3D7BFF.toInt(), 0xFF2FA866.toInt(), 0xFFC98A12.toInt())
         // Avatares: tons claros, nenhum rosado (o dono detesta rosa).
-        val CORES_AVATAR = intArrayOf(0xFFFFB37A.toInt(), 0xFF9CC8FF.toInt(), 0xFFA8E6B8.toInt(), 0xFFF5DFA0.toInt(), 0xFF8FE0D0.toInt(), 0xFFC7D3E0.toInt())
+        private val CORES_AVATAR = intArrayOf(0xFFFFB37A.toInt(), 0xFF9CC8FF.toInt(), 0xFFA8E6B8.toInt(), 0xFFF5DFA0.toInt(), 0xFF8FE0D0.toInt(), 0xFFC7D3E0.toInt())
     }
 }

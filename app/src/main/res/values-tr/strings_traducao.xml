@@ -227,6 +227,10 @@
     <string name="pn_nao_achei">eşleme ekranı henüz bulunamadı</string>
     <string name="pn_6">kod 6 hanelidir</string>
     <string name="pn_pareado">eşleştirildi! kabuk denetleniyor…</string>
+    <string name="pn_ok_titulo">Eşleştirme başarılı ✓</string>
+    <string name="pn_ok_texto">Tamam! Başlatıcı TV\'ye bağlandı. Kendi kabuğu bağlanıyor…</string>
+    <string name="pn_ok_shell">Her şey hazır: başlatıcının kendi kabuğu çalışıyor.</string>
+    <string name="pn_ok_lento">Eşleştirildi. Kabuk henüz yanıt vermedi; başlatıcı kendisi denemeye devam ediyor.</string>
     <string name="pn_codigo">Kod: %1$s</string>
     <string name="pn_achada">Eşleme ekranı bulundu (port %1$d). Kodu yazın:</string>
     <string name="pn_falhou">başarısız: %1$s</string>

@@ -2,12 +2,12 @@
 <!-- Tradução (pt-rPT) de values/strings_saude.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="saude_titulo">Acesso remoto parado</string>
-    <string name="saude_texto_shell">O acesso da TV a ela mesma caiu há %1$d min (painel, Claude e consertos automáticos param). Toque em Parear de novo ou vá em Definições › Sistema › Parear sem PC.</string>
+    <string name="saude_texto_shell">O acesso da TV a ela mesma caiu há %1$d min (painel, Claude e consertos automáticos param). Toque em Parear de novo ou vá em Definições › Avançado › Parear sem PC.</string>
     <string name="saude_texto_tunel">O Claude pela internet saiu do ar. Toque em Conectar para ver o que falta, ou vá em Definições › Acesso remoto.</string>
     <string name="saude_parear">Parear de novo</string>
     <string name="saude_conectar">Conectar</string>
     <string name="saude_depois">Agora não</string>
-    <string name="saude_acao_shell">Parear de novo: Definições › Sistema › Parear sem PC</string>
+    <string name="saude_acao_shell">Parear de novo: Definições › Avançado › Parear sem PC</string>
     <string name="saude_acao_tunel">Conectar de novo: Definições › Acesso remoto › Conectar</string>
     <string name="mnt_titulo">Manutenção da noite</string>
     <string name="mnt_consertei">Consertei:</string>

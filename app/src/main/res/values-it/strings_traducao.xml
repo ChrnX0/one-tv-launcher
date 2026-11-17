@@ -227,6 +227,10 @@
     <string name="pn_nao_achei">schermata di abbinamento non ancora trovata</string>
     <string name="pn_6">il codice ha 6 cifre</string>
     <string name="pn_pareado">abbinato! verifica della shell…</string>
+    <string name="pn_ok_titulo">Associazione riuscita ✓</string>
+    <string name="pn_ok_texto">Fatto! Il launcher è collegato alla TV. Collegamento della sua shell…</string>
+    <string name="pn_ok_shell">Tutto pronto: la shell del launcher funziona.</string>
+    <string name="pn_ok_lento">Associato. La shell non ha ancora risposto; il launcher continua a provare da solo.</string>
     <string name="pn_codigo">Codice: %1$s</string>
     <string name="pn_achada">Schermata di abbinamento trovata (porta %1$d). Digita il codice:</string>
     <string name="pn_falhou">non riuscito: %1$s</string>

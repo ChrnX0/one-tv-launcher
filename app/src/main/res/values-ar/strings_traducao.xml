@@ -227,6 +227,10 @@
     <string name="pn_nao_achei">لم أجد شاشة الإقران بعد</string>
     <string name="pn_6">الرمز من 6 أرقام</string>
     <string name="pn_pareado">تم الإقران! جارٍ فحص الصدفة…</string>
+    <string name="pn_ok_titulo">تم الإقران بنجاح ✓</string>
+    <string name="pn_ok_texto">تم! المشغّل متصل الآن بالتلفزيون. جارٍ توصيل الواجهة الخاصة به…</string>
+    <string name="pn_ok_shell">كل شيء جاهز: الواجهة الخاصة بالمشغّل تعمل.</string>
+    <string name="pn_ok_lento">تم الإقران. لم تستجب الواجهة بعد؛ يواصل المشغّل المحاولة وحده.</string>
     <string name="pn_codigo">الرمز: %1$s</string>
     <string name="pn_achada">وُجدت شاشة الإقران (المنفذ %1$d). اكتب الرمز:</string>
     <string name="pn_falhou">فشل: %1$s</string>

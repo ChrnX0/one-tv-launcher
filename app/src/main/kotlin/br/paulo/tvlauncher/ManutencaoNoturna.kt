@@ -132,6 +132,8 @@ object ManutencaoNoturna {
             runCatching { InfoExternaCache.noturnoTrakt(app) }
             // Nota da comunidade do Simkl (16/11/2026), do mesmo jeito.
             runCatching { InfoExternaCache.noturnoSimkl(app) }
+            // Podcasts seguidos (Ouvir, 17/11/2026): episódios novos de madrugada, com pedido condicional (304 = nada novo).
+            runCatching { Podcasts.atualizar(app, intervaloMs = 0) }
         } finally { try { trava?.release() } catch (_: Exception) {} }
         idades(app)
     }

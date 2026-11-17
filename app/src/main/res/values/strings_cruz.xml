@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela inicial em cruz (17/11/2026). -->
+<resources>
+    <string name="cruz_continuar">Continue</string>
+    <string name="cruz_assistir">Watch</string>
+    <string name="cruz_ouvir">Listen</string>
+    <string name="cruz_jogar">Play</string>
+    <string name="cruz_aplicativos">Apps</string>
+    <string name="cruz_todos_apps">All apps</string>
+    <string name="cruz_todos_apps_sub">See, move and hide your apps</string>
+    <string name="cruz_radio">Radio</string>
+    <string name="cruz_radio_sub">Stations from around the world</string>
+    <string name="cruz_filme">Movie</string>
+    <string name="cruz_jogo">Game</string>
+    <string name="cruz_icones">Home screen icons</string>
+    <string name="cruz_icones_det">Drawing used for Watch, Listen and Play</string>
+    <string name="cruz_objeto">Object</string>
+    <string name="cruz_simbolo">Symbol</string>
+    <string name="cruz_duotom">Duotone</string>
+    <string name="cruz_barra">Top bar</string>
+    <string name="cruz_barra_det">Profile, search, voice, weather and clock</string>
+    <string name="cruz_barra_recua">Steps back</string>
+    <string name="cruz_barra_leve">Light</string>
+    <string name="cruz_barra_relogio">Big clock</string>
+    <string name="cruz_barra_capsulas">Capsules</string>
+    <string name="cruz_arte">Art of the item in focus</string>
+    <string name="cruz_arte_det">Behind the cross, on the right</string>
+    <string name="cruz_ligada">On</string>
+    <string name="cruz_desligada">Off</string>
+</resources>

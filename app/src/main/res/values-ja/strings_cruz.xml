@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela inicial em cruz (17/11/2026). -->
+<resources>
+    <string name="cruz_continuar">続きから</string>
+    <string name="cruz_assistir">見る</string>
+    <string name="cruz_ouvir">聴く</string>
+    <string name="cruz_jogar">遊ぶ</string>
+    <string name="cruz_aplicativos">アプリ</string>
+    <string name="cruz_todos_apps">すべてのアプリ</string>
+    <string name="cruz_todos_apps_sub">アプリの表示・移動・非表示</string>
+    <string name="cruz_radio">ラジオ</string>
+    <string name="cruz_radio_sub">世界中の放送局</string>
+    <string name="cruz_filme">映画</string>
+    <string name="cruz_jogo">ゲーム</string>
+    <string name="cruz_icones">ホーム画面のアイコン</string>
+    <string name="cruz_icones_det">「見る」「聴く」「遊ぶ」の絵</string>
+    <string name="cruz_objeto">オブジェクト</string>
+    <string name="cruz_simbolo">シンボル</string>
+    <string name="cruz_duotom">ツートン</string>
+    <string name="cruz_barra">上部バー</string>
+    <string name="cruz_barra_det">プロフィール、検索、音声、天気、時計</string>
+    <string name="cruz_barra_recua">控えめ</string>
+    <string name="cruz_barra_leve">ライト</string>
+    <string name="cruz_barra_relogio">大きな時計</string>
+    <string name="cruz_barra_capsulas">カプセル</string>
+    <string name="cruz_arte">選択中の項目の画像</string>
+    <string name="cruz_arte_det">十字の後ろ、右側</string>
+    <string name="cruz_ligada">オン</string>
+    <string name="cruz_desligada">オフ</string>
+</resources>

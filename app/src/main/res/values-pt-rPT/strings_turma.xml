@@ -40,4 +40,7 @@
     <string name="turma_config_guardar">Guardar</string>
     <string name="turma_config_tirar">Remover o grupo</string>
     <string name="turma_id_invalido">Isto não é um ID de servidor do Discord (17 a 20 números).</string>
+    <string name="cruz_sofa">Sofá</string>
+    <string name="cruz_sofa_sub">Comandos e o seu grupo do Discord</string>
+    <string name="cruz_sofa_voz">%1$d em voz · %2$s</string>
 </resources>

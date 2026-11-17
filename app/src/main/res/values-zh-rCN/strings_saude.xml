@@ -2,12 +2,12 @@
 <!-- Tradução (zh-rCN) de values/strings_saude.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="saude_titulo">远程访问已停止</string>
-    <string name="saude_texto_shell">电视对自身的访问已在 %1$d 分钟前中断（面板、Claude 和自动修复都会停止）。请按“重新配对”或前往 设置 › 系统 › 无需电脑配对。</string>
+    <string name="saude_texto_shell">电视对自身的访问已在 %1$d 分钟前中断（面板、Claude 和自动修复都会停止）。请按“重新配对”或前往 设置 › 高级 › 无需电脑配对。</string>
     <string name="saude_texto_tunel">通过互联网使用 Claude 已离线。按“连接”查看缺少什么，或前往 设置 › 远程访问。</string>
     <string name="saude_parear">重新配对</string>
     <string name="saude_conectar">连接</string>
     <string name="saude_depois">暂不</string>
-    <string name="saude_acao_shell">重新配对：设置 › 系统 › 无需电脑配对</string>
+    <string name="saude_acao_shell">重新配对：设置 › 高级 › 无需电脑配对</string>
     <string name="saude_acao_tunel">重新连接：设置 › 远程访问 › 连接</string>
     <string name="mnt_titulo">夜间维护</string>
     <string name="mnt_consertei">已修复：</string>

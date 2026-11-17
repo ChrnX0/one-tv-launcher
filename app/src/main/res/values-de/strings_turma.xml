@@ -40,4 +40,7 @@
     <string name="turma_config_guardar">Speichern</string>
     <string name="turma_config_tirar">Crew entfernen</string>
     <string name="turma_id_invalido">Das ist keine Discord-Server-ID (17 bis 20 Ziffern).</string>
+    <string name="cruz_sofa">Sofa</string>
+    <string name="cruz_sofa_sub">Controller und deine Discord-Crew</string>
+    <string name="cruz_sofa_voz">%1$d im Sprachkanal · %2$s</string>
 </resources>

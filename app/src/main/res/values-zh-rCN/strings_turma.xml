@@ -40,4 +40,7 @@
     <string name="turma_config_guardar">保存</string>
     <string name="turma_config_tirar">移除伙伴</string>
     <string name="turma_id_invalido">这不是 Discord 服务器 ID（17 到 20 位数字）。</string>
+    <string name="cruz_sofa">沙发</string>
+    <string name="cruz_sofa_sub">手柄和你的 Discord 伙伴</string>
+    <string name="cruz_sofa_voz">%1$d 人语音中 · %2$s</string>
 </resources>
