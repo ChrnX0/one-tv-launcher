@@ -97,7 +97,7 @@ object FamiliaConectada {
     }
 
     /** Recado (e foto opcional) que chegou. Devolve null se deu certo, ou o código do erro para a página. */
-    fun receber(ctx: Context, nomeBruto: String?, texto: String?, foto: ByteArray?): String? {
+    fun receber(ctx: Context, nomeBruto: String?, texto: String?, foto: ByteArray?, rid: String? = null): String? {
         val app = ctx.applicationContext
         if (!Planos.permite(app, Planos.Recurso.FAMILIA_LINK)) return "desligado"   // plano: Pro (link de fora de casa)
         val quem = Regras.nome(nomeBruto).ifEmpty { app.getString(R.string.famc_alguem) }
@@ -106,15 +106,16 @@ object FamiliaConectada {
         if (foto != null && (foto.size > MAX_FOTO || RecadoImagem.tipo(foto) == null)) return "foto"
         if (!podeMandar(app)) return "limite"
         val titulo = app.getString(R.string.famc_de, quem)
+        val vistoId = FamiliaVistos.registrar(app, rid, quem, t, foto != null)   // "❤ Vi": OK no aviso avisa quem mandou
         if (foto != null) {
             val bmp = RecadoImagem.decodificar(foto) ?: return "foto"
             // Também nas fotos do protetor (a pasta tem limite: cheia, só não guarda; o cartão aparece mesmo assim).
             val nome = "familia-" + java.text.SimpleDateFormat("yyyyMMdd-HHmmss", java.util.Locale.US).format(java.util.Date()) +
                 when (RecadoImagem.tipo(foto)) { RecadoImagem.Tipo.PNG -> ".png"; RecadoImagem.Tipo.WEBP -> ".webp"; else -> ".jpg" }
             FotosProtetor.receber(app, nome, foto.size.toLong(), foto.inputStream())
-            AvisoTv.mostrar(app, titulo, t ?: "📷", 60, som = true, guardarSeApagada = true, imagem = bmp, fica = AvisoRegras.Fica.ATENCAO)
+            AvisoTv.mostrar(app, titulo, t ?: "📷", 60, som = true, guardarSeApagada = true, imagem = bmp, fica = AvisoRegras.Fica.ATENCAO, vistoId = vistoId)
         } else {
-            AvisoTv.mostrar(app, titulo, t!!, 60, som = true, guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO)
+            AvisoTv.mostrar(app, titulo, t!!, 60, som = true, guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO, vistoId = vistoId)
         }
         Gatilhos.disparar(app, Gatilhos.Evento.RECADO_CHEGOU)   // elevação 10.6
         if (t != null) Mural.editar(app) { Mural.adicionar(it, Mural.Lista.RECADOS, "$quem: $t") }
