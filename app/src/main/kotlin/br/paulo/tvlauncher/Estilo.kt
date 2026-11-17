@@ -28,6 +28,13 @@ import android.widget.TextView
 object Estilo {
 
     // ------------------------------------------------------------------ cores
+    /**
+     * Alto contraste (elevação 16.3, 17/11/2026): texto secundário, bordas, acento e erro sobem para pelo menos 7:1
+     * (WCAG AAA) sobre o fundo. Ligado em Configurações; vale para a tela aberta depois de ligar (as abertas redesenham
+     * ao voltar). Lido de Extras.Chave.ALTO_CONTRASTE pelo [LauncherApp] e ao trocar a chave.
+     */
+    @Volatile var altoContraste = false
+
     // Formato 0xAARRGGBB: os dois primeiros dígitos são a opacidade (FF = sólido, 00 = invisível).
 
     /** Fundo de toda tela sem imagem atrás (era o fundo mais usado no código antigo). */
@@ -37,43 +44,46 @@ object Estilo {
     /** Superfície um nível acima (linha focada sem virar pílula, chip ativo): branco a 12%. */
     const val SUPERFICIE_ALTA = 0x1FFFFFFF
     /** Fio de borda das superfícies: branco a 8%. */
-    const val BORDA = 0x14FFFFFF
+    val BORDA: Int get() = if (altoContraste) 0x8CFFFFFF.toInt() else 0x14FFFFFF
     /** Vidro (sobre imagem): tinta escura translúcida + fio claro. Igual à pílula da HOME que o dono aprovou. */
     const val VIDRO_TINTA = 0x8C0E1020.toInt()
     const val VIDRO_BORDA = 0x38FFFFFF
 
     /** Texto: principal, explicação (70%) e rótulo apagado (48%). Nunca branco puro em bloco grande: cansa a vista. */
     const val TEXTO = 0xFFF4F1EC.toInt()
-    const val TEXTO_2 = 0xB3F4F1EC.toInt()
-    const val TEXTO_3 = 0x7AF4F1EC.toInt()
+    val TEXTO_2: Int get() = if (altoContraste) 0xFFF4F1EC.toInt() else 0xB3F4F1EC.toInt()
+    val TEXTO_3: Int get() = if (altoContraste) 0xD9F4F1EC.toInt() else 0x7AF4F1EC.toInt()
     /** Texto em cima do foco branco (linha de lista focada). */
     const val TEXTO_NO_FOCO = 0xFF0E1020.toInt()
-    const val TEXTO_NO_FOCO_2 = 0xA60E1020.toInt()
+    val TEXTO_NO_FOCO_2: Int get() = if (altoContraste) TEXTO_NO_FOCO else 0xA60E1020.toInt()
 
     /** O ÚNICO acento: "ligado", valor escolhido, progresso. Foco NÃO usa acento: foco é branco. */
-    const val ACENTO = 0xFFFF6A2B.toInt()
+    val ACENTO: Int get() = if (altoContraste) 0xFFFF9A3C.toInt() else 0xFFFF6A2B.toInt()
     /** Acento legível sobre o foco branco. */
-    const val ACENTO_NO_FOCO = 0xFFCE3D00.toInt()
+    val ACENTO_NO_FOCO: Int get() = if (altoContraste) 0xFF8A2900.toInt() else 0xFFCE3D00.toInt()
     /** Semânticas: atenção (chuva, vencimento) e erro/ao vivo. Não contam como acento. */
     const val ATENCAO = 0xFFF5B544.toInt()
-    const val ERRO = 0xFFFF5252.toInt()
+    val ERRO: Int get() = if (altoContraste) 0xFFFF8F70.toInt() else 0xFFFF5252.toInt()
     /** Foco: branco. A TV é vista a 3 m; o foco tem que ser a coisa mais óbvia da tela. */
     const val FOCO = 0xFFFFFFFF.toInt()
 
     // ------------------------------------------------------------------ tipografia (5 papéis, Nunito)
 
     /** Papel do texto: tamanho em sp, peso pedido (escala antiga 400-600; [Fontes.nunito] sobe um degrau) e cor. Caixa alta + espaçamento só na SECAO. */
-    enum class Papel(val sp: Float, val peso: Int, val cor: Int, val caixaAlta: Boolean = false, val espaco: Float = 0f) {
+    enum class Papel(val sp: Float, val peso: Int, private val nivel: Int, val caixaAlta: Boolean = false, val espaco: Float = 0f) {
         /** Hora, temperatura grande. */
-        DISPLAY(56f, 800, TEXTO),
+        DISPLAY(56f, 800, 1),
         /** Título de tela, nome do item em destaque. */
-        TITULO(28f, 600, TEXTO),
+        TITULO(28f, 600, 1),
         /** Linhas, cards, botões. */
-        CORPO(16f, 500, TEXTO),
+        CORPO(16f, 500, 1),
         /** Explicação, metadado. */
-        LEGENDA(13f, 400, TEXTO_2),
+        LEGENDA(13f, 400, 2),
         /** Nome de grupo ("PRÓXIMOS 9 DIAS"). */
-        SECAO(12f, 600, TEXTO_3, caixaAlta = true, espaco = 0.14f),
+        SECAO(12f, 600, 3, caixaAlta = true, espaco = 0.14f);
+
+        /** A cor do papel na hora (o alto contraste, 16.3, muda TEXTO_2 e TEXTO_3). */
+        val cor: Int get() = when (nivel) { 1 -> TEXTO; 2 -> TEXTO_2; else -> TEXTO_3 }
     }
 
     fun fonte(peso: Int): Typeface = Fontes.nunito(peso)

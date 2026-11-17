@@ -290,7 +290,7 @@ class MainActivity : Activity() {
         tema = Tema.atual(this)
         assinaturaFundo = FundoMeuDados.assinatura(this)
         idiomaMontado = idiomaAtual()
-        assinaturaLayout = "${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}"
+        assinaturaLayout = "${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}|${AltoContraste.ligado(this)}|${TamanhoTexto.atual(this)}"
         setContentView(montarTela())
         window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, novo ->
             if (novo != null && novo !== bolinhaPerfil) voltarAoPerfil = false
@@ -337,7 +337,7 @@ class MainActivity : Activity() {
         // Trocou o idioma (do sistema ou só do launcher): textos já montados (data, destaque) ficavam no antigo.
         if (idiomaAtual() != idiomaMontado) { recreate(); return }
         if (tema == Tema.MEU && FundoMeuDados.assinatura(this) != assinaturaFundo) { recreate(); return }   // outro arquivo/brilho
-        if ("${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}" != assinaturaLayout) { recreate(); return }   // cartões mudaram
+        if ("${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}|${AltoContraste.ligado(this)}|${TamanhoTexto.atual(this)}" != assinaturaLayout) { recreate(); return }   // cartões, alto contraste (16.3) ou letra mudaram
         // Modo simples (12/11/2026, ideia 10; desligado por padrão): a HOME vira a tela de cards grandes.
         if (ModoSimples.ligado(this)) {
             try { startActivity(Intent(this, ModoSimplesActivity::class.java)); return } catch (_: Exception) {}

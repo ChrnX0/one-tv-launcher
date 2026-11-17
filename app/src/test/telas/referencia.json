@@ -3,156 +3,288 @@
   "menorSp": 11,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "en\/ajuda-ac": {
+  "menorSp": 11,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "en\/boas-vindas": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "en\/configuracoes": {
   "menorSp": 11,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "en\/configuracoes-ac": {
+  "menorSp": 11,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "en\/despertador": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "en\/entrar-celular": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "en\/filmes": {
   "menorSp": 12.5,
   "foco": false,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "en\/home": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "en\/home-ac": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "en\/home-grade": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "en\/home-grande": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "en\/jogos": {
   "menorSp": 11,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "en\/placar": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "en\/placar-ac": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "en\/planos": {
   "menorSp": 13,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "en\/previsao": {
   "menorSp": 18,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "en\/series": {
   "menorSp": 12.5,
   "foco": false,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "pt\/ajuda": {
   "menorSp": 11,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "pt\/ajuda-ac": {
+  "menorSp": 11,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "pt\/boas-vindas": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "pt\/configuracoes": {
   "menorSp": 11,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "pt\/configuracoes-ac": {
+  "menorSp": 11,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "pt\/despertador": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "pt\/entrar-celular": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "pt\/filmes": {
   "menorSp": 12.5,
   "foco": false,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "pt\/home": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "pt\/home-ac": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "pt\/home-grade": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "pt\/home-grande": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "pt\/jogos": {
   "menorSp": 11,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "pt\/placar": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
+ },
+ "pt\/placar-ac": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "pt\/planos": {
   "menorSp": 13,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "pt\/previsao": {
   "menorSp": 18,
   "foco": true,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  },
  "pt\/series": {
   "menorSp": 12.5,
   "foco": false,
   "cortes": [],
-  "sobrepostos": []
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": []
  }
 }

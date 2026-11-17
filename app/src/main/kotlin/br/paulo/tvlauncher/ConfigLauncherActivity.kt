@@ -966,6 +966,12 @@ class ConfigLauncherActivity : Activity() {
             TamanhoTexto.definir(this, TamanhoTexto.proximo(TamanhoTexto.atual(this)))
             recreate()
         }, lp())
+        // Alto contraste (elevação 16.3): texto e bordas a 7:1 ou mais; esta tela se refaz para mostrar.
+        c.addView(linha(getString(R.string.elv_ac_titulo), getString(R.string.elv_ac_det), chave = AltoContraste.ligado(this)) {
+            AltoContraste.definir(this, !AltoContraste.ligado(this))
+            reconstruirAoVoltar = true
+            recreate()
+        }, lp())
         // Fileira ou grade (layout flexível, LayoutHome): a HOME se refaz ao voltar.
         c.addView(linha(getString(R.string.lh_arranjo), getString(R.string.lh_arranjo_det),
             valor = getString(if (LayoutHome.grade(this)) R.string.lh_grade else R.string.lh_fileira)) {

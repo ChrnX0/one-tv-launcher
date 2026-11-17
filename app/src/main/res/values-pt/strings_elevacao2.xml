@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação, onda 2 (17/11/2026): vitrine (acessibilidade, árabe, catálogo, biblioteca). -->
+<resources>
+    <!-- 16.3 alto contraste -->
+    <string name="elv_ac_titulo">Alto contraste</string>
+    <string name="elv_ac_det">Texto mais forte e bordas mais nítidas em todas as telas (pelo menos 7:1)</string>
+</resources>
