@@ -68,6 +68,7 @@ class VodActivity : Activity() {
         private const val EXTRA_LEG_ANO = "leg_ano"
         private const val EXTRA_LEG_TEMP = "leg_temp"
         private const val EXTRA_LEG_EP = "leg_ep"
+        private const val EXTRA_LEG_VERSAO = "leg_versao"
         private const val EXTRA_TMDB = "tmdb"
         private const val LEGENDA_AUTO = "legenda_auto"   // prefs "player" (ideia 89): baixar a legenda sozinho
         private const val LEGENDA_TRADUZIR = "legenda_traduzir"   // ideia 90: sem legenda no idioma da TV, traduzir a inglesa
@@ -76,6 +77,7 @@ class VodActivity : Activity() {
         /** Põe no Intent o que a busca de legenda precisa (sem nada, a busca usa o título da tela). */
         fun comBusca(i: Intent, b: LegendaExterna.Busca?): Intent = if (b == null) i else i.putExtra(EXTRA_LEG_NOME, b.nome)
             .putExtra(EXTRA_LEG_ANO, b.ano ?: 0).putExtra(EXTRA_LEG_TEMP, b.temporada ?: 0).putExtra(EXTRA_LEG_EP, b.episodio ?: 0).putExtra(EXTRA_TMDB, b.tmdb ?: 0)
+            .putExtra(EXTRA_LEG_VERSAO, b.versao.name)
         const val TIPO_FILME = "filme"
         const val TIPO_EPISODIO = "episodio"
         const val RESULTADO_TERMINOU = "terminou"
@@ -499,7 +501,12 @@ class VodActivity : Activity() {
     private fun nomeFaixa(f: androidx.media3.common.Format): String {
         // "und"/"mul"/"zxx" (idioma não marcado no arquivo) apareciam crus: "Áudio: und" na Sala (16/11/2026).
         val idioma = f.language?.takeUnless { it.isBlank() || it.lowercase() in SEM_IDIOMA }
-            ?.let { Locale.forLanguageTag(it).getDisplayLanguage(Locale.getDefault()).ifEmpty { it } } ?: getString(R.string.vod_faixa)
+            ?.let { Locale.forLanguageTag(it).getDisplayLanguage(Locale.getDefault()).ifEmpty { it } }
+            // Áudio sem idioma: o formato diz mais que "Faixa" ("Áudio: Faixa" na Sala, 17/11/2026), ex. "AAC estéreo".
+            ?: f.takeIf { it.channelCount > 0 }?.let {
+                InfoTecnica.formato(it.sampleMimeType, it.codecs) + " " + InfoTecnica.canais(it.channelCount, rotulosInfo)
+            }
+            ?: getString(R.string.vod_faixa)
         return listOfNotNull(idioma, f.label?.takeIf { it.isNotBlank() && it != idioma }).joinToString(" · ")
     }
 
@@ -803,6 +810,13 @@ class VodActivity : Activity() {
         val comLegenda = legendaArquivo != null || p.currentTracks.groups.any { it.type == C.TRACK_TYPE_TEXT && it.isSelected }
         opcoes += Opcao(semLegenda, marcada = !comLegenda) {
             p.trackSelectionParameters = p.trackSelectionParameters.buildUpon().setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true).build()
+            // A baixada também sai: antes ela voltava na próxima vez que o filme abria (Sala, 17/11/2026). O "já tentei a
+            // automática" fica, então ela não é baixada de novo sozinha; "Buscar legenda" continua trazendo outra.
+            if (legendaArquivo != null) {
+                val k = chave
+                legendaArquivo = null; legendaTraduzida = false
+                Fundo.rodar { LegendaBaixar.apagar(this, k) }
+            }
         }
         // Legenda da internet (OpenSubtitles, com a conta do dono) e, se já tem uma baixada, o ajuste de atraso.
         opcoes += Opcao(getString(R.string.legenda_buscar)) { buscarLegenda() }
@@ -936,7 +950,9 @@ class VodActivity : Activity() {
         val nome = intent.getStringExtra(EXTRA_LEG_NOME)?.takeIf { it.isNotBlank() }
             ?: LegendaExterna.nomeDeBusca(intent.getStringExtra(EXTRA_TITULO).orEmpty().substringBefore(" · "))
         fun n(k: String) = intent.getIntExtra(k, 0).takeIf { it > 0 }
-        return LegendaExterna.Busca(nome, n(EXTRA_LEG_ANO), n(EXTRA_LEG_TEMP), n(EXTRA_LEG_EP), n(EXTRA_TMDB))
+        val versao = intent.getStringExtra(EXTRA_LEG_VERSAO)?.let { v -> Idioma.Versao.entries.firstOrNull { it.name == v } }
+            ?: Idioma.Versao.DESCONHECIDA
+        return LegendaExterna.Busca(nome, n(EXTRA_LEG_ANO), n(EXTRA_LEG_TEMP), n(EXTRA_LEG_EP), n(EXTRA_TMDB), versao = versao)
     }
 
     // ---------------------------------------------------------------- Trakt/Simkl (fatia 3)
@@ -999,7 +1015,7 @@ class VodActivity : Activity() {
     private fun talvezLegendaAuto(t: Tracks) {
         if (autoTentada || legendaArquivo != null || legendasAoLado.isNotEmpty()) return
         if (!getSharedPreferences("player", MODE_PRIVATE).getBoolean(LEGENDA_AUTO, true)) return
-        if (!IdiomaPlayer.faltaLegenda(t, prefIdioma, idiomaTv)) return
+        if (!IdiomaPlayer.faltaLegenda(t, prefIdioma, idiomaTv, buscaLegenda().versao)) return
         autoTentada = true
         val k = chave; val u = url; val b = buscaLegenda()
         if (b.nome.isBlank()) return

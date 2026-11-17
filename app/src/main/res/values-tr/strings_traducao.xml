@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">Siyaha yakın</string>
     <string name="cb_quase_branco">Beyaza yakın</string>
     <string name="cb_bordas">Kenarlar</string>
-    <string name="cb_barras">75% renk çubukları</string>
+    <string name="cb_barras" formatted="false">75% renk çubukları</string>
     <string name="cb_linhas">1 piksellik çizgiler</string>
     <string name="ad_ninguem">%1$s boyunca kimse kumandaya dokunmadı.\nİzlemeye devam etmek için herhangi bir tuşa basın.</string>
     <string name="ad_vai_desligar">TV %1$d sn içinde kapanacak</string>

@@ -159,7 +159,7 @@
     <string name="bc_limite">limite de bloqueios atingido</string>
     <string name="bc_parental_on">controlo parental LIGADO</string>
     <string name="bc_parental_off">controlo parental desligado (o bloqueio só vale depois de ligar)</string>
-    <string name="bc_resumo">%1$d de %2$d canais bloqueados · %3$d categoria(s) inteira(s) · %4$s</string>
+    <string name="bc_resumo">%1$d de %2$d canais bloqueados · categorias inteiras: %3$d · %4$s</string>
     <string name="bc_todas">Todas (%1$d)</string>
     <string name="bc_outros">Outros</string>
     <string name="bc_bloqueada">bloqueada</string>
@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">Quase preto</string>
     <string name="cb_quase_branco">Quase branco</string>
     <string name="cb_bordas">Bordas</string>
-    <string name="cb_barras">Barras de cor 75%</string>
+    <string name="cb_barras" formatted="false">Barras de cor 75%</string>
     <string name="cb_linhas">Linhas de 1 pixel</string>
     <string name="ad_ninguem">Ninguém mexe no comando há %1$s.\nAperte qualquer botão para continuar.</string>
     <string name="ad_vai_desligar">A TV vai desligar em %1$d s</string>

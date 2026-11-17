@@ -60,7 +60,7 @@
     <string name="grv_apagar_pergunta">Hapus \"%1$s\"? Ini tidak bisa dibatalkan.</string>
     <string name="grv_reserva_secao">Tanpa flashdisk</string>
     <string name="grv_reserva">Folder jaringan</string>
-    <string name="grv_reserva_explica">Tempat merekam saat tidak ada flashdisk (folder Windows/NAS dari Di jaringan)</string>
+    <string name="grv_reserva_explica">Tempat merekam saat tidak ada flashdisk (folder Windows atau NAS dari “Di jaringan”)</string>
     <string name="grv_nenhuma">Tidak ada</string>
     <string name="grv_sem_smb">Tambahkan folder Windows/NAS (SMB) di Di jaringan dulu.</string>
     <string name="grv_amanha">Besok</string>

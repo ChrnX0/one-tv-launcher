@@ -51,7 +51,7 @@
     <string name="cl_testar_det">Transfere a lista e o guia de novo e conta os canais</string>
     <string name="cl_baixando">a transferir… (pode levar até um minuto)</string>
     <string name="cl_teste_resultado">%1$d canais, %2$d com programação agora</string>
-    <string name="cl_teste_sem_canal">" · %1$d conta(s) sem canal: confira servidor, utilizador e senha"</string>
+    <string name="cl_teste_sem_canal">" · contas sem canal: %1$d; confira servidor, utilizador e senha"</string>
     <string name="cl_campo_nome">Nome da lista (opcional, ex.: Playon)</string>
     <string name="cl_campo_servidor">Servidor (ex.: http://servidor:8080)</string>
     <string name="cl_campo_link">Link da lista (http://…)</string>
@@ -67,7 +67,7 @@
     <string name="cl_definir_pin">Definir o PIN</string>
     <string name="cl_definir_pin_det">%1$d a %2$d números, digitados duas vezes</string>
     <string name="cl_nenhum_canal">nenhum canal escolhido ainda</string>
-    <string name="cl_resumo_bloqueio">%1$d canal(is) e %2$d categoria(s) inteira(s) escolhidos</string>
+    <string name="cl_resumo_bloqueio">Canais: %1$d · categorias inteiras: %2$d</string>
     <string name="cl_ligado_resumo">ligado · %1$s</string>
     <string name="cl_desligado_resumo">desligado · %1$s</string>
     <string name="cl_nao_gravei_tente">não consegui gravar · tente de novo</string>
@@ -173,7 +173,7 @@
     <string name="cl_shell_claude_det">Deixa o Claude rodar qualquer comando na TV (como adb shell); desligue se não usar</string>
     <string name="cl_logins">Logins do Claude</string>
     <string name="cl_logins_det">OK revoga todos</string>
-    <string name="cl_ativos">%1$d ativo(s)</string>
+    <string name="cl_ativos">Ativos: %1$d</string>
     <string name="cl_revogados">revogados</string>
     <string name="cl_visivel">visível na TV</string>
     <string name="cl_limpeza">Limpeza de apps de fábrica</string>
@@ -183,7 +183,7 @@
     <string name="cl_nao_mudou">não consegui mudar (sem Device Owner e sem o shell próprio pareado?)</string>
     <string name="cl_mostrar_todos">Mostrar todos de volta</string>
     <string name="cl_mostrar_todos_det">Desfaz a limpeza (o protetor do Google continua oculto)</string>
-    <string name="cl_apps_de_volta">%1$d app(s) de volta</string>
+    <string name="cl_apps_de_volta">Apps de volta: %1$d</string>
     <string name="cl_sobre">Sobre</string>
     <string name="cl_novo_pin">Novo PIN (%1$d a %2$d dígitos)</string>
     <string name="cl_pin_invalido">PIN precisa ter de %1$d a %2$d números</string>

@@ -69,7 +69,10 @@ object Radios {
         (0 until a.length()).mapNotNull { a.optJSONObject(it)?.optString("name")?.takeIf { n -> n.endsWith(".radio-browser.info") } }.distinct()
     }.getOrDefault(emptyList())
 
-    /** As estações de /json/stations/search: só as que funcionam, com endereço http(s), sem repetir nome+endereço. */
+    /**
+     * As estações de /json/stations/search: só as que funcionam, com endereço http(s), sem repetir nome+país (a mesma
+     * rádio cadastrada com 2 endereços aparecia 2 vezes seguidas, visto na Sala 17/11/2026; fica a 1ª, a mais ouvida).
+     */
     fun estacoes(json: String?): List<Radio> = runCatching {
         val a = JSONArray(json ?: return emptyList())
         val vistos = HashSet<String>()
@@ -79,7 +82,8 @@ object Radios {
             val url = o.optString("url_resolved").ifBlank { o.optString("url") }.trim()
             val nome = o.optString("name").replace(Regex("\\s+"), " ").trim()
             if (nome.isEmpty() || !enderecoValido(url)) return@mapNotNull null
-            if (!vistos.add(nome.lowercase() + "|" + url)) return@mapNotNull null
+            val n = nome.lowercase()
+            if (!vistos.add("$n|$url") or !vistos.add("$n|pais:" + o.optString("countrycode").lowercase())) return@mapNotNull null
             Radio(o.optString("stationuuid").ifBlank { "url:" + url.hashCode() }, nome.take(80), url, o.optString("countrycode"),
                 o.optString("tags").split(',').map { it.trim() }.filter { it.isNotEmpty() }.take(3).joinToString(", "),
                 o.optInt("bitrate"), o.optString("codec"))

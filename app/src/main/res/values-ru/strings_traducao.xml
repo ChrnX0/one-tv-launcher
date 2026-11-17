@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">Почти чёрный</string>
     <string name="cb_quase_branco">Почти белый</string>
     <string name="cb_bordas">Края</string>
-    <string name="cb_barras">Цветные полосы 75%</string>
+    <string name="cb_barras" formatted="false">Цветные полосы 75%</string>
     <string name="cb_linhas">Линии в 1 пиксель</string>
     <string name="ad_ninguem">Пульт не трогали уже %1$s.\nНажмите любую кнопку, чтобы продолжить просмотр.</string>
     <string name="ad_vai_desligar">ТВ выключится через %1$d с</string>

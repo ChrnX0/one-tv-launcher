@@ -51,7 +51,7 @@
     <string name="cl_testar_det">Downloads the list and guide again and counts the channels</string>
     <string name="cl_baixando">downloading… (may take up to a minute)</string>
     <string name="cl_teste_resultado">%1$d channels, %2$d with a show on now</string>
-    <string name="cl_teste_sem_canal">" · %1$d account(s) without channels: check server, username and password"</string>
+    <string name="cl_teste_sem_canal">" · accounts without channels: %1$d; check server, username and password"</string>
     <string name="cl_campo_nome">List name (optional, e.g. Playon)</string>
     <string name="cl_campo_servidor">Server (e.g. http://server:8080)</string>
     <string name="cl_campo_link">List link (http://…)</string>
@@ -67,7 +67,7 @@
     <string name="cl_definir_pin">Set the PIN</string>
     <string name="cl_definir_pin_det">%1$d to %2$d digits, entered twice</string>
     <string name="cl_nenhum_canal">no channels chosen yet</string>
-    <string name="cl_resumo_bloqueio">%1$d channel(s) and %2$d whole category(ies) chosen</string>
+    <string name="cl_resumo_bloqueio">Channels: %1$d · whole categories: %2$d</string>
     <string name="cl_ligado_resumo">on · %1$s</string>
     <string name="cl_desligado_resumo">off · %1$s</string>
     <string name="cl_nao_gravei_tente">couldn\'t save · try again</string>
@@ -183,7 +183,7 @@
     <string name="cl_nao_mudou">couldn\'t change it (no Device Owner and no paired built-in shell?)</string>
     <string name="cl_mostrar_todos">Show all again</string>
     <string name="cl_mostrar_todos_det">Undoes the cleanup (Google\'s screensaver stays hidden)</string>
-    <string name="cl_apps_de_volta">%1$d app(s) restored</string>
+    <string name="cl_apps_de_volta">Apps restored: %1$d</string>
     <string name="cl_sobre">About</string>
     <string name="cl_novo_pin">New PIN (%1$d to %2$d digits)</string>
     <string name="cl_pin_invalido">The PIN must have %1$d to %2$d digits</string>

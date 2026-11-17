@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">Prawie czarny</string>
     <string name="cb_quase_branco">Prawie biały</string>
     <string name="cb_bordas">Krawędzie</string>
-    <string name="cb_barras">Paski kolorów 75%</string>
+    <string name="cb_barras" formatted="false">Paski kolorów 75%</string>
     <string name="cb_linhas">Linie 1-pikselowe</string>
     <string name="ad_ninguem">Nikt nie dotykał pilota od %1$s.\nNaciśnij dowolny przycisk, by oglądać dalej.</string>
     <string name="ad_vai_desligar">Telewizor wyłączy się za %1$d s</string>

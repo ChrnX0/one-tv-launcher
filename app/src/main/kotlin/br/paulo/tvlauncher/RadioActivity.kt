@@ -180,7 +180,7 @@ class RadioActivity : Activity() {
 
     private fun detalhe(r: Radios.Radio): String = listOfNotNull(
         r.pais.takeIf { it.length == 2 }?.let { Locale("", it).getDisplayCountry(Locale.getDefault()) },
-        r.tags.ifEmpty { null }, if (r.bitrate > 0) "${r.bitrate} kbps" else null).joinToString(" · ")
+        r.tags.ifEmpty { null }, if (r.bitrate in 8..512) "${r.bitrate} kbps" else null).joinToString(" · ")
 
     private fun linhaRadio(prefixo: String, r: Radios.Radio, numero: Int? = null) {
         val fav = favoritas.any { it.id == r.id }

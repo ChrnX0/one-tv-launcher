@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">Hampir hitam</string>
     <string name="cb_quase_branco">Hampir putih</string>
     <string name="cb_bordas">Tepi</string>
-    <string name="cb_barras">Bar warna 75%</string>
+    <string name="cb_barras" formatted="false">Bar warna 75%</string>
     <string name="cb_linhas">Garis 1 piksel</string>
     <string name="ad_ninguem">Tidak ada yang menyentuh remote selama %1$s.\nTekan tombol apa pun untuk terus menonton.</string>
     <string name="ad_vai_desligar">TV akan mati dalam %1$d dtk</string>

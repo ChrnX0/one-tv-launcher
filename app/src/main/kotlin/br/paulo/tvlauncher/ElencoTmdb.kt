@@ -76,14 +76,47 @@ object ElencoTmdb {
         }.toSet()
     }.getOrDefault(emptySet())
 
-    /** Um título da lista de canais com id TMDB conhecido. */
-    data class NaLista(val serie: Boolean, val tmdb: Int, val nome: String, val ano: Int?)
+    /**
+     * Os créditos da pessoa: ids e também nome+ano de cada título. Só pelo id quase nada aparecia ("Nada mais com esta
+     * pessoa" para o Timothée Chalamet com Duna: Parte Dois na lista, Sala 17/11/2026): a maioria dos títulos da lista
+     * não traz o id do TMDB. O nome+ano é o mesmo par que a coleção da ficha já usa.
+     */
+    data class Creditos(val ids: Set<Pair<Boolean, Int>>, val nomes: Set<String>)
+
+    fun lerCreditosCompletos(json: String): Creditos? = runCatching {
+        val c = JSONObject(json).optJSONArray("cast") ?: return null
+        val ids = HashSet<Pair<Boolean, Int>>()
+        val nomes = HashSet<String>()
+        for (i in 0 until c.length()) {
+            val o = c.optJSONObject(i) ?: continue
+            val serie = when (o.optString("media_type")) { "tv" -> true; "movie" -> false; else -> continue }
+            o.optInt("id").takeIf { it > 0 }?.let { ids += serie to it }
+            val ano = o.optString(if (serie) "first_air_date" else "release_date").take(4).toIntOrNull() ?: continue
+            for (campo in if (serie) listOf("name", "original_name") else listOf("title", "original_title"))
+                o.optString(campo).takeIf { it.isNotBlank() }?.let { nomes += chaveNome(serie, it, ano) }
+        }
+        Creditos(ids, nomes).takeIf { ids.isNotEmpty() || nomes.isNotEmpty() }
+    }.getOrNull()
+
+    fun chaveNome(serie: Boolean, nome: String, ano: Int): String = (if (serie) "s|" else "f|") + Idioma.chaveTitulo(nome) + "|" + ano
+
+    /** Um título da lista de canais (com o id do TMDB quando a lista ou o cache sabem). */
+    data class NaLista(val serie: Boolean, val tmdb: Int?, val nome: String, val ano: Int?)
 
     /**
-     * Os títulos da lista que a pessoa fez, sem o que está aberto agora ([fora]) e sem repetir versões (dublado e
-     * legendado do mesmo id viram um só). Mais novos primeiro.
+     * Os títulos da lista que a pessoa fez, pelo id ou, sem id, pelo nome+ano (sem ano não arrisca: refilmagens), sem o
+     * que está aberto agora ([fora], e [foraNome] para a versão dele sem id) e sem repetir versões (dublado e legendado
+     * do mesmo título viram um só). Mais novos primeiro.
      */
-    fun naLista(creditos: Set<Pair<Boolean, Int>>, catalogo: List<NaLista>, fora: Pair<Boolean, Int>?): List<NaLista> =
-        catalogo.filter { (it.serie to it.tmdb) in creditos && (it.serie to it.tmdb) != fora }
-            .distinctBy { it.serie to it.tmdb }.sortedByDescending { it.ano ?: 0 }
+    fun naLista(creditos: Creditos, catalogo: List<NaLista>, fora: Pair<Boolean, Int>?, foraNome: String? = null): List<NaLista> {
+        val foraChave = foraNome?.let { Idioma.chaveTitulo(it) }
+        return catalogo.filter { t ->
+            val id = t.tmdb
+            val achou = (id != null && (t.serie to id) in creditos.ids) ||
+                (t.ano != null && chaveNome(t.serie, t.nome, t.ano) in creditos.nomes)
+            achou && (id == null || (t.serie to id) != fora) && !(t.serie == fora?.first && foraChave != null && Idioma.chaveTitulo(t.nome) == foraChave)
+        }.distinctBy { t -> t.serie to (Idioma.chaveTitulo(t.nome) + "|" + (t.ano ?: 0)) }
+            .distinctBy { t -> t.tmdb?.let { t.serie to it } ?: t }
+            .sortedByDescending { it.ano ?: 0 }
+    }
 }

@@ -41,7 +41,7 @@
     <string name="sv_conferindo">Prüfung bei %1$s …</string>
     <string name="sv_limite_dia">Das tägliche Untertitel-Limit ist erreicht. Es erneuert sich in 24 h (mit OpenSubtitles-Konto sind es 20 pro Tag).</string>
     <string name="sv_tmdb_atribuicao">Dieses Produkt nutzt die TMDB-API, ist aber weder von TMDB unterstützt noch zertifiziert.</string>
-    <string name="ext_saga">%1$s: %2$d von %3$d in deiner Liste</string>
+    <string name="ext_saga">%1$s · %2$d von %3$d in deiner Liste</string>
     <string name="ext_nao_e_este">Nicht dieser Film</string>
     <string name="ext_proximo">Neue Folge %1$s (S%2$dE%3$d)</string>
     <string name="ext_proximo_curto">Neue Folge %1$s</string>

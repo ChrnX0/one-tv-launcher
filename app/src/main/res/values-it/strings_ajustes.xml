@@ -45,7 +45,7 @@
     <string name="oc_titulo">App nascoste</string>
     <string name="oc_subtitulo">OK mostra o nasconde un’app nella schermata Home · le nascoste vengono prima</string>
     <string name="oc_nenhum">Nessuna app nascosta · OK per scegliere</string>
-    <string name="oc_quantos">%1$d nascoste · OK per mostrarle di nuovo</string>
+    <string name="oc_quantos">Nascoste: %1$d · OK per mostrarle di nuovo</string>
     <string name="oc_oculto">nascosta</string>
     <string name="oc_aparece">nella schermata Home</string>
     <string name="oc_aviso_titulo">App nascosta</string>

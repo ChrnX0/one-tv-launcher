@@ -49,7 +49,7 @@
     <string name="oc_titulo">Apps ocultos</string>
     <string name="oc_subtitulo">OK mostra ou esconde o app na tela inicial · os ocultos vêm primeiro</string>
     <string name="oc_nenhum">Nenhum app oculto · OK para escolher</string>
-    <string name="oc_quantos">%1$d ocultos · OK para mostrar de volta</string>
+    <string name="oc_quantos">Ocultos: %1$d · OK para mostrar de volta</string>
     <string name="oc_oculto">oculto</string>
     <string name="oc_aparece">na tela inicial</string>
     <string name="oc_aviso_titulo">App oculto</string>

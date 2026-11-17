@@ -183,7 +183,7 @@
     <string name="bc_limite">limite de bloqueios atingido</string>
     <string name="bc_parental_on">controle parental LIGADO</string>
     <string name="bc_parental_off">controle parental desligado (o bloqueio só vale depois de ligar)</string>
-    <string name="bc_resumo">%1$d de %2$d canais bloqueados · %3$d categoria(s) inteira(s) · %4$s</string>
+    <string name="bc_resumo">%1$d de %2$d canais bloqueados · categorias inteiras: %3$d · %4$s</string>
     <string name="bc_todas">Todas (%1$d)</string>
     <string name="bc_outros">Outros</string>
     <string name="bc_bloqueada">bloqueada</string>

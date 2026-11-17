@@ -159,7 +159,7 @@
     <string name="bc_limite">limite de blocage atteinte</string>
     <string name="bc_parental_on">contrôle parental ACTIVÉ</string>
     <string name="bc_parental_off">contrôle parental désactivé (le blocage ne s’applique qu’une fois activé)</string>
-    <string name="bc_resumo">%1$d chaînes sur %2$d bloquées · %3$d catégorie(s) entière(s) · %4$s</string>
+    <string name="bc_resumo">%1$d chaînes sur %2$d bloquées · catégories entières : %3$d · %4$s</string>
     <string name="bc_todas">Toutes (%1$d)</string>
     <string name="bc_outros">Autres</string>
     <string name="bc_bloqueada">bloquée</string>
@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">Presque noir</string>
     <string name="cb_quase_branco">Presque blanc</string>
     <string name="cb_bordas">Bords</string>
-    <string name="cb_barras">Barres de couleur 75%</string>
+    <string name="cb_barras" formatted="false">Barres de couleur 75%</string>
     <string name="cb_linhas">Lignes de 1 pixel</string>
     <string name="ad_ninguem">Personne n’a touché la télécommande depuis %1$s.\nAppuyez sur n’importe quel bouton pour continuer à regarder.</string>
     <string name="ad_vai_desligar">La TV va s’éteindre dans %1$d s</string>

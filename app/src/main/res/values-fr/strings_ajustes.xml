@@ -45,7 +45,7 @@
     <string name="oc_titulo">Apps masquées</string>
     <string name="oc_subtitulo">OK affiche ou masque une app sur l’accueil · les masquées d’abord</string>
     <string name="oc_nenhum">Aucune app masquée · OK pour choisir</string>
-    <string name="oc_quantos">%1$d masquée(s) · OK pour les réafficher</string>
+    <string name="oc_quantos">Masquées : %1$d · OK pour les réafficher</string>
     <string name="oc_oculto">masquée</string>
     <string name="oc_aparece">sur l’accueil</string>
     <string name="oc_aviso_titulo">App masquée</string>

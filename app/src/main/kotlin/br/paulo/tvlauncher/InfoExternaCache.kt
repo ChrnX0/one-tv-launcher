@@ -195,8 +195,9 @@ object InfoExternaCache {
         tmdb("elenco:$serie:$id", { ElencoTmdb.urlElenco(it, id, serie, InfoExterna.idiomaTmdb()) }) { ElencoTmdb.lerElenco(it).ifEmpty { null } }.orEmpty()
 
     /** Ideia 84: em que filmes e séries a pessoa atuou. Bloqueia (rede). */
-    fun creditos(pessoa: Int): Set<Pair<Boolean, Int>> =
-        tmdb("pessoa:$pessoa", { ElencoTmdb.urlCreditos(it, pessoa, InfoExterna.idiomaTmdb()) }) { ElencoTmdb.lerCreditos(it).ifEmpty { null } }.orEmpty()
+    fun creditos(pessoa: Int): ElencoTmdb.Creditos =
+        tmdb("pessoa:$pessoa", { ElencoTmdb.urlCreditos(it, pessoa, InfoExterna.idiomaTmdb()) }, ElencoTmdb::lerCreditosCompletos)
+            ?: ElencoTmdb.Creditos(emptySet(), emptySet())
 
     // ================================================================ ideia 82: onde assistir
 

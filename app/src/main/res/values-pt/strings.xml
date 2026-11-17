@@ -585,8 +585,8 @@
     <string name="infantil_resumo_ligado">%1$d de %2$d categorias marcadas como infantis · modo infantil LIGADO</string>
     <string name="infantil_resumo_desligado">%1$d de %2$d categorias marcadas como infantis · modo infantil desligado</string>
     <string name="cfg_infantil">Modo infantil</string>
-    <string name="cfg_infantil_ligado">ligado · só as %d categoria(s) infantil(is) aparecem; o resto pede o PIN</string>
-    <string name="cfg_infantil_desligado">desligado · %d categoria(s) marcada(s) como infantil(is)</string>
+    <string name="cfg_infantil_ligado">Ligado · só aparecem as categorias infantis (%d); o resto pede o PIN</string>
+    <string name="cfg_infantil_desligado">Desligado · categorias marcadas como infantis: %d</string>
     <string name="cfg_infantil_escolher">Escolher categorias infantis</string>
     <string name="cfg_infantil_escolher_det">Valem para TV ao vivo, Filmes e Séries</string>
     <string name="player_grupo_oculto">%1$s oculta. Para ver: Filtros, mostrar ocultas.</string>

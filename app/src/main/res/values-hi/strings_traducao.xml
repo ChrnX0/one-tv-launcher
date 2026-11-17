@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">लगभग काला</string>
     <string name="cb_quase_branco">लगभग सफ़ेद</string>
     <string name="cb_bordas">किनारे</string>
-    <string name="cb_barras">75% रंग पट्टियाँ</string>
+    <string name="cb_barras" formatted="false">75% रंग पट्टियाँ</string>
     <string name="cb_linhas">1-पिक्सेल रेखाएँ</string>
     <string name="ad_ninguem">%1$s से किसी ने रिमोट नहीं छुआ।\nदेखते रहने के लिए कोई भी बटन दबाएँ।</string>
     <string name="ad_vai_desligar">TV %1$d s में बंद होगा</string>

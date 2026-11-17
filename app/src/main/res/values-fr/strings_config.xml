@@ -51,7 +51,7 @@
     <string name="cl_testar_det">Retélécharge la liste et le guide et compte les chaînes</string>
     <string name="cl_baixando">téléchargement… (peut prendre jusqu’à une minute)</string>
     <string name="cl_teste_resultado">%1$d chaînes, %2$d avec un programme en cours</string>
-    <string name="cl_teste_sem_canal">" · %1$d compte(s) sans chaînes : vérifiez serveur, utilisateur et mot de passe"</string>
+    <string name="cl_teste_sem_canal">" · comptes sans chaînes : %1$d ; vérifiez serveur, utilisateur et mot de passe"</string>
     <string name="cl_campo_nome">Nom de la liste (facultatif, ex. Playon)</string>
     <string name="cl_campo_servidor">Serveur (ex. http://serveur:8080)</string>
     <string name="cl_campo_link">Lien de la liste (http://…)</string>
@@ -67,7 +67,7 @@
     <string name="cl_definir_pin">Définir le PIN</string>
     <string name="cl_definir_pin_det">%1$d à %2$d chiffres, saisis deux fois</string>
     <string name="cl_nenhum_canal">aucune chaîne choisie</string>
-    <string name="cl_resumo_bloqueio">%1$d chaîne(s) et %2$d catégorie(s) entière(s) choisies</string>
+    <string name="cl_resumo_bloqueio">Chaînes : %1$d · catégories entières : %2$d</string>
     <string name="cl_ligado_resumo">activé · %1$s</string>
     <string name="cl_desligado_resumo">désactivé · %1$s</string>
     <string name="cl_nao_gravei_tente">enregistrement impossible · réessayez</string>
@@ -183,7 +183,7 @@
     <string name="cl_nao_mudou">modification impossible (pas de Device Owner ni de shell intégré appairé ?)</string>
     <string name="cl_mostrar_todos">Tout réafficher</string>
     <string name="cl_mostrar_todos_det">Annule le nettoyage (l’économiseur de Google reste masqué)</string>
-    <string name="cl_apps_de_volta">%1$d app(s) rétablie(s)</string>
+    <string name="cl_apps_de_volta">Apps rétablies : %1$d</string>
     <string name="cl_sobre">À propos</string>
     <string name="cl_novo_pin">Nouveau PIN (%1$d à %2$d chiffres)</string>
     <string name="cl_pin_invalido">Le PIN doit avoir de %1$d à %2$d chiffres</string>

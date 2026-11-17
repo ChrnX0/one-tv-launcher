@@ -703,7 +703,7 @@ AS\\Films).</string>
     <string name="pr_sinal_bom">bon signal</string>
     <string name="pr_sinal_medio">signal moyen</string>
     <string name="pr_sinal_fraco">signal faible</string>
-    <string name="pr_bt_conectados">%1$d connecté(s)</string>
+    <string name="pr_bt_conectados">Connectés : %1$d</string>
     <string name="pr_hoje">Aujourd’hui</string>
     <string name="pr_amanha">Demain</string>
     <string name="pr_ligado">Activé</string>

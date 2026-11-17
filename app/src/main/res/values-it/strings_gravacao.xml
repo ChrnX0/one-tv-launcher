@@ -60,7 +60,7 @@
     <string name="grv_apagar_pergunta">Eliminare «%1$s»? Non si può annullare.</string>
     <string name="grv_reserva_secao">Senza chiavetta USB</string>
     <string name="grv_reserva">Cartella di rete</string>
-    <string name="grv_reserva_explica">Dove registrare quando non c’è una chiavetta USB collegata (una cartella Windows/NAS da In rete)</string>
+    <string name="grv_reserva_explica">Dove registrare quando non c’è una chiavetta USB collegata (una cartella Windows o NAS da “In rete”)</string>
     <string name="grv_nenhuma">Nessuna</string>
     <string name="grv_sem_smb">Aggiungi prima una cartella Windows/NAS (SMB) in In rete.</string>
     <string name="grv_amanha">Domani</string>

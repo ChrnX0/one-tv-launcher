@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">Quasi nero</string>
     <string name="cb_quase_branco">Quasi bianco</string>
     <string name="cb_bordas">Bordi</string>
-    <string name="cb_barras">Barre di colore al 75%</string>
+    <string name="cb_barras" formatted="false">Barre di colore al 75%</string>
     <string name="cb_linhas">Linee da 1 pixel</string>
     <string name="ad_ninguem">Nessuno tocca il telecomando da %1$s.\nPremi un tasto qualsiasi per continuare a guardare.</string>
     <string name="ad_vai_desligar">La TV si spegnerà tra %1$d s</string>

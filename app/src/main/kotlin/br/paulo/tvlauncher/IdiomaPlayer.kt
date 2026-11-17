@@ -49,12 +49,12 @@ object IdiomaPlayer {
         t.groups.filter { it.type == tipo }.flatMap { g -> (0 until g.length).filter { g.isTrackSupported(it) }.map { g to it } }
 
     /** Ideia 89: o áudio que vai tocar não é do idioma da TV e não há legenda nele (Idioma.faltaLegenda). */
-    fun faltaLegenda(t: Tracks, pref: Idioma.Pref, idioma: String = idiomaDaTv()): Boolean {
+    fun faltaLegenda(t: Tracks, pref: Idioma.Pref, idioma: String = idiomaDaTv(), versao: Idioma.Versao = Idioma.Versao.DESCONHECIDA): Boolean {
         val audios = faixas(t, C.TRACK_TYPE_AUDIO)
         // O mesmo áudio que [aplicar] escolhe (a troca ainda não chegou às faixas quando isto roda).
         val audio = Idioma.escolherAudio(audios.map { (g, i) -> faixa(g.getTrackFormat(i)) }, pref, idioma)?.let { audios[it] }
             ?: audios.firstOrNull { (g, i) -> g.isTrackSelected(i) } ?: return false
-        return Idioma.faltaLegenda(faixa(audio.first.getTrackFormat(audio.second)), faixas(t, C.TRACK_TYPE_TEXT).map { (g, i) -> faixa(g.getTrackFormat(i)) }, idioma)
+        return Idioma.faltaLegenda(faixa(audio.first.getTrackFormat(audio.second)), faixas(t, C.TRACK_TYPE_TEXT).map { (g, i) -> faixa(g.getTrackFormat(i)) }, idioma, versao)
     }
 
     /**

@@ -76,8 +76,9 @@ class ElencoActivity : Activity() {
         val ocultas = VodFiltro.ocultas(filmes.map { it.grupo } + series.map { it.grupo }, PlayerArmazem.gruposEscondidos(this),
             PlayerArmazem.gruposLiberados(this), PlayerArmazem.parental(this))
         val r = ArrayList<ElencoTmdb.NaLista>()
-        for (f in filmes) if (f.grupo.trim() !in ocultas) (f.tmdb ?: InfoExternaCache.guardado(this, f.chave)?.tmdb)?.let { r += ElencoTmdb.NaLista(false, it, Vod.nomeLimpo(f.nome), f.ano) }
-        for (s in series) if (s.grupo.trim() !in ocultas) (s.tmdb ?: InfoExternaCache.guardado(this, s.chave)?.tmdb)?.let { r += ElencoTmdb.NaLista(true, it, Vod.nomeLimpo(s.nome), s.ano) }
+        // Também os sem id do TMDB (a maioria): o encontro é pelo nome+ano (ElencoTmdb.naLista).
+        for (f in filmes) if (f.grupo.trim() !in ocultas) r += ElencoTmdb.NaLista(false, f.tmdb ?: InfoExternaCache.guardado(this, f.chave)?.tmdb, Vod.nomeLimpo(f.nome), f.ano)
+        for (s in series) if (s.grupo.trim() !in ocultas) r += ElencoTmdb.NaLista(true, s.tmdb ?: InfoExternaCache.guardado(this, s.chave)?.tmdb, Vod.nomeLimpo(s.nome), s.ano)
         return r
     }
 
@@ -124,7 +125,7 @@ class ElencoActivity : Activity() {
         titulos.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.elenco_procurando)).apply { textSize = Estilo.Leitura.AVISO })
         if (cat == null) return   // o catálogo ainda está carregando: volta aqui quando terminar
         rede.execute {
-            val achados = ElencoTmdb.naLista(InfoExternaCache.creditos(pessoa), cat, serie to tmdb)
+            val achados = ElencoTmdb.naLista(InfoExternaCache.creditos(pessoa), cat, serie to tmdb, intent.getStringExtra(EXTRA_NOME))
             ui.post {
                 if (isDestroyed || pessoaFocada != pessoa) return@post
                 titulos.removeAllViews()

@@ -60,7 +60,7 @@
     <string name="grv_apagar_pergunta">„%1$s“ löschen? Das lässt sich nicht rückgängig machen.</string>
     <string name="grv_reserva_secao">Ohne USB-Stick</string>
     <string name="grv_reserva">Netzwerkordner</string>
-    <string name="grv_reserva_explica">Wo aufgenommen wird, wenn kein USB-Stick steckt (ein Windows-/NAS-Ordner aus Netzwerk)</string>
+    <string name="grv_reserva_explica">Wo aufgenommen wird, wenn kein USB-Stick steckt (ein Windows- oder NAS-Ordner aus „Netzwerk“)</string>
     <string name="grv_nenhuma">Keiner</string>
     <string name="grv_sem_smb">Füge zuerst einen Windows-/NAS-Ordner (SMB) in Netzwerk hinzu.</string>
     <string name="grv_amanha">Morgen</string>

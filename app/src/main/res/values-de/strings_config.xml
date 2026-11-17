@@ -51,7 +51,7 @@
     <string name="cl_testar_det">Lädt Liste und Programmführer erneut und zählt die Sender</string>
     <string name="cl_baixando">wird heruntergeladen … (kann bis zu einer Minute dauern)</string>
     <string name="cl_teste_resultado">%1$d Sender, %2$d mit laufender Sendung</string>
-    <string name="cl_teste_sem_canal">" · %1$d Konto/Konten ohne Sender: prüfe Server, Benutzername und Passwort"</string>
+    <string name="cl_teste_sem_canal">" · Konten ohne Sender: %1$d; prüfe Server, Benutzername und Passwort"</string>
     <string name="cl_campo_nome">Listenname (optional, z. B. Playon)</string>
     <string name="cl_campo_servidor">Server (z. B. http://server:8080)</string>
     <string name="cl_campo_link">Listenlink (http://…)</string>
@@ -67,7 +67,7 @@
     <string name="cl_definir_pin">PIN festlegen</string>
     <string name="cl_definir_pin_det">%1$d bis %2$d Ziffern, zweimal eingegeben</string>
     <string name="cl_nenhum_canal">noch keine Sender gewählt</string>
-    <string name="cl_resumo_bloqueio">%1$d Sender und %2$d ganze Kategorie(n) gewählt</string>
+    <string name="cl_resumo_bloqueio">Sender: %1$d · ganze Kategorien: %2$d</string>
     <string name="cl_ligado_resumo">an · %1$s</string>
     <string name="cl_desligado_resumo">aus · %1$s</string>
     <string name="cl_nao_gravei_tente">konnte nicht speichern · versuche es erneut</string>
@@ -183,7 +183,7 @@
     <string name="cl_nao_mudou">konnte nicht geändert werden (kein Device Owner und keine gekoppelte eigene Shell?)</string>
     <string name="cl_mostrar_todos">Alle wieder zeigen</string>
     <string name="cl_mostrar_todos_det">Macht das Aufräumen rückgängig (Googles Bildschirmschoner bleibt ausgeblendet)</string>
-    <string name="cl_apps_de_volta">%1$d App(s) zurückgeholt</string>
+    <string name="cl_apps_de_volta">Apps zurückgeholt: %1$d</string>
     <string name="cl_sobre">Info</string>
     <string name="cl_novo_pin">Neue PIN (%1$d bis %2$d Ziffern)</string>
     <string name="cl_pin_invalido">Die PIN muss %1$d bis %2$d Ziffern haben</string>

@@ -51,7 +51,7 @@
     <string name="cl_testar_det">Vuelve a descargar la lista y la guía y cuenta los canales</string>
     <string name="cl_baixando">descargando… (puede tardar hasta un minuto)</string>
     <string name="cl_teste_resultado">%1$d canales, %2$d con un programa ahora</string>
-    <string name="cl_teste_sem_canal">" · %1$d cuenta(s) sin canales: revisa servidor, usuario y contraseña"</string>
+    <string name="cl_teste_sem_canal">" · cuentas sin canales: %1$d; revisa servidor, usuario y contraseña"</string>
     <string name="cl_campo_nome">Nombre de la lista (opcional, ej. Playon)</string>
     <string name="cl_campo_servidor">Servidor (ej. http://servidor:8080)</string>
     <string name="cl_campo_link">Enlace de la lista (http://…)</string>
@@ -67,7 +67,7 @@
     <string name="cl_definir_pin">Definir el PIN</string>
     <string name="cl_definir_pin_det">De %1$d a %2$d dígitos, escritos dos veces</string>
     <string name="cl_nenhum_canal">aún no se eligió ningún canal</string>
-    <string name="cl_resumo_bloqueio">%1$d canal(es) y %2$d categoría(s) completas elegidas</string>
+    <string name="cl_resumo_bloqueio">Canales: %1$d · categorías completas: %2$d</string>
     <string name="cl_ligado_resumo">activado · %1$s</string>
     <string name="cl_desligado_resumo">desactivado · %1$s</string>
     <string name="cl_nao_gravei_tente">no se pudo guardar · inténtalo de nuevo</string>
@@ -183,7 +183,7 @@
     <string name="cl_nao_mudou">no se pudo cambiar (¿sin Device Owner y sin shell propio vinculado?)</string>
     <string name="cl_mostrar_todos">Volver a mostrar todas</string>
     <string name="cl_mostrar_todos_det">Deshace la limpieza (el protector de Google sigue oculto)</string>
-    <string name="cl_apps_de_volta">%1$d app(s) restauradas</string>
+    <string name="cl_apps_de_volta">Apps restauradas: %1$d</string>
     <string name="cl_sobre">Acerca de</string>
     <string name="cl_novo_pin">PIN nuevo (%1$d a %2$d dígitos)</string>
     <string name="cl_pin_invalido">El PIN debe tener de %1$d a %2$d dígitos</string>

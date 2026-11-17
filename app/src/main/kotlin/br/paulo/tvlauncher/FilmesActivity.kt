@@ -1114,7 +1114,7 @@ class FilmesActivity : Activity() {
         if (paraHome) Fundo.rodar { PlayerArmazem.definirCapaHome(this, serie = false, poster = capa, cenas = cenas, ficha = fichaHome) }
         VodActivity.abrir(this, VodActivity.TIPO_FILME, f.fonteId, f.id, f.extensao, Vod.nomeLimpo(f.nome), doComeco,
             busca = LegendaExterna.Busca(LegendaExterna.nomeDeBusca(f.nome), f.ano,
-                tmdb = f.tmdb ?: externo?.takeIf { it.first === f }?.second?.tmdb))
+                tmdb = f.tmdb ?: externo?.takeIf { it.first === f }?.second?.tmdb, versao = Idioma.versao(f.nome, f.grupo)))
     }
 
     private fun botao(texto: String, marca: String, aoApertar: () -> Unit) = TextView(this).apply {

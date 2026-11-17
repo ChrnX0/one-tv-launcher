@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">거의 검정</string>
     <string name="cb_quase_branco">거의 흰색</string>
     <string name="cb_bordas">가장자리</string>
-    <string name="cb_barras">75% 컬러 바</string>
+    <string name="cb_barras" formatted="false">75% 컬러 바</string>
     <string name="cb_linhas">1픽셀 선</string>
     <string name="ad_ninguem">%1$s 동안 아무도 리모컨을 만지지 않았습니다.\n계속 보려면 아무 버튼이나 누르세요.</string>
     <string name="ad_vai_desligar">%1$d초 후 TV가 꺼집니다</string>

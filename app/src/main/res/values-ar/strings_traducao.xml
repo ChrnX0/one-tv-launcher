@@ -247,7 +247,7 @@
     <string name="cb_quase_preto">قريب من الأسود</string>
     <string name="cb_quase_branco">قريب من الأبيض</string>
     <string name="cb_bordas">الحواف</string>
-    <string name="cb_barras">أشرطة ألوان 75%</string>
+    <string name="cb_barras" formatted="false">أشرطة ألوان 75%</string>
     <string name="cb_linhas">خطوط بعرض بكسل واحد</string>
     <string name="ad_ninguem">لم يلمس أحد جهاز التحكم منذ %1$s.\nاضغط أي زر لمواصلة المشاهدة.</string>
     <string name="ad_vai_desligar">سينطفئ التلفزيون بعد %1$d ث</string>

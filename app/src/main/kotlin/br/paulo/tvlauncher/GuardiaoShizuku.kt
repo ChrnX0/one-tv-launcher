@@ -253,7 +253,8 @@ object GuardiaoShizuku {
             ServidorShizuku.executar(app, m, "appops set $p GET_USAGE_STATS allow")
             if (ServidorShizuku.executar(app, m, "appops get $p GET_USAGE_STATS")?.contains("allow") == true) feito += "GET_USAGE_STATS"
         }
-        // Som (17/11/2026, Sala): PLAY_AUDIO ficou gravado como "default" (modo 3) para o launcher, sem se saber quem gravou.
+        // Som (17/11/2026, Sala): PLAY_AUDIO ficou gravado como "default" (modo 3) para o launcher. Quem gravou foi a receita
+        // de teste de madrugada ("appops ... PLAY_AUDIO ignore" para silenciar e "... default" para "restaurar").
         // O Android só deixa tocar com "allow", então TODO som nosso (TV ao vivo, filmes, despertador) saía mudo
         // (dumpsys audio: mutedState:appOps; audioflinger: ganho -inf), e os outros apps tocavam normal. Sem registro
         // ("No operations") vale o padrão, que é allow; qualquer outro modo volta para allow.

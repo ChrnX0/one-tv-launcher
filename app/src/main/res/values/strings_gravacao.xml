@@ -60,7 +60,7 @@
     <string name="grv_apagar_pergunta">Delete \"%1$s\"? This cannot be undone.</string>
     <string name="grv_reserva_secao">Without a USB drive</string>
     <string name="grv_reserva">Network folder</string>
-    <string name="grv_reserva_explica">Where to record when no USB drive is plugged in (a Windows/NAS folder from On the network)</string>
+    <string name="grv_reserva_explica">Where to record when no USB drive is plugged in (a Windows or NAS folder from “On the network”)</string>
     <string name="grv_nenhuma">None</string>
     <string name="grv_sem_smb">Add a Windows/NAS (SMB) folder in On the network first.</string>
     <string name="grv_amanha">Tomorrow</string>
