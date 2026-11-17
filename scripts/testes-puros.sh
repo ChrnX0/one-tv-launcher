@@ -55,6 +55,7 @@ declare -A FONTES=(
   [DiarioRegrasTest]="DiarioRegras"
   [CaixaComandoTest]="CaixaComando"
   [ProximoJogoTest]="ProximoJogo MeuTimeAdiante"
+  [TurmaDiscordTest]="TurmaDiscord"
   [AtalhosVozTest]="AtalhosVoz"
   [PausaAoVivoTest]="PausaAoVivo"
   [PerfilDadosTest]="PerfilDados EnsaioRestauracao CofreBackup"
