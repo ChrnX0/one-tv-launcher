@@ -109,6 +109,8 @@ object CuidarDeLongeTv {
 
     // ---------------------------------------------------------------- 77: pedido de ajuda
 
+    /** A pergunta do consentimento está na frente (CuidarTelaActivity): o shell do MCP recusa comandos enquanto isso. */
+    @Volatile var consentimentoNaTela = false
     @Volatile private var ajudaLigada = false
     @Volatile private var teclaAjuda = CuidarDeLonge.Tecla.VOLTAR.codigo
     private val segurar = CuidarDeLonge.Segurar()

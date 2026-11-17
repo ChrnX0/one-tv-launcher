@@ -30,6 +30,17 @@ import java.util.TimeZone
  */
 object CuidarDeLonge {
     /**
+     * Tecla que pode ACEITAR o consentimento (17/11/2026, decisão do Paulo: "o que funcionar melhor").
+     *  - controle Bluetooth/IR do Chromecast: aparelho com id próprio (> 0, não o VIRTUAL_KEYBOARD -1);
+     *  - controle da própria LG pelo HDMI-CEC: o Android injeta como VIRTUAL_KEYBOARD, mas com a fonte HDMI. O
+     *    `input keyevent` do shell não tem fonte HDMI, então não passa por aqui.
+     * O que ainda imitaria uma tecla física (um aparelho virtual criado pelo shell) é barrado à parte: com a pergunta
+     * na tela, o shell do Claude recusa comandos ([CuidarDeLongeTv.consentimentoNaTela]).
+     */
+    fun teclaDeGente(deviceId: Int, source: Int, virtual: Int = -1, fonteHdmi: Int = 0x02000001): Boolean =
+        (deviceId > 0 && deviceId != virtual) || (deviceId == virtual && source and fonteHdmi == fonteHdmi)
+
+    /**
      * ESTOU_BEM (16/11/2026, a 79 da Play): na primeira vez que a TV acende no dia, ela pergunta "Avisar Ana que está tudo
      * bem?" e só a resposta da PESSOA manda o aviso. Nada sai sem o botão: é o oposto de vigiar, e por isso cabe na Play.
      */

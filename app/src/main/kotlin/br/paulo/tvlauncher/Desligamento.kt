@@ -83,21 +83,37 @@ object Desligamento {
      */
     fun desligarTudo(ctx: Context) {
         val app = ctx.applicationContext
-        val ui = Handler(Looper.getMainLooper())
         val feito = java.util.concurrent.atomic.AtomicBoolean(false)
         val apagar = Runnable {
             if (!feito.compareAndSet(false, true)) return@Runnable
             apagarTela(app)
             SonoSuave.parar(app, esperarMs = 8_000L)   // a película sai e o volume do Android volta depois que dormiu
         }
-        if (!VolumeLg.configurado(app) || !VolumeLg.desligarJunto(app)) { apagar.run(); return }
-        val lgAntes = SonoSuave.tomarLgAntes()
-        ui.postDelayed(apagar, PRAZO_LG_MS)   // garantia: a LG sumiu da rede ou demorou
+        lgPrimeiro(app, SonoSuave.tomarLgAntes(), apagar)
+    }
+
+    /**
+     * Desliga a LG pela rede (se pareada e com "desligar junto") e roda [depois] (apagar o Chromecast) em seguida.
+     * Decisão do Paulo (17/11/2026): só desliga a LG se ela está NA ENTRADA DO CHROMECAST. Na antena ou em outro HDMI
+     * alguém está vendo outra coisa na LG: o timer e o "desligar sem uso" apagam só o Chromecast. Entrada que não deu
+     * para ler = na dúvida, não desliga (a mesma regra do [AcordarComLg]). [lgAntes] > 0 = volume a devolver antes.
+     */
+    fun lgPrimeiro(app: Context, lgAntes: Int, depois: Runnable) {
+        val ui = Handler(Looper.getMainLooper())
+        if (!VolumeLg.configurado(app) || !VolumeLg.desligarJunto(app)) { depois.run(); return }
+        ui.postDelayed(depois, PRAZO_LG_MS)   // garantia: a LG sumiu da rede ou demorou
         Fundo.rodar("Desligar-lg") {
+            val e = VolumeLg.entrada(app)
+            val nosso = runCatching { android.provider.Settings.Global.getString(app.contentResolver, "device_name") }.getOrNull()
+            if (!LgNetcast.desligarLgJunto(e, nosso, VolumeLg.entradaAprendida(app))) {
+                Log.i(TAG, "LG fica ligada: entrada ${e?.nome ?: "não lida"} não é a do Chromecast")
+                if (e != null && lgAntes > 0) VolumeLg.irPara(app, lgAntes)   // o volume que o sono suave baixou volta
+                ui.post(depois); return@rodar
+            }
             if (lgAntes > 0) VolumeLg.irPara(app, lgAntes)
             val ok = VolumeLg.desligar(app)
             Log.i(TAG, "LG desligada pela rede: $ok")
-            ui.postDelayed(apagar, if (ok) DEPOIS_DA_LG_MS else 0L)
+            ui.postDelayed(depois, if (ok) DEPOIS_DA_LG_MS else 0L)
         }
     }
     private const val DEPOIS_DA_LG_MS = 2_000L

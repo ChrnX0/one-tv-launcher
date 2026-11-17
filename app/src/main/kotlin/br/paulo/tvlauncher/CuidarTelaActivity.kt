@@ -70,6 +70,10 @@ class CuidarTelaActivity : Activity() {
         recreate()
     }
 
+    // Com a pergunta do consentimento na tela, o shell do Claude não roda (não pode imitar o "Aceito" do morador).
+    override fun onResume() { super.onResume(); if (modo == MODO_CONSENTIMENTO) CuidarDeLongeTv.consentimentoNaTela = true }
+    override fun onPause() { super.onPause(); CuidarDeLongeTv.consentimentoNaTela = false }
+
     override fun onDestroy() {
         super.onDestroy()
         ui.removeCallbacksAndMessages(null)
@@ -179,7 +183,7 @@ class CuidarTelaActivity : Activity() {
         if (modo == MODO_CONSENTIMENTO && sim != null && sim.isFocused && SegurarOk.ehOk(e.keyCode)) {
             if (e.action == KeyEvent.ACTION_UP) {
                 // Controle de verdade: aparelho com id próprio. -1 (VIRTUAL_KEYBOARD) é o `input keyevent` do adb/painel.
-                val fisica = e.deviceId != KeyCharacterMap.VIRTUAL_KEYBOARD && e.deviceId > 0
+                val fisica = CuidarDeLonge.teclaDeGente(e.deviceId, e.source, KeyCharacterMap.VIRTUAL_KEYBOARD, android.view.InputDevice.SOURCE_HDMI)
                 if (fisica) {
                     CuidarDeLongeTv.consentir(this)
                     aceito = null

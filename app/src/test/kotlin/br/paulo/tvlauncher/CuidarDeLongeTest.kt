@@ -301,4 +301,11 @@ class CuidarDeLongeTest {
         s.evento(23, true, 0, 0) {}
         assertTrue(s.venceu(3000))
     }
+
+    @Test fun soTeclaDeGenteAceitaOConsentimento() {
+        assertTrue(CuidarDeLonge.teclaDeGente(7, 0x101))                 // controle do Chromecast (aparelho próprio)
+        assertTrue(CuidarDeLonge.teclaDeGente(-1, 0x02000001))           // controle da LG pelo HDMI-CEC
+        assertFalse(CuidarDeLonge.teclaDeGente(-1, 0x101))               // input keyevent do shell (teclado virtual)
+        assertFalse(CuidarDeLonge.teclaDeGente(0, 0x101))
+    }
 }

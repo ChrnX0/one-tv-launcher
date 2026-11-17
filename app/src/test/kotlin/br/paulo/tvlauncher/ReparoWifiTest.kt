@@ -32,6 +32,17 @@ class ReparoWifiTest {
         assertEquals(Acao.REINICIAR, ReparoWifi.decidir(t0 + 15 * min, t0, 2, t0 + 10 * min, t0 - 7 * 60 * min, false))
     }
 
+    @Test fun telaAcesaSoReiniciaSemNinguemMexer() {
+        // tela acesa e alguém apertou tecla há 10 min: não reinicia (só religa o Wi-Fi, o que já fez)
+        assertEquals(Acao.NADA, ReparoWifi.decidir(t0 + 15 * min, t0, 2, t0 + 10 * min, 0, false, telaAcesa = true, semTeclaMs = 10 * min))
+        // tela acesa, largada há 40 min: reinicia
+        assertEquals(Acao.REINICIAR, ReparoWifi.decidir(t0 + 15 * min, t0, 2, t0 + 10 * min, 0, false, telaAcesa = true, semTeclaMs = 40 * min))
+        // tela apagada: reinicia mesmo com tecla recente (ninguém está vendo)
+        assertEquals(Acao.REINICIAR, ReparoWifi.decidir(t0 + 15 * min, t0, 2, t0 + 10 * min, 0, false, telaAcesa = false, semTeclaMs = 1 * min))
+        // religar o Wi-Fi não depende da tela
+        assertEquals(Acao.RELIGAR_WIFI, ReparoWifi.decidir(t0 + 5 * min, t0, 0, 0, 0, false, telaAcesa = true, semTeclaMs = 0))
+    }
+
     @Test fun relogioQueVoltouDepoisDoReinicioNaoViraCiclo() {
         // reiniciou sem Wi-Fi e o relógio (sem NTP) voltou 2 dias: o último reinício parece "no futuro" e não libera outro
         assertEquals(Acao.NADA, ReparoWifi.decidir(t0 + 15 * min, t0, 2, t0 + 10 * min, t0 + 2 * 24 * 60 * min, false))

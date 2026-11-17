@@ -200,7 +200,8 @@ object HistoricoRede {
         val p = app.getSharedPreferences(PREFS_REPARO, Context.MODE_PRIVATE)
         val som = app.getSystemService(AudioManager::class.java)?.isMusicActive == true
         val minFora = (agora - desde) / 60_000
-        when (ReparoWifi.decidir(agora, desde, religadas, ultimaReligada, p.getLong("reinicio", 0L), som)) {
+        val tela = app.getSystemService(android.os.PowerManager::class.java)?.isInteractive == true
+        when (ReparoWifi.decidir(agora, desde, religadas, ultimaReligada, p.getLong("reinicio", 0L), som, tela, AutoDesligar.semTeclaMs())) {
             ReparoWifi.Acao.NADA -> {}
             ReparoWifi.Acao.RELIGAR_WIFI -> {
                 religadas++; ultimaReligada = agora
