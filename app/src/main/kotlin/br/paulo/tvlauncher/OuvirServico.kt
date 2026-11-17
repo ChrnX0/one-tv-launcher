@@ -103,6 +103,20 @@ class OuvirServico : Service() {
 
     private val pausaLonga = Runnable { Log.i(TAG, "pausado há muito tempo: parei"); parar() }
 
+    /**
+     * Pausada, a rádio não fica sabendo quando outro app pega o som (o foco só é avisado com o som pedido). Então: pausada
+     * e algum som tocando no aparelho = é de outro app (o nosso está parado) → para de vez, e a pílula dá lugar a ele.
+     */
+    private val outroTocando = object : android.media.AudioManager.AudioPlaybackCallback() {
+        override fun onPlaybackConfigChanged(configs: MutableList<android.media.AudioPlaybackConfiguration>?) {
+            if (radio == null || !pausado) return
+            // Logo depois de pausar, o nosso próprio som ainda pode constar como ativo por um instante.
+            if (SystemClock.elapsedRealtime() - pausouEm < 2_000) return
+            val am = getSystemService(android.media.AudioManager::class.java) ?: return
+            if (am.isMusicActive) { Log.i(TAG, "pausada e outro app tocou: parei"); ui.post { parar() } }
+        }
+    }
+
     private val telaApagou = object : BroadcastReceiver() {
         override fun onReceive(c: Context, i: Intent) {
             if (i.action == Intent.ACTION_SCREEN_OFF && radio != null) { Log.i(TAG, "tela apagou: parei"); parar() }
@@ -116,6 +130,7 @@ class OuvirServico : Service() {
         instancia = this
         val f = IntentFilter(Intent.ACTION_SCREEN_OFF)
         if (Build.VERSION.SDK_INT >= 33) registerReceiver(telaApagou, f, Context.RECEIVER_NOT_EXPORTED) else registerReceiver(telaApagou, f)
+        runCatching { getSystemService(android.media.AudioManager::class.java)?.registerAudioPlaybackCallback(outroTocando, ui) }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -132,6 +147,7 @@ class OuvirServico : Service() {
     override fun onDestroy() {
         ui.removeCallbacksAndMessages(null)
         runCatching { unregisterReceiver(telaApagou) }
+        runCatching { getSystemService(android.media.AudioManager::class.java)?.unregisterAudioPlaybackCallback(outroTocando) }
         soltarPlayer()
         sessao?.let { runCatching { it.isActive = false; it.release() } }; sessao = null
         radio = null; musica = ""
@@ -169,23 +185,19 @@ class OuvirServico : Service() {
                 override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
                     if (!playWhenReady && reason == Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_FOCUS_LOSS) {
                         // Outro app pegou o som de vez: parar (rádio ao vivo pausada não tem para onde voltar).
-                        Log.i(TAG, "outro app pegou o som: parei"); parar(); return
+                        // Fora do próprio callback: soltar o player dentro dele é arriscado.
+                        Log.i(TAG, "outro app pegou o som: parei"); ui.post { parar() }; return
                     }
                     ui.removeCallbacks(pausaLonga)
                     pausouEm = if (playWhenReady) 0L else SystemClock.elapsedRealtime()
                     if (!playWhenReady) ui.postDelayed(pausaLonga, TocandoAgora.PAUSADA_MAX_MS)
                     publicar()
                 }
-                override fun onPlayerError(error: PlaybackException) {
-                    Log.w(TAG, "${r.nome}: ${error.errorCodeName} (tentativa ${tentativas + 1})")
-                    if (tentativas < RETENTATIVAS) {
-                        tentativas++
-                        ui.postDelayed({ if (player === p) { p.prepare(); p.playWhenReady = true } }, ESPERA_RETENTATIVA_MS)
-                        return
-                    }
-                    AvisoTv.rapido(this@OuvirServico, r.nome, getString(R.string.ra_falhou), 6)
-                    parar()
+                override fun onPlaybackStateChanged(estado: Int) {
+                    // O servidor fechou a transmissão sem erro (reiniciou): rádio ao vivo não "acaba"; é queda.
+                    if (estado == Player.STATE_ENDED) caiu(p, r, "fim da transmissão")
                 }
+                override fun onPlayerError(error: PlaybackException) = caiu(p, r, error.errorCodeName)
             })
             p.setMediaSource(DefaultMediaSourceFactory(http).createMediaSource(item))
             p.prepare(); p.playWhenReady = true
@@ -196,6 +208,19 @@ class OuvirServico : Service() {
         Fundo.rodar("radios") { Radios.contarClique(r) }
     }
 
+    /** A rádio caiu: com o som pedido, tenta de novo [RETENTATIVAS] vezes; depois avisa e para. Pausada, espera o continuar. */
+    private fun caiu(p: ExoPlayer, r: Radios.Radio, motivo: String) {
+        Log.w(TAG, "${r.nome}: $motivo (tentativa ${tentativas + 1})")
+        if (!p.playWhenReady) { publicar(); return }   // pausada: continuar() reconecta; não volta a tocar sozinha
+        if (tentativas < RETENTATIVAS) {
+            tentativas++
+            ui.postDelayed({ if (player === p && p.playWhenReady) { p.stop(); p.prepare() } }, ESPERA_RETENTATIVA_MS)
+            return
+        }
+        AvisoTv.rapido(this, r.nome, getString(R.string.ra_falhou), 6)
+        ui.post { parar() }
+    }
+
     fun alternar() { val p = player ?: return; if (p.playWhenReady) pausar() else continuar() }
     fun pausar() { player?.playWhenReady = false }
     fun continuar() {
@@ -203,7 +228,7 @@ class OuvirServico : Service() {
         val pausadoHa = if (pausouEm > 0) SystemClock.elapsedRealtime() - pausouEm else 0L
         // Rádio é ao vivo: depois de uma pausa de verdade, volta para o "agora" (reconecta), não para o áudio guardado.
         // Caiu (rede) enquanto pausado: também reconecta.
-        if (p.playbackState == Player.STATE_IDLE || pausadoHa > VOLTAR_AO_VIVO_MS) { p.stop(); p.prepare() }
+        if (p.playbackState == Player.STATE_IDLE || p.playbackState == Player.STATE_ENDED || pausadoHa > VOLTAR_AO_VIVO_MS) { p.stop(); p.prepare() }
         p.playWhenReady = true
     }
 
@@ -228,7 +253,9 @@ class OuvirServico : Service() {
     private fun publicar() {
         val r = radio ?: return
         val agora = tocando
-        OuvirEstado.gravar(this, OuvirEstado.Estado("radio", r.id, r.nome, musica, agora, Process.myPid(), SystemClock.elapsedRealtime()))
+        // Para fora vai o PEDIDO (tocar/pausado), não o som: reconectando, a pílula mostra "tocando" e o OK pausa, como esperado.
+        val pedido = player?.playWhenReady == true
+        OuvirEstado.gravar(this, OuvirEstado.Estado("radio", r.id, r.nome, musica, pedido, Process.myPid(), SystemClock.elapsedRealtime()))
         sessao?.let { s ->
             runCatching {
                 s.setPlaybackState(estadoSessao(when {

@@ -1387,7 +1387,8 @@ class MainActivity : Activity() {
         }
         pilulaTocando.contentDescription = getString(R.string.l75_pilula, p.titulo, p.subtitulo)
         capsulaTocando.visibility = View.VISIBLE
-        if (!p.tocando) ui.postDelayed(tarefaTocando, 60_000)
+        // Pausada: some sozinha depois do prazo. A nossa rádio: confere também tocando (se o ":player" cair, não há aviso).
+        if (!p.tocando || p.nosso) ui.postDelayed(tarefaTocando, 60_000)
     }
 
     /** Ideia 93: aniversário hoje ou amanhã (lista da TV). Mais de um: o primeiro e "+N". */

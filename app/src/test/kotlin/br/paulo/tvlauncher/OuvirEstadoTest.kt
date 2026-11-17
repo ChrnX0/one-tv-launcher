@@ -28,6 +28,7 @@ class OuvirEstadoTest {
         assertNotNull(OuvirEstado.valido(e, setOf(1, 4321), 2_000L))
         assertNull(OuvirEstado.valido(e, setOf(1, 999), 2_000L))   // o ":player" caiu: a pílula não pode ficar
         assertNull(OuvirEstado.valido(null, setOf(4321), 2_000L))
+        assertNull(OuvirEstado.valido(e, setOf(4321), 500L))   // gravado antes de a TV reiniciar
     }
 
     @Test

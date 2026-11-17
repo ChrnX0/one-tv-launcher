@@ -33,7 +33,7 @@ object OuvirEstado {
 
     /**
      * [tipo] "radio" (depois "podcast"); [id] da fonte; [titulo] = o nome da rádio; [detalhe] = a música que ela manda
-     * (vazio se não manda); [tocando] = som saindo agora (false = pausado ou carregando); [pid] do ":player" que gravou;
+     * (vazio se não manda); [tocando] = tocar pedido (true também enquanto conecta; false = pausado); [pid] do ":player" que gravou;
      * [desde] = SystemClock.elapsedRealtime() da última mudança (o relógio é do sistema, vale entre processos).
      */
     data class Estado(val tipo: String, val id: String, val titulo: String, val detalhe: String, val tocando: Boolean,
@@ -60,6 +60,7 @@ object OuvirEstado {
      */
     fun valido(e: Estado?, pidsVivos: Set<Int>, agora: Long): Estado? = when {
         e == null || e.pid !in pidsVivos -> null
+        e.desde > agora -> null   // gravado antes de reiniciar a TV (o relógio do boot recomeçou)
         !e.tocando && e.desde > 0 && agora - e.desde > TocandoAgora.PAUSADA_MAX_MS -> null
         else -> e
     }
@@ -81,8 +82,10 @@ object OuvirEstado {
     /** O que o nosso som está tocando agora, ou null. Qualquer processo; fora da thread da tela não é preciso (é leve). */
     fun ler(ctx: Context): Estado? {
         val e = deJson(runCatching { arquivo(ctx).takeIf { it.exists() }?.readText() }.getOrNull()) ?: return null
+        // Só o ":player" conta: depois de reiniciar a TV, outro processo nosso pode ter ganhado o mesmo número.
         val vivos = runCatching {
-            ctx.getSystemService(ActivityManager::class.java)?.runningAppProcesses.orEmpty().map { it.pid }.toSet()
+            ctx.getSystemService(ActivityManager::class.java)?.runningAppProcesses.orEmpty()
+                .filter { it.processName == ctx.packageName + ":player" }.map { it.pid }.toSet()
         }.getOrDefault(emptySet())
         return valido(e, vivos, SystemClock.elapsedRealtime())
     }
