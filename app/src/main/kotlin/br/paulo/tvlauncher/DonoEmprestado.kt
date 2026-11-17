@@ -31,12 +31,28 @@ object DonoEmprestado {
     fun definirLigado(ctx: Context, sim: Boolean) {
         prefs(ctx).edit().putBoolean("ligado", sim).apply()
         anotar(ctx, if (sim) "ligado" else "desligado")
+        if (!sim) parado(ctx)   // tira na hora os escopos que os apps de poder total delegaram a si
     }
 
     fun somosDono(ctx: Context) = PrivilegioDO.somosDonos(ctx)
 
-    fun parado(ctx: Context): RegrasDono.Parado = RegrasDono.parado(
-        ligado(ctx), Planos.permite(ctx, Planos.Recurso.PODER_EMPRESTADO), somosDono(ctx))
+    /**
+     * Também limpa os escopos delegados quando o empréstimo para (desligado ou plano perdido): um app de poder total
+     * pode ter dado a si "permission-grant", "package-access"... e esses chamam o DPM direto, sem o servidor nem o
+     * FiltroDpm. Sem dono não precisa: os escopos somem junto com o dono. Uma vez por parada (marca "escopos_limpos").
+     */
+    fun parado(ctx: Context): RegrasDono.Parado {
+        val p = RegrasDono.parado(ligado(ctx), Planos.permite(ctx, Planos.Recurso.PODER_EMPRESTADO), somosDono(ctx))
+        val limpos = prefs(ctx).getBoolean("escopos_limpos", true)
+        if (p == RegrasDono.Parado.NAO) {
+            if (limpos) prefs(ctx).edit().putBoolean("escopos_limpos", false).apply()
+        } else if (!limpos && p != RegrasDono.Parado.SEM_DONO) {
+            apps(ctx).forEach { tirarEscopos(ctx, it.pacote) }
+            prefs(ctx).edit().putBoolean("escopos_limpos", true).apply()
+            anotar(ctx, "parado (${p.name.lowercase()}): escopos delegados tirados")
+        }
+        return p
+    }
 
     fun apps(ctx: Context): List<App> = mapa(ctx).values.sortedBy { it.pacote }
 

@@ -122,7 +122,7 @@ class BoasVindasActivity : Activity() {
         }
         if (UsoTv.ofereceTecnico(uso) && SaudeAcesso.shellEsperado(this) && !PrivilegioDO.somosDonos(this))
             lista.addView(linha(getString(R.string.bv_dono), getString(R.string.bv_dono_det)) {
-                VirarDono.perguntar(this, { t -> AvisoTv.rapido(this, getString(R.string.bv_titulo), t, 4) }) { montar() }
+                VirarDono.perguntar(this, { t -> AvisoTv.rapido(this, getString(R.string.bv_titulo), t, 4) }) { if (!isFinishing && !isDestroyed) montar() }
             })
         if (uso != UsoTv.SIMPLES) lista.addView(linha(getString(R.string.bv_claude), getString(R.string.bv_claude_det)) {
             abrir(Intent(this, ConectarClaudeActivity::class.java))
