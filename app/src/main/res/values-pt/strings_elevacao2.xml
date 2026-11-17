@@ -4,4 +4,9 @@
     <!-- 16.3 alto contraste -->
     <string name="elv_ac_titulo">Alto contraste</string>
     <string name="elv_ac_det">Texto mais forte e bordas mais nítidas em todas as telas (pelo menos 7:1)</string>
+    <!-- 16.2 audiodescrição e legenda para surdos -->
+    <string name="elv_ad_titulo">Audiodescrição</string>
+    <string name="elv_ad_det">Escolher o áudio que descreve a cena sempre que houver</string>
+    <string name="elv_sdh_titulo">Legenda para surdos</string>
+    <string name="elv_sdh_det">Sempre mostrar legenda com os sons ([porta bate]) no idioma da TV, mesmo dublado</string>
 </resources>

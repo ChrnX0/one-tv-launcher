@@ -4,4 +4,9 @@
     <!-- 16.3 alto contraste -->
     <string name="elv_ac_titulo">High contrast</string>
     <string name="elv_ac_det">Brighter text and clearer borders on every screen (at least 7:1)</string>
+    <!-- 16.2 audiodescrição e legenda para surdos -->
+    <string name="elv_ad_titulo">Audio description</string>
+    <string name="elv_ad_det">Pick the audio track that describes the scene whenever there is one</string>
+    <string name="elv_sdh_titulo">Subtitles for the deaf</string>
+    <string name="elv_sdh_det">Always show subtitles with sounds ([door slams]) in the TV language, even when dubbed</string>
 </resources>

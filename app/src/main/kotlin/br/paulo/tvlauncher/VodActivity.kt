@@ -166,6 +166,8 @@ class VodActivity : Activity() {
     private var quadrosDecididos = false   // ideia 86: o modo da tela (24 Hz para filme) já foi pedido para este vídeo
     // Preferência de áudio deste título (Idioma), lida do disco fora da thread da tela antes de o vídeo começar.
     @Volatile private var prefIdioma = Idioma.Pref.DUBLADO
+    /** 16.2: audiodescrição e legenda para surdos (lidas com a preferência de idioma). */
+    @Volatile private var prefAcesso = Idioma.Prefs()
     /** Segundo idioma de áudio/legenda (Conforto, 16/11/2026), já sem o idioma da TV; null = nenhum. */
     @Volatile private var segundoIdioma: String? = null
     private var chaveIdioma = ""
@@ -328,7 +330,8 @@ class VodActivity : Activity() {
             val endereco = tocavel?.url ?: m3u?.first ?: if (direto != null) null else PlayerArmazem.fontes(this).firstOrNull { it.id == fonte }?.xtream?.let { conta ->
                 if (tipo == TIPO_EPISODIO) Series.urlEpisodio(conta, id, ext) else Vod.urlFilme(conta, Filme(id, fonte, "", extensao = ext))
             }
-            prefIdioma = IdiomaPlayer.prefs(this).para(chaveIdioma)
+            prefAcesso = IdiomaPlayer.prefs(this)
+            prefIdioma = prefAcesso.para(chaveIdioma)
             segundoIdioma = ConfortoRegras.segundoUtil(Conforto.segundoIdioma(this), idiomaTv)
             // Ideia 90: tradução que ficou pela metade (o player fechou no meio) é refeita; a metade não fica valendo.
             if (LegendaTraduzida.pelaMetade(this, chave)) LegendaBaixar.apagar(this, chave)
@@ -767,7 +770,7 @@ class VodActivity : Activity() {
             if (legendaDecidida || faixas.groups.none { it.type == C.TRACK_TYPE_AUDIO }) return
             legendaDecidida = true
             val p = player ?: return
-            IdiomaPlayer.aplicar(faixas, p.trackSelectionParameters, prefIdioma, idiomaTv, segundoIdioma)?.let { p.trackSelectionParameters = it }
+            IdiomaPlayer.aplicar(faixas, p.trackSelectionParameters, prefIdioma, idiomaTv, segundoIdioma, prefAcesso)?.let { p.trackSelectionParameters = it }
             aplicarMemoriaSerie(p, faixas)
             talvezLegendaAuto(faixas)
         }
@@ -1141,7 +1144,7 @@ class VodActivity : Activity() {
     private fun talvezLegendaAuto(t: Tracks) {
         if (autoTentada || legendaArquivo != null || legendasAoLado.isNotEmpty()) return
         if (!getSharedPreferences("player", MODE_PRIVATE).getBoolean(LEGENDA_AUTO, true)) return
-        if (!IdiomaPlayer.faltaLegenda(t, prefIdioma, idiomaTv, buscaLegenda().versao)) return
+        if (!IdiomaPlayer.faltaLegenda(t, prefIdioma, idiomaTv, buscaLegenda().versao, prefAcesso.audiodescricao)) return
         autoTentada = true
         val k = chave; val u = url; val b = buscaLegenda()
         if (b.nome.isBlank()) return

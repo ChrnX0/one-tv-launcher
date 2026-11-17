@@ -397,6 +397,16 @@ class ConfigLauncherActivity : Activity() {
             leitura.execute { IdiomaPlayer.definirPadrao(this, nova) }
         }
         c.addView(linhaAudio)
+        // Elevação 16.2: audiodescrição e legenda para surdos, escolhidas uma vez (valem em todo filme e série).
+        var ad = false; var sdh = false
+        lateinit var linhaAd: LinhaCfg; lateinit var linhaSdh: LinhaCfg
+        linhaAd = linha(getString(R.string.elv_ad_titulo), getString(R.string.elv_ad_det), chave = false) {
+            ad = !ad; linhaAd.ligado(ad); val v = ad; leitura.execute { IdiomaPlayer.definirAudiodescricao(this, v) }
+        }
+        linhaSdh = linha(getString(R.string.elv_sdh_titulo), getString(R.string.elv_sdh_det), chave = false) {
+            sdh = !sdh; linhaSdh.ligado(sdh); val v = sdh; leitura.execute { IdiomaPlayer.definirSurdos(this, v) }
+        }
+        c.addView(linhaAd, lp()); c.addView(linhaSdh, lp())
         // Serviços de filmes e séries (14/11/2026): Trakt, Simkl, MDBList, TMDB e OpenSubtitles numa tela só. A chave do
         // OpenSubtitles agora é a do app; a linha antiga (chave do dono) só aparece para quem já tinha cadastrado uma,
         // enquanto o build não tiver a chave do app.
@@ -474,11 +484,13 @@ class ConfigLauncherActivity : Activity() {
             startActivity(Intent(this, FotoPerfilActivity::class.java))
         }, lp())
         leitura.execute {
-            val p = IdiomaPlayer.prefs(this).padrao
+            val todas = IdiomaPlayer.prefs(this)
+            val p = todas.padrao
             val tem = LegendaBaixar.temConta(this)
             ui.post {
                 if (isDestroyed) return@post
                 atual = p; linhaAudio.valor(IdiomaPlayer.rotulo(this, p))
+                ad = todas.audiodescricao; sdh = todas.surdos; linhaAd.ligado(ad); linhaSdh.ligado(sdh)
                 linhaLeg.valor(getString(if (tem) R.string.legenda_conta_sim else R.string.legenda_conta_nao))
             }
         }
