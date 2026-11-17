@@ -99,6 +99,22 @@ class LinhasTempo(private val ctx: Context, private val m400: Typeface, private 
     /** Liga/desliga de cada linha nas Configurações (protetor v2, 17/11/2026). Desligada = some mesmo com dado. */
     var comFrase = true
     var comCuriosidades = true
+    private var semIcones = false
+
+    /**
+     * Variação do desenho (17/11/2026, [Protetor.LINHAS]): "icones" (o de antes), "vidro" (as duas linhas dentro de um
+     * vidro escuro arredondado, para fundos claros) ou "texto" (sem os ícones, mais limpo).
+     */
+    fun estilo(e: String) {
+        semIcones = e == Protetor.LINHAS_TEXTO
+        if (semIcones) { iconeFrase.visibility = GONE; iconeCurio.visibility = GONE }
+        if (e == Protetor.LINHAS_VIDRO) {
+            background = android.graphics.drawable.GradientDrawable().apply { setColor(0x66000000); cornerRadius = dp(16).toFloat() }
+            setPadding(dp(16), dp(12), dp(18), dp(12))
+        }
+        (frase.layoutParams as? LayoutParams)?.leftMargin = if (semIcones) 0 else dp(10)
+        (tituloCurio.layoutParams as? LayoutParams)?.leftMargin = if (semIcones) 0 else dp(12)
+    }
 
     init {
         orientation = VERTICAL
@@ -133,7 +149,7 @@ class LinhasTempo(private val ctx: Context, private val m400: Typeface, private 
         val fraseVisivel = textoFrase != null && comFrase
         linhaFrase.visibility = if (fraseVisivel) VISIBLE else GONE
         frase.text = textoFrase ?: ""
-        iconeFrase.setImageDrawable(iconeCeu); iconeFrase.visibility = if (iconeCeu == null) GONE else VISIBLE
+        iconeFrase.setImageDrawable(iconeCeu); iconeFrase.visibility = if (iconeCeu == null || semIcones) GONE else VISIBLE
         val mudou = lista != itens
         itens = lista
         if (mudou) atual = 0

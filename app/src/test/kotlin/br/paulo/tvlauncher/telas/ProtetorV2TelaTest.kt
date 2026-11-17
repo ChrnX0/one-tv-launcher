@@ -52,7 +52,8 @@ class ProtetorV2TelaTest {
         override fun awaitTermination(t: Long, u: TimeUnit) = true
     }
 
-    private class Caso(val nome: String, val relogio: String, val pos: String, val tam: String, val mostrar: String, val tecla: Boolean)
+    private class Caso(val nome: String, val relogio: String, val pos: String, val tam: String, val mostrar: String, val tecla: Boolean,
+        val estilos: Map<String, String> = emptyMap())
 
     @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi") @Test fun portugues() = conferir("pt", listOf(
         Caso("fino-alto-tudo", Protetor.REL_FINO, Protetor.POS_ALTO, "normal", Protetor.MOSTRAR_SEMPRE, false),
@@ -65,6 +66,13 @@ class ProtetorV2TelaTest {
         Caso("extenso-alto-grande", Protetor.REL_EXTENSO, Protetor.POS_ALTO, "grande", Protetor.MOSTRAR_SEMPRE, false),
         Caso("empilhado-centro-so", Protetor.REL_EMPILHADO, Protetor.POS_CENTRO, "normal", Protetor.MOSTRAR_SO_HORA, false),
         Caso("empilhado-alto-tudo", Protetor.REL_EMPILHADO, Protetor.POS_ALTO, "grande", Protetor.MOSTRAR_SEMPRE, false),
+        // Variações dos elementos (17/11/2026).
+        Caso("var-linha-serifa-vidro", Protetor.REL_EDITORIAL, Protetor.POS_ALTO, "normal", Protetor.MOSTRAR_SEMPRE, false, mapOf(
+            "protetor_widget" to Protetor.WIDGET_LINHA, "protetor_textos" to Protetor.TEXTOS_SERIFA, "protetor_linhas" to Protetor.LINHAS_VIDRO,
+            "protetor_avisos" to Protetor.AVISOS_LISTA, "protetor_credito" to Protetor.CREDITO_DISCRETO)),
+        Caso("var-grande-maiusculas-texto", Protetor.REL_FINO, Protetor.POS_BAIXO, "normal", Protetor.MOSTRAR_SEMPRE, false, mapOf(
+            "protetor_widget" to Protetor.WIDGET_GRANDE, "protetor_textos" to Protetor.TEXTOS_MAIUSCULAS, "protetor_linhas" to Protetor.LINHAS_TEXTO,
+            "protetor_avisos" to Protetor.AVISOS_UM)),
     ))
 
     @Config(qualifiers = "de-w960dp-h540dp-land-television-xhdpi") @Test fun alemao() = conferir("de", listOf(
@@ -82,7 +90,8 @@ class ProtetorV2TelaTest {
             a.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().clear()
                 .putString("protetor_fundo", Protetor.FUNDO_TERRA).putString("protetor_relogio", caso.relogio)
                 .putString("protetor_posicao", caso.pos).putString("protetor_tamanho", caso.tam)
-                .putString("protetor_mostrar", caso.mostrar).commit()
+                .putString("protetor_mostrar", caso.mostrar)
+                .apply { caso.estilos.forEach { (k, v) -> putString(k, v) } }.commit()
             a.getSharedPreferences("clima", Context.MODE_PRIVATE).edit().clear()
                 .putInt("temp", 22).putLong("em", agora).putInt("codigo", 2).putInt("max", 27).putInt("min", 18)
                 .putInt("umidade", 70).putInt("chuva", 20).putBoolean("eDia", false).commit()

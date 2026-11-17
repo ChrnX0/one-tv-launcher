@@ -35,7 +35,11 @@ object Protetor {
     const val WIDGET_FAIXA = "faixa"
     const val WIDGET_CARTOES = "cartoes"
     const val WIDGET_SOLTO = "solto"
-    val WIDGETS = listOf(WIDGET_FAIXA, WIDGET_CARTOES, WIDGET_SOLTO)
+    /** 17/11/2026 (Paulo: "variações tb para os elementos do clima e todos os outros"): uma linha só, sem caixa; e a
+     *  temperatura grande e fina, como um segundo relógio. */
+    const val WIDGET_LINHA = "linha"
+    const val WIDGET_GRANDE = "grande"
+    val WIDGETS = listOf(WIDGET_FAIXA, WIDGET_CARTOES, WIDGET_SOLTO, WIDGET_LINHA, WIDGET_GRANDE)
 
     fun widget(ctx: Context): String =
         normalizarWidget(ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).getString(CHAVE_WIDGET, null))
@@ -121,6 +125,27 @@ object Protetor {
         MOSTRAR_DE_VEZ -> agora < teclaAte || ((agora - desde).coerceAtLeast(0) % VEZ_CICLO_MS) < VEZ_MOSTRA_MS
         else -> agora < teclaAte
     }
+
+    // Variações dos outros elementos (17/11/2026, mesmo pedido). O primeiro valor é o desenho de antes.
+    /** Avisos e notificações (coluna da direita): cartões de vidro, lista sem caixa, ou um cartão por vez (troca a cada 8 s). */
+    const val AVISOS_CARTOES = "cartoes"
+    const val AVISOS_LISTA = "lista"
+    const val AVISOS_UM = "um"
+    val AVISOS = Escolha("protetor_avisos", listOf(AVISOS_CARTOES, AVISOS_LISTA, AVISOS_UM))
+    /** Saudação, data e agenda: Manrope (moderno), Fraunces itálica (serifa) ou maiúsculas espaçadas. */
+    const val TEXTOS_MODERNO = "moderno"
+    const val TEXTOS_SERIFA = "serifa"
+    const val TEXTOS_MAIUSCULAS = "maiusculas"
+    val TEXTOS = Escolha("protetor_textos", listOf(TEXTOS_MODERNO, TEXTOS_SERIFA, TEXTOS_MAIUSCULAS))
+    /** Frase do tempo e curiosidades: com ícones, dentro de um vidro escuro, ou só o texto. */
+    const val LINHAS_ICONES = "icones"
+    const val LINHAS_VIDRO = "vidro"
+    const val LINHAS_TEXTO = "texto"
+    val LINHAS = Escolha("protetor_linhas", listOf(LINHAS_ICONES, LINHAS_VIDRO, LINHAS_TEXTO))
+    /** Crédito da imagem: etiqueta de museu (título grande + autor) ou uma linha discreta. */
+    const val CREDITO_ETIQUETA = "etiqueta"
+    const val CREDITO_DISCRETO = "discreto"
+    val CREDITO = Escolha("protetor_credito", listOf(CREDITO_ETIQUETA, CREDITO_DISCRETO))
 
     /** Os elementos que se ligam e desligam um por um. A hora não está aqui: ela sempre aparece. */
     enum class Elemento(val chave: String) {

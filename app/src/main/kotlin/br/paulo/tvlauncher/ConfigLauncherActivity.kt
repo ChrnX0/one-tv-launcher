@@ -1072,6 +1072,18 @@ class ConfigLauncherActivity : Activity() {
         escolha(R.string.pv2_mostrar, R.string.pv2_mostrar_det, Protetor.MOSTRAR,
             mapOf(Protetor.MOSTRAR_SO_HORA to R.string.pv2_mostrar_so, Protetor.MOSTRAR_DE_VEZ to R.string.pv2_mostrar_vez,
                 Protetor.MOSTRAR_SEMPRE to R.string.pv2_mostrar_sempre))
+        // Variações de cada elemento (17/11/2026, Paulo: "variações também para o clima e todos os outros").
+        escolha(R.string.pv2_est_avisos, R.string.pv2_est_avisos_det, Protetor.AVISOS,
+            mapOf(Protetor.AVISOS_CARTOES to R.string.pv2_av_cartoes, Protetor.AVISOS_LISTA to R.string.pv2_av_lista,
+                Protetor.AVISOS_UM to R.string.pv2_av_um))
+        escolha(R.string.pv2_est_textos, R.string.pv2_est_textos_det, Protetor.TEXTOS,
+            mapOf(Protetor.TEXTOS_MODERNO to R.string.pv2_tx_moderno, Protetor.TEXTOS_SERIFA to R.string.pv2_tx_serifa,
+                Protetor.TEXTOS_MAIUSCULAS to R.string.pv2_tx_maiusculas))
+        escolha(R.string.pv2_est_linhas, R.string.pv2_est_linhas_det, Protetor.LINHAS,
+            mapOf(Protetor.LINHAS_ICONES to R.string.pv2_ln_icones, Protetor.LINHAS_VIDRO to R.string.pv2_ln_vidro,
+                Protetor.LINHAS_TEXTO to R.string.pv2_ln_texto))
+        escolha(R.string.pv2_est_credito, R.string.pv2_est_credito_det, Protetor.CREDITO,
+            mapOf(Protetor.CREDITO_ETIQUETA to R.string.pv2_cr_etiqueta, Protetor.CREDITO_DISCRETO to R.string.pv2_cr_discreto))
     }
 
     /** Liga/desliga de cada elemento do protetor (a hora não desliga), numa seção no fim da aba. */
@@ -1109,10 +1121,12 @@ class ConfigLauncherActivity : Activity() {
         fun rotuloBarra(v: String) = getString(when (v) {
             Protetor.WIDGET_CARTOES -> R.string.cl_widget_cartoes
             Protetor.WIDGET_SOLTO -> R.string.cl_widget_solto
+            Protetor.WIDGET_LINHA -> R.string.cl_widget_linha
+            Protetor.WIDGET_GRANDE -> R.string.cl_widget_grande
             else -> R.string.cl_widget_faixa
         })
         lateinit var linhaBarra: LinhaCfg
-        linhaBarra = linha(getString(R.string.cl_linha_baixo), getString(R.string.cl_linha_baixo_det),
+        linhaBarra = linha(getString(R.string.cl_linha_baixo), getString(R.string.pv2_widget_det),
             valor = rotuloBarra(Protetor.widget(this))) {
             val novo = Protetor.proximoWidget(Protetor.widget(this))
             Protetor.definirWidget(this, novo)
