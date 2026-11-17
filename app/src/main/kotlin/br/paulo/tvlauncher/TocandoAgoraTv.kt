@@ -110,7 +110,7 @@ object TocandoAgoraTv {
 
     /** O nosso som (rádio), ou null. Leve: um arquivo pequeno e a lista de processos do app. */
     private fun nosso(ctx: Context): OuvirEstado.Estado? = runCatching { OuvirEstado.ler(ctx) }.getOrNull()
-    private fun rotuloNosso(ctx: Context, e: OuvirEstado.Estado) = ctx.getString(R.string.ra_coluna)
+    private fun rotuloNosso(ctx: Context, e: OuvirEstado.Estado) = ctx.getString(if (e.tipo == "podcast") R.string.pod_titulo else R.string.ra_coluna)
     private fun jsonNosso(ctx: Context, e: OuvirEstado.Estado): JSONObject = JSONObject().put("app", rotuloNosso(ctx, e))
         .put("pacote", ctx.packageName).put("titulo", e.titulo).put("artista", e.detalhe).put("tocando", e.tocando)
         .put("nosso", true).put("tipo", e.tipo)
@@ -153,7 +153,7 @@ object TocandoAgoraTv {
 
     /** Ideia 75: o que a pílula da HOME mostra. [capa] = a arte que o app mandou (null: a HOME usa o ícone do app). */
     class Pilula(val pacote: String, val titulo: String, val subtitulo: String, val tocando: Boolean, val capa: android.graphics.Bitmap?,
-                 val nosso: Boolean = false)
+                 val nosso: Boolean = false, val tipoNosso: String = "")
 
     /**
      * Para a pílula "Tocando agora" da HOME. Null = não mostrar: chave desligada, nada tocando, sem título ou pausado há
@@ -163,7 +163,7 @@ object TocandoAgoraTv {
         // A rádio: nome da rádio no título (é o que se reconhece de longe), a música (ou "Rádio") ao lado.
         nosso(ctx)?.let { e ->
             return Pilula(ctx.packageName, TocandoAgora.tituloPilula(e.titulo), TocandoAgora.subtitulo(e.detalhe, rotuloNosso(ctx, e)),
-                e.tocando, null, nosso = true)
+                e.tocando, null, nosso = true, tipoNosso = e.tipo)
         }
         if (!Extras.ligado(ctx, Extras.Chave.TOCANDO_AGORA)) return null
         val c = atual(ctx) ?: return null
@@ -255,8 +255,13 @@ object TocandoAgoraTv {
 
     /** "alternar" (tocar/pausar), "proxima", "anterior". */
     fun controlar(ctx: Context, acao: String): Boolean {
-        // A rádio não tem próxima/anterior: só tocar/pausar.
-        if (nosso(ctx) != null) return acao == "alternar" && OuvirEstado.comandar(ctx, OuvirEstado.ALTERNAR)
+        // A rádio não tem próxima/anterior: só tocar/pausar. O podcast: próxima = +30 s, anterior = -15 s.
+        nosso(ctx)?.let { e -> return when (acao) {
+            "alternar" -> OuvirEstado.comandar(ctx, OuvirEstado.ALTERNAR)
+            "proxima" -> e.tipo == "podcast" && OuvirEstado.comandar(ctx, OuvirEstado.AVANCAR)
+            "anterior" -> e.tipo == "podcast" && OuvirEstado.comandar(ctx, OuvirEstado.VOLTAR)
+            else -> false
+        } }
         val c = atual(ctx) ?: return false
         val t = c.transportControls
         when (acao) {

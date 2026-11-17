@@ -29,7 +29,9 @@ object OuvirEstado {
     const val PAUSAR = "pausar"
     const val CONTINUAR = "continuar"
     const val PARAR = "parar"
-    val COMANDOS = setOf(ALTERNAR, PAUSAR, CONTINUAR, PARAR)
+    const val AVANCAR = "avancar"   // podcast: +30 s
+    const val VOLTAR = "voltar"     // podcast: -15 s
+    val COMANDOS = setOf(ALTERNAR, PAUSAR, CONTINUAR, PARAR, AVANCAR, VOLTAR)
 
     /**
      * [tipo] "radio" (depois "podcast"); [id] da fonte; [titulo] = o nome da rádio; [detalhe] = a música que ela manda

@@ -70,6 +70,29 @@ class OuvirServico : Service() {
         fun ouvir(f: () -> Unit) { ouvintes.add(f) }
         fun esquecer(f: () -> Unit) { ouvintes.remove(f) }
 
+        private const val ACAO_EPISODIO = "br.paulo.tvlauncher.OUVIR_EPISODIO"
+        private const val EXTRA_EP = "ep"
+        private const val SALVAR_MS = 15_000L
+        /** ◀ volta, ▶ avança (podcast). */
+        const val VOLTAR_MS = 15_000L
+        const val AVANCAR_MS = 30_000L
+        /** Velocidades oferecidas (sem mudar o tom: o ExoPlayer ajusta o tempo, não a afinação). */
+        val VELOCIDADES = listOf(0.8f, 1.0f, 1.2f, 1.5f, 1.75f, 2.0f)
+        private const val PREFS = "ouvir"
+        private const val CHAVE_VELOCIDADE = "velocidade"
+        private const val CHAVE_SILENCIO = "pular_silencio"
+        fun velocidade(ctx: Context) = ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getFloat(CHAVE_VELOCIDADE, 1f).takeIf { it in VELOCIDADES } ?: 1f
+        fun pularSilencio(ctx: Context) = ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getBoolean(CHAVE_SILENCIO, false)
+
+        /** Toca o episódio [e] a partir de [inicioMs] (troca o que estiver tocando). Chame com a tela na frente. */
+        fun tocarEpisodio(ctx: Context, e: EpisodioTocando, inicioMs: Long) {
+            instancia?.let { it.tocarEp(e, inicioMs); return }
+            val i = Intent(ctx, OuvirServico::class.java).setAction(ACAO_EPISODIO).putExtra(EXTRA_EP, e.paraJson()).putExtra("inicio", inicioMs)
+            try {
+                if (Build.VERSION.SDK_INT >= 26) ctx.startForegroundService(i) else ctx.startService(i)
+            } catch (ex: Exception) { Log.w(TAG, "não deu para começar o serviço: $ex") }
+        }
+
         /** Toca a rádio [r] (troca a que estiver tocando). Chame com a tela na frente: é ela que dá a licença de começar. */
         fun tocarRadio(ctx: Context, r: Radios.Radio) {
             instancia?.let { it.tocar(r); return }
@@ -80,12 +103,30 @@ class OuvirServico : Service() {
         }
     }
 
+    /** Um episódio de podcast com o que a tela e a pílula precisam (nome e capa do podcast, endereço do feed). */
+    data class EpisodioTocando(val feed: String, val podcast: String, val capaPodcast: String, val ep: PodcastFeed.Episodio) {
+        fun paraJson(): String = org.json.JSONObject().put("feed", feed).put("podcast", podcast).put("capa", capaPodcast)
+            .put("f", Podcasts.feedParaJson(PodcastFeed.Feed(podcast, "", "", capaPodcast, "", "", false, listOf(ep)))).toString()
+        companion object {
+            fun deJson(t: String?): EpisodioTocando? = runCatching {
+                val o = org.json.JSONObject(t ?: return null)
+                val ep = Podcasts.feedDeJson(o.optString("f"))?.episodios?.firstOrNull() ?: return null
+                val feed = o.optString("feed").takeIf { PodcastFeed.urlValida(it) } ?: return null
+                EpisodioTocando(feed, o.optString("podcast"), o.optString("capa"), ep)
+            }.getOrNull()
+        }
+    }
+
     private val ui = Handler(Looper.getMainLooper())
     private var player: ExoPlayer? = null
     private var sessao: MediaSession? = null
     /** A rádio tocando (ou pausada), ou null. */
     var radio: Radios.Radio? = null
         private set
+    /** O episódio tocando (ou pausado), ou null. Só um dos dois, [radio] ou [episodio], existe. */
+    var episodio: EpisodioTocando? = null
+        private set
+    private val ativo: Boolean get() = radio != null || episodio != null
     /** A música que a rádio manda (ICY), "" se não manda. */
     var musica: String = ""
         private set
@@ -102,6 +143,10 @@ class OuvirServico : Service() {
     val pausado: Boolean get() = player?.playWhenReady == false
 
     private val pausaLonga = Runnable { Log.i(TAG, "pausado há muito tempo: parei"); parar() }
+    /** Podcast: grava onde está a cada [SALVAR_MS] tocando (a TV pode ser desligada da tomada a qualquer hora). */
+    private val salvarPeriodico = object : Runnable {
+        override fun run() { if (tocando) salvarPosicao(); ui.postDelayed(this, SALVAR_MS) }
+    }
 
     /**
      * Pausada, a rádio não fica sabendo quando outro app pega o som (o foco só é avisado com o som pedido). Então: pausada
@@ -109,7 +154,7 @@ class OuvirServico : Service() {
      */
     private val outroTocando = object : android.media.AudioManager.AudioPlaybackCallback() {
         override fun onPlaybackConfigChanged(configs: MutableList<android.media.AudioPlaybackConfiguration>?) {
-            if (radio == null || !pausado) return
+            if (!ativo || !pausado) return
             // Logo depois de pausar, o nosso próprio som ainda pode constar como ativo por um instante.
             if (SystemClock.elapsedRealtime() - pausouEm < 2_000) return
             val am = getSystemService(android.media.AudioManager::class.java) ?: return
@@ -119,7 +164,7 @@ class OuvirServico : Service() {
 
     private val telaApagou = object : BroadcastReceiver() {
         override fun onReceive(c: Context, i: Intent) {
-            if (i.action == Intent.ACTION_SCREEN_OFF && radio != null) { Log.i(TAG, "tela apagou: parei"); parar() }
+            if (i.action == Intent.ACTION_SCREEN_OFF && ativo) { Log.i(TAG, "tela apagou: parei"); parar() }
         }
     }
 
@@ -138,8 +183,13 @@ class OuvirServico : Service() {
         instancia = this
         // startForegroundService exige startForeground logo: primeiro a notificação, depois o resto.
         val r = intent?.takeIf { it.action == ACAO_RADIO }?.getStringExtra(EXTRA_RADIO)?.let { Radios.deJson(it).firstOrNull() }
-        primeiroPlano(r?.nome ?: radio?.nome ?: "", "")
-        if (r != null) tocar(r) else if (radio == null) parar()
+        val e = intent?.takeIf { it.action == ACAO_EPISODIO }?.getStringExtra(EXTRA_EP)?.let { EpisodioTocando.deJson(it) }
+        primeiroPlano(r?.nome ?: e?.podcast ?: radio?.nome ?: episodio?.podcast ?: "", "")
+        when {
+            r != null -> tocar(r)
+            e != null -> tocarEp(e, intent.getLongExtra("inicio", 0L))
+            !ativo -> parar()
+        }
         // Se o Android matar o processo, não recria sozinho: o som não pode voltar sem ninguém pedir.
         return START_NOT_STICKY
     }
@@ -148,9 +198,10 @@ class OuvirServico : Service() {
         ui.removeCallbacksAndMessages(null)
         runCatching { unregisterReceiver(telaApagou) }
         runCatching { getSystemService(android.media.AudioManager::class.java)?.unregisterAudioPlaybackCallback(outroTocando) }
+        if (episodio != null) salvarPosicao()
         soltarPlayer()
         sessao?.let { runCatching { it.isActive = false; it.release() } }; sessao = null
-        radio = null; musica = ""
+        radio = null; episodio = null; musica = ""
         OuvirEstado.gravar(this, null)
         if (instancia === this) instancia = null
         avisar()
@@ -161,18 +212,55 @@ class OuvirServico : Service() {
 
     fun tocar(r: Radios.Radio) {
         if (radio?.id == r.id && player != null) { continuar(); return }
+        largarAtual()
+        radio = r; musica = ""
+        player = novoPlayer(r.url, fala = false).also { it.prepare(); it.playWhenReady = true }
+        garantirSessao()
+        primeiroPlano(r.nome, "")
+        publicar()
+        Fundo.rodar("radios") { Radios.contarClique(r) }
+    }
+
+    /** Toca o episódio [e] a partir de [inicioMs]; o mesmo episódio já carregado só continua. */
+    fun tocarEp(e: EpisodioTocando, inicioMs: Long) {
+        val atual = episodio
+        if (atual != null && atual.feed == e.feed && atual.ep.guid == e.ep.guid && player != null) { continuar(); return }
+        largarAtual()
+        episodio = e
+        if (e.ep.video) Log.w(TAG, "episódio em vídeo tocado só como áudio: ${e.ep.titulo}")   // a tela abre o vídeo no player
+        player = novoPlayer(e.ep.url, fala = true).also { p ->
+            p.setPlaybackSpeed(velocidade(this))
+            p.skipSilenceEnabled = pularSilencio(this)
+            if (inicioMs > 0) p.seekTo(inicioMs)
+            p.prepare(); p.playWhenReady = true
+        }
+        ui.removeCallbacks(salvarPeriodico); ui.postDelayed(salvarPeriodico, SALVAR_MS)
+        garantirSessao()
+        primeiroPlano(e.podcast, e.ep.titulo)
+        publicar()
+    }
+
+    /** Antes de trocar de rádio/episódio: grava onde o episódio parou e solta o player. */
+    private fun largarAtual() {
+        if (episodio != null) salvarPosicao()
+        ui.removeCallbacks(salvarPeriodico)
         soltarPlayer()
-        radio = r; musica = ""; tentativas = 0; pausouEm = 0L
-        val http = DefaultHttpDataSource.Factory().setUserAgent("onetv-launcher/1")
+        radio = null; episodio = null; musica = ""; tentativas = 0; pausouEm = 0L
+    }
+
+    private fun novoPlayer(url: String, fala: Boolean): ExoPlayer {
+        val http = DefaultHttpDataSource.Factory().setUserAgent(if (fala) "Sofaly/1 (TV podcast player)" else "onetv-launcher/1")
             .setAllowCrossProtocolRedirects(true).setConnectTimeoutMs(10_000).setReadTimeoutMs(20_000)
-        val item = MediaItem.Builder().setUri(r.url).apply {
-            if (r.url.substringBefore('?').endsWith(".m3u8", ignoreCase = true)) setMimeType(MimeTypes.APPLICATION_M3U8)
+        val item = MediaItem.Builder().setUri(url).apply {
+            if (url.substringBefore('?').endsWith(".m3u8", ignoreCase = true)) setMimeType(MimeTypes.APPLICATION_M3U8)
         }.build()
-        player = ExoPlayer.Builder(this).build().also { p ->
+        return ExoPlayer.Builder(this).build().also { p ->
             // true = o ExoPlayer cuida do foco de áudio (pausa quando outro app toca, abaixa quando o Assistente fala).
-            p.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA).setContentType(C.AUDIO_CONTENT_TYPE_MUSIC).build(), true)
+            p.setAudioAttributes(AudioAttributes.Builder().setUsage(C.USAGE_MEDIA)
+                .setContentType(if (fala) C.AUDIO_CONTENT_TYPE_SPEECH else C.AUDIO_CONTENT_TYPE_MUSIC).build(), true)
             p.addListener(object : Player.Listener {
                 override fun onMediaMetadataChanged(m: androidx.media3.common.MediaMetadata) {
+                    val r = radio ?: return
                     // ICY "StreamTitle" (Artista - Música) chega como título; texto de espera não vale (Radios.musicaUtil).
                     val t = listOfNotNull(m.title?.toString(), m.artist?.toString()).filter { Radios.musicaUtil(it, r.nome) }
                         .distinct().joinToString(" · ")
@@ -184,40 +272,39 @@ class OuvirServico : Service() {
                 }
                 override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
                     if (!playWhenReady && reason == Player.PLAY_WHEN_READY_CHANGE_REASON_AUDIO_FOCUS_LOSS) {
-                        // Outro app pegou o som de vez: parar (rádio ao vivo pausada não tem para onde voltar).
-                        // Fora do próprio callback: soltar o player dentro dele é arriscado.
+                        // Outro app pegou o som de vez: parar (rádio ao vivo pausada não tem para onde voltar; o
+                        // episódio grava onde parou). Fora do próprio callback: soltar o player dentro dele é arriscado.
                         Log.i(TAG, "outro app pegou o som: parei"); ui.post { parar() }; return
                     }
                     ui.removeCallbacks(pausaLonga)
                     pausouEm = if (playWhenReady) 0L else SystemClock.elapsedRealtime()
-                    if (!playWhenReady) ui.postDelayed(pausaLonga, TocandoAgora.PAUSADA_MAX_MS)
+                    if (!playWhenReady) { ui.postDelayed(pausaLonga, TocandoAgora.PAUSADA_MAX_MS); if (episodio != null) salvarPosicao() }
                     publicar()
                 }
                 override fun onPlaybackStateChanged(estado: Int) {
-                    // O servidor fechou a transmissão sem erro (reiniciou): rádio ao vivo não "acaba"; é queda.
-                    if (estado == Player.STATE_ENDED) caiu(p, r, "fim da transmissão")
+                    if (estado != Player.STATE_ENDED) return
+                    // Rádio: o servidor fechou a transmissão sem erro (reiniciou); ao vivo não "acaba", é queda.
+                    // Episódio: chegou ao fim = ouvido, e para (nada toca sozinho depois).
+                    if (episodio != null) ui.post { terminouEpisodio() } else caiu(p, "fim da transmissão")
                 }
-                override fun onPlayerError(error: PlaybackException) = caiu(p, r, error.errorCodeName)
+                override fun onPlayerError(error: PlaybackException) = caiu(p, error.errorCodeName)
             })
             p.setMediaSource(DefaultMediaSourceFactory(http).createMediaSource(item))
-            p.prepare(); p.playWhenReady = true
         }
-        garantirSessao()
-        primeiroPlano(r.nome, "")
-        publicar()
-        Fundo.rodar("radios") { Radios.contarClique(r) }
     }
 
     /** A rádio caiu: com o som pedido, tenta de novo [RETENTATIVAS] vezes; depois avisa e para. Pausada, espera o continuar. */
-    private fun caiu(p: ExoPlayer, r: Radios.Radio, motivo: String) {
-        Log.w(TAG, "${r.nome}: $motivo (tentativa ${tentativas + 1})")
+    private fun caiu(p: ExoPlayer, motivo: String) {
+        val nome = radio?.nome ?: episodio?.ep?.titulo ?: return
+        Log.w(TAG, "$nome: $motivo (tentativa ${tentativas + 1})")
         if (!p.playWhenReady) { publicar(); return }   // pausada: continuar() reconecta; não volta a tocar sozinha
         if (tentativas < RETENTATIVAS) {
             tentativas++
-            ui.postDelayed({ if (player === p && p.playWhenReady) { p.stop(); p.prepare() } }, ESPERA_RETENTATIVA_MS)
+            // Rádio: reconecta no "agora". Episódio: o prepare retoma do ponto em que estava.
+            ui.postDelayed({ if (player === p && p.playWhenReady) { if (radio != null) p.stop(); p.prepare() } }, ESPERA_RETENTATIVA_MS)
             return
         }
-        AvisoTv.rapido(this, r.nome, getString(R.string.ra_falhou), 6)
+        AvisoTv.rapido(this, nome, getString(if (radio != null) R.string.ra_falhou else R.string.pod_falhou), 6)
         ui.post { parar() }
     }
 
@@ -226,17 +313,67 @@ class OuvirServico : Service() {
     fun continuar() {
         val p = player ?: return
         val pausadoHa = if (pausouEm > 0) SystemClock.elapsedRealtime() - pausouEm else 0L
-        // Rádio é ao vivo: depois de uma pausa de verdade, volta para o "agora" (reconecta), não para o áudio guardado.
-        // Caiu (rede) enquanto pausado: também reconecta.
-        if (p.playbackState == Player.STATE_IDLE || p.playbackState == Player.STATE_ENDED || pausadoHa > VOLTAR_AO_VIVO_MS) { p.stop(); p.prepare() }
+        if (episodio != null) {
+            // Episódio: continua do ponto (caiu enquanto pausado: reconecta no mesmo ponto).
+            if (p.playbackState == Player.STATE_IDLE) p.prepare()
+        } else if (p.playbackState == Player.STATE_IDLE || p.playbackState == Player.STATE_ENDED || pausadoHa > VOLTAR_AO_VIVO_MS) {
+            // Rádio é ao vivo: depois de uma pausa de verdade, volta para o "agora" (reconecta), não para o áudio guardado.
+            p.stop(); p.prepare()
+        }
         p.playWhenReady = true
+    }
+
+    /** Podcast: pula [deltaMs] (negativo = volta). Rádio ao vivo não pula. */
+    fun pular(deltaMs: Long) {
+        val p = player ?: return
+        if (episodio == null) return
+        val dur = p.duration.takeIf { it != C.TIME_UNSET && it > 0 } ?: Long.MAX_VALUE
+        p.seekTo((p.currentPosition + deltaMs).coerceIn(0L, maxOf(0L, dur - 1_000)))
+        publicar()
+    }
+
+    fun irPara(ms: Long) { val p = player ?: return; if (episodio != null) { p.seekTo(ms.coerceAtLeast(0)); publicar() } }
+
+    fun definirVelocidade(v: Float) {
+        if (v !in VELOCIDADES) return
+        getSharedPreferences(PREFS, MODE_PRIVATE).edit().putFloat(CHAVE_VELOCIDADE, v).apply()
+        if (episodio != null) player?.setPlaybackSpeed(v)
+        publicar()
+    }
+
+    fun definirPularSilencio(sim: Boolean) {
+        getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean(CHAVE_SILENCIO, sim).apply()
+        if (episodio != null) player?.skipSilenceEnabled = sim
+        publicar()
+    }
+
+    /** Posição e duração do episódio (ms); duração 0 = ainda não sabe. */
+    val posicaoMs: Long get() = player?.currentPosition ?: 0L
+    val duracaoMs: Long get() = player?.duration?.takeIf { it != C.TIME_UNSET && it > 0 } ?: ((episodio?.ep?.duracaoS ?: 0) * 1000L)
+
+    /** Grava onde o episódio está (fora da thread da tela: é disco). */
+    private fun salvarPosicao(fim: Boolean = false) {
+        val e = episodio ?: return
+        val dur = duracaoMs
+        val ms = if (fim) maxOf(dur, posicaoMs) else posicaoMs
+        val p = Podcasts.Posicao(e.feed, e.ep.guid, ms, dur, fim, System.currentTimeMillis(), e.ep.titulo, e.podcast)
+        val app = applicationContext
+        Fundo.rodar("podcast") { Podcasts.guardarPosicao(app, p) }
+    }
+
+    private fun terminouEpisodio() {
+        if (episodio == null) return
+        salvarPosicao(fim = true)
+        episodio = null   // já gravado como ouvido: o parar() não grava de novo no meio
+        parar()
     }
 
     /** Para de vez: solta o player e a conexão, some da HOME e do protetor, e o serviço acaba. */
     fun parar() {
-        ui.removeCallbacks(pausaLonga)
+        ui.removeCallbacks(pausaLonga); ui.removeCallbacks(salvarPeriodico)
+        if (episodio != null) salvarPosicao()
         soltarPlayer()
-        radio = null; musica = ""
+        radio = null; episodio = null; musica = ""
         sessao?.let { runCatching { it.setPlaybackState(estadoSessao(PlaybackState.STATE_STOPPED)); it.isActive = false } }
         OuvirEstado.gravar(this, null)
         if (emPrimeiroPlano) { stopForeground(STOP_FOREGROUND_REMOVE); emPrimeiroPlano = false }
@@ -251,35 +388,42 @@ class OuvirServico : Service() {
     // ---------------------------------------------------------------- estado para fora
 
     private fun publicar() {
-        val r = radio ?: return
+        val r = radio; val e = episodio
+        if (r == null && e == null) return
         val agora = tocando
         // Para fora vai o PEDIDO (tocar/pausado), não o som: reconectando, a pílula mostra "tocando" e o OK pausa, como esperado.
         val pedido = player?.playWhenReady == true
-        OuvirEstado.gravar(this, OuvirEstado.Estado("radio", r.id, r.nome, musica, pedido, Process.myPid(), SystemClock.elapsedRealtime()))
+        val (tipo, id, titulo, detalhe) = if (r != null) listOf("radio", r.id, r.nome, musica)
+            else listOf("podcast", e!!.feed + "\u0001" + e.ep.guid, e.podcast, e.ep.titulo)
+        OuvirEstado.gravar(this, OuvirEstado.Estado(tipo, id, titulo, detalhe, pedido, Process.myPid(), SystemClock.elapsedRealtime()))
         sessao?.let { s ->
             runCatching {
                 s.setPlaybackState(estadoSessao(when {
                     agora -> PlaybackState.STATE_PLAYING
-                    player?.playWhenReady == true -> PlaybackState.STATE_BUFFERING
+                    pedido -> PlaybackState.STATE_BUFFERING
                     else -> PlaybackState.STATE_PAUSED
                 }))
                 s.setMetadata(MediaMetadata.Builder()
-                    .putString(MediaMetadata.METADATA_KEY_TITLE, musica.ifEmpty { r.nome })
-                    .putString(MediaMetadata.METADATA_KEY_ARTIST, if (musica.isEmpty()) getString(R.string.ra_coluna) else r.nome)
-                    .putLong(MediaMetadata.METADATA_KEY_DURATION, -1L)   // ao vivo
+                    .putString(MediaMetadata.METADATA_KEY_TITLE, if (r != null) musica.ifEmpty { r.nome } else e!!.ep.titulo)
+                    .putString(MediaMetadata.METADATA_KEY_ARTIST, if (r != null) (if (musica.isEmpty()) getString(R.string.ra_coluna) else r.nome) else e!!.podcast)
+                    .putLong(MediaMetadata.METADATA_KEY_DURATION, if (r != null) -1L else duracaoMs)   // -1 = ao vivo
                     .build())
             }
         }
-        primeiroPlano(r.nome, musica)
+        primeiroPlano(titulo, detalhe)
         avisar()
     }
 
     private fun avisar() = ouvintes.forEach { f -> ui.post { runCatching { f() } } }
 
-    private fun estadoSessao(estado: Int): PlaybackState = PlaybackState.Builder()
-        .setActions(PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE or PlaybackState.ACTION_PLAY_PAUSE or PlaybackState.ACTION_STOP)
-        .setState(estado, PlaybackState.PLAYBACK_POSITION_UNKNOWN, if (estado == PlaybackState.STATE_PLAYING) 1f else 0f)
-        .build()
+    private fun estadoSessao(estado: Int): PlaybackState {
+        val ep = episodio != null
+        val acoes = PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE or PlaybackState.ACTION_PLAY_PAUSE or PlaybackState.ACTION_STOP or
+            (if (ep) PlaybackState.ACTION_SEEK_TO or PlaybackState.ACTION_FAST_FORWARD or PlaybackState.ACTION_REWIND else 0L)
+        val vel = if (estado == PlaybackState.STATE_PLAYING) (if (ep) player?.playbackParameters?.speed ?: 1f else 1f) else 0f
+        return PlaybackState.Builder().setActions(acoes)
+            .setState(estado, if (ep) posicaoMs else PlaybackState.PLAYBACK_POSITION_UNKNOWN, vel).build()
+    }
 
     /** A sessão que recebe as teclas de mídia de qualquer tela. Uma por serviço; reativada a cada rádio nova. */
     private fun garantirSessao() {
@@ -288,11 +432,15 @@ class OuvirServico : Service() {
                 override fun onPlay() = continuar()
                 override fun onPause() = pausar()
                 override fun onStop() = parar()
+                // Teclas ⏪ ⏩ do controle (podcast): 15 s para trás, 30 s para frente.
+                override fun onFastForward() = pular(AVANCAR_MS)
+                override fun onRewind() = pular(-VOLTAR_MS)
+                override fun onSeekTo(pos: Long) = irPara(pos)
             }, ui)
             sessao = nova
         }
         runCatching {
-            s.setSessionActivity(PendingIntent.getActivity(this, 0, Intent(this, RadioActivity::class.java)
+            s.setSessionActivity(PendingIntent.getActivity(this, 0, Intent(this, if (episodio != null) PodcastsActivity::class.java else RadioActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT))
             s.isActive = true
         }
@@ -337,6 +485,8 @@ class OuvirComandoReceiver : BroadcastReceiver() {
             OuvirEstado.PAUSAR -> s.pausar()
             OuvirEstado.CONTINUAR -> s.continuar()
             OuvirEstado.PARAR -> s.parar()
+            OuvirEstado.AVANCAR -> s.pular(OuvirServico.AVANCAR_MS)
+            OuvirEstado.VOLTAR -> s.pular(-OuvirServico.VOLTAR_MS)
         }
     }
 }

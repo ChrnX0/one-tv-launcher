@@ -177,6 +177,11 @@ object Podcasts {
         PlayerCarga.gravarAtomico(arqPosicoes(ctx), posicoesParaJson(guardar(posicoes(ctx), p)))
     }
 
+    /** Muda as posições direto (marcar/desmarcar ouvido na tela). */
+    fun editarPosicoes(ctx: Context, mudar: (Map<String, Posicao>) -> Map<String, Posicao>) = synchronized(trava) {
+        PlayerCarga.gravarAtomico(arqPosicoes(ctx), posicoesParaJson(mudar(posicoes(ctx))))
+    }
+
     fun feed(ctx: Context, url: String): PodcastFeed.Feed? = feedDeJson(runCatching { arqFeed(ctx, url).readText() }.getOrNull())
 
     /** As cópias de todos os assinados (para "Episódios novos"). Fora da thread da tela. */

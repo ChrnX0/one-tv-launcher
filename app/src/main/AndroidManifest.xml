@@ -922,6 +922,10 @@
         <service android:name=".OuvirServico" android:exported="false" android:process=":player"
             android:foregroundServiceType="mediaPlayback" />
         <receiver android:name=".OuvirComandoReceiver" android:exported="false" android:process=":player" />
+        <!-- Ouvir parte 2 (17/11/2026): podcasts (prévia, aberta pela tela de Rádios). Junto do serviço que toca. -->
+        <activity android:name=".PodcastsActivity" android:exported="false" android:process=":player"
+            android:excludeFromRecents="true" android:launchMode="singleTask"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection" />
         <activity android:name=".GravacoesActivity" android:exported="false" android:process=":player"
             android:excludeFromRecents="true"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection" />

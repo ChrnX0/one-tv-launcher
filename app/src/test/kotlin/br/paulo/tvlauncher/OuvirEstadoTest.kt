@@ -42,7 +42,7 @@ class OuvirEstadoTest {
 
     @Test
     fun soComandosConhecidos() {
-        assertEquals(setOf("alternar", "pausar", "continuar", "parar"), OuvirEstado.COMANDOS)
+        assertEquals(setOf("alternar", "pausar", "continuar", "parar", "avancar", "voltar"), OuvirEstado.COMANDOS)
     }
 
     @Test
