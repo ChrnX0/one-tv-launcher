@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App do celular (revisão dos degraus, T5, 17/11/2026). Caminho do menu = o mesmo texto da TV neste idioma. -->
+<resources>
+    <string name="cel_titulo">أجهزة التلفزيون لديك</string>
+    <string name="cel_mandar_para">إلى أي تلفزيون تريد الإرسال؟</string>
+    <string name="cel_ler_qr">امسح رمز QR من التلفزيون</string>
+    <string name="cel_vazio">لا يوجد تلفزيون بعد. على التلفزيون افتح الإعدادات › الوصول عن بُعد › سجّل الدخول بهاتفك، ثم اضغط الزر أدناه ووجّه الكاميرا إلى الرمز.</string>
+    <string name="cel_pareada_segura">%1$s · اتصال آمن</string>
+    <string name="cel_pareada_http">%1$s · شبكة المنزل</string>
+    <string name="cel_na_rede">تم العثور عليها في الشبكة</string>
+    <string name="cel_achada">%1$s · لم يُقرن بعد</string>
+    <string name="cel_achada_explica">للحصول على اتصال آمن امسح رمز QR مرة واحدة: على التلفزيون، الإعدادات › الوصول عن بُعد › سجّل الدخول بهاتفك. أو افتحه الآن وادخل برمز PIN.</string>
+    <string name="cel_abrir_pin">فتح برمز PIN</string>
+    <string name="cel_esquecer">نسيان</string>
+    <string name="cel_esquecer_explica">سينسى هذا الهاتف هذا التلفزيون. لاستخدامه مرة أخرى امسح رمز QR.</string>
+    <string name="cel_aponte">وجّه الكاميرا إلى الرمز على التلفزيون</string>
+    <string name="cel_qr_invalido">هذا ليس رمزًا من التلفزيون. على التلفزيون افتح الإعدادات › الوصول عن بُعد › سجّل الدخول بهاتفك.</string>
+    <string name="cel_cert_outro">ردّ التلفزيون بشهادة مختلفة. إذا جدّدتها فامسح رمز QR مرة أخرى.</string>
+    <string name="cel_casa_padrao">المنزل</string>
+    <string name="cel_casa_qual">في أي منزل يوجد هذا التلفزيون؟</string>
+    <string name="cel_casa_nova">منزل آخر…</string>
+    <string name="cel_casa_dica">مثال: بيت الشاطئ، بيت أمي</string>
+</resources>

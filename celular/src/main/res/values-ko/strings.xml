@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App do celular (revisão dos degraus, T5, 17/11/2026). Caminho do menu = o mesmo texto da TV neste idioma. -->
+<resources>
+    <string name="cel_titulo">내 TV</string>
+    <string name="cel_mandar_para">어느 TV로 보낼까요?</string>
+    <string name="cel_ler_qr">TV의 QR 코드 읽기</string>
+    <string name="cel_vazio">아직 TV가 없습니다. TV에서 설정 › 원격 액세스 › 휴대폰으로 로그인을(를) 연 다음, 아래 버튼을 누르고 카메라를 코드에 맞추세요.</string>
+    <string name="cel_pareada_segura">%1$s · 보안 연결</string>
+    <string name="cel_pareada_http">%1$s · 집 네트워크</string>
+    <string name="cel_na_rede">네트워크에서 찾음</string>
+    <string name="cel_achada">%1$s · 아직 페어링 안 됨</string>
+    <string name="cel_achada_explica">보안 연결을 위해 QR 코드를 한 번 읽으세요: TV에서 설정 › 원격 액세스 › 휴대폰으로 로그인. 또는 지금 열고 PIN으로 로그인하세요.</string>
+    <string name="cel_abrir_pin">PIN으로 열기</string>
+    <string name="cel_esquecer">삭제</string>
+    <string name="cel_esquecer_explica">이 휴대폰에서 이 TV를 삭제합니다. 다시 사용하려면 QR 코드를 읽으세요.</string>
+    <string name="cel_aponte">TV의 코드에 카메라를 맞추세요</string>
+    <string name="cel_qr_invalido">TV의 코드가 아닙니다. TV에서 설정 › 원격 액세스 › 휴대폰으로 로그인을(를) 여세요.</string>
+    <string name="cel_cert_outro">TV가 다른 인증서로 응답했습니다. 인증서를 갱신했다면 QR 코드를 다시 읽으세요.</string>
+    <string name="cel_casa_padrao">집</string>
+    <string name="cel_casa_qual">이 TV는 어느 집에 있나요?</string>
+    <string name="cel_casa_nova">다른 집…</string>
+    <string name="cel_casa_dica">예: 바닷가 집, 엄마 집</string>
+</resources>

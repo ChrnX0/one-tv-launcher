@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App do celular (revisão dos degraus, T5, 17/11/2026). Caminho do menu = o mesmo texto da TV neste idioma. -->
+<resources>
+    <string name="cel_titulo">あなたのテレビ</string>
+    <string name="cel_mandar_para">どのテレビに送りますか？</string>
+    <string name="cel_ler_qr">テレビのQRコードを読み取る</string>
+    <string name="cel_vazio">まだテレビがありません。テレビで 設定 › リモートアクセス › スマートフォンでログイン を開き、下のボタンをタップしてカメラをコードに向けてください。</string>
+    <string name="cel_pareada_segura">%1$s · 安全な接続</string>
+    <string name="cel_pareada_http">%1$s · 家のネットワーク</string>
+    <string name="cel_na_rede">ネットワークで見つかったテレビ</string>
+    <string name="cel_achada">%1$s · まだペアリングしていません</string>
+    <string name="cel_achada_explica">安全に接続するには、QRコードを一度読み取ってください（テレビで 設定 › リモートアクセス › スマートフォンでログイン）。または今すぐ開いてPINでログインします。</string>
+    <string name="cel_abrir_pin">PINで開く</string>
+    <string name="cel_esquecer">削除</string>
+    <string name="cel_esquecer_explica">このスマートフォンからこのテレビを削除します。また使うにはQRコードを読み取ってください。</string>
+    <string name="cel_aponte">テレビのコードにカメラを向けてください</string>
+    <string name="cel_qr_invalido">テレビのコードではありません。テレビで 設定 › リモートアクセス › スマートフォンでログイン を開いてください。</string>
+    <string name="cel_cert_outro">テレビが別の証明書で応答しました。証明書を更新した場合は、QRコードをもう一度読み取ってください。</string>
+    <string name="cel_casa_padrao">自宅</string>
+    <string name="cel_casa_qual">このテレビはどの家にありますか？</string>
+    <string name="cel_casa_nova">別の家…</string>
+    <string name="cel_casa_dica">例：別荘、実家</string>
+</resources>

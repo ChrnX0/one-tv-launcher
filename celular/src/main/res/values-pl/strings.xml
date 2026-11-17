@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- App do celular (revisão dos degraus, T5, 17/11/2026). Caminho do menu = o mesmo texto da TV neste idioma. -->
+<resources>
+    <string name="cel_titulo">Twoje telewizory</string>
+    <string name="cel_mandar_para">Na który telewizor wysłać?</string>
+    <string name="cel_ler_qr">Zeskanuj kod QR z telewizora</string>
+    <string name="cel_vazio">Nie ma jeszcze telewizora. Na telewizorze otwórz Ustawienia › Dostęp zdalny › Logowanie z telefonu, potem dotknij przycisku poniżej i skieruj aparat na kod.</string>
+    <string name="cel_pareada_segura">%1$s · bezpieczne połączenie</string>
+    <string name="cel_pareada_http">%1$s · sieć domowa</string>
+    <string name="cel_na_rede">Znalezione w sieci</string>
+    <string name="cel_achada">%1$s · jeszcze nie sparowany</string>
+    <string name="cel_achada_explica">Aby połączenie było bezpieczne, zeskanuj kod QR raz: na telewizorze Ustawienia › Dostęp zdalny › Logowanie z telefonu. Albo otwórz teraz i zaloguj się PIN-em.</string>
+    <string name="cel_abrir_pin">Otwórz z PIN-em</string>
+    <string name="cel_esquecer">Zapomnij</string>
+    <string name="cel_esquecer_explica">Ten telefon zapomni ten telewizor. Aby znów go używać, zeskanuj kod QR.</string>
+    <string name="cel_aponte">Skieruj na kod na telewizorze</string>
+    <string name="cel_qr_invalido">To nie jest kod z telewizora. Na telewizorze otwórz Ustawienia › Dostęp zdalny › Logowanie z telefonu.</string>
+    <string name="cel_cert_outro">Telewizor odpowiedział innym certyfikatem. Jeśli go odnowiłeś, zeskanuj kod QR ponownie.</string>
+    <string name="cel_casa_padrao">Dom</string>
+    <string name="cel_casa_qual">W którym domu jest ten telewizor?</string>
+    <string name="cel_casa_nova">Inny dom…</string>
+    <string name="cel_casa_dica">np. Domek nad morzem, U mamy</string>
+</resources>
