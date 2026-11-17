@@ -37,6 +37,7 @@ object BackupCompleto {
         "sincronizar_filmes",   // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
         "pacote_icones", "fundo_meu",   // degrau 1 (15/11/2026): pacote de ícones e "Meu fundo" (caminho, brilho, contraste)
         "addons",   // addons no protocolo do Stremio (16/11/2026): a lista instalada e o aceite dos termos
+        "backup_recuperacao",   // elevação 19.6: só a parte PÚBLICA da chave de recuperação (a TV restaurada segue trancando com ela)
         "catalogo_pasta")   // elevação 8.2: o "pôster e sinopse" das pastas ligado e os nomes corrigidos à mão
     // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
     /**
@@ -135,7 +136,8 @@ object BackupCompleto {
         val claro = JSONObject().put("versao", 3).put("pacote", app.packageName).put("criadoEm", System.currentTimeMillis())
             .put("preferencias", prefs).put("segredos", segredos).put("arquivos", arquivos).toString()
         conferirTamanho(claro)
-        return CofreBackup.trancar(claro, senha)
+        // Elevação 19.6: com a chave de recuperação criada, o backup abre também com o código do QR.
+        return CofreBackup.trancar(claro, senha, RecuperacaoTv.publica(app))
     }
 
     /**

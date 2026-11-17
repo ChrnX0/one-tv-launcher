@@ -696,6 +696,86 @@ async function baixar(caminho, nome, status) {
   }
 }
 $('btnBaixar').addEventListener('click', () => baixar('/api/backup', 'launcher-backup.json', $('statusBaixar')));
+// ---------- chave de recuperação do backup (elevação 19.6; PainelWeb "/api/backup/recuperacao") ----------
+async function carregarRecuperacao() {
+  try {
+    const r = await chamar('GET', '/api/backup/recuperacao');
+    $('estadoRecuperacao').textContent = r.tem
+      ? `Chave criada em ${new Date(r.criadaEm).toLocaleDateString()} (digital ${r.digital}).` : 'Nenhuma chave criada.';
+    $('btnCriarRecuperacao').textContent = r.tem ? 'Criar uma chave nova' : 'Criar chave de recuperação';
+    $('btnApagarRecuperacao').hidden = !r.tem;
+  } catch (e) { $('estadoRecuperacao').textContent = textoErro(e); }
+}
+document.addEventListener('aba', (ev) => { if (ev.detail === 'backup') carregarRecuperacao(); });
+
+$('btnCriarRecuperacao').addEventListener('click', async () => {
+  const nova = !$('btnApagarRecuperacao').hidden;
+  const r = await confirmar('Criar chave de recuperação?',
+    (nova ? 'A chave antiga deixa de valer para os backups NOVOS (os já feitos continuam abrindo com ela). ' : '') +
+    'A chave aparece uma vez só, nesta tela.',
+    'Criar', () => chamar('POST', '/api/backup/recuperacao', {}));
+  if (!r) return;
+  $('qrRecuperacao').src = 'data:image/png;base64,' + r.qr;
+  $('codigoRecuperacao').textContent = r.codigo;
+  $('mostraRecuperacao').hidden = false;
+  carregarRecuperacao();
+});
+function fecharRecuperacao() {
+  // Some da tela e da memória da página: o código não fica em lugar nenhum depois de fechado.
+  $('mostraRecuperacao').hidden = true;
+  $('qrRecuperacao').removeAttribute('src');
+  $('codigoRecuperacao').textContent = '';
+}
+$('btnFecharRecuperacao').addEventListener('click', fecharRecuperacao);
+document.addEventListener('aba', () => { if (paginaAtual !== 'sistema') { fecharRecuperacao(); pararQrRestaurar(); } });
+$('btnImprimirRecuperacao').addEventListener('click', () => {
+  document.body.classList.add('imprimindo-recuperacao');
+  window.print();
+  document.body.classList.remove('imprimindo-recuperacao');
+});
+$('btnApagarRecuperacao').addEventListener('click', async () => {
+  const r = await confirmar('Esquecer a chave?', 'Backups novos voltam a abrir só com a senha.', 'Esquecer a chave',
+    () => chamar('POST', '/api/backup/recuperacao', { apagar: true }));
+  if (r) { fecharRecuperacao(); carregarRecuperacao(); }
+});
+
+// Restaurar: o celular lê o QR impresso e põe o código no campo da senha (o leitor de QR é o do addons.js).
+let qrRestaurarFluxo = null;
+function pararQrRestaurar() {
+  if (qrRestaurarFluxo) { qrRestaurarFluxo.getTracks().forEach((t) => t.stop()); qrRestaurarFluxo = null; }
+  $('videoQrRestaurar').srcObject = null;
+  $('qrRestaurar').hidden = true;
+}
+$('btnFecharQrRestaurar').addEventListener('click', pararQrRestaurar);
+$('btnLerRecuperacao').addEventListener('click', async () => {
+  const status = $('statusBackup');
+  if (!window.isSecureContext || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    mostrar(status, 'Para ler QR, abra o painel pelo endereço https (porta 8444). No http o navegador não libera a câmera.');
+    return;
+  }
+  try { qrRestaurarFluxo = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false }); }
+  catch (e) { mostrar(status, 'Não consegui abrir a câmera. Confira se o navegador tem permissão para usá-la.'); return; }
+  const video = $('videoQrRestaurar');
+  $('qrRestaurar').hidden = false;
+  video.srcObject = qrRestaurarFluxo;
+  await video.play().catch(() => {});
+  let ler;
+  try { ler = await leitorQr(video); } catch (e) { pararQrRestaurar(); mostrar(status, textoErro(e)); return; }
+  const passo = async () => {
+    if (!qrRestaurarFluxo) return;
+    let texto = '';
+    try { texto = await ler(); } catch (e) { texto = ''; }
+    if (/^SOFALY-[0-9A-Z-]{40,}$/.test(texto.trim().toUpperCase())) {
+      pararQrRestaurar();
+      $('senhaRestaurar').value = texto.trim();
+      mostrar(status, 'Chave de recuperação lida.');
+      return;
+    }
+    setTimeout(passo, 250);
+  };
+  passo();
+});
+
 $('btnBaixarCompleto').addEventListener('click', async () => {
   const status = $('statusBaixarCompleto');
   const senha = $('senhaBackupCompleto').value;

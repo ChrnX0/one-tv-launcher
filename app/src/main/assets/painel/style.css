@@ -986,3 +986,14 @@ input[type=time]:focus, input[type=date]:focus, input[type=number]:focus { borde
   .aba:not(.ativa) { min-width: 44px; padding: 0 10px; }
   .aba.ativa { padding: 0 16px; font-size: 14px; letter-spacing: -.01em; }
 }
+
+/* Elevação 19.6: a chave de recuperação aparece uma vez (QR + texto para imprimir). Na impressão sai só ela. */
+.recuperacao { display: grid; gap: 12px; justify-items: start; margin-top: 12px; }
+.recuperacao img { background: #fff; padding: 12px; border-radius: 12px; max-width: 100%; height: auto; }
+.recuperacao code { font: 600 15px/1.5 ui-monospace, monospace; word-break: break-all; user-select: all; }
+@media print {
+  body.imprimindo-recuperacao * { visibility: hidden; }
+  body.imprimindo-recuperacao #mostraRecuperacao, body.imprimindo-recuperacao #mostraRecuperacao * { visibility: visible; }
+  body.imprimindo-recuperacao #mostraRecuperacao { position: absolute; inset: 0 auto auto 0; color: #000; }
+  body.imprimindo-recuperacao #mostraRecuperacao .barra-acoes { display: none; }
+}

@@ -1003,6 +1003,24 @@
                placeholder="senha do backup (8 ou mais caracteres)">
         <button type="button" class="botao-primario" id="btnBaixarCompleto">Baixar backup completo</button>
         <p id="statusBaixarCompleto" class="aviso" hidden></p>
+        <h3>Chave de recuperação</h3>
+        <p class="aviso">Se a senha do backup se perder, esta chave abre os backups completos feitos depois de criá-la. Ela
+          aparece uma vez só, aqui: imprima ou guarde num lugar seguro. A TV guarda só a parte que tranca, nunca a que abre.</p>
+        <p id="estadoRecuperacao" class="aviso-curto"></p>
+        <div class="barra-acoes">
+          <button type="button" class="botao-secundario" id="btnCriarRecuperacao">Criar chave de recuperação</button>
+          <button type="button" class="botao-secundario" id="btnApagarRecuperacao" hidden>Esquecer a chave</button>
+        </div>
+        <div id="mostraRecuperacao" class="recuperacao" hidden>
+          <p class="aviso"><strong>Guarde agora: esta chave não aparece de novo.</strong></p>
+          <img id="qrRecuperacao" alt="QR da chave de recuperação" width="240" height="240">
+          <code id="codigoRecuperacao"></code>
+          <div class="barra-acoes">
+            <button type="button" class="botao-primario" id="btnImprimirRecuperacao">Imprimir</button>
+            <button type="button" class="botao-secundario" id="btnFecharRecuperacao">Fechar</button>
+          </div>
+        </div>
+        <p id="statusRecuperacao" class="aviso" hidden></p>
       </div>
       <div id="cartaoCopiasAutomaticas" class="cartao">
         <h2>Cópias automáticas</h2>
@@ -1056,7 +1074,12 @@
         <label class="botao-secundario" for="arquivoBackup">Escolher arquivo…</label>
         <input type="file" id="arquivoBackup" accept=".json,application/json" hidden>
         <input id="senhaRestaurar" type="password" maxlength="128" autocomplete="off"
-               placeholder="senha (só para o backup completo)">
+               placeholder="senha ou chave de recuperação (só para o backup completo)">
+        <button type="button" class="botao-secundario" id="btnLerRecuperacao">Ler chave de recuperação (QR)</button>
+        <div id="qrRestaurar" class="qr-camera" hidden>
+          <video id="videoQrRestaurar" muted playsinline aria-label="Câmera lendo a chave de recuperação"></video>
+          <button type="button" id="btnFecharQrRestaurar" class="botao-secundario">Fechar câmera</button>
+        </div>
         <p id="statusBackup" class="aviso" hidden></p>
       </div>
     </section>

@@ -740,6 +740,7 @@ object PainelWeb {
             "/api/backup/restaurar" -> if (req.metodo == "POST") return restaurar(req, token, ip)
             // Backup completo e cifrado (BackupCompleto.kt): leva segredos, então baixar também pede o PIN de novo.
             "/api/backup/completo" -> if (req.metodo == "POST") return backupCompleto(req, token, ip)
+            "/api/backup/recuperacao" -> return recuperacao(req, token, ip)
             "/api/backup/completo/restaurar" -> if (req.metodo == "POST") return restaurarCompleto(req, token, ip)
             // Backup automático (BackupAutomatico.kt): as cópias diárias guardadas na TV.
             "/api/backup/automaticos" -> if (req.metodo == "GET") return json(200, JSONObject().put("copias",
@@ -1456,6 +1457,28 @@ object PainelWeb {
         PainelArmazem.registrar(app, ip, "baixar backup completo", "ok")
         return Resposta(200, "application/json; charset=utf-8", texto.toByteArray(),
             mapOf("Content-Disposition" to "attachment; filename=\"launcher-backup-completo.json\""))
+    }
+
+    /**
+     * Elevação 19.6: chave de recuperação do backup. GET = se existe (data e digital, nunca o código). POST com PIN =
+     * cria uma nova e devolve o código e o QR UMA vez (a TV guarda só a parte pública; nada aparece na tela da TV).
+     * POST {"apagar":true} = a TV esquece a pública (backups novos voltam a abrir só com a senha).
+     */
+    private fun recuperacao(req: Requisicao, token: String?, ip: String): Resposta {
+        if (req.metodo == "GET") return json(200, JSONObject().put("tem", RecuperacaoTv.publica(app) != null)
+            .put("criadaEm", RecuperacaoTv.criadaEm(app)).put("digital", RecuperacaoTv.digital(app) ?: ""))
+        if (req.metodo != "POST") return erro(405, "método não aceito")
+        if (!sessoes.elevada(token)) return precisaPin()
+        if (corpoJson(req)?.optBoolean("apagar") == true) {
+            RecuperacaoTv.apagar(app)
+            PainelArmazem.registrar(app, ip, "chave de recuperação", "apagada")
+            return json(200, JSONObject().put("ok", true))
+        }
+        val codigo = RecuperacaoTv.criar(app)
+        val qr = java.util.Base64.getEncoder().encodeToString(QrCodigo.png(codigo, 480))
+        PainelArmazem.registrar(app, ip, "chave de recuperação", "criada (${RecuperacaoTv.digital(app)})")   // o código nunca vai para o registro
+        return json(200, JSONObject().put("codigo", codigo).put("qr", qr).put("digital", RecuperacaoTv.digital(app) ?: ""),
+            mapOf("Cache-Control" to "no-store"))
     }
 
     private fun restaurarCompleto(req: Requisicao, token: String?, ip: String): Resposta {
