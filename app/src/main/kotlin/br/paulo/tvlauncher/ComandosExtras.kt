@@ -133,6 +133,9 @@ object ComandosExtras {
         // Degrau 4: recado em vídeo. videos_aceitar --ez sim true|false liga o opt-in (adb já é do dono).
         "videos" -> RecadoVideo.estado(ctx)
         "videos_tela" -> abrir(ctx, RecadoVideoActivity::class.java)
+        "entre_tvs" -> "ligado=${EntreTvs.ligado(ctx)} eu=${EntreTvs.meuHost(ctx)} outras=${EntreTvs.outras(ctx)} junto=${SessaoJunto.texto()}"
+        "entre_tvs_ligar" -> { EntreTvs.definir(ctx, i.getBooleanExtra("sim", false)); "entre_tvs=${i.getBooleanExtra("sim", false)}" }
+        "junto_sair" -> { val app = ctx.applicationContext; Fundo.rodar("junto-adb") { SessaoJunto.encerrar(app, avisarOutra = true) }; "saindo" }
         "videos_aceitar" -> { RecadoVideo.definirAceita(ctx, i.getBooleanExtra("sim", false)); RecadoVideo.estado(ctx) }
         "hospede" -> "ativo=${ModoHospede.ativo(ctx)} saida=${ModoHospede.textoSaida(ctx)} apps=${ModoHospede.paraLimpar(ctx)} ultima=${ModoHospede.ultimaLimpeza(ctx)}"
         "hospede_ligar" -> { ModoHospede.ligar(ctx); "modo hóspede ligado" }

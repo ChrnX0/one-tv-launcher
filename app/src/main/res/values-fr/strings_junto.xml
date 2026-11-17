@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sessão junto e Continuar em outra TV (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="junto_titulo">Regarder ensemble</string>
+    <string name="junto_menu">Regarder ensemble avec une autre TV</string>
+    <string name="junto_escolher">Inviter quelle TV ?</string>
+    <string name="junto_sem_tvs">Aucune autre TV en ligne. Activez aussi « TV de la famille » sur l\'autre TV.</string>
+    <string name="junto_sem_titulo">Cette vidéo ne peut pas être partagée : l\'autre TV ne trouverait pas le même titre.</string>
+    <string name="junto_convidou">Invitation envoyée à %1$s. Quand le même titre démarrera là-bas, les deux TV avanceront ensemble.</string>
+    <string name="junto_falhou">Impossible de joindre %1$s. Est-elle allumée, avec « TV de la famille » activé ?</string>
+    <string name="junto_convite_titulo">%1$s vous invite à regarder ensemble</string>
+    <string name="junto_convite_texto">%1$s\n\nOuvrez ce même titre ici et les deux TV se mettront en pause et avanceront ensemble.</string>
+    <string name="junto_convite_canal">%1$s\n\nTV en direct : les deux TV restent sur la même chaîne. Si l\'une change, l\'autre suit.</string>
+    <string name="junto_entrar">Rejoindre</string>
+    <string name="junto_agora_nao">Pas maintenant</string>
+    <string name="junto_entrou">%1$s a rejoint. Pause et lecture valent maintenant pour les deux.</string>
+    <string name="junto_saiu">%1$s est parti. Cette TV continue seule.</string>
+    <string name="junto_com">Ensemble avec %1$s</string>
+    <string name="junto_sair">Quitter le visionnage ensemble</string>
+    <string name="junto_sem_canal">Cette chaîne n\'est pas dans la liste de cette TV.</string>
+    <string name="junto_tvs">TV de la famille</string>
+    <string name="junto_tvs_det">Les TV du même compte peuvent regarder ensemble et se passer une vidéo. Seules les commandes circulent, jamais la vidéo.</string>
+    <string name="cont_titulo">Continuer sur une autre TV</string>
+    <string name="cont_menu">Envoyer vers une autre TV</string>
+    <string name="cont_escolher">Envoyer vers quelle TV ?</string>
+    <string name="cont_enviado">Envoyé. %1$s demandera s\'il faut continuer d\'ici.</string>
+    <string name="cont_falhou">Envoi vers %1$s impossible. Est-elle allumée, avec « TV de la famille » activé ?</string>
+    <string name="cont_pergunta">Reprendre où vous en étiez ?</string>
+    <string name="cont_texto">%1$s\narrêté à %2$s sur %3$s.</string>
+    <string name="cont_texto_canal">%1$s\nétait allumé sur %3$s. Ouvrir la même chaîne ici ?</string>
+    <string name="cont_continuar">Continuer</string>
+    <string name="cont_buscar">Le chercher ici</string>
+</resources>

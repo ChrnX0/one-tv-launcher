@@ -54,6 +54,7 @@ import java.util.Locale
 class PlayerActivity : Activity() {
     companion object {
         const val EXTRA_CANAL = "canal"   // id do canal para abrir (vazio = o último assistido)
+        const val EXTRA_CANAL_NOME = "canal_nome"   // nome normalizado (JuntoRegras.normalizarCanal), vindo de outra TV da casa
         private const val ESCONDER_INFO_MS = 5_000L
         private const val ESPERA_NUMERO_MS = 1_500L
         private const val SEGURAR_FAVORITO_MS = 2_000L   // segurar OK este tempo põe/tira dos favoritos
@@ -127,6 +128,10 @@ class PlayerActivity : Activity() {
         }
         raiz.addView(seloGravando, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, dp(28), dp(Estilo.MARGEM_LATERAL), 0) })
         janelas = PlayerJanelas(this)
+        // Sessão junto (degrau 4): canal ao vivo = "mesmo canal" + reações; quem troca, a outra TV acompanha.
+        junto = JuntoNoPlayer(this, aplicar = { _, _ -> }, posicao = { 0L }, tocandoAgora = { player?.isPlaying == true },
+            trocarCanal = { nome -> juntoCanal(nome) }).also { it.ligar() }
+        intent.getStringExtra(EXTRA_CANAL_NOME)?.let { juntoPendente = it }
         lista = PlayerListaTela(this, aoAssistir = { c, chave -> escolherNaLista(c, chave) }, aoFavoritar = { alternarFavorito(it) }, simples = simples,
             aoBuscar = { buscar() }, aoFiltros = { abrirFiltros() }, aoOcultarGrupo = { alternarOculto(it) },
             aoGuia = { cs, nome -> abrirGrade(cs, nome) },
@@ -209,6 +214,7 @@ class PlayerActivity : Activity() {
     }
 
     override fun onDestroy() {
+        junto?.desligar()
         Gravacoes.esquecer(mudouGravacao)
         tela.removeCallbacksAndMessages(null)
         disco.shutdown()   // não "Now": deixa terminar a última gravação (canal, recentes)
@@ -258,6 +264,7 @@ class PlayerActivity : Activity() {
                 if (externo != null) { if (!tocarPedido(externo)) mostrarAviso(getString(R.string.player_bloqueado)); return@post }
                 val pedido = Gravacoes.atual?.canalId ?: PlayerArmazem.ultimoCanal(this)   // gravando: abre no que grava
                 sintonizar(visiveis.firstOrNull { it.id == pedido } ?: visiveis.first(), guardarAnterior = false)
+                juntoPendente?.let { juntoPendente = null; juntoCanal(it) }
             }
             // O guia vem depois: pode levar alguns segundos (arquivo grande) e o canal já está tocando.
             val g = PlayerCarga.guia(this, lidos)
@@ -299,6 +306,7 @@ class PlayerActivity : Activity() {
         if (guardarAnterior && atual != null && atual?.id != c.id) anterior = atual
         atual = c
         contarCanal(c)
+        junto?.let { j -> j.tocandoTitulo(JuntoRegras.chave(JuntoRegras.Tipo.CANAL, null, nome = c.nome)); j.mudou(true, 0) }
         arquivo = null; atualizarSelo()   // trocar de canal (ou voltar ao player) é sempre ao vivo
         tentativas = 0
         gravarUltimo(c)
@@ -658,7 +666,24 @@ class PlayerActivity : Activity() {
             if (EfeitosSom.vozClara(this)) marcadas += itens.size
             itens += getString(R.string.acess_voz) to { alternarSom(c, PlayerAcessivel.VOZ_CLARA) }
         }
+        if (EntreTvs.ligado(this)) {
+            itens += getString(R.string.junto_menu) to { junto?.menu(c.nome, JuntoTvsProvider.tvs(this)) }
+            itens += getString(R.string.cont_menu) to { junto?.enviarPara(c.nome, JuntoTvsProvider.tvs(this), 0L, null) }
+        }
         Estilo.lista(this, c.nome, itens.map { it.first }, marcadas) { i -> itens[i].second() }
+    }
+
+    // ---------------------------------------------------------------- sessão junto (degrau 4)
+
+    private var junto: JuntoNoPlayer? = null
+    private var juntoPendente: String? = null   // canal pedido pela outra TV antes da lista carregar
+
+    /** A outra TV está no canal [nome] (normalizado): procura pelo nome aqui (o id muda de lista para lista). */
+    private fun juntoCanal(nome: String) {
+        if (visiveis.isEmpty()) { juntoPendente = nome; return }
+        val c = visiveis.firstOrNull { JuntoRegras.normalizarCanal(it.nome) == nome }
+        if (c == null) { mostrarAviso(getString(R.string.junto_sem_canal)); return }
+        if (c.id != atual?.id) { grade.fechar(); lista.fechar(); sintonizar(c) }
     }
 
     /**

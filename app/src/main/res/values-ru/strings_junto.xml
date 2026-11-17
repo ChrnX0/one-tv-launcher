@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sessão junto e Continuar em outra TV (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="junto_titulo">Смотреть вместе</string>
+    <string name="junto_menu">Смотреть вместе с другим ТВ</string>
+    <string name="junto_escolher">Какой ТВ пригласить?</string>
+    <string name="junto_sem_tvs">Других ТВ в сети нет. Включите «ТВ семьи» и на другом ТВ.</string>
+    <string name="junto_sem_titulo">Это видео нельзя смотреть вместе: другой ТВ не найдёт то же название.</string>
+    <string name="junto_convidou">Приглашение отправлено: %1$s. Когда там включат то же самое, ТВ пойдут вместе.</string>
+    <string name="junto_falhou">Не удалось связаться: %1$s. ТВ включён и «ТВ семьи» включено?</string>
+    <string name="junto_convite_titulo">%1$s приглашает смотреть вместе</string>
+    <string name="junto_convite_texto">%1$s\n\nОткройте здесь то же самое, и оба ТВ будут ставить паузу и идти вместе.</string>
+    <string name="junto_convite_canal">%1$s\n\nПрямой эфир: оба ТВ на одном канале. Кто переключит, за тем последует другой.</string>
+    <string name="junto_entrar">Присоединиться</string>
+    <string name="junto_agora_nao">Не сейчас</string>
+    <string name="junto_entrou">%1$s присоединился. Пауза и продолжение теперь общие.</string>
+    <string name="junto_saiu">%1$s вышел. Этот ТВ продолжает сам.</string>
+    <string name="junto_com">Вместе с: %1$s</string>
+    <string name="junto_sair">Выйти из совместного просмотра</string>
+    <string name="junto_sem_canal">Этого канала нет в списке этого ТВ.</string>
+    <string name="junto_tvs">ТВ семьи</string>
+    <string name="junto_tvs_det">ТВ одного аккаунта могут смотреть вместе и передавать видео. Передаются только команды, не само видео.</string>
+    <string name="cont_titulo">Продолжить на другом ТВ</string>
+    <string name="cont_menu">Отправить на другой ТВ</string>
+    <string name="cont_escolher">На какой ТВ отправить?</string>
+    <string name="cont_enviado">Отправлено. %1$s спросит, продолжить ли с этого места.</string>
+    <string name="cont_falhou">Не удалось отправить: %1$s. ТВ включён и «ТВ семьи» включено?</string>
+    <string name="cont_pergunta">Продолжить с того места?</string>
+    <string name="cont_texto">%1$s\nостановлено на %2$s (%3$s).</string>
+    <string name="cont_texto_canal">%1$s\nшёл на %3$s. Открыть этот канал здесь?</string>
+    <string name="cont_continuar">Продолжить</string>
+    <string name="cont_buscar">Найти здесь</string>
+</resources>

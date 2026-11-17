@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sessão junto e Continuar em outra TV (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="junto_titulo">Nonton bareng</string>
+    <string name="junto_menu">Nonton bareng TV lain</string>
+    <string name="junto_escolher">Ajak TV mana?</string>
+    <string name="junto_sem_tvs">Tidak ada TV lain yang online. Aktifkan juga \"TV keluarga\" di TV lain.</string>
+    <string name="junto_sem_titulo">Video ini tidak bisa dibagi: TV lain tidak akan menemukan judul yang sama.</string>
+    <string name="junto_convidou">Undangan dikirim ke %1$s. Saat judul yang sama dimulai di sana, kedua TV berjalan bersama.</string>
+    <string name="junto_falhou">Tidak bisa menghubungi %1$s. Apakah menyala, dengan \"TV keluarga\" aktif?</string>
+    <string name="junto_convite_titulo">%1$s mengajak nonton bareng</string>
+    <string name="junto_convite_texto">%1$s\n\nBuka judul yang sama di sini dan kedua TV akan jeda dan berjalan bersama.</string>
+    <string name="junto_convite_canal">%1$s\n\nTV langsung: kedua TV tetap di saluran yang sama. Siapa pun yang mengganti, yang lain ikut.</string>
+    <string name="junto_entrar">Gabung</string>
+    <string name="junto_agora_nao">Nanti saja</string>
+    <string name="junto_entrou">%1$s bergabung. Jeda dan lanjut kini berlaku untuk keduanya.</string>
+    <string name="junto_saiu">%1$s keluar. TV ini lanjut sendiri.</string>
+    <string name="junto_com">Bersama %1$s</string>
+    <string name="junto_sair">Keluar dari nonton bareng</string>
+    <string name="junto_sem_canal">Saluran ini tidak ada di daftar TV ini.</string>
+    <string name="junto_tvs">TV keluarga</string>
+    <string name="junto_tvs_det">TV di akun yang sama bisa nonton bareng dan meneruskan video. Hanya perintah yang dikirim, bukan videonya.</string>
+    <string name="cont_titulo">Lanjutkan di TV lain</string>
+    <string name="cont_menu">Kirim ke TV lain</string>
+    <string name="cont_escolher">Kirim ke TV mana?</string>
+    <string name="cont_enviado">Terkirim. %1$s akan bertanya apakah mau lanjut dari sini.</string>
+    <string name="cont_falhou">Tidak bisa mengirim ke %1$s. Apakah menyala, dengan \"TV keluarga\" aktif?</string>
+    <string name="cont_pergunta">Lanjutkan dari terakhir?</string>
+    <string name="cont_texto">%1$s\nberhenti di %2$s pada %3$s.</string>
+    <string name="cont_texto_canal">%1$s\nsedang tayang di %3$s. Buka saluran yang sama di sini?</string>
+    <string name="cont_continuar">Lanjutkan</string>
+    <string name="cont_buscar">Cari di sini</string>
+</resources>

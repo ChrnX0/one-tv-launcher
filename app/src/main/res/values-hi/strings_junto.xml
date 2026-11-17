@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sessão junto e Continuar em outra TV (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="junto_titulo">साथ देखें</string>
+    <string name="junto_menu">दूसरे टीवी के साथ देखें</string>
+    <string name="junto_escolher">किस टीवी को बुलाएं?</string>
+    <string name="junto_sem_tvs">कोई और टीवी ऑनलाइन नहीं है। दूसरे टीवी पर भी \"परिवार के टीवी\" चालू करें।</string>
+    <string name="junto_sem_titulo">यह वीडियो साझा नहीं हो सकता: दूसरा टीवी वही शीर्षक नहीं ढूंढ पाएगा।</string>
+    <string name="junto_convidou">%1$s को निमंत्रण भेजा। वहां वही शीर्षक शुरू होते ही दोनों टीवी साथ चलेंगे।</string>
+    <string name="junto_falhou">%1$s से बात नहीं हो सकी। क्या वह चालू है और \"परिवार के टीवी\" चालू है?</string>
+    <string name="junto_convite_titulo">%1$s साथ देखने बुला रहा है</string>
+    <string name="junto_convite_texto">%1$s\n\nयहां वही शीर्षक खोलें, दोनों टीवी साथ रुकेंगे और चलेंगे।</string>
+    <string name="junto_convite_canal">%1$s\n\nलाइव टीवी: दोनों टीवी एक ही चैनल पर रहेंगे। कोई बदले तो दूसरा साथ बदलेगा।</string>
+    <string name="junto_entrar">जुड़ें</string>
+    <string name="junto_agora_nao">अभी नहीं</string>
+    <string name="junto_entrou">%1$s जुड़ गया। अब रोकना और चलाना दोनों पर लागू है।</string>
+    <string name="junto_saiu">%1$s चला गया। यह टीवी अकेले चलता रहेगा।</string>
+    <string name="junto_com">%1$s के साथ</string>
+    <string name="junto_sair">साथ देखना छोड़ें</string>
+    <string name="junto_sem_canal">यह चैनल इस टीवी की सूची में नहीं है।</string>
+    <string name="junto_tvs">परिवार के टीवी</string>
+    <string name="junto_tvs_det">एक ही खाते के टीवी साथ देख सकते हैं और वीडियो आगे दे सकते हैं। सिर्फ़ आदेश जाते हैं, वीडियो कभी नहीं।</string>
+    <string name="cont_titulo">दूसरे टीवी पर जारी रखें</string>
+    <string name="cont_menu">दूसरे टीवी पर भेजें</string>
+    <string name="cont_escolher">किस टीवी पर भेजें?</string>
+    <string name="cont_enviado">भेज दिया। %1$s पूछेगा कि यहीं से जारी रखें या नहीं।</string>
+    <string name="cont_falhou">%1$s पर नहीं भेज सके। क्या वह चालू है और \"परिवार के टीवी\" चालू है?</string>
+    <string name="cont_pergunta">जहां रुके थे वहीं से जारी रखें?</string>
+    <string name="cont_texto">%1$s\n%3$s पर %2$s पर रुका।</string>
+    <string name="cont_texto_canal">%1$s\n%3$s पर चल रहा था। यहां वही चैनल खोलें?</string>
+    <string name="cont_continuar">जारी रखें</string>
+    <string name="cont_buscar">यहां खोजें</string>
+</resources>

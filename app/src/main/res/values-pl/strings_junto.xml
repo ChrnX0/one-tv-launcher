@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sessão junto e Continuar em outra TV (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="junto_titulo">Oglądaj razem</string>
+    <string name="junto_menu">Oglądaj razem z innym TV</string>
+    <string name="junto_escolher">Który TV zaprosić?</string>
+    <string name="junto_sem_tvs">Brak innego TV w sieci. Włącz „TV rodziny” także na drugim TV.</string>
+    <string name="junto_sem_titulo">Tego filmu nie da się dzielić: drugi TV nie znajdzie tego samego tytułu.</string>
+    <string name="junto_convidou">Zaproszenie wysłane do: %1$s. Gdy tam zacznie się ten sam tytuł, oba TV pójdą razem.</string>
+    <string name="junto_falhou">Nie udało się połączyć z: %1$s. Czy jest włączony, z „TV rodziny” włączonym?</string>
+    <string name="junto_convite_titulo">%1$s zaprasza do wspólnego oglądania</string>
+    <string name="junto_convite_texto">%1$s\n\nOtwórz tu ten sam tytuł, a oba TV będą pauzować i iść razem.</string>
+    <string name="junto_convite_canal">%1$s\n\nTV na żywo: oba TV na tym samym kanale. Kto przełączy, drugi podąży.</string>
+    <string name="junto_entrar">Dołącz</string>
+    <string name="junto_agora_nao">Nie teraz</string>
+    <string name="junto_entrou">%1$s dołączył. Pauza i wznowienie działają teraz na oba.</string>
+    <string name="junto_saiu">%1$s wyszedł. Ten TV gra dalej sam.</string>
+    <string name="junto_com">Razem z: %1$s</string>
+    <string name="junto_sair">Zakończ wspólne oglądanie</string>
+    <string name="junto_sem_canal">Tego kanału nie ma na liście tego TV.</string>
+    <string name="junto_tvs">TV rodziny</string>
+    <string name="junto_tvs_det">TV z tego samego konta mogą oglądać razem i przekazywać film. Wysyłane są tylko polecenia, nigdy wideo.</string>
+    <string name="cont_titulo">Kontynuuj na innym TV</string>
+    <string name="cont_menu">Wyślij na inny TV</string>
+    <string name="cont_escolher">Na który TV wysłać?</string>
+    <string name="cont_enviado">Wysłano. %1$s zapyta, czy kontynuować od tego miejsca.</string>
+    <string name="cont_falhou">Nie udało się wysłać do: %1$s. Czy jest włączony, z „TV rodziny” włączonym?</string>
+    <string name="cont_pergunta">Kontynuować od miejsca, w którym przerwano?</string>
+    <string name="cont_texto">%1$s\nzatrzymano na %2$s (%3$s).</string>
+    <string name="cont_texto_canal">%1$s\nleciał na %3$s. Otworzyć ten kanał tutaj?</string>
+    <string name="cont_continuar">Kontynuuj</string>
+    <string name="cont_buscar">Szukaj tutaj</string>
+</resources>

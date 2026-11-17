@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sessão junto e Continuar em outra TV (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="junto_titulo">Watch together</string>
+    <string name="junto_menu">Watch together with another TV</string>
+    <string name="junto_escolher">Which TV to invite?</string>
+    <string name="junto_sem_tvs">No other TV online. Turn on \"Family TVs\" on the other TV too.</string>
+    <string name="junto_sem_titulo">This video can\'t be shared: the other TV couldn\'t find the same title.</string>
+    <string name="junto_convidou">Invite sent to %1$s. When they start the same title, both TVs move together.</string>
+    <string name="junto_falhou">Couldn\'t reach %1$s. Is it on, with \"Family TVs\" turned on?</string>
+    <string name="junto_convite_titulo">%1$s invites you to watch together</string>
+    <string name="junto_convite_texto">%1$s\n\nOpen this same title here and both TVs will pause and move together.</string>
+    <string name="junto_convite_canal">%1$s\n\nLive TV: both TVs stay on the same channel. Whoever changes it, the other follows.</string>
+    <string name="junto_entrar">Join</string>
+    <string name="junto_agora_nao">Not now</string>
+    <string name="junto_entrou">%1$s joined. Pause and play are shared now.</string>
+    <string name="junto_saiu">%1$s left. This TV goes on by itself.</string>
+    <string name="junto_com">Together with %1$s</string>
+    <string name="junto_sair">Leave watching together</string>
+    <string name="junto_sem_canal">This channel isn\'t in this TV\'s list.</string>
+    <string name="junto_tvs">Family TVs</string>
+    <string name="junto_tvs_det">TVs on the same account can watch together and pass a video along. Only commands travel, never the video.</string>
+    <string name="cont_titulo">Continue on another TV</string>
+    <string name="cont_menu">Send to another TV</string>
+    <string name="cont_escolher">Send to which TV?</string>
+    <string name="cont_enviado">Sent. %1$s will ask whether to continue from here.</string>
+    <string name="cont_falhou">Couldn\'t send to %1$s. Is it on, with \"Family TVs\" turned on?</string>
+    <string name="cont_pergunta">Continue where you left off?</string>
+    <string name="cont_texto">%1$s\nstopped at %2$s on %3$s.</string>
+    <string name="cont_texto_canal">%1$s\nwas on at %3$s. Open the same channel here?</string>
+    <string name="cont_continuar">Continue</string>
+    <string name="cont_buscar">Search for it here</string>
+</resources>

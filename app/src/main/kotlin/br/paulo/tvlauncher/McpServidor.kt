@@ -65,7 +65,7 @@ object McpServidor {
     fun ligado(ctx: Context): Boolean = prefs(ctx).getBoolean("ligado", false)
 
     /** O servidor (e o túnel) sobem com o MCP ligado OU com o link da família ligado (degrau 3). As rotas do MCP ainda conferem [ligado]. */
-    fun precisaServidor(ctx: Context): Boolean = ligado(ctx) || FamiliaConectada.ligado(ctx)
+    fun precisaServidor(ctx: Context): Boolean = ligado(ctx) || FamiliaConectada.ligado(ctx) || EntreTvs.ligado(ctx)
 
     /** Ferramenta executar_shell (dono, 09/11/2026: "controle total", sem trava). Ligada por padrão; a chave nas
      *  Configurações é o botão de desligar. */
@@ -206,6 +206,20 @@ object McpServidor {
         FamiliaConectada.Regras.rota(req.caminho)?.let { (token, acao) ->
             if (base(req) == null) return json(421, JSONObject().put("erro", "nome desconhecido"))
             return familia(req, token, acao, corpo)
+        }
+        // Entre TVs da conta (degrau 4: Sessão junto e Continuar em outra TV): opt-in próprio (EntreTvs), sem o MCP.
+        JuntoRegras.rota(req.caminho)?.let { (token, acao) ->
+            if (base(req) == null) return json(421, JSONObject().put("erro", "nome desconhecido"))
+            val o = if (req.metodo == "POST") JsonSeguro.objeto(req.corpoTexto()) else null
+            val (cod, r) = when {
+                acao == "convite" && req.metodo == "POST" -> SessaoJunto.receberConvite(app, o)
+                acao == "continuar" && req.metodo == "POST" -> ContinuarOutraTv.receber(app, o)
+                acao == "estado" && req.metodo == "GET" -> if (EntreTvs.ligado(app)) SessaoJunto.estado(token) else 403 to JSONObject().put("erro", "desligado")
+                (acao == "evento" || acao == "sair") && req.metodo == "POST" ->
+                    if (EntreTvs.ligado(app)) SessaoJunto.receberEvento(app, token, acao, o) else 403 to JSONObject().put("erro", "desligado")
+                else -> 405 to JSONObject().put("erro", "método")
+            }
+            return json(cod, r, CABECALHOS_FAMILIA)
         }
         if (!ligado(app)) return json(503, JSONObject().put("erro", "MCP desligado na TV"))
         val base = base(req) ?: return json(421, JSONObject().put("erro", "nome desconhecido"))

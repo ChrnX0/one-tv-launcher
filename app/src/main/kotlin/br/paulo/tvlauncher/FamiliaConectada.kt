@@ -140,6 +140,11 @@ class FamiliaConectadaActivity : Activity() {
             getString(R.string.vid_quantos, RecadoVideo.lista(this).size)).apply {
             setOnClickListener { startActivity(android.content.Intent(this@FamiliaConectadaActivity, RecadoVideoActivity::class.java)) }
         }, LinearLayout.LayoutParams(dp(300), -2).apply { topMargin = dp(8) })
+        // Degrau 4: as TVs da mesma conta conversam (Sessão junto, Continuar em outra TV). Opt-in, desligado de fábrica.
+        col.addView(Estilo.linhaOpcao(this, getString(R.string.junto_tvs), getString(R.string.junto_tvs_det),
+            Estilo.valor(this, getString(if (EntreTvs.ligado(this)) R.string.rec_ligado else R.string.rec_desligado), seta = false)).apply {
+            setOnClickListener { EntreTvs.definir(this@FamiliaConectadaActivity, !EntreTvs.ligado(this@FamiliaConectadaActivity)); recreate() }
+        }, LinearLayout.LayoutParams(dp(300), -2).apply { topMargin = dp(8) })
         col.addView(Estilo.linhaOpcao(this, getString(R.string.famc_trocar), getString(R.string.famc_trocar_det)).apply {
             setOnClickListener { FamiliaConectada.novoLink(this@FamiliaConectadaActivity); recreate() }
         }, LinearLayout.LayoutParams(dp(300), -2).apply { topMargin = dp(8) })
