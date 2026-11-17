@@ -15,7 +15,7 @@ object ClimaFontes {
     /** O que a HOME mostra e guarda nas prefs "clima". [amanha] = máx, mín, código, chance (nulo sem o 2º dia). */
     class Resultado(val ponto: Localizacao.Ponto, val temp: Int, val umidade: Int?, val max: Int, val min: Int,
         val amanha: List<Int>?, val codigo: Int, val chovendo: Boolean, val eDia: Boolean, val picoChuva: Int,
-        val linha: String, val icone: String, val horas: String = "")
+        val linha: String, val icone: String, val horas: String = "", val chuvaHoje: Int = picoChuva)
 
     @Volatile private var ultimaMedida: Medida? = null   // a última leitura boa do aeroporto
     @Volatile private var ultimaMedidaMs = 0L
@@ -100,6 +100,12 @@ object ClimaFontes {
             val p = horasChuva[i]
             if (p >= 40) { primeira = i; picoChuva = p; break }
         }
+        // A maior chance de chuva no RESTO de hoje (da hora atual até meia-noite). É o "Hoje · X% de chuva" do protetor e o
+        // chance_chuva_pct do MCP; antes eles recebiam o picoChuva (a 1ª hora >= 40%, ou 0), e o protetor dizia "0% de
+        // chuva" num dia com 47% à tarde (visto na Sala, 17/11/2026).
+        val horaAgora = atual.optString("time", "").take(13)   // "2026-11-17T09"
+        val chuvaHoje = horasChuva.indices.filter { it < horasData.size && horasData[it].startsWith(hoje) && horasData[it].take(13) >= horaAgora }
+            .maxOfOrNull { horasChuva[it] } ?: picoChuva
         val textoLinha = when {
             chovendoAgora -> ctx.getString(R.string.home_chovendo)
             primeira == 0 -> ctx.getString(R.string.home_chuva_agora, descricao, picoChuva)
@@ -113,7 +119,7 @@ object ClimaFontes {
         // IconesClima.aparar na pilha da thread principal). Na tela, bitmap() já acha pronto no cache.
         if (IconesClima.ehIcone(icone)) IconesClima.bitmap(ctx, icone)
         return Resultado(ponto, temp, umidade, max, min, amanha, codigo, chovendoAgora, eDia, picoChuva, textoLinha, icone,
-            proximasHoras(json, atual.optString("time", ""), horasData, horasChuva))
+            proximasHoras(json, atual.optString("time", ""), horasData, horasChuva), chuvaHoje)
     }
 
     /**
