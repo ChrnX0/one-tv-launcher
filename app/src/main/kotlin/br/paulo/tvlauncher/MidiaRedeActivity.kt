@@ -325,6 +325,7 @@ class MidiaRedeActivity : Activity() {
                 val ordem = if (lidos.isEmpty()) entradas else CatalogoPasta.ordenar(entradas, { it.pasta }, { lidos[it] })
                 val catalogo = if (lidos.isNotEmpty() && InfoExternaCache.temTmdb()) listOf(linhaCatalogo()) else emptyList()
                 pilha += Nivel(nome, origem, buscar + catalogo + linhaFotos(origem, id, nome, entradas) + ordem.map { linhaEntrada(it, lidos[it]) }, lidos = lidos)
+                anotarNaBiblioteca(origem, entradas, lidos)
                 desenhar(if (entradas.isEmpty()) getString(R.string.rede_vazia) else resources.getQuantityString(R.plurals.rede_itens, entradas.size, entradas.size))
             }
         }
@@ -357,6 +358,35 @@ class MidiaRedeActivity : Activity() {
         val nivel = pilha.lastOrNull() ?: return
         pilha[pilha.lastIndex] = Nivel(nivel.titulo, nivel.origem, nivel.itens.toMutableList().also { it[pos] = linhaFotos(f) }, pos, nivel.lidos)
         desenhar(getString(if (usando) R.string.rede_fotos_paradas else R.string.rede_fotos_usando))
+    }
+
+    // ---------------------------------------------------------------- elevação 7.1: biblioteca única
+
+    /**
+     * Os vídeos vistos aqui entram no índice da busca única (só na TV): título, ano, qualidade e o endereço do arquivo
+     * quando ele não leva senha nem chave (BibliotecaIndice.enderecoGuardavel). Jellyfin/Plex/Emby entram sem endereço:
+     * a busca abre a procura no servidor.
+     */
+    private fun anotarNaBiblioteca(origem: Origem, entradas: List<Upnp.Entrada>, lidos: Map<Upnp.Entrada, LeitorNomes.Lido>) {
+        val (tipo, onde) = when (origem) {
+            is Origem.Pasta -> (if (origem.c.tipo in setOf(ContaMidia.ONEDRIVE, ContaMidia.DROPBOX, ContaMidia.BOX, ContaMidia.GDRIVE))
+                BibliotecaUnica.Origem.NUVEM else BibliotecaUnica.Origem.PASTA) to origem.c.nome
+            is Origem.Local -> BibliotecaUnica.Origem.PASTA to origem.raiz.name
+            is Origem.Dav -> BibliotecaUnica.Origem.NUVEM to origem.c.nome
+            is Origem.Dlna -> BibliotecaUnica.Origem.SERVIDOR to origem.s.nome
+            is Origem.Jelly -> BibliotecaUnica.Origem.SERVIDOR to origem.c.nome
+            is Origem.PlexO -> BibliotecaUnica.Origem.SERVIDOR to origem.c.nome
+            is Origem.Link -> return
+        }
+        val servidor = origem is Origem.Jelly || origem is Origem.PlexO
+        val fontes = entradas.filter { !it.pasta && it.tipo == Upnp.Tipo.VIDEO }.mapNotNull { e ->
+            val l = lidos[e] ?: LeitorNomes.ler(e.titulo).takeIf { it.nome.isNotBlank() && !it.extra } ?: return@mapNotNull null
+            BibliotecaUnica.Fonte(tipo, onde, l.nome, l.ano, l.serie, qualidade = BibliotecaUnica.qualidadeDoNome(e.titulo),
+                versao = Idioma.versao(e.titulo, ""), abrir = if (servidor || l.serie) "" else e.url.orEmpty())
+        }.distinctBy { listOf(it.titulo, it.serie, it.abrir) }   // série: uma linha por série (cada episódio não vira título)
+        if (fontes.isEmpty()) return
+        val app = applicationContext
+        if (!capas.isShutdown) capas.execute { BibliotecaIndice.anotar(app, fontes) }
     }
 
     // ---------------------------------------------------------------- elevação 8.2: a pasta vira catálogo

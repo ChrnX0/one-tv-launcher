@@ -29,4 +29,11 @@
     <string name="elv_cat_campo">Nome e ano, ex.: Duna 2021</string>
     <string name="elv_cat_salvar">Salvar</string>
     <string name="elv_cat_dica">corrigir</string>
+
+    <!-- Elevação 7.1: biblioteca única (de onde vem cada fonte) -->
+    <string name="elv_bib_lista">Lista</string>
+    <string name="elv_bib_pasta">Pasta</string>
+    <string name="elv_bib_servidor">Servidor</string>
+    <string name="elv_bib_nuvem">Nuvem</string>
+    <string name="elv_bib_addon">Addon</string>
 </resources>

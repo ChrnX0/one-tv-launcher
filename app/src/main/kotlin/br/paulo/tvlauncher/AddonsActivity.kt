@@ -119,6 +119,8 @@ class AddonsActivity : Activity() {
         window.setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         Estilo.entrar(coluna)
         desenharRaiz()
+        // Elevação 7.1: aberta pela busca única com um título que só um addon tem.
+        intent.getStringExtra(BibliotecaUnica.EXTRA_BUSCA)?.trim()?.takeIf { it.length >= 2 }?.let { buscar(it) }
     }
 
     override fun onResume() {
@@ -177,6 +179,7 @@ class AddonsActivity : Activity() {
     private fun abrirCatalogo(l: AddonsTv.Linha, skip: Int = 0, busca: String? = null) {
         emSegundo({ AddonsTv.catalogo(l, skip, busca = busca) }) { itens ->
             val linhas = itens.map { linhaItem(it, l.addon) }
+            anotarNaBiblioteca(itens, l.addon)
             val mais = if (itens.size >= PAGINA_MINIMA) listOf(Linha(IconeMidia.Tipo.MAIS, getString(R.string.ad_mais), null,
                 Mais(l, skip + itens.size, busca))) else emptyList()
             val atual = pilha.lastOrNull()
@@ -198,9 +201,21 @@ class AddonsActivity : Activity() {
             achados.forEach { (l, lista) ->
                 itens += Secao("${l.addon.m.nome} · ${tipoLegivel(l.cat.tipo)}")
                 lista.forEach { itens += linhaItem(it, l.addon) }
+                anotarNaBiblioteca(lista, l.addon)
             }
             entrarNivel(Nivel("${getString(R.string.ad_buscar)}: $termo", itens), if (itens.isEmpty()) getString(R.string.ad_nada) else null)
         }
+    }
+
+    /** Elevação 7.1: filmes e séries vistos nos addons entram no índice da busca única (título, ano, id do IMDb). */
+    private fun anotarNaBiblioteca(itens: List<AddonsProtocolo.Item>, addon: AddonsProtocolo.Instalado?) {
+        val fontes = itens.filter { it.tipo == "movie" || it.tipo == "series" }.map { i ->
+            BibliotecaUnica.Fonte(BibliotecaUnica.Origem.ADDON, addon?.m?.nome.orEmpty(), i.nome, i.ano.take(4).toIntOrNull(),
+                i.tipo == "series", imdb = i.id.takeIf { InfoExterna.idImdbValido(it) }.orEmpty())
+        }
+        if (fontes.isEmpty()) return
+        val app = applicationContext
+        Thread { BibliotecaIndice.anotar(app, fontes) }.start()
     }
 
     private fun abrirItem(d: ItemDe) {

@@ -43,7 +43,10 @@ class BuscaActivity : Activity() {
                         val instalados: Set<String> = emptySet(),
                         val idsFilmes: Set<Int> = emptySet(), val idsSeries: Set<Int> = emptySet(),
                         val radios: List<Radios.Radio> = emptyList(), val ajuda: List<Pair<Int, String>> = emptyList(),
-                        val temServidorMidia: Boolean = false, val appsMapa: Map<String, String> = emptyMap())
+                        val temServidorMidia: Boolean = false, val appsMapa: Map<String, String> = emptyMap(),
+                        /** Elevação 7.1: o que a TV viu em pastas, servidores, nuvens e addons; e a versão preferida. */
+                        val iBiblioteca: List<BuscaUnica.Indexado<BibliotecaUnica.Fonte>> = emptyList(),
+                        val preferida: Idioma.Versao = Idioma.Versao.DUBLADA)
     @Volatile private var dados: Dados? = null
 
     override fun onCreate(b: Bundle?) {
@@ -101,7 +104,10 @@ class BuscaActivity : Activity() {
                 comGoogleTv(this, listaApps.map { it.first }.toSet()),
                 // Ideia 82: ids TMDB do catálogo inteiro (com as ocultas: o que está escondido não vira "fora da sua lista").
                 idsDoCatalogo(false), idsDoCatalogo(true), radiosFavoritas(), topicosAjuda(), temServidorMidia(),
-                runCatching { PedidoIa.appsDaHome(this) }.getOrDefault(emptyMap()))
+                runCatching { PedidoIa.appsDaHome(this) }.getOrDefault(emptyMap()),
+                // Modo infantil: o que veio de pasta, servidor ou addon não tem classificação conferida, então não entra.
+                BuscaUnica.indexar(if (parental.infantil) emptyList() else runCatching { BibliotecaIndice.todas(this) }.getOrDefault(emptyList())) { it.titulo },
+                runCatching { Idioma.versaoDesejada(IdiomaPlayer.prefs(this).padrao) }.getOrDefault(Idioma.Versao.DUBLADA))
                 .also { Log.i(TAG, "índice: ${canais.size} canais, ${filmes.size} filmes, ${series.size} séries, " +
                     "${it.titulos.size} títulos do guia em ${System.currentTimeMillis() - t0} ms") }
         } catch (e: Exception) {
@@ -233,17 +239,27 @@ class BuscaActivity : Activity() {
         if (canais.isNotEmpty()) grupos += Grupo(getString(R.string.bu_canais), canais.map { c -> Item(c.nome, getString(R.string.bu_canal_n, c.numero)) { tocar(c.id, c.nome) } })
         val progs = programas(d, termo)
         if (progs.isNotEmpty()) grupos += Grupo(getString(R.string.bu_no_guia), progs)
-        val (filmes, total) = BuscaUnica.filtrarIndice(d.iFilmes, termo, tolerante = true)
-        if (filmes.isNotEmpty()) {
-            grupos += Grupo(getString(R.string.home_card_filmes), filmes.map { f ->
-                Item(f.nome, listOfNotNull(f.ano?.toString(), f.grupo.takeIf { it.isNotBlank() }).joinToString(" · ")) { catalogo(FilmesActivity::class.java, f.nome) }
-            } + Item(getString(R.string.bu_ver_filmes, total), getString(R.string.bu_ver_filmes_det)) { catalogo(FilmesActivity::class.java, termo) })
+        // Elevação 7.1: biblioteca única. Lista, pastas, servidores, nuvens e addons juntos: cada título uma vez, com as
+        // fontes embaixo (a melhor primeiro, com ▶) e o OK abrindo a melhor. Só junta o que bateu com o termo (rápido).
+        val (filmes, total) = BuscaUnica.filtrarIndice(d.iFilmes, termo, max = 40, tolerante = true)
+        val (series, totalSeries) = BuscaUnica.filtrarIndice(d.iSeries, termo, max = 40, tolerante = true)
+        val daCasa = BuscaUnica.filtrarIndice(d.iBiblioteca, termo, max = 60, tolerante = true).first
+        val unicos = BibliotecaUnica.juntar(filmes.map { f ->
+            BibliotecaUnica.Fonte(BibliotecaUnica.Origem.LISTA, f.grupo, f.nome, f.ano, false, f.tmdb,
+                qualidade = BibliotecaUnica.qualidadeDoNome(f.nome + " " + f.grupo), versao = Idioma.versao(f.nome, f.grupo), abrir = f.nome)
+        } + series.map { s ->
+            BibliotecaUnica.Fonte(BibliotecaUnica.Origem.LISTA, s.grupo, s.nome, s.ano, true, s.tmdb,
+                qualidade = BibliotecaUnica.qualidadeDoNome(s.nome + " " + s.grupo), versao = Idioma.versao(s.nome, s.grupo), abrir = s.nome)
+        } + daCasa, d.preferida)
+        val uFilmes = unicos.filter { !it.serie }.take(BuscaUnica.MAX_POR_GRUPO)
+        if (uFilmes.isNotEmpty()) {
+            grupos += Grupo(getString(R.string.home_card_filmes), uFilmes.map { itemUnico(it) } +
+                if (total > 0) listOf(Item(getString(R.string.bu_ver_filmes, total), getString(R.string.bu_ver_filmes_det)) { catalogo(FilmesActivity::class.java, termo) }) else emptyList())
         }
-        val (series, totalSeries) = BuscaUnica.filtrarIndice(d.iSeries, termo, tolerante = true)
-        if (series.isNotEmpty()) {
-            grupos += Grupo(getString(R.string.home_card_series), series.map { s ->
-                Item(s.nome, listOfNotNull(s.ano?.toString(), s.grupo.takeIf { it.isNotBlank() }).joinToString(" · ")) { catalogo(SeriesActivity::class.java, s.nome) }
-            } + Item(getString(R.string.bu_ver_series, totalSeries), getString(R.string.bu_ver_series_det)) { catalogo(SeriesActivity::class.java, termo) })
+        val uSeries = unicos.filter { it.serie }.take(BuscaUnica.MAX_POR_GRUPO)
+        if (uSeries.isNotEmpty()) {
+            grupos += Grupo(getString(R.string.home_card_series), uSeries.map { itemUnico(it) } +
+                if (totalSeries > 0) listOf(Item(getString(R.string.bu_ver_series, totalSeries), getString(R.string.bu_ver_series_det)) { catalogo(SeriesActivity::class.java, termo) }) else emptyList())
         }
         val apps = BuscaUnica.filtrarIndice(d.iApps, termo, tolerante = true).first
         if (apps.isNotEmpty()) grupos += Grupo("Apps", apps.map { (pacote, nome) -> Item(nome, "App") { abrirApp(pacote) } })
@@ -370,6 +386,39 @@ class BuscaActivity : Activity() {
 
     private fun tocar(canalId: String, nome: String) {
         CanalTv.tocar(applicationContext, ComandosIa.Acao.TocarCanal(nome, canalId = canalId, nomeCanal = nome))
+    }
+
+    /** "Duna: Parte Dois" / "2024 · ▶ Pasta PC 4K · Lista · Addon Cinemeta". */
+    private fun itemUnico(t: BibliotecaUnica.Titulo): Item {
+        fun rotulo(f: BibliotecaUnica.Fonte): String {
+            val tipo = getString(when (f.origem) {
+                BibliotecaUnica.Origem.LISTA -> R.string.elv_bib_lista
+                BibliotecaUnica.Origem.PASTA -> R.string.elv_bib_pasta
+                BibliotecaUnica.Origem.SERVIDOR -> R.string.elv_bib_servidor
+                BibliotecaUnica.Origem.NUVEM -> R.string.elv_bib_nuvem
+                BibliotecaUnica.Origem.ADDON -> R.string.elv_bib_addon
+            })
+            val q = when { f.qualidade >= 2160 -> "4K"; f.qualidade >= 1080 -> "1080p"; f.qualidade >= 720 -> "720p"; else -> null }
+            return listOfNotNull(tipo, f.onde.takeIf { it.isNotBlank() && f.origem != BibliotecaUnica.Origem.LISTA }?.take(24), q).joinToString(" ")
+        }
+        val fontes = t.fontes.map { rotulo(it) }.distinct()
+        val texto = listOfNotNull(t.ano?.toString(), "▶ " + fontes.first(), fontes.drop(1).take(2).joinToString(" · ").takeIf { it.isNotEmpty() },
+            (fontes.size - 3).takeIf { it > 0 }?.let { "+$it" }).joinToString(" · ")
+        return Item(t.nome, texto) { abrirFonte(t.melhor, t) }
+    }
+
+    /** Abre a melhor fonte: lista no catálogo, arquivo da casa direto no player, servidor e addon na busca deles. */
+    private fun abrirFonte(f: BibliotecaUnica.Fonte, t: BibliotecaUnica.Titulo) {
+        try {
+            when (f.origem) {
+                BibliotecaUnica.Origem.LISTA -> catalogo(if (t.serie) SeriesActivity::class.java else FilmesActivity::class.java, f.abrir.ifBlank { t.nome })
+                BibliotecaUnica.Origem.PASTA, BibliotecaUnica.Origem.NUVEM ->
+                    if (f.abrir.isNotBlank() && FontesMidia.aceito(f.abrir)) VodActivity.abrirUrl(this, f.abrir, t.nome)
+                    else startActivity(Intent(this, MidiaRedeActivity::class.java))
+                BibliotecaUnica.Origem.SERVIDOR -> startActivity(Intent(this, MidiaRedeActivity::class.java).putExtra(MidiaRedeActivity.EXTRA_BUSCA, f.titulo))
+                BibliotecaUnica.Origem.ADDON -> startActivity(Intent(this, AddonsActivity::class.java).putExtra(BibliotecaUnica.EXTRA_BUSCA, f.titulo))
+            }
+        } catch (e: Exception) { Log.w(TAG, "fonte: ${e.javaClass.simpleName}") }
     }
 
     private fun catalogo(tela: Class<out Activity>, termo: String) {

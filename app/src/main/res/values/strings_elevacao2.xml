@@ -29,4 +29,11 @@
     <string name="elv_cat_campo">Name and year, e.g. Dune 2021</string>
     <string name="elv_cat_salvar">Save</string>
     <string name="elv_cat_dica">fix</string>
+
+    <!-- Elevação 7.1: biblioteca única (de onde vem cada fonte) -->
+    <string name="elv_bib_lista">List</string>
+    <string name="elv_bib_pasta">Folder</string>
+    <string name="elv_bib_servidor">Server</string>
+    <string name="elv_bib_nuvem">Cloud</string>
+    <string name="elv_bib_addon">Add-on</string>
 </resources>
