@@ -56,7 +56,7 @@ node ponta-a-ponta.mjs      http://127.0.0.1:8787    # encontro, caixa, WebSocke
 cd ../dns && go test ./...                           # nomes, servidor DNS de verdade, leitura do TXT
 ```
 
-## Publicar (só depois do domínio, com o Paulo)
+## Publicar (só depois do domínio, com o Paulo): roteiro completo em `PUBLICAR.md`
 
 - Carteiro: `npx wrangler login` na conta dele, descomentar a rota `carteiro.sofaly.tv` em `wrangler.toml`,
   `npx wrangler deploy`. Plano grátis serve até ~1.000 TVs (estimativa); depois, Workers Paid (US$ 5/mês).
