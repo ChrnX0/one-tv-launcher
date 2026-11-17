@@ -102,7 +102,7 @@
     <string name="pl_basico">Podstawowy</string>
     <string name="pl_pro">Pro</string>
     <string name="pl_ultra">Ultra</string>
-    <string name="pl_basico_itens">• Ekran główny, wygaszacz\n• Budzik, tryb prosty\n• Odtwarzacz i radio\n• 1 lista IPTV\n• 2 motywy</string>
+    <string name="pl_basico_itens">• Ekran główny, wygaszacz\n• Budzik, łatwy ekran\n• Odtwarzacz i radio\n• 1 lista IPTV\n• 2 motywy</string>
     <string name="pl_pro_itens">• Wszystko z Podstawowego\n• Wiele list IPTV, nagrywanie\n• Pełny panel WWW\n• Claude, rutyny, Home Assistant\n• Wszystkie motywy, kopia w chmurze</string>
     <string name="pl_ultra_itens">• Wszystko z Pro\n• Lepsza pogoda (3 modele)\n• Bogate karty filmów\n• Automatyczne napisy\n• Do 3 telewizorów</string>
     <string name="pl_qr">Zeskanuj telefonem, aby zobaczyć ceny i kupić.</string>

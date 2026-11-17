@@ -102,7 +102,7 @@
     <string name="pl_basico">Basis</string>
     <string name="pl_pro">Pro</string>
     <string name="pl_ultra">Ultra</string>
-    <string name="pl_basico_itens">• Startbildschirm, Bildschirmschoner\n• Wecker, einfacher Modus\n• Player und Radiosender\n• 1 IPTV-Liste\n• 2 Designs</string>
+    <string name="pl_basico_itens">• Startbildschirm, Bildschirmschoner\n• Wecker, einfache Ansicht\n• Player und Radiosender\n• 1 IPTV-Liste\n• 2 Designs</string>
     <string name="pl_pro_itens">• Alles aus Basis\n• Viele IPTV-Listen, Aufnahme\n• Volles Web-Panel\n• Claude, Routinen, Home Assistant\n• Alle Designs, Cloud-Backup</string>
     <string name="pl_ultra_itens">• Alles aus Pro\n• Besseres Wetter (3 Modelle)\n• Ausführliche Filmseiten\n• Automatische Untertitel\n• Bis zu 3 Fernseher</string>
     <string name="pl_qr">Mit dem Handy scannen, um Preise zu sehen und zu kaufen.</string>

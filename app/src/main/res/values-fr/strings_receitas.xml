@@ -14,7 +14,7 @@
     <string name="rec_desfazer">Annuler</string>
     <string name="rec_desfazer_det">Tout remettre comme avant %1$s.</string>
     <string name="rec_ja_esta">Cette télé est déjà réglée ainsi.</string>
-    <string name="rec_aviso_prende">Le mode simple ne se ferme qu\'avec le code PIN. Vérifiez que quelqu\'un de la maison le connaît.</string>
+    <string name="rec_aviso_prende">L’Écran facile ne se ferme qu\'avec le code PIN. Vérifiez que quelqu\'un de la maison le connaît.</string>
     <string name="rec_aviso_sem_pin">Il n\'y a pas encore de code PIN : n\'importe qui peut désactiver ceci. Créez-en un dans le panneau du téléphone.</string>
     <string name="rec_aviso_plano">Nécessite un forfait payant, donc reste désactivé : %1$s.</string>
     <string name="rec_voltar">Retour</string>
@@ -29,7 +29,7 @@
     <string name="rec_desligado">désactivé</string>
     <string name="rec_aj_hospede">Mode invité</string>
     <string name="rec_aj_visita">Mode visite</string>
-    <string name="rec_aj_simples">Mode simple</string>
+    <string name="rec_aj_simples">Écran facile</string>
     <string name="rec_aj_infantil">Mode enfant</string>
     <string name="rec_aj_dormir">Heure du coucher</string>
     <string name="rec_aj_texto">Taille du texte</string>

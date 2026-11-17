@@ -14,7 +14,7 @@
     <string name="rec_desfazer">Deshacer</string>
     <string name="rec_desfazer_det">Volver todo a como estaba antes de %1$s.</string>
     <string name="rec_ja_esta">Esta TV ya está así.</string>
-    <string name="rec_aviso_prende">El modo simple solo se cierra con el PIN. Asegúrate de que alguien de la casa lo sepa.</string>
+    <string name="rec_aviso_prende">La Pantalla fácil solo se cierra con el PIN. Asegúrate de que alguien de la casa lo sepa.</string>
     <string name="rec_aviso_sem_pin">Todavía no hay PIN, así que cualquiera puede apagar esto. Crea uno en el panel del móvil.</string>
     <string name="rec_aviso_plano">Necesita un plan de pago, así que queda apagado: %1$s.</string>
     <string name="rec_voltar">Volver</string>
@@ -29,7 +29,7 @@
     <string name="rec_desligado">desactivado</string>
     <string name="rec_aj_hospede">Modo huésped</string>
     <string name="rec_aj_visita">Modo visita</string>
-    <string name="rec_aj_simples">Modo simple</string>
+    <string name="rec_aj_simples">Pantalla fácil</string>
     <string name="rec_aj_infantil">Modo infantil</string>
     <string name="rec_aj_dormir">Hora de dormir</string>
     <string name="rec_aj_texto">Tamaño del texto</string>

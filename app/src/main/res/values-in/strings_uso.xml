@@ -2,8 +2,8 @@
 <!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
 <resources>
     <string name="uso_titulo">Cara TV ini dipakai</string>
-    <string name="uso_det">Sederhana menyembunyikan tab teknis (Rumah, Jarak jauh, Lanjutan). Tidak ada yang dimatikan.</string>
-    <string name="uso_simples">Sederhana</string>
+    <string name="uso_det">Dasar menyembunyikan tab teknis (Rumah, Jarak jauh, Lanjutan). Tidak ada yang dimatikan.</string>
+    <string name="uso_simples">Dasar</string>
     <string name="uso_completo">Lengkap</string>
     <string name="uso_cuida">Untuk orang yang saya rawat</string>
     <string name="uso_pergunta">Bagaimana TV ini akan dipakai?</string>

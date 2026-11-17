@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pergunta única da primeira abertura (T3, 17/11/2026): BoasVindasActivity + PrimeiraPergunta. -->
+<resources>
+    <string name="pp_det">Una risposta imposta menu e schermata. Puoi cambiarla dopo in Impostazioni › Sistema.</string>
+    <string name="pp_casa">Per tutta la casa</string>
+    <string name="pp_vo_det">Schede grandi con il nome letto ad alta voce e testo più grande, e tu aiuti dal telefono, a distanza.</string>
+</resources>

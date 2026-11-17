@@ -108,7 +108,7 @@
     <string name="pl_basico">Basic</string>
     <string name="pl_pro">Pro</string>
     <string name="pl_ultra">Ultra</string>
-    <string name="pl_basico_itens">• Home screen, screensaver\n• Alarm, simple mode\n• Player and radios\n• 1 IPTV list\n• 2 themes</string>
+    <string name="pl_basico_itens">• Home screen, screensaver\n• Alarm, easy screen\n• Player and radios\n• 1 IPTV list\n• 2 themes</string>
     <string name="pl_pro_itens">• Everything in Basic\n• Many IPTV lists, recording\n• Full web panel\n• Claude, routines, Home Assistant\n• All themes, cloud backup</string>
     <string name="pl_ultra_itens">• Everything in Pro\n• Better weather (3 models)\n• Rich movie pages\n• Automatic subtitles\n• Up to 3 TVs</string>
     <string name="pl_qr">Scan with your phone to see prices and buy.</string>

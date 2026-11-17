@@ -108,7 +108,7 @@
     <string name="pl_basico">Básico</string>
     <string name="pl_pro">Pro</string>
     <string name="pl_ultra">Ultra</string>
-    <string name="pl_basico_itens">• Tela inicial, protetor\n• Despertador, modo simples\n• Player e rádios\n• 1 lista de IPTV\n• 2 temas</string>
+    <string name="pl_basico_itens">• Tela inicial, protetor\n• Despertador, tela fácil\n• Player e rádios\n• 1 lista de IPTV\n• 2 temas</string>
     <string name="pl_pro_itens">• Tudo do Básico\n• Várias listas de IPTV, gravação\n• Painel web completo\n• Claude, rotinas, Home Assistant\n• Todos os temas, backup na nuvem</string>
     <string name="pl_ultra_itens">• Tudo do Pro\n• Clima melhor (3 modelos)\n• Fichas de filme completas\n• Legenda automática\n• Até 3 TVs</string>
     <string name="pl_qr">Leia com o celular para ver preços e comprar.</string>

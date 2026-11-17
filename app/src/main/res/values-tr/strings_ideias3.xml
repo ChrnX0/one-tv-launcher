@@ -6,5 +6,5 @@
     <string name="extras_PRESENCA">Herkes evden çıkınca kapat (UniFi yönlendirici)</string>
     <string name="extras_HOJE_NA_TV">Arama ekranında «Bugün TV’de»</string>
     <string name="extras_RETROSPECTIVA">Haftalık özet (pazar akşamı)</string>
-    <string name="extras_MODO_SIMPLES">Basit mod (büyük kartlar, sesli adlar)</string>
+    <string name="extras_MODO_SIMPLES">Kolay ekran (büyük kartlar, sesli adlar)</string>
 </resources>

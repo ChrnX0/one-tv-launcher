@@ -102,7 +102,7 @@
     <string name="pl_basico">Base</string>
     <string name="pl_pro">Pro</string>
     <string name="pl_ultra">Ultra</string>
-    <string name="pl_basico_itens">• Schermata Home, salvaschermo\n• Sveglia, modalità semplice\n• Lettore e radio\n• 1 lista IPTV\n• 2 temi</string>
+    <string name="pl_basico_itens">• Schermata Home, salvaschermo\n• Sveglia, schermata facile\n• Lettore e radio\n• 1 lista IPTV\n• 2 temi</string>
     <string name="pl_pro_itens">• Tutto di Base\n• Più liste IPTV, registrazione\n• Pannello web completo\n• Claude, routine, Home Assistant\n• Tutti i temi, backup nel cloud</string>
     <string name="pl_ultra_itens">• Tutto di Pro\n• Meteo migliore (3 modelli)\n• Schede film complete\n• Sottotitoli automatici\n• Fino a 3 TV</string>
     <string name="pl_qr">Scansiona con il telefono per vedere i prezzi e acquistare.</string>

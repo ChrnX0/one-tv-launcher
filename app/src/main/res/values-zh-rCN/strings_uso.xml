@@ -2,8 +2,8 @@
 <!-- Como esta TV vai ser usada (degrau 2, 16/11/2026): UsoTv, BoasVindasActivity, Configurações > Sistema. -->
 <resources>
     <string name="uso_titulo">这台电视的用法</string>
-    <string name="uso_det">简单模式会隐藏技术选项卡（家居、远程、高级），不会关闭任何功能。</string>
-    <string name="uso_simples">简单</string>
+    <string name="uso_det">基础模式会隐藏技术选项卡（家居、远程、高级），不会关闭任何功能。</string>
+    <string name="uso_simples">基础</string>
     <string name="uso_completo">完整</string>
     <string name="uso_cuida">给我照顾的人</string>
     <string name="uso_pergunta">这台电视将如何使用？</string>

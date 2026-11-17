@@ -6,5 +6,5 @@
     <string name="extras_PRESENCA">Ausschalten, wenn alle das Haus verlassen (UniFi-Router)</string>
     <string name="extras_HOJE_NA_TV">„Heute im TV“ auf dem Suchbildschirm</string>
     <string name="extras_RETROSPECTIVA">Wochenrückblick (Sonntagabend)</string>
-    <string name="extras_MODO_SIMPLES">Einfacher Modus (große Karten, Namen werden vorgelesen)</string>
+    <string name="extras_MODO_SIMPLES">Einfache Ansicht (große Karten, Namen werden vorgelesen)</string>
 </resources>

@@ -62,18 +62,26 @@ class BoasVindasActivity : Activity() {
             background = Estilo.fundoTela(context)
             setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
-        raiz.addView(Estilo.tituloTela(this, getString(R.string.uso_pergunta)))
-        raiz.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.uso_pergunta_det)),
+        // T3 (17/11/2026): UMA pergunta. A resposta escolhe o menu (UsoTv) e a receita juntos (PrimeiraPergunta).
+        raiz.addView(Estilo.tituloTela(this, getString(R.string.rec_titulo)))
+        raiz.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.pp_det)),
             LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(4) })
         val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(8), dp(8), dp(8), dp(8)); clipChildren = false; clipToPadding = false }
         raiz.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(lista) },
             LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f).apply { topMargin = dp(16) })
-        fun opcao(uso: UsoTv, titulo: Int, det: Int) = lista.addView(linha(getString(titulo), getString(det)) {
-            UsoTv.escolher(this, uso); montar()
+        fun opcao(r: PrimeiraPergunta.Resposta, titulo: Int, det: Int) = lista.addView(linha(getString(titulo), getString(det)) {
+            UsoTv.escolher(this, r.uso)
+            // Com receita: a confirmação dela (o que muda, PIN, Desfazer); ao voltar, onRestart monta o resto do assistente.
+            val rec = r.receita
+            if (rec == null) montar()
+            else { montar(); abrir(Intent(this, ReceitasActivity::class.java).putExtra(ReceitasActivity.EXTRA_CONFIRMAR, rec.name)) }
         })
-        opcao(UsoTv.SIMPLES, R.string.uso_simples, R.string.uso_simples_det)
-        opcao(UsoTv.COMPLETO, R.string.uso_completo, R.string.uso_completo_det)
-        opcao(UsoTv.CUIDA, R.string.uso_cuida, R.string.uso_cuida_det)
+        opcao(PrimeiraPergunta.Resposta.CASA, R.string.pp_casa, R.string.uso_completo_det)
+        opcao(PrimeiraPergunta.Resposta.VO, R.string.rec_vo, R.string.pp_vo_det)
+        opcao(PrimeiraPergunta.Resposta.CRIANCAS, R.string.rec_criancas, R.string.rec_criancas_det)
+        opcao(PrimeiraPergunta.Resposta.GAMER, R.string.rec_gamer, R.string.rec_gamer_det)
+        opcao(PrimeiraPergunta.Resposta.ALUGUEL, R.string.rec_aluguel, R.string.rec_aluguel_det)
+        opcao(PrimeiraPergunta.Resposta.ESSENCIAL, R.string.uso_simples, R.string.uso_simples_det)
         setContentView(raiz)
         lista.getChildAt(0)?.requestFocus()
     }
@@ -124,15 +132,12 @@ class BoasVindasActivity : Activity() {
             lista.addView(linha(getString(R.string.bv_dono), getString(R.string.bv_dono_det)) {
                 VirarDono.perguntar(this, { t -> AvisoTv.rapido(this, getString(R.string.bv_titulo), t, 4) }) { if (!isFinishing && !isDestroyed) montar() }
             })
-        // Degrau 4: receitas prontas (TV da vó, das crianças, do gamer, de aluguel), um OK e com Desfazer.
-        lista.addView(linha(getString(R.string.rec_titulo), getString(R.string.rec_subtitulo)) {
-            abrir(Intent(this, ReceitasActivity::class.java))
-        })
+        // As receitas já vêm da pergunta única (T3); trocar de receita fica em Configurações e em "Para quem é esta TV?" abaixo.
         if (uso != UsoTv.SIMPLES) lista.addView(linha(getString(R.string.bv_claude), getString(R.string.bv_claude_det)) {
             abrir(Intent(this, ConectarClaudeActivity::class.java))
         })
         // Voltar à pergunta (escolheu errado): a mesma troca também fica em Configurações > Sistema.
-        lista.addView(linha(getString(R.string.uso_titulo), getString(R.string.uso_trocar_det, nomeUso(uso))) {
+        lista.addView(linha(getString(R.string.rec_titulo), getString(R.string.uso_trocar_det, nomeUso(uso))) {
             UsoTv.limpar(this); montar()
         })
         lista.addView(linha(getString(R.string.bv_tudo), getString(R.string.cfg_titulo)) {
@@ -143,9 +148,10 @@ class BoasVindasActivity : Activity() {
         (lista.getChildAt(0) ?: comecar).requestFocus()
     }
 
-    private fun nomeUso(u: UsoTv) = getString(when (u) {
+    // A resposta de agora como a pessoa a escolheu: a receita ativa, se houver; senão o nome da opção de menu.
+    private fun nomeUso(u: UsoTv): String = ReceitasTv.ativa(this)?.let { ReceitasTv.nome(this, it) } ?: getString(when (u) {
         UsoTv.SIMPLES -> R.string.uso_simples
-        UsoTv.COMPLETO -> R.string.uso_completo
+        UsoTv.COMPLETO -> R.string.pp_casa
         UsoTv.CUIDA -> R.string.uso_cuida
     })
 

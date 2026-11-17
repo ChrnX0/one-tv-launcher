@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pergunta única da primeira abertura (T3, 17/11/2026): BoasVindasActivity + PrimeiraPergunta. -->
+<resources>
+    <string name="pp_det">Tek bir cevap menüyü ve ekranı ayarlar. Sonra Ayarlar › Sistem\'den değiştirebilirsin.</string>
+    <string name="pp_casa">Bütün ev için</string>
+    <string name="pp_vo_det">Sesli adlarla büyük kartlar ve daha büyük yazı; sen de uzaktan telefondan yardım edersin.</string>
+</resources>

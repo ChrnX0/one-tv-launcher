@@ -102,7 +102,7 @@
     <string name="pl_basico">ベーシック</string>
     <string name="pl_pro">Pro</string>
     <string name="pl_ultra">Ultra</string>
-    <string name="pl_basico_itens">• ホーム画面、スクリーンセーバー\n• アラーム、シンプルモード\n• プレーヤーとラジオ\n• IPTV リスト 1 件\n• テーマ 2 種</string>
+    <string name="pl_basico_itens">• ホーム画面、スクリーンセーバー\n• アラーム、かんたん画面\n• プレーヤーとラジオ\n• IPTV リスト 1 件\n• テーマ 2 種</string>
     <string name="pl_pro_itens">• ベーシックの全機能\n• 複数の IPTV リスト、録画\n• Web パネルの全機能\n• Claude、ルーティン、Home Assistant\n• 全テーマ、クラウドバックアップ</string>
     <string name="pl_ultra_itens">• Pro の全機能\n• より正確な天気(3 モデル)\n• 充実した映画ページ\n• 自動字幕\n• テレビ 3 台まで</string>
     <string name="pl_qr">スマホで読み取って、価格の確認と購入ができます。</string>

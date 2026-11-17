@@ -102,7 +102,7 @@
     <string name="pl_basico">الأساسية</string>
     <string name="pl_pro">Pro</string>
     <string name="pl_ultra">Ultra</string>
-    <string name="pl_basico_itens">• الشاشة الرئيسية، شاشة التوقف\n• المنبّه، الوضع البسيط\n• المشغّل والراديو\n• قائمة IPTV واحدة\n• سمتان</string>
+    <string name="pl_basico_itens">• الشاشة الرئيسية، شاشة التوقف\n• المنبّه، الشاشة السهلة\n• المشغّل والراديو\n• قائمة IPTV واحدة\n• سمتان</string>
     <string name="pl_pro_itens">• كل ما في الأساسية\n• قوائم IPTV كثيرة، التسجيل\n• لوحة ويب كاملة\n• Claude والروتينات وHome Assistant\n• كل السمات، نسخ احتياطي سحابي</string>
     <string name="pl_ultra_itens">• كل ما في Pro\n• طقس أدق (3 نماذج)\n• صفحات أفلام غنية\n• ترجمات تلقائية\n• حتى 3 أجهزة تلفزيون</string>
     <string name="pl_qr">امسح بهاتفك لرؤية الأسعار والشراء.</string>

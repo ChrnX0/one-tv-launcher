@@ -102,7 +102,7 @@
     <string name="pl_basico">Dasar</string>
     <string name="pl_pro">Pro</string>
     <string name="pl_ultra">Ultra</string>
-    <string name="pl_basico_itens">• Layar utama, screensaver\n• Alarm, mode sederhana\n• Pemutar dan radio\n• 1 daftar IPTV\n• 2 tema</string>
+    <string name="pl_basico_itens">• Layar utama, screensaver\n• Alarm, layar mudah\n• Pemutar dan radio\n• 1 daftar IPTV\n• 2 tema</string>
     <string name="pl_pro_itens">• Semua di Dasar\n• Banyak daftar IPTV, perekaman\n• Panel web lengkap\n• Claude, rutinitas, Home Assistant\n• Semua tema, cadangan cloud</string>
     <string name="pl_ultra_itens">• Semua di Pro\n• Cuaca lebih akurat (3 model)\n• Halaman film lengkap\n• Subtitle otomatis\n• Hingga 3 TV</string>
     <string name="pl_qr">Pindai dengan ponsel untuk melihat harga dan membeli.</string>

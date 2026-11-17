@@ -102,7 +102,7 @@
     <string name="pl_basico">基础版</string>
     <string name="pl_pro">Pro</string>
     <string name="pl_ultra">Ultra</string>
-    <string name="pl_basico_itens">• 主屏幕、屏幕保护程序\n• 闹钟、简易模式\n• 播放器和电台\n• 1 个 IPTV 列表\n• 2 个主题</string>
+    <string name="pl_basico_itens">• 主屏幕、屏幕保护程序\n• 闹钟、简易屏幕\n• 播放器和电台\n• 1 个 IPTV 列表\n• 2 个主题</string>
     <string name="pl_pro_itens">• 基础版的全部功能\n• 多个 IPTV 列表、录制\n• 完整网页面板\n• Claude、日常任务、Home Assistant\n• 全部主题、云备份</string>
     <string name="pl_ultra_itens">• Pro 的全部功能\n• 更准的天气(3 个模型)\n• 丰富的影片页面\n• 自动字幕\n• 最多 3 台电视</string>
     <string name="pl_qr">用手机扫描,查看价格并购买。</string>

@@ -102,7 +102,7 @@
     <string name="pl_basico">बेसिक</string>
     <string name="pl_pro">Pro</string>
     <string name="pl_ultra">Ultra</string>
-    <string name="pl_basico_itens">• होम स्क्रीन, स्क्रीनसेवर\n• अलार्म, आसान मोड\n• प्लेयर और रेडियो\n• 1 IPTV सूची\n• 2 थीम</string>
+    <string name="pl_basico_itens">• होम स्क्रीन, स्क्रीनसेवर\n• अलार्म, आसान स्क्रीन\n• प्लेयर और रेडियो\n• 1 IPTV सूची\n• 2 थीम</string>
     <string name="pl_pro_itens">• बेसिक का सब कुछ\n• कई IPTV सूचियाँ, रिकॉर्डिंग\n• पूरा वेब पैनल\n• Claude, रूटीन, Home Assistant\n• सभी थीम, क्लाउड बैकअप</string>
     <string name="pl_ultra_itens">• Pro का सब कुछ\n• बेहतर मौसम (3 मॉडल)\n• विस्तृत फ़िल्म पेज\n• अपने-आप सबटाइटल\n• 3 टीवी तक</string>
     <string name="pl_qr">कीमतें देखने और खरीदने के लिए फ़ोन से स्कैन करें।</string>

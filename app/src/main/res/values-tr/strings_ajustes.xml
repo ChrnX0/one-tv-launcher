@@ -102,7 +102,7 @@
     <string name="pl_basico">Temel</string>
     <string name="pl_pro">Pro</string>
     <string name="pl_ultra">Ultra</string>
-    <string name="pl_basico_itens">• Ana ekran, ekran koruyucu\n• Alarm, basit mod\n• Oynatıcı ve radyolar\n• 1 IPTV listesi\n• 2 tema</string>
+    <string name="pl_basico_itens">• Ana ekran, ekran koruyucu\n• Alarm, kolay ekran\n• Oynatıcı ve radyolar\n• 1 IPTV listesi\n• 2 tema</string>
     <string name="pl_pro_itens">• Temel’deki her şey\n• Çok sayıda IPTV listesi, kayıt\n• Tam web paneli\n• Claude, rutinler, Home Assistant\n• Tüm temalar, bulut yedeği</string>
     <string name="pl_ultra_itens">• Pro’daki her şey\n• Daha iyi hava durumu (3 model)\n• Zengin film sayfaları\n• Otomatik altyazılar\n• En fazla 3 TV</string>
     <string name="pl_qr">Fiyatları görmek ve satın almak için telefonunuzla tarayın.</string>

@@ -102,7 +102,7 @@
     <string name="pl_basico">Essentiel</string>
     <string name="pl_pro">Pro</string>
     <string name="pl_ultra">Ultra</string>
-    <string name="pl_basico_itens">• Écran d’accueil, économiseur d’écran\n• Réveil, mode simple\n• Lecteur et radios\n• 1 liste IPTV\n• 2 thèmes</string>
+    <string name="pl_basico_itens">• Écran d’accueil, économiseur d’écran\n• Réveil, écran facile\n• Lecteur et radios\n• 1 liste IPTV\n• 2 thèmes</string>
     <string name="pl_pro_itens">• Tout Essentiel\n• Plusieurs listes IPTV, enregistrement\n• Panneau web complet\n• Claude, routines, Home Assistant\n• Tous les thèmes, sauvegarde cloud</string>
     <string name="pl_ultra_itens">• Tout Pro\n• Météo plus précise (3 modèles)\n• Fiches de films complètes\n• Sous-titres automatiques\n• Jusqu’à 3 téléviseurs</string>
     <string name="pl_qr">Scannez avec votre téléphone pour voir les prix et acheter.</string>

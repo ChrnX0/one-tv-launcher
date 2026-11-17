@@ -102,7 +102,7 @@
     <string name="pl_basico">Базовый</string>
     <string name="pl_pro">Pro</string>
     <string name="pl_ultra">Ultra</string>
-    <string name="pl_basico_itens">• Главный экран, заставка\n• Будильник, простой режим\n• Плеер и радио\n• 1 IPTV-список\n• 2 темы</string>
+    <string name="pl_basico_itens">• Главный экран, заставка\n• Будильник, простой экран\n• Плеер и радио\n• 1 IPTV-список\n• 2 темы</string>
     <string name="pl_pro_itens">• Всё из Базового\n• Много IPTV-списков, запись\n• Полная веб-панель\n• Claude, расписания, Home Assistant\n• Все темы, резервная копия в облаке</string>
     <string name="pl_ultra_itens">• Всё из Pro\n• Точнее погода (3 модели)\n• Подробные карточки фильмов\n• Автоматические субтитры\n• До 3 ТВ</string>
     <string name="pl_qr">Отсканируйте телефоном, чтобы увидеть цены и купить.</string>

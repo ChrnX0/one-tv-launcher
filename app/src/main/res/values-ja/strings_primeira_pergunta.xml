@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pergunta única da primeira abertura (T3, 17/11/2026): BoasVindasActivity + PrimeiraPergunta. -->
+<resources>
+    <string name="pp_det">1つの答えでメニューと画面が決まります。あとで 設定 › システム で変更できます。</string>
+    <string name="pp_casa">家族みんなで</string>
+    <string name="pp_vo_det">名前を読み上げる大きなカードと大きな文字。あなたは離れた場所からスマホで手伝えます。</string>
+</resources>

@@ -25,7 +25,7 @@ const NOMES_CHAVES = {
   RETROSPECTIVA_ANO: 'Sua TV no ano (em dezembro, no protetor)',
   ENTRADAS_TV: 'Entradas HDMI na linha de apps (só em TV com entrada)',
   CARTOES_TRANSPARENTES: 'Cartões de app transparentes fora do foco',
-  MODO_SIMPLES: 'Modo simples (cards grandes no lugar da HOME)',
+  MODO_SIMPLES: 'Tela fácil (cards grandes no lugar da HOME)',
   TEMPO_TELA: 'Tempo de tela por dia (acabou, só os apps liberados abrem)',
   AGENDA_TODAS: 'Agenda de todas as contas Google da TV juntas',
   LER_FOCO: 'Ler em voz alta o que está em foco nas telas do launcher',
