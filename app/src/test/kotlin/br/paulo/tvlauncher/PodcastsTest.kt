@@ -41,6 +41,22 @@ class PodcastsTest {
     }
 
     @Test
+    fun posicaoVelhaNaoPassaPorCimaDaNova() {
+        // Gravação periódica (10:00, tirada antes) chegando depois da pausa (11:30): não volta o relógio.
+        val m = Podcasts.guardar(emptyMap(), pos("g", 690_000, em = 20))
+        assertEquals(690_000L, Podcasts.guardar(m, pos("g", 600_000, em = 10)).values.single().ms)
+        assertEquals(700_000L, Podcasts.guardar(m, pos("g", 700_000, em = 30)).values.single().ms)
+    }
+
+    @Test
+    fun arquivoEstragadoNaoViraListaVazia() {
+        assertNull(Podcasts.posicoesDeJsonOuNull("[{\"feed\":"))
+        assertNull(Podcasts.assinaturasDeJsonOuNull("{\"assinaturas\":[{"))
+        assertEquals(emptyList<Podcasts.Assinatura>(), Podcasts.assinaturasDeJsonOuNull(null))
+        assertEquals(emptyMap<String, Podcasts.Posicao>(), Podcasts.posicoesDeJsonOuNull("[]"))
+    }
+
+    @Test
     fun retomar() {
         assertEquals(0L, Podcasts.retomarEm(null))
         assertEquals(0L, Podcasts.retomarEm(pos("g", 8_000)))

@@ -66,7 +66,7 @@ class AuditoriaPlayerTest {
             arq.writeText("antigo")
             PlayerCarga.gravarAtomico(arq, "novo")
             assertEquals("novo", arq.readText())
-            assertFalse(File(dir, "guia.json.tmp").exists())
+            assertEquals(listOf("guia.json"), dir.list()!!.toList())   // nenhum .tmp sobrando
         } finally { dir.deleteRecursively() }
     }
 

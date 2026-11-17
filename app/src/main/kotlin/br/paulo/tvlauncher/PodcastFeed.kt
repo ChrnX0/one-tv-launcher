@@ -16,14 +16,20 @@ import java.util.Locale
  * Proteções (feed inválido ou gigante não pode derrubar a tela): no máximo [MAX_EPISODIOS] episódios, textos cortados,
  * endereços só http(s), e quem baixa corta o arquivo em [MAX_BYTES]. Feed cortado (ou com erro no meio) vale com os
  * episódios lidos até ali: feeds reais de podcast antigo passam de 20 MB (medido 17/11/2026: um de 20,7 MB, o Nerdcast
- * com 8,9 MB), quase sempre com o mais novo primeiro. A leitura para em [MAX_LIDOS] episódios.
+ * com 8,9 MB), quase sempre com o mais novo primeiro. Feed em ordem do mais velho para o mais novo: a leitura vai
+ * até o fim (ou o corte) guardando só os [MAX_EPISODIOS] mais novos do que leu; cortado nos 8 MB, os mais novos que
+ * vinham depois do corte ficam de fora (limite aceito: o corte protege a memória do aparelho).
+ * Cada texto acumulado para em [MAX_ACUMULADO] (um único texto gigante não vira várias cópias grandes na memória).
+ * Entidades declaradas no DTD (`<!ENTITY`, o ataque "billion laughs") são recusadas antes do leitor ver: [Entrada].
  */
 object PodcastFeed {
     const val MAX_EPISODIOS = 300
     const val MAX_BYTES = 8L * 1024 * 1024
     const val MAX_OPML = 500
-    const val MAX_LIDOS = 600
+    /** Prazo total para baixar um feed (servidor que manda 1 byte a cada tanto não segura a atualização por horas). */
+    const val PRAZO_MS = 60_000L
     private const val MAX_TEXTO = 600
+    private const val MAX_ACUMULADO = 20_000
 
     data class Transcricao(val url: String, val tipo: String, val idioma: String)
 
@@ -60,7 +66,7 @@ object PodcastFeed {
         var transcricoes = ArrayList<Transcricao>()
         val pilha = ArrayList<String>()
         var tipo = try { p.eventType } catch (_: Exception) { XmlPullParser.END_DOCUMENT }
-        while (tipo != XmlPullParser.END_DOCUMENT && episodios.size < MAX_LIDOS) {
+        while (tipo != XmlPullParser.END_DOCUMENT) {
             when (tipo) {
                 XmlPullParser.START_TAG -> {
                     val n = p.name.lowercase()
@@ -103,15 +109,15 @@ object PodcastFeed {
                             if (pai == "item") when (n) {
                                 "title", "guid", "pubdate", "description", "itunes:duration", "itunes:explicit",
                                 "itunes:summary", "itunes:season", "itunes:episode", "itunes:title" ->
-                                    alvo[n] = (alvo[n] ?: "") + t
+                                    alvo[n] = juntar(alvo[n] ?: "", t)
                             }
                         } else if (pai == "channel") when (n) {
-                            "title" -> titulo += t
-                            "itunes:author" -> autor += t
-                            "description" -> descricao += t
-                            "itunes:summary" -> if (descricao.isBlank()) descricao += t
-                            "link" -> link += t
-                            "language" -> idioma += t
+                            "title" -> titulo = juntar(titulo, t)
+                            "itunes:author" -> autor = juntar(autor, t)
+                            "description" -> descricao = juntar(descricao, t)
+                            "itunes:summary" -> if (descricao.isBlank()) descricao = juntar(descricao, t)
+                            "link" -> link = juntar(link, t)
+                            "language" -> idioma = juntar(idioma, t)
                             "itunes:explicit" -> explicito = simExplicito(t)
                         } else if (pai == "image" && n == "url" && capa.isEmpty() && pilha.getOrNull(pilha.size - 3) == "channel") capa = t.trim()
                     }
@@ -121,6 +127,11 @@ object PodcastFeed {
                     if (n == "item") {
                         e?.let { m -> episodio(m, transcricoes, explicito)?.let { ep -> if (vistos.add(ep.guid)) episodios.add(ep) } }
                         e = null
+                        // Guarda só os mais novos: a lista não cresce sem fim num feed com milhares de episódios.
+                        if (episodios.size >= 2 * MAX_EPISODIOS) {
+                            val novos = episodios.sortedByDescending { it.dataMs }.take(MAX_EPISODIOS)
+                            episodios.clear(); episodios.addAll(novos)
+                        }
                     }
                 }
             }
@@ -132,6 +143,8 @@ object PodcastFeed {
             link.trim().takeIf { urlValida(it) }.orEmpty(), idioma.trim().take(10), explicito,
             episodios.sortedByDescending { it.dataMs }.take(MAX_EPISODIOS))
     }
+
+    private fun juntar(a: String, b: String) = if (a.length >= MAX_ACUMULADO) a else (a + b).take(MAX_ACUMULADO)
 
     private fun episodio(m: Map<String, String>, trs: List<Transcricao>, canalExplicito: Boolean): Episodio? {
         val url = m["url"].orEmpty()
@@ -149,6 +162,59 @@ object PodcastFeed {
             m["itunes:explicit"]?.let { simExplicito(it) } ?: canalExplicito,
             m["itunes:season"]?.trim()?.toIntOrNull() ?: 0, m["itunes:episode"]?.trim()?.toIntOrNull() ?: 0,
             trs.take(5), m["capitulos"].orEmpty().takeIf { urlValida(it) }.orEmpty())
+    }
+
+    // ---------------------------------------------------------------- entrada protegida
+
+    /** O texto declara entidades no DTD (`<!ENTITY`)? Feed e OPML de verdade não declaram; recusar fecha o "billion laughs". */
+    fun temEntidade(t: String) = t.contains("<!ENTITY")
+
+    /**
+     * O que o leitor de XML lê da rede, com três proteções:
+     *  - acaba em [maxBytes] (feed gigante ou sem fim não enche a memória: o leitor vê o fim e fica com o que leu);
+     *  - prazo total [prazoMs] desde o primeiro byte pedido ([relogio] em ms; servidor lento demais = [estourou]);
+     *  - `<!ENTITY` em qualquer ponto = [recusou] (o DTD vem antes do conteúdo, então a recusa chega antes da expansão).
+     * Estourar ou recusar devolve erro de leitura; quem chama confere [estourou]/[recusou] e trata como erro, não como corte.
+     */
+    class Entrada(dentro: java.io.InputStream, private var resta: Long, private val prazoMs: Long = PRAZO_MS,
+                  private val relogio: () -> Long = { System.nanoTime() / 1_000_000 }) : java.io.FilterInputStream(dentro) {
+        private var inicio = -1L
+        private var casou = 0
+        var estourou = false; private set
+        var recusou = false; private set
+
+        private fun conferir() {
+            val agora = relogio()
+            if (inicio < 0) inicio = agora
+            if (agora - inicio > prazoMs) { estourou = true; throw java.io.IOException("prazo do feed estourou") }
+            if (recusou) throw java.io.IOException("feed com entidades no DTD")
+        }
+
+        private fun olhar(c: Int) {
+            casou = when {
+                c == PADRAO[casou].code -> casou + 1
+                c == '<'.code -> 1
+                else -> 0
+            }
+            if (casou == PADRAO.length) { recusou = true; casou = 0 }
+        }
+
+        override fun read(): Int {
+            conferir()
+            if (resta <= 0) return -1
+            return super.read().also { if (it >= 0) { resta--; olhar(it) } }
+        }
+
+        override fun read(b: ByteArray, off: Int, len: Int): Int {
+            conferir()
+            if (resta <= 0) return -1
+            val n = super.read(b, off, minOf(len.toLong(), resta).toInt())
+            if (n > 0) { resta -= n; for (i in off until off + n) olhar(b[i].toInt() and 0xFF) }
+            if (recusou) throw java.io.IOException("feed com entidades no DTD")
+            return n
+        }
+
+        private companion object { const val PADRAO = "<!ENTITY" }
     }
 
     // ---------------------------------------------------------------- OPML

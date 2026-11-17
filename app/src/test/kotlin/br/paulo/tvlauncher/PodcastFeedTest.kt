@@ -102,6 +102,58 @@ class PodcastFeedTest {
     }
 
     @Test
+    fun feedDoMaisVelhoParaOMaisNovoGuardaOsMaisNovos() {
+        // Revisão 17/11/2026: antes parava em 600 lidos e ficava com os 300 MAIS VELHOS.
+        val itens = (1..1000).joinToString("") { i ->
+            val d = java.time.Instant.ofEpochSecond(1_600_000_000L + i * 86_400L).atOffset(java.time.ZoneOffset.UTC)
+                .format(java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME)
+            "<item><title>e$i</title><guid>g$i</guid><pubDate>$d</pubDate><enclosure url=\"https://a.b/$i.mp3\" type=\"audio/mpeg\"/></item>"
+        }
+        val f = PodcastFeed.ler(parser("<rss><channel><title>x</title>$itens</channel></rss>"))!!
+        assertEquals(PodcastFeed.MAX_EPISODIOS, f.episodios.size)
+        assertEquals("g1000", f.episodios.first().guid)
+        assertEquals("g701", f.episodios.last().guid)
+    }
+
+    @Test
+    fun textoGiganteECortado() {
+        val grande = "a".repeat(200_000)
+        val f = PodcastFeed.ler(parser("<rss><channel><title>$grande</title><item><title>e</title><enclosure url=\"https://a.b/1.mp3\"/></item></channel></rss>"))!!
+        assertEquals(200, f.titulo.length)
+    }
+
+    @Test
+    fun entradaRecusaEntidadesDoDtd() {
+        val bomba = "<?xml version=\"1.0\"?><!DOCTYPE rss [<!ENTITY a \"aaaaaaaaaa\"><!ENTITY b \"&a;&a;&a;&a;\">]><rss><channel><title>&b;</title></channel></rss>"
+        val en = PodcastFeed.Entrada(bomba.byteInputStream(), PodcastFeed.MAX_BYTES)
+        assertNull(PodcastFeed.ler(KXmlParser().apply { setInput(en, "UTF-8") }))
+        assertTrue(en.recusou)
+        assertTrue(PodcastFeed.temEntidade(bomba))
+        assertFalse(PodcastFeed.temEntidade(feed))
+        // O padrão partido entre duas leituras também é visto.
+        val partido = PodcastFeed.Entrada(object : java.io.InputStream() {
+            val b = "<!DOCTYPE x [<!ENTITY y \"z\">]>".toByteArray(); var i = 0
+            override fun read() = if (i < b.size) b[i++].toInt() else -1
+            override fun read(d: ByteArray, o: Int, l: Int): Int { if (i >= b.size) return -1; d[o] = b[i++]; return 1 }
+        }, 1000)
+        runCatching { partido.readBytes() }
+        assertTrue(partido.recusou)
+    }
+
+    @Test
+    fun entradaComPrazoEComLimite() {
+        var agora = 0L
+        val lento = PodcastFeed.Entrada(ByteArray(10_000).inputStream(), 100_000, prazoMs = 60_000, relogio = { agora })
+        assertEquals(10, lento.read(ByteArray(10), 0, 10))
+        agora = 61_000
+        assertTrue(runCatching { lento.read(ByteArray(10), 0, 10) }.isFailure)
+        assertTrue(lento.estourou)
+        val limitado = PodcastFeed.Entrada(ByteArray(10_000).inputStream(), 4_000)
+        assertEquals(4_000, limitado.readBytes().size)
+        assertFalse(limitado.estourou || limitado.recusou)
+    }
+
+    @Test
     fun feedCortadoNoMeioValeComOQueLeu() {
         // Feed real maior que o limite chega cortado (medido 17/11/2026: 20,7 MB). Os episódios inteiros já lidos valem.
         val cortado = feed.substring(0, feed.indexOf("<title>Repetido"))

@@ -84,7 +84,10 @@ class OuvirServico : Service() {
         fun velocidade(ctx: Context) = ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getFloat(CHAVE_VELOCIDADE, 1f).takeIf { it in VELOCIDADES } ?: 1f
         fun pularSilencio(ctx: Context) = ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getBoolean(CHAVE_SILENCIO, false)
 
-        /** Toca o episódio [e] a partir de [inicioMs] (troca o que estiver tocando). Chame com a tela na frente. */
+        /** [tocarEpisodio] com isto = de onde parou (o serviço lê a posição gravada, depois de gravar a do anterior). */
+        const val RETOMAR = -1L
+
+        /** Toca o episódio [e] a partir de [inicioMs] ou [RETOMAR] (troca o que estiver tocando). Chame com a tela na frente. */
         fun tocarEpisodio(ctx: Context, e: EpisodioTocando, inicioMs: Long) {
             instancia?.let { it.tocarEp(e, inicioMs); return }
             val i = Intent(ctx, OuvirServico::class.java).setAction(ACAO_EPISODIO).putExtra(EXTRA_EP, e.paraJson()).putExtra("inicio", inicioMs)
@@ -187,7 +190,7 @@ class OuvirServico : Service() {
         primeiroPlano(r?.nome ?: e?.podcast ?: radio?.nome ?: episodio?.podcast ?: "", "")
         when {
             r != null -> tocar(r)
-            e != null -> tocarEp(e, intent.getLongExtra("inicio", 0L))
+            e != null -> tocarEp(e, intent.getLongExtra("inicio", RETOMAR))
             !ativo -> parar()
         }
         // Se o Android matar o processo, não recria sozinho: o som não pode voltar sem ninguém pedir.
@@ -212,6 +215,7 @@ class OuvirServico : Service() {
 
     fun tocar(r: Radios.Radio) {
         if (radio?.id == r.id && player != null) { continuar(); return }
+        pedidoEp++   // episódio pedido e ainda não começado não passa por cima da rádio
         largarAtual()
         radio = r; musica = ""
         player = novoPlayer(r.url, fala = false).also { it.prepare(); it.playWhenReady = true }
@@ -221,11 +225,41 @@ class OuvirServico : Service() {
         Fundo.rodar("radios") { Radios.contarClique(r) }
     }
 
-    /** Toca o episódio [e] a partir de [inicioMs]; o mesmo episódio já carregado só continua. */
+    /** Conta os pedidos de episódio: só o último que chegou começa a tocar (escolher A e logo B toca B). */
+    private var pedidoEp = 0
+
+    /**
+     * Toca o episódio [e] a partir de [inicioMs] ([RETOMAR] = de onde parou). O mesmo episódio já carregado continua
+     * (e vai para [inicioMs], se veio um). Antes de tocar, fora da thread da tela:
+     *  - o endereço do áudio vem do feed (de fora): apontando para a própria TV ou a rede da casa, não toca;
+     *  - a posição é lida na fila dos podcasts, DEPOIS da gravação de onde o anterior parou (a ordem é garantida).
+     */
     fun tocarEp(e: EpisodioTocando, inicioMs: Long) {
         val atual = episodio
-        if (atual != null && atual.feed == e.feed && atual.ep.guid == e.ep.guid && player != null) { continuar(); return }
+        if (atual != null && atual.feed == e.feed && atual.ep.guid == e.ep.guid && player != null) {
+            if (inicioMs >= 0) player?.seekTo(inicioMs)
+            continuar(); return
+        }
+        val n = ++pedidoEp
         largarAtual()
+        val app = applicationContext
+        Fundo.rodar("podcast") {
+            val ips = runCatching { java.net.InetAddress.getAllByName(java.net.URL(e.ep.url).host).toList() }.getOrNull()
+            val proibido = ips.orEmpty().any { Radios.destinoProibido(it) }
+            Podcasts.naFila {
+                val inicio = if (inicioMs >= 0) inicioMs else Podcasts.retomarEm(Podcasts.posicoes(app)[Podcasts.chave(e.feed, e.ep.guid)])
+                ui.post {
+                    if (n != pedidoEp) return@post   // outro pedido chegou depois
+                    if (proibido) {
+                        Log.w(TAG, "endereço do episódio aponta para a própria rede: não toquei")
+                        AvisoTv.rapido(this, e.ep.titulo, getString(R.string.pod_falhou), 6); parar()
+                    } else comecarEp(e, inicio)
+                }
+            }
+        }
+    }
+
+    private fun comecarEp(e: EpisodioTocando, inicioMs: Long) {
         episodio = e
         if (e.ep.video) Log.w(TAG, "episódio em vídeo tocado só como áudio: ${e.ep.titulo}")   // a tela abre o vídeo no player
         player = novoPlayer(e.ep.url, fala = true).also { p ->
@@ -358,11 +392,19 @@ class OuvirServico : Service() {
         val ms = if (fim) maxOf(dur, posicaoMs) else posicaoMs
         val p = Podcasts.Posicao(e.feed, e.ep.guid, ms, dur, fim, System.currentTimeMillis(), e.ep.titulo, e.podcast)
         val app = applicationContext
-        Fundo.rodar("podcast") { Podcasts.guardarPosicao(app, p) }
+        Podcasts.naFila { Podcasts.guardarPosicao(app, p) }
     }
 
     private fun terminouEpisodio() {
         if (episodio == null) return
+        // Conexão que cai sem erro (áudio sem tamanho declarado) também chega aqui: antes de 95% da duração conhecida
+        // não é fim, é queda. Guarda onde parou (o parar grava) e avisa; não marca como ouvido.
+        val dur = duracaoMs; val pos = posicaoMs
+        if (dur > 0 && !Podcasts.ehOuvido(pos, dur)) {
+            Log.w(TAG, "fim antes da hora ($pos de $dur ms): guardei a posição")
+            AvisoTv.rapido(this, episodio?.ep?.titulo.orEmpty(), getString(R.string.pod_falhou), 6)
+            parar(); return
+        }
         salvarPosicao(fim = true)
         episodio = null   // já gravado como ouvido: o parar() não grava de novo no meio
         parar()
@@ -370,6 +412,7 @@ class OuvirServico : Service() {
 
     /** Para de vez: solta o player e a conexão, some da HOME e do protetor, e o serviço acaba. */
     fun parar() {
+        pedidoEp++   // episódio pedido e ainda não começado não começa mais
         ui.removeCallbacks(pausaLonga); ui.removeCallbacks(salvarPeriodico)
         if (episodio != null) salvarPosicao()
         soltarPlayer()

@@ -55,8 +55,12 @@ class PodcastsActivity : Activity() {
         recarregar(buscarNovos = true)
     }
 
+    /** O onCreate já leu; os onStart seguintes releem (a tela é singleTask: volta a mesma, com posições velhas). */
+    private var jaLeu = false
+
     override fun onStart() {
         super.onStart()
+        if (jaLeu) recarregar() else jaLeu = true
         OuvirServico.ouvir(mudou)
         ui.post(relogio)
     }
@@ -89,21 +93,22 @@ class PodcastsActivity : Activity() {
 
     // ---------------------------------------------------------------- dados
 
+    /** Relê tudo do disco. Na fila dos podcasts: vem depois de qualquer posição que o serviço mandou gravar antes. */
     private fun recarregar(buscarNovos: Boolean = false) {
         val app = applicationContext
-        Fundo.rodar("podcast") {
+        Podcasts.naFila {
             val a = Podcasts.assinaturas(app); val f = Podcasts.feeds(app); val p = Podcasts.posicoes(app); val prot = Podcasts.protegido(app)
             runOnUiThread {
                 if (isDestroyed) return@runOnUiThread
                 assinaturas = a; feeds = f; posicoes = p; protegido = prot
                 montar()
             }
-            if (buscarNovos && a.isNotEmpty()) {
+            if (buscarNovos && a.isNotEmpty()) Fundo.rodar("podcast") {   // rede: fora da fila
                 // Feeds lidos há mais de 6 h: relê (pedido condicional, quase sempre "nada novo").
                 runOnUiThread { if (!isDestroyed) subtitulo.text = getString(R.string.pod_atualizando) }
                 val mudaram = runCatching { Podcasts.atualizar(app) }.getOrDefault(0)
                 runOnUiThread { if (!isDestroyed) subtitulo.text = getString(R.string.pod_subtitulo) }
-                if (mudaram > 0) recarregar()
+                if (mudaram > 0) runOnUiThread { if (!isDestroyed) recarregar() }
             }
         }
     }
@@ -160,10 +165,11 @@ class PodcastsActivity : Activity() {
         else window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         val agora = listOf(s?.episodio?.ep?.guid, s?.pausado, OuvirServico.velocidade(this), OuvirServico.pularSilencio(this))
         if (agora != visto) {
-            val parou = visto != null && s?.episodio == null
+            // Parou ou trocou de episódio: a posição do anterior foi mandada gravar; relê (na fila, depois da gravação)
+            // para "Continuar", "faltam" e "ouvido" saírem certos.
+            val trocou = visto != null && (visto as List<*>)[0] != agora[0]
             visto = agora
-            // Parou (fim do episódio, outro app): a posição foi gravada; relê para "Continuar" e "ouvido" saírem certos.
-            if (parou) recarregar() else montar()
+            if (trocou) recarregar() else montar()
         }
     }
 
@@ -201,7 +207,8 @@ class PodcastsActivity : Activity() {
         secao(getString(R.string.pod_meus))
         if (assinaturas.isEmpty()) coluna.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.pod_vazio)).apply {
             setPadding(Estilo.dp(this@PodcastsActivity, 16), Estilo.dp(this@PodcastsActivity, 8), 0, Estilo.dp(this@PodcastsActivity, 8)) })
-        assinaturas.forEach { a ->
+        // Com o modo infantil ou o controle dos pais, podcast marcado como explícito nem aparece.
+        assinaturas.filter { !(protegido && it.explicito) }.forEach { a ->
             val f = feeds[a.url]
             val det = listOfNotNull(a.autor.ifEmpty { null }, f?.episodios?.firstOrNull()?.let { quando(it.dataMs) }?.let { getString(R.string.pod_ultimo, it) })
             linha("pod:${a.url}", a.titulo, det.joinToString(" · "), null, ok = { aberto = a.url; montar() }, segurar = { menuPodcast(a) })
@@ -267,10 +274,12 @@ class PodcastsActivity : Activity() {
             OuvirServico.instancia?.parar()
             VodActivity.abrirUrl(this, ep.url, ep.titulo)
             val app = applicationContext
-            Fundo.rodar("podcast") { Podcasts.guardarPosicao(app, Podcasts.Posicao(feed, ep.guid, 1, ep.duracaoS * 1000L, false, System.currentTimeMillis(), ep.titulo, nome)) }
+            val p = Podcasts.Posicao(feed, ep.guid, 1, ep.duracaoS * 1000L, false, System.currentTimeMillis(), ep.titulo, nome)
+            Podcasts.naFila { Podcasts.guardarPosicao(app, p) }
             return
         }
-        val inicio = if (doComeco) 0L else Podcasts.retomarEm(posicoes[Podcasts.chave(feed, ep.guid)])
+        // De onde parou: o serviço lê a posição gravada (a desta tela pode estar velha).
+        val inicio = if (doComeco) 0L else OuvirServico.RETOMAR
         val capa = assinaturas.firstOrNull { it.url == feed }?.capa.orEmpty()
         OuvirServico.tocarEpisodio(this, OuvirServico.EpisodioTocando(feed, nome, capa, ep), inicio)
     }
@@ -286,7 +295,7 @@ class PodcastsActivity : Activity() {
             val dur = ep.duracaoS * 1000L
             // Desmarcar = começa do zero de novo (sai de "ouvido" e de "Continuar").
             val nova = Podcasts.Posicao(feed, ep.guid, if (ouvido) 0 else maxOf(dur, 1), dur, !ouvido, System.currentTimeMillis(), ep.titulo, nome)
-            Fundo.rodar("podcast") {
+            Podcasts.naFila {
                 // guardar() não tira o "ouvido" sozinho: para desmarcar, grava a posição nova por cima.
                 Podcasts.editarPosicoes(app) { m -> LinkedHashMap(m).apply { this[Podcasts.chave(feed, ep.guid)] = nova } }
                 runOnUiThread { recarregar() }

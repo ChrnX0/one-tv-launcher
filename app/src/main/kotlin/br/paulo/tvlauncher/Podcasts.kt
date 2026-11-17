@@ -49,7 +49,10 @@ object Podcasts {
             .put("verificado_em", a.verificadoEm).put("desde", a.desde)) }
     }).toString()
 
-    fun assinaturasDeJson(t: String?): List<Assinatura> = runCatching {
+    fun assinaturasDeJson(t: String?): List<Assinatura> = assinaturasDeJsonOuNull(t) ?: emptyList()
+
+    /** Null = texto que não abre (arquivo estragado); vazio = sem assinaturas. */
+    fun assinaturasDeJsonOuNull(t: String?): List<Assinatura>? = runCatching {
         val a = JSONObject(t ?: return emptyList()).optJSONArray("assinaturas") ?: return emptyList()
         (0 until a.length()).mapNotNull { i ->
             val o = a.optJSONObject(i) ?: return@mapNotNull null
@@ -59,9 +62,9 @@ object Podcasts {
                 o.optString("capa").takeIf { PodcastFeed.urlValida(it) }.orEmpty(), o.optBoolean("explicito"),
                 o.optString("etag").take(300), o.optString("modificado").take(100), o.optLong("verificado_em"), o.optLong("desde"))
         }.distinctBy { it.url }.take(MAX_ASSINATURAS)
-    }.getOrDefault(emptyList())
+    }.getOrNull()
 
-    /** Assina (ou atualiza nome/capa se já assinado). A nova entra no fim. */
+    /** Assina (ou atualiza nome/capa se já assinado). A nova entra no fim; passou de [MAX_ASSINATURAS], não entra. */
     fun assinar(l: List<Assinatura>, a: Assinatura): List<Assinatura> {
         val i = l.indexOfFirst { it.url == a.url }
         return if (i >= 0) l.toMutableList().apply { this[i] = a.copy(desde = l[i].desde) } else (l + a).take(MAX_ASSINATURAS)
@@ -76,7 +79,10 @@ object Podcasts {
             .put("ouvido", p.ouvido).put("em", p.em).put("titulo", p.titulo).put("podcast", p.podcast)) }
     }.toString()
 
-    fun posicoesDeJson(t: String?): Map<String, Posicao> = runCatching {
+    fun posicoesDeJson(t: String?): Map<String, Posicao> = posicoesDeJsonOuNull(t) ?: emptyMap()
+
+    /** Null = texto que não abre (arquivo estragado). */
+    fun posicoesDeJsonOuNull(t: String?): Map<String, Posicao>? = runCatching {
         val a = JSONArray(t ?: return emptyMap())
         (0 until a.length()).mapNotNull { i ->
             val o = a.optJSONObject(i) ?: return@mapNotNull null
@@ -85,13 +91,19 @@ object Podcasts {
             else Posicao(feed, guid.take(300), o.optLong("ms").coerceAtLeast(0), o.optLong("dur").coerceAtLeast(0), o.optBoolean("ouvido"),
                 o.optLong("em"), o.optString("titulo").take(200), o.optString("podcast").take(200))
         }.associateBy { chave(it.feed, it.guid) }
-    }.getOrDefault(emptyMap())
+    }.getOrNull()
 
     fun ehOuvido(ms: Long, durMs: Long): Boolean = durMs > 0 && ms >= (durMs * FRACAO_OUVIDO).toLong()
 
-    /** Grava a posição [p] em [m]; passa de 95% = ouvido (e não volta a "não ouvido" sozinho). Corta as mais velhas. */
+    /**
+     * Grava a posição [p] em [m]. Passou de 95% = ouvido. Já ouvido continua ouvido quando a posição é 0 (abriu e saiu
+     * no começo); ouvir de novo (posição > 0) tira a marca, e o episódio volta para "Continuar". Posição tirada ANTES
+     * da que já está guardada ([Posicao.em] menor) é ignorada: gravações em paralelo não voltam o relógio do episódio.
+     * Corta as mais velhas.
+     */
     fun guardar(m: Map<String, Posicao>, p: Posicao): Map<String, Posicao> {
         val k = chave(p.feed, p.guid)
+        if ((m[k]?.em ?: Long.MIN_VALUE) > p.em) return m
         val ouvido = p.ouvido || ehOuvido(p.ms, p.durMs) || (m[k]?.ouvido == true && p.ms == 0L)
         val nova = LinkedHashMap(m).apply { this[k] = p.copy(ouvido = ouvido) }
         return if (nova.size <= MAX_POSICOES) nova else nova.values.sortedByDescending { it.em }.take(MAX_POSICOES).associateBy { chave(it.feed, it.guid) }
@@ -157,28 +169,64 @@ object Podcasts {
     private fun hash(s: String) = MessageDigest.getInstance("SHA-1").digest(s.toByteArray()).joinToString("") { "%02x".format(it) }.take(20)
     private val trava = Any()
 
-    fun assinaturas(ctx: Context): List<Assinatura> = assinaturasDeJson(runCatching { arqAssinaturas(ctx).readText() }.getOrNull())
+    /**
+     * Uma edição por vez, entre threads E entre processos: o painel e a madrugada rodam no processo da HOME, a tela e o
+     * serviço no ":player". A trava do Java vale só dentro do processo; o FileLock (podcasts.lock) vale entre eles.
+     */
+    private fun <T> comTrava(ctx: Context, bloco: () -> T): T = synchronized(trava) {
+        val lock = runCatching { java.io.RandomAccessFile(File(PlayerArmazem.pasta(ctx), "podcasts.lock"), "rw") }.getOrNull()
+        try {
+            val f = runCatching { lock?.channel?.lock() }.getOrNull()
+            try { bloco() } finally { runCatching { f?.release() } }
+        } finally { runCatching { lock?.close() } }
+    }
+
+    /**
+     * Fila única do processo para gravar posições e reler a tela: quem lê depois de pedir uma gravação vê a gravação
+     * (o Fundo é um conjunto de threads em paralelo, sem ordem). Só trabalho curto de disco; rede nunca.
+     */
+    private val fila = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "podcast-fila").apply { isDaemon = true } }
+    fun naFila(tarefa: () -> Unit) {
+        fila.execute { try { tarefa() } catch (t: Throwable) { Log.w(TAG, "fila: $t") } }
+    }
+
+    /**
+     * Lê [arq] com [ler]. Arquivo estragado (não abre) é guardado como .estragado e conta como vazio: a próxima gravação
+     * não apaga o que havia nele sem deixar cópia.
+     */
+    private fun <T> lerArquivo(arq: File, vazio: T, ler: (String?) -> T?): T {
+        if (!arq.exists()) return vazio
+        val t = runCatching { arq.readText() }.getOrNull() ?: return vazio
+        ler(t)?.let { return it }
+        Log.w(TAG, "${arq.name} estragado: guardado como .estragado")
+        runCatching { arq.copyTo(File(arq.path + ".estragado"), overwrite = true) }
+        return vazio
+    }
+
+    fun assinaturas(ctx: Context): List<Assinatura> = lerArquivo(arqAssinaturas(ctx), emptyList(), ::assinaturasDeJsonOuNull)
 
     /** Lê, muda e grava de uma vez (o painel e a tela da TV podem mexer ao mesmo tempo). */
-    fun editarAssinaturas(ctx: Context, mudar: (List<Assinatura>) -> List<Assinatura>): List<Assinatura> = synchronized(trava) {
+    fun editarAssinaturas(ctx: Context, mudar: (List<Assinatura>) -> List<Assinatura>): List<Assinatura> = comTrava(ctx) {
         val nova = mudar(assinaturas(ctx))
         PlayerCarga.gravarAtomico(arqAssinaturas(ctx), assinaturasParaJson(nova))
         nova
     }
 
     fun desassinar(ctx: Context, url: String) {
-        editarAssinaturas(ctx) { l -> l.filterNot { it.url == url } }
-        runCatching { arqFeed(ctx, url).delete() }
+        comTrava(ctx) {
+            PlayerCarga.gravarAtomico(arqAssinaturas(ctx), assinaturasParaJson(assinaturas(ctx).filterNot { it.url == url }))
+            runCatching { arqFeed(ctx, url).delete() }
+        }
     }
 
-    fun posicoes(ctx: Context): Map<String, Posicao> = posicoesDeJson(runCatching { arqPosicoes(ctx).readText() }.getOrNull())
+    fun posicoes(ctx: Context): Map<String, Posicao> = lerArquivo(arqPosicoes(ctx), emptyMap(), ::posicoesDeJsonOuNull)
 
-    fun guardarPosicao(ctx: Context, p: Posicao) = synchronized(trava) {
+    fun guardarPosicao(ctx: Context, p: Posicao) = comTrava(ctx) {
         PlayerCarga.gravarAtomico(arqPosicoes(ctx), posicoesParaJson(guardar(posicoes(ctx), p)))
     }
 
     /** Muda as posições direto (marcar/desmarcar ouvido na tela). */
-    fun editarPosicoes(ctx: Context, mudar: (Map<String, Posicao>) -> Map<String, Posicao>) = synchronized(trava) {
+    fun editarPosicoes(ctx: Context, mudar: (Map<String, Posicao>) -> Map<String, Posicao>) = comTrava(ctx) {
         PlayerCarga.gravarAtomico(arqPosicoes(ctx), posicoesParaJson(mudar(posicoes(ctx))))
     }
 
@@ -188,7 +236,7 @@ object Podcasts {
     fun feeds(ctx: Context): Map<String, PodcastFeed.Feed> = assinaturas(ctx).mapNotNull { a -> feed(ctx, a.url)?.let { a.url to it } }.toMap()
 
     /** O modo infantil ou o controle dos pais estão ligados? (esconde episódio explícito) */
-    fun protegido(ctx: Context): Boolean = runCatching { PlayerArmazem.parental(ctx).let { it.infantil || it.ligado } }.getOrDefault(false)
+    fun protegido(ctx: Context): Boolean = runCatching { PlayerArmazem.parental(ctx).let { it.infantil || it.ligado } }.getOrDefault(true)
 
     // ---------------------------------------------------------------- Android: rede
 
@@ -226,28 +274,23 @@ object Podcasts {
                     cod != 200 -> return Leitura.Erro("o servidor respondeu $cod")
                 }
                 // Feed maior que o limite: lê só o começo (o mais novo vem primeiro); PodcastFeed.ler aceita o corte.
+                // Prazo estourado ou DTD com entidades: erro (não vale como corte).
+                var entrada: PodcastFeed.Entrada? = null
                 val f = c.inputStream.use { e ->
                     val p = android.util.Xml.newPullParser()
-                    p.setInput(Limitado(e, PodcastFeed.MAX_BYTES), null)
+                    val en = PodcastFeed.Entrada(e, PodcastFeed.MAX_BYTES).also { entrada = it }
+                    p.setInput(en, null)
                     runCatching { PodcastFeed.ler(p) }.onFailure { Log.w(TAG, "feed: $it") }.getOrNull()
-                } ?: return Leitura.Erro("não é um feed de podcast")
+                }
+                if (entrada?.estourou == true) return Leitura.Erro("o servidor demorou demais")
+                if (entrada?.recusou == true) return Leitura.Erro("não é um feed de podcast")
+                f ?: return Leitura.Erro("não é um feed de podcast")
                 return Leitura.Nova(f, c.getHeaderField("ETag").orEmpty().take(300), c.getHeaderField("Last-Modified").orEmpty().take(100))
             } catch (e: Exception) {
                 return Leitura.Erro(e.javaClass.simpleName)
             } finally { c.disconnect() }
         }
         return Leitura.Erro("redirecionamentos demais")
-    }
-
-    /** Entrada que acaba em [max] bytes (feed gigante ou sem fim não enche a memória: o leitor vê o fim e para). */
-    private class Limitado(private val dentro: java.io.InputStream, private var resta: Long) : java.io.FilterInputStream(dentro) {
-        override fun read(): Int = if (resta <= 0) -1 else super.read().also { if (it >= 0) resta-- }
-        override fun read(b: ByteArray, off: Int, len: Int): Int {
-            if (resta <= 0) return -1
-            val n = super.read(b, off, minOf(len.toLong(), resta).toInt())
-            if (n > 0) resta -= n
-            return n
-        }
     }
 
     /**
@@ -258,10 +301,16 @@ object Podcasts {
         val u = url.trim().let { if (it.startsWith("feed://", true)) "https://" + it.substring(7) else it }
         when (val r = baixar(u)) {
             is Leitura.Nova -> {
-                PlayerCarga.gravarAtomico(arqFeed(ctx, u), feedParaJson(r.feed))
                 val agora = System.currentTimeMillis()
-                editarAssinaturas(ctx) { l -> assinar(l, Assinatura(u, r.feed.titulo.ifBlank { u }, r.feed.autor, r.feed.capa,
-                    r.feed.explicito, r.etag, r.modificado, agora, agora)) }
+                val ok = comTrava(ctx) {
+                    val l = assinaturas(ctx)
+                    if (l.none { it.url == u } && l.size >= MAX_ASSINATURAS) return@comTrava false
+                    PlayerCarga.gravarAtomico(arqFeed(ctx, u), feedParaJson(r.feed))
+                    PlayerCarga.gravarAtomico(arqAssinaturas(ctx), assinaturasParaJson(assinar(l, Assinatura(u, r.feed.titulo.ifBlank { u },
+                        r.feed.autor, r.feed.capa, r.feed.explicito, r.etag, r.modificado, agora, agora))))
+                    true
+                }
+                if (!ok) error("limite de $MAX_ASSINATURAS podcasts")
                 r.feed.titulo.ifBlank { u }
             }
             is Leitura.Erro -> error(r.motivo)
@@ -280,11 +329,14 @@ object Podcasts {
             if (agora - a.verificadoEm < intervaloMs && arqFeed(ctx, a.url).exists()) continue
             val r = baixar(a.url, if (arqFeed(ctx, a.url).exists()) a.etag else "", if (arqFeed(ctx, a.url).exists()) a.modificado else "")
             when (r) {
-                is Leitura.Nova -> {
+                is Leitura.Nova -> comTrava(ctx) {
+                    // Removido enquanto baixava (painel, outra tela): não recria a cópia órfã.
+                    val l = assinaturas(ctx)
+                    if (l.none { it.url == a.url }) return@comTrava
                     PlayerCarga.gravarAtomico(arqFeed(ctx, a.url), feedParaJson(r.feed)); mudaram++
-                    editarAssinaturas(ctx) { l -> l.map { if (it.url == a.url) it.copy(titulo = r.feed.titulo.ifBlank { it.titulo },
-                        autor = r.feed.autor, capa = r.feed.capa.ifEmpty { it.capa }, explicito = r.feed.explicito,
-                        etag = r.etag, modificado = r.modificado, verificadoEm = agora) else it } }
+                    PlayerCarga.gravarAtomico(arqAssinaturas(ctx), assinaturasParaJson(l.map { if (it.url == a.url) it.copy(
+                        titulo = r.feed.titulo.ifBlank { it.titulo }, autor = r.feed.autor, capa = r.feed.capa.ifEmpty { it.capa },
+                        explicito = r.feed.explicito, etag = r.etag, modificado = r.modificado, verificadoEm = agora) else it }))
                 }
                 Leitura.SemMudanca -> editarAssinaturas(ctx) { l -> l.map { if (it.url == a.url) it.copy(verificadoEm = agora) else it } }
                 is Leitura.Erro -> Log.w(TAG, "${a.titulo}: ${r.motivo}")
@@ -293,17 +345,23 @@ object Podcasts {
         return mudaram
     }
 
-    /** Importa uma lista OPML (texto). Devolve (assinados, falharam). Fora da thread da tela: baixa cada feed. */
+    /**
+     * Importa uma lista OPML (texto). Devolve (seguidos da lista, que ficaram de fora). Rápido: assina com o nome que a
+     * lista dá e baixa os episódios depois, em segundo plano (antes baixava 500 feeds um a um na thread do pedido do
+     * painel). Feed que não responder fica seguido sem episódios até a próxima atualização; dá para remover.
+     */
     fun importarOpml(ctx: Context, texto: String): Pair<Int, Int> {
+        if (PodcastFeed.temEntidade(texto)) return 0 to 0
         val p = android.util.Xml.newPullParser().apply { setInput(texto.reader()) }
         val itens = runCatching { PodcastFeed.lerOpml(p) }.getOrDefault(emptyList())
-        var ok = 0; var falhou = 0
-        val ja = assinaturas(ctx).map { it.url }.toSet()
-        for (i in itens) {
-            if (i.url in ja) { ok++; continue }
-            if (adicionar(ctx, i.url).isSuccess) ok++ else falhou++
+        if (itens.isEmpty()) return 0 to 0
+        val l = editarAssinaturas(ctx) { atual ->
+            itens.fold(atual) { acc, i -> if (acc.any { it.url == i.url }) acc else assinar(acc, Assinatura(i.url, i.titulo.ifBlank { i.url }, desde = System.currentTimeMillis())) }
         }
-        return ok to falhou
+        val seguidos = itens.count { i -> l.any { it.url == i.url } }
+        val app = ctx.applicationContext
+        Fundo.rodar("podcast") { runCatching { atualizar(app) } }
+        return seguidos to (itens.size - seguidos)
     }
 
     fun exportarOpml(ctx: Context): String = PodcastFeed.paraOpml(assinaturas(ctx).map { PodcastFeed.ItemOpml(it.url, it.titulo) })
