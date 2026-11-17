@@ -35,6 +35,8 @@ class PodcastsActivity : Activity() {
     private var resultados: Pair<String, List<PodcastBusca.Resultado>>? = null
     /** O podcast aberto (lista de episódios), ou null = a tela principal. */
     private var aberto: String? = null
+    /** Na próxima montagem, o foco vai para o 1º episódio (o mais novo) e a lista volta ao topo. */
+    private var focarPrimeiroEp = false
     private val mudou: () -> Unit = { aoMudarSom() }
     private var visto: Any? = null
     private val ui = android.os.Handler(android.os.Looper.getMainLooper())
@@ -122,6 +124,12 @@ class PodcastsActivity : Activity() {
         val url = aberto
         if (url != null) montarPodcast(url) else montarPrincipal()
         val filhos = (0 until coluna.childCount).map { coluna.getChildAt(it) }
+        val primeiroEp = if (focarPrimeiroEp) filhos.firstOrNull { (it.tag as? String)?.startsWith("ep:") == true } else null
+        if (primeiroEp != null) {
+            focarPrimeiroEp = false
+            (coluna.parent as? android.widget.ScrollView)?.scrollTo(0, 0)
+            primeiroEp.requestFocus(); return
+        }
         (filhos.firstOrNull { it.tag != null && it.tag == focoAntes } ?: filhos.firstOrNull { it.isFocusable })?.requestFocus()
     }
 
@@ -321,6 +329,7 @@ class PodcastsActivity : Activity() {
         val d = CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert).setTitle(getString(R.string.pod_colar)).setView(moldura)
             .setPositiveButton(android.R.string.ok) { _, _ -> adicionar(campo.text.toString().trim()) }
             .setNegativeButton(android.R.string.cancel, null).create()
+        enterConfirma(campo, d)
         d.setOnShowListener { campo.requestFocus() }
         d.show()
     }
@@ -334,8 +343,24 @@ class PodcastsActivity : Activity() {
                 if (t.length >= 2) procurar(getString(R.string.ra_resultado, t)) { PodcastBusca.buscar(t, Locale.getDefault().language) }
             }
             .setNegativeButton(android.R.string.cancel, null).create()
+        enterConfirma(campo, d)
         d.setOnShowListener { campo.requestFocus() }
         d.show()
+    }
+
+    /**
+     * Enter (ou "OK"/"Concluído" do teclado da TV) no campo = apertar OK. Visto na TV 17/11/2026: sem isto o Enter só
+     * passava o foco adiante, e ele caía em Cancelar (o primeiro botão).
+     */
+    private fun enterConfirma(campo: EditText, d: CaixaTv.Janela) {
+        campo.imeOptions = android.view.inputmethod.EditorInfo.IME_ACTION_DONE
+        val ok = { d.getButton(android.content.DialogInterface.BUTTON_POSITIVE)?.performClick(); true }
+        campo.setOnEditorActionListener { _, _, _ -> ok() }
+        campo.setOnKeyListener { _, tecla, e ->
+            // A descida também é nossa: solta, ela andaria com o foco para o botão de baixo antes da subida chegar.
+            if (tecla != KeyEvent.KEYCODE_ENTER && tecla != KeyEvent.KEYCODE_NUMPAD_ENTER) false
+            else { if (e.action == KeyEvent.ACTION_UP) ok(); true }
+        }
     }
 
     private fun procurar(titulo: String, buscar: () -> List<PodcastBusca.Resultado>) {
@@ -362,7 +387,13 @@ class PodcastsActivity : Activity() {
             runOnUiThread {
                 if (isDestroyed) return@runOnUiThread
                 subtitulo.text = getString(R.string.pod_subtitulo)
-                r.onSuccess { nome -> AvisoTv.rapido(app, nome, getString(R.string.pod_adicionado), 4); recarregar() }
+                r.onSuccess { nome ->
+                    AvisoTv.rapido(app, nome, getString(R.string.pod_adicionado), 4)
+                    // Abre o podcast recém-seguido com o foco no episódio MAIS NOVO (visto na TV 17/11/2026: o foco
+                    // ficava em "Colar o endereço", no fim da lista, e o OK seguinte pegava o episódio mais antigo).
+                    aberto = Podcasts.normalizar(url); focarPrimeiroEp = true
+                    recarregar()
+                }
                  .onFailure { AvisoTv.rapido(app, getString(R.string.pod_colar), getString(R.string.pod_nao_deu, it.message ?: "?"), 8) }
             }
         }

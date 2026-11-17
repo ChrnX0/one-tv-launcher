@@ -1043,10 +1043,15 @@ class MainActivity : Activity() {
         // "Quais apps aparecem no menu de uma TV?" = os que declaram a categoria LEANBACK_LAUNCHER.
         val consulta = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER)
         val itens = LinkedHashMap<String, Item>()
+        val jogos = HashSet<String>()   // pacotes de jogo com ícone na TV, de sistema também (a conta da tela Jogos)
         val pacoteIcones = PacoteIcones.versao(this)
         for (ri in pm.queryIntentActivities(consulta, 0)) {
             val pkg = ri.activityInfo.packageName
             if (pkg == packageName || pkg == Config.PACOTE_CONFIG || pkg in itens) continue
+            // Jogos contam ANTES do filtro de sistema (17/11/2026): a tela Jogos (JogosTv.listar) mostra também os de
+            // sistema, como o Play Games; contar só os instalados por você dava "5 jogos" na cruz e "Todos · 6" no hub.
+            JogosTv.primar(this, pkg, ri.activityInfo.applicationInfo.category)
+            if (JogosTv.ehJogo(this, pkg)) jogos += pkg
             // FLAG_SYSTEM == 0 significa "instalado por você". Os de sistema só entram se estiverem em SEMPRE_MOSTRAR.
             val instaladoPorVoce = (ri.activityInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0
             if (!instaladoPorVoce && pkg !in Config.SEMPRE_MOSTRAR) continue
@@ -1058,7 +1063,6 @@ class MainActivity : Activity() {
             val chave = ri.activityInfo.applicationInfo.sourceDir + "|" + ri.activityInfo.name + "|" + pacoteIcones
             // A categoria já vem no ResolveInfo: sem IPC na thread da tela depois (home-9).
             categorias[pkg] = ri.activityInfo.applicationInfo.category
-            JogosTv.primar(this, pkg, ri.activityInfo.applicationInfo.category)   // card Jogos: já sabe se é jogo, sem IPC depois
             // APK novo (atualizado): a capa guardada pode ser a arte antiga; lê de novo (home-6).
             if (cacheApps[pkg]?.first != null && cacheApps[pkg]?.first != chave) capas.remove(pkg)
             itens[pkg] = cacheApps[pkg]?.takeIf { it.first == chave }?.second ?: run {
@@ -1072,6 +1076,7 @@ class MainActivity : Activity() {
             DesenhoHome.iconeRedondo(resources, e.icone ?: IconeApp(IconeApp.Tipo.TV))).also { cacheApps[e.chave] = "" to it }
         cacheApps.keys.retainAll(itens.keys)   // app desinstalado sai do cache
         capas.keys.retainAll(itens.keys)       // e a capa dele também (home-6)
+        jogosNaTv = jogos.size   // a frase do card Jogos (resumoJogos) e da coluna Jogar
         return itens.values.toList()
     }
 
@@ -1165,7 +1170,6 @@ class MainActivity : Activity() {
         filaApps.execute {
             val todos = carregarApps()   // cacheApps só é tocado nesta fila (uma thread)
             val doJogos = todos.filter { JogosTv.ehJogo(this, it.pacote) }
-            jogosNaTv = doJogos.size   // a frase do card Jogos (resumoJogos)
             // Uso recente também aqui fora (04/11/2026): antes rodava dentro de montarEntradas, na thread da tela.
             val uso = if (Config.ORDENAR_POR_USO_RECENTE) Uso.ultimoUso(this) else emptyMap()
             // Card Jogos em foco (esboço A, 14/11/2026): o fundo é o banner oficial do jogo usado por último.
@@ -2524,11 +2528,18 @@ class MainActivity : Activity() {
         if (recolher == barraRecolhida && animar) return
         barraRecolhida = recolher
         val d = if (animar) 220L else 0L
+        fun mexer(v: View, fica: Boolean) =
+            v.animate().alpha(if (!recolher || fica) 1f else 0f).translationY(if (recolher && !fica) -dp(24).toFloat() else 0f).setDuration(d).start()
         for (i in 0 until topo.childCount) {
             val v = topo.getChildAt(i)
             // Recua: a direita (hora, e a temperatura) fica; Relógio: some tudo (a hora está grande embaixo).
             val fica = recolher && i == 2 && barraCruz == LayoutHome.BarraCruz.RECUA
-            v.animate().alpha(if (!recolher || fica) 1f else 0f).translationY(if (recolher && !fica) -dp(24).toFloat() else 0f).setDuration(d).start()
+            // A pílula "Tocando agora" nunca some com a barra (visto na TV 17/11/2026: estava na árvore de acessibilidade,
+            // mas invisível): o grupo dela fica, e só os vizinhos (busca, clima, avisos) recolhem.
+            if (v is ViewGroup && capsulaTocando.parent === v) {
+                v.animate().cancel(); v.alpha = 1f; v.translationY = 0f
+                for (j in 0 until v.childCount) v.getChildAt(j).let { mexer(it, fica || it === capsulaTocando) }
+            } else mexer(v, fica)
         }
         tempoCruz?.animate()?.alpha(if (recolher) 1f else 0f)?.setDuration(d)?.start()
         relogioCruz?.animate()?.alpha(if (recolher) 1f else 0.35f)?.setDuration(d)?.start()
