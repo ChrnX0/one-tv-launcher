@@ -227,6 +227,10 @@
     <string name="pn_nao_achei">jeszcze nie znaleziono ekranu parowania</string>
     <string name="pn_6">kod ma 6 cyfr</string>
     <string name="pn_pareado">sparowano! sprawdzanie powłoki…</string>
+    <string name="pn_ok_titulo">Sparowano pomyślnie ✓</string>
+    <string name="pn_ok_texto">Gotowe! Launcher jest połączony z telewizorem. Łączenie własnej powłoki…</string>
+    <string name="pn_ok_shell">Wszystko gotowe: własna powłoka launchera działa.</string>
+    <string name="pn_ok_lento">Sparowano. Powłoka jeszcze nie odpowiedziała; launcher próbuje dalej sam.</string>
     <string name="pn_codigo">Kod: %1$s</string>
     <string name="pn_achada">Znaleziono ekran parowania (port %1$d). Wpisz kod:</string>
     <string name="pn_falhou">nie udało się: %1$s</string>
