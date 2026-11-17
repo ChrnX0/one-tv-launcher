@@ -30,6 +30,7 @@
     <string name="casa_vazio">Aucune lampe, prise ou scène dans Home Assistant.</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Lampes et caméras Google</string>
+    <string name="casa_google_home_vazio">Ce compte Google n\'a pas de maison dans Google Home</string>
     <string name="casa_resumo">Home Assistant · %1$d sur %2$d allumés</string>
     <string name="casa_resumo_so_cenas">Home Assistant · %1$d scènes</string>
     <string name="casa_secao_cenas">Scènes et scripts</string>

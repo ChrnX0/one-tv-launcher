@@ -111,10 +111,10 @@ class AgendaFamiliaActivity : Activity() {
         }
         coluna.addView(add, lp())
         for (e in l) {
-            coluna.addView(Estilo.linhaOpcao(this, "${hora(e.minuto)} · ${PerfilCrianca.nomeCurto(e.conta)}", nomeDias(e.dias)).apply {
+            coluna.addView(Estilo.linhaOpcao(this, "${hora(e.minuto)} · ${Perfil.nome(this, e.conta)}", nomeDias(e.dias)).apply {
                 setOnClickListener {
                     CaixaTv(this@AgendaFamiliaActivity).setTitle(getString(R.string.agf_apagar))
-                        .setMessage("${hora(e.minuto)} · ${PerfilCrianca.nomeCurto(e.conta)} · ${nomeDias(e.dias)}")
+                        .setMessage("${hora(e.minuto)} · ${Perfil.nome(this, e.conta)} · ${nomeDias(e.dias)}")
                         .setNegativeButton(getString(R.string.cl_cancelar), null)
                         .setPositiveButton(getString(R.string.agf_apagar_sim)) { _, _ ->
                             AgendaPerfisTv.gravar(this@AgendaFamiliaActivity, AgendaPerfisTv.lista(this@AgendaFamiliaActivity) - e); montar()
@@ -142,7 +142,7 @@ class AgendaFamiliaActivity : Activity() {
     private fun escolherConta() {
         val contas = Perfil.contas(this)
         if (contas.isEmpty()) { aviso(getString(R.string.agf_sem_contas)); return }
-        escolher(getString(R.string.agf_quem), contas.map { PerfilCrianca.nomeCurto(it) }) { i -> escolherDias(contas[i]) }
+        escolher(getString(R.string.agf_quem), contas.map { Perfil.nome(this, it) }) { i -> escolherDias(contas[i]) }
     }
 
     private fun escolherDias(conta: String) {

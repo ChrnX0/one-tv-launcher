@@ -384,6 +384,7 @@
 "Foto do perfil": "Profile picture",
 "Foto removida: a bolinha volta a mostrar a inicial.": "Photo removed: the circle shows the initial again.",
 "Foto trocada. Ela aparece na TV quando a tela inicial for aberta de novo.": "Photo changed. It shows on the TV when the home screen opens again.",
+"Nome na TV": "Name on the TV",
 "Fotos do protetor": "Screensaver photos",
 "Fotos do protetor de tela": "Screensaver photos",
 "Gerar certificado novo": "Create new certificate",
@@ -1199,6 +1200,9 @@
 "sem foto de pedido de ajuda nas últimas 24 h": "no help request photo in the last 24 h",
 };
   const P = [
+["^Na TV este perfil aparece como “(.+)”\\.$",
+"On the TV this profile shows as “$1”."
+],
 ["^Ligado: (.+) recebe os avisos \\(aceito na TV em (.+)\\)\\.$",
 "On: $1 receives the notices (agreed on the TV on $2)."
 ],

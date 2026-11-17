@@ -143,6 +143,17 @@ object Retrospectiva {
 
     fun ultima(ctx: Context): Resumo? = deJson(prefs(ctx).getString("ultima", null))
 
+    /**
+     * A da última semana para quem pergunta (MCP, painel). Se a guardada saiu sem medida (0 min e sem consumo de rede:
+     * a permissão de uso estava negada quando o domingo chegou) e hoje a permissão existe, refaz na hora. Sala,
+     * 17/11/2026: a semana dizia "0 min de TV" com a permissão já liberada. FORA da thread da tela.
+     */
+    fun ultimaMedida(ctx: Context): Resumo? {
+        val r = ultima(ctx)
+        val semMedida = r == null || (r.minutosTv < 1 && r.bytes == null)
+        return if (semMedida && Recursos.usoLiberado(ctx)) runCatching { montar(ctx) }.getOrNull() ?: r else r
+    }
+
     /** O cartão do protetor (título, linha 1, linha 2) enquanto valer, ou null. */
     fun cartao(ctx: Context, agora: Long = System.currentTimeMillis()): Triple<String, String, String>? {
         if (!Extras.ligado(ctx, Extras.Chave.RETROSPECTIVA)) return null

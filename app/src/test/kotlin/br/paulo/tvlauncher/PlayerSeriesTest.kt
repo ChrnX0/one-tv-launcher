@@ -77,6 +77,13 @@ class PlayerSeriesTest {
         assertEquals(100, Series.percentual(serie, p3))                                  // 3 de 3: Finalizado
         // Posições velhas sumiram do arquivo: o visto continua visto (total igual).
         assertEquals(3, Series.progressoDaFicha(serie, ficha, emptyMap(), p3)!!.vistos)
+        // Sala 17/11/2026: conta velha "1 de 3" com só o T1E1 começado (não visto) e nada antes dele: volta a 0.
+        val velha = ProgressoSerie(1, 3, 100)
+        val soComecou = mapOf("a1:e11" to Posicao(1_000_000, 2_700_000, 5))
+        assertEquals(0, Series.progressoDaFicha(serie, ficha, soComecou, velha)!!.vistos)
+        // Assistiu T1E1 e T1E2 (posições sumiram), está no T2E1 começado: mantém os 2.
+        val noT2 = mapOf("a1:e21" to Posicao(60_000, 2_700_000, 9))
+        assertEquals(2, Series.progressoDaFicha(serie, ficha, noT2, ProgressoSerie(2, 3, 100))!!.vistos)
         // Episódio novo no servidor depois da conta: deixa de ser Finalizado.
         assertEquals(99, Series.percentual(serie.copy(atualizada = 200), p3))
         // Finalizada sai do "continuar" e fica nos "assistidos".

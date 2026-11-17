@@ -135,7 +135,7 @@ object PainelIdeias {
             .put("radios", Radios.paraJson(Radios.favoritas(app)))
             .put("presenca", JSONArray(Presenca.escolhidos(app).toList()))
             .put("presencaOutras", JSONObject().put("entidades", Presenca.entidades(app).joinToString(", ")).put("ips", Presenca.ips(app).joinToString(", ")))
-            .put("retrospectiva", Retrospectiva.ultima(app)?.let { Retrospectiva.paraJson(it).put("linhas", JSONArray(Retrospectiva.linhas(it).toList())) } ?: JSONObject.NULL)
+            .put("retrospectiva", Retrospectiva.ultimaMedida(app)?.let { Retrospectiva.paraJson(it).put("linhas", JSONArray(Retrospectiva.linhas(it).toList())) } ?: JSONObject.NULL)
             .put("simples", JSONObject().put("apps", JSONArray(ModoSimples.escolhidos(app)))
                 .put("instalados", JSONArray().apply {
                     instalados.entries.sortedBy { it.value.lowercase() }.forEach { put(JSONObject().put("pacote", it.key).put("nome", it.value)) }

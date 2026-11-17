@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -75,5 +76,16 @@ class ElencoTmdbTest {
         assertEquals(listOf("Duna: Parte Dois [L]", "Série X"), r.map { it.nome })   // versões viram uma; sem ano não arrisca
         assertTrue(r.last().serie)
         assertEquals(null, ElencoTmdb.lerCreditosCompletos("{"))
+    }
+
+    @Test fun nomeEmOutraEscritaViraLatino() {
+        assertTrue(ElencoTmdb.precisaLatino("張震", "pt-BR"))
+        assertFalse(ElencoTmdb.precisaLatino("張震", "zh-CN"))
+        assertFalse(ElencoTmdb.precisaLatino("Timothée Chalamet", "pt-BR"))
+        assertFalse(ElencoTmdb.precisaLatino("Zendaya", "en-US"))
+        val json = """{"also_known_as":["チャン・チェン","Chang Chen","Zhang Zhen"]}"""
+        assertEquals("Chang Chen", ElencoTmdb.lerNomeLatino(json))
+        assertNull(ElencoTmdb.lerNomeLatino("""{"also_known_as":["チャン・チェン"]}"""))
+        assertNull(ElencoTmdb.lerNomeLatino("lixo"))
     }
 }

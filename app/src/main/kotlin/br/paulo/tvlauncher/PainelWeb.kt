@@ -924,8 +924,18 @@ object PainelWeb {
             "/api/perfil" -> if (req.metodo == "GET") return json(200, JSONObject().put("google", LoginGoogle.configurado(app))
                 .put("contas", org.json.JSONArray().apply {
                     for (c in Perfil.contas(app)) put(JSONObject().put("conta", c)
-                        .put("foto", FotoPerfil.arquivo(app, c)?.lastModified() ?: 0L).put("manual", FotoPerfil.manual(app, c)))
+                        .put("foto", FotoPerfil.arquivo(app, c)?.lastModified() ?: 0L).put("manual", FotoPerfil.manual(app, c))
+                        .put("nome", Perfil.nomeGuardado(app, c) ?: ""))
                 }))
+            // Nome do perfil (17/11/2026): o que a TV mostra na bolinha e nos avisos, no lugar do usuário do e-mail.
+            "/api/perfil/nome" -> if (req.metodo == "POST") {
+                val o = corpoJson(req) ?: return erro(400, "corpo inválido")
+                val conta = Perfil.contas(app).firstOrNull { it.equals(o.optString("conta"), ignoreCase = true) }
+                    ?: return erro(404, "essa conta não está nesta TV")
+                Perfil.definirNome(app, conta, o.optString("nome"))
+                PainelArmazem.registrar(app, ip, "nome do perfil", "ok")   // sem o e-mail nem o nome no registro
+                return json(200, JSONObject().put("ok", true).put("nome", Perfil.nome(app, conta)))
+            }
             "/api/perfil/foto" -> {
                 val conta = Perfil.contas(app).firstOrNull { it.equals(req.consulta["conta"], ignoreCase = true) }
                     ?: return erro(404, "essa conta não está nesta TV")

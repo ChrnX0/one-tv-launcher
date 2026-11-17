@@ -299,7 +299,7 @@ class CasaActivity : Activity() {
 
     private fun cartaoGoogle(): View {
         val c = Cartao("casa", getString(R.string.casa_google_home))
-        c.mostrar(getString(R.string.casa_google_home_det), false, null, false)
+        c.mostrar(getString(if (Home.googleHomeSemCasa(this)) R.string.casa_google_home_vazio else R.string.casa_google_home_det), false, null, false)
         // Google Home (dono, 10/11/2026): abre o painel do Google TV (luzes, câmeras, timer), o mesmo do HOME segurado.
         c.casca.setOnClickListener { Home.abrirGoogleHome(this) }
         c.casca.setOnFocusChangeListener { v, foco -> if (foco) { focoId = null; mostrarTitulo(v) }; c.pintar() }

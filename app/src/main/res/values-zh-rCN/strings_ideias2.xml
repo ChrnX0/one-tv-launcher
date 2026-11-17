@@ -30,6 +30,7 @@
     <string name="casa_vazio">Home Assistant 中没有灯、插座或场景。</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Google 的灯和摄像头</string>
+    <string name="casa_google_home_vazio">此 Google 账号在 Google Home 中没有家庭</string>
     <string name="casa_resumo">Home Assistant · %2$d 个中 %1$d 个已开启</string>
     <string name="casa_resumo_so_cenas">Home Assistant · %1$d 个场景</string>
     <string name="casa_secao_cenas">场景和脚本</string>

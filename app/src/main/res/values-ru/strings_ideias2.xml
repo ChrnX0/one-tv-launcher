@@ -30,6 +30,7 @@
     <string name="casa_vazio">В Home Assistant нет света, розеток или сцен.</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Свет и камеры Google</string>
+    <string name="casa_google_home_vazio">У этого аккаунта Google нет дома в Google Home</string>
     <string name="casa_resumo">Home Assistant · включено %1$d из %2$d</string>
     <string name="casa_resumo_so_cenas">Home Assistant · сцен: %1$d</string>
     <string name="casa_secao_cenas">Сцены и скрипты</string>

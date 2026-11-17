@@ -180,13 +180,13 @@ class BuscaActivity : Activity() {
         val (filmes, total) = BuscaUnica.filtrarIndice(d.iFilmes, termo)
         if (filmes.isNotEmpty()) {
             grupos += Grupo(getString(R.string.home_card_filmes), filmes.map { f ->
-                Item(f.nome, listOfNotNull(f.ano?.toString(), f.grupo.takeIf { it.isNotBlank() }).joinToString(" · ")) { catalogo(FilmesActivity::class.java, f.nome) }
+                Item(Vod.nomeTela(f.nome, f.ano), listOfNotNull(f.ano?.toString(), f.grupo.takeIf { it.isNotBlank() }).joinToString(" · ")) { catalogo(FilmesActivity::class.java, f.nome) }
             } + Item(getString(R.string.bu_ver_filmes, total), getString(R.string.bu_ver_filmes_det)) { catalogo(FilmesActivity::class.java, termo) })
         }
         val (series, totalSeries) = BuscaUnica.filtrarIndice(d.iSeries, termo)
         if (series.isNotEmpty()) {
             grupos += Grupo(getString(R.string.home_card_series), series.map { s ->
-                Item(s.nome, listOfNotNull(s.ano?.toString(), s.grupo.takeIf { it.isNotBlank() }).joinToString(" · ")) { catalogo(SeriesActivity::class.java, s.nome) }
+                Item(Vod.nomeTela(s.nome, s.ano), listOfNotNull(s.ano?.toString(), s.grupo.takeIf { it.isNotBlank() }).joinToString(" · ")) { catalogo(SeriesActivity::class.java, s.nome) }
             } + Item(getString(R.string.bu_ver_series, totalSeries), getString(R.string.bu_ver_series_det)) { catalogo(SeriesActivity::class.java, termo) })
         }
         val apps = BuscaUnica.filtrarIndice(d.iApps, termo).first

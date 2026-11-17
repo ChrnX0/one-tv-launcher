@@ -30,6 +30,7 @@
     <string name="casa_vazio">No lights, plugs or scenes in Home Assistant.</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Google lights and cameras</string>
+    <string name="casa_google_home_vazio">This Google account has no home in Google Home</string>
     <string name="casa_resumo">Home Assistant · %1$d of %2$d on</string>
     <string name="casa_resumo_so_cenas">Home Assistant · %1$d scenes</string>
     <string name="casa_secao_cenas">Scenes and scripts</string>

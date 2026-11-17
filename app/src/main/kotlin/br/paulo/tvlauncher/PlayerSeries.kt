@@ -214,14 +214,20 @@ object Series {
 
     /**
      * Conta os episódios CONCLUÍDOS (régua de minutos do episódio, [Vod.noFim]) com a ficha na mão. Se o total não
-     * mudou, nunca desce: posição velha de episódio pode sair do posicoes.json (limite de 1000) e o visto continua visto.
+     * mudou, não desce por posição que saiu do posicoes.json (limite de 1000): o visto continua visto.
      * Concluiu tudo: guarda quantos episódios e temporadas havia, para avisar quando o servidor publicar mais.
      */
     fun progressoDaFicha(s: Serie, f: FichaSerie, posicoes: Map<String, Posicao>, anterior: ProgressoSerie?): ProgressoSerie? {
         val todos = emOrdem(f)
         if (todos.isEmpty()) return anterior
         val vistosAgora = todos.count { Vod.finalizado(posicoes[it.chave(s.fonteId)], episodio = true) }
-        val manter = if (anterior != null && anterior.total == todos.size) anterior.vistos else 0
+        // O "nunca desce" só cobre episódio cuja posição SUMIU (o posicoes.json guarda 1000 e joga fora as mais velhas),
+        // e o que some é o que vem antes do último episódio com posição. Sem esse limite, uma conta velha ficava para
+        // sempre: Sala, 17/11/2026, Noturno/Slow Horses em T1E1 diziam "1 de N" sem nenhum episódio visto (a regra de
+        // antes de 14/11 contava episódio começado). Nenhuma posição guardada = série inteira saiu do arquivo: mantém.
+        val ultimoComPosicao = todos.indexOfLast { posicoes[it.chave(s.fonteId)] != null }
+        val sumidos = if (ultimoComPosicao < 0) todos.size else (0 until ultimoComPosicao).count { posicoes[todos[it].chave(s.fonteId)] == null }
+        val manter = if (anterior != null && anterior.total == todos.size) minOf(anterior.vistos, vistosAgora + sumidos) else 0
         val vistos = maxOf(vistosAgora, manter).coerceAtMost(todos.size)
         val temporadas = f.temporadas.size
         val (com, temps) = if (vistos >= todos.size) todos.size to temporadas
