@@ -1,5 +1,5 @@
 /* Painel no navegador (PainelWeb.kt). Visual Sofaly de 16/11/2026 (painel v3), sobre a base de 13/11/2026.
-   - Cores da marca: Noite #121528, Creme #FFF3E6, Coral #FF8A5C (no claro, coral escuro #C4461E, que lê bem em fundo claro).
+   - Cores da marca: Noite #121528, Creme #FFF3E6, Vermelho-laranja #FF6A2B (no claro, #CE3D00, que lê bem em fundo claro; troca decidida 17/11/2026).
      Verde-água (#7FD6C2) continua só para "ligado/ok", como na TV.
    - Tema claro ou escuro conforme o celular/computador (prefers-color-scheme). Toda cor mora num token abaixo:
      o resto do arquivo não tem cor escrita direto (exceto o preto atrás de vídeo e foto da TV).
@@ -29,13 +29,13 @@
   --texto: #fff3e6;                              /* Creme */
   --texto-fraco: #c2bfd2;
   --texto-apagado: #9a98b3;
-  --acento: #ff8a5c;                             /* Coral: ação principal, links, foco */
-  --acento-texto: #121528;                       /* texto em cima do coral */
-  --acento-hover: #ff9f79;
-  --acento-fundo: rgba(255, 138, 92, .14);
-  --foco: #ff8a5c;                               /* anel de foco e item ativo da navegação */
+  --acento: #ff6a2b;                             /* Vermelho-laranja: ação principal, links, foco */
+  --acento-texto: #121528;                       /* texto em cima do acento */
+  --acento-hover: #ff8550;
+  --acento-fundo: rgba(255, 106, 43, .14);
+  --foco: #ff6a2b;                               /* anel de foco e item ativo da navegação */
   --foco-texto: #121528;
-  --foco-hover: #ff9f79;
+  --foco-hover: #ff8550;
   --perigo: #ff8a80;
   --perigo-fundo: rgba(255, 138, 128, .12);
   --perigo-borda: rgba(255, 138, 128, .4);
@@ -43,11 +43,11 @@
   --ok-fundo: rgba(127, 214, 194, .16);
   --alerta: #ffd27a;
   --alerta-fundo: rgba(255, 210, 122, .12);
-  --selecao: rgba(255, 138, 92, .32);
+  --selecao: rgba(255, 106, 43, .32);
   --vidro-topo: rgba(18, 21, 40, .78);
   --vidro-barra: rgba(22, 26, 50, .9);
   --veu: rgba(8, 9, 20, .62);                    /* atrás de janela */
-  --brilho: rgba(255, 138, 92, .10);             /* luz suave em cima da página */
+  --brilho: rgba(255, 106, 43, .10);             /* luz suave em cima da página */
   --brilho2: rgba(127, 214, 194, .07);
   /* Medidas: grade de 4/8, três raios */
   --raio: 18px;
@@ -61,7 +61,7 @@
   --letra-titulo: "Nunito", "Manrope", system-ui, sans-serif;
   color-scheme: dark;
 }
-/* Tema claro: fundo creme, cartão branco, coral escuro (contraste 4.5:1 ou mais em todo texto). */
+/* Tema claro: fundo creme, cartão branco, vermelho-laranja escuro (contraste 4.5:1 ou mais em todo texto). */
 @media (prefers-color-scheme: light) {
   :root {
     --fundo: #fff8f1;
@@ -78,13 +78,13 @@
     --texto: #121528;
     --texto-fraco: #4f5470;
     --texto-apagado: #666b85;
-    --acento: #c4461e;
+    --acento: #ce3d00;
     --acento-texto: #ffffff;
-    --acento-hover: #a93a16;
-    --acento-fundo: rgba(196, 70, 30, .10);
-    --foco: #c4461e;
+    --acento-hover: #a83200;
+    --acento-fundo: rgba(206, 61, 0, .10);
+    --foco: #ce3d00;
     --foco-texto: #ffffff;
-    --foco-hover: #a93a16;
+    --foco-hover: #a83200;
     --perigo: #b3261e;
     --perigo-fundo: rgba(179, 38, 30, .08);
     --perigo-borda: rgba(179, 38, 30, .4);
@@ -92,11 +92,11 @@
     --ok-fundo: rgba(31, 122, 102, .12);
     --alerta: #8a5a00;
     --alerta-fundo: rgba(138, 90, 0, .1);
-    --selecao: rgba(196, 70, 30, .22);
+    --selecao: rgba(206, 61, 0, .22);
     --vidro-topo: rgba(255, 248, 241, .85);
     --vidro-barra: rgba(255, 255, 255, .94);
     --veu: rgba(18, 21, 40, .45);
-    --brilho: rgba(255, 138, 92, .16);
+    --brilho: rgba(255, 106, 43, .16);
     --brilho2: rgba(127, 214, 194, .12);
     --sombra: 0 12px 40px rgba(18, 21, 40, .16);
     --sombra-leve: 0 1px 2px rgba(18, 21, 40, .06);
@@ -758,7 +758,7 @@ body.ocupado::before { opacity: 1; animation: carregando 1.1s linear infinite; }
 .qr-camera video { width: 100%; max-width: 360px; border-radius: 12px; background: #000; }
 
 /* ---------------------------------------------------------------- painel v3 (16/11/2026): páginas iguais às da TV */
-/* Nome Sofaly na tela de entrar: "ly" em coral para ler so-fa-ly (decisão da marca). */
+/* Nome Sofaly na tela de entrar: "ly" na cor de acento para ler so-fa-ly (decisão da marca). */
 .nome-marca { font-family: var(--letra-titulo); font-weight: 600; font-size: 36px; letter-spacing: -.01em; }
 .nome-marca .ly { color: var(--acento); }
 
