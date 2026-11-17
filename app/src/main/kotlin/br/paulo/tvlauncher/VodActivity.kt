@@ -711,6 +711,7 @@ class VodActivity : Activity() {
                 Player.STATE_BUFFERING -> mostrarAviso(getString(R.string.vod_carregando))
                 Player.STATE_ENDED -> {
                     salvar(terminou = true)
+                    Gatilhos.avisarDoPlayer(this@VodActivity, false, acabou = true)   // elevação 10.6: filme acabou
                     // Posição = duração: o servidor marca como visto e tira do "Continuar assistindo".
                     player?.let { p -> avisar(FontesMidia.Momento.PAROU, p.duration.takeIf { it > 0 } ?: p.currentPosition) }
                     avisouInicio = false   // o fim já foi avisado; o onStop não repete

@@ -141,7 +141,14 @@ object Presenca {
         val rede: Boolean? = if (listaIps.isEmpty()) null
             else GuardiaoShizuku.comando(app, comandoIps(listaIps), 15_000)?.let { algumVizinho(it) }
         val antes = p.getLong("ausente_desde", 0L).takeIf { it > 0 }
-        val d = decidirJunto(juntar(listOf(unifi, ha, rede)), antes, System.currentTimeMillis(), Rotinas.minutosSemTecla(), acesa)
+        val junto = juntar(listOf(unifi, ha, rede))
+        // Elevação 10.5/10.6: o último "alguém em casa" fica para o "só se", e quem chega vira gatilho.
+        if (junto != null) {
+            val estava = if (p.contains("em_casa")) p.getBoolean("em_casa", false) else null
+            p.edit().putBoolean("em_casa", junto).putLong("em_casa_em", System.currentTimeMillis()).apply()
+            if (estava == false && junto) Gatilhos.disparar(app, Gatilhos.Evento.ALGUEM_CHEGOU)
+        }
+        val d = decidirJunto(junto, antes, System.currentTimeMillis(), Rotinas.minutosSemTecla(), acesa)
         p.edit().putLong("ausente_desde", d.ausenteDesde ?: 0L).apply()
         if (d.desligar) {
             Gatilhos.disparar(ctx, Gatilhos.Evento.TODOS_SAIRAM)   // ideia 7: ex.: apagar as luzes junto

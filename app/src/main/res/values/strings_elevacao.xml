@@ -103,4 +103,24 @@
     <plurals name="elv_np_resumo_noite"><item quantity="one">During the night: %1$d notice</item><item quantity="other">During the night: %1$d notices</item></plurals>
     <plurals name="elv_np_resumo_visita"><item quantity="one">During the visit: %1$d notice</item><item quantity="other">During the visit: %1$d notices</item></plurals>
     <string name="elv_np_mais">+%1$d more</string>
+    <!-- 10.5 só se / 10.6 gatilhos -->
+    <string name="elv_ev_filme_acabou">When a movie ends</string>
+    <string name="elv_ev_programa_comecou">When a program you marked in the guide starts</string>
+    <string name="elv_ev_nascer_do_sol">At sunrise</string>
+    <string name="elv_ev_por_do_sol">At sunset</string>
+    <string name="elv_ev_campainha">When the doorbell rings</string>
+    <string name="elv_ev_alguem_chegou">When someone gets home</string>
+    <string name="elv_ev_internet_caiu">When the internet goes down</string>
+    <string name="elv_ev_internet_voltou">When the internet comes back</string>
+    <string name="elv_ev_recado_chegou">When a message arrives</string>
+    <string name="elv_ev_aniversario">On someone\'s birthday (9 AM)</string>
+    <string name="elv_ev_compromisso">When an appointment in the calendar starts</string>
+    <string name="elv_ss_sempre">Always</string>
+    <string name="elv_ss_so_se">Only if %1$s</string>
+    <string name="elv_ss_e">" and "</string>
+    <string name="elv_ss_em_casa">someone is home</string>
+    <string name="elv_ss_noite">after sunset</string>
+    <string name="elv_ss_dia_util">it is a weekday</string>
+    <string name="elv_ss_perfil">the profile is %1$s</string>
+    <string name="elv_ss_det">◀ ▶ change the condition</string>
 </resources>

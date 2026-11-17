@@ -565,6 +565,7 @@ object CasaHA {
     }
 
     private fun tocouCampainha(ctx: Context) {
+        Gatilhos.disparar(ctx, Gatilhos.Evento.CAMPAINHA)   // elevação 10.6
         val camera = texto(ctx, CHAVE_CAMERA)
         val foto = if (camera.isEmpty()) null else try { fotoCamera(ctx, camera) } catch (e: Exception) { null }
         AvisoTv.mostrar(ctx, ctx.getString(R.string.casa_campainha), ctx.getString(R.string.casa_alguem_porta), 30, som = true, guardarSeApagada = false,

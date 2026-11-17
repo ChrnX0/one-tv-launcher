@@ -36,7 +36,14 @@ object Gatilhos {
     const val ACAO_MIDIA = "br.paulo.tvlauncher.GATILHO_MIDIA"
 
     enum class Evento(val chave: String) { MIDIA_TOCOU("midia_tocou"), MIDIA_PAUSOU("midia_pausou"), TV_LIGOU("tv_ligou"),
-        TODOS_SAIRAM("todos_sairam"), CHUVA("chuva") }
+        TODOS_SAIRAM("todos_sairam"), CHUVA("chuva"),
+        // Elevação 10.6 (17/11/2026)
+        FILME_ACABOU("filme_acabou"), PROGRAMA_COMECOU("programa_comecou"), NASCER_DO_SOL("nascer_do_sol"), POR_DO_SOL("por_do_sol"),
+        CAMPAINHA("campainha"), ALGUEM_CHEGOU("alguem_chegou"), INTERNET_CAIU("internet_caiu"), INTERNET_VOLTOU("internet_voltou"),
+        RECADO_CHEGOU("recado_chegou"), ANIVERSARIO("aniversario"), COMPROMISSO("compromisso") }
+
+    /** Os eventos que são hora (o relógio de minuto só roda se algum deles tem cena). */
+    val DE_HORA = setOf(Evento.NASCER_DO_SOL, Evento.POR_DO_SOL, Evento.ANIVERSARIO, Evento.COMPROMISSO)
 
     /** {"midia_tocou": "Cinema"}: evento → nome da cena. Ignora evento desconhecido e nome inválido. Pura. */
     fun lerJson(texto: String?): Map<Evento, String> = try {
@@ -50,6 +57,10 @@ object Gatilhos {
     fun todos(ctx: Context): Map<Evento, String> = lerJson(prefs(ctx).getString(CHAVE, null))
     fun salvar(ctx: Context, m: Map<Evento, String>) = prefs(ctx).edit().putString(CHAVE, paraJson(m)).apply()
 
+    // Elevação 10.5: "só se" de cada evento (SoSe.kt).
+    fun soSe(ctx: Context): Map<Evento, List<SoSe.Condicao>> = SoSe.lerJson(prefs(ctx).getString("gatilhos_so_se", null))
+    fun salvarSoSe(ctx: Context, m: Map<Evento, List<SoSe.Condicao>>) = prefs(ctx).edit().putString("gatilhos_so_se", SoSe.paraJson(m)).apply()
+
     private val ultimo = HashMap<Evento, Long>()
 
     /** Pura: o evento pode disparar agora? (no máximo um a cada [INTERVALO_MS]) */
@@ -61,7 +72,11 @@ object Gatilhos {
         val agora = SystemClock.elapsedRealtime()
         synchronized(ultimo) { if (!podeDisparar(ultimo[e], agora)) return; ultimo[e] = agora }
         val app = ctx.applicationContext
-        Fundo.rodar { Log.i(TAG, "${e.chave}: ${Cenas.rodar(app, cena, "evento")}") }
+        Fundo.rodar {
+            val cond = soSe(app)[e].orEmpty()
+            if (cond.isNotEmpty() && !SoSe.todas(cond, SoSeTv.estado(app))) { Log.i(TAG, "${e.chave}: só se ${cond.map { it.chave }} não vale agora"); return@rodar }
+            Log.i(TAG, "${e.chave}: ${Cenas.rodar(app, cena, "evento")}")
+        }
     }
 
     // ---------------------------------------------------------------- mídia
@@ -81,10 +96,11 @@ object Gatilhos {
             .also { principal.postAtTime(it, prazo) }
     }
 
-    /** Do processo :player (VodActivity): avisa o processo principal, onde as cenas rodam. */
-    fun avisarDoPlayer(ctx: Context, tocando: Boolean) {
+    /** Do processo :player (VodActivity): avisa o processo principal, onde as cenas rodam. [acabou] = o filme chegou ao fim (10.6). */
+    fun avisarDoPlayer(ctx: Context, tocando: Boolean, acabou: Boolean = false) {
         try {
-            ctx.sendBroadcast(Intent(ACAO_MIDIA).setComponent(ComponentName(ctx, GatilhoReceiver::class.java)).putExtra("tocando", tocando))
+            ctx.sendBroadcast(Intent(ACAO_MIDIA).setComponent(ComponentName(ctx, GatilhoReceiver::class.java)).putExtra("tocando", tocando)
+                .putExtra("acabou", acabou))
         } catch (e: Exception) { Log.w(TAG, "aviso do player: $e") }
     }
 
@@ -108,6 +124,8 @@ object Gatilhos {
             if (Build.VERSION.SDK_INT >= 33) app.registerReceiver(tela, IntentFilter(Intent.ACTION_SCREEN_ON), Context.RECEIVER_NOT_EXPORTED)
             else app.registerReceiver(tela, IntentFilter(Intent.ACTION_SCREEN_ON))
         } catch (e: Exception) { Log.w(TAG, "tela: $e") }
+        iniciarRede(app)
+        principal.postDelayed(relogio(app), 60_000)
         // Sessões de mídia de outros apps: só com o acesso às notificações (sem ele, SecurityException: fica só o player).
         try {
             val msm = app.getSystemService(MediaSessionManager::class.java) ?: return
@@ -117,6 +135,48 @@ object Gatilhos {
             acompanhar(app, msm.getActiveSessions(ouvinte))
         } catch (e: SecurityException) { Log.i(TAG, "sem acesso às notificações: só o player próprio dispara mídia") }
         catch (e: Exception) { Log.w(TAG, "sessões: $e") }
+    }
+
+    // ---------------------------------------------------------------- 10.6: internet e hora
+
+    private val filtroRede = FiltroRede()
+
+    private fun iniciarRede(app: Context) {
+        try {
+            val cm = app.getSystemService(android.net.ConnectivityManager::class.java) ?: return
+            cm.registerDefaultNetworkCallback(object : android.net.ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(n: android.net.Network) { principal.post { synchronized(filtroRede) { filtroRede.voltou() }?.let { disparar(app, it) } } }
+                override fun onLost(n: android.net.Network) { principal.post { synchronized(filtroRede) { filtroRede.perdeu(SystemClock.elapsedRealtime()) } } }
+            }, principal)
+        } catch (e: Exception) { Log.w(TAG, "rede: $e") }
+    }
+
+    @Volatile private var conferidoEm = 0L
+
+    /** A cada minuto: internet que caiu há 1 min, e os eventos de hora (só se algum tem cena; o trabalho vai ao Fundo). */
+    private fun relogio(app: Context): Runnable = object : Runnable {
+        override fun run() {
+            principal.postDelayed(this, 60_000)
+            synchronized(filtroRede) { filtroRede.conferir(SystemClock.elapsedRealtime()) }?.let { disparar(app, it) }
+            val agora = System.currentTimeMillis()
+            val antes = conferidoEm.takeIf { it > 0 } ?: (agora - 60_000)
+            conferidoEm = agora
+            val ligados = todos(app).keys.intersect(DE_HORA)
+            if (ligados.isEmpty()) return
+            Fundo.rodar("gatilhos-hora") {
+                if (Evento.NASCER_DO_SOL in ligados || Evento.POR_DO_SOL in ligados) SoSeTv.sol(app, agora)?.let { (nascer, por) ->
+                    if (RelogioGatilhos.caiu(antes, agora, nascer)) disparar(app, Evento.NASCER_DO_SOL)
+                    if (RelogioGatilhos.caiu(antes, agora, por)) disparar(app, Evento.POR_DO_SOL)
+                }
+                if (Evento.ANIVERSARIO in ligados &&
+                    RelogioGatilhos.caiu(antes, agora, runCatching { RelogioGatilhos.aniversarioHoje(Aniversarios.ler(app), agora) }.getOrNull()))
+                    disparar(app, Evento.ANIVERSARIO)
+                if (Evento.COMPROMISSO in ligados) {
+                    val ev = runCatching { Agenda.eventosDaTv(app, antes - 60_000, agora + 60_000) }.getOrDefault(emptyList())
+                    if (RelogioGatilhos.compromissoComecou(antes, agora, ev.map { it.inicio to it.diaInteiro })) disparar(app, Evento.COMPROMISSO)
+                }
+            }
+        }
     }
 
     private fun acompanhar(app: Context, cs: List<MediaController>) {
@@ -172,6 +232,8 @@ class FiltroMidia(private val esperaMs: Long) {
 /** Recebe o "tocando/pausado" do player (processo :player) no processo principal. Não exportado. */
 class GatilhoReceiver : BroadcastReceiver() {
     override fun onReceive(ctx: Context, i: Intent) {
-        if (i.action == Gatilhos.ACAO_MIDIA) Gatilhos.midia(ctx, i.getBooleanExtra("tocando", false))
+        if (i.action != Gatilhos.ACAO_MIDIA) return
+        if (i.getBooleanExtra("acabou", false)) Gatilhos.disparar(ctx, Gatilhos.Evento.FILME_ACABOU)
+        else Gatilhos.midia(ctx, i.getBooleanExtra("tocando", false))
     }
 }

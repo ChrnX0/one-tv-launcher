@@ -104,6 +104,7 @@ object FamiliaConectada {
         } else {
             AvisoTv.mostrar(app, titulo, t!!, 60, som = true, guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO)
         }
+        Gatilhos.disparar(app, Gatilhos.Evento.RECADO_CHEGOU)   // elevação 10.6
         if (t != null) Mural.editar(app) { Mural.adicionar(it, Mural.Lista.RECADOS, "$quem: $t") }
         return null
     }
