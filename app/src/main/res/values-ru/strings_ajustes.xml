@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK переключает · эти исчезают в гостевом режиме</string>
     <string name="cfg2_some_visita">скрыто от гостей</string>
     <string name="cfg2_fica_visita">остаётся</string>
-    <string name="cfg2_casa_det">Свет, розетки и сцены вашего Home Assistant</string>
+    <string name="cfg2_casa_det">Свет, розетки и сцены из Google Home или Home Assistant</string>
     <string name="oc_titulo">Скрытые приложения</string>
     <string name="oc_subtitulo">OK показывает или скрывает приложение на главном · скрытые идут первыми</string>
     <string name="oc_nenhum">Нет скрытых приложений · OK, чтобы выбрать</string>

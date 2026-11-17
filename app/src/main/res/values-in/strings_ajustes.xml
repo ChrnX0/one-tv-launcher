@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK mengganti · ini hilang saat mode tamu aktif</string>
     <string name="cfg2_some_visita">disembunyikan untuk tamu</string>
     <string name="cfg2_fica_visita">tetap</string>
-    <string name="cfg2_casa_det">Lampu, colokan, dan adegan Home Assistant Anda</string>
+    <string name="cfg2_casa_det">Lampu, colokan, dan adegan dari Google Home atau Home Assistant</string>
     <string name="oc_titulo">Aplikasi tersembunyi</string>
     <string name="oc_subtitulo">OK menampilkan atau menyembunyikan aplikasi di layar utama · yang tersembunyi tampil lebih dulu</string>
     <string name="oc_nenhum">Tidak ada aplikasi tersembunyi · OK untuk memilih</string>

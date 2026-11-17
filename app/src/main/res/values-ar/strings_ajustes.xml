@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK يبدّل · هذه تختفي أثناء تفعيل وضع الضيوف</string>
     <string name="cfg2_some_visita">مخفي عن الضيوف</string>
     <string name="cfg2_fica_visita">يبقى</string>
-    <string name="cfg2_casa_det">أضواء ومقابس ومشاهد Home Assistant الخاص بك</string>
+    <string name="cfg2_casa_det">الأضواء والمقابس والمشاهد من Google Home أو Home Assistant</string>
     <string name="oc_titulo">التطبيقات المخفية</string>
     <string name="oc_subtitulo">OK يُظهر تطبيقًا في الشاشة الرئيسية أو يخفيه · المخفية تأتي أولًا</string>
     <string name="oc_nenhum">لا تطبيقات مخفية · OK للاختيار</string>

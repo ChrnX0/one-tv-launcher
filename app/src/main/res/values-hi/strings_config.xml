@@ -2,7 +2,7 @@
 <!-- Tradução (hi) de values/strings_config.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="cl_aba_conta">TV और फ़िल्में</string>
-    <string name="cl_aba_conta_det">इस TV पर सेव IPTV खाता: स्थिति, समाप्ति और कनेक्शन</string>
+    <string name="cl_aba_conta_det">IPTV खाता, फ़िल्म और सीरीज़ सेवाएँ, ऑडियो और सबटाइटल</string>
     <string name="cl_aba_parental">पैरेंटल कंट्रोल</string>
     <string name="cl_aba_parental_det">PIN से चैनल लॉक करें: वे सूची से गायब होते हैं और नहीं चलते</string>
     <string name="cl_aba_aparencia">दिखावट</string>

@@ -45,7 +45,7 @@
     <string name="cfg2_apps_visita_sub">OK switches · these disappear while guest mode is on</string>
     <string name="cfg2_some_visita">hidden for guests</string>
     <string name="cfg2_fica_visita">stays</string>
-    <string name="cfg2_casa_det">Lights, plugs and scenes of your Home Assistant</string>
+    <string name="cfg2_casa_det">Lights, plugs and scenes from Google Home or Home Assistant</string>
     <string name="oc_titulo">Hidden apps</string>
     <string name="oc_subtitulo">OK shows or hides an app on the home screen · hidden ones come first</string>
     <string name="oc_nenhum">No hidden apps · OK to choose</string>

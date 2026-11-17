@@ -114,7 +114,7 @@ class AgendaFamiliaActivity : Activity() {
             coluna.addView(Estilo.linhaOpcao(this, "${hora(e.minuto)} · ${Perfil.nome(this, e.conta)}", nomeDias(e.dias)).apply {
                 setOnClickListener {
                     CaixaTv(this@AgendaFamiliaActivity).setTitle(getString(R.string.agf_apagar))
-                        .setMessage("${hora(e.minuto)} · ${Perfil.nome(this, e.conta)} · ${nomeDias(e.dias)}")
+                        .setMessage("${hora(e.minuto)} · ${Perfil.nome(this@AgendaFamiliaActivity, e.conta)} · ${nomeDias(e.dias)}")
                         .setNegativeButton(getString(R.string.cl_cancelar), null)
                         .setPositiveButton(getString(R.string.agf_apagar_sim)) { _, _ ->
                             AgendaPerfisTv.gravar(this@AgendaFamiliaActivity, AgendaPerfisTv.lista(this@AgendaFamiliaActivity) - e); montar()

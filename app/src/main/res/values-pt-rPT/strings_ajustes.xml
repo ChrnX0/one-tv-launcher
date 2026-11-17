@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK alterna · estes somem enquanto o modo visita está ligado</string>
     <string name="cfg2_some_visita">some na visita</string>
     <string name="cfg2_fica_visita">fica</string>
-    <string name="cfg2_casa_det">Luzes, tomadas e cenas do seu Home Assistant</string>
+    <string name="cfg2_casa_det">Luzes, tomadas e cenas do Google Home ou do Home Assistant</string>
     <string name="oc_titulo">Apps ocultos</string>
     <string name="oc_subtitulo">OK mostra ou esconde o app no ecrã inicial · os ocultos vêm primeiro</string>
     <string name="oc_nenhum">Nenhum app oculto · OK para escolher</string>

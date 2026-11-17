@@ -2,7 +2,7 @@
 <!-- Tradução (ko) de values/strings_config.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="cl_aba_conta">TV 및 영화</string>
-    <string name="cl_aba_conta_det">이 TV에 저장된 IPTV 계정: 상태, 만료, 연결 수</string>
+    <string name="cl_aba_conta_det">IPTV 계정, 영화·시리즈 서비스, 오디오와 자막</string>
     <string name="cl_aba_parental">자녀 보호</string>
     <string name="cl_aba_parental_det">PIN으로 채널 잠금: 목록에서 사라지고 재생되지 않음</string>
     <string name="cl_aba_aparencia">모양</string>

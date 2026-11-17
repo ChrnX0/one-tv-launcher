@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK で切り替え · これらはゲストモード中に隠れます</string>
     <string name="cfg2_some_visita">ゲストには非表示</string>
     <string name="cfg2_fica_visita">表示のまま</string>
-    <string name="cfg2_casa_det">Home Assistant の照明、プラグ、シーン</string>
+    <string name="cfg2_casa_det">Google Home または Home Assistant の照明、プラグ、シーン</string>
     <string name="oc_titulo">非表示のアプリ</string>
     <string name="oc_subtitulo">OK でアプリをホーム画面に表示/非表示 · 非表示のものが先頭</string>
     <string name="oc_nenhum">非表示のアプリはありません · OK で選択</string>

@@ -2,7 +2,7 @@
 <!-- Tradução (ja) de values/strings_config.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="cl_aba_conta">TV と映画</string>
-    <string name="cl_aba_conta_det">この TV に保存した IPTV アカウント: 状態、有効期限、接続数</string>
+    <string name="cl_aba_conta_det">IPTV アカウント、映画・シリーズのサービス、音声と字幕</string>
     <string name="cl_aba_parental">ペアレンタルコントロール</string>
     <string name="cl_aba_parental_det">PIN でチャンネルをロック: リストから消え、再生されません</string>
     <string name="cl_aba_aparencia">外観</string>

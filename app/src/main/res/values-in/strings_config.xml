@@ -2,7 +2,7 @@
 <!-- Tradução (in) de values/strings_config.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="cl_aba_conta">TV dan film</string>
-    <string name="cl_aba_conta_det">Akun IPTV yang tersimpan di TV ini: status, masa berlaku, dan koneksi</string>
+    <string name="cl_aba_conta_det">Akun IPTV, layanan film dan serial, audio dan subtitel</string>
     <string name="cl_aba_parental">Kontrol orang tua</string>
     <string name="cl_aba_parental_det">Kunci saluran dengan PIN: saluran hilang dari daftar dan tidak diputar</string>
     <string name="cl_aba_aparencia">Tampilan</string>

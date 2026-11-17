@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK로 전환 · 게스트 모드가 켜져 있으면 이 앱들이 사라짐</string>
     <string name="cfg2_some_visita">게스트에게 숨김</string>
     <string name="cfg2_fica_visita">유지</string>
-    <string name="cfg2_casa_det">Home Assistant의 조명, 플러그, 장면</string>
+    <string name="cfg2_casa_det">Google Home 또는 Home Assistant의 조명, 플러그, 장면</string>
     <string name="oc_titulo">숨긴 앱</string>
     <string name="oc_subtitulo">OK로 홈 화면에 앱 표시 또는 숨김 · 숨긴 앱이 먼저 표시됨</string>
     <string name="oc_nenhum">숨긴 앱 없음 · OK로 선택</string>

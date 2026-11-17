@@ -2,7 +2,7 @@
 <!-- Tradução (ar) de values/strings_config.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="cl_aba_conta">التلفزيون والأفلام</string>
-    <string name="cl_aba_conta_det">حساب IPTV المحفوظ على هذا التلفزيون: الحالة والانتهاء والاتصالات</string>
+    <string name="cl_aba_conta_det">حساب IPTV وخدمات الأفلام والمسلسلات والصوت والترجمة</string>
     <string name="cl_aba_parental">الرقابة الأبوية</string>
     <string name="cl_aba_parental_det">اقفل القنوات بـPIN: تختفي من القائمة ولا تُشغَّل</string>
     <string name="cl_aba_aparencia">المظهر</string>

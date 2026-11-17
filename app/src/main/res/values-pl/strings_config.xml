@@ -2,7 +2,7 @@
 <!-- Tradução (pl) de values/strings_config.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="cl_aba_conta">TV i filmy</string>
-    <string name="cl_aba_conta_det">Konto IPTV zapisane na tym telewizorze: stan, ważność i połączenia</string>
+    <string name="cl_aba_conta_det">Konto IPTV, serwisy z filmami i serialami, dźwięk i napisy</string>
     <string name="cl_aba_parental">Kontrola rodzicielska</string>
     <string name="cl_aba_parental_det">Zablokuj kanały PIN-em: znikają z listy i nie są odtwarzane</string>
     <string name="cl_aba_aparencia">Wygląd</string>
