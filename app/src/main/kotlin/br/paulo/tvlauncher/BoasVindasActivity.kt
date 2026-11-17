@@ -124,6 +124,10 @@ class BoasVindasActivity : Activity() {
             lista.addView(linha(getString(R.string.bv_dono), getString(R.string.bv_dono_det)) {
                 VirarDono.perguntar(this, { t -> AvisoTv.rapido(this, getString(R.string.bv_titulo), t, 4) }) { montar() }
             })
+        // Degrau 4: receitas prontas (TV da vó, das crianças, do gamer, de aluguel), um OK e com Desfazer.
+        lista.addView(linha(getString(R.string.rec_titulo), getString(R.string.rec_subtitulo)) {
+            abrir(Intent(this, ReceitasActivity::class.java))
+        })
         if (uso != UsoTv.SIMPLES) lista.addView(linha(getString(R.string.bv_claude), getString(R.string.bv_claude_det)) {
             abrir(Intent(this, ConectarClaudeActivity::class.java))
         })

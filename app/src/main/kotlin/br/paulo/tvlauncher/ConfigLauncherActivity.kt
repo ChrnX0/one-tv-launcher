@@ -1385,6 +1385,10 @@ class ConfigLauncherActivity : Activity() {
             mostrarAbasDoUso()
         }
         c.addView(linhaUso, lp())
+        // Degrau 4: receitas prontas ("Para quem é esta TV?"), com Desfazer (ReceitasTv.kt).
+        c.addView(linha(getString(R.string.rec_titulo), getString(R.string.rec_subtitulo), seta = true) {
+            startActivity(Intent(this, ReceitasActivity::class.java))
+        }, lp())
         // Diagnóstico de 1 botão (04/11/2026): o 1º da aba, para ser o OK mais rápido quando "o app parou".
         c.addView(linha(getString(R.string.cfg_diag), getString(R.string.cfg_diag_det), seta = true) {
             startActivity(Intent(this, DiagnosticoActivity::class.java))

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Receitas prontas (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="rec_titulo">このテレビは誰が使いますか？</string>
+    <string name="rec_subtitulo">OKひとつでテレビの準備ができます。いつでも元に戻せます。</string>
+    <string name="rec_vo">おばあちゃんのテレビ</string>
+    <string name="rec_vo_det">名前を読み上げる大きなカード、大きな文字、「助けを呼ぶ」ボタン。</string>
+    <string name="rec_criancas">子どものテレビ</string>
+    <string name="rec_criancas_det">子ども向けの内容だけ、おやすみ時間、ゲームのカード。</string>
+    <string name="rec_gamer">ゲーマーのテレビ</string>
+    <string name="rec_gamer_det">ゲームのカード、ゲームモード（プレイ中はスクリーンセーバーも通知も出ない）、ゲームパッドでゲームが開く。</string>
+    <string name="rec_aluguel">貸し部屋のテレビ</string>
+    <string name="rec_aluguel_det">ゲストモード：ようこそ画面、ホーム画面に個人的なものなし、チェックアウト時に消去。</string>
+    <string name="rec_desfazer">元に戻す</string>
+    <string name="rec_desfazer_det">「%1$s」の前の状態にすべて戻します。</string>
+    <string name="rec_ja_esta">このテレビはすでにこの設定です。</string>
+    <string name="rec_aviso_prende">シンプルモードはPINでしか終了できません。家の誰かがPINを知っているか確認してください。</string>
+    <string name="rec_aviso_sem_pin">まだPINがないので、誰でもこれをオフにできます。スマホのパネルでPINを作ってください。</string>
+    <string name="rec_aviso_plano">有料プランが必要なのでオフのままです：%1$s。</string>
+    <string name="rec_voltar">戻る</string>
+    <string name="rec_aplicar">適用</string>
+    <string name="rec_pin">テレビの設定を変えるためのPIN</string>
+    <string name="rec_pronto">完了</string>
+    <string name="rec_aplicada">テレビの準備ができました</string>
+    <string name="rec_aplicada_det">望まない変更がありましたか？「元に戻す」ですべて元通りになります。</string>
+    <string name="rec_desfeita">すべて元に戻りました。</string>
+    <string name="rec_linha">%1$s：%2$s</string>
+    <string name="rec_ligado">オン</string>
+    <string name="rec_desligado">オフ</string>
+    <string name="rec_aj_hospede">ゲストモード</string>
+    <string name="rec_aj_visita">来客モード</string>
+    <string name="rec_aj_simples">シンプルモード</string>
+    <string name="rec_aj_infantil">キッズモード</string>
+    <string name="rec_aj_dormir">おやすみ時間</string>
+    <string name="rec_aj_texto">文字の大きさ</string>
+    <string name="rec_aj_ler_foco">選択中の項目を読み上げる</string>
+    <string name="rec_aj_som">キーごとにクリック音</string>
+    <string name="rec_aj_jogos">ゲームのカード</string>
+    <string name="rec_aj_modo_jogo">ゲームモード</string>
+    <string name="rec_aj_controle">ゲームパッドでゲームを開く</string>
+</resources>

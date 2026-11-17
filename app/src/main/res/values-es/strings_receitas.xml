@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Receitas prontas (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="rec_titulo">¿Para quién es esta TV?</string>
+    <string name="rec_subtitulo">Un OK deja la TV lista. Puedes deshacerlo cuando quieras.</string>
+    <string name="rec_vo">TV de la abuela</string>
+    <string name="rec_vo_det">Tarjetas grandes con el nombre en voz alta, letra más grande y el botón Pedir ayuda.</string>
+    <string name="rec_criancas">TV de los niños</string>
+    <string name="rec_criancas_det">Solo contenido infantil, hora de dormir y la tarjeta Juegos.</string>
+    <string name="rec_gamer">TV del gamer</string>
+    <string name="rec_gamer_det">Tarjeta Juegos, modo juego (sin protector ni avisos durante el juego) y el mando abre Juegos.</string>
+    <string name="rec_aluguel">TV de alquiler</string>
+    <string name="rec_aluguel_det">Modo huésped: bienvenida, nada personal en la pantalla de inicio y limpieza al salir.</string>
+    <string name="rec_desfazer">Deshacer</string>
+    <string name="rec_desfazer_det">Volver todo a como estaba antes de %1$s.</string>
+    <string name="rec_ja_esta">Esta TV ya está así.</string>
+    <string name="rec_aviso_prende">El modo simple solo se cierra con el PIN. Asegúrate de que alguien de la casa lo sepa.</string>
+    <string name="rec_aviso_sem_pin">Todavía no hay PIN, así que cualquiera puede apagar esto. Crea uno en el panel del móvil.</string>
+    <string name="rec_aviso_plano">Necesita un plan de pago, así que queda apagado: %1$s.</string>
+    <string name="rec_voltar">Volver</string>
+    <string name="rec_aplicar">Aplicar</string>
+    <string name="rec_pin">PIN para cambiar cómo está la TV</string>
+    <string name="rec_pronto">Listo</string>
+    <string name="rec_aplicada">Tu TV está lista</string>
+    <string name="rec_aplicada_det">¿Cambió algo que no querías? Deshacer deja todo como estaba.</string>
+    <string name="rec_desfeita">Todo volvió a como estaba.</string>
+    <string name="rec_linha">%1$s: %2$s</string>
+    <string name="rec_ligado">activado</string>
+    <string name="rec_desligado">desactivado</string>
+    <string name="rec_aj_hospede">Modo huésped</string>
+    <string name="rec_aj_visita">Modo visita</string>
+    <string name="rec_aj_simples">Modo simple</string>
+    <string name="rec_aj_infantil">Modo infantil</string>
+    <string name="rec_aj_dormir">Hora de dormir</string>
+    <string name="rec_aj_texto">Tamaño del texto</string>
+    <string name="rec_aj_ler_foco">Leer en voz alta lo seleccionado</string>
+    <string name="rec_aj_som">Sonido de clic en cada tecla</string>
+    <string name="rec_aj_jogos">Tarjeta Juegos</string>
+    <string name="rec_aj_modo_jogo">Modo juego</string>
+    <string name="rec_aj_controle">El mando abre Juegos</string>
+</resources>

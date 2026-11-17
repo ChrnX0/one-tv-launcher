@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Receitas prontas (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="rec_titulo">Pour qui est cette télé ?</string>
+    <string name="rec_subtitulo">Un OK et la télé est prête. Vous pouvez annuler à tout moment.</string>
+    <string name="rec_vo">La télé de mamie</string>
+    <string name="rec_vo_det">Grandes cartes avec le nom lu à voix haute, texte plus grand et un bouton Demander de l\'aide.</string>
+    <string name="rec_criancas">La télé des enfants</string>
+    <string name="rec_criancas_det">Seulement du contenu pour enfants, l\'heure du coucher et la carte Jeux.</string>
+    <string name="rec_gamer">La télé du gamer</string>
+    <string name="rec_gamer_det">Carte Jeux, mode jeu (ni économiseur ni alertes pendant une partie) et la manette ouvre Jeux.</string>
+    <string name="rec_aluguel">Télé de location</string>
+    <string name="rec_aluguel_det">Mode invité : accueil, rien de personnel sur l\'écran d\'accueil et nettoyage au départ.</string>
+    <string name="rec_desfazer">Annuler</string>
+    <string name="rec_desfazer_det">Tout remettre comme avant %1$s.</string>
+    <string name="rec_ja_esta">Cette télé est déjà réglée ainsi.</string>
+    <string name="rec_aviso_prende">Le mode simple ne se ferme qu\'avec le code PIN. Vérifiez que quelqu\'un de la maison le connaît.</string>
+    <string name="rec_aviso_sem_pin">Il n\'y a pas encore de code PIN : n\'importe qui peut désactiver ceci. Créez-en un dans le panneau du téléphone.</string>
+    <string name="rec_aviso_plano">Nécessite un forfait payant, donc reste désactivé : %1$s.</string>
+    <string name="rec_voltar">Retour</string>
+    <string name="rec_aplicar">Appliquer</string>
+    <string name="rec_pin">Code PIN pour changer les réglages de la télé</string>
+    <string name="rec_pronto">Terminé</string>
+    <string name="rec_aplicada">Votre télé est prête</string>
+    <string name="rec_aplicada_det">Un changement non voulu ? Annuler remet tout comme avant.</string>
+    <string name="rec_desfeita">Tout est redevenu comme avant.</string>
+    <string name="rec_linha">%1$s : %2$s</string>
+    <string name="rec_ligado">activé</string>
+    <string name="rec_desligado">désactivé</string>
+    <string name="rec_aj_hospede">Mode invité</string>
+    <string name="rec_aj_visita">Mode visite</string>
+    <string name="rec_aj_simples">Mode simple</string>
+    <string name="rec_aj_infantil">Mode enfant</string>
+    <string name="rec_aj_dormir">Heure du coucher</string>
+    <string name="rec_aj_texto">Taille du texte</string>
+    <string name="rec_aj_ler_foco">Lire à voix haute l\'élément sélectionné</string>
+    <string name="rec_aj_som">Son de clic à chaque touche</string>
+    <string name="rec_aj_jogos">Carte Jeux</string>
+    <string name="rec_aj_modo_jogo">Mode jeu</string>
+    <string name="rec_aj_controle">La manette ouvre Jeux</string>
+</resources>

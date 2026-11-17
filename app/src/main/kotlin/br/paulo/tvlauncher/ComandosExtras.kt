@@ -123,6 +123,17 @@ object ComandosExtras {
         "vitais" -> VitaisTv.textoAdb(ctx)   // degrau 2: quedas e travadas do launcher por dia (VitaisLocais.kt)
         "modo_seguro" -> if (ModoSeguro.ativo(ctx)) "ligado" else "desligado"
         // Modo hóspede (degrau 2). O adb já é autenticado: desligar aqui não pede o PIN.
+        // Degrau 4: receitas prontas (Receitas.kt). receitas_aplicar --es receita VO|CRIANCAS|GAMER|ALUGUEL (adb já é do dono: sem PIN).
+        "receitas" -> ReceitasTv.estado(ctx)
+        "receitas_tela" -> abrir(ctx, ReceitasActivity::class.java)
+        "receitas_aplicar" -> Receitas.dePalavra(i.getStringExtra("receita"))?.let { r ->
+            ReceitasTv.aplicar(ctx, r).joinToString(", ") { "${it.first}=${it.second}" }.ifEmpty { "nada mudou" }
+        } ?: "receita desconhecida (VO, CRIANCAS, GAMER, ALUGUEL)"
+        "receitas_desfazer" -> ReceitasTv.desfazer(ctx).joinToString(", ") { "${it.first}=${it.second}" }.ifEmpty { "nada a desfazer" }
+        // Degrau 4: recado em vídeo. videos_aceitar --ez sim true|false liga o opt-in (adb já é do dono).
+        "videos" -> RecadoVideo.estado(ctx)
+        "videos_tela" -> abrir(ctx, RecadoVideoActivity::class.java)
+        "videos_aceitar" -> { RecadoVideo.definirAceita(ctx, i.getBooleanExtra("sim", false)); RecadoVideo.estado(ctx) }
         "hospede" -> "ativo=${ModoHospede.ativo(ctx)} saida=${ModoHospede.textoSaida(ctx)} apps=${ModoHospede.paraLimpar(ctx)} ultima=${ModoHospede.ultimaLimpeza(ctx)}"
         "hospede_ligar" -> { ModoHospede.ligar(ctx); "modo hóspede ligado" }
         "hospede_desligar" -> { ModoHospede.desligar(ctx); "modo hóspede desligado" }

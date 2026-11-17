@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Receitas prontas (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="rec_titulo">Für wen ist dieser Fernseher?</string>
+    <string name="rec_subtitulo">Ein OK richtet den Fernseher ein. Du kannst es jederzeit rückgängig machen.</string>
+    <string name="rec_vo">Omas Fernseher</string>
+    <string name="rec_vo_det">Große Karten mit vorgelesenen Namen, größere Schrift und eine Hilfe-Taste.</string>
+    <string name="rec_criancas">Kinderfernseher</string>
+    <string name="rec_criancas_det">Nur Kinderinhalte, Schlafenszeit und die Karte Spiele.</string>
+    <string name="rec_gamer">Gamer-Fernseher</string>
+    <string name="rec_gamer_det">Karte Spiele, Spielmodus (kein Bildschirmschoner und keine Hinweise beim Spielen) und der Controller öffnet Spiele.</string>
+    <string name="rec_aluguel">Ferienwohnungs-Fernseher</string>
+    <string name="rec_aluguel_det">Gastmodus: Begrüßung, nichts Persönliches auf dem Startbildschirm und Aufräumen beim Check-out.</string>
+    <string name="rec_desfazer">Rückgängig</string>
+    <string name="rec_desfazer_det">Alles so wie vor %1$s.</string>
+    <string name="rec_ja_esta">Dieser Fernseher ist schon so eingerichtet.</string>
+    <string name="rec_aviso_prende">Der einfache Modus lässt sich nur mit der PIN beenden. Sorge dafür, dass jemand im Haus sie kennt.</string>
+    <string name="rec_aviso_sem_pin">Es gibt noch keine PIN, daher kann jeder das ausschalten. Lege eine im Handy-Panel an.</string>
+    <string name="rec_aviso_plano">Braucht ein Bezahl-Abo und bleibt deshalb aus: %1$s.</string>
+    <string name="rec_voltar">Zurück</string>
+    <string name="rec_aplicar">Übernehmen</string>
+    <string name="rec_pin">PIN, um die Einrichtung zu ändern</string>
+    <string name="rec_pronto">Fertig</string>
+    <string name="rec_aplicada">Dein Fernseher ist bereit</string>
+    <string name="rec_aplicada_det">Etwas geändert, das du nicht wolltest? Rückgängig stellt alles wieder her.</string>
+    <string name="rec_desfeita">Alles ist wieder wie vorher.</string>
+    <string name="rec_linha">%1$s: %2$s</string>
+    <string name="rec_ligado">an</string>
+    <string name="rec_desligado">aus</string>
+    <string name="rec_aj_hospede">Gastmodus</string>
+    <string name="rec_aj_visita">Besuchsmodus</string>
+    <string name="rec_aj_simples">Einfacher Modus</string>
+    <string name="rec_aj_infantil">Kindermodus</string>
+    <string name="rec_aj_dormir">Schlafenszeit</string>
+    <string name="rec_aj_texto">Textgröße</string>
+    <string name="rec_aj_ler_foco">Ausgewähltes vorlesen</string>
+    <string name="rec_aj_som">Klickton bei jeder Taste</string>
+    <string name="rec_aj_jogos">Karte Spiele</string>
+    <string name="rec_aj_modo_jogo">Spielmodus</string>
+    <string name="rec_aj_controle">Controller öffnet Spiele</string>
+</resources>

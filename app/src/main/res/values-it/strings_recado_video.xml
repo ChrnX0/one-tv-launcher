@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Recado em vídeo (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="vid_de">Video di %1$s</string>
+    <string name="vid_mural">ha mandato un video</string>
+    <string name="vid_onde">Per guardarlo: Impostazioni › Famiglia › Video della famiglia.</string>
+    <string name="vid_depois">Più tardi</string>
+    <string name="vid_assistir">Guarda</string>
+    <string name="vid_ok_para_assistir">Premi OK per guardarlo.</string>
+    <string name="vid_lista">Video della famiglia</string>
+    <string name="vid_lista_det">Inviati con il link della famiglia. Ognuno resta 30 giorni. Tieni premuto OK per eliminare.</string>
+    <string name="vid_nenhum">Ancora nessun video.</string>
+    <string name="vid_apagar">Elimina video</string>
+    <string name="vid_aceitar">Accetta video</string>
+    <string name="vid_aceitar_det">La famiglia può mandare video fino a 30 secondi. Non partono mai da soli.</string>
+    <string name="vid_quantos">Video: %1$d</string>
+</resources>

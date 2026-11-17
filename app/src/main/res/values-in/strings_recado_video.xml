@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Recado em vídeo (degrau 4, 17/11/2026). Gerado por gerar.py; tradução por IA, sem revisão de nativo. -->
+<resources>
+    <string name="vid_de">Video dari %1$s</string>
+    <string name="vid_mural">mengirim video</string>
+    <string name="vid_onde">Untuk menonton: Setelan › Keluarga › Video keluarga.</string>
+    <string name="vid_depois">Nanti</string>
+    <string name="vid_assistir">Tonton</string>
+    <string name="vid_ok_para_assistir">Tekan OK untuk menonton.</string>
+    <string name="vid_lista">Video keluarga</string>
+    <string name="vid_lista_det">Dikirim lewat tautan keluarga. Masing-masing disimpan 30 hari. Tahan OK untuk menghapus.</string>
+    <string name="vid_nenhum">Belum ada video.</string>
+    <string name="vid_apagar">Hapus video</string>
+    <string name="vid_aceitar">Terima video</string>
+    <string name="vid_aceitar_det">Keluarga bisa mengirim video hingga 30 detik. Video tidak pernah diputar sendiri.</string>
+    <string name="vid_quantos">Video: %1$d</string>
+</resources>
