@@ -12,18 +12,18 @@ class ClimaLugarTest {
     // ---- endereço (CEP + número)
 
     @Test fun cepENumero() {
-        assertEquals("14015060", Endereco.limparCep("14015-060"))
-        assertNull(Endereco.limparCep("1401506"))
+        assertEquals("01001000", Endereco.limparCep("01001-000"))
+        assertNull(Endereco.limparCep("0100100"))
         assertNull(Endereco.limparCep(null))
         assertEquals("100", Endereco.limparNumero(" 100 "))
         assertEquals("", Endereco.limparNumero(""))
         assertNull(Endereco.limparNumero("100A"))
     }
 
-    private val viaCep = """{"cep":"14015-060","logradouro":"Rua Florêncio de Abreu","bairro":"Centro","localidade":"Ribeirão Preto","uf":"SP"}"""
+    private val viaCep = """{"cep":"01001-000","logradouro":"Praça da Sé","bairro":"Centro","localidade":"São Paulo","uf":"SP"}"""
 
     @Test fun leViaCep() {
-        assertEquals(Endereco.Cep("14015-060", "Rua Florêncio de Abreu", "Centro", "Ribeirão Preto", "SP"), Endereco.lerViaCep(viaCep))
+        assertEquals(Endereco.Cep("01001-000", "Praça da Sé", "Centro", "São Paulo", "SP"), Endereco.lerViaCep(viaCep))
         assertNull(Endereco.lerViaCep("""{"erro": true}"""))
         assertNull(Endereco.lerViaCep("""{"erro": "true"}"""))
         assertNull(Endereco.lerViaCep("lixo"))
@@ -41,29 +41,29 @@ class ClimaLugarTest {
         assertEquals(listOf("rua", "bairro", "cidade"), Endereco.consultas(c, "").map { it.second })
         // O número não achou nada no mapa: cai na rua.
         val pedidos = ArrayList<String>()
-        val r = Endereco.buscar("14015-060", "100") { url ->
+        val r = Endereco.buscar("01001-000", "100") { url ->
             pedidos += url
             when {
                 "viacep" in url -> viaCep
                 "street=100" in url -> "[]"
-                "street=" in url -> """[{"lat":"-21.179","lon":"-47.811"}]"""
+                "street=" in url -> """[{"lat":"-23.550","lon":"-46.633"}]"""
                 else -> "[]"
             }
         }.getOrThrow()
-        assertEquals(Endereco.Achado("Centro", -21.179, -47.811, "rua"), r)
+        assertEquals(Endereco.Achado("Centro", -23.550, -46.633, "rua"), r)
         assertEquals(3, pedidos.size)   // ViaCEP + 2 buscas no mapa, e para
     }
 
     @Test fun erros() {
         assertEquals("CEP inválido: são 8 números", Endereco.buscar("123", "") { null }.exceptionOrNull()?.message)
-        assertEquals("CEP não encontrado (ou sem internet)", Endereco.buscar("14015060", "") { null }.exceptionOrNull()?.message)
+        assertEquals("CEP não encontrado (ou sem internet)", Endereco.buscar("01001000", "") { null }.exceptionOrNull()?.message)
         assertEquals("não achei esse endereço no mapa",
-            Endereco.buscar("14015060", "") { if ("viacep" in it) viaCep else "[]" }.exceptionOrNull()?.message)
+            Endereco.buscar("01001000", "") { if ("viacep" in it) viaCep else "[]" }.exceptionOrNull()?.message)
     }
 
     @Test fun descricao() {
-        assertEquals("Centro · CEP 14015-060, nº 100", LocalClima.descrever(LocalClima.Lugar("Centro", 1.0, 1.0, "14015060", "100")))
-        assertEquals("Centro · CEP 14015-060", LocalClima.descrever(LocalClima.Lugar("Centro", 1.0, 1.0, "14015060", "")))
+        assertEquals("Centro · CEP 01001-000, nº 100", LocalClima.descrever(LocalClima.Lugar("Centro", 1.0, 1.0, "01001000", "100")))
+        assertEquals("Centro · CEP 01001-000", LocalClima.descrever(LocalClima.Lugar("Centro", 1.0, 1.0, "01001000", "")))
     }
 
     @Test fun nomeLimpo() {

@@ -43,3 +43,8 @@ app/src/main/res/raw/vpn_cert.pem
 
 # Dados pessoais do build (cidade, coordenadas, apps preferidos): NUNCA versionar. Modelo: pessoal.properties.exemplo
 pessoal.properties
+
+# Obra do build nativo (nativo/compilar.sh) e chaves de assinatura: nunca no git
+nativo/obra/
+*.jks
+*.keystore

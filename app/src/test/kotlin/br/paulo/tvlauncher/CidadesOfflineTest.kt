@@ -40,6 +40,6 @@ class CidadesOfflineTest {
     }
 
     @Test fun normaliza() {
-        assertEquals("ribeirao preto", CidadesOffline.normalizar("  Ribeirão-Preto "))
+        assertEquals("ribeirao pires", CidadesOffline.normalizar("  Ribeirão-Pires "))
     }
 }
