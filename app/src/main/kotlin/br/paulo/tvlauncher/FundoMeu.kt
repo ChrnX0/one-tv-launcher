@@ -35,6 +35,7 @@ class FundoMeu(ctx: Context, private val emSegundoPlano: (() -> Unit) -> Unit) :
     private var animada: AnimatedImageDrawable? = null
     private var textura: TextureView? = null
     private var tocador: MediaPlayer? = null
+    private var superficie: Surface? = null   // a Surface criada para o MediaPlayer: solta junto com ele
 
     /** Filtro de brilho/contraste: o criarFundo usa como pintura da camada de hardware (null = sem filtro). */
     val pintura: Paint? = FundoMeuRegras.matriz(FundoMeuDados.brilho(ctx), FundoMeuDados.contraste(ctx))?.let {
@@ -60,8 +61,17 @@ class FundoMeu(ctx: Context, private val emSegundoPlano: (() -> Unit) -> Unit) :
         val dm = resources.displayMetrics
         emSegundoPlano {
             val d = runCatching {
-                if (tipo == FundoMeuRegras.Tipo.ANIMADA) ImageDecoder.decodeDrawable(ImageDecoder.createSource(f))
-                else {
+                if (tipo == FundoMeuRegras.Tipo.ANIMADA) {
+                    // Cor do foco: o 1º quadro, já pequeno (antes o GIF não guardava cor e a borda ficava com a da Galeria).
+                    runCatching {
+                        BitmapFactory.decodeFile(f.path, BitmapFactory.Options().apply { inSampleSize = 8 })
+                            ?.let { CorDoFundo.guardar(app, it); it.recycle() }
+                    }
+                    // Reduzido ao tamanho da tela, como a foto: um GIF 4K inteiro não cabe na HOME de uma TV de 32 bits.
+                    ImageDecoder.decodeDrawable(ImageDecoder.createSource(f)) { dec, info, _ ->
+                        dec.setTargetSampleSize(FundoMeuRegras.amostragem(info.size.width, info.size.height, dm.widthPixels, dm.heightPixels))
+                    }
+                } else {
                     val o = BitmapFactory.Options().apply { inJustDecodeBounds = true }
                     BitmapFactory.decodeFile(f.path, o)
                     val bmp = BitmapFactory.decodeFile(f.path, BitmapFactory.Options().apply {
@@ -84,15 +94,19 @@ class FundoMeu(ctx: Context, private val emSegundoPlano: (() -> Unit) -> Unit) :
         // Cor do fundo: o quadro do meio do vídeo, uma vez, fora da thread da tela.
         emSegundoPlano {
             runCatching {
-                MediaMetadataRetriever().use { r -> r.setDataSource(f.path); r.frameAtTime?.let { CorDoFundo.guardar(app, it) } }
+                // Quadro já pequeno (a cor usa 24x24): o frameAtTime inteiro de um vídeo 4K ocupava ~33 MB.
+                MediaMetadataRetriever().use { r ->
+                    r.setDataSource(f.path)
+                    r.getScaledFrameAtTime(-1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC, 320, 180)?.let { CorDoFundo.guardar(app, it); it.recycle() }
+                }
             }
         }
         val tv = TextureView(context)
         textura = tv
         tv.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
-            override fun onSurfaceTextureAvailable(st: SurfaceTexture, w: Int, h: Int) = abrirVideo(f, Surface(st))
+            override fun onSurfaceTextureAvailable(st: SurfaceTexture, w: Int, h: Int) = abrirVideo(f, Surface(st).also { superficie = it })
             override fun onSurfaceTextureSizeChanged(st: SurfaceTexture, w: Int, h: Int) {}
-            override fun onSurfaceTextureDestroyed(st: SurfaceTexture): Boolean { soltarVideo(); return true }
+            override fun onSurfaceTextureDestroyed(st: SurfaceTexture): Boolean { soltarSuperficie(); return true }
             override fun onSurfaceTextureUpdated(st: SurfaceTexture) {}
         }
         addView(tv, LayoutParams(-1, -1))
@@ -117,6 +131,13 @@ class FundoMeu(ctx: Context, private val emSegundoPlano: (() -> Unit) -> Unit) :
     private fun soltarVideo() {
         tocador?.let { runCatching { it.release() } }
         tocador = null
+    }
+
+    /** Ao perder a textura: solta o player e a Surface (antes a Surface ficava viva até o coletor de lixo). */
+    private fun soltarSuperficie() {
+        soltarVideo()
+        superficie?.let { runCatching { it.release() } }
+        superficie = null
     }
 
     override fun onWindowVisibilityChanged(v: Int) {

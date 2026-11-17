@@ -299,7 +299,7 @@ class FilmesActivity : Activity() {
     /** Chave, id TMDB (da lista ou já achado) e nome+ano de cada filme, para cruzar com as listas de fora. Fora da tela. */
     private fun titulosDoCatalogo(vis: List<Filme>): List<SincronizarFilmes.Titulo> =
         cacheTitulos?.takeIf { it.first === vis }?.second ?: vis.map {
-            SincronizarFilmes.Titulo(it.chave, it.tmdb ?: InfoExternaCache.guardado(this, it.chave)?.tmdb, InfoExterna.chaveNomeAno(Vod.nomeLimpo(it.nome), it.ano))
+            SincronizarFilmes.Titulo(it.chave, InfoExternaCache.tmdbSemRede(this, it.chave, it.tmdb), InfoExterna.chaveNomeAno(Vod.nomeLimpo(it.nome), it.ano))
         }.also { cacheTitulos = vis to it }
 
     private fun etiquetaLista(l: SincronizarFilmes.ListaFora) = if (l.servico == "trakt") "Trakt" else "MDBList"
@@ -352,7 +352,7 @@ class FilmesActivity : Activity() {
     private var cacheVisiveis: Triple<List<Filme>, Set<String>, List<Filme>>? = null
     @Volatile private var cacheIdade: IdadesTmdb.Filtro? = null
 
-    private fun tmdbDe(f: Filme): Int? = f.tmdb ?: InfoExternaCache.guardado(this, f.chave)?.tmdb
+    private fun tmdbDe(f: Filme): Int? = InfoExternaCache.tmdbSemRede(this, f.chave, f.tmdb)
 
     /** Ideia 91: com idade máxima, pergunta ao TMDB a classificação dos que faltam (infantis primeiro) e refaz a grade. */
     private fun classificarIdades(f: List<Filme>) {

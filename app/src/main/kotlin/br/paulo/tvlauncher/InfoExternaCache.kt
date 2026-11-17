@@ -151,6 +151,16 @@ object InfoExternaCache {
         return guardado(app, chave) ?: g
     }
 
+    /**
+     * O id do TMDB de um título sem ir à rede, com a MESMA prioridade de [resolver]: o da lista (Xtream) se a pessoa
+     * não o recusou ("Não é este"), senão o já achado. Antes, `doXtream ?: guardado.tmdb` voltava ao id recusado e a
+     * nota da noite (Trakt/Simkl) e a idade do modo infantil vinham do filme errado.
+     */
+    fun tmdbSemRede(ctx: Context, chave: String, doXtream: Int?): Int? {
+        val g = guardado(ctx.applicationContext, chave)
+        return doXtream?.takeIf { g == null || it !in g.recusados } ?: g?.tmdb
+    }
+
     /** "Não é este filme": o id atual vai para os recusados e a próxima abertura busca de novo. */
     fun recusar(ctx: Context, chave: String) {
         mudar(ctx.applicationContext, chave) { g -> Guardado(recusados = g.recusados + listOfNotNull(g.tmdb)) }
@@ -260,7 +270,7 @@ object InfoExternaCache {
             .sortedWith(compareBy({ it.first.first !in marcados }, { -it.second }))
             .map { it.first }
             .mapNotNull { (ch, t, s) ->
-                val g = guardado(app, ch); val tmdb = t ?: g?.tmdb ?: return@mapNotNull null
+                val g = guardado(app, ch); val tmdb = t?.takeIf { g == null || it !in g.recusados } ?: g?.tmdb ?: return@mapNotNull null
                 if (emDia(g)) null else Triple(ch, tmdb, s)
             }
             .distinctBy { it.first }
@@ -294,9 +304,12 @@ object InfoExternaCache {
             }
             var nota: Float? = null
             if (simkl != null) {
-                val r = runCatching { ServicosContas.pedir(InfoExterna.urlSimklFicha(simkl, serie, cliente, versao), cab) }.getOrNull() ?: break
-                if (r.codigo == 429) { Log.i(TAG, "Simkl: limite"); break }
-                if (r.codigo !in 200..299 && r.codigo != 404) { Log.w(TAG, "Simkl: ${r.codigo}"); break }
+                // Ficha falhou: guarda ao menos o id que o /redirect achou (sem data: a nota é pedida de novo amanhã,
+                // mas sem repetir o /redirect).
+                fun guardarSoId() = synchronized(trava) { val m = mapa(app); val g = m[ch] ?: Guardado(); if (g.simkl == null) por(m, ch, g.copy(simkl = simkl)) }
+                val r = runCatching { ServicosContas.pedir(InfoExterna.urlSimklFicha(simkl, serie, cliente, versao), cab) }.getOrNull() ?: run { guardarSoId(); null } ?: break
+                if (r.codigo == 429) { Log.i(TAG, "Simkl: limite"); guardarSoId(); break }
+                if (r.codigo !in 200..299 && r.codigo != 404) { Log.w(TAG, "Simkl: ${r.codigo}"); guardarSoId(); break }
                 nota = InfoExterna.lerNotaSimkl(r.corpo)
             }
             if (nota != null) n++
