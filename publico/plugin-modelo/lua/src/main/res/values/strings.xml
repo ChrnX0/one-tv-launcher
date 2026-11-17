@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nome">Moon today</string>
+    <string name="cheia_hoje">Full moon tonight</string>
+    <plurals name="ate_cheia"><item quantity="one">Full moon in %d day</item><item quantity="other">Full moon in %d days</item></plurals>
+    <string-array name="fases">
+        <item>New moon</item><item>Waxing crescent</item><item>First quarter</item><item>Waxing gibbous</item>
+        <item>Full moon</item><item>Waning gibbous</item><item>Last quarter</item><item>Waning crescent</item>
+    </string-array>
+</resources>

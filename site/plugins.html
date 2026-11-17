@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Plugin kit · One TV Launcher</title>
-<meta name="description" content="How to put a card from your Android TV app on the One TV Launcher home screen.">
+<title>Plugin kit · Sofaly</title>
+<meta name="description" content="How to put a card from your Android TV app on the Sofaly home screen.">
 <link rel="stylesheet" href="estilo.css">
 <style>
 /* Kit do desenvolvedor de plugins (degrau 3, P6). Contrato em PluginCartao.kt; a HOME desenha o cartão. */
@@ -16,6 +16,10 @@ table{border-collapse:collapse;width:100%}td,th{text-align:left;padding:.35rem .
 <p>A plugin is your own Android TV app. It sends one short card (a title, a big value, a line of detail, a color) and
 the launcher draws it at the end of the <b>Watch</b> row, in its own style and with large letters. You never draw on
 the home screen, and the launcher never sends you anything about the person's apps, accounts or channels.</p>
+
+<p><b>Start from the template:</b> <a href="https://github.com/ChrnX0/one-tv-launcher/tree/main/plugin-modelo">plugin-modelo</a>
+has two ready apps you can build and install today: a countdown to a date the person picks on the TV, and today's moon
+phase. No internet, no account. MIT No Attribution: copy it, rename the package, publish.</p>
 
 <h2>1. Declare a provider</h2>
 <pre>&lt;provider

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nome">Countdown</string>
+    <string name="titulo_padrao">Days left</string>
+    <string name="escolha">Press OK to choose the date</string>
+    <string name="hoje">It\'s today!</string>
+    <string name="passou">Already happened. Press OK to choose another date</string>
+    <string name="salvar">Save</string>
+    <plurals name="faltam"><item quantity="one">%d day to go</item><item quantity="other">%d days to go</item></plurals>
+</resources>
