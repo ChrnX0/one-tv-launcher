@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+<<<<<<< HEAD
         <item>Addons no formato do Stremio, só vídeo por HTTP (nada de P2P): instale pelo painel web ou lendo o QR do addon com a câmera do celular</item>
         <item>Continuar: episódio novo de uma série que você acompanha sobe para o topo; dá para esconder spoiler, escolher um segundo idioma de legenda e ajustar a contagem até o próximo. Mandar o que você vê ao Trakt/Simkl agora pergunta antes</item>
         <item>Unidade de rede no Windows: a TV aparece em Este Computador como “Sofaly · nome da TV”, volta sozinha depois que o launcher reinicia, e cada pendrive vira uma unidade separada</item>
@@ -27,6 +28,8 @@
         <item>Visuais prontos (Configurações › Tela inicial) e “Visual de outra TV” no painel: cole o código do QR de outra TV ou do site</item>
         <item>Relatar um problema agora vai por e-mail, sem precisar de conta no GitHub; o nome Sofaly aparece no app e nos textos</item>
         <item>Correções: reparo do Wi-Fi sem ciclo de reinício, o alarme para de verdade quando você para, queda de rede em AVI/WMV não encerra o vídeo, GIF e vídeo no Meu fundo sem estourar a memória, foco nas opções do player e teclas com o vídeo pausado</item>
+=======
+>>>>>>> 04a6a62eed5736c9d6969ee7164718915086e899
         <item>Filmes e Séries: o nome não repete mais o ano (“Os Anéis de Poder 2022”) e os gêneros vêm no idioma da TV quando o TMDB tem a ficha</item>
         <item>Filmes e Séries: a ficha abre mais leve (um fundo de tela cheia em vez de dois) e “Episódios” não quebra mais no meio da palavra; detalhes compridos como “Temporada 1” vão embaixo do nome do botão</item>
         <item>Jogos: ao rolar as fileiras, elas não aparecem mais por cima do jogo em destaque no alto</item>
