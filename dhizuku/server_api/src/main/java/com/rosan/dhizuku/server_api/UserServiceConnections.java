@@ -55,6 +55,20 @@ public final class UserServiceConnections {
         if (userServiceConnection != null) userServiceConnection.unbind(connection);
     }
 
+    /** Launcher (17/11/2026): para e desliga todos os UserServices do [uid] (ao revogar ou parar o empréstimo). */
+    public static void pararDoUid(int uid) {
+        java.util.List<UserServiceConnection> parar = new java.util.ArrayList<>();
+        synchronized (CACHE) {
+            for (java.util.Iterator<Map.Entry<String, UserServiceConnection>> it = CACHE.entrySet().iterator(); it.hasNext(); ) {
+                Map.Entry<String, UserServiceConnection> e = it.next();
+                if (e.getKey().startsWith(uid + ":")) { parar.add(e.getValue()); it.remove(); }
+            }
+        }
+        for (UserServiceConnection c : parar) {
+            try { c.unbindAll(); c.stop(); } catch (Throwable ignored) { }
+        }
+    }
+
     static void start(int uid, int pid, DhizukuUserServiceArgs args) {
         require(uid, pid, args).start();
     }

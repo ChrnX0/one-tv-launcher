@@ -47,7 +47,9 @@ object Pareamento {
     /** O que veio no QR: a TV e o código de uso único para entrar sem PIN (ou criar o PIN, se [primeira]). */
     data class Lido(val ip: String, val codigo: String, val primeira: Boolean, val fp: String, val ts: String, val ir: String)
 
-    private val IPV4 = Regex("^(25[0-5]|2[0-4]\\d|1?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|1?\\d?\\d)){3}$")
+    // Sem zero à esquerda (17/11/2026): "01.1.2.3" passava como rede local, mas o WebView lê 01 como octal e abria
+    // outro endereço (público) por http dentro do app.
+    private val IPV4 = Regex("^(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)(\\.(25[0-5]|2[0-4]\\d|1\\d\\d|[1-9]?\\d)){3}$")
     private val HEX48 = Regex("^[0-9a-f]{48}$")
     private val HEX64 = Regex("^[0-9a-f]{64}$")
     private val NOME_TS = Regex("^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*\\.ts\\.net$")

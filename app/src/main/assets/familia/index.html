@@ -89,6 +89,7 @@ $("arquivo").addEventListener("change", async () => {
   if (!f) return;
   try {
     foto = await reduzir(f);
+    if ($("previa").src.startsWith("blob:")) URL.revokeObjectURL($("previa").src);
     $("previa").src = URL.createObjectURL(foto); $("previa").hidden = false;
     $("btnFoto").textContent = t.trocar; mensagem("", "");
   } catch (e) { foto = null; mensagem(t.erroFoto, "erro"); }

@@ -190,7 +190,16 @@ func main() {
 		r.Host = host
 	}
 	srv := &http.Server{
-		Handler:           http.MaxBytesHandler(proxy, 64<<10),
+		// 64 KB basta para o MCP e o OAuth; a foto da Família conectada (/familia/<token>/foto) aceita até 3 MB no
+		// launcher (McpServidor.kt), e com 64 KB aqui ela nunca passava pelo Funnel (502). O launcher confere o token.
+		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			limite := int64(64 << 10)
+			if strings.HasPrefix(r.URL.Path, "/familia/") && strings.HasSuffix(r.URL.Path, "/foto") {
+				limite = 3<<20 + 64<<10
+			}
+			r.Body = http.MaxBytesReader(w, r.Body, limite)
+			proxy.ServeHTTP(w, r)
+		}),
 		ReadHeaderTimeout: 10 * time.Second,
 		ReadTimeout:       30 * time.Second,
 		// Maior que o pior caso do executar_shell: até 60 s esperando OK na TV + tempo_s até 120 s + 20 s de folga

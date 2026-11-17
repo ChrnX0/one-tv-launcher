@@ -144,7 +144,7 @@ open class ControleShizukuReceiver : BroadcastReceiver() {
                     intent.getBooleanExtra("som", true), guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO).name.lowercase()
             }
             // Só pelo adb: o endereço do clima (LocalClima.kt) pelo CEP e o número. Sem --es cep, apaga o endereço.
-            // Ex.: am broadcast -a br.paulo.tvlauncher.LOCAL_CLIMA --es cep 14015060 --es numero 100
+            // Ex.: am broadcast -a br.paulo.tvlauncher.LOCAL_CLIMA --es cep 01001000 --es numero 100
             //   -n br.paulo.tvlauncher/.ControleShizukuAdbReceiver
             LOCAL_CLIMA -> if (this is ControleShizukuAdbReceiver) {
                 val cep = intent.getStringExtra("cep")

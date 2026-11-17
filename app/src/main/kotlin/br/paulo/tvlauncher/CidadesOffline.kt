@@ -70,7 +70,7 @@ object CidadesOffline {
     /** A maior cidade do fuso da TV ("America/Sao_Paulo" -> São Paulo): o palpite de lugar sem Wi-Fi e sem cadastro. */
     fun doFuso(lista: List<Cidade>, fuso: String): Cidade? = lista.firstOrNull { it.fuso == fuso }
 
-    /** "Ribeirão Preto, São Paulo, Brasil" no idioma da TV (o mesmo jeito da busca antiga). */
+    /** "Campinas, São Paulo, Brasil" no idioma da TV (o mesmo jeito da busca antiga). */
     fun rotulo(c: Cidade, idioma: Locale = Locale.getDefault()): String =
         listOf(c.nome, c.estado.takeIf { it.isNotEmpty() && it != c.nome }, Locale("", c.pais).getDisplayCountry(idioma).takeIf { it.isNotEmpty() })
             .filterNotNull().joinToString(", ")

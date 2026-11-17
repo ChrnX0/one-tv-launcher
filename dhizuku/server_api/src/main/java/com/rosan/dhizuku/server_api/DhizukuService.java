@@ -37,6 +37,24 @@ public abstract class DhizukuService extends IDhizuku.Stub {
     /** Remote processes handed out to the current client, guarded by itself. */
     private final List<RemoteProcess> mProcesses = new ArrayList<>();
 
+    /** Launcher (17/11/2026): todos os processos remotos por uid do app que pediu, para encerrar ao revogar. */
+    private static final java.util.Map<Integer, List<RemoteProcess>> PROCESSOS_POR_UID = new java.util.HashMap<>();
+
+    /**
+     * Revogar/parar o empréstimo (launcher, 17/11/2026): encerra os processos remotos (com filhos) e para os
+     * UserServices que o app de [uid] abriu. Antes, revogar só fechava a porta para chamadas NOVAS.
+     */
+    public static void encerrarDoUid(int uid) {
+        List<RemoteProcess> lista;
+        synchronized (PROCESSOS_POR_UID) {
+            lista = PROCESSOS_POR_UID.remove(uid);
+        }
+        if (lista != null) for (RemoteProcess p : lista) {
+            try { p.encerrarTudo(); } catch (Throwable ignored) { }
+        }
+        UserServiceConnections.pararDoUid(uid);
+    }
+
     public DhizukuService(Context context, ComponentName admin, IDhizukuClient client) {
         mContext = context;
         mManager = (DevicePolicyManager) context.getSystemService(Context.DEVICE_POLICY_SERVICE);
@@ -146,6 +164,16 @@ public abstract class DhizukuService extends IDhizuku.Stub {
         RemoteProcess process = new RemoteProcess(DhizukuProcess.get().remoteProcess(Arrays.asList(cmd), environment, dir));
         synchronized (mProcesses) {
             mProcesses.add(process);
+        }
+        int uid = Binder.getCallingUid();
+        synchronized (PROCESSOS_POR_UID) {
+            List<RemoteProcess> l = PROCESSOS_POR_UID.get(uid);
+            if (l == null) { l = new ArrayList<>(); PROCESSOS_POR_UID.put(uid, l); }
+            // aproveita para esquecer os que já terminaram (não acumula FDs)
+            for (java.util.Iterator<RemoteProcess> it = l.iterator(); it.hasNext(); ) {
+                try { if (!it.next().alive()) it.remove(); } catch (Throwable e) { it.remove(); }
+            }
+            l.add(process);
         }
         return process;
     }

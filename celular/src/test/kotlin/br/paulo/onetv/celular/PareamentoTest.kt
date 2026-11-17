@@ -24,6 +24,8 @@ class PareamentoTest {
 
     @Test fun `recusa QR que nao e da TV`() {
         assertNull(Pareamento.ler("http://8.8.8.8:8080/#qr=$cod"))            // IP público
+        assertNull(Pareamento.ler("http://010.1.2.3:8080/#qr=$cod"))          // octal: o WebView abriria 8.1.2.3
+        assertNull(Pareamento.ler("http://10.01.2.3:8080/#qr=$cod"))
         assertNull(Pareamento.ler("https://192.168.1.50:8080/#qr=$cod"))      // não é o QR da TV
         assertNull(Pareamento.ler("http://192.168.1.50:80/#qr=$cod"))         // porta errada
         assertNull(Pareamento.ler("http://192.168.1.50:8080/#qr=123"))        // código curto

@@ -16,7 +16,7 @@ import java.util.concurrent.Executors
  *
  * Fonte: a MESMA chance de chuva da linha do widget de clima — a mediana dos modelos ECMWF, ICON e GFS da
  * Open-Meteo (ver MainActivity.chuvaMediana: o ECMWF sozinho exagera a chuva aqui). E o "chovendo agora" do aeroporto
- * (METAR SBRP), que a HOME grava em prefs "clima": se já está chovendo, não há o que avisar.
+ * (METAR da estação configurada), que a HOME grava em prefs "clima": se já está chovendo, não há o que avisar.
  *
  * Quando avisa ([decidir]): a chance de agora está abaixo de [LIMIAR] e a de uma das próximas [HORAS_A_FRENTE] horas
  * está em [LIMIAR] ou mais. Depois de um aviso, fica [SILENCIO_H] horas quieto (uma chuva = um aviso, não um a cada

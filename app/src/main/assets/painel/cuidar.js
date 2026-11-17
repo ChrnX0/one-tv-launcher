@@ -8,6 +8,7 @@
     AJUDA: 'Pedido de ajuda (segurar a tecla 3 s), com a foto da tela',
     LEMBRETE: 'Lembrete não confirmado no prazo',
     NAO_LIGOU: 'TV não ligada até a hora de costume + margem',
+    ESTOU_BEM: 'Estou bem: ao ligar a TV de manhã, ela pergunta se pode avisar a família',
   };
   let atual = null;
   const doisDigitos = (n) => String(n).padStart(2, '0');
@@ -60,7 +61,8 @@
     for (const a of e.disponiveis) ap.appendChild(caixa('Recebe: ' + a.nome, e.aparelhos.includes(a.id), a.id));
 
     const av = $('avisosCuidar'); av.textContent = '';
-    for (const k of Object.keys(NOMES_AVISOS)) if (e.familia !== false || k === 'AJUDA') av.appendChild(caixa(NOMES_AVISOS[k], e.avisos.includes(k), k));
+    const oferecidos = e.oferecidos || (e.familia !== false ? Object.keys(NOMES_AVISOS) : ['AJUDA', 'ESTOU_BEM']);
+    for (const k of Object.keys(NOMES_AVISOS)) if (oferecidos.includes(k)) av.appendChild(caixa(NOMES_AVISOS[k], e.avisos.includes(k), k));
 
     opcoes($('prazoCuidar'), [10, 15, 20, 30, 60].map((m) => [m, m + ' min']), e.prazo);
     const aprendida = e.costume != null && e.horaFixa < 0 ? 'Aprender (' + hhmm(e.costume) + ')' : 'Aprender (' + e.amostras + ' de 5 dias)';

@@ -164,6 +164,8 @@ object VolumeLg {
         while (true) {
             if (m.cancelado) return
             val comecou = synchronized(trava) {
+                // Reconferido DENTRO da trava: o alarme pode ter parado (devolverAlarme) enquanto esperávamos por ela.
+                if (m.cancelado) return
                 val v = lerNivel(ctx) ?: return@synchronized false
                 if (v.mudo && apertar(ctx, LgNetcast.TECLA_MUDO, 1)) m.tirouMudo = true
                 m.original = v.nivel
@@ -181,6 +183,7 @@ object VolumeLg {
             SystemClock.sleep(passo)
             if (m.cancelado) return
             val parar = synchronized(trava) {
+                if (m.cancelado) return@synchronized true
                 val v = lerNivel(ctx) ?: return@synchronized true
                 if (LgNetcast.mexeramNaRampa(v.nivel, esperado)) { Log.i(TAG, "alarme: mexeram no volume (${v.nivel}), paro de subir"); m.definido = v.nivel; return@synchronized true }
                 if (v.nivel >= ate) { m.definido = v.nivel; esperado = ate; return@synchronized false }

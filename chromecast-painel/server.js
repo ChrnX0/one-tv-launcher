@@ -124,7 +124,7 @@ async function rotulosDoLauncher(endpoint) {
 
 // Tenta um nome melhor baixando so o cabecalho do APK e procurando a label no AndroidManifest/resources.
 // E mais lento (precisa puxar o APK do aparelho), por isso e sob pedido, nao em toda listagem.
-async function atualizarNomeDeVerdade(endpoint, pkg) {
+async function atualizarNomeDeVerdade(endpoint, pkg) { nomeSeguro(pkg, 'pacote');
     const caminhoRemoto = (await adbShell(endpoint, `pm path ${pkg}`)).split(/\r?\n/)[0].replace(/^package:/, '').trim();
     if (!caminhoRemoto) throw new Error('apk nao encontrado no aparelho');
     const tmp = path.join(os.tmpdir(), `${pkg}.apk`);
@@ -143,12 +143,17 @@ async function atualizarNomeDeVerdade(endpoint, pkg) {
 // Apps que o painel NUNCA congela nem remove (04/11/2026): o launcher é a tela inicial E o Device Owner da TV —
 // congelá-lo deixaria a TV sem HOME. Antes a lista oferecia "Remover" e o interruptor para ele também.
 const PROTEGIDOS = new Set(['br.paulo.tvlauncher']);
+// Nome de pacote e de permissão vão para o "adb shell": só letras, números, _ e ponto (senão "x;reboot" vira comando).
+function nomeSeguro(v, oque) {
+    if (typeof v !== 'string' || !/^[A-Za-z0-9_.]+$/.test(v)) throw Object.assign(new Error(`${oque} inválido`), { status: 400 });
+    return v;
+}
 function recusarSeProtegido(pkg) {
     if (PROTEGIDOS.has(pkg)) throw Object.assign(new Error('Este app é a tela inicial da TV e não pode ser congelado nem removido pelo painel'), { status: 403 });
 }
-async function congelarApp(endpoint, pkg) { recusarSeProtegido(pkg); await adbShell(endpoint, `pm disable-user --user 0 ${pkg}`); }
-async function descongelarApp(endpoint, pkg) { await adbShell(endpoint, `pm enable ${pkg}`); }
-async function removerApp(endpoint, pkg) { recusarSeProtegido(pkg); await adb(['-s', endpoint, 'uninstall', pkg], { timeoutMs: 30000 }); }
+async function congelarApp(endpoint, pkg) { nomeSeguro(pkg, 'pacote'); recusarSeProtegido(pkg); await adbShell(endpoint, `pm disable-user --user 0 ${pkg}`); }
+async function descongelarApp(endpoint, pkg) { nomeSeguro(pkg, 'pacote'); await adbShell(endpoint, `pm enable ${pkg}`); }
+async function removerApp(endpoint, pkg) { nomeSeguro(pkg, 'pacote'); recusarSeProtegido(pkg); await adb(['-s', endpoint, 'uninstall', pkg], { timeoutMs: 30000 }); }
 async function instalarApp(endpoint, caminhoApkLocal) {
     await adb(['-s', endpoint, 'install', '-r', '-t', caminhoApkLocal], { timeoutMs: 120000 });
 }
@@ -156,7 +161,7 @@ async function instalarApp(endpoint, caminhoApkLocal) {
 // ---------- permissoes ----------
 // So as permissoes "perigosas" (camera, microfone, localizacao, armazenamento, etc.) aparecem - sao as
 // unicas que fazem sentido a familia decidir; o resto (internet, etc.) o Android ja cuida sozinho.
-async function listarPermissoes(endpoint, pkg) {
+async function listarPermissoes(endpoint, pkg) { nomeSeguro(pkg, 'pacote');
     const saida = await adbShell(endpoint, `dumpsys package ${pkg}`, { timeoutMs: 10000 });
     const linhas = saida.split('\n');
     // O dumpsys repete "runtime permissions:" uma vez por usuario do Android (aqui so importa o user 0 -
@@ -174,12 +179,14 @@ async function listarPermissoes(endpoint, pkg) {
     }
     return [...permissoes.entries()].map(([permissao, concedida]) => ({ permissao, concedida }));
 }
-async function concederPermissao(endpoint, pkg, permissao) { await adbShell(endpoint, `pm grant ${pkg} ${permissao}`); }
-async function revogarPermissao(endpoint, pkg, permissao) { await adbShell(endpoint, `pm revoke ${pkg} ${permissao}`); }
+async function concederPermissao(endpoint, pkg, permissao) { nomeSeguro(pkg, 'pacote'); nomeSeguro(permissao, 'permissão'); await adbShell(endpoint, `pm grant ${pkg} ${permissao}`); }
+async function revogarPermissao(endpoint, pkg, permissao) { nomeSeguro(pkg, 'pacote'); nomeSeguro(permissao, 'permissão'); await adbShell(endpoint, `pm revoke ${pkg} ${permissao}`); }
 
 // ---------- arquivos ----------
 async function listarArquivos(endpoint, pastaRemota) {
-    const saida = await adbShell(endpoint, `ls -la ${JSON.stringify(pastaRemota)}`.replace(/"/g, "'"));
+    // Entre aspas simples do shell; uma aspa simples no nome vira '\'' (fecha, aspa escapada, abre).
+    const pasta = "'" + String(pastaRemota).replace(/'/g, "'\\''") + "'";
+    const saida = await adbShell(endpoint, `ls -la ${pasta}`);
     return saida.split('\n').map((l) => l.trim()).filter(Boolean).filter((l) => !l.startsWith('total'));
 }
 async function enviarArquivo(endpoint, caminhoLocal, pastaRemota, nomeArquivo) {
@@ -193,6 +200,22 @@ async function baixarArquivo(endpoint, caminhoRemoto, caminhoLocalDestino) {
 
 // ========================= servidor HTTP =========================
 const app = express();
+// 17/11/2026: sem isto, qualquer site aberto no PC podia mandar o navegador chamar este painel (Host localhost) e
+// rodar comandos na TV pelo adb. Agora: Host tem que ser o do próprio painel, e um pedido com Origin de outro site
+// é recusado (o navegador sempre manda Origin em POST e em fetch de outra origem).
+app.use((req, res, next) => {
+    const host = String(req.headers.host || '');
+    const nomeHost = host.replace(/:\d+$/, '').replace(/^\[|\]$/g, '');
+    const hostOk = ['localhost', '127.0.0.1', '::1'].includes(nomeHost) || /^(10|192\.168|172\.(1[6-9]|2\d|3[01]))\.[\d.]+$/.test(nomeHost);
+    const origem = req.headers.origin;
+    // Pedido que muda algo (POST/DELETE...) tem que trazer Origin do próprio painel: o navegador sempre manda, e um
+    // cliente sem Origin (script na rede, se PAINEL_HOST abrir o painel) não aciona adb. GET/HEAD seguem sem exigir.
+    const muda = !['GET', 'HEAD', 'OPTIONS'].includes(req.method);
+    let origemOk = !muda;
+    if (origem) { try { origemOk = new URL(origem).host === host; } catch { origemOk = false; } }
+    if (!hostOk || !origemOk) return res.status(403).json({ erro: 'pedido de fora do painel' });
+    next();
+});
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 const upload = multer({ dest: PASTA_UPLOADS });

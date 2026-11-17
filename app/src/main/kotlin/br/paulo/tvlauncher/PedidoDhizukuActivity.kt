@@ -39,6 +39,9 @@ class PedidoDhizukuActivity : Activity() {
         ouvinte = b?.let { IDhizukuRequestPermissionListener.Stub.asInterface(it) }
         val pacotes = if (uid >= 0) packageManager.getPackagesForUid(uid) else null
         val pacote = pacotes?.singleOrNull()
+        // uid de sistema (shell 2000 etc.) nunca: autorizar "com.android.shell" daria o dono a todo processo do adb e do
+        // shell emprestado (Shizuku). Só apps de verdade (uid >= FIRST_APPLICATION_UID).
+        if (uid < android.os.Process.FIRST_APPLICATION_UID) return responder(false)
         if (pacote == null || pacote == packageName || DonoEmprestado.parado(this) != RegrasDono.Parado.NAO) return responder(false)
         if (DonoEmprestado.porUid(this, uid) != null) return responder(true)   // já autorizado: sem tela
         val ai = try { packageManager.getApplicationInfo(pacote, 0) } catch (_: Exception) { return responder(false) }

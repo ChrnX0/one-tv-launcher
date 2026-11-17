@@ -29,6 +29,10 @@ class LauncherApp : Application() {
     override fun onCreate() {
         super.onCreate()
         instancia = this
+        // O processo ":dhizuku_usuario" roda código de OUTRO app (UserService do Dhizuku): uma exceção dele não pode
+        // contar como queda do launcher (RegistroErros/VigiaAtualizacao marcariam a versão como ruim), e nada da tela
+        // do launcher precisa existir lá.
+        if (android.os.Build.VERSION.SDK_INT >= 28 && getProcessName().endsWith(":dhizuku_usuario")) return
         RegistroErros.instalar(this)
         // Atualização vigiada: anota a versão que abriu (versão nova = começa a vigiar) e liga o modo seguro, que não
         // deixa abrir a tela que derrubou uma versão ruim. Logo depois do RegistroErros: uma queda já conta.

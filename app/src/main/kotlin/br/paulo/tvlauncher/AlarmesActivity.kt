@@ -172,7 +172,7 @@ class AlarmesActivity : Activity() {
         // LG pareada: o volume que conta é o da LG (o do Android é fixo no HDMI). A linha escolhe o volume FINAL da LG;
         // o toque começa baixo e sobe até ele na rampa de cada alarme.
         val lg = VolumeLg.configurado(this) && VolumeLg.alarmeLigado(this)
-        fun rotulo(pct: Int) = if (lg) getString(R.string.al_volume_tv, pct)
+        fun rotulo(pct: Int) = if (lg && pct != LgNetcast.NAO_MEXER) getString(R.string.al_volume_tv, pct)
             else getString(R.string.al_volume_min, if (pct <= 0) getString(R.string.al_volume_nao_mexe) else "$pct%")
         fun atual() = if (lg) AlarmeGarantia.volumeLg(this) else AlarmeGarantia.volumeMinimo(this)
         val t = texto(17f, textoClaro, fonteMedia).apply { text = rotulo(atual()) }

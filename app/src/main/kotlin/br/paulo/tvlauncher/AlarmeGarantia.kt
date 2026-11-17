@@ -169,7 +169,7 @@ object AlarmeGarantia {
     /** Volume FINAL da LG no despertador (escala 0-100 dela), quando há LG pareada. */
     const val CHAVE_VOLUME_LG = "volume_lg_alarme"
     fun volumeLg(ctx: Context): Int = LgNetcast.alvoFixoAlarme(
-        ctx.getSharedPreferences(PREFS_DESPERTADOR, Context.MODE_PRIVATE).getInt(CHAVE_VOLUME_LG, LgNetcast.PADRAO_ALARME))
+        ctx.getSharedPreferences(PREFS_DESPERTADOR, Context.MODE_PRIVATE).getInt(CHAVE_VOLUME_LG, LgNetcast.volumeLgInicial(volumeMinimo(ctx))))
     fun definirVolumeLg(ctx: Context, v: Int) =
         ctx.getSharedPreferences(PREFS_DESPERTADOR, Context.MODE_PRIVATE).edit().putInt(CHAVE_VOLUME_LG, LgNetcast.alvoFixoAlarme(v)).apply()
 
@@ -187,7 +187,7 @@ object AlarmeGarantia {
     fun subirVolume(ctx: Context, rampaSeg: Int = 0): Volume? {
         // LG pareada (ideia 49): o volume do Android não chega na TV pelo HDMI; a própria LG começa baixo e sobe aos
         // poucos (na [rampaSeg] do alarme) até o volume fixo escolhido ([volumeLg], no máximo 30), em segundo plano.
-        val lg = if (VolumeLg.configurado(ctx) && VolumeLg.alarmeLigado(ctx)) VolumeLg.Mudanca().also { m ->
+        val lg = if (VolumeLg.configurado(ctx) && VolumeLg.alarmeLigado(ctx) && volumeLg(ctx) != LgNetcast.NAO_MEXER) VolumeLg.Mudanca().also { m ->
             val app = ctx.applicationContext
             val alvo = volumeLg(ctx)
             Fundo.rodar("Alarme-lg") { VolumeLg.subirAlarme(app, alvo, rampaSeg, m) }

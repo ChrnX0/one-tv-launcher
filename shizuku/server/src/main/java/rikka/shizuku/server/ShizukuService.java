@@ -424,7 +424,9 @@ public class ShizukuService extends Service<ShizukuUserServiceManager, ShizukuCl
             }
         }
 
-        configManager.update(uid, null, mask, value);
+        // tv-launcher (17/11/2026): grava também os pacotes do uid. Com null a entrada ficava com a lista vazia e a
+        // próxima subida do servidor (ShizukuConfigManager: "packagesChanged") apagava a autorização dada no painel.
+        configManager.update(uid, PackageManagerApis.getPackagesForUidNoThrow(uid), mask, value);
     }
 
     private void onPermissionRevoked(String packageName) {

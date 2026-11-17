@@ -120,9 +120,11 @@ class FfExtrator(private val uri: Uri, private val dados: DataSource.Factory) : 
             if (ctx == 0L) abrir()
             if (buscarPara != C.TIME_UNSET) { FfNativo.arquivoBuscar(ctx, buscarPara); buscarPara = C.TIME_UNSET; ultimoTempo.clear() }
             val n = FfNativo.arquivoLerPacote(ctx)
+            // O erro de rede guardado vem ANTES do "fim": o leitor devolve -1 ao FFmpeg quando a rede falha, e o FFmpeg
+            // chama isso de fim de arquivo. Antes, um AVI/WMV pela rede "terminava" no meio, sem nova tentativa.
+            leitor.erro?.let { leitor.erro = null; throw it }
             if (n == -1) return Extractor.RESULT_END_OF_INPUT
             if (n < 0) throw IOException("FFmpeg não conseguiu ler o arquivo")
-            leitor.erro?.let { leitor.erro = null; throw it }
             val i = FfNativo.arquivoPacoteFaixa(ctx)
             val t = faixas[i] ?: return Extractor.RESULT_CONTINUE
             if (pacote.size < n) pacote = ByteArray(n + n / 2)
@@ -141,7 +143,13 @@ class FfExtrator(private val uri: Uri, private val dados: DataSource.Factory) : 
 
     private fun abrir() {
         ctx = FfNativo.arquivoAbrir(leitor, true)
-        leitor.erro?.let { leitor.erro = null; throw it }
+        leitor.erro?.let {
+            // A rede caiu durante a abertura: fecha o que o FFmpeg chegou a abrir, para a nova tentativa abrir de novo
+            // e declarar as faixas (com ctx != 0 ela pulava abrir() e o player ficava carregando para sempre).
+            leitor.erro = null
+            if (ctx != 0L) { FfNativo.arquivoFechar(ctx); ctx = 0 }
+            throw it
+        }
         if (ctx == 0L) throw IOException("FFmpeg não abriu o arquivo")
         val n = FfNativo.arquivoFaixas(ctx)
         for (i in 0 until n) {
@@ -183,6 +191,7 @@ class FfExtrator(private val uri: Uri, private val dados: DataSource.Factory) : 
 
     override fun seek(posicao: Long, tempoUs: Long) {
         leitor.posicaoEntrada = posicao
+        leitor.erro = null   // erro de antes da busca não vale para a leitura nova
         if (ctx != 0L) buscarPara = tempoUs
     }
 

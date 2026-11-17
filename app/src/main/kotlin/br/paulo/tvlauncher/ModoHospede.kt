@@ -195,9 +195,9 @@ object ModoHospede {
 class HospedeReceiver : BroadcastReceiver() {
     override fun onReceive(ctx: Context, intent: Intent) {
         if (intent.action != ModoHospede.ACAO_SAIDA || !ModoHospede.ativo(ctx)) return
-        val pronto = goAsync()
-        Fundo.rodar("hospede-saida") {
-            try { ModoHospede.encerrarEstadia(ctx) } finally { pronto.finish() }
-        }
+        // Sem goAsync: a limpeza total pode levar minutos (até 30 s por app) e passava do prazo de 60 s do broadcast
+        // (ANR). O processo do launcher fica vivo pelo serviço de acessibilidade, então a thread termina o trabalho.
+        val app = ctx.applicationContext
+        Fundo.rodar("hospede-saida") { ModoHospede.encerrarEstadia(app) }
     }
 }
