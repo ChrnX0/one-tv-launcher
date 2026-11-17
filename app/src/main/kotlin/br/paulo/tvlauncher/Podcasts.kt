@@ -293,12 +293,15 @@ object Podcasts {
         return Leitura.Erro("redirecionamentos demais")
     }
 
+    /** O endereço como fica guardado (feed:// vira https://). */
+    fun normalizar(url: String) = url.trim().let { if (it.startsWith("feed://", true)) "https://" + it.substring(7) else it }
+
     /**
      * Assina [url]: baixa, confere que é podcast, grava a cópia e a assinatura. Devolve o nome do podcast ou o erro.
      * Fora da thread da tela.
      */
     fun adicionar(ctx: Context, url: String): Result<String> = runCatching {
-        val u = url.trim().let { if (it.startsWith("feed://", true)) "https://" + it.substring(7) else it }
+        val u = normalizar(url)
         when (val r = baixar(u)) {
             is Leitura.Nova -> {
                 val agora = System.currentTimeMillis()
