@@ -189,6 +189,10 @@ object HistoricoRede {
         val agora = System.currentTimeMillis()
         if (a.dbm != 0 || noCabo || !wm.isWifiEnabled) {
             if (religadas > 0) evento(app, "Wi-Fi voltou depois de $religadas religada(s) pelo launcher")
+            // Com rede o relógio é o do NTP: um "último reinício" no futuro (gravado com o relógio errado) travaria o
+            // reparo para sempre; traz para agora (a trava de 6 h continua valendo a partir daqui).
+            val pr = app.getSharedPreferences(PREFS_REPARO, Context.MODE_PRIVATE)
+            if (pr.getLong("reinicio", 0L) > agora) pr.edit().putLong("reinicio", agora).apply()
             semWifiDesde = null; religadas = 0; ultimaReligada = 0L
             return
         }

@@ -164,8 +164,12 @@ object McpServidor {
             val saida = c.getOutputStream().buffered(16 * 1024)
             val r = try {
                 // Família conectada (degrau 3): só a rota da foto aceita corpo maior (a foto chega já reduzida pelo celular).
+                // O limite maior só vale com o token certo: antes, qualquer um na internet fazia a TV ler ~3 MB antes
+                // de o token ser conferido (o pedido recusado depois em familia(), mas a leitura já tinha acontecido).
                 val req = PainelHttp.lerCabecalhos(entrada).also {
-                    it.lerCorpo(if (it.caminho.startsWith("/familia/")) FamiliaConectada.MAX_FOTO + 1024 else LIMITE_CORPO)
+                    val fotoDaFamilia = FamiliaConectada.Regras.rota(it.caminho)
+                        ?.let { (t, _) -> FamiliaConectada.Regras.confere(t, FamiliaConectada.token(app)) } == true
+                    it.lerCorpo(if (fotoDaFamilia) FamiliaConectada.MAX_FOTO + 1024 else LIMITE_CORPO)
                 }
                 // painel-1: as rotas que montam JSON (/register e /mcp) só recebem JSON estrito e raso, SEM depender do
                 // Content-Type (antes, sem esse cabeçalho a checagem era pulada e "[[[[..." derrubava o launcher).

@@ -32,7 +32,9 @@ object ReparoWifi {
         if (ultimaAcao > 0 && agora - ultimaAcao < ENTRE_ACOES_MS) return Acao.NADA
         if (religadas < MAX_RELIGAR) return Acao.RELIGAR_WIFI
         if (somTocando) return Acao.NADA
-        if (ultimoReinicio > 0 && agora - ultimoReinicio in 0 until INTERVALO_REINICIO_MS) return Acao.NADA
+        // Diferença NEGATIVA também conta como "recente": depois de reiniciar sem Wi-Fi (sem NTP) o relógio do
+        // Chromecast volta para trás, e com `in 0 until` a trava deixava de valer (reinício a cada ~15 min a noite toda).
+        if (ultimoReinicio > 0 && agora - ultimoReinicio < INTERVALO_REINICIO_MS) return Acao.NADA
         return Acao.REINICIAR
     }
 }

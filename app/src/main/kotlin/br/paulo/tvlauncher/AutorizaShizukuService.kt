@@ -25,6 +25,7 @@ class AutorizaShizukuService : AccessibilityService() {
         AvisoChuva.vigiar(this)   // aviso de chuva por cima de qualquer tela (a cada 30 min, só com a tela acesa)
         HistoricoRede.iniciar(this)   // histórico de rede (para o painel) e o "desligar sozinha": também voltam daqui
         AutoDesligar.iniciar(this)
+        AcordarComLg.iniciar(this)   // LG ligada pelo controle dela acorda o Chromecast: volta também quando o processo renasce com a tela apagada
         UnifiCliente.vigiar(this) // aparelho novo no roteador UniFi (a cada 5 min, só com o aviso ligado no painel)
         FiltroNoturno.iniciar(this)
         SaudeAcesso.vigiar(this)   // aviso "acesso remoto parado" (shell próprio / túnel), ver SaudeAcesso.kt

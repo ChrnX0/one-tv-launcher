@@ -32,6 +32,11 @@ class ReparoWifiTest {
         assertEquals(Acao.REINICIAR, ReparoWifi.decidir(t0 + 15 * min, t0, 2, t0 + 10 * min, t0 - 7 * 60 * min, false))
     }
 
+    @Test fun relogioQueVoltouDepoisDoReinicioNaoViraCiclo() {
+        // reiniciou sem Wi-Fi e o relógio (sem NTP) voltou 2 dias: o último reinício parece "no futuro" e não libera outro
+        assertEquals(Acao.NADA, ReparoWifi.decidir(t0 + 15 * min, t0, 2, t0 + 10 * min, t0 + 2 * 24 * 60 * min, false))
+    }
+
     @Test fun relatoDosAparelhosMostraQuandoLigou() {
         val zona = ZoneId.of("UTC")
         val agora = 1_794_736_000_000L   // 15/11/2026 09:46:40 UTC
