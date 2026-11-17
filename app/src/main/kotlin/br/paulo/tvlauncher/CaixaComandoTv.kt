@@ -52,8 +52,8 @@ object CaixaComandoTv {
         return 200 to JSONObject().put("entendeu", true).put("texto", texto).put("situacao", p.situacao.name.lowercase())
     }
 
-    /** "Abrindo YouTube", "Colocando em Globo", "Aviso em 7 minutos"... no idioma da TV. */
-    private fun entendido(app: Context, p: CaixaComando.Pedido, apps: Map<String, String>): String = when (p.tipo) {
+    /** "Abrindo YouTube", "Colocando em Globo", "Aviso em 7 minutos"... no idioma da TV. Também a busca que faz (3.11). */
+    fun entendido(app: Context, p: CaixaComando.Pedido, apps: Map<String, String>): String = when (p.tipo) {
         "abrir_app" -> app.getString(R.string.cc_abrindo, apps[p.alvo] ?: p.alvo)
         "abrir_tela" -> app.getString(R.string.cc_abrindo, app.getString(when (p.alvo) {
             "previsao" -> R.string.cc_tela_previsao
@@ -68,6 +68,8 @@ object CaixaComandoTv {
         "desligar_em" -> if (p.numero == 0) app.getString(R.string.cc_desligar_cancelar) else app.getString(R.string.cc_desligar, p.numero)
         "volume" -> app.getString(when (p.acao) { "subir" -> R.string.cc_volume_subir; "descer" -> R.string.cc_volume_descer; else -> R.string.cc_mudo })
         "midia" -> app.getString(if (p.acao == "pausar") R.string.cc_pausar else R.string.cc_continuar)
+        "modo_visita" -> app.getString(if (p.numero == 1) R.string.l72_visita_liga else R.string.l72_visita_desliga)
+        "filtro_noturno" -> app.getString(if (p.numero == 1) R.string.acao_filtro_ligar else R.string.acao_filtro_desligar)
         else -> p.tipo
     }
 }

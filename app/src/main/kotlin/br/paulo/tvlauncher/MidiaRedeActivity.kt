@@ -161,6 +161,11 @@ class MidiaRedeActivity : Activity() {
         pilha += Nivel(getString(R.string.rede_titulo), null, emptyList())
         desenharRaiz()
         procurar()
+        intent.getStringExtra(EXTRA_BUSCA)?.trim()?.takeIf { it.length >= 2 }?.let { q ->
+            val c = runCatching { MidiaArmazem.contas(this) }.getOrDefault(emptyList()).firstOrNull { it.ehJellyOuEmby || it.tipo == ContaMidia.PLEX }
+            if (c != null) entrar(if (c.tipo == ContaMidia.PLEX) Origem.PlexO(c) else Origem.Jelly(c),
+                (if (c.tipo == ContaMidia.PLEX) Plex.BUSCA else Jellyfin.BUSCA) + q, "“$q”")
+        }
     }
 
     // Saiu para a HOME (que não chega como tecla) ou outro app: o "próximo em 10 s" não pode tocar por cima deles.
@@ -1327,10 +1332,12 @@ class MidiaRedeActivity : Activity() {
 
     private fun dp(v: Int) = Estilo.dp(this, v)
 
-    private companion object {
-        const val TAG_LINHA = "linha"
-        const val CODIGO_TOCAR = 29
+    companion object {
+        /** Elevação 3.11: aberta pela busca da HOME; procura este termo no primeiro Jellyfin/Emby/Plex guardado. */
+        const val EXTRA_BUSCA = "busca"
+        private const val TAG_LINHA = "linha"
+        private const val CODIGO_TOCAR = 29
         /** ContaMidia.pasta de um LINK que é lista M3U (OK abre a lista em vez de tocar). */
-        const val LISTA = "lista"
+        private const val LISTA = "lista"
     }
 }

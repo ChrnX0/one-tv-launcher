@@ -31,7 +31,11 @@ import java.util.Locale
  * qualquer tecla acende. Sair da tela para o som. Catálogo e espelhos: [Radios].
  */
 class RadioActivity : Activity() {
-    companion object { private const val ESCURECER_MS = 3 * 60_000L }
+    companion object {
+        private const val ESCURECER_MS = 3 * 60_000L
+        /** Elevação 3.11: aberta pela busca da HOME já procurando este nome. */
+        const val EXTRA_BUSCA = "busca"
+    }
 
     private val ui = Handler(Looper.getMainLooper())
     private lateinit var coluna: LinearLayout
@@ -73,6 +77,9 @@ class RadioActivity : Activity() {
         favoritas = Radios.favoritas(this)
         montar()
         carregarListas()
+        intent.getStringExtra(EXTRA_BUSCA)?.trim()?.takeIf { it.length >= 2 }?.let { t ->
+            buscar(getString(R.string.ra_resultado, t)) { Radios.urlNome(it, t) }
+        }
     }
 
     override fun onResume() {

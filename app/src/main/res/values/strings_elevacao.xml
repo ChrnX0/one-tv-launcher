@@ -47,4 +47,21 @@
     <string name="elv_leg_posicao">Subtitle position: %1$s</string>
     <string name="elv_leg_embaixo">bottom</string>
     <string name="elv_leg_em_cima">top</string>
+    <!-- 3.11 busca que faz -->
+    <string name="elv_bf_fazer">Do it</string>
+    <string name="elv_bf_ok_faz">OK does it now</string>
+    <string name="elv_bf_wifi">Show the guest Wi-Fi</string>
+    <string name="elv_bf_wifi_configurar">Not set up yet: OK opens Settings (Visits)</string>
+    <string name="elv_bf_letra_maior">Bigger text (%1$d%%)</string>
+    <string name="elv_bf_letra_menor">Smaller text (%1$d%%)</string>
+    <string name="elv_bf_letra_limite">It is already at this size</string>
+    <string name="elv_bf_radios">Radio stations</string>
+    <string name="elv_bf_radio_fav">Favorite station</string>
+    <string name="elv_bf_ajuda">Help</string>
+    <string name="elv_bf_ajuda_det">Topic of the manual</string>
+    <string name="elv_bf_procurar">Search further</string>
+    <string name="elv_bf_procurar_radio">Radio stations named “%1$s”</string>
+    <string name="elv_bf_procurar_radio_det">Stations from all over the world</string>
+    <string name="elv_bf_procurar_rede">“%1$s” in your network files</string>
+    <string name="elv_bf_procurar_rede_det">On your Jellyfin, Emby or Plex</string>
 </resources>
