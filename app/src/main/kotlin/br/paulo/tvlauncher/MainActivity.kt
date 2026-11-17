@@ -1759,6 +1759,10 @@ class MainActivity : Activity() {
             mostrarDestaque(null, getString(R.string.home_card_jogos), resumoJogos())
             mostrarCapaAtalho(IconeApp.Tipo.JOGOS)
         }) { abrirCatalogo(JogosActivity::class.java) }, quadrado = true)
+        // Addons (16/11/2026, estudo do Stremio): só aparece com pelo menos um addon instalado (painel web ou Configurações).
+        if (AddonsTv.instalados(this).isNotEmpty()) adicionar(cartaoAtalho(getString(R.string.ad_titulo), IconeApp.Tipo.FILMES, CORES_REDE, {
+            mostrarDestaque(null, getString(R.string.ad_titulo), getString(R.string.ad_destaque))
+        }) { abrirCatalogo(AddonsActivity::class.java) }, quadrado = true)
         // Plugins de terceiros (degrau 3): no fim da linha, no máximo 3, desenhados por NÓS com os dados que o plugin mandou.
         for (c in cartoesPlugin) adicionar(cartaoPlugin(c), quadrado = true)
         rotuloContinuar?.text = getString(if (JogosTv.cardLigado(this)) R.string.home_linha_continuar_jogos else R.string.home_linha_continuar)

@@ -208,7 +208,20 @@ object Series {
      * finalizada sai daqui (como o filme visto até o fim) e fica só em "Assistidos"; volta se sair episódio novo.
      */
     fun continuar(series: List<Serie>, ultimos: Map<String, UltimoEpisodio>, progresso: Map<String, ProgressoSerie> = emptyMap()): List<Serie> =
-        series.filter { it.chave in ultimos && percentual(it, progresso[it.chave]) != 100 }.sortedByDescending { ultimos[it.chave]?.quando ?: 0 }
+        series.filter { it.chave in ultimos && percentual(it, progresso[it.chave]) != 100 }
+            .sortedByDescending { ordemContinuar(it, ultimos[it.chave], progresso[it.chave]) }
+
+    /**
+     * Momento usado para ordenar o Continuar (16/11/2026, ideia do Stremio): a última vez que a pessoa assistiu OU, se o
+     * servidor publicou episódio depois da última conta da ficha, a hora dessa publicação. Assim a série que ganhou
+     * episódio novo sobe para o topo do Continuar, junto com a etiqueta "N episódios novos", em vez de ficar lá embaixo
+     * por ter sido vista há semanas. `atualizada` vem em segundos (last_modified); `quando` em milissegundos.
+     */
+    fun ordemContinuar(s: Serie, ultimo: UltimoEpisodio?, p: ProgressoSerie?): Long {
+        val visto = ultimo?.quando ?: 0L
+        val novidade = if (p != null && p.vistos > 0 && s.atualizada > p.atualizada) s.atualizada * 1000 else 0L
+        return maxOf(visto, novidade)
+    }
 
     // ---------------------------------------------------------------- assistidos (07/11/2026)
 

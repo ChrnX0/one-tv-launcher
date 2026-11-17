@@ -29,11 +29,15 @@ object FimDoVideo {
      * O que fazer quando um vídeo para.
      * [terminou]: foi até o fim (não foi o VOLTAR). [temProximo]: a série tem episódio seguinte.
      * [desligarAoFim]: a pessoa marcou "desligar quando este acabar". [seguidosSemTecla]: já contando este episódio.
+     * [contagem]: segundos da contagem escolhidos nas Configurações ([Conforto.contagem]); 0 = não seguir sozinho.
      */
-    fun depois(terminou: Boolean, temProximo: Boolean, desligarAoFim: Boolean, seguidosSemTecla: Int): Passo = when {
+    fun depois(terminou: Boolean, temProximo: Boolean, desligarAoFim: Boolean, seguidosSemTecla: Int,
+               contagem: Int = CONTAGEM_S): Passo = when {
         !terminou -> Passo.NADA
         desligarAoFim -> Passo.DESLIGAR
         !temProximo -> Passo.NADA
+        // [contagem] = 0 (Configurações, 16/11/2026): "não começar sozinho"; volta à ficha no próximo episódio.
+        contagem <= 0 -> Passo.NADA
         seguidosSemTecla >= SEGUIDOS_MAX -> Passo.PERGUNTAR
         else -> Passo.PROXIMO_CONTANDO
     }

@@ -393,6 +393,49 @@ class ConfigLauncherActivity : Activity() {
             linhaQuadros.ligado(TaxaQuadros.alternar(this))
         }
         c.addView(linhaQuadros)
+        // Confortos do estudo do Stremio (16/11/2026; Conforto.kt): esconder spoiler, segundo idioma e a contagem do próximo.
+        lateinit var linhaSpoiler: LinhaCfg
+        linhaSpoiler = linha(getString(R.string.cf_spoiler), getString(R.string.cf_spoiler_det), chave = Conforto.semSpoiler(this)) {
+            linhaSpoiler.ligado(Conforto.alternarSpoiler(this))
+        }
+        c.addView(linhaSpoiler)
+        fun rotuloSegundo(cod: String?) = cod?.let { Conforto.nomeIdioma(it) } ?: getString(R.string.cf_nenhum)
+        lateinit var linhaSegundo: LinhaCfg
+        linhaSegundo = linha(getString(R.string.cf_segundo), getString(R.string.cf_segundo_det), valor = rotuloSegundo(Conforto.segundoIdioma(this))) {
+            val opcoes = listOf<String?>(null) + ConfortoRegras.SEGUNDOS
+            val atualS = Conforto.segundoIdioma(this)
+            Estilo.lista(this, getString(R.string.cf_segundo), opcoes.map { rotuloSegundo(it) }, listOf(opcoes.indexOf(atualS).coerceAtLeast(0))) { i ->
+                Conforto.definirSegundo(this, opcoes[i]); linhaSegundo.valor(rotuloSegundo(opcoes[i]))
+            }
+        }
+        c.addView(linhaSegundo)
+        fun rotuloContagem(s: Int) = if (s <= 0) getString(R.string.cf_proximo_nao) else getString(R.string.cf_segundos, s)
+        lateinit var linhaContagem: LinhaCfg
+        linhaContagem = linha(getString(R.string.cf_proximo), getString(R.string.cf_proximo_det), valor = rotuloContagem(Conforto.contagem(this))) {
+            val v = ConfortoRegras.CONTAGENS
+            Estilo.lista(this, getString(R.string.cf_proximo), v.map { rotuloContagem(it) }, listOf(v.indexOf(Conforto.contagem(this)).coerceAtLeast(0))) { i ->
+                Conforto.definirContagem(this, v[i]); linhaContagem.valor(rotuloContagem(v[i]))
+            }
+        }
+        c.addView(linhaContagem)
+        // Addons (16/11/2026): ver e remover aqui; instalar é pelo painel web (colar endereço é penoso no controle).
+        fun rotuloAddons() = AddonsTv.instalados(this).size.let { if (it == 0) getString(R.string.cf_nenhum) else it.toString() }
+        lateinit var linhaAddons: LinhaCfg
+        linhaAddons = linha(getString(R.string.ad_titulo), getString(R.string.ad_cfg_det), valor = rotuloAddons()) {
+            val todos = AddonsTv.instalados(this)
+            if (todos.isEmpty()) {
+                CaixaTv(this).setTitle(getString(R.string.ad_titulo)).setMessage(getString(R.string.ad_cfg_como))
+                    .setPositiveButton(getString(android.R.string.ok), null).show()
+                return@linha
+            }
+            Estilo.lista(this, getString(R.string.ad_cfg_remover_qual), todos.map { it.m.nome }, emptyList()) { i ->
+                val a = todos[i]
+                CaixaTv(this).setTitle(a.m.nome).setMessage(getString(R.string.ad_cfg_remover, a.m.nome))
+                    .setPositiveButton(getString(R.string.ad_cfg_remover_sim)) { _, _ -> AddonsTv.remover(this, a.base); linhaAddons.valor(rotuloAddons()) }
+                    .setNegativeButton(getString(R.string.sv_cancelar), null).show()
+            }
+        }
+        c.addView(linhaAddons)
         // Foto da conta Google na bolinha do perfil (FotoPerfil, 13/11/2026): abre a tela do código para o celular.
         secao(c, getString(R.string.fp_secao))
         c.addView(linha(getString(R.string.fp_linha), getString(R.string.fp_linha_det), seta = true) {

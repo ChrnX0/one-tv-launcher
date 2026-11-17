@@ -60,6 +60,8 @@ class VodActivity : Activity() {
         private const val EXTRA_TITULO = "titulo"
         private const val EXTRA_TIPO = "tipo"
         private const val EXTRA_URL = "url"
+        private const val EXTRA_CHAVE_POS = "chave_pos"     // addons: a posição guardada por esta chave, não pelo endereço
+        private const val EXTRA_CABECALHOS = "cabecalhos"   // addons: User-Agent/Referer que o addon pediu
         // De quem é a escolha de áudio (Idioma): o filme, ou a SÉRIE inteira (o próximo episódio segue a mesma escolha).
         private const val EXTRA_IDIOMA = "idioma"
         // O que procurar no OpenSubtitles (LegendaExterna): nome limpo, ano, e temporada/episódio nas séries.
@@ -94,6 +96,20 @@ class VodActivity : Activity() {
         fun abrirUrl(ctx: Context, url: String, titulo: String) {
             ctx.startActivity(Intent(ctx, VodActivity::class.java)
                 .putExtra(EXTRA_TIPO, TIPO_FILME).putExtra(EXTRA_URL, url).putExtra(EXTRA_TITULO, titulo))
+        }
+
+        /**
+         * Fonte de um addon (16/11/2026, AddonsActivity): endereço http(s) direto, a posição guardada pelo id do vídeo no
+         * addon ([chavePos], ex.: "addon:tt123:1:2"; o endereço muda a cada pedido) e os cabeçalhos que o addon pediu
+         * (só os de [AddonsProtocolo.cabecalhoPermitido]). Com resultado: o fim do episódio decide o próximo.
+         */
+        fun abrirAddon(act: Activity, codigo: Int, url: String, titulo: String, chavePos: String, episodio: Boolean,
+                       cabecalhos: Map<String, String>) {
+            val b = android.os.Bundle()
+            cabecalhos.filterKeys { AddonsProtocolo.cabecalhoPermitido(it) }.forEach { (k, v) -> b.putString(k, v) }
+            act.startActivityForResult(Intent(act, VodActivity::class.java)
+                .putExtra(EXTRA_TIPO, if (episodio) TIPO_EPISODIO else TIPO_FILME).putExtra(EXTRA_URL, url).putExtra(EXTRA_TITULO, titulo)
+                .putExtra(EXTRA_CHAVE_POS, chavePos).putExtra(EXTRA_CABECALHOS, b), codigo)
         }
 
         /** Endereço da rede com resultado (ideia 29: a pasta do "Na rede" emenda o próximo arquivo). */
@@ -141,6 +157,8 @@ class VodActivity : Activity() {
     private var quadrosDecididos = false   // ideia 86: o modo da tela (24 Hz para filme) já foi pedido para este vídeo
     // Preferência de áudio deste título (Idioma), lida do disco fora da thread da tela antes de o vídeo começar.
     @Volatile private var prefIdioma = Idioma.Pref.DUBLADO
+    /** Segundo idioma de áudio/legenda (Conforto, 16/11/2026), já sem o idioma da TV; null = nenhum. */
+    @Volatile private var segundoIdioma: String? = null
     private var chaveIdioma = ""
     // Ideia 25: idioma do sistema da TV ("pt", "en", "es"): "dublado" e a legenda automática seguem ele.
     private val idiomaTv by lazy { IdiomaPlayer.idiomaDaTv() }
@@ -210,7 +228,11 @@ class VodActivity : Activity() {
         val ext = intent.getStringExtra(EXTRA_EXT).orEmpty()
         // Endereço da rede (ver FontesMidia: nenhum leva senha nem token). A posição salva usa o próprio endereço como chave.
         val direto = intent.getStringExtra(EXTRA_URL)?.takeIf { FontesMidia.aceito(it) }
-        chave = if (direto != null) "rede:${direto.hashCode()}" else chave(tipo, fonte, id)
+        val chavePos = intent.getStringExtra(EXTRA_CHAVE_POS)?.takeIf { it.startsWith("addon:") && direto != null }
+        chave = chavePos ?: if (direto != null) "rede:${direto.hashCode()}" else chave(tipo, fonte, id)
+        val cabAddon = intent.getBundleExtra(EXTRA_CABECALHOS)?.let { b ->
+            b.keySet().filter { AddonsProtocolo.cabecalhoPermitido(it) }.mapNotNull { k -> b.getString(k)?.let { k to it } }.toMap()
+        }.orEmpty()
         chaveIdioma = intent.getStringExtra(EXTRA_IDIOMA)?.takeIf { it.isNotEmpty() } ?: chave
         serie = tipo == TIPO_EPISODIO && !intent.getStringExtra(EXTRA_IDIOMA).isNullOrEmpty()
         podeSondar = direto != null
@@ -294,6 +316,7 @@ class VodActivity : Activity() {
                 if (tipo == TIPO_EPISODIO) Series.urlEpisodio(conta, id, ext) else Vod.urlFilme(conta, Filme(id, fonte, "", extensao = ext))
             }
             prefIdioma = IdiomaPlayer.prefs(this).para(chaveIdioma)
+            segundoIdioma = ConfortoRegras.segundoUtil(Conforto.segundoIdioma(this), idiomaTv)
             // Ideia 90: tradução que ficou pela metade (o player fechou no meio) é refeita; a metade não fica valendo.
             if (LegendaTraduzida.pelaMetade(this, chave)) LegendaBaixar.apagar(this, chave)
             val leg = LegendaBaixar.guardada(this, chave)
@@ -313,7 +336,7 @@ class VodActivity : Activity() {
                 pintarLegenda()
                 abertura = ab
                 relato = tocavel?.relato
-                cabecalhos = tocavel?.cabecalhos ?: m3u?.second?.takeIf { it.isNotBlank() }?.let { mapOf("User-Agent" to it) }.orEmpty()
+                cabecalhos = tocavel?.cabecalhos?.takeIf { it.isNotEmpty() } ?: cabAddon.takeIf { it.isNotEmpty() } ?: m3u?.second?.takeIf { it.isNotBlank() }?.let { mapOf("User-Agent" to it) }.orEmpty()
                 tocar()
             }
         }
@@ -372,7 +395,8 @@ class VodActivity : Activity() {
         // escolhidos quando as faixas chegam (onTracksChanged + IdiomaPlayer.aplicar). Nos dois casos, a legenda no idioma
         // da TV só liga se o áudio não for desse idioma.
         p.trackSelectionParameters = p.trackSelectionParameters.buildUpon()
-            .setPreferredAudioLanguage(if (prefIdioma == Idioma.Pref.DUBLADO) idiomaTv else null).build()
+            .setPreferredAudioLanguages(*(if (prefIdioma == Idioma.Pref.DUBLADO) listOfNotNull(idiomaTv, segundoIdioma) else emptyList()).toTypedArray())
+            .build()
         legendaDecidida = false   // player novo (voltou de outra tela): as faixas são escolhidas de novo
         p.addListener(ouvinte)
         p.setMediaItem(item(u), retomarEm)
@@ -684,7 +708,7 @@ class VodActivity : Activity() {
             if (legendaDecidida || faixas.groups.none { it.type == C.TRACK_TYPE_AUDIO }) return
             legendaDecidida = true
             val p = player ?: return
-            IdiomaPlayer.aplicar(faixas, p.trackSelectionParameters, prefIdioma, idiomaTv)?.let { p.trackSelectionParameters = it }
+            IdiomaPlayer.aplicar(faixas, p.trackSelectionParameters, prefIdioma, idiomaTv, segundoIdioma)?.let { p.trackSelectionParameters = it }
             talvezLegendaAuto(faixas)
         }
     }

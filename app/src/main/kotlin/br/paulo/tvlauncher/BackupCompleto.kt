@@ -35,7 +35,8 @@ object BackupCompleto {
         "gravacao",   // gravação (14/11/2026): a pasta da rede de reserva
         "nuvem",   // Na rede › OneDrive/Dropbox (14/11/2026): o id do app Microsoft e a chave do Dropbox que o dono digitou
         "sincronizar_filmes",   // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
-        "pacote_icones", "fundo_meu")   // degrau 1 (15/11/2026): pacote de ícones e "Meu fundo" (caminho, brilho, contraste)
+        "pacote_icones", "fundo_meu",   // degrau 1 (15/11/2026): pacote de ícones e "Meu fundo" (caminho, brilho, contraste)
+        "addons")   // addons no protocolo do Stremio (16/11/2026): a lista instalada e o aceite dos termos
     // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
     /**
      * Preferências que NÃO vão, de propósito (o teste BackupCompletoTest confere que nenhuma outra ficou esquecida):
@@ -52,6 +53,8 @@ object BackupCompleto {
         "roteiro",   // respostas do "Conferir na TV" (ConferirTvActivity): valem só para a versão em que foram dadas
         // Cuidar de longe (CuidarDeLongeTv): o consentimento é de quem mora com ESTA TV; restaurar em outra não pode levá-lo.
         "cuidar_de_longe",
+        // Aceite de mandar dados ao Trakt/Simkl (SincronizarActivity, 16/11/2026): é de quem está nesta TV; restaurar pergunta de novo.
+        "sync_consentimento",
         "timer",   // timer é passageiro: restaurar um backup feito com o timer correndo o armaria de novo sem ninguém pedir
         "player_pin", "config_pin",   // erros do PIN no player e nas Configurações (TentativasPin): passageiro, e restaurar não pode zerar nem prender ninguém
         "despertador_estado",   // próximo toque anotado (AlarmeGarantia): um antigo restaurado daria aviso falso de alarme perdido

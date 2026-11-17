@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Confortos do estudo do Stremio (16/11/2026): Conforto.kt, ConfigLauncherActivity, SincronizarActivity. -->
+<resources>
+    <string name="cf_resumo_escondido">Zusammenfassung verborgen, bis du sie ansiehst</string>
+    <string name="cf_spoiler">Zusammenfassung ungesehener Folgen ausblenden</string>
+    <string name="cf_spoiler_det">Die Zusammenfassung erscheint erst, nachdem du die Folge begonnen hast</string>
+    <string name="cf_segundo">Zweite Sprache</string>
+    <string name="cf_segundo_det">Wird verwendet, wenn das Video keinen Ton oder Untertitel in der Sprache des Fernsehers hat</string>
+    <string name="cf_nenhum">Keine</string>
+    <string name="cf_proximo">Countdown zur nächsten Folge</string>
+    <string name="cf_proximo_det">Wie lange gewartet wird, bevor die nächste Folge von selbst startet</string>
+    <string name="cf_proximo_nao">Nicht von selbst starten</string>
+    <string name="cf_segundos">%1$d s</string>
+    <string name="cf_consent_titulo">Daten an %1$s senden?</string>
+    <string name="cf_consent_texto">Wenn du das einschaltest, werden die Titel, die du auf diesem Fernseher markierst und ansiehst, und die Stelle, an der du aufgehört hast, über das Internet an %1$s gesendet. Sie bleiben in deinem %1$s-Konto nach dessen Datenschutzregeln. Du kannst es jederzeit ausschalten.</string>
+    <string name="cf_consent_sim">Ich stimme zu</string>
+</resources>

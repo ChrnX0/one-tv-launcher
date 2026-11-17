@@ -62,6 +62,20 @@ class PlayerSeriesTest {
         assertTrue(Series.registrarUltimo(muitas, "novo", UltimoEpisodio("e", 1, 1, "", "mp4", 999)).size == 200)
     }
 
+    @Test fun continuarSobeComEpisodioNovo() {
+        // A foi vista agora há pouco; B foi vista há muito tempo, mas o servidor publicou episódio depois da conta.
+        val a = Serie("1", "a", "A", atualizada = 100)
+        val b = Serie("2", "a", "B", atualizada = 2_000_000)                       // segundos
+        val u = mapOf(a.chave to UltimoEpisodio("x", 1, 1, "", "mp4", 1_500_000_000L), // ms
+                      b.chave to UltimoEpisodio("y", 1, 1, "", "mp4", 10L))
+        val semNovidade = mapOf(b.chave to ProgressoSerie(2, 5, 2_000_000, 0, 0, 1))
+        assertEquals(listOf("1", "2"), Series.continuar(listOf(a, b), u, semNovidade).map { it.id })
+        val comNovidade = mapOf(b.chave to ProgressoSerie(2, 5, 1_000_000, 0, 0, 1))
+        assertEquals(listOf("2", "1"), Series.continuar(listOf(a, b), u, comNovidade).map { it.id })
+        // Nada visto (vistos = 0): a publicação não conta, fica pela última vez aberta.
+        assertEquals(10L, Series.ordemContinuar(b, u[b.chave], ProgressoSerie(0, 5, 1_000_000, 0, 0, 1)))
+    }
+
     @Test fun assistidosEFinalizado() {
         val serie = Serie("5", "a1", "A Série", atualizada = 100)
         val vista = mapOf("a1:e11" to Posicao(2_700_000, 2_700_000, 1))                 // T1E1 até o fim

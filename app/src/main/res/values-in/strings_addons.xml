@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Addons no formato do Stremio, só HTTP (16/11/2026): AddonsActivity, ConfigLauncherActivity, MainActivity. -->
+<resources>
+    <string name="ad_titulo">Add-on</string>
+    <string name="ad_destaque">Film dan serial dari add-on Anda</string>
+    <string name="ad_vazio">Belum ada add-on. Tambahkan di panel web (Setelan, Add-on). Di sini hanya video tautan langsung (HTTP) yang diputar: torrent dan P2P tidak didukung.</string>
+    <string name="ad_resumo">Katalog dari add-on Anda. Add-on dibuat pihak ketiga: yang memasang add-on bertanggung jawab atas isinya.</string>
+    <string name="ad_buscar">Cari</string>
+    <string name="ad_buscar_dica">Nama film atau serial</string>
+    <string name="ad_carregando">Memuat…</string>
+    <string name="ad_falhou">Add-on tidak menjawab. Coba lagi sebentar lagi.</string>
+    <string name="ad_nada">Tidak ada apa-apa di sini.</string>
+    <string name="ad_mais">Lainnya</string>
+    <string name="ad_tipo_filmes">Film</string>
+    <string name="ad_tipo_series">Serial</string>
+    <string name="ad_tipo_canais">Saluran</string>
+    <string name="ad_temporada">Musim %1$d</string>
+    <string name="ad_especiais">Spesial</string>
+    <string name="ad_episodio">%1$d. %2$s</string>
+    <string name="ad_sem_fontes">Tidak ada sumber yang bisa diputar di sini. Sofaly hanya memutar video tautan langsung (HTTP).</string>
+    <string name="ad_fontes_resumo">Pilih sumber</string>
+    <string name="ad_dica_voltar">kembali</string>
+    <string name="ad_cfg_det">Add-on terpasang. Untuk menambah, gunakan panel web.</string>
+    <string name="ad_cfg_como">Untuk menambah add-on, buka panel web TV di ponsel atau komputer, buka Setelan, Add-on, tempel alamat yang berakhiran manifest.json, lalu konfirmasi dengan PIN.</string>
+    <string name="ad_cfg_remover_qual">Hapus add-on yang mana?</string>
+    <string name="ad_cfg_remover">%1$s akan dihapus dari TV ini.</string>
+    <string name="ad_cfg_remover_sim">Hapus</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Confortos do estudo do Stremio (16/11/2026): Conforto.kt, ConfigLauncherActivity, SincronizarActivity. -->
+<resources>
+    <string name="cf_resumo_escondido">观看前隐藏简介</string>
+    <string name="cf_spoiler">隐藏未看剧集的简介</string>
+    <string name="cf_spoiler_det">开始播放该集后才显示简介</string>
+    <string name="cf_segundo">第二语言</string>
+    <string name="cf_segundo_det">当视频没有电视语言的音频或字幕时使用</string>
+    <string name="cf_nenhum">无</string>
+    <string name="cf_proximo">下一集倒计时</string>
+    <string name="cf_proximo_det">下一集自动开始前等待多久</string>
+    <string name="cf_proximo_nao">不自动开始</string>
+    <string name="cf_segundos">%1$d 秒</string>
+    <string name="cf_consent_titulo">向 %1$s 发送数据？</string>
+    <string name="cf_consent_texto">开启后，你在这台电视上标记和观看的影片以及停止的位置会通过互联网发送到 %1$s，并按照 %1$s 的隐私规则保存在你的账户中。你可以随时关闭。</string>
+    <string name="cf_consent_sim">同意</string>
+</resources>

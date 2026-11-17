@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Addons no formato do Stremio, só HTTP (16/11/2026): AddonsActivity, ConfigLauncherActivity, MainActivity. -->
+<resources>
+    <string name="ad_titulo">Addons</string>
+    <string name="ad_destaque">Filmes e séries dos seus addons</string>
+    <string name="ad_vazio">Nenhum addon ainda. Adicione no painel web (Configurações, Addons). Aqui só toca vídeo por link direto (HTTP): torrent e P2P não são aceitos.</string>
+    <string name="ad_resumo">Catálogos dos seus addons. Addons são feitos por terceiros: quem instala responde pelo conteúdo.</string>
+    <string name="ad_buscar">Buscar</string>
+    <string name="ad_buscar_dica">Nome do filme ou da série</string>
+    <string name="ad_carregando">Carregando…</string>
+    <string name="ad_falhou">O addon não respondeu. Tente de novo daqui a pouco.</string>
+    <string name="ad_nada">Nada aqui.</string>
+    <string name="ad_mais">Mais</string>
+    <string name="ad_tipo_filmes">Filmes</string>
+    <string name="ad_tipo_series">Séries</string>
+    <string name="ad_tipo_canais">Canais</string>
+    <string name="ad_temporada">Temporada %1$d</string>
+    <string name="ad_especiais">Especiais</string>
+    <string name="ad_episodio">%1$d. %2$s</string>
+    <string name="ad_sem_fontes">Nenhuma fonte que toque aqui. A Sofaly só toca vídeo por link direto (HTTP).</string>
+    <string name="ad_fontes_resumo">Escolha uma fonte</string>
+    <string name="ad_dica_voltar">voltar</string>
+    <string name="ad_cfg_det">Addons instalados. Para adicionar, use o painel web.</string>
+    <string name="ad_cfg_como">Para adicionar um addon, abra o painel web da TV no celular ou no computador, vá em Configurações, Addons, cole o endereço que termina em manifest.json e confirme com o PIN.</string>
+    <string name="ad_cfg_remover_qual">Remover qual addon?</string>
+    <string name="ad_cfg_remover">%1$s vai sair desta TV.</string>
+    <string name="ad_cfg_remover_sim">Remover</string>
+</resources>

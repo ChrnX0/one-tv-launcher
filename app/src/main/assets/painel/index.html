@@ -676,6 +676,24 @@
           <option value="dublado">Dublado</option><option value="original">Original</option></select></p>
         <label><input id="cfgQuadros" type="checkbox"> Filme na taxa de quadros dele (24 Hz, sem tremer no movimento)</label>
       </div>
+      <div class="cartao" id="cartaoAddons">
+        <h2>Addons</h2>
+        <p class="aviso">Catálogos e vídeos de addons no formato do Stremio. Só vídeo por link direto (HTTP): torrent e P2P
+          são recusados. Instalar e remover pedem o PIN.</p>
+        <div id="listaAddons"></div>
+        <form id="formAddon" class="form-pasta" autocomplete="off">
+          <input id="urlAddon" type="url" inputmode="url" autocomplete="off" placeholder="https://…/manifest.json" aria-label="Endereço do addon">
+          <button type="submit" class="botao-primario">Instalar</button>
+          <button type="button" id="btnQrAddon" class="botao-secundario">Ler QR</button>
+        </form>
+        <div id="qrAddon" class="qr-camera" hidden>
+          <video id="videoQrAddon" muted playsinline aria-label="Câmera lendo o QR do addon"></video>
+          <button type="button" id="btnFecharQrAddon" class="botao-secundario">Fechar câmera</button>
+        </div>
+        <p class="aviso-curto" id="termosAddons"></p>
+        <label><input id="aceiteAddons" type="checkbox"> Li e aceito: quem instala responde pelo conteúdo do addon</label>
+        <p class="aviso" id="statusAddons" hidden></p>
+      </div>
       <div class="cartao" id="cartaoServicos">
         <h2>Serviços de filmes e séries</h2>
         <p class="aviso">Contas opcionais: nada sai da TV antes de você entrar. Entrar e sair pedem o PIN.</p>
@@ -1156,6 +1174,7 @@
   <script src="controle.js"></script>
   <script src="certificado.js"></script>
   <script src="primeira.js"></script>
+  <script src="addons.js"></script>   <!-- addons no formato do Stremio, só HTTP -->
   <script src="emprestimo.js"></script>   <!-- shell (Shizuku) e dono (Dhizuku) emprestados -->
   <script src="chave.js"></script>   <!-- ideia 99: entrar com a digital (passkey) -->   <!-- ideia 97: assistente da primeira configuração -->
 </body>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Addons no formato do Stremio, só HTTP (16/11/2026): AddonsActivity, ConfigLauncherActivity, MainActivity. -->
+<resources>
+    <string name="ad_titulo">Add-ons</string>
+    <string name="ad_destaque">Filme und Serien aus deinen Add-ons</string>
+    <string name="ad_vazio">Noch keine Add-ons. Füge eins im Web-Panel hinzu (Einstellungen, Add-ons). Hier laufen nur direkte Videolinks (HTTP): Torrent und P2P werden nicht unterstützt.</string>
+    <string name="ad_resumo">Kataloge deiner Add-ons. Add-ons stammen von Dritten: Wer eins installiert, ist für dessen Inhalt verantwortlich.</string>
+    <string name="ad_buscar">Suchen</string>
+    <string name="ad_buscar_dica">Name des Films oder der Serie</string>
+    <string name="ad_carregando">Wird geladen…</string>
+    <string name="ad_falhou">Das Add-on hat nicht geantwortet. Versuch es gleich noch einmal.</string>
+    <string name="ad_nada">Hier ist nichts.</string>
+    <string name="ad_mais">Mehr</string>
+    <string name="ad_tipo_filmes">Filme</string>
+    <string name="ad_tipo_series">Serien</string>
+    <string name="ad_tipo_canais">Sender</string>
+    <string name="ad_temporada">Staffel %1$d</string>
+    <string name="ad_especiais">Specials</string>
+    <string name="ad_episodio">%1$d. %2$s</string>
+    <string name="ad_sem_fontes">Keine Quelle, die hier läuft. Sofaly spielt nur direkte Videolinks (HTTP) ab.</string>
+    <string name="ad_fontes_resumo">Quelle wählen</string>
+    <string name="ad_dica_voltar">zurück</string>
+    <string name="ad_cfg_det">Installierte Add-ons. Zum Hinzufügen das Web-Panel verwenden.</string>
+    <string name="ad_cfg_como">Um ein Add-on hinzuzufügen, öffne das Web-Panel des Fernsehers auf dem Handy oder Computer, gehe zu Einstellungen, Add-ons, füge die Adresse ein, die auf manifest.json endet, und bestätige mit der PIN.</string>
+    <string name="ad_cfg_remover_qual">Welches Add-on entfernen?</string>
+    <string name="ad_cfg_remover">%1$s wird von diesem Fernseher entfernt.</string>
+    <string name="ad_cfg_remover_sim">Entfernen</string>
+</resources>
