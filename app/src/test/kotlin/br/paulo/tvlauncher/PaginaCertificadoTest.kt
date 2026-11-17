@@ -51,4 +51,32 @@ class PaginaCertificadoTest {
         val h = PaginaCertificado.preencher("{{NOME}}|{{IMPRESSAO}}", pronto().put("impressao", "<b>\"x\"&'"), "<script>")
         assertTrue(h, h == "&lt;script&gt;|&lt;b&gt;&quot;x&quot;&amp;&#39;")
     }
+
+    // 16/11/2026: o sistema de quem abriu vem primeiro e aberto; os outros fechados.
+    @Test fun sistemaPeloUserAgent() {
+        val s = PaginaCertificado::sistema
+        assertTrue(s("Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 Chrome/131 Mobile Safari/537.36") == PaginaCertificado.Sistema.ANDROID)
+        assertTrue(s("Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148 Safari/604.1") == PaginaCertificado.Sistema.IOS)
+        assertTrue(s("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131 Safari/537.36 Edg/131") == PaginaCertificado.Sistema.WINDOWS)
+        assertTrue(s("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Version/18.1 Safari/605.1.15") == PaginaCertificado.Sistema.MAC)
+        assertTrue(s("Mozilla/5.0 (X11; Linux x86_64; rv:132.0) Gecko/20100101 Firefox/132.0") == PaginaCertificado.Sistema.OUTRO)
+        assertTrue(s(null) == PaginaCertificado.Sistema.OUTRO)
+    }
+
+    @Test fun sistemaDoAparelhoVemAberto() {
+        val h = PaginaCertificado.preencher(modelo, pronto(), "tv", "Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X)")
+        semSobras(h)
+        assertTrue(h.contains("<details class=\"so primeiro\" open>\n      <summary>iPhone ou iPad</summary>"))
+        assertTrue(h.contains("<details class=\"so \" >\n      <summary>Android"))
+        assertTrue(h.contains("parece ser: <b>iPhone ou iPad</b>"))
+        // Sem User-Agent conhecido: nada aberto, nada primeiro.
+        val o = PaginaCertificado.preencher(modelo, pronto(), "tv", "curl/8")
+        assertFalse(o.contains(" open>"))
+        assertFalse(o.contains("primeiro\""))
+        assertTrue(o.contains("cadeado.js"))
+    }
+
+    @Test fun cspDeixaTestarOCadeado() {
+        assertTrue(PainelHttp.CABECALHOS_SEGURANCA["Content-Security-Policy"]!!.contains("connect-src 'self' https://*:8444;"))
+    }
 }
