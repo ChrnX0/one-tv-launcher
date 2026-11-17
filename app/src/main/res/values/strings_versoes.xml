@@ -17,6 +17,19 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Stremio-format add-ons, HTTP video only (no P2P): install from the web panel or by scanning the add-on\'s QR with your phone camera</item>
+        <item>Continue watching: a new episode of a show you follow moves to the top; you can hide spoilers, pick a second subtitle language and adjust the countdown to the next one. Sharing what you watch with Trakt/Simkl now asks first</item>
+        <item>Network drive on Windows: the TV shows in This PC as “Sofaly · TV name”, comes back by itself after the launcher restarts, and each USB drive is a separate drive</item>
+        <item>New web panel: the same pages as the TV\'s Settings, in the Sofaly look, on phone and PC, in 14 languages</item>
+        <item>Panel: if you installed the TV\'s certificate it opens straight in https, with a padlock; the certificate page has step-by-step help for each system</item>
+        <item>Screensaver that reacts to the current weather, a real Sky theme, photos of Earth from space (NASA), 6 clocks, a “time only” option and a switch for each element</item>
+        <item>Ready-made recipes: one OK sets the TV up right for grandma, kids, gamers or a rental, with Undo</item>
+        <item>Connected family: grandkids can send a video message (off by default)</item>
+        <item>Player: “Sound on headphones (phone)” sends the sound to the headphones of a few phones at home while the TV stays muted; and between family TVs, “Watch together” and “Send to another TV”</item>
+        <item>Games in the Couch design: controls in view, tall cards, By type and the crew from your Discord server</item>
+        <item>Ready-made looks (Settings › Home screen) and “Look from another TV” in the panel: paste the code from another TV\'s QR or from the site</item>
+        <item>Report a problem now goes by e-mail, no GitHub account needed; the Sofaly name shows in the app and its texts</item>
+        <item>Fixes: Wi-Fi repair without a restart loop, the alarm really stops when you stop it, a network drop in AVI/WMV no longer ends the video, GIF and video in My background without running out of memory, focus in the player options and keys while paused</item>
         <item>Movies and Series: the name no longer repeats the year (“The Rings of Power 2022”) and genres come in the TV’s language when TMDB has the details</item>
         <item>Movies and Series: the details open lighter (one full-screen background instead of two) and “Episodes” no longer breaks in the middle of the word; long details like “Season 1” go under the button name</item>
         <item>Games: when the rows scroll, they no longer show over the highlighted game at the top</item>
@@ -169,7 +182,7 @@
         <item>Voice: “Ok Google, open Movies” (also Series, Network media, Home control, Search, Board) opens that launcher screen</item>
         <item>Live TV: pause any channel for up to 2 minutes (⏯, or ▶ ▶ › “Pause live TV”); OK resumes from where you stopped, ▶ goes back to live. Kept only in the player\'s memory, never on disk</item>
         <item>The web panel is in English when the phone or computer is not in Portuguese</item>
-        <item>With the TV in English, voice requests for channels ("watch Globo", "what's on SBT") work in English too, and the confirmations show up in English</item>
+        <item>With the TV in English, voice requests for channels ("watch Globo", "what\'s on SBT") work in English too, and the confirmations show up in English</item>
         <item>LG volume: the alarm never goes above 30, the volume is checked after each change, and the alarm on the LG starts turned off</item>
         <item>Real profiles: each Google account on the TV has its own channel favorites, Continue watching, last episodes, watchlist and app order; a profile can be marked as a kid profile (quick panel), which turns on kids mode and bedtime and asks the parents\' PIN to leave</item>
         <item>The launcher has its own icon and banner (in Apps and in Settings)</item>
@@ -200,6 +213,14 @@
         <item>Screensaver with new, larger widgets: pick Glass strip (the next hours on a curve, with the sun time), Cards (now, hours, today and tomorrow) or No box (big temperature and the weather in one sentence) in Settings › Screen and power › Screensaver widgets, or in the panel</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>painel_v3</item>
+        <item>painel_https</item>
+        <item>unidade_windows</item>
+        <item>pendrive_mtp</item>
+        <item>protetor_tempo</item>
+        <item>som_fone</item>
+        <item>jogos_sofa</item>
+        <item>visual_outra_tv</item>
         <item>idades_madrugada</item>
         <item>notas_trakt</item>
         <item>notas_simkl</item>
@@ -350,6 +371,14 @@
         <item>protetor_widgets</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>New panel</item>
+        <item>Panel in https</item>
+        <item>Drive on Windows</item>
+        <item>USB drive on Windows</item>
+        <item>Weather screensaver</item>
+        <item>Sound on headphones</item>
+        <item>Games on the Couch</item>
+        <item>Look from another TV</item>
         <item>Kids mode by age</item>
         <item>Trakt rating</item>
         <item>Simkl rating</item>
@@ -473,7 +502,7 @@
         <item>Say “Ok Google, open Movies” (and the others: Series, Network media, Home control, Search, Board)</item>
         <item>On a live channel without catch-up, ▶ ▶ › “Pause live TV”, wait 1 minute and press OK; then ▶ › “Back to live”</item>
         <item>Open the web panel on a browser set to English</item>
-        <item>With the TV in English, say "what's on" and a channel name</item>
+        <item>With the TV in English, say "what\'s on" and a channel name</item>
         <item>In the quick panel, open the profiles, mark one account as “Kid profile” (parents\' PIN) and switch to it; favorite a channel; then switch back to your profile</item>
         <item>Open Settings > Apps and find One TV Launcher</item>
         <item>Play a song or video, go back to the home screen and press OK on the pill</item>
@@ -500,6 +529,14 @@
         <item>In Settings › Screen and power, press OK on Screensaver widgets until the style you want, then wait for the screensaver</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Open the web panel on your phone: are the pages the same as the TV\'s Settings, in the Sofaly look, with text in the phone\'s language?</item>
+        <item>On the phone that has the TV\'s certificate installed, does the panel open in https with a padlock?</item>
+        <item>On the Windows PC, does the TV show in This PC as “Sofaly · TV name” and come back by itself after the launcher restarts?</item>
+        <item>With a USB drive in the TV, does it show in This PC as a drive separate from internal storage?</item>
+        <item>Pick the screensaver that reacts to the weather and wait for it: does it show the current weather, and do the options let you pick the clock, “time only” and turn each element off?</item>
+        <item>In a video, ▼ › Sound on headphones (phone): does the QR open on the phone, the sound play on the headphones with the TV muted, and closing the page bring the sound back?</item>
+        <item>Open Games: does the Couch design show the controls, tall cards and By type, with nothing cut off?</item>
+        <item>In the web panel › Home screen › Look from another TV, paste the code of a ready-made look from the site and apply it: does the home screen change? Then go back to your look</item>
         <item>After one night, with kids mode on and “Up to 12”, does Movies show many films rated up to 12 (and none for adults)?</item>
         <item>The morning after installing, open a movie from your list: does the details page show “Trakt NN%” and no “IMDb” or “Also on”?</item>
         <item>The morning after installing, open a popular movie: next to the Trakt rating, does “Simkl 8.1” (or similar) appear?</item>
