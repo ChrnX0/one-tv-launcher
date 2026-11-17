@@ -388,6 +388,17 @@ $('btnAddAcao').addEventListener('click', () => {
 const EVENTOS_CENA = [
   ['midia_tocou', 'Filme ou vídeo começou'], ['midia_pausou', 'Filme ou vídeo pausou ou acabou'],
   ['tv_ligou', 'A TV ligou'], ['todos_sairam', 'Todos saíram (presença)'], ['chuva', 'Chuva chegando'],
+  ['filme_acabou', 'Quando um filme acabar'],
+  ['programa_comecou', 'Quando começar um programa marcado no guia'],
+  ['nascer_do_sol', 'No nascer do sol'],
+  ['por_do_sol', 'No pôr do sol'],
+  ['campainha', 'Quando a campainha tocar'],
+  ['alguem_chegou', 'Quando alguém chegar em casa'],
+  ['internet_caiu', 'Quando a internet cair'],
+  ['internet_voltou', 'Quando a internet voltar'],
+  ['recado_chegou', 'Quando chegar um recado'],
+  ['aniversario', 'No aniversário de alguém (9h)'],
+  ['compromisso', 'Quando começar um compromisso da agenda'],
 ];
 
 function desenharGatilhos(gatilhos, cenas) {
