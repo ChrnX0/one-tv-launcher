@@ -181,8 +181,10 @@ object MidiaContas {
 
     /** Vídeo, música, foto ou outro, pela extensão do arquivo (SMB não diz o tipo). */
     fun tipoPorNome(nome: String): Upnp.Tipo = when (nome.substringAfterLast('.', "").lowercase(Locale.ROOT)) {
-        "mp4", "mkv", "avi", "mov", "m4v", "webm", "ts", "m2ts", "mts", "mpg", "mpeg", "wmv", "flv", "3gp" -> Upnp.Tipo.VIDEO
-        "mp3", "m4a", "aac", "flac", "ogg", "opus", "wav", "wma" -> Upnp.Tipo.AUDIO
+        // 17/11/2026: o player já tocava estes (libavformat e Media3), mas a lista os mostrava como "arquivo" (ex.: .ac3).
+        "mp4", "mkv", "avi", "mov", "m4v", "webm", "ts", "m2ts", "mts", "mpg", "mpeg", "wmv", "flv", "3gp",
+        "asf", "vob", "ogv", "rm", "rmvb", "divx", "f4v", "m2v" -> Upnp.Tipo.VIDEO
+        "mp3", "m4a", "aac", "flac", "ogg", "opus", "wav", "wma", "ac3", "eac3", "dts", "mka", "m4b", "aif", "aiff", "oga" -> Upnp.Tipo.AUDIO
         "jpg", "jpeg", "png", "webp", "gif", "bmp", "heic" -> Upnp.Tipo.FOTO
         else -> Upnp.Tipo.OUTRO
     }

@@ -90,6 +90,9 @@ class JogosActivity : Activity() {
         conteudo.addView(ScrollView(this).apply {
             isVerticalScrollBarEnabled = false; clipChildren = false; clipToPadding = false
             isSmoothScrollingEnabled = true
+            // Sala, 17/11/2026: rolando para "Mais opções", os cards de cima ficavam cortados a seco embaixo do destaque.
+            // A borda esmaece em vez de cortar.
+            isVerticalFadingEdgeEnabled = true; setFadingEdgeLength(dp(48))
             addView(coluna)
             // Corta embaixo: a fileira de baixo não passa por cima da barra de dicas (achado do teste de tela, ideia 96).
             // Corta em cima também (16/11/2026): com folga de 40 dp em cima, as fileiras roladas apareciam numa faixa por

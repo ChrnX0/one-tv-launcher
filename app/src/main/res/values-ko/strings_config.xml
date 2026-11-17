@@ -104,7 +104,7 @@
     <string name="cl_acao_mcp_acoes">AI가 요청한 동작</string>
     <string name="cl_acao_mcp_acoes_det">정해진 목록의 앱 열기, 볼륨, 알람 등.</string>
     <string name="cl_acao_mcp_shell">AI의 셸 명령</string>
-    <string name="cl_acao_mcp_shell_det">adb처럼 TV 셸에서 실행하는 모든 명령. 가장 위험한 항목입니다.</string>
+    <string name="cl_acao_mcp_shell_det">Adb처럼 TV 셸에서 실행하는 모든 명령. 가장 위험한 항목입니다.</string>
     <string name="cl_acao_instalar">앱 설치</string>
     <string name="cl_acao_instalar_det">패널에서 보낸 APK(PIN 외에 추가로).</string>
     <string name="cl_acao_remover">앱 제거, 중지 또는 데이터 삭제</string>
