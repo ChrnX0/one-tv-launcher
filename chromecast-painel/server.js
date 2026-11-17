@@ -208,7 +208,10 @@ app.use((req, res, next) => {
     const nomeHost = host.replace(/:\d+$/, '').replace(/^\[|\]$/g, '');
     const hostOk = ['localhost', '127.0.0.1', '::1'].includes(nomeHost) || /^(10|192\.168|172\.(1[6-9]|2\d|3[01]))\.[\d.]+$/.test(nomeHost);
     const origem = req.headers.origin;
-    let origemOk = true;
+    // Pedido que muda algo (POST/DELETE...) tem que trazer Origin do próprio painel: o navegador sempre manda, e um
+    // cliente sem Origin (script na rede, se PAINEL_HOST abrir o painel) não aciona adb. GET/HEAD seguem sem exigir.
+    const muda = !['GET', 'HEAD', 'OPTIONS'].includes(req.method);
+    let origemOk = !muda;
     if (origem) { try { origemOk = new URL(origem).host === host; } catch { origemOk = false; } }
     if (!hostOk || !origemOk) return res.status(403).json({ erro: 'pedido de fora do painel' });
     next();
