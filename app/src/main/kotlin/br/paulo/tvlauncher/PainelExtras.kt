@@ -118,6 +118,13 @@ object PainelExtras {
                 PainelArmazem.registrar(app, ip, "extras: MAC do computador guardado", "ok")
                 ok(estado(app))
             }
+            // Turma do Discord da tela Jogos: o webhook nunca volta inteiro para o navegador (só se existe).
+            get && rota == "turma" -> ok(JSONObject().put("servidor", TurmaDiscordTv.servidor(app)).put("webhook", TurmaDiscordTv.temWebhook(app)))
+            post && rota == "turma" -> {
+                corpo?.optString("servidor", null)?.let { if (!TurmaDiscordTv.guardarServidor(app, it)) return erro(400, "ID do servidor inválido (17 a 20 números)") }
+                corpo?.optString("webhook", null)?.let { if (!TurmaDiscordTv.guardarWebhook(app, it)) return erro(400, "Webhook inválido (https://discord.com/api/webhooks/...)") }
+                ok(JSONObject().put("servidor", TurmaDiscordTv.servidor(app)).put("webhook", TurmaDiscordTv.temWebhook(app)))
+            }
             post && rota == "acordar" -> {
                 val r = AcordarPc.acordar(app)
                 PainelArmazem.registrar(app, ip, "acordar o computador", if (r) "enviado" else "falhou")

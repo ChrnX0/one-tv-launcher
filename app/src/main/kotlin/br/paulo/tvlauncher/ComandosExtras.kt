@@ -17,6 +17,7 @@ import java.io.File
  *  - extras                abre a tela das chaves novas
  *  - diario_dns [--es dia AAAA-MM-DD]   as consultas de DNS mais frequentes do dia
  *  - wol_mac --es mac AA:BB:CC:DD:EE:FF   guarda o MAC do PC (fica só na TV)
+ *  - turma_id --es id <ID do servidor> / turma_webhook --es url <webhook> / turma   turma do Discord da tela Jogos
  *  - acordar_pc            manda o pacote mágico
  *  - recado_foto --es arquivo <caminho> [--es texto "..."] [--ei segundos 60]
  *  - cena --es nome <cena>   roda uma cena (ver Cenas.kt)
@@ -67,6 +68,10 @@ object ComandosExtras {
         "extras" -> abrir(ctx, ExtrasActivity::class.java)
         "diario_dns" -> DiarioDns.resumo(ctx, i.getStringExtra("dia") ?: DiarioDns.diaDe(System.currentTimeMillis()))
         "wol_mac" -> if (AcordarPc.guardarMac(ctx, i.getStringExtra("mac") ?: "")) "ok" else "MAC inválido"
+        // Turma do Discord na tela Jogos (17/11/2026): ID do servidor e webhook do "Chamar a turma" ("" apaga).
+        "turma_id" -> if (TurmaDiscordTv.guardarServidor(ctx, i.getStringExtra("id") ?: "")) "ok" else "ID inválido (17 a 20 números)"
+        "turma_webhook" -> if (TurmaDiscordTv.guardarWebhook(ctx, i.getStringExtra("url") ?: "")) "ok" else "webhook inválido (só https://discord.com/api/webhooks/...)"
+        "turma" -> "servidor=" + TurmaDiscordTv.servidor(ctx).ifEmpty { "-" } + " webhook=" + (if (TurmaDiscordTv.temWebhook(ctx)) "sim" else "não")
         "acordar_pc" -> if (AcordarPc.acordar(ctx)) "enviado" else "falhou (MAC guardado? rede?)"
         "recado_foto" -> {
             val f = File(i.getStringExtra("arquivo") ?: "")

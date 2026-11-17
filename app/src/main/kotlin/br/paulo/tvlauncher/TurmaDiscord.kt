@@ -97,6 +97,16 @@ object TurmaDiscord {
             .sortedByDescending { it.second.size }
 
     /**
+     * Quem da turma está jogando o app [nomeApp] (o selo "2 da turma aqui" no card). Só nome igual, sem adivinhar: o
+     * widget diz "Fortnite", e o app GeForce NOW não diz qual jogo roda dentro dele.
+     */
+    fun noApp(t: Turma, nomeApp: String): List<String> {
+        val alvo = nomeApp.trim().lowercase()
+        if (alvo.isEmpty()) return emptyList()
+        return (t.salas.flatMap { it.membros } + t.outros).filter { it.jogo?.lowercase() == alvo }.map { it.nome }
+    }
+
+    /**
      * Corpo JSON do webhook "Chamar a turma". `allowed_mentions` vazio: nada de @everyone, @here ou menção, mesmo que
      * o texto (nome do jogo, nome da TV) traga um "@". O nome que aparece no Discord é o da TV.
      */

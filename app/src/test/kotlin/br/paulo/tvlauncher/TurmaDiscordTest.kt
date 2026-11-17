@@ -57,6 +57,13 @@ class TurmaDiscordTest {
         assertEquals("EA FC 26", j[1].first)
     }
 
+    @Test fun noAppSoComNomeIgual() {
+        val t = TurmaDiscord.ler(widget)
+        assertEquals(listOf("Lucas", "Mari"), TurmaDiscord.noApp(t, " fortnite "))
+        assertEquals(emptyList<String>(), TurmaDiscord.noApp(t, "GeForce NOW"))
+        assertEquals(emptyList<String>(), TurmaDiscord.noApp(t, ""))
+    }
+
     @Test fun limparTextoDeOutraPessoa() {
         assertEquals("a b", TurmaDiscord.limpar("a\n\u0000 b ", 10))
         assertEquals("abcd…", TurmaDiscord.limpar("abcdefgh", 5))
