@@ -544,13 +544,23 @@ class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.in
         val final = File(p.pasta, p.nome)
         val parcial = try { File.createTempFile(".${p.nome.take(40)}.", ".parcial", p.pasta) } catch (_: IOException) { return Mtp.NEGADO }
         try {
+            val t0 = System.nanoTime()
+            var disco = 0L; var chegou = 0L; var tSync = 0L
             FileOutputStream(parcial).use { s ->
                 // Arquivo grande: a rede enche e o disco grava ao mesmo tempo (ver EscritaAdiantada). Pequeno: direto.
-                val n = if (p.tamanho in 0 until EscritaAdiantada.MINIMO) encher(s) else EscritaAdiantada(s).use { encher(it) }
+                val n = if (p.tamanho in 0 until EscritaAdiantada.MINIMO) encher(s)
+                    else EscritaAdiantada(s).let { e -> e.use { _ -> encher(e) }.also { disco = e.tempoDisco } }
                 if (p.tamanho >= 0 && n != p.tamanho) throw IOException("chegaram $n de ${p.tamanho} bytes")
-                s.fd.sync()
+                chegou = n
+                val t = System.nanoTime(); s.fd.sync(); tSync = System.nanoTime() - t
             }
+            val t1 = System.nanoTime()
             if (final.exists() || !parcial.renameTo(final)) { parcial.delete(); return Mtp.NEGADO }
+            val t2 = System.nanoTime()
+            // Onde foi o tempo de uma gravação demorada (17/11/2026: o pendrive levava 14,8 s para 16 MB, a memória interna 2,4 s).
+            if (t2 - t0 >= MtpSessao.LENTA_MS * 1_000_000) MtpSessao.lenta?.invoke(
+                "gravar %d bytes em %s: receber+gravar %d ms (disco %d ms), sync %d ms, renomear %d ms".format(chegou,
+                    if (p.armazem.removivel) "pendrive" else "interno", (t1 - t0 - tSync) / 1_000_000, disco / 1_000_000, tSync / 1_000_000, (t2 - t1) / 1_000_000))
         } catch (e: Exception) {
             parcial.delete()
             throw e
@@ -588,7 +598,9 @@ class EscritaAdiantada(private val destino: OutputStream, private val blocos: In
                 val x = fila.take()
                 if (x === fim) break
                 // depois de um erro só esvazia a fila: quem enche não pode ficar preso esperando lugar
-                if (erro == null) try { destino.write(x.b, 0, x.n) } catch (e: IOException) { erro = e }
+                if (erro == null) try {
+                    val t = System.nanoTime(); destino.write(x.b, 0, x.n); tempoDisco += System.nanoTime() - t
+                } catch (e: IOException) { erro = e }
                 livres.put(x)
             }
         } catch (_: InterruptedException) {}
@@ -596,15 +608,20 @@ class EscritaAdiantada(private val destino: OutputStream, private val blocos: In
 
     override fun write(b: Int) = write(byteArrayOf(b.toByte()), 0, 1)
 
+    /** O bloco que está enchendo. A rede entrega pedaços pequenos (alguns KB): só vai para o disco quando enche. */
+    private var atual: Bloco? = null
+    /** Quanto tempo o disco levou nas gravações, em nanossegundos (para o registro de operações demoradas). */
+    @Volatile var tempoDisco = 0L; private set
+
     override fun write(b: ByteArray, off: Int, len: Int) {
         var o = off; var falta = len
         while (falta > 0) {
             erro?.let { throw it }
-            val x = livres.poll() ?: if (criados < blocos) { criados++; Bloco(ByteArray(tamanho)) } else livres.take()
-            x.n = minOf(falta, tamanho)
-            System.arraycopy(b, o, x.b, 0, x.n)
-            o += x.n; falta -= x.n
-            fila.put(x)
+            val x = atual ?: (livres.poll() ?: if (criados < blocos) { criados++; Bloco(ByteArray(tamanho)) } else livres.take()).also { it.n = 0; atual = it }
+            val cabe = minOf(falta, tamanho - x.n)
+            System.arraycopy(b, o, x.b, x.n, cabe)
+            x.n += cabe; o += cabe; falta -= cabe
+            if (x.n == tamanho) { fila.put(x); atual = null }
         }
     }
 
@@ -612,6 +629,7 @@ class EscritaAdiantada(private val destino: OutputStream, private val blocos: In
     override fun close() {
         if (fechado) return
         fechado = true
+        atual?.let { if (it.n > 0) fila.put(it) }; atual = null   // o último bloco, que não chegou a encher
         fila.put(fim)
         gravador.join()
         erro?.let { throw it }
