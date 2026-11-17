@@ -175,9 +175,9 @@ class ColunaCategorias(
                 img.visibility = if (tem) View.GONE else View.VISIBLE; focado.visibility = if (tem) View.VISIBLE else View.GONE
             }
             setOnClickListener { botoes.getOrNull(k)?.first?.let { aoOk(it.chave) } }
-            setOnKeyListener { _, codigo, e ->
+            setOnKeyListener { v, codigo, e ->
                 if (e.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
-                when (codigo) {
+                when (Rtl.tecla(codigo, v)) {   // 16.8
                     KeyEvent.KEYCODE_DPAD_DOWN -> { pularPara(-1, +1); true }
                     KeyEvent.KEYCODE_DPAD_LEFT -> { if (k > 0) botoes[k - 1].second.requestFocus(); true }
                     KeyEvent.KEYCODE_DPAD_RIGHT -> { if (k < total - 1) botoes[k + 1].second.requestFocus(); true }

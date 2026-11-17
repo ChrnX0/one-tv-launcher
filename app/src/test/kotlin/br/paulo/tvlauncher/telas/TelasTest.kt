@@ -64,6 +64,12 @@ class TelasTest {
         "entrar-celular" to EntrarPeloQrActivity::class.java,
         "planos" to br.paulo.tvlauncher.ConhecerProActivity::class.java,
         "placar" to br.paulo.tvlauncher.PlacarActivity::class.java,   // elevação 2.1: os 7 pilares
+        // Elevação 16.1: mais telas para o leitor de tela conferir (todo elemento com foco tem nome).
+        "extras" to br.paulo.tvlauncher.ExtrasActivity::class.java,
+        "automacoes" to br.paulo.tvlauncher.AutomacoesActivity::class.java,
+        "busca" to br.paulo.tvlauncher.BuscaActivity::class.java,
+        "diagnostico" to br.paulo.tvlauncher.DiagnosticoActivity::class.java,
+        "radio" to br.paulo.tvlauncher.RadioActivity::class.java,
         // Elevação 16.3: as mesmas telas com o alto contraste ligado; todo texto tem que passar de 7:1 ("contraste").
         "home-ac" to MainActivity::class.java,
         "configuracoes-ac" to ConfigLauncherActivity::class.java,
@@ -74,14 +80,16 @@ class TelasTest {
     private val saida = File("build/telas")
 
     data class Medida(val menorSp: Float, val cortes: Set<String>, val sobrepostos: Set<String>, val foco: Boolean,
-                      val soCor: Set<String> = emptySet(), val contraste: Set<String> = emptySet()) {
+                      val soCor: Set<String> = emptySet(), val contraste: Set<String> = emptySet(),
+                      val semNome: Set<String> = emptySet()) {
         fun json(): JSONObject = JSONObject().put("menorSp", menorSp.toDouble()).put("foco", foco)
             .put("cortes", JSONArray(cortes.sorted())).put("sobrepostos", JSONArray(sobrepostos.sorted()))
             .put("soCor", JSONArray(soCor.sorted())).put("contraste", JSONArray(contraste.sorted()))
+            .put("semNome", JSONArray(semNome.sorted()))
         companion object {
             private fun conjunto(o: JSONObject, k: String) = o.optJSONArray(k).let { a -> (0 until (a?.length() ?: 0)).map { a!!.getString(it) }.toSet() }
             fun de(o: JSONObject) = Medida(o.optDouble("menorSp").toFloat(), conjunto(o, "cortes"), conjunto(o, "sobrepostos"),
-                o.optBoolean("foco"), conjunto(o, "soCor"), conjunto(o, "contraste"))
+                o.optBoolean("foco"), conjunto(o, "soCor"), conjunto(o, "contraste"), conjunto(o, "semNome"))
         }
     }
 
@@ -119,6 +127,7 @@ class TelasTest {
             for (s in m.sobrepostos - antes.sobrepostos) problemas += "$chave: texto por cima de outro: $s"
             if (antes.foco && !m.foco) problemas += "$chave: nada tem o foco (o controle não anda)"
             for (c in m.soCor - antes.soCor) problemas += "$chave: estado só pela cor (16.4): $c"
+            for (c in m.semNome - antes.semNome) problemas += "$chave: elemento com foco sem nome para o leitor de tela (16.1): $c"
             for (c in m.contraste - antes.contraste) problemas += "$chave: texto abaixo de 7:1 no alto contraste (16.3): $c"
         }
         br.paulo.tvlauncher.AltoContraste.definir(RuntimeEnvironment.getApplication(), false)
@@ -176,8 +185,9 @@ class TelasTest {
                 br.paulo.tvlauncher.CorSegura.contraste(br.paulo.tvlauncher.CorSegura.compor(cor, br.paulo.tvlauncher.Estilo.FOCO), br.paulo.tvlauncher.Estilo.FOCO))
             if (c < br.paulo.tvlauncher.AltoContraste.MINIMO) "${rotulo(t)} (${"%.1f".format(c)}:1)" else null
         }.toSet()
+        val semNome = LeitorTela.semNome(raiz)
         a.finish()
-        return Medida(menor, cortes, sobrepostos, raiz.findFocus() != null, soCor, contraste)
+        return Medida(menor, cortes, sobrepostos, raiz.findFocus() != null, soCor, contraste, semNome)
     }
 
     /** Onde as letras estão de fato na tela (não a caixa inteira da view), já cortado pelo que os pais deixam ver. */

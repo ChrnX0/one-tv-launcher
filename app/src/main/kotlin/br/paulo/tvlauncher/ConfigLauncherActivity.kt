@@ -348,7 +348,7 @@ class ConfigLauncherActivity : Activity() {
             val foco = currentFocus
             val noConteudo = foco != null && foco.dentroDe(conteudo)
             val noMenu = foco != null && foco.dentroDe(menu)
-            when (e.keyCode) {
+            when (Rtl.tecla(e.keyCode, window.decorView)) {   // 16.8: no árabe o menu fica à direita
                 KeyEvent.KEYCODE_DPAD_LEFT -> if (noConteudo && foco !is android.widget.EditText) { voltarAoMenu(); return true }
                 KeyEvent.KEYCODE_BACK -> if (noConteudo) { engoliuVoltar = true; voltarAoMenu(); return true }
                 KeyEvent.KEYCODE_DPAD_RIGHT -> if (noMenu) {

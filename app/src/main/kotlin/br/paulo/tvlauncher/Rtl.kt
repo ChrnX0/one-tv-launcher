@@ -34,6 +34,17 @@ object Rtl {
 
     fun texto(c: Canvas, rtl: Boolean, t: String, x: Float, y: Float, p: Paint) = texto(c, rtl, t, 0, t.length, x, y, p)
 
+    /**
+     * A tecla como ela se lê na tela: no árabe a ◀ do controle aponta para o que fica à esquerda, que é o "depois".
+     * Usado só em navegação ESPACIAL feita à mão (ir para a coluna ao lado, andar entre cartões); setas que mudam um
+     * valor (◀ ▶ trocam a opção) ficam como estão.
+     */
+    fun tecla(keyCode: Int, v: View?): Int = if (v == null || !ehRtl(v)) keyCode else when (keyCode) {
+        android.view.KeyEvent.KEYCODE_DPAD_LEFT -> android.view.KeyEvent.KEYCODE_DPAD_RIGHT
+        android.view.KeyEvent.KEYCODE_DPAD_RIGHT -> android.view.KeyEvent.KEYCODE_DPAD_LEFT
+        else -> keyCode
+    }
+
     /** A seta de "mais" que aponta para onde a leitura continua: "›" ou "‹". */
     fun seta(rtl: Boolean) = if (rtl) "‹" else "›"
 }

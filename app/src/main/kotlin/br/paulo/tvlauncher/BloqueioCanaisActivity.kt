@@ -200,7 +200,8 @@ class BloqueioCanaisActivity : Activity() {
         subtitulo.text = getString(R.string.bc_resumo, n, canais.size, regras.grupos.size, estado)
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+    override fun onKeyDown(tecla: Int, event: KeyEvent): Boolean {
+        val keyCode = Rtl.tecla(tecla, window.decorView)   // 16.8
         // ▶ nas categorias vai para os canais; ◀ nos canais volta para as categorias (como na lista do player).
         val temDireita = if (modoInfantis) daAmostra.isNotEmpty() else daCategoria.isNotEmpty()
         if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT && listaCats.hasFocus() && temDireita) { listaCanais.requestFocus(); return true }

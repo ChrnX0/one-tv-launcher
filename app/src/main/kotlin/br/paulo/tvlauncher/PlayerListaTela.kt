@@ -233,7 +233,7 @@ class PlayerListaTela(
      * inclusive ◀ ▶, para o foco nunca escapar para fora da lista. Devolve false para o que não é da lista
      * (volume segue para o Android; números, a Activity fecha a lista e digita o canal).
      */
-    fun tecla(keyCode: Int): Boolean = when (keyCode) {
+    fun tecla(keyCode: Int): Boolean = when (Rtl.tecla(keyCode, listaCanais)) {   // 16.8: colunas espelhadas no árabe
         KeyEvent.KEYCODE_BACK -> {
             if (coluna.temFoco() && doMeio.isNotEmpty()) listaCanais.requestFocus() else fechar()
             true

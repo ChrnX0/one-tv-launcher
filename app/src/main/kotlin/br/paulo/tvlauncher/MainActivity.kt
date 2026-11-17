@@ -2411,8 +2411,8 @@ class MainActivity : Activity() {
         val pressionou = event.action == KeyEvent.ACTION_DOWN
         val soltou = event.action == KeyEvent.ACTION_UP
         return when {
-            event.keyCode == KeyEvent.KEYCODE_DPAD_LEFT -> { if (pressionou) moverCartao(-1); true }
-            event.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT -> { if (pressionou) moverCartao(1); true }
+            Rtl.tecla(event.keyCode, window.decorView) == KeyEvent.KEYCODE_DPAD_LEFT -> { if (pressionou) moverCartao(-1); true }   // 16.8
+            Rtl.tecla(event.keyCode, window.decorView) == KeyEvent.KEYCODE_DPAD_RIGHT -> { if (pressionou) moverCartao(1); true }
             event.keyCode == KeyEvent.KEYCODE_DPAD_UP -> {
                 if (pressionou && event.repeatCount == 0) ocultarArrastado()
                 true

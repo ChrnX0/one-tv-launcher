@@ -162,7 +162,8 @@ class FilmesActivity : Activity() {
 
         grade.adapter = adaptadorGrade
         // ◀ na 1ª coluna da grade volta para a categoria escolhida (não para a linha da coluna que estiver mais perto).
-        grade.setOnKeyListener { _, codigo, e ->
+        grade.setOnKeyListener { v, tecla, e ->
+            val codigo = Rtl.tecla(tecla, v)   // 16.8: no árabe a coluna de categorias fica à direita
             if (e.action != KeyEvent.ACTION_DOWN) false
             else if (codigo == KeyEvent.KEYCODE_DPAD_LEFT && grade.selectedItemPosition % grade.numColumns == 0) { coluna.focar(); true }
             // ▶ na última coluna de uma grade grande: as letras, para pular (acréscimo 3).

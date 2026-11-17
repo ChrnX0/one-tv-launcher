@@ -83,6 +83,7 @@ class PlayerGradeView(
         janela = PlayerGrade.inicioFaixa(agora)
         visibility = VISIBLE
         requestFocus()
+        post { anunciar() }
         invalidate()
         removeCallbacks(relogio); postDelayed(relogio, 30_000)
         val app = context.applicationContext
@@ -200,7 +201,7 @@ class PlayerGradeView(
             KeyEvent.KEYCODE_CHANNEL_UP, KeyEvent.KEYCODE_PAGE_UP -> trocarLinha(-visiveis())
             KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_PAGE_DOWN -> trocarLinha(+visiveis())
             KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                val passo = if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) +1 else -1
+                val passo = PlayerGrade.passoDaSeta(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT, Rtl.ehRtl(this))
                 foco = PlayerGrade.mover(programas(canais[linha]), foco, passo, agora)
                 janela = PlayerGrade.ajustarJanela(janela, foco, agora)
             }
@@ -215,7 +216,21 @@ class PlayerGradeView(
             else -> return super.onKeyDown(keyCode, event)   // volume e o resto seguem para o Android
         }
         invalidate()
+        anunciar()
         return true
+    }
+
+    /** 16.1: diz ao leitor de tela o canal e o programa sob o cursor (e deixa como descrição da grade). */
+    private fun anunciar() {
+        val c = canais.getOrNull(linha) ?: return
+        val p = programaFocado()
+        val fala = PlayerGrade.falaLeitor(c.numero, c.nome, p?.titulo, p?.let { hora.format(Date(it.inicio)) },
+            p?.let { hora.format(Date(it.fim)) }, context.getString(R.string.player_sem_guia_curto))
+        if (fala == contentDescription) return
+        contentDescription = fala
+        val am = context.getSystemService(android.content.Context.ACCESSIBILITY_SERVICE) as? android.view.accessibility.AccessibilityManager
+        @Suppress("DEPRECATION")
+        if (am?.isEnabled == true) announceForAccessibility(fala)
     }
 
     private fun trocarLinha(passo: Int) {
