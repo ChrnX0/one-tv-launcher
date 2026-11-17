@@ -58,4 +58,7 @@
     <string name="sv_f_longo">用户名或密码过长</string>
     <string name="sv_f_senha">用户名或密码错误</string>
     <string name="sv_f_gravar">无法保存到电视。请重试。</string>
+    <!-- Ficha sem a conta Simkl: convite para conectar (a nota do Simkl só aparece com a conta; licença). -->
+    <string name="sv_simkl_convite">Simkl 评分</string>
+    <string name="sv_simkl_convite_det">连接你的账号</string>
 </resources>

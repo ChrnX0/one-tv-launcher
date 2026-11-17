@@ -58,4 +58,7 @@
     <string name="sv_f_longo">usuario o contraseña demasiado largos</string>
     <string name="sv_f_senha">usuario o contraseña incorrectos</string>
     <string name="sv_f_gravar">no se pudo guardar en la TV. Inténtalo de nuevo.</string>
+    <!-- Ficha sem a conta Simkl: convite para conectar (a nota do Simkl só aparece com a conta; licença). -->
+    <string name="sv_simkl_convite">Nota de Simkl</string>
+    <string name="sv_simkl_convite_det">Conecta tu cuenta</string>
 </resources>

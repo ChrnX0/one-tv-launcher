@@ -58,4 +58,7 @@
     <string name="sv_f_longo">слишком длинное имя пользователя или пароль</string>
     <string name="sv_f_senha">неверное имя пользователя или пароль</string>
     <string name="sv_f_gravar">не удалось сохранить на ТВ. Попробуйте снова.</string>
+    <!-- Ficha sem a conta Simkl: convite para conectar (a nota do Simkl só aparece com a conta; licença). -->
+    <string name="sv_simkl_convite">Рейтинг Simkl</string>
+    <string name="sv_simkl_convite_det">Подключите аккаунт</string>
 </resources>

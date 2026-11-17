@@ -1,6 +1,8 @@
 package br.paulo.tvlauncher
 
 import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -25,6 +27,13 @@ import br.paulo.tvlauncher.ServicosFilmes.Servico
  * O TMDB não tem conta: só mostra "ligado" quando o build tem a chave (e a frase de atribuição que o TMDB exige).
  */
 class ServicosFilmesActivity : Activity() {
+    companion object {
+        private const val EXTRA_ENTRAR = "entrar"
+        /** Abre a tela já entrando no [s] (Trakt/Simkl: o código grande + QR). Usado pelo convite da ficha. */
+        fun abrirEntrar(ctx: Context, s: Servico) =
+            ctx.startActivity(Intent(ctx, ServicosFilmesActivity::class.java).putExtra(EXTRA_ENTRAR, s.id))
+    }
+
     private val ui = Handler(Looper.getMainLooper())
     private val rede = java.util.concurrent.Executors.newSingleThreadExecutor()
     private lateinit var lista: LinearLayout
@@ -42,6 +51,10 @@ class ServicosFilmesActivity : Activity() {
         setContentView(raiz)
         rede.execute { ServicosContas.renovarSePreciso(this) }   // token do Trakt perto de vencer: renova já
         desenhar()
+        // Veio do convite da ficha: vai direto ao código (só Trakt/Simkl e só se ainda não conectou).
+        Servico.de(intent.getStringExtra(EXTRA_ENTRAR).orEmpty())?.takeIf { it == Servico.TRAKT || it == Servico.SIMKL }?.let { s ->
+            if (savedInstanceState == null && ServicosContas.disponivel(s) && ServicosContas.conta(this, s) == null) mostrarCodigo(s)
+        }
     }
 
     /** Voltou da tela de uma conta (pode ter saído dela): redesenha. */

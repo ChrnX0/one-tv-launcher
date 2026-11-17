@@ -58,4 +58,7 @@
     <string name="sv_f_longo">nom d’utilisateur ou mot de passe trop long</string>
     <string name="sv_f_senha">nom d’utilisateur ou mot de passe incorrect</string>
     <string name="sv_f_gravar">impossible d’enregistrer sur la TV. Réessayez.</string>
+    <!-- Ficha sem a conta Simkl: convite para conectar (a nota do Simkl só aparece com a conta; licença). -->
+    <string name="sv_simkl_convite">Note Simkl</string>
+    <string name="sv_simkl_convite_det">Connectez votre compte</string>
 </resources>

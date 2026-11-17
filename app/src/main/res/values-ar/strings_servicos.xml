@@ -58,4 +58,7 @@
     <string name="sv_f_longo">اسم المستخدم أو كلمة المرور طويل جدًا</string>
     <string name="sv_f_senha">اسم المستخدم أو كلمة المرور خاطئ</string>
     <string name="sv_f_gravar">تعذّر حفظه على التلفزيون. حاول مجددًا.</string>
+    <!-- Ficha sem a conta Simkl: convite para conectar (a nota do Simkl só aparece com a conta; licença). -->
+    <string name="sv_simkl_convite">تقييم Simkl</string>
+    <string name="sv_simkl_convite_det">اربط حسابك</string>
 </resources>
