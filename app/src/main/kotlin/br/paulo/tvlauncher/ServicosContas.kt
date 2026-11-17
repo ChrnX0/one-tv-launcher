@@ -277,7 +277,7 @@ object ServicosContas {
     class Resposta(val codigo: Int, val corpo: String, val local: String? = null)
 
     /** GET (sem corpo) ou POST (com corpo JSON). Só https; sem seguir redirecionamento. */
-    fun pedir(url: String, cabecalhos: Map<String, String>, corpo: String? = null): Resposta {
+    fun pedir(url: String, cabecalhos: Map<String, String>, corpo: String? = null, maxBytes: Int = 2_000_000): Resposta {
         require(url.startsWith("https://"))
         val c = URL(url).openConnection() as HttpURLConnection
         try {
@@ -290,7 +290,7 @@ object ServicosContas {
             }
             val codigo = c.responseCode
             val fluxo = if (codigo in 200..299) c.inputStream else c.errorStream
-            val texto = fluxo?.use { String(lerAte(it, 2_000_000)) }.orEmpty()
+            val texto = fluxo?.use { String(lerAte(it, maxBytes)) }.orEmpty()
             return Resposta(codigo, texto, c.getHeaderField("Location"))
         } finally { c.disconnect() }
     }

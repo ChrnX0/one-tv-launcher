@@ -163,6 +163,14 @@ object ServicosFilmes {
 
     fun simklUrlUsuario(clienteId: String, versao: Int): String = simklUrl("/users/settings", clienteId, versao)
 
+    /**
+     * Arquivos prontos do Simkl no CDN (data.simkl.in, api.simkl.org/api-reference/trending e /calendar): públicos, não
+     * contam no limite de chamadas e trazem, por título, os ids do Simkl e do TMDB e a nota. Dica do próprio Simkl
+     * (17/11/2026) para não perguntar o id título a título. [caminho] sem barra inicial, e.g. "calendar/v2/tv.json".
+     */
+    const val SIMKL_DADOS = "https://data.simkl.in"
+    fun simklUrlArquivo(caminho: String, clienteId: String, versao: Int): String = "$SIMKL_DADOS/$caminho?" + simklParametros(clienteId, versao)
+
     fun simklCabecalhos(clienteId: String, versao: Int, token: String? = null): Map<String, String> = buildMap {
         put("Content-Type", "application/json")
         put("simkl-api-key", clienteId)

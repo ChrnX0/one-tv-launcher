@@ -289,9 +289,21 @@ object InfoExternaCache {
         val fila = filaDaNoite(app, MAX_SIMKL_POR_NOITE) { agora - (it?.simklEm ?: 0) in 0 until InfoExterna.SIMKL_VALIDADE_MS } ?: return -1
         val versao = BuildConfig.VERSION_CODE
         val cab = ServicosFilmes.simklCabecalhos(cliente, versao, token)
-        var n = 0
+        // Primeiro os arquivos prontos (sem limite, sem token): quem estiver neles já sai com id e nota, sem pergunta.
+        val prontos = if (fila.isEmpty()) emptyMap() else arquivosSimkl(cliente, versao)
+        var n = 0; var dosArquivos = 0
         for ((ch, tmdb, serie) in fila) {
-            var simkl = guardado(app, ch)?.simkl
+            val doArquivo = prontos[serie to tmdb]
+            var simkl = guardado(app, ch)?.simkl ?: doArquivo?.id
+            if (doArquivo != null && doArquivo.id == simkl) {
+                dosArquivos++
+                if (doArquivo.nota != null) n++
+                synchronized(trava) {
+                    val m = mapa(app); val g = m[ch] ?: Guardado()
+                    por(m, ch, g.copy(tmdb = g.tmdb ?: tmdb, simkl = simkl, simklNota = doArquivo.nota, simklEm = agora))
+                }
+                continue
+            }
             if (simkl == null) {
                 val r = runCatching { ServicosContas.pedir(InfoExterna.urlSimklRedirect(tmdb, serie, cliente, versao), cab) }.getOrNull() ?: break
                 if (r.codigo == 429) { Log.i(TAG, "Simkl: limite"); break }
@@ -315,8 +327,23 @@ object InfoExternaCache {
             Thread.sleep(500)
         }
         synchronized(trava) { gravar(app) }
-        Log.i(TAG, "Simkl: $n notas de ${fila.size} títulos")
+        Log.i(TAG, "Simkl: $n notas de ${fila.size} títulos ($dosArquivos dos arquivos prontos)")
         return n
+    }
+
+    /**
+     * Baixa e junta os [InfoExterna.ARQUIVOS_SIMKL], um de cada vez (o texto de um sai da memória antes do próximo).
+     * Arquivo que falhar fica de fora; os títulos dele caem no caminho de antes (/redirect + ficha). Bloqueia (rede).
+     */
+    private fun arquivosSimkl(cliente: String, versao: Int): Map<Pair<Boolean, Int>, InfoExterna.SimklDoArquivo> {
+        val r = HashMap<Pair<Boolean, Int>, InfoExterna.SimklDoArquivo>()
+        val cab = mapOf("User-Agent" to ServicosFilmes.agente(versao), "Accept" to "application/json")
+        for ((caminho, serie) in InfoExterna.ARQUIVOS_SIMKL) {
+            val resp = runCatching { ServicosContas.pedir(ServicosFilmes.simklUrlArquivo(caminho, cliente, versao), cab, maxBytes = 6_000_000) }.getOrNull()
+            if (resp == null || resp.codigo !in 200..299) { Log.w(TAG, "Simkl arquivo $caminho: ${resp?.codigo}"); continue }
+            for ((k, v) in InfoExterna.lerArquivoSimkl(resp.corpo, serie)) r.putIfAbsent(k, v)
+        }
+        return r
     }
 
     private const val MAX_SIMKL_POR_NOITE = 400
