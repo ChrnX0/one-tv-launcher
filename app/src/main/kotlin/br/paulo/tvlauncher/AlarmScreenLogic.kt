@@ -22,6 +22,13 @@ object AlarmScreenLogic {
         else { val m = if (minuto % 5 == 0) minuto - 5 else minuto / 5 * 5; (m + 60) % 60 }
     }
 
+    /** Intervalo mínimo entre passos com a seta SEGURADA (o controle repete a cada ~50 ms). */
+    const val RITMO_SEGURANDO_MS = 250L
+
+    /** Aceita a tecla? O 1º aperto sempre; as repetições de quem segura, só a cada [RITMO_SEGURANDO_MS]. */
+    fun passaRepeticao(repeticao: Int, ultimaMs: Long, agoraMs: Long): Boolean =
+        repeticao == 0 || agoraMs - ultimaMs >= RITMO_SEGURANDO_MS
+
     /** Índice em [PRONTOS] dos dias marcados, ou -1 quando é uma escolha à mão (ex.: só terça e quinta). */
     fun pronto(dias: Int): Int = PRONTOS.indexOf(dias and 0b1111111)
 

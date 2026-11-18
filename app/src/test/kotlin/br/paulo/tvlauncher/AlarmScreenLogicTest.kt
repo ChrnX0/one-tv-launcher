@@ -47,4 +47,14 @@ class AlarmScreenLogicTest {
         assertTrue(AlarmScreenLogic.mudou(v, v.copy(minuto = 30)))
         assertTrue(AlarmScreenLogic.mudou(v, v.copy(bomDia = false)))
     }
+
+    @Test fun seguraraSetaAndaDevagar() {
+        org.junit.Assert.assertTrue(AlarmScreenLogic.passaRepeticao(0, 1000, 1001))      // 1º aperto sempre
+        org.junit.Assert.assertFalse(AlarmScreenLogic.passaRepeticao(3, 1000, 1050))     // repetição de 50 ms: segura
+        org.junit.Assert.assertTrue(AlarmScreenLogic.passaRepeticao(3, 1000, 1000 + AlarmScreenLogic.RITMO_SEGURANDO_MS))
+        // 1 segundo segurando = 4 passos, não 20
+        var ultima = 0L; var passos = 0
+        for (t in 50L..1000L step 50) if (AlarmScreenLogic.passaRepeticao(1, ultima, t)) { ultima = t; passos++ }
+        org.junit.Assert.assertEquals(4, passos)
+    }
 }
