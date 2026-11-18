@@ -66,7 +66,7 @@
     <string name="tt_grande">Grande</string>
     <string name="tt_maior">Plus grande</string>
     <string name="pi_titulo">Pack d’icônes</string>
-    <string name="pi_det">Remplace les icônes des applis par celles d’un pack d’icônes installé. OK choisit le suivant.</string>
+    <string name="pi_det">Remplace les icônes des applis par un style intégré (Symbole, Bichrome) ou un pack d’icônes installé. OK choisit le suivant.</string>
     <string name="pi_det_vazio">Aucun pack d’icônes installé. Téléchargez-en un sur le Play Store et il apparaîtra ici.</string>
     <string name="pi_nenhum">Aucun</string>
     <string name="fm_titulo">Mon fond</string>

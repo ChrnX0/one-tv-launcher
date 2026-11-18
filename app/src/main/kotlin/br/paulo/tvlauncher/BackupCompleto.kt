@@ -35,7 +35,9 @@ object BackupCompleto {
         "gravacao",   // gravação (14/11/2026): a pasta da rede de reserva
         "nuvem",   // Na rede › OneDrive/Dropbox (14/11/2026): o id do app Microsoft e a chave do Dropbox que o dono digitou
         "sincronizar_filmes",   // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
+        "ouvir",   // Ouvir (17/11/2026): rádio continua ao sair da tela (e, depois, os ajustes dos podcasts)
         "pacote_icones", "fundo_meu",   // degrau 1 (15/11/2026): pacote de ícones e "Meu fundo" (caminho, brilho, contraste)
+        "cruz_apps",   // cruz (18/11/2026): em que categoria cada app mora ("Mover para…"), fixados no topo e aberturas
         "addons")   // addons no protocolo do Stremio (16/11/2026): a lista instalada e o aceite dos termos
     // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
     /**
@@ -90,7 +92,8 @@ object BackupCompleto {
     /** Arquivos pequenos do player (files/player). O contas.json fica de fora: vai decifrado em "segredos". */
     val ARQUIVOS_PLAYER = listOf("favoritos.json", "recentes.json", "ocultas.json", "liberadas.json", "posicoes.json",
         "interesses_series.json", "interesses_filmes.json", "series_ultimos.json", "series_progresso.json",
-        "parental.json", "ultimo.json", "radios.json", "ano_canais.json")   // rodada 2: rádios favoritas, minutos por canal
+        "parental.json", "ultimo.json", "radios.json", "ano_canais.json",
+        "podcasts.json", "podcast_posicoes.json")   // rodada 2: rádios favoritas, minutos por canal
     private const val ESTADO_TUNEL = "tailscaled.state"
     /** No máximo tantas cópias por perfil vão no backup (8 contas x 5 arquivos já sobra). */
     private const val MAX_COPIAS_PERFIL = 64

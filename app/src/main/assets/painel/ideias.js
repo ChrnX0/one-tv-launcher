@@ -28,6 +28,7 @@ async function carregarIdeias() {
     desenharMural(e.mural);
     desenharAniversarios(e.aniversarios || []);
     desenharRadios(e.radios || []);
+    desenharPodcasts(e.podcasts || []);
     desenharSemana(e.retrospectiva, e.desempenho);
     desenharSimples(e.simples);
     presencaEscolhidos = new Set(e.presenca);
@@ -155,6 +156,57 @@ $('formMural').addEventListener('submit', async (ev) => {
     desenharMural(await ideias('POST', 'mural', { lista: $('listaMural').value, acao: 'adicionar', texto }));
     $('textoMural').value = '';
   } catch (_) {}
+});
+
+// ---------- podcasts (Ouvir parte 2, 17/11/2026) ----------
+
+function desenharPodcasts(lista) {
+  const caixa = $('itensPodcasts');
+  caixa.replaceChildren();
+  lista.forEach((p) => {
+    const linha = el('div', 'linha-registro');
+    linha.append(el('span', '', p.titulo + (p.autor ? ' · ' + p.autor : '')), botao('Deixar de seguir', async () => {
+      try { desenharPodcasts((await ideias('POST', 'podcasts', { acao: 'remover', url: p.url })).lista); } catch (_) {}
+    }));
+    caixa.append(linha);
+  });
+  if (!lista.length) caixa.append(el('p', 'aviso', 'Nenhum podcast seguido.'));
+}
+
+$('formPodcast').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const url = $('urlPodcast').value.trim();
+  if (!url) return;
+  mostrar($('statusPodcasts'), 'Lendo o feed…');
+  try {
+    desenharPodcasts((await ideias('POST', 'podcasts', { acao: 'colar', url })).lista);
+    $('urlPodcast').value = '';
+    mostrar($('statusPodcasts'), 'Podcast na TV.');
+  } catch (err) { mostrar($('statusPodcasts'), textoErro(err)); }
+});
+
+$('arquivoOpml').addEventListener('change', async (ev) => {
+  const arq = ev.target.files && ev.target.files[0];
+  ev.target.value = '';
+  if (!arq) return;
+  if (arq.size > 500 * 1024) { mostrar($('statusPodcasts'), 'Lista grande demais.'); return; }
+  mostrar($('statusPodcasts'), 'Importando…');
+  try {
+    const r = await ideias('POST', 'podcasts/opml', { opml: await arq.text() });
+    desenharPodcasts(r.lista);
+    mostrar($('statusPodcasts'), r.falharam ? `Seguindo ${r.assinados}. Ficaram de fora: ${r.falharam}.` : `Seguindo ${r.assinados}.`);
+  } catch (err) { mostrar($('statusPodcasts'), textoErro(err)); }
+});
+
+$('exportarOpml').addEventListener('click', async () => {
+  try {
+    const r = await ideias('GET', 'podcasts/opml');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([r.opml], { type: 'text/xml' }));
+    a.download = 'podcasts-sofaly.opml';
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  } catch (err) { mostrar($('statusPodcasts'), textoErro(err)); }
 });
 
 // ---------- rádios (ideia 87) ----------

@@ -27,7 +27,7 @@ import java.io.File
  * 2ª leva (10/11/2026):
  *  - caches                limpa o cache de todos os apps
  *  - consumo [--ei dias N]  internet por app desde a meia-noite (ou N dias)
- *  - tocando · tocando_acao --es acao alternar|proxima|anterior
+ *  - tocando · tocando_acao --es acao alternar|proxima|anterior · ouvir_parar (a nossa rádio, Ouvir)
  *  - chave --es nome <CHAVE> --ez ligado true|false   (pelo adb não pede PIN: o adb já é o dono)
  *  - dormir_apps --es apps "pacote1,pacote2"
  *  - recado_link           cria (ou troca) o link do recado; devolve o token (só aparece agora)
@@ -40,6 +40,7 @@ import java.io.File
  * Conferência (14/11/2026):
  *  - tecla --es tecla HOME [--el ms 1500]   entrega uma tecla falsa ao funil das teclas da acessibilidade (TeclaFalsa).
  *    Aceita o nome sem "KEYCODE_" ou o número. Ex.: HOME segurado = --es tecla HOME --el ms 1500.
+ *  - home_antiga --ez ligar true|false   saída de emergência: volta a HOME antiga (sem a cruz) até a Cruz passar no aceite
  *  - roteiro               respostas do roteiro "Conferir na TV" desta versão (JSON; ver RoteiroConferencia)
  * Compatibilidade (15/11/2026, degrau 1 contra o Projectivy):
  *  - compat                JSON do aparelho para a página "Funciona no seu aparelho?" (Compatibilidade.kt)
@@ -100,6 +101,8 @@ object ComandosExtras {
         "consumo" -> ConsumoRedeTv.texto(ctx, i.getIntExtra("dias", 1))
         "tocando" -> TocandoAgoraTv.texto(ctx)
         "tocando_acao" -> if (TocandoAgoraTv.controlar(ctx, i.getStringExtra("acao") ?: "")) "ok" else "nada tocando"
+        // Ouvir (17/11/2026): o estado do nosso som aparece em "tocando"; aqui, parar de vez (alternar = tocando_acao).
+        "ouvir_parar" -> if (OuvirEstado.ler(ctx) != null && OuvirEstado.comandar(ctx, OuvirEstado.PARAR)) "ok" else "nada tocando"
         "chave" -> Extras.Chave.values().firstOrNull { it.name == i.getStringExtra("nome") }?.let { c ->
             Extras.definir(ctx, c, i.getBooleanExtra("ligado", false))
             when (c) {
@@ -113,6 +116,8 @@ object ComandosExtras {
             Extras.definirTexto(ctx, HoraDormir.CHAVE_PERMITIDOS, it) }.ifEmpty { "lista vazia: só os essenciais abrem" }
         "recado_link" -> PainelExtras.novoLinkRecado(ctx)
         "tecla" -> teclaFalsa(i)
+        // Tela inicial em cruz (17/11/2026): saída de emergência para a HOME antiga até a Cruz passar no aceite na TV.
+        "home_antiga" -> { LayoutHome.definirAntiga(ctx, i.getBooleanExtra("ligar", false)); "cruz=${LayoutHome.cruz(ctx)} (aperte HOME)" }
         // Cuidar de longe (ideias 77-79): estado, rodar o relógio agora, abrir a pergunta de consentimento, teste de envio.
         "cuidar" -> CuidarDeLongeTv.texto(ctx)
         "cuidar_rodar" -> { val app = ctx.applicationContext; Fundo.rodar("cuidar-adb") { CuidarDeLongeTv.rodar(app) }; "rodando; ver depois com cuidar" }

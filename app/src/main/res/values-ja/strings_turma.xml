@@ -40,4 +40,7 @@
     <string name="turma_config_guardar">保存</string>
     <string name="turma_config_tirar">仲間を外す</string>
     <string name="turma_id_invalido">Discord のサーバー ID ではありません（17〜20桁）。</string>
+    <string name="cruz_sofa">ソファ</string>
+    <string name="cruz_sofa_sub">コントローラーと Discord の仲間</string>
+    <string name="cruz_sofa_voz">ボイス中 %1$d人 · %2$s</string>
 </resources>

@@ -249,7 +249,18 @@ object PareamentoNaTv {
             if (!ok) { estado(erro?.let { app.getString(R.string.pn_falhou, it) } ?: app.getString(R.string.pn_recusou)); return@execute }
             estado(app.getString(R.string.pn_pareado))
             GuardiaoShizuku.parearEGarantir(app, null, -1)
-            principal.postDelayed({ fechar(app) }, 4000)
+            // Confirmação que se vê (Paulo, 17/11/2026): ao parear, o Android fecha sozinho a caixinha do código e
+            // parecia erro. Agora um aviso grande diz que deu certo e, depois, se o shell respondeu de verdade.
+            AvisoTv.rapido(app, app.getString(R.string.pn_ok_titulo), app.getString(R.string.pn_ok_texto), 8)
+            principal.postDelayed({ fechar(app) }, 2500)
+            // Confere o shell com um comando real (até ~1 min: o guardião conecta na mesma fila logo depois).
+            var shell = false
+            for (i in 1..6) {
+                if (GuardiaoShizuku.comando(app, "echo ok", 10_000)?.trim() == "ok") { shell = true; break }
+                try { Thread.sleep(2_000) } catch (_: InterruptedException) { break }
+            }
+            if (shell) AvisoTv.rapido(app, app.getString(R.string.pn_ok_titulo), app.getString(R.string.pn_ok_shell), 8)
+            else AvisoTv.rapido(app, app.getString(R.string.pn_ok_titulo), app.getString(R.string.pn_ok_lento), 10)
         }
     }
 }

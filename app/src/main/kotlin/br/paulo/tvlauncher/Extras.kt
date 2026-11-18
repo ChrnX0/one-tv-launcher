@@ -65,6 +65,8 @@ object Extras {
         // Card Jogos (14/11/2026)
         /** Card "Jogos" na HOME; os apps de jogo saem da linha de apps. Desligado, eles voltam para lá. */
         CARD_JOGOS(true),
+        /** Card "Ouvir" na HOME (rádio + podcasts, 17/11/2026). */
+        CARD_OUVIR(true),
         /** Modo jogo: com um jogo na frente, protetor, filtro noturno e avisos esperam. */
         MODO_JOGO(true),
         /** Ligar um controle de videogame com a HOME na tela abre a tela Jogos. */

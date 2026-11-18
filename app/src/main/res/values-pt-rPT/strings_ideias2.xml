@@ -11,7 +11,7 @@
     <string name="extras_HORA_DORMIR">Hora de dormir (só apps liberados, volume com teto)</string>
     <string name="extras_TOCANDO_AGORA">A tocar agora (lê o que está a tocar)</string>
     <string name="extras_MODO_LEVE">Modo leve (animações mais curtas)</string>
-    <string name="extras_SOM_NAVEGACAO">Som de navegação</string>
+    <string name="extras_SOM_NAVEGACAO">Clique ao navegar nos outros ecrãs</string>
     <string name="extras_RECADO_LINK">Recado por link (Home Assistant, TvOverlay)</string>
     <string name="extras_caches">Limpar caches dos apps</string>
     <string name="extras_livre">%1$s livres</string>

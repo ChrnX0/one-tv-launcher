@@ -46,4 +46,58 @@ object LayoutHome {
     fun tamanho(ctx: Context) = valido(Extras.numero(ctx, CHAVE, 100))
     fun definirTamanho(ctx: Context, v: Int) = Extras.definirNumero(ctx, CHAVE, valido(v))
     fun transparente(ctx: Context) = Extras.ligado(ctx, Extras.Chave.CARTOES_TRANSPARENTES)
+
+    // ---- tela inicial em cruz (17/11/2026): a ÚNICA tela inicial (dono, 19:41Z: "aposenta a antiga"). Não há ajuste.
+    // A HOME antiga (fileira/grade) só volta por adb, como saída de emergência enquanto a Cruz não passa no teste de
+    // desempenho na TV: `EXTRAS --es o home_antiga --ez ligar true`. Depois do aceite, um PR próprio apaga a antiga.
+    const val CHAVE_JEITO = "home_jeito"
+    const val JEITO_ANTIGA = 2
+
+    /** true = Cruz (sempre, salvo a saída de emergência por adb). */
+    fun cruz(ctx: Context): Boolean = cruz(Extras.numero(ctx, CHAVE_JEITO, 0))
+    fun cruz(valorGuardado: Int): Boolean = valorGuardado != JEITO_ANTIGA
+
+    fun definirAntiga(ctx: Context, sim: Boolean) = Extras.definirNumero(ctx, CHAVE_JEITO, if (sim) JEITO_ANTIGA else 0)
+
+    /**
+     * Como os APPS aparecem na cruz (18/11/2026: o dono não gostou dos ícones quadrados). [BANNER] = a arte 16:9 de TV
+     * do app com cantos arredondados (sem banner: o ícone num retângulo da cor dele); [REDONDO] = o ícone recortado em
+     * círculo; [SOLTO] = só o traço do ícone, sem fundo (sem traço legível: o redondo).
+     */
+    enum class IconeAppCruz { BANNER, REDONDO, SOLTO }
+    const val CHAVE_APPS_ICONE = "cruz_apps_icone"
+    fun iconeAppCruz(ctx: Context) = iconeAppCruz(Extras.numero(ctx, CHAVE_APPS_ICONE, IconeAppCruz.BANNER.ordinal))
+    fun iconeAppCruz(valor: Int) = IconeAppCruz.entries.getOrElse(valor) { IconeAppCruz.BANNER }
+    fun proximoIconeAppCruz(ctx: Context) = IconeAppCruz.entries.let { it[(iconeAppCruz(ctx).ordinal + 1) % it.size] }
+        .also { Extras.definirNumero(ctx, CHAVE_APPS_ICONE, it.ordinal) }
+
+    /** Estilo dos ícones da cruz: 0 = Objeto, 1 = Símbolo, 2 = Duotom, 3 = Linha (padrão desde 18/11/2026; o número é a ordem do enum). */
+    const val CHAVE_ICONES = "cruz_icones"
+    fun iconesCruz(ctx: Context) = iconesCruz(Extras.numero(ctx, CHAVE_ICONES, IconeCruz.Estilo.LINHA.ordinal))
+    fun iconesCruz(valor: Int) = IconeCruz.Estilo.entries.getOrElse(valor) { IconeCruz.Estilo.LINHA }
+    fun definirIconesCruz(ctx: Context, e: IconeCruz.Estilo) = Extras.definirNumero(ctx, CHAVE_ICONES, e.ordinal)
+    fun proximoIconesCruz(ctx: Context) = IconeCruz.Estilo.entries.let { it[(iconesCruz(ctx).ordinal + 1) % it.size] }
+        .also { definirIconesCruz(ctx, it) }
+
+    /**
+     * Barra de cima na cruz (17/11/2026, Paulo: "quero todas as opções"):
+     * - [BarraCruz.RECUA] (padrão até 18/11/2026): com a cruz em foco, só hora e tempo, pequenos; ▲ traz a barra inteira e a cruz desce;
+     * - [BarraCruz.LEVE]: a barra sempre à mostra, sem as cápsulas de vidro;
+     * - [BarraCruz.RELOGIO]: como a Recua, e um relógio grande com data e tempo no canto livre de baixo;
+     * - [BarraCruz.HOJE]: a barra de cápsulas de sempre;
+     * - [BarraCruz.VIDRO] (padrão desde a onda 3, 18/11/2026): a barra sempre à mostra numa faixa só de vidro parado.
+     * A ordem é a guardada nas preferências (o número): opção nova entra no FIM.
+     */
+    enum class BarraCruz { RECUA, LEVE, RELOGIO, HOJE, VIDRO }
+    const val CHAVE_BARRA = "cruz_barra"
+    fun barraCruz(ctx: Context) = barraCruz(Extras.numero(ctx, CHAVE_BARRA, BarraCruz.VIDRO.ordinal))
+    fun barraCruz(valor: Int) = BarraCruz.entries.getOrElse(valor) { BarraCruz.VIDRO }
+    fun definirBarraCruz(ctx: Context, b: BarraCruz) = Extras.definirNumero(ctx, CHAVE_BARRA, b.ordinal)
+    fun proximaBarraCruz(ctx: Context) = BarraCruz.entries.let { it[(barraCruz(ctx).ordinal + 1) % it.size] }
+        .also { definirBarraCruz(ctx, it) }
+
+    /** Arte do item em foco atrás da cruz (capa à direita, sobre o fundo escolhido em Tema). Ligada de fábrica. */
+    const val CHAVE_ARTE = "cruz_arte"
+    fun arteCruz(ctx: Context) = Extras.numero(ctx, CHAVE_ARTE, 1) != 0
+    fun definirArteCruz(ctx: Context, sim: Boolean) = Extras.definirNumero(ctx, CHAVE_ARTE, if (sim) 1 else 0)
 }

@@ -227,6 +227,10 @@
     <string name="pn_nao_achei">ainda não achei o ecrã de pareamento</string>
     <string name="pn_6">o código tem 6 dígitos</string>
     <string name="pn_pareado">pareado! a conferir o shell…</string>
+    <string name="pn_ok_titulo">Emparelhado com sucesso ✓</string>
+    <string name="pn_ok_texto">Funcionou! O launcher está ligado à TV. A ligar a shell própria…</string>
+    <string name="pn_ok_shell">Tudo pronto: a shell própria do launcher está a funcionar.</string>
+    <string name="pn_ok_lento">Emparelhado. A shell ainda não respondeu; o launcher continua a tentar sozinho.</string>
     <string name="pn_codigo">Código: %1$s</string>
     <string name="pn_achada">Ecrã de pareamento achada (porta %1$d). Introduza o código:</string>
     <string name="pn_falhou">falhou: %1$s</string>

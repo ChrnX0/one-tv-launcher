@@ -2,12 +2,12 @@
 <!-- Tradução (ja) de values/strings_saude.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="saude_titulo">リモートアクセスが停止しました</string>
-    <string name="saude_texto_shell">TV の自分自身へのアクセスが %1$d 分前に切れました（パネル、Claude、自動修復が止まります）。「再ペアリング」を押すか、設定 › システム › PC なしでペアリング に進んでください。</string>
+    <string name="saude_texto_shell">TV の自分自身へのアクセスが %1$d 分前に切れました（パネル、Claude、自動修復が止まります）。「再ペアリング」を押すか、設定 › 詳細 › PC なしでペアリング に進んでください。</string>
     <string name="saude_texto_tunel">インターネット経由の Claude がオフラインです。「接続」を押して不足しているものを確認するか、設定 › リモートアクセス に進んでください。</string>
     <string name="saude_parear">再ペアリング</string>
     <string name="saude_conectar">接続</string>
     <string name="saude_depois">今はしない</string>
-    <string name="saude_acao_shell">再ペアリング: 設定 › システム › PC なしでペアリング</string>
+    <string name="saude_acao_shell">再ペアリング: 設定 › 詳細 › PC なしでペアリング</string>
     <string name="saude_acao_tunel">再接続: 設定 › リモートアクセス › 接続</string>
     <string name="mnt_titulo">夜間メンテナンス</string>
     <string name="mnt_consertei">修復済み:</string>

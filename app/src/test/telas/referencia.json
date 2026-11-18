@@ -38,7 +38,9 @@
  "en\/home": {
   "menorSp": 12,
   "foco": true,
-  "cortes": [],
+  "cortes": [
+   "Videos, music and photos from your home "
+  ],
   "sobrepostos": []
  },
  "en\/home-grade": {
@@ -51,6 +53,30 @@
   "menorSp": 12,
   "foco": true,
   "cortes": [],
+  "sobrepostos": []
+ },
+ "en\/home-leve": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [
+   "Videos, music and photos from your home "
+  ],
+  "sobrepostos": []
+ },
+ "en\/home-relogio": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [
+   "Videos, music and photos from your home "
+  ],
+  "sobrepostos": []
+ },
+ "en\/home-vidro": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [
+   "Videos, music and photos from your home "
+  ],
   "sobrepostos": []
  },
  "en\/jogos": {
@@ -126,6 +152,24 @@
   "sobrepostos": []
  },
  "pt\/home-grande": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
+ "pt\/home-leve": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
+ "pt\/home-relogio": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
+ "pt\/home-vidro": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],

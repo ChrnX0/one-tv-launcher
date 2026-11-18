@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ouvir parte 1 (17/11/2026): rádio que continua fora da tela (OuvirServico, RadioActivity, pílula da HOME). -->
+<resources>
+    <string name="ra_parar">Detener</string>
+    <string name="ra_parar_det">La radio sigue sonando en la pantalla de inicio y en el protector hasta que la detengas</string>
+    <string name="ra_parar_det_antigo">Salir de esta pantalla también la detiene</string>
+    <string name="ra_ajustes">Ajustes</string>
+    <string name="ra_ao_sair">Al salir de esta pantalla</string>
+    <string name="ra_ao_sair_det">Si sigue sonando, ⏯ en el control la pausa desde cualquier pantalla</string>
+    <string name="ra_ao_sair_continua">sigue sonando</string>
+    <string name="ra_ao_sair_para">se detiene</string>
+    <string name="ouv_canal">Radio sonando</string>
+    <string name="ouv_abrir">Abrir la pantalla de la radio</string>
+    <!-- Ouvir parte 2: podcasts -->
+    <string name="pod_titulo">Podcasts</string>
+    <string name="pod_subtitulo">Los programas que sigues, directo de quien los publica</string>
+    <string name="pod_dica_mais">más</string>
+    <string name="pod_atualizando">Buscando episodios nuevos…</string>
+    <string name="pod_de">%1$s de %2$s</string>
+    <string name="pod_velocidade">Velocidad</string>
+    <string name="pod_silencio">Saltar silencios</string>
+    <string name="pod_silencio_det">Quita las pausas del habla</string>
+    <string name="pod_ligado">activado</string>
+    <string name="pod_desligado">desactivado</string>
+    <string name="pod_dica_pular">En la línea que suena, ◀ ▶ retroceden 15 s / avanzan 30 s</string>
+    <string name="pod_continuar">Continuar</string>
+    <string name="pod_faltam">quedan %s</string>
+    <string name="pod_novos">Episodios nuevos</string>
+    <string name="pod_video">video</string>
+    <string name="pod_meus">Mis podcasts</string>
+    <string name="pod_vazio">Aún no hay podcasts. Agrega uno abajo.</string>
+    <string name="pod_ultimo">último: %s</string>
+    <string name="pod_adicionar">Agregar</string>
+    <string name="pod_colar">Pegar la dirección de un podcast</string>
+    <string name="pod_colar_det">El enlace del feed RSS (los sitios de podcasts lo muestran como RSS)</string>
+    <string name="pod_pelo_celular">Desde el celular</string>
+    <string name="pod_pelo_celular_det">Abre el panel de la TV en el celular › Podcasts: pega un enlace o importa la lista de tu app de podcasts (OPML)</string>
+    <string name="pod_sem_episodios">No hay episodios para mostrar.</string>
+    <string name="pod_ouvido">escuchado</string>
+    <string name="pod_do_comeco">Reproducir desde el inicio</string>
+    <string name="pod_marcar_nao">Marcar como no escuchado</string>
+    <string name="pod_marcar_ouvido">Marcar como escuchado</string>
+    <string name="pod_abrir">Abrir</string>
+    <string name="pod_remover">Dejar de seguir</string>
+    <string name="pod_removido">Dejaste de seguirlo</string>
+    <string name="pod_adicionando">Agregando el podcast…</string>
+    <string name="pod_adicionado">Podcast agregado</string>
+    <string name="pod_nao_deu">No se pudo agregar: %s</string>
+    <string name="pod_horas">%1$d h %2$s</string>
+    <string name="pod_minutos">%d min</string>
+    <string name="pod_hoje">hoy</string>
+    <string name="pod_ontem">ayer</string>
+    <string name="pod_falhou">Este episodio no se está reproduciendo ahora. Intenta más tarde.</string>
+    <string name="pod_abrir_tela">Abrir la pantalla de podcasts</string>
+    <string name="ra_podcasts_det">Programas, noticias y charlas que sigues</string>
+    <string name="pod_procurar">Buscar</string>
+    <string name="pod_buscar">Buscar podcasts</string>
+    <string name="pod_em_alta">Populares en tu país</string>
+    <string name="pod_atribuicao">Búsqueda: Podcast Index</string>
+    <string name="home_card_ouvir">Escuchar</string>
+    <string name="home_destaque_ouvir">Radio y pódcasts</string>
+    <string name="extras_CARD_OUVIR">Tarjeta Escuchar en la pantalla de inicio (radio y pódcasts)</string>
+</resources>
