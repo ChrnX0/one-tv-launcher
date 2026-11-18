@@ -37,6 +37,7 @@ object BackupCompleto {
         "sincronizar_filmes",   // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
         "ouvir",   // Ouvir (17/11/2026): rádio continua ao sair da tela (e, depois, os ajustes dos podcasts)
         "pacote_icones", "fundo_meu",   // degrau 1 (15/11/2026): pacote de ícones e "Meu fundo" (caminho, brilho, contraste)
+        "cruz_apps",   // cruz (18/11/2026): em que categoria cada app mora ("Mover para…"), fixados no topo e aberturas
         "addons")   // addons no protocolo do Stremio (16/11/2026): a lista instalada e o aceite dos termos
     // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
     /**
@@ -50,6 +51,7 @@ object BackupCompleto {
         "mtp_permitidos", "painel_log", "atualizador", "aviso_tv", "loja_curada",
         "ceu",   // cache do TLE da Estação Espacial (protetor com tempo): renovado a cada 12 h, de outro aparelho não vale
         "compatibilidade",   // medidas do "acordar" deste aparelho (CompatibilidadeTv): de outro aparelho não valem
+        "qualidade_tv",   // TV ao vivo: banda, travadas e resolução real medidas NESTA rede e neste aparelho (QualidadeTv)
         "aot",   // versão já compilada (CompilarAot): é do APK instalado, não da configuração
         "cobranca",   // plano comprado (CobrancaPlay): vem sempre da Play, nunca de um backup (restaurar não pode virar Ultra)
         "roteiro",   // respostas do "Conferir na TV" (ConferirTvActivity): valem só para a versão em que foram dadas

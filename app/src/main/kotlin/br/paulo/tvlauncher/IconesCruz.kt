@@ -20,9 +20,17 @@ import android.graphics.drawable.Drawable
  */
 class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJETO) : Drawable() {
 
-    enum class Tipo { CONTINUAR, ASSISTIR, OUVIR, JOGAR, APLICATIVOS, TV, SERIES, FILMES, REDE, ADDONS, RADIO, PODCASTS, JOGOS, SOFA, TODOS_APPS, PLUGIN }
-    /** [DUOTOM] (17/11/2026, 3º estilo embutido): o traço do Símbolo em branco quente sobre um halo suave na cor do grupo. */
-    enum class Estilo { OBJETO, SIMBOLO, DUOTOM }
+    enum class Tipo { CONTINUAR, ASSISTIR, OUVIR, JOGAR, APLICATIVOS, TV, SERIES, FILMES, REDE, ADDONS, RADIO, PODCASTS, JOGOS, SOFA, TODOS_APPS, PLUGIN, DORMIR, CENTRAL }
+    /**
+     * [DUOTOM] (17/11/2026, 3º estilo embutido): o traço do Símbolo em branco quente sobre um halo suave na cor do grupo.
+     * [LINHA] (18/11/2026, PADRÃO): o dono achou os desenhos "infantis". Traço fino de uma cor só (creme), desenho adulto
+     * (TV de tela plana, rolo de filme), e só o item escolhido fica na cor da marca. Entrou no FIM do enum: o número já
+     * gravado nas Extras (0, 1, 2) continua apontando para o mesmo estilo.
+     */
+    enum class Estilo { OBJETO, SIMBOLO, DUOTOM, LINHA }
+
+    /** Linha: true = item escolhido com a cruz em foco (o ImageView avisa pelo estado "activated"). */
+    private var aceso = false
 
     private val cheio = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL }
     private val traco = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE; strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND }
@@ -35,7 +43,13 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         if (b.isEmpty) return
         c.save()
         c.translate(b.left.toFloat(), b.top.toFloat())
-        if (estilo == Estilo.OBJETO) {
+        if (estilo == Estilo.LINHA) {
+            val esc = minOf(b.width(), b.height()) / 24f
+            c.translate((b.width() - 24f * esc) / 2f, (b.height() - 24f * esc) / 2f)
+            c.scale(esc, esc)
+            corTraco = if (aceso) COR_ACESA else COR_CLARA
+            linhaFina(c)
+        } else if (estilo == Estilo.OBJETO) {
             // quadro 120 x 100 centrado, sem deformar
             val esc = minOf(b.width() / 120f, b.height() / 100f)
             c.translate((b.width() - 120f * esc) / 2f, (b.height() - 100f * esc) / 2f)
@@ -80,7 +94,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
     private fun objeto(c: Canvas) {
         when (tipo) {
             Tipo.ASSISTIR, Tipo.TV -> tv(c)
-            Tipo.JOGAR, Tipo.JOGOS -> controle(c)
+            Tipo.JOGAR, Tipo.JOGOS, Tipo.CENTRAL -> controle(c)
             Tipo.OUVIR -> fone(c)
             Tipo.CONTINUAR -> continuar(c)
             Tipo.SERIES -> series(c)
@@ -91,6 +105,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             Tipo.PODCASTS -> microfone(c)
             Tipo.SOFA -> sofa(c)
             Tipo.APLICATIVOS, Tipo.TODOS_APPS -> quadradinhos(c)
+            Tipo.DORMIR -> lua(c)
         }
         cheio.shader = null; cheio.alpha = 255
     }
@@ -208,6 +223,27 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         linha(c, 0xFF3A2A20, 5f, 20f, 86f, 20f, 94f, 100f, 86f, 100f, 94f)
     }
 
+    /** "Dormir em 30 min" (onda 3): lua crescente creme com duas estrelinhas. */
+    private fun lua(c: Canvas) {
+        val fora = Path().apply { addCircle(52f, 52f, 42f, Path.Direction.CW) }
+        val dentro = Path().apply { addCircle(74f, 36f, 34f, Path.Direction.CW) }
+        fora.op(dentro, Path.Op.DIFFERENCE)
+        vert(0xFFFFEBC4, 0xFFE8A55E, 10f, 94f); c.drawPath(fora, cheio)
+        solido(0xFFFFFFFF, .22f); c.drawCircle(26f, 50f, 6f, cheio)
+        solido(0xFFFFD166); estrela(c, 96f, 74f, 10f); estrela(c, 108f, 44f, 6.5f)
+    }
+
+    private fun estrela(c: Canvas, x: Float, y: Float, raio: Float) {
+        p.reset()
+        for (i in 0 until 8) {
+            val a = i * Math.PI / 4 - Math.PI / 2
+            val rr = if (i % 2 == 0) raio else raio * 0.38f
+            val px = x + (rr * Math.cos(a)).toFloat(); val py = y + (rr * Math.sin(a)).toFloat()
+            if (i == 0) p.moveTo(px, py) else p.lineTo(px, py)
+        }
+        p.close(); c.drawPath(p, cheio)
+    }
+
     private fun quadradinhos(c: Canvas) {
         solido(0xFFFF8A55); rr(c, 20f, 10f, 38f, 38f, 10f)
         solido(0xFF7DD3C0); rr(c, 62f, 10f, 38f, 38f, 10f)
@@ -220,7 +256,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
 
     private fun corDoGrupo(): Int = when (tipo) {
         Tipo.OUVIR, Tipo.RADIO, Tipo.PODCASTS -> 0xFF93D6D0.toInt()
-        Tipo.JOGAR, Tipo.JOGOS, Tipo.SOFA -> 0xFFB4B9FF.toInt()
+        Tipo.JOGAR, Tipo.JOGOS, Tipo.SOFA, Tipo.CENTRAL -> 0xFFB4B9FF.toInt()
         Tipo.APLICATIVOS, Tipo.TODOS_APPS, Tipo.PLUGIN -> 0xFFE8E2DA.toInt()
         else -> 0xFFFFB48E.toInt()   // Continuar e Assistir: o laranja claro da marca (nada rosado)
     }
@@ -233,7 +269,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             Tipo.SERIES -> IconeApp(IconeApp.Tipo.SERIES, corTraco).also { it.setBounds(0, 0, 24, 24) }.draw(c)
             Tipo.FILMES -> IconeApp(IconeApp.Tipo.FILMES, corTraco).also { it.setBounds(0, 0, 24, 24) }.draw(c)
             Tipo.REDE -> IconeApp(IconeApp.Tipo.REDE, corTraco).also { it.setBounds(0, 0, 24, 24) }.draw(c)
-            Tipo.JOGAR, Tipo.JOGOS -> IconeApp(IconeApp.Tipo.JOGOS, corTraco).also { it.setBounds(0, 0, 24, 24) }.draw(c)
+            Tipo.JOGAR, Tipo.JOGOS, Tipo.CENTRAL -> IconeApp(IconeApp.Tipo.JOGOS, corTraco).also { it.setBounds(0, 0, 24, 24) }.draw(c)
             Tipo.PODCASTS -> IconeApp(IconeApp.Tipo.MICROFONE, corTraco).also { it.setBounds(0, 0, 24, 24) }.draw(c)
             Tipo.CONTINUAR -> {
                 c.drawCircle(12f, 12f, 9f, traco)
@@ -262,7 +298,109 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             Tipo.APLICATIVOS, Tipo.TODOS_APPS -> for (x in listOf(4f, 13.5f)) for (y in listOf(4f, 13.5f)) {
                 r.set(x, y, x + 6.5f, y + 6.5f); c.drawRoundRect(r, 1.8f, 1.8f, traco)
             }
+            Tipo.DORMIR -> {
+                // lua crescente: dois arcos que se encontram nas pontas
+                p.reset(); p.moveTo(14.5f, 3.6f)
+                p.cubicTo(8f, 4.5f, 3.6f, 9.6f, 4.2f, 14.6f); p.cubicTo(4.9f, 19.6f, 10.6f, 22.4f, 16.6f, 19.6f)
+                p.cubicTo(11.4f, 18.6f, 8.6f, 14.4f, 9.6f, 10f); p.cubicTo(10.2f, 7.2f, 12f, 5f, 14.5f, 3.6f); p.close()
+                c.drawPath(p, traco)
+                c.drawLine(17f, 6f, 21f, 6f, traco); c.drawLine(21f, 6f, 17f, 10f, traco); c.drawLine(17f, 10f, 21f, 10f, traco)
+            }
         }
+    }
+
+    // ------------------------------------------------------------------ linha (24 x 24, traço fino de uma cor)
+
+    private fun linhaFina(c: Canvas) {
+        traco.shader = null; traco.color = corTraco; traco.strokeWidth = TRACO_FINO; traco.pathEffect = null; traco.alpha = 255
+        cheio.shader = null; cheio.color = corTraco; cheio.alpha = 255
+        fun ret(x0: Float, y0: Float, x1: Float, y1: Float, raio: Float) { r.set(x0, y0, x1, y1); c.drawRoundRect(r, raio, raio, traco) }
+        fun tri(x: Float, y: Float, alt: Float) {   // "play" vazado
+            p.reset(); p.moveTo(x, y); p.lineTo(x, y + alt); p.lineTo(x + alt * 0.86f, y + alt / 2); p.close(); c.drawPath(p, traco)
+        }
+        when (tipo) {
+            Tipo.CONTINUAR -> {   // seta que dá a volta (retomar) com o play no meio
+                r.set(3.5f, 3.5f, 20.5f, 20.5f); c.drawArc(r, -60f, 300f, false, traco)
+                c.drawLine(16.25f, 4.64f, 16.6f, 8.6f, traco); c.drawLine(16.25f, 4.64f, 20.1f, 3.9f, traco)
+                tri(10.3f, 8.8f, 6.4f)
+            }
+            Tipo.ASSISTIR, Tipo.TV -> {   // TV de tela plana no pé
+                ret(2.5f, 4.5f, 21.5f, 16.5f, 1.6f)
+                c.drawLine(12f, 16.5f, 12f, 19.5f, traco); c.drawLine(8f, 19.5f, 16f, 19.5f, traco)
+            }
+            Tipo.SERIES -> {   // quadros empilhados (episódios)
+                ret(2.5f, 8f, 17.5f, 19.5f, 1.6f)
+                p.reset(); p.moveTo(5.5f, 5f); p.lineTo(19f, 5f); p.quadTo(20.5f, 5f, 20.5f, 6.5f); p.lineTo(20.5f, 16.5f); c.drawPath(p, traco)
+                tri(8.6f, 11.2f, 5f)
+            }
+            Tipo.FILMES -> {   // rolo de filme: o quadro com as perfurações dos lados
+                ret(3f, 3.5f, 21f, 20.5f, 1.6f)
+                c.drawLine(7.5f, 3.5f, 7.5f, 20.5f, traco); c.drawLine(16.5f, 3.5f, 16.5f, 20.5f, traco)
+                for (y in floatArrayOf(8f, 12f, 16f)) { c.drawLine(3f, y, 7.5f, y, traco); c.drawLine(16.5f, y, 21f, y, traco) }
+            }
+            Tipo.REDE -> {   // dois servidores
+                ret(3.5f, 4f, 20.5f, 10.5f, 1.6f); ret(3.5f, 13.5f, 20.5f, 20f, 1.6f)
+                c.drawCircle(7f, 7.25f, 0.9f, cheio); c.drawCircle(7f, 16.75f, 0.9f, cheio)
+                c.drawLine(13f, 7.25f, 17f, 7.25f, traco); c.drawLine(13f, 16.75f, 17f, 16.75f, traco)
+            }
+            Tipo.ADDONS, Tipo.PLUGIN -> {   // peça de encaixe
+                p.reset(); p.moveTo(4f, 7f); p.lineTo(9f, 7f); p.arcTo(RectF(9f, 4.5f, 14f, 9.5f), 180f, 180f); p.lineTo(18f, 7f); p.lineTo(18f, 11f)
+                p.arcTo(RectF(15.5f, 11f, 20.5f, 16f), 270f, -180f); p.lineTo(18f, 20f); p.lineTo(4f, 20f); p.close(); c.drawPath(p, traco)
+            }
+            Tipo.OUVIR -> {   // fone: arco e as duas conchas
+                r.set(4f, 4f, 20f, 20f); c.drawArc(r, 180f, 180f, false, traco)
+                ret(3f, 13f, 7.5f, 20f, 1.6f); ret(16.5f, 13f, 21f, 20f, 1.6f)
+            }
+            Tipo.RADIO -> {   // rádio: caixa, alça, alto-falante e dial
+                ret(3f, 8f, 21f, 20f, 1.8f)
+                c.drawLine(7f, 8f, 16.5f, 3.5f, traco)
+                c.drawCircle(8.8f, 14f, 2.8f, traco); c.drawLine(14f, 12f, 18f, 12f, traco); c.drawLine(14f, 16f, 18f, 16f, traco)
+            }
+            Tipo.PODCASTS -> {   // microfone de estúdio
+                ret(9f, 3f, 15f, 14f, 3f)
+                r.set(5.5f, 6.5f, 18.5f, 17.5f); c.drawArc(r, 0f, 180f, false, traco)
+                c.drawLine(12f, 17.5f, 12f, 20.5f, traco); c.drawLine(9f, 20.5f, 15f, 20.5f, traco)
+            }
+            Tipo.JOGAR, Tipo.JOGOS -> {   // controle
+                p.reset()
+                p.moveTo(7f, 7f); p.lineTo(17f, 7f)
+                p.quadTo(20.5f, 7f, 21.3f, 11f); p.lineTo(22f, 15.5f)
+                p.quadTo(22.4f, 18.5f, 20f, 18.5f); p.quadTo(18.4f, 18.5f, 17f, 16.5f); p.lineTo(16f, 15f); p.lineTo(8f, 15f)
+                p.lineTo(7f, 16.5f); p.quadTo(5.6f, 18.5f, 4f, 18.5f); p.quadTo(1.6f, 18.5f, 2f, 15.5f)
+                p.lineTo(2.7f, 11f); p.quadTo(3.5f, 7f, 7f, 7f); p.close()
+                c.drawPath(p, traco)
+                c.drawLine(5.6f, 11f, 9.4f, 11f, traco); c.drawLine(7.5f, 9.1f, 7.5f, 12.9f, traco)
+                c.drawCircle(15.6f, 11.8f, 0.9f, cheio); c.drawCircle(18f, 10f, 0.9f, cheio)
+            }
+            Tipo.CENTRAL -> {   // mostrador (o painel de informações da Central de jogos)
+                r.set(3f, 5f, 21f, 23f); c.drawArc(r, 150f, 240f, false, traco)
+                c.drawLine(12f, 14f, 16f, 9.5f, traco); c.drawCircle(12f, 14f, 1.3f, cheio)
+                c.drawLine(5.5f, 19.5f, 18.5f, 19.5f, traco)
+            }
+            Tipo.SOFA -> {
+                ret(5f, 7f, 19f, 13.5f, 1.8f); ret(2.5f, 11f, 6.5f, 18f, 1.6f); ret(17.5f, 11f, 21.5f, 18f, 1.6f)
+                c.drawLine(6.5f, 15f, 17.5f, 15f, traco); c.drawLine(4.5f, 18f, 4.5f, 20.5f, traco); c.drawLine(19.5f, 18f, 19.5f, 20.5f, traco)
+            }
+            Tipo.APLICATIVOS -> for (x in floatArrayOf(4f, 13.5f)) for (y in floatArrayOf(4f, 13.5f)) ret(x, y, x + 6.5f, y + 6.5f, 1.6f)
+            Tipo.TODOS_APPS -> for (x in floatArrayOf(4f, 10.5f, 17f)) for (y in floatArrayOf(4f, 10.5f, 17f)) ret(x, y, x + 3f, y + 3f, 0.8f)
+            Tipo.DORMIR -> {   // lua crescente e uma estrela pequena
+                p.reset(); p.moveTo(14.5f, 3.6f)
+                p.cubicTo(8f, 4.5f, 3.6f, 9.6f, 4.2f, 14.6f); p.cubicTo(4.9f, 19.6f, 10.6f, 22.4f, 16.6f, 19.6f)
+                p.cubicTo(11.4f, 18.6f, 8.6f, 14.4f, 9.6f, 10f); p.cubicTo(10.2f, 7.2f, 12f, 5f, 14.5f, 3.6f); p.close()
+                c.drawPath(p, traco)
+                c.drawLine(18.5f, 5f, 18.5f, 9f, traco); c.drawLine(16.5f, 7f, 20.5f, 7f, traco)
+            }
+        }
+    }
+
+    // Linha: o ImageView marca "activated" no item escolhido (HomeCruz.posicionar) e o ícone acende na cor da marca.
+    override fun isStateful() = estilo == Estilo.LINHA
+    override fun onStateChange(state: IntArray): Boolean {
+        val novo = estilo == Estilo.LINHA && state.contains(android.R.attr.state_activated)
+        if (novo == aceso) return false
+        aceso = novo
+        invalidateSelf()
+        return true
     }
 
     override fun setAlpha(alpha: Int) { cheio.alpha = alpha; traco.alpha = alpha }
@@ -274,5 +412,9 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         /** A cor clara do traço (Símbolo/Duotom), também nos ícones de app do pacote embutido. */
         const val COR_TRACO = 0xFFF4F1EC.toInt()
         private const val COR_CLARA = 0xFFF4F1EC.toInt()
+        /** Linha: o item escolhido acende na cor da marca (vermelho-laranja; nada rosado). */
+        const val COR_ACESA = 0xFFFF6A2B.toInt()
+        /** Linha: traço de 1,25 no quadro de 24 (o Símbolo usa 1,5). */
+        const val TRACO_FINO = 1.25f
     }
 }

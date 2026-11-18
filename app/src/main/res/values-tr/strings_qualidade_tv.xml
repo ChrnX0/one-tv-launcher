@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- TV ao vivo: canais novos, qualidade automática e motivo do "sem sinal" (18/11/2026). -->
+<resources>
+    <string name="coluna_novos_canais">Yeni</string>
+    <string name="qual_menu">Kalite: %1$s</string>
+    <string name="qual_auto">Otomatik</string>
+    <string name="qual_auto_curto">otomatik</string>
+    <string name="qual_titulo">Görüntü kalitesi</string>
+    <string name="qual_padrao">Standart</string>
+    <string name="player_conta_vencida">Listenizin süresi %1$s tarihinde doldu. Satıcıdan yenileyin.</string>
+    <string name="player_conta_recusada">Liste sunucusu hesabı reddetti. Satıcıyla görüşün.</string>
+    <string name="player_telas_cheias">Liste zaten %2$d ekranın %1$d tanesinde açık. Başka bir cihazda kapatın.</string>
+</resources>

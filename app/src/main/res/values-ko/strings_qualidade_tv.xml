@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- TV ao vivo: canais novos, qualidade automática e motivo do "sem sinal" (18/11/2026). -->
+<resources>
+    <string name="coluna_novos_canais">새 채널</string>
+    <string name="qual_menu">화질: %1$s</string>
+    <string name="qual_auto">자동</string>
+    <string name="qual_auto_curto">자동</string>
+    <string name="qual_titulo">화질</string>
+    <string name="qual_padrao">표준</string>
+    <string name="player_conta_vencida">목록이 %1$s에 만료되었습니다. 판매자에게 갱신하세요.</string>
+    <string name="player_conta_recusada">목록 서버가 계정을 거부했습니다. 판매자에게 문의하세요.</string>
+    <string name="player_telas_cheias">목록이 이미 %2$d개 화면 중 %1$d개에서 열려 있습니다. 다른 기기에서 닫으세요.</string>
+</resources>

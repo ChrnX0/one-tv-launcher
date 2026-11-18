@@ -70,6 +70,23 @@ object Xtream {
     fun urlCanal(conta: Conta, streamId: String, formato: String = "ts"): String =
         "${conta.servidor}/live/${cod(conta.usuario)}/${cod(conta.senha)}/${cod(streamId)}.${if (formato == "m3u8") "m3u8" else "ts"}"
 
+    /** Por que um canal não abre, segundo a própria conta (18/11/2026: "usar tudo o que a lista dá a nosso favor"). */
+    enum class Motivo { VENCIDA, INATIVA, TELAS_CHEIAS }
+
+    /**
+     * Depois de o canal falhar: a conta explica? Vencida (exp_date no passado), recusada pelo servidor (status), ou todas
+     * as telas do plano em uso (active_cons >= max_connections: outro aparelho está com a lista aberta). null = a conta
+     * está em ordem, o problema é o canal ou a rede. [agoraS] em segundos.
+     */
+    fun motivoSemSinal(s: Situacao?, agoraS: Long): Motivo? {
+        if (s == null) return null
+        s.expiraEm?.let { if (it in 1 until agoraS) return Motivo.VENCIDA }
+        if (!s.ativa) return Motivo.INATIVA
+        val max = s.telasMax ?: return null
+        val uso = s.telasEmUso ?: return null
+        return if (max > 0 && uso >= max) Motivo.TELAS_CHEIAS else null
+    }
+
     /** Lê a resposta do login. null = não é uma resposta Xtream (servidor errado, página de erro em HTML...). */
     fun lerSituacao(json: String): Situacao? {
         val raiz = runCatching { JSONObject(json) }.getOrNull() ?: return null
@@ -159,6 +176,8 @@ object Xtream {
                 guiaId = o.optString("epg_channel_id", "").let { if (it == "null") "" else it.trim() },
                 // TV de volta: tv_archive = 1 e tv_archive_duration = dias guardados
                 arquivoDias = if (o.optString("tv_archive", "0").trim() == "1") TvDeVolta.dias(o.opt("tv_archive_duration")).coerceAtLeast(1) else 0,
+                // Quando o canal entrou na lista (vem como texto ou número): alimenta a categoria "Novos".
+                adicionado = o.opt("added")?.toString()?.trim()?.toLongOrNull()?.takeIf { it in 1..4_102_444_800L } ?: 0L,
             )
         }
         return canais

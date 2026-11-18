@@ -46,6 +46,9 @@ class CruzTelaTest {
     @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
     @Test fun duotom() = conferir(IconeCruz.Estilo.DUOTOM, "duotom")
 
+    @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
+    @Test fun linha() = conferir(IconeCruz.Estilo.LINHA, "linha")
+
     private fun conferir(estilo: IconeCruz.Estilo, nome: String) {
         InstrumentationRegistry.getInstrumentation().setInTouchMode(false)
         saida.mkdirs()
@@ -61,19 +64,25 @@ class CruzTelaTest {
         cruz.definir(listOf(
             HomeCruz.Categoria(CruzLogica.Categoria.CONTINUAR, "Continuar", ic(IconeCruz.Tipo.CONTINUAR), listOf(
                 it("c:serie", "O Último Farol", "T1 E4 · faltam 18 min", IconeCruz.Tipo.SERIES, visto = 0.6f),
-                it("c:filme", "Maré Alta", "Filme · faltam 52 min", IconeCruz.Tipo.FILMES, visto = 0.45f))),
+                it("c:filme", "Maré Alta", "Filme · faltam 52 min", IconeCruz.Tipo.FILMES, visto = 0.45f),
+                it("c:midia:netflix", "Cidade Submersa", "Netflix · T2 E3", IconeCruz.Tipo.CONTINUAR, visto = 0.3f),
+                it("c:podcast", "Os vulcões do Pacífico", "Café com Ciência · faltam 21 min", IconeCruz.Tipo.PODCASTS, visto = 0.5f),
+                it("c:radio", "Rádio Mar Azul FM", "Rádio", IconeCruz.Tipo.RADIO),
+                it("c:dormir", "Dormir em 30 min", "A tela escurece devagar e a TV desliga", IconeCruz.Tipo.DORMIR))),
             HomeCruz.Categoria(CruzLogica.Categoria.ASSISTIR, "Assistir", ic(IconeCruz.Tipo.ASSISTIR), listOf(
-                it("tv", "TV", "Canal 5 · Jornal da Noite", IconeCruz.Tipo.TV),
+                it("tv", "TV", "Canal 156 · Discovery Channel\nMil Lugares para Conhecer Antes de Morrer · faltam 25 min\nDepois, 21:30: Aventura Selvagem", IconeCruz.Tipo.TV, visto = 0.7f),
                 it("series", "Séries", "O Último Farol · T1 E4", IconeCruz.Tipo.SERIES),
                 it("filmes", "Filmes", "Maré Alta · faltam 52 min", IconeCruz.Tipo.FILMES),
                 it("rede", "Na rede", "Vídeos, músicas e fotos da rede da casa", IconeCruz.Tipo.REDE),
                 it("addons", "Addons", "Filmes e séries dos seus addons", IconeCruz.Tipo.ADDONS))),
             HomeCruz.Categoria(CruzLogica.Categoria.OUVIR, "Ouvir", ic(IconeCruz.Tipo.OUVIR), listOf(
                 it("radio", "Rádio", "Rádios do mundo inteiro", IconeCruz.Tipo.RADIO),
-                it("podcasts", "Podcasts", "Café com Ciência", IconeCruz.Tipo.PODCASTS))),
+                it("podcasts", "Podcasts", "Café com Ciência", IconeCruz.Tipo.PODCASTS),
+                it("app:musica", "Música do Sofá", "Movido para Ouvir", IconeCruz.Tipo.APLICATIVOS))),
             HomeCruz.Categoria(CruzLogica.Categoria.JOGAR, "Jogar", ic(IconeCruz.Tipo.JOGAR), listOf(
-                it("jogos", "Jogos", "3 jogos · 1 controle ligado", IconeCruz.Tipo.JOGOS),
-                it("sofa", "Jogos de sofá", "2 a 4 pessoas", IconeCruz.Tipo.SOFA))),
+                it("central", "Central de jogos", "3 na voz · Geral", IconeCruz.Tipo.CENTRAL),
+                it("app:corrida", "Asfalto Veloz", "Corrida", IconeCruz.Tipo.JOGOS),
+                it("app:xadrez", "Xadrez", "Tabuleiro", IconeCruz.Tipo.JOGOS))),
             HomeCruz.Categoria(CruzLogica.Categoria.APLICATIVOS, "Aplicativos", ic(IconeCruz.Tipo.APLICATIVOS), listOf(
                 it(CruzLogica.ID_TODOS_APPS, "Todos os apps", "Ver, mover e esconder os apps", IconeCruz.Tipo.TODOS_APPS))),
         ))
@@ -95,10 +104,10 @@ class CruzTelaTest {
         assertEquals("radio", cruz.itemAtual()?.id)
         foto(a, "cruz-$nome-4-ouvir")
         tecla(KeyEvent.KEYCODE_DPAD_RIGHT); tecla(KeyEvent.KEYCODE_DPAD_DOWN)
-        assertEquals("sofa", cruz.itemAtual()?.id)
-        foto(a, "cruz-$nome-5-jogar-sofa")
+        assertEquals("app:corrida", cruz.itemAtual()?.id)
+        foto(a, "cruz-$nome-5-jogar")
         tecla(KeyEvent.KEYCODE_DPAD_CENTER)
-        assertEquals(listOf("sofa"), abertos)
+        assertEquals(listOf("app:corrida"), abertos)
         tecla(KeyEvent.KEYCODE_DPAD_LEFT); tecla(KeyEvent.KEYCODE_DPAD_LEFT); tecla(KeyEvent.KEYCODE_DPAD_LEFT)
         assertEquals(CruzLogica.Categoria.CONTINUAR, cruz.categoriaAtual()?.cat)
         foto(a, "cruz-$nome-6-continuar")

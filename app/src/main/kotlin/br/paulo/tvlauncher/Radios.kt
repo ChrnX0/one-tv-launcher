@@ -178,6 +178,20 @@ object Radios {
         return nova
     }
 
+    // A última rádio que tocou ("Continuar" da cruz, 18/11/2026). Arquivo em files/player: o ":player" grava, a HOME lê.
+    private fun arqUltima(ctx: Context) = File(PlayerArmazem.pasta(ctx), "ultima_radio.json")
+
+    fun anotarUltima(ctx: Context, r: Radio) = runCatching {
+        val o = JSONObject().put("r", paraJson(listOf(r))).put("q", System.currentTimeMillis())
+        File(PlayerArmazem.pasta(ctx), "ultima_radio.json.tmp").apply { writeText(o.toString()) }.renameTo(arqUltima(ctx))
+    }
+
+    /** A última rádio e quando tocou (ms), ou null. */
+    fun ultima(ctx: Context): Pair<Radio, Long>? = runCatching {
+        val o = JSONObject(arqUltima(ctx).readText())
+        deJson(o.getJSONArray("r").toString()).firstOrNull()?.let { it to o.optLong("q") }
+    }.getOrNull()
+
     /** Colar pelo painel: se for playlist, abre e pega o 1º endereço. Devolve a lista nova ou o erro. */
     fun colar(ctx: Context, nome: String, url: String): Result<List<Radio>> = runCatching {
         var u = url.trim()

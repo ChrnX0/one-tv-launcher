@@ -277,6 +277,9 @@ class IdeiasDozeTest {
         val inst = setOf("a.b", "c.d", "e.f", "g.h")
         assertEquals(listOf("c.d", "a.b", "e.f"), ModoSimples.escolher(listOf("c.d", "x.y"), inst, listOf("a.b", "c.d", "e.f", "g.h"), 3))
         assertTrue(ModoSimples.escolher(emptyList(), inst, emptyList(), 0).isEmpty())
+        // Oculto na HOME não vem pelos mais usados; escolhido à mão, vem (Sala, 18/11/2026).
+        assertEquals(listOf("a.b", "e.f"), ModoSimples.escolher(emptyList(), inst, listOf("g.h", "a.b", "e.f"), 3, ocultos = setOf("g.h")))
+        assertEquals(listOf("g.h", "a.b"), ModoSimples.escolher(listOf("g.h"), inst, listOf("a.b"), 3, ocultos = setOf("g.h")))
         assertEquals(listOf("com.netflix.ninja", "com.google.android.youtube.tv"),
             ModoSimples.lerLista("com.netflix.ninja, ; rm -rf\ncom.google.android.youtube.tv,com.netflix.ninja"))
         // Ligar o modo simples é livre; desligar pede o PIN (quem está usando não sai sem querer).

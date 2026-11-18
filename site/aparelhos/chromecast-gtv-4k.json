@@ -1,0 +1,75 @@
+{
+  "formato": 1,
+  "medidoEm": 1794948418320,
+  "aparelho": {
+    "fabricante": "Google",
+    "modelo": "Chromecast",
+    "codinome": "sabrina",
+    "android": "14",
+    "sdk": 34,
+    "abis": [
+      "armeabi-v7a",
+      "armeabi"
+    ],
+    "ramMb": 1936,
+    "processo64": false,
+    "googleTv": true,
+    "fireOs": false,
+    "entradas": 0
+  },
+  "app": {
+    "versao": "1.0",
+    "versionCode": 460575
+  },
+  "poderes": {
+    "dono": true,
+    "acessibilidade": true,
+    "homePreferida": false
+  },
+  "medidas": {
+    "aberturaHomeMs": 152,
+    "acordarMs": 30,
+    "acordarAmostras": 20,
+    "quedas24h": 0,
+    "ligadoHoras": 59,
+    "watchNext": 0
+  },
+  "testes": [
+    {
+      "id": "home",
+      "veredito": "PASSOU",
+      "detalhe": "accessibility"
+    },
+    {
+      "id": "acordar",
+      "veredito": "PASSOU",
+      "detalhe": "30 ms"
+    },
+    {
+      "id": "estavel",
+      "veredito": "PASSOU",
+      "detalhe": "59 h"
+    },
+    {
+      "id": "telas",
+      "veredito": "NAO_MEDIDO",
+      "detalhe": "pc"
+    }
+  ],
+  "geral": "PASSOU",
+  "leveza": {
+    "memoriaMb": 103,
+    "apkMb": 31.3,
+    "homeCarregarMs": 72,
+    "homeDesenharMs": 27
+  },
+  "resistencia": {
+    "horas": 24,
+    "heapJavaInicioMb": 6.0,
+    "heapJavaFimMb": 5.6,
+    "nativoInicioMb": 20.8,
+    "nativoFimMb": 20.3,
+    "reiniciou": false,
+    "veredito": "PASSOU"
+  }
+}
