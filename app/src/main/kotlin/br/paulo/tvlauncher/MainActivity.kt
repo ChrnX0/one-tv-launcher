@@ -298,6 +298,11 @@ class MainActivity : Activity() {
         idiomaMontado = idiomaAtual()
         assinaturaLayout = assinaturaDoLayout()
         setContentView(montarTela())
+        // Logo Sofaly ao ligar (18/11/2026): no boot, uma vez por processo, por cima da HOME já montada (SplashRules).
+        if (!splashBootDecidido) {
+            splashBootDecidido = true
+            if (SplashRules.onBoot(SplashOverlay.enabled(this), android.os.SystemClock.elapsedRealtime())) SplashOverlay.show(this)
+        }
         window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, novo ->
             if (novo != null && novo !== bolinhaPerfil) voltarAoPerfil = false
         }
@@ -339,6 +344,11 @@ class MainActivity : Activity() {
         super.onResume()
         homeNaFrente = true
         SonsCruz.naFrente = true
+        // A tela acendeu com a HOME ainda pausada (o Android retoma a HOME logo depois do SCREEN_ON): a logo entra agora.
+        if (splashPendenteAte > 0L) {
+            if (android.os.SystemClock.elapsedRealtime() <= splashPendenteAte) SplashOverlay.show(this)
+            splashPendenteAte = 0L
+        }
         if (desviadaParaSegura) return
         ModoSeguro.aoRetomarHome(this)   // 30 s de pé = a HOME firmou (zera a conta de quedas seguidas)
         ModoHospede.talvezBoasVindas(this)   // modo hóspede: boas-vindas uma vez por estadia
@@ -1034,6 +1044,8 @@ class MainActivity : Activity() {
     /** pacote -> (APK|activity, Item). Vive enquanto o processo da HOME viver (sobrevive à troca de tema). */
     private companion object {
         @Volatile var homeFriaMedida = false   // placar (elevação 2.1): a HOME "fria" é medida uma vez por processo
+        /** A abertura com a logo do boot já foi decidida neste processo (recriar a HOME não mostra de novo). */
+        @Volatile var splashBootDecidido = false
         val cacheApps = HashMap<String, Pair<String, Item>>()
         // Topo C3 (12/11/2026): cápsulas de 52 dp em 24 (até 76). Ordem pedida pelo dono (12/11 tarde): nome do card em foco
         // (36 sp) e a descrição na mesma linha em 222 (até ~266), "ASSISTIR" em 290 e os cards (do tamanho dos apps) em 316
@@ -3392,6 +3404,8 @@ class MainActivity : Activity() {
     private var acendeuEm = 0L
     private var dormiuMs = 0L
     private var perguntouNestaVez = true   // começa true: abrir o launcher não é "ligar a TV"
+    /** Até quando (elapsedRealtime) a logo ainda entra no onResume depois de a tela acender; 0 = nada pendente. */
+    private var splashPendenteAte = 0L
     private val tarefaQuemVe = Runnable { talvezPerguntarQuemVe() }
 
     private fun vigiarTela() {
@@ -3405,6 +3419,10 @@ class MainActivity : Activity() {
                         acendeuEm = agora
                         dormiuMs = if (apagouEm > 0) agora - apagouEm else 0L
                         perguntouNestaVez = false
+                        // Logo Sofaly ao acordar a TV (SplashRules): HOME na frente = já; pausada = no onResume dos próximos 3 s.
+                        if (SplashRules.onWake(SplashOverlay.enabled(ctx), dormiuMs, homeInFront = true)) {
+                            if (homeNaFrente) SplashOverlay.show(this@MainActivity) else splashPendenteAte = agora + 3000L
+                        }
                         abrirIlhaAoAcordar()
                         if (homeNaFrente) { ui.removeCallbacks(tarefaQuemVe); ui.postDelayed(tarefaQuemVe, 1500) }
                     }
@@ -3497,6 +3515,8 @@ class MainActivity : Activity() {
      * Fora dele: segurar OK (ver tratarSegurar) e ▲▼ numa pilha (ver trocarDaFrente).
      */
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        // Tecla durante a abertura com a logo: a logo sai na hora e a tecla segue para a HOME.
+        if (event.action == KeyEvent.ACTION_DOWN && SplashOverlay.showing(this)) SplashOverlay.dismiss(this)
         if (teclaDoAmbiente(event)) return true
         val confirma = event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER
         if (!modoMover) {

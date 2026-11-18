@@ -468,7 +468,9 @@ object CasaHA {
         return try { pedirEm(e, t, metodo, caminho, corpo, limite) } catch (ex: SemConexao) {
             // Plug & play (18/11/2026): só para endereço de dentro de casa; um endereço de fora não se procura na rede.
             val host = runCatching { URL(e).host }.getOrNull()
-            val novo = if (host != null && hostDeCasa(host)) HomeAssistantFinder.reencontrar(ctx, t, e) else null
+            // Outro pedido ao mesmo tempo (a tela e o MCP) pode ter achado e gravado o endereço novo enquanto este
+            // esperava a procura (visto na Sala, 18/11/2026: a 2ª procura cai no intervalo e devolve null): vale o gravado.
+            val novo = if (host != null && hostDeCasa(host)) HomeAssistantFinder.reencontrar(ctx, t, e) ?: endereco(ctx) else null
             if (novo == null || novo == e) throw Erro(ex.message ?: "não consegui falar com o Home Assistant")
             pedirEm(novo, t, metodo, caminho, corpo, limite)
         }

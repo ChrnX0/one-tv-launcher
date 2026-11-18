@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="brand_slogan">让电视重新变简单。</string>
+    <string name="brand_about">关于 Sofaly</string>
+    <string name="brand_about_det">版本、新功能和许可</string>
+    <string name="brand_splash">开机标志</string>
+    <string name="brand_splash_det">电视唤醒时显示 Sofaly 标志一秒</string>
+    <string name="brand_version">版本 %1$s</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="brand_slogan">Televizyonunuz yeniden sade.</string>
+    <string name="brand_about">Sofaly hakkında</string>
+    <string name="brand_about_det">Sürüm, yenilikler ve lisanslar</string>
+    <string name="brand_splash">Açılışta logo</string>
+    <string name="brand_splash_det">TV uyandığında bir saniyeliğine Sofaly logosu</string>
+    <string name="brand_version">Sürüm %1$s</string>
+</resources>

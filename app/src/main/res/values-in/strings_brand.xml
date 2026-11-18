@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="brand_slogan">TV Anda, sederhana lagi.</string>
+    <string name="brand_about">Tentang Sofaly</string>
+    <string name="brand_about_det">Versi, yang baru, dan lisensi</string>
+    <string name="brand_splash">Logo saat TV menyala</string>
+    <string name="brand_splash_det">Logo Sofaly selama satu detik saat TV bangun</string>
+    <string name="brand_version">Versi %1$s</string>
+</resources>

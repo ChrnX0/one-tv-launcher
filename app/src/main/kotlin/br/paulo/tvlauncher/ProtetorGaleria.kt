@@ -131,8 +131,13 @@ class ProtetorGaleria(
         camadaInfo = FrameLayout(ctx)
         montarTopo()
         colunaAvisos = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL }
+        // Logo Sofaly pequena e apagada no canto de cima à direita (18/11/2026, pedido do Paulo). Fica na camada que anda
+        // (anti-burn-in) e empurra os avisos um pouco para baixo.
+        camadaInfo.addView(SofalyWordmark(ctx, dp(22).toFloat(), dim = 0.55f), FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply {
+            topMargin = dp(26); marginEnd = dp(36)
+        })
         camadaInfo.addView(colunaAvisos, FrameLayout.LayoutParams(dp(250), -2, Gravity.TOP or Gravity.END).apply {
-            topMargin = dp(32); marginEnd = dp(32)
+            topMargin = dp(32 + 40); marginEnd = dp(32)
         })
         // Sem caixa (12/11/2026, dono: "a B na proposta da C"): a linha de baixo fica solta sobre a pintura, legível por
         // um véu escuro que sobe do pé da tela (fica na raiz, parado: não anda com o anti-burn-in) e uma sombra nas letras.
