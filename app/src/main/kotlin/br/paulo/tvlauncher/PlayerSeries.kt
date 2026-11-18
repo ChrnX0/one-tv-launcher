@@ -169,12 +169,17 @@ object Series {
         val i = ordem.indexOfFirst { it.id == ate.id }
         if (i < 0) return posicoes
         val saida = HashMap(posicoes)
-        ordem.take(i + 1).forEach { ep ->
+        // No máximo os MAX_VISTOS_ATE mais perto deste, com "quando" decrescente: numa série de 1100 episódios, 1100
+        // posições com o mesmo "quando" passavam do teto (Vod.MAX_POSICOES) e o corte apagava o "continuar" dos filmes.
+        val marcar = ordem.take(i + 1).takeLast(MAX_VISTOS_ATE)
+        marcar.forEachIndexed { k, ep ->
             val d = posicoes[ep.chave(fonteId)]?.duracao?.takeIf { it > 0 } ?: ((ep.duracaoMin ?: 1) * 60_000L)
-            saida[ep.chave(fonteId)] = Posicao(d, d, agora)
+            saida[ep.chave(fonteId)] = Posicao(d, d, agora - (marcar.size - 1 - k))
         }
         return saida
     }
+
+    const val MAX_VISTOS_ATE = 300
 
     /** "Não visto": apaga a posição deste episódio (volta a começar do zero). */
     fun desmarcar(fonteId: String, ep: Episodio, posicoes: Map<String, Posicao>): Map<String, Posicao> = posicoes - ep.chave(fonteId)

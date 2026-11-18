@@ -40,22 +40,38 @@ object PlayerArmazem {
     /** Há conta cadastrada? (só olha se o arquivo existe: barato o bastante para a HOME chamar a cada desenho) */
     fun temContas(ctx: Context): Boolean = File(File(ctx.filesDir, "player"), "contas.json").exists()
 
-    fun fontes(ctx: Context): List<FonteTv> {
+    fun fontes(ctx: Context): List<FonteTv> = fontesOuNull(ctx) ?: emptyList()
+
+    /** As contas; null se o arquivo existe mas não deu para ler (Keystore fora, arquivo estragado). */
+    private fun fontesOuNull(ctx: Context): List<FonteTv>? {
         val f = arquivoContas(ctx)
         if (!f.exists()) return emptyList()
-        val o = runCatching { JSONObject(f.readText()) }.getOrNull() ?: return emptyList()
-        val dados = o.optString("dados").ifEmpty { return emptyList() }
-        val iv = o.optString("iv").ifEmpty { return emptyList() }
+        val o = runCatching { JSONObject(f.readText()) }.getOrNull() ?: return null
+        val dados = o.optString("dados").ifEmpty { return null }
+        val iv = o.optString("iv").ifEmpty { return null }
         val claro = runCatching { decifrar(dados, iv) }.onFailure { Log.w(TAG, "contas ilegíveis: ${it.javaClass.simpleName}") }.getOrNull()
+            ?: return null
         return PlayerDados.fontesDeJson(claro)
+    }
+
+    /**
+     * Ler, mudar e gravar as contas sob uma trava de ARQUIVO: o player (:player) e o launcher gravam o mesmo
+     * contas.json, e o @Synchronized só vale dentro de um processo (uma conta nova sumia quando o player promovia um
+     * servidor reserva com a lista antiga). Arquivo ilegível: não muda nada (antes virava lista vazia e a conta nova
+     * apagava todas as outras).
+     */
+    private fun <T> mudarContas(ctx: Context, falha: T, f: (List<FonteTv>) -> T): T = synchronized(this) {
+        runCatching {
+            java.io.RandomAccessFile(File(pasta(ctx), "contas.lock"), "rw").use { r ->
+                r.channel.lock().use { f(fontesOuNull(ctx) ?: return@use falha) }
+            }
+        }.onFailure { Log.w(TAG, "contas: ${it.javaClass.simpleName}") }.getOrDefault(falha)
     }
 
     private fun gravar(ctx: Context, fontes: List<FonteTv>): Boolean = runCatching {
         val (dados, iv) = cifrar(PlayerDados.fontesParaJson(fontes))
-        // Grava num temporário e troca de nome: se a TV desligar no meio, fica o arquivo antigo inteiro, não metade.
-        val tmp = File(pasta(ctx), "contas.json.tmp")
-        tmp.writeText(JSONObject().put("dados", dados).put("iv", iv).toString())
-        tmp.renameTo(arquivoContas(ctx))
+        // Temporário único + fsync + troca de nome: TV desligando no meio deixa o arquivo antigo inteiro.
+        PlayerCarga.gravarAtomico(arquivoContas(ctx), JSONObject().put("dados", dados).put("iv", iv).toString())
     }.onFailure { Log.w(TAG, "não gravou as contas: ${it.javaClass.simpleName}") }.getOrDefault(false)
 
     /** Troca TODAS as contas pelas da lista (restauração do backup completo; o Keystore desta instalação cifra de novo). */
@@ -65,23 +81,24 @@ object PlayerArmazem {
     /** Cria uma conta nova (id gerado). Devolve a conta, ou o motivo de não ter criado. */
     fun adicionar(ctx: Context, nome: String, tipo: String, endereco: String, usuario: String = "", senha: String = "", guia: String = "",
                   reservas: String = "", guiaExtra: String = ""): Result<FonteTv> {
-        val atuais = fontes(ctx)
-        if (atuais.size >= 8) return Result.failure(IllegalStateException("já há 8 contas; apague uma antes"))
         val nova = PlayerDados.criar(UUID.randomUUID().toString().take(8), nome, tipo, endereco, usuario, senha, guia, reservas, guiaExtra).getOrElse { return Result.failure(it) }
-        return if (gravar(ctx, atuais + nova)) Result.success(nova) else Result.failure(IllegalStateException("não consegui gravar"))
+        return mudarContas(ctx, Result.failure(IllegalStateException("não consegui ler as contas salvas"))) { atuais ->
+            if (atuais.size >= 8) Result.failure(IllegalStateException("já há 8 contas; apague uma antes"))
+            else if (gravar(ctx, atuais + nova)) Result.success(nova) else Result.failure(IllegalStateException("não consegui gravar"))
+        }
     }
 
     /**
      * O servidor reserva `servidor` respondeu e o principal não: ele vira o principal (e o antigo vai para as reservas).
      * Assim o próximo carregamento, os filmes e o endereço de cada canal já usam o que funciona.
      */
-    @Synchronized
-    fun promoverServidor(ctx: Context, id: String, servidor: String): Boolean {
-        val atuais = fontes(ctx)
-        val f = atuais.firstOrNull { it.id == id } ?: return false
-        if (f.endereco == servidor || servidor !in f.reservas) return false
-        val nova = f.copy(endereco = servidor, reservas = listOf(f.endereco) + f.reservas.filter { it != servidor })
-        return gravar(ctx, atuais.map { if (it.id == id) nova else it })
+    fun promoverServidor(ctx: Context, id: String, servidor: String): Boolean = mudarContas(ctx, false) { atuais ->
+        val f = atuais.firstOrNull { it.id == id }
+        if (f == null || f.endereco == servidor || servidor !in f.reservas) false
+        else {
+            val nova = f.copy(endereco = servidor, reservas = listOf(f.endereco) + f.reservas.filter { it != servidor })
+            gravar(ctx, atuais.map { if (it.id == id) nova else it })
+        }
     }
 
     /**
@@ -104,11 +121,9 @@ object PlayerArmazem {
         }.toList()
     }
 
-    fun apagar(ctx: Context, id: String): Boolean {
-        val atuais = fontes(ctx)
-        if (atuais.none { it.id == id }) return false
-        PlayerCarga.apagarCache(ctx, id)
-        return gravar(ctx, atuais.filter { it.id != id })
+    fun apagar(ctx: Context, id: String): Boolean = mudarContas(ctx, false) { atuais ->
+        if (atuais.none { it.id == id }) false
+        else { PlayerCarga.apagarCache(ctx, id); gravar(ctx, atuais.filter { it.id != id }) }
     }
 
     // ---------------------------------------------------------------- favoritos, recentes e categoria escolhida

@@ -52,18 +52,28 @@ object Upnp {
             while (System.currentTimeMillis() < fim) {
                 val p = DatagramPacket(buf, buf.size)
                 try { s.receive(p) } catch (_: SocketTimeoutException) { continue }
-                localDaResposta(String(p.data, 0, p.length, Charsets.UTF_8))?.let { achados += it }
+                if (p.address.isLoopbackAddress) continue
+                localDaResposta(String(p.data, 0, p.length, Charsets.UTF_8), p.address.hostAddress)?.let { achados += it }
             }
         }
         return achados.toList()
     }
 
-    /** O LOCATION de uma resposta SSDP (só http, só da rede local por conta de quem responde). */
-    fun localDaResposta(texto: String): String? = texto.lineSequence()
+    /**
+     * O LOCATION de uma resposta SSDP (só http). Com [remetente], só se apontar para quem respondeu: qualquer aparelho
+     * da rede podia mandar "LOCATION: http://127.0.0.1:8091/..." e a TV ia buscar (e mandar SOAP) nas próprias portas
+     * (painel, MCP) ou em qualquer endereço da internet.
+     */
+    fun localDaResposta(texto: String, remetente: String? = null): String? = texto.lineSequence()
         .map { it.trim() }
         .firstOrNull { it.startsWith("LOCATION:", ignoreCase = true) }
         ?.substringAfter(':')?.trim()
         ?.takeIf { it.startsWith("http://") }
+        ?.takeIf { remetente == null || mesmoHost(it, remetente) }
+
+    /** O host de [url] é [host]? (IPv6 com ou sem colchetes.) URL ruim = não. */
+    fun mesmoHost(url: String, host: String): Boolean =
+        runCatching { URL(url).host.trim('[', ']').equals(host.substringBefore('%').trim('[', ']'), ignoreCase = true) }.getOrDefault(false)
 
     // ---------------------------------------------------------------- 2. ficha
 
@@ -72,7 +82,9 @@ object Upnp {
     /** Nome e endereço do ContentDirectory a partir do XML da ficha. null se o aparelho não tem pastas. */
     fun lerFicha(xml: ByteArray, local: String): Servidor? {
         val doc = documento(xml)
-        val base = texto(doc.documentElement, "URLBase")?.takeIf { it.startsWith("http") } ?: local
+        val hostLocal = URL(local).host
+        // URLBase e controlURL vêm do aparelho: só valem no MESMO host da ficha (senão, SOAP para qualquer endereço).
+        val base = texto(doc.documentElement, "URLBase")?.takeIf { it.startsWith("http") && mesmoHost(it, hostLocal) } ?: local
         val nome = texto(doc.documentElement, "friendlyName") ?: URL(local).host
         val servicos = doc.getElementsByTagNameNS("*", "service")
         for (i in 0 until servicos.length) {
@@ -80,7 +92,9 @@ object Upnp {
             val tipo = texto(s, "serviceType") ?: continue
             if (!tipo.startsWith("urn:schemas-upnp-org:service:ContentDirectory:")) continue
             val controle = texto(s, "controlURL") ?: continue
-            return Servidor(nome, URL(URL(base), controle).toString())
+            val url = runCatching { URL(URL(base), controle).toString() }.getOrNull() ?: continue
+            if (!url.startsWith("http://") || !mesmoHost(url, hostLocal)) continue
+            return Servidor(nome, url)
         }
         return null
     }
@@ -91,7 +105,10 @@ object Upnp {
     fun navegar(s: Servidor, id: String, limite: Int = 5000): List<Entrada> {
         val todos = ArrayList<Entrada>()
         var inicio = 0
-        while (todos.size < limite) {
+        var paginas = 0
+        // Conta páginas também: um servidor que diz "total 2 bilhões" e devolve páginas todas filtradas nunca enchia
+        // "todos" e o laço pedia para sempre.
+        while (todos.size < limite && paginas++ <= limite / 500) {
             val resposta = soap(s.pastas, corpoNavegar(id, inicio, 500))
             val (didl, total) = lerRespostaNavegar(resposta)
             val pagina = lerDidl(didl)
@@ -260,7 +277,8 @@ object Upnp {
     private fun baixar(url: String): ByteArray {
         val c = URL(url).openConnection() as HttpURLConnection
         c.connectTimeout = 4000; c.readTimeout = 8000
-        return c.inputStream.use { limitado(it) }.also { c.disconnect() }
+        c.instanceFollowRedirects = false   // um redirecionamento levaria a outro host (ver localDaResposta)
+        try { return c.inputStream.use { limitado(it) } } finally { c.disconnect() }
     }
 
     private fun soap(url: String, corpo: String): ByteArray {
@@ -269,8 +287,11 @@ object Upnp {
         c.requestMethod = "POST"; c.doOutput = true
         c.setRequestProperty("Content-Type", "text/xml; charset=\"utf-8\"")
         c.setRequestProperty("SOAPACTION", "\"$ST_PASTAS#Browse\"")
-        c.outputStream.use { it.write(corpo.toByteArray(Charsets.UTF_8)) }
-        return c.inputStream.use { limitado(it) }.also { c.disconnect() }
+        c.instanceFollowRedirects = false
+        try {
+            c.outputStream.use { it.write(corpo.toByteArray(Charsets.UTF_8)) }
+            return c.inputStream.use { limitado(it) }
+        } finally { c.disconnect() }
     }
 
     private fun limitado(i: InputStream): ByteArray {

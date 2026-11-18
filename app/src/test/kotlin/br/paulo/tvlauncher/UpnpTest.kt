@@ -9,6 +9,10 @@ class UpnpTest {
     @Test fun localDaRespostaSsdp() {
         val r = "HTTP/1.1 200 OK\r\nCACHE-CONTROL: max-age=1800\r\nLocation: http://192.168.1.20:8200/rootDesc.xml\r\nST: x\r\n\r\n"
         assertEquals("http://192.168.1.20:8200/rootDesc.xml", Upnp.localDaResposta(r))
+        assertEquals("http://192.168.1.20:8200/rootDesc.xml", Upnp.localDaResposta(r, "192.168.1.20"))
+        // Outro aparelho apontando para a própria TV ou para fora: ignorado.
+        assertNull(Upnp.localDaResposta(r.replace("192.168.1.20", "127.0.0.1"), "192.168.1.66"))
+        assertNull(Upnp.localDaResposta(r, "192.168.1.66"))
         assertNull(Upnp.localDaResposta("HTTP/1.1 200 OK\r\nLOCATION: file:///etc/passwd\r\n"))
     }
 
@@ -23,6 +27,16 @@ class UpnpTest {
         val s = Upnp.lerFicha(xml, "http://192.168.1.20:8200/rootDesc.xml")!!
         assertEquals("NAS da casa", s.nome)
         assertEquals("http://192.168.1.20:8200/ctl/ContentDir", s.pastas)
+    }
+
+    @Test fun fichaComControleEmOutroHostEhRecusada() {
+        fun ficha(base: String, ctl: String) = """<root><URLBase>$base</URLBase><device><friendlyName>X</friendlyName><serviceList>
+            <service><serviceType>urn:schemas-upnp-org:service:ContentDirectory:1</serviceType><controlURL>$ctl</controlURL></service>
+            </serviceList></device></root>""".toByteArray()
+        assertNull(Upnp.lerFicha(ficha("http://192.168.1.20:8200/", "http://127.0.0.1:8091/mcp"), "http://192.168.1.20:8200/d.xml"))
+        // URLBase de outro host é ignorada: fica a da ficha.
+        assertEquals("http://192.168.1.20:8200/ctl", Upnp.lerFicha(ficha("http://127.0.0.1:8080/", "/ctl"), "http://192.168.1.20:8200/d.xml")!!.pastas)
+        assertEquals("http://192.168.1.20:9000/ctl", Upnp.lerFicha(ficha("http://192.168.1.20:9000/", "/ctl"), "http://192.168.1.20:8200/d.xml")!!.pastas)
     }
 
     @Test fun fichaSemPastasDaNull() {

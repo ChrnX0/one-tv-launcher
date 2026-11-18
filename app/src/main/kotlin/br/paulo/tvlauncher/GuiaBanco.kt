@@ -50,13 +50,15 @@ object GuiaBanco {
          * Fecha o arquivo. Com `indexar`, cria o índice antes (criar no fim é bem mais rápido que manter durante as
          * dezenas de milhares de inserções).
          */
-        fun concluir(indexar: Boolean) {
-            runCatching {
+        /** true = banco completo e marcado com a versão (só então ele pode substituir o guia que já funciona). */
+        fun concluir(indexar: Boolean): Boolean {
+            val ok = runCatching {
                 if (indexar) db.execSQL("CREATE INDEX IF NOT EXISTS programa_canal ON programa(canal, inicio)")
                 db.version = VERSAO   // marca o banco como completo e desta versão
-            }.onFailure { Log.w(TAG, "guia: índice ${it.javaClass.simpleName}") }
+            }.onFailure { Log.w(TAG, "guia: índice ${it.javaClass.simpleName}") }.isSuccess
             runCatching { insere.close() }
             runCatching { db.close() }
+            return ok
         }
     }
 

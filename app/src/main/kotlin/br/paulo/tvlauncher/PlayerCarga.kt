@@ -80,7 +80,8 @@ object PlayerCarga {
         val fresco = cache.exists() && System.currentTimeMillis() - cache.lastModified() < VALIDADE_LISTA
         if (fresco && !forcar) PlayerDados.canaisDeJson(cache.readText(), fonte).takeIf { it.isNotEmpty() }?.let { return it }
         val baixados = runCatching { baixarCanais(ctx, fonte) }
-            .onFailure { Log.w(TAG, "lista de ${fonte.servidorVisivel}: ${it.javaClass.simpleName} ${it.message?.take(80)}") }
+            // Só o tipo: a mensagem do okhttp ("Invalid URL: ... for <url>") traz o endereço com usuário e senha.
+            .onFailure { Log.w(TAG, "lista de ${fonte.servidorVisivel}: ${it.javaClass.simpleName}") }
             .getOrNull()
         if (!baixados.isNullOrEmpty()) {
             gravarAtomico(cache, PlayerDados.canaisParaJson(baixados, fonte))
@@ -383,6 +384,9 @@ object PlayerCarga {
                 Log.i(TAG, "guia sem nada passando agora: baixando de novo")
             }
         }
+        // Sem guia usável (a lista não casa nenhum tvg-id, o xmltv deu erro, banco ilegível), cada abertura do player
+        // baixava de novo (até 150 MB, 3 tentativas). Também aqui: no máximo 1 vez por hora.
+        if (!forcar && agora - ultimaTentativa(ctx) < 3_600_000L) return abrirGuia(arquivo) ?: Guia(emptyList())
         val guardar = !forcar
         anotarTentativa(ctx, agora)   // antes do "sem tvg-id" abaixo: senão cada zapping abria uma thread à toa
         val ids = canais.mapNotNull { it.guiaId.ifEmpty { null } }.toSet()
@@ -455,7 +459,8 @@ object PlayerCarga {
                 // Grava a lista à parte já agora (antes de trocar o banco): o varrerDepois logo abaixo a usa.
                 if (total > 0) gravarAtomico(arquivoAdiante(ctx), MeuTimeAdiante.paraJson(adiante?.partidas().orEmpty()))
             } finally {
-                gravador.concluir(indexar = total > 0)
+                // Disco cheio no índice: o banco novo fica sem versão (inútil) e não pode tomar o lugar do antigo.
+                if (!gravador.concluir(indexar = total > 0)) total = 0
             }
         }
         if (total > 0) {
