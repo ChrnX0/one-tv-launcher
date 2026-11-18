@@ -48,6 +48,9 @@ object ServicosFilmes {
     /** "Sofaly v1.0 (457800)": o OpenSubtitles e o Trakt pedem o nome e a versão do app no User-Agent. */
     fun agente(versao: Int): String = "$APP_NOME v1.0 ($versao)"
 
+    /** O Simkl pede o User-Agent na forma nome/versão, igual aos parâmetros app-name e app-version: "sofaly/1.0.457800". */
+    fun agenteSimkl(versao: Int): String = "${APP_NOME.lowercase()}/1.0.$versao"
+
     private fun cod(v: String) = URLEncoder.encode(v, "UTF-8").replace("+", "%20")
 
     // ================================================================ login por código (Trakt e Simkl)
@@ -166,13 +169,13 @@ object ServicosFilmes {
     fun simklCabecalhos(clienteId: String, versao: Int, token: String? = null): Map<String, String> = buildMap {
         put("Content-Type", "application/json")
         put("simkl-api-key", clienteId)
-        put("User-Agent", agente(versao))
+        put("User-Agent", agenteSimkl(versao))
         if (token != null) put("Authorization", "Bearer $token")
     }
 
     /** Cabeçalhos dos endereços /oauth2/... (formulário, não JSON). */
     fun simklCabecalhosForm(versao: Int): Map<String, String> =
-        mapOf("Content-Type" to "application/x-www-form-urlencoded", "User-Agent" to agente(versao), "Accept" to "application/json")
+        mapOf("Content-Type" to "application/x-www-form-urlencoded", "User-Agent" to agenteSimkl(versao), "Accept" to "application/json")
 
     private fun form(vararg p: Pair<String, String>) = p.joinToString("&") { (k, v) -> "${cod(k)}=${cod(v)}" }
 

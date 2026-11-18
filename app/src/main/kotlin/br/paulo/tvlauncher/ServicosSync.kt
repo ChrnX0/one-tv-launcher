@@ -12,6 +12,7 @@ import br.paulo.tvlauncher.SincronizarFilmes.Titulo
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
+import java.net.URLEncoder
 
 /**
  * A parte com rede e disco da fatia 3 (regras em SincronizarFilmes, testadas na JVM).
@@ -31,6 +32,7 @@ object ServicosSync {
     private const val TAG = "TvLauncher.Sync"
     private const val PREFS = "sincronizar_filmes"
     private const val ARQ_ESTADO = "sincronizar.json"
+    private const val ARQ_SIMKL = "simkl_biblioteca.json"
     private const val PASTA_LISTAS = "listas_fora"
     private const val VALIDADE_LISTA_MS = 12 * 3_600_000L
     private const val MAX_POR_ENVIO = 100
@@ -51,7 +53,14 @@ object ServicosSync {
     fun definirOpcoes(ctx: Context, s: Servico, o: Opcoes): Boolean {
         if (bloqueado(ctx)) return false
         val e = prefs(ctx).edit().putString("opcoes_${s.id}", SincronizarFilmes.opcoesParaJson(o).toString())
-        if (prefs(ctx).getString("perfil", null) == null || nenhumaLigada(ctx)) e.putString("perfil", Perfil.chaveDados(ctx))
+        val antigo = prefs(ctx).getString("perfil", null)
+        if (antigo == null || nenhumaLigada(ctx)) {
+            val novo = Perfil.chaveDados(ctx)
+            // Outro perfil assume a sincronização: as fotos (base dos Interesses, atividades, cópia do Simkl) eram do
+            // outro. Mantê-las faria a mescla de três vias "tirar lá fora" o que só este perfil não tem.
+            if (antigo != null && antigo != novo) listOf(Servico.TRAKT, Servico.SIMKL).forEach { esquecer(ctx, it) }
+            e.putString("perfil", novo)
+        }
         e.apply()
         return true
     }
@@ -111,6 +120,7 @@ object ServicosSync {
     fun esquecer(ctx: Context, s: Servico) = mudarEstado(ctx) { o ->
         val tira = o.keys().asSequence().filter { it.endsWith("_${s.id}") || it.contains("_${s.id}_") }.toList()
         tira.forEach { o.remove(it) }
+        if (s == Servico.SIMKL) arquivoBibliotecaSimkl(ctx).delete()
     }
 
     // ================================================================ rede
@@ -124,7 +134,13 @@ object ServicosSync {
         val (url, cab) = if (s == Servico.TRAKT) "${ServicosFilmes.TRAKT_API}$caminho" + (if (extra.isEmpty()) "" else "?$extra") to
             ServicosFilmes.traktCabecalhos(k.traktId, versao, c.acesso)
         else ServicosFilmes.simklUrl(caminho, k.simklId, versao, extra) to ServicosFilmes.simklCabecalhos(k.simklId, versao, c.acesso)
-        val r = ServicosContas.pedir(url, cab, corpo).let { Http(it.codigo, it.corpo) }
+        var r = ServicosContas.pedir(url, cab, corpo).let { Http(it.codigo, it.corpo) }
+        // Simkl: 400 {"error":"rate_limit"} numa escrita NÃO é cota: é a trava de 20 s por usuário (outra escrita nossa,
+        // por exemplo o scrobble do player, ainda corre). A doc manda esperar uns segundos e tentar UMA vez.
+        if (s == Servico.SIMKL && corpo != null && r.codigo == 400 && r.corpo.contains("rate_limit", ignoreCase = true)) {
+            Thread.sleep(5_000)
+            r = ServicosContas.pedir(url, cab, corpo).let { Http(it.codigo, it.corpo) }
+        }
         if (r.codigo == 401 && renovar && processoPrincipal(ctx) && ServicosContas.renovar(ctx, s, forcar = true) != null)
             return chamar(ctx, s, caminho, corpo, extra, renovar = false)
         if (r.codigo == 429) Log.i(TAG, "${s.id}: devagar (429)")
@@ -155,7 +171,7 @@ object ServicosSync {
             val chaveUltima = "ultima_${s.id}_${tipo.name}"
             if (!SincronizarFilmes.deveSincronizar(lerEstado(ctx).optLong(chaveUltima, 0), System.currentTimeMillis(), forcar)) continue
             runCatching {
-                val m = if (s == Servico.TRAKT) trakt(ctx, tipo, catalogo) else simkl(ctx, tipo, catalogo)
+                val m = if (s == Servico.TRAKT) trakt(ctx, tipo, catalogo) else simkl(ctx, tipo, catalogo, forcar)
                 interesses = interesses || m.interesses; posicoes = posicoes || m.posicoes
                 val agora = System.currentTimeMillis()
                 mudarEstado(ctx) { it.put(chaveUltima, agora).put("ultima_${s.id}", agora) }
@@ -190,13 +206,19 @@ object ServicosSync {
         if (o.interesses) {
             val wl = chamar(ctx, s, "/sync/watchlist/$grupo")
             if (wl.codigo in 200..299) {
-                val remoto = SincronizarFilmes.traktLerItens(wl.corpo).filter { it.tipo == tipo }
-                mi = aplicarInteresses(ctx, s, tipo, ind, remoto, enviar) { add, tirar ->
+                val remoto = SincronizarFilmes.traktLerItens(wl.corpo)?.filter { it.tipo == tipo }
+                if (remoto != null) mi = aplicarInteresses(ctx, s, tipo, ind, remoto, enviar) { add, tirar ->
+                    var addOk = emptyList<Item>(); var tirarOk = emptyList<Item>()
                     if (add.isNotEmpty()) {
-                        val a = chamar(ctx, s, "/sync/watchlist", SincronizarFilmes.corpoItens(add.take(MAX_POR_ENVIO)))
-                        if (a.codigo == 420) avisar(ctx, s, ctx.getString(R.string.sync_trakt_cheia)) else if (a.codigo in 200..299) avisar(ctx, s, null)
+                        val lote = add.take(MAX_POR_ENVIO)
+                        val a = chamar(ctx, s, "/sync/watchlist", SincronizarFilmes.corpoItens(lote))
+                        if (a.codigo == 420) avisar(ctx, s, ctx.getString(R.string.sync_trakt_cheia)) else if (ok(a)) { avisar(ctx, s, null); addOk = lote }
                     }
-                    if (tirar.isNotEmpty()) chamar(ctx, s, "/sync/watchlist/remove", SincronizarFilmes.corpoItens(tirar.take(MAX_POR_ENVIO)))
+                    if (tirar.isNotEmpty()) {
+                        val lote = tirar.take(MAX_POR_ENVIO)
+                        if (ok(chamar(ctx, s, "/sync/watchlist/remove", SincronizarFilmes.corpoItens(lote)))) tirarOk = lote
+                    }
+                    addOk to tirarOk
                 }
             }
         }
@@ -204,8 +226,10 @@ object ServicosSync {
             val w = chamar(ctx, s, "/sync/watched/$grupo")
             if (w.codigo in 200..299) {
                 val vistos = SincronizarFilmes.traktLerVistos(w.corpo, tipo)
-                if (tipo == Tipo.FILME) mp = aplicarVistosFilmes(ctx, s, ind, vistos) || mp
-                else guardarEpisodiosVistos(ctx, s, vistos)
+                if (vistos != null) {
+                    if (tipo == Tipo.FILME) mp = aplicarVistosFilmes(ctx, s, ind, vistos).first || mp
+                    else guardarEpisodiosVistos(ctx, s, vistos)
+                }
             }
         }
         if (o.continuar && SincronizarFilmes.mudou(antes, ativ, "movies.paused_at", "episodes.paused_at")) {
@@ -218,48 +242,136 @@ object ServicosSync {
 
     // ---------------------------------------------------------------- Simkl
 
-    private fun simkl(ctx: Context, tipo: Tipo, catalogo: List<Titulo>): Mudou {
+    /**
+     * O Simkl em duas partes, como pede o guia /sync deles (api.simkl.org/guides/sync):
+     *  1. rede ([atualizarBibliotecaSimkl]): uma cópia local da biblioteca, posta em dia por /sync/activities + só o
+     *     que mudou (date_from). Filmes e Séries usam a mesma cópia: abrir os dois em seguida faz UMA ida ao Simkl;
+     *  2. aqui, sem rede para ler: a mescla dos Interesses, os vistos e as pausas saem da cópia. Só as escritas
+     *     (pôr/tirar da lista, marcar visto) vão lá, e já entram na cópia.
+     */
+    private fun simkl(ctx: Context, tipo: Tipo, catalogo: List<Titulo>, forcar: Boolean): Mudou {
         val s = Servico.SIMKL
         val o = opcoes(ctx, s)
-        val r = chamar(ctx, s, "/sync/activities")
-        if (r.codigo !in 200..299) error("activities ${r.codigo}")
-        val ativ = SincronizarFilmes.simklLerAtividades(r.corpo)
-        val chaveAtiv = "ativ_${s.id}_${tipo.name}"
-        val antes = lerEstado(ctx).optJSONObject(chaveAtiv)?.let { mapa(it) }
+        atualizarBibliotecaSimkl(ctx, s, o, forcar)
+        var bib = lerBibliotecaSimkl(ctx) ?: return Mudou(false, false)
+        val antesDasEscritas = bib
         val ind = Indice(catalogo)
-        var mi = false; var mp = false
+        var mi = false; var mp = false; var tirou = false
         val enviar = SincronizarFilmes.podeEnviar(true, ModoVisita.ativo(ctx), bloqueado(ctx))
-        val localMudou = o.interesses && localDosInteressesMudou(ctx, s, tipo, ind)
-        if (SincronizarFilmes.mudou(antes, ativ, "all") || localMudou || o.contar) {
-            // Filmes: /sync/all-items/movies; séries: shows e anime (anime conta como série aqui).
-            val entradas = if (tipo == Tipo.FILME) lerTudoSimkl(ctx, s, "movies")
-                else lerTudoSimkl(ctx, s, "shows")?.let { sh -> lerTudoSimkl(ctx, s, "anime")?.let { an -> sh + an } }
-            if (entradas != null) {
-                if (o.interesses) {
-                    val remoto = entradas.filter { it.status == "plantowatch" }.map { it.item }
-                    mi = aplicarInteresses(ctx, s, tipo, ind, remoto, enviar) { add, tirar ->
-                        if (add.isNotEmpty()) chamar(ctx, s, "/sync/add-to-list", SincronizarFilmes.corpoItens(add.take(MAX_POR_ENVIO), "plantowatch"))
-                        // O Simkl não tem "tirar da lista para ver" separado: /sync/history/remove tira o título da lista.
-                        if (tirar.isNotEmpty()) chamar(ctx, s, "/sync/history/remove", SincronizarFilmes.corpoItens(tirar.take(MAX_POR_ENVIO)))
-                    }
+        val doTipo = bib.values.filter { it.item.tipo == tipo }
+        if (o.interesses) {
+            val remoto = doTipo.filter { it.status == "plantowatch" }.map { it.item }
+            mi = aplicarInteresses(ctx, s, tipo, ind, remoto, enviar) { add, tirar ->
+                val agora = System.currentTimeMillis()
+                var addOk = emptyList<Item>(); var tirarOk = emptyList<Item>()
+                val loteAdd = add.take(MAX_POR_ENVIO)
+                if (loteAdd.isNotEmpty() && ok(chamar(ctx, s, "/sync/add-to-list", SincronizarFilmes.corpoItens(loteAdd, "plantowatch")))) {
+                    loteAdd.forEach { bib = SincronizarFilmes.simklMarcar(bib, it, "plantowatch", agora) }
+                    addOk = loteAdd
                 }
-                if (o.assistidos && tipo == Tipo.FILME) {
-                    val vistos = entradas.filter { it.status == "completed" }.map { SincronizarFilmes.Visto(it.item, it.quandoMs) }
-                    mp = aplicarVistosFilmes(ctx, s, ind, vistos) || mp
+                // O Simkl não tem "tirar da lista para ver" separado: /sync/history/remove tira o título da lista.
+                val loteTirar = tirar.take(MAX_POR_ENVIO)
+                if (loteTirar.isNotEmpty() && ok(chamar(ctx, s, "/sync/history/remove", SincronizarFilmes.corpoItens(loteTirar)))) {
+                    loteTirar.forEach { bib = SincronizarFilmes.simklMarcar(bib, it, null, agora) }
+                    tirarOk = loteTirar; tirou = true
                 }
+                addOk to tirarOk
             }
         }
-        if (o.continuar && SincronizarFilmes.mudou(antes, ativ, "movies.playback", "tv_shows.playback", "anime.playback")) {
-            val p = chamar(ctx, s, "/sync/playback/" + if (tipo == Tipo.FILME) "movies" else "episodes")
-            if (p.codigo in 200..299) mp = aplicarPausas(ctx, s, tipo, ind, SincronizarFilmes.simklLerPausas(p.corpo)) || mp
+        if (o.assistidos && tipo == Tipo.FILME) {
+            val vistos = doTipo.filter { it.status == "completed" }.map { SincronizarFilmes.Visto(it.item, it.quandoMs) }
+            val r = aplicarVistosFilmes(ctx, s, ind, vistos)
+            mp = r.first || mp
+            r.second.forEach { (item, q) -> bib = SincronizarFilmes.simklMarcar(bib, item, "completed", q) }
         }
-        mudarEstado(ctx) { it.put(chaveAtiv, JSONObject(ativ as Map<*, *>)) }
+        if (o.continuar) {
+            val bruto = lerEstado(ctx).optString("pausas_${s.id}")
+            val pausas = SincronizarFilmes.simklLerPausas(bruto).filter { it.item.tipo == tipo }
+            mp = aplicarPausas(ctx, s, tipo, ind, pausas) || mp
+        }
+        if (bib !== antesDasEscritas) gravarBibliotecaSimkl(ctx, bib)
+        // Tiramos algo: a foto passa a ter os removed_from_list novos (sem isso a próxima vez baixaria a lista de ids
+        // por causa da nossa própria remoção). Ler /sync/activities não passa pela trava de escrita do Simkl.
+        if (tirou) {
+            val r = chamar(ctx, s, "/sync/activities")
+            if (ok(r)) mudarEstado(ctx) { e ->
+                val salva = mapa(e.optJSONObject("ativ_${s.id}"))
+                if (salva.isNotEmpty()) e.put("ativ_${s.id}", JSONObject(SincronizarFilmes.simklFotoAposTirar(salva, SincronizarFilmes.simklLerAtividades(r.corpo)) as Map<*, *>))
+            }
+        }
         return Mudou(mi, mp)
     }
 
-    private fun lerTudoSimkl(ctx: Context, s: Servico, tipo: String): List<SincronizarFilmes.EntradaSimkl>? {
-        val r = chamar(ctx, s, "/sync/all-items/$tipo")
-        return if (r.codigo in 200..299) SincronizarFilmes.simklLerTodos(r.corpo) else null
+    private fun ok(r: Http) = r.codigo in 200..299
+
+    private fun arquivoBibliotecaSimkl(ctx: Context) = File(PlayerArmazem.pasta(ctx), ARQ_SIMKL)
+
+    /** A cópia local da biblioteca do Simkl; null = ainda não houve a fase 1. */
+    private fun lerBibliotecaSimkl(ctx: Context): Map<String, SincronizarFilmes.EntradaSimkl>? = synchronized(trava) {
+        val f = arquivoBibliotecaSimkl(ctx)
+        if (!f.exists()) null else runCatching { SincronizarFilmes.simklBibliotecaDeJson(JSONArray(f.readText())) }.getOrNull()
+    }
+
+    private fun gravarBibliotecaSimkl(ctx: Context, b: Map<String, SincronizarFilmes.EntradaSimkl>) = synchronized(trava) {
+        runCatching {
+            val f = arquivoBibliotecaSimkl(ctx)
+            val tmp = File(f.path + ".tmp"); tmp.writeText(SincronizarFilmes.simklBibliotecaParaJson(b).toString()); tmp.renameTo(f)
+        }
+    }
+
+    /**
+     * Põe a cópia local em dia. No máximo uma ida a cada 20 min (Filmes e Séries juntos; "Sincronizar agora" fura, mas
+     * não duas vezes no mesmo minuto). A foto de /sync/activities é lida ANTES de buscar e só é salva depois que
+     * tudo deu certo (se algo falhar, a próxima vez pede o mesmo date_from de novo).
+     */
+    private fun atualizarBibliotecaSimkl(ctx: Context, s: Servico, o: Opcoes, forcar: Boolean) {
+        val est = lerEstado(ctx)
+        val agoraMs = System.currentTimeMillis()
+        val ultima = est.optLong("rede_${s.id}", 0)
+        val espera = if (forcar) 60_000L else SincronizarFilmes.INTERVALO_MS
+        if (ultima in 1..agoraMs && agoraMs - ultima < espera && lerBibliotecaSimkl(ctx) != null) return
+        val antes = est.optJSONObject("ativ_${s.id}")?.let { mapa(it) }?.takeIf { it.isNotEmpty() }
+        val r = chamar(ctx, s, "/sync/activities")
+        if (!ok(r)) error("activities ${r.codigo}")
+        val ativ = SincronizarFilmes.simklLerAtividades(r.corpo)
+        // Sem o "all" a resposta é ilegível: parar aqui (seguir faria a fase 1 inteira de novo).
+        if (ativ["all"] == null) error("activities ilegível")
+        var bib = lerBibliotecaSimkl(ctx)
+        val plano = SincronizarFilmes.simklPlano(antes, ativ, bib != null, o.continuar, est.has("pausas_${s.id}"))
+        if (plano.completo) {
+            // Fase 1: a biblioteca inteira, um tipo de cada vez, em sequência (nunca em paralelo).
+            val tudo = ArrayList<SincronizarFilmes.EntradaSimkl>()
+            for (t in listOf("movies", "shows", "anime")) tudo += lerTudoSimkl(ctx, s, "/sync/all-items/$t") ?: error("all-items $t")
+            bib = SincronizarFilmes.simklMesclar(emptyMap(), tudo)
+        } else {
+            var b = bib ?: emptyMap()
+            if (plano.conferirTirados) {
+                val ids = chamar(ctx, s, "/sync/all-items", extra = "extended=simkl_ids_only")
+                b = SincronizarFilmes.simklTirarSumidos(b, ids.takeIf { ok(it) }?.let { SincronizarFilmes.simklLerIds(it.corpo) } ?: error("ids ${ids.codigo}"))
+            }
+            plano.desde?.let { d ->
+                // Fase 2: os três tipos numa chamada só, só o que mudou desde a foto.
+                b = SincronizarFilmes.simklMesclar(b, lerTudoSimkl(ctx, s, "/sync/all-items", "date_from=" + URLEncoder.encode(d, "UTF-8")) ?: error("delta"))
+            }
+            bib = b
+        }
+        var pausas: String? = null
+        if (plano.pausas) {
+            val p = chamar(ctx, s, "/sync/playback")
+            if (ok(p)) pausas = p.corpo
+        }
+        if (plano.completo || plano.desde != null || plano.conferirTirados) gravarBibliotecaSimkl(ctx, bib)
+        mudarEstado(ctx) { e ->
+            e.put("ativ_${s.id}", JSONObject(ativ as Map<*, *>)).put("rede_${s.id}", agoraMs)
+            pausas?.let { e.put("pausas_${s.id}", it) }
+            // Fotos por tipo do jeito antigo (antes de 18/11/2026): não servem mais.
+            e.remove("ativ_${s.id}_${Tipo.FILME.name}"); e.remove("ativ_${s.id}_${Tipo.SERIE.name}")
+        }
+    }
+
+    private fun lerTudoSimkl(ctx: Context, s: Servico, caminho: String, extra: String = ""): List<SincronizarFilmes.EntradaSimkl>? {
+        val r = chamar(ctx, s, caminho, extra = extra)
+        return if (ok(r)) SincronizarFilmes.simklLerTodos(r.corpo) else null
     }
 
     // ---------------------------------------------------------------- aplicar aqui
@@ -270,27 +382,24 @@ object ServicosSync {
         return r
     }
 
-    private fun localDosInteressesMudou(ctx: Context, s: Servico, tipo: Tipo, ind: Indice): Boolean {
-        val agora = idsLocaisInteresses(ctx, tipo, ind).keys
-        return conjunto(lerEstado(ctx).optJSONArray("local_${s.id}_${tipo.name}")) != agora
-    }
-
     /**
      * Interesses <-> watchlist pela mescla de três vias. [mandar] recebe o que pôr e tirar lá fora (já como itens com o
      * id TMDB). Devolve se os Interesses daqui mudaram.
      */
     private fun aplicarInteresses(ctx: Context, s: Servico, tipo: Tipo, ind: Indice, remoto: List<Item>, enviar: Boolean,
-                                  mandar: (List<Item>, List<Item>) -> Unit): Boolean {
+                                  mandar: (List<Item>, List<Item>) -> Pair<List<Item>, List<Item>>): Boolean {
         val local = idsLocaisInteresses(ctx, tipo, ind)
         val remotoIds = remoto.mapNotNull { it.ids.tmdb }.toSet()
         val chaveBase = "base_${s.id}_${tipo.name}"
         val base = conjunto(lerEstado(ctx).optJSONArray(chaveBase))
         val universo = ind.porId.keys + local.keys
         val m = SincronizarFilmes.mesclarInteresses(local.keys, remotoIds, base, enviar, universo)
+        var baseNova = m.base
         if (enviar) {
             val porId = remoto.associateBy { it.ids.tmdb }
             fun item(id: Int) = porId[id] ?: Item(tipo, SincronizarFilmes.Ids(tmdb = id))
-            mandar(m.adicionarFora.map(::item), m.tirarFora.map(::item))
+            val (addOk, tirarOk) = mandar(m.adicionarFora.map(::item), m.tirarFora.map(::item))
+            baseNova = SincronizarFilmes.baseAposEnvio(m, addOk.mapNotNull { it.ids.tmdb }.toSet(), tirarOk.mapNotNull { it.ids.tmdb }.toSet())
         }
         // Os Interesses daqui: tira os que saíram, põe os novos (o mais novo primeiro, como quando se marca na TV).
         val atuais = PlayerArmazem.interesses(ctx, tipo == Tipo.SERIE)
@@ -300,12 +409,15 @@ object ServicosSync {
         val mudou = novos != atuais
         if (mudou) PlayerArmazem.definirInteresses(ctx, tipo == Tipo.SERIE, LinkedHashSet(novos.take(Vod.MAX_INTERESSES)))
         val finais = idsLocaisInteresses(ctx, tipo, ind).keys
-        mudarEstado(ctx) { it.put(chaveBase, arranjo(m.base)).put("local_${s.id}_${tipo.name}", arranjo(finais)) }
+        mudarEstado(ctx) { it.put(chaveBase, arranjo(baseNova)).put("local_${s.id}_${tipo.name}", arranjo(finais)) }
         return mudou
     }
 
-    /** Filmes vistos lá fora: marca concluído aqui (união); com "contar" ligado, sobe os concluídos daqui. */
-    private fun aplicarVistosFilmes(ctx: Context, s: Servico, ind: Indice, vistos: List<SincronizarFilmes.Visto>): Boolean {
+    /**
+     * Filmes vistos lá fora: marca concluído aqui (união); com "contar" ligado, sobe os concluídos daqui. Devolve se
+     * mudou algo aqui e o que subiu (com a data), para a cópia local do Simkl já saber.
+     */
+    private fun aplicarVistosFilmes(ctx: Context, s: Servico, ind: Indice, vistos: List<SincronizarFilmes.Visto>): Pair<Boolean, List<Pair<Item, Long>>> {
         val pos = PlayerArmazem.posicoes(ctx)
         val concluidosAqui = HashMap<Int, Pair<String, Long>>()
         for ((ch, p) in pos) if (Vod.finalizado(p)) ind.porChave[ch]?.let { concluidosAqui[it] = ch to p.quando }
@@ -322,10 +434,10 @@ object ServicosSync {
         }
         if (podeContar(ctx, s)) {
             val subir = SincronizarFilmes.vistosParaEnviar(concluidosAqui.keys, remoto).take(MAX_POR_ENVIO)
-            if (subir.isNotEmpty()) chamar(ctx, s, "/sync/history",
-                SincronizarFilmes.corpoHistorico(subir.map { Item(Tipo.FILME, SincronizarFilmes.Ids(tmdb = it)) to (concluidosAqui[it]?.second ?: System.currentTimeMillis()) }))
+                .map { Item(Tipo.FILME, SincronizarFilmes.Ids(tmdb = it)) to (concluidosAqui[it]?.second ?: System.currentTimeMillis()) }
+            if (subir.isNotEmpty() && ok(chamar(ctx, s, "/sync/history", SincronizarFilmes.corpoHistorico(subir)))) return mudou to subir
         }
-        return mudou
+        return mudou to emptyList()
     }
 
     /** Episódios vistos lá fora, por série (id TMDB): a ficha da série aplica quando abre (só ela conhece os episódios). */
@@ -478,7 +590,7 @@ object ServicosSync {
         "trakt" -> {
             val dono = l.dono.takeIf { it.matches(Regex("[A-Za-z0-9_.-]{1,60}")) } ?: "me"
             chamar(ctx, Servico.TRAKT, "/users/$dono/lists/${l.id}/items/movie,show").takeIf { it.codigo in 200..299 }
-                ?.let { SincronizarFilmes.traktLerItens(it.corpo) }
+                ?.let { SincronizarFilmes.traktLerItens(it.corpo) }   // ilegível: null, fica a lista guardada
         }
         "mdblist" -> ServicosContas.chaveMdblist(ctx)?.let { k ->
             ServicosContas.pedir("${ServicosFilmes.MDBLIST_API}/lists/${l.id}/items?limit=1000&apikey=${java.net.URLEncoder.encode(k, "UTF-8")}",

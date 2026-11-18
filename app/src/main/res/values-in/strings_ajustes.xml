@@ -66,7 +66,7 @@
     <string name="tt_grande">Besar</string>
     <string name="tt_maior">Lebih besar</string>
     <string name="pi_titulo">Paket ikon</string>
-    <string name="pi_det">Ganti ikon aplikasi dengan ikon dari paket ikon yang terpasang. OK memilih berikutnya.</string>
+    <string name="pi_det">Ganti ikon aplikasi dengan gaya bawaan (Simbol, Dua warna) atau paket ikon yang terpasang. OK memilih berikutnya.</string>
     <string name="pi_det_vazio">Tidak ada paket ikon terpasang. Ambil satu dari Play Store dan paket itu muncul di sini.</string>
     <string name="pi_nenhum">Tidak ada</string>
     <string name="fm_titulo">Latar saya</string>

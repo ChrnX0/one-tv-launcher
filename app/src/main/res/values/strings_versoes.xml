@@ -17,31 +17,40 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Pair without a PC now confirms on screen: a big “Paired successfully ✓” notice, and then whether the launcher’s own shell is working</item>
-        <item>Smoother home screen: moving through the cross redraws less on each frame</item>
-        <item>Copying files from the computer to the TV over the network drive is faster (disk and network work at the same time)</item>
-            <item>Podcasts: in Listen › Podcasts, follow any show by pasting its feed address, or import your phone app’s list from the web panel. It resumes where you stopped, with speed and skip buttons</item>
-        <item>The radio keeps playing when you leave its screen: it follows you to the home screen and the screensaver, and the remote’s play/pause works from anywhere</item>
+        <item>In the cross, the line below the chosen item is bigger (18) and far items are more visible, to read from the sofa</item>
+        <item>Pressing OK gives the icon a light squeeze; if the app doesn’t open, the cross says “Couldn’t open”</item>
+        <item>Holding an arrow, the cross runs faster with fewer clicks; changing group feels firmer</item>
+        <item>Each group has its own note (Watch, Listen, Play…) and sounds are softer at night</item>
+        <item>Next to the group name you see where you are (“3 of 9”) and, when the cross rests, a small arrow shows there are more items below</item>
+        <item>Apps shows the ones you open most first (not only the last one); hold OK on an app to “Pin to top”</item>
+        <item>In Continue, a thin bar on the icon shows how much you have watched (and how much of the TV show has aired); Radio and Podcasts say what is playing</item>
+        <item>Without internet, Series, Movies, Radio and Podcasts say “Needs the internet” before you open them</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>pareamento_ok</item>
-        <item>cruz_fluida2</item>
-        <item>rede_rapida</item>
-            <item>podcasts_ouvir</item>
-        <item>radio_continua</item>
+        <item>cruz_letra</item>
+        <item>cruz_aperto</item>
+        <item>cruz_segurar</item>
+        <item>cruz_notas</item>
+        <item>cruz_posicao</item>
+        <item>cruz_fixar</item>
+        <item>cruz_progresso</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Pairing confirmed</item>
-        <item>Smooth cross</item>
-        <item>Faster copy</item>
-            <item>Podcasts</item>
-        <item>Radio keeps playing</item>
+        <item>Bigger text</item>
+        <item>Squeeze on open</item>
+        <item>Holding an arrow</item>
+        <item>Note per group</item>
+        <item>Where am I</item>
+        <item>Pin to top</item>
+        <item>Progress bar</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>After pairing in Settings › Advanced › Pair without a PC, did a “Paired successfully ✓” notice appear, followed by “All set”?</item>
-        <item>Moving through the cross with the arrows is smooth, without stutter?</item>
-        <item>Copying a big file from the computer to the TV (This PC › TV) went faster than before?</item>
-            <item>In Listen › Podcasts, after following a podcast, did an episode play and resume where it stopped the next time?</item>
-        <item>Playing a radio station and pressing HOME, did the sound keep going and the “Playing” pill show the station?</item>
+        <item>From the sofa, can you read the line below the chosen item and see the items at the ends?</item>
+        <item>Pressing OK on an app, does the icon give a light squeeze before opening?</item>
+        <item>Holding ▼ in Apps, does the list run fast without a burst of clicks?</item>
+        <item>Changing group with ◀ ▶, does each group sound a different note?</item>
+        <item>Next to the group name, does “2 of 5” (or similar) appear and change as you move?</item>
+        <item>Holding OK on an app in Apps and choosing “Pin to top”, does it move to the first place?</item>
+        <item>In Continue, does the movie or series show a thin orange bar under the icon?</item>
     </string-array>
 </resources>

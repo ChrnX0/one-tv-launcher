@@ -985,6 +985,15 @@ class ConfigLauncherActivity : Activity() {
                 linhaArte.valor(rotuloArte())
             }
             c.addView(linhaArte, lp())
+            // Sons ao andar na cruz (SonsCruz, 18/11/2026): ligados de fábrica, baixos, mudos com outro áudio tocando.
+            fun rotuloSons() = getString(if (SonsCruz.ligado(this)) R.string.al_ligado else R.string.al_desligado)   // "Sons": masculino
+            lateinit var linhaSons: LinhaCfg
+            linhaSons = linha(getString(R.string.cruz_sons), getString(R.string.cruz_sons_det), valor = rotuloSons()) {
+                SonsCruz.definir(this, !SonsCruz.ligado(this))
+                if (SonsCruz.ligado(this)) SonsCruz.tocar(this, SonsCruz.Som.GRUPO)   // amostra do som ao ligar
+                linhaSons.valor(rotuloSons())
+            }
+            c.addView(linhaSons, lp())
         } else c.addView(linha(getString(R.string.lh_arranjo), getString(R.string.lh_arranjo_det),
             valor = getString(if (LayoutHome.grade(this)) R.string.lh_grade else R.string.lh_fileira)) {
             LayoutHome.definirGrade(this, !LayoutHome.grade(this))
@@ -2082,7 +2091,13 @@ class ConfigLauncherActivity : Activity() {
             // em "Meu…" (visto na Sala, 17/11/2026). MIDDLE guarda o começo, a extensão e o "›".
             val t = tValor ?: Estilo.texto(context, Estilo.Papel.CORPO).apply {
                 setSingleLine(true); ellipsize = TextUtils.TruncateAt.MIDDLE; maxWidth = dp(360)
-            }.also { direita.removeAllViews(); direita.addView(it); tValor = it }
+            }.also {
+                direita.removeAllViews()
+                // WRAP explícito: o padrão do FrameLayout é MATCH_PARENT, e aí o TextView refaz o texto novo na largura
+                // do ANTERIOR sem pedir layout ("Duotom" -> "Nen…m", visto na Sala, 18/11/2026).
+                direita.addView(it, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.CENTER_VERTICAL or Gravity.END))
+                tValor = it
+            }
             t.text = "$v  ›"
             pintarTextos()
         }

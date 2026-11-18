@@ -13,7 +13,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
-import android.view.animation.DecelerateInterpolator
+import android.provider.Settings
+import android.view.Choreographer
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -32,10 +33,14 @@ import android.widget.TextView
  */
 class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte: Typeface) : FrameLayout(ctx) {
 
-    /** Um item da coluna. [abrir] roda no OK; [opcoes] no OK segurado (null = segurar é igual a apertar). */
+    /**
+     * Um item da coluna. [abrir] roda no OK; [opcoes] no OK segurado (null = segurar é igual a apertar).
+     * [progresso] (0..1): quanto já foi visto (filme, série, programa da TV ao vivo); vira uma barra embaixo do ícone.
+     */
     class Item(
         val id: String, val nome: String, val sub: String, val icone: Drawable,
         val abrir: () -> Unit, val opcoes: (() -> Unit)? = null, val aoEscolher: (() -> Unit)? = null,
+        val progresso: Float? = null,
     )
     class Categoria(val cat: CruzLogica.Categoria, val nome: String, val icone: Drawable, val itens: List<Item>)
 
@@ -60,16 +65,44 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         const val TELA_L = 960f
         // ---- fontes (sp): tabela do estudo 32 / 20 / 16 / 18
         const val FONTE_ESCOLHIDO = 32f // nome do item escolhido (fora da escolha fica 0,6 x = ~19)
-        const val FONTE_ROTULO = 20f    // nome da categoria em foco
-        const val FONTE_SUB = 16f       // linha de baixo do item escolhido
+        const val FONTE_ROTULO = 22f    // nome da categoria em foco (estudo da HOME, 18/11/2026: 20 -> 22)
+        const val FONTE_SUB = 18f       // linha de baixo do item escolhido (18 sp = texto padrão do Google para TV; era 16)
+        const val FONTE_SUB_MIN = 16f   // texto longo encolhe até aqui (o tamanho de antes) antes de cortar
         const val FONTE_CATEGORIA = 18f // nome das categorias na linha
         // ---- transparência dos vizinhos na coluna (posição relativa -> alfa)
-        val ALFA_COLUNA = mapOf(-1 to 0.5f, 1 to 0.9f, 2 to 0.65f, 3 to 0.35f)
-        const val ANIMA_MS = 220L
+        // Estudo da HOME (18/11/2026): nenhum nome visível abaixo de 0,6, que a 3 m some (era 0,5 em cima e 0,35 no 3º).
+        val ALFA_COLUNA = mapOf(-1 to 0.6f, 1 to 0.9f, 2 to 0.72f, 3 to 0.6f)
+        // ---- movimento (Paulo 18/11/2026: "mais suave e orgânico"): mola em vez de tempo fixo. A mola guarda a velocidade
+        // quando a tecla vem no meio do caminho (nada "freia e recomeça"), e os vizinhos saem um pouco depois (onda).
+        const val MOLA_W = 17f          // rigidez (rad/s): ~0,3 s até assentar, perto dos 220 ms de antes
+        const val MOLA_AMORTECE = 0.86f // < 1 passa um tiquinho do alvo e volta (1 % na posição); 1 = sem passar
+        const val ONDA_MS = 16L         // atraso por passo de distância do item escolhido
+        const val ONDA_MAX_MS = 64L
+        // Trocar de categoria é um salto lateral grande: sem passar do alvo (amortecimento 1), para não "balançar".
+        const val MOLA_AMORTECE_CATEGORIA = 1f
+        // Segurando a seta (a partir da 3ª repetição): mola 40% mais rígida e sem onda, para atravessar a lista sem fila.
+        const val REPETICAO_RAPIDA = 2
+        const val RAPIDA_W = 1.4f
+        // O som, segurando a seta, toca 1 vez a cada 3 itens (não metralha).
+        const val SOM_A_CADA = 3
+        const val APERTO = 0.92f        // "aperto" do ícone no OK: resposta no mesmo quadro do toque
+        const val APERTO_MS = 70L
+        const val NAO_ABRIU_MS = 4000L  // "Não deu para abrir" no lugar da linha de baixo
+        const val FONTE_POSICAO = 18f   // "3 de 9"
+        const val BARRA_A = 5f          // altura da barra de progresso (dp)
+        const val BARRA_L = 0.72f       // largura da barra em fração do ícone
+        // Seta ▼ "tem mais embaixo": abaixo do 3º vizinho (o último visível), no centro dos ícones pequenos.
+        const val SETA_L = 28
+        const val SETA_A = 12
+        const val SETA_Y = 521f
+        const val DICA_MS = 1500L       // cruz parada por este tempo: a seta aparece (some na próxima tecla)
         const val COR_CATEGORIA = 0xFFE8E2DA.toInt()
+        const val COR_SUB = 0xFFE2D8CF.toInt()
     }
 
     var aoSubirTopo: (() -> Unit)? = null
+    /** Som de cada passo (SonsCruz): quem usa decide se toca. */
+    var aoSom: ((SonsCruz.Som, CruzLogica.Categoria?) -> Unit)? = null
     /** Mudou o item em foco (para o destaque/capa de quem usa) */
     var aoMudar: ((Categoria, Item) -> Unit)? = null
     /** OK num item (antes de [Item.abrir]): quem usa grava o "lembrado" da categoria. */
@@ -85,13 +118,40 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private val viewsCat = ArrayList<View>()
     private val viewsItem = ArrayList<List<ItemView>>()
     private val rotulo: TextView
+    /** "3 de 9" ao lado do nome da categoria: quanto falta na coluna (estudo da HOME, onda 2). */
+    private val posicao: TextView
+    /** Seta ▼ embaixo da coluna quando há itens escondidos lá embaixo; aparece com a cruz parada ([DICA_MS]). */
+    private val maisAbaixo: View
     private val dm = resources.displayMetrics
     private fun dp(v: Float) = v * dm.density
     private fun dpi(v: Int) = (v * dm.density + 0.5f).toInt()
-    private val interp = DecelerateInterpolator(1.6f)
 
     /** As partes de um item que mudam com a escolha. */
-    private inner class ItemView(val raiz: LinearLayout, val icone: ImageView, val nome: TextView, val sub: TextView, val traco: View)
+    private inner class ItemView(val raiz: LinearLayout, val icone: ImageView, val nome: TextView, val sub: TextView, val traco: View) {
+        var voltarSub: Runnable? = null
+        /** Barra de "quanto já foi visto", criada só no item que tem progresso. */
+        var barra: BarraProgresso? = null
+    }
+
+    /** Barra fina e arredondada no pé do ícone (como nas miniaturas de vídeo): trilho claro, parte vista na cor de destaque. */
+    private inner class BarraProgresso : Drawable() {
+        var valor = 0f
+            set(v) { field = v.coerceIn(0f, 1f); invalidateSelf() }
+        private val trilho = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply { color = 0x59FFFFFF }
+        private val cheio = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply { color = Estilo.ACENTO }
+        private val r = android.graphics.RectF()
+        override fun draw(c: android.graphics.Canvas) {
+            val b = bounds
+            val a = dp(BARRA_A); val l = b.width() * BARRA_L
+            r.set(b.exactCenterX() - l / 2f, b.bottom - a - dp(2f), b.exactCenterX() + l / 2f, b.bottom - dp(2f))
+            c.drawRoundRect(r, a / 2f, a / 2f, trilho)
+            if (valor > 0f) { r.right = r.left + maxOf(a, l * valor); c.drawRoundRect(r, a / 2f, a / 2f, cheio) }
+        }
+        override fun setAlpha(alpha: Int) {}
+        override fun setColorFilter(cf: android.graphics.ColorFilter?) {}
+        @Deprecated("Deprecated in Java")
+        override fun getOpacity() = android.graphics.PixelFormat.TRANSLUCENT
+    }
 
     init {
         isFocusable = true
@@ -112,10 +172,28 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             includeFontPadding = false
             importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
         }
-        addView(rotulo, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
-        rotulo.translationX = dp(COLUNA - ICONE_L / 2f)
-        rotulo.translationY = dp(ROTULO_Y)
-        setOnFocusChangeListener { _, _ -> posicionar(animar = false); anunciar() }
+        posicao = TextView(ctx).apply {
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, FONTE_POSICAO)
+            setTextColor(COR_SUB)
+            typeface = fonte
+            includeFontPadding = false
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            setShadowLayer(dp(6f), 0f, 0f, 0x99000000.toInt())
+        }
+        val cabecalho = LinearLayout(ctx).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.BOTTOM
+            addView(rotulo, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
+            addView(posicao, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply { marginStart = dpi(14) })
+        }
+        addView(cabecalho, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
+        cabecalho.translationX = dp(COLUNA - ICONE_L / 2f)
+        cabecalho.translationY = dp(ROTULO_Y)
+        maisAbaixo = Seta(ctx).apply { alpha = 0f; importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO }
+        addView(maisAbaixo, LayoutParams(dpi(SETA_L), dpi(SETA_A)))
+        maisAbaixo.translationX = dp(COLUNA - SETA_L / 2f)
+        maisAbaixo.translationY = dp(SETA_Y)
+        setOnFocusChangeListener { _, tem -> posicionar(animar = false); anunciar(); if (tem) dicaDepois() else esconderDica() }
     }
 
     /**
@@ -126,8 +204,12 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         val sig = novas.flatMap { c -> listOf("#" + c.cat.id) + c.itens.map { it.id } }
         val novoMapa = CruzLogica.Mapa(novas.map { it.cat }, novas.map { c -> c.itens.map { it.id } })
         if (sig == assinatura) {
+            val antes = itemAtual()
             cats = novas
             for ((j, c) in novas.withIndex()) for ((i, it) in c.itens.withIndex()) preencher(viewsItem[j][i], it)
+            // O item em foco mudou de texto ou ícone (canal novo, episódio novo): a arte e o TalkBack acompanham.
+            val agora = itemAtual()
+            if (agora != null && (antes?.nome != agora.nome || antes.sub != agora.sub || antes.icone !== agora.icone)) avisarMudanca()
             return
         }
         estado = if (assinatura == null) CruzLogica.inicial(novoMapa, lembrados) else CruzLogica.reajustar(mapa, estado, novoMapa)
@@ -145,6 +227,9 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         avisarMudanca()
     }
 
+    /** Voltando de um app: só leva a Assistir, sem o 2º passo da HOME (o item lembrado fica). */
+    fun irParaAssistir() { if (categoriaAtual()?.cat != CruzLogica.Categoria.ASSISTIR) home() }
+
     /** HOME: Assistir; HOME de novo: a TV. */
     fun home() = aplicar(CruzLogica.Tecla.HOME)
 
@@ -160,7 +245,12 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
 
     // ------------------------------------------------------------------ teclas
 
+    /** Quantas vezes a tecla de agora já se repetiu (segurada): muda a mola e o som (ver [REPETICAO_RAPIDA]). */
+    private var repeticao = 0
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        repeticao = event.repeatCount
+        esconderDica()
         val t = when (keyCode) {
             KeyEvent.KEYCODE_DPAD_LEFT -> CruzLogica.Tecla.ESQUERDA
             KeyEvent.KEYCODE_DPAD_RIGHT -> CruzLogica.Tecla.DIREITA
@@ -197,20 +287,110 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private fun aplicar(t: CruzLogica.Tecla) {
         val r = CruzLogica.passo(mapa, estado, t)
         if (r is CruzLogica.Resultado.Abrir) {
+            aoSom?.invoke(SonsCruz.Som.ABRIR, categoriaAtual()?.cat)
             aoAbrir?.invoke(r.categoria, r.item)
-            itemAtual()?.abrir?.invoke()
+            apertar()
+            // Um app que não abre (desinstalado no meio, sem tela de TV, recusado pelo Android) não falha em silêncio.
+            try { itemAtual()?.abrir?.invoke() } catch (e: Exception) { naoAbriu() }
             return
         }
-        if (r.estado == estado) return
+        val rapida = t != CruzLogica.Tecla.HOME && repeticao >= REPETICAO_RAPIDA
+        val soar = !rapida || repeticao % SOM_A_CADA == 0
+        if (r.estado == estado) {
+            if (t != CruzLogica.Tecla.HOME && repeticao == 0) aoSom?.invoke(SonsCruz.Som.BORDA, categoriaAtual()?.cat)   // fim da coluna/linha
+            return
+        }
+        val trocouCategoria = r.estado.cat != estado.cat
+        if (soar) aoSom?.invoke(if (trocouCategoria) SonsCruz.Som.GRUPO else SonsCruz.Som.ANDAR, cats.getOrNull(r.estado.cat)?.cat)
         estado = r.estado
+        amortecer = if (trocouCategoria) MOLA_AMORTECE_CATEGORIA else MOLA_AMORTECE
+        rigidez = if (rapida) MOLA_W * RAPIDA_W else MOLA_W
+        semOnda = rapida
         posicionar(animar = true)
         avisarMudanca()
     }
+
+    // Parâmetros da mola para o passo de agora (lidos por [mover]).
+    private var amortecer = MOLA_AMORTECE
+    private var rigidez = MOLA_W
+    private var semOnda = false
+
+    /** O ícone do item escolhido "aperta" e volta: o toque foi entendido, no mesmo quadro. */
+    private fun apertar() {
+        val iv = viewAtual() ?: return
+        if (semAnimacao()) return
+        iv.icone.animate().cancel()
+        iv.icone.pivotX = iv.icone.width / 2f; iv.icone.pivotY = iv.icone.height / 2f
+        iv.icone.animate().scaleX(APERTO).scaleY(APERTO).setDuration(APERTO_MS).withEndAction {
+            iv.icone.animate().scaleX(1f).scaleY(1f).setDuration(APERTO_MS * 3)
+                .setInterpolator(android.view.animation.OvershootInterpolator(2f)).start()
+        }.start()
+    }
+
+    /**
+     * Quem usa avisa que o item não abriu (ou a abertura deu erro): a linha de baixo vira "Não deu para abrir" na cor de
+     * destaque por [NAO_ABRIU_MS], e o leitor de tela fala. Depois volta ao texto de antes.
+     */
+    fun naoAbriu() {
+        val iv = viewAtual() ?: return
+        val antes = itemAtual()?.sub.orEmpty()
+        val aviso = context.getString(R.string.cruz_nao_abriu)
+        iv.sub.text = aviso
+        iv.sub.setTextColor(Estilo.ACENTO)
+        iv.sub.visibility = View.VISIBLE
+        announceForAccessibility(aviso)
+        iv.sub.removeCallbacks(iv.voltarSub)
+        iv.voltarSub = Runnable {
+            iv.sub.setTextColor(COR_SUB)
+            iv.sub.text = antes
+            iv.sub.visibility = if (antes.isEmpty()) View.GONE else View.VISIBLE
+        }
+        iv.sub.postDelayed(iv.voltarSub, NAO_ABRIU_MS)
+    }
+
+    // ---- dica de "tem mais embaixo" (idosos acham a coluna mais rápido com dica de seta; notas do estudo, IJHCI 2018)
+
+    private val mostrarDica = Runnable {
+        val n = categoriaAtual()?.itens?.size ?: 0
+        val sel = estado.sel.getOrElse(estado.cat) { 0 }
+        val tem = sel + ALFA_COLUNA.keys.max() < n - 1 && (hasFocus() || isFocused)
+        maisAbaixo.animate().cancel()
+        if (tem) maisAbaixo.animate().alpha(0.8f).setDuration(if (semAnimacao()) 0L else 300L).start() else maisAbaixo.alpha = 0f
+    }
+
+    private fun dicaDepois() { removeCallbacks(mostrarDica); postDelayed(mostrarDica, DICA_MS) }
+
+    private fun esconderDica() { removeCallbacks(mostrarDica); maisAbaixo.animate().cancel(); maisAbaixo.alpha = 0f }
+
+    /** Um "v" de traço arredondado, na cor da linha de baixo. Desenhado à mão: nenhuma fonte garante o glifo ▾. */
+    private class Seta(ctx: Context) : View(ctx) {
+        private val tinta = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
+            color = COR_SUB
+            style = android.graphics.Paint.Style.STROKE
+            strokeCap = android.graphics.Paint.Cap.ROUND
+            strokeJoin = android.graphics.Paint.Join.ROUND
+            setShadowLayer(4f, 0f, 0f, 0x99000000.toInt())
+        }
+        private val caminho = android.graphics.Path()
+        override fun onDraw(c: android.graphics.Canvas) {
+            val e = height * 0.28f
+            tinta.strokeWidth = e
+            caminho.reset()
+            caminho.moveTo(e, e); caminho.lineTo(width / 2f, height - e); caminho.lineTo(width - e, e)
+            c.drawPath(caminho, tinta)
+        }
+    }
+
+    private fun viewAtual(): ItemView? = viewsItem.getOrNull(estado.cat)?.getOrNull(estado.sel.getOrElse(estado.cat) { 0 })
 
     private fun avisarMudanca() {
         val c = categoriaAtual() ?: return
         val i = itemAtual() ?: return
         rotulo.text = c.nome.uppercase()
+        val n = c.itens.size
+        val sel = estado.sel.getOrElse(estado.cat) { 0 }
+        posicao.text = if (n > 1) context.getString(R.string.cruz_posicao, sel + 1, n) else ""
+        dicaDepois()
         i.aoEscolher?.invoke()
         aoMudar?.invoke(c, i)
         anunciar()
@@ -252,20 +432,21 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         val traco = View(context).apply { background = GradientDrawable().apply { setColor(Estilo.ACENTO); cornerRadius = dp(2f) } }
         val sub = TextView(context).apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, FONTE_SUB)
-            setTextColor(0xFFE2D8CF.toInt())   // creme claro (contraste > 4,5:1 sobre o véu)
+            setTextColor(COR_SUB)   // creme claro (contraste > 4,5:1 sobre o véu)
             typeface = fonte
             maxLines = 1
             ellipsize = TextUtils.TruncateAt.END
             includeFontPadding = false
-            maxWidth = dpi(TEXTO_MAX)
             setShadowLayer(dp(6f), 0f, 0f, 0x99000000.toInt())
+            // 18 sp; um texto longo (francês, "Na rede") desce até 16 sp antes de cortar. Precisa de largura fixa.
+            setAutoSizeTextTypeUniformWithConfiguration(FONTE_SUB_MIN.toInt(), FONTE_SUB.toInt(), 1, TypedValue.COMPLEX_UNIT_SP)
         }
         val textos = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_VERTICAL
             addView(nome, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
             addView(traco, LinearLayout.LayoutParams(dpi(48), dpi(4)).apply { topMargin = dpi(6) })
-            addView(sub, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply { topMargin = dpi(6) })
+            addView(sub, LinearLayout.LayoutParams(dpi(TEXTO_MAX), LayoutParams.WRAP_CONTENT).apply { topMargin = dpi(6) })
         }
         val raiz = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
@@ -286,7 +467,16 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         if (v.nome.text.toString() != item.nome) v.nome.text = item.nome
         if (v.sub.text.toString() != item.sub) v.sub.text = item.sub
         v.sub.visibility = if (item.sub.isEmpty()) View.GONE else View.VISIBLE
+        val p = item.progresso
+        if (p == null) { if (v.icone.foreground != null) v.icone.foreground = null }
+        else {
+            val b = v.barra ?: BarraProgresso().also { v.barra = it }
+            b.valor = p
+            if (v.icone.foreground !== b) v.icone.foreground = b
+        }
     }
+
+    private fun onda(distancia: Int) = if (semOnda) 0L else minOf(distancia * ONDA_MS, ONDA_MAX_MS)
 
     /** Põe cada view no lugar do estado atual (animado ou de uma vez). */
     private fun posicionar(animar: Boolean) {
@@ -300,7 +490,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
                 else -> CAT_DIREITA + (k - 1) * PASSO_CATS
             }
             val visivel = k != 0 && cx > 30f && cx < TELA_L - 40f
-            mover(v, dp(cx - 75f), dp(LINHA - CAT_A / 2f), if (visivel) 1f else 0f, 1f, animar)
+            mover(v, dp(cx - 75f), dp(LINHA - CAT_A / 2f), if (visivel) 1f else 0f, 1f, animar, onda(kotlin.math.abs(k)))
         }
         for ((j, lista) in viewsItem.withIndex()) {
             val k = j - f
@@ -310,7 +500,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
                 if (k != 0) {
                     // categoria fora de foco: os itens se recolhem no ícone dela e somem
                     val cx = if (k < 0) CAT_ESQUERDA + (k + 1) * PASSO_CATS else CAT_DIREITA + (k - 1) * PASSO_CATS
-                    mover(iv.raiz, dp(cx - ICONE_L * ESCALA_PEQUENO / 2f), dp(LINHA - ICONE_A / 2f), 0f, ESCALA_PEQUENO, animar)
+                    mover(iv.raiz, dp(cx - ICONE_L * ESCALA_PEQUENO / 2f), dp(LINHA - ICONE_A / 2f), 0f, ESCALA_PEQUENO, animar, onda(kotlin.math.abs(rel)))
                     continue
                 }
                 val cy = when {
@@ -321,28 +511,116 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
                 val alfa = if (rel == 0) (if (focada) 1f else 0.75f) else ALFA_COLUNA[rel] ?: 0f
                 val escala = if (rel == 0) 1f else ESCALA_PEQUENO
                 val x = if (rel == 0) COLUNA - ICONE_L / 2f else COLUNA - ICONE_L * ESCALA_PEQUENO / 2f
-                mover(iv.raiz, dp(x), dp(cy - ICONE_A / 2f), alfa, escala, animar)
+                mover(iv.raiz, dp(x), dp(cy - ICONE_A / 2f), alfa, escala, animar, onda(kotlin.math.abs(rel)))
                 iv.traco.alpha = if (rel == 0 && focada) 1f else 0f
                 iv.sub.alpha = if (rel == 0) 1f else 0f
             }
         }
     }
 
-    private fun mover(v: View, x: Float, y: Float, alfa: Float, escala: Float, animar: Boolean) {
-        v.animate().cancel()
+    private fun mover(v: View, x: Float, y: Float, alfa: Float, escala: Float, animar: Boolean, atrasoMs: Long = 0L) {
+        val m = molas.getOrPut(v) { Mola(v) }
         if (alfa > 0f) v.visibility = View.VISIBLE
-        if (!animar || v.visibility != View.VISIBLE) {
-            v.translationX = x; v.translationY = y; v.alpha = alfa; v.scaleX = escala; v.scaleY = escala
-            if (alfa == 0f) v.visibility = View.INVISIBLE
+        if (!animar || v.visibility != View.VISIBLE || semAnimacao()) {
+            m.parar(x, y, alfa, escala)
             return
         }
-        val a = v.animate().translationX(x).translationY(y).alpha(alfa).scaleX(escala).scaleY(escala)
-            .setDuration(ANIMA_MS).setInterpolator(interp)
-            .withEndAction { if (alfa == 0f) v.visibility = View.INVISIBLE }
-        // Escala ou transparência mudando: anima numa camada de GPU (texto e vetor rasterizados UMA vez, não a cada
-        // quadro). Foi a cauda lenta medida na Sala (p95 42 ms, "Slow issue draw commands"). Só translação não precisa.
-        if (v.scaleX != escala || v.alpha != alfa) a.withLayer()
-        a.start()
+        m.mirar(floatArrayOf(x, y, alfa, escala), android.os.SystemClock.uptimeMillis() + atrasoMs, rigidez, amortecer)
+        if (m !in ativas) ativas += m
+        if (!quadroPedido) { quadroPedido = true; ultimoQuadro = 0L; Choreographer.getInstance().postFrameCallback(quadro) }
+    }
+
+    /** "Remover animações" (acessibilidade) ou escala de animação 0 nas opções do desenvolvedor: tudo vai direto. */
+    private fun semAnimacao() =
+        runCatching { Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f }.getOrDefault(false)
+
+    // ------------------------------------------------------------------ mola
+
+    /**
+     * Uma view com quatro propriedades em mola (x, y, transparência, escala), cada uma com posição e velocidade. A conta é a
+     * de um amortecedor: aceleração = -w²·(posição - alvo) - 2·ζ·w·velocidade. Um quadro do Choreographer anda todas.
+     */
+    private inner class Mola(val v: View) {
+        val pos = FloatArray(4); val vel = FloatArray(4); val alvo = FloatArray(4)
+        private var proximo: FloatArray? = null
+        private var trocaEm = 0L
+        private var camada = false
+
+        fun ler() { pos[0] = v.translationX; pos[1] = v.translationY; pos[2] = v.alpha; pos[3] = v.scaleX }
+
+        fun parar(x: Float, y: Float, alfa: Float, escala: Float) {
+            ativas.remove(this); proximo = null
+            vel.fill(0f); alvo[0] = x; alvo[1] = y; alvo[2] = alfa; alvo[3] = escala
+            pos.indices.forEach { pos[it] = alvo[it] }
+            aplicar(); semCamada()
+            if (alfa == 0f) v.visibility = View.INVISIBLE
+        }
+
+        private var w = MOLA_W
+        private var zeta = MOLA_AMORTECE
+
+        fun mirar(novo: FloatArray, quando: Long, rigidez: Float, amortece: Float) {
+            if (this !in ativas) { ler(); vel.fill(0f); pos.indices.forEach { alvo[it] = pos[it] } }
+            proximo = novo; trocaEm = quando; w = rigidez; zeta = amortece
+        }
+
+        /** Anda dt segundos; devolve true se ainda está em movimento. */
+        fun andar(agora: Long, dt: Float): Boolean {
+            proximo?.let { if (agora >= trocaEm) { it.copyInto(alvo); proximo = null } }
+            val zw2 = 2f * zeta * w; val ww = w * w
+            var t = dt
+            while (t > 0f) {   // passos de até 4 ms: estável mesmo se um quadro atrasar
+                val h = minOf(t, 0.004f); t -= h
+                for (i in 0..3) {
+                    // transparência sem passar do alvo (amortecimento crítico): piscar de alfa chama atenção
+                    val z = if (i == 2) 2f * w else zw2
+                    vel[i] += (-ww * (pos[i] - alvo[i]) - z * vel[i]) * h
+                    pos[i] += vel[i] * h
+                }
+            }
+            pos[2] = pos[2].coerceIn(0f, 1f)
+            val parado = proximo == null &&
+                kotlin.math.abs(pos[0] - alvo[0]) < 0.5f && kotlin.math.abs(pos[1] - alvo[1]) < 0.5f &&
+                kotlin.math.abs(pos[2] - alvo[2]) < 0.004f && kotlin.math.abs(pos[3] - alvo[3]) < 0.002f &&
+                kotlin.math.abs(vel[0]) < 8f && kotlin.math.abs(vel[1]) < 8f
+            if (parado) { pos.indices.forEach { pos[it] = alvo[it] }; vel.fill(0f) }
+            // Escala ou transparência mudando: camada de GPU (texto e vetor rasterizados UMA vez, não a cada quadro; foi a
+            // cauda lenta medida na Sala, p95 42 ms). Só translação não precisa.
+            if (!parado && (kotlin.math.abs(pos[2] - alvo[2]) > 0.004f || kotlin.math.abs(pos[3] - alvo[3]) > 0.002f)) comCamada()
+            aplicar()
+            if (parado) { semCamada(); if (alvo[2] == 0f) v.visibility = View.INVISIBLE }
+            return !parado
+        }
+
+        private fun aplicar() {
+            v.translationX = pos[0]; v.translationY = pos[1]; v.alpha = pos[2]; v.scaleX = pos[3]; v.scaleY = pos[3]
+        }
+        private fun comCamada() { if (!camada && v.isAttachedToWindow) { camada = true; v.setLayerType(View.LAYER_TYPE_HARDWARE, null) } }
+        private fun semCamada() { if (camada) { camada = false; v.setLayerType(View.LAYER_TYPE_NONE, null) } }
+    }
+
+    private val molas = HashMap<View, Mola>()
+    private val ativas = ArrayList<Mola>()
+    private var quadroPedido = false
+    private var ultimoQuadro = 0L
+    private val quadro: Choreographer.FrameCallback = object : Choreographer.FrameCallback {
+        override fun doFrame(t: Long) {
+            val dt = if (ultimoQuadro == 0L) 1f / 60f else ((t - ultimoQuadro) / 1e9f).coerceIn(0f, 1f / 20f)
+            ultimoQuadro = t
+            val agora = android.os.SystemClock.uptimeMillis()
+            ativas.removeAll { !it.andar(agora, dt) }
+            if (ativas.isNotEmpty() && isAttachedToWindow) Choreographer.getInstance().postFrameCallback(this)
+            else quadroPedido = false
+        }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        Choreographer.getInstance().removeFrameCallback(quadro); quadroPedido = false
+        removeCallbacks(mostrarDica)
+        // fora da tela: tudo direto no lugar (nada fica no meio do caminho)
+        ativas.toList().forEach { m -> m.andar(Long.MAX_VALUE, 5f) }
+        ativas.clear()
     }
 
     // ------------------------------------------------------------------ TalkBack
@@ -351,7 +629,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private fun anunciar() {
         val c = categoriaAtual() ?: return
         val i = itemAtual() ?: return
-        contentDescription = listOf(c.nome, i.nome, i.sub).filter { it.isNotEmpty() }.joinToString(", ")
+        contentDescription = listOf(c.nome, i.nome, i.sub, posicao.text.toString()).filter { it.isNotEmpty() }.joinToString(", ")
         if (isFocused) sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
     }
 

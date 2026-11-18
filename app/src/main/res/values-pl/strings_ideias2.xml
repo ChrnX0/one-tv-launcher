@@ -11,7 +11,7 @@
     <string name="extras_HORA_DORMIR">Pora snu (tylko dozwolone aplikacje, ograniczona głośność)</string>
     <string name="extras_TOCANDO_AGORA">Teraz odtwarzane (odczytuje, co gra)</string>
     <string name="extras_MODO_LEVE">Tryb lekki (krótsze animacje)</string>
-    <string name="extras_SOM_NAVEGACAO">Dźwięk nawigacji</string>
+    <string name="extras_SOM_NAVEGACAO">Kliknięcie przy poruszaniu się po innych ekranach</string>
     <string name="extras_RECADO_LINK">Wiadomość przez link (Home Assistant, TvOverlay)</string>
     <string name="extras_caches">Wyczyść pamięć podręczną aplikacji</string>
     <string name="extras_livre">wolne: %1$s</string>

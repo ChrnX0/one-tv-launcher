@@ -27,4 +27,12 @@
     <string name="cruz_arte_det">십자 뒤, 오른쪽</string>
     <string name="cruz_ligada">켜짐</string>
     <string name="cruz_desligada">꺼짐</string>
+    <string name="cruz_sons">이동 효과음</string>
+    <string name="cruz_sons_det">짧고 부드러움, 재생 중에는 울리지 않음</string>
+    <string name="cruz_nao_abriu">열 수 없습니다</string>
+    <string name="cruz_posicao">%2$d개 중 %1$d</string>
+    <string name="cruz_fixar">맨 위에 고정</string>
+    <string name="cruz_soltar">고정 해제</string>
+    <string name="cruz_tocando">재생 중: %1$s</string>
+    <string name="cruz_precisa_internet">인터넷이 필요합니다</string>
 </resources>

@@ -66,7 +66,7 @@
     <string name="tt_grande">Groß</string>
     <string name="tt_maior">Größer</string>
     <string name="pi_titulo">Symbolpaket</string>
-    <string name="pi_det">Ersetzt die App-Symbole durch die eines installierten Symbolpakets. OK wählt das nächste.</string>
+    <string name="pi_det">Ersetzt die App-Symbole durch einen eingebauten Stil (Symbol, Zweifarbig) oder ein installiertes Symbolpaket. OK wählt das nächste.</string>
     <string name="pi_det_vazio">Kein Symbolpaket installiert. Hol dir eines im Play Store, dann erscheint es hier.</string>
     <string name="pi_nenhum">Keines</string>
     <string name="fm_titulo">Mein Hintergrund</string>

@@ -80,8 +80,9 @@ object SincronizarFilmes {
      * Itens de uma lista do Trakt: watchlist (GET /sync/watchlist/{movies|shows}) ou lista (GET .../items/{movie,show}).
      * Cada um é {type:"movie", movie:{...}} ou {type:"show", show:{...}}; temporada, episódio e pessoa ficam de fora.
      */
-    fun traktLerItens(json: String): List<Item> {
-        val a = arranjo(json) ?: return emptyList()
+    fun traktLerItens(json: String): List<Item>? {
+        // Corpo ilegível (ou cortado no limite de 2 MB) = null, nunca "lista vazia": vazia apagaria os Interesses daqui.
+        val a = arranjo(json) ?: return null
         return (0 until a.length()).mapNotNull { i ->
             val o = a.optJSONObject(i) ?: return@mapNotNull null
             when (o.optString("type")) {
@@ -93,8 +94,8 @@ object SincronizarFilmes {
     }
 
     /** GET /sync/watched/{movies|shows}: [{plays, last_watched_at, movie|show, seasons:[{number, episodes:[{number}]}]}]. */
-    fun traktLerVistos(json: String, tipo: Tipo): List<Visto> {
-        val a = arranjo(json) ?: return emptyList()
+    fun traktLerVistos(json: String, tipo: Tipo): List<Visto>? {
+        val a = arranjo(json) ?: return null
         return (0 until a.length()).mapNotNull { i ->
             val o = a.optJSONObject(i) ?: return@mapNotNull null
             val item = lerItem(o.optJSONObject(if (tipo == Tipo.FILME) "movie" else "show"), tipo) ?: return@mapNotNull null
@@ -190,7 +191,7 @@ object SincronizarFilmes {
      * GET /sync/all-items: {"movies":[{"movie":{...},"status":"plantowatch","last_watched_at":...}],
      * "shows":[{"show":{...},"status":"watching"}], "anime":[{"show":{...},...}]}. Anime conta como série.
      */
-    fun simklLerTodos(json: String): List<EntradaSimkl> = runCatching {
+    fun simklLerTodos(json: String): List<EntradaSimkl>? = runCatching {
         val o = JSONObject(json)
         val r = ArrayList<EntradaSimkl>()
         for ((grupo, campo, tipo) in listOf(Triple("movies", "movie", Tipo.FILME), Triple("shows", "show", Tipo.SERIE), Triple("anime", "show", Tipo.SERIE))) {
@@ -201,8 +202,8 @@ object SincronizarFilmes {
                 r += EntradaSimkl(item, e.optString("status"), lerData(e.optString("last_watched_at")) ?: lerData(e.optString("added_to_watchlist_at")) ?: 0)
             }
         }
-        r
-    }.getOrDefault(emptyList())
+        r as List<EntradaSimkl>
+    }.getOrNull()   // ilegível ou cortado: null (a sincronização pula; lista vazia apagaria tudo)
 
     /** GET /sync/activities: o "all" (se não mudou, nada mudou: a doc manda parar aí). */
     fun simklLerAtividades(json: String): Map<String, String> = runCatching {
@@ -217,6 +218,105 @@ object SincronizarFilmes {
         }
         m
     }.getOrDefault(emptyMap())
+
+    /**
+     * GET /sync/all-items?extended=simkl_ids_only: só o ids.simkl de cada item da biblioteca (até 60 mil). Serve para
+     * achar o que a pessoa tirou lá fora (o date_from só traz o que entrou ou mudou). null = resposta ilegível.
+     */
+    fun simklLerIds(json: String): Set<Int>? = runCatching {
+        val o = JSONObject(json)
+        val r = HashSet<Int>()
+        for ((grupo, campo) in listOf("movies" to "movie", "shows" to "show", "anime" to "show")) {
+            val a = o.optJSONArray(grupo) ?: continue
+            for (i in 0 until a.length()) {
+                val e = a.optJSONObject(i) ?: continue
+                val ids = (e.optJSONObject(campo) ?: e).optJSONObject("ids") ?: continue
+                inteiro(ids, "simkl")?.let { r += it }
+            }
+        }
+        r as Set<Int>
+    }.getOrNull()
+
+    /**
+     * Chave de um item na cópia local da biblioteca do Simkl: "s<id simkl>"; um item que nós mesmos mandamos e ainda
+     * não voltou de lá (sem id simkl) fica como "t<tmdb>:<tipo>" até o próximo date_from trazer o id de verdade.
+     */
+    fun simklChave(i: Item): String? = i.ids.simkl?.let { "s$it" } ?: i.ids.tmdb?.let { "t$it:${i.tipo.name}" }
+
+    /** Junta o que veio do Simkl (fase 1 ou date_from) à cópia local: o novo substitui o velho do mesmo título. */
+    fun simklMesclar(cache: Map<String, EntradaSimkl>, novos: List<EntradaSimkl>): Map<String, EntradaSimkl> {
+        val r = LinkedHashMap(cache)
+        for (e in novos) {
+            val k = simklChave(e.item) ?: continue
+            // O provisório ("t…") do mesmo título sai: agora temos o id do Simkl.
+            e.item.ids.tmdb?.let { r.remove("t$it:${e.item.tipo.name}") }
+            r[k] = e
+        }
+        return r
+    }
+
+    /** Tira da cópia local o que não está mais na lista de ids de lá. Provisórios ("t…") ficam: não dá para julgar. */
+    fun simklTirarSumidos(cache: Map<String, EntradaSimkl>, idsLa: Set<Int>): Map<String, EntradaSimkl> =
+        cache.filter { (k, _) -> !k.startsWith("s") || k.drop(1).toIntOrNull()?.let { it in idsLa } == true }
+
+    /**
+     * O que nós mesmos mandamos (pôr na lista, tirar, marcar visto), já na cópia local, para não pedir de volta.
+     * [status] null = tirou da lista. Acha o título pelo id TMDB e tipo.
+     */
+    fun simklMarcar(cache: Map<String, EntradaSimkl>, item: Item, status: String?, quandoMs: Long): Map<String, EntradaSimkl> {
+        val tmdb = item.ids.tmdb ?: return cache
+        val r = LinkedHashMap(cache)
+        val achados = r.filterValues { it.item.tipo == item.tipo && it.item.ids.tmdb == tmdb }.keys
+        if (status == null) { achados.forEach { r.remove(it) }; return r }
+        if (achados.isEmpty()) simklChave(item)?.let { r[it] = EntradaSimkl(item, status, quandoMs) }
+        else achados.forEach { k -> r[k] = r.getValue(k).copy(status = status, quandoMs = quandoMs) }
+        return r
+    }
+
+    fun simklBibliotecaParaJson(cache: Map<String, EntradaSimkl>): JSONArray = JSONArray().apply {
+        for (e in cache.values) put(JSONObject().put("t", if (e.item.tipo == Tipo.FILME) "F" else "S")
+            .put("ids", idsJson(e.item.ids)).put("n", e.item.titulo).put("a", e.item.ano ?: 0).put("s", e.status).put("q", e.quandoMs))
+    }
+
+    fun simklBibliotecaDeJson(a: JSONArray?): Map<String, EntradaSimkl> {
+        val r = LinkedHashMap<String, EntradaSimkl>()
+        if (a == null) return r
+        for (i in 0 until a.length()) {
+            val o = a.optJSONObject(i) ?: continue
+            val tipo = if (o.optString("t") == "F") Tipo.FILME else Tipo.SERIE
+            val ids = lerIds(o.optJSONObject("ids")).takeIf { !it.vazio } ?: continue
+            val item = Item(tipo, ids, o.optString("n"), o.optInt("a", 0).takeIf { it > 0 })
+            simklChave(item)?.let { r[it] = EntradaSimkl(item, o.optString("s"), o.optLong("q", 0)) }
+        }
+        return r
+    }
+
+    /**
+     * Quais chamadas fazer, pelo guia /sync do Simkl (api.simkl.org/guides/sync). [antes] = a foto de /sync/activities
+     * salva da última vez; [agora] = a de agora.
+     *  - sem cópia local (ou sem foto): fase 1, a biblioteca inteira, uma vez;
+     *  - "all" igual: nada mudou lá, para aqui;
+     *  - "all" mudou: só o que mudou desde a foto (date_from = o "all" salvo), e a lista de ids se algum
+     *    removed_from_list andou (tirar não aparece no date_from).
+     * As pausas (/sync/playback) só quando a pessoa usa "continuar" e o playback andou (ou nunca vieram).
+     */
+    data class PlanoSimkl(val completo: Boolean, val desde: String?, val conferirTirados: Boolean, val pausas: Boolean)
+
+    fun simklPlano(antes: Map<String, String>?, agora: Map<String, String>, temCopia: Boolean, querPausas: Boolean, temPausas: Boolean): PlanoSimkl {
+        val pausas = querPausas && (!temPausas || mudou(antes, agora, "movies.playback", "tv_shows.playback", "anime.playback"))
+        val desde = antes?.get("all")
+        if (!temCopia || desde == null || agora["all"] == null) return PlanoSimkl(true, null, false, pausas)
+        if (desde == agora["all"]) return PlanoSimkl(false, null, false, pausas)
+        return PlanoSimkl(false, desde, mudou(antes, agora, "movies.removed_from_list", "tv_shows.removed_from_list", "anime.removed_from_list"), pausas)
+    }
+
+    /**
+     * A foto salva depois que NÓS tiramos algo da lista: só os removed_from_list andam (para não baixar a lista de ids
+     * por causa da nossa própria remoção). O "all" fica o antigo: o próximo date_from traz o que mandamos, já com o id
+     * do Simkl.
+     */
+    fun simklFotoAposTirar(salva: Map<String, String>, nova: Map<String, String>): Map<String, String> =
+        salva + nova.filterKeys { it.endsWith(".removed_from_list") }
 
     /** GET /sync/playback: a doc do Simkl usa o mesmo desenho do Trakt (progress, paused_at, movie | show + episode). */
     fun simklLerPausas(json: String): List<Pausa> = traktLerPausas(json)
@@ -360,6 +460,16 @@ object SincronizarFilmes {
         val novoRemoto = (remoto - tirar) + adicionar
         return Mescla(novoLocal, adicionar, tirar, novoLocal intersect novoRemoto)
     }
+
+    /**
+     * A base depois do envio, com o que o serviço CONFIRMOU (2xx). A [Mescla] supõe que tudo foi aceito; o que não foi
+     * (lote acima de 100, 420 lista cheia, 429, 5xx, sem rede) não pode entrar na base como se estivesse lá:
+     *  - pôr que falhou sai da base: na próxima vez ainda é "posto aqui" e sobe de novo (sem isso viraria "tirado lá"
+     *    e sumiria da TV);
+     *  - tirar que falhou fica na base: na próxima vez ainda é "tirado aqui" e tenta de novo (sem isso voltaria à TV).
+     */
+    fun baseAposEnvio(m: Mescla, adicionadosOk: Set<Int>, tiradosOk: Set<Int>): Set<Int> =
+        m.base - (m.adicionarFora - adicionadosOk) + (m.tirarFora - tiradosOk)
 
     /** Vistos lá fora que aqui ainda não estão concluídos: marcar aqui. Visto é união, nunca desmarca. */
     fun vistosParaTrazer(remoto: Set<Int>, localConcluidos: Set<Int>): Set<Int> = remoto - localConcluidos

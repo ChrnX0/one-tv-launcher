@@ -66,7 +66,7 @@
     <string name="tt_grande">كبير</string>
     <string name="tt_maior">أكبر</string>
     <string name="pi_titulo">حزمة الأيقونات</string>
-    <string name="pi_det">يستبدل أيقونات التطبيقات بأيقونات حزمة مثبتة. OK يختار التالية.</string>
+    <string name="pi_det">يستبدل أيقونات التطبيقات بنمط مدمج (رمز، لونان) أو بحزمة مثبتة. OK يختار التالي.</string>
     <string name="pi_det_vazio">لا توجد حزمة أيقونات مثبتة. احصل على واحدة من Play Store وستظهر هنا.</string>
     <string name="pi_nenhum">لا شيء</string>
     <string name="fm_titulo">خلفيتي</string>

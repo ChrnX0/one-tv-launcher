@@ -27,4 +27,12 @@
     <string name="cruz_arte_det">Dietro la croce, a destra</string>
     <string name="cruz_ligada">Attiva</string>
     <string name="cruz_desligada">Disattiva</string>
+    <string name="cruz_sons">Suoni di navigazione</string>
+    <string name="cruz_sons_det">Brevi e morbidi; muti mentre qualcosa è in riproduzione</string>
+    <string name="cruz_nao_abriu">Impossibile aprire</string>
+    <string name="cruz_posicao">%1$d di %2$d</string>
+    <string name="cruz_fixar">Fissa in alto</string>
+    <string name="cruz_soltar">Togli dall’alto</string>
+    <string name="cruz_tocando">In riproduzione: %1$s</string>
+    <string name="cruz_precisa_internet">Serve internet</string>
 </resources>
