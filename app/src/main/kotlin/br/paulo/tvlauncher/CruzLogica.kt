@@ -155,6 +155,10 @@ object CruzLogica {
             { -(frequencia[it] ?: 0.0) }, { -(ultimoUso[it] ?: 0L) }, { pos[it] ?: Int.MAX_VALUE }))
     }
 
+    /** Linhas do canal de TV (uma informação por linha; as vazias somem): canal, agora, depois. */
+    fun linhasTv(canal: String, agora: String?, depois: String?): String =
+        listOf(canal, agora, depois).filterNot { it.isNullOrBlank() }.joinToString("\n")
+
     /**
      * Continuar (18/11/2026): os itens com quando (ms) do mais recente para o mais antigo, no máximo [max]. Empate (ou
      * quando = 0, sem data) mantém a ordem em que vieram.

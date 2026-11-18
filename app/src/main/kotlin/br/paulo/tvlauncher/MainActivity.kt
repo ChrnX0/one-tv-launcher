@@ -2737,6 +2737,21 @@ class MainActivity : Activity() {
         }
     }
 
+    /**
+     * Linha de baixo do canal de TV na cruz (Paulo, 18/11/2026: "as informações ali são ótimas, usar da melhor maneira"),
+     * uma informação por linha, na ordem em que se lê: o canal; o programa de agora e quanto falta; o próximo e a hora.
+     * [comPrograma] = false quando o programa já é o título do item (Continuar). Sem guia, só o canal.
+     */
+    private fun linhasTvCruz(u: PlayerArmazem.Ultimo, agora: Programa?, ms: Long, comPrograma: Boolean): String {
+        val hora = android.text.format.DateFormat.getTimeFormat(this)
+        val canal = if (u.nome.isBlank()) getString(R.string.home_dest_tv, u.numero) else getString(R.string.cruz_tv_canal, u.numero, u.nome.trim())
+        val falta = agora?.let { ((it.fim - ms) / 60_000).toInt() }?.takeIf { it > 0 }?.let { getString(R.string.home_faltam, duracaoTexto(it)) }
+        val linhaAgora = listOfNotNull(agora?.titulo?.trim()?.takeIf { comPrograma }, falta).joinToString(" · ")
+        val depois = u.programas.firstOrNull { it.inicio >= (agora?.fim ?: ms) && it.titulo.isNotBlank() }
+            ?.let { getString(R.string.cruz_tv_depois, hora.format(java.util.Date(it.inicio)), it.titulo.trim()) }
+        return CruzLogica.linhasTv(canal, linhaAgora, depois)
+    }
+
     /** Refaz a lista da cruz com os dados de agora. Barato: a HomeCruz só recria views quando os ids mudam. */
     private fun atualizarCruz() {
         val c = cruz ?: return
@@ -2779,7 +2794,7 @@ class MainActivity : Activity() {
         val continuar = ArrayList<HomeCruz.Item>()
         ultimoTv?.let { u ->
             continuar += HomeCruz.Item("c:tv", programa?.titulo ?: u.nome.ifBlank { getString(R.string.home_card_tv) },
-                getString(R.string.home_dest_tv, u.numero), icCruz("c:tv", IconeCruz.Tipo.TV), { abrirTv() }, progresso = noAr)
+                linhasTvCruz(u, programa, agora, comPrograma = false), icCruz("c:tv", IconeCruz.Tipo.TV), { abrirTv() }, progresso = noAr)
         }
         val recentes = ArrayList<Pair<Long, HomeCruz.Item>>()
         if (cruzTemVod) {
@@ -2813,9 +2828,8 @@ class MainActivity : Activity() {
         // Assistir: os cards de hoje (TV, Séries, Filmes, Na rede, Addons, plugins), cada um só se o recurso existe.
         val assistir = ArrayList<HomeCruz.Item>()
         if (cruzTemTv) assistir += HomeCruz.Item("tv", getString(R.string.home_card_tv),
-            listOfNotNull(ultimoTv?.let { getString(R.string.home_dest_tv, it.numero) }, programa?.titulo).joinToString(" · ")
-                .ifEmpty { getString(R.string.home_destaque_tv_sub) },
-            icCruz("tv", IconeCruz.Tipo.TV), { abrirTv() })
+            ultimoTv?.let { linhasTvCruz(it, programa, agora, comPrograma = true) } ?: getString(R.string.home_destaque_tv_sub),
+            icCruz("tv", IconeCruz.Tipo.TV), { abrirTv() }, progresso = noAr)
         if (cruzTemVod) {
             assistir += HomeCruz.Item("series", getString(R.string.home_card_series),
                 precisa ?: fichaSerie?.let { listOf(it.titulo, it.episodio).filter { s -> s.isNotEmpty() }.joinToString(" · ") } ?: getString(R.string.home_destaque_series),
