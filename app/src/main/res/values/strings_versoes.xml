@@ -17,14 +17,20 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Movies and Series: the details page shows the movie or series scene sent by the list behind it, darkened so the text stays easy to read</item>
-        <item>Hold BACK, in any app or on the home screen, to open the quick panel (the short press still goes back as before)</item>
-        <item>Hold HOME to open Home: the lights and scenes from Home Assistant</item>
-        <item>Each home screen icon has its own color and a short animation of its own: the TV turns on, the film runs, the radio sends out waves, the headphones play an equalizer</item>
-        <item>The top bar folds away again while you browse (the glass bar is still an option in Settings)</item>
-        <item>When you leave an app, the home screen goes back to the item that opened it, not to TV</item>
-        <item>Every item on the home screen now shows its useful details, one per line: episode and time left, year, rating and length of a movie, what you last watched in each app and when, the last radio station, controllers and the Discord crew</item>
         <item>A long piece of information, like the title of the last video, now ends in “…” and no longer pushes the others out; “Opened 0 minutes ago” became “Opened now”</item>
+        <item>Continue: the movie or series name shows without the list tag (“LEG”, “DUB”, “4K”)</item>
+        <item>Home: with Home Assistant offline, the screen says what happened and that it retries by itself, and Google Home stays at hand</item>
+        <item>After the screensaver, focus returns to the home screen, not to the top bar</item>
+        <item>Lighter navigation: the selected icon only starts its animation after the column stops moving</item>
+        <item>Settings › System › “How this TV is doing”: 7 measurements of the TV, with number and target</item>
+        <item>Live TV: hold ▲▼ to browse channel names without switching the video; release to switch once</item>
+        <item>Series: “Skip intro” button; the chosen subtitle is saved for each series</item>
+        <item>Search that forgives typos (“netflx” finds Netflix) and search inside settings</item>
+        <item>High contrast, audio description and subtitles for the deaf in Settings</item>
+        <item>Changed settings show “Undo” for 10 s; Settings › System › “Recent changes”</item>
+        <item>On the network: a movie folder becomes a catalog with clean titles and “S1 E2”</item>
+        <item>Panel: one-day invite for guests, backup recovery key and “Move to a new TV”</item>
+        <item>Stability fixes from a long debugging round</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>ficha_cena</item>

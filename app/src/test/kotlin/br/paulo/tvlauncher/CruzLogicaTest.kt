@@ -190,6 +190,19 @@ class CruzLogicaTest {
     }
 
     /** Toda a HOME: uma informação por linha, sem vazias nem repetidas, no máximo 4. */
+    @Test fun nomeSemMarcaDeVersao() {
+        assertEquals("Sem Deixar Vestigios", CruzLogica.semMarca("Sem Deixar Vestigios LEG"))
+        assertEquals("Duna", CruzLogica.semMarca("Duna [DUB]"))
+        assertEquals("Noturno", CruzLogica.semMarca("Noturno - DUAL 4K"))
+        assertEquals("Avatar", CruzLogica.semMarca("Avatar (L)"))
+        assertEquals("Oppenheimer", CruzLogica.semMarca("Oppenheimer | Dual Áudio"))
+        // nome que só parece marca fica como veio
+        assertEquals("Plano D", CruzLogica.semMarca("Plano D"))
+        assertEquals("LEG", CruzLogica.semMarca("LEG"))
+        assertEquals("Legado", CruzLogica.semMarca("Legado"))
+        assertEquals("O Último Farol", CruzLogica.semMarca("  O Último Farol  "))
+    }
+
     @Test fun linhasDeInformacao() {
         assertEquals("Duna\n2021 · 2 h 35 min · ★ 8,0\nFicção científica",
             CruzLogica.linhas("Duna", CruzLogica.juntar("2021", "2 h 35 min", "★ 8,0"), null, " ", "Ficção científica", "Duna"))

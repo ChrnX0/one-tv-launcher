@@ -45,7 +45,6 @@
     <string name="casa_indisponivel">Tidak tersedia</string>
     <string name="casa_sem_config_titulo">Hubungkan rumah Anda</string>
     <string name="casa_dica_acionar">nyalakan atau matikan</string>
-    <string name="casa_erro_simples">Home Assistant tidak menjawab. Pastikan servernya menyala lalu coba lagi.</string>
     <string name="casa_erro">Home Assistant tidak menjawab: %1$s</string>
     <string name="casa_ligado_pct">Menyala · %1$d%%</string>
     <string name="casa_brilho_ajuste">Kecerahan %1$d%% · ◀ ▶</string>

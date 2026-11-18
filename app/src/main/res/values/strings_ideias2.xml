@@ -45,7 +45,6 @@
     <string name="casa_indisponivel">Unavailable</string>
     <string name="casa_sem_config_titulo">Connect your home</string>
     <string name="casa_dica_acionar">turn on or off</string>
-    <string name="casa_erro_simples">Home Assistant did not answer. Check that its server is on and try again.</string>
     <string name="casa_erro">Home Assistant did not answer: %1$s</string>
     <string name="casa_ligado_pct">On · %1$d%%</string>
     <string name="casa_brilho_ajuste">Brightness %1$d%% · ◀ ▶</string>

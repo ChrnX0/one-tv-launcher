@@ -45,7 +45,6 @@
     <string name="casa_indisponivel">उपलब्ध नहीं</string>
     <string name="casa_sem_config_titulo">अपना घर जोड़ें</string>
     <string name="casa_dica_acionar">चालू या बंद</string>
-    <string name="casa_erro_simples">Home Assistant ने जवाब नहीं दिया। जाँचें कि उसका सर्वर चालू है और फिर कोशिश करें।</string>
     <string name="casa_erro">Home Assistant ने जवाब नहीं दिया: %1$s</string>
     <string name="casa_ligado_pct">चालू · %1$d%%</string>
     <string name="casa_brilho_ajuste">चमक %1$d%% · ◀ ▶</string>

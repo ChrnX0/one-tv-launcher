@@ -14,14 +14,20 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Filmes e Séries: a ficha mostra atrás a cena do filme ou da série que a lista manda, escurecida para o texto continuar fácil de ler</item>
-        <item>Segurar VOLTAR, em qualquer app ou na tela inicial, abre o painel rápido (o toque curto continua voltando como antes)</item>
-        <item>Segurar HOME abre a Casa: as luzes e cenas do Home Assistant</item>
-        <item>Cada ícone da tela inicial tem a sua cor e uma animação curta só dele: a TV liga, o filme corre, o rádio solta ondas, o fone toca um equalizador</item>
-        <item>A barra de cima volta a recolher enquanto você navega (a barra de vidro continua como opção nas Configurações)</item>
-        <item>Ao sair de um app, a tela inicial volta no item que o abriu, e não na TV</item>
-        <item>Todos os itens da tela inicial mostram as informações úteis, uma por linha: episódio e quanto falta, ano, nota e duração do filme, o que você viu por último em cada app e quando, a última rádio, os controles e a turma do Discord</item>
         <item>Uma informação comprida, como o título do último vídeo, termina em “…” e não empurra mais as outras para fora; “Aberto há 0 minuto” virou “Aberto agora”</item>
+        <item>Continuar: o nome do filme ou da série aparece sem a marca da lista (“LEG”, “DUB”, “4K”)</item>
+        <item>Casa: com o Home Assistant fora do ar, a tela diz o que houve e que tenta de novo sozinha, e o Google Home continua à mão</item>
+        <item>Depois do descanso de tela, o foco volta para a tela inicial em cruz, e não para a barra de cima</item>
+        <item>Navegação mais leve: o ícone escolhido só começa a animação depois que a coluna para de andar</item>
+        <item>Configurações › Sistema › “Como esta TV está indo”: 7 medidas da TV, com número e alvo</item>
+        <item>TV ao vivo: segurar ▲▼ passa os nomes dos canais sem trocar o vídeo; soltar troca uma vez</item>
+        <item>Séries: botão “Pular abertura”; a legenda escolhida fica salva para cada série</item>
+        <item>Busca que perdoa erro de digitação (“netflx” acha Netflix) e busca nos ajustes</item>
+        <item>Alto contraste, audiodescrição e legenda para surdos nas Configurações</item>
+        <item>Ajustes mudados mostram “Desfazer” por 10 s; Configurações › Sistema › “Mudanças recentes”</item>
+        <item>Na rede: pasta de filmes vira catálogo com títulos limpos e “T1 E2”</item>
+        <item>Painel: convite de um dia para visitas, chave de recuperação do backup e “Levar para uma TV nova”</item>
+        <item>Correções de estabilidade de uma rodada longa de depuração</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Cena atrás da ficha</item>

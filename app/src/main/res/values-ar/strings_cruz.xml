@@ -78,4 +78,6 @@
     <string name="cruz_apps_n">التطبيقات على هذا التلفاز: %1$d</string>
     <string name="cruz_podcasts_n">البودكاست التي تتابعها: %1$d</string>
     <string name="cruz_pendrive">ذاكرة USB: %1$s</string>
+    <string name="casa_fora_titulo">Home Assistant لا يستجيب</string>
+    <string name="casa_fora_texto">تأكد من أن الخادم الخاص به يعمل. يعيد التلفاز المحاولة تلقائيًا كل بضع ثوانٍ.</string>
 </resources>

@@ -45,7 +45,6 @@
     <string name="casa_indisponivel">Niedostępne</string>
     <string name="casa_sem_config_titulo">Połącz swój dom</string>
     <string name="casa_dica_acionar">włącz lub wyłącz</string>
-    <string name="casa_erro_simples">Home Assistant nie odpowiedział. Sprawdź, czy jego serwer jest włączony, i spróbuj ponownie.</string>
     <string name="casa_erro">Home Assistant nie odpowiedział: %1$s</string>
     <string name="casa_ligado_pct">Wł. · %1$d%%</string>
     <string name="casa_brilho_ajuste">Jasność %1$d%% · ◀ ▶</string>

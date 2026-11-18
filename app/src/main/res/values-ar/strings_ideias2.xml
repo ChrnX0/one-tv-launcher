@@ -45,7 +45,6 @@
     <string name="casa_indisponivel">غير متاح</string>
     <string name="casa_sem_config_titulo">اربط منزلك</string>
     <string name="casa_dica_acionar">تشغيل أو إطفاء</string>
-    <string name="casa_erro_simples">Home Assistant لم يستجب. تحقق من أن خادمه يعمل وحاول مجددًا.</string>
     <string name="casa_erro">Home Assistant لم يستجب: %1$s</string>
     <string name="casa_ligado_pct">يعمل · %1$d%%</string>
     <string name="casa_brilho_ajuste">السطوع %1$d%% · ◀ ▶</string>

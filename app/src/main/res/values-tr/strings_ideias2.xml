@@ -45,7 +45,6 @@
     <string name="casa_indisponivel">Kullanılamıyor</string>
     <string name="casa_sem_config_titulo">Evinizi bağlayın</string>
     <string name="casa_dica_acionar">aç veya kapat</string>
-    <string name="casa_erro_simples">Home Assistant yanıt vermedi. Sunucusunun açık olduğunu kontrol edin ve yeniden deneyin.</string>
     <string name="casa_erro">Home Assistant yanıt vermedi: %1$s</string>
     <string name="casa_ligado_pct">Açık · %%%1$d</string>
     <string name="casa_brilho_ajuste">Parlaklık %%%1$d · ◀ ▶</string>

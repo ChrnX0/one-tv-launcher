@@ -45,7 +45,6 @@
     <string name="casa_indisponivel">사용할 수 없음</string>
     <string name="casa_sem_config_titulo">집 연결하기</string>
     <string name="casa_dica_acionar">켜기 또는 끄기</string>
-    <string name="casa_erro_simples">Home Assistant가 응답하지 않았습니다. 서버가 켜져 있는지 확인하고 다시 시도하세요.</string>
     <string name="casa_erro">Home Assistant가 응답하지 않음: %1$s</string>
     <string name="casa_ligado_pct">켜짐 · %1$d%%</string>
     <string name="casa_brilho_ajuste">밝기 %1$d%% · ◀ ▶</string>
