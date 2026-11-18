@@ -179,10 +179,19 @@ class McpAutorizacaoTest {
     @Test fun registroEmMassaNaoExpulsaQuemTemLogin() {
         val a = nova(); val c = registrar(a)
         val par = login(a, c)
-        repeat(McpAutorizacao.MAX_CLIENTES * 3) { registrar(a) }
+        repeat(McpAutorizacao.MAX_CLIENTES * 3) { agora += 11_000; registrar(a) }   // abaixo do limite por minuto
         assertEquals("Claude", a.nomeDoCliente(c))
         assertTrue(a.tokenValido(par.acesso))
         a.conferirPedido(c, volta, "code", desafio, "S256")   // o próximo login do Claude ainda funciona
+    }
+
+    /** 18/11/2026: o /register aberto tem limite por minuto. */
+    @Test fun registroTemLimitePorMinuto() {
+        val a = nova()
+        repeat(McpAutorizacao.MAX_REGISTROS_MIN) { registrar(a) }
+        esperaErro("temporarily_unavailable") { registrar(a) }
+        agora += 61_000
+        registrar(a)
     }
 
     @Test fun voltaComAcentoOuEspacoERecusada() {

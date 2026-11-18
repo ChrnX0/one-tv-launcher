@@ -138,6 +138,10 @@ object PainelHttp {
         for (linha in linhas.drop(1)) {
             val doisPontos = linha.indexOf(':')
             if (doisPontos <= 0) throw ErroHttp(400, "cabeçalho inválido")
+            // Linha dobrada (começa com espaço/tab, obsoleta na RFC 9112) ou nome fora dos "tchar": recusa. Antes
+            // " Content-Length: 5" era aparado e valia como content-length.
+            if (linha[0] == ' ' || linha[0] == '\t' || !linha.substring(0, doisPontos).all { it.isLetterOrDigit() && it.code < 128 || it in "!#$%&'*+-.^_`|~" })
+                throw ErroHttp(400, "nome de cabeçalho inválido")
             // "Content-Length : 5" (espaço antes dos dois-pontos): a RFC 9112 manda recusar. É truque de "request
             // smuggling" (um proxy lê um tamanho, nós outro). Antes o nome era aparado e aceito.
             if (linha[doisPontos - 1] == ' ' || linha[doisPontos - 1] == '\t') throw ErroHttp(400, "espaço antes de ':'")

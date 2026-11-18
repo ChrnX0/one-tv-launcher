@@ -68,7 +68,7 @@ object TurmaDiscordTv {
             try {
                 // 403 com código 50004 = widget desligado; o corpo de erro também é JSON.
                 val corpo = (if (c.responseCode in 200..299) c.inputStream else c.errorStream)
-                    ?.bufferedReader()?.use { it.readText().take(512 * 1024) } ?: ""
+                    ?.use { e -> lerAte(e, 512 * 1024) } ?: ""   // teto na leitura (antes lia tudo e cortava depois)
                 Estado.Pronta(TurmaDiscord.ler(corpo))
             } finally { c.disconnect() }
         } catch (_: TurmaDiscord.WidgetDesligado) {
@@ -107,5 +107,12 @@ object TurmaDiscordTv {
                 if (c.responseCode in 200..299) { ultimoChamado = agora; Chamado.ENVIADO } else Chamado.FALHOU
             } finally { c.disconnect() }
         } catch (_: Exception) { Chamado.FALHOU }
+    }
+
+    /** Lê no máximo [teto] bytes (readNBytes é do Android 13; o mínimo aqui é o 10). */
+    private fun lerAte(e: java.io.InputStream, teto: Int): String {
+        val b = java.io.ByteArrayOutputStream(); val buf = ByteArray(8192)
+        while (b.size() < teto) { val n = e.read(buf, 0, minOf(buf.size, teto - b.size())); if (n < 0) break; b.write(buf, 0, n) }
+        return b.toString("UTF-8")
     }
 }

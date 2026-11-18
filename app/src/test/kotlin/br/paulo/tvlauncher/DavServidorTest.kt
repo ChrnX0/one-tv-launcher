@@ -212,6 +212,43 @@ class DavServidorTest {
         assertEquals(400, pedir("MOVE", "/dav/Download/Copia/oi.txt", mapOf("Destination" to "https://outro:8444/dav/x")).codigo)
     }
 
+    @Test fun destinoQueContemAOrigemNaoApagaNada() {
+        File(raiz, "Download/Fotos/2024").mkdirs(); File(raiz, "Download/Fotos/2024/a.jpg").writeText("foto")
+        val r = pedir("MOVE", "/dav/Download/Fotos/2024/a.jpg", mapOf("Destination" to "/dav/Download/Fotos", "Overwrite" to "T"))
+        assertEquals(403, r.codigo)
+        assertEquals("foto", File(raiz, "Download/Fotos/2024/a.jpg").readText())   // antes: Fotos inteira apagada
+        assertEquals(403, pedir("COPY", "/dav/Download/Fotos/2024/a.jpg", mapOf("Destination" to "/dav/Download/Fotos", "Overwrite" to "T")).codigo)
+        assertTrue(File(raiz, "Download/Fotos/2024/a.jpg").exists())
+    }
+
+    @Test fun copiarParaSiMesmoNaoZeraOArquivo() {
+        val r = pedir("COPY", "/dav/Download/ola.txt", mapOf("Destination" to "/dav/Download/ola.txt", "Overwrite" to "T"))
+        assertEquals(403, r.codigo)
+        assertEquals("olá mundo", File(raiz, "Download/ola.txt").readText())
+    }
+
+    @Test fun moverPastaDoSistemaNaoApagaODestinoAntes() {
+        File(raiz, "Outra").mkdirs(); File(raiz, "Outra/x.txt").writeText("x")
+        val r = pedir("MOVE", "/dav/Download", mapOf("Destination" to "/dav/Outra", "Overwrite" to "T"))
+        assertEquals(403, r.codigo)
+        assertTrue(File(raiz, "Outra/x.txt").exists() && File(raiz, "Download/ola.txt").exists())
+    }
+
+    @Test fun lockComXmlGrandeEhRecusado() {
+        val corpo = "<a>".repeat(4000).toByteArray()
+        assertEquals(413, pedir("LOCK", "/dav/Download/ola.txt", corpo = corpo).codigo)
+        assertEquals(413, pedir("PROPPATCH", "/dav/Download/ola.txt", corpo = corpo).codigo)
+    }
+
+    @Test fun listagemEscondeLinkSimbolico() {
+        val fora = Files.createTempDirectory("fora").toFile()
+        Files.createSymbolicLink(File(raiz, "Download/atalho").toPath(), fora.toPath())
+        val r = pedir("PROPFIND", "/dav/Download/", mapOf("Depth" to "1"))
+        assertEquals(207, r.codigo)
+        assertFalse("atalho" in r.texto)
+        fora.deleteRecursively()
+    }
+
     @Test fun pastasDoSistemaNaoSeApagam() {
         assertEquals(403, pedir("DELETE", "/dav/Download").codigo)
         assertEquals(403, pedir("DELETE", "/dav/").codigo)
