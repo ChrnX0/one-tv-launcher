@@ -41,6 +41,16 @@ object CuidarDeLonge {
         (deviceId > 0 && deviceId != virtual) || (deviceId == virtual && source and fonteHdmi == fonteHdmi)
 
     /**
+     * Depuração 18/11/2026: um teclado virtual criado pelo shell (uinput/uhid) ganha id > 0 e passaria por [teclaDeGente].
+     * Por isso a tela guarda os aparelhos de entrada que existiam quando a pergunta ABRIU ([antes], de
+     * InputDevice.getDeviceIds()) e recusa tecla de aparelho que apareceu depois. id <= 0 (o VIRTUAL_KEYBOARD do CEC)
+     * fica com a regra de [teclaDeGente]. [antes] null (não deu para ler) = recusa.
+     * Resíduo: um aparelho falso criado ANTES de a pergunta abrir continua passando; e um controle Bluetooth que
+     * reconectou depois (TV acordando) é recusado: a pessoa fecha e abre a pergunta de novo.
+     */
+    fun aparelhoDeAntes(deviceId: Int, antes: Set<Int>?): Boolean = deviceId <= 0 || (antes != null && deviceId in antes)
+
+    /**
      * ESTOU_BEM (16/11/2026, a 79 da Play): na primeira vez que a TV acende no dia, ela pergunta "Avisar Ana que está tudo
      * bem?" e só a resposta da PESSOA manda o aviso. Nada sai sem o botão: é o oposto de vigiar, e por isso cabe na Play.
      */

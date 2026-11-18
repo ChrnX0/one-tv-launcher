@@ -43,6 +43,10 @@ class CuidarTelaActivity : Activity() {
     private val ui = Handler(Looper.getMainLooper())
     private var modo = ""
     private var aceito: TextView? = null
+    // Aparelhos de entrada que existiam quando a pergunta do consentimento abriu (CuidarDeLonge.aparelhoDeAntes).
+    // Lido UMA vez, ao montar: reler no onResume deixaria entrar um aparelho criado enquanto a tela estava pausada
+    // (com a tela pausada o shell volta a rodar).
+    private var aparelhosNaAbertura: Set<Int>? = null
     private var mandou = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +54,7 @@ class CuidarTelaActivity : Activity() {
         modo = intent.getStringExtra(EXTRA_MODO).orEmpty()
         window.setBackgroundDrawable(ColorDrawable(0))
         when (modo) {
-            MODO_CONSENTIMENTO -> consentimento()
+            MODO_CONSENTIMENTO -> { aparelhosNaAbertura = runCatching { android.view.InputDevice.getDeviceIds().toSet() }.getOrNull(); consentimento() }
             MODO_AJUDA -> ajuda()
             MODO_LEMBRETE -> lembrete()
             MODO_ESTOU_BEM -> estouBem()
@@ -183,7 +187,8 @@ class CuidarTelaActivity : Activity() {
         if (modo == MODO_CONSENTIMENTO && sim != null && sim.isFocused && SegurarOk.ehOk(e.keyCode)) {
             if (e.action == KeyEvent.ACTION_UP) {
                 // Controle de verdade: aparelho com id próprio. -1 (VIRTUAL_KEYBOARD) é o `input keyevent` do adb/painel.
-                val fisica = CuidarDeLonge.teclaDeGente(e.deviceId, e.source, KeyCharacterMap.VIRTUAL_KEYBOARD, android.view.InputDevice.SOURCE_HDMI)
+                val fisica = CuidarDeLonge.teclaDeGente(e.deviceId, e.source, KeyCharacterMap.VIRTUAL_KEYBOARD, android.view.InputDevice.SOURCE_HDMI) &&
+                    CuidarDeLonge.aparelhoDeAntes(e.deviceId, aparelhosNaAbertura)   // teclado falso criado depois: não
                 if (fisica) {
                     CuidarDeLongeTv.consentir(this)
                     aceito = null

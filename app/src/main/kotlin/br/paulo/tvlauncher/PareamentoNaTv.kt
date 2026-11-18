@@ -49,6 +49,9 @@ object PareamentoNaTv {
     private const val SERVICO = "_adb-tls-pairing._tcp"
     private const val PRAZO_MS = 3 * 60_000L
     private var botaoParear: View? = null
+    // Aparelhos de entrada que existiam quando a janela abriu: tecla de aparelho criado depois não pareia
+    // (CuidarDeLonge.aparelhoDeAntes; aqui o shell não fica bloqueado, então esta é a barreira).
+    private var aparelhosNaAbertura: Set<Int>? = null
     private var appCtx: Context? = null
     private val prazo = Runnable { appCtx?.let { fechar(it) } }
     private val principal = Handler(Looper.getMainLooper())
@@ -78,6 +81,7 @@ object PareamentoNaTv {
         fechar(app)
         porta = -1; codigo.setLength(0)
         appCtx = app
+        aparelhosNaAbertura = runCatching { InputDevice.getDeviceIds().toSet() }.getOrNull()
         mostrarJanela(svc)
         procurarPorta(app)
         principal.postDelayed(prazo, PRAZO_MS)   // esquecida na tela: fecha sozinha e para o mDNS
@@ -145,7 +149,8 @@ object PareamentoNaTv {
                 val b = botaoParear
                 if (b != null && b.isFocused && SegurarOk.ehOk(e.keyCode)) {
                     if (e.action == KeyEvent.ACTION_UP) {
-                        if (CuidarDeLonge.teclaDeGente(e.deviceId, e.source, KeyCharacterMap.VIRTUAL_KEYBOARD, InputDevice.SOURCE_HDMI)) parear(app)
+                        if (CuidarDeLonge.teclaDeGente(e.deviceId, e.source, KeyCharacterMap.VIRTUAL_KEYBOARD, InputDevice.SOURCE_HDMI) &&
+                            CuidarDeLonge.aparelhoDeAntes(e.deviceId, aparelhosNaAbertura)) parear(app)
                         else estado(app.getString(R.string.pn_so_controle))
                     }
                     return true

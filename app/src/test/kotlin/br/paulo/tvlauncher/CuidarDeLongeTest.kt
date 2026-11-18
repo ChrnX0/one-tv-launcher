@@ -308,4 +308,12 @@ class CuidarDeLongeTest {
         assertFalse(CuidarDeLonge.teclaDeGente(-1, 0x101))               // input keyevent do shell (teclado virtual)
         assertFalse(CuidarDeLonge.teclaDeGente(0, 0x101))
     }
+
+    @Test fun aparelhoCriadoDepoisDaPerguntaNaoAceita() {
+        val antes = setOf(3, 7)
+        assertTrue(CuidarDeLonge.aparelhoDeAntes(7, antes))     // o controle que já estava ligado
+        assertFalse(CuidarDeLonge.aparelhoDeAntes(12, antes))   // teclado virtual (uhid) criado pelo shell depois
+        assertTrue(CuidarDeLonge.aparelhoDeAntes(-1, antes))    // CEC da LG: decide o teclaDeGente
+        assertFalse(CuidarDeLonge.aparelhoDeAntes(7, null))     // não deu para ler: recusa
+    }
 }
