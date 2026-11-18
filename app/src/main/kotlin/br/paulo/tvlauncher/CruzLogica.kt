@@ -133,12 +133,31 @@ object CruzLogica {
     const val ID_TODOS_APPS = "todos_apps"
 
     /**
-     * Os [APPS_NA_COLUNA] apps mais usados (último uso mais recente primeiro; empate e nunca usado: a ordem da linha de
-     * apps de hoje, que já respeita a ordem manual e os fixos), e "Todos os apps" no fim.
+     * Os [APPS_NA_COLUNA] apps da coluna e "Todos os apps" no fim (estudo da HOME, 18/11/2026, onda 2):
+     * 1. os [fixados] pelo dono ("Fixar no topo"), na ordem em que foram fixados;
+     * 2. depois por [frequencia] (aberturas que valem metade a cada [MEIA_VIDA_MS]; ver [somarAbertura]): quem abre o
+     *    YouTube todo dia e o Globoplay uma vez ontem vê o YouTube em cima, não o último aberto;
+     * 3. empate e nunca aberto pela HOME: último uso do Android, depois a ordem da linha de apps de hoje (ordem manual).
      */
-    fun appsDaColuna(ordemDaLinha: List<String>, ultimoUso: Map<String, Long>): List<String> {
+    fun appsDaColuna(
+        ordemDaLinha: List<String>, ultimoUso: Map<String, Long>,
+        frequencia: Map<String, Double> = emptyMap(), fixados: List<String> = emptyList(),
+    ): List<String> {
         val pos = ordemDaLinha.withIndex().associate { it.value to it.index }
-        return ordemDaLinha.sortedWith(compareBy<String>({ -(ultimoUso[it] ?: 0L) }, { pos[it] ?: Int.MAX_VALUE }))
-            .take(APPS_NA_COLUNA) + ID_TODOS_APPS
+        val presentes = pos.keys
+        val topo = fixados.filter { it in presentes }.distinct()
+        val resto = ordemDaLinha.filter { it !in topo }.sortedWith(compareBy<String>(
+            { -(frequencia[it] ?: 0.0) }, { -(ultimoUso[it] ?: 0L) }, { pos[it] ?: Int.MAX_VALUE }))
+        return (topo + resto).take(APPS_NA_COLUNA) + ID_TODOS_APPS
     }
+
+    /** Meia-vida da contagem de aberturas: 7 dias (uma abertura de uma semana atrás vale meia de hoje). */
+    const val MEIA_VIDA_MS = 7L * 24 * 3600 * 1000
+
+    /** Quanto vale hoje uma contagem [pontos] guardada em [desde]. */
+    fun frequenciaAgora(pontos: Double, desde: Long, agora: Long): Double =
+        if (agora <= desde) pontos else pontos * Math.pow(0.5, (agora - desde).toDouble() / MEIA_VIDA_MS)
+
+    /** A contagem depois de mais uma abertura em [agora] (guarda-se o par pontos/agora). */
+    fun somarAbertura(pontos: Double, desde: Long, agora: Long): Double = frequenciaAgora(pontos, desde, agora) + 1.0
 }

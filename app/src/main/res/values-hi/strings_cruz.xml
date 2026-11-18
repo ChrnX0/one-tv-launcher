@@ -29,4 +29,10 @@
     <string name="cruz_desligada">बंद</string>
     <string name="cruz_sons">नेविगेशन की आवाज़ें</string>
     <string name="cruz_sons_det">छोटी और हल्की; कुछ चलते समय चुप रहती हैं</string>
+    <string name="cruz_nao_abriu">खोला नहीं जा सका</string>
+    <string name="cruz_posicao">%2$d में से %1$d</string>
+    <string name="cruz_fixar">ऊपर पिन करें</string>
+    <string name="cruz_soltar">पिन हटाएँ</string>
+    <string name="cruz_tocando">चल रहा है: %1$s</string>
+    <string name="cruz_precisa_internet">इंटरनेट चाहिए</string>
 </resources>

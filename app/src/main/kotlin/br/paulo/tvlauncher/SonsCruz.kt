@@ -37,15 +37,31 @@ object SonsCruz {
     private val ids = HashMap<Som, Int>()
     private val prontos = HashSet<Int>()
 
-    fun tocar(ctx: Context, som: Som) {
+    /**
+     * Toca [som]. Com [categoria], GRUPO e ABRIR saem na nota dela ([tom]): cada categoria tem a sua, e todas são da mesma
+     * escala pentatônica, que soa bem em qualquer ordem (estudo da HOME, 18/11/2026). De noite ([volume]) sai mais baixo.
+     */
+    fun tocar(ctx: Context, som: Som, categoria: CruzLogica.Categoria? = null) {
         if (!ligado(ctx)) return
         val app = ctx.applicationContext
         val am = app.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
         if (am?.isMusicActive == true) return
         val p = pool ?: preparar(app) ?: return
         val id = ids[som] ?: return
-        if (id in prontos) p.play(id, VOLUME, VOLUME, 1, 0, 1f)
+        val v = volume(java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY))
+        if (id in prontos) p.play(id, v, v, 1, 0, tom(som, categoria))
     }
+
+    /** Escala pentatônica maior (dó, ré, mi, sol, lá): razões da frequência, uma por categoria, na ordem da linha. */
+    private val PENTATONICA = floatArrayOf(1f, 9f / 8f, 5f / 4f, 3f / 2f, 5f / 3f)
+
+    /** A velocidade de reprodução do SoundPool muda o tom: 1,5 = uma quinta acima. ANDAR e BORDA ficam no tom de sempre. */
+    fun tom(som: Som, categoria: CruzLogica.Categoria?): Float =
+        if (categoria == null || (som != Som.GRUPO && som != Som.ABRIR)) 1f
+        else PENTATONICA[categoria.ordinal % PENTATONICA.size]
+
+    /** 40% mais baixo das 22 h às 7 h (casa dormindo). */
+    fun volume(hora: Int): Float = if (hora >= 22 || hora < 7) VOLUME * 0.6f else VOLUME
 
     /** Fora da HOME (ou sons desligados): solta o SoundPool. */
     fun soltar() {

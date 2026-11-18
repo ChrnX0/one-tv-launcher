@@ -29,4 +29,10 @@
     <string name="cruz_desligada">オフ</string>
     <string name="cruz_sons">移動時のサウンド</string>
     <string name="cruz_sons_det">短く控えめ。何かを再生中は鳴りません</string>
+    <string name="cruz_nao_abriu">開けませんでした</string>
+    <string name="cruz_posicao">%2$d 件中 %1$d</string>
+    <string name="cruz_fixar">先頭に固定</string>
+    <string name="cruz_soltar">固定を解除</string>
+    <string name="cruz_tocando">再生中: %1$s</string>
+    <string name="cruz_precisa_internet">インターネットが必要です</string>
 </resources>

@@ -29,4 +29,10 @@
     <string name="cruz_desligada">Выкл.</string>
     <string name="cruz_sons">Звуки при навигации</string>
     <string name="cruz_sons_det">Короткие и мягкие; молчат, пока что-то играет</string>
+    <string name="cruz_nao_abriu">Не удалось открыть</string>
+    <string name="cruz_posicao">%1$d из %2$d</string>
+    <string name="cruz_fixar">Закрепить вверху</string>
+    <string name="cruz_soltar">Открепить</string>
+    <string name="cruz_tocando">Играет: %1$s</string>
+    <string name="cruz_precisa_internet">Нужен интернет</string>
 </resources>
