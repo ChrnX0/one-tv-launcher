@@ -190,6 +190,8 @@ class OuvirServico : Service() {
         val r = intent?.takeIf { it.action == ACAO_RADIO }?.getStringExtra(EXTRA_RADIO)?.let { Radios.deJson(it).firstOrNull() }
         val e = intent?.takeIf { it.action == ACAO_EPISODIO }?.getStringExtra(EXTRA_EP)?.let { EpisodioTocando.deJson(it) }
         primeiroPlano(r?.nome ?: e?.podcast ?: radio?.nome ?: episodio?.podcast ?: "", "")
+        // Sem primeiro plano o serviço já pediu para parar: não cria player (ficava tocando sem serviço, sem liberar).
+        if (!emPrimeiroPlano) return START_NOT_STICKY
         when {
             r != null -> tocar(r)
             e != null -> tocarEp(e, intent.getLongExtra("inicio", RETOMAR))
@@ -200,6 +202,7 @@ class OuvirServico : Service() {
     }
 
     override fun onDestroy() {
+        pedidoEp++   // um episódio ainda resolvendo o endereço não começa depois do fim do serviço
         ui.removeCallbacksAndMessages(null)
         runCatching { unregisterReceiver(telaApagou) }
         runCatching { getSystemService(android.media.AudioManager::class.java)?.unregisterAudioPlaybackCallback(outroTocando) }
@@ -247,7 +250,7 @@ class OuvirServico : Service() {
         val app = applicationContext
         Fundo.rodar("podcast") {
             val ips = runCatching { java.net.InetAddress.getAllByName(java.net.URL(e.ep.url).host).toList() }.getOrNull()
-            val proibido = ips.orEmpty().any { Radios.destinoProibido(it) }
+            val proibido = ips.isNullOrEmpty() || ips.any { Radios.destinoDeFeedProibido(it) }
             Podcasts.naFila {
                 val inicio = if (inicioMs >= 0) inicioMs else Podcasts.retomarEm(Podcasts.posicoes(app)[Podcasts.chave(e.feed, e.ep.guid)])
                 ui.post {

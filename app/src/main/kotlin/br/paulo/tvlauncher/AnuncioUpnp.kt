@@ -86,6 +86,9 @@ object AnuncioUpnp {
             mandar(anuncios(true), grupo, Ssdp.PORTA)
             var ultimo = System.currentTimeMillis()
             val buf = ByteArray(2048)
+            // Uma resposta por origem a cada segundo: uma busca de ~100 B rendia 6 respostas de ~250 B, e com a origem
+            // forjada a TV virava refletor contra outro aparelho da casa. O Windows repete a busca: nada se perde.
+            val respondido = HashMap<String, Long>()
             while (thread === eu) {
                 if (s == null) {
                     Thread.sleep(REANUNCIO_MS)
@@ -99,7 +102,13 @@ object AnuncioUpnp {
                         val daCasa = p.address is java.net.Inet4Address && p.port != 0 &&
                             ChecagensPainel.mesmaRede(minha.address, p.address.address, prefixo)
                         val r = if (daCasa) aparelhos.flatMap { (u, l, t) -> Ssdp.respostas(texto, u, l, t) } else emptyList()
-                        if (r.isNotEmpty()) mandar(r, p.address, p.port)
+                        val chave = p.address.hostAddress + ":" + p.port
+                        val agora = System.currentTimeMillis()
+                        if (r.isNotEmpty() && agora - (respondido[chave] ?: 0L) >= 1000) {
+                            if (respondido.size > 256) respondido.clear()
+                            respondido[chave] = agora
+                            mandar(r, p.address, p.port)
+                        }
                     } catch (_: java.net.SocketTimeoutException) {}
                 }
                 if (System.currentTimeMillis() - ultimo >= REANUNCIO_MS) { mandar(anuncios(true), grupo, Ssdp.PORTA); ultimo = System.currentTimeMillis() }
@@ -108,7 +117,9 @@ object AnuncioUpnp {
         } catch (e: Exception) {
             if (thread === eu) Log.w(TAG, "parou: $e")
         } finally {
-            mandar(anuncios(false), grupo, Ssdp.PORTA)
+            // "Saí" só se ninguém tomou o lugar: num desligar+ligar rápido o adeus da thread velha chegava depois do olá
+            // da nova e o Windows soltava a TV.
+            if (thread == null || thread === eu) mandar(anuncios(false), grupo, Ssdp.PORTA)
             try { s?.close() } catch (_: Exception) {}
             envio.close()
             try { trava?.release() } catch (_: Exception) {}

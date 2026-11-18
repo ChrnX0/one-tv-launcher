@@ -123,6 +123,26 @@ class PodcastFeedTest {
     }
 
     @Test
+    fun entradaRecusaUtf7() {
+        // Em UTF-7 "<!ENTITY" vira "+ADwAIQ-ENTITY": a busca byte a byte não via.
+        val bomba = "<?xml version=\"1.0\" encoding=\"UTF-7\"?>+ADw-rss+AD4-"
+        val en = PodcastFeed.Entrada(bomba.byteInputStream(), PodcastFeed.MAX_BYTES)
+        assertTrue(runCatching { en.readBytes() }.isFailure)
+        assertTrue(en.recusou)
+        val ok = PodcastFeed.Entrada(feed.byteInputStream(), PodcastFeed.MAX_BYTES)
+        ok.readBytes(); assertFalse(ok.recusou)
+    }
+
+    @Test
+    fun datasComFormatosGuardados() {
+        val a = PodcastFeed.data("Wed, 18 Nov 2026 06:00:00 +0000")
+        assertEquals(a, PodcastFeed.data("Wed, 18 Nov 2026 06:00:00 +0000"))
+        assertTrue(a > 0)
+        assertEquals(PodcastFeed.data("2026-11-18T06:00:00Z"), a)
+        assertEquals(0L, PodcastFeed.data("ontem"))
+    }
+
+    @Test
     fun entradaRecusaEntidadesDoDtd() {
         val bomba = "<?xml version=\"1.0\"?><!DOCTYPE rss [<!ENTITY a \"aaaaaaaaaa\"><!ENTITY b \"&a;&a;&a;&a;\">]><rss><channel><title>&b;</title></channel></rss>"
         val en = PodcastFeed.Entrada(bomba.byteInputStream(), PodcastFeed.MAX_BYTES)

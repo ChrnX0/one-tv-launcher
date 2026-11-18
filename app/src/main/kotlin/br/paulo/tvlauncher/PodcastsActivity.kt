@@ -141,8 +141,10 @@ class PodcastsActivity : Activity() {
         val s = OuvirServico.instancia ?: return
         val e = s.episodio ?: return
         linha("tocando", "● " + e.ep.titulo, textoTocando(s), getString(if (s.pausado) R.string.ra_continuar else R.string.ra_pausar),
-            cor = Estilo.ATENCAO, ok = { s.alternar() }, segurar = null)
-        linha("parar", "■ " + getString(R.string.ra_parar), getString(R.string.pod_dica_pular), null, ok = { s.parar() }, segurar = null)
+            cor = Estilo.ATENCAO, ok = { OuvirServico.instancia?.alternar() }, segurar = null)
+        // A instância da HORA do clique: o serviço guardado aqui pode já ter sido trocado por outro (e o parar do velho
+        // apagava a pílula do que está tocando).
+        linha("parar", "■ " + getString(R.string.ra_parar), getString(R.string.pod_dica_pular), null, ok = { OuvirServico.instancia?.parar() }, segurar = null)
         val v = OuvirServico.velocidade(this)
         linha("velocidade", getString(R.string.pod_velocidade), null, rotuloVelocidade(v), ok = {
             Estilo.lista(this, getString(R.string.pod_velocidade), OuvirServico.VELOCIDADES.map { rotuloVelocidade(it) },
@@ -285,8 +287,17 @@ class PodcastsActivity : Activity() {
         if (ep.video) {
             // Vídeo no feed: o player de vídeo (tela cheia, legenda, velocidade). A posição fica com ele.
             OuvirServico.instancia?.parar()
-            VodActivity.abrirUrl(this, ep.url, ep.titulo)
             val app = applicationContext
+            // O endereço vem do feed (de fora): para a própria TV ou a rede da casa, não abre (como no áudio).
+            Fundo.rodar("podcast-video") {
+                val ips = runCatching { java.net.InetAddress.getAllByName(java.net.URL(ep.url).host).toList() }.getOrNull()
+                val ok = !ips.isNullOrEmpty() && ips.none { Radios.destinoDeFeedProibido(it) }
+                runOnUiThread {
+                    if (isDestroyed) return@runOnUiThread
+                    if (ok) VodActivity.abrirUrl(this, ep.url, ep.titulo)
+                    else AvisoTv.rapido(this, ep.titulo, getString(R.string.pod_falhou), 6)
+                }
+            }
             // ms = 0: só registra que abriu; 1 tirava o ✓ de "ouvido" (guardar() só o mantém com posição 0).
             val p = Podcasts.Posicao(feed, ep.guid, 0, ep.duracaoS * 1000L, false, System.currentTimeMillis(), ep.titulo, nome)
             Podcasts.naFila { Podcasts.guardarPosicao(app, p) }
