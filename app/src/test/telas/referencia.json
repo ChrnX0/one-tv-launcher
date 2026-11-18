@@ -182,7 +182,9 @@
  "ar\/home-vidro": {
   "menorSp": 12,
   "foco": true,
-  "cortes": [],
+  "cortes": [
+   "غائم - مطر ١٠٠% الآن"
+  ],
   "sobrepostos": [],
   "soCor": [],
   "contraste": [],

@@ -399,6 +399,17 @@ object CasaHA {
         } catch (ex: Exception) { txt(R.string.casa_err_keystore, ex.javaClass.simpleName) }
     }
 
+    /**
+     * Troca só o endereço, mantendo o token (adb: EXTRAS casa_endereco; 18/11/2026, o Home Assistant saiu do
+     * "adb reverse" do PC para o IP dele na rede). Devolve null se gravou, ou o motivo.
+     */
+    fun trocarEndereco(ctx: Context, endereco: String): String? {
+        val e = enderecoValido(endereco) ?: return txt(R.string.casa_err_endereco)
+        if (!prefs(ctx).contains("token_cifrado")) return txt(R.string.casa_err_token)
+        prefs(ctx).edit().putString("endereco", e).commit()
+        return null
+    }
+
     /** Campainha e câmera (ids de entidade; vazio desliga o aviso). */
     fun configurarCampainha(ctx: Context, sensor: String, camera: String): String? {
         if (sensor.isNotEmpty() && !idValido(sensor)) return txt(R.string.casa_err_sensor)

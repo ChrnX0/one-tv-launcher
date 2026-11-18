@@ -183,6 +183,24 @@ object CruzLogica {
         partes.mapNotNull { it?.trim()?.takeIf { t -> t.isNotEmpty() } }.distinct().take(4).joinToString("\n")
 
     /**
+     * A linha de baixo do escolhido separada em duas partes (Paulo, 18/11/2026 12:15 local: "deixar apenas uma linha com
+     * alguma info básica e as complementares no canto inferior direito"): a [Partes.principal] fica embaixo do nome, numa
+     * linha só, e os [Partes.detalhes] vão para o canto de baixo da tela. [tirar] é o que a barra de cima já mostra (o
+     * programa no ar): não aparece de novo. Se a principal não coube e terminou em "…", ela vai inteira para os detalhes
+     * ([principalCortada]), para nada ficar sem ser lido.
+     */
+    data class Partes(val principal: String, val detalhes: List<String>)
+
+    fun partes(sub: String?, tirar: String? = null): Partes {
+        val t = tirar?.trim()?.takeIf { it.isNotEmpty() }
+        val ls = sub.orEmpty().split('\n').map { it.trim() }.filter { it.isNotEmpty() && it != t }.distinct()
+        return Partes(ls.firstOrNull().orEmpty(), ls.drop(1))
+    }
+
+    fun detalhes(p: Partes, principalCortada: Boolean): List<String> =
+        if (principalCortada && p.principal.isNotEmpty()) listOf(p.principal) + p.detalhes else p.detalhes
+
+    /**
      * Nome para a cruz sem a marca de versão que as listas põem no fim ("Sem Deixar Vestígios LEG", "Duna [DUB]",
      * "Noturno - DUAL 4K"; Sala, 18/11/2026). Só tira palavras-marca inteiras no FIM; se o nome for só marca, fica como
      * veio. A marca continua valendo onde importa (legenda automática, LegendaExterna), que lê o título original.

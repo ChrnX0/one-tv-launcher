@@ -8,6 +8,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.FrameLayout
 import androidx.test.platform.app.InstrumentationRegistry
+import br.paulo.tvlauncher.BarraIlha
 import br.paulo.tvlauncher.CruzLogica
 import br.paulo.tvlauncher.Estilo
 import br.paulo.tvlauncher.HomeCruz
@@ -50,34 +51,41 @@ class CruzTelaTest {
     @Test fun linha() = conferir(IconeCruz.Estilo.LINHA, "linha")
 
     /**
-     * Linha comprida (Sala, 18/11/2026): o último vídeo do YouTube quebrava em 3 linhas e empurrava "Aberto há…" para
-     * fora. Agora cabe tudo em até 4 linhas, a comprida termina em "…", e a quebra em 2 linhas continua quando cabe.
+     * Uma linha embaixo do nome e o resto no canto de baixo à direita (Paulo, 18/11/2026 12:15 local). Com a barra Ilha,
+     * o programa no ar vai para a barra ([HomeCruz.Item.canto]) e não aparece de novo embaixo.
      */
     @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
-    @Test fun linhaCompridaNaoEmpurraAsOutras() {
+    @Test fun umaLinhaEDetalhesNoCanto() {
         InstrumentationRegistry.getInstrumentation().setInTouchMode(false)
         saida.mkdirs()
         val a = Robolectric.buildActivity(Activity::class.java).setup().get()
         val raiz = FrameLayout(a).apply { setBackgroundColor(Estilo.FUNDO) }
         a.setContentView(raiz)
         val cruz = HomeCruz(a, Typeface.DEFAULT, Typeface.DEFAULT_BOLD)
+        cruz.cantoNaBarra = true
         raiz.addView(cruz, FrameLayout.LayoutParams(-1, -1))
         fun ic(t: IconeCruz.Tipo) = IconeCruz(t, IconeCruz.Estilo.LINHA)
         val comprida = "Por último: Coração Selvagem | Trailer Oficial | LEG | Paramount Pictures Brasil · Paramount Brasil"
         val tv = "Canal 2 · Globo SP\nMil Lugares para Conhecer Antes de Morrer · faltam 25 min\nDepois, 09:30: Encontro"
         cruz.definir(listOf(HomeCruz.Categoria(CruzLogica.Categoria.ASSISTIR, "Assistir", ic(IconeCruz.Tipo.ASSISTIR), listOf(
-            HomeCruz.Item("app:yt", "YouTube", "Vídeos e canais\n$comprida\nAberto há 12 min", ic(IconeCruz.Tipo.APLICATIVOS), {}),
-            HomeCruz.Item("tv", "TV", tv, ic(IconeCruz.Tipo.TV), {})))))
+            HomeCruz.Item("app:yt", "YouTube", "$comprida\nVídeos e canais\nAberto há 12 min", ic(IconeCruz.Tipo.APLICATIVOS), {}),
+            HomeCruz.Item("tv", "TV", tv, ic(IconeCruz.Tipo.TV), {},
+                canto = BarraIlha.Canto("No ar", "Mil Lugares para Conhecer Antes de Morrer · faltam 25 min", "tv"))))))
         cruz.requestFocus()
         ShadowLooper.idleMainLooper(1, TimeUnit.SECONDS)
         val sub = cruz.subAtual()!!
-        assertTrue("cabe em 4 linhas: ${sub.lineCount}", sub.lineCount <= HomeCruz.SUB_LINHAS)
-        assertTrue("a última informação continua na tela", sub.text.endsWith("Aberto há 12 min"))
-        assertTrue("a comprida termina em …", sub.text.split('\n')[1].endsWith("…"))
+        assertEquals("uma informação em até 2 linhas", HomeCruz.ITEM_LINHAS, sub.lineCount)
+        assertEquals(comprida, sub.text.toString())   // o "…" é do TextView (ellipsize), o texto fica inteiro
+        // a principal não coube: vai inteira para o canto, seguida das outras
+        assertEquals("$comprida\nVídeos e canais\nAberto há 12 min", cruz.detalheAtual().text.toString())
+        assertEquals(1f, cruz.detalheAtual().alpha)
         foto(a, "cruz-linha-comprida")
         cruz.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_DOWN)); cruz.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_DOWN))
+        assertEquals("some na hora ao andar", 0f, cruz.detalheAtual().alpha)
         ShadowLooper.idleMainLooper(1, TimeUnit.SECONDS)
-        assertEquals("cabe em 4 linhas com a quebra: fica igual", tv, cruz.subAtual()!!.text.toString())
+        assertEquals("Canal 2 · Globo SP", cruz.subAtual()!!.text.toString())
+        assertEquals("o programa fica na barra, não repete", "Depois, 09:30: Encontro", cruz.detalheAtual().text.toString())
+        foto(a, "cruz-tv-detalhes")
     }
 
     /** Prévia da animação de cada ícone Linha (18/11/2026): uma linha por ícone, o estático e 8 quadros da passada. */

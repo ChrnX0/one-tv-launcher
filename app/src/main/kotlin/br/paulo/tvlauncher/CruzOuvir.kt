@@ -439,7 +439,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
 
     /**
      * Corta [texto] para caber em [linhas] na largura [largura] SEM reticências do layout: a parte (linha do texto) mais
-     * comprida perde o fim primeiro, com "…" escrito no próprio texto. É a regra da HOME (HomeCruz.cortarLinhas), com
+     * comprida perde o fim primeiro, com "…" escrito no próprio texto. Era a regra da HOME (até 18/11/2026, quando a HOME passou a uma linha só), com
      * largura e linhas livres, porque aqui o nome também quebra em duas e o cartão tem outra largura.
      */
     private fun caber(texto: String, tv: TextView, largura: Int, linhas: Int): String {

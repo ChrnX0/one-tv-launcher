@@ -210,4 +210,23 @@ class CruzLogicaTest {
         assertNull(CruzLogica.juntar(null, "", "  "))
         assertEquals("T1 E2 · faltam 10 min", CruzLogica.juntar("T1 E2", null, "faltam 10 min"))
     }
+
+    @Test fun umaLinhaEmbaixoDoNomeEDetalhesNoCanto() {
+        val serie = "Lei e Ordem: Unidade de Vítimas Especiais\nT1 E1 · faltam 43 min\n1999 · ★ 8,0\nCrime, Drama, Mistério"
+        val p = CruzLogica.partes(serie)
+        assertEquals("Lei e Ordem: Unidade de Vítimas Especiais", p.principal)
+        assertEquals(listOf("T1 E1 · faltam 43 min", "1999 · ★ 8,0", "Crime, Drama, Mistério"), p.detalhes)
+        // principal cortada com "…": vai inteira para o canto de baixo
+        assertEquals("Lei e Ordem: Unidade de Vítimas Especiais", CruzLogica.detalhes(p, principalCortada = true).first())
+        assertEquals(p.detalhes, CruzLogica.detalhes(p, principalCortada = false))
+    }
+
+    @Test fun oQueABarraJaMostraNaoRepete() {
+        val tv = "Canal 2 · Globo SP\nSP1 · faltam 58 min\nDepois, 12:45: Globo Esporte"
+        val p = CruzLogica.partes(tv, tirar = " SP1 · faltam 58 min ")
+        assertEquals("Canal 2 · Globo SP", p.principal)
+        assertEquals(listOf("Depois, 12:45: Globo Esporte"), p.detalhes)
+        assertEquals(CruzLogica.Partes("", emptyList()), CruzLogica.partes(null))
+        assertEquals(CruzLogica.Partes("só", emptyList()), CruzLogica.partes("\n só \n\n", tirar = ""))
+    }
 }

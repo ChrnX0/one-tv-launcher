@@ -122,6 +122,11 @@ object ComandosExtras {
                 ?: "barra=${LayoutHome.barraCruz(ctx)}; opções: ${LayoutHome.BarraCruz.entries.joinToString { it.name.lowercase() }}"
         }
         "movimento" -> MovimentoAdaptativo.comando(ctx, i.getStringExtra("nivel"))
+        // Casa (Home Assistant): sem endereço mostra o atual; com endereço troca só ele (o token fica).
+        "casa_endereco" -> i.getStringExtra("endereco").let { e ->
+            if (e.isNullOrBlank()) "casa=${CasaHA.endereco(ctx) ?: "-"} configurado=${CasaHA.configurado(ctx)}"
+            else CasaHA.trocarEndereco(ctx, e)?.let { "não trocou: $it" } ?: "casa=${CasaHA.endereco(ctx)}"
+        }
         // Tela inicial em cruz (17/11/2026): saída de emergência para a HOME antiga até a Cruz passar no aceite na TV.
         "home_antiga" -> { LayoutHome.definirAntiga(ctx, i.getBooleanExtra("ligar", false)); "cruz=${LayoutHome.cruz(ctx)} (aperte HOME)" }
         // Cuidar de longe (ideias 77-79): estado, rodar o relógio agora, abrir a pergunta de consentimento, teste de envio.

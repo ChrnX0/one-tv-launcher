@@ -17,17 +17,20 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Player lists (audio, subtitles, quality, seasons) in a right-hand panel with the movie visible beside it, bigger text and the position “1 of 5”</item>
-        <item>The chosen item stands out and the others get lighter and smaller, like the cross home screen; with move and select sounds</item>
-        <item>The “OK selects · back closes” hints sit inside the panel, without covering the movie subtitles</item>
+        <item>Home screen: under the name of the chosen item there is now one line only; the other details appear in the lower right corner when you stop on the item</item>
+        <item>The top bar follows the selection: with TV in focus it shows what is on now; with nothing happening, only the clock pill stays</item>
+        <item>The column no longer jumps when an item has a lot of text</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>listas_cruz_2</item>
+        <item>detalhes_canto</item>
+        <item>barra_segue</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Player list</item>
+        <item>Details in the corner</item>
+        <item>Bar follows the selection</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>In a movie, with ▼ and “Audio and subtitles”, does the list open on the right with the movie visible and the hints under the list?</item>
+        <item>On Series, is there one line under the name and the episode, year and genre in the lower right corner?</item>
+        <item>With TV in focus, does the top left show “On air” with the program, and with Series in focus does it stay empty?</item>
     </string-array>
 </resources>
