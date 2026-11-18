@@ -145,8 +145,9 @@ class VodActivity : Activity() {
 
         /** Para quem quer saber se o vídeo foi até o fim (séries: próximo episódio). */
         fun abrirComResultado(act: Activity, codigo: Int, tipo: String, fonteId: String, id: String, extensao: String, titulo: String,
-                              doComeco: Boolean = false, chaveIdioma: String = "", busca: LegendaExterna.Busca? = null) {
-            act.startActivityForResult(comBusca(intent(act, tipo, fonteId, id, extensao, titulo, doComeco).putExtra(EXTRA_IDIOMA, chaveIdioma), busca), codigo)
+                              doComeco: Boolean = false, chaveIdioma: String = "", busca: LegendaExterna.Busca? = null,
+                              extra: (Intent) -> Intent = { it }) {
+            act.startActivityForResult(extra(comBusca(intent(act, tipo, fonteId, id, extensao, titulo, doComeco).putExtra(EXTRA_IDIOMA, chaveIdioma), busca)), codigo)
         }
 
         private fun intent(ctx: Context, tipo: String, fonteId: String, id: String, extensao: String, titulo: String, doComeco: Boolean) =
@@ -923,7 +924,7 @@ class VodActivity : Activity() {
                 }
             }
         }
-        // A outra versão do filme (dublada/legendada): é outro arquivo, troca no mesmo ponto (18/11/2026).
+        // A outra versão do filme ou do episódio (dublada/legendada): é outro arquivo, troca no mesmo ponto (18/11/2026).
         outraVersao()?.let { (v, _) ->
             val r = if (v == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
             opcoes += Opcao(getString(R.string.vod_trocar_versao, getString(r))) { trocarVersao() }
@@ -1054,7 +1055,11 @@ class VodActivity : Activity() {
             .putExtra(EXTRA_ALT_FONTE, intent.getStringExtra(EXTRA_FONTE).orEmpty()).putExtra(EXTRA_ALT_ID, intent.getStringExtra(EXTRA_ID).orEmpty())
             .putExtra(EXTRA_ALT_EXT, intent.getStringExtra(EXTRA_EXT).orEmpty())
             .putExtra(EXTRA_ALT_TITULO, intent.getStringExtra(EXTRA_TITULO).orEmpty()).putExtra(EXTRA_ALT_VERSAO, atual.name)
-        nova.removeExtra(EXTRA_IDIOMA)   // filme: a chave de idioma é a do próprio arquivo
+        if (tipo == TIPO_EPISODIO) {
+            // Episódio: a chave de idioma é a da série (a escolha vale para os próximos), e o "terminou" desta nova
+            // VodActivity tem de chegar à SeriesActivity para o próximo episódio seguir.
+            nova.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)
+        } else nova.removeExtra(EXTRA_IDIOMA)   // filme: a chave de idioma é a do próprio arquivo
         startActivity(nova)
         finish()
     }

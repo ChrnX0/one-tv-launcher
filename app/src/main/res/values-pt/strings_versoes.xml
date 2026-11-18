@@ -14,14 +14,13 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Listas do player (áudio, legenda, qualidade, temporadas) em painel à direita com o filme visível ao lado, letras maiores e a posição “1 de 5”</item>
-        <item>Item escolhido fica em destaque e os outros ficam mais claros e menores, como na tela inicial em cruz; com som de andar e de escolher</item>
-        <item>As dicas “OK escolhe · voltar fecha” ficam dentro do painel, sem cobrir a legenda do filme</item>
+        <item>Séries: no ▼ do player, “Versão dublada” ou “Versão legendada” troca o episódio no mesmo ponto, como já acontecia nos filmes</item>
+        <item>Depois de trocar, os próximos episódios daquela série já abrem na versão escolhida</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Lista do player</item>
+        <item>Série dublada</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Num filme, com ▼ e “Áudio e legenda”, a lista abre à direita com o filme visível e as dicas embaixo da lista?</item>
+        <item>Numa série que existe dublada e legendada, o ▼ mostra a troca de versão e o episódio continua do mesmo ponto?</item>
     </string-array>
 </resources>

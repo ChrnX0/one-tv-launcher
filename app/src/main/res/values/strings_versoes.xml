@@ -17,17 +17,16 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Player lists (audio, subtitles, quality, seasons) in a right-hand panel with the movie visible beside it, bigger text and the position “1 of 5”</item>
-        <item>The chosen item stands out and the others get lighter and smaller, like the cross home screen; with move and select sounds</item>
-        <item>The “OK selects · back closes” hints sit inside the panel, without covering the movie subtitles</item>
+        <item>Series: in the player ▼, “Dubbed version” or “Subtitled version” switches the episode at the same point, as movies already did</item>
+        <item>After switching, the next episodes of that series open in the chosen version</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>listas_cruz_2</item>
+        <item>serie_versao</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Player list</item>
+        <item>Dubbed series</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>In a movie, with ▼ and “Audio and subtitles”, does the list open on the right with the movie visible and the hints under the list?</item>
+        <item>On a series available dubbed and subtitled, does ▼ show the version switch and the episode continue from the same point?</item>
     </string-array>
 </resources>
