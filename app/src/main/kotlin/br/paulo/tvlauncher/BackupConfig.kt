@@ -63,9 +63,20 @@ object BackupConfig {
     private val TIPOS_CONHECIDOS = mapOf(
         "despertador" to mapOf("alarmes" to "s", "soneca_em" to "l", "soneca_id" to "i", "volume_minimo" to "i"),
         "launcher" to mapOf("ordem" to "s", "pilhas" to "s", "ocultos" to "ss", "tema" to "s", "perfil_ativo" to "s",
-            "protetor_estilo" to "s"),
+            "protetor_estilo" to "s", "pilhas_auto" to "b", "auto_fora" to "ss", "frente_auto" to "s"),
         "dns" to mapOf("salvos" to "ss", "caiu_de" to "s"),
     )
+
+    /**
+     * Chaves com parte variável: "botao_<tecla>" (app de cada botão, lido no filtro de teclas da acessibilidade) e
+     * "ordem@<perfil>" (ordem da HOME de cada perfil). Um backup editado com outro tipo derrubava o serviço de teclas
+     * ou a HOME a cada desenho (ClassCastException).
+     */
+    internal fun tipoPorPrefixo(nome: String, chave: String): String? = when {
+        nome != "launcher" -> null
+        chave.startsWith("botao_") || chave.startsWith("ordem@") -> "s"
+        else -> null
+    }
 
     /**
      * Os alarmes são um JSON dentro de um texto; o Despertador lê id, hora e minuto como números obrigatórios.
@@ -117,7 +128,7 @@ object BackupConfig {
                 } catch (e: org.json.JSONException) {
                     throw IllegalArgumentException("$nome/$chave: o valor não é do tipo '$t'")
                 }
-                val esperado = TIPOS_CONHECIDOS[nome]?.get(chave) ?: tipoDe(atuais[chave])
+                val esperado = TIPOS_CONHECIDOS[nome]?.get(chave) ?: tipoPorPrefixo(nome, chave) ?: tipoDe(atuais[chave])
                 if (esperado != null && esperado != t) throw IllegalArgumentException("$nome/$chave: devia ser '$esperado' e veio '$t'")
                 if (nome == "despertador" && chave == "alarmes") validarAlarmes(item.getString("v"))
             }
