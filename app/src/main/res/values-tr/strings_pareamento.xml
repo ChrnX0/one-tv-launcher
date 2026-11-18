@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">Geliştirici seçenekleri açılamadı (%1$s)</string>
+    <string name="pn_porta_achada">eşleme bağlantı noktası %1$d bulundu</string>
+    <string name="pn_mdns_falhou">ağda arama başarısız (%1$s)</string>
+    <string name="pn_pareando">eşleniyor…</string>
+    <string name="pn_confirme">kod okundu. Eşlemek için kumandada “%1$s” üzerinde OK\'a basın</string>
+    <string name="pn_so_controle">eşlemeyi yalnızca kumandanın bir tuşu onaylar</string>
+</resources>

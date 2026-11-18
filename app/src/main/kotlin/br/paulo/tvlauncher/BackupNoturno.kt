@@ -102,6 +102,9 @@ object BackupNoturno {
     /** Última execução, para a tela: "10/11 03:30 · ok: TV + NAS" ou o erro. Vazio = nunca rodou. */
     fun ultimo(ctx: Context): String = prefs(ctx).getString("ultimo_texto", "") ?: ""
     private fun ultimoOk(ctx: Context): Long = prefs(ctx).getLong("ultimo_ok_em", 0L)
+    /** Elevação 2.3: para o "backup não roda há 2 dias". */
+    fun ultimoOkEm(ctx: Context): Long = ultimoOk(ctx)
+    fun ligadoDesde(ctx: Context): Long = prefs(ctx).getLong("ligado_desde", 0L)
 
     /** As cópias guardadas na TV, da mais nova para a mais velha. */
     fun listar(ctx: Context): List<File> =

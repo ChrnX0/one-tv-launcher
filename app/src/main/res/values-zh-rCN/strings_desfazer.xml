@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 2.11: Desfazer em tudo (Desfazer.kt). -->
+<resources>
+    <string name="desf_diario">更改（%1$s）：%2$s</string>
+    <string name="desf_diario_desfeito">已撤销：%1$s</string>
+    <string name="desf_ocultou">已隐藏 %1$s</string>
+    <string name="desf_mostrou">已重新显示 %1$s</string>
+    <string name="desf_cat_ajuste">设置</string>
+    <string name="desf_cat_organizacao">排列</string>
+    <string name="desf_cat_automacao">自动化</string>
+    <string name="desf_cat_limpeza">清理</string>
+    <string name="desf_nada">没有可撤销的内容（已撤销）。</string>
+    <string name="desf_feito">已撤销。一切恢复原样。</string>
+    <string name="desf_parcial">部分撤销：%1$d 项已再次更改，保持现状。</string>
+    <string name="desf_barra">已更改：%1$s</string>
+    <string name="desf_botao">撤销</string>
+    <string name="desf_tela">最近的更改</string>
+    <string name="desf_tela_det">过去 7 天的更改。在某一项上按 OK 即恢复原样。</string>
+    <string name="desf_tela_vazia">过去 7 天没有更改。</string>
+    <string name="desf_ja_desfeita">已撤销</string>
+    <string name="desf_rot_config">设置</string>
+    <string name="desf_rot_automacoes">自动化</string>
+    <string name="desf_rot_rotinas">例行程序</string>
+    <string name="desf_rot_apps">应用列表</string>
+    <string name="desf_rot_organizar">主屏幕应用</string>
+</resources>

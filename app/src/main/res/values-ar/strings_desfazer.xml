@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 2.11: Desfazer em tudo (Desfazer.kt). -->
+<resources>
+    <string name="desf_diario">تغيير (%1$s): %2$s</string>
+    <string name="desf_diario_desfeito">تم التراجع: %1$s</string>
+    <string name="desf_ocultou">أخفى %1$s</string>
+    <string name="desf_mostrou">أظهر %1$s من جديد</string>
+    <string name="desf_cat_ajuste">إعداد</string>
+    <string name="desf_cat_organizacao">ترتيب</string>
+    <string name="desf_cat_automacao">أتمتة</string>
+    <string name="desf_cat_limpeza">تنظيف</string>
+    <string name="desf_nada">لا شيء للتراجع عنه (تم التراجع من قبل).</string>
+    <string name="desf_feito">تم التراجع. عاد كل شيء كما كان.</string>
+    <string name="desf_parcial">تراجع جزئي: %1$d عنصر تغيّر من جديد وبقي كما هو.</string>
+    <string name="desf_barra">تغيّر: %1$s</string>
+    <string name="desf_botao">تراجع</string>
+    <string name="desf_tela">التغييرات الأخيرة</string>
+    <string name="desf_tela_det">ما تغيّر في آخر 7 أيام. OK على أحدها يعيده كما كان.</string>
+    <string name="desf_tela_vazia">لا تغييرات في آخر 7 أيام.</string>
+    <string name="desf_ja_desfeita">تم التراجع</string>
+    <string name="desf_rot_config">الإعدادات</string>
+    <string name="desf_rot_automacoes">الأتمتة</string>
+    <string name="desf_rot_rotinas">الروتينات</string>
+    <string name="desf_rot_apps">قائمة التطبيقات</string>
+    <string name="desf_rot_organizar">تطبيقات الشاشة الرئيسية</string>
+</resources>

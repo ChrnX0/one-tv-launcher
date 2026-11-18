@@ -290,11 +290,13 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         // Modo de segurança (degrau 2): a HOME caiu 3 vezes seguidas nesta versão -> HOME mínima no lugar desta.
         if (ModoSeguro.desviar(this)) { desviadaParaSegura = true; return }
+        // Elevação 2.11: só a organização (ordem, pilhas, ocultos); o resto que a HOME grava é estado da tela.
+        VigiaDesfazer.ligar(this, getString(R.string.desf_rot_organizar), setOf(DesfazerRegras.Categoria.ORGANIZACAO))
         DesempenhoTv.criou()   // guarda de desempenho (12/11/2026): o 1º quadro depois disto dá o tempo de abertura
         tema = Tema.atual(this)
         assinaturaFundo = FundoMeuDados.assinatura(this)
         idiomaMontado = idiomaAtual()
-        assinaturaLayout = "${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}|${LayoutHome.cruz(this)}|${LayoutHome.iconesCruz(this)}|${LayoutHome.barraCruz(this)}|${LayoutHome.arteCruz(this)}"
+        assinaturaLayout = assinaturaDoLayout()
         setContentView(montarTela())
         window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, novo ->
             if (novo != null && novo !== bolinhaPerfil) voltarAoPerfil = false
@@ -325,6 +327,11 @@ class MainActivity : Activity() {
         if (idiomaMontado.isNotEmpty() && idiomaAtual() != idiomaMontado) recreate()
     }
 
+    /** O que, mudando em Configurações, faz a HOME se refazer ao voltar (cartões, cruz, alto contraste 16.3, letra). */
+    private fun assinaturaDoLayout() = "${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}|" +
+        "${LayoutHome.cruz(this)}|${LayoutHome.iconesCruz(this)}|${LayoutHome.barraCruz(this)}|${LayoutHome.arteCruz(this)}|" +
+        "${AltoContraste.ligado(this)}|${TamanhoTexto.atual(this)}"
+
     override fun onResume() {
         super.onResume()
         homeNaFrente = true
@@ -333,6 +340,7 @@ class MainActivity : Activity() {
         ModoSeguro.aoRetomarHome(this)   // 30 s de pé = a HOME firmou (zera a conta de quedas seguidas)
         ModoHospede.talvezBoasVindas(this)   // modo hóspede: boas-vindas uma vez por estadia
         ModoHospede.conferirSaida(this)      // e a saída que passou com a TV fora da tomada
+        MudarDeTv.abrirFilaSePendente(this)  // elevação 19.7: veio tudo de outra TV; a fila dos apps abre uma vez
         // Agenda da família (degrau 2): a troca de perfil que passou com a TV desligada (o alarme não veio).
         Fundo.rodar("agenda-perfis") {
             if (AgendaPerfisTv.conferir(applicationContext)) runOnUiThread { if (!isDestroyed) { atualizarFotoPerfil(); reorganizar() } }
@@ -343,7 +351,7 @@ class MainActivity : Activity() {
         // Trocou o idioma (do sistema ou só do launcher): textos já montados (data, destaque) ficavam no antigo.
         if (idiomaAtual() != idiomaMontado) { recreate(); return }
         if (tema == Tema.MEU && FundoMeuDados.assinatura(this) != assinaturaFundo) { recreate(); return }   // outro arquivo/brilho
-        if ("${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}|${LayoutHome.cruz(this)}|${LayoutHome.iconesCruz(this)}|${LayoutHome.barraCruz(this)}|${LayoutHome.arteCruz(this)}" != assinaturaLayout) { recreate(); return }   // cartões mudaram
+        if (assinaturaDoLayout() != assinaturaLayout) { recreate(); return }   // cartões, cruz, alto contraste (16.3) ou letra mudaram
         // Modo simples (12/11/2026, ideia 10; desligado por padrão): a HOME vira a tela de cards grandes.
         if (ModoSimples.ligado(this)) {
             try { startActivity(Intent(this, ModoSimplesActivity::class.java)); return } catch (_: Exception) {}
@@ -551,13 +559,13 @@ class MainActivity : Activity() {
             clipChildren = false
             clipToPadding = false
             background = Estilo.vidro(this@MainActivity, Estilo.RAIO_PILULA)
-            setPadding(dp(8), 0, dp(8), 0)
+            setPaddingRelative(dp(8), 0, dp(8), 0)
         }
         fun lpPilula() = LinearLayout.LayoutParams(WRAP, alturaPilula).apply { marginEnd = dp(2) }
         // Pílula só de ícone (lupa, microfone): redonda, sem o espaço que a pílula deixa para um texto depois do ícone.
         fun pilulaIcone(icone: android.graphics.drawable.Drawable, descricao: String, acao: () -> Unit) = pilula(icone, vidro = false).apply {
             (getChildAt(0).layoutParams as LinearLayout.LayoutParams).marginEnd = 0
-            setPadding(dp(8), 0, dp(8), 0)
+            setPaddingRelative(dp(8), 0, dp(8), 0)
             contentDescription = descricao   // o MCP e a acessibilidade acham o botão pelo nome
             setOnClickListener { acao() }
         }
@@ -565,8 +573,8 @@ class MainActivity : Activity() {
         val voz = pilulaIcone(IconeApp(IconeApp.Tipo.MICROFONE), getString(R.string.home_falar)) { abrirBuscaPorVoz() }
 
         val bolinha = botaoPerfil().also { bolinhaPerfil = it }
-        topo.addView(bolinha, FrameLayout.LayoutParams(dp(ALTURA_TOPO - 4), dp(ALTURA_TOPO - 4), Gravity.CENTER_VERTICAL).apply {
-            leftMargin = dp(Grade.MARGEM)
+        topo.addView(bolinha, FrameLayout.LayoutParams(dp(ALTURA_TOPO - 4), dp(ALTURA_TOPO - 4), Gravity.CENTER_VERTICAL or Gravity.START).apply {
+            marginStart = dp(Grade.MARGEM)
         })
         // Duas cápsulas (13/11/2026, pedido do dono): uma só com a busca e a voz, outra só com o clima. Juntas numa cápsula
         // só, a busca parecia parte do clima.
@@ -594,7 +602,7 @@ class MainActivity : Activity() {
             includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(130)
         }
         pilulaTocando = pilula(vidro = false).apply {
-            setPadding(dp(6), 0, dp(14), 0)   // a capa encosta mais na borda que um ícone
+            setPaddingRelative(dp(6), 0, dp(14), 0)   // a capa encosta mais na borda que um ícone
             addView(capaTocando, LinearLayout.LayoutParams(dp(22), dp(22)).apply { marginEnd = dp(8) })
             addView(barrasTocando, LinearLayout.LayoutParams(dp(11), dp(12)).apply { marginEnd = dp(8) })
             addView(txtTocandoTitulo)
@@ -630,7 +638,7 @@ class MainActivity : Activity() {
             addView(avisos, LinearLayout.LayoutParams(WRAP, dp(ALTURA_TOPO)).apply { marginStart = dp(8) })
         }
         topo.addView(esquerda, FrameLayout.LayoutParams(WRAP, dp(ALTURA_TOPO)).apply {
-            leftMargin = dp(Grade.MARGEM + ALTURA_TOPO - 4 + 12)
+            marginStart = dp(Grade.MARGEM + ALTURA_TOPO - 4 + 12)
         })
 
         // Direita: a hora e a data soltas, sem vidro. A pílula tem 14 dp de respiro no fim: a margem desconta, para o texto
@@ -643,7 +651,7 @@ class MainActivity : Activity() {
             addView(blocoHora, LinearLayout.LayoutParams(WRAP, dp(ALTURA_TOPO - 8)))
             addView(blocoData, LinearLayout.LayoutParams(WRAP, dp(ALTURA_TOPO - 8)))
         }
-        topo.addView(direita, FrameLayout.LayoutParams(WRAP, dp(ALTURA_TOPO), Gravity.END).apply { rightMargin = dp(Grade.MARGEM - 14) })
+        topo.addView(direita, FrameLayout.LayoutParams(WRAP, dp(ALTURA_TOPO), Gravity.END).apply { marginEnd = dp(Grade.MARGEM - 14) })
         // O texto do clima usa só o espaço que sobra até a hora (com despertador e timer na linha ele encolhe e ganha "…";
         // sem eles, cabe inteiro). Esquerda e direita são independentes no FrameLayout e podiam se sobrepor.
         esquerda.addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ ->
@@ -762,7 +770,7 @@ class MainActivity : Activity() {
             if (emGrade || emCruz) visibility = View.GONE   // grade e cruz: a ficha sai e o Continuar sobe para o lugar dela (LayoutHome)
             addView(destaque, FrameLayout.LayoutParams(MATCH, WRAP, Gravity.BOTTOM))
         }, FrameLayout.LayoutParams(dp(Grade.largura(10)), dp(TOPO_DESTAQUE - topoCaixa)).apply {
-            leftMargin = dp(Grade.MARGEM)
+            marginStart = dp(Grade.MARGEM)
             topMargin = dp(topoCaixa)
         })
         // Pela troca de foco (e não por quem chama mostrarDestaque): apaga com o foco no topo, volta ao descer.
@@ -785,7 +793,7 @@ class MainActivity : Activity() {
                 clipToPadding = false
                 isVerticalScrollBarEnabled = false
                 isSmoothScrollingEnabled = true
-                setPadding(dp(Grade.MARGEM - ANEL), dp(folga) - dp(ANEL), dp(Grade.MARGEM), dp(folga))
+                setPaddingRelative(dp(Grade.MARGEM - ANEL), dp(folga) - dp(ANEL), dp(Grade.MARGEM), dp(folga))
                 addView(linhaApps)
             }
             raiz.addView(rolagem, FrameLayout.LayoutParams(MATCH, dp(LayoutHome.TELA_A - linhaDosApps + folga)).apply {
@@ -796,7 +804,7 @@ class MainActivity : Activity() {
                 clipChildren = false    // senão a rolagem corta o card focado quando ele cresce
                 isHorizontalScrollBarEnabled = false
                 clipToPadding = false
-                setPadding(dp(Grade.MARGEM - ANEL), dp(folga) - dp(ANEL), dp(Grade.MARGEM), dp(folga))
+                setPaddingRelative(dp(Grade.MARGEM - ANEL), dp(folga) - dp(ANEL), dp(Grade.MARGEM), dp(folga))
             }
             linhaApps = LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
@@ -811,7 +819,7 @@ class MainActivity : Activity() {
             text = if (emCruz) getString(R.string.cruz_todos_apps).uppercase() else getString(R.string.home_linha_apps)
             letterSpacing = 0.1f
             if (tema != Tema.ESCURO) setShadowLayer(dp(6).toFloat(), 0f, 0f, 0x99000000.toInt())
-        }, FrameLayout.LayoutParams(WRAP, WRAP).apply { leftMargin = dp(Grade.MARGEM); topMargin = dp(linhaDosApps - 32) })
+        }, FrameLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(Grade.MARGEM); topMargin = dp(linhaDosApps - 32) })
 
         // ---- Continuar (HOME recomendada): último canal e apps usados há pouco, em cards 16:9 com o banner do app. Fica
         // meio escondida na borda de baixo; com o foco nela (▼ num card solto), a tela inteira sobe para mostrá-la.
@@ -831,14 +839,14 @@ class MainActivity : Activity() {
                 clipChildren = false
                 clipToPadding = false
                 isHorizontalScrollBarEnabled = false
-                setPadding(0, dp(10), dp(Grade.MARGEM), dp(16))
+                setPaddingRelative(0, dp(10), dp(Grade.MARGEM), dp(16))
                 addView(linhaContinuar)
             }, LinearLayout.LayoutParams(MATCH, WRAP))
         }
         // Altura fixa (passa da borda de baixo de propósito): com WRAP o FrameLayout cortava a linha no fim da tela, e ao
         // subir aparecia só o topo dos cards e uma faixa vazia embaixo (visto na Sala, 06/11).
         raiz.addView(caixaContinuar, FrameLayout.LayoutParams(MATCH, dp(ALTURA_CONTINUAR + descer)).apply {
-            leftMargin = dp(Grade.MARGEM)
+            marginStart = dp(Grade.MARGEM)
             topMargin = dp(topoContinuar)
         })
 
@@ -848,7 +856,7 @@ class MainActivity : Activity() {
             gravity = Gravity.CENTER
             maxLines = 2
             maxWidth = dp(1000)
-            setPadding(dp(22), dp(10), dp(22), dp(10))
+            setPaddingRelative(dp(22), dp(10), dp(22), dp(10))
             background = GradientDrawable().apply {
                 cornerRadius = dp(22).toFloat()
                 setColor(0xE60E1311.toInt())
@@ -905,7 +913,7 @@ class MainActivity : Activity() {
             contentDescription = getString(R.string.home_perfil)
             isFocusable = true
             isClickable = true
-            setPadding(dp(3), dp(3), dp(3), dp(3))
+            setPaddingRelative(dp(3), dp(3), dp(3), dp(3))
             background = anel(false)
             addView(fotoPerfil, FrameLayout.LayoutParams(MATCH, MATCH))   // ocupa a bolinha toda (40 dp no topo Palco)
             setOnClickListener { abrirPopup() }
@@ -1012,6 +1020,7 @@ class MainActivity : Activity() {
 
     /** pacote -> (APK|activity, Item). Vive enquanto o processo da HOME viver (sobrevive à troca de tema). */
     private companion object {
+        @Volatile var homeFriaMedida = false   // placar (elevação 2.1): a HOME "fria" é medida uma vez por processo
         val cacheApps = HashMap<String, Pair<String, Item>>()
         // Topo C3 (12/11/2026): cápsulas de 52 dp em 24 (até 76). Ordem pedida pelo dono (12/11 tarde): nome do card em foco
         // (36 sp) e a descrição na mesma linha em 222 (até ~266), "ASSISTIR" em 290 e os cards (do tamanho dos apps) em 316
@@ -1217,6 +1226,13 @@ class MainActivity : Activity() {
                 val desenhou = android.os.SystemClock.elapsedRealtime() - t1
                 android.util.Log.i("TvLauncher.Apps", "preencherApps: carregar=${t1 - t0} ms (fora da tela), desenhar=$desenhou ms")
                 LevezaTv.anotarHome(t1 - t0, desenhou)   // números de leveza (degrau 2): `EXTRAS --es o leveza`
+                // Placar (elevação 2.1, pilar 1): volta à HOME até os apps desenhados; e, na 1ª vez do processo, desde
+                // o processo nascer (a TV ligou ou o launcher reiniciou).
+                MedidasTv.anotar(this, Placar.Chave.HOME, t1 - t0 + desenhou)
+                if (!homeFriaMedida) {
+                    homeFriaMedida = true
+                    MedidasTv.anotar(this, Placar.Chave.HOME_FRIA, android.os.SystemClock.uptimeMillis() - android.os.Process.getStartUptimeMillis())
+                }
             }
         }
     }
@@ -1883,7 +1899,7 @@ class MainActivity : Activity() {
                 typeface = fonteUi
                 maxLines = if (aoVivo) 3 else 1
                 ellipsize = TextUtils.TruncateAt.END
-                setPadding(dp(8), dp(3), dp(8), dp(3))
+                setPaddingRelative(dp(8), dp(3), dp(8), dp(3))
                 if (!aoVivo) background = GradientDrawable().apply { cornerRadius = dp(5).toFloat(); setColor(0xBF0E1020.toInt()) }
             }, FrameLayout.LayoutParams(WRAP, WRAP, if (aoVivo) Gravity.CENTER_VERTICAL or Gravity.START else Gravity.BOTTOM or Gravity.START).apply {
                 setMargins(dp(8), dp(8), dp(8), dp(8))
@@ -2102,7 +2118,7 @@ class MainActivity : Activity() {
             addView(LinearLayout(this@MainActivity).apply {
                 orientation = LinearLayout.HORIZONTAL
                 gravity = Gravity.CENTER_VERTICAL
-                setPadding(dp(8), 0, dp(6), 0)
+                setPaddingRelative(dp(8), 0, dp(6), 0)
                 addView(ImageView(this@MainActivity).apply { setImageDrawable(DesenhoHome.copia(resources, app.icone)) }, LinearLayout.LayoutParams(dp(30), dp(30)))
                 addView(texto(12f, Color.WHITE, fonteUi).apply {
                     text = app.nome
@@ -2132,9 +2148,9 @@ class MainActivity : Activity() {
                 alpha = if (i == 0) 1f else 0.7f - 0.25f * (i - 1)   // as de trás mais apagadas
             }
             caixa.addView(ret, FrameLayout.LayoutParams(MATCH, MATCH).apply {
-                leftMargin = dp(6) * i
+                marginStart = dp(6) * i
                 topMargin = -dp(4) * i
-                rightMargin = -dp(6) * i
+                marginEnd = -dp(6) * i
                 bottomMargin = dp(4) * i
             })
         }
@@ -2230,7 +2246,7 @@ class MainActivity : Activity() {
             clipChildren = false
             clipToPadding = false
             isHorizontalScrollBarEnabled = false
-            setPadding(dp(56), dp(24), dp(56), dp(24))
+            setPaddingRelative(dp(56), dp(24), dp(56), dp(24))
             addView(linha)
         }
         for (app in itens) {
@@ -2250,7 +2266,7 @@ class MainActivity : Activity() {
                 gravity = Gravity.CENTER
                 maxLines = 1
                 ellipsize = TextUtils.TruncateAt.END
-                setPadding(dp(56), 0, dp(56), 0)
+                setPaddingRelative(dp(56), 0, dp(56), 0)
             }, LinearLayout.LayoutParams(MATCH, WRAP))
             addView(barra, LinearLayout.LayoutParams(MATCH, WRAP))
             addView(texto(13f, textoSuave).apply {
@@ -2642,7 +2658,7 @@ class MainActivity : Activity() {
         }
         if (barraCruz == LayoutHome.BarraCruz.RELOGIO) relogioCruz = montarRelogioCruz().also {
             raiz.addView(it, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.BOTTOM or Gravity.END).apply {
-                rightMargin = dp(Grade.MARGEM); bottomMargin = dp(40)
+                marginEnd = dp(Grade.MARGEM); bottomMargin = dp(40)
             })
         }
         window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, novo ->
@@ -3115,7 +3131,7 @@ class MainActivity : Activity() {
         val r = relogioAmbiente ?: montarRelogioCruz().also { v ->
             v.alpha = 0f
             raizCruz?.addView(v, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.BOTTOM or Gravity.END).apply {
-                rightMargin = dp(Grade.MARGEM); bottomMargin = dp(40)
+                marginEnd = dp(Grade.MARGEM); bottomMargin = dp(40)
             })
             relogioAmbiente = v
         }
@@ -3284,8 +3300,8 @@ class MainActivity : Activity() {
         val pressionou = event.action == KeyEvent.ACTION_DOWN
         val soltou = event.action == KeyEvent.ACTION_UP
         return when {
-            event.keyCode == KeyEvent.KEYCODE_DPAD_LEFT -> { if (pressionou) moverCartao(-1); true }
-            event.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT -> { if (pressionou) moverCartao(1); true }
+            Rtl.tecla(event.keyCode, window.decorView) == KeyEvent.KEYCODE_DPAD_LEFT -> { if (pressionou) moverCartao(-1); true }   // 16.8
+            Rtl.tecla(event.keyCode, window.decorView) == KeyEvent.KEYCODE_DPAD_RIGHT -> { if (pressionou) moverCartao(1); true }
             event.keyCode == KeyEvent.KEYCODE_DPAD_UP -> {
                 if (pressionou && event.repeatCount == 0) ocultarArrastado()
                 true

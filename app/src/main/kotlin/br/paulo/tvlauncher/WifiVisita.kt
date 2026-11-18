@@ -38,7 +38,7 @@ object WifiVisita {
         }
         val r = campo(R.string.l51_wifi_rede, rede(a), false)
         val s = campo(R.string.l51_wifi_senha, senha(a), true)
-        val caixa = LinearLayout(a).apply { orientation = LinearLayout.VERTICAL; setPadding(48, 16, 48, 0); addView(r); addView(s) }
+        val caixa = LinearLayout(a).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(48, 16, 48, 0); addView(r); addView(s) }
         CaixaTv(a, android.R.style.Theme_Material_Dialog_Alert)
             .setTitle(a.getString(R.string.l51_wifi_titulo))
             .setMessage(a.getString(R.string.l51_wifi_dica))
@@ -68,7 +68,7 @@ object WifiVisita {
             rede(a) + (senha(a).takeIf { it.isNotEmpty() }?.let { "\n" + a.getString(R.string.l51_wifi_senha) + ": " + it } ?: ""))
             .apply { gravity = Gravity.CENTER }
         val caixa = LinearLayout(a).apply {
-            orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_HORIZONTAL; setPadding(24, 8, 24, 0)
+            orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_HORIZONTAL; setPaddingRelative(24, 8, 24, 0)
             addView(img, LinearLayout.LayoutParams(lado, lado)); addView(legenda)
         }
         CaixaTv(a, android.R.style.Theme_Material_Dialog_Alert)

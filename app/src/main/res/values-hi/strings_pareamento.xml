@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">डेवलपर विकल्प नहीं खुले (%1$s)</string>
+    <string name="pn_porta_achada">पेयरिंग पोर्ट %1$d मिला</string>
+    <string name="pn_mdns_falhou">नेटवर्क खोज विफल (%1$s)</string>
+    <string name="pn_pareando">पेयर हो रहा है…</string>
+    <string name="pn_confirme">कोड पढ़ लिया। पेयर करने के लिए रिमोट से “%1$s” पर OK दबाएँ</string>
+    <string name="pn_so_controle">पेयरिंग की पुष्टि सिर्फ़ रिमोट का बटन करता है</string>
+</resources>

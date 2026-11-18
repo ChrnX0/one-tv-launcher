@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 19.7: TV nova em 2 min (MudarDeTv, ReceberTvActivity, FilaAppsActivity). -->
+<resources>
+    <string name="mtv_titulo">النقل من تلفاز آخر</string>
+    <string name="mtv_qr_desc">رمز QR لنقل إعدادات تلفاز آخر</string>
+    <string name="mtv_instrucoes">على التلفاز القديم افتح اللوحة (الهاتف أو الكمبيوتر)، وادخل إلى النظام › النسخ الاحتياطي › \"النقل إلى تلفاز جديد\" وامسح هذا الرمز أو اكتب الرمز أدناه.\nيُرسل كل شيء مشفرًا وإلى هذا التلفاز فقط. الرمز صالح لمدة %1$s.</string>
+    <string name="mtv_recebendo">جارٍ الاستلام… لا تطفئ التلفاز.</string>
+    <string name="mtv_pronto">وصل كل شيء من %1$s. سيُعاد تشغيل التلفاز الآن، ثم تعود تطبيقاتك واحدًا تلو الآخر.</string>
+    <string name="mtv_erro">لم ينجح: %1$s\nلم يتغير شيء على هذا التلفاز. اضغط \"%2$s\" للمحاولة مجددًا.</string>
+    <string name="mtv_venceu">انتهت صلاحية الرمز (صالح 10 دقائق).\nاضغط \"%1$s\" لعرض رمز جديد.</string>
+    <string name="mtv_cfg_det">إعدادات التلفاز القديم ورمزه وقنواته وتطبيقاته في دقيقتين، برمز QR</string>
+    <string name="mtv_fila_titulo">تطبيقاتك تعود</string>
+    <string name="mtv_fila_texto">التطبيق %1$d من %2$d. افتحه في متجر Play واضغط تثبيت؛ عند عودتك يظهر التالي.</string>
+    <string name="mtv_fila_abrir">فتح في متجر Play</string>
+    <string name="mtv_fila_pular">تخطٍّ</string>
+    <string name="mtv_fila_depois">لاحقًا</string>
+    <string name="mtv_fila_fim">كل تطبيقات التلفاز الآخر موجودة هنا.</string>
+    <string name="mtv_fila_cfg_det">بقي %1$d من تطبيقات التلفاز الآخر للتثبيت</string>
+    <string name="mtv_diario">نُقل من %1$s: استُعيدت الإعدادات، و%2$d تطبيقات للتثبيت</string>
+    <string name="mtv_diario_enviado">أُرسل إلى تلفاز جديد: الإعدادات و%1$d تطبيقات</string>
+</resources>

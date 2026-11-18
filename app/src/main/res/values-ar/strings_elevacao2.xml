@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação (17/11/2026, ondas 2): tradução de values/strings_elevacao2.xml. -->
+<resources>
+    <string name="elv_ac_titulo">تباين عالٍ</string>
+    <string name="elv_ac_det">نص أكثر سطوعًا وحواف أوضح في كل الشاشات (7:1 على الأقل)</string>
+    <string name="elv_ad_titulo">الوصف الصوتي</string>
+    <string name="elv_ad_det">اختيار المسار الصوتي الذي يصف المشهد كلما توفر</string>
+    <string name="elv_sdh_titulo">ترجمة لضعاف السمع</string>
+    <string name="elv_sdh_det">إظهار ترجمة تتضمن الأصوات ([صوت باب يُغلق]) بلغة التلفاز دائمًا، حتى مع الدبلجة</string>
+    <string name="elv_cat_titulo">ملصق وملخص للفيديوهات</string>
+    <string name="elv_cat_explica">يُرسل العنوان فقط إلى TMDB، ولا يُرسل المجلد أو الخادم أبدًا</string>
+    <string name="elv_cat_ligado">مفعّل</string>
+    <string name="elv_cat_desligado">متوقف</string>
+    <string name="elv_cat_ep">%1$s · م%2$d ح%3$d</string>
+    <string name="elv_cat_so_ep">%1$s · الحلقة %2$d</string>
+    <string name="elv_cat_temporada">%1$s · الموسم %2$d</string>
+    <string name="elv_cat_filme_ano">%1$s (%2$d)</string>
+    <string name="elv_cat_n_temporadas">المواسم: %d</string>
+    <string name="elv_cat_procurando">جارٍ البحث عن الملصق…</string>
+    <string name="elv_cat_nada">لم يُعثر على شيء في TMDB. اضغط مطولًا على OK لكتابة الاسم الصحيح.</string>
+    <string name="elv_cat_corrigir_titulo">تصحيح: %s</string>
+    <string name="elv_cat_corrigir_explica">الملصق أو الملخص خطأ؟ اطلب النتيجة التالية أو اكتب الاسم والسنة الصحيحين. الاسم الفارغ يعيد الوضع التلقائي.</string>
+    <string name="elv_cat_nao_e">ليس هذا</string>
+    <string name="elv_cat_escrever">اكتب الاسم</string>
+    <string name="elv_cat_campo">الاسم والسنة، مثل: Dune 2021</string>
+    <string name="elv_cat_salvar">حفظ</string>
+    <string name="elv_cat_dica">تصحيح</string>
+    <string name="elv_bib_lista">القائمة</string>
+    <string name="elv_bib_pasta">مجلد</string>
+    <string name="elv_bib_servidor">خادم</string>
+    <string name="elv_bib_nuvem">سحابة</string>
+    <string name="elv_bib_addon">إضافة</string>
+</resources>

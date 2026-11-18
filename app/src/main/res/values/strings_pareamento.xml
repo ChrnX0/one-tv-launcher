@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">couldn\'t open Developer options (%1$s)</string>
+    <string name="pn_porta_achada">pairing port %1$d found</string>
+    <string name="pn_mdns_falhou">network search failed (%1$s)</string>
+    <string name="pn_pareando">pairing…</string>
+    <string name="pn_confirme">code read. To pair, press OK on the remote on “%1$s”</string>
+    <string name="pn_so_controle">only a key on the remote confirms pairing</string>
+</resources>

@@ -50,6 +50,13 @@ object AlarmeGarantia {
         val p = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         p.edit().putLong("tocou_em", maxOf(previsto, p.getLong("tocou_em", 0)))
             .putLong("resolvido_ate", maxOf(previsto, p.getLong("resolvido_ate", 0))).apply()
+        anotarAcerto(ctx, previsto, AcertoAlarme.classificar(previsto, System.currentTimeMillis()))
+    }
+
+    /** Placar (elevação 10.2): "tocou na hora em N de N". Fora da thread de quem chamou (a tela do alarme). */
+    private fun anotarAcerto(ctx: Context, previsto: Long, r: AcertoAlarme.Resultado) {
+        val app = ctx.applicationContext
+        Fundo.rodar("acerto-alarme") { MedidasTv.anotarAlarme(app, previsto, r) }
     }
 
     /** Este toque já tocou antes? (o Android pode entregar o mesmo pedido duas vezes: nós e o AlarmManager.) */
@@ -89,6 +96,7 @@ object AlarmeGarantia {
                 } catch (e: Exception) { Log.w(TAG, "não abri a tela do alarme: $e") }
             }
             if (av.desligar.isNotEmpty()) Despertador.desligarSemAgendar(app, av.desligar)
+            av.perdidos.forEach { anotarAcerto(app, it.em, AcertoAlarme.Resultado.PERDIDO) }
             if (av.perdidos.isNotEmpty()) {
                 Log.i(TAG, "alarmes perdidos: ${av.perdidos.joinToString { AlarmePerdido.horaFalada(it.hora, it.minuto) }}")
                 avisar(app, textoAviso(app, av.perdidos))
@@ -106,6 +114,7 @@ object AlarmeGarantia {
         val a = Despertador.listar(app).firstOrNull { it.id == id }
         if (a != null && previsto > p.getLong("resolvido_ate", 0)) {
             p.edit().putLong("resolvido_ate", previsto).apply()
+            anotarAcerto(app, previsto, AcertoAlarme.Resultado.PERDIDO)
             if (a.dias == 0 && a.ativo) Despertador.desligarSemAgendar(app, setOf(a.id))
             if (System.currentTimeMillis() - previsto <= AlarmePerdido.JANELA_MS)
                 avisar(app, textoAviso(app, listOf(AlarmePerdido.Toque(a.id, a.hora, a.minuto, previsto))))
@@ -135,7 +144,8 @@ object AlarmeGarantia {
     }
 
     private fun tentarAviso(app: Context, texto: String, tentativa: Int) {
-        val r = try { AvisoTv.mostrar(app, app.getString(R.string.al_titulo), texto, 60, som = true, guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO) }
+        val r = try { AvisoTv.mostrar(app, app.getString(R.string.al_titulo), texto, 60, som = true, guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO,
+            prioridade = NaoPerturbe.Tipo.ALARME) }
             catch (e: Exception) { Log.w(TAG, "aviso de alarme perdido: $e"); AvisoTv.Resultado.SEM_ACESSIBILIDADE }
         if (r == AvisoTv.Resultado.SEM_ACESSIBILIDADE && tentativa < 12) {
             principal.postDelayed({ tentarAviso(app, texto, tentativa + 1) }, 15_000)

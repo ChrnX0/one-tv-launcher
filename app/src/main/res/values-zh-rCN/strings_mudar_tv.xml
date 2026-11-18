@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 19.7: TV nova em 2 min (MudarDeTv, ReceberTvActivity, FilaAppsActivity). -->
+<resources>
+    <string name="mtv_titulo">从另一台电视迁移</string>
+    <string name="mtv_qr_desc">用于从另一台电视迁移设置的二维码</string>
+    <string name="mtv_instrucoes">在旧电视上打开面板（手机或电脑），进入 系统 › 备份 ›“迁移到新电视”，扫描此二维码或输入下面的代码。\n全部加密传输，只发到这台电视。代码有效期 %1$s。</string>
+    <string name="mtv_recebendo">正在接收… 请勿关闭电视。</string>
+    <string name="mtv_pronto">已从 %1$s 收到全部内容。电视即将重启；之后你的应用会逐个回来。</string>
+    <string name="mtv_erro">没有成功：%1$s\n这台电视没有任何改变。按“%2$s”再试一次。</string>
+    <string name="mtv_venceu">代码已过期（有效 10 分钟）。\n按“%1$s”显示新代码。</string>
+    <string name="mtv_cfg_det">用一个二维码，2 分钟迁移旧电视的设置、PIN、频道和应用</string>
+    <string name="mtv_fila_titulo">你的应用正在回来</string>
+    <string name="mtv_fila_texto">第 %1$d 个，共 %2$d 个。在 Play 商店中打开并按“安装”；返回后显示下一个。</string>
+    <string name="mtv_fila_abrir">在 Play 商店中打开</string>
+    <string name="mtv_fila_pular">跳过</string>
+    <string name="mtv_fila_depois">稍后</string>
+    <string name="mtv_fila_fim">另一台电视的所有应用都已在这里。</string>
+    <string name="mtv_fila_cfg_det">还有 %1$d 个来自另一台电视的应用待安装</string>
+    <string name="mtv_diario">已从 %1$s 迁移：设置已恢复，%2$d 个应用待安装</string>
+    <string name="mtv_diario_enviado">已发送到新电视：设置和 %1$d 个应用</string>
+</resources>

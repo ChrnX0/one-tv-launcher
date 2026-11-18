@@ -48,3 +48,4 @@ pessoal.properties
 nativo/obra/
 *.jks
 *.keystore
+__pycache__/

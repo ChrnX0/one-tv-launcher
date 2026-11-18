@@ -164,18 +164,18 @@ object AutoDesligar {
         // Ideia 80 (14/11/2026): a pergunta em letra grande, para quem acordou no sofá ler a 3 m. A contagem fica abaixo,
         // em âmbar; a explicação por último. Fonte e tamanhos acima do Estilo.Leitura (é um aviso, não uma tela de ler).
         val pergunta = texto(42f, Color.WHITE).apply { text = servico.getString(R.string.ad_pergunta); typeface = Estilo.fonte(700) }
-        val titulo = texto(30f, Estilo.ATENCAO).apply { typeface = Estilo.fonte(600); setPadding(0, dp(14), 0, 0) }
+        val titulo = texto(30f, Estilo.ATENCAO).apply { typeface = Estilo.fonte(600); setPaddingRelative(0, dp(14), 0, 0) }
         textoAviso = titulo
         val caixa = LinearLayout(servico).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(64), dp(40), dp(64), dp(40))
+            setPaddingRelative(dp(64), dp(40), dp(64), dp(40))
             background = GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(0xF0101418.toInt()); setStroke(dp(1), 0x40FFFFFF) }
             addView(pergunta)
             addView(titulo)
             addView(texto(22f, 0xFFD0D7DE.toInt()).apply {
                 text = servico.getString(R.string.ad_ninguem, Desligamento.duracaoTexto(((SystemClock.elapsedRealtime() - ultima) / 60_000L).toInt().coerceAtLeast(1)))   // tempo real sem tecla (no teto da mídia passa do escolhido)
                 setLineSpacing(0f, 1.15f)
-                setPadding(0, dp(16), 0, 0)
+                setPaddingRelative(0, dp(16), 0, 0)
             })
         }
         val p = WindowManager.LayoutParams(

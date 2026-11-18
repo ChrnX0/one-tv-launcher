@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 2.11: Desfazer em tudo (Desfazer.kt). -->
+<resources>
+    <string name="desf_diario">Change (%1$s): %2$s</string>
+    <string name="desf_diario_desfeito">Undone: %1$s</string>
+    <string name="desf_ocultou">Hid %1$s</string>
+    <string name="desf_mostrou">Showed %1$s again</string>
+    <string name="desf_cat_ajuste">Setting</string>
+    <string name="desf_cat_organizacao">Organization</string>
+    <string name="desf_cat_automacao">Automation</string>
+    <string name="desf_cat_limpeza">Clean-up</string>
+    <string name="desf_nada">Nothing to undo (it was already undone).</string>
+    <string name="desf_feito">Undone. Everything is back as it was.</string>
+    <string name="desf_parcial">Partly undone: %1$d item(s) had changed again and stayed as they are.</string>
+    <string name="desf_barra">Changed: %1$s</string>
+    <string name="desf_botao">Undo</string>
+    <string name="desf_tela">Recent changes</string>
+    <string name="desf_tela_det">What was changed in the last 7 days. OK on one puts it back as it was.</string>
+    <string name="desf_tela_vazia">No changes in the last 7 days.</string>
+    <string name="desf_ja_desfeita">undone</string>
+    <string name="desf_rot_config">Settings</string>
+    <string name="desf_rot_automacoes">Automations</string>
+    <string name="desf_rot_rotinas">Routines</string>
+    <string name="desf_rot_apps">App list</string>
+    <string name="desf_rot_organizar">Home screen apps</string>
+</resources>

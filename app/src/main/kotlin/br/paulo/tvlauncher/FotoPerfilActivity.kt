@@ -44,12 +44,12 @@ class FotoPerfilActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             background = Estilo.fundoTela(context)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
             gravity = Gravity.CENTER_VERTICAL
         }
         val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         col.addView(Estilo.tituloTela(this, getString(if (drive) R.string.drv_titulo else R.string.fp_titulo)))
-        texto = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { textSize = 16f; setPadding(0, dp(Estilo.E2), dp(32), 0); setLineSpacing(0f, 1.25f) }
+        texto = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { textSize = 16f; setPaddingRelative(0, dp(Estilo.E2), dp(32), 0); setLineSpacing(0f, 1.25f) }
         col.addView(texto)
         val sair = Estilo.botao(this, getString(R.string.fp_fechar)).apply { setOnClickListener { finish() } }
         col.addView(sair, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { topMargin = dp(24) })

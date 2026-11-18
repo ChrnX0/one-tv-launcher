@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">impossibile aprire le Opzioni sviluppatore (%1$s)</string>
+    <string name="pn_porta_achada">porta di accoppiamento %1$d trovata</string>
+    <string name="pn_mdns_falhou">ricerca in rete non riuscita (%1$s)</string>
+    <string name="pn_pareando">accoppiamento…</string>
+    <string name="pn_confirme">codice letto. Per accoppiare, premi OK sul telecomando su “%1$s”</string>
+    <string name="pn_so_controle">solo un tasto del telecomando conferma l\'accoppiamento</string>
+</resources>

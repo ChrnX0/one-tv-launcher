@@ -45,6 +45,7 @@ class RotinasActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
+        VigiaDesfazer.ligar(this, getString(R.string.desf_rot_rotinas))   // elevação 2.11
         if (intent.hasExtra(EXTRA_ROTINA)) {
             direto = true
             val id = intent.getIntExtra(EXTRA_ROTINA, -1)
@@ -64,11 +65,11 @@ class RotinasActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)   // o grafite da HOME (sistema de design)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         raiz.addView(Estilo.tituloTela(this, titulo))
         raiz.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, subtitulo), LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(4) })
-        val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(8), dp(4), dp(8), dp(4)); clipChildren = false; clipToPadding = false }
+        val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(8), dp(4), dp(8), dp(4)); clipChildren = false; clipToPadding = false }
         raiz.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(lista) },
             LinearLayout.LayoutParams(MATCH, 0, 1f).apply { topMargin = dp(16) })
         return raiz to lista
@@ -217,7 +218,7 @@ class RotinasActivity : Activity() {
         }
         text = sb
         typeface = fonteMedia
-        setPadding(dp(20), dp(12), dp(20), dp(12))
+        setPaddingRelative(dp(20), dp(12), dp(20), dp(12))
     }
 
     private fun dp(valor: Int): Int = (valor * resources.displayMetrics.density + 0.5f).toInt()

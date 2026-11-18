@@ -309,6 +309,38 @@ class CuidarDeLongeTest {
         assertFalse(CuidarDeLonge.teclaDeGente(0, 0x101))
     }
 
+    @Test fun lembreteNovoEsperaNaFilaEAjudaPassaNaFrente() {
+        assertTrue(CuidarDeLonge.esperaNaFila("lembrete", "lembrete"))
+        assertTrue(CuidarDeLonge.esperaNaFila("lembrete", "estou_bem"))
+        assertTrue(CuidarDeLonge.esperaNaFila("estou_bem", "lembrete"))
+        assertFalse(CuidarDeLonge.esperaNaFila("lembrete", "ajuda"))
+        assertFalse(CuidarDeLonge.esperaNaFila("ajuda", "lembrete"))
+        assertFalse(CuidarDeLonge.esperaNaFila("consentimento", "lembrete"))
+    }
+
+    @Test fun idDeLembreteApagadoNaoHerdaAsMarcas() {
+        val l1 = CuidarDeLonge.Lembrete(0, 8, 0, CuidarDeLonge.TODO_DIA, "Remédio")
+        var lista = CuidarDeLonge.salvarLembrete(emptyList(), l1)
+        val id = lista.single().id
+        var e = CuidarDeLonge.anotarConfirmado(CuidarDeLonge.Estado(), "$id@20261118", 1000)
+        e = CuidarDeLonge.anotarMostrado(e, "${id + 10}@20261118", 1000)
+        e = CuidarDeLonge.anotarMostrado(e, "tv@20261118", 1000)
+        lista = CuidarDeLonge.removerLembrete(lista, id)
+        e = CuidarDeLonge.esquecerLembrete(e, id)
+        val novo = CuidarDeLonge.salvarLembrete(lista, l1.copy(texto = "Água")).single()
+        assertEquals(id, novo.id)                                       // o id volta (máximo + 1)...
+        assertEquals(0L, e.marca("$id@20261118").confirmado)            // ...mas sem o "confirmado" do apagado
+        assertEquals(2, e.marcas.size)                                  // outras marcas (id 11, "tv@") ficam
+    }
+
+    @Test fun aparelhoCriadoDepoisDaPerguntaNaoAceita() {
+        val antes = setOf(3, 7)
+        assertTrue(CuidarDeLonge.aparelhoDeAntes(7, antes))     // o controle que já estava ligado
+        assertFalse(CuidarDeLonge.aparelhoDeAntes(12, antes))   // teclado virtual (uhid) criado pelo shell depois
+        assertTrue(CuidarDeLonge.aparelhoDeAntes(-1, antes))    // CEC da LG: decide o teclaDeGente
+        assertFalse(CuidarDeLonge.aparelhoDeAntes(7, null))     // não deu para ler: recusa
+    }
+
     /** VOLTAR segurado do painel rápido (BotoesControle, 18/11/2026): a mesma conta, com 700 ms. */
     @Test fun voltarSeguradoAbrePainelEToqueCurtoPassa() {
         val v = CuidarDeLonge.Segurar(Home.SEGURAR_HOME_MS).apply { tecla = 4 }

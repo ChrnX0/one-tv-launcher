@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 2.11: Desfazer em tudo (Desfazer.kt). -->
+<resources>
+    <string name="desf_diario">Mudança (%1$s): %2$s</string>
+    <string name="desf_diario_desfeito">Desfeito: %1$s</string>
+    <string name="desf_ocultou">Ocultou %1$s</string>
+    <string name="desf_mostrou">Mostrou %1$s de volta</string>
+    <string name="desf_cat_ajuste">Ajuste</string>
+    <string name="desf_cat_organizacao">Organização</string>
+    <string name="desf_cat_automacao">Automação</string>
+    <string name="desf_cat_limpeza">Limpeza</string>
+    <string name="desf_nada">Nada a desfazer (já foi desfeito).</string>
+    <string name="desf_feito">Desfeito. Tudo voltou ao que era.</string>
+    <string name="desf_parcial">Desfeito em parte: %1$d item(ns) tinha(m) mudado de novo e ficou(aram) como está.</string>
+    <string name="desf_barra">Mudou: %1$s</string>
+    <string name="desf_botao">Desfazer</string>
+    <string name="desf_tela">Mudanças recentes</string>
+    <string name="desf_tela_det">O que foi mudado nos últimos 7 dias. OK numa delas volta ao que era.</string>
+    <string name="desf_tela_vazia">Nenhuma mudança nos últimos 7 dias.</string>
+    <string name="desf_ja_desfeita">desfeita</string>
+    <string name="desf_rot_config">Configurações</string>
+    <string name="desf_rot_automacoes">Automações</string>
+    <string name="desf_rot_rotinas">Rotinas</string>
+    <string name="desf_rot_apps">Lista de apps</string>
+    <string name="desf_rot_organizar">Apps da tela inicial</string>
+</resources>

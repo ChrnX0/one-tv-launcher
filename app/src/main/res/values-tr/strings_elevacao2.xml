@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação (17/11/2026, ondas 2): tradução de values/strings_elevacao2.xml. -->
+<resources>
+    <string name="elv_ac_titulo">Yüksek kontrast</string>
+    <string name="elv_ac_det">Her ekranda daha parlak yazı ve daha belirgin kenarlar (en az 7:1)</string>
+    <string name="elv_ad_titulo">Sesli betimleme</string>
+    <string name="elv_ad_det">Varsa sahneyi anlatan ses parçasını seç</string>
+    <string name="elv_sdh_titulo">İşitme engelliler için altyazı</string>
+    <string name="elv_sdh_det">Dublajlı olsa bile her zaman sesleri içeren altyazıyı ([kapı çarpar]) TV dilinde göster</string>
+    <string name="elv_cat_titulo">Videolar için afiş ve özet</string>
+    <string name="elv_cat_explica">TMDB\'ye yalnızca başlık gider, klasör veya sunucu asla</string>
+    <string name="elv_cat_ligado">Açık</string>
+    <string name="elv_cat_desligado">Kapalı</string>
+    <string name="elv_cat_ep">%1$s · S%2$d B%3$d</string>
+    <string name="elv_cat_so_ep">%1$s · Bölüm %2$d</string>
+    <string name="elv_cat_temporada">%1$s · Sezon %2$d</string>
+    <string name="elv_cat_filme_ano">%1$s (%2$d)</string>
+    <string name="elv_cat_n_temporadas">Sezon: %d</string>
+    <string name="elv_cat_procurando">Afiş aranıyor…</string>
+    <string name="elv_cat_nada">TMDB\'de bir şey bulunamadı. Doğru adı yazmak için OK\'a basılı tutun.</string>
+    <string name="elv_cat_corrigir_titulo">Düzelt: %s</string>
+    <string name="elv_cat_corrigir_explica">Afiş ya da özet yanlış mı? Sonraki sonucu isteyin veya doğru adı ve yılı yazın. Boş ad otomatiğe döner.</string>
+    <string name="elv_cat_nao_e">Bu değil</string>
+    <string name="elv_cat_escrever">Adı yaz</string>
+    <string name="elv_cat_campo">Ad ve yıl, ör.: Dune 2021</string>
+    <string name="elv_cat_salvar">Kaydet</string>
+    <string name="elv_cat_dica">düzelt</string>
+    <string name="elv_bib_lista">Liste</string>
+    <string name="elv_bib_pasta">Klasör</string>
+    <string name="elv_bib_servidor">Sunucu</string>
+    <string name="elv_bib_nuvem">Bulut</string>
+    <string name="elv_bib_addon">Eklenti</string>
+</resources>

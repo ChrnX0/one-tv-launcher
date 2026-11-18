@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 19.7: TV nova em 2 min (MudarDeTv, ReceberTvActivity, FilaAppsActivity). -->
+<resources>
+    <string name="mtv_titulo">別のテレビから移す</string>
+    <string name="mtv_qr_desc">別のテレビの設定を移すための QR</string>
+    <string name="mtv_instrucoes">古いテレビでパネル（スマホまたはパソコン）を開き、システム › バックアップ › 「新しいテレビへ移す」でこの QR を読み取るか、下のコードを入力してください。\nすべて暗号化され、このテレビにだけ届きます。コードの有効時間は %1$s です。</string>
+    <string name="mtv_recebendo">受信中… テレビの電源を切らないでください。</string>
+    <string name="mtv_pronto">%1$s からすべて届きました。テレビは今から再起動し、そのあとアプリが 1 つずつ戻ります。</string>
+    <string name="mtv_erro">うまくいきませんでした：%1$s\nこのテレビは何も変わっていません。「%2$s」を押してやり直してください。</string>
+    <string name="mtv_venceu">コードの期限が切れました（有効 10 分）。\n「%1$s」を押すと新しいコードを表示します。</string>
+    <string name="mtv_cfg_det">古いテレビの設定・PIN・チャンネル・アプリを QR で 2 分で</string>
+    <string name="mtv_fila_titulo">アプリを戻しています</string>
+    <string name="mtv_fila_texto">アプリ %1$d / %2$d。Play ストアで開いて「インストール」を押してください。戻ると次のアプリが表示されます。</string>
+    <string name="mtv_fila_abrir">Play ストアで開く</string>
+    <string name="mtv_fila_pular">スキップ</string>
+    <string name="mtv_fila_depois">あとで</string>
+    <string name="mtv_fila_fim">別のテレビのアプリはすべてそろいました。</string>
+    <string name="mtv_fila_cfg_det">別のテレビのアプリがあと %1$d 個残っています</string>
+    <string name="mtv_diario">%1$s から移しました：設定を復元、インストール待ちのアプリ %2$d 個</string>
+    <string name="mtv_diario_enviado">新しいテレビへ送信：設定とアプリ %1$d 個</string>
+</resources>

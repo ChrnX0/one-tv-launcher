@@ -408,7 +408,7 @@ class PodcastsActivity : Activity() {
 
     private fun pedirEndereco() {
         val campo = EditText(this).apply { inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI; isSingleLine = true; textSize = 20f; hint = "https://" }
-        val moldura = FrameLayout(this).apply { setPadding(Estilo.dp(this@PodcastsActivity, 20), Estilo.dp(this@PodcastsActivity, 8), Estilo.dp(this@PodcastsActivity, 20), 0); addView(campo) }
+        val moldura = FrameLayout(this).apply { setPaddingRelative(Estilo.dp(this@PodcastsActivity, 20), Estilo.dp(this@PodcastsActivity, 8), Estilo.dp(this@PodcastsActivity, 20), 0); addView(campo) }
         val d = CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert).setTitle(getString(R.string.pod_colar)).setView(moldura)
             .setPositiveButton(android.R.string.ok) { _, _ -> adicionar(campo.text.toString().trim()) }
             .setNegativeButton(android.R.string.cancel, null).create()
@@ -419,7 +419,7 @@ class PodcastsActivity : Activity() {
 
     private fun pedirBusca() {
         val campo = EditText(this).apply { inputType = InputType.TYPE_CLASS_TEXT; isSingleLine = true; textSize = 20f }
-        val moldura = FrameLayout(this).apply { setPadding(Estilo.dp(this@PodcastsActivity, 20), Estilo.dp(this@PodcastsActivity, 8), Estilo.dp(this@PodcastsActivity, 20), 0); addView(campo) }
+        val moldura = FrameLayout(this).apply { setPaddingRelative(Estilo.dp(this@PodcastsActivity, 20), Estilo.dp(this@PodcastsActivity, 8), Estilo.dp(this@PodcastsActivity, 20), 0); addView(campo) }
         val d = CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert).setTitle(getString(R.string.pod_buscar)).setView(moldura)
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 val t = campo.text.toString().trim()

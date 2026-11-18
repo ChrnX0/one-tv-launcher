@@ -41,7 +41,12 @@ class BuscaActivity : Activity() {
                         val iFilmes: List<BuscaUnica.Indexado<Filme>>, val iSeries: List<BuscaUnica.Indexado<Serie>>,
                         val iApps: List<BuscaUnica.Indexado<Pair<String, String>>>, val titulos: Map<String, List<String>>,
                         val instalados: Set<String> = emptySet(),
-                        val idsFilmes: Set<Int> = emptySet(), val idsSeries: Set<Int> = emptySet())
+                        val idsFilmes: Set<Int> = emptySet(), val idsSeries: Set<Int> = emptySet(),
+                        val radios: List<Radios.Radio> = emptyList(), val ajuda: List<Pair<Int, String>> = emptyList(),
+                        val temServidorMidia: Boolean = false, val appsMapa: Map<String, String> = emptyMap(),
+                        /** Elevação 7.1: o que a TV viu em pastas, servidores, nuvens e addons; e a versão preferida. */
+                        val iBiblioteca: List<BuscaUnica.Indexado<BibliotecaUnica.Fonte>> = emptyList(),
+                        val preferida: Idioma.Versao = Idioma.Versao.DUBLADA)
     @Volatile private var dados: Dados? = null
 
     override fun onCreate(b: Bundle?) {
@@ -57,7 +62,7 @@ class BuscaActivity : Activity() {
             textSize = 20f
             typeface = Estilo.fonte(500)
             background = Estilo.fundo(context, Estilo.SUPERFICIE_ALTA, Estilo.RAIO_PILULA, Estilo.BORDA)
-            setPadding(dp(22), dp(14), dp(22), dp(14))
+            setPaddingRelative(dp(22), dp(14), dp(22), dp(14))
             setOnEditorActionListener { _, acao, _ ->
                 if (acao == EditorInfo.IME_ACTION_SEARCH || acao == EditorInfo.IME_ACTION_DONE) { buscarJa(); true } else false
             }
@@ -98,17 +103,72 @@ class BuscaActivity : Activity() {
                 BuscaUnica.indexar(series) { it.nome }, BuscaUnica.indexar(listaApps) { it.second }, titulosDoGuia(canais),
                 comGoogleTv(this, listaApps.map { it.first }.toSet()),
                 // Ideia 82: ids TMDB do catálogo inteiro (com as ocultas: o que está escondido não vira "fora da sua lista").
-                idsDoCatalogo(false), idsDoCatalogo(true))
+                idsDoCatalogo(false), idsDoCatalogo(true), radiosFavoritas(), topicosAjuda(), temServidorMidia(),
+                runCatching { PedidoIa.appsDaHome(this) }.getOrDefault(emptyMap()),
+                // Modo infantil: o que veio de pasta, servidor ou addon não tem classificação conferida, então não entra.
+                BuscaUnica.indexar(if (parental.infantil) emptyList() else runCatching { BibliotecaIndice.todas(this) }.getOrDefault(emptyList())) { it.titulo },
+                runCatching { Idioma.versaoDesejada(IdiomaPlayer.prefs(this).padrao) }.getOrDefault(Idioma.Versao.DUBLADA))
                 .also { Log.i(TAG, "índice: ${canais.size} canais, ${filmes.size} filmes, ${series.size} séries, " +
                     "${it.titulos.size} títulos do guia em ${System.currentTimeMillis() - t0} ms") }
         } catch (e: Exception) {
             Log.w(TAG, "carregar: $e")
             val listaApps = apps()
             Dados(emptyList(), emptyList(), emptyList(), emptyList(), BuscaUnica.indexar(listaApps) { it.second }, emptyMap(),
-                comGoogleTv(this, listaApps.map { it.first }.toSet()))
+                comGoogleTv(this, listaApps.map { it.first }.toSet()), ajuda = topicosAjuda(),
+                appsMapa = runCatching { PedidoIa.appsDaHome(this) }.getOrDefault(emptyMap()))
         }
         dados = d
         ui.post { if (!isFinishing) buscarJa() }
+    }
+
+    private fun radiosFavoritas(): List<Radios.Radio> = runCatching { Radios.favoritas(this) }.getOrDefault(emptyList())
+
+    /** Os assuntos da Ajuda: (índice, "título resumo"), para achar "como pareio o controle" pelo resumo também. */
+    private fun topicosAjuda(): List<Pair<Int, String>> = Manual.TOPICOS.mapIndexed { i, id ->
+        i to AjudaActivity.texto(this, id, Manual.Parte.TITULO)
+    }
+
+    private fun temServidorMidia(): Boolean = runCatching {
+        MidiaArmazem.contas(this).any { it.ehJellyOuEmby || it.tipo == ContaMidia.PLEX }
+    }.getOrDefault(false)
+
+    /** Elevação 3.11: a linha "Fazer", se a frase pede algo. */
+    private fun fazer(d: Dados, termo: String): Item? {
+        val f = BuscaFaz.entender(termo, d.appsMapa) { t ->
+            when (val p = CanalBusca.interpretarFrase(t)) {
+                is CanalBusca.PedidoVoz.OQuePassa -> CaixaComando.Pedido("o_que_passa", alvo = p.canal)
+                is CanalBusca.PedidoVoz.Tocar -> CaixaComando.Pedido("tocar_canal", alvo = p.canal)
+                null -> null
+            }
+        } ?: return null
+        f.local?.let { l ->
+            return when (l) {
+                BuscaFaz.Local.WIFI_VISITA -> Item(getString(R.string.elv_bf_wifi), getString(
+                    if (WifiVisita.configurado(this)) R.string.elv_bf_ok_faz else R.string.elv_bf_wifi_configurar)) {
+                    if (WifiVisita.configurado(this)) WifiVisita.mostrarQr(this)
+                    else startActivity(Intent(this, ConfigLauncherActivity::class.java))
+                }
+                BuscaFaz.Local.LETRA_MAIOR, BuscaFaz.Local.LETRA_MENOR -> {
+                    val atual = TamanhoTexto.atual(this)
+                    val i = TamanhoTexto.OPCOES.indexOf(atual).coerceAtLeast(0)
+                    val novo = TamanhoTexto.OPCOES[(if (l == BuscaFaz.Local.LETRA_MAIOR) i + 1 else i - 1).coerceIn(0, TamanhoTexto.OPCOES.lastIndex)]
+                    Item(getString(if (l == BuscaFaz.Local.LETRA_MAIOR) R.string.elv_bf_letra_maior else R.string.elv_bf_letra_menor, novo),
+                        getString(if (novo == atual) R.string.elv_bf_letra_limite else R.string.elv_bf_ok_faz)) {
+                        if (novo != atual) { TamanhoTexto.definir(this, novo); recreate() }
+                    }
+                }
+            }
+        }
+        val p = f.pedido ?: return null
+        val texto = CaixaComandoTv.entendido(applicationContext, p, d.appsMapa)
+        return Item(texto, getString(R.string.elv_bf_ok_faz)) {
+            PedidoIa.propor(applicationContext, termo, ORIGEM, p.json())
+            if (p.tipo != "volume" && p.tipo != "midia") finish()   // volume/mídia: a pessoa pode querer de novo
+        }
+    }
+
+    private fun abrirRadio(termo: String) {
+        try { startActivity(Intent(this, RadioActivity::class.java).putExtra(RadioActivity.EXTRA_BUSCA, termo)) } catch (_: Exception) {}
     }
 
     private fun idsDoCatalogo(serie: Boolean): Set<Int> = runCatching {
@@ -173,24 +233,53 @@ class BuscaActivity : Activity() {
 
     private fun resultados(d: Dados, termo: String): List<Grupo> {
         val grupos = ArrayList<Grupo>()
-        val canais = BuscaUnica.filtrarIndice(d.iCanais, termo).first
+        // Elevação 3.11: o que a frase pede vem primeiro ("desligar em 30", "wifi visita", "letra maior"). Só com o OK.
+        fazer(d, termo)?.let { grupos += Grupo(getString(R.string.elv_bf_fazer), listOf(it)) }
+        val canais = BuscaUnica.filtrarIndice(d.iCanais, termo, tolerante = true).first
         if (canais.isNotEmpty()) grupos += Grupo(getString(R.string.bu_canais), canais.map { c -> Item(c.nome, getString(R.string.bu_canal_n, c.numero)) { tocar(c.id, c.nome) } })
         val progs = programas(d, termo)
         if (progs.isNotEmpty()) grupos += Grupo(getString(R.string.bu_no_guia), progs)
-        val (filmes, total) = BuscaUnica.filtrarIndice(d.iFilmes, termo)
-        if (filmes.isNotEmpty()) {
-            grupos += Grupo(getString(R.string.home_card_filmes), filmes.map { f ->
-                Item(Vod.nomeTela(f.nome, f.ano), listOfNotNull(f.ano?.toString(), f.grupo.takeIf { it.isNotBlank() }).joinToString(" · ")) { catalogo(FilmesActivity::class.java, f.nome) }
-            } + Item(getString(R.string.bu_ver_filmes, total), getString(R.string.bu_ver_filmes_det)) { catalogo(FilmesActivity::class.java, termo) })
+        // Elevação 7.1: biblioteca única. Lista, pastas, servidores, nuvens e addons juntos: cada título uma vez, com as
+        // fontes embaixo (a melhor primeiro, com ▶) e o OK abrindo a melhor. Só junta o que bateu com o termo (rápido).
+        val (filmes, total) = BuscaUnica.filtrarIndice(d.iFilmes, termo, max = 40, tolerante = true)
+        val (series, totalSeries) = BuscaUnica.filtrarIndice(d.iSeries, termo, max = 40, tolerante = true)
+        val daCasa = BuscaUnica.filtrarIndice(d.iBiblioteca, termo, max = 60, tolerante = true).first
+        val unicos = BibliotecaUnica.juntar(filmes.map { f ->
+            BibliotecaUnica.Fonte(BibliotecaUnica.Origem.LISTA, f.grupo, f.nome, f.ano, false, f.tmdb,
+                qualidade = BibliotecaUnica.qualidadeDoNome(f.nome + " " + f.grupo), versao = Idioma.versao(f.nome, f.grupo), abrir = f.nome)
+        } + series.map { s ->
+            BibliotecaUnica.Fonte(BibliotecaUnica.Origem.LISTA, s.grupo, s.nome, s.ano, true, s.tmdb,
+                qualidade = BibliotecaUnica.qualidadeDoNome(s.nome + " " + s.grupo), versao = Idioma.versao(s.nome, s.grupo), abrir = s.nome)
+        } + daCasa, d.preferida)
+        val uFilmes = unicos.filter { !it.serie }.take(BuscaUnica.MAX_POR_GRUPO)
+        if (uFilmes.isNotEmpty()) {
+            grupos += Grupo(getString(R.string.home_card_filmes), uFilmes.map { itemUnico(it) } +
+                if (total > 0) listOf(Item(getString(R.string.bu_ver_filmes, total), getString(R.string.bu_ver_filmes_det)) { catalogo(FilmesActivity::class.java, termo) }) else emptyList())
         }
-        val (series, totalSeries) = BuscaUnica.filtrarIndice(d.iSeries, termo)
-        if (series.isNotEmpty()) {
-            grupos += Grupo(getString(R.string.home_card_series), series.map { s ->
-                Item(Vod.nomeTela(s.nome, s.ano), listOfNotNull(s.ano?.toString(), s.grupo.takeIf { it.isNotBlank() }).joinToString(" · ")) { catalogo(SeriesActivity::class.java, s.nome) }
-            } + Item(getString(R.string.bu_ver_series, totalSeries), getString(R.string.bu_ver_series_det)) { catalogo(SeriesActivity::class.java, termo) })
+        val uSeries = unicos.filter { it.serie }.take(BuscaUnica.MAX_POR_GRUPO)
+        if (uSeries.isNotEmpty()) {
+            grupos += Grupo(getString(R.string.home_card_series), uSeries.map { itemUnico(it) } +
+                if (totalSeries > 0) listOf(Item(getString(R.string.bu_ver_series, totalSeries), getString(R.string.bu_ver_series_det)) { catalogo(SeriesActivity::class.java, termo) }) else emptyList())
         }
-        val apps = BuscaUnica.filtrarIndice(d.iApps, termo).first
+        val apps = BuscaUnica.filtrarIndice(d.iApps, termo, tolerante = true).first
         if (apps.isNotEmpty()) grupos += Grupo("Apps", apps.map { (pacote, nome) -> Item(nome, "App") { abrirApp(pacote) } })
+        // Elevação 3.11: rádios favoritas, ajuda e (com Jellyfin/Plex) os arquivos da rede.
+        val radios = BuscaUnica.filtrar(d.radios, termo, max = 4, tolerante = true) { it.nome }
+        if (radios.isNotEmpty()) grupos += Grupo(getString(R.string.elv_bf_radios), radios.map { r ->
+            Item(r.nome, getString(R.string.elv_bf_radio_fav)) { abrirRadio(r.nome) }
+        })
+        val ajuda = BuscaUnica.filtrar(d.ajuda, termo, max = 3, tolerante = true) { it.second }
+        if (ajuda.isNotEmpty()) grupos += Grupo(getString(R.string.elv_bf_ajuda), ajuda.map { (i, nome) ->
+            Item(nome, getString(R.string.elv_bf_ajuda_det)) {
+                try { startActivity(Intent(this, AjudaActivity::class.java).putExtra(AjudaActivity.EXTRA_TOPICO, i)) } catch (_: Exception) {}
+            }
+        })
+        val maisLonge = ArrayList<Item>()
+        if (termo.length >= 3) maisLonge += Item(getString(R.string.elv_bf_procurar_radio, termo), getString(R.string.elv_bf_procurar_radio_det)) { abrirRadio(termo) }
+        if (termo.length >= 2 && d.temServidorMidia) maisLonge += Item(getString(R.string.elv_bf_procurar_rede, termo), getString(R.string.elv_bf_procurar_rede_det)) {
+            try { startActivity(Intent(this, MidiaRedeActivity::class.java).putExtra(MidiaRedeActivity.EXTRA_BUSCA, termo)) } catch (_: Exception) {}
+        }
+        if (maisLonge.isNotEmpty()) grupos += Grupo(getString(R.string.elv_bf_procurar), maisLonge)
         // Ideia 14: no fim, continuar a busca no Google TV, YouTube, Netflix e Prime Video (só os instalados). Mesma linha dos apps.
         val outros = BuscaOutrosApps.montar(termo, d.instalados)
         if (outros.isNotEmpty()) grupos += Grupo(getString(R.string.bu_outros_apps), outros.map { p ->
@@ -212,7 +301,7 @@ class BuscaActivity : Activity() {
     private fun programas(d: Dados, termo: String): List<Item> {
         val agora = System.currentTimeMillis()
         val p = BuscaUnica.palavras(termo)
-        val quero = d.titulos.entries.mapNotNull { (n, t) -> BuscaUnica.pontosNorm(n, p)?.let { pts -> Triple(t, pts, n.length) } }
+        val quero = d.titulos.entries.mapNotNull { (n, t) -> BuscaUnica.pontosNorm(n, p, tolerante = true)?.let { pts -> Triple(t, pts, n.length) } }
             .sortedWith(compareBy({ it.second }, { it.third })).take(100).flatMap { it.first }
         if (quero.isEmpty()) return emptyList()
         val porGuia = d.canais.filter { it.guiaId.isNotEmpty() }.groupBy { it.guiaId }
@@ -221,7 +310,7 @@ class BuscaActivity : Activity() {
             if (prog.fim <= agora || achados.size >= 400) return@programasDoGuia
             porGuia[prog.guiaId]?.minByOrNull { it.numero }?.let { c -> achados += Lembretes.Candidato(c.id, c.nome, c.numero, prog) }
         }
-        val melhores = BuscaUnica.filtrar(BuscaUnica.agrupar(achados), termo, max = BuscaUnica.MAX_POR_GRUPO) { it.first.programa.titulo }
+        val melhores = BuscaUnica.filtrar(BuscaUnica.agrupar(achados), termo, max = BuscaUnica.MAX_POR_GRUPO, tolerante = true) { it.first.programa.titulo }
         return melhores.sortedBy { it.first.programa.inicio }.map { (c, outros) ->
             itemPrograma(c, agora, if (outros > 0) "+" + resources.getQuantityString(R.plurals.bu_canais_n, outros, outros) else null)
         }
@@ -277,14 +366,14 @@ class BuscaActivity : Activity() {
         lista.removeAllViews()
         // Só as linhas "Procurar no YouTube..." (ideia 14): o "nada encontrado" continua aparecendo, em cima delas.
         if (grupos.size == 1 && grupos[0].nome == getString(R.string.bu_outros_apps))
-            lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.bu_nada, termo)).apply { setPadding(dp(4), dp(Estilo.E3), 0, dp(Estilo.E3)) })
+            lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.bu_nada, termo)).apply { setPaddingRelative(dp(4), dp(Estilo.E3), 0, dp(Estilo.E3)) })
         if (grupos.isEmpty()) {
             val msg = when {
                 termo.length >= 2 -> getString(R.string.bu_nada, termo)
                 Extras.ligado(this, Extras.Chave.HOJE_NA_TV) -> getString(R.string.bu_digite) + " " + getString(R.string.bu_sem_sugestoes)
                 else -> getString(R.string.bu_digite)
             }
-            lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, msg).apply { setPadding(dp(4), dp(Estilo.E3), 0, 0) })
+            lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, msg).apply { setPaddingRelative(dp(4), dp(Estilo.E3), 0, 0) })
             return
         }
         for (g in grupos) {
@@ -297,6 +386,39 @@ class BuscaActivity : Activity() {
 
     private fun tocar(canalId: String, nome: String) {
         CanalTv.tocar(applicationContext, ComandosIa.Acao.TocarCanal(nome, canalId = canalId, nomeCanal = nome))
+    }
+
+    /** "Duna: Parte Dois" / "2024 · ▶ Pasta PC 4K · Lista · Addon Cinemeta". */
+    private fun itemUnico(t: BibliotecaUnica.Titulo): Item {
+        fun rotulo(f: BibliotecaUnica.Fonte): String {
+            val tipo = getString(when (f.origem) {
+                BibliotecaUnica.Origem.LISTA -> R.string.elv_bib_lista
+                BibliotecaUnica.Origem.PASTA -> R.string.elv_bib_pasta
+                BibliotecaUnica.Origem.SERVIDOR -> R.string.elv_bib_servidor
+                BibliotecaUnica.Origem.NUVEM -> R.string.elv_bib_nuvem
+                BibliotecaUnica.Origem.ADDON -> R.string.elv_bib_addon
+            })
+            val q = when { f.qualidade >= 2160 -> "4K"; f.qualidade >= 1080 -> "1080p"; f.qualidade >= 720 -> "720p"; else -> null }
+            return listOfNotNull(tipo, f.onde.takeIf { it.isNotBlank() && f.origem != BibliotecaUnica.Origem.LISTA }?.take(24), q).joinToString(" ")
+        }
+        val fontes = t.fontes.map { rotulo(it) }.distinct()
+        val texto = listOfNotNull(t.ano?.toString(), "▶ " + fontes.first(), fontes.drop(1).take(2).joinToString(" · ").takeIf { it.isNotEmpty() },
+            (fontes.size - 3).takeIf { it > 0 }?.let { "+$it" }).joinToString(" · ")
+        return Item(Vod.nomeTela(t.nome, t.ano), texto) { abrirFonte(t.melhor, t) }   // sem o ano repetido no nome (main, 16/11)
+    }
+
+    /** Abre a melhor fonte: lista no catálogo, arquivo da casa direto no player, servidor e addon na busca deles. */
+    private fun abrirFonte(f: BibliotecaUnica.Fonte, t: BibliotecaUnica.Titulo) {
+        try {
+            when (f.origem) {
+                BibliotecaUnica.Origem.LISTA -> catalogo(if (t.serie) SeriesActivity::class.java else FilmesActivity::class.java, f.abrir.ifBlank { t.nome })
+                BibliotecaUnica.Origem.PASTA, BibliotecaUnica.Origem.NUVEM ->
+                    if (f.abrir.isNotBlank() && FontesMidia.aceito(f.abrir)) VodActivity.abrirUrl(this, f.abrir, t.nome)
+                    else startActivity(Intent(this, MidiaRedeActivity::class.java))
+                BibliotecaUnica.Origem.SERVIDOR -> startActivity(Intent(this, MidiaRedeActivity::class.java).putExtra(MidiaRedeActivity.EXTRA_BUSCA, f.titulo))
+                BibliotecaUnica.Origem.ADDON -> startActivity(Intent(this, AddonsActivity::class.java).putExtra(BibliotecaUnica.EXTRA_BUSCA, f.titulo))
+            }
+        } catch (e: Exception) { Log.w(TAG, "fonte: ${e.javaClass.simpleName}") }
     }
 
     private fun catalogo(tela: Class<out Activity>, termo: String) {
@@ -321,6 +443,8 @@ class BuscaActivity : Activity() {
 
     companion object {
         private const val TAG = "TvLauncher.Busca"
+        /** Origem dos pedidos que a busca faz (3.11), como "painel" na caixa do celular. */
+        const val ORIGEM = "busca"
 
         /** A busca do Google TV (katniss) não é app de tela inicial: entra na lista de instalados à parte. */
         fun temGoogleTv(ctx: android.content.Context): Boolean =

@@ -60,7 +60,7 @@ object UsoLocal {
             a.getString(R.string.l51_uso_linha, nome, tipo, vezes, quando)
         }
         val corpo = android.widget.ScrollView(a).apply {
-            addView(Estilo.texto(a, Estilo.Papel.LEGENDA, texto).apply { setPadding(48, 8, 48, 8); isFocusable = true })
+            addView(Estilo.texto(a, Estilo.Papel.LEGENDA, texto).apply { setPaddingRelative(48, 8, 48, 8); isFocusable = true })
         }
         CaixaTv(a, android.R.style.Theme_Material_Dialog_Alert)
             .setTitle(a.getString(R.string.l51_uso_titulo))

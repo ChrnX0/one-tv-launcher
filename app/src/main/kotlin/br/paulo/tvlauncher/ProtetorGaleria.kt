@@ -132,7 +132,7 @@ class ProtetorGaleria(
         montarTopo()
         colunaAvisos = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL }
         camadaInfo.addView(colunaAvisos, FrameLayout.LayoutParams(dp(250), -2, Gravity.TOP or Gravity.END).apply {
-            topMargin = dp(32); rightMargin = dp(32)
+            topMargin = dp(32); marginEnd = dp(32)
         })
         // Sem caixa (12/11/2026, dono: "a B na proposta da C"): a linha de baixo fica solta sobre a pintura, legível por
         // um véu escuro que sobe do pé da tela (fica na raiz, parado: não anda com o anti-burn-in) e uma sombra nas letras.
@@ -141,12 +141,12 @@ class ProtetorGaleria(
         }
         raiz.addView(veuBaixo, raiz.childCount - 1, FrameLayout.LayoutParams(-1, dp(190), Gravity.BOTTOM))
         barra = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.BOTTOM; clipChildren = false }
-        camadaInfo.addView(barra, FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM).apply {
-            leftMargin = dp(Estilo.MARGEM_LATERAL); rightMargin = dp(Estilo.MARGEM_LATERAL); bottomMargin = dp(Estilo.MARGEM_VERTICAL)
+        camadaInfo.addView(barra, FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM or Gravity.START).apply {
+            marginStart = dp(Estilo.MARGEM_LATERAL); marginEnd = dp(Estilo.MARGEM_LATERAL); bottomMargin = dp(Estilo.MARGEM_VERTICAL)
         })
         etiquetaObra = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; gravity = Gravity.END }
         camadaInfo.addView(etiquetaObra, FrameLayout.LayoutParams(dp(420), -2, Gravity.TOP or Gravity.END).apply {
-            rightMargin = dp(Estilo.MARGEM_LATERAL)
+            marginEnd = dp(Estilo.MARGEM_LATERAL)
         })
         raiz.addView(camadaInfo, FrameLayout.LayoutParams(-1, -1))
 
@@ -327,11 +327,11 @@ class ProtetorGaleria(
         val recuo = if (centro) 0 else dp(6)
         fun lpGrupo() = LinearLayout.LayoutParams(-2, -2).apply { if (centro) gravity = Gravity.CENTER_HORIZONTAL }
         // Saudação: 12 sp (era 9): letra grande para quem enxerga pouco; com a hora sozinha, ela só aparece com o resto.
-        saudacao = texto("", 12f, m500).apply { letterSpacing = 0.24f; isAllCaps = true; alpha = 0.85f; setPadding(recuo, 0, 0, 0) }
+        saudacao = texto("", 12f, m500).apply { letterSpacing = 0.24f; isAllCaps = true; alpha = 0.85f; setPaddingRelative(recuo, 0, 0, 0) }
         topo.addView(saudacao, lpGrupo().apply { bottomMargin = dp(4) })
         relogio = RelogioProtetor(ctx, estiloRelogio, fator, centro)
         topo.addView(relogio, lpGrupo())
-        data = texto("", 16f, m500).apply { setPadding(recuo, 0, 0, 0) }
+        data = texto("", 16f, m500).apply { setPaddingRelative(recuo, 0, 0, 0) }
         topo.addView(data, lpGrupo().apply { topMargin = dp(8) })
         // Variação da saudação e da data (17/11/2026, Protetor.TEXTOS).
         when (estiloTextos) {
@@ -343,20 +343,20 @@ class ProtetorGaleria(
         }
         listOf(saudacao, data).forEach { it.sombrear() }
         // Compromissos de hoje logo abaixo da data (dono, 10/11: "o calendário poderia ficar junto da data").
-        agenda = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; setPadding(recuo, 0, 0, 0) }
+        agenda = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(recuo, 0, 0, 0) }
         topo.addView(agenda, lpGrupo())
         progresso = FrameLayout(ctx).apply { background = arredondado(0x40FFFFFF, 2f); clipToOutline = true }
         progressoCheio = View(ctx).apply { background = arredondado(branco, 2f) }
         progresso.addView(progressoCheio, FrameLayout.LayoutParams(0, -1))
-        topo.addView(progresso, LinearLayout.LayoutParams(dp(180), dp(2)).apply { topMargin = dp(11); leftMargin = recuo; if (centro) gravity = Gravity.CENTER_HORIZONTAL })
+        topo.addView(progresso, LinearLayout.LayoutParams(dp(180), dp(2)).apply { topMargin = dp(11); marginStart = recuo; if (centro) gravity = Gravity.CENTER_HORIZONTAL })
         linhasTempo = LinhasTempo(ctx, m400, m600).apply { if (centro) gravity = Gravity.CENTER_HORIZONTAL; estilo(Protetor.LINHAS.ler(ctx)) }
-        topo.addView(linhasTempo, lpGrupo().apply { topMargin = dp(20); leftMargin = recuo })
+        topo.addView(linhasTempo, lpGrupo().apply { topMargin = dp(20); marginStart = recuo })
         camadaInfo.addView(topo, when (posicao) {
             Protetor.POS_BAIXO -> FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply {
-                leftMargin = dp(36); bottomMargin = dp(Estilo.MARGEM_VERTICAL)
+                marginStart = dp(36); bottomMargin = dp(Estilo.MARGEM_VERTICAL)
             }
             Protetor.POS_CENTRO -> FrameLayout.LayoutParams(-1, -2, Gravity.TOP or Gravity.CENTER_HORIZONTAL)
-            else -> FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.START).apply { leftMargin = dp(36); topMargin = dp(26) }
+            else -> FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.START).apply { marginStart = dp(36); topMargin = dp(26) }
         })
     }
 
@@ -633,7 +633,7 @@ class ProtetorGaleria(
         }
         val fora = cartoes.size - inicio - visiveis
         if (fora > 0 && visiveis > 1) colunaAvisos.addView(texto(ctx.getString(R.string.pg_mais_notif, fora), 8f, m500).apply {
-            alpha = 0.8f; gravity = Gravity.END; setPadding(0, 0, dp(4), 0)
+            alpha = 0.8f; gravity = Gravity.END; setPaddingRelative(0, 0, dp(4), 0)
         }, LinearLayout.LayoutParams(-1, -2))
         // Dica do que o OK faz, só com um cartão marcado (o protetor parado continua limpo).
         cartoes.getOrNull(escolhido)?.let { c ->
@@ -643,7 +643,7 @@ class ProtetorGaleria(
                 TeclasProtetor.Tipo.OUTRO -> R.string.pt_dica_andar
             }
             colunaAvisos.addView(texto(ctx.getString(dica), 8f, m500).apply {
-                alpha = 0.85f; gravity = Gravity.END; setPadding(0, dp(2), dp(4), 0); sombrear()
+                alpha = 0.85f; gravity = Gravity.END; setPaddingRelative(0, dp(2), dp(4), 0); sombrear()
             }, LinearLayout.LayoutParams(-1, -2))
         }
     }
@@ -659,7 +659,7 @@ class ProtetorGaleria(
 
     /** Avisos sem caixa (17/11/2026, "Lista"): ícone, título e texto soltos, alinhados à direita, com sombra nas letras. */
     private fun linhaAviso(c: Cartao): View = LinearLayout(ctx).apply {
-        orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL or Gravity.END; setPadding(dp(6), dp(4), dp(6), dp(4))
+        orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL or Gravity.END; setPaddingRelative(dp(6), dp(4), dp(6), dp(4))
         val tx = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; gravity = Gravity.END }
         tx.addView(texto(listOf(c.app, c.tempo).filter { it.isNotEmpty() }.joinToString("  ·  "), 12f, m600).apply {
             letterSpacing = 0.1f; isAllCaps = true; alpha = 0.75f; linhaUnica(); gravity = Gravity.END; sombrear()
@@ -672,11 +672,11 @@ class ProtetorGaleria(
         val ic = FrameLayout(ctx)
         if (c.icone != null) ic.addView(ImageView(ctx).apply { setImageDrawable(c.icone) }, FrameLayout.LayoutParams(dp(22), dp(22), Gravity.CENTER))
         else ic.addView(texto(c.emoji ?: "", 16f, m400).apply { gravity = Gravity.CENTER }, FrameLayout.LayoutParams(-1, -1))
-        addView(ic, LinearLayout.LayoutParams(dp(26), dp(26)).apply { leftMargin = dp(10) })
+        addView(ic, LinearLayout.LayoutParams(dp(26), dp(26)).apply { marginStart = dp(10) })
     }
 
     private fun cartao(c: Cartao): View = Vidro(ctx, vidro, 13f).apply {
-        val linha = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(12), dp(10), dp(12), dp(10)) }
+        val linha = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL; setPaddingRelative(dp(12), dp(10), dp(12), dp(10)) }
         val caixaIcone = FrameLayout(ctx).apply { background = arredondado(0x2EFFFFFF, 7f) }
         if (c.icone != null) caixaIcone.addView(ImageView(ctx).apply { setImageDrawable(c.icone) }, FrameLayout.LayoutParams(dp(18), dp(18), Gravity.CENTER))
         else caixaIcone.addView(texto(c.emoji ?: "", 14f, m400).apply { gravity = Gravity.CENTER }, FrameLayout.LayoutParams(-1, -1))
@@ -690,7 +690,7 @@ class ProtetorGaleria(
         tx.addView(texto(c.titulo, 11f, m600).apply { linhaUnica() }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(2) })
         if (c.texto.isNotEmpty()) tx.addView(texto(c.texto, 9.5f, m400).apply { linhaUnica(); alpha = 0.85f },
             LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(1) })
-        linha.addView(tx, LinearLayout.LayoutParams(0, -2, 1f).apply { leftMargin = dp(9) })
+        linha.addView(tx, LinearLayout.LayoutParams(0, -2, 1f).apply { marginStart = dp(9) })
         addView(linha, FrameLayout.LayoutParams(-1, -2))
     }
 
@@ -757,9 +757,9 @@ class ProtetorGaleria(
                 addView(ImageView(ctx).apply { setImageDrawable(IconeLinha(IconeLinha.Tipo.CALENDARIO)); alpha = 0.9f },
                     LinearLayout.LayoutParams(dp(15), dp(15)))
                 addView(texto(titulo, 12f, m600).apply { linhaUnica(); maxWidth = dp(300); setShadowLayer(dp(8).toFloat(), 0f, 0f, sombra) },
-                    LinearLayout.LayoutParams(-2, -2).apply { leftMargin = dp(8) })
+                    LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(8) })
                 addView(texto("·  $quando", 12f, m400).apply { alpha = 0.8f; setShadowLayer(dp(8).toFloat(), 0f, 0f, sombra) },
-                    LinearLayout.LayoutParams(-2, -2).apply { leftMargin = dp(6) })
+                    LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(6) })
             }, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(if (i == 0) 10 else 5) })
         }
     }

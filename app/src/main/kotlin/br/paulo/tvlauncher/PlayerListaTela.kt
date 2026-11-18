@@ -103,7 +103,7 @@ class PlayerListaTela(
     val aberta: Boolean get() = raiz.visibility == View.VISIBLE
 
     init {
-        val colunas = LinearLayout(act).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(32), dp(26), dp(32), dp(22)) }
+        val colunas = LinearLayout(act).apply { orientation = LinearLayout.HORIZONTAL; setPaddingRelative(dp(32), dp(26), dp(32), dp(22)) }
         colunas.addView(coluna.raiz, LinearLayout.LayoutParams(dp((Estilo.Leitura.COLUNA_CATEGORIAS * escala).toInt()), -1))
         colunas.addView(coluna(tituloMeio, listaCanais), LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(14); marginEnd = dp(18) })
         colunas.addView(montarDetalhe(), LinearLayout.LayoutParams(dp(290), -1))
@@ -242,7 +242,7 @@ class PlayerListaTela(
      * inclusive ◀ ▶, para o foco nunca escapar para fora da lista. Devolve false para o que não é da lista
      * (volume segue para o Android; números, a Activity fecha a lista e digita o canal).
      */
-    fun tecla(keyCode: Int): Boolean = when (keyCode) {
+    fun tecla(keyCode: Int): Boolean = when (Rtl.tecla(keyCode, listaCanais)) {   // 16.8: colunas espelhadas no árabe
         KeyEvent.KEYCODE_BACK -> {
             if (coluna.temFoco() && doMeio.isNotEmpty()) listaCanais.requestFocus() else fechar()
             true
@@ -385,7 +385,7 @@ class PlayerListaTela(
     private fun novaLinhaCanal(): View {
         val linha = LinearLayout(act).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
-            setPadding(dp(10), dp(7), dp(12), dp(7))
+            setPaddingRelative(dp(10), dp(7), dp(12), dp(7))
             layoutParams = AbsListView.LayoutParams(-1, dp((70 * escala).toInt()))   // 58 -> 70: letra maior e barra de 5 dp (13/11/2026)
         }
         val numero = TextView(act).apply { textSize = Estilo.Leitura.ITEM * escala; typeface = Fontes.nunito(600); gravity = Gravity.CENTER }
@@ -393,7 +393,7 @@ class PlayerListaTela(
         val logo = ImageView(act).apply {
             scaleType = ImageView.ScaleType.FIT_CENTER
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(Estilo.BORDA) }
-            setPadding(dp(3), dp(3), dp(3), dp(3))
+            setPaddingRelative(dp(3), dp(3), dp(3), dp(3))
         }
         linha.addView(logo, LinearLayout.LayoutParams(dp(58), dp(40)).apply { marginEnd = dp(12) })
         val col = LinearLayout(act).apply { orientation = LinearLayout.VERTICAL }
@@ -401,7 +401,7 @@ class PlayerListaTela(
         // "AO VIVO" em vermelho forte, letra branca, ao lado do nome (Esportes; acréscimo 4 do painel, 14/11/2026).
         val vivo = TextView(act).apply {
             text = act.getString(R.string.coluna_ao_vivo); textSize = Estilo.Leitura.ITEM_DETALHE; typeface = Fontes.nunito(700)
-            setTextColor(0xFFFFFFFF.toInt()); setPadding(dp(8), dp(1), dp(8), dp(2)); visibility = View.GONE
+            setTextColor(0xFFFFFFFF.toInt()); setPaddingRelative(dp(8), dp(1), dp(8), dp(2)); visibility = View.GONE
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(COR_AO_VIVO) }
         }
         val linhaNome = LinearLayout(act).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
@@ -428,7 +428,7 @@ class PlayerListaTela(
         val col = LinearLayout(act).apply {
             orientation = LinearLayout.VERTICAL
             background = GradientDrawable().apply { cornerRadius = dp(16).toFloat(); setColor(Estilo.alfa(Estilo.FUNDO, 0xCC)); setStroke(dp(1), Estilo.SUPERFICIE_ALTA) }
-            setPadding(dp(18), dp(18), dp(18), dp(16))
+            setPaddingRelative(dp(18), dp(18), dp(18), dp(16))
         }
         detLogo = ImageView(act).apply { scaleType = ImageView.ScaleType.FIT_START }
         col.addView(detLogo, LinearLayout.LayoutParams(dp(120), dp(64)))
@@ -484,7 +484,7 @@ class PlayerListaTela(
             depois.forEach { p ->
                 detSeguir.addView(TextView(act).apply {
                     text = "${hora.format(Date(p.inicio))}   ${p.titulo}"; textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(papel)
-                    maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(3), 0, dp(3))
+                    maxLines = 1; ellipsize = TextUtils.TruncateAt.END; setPaddingRelative(0, dp(3), 0, dp(3))
                 })
             }
         }
@@ -512,7 +512,7 @@ class PlayerListaTela(
 
     private fun rotulo() = TextView(act).apply {
         textSize = Estilo.Leitura.ROTULO; typeface = Fontes.nunito(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
-        setPadding(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
+        setPaddingRelative(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
     }
 
     private fun dp(v: Int) = (v * act.resources.displayMetrics.density + 0.5f).toInt()

@@ -41,10 +41,10 @@ class AjudaActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL - 7))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL - 7))
         }
         tTitulo = Estilo.tituloTela(this, "")
-        tResumo = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { setPadding(0, dp(4), 0, 0) }
+        tResumo = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { setPaddingRelative(0, dp(4), 0, 0) }
         // Ajuda por QR (degrau 2): à direita do título, o QR do mesmo assunto no site, para ler no celular.
         val topo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = android.view.Gravity.CENTER_VERTICAL }
         val textos = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; addView(tTitulo); addView(tResumo) }
@@ -55,7 +55,7 @@ class AjudaActivity : Activity() {
             orientation = LinearLayout.VERTICAL; gravity = android.view.Gravity.CENTER_HORIZONTAL
             addView(qr, LinearLayout.LayoutParams(ladoQr, ladoQr))
             addView(Estilo.texto(this@AjudaActivity, Estilo.Papel.LEGENDA, getString(R.string.ajq_celular)).apply {
-                gravity = android.view.Gravity.CENTER; setPadding(0, dp(4), 0, 0)
+                gravity = android.view.Gravity.CENTER; setPaddingRelative(0, dp(4), 0, 0)
             })
         }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginStart = dp(24) })
         raiz.addView(topo)
@@ -64,7 +64,7 @@ class AjudaActivity : Activity() {
             textSize = 20f
             setTextColor(Estilo.TEXTO)
             setLineSpacing(0f, 1.3f)
-            setPadding(dp(28), dp(20), dp(28), dp(24))
+            setPaddingRelative(dp(28), dp(20), dp(28), dp(24))
         }
         // A ScrollView recebe o foco: ▲ ▼ rolam; ◀ ▶ trocam o assunto (dispatchKeyEvent); VOLTAR fecha.
         rolagem = ScrollView(this).apply {
@@ -74,7 +74,7 @@ class AjudaActivity : Activity() {
         }
         raiz.addView(rolagem, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f).apply { topMargin = dp(Estilo.E2) })
         raiz.addView(Estilo.barraDicas(this, "◀ ▶" to getString(R.string.aj_dica_assunto), "▲ ▼" to getString(R.string.aj_dica_rolar),
-            getString(R.string.cl_tecla_voltar) to getString(R.string.cl_dica_sair)).apply { setPadding(0, dp(12), 0, 0) })
+            getString(R.string.cl_tecla_voltar) to getString(R.string.cl_dica_sair)).apply { setPaddingRelative(0, dp(12), 0, 0) })
         setContentView(raiz)
         mostrar()
         rolagem.requestFocus()

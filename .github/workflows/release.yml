@@ -10,8 +10,10 @@
 #   Rodado em outra branch, só compila e assina com a chave debug do runner: a chave de verdade só é lida na main
 #   (10/11/2026, auditoria: antes uma branch qualquer saía assinada com a chave aceita pelas TVs, como artifact).
 #   Sem o segredo, só compila (e avisa).
-#   Antes de publicar roda os testes JVM (14/11/2026, ideia 62a): teste vermelho = nada sai. Só neste fluxo manual, para
-#   não gastar minutos do Actions em todo PR.
+#   Antes de publicar roda os testes JVM (14/11/2026, ideia 62a): teste vermelho = nada sai.
+# - Elevação 21.1 (17/11/2026): os testes JVM rodam também em TODO PR (antes só compilava): o erro aparece no PR, não
+#   na hora do Release. Custo medido: ~1 min 50 s a mais por PR (docs/ci-minutos.md). Em troca, um push novo no mesmo
+#   PR cancela a execução anterior (concurrency abaixo), que não serve mais para nada.
 # - Canal (14/11/2026, ideia 62c): "teste" publica como pré-lançamento (prerelease). O /releases/latest do GitHub ignora
 #   pré-lançamentos, então só a TV com o canal de teste ligado (ComandosExtras "canal") instala. Depois de uns dias sem
 #   queda na TV de teste, o workflow "Promover para todos" (promover.yml) tira a marca e todas as TVs recebem.
@@ -45,7 +47,8 @@ permissions:
 
 concurrency:
   group: release-${{ github.ref }}
-  cancel-in-progress: false
+  # PR: o push novo cancela o anterior (economia). Publicar (main, à mão): nunca cancela no meio.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
@@ -115,9 +118,8 @@ jobs:
             echo "::warning::Sem o segredo ASSINATURA_KEYSTORE_B64: compila, mas não publica Release."
           fi
 
-      # 62a: teste vermelho = não publica. Só no fluxo manual (PR continua só compilando, sem gastar minutos a mais).
+      # 62a: teste vermelho = não publica. 21.1: também em todo PR (teste vermelho = PR vermelho, sem compilar o APK).
       - name: Testes JVM
-        if: github.event_name == 'workflow_dispatch'
         run: |
           chmod +x gradlew
           ./gradlew :app:testReleaseUnitTest --no-daemon --stacktrace

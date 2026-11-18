@@ -122,6 +122,10 @@ object Xmltv {
             // Arquivo com defeito no meio: fica com o que já leu (antes jogava fora tudo, e o guia sumia).
             // Sem nada lido, o erro sobe: aí o PlayerCarga sabe que este guia não serve.
             if (lidos == 0) throw e
+        } catch (e: RuntimeException) {
+            // Achado do fuzz (elevação 2.5): o kxml no modo tolerante lança NumberFormatException em "&#EXTM3U;" (referência
+            // numérica estragada). Vale como arquivo com defeito, igual ao de cima.
+            if (lidos == 0) throw XmlPullParserException("XMLTV com defeito: ${e.javaClass.simpleName}")
         } catch (e: IOException) {
             // Passou do teto de tamanho: fica com o que já leu (baixar de novo daria o mesmo corte).
             // Rede que caiu no meio NÃO: o erro sobe para o PlayerCarga tentar de novo (senão um guia pela metade
@@ -169,6 +173,8 @@ object Xmltv {
             }
         } catch (e: XmlPullParserException) {
             if (lidos == 0) throw e
+        } catch (e: RuntimeException) {   // ver lerEmFluxo (fuzz, elevação 2.5)
+            if (lidos == 0) throw XmlPullParserException("XMLTV com defeito: ${e.javaClass.simpleName}")
         } catch (e: IOException) {
             if (lidos == 0 || e.message != TETO) throw e
         }

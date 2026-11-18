@@ -28,7 +28,7 @@ class TesteTeclasActivity : Activity() {
         val (raiz, coluna) = Estilo.telaLista(this, getString(R.string.teclas_titulo))
         situacao = Estilo.texto(this, Estilo.Papel.CORPO, getString(R.string.teclas_instrucao))
         // Lista em fonte de largura fixa: os códigos das teclas ficam alinhados em coluna.
-        lista = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { typeface = Typeface.MONOSPACE; setPadding(0, Estilo.dp(context, Estilo.E2), 0, 0) }
+        lista = Estilo.texto(this, Estilo.Papel.LEGENDA).apply { typeface = Typeface.MONOSPACE; setPaddingRelative(0, Estilo.dp(context, Estilo.E2), 0, 0) }
         coluna.addView(situacao)
         coluna.addView(lista)
         setContentView(raiz)

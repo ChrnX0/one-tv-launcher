@@ -27,6 +27,8 @@ import java.security.spec.ECGenParameterSpec
  *   pedido de ajuda, que são pontuais).
  */
 object Avisos {
+    /** Prazo de um envio a vários celulares juntos (cada um tem 10 s de conexão + 15 s de leitura). */
+    const val ENVIO_PRAZO_MS = 30_000L
     private const val TAG = "TvLauncher.Avisos"
     private const val PREFS = "avisos_celular"
     private const val ALIAS = "vapid_avisos"
@@ -146,8 +148,15 @@ object Avisos {
     fun enviarPara(ctx: Context, ids: Collection<String>, tipoNome: String, titulo: String, texto: String): Pair<Int, Int> {
         val app = ctx.applicationContext
         val lista = inscricoes(app).filter { it.endpoint.takeLast(16) in ids }
-        val aceitos = lista.count { enviarCru(app, it, tipoNome, titulo, texto, ttl = 6 * 3600, urgente = true) in 200..299 }
-        return aceitos to lista.size
+        if (lista.isEmpty()) return 0 to 0
+        // Em paralelo, com prazo total (depuração 18/11/2026): em fila eram até 25 s por celular, e o alarme do Cuidar de
+        // longe (goAsync, 60 s no máximo) dava ANR com 3 celulares fora do ar. Quem não respondeu no prazo conta como falha.
+        val pool = java.util.concurrent.Executors.newFixedThreadPool(minOf(lista.size, 4))
+        return try {
+            val tarefas = lista.map { i -> java.util.concurrent.Callable { enviarCru(app, i, tipoNome, titulo, texto, ttl = 6 * 3600, urgente = true) } }
+            val futuros = pool.invokeAll(tarefas, ENVIO_PRAZO_MS, java.util.concurrent.TimeUnit.MILLISECONDS)
+            futuros.count { f -> !f.isCancelled && runCatching { f.get() in 200..299 }.getOrDefault(false) } to lista.size
+        } finally { pool.shutdownNow() }
     }
 
     private fun enviarCru(app: Context, i: Inscricao, tipoNome: String, titulo: String, texto: String, ttl: Int, urgente: Boolean): Int = try {

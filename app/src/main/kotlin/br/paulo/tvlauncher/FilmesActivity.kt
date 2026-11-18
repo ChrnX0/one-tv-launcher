@@ -126,7 +126,7 @@ class FilmesActivity : Activity() {
         ordem = runCatching { Vod.Ordem.valueOf(getSharedPreferences("player", MODE_PRIVATE).getString("ordem_filmes", "")!!) }.getOrDefault(Vod.Ordem.RECENTES)
         // Coerência visual parte 2 (12/11/2026): o grafite e a margem da HOME (eram FUNDO liso e 32/26 dp).
         val raiz = FrameLayout(this).apply { background = Estilo.fundoTela(context) }
-        val colunas = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(18)) }
+        val colunas = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(18)) }
         // Coluna esquerda nova (14/11/2026, esboço aprovado): ações fixas, LISTAS, Todos fixo, categorias de A a Z rolando.
         coluna = ColunaCategorias(this, getString(R.string.filmes_titulo), aoParar = { escolherCat(it) }, aoOk = { okNaColuna(it) },
             escala = PlayerAcessivel.escala(simples))
@@ -141,11 +141,11 @@ class FilmesActivity : Activity() {
             horizontalSpacing = dp(12); verticalSpacing = dp(Estilo.Leitura.GRADE_VAO)
             stretchMode = GridView.STRETCH_COLUMN_WIDTH
             estiloLista(this)
-            setPadding(dp(4), dp(4), dp(4), dp(4)); clipToPadding = false
+            setPaddingRelative(dp(4), dp(4), dp(4), dp(4)); clipToPadding = false
         }
         direita.addView(grade, LinearLayout.LayoutParams(-1, 0, 1f))
         // Dica fixa das teclas, no mesmo jeito da lista de canais do player (player_lista_teclas: 11sp, cor apagada).
-        direita.addView(TextView(this).apply { text = getString(R.string.vod_grade_teclas); textSize = Estilo.Leitura.DICA; setTextColor(apagado); setPadding(dp(8), dp(6), 0, 0) })
+        direita.addView(TextView(this).apply { text = getString(R.string.vod_grade_teclas); textSize = Estilo.Leitura.DICA; setTextColor(apagado); setPaddingRelative(dp(8), dp(6), 0, 0) })
         colunas.addView(direita, LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(16) })
         raiz.addView(colunas, FrameLayout.LayoutParams(-1, -1))
         telaDeTras = colunas
@@ -155,14 +155,15 @@ class FilmesActivity : Activity() {
         raiz.addView(painelFicha, FrameLayout.LayoutParams(-1, -1))
         aviso = TextView(this).apply {
             textSize = 18f; setTextColor(papel); gravity = Gravity.CENTER; background = vidro(16)
-            setPadding(dp(24), dp(16), dp(24), dp(16)); text = getString(R.string.filmes_carregando)
+            setPaddingRelative(dp(24), dp(16), dp(24), dp(16)); text = getString(R.string.filmes_carregando)
         }
         raiz.addView(aviso, FrameLayout.LayoutParams(-2, -2, Gravity.CENTER))
         setContentView(raiz)
 
         grade.adapter = adaptadorGrade
         // ◀ na 1ª coluna da grade volta para a categoria escolhida (não para a linha da coluna que estiver mais perto).
-        grade.setOnKeyListener { _, codigo, e ->
+        grade.setOnKeyListener { v, tecla, e ->
+            val codigo = Rtl.tecla(tecla, v)   // 16.8: no árabe a coluna de categorias fica à direita
             if (e.action != KeyEvent.ACTION_DOWN) false
             else if (codigo == KeyEvent.KEYCODE_DPAD_LEFT && grade.selectedItemPosition % grade.numColumns == 0) { coluna.focar(); true }
             // ▶ na última coluna de uma grade grande: as letras, para pular (acréscimo 3).
@@ -598,7 +599,7 @@ class FilmesActivity : Activity() {
         }
         val d = CaixaTv(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
             .setTitle(R.string.player_acao_buscar)
-            .setView(FrameLayout(this).apply { setPadding(dp(20), dp(10), dp(20), 0); addView(campo) })
+            .setView(FrameLayout(this).apply { setPaddingRelative(dp(20), dp(10), dp(20), 0); addView(campo) })
             .setPositiveButton(R.string.player_acao_buscar) { _, _ -> aplicar(campo.text.toString().trim()) }
             .setNegativeButton(android.R.string.cancel, null)
             .create()
@@ -642,24 +643,24 @@ class FilmesActivity : Activity() {
 
     /** Cabeçalho do card: o nome (2 linhas no máximo) encostado embaixo, logo acima do pôster. */
     private fun cabecalhoCard(alturaDp: Int) = LinearLayout(this).apply {
-        orientation = LinearLayout.VERTICAL; gravity = Gravity.BOTTOM; setPadding(0, 0, 0, dp(6))
+        orientation = LinearLayout.VERTICAL; gravity = Gravity.BOTTOM; setPaddingRelative(0, 0, 0, dp(6))
         layoutParams = LinearLayout.LayoutParams(-1, dp(alturaDp))
     }
 
     private fun novoCard(): View {
-        val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(4), dp(4), dp(4), dp(6)) }
+        val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(4), dp(4), dp(4), dp(6)) }
         val capa = CapaCartao(this, dp(8).toFloat())   // cinza só enquanto o pôster não chega (CapaCartao.kt)
         // Largura da coluna / altura 2:3 (pôster de cinema). A largura real vem do GridView; aqui uma altura fixa basta.
         // A capa vai num FrameLayout para a etiqueta (embaixo, à esquerda) e a estrela (em cima, à direita) ficarem por cima.
         val moldura = FrameLayout(this)
         moldura.addView(capa, FrameLayout.LayoutParams(-1, -1))
         val etiqueta = TextView(this).apply {
-            textSize = 11f; typeface = fonteMedia; setTextColor(papel); setPadding(dp(7), dp(2), dp(7), dp(2))
+            textSize = 11f; typeface = fonteMedia; setTextColor(papel); setPaddingRelative(dp(7), dp(2), dp(7), dp(2))
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
         }
         moldura.addView(etiqueta, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(5), 0, 0, dp(5)) })
         val estrela = TextView(this).apply {
-            text = "★"; textSize = 15f; setTextColor(ambar); setPadding(dp(6), dp(1), dp(6), dp(2))
+            text = "★"; textSize = 15f; setTextColor(ambar); setPaddingRelative(dp(6), dp(1), dp(6), dp(2))
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
         }
         moldura.addView(estrela, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, dp(5), dp(5), 0) })
@@ -845,7 +846,7 @@ class FilmesActivity : Activity() {
     private fun desenharFicha(f: Filme, info: FichaFilme?, manterFoco: Boolean) {
         val focoAntes = if (manterFoco) (painelFicha.findFocus()?.tag as? String) else null
         painelFicha.removeAllViews()
-        val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(48), dp(36), dp(48), dp(28)) }
+        val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPaddingRelative(dp(48), dp(36), dp(48), dp(28)) }
         val ext = externo?.takeIf { it.first === f }?.second
         val pos = posicoes[f.chave]
 
@@ -896,7 +897,7 @@ class FilmesActivity : Activity() {
         linha.addView(colAcoes, LinearLayout.LayoutParams(dp(FichaAcoes.LARGURA_DP), -1))
 
         // ---- informações (direita): título e dados ao lado do pôster, sinopse embaixo
-        val direita = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(36), 0, 0, 0) }
+        val direita = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(36), 0, 0, 0) }
         val topo = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
         val texto = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         texto.addView(TextView(this).apply { text = Vod.nomeTela(f.nome, f.ano); textSize = Estilo.Leitura.TITULO; typeface = fonteMedia; setTextColor(papel); maxLines = 3; ellipsize = TextUtils.TruncateAt.END })
@@ -908,21 +909,21 @@ class FilmesActivity : Activity() {
             ext?.detalhe?.generos?.takeIf { it.isNotEmpty() }?.joinToString(", ") ?: info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(f.grupo).ifEmpty { null },
             rotuloVersao(Idioma.versao(f.nome, f.grupo)),
         ).joinToString("   ·   ")
-        texto.addView(TextView(this).apply { text = dados; textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(10), 0, 0) })
+        texto.addView(TextView(this).apply { text = dados; textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPaddingRelative(0, dp(10), 0, 0) })
         // Nota de fora (Trakt): "Trakt 78%", em âmbar como a estrela.
         ext?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { n ->
-            texto.addView(TextView(this).apply { text = InfoExterna.textoNotas(n); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPadding(0, dp(6), 0, 0) })
+            texto.addView(TextView(this).apply { text = InfoExterna.textoNotas(n); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPaddingRelative(0, dp(6), 0, 0) })
         }
         // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch). DESLIGADO (OndeAssistir.JUSTWATCH_LIBERADO): licença.
         (f.tmdb ?: info?.tmdb ?: ext?.tmdb)?.takeIf { OndeAssistir.JUSTWATCH_LIBERADO && InfoExternaCache.temTmdb() }?.let { id ->
-            val linhaOnde = TextView(this).apply { textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(6), 0, 0); visibility = View.GONE; maxLines = 2 }
+            val linhaOnde = TextView(this).apply { textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPaddingRelative(0, dp(6), 0, 0); visibility = View.GONE; maxLines = 2 }
             texto.addView(linhaOnde)
             Fundo.rodar { InfoExternaCache.provedores(id, serie = false).takeIf { it.isNotEmpty() }?.let { p ->
                 tela.post { linhaOnde.text = getString(R.string.onde_tambem_em, p.joinToString(" · ")); linhaOnde.visibility = View.VISIBLE }
             } }
         }
         sagaExterna?.takeIf { it.first === f }?.second?.let { (nome, tem, total) ->
-            texto.addView(TextView(this).apply { text = getString(R.string.ext_saga, nome, tem, total); textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPadding(0, dp(6), 0, 0) })
+            texto.addView(TextView(this).apply { text = getString(R.string.ext_saga, nome, tem, total); textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPaddingRelative(0, dp(6), 0, 0) })
         }
         // Começou e não terminou: barra de onde parou + "faltam 1 h 01 · termina às 22:41" (13/11/2026).
         if (Vod.deveRetomar(pos) && pos!!.duracao > 0) {
@@ -941,7 +942,7 @@ class FilmesActivity : Activity() {
         topo.addView(capa, LinearLayout.LayoutParams(dp(140), dp(210)).apply { marginStart = dp(24) })
         direita.addView(topo)
 
-        val corpo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(0, dp(16), 0, 0) }
+        val corpo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(0, dp(16), 0, 0) }
         if (info == null) corpo.addView(TextView(this).apply { text = getString(R.string.filmes_ficha_carregando); textSize = Estilo.Leitura.AVISO; setTextColor(apagado) })
         val txtSinopse = sinopse?.let {
             TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.25f); maxLines = 5; ellipsize = TextUtils.TruncateAt.END }
@@ -1126,7 +1127,7 @@ class FilmesActivity : Activity() {
 
     private fun botao(texto: String, marca: String, aoApertar: () -> Unit) = TextView(this).apply {
         text = texto; textSize = Estilo.Leitura.BOTAO; typeface = fonteMedia; tag = marca
-        setPadding(dp(26), dp(12), dp(26), dp(12))
+        setPaddingRelative(dp(26), dp(12), dp(26), dp(12))
         isFocusable = true; isClickable = true
         background = StateListDrawable().apply {
             addState(intArrayOf(android.R.attr.state_focused), GradientDrawable().apply { cornerRadius = dp(24).toFloat(); setColor(papel) })
@@ -1138,7 +1139,7 @@ class FilmesActivity : Activity() {
     }
 
     private fun rotuloValor(r: String, v: String) = TextView(this).apply {
-        text = "$r: $v"; textSize = Estilo.Leitura.CREDITOS; setTextColor(suave); setPadding(0, dp(12), 0, 0); setLineSpacing(0f, 1.15f)
+        text = "$r: $v"; textSize = Estilo.Leitura.CREDITOS; setTextColor(suave); setPaddingRelative(0, dp(12), 0, 0); setLineSpacing(0f, 1.15f)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -1168,7 +1169,7 @@ class FilmesActivity : Activity() {
 
     private fun rotulo(t: String) = TextView(this).apply {
         text = t; textSize = Estilo.Leitura.ROTULO; typeface = Fontes.nunito(600); letterSpacing = 0.06f; setTextColor(Estilo.TEXTO_3)
-        setPadding(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
+        setPaddingRelative(dp(10), dp(4), dp(10), dp(8)); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
     }
 
     private fun relogio(ms: Long): String {

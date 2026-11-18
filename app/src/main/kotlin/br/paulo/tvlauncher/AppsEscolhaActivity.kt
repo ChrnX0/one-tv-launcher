@@ -34,6 +34,7 @@ class AppsEscolhaActivity : Activity() {
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro (VigiaAtualizacao)
+        VigiaDesfazer.ligar(this, getString(R.string.desf_rot_apps))   // elevação 2.11
         modo = intent.getStringExtra(EXTRA_MODO) ?: MODO_OCULTOS
         val visita = modo == MODO_VISITA
         val (raiz, col) = when (modo) {

@@ -96,6 +96,11 @@ object InfoExternaCache {
         }.onFailure { Log.w(TAG, "não gravei: ${it.javaClass.simpleName}") }
     }
 
+    /** Elevação 6.3: o id do IMDb (só o número, como identificador) da série/filme de id TMDB [tmdb], se já guardado. */
+    fun imdbPorTmdb(ctx: Context, tmdb: Int): String? = synchronized(trava) {
+        mapa(ctx).values.firstOrNull { it.tmdb == tmdb && it.imdb.isNotBlank() }?.imdb
+    }
+
     /** O que já está guardado (sem rede). Rápido: pode chamar da tela depois da primeira leitura. */
     fun guardado(ctx: Context, chave: String): Guardado? = synchronized(trava) { mapa(ctx)[chave] }
 

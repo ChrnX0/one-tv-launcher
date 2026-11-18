@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação (17/11/2026, ondas 2): tradução de values/strings_elevacao2.xml. -->
+<resources>
+    <string name="elv_ac_titulo">Alto contraste</string>
+    <string name="elv_ac_det">Texto mais brilhante e contornos mais nítidos em todos os ecrãs (pelo menos 7:1)</string>
+    <string name="elv_ad_titulo">Audiodescrição</string>
+    <string name="elv_ad_det">Escolher a faixa de áudio que descreve a cena sempre que houver uma</string>
+    <string name="elv_sdh_titulo">Legendas para surdos</string>
+    <string name="elv_sdh_det">Mostrar sempre legendas com sons ([porta bate]) na língua do televisor, mesmo dobrado</string>
+    <string name="elv_cat_titulo">Cartaz e sinopse dos vídeos</string>
+    <string name="elv_cat_explica">Só o título vai para o TMDB, nunca a pasta nem o servidor</string>
+    <string name="elv_cat_ligado">Ligado</string>
+    <string name="elv_cat_desligado">Desligado</string>
+    <string name="elv_cat_ep">%1$s · T%2$d E%3$d</string>
+    <string name="elv_cat_so_ep">%1$s · Episódio %2$d</string>
+    <string name="elv_cat_temporada">%1$s · Temporada %2$d</string>
+    <string name="elv_cat_filme_ano">%1$s (%2$d)</string>
+    <string name="elv_cat_n_temporadas">Temporadas: %d</string>
+    <string name="elv_cat_procurando">A procurar o cartaz…</string>
+    <string name="elv_cat_nada">Nada encontrado no TMDB. Mantenha OK premido para escrever o nome certo.</string>
+    <string name="elv_cat_corrigir_titulo">Corrigir: %s</string>
+    <string name="elv_cat_corrigir_explica">Cartaz ou sinopse errados? Peça o resultado seguinte ou escreva o nome e o ano certos. Nome vazio volta ao automático.</string>
+    <string name="elv_cat_nao_e">Não é este</string>
+    <string name="elv_cat_escrever">Escrever o nome</string>
+    <string name="elv_cat_campo">Nome e ano, ex.: Duna 2021</string>
+    <string name="elv_cat_salvar">Guardar</string>
+    <string name="elv_cat_dica">corrigir</string>
+    <string name="elv_bib_lista">Lista</string>
+    <string name="elv_bib_pasta">Pasta</string>
+    <string name="elv_bib_servidor">Servidor</string>
+    <string name="elv_bib_nuvem">Nuvem</string>
+    <string name="elv_bib_addon">Extra</string>
+</resources>

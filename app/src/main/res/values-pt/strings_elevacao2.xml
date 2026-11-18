@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação, onda 2 (17/11/2026): vitrine (acessibilidade, árabe, catálogo, biblioteca). -->
+<resources>
+    <!-- 16.3 alto contraste -->
+    <string name="elv_ac_titulo">Alto contraste</string>
+    <string name="elv_ac_det">Texto mais forte e bordas mais nítidas em todas as telas (pelo menos 7:1)</string>
+    <!-- 16.2 audiodescrição e legenda para surdos -->
+    <string name="elv_ad_titulo">Audiodescrição</string>
+    <string name="elv_ad_det">Escolher o áudio que descreve a cena sempre que houver</string>
+    <string name="elv_sdh_titulo">Legenda para surdos</string>
+    <string name="elv_sdh_det">Sempre mostrar legenda com os sons ([porta bate]) no idioma da TV, mesmo dublado</string>
+
+    <!-- Elevação 8.2: a pasta vira catálogo -->
+    <string name="elv_cat_titulo">Pôster e sinopse dos vídeos</string>
+    <string name="elv_cat_explica">Só o título vai ao TMDB, nunca a pasta nem o servidor</string>
+    <string name="elv_cat_ligado">Ligado</string>
+    <string name="elv_cat_desligado">Desligado</string>
+    <string name="elv_cat_ep">%1$s · T%2$d E%3$d</string>
+    <string name="elv_cat_so_ep">%1$s · Episódio %2$d</string>
+    <string name="elv_cat_temporada">%1$s · Temporada %2$d</string>
+    <string name="elv_cat_filme_ano">%1$s (%2$d)</string>
+    <string name="elv_cat_n_temporadas">Temporadas: %d</string>
+    <string name="elv_cat_procurando">Procurando o pôster…</string>
+    <string name="elv_cat_nada">Nada achado no TMDB. Segure OK para escrever o nome certo.</string>
+    <string name="elv_cat_corrigir_titulo">Corrigir: %s</string>
+    <string name="elv_cat_corrigir_explica">Pôster ou sinopse errados? Peça o próximo resultado ou escreva o nome certo e o ano. Nome vazio volta ao automático.</string>
+    <string name="elv_cat_nao_e">Não é este</string>
+    <string name="elv_cat_escrever">Escrever o nome</string>
+    <string name="elv_cat_campo">Nome e ano, ex.: Duna 2021</string>
+    <string name="elv_cat_salvar">Salvar</string>
+    <string name="elv_cat_dica">corrigir</string>
+
+    <!-- Elevação 7.1: biblioteca única (de onde vem cada fonte) -->
+    <string name="elv_bib_lista">Lista</string>
+    <string name="elv_bib_pasta">Pasta</string>
+    <string name="elv_bib_servidor">Servidor</string>
+    <string name="elv_bib_nuvem">Nuvem</string>
+    <string name="elv_bib_addon">Addon</string>
+</resources>
