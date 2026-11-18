@@ -15,11 +15,16 @@ Run: python3 website/build.py   (no dependencies). Pages that the app opens by U
 """
 import html
 import json
+import os
 import shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT.parent / "site"
+# SOFALY_PREVIEW=<folder>: build a copy with explicit index.html links (for hosts that don't serve folder indexes).
+PREVIEW = os.environ.get("SOFALY_PREVIEW")
+if PREVIEW:
+    OUT = Path(PREVIEW)
 SITE_URL = "https://sofaly.tv/"
 DEFAULT = "en"
 PAGES = ["index", "features", "plans", "developers"]
@@ -126,7 +131,7 @@ class Lang:
     def url(self, page, code=None):
         """Relative link from a page of this language to `page` in `code` (default: same language)."""
         code = code or self.code
-        f = "" if page == "index" else f"{page}.html"
+        f = "index.html" if PREVIEW and page == "index" else ("" if page == "index" else f"{page}.html")
         if code != self.code:
             f = self.prefix + ("" if code == DEFAULT else f"{code}/") + f
         return f or "./"
