@@ -396,7 +396,8 @@ class PrevisaoActivity : Activity() {
         })
         trio.addView(ar, LinearLayout.LayoutParams(0, -1, 1f).apply { marginEnd = dp(Grade.VAO / 2) })
         trio.addView(sol, LinearLayout.LayoutParams(0, -1, 1.15f).apply { marginStart = dp(Grade.VAO / 2); marginEnd = dp(Grade.VAO / 2) })
-        trio.addView(lua, LinearLayout.LayoutParams(0, -1, 1.15f).apply { marginStart = dp(Grade.VAO / 2) })
+        if (Extras.ligado(this, Extras.Chave.CARTAO_LUA))   // chave CARTAO_LUA (HomeCards, 18/11/2026)
+            trio.addView(lua, LinearLayout.LayoutParams(0, -1, 1.15f).apply { marginStart = dp(Grade.VAO / 2) })
         coluna.addView(trio, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(16) })
 
         if (voz != null) {

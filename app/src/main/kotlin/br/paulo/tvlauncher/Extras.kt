@@ -85,6 +85,19 @@ object Extras {
         /** 6.3 Abertura pronta: nos episódios, pergunta ao IntroDB onde fica a abertura (manda o episódio e, como todo
          *  pedido, o IP da casa). Ligada de fábrica; desligada, valem só as aberturas marcadas na TV (18/11/2026). */
         ABERTURA_PRONTA(true),
+        // Cartões próprios da tela inicial (HomeCards, 18/11/2026). Sem nada cadastrado, as listas não mostram nada.
+        /** Próximo jogo do "Meu time" no item TV da cruz. */
+        CARTAO_PLACAR(true),
+        /** Cotação do dia ao lado do clima (pergunta à Frankfurter, grátis; manda o IP da casa, como todo pedido). */
+        CARTAO_COTACAO(false),
+        /** Contagem regressiva na pílula de cima nos últimos 7 dias (datas da pessoa ou o próximo feriado). */
+        CARTAO_CONTAGEM(true),
+        /** Lembretes da casa na pílula de cima no dia ("Hoje: lixo reciclável") e aviso na hora marcada. */
+        CARTAO_LEMBRETE_CASA(true),
+        /** Aviso na pílula de cima quando um serviço cadastrado para de responder. */
+        CARTAO_SERVICO(true),
+        /** Fase da lua na Previsão, no protetor e no ícone do clima à noite (já existia; agora dá para desligar). */
+        CARTAO_LUA(true),
     }
 
     /** [ligado] relido do disco: para o processo :player, que não vê na hora o que a tela de Configurações mudou. */

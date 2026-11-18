@@ -27,6 +27,7 @@ async function carregarIdeias() {
     desenharLembretes(e.lembretes);
     desenharMural(e.mural);
     desenharAniversarios(e.aniversarios || []);
+    if (e.cartoes) desenharCartoesHome(e.cartoes);
     desenharRadios(e.radios || []);
     desenharPodcasts(e.podcasts || []);
     desenharSemana(e.retrospectiva, e.desempenho);
@@ -265,6 +266,94 @@ $('formAniversario').addEventListener('submit', async (ev) => {
     desenharAniversarios((await ideias('POST', 'aniversarios', corpo)).lista);
     $('nomeAniversario').value = '';
   } catch (err) { mostrar($('statusAniversarios'), textoErro(err)); }
+});
+
+// ---------- cartões próprios da tela inicial (HomeCards.kt, 18/11/2026) ----------
+
+const DIAS_CURTOS = ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom'];   // bit 0 = segunda (HomeCards.bit)
+const hhmmCartao = (m) => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+
+(function montarDiasLembrete() {
+  const caixa = $('diasLembreteCasa');
+  DIAS_CURTOS.forEach((d, i) => {
+    const r = el('label');
+    const c = el('input'); c.type = 'checkbox'; c.value = String(1 << i);
+    r.append(c, ' ', el('span', '', d));
+    caixa.append(r, ' ');
+  });
+})();
+
+/** Uma linha com as partes em pedaços separados (cada pedaço traduz sozinho: "seg", "o dia todo", "fora do ar"). */
+function linhaCartao(partes, aoTirar) {
+  const linha = el('div', 'linha-registro');
+  const t = el('span');
+  partes.forEach((p, i) => { if (i) t.append(' · '); t.append(el('span', '', p)); });
+  linha.append(t, botao('Tirar', aoTirar));
+  return linha;
+}
+
+async function mandarCartao(corpo) {
+  try { desenharCartoesHome((await ideias('POST', 'cartoes', corpo)).cartoes); return true; }
+  catch (err) { mostrar($('statusCartoesHome'), textoErro(err)); return false; }
+}
+
+function desenharCartoesHome(c) {
+  $('cartoesSemPlano').hidden = !!c.permitido;
+  const cont = $('itensContagem'); cont.replaceChildren();
+  for (const x of c.contagens) cont.append(linhaCartao([x.nome, x.data.split('-').reverse().join('/')], () => mandarCartao({ tipo: 'contagem', acao: 'remover', nome: x.nome })));
+  if (!c.contagens.length) cont.append(el('p', 'aviso', 'Nenhuma contagem.'));
+
+  const lem = $('itensLembreteCasa'); lem.replaceChildren();
+  for (const x of c.lembretes) {
+    const dias = DIAS_CURTOS.filter((_, i) => x.dias & (1 << i));
+    lem.append(linhaCartao([x.texto, ...dias, x.minuto !== undefined ? hhmmCartao(x.minuto) : 'o dia todo'],
+      () => mandarCartao({ tipo: 'lembrete', acao: 'remover', texto: x.texto })));
+  }
+  if (!c.lembretes.length) lem.append(el('p', 'aviso', 'Nenhum lembrete da casa.'));
+
+  const srv = $('itensServico'); srv.replaceChildren();
+  for (const x of c.servicos) srv.append(linhaCartao([x.nome, x.url, x.fora ? 'fora do ar' : 'no ar'], () => mandarCartao({ tipo: 'servico', acao: 'remover', nome: x.nome })));
+  if (!c.servicos.length) srv.append(el('p', 'aviso', 'Nenhum serviço.'));
+
+  const moe = $('moedasCotacao'); moe.replaceChildren();
+  const valor = Object.fromEntries((c.cotacoes || []).map((q) => [q.codigo, q]));
+  for (const m of c.ativos.filter((a) => a !== c.moedaCasa)) {
+    const r = el('label');
+    const cb = el('input'); cb.type = 'checkbox'; cb.value = m; cb.checked = c.moedas.includes(m);
+    const q = valor[m];
+    r.append(cb, ' ', el('span', '', m + (q ? ' = ' + q.valor.toLocaleString(undefined, { maximumFractionDigits: q.valor < 100 ? 2 : 0 }) + ' ' + c.moedaCasa : '')));
+    moe.append(r, ' ');
+  }
+}
+
+$('formContagem').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const nome = $('nomeContagem').value.trim(), data = $('dataContagem').value;
+  if (!nome || !data) return;
+  if (await mandarCartao({ tipo: 'contagem', nome, data })) $('nomeContagem').value = '';
+});
+
+$('formLembreteCasa').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const texto = $('textoLembreteCasa').value.trim();
+  const dias = [...$('diasLembreteCasa').querySelectorAll('input:checked')].reduce((s, c) => s | Number(c.value), 0);
+  if (!texto || !dias) return;
+  const h = $('horaLembreteCasa').value;
+  const corpo = { tipo: 'lembrete', texto, dias };
+  if (h) { const [hh, mm] = h.split(':').map(Number); corpo.minuto = hh * 60 + mm; }
+  if (await mandarCartao(corpo)) $('textoLembreteCasa').value = '';
+});
+
+$('formServico').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const nome = $('nomeServico').value.trim(), url = $('urlServico').value.trim();
+  if (!nome || !url) return;
+  if (await mandarCartao({ tipo: 'servico', nome, url })) { $('nomeServico').value = ''; $('urlServico').value = ''; }
+});
+
+$('btnMoedas').addEventListener('click', async () => {
+  const moedas = [...$('moedasCotacao').querySelectorAll('input:checked')].map((c) => c.value).join(',');
+  if (await mandarCartao({ tipo: 'moedas', moedas })) mostrar($('statusCartoesHome'), 'Moedas salvas.');
 });
 
 // ---------- presença ----------

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartões próprios da tela inicial (HomeCards.kt, 18/11/2026). -->
+<resources>
+    <string name="extras_CARTAO_PLACAR">Ana ekrandaki TV öğesinde takımınızın sıradaki maçı</string>
+    <string name="extras_CARTAO_COTACAO">Hava durumunun yanında günün döviz kurları (dolar, euro, bitcoin; ücretsiz Frankfurter hizmetine sorar)</string>
+    <string name="extras_CARTAO_CONTAGEM">Son 7 günde ana ekranın üstünde geri sayım (sizin tarihleriniz veya sıradaki resmi tatil)</string>
+    <string name="extras_CARTAO_LEMBRETE_CASA">Günü gelince ana ekranın üstünde ev hatırlatıcıları (ör. geri dönüşüm günü), belirlenen saatte bildirimle</string>
+    <string name="extras_CARTAO_SERVICO">Eklenen bir hizmet yanıt vermeyi bıraktığında ana ekranın üstünde uyar</string>
+    <string name="extras_CARTAO_LUA">Tahminde, ekran koruyucuda ve gece hava durumu simgesinde ay evresi</string>
+    <string name="hc_feriado_hoje">Bugün resmi tatil</string>
+    <string name="hc_hoje">Bugün: %1$s</string>
+    <string name="hc_lembrete_rotulo">Ev hatırlatıcısı</string>
+    <string name="hc_servico_fora">%1$s çalışmıyor</string>
+    <string name="hc_servico_rotulo">Hizmetleriniz</string>
+    <string name="hc_cotacao_rotulo">Döviz kurları</string>
+    <string name="hc_cotacao_fonte">Günün değerleri, kaynak: Frankfurter (merkez bankaları)</string>
+    <string name="hc_mil">bin</string>
+    <string name="hc_milhao">mn</string>
+    <string name="hc_seu_time">Takımınız: %1$s</string>
+    <plurals name="hc_feriado_em">
+        <item quantity="one">%1$d gün sonra resmi tatil</item>
+        <item quantity="other">%1$d gün sonra resmi tatil</item>
+    </plurals>
+    <plurals name="hc_faltam">
+        <item quantity="one">%2$s için %1$d gün kaldı</item>
+        <item quantity="other">%2$s için %1$d gün kaldı</item>
+    </plurals>
+</resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartões próprios da tela inicial (HomeCards.kt, 18/11/2026). -->
+<resources>
+    <string name="extras_CARTAO_PLACAR">홈 화면 TV 항목에 응원 팀의 다음 경기</string>
+    <string name="extras_CARTAO_COTACAO">날씨 옆에 오늘의 환율 (달러, 유로, 비트코인; 무료 서비스 Frankfurter에 요청)</string>
+    <string name="extras_CARTAO_CONTAGEM">마지막 7일 동안 홈 화면 위에 카운트다운 (내 날짜 또는 다음 공휴일)</string>
+    <string name="extras_CARTAO_LEMBRETE_CASA">해당 요일에 홈 화면 위에 집 알림 (예: 분리수거 날), 정한 시간에 알림</string>
+    <string name="extras_CARTAO_SERVICO">추가한 서비스가 응답하지 않으면 홈 화면 위에 알림</string>
+    <string name="extras_CARTAO_LUA">예보, 화면 보호기, 밤 날씨 아이콘에 달의 위상 표시</string>
+    <string name="hc_feriado_hoje">오늘은 공휴일</string>
+    <string name="hc_hoje">오늘: %1$s</string>
+    <string name="hc_lembrete_rotulo">집 알림</string>
+    <string name="hc_servico_fora">%1$s 중단됨</string>
+    <string name="hc_servico_rotulo">내 서비스</string>
+    <string name="hc_cotacao_rotulo">환율</string>
+    <string name="hc_cotacao_fonte">오늘의 환율, 출처: Frankfurter (중앙은행)</string>
+    <string name="hc_mil">천</string>
+    <string name="hc_milhao">백만</string>
+    <string name="hc_seu_time">응원 팀: %1$s</string>
+    <plurals name="hc_feriado_em">
+        <item quantity="other">공휴일까지 %1$d일</item>
+    </plurals>
+    <plurals name="hc_faltam">
+        <item quantity="other">%2$s까지 %1$d일</item>
+    </plurals>
+</resources>

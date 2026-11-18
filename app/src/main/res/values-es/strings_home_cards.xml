@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartões próprios da tela inicial (HomeCards.kt, 18/11/2026). -->
+<resources>
+    <string name="extras_CARTAO_PLACAR">Próximo partido de tu equipo en el elemento TV de la pantalla de inicio</string>
+    <string name="extras_CARTAO_COTACAO">Cotización del día junto al tiempo (dólar, euro, bitcoin; consulta el servicio gratuito Frankfurter)</string>
+    <string name="extras_CARTAO_CONTAGEM">Cuenta regresiva arriba en la pantalla de inicio en los últimos 7 días (tus fechas o el próximo feriado)</string>
+    <string name="extras_CARTAO_LEMBRETE_CASA">Recordatorios de la casa arriba en la pantalla de inicio el día que tocan (p. ej. día del reciclaje), con aviso a la hora</string>
+    <string name="extras_CARTAO_SERVICO">Avisar arriba en la pantalla de inicio cuando un servicio añadido deje de responder</string>
+    <string name="extras_CARTAO_LUA">Fase lunar en el pronóstico, el salvapantallas y el icono del tiempo de noche</string>
+    <string name="hc_feriado_hoje">Feriado hoy</string>
+    <string name="hc_hoje">Hoy: %1$s</string>
+    <string name="hc_lembrete_rotulo">Recordatorio de la casa</string>
+    <string name="hc_servico_fora">%1$s está caído</string>
+    <string name="hc_servico_rotulo">Tus servicios</string>
+    <string name="hc_cotacao_rotulo">Cotización del día</string>
+    <string name="hc_cotacao_fonte">Valores del día, fuente: Frankfurter (bancos centrales)</string>
+    <string name="hc_mil">mil</string>
+    <string name="hc_milhao">M</string>
+    <string name="hc_seu_time">Tu equipo: %1$s</string>
+    <plurals name="hc_feriado_em">
+        <item quantity="one">Feriado en %1$d día</item>
+        <item quantity="many">Feriado en %1$d días</item>
+        <item quantity="other">Feriado en %1$d días</item>
+    </plurals>
+    <plurals name="hc_faltam">
+        <item quantity="one">Falta %1$d día para %2$s</item>
+        <item quantity="many">Faltan %1$d días para %2$s</item>
+        <item quantity="other">Faltan %1$d días para %2$s</item>
+    </plurals>
+</resources>

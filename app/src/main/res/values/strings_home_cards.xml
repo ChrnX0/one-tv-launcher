@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartões próprios da tela inicial (HomeCards.kt, 18/11/2026). -->
+<resources>
+    <string name="extras_CARTAO_PLACAR">Your team\'s next game on the TV item of the home screen</string>
+    <string name="extras_CARTAO_COTACAO">Exchange rates of the day next to the weather (dollar, euro, bitcoin; asks the free Frankfurter service)</string>
+    <string name="extras_CARTAO_CONTAGEM">Countdown at the top of the home screen in the last 7 days (your dates, or the next holiday)</string>
+    <string name="extras_CARTAO_LEMBRETE_CASA">House reminders at the top of the home screen on their day (e.g. recycling day), with a notice at the set time</string>
+    <string name="extras_CARTAO_SERVICO">Warn at the top of the home screen when a service you added stops answering</string>
+    <string name="extras_CARTAO_LUA">Moon phase in the forecast, the screensaver and the weather icon at night</string>
+    <string name="hc_feriado_hoje">Holiday today</string>
+    <string name="hc_hoje">Today: %1$s</string>
+    <string name="hc_lembrete_rotulo">House reminder</string>
+    <string name="hc_servico_fora">%1$s is down</string>
+    <string name="hc_servico_rotulo">Your services</string>
+    <string name="hc_cotacao_rotulo">Exchange rates</string>
+    <string name="hc_cotacao_fonte">Rates of the day, source: Frankfurter (central banks)</string>
+    <string name="hc_mil">k</string>
+    <string name="hc_milhao">M</string>
+    <string name="hc_seu_time">Your team: %1$s</string>
+    <plurals name="hc_feriado_em">
+        <item quantity="one">Holiday in %1$d day</item>
+        <item quantity="other">Holiday in %1$d days</item>
+    </plurals>
+    <plurals name="hc_faltam">
+        <item quantity="one">%1$d day to %2$s</item>
+        <item quantity="other">%1$d days to %2$s</item>
+    </plurals>
+</resources>

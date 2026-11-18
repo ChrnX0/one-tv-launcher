@@ -394,6 +394,7 @@ class MainActivity : Activity() {
         atualizarPilulaVencimento()
         atualizarPilulaJogo()
         atualizarPilulaAniversario()
+        atualizarPilulasCartoes(buscar = true)
         getSharedPreferences("launcher", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteLocal)
         getSharedPreferences("despertador", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteAlarmes)
         getSharedPreferences("timer", MODE_PRIVATE).registerOnSharedPreferenceChangeListener(ouvinteTimer)
@@ -605,7 +606,19 @@ class MainActivity : Activity() {
             addView(lupa, LinearLayout.LayoutParams(alturaPilula, alturaPilula).apply { marginEnd = dp(2) })
             addView(voz, LinearLayout.LayoutParams(alturaPilula, alturaPilula))
         }
-        val capsulaClima = capsula().apply { addView(blocoClima, LinearLayout.LayoutParams(WRAP, alturaPilula)) }
+        // Cotação do dia (HomeCards, 18/11/2026): na mesma cápsula do clima, depois dele. OK mostra todas as escolhidas.
+        txtCotacao = texto(12.5f, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false; maxLines = 1 }
+        pilulaCotacao = pilula(vidro = false).apply {
+            visibility = View.GONE
+            addView(txtCotacao)
+            setOnClickListener {
+                Fundo.rodar { val t = HomeCardsTv.textoCotacoesCompleto(this@MainActivity); ui.post { AvisoTv.rapido(this@MainActivity, getString(R.string.hc_cotacao_rotulo), t, 10) } }
+            }
+        }
+        val capsulaClima = capsula().apply {
+            addView(blocoClima, LinearLayout.LayoutParams(WRAP, alturaPilula))
+            addView(pilulaCotacao, LinearLayout.LayoutParams(WRAP, alturaPilula))
+        }
         // Ideia 75 (14/11/2026): "Tocando agora", cápsula própria depois do clima (chave Tocando agora, em Extras). Capa do
         // que toca (ou o ícone do app), barrinhas que mexem só tocando, título e artista/app. OK pausa ou continua; segurar
         // OK abre o app. Some sem nada tocando e 10 min depois de pausar (ver mostrarTocando).
@@ -729,6 +742,22 @@ class MainActivity : Activity() {
             }
         }
         avisos.addView(pilulaAniversario, lpPilula())
+        // Cartões próprios (HomeCards, 18/11/2026): lembrete da casa no dia e contagem regressiva na última semana.
+        txtLembreteCasa = texto(12.5f, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
+        pilulaLembreteCasa = pilula(IconeLinha(IconeLinha.Tipo.RECADO), vidro = false).apply {
+            visibility = View.GONE
+            addView(txtLembreteCasa)
+            setOnClickListener {
+                Fundo.rodar { val t = HomeCardsTv.textosLembretes(this@MainActivity); ui.post { if (t.isNotEmpty()) AvisoTv.rapido(this@MainActivity, getString(R.string.hc_lembrete_rotulo), t.joinToString("\n"), 8) } }
+            }
+        }
+        avisos.addView(pilulaLembreteCasa, lpPilula())
+        txtContagem = texto(12.5f, Estilo.TEXTO, fonteUi).apply { includeFontPadding = false }
+        pilulaContagem = pilula(IconeLinha(IconeLinha.Tipo.CALENDARIO), vidro = false).apply {
+            visibility = View.GONE
+            addView(txtContagem)
+        }
+        avisos.addView(pilulaContagem, lpPilula())
         // Ideia 88: "Sem internet · Funcionam: pendrive, Na rede, Gravações". Primeira da cápsula (é o que mais importa
         // quando aparece). OK abre o Diagnóstico, que explica a queda em uma frase. Ver avaliarSemInternet.
         txtSemInternet = texto(12.5f, Estilo.ATENCAO, fonteUi).apply { includeFontPadding = false }
@@ -738,6 +767,20 @@ class MainActivity : Activity() {
             setOnClickListener { startActivity(Intent(this@MainActivity, DiagnosticoActivity::class.java)) }
         }
         avisos.addView(pilulaSemInternet, 0, lpPilula())
+        // Status do seu serviço (HomeCards): só aparece quando um endereço cadastrado para de responder. OK mostra todos.
+        txtServico = texto(12.5f, Estilo.ATENCAO, fonteUi).apply { includeFontPadding = false }
+        pilulaServico = pilula(IconeApp(IconeApp.Tipo.SEM_REDE, Estilo.ATENCAO), vidro = false).apply {
+            visibility = View.GONE
+            addView(txtServico)
+            setOnClickListener {
+                Fundo.rodar {
+                    HomeCardsTv.testarServicos(this@MainActivity, forcar = true)
+                    val fora = HomeCardsTv.foraDoArTodos(this@MainActivity)
+                    ui.post { atualizarPilulasCartoes(); if (fora.isNotEmpty()) AvisoTv.rapido(this@MainActivity, getString(R.string.hc_servico_rotulo), fora.joinToString("\n") { getString(R.string.hc_servico_fora, it) }, 8) }
+                }
+            }
+        }
+        avisos.addView(pilulaServico, 1, lpPilula())
         atualizarAvisos()
 
         raiz.addView(topo, FrameLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(TOPO_PALCO) })
@@ -1435,6 +1478,51 @@ class MainActivity : Activity() {
     }
 
     private lateinit var txtJogo: TextView
+    // Cartões próprios da tela inicial (HomeCards, 18/11/2026)
+    private lateinit var pilulaCotacao: LinearLayout
+    private lateinit var txtCotacao: TextView
+    private lateinit var pilulaLembreteCasa: LinearLayout
+    private lateinit var txtLembreteCasa: TextView
+    private lateinit var pilulaContagem: LinearLayout
+    private lateinit var txtContagem: TextView
+    private lateinit var pilulaServico: LinearLayout
+    private lateinit var txtServico: TextView
+    /** Próximo jogo do "Meu time" para a linha do item TV da cruz (HomeCards, chave CARTAO_PLACAR). */
+    @Volatile private var jogoCruz: String? = null
+
+    /**
+     * As pílulas dos cartões próprios: lê o guardado (rápido) e mostra; depois, fora da tela, busca a cotação e testa os
+     * serviços (cada um tem o seu intervalo) e, se algo mudou, mostra de novo.
+     */
+    private fun atualizarPilulasCartoes(buscar: Boolean = false) {
+        Fundo.rodar("cartoes") {
+            if (buscar) {
+                val mudou = runCatching { HomeCardsTv.atualizarCotacoes(this) }.getOrDefault(false) or
+                    runCatching { HomeCardsTv.testarServicos(this) }.getOrDefault(false)
+                if (mudou) ui.post { if (!isDestroyed) atualizarPilulasCartoes() }
+                runCatching { HomeCardsTv.avisarLembretes(this) }
+            }
+            val cotacao = runCatching { HomeCardsTv.textoCotacao(this) }.getOrNull()
+            val lembretes = runCatching { HomeCardsTv.textosLembretes(this) }.getOrDefault(emptyList())
+            val contagem = runCatching { HomeCardsTv.textoContagem(this) }.getOrNull()
+            val servico = runCatching { HomeCardsTv.textoServicoFora(this) }.getOrNull()
+            val jogo = runCatching { if (Extras.ligado(this, Extras.Chave.CARTAO_PLACAR)) LembretesTv.proximoJogo(this) else null }.getOrNull()
+            ui.post {
+                if (isDestroyed) return@post
+                fun mostrar(p: LinearLayout, t: TextView, texto: String?) {
+                    if (texto == null) { if (p.hasFocus()) linhaApps.requestFocus(); p.visibility = View.GONE }
+                    else { t.text = texto; p.visibility = View.VISIBLE }
+                }
+                mostrar(pilulaCotacao, txtCotacao, cotacao)
+                mostrar(pilulaLembreteCasa, txtLembreteCasa, lembretes.firstOrNull()?.let { it + if (lembretes.size > 1) "  +${lembretes.size - 1}" else "" })
+                mostrar(pilulaContagem, txtContagem, contagem)
+                mostrar(pilulaServico, txtServico, servico)
+                atualizarAvisos()
+                atualizarIlha()
+                if (jogo != jogoCruz) { jogoCruz = jogo; atualizarCruz() }
+            }
+        }
+    }
     private lateinit var pilulaAniversario: LinearLayout
     private lateinit var txtAniversario: TextView
     private lateinit var pilulaJogo: LinearLayout
@@ -2869,6 +2957,9 @@ class MainActivity : Activity() {
             aniversario = txtAniversario.se(pilulaAniversario),
             jogo = txtJogo.se(pilulaJogo),
             vencimento = txtVencimento.se(pilulaVencimento),
+            servicoFora = txtServico.se(pilulaServico),
+            lembreteCasa = txtLembreteCasa.se(pilulaLembreteCasa),
+            contagem = txtContagem.se(pilulaContagem),
         ))
         if (e == ilhaEvento) return
         val mudouTipo = e?.tipo != ilhaEvento?.tipo
@@ -2882,12 +2973,15 @@ class MainActivity : Activity() {
             ilhaBarras?.tocando = false
         } else {
             ilhaTexto?.text = e.texto
-            ilhaTexto?.setTextColor(if (e.tipo == BarraIlha.Tipo.SEM_INTERNET || e.tipo == BarraIlha.Tipo.VENCIMENTO) Estilo.ATENCAO else Estilo.TEXTO)
+            ilhaTexto?.setTextColor(if (e.tipo == BarraIlha.Tipo.SEM_INTERNET || e.tipo == BarraIlha.Tipo.VENCIMENTO || e.tipo == BarraIlha.Tipo.SERVICO_FORA) Estilo.ATENCAO else Estilo.TEXTO)
             val ic: Drawable? = when (e.tipo) {
                 BarraIlha.Tipo.SEM_INTERNET -> IconeApp(IconeApp.Tipo.SEM_REDE, Estilo.ATENCAO)
                 BarraIlha.Tipo.TIMER -> IconeApp(IconeApp.Tipo.TIMER)
                 BarraIlha.Tipo.ALARME -> IconeLinha(IconeLinha.Tipo.DESPERTADOR)
                 BarraIlha.Tipo.JOGO -> IconeApp(IconeApp.Tipo.TV)
+                BarraIlha.Tipo.SERVICO_FORA -> IconeApp(IconeApp.Tipo.SEM_REDE, Estilo.ATENCAO)
+                BarraIlha.Tipo.LEMBRETE_CASA -> IconeLinha(IconeLinha.Tipo.RECADO)
+                BarraIlha.Tipo.CONTAGEM -> IconeLinha(IconeLinha.Tipo.CALENDARIO)
                 else -> null
             }
             if (mudouTipo) { ilhaIcone?.setImageDrawable(ic); ilhaIcone?.visibility = if (ic != null) View.VISIBLE else View.GONE }
@@ -3092,7 +3186,9 @@ class MainActivity : Activity() {
         // Assistir: os cards de hoje (TV, Séries, Filmes, Na rede, Addons, plugins), cada um só se o recurso existe.
         val assistir = ArrayList<HomeCruz.Item>()
         if (cruzTemTv) assistir += HomeCruz.Item("tv", getString(R.string.home_card_tv),
-            ultimoTv?.let { linhasTvCruz(it, programa, agora, comPrograma = true) } ?: getString(R.string.home_destaque_tv_sub),
+            (ultimoTv?.let { linhasTvCruz(it, programa, agora, comPrograma = true) } ?: getString(R.string.home_destaque_tv_sub)).split("\n").let { l ->
+                // O jogo do seu time (HomeCards, chave CARTAO_PLACAR) logo depois do canal: as linhas param em 4.
+                CruzLogica.linhas(l.first(), jogoCruz?.let { getString(R.string.hc_seu_time, it) }, *l.drop(1).toTypedArray()) },
             icCruz("tv", IconeCruz.Tipo.TV), { abrirTv() }, progresso = noAr,
             situacao = situacaoTv(programa?.titulo, programa?.let { linhaAgoraTv(it, agora, comPrograma = true) }))
         if (cruzTemVod) {

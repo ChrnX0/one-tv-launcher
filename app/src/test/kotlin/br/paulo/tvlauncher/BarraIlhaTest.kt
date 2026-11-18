@@ -21,7 +21,16 @@ class BarraIlhaTest {
         assertEquals(BarraIlha.Tipo.ALARME, BarraIlha.escolher(tudo.copy(semInternet = null, timer = null))?.tipo)
         val tocando = BarraIlha.escolher(tudo.copy(semInternet = null, timer = null, alarme = null))
         assertEquals(BarraIlha.Evento(BarraIlha.Tipo.TOCANDO, "Rádio Mar Azul", tocando = true), tocando)
-        assertEquals(BarraIlha.Tipo.VENCIMENTO, BarraIlha.escolher(BarraIlha.Estado(vencimento = "Playon vence em 3 dias"))?.tipo)
+        assertEquals(BarraIlha.Tipo.VENCIMENTO, BarraIlha.escolher(BarraIlha.Estado(vencimento = "Playon vence em 3 dias"))?.tipo)    }
+
+    @Test fun cartoesPropriosNaOrdem() {
+        val e = BarraIlha.Estado(semInternet = "Sem internet", servicoFora = "Casa fora do ar", lembreteCasa = "Hoje: lixo",
+            aniversario = "Tia Rosa", contagem = "Faltam 3 dias para as férias")
+        assertEquals(BarraIlha.Tipo.SEM_INTERNET, BarraIlha.escolher(e)?.tipo)
+        assertEquals(BarraIlha.Tipo.SERVICO_FORA, BarraIlha.escolher(e.copy(semInternet = null))?.tipo)
+        assertEquals(BarraIlha.Tipo.LEMBRETE_CASA, BarraIlha.escolher(e.copy(semInternet = null, servicoFora = null))?.tipo)
+        assertEquals(BarraIlha.Tipo.CONTAGEM, BarraIlha.escolher(BarraIlha.Estado(contagem = "Faltam 3 dias", vencimento = null))?.tipo)
+        assertEquals(BarraIlha.Tipo.VENCIMENTO, BarraIlha.escolher(BarraIlha.Estado(contagem = "Faltam 3 dias", vencimento = "Playon"))?.tipo)
     }
 
     @Test fun despertadorSoNasUltimas12Horas() {

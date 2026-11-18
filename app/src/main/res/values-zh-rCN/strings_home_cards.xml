@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartões próprios da tela inicial (HomeCards.kt, 18/11/2026). -->
+<resources>
+    <string name="extras_CARTAO_PLACAR">在主屏幕的电视项中显示你的球队下一场比赛</string>
+    <string name="extras_CARTAO_COTACAO">在天气旁显示今日汇率（美元、欧元、比特币；查询免费的 Frankfurter 服务）</string>
+    <string name="extras_CARTAO_CONTAGEM">最后 7 天在主屏幕顶部显示倒计时（你的日期或下一个节假日）</string>
+    <string name="extras_CARTAO_LEMBRETE_CASA">当天在主屏幕顶部显示家务提醒（例如可回收垃圾日），并在设定时间提示</string>
+    <string name="extras_CARTAO_SERVICO">你添加的服务停止响应时在主屏幕顶部提醒</string>
+    <string name="extras_CARTAO_LUA">在预报、屏幕保护程序和夜间天气图标中显示月相</string>
+    <string name="hc_feriado_hoje">今天是节假日</string>
+    <string name="hc_hoje">今天：%1$s</string>
+    <string name="hc_lembrete_rotulo">家务提醒</string>
+    <string name="hc_servico_fora">%1$s 已停止响应</string>
+    <string name="hc_servico_rotulo">你的服务</string>
+    <string name="hc_cotacao_rotulo">今日汇率</string>
+    <string name="hc_cotacao_fonte">今日汇率，来源：Frankfurter（各国央行）</string>
+    <string name="hc_mil">千</string>
+    <string name="hc_milhao">百万</string>
+    <string name="hc_seu_time">你的球队：%1$s</string>
+    <plurals name="hc_feriado_em">
+        <item quantity="other">距节假日还有 %1$d 天</item>
+    </plurals>
+    <plurals name="hc_faltam">
+        <item quantity="other">距%2$s还有 %1$d 天</item>
+    </plurals>
+</resources>

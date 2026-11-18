@@ -34,6 +34,12 @@ const NOMES_CHAVES = {
   CARD_JOGOS: 'Card Jogos na tela inicial (os apps de jogo saem da linha de apps)',
   MODO_JOGO: 'Modo jogo: com um jogo aberto, protetor, filtro noturno e avisos esperam',
   CONTROLE_ABRE_JOGOS: 'Ligar um controle de videogame abre a tela Jogos',
+  CARTAO_PLACAR: 'Próximo jogo do seu time no item TV da tela inicial',
+  CARTAO_COTACAO: 'Cotação do dia ao lado do clima (Frankfurter, grátis)',
+  CARTAO_CONTAGEM: 'Contagem regressiva no alto da tela inicial (últimos 7 dias)',
+  CARTAO_LEMBRETE_CASA: 'Lembretes da casa no alto da tela inicial',
+  CARTAO_SERVICO: 'Aviso quando um serviço seu sai do ar',
+  CARTAO_LUA: 'Fase da lua na previsão e no protetor',
 };
 
 const hhmm = (m) => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');

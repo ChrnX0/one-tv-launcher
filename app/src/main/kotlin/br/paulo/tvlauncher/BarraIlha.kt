@@ -11,7 +11,7 @@ package br.paulo.tvlauncher
 object BarraIlha {
 
     /** Em ordem de importância: o primeiro presente vai para a pílula. */
-    enum class Tipo { SEM_INTERNET, TIMER, ALARME, TOCANDO, ANIVERSARIO, JOGO, VENCIMENTO }
+    enum class Tipo { SEM_INTERNET, SERVICO_FORA, TIMER, ALARME, TOCANDO, LEMBRETE_CASA, ANIVERSARIO, JOGO, VENCIMENTO, CONTAGEM }
 
     data class Evento(val tipo: Tipo, val texto: String, val tocando: Boolean = false)
 
@@ -27,6 +27,10 @@ object BarraIlha {
         val aniversario: String? = null,
         val jogo: String? = null,
         val vencimento: String? = null,
+        // Cartões próprios (HomeCards, 18/11/2026)
+        val servicoFora: String? = null,
+        val lembreteCasa: String? = null,
+        val contagem: String? = null,
     )
 
     /** O despertador vai para a pílula nas últimas 12 h (antes disso, só na barra aberta). */
@@ -36,12 +40,15 @@ object BarraIlha {
     fun escolher(e: Estado): Evento? {
         fun ok(s: String?) = s?.trim()?.takeIf { it.isNotEmpty() && it != "…" }
         ok(e.semInternet)?.let { return Evento(Tipo.SEM_INTERNET, it) }
+        ok(e.servicoFora)?.let { return Evento(Tipo.SERVICO_FORA, it) }
         ok(e.timer)?.let { return Evento(Tipo.TIMER, it) }
         ok(e.alarme)?.takeIf { e.alarmeFaltaMs != null && e.alarmeFaltaMs in 0..ALARME_JANELA_MS }?.let { return Evento(Tipo.ALARME, it) }
         ok(e.tocandoTitulo)?.let { return Evento(Tipo.TOCANDO, it, e.tocando) }
+        ok(e.lembreteCasa)?.let { return Evento(Tipo.LEMBRETE_CASA, it) }
         ok(e.aniversario)?.let { return Evento(Tipo.ANIVERSARIO, it) }
         ok(e.jogo)?.let { return Evento(Tipo.JOGO, it) }
         ok(e.vencimento)?.let { return Evento(Tipo.VENCIMENTO, it) }
+        ok(e.contagem)?.let { return Evento(Tipo.CONTAGEM, it) }
         return null
     }
 }

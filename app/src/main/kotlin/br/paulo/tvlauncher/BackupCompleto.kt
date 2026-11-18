@@ -59,6 +59,7 @@ object BackupCompleto {
         "desfazer",   // elevação 2.11: os passos de desfazer são desta TV e destes dias
         "nao_perturbe", "config_busca",   // elevação 11.4/12.2: fila de avisos guardados e "mexidos há pouco" são passageiros
         "mtp_permitidos", "painel_log", "atualizador", "aviso_tv", "loja_curada",
+        "cartoes_cache",   // cartões da tela inicial (HomeCards): cotação guardada e falhas dos serviços medidas daqui
         "ceu",   // cache do TLE da Estação Espacial (protetor com tempo): renovado a cada 12 h, de outro aparelho não vale
         "compatibilidade",   // medidas do "acordar" deste aparelho (CompatibilidadeTv): de outro aparelho não valem
         "qualidade_tv",   // TV ao vivo: banda, travadas e resolução real medidas NESTA rede e neste aparelho (QualidadeTv)

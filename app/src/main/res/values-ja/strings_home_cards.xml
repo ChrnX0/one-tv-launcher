@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartões próprios da tela inicial (HomeCards.kt, 18/11/2026). -->
+<resources>
+    <string name="extras_CARTAO_PLACAR">ホーム画面のテレビ項目にあなたのチームの次の試合</string>
+    <string name="extras_CARTAO_COTACAO">天気の横に今日の為替レート（ドル、ユーロ、ビットコイン。無料サービスFrankfurterに問い合わせ）</string>
+    <string name="extras_CARTAO_CONTAGEM">最後の7日間、ホーム画面の上にカウントダウン（あなたの日付または次の祝日）</string>
+    <string name="extras_CARTAO_LEMBRETE_CASA">その日にホーム画面の上に家のリマインダー（例：資源ごみの日）、設定時刻にお知らせ</string>
+    <string name="extras_CARTAO_SERVICO">追加したサービスが応答しなくなったらホーム画面の上で知らせる</string>
+    <string name="extras_CARTAO_LUA">予報、スクリーンセーバー、夜の天気アイコンに月相を表示</string>
+    <string name="hc_feriado_hoje">今日は祝日</string>
+    <string name="hc_hoje">今日：%1$s</string>
+    <string name="hc_lembrete_rotulo">家のリマインダー</string>
+    <string name="hc_servico_fora">%1$s が停止中</string>
+    <string name="hc_servico_rotulo">あなたのサービス</string>
+    <string name="hc_cotacao_rotulo">為替レート</string>
+    <string name="hc_cotacao_fonte">今日のレート、出典：Frankfurter（中央銀行）</string>
+    <string name="hc_mil">千</string>
+    <string name="hc_milhao">百万</string>
+    <string name="hc_seu_time">あなたのチーム：%1$s</string>
+    <plurals name="hc_feriado_em">
+        <item quantity="other">祝日まであと%1$d日</item>
+    </plurals>
+    <plurals name="hc_faltam">
+        <item quantity="other">%2$sまであと%1$d日</item>
+    </plurals>
+</resources>

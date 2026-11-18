@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartões próprios da tela inicial (HomeCards.kt, 18/11/2026). -->
+<resources>
+    <string name="extras_CARTAO_PLACAR">المباراة القادمة لفريقك في عنصر التلفاز على الشاشة الرئيسية</string>
+    <string name="extras_CARTAO_COTACAO">أسعار الصرف اليوم بجانب الطقس (دولار، يورو، بيتكوين؛ يسأل خدمة Frankfurter المجانية)</string>
+    <string name="extras_CARTAO_CONTAGEM">عدّ تنازلي أعلى الشاشة الرئيسية في آخر 7 أيام (تواريخك أو العطلة القادمة)</string>
+    <string name="extras_CARTAO_LEMBRETE_CASA">تذكيرات المنزل أعلى الشاشة الرئيسية في يومها (مثل يوم إعادة التدوير)، مع تنبيه في الوقت المحدد</string>
+    <string name="extras_CARTAO_SERVICO">التنبيه أعلى الشاشة الرئيسية عندما تتوقف خدمة أضفتها عن الاستجابة</string>
+    <string name="extras_CARTAO_LUA">طور القمر في التوقعات وشاشة التوقف وأيقونة الطقس ليلًا</string>
+    <string name="hc_feriado_hoje">عطلة اليوم</string>
+    <string name="hc_hoje">اليوم: %1$s</string>
+    <string name="hc_lembrete_rotulo">تذكير المنزل</string>
+    <string name="hc_servico_fora">%1$s متوقفة</string>
+    <string name="hc_servico_rotulo">خدماتك</string>
+    <string name="hc_cotacao_rotulo">أسعار الصرف</string>
+    <string name="hc_cotacao_fonte">أسعار اليوم، المصدر: Frankfurter (البنوك المركزية)</string>
+    <string name="hc_mil">ألف</string>
+    <string name="hc_milhao">مليون</string>
+    <string name="hc_seu_time">فريقك: %1$s</string>
+    <plurals name="hc_feriado_em">
+        <item quantity="zero">عطلة بعد %1$d يوم</item>
+        <item quantity="one">عطلة بعد %1$d يوم</item>
+        <item quantity="two">عطلة بعد %1$d يوم</item>
+        <item quantity="few">عطلة بعد %1$d أيام</item>
+        <item quantity="many">عطلة بعد %1$d يوم</item>
+        <item quantity="other">عطلة بعد %1$d يوم</item>
+    </plurals>
+    <plurals name="hc_faltam">
+        <item quantity="zero">%2$s بعد %1$d يوم</item>
+        <item quantity="one">%2$s بعد %1$d يوم</item>
+        <item quantity="two">%2$s بعد %1$d يوم</item>
+        <item quantity="few">%2$s بعد %1$d أيام</item>
+        <item quantity="many">%2$s بعد %1$d يوم</item>
+        <item quantity="other">%2$s بعد %1$d يوم</item>
+    </plurals>
+</resources>
