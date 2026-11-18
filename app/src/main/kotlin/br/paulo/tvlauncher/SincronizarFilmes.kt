@@ -278,6 +278,19 @@ object SincronizarFilmes {
             .put("ids", idsJson(e.item.ids)).put("n", e.item.titulo).put("a", e.item.ano ?: 0).put("s", e.status).put("q", e.quandoMs))
     }
 
+    /**
+     * Ids do Simkl que a biblioteca da pessoa já traz, por id TMDB (chave de [InfoExterna.chaveTmdb]). A nota noturna
+     * usa isso em vez de perguntar ao /redirect, que é uma busca ao vivo sem cache (Simkl, Ennergizer, 18/11/2026).
+     */
+    fun simklIdsPorTmdb(biblioteca: Collection<EntradaSimkl>): Map<String, Int> {
+        val r = HashMap<String, Int>()
+        for (e in biblioteca) {
+            val tmdb = e.item.ids.tmdb ?: continue; val simkl = e.item.ids.simkl ?: continue
+            r.putIfAbsent(InfoExterna.chaveTmdb(tmdb, e.item.tipo == Tipo.SERIE), simkl)
+        }
+        return r
+    }
+
     fun simklBibliotecaDeJson(a: JSONArray?): Map<String, EntradaSimkl> {
         val r = LinkedHashMap<String, EntradaSimkl>()
         if (a == null) return r

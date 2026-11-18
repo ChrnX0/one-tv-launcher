@@ -294,8 +294,9 @@ object InfoExternaCache {
 
     /**
      * Nota da comunidade do Simkl para todos, sem login (16/11/2026). Como a do Trakt: de madrugada, até
-     * [MAX_SIMKL_POR_NOITE] títulos, cada nota vale 30 dias. Duas perguntas por título na primeira vez (/redirect para
-     * achar o id do Simkl, depois a ficha, que fica em cache no Cloudflare); depois só a ficha. Para no primeiro erro ou
+     * [MAX_SIMKL_POR_NOITE] títulos, cada nota vale 30 dias. Uma pergunta por título (a ficha, em cache no Cloudflare). O
+     * id do Simkl vem do que já sabemos (catálogo e biblioteca da pessoa); só título nunca visto passa pelo /redirect,
+     * uma vez por id TMDB (pedido do Simkl, 18/11/2026). Para no primeiro erro ou
      * limite (429). Devolve quantos ganharam nota, ou -1 sem chave/lista. Bloqueia (rede).
      */
     fun noturnoSimkl(ctx: Context): Int {
@@ -305,14 +306,21 @@ object InfoExternaCache {
         val fila = filaDaNoite(app, MAX_SIMKL_POR_NOITE) { agora - (it?.simklEm ?: 0) in 0 until InfoExterna.SIMKL_VALIDADE_MS } ?: return -1
         val versao = BuildConfig.VERSION_CODE
         val cab = ServicosFilmes.simklCabecalhos(cliente, versao)
-        var n = 0
+        // Ids já sabidos (catálogo + biblioteca da pessoa): o /redirect é busca ao vivo sem cache no Simkl e os ids não
+        // mudam, então só pergunta por título nunca visto, e uma vez por id TMDB (não uma por versão). 18/11/2026.
+        val conhecidos = InfoExterna.simklConhecidos(simklDoCatalogo(app), runCatching { ServicosSync.idsSimklDaBiblioteca(app) }.getOrDefault(emptyMap()))
+        val semSimkl = HashSet<String>()
+        var n = 0; var redirects = 0
         for ((ch, tmdb, serie) in fila) {
-            var simkl = guardado(app, ch)?.simkl
-            if (simkl == null) {
+            val k = InfoExterna.chaveTmdb(tmdb, serie)
+            var simkl = guardado(app, ch)?.simkl ?: conhecidos[k]
+            if (simkl == null && k !in semSimkl) {
                 val r = runCatching { ServicosContas.pedir(InfoExterna.urlSimklRedirect(tmdb, serie, cliente, versao), cab) }.getOrNull() ?: break
+                redirects++
                 if (r.codigo == 429) { Log.i(TAG, "Simkl: limite"); break }
                 simkl = if (r.codigo in 300..399) InfoExterna.idSimklDoLocal(r.local, serie) else null
                 if (simkl == null && r.codigo !in 300..499) { Log.w(TAG, "Simkl redirect: ${r.codigo}"); break }
+                if (simkl != null) conhecidos[k] = simkl else semSimkl += k
                 Thread.sleep(300)
             }
             var nota: Float? = null
@@ -334,8 +342,19 @@ object InfoExternaCache {
             Thread.sleep(500)
         }
         synchronized(trava) { gravar(app) }
-        Log.i(TAG, "Simkl: $n notas de ${fila.size} títulos")
+        Log.i(TAG, "Simkl: $n notas de ${fila.size} títulos, $redirects /redirect")
         return n
+    }
+
+    /** (tmdb, série, id do Simkl guardado) de cada título do catálogo com id TMDB. Sem rede. */
+    private fun simklDoCatalogo(app: Context): List<Triple<Int, Boolean, Int?>> {
+        val filmes = runCatching { PlayerCarga.filmes(app, soCache = true) }.getOrDefault(emptyList())
+        val series = runCatching { PlayerCarga.series(app, soCache = true) }.getOrDefault(emptyList())
+        return synchronized(trava) {
+            val m = mapa(app)
+            filmes.mapNotNull { f -> val g = m[f.chave]; val t = f.tmdb ?: g?.tmdb ?: return@mapNotNull null; Triple(t, false, g?.simkl) } +
+                series.mapNotNull { x -> val g = m[x.chave]; val t = x.tmdb ?: g?.tmdb ?: return@mapNotNull null; Triple(t, true, g?.simkl) }
+        }
     }
 
     private const val MAX_SIMKL_POR_NOITE = 400
