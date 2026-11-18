@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela do despertador no jeito da cruz (18/11/2026). -->
+<resources>
+    <string name="al_novo_det">시간과 요일을 고르세요</string>
+    <string name="al_volume_rotulo">울릴 때 음량</string>
+    <string name="al_volume_det">음소거 상태여도 TV가 최소 이 음량으로 올립니다</string>
+    <string name="al_volume_lg_det">LG TV는 작게 시작해 이 음량까지 올립니다</string>
+    <string name="al_info_toca">%1$s 울림</string>
+    <string name="al_proximo_rotulo">다음 알람</string>
+    <string name="al_dica_editar">편집</string>
+    <string name="al_dica_ligar">켜기/끄기</string>
+    <string name="al_dica_sair">나가기</string>
+    <string name="al_dica_mudar">변경</string>
+    <string name="al_dica_andar">이동</string>
+    <string name="al_dica_salvar">저장</string>
+    <string name="al_ligou">%1$s 알람 켜짐</string>
+    <string name="al_desligou">%1$s 알람 꺼짐</string>
+    <string name="al_sim">예</string>
+    <string name="al_nao">아니요</string>
+    <string name="al_op_salvar_det">뒤로도 저장됩니다</string>
+    <string name="al_op_repetir">반복</string>
+    <string name="al_op_repetir_det">OK로 요일 선택</string>
+    <string name="al_op_som">소리</string>
+    <string name="al_op_som_det">OK로 소리를 골라 들려줍니다</string>
+    <string name="al_op_rampa">울림 방식</string>
+    <string name="al_op_rampa_det">작게 시작하면 더 편안하게 깹니다</string>
+    <string name="al_op_bom_dia">좋은 아침</string>
+    <string name="al_op_bom_dia_det">끄면 TV가 시간, 날씨, 오늘 일정을 알려 줍니다</string>
+    <string name="al_op_cena">끌 때 장면</string>
+    <string name="al_op_cena_det">OK로 장면 선택</string>
+    <string name="al_op_nome">이름</string>
+    <string name="al_op_nome_det">울릴 때 화면에 표시됩니다</string>
+    <string name="al_op_nome_dica">예: 약</string>
+    <string name="al_op_alarme">알람</string>
+    <string name="al_op_ligado_det">OK로 켜거나 끕니다</string>
+    <string name="al_op_apagar">알람 삭제</string>
+    <string name="al_op_apagar_det">삭제 전에 묻습니다</string>
+    <string name="al_op_sair">저장하지 않고 나가기</string>
+    <string name="al_op_sair_det">여기서 바꾼 내용을 되돌립니다</string>
+    <string name="al_apagar_q">%1$s 알람을 삭제할까요?</string>
+    <string name="al_salvo">알람 저장됨: %1$s</string>
+    <string name="al_resumo">%1$s 울림</string>
+    <string name="al_resumo_desligado">꺼짐: 울리지 않습니다</string>
+    <string name="al_op_hora">시</string>
+    <string name="al_op_minuto">분</string>
+</resources>

@@ -112,8 +112,6 @@
     <string name="casa_err_keystore">فشل Keystore في التلفزيون: %1$s</string>
     <string name="casa_err_sensor">مستشعر غير صالح (مثل binary_sensor.doorbell)</string>
     <string name="casa_err_camera">كاميرا غير صالحة (مثل camera.front_door)</string>
-    <string name="al_bom_dia_sim">صباح الخير: نعم</string>
-    <string name="al_bom_dia_nao">صباح الخير: لا</string>
     <string name="ag_agora">الآن</string>
     <string name="ag_as_h">الساعة %1$d</string>
     <string name="ag_as_hm">الساعة %1$d:%2$02d</string>

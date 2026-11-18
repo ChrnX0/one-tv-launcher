@@ -175,16 +175,11 @@
     <string name="al_criar">Régler</string>
     <string name="al_titulo">Réveil</string>
     <string name="al_nenhum">Aucun réveil actif</string>
-    <string name="al_proximo">Prochain : %1$s</string>
     <string name="al_novo_mais">+  Nouveau réveil</string>
     <string name="al_ligado">Activé</string>
     <string name="al_desligado">Désactivé</string>
     <string name="al_novo">Nouveau réveil</string>
     <string name="al_editar">Modifier le réveil</string>
-    <string name="al_editor_dica">▲ ▼ changent l’heure et les minutes (maintenir pour aller vite) · OK coche les jours</string>
-    <string name="al_nome">Nom (facultatif)</string>
-    <string name="al_som">Son : %1$s</string>
-    <string name="al_ouvir">Écouter</string>
     <string name="al_apagar">Supprimer</string>
     <string name="al_hoje">aujourd’hui</string>
     <string name="al_amanha">demain</string>
@@ -194,8 +189,6 @@
     <string name="al_perdido_um">Le réveil de %1$s n’a pas sonné car la TV était éteinte.</string>
     <string name="al_perdido_varios">Les réveils de %1$s n’ont pas sonné car la TV était éteinte.</string>
     <string name="al_perdido_e">et</string>
-    <string name="al_volume_tv">Volume de la TV à la sonnerie : commence bas et monte jusqu\'à %1$d</string>
-    <string name="al_volume_min">Volume minimum à la sonnerie : %1$s</string>
     <string name="al_volume_nao_mexe">ne pas changer</string>
     <string name="pp_sem_conta">Aucun compte Google</string>
     <string name="pp_ativo">"  ·  actif"</string>

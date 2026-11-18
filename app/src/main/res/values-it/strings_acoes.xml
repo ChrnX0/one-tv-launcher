@@ -26,7 +26,6 @@
     <string name="rot_cena">Esegui scena: %1$s</string>
     <string name="rot_cena_linha">Scena: %1$s</string>
     <string name="rot_cena_sem">Crea prima una scena (pannello web › Extra › Scene)</string>
-    <string name="al_cena">Scena allo stop: %1$s</string>
     <string name="lbl_cenas">Scene</string>
     <string name="pr_cenas">Scene</string>
     <string name="cenas_titulo">Scene</string>

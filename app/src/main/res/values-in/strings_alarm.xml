@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela do despertador no jeito da cruz (18/11/2026). -->
+<resources>
+    <string name="al_novo_det">Pilih jam dan hari</string>
+    <string name="al_volume_rotulo">Volume saat berbunyi</string>
+    <string name="al_volume_det">TV menaikkan volume setidaknya ke tingkat ini, meski sedang dibisukan</string>
+    <string name="al_volume_lg_det">TV LG mulai pelan lalu naik ke volume ini</string>
+    <string name="al_info_toca">berbunyi %1$s</string>
+    <string name="al_proximo_rotulo">Alarm berikutnya</string>
+    <string name="al_dica_editar">ubah</string>
+    <string name="al_dica_ligar">aktif/nonaktif</string>
+    <string name="al_dica_sair">keluar</string>
+    <string name="al_dica_mudar">ubah</string>
+    <string name="al_dica_andar">pindah</string>
+    <string name="al_dica_salvar">simpan</string>
+    <string name="al_ligou">Alarm %1$s aktif</string>
+    <string name="al_desligou">Alarm %1$s nonaktif</string>
+    <string name="al_sim">Ya</string>
+    <string name="al_nao">Tidak</string>
+    <string name="al_op_salvar_det">KEMBALI juga menyimpan</string>
+    <string name="al_op_repetir">Ulangi</string>
+    <string name="al_op_repetir_det">OK memilih hari</string>
+    <string name="al_op_som">Suara</string>
+    <string name="al_op_som_det">OK memilih suara dan memutarnya</string>
+    <string name="al_op_rampa">Dering</string>
+    <string name="al_op_rampa_det">Mulai pelan membangunkan lebih tenang</string>
+    <string name="al_op_bom_dia">Selamat pagi</string>
+    <string name="al_op_bom_dia_det">Saat dihentikan, TV menyebut jam, cuaca, dan agenda hari ini</string>
+    <string name="al_op_cena">Adegan saat berhenti</string>
+    <string name="al_op_cena_det">OK memilih adegan</string>
+    <string name="al_op_nome">Nama</string>
+    <string name="al_op_nome_det">Muncul di layar saat berbunyi</string>
+    <string name="al_op_nome_dica">mis. Obat</string>
+    <string name="al_op_alarme">Alarm</string>
+    <string name="al_op_ligado_det">OK mengaktifkan atau menonaktifkan</string>
+    <string name="al_op_apagar">Hapus alarm</string>
+    <string name="al_op_apagar_det">Bertanya sebelum menghapus</string>
+    <string name="al_op_sair">Keluar tanpa menyimpan</string>
+    <string name="al_op_sair_det">Membatalkan perubahan di sini</string>
+    <string name="al_apagar_q">Hapus alarm %1$s?</string>
+    <string name="al_salvo">Alarm disimpan: %1$s</string>
+    <string name="al_resumo">Berbunyi %1$s</string>
+    <string name="al_resumo_desligado">Nonaktif: tidak akan berbunyi</string>
+    <string name="al_op_hora">Jam</string>
+    <string name="al_op_minuto">Menit</string>
+</resources>

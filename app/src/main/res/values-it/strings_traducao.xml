@@ -112,8 +112,6 @@
     <string name="casa_err_keystore">il Keystore della TV ha fallito: %1$s</string>
     <string name="casa_err_sensor">sensore non valido (es. binary_sensor.doorbell)</string>
     <string name="casa_err_camera">telecamera non valida (es. camera.front_door)</string>
-    <string name="al_bom_dia_sim">Buongiorno: sì</string>
-    <string name="al_bom_dia_nao">Buongiorno: no</string>
     <string name="ag_agora">ora</string>
     <string name="ag_as_h">alle %1$d</string>
     <string name="ag_as_hm">alle %1$d:%2$02d</string>

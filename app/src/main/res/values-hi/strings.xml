@@ -175,16 +175,11 @@
     <string name="al_criar">सेट करें</string>
     <string name="al_titulo">अलार्म घड़ी</string>
     <string name="al_nenhum">कोई अलार्म चालू नहीं</string>
-    <string name="al_proximo">अगला: %1$s</string>
     <string name="al_novo_mais">+  नया अलार्म</string>
     <string name="al_ligado">चालू</string>
     <string name="al_desligado">बंद</string>
     <string name="al_novo">नया अलार्म</string>
     <string name="al_editar">अलार्म बदलें</string>
-    <string name="al_editor_dica">▲ ▼ घंटा और मिनट बदलें (तेज़ी के लिए दबाए रखें) · OK से दिन चुनें</string>
-    <string name="al_nome">नाम (वैकल्पिक)</string>
-    <string name="al_som">आवाज़: %1$s</string>
-    <string name="al_ouvir">सुनें</string>
     <string name="al_apagar">हटाएँ</string>
     <string name="al_hoje">आज</string>
     <string name="al_amanha">कल</string>
@@ -194,8 +189,6 @@
     <string name="al_perdido_um">%1$s का अलार्म नहीं बजा क्योंकि TV बंद था।</string>
     <string name="al_perdido_varios">%1$s के अलार्म नहीं बजे क्योंकि TV बंद था।</string>
     <string name="al_perdido_e">और</string>
-    <string name="al_volume_tv">बजते समय TV वॉल्यूम: धीमे शुरू होकर %1$d तक बढ़ता है</string>
-    <string name="al_volume_min">बजते समय न्यूनतम वॉल्यूम: %1$s</string>
     <string name="al_volume_nao_mexe">न बदलें</string>
     <string name="pp_sem_conta">कोई Google खाता नहीं</string>
     <string name="pp_ativo">"  ·  सक्रिय"</string>

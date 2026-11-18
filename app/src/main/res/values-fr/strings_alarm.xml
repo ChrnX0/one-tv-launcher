@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela do despertador no jeito da cruz (18/11/2026). -->
+<resources>
+    <string name="al_novo_det">Choisissez l’heure et les jours</string>
+    <string name="al_volume_rotulo">Volume à la sonnerie</string>
+    <string name="al_volume_det">La TV monte au moins à ce volume, même si le son était coupé</string>
+    <string name="al_volume_lg_det">La TV LG commence bas et monte jusqu’à ce volume</string>
+    <string name="al_info_toca">sonne %1$s</string>
+    <string name="al_proximo_rotulo">Prochaine alarme</string>
+    <string name="al_dica_editar">modifier</string>
+    <string name="al_dica_ligar">activer/désactiver</string>
+    <string name="al_dica_sair">quitter</string>
+    <string name="al_dica_mudar">changer</string>
+    <string name="al_dica_andar">se déplacer</string>
+    <string name="al_dica_salvar">enregistrer</string>
+    <string name="al_ligou">Alarme de %1$s activée</string>
+    <string name="al_desligou">Alarme de %1$s désactivée</string>
+    <string name="al_sim">Oui</string>
+    <string name="al_nao">Non</string>
+    <string name="al_op_salvar_det">RETOUR enregistre aussi</string>
+    <string name="al_op_repetir">Répéter</string>
+    <string name="al_op_repetir_det">OK choisit les jours</string>
+    <string name="al_op_som">Son</string>
+    <string name="al_op_som_det">OK choisit le son et le fait écouter</string>
+    <string name="al_op_rampa">Sonnerie</string>
+    <string name="al_op_rampa_det">Commencer bas réveille en douceur</string>
+    <string name="al_op_bom_dia">Bonjour</string>
+    <string name="al_op_bom_dia_det">À l’arrêt, la TV dit l’heure, la météo et l’agenda du jour</string>
+    <string name="al_op_cena">Scène à l’arrêt</string>
+    <string name="al_op_cena_det">OK choisit la scène</string>
+    <string name="al_op_nome">Nom</string>
+    <string name="al_op_nome_det">S’affiche à l’écran quand elle sonne</string>
+    <string name="al_op_nome_dica">ex. : Médicament</string>
+    <string name="al_op_alarme">Alarme</string>
+    <string name="al_op_ligado_det">OK l’active ou la désactive</string>
+    <string name="al_op_apagar">Supprimer l’alarme</string>
+    <string name="al_op_apagar_det">Demande avant de supprimer</string>
+    <string name="al_op_sair">Quitter sans enregistrer</string>
+    <string name="al_op_sair_det">Annule ce que vous avez changé ici</string>
+    <string name="al_apagar_q">Supprimer l’alarme de %1$s ?</string>
+    <string name="al_salvo">Alarme enregistrée : %1$s</string>
+    <string name="al_resumo">Sonne %1$s</string>
+    <string name="al_resumo_desligado">Désactivée : elle ne sonnera pas</string>
+    <string name="al_op_hora">Heure</string>
+    <string name="al_op_minuto">Minute</string>
+</resources>

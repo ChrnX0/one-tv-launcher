@@ -128,8 +128,6 @@
     <string name="casa_err_keystore">o Keystore da TV falhou: %1$s</string>
     <string name="casa_err_sensor">sensor inválido (ex.: binary_sensor.campainha)</string>
     <string name="casa_err_camera">câmera inválida (ex.: camera.porta)</string>
-    <string name="al_bom_dia_sim">Bom dia: sim</string>
-    <string name="al_bom_dia_nao">Bom dia: não</string>
     <string name="ag_agora">agora</string>
     <string name="ag_as_h">às %1$d</string>
     <string name="ag_as_hm">às %1$d e %2$d</string>

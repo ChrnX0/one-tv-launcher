@@ -26,7 +26,6 @@
     <string name="rot_cena">Запустить сцену: %1$s</string>
     <string name="rot_cena_linha">Сцена: %1$s</string>
     <string name="rot_cena_sem">Сначала создайте сцену (веб-панель › Дополнительно › Сцены)</string>
-    <string name="al_cena">Сцена при остановке: %1$s</string>
     <string name="lbl_cenas">Сцены</string>
     <string name="pr_cenas">Сцены</string>
     <string name="cenas_titulo">Сцены</string>

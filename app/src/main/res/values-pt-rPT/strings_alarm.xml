@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela do despertador no jeito da cruz (18/11/2026). -->
+<resources>
+    <string name="al_novo_det">Escolha a hora e os dias</string>
+    <string name="al_volume_rotulo">Volume ao tocar</string>
+    <string name="al_volume_det">A TV sobe pelo menos até este volume, mesmo se estiver sem som</string>
+    <string name="al_volume_lg_det">A TV LG começa baixo e sobe até este volume</string>
+    <string name="al_info_toca">toca %1$s</string>
+    <string name="al_proximo_rotulo">Próximo alarme</string>
+    <string name="al_dica_editar">editar</string>
+    <string name="al_dica_ligar">ligar/desligar</string>
+    <string name="al_dica_sair">sair</string>
+    <string name="al_dica_mudar">mudar</string>
+    <string name="al_dica_andar">mover</string>
+    <string name="al_dica_salvar">guardar</string>
+    <string name="al_ligou">Alarme das %1$s ligado</string>
+    <string name="al_desligou">Alarme das %1$s desligado</string>
+    <string name="al_sim">Sim</string>
+    <string name="al_nao">Não</string>
+    <string name="al_op_salvar_det">VOLTAR também guarda</string>
+    <string name="al_op_repetir">Repetir</string>
+    <string name="al_op_repetir_det">OK escolhe os dias</string>
+    <string name="al_op_som">Som</string>
+    <string name="al_op_som_det">OK escolhe o som e toca-o para ouvir</string>
+    <string name="al_op_rampa">Toque</string>
+    <string name="al_op_rampa_det">Começar baixo acorda com mais calma</string>
+    <string name="al_op_bom_dia">Bom dia</string>
+    <string name="al_op_bom_dia_det">Ao parar, a TV diz a hora, o tempo e a agenda de hoje</string>
+    <string name="al_op_cena">Cena ao parar</string>
+    <string name="al_op_cena_det">OK escolhe a cena</string>
+    <string name="al_op_nome">Nome</string>
+    <string name="al_op_nome_det">Aparece no ecrã quando tocar</string>
+    <string name="al_op_nome_dica">ex.: Medicamento</string>
+    <string name="al_op_alarme">Alarme</string>
+    <string name="al_op_ligado_det">OK liga ou desliga</string>
+    <string name="al_op_apagar">Apagar alarme</string>
+    <string name="al_op_apagar_det">Pergunta antes de apagar</string>
+    <string name="al_op_sair">Sair sem guardar</string>
+    <string name="al_op_sair_det">Desfaz o que mudou aqui</string>
+    <string name="al_apagar_q">Apagar o alarme das %1$s?</string>
+    <string name="al_salvo">Alarme guardado: %1$s</string>
+    <string name="al_resumo">Toca %1$s</string>
+    <string name="al_resumo_desligado">Desligado: não vai tocar</string>
+    <string name="al_op_hora">Hora</string>
+    <string name="al_op_minuto">Minuto</string>
+</resources>

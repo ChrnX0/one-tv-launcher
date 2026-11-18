@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela do despertador no jeito da cruz (18/11/2026). -->
+<resources>
+    <string name="al_novo_det">Scegli l’ora e i giorni</string>
+    <string name="al_volume_rotulo">Volume quando suona</string>
+    <string name="al_volume_det">La TV sale almeno a questo volume, anche se era muta</string>
+    <string name="al_volume_lg_det">La TV LG parte bassa e sale fino a questo volume</string>
+    <string name="al_info_toca">suona %1$s</string>
+    <string name="al_proximo_rotulo">Prossima sveglia</string>
+    <string name="al_dica_editar">modifica</string>
+    <string name="al_dica_ligar">attiva/disattiva</string>
+    <string name="al_dica_sair">esci</string>
+    <string name="al_dica_mudar">cambia</string>
+    <string name="al_dica_andar">spostati</string>
+    <string name="al_dica_salvar">salva</string>
+    <string name="al_ligou">Sveglia delle %1$s attivata</string>
+    <string name="al_desligou">Sveglia delle %1$s disattivata</string>
+    <string name="al_sim">Sì</string>
+    <string name="al_nao">No</string>
+    <string name="al_op_salvar_det">INDIETRO salva anche</string>
+    <string name="al_op_repetir">Ripeti</string>
+    <string name="al_op_repetir_det">OK sceglie i giorni</string>
+    <string name="al_op_som">Suono</string>
+    <string name="al_op_som_det">OK sceglie il suono e lo fa ascoltare</string>
+    <string name="al_op_rampa">Squillo</string>
+    <string name="al_op_rampa_det">Partire basso sveglia con più calma</string>
+    <string name="al_op_bom_dia">Buongiorno</string>
+    <string name="al_op_bom_dia_det">Quando la fermi, la TV dice l’ora, il meteo e l’agenda di oggi</string>
+    <string name="al_op_cena">Scena all’arresto</string>
+    <string name="al_op_cena_det">OK sceglie la scena</string>
+    <string name="al_op_nome">Nome</string>
+    <string name="al_op_nome_det">Appare sullo schermo quando suona</string>
+    <string name="al_op_nome_dica">es. Medicina</string>
+    <string name="al_op_alarme">Sveglia</string>
+    <string name="al_op_ligado_det">OK la attiva o disattiva</string>
+    <string name="al_op_apagar">Elimina sveglia</string>
+    <string name="al_op_apagar_det">Chiede prima di eliminare</string>
+    <string name="al_op_sair">Esci senza salvare</string>
+    <string name="al_op_sair_det">Annulla ciò che hai cambiato qui</string>
+    <string name="al_apagar_q">Eliminare la sveglia delle %1$s?</string>
+    <string name="al_salvo">Sveglia salvata: %1$s</string>
+    <string name="al_resumo">Suona %1$s</string>
+    <string name="al_resumo_desligado">Disattivata: non suonerà</string>
+    <string name="al_op_hora">Ora</string>
+    <string name="al_op_minuto">Minuto</string>
+</resources>

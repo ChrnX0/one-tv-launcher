@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela do despertador no jeito da cruz (18/11/2026). -->
+<resources>
+    <string name="al_novo_det">Pick the time and the days</string>
+    <string name="al_volume_rotulo">Volume when ringing</string>
+    <string name="al_volume_det">The TV turns up to at least this volume, even if it was muted</string>
+    <string name="al_volume_lg_det">The LG TV starts low and rises to this volume</string>
+    <string name="al_info_toca">rings %1$s</string>
+    <string name="al_proximo_rotulo">Next alarm</string>
+    <string name="al_dica_editar">edit</string>
+    <string name="al_dica_ligar">on/off</string>
+    <string name="al_dica_sair">exit</string>
+    <string name="al_dica_mudar">change</string>
+    <string name="al_dica_andar">move</string>
+    <string name="al_dica_salvar">save</string>
+    <string name="al_ligou">%1$s alarm on</string>
+    <string name="al_desligou">%1$s alarm off</string>
+    <string name="al_sim">Yes</string>
+    <string name="al_nao">No</string>
+    <string name="al_op_salvar_det">BACK also saves</string>
+    <string name="al_op_repetir">Repeat</string>
+    <string name="al_op_repetir_det">OK picks the days</string>
+    <string name="al_op_som">Sound</string>
+    <string name="al_op_som_det">OK picks a sound and plays it for you</string>
+    <string name="al_op_rampa">Ring</string>
+    <string name="al_op_rampa_det">Starting low is a gentler way to wake up</string>
+    <string name="al_op_bom_dia">Good morning</string>
+    <string name="al_op_bom_dia_det">When you stop it, the TV says the time, the weather and today’s calendar</string>
+    <string name="al_op_cena">Scene when stopped</string>
+    <string name="al_op_cena_det">OK picks the scene</string>
+    <string name="al_op_nome">Name</string>
+    <string name="al_op_nome_det">Shows on the screen when it rings</string>
+    <string name="al_op_nome_dica">e.g. Medicine</string>
+    <string name="al_op_alarme">Alarm</string>
+    <string name="al_op_ligado_det">OK turns it on or off</string>
+    <string name="al_op_apagar">Delete alarm</string>
+    <string name="al_op_apagar_det">Asks before deleting</string>
+    <string name="al_op_sair">Leave without saving</string>
+    <string name="al_op_sair_det">Undoes what you changed here</string>
+    <string name="al_apagar_q">Delete the %1$s alarm?</string>
+    <string name="al_salvo">Alarm saved: %1$s</string>
+    <string name="al_resumo">Rings %1$s</string>
+    <string name="al_resumo_desligado">Off: it will not ring</string>
+    <string name="al_op_hora">Hour</string>
+    <string name="al_op_minuto">Minute</string>
+</resources>

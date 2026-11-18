@@ -371,8 +371,8 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             }
             Tipo.ASSISTIR, Tipo.TV -> {   // a silhueta EXATA da TV-sofá da logo, só o contorno de fora (18/11/2026, Paulo)
                 // Medidas do SVG da marca (quadro 120 x 112) x 0,2, descidas 0,8 para centrar no quadro de 24.
-                // Um pouco menor que o quadro (0,84): embaixo do ícone da TV vem a barra do programa, que não pode encostar.
-                c.save(); c.scale(0.84f, 0.84f, 12f, 10f)
+                // Menor que o quadro ([ESCALA_TV]): embaixo do ícone da TV vem a barra do programa, que não pode encostar.
+                c.save(); c.scale(ESCALA_TV, ESCALA_TV, 12f, 9f)
                 // Antenas saindo do alto da tela (no SVG o pino fica por baixo da moldura cheia; aqui só há contorno).
                 if (fase < 0f) { c.drawLine(12f, 6.5f, 7f, 2.9f, traco); c.drawLine(12f, 6.5f, 17.8f, 4.1f, traco) }   // tocando: as da linhaViva
                 p.reset()
@@ -386,6 +386,8 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
                 p.lineTo(2.2f, 20.7f); p.quadTo(0.7f, 20.7f, 0.7f, 18.8f); p.lineTo(0.7f, 14.5f); p.quadTo(0.7f, 12.6f, 2.6f, 12.6f)   // braço esquerdo
                 p.close()
                 c.drawPath(p, traco)
+                // O brilhinho do vidro no canto da tela, como na logo (parado; tocando, o da linhaViva atravessa a tela).
+                if (fase < 0f) { p.reset(); p.moveTo(7.4f, 13.8f); p.quadTo(7.4f, 11.6f, 9.6f, 11.4f); c.drawPath(p, traco) }
                 c.restore()
             }
             Tipo.SERIES -> {   // quadros empilhados (episódios)
@@ -493,8 +495,14 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             }
             Tipo.ASSISTIR, Tipo.TV -> {   // a TV-sofá mexe as antenas, como quem procura o sinal
                 // As antenas balançam (o miolo continua vazio: nada desenhado dentro do contorno).
-                alfa(1f); c.save(); c.scale(0.84f, 0.84f, 12f, 10f); c.rotate(-12f * sino, 12f, 6.5f)
+                c.save(); c.scale(ESCALA_TV, ESCALA_TV, 12f, 9f)
+                // As antenas balançam procurando o sinal...
+                alfa(1f); c.save(); c.rotate(-12f * sino, 12f, 6.5f)
                 c.drawLine(12f, 6.5f, 7f, 2.9f, traco); c.drawLine(12f, 6.5f, 17.8f, 4.1f, traco); c.restore()
+                // ...e o brilhinho do vidro atravessa a tela da esquerda para a direita e volta ao canto.
+                val dx = 7.6f * sino
+                p.reset(); p.moveTo(7.4f + dx, 13.8f); p.quadTo(7.4f + dx, 11.6f, 9.6f + dx, 11.4f); c.drawPath(p, traco)
+                c.restore()
             }
             Tipo.SERIES -> {   // o próximo episódio: o quadro de trás sobe e volta
                 alfa(sino); val d = 1.4f * sino
@@ -625,5 +633,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         const val COR_ACESA = 0xFFFF6A2B.toInt()
         /** Linha: traço de 1,25 no quadro de 24 (o Símbolo usa 1,5). */
         const val TRACO_FINO = 1.25f
+        /** A TV-sofá desenhada menor que o quadro: a barra do programa embaixo do ícone não pode encostar (Paulo, 18/11/2026). */
+        const val ESCALA_TV = 0.76f
     }
 }

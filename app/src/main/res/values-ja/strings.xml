@@ -175,16 +175,11 @@
     <string name="al_criar">設定</string>
     <string name="al_titulo">目覚まし</string>
     <string name="al_nenhum">有効なアラームはありません</string>
-    <string name="al_proximo">次回: %1$s</string>
     <string name="al_novo_mais">+  新しいアラーム</string>
     <string name="al_ligado">オン</string>
     <string name="al_desligado">オフ</string>
     <string name="al_novo">新しいアラーム</string>
     <string name="al_editar">アラームを編集</string>
-    <string name="al_editor_dica">▲ ▼ 時と分を変更（長押しで高速）· OK で曜日を選択</string>
-    <string name="al_nome">名前（任意）</string>
-    <string name="al_som">音: %1$s</string>
-    <string name="al_ouvir">試聴</string>
     <string name="al_apagar">削除</string>
     <string name="al_hoje">今日</string>
     <string name="al_amanha">明日</string>
@@ -194,8 +189,6 @@
     <string name="al_perdido_um">TV の電源が切れていたため、%1$s のアラームが鳴りませんでした。</string>
     <string name="al_perdido_varios">TV の電源が切れていたため、%1$s のアラームが鳴りませんでした。</string>
     <string name="al_perdido_e">と</string>
-    <string name="al_volume_tv">鳴るときのテレビ音量：小さく始まり %1$d まで上がります</string>
-    <string name="al_volume_min">鳴るときの最小音量: %1$s</string>
     <string name="al_volume_nao_mexe">変更しない</string>
     <string name="pp_sem_conta">Google アカウントなし</string>
     <string name="pp_ativo">"  ·  使用中"</string>

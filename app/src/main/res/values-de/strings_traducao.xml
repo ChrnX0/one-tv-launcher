@@ -112,8 +112,6 @@
     <string name="casa_err_keystore">der Keystore des Fernsehers ist fehlgeschlagen: %1$s</string>
     <string name="casa_err_sensor">ungültiger Sensor (z. B. binary_sensor.doorbell)</string>
     <string name="casa_err_camera">ungültige Kamera (z. B. camera.front_door)</string>
-    <string name="al_bom_dia_sim">Guten Morgen: ja</string>
-    <string name="al_bom_dia_nao">Guten Morgen: nein</string>
     <string name="ag_agora">jetzt</string>
     <string name="ag_as_h">um %1$d Uhr</string>
     <string name="ag_as_hm">um %1$d:%2$02d</string>

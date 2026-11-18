@@ -175,16 +175,11 @@
     <string name="al_criar">Atur</string>
     <string name="al_titulo">Jam alarm</string>
     <string name="al_nenhum">Tidak ada alarm aktif</string>
-    <string name="al_proximo">Berikutnya: %1$s</string>
     <string name="al_novo_mais">+  Alarm baru</string>
     <string name="al_ligado">Aktif</string>
     <string name="al_desligado">Nonaktif</string>
     <string name="al_novo">Alarm baru</string>
     <string name="al_editar">Edit alarm</string>
-    <string name="al_editor_dica">▲ ▼ mengubah jam dan menit (tahan agar cepat) · OK menandai hari</string>
-    <string name="al_nome">Nama (opsional)</string>
-    <string name="al_som">Suara: %1$s</string>
-    <string name="al_ouvir">Dengarkan</string>
     <string name="al_apagar">Hapus</string>
     <string name="al_hoje">hari ini</string>
     <string name="al_amanha">besok</string>
@@ -194,8 +189,6 @@
     <string name="al_perdido_um">Alarm %1$s tidak berbunyi karena TV mati.</string>
     <string name="al_perdido_varios">Alarm %1$s tidak berbunyi karena TV mati.</string>
     <string name="al_perdido_e">dan</string>
-    <string name="al_volume_tv">Volume TV saat berbunyi: mulai pelan dan naik sampai %1$d</string>
-    <string name="al_volume_min">Volume minimum saat berbunyi: %1$s</string>
     <string name="al_volume_nao_mexe">jangan diubah</string>
     <string name="pp_sem_conta">Tidak ada akun Google</string>
     <string name="pp_ativo">"  ·  aktif"</string>
