@@ -59,7 +59,10 @@ object ShizukuEmbutido {
     } catch (_: PackageManager.NameNotFoundException) { false }
 
     fun parado(ctx: Context): Parado = RegrasEmprestimo.parado(
-        modo(ctx), Planos.permite(ctx, Planos.Recurso.PODER_EMPRESTADO), oficialInstalado(ctx))
+        modo(ctx), Planos.permite(ctx, Planos.Recurso.PODER_EMPRESTADO) && emprestimoExiste(), oficialInstalado(ctx))
+
+    /** Versão da Play enxuta (PlayPolicy): emprestar o shell não existe; fica parado como "sem plano". */
+    fun emprestimoExiste() = PlayPolicy.allowed(PlayPolicy.Power.LEND_POWERS, BuildConfig.PLAY)
 
     /** O servidor responde agora (o launcher, como gerente, tem o binder dele)? */
     fun rodando(): Boolean = try { Shizuku.pingBinder() } catch (_: Throwable) { false }

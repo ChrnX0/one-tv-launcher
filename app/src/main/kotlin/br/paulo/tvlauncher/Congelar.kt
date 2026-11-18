@@ -46,6 +46,8 @@ object Congelar {
      */
     fun definir(ctx: Context, pacote: String, congelar: Boolean): Boolean {
         if (pacote == ctx.packageName) return false
+        // Versão da Play enxuta (PlayPolicy): congelar apps de outros não existe; descongelar continua valendo.
+        if (congelar && !PlayPolicy.allowed(PlayPolicy.Power.FREEZE_APPS, BuildConfig.PLAY)) return false
         // O usuário Android vem do uid do processo: uid = usuário × 100000 + número do app.
         val cmd = comando(pacote, congelar, android.os.Process.myUid() / 100_000) ?: return false
         if (congelado(ctx, pacote) == congelar) return true   // já está como pedido

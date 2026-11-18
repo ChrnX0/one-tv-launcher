@@ -86,14 +86,21 @@ object PainelControle {
         "apagar_letra" to 67, "entrar" to 66,
     )
 
-    /** Aperta uma tecla. Devolve null se deu certo, ou o motivo. */
-    fun tecla(ctx: Context, nome: String): String? {
+    /**
+     * Aperta uma tecla. Devolve null se deu certo, ou o motivo. [pelaIa] = pedido do Claude pelo MCP: na versão da Play
+     * a IA não usa a acessibilidade (PlayPolicy), então VOLTAR vai pelo shell e INÍCIO abre a nossa tela por Intent.
+     */
+    fun tecla(ctx: Context, nome: String, pelaIa: Boolean = false): String? {
         val codigo = TECLAS[nome] ?: return "tecla desconhecida"
         // Tecla pelo painel também é alguém usando a TV. Com o aviso de desligar na tela, ela só o cancela (igual ao controle).
         val cancelouAviso = AutoDesligar.avisoNaTela()
         AutoDesligar.atividade()
         if (cancelouAviso) return null
-        val servico = AutorizaShizukuService.instancia
+        val servico = AutorizaShizukuService.instancia.takeIf { !pelaIa || PlayPolicy.aiMayUseAccessibility(BuildConfig.PLAY) }
+        // `input keyevent 3` não passa pelo filtro de teclas da acessibilidade e cairia no launcher do Google: sem o
+        // serviço (IA na versão da Play), INÍCIO é a nossa própria tela inicial por Intent.
+        if (pelaIa && nome == "inicio" && !PlayPolicy.aiMayUseAccessibility(BuildConfig.PLAY))
+            return null.also { Home.irParaHome(ctx) }
         // VOLTAR e INÍCIO pela acessibilidade: imediatos e sem shell.
         if (servico != null && nome == "voltar") return if (servico.performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)) null else "o Android recusou"
         if (servico != null && nome == "inicio") return if (servico.performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME)) null else "o Android recusou"

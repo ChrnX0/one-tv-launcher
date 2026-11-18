@@ -42,7 +42,10 @@ object DonoEmprestado {
      * FiltroDpm. Sem dono não precisa: os escopos somem junto com o dono. Uma vez por parada (marca "escopos_limpos").
      */
     fun parado(ctx: Context): RegrasDono.Parado {
-        val p = RegrasDono.parado(ligado(ctx), Planos.permite(ctx, Planos.Recurso.PODER_EMPRESTADO), somosDono(ctx))
+        val p = RegrasDono.parado(ligado(ctx),
+            // Versão da Play enxuta (PlayPolicy): emprestar o Device Owner não existe; fica parado como "sem plano".
+            Planos.permite(ctx, Planos.Recurso.PODER_EMPRESTADO) && PlayPolicy.allowed(PlayPolicy.Power.LEND_POWERS, BuildConfig.PLAY),
+            somosDono(ctx))
         val limpos = prefs(ctx).getBoolean("escopos_limpos", true)
         if (p == RegrasDono.Parado.NAO) {
             if (limpos) prefs(ctx).edit().putBoolean("escopos_limpos", false).apply()

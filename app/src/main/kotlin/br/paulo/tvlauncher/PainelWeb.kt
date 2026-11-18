@@ -1937,7 +1937,9 @@ object PainelWeb {
         val lista = JSONArray()
         for (f in PlayerArmazem.fontes(app)) lista.put(JSONObject().put("id", f.id).put("nome", f.nome).put("tipo", f.tipo)
             .put("servidor", f.servidorVisivel).put("temGuia", f.guia.isNotEmpty()).put("temGuiaExtra", f.guiaExtra.isNotEmpty()).put("reservas", f.reservas.size))
+        // "existe": false na versão da Play enxuta (PlayPolicy.Power.LIVE_TV_LISTS): o painel esconde a seção.
         return JSONObject().put("contas", lista).put("maximo", 8)
+            .put("existe", PlayPolicy.allowed(PlayPolicy.Power.LIVE_TV_LISTS, BuildConfig.PLAY))
     }
 
     private fun tvAdicionar(req: Requisicao, token: String?, ip: String): Resposta {

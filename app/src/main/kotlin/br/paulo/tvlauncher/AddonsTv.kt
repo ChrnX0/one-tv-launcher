@@ -193,7 +193,9 @@ object AddonsTv {
 
     /** Fontes HTTP de todos os addons que atendem esse vídeo, com o nome do addon. */
     fun fontes(ctx: Context, tipo: String, videoId: String): List<Pair<AddonsProtocolo.Instalado, AddonsProtocolo.Fonte>> =
-        instalados(ctx).filter { it.m.atende("stream", tipo, videoId) }.flatMap { a ->
+        // Versão da Play enxuta (PlayPolicy.Power.ADDON_STREAMS): add-on não diz de onde tocar; catálogo e ficha ficam.
+        if (!PlayPolicy.allowed(PlayPolicy.Power.ADDON_STREAMS, BuildConfig.PLAY)) emptyList()
+        else instalados(ctx).filter { it.m.atende("stream", tipo, videoId) }.flatMap { a ->
             baixar(AddonsProtocolo.url(a.base, "stream", tipo, videoId))?.let { AddonsProtocolo.lerFontes(it) }.orEmpty().map { a to it }
         }
 }

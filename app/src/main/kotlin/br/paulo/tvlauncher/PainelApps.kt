@@ -223,6 +223,9 @@ object PainelApps {
      */
     fun instalar(ctx: Context, entrada: java.io.InputStream, tamanho: Long): Instalado {
         if (tamanho <= 0 || tamanho > LIMITE_APK) return Instalado(null, null, null, "tamanho de APK inválido")
+        // Versão da Play enxuta (18/11/2026, PlayPolicy): instalar APK de fora não existe; apps vêm da Play Store.
+        if (!PlayPolicy.allowed(PlayPolicy.Power.INSTALL_APK, BuildConfig.PLAY))
+            return Instalado(null, null, null, "nesta versão os apps são instalados pela Play Store")
         // Build da Play: sem REQUEST_INSTALL_PACKAGES (a loja só aceita para quem instala apps como função principal);
         // instala pelo shell próprio (`pm install`, alternativa aprovada 16/11/2026). Com dono ou sem dono.
         if (!BuildConfig.PLAY && !PrivilegioDO.somosDonos(ctx)) return Instalado(null, null, null, "o launcher não é mais o dono do aparelho (Device Owner)")

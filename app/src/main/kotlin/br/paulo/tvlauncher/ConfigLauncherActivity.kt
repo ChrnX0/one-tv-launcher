@@ -380,6 +380,12 @@ class ConfigLauncherActivity : Activity() {
     // ================================================================ aba: Conta
 
     private fun abaConta(c: LinearLayout) {
+        // Versão da Play enxuta (PlayPolicy.Power.LIVE_TV_LISTS): sem contas de TV ao vivo, só o resto da aba.
+        if (PlayPolicy.allowed(PlayPolicy.Power.LIVE_TV_LISTS, BuildConfig.PLAY)) contasTv(c)
+        abaContaResto(c)
+    }
+
+    private fun contasTv(c: LinearLayout) {
         // As contas são decifradas pelo Keystore (IPC): leitura fora da thread da tela (auditoria 10/11). A seção
         // "Gerenciar contas" já entra embaixo; as contas aparecem no lugar reservado quando a leitura terminar.
         val topo = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false }
@@ -393,7 +399,9 @@ class ConfigLauncherActivity : Activity() {
         val caixaContas = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false }
         c.addView(caixaContas, LinearLayout.LayoutParams(MATCH, WRAP))
         montarContasTv(caixaContas)
+    }
 
+    private fun abaContaResto(c: LinearLayout) {
         // Áudio de filmes e séries (Idioma, 11/11/2026). OK alterna. Cada filme ou série lembra a troca feita no player.
         secao(c, getString(R.string.idioma_secao))
         var atual = Idioma.Pref.DUBLADO

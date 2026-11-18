@@ -23,6 +23,10 @@ object AddonsProtocolo {
     const val MAX_ITENS_CATALOGO = 200
     const val MAX_FONTES = 60
 
+    /** Os recursos que a Sofaly usa. Na versão da Play não entra `stream` (PlayPolicy.Power.ADDON_STREAMS). */
+    fun recursosUteis(play: Boolean): List<String> =
+        listOf("catalog", "meta", "stream", "subtitles").filter { it != "stream" || PlayPolicy.allowed(PlayPolicy.Power.ADDON_STREAMS, play) }
+
     data class CatalogoDecl(val tipo: String, val id: String, val nome: String, val extras: List<String>, val obrigatorios: List<String>,
                             val generos: List<String>) {
         val temBusca get() = "search" in extras
@@ -132,7 +136,8 @@ object AddonsProtocolo {
         val m = Manifesto(id, o.optString("version"), nome, o.optString("description"), o.optString("logo"), tipos, prefixos,
             recursos, catalogos, p2p = false, adulto = false, configuracaoObrigatoria = false)
         // Só eventos (player/library) ou nada que a Sofaly use: não instala.
-        if (listOf("catalog", "meta", "stream", "subtitles").none { m.tem(it) }) return Leitura.Recusado(Motivo.SEM_RECURSO_UTIL)
+        // Na versão da Play (PlayPolicy.Power.ADDON_STREAMS) um add-on só de `stream` também não tem o que fazer.
+        if (recursosUteis(BuildConfig.PLAY).none { m.tem(it) }) return Leitura.Recusado(Motivo.SEM_RECURSO_UTIL)
         return Leitura.Ok(m)
     }
 

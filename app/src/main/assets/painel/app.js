@@ -1742,6 +1742,9 @@ async function carregarTv() {
   lista.replaceChildren();
   try {
     const r = await chamar('GET', '/api/tv/contas');
+    // Versão da Play enxuta (PlayPolicy.Power.LIVE_TV_LISTS): o cartão das contas de TV ao vivo some.
+    lista.closest('.cartao').hidden = r.existe === false;
+    if (r.existe === false) return;
     if (!r.contas.length) {
       const p = document.createElement('p'); p.className = 'aviso';
       p.textContent = 'Nenhuma conta ainda. Sem conta, o disco "TV ao vivo" não aparece na HOME.';
