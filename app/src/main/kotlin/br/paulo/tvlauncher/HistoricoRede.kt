@@ -67,13 +67,16 @@ object HistoricoRede {
         val app = ctx.applicationContext
         val e = Executors.newSingleThreadScheduledExecutor { r -> Thread(r, "HistoricoRede").apply { isDaemon = true } }
         exec = e
-        e.schedule({ amostrar(app) }, 20, TimeUnit.SECONDS)   // a 1ª depois de o boot assentar
+        proxima = e.schedule({ amostrar(app) }, 20, TimeUnit.SECONDS)   // a 1ª depois de o boot assentar
         e.execute { aparar(app) }
         vigiarEventos(app)
         Log.i(TAG, "coletando a cada ${INTERVALO_MS / 60_000} min")
     }
 
     // ---------------------------------------------------------------- coleta
+
+    /** O próximo ciclo agendado: a medição avulsa que vê a rede fora o traz para daqui a 30 s. */
+    @Volatile private var proxima: java.util.concurrent.ScheduledFuture<*>? = null
 
     private fun amostrar(app: Context) {
         val proximo = try {
@@ -84,7 +87,7 @@ object HistoricoRede {
         } catch (e: Throwable) {
             Log.w(TAG, "amostra falhou: $e"); INTERVALO_MS
         }
-        exec?.schedule({ amostrar(app) }, proximo, TimeUnit.MILLISECONDS)
+        proxima = exec?.schedule({ amostrar(app) }, proximo, TimeUnit.MILLISECONDS)
     }
 
     /** Uma medição. Rede: até ~3 s (conexão) + ~3 s (DNS) no pior caso, na thread própria. */
@@ -154,7 +157,13 @@ object HistoricoRede {
 
     /** Medição fora do ciclo (depois de um "rede caiu"); não mexe no agendamento normal. */
     private fun amostrarAvulsa(app: Context) {
-        try { val a = medir(app); gravar(app, ResumoRede.linhaAmostra(a)); depoisDaAmostra(app, a) } catch (_: Throwable) {}
+        try {
+            val a = medir(app); gravar(app, ResumoRede.linhaAmostra(a)); depoisDaAmostra(app, a)
+            // Fora do ar: o ciclo normal podia estar a até 5 min; passa a medir a cada 30 s (como o comentário prometia),
+            // senão uma queda de 40 s ficava registrada como de 5 min e o ReparoWifi reagia tarde.
+            if (!a.internet && proxima?.cancel(false) == true)
+                proxima = exec?.schedule({ amostrar(app) }, INTERVALO_FALHA_MS, TimeUnit.MILLISECONDS)
+        } catch (_: Throwable) {}
     }
 
     /**

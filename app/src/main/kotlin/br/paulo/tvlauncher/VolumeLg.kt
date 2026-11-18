@@ -306,7 +306,10 @@ object VolumeLg {
             }
             val codigo = c.responseCode
             val texto = (if (codigo in 200..299) c.inputStream else c.errorStream)?.use { s ->
-                s.readBytes().take(16 * 1024).toByteArray().toString(Charsets.UTF_8)
+                // Lê no máximo 16 KB: a varredura bate na 8080 de 254 aparelhos, e uma câmera que manda vídeo enchia a memória.
+                val buf = ByteArray(16 * 1024); var n = 0
+                while (n < buf.size) { val r = s.read(buf, n, buf.size - n); if (r < 0) break; n += r }
+                String(buf, 0, n, Charsets.UTF_8)
             }.orEmpty()
             codigo to texto
         } catch (_: Exception) { null } finally { c?.disconnect() }
