@@ -17,19 +17,32 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Movies and Series: the details page shows the movie or series scene sent by the list behind it, darkened so the text stays easy to read</item>
         <item>Hold BACK, in any app or on the home screen, to open the quick panel (the short press still goes back as before)</item>
         <item>Hold HOME to open Home: the lights and scenes from Home Assistant</item>
+        <item>Each home screen icon has its own color and a short animation of its own: the TV turns on, the film runs, the radio sends out waves, the headphones play an equalizer</item>
+        <item>The top bar folds away again while you browse (the glass bar is still an option in Settings)</item>
+        <item>When you leave an app, the home screen goes back to the item that opened it, not to TV</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>ficha_cena</item>
         <item>tecla_voltar</item>
         <item>tecla_home</item>
+        <item>icones_vivos</item>
+        <item>volta_app</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Scene behind the details</item>
         <item>Hold BACK</item>
         <item>Hold HOME</item>
+        <item>Living icons</item>
+        <item>Back to the app</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Opening a movie’s details, does its scene show on the right without getting in the way of reading?</item>
         <item>Holding BACK inside an app (YouTube, for example) and on the home screen, does the quick panel open, and does a short BACK still go back?</item>
         <item>Holding HOME, inside an app and on the home screen, does Home open with your lights and scenes?</item>
+        <item>Do the icons have different colors, and does the selected one play a short animation of its own every few seconds?</item>
+        <item>Opening YouTube from its column and pressing HOME, does the focus go back to YouTube (and not to TV)?</item>
     </string-array>
 </resources>

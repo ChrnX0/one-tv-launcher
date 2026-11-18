@@ -957,6 +957,7 @@ class FilmesActivity : Activity() {
         linha.addView(direita, LinearLayout.LayoutParams(0, -1, 1f))
 
         painelFicha.addView(linha, FrameLayout.LayoutParams(-1, -1))
+        FundoFicha.por(this, painelFicha, info?.fundo)   // a cena que a lista manda, atrás da ficha (18/11/2026)
         painelFicha.visibility = View.VISIBLE
         // "Sinopse inteira" só aparece quando a sinopse não coube (dá para saber só depois de desenhada).
         if (txtSinopse != null && acaoSinopse != null) txtSinopse.post { if (FichaAcoes.cortada(txtSinopse)) acaoSinopse.visibility = View.VISIBLE }
