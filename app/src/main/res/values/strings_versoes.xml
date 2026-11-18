@@ -17,20 +17,20 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Home screen: under the name of the chosen item there is now one line only; the other details appear in the lower right corner when you stop on the item</item>
-        <item>The top bar follows the selection: with TV in focus it shows what is on now; with nothing happening, only the clock pill stays</item>
-        <item>The column no longer jumps when an item has a lot of text</item>
+        <item>Podcasts: new full-screen player with big cover art, the time the episode ends, speed, skip silences and a sleep timer</item>
+        <item>In the player, ▼ shows Up next: the next episodes of the same podcast; OK plays one</item>
+        <item>Playing an episode opens the player; on the Podcasts screen, Now playing has an Open player item</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>detalhes_canto</item>
-        <item>barra_segue</item>
+        <item>player_podcast</item>
+        <item>a_seguir</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Details in the corner</item>
-        <item>Bar follows the selection</item>
+        <item>Podcast player</item>
+        <item>Up next</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>On Series, is there one line under the name and the episode, year and genre in the lower right corner?</item>
-        <item>With TV in focus, does the top left show “On air” with the program, and with Series in focus does it stay empty?</item>
+        <item>Does playing a podcast episode open the full-screen player with the cover, time bar and controls?</item>
+        <item>In the player, does ▼ show the next episodes, and does OK on one play it?</item>
     </string-array>
 </resources>
