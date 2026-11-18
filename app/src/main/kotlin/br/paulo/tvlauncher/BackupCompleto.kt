@@ -62,6 +62,7 @@ object BackupCompleto {
         "aot",   // versão já compilada (CompilarAot): é do APK instalado, não da configuração
         "cobranca",   // plano comprado (CobrancaPlay): vem sempre da Play, nunca de um backup (restaurar não pode virar Ultra)
         "roteiro",   // respostas do "Conferir na TV" (ConferirTvActivity): valem só para a versão em que foram dadas
+        "podcast_starter",   // "já seguiu os sugeridos" (PodcastStarter): marca desta TV; os podcasts seguidos vão no backup do player
         // Cuidar de longe (CuidarDeLongeTv): o consentimento é de quem mora com ESTA TV; restaurar em outra não pode levá-lo.
         "cuidar_de_longe",
         // Degrau 4 (17/11/2026). "receitas": a receita ativa e a foto do "Desfazer" são do momento desta TV (os ajustes já vão
