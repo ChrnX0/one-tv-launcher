@@ -49,6 +49,21 @@ class CruzTelaTest {
     @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
     @Test fun linha() = conferir(IconeCruz.Estilo.LINHA, "linha")
 
+    /** Prévia da animação de cada ícone Linha (18/11/2026): uma linha por ícone, o estático e 8 quadros da passada. */
+    @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
+    @Test fun animacaoDosIcones() {
+        saida.mkdirs()
+        val tipos = IconeCruz.Tipo.entries
+        val lado = 96; val fases = listOf(-1f, 0.12f, 0.25f, 0.37f, 0.5f, 0.62f, 0.75f, 0.87f)
+        val bmp = Bitmap.createBitmap(lado * fases.size, lado * tipos.size, Bitmap.Config.ARGB_8888)
+        val c = Canvas(bmp); c.drawColor(Estilo.FUNDO)
+        for ((i, t) in tipos.withIndex()) for ((j, f) in fases.withIndex()) {
+            val ic = IconeCruz(t, IconeCruz.Estilo.LINHA).apply { faseFixa = f; setBounds(j * lado + 12, i * lado + 12, (j + 1) * lado - 12, (i + 1) * lado - 12) }
+            ic.draw(c)
+        }
+        File(saida, "cruz-icones-animacao.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
+    }
+
     private fun conferir(estilo: IconeCruz.Estilo, nome: String) {
         InstrumentationRegistry.getInstrumentation().setInTouchMode(false)
         saida.mkdirs()

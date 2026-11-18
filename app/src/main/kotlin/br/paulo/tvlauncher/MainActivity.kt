@@ -442,9 +442,9 @@ class MainActivity : Activity() {
             focoTopo = null
             voltarAoPerfil = false   // HOME de novo depois de bolinha > Configurações: o foco vai ao 1º app (home-12)
             // Cruz: HOME vai para Assistir; HOME de novo, para a TV (CruzLogica). Fecha o "Todos os apps".
-            // Só o 2º passo (Assistir -> TV) com a HOME já na frente: voltando de um app, quem estava em Assistir › Filmes
-            // continua em Filmes (depuração 18/11/2026).
-            cruz?.let { c -> if (todosAbertos) fecharTodos(); if (homeNaFrente) c.home() else c.irParaAssistir(); c.requestFocus() }
+            // Só o 2º passo (Assistir -> TV) com a HOME já na frente. Voltando de um app, o foco vai ao item que o abriu
+            // (HomeCruz.voltarDoApp; dono, 18/11/2026: "deveria voltar no último app aberto").
+            cruz?.let { c -> if (todosAbertos) fecharTodos(); if (homeNaFrente) c.home() else c.voltarDoApp(); c.requestFocus() }
         }
     }
 
@@ -1038,6 +1038,10 @@ class MainActivity : Activity() {
         const val PREFS_CRUZ_APPS = "cruz_apps"   // aberturas por app (meia-vida 7 dias) e fixados no topo de Aplicativos
         const val PREFS_CRUZ = "cruz"   // cruz: o último item escolhido em cada categoria (id da categoria -> id do item)
         const val CONTINUAR_MAX = 9          // itens do Continuar da cruz (o 10º seria o "Dormir em 30 min")
+        /** Prefs "cruz": o último item aberto na cruz ("categoria|item") e quando; vale [ULTIMO_ABERTO_VALE_MS] na HOME refeita. */
+        const val ULTIMO_ABERTO = "ultimo_aberto"
+        const val ULTIMO_ABERTO_EM = "ultimo_aberto_em"
+        const val ULTIMO_ABERTO_VALE_MS = 6L * 3600 * 1000
         const val MIDIA_NO_CONTINUAR = 4     // apps de mídia (MidiaRecente) no Continuar
         const val JOGOS_NO_CONTINUAR = 3     // jogos recentes no Continuar
         const val LARGURA_ARTE = 640   // px da arte de filme/série no fundo (ver carregarArte)
@@ -2566,7 +2570,13 @@ class MainActivity : Activity() {
         val prefs = getSharedPreferences(PREFS_CRUZ, MODE_PRIVATE)
         val c = HomeCruz(this, fonteUi, Typeface.create(fonteUi, Typeface.BOLD))
         c.lembrados = CruzLogica.Categoria.entries.mapNotNull { k -> prefs.getString(k.id, null)?.let { k.id to it } }.toMap()
-        c.aoAbrir = { cat, item -> prefs.edit().putString(cat.id, item).apply() }   // cada categoria lembra o último escolhido
+        // HOME refeita pelo Android (memória para um app grande) até 6 h depois de abrir algo: volta naquele item.
+        c.ultimoAberto = prefs.getString(ULTIMO_ABERTO, null)
+            ?.takeIf { System.currentTimeMillis() - prefs.getLong(ULTIMO_ABERTO_EM, 0L) in 0..ULTIMO_ABERTO_VALE_MS }
+        c.aoAbrir = { cat, item ->   // cada categoria lembra o último escolhido; e a cruz, o último aberto
+            prefs.edit().putString(cat.id, item).putString(ULTIMO_ABERTO, cat.id + "|" + item)
+                .putLong(ULTIMO_ABERTO_EM, System.currentTimeMillis()).apply()
+        }
         raiz.addView(c, 0, FrameLayout.LayoutParams(MATCH, MATCH))   // atrás da barra de cima (o véu não a escurece)
         cruz = c
         c.id = View.generateViewId()

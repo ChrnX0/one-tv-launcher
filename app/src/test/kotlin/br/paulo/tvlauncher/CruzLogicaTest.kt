@@ -151,4 +151,41 @@ class CruzLogicaTest {
         assertEquals("Canal 5 · X", CruzLogica.linhasTv("Canal 5 · X", "", null))
         assertEquals("Canal 5 · X\nDepois, 21:30: Novela", CruzLogica.linhasTv("Canal 5 · X", " ", "Depois, 21:30: Novela"))
     }
+
+    /** Dono, 18/11/2026: ao sair de um app, a HOME volta no item que o abriu (não na TV). */
+    @Test fun voltaNoUltimoAppAberto() {
+        val e = CruzLogica.inicial(amostra)
+        assertEquals(1, e.cat); assertEquals(0, e.sel[1])   // abertura: Assistir › TV
+        // Abriu o app2 em Aplicativos: a volta vai para lá, na posição dele.
+        val volta = CruzLogica.focar(amostra, e, "app2", Categoria.APLICATIVOS)!!
+        assertEquals(4, volta.cat); assertEquals(2, volta.sel[4])
+        assertEquals(e.sel[1], volta.sel[1])   // as outras colunas ficam onde estavam
+        // O app subiu para o topo da coluna depois de aberto (ordem por uso): o foco segue o app, não a posição.
+        val reordenado = CruzLogica.Mapa(amostra.categorias, amostra.itens.toMutableList().also { it[4] = listOf("app2", "app0", "app1", CruzLogica.ID_TODOS_APPS) })
+        assertEquals(0, CruzLogica.reajustar(amostra, volta, reordenado).sel[4])
+        // Item que não está na cruz: null (quem chama mantém o foco onde estava).
+        assertNull(CruzLogica.focar(amostra, e, "sumiu"))
+        // HOME refeita pelo Android com um app aberto há pouco: começa nele.
+        val refeita = CruzLogica.inicial(amostra, emptyMap(), "podcasts")
+        assertEquals(2, refeita.cat); assertEquals(1, refeita.sel[2])
+        // Mesmo id em duas categorias: a de onde foi aberto.
+        val dois = CruzLogica.Mapa(listOf(Categoria.CONTINUAR, Categoria.ASSISTIR), listOf(listOf("x", "app:yt"), listOf("tv", "app:yt")))
+        assertEquals(1, CruzLogica.focar(dois, CruzLogica.inicial(dois), "app:yt", Categoria.ASSISTIR)!!.cat)
+        assertEquals(0, CruzLogica.focar(dois, CruzLogica.inicial(dois), "app:yt", Categoria.CONTINUAR)!!.cat)
+    }
+
+    @Test fun animacaoDosIconesTocaEDescansa() {
+        assertEquals(-1f, IconeCruz.faseEm(-5, 1500, 2500))          // antes de começar (atraso)
+        assertEquals(0f, IconeCruz.faseEm(0, 1500, 2500))
+        assertEquals(0.5f, IconeCruz.faseEm(750, 1500, 2500))
+        assertEquals(-1f, IconeCruz.faseEm(2000, 1500, 2500))        // descanso
+        assertEquals(0f, IconeCruz.faseEm(4000, 1500, 2500))         // passada seguinte
+        assertEquals(5L, IconeCruz.proximoEm(-5, 1500, 2500))         // acorda quando o atraso acaba
+        assertEquals(2000L, IconeCruz.proximoEm(2000, 1500, 2500))    // parado: só no fim do descanso
+        assertEquals(0f, IconeCruz.sino(0f)); assertEquals(0f, IconeCruz.sino(1f)); assertEquals(1f, IconeCruz.sino(0.5f), 1e-6f)
+        // Cada ícone tem a sua cor (nada de todos iguais).
+        assertEquals(IconeCruz.Tipo.entries.size, IconeCruz.Tipo.entries.map { IconeCruz.corLinha(it) }.size)
+        assertTrue(listOf(IconeCruz.Tipo.CONTINUAR, IconeCruz.Tipo.ASSISTIR, IconeCruz.Tipo.OUVIR, IconeCruz.Tipo.JOGAR, IconeCruz.Tipo.APLICATIVOS)
+            .map { IconeCruz.corLinha(it) }.toSet().size == 5)
+    }
 }
