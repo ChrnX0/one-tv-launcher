@@ -134,19 +134,31 @@ object PainelTls {
         if (!ca.exists() || !srv.exists() || !chave.exists()) null
         else {
             val pk = KeyFactory.getInstance("EC").generatePrivate(PKCS8EncodedKeySpec(decifrar(chave.readBytes())))
-            CertificadoX509.Emissao(CertificadoX509.ler(ca.readBytes()), CertificadoX509.ler(srv.readBytes()), pk)
+            val servidor = CertificadoX509.ler(srv.readBytes())
+            // Chave e certificado do MESMO par? Uma troca que parou no meio (queda de energia entre os renames) deixava
+            // certificado novo com chave velha: o https ficava quebrado até o certificado vencer (820 dias).
+            if (!mesmoPar(pk, servidor.publicKey)) { Log.w(TAG, "chave não é a do certificado: vou emitir outro"); null }
+            else CertificadoX509.Emissao(CertificadoX509.ler(ca.readBytes()), servidor, pk)
         }
     } catch (e: Exception) {
         Log.w(TAG, "certificado guardado ilegível, vou emitir outro: $e")
         null
     }
 
+    /** Assina e confere um texto qualquer: a chave privada [pk] é a do certificado? */
+    internal fun mesmoPar(pk: java.security.PrivateKey, pub: java.security.PublicKey): Boolean = try {
+        val dado = "onetv-painel-tls".toByteArray()
+        val ass = java.security.Signature.getInstance("SHA256withECDSA").apply { initSign(pk); update(dado) }.sign()
+        java.security.Signature.getInstance("SHA256withECDSA").apply { initVerify(pub); update(dado) }.verify(ass)
+    } catch (_: Exception) { false }
+
     /** Escreve em arquivos .novo e só então troca: uma queda no meio não deixa metade velha e metade nova. */
     private fun salvar(ctx: Context, e: CertificadoX509.Emissao) {
         val p = pasta(ctx).apply { mkdirs() }
         val arquivos = listOf("ca.der" to e.ca.encoded, "servidor.der" to e.servidor.encoded,
             "chave.bin" to cifrar(e.chaveServidor.encoded))
-        for ((nome, bytes) in arquivos) File(p, "$nome.novo").writeBytes(bytes)
+        // fsync antes de trocar: sem ele, uma queda logo depois podia deixar o arquivo trocado vazio.
+        for ((nome, bytes) in arquivos) java.io.FileOutputStream(File(p, "$nome.novo")).use { it.write(bytes); it.fd.sync() }
         for ((nome, _) in arquivos) {
             if (!File(p, "$nome.novo").renameTo(File(p, nome))) throw java.io.IOException("não troquei $nome")
         }

@@ -121,11 +121,18 @@ object Rotinas {
     }
 
     /** Chamado pelo RotinaReceiver na hora marcada (e pelo adb, para testar). */
-    fun rodar(ctx: Context, id: Int) {
+    fun rodar(ctx: Context, id: Int, peloAlarme: Boolean = false) {
         val todas = listar(ctx)
         val r = todas.firstOrNull { it.id == id }
         if (r == null) { agendar(ctx); return }
         val agora = System.currentTimeMillis()
+        // Alarme muito fora da hora (TV que ligou com o relógio velho e o NTP adiantou: o alarme ficou no passado e
+        // disparou na hora): não roda (desligava a TV às 15h com gente vendo). Reagenda a próxima.
+        if (peloAlarme && atrasada(r, agora)) {
+            Log.w(TAG, "rotina $id fora da hora: pulada")
+            agendar(ctx)
+            return
+        }
         val previsto = horaPrevista(r, agora)
         // Só há UM alarme no sistema (o da mais próxima). Duas rotinas no mesmo minuto: rodam juntas aqui; antes, a
         // segunda era empurrada para o dia seguinte pelo agendar logo abaixo, e nunca rodava (revisão de 15/11/2026).
@@ -137,6 +144,12 @@ object Rotinas {
         // A próxima conta a partir da hora desta (até 5 min atrás): uma rotina 1 min depois, com este alarme chegando
         // atrasado, ainda roda (o alarme no passado dispara na hora) em vez de pular para amanhã.
         agendar(ctx, maxOf(previsto, agora - 5 * 60_000L))
+    }
+
+    /** O alarme de [r] chegou longe da hora marcada (mais de 15 min, ou nenhuma hora marcada perto)? */
+    fun atrasada(r: Rotina, agora: Long): Boolean {
+        val p = proximaVez(r.copy(ativa = true), agora - 2 * 3600_000L) ?: return true
+        return p > agora + 60_000L || agora - p > 15 * 60_000L
     }
 
     /** A hora em que [r] devia rodar agora (o alarme pode chegar segundos ou minutos atrasado); sem como saber, [agora]. */
@@ -238,6 +251,6 @@ object Rotinas {
 /** Recebe o alarme da rotina (não exportado: só o PendingIntent do próprio launcher chega aqui). */
 class RotinaReceiver : BroadcastReceiver() {
     override fun onReceive(ctx: Context, intent: Intent) {
-        Rotinas.rodar(ctx.applicationContext, intent.getIntExtra(Rotinas.EXTRA_ID, 0))
+        Rotinas.rodar(ctx.applicationContext, intent.getIntExtra(Rotinas.EXTRA_ID, 0), peloAlarme = true)
     }
 }

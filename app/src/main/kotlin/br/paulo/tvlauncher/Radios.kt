@@ -208,6 +208,9 @@ object Radios {
         val c = URL(endereco).openConnection() as HttpURLConnection
         return try {
             c.connectTimeout = 8000; c.readTimeout = 10000
+            // Sem seguir redirecionamento: a checagem de destino (colar) olhou só o primeiro host; um 302 para
+            // 127.0.0.1:8091 (MCP) ou :8080 (painel) passava por cima dela.
+            c.instanceFollowRedirects = false
             c.setRequestProperty("User-Agent", "onetv-launcher/1 (+https://github.com/ChrnX0/one-tv-launcher)")
             if (c.responseCode != 200) null else c.inputStream.use { e ->
                 // Lê no máximo 2 MB: um link que é o próprio áudio (não a lista .m3u/.pls) nunca acaba, e o readText()

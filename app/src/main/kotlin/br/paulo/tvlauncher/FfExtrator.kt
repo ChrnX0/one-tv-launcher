@@ -47,7 +47,10 @@ object FfFormatos {
      */
     fun flvVideoAntigo(d: ByteArray): Boolean {
         if (d.size < 13 || d[0] != 'F'.code.toByte() || d[1] != 'L'.code.toByte() || d[2] != 'V'.code.toByte()) return false
-        var p = ((d[5].toInt() and 0xFF) shl 24 or ((d[6].toInt() and 0xFF) shl 16) or ((d[7].toInt() and 0xFF) shl 8) or (d[8].toInt() and 0xFF)) + 4
+        // Sem sinal (Long): com d[5] >= 0x80 o deslocamento ficava negativo e d[p] estourava dentro do sniff.
+        val cab = ((d[5].toLong() and 0xFF) shl 24) or ((d[6].toLong() and 0xFF) shl 16) or ((d[7].toLong() and 0xFF) shl 8) or (d[8].toLong() and 0xFF)
+        if (cab < 9 || cab > d.size) return false
+        var p = cab.toInt() + 4
         while (p + 11 < d.size) {
             val tipo = d[p].toInt() and 0x1F
             val tam = ((d[p + 1].toInt() and 0xFF) shl 16) or ((d[p + 2].toInt() and 0xFF) shl 8) or (d[p + 3].toInt() and 0xFF)
@@ -91,7 +94,14 @@ class FfExtrator(private val uri: Uri, private val dados: DataSource.Factory) : 
     companion object { private const val TAG = "FfExtrator" }
 
     private lateinit var saida: ExtractorOutput
-    private var ctx = 0L
+    @Volatile private var ctx = 0L
+    /**
+     * O AVFormatContext não é seguro entre threads: o ExoPlayer pede pontos de busca (getSeekPoints) na thread de
+     * reprodução enquanto a de carga está dentro de arquivoLerPacote, e FLV/ASF/RM realocam o índice ao ler (SIGSEGV
+     * aleatório numa busca). Tudo que toca o ctx passa por esta trava; a busca não espera (tryLock) e, ocupada, usa o
+     * ponto aproximado.
+     */
+    private val trava = java.util.concurrent.locks.ReentrantLock()
     private val leitor = Leitor()
     private val faixas = HashMap<Int, TrackOutput>()
     private val ultimoTempo = HashMap<Int, Long>()
@@ -116,6 +126,7 @@ class FfExtrator(private val uri: Uri, private val dados: DataSource.Factory) : 
 
     override fun read(input: ExtractorInput, posicao: PositionHolder): Int {
         leitor.entrada = input
+        trava.lock()
         try {
             if (ctx == 0L) abrir()
             if (buscarPara != C.TIME_UNSET) { FfNativo.arquivoBuscar(ctx, buscarPara); buscarPara = C.TIME_UNSET; ultimoTempo.clear() }
@@ -137,6 +148,7 @@ class FfExtrator(private val uri: Uri, private val dados: DataSource.Factory) : 
             t.sampleMetadata(tempo, if (FfNativo.arquivoPacoteChave(ctx)) C.BUFFER_FLAG_KEY_FRAME else 0, n, 0, null)
             return Extractor.RESULT_CONTINUE
         } finally {
+            trava.unlock()
             leitor.entrada = null
         }
     }
@@ -177,12 +189,12 @@ class FfExtrator(private val uri: Uri, private val dados: DataSource.Factory) : 
         }
         saida.endTracks()
         val duracao = FfNativo.arquivoDuracaoUs(ctx).let { if (it > 0) it else C.TIME_UNSET }
-        val c = ctx
         saida.seekMap(object : SeekMap {
             override fun isSeekable() = duracao != C.TIME_UNSET && leitor.tamanhoTotal > 0
             override fun getDurationUs() = duracao
             override fun getSeekPoints(t: Long): SeekMap.SeekPoints {
-                val p = FfNativo.arquivoPontoBusca(c, t)
+                // Lê o ctx de agora (não uma cópia: depois do release ela apontava para memória liberada).
+                val p = if (trava.tryLock()) try { ctx.takeIf { it != 0L }?.let { FfNativo.arquivoPontoBusca(it, t) } } finally { trava.unlock() } else null
                 return SeekMap.SeekPoints(if (p != null && p[1] >= 0) SeekPoint(maxOf(p[0], 0), p[1]) else SeekPoint(t, 0))
             }
         })
@@ -196,7 +208,8 @@ class FfExtrator(private val uri: Uri, private val dados: DataSource.Factory) : 
     }
 
     override fun release() {
-        if (ctx != 0L) { FfNativo.arquivoFechar(ctx); ctx = 0 }
+        trava.lock()
+        try { if (ctx != 0L) { FfNativo.arquivoFechar(ctx); ctx = 0 } } finally { trava.unlock() }
         leitor.fecharLado()
     }
 

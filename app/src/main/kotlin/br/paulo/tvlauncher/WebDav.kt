@@ -124,16 +124,20 @@ object WebDav {
         val https = u.scheme.equals("https", true)
         val host = u.host ?: throw IOException("endereço sem servidor")
         val porta = if (u.port > 0) u.port else if (https) 443 else 80
-        val bruto = Socket().apply { soTimeout = 20_000; connect(InetSocketAddress(host, porta), 6_000) }
-        val s: Socket = if (https) {
-            val tls = (SSLSocketFactory.getDefault() as SSLSocketFactory).createSocket(bruto, host, porta, true) as SSLSocket
-            tls.startHandshake()
-            // createSocket não confere o NOME do certificado: sem isto, qualquer certificado válido de outro site passaria.
-            if (!HttpsURLConnection.getDefaultHostnameVerifier().verify(host, tls.session)) {
-                tls.close(); throw IOException("certificado não é deste servidor")
-            }
-            tls
-        } else bruto
+        val bruto = Socket()
+        // Falha na conexão ou no TLS (servidor fora, certificado ruim) fechava nada: um descritor vazado por tentativa.
+        val s: Socket = try {
+            bruto.soTimeout = 20_000; bruto.connect(InetSocketAddress(host, porta), 6_000)
+            if (https) {
+                val tls = (SSLSocketFactory.getDefault() as SSLSocketFactory).createSocket(bruto, host, porta, true) as SSLSocket
+                tls.startHandshake()
+                // createSocket não confere o NOME do certificado: sem isto, qualquer certificado válido de outro site passaria.
+                if (!HttpsURLConnection.getDefaultHostnameVerifier().verify(host, tls.session)) {
+                    tls.close(); throw IOException("certificado não é deste servidor")
+                }
+                tls
+            } else bruto
+        } catch (e: Exception) { runCatching { bruto.close() }; throw e }
         s.use { sock ->
             val alvo = (u.rawPath ?: "/").ifEmpty { "/" } + (u.rawQuery?.let { "?$it" } ?: "")
             val cab = StringBuilder("$metodo $alvo HTTP/1.1\r\nHost: ${u.rawAuthority}\r\n")
