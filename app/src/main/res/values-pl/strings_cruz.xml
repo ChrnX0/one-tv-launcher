@@ -84,4 +84,8 @@
     <string name="cruz_canto_no_ar">Na antenie</string>
     <string name="cruz_canto_buscar">Szukaj</string>
     <string name="cruz_canto_buscar_txt">▲ otwiera pasek z wyszukiwaniem</string>
+    <string name="cruz_canto_gravando">Nagrywa</string>
+    <string name="cruz_canto_tocando">Odtwarzane</string>
+    <string name="cruz_canto_parou">Zatrzymano na</string>
+    <string name="cruz_canto_conectado">Podłączono</string>
 </resources>

@@ -84,4 +84,8 @@
     <string name="cruz_canto_no_ar">Sedang tayang</string>
     <string name="cruz_canto_buscar">Cari</string>
     <string name="cruz_canto_buscar_txt">▲ membuka bilah dengan pencarian</string>
+    <string name="cruz_canto_gravando">Merekam</string>
+    <string name="cruz_canto_tocando">Diputar</string>
+    <string name="cruz_canto_parou">Berhenti di</string>
+    <string name="cruz_canto_conectado">Terhubung</string>
 </resources>

@@ -277,7 +277,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             for ((j, c) in novas.withIndex()) for ((i, it) in c.itens.withIndex()) preencher(viewsItem[j][i], it)
             // O item em foco mudou de texto ou ícone (canal novo, episódio novo): a arte e o TalkBack acompanham.
             val agora = itemAtual()
-            if (agora != null && (antes?.nome != agora.nome || antes.sub != agora.sub || antes.icone !== agora.icone)) avisarMudanca()
+            if (agora != null && (antes?.nome != agora.nome || antes.sub != agora.sub || antes.icone !== agora.icone || antes.canto != agora.canto)) avisarMudanca()
             return
         }
         estado = if (assinatura == null) CruzLogica.inicial(novoMapa, lembrados, ultimoAberto?.substringAfter('|'))
@@ -488,7 +488,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         val i = itemAtual()
         val iv = viewAtual()
         val linhas = if (i == null || iv == null || !(hasFocus() || isFocused)) emptyList() else {
-            val p = CruzLogica.partes(i.sub, i.canto?.texto?.takeIf { cantoNaBarra })
+            val p = CruzLogica.partes(i.sub, if (cantoNaBarra) BarraIlha.tirarDoItem(i.canto) else emptyList())
             val cortada = p.principal.isNotEmpty() && android.text.StaticLayout.Builder
                 .obtain(p.principal, 0, p.principal.length, iv.sub.paint, dpi(TEXTO_MAX)).setIncludePad(false).build().lineCount > ITEM_LINHAS
             CruzLogica.detalhes(p, principalCortada = cortada)
@@ -595,7 +595,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private fun preencher(v: ItemView, item: Item) {
         if (v.icone.drawable !== item.icone) v.icone.setImageDrawable(item.icone)
         if (v.nome.text.toString() != item.nome) v.nome.text = item.nome
-        val principal = CruzLogica.partes(item.sub, item.canto?.texto?.takeIf { cantoNaBarra }).principal
+        val principal = CruzLogica.partes(item.sub, if (cantoNaBarra) BarraIlha.tirarDoItem(item.canto) else emptyList()).principal
         if (v.principal != principal || v.sub.text.toString() != principal) { v.principal = principal; v.sub.text = principal }
         v.sub.visibility = if (principal.isEmpty()) View.GONE else View.VISIBLE
         val p = item.progresso

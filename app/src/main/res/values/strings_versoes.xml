@@ -17,15 +17,20 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Podcast player: the sleep timer notice shows in full, at the top</item>
+        <item>Top bar with one rule for everything: it shows what is happening now with the chosen item — On air, Recording, Playing, Stopped at, Connected — with % and time left</item>
+        <item>Series, movies, podcasts and app videos stopped halfway show how far you got (e.g. “Stopped at T1 E1 · 35% · 43 min left”)</item>
+        <item>Home (Home Assistant) finds itself again on the network when the computer changes address: nothing to set up</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>timer_alto</item>
+        <item>barra_estado</item>
+        <item>casa_reencontra</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Sleep timer</item>
+        <item>Bar shows the state</item>
+        <item>Home finds itself</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>In the podcast player, with the sleep timer on, does the top read “Now playing · sleeps in 15 min” in full?</item>
+        <item>With Series in focus, does the top left show “Stopped at” with the episode, % and time left, and with TV “On air” with %?</item>
+        <item>Does the Home screen (lights) open normally?</item>
     </string-array>
 </resources>

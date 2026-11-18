@@ -84,4 +84,8 @@
     <string name="cruz_canto_no_ar">अभी प्रसारण</string>
     <string name="cruz_canto_buscar">खोजें</string>
     <string name="cruz_canto_buscar_txt">▲ खोज वाली पट्टी खोलता है</string>
+    <string name="cruz_canto_gravando">रिकॉर्ड हो रहा</string>
+    <string name="cruz_canto_tocando">चल रहा</string>
+    <string name="cruz_canto_parou">यहाँ रुका</string>
+    <string name="cruz_canto_conectado">जुड़ा है</string>
 </resources>

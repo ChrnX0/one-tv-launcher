@@ -84,4 +84,8 @@
     <string name="cruz_canto_no_ar">على الهواء</string>
     <string name="cruz_canto_buscar">بحث</string>
     <string name="cruz_canto_buscar_txt">▲ يفتح الشريط مع البحث</string>
+    <string name="cruz_canto_gravando">يسجّل</string>
+    <string name="cruz_canto_tocando">يُشغَّل</string>
+    <string name="cruz_canto_parou">توقّف عند</string>
+    <string name="cruz_canto_conectado">متصل</string>
 </resources>

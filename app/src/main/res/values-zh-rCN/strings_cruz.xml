@@ -84,4 +84,8 @@
     <string name="cruz_canto_no_ar">正在播出</string>
     <string name="cruz_canto_buscar">搜索</string>
     <string name="cruz_canto_buscar_txt">▲ 打开带搜索的栏</string>
+    <string name="cruz_canto_gravando">正在录制</string>
+    <string name="cruz_canto_tocando">正在播放</string>
+    <string name="cruz_canto_parou">停在</string>
+    <string name="cruz_canto_conectado">已连接</string>
 </resources>

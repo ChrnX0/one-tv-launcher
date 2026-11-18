@@ -84,4 +84,8 @@
     <string name="cruz_canto_no_ar">방송 중</string>
     <string name="cruz_canto_buscar">검색</string>
     <string name="cruz_canto_buscar_txt">▲ 검색이 있는 막대 열기</string>
+    <string name="cruz_canto_gravando">녹화 중</string>
+    <string name="cruz_canto_tocando">재생 중</string>
+    <string name="cruz_canto_parou">멈춘 곳</string>
+    <string name="cruz_canto_conectado">연결됨</string>
 </resources>

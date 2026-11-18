@@ -123,6 +123,7 @@ object ComandosExtras {
         }
         "movimento" -> MovimentoAdaptativo.comando(ctx, i.getStringExtra("nivel"))
         // Casa (Home Assistant): sem endereço mostra o atual; com endereço troca só ele (o token fica).
+        "casa_procurar" -> CasaHA.procurarNaRede(ctx)   // procura o Home Assistant na rede (HomeAssistantFinder), ~6 s
         "casa_endereco" -> i.getStringExtra("endereco").let { e ->
             if (e.isNullOrBlank()) "casa=${CasaHA.endereco(ctx) ?: "-"} configurado=${CasaHA.configurado(ctx)}"
             else CasaHA.trocarEndereco(ctx, e)?.let { "não trocou: $it" } ?: "casa=${CasaHA.endereco(ctx)}"

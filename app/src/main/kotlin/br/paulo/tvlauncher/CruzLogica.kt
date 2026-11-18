@@ -187,13 +187,13 @@ object CruzLogica {
      * alguma info básica e as complementares no canto inferior direito"): a [Partes.principal] fica embaixo do nome, numa
      * linha só, e os [Partes.detalhes] vão para o canto de baixo da tela. [tirar] é o que a barra de cima já mostra (o
      * programa no ar): não aparece de novo. Se a principal não coube e terminou em "…", ela vai inteira para os detalhes
-     * ([principalCortada]), para nada ficar sem ser lido.
+     * ([principalCortada]), para nada ficar sem ser lido. [tirar]: [BarraIlha.tirarDoItem].
      */
     data class Partes(val principal: String, val detalhes: List<String>)
 
-    fun partes(sub: String?, tirar: String? = null): Partes {
-        val t = tirar?.trim()?.takeIf { it.isNotEmpty() }
-        val ls = sub.orEmpty().split('\n').map { it.trim() }.filter { it.isNotEmpty() && it != t }.distinct()
+    fun partes(sub: String?, tirar: Collection<String> = emptyList()): Partes {
+        val t = tirar.map { it.trim() }.filter { it.isNotEmpty() }.toSet()
+        val ls = sub.orEmpty().split('\n').map { it.trim() }.filter { it.isNotEmpty() && it !in t }.distinct()
         return Partes(ls.firstOrNull().orEmpty(), ls.drop(1))
     }
 

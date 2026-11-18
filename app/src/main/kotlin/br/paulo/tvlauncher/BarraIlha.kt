@@ -3,7 +3,7 @@ package br.paulo.tvlauncher
 /**
  * Barra de cima "Ilha" (Paulo, 18/11/2026: a mistura A+B+D do estudo da barra). Navegando na cruz ela recolhe, e sobram:
  * - no centro, a pílula com o ponto laranja e a hora, que se estica com o que está acontecendo ([escolher]);
- * - no canto esquerdo, o que está acontecendo com o item em foco ([Canto]): o programa no ar; em Aplicativos, a busca.
+ * - no canto esquerdo, o estado agora do item em foco ([Canto]): no ar, gravando, tocando, onde parou, conectado.
  * Com ▲ a barra de sempre volta (com o véu atrás) e a pílula dá lugar a ela. Lógica pura, testada na JVM.
  */
 object BarraIlha {
@@ -43,8 +43,22 @@ object BarraIlha {
         return null
     }
 
-    /** Uma linha do canto: [rotulo] colorido + [texto], vindos do item [origem] da categoria. */
-    data class Canto(val rotulo: String, val texto: String, val origem: String)
+    /**
+     * O "estado agora" do item em foco (Paulo, 18/11/2026 14:15 local: "mais inteligente, coerente e lógico"): [rotulo]
+     * colorido (No ar, Gravando, Tocando, Parou em, Conectado) + [texto] no formato de [andamento]. [tira] = as linhas
+     * da linha de baixo do item que o canto substitui (não aparecem de novo embaixo nem nos detalhes).
+     */
+    data class Canto(val rotulo: String, val texto: String, val origem: String, val tira: List<String> = emptyList())
+
+    /** "o quê · 35% · faltam 43 min": as partes vazias somem; a porcentagem só entre 1% e 99%. */
+    fun andamento(oQue: String?, fracao: Float?, falta: String?): String = listOfNotNull(
+        oQue?.trim()?.takeIf { it.isNotEmpty() },
+        fracao?.takeIf { it >= 0.01f && it < 0.995f }?.let { "${kotlin.math.round(it * 100).toInt()}%" },
+        falta?.trim()?.takeIf { it.isNotEmpty() },
+    ).joinToString(" · ")
+
+    /** O que a linha de baixo deixa de mostrar porque o canto mostra (o próprio texto do canto e o que ele substitui). */
+    fun tirarDoItem(c: Canto?): List<String> = if (c == null) emptyList() else c.tira + c.texto
 
     /** Largura do canto: do começo dele até a pílula, menos um respiro (nunca menos que [CANTO_MIN_DP]). */
     fun larguraCanto(inicioCanto: Int, inicioPilula: Int, respiro: Int, minimo: Int): Int = maxOf(minimo, inicioPilula - inicioCanto - respiro)
@@ -60,7 +74,4 @@ object BarraIlha {
         val p = pilula?.trim().orEmpty()
         return p.isEmpty() || !c.texto.contains(p, ignoreCase = true)
     }
-
-    /** O canto do item em foco; sem ele, o da categoria (em Aplicativos, a dica da busca). */
-    fun cantoDoFoco(doItem: Canto?, daCategoria: Canto?): Canto? = doItem?.takeIf { it.texto.isNotBlank() } ?: daCategoria
 }

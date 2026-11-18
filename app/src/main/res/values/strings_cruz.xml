@@ -84,4 +84,8 @@
     <string name="cruz_canto_no_ar">On air</string>
     <string name="cruz_canto_buscar">Search</string>
     <string name="cruz_canto_buscar_txt">▲ opens the bar with search</string>
+    <string name="cruz_canto_gravando">Recording</string>
+    <string name="cruz_canto_tocando">Playing</string>
+    <string name="cruz_canto_parou">Stopped at</string>
+    <string name="cruz_canto_conectado">Connected</string>
 </resources>
