@@ -13,4 +13,5 @@
     <string name="mtp_pcs_nenhum">Belum ada. TV bertanya di layar saat komputer meminta file.</string>
     <string name="mtp_pcs_lista">%1$s · OK melupakan semua (tiap komputer bertanya lagi)</string>
     <string name="mtp_pcs_esquecidos">Komputer dilupakan</string>
+    <string name="ur_atalho_nome">Buka panel TV</string>
 </resources>

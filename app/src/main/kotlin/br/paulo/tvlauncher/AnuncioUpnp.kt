@@ -12,7 +12,9 @@ import java.net.NetworkInterface
 
 /**
  * Manda e responde os pacotes SSDP (Ssdp.kt) para a TV aparecer na tela "Rede" do Windows como "<nome> · painel".
- * Só com a unidade de rede ligada (liga e desliga junto com o AnuncioDav).
+ * Desde 18/11/2026 liga junto com o painel (PainelWeb), sem depender de chave nenhuma: o duplo clique ali abre o painel,
+ * para quem não sabe o IP. A TV em "Este Computador" (aparelho MTP) entra no anúncio só com a unidade de rede ligada
+ * ([mostrarMtp], chamado pelo AnuncioDav). O IP é conferido a cada minuto: mudou, anuncia de novo com o endereço novo.
  *
  * Porta 1900: o Chromecast embutido (mediashell) já escuta nela (medido na Sala em 14/11/2026). Com reuseAddress os dois
  * recebem as buscas; se o sistema não deixar dividir, seguimos só com os anúncios periódicos (NOTIFY), que o Windows
@@ -21,15 +23,37 @@ import java.net.NetworkInterface
 object AnuncioUpnp {
     private const val TAG = "TvLauncher.Upnp"
     private const val REANUNCIO_MS = 10 * 60_000L
+    /** De quanto em quanto tempo o IP é conferido (e quanto se espera a rede aparecer). */
+    private const val CONFERE_IP_MS = 60_000L
     @Volatile private var thread: Thread? = null
     @Volatile private var escuta: MulticastSocket? = null
+    /** A TV também em "Este Computador" (unidade de rede ligada). */
+    @Volatile private var comMtp = false
+    @Volatile private var contexto: Context? = null
+    /** O MTP acabou de sair do anúncio: o próximo anúncio manda o "saí" dele (só uma vez). */
+    @Volatile private var tirarMtp = false
 
     @Synchronized fun ligar(ctx: Context) {
-        if (thread != null) return
         val app = ctx.applicationContext
+        contexto = app
+        if (thread != null) return
         val t = Thread({ rodar(app) }, "Upnp-anuncio").apply { isDaemon = true; priority = Thread.MIN_PRIORITY }
         thread = t
         t.start()
+    }
+
+    /**
+     * Põe ou tira o aparelho MTP do anúncio (unidade de rede ligada/desligada). Recomeça o anúncio se o painel está no
+     * ar; o anúncio novo manda o "saí" do MTP quando ele sai, para o Windows tirar a TV de "Este Computador".
+     */
+    @Synchronized fun mostrarMtp(sim: Boolean, ctx: Context? = null) {
+        ctx?.let { contexto = it.applicationContext }
+        if (comMtp == sim) return
+        comMtp = sim
+        tirarMtp = !sim
+        val app = contexto ?: return
+        if (thread != null) desligar()
+        if (PainelWeb.ligado()) ligar(app)
     }
 
     @Synchronized fun desligar() {
@@ -41,13 +65,24 @@ object AnuncioUpnp {
 
     private fun rodar(app: Context) {
         val eu = Thread.currentThread()
-        val ip = PainelWeb.ipsDaRede().minOrNull() ?: run { synchronized(this) { if (thread === eu) thread = null }; return }
-        // Dois aparelhos: o atalho para a página de ajuda (Basic) e a TV como dispositivo portátil (MTP pela rede).
+        // O painel pode ligar antes do Wi-Fi (TV acordando): espera a rede em vez de desistir de anunciar.
+        var ipAchado = PainelWeb.ipsDaRede().minOrNull()
+        while (ipAchado == null) {
+            try { Thread.sleep(CONFERE_IP_MS) } catch (_: InterruptedException) { synchronized(this) { if (thread === eu) thread = null }; return }
+            if (thread !== eu) return
+            ipAchado = PainelWeb.ipsDaRede().minOrNull()
+        }
+        val ip: String = ipAchado
+        var trocouIp = false
+        // Até dois aparelhos: o atalho para o painel (Basic, sempre) e a TV como dispositivo portátil (MTP pela rede,
+        // só com a unidade de rede ligada).
         val id = PainelVizinhos.idDaTv(app)
         val base = "http://$ip:${Config.PAINEL_PORTA}"
-        val aparelhos = listOf(
+        val mtp = Triple(Ssdp.uuidMtp(id), base + Ssdp.CAMINHO_MTP, Ssdp.TIPO_MTP)
+        val comMtpAgora = comMtp
+        val aparelhos = listOfNotNull(
             Triple(Ssdp.uuid(id), base + Ssdp.CAMINHO_DESCRICAO, Ssdp.TIPO),
-            Triple(Ssdp.uuidMtp(id), base + Ssdp.CAMINHO_MTP, Ssdp.TIPO_MTP),
+            mtp.takeIf { comMtpAgora },
         )
         fun anuncios(vivo: Boolean) = aparelhos.flatMap { (u, l, t) -> Ssdp.notify(u, l, vivo, t) }
         val grupo = InetAddress.getByName(Ssdp.GRUPO)
@@ -68,7 +103,7 @@ object AnuncioUpnp {
                 reuseAddress = true
                 bind(InetSocketAddress(Ssdp.PORTA))
                 joinGroup(InetSocketAddress(grupo, Ssdp.PORTA), NetworkInterface.getByInetAddress(InetAddress.getByName(ip)))
-                soTimeout = REANUNCIO_MS.toInt()
+                soTimeout = CONFERE_IP_MS.toInt()
             }
         } catch (e: Exception) { Log.i(TAG, "porta 1900 ocupada, só anúncios: $e"); null }
         escuta = s
@@ -76,22 +111,29 @@ object AnuncioUpnp {
             // O servidor MTP acabou de subir (processo novo, atualização do launcher): o Windows ainda acha que a conexão
             // antiga vale. "Saí" + "estou aqui" do aparelho MTP faz ele soltar e reconectar sozinho (ver Ssdp.avisoDoAparelho).
             // Com alguém já conectado (este anúncio religou sem o servidor cair) não mexe: derrubaria uma cópia no meio.
-            val (uMtp, lMtp, _) = aparelhos[1]
-            if (!MtpNaRede.temSessao()) {
-                mandar(listOf(Ssdp.avisoDoAparelho(uMtp, lMtp, false)), grupo, Ssdp.PORTA)
-                Thread.sleep(Ssdp.PAUSA_RECONEXAO_MS)
+            val (uMtp, lMtp, tMtp) = mtp
+            if (comMtpAgora) {
+                if (!MtpNaRede.temSessao()) {
+                    mandar(listOf(Ssdp.avisoDoAparelho(uMtp, lMtp, false)), grupo, Ssdp.PORTA)
+                    Thread.sleep(Ssdp.PAUSA_RECONEXAO_MS)
+                }
+                mandar(listOf(Ssdp.avisoDoAparelho(uMtp, lMtp, true)), grupo, Ssdp.PORTA)
+                Thread.sleep(300)
+            } else if (tirarMtp) {
+                // Unidade de rede acabou de ser desligada: "saí" do aparelho MTP (o Windows tira a TV de "Este Computador").
+                tirarMtp = false
+                mandar(Ssdp.notify(uMtp, lMtp, false, tMtp), grupo, Ssdp.PORTA)
             }
-            mandar(listOf(Ssdp.avisoDoAparelho(uMtp, lMtp, true)), grupo, Ssdp.PORTA)
-            Thread.sleep(300)
             mandar(anuncios(true), grupo, Ssdp.PORTA)
             var ultimo = System.currentTimeMillis()
+            var conferiuIp = ultimo
             val buf = ByteArray(2048)
             // Uma resposta por origem a cada segundo: uma busca de ~100 B rendia 6 respostas de ~250 B, e com a origem
             // forjada a TV virava refletor contra outro aparelho da casa. O Windows repete a busca: nada se perde.
             val respondido = HashMap<String, Long>()
             while (thread === eu) {
                 if (s == null) {
-                    Thread.sleep(REANUNCIO_MS)
+                    Thread.sleep(CONFERE_IP_MS)
                 } else {
                     val p = DatagramPacket(buf, buf.size)
                     try {
@@ -112,6 +154,11 @@ object AnuncioUpnp {
                     } catch (_: java.net.SocketTimeoutException) {}
                 }
                 if (System.currentTimeMillis() - ultimo >= REANUNCIO_MS) { mandar(anuncios(true), grupo, Ssdp.PORTA); ultimo = System.currentTimeMillis() }
+                if (System.currentTimeMillis() - conferiuIp >= CONFERE_IP_MS) {
+                    conferiuIp = System.currentTimeMillis()
+                    // O roteador deu outro IP à TV (ou a rede caiu): o endereço anunciado deixou de valer.
+                    if (PainelWeb.ipsDaRede().minOrNull() != ip) { trocouIp = true; break }
+                }
             }
         } catch (_: InterruptedException) {
         } catch (e: Exception) {
@@ -125,5 +172,7 @@ object AnuncioUpnp {
             try { trava?.release() } catch (_: Exception) {}
             synchronized(this) { if (thread === eu) thread = null }
         }
+        // Recomeça com o IP novo (o "saí" acima foi com o endereço velho, que o Windows ainda tem guardado).
+        if (trocouIp && PainelWeb.ligado()) { Log.i(TAG, "IP mudou: anunciando de novo"); ligar(app) }
     }
 }

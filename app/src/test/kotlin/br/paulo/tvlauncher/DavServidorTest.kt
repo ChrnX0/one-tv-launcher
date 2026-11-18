@@ -36,7 +36,10 @@ class DavServidorTest {
         override fun acesso() = true
         override fun registrar(ip: String, acao: String) { synchronized(diario) { diario.add(acao) } }
         override fun avisar(f: File) {}
+        override fun atalho(): File? = atalhoTeste
     }
+    /** O atalho do painel (PanelShortcut) que o "Android" entrega; null = sem atalho. */
+    private var atalhoTeste: File? = null
 
     private fun conferir(c: String?): PainelDav.Recusa? =
         if (DavLogica.senhaBasic(c) == "123456") null else PainelDav.Recusa(401, "PIN errado")
@@ -131,6 +134,31 @@ class DavServidorTest {
         assertEquals(401, r.codigo)
         assertTrue(r.cab["www-authenticate"]!!.startsWith("Basic"))
         assertEquals(401, pedir("GET", "/dav/Download/ola.txt", mapOf("Authorization" to "Basic eDp4"), comSenha = false).codigo)
+    }
+
+    /** O atalho "Abrir o painel da TV.url": aparece só na raiz, baixa com o IP de agora, não se apaga. */
+    @Test fun atalhoDoPainelNaRaiz() {
+        val fora = Files.createTempDirectory("atalho").toFile()
+        try {
+            val nome = PanelShortcut.fileName("Abrir o painel da TV")!!
+            atalhoTeste = File(fora, nome).apply { writeBytes(PanelShortcut.content("192.168.1.153", 8080)) }
+            val enc = DavLogica.codificar(nome)
+            val lista = pedir("PROPFIND", "/dav/", mapOf("Depth" to "1"))
+            assertEquals(207, lista.codigo)
+            assertTrue(lista.texto, lista.texto.contains("<D:href>/dav/$enc</D:href>"))
+            assertTrue(!pedir("PROPFIND", "/dav/Download/", mapOf("Depth" to "1")).texto.contains(enc))   // só na raiz
+            assertEquals(207, pedir("PROPFIND", "/dav/$enc", mapOf("Depth" to "0")).codigo)
+            val g = pedir("GET", "/dav/$enc")
+            assertEquals(200, g.codigo)
+            assertTrue(g.texto.contains("URL=http://192.168.1.153:8080/"))
+            assertEquals(404, pedir("DELETE", "/dav/$enc").codigo)   // não está no disco: nada a apagar
+            assertTrue(atalhoTeste!!.exists())
+            assertEquals(404, pedir("GET", "/dav/Download/$enc").codigo)
+            // um arquivo de verdade com o mesmo nome vale mais que o atalho
+            File(raiz, nome).writeText("meu")
+            assertEquals("meu", pedir("GET", "/dav/$enc").texto)
+            assertEquals(1, Regex(Regex.escape("<D:href>/dav/$enc</D:href>")).findAll(pedir("PROPFIND", "/dav/", mapOf("Depth" to "1")).texto).count())
+        } finally { atalhoTeste = null; fora.deleteRecursively() }
     }
 
     @Test fun listaARaizSemAPastaAndroid() {

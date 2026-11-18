@@ -13,4 +13,5 @@
     <string name="mtp_pcs_nenhum">لا شيء بعد. يسأل التلفزيون على الشاشة عندما يطلب كمبيوتر الملفات.</string>
     <string name="mtp_pcs_lista">%1$s · OK ينسى الكل (كل واحد يسأل مجددًا)</string>
     <string name="mtp_pcs_esquecidos">نُسيت أجهزة الكمبيوتر</string>
+    <string name="ur_atalho_nome">افتح لوحة التلفزيون</string>
 </resources>

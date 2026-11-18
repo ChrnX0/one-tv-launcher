@@ -100,6 +100,11 @@ It is off by default and needs the resident's consent on the TV: never turn it o
   `ONETV_MTP_SERVIR=1`. Mac/Linux/phones: WebDAV, `PainelDav.kt` at `https://<tv>:8444/dav/`, password = panel PIN with
   the same lockout; pure logic `DavLogica.kt`, server test `DavServidorTest`; `/unidade/conectar.cmd` (`ConectorWindows.kt`)
   maps it on Windows with a drive letter. SMB is impossible (port 445 < 1024): `docs/unidade-de-rede.md`.
+- Panel shortcut on Windows (18/11/2026): `AnuncioUpnp` announces "<TV> · painel" in Explorer's Network whenever the panel
+  runs (not tied to the drive switch; MTP joins via `mostrarMtp`) and re-announces when the IP changes (checked every
+  minute). `PanelShortcut.kt`: a virtual read-only "Open the TV panel.url" (localized, `ur_atalho_nome`) at the root of
+  internal storage in MTP (`MtpLoja.atalho`) and WebDAV (`Ambiente.atalho`), built with the current IP on each listing
+  (`PainelWeb.atalhoPainel`, cache dir). A real file with the same name wins.
 - MCP: `McpServidor.kt` on 127.0.0.1:8091, OAuth 2.1 (DCR + PKCE) in `McpAutorizacao.kt`, tools in `McpFerramentas.kt`.
   Reachable from outside only through `tunel/main.go` (Tailscale `tsnet`, userspace, Funnel :443), compiled to
   `libtsnet.so` by the `compilarTunel` Gradle task when Go is installed. Machine name: `onetv-<device name>`.

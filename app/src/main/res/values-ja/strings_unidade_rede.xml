@@ -13,4 +13,5 @@
     <string name="mtp_pcs_nenhum">まだありません。パソコンがファイルを求めると TV の画面で確認します。</string>
     <string name="mtp_pcs_lista">%1$s · OK ですべて忘れる（それぞれ再度確認します）</string>
     <string name="mtp_pcs_esquecidos">パソコンを忘れました</string>
+    <string name="ur_atalho_nome">テレビのパネルを開く</string>
 </resources>

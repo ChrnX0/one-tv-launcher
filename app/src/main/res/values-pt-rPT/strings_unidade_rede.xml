@@ -13,4 +13,5 @@
     <string name="mtp_pcs_nenhum">Nenhum ainda. A TV pergunta no ecrã quando um computador pede os ficheiros.</string>
     <string name="mtp_pcs_lista">%1$s · OK esquece todos (cada um pergunta de novo)</string>
     <string name="mtp_pcs_esquecidos">Computadores esquecidos</string>
+    <string name="ur_atalho_nome">Abrir o painel da TV</string>
 </resources>

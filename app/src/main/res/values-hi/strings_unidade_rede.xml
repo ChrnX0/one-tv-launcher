@@ -13,4 +13,5 @@
     <string name="mtp_pcs_nenhum">अभी कोई नहीं। कोई कंप्यूटर फ़ाइलें माँगेगा तो TV स्क्रीन पर पूछेगा।</string>
     <string name="mtp_pcs_lista">%1$s · OK सब भूल जाता है (हर एक फिर पूछेगा)</string>
     <string name="mtp_pcs_esquecidos">कंप्यूटर भुला दिए गए</string>
+    <string name="ur_atalho_nome">टीवी पैनल खोलें</string>
 </resources>
