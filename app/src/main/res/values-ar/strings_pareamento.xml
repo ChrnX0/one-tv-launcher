@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">تعذّر فتح خيارات المطوّرين (%1$s)</string>
+    <string name="pn_porta_achada">وُجد منفذ الإقران %1$d</string>
+    <string name="pn_mdns_falhou">فشل البحث في الشبكة (%1$s)</string>
+    <string name="pn_pareando">جارٍ الإقران…</string>
+    <string name="pn_confirme">تمت قراءة الرمز. للإقران اضغط OK في جهاز التحكم على \"%1$s\"</string>
+    <string name="pn_so_controle">لا يؤكد الإقران إلا زر في جهاز التحكم</string>
+</resources>

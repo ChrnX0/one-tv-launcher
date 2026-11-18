@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">无法打开开发者选项（%1$s）</string>
+    <string name="pn_porta_achada">找到配对端口 %1$d</string>
+    <string name="pn_mdns_falhou">网络搜索失败（%1$s）</string>
+    <string name="pn_pareando">正在配对…</string>
+    <string name="pn_confirme">已读取代码。要配对，请用遥控器在“%1$s”上按 OK</string>
+    <string name="pn_so_controle">只有遥控器按键才能确认配对</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">개발자 옵션을 열 수 없습니다(%1$s)</string>
+    <string name="pn_porta_achada">페어링 포트 %1$d 찾음</string>
+    <string name="pn_mdns_falhou">네트워크 검색 실패(%1$s)</string>
+    <string name="pn_pareando">페어링 중…</string>
+    <string name="pn_confirme">코드를 읽었습니다. 페어링하려면 리모컨으로 \"%1$s\"에서 OK를 누르세요</string>
+    <string name="pn_so_controle">페어링은 리모컨 버튼으로만 확인됩니다</string>
+</resources>

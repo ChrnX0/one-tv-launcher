@@ -60,6 +60,8 @@ class JogosActivity : Activity() {
     private var atual: JogosTv.App? = null               // o jogo com foco (ou o último que teve)
     private var filtro: Jogos.Grupo? = null              // "Por tipo": null = todos
     private var turma: TurmaDiscordTv.Estado? = null
+    /** Depuração 18/11: virou true na 1ª tecla. Depois dela, nada que chega atrasado (lista, turma) rouba o foco. */
+    private var pessoaMexeu = false
     private var aberto = false                           // painel aberto (foco nele)
     private var esperandoPc = false
     private var montado = false
@@ -561,7 +563,7 @@ class JogosActivity : Activity() {
         val focoNaFila = currentFocus?.let { dentro(it, fila) } == true
         val tag = focoPacote ?: (currentFocus?.tag as? String)?.takeIf { focoNaFila }
         val alvo = redesenharFila(tag)
-        if (!montado || focoNaFila || focoPacote != null) alvo?.requestFocus()
+        if ((!montado && !pessoaMexeu) || focoNaFila || focoPacote != null) alvo?.requestFocus()
         focoPacote = null
     }
 
@@ -966,6 +968,8 @@ class JogosActivity : Activity() {
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        // A pessoa já começou a navegar: a fileira (ou a turma que chega atrasada) não puxa mais o foco sozinha.
+        if (event.action == KeyEvent.ACTION_DOWN) pessoaMexeu = true
         // Botão Y/△ do controle de videogame em cima de um jogo = o mesmo que segurar OK (escolher o grupo).
         if (event.keyCode == KeyEvent.KEYCODE_BUTTON_Y && event.action == KeyEvent.ACTION_UP) {
             val p = currentFocus?.tag as? String

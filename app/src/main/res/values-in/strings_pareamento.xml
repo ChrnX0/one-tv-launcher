@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">Opsi developer tidak bisa dibuka (%1$s)</string>
+    <string name="pn_porta_achada">port penyambungan %1$d ditemukan</string>
+    <string name="pn_mdns_falhou">pencarian jaringan gagal (%1$s)</string>
+    <string name="pn_pareando">menyambungkan…</string>
+    <string name="pn_confirme">kode terbaca. Untuk menyambungkan, tekan OK di remote pada “%1$s”</string>
+    <string name="pn_so_controle">hanya tombol remote yang mengonfirmasi penyambungan</string>
+</resources>
