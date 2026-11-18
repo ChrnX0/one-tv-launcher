@@ -39,9 +39,17 @@ class ConectorWindowsTest {
         val s = ConectorWindows.script("192.168.1.50", 8444, pem)!!
         val padrao = s.indexOf("set \"LETRA=*\""); val y = s.indexOf("set \"LETRA=Y:\""); val l = s.indexOf("set \"LETRA=S:\"")
         assertTrue(padrao in 0 until y && y < l)   // a última que vale é a S
-        // com espaço na frente: "Unidades:" / "Drives:" do fsutil terminam em "s:" (medido num Windows 11 em português)
+        // com espaço na frente: "Unidades:" / "Drives:" terminam em "s:" (medido num Windows 11 em português)
         assertTrue("find /i \" S:\"" in s && "find /i \" Y:\"" in s)
         assertTrue("net use %LETRA% \"%ALVO%\"" in s)
+        assertFalse("fsutil" in s)                                 // pede administrador: a letra saía sempre "*"
+        assertTrue("if not exist S:\\ " in s)
+    }
+
+    @Test fun elevacaoNaoPoeOCaminhoEntreAspasSimples() {
+        val s = ConectorWindows.script("192.168.1.50", 8444, pem)!!
+        assertFalse("'%~f0'" in s)                                 // C:\Users\D'Avila quebrava o PowerShell
+        assertTrue("-FilePath \$env:EU" in s && "set \"EU=%~f0\"" in s)
     }
 
     @Test fun rotuloDaUnidadeVaiEmNumerosESoAscii() {

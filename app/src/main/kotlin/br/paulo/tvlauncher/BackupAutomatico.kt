@@ -46,7 +46,8 @@ object BackupAutomatico {
         dir.mkdirs()
         // Grava num temporário e renomeia: uma queda de energia no meio não deixa um backup pela metade com nome válido.
         val tmp = File(dir, hoje.name + ".tmp")
-        tmp.writeText(texto)
+        // fsync antes de trocar o nome: sem ele, uma queda logo depois deixava um backup de 0 bytes "de hoje".
+        java.io.FileOutputStream(tmp).use { it.write(texto.toByteArray(Charsets.UTF_8)); it.fd.sync() }
         if (!tmp.renameTo(hoje)) { tmp.delete(); return null }
         podar(dir, MANTER)
         Log.i(TAG, "backup automático gravado: ${hoje.name} (${hoje.length()} bytes)")

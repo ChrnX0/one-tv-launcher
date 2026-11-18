@@ -29,6 +29,10 @@ import java.util.UUID
  */
 object PainelDav {
     private const val LIMITE_XML = 64 * 1024   // PROPFIND, PROPPATCH e LOCK mandam XML pequeno
+    /** PROPPATCH e LOCK: as regex do DavLogica são quadráticas no pior caso (64 KB de "<a><a>..." = 6 s no PC). */
+    private const val LIMITE_XML_REGEX = 8 * 1024
+    /** Prazo total do corpo XML chunked (o Content-Length já tem o dele no PainelHttp). */
+    private const val PRAZO_XML_MS = 30_000L
     private const val LOCK_SEGUNDOS = 3600
 
     /**
@@ -117,19 +121,21 @@ object PainelDav {
         PainelHttp.escrever(saida, codigo, "application/xml; charset=utf-8", xml.toByteArray(Charsets.UTF_8), CABECALHOS + extras)
 
     /** O XML pequeno do pedido (PROPFIND, LOCK, PROPPATCH), com Content-Length ou chunked. */
-    private fun corpoXml(req: Requisicao, entrada: InputStream): String {
+    private fun corpoXml(req: Requisicao, entrada: InputStream, limite: Int = LIMITE_XML): String {
         val b = if (req.chunked) {
             val r = DavLogica.LeitorChunked(entrada)
             val buf = java.io.ByteArrayOutputStream()
             val pedaco = ByteArray(8192)
+            val ate = System.currentTimeMillis() + PRAZO_XML_MS
             while (true) {
                 val n = r.read(pedaco)
                 if (n < 0) break
                 buf.write(pedaco, 0, n)
-                if (buf.size() > LIMITE_XML) throw ErroHttp(413, "corpo grande demais")
+                if (buf.size() > limite) throw ErroHttp(413, "corpo grande demais")
+                if (System.currentTimeMillis() > ate) throw ErroHttp(408, "corpo demorou demais")
             }
             buf.toByteArray()
-        } else req.lerCorpo(LIMITE_XML)
+        } else req.lerCorpo(limite)
         return String(b, Charsets.UTF_8)
     }
 
@@ -142,6 +148,8 @@ object PainelDav {
     /** O que aparece dentro de [pasta]: sem a pasta Android na raiz, sem nomes estranhos e sem envios pela metade. */
     private fun filhos(pasta: File, rel: String): List<File> =
         (pasta.listFiles() ?: emptyArray()).filter {
+            // link simbólico fora: a listagem mostrava tamanho/data/tipo do alvo (que pode estar fora da raiz)
+            !Files.isSymbolicLink(it.toPath()) &&
             !(rel.isEmpty() && it.name.lowercase() in ChecagensPainel.PASTAS_FECHADAS) &&
                 ChecagensPainel.nomeArquivoValido(it.name) && !DavLogica.escondido(it.name)
         }.sortedWith(compareBy<File>({ !it.isDirectory }, { it.name.lowercase() }))
@@ -246,14 +254,19 @@ object PainelDav {
                     if (n < 0) break
                     total += n
                     if (total > livre) throw PainelArquivos.Erro(507, "a memória da TV encheu durante o envio")
+                    // Relê o espaço a cada ~16 MB: dois envios em paralelo mediam o mesmo "livre" e juntos comiam a folga.
+                    if ((total - n) shr 24 != total shr 24 && PainelArquivos.livre() <= 0) throw PainelArquivos.Erro(507, "a memória da TV encheu durante o envio")
                     out.write(buf, 0, n)
                 }
                 if (!req.chunked && total != req.tamanho) throw IOException("chegaram $total de ${req.tamanho} bytes")
                 out.fd.sync()
             }
             val existia = alvo.exists()
-            if (existia && !alvo.delete()) throw PainelArquivos.Erro(409, "não consegui substituir o arquivo")
-            if (!parcial.renameTo(alvo)) throw PainelArquivos.Erro(500, "não consegui dar o nome final ao arquivo")
+            // rename() já substitui de uma vez; apagar antes perdia o antigo se o rename falhasse.
+            if (!parcial.renameTo(alvo)) {
+                if (existia && !alvo.delete()) throw PainelArquivos.Erro(409, "não consegui substituir o arquivo")
+                if (!parcial.renameTo(alvo)) throw PainelArquivos.Erro(500, "não consegui dar o nome final ao arquivo")
+            }
             amb.avisar(alvo)
             // Arquivo vazio é o "reservar o nome" do Windows e do Finder antes do envio de verdade: não enche o diário.
             if (total > 0) amb.registrar(ip, "unidade de rede: enviar ${alvo.name.take(80)} (${total / 1024} KB)")
@@ -288,18 +301,28 @@ object PainelDav {
     private class Destino(val rel: String, val existia: Boolean)
 
     /** null = já existe e o cliente pediu para não sobrescrever (412). */
-    private fun prepararDestino(amb: Ambiente, req: Requisicao, origem: File, rel: String): Destino? {
+    private fun prepararDestino(amb: Ambiente, req: Requisicao, origem: File, rel: String, movendo: Boolean): Destino? {
         val dest = DavLogica.destino(req.cabecalho("destination"), req.cabecalho("host")) ?: throw PainelArquivos.Erro(400, "destino inválido")
         if (dest.isEmpty() || dest == rel) throw PainelArquivos.Erro(403, "destino igual à origem")
         pastaPai(dest)
         val alvo = PainelArquivos.resolver(dest, deveExistir = false)
         if (origem.isDirectory && ChecagensPainel.dentroDe(alvo.canonicalPath, origem.canonicalPath))
             throw PainelArquivos.Erro(403, "não dá para pôr uma pasta dentro dela mesma")
-        // Mesmo arquivo com outra caixa ("foto.JPG" -> "foto.jpg"): não é "já existe" (o mover() trata).
-        val mesmo = alvo.exists() && alvo.canonicalPath.equals(origem.canonicalPath, ignoreCase = true)
+        // Destino que CONTÉM a origem (MOVE Fotos/2024/a.jpg -> Fotos): com Overwrite: T apagava Fotos inteira, origem
+        // junto, e só então o mover dava 404. Sem lixeira: perda definitiva.
+        if (alvo.exists() && ChecagensPainel.dentroDe(origem.canonicalPath, alvo.canonicalPath))
+            throw PainelArquivos.Erro(403, "o destino contém a origem")
+        // Mesmo arquivo com outra caixa ("foto.JPG" -> "foto.jpg"). Só o mesmo arquivo de verdade (isSameFile): num disco
+        // que diferencia caixa, "foto.jpg" é OUTRO arquivo e vale o Overwrite.
+        val mesmo = alvo.exists() && runCatching { Files.isSameFile(alvo.toPath(), origem.toPath()) }.getOrDefault(false)
+        // COPY de um arquivo para ele mesmo abria a leitura e depois a escrita do mesmo arquivo: zerava.
+        if (mesmo && !movendo) throw PainelArquivos.Erro(403, "destino igual à origem")
         val existia = alvo.exists() && !mesmo
         if (existia) {
             if (!DavLogica.sobrescrever(req.cabecalho("overwrite"))) return null
+            // MOVE de pasta do sistema seria recusado pelo mover() DEPOIS de apagar o destino: confere antes.
+            if (movendo && !rel.contains('/') && origem.isDirectory && ChecagensPainel.pastaPadraoTopo(rel))
+                throw PainelArquivos.Erro(403, "a pasta \"$rel\" é do sistema e fica onde está")
             PainelArquivos.apagar(dest, amb::avisar)
         }
         return Destino(dest, existia)
@@ -308,7 +331,7 @@ object PainelDav {
     private fun mover(amb: Ambiente, req: Requisicao, saida: OutputStream, rel: String, ip: String) {
         if (rel.isEmpty()) return texto(saida, req, 403, "a raiz não se move")
         val origem = PainelArquivos.resolver(rel)
-        val d = prepararDestino(amb, req, origem, rel) ?: return texto(saida, req, 412, "já existe no destino")
+        val d = prepararDestino(amb, req, origem, rel, movendo = true) ?: return texto(saida, req, 412, "já existe no destino")
         PainelArquivos.mover(rel, pai(d.rel), d.rel.substringAfterLast('/'), amb::avisar)
         amb.registrar(ip, "unidade de rede: mover ${rel.take(60)} → ${d.rel.take(60)}")
         PainelHttp.escrever(saida, if (d.existia) 204 else 201, null, ByteArray(0), CABECALHOS)
@@ -317,7 +340,7 @@ object PainelDav {
     private fun copiar(amb: Ambiente, req: Requisicao, saida: OutputStream, rel: String, ip: String) {
         val origem = PainelArquivos.resolver(rel)
         if (tamanhoTotal(origem) > PainelArquivos.livre()) return texto(saida, req, 507, "não cabe na TV")
-        val d = prepararDestino(amb, req, origem, rel) ?: return texto(saida, req, 412, "já existe no destino")
+        val d = prepararDestino(amb, req, origem, rel, movendo = false) ?: return texto(saida, req, 412, "já existe no destino")
         val alvo = PainelArquivos.resolver(d.rel, deveExistir = false)
         copiarTudo(origem, alvo, soAPasta = req.cabecalho("depth")?.trim() == "0")
         amb.avisar(alvo)
@@ -345,7 +368,7 @@ object PainelDav {
     // ---------------------------------------------------------------- travas e propriedades (de mentira)
 
     private fun travar(req: Requisicao, entrada: InputStream, saida: OutputStream, rel: String) {
-        val corpo = if (req.tamanho > 0 || req.chunked) corpoXml(req, entrada) else ""
+        val corpo = if (req.tamanho > 0 || req.chunked) corpoXml(req, entrada, LIMITE_XML_REGEX) else ""
         var f = PainelArquivos.resolver(rel, deveExistir = false)
         var codigo = 200
         if (!f.exists()) {
@@ -365,7 +388,7 @@ object PainelDav {
     /** PROPPATCH: dizemos "ok" a tudo; só a data de modificação (que o Windows manda após copiar) vale de verdade. */
     private fun proppatch(req: Requisicao, entrada: InputStream, saida: OutputStream, rel: String) {
         val f = PainelArquivos.resolver(rel)
-        val props = DavLogica.propsDoProppatch(corpoXml(req, entrada))
+        val props = DavLogica.propsDoProppatch(corpoXml(req, entrada, LIMITE_XML_REGEX))
         DavLogica.dataPedida(props)?.let { f.setLastModified(it) }   // se o Android não deixar, fica a data da cópia
         xml(saida, 207, DavLogica.proppatchXml(rel, f.isDirectory, props))
     }

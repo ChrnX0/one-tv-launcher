@@ -20,4 +20,6 @@
     <string name="cel_casa_qual">यह टीवी किस घर में है?</string>
     <string name="cel_casa_nova">दूसरा घर…</string>
     <string name="cel_casa_dica">जैसे: समुद्र वाला घर, माँ का घर</string>
+    <string name="cel_baixado">डाउनलोड में सहेजा गया: %1$s</string>
+    <string name="cel_baixar_falhou">फ़ाइल सहेजी नहीं जा सकी। फिर से कोशिश करें।</string>
 </resources>

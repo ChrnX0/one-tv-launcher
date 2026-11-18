@@ -27,6 +27,12 @@ object PlayerCarga {
     private const val VALIDADE_LISTA = 12 * 3_600_000L
     private const val VALIDADE_GUIA = 6 * 3_600_000L
     private const val MAX_LISTA = 30L * 1024 * 1024
+    /**
+     * Catálogos Xtream lidos em fluxo ([JsonEmFluxo]): só um item por vez na memória e a leitura para no máximo de
+     * itens; o teto aqui só barra servidor que manda sem fim. (Antes: 30 MB inteiros na memória, 3 cópias, e lista
+     * maior que isso dava erro em toda abertura.)
+     */
+    private const val MAX_FLUXO = 400L * 1024 * 1024
     private const val MAX_GUIA = 150L * 1024 * 1024
     private const val AGENTE = "TvLauncher-Player/1.0"
 
@@ -80,7 +86,8 @@ object PlayerCarga {
         val fresco = cache.exists() && System.currentTimeMillis() - cache.lastModified() < VALIDADE_LISTA
         if (fresco && !forcar) PlayerDados.canaisDeJson(cache.readText(), fonte).takeIf { it.isNotEmpty() }?.let { return it }
         val baixados = runCatching { baixarCanais(ctx, fonte) }
-            .onFailure { Log.w(TAG, "lista de ${fonte.servidorVisivel}: ${it.javaClass.simpleName} ${it.message?.take(80)}") }
+            // Só o tipo: a mensagem do okhttp ("Invalid URL: ... for <url>") traz o endereço com usuário e senha.
+            .onFailure { Log.w(TAG, "lista de ${fonte.servidorVisivel}: ${it.javaClass.simpleName}") }
             .getOrNull()
         if (!baixados.isNullOrEmpty()) {
             gravarAtomico(cache, PlayerDados.canaisParaJson(baixados, fonte))
@@ -112,7 +119,7 @@ object PlayerCarga {
         PlayerArmazem.definirVencimento(ctx, fonte.id, fonte.nome, situacao.expiraEm)   // pílula "vence em N dias" da HOME
         if (!situacao.ativa) throw IOException("conta ${situacao.status.ifEmpty { "recusada" }}")
         val categorias = runCatching { Xtream.lerCategorias(baixarTexto(Xtream.urlCategoriasAoVivo(conta), 5L * 1024 * 1024)) }.getOrDefault(emptyList())
-        return Xtream.lerCanais(baixarTexto(Xtream.urlCanaisAoVivo(conta), MAX_LISTA), conta, categorias)
+        return abrir(Xtream.urlCanaisAoVivo(conta), MAX_FLUXO).use { Xtream.lerCanais(JsonEmFluxo.objetos(it.reader()), conta, categorias) }
     }
 
     /**
@@ -203,7 +210,7 @@ object PlayerCarga {
         if (fresco && !forcar) Vod.filmesDeJson(cache.readText(), fonte.id).takeIf { it.isNotEmpty() }?.let { return@flatMap it }
         val baixados = runCatching {
             val cats = runCatching { Xtream.lerCategorias(baixarTexto(Vod.urlCategoriasFilmes(conta), 5L * 1024 * 1024)) }.getOrDefault(emptyList())
-            Vod.lerFilmes(baixarTexto(Vod.urlFilmes(conta), MAX_LISTA), fonte.id, cats)
+            abrir(Vod.urlFilmes(conta), MAX_FLUXO).use { Vod.lerFilmes(JsonEmFluxo.objetos(it.reader()), fonte.id, cats) }
         }.onFailure { Log.w(TAG, "filmes de ${fonte.servidorVisivel}: ${it.javaClass.simpleName}") }.getOrNull()
         if (!baixados.isNullOrEmpty()) {
             gravarAtomico(cache, Vod.filmesParaJson(baixados))
@@ -266,7 +273,7 @@ object PlayerCarga {
         if (fresco && !forcar) Series.seriesDeJson(cache.readText(), fonte.id).takeIf { it.isNotEmpty() }?.let { return@flatMap it }
         val baixadas = runCatching {
             val cats = runCatching { Xtream.lerCategorias(baixarTexto(Series.urlCategorias(conta), 5L * 1024 * 1024)) }.getOrDefault(emptyList())
-            Series.lerSeries(baixarTexto(Series.urlSeries(conta), MAX_LISTA), fonte.id, cats)
+            abrir(Series.urlSeries(conta), MAX_FLUXO).use { Series.lerSeries(JsonEmFluxo.objetos(it.reader()), fonte.id, cats) }
         }.onFailure { Log.w(TAG, "séries de ${fonte.servidorVisivel}: ${it.javaClass.simpleName}") }.getOrNull()
         if (!baixadas.isNullOrEmpty()) {
             gravarAtomico(cache, Series.seriesParaJson(baixadas))
@@ -394,6 +401,9 @@ object PlayerCarga {
                 Log.i(TAG, "guia sem nada passando agora: baixando de novo")
             }
         }
+        // Sem guia usável (a lista não casa nenhum tvg-id, o xmltv deu erro, banco ilegível), cada abertura do player
+        // baixava de novo (até 150 MB, 3 tentativas). Também aqui: no máximo 1 vez por hora.
+        if (!forcar && agora - ultimaTentativa(ctx) < 3_600_000L) return abrirGuia(arquivo) ?: Guia(emptyList())
         val guardar = !forcar
         anotarTentativa(ctx, agora)   // antes do "sem tvg-id" abaixo: senão cada zapping abria uma thread à toa
         val ids = canais.mapNotNull { it.guiaId.ifEmpty { null } }.toSet()
@@ -466,7 +476,8 @@ object PlayerCarga {
                 // Grava a lista à parte já agora (antes de trocar o banco): o varrerDepois logo abaixo a usa.
                 if (total > 0) gravarAtomico(arquivoAdiante(ctx), MeuTimeAdiante.paraJson(adiante?.partidas().orEmpty()))
             } finally {
-                gravador.concluir(indexar = total > 0)
+                // Disco cheio no índice: o banco novo fica sem versão (inútil) e não pode tomar o lugar do antigo.
+                if (!gravador.concluir(indexar = total > 0)) total = 0
             }
         }
         if (total > 0) {
@@ -493,14 +504,15 @@ object PlayerCarga {
      * desligasse no meio, ficava um arquivo cortado com data de agora (e o guia cortado valia como "fresco" por 6 h).
      * Trocar o nome é tudo ou nada: ou fica o arquivo antigo inteiro, ou o novo inteiro.
      */
-    internal fun gravarAtomico(arquivo: File, texto: String) {
+    /** Devolve se gravou (18/11/2026: antes engolia a falha, e quem chamava dizia "salvo" com o disco cheio). */
+    internal fun gravarAtomico(arquivo: File, texto: String): Boolean {
         // Nome temporário único (dois processos gravando o mesmo arquivo não disputam o mesmo .tmp) e fsync antes de
         // trocar (queda de energia logo depois não deixa o arquivo vazio).
         val tmp = File(arquivo.path + ".tmp-" + java.util.UUID.randomUUID().toString().take(8))
-        runCatching {
+        return runCatching {
             java.io.FileOutputStream(tmp).use { o -> o.write(texto.toByteArray(Charsets.UTF_8)); o.fd.sync() }
-            if (!tmp.renameTo(arquivo)) tmp.delete()
-        }.onFailure { tmp.delete() }
+            tmp.renameTo(arquivo).also { if (!it) tmp.delete() }
+        }.onFailure { tmp.delete() }.getOrDefault(false)
     }
 
     // ---------------------------------------------------------------- rede

@@ -74,7 +74,9 @@ sc query WebClient | find "RUNNING" >nul || set "PRECISA=1"
 if "%PRECISA%"=="1" (
   echo.
   echo O Windows vai perguntar se pode fazer alteracoes. Responda SIM.
-  powershell -NoProfile -Command "Start-Process -FilePath '%~f0' -ArgumentList 'admin' -Verb RunAs -Wait"
+  rem O caminho vai por variavel: um apostrofo no nome da pasta quebrava as aspas simples do PowerShell.
+  set "EU=%~f0"
+  powershell -NoProfile -Command "Start-Process -FilePath ${'$'}env:EU -ArgumentList 'admin' -Verb RunAs -Wait"
 )
 sc query WebClient | find "RUNNING" >nul || (
   echo.
@@ -89,10 +91,11 @@ echo Usuario: digite  tv
 echo Senha:   o PIN do painel da TV ^(nao aparece enquanto digita^)
 echo.
 rem A letra: S, de Sofaly; se estiver ocupada, Y; se nao, a que o Windows escolher.
+rem "if exist" ve disco e pendrive; o "net use" ve unidade de rede desconectada; sem administrador.
 rem O espaco antes da letra e de proposito: sem ele, "Unidades:" e "Drives:" casam com "S:".
 set "LETRA=*"
-(fsutil fsinfo drives & net use) 2>nul | find /i " Y:" >nul || set "LETRA=Y:"
-(fsutil fsinfo drives & net use) 2>nul | find /i " S:" >nul || set "LETRA=S:"
+if not exist Y:\ (net use 2>nul | find /i " Y:" >nul || set "LETRA=Y:")
+if not exist S:\ (net use 2>nul | find /i " S:" >nul || set "LETRA=S:")
 net use %LETRA% "%ALVO%" /savecred /persistent:yes
 if errorlevel 1 (
   echo.

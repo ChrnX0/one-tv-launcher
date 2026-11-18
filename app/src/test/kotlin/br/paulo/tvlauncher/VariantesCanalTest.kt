@@ -71,4 +71,21 @@ class VariantesCanalTest {
         val g = VariantesCanal.agrupar(lista)
         assertTrue(g.canais === lista)
     }
+
+    // Rodada 13 da depuração: nome gigante (lixo da lista) não trava as regex; mesmo nível mantém a ordem da lista.
+    @Test fun nomeGiganteNaoTravaEMesmoNivelMantemAOrdem() {
+        val lixo = "X" + " |-|".repeat(50_000)
+        val t0 = System.nanoTime()
+        VariantesCanal.nomeLimpo(lixo); VariantesCanal.chave(lixo)
+        assertTrue((System.nanoTime() - t0) / 1_000_000 < 2_000)
+        val lista = listOf(c("Band HD"), c("Band SD"), c("Band HD ALT"), c("Band FHD"))
+        val g = VariantesCanal.agrupar(lista)
+        assertEquals(listOf("Band FHD", "Band HD", "Band HD ALT", "Band SD"), g.familia(g.canais[0].id).map { it.nome })
+    }
+
+    @Test fun paisDoGrupoNaoSeparaAVarianteDoGrupo4K() {
+        val g = VariantesCanal.agrupar(listOf(c("Globo HD", "BR | Abertos"), c("Globo 4K", "4K")))
+        assertEquals(1, g.canais.size)
+        assertEquals("BR | Abertos", g.canais[0].grupo)
+    }
 }

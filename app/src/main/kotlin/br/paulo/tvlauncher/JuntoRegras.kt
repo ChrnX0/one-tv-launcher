@@ -103,8 +103,11 @@ object JuntoRegras {
 
     /** "tmdb:serie:1399:s1e3" -> (1, 3); outra coisa -> null. */
     fun episodio(chave: String?): Pair<Int, Int>? {
-        val m = Regex("^tmdb:serie:\\d+:s(\\d+)e(\\d+)$").find(chave ?: return null) ?: return null
-        return m.groupValues[1].toInt() to m.groupValues[2].toInt()
+        // \d{1,4} + toIntOrNull: a chave vem da outra TV; "s99999999999" derrubava o player (NumberFormatException).
+        val m = Regex("^tmdb:serie:\\d+:s(\\d{1,4})e(\\d{1,4})$").find(chave ?: return null) ?: return null
+        val t = m.groupValues[1].toIntOrNull() ?: return null
+        val e = m.groupValues[2].toIntOrNull() ?: return null
+        return t to e
     }
 
     /** Mesma série (episódios podem ser outros): a sessão segue para o episódio seguinte (4c, 17/11/2026). */

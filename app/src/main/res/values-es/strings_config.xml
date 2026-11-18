@@ -235,6 +235,7 @@
     <string name="cl_vd_ja_dono">el launcher ya es el device owner</string>
     <string name="cl_vd_sem_shell">el shell propio no respondió (vincúlalo en Ajustes &gt; Shell del launcher)</string>
     <string name="cl_vd_usuario">Android no permitió quitar el usuario %1$s</string>
+    <string name="cl_vd_mudou">Los usuarios de la TV cambiaron después de confirmar (ahora: %1$s). No se quitó nada; empieza de nuevo.</string>
     <string name="cl_vd_google">Android no permitió pausar Google un momento</string>
     <string name="cl_vd_recusou">Android se negó: %1$s</string>
     <string name="cl_vd_sem_resposta">sin respuesta</string>

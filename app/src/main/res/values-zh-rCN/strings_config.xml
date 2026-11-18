@@ -235,6 +235,7 @@
     <string name="cl_vd_ja_dono">启动器已经是设备所有者</string>
     <string name="cl_vd_sem_shell">内置 Shell 无响应（请在 设置 &gt; 启动器 Shell 中配对）</string>
     <string name="cl_vd_usuario">Android 不允许删除用户 %1$s</string>
+    <string name="cl_vd_mudou">确认之后电视的用户发生了变化(现在:%1$s)。没有删除任何内容,请重新开始。</string>
     <string name="cl_vd_google">Android 不允许暂时停用 Google</string>
     <string name="cl_vd_recusou">Android 拒绝：%1$s</string>
     <string name="cl_vd_sem_resposta">无响应</string>

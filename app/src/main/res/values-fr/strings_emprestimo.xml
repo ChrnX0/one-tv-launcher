@@ -16,11 +16,11 @@
     <string name="emp_pin_titulo">PIN du panneau pour autoriser</string>
     <string name="emp_sem_pin">Définissez d’abord le PIN du panneau (Paramètres, Panneau web).</string>
     <string name="emd_titulo">Prêter le contrôle de propriétaire à d’autres apps (Dhizuku)</string>
-    <string name="emd_titulo_det">Les apps faites pour Dhizuku utilisent le contrôle de propriétaire du launcher. Chaque app demande sur la TV, avec le PIN. Aucune ne peut retirer le launcher comme propriétaire ni effacer la TV.</string>
+    <string name="emd_titulo_det">Les apps faites pour Dhizuku utilisent le contrôle de propriétaire du launcher. Chaque app demande sur la TV, avec le PIN. Avec « Autoriser », aucune ne peut retirer le launcher comme propriétaire ni effacer la TV ; avec « Pouvoir total », elle le peut.</string>
     <string name="emd_ligado">Activé</string>
     <string name="emd_sem_dono">Le launcher n’est pas le propriétaire (Device Owner) de cette TV : il n’y a rien à prêter.</string>
     <string name="emd_pedido_titulo">Autoriser %1$s à utiliser le contrôle de propriétaire du launcher ?</string>
-    <string name="emd_pedido_texto">Avec « Autoriser », l’app peut masquer et bloquer des apps et modifier les autorisations et règles de la TV, mais jamais retirer le launcher comme propriétaire ni effacer la TV. « Pouvoir total » laisse l’app tourner comme le launcher et lire ses données : seulement pour des apps en qui vous avez toute confiance. Vous pouvez révoquer l’accès dans le panneau web.</string>
+    <string name="emd_pedido_texto">Avec « Autoriser », l’app peut masquer et bloquer des apps et modifier les autorisations et règles de la TV, mais jamais retirer le launcher comme propriétaire ni effacer la TV. « Pouvoir total » laisse l’app tourner comme le launcher et lire ses données : seulement pour des apps en qui vous avez toute confiance. Vous pouvez révoquer l’accès dans le panneau web. Avec « Pouvoir total », l’app peut faire tout ce que fait le launcher, même effacer la TV.</string>
     <string name="emd_total">Pouvoir total</string>
-    <string name="emd_pin_total">POUVOIR TOTAL : l’app lira les données du launcher. PIN du panneau</string>
+    <string name="emd_pin_total">POUVOIR TOTAL : l’app peut faire tout ce que fait le launcher, même effacer la TV. PIN du panneau</string>
 </resources>

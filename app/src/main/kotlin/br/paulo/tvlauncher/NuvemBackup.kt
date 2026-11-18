@@ -84,7 +84,10 @@ object NuvemBackup {
         val idPasta = raiz.firstOrNull { it.item.pasta && it.item.nome == PASTA }?.id ?: run {
             val r = Nuvem.postarJson("${Nuvem.BOX_API}/folders", Nuvem.acesso(c),
                 JSONObject().put("name", PASTA).put("parent", JSONObject().put("id", "0")).toString())
-            JSONObject(ok(r)).getString("id")
+            // 409 = a pasta já existe (raiz com mais de 1000 itens: a 1ª página da lista não a mostrou). O Box diz qual é.
+            if (r.codigo == 409) runCatching { JSONObject(r.corpo).getJSONObject("context_info").getJSONArray("conflicts")
+                .getJSONObject(0).getString("id") }.getOrNull() ?: JSONObject(ok(r)).getString("id")
+            else JSONObject(ok(r)).getString("id")
         }
         val itens = Nuvem.lerListaBox(ok(Nuvem.get(Nuvem.boxItens(idPasta, 0), Nuvem.acesso(c)))).first.filter { !it.item.pasta }
         val fronteira = "onetv" + RetornoNuvem.novoNumero()

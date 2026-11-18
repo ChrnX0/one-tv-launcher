@@ -97,6 +97,9 @@ class McpFerramentas(ctx: Context) : McpProtocolo.Ferramentas, McpProtocolo.ComC
         if (!McpServidor.shellLigado(app)) throw McpProtocolo.ErroFerramenta("o shell pelo Claude está desligado nas Configurações da TV")
         if (CuidarDeLongeTv.consentimentoNaTela)
             throw McpProtocolo.ErroFerramenta("a TV está perguntando ao morador sobre o Cuidar de longe; o shell volta quando ele responder")
+        // Pergunta das Confirmações na tela (de outro pedido): o shell livre podia apertá-la com "input keyevent" e aprovar
+        // o próprio pedido. Mesma trava das ferramentas de tela (McpPoder.semPerguntaNaTela); vale também na Sala.
+        McpPoder.semPerguntaNaTela()
         val cmd = a.optString("comando").trim()
         if (cmd.isEmpty() || cmd.length > 8000) throw McpProtocolo.ErroFerramenta("comando vazio ou longo demais (máx. 8000 caracteres)")
         // Até 40 s: o túnel corta a resposta em 60 s, e um comando mais longo rodaria sem a saída chegar (auditoria 10/11/2026).

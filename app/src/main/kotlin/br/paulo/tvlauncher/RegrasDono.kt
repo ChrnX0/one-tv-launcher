@@ -9,7 +9,9 @@ package br.paulo.tvlauncher
  * por fora do filtro (delegar escopos do DPM, chamar outros serviços do sistema como o launcher): com isso ele lê os
  * dados do launcher (hash do PIN, tokens do MCP, chave do Tailscale). Sem poder total, o app só chama o
  * DevicePolicyManager, e cada chamada passa pelo filtro [transacao]:
- *  - nunca: tirar o dono do launcher, apagar a TV, trocar de dono (lista [SEMPRE_BLOQUEADOS], vale até com poder total);
+ *  - nunca: tirar o dono do launcher, apagar a TV, trocar de dono (lista [SEMPRE_BLOQUEADOS]). Isto vale para o que passa
+ *    pelo filtro; com PODER TOTAL o app roda processo e serviço com o uid do launcher e pode chamar o sistema direto
+ *    (inclusive apagar a TV): por isso o PIN do poder total diz isso com todas as letras;
  *  - nunca contra o próprio launcher: esconder, suspender, limpar dados, mexer nas permissões dele etc. ([MEXE_EM_PACOTE]);
  *  - se o nome do método ou os argumentos não puderem ser lidos nesta TV, a chamada é negada (falha segura).
  */
@@ -90,7 +92,7 @@ object RegrasDono {
      * do launcher.
      */
     fun transacao(descritor: String?, metodo: String?, alvos: List<String>?, nosso: String, poderTotal: Boolean,
-                  textos: List<String>? = null): Veredito {
+                  textos: List<String>? = null, protegidos: Set<String> = emptySet()): Veredito {
         if (descritor != DPM) return if (poderTotal) Veredito.PASSA else Veredito.BLOQUEIA
         if (metodo == null) return Veredito.BLOQUEIA_SEM_MAPA
         if (metodo in SEMPRE_BLOQUEADOS) return Veredito.BLOQUEIA
@@ -101,7 +103,9 @@ object RegrasDono {
         }
         if (poderTotal || !mexeEmPacote(metodo)) return Veredito.PASSA
         if (alvos == null) return Veredito.BLOQUEIA_SEM_MAPA
-        return if (nosso in alvos) Veredito.BLOQUEIA else Veredito.PASSA
+        // Também os pacotes de que a TV depende (launcherx do Google, GMS, shell, Configurações): o painel já os
+        // protege (PainelApps.protegido); um app só com "Permitir" podia escondê-los ou limpar os dados deles.
+        return if (nosso in alvos || alvos.any { it in protegidos }) Veredito.BLOQUEIA else Veredito.PASSA
     }
 
     /** Um argumento lido do Parcel de uma chamada AIDL, só no que importa para achar o pacote alvo. */

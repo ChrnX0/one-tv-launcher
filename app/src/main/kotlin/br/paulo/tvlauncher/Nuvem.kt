@@ -321,7 +321,11 @@ object Nuvem {
         // invalid_grant = a pessoa tirou a permissão ou o token venceu: só entrando de novo.
         if (r.codigo == 400 || r.codigo == 401) throw SecurityException("401 NUVEM_ENTRAR_DE_NOVO")
         val t = lerTokens(conferir(r))
-        if (t.renovacao != null && t.renovacao != atual.token) runCatching { MidiaArmazem.salvar(LauncherApp.instancia, atual.copy(token = t.renovacao)) }
+        if (t.renovacao != null && t.renovacao != atual.token) {
+            // O Box invalida o token velho: se não gravar o novo, a conta pede login de novo na próxima renovação.
+            val gravou = runCatching { MidiaArmazem.salvar(LauncherApp.instancia, atual.copy(token = t.renovacao)) }.getOrNull() != null
+            if (!gravou) android.util.Log.w("TvLauncher.Nuvem", "não gravei o token de renovação novo (${c.tipo})")
+        }
         cache[c.id] = t.acesso to (System.currentTimeMillis() + (t.expiraEmS - 120).coerceAtLeast(60) * 1000)
         t.acesso
     }

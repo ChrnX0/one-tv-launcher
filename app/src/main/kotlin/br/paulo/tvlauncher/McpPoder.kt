@@ -98,12 +98,21 @@ object McpPoder {
         AutorizaShizukuService.instancia?.rootInActiveWindow?.packageName?.toString()
     } catch (e: Exception) { null } ?: JanelaNaFrente.pacote
 
+    /**
+     * Com uma pergunta das Confirmações na tela, o Claude não mexe na tela: senão ele mesmo apertava "Permitir" na
+     * pergunta do próprio pedido (executar_shell esperando + controle_remoto ["direita","ok"] em paralelo).
+     */
+    internal fun semPerguntaNaTela() {
+        if (ConfirmacoesTv.atual() != null)
+            throw McpProtocolo.ErroFerramenta("há uma pergunta na TV esperando a resposta de quem está na frente dela")
+    }
+
     fun chamar(ctx: Context, nome: String, a: JSONObject): String {
         val app = ctx.applicationContext
         return when (nome) {
-            "controle_remoto" -> controle(app, a)
-            "digitar_texto" -> digitar(app, a)
-            "abrir" -> abrir(app, a)
+            "controle_remoto" -> { semPerguntaNaTela(); controle(app, a) }
+            "digitar_texto" -> { semPerguntaNaTela(); digitar(app, a) }
+            "abrir" -> { semPerguntaNaTela(); abrir(app, a) }
             "apps_instalados" -> PainelApps.listar(app).toString()
             "instalar_apk" -> instalarApk(app, a)
             "desinstalar_app" -> desinstalar(app, a)

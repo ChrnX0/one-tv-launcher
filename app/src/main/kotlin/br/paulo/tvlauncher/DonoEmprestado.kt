@@ -122,17 +122,41 @@ object DonoEmprestado {
         Fundo.rodar("dono-encerrar") {
             try { com.rosan.dhizuku.server_api.DhizukuService.encerrarDoUid(uid); anotar(ctx, "encerrado o que uid=$uid rodava") }
             catch (e: Throwable) { anotar(ctx, "não encerrei uid=$uid: $e") }
+            // Os UserServices de TODOS os apps dividem o processo :dhizuku_usuario (uid do launcher): o "onDestroy" só
+            // fecha o processo quando não sobra serviço de outro app, e um serviço subindo no meio da revogação escapava.
+            // Mata o processo inteiro; os apps ainda autorizados religam o serviço quando precisarem.
+            try {
+                val am = ctx.getSystemService(android.app.ActivityManager::class.java)
+                am.runningAppProcesses?.filter { it.processName == ctx.packageName + ":dhizuku_usuario" }?.forEach {
+                    android.os.Process.killProcess(it.pid); anotar(ctx, "processo dos serviços encerrado (pid ${it.pid})")
+                }
+            } catch (e: Throwable) { anotar(ctx, "não encerrei o processo dos serviços: $e") }
         }
     }
 
-    /** Escopos delegados ficam no sistema mesmo depois de revogar: zera (só o dono pode). */
+    /**
+     * Escopos delegados ficam no sistema mesmo depois de revogar: zera (só o dono pode). Não só os do [pacote]: um app
+     * de poder total podia delegar a OUTRO pacote dele (setDelegatedScopes pelo transact) e esse continuava chamando o
+     * DPM direto depois da revogação. O launcher não delega nada; fica só o que um app de poder total AINDA autorizado
+     * deu a si mesmo.
+     */
     private fun tirarEscopos(ctx: Context, pacote: String) {
         if (Build.VERSION.SDK_INT < 26 || !somosDono(ctx)) return
-        try {
-            val dpm = ctx.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
-            dpm.setDelegatedScopes(ComponentName(ctx, AdminReceiver::class.java), pacote, emptyList())
-        } catch (e: Exception) { anotar(ctx, "não tirei os escopos de $pacote: $e") }
+        val dpm = ctx.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val admin = ComponentName(ctx, AdminReceiver::class.java)
+        try { dpm.setDelegatedScopes(admin, pacote, emptyList()) } catch (e: Exception) { anotar(ctx, "não tirei os escopos de $pacote: $e") }
+        val mantidos = mapa(ctx).values.filter { it.total }.map { it.pacote }.toSet()
+        val delegados = ESCOPOS.flatMap { e -> runCatching { dpm.getDelegatePackages(admin, e) }.getOrNull().orEmpty() }.toSet()
+        for (p in delegados - mantidos - ctx.packageName) {
+            try { dpm.setDelegatedScopes(admin, p, emptyList()); anotar(ctx, "escopos de $p tirados") }
+            catch (e: Exception) { anotar(ctx, "não tirei os escopos de $p: $e") }
+        }
     }
+
+    private val ESCOPOS = listOf("delegation-cert-install", "delegation-app-restrictions", "delegation-block-uninstall",
+        "delegation-enable-system-app", "delegation-keep-uninstalled-packages", "delegation-package-access",
+        "delegation-permission-grant", "delegation-install-existing-package", "delegation-cert-selection",
+        "delegation-network-logging", "delegation-security-logging")
 
     fun estado(ctx: Context): String {
         val p = parado(ctx)

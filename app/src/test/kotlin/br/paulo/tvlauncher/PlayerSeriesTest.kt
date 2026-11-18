@@ -109,4 +109,13 @@ class PlayerSeriesTest {
         assertTrue(Series.assistidos(listOf(serie), u, todas, emptyMap()).isEmpty())
         assertEquals(prog, Series.progressoDeJson(Series.progressoParaJson(prog)))
     }
+
+    // Rodada 14 da depuração: ficha com episódios demais não estoura a memória; título gigante é cortado.
+    @Test fun fichaComEpisodiosDemaisPara() {
+        val eps = org.json.JSONArray()
+        repeat(Series.MAX_EPISODIOS + 50) { eps.put(org.json.JSONObject().put("id", "$it").put("episode_num", it + 1).put("title", "x".repeat(1000))) }
+        val f = Series.lerFicha(org.json.JSONObject().put("info", org.json.JSONObject()).put("episodes", org.json.JSONObject().put("1", eps)).toString())!!
+        assertEquals(Series.MAX_EPISODIOS, Series.emOrdem(f).size)
+        assertEquals(300, Series.emOrdem(f).first().titulo.length)
+    }
 }

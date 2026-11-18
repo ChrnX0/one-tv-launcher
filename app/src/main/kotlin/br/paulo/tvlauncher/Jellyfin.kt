@@ -223,11 +223,14 @@ object Jellyfin {
             c.setRequestProperty("Content-Type", "application/json")
             c.outputStream.use { it.write(corpoJson.toByteArray(Charsets.UTF_8)) }
         }
-        val codigo = c.responseCode
-        if (codigo == 401) throw SecurityException("401")
-        if (codigo !in 200..299) throw java.io.IOException("http $codigo")
-        if (codigo == 204) { c.disconnect(); return "" }   // os avisos de reprodução respondem sem corpo
-        return c.inputStream.use { limitado(it) }.also { c.disconnect() }
+        // finally: no 401/erro a conexão ficava aberta (um token vencido vazava uma por aviso de reprodução).
+        try {
+            val codigo = c.responseCode
+            if (codigo == 401) throw SecurityException("401")
+            if (codigo !in 200..299) throw java.io.IOException("http $codigo")
+            if (codigo == 204) return ""   // os avisos de reprodução respondem sem corpo
+            return c.inputStream.use { limitado(it) }
+        } finally { c.disconnect() }
     }
 
     private fun limitado(i: InputStream): String {

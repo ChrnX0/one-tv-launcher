@@ -16,11 +16,11 @@
     <string name="emp_pin_titulo">PIN del pannello per consentire</string>
     <string name="emp_sem_pin">Imposta prima il PIN del pannello (Impostazioni, Pannello web).</string>
     <string name="emd_titulo">Prestare il controllo da proprietario ad altre app (Dhizuku)</string>
-    <string name="emd_titulo_det">Le app fatte per Dhizuku usano il controllo da proprietario del launcher. Ogni app lo chiede sulla TV, con il PIN. Nessuna può rimuovere il launcher come proprietario o cancellare la TV.</string>
+    <string name="emd_titulo_det">Le app fatte per Dhizuku usano il controllo da proprietario del launcher. Ogni app lo chiede sulla TV, con il PIN. Con “Consenti”, nessuna può rimuovere il launcher come proprietario o cancellare la TV; con “Potere totale”, sì.</string>
     <string name="emd_ligado">Attivo</string>
     <string name="emd_sem_dono">Il launcher non è il proprietario (Device Owner) di questa TV, quindi non c’è nulla da prestare.</string>
     <string name="emd_pedido_titulo">Consentire a %1$s di usare il controllo da proprietario del launcher?</string>
-    <string name="emd_pedido_texto">Con “Consenti”, l’app può nascondere e bloccare app e cambiare permessi e regole della TV, ma mai rimuovere il launcher come proprietario o cancellare la TV. “Potere totale” fa girare l’app come il launcher e le fa leggere i suoi dati: solo per app di cui ti fidi del tutto. Puoi revocarlo nel pannello web.</string>
+    <string name="emd_pedido_texto">Con “Consenti”, l’app può nascondere e bloccare app e cambiare permessi e regole della TV, ma mai rimuovere il launcher come proprietario o cancellare la TV. “Potere totale” fa girare l’app come il launcher e le fa leggere i suoi dati: solo per app di cui ti fidi del tutto. Puoi revocarlo nel pannello web. Con “Potere totale” l’app può fare tutto ciò che fa il launcher, persino cancellare la TV.</string>
     <string name="emd_total">Potere totale</string>
-    <string name="emd_pin_total">POTERE TOTALE: l’app leggerà i dati del launcher. PIN del pannello</string>
+    <string name="emd_pin_total">POTERE TOTALE: l’app può fare tutto ciò che fa il launcher, persino cancellare la TV. PIN del pannello</string>
 </resources>

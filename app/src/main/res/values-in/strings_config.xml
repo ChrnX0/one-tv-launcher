@@ -235,6 +235,7 @@
     <string name="cl_vd_ja_dono">launcher sudah menjadi device owner</string>
     <string name="cl_vd_sem_shell">shell bawaan tidak menjawab (pasangkan di Setelan &gt; Shell launcher)</string>
     <string name="cl_vd_usuario">Android tidak mengizinkan menghapus pengguna %1$s</string>
+    <string name="cl_vd_mudou">Pengguna TV berubah setelah konfirmasi (sekarang: %1$s). Tidak ada yang dihapus; mulai lagi.</string>
     <string name="cl_vd_google">Android tidak mengizinkan menjeda Google sebentar</string>
     <string name="cl_vd_recusou">Android menolak: %1$s</string>
     <string name="cl_vd_sem_resposta">tidak ada jawaban</string>

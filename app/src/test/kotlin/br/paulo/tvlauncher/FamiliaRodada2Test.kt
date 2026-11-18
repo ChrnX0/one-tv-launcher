@@ -158,6 +158,14 @@ class FamiliaRodada2Test {
         assertFalse(Radios.destinoProibido(ip("8.8.8.8"), emptySet()))
     }
 
+    @Test fun destinosDeFeedNaoEntramNaCasa() {
+        fun ip(t: String) = java.net.InetAddress.getByName(t)
+        for (t in listOf("192.168.0.1", "10.0.0.9", "172.16.3.4", "100.100.1.1", "fd00::1", "127.0.0.1"))
+            assertTrue(t, Radios.destinoDeFeedProibido(ip(t), emptySet()))
+        for (t in listOf("8.8.8.8", "100.128.0.1", "172.32.0.1", "2606:4700::1"))
+            assertFalse(t, Radios.destinoDeFeedProibido(ip(t), emptySet()))
+    }
+
     @Test fun favoritasAlternamEMantemOrdem() {
         val a = Radios.Radio("a", "A", "https://x/a1"); val b = Radios.Radio("b", "B", "https://x/b1")
         var l = Radios.alternar(Radios.alternar(emptyList(), a), b)

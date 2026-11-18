@@ -20,4 +20,6 @@
     <string name="cel_casa_qual">이 TV는 어느 집에 있나요?</string>
     <string name="cel_casa_nova">다른 집…</string>
     <string name="cel_casa_dica">예: 바닷가 집, 엄마 집</string>
+    <string name="cel_baixado">다운로드에 저장됨: %1$s</string>
+    <string name="cel_baixar_falhou">파일을 저장하지 못했습니다. 다시 시도하세요.</string>
 </resources>

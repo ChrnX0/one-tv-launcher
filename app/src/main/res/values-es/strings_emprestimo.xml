@@ -16,11 +16,11 @@
     <string name="emp_pin_titulo">PIN del panel para permitir</string>
     <string name="emp_sem_pin">Primero define el PIN del panel (Ajustes, Panel web).</string>
     <string name="emd_titulo">Prestar el control de propietario a otras apps (Dhizuku)</string>
-    <string name="emd_titulo_det">Las apps hechas para Dhizuku usan el control de propietario del launcher. Cada app lo pide en la TV, con el PIN. Ninguna puede quitar al launcher como propietario ni borrar la TV.</string>
+    <string name="emd_titulo_det">Las apps hechas para Dhizuku usan el control de propietario del launcher. Cada app lo pide en la TV, con el PIN. Con “Permitir”, ninguna puede quitar al launcher como propietario ni borrar la TV; con “Poder total”, sí.</string>
     <string name="emd_ligado">Activado</string>
     <string name="emd_sem_dono">El launcher no es el propietario (Device Owner) de esta TV, así que no hay nada que prestar.</string>
     <string name="emd_pedido_titulo">¿Permitir que %1$s use el control de propietario del launcher?</string>
-    <string name="emd_pedido_texto">Con “Permitir”, la app puede ocultar y bloquear apps y cambiar los permisos y reglas de la TV, pero nunca quitar al launcher como propietario ni borrar la TV. “Poder total” deja que la app funcione como el launcher y lea sus datos: solo para apps de total confianza. Puedes revocarlo en el panel web.</string>
+    <string name="emd_pedido_texto">Con “Permitir”, la app puede ocultar y bloquear apps y cambiar los permisos y reglas de la TV, pero nunca quitar al launcher como propietario ni borrar la TV. “Poder total” deja que la app funcione como el launcher y lea sus datos: solo para apps de total confianza. Puedes revocarlo en el panel web. Con “Poder total” la app puede hacer todo lo que hace el launcher, incluso borrar la TV.</string>
     <string name="emd_total">Poder total</string>
-    <string name="emd_pin_total">PODER TOTAL: la app leerá los datos del launcher. PIN del panel</string>
+    <string name="emd_pin_total">PODER TOTAL: la app puede hacer todo lo que hace el launcher, incluso borrar la TV. PIN del panel</string>
 </resources>

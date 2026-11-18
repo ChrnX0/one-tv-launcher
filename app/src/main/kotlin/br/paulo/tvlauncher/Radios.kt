@@ -116,6 +116,19 @@ object Radios {
     fun destinoProibido(ip: java.net.InetAddress, daTv: Set<java.net.InetAddress> = ipsDaTv()): Boolean =
         ip.isLoopbackAddress || ip.isAnyLocalAddress || ip.isLinkLocalAddress || ip.isMulticastAddress || ip in daTv
 
+    /**
+     * Mais estrito, para endereços que vêm de FEED (conteúdo de terceiros, achado na busca): além de [destinoProibido],
+     * a rede da casa (10/8, 172.16/12, 192.168/16, fc00::/7) e a do Tailscale (100.64/10). Um enclosure de episódio
+     * apontando para o roteador fazia a TV mandar um pedido para dentro da casa. Rádio colada pela pessoa segue com
+     * [destinoProibido] (um Icecast em casa é legítimo).
+     */
+    fun destinoDeFeedProibido(ip: java.net.InetAddress, daTv: Set<java.net.InetAddress> = ipsDaTv()): Boolean {
+        if (destinoProibido(ip, daTv) || ip.isSiteLocalAddress) return true
+        val b = ip.address
+        return (b.size == 16 && (b[0].toInt() and 0xFE) == 0xFC) ||
+            (b.size == 4 && (b[0].toInt() and 0xFF) == 100 && (b[1].toInt() and 0xC0) == 64)
+    }
+
     private fun ipsDaTv(): Set<java.net.InetAddress> = runCatching {
         java.net.NetworkInterface.getNetworkInterfaces().toList().flatMap { it.inetAddresses.toList() }.toSet()
     }.getOrDefault(emptySet())
@@ -222,6 +235,9 @@ object Radios {
         val c = URL(endereco).openConnection() as HttpURLConnection
         return try {
             c.connectTimeout = 8000; c.readTimeout = 10000
+            // Sem seguir redirecionamento: a checagem de destino (colar) olhou só o primeiro host; um 302 para
+            // 127.0.0.1:8091 (MCP) ou :8080 (painel) passava por cima dela.
+            c.instanceFollowRedirects = false
             c.setRequestProperty("User-Agent", "onetv-launcher/1 (+https://github.com/ChrnX0/one-tv-launcher)")
             if (c.responseCode != 200) null else c.inputStream.use { e ->
                 // Lê no máximo 2 MB: um link que é o próprio áudio (não a lista .m3u/.pls) nunca acaba, e o readText()

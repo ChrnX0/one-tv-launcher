@@ -74,6 +74,10 @@ class PlayerVodTest {
         assertEquals(listOf("10"), Vod.buscar(f, "filme").map { it.id })
         assertEquals(listOf("Ação" to 1, "Drama" to 1), Vod.grupos(f))
         assertEquals(112, Vod.duracaoTexto("112 min"))
+        assertEquals(112, Vod.duracaoTexto("1:52"))
+        assertEquals(112, Vod.duracaoTexto("1h 52min"))
+        assertEquals(120, Vod.duracaoTexto("2h"))
+        assertEquals(52, Vod.duracaoTexto("52:30"))
     }
 
     @Test fun assistidosEPercentual() {

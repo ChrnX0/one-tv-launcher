@@ -125,7 +125,8 @@ object ClimaFontes {
         if (IconesClima.ehIcone(icone)) IconesClima.bitmap(ctx, icone)
         return Resultado(ponto, temp, umidade, max, min, amanha, codigo, chovendoAgora, eDia, picoChuva, textoLinha, icone,
             proximasHoras(json, atual.optString("time", ""), horasData, horasChuva),
-            uv = serie(json.optJSONObject("hourly"), "uv_index"), chuva15 = serie(json.optJSONObject("minutely_15"), "precipitation", -15 * 60_000L),
+            uv = serie(json.optJSONObject("hourly"), "uv_index", fuso = fusoDe(json)),
+            chuva15 = serie(json.optJSONObject("minutely_15"), "precipitation", -15 * 60_000L, fusoDe(json)),
             aqi = if (BuildConfig.CLIMA_MET) null else qualidadeDoAr(ponto), chuvaHoje = chuvaHoje)
     }
 
@@ -135,12 +136,23 @@ object ClimaFontes {
      * instante virar o começo do bloco, como [FraseTempo] espera. (Fora dos EUA e da Europa central o dado de 15 min é a
      * hora a hora interpolada pela própria Open-Meteo: a frase de minutos fica menos precisa ali.)
      */
-    private fun serie(bloco: JSONObject?, campo: String, desloca: Long = 0L): String = try {
+    private fun serie(bloco: JSONObject?, campo: String, desloca: Long = 0L, fuso: java.util.TimeZone = java.util.TimeZone.getDefault()): String = try {
         val t = bloco?.optJSONArray("time"); val v = bloco?.optJSONArray(campo)
         if (t == null || v == null) "" else SeriesTempo.escrever((0 until minOf(t.length(), v.length())).mapNotNull { i ->
-            if (v.isNull(i)) null else SeriesTempo.msLocal(t.getString(i))?.let { (it + desloca) to v.getDouble(i) }
+            if (v.isNull(i)) null else SeriesTempo.msLocal(t.getString(i), fuso)?.let { (it + desloca) to v.getDouble(i) }
         })
     } catch (e: Exception) { "" }
+
+    /**
+     * Com timezone=auto as horas vêm no fuso do LUGAR; lidas no fuso da TV (configurada à mão, local tirado do IP) a
+     * "chuva em 25 min" e o UV andavam horas. Sem o campo (ou desconhecido): o da TV.
+     */
+    internal fun fusoDe(json: JSONObject): java.util.TimeZone {
+        val id = json.optString("timezone")
+        if (id.isEmpty()) return java.util.TimeZone.getDefault()
+        val z = java.util.TimeZone.getTimeZone(id)
+        return if (z.id == "GMT" && id != "GMT") java.util.TimeZone.getDefault() else z
+    }
 
     @Volatile private var arGuardado: Pair<Long, Int?>? = null
 

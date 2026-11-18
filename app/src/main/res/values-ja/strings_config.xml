@@ -235,6 +235,7 @@
     <string name="cl_vd_ja_dono">ランチャーはすでにデバイスオーナーです</string>
     <string name="cl_vd_sem_shell">内蔵シェルが応答しませんでした（設定 &gt; ランチャーのシェル でペアリングしてください）</string>
     <string name="cl_vd_usuario">Android がユーザー %1$s の削除を許可しませんでした</string>
+    <string name="cl_vd_mudou">確認のあとでテレビのユーザーが変わりました(現在: %1$s)。何も削除していません。最初からやり直してください。</string>
     <string name="cl_vd_google">Android が Google の一時停止を許可しませんでした</string>
     <string name="cl_vd_recusou">Android が拒否しました: %1$s</string>
     <string name="cl_vd_sem_resposta">応答なし</string>

@@ -213,7 +213,22 @@ class GravacaoServico : Service() {
             }
             else -> if (!Gravacoes.ocupado()) encerrar()
         }
+        // Um pedido que não começou nada (outro canal, já começando) deixava "Preparando" por cima da gravação em curso.
+        Gravacoes.atual?.let { atualizarNotificacao(it) }
         return START_NOT_STICKY
+    }
+
+    /**
+     * Android 15+: dataSync tem 6 h por dia; esgotado, o sistema chama isto e derruba o processo (:player, junto com o
+     * player) se o serviço não sair do primeiro plano em segundos. Para a gravação e sai.
+     */
+    override fun onTimeout(startId: Int, fgsType: Int) {
+        Log.w(TAG, "tempo de primeiro plano esgotado (Android): parando a gravação")
+        Gravacoes.parar(this)
+        runCatching { trava?.release() }; runCatching { wifi?.release() }
+        trava = null; wifi = null
+        if (Build.VERSION.SDK_INT >= 24) stopForeground(STOP_FOREGROUND_REMOVE) else @Suppress("DEPRECATION") stopForeground(true)
+        stopSelf()
     }
 
     private fun comecar(canalId: String, nome: String, programa: String, fim: Long, agendadaId: String?) {
@@ -275,7 +290,14 @@ class GravacaoServico : Service() {
                 try { Thread.sleep(1000) } catch (_: InterruptedException) { break }
             }
         }.apply { isDaemon = true; start() }
-        val r = try { g.rodar() } finally {
+        val r = try { g.rodar() } catch (e: Throwable) {
+            // Sem isto, "atual" ficava preso: ocupado() = true, o serviço nunca encerrava (trava e Wi-Fi presos) e
+            // nenhuma gravação nova começava neste processo.
+            Gravacoes.atual = null
+            Gravacoes.escreverEstado(app, null)
+            Gravacoes.avisarOuvintes()
+            throw e
+        } finally {
             vigia.interrupt()
             s.cano.fechar()
             runCatching { destino.close() }

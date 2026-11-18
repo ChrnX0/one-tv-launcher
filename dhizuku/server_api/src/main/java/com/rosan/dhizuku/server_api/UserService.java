@@ -32,6 +32,19 @@ public class UserService extends IUserServiceManager.Stub {
         System.exit(0);
     }
 
+    /** Para o serviço de um app só; o processo sai quando não sobra nenhum (tv-launcher, 18/11/2026). */
+    @Override
+    public synchronized void stopService(ComponentName component) {
+        IBinder service = map.remove(component.flattenToShortString());
+        if (service != null) {
+            try {
+                transact(service, 2);
+            } catch (RemoteException | RuntimeException ignored) {
+            }
+        }
+        if (map.isEmpty()) System.exit(0);
+    }
+
     @Override
     public synchronized IBinder startService(ComponentName component) {
         String key = component.flattenToShortString();

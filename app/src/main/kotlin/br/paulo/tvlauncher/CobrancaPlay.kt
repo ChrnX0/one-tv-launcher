@@ -99,6 +99,7 @@ object CobrancaPlay {
     fun atualizar(ctx: Context, fim: ((Planos.Plano) -> Unit)? = null) {
         if (!BuildConfig.PLAY) return
         val app = ctx.applicationContext
+        agendarRepeticao(app)
         conectado(app) { c ->
             c.queryPurchasesAsync(QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.SUBS).build()) { r, compras ->
                 if (r.responseCode == BillingClient.BillingResponseCode.OK) tratar(app, compras)
@@ -113,6 +114,23 @@ object CobrancaPlay {
         }
     }
 
+    private val principal by lazy { android.os.Handler(android.os.Looper.getMainLooper()) }
+    @Volatile private var repetindo = false
+    private const val REPETIR_MS = 6 * 3_600_000L
+
+    /**
+     * O launcher (HOME, dono, acessibilidade) fica semanas no ar: consultar só ao abrir o processo deixava o plano
+     * guardado vencer (14 dias sem conferir = Básico para quem paga) e um reembolso valendo até reiniciar. Repete a
+     * cada 6 h enquanto o processo vive.
+     */
+    private fun agendarRepeticao(app: Context) {
+        if (repetindo) return
+        repetindo = true
+        principal.postDelayed(object : Runnable {
+            override fun run() { atualizar(app); principal.postDelayed(this, REPETIR_MS) }
+        }, REPETIR_MS)
+    }
+
     /** Compras que chegaram (da consulta ou da tela de compra): reconhece as novas e recalcula o plano. */
     private fun tratar(ctx: Context, compras: List<Purchase>) {
         val ativasAgora = reconhecer(compras)
@@ -125,12 +143,21 @@ object CobrancaPlay {
     /** Reconhece (acknowledge) as compras novas. Devolve as ativas (compradas, não pendentes). */
     private fun reconhecer(compras: List<Purchase>): List<Purchase> {
         val ativasAgora = compras.filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }
-        for (p in ativasAgora) if (!p.isAcknowledged) {
-            cliente?.acknowledgePurchase(AcknowledgePurchaseParams.newBuilder().setPurchaseToken(p.purchaseToken).build()) { r ->
-                Log.i(TAG, "reconhecida: ${r.responseCode}")
-            }
-        }
+        for (p in ativasAgora) if (!p.isAcknowledged) reconhecerUma(p.purchaseToken, 0)
         return ativasAgora
+    }
+
+    /**
+     * Sem acknowledge em 3 dias a Play devolve o dinheiro e tira o plano. Uma falha (Wi-Fi caiu, serviço fora) tenta de
+     * novo com espera crescente (1, 2, 4... até 30 min, 8 vezes); depois disso, a repetição de 6 h tenta outra vez.
+     */
+    private fun reconhecerUma(token: String, tentativa: Int) {
+        val c = cliente ?: return
+        c.acknowledgePurchase(AcknowledgePurchaseParams.newBuilder().setPurchaseToken(token).build()) { r ->
+            Log.i(TAG, "reconhecida: ${r.responseCode}")
+            if (r.responseCode != BillingClient.BillingResponseCode.OK && tentativa < 8)
+                principal.postDelayed({ reconhecerUma(token, tentativa + 1) }, minOf(60_000L shl tentativa, 30 * 60_000L))
+        }
     }
 
     /** Preço do primeiro plano-base do produto, já formatado pela Play ("R$ 9,90"); null antes da Play responder. */

@@ -94,7 +94,11 @@ object Nfs {
 
     /** Uma conexão TCP com um programa RPC (portmap, mount ou nfs). */
     class Conexao(host: String, porta: Int, private val programa: Int, private val versao: Int, private val uid: Int, private val gid: Int) : AutoCloseable {
-        private val s = Socket().apply { soTimeout = 30_000; tcpNoDelay = true; connect(InetSocketAddress(host, porta), TEMPO_MS) }
+        // Sem fechar na falha, cada tentativa com o NAS desligado (cada busca no vídeo) vazava um descritor.
+        private val s = Socket().apply {
+            try { soTimeout = 30_000; tcpNoDelay = true; connect(InetSocketAddress(host, porta), TEMPO_MS) }
+            catch (e: Exception) { runCatching { close() }; throw e }
+        }
         private val sai: OutputStream = s.getOutputStream()
         private val entra = DataInputStream(s.getInputStream().buffered(64 * 1024))
         private var xid = (System.nanoTime() and 0x7fffffff).toInt()

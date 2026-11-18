@@ -152,10 +152,12 @@ object PainelControle {
     }
 
     /** Apaga os dados do app (login, configurações, downloads dele), como "Limpar dados". Sem volta. Só app instalado. */
-    fun limparDados(ctx: Context, pacote: String): String? {
+    fun limparDados(ctx: Context, pacote: String, deSistemaTambem: Boolean = false): String? {
         if (PainelApps.protegido(ctx, pacote)) return "este app é protegido"
         val ai = try { ctx.packageManager.getApplicationInfo(pacote, 0) } catch (e: Exception) { return "app não encontrado" }
-        if (ai.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM != 0) return "app do sistema: limpe pelas Configurações da TV"
+        // [deSistemaTambem]: a saída do hóspede limpa YouTube/Netflix de fábrica (são apps de sistema no Google TV);
+        // o painel continua recusando. PainelApps.protegido acima segura os essenciais nos dois casos.
+        if (!deSistemaTambem && ai.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM != 0) return "app do sistema: limpe pelas Configurações da TV"
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return "Android antigo demais"
         if (!PrivilegioDO.somosDonos(ctx)) return "o launcher não é mais o dono do aparelho (Device Owner)"
         val pronto = CountDownLatch(1)

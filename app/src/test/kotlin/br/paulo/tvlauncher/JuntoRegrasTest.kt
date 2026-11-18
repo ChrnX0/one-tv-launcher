@@ -121,4 +121,10 @@ class JuntoEpisodioTest {
         assertEquals(1 to 3, JuntoRegras.episodio("tmdb:serie:1399:s1e3"))
         assertNull(JuntoRegras.episodio("tmdb:serie:1399"))
     }
+
+    @Test fun episodioComNumeroEnormeNaoDerrubaOPlayer() {
+        assertEquals(1 to 3, JuntoRegras.episodio("tmdb:serie:1399:s1e3"))
+        assertEquals(null, JuntoRegras.episodio("tmdb:serie:1:s99999999999e1"))
+        assertEquals(null, JuntoRegras.episodio("tmdb:serie:1:s1e99999999999"))
+    }
 }

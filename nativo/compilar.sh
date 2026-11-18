@@ -229,7 +229,7 @@ cola() {
     cp "$(readlink -f "$PREFIXO/lib/libfribidi.so")" "$destino/libfribidi.so"
     cp "$(readlink -f "$PREFIXO/lib/libass.so")" "$destino/libass.so"
     cp "$OBRA/compilando/cola/$ABI/libonetvplayer.so" "$destino/"
-    [[ $ABI != host ]] && "$STRIP" --strip-unneeded "$destino"/*.so
+    if [[ $ABI != host ]]; then "$STRIP" --strip-unneeded "$destino"/*.so; fi   # com "&&" o host saía com 1 (set -e)
   done
 }
 

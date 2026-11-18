@@ -179,10 +179,22 @@ http://l.invalid/ana/s/2.ts""".lineSequence())
         val antes = mapOf(t1[1].chave("x") to Posicao(5_000, 3_000_000, 1))
         val p = Series.marcarVistosAte(f, "x", t2[0], antes, 99)
         assertEquals(3, p.size)
-        assertEquals(Posicao(2_400_000, 2_400_000, 99), p[t1[0].chave("x")])
-        assertEquals(Posicao(3_000_000, 3_000_000, 99), p[t1[1].chave("x")])   // usa a duração conhecida
+        // "quando" decrescente para trás: o mais perto do escolhido é o mais recente.
+        assertEquals(Posicao(2_400_000, 2_400_000, 97), p[t1[0].chave("x")])
+        assertEquals(Posicao(3_000_000, 3_000_000, 98), p[t1[1].chave("x")])   // usa a duração conhecida
+        assertEquals(99L, p[t2[0].chave("x")]!!.quando)
         assertNotNull(p[t2[0].chave("x")]); assertNull(p[t2[1].chave("x")])
         assertEquals(2, Series.desmarcar("x", t2[0], p).size)
         assertEquals(antes, Series.marcarVistosAte(f, "x", Episodio("99", 9, 9, "?"), antes, 99))
+    }
+
+    @Test fun vistoAteAquiNumaSerieLongaNaoApagaOContinuar() {
+        val eps = (1..1100).map { Episodio("$it", 1, it, "e$it") }
+        val f = FichaSerie(temporadas = linkedMapOf(1 to eps))
+        val filme = mapOf("filme:x" to Posicao(60_000, 6_000_000, 50))
+        val p = Series.marcarVistosAte(f, "x", eps.last(), filme, 10_000)
+        assertEquals(Series.MAX_VISTOS_ATE + 1, p.size)
+        assertTrue(p.size <= Vod.MAX_POSICOES)
+        assertEquals(filme["filme:x"], p["filme:x"])
     }
 }

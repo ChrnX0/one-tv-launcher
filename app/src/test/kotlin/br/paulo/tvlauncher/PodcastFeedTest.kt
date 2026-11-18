@@ -123,6 +123,26 @@ class PodcastFeedTest {
     }
 
     @Test
+    fun entradaRecusaUtf7() {
+        // Em UTF-7 "<!ENTITY" vira "+ADwAIQ-ENTITY": a busca byte a byte não via.
+        val bomba = "<?xml version=\"1.0\" encoding=\"UTF-7\"?>+ADw-rss+AD4-"
+        val en = PodcastFeed.Entrada(bomba.byteInputStream(), PodcastFeed.MAX_BYTES)
+        assertTrue(runCatching { en.readBytes() }.isFailure)
+        assertTrue(en.recusou)
+        val ok = PodcastFeed.Entrada(feed.byteInputStream(), PodcastFeed.MAX_BYTES)
+        ok.readBytes(); assertFalse(ok.recusou)
+    }
+
+    @Test
+    fun datasComFormatosGuardados() {
+        val a = PodcastFeed.data("Wed, 18 Nov 2026 06:00:00 +0000")
+        assertEquals(a, PodcastFeed.data("Wed, 18 Nov 2026 06:00:00 +0000"))
+        assertTrue(a > 0)
+        assertEquals(PodcastFeed.data("2026-11-18T06:00:00Z"), a)
+        assertEquals(0L, PodcastFeed.data("ontem"))
+    }
+
+    @Test
     fun entradaRecusaEntidadesDoDtd() {
         val bomba = "<?xml version=\"1.0\"?><!DOCTYPE rss [<!ENTITY a \"aaaaaaaaaa\"><!ENTITY b \"&a;&a;&a;&a;\">]><rss><channel><title>&b;</title></channel></rss>"
         val en = PodcastFeed.Entrada(bomba.byteInputStream(), PodcastFeed.MAX_BYTES)
@@ -138,6 +158,24 @@ class PodcastFeedTest {
         }, 1000)
         runCatching { partido.readBytes() }
         assertTrue(partido.recusou)
+    }
+
+    /** Rodada 3 (18/11/2026): em UTF-16 o "<!ENTITY" vem com zeros no meio e passava pelo filtro. */
+    @Test
+    fun entradaRecusaEntidadesEmUtf16() {
+        val bomba = "<?xml version=\"1.0\" encoding=\"UTF-16\"?><!DOCTYPE rss [<!ENTITY a \"aaaa\">]><rss/>"
+        for (cs in listOf(Charsets.UTF_16BE, Charsets.UTF_16LE, Charsets.UTF_16)) {
+            val en = PodcastFeed.Entrada(bomba.toByteArray(cs).inputStream(), PodcastFeed.MAX_BYTES)
+            runCatching { en.readBytes() }
+            assertTrue("$cs", en.recusou)
+        }
+    }
+
+    @Test
+    fun opmlQuebradoNoMeioFicaComOQueVeioAntes() {
+        val opml = "<opml><body><outline xmlUrl=\"https://a.b/1.xml\" text=\"Um\"/><outline xmlUrl=\"https://a.b/2.xml\" text=\"Dois\"/><outline <<< quebrado"
+        val itens = PodcastFeed.lerOpml(KXmlParser().apply { setInput(opml.reader()) })
+        assertEquals(listOf("https://a.b/1.xml", "https://a.b/2.xml"), itens.map { it.url })
     }
 
     @Test

@@ -134,11 +134,15 @@ object Vod {
 
     fun lerFilmes(json: String, fonteId: String, categorias: List<Xtream.Categoria> = emptyList()): List<Filme> {
         val a = runCatching { JSONArray(json) }.getOrNull() ?: return emptyList()
+        return lerFilmes(Xtream.objetos(a), fonteId, categorias)
+    }
+
+    /** Igual, de um fluxo ([JsonEmFluxo]): para no máximo e não lê o resto. */
+    fun lerFilmes(itens: Sequence<JSONObject>, fonteId: String, categorias: List<Xtream.Categoria> = emptyList()): List<Filme> {
         val grupos = categorias.associate { it.id to it.nome }
         val saida = ArrayList<Filme>()
-        for (i in 0 until a.length()) {
+        for (o in itens) {
             if (saida.size >= MAX_FILMES) break
-            val o = a.optJSONObject(i) ?: continue
             val id = o.opt("stream_id")?.toString()?.takeIf { it.isNotEmpty() && it != "null" } ?: continue
             val nome = o.optString("name", "").trim()
             if (nome.isEmpty()) continue
@@ -191,10 +195,18 @@ object Vod {
 
     const val MAX_CENAS = 4
 
-    /** "01:52:30" ou "112 min" -> minutos. */
+    /** "01:52:30", "1:52" (h:mm), "1h 52min" ou "112 min" -> minutos. */
     fun duracaoTexto(t: String): Int? {
         val partes = t.trim().split(':')
-        if (partes.size == 3) return partes[0].toIntOrNull()?.let { h -> (partes[1].toIntOrNull() ?: 0) + h * 60 }
+        if (partes.size == 3) return partes[0].trim().toIntOrNull()?.let { h -> (partes[1].trim().toIntOrNull() ?: 0) + h * 60 }
+        // Duas partes: "1:52" é h:mm (filme não passa de 9 h); "52:30" é mm:ss.
+        if (partes.size == 2) return partes[0].trim().toIntOrNull()?.let { a ->
+            if (a <= 9) a * 60 + (partes[1].trim().toIntOrNull() ?: 0) else a
+        }
+        Regex("""(\d+)\s*h(?:oras?|rs?)?\s*(\d+)?""", RegexOption.IGNORE_CASE).find(t)?.let { m ->
+            val h = m.groupValues[1].toIntOrNull() ?: return null
+            return h * 60 + (m.groupValues[2].toIntOrNull() ?: 0)
+        }
         return Regex("""(\d+)""").find(t)?.groupValues?.get(1)?.toIntOrNull()
     }
 

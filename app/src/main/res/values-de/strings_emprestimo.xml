@@ -16,11 +16,11 @@
     <string name="emp_pin_titulo">Panel-PIN zum Erlauben</string>
     <string name="emp_sem_pin">Lege zuerst die Panel-PIN fest (Einstellungen, Web-Panel).</string>
     <string name="emd_titulo">Die Eigentümerkontrolle an andere Apps ausleihen (Dhizuku)</string>
-    <string name="emd_titulo_det">Apps für Dhizuku nutzen die Eigentümerkontrolle des Launchers. Jede App fragt auf dem Fernseher, mit der PIN. Keine kann den Launcher als Eigentümer entfernen oder den Fernseher löschen.</string>
+    <string name="emd_titulo_det">Apps für Dhizuku nutzen die Eigentümerkontrolle des Launchers. Jede App fragt auf dem Fernseher, mit der PIN. Mit „Erlauben“ kann keine den Launcher als Eigentümer entfernen oder den Fernseher löschen; mit „Volle Macht“ schon.</string>
     <string name="emd_ligado">An</string>
     <string name="emd_sem_dono">Der Launcher ist nicht der Eigentümer (Device Owner) dieses Fernsehers, es gibt also nichts auszuleihen.</string>
     <string name="emd_pedido_titulo">%1$s erlauben, die Eigentümerkontrolle des Launchers zu nutzen?</string>
-    <string name="emd_pedido_texto">Mit „Erlauben“ kann die App Apps ausblenden und sperren und die Berechtigungen und Regeln des Fernsehers ändern, aber nie den Launcher als Eigentümer entfernen oder den Fernseher löschen. „Volle Macht“ lässt die App als Launcher laufen und seine Daten lesen: nur für Apps, denen du voll vertraust. Du kannst es im Web-Panel widerrufen.</string>
+    <string name="emd_pedido_texto">Mit „Erlauben“ kann die App Apps ausblenden und sperren und die Berechtigungen und Regeln des Fernsehers ändern, aber nie den Launcher als Eigentümer entfernen oder den Fernseher löschen. „Volle Macht“ lässt die App als Launcher laufen und seine Daten lesen: nur für Apps, denen du voll vertraust. Du kannst es im Web-Panel widerrufen. Mit „Volle Macht“ kann die App alles, was der Launcher kann, sogar den Fernseher löschen.</string>
     <string name="emd_total">Volle Macht</string>
-    <string name="emd_pin_total">VOLLE MACHT: Die App liest die Daten des Launchers. Panel-PIN</string>
+    <string name="emd_pin_total">VOLLE MACHT: Die App kann alles, was der Launcher kann, sogar den Fernseher löschen. Panel-PIN</string>
 </resources>

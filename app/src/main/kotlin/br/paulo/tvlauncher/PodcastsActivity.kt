@@ -37,6 +37,8 @@ class PodcastsActivity : Activity() {
     private var aberto: String? = null
     /** Na próxima montagem, o foco vai para o 1º episódio (o mais novo) e a lista volta ao topo. */
     private var focarPrimeiroEp = false
+    /** Tag da linha a focar no próximo montar() (o "ep:..." de antes não existe mais na tela principal). */
+    private var focarDepois: String? = null
     private val mudou: () -> Unit = { aoMudarSom() }
     private var visto: Any? = null
     private val ui = android.os.Handler(android.os.Looper.getMainLooper())
@@ -78,7 +80,8 @@ class PodcastsActivity : Activity() {
 
     @Deprecated("Activity.onBackPressed")
     override fun onBackPressed() {
-        if (aberto != null) { aberto = null; montar(); return }
+        val veioDe = aberto
+        if (veioDe != null) { aberto = null; focarDepois = "pod:$veioDe"; montar(); return }   // volta para o podcast de onde veio
         @Suppress("DEPRECATION") super.onBackPressed()
     }
 
@@ -118,7 +121,8 @@ class PodcastsActivity : Activity() {
     // ---------------------------------------------------------------- tela
 
     private fun montar() {
-        val focoAntes = coluna.focusedChild?.tag
+        val focoAntes = focarDepois ?: coluna.focusedChild?.tag
+        focarDepois = null
         coluna.removeAllViews()
         linhasTocando()
         val url = aberto
@@ -137,8 +141,10 @@ class PodcastsActivity : Activity() {
         val s = OuvirServico.instancia ?: return
         val e = s.episodio ?: return
         linha("tocando", "● " + e.ep.titulo, textoTocando(s), getString(if (s.pausado) R.string.ra_continuar else R.string.ra_pausar),
-            cor = Estilo.ATENCAO, ok = { s.alternar() }, segurar = null)
-        linha("parar", "■ " + getString(R.string.ra_parar), getString(R.string.pod_dica_pular), null, ok = { s.parar() }, segurar = null)
+            cor = Estilo.ATENCAO, ok = { OuvirServico.instancia?.alternar() }, segurar = null)
+        // A instância da HORA do clique: o serviço guardado aqui pode já ter sido trocado por outro (e o parar do velho
+        // apagava a pílula do que está tocando).
+        linha("parar", "■ " + getString(R.string.ra_parar), getString(R.string.pod_dica_pular), null, ok = { OuvirServico.instancia?.parar() }, segurar = null)
         val v = OuvirServico.velocidade(this)
         linha("velocidade", getString(R.string.pod_velocidade), null, rotuloVelocidade(v), ok = {
             Estilo.lista(this, getString(R.string.pod_velocidade), OuvirServico.VELOCIDADES.map { rotuloVelocidade(it) },
@@ -281,9 +287,19 @@ class PodcastsActivity : Activity() {
         if (ep.video) {
             // Vídeo no feed: o player de vídeo (tela cheia, legenda, velocidade). A posição fica com ele.
             OuvirServico.instancia?.parar()
-            VodActivity.abrirUrl(this, ep.url, ep.titulo)
             val app = applicationContext
-            val p = Podcasts.Posicao(feed, ep.guid, 1, ep.duracaoS * 1000L, false, System.currentTimeMillis(), ep.titulo, nome)
+            // O endereço vem do feed (de fora): para a própria TV ou a rede da casa, não abre (como no áudio).
+            Fundo.rodar("podcast-video") {
+                val ips = runCatching { java.net.InetAddress.getAllByName(java.net.URL(ep.url).host).toList() }.getOrNull()
+                val ok = !ips.isNullOrEmpty() && ips.none { Radios.destinoDeFeedProibido(it) }
+                runOnUiThread {
+                    if (isDestroyed) return@runOnUiThread
+                    if (ok) VodActivity.abrirUrl(this, ep.url, ep.titulo)
+                    else AvisoTv.rapido(this, ep.titulo, getString(R.string.pod_falhou), 6)
+                }
+            }
+            // ms = 0: só registra que abriu; 1 tirava o ✓ de "ouvido" (guardar() só o mantém com posição 0).
+            val p = Podcasts.Posicao(feed, ep.guid, 0, ep.duracaoS * 1000L, false, System.currentTimeMillis(), ep.titulo, nome)
             Podcasts.naFila { Podcasts.guardarPosicao(app, p) }
             return
         }
@@ -304,6 +320,9 @@ class PodcastsActivity : Activity() {
             val dur = ep.duracaoS * 1000L
             // Desmarcar = começa do zero de novo (sai de "ouvido" e de "Continuar").
             val nova = Podcasts.Posicao(feed, ep.guid, if (ouvido) 0 else maxOf(dur, 1), dur, !ouvido, System.currentTimeMillis(), ep.titulo, nome)
+            // Marcar o que está tocando: para antes (a gravação do parar entra na fila antes), senão a gravação periódica
+            // de 15 s gravava "ms > 0, não ouvido" por cima e a marca sumia.
+            OuvirServico.instancia?.let { s -> s.episodio?.let { if (it.feed == feed && it.ep.guid == ep.guid) s.parar() } }
             Podcasts.naFila {
                 // guardar() não tira o "ouvido" sozinho: para desmarcar, grava a posição nova por cima.
                 Podcasts.editarPosicoes(app) { m -> LinkedHashMap(m).apply { this[Podcasts.chave(feed, ep.guid)] = nova } }

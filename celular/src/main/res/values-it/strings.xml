@@ -20,4 +20,6 @@
     <string name="cel_casa_qual">In quale casa si trova questa TV?</string>
     <string name="cel_casa_nova">Altra casa…</string>
     <string name="cel_casa_dica">es.: Casa al mare, Da mamma</string>
+    <string name="cel_baixado">Salvato in Download: %1$s</string>
+    <string name="cel_baixar_falhou">Impossibile salvare il file. Riprova.</string>
 </resources>

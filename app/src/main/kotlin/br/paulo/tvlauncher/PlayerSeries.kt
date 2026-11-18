@@ -81,9 +81,14 @@ object Series {
             if (n.isNotEmpty() && t.startsWith(n, ignoreCase = true)) { t = t.substring(n.length); break }
         }
         // O ano que a lista põe depois do nome ("Slow Horses 2022 - S01E01 - ..." ou "(2022)") sai junto com o código.
-        t = t.replace(Regex("""^[\s\-–:|·]*(?:\(?(?:19|20)\d{2}\)?[\s\-–:|·]+(?=S\d|T\d|\d{1,2}x\d))?(?:S\d{1,2}\s*E\d{1,3}|T\d{1,2}\s*E\d{1,3}|\d{1,2}x\d{1,3})?[\s\-–:|·]*""", RegexOption.IGNORE_CASE), "")
+        t = t.replace(reCodigoEp, "")
         return t.trim().ifEmpty { titulo.trim() }
     }
+
+    private val reCodigoEp = Regex("""^[\s\-–:|·]*(?:\(?(?:19|20)\d{2}\)?[\s\-–:|·]+(?=S\d|T\d|\d{1,2}x\d))?(?:S\d{1,2}\s*E\d{1,3}|T\d{1,2}\s*E\d{1,3}|\d{1,2}x\d{1,3})?[\s\-–:|·]*""", RegexOption.IGNORE_CASE)
+
+    /** Teto de episódios por ficha: a maior série real tem poucos milhares; um servidor com defeito não estoura a memória. */
+    const val MAX_EPISODIOS = 5000
 
     private fun cod(v: String) = URLEncoder.encode(v, "UTF-8")
 
@@ -104,11 +109,15 @@ object Series {
 
     fun lerSeries(json: String, fonteId: String, categorias: List<Xtream.Categoria> = emptyList()): List<Serie> {
         val a = runCatching { JSONArray(json) }.getOrNull() ?: return emptyList()
+        return lerSeries(Xtream.objetos(a), fonteId, categorias)
+    }
+
+    /** Igual, de um fluxo ([JsonEmFluxo]): para no máximo e não lê o resto. */
+    fun lerSeries(itens: Sequence<JSONObject>, fonteId: String, categorias: List<Xtream.Categoria> = emptyList()): List<Serie> {
         val grupos = categorias.associate { it.id to it.nome }
         val saida = ArrayList<Serie>()
-        for (i in 0 until a.length()) {
+        for (o in itens) {
             if (saida.size >= Vod.MAX_FILMES) break
-            val o = a.optJSONObject(i) ?: continue
             val id = o.opt("series_id")?.toString()?.takeIf { it.isNotEmpty() && it != "null" } ?: continue
             val nome = texto(o, "name")
             if (nome.isEmpty()) continue
@@ -136,16 +145,19 @@ object Series {
         }
         if (listas.isEmpty() && !raiz.has("info")) return null
         val porTemporada = HashMap<Int, MutableList<Episodio>>()
+        var lidos = 0
         for ((tempChave, arr) in listas) {
             for (i in 0 until arr.length()) {
+                if (lidos >= MAX_EPISODIOS) break
                 val o = arr.optJSONObject(i) ?: continue
                 val id = o.opt("id")?.toString()?.takeIf { it.isNotEmpty() && it != "null" } ?: continue
                 val inf = o.optJSONObject("info") ?: JSONObject()
                 val temporada = numero(o, "season")?.toInt() ?: tempChave ?: 1
                 val num = numero(o, "episode_num")?.toInt() ?: (i + 1)
                 val seg = numero(inf, "duration_secs")
+                lidos++
                 porTemporada.getOrPut(temporada) { ArrayList() } += Episodio(
-                    id, temporada, num, texto(o, "title").ifEmpty { "Episódio $num" }, Vod.extensaoSegura(texto(o, "container_extension")),
+                    id, temporada, num, texto(o, "title").take(300).ifEmpty { "Episódio $num" }, Vod.extensaoSegura(texto(o, "container_extension")),
                     texto(inf, "plot").take(800),
                     (seg?.let { (it / 60).toInt() } ?: Vod.duracaoTexto(texto(inf, "duration")))?.takeIf { it in 1..600 },
                 )
@@ -169,12 +181,17 @@ object Series {
         val i = ordem.indexOfFirst { it.id == ate.id }
         if (i < 0) return posicoes
         val saida = HashMap(posicoes)
-        ordem.take(i + 1).forEach { ep ->
+        // No máximo os MAX_VISTOS_ATE mais perto deste, com "quando" decrescente: numa série de 1100 episódios, 1100
+        // posições com o mesmo "quando" passavam do teto (Vod.MAX_POSICOES) e o corte apagava o "continuar" dos filmes.
+        val marcar = ordem.take(i + 1).takeLast(MAX_VISTOS_ATE)
+        marcar.forEachIndexed { k, ep ->
             val d = posicoes[ep.chave(fonteId)]?.duracao?.takeIf { it > 0 } ?: ((ep.duracaoMin ?: 1) * 60_000L)
-            saida[ep.chave(fonteId)] = Posicao(d, d, agora)
+            saida[ep.chave(fonteId)] = Posicao(d, d, agora - (marcar.size - 1 - k))
         }
         return saida
     }
+
+    const val MAX_VISTOS_ATE = 300
 
     /** "Não visto": apaga a posição deste episódio (volta a começar do zero). */
     fun desmarcar(fonteId: String, ep: Episodio, posicoes: Map<String, Posicao>): Map<String, Posicao> = posicoes - ep.chave(fonteId)

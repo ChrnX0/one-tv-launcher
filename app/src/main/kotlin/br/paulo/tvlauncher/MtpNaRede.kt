@@ -38,6 +38,11 @@ object MtpNaRede {
     // Nome da TV trocado nas configurações (16/11/2026): o computador só relê o nome quando o aparelho "volta".
     private var vigiaNome: ContentObserver? = null
     @Volatile private var nomeAnunciado = ""
+    /** O que o dono pediu (chave da unidade de rede). As religadas internas (nome novo, esquecer) só religam se ainda for true. */
+    @Volatile private var querLigado = false
+    /** Muda a cada "Esquecer computadores": uma pergunta que já estava na tela não grava o computador depois. */
+    private val geracao = java.util.concurrent.atomic.AtomicInteger()
+    private val castigo = CastigoIp()
 
     /** A memória interna + os pendrives montados agora. O nome de cada pendrive vem do Android, no idioma da TV. */
     private fun lerArmazens(app: Context): List<MtpArmazem> {
@@ -55,13 +60,17 @@ object MtpNaRede {
     }
 
     /** Relê os pendrives e avisa os computadores conectados do que entrou e do que saiu. */
-    @Synchronized private fun conferirArmazens(app: Context) {
-        val antes = armazens
-        val novo = try { lerArmazens(app) } catch (e: Exception) { Log.w(TAG, "lendo os armazenamentos: $e"); return }
-        armazens = novo
-        val s = servico ?: return
-        antes.filter { a -> novo.none { it.id == a.id } }.forEach { s.avisarArmazem(it.id, false) }
-        novo.filter { a -> antes.none { it.id == a.id } }.forEach { s.avisarArmazem(it.id, true) }
+    private fun conferirArmazens(app: Context) {
+        // A troca da lista fica na trava; o aviso ao computador (escrita na rede, pode demorar) fica fora dela: antes um
+        // computador que parou de ler travava ligar/desligar, chamados da tela das Configurações.
+        val (s, saiu, entrou) = synchronized(this) {
+            val antes = armazens
+            val novo = try { lerArmazens(app) } catch (e: Exception) { Log.w(TAG, "lendo os armazenamentos: $e"); return }
+            armazens = novo
+            Triple(servico ?: return, antes.filter { a -> novo.none { it.id == a.id } }, novo.filter { a -> antes.none { it.id == a.id } })
+        }
+        saiu.forEach { s.avisarArmazem(it.id, false) }
+        entrou.forEach { s.avisarArmazem(it.id, true) }
     }
 
     private fun prefs(ctx: Context) = ctx.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
@@ -71,17 +80,24 @@ object MtpNaRede {
 
     /** Esquece todos e derruba quem está ligado: cada computador pergunta de novo na próxima vez. */
     fun esquecerTodos(ctx: Context) {
+        geracao.incrementAndGet()
         prefs(ctx).edit().clear().apply()
-        val ligado = servico != null
-        desligar()
-        if (ligado) {
-            ligar(ctx)
+        castigo.limpar()
+        val religou = synchronized(this) {
+            val ligado = servico != null
+            desligarJa()
+            if (ligado && querLigado) ligarJa(ctx)
+            ligado && querLigado
+        }
+        if (religou) {
             // o anúncio recomeça junto: é ele que manda o Windows largar a conexão que acabamos de derrubar
             AnuncioUpnp.desligar(); AnuncioUpnp.ligar(ctx)
         }
     }
 
-    @Synchronized fun ligar(ctx: Context) {
+    @Synchronized fun ligar(ctx: Context) { querLigado = true; ligarJa(ctx) }
+
+    @Synchronized private fun ligarJa(ctx: Context) {
         if (servico != null) return
         val app = ctx.applicationContext
         val ss = try { ServerSocket(PtpIp.PORTA, 16) } catch (e: Exception) { Log.w(TAG, "porta ${PtpIp.PORTA} ocupada: $e"); return }
@@ -125,8 +141,11 @@ object MtpNaRede {
                     // fora da thread que avisou: religar fecha portas e escreve na rede
                     Thread({
                         Log.i(TAG, "nome da TV mudou: anunciando de novo")
-                        desligar(); ligar(app)
-                        AnuncioUpnp.desligar(); AnuncioUpnp.ligar(app)   // o adeus + o olá fazem o Windows reler a descrição
+                        // Confere na trava: o dono pode ter desligado a unidade entre o aviso e esta thread.
+                        val religou = synchronized(MtpNaRede) {
+                            if (!querLigado || servico == null) false else { desligarJa(); ligarJa(app); true }
+                        }
+                        if (religou) { AnuncioUpnp.desligar(); AnuncioUpnp.ligar(app) }   // o adeus + o olá fazem o Windows reler a descrição
                     }, "Mtp-nome").apply { isDaemon = true }.start()
                 }
             }
@@ -139,7 +158,9 @@ object MtpNaRede {
     /** Há algum computador conectado agora? */
     fun temSessao(): Boolean = servico?.temConexao() == true
 
-    @Synchronized fun desligar() {
+    @Synchronized fun desligar() { querLigado = false; desligarJa() }
+
+    @Synchronized private fun desligarJa() {
         servico?.parar()
         servico = null
         receptor?.let { r -> try { ondeRegistrei?.unregisterReceiver(r) } catch (_: Exception) {} }
@@ -150,9 +171,16 @@ object MtpNaRede {
     private fun permitir(app: Context, pc: String, nome: String, ip: String): Boolean {
         if (prefs(app).contains(pc)) return true
         if (prefs(app).all.size >= MAX_PERMITIDOS) return false
+        if (castigo.emCastigo(ip, System.currentTimeMillis())) return false   // disse "não" há pouco: não pergunta de novo
+        // Outra pergunta já na tela: recusa agora SEM castigo (senão a pergunta de um aparelho insistente punia o
+        // computador verdadeiro, que pediu na mesma hora).
+        if (ConfirmacoesTv.atual() != null) return false
+        val g = geracao.get()
         val sim = ConfirmacoesTv.perguntarSempre(app, app.getString(R.string.mtp_pergunta_titulo),
             app.getString(R.string.mtp_pergunta, nome), ip)
-        if (sim) prefs(app).edit().putString(pc, nome.take(80)).apply()
-        return sim
+        if (!sim) { castigo.castigar(ip, System.currentTimeMillis()); return false }
+        if (geracao.get() != g) return false   // "Esquecer computadores" foi apertado enquanto a pergunta estava na tela
+        prefs(app).edit().putString(pc, nome.take(80)).apply()
+        return true
     }
 }

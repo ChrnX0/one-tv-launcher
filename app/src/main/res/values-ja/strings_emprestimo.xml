@@ -16,11 +16,11 @@
     <string name="emp_pin_titulo">許可するためのパネル PIN</string>
     <string name="emp_sem_pin">先にパネル PIN を設定してください (設定、ウェブパネル)。</string>
     <string name="emd_titulo">所有者権限をほかのアプリに貸す (Dhizuku)</string>
-    <string name="emd_titulo_det">Dhizuku 対応アプリがランチャーの所有者権限を使います。各アプリは TV で PIN 付きで確認します。ランチャーを所有者から外したり TV を初期化したりはできません。</string>
+    <string name="emd_titulo_det">Dhizuku 対応アプリがランチャーの所有者権限を使います。各アプリは TV で PIN 付きで確認します。「許可」ではランチャーを所有者から外したり TV を初期化したりはできませんが、「フル権限」ではできます。</string>
     <string name="emd_ligado">オン</string>
     <string name="emd_sem_dono">ランチャーはこの TV の所有者 (Device Owner) ではないため、貸せるものはありません。</string>
     <string name="emd_pedido_titulo">%1$s にランチャーの所有者権限の使用を許可しますか?</string>
-    <string name="emd_pedido_texto">「許可」すると、アプリはアプリの非表示やブロック、TV の権限やルールの変更ができますが、ランチャーを所有者から外したり TV を初期化したりはできません。「フル権限」はアプリをランチャーとして動かし、そのデータを読めるようにします: 完全に信頼できるアプリだけにしてください。ウェブパネルから取り消せます。</string>
+    <string name="emd_pedido_texto">「許可」すると、アプリはアプリの非表示やブロック、TV の権限やルールの変更ができますが、ランチャーを所有者から外したり TV を初期化したりはできません。「フル権限」はアプリをランチャーとして動かし、そのデータを読めるようにします: 完全に信頼できるアプリだけにしてください。ウェブパネルから取り消せます。「フル権限」のアプリはランチャーにできることは何でもでき、TV の初期化もできます。</string>
     <string name="emd_total">フル権限</string>
-    <string name="emd_pin_total">フル権限: アプリはランチャーのデータを読みます。パネル PIN</string>
+    <string name="emd_pin_total">フル権限: アプリはランチャーにできることは何でもでき、TV の初期化もできます。パネル PIN</string>
 </resources>

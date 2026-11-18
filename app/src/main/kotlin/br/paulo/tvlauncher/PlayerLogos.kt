@@ -83,8 +83,10 @@ object PlayerLogos {
         val dir = File(ctx.cacheDir, "logos")
         trabalho.execute {
             // Ninguém mais quer (rolou para longe antes da vez dela): não baixa. Quem voltar a precisar pede de novo.
-            val bmp = if ((querem[k] ?: 0) <= 0) null else runCatching { obter(dir, url, lado) }.getOrNull()
-            val desistiu = (querem[k] ?: 0) <= 0 && bmp == null
+            // Lido UMA vez: lendo de novo, uma View que voltou a pedir no meio virava "falhou" sem ter baixado (5 min em branco).
+            val pulou = (querem[k] ?: 0) <= 0
+            val bmp = if (pulou) null else runCatching { obter(dir, url, lado) }.getOrNull()
+            val desistiu = pulou
             tela.post {
                 val alvos = esperando.remove(k).orEmpty()
                 querem.remove(k)
@@ -134,10 +136,18 @@ object PlayerLogos {
 
     private fun obter(dir: File, url: String, lado: Int, opaco: Boolean = lado > LADO_PX): Bitmap? {
         val arquivo = File(dir, hash(url))
-        val bytes = if (arquivo.exists()) arquivo.readBytes() else baixar(url).also {
-            runCatching { dir.mkdirs(); File(dir, "${arquivo.name}.tmp").apply { writeBytes(it) }.renameTo(arquivo) }
+        val doDisco = arquivo.exists()
+        val bytes = if (doDisco) arquivo.readBytes() else baixar(url).also {
+            // Temporário de nome único: a HOME e o processo do player escrevem no mesmo cache, e com nome fixo um
+            // truncava o do outro e o rename publicava um arquivo cortado.
+            runCatching {
+                dir.mkdirs()
+                val tmp = File.createTempFile(arquivo.name, ".tmp", dir)
+                try { tmp.writeBytes(it); tmp.renameTo(arquivo) } finally { tmp.delete() }
+            }
         }
-        return decodificar(bytes, lado, opaco)
+        // Do disco e não abre: estava estragado (ficava em branco para sempre). Apaga para baixar de novo.
+        return decodificar(bytes, lado, opaco).also { if (it == null && doDisco) arquivo.delete() }
     }
 
     private fun decodificar(bytes: ByteArray, lado: Int, opaco: Boolean): Bitmap? {
