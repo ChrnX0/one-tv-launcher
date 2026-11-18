@@ -3,7 +3,7 @@
 <resources>
     <string name="ad_titulo">Dodatki</string>
     <string name="ad_destaque">Filmy i seriale z Twoich dodatków</string>
-    <string name="ad_vazio">Nie masz jeszcze dodatków. Dodaj w panelu webowym (Ustawienia, Dodatki). Tutaj działają tylko bezpośrednie linki do wideo (HTTP): torrent i P2P nie są obsługiwane.</string>
+    <string name="ad_vazio">Brak dodatków. Wybierz polecany poniżej albo dodaj przez adres. Tutaj działa tylko wideo z bezpośrednich linków (HTTP): torrent i P2P nie są akceptowane.</string>
     <string name="ad_resumo">Katalogi Twoich dodatków. Dodatki tworzą osoby trzecie: kto instaluje dodatek, odpowiada za jego treść.</string>
     <string name="ad_buscar">Szukaj</string>
     <string name="ad_buscar_dica">Nazwa filmu lub serialu</string>
@@ -20,9 +20,34 @@
     <string name="ad_sem_fontes">Brak źródła, które tu działa. Sofaly odtwarza tylko bezpośrednie linki do wideo (HTTP).</string>
     <string name="ad_fontes_resumo">Wybierz źródło</string>
     <string name="ad_dica_voltar">wróć</string>
-    <string name="ad_cfg_det">Zainstalowane dodatki. Aby dodać, użyj panelu webowego.</string>
-    <string name="ad_cfg_como">Aby dodać dodatek, otwórz panel webowy telewizora na telefonie lub komputerze, przejdź do Ustawienia, Dodatki, wklej adres kończący się na manifest.json i potwierdź PIN-em.</string>
+    <string name="ad_cfg_det">Zainstalowane dodatki. Wybierz, aby dodać lub usunąć.</string>
     <string name="ad_cfg_remover_qual">Który dodatek usunąć?</string>
     <string name="ad_cfg_remover">%1$s zostanie usunięty z tego telewizora.</string>
     <string name="ad_cfg_remover_sim">Usuń</string>
+    <string name="ad_add_titulo">Dodaj dodatek</string>
+    <string name="ad_add_item">Dodaj dodatek</string>
+    <string name="ad_add_texto">Skieruj aparat telefonu na kod: panel telewizora otworzy się gotowy do wklejenia adresu dodatku. Albo wpisz go tutaj.</string>
+    <string name="ad_add_qr">Albo otwórz %1$s w telefonie (TV i filmy, Dodatki)</string>
+    <string name="ad_add_sem_painel">Panel internetowy jest wyłączony, więc kod dla telefonu się nie pojawia. Wpisz adres tutaj albo włącz panel w Ustawieniach.</string>
+    <string name="ad_add_digitar">Wpisz adres</string>
+    <string name="ad_add_instalar">Zainstaluj</string>
+    <string name="ad_add_termos_titulo">Przed instalacją</string>
+    <string name="ad_add_termos">Dodatki tworzą osoby trzecie. Sofaly nie tworzy, nie hostuje i nie sprawdza tego, co pokazują. Kto instaluje dodatek, odpowiada za jego treść i za prawo do oglądania. Sofaly odtwarza tylko wideo z bezpośrednich linków: źródła torrent i P2P są pomijane.</string>
+    <string name="ad_add_aceito">Akceptuję</string>
+    <string name="ad_add_ok">Dodatek %1$s jest zainstalowany. Jego katalogi są w Dodatkach.</string>
+    <string name="ad_recusa_p2p">Ten dodatek używa torrent/P2P. Telewizor przyjmuje tylko dodatki z wideo z bezpośrednich linków (HTTP).</string>
+    <string name="ad_recusa_adulto">Dodatek oznaczony jako treści dla dorosłych: niedozwolony.</string>
+    <string name="ad_recusa_configurar">Ten dodatek trzeba najpierw skonfigurować. Skonfiguruj go na jego stronie i użyj podanego adresu.</string>
+    <string name="ad_recusa_sem_recurso">Ten dodatek nie oferuje katalogu, opisu, wideo ani napisów.</string>
+    <string name="ad_recusa_invalido">Pod tym adresem nie ma prawidłowego dodatku (manifest.json).</string>
+    <string name="ad_recusa_endereco">Nieprawidłowy adres. Użyj linku kończącego się na manifest.json.</string>
+    <string name="ad_recusa_cheio">Osiągnięto limit dodatków. Usuń jeden, aby zainstalować inny.</string>
+    <string name="ad_recusa_sem_rede">Dodatek nie odpowiedział. Sprawdź adres i spróbuj ponownie.</string>
+    <string name="ad_recusa_sem_aceite">Zaakceptuj warunki, aby zainstalować.</string>
+    <string name="ad_sug_secao">Polecane</string>
+    <string name="ad_sug_streaming">Co jest na Netflix, Disney+, Max, Prime Video i innych. Wybierz tytuł, aby zobaczyć, gdzie go obejrzeć.</string>
+    <string name="ad_sug_tmdb">Popularne, na czasie i według roku, z The Movie Database.</string>
+    <string name="ad_sug_mubi">Nowe i klasyczne filmy z MUBI.</string>
+    <string name="ad_sug_kitsu">Katalog i odcinki anime z Kitsu.</string>
+    <string name="ad_sug_animeseason">Anime według sezonu i roku.</string>
 </resources>

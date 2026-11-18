@@ -17,6 +17,11 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Addons: new “Add an addon” row (in Addons and in Settings › Addons) with a code for your phone, which opens the panel ready to paste the address, or to type it on the TV</item>
+        <item>Addons: “Recommended” list with checked catalogs (movies and shows from the services, TMDB, MUBI and anime); pick one and confirm with the PIN, no typing</item>
+        <item>Addons: a catalog title with no video to play here shows “Where to watch”, which opens the Google TV search</item>
+        <item>Alarm clock: on the time wheel the bigger number is on top, and the lists no longer show the options underneath</item>
+        <item>Alarm clock: holding the arrow turns the wheel slowly (4 steps per second), so you can stop at the right time</item>
         <item>Games redone like the home screen: recently played with the app icon, On the couch (controllers and pairing), Your Discord crew (voice room with QR, who is online, call the crew) and More options</item>
         <item>Games: the This week card shows the network and how much was played in the last 7 days</item>
         <item>Bigger letters in Settings, Extras, Diagnostics and the other inner screens</item>
@@ -25,19 +30,27 @@
         <item>Time left always shows the same way across the system: “1 h 5 min”</item>
         <item>Movies and Series no longer open empty on “All 0”</item>
         <item>Radios opens on recent stations when there are no favorites yet</item>
-        <item>Alarm clock: the wheel has the bigger number on top, holding an arrow turns it slowly, and the options no longer show under the lists</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>addon_adicionar</item>
+        <item>addon_recomendados</item>
+        <item>despertador_rolete</item>
         <item>jogos_cruz</item>
         <item>letras_maiores</item>
         <item>filmes_cheio</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Add an addon</item>
+        <item>Recommended</item>
+        <item>Alarm wheel</item>
         <item>Games on the cross</item>
         <item>Bigger letters</item>
         <item>Movies opens full</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>In Addons, does the “Add an addon” row show the code, and when scanned on the phone does the panel open at the Addons card?</item>
+        <item>In Addons › Recommended, does picking “The Movie Database” and confirming with the PIN install it, and do its catalogs show and open?</item>
+        <item>In the alarm clock, does holding ▲ raise the hour slowly and stop where you let go?</item>
         <item>Open Games: do ◀ ▶ switch between Recently played, On the couch, Your crew and More options, does each game show the app icon, and does OK open the game?</item>
         <item>In Settings, are the letters bigger with no explanation cut off with “…”?</item>
         <item>Open Movies: does the grid show the movies with focus on one (not “All 0”)?</item>

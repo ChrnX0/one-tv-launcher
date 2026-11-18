@@ -14,6 +14,11 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Addons: nova linha “Adicionar addon” (em Addons e em Configurações › Addons) com um código para o celular, que abre o painel pronto para colar o endereço, ou para digitar na TV</item>
+        <item>Addons: lista “Recomendados” com catálogos conferidos (filmes e séries dos serviços, TMDB, MUBI e anime); escolha e confirme com o PIN, sem digitar nada</item>
+        <item>Addons: título de catálogo sem vídeo para tocar aqui mostra “Onde assistir”, que abre a busca do Google TV</item>
+        <item>Despertador: no rolete da hora o número maior fica em cima, e as listas não mostram mais as opções por baixo</item>
+        <item>Despertador: segurar a seta gira o rolete devagar (4 passos por segundo), dá para parar na hora certa</item>
         <item>Jogos refeito no jeito da tela inicial: jogados por último com o ícone do app, No sofá (controles e parear), Sua turma do Discord (sala de voz com QR, quem está online, chamar a turma) e Mais opções</item>
         <item>Jogos: o cartão Esta semana mostra a rede e quanto se jogou nos últimos 7 dias</item>
         <item>Letras maiores em Configurações, Extras, Diagnóstico e nas outras telas de dentro</item>
@@ -22,14 +27,19 @@
         <item>O tempo que falta aparece sempre do mesmo jeito em todo o sistema: “1 h 5 min”</item>
         <item>Filmes e Séries não abrem mais vazios em “Todos 0”</item>
         <item>Rádios abre nas recentes quando ainda não há favoritas</item>
-        <item>Despertador: o rolete tem o maior em cima, segurar a seta gira devagar e as opções não aparecem mais por baixo das listas</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Adicionar addon</item>
+        <item>Recomendados</item>
+        <item>Rolete do despertador</item>
         <item>Jogos na cruz</item>
         <item>Letras maiores</item>
         <item>Filmes abre cheio</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Em Addons, a linha “Adicionar addon” mostra o código; lido no celular, o painel abre já no cartão Addons?</item>
+        <item>Em Addons › Recomendados, escolher “The Movie Database” e confirmar com o PIN instala, e os catálogos dele aparecem e abrem?</item>
+        <item>No despertador, segurando ▲ a hora sobe devagar e para onde você soltar?</item>
         <item>Abra Jogos: ◀ ▶ trocam entre Jogados por último, No sofá, Sua turma e Mais opções, cada jogo mostra o ícone do app e OK abre o jogo?</item>
         <item>Em Configurações, as letras estão maiores e nenhuma explicação aparece cortada com “…”?</item>
         <item>Abra Filmes: a grade aparece com os filmes e o foco num deles (não fica “Todos 0”)?</item>

@@ -3,7 +3,7 @@
 <resources>
     <string name="ad_titulo">Аддоны</string>
     <string name="ad_destaque">Фильмы и сериалы из ваших аддонов</string>
-    <string name="ad_vazio">Аддонов пока нет. Добавьте в веб-панели (Настройки, Аддоны). Здесь воспроизводятся только прямые ссылки на видео (HTTP): торрент и P2P не поддерживаются.</string>
+    <string name="ad_vazio">Аддонов пока нет. Выберите рекомендуемый ниже или добавьте по адресу. Здесь воспроизводится только видео по прямым ссылкам (HTTP): torrent и P2P не принимаются.</string>
     <string name="ad_resumo">Каталоги ваших аддонов. Аддоны делают третьи лица: кто устанавливает аддон, тот отвечает за его содержимое.</string>
     <string name="ad_buscar">Поиск</string>
     <string name="ad_buscar_dica">Название фильма или сериала</string>
@@ -20,9 +20,34 @@
     <string name="ad_sem_fontes">Нет источника, который здесь воспроизводится. Sofaly воспроизводит только прямые ссылки на видео (HTTP).</string>
     <string name="ad_fontes_resumo">Выберите источник</string>
     <string name="ad_dica_voltar">назад</string>
-    <string name="ad_cfg_det">Установленные аддоны. Добавлять — через веб-панель.</string>
-    <string name="ad_cfg_como">Чтобы добавить аддон, откройте веб-панель телевизора на телефоне или компьютере, перейдите в Настройки, Аддоны, вставьте адрес, оканчивающийся на manifest.json, и подтвердите PIN-кодом.</string>
+    <string name="ad_cfg_det">Установленные аддоны. Выберите, чтобы добавить или удалить.</string>
     <string name="ad_cfg_remover_qual">Какой аддон удалить?</string>
     <string name="ad_cfg_remover">%1$s будет удалён с этого телевизора.</string>
     <string name="ad_cfg_remover_sim">Удалить</string>
+    <string name="ad_add_titulo">Добавить аддон</string>
+    <string name="ad_add_item">Добавить аддон</string>
+    <string name="ad_add_texto">Наведите камеру телефона на код: панель телевизора откроется, чтобы вставить адрес аддона. Или введите его здесь.</string>
+    <string name="ad_add_qr">Или откройте %1$s на телефоне (ТВ и фильмы, Аддоны)</string>
+    <string name="ad_add_sem_painel">Веб-панель выключена, поэтому код для телефона не показывается. Введите адрес здесь или включите панель в Настройках.</string>
+    <string name="ad_add_digitar">Ввести адрес</string>
+    <string name="ad_add_instalar">Установить</string>
+    <string name="ad_add_termos_titulo">Перед установкой</string>
+    <string name="ad_add_termos">Аддоны создают третьи лица. Sofaly не создаёт, не размещает и не проверяет то, что они показывают. Кто устанавливает аддон, отвечает за его содержимое и за право его смотреть. Sofaly воспроизводит видео только по прямым ссылкам: источники torrent и P2P игнорируются.</string>
+    <string name="ad_add_aceito">Принимаю</string>
+    <string name="ad_add_ok">%1$s установлен. Его каталоги — в разделе Аддоны.</string>
+    <string name="ad_recusa_p2p">Этот аддон использует torrent/P2P. Телевизор принимает только аддоны с видео по прямым ссылкам (HTTP).</string>
+    <string name="ad_recusa_adulto">Аддон помечен как контент для взрослых: не принимается.</string>
+    <string name="ad_recusa_configurar">Этот аддон нужно сначала настроить. Настройте его на сайте и используйте выданный адрес.</string>
+    <string name="ad_recusa_sem_recurso">Этот аддон не даёт ни каталога, ни описания, ни видео, ни субтитров.</string>
+    <string name="ad_recusa_invalido">По этому адресу нет корректного аддона (manifest.json).</string>
+    <string name="ad_recusa_endereco">Неверный адрес. Используйте ссылку, которая заканчивается на manifest.json.</string>
+    <string name="ad_recusa_cheio">Достигнут предел аддонов. Удалите один, чтобы установить другой.</string>
+    <string name="ad_recusa_sem_rede">Аддон не ответил. Проверьте адрес и попробуйте снова.</string>
+    <string name="ad_recusa_sem_aceite">Примите условия, чтобы установить.</string>
+    <string name="ad_sug_secao">Рекомендуемые</string>
+    <string name="ad_sug_streaming">Что есть на Netflix, Disney+, Max, Prime Video и других. Выберите название, чтобы узнать, где смотреть.</string>
+    <string name="ad_sug_tmdb">Популярное, в тренде и по годам, из The Movie Database.</string>
+    <string name="ad_sug_mubi">Новые и классические фильмы MUBI.</string>
+    <string name="ad_sug_kitsu">Каталог и серии аниме из Kitsu.</string>
+    <string name="ad_sug_animeseason">Аниме по сезонам и годам.</string>
 </resources>

@@ -3,7 +3,7 @@
 <resources>
     <string name="ad_titulo">Addons</string>
     <string name="ad_destaque">Movies and series from your addons</string>
-    <string name="ad_vazio">No addons yet. Add one in the web panel (Settings, Addons). Only direct video links (HTTP) play here: torrent and P2P are not supported.</string>
+    <string name="ad_vazio">No addons yet. Choose a recommended one below or add one by its address. Only video from direct links (HTTP) plays here: torrent and P2P are not accepted.</string>
     <string name="ad_resumo">Catalogs from your addons. Addons are made by third parties: whoever installs one is responsible for its content.</string>
     <string name="ad_buscar">Search</string>
     <string name="ad_buscar_dica">Name of a movie or series</string>
@@ -20,9 +20,34 @@
     <string name="ad_sem_fontes">No source that plays here. Sofaly only plays direct video links (HTTP).</string>
     <string name="ad_fontes_resumo">Choose a source</string>
     <string name="ad_dica_voltar">back</string>
-    <string name="ad_cfg_det">Installed addons. To add one, use the web panel.</string>
-    <string name="ad_cfg_como">To add an addon, open the TV\'s web panel on your phone or computer, go to Settings, Addons, paste the address that ends in manifest.json and confirm with the PIN.</string>
+    <string name="ad_cfg_det">Installed addons. Choose to add or remove.</string>
     <string name="ad_cfg_remover_qual">Remove which addon?</string>
     <string name="ad_cfg_remover">%1$s will be removed from this TV.</string>
     <string name="ad_cfg_remover_sim">Remove</string>
+    <string name="ad_add_titulo">Add an addon</string>
+    <string name="ad_add_item">Add an addon</string>
+    <string name="ad_add_texto">Scan the code with your phone: the TV panel opens ready to paste the addon address. Or type it here.</string>
+    <string name="ad_add_qr">Or open %1$s on your phone (TV and movies, Addons)</string>
+    <string name="ad_add_sem_painel">The web panel is off, so the phone code is not available. Type the address here or turn the panel on in Settings.</string>
+    <string name="ad_add_digitar">Type address</string>
+    <string name="ad_add_instalar">Install</string>
+    <string name="ad_add_termos_titulo">Before installing</string>
+    <string name="ad_add_termos">Addons are made by third parties. Sofaly does not create, host or check what they show. Whoever installs an addon is responsible for its content and for having the right to watch it. Sofaly only plays video from direct links: torrent and P2P sources are ignored.</string>
+    <string name="ad_add_aceito">I accept</string>
+    <string name="ad_add_ok">%1$s is installed. Its catalogs are in Addons.</string>
+    <string name="ad_recusa_p2p">This addon uses torrent/P2P. The TV only accepts addons with video from direct links (HTTP).</string>
+    <string name="ad_recusa_adulto">Addon marked as adult content: not accepted.</string>
+    <string name="ad_recusa_configurar">This addon must be set up first. Set it up on its website and use the address it gives you.</string>
+    <string name="ad_recusa_sem_recurso">This addon offers no catalog, details, video or subtitles.</string>
+    <string name="ad_recusa_invalido">This address has no valid addon (manifest.json).</string>
+    <string name="ad_recusa_endereco">Invalid address. Use the link that ends in manifest.json.</string>
+    <string name="ad_recusa_cheio">Addon limit reached. Remove one to install another.</string>
+    <string name="ad_recusa_sem_rede">The addon did not answer. Check the address and try again.</string>
+    <string name="ad_recusa_sem_aceite">Accept the terms to install.</string>
+    <string name="ad_sug_secao">Recommended</string>
+    <string name="ad_sug_streaming">What is on Netflix, Disney+, Max, Prime Video and more. Choose a title to see where to watch.</string>
+    <string name="ad_sug_tmdb">Popular, trending and by year, from The Movie Database.</string>
+    <string name="ad_sug_mubi">New and classic films from MUBI.</string>
+    <string name="ad_sug_kitsu">Anime catalog and episodes from Kitsu.</string>
+    <string name="ad_sug_animeseason">Anime by season and year.</string>
 </resources>

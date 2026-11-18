@@ -468,20 +468,19 @@ class ConfigLauncherActivity : Activity() {
             }
         }
         c.addView(linhaContagem)
-        // Addons (16/11/2026): ver e remover aqui; instalar é pelo painel web (colar endereço é penoso no controle).
+        // Addons (16/11/2026; 18/11 ganhou "Adicionar" aqui, com QR para o painel ou digitando: AddonInstallDialog).
         fun rotuloAddons() = AddonsTv.instalados(this).size.let { if (it == 0) getString(R.string.cf_nenhum) else it.toString() }
         lateinit var linhaAddons: LinhaCfg
         linhaAddons = linha(getString(R.string.ad_titulo), getString(R.string.ad_cfg_det), valor = rotuloAddons()) {
             val todos = AddonsTv.instalados(this)
-            if (todos.isEmpty()) {
-                CaixaTv(this).setTitle(getString(R.string.ad_titulo)).setMessage(getString(R.string.ad_cfg_como))
-                    .setPositiveButton(getString(android.R.string.ok), null).show()
-                return@linha
-            }
-            Estilo.lista(this, getString(R.string.ad_cfg_remover_qual), todos.map { it.m.nome }, emptyList()) { i ->
-                val a = todos[i]
+            val atualizar = { linhaAddons.valor(rotuloAddons()) }
+            if (todos.isEmpty()) { AddonInstallDialog.mostrar(this, atualizar); return@linha }
+            // 1º item = adicionar; os outros = addons instalados (escolher um pergunta se remove).
+            Estilo.lista(this, getString(R.string.ad_titulo), listOf(getString(R.string.ad_add_item)) + todos.map { it.m.nome }, emptyList()) { i ->
+                if (i == 0) { AddonInstallDialog.mostrar(this, atualizar); return@lista }
+                val a = todos[i - 1]
                 CaixaTv(this).setTitle(a.m.nome).setMessage(getString(R.string.ad_cfg_remover, a.m.nome))
-                    .setPositiveButton(getString(R.string.ad_cfg_remover_sim)) { _, _ -> AddonsTv.remover(this, a.base); linhaAddons.valor(rotuloAddons()) }
+                    .setPositiveButton(getString(R.string.ad_cfg_remover_sim)) { _, _ -> AddonsTv.remover(this, a.base); atualizar() }
                     .setNegativeButton(getString(R.string.sv_cancelar), null).show()
             }
         }
