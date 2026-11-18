@@ -181,9 +181,16 @@ object ServicosSync {
     }
 
     /** Ids TMDB de cada chave do catálogo, e o caminho de volta. */
-    private class Indice(catalogo: List<Titulo>) {
+    private class Indice(private val catalogo: List<Titulo>) {
         val porChave = HashMap<String, Int>(); val porId = HashMap<Int, String>()
         init { for (t in catalogo) t.tmdb?.let { porChave[t.chave] = it; porId.putIfAbsent(it, t.chave) } }
+
+        /** Os itens de fora ensinam o id aos títulos do catálogo que vieram sem (casando por nome + ano). */
+        fun ensinar(remoto: List<Item>) {
+            for ((ch, id) in SincronizarFilmes.idsPorNome(catalogo, remoto)) {
+                if (porChave.putIfAbsent(ch, id) == null) porId.putIfAbsent(id, ch)
+            }
+        }
     }
 
     private fun tmdbDe(ctx: Context, chave: String, ind: Indice): Int? = ind.porChave[chave] ?: InfoExternaCache.guardado(ctx, chave)?.tmdb
@@ -388,6 +395,7 @@ object ServicosSync {
      */
     private fun aplicarInteresses(ctx: Context, s: Servico, tipo: Tipo, ind: Indice, remoto: List<Item>, enviar: Boolean,
                                   mandar: (List<Item>, List<Item>) -> Pair<List<Item>, List<Item>>): Boolean {
+        ind.ensinar(remoto)
         val local = idsLocaisInteresses(ctx, tipo, ind)
         val remotoIds = remoto.mapNotNull { it.ids.tmdb }.toSet()
         val chaveBase = "base_${s.id}_${tipo.name}"
@@ -418,6 +426,7 @@ object ServicosSync {
      * mudou algo aqui e o que subiu (com a data), para a cópia local do Simkl já saber.
      */
     private fun aplicarVistosFilmes(ctx: Context, s: Servico, ind: Indice, vistos: List<SincronizarFilmes.Visto>): Pair<Boolean, List<Pair<Item, Long>>> {
+        ind.ensinar(vistos.map { it.item })
         val pos = PlayerArmazem.posicoes(ctx)
         val concluidosAqui = HashMap<Int, Pair<String, Long>>()
         for ((ch, p) in pos) if (Vod.finalizado(p)) ind.porChave[ch]?.let { concluidosAqui[it] = ch to p.quando }
@@ -470,6 +479,7 @@ object ServicosSync {
      * senão fica guardada e o player aplica ao abrir ([pausaDeFora]).
      */
     private fun aplicarPausas(ctx: Context, s: Servico, tipo: Tipo, ind: Indice, pausas: List<SincronizarFilmes.Pausa>): Boolean {
+        ind.ensinar(pausas.map { it.item })
         val guardar = JSONObject()
         var mudou = false
         for (p in pausas) {

@@ -277,6 +277,7 @@ object ServicosContas {
     /** GET (sem corpo) ou POST (com corpo JSON). Só https; sem seguir redirecionamento. */
     fun pedir(url: String, cabecalhos: Map<String, String>, corpo: String? = null): Resposta {
         require(url.startsWith("https://"))
+        if (url.startsWith(ServicosFilmes.SIMKL_API)) espacarSimkl()
         val c = URL(url).openConnection() as HttpURLConnection
         try {
             c.connectTimeout = 10_000; c.readTimeout = 20_000
@@ -292,6 +293,25 @@ object ServicosContas {
             return Resposta(codigo, texto, c.getHeaderField("Location"))
         } finally { c.disconnect() }
     }
+
+    private val travaSimkl = Any()
+    private var ultimoSimklMs = 0L
+
+    /**
+     * Uma chamada ao Simkl de cada vez, com [ESPACO_SIMKL_MS] entre elas. O painel Debug do Simkl marca como rajada 3+
+     * pedidos no mesmo segundo do mesmo IP (visto no teste de 18/11/2026: activities + all-items/movies + shows no
+     * mesmo segundo; e 4 no mesmo segundo no Sincronizar agora: activities + all-items delta + ids_only + playback).
+     * Com 600 ms cabem no máximo 2 em qualquer segundo do relógio (450 ms ainda deixava 0 / 0,45 / 0,9 s caírem
+     * juntos); 4 chamadas levam ~1,8 s a mais, em segundo plano.
+     */
+    private fun espacarSimkl() = synchronized(travaSimkl) {
+        val agora = android.os.SystemClock.elapsedRealtime()
+        val falta = ultimoSimklMs + ESPACO_SIMKL_MS - agora
+        if (ultimoSimklMs > 0 && falta in 1..ESPACO_SIMKL_MS) Thread.sleep(falta)
+        ultimoSimklMs = android.os.SystemClock.elapsedRealtime()
+    }
+
+    private const val ESPACO_SIMKL_MS = 600L
 
     /** Lê até [max] bytes (readNBytes só existe no Android 13+). */
     private fun lerAte(e: java.io.InputStream, max: Int): ByteArray {
