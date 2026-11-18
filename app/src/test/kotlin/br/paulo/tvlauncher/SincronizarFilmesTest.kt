@@ -192,4 +192,81 @@ class SincronizarFilmesTest {
         val itens = listOf(filme(1, "A", 2000), Item(Tipo.SERIE, Ids(imdb = "tt0903747"), "B"))
         assertEquals(itens, SincronizarFilmes.itensDeJson(SincronizarFilmes.itensParaJson(itens)))
     }
+
+    // ---------------------------------------------------------------- Simkl: cópia local + delta (guia /sync, 18/11/2026)
+
+    private fun ent(tipo: Tipo, simkl: Int?, tmdb: Int?, status: String) =
+        SincronizarFilmes.EntradaSimkl(Item(tipo, Ids(tmdb = tmdb, simkl = simkl)), status, 1L)
+
+    @Test fun simklPlanoSegueOGuia() {
+        val foto = mapOf("all" to "A", "movies.removed_from_list" to "R", "movies.playback" to "P")
+        // Sem cópia local: fase 1 (tudo), uma vez.
+        assertTrue(SincronizarFilmes.simklPlano(null, foto, false, false, false).completo)
+        assertTrue(SincronizarFilmes.simklPlano(foto, foto, false, false, false).completo)
+        // "all" igual: nada a buscar.
+        val nada = SincronizarFilmes.simklPlano(foto, foto, true, true, true)
+        assertFalse(nada.completo); assertNull(nada.desde); assertFalse(nada.conferirTirados); assertFalse(nada.pausas)
+        // "all" mudou: date_from = o "all" SALVO (não o novo).
+        val so = SincronizarFilmes.simklPlano(foto, foto + ("all" to "B"), true, false, false)
+        assertEquals("A", so.desde); assertFalse(so.conferirTirados); assertFalse(so.pausas)
+        // removed_from_list andou: confere a lista de ids.
+        assertTrue(SincronizarFilmes.simklPlano(foto, foto + mapOf("all" to "B", "movies.removed_from_list" to "R2"), true, false, false).conferirTirados)
+        // Pausas: só com "continuar", quando o playback andou ou nunca vieram.
+        assertTrue(SincronizarFilmes.simklPlano(foto, foto + mapOf("all" to "B", "movies.playback" to "P2"), true, true, true).pausas)
+        assertFalse(SincronizarFilmes.simklPlano(foto, foto + mapOf("all" to "B", "movies.playback" to "P2"), true, false, true).pausas)
+        assertTrue(SincronizarFilmes.simklPlano(foto, foto, true, true, false).pausas)
+    }
+
+    @Test fun simklLerIdsDoSimklIdsOnly() {
+        val ids = SincronizarFilmes.simklLerIds("""{"movies":[{"movie":{"ids":{"simkl":53536}}}],"shows":[{"show":{"ids":{"simkl":967226}}}],"anime":[{"show":{"ids":{"simkl":38636}}}]}""")
+        assertEquals(setOf(53536, 967226, 38636), ids)
+        assertEquals(emptySet<Int>(), SincronizarFilmes.simklLerIds("{}"))
+        assertNull(SincronizarFilmes.simklLerIds("<html>"))
+    }
+
+    @Test fun simklMesclarTrocaProvisorioEStatus() {
+        var c = SincronizarFilmes.simklMesclar(emptyMap(), listOf(ent(Tipo.FILME, 1, 10, "plantowatch"), ent(Tipo.SERIE, 2, 10, "watching")))
+        assertEquals(setOf("s1", "s2"), c.keys)   // mesmo tmdb, tipos diferentes: dois títulos
+        // Nós pusemos o tmdb 30 na lista: entra provisório; o date_from traz o id do Simkl e o provisório sai.
+        c = SincronizarFilmes.simklMarcar(c, Item(Tipo.FILME, Ids(tmdb = 30)), "plantowatch", 5L)
+        assertTrue("t30:FILME" in c.keys)
+        c = SincronizarFilmes.simklMesclar(c, listOf(ent(Tipo.FILME, 3, 30, "plantowatch"), ent(Tipo.FILME, 1, 10, "completed")))
+        assertEquals(setOf("s1", "s2", "s3"), c.keys)
+        assertEquals("completed", c.getValue("s1").status)
+    }
+
+    @Test fun simklTirarSumidosPoupaProvisorios() {
+        var c = SincronizarFilmes.simklMesclar(emptyMap(), listOf(ent(Tipo.FILME, 1, 10, "plantowatch"), ent(Tipo.FILME, 2, 20, "completed")))
+        c = SincronizarFilmes.simklMarcar(c, Item(Tipo.FILME, Ids(tmdb = 30)), "plantowatch", 5L)
+        c = SincronizarFilmes.simklTirarSumidos(c, setOf(2))
+        assertEquals(setOf("s2", "t30:FILME"), c.keys)
+    }
+
+    @Test fun simklMarcarTiraEMudaStatus() {
+        var c = SincronizarFilmes.simklMesclar(emptyMap(), listOf(ent(Tipo.FILME, 1, 10, "plantowatch"), ent(Tipo.SERIE, 2, 10, "plantowatch")))
+        c = SincronizarFilmes.simklMarcar(c, Item(Tipo.FILME, Ids(tmdb = 10)), "completed", 9L)
+        assertEquals("completed", c.getValue("s1").status); assertEquals(9L, c.getValue("s1").quandoMs)
+        assertEquals("plantowatch", c.getValue("s2").status)   // a série com o mesmo tmdb não muda
+        c = SincronizarFilmes.simklMarcar(c, Item(Tipo.SERIE, Ids(tmdb = 10)), null, 9L)
+        assertEquals(setOf("s1"), c.keys)
+    }
+
+    @Test fun simklBibliotecaIdaEVolta() {
+        val c = SincronizarFilmes.simklMesclar(emptyMap(), listOf(
+            SincronizarFilmes.EntradaSimkl(Item(Tipo.FILME, Ids(tmdb = 27205, imdb = "tt1375666", simkl = 53536), "Inception", 2010), "plantowatch", 7L),
+            ent(Tipo.SERIE, 38636, null, "completed")))
+        val volta = SincronizarFilmes.simklBibliotecaDeJson(org.json.JSONArray(SincronizarFilmes.simklBibliotecaParaJson(c).toString()))
+        assertEquals(c, volta)
+    }
+
+    @Test fun simklFotoAposTirarSoAndaORemoved() {
+        val salva = mapOf("all" to "A", "movies.removed_from_list" to "R", "movies.plantowatch" to "P")
+        val nova = mapOf("all" to "B", "movies.removed_from_list" to "R2", "movies.plantowatch" to "P2")
+        assertEquals(mapOf("all" to "A", "movies.removed_from_list" to "R2", "movies.plantowatch" to "P"), SincronizarFilmes.simklFotoAposTirar(salva, nova))
+    }
+
+    @Test fun simklAgenteNomeBarraVersao() {
+        assertEquals("sofaly/1.0.457800", ServicosFilmes.simklCabecalhos("abc", 457800, "t")["User-Agent"])
+        assertEquals("sofaly/1.0.457800", ServicosFilmes.simklCabecalhosForm(457800)["User-Agent"])
+    }
 }
