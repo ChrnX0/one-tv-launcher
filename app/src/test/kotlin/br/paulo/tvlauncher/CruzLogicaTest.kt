@@ -105,4 +105,27 @@ class CruzLogicaTest {
         assertEquals(listOf("p12", "p9", "p3", "p1", "p2", "p4", "p5", "p6", CruzLogica.ID_TODOS_APPS), col)
         assertEquals(listOf(CruzLogica.ID_TODOS_APPS), CruzLogica.appsDaColuna(emptyList(), emptyMap()))
     }
+
+    @Test fun frequenciaGanhaDoUltimoUsoEFixadosFicamNoTopo() {
+        val linha = listOf("youtube", "globoplay", "netflix", "spotify")
+        val uso = mapOf("globoplay" to 2000L, "youtube" to 1000L)
+        val freq = mapOf("youtube" to 6.0, "globoplay" to 1.0)
+        // o mais aberto vence o último aberto
+        assertEquals(listOf("youtube", "globoplay", "netflix", "spotify", CruzLogica.ID_TODOS_APPS), CruzLogica.appsDaColuna(linha, uso, freq))
+        // fixado vai ao topo na ordem em que foi fixado; fixado desinstalado some sem erro
+        assertEquals(listOf("spotify", "netflix", "youtube", "globoplay", CruzLogica.ID_TODOS_APPS),
+            CruzLogica.appsDaColuna(linha, uso, freq, listOf("spotify", "sumiu", "netflix", "spotify")))
+    }
+
+    @Test fun aberturaValeMetadeAcadaSeteDias() {
+        val semana = CruzLogica.MEIA_VIDA_MS
+        assertEquals(4.0, CruzLogica.frequenciaAgora(8.0, 0L, semana), 1e-9)
+        assertEquals(2.0, CruzLogica.frequenciaAgora(8.0, 0L, 2 * semana), 1e-9)
+        assertEquals(8.0, CruzLogica.frequenciaAgora(8.0, 100L, 50L), 1e-9)   // relógio que voltou: não cresce nem quebra
+        assertEquals(3.0, CruzLogica.somarAbertura(4.0, 0L, semana), 1e-9)
+        // 1 abertura por dia por 30 dias fica perto de 1/(1-2^(-1/7)) ~ 10,6, sem crescer sem fim
+        var p = 0.0; var t = 0L
+        repeat(30) { p = CruzLogica.somarAbertura(p, t, t + 86_400_000L); t += 86_400_000L }
+        assertTrue(p in 8.0..10.6)
+    }
 }

@@ -30,4 +30,8 @@
     <string name="cruz_sons">Gezinme sesleri</string>
     <string name="cruz_sons_det">Kısa ve yumuşak; bir şey çalarken sessiz</string>
     <string name="cruz_nao_abriu">Açılamadı</string>
+    <string name="cruz_posicao">%1$d / %2$d</string>
+    <string name="cruz_fixar">En üste sabitle</string>
+    <string name="cruz_soltar">Sabitlemeyi kaldır</string>
+    <string name="cruz_tocando">Çalıyor: %1$s</string>
 </resources>

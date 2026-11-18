@@ -33,10 +33,14 @@ import android.widget.TextView
  */
 class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte: Typeface) : FrameLayout(ctx) {
 
-    /** Um item da coluna. [abrir] roda no OK; [opcoes] no OK segurado (null = segurar é igual a apertar). */
+    /**
+     * Um item da coluna. [abrir] roda no OK; [opcoes] no OK segurado (null = segurar é igual a apertar).
+     * [progresso] (0..1): quanto já foi visto (filme, série, programa da TV ao vivo); vira uma barra embaixo do ícone.
+     */
     class Item(
         val id: String, val nome: String, val sub: String, val icone: Drawable,
         val abrir: () -> Unit, val opcoes: (() -> Unit)? = null, val aoEscolher: (() -> Unit)? = null,
+        val progresso: Float? = null,
     )
     class Categoria(val cat: CruzLogica.Categoria, val nome: String, val icone: Drawable, val itens: List<Item>)
 
@@ -84,6 +88,14 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         const val APERTO = 0.92f        // "aperto" do ícone no OK: resposta no mesmo quadro do toque
         const val APERTO_MS = 70L
         const val NAO_ABRIU_MS = 4000L  // "Não deu para abrir" no lugar da linha de baixo
+        const val FONTE_POSICAO = 18f   // "3 de 9"
+        const val BARRA_A = 5f          // altura da barra de progresso (dp)
+        const val BARRA_L = 0.72f       // largura da barra em fração do ícone
+        // Seta ▼ "tem mais embaixo": abaixo do 3º vizinho (o último visível), no centro dos ícones pequenos.
+        const val SETA_L = 28
+        const val SETA_A = 12
+        const val SETA_Y = 521f
+        const val DICA_MS = 1500L       // cruz parada por este tempo: a seta aparece (some na próxima tecla)
         const val COR_CATEGORIA = 0xFFE8E2DA.toInt()
         const val COR_SUB = 0xFFE2D8CF.toInt()
     }
@@ -106,6 +118,10 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private val viewsCat = ArrayList<View>()
     private val viewsItem = ArrayList<List<ItemView>>()
     private val rotulo: TextView
+    /** "3 de 9" ao lado do nome da categoria: quanto falta na coluna (estudo da HOME, onda 2). */
+    private val posicao: TextView
+    /** Seta ▼ embaixo da coluna quando há itens escondidos lá embaixo; aparece com a cruz parada ([DICA_MS]). */
+    private val maisAbaixo: View
     private val dm = resources.displayMetrics
     private fun dp(v: Float) = v * dm.density
     private fun dpi(v: Int) = (v * dm.density + 0.5f).toInt()
@@ -113,6 +129,28 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     /** As partes de um item que mudam com a escolha. */
     private inner class ItemView(val raiz: LinearLayout, val icone: ImageView, val nome: TextView, val sub: TextView, val traco: View) {
         var voltarSub: Runnable? = null
+        /** Barra de "quanto já foi visto", criada só no item que tem progresso. */
+        var barra: BarraProgresso? = null
+    }
+
+    /** Barra fina e arredondada no pé do ícone (como nas miniaturas de vídeo): trilho claro, parte vista na cor de destaque. */
+    private inner class BarraProgresso : Drawable() {
+        var valor = 0f
+            set(v) { field = v.coerceIn(0f, 1f); invalidateSelf() }
+        private val trilho = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply { color = 0x59FFFFFF }
+        private val cheio = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply { color = Estilo.ACENTO }
+        private val r = android.graphics.RectF()
+        override fun draw(c: android.graphics.Canvas) {
+            val b = bounds
+            val a = dp(BARRA_A); val l = b.width() * BARRA_L
+            r.set(b.exactCenterX() - l / 2f, b.bottom - a - dp(2f), b.exactCenterX() + l / 2f, b.bottom - dp(2f))
+            c.drawRoundRect(r, a / 2f, a / 2f, trilho)
+            if (valor > 0f) { r.right = r.left + maxOf(a, l * valor); c.drawRoundRect(r, a / 2f, a / 2f, cheio) }
+        }
+        override fun setAlpha(alpha: Int) {}
+        override fun setColorFilter(cf: android.graphics.ColorFilter?) {}
+        @Deprecated("Deprecated in Java")
+        override fun getOpacity() = android.graphics.PixelFormat.TRANSLUCENT
     }
 
     init {
@@ -134,10 +172,28 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             includeFontPadding = false
             importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
         }
-        addView(rotulo, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
-        rotulo.translationX = dp(COLUNA - ICONE_L / 2f)
-        rotulo.translationY = dp(ROTULO_Y)
-        setOnFocusChangeListener { _, _ -> posicionar(animar = false); anunciar() }
+        posicao = TextView(ctx).apply {
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, FONTE_POSICAO)
+            setTextColor(COR_SUB)
+            typeface = fonte
+            includeFontPadding = false
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            setShadowLayer(dp(6f), 0f, 0f, 0x99000000.toInt())
+        }
+        val cabecalho = LinearLayout(ctx).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.BOTTOM
+            addView(rotulo, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
+            addView(posicao, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply { marginStart = dpi(14) })
+        }
+        addView(cabecalho, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
+        cabecalho.translationX = dp(COLUNA - ICONE_L / 2f)
+        cabecalho.translationY = dp(ROTULO_Y)
+        maisAbaixo = Seta(ctx).apply { alpha = 0f; importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO }
+        addView(maisAbaixo, LayoutParams(dpi(SETA_L), dpi(SETA_A)))
+        maisAbaixo.translationX = dp(COLUNA - SETA_L / 2f)
+        maisAbaixo.translationY = dp(SETA_Y)
+        setOnFocusChangeListener { _, tem -> posicionar(animar = false); anunciar(); if (tem) dicaDepois() else esconderDica() }
     }
 
     /**
@@ -194,6 +250,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         repeticao = event.repeatCount
+        esconderDica()
         val t = when (keyCode) {
             KeyEvent.KEYCODE_DPAD_LEFT -> CruzLogica.Tecla.ESQUERDA
             KeyEvent.KEYCODE_DPAD_RIGHT -> CruzLogica.Tecla.DIREITA
@@ -291,12 +348,49 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         iv.sub.postDelayed(iv.voltarSub, NAO_ABRIU_MS)
     }
 
+    // ---- dica de "tem mais embaixo" (idosos acham a coluna mais rápido com dica de seta; notas do estudo, IJHCI 2018)
+
+    private val mostrarDica = Runnable {
+        val n = categoriaAtual()?.itens?.size ?: 0
+        val sel = estado.sel.getOrElse(estado.cat) { 0 }
+        val tem = sel + ALFA_COLUNA.keys.max() < n - 1 && (hasFocus() || isFocused)
+        maisAbaixo.animate().cancel()
+        if (tem) maisAbaixo.animate().alpha(0.8f).setDuration(if (semAnimacao()) 0L else 300L).start() else maisAbaixo.alpha = 0f
+    }
+
+    private fun dicaDepois() { removeCallbacks(mostrarDica); postDelayed(mostrarDica, DICA_MS) }
+
+    private fun esconderDica() { removeCallbacks(mostrarDica); maisAbaixo.animate().cancel(); maisAbaixo.alpha = 0f }
+
+    /** Um "v" de traço arredondado, na cor da linha de baixo. Desenhado à mão: nenhuma fonte garante o glifo ▾. */
+    private class Seta(ctx: Context) : View(ctx) {
+        private val tinta = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
+            color = COR_SUB
+            style = android.graphics.Paint.Style.STROKE
+            strokeCap = android.graphics.Paint.Cap.ROUND
+            strokeJoin = android.graphics.Paint.Join.ROUND
+            setShadowLayer(4f, 0f, 0f, 0x99000000.toInt())
+        }
+        private val caminho = android.graphics.Path()
+        override fun onDraw(c: android.graphics.Canvas) {
+            val e = height * 0.28f
+            tinta.strokeWidth = e
+            caminho.reset()
+            caminho.moveTo(e, e); caminho.lineTo(width / 2f, height - e); caminho.lineTo(width - e, e)
+            c.drawPath(caminho, tinta)
+        }
+    }
+
     private fun viewAtual(): ItemView? = viewsItem.getOrNull(estado.cat)?.getOrNull(estado.sel.getOrElse(estado.cat) { 0 })
 
     private fun avisarMudanca() {
         val c = categoriaAtual() ?: return
         val i = itemAtual() ?: return
         rotulo.text = c.nome.uppercase()
+        val n = c.itens.size
+        val sel = estado.sel.getOrElse(estado.cat) { 0 }
+        posicao.text = if (n > 1) context.getString(R.string.cruz_posicao, sel + 1, n) else ""
+        dicaDepois()
         i.aoEscolher?.invoke()
         aoMudar?.invoke(c, i)
         anunciar()
@@ -373,6 +467,13 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         if (v.nome.text.toString() != item.nome) v.nome.text = item.nome
         if (v.sub.text.toString() != item.sub) v.sub.text = item.sub
         v.sub.visibility = if (item.sub.isEmpty()) View.GONE else View.VISIBLE
+        val p = item.progresso
+        if (p == null) { if (v.icone.foreground != null) v.icone.foreground = null }
+        else {
+            val b = v.barra ?: BarraProgresso().also { v.barra = it }
+            b.valor = p
+            if (v.icone.foreground !== b) v.icone.foreground = b
+        }
     }
 
     private fun onda(distancia: Int) = if (semOnda) 0L else minOf(distancia * ONDA_MS, ONDA_MAX_MS)
@@ -516,6 +617,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         Choreographer.getInstance().removeFrameCallback(quadro); quadroPedido = false
+        removeCallbacks(mostrarDica)
         // fora da tela: tudo direto no lugar (nada fica no meio do caminho)
         ativas.toList().forEach { m -> m.andar(Long.MAX_VALUE, 5f) }
         ativas.clear()
@@ -527,7 +629,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private fun anunciar() {
         val c = categoriaAtual() ?: return
         val i = itemAtual() ?: return
-        contentDescription = listOf(c.nome, i.nome, i.sub).filter { it.isNotEmpty() }.joinToString(", ")
+        contentDescription = listOf(c.nome, i.nome, i.sub, posicao.text.toString()).filter { it.isNotEmpty() }.joinToString(", ")
         if (isFocused) sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
     }
 

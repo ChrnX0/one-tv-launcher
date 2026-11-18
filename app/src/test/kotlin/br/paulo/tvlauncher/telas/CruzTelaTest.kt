@@ -56,11 +56,12 @@ class CruzTelaTest {
         raiz.addView(cruz, FrameLayout.LayoutParams(-1, -1))
         val abertos = mutableListOf<String>()
         fun ic(t: IconeCruz.Tipo) = IconeCruz(t, estilo)
-        fun it(id: String, n: String, sub: String, t: IconeCruz.Tipo) = HomeCruz.Item(id, n, sub, ic(t), { abertos += id })
+        fun it(id: String, n: String, sub: String, t: IconeCruz.Tipo, visto: Float? = null) =
+            HomeCruz.Item(id, n, sub, ic(t), { abertos += id }, progresso = visto)
         cruz.definir(listOf(
             HomeCruz.Categoria(CruzLogica.Categoria.CONTINUAR, "Continuar", ic(IconeCruz.Tipo.CONTINUAR), listOf(
-                it("c:serie", "O Último Farol", "T1 E4 · faltam 18 min", IconeCruz.Tipo.SERIES),
-                it("c:filme", "Maré Alta", "Filme · faltam 52 min", IconeCruz.Tipo.FILMES))),
+                it("c:serie", "O Último Farol", "T1 E4 · faltam 18 min", IconeCruz.Tipo.SERIES, visto = 0.6f),
+                it("c:filme", "Maré Alta", "Filme · faltam 52 min", IconeCruz.Tipo.FILMES, visto = 0.45f))),
             HomeCruz.Categoria(CruzLogica.Categoria.ASSISTIR, "Assistir", ic(IconeCruz.Tipo.ASSISTIR), listOf(
                 it("tv", "TV", "Canal 5 · Jornal da Noite", IconeCruz.Tipo.TV),
                 it("series", "Séries", "O Último Farol · T1 E4", IconeCruz.Tipo.SERIES),
