@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Player de podcast em tela cheia (PodcastPlayerActivity, 18/11/2026). -->
+<resources>
+    <string name="pl_termina">%1$s 结束</string>
+    <string name="pl_dorme_em">%1$d 分钟后停止</string>
+    <string name="pl_a_seguir">接下来</string>
+    <string name="pl_dormir">睡眠定时</string>
+    <string name="pl_dormir_min">%1$d 分钟后</string>
+    <string name="pl_barra_dica">◀ ▶ 移动 10 秒 · 按住更快</string>
+    <string name="pl_abrir">打开播放器</string>
+    <string name="pl_abrir_det">全屏，并显示接下来播放的内容</string>
+</resources>

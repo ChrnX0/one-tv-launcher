@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Player de podcast em tela cheia (PodcastPlayerActivity, 18/11/2026). -->
+<resources>
+    <string name="pl_termina">%1$s에 종료</string>
+    <string name="pl_dorme_em">%1$d분 후 꺼짐</string>
+    <string name="pl_a_seguir">다음 재생</string>
+    <string name="pl_dormir">취침 타이머</string>
+    <string name="pl_dormir_min">%1$d분 후</string>
+    <string name="pl_barra_dica">◀ ▶ 10초 이동 · 길게 누르면 더 빠르게</string>
+    <string name="pl_abrir">플레이어 열기</string>
+    <string name="pl_abrir_det">전체 화면, 다음 재생 목록과 함께</string>
+</resources>

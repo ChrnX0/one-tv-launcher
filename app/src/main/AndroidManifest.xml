@@ -984,6 +984,9 @@
         <activity android:name=".PodcastsActivity" android:exported="false" android:process=":player"
             android:excludeFromRecents="true" android:launchMode="singleTask"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection" />
+        <activity android:name=".PodcastPlayerActivity" android:exported="false" android:process=":player"
+            android:excludeFromRecents="true" android:launchMode="singleTop"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection" />
         <activity android:name=".GravacoesActivity" android:exported="false" android:process=":player"
             android:excludeFromRecents="true"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection" />

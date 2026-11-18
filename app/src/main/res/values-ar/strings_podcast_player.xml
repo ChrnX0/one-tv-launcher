@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Player de podcast em tela cheia (PodcastPlayerActivity, 18/11/2026). -->
+<resources>
+    <string name="pl_termina">ينتهي في %1$s</string>
+    <string name="pl_dorme_em">يتوقف بعد %1$d د</string>
+    <string name="pl_a_seguir">التالي</string>
+    <string name="pl_dormir">مؤقت النوم</string>
+    <string name="pl_dormir_min">بعد %1$d د</string>
+    <string name="pl_barra_dica">◀ ▶ تنقل 10 ث · اضغط مطولًا للإسراع</string>
+    <string name="pl_abrir">فتح المشغل</string>
+    <string name="pl_abrir_det">ملء الشاشة، مع ما يُشغَّل بعد ذلك</string>
+</resources>

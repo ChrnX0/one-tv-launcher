@@ -25,6 +25,8 @@ class IconeOuvir(val tipo: Tipo) : Drawable() {
     enum class Tipo {
         TOCANDO, PAUSAR, CONTINUAR, VOLTAR, AVANCAR, VELOCIDADE, SILENCIO, PARAR, SAIR,
         FAVORITAS, RECENTES, PERTO, PAIS, GENEROS, BUSCAR, EM_ALTA, ADICIONAR, CELULAR, NOVOS, MEUS, EPISODIOS, RADIO, PODCAST,
+        /** Timer para dormir do player de podcast (18/11/2026). */
+        DORMIR,
     }
 
     companion object {
@@ -36,6 +38,7 @@ class IconeOuvir(val tipo: Tipo) : Drawable() {
             Tipo.SILENCIO -> 0xFF9CD27E                               // verde-folha
             Tipo.PARAR -> 0xFFE8E2DA                                  // creme
             Tipo.SAIR -> 0xFFB9C6E4                                   // luar
+            Tipo.DORMIR -> 0xFFB9C6E4                                 // luar
             Tipo.FAVORITAS -> 0xFFF2B84B                              // âmbar
             Tipo.RECENTES -> 0xFFB9C6E4
             Tipo.PERTO -> 0xFFF59E5B                                  // laranja claro
@@ -166,6 +169,12 @@ class IconeOuvir(val tipo: Tipo) : Drawable() {
                 c.drawLine(11f, 12f, 11.4f, 12f, traco); c.drawLine(12.8f, 12f, 13.2f, 12f, traco)
             }
             Tipo.PARAR -> ret(c, 5.5f, 5.5f, 18.5f, 18.5f, 2f)
+            Tipo.DORMIR -> {   // lua crescente (um círculo menos outro) e uma estrelinha
+                p.reset(); p.addCircle(11f, 13f, 8.5f, Path.Direction.CW)
+                val corte = Path().apply { addCircle(16.5f, 8.5f, 7f, Path.Direction.CW) }
+                p.op(corte, Path.Op.DIFFERENCE); c.drawPath(p, traco)
+                c.drawLine(19.5f, 15f, 19.5f, 18f, traco); c.drawLine(18f, 16.5f, 21f, 16.5f, traco)
+            }
             Tipo.SAIR -> {   // porta com a seta saindo
                 p.reset(); p.moveTo(13f, 4f); p.lineTo(5f, 4f); p.lineTo(5f, 20f); p.lineTo(13f, 20f); c.drawPath(p, traco)
                 c.drawLine(10f, 12f, 20.5f, 12f, traco); c.drawLine(17f, 8.5f, 20.5f, 12f, traco); c.drawLine(17f, 15.5f, 20.5f, 12f, traco)

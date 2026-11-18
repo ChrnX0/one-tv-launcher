@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Player de podcast em tela cheia (PodcastPlayerActivity, 18/11/2026). -->
+<resources>
+    <string name="pl_termina">%1$sに終了</string>
+    <string name="pl_dorme_em">あと%1$d分で停止</string>
+    <string name="pl_a_seguir">次に再生</string>
+    <string name="pl_dormir">スリープタイマー</string>
+    <string name="pl_dormir_min">%1$d分後</string>
+    <string name="pl_barra_dica">◀ ▶ で10秒移動・長押しで速く</string>
+    <string name="pl_abrir">プレーヤーを開く</string>
+    <string name="pl_abrir_det">全画面で、次に再生するものも表示</string>
+</resources>
