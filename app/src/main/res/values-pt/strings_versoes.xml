@@ -19,6 +19,7 @@
         <item>A Casa (Home Assistant) se reencontra sozinha na rede quando o computador muda de endereço: nada para configurar</item>
         <item>Windows: a TV aparece sempre em Rede com o painel, e a unidade da TV tem um atalho “Abrir o painel da TV” que acompanha o endereço da TV</item>
         <item>Despertador redesenhado no jeito da tela inicial: a hora em roletes grandes com setas, as opções numa coluna com o valor em laranja, a frase de quando toca, dias por extenso e o som tocando ao escolher; na lista, segurar OK liga ou desliga o alarme</item>
+        <item>Despertador: se a TV não ligar na hora do toque (a LG às vezes não ouve o primeiro pedido), o alarme pede de novo algumas vezes nos primeiros 4 minutos</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Estado do item no canto</item>

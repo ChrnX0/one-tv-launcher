@@ -22,6 +22,7 @@
         <item>Home (Home Assistant) finds itself again on the network when the computer changes address: nothing to set up</item>
         <item>Windows: the TV always shows under Network with its panel, and the TV drive has an “Open the TV panel” shortcut that follows the TV’s address</item>
         <item>Alarm clock redesigned like the home screen: the time on big wheels with arrows, the options in a column with the value in orange, a sentence saying when it rings, days spelled out and the sound playing when you pick it; in the list, hold OK to turn an alarm on or off</item>
+        <item>Alarm clock: if the TV does not turn on when it rings (some TVs miss the first request), the alarm asks again a few times in the first 4 minutes</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>barra_estado</item>

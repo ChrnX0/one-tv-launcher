@@ -48,6 +48,25 @@ class AlarmeTocandoActivity : Activity() {
     private val desistir = Runnable { parar(falar = false) }   // ninguém apareceu: sem "Bom dia" para a sala vazia
     private var rampa: Runnable? = null   // guardado para poder parar a rampa de volume quando a tela fecha
 
+    // Insiste em ligar a TV pelo HDMI-CEC (TvWakeRetry.kt): o Android pede uma vez só e a LG às vezes não ouve.
+    @Volatile private var tocando = false
+    @Volatile private var alguemMexeu = false
+    private var tentativasTv = 0
+    private val ligarTv = object : Runnable {
+        override fun run() {
+            if (!TvWakeRetry.tentar(tocando, alguemMexeu)) return
+            tentativasTv++
+            val app = applicationContext
+            val n = tentativasTv
+            Thread {
+                // Fila do nosso shell (uid 2000): o app sozinho não tem a permissão HDMI_CEC.
+                val r = GuardiaoShizuku.comando(app, TvWakeRetry.COMANDO, 15_000)
+                Log.i("TvLauncher.Alarme", "ligar a TV pelo CEC, tentativa $n: ${if (r == null) "sem shell" else "pedido"}")
+            }.start()
+            TvWakeRetry.proxima(tentativasTv)?.let { ui.postDelayed(this, it) }
+        }
+    }
+
     /**
      * Toques que chegaram enquanto esta tela já tocava (ex.: o timer acaba durante o alarme). A tela é "singleInstance":
      * o Android entrega o pedido novo em onNewIntent, na MESMA tela, e antes ele era ignorado (o timer se perdia).
@@ -86,6 +105,8 @@ class AlarmeTocandoActivity : Activity() {
         setContentView(montar())
         tocarSom()
         ui.postDelayed(desistir, 10 * 60_000L)
+        tocando = true
+        TvWakeRetry.proxima(0)?.let { ui.postDelayed(ligarTv, it) }
         Log.i("TvLauncher.Alarme", if (timer) "timer acabou ('$nomeTimer')" else "tocando (id $id)")
     }
 
@@ -267,6 +288,9 @@ class AlarmeTocandoActivity : Activity() {
         finish()
     }
 
+    // Qualquer tecla = alguém está vendo a TV: para de pedir para ligá-la.
+    override fun onUserInteraction() { super.onUserInteraction(); alguemMexeu = true }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) { if (timer) parar() else soneca(); return true }
         return super.onKeyDown(keyCode, event)
@@ -282,6 +306,8 @@ class AlarmeTocandoActivity : Activity() {
     }
 
     override fun onDestroy() {
+        tocando = false
+        ui.removeCallbacks(ligarTv)
         pararSom()
         ui.removeCallbacks(desistir)
         // Abre os toques da fila só agora, com esta tela já fechada (senão o Android os entregaria a ela de novo).
