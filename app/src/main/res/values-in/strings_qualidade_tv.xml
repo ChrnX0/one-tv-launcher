@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- TV ao vivo: canais novos, qualidade automática e motivo do "sem sinal" (18/11/2026). -->
+<resources>
+    <string name="coluna_novos_canais">Baru</string>
+    <string name="qual_menu">Kualitas: %1$s</string>
+    <string name="qual_auto">Otomatis</string>
+    <string name="qual_auto_curto">otomatis</string>
+    <string name="qual_titulo">Kualitas gambar</string>
+    <string name="qual_padrao">Standar</string>
+    <string name="player_conta_vencida">Daftar Anda kedaluwarsa pada %1$s. Perpanjang ke penjualnya.</string>
+    <string name="player_conta_recusada">Server daftar menolak akun. Hubungi penjualnya.</string>
+    <string name="player_telas_cheias">Daftar sudah terbuka di %1$d dari %2$d layar. Tutup di perangkat lain.</string>
+</resources>

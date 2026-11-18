@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- TV ao vivo: canais novos, qualidade automática e motivo do "sem sinal" (18/11/2026). -->
+<resources>
+    <string name="coluna_novos_canais">नए</string>
+    <string name="qual_menu">क्वालिटी: %1$s</string>
+    <string name="qual_auto">अपने-आप</string>
+    <string name="qual_auto_curto">ऑटो</string>
+    <string name="qual_titulo">तस्वीर की क्वालिटी</string>
+    <string name="qual_padrao">सामान्य</string>
+    <string name="player_conta_vencida">आपकी लिस्ट %1$s को खत्म हो गई। बेचने वाले से रिन्यू कराएं।</string>
+    <string name="player_conta_recusada">लिस्ट के सर्वर ने खाता नहीं माना। बेचने वाले से बात करें।</string>
+    <string name="player_telas_cheias">लिस्ट पहले से %2$d में से %1$d स्क्रीन पर खुली है। किसी दूसरे डिवाइस पर बंद करें।</string>
+</resources>

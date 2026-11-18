@@ -37,7 +37,8 @@ import java.util.Locale
  *
  * Teclas: ▲▼ andam; ◀ ▶ trocam de coluna; OK num canal assiste; OK segurado 2 s (ou MENU) põe/tira dos favoritos;
  * OK segurado numa categoria esconde/mostra a categoria; VOLTAR fecha.
- * No topo da coluna de categorias ficam três ações: Buscar, Filtros e Guia de programação (as janelas são da PlayerActivity).
+ * Coluna de categorias (18/11/2026): "TV" com Buscar e Filtro; Favoritos, Recentes e Gravações; "LISTAS" com Todos e
+ * Guia ao lado; Esportes; as categorias. Rádio saiu daqui (mora em Ouvir).
  * Filmes e Séries não aparecem aqui: abrem pelos cards da HOME (06/11/2026, pedido do dono).
  */
 /** Vermelho da etiqueta AO VIVO: branco sobre ele passa de 4,5:1 (legível de longe). */
@@ -53,7 +54,6 @@ class PlayerListaTela(
     private val aoGuia: (List<Canal>, String) -> Unit,   // guia em grade dos canais da categoria + nome dela
     /** A linha "Gravações" (a tela é feita em outra frente; até lá, a PlayerActivity mostra um aviso). */
     private val aoGravacoes: () -> Unit = {},
-    private val aoRadios: () -> Unit = {},
     /** Modo simples da HOME (ModoSimples): bloco fixo só com Buscar, Favoritos e Recentes, letra maior. */
     private val simples: Boolean = false,
 ) {
@@ -72,6 +72,7 @@ class PlayerListaTela(
     private var recentes: List<String> = emptyList()
     private var grupos: List<GrupoCanais> = emptyList()   // todas as linhas da coluna (ações, fixas e categorias), para achar o nome
     private var esportes: Pair<List<Canal>, Int>? = null    // quantos canais de esporte esta lista tem (conta uma vez por lista)
+    private var novos: Pair<List<Canal>, List<Canal>>? = null  // os canais novos desta lista (conta uma vez por lista)
     private var chave = PlayerLista.TODOS              // categoria cujos canais estão na coluna do meio
     private var doMeio: List<Canal> = emptyList()
     private var atualId: String? = null
@@ -88,7 +89,7 @@ class PlayerListaTela(
     // 14/11/2026 (Paulo): título só "TV", com Buscar e Filtro em botões ao lado, para caber Gravações no bloco.
     private val coluna = ColunaCategorias(act, act.getString(R.string.coluna_tv_titulo),
         aoParar = { escolherGrupo(it) }, aoOk = { okNaColuna(it) },
-        aoSegurar = { k -> if (k.startsWith("g:")) aoOcultarGrupo(k.removePrefix("g:")) }, escala = escala)
+        aoSegurar = { k -> if (k.startsWith("g:")) aoOcultarGrupo(k.removePrefix("g:")) }, escala = escala, compacta = true)
     private val listaCanais = lista()
     private val tituloMeio = rotulo()
     private lateinit var detLogo: ImageView
@@ -117,7 +118,6 @@ class PlayerListaTela(
             PlayerLista.ACAO_FILTROS -> aoFiltros()
             PlayerLista.ACAO_GUIA -> grupos.firstOrNull { it.chave == chave }?.let { aoGuia(doMeio, nomeDoGrupo(it)) }
             PlayerLista.ACAO_GRAVACOES -> aoGravacoes()
-            PlayerLista.ACAO_RADIOS -> aoRadios()
             else -> { escolherGrupo(k); if (doMeio.isNotEmpty()) listaCanais.requestFocus() }
         }
     }
@@ -171,21 +171,29 @@ class PlayerListaTela(
         val nEsportes = esportes?.takeIf { it.first === canais }?.second
             ?: canais.count { ColunaRegras.ehEsporte(it.grupo, it.nome) }.also { esportes = canais to it }
         val porChave = base.associateBy { it.chave }
-        val fixas = listOfNotNull(porChave[PlayerLista.BUSCA], porChave[PlayerLista.TODOS],
+        // Todos virou botão ao lado de "LISTAS" (18/11/2026): as linhas fixas ficam só com Busca e Esportes.
+        val nNovos = novos?.takeIf { it.first === canais }?.second?.size
+            ?: PlayerLista.novos(canais, System.currentTimeMillis() / 1000).also { novos = canais to it }.size
+        val fixas = listOfNotNull(porChave[PlayerLista.BUSCA],
+            GrupoCanais(PlayerLista.NOVOS, "", nNovos).takeIf { nNovos > 0 },
             GrupoCanais(PlayerLista.ESPORTES, "", nEsportes).takeIf { nEsportes > 0 })
         val cats = base.filter { it.chave.startsWith("g:") && it.quantos > 0 }
         val (semNome, comNome) = cats.partition { it.nome.isBlank() }
         val rola = comNome.sortedBy { ColunaRegras.chaveAZ(it.nome) } + semNome
         botoes = listOf(GrupoCanais(PlayerLista.ACAO_BUSCAR, "", -1), GrupoCanais(PlayerLista.ACAO_FILTROS, resumoFiltro, -1))
             .let { b -> if (simples) b.filter { it.chave == PlayerLista.ACAO_BUSCAR } else b }   // modo simples: sem Filtro, como antes
+        // Pedido do Paulo (18/11/2026): Guia sai das linhas (vai para o lado de "LISTAS") e Rádio sai da TV (está em Ouvir).
         val acoes = listOf(porChave.getValue(PlayerLista.FAVORITOS), porChave.getValue(PlayerLista.RECENTES),
-            GrupoCanais(PlayerLista.ACAO_GUIA, "", -1), GrupoCanais(PlayerLista.ACAO_GRAVACOES, "", -1),
-            GrupoCanais(PlayerLista.ACAO_RADIOS, "", -1))
+            GrupoCanais(PlayerLista.ACAO_GRAVACOES, "", -1))
             .let { a -> if (simples) PlayerAcessivel.blocoSimples(a, { it.chave }, setOf(PlayerLista.FAVORITOS, PlayerLista.RECENTES)) else a }
-        grupos = acoes + fixas + rola
+        botoesListas = listOf(porChave.getValue(PlayerLista.TODOS), GrupoCanais(PlayerLista.ACAO_GUIA, "", -1))
+            .let { b -> if (simples) b.filter { it.chave == PlayerLista.TODOS } else b }   // modo simples: sem a grade do guia, como antes
+        // botoesListas vão no fim: as linhas são lidas por posição (ações, fixas, rolando) em mostrarColuna.
+        grupos = acoes + fixas + rola + botoesListas
         nAcoes = acoes.size; nFixas = fixas.size
     }
     private var botoes: List<GrupoCanais> = emptyList()
+    private var botoesListas: List<GrupoCanais> = emptyList()
     private var nAcoes = 0
     private var nFixas = 0
 
@@ -197,7 +205,8 @@ class PlayerListaTela(
     private fun mostrarColuna() {
         val l = grupos.map { linha(it) }
         coluna.mostrarBotoes(botoes.map { linha(it) })
-        coluna.mostrar(l.take(nAcoes), l.drop(nAcoes).take(nFixas), l.drop(nAcoes + nFixas), chave)
+        coluna.mostrarBotoesListas(botoesListas.map { linha(it) })
+        coluna.mostrar(l.take(nAcoes), l.drop(nAcoes).take(nFixas), l.drop(nAcoes + nFixas).dropLast(botoesListas.size), chave)
     }
 
     fun fechar() {
@@ -279,6 +288,7 @@ class PlayerListaTela(
                 }.mapTo(HashSet()) { it.id }
                 ColunaRegras.aoVivoPrimeiro(lista) { it.id in aoVivo }
             }
+            PlayerLista.NOVOS -> novos?.takeIf { it.first === canais }?.second ?: PlayerLista.novos(canais, System.currentTimeMillis() / 1000)
             else -> PlayerLista.filtrar(canais, chave, favoritos, recentes)
         }
         if (chave != PlayerLista.ESPORTES) aoVivo = emptySet()
@@ -305,12 +315,12 @@ class PlayerListaTela(
         PlayerLista.FAVORITOS -> act.getString(R.string.player_cat_favoritos)
         PlayerLista.RECENTES -> act.getString(R.string.player_cat_recentes)
         PlayerLista.ESPORTES -> act.getString(R.string.coluna_esportes)
+        PlayerLista.NOVOS -> act.getString(R.string.coluna_novos_canais)
         PlayerLista.BUSCA -> act.getString(R.string.player_cat_busca, g.nome)
         PlayerLista.ACAO_BUSCAR -> act.getString(R.string.player_acao_buscar)
         PlayerLista.ACAO_FILTROS -> act.getString(R.string.coluna_filtro)
         PlayerLista.ACAO_GUIA -> act.getString(R.string.coluna_guia)
         PlayerLista.ACAO_GRAVACOES -> act.getString(R.string.coluna_gravacoes)
-        PlayerLista.ACAO_RADIOS -> act.getString(R.string.ra_coluna)
         else -> PlayerLista.nomeExibido(g.nome).ifEmpty { act.getString(R.string.player_cat_outros) }
     }
 
@@ -322,9 +332,9 @@ class PlayerListaTela(
         PlayerLista.ACAO_FILTROS -> IconePlayer.Tipo.FILTROS
         PlayerLista.ACAO_GUIA -> IconePlayer.Tipo.GRADE
         PlayerLista.ACAO_GRAVACOES -> IconePlayer.Tipo.GRAVACOES
-        PlayerLista.ACAO_RADIOS -> IconePlayer.Tipo.RADIO
         PlayerLista.TODOS -> IconePlayer.Tipo.TODOS
         PlayerLista.ESPORTES -> IconePlayer.Tipo.ESPORTE
+        PlayerLista.NOVOS -> IconePlayer.Tipo.NOVO
         else -> if (g.nome in ocultas) IconePlayer.Tipo.CADEADO else null
     }
 

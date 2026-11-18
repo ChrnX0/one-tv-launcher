@@ -17,6 +17,10 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>TV: the same channel in 4K, Full HD, HD and SD is now a single channel; the TV picks the quality by itself and steps down if the picture stalls (Options › Quality to choose by hand)</item>
+        <item>TV: leaner left menu; All and Guide sit next to LISTS and Radio left (it is in Listen)</item>
+        <item>TV: New category with the channels added to the list in the last 14 days</item>
+        <item>TV: when a channel does not open, the TV tells you if the list expired or another screen is using it</item>
         <item>New “Line” icons: thin stroke, one color, and the selected item lights up in the brand color (the other styles are still in Settings › Home screen)</item>
         <item>Apps show their TV banner, without the square; “App icons” in Settings switches to round or symbol only</item>
         <item>Each app lands in the right category on its own (YouTube in Watch, Spotify in Listen); hold OK on an app and pick “Move to…” to change it</item>
@@ -24,16 +28,22 @@
         <item>Continue also shows the last radio station, the podcast you were halfway through, recent games and what you watched or heard on YouTube, Spotify, Netflix and other apps</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>tv_menu</item>
+        <item>tv_qualidade</item>
         <item>cruz_linha</item>
         <item>cruz_mover</item>
         <item>cruz_midia</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>TV menu</item>
+        <item>TV quality</item>
         <item>Line icons</item>
         <item>Move to…</item>
         <item>Continue with apps</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>In the TV list, do more categories fit, with All and Guide next to LISTS and no Radio?</item>
+        <item>Does a channel that used to repeat (4K, FHD, HD) show only once, and does ▶ ▶ › Quality show the choices?</item>
         <item>Are the home screen icons in a thin stroke, with only the selected item in orange?</item>
         <item>Holding OK on an app and choosing “Move to… › Watch”, does it appear in the Watch column?</item>
         <item>After watching something on YouTube or listening on Spotify, does the title show in Continue and OK go back to it?</item>
