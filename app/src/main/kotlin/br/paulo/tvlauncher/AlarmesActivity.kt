@@ -156,12 +156,18 @@ class AlarmesActivity : Activity() {
         val seta = k == KeyEvent.KEYCODE_DPAD_UP || k == KeyEvent.KEYCODE_DPAD_DOWN || k == KeyEvent.KEYCODE_DPAD_LEFT || k == KeyEvent.KEYCODE_DPAD_RIGHT
         if (!seta) return super.dispatchKeyEvent(e)
         if (e.action == KeyEvent.ACTION_DOWN) {
+            // Segurando a tecla, o controle repete ~20 vezes por segundo: o rolete girava rápido demais para parar na
+            // hora certa (Paulo, 18/11/2026). Repetições só passam no ritmo de AlarmScreenLogic.RITMO_SEGURANDO_MS.
+            if (!AlarmScreenLogic.passaRepeticao(e.repeatCount, ultimaSetaEm, e.eventTime)) return true
+            ultimaSetaEm = e.eventTime
             lista?.seta(k)
             editor?.seta(k, e.repeatCount > 0)
             nomear()
         }
         return true
     }
+
+    private var ultimaSetaEm = 0L
 
     // Um só dono por vez: o OK da lista abre o editor, e o mesmo OK não pode chegar ao editor recém-aberto.
     private fun apertarOk() { val l = lista; if (l != null) l.ok() else editor?.ok(); nomear() }
