@@ -17,20 +17,17 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Island bar: the corner line uses all the space up to the center pill instead of cutting early</item>
-        <item>In Watch, the corner shows the program on air and the time left first, then the channel</item>
-        <item>In Play, the corner only shows real news: connected controllers, the Discord crew or the last game</item>
+        <item>Player lists (audio, subtitles, quality, seasons) in a right-hand panel with the movie visible beside it, bigger text and the position “1 of 5”</item>
+        <item>The chosen item stands out and the others get lighter and smaller, like the cross home screen; with move and select sounds</item>
+        <item>The “OK selects · back closes” hints sit inside the panel, without covering the movie subtitles</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>ilha_canto_largo</item>
-        <item>ilha_canto_tv</item>
+        <item>listas_cruz_2</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Full corner</item>
-        <item>Program on air</item>
+        <item>Player list</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>In Apps, does the left corner show “Search ▲ opens the bar with search” in full, without “…”?</item>
-        <item>In Watch, with Movies selected, does the corner show the program on air before the channel?</item>
+        <item>In a movie, with ▼ and “Audio and subtitles”, does the list open on the right with the movie visible and the hints under the list?</item>
     </string-array>
 </resources>
