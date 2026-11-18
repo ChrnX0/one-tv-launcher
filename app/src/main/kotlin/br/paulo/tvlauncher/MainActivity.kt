@@ -323,6 +323,7 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        homeNaFrente = true
         if (desviadaParaSegura) return
         ModoSeguro.aoRetomarHome(this)   // 30 s de pé = a HOME firmou (zera a conta de quedas seguidas)
         ModoHospede.talvezBoasVindas(this)   // modo hóspede: boas-vindas uma vez por estadia
@@ -385,6 +386,7 @@ class MainActivity : Activity() {
 
     override fun onPause() {
         super.onPause()
+        homeNaFrente = false
         ModoSeguro.aoPausarHome()
         if (desviadaParaSegura) return
         focoTopo = currentFocus?.takeIf { f -> generateSequence(f.parent) { it.parent }.any { it === topoRaiz } }
@@ -428,7 +430,9 @@ class MainActivity : Activity() {
             focoTopo = null
             voltarAoPerfil = false   // HOME de novo depois de bolinha > Configurações: o foco vai ao 1º app (home-12)
             // Cruz: HOME vai para Assistir; HOME de novo, para a TV (CruzLogica). Fecha o "Todos os apps".
-            cruz?.let { c -> if (todosAbertos) fecharTodos(); c.home(); c.requestFocus() }
+            // Só o 2º passo (Assistir -> TV) com a HOME já na frente: voltando de um app, quem estava em Assistir › Filmes
+            // continua em Filmes (depuração 18/11/2026).
+            cruz?.let { c -> if (todosAbertos) fecharTodos(); if (homeNaFrente) c.home() else c.irParaAssistir(); c.requestFocus() }
         }
     }
 
@@ -2450,6 +2454,8 @@ class MainActivity : Activity() {
     private var rotuloApps: TextView? = null
     /** "Todos os apps" aberto: a cruz some e a grade dos apps aparece; Voltar ou HOME fecham. */
     private var todosAbertos = false
+    /** Entre onResume e onPause: a HOME é o que está na tela (onNewIntent chega ANTES do onResume vindo de um app). */
+    private var homeNaFrente = false
     private var cruzTemTv = false
     private var cruzTemVod = false
     /** A 1ª leitura do player chegou (sem ela a cruz montaria sem a TV e pularia de lugar logo depois). */
@@ -2475,7 +2481,7 @@ class MainActivity : Activity() {
         cruz = c
         c.id = View.generateViewId()
         c.aoMudar = { _, item -> arteDoItem(item) }
-        c.aoSom = { som -> SonsCruz.tocar(this, som) }
+        c.aoSom = { som -> if (homeNaFrente) SonsCruz.tocar(this, som) }   // voltando de um app (HOME), sem som
         c.aoSubirTopo = { ui.post { bolinhaPerfil?.requestFocus() } }   // ▲ no 1º item: o perfil, 1º da barra
         montarBarraCruz(raiz, c)
     }
@@ -2726,11 +2732,13 @@ class MainActivity : Activity() {
     private fun abrirTodos() {
         val c = cruz ?: return
         todosAbertos = true
+        recolherBarra(false, animar = false)   // ▲ na 1ª fileira vai à barra: ela precisa estar visível (o ouvinte sai cedo aqui)
         c.visibility = View.GONE
         rotuloApps?.visibility = View.VISIBLE
         rolagem.visibility = View.VISIBLE
         rolagem.scrollTo(0, 0)
-        linhaApps.post { linhaApps.getChildAt(0)?.requestFocus() }
+        // Sem nenhum app na grade, o foco não pode ficar sem dono: vai à bolinha do perfil, 1º da barra.
+        linhaApps.post { linhaApps.getChildAt(0)?.requestFocus() ?: bolinhaPerfil?.requestFocus() }
     }
 
     private fun fecharTodos() {
