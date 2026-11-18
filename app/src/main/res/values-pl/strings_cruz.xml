@@ -78,4 +78,6 @@
     <string name="cruz_apps_n">Aplikacje na tym telewizorze: %1$d</string>
     <string name="cruz_podcasts_n">Obserwowane podcasty: %1$d</string>
     <string name="cruz_pendrive">Pendrive: %1$s</string>
+    <string name="casa_fora_titulo">Home Assistant nie odpowiada</string>
+    <string name="casa_fora_texto">Sprawdź, czy jego serwer jest włączony. Telewizor sam ponawia próbę co kilka sekund.</string>
 </resources>

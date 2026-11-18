@@ -325,6 +325,9 @@ class MainActivity : Activity() {
         if (idiomaMontado.isNotEmpty() && idiomaAtual() != idiomaMontado) recreate()
     }
 
+    /** Quando a HOME saiu da frente (para a volta decidir onde pôr o foco). */
+    private var pausadaEm = 0L
+
     override fun onResume() {
         super.onResume()
         homeNaFrente = true
@@ -353,6 +356,13 @@ class MainActivity : Activity() {
         preencherContinuar()
         reagendarAmbiente()
         talvezPerguntarQuemVe()
+        // Foco na barra de cima ao sair: volta nela só se foi um passeio curto (Configurações, perfil). Depois de muito tempo
+        // fora (descanso de tela, um filme inteiro) quem volta quer o conteúdo: a cruz (Sala, 18/11/2026: acordou do
+        // descanso com o foco na bolinha do perfil, e a 1ª seta andava na barra).
+        if (focoTopo != null && pausadaEm > 0L && android.os.SystemClock.elapsedRealtime() - pausadaEm > FOCO_TOPO_VALE_MS) {
+            focoTopo = null
+            cruz?.requestFocus()
+        }
         if (voltarAoPerfil) bolinhaPerfil?.requestFocus()
         else if (focoTopo?.isShown == true) focoTopo?.requestFocus()
         else if (atalhoAberto < 0 && ::linhaContinuar.isInitialized && linhaContinuar.hasFocus()) linhaApps.getChildAt(indiceFoco.coerceAtLeast(0))?.requestFocus()
@@ -400,6 +410,7 @@ class MainActivity : Activity() {
         sairAmbiente(animar = false)
         if (desviadaParaSegura) return
         focoTopo = currentFocus?.takeIf { f -> generateSequence(f.parent) { it.parent }.any { it === topoRaiz } }
+        pausadaEm = android.os.SystemClock.elapsedRealtime()
         DesempenhoTv.desligar(this)
         if (::capa.isInitialized) capa.parar()   // zoom da cena: não fica pedindo quadro com a HOME por trás de um app
         ui.removeCallbacks(tarefaClima)
@@ -1038,6 +1049,8 @@ class MainActivity : Activity() {
         const val PREFS_CRUZ_APPS = "cruz_apps"   // aberturas por app (meia-vida 7 dias) e fixados no topo de Aplicativos
         const val PREFS_CRUZ = "cruz"   // cruz: o último item escolhido em cada categoria (id da categoria -> id do item)
         const val CONTINUAR_MAX = 9          // itens do Continuar da cruz (o 10º seria o "Dormir em 30 min")
+        /** Foco na barra de cima vale por isto fora da HOME; depois, a volta cai na cruz. */
+        const val FOCO_TOPO_VALE_MS = 5 * 60_000L
         /** Prefs "cruz": o último item aberto na cruz ("categoria|item") e quando; vale [ULTIMO_ABERTO_VALE_MS] na HOME refeita. */
         const val ULTIMO_ABERTO = "ultimo_aberto"
         const val ULTIMO_ABERTO_EM = "ultimo_aberto_em"

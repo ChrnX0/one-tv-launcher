@@ -25,6 +25,9 @@
         <item>When you leave an app, the home screen goes back to the item that opened it, not to TV</item>
         <item>Every item on the home screen now shows its useful details, one per line: episode and time left, year, rating and length of a movie, what you last watched in each app and when, the last radio station, controllers and the Discord crew</item>
         <item>A long piece of information, like the title of the last video, now ends in “…” and no longer pushes the others out; “Opened 0 minutes ago” became “Opened now”</item>
+        <item>Home: with Home Assistant offline, the screen says what happened and that it retries by itself, and Google Home stays at hand</item>
+        <item>After the screensaver, focus returns to the home screen, not to the top bar</item>
+        <item>Lighter navigation: the selected icon only starts its animation after the column stops moving</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>ficha_cena</item>

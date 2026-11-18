@@ -78,4 +78,6 @@
     <string name="cruz_apps_n">Apps nesta TV: %1$d</string>
     <string name="cruz_podcasts_n">Podcasts que você segue: %1$d</string>
     <string name="cruz_pendrive">Pendrive: %1$s</string>
+    <string name="casa_fora_titulo">O Home Assistant está fora do ar</string>
+    <string name="casa_fora_texto">Confira se o servidor dele está ligado. A TV tenta de novo sozinha a cada poucos segundos.</string>
 </resources>

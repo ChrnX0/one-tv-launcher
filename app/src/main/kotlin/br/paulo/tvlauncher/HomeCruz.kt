@@ -101,6 +101,9 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         const val SETA_A = 12
         const val SETA_Y = 521f
         const val DICA_MS = 1500L       // cruz parada por este tempo: a seta aparece (some na próxima tecla)
+        // O ícone escolhido começa a animação dele depois que a coluna assenta (~0,3 s de mola): durante o movimento a view
+        // tem camada de GPU, e um desenho que muda a cada quadro obrigaria a refazer a camada inteira a cada 33 ms.
+        const val ICONE_ESPERA_MS = 450L
         const val COR_CATEGORIA = 0xFFE8E2DA.toInt()
         const val COR_SUB = 0xFFE2D8CF.toInt()
     }
@@ -140,6 +143,8 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         /** Linhas da linha de baixo na última arrumação (quando muda, a coluna se rearruma). */
         var linhas = 1
         var voltarSub: Runnable? = null
+        /** O texto de baixo como veio (antes do corte por linha): só refaz a medida quando ele muda. */
+        var subBruto: String? = null
         /** Barra de "quanto já foi visto", criada só no item que tem progresso. */
         var barra: BarraProgresso? = null
     }
@@ -357,7 +362,6 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
      */
     fun naoAbriu() {
         val iv = viewAtual() ?: return
-        val antes = itemAtual()?.sub.orEmpty()
         val aviso = context.getString(R.string.cruz_nao_abriu)
         iv.sub.text = aviso
         iv.sub.setTextColor(Estilo.ACENTO)
@@ -365,9 +369,11 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         announceForAccessibility(aviso)
         iv.sub.removeCallbacks(iv.voltarSub)
         iv.voltarSub = Runnable {
+            // o texto de AGORA (o item pode ter mudado nesses 4 s: programa novo, minutos que passaram)
+            val agora = iv.subBruto.orEmpty()
             iv.sub.setTextColor(COR_SUB)
-            iv.sub.text = cortarLinhas(antes, iv.sub)
-            iv.sub.visibility = if (antes.isEmpty()) View.GONE else View.VISIBLE
+            iv.sub.text = cortarLinhas(agora, iv.sub)
+            iv.sub.visibility = if (agora.isEmpty()) View.GONE else View.VISIBLE
         }
         iv.sub.postDelayed(iv.voltarSub, NAO_ABRIU_MS)
     }
@@ -528,8 +534,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private fun preencher(v: ItemView, item: Item) {
         if (v.icone.drawable !== item.icone) v.icone.setImageDrawable(item.icone)
         if (v.nome.text.toString() != item.nome) v.nome.text = item.nome
-        val sub = cortarLinhas(item.sub, v.sub)
-        if (v.sub.text.toString() != sub) v.sub.text = sub
+        if (v.subBruto != item.sub) { v.subBruto = item.sub; v.sub.text = cortarLinhas(item.sub, v.sub) }
         v.sub.visibility = if (item.sub.isEmpty()) View.GONE else View.VISIBLE
         val p = item.progresso
         if (p == null) { if (v.icone.foreground != null) v.icone.foreground = null }
@@ -547,6 +552,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         val f = estado.cat
         val focada = hasFocus() || isFocused
         val semMovimento = semAnimacao()
+        semMov = semMovimento   // lido por [mover] em cada view: uma leitura do ajuste por arrumação, não ~40
         for ((j, v) in viewsCat.withIndex()) {
             val k = j - f
             val cx = when {
@@ -589,7 +595,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
                 // Ícones "Linha" (IconeCruz): o escolhido toca a animação dele (a cor é de cada ícone, sempre).
                 val aceso = rel == 0 && focada
                 if (iv.icone.isActivated != aceso) iv.icone.isActivated = aceso
-                (iv.icone.drawable as? IconeCruz)?.animar(aceso && !semMovimento)
+                (iv.icone.drawable as? IconeCruz)?.animar(aceso && !semMovimento, atraso = if (animar) ICONE_ESPERA_MS else 0L)
                 iv.sub.alpha = if (rel == 0) 1f else 0f
             }
         }
@@ -598,7 +604,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private fun mover(v: View, x: Float, y: Float, alfa: Float, escala: Float, animar: Boolean, atrasoMs: Long = 0L) {
         val m = molas.getOrPut(v) { Mola(v) }
         if (alfa > 0f) v.visibility = View.VISIBLE
-        if (!animar || v.visibility != View.VISIBLE || semAnimacao()) {
+        if (!animar || v.visibility != View.VISIBLE || semMov) {
             m.parar(x, y, alfa, escala)
             return
         }
@@ -606,6 +612,8 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         if (m !in ativas) ativas += m
         if (!quadroPedido) { quadroPedido = true; ultimoQuadro = 0L; Choreographer.getInstance().postFrameCallback(quadro) }
     }
+
+    private var semMov = false
 
     /** "Remover animações" (acessibilidade) ou escala de animação 0 nas opções do desenvolvedor: tudo vai direto. */
     private fun semAnimacao() =

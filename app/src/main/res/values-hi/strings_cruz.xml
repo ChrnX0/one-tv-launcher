@@ -78,4 +78,6 @@
     <string name="cruz_apps_n">इस टीवी पर ऐप: %1$d</string>
     <string name="cruz_podcasts_n">फ़ॉलो किए पॉडकास्ट: %1$d</string>
     <string name="cruz_pendrive">USB ड्राइव: %1$s</string>
+    <string name="casa_fora_titulo">Home Assistant जवाब नहीं दे रहा</string>
+    <string name="casa_fora_texto">देखें कि उसका सर्वर चालू है। टीवी हर कुछ सेकंड में खुद फिर से कोशिश करता है।</string>
 </resources>

@@ -78,4 +78,6 @@
     <string name="cruz_apps_n">Bu TV’deki uygulamalar: %1$d</string>
     <string name="cruz_podcasts_n">Takip edilen podcastler: %1$d</string>
     <string name="cruz_pendrive">USB bellek: %1$s</string>
+    <string name="casa_fora_titulo">Home Assistant yanıt vermiyor</string>
+    <string name="casa_fora_texto">Sunucusunun açık olduğunu kontrol edin. TV birkaç saniyede bir kendisi yeniden dener.</string>
 </resources>

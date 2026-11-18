@@ -22,6 +22,9 @@
         <item>Ao sair de um app, a tela inicial volta no item que o abriu, e não na TV</item>
         <item>Todos os itens da tela inicial mostram as informações úteis, uma por linha: episódio e quanto falta, ano, nota e duração do filme, o que você viu por último em cada app e quando, a última rádio, os controles e a turma do Discord</item>
         <item>Uma informação comprida, como o título do último vídeo, termina em “…” e não empurra mais as outras para fora; “Aberto há 0 minuto” virou “Aberto agora”</item>
+        <item>Casa: com o Home Assistant fora do ar, a tela diz o que houve e que tenta de novo sozinha, e o Google Home continua à mão</item>
+        <item>Depois do descanso de tela, o foco volta para a tela inicial em cruz, e não para a barra de cima</item>
+        <item>Navegação mais leve: o ícone escolhido só começa a animação depois que a coluna para de andar</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Cena atrás da ficha</item>
