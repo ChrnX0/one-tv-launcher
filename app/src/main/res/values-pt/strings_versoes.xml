@@ -16,6 +16,7 @@
     <string-array name="novidades">
         <item>Addons: nova linha “Adicionar addon” (em Addons e em Configurações › Addons) com um código para o celular, que abre o painel pronto para colar o endereço, ou para digitar na TV</item>
         <item>Addons: lista “Recomendados” com catálogos conferidos (filmes e séries dos serviços, TMDB, MUBI e anime); escolha e confirme com o PIN, sem digitar nada</item>
+        <item>Addons separados por tipo (Filmes e séries, Anime, Legendas...): seções na TV e filtro no painel</item>
         <item>Addons: título de catálogo sem vídeo para tocar aqui mostra “Onde assistir”, que abre a busca do Google TV</item>
         <item>Despertador: no rolete da hora o número maior fica em cima, e as listas não mostram mais as opções por baixo</item>
         <item>Despertador: segurar a seta gira o rolete devagar (4 passos por segundo), dá para parar na hora certa</item>
