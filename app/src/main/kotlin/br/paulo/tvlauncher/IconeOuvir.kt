@@ -27,6 +27,8 @@ class IconeOuvir(val tipo: Tipo) : Drawable() {
         FAVORITAS, RECENTES, PERTO, PAIS, GENEROS, BUSCAR, EM_ALTA, ADICIONAR, CELULAR, NOVOS, MEUS, EPISODIOS, RADIO, PODCAST,
         /** Timer para dormir do player de podcast (18/11/2026). */
         DORMIR,
+        /** Tela Jogos na cruz (18/11/2026): controle, sofá, turma, rede, PC e mais opções. */
+        CONTROLE, SOFA, TURMA, REDE, PC, OPCOES,
     }
 
     companion object {
@@ -51,6 +53,12 @@ class IconeOuvir(val tipo: Tipo) : Drawable() {
             Tipo.NOVOS -> 0xFFF2B84B
             Tipo.MEUS, Tipo.EPISODIOS, Tipo.PODCAST -> 0xFF7FB2FF     // o azul dos podcasts (o mesmo da cruz)
             Tipo.RADIO -> 0xFF45C2B1                                  // o turquesa da rádio (o mesmo da cruz)
+            Tipo.CONTROLE -> 0xFF8E92FA                               // o violeta do Jogar (o mesmo da cruz)
+            Tipo.SOFA -> 0xFFF59E5B                                   // laranja claro
+            Tipo.TURMA -> 0xFF8FB4F0                                  // azul acinzentado
+            Tipo.REDE -> 0xFF9CD27E                                   // verde-folha
+            Tipo.PC -> 0xFF7FB2FF
+            Tipo.OPCOES -> 0xFFE8E2DA                                 // creme
         }.toInt()
 
         const val TRACO = IconeCruz.TRACO_FINO
@@ -58,7 +66,7 @@ class IconeOuvir(val tipo: Tipo) : Drawable() {
         const val DESCANSO_MS = 2500L
         /** O "Tocando" não descansa: o equalizador pula enquanto o som sai. */
         private fun descanso(t: Tipo) = if (t == Tipo.TOCANDO) 0L else DESCANSO_MS
-        private val COM_GESTO = setOf(Tipo.TOCANDO, Tipo.RECENTES, Tipo.PERTO, Tipo.GENEROS, Tipo.BUSCAR, Tipo.PAIS, Tipo.FAVORITAS, Tipo.NOVOS)
+        private val COM_GESTO = setOf(Tipo.TOCANDO, Tipo.RECENTES, Tipo.PERTO, Tipo.GENEROS, Tipo.BUSCAR, Tipo.PAIS, Tipo.FAVORITAS, Tipo.NOVOS, Tipo.CONTROLE, Tipo.REDE)
     }
 
     private val traco = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -238,6 +246,38 @@ class IconeOuvir(val tipo: Tipo) : Drawable() {
                 c.drawLine(7f, 8f, 16.5f, 3.5f, traco)
                 c.drawCircle(8.8f, 14f, 2.8f, traco); c.drawLine(14f, 12f, 18f, 12f, traco); c.drawLine(14f, 16f, 18f, 16f, traco)
             }
+            Tipo.CONTROLE -> {   // controle de videogame; o gesto aperta os dois botões, um depois do outro
+                ret(c, 2.5f, 7.5f, 21.5f, 17.5f, 5f)
+                c.drawLine(5.5f, 12.5f, 9.5f, 12.5f, traco); c.drawLine(7.5f, 10.5f, 7.5f, 14.5f, traco)
+                val k1 = if (f in 0f..0.5f) s else 0f; val k2 = if (f > 0.5f) s else 0f
+                c.drawCircle(15.5f, 11.2f, 1.1f - 0.4f * k1, cheio); c.drawCircle(17.8f, 13.6f, 1.1f - 0.4f * k2, cheio)
+            }
+            Tipo.SOFA -> {   // sofá: encosto, assento com braços e os pés
+                ret(c, 5.5f, 5.5f, 18.5f, 12f, 2f)
+                ret(c, 2.5f, 10f, 21.5f, 17.5f, 2.2f)
+                c.drawLine(6f, 13.5f, 18f, 13.5f, traco)
+                c.drawLine(5f, 17.5f, 5f, 19.5f, traco); c.drawLine(19f, 17.5f, 19f, 19.5f, traco)
+            }
+            Tipo.TURMA -> {   // duas pessoas
+                c.drawCircle(9f, 8.5f, 3f, traco)
+                r.set(3f, 14f, 15f, 24f); c.drawArc(r, 180f, 180f, false, traco)
+                c.drawCircle(16.5f, 9.5f, 2.4f, traco)
+                p.reset(); p.moveTo(16.5f, 14.2f); p.quadTo(21f, 14.4f, 21.5f, 19f); c.drawPath(p, traco)
+            }
+            Tipo.REDE -> {   // sinal de wi-fi; o gesto acende os arcos de dentro para fora
+                c.drawCircle(12f, 19f, 1.3f, cheio)
+                for (i in 1..3) {
+                    val raio = 4.5f * i
+                    traco.alpha = if (f < 0f) 255 else (90 + 165 * (if (f * 3.2f >= i - 1) 1f else 0f)).toInt()
+                    r.set(12f - raio, 19f - raio, 12f + raio, 19f + raio); c.drawArc(r, 225f, 90f, false, traco)
+                }
+                traco.alpha = 255
+            }
+            Tipo.PC -> {   // monitor com o pé
+                ret(c, 3f, 4f, 21f, 16f, 1.8f)
+                c.drawLine(12f, 16f, 12f, 19.5f, traco); c.drawLine(8f, 20f, 16f, 20f, traco)
+            }
+            Tipo.OPCOES -> for (x in floatArrayOf(6f, 12f, 18f)) c.drawCircle(x, 12f, 1.6f, cheio)
             Tipo.PODCAST -> {   // o mesmo microfone da cruz
                 ret(c, 9f, 3f, 15f, 14f, 3f)
                 r.set(5.5f, 6.5f, 18.5f, 17.5f); c.drawArc(r, 0f, 180f, false, traco)

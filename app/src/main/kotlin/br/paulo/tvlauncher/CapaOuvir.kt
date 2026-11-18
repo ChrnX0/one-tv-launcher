@@ -70,6 +70,13 @@ class CapaOuvir(ctx: Context, private val raioDp: Float = 14f) : ImageView(ctx) 
         PlayerLogos.carregar(context, endereco, this, lado)
     }
 
+    /** Mostra uma imagem já pronta (ícone de app). A próxima [carregar] troca por outra, mesmo vazia. */
+    fun mostrar(d: Drawable) {
+        if (drawable === d) return
+        url = "#imagem"
+        setImageDrawable(d)
+    }
+
     /** O logo inteiro precisa de uma folga do quadro; a capa que cobre, não. */
     private fun ajustarMargem() { val m = if (cobrir) 0 else dp(10f).toInt(); setPaddingRelative(m, m, m, m) }
 

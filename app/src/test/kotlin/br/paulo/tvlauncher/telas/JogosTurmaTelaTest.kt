@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
+import br.paulo.tvlauncher.CruzOuvir
 import br.paulo.tvlauncher.JogosActivity
 import br.paulo.tvlauncher.TurmaDiscord
 import br.paulo.tvlauncher.TurmaDiscordTv
@@ -24,7 +25,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 /**
- * Tela Jogos com a turma do Discord (17/11/2026): foto com o painel fechado (foco no jogo) e aberto (foco na sala de
+ * Tela Jogos com a turma do Discord (17/11/2026; na cruz desde 18/11/2026): foto na 1ª prateleira e na turma (foco na sala de
  * voz, com o QR), em inglês e português, com nomes de verdade compridos. Regras fixas: nada por
  * cima de outro texto, letra de pelo menos 11 sp (a da barra de dicas) e alguma coisa com o foco. Fotos em app/build/telas/jogos-turma-*.png.
  */
@@ -64,13 +65,13 @@ class JogosTurmaTelaTest {
         ShadowLooper.idleMainLooper(1, TimeUnit.SECONDS)
         val problemas = mutableListOf<String>()
         problemas += medir(a, "$idioma/fechado", "jogos-turma-$idioma-fechado")
-        // ◀ até o painel: o foco vai para a sala de voz e o painel abre.
+        // ▶ até a turma (redesenho na cruz, 18/11/2026): a sala de voz é o 1º item da prateleira.
         val raiz = a.window.decorView as ViewGroup
-        val sala = achar(raiz) { it.isFocusable && it is ViewGroup && textos(it).any { t -> t.contains("Squad") } }
-        sala?.requestFocus()
+        val cruz = achar(raiz) { it is CruzOuvir } as CruzOuvir?
+        cruz?.ir("turma", animar = false)
         ShadowLooper.idleMainLooper(1, TimeUnit.SECONDS)
         problemas += medir(a, "$idioma/aberto", "jogos-turma-$idioma-aberto")
-        if (sala == null) problemas += "$idioma: cartão da sala de voz não apareceu"
+        if (cruz?.itemAtual()?.nome?.contains("Squad") != true) problemas += "$idioma: a sala de voz não apareceu na turma"
         a.finish()
         assertTrue("Jogos com a turma ($idioma):\n" + problemas.joinToString("\n"), problemas.isEmpty())
     }

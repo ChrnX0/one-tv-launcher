@@ -41,6 +41,8 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         val capa: String = "", val cor: Int = IconeOuvir.cor(IconeOuvir.Tipo.RADIO), val monograma: String = "",
         val cobrir: Boolean = false, val progresso: Float? = null,
         val abrir: () -> Unit = {}, val opcoes: (() -> Unit)? = null,
+        /** Imagem já pronta (ícone de um app, na tela Jogos): fica no lugar da [capa] baixada. */
+        val imagem: android.graphics.drawable.Drawable? = null,
     )
     class Prateleira(val id: String, val nome: String, val icone: IconeOuvir.Tipo, val itens: List<Item>)
     /** O cartão "Tocando agora". [progresso] null = rádio (ao vivo, sem barra); [tempo] = "12:30 de 58:00". */
@@ -338,6 +340,8 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         cartaoLinhas.visibility = if (t.linhas.isEmpty()) View.GONE else View.VISIBLE
         cartaoCapa.cor = t.cor; cartaoCapa.monograma = t.monograma; cartaoCapa.cobrir = t.cobrir
         cartaoCapa.carregar(t.capa, 300)
+        // Cartão só de texto (o "Esta semana" da tela Jogos): sem capa, o quadro vazio some.
+        cartaoCapa.visibility = if (t.capa.isEmpty() && t.monograma.isEmpty()) View.GONE else View.VISIBLE
         tempo(t.progresso, t.tempo)
         if (cartao.visibility != View.VISIBLE || cartao.alpha < 1f) {
             mola.mover(cartao, dp(CARTAO_X), dp(CARTAO_Y), 1f, 1f, animar)
@@ -583,6 +587,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         v.capa.monograma = item.monograma
         v.capa.cobrir = item.cobrir
         v.capa.progresso = item.progresso
+        item.imagem?.let { v.capa.mostrar(it) }
         v.capa.invalidateOutline()
     }
 
@@ -642,7 +647,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
                 iv.sub.alpha = if (rel == 0) 1f else 0f
                 ic?.animar(rel == 0 && focada && !semMovimento)
                 // a capa só é baixada quando o item aparece (uma lista de 60 rádios não baixa 60 logos de uma vez)
-                iv.item?.let { if (it.icone == null) iv.capa.carregar(it.capa) }
+                iv.item?.let { if (it.icone == null && it.imagem == null) iv.capa.carregar(it.capa) }
             }
         }
     }
