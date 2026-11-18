@@ -80,8 +80,9 @@ object SincronizarFilmes {
      * Itens de uma lista do Trakt: watchlist (GET /sync/watchlist/{movies|shows}) ou lista (GET .../items/{movie,show}).
      * Cada um é {type:"movie", movie:{...}} ou {type:"show", show:{...}}; temporada, episódio e pessoa ficam de fora.
      */
-    fun traktLerItens(json: String): List<Item> {
-        val a = arranjo(json) ?: return emptyList()
+    fun traktLerItens(json: String): List<Item>? {
+        // Corpo ilegível (ou cortado no limite de 2 MB) = null, nunca "lista vazia": vazia apagaria os Interesses daqui.
+        val a = arranjo(json) ?: return null
         return (0 until a.length()).mapNotNull { i ->
             val o = a.optJSONObject(i) ?: return@mapNotNull null
             when (o.optString("type")) {
@@ -93,8 +94,8 @@ object SincronizarFilmes {
     }
 
     /** GET /sync/watched/{movies|shows}: [{plays, last_watched_at, movie|show, seasons:[{number, episodes:[{number}]}]}]. */
-    fun traktLerVistos(json: String, tipo: Tipo): List<Visto> {
-        val a = arranjo(json) ?: return emptyList()
+    fun traktLerVistos(json: String, tipo: Tipo): List<Visto>? {
+        val a = arranjo(json) ?: return null
         return (0 until a.length()).mapNotNull { i ->
             val o = a.optJSONObject(i) ?: return@mapNotNull null
             val item = lerItem(o.optJSONObject(if (tipo == Tipo.FILME) "movie" else "show"), tipo) ?: return@mapNotNull null
@@ -190,7 +191,7 @@ object SincronizarFilmes {
      * GET /sync/all-items: {"movies":[{"movie":{...},"status":"plantowatch","last_watched_at":...}],
      * "shows":[{"show":{...},"status":"watching"}], "anime":[{"show":{...},...}]}. Anime conta como série.
      */
-    fun simklLerTodos(json: String): List<EntradaSimkl> = runCatching {
+    fun simklLerTodos(json: String): List<EntradaSimkl>? = runCatching {
         val o = JSONObject(json)
         val r = ArrayList<EntradaSimkl>()
         for ((grupo, campo, tipo) in listOf(Triple("movies", "movie", Tipo.FILME), Triple("shows", "show", Tipo.SERIE), Triple("anime", "show", Tipo.SERIE))) {
@@ -201,8 +202,8 @@ object SincronizarFilmes {
                 r += EntradaSimkl(item, e.optString("status"), lerData(e.optString("last_watched_at")) ?: lerData(e.optString("added_to_watchlist_at")) ?: 0)
             }
         }
-        r
-    }.getOrDefault(emptyList())
+        r as List<EntradaSimkl>
+    }.getOrNull()   // ilegível ou cortado: null (a sincronização pula; lista vazia apagaria tudo)
 
     /** GET /sync/activities: o "all" (se não mudou, nada mudou: a doc manda parar aí). */
     fun simklLerAtividades(json: String): Map<String, String> = runCatching {
@@ -459,6 +460,16 @@ object SincronizarFilmes {
         val novoRemoto = (remoto - tirar) + adicionar
         return Mescla(novoLocal, adicionar, tirar, novoLocal intersect novoRemoto)
     }
+
+    /**
+     * A base depois do envio, com o que o serviço CONFIRMOU (2xx). A [Mescla] supõe que tudo foi aceito; o que não foi
+     * (lote acima de 100, 420 lista cheia, 429, 5xx, sem rede) não pode entrar na base como se estivesse lá:
+     *  - pôr que falhou sai da base: na próxima vez ainda é "posto aqui" e sobe de novo (sem isso viraria "tirado lá"
+     *    e sumiria da TV);
+     *  - tirar que falhou fica na base: na próxima vez ainda é "tirado aqui" e tenta de novo (sem isso voltaria à TV).
+     */
+    fun baseAposEnvio(m: Mescla, adicionadosOk: Set<Int>, tiradosOk: Set<Int>): Set<Int> =
+        m.base - (m.adicionarFora - adicionadosOk) + (m.tirarFora - tiradosOk)
 
     /** Vistos lá fora que aqui ainda não estão concluídos: marcar aqui. Visto é união, nunca desmarca. */
     fun vistosParaTrazer(remoto: Set<Int>, localConcluidos: Set<Int>): Set<Int> = remoto - localConcluidos
