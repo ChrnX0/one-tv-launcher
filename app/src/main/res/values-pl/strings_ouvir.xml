@@ -60,4 +60,7 @@
     <string name="home_card_ouvir">Słuchaj</string>
     <string name="home_destaque_ouvir">Radio i podcasty</string>
     <string name="extras_CARD_OUVIR">Karta Słuchaj na ekranie głównym (radio i podcasty)</string>
+    <string name="pod_sugestoes">Propozycje</string>
+    <string name="pod_sugestao_seguir">OK, aby obserwować</string>
+    <string name="pod_sugeridos_seguidos">Proponowane podcasty dodane do Moich podcastów</string>
 </resources>

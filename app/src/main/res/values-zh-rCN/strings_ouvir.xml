@@ -60,4 +60,7 @@
     <string name="home_card_ouvir">收听</string>
     <string name="home_destaque_ouvir">电台和播客</string>
     <string name="extras_CARD_OUVIR">主屏幕上的“收听”卡片（电台和播客）</string>
+    <string name="pod_sugestoes">推荐</string>
+    <string name="pod_sugestao_seguir">按 OK 订阅</string>
+    <string name="pod_sugeridos_seguidos">已将推荐播客添加到我的播客</string>
 </resources>

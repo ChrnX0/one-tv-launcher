@@ -60,4 +60,7 @@
     <string name="home_card_ouvir">सुनें</string>
     <string name="home_destaque_ouvir">रेडियो और पॉडकास्ट</string>
     <string name="extras_CARD_OUVIR">होम स्क्रीन पर सुनें कार्ड (रेडियो और पॉडकास्ट)</string>
+    <string name="pod_sugestoes">सुझाव</string>
+    <string name="pod_sugestao_seguir">फ़ॉलो करने के लिए OK</string>
+    <string name="pod_sugeridos_seguidos">सुझाए गए पॉडकास्ट मेरे पॉडकास्ट में जोड़े गए</string>
 </resources>

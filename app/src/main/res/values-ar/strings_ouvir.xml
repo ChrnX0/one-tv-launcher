@@ -60,4 +60,7 @@
     <string name="home_card_ouvir">استماع</string>
     <string name="home_destaque_ouvir">الراديو والبودكاست</string>
     <string name="extras_CARD_OUVIR">بطاقة «استماع» في الشاشة الرئيسية (الراديو والبودكاست)</string>
+    <string name="pod_sugestoes">اقتراحات</string>
+    <string name="pod_sugestao_seguir">اضغط OK للمتابعة</string>
+    <string name="pod_sugeridos_seguidos">تمت إضافة البودكاست المقترحة إلى البودكاست الخاص بي</string>
 </resources>

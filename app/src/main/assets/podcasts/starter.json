@@ -1,0 +1,234 @@
+{
+ "version": 1,
+ "checked": "2026-11-18",
+ "languages": {
+  "pt": [
+   {
+    "url": "https://www.omnycontent.com/d/playlist/651a251e-06e1-47e0-9336-ac5a00f41628/04561b43-753d-4784-8e19-ac8b00e86411/3036d550-85b2-4301-b1e4-ac8b00e8641f/podcast.rss",
+    "title": "O Assunto",
+    "author": "G1",
+    "image": "https://www.omnycontent.com/d/playlist/651a251e-06e1-47e0-9336-ac5a00f41628/04561b43-753d-4784-8e19-ac8b00e86411/3036d550-85b2-4301-b1e4-ac8b00e8641f/image.jpg?t=1668803692&size=Large",
+    "explicit": false,
+    "follow": true
+   },
+   {
+    "url": "https://feeds.simplecast.com/hwQVm5gy",
+    "title": "Naruhodo",
+    "author": "B9, Ken Fujioka, Naruhodo, Altay de Souza",
+    "image": "https://image.simplecastcdn.com/images/35e2db64-2d2f-4a5b-8291-d6b12131fb3d/076e15b7-8541-4754-9e2d-952bbd93ff83/3000x3000/screenshot-2023-06-27-at-09-10-18-overview-simplecast-dashboard.jpg?aid=rss_feed",
+    "explicit": false,
+    "follow": true
+   },
+   {
+    "url": "https://feeds.megaphone.fm/NPP6869883964",
+    "title": "Rádio Novelo Apresenta",
+    "author": "Rádio Novelo",
+    "image": "https://megaphone.imgix.net/podcasts/51a3b172-614f-11ee-89f1-d3bff45e4456/image/b10cddb063c1317ddcd82035ea8c059e.png?ixlib=rails-4.3.1&max-w=3000&max-h=3000&fit=crop&auto=format,compress",
+    "explicit": false,
+    "follow": true
+   },
+   {
+    "url": "https://api.jovemnerd.com.br/feed-nerdcast/",
+    "title": "NerdCast",
+    "author": "Jovem Nerd",
+    "image": "https://megaphone.imgix.net/podcasts/4adb4810-6e35-11f0-aab6-435e1b2473fa/image/749d9ceec478a5d865f55bbfaa021532.jpg?ixlib=rails-4.3.1&max-w=3000&max-h=3000&fit=crop&auto=format,compress",
+    "explicit": false,
+    "follow": true
+   },
+   {
+    "url": "https://anchor.fm/s/10b948e30/podcast/rss",
+    "title": "Mamilos",
+    "author": "B9",
+    "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_nologo/44792524/0367b2a4cd4e6993.jpg",
+    "explicit": false
+   },
+   {
+    "url": "https://www.spreaker.com/show/4712237/episodes/feed",
+    "title": "Xadrez Verbal",
+    "author": "Central 3 Podcasts",
+    "image": "https://d3wo5wojvuv7l.cloudfront.net/t_rss_itunes_square_1400/images.spreaker.com/original/7076805c9b447868c242dd6b4a594929.jpg",
+    "explicit": false
+   },
+   {
+    "url": "https://www.deviante.com.br/podcasts/scicast/feed/",
+    "title": "Scicast",
+    "author": "Portal Deviante",
+    "image": "https://www.omnycontent.com/d/playlist/f7f86f6a-2fbd-4ac7-ab53-b01900e5d187/29a40f8a-f647-4a82-b434-b03f00cd7866/638fd98e-8c28-49db-9cab-b03f00cd788c/image.jpg?t=1696030987&size=Large",
+    "explicit": false
+   },
+   {
+    "url": "https://anchor.fm/s/10e595e0c/podcast/rss",
+    "title": "Projeto Humanos",
+    "author": "Ivan Mizanzuk",
+    "image": "https://d3t3ozftmdmh3i.cloudfront.net/staging/podcast_uploaded_nologo/45257051/45257051-1769625503713-8cdc18a17e896.jpg",
+    "explicit": false
+   },
+   {
+    "url": "https://feeds.megaphone.fm/NEXOJORNALLTDA4928237843",
+    "title": "Durma com essa",
+    "author": "Nexo Jornal",
+    "image": "https://megaphone.imgix.net/podcasts/b239f374-032b-11ef-9dee-9fc55bb3a6c7/image/63eea4781f2f81fc360ce9b91f5b7d23.jpg?ixlib=rails-4.3.1&max-w=3000&max-h=3000&fit=crop&auto=format,compress",
+    "explicit": false
+   },
+   {
+    "url": "https://feeds.acast.com/public/shows/6a7ddec783128ee3d2e255ad",
+    "title": "Praia dos Ossos",
+    "author": "Rádio Novelo",
+    "image": "https://assets.pippa.io/shows/6a7ddec783128ee3d2e255ad/show-cover.jpg",
+    "explicit": false
+   },
+   {
+    "url": "https://www.omnycontent.com/d/playlist/2f6a79aa-d181-48a4-92e0-ac5d00c8eb1d/041abfce-e5a7-49c3-9700-aea60151a076/a0c75c3c-9cdf-4885-85d7-aea601535293/podcast.rss",
+    "title": "A Mulher da Casa Abandonada",
+    "author": "Folha de S.Paulo",
+    "image": "https://www.omnycontent.com/d/programs/2f6a79aa-d181-48a4-92e0-ac5d00c8eb1d/041abfce-e5a7-49c3-9700-aea60151a076/image.jpg?t=1654029326&size=Large",
+    "explicit": false
+   }
+  ],
+  "en": [
+   {
+    "url": "https://feeds.npr.org/510318/podcast.xml",
+    "title": "Up First from NPR",
+    "author": "NPR",
+    "image": "https://npr.brightspotcdn.com/dims3/default/strip/false/crop/3000x3000+0+0/resize/1400/quality/66/format/jpg/?url=http%3A%2F%2Fnpr-brightspot.s3.amazonaws.com%2Fe0%2F7a%2Ffe9d16a44fbf9dd2d9932ffe799b%2F510318.png",
+    "explicit": false,
+    "follow": true
+   },
+   {
+    "url": "https://feeds.simplecast.com/54nAGcIl",
+    "title": "The Daily",
+    "author": "The New York Times",
+    "image": "https://image.simplecastcdn.com/images/7f2f4c05-9c2f-4deb-82b7-b538062bc22d/73549bf1-94b3-40ff-8aeb-b4054848ec1b/3000x3000/the-daily-album-art-original.jpg?aid=rss_feed",
+    "explicit": false,
+    "follow": true
+   },
+   {
+    "url": "https://feeds.simplecast.com/kwWc0lhf",
+    "title": "Hidden Brain",
+    "author": "Hidden Brain, Shankar Vedantam",
+    "image": "https://image.simplecastcdn.com/images/5982e1b7-239c-4b89-81f9-49df1f33fdae/dd71b17c-82bb-441d-a979-e16975aebc1c/3000x3000/hbtilewshankarfinal_rgbsimplecast.jpg?aid=rss_feed",
+    "explicit": false,
+    "follow": true
+   },
+   {
+    "url": "https://feeds.acast.com/public/shows/67587e77c705e441797aff96",
+    "title": "TED Talks Daily",
+    "author": "TED",
+    "image": "https://assets.pippa.io/shows/67587e77c705e441797aff96/show-cover.png",
+    "explicit": false,
+    "follow": true
+   },
+   {
+    "url": "https://feeds.npr.org/510289/podcast.xml",
+    "title": "Planet Money",
+    "author": "NPR",
+    "image": "https://media.npr.org/assets/img/2022/10/24/pm_new_tile_2022_sq-e543deddd0a46a98be481b46e6a72efa6b52236f.jpg?s=1400&c=66&f=jpg",
+    "explicit": false
+   },
+   {
+    "url": "https://feeds.simplecast.com/EmVW7VGp",
+    "title": "Radiolab",
+    "author": "WNYC Studios",
+    "image": "https://image.simplecastcdn.com/images/2c9187d6-9dff-4257-bc55-469cf13afd48/60a2cfed-b8ca-460b-abb8-8ab0afb3fa8c/3000x3000/radiolab-showsquare-3000x3000.jpg?aid=rss_feed",
+    "explicit": false
+   },
+   {
+    "url": "https://feeds.99percentinvisible.org/99percentinvisible",
+    "title": "99% Invisible",
+    "author": "Roman Mars",
+    "image": "https://image.simplecastcdn.com/images/8436e3c1-2479-4466-ac48-fa58259960bb/a6d5b177-ab5d-430d-b3f2-b393a09d8101/3000x3000/sxm-cover-99percentinvisible-r2025-3000x3000-final.jpg?aid=rss_feed",
+    "explicit": false
+   },
+   {
+    "url": "https://feeds.simplecast.com/Y8lFbOT4",
+    "title": "Freakonomics Radio",
+    "author": "Freakonomics Radio + Stitcher",
+    "image": "https://image.simplecastcdn.com/images/2be48404-a43c-4fa8-a32c-760a3216272e/fab1584e-8ea9-4efa-9650-5e595861b2cd/3000x3000/image.jpg?aid=rss_feed",
+    "explicit": false
+   },
+   {
+    "url": "https://www.omnycontent.com/d/playlist/e73c998e-6e60-432f-8610-ae210140c5b1/a91018a4-ea4f-4130-bf55-ae270180c327/44710ecc-10bb-48d1-93c7-ae270180c33e/podcast.rss",
+    "title": "Stuff You Should Know",
+    "author": "iHeartPodcasts",
+    "image": "https://www.omnycontent.com/d/programs/e73c998e-6e60-432f-8610-ae210140c5b1/a91018a4-ea4f-4130-bf55-ae270180c327/image.jpg?t=1749759419&size=Large",
+    "explicit": false
+   },
+   {
+    "url": "https://feeds.npr.org/344098539/podcast.xml",
+    "title": "Wait Wait... Don't Tell Me!",
+    "author": "NPR",
+    "image": "https://media.npr.org/assets/img/2022/09/23/waitwait-don-t-tell-me_tile_npr-network-01_sq-c912ab84bb59df0c4eb2af72886c763ce97f3e3d.jpg?s=1400&c=66&f=jpg",
+    "explicit": false
+   },
+   {
+    "url": "https://www.thisamericanlife.org/podcast/rss.xml",
+    "title": "This American Life",
+    "author": "This American Life",
+    "image": "https://thisamericanlife.org/sites/all/themes/thislife/img/tal-logo-3000x3000.png",
+    "explicit": false
+   },
+   {
+    "url": "https://podcasts.files.bbci.co.uk/p02nq0gn.rss",
+    "title": "Global News Podcast",
+    "author": "BBC World Service",
+    "image": "https://ichef.bbci.co.uk/images/ic/3000x3000/p0pc2j9y.jpg",
+    "explicit": false
+   }
+  ],
+  "es": [
+   {
+    "url": "https://www.omnycontent.com/d/playlist/26708dff-8243-49e4-a5b6-adb700ec9cae/a7906eb0-d14b-4bc1-a048-ae30009a0e51/3ec1b1fa-5520-4b11-b8f2-ae30009a0e77/podcast.rss",
+    "title": "Hoy en EL PAÍS",
+    "author": "EL PAÍS",
+    "image": "https://www.omnycontent.com/d/playlist/26708dff-8243-49e4-a5b6-adb700ec9cae/a7906eb0-d14b-4bc1-a048-ae30009a0e51/3ec1b1fa-5520-4b11-b8f2-ae30009a0e77/image.jpg?t=1764277043&size=Large",
+    "explicit": false,
+    "follow": true
+   },
+   {
+    "url": "https://fapi-top.prisasd.com/api/v2/feed-rss/playser/un-libro-una-hora/itunestfp",
+    "title": "Un Libro Una Hora",
+    "author": "SER Podcast",
+    "image": "https://sdmedia.playser.cadenaser.com/playser/image/20244/10/1712744718917_318.jpeg",
+    "explicit": false,
+    "follow": true
+   },
+   {
+    "url": "https://www.spreaker.com/show/6154892/episodes/feed",
+    "title": "La escóbula de la brújula",
+    "author": "Felipe Areal",
+    "image": "https://d3wo5wojvuv7l.cloudfront.net/t_rss_itunes_square_1400/images.spreaker.com/original/72be26adf4990e6aaeb05a5662fa5c13.jpg",
+    "explicit": false,
+    "follow": true
+   },
+   {
+    "url": "https://www.omnycontent.com/d/playlist/2446592a-b80e-4d28-a4fd-ae4c0140ac11/42658bb8-4afa-4449-9c7a-aea9010e5b53/5942eb19-73a6-4772-8093-aea9010e5b61/podcast.rss",
+    "title": "Estirando el chicle",
+    "author": "Podium Podcast",
+    "image": "https://www.omnycontent.com/d/playlist/2446592a-b80e-4d28-a4fd-ae4c0140ac11/42658bb8-4afa-4449-9c7a-aea9010e5b53/5942eb19-73a6-4772-8093-aea9010e5b61/image.jpg?t=1729417339&size=Large",
+    "explicit": false,
+    "follow": true
+   },
+   {
+    "url": "https://www.omnycontent.com/d/playlist/e73c998e-6e60-432f-8610-ae210140c5b1/b9075595-43ce-4bdd-9a4c-b1ea01352a3d/e4eb1040-260e-4556-a9c7-b1ea01352a67/podcast.rss",
+    "title": "El hilo",
+    "author": "My Cultura and iHeartPodcasts",
+    "image": "https://www.omnycontent.com/d/programs/e73c998e-6e60-432f-8610-ae210140c5b1/b9075595-43ce-4bdd-9a4c-b1ea01352a3d/image.jpg?t=1752785814&size=Large",
+    "explicit": true
+   },
+   {
+    "url": "https://www.omnycontent.com/d/playlist/e73c998e-6e60-432f-8610-ae210140c5b1/b3c9b6e7-72ba-45c4-aff9-b1e7012d213b/092b66a8-4329-4183-bb12-b1e7012d216f/podcast.rss",
+    "title": "Radio Ambulante",
+    "author": "My Cultura, Radio Ambulante and iHeartPodcasts",
+    "image": "https://www.omnycontent.com/d/programs/e73c998e-6e60-432f-8610-ae210140c5b1/b3c9b6e7-72ba-45c4-aff9-b1e7012d213b/image.jpg?t=1771965809&size=Large",
+    "explicit": true
+   },
+   {
+    "url": "https://feeds.simplecast.com/TjkG2gz_",
+    "title": "Leyendas Legendarias",
+    "author": "Sonoro | SINCO",
+    "image": "https://image.simplecastcdn.com/images/52785482-0332-43cd-8a5f-0cbecb9be5b1/670dd594-252c-437b-8f5a-55bef6ae6edb/3000x3000/portada_leyendas2026.jpg?aid=rss_feed",
+    "explicit": true
+   }
+  ]
+ }
+}
