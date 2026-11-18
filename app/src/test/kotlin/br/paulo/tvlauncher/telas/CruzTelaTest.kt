@@ -86,6 +86,24 @@ class CruzTelaTest {
         foto(a, "cruz-tv-detalhes")
     }
 
+    /** Nome que não cabe ("What universal fre…", Continuar na Sala, 18/11/2026): aparece inteiro no topo do canto. */
+    @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
+    @Test fun nomeCortadoVaiInteiroParaOCanto() {
+        InstrumentationRegistry.getInstrumentation().setInTouchMode(false)
+        val a = Robolectric.buildActivity(Activity::class.java).setup().get()
+        val raiz = FrameLayout(a).apply { setBackgroundColor(Estilo.FUNDO) }
+        a.setContentView(raiz)
+        val cruz = HomeCruz(a, Typeface.DEFAULT, Typeface.DEFAULT_BOLD)
+        raiz.addView(cruz, FrameLayout.LayoutParams(-1, -1))
+        val nome = "What universal free childcare is costing New Mexico"
+        cruz.definir(listOf(HomeCruz.Categoria(CruzLogica.Categoria.CONTINUAR, "Continuar", IconeCruz(IconeCruz.Tipo.ASSISTIR, IconeCruz.Estilo.LINHA), listOf(
+            HomeCruz.Item("c:podcast", nome, "Up First from NPR\nTocou há 1 h", IconeCruz(IconeCruz.Tipo.PODCASTS, IconeCruz.Estilo.LINHA), {},
+                situacao = CruzLogica.Situacao("Parou em", "3% · faltam 28 min", "c:podcast"))))))
+        cruz.requestFocus()
+        ShadowLooper.idleMainLooper(1, TimeUnit.SECONDS)
+        assertEquals("$nome\nParou em  3% · faltam 28 min\nTocou há 1 h", cruz.detalheAtual().text.toString())
+    }
+
     /** Prévia da animação de cada ícone Linha (18/11/2026): uma linha por ícone, o estático e 8 quadros da passada. */
     @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
     @Test fun animacaoDosIcones() {

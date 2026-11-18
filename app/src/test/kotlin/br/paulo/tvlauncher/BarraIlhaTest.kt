@@ -33,11 +33,13 @@ class BarraIlhaTest {
     }
 
     @Test fun andamentoNoMesmoFormatoParaTudo() {
-        assertEquals("T1 E1 · 35% · faltam 43 min", CruzLogica.andamento("T1 E1", 0.35f, "faltam 43 min"))
-        assertEquals("Globo Esporte · 62% · faltam 17 min", CruzLogica.andamento(" Globo Esporte ", 0.6249f, "faltam 17 min"))
-        assertEquals("faltam 2 min", CruzLogica.andamento(null, 0.999f, "faltam 2 min"))   // 100% não aparece
-        assertEquals("T1 E1", CruzLogica.andamento("T1 E1", 0f, " "))                       // 0% também não
-        assertEquals("", CruzLogica.andamento(null, null, null))
+        // espaços duros: "·" grudado no anterior e "faltam 43 min" inteiro (a quebra fica no título ou depois do "·")
+        assertEquals("T1 E1\u00A0· 35%\u00A0· faltam\u00A043\u00A0min", CruzLogica.andamento("T1 E1", 0.35f, "faltam 43 min"))
+        assertEquals("T1 E1 · 35% · faltam 43 min", and("T1 E1", 0.35f, "faltam 43 min"))
+        assertEquals("Globo Esporte · 62% · faltam 17 min", and(" Globo Esporte ", 0.6249f, "faltam 17 min"))
+        assertEquals("faltam 2 min", and(null, 0.999f, "faltam 2 min"))   // 100% não aparece
+        assertEquals("T1 E1", and("T1 E1", 0f, " "))                       // 0% também não
+        assertEquals("", and(null, null, null))
     }
 
     @Test fun oQueASituacaoMostraSaiDoItem() {
@@ -45,4 +47,6 @@ class BarraIlhaTest {
         assertEquals(listOf("T1 E1 · faltam 43 min", "T1 E1 · 35% · faltam 43 min"), CruzLogica.tirarDoItem(c))
         assertEquals(emptyList<String>(), CruzLogica.tirarDoItem(null))
     }
+
+    private fun and(o: String?, f: Float?, falta: String?) = CruzLogica.andamento(o, f, falta).replace('\u00A0', ' ')
 }
