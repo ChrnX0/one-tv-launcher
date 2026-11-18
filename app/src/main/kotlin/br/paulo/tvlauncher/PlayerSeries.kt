@@ -81,9 +81,14 @@ object Series {
             if (n.isNotEmpty() && t.startsWith(n, ignoreCase = true)) { t = t.substring(n.length); break }
         }
         // O ano que a lista põe depois do nome ("Slow Horses 2022 - S01E01 - ..." ou "(2022)") sai junto com o código.
-        t = t.replace(Regex("""^[\s\-–:|·]*(?:\(?(?:19|20)\d{2}\)?[\s\-–:|·]+(?=S\d|T\d|\d{1,2}x\d))?(?:S\d{1,2}\s*E\d{1,3}|T\d{1,2}\s*E\d{1,3}|\d{1,2}x\d{1,3})?[\s\-–:|·]*""", RegexOption.IGNORE_CASE), "")
+        t = t.replace(reCodigoEp, "")
         return t.trim().ifEmpty { titulo.trim() }
     }
+
+    private val reCodigoEp = Regex("""^[\s\-–:|·]*(?:\(?(?:19|20)\d{2}\)?[\s\-–:|·]+(?=S\d|T\d|\d{1,2}x\d))?(?:S\d{1,2}\s*E\d{1,3}|T\d{1,2}\s*E\d{1,3}|\d{1,2}x\d{1,3})?[\s\-–:|·]*""", RegexOption.IGNORE_CASE)
+
+    /** Teto de episódios por ficha: a maior série real tem poucos milhares; um servidor com defeito não estoura a memória. */
+    const val MAX_EPISODIOS = 5000
 
     private fun cod(v: String) = URLEncoder.encode(v, "UTF-8")
 
@@ -140,16 +145,19 @@ object Series {
         }
         if (listas.isEmpty() && !raiz.has("info")) return null
         val porTemporada = HashMap<Int, MutableList<Episodio>>()
+        var lidos = 0
         for ((tempChave, arr) in listas) {
             for (i in 0 until arr.length()) {
+                if (lidos >= MAX_EPISODIOS) break
                 val o = arr.optJSONObject(i) ?: continue
                 val id = o.opt("id")?.toString()?.takeIf { it.isNotEmpty() && it != "null" } ?: continue
                 val inf = o.optJSONObject("info") ?: JSONObject()
                 val temporada = numero(o, "season")?.toInt() ?: tempChave ?: 1
                 val num = numero(o, "episode_num")?.toInt() ?: (i + 1)
                 val seg = numero(inf, "duration_secs")
+                lidos++
                 porTemporada.getOrPut(temporada) { ArrayList() } += Episodio(
-                    id, temporada, num, texto(o, "title").ifEmpty { "Episódio $num" }, Vod.extensaoSegura(texto(o, "container_extension")),
+                    id, temporada, num, texto(o, "title").take(300).ifEmpty { "Episódio $num" }, Vod.extensaoSegura(texto(o, "container_extension")),
                     texto(inf, "plot").take(800),
                     (seg?.let { (it / 60).toInt() } ?: Vod.duracaoTexto(texto(inf, "duration")))?.takeIf { it in 1..600 },
                 )
