@@ -138,6 +138,12 @@ class Sessoes(private val relogio: () -> Long, private val maximoSessoes: Int = 
     @Synchronized fun criar(elevada: Boolean = true, papel: PapeisPainel.Papel = PapeisPainel.Papel.DONO,
                             venceEm: Long = Long.MAX_VALUE): String {
         limpar()
+        // Convidado nunca derruba o dono (rodada 15: quem tem o link do convite fazia 8 entradas e tirava a sessão do
+        // dono): sessão de convidado só tira outra de convidado, e eles ficam com no máximo metade das vagas.
+        if (papel != PapeisPainel.Papel.DONO) {
+            val convidados = mapa.entries.filter { it.value.papel != PapeisPainel.Papel.DONO }
+            if (convidados.size >= maximoSessoes / 2 || mapa.size >= maximoSessoes) convidados.firstOrNull()?.let { mapa.remove(it.key) }
+        }
         while (mapa.size >= maximoSessoes) mapa.remove(mapa.keys.first())   // tira a mais antiga
         val bytes = ByteArray(16).also { aleatorio.nextBytes(it) }
         val token = bytes.joinToString("") { "%02x".format(it) }

@@ -365,7 +365,9 @@ class BuscaActivity : Activity() {
     private fun desenhar(termo: String, grupos: List<Grupo>) {
         lista.removeAllViews()
         // Só as linhas "Procurar no YouTube..." (ideia 14): o "nada encontrado" continua aparecendo, em cima delas.
-        if (grupos.size == 1 && grupos[0].nome == getString(R.string.bu_outros_apps))
+        // "Procurar" (rádios mais longe) e "outros apps" não são resultado: só eles = nada encontrado (rodada 15).
+        val soAtalhos = setOf(getString(R.string.bu_outros_apps), getString(R.string.elv_bf_procurar))
+        if (grupos.isNotEmpty() && grupos.all { it.nome in soAtalhos })
             lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.bu_nada, termo)).apply { setPaddingRelative(dp(4), dp(Estilo.E3), 0, dp(Estilo.E3)) })
         if (grupos.isEmpty()) {
             val msg = when {

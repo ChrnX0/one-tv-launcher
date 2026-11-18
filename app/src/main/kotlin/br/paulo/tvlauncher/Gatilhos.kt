@@ -74,7 +74,7 @@ object Gatilhos {
         val app = ctx.applicationContext
         Fundo.rodar {
             val cond = soSe(app)[e].orEmpty()
-            if (cond.isNotEmpty() && !SoSe.todas(cond, SoSeTv.estado(app))) { Log.i(TAG, "${e.chave}: só se ${cond.map { it.chave }} não vale agora"); return@rodar }
+            if (cond.isNotEmpty() && !SoSe.todas(cond, SoSeTv.estado(app))) { Log.i(TAG, "${e.chave}: só se ${cond.map { it.chave.substringBefore(':') }} não vale agora"); return@rodar }
             Log.i(TAG, "${e.chave}: ${Cenas.rodar(app, cena, "evento")}")
         }
     }

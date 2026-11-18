@@ -33,14 +33,18 @@ object MudarDeTv {
     @Volatile private var recepcao: MudarDeTvRegras.Recepcao? = null
     @Volatile var estado = Estado.PARADO; private set
     @Volatile var detalhe: String = ""; private set   // o nome da TV que mandou, ou o motivo do erro
-    @Volatile private var aceito = false   // o segredo certo chegou; falta só o corpo
+    // Hora (elapsed) em que o segredo certo chegou; falta só o corpo. 0 = não. Vence em [PRAZO_CORPO_MS]: se a conexão
+    // cair no meio do corpo, a porta não fica aberta sem PIN até a tela fechar (rodada 15 da depuração).
+    @Volatile private var aceitoEm = 0L
+    private const val PRAZO_CORPO_MS = 120_000L
+    private fun aceito() = aceitoEm != 0L && android.os.SystemClock.elapsedRealtime() - aceitoEm < PRAZO_CORPO_MS
 
     /** Abre a porta e devolve o convite (QR). Null sem rede de casa. A chave privada vive só na memória. */
     @Synchronized fun iniciar(ctx: Context): MudarDeTvRegras.Convite? {
         val ip = PainelWeb.ipsDaRede().filter { MudarDeTvRegras.ipDeCasa(it) }.minOrNull() ?: return null
         val p = MudarDeTvRegras.novoPar()
         val r = MudarDeTvRegras.Recepcao(MudarDeTvRegras.novoSegredo(), System.currentTimeMillis())
-        par = p; recepcao = r; aceito = false
+        par = p; recepcao = r; aceitoEm = 0
         estado = Estado.ESPERANDO; detalhe = ""
         PainelWeb.ajustar(ctx)   // a porta do painel abre mesmo sem PIN enquanto esta tela está aberta ([recebendo])
         return MudarDeTvRegras.Convite(ip, Config.PAINEL_PORTA, r.segredo, MudarDeTvRegras.digital(p.public.encoded))
@@ -49,13 +53,13 @@ object MudarDeTv {
     /** A tela saiu: o segredo e a chave morrem (salvo no meio de uma recepção, que termina sozinha). */
     @Synchronized fun parar(ctx: Context) {
         if (estado == Estado.RECEBENDO) return
-        par = null; recepcao = null; aceito = false
+        par = null; recepcao = null; aceitoEm = 0
         if (estado == Estado.ESPERANDO) estado = Estado.PARADO
         PainelWeb.ajustar(ctx)
     }
 
     /** A porta está aberta para receber? (PainelWeb.ajustar deixa o painel de pé, e só as rotas de mudar respondem.) */
-    fun recebendo(): Boolean = par != null && (recepcao?.vale(System.currentTimeMillis()) == true || aceito)
+    fun recebendo(): Boolean = par != null && (recepcao?.vale(System.currentTimeMillis()) == true || aceito())
 
     fun tempoRestanteMs(): Long = recepcao?.let { (it.criadoEm + MudarDeTvRegras.VALIDADE_MS - System.currentTimeMillis()).coerceAtLeast(0) } ?: 0
 
@@ -65,7 +69,7 @@ object MudarDeTv {
     @Synchronized fun conferirSegredo(s: String?): MudarDeTvRegras.Conferencia {
         val r = recepcao ?: return MudarDeTvRegras.Conferencia.VENCIDO
         val c = r.conferir(s, System.currentTimeMillis())
-        if (c == MudarDeTvRegras.Conferencia.OK) aceito = true
+        if (c == MudarDeTvRegras.Conferencia.OK) aceitoEm = android.os.SystemClock.elapsedRealtime()
         return c
     }
 
@@ -74,16 +78,17 @@ object MudarDeTv {
      * Devolve o nome da TV de onde veio. Quem chama reinicia o launcher depois (como no restaurar).
      */
     fun receber(ctx: Context, corpo: String): String {
-        val privada = synchronized(this) {
+        val (privada, segredo) = synchronized(this) {
             val k = par?.private
-            if (!aceito || k == null) throw NaoEsperando()
-            aceito = false
+            val s = recepcao?.segredo
+            if (!aceito() || k == null || s == null) throw NaoEsperando()
+            aceitoEm = 0
             estado = Estado.RECEBENDO
-            k
+            k to s
         }
         try {
             val env = runCatching { JSONObject(corpo) }.getOrNull() ?: throw IllegalArgumentException("conteúdo ilegível")
-            val p = MudarDeTvRegras.lerPacote(MudarDeTvRegras.abrir(privada, env))
+            val p = MudarDeTvRegras.lerPacote(MudarDeTvRegras.abrir(privada, env, segredo))
             BackupCompleto.importar(ctx, p.backup, p.senha)
             val instalados = runCatching { ctx.packageManager.getInstalledPackages(0).map { it.packageName }.toSet() }.getOrDefault(emptySet())
             val fila = MudarDeTvRegras.fila(p.apps, instalados, ctx.packageName)
@@ -94,6 +99,7 @@ object MudarDeTv {
             return p.de
         } catch (e: Exception) {
             synchronized(this) { estado = Estado.ERRO; detalhe = e.message ?: e.javaClass.simpleName; par = null; recepcao = null }
+            runCatching { PainelWeb.ajustar(ctx) }   // a porta aberta só para receber fecha já
             throw e
         }
     }
@@ -121,9 +127,9 @@ object MudarDeTv {
             val o = lista.optJSONObject(i) ?: return@mapNotNull null
             if (o.optBoolean("sistema") || !o.optBoolean("abrivel")) null else MudarDeTvRegras.App(o.optString("pacote"), o.optString("nome"))
         }
-        val env = MudarDeTvRegras.selar(pub, MudarDeTvRegras.pacote(senha, backup, apps, PainelVizinhos.nomeDaTv(app)))
+        val env = MudarDeTvRegras.selar(pub, MudarDeTvRegras.pacote(senha, backup, apps, PainelVizinhos.nomeDaTv(app)), c.segredo)
         // 3. Envia. A TV nova confere o segredo antes de ler o corpo e restaura na hora.
-        val r = chamar(base, "/api/mudar/receber", env.toString(), c.segredo)
+        val r = chamar(base, "/api/mudar/receber", env.toString(), MudarDeTvRegras.prova(c.segredo))
         if (r.first != 200) throw IllegalArgumentException(r.second?.optString("erro")?.ifBlank { null } ?: "a TV nova recusou (${r.first})")
         Diario.anotar(app, "tv", app.getString(R.string.mtv_diario_enviado, apps.size), "ok")
         return r.second?.optString("de") ?: ""

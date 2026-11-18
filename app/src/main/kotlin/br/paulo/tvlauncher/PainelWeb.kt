@@ -1473,6 +1473,8 @@ object PainelWeb {
 
     /** Entrar pelo link do convite: sessão do papel do convite (convidado: cai quando o convite vence). */
     private fun entrarPorConvite(req: Requisicao, ip: String): Resposta {
+        // Painel desligado pelo dono ou por erros de PIN (aberto só para "Trazer de outra TV"): convite não entra.
+        if (!ligado() || !PainelArmazem.podeLigar(app)) return erro(503, "painel desligado")
         val c = PapeisPainel.usar(convites(), corpoJson(req)?.optString("codigo"), System.currentTimeMillis())
             ?: return erro(401, "convite vencido ou revogado")
         val token = sessoes.criar(elevada = false, papel = c.papel, venceEm = c.vence ?: Long.MAX_VALUE)

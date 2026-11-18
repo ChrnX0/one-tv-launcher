@@ -39,16 +39,16 @@ class MudarDeTvRegrasTest {
 
     @Test fun portaDeUsoUnicoComPrazoELimiteDeErros() {
         val r = MudarDeTvRegras.Recepcao("ABCDEFGH", 1_000)
-        assertEquals(Conferencia.ERRADO, r.conferir("ABCDEFGX", 2_000))
-        assertEquals(Conferencia.OK, r.conferir("abcd-efgh", 3_000))
-        assertEquals(Conferencia.VENCIDO, r.conferir("ABCDEFGH", 4_000))   // uso único
+        assertEquals(Conferencia.ERRADO, r.conferir(MudarDeTvRegras.prova("ABCDEFGX"), 2_000))
+        assertEquals(Conferencia.OK, r.conferir(MudarDeTvRegras.prova("abcd-efgh"), 3_000))
+        assertEquals(Conferencia.VENCIDO, r.conferir(MudarDeTvRegras.prova("ABCDEFGH"), 4_000))   // uso único
 
         val v = MudarDeTvRegras.Recepcao("ABCDEFGH", 0)
-        assertEquals(Conferencia.VENCIDO, v.conferir("ABCDEFGH", MudarDeTvRegras.VALIDADE_MS + 1))
+        assertEquals(Conferencia.VENCIDO, v.conferir(MudarDeTvRegras.prova("ABCDEFGH"), MudarDeTvRegras.VALIDADE_MS + 1))
 
         val e = MudarDeTvRegras.Recepcao("ABCDEFGH", 0)
-        repeat(MudarDeTvRegras.MAX_ERROS) { assertEquals(Conferencia.ERRADO, e.conferir("ZZZZZZZZ", 10)) }
-        assertEquals(Conferencia.VENCIDO, e.conferir("ABCDEFGH", 20))   // chutar não adianta: cai depois de 5
+        repeat(MudarDeTvRegras.MAX_ERROS) { assertEquals(Conferencia.ERRADO, e.conferir(MudarDeTvRegras.prova("ZZZZZZZZ"), 10)) }
+        assertEquals(Conferencia.VENCIDO, e.conferir(MudarDeTvRegras.prova("ABCDEFGH"), 20))   // chutar não adianta: cai depois de 5
         assertFalse(e.vale(20))
     }
 
@@ -56,15 +56,18 @@ class MudarDeTvRegrasTest {
         val nova = MudarDeTvRegras.novoPar()
         val outra = MudarDeTvRegras.novoPar()
         val dados = ByteArray(200_000) { (it * 31).toByte() }
-        val env = MudarDeTvRegras.selar(nova.public.encoded, dados)
-        assertArrayEquals(dados, MudarDeTvRegras.abrir(nova.private, env))
-        try { MudarDeTvRegras.abrir(outra.private, env); fail("abriu com outra chave") } catch (_: IllegalArgumentException) {}
+        val env = MudarDeTvRegras.selar(nova.public.encoded, dados, "abcd-efgh")
+        assertArrayEquals(dados, MudarDeTvRegras.abrir(nova.private, env, "ABCDEFGH"))
+        try { MudarDeTvRegras.abrir(outra.private, env, "ABCDEFGH"); fail("abriu com outra chave") } catch (_: IllegalArgumentException) {}
+        // Rodada 15: envelope montado por quem só viu o cabeçalho (não sabe o segredo) não abre.
+        try { MudarDeTvRegras.abrir(nova.private, MudarDeTvRegras.selar(nova.public.encoded, dados, "ZZZZZZZZ"), "ABCDEFGH"); fail("aceitou envelope de outro segredo") }
+        catch (_: IllegalArgumentException) {}
         // Um byte trocado no meio do caminho: o GCM recusa.
         val b = java.util.Base64.getDecoder().decode(env.getString("dados")); b[100] = (b[100].toInt() xor 1).toByte()
         env.put("dados", java.util.Base64.getEncoder().encodeToString(b))
-        try { MudarDeTvRegras.abrir(nova.private, env); fail("aceitou conteúdo alterado") } catch (_: IllegalArgumentException) {}
+        try { MudarDeTvRegras.abrir(nova.private, env, "ABCDEFGH"); fail("aceitou conteúdo alterado") } catch (_: IllegalArgumentException) {}
         // Lixo no lugar do envelope: recusa com IllegalArgumentException, nunca outra exceção.
-        try { MudarDeTvRegras.abrir(nova.private, org.json.JSONObject().put("v", 1).put("efemera", "!!").put("iv", "x").put("dados", "y")); fail() }
+        try { MudarDeTvRegras.abrir(nova.private, org.json.JSONObject().put("v", 1).put("efemera", "!!").put("iv", "x").put("dados", "y"), "ABCDEFGH"); fail() }
         catch (_: IllegalArgumentException) {}
     }
 

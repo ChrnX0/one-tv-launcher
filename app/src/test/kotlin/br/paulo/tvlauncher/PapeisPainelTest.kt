@@ -103,4 +103,20 @@ class PapeisPainelTest {
         assertTrue(runCatching { PapeisPainel.criar(emptyList(), Papel.DONO, t0) }.isFailure)
         assertTrue(PapeisPainel.deJson(json.replace("\"familia\"", "\"dono\"")).none { it.papel == Papel.DONO })
     }
+
+    // Rodada 15: quem tem o link do convite entrava 8 vezes e derrubava a sessão do dono.
+    @Test fun convidadoNaoDerrubaODono() {
+        val agora = 1_000L
+        val s = Sessoes({ agora })
+        val dono = s.criar()
+        repeat(20) { s.criar(elevada = false, papel = Papel.CONVIDADO) }
+        assertTrue("o dono continua dentro", s.existe(dono))
+        assertEquals(Papel.DONO, s.papel(dono))
+    }
+
+    @Test fun anoMaximoAcompanhaOAno() {
+        val ano = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
+        assertEquals(ano + 1, LeitorNomes.anoMaximoAgora())
+        assertEquals(ano + 1, LeitorNomes.ler("Filme.${ano + 1}.1080p.mkv").ano)
+    }
 }

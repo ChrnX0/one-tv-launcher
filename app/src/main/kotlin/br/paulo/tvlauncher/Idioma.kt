@@ -226,7 +226,8 @@ object Idioma {
     /** O título sem marca, ano, acento nem pontuação: "Duna: Parte 2 (2024) [L]" e "Duna - Parte 2 (2024)" dão o mesmo. */
     fun chaveTitulo(nome: String): String =
         semAcento(Vod.nomeLimpo(nome.replace(reMarcas, " ")).replace(reMarcas, " "))
-            .lowercase().replace(Regex("""[^a-z0-9]+"""), " ").trim()
+            .lowercase().replace(reNaoAlfaNum, " ").trim()
+    private val reNaoAlfaNum = Regex("""[^a-z0-9]+""")
 
     /**
      * Índice do catálogo por título (só os itens com marca de versão; os outros nunca têm par). Montado uma vez, fora da

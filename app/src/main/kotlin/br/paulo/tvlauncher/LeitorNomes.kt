@@ -32,6 +32,27 @@ object LeitorNomes {
 
     private val IC = setOf(RegexOption.IGNORE_CASE)
 
+    // Rodada 15 da depuração: as regex de lerSo/temporadaDaPasta compiladas uma vez (antes, a cada arquivo e a cada
+    // palavra: uma pasta DLNA com milhares de vídeos travava a tela).
+    private val reL1 = Regex("""^(?:season|temporada|saison|staffel|stagione|seizoen|sezon|series)[ ._]?(\d{1,2})$""", IC)
+    private val reL2 = Regex("""^[ST](\d{1,2})$""", IC)
+    private val reL3 = Regex("""^(\d{1,2})(?:ª|a|º)? ?(?:temporada|season)$""", IC)
+    private val reL4 = Regex("""^\s*(?:\[[^\]]*]|【[^】]*】|\{[^}]*})\s*""")
+    private val reL5 = Regex("""(?i)\b([hx])\.(26[45])\b""")
+    private val reL6 = Regex("""(?i)\b(ddp?|aac|dts|ac3|eac3|atmos|truehd|opus|flac)\.?([257])[.]([01])\b""")
+    private val reL7 = Regex("""(?<![0-9])([257])\.([01])(?![0-9])""")
+    private val reL8 = Regex("""(?<![A-Za-z0-9])((?:[A-Za-z]\.){2,})""")
+    private val reL9 = Regex("""\b(Mr|Mrs|Ms|Dr|St|Sr|Sra|Jr|Vol|Pt)\.(?=\S)""", IC)
+    private val reL10 = Regex("""[\[\](){}【】]""")
+    private val reL11 = Regex("""\s+""")
+    private val reL12 = Regex("""\d{1,4}""")
+    private val reL13 = Regex("""^\d{3,4}[pi]$""")
+    private val reL14 = Regex("""\s+-\s*$""")
+    private val reL15 = Regex("""\s+(complete|completa|season|temporada|saison|staffel)$""", IC)
+
+    /** O ano mais alto aceito como ano de lançamento: o ano corrente + 1 (antes fixo em 2027). */
+    fun anoMaximoAgora(): Int = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR) + 1
+
     private val reExtensao = Regex("""\.(mkv|mp4|m4v|avi|mov|wmv|mpe?g|ts|m2ts|mts|webm|flv|vob|iso|3gp|ogv|divx|rmvb|srt)$""", IC)
 
     /** Tags que sempre marcam o fim do título (resolução, origem, codec, áudio). */
@@ -85,7 +106,7 @@ object LeitorNomes {
      * Lê [arquivo] (só o nome, com ou sem extensão). [pastas] são as pastas acima, da mais de fora para a mais de dentro
      * ("Séries", "Dark", "Temporada 2"): dão o nome e a temporada quando o arquivo não diz.
      */
-    fun ler(arquivo: String, pastas: List<String> = emptyList(), anoMaximo: Int = 2027): Lido {
+    fun ler(arquivo: String, pastas: List<String> = emptyList(), anoMaximo: Int = anoMaximoAgora()): Lido {
         val base = lerSo(arquivo, anoMaximo)
         val extra = base.extra || pastas.lastOrNull()?.let { reExtra.containsMatchIn(" $it ") && limparPasta(it) in setOf("extras", "featurettes", "trailers", "samples", "sample", "bonus") } == true
         // Temporada pela pasta ("Season 2", "Temporada 02", "S02"), quando o arquivo não tem.
@@ -121,9 +142,9 @@ object LeitorNomes {
     /** A temporada que o nome da pasta diz ("Season 2", "Temporada 02", "S02", "T2"), ou null. */
     fun temporadaDaPasta(pasta: String): Int? {
         val p = pasta.trim()
-        Regex("""^(?:season|temporada|saison|staffel|stagione|seizoen|sezon|series)[ ._]?(\d{1,2})$""", IC).find(p)?.let { return it.groupValues[1].toInt() }
-        Regex("""^[ST](\d{1,2})$""", IC).find(p)?.let { return it.groupValues[1].toInt() }
-        Regex("""^(\d{1,2})(?:ª|a|º)? ?(?:temporada|season)$""", IC).find(p)?.let { return it.groupValues[1].toInt() }
+        reL1.find(p)?.let { return it.groupValues[1].toInt() }
+        reL2.find(p)?.let { return it.groupValues[1].toInt() }
+        reL3.find(p)?.let { return it.groupValues[1].toInt() }
         if (p.equals("specials", true) || p.equals("especiais", true)) return 0
         return null
     }
@@ -135,17 +156,17 @@ object LeitorNomes {
         var s = arquivoBruto.trim().replace(reExtensao, "")
         val extra = reExtra.containsMatchIn(s)
         // 1. Grupo no começo ("[SubsPlease] ", "【Grupo】") sai; ano entre parênteses fica guardado.
-        s = s.replace(Regex("""^\s*(?:\[[^\]]*]|【[^】]*】|\{[^}]*})\s*"""), "")
+        s = s.replace(reL4, "")
         val anoParenteses = reAnoParenteses.findAll(s).mapNotNull { it.groupValues[1].toIntOrNull() }.lastOrNull { it <= anoMaximo }
         // 2. Separadores viram espaço, sem quebrar o que tem ponto de propósito.
-        s = s.replace(Regex("""(?i)\b([hx])\.(26[45])\b"""), "$1$2")
-            .replace(Regex("""(?i)\b(ddp?|aac|dts|ac3|eac3|atmos|truehd|opus|flac)\.?([257])[.]([01])\b"""), "$1$2$3")
-            .replace(Regex("""(?<![0-9])([257])\.([01])(?![0-9])"""), "$1$2")
-            .replace(Regex("""(?<![A-Za-z0-9])((?:[A-Za-z]\.){2,})""")) { m -> m.value.replace(".", "") + " " }
-            .replace(Regex("""\b(Mr|Mrs|Ms|Dr|St|Sr|Sra|Jr|Vol|Pt)\.(?=\S)""", IC)) { m -> m.groupValues[1] + " " }
+        s = s.replace(reL5, "$1$2")
+            .replace(reL6, "$1$2$3")
+            .replace(reL7, "$1$2")
+            .replace(reL8) { m -> m.value.replace(".", "") + " " }
+            .replace(reL9) { m -> m.groupValues[1] + " " }
             .replace('_', ' ').replace('.', ' ')
-            .replace(Regex("""[\[\](){}【】]"""), " ")
-            .replace(Regex("""\s+"""), " ").trim()
+            .replace(reL10, " ")
+            .replace(reL11, " ").trim()
 
         // 3. Marcadores de episódio / data: o título é o que vem antes do primeiro.
         var temporada: Int? = null
@@ -158,7 +179,7 @@ object LeitorNomes {
         marca(reSxE.find(s)) { m ->
             temporada = m.groupValues[1].toInt()
             val inicio = m.groupValues[2].toInt()
-            val resto = Regex("""\d{1,4}""").findAll(m.groupValues[3]).map { it.value.toInt() }.toList()
+            val resto = reL12.findAll(m.groupValues[3]).map { it.value.toInt() }.toList()
             // "S01E01-E03" / "S01E01-03": faixa; "S01E01E02": lista.
             episodios = if (resto.size == 1 && m.groupValues[3].contains('-') && resto[0] > inicio && resto[0] - inicio <= 30) (inicio..resto[0]).toList()
             else listOf(inicio) + resto.filter { it > inicio }
@@ -185,8 +206,8 @@ object LeitorNomes {
         for (i in 1 until palavras.size) {
             val w = palavras[i].lowercase().trim('-', ',')
             val prox = palavras.getOrNull(i + 1)?.lowercase()?.trim('-', ',')
-            val forte = w in FORTES || Regex("""^\d{3,4}[pi]$""").matches(w) || w.startsWith("web-dl") || w.startsWith("x26") || w.startsWith("h26")
-            val fraca = w in FRACAS && prox != null && (prox in FORTES || prox in FRACAS || Regex("""^\d{3,4}[pi]$""").matches(prox) || reAno.matches(prox))
+            val forte = w in FORTES || reL13.matches(w) || w.startsWith("web-dl") || w.startsWith("x26") || w.startsWith("h26")
+            val fraca = w in FRACAS && prox != null && (prox in FORTES || prox in FRACAS || reL13.matches(prox) || reAno.matches(prox))
             if (forte || fraca) { fim = i; break }
         }
         var titulo = palavras.take(fim)
@@ -203,9 +224,9 @@ object LeitorNomes {
         if (ano == null && data != null) ano = data!!.take(4).toInt()
         // Ano entre parênteses que ficou no meio ("Filme (2019) Dublado") já saiu com as tags; tira sobras de pontuação.
         var nome = titulo.joinToString(" ").trim(' ', '-', '.', ',', ':', ';', '+', '~', '–')
-        nome = nome.replace(Regex("""\s+-\s*$"""), "").replace(Regex("""\s+"""), " ").trim()
+        nome = nome.replace(reL14, "").replace(reL11, " ").trim()
         // Sufixo de grupo grudado ("Filme-GRUPO") só some depois de tag; aqui só limpa "Complete"/"Season" sobrando.
-        nome = nome.replace(Regex("""\s+(complete|completa|season|temporada|saison|staffel)$""", IC), "").trim()
+        nome = nome.replace(reL15, "").trim()
         return Lido(nome, ano, temporada, episodios, extra, data)
     }
 }

@@ -297,6 +297,7 @@ class MidiaRedeActivity : Activity() {
         if (ocupado) return
         ocupado = true
         aviso.text = getString(R.string.rede_abrindo)
+        val pastas = pilha.drop(2).map { it.titulo } + nome   // lido aqui (thread da tela); o resto vai para a rede
         rede.execute {
             val r = runCatching {
                 when (origem) {
@@ -309,20 +310,21 @@ class MidiaRedeActivity : Activity() {
                     is Origem.Link -> FontesMidia.listarLink(origem.c)
                 }
             }
+            // Rodada 15: ler os nomes e ordenar FORA da thread da tela (pasta DLNA com milhares de vídeos dava ANR).
+            // Elevação 8.2: vídeos de pasta (não Jellyfin/Plex, que já têm ficha) ganham título, temporada e episódio.
+            val lidos = r.getOrNull()?.takeUnless { origem is Origem.Jelly || origem is Origem.PlexO }
+                ?.filter { !it.pasta && it.tipo == Upnp.Tipo.VIDEO }
+                ?.mapNotNull { e -> LeitorNomes.ler(e.titulo, pastas).takeIf { CatalogoPasta.leuAlgo(e.titulo, it) }?.let { e to it } }?.toMap()
+                ?: emptyMap()
+            val ordem = r.getOrNull()?.let { if (lidos.isEmpty()) it else CatalogoPasta.ordenar(it, { e -> e.pasta }, { e -> lidos[e] }) }
             tela.post {
                 ocupado = false
                 if (isDestroyed) return@post
                 val entradas = r.getOrNull()
-                if (entradas == null) { aviso.text = erroLegivel(r.exceptionOrNull()); return@post }
+                if (entradas == null || ordem == null) { aviso.text = erroLegivel(r.exceptionOrNull()); return@post }
                 pilha.last().foco = lista.selectedItemPosition
                 val buscar = if (id == "" && (origem is Origem.Jelly || origem is Origem.PlexO))
                     listOf(Linha(IconeMidia.Tipo.LUPA, getString(R.string.rede_buscar), null, null, Buscar(origem))) else emptyList()
-                // Elevação 8.2: vídeos de pasta (não Jellyfin/Plex, que já têm ficha) ganham título, temporada e episódio.
-                val pastas = pilha.drop(2).map { it.titulo } + nome
-                val lidos = if (origem is Origem.Jelly || origem is Origem.PlexO) emptyMap() else entradas
-                    .filter { !it.pasta && it.tipo == Upnp.Tipo.VIDEO }
-                    .mapNotNull { e -> LeitorNomes.ler(e.titulo, pastas).takeIf { CatalogoPasta.leuAlgo(e.titulo, it) }?.let { e to it } }.toMap()
-                val ordem = if (lidos.isEmpty()) entradas else CatalogoPasta.ordenar(entradas, { it.pasta }, { lidos[it] })
                 val catalogo = if (lidos.isNotEmpty() && InfoExternaCache.temTmdb()) listOf(linhaCatalogo()) else emptyList()
                 pilha += Nivel(nome, origem, buscar + catalogo + linhaFotos(origem, id, nome, entradas) + ordem.map { linhaEntrada(it, lidos[it]) }, lidos = lidos)
                 anotarNaBiblioteca(origem, entradas, lidos)
@@ -379,14 +381,16 @@ class MidiaRedeActivity : Activity() {
             is Origem.Link -> return
         }
         val servidor = origem is Origem.Jelly || origem is Origem.PlexO
+        val app = applicationContext
+        if (capas.isShutdown) return
+        capas.execute {   // a leitura dos nomes que faltam também sai da thread da tela (rodada 15)
         val fontes = entradas.filter { !it.pasta && it.tipo == Upnp.Tipo.VIDEO }.mapNotNull { e ->
             val l = lidos[e] ?: LeitorNomes.ler(e.titulo).takeIf { it.nome.isNotBlank() && !it.extra } ?: return@mapNotNull null
             BibliotecaUnica.Fonte(tipo, onde, l.nome, l.ano, l.serie, qualidade = BibliotecaUnica.qualidadeDoNome(e.titulo),
                 versao = Idioma.versao(e.titulo, ""), abrir = if (servidor || l.serie) "" else e.url.orEmpty())
         }.distinctBy { listOf(it.titulo, it.serie, it.abrir) }   // série: uma linha por série (cada episódio não vira título)
-        if (fontes.isEmpty()) return
-        val app = applicationContext
-        if (!capas.isShutdown) capas.execute { BibliotecaIndice.anotar(app, fontes) }
+        if (fontes.isNotEmpty()) BibliotecaIndice.anotar(app, fontes)
+        }
     }
 
     // ---------------------------------------------------------------- elevação 8.2: a pasta vira catálogo

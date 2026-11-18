@@ -20,7 +20,7 @@ import org.json.JSONObject
  */
 object Despertador {
     private const val TAG = "TvLauncher.Alarme"
-    private const val PREFS = "despertador"
+    const val PREFS = "despertador"
     const val EXTRA_ID = "alarme_id"
 
     /**

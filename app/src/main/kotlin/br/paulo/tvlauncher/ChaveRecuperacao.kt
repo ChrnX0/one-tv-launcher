@@ -126,8 +126,10 @@ object ChaveRecuperacao {
     /** Abre o pedaço "recuperacao" com o código. Lança [CofreBackup.SenhaErrada] se não é a chave deste arquivo. */
     fun abrirComCodigo(rec: JSONObject, codigo: String): ByteArray {
         val bruto = brutoDoCodigo(codigo) ?: throw CofreBackup.SenhaErrada()
+        // Código errado que passa na verificação de 16 bits (1 em 65536) pode virar escalar 0 ou >= n: é "chave errada".
         val priv = try {
             KeyFactory.getInstance("EC").generatePrivate(ECPrivateKeySpec(BigInteger(1, bruto), parametros))
+        } catch (e: java.security.GeneralSecurityException) { throw CofreBackup.SenhaErrada()
         } finally { bruto.fill(0) }
         val b64 = Base64.getDecoder()
         val efemera = runCatching { b64.decode(rec.getString("efemera")) }.getOrNull()
@@ -136,7 +138,10 @@ object ChaveRecuperacao {
         if (efemera == null || iv == null || iv.size != 12 || trancada == null) throw IllegalArgumentException("arquivo de backup estragado")
         val pubEfemera = runCatching { KeyFactory.getInstance("EC").generatePublic(X509EncodedKeySpec(efemera)) }.getOrNull()
             ?: throw IllegalArgumentException("arquivo de backup estragado")
-        val acordo = try { KeyAgreement.getInstance("ECDH").apply { init(priv); doPhase(pubEfemera, true) } }
+        // init recusa a NOSSA chave (código errado); doPhase recusa a do arquivo (arquivo estragado).
+        val acordo = try { KeyAgreement.getInstance("ECDH").apply { init(priv) } }
+            catch (e: java.security.GeneralSecurityException) { throw CofreBackup.SenhaErrada() }
+        try { acordo.doPhase(pubEfemera, true) }
             catch (e: java.security.GeneralSecurityException) { throw IllegalArgumentException("arquivo de backup estragado") }
         return CofreBackup.abrirGcm(kek(acordo.generateSecret(), efemera), iv, trancada)
     }

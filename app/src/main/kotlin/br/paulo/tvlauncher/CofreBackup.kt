@@ -106,7 +106,10 @@ object CofreBackup {
      * [senha] pode ser também o código da chave de recuperação (o campo de senha aceita os dois).
      */
     fun abrir(envelope: String, senha: String): String {
-        if (ChaveRecuperacao.pareceCodigo(senha) && temRecuperacao(envelope)) return abrirComChave(envelope, senha)
+        // Parece código: tenta a chave; se não for, segue como senha (uma senha que começa com "sofaly-" também vale).
+        if (ChaveRecuperacao.pareceCodigo(senha) && temRecuperacao(envelope)) {
+            try { return abrirComChave(envelope, senha) } catch (_: SenhaErrada) { }
+        }
         val o = runCatching { JSONObject(envelope) }.getOrNull() ?: throw IllegalArgumentException("não é um backup cifrado")
         if (o.optString("tipo") == TIPO && o.optInt("versao") == 2) {
             val voltas = o.optInt("voltas")

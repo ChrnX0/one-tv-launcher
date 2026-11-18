@@ -103,8 +103,9 @@ class AutomacoesActivity : Activity() {
                 fun girarSoSe(passo: Int) {
                     val m = Gatilhos.soSe(this).toMutableMap()
                     val atual = m[e].orEmpty()
-                    val i = opcoes.indexOf(atual).let { if (it < 0) 0 else it }
-                    val novo = opcoes[(i + passo).mod(opcoes.size)]
+                    // Combinação montada no painel (fora das opções da TV) entra na roda como a 1ª: girar não a apaga sem querer.
+                    val roda = if (atual in opcoes) opcoes else listOf(atual) + opcoes
+                    val novo = roda[(roda.indexOf(atual) + passo).mod(roda.size)]
                     if (novo.isEmpty()) m.remove(e) else m[e] = novo
                     Gatilhos.salvarSoSe(this, m)
                     w.titulo("    " + textoSoSe(novo))

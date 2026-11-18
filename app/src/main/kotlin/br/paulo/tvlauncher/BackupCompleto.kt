@@ -50,6 +50,7 @@ object BackupCompleto {
     internal val FORA_DE_PROPOSITO = setOf("confirmacoes", "familia_link", "plugins",   // plugins: o OK vale para o certificado desta TV
           // degrau 3: o link da família não viaja no backup (restaurar = link novo)
         "emprestimo_shell", "emprestimo_dono",   // empréstimos: restaurar não pode ligar poder emprestado sem o PIN (e o uid de cada app muda entre aparelhos)
+        "abertura_pronta",   // rodada 15: só cache das marcações do IntroDB (refaz sozinho)
         "painel_papeis",   // elevação 18.1: convites (família/convidado) não viajam: restaurar não pode reabrir acesso revogado
         "mudar_tv",   // elevação 19.7: a fila dos apps que faltam é desta TV, depois de receber de outra
         "desfazer",   // elevação 2.11: os passos de desfazer são desta TV e destes dias
@@ -209,6 +210,9 @@ object BackupCompleto {
         val trocaTunel = bytes.containsKey("tunel/$ESTADO_TUNEL") || tailscale != null
         if (trocaTunel) extras.put("tunel_seguro", extras.optJSONObject("tunel_seguro") ?: JSONObject())   // vazio = limpa, como o esquecer
         else extras.remove("tunel_seguro")   // o backup não traz o túnel: o de agora continua como está
+        // Chave de recuperação: a desta TV vale mais que a do backup. Senão restaurar um backup velho trazia de volta uma
+        // chave trocada por ter vazado (ou apagava a atual, se o backup era de antes dela). Só adota a do backup sem chave aqui.
+        if (RecuperacaoTv.publica(app) != null) extras.remove(RecuperacaoTv.PREFS)
 
         // Retrato: as preferências (com as chaves do Keystore, que nesta mesma instalação continuam valendo) e os arquivos.
         val prefsAntes = JSONObject()
