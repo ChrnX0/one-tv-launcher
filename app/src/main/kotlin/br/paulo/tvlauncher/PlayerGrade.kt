@@ -9,6 +9,16 @@ package br.paulo.tvlauncher
  * O passado não interessa (não há "assistir de novo"): o cursor e a janela nunca vão antes de agora.
  */
 object PlayerGrade {
+    /**
+     * Elevação 16.1: o que o leitor de tela fala na célula do guia (a grade é desenhada à mão e não tem views).
+     * "5, Globo. Jornal Nacional, 20:30 a 21:15" ou "5, Globo. Sem guia".
+     */
+    fun falaLeitor(numero: Int, canal: String, programa: String?, inicio: String?, fim: String?, semGuia: String): String =
+        "$numero, $canal. " + if (programa.isNullOrBlank()) semGuia else listOfNotNull(programa, if (inicio != null && fim != null) "$inicio – $fim" else null).joinToString(", ")
+
+    /** 16.8: no árabe a régua do tempo anda para a esquerda; a seta da direita volta no tempo. */
+    fun passoDaSeta(direita: Boolean, rtl: Boolean): Int = if (direita != rtl) +1 else -1
+
     const val FAIXA = 30 * 60_000L           // largura de uma coluna da régua (30 min)
     const val JANELA = 3 * 60 * 60_000L      // quanto tempo cabe na tela (3 h)
     const val ALCANCE = 14 * 60 * 60_000L    // até onde dá para ir (o guia guarda 14 h à frente desde a auditoria de 10/11/2026)

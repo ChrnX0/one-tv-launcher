@@ -50,7 +50,7 @@ object TempoTelaTv {
         if (agora - ultimoAviso > 10_000) {
             ultimoAviso = agora
             AvisoTv.mostrar(servico, servico.getString(R.string.tela_titulo), servico.getString(R.string.tela_acabou), 8,
-                som = false, guardarSeApagada = false)
+                som = false, guardarSeApagada = false, prioridade = NaoPerturbe.Tipo.REGRA)
         }
     }
 
@@ -81,7 +81,8 @@ object TempoTelaTv {
         gravar(app, depois)
         val restDepois = TempoTela.restanteMs(depois, hoje(), cota(app))
         if (TempoTela.cruzouAviso(restAntes, restDepois))
-            AvisoTv.mostrar(app, app.getString(R.string.tela_titulo), app.getString(R.string.tela_5min), 8, som = false, guardarSeApagada = false)
+            AvisoTv.mostrar(app, app.getString(R.string.tela_titulo), app.getString(R.string.tela_5min), 8, som = false, guardarSeApagada = false,
+                prioridade = NaoPerturbe.Tipo.REGRA)
         if (restDepois == 0L) AutorizaShizukuService.instancia?.let { fecharSeAcabou(it, pacote) }
     }
 }

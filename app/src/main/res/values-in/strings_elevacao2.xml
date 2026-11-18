@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação (17/11/2026, ondas 2): tradução de values/strings_elevacao2.xml. -->
+<resources>
+    <string name="elv_ac_titulo">Kontras tinggi</string>
+    <string name="elv_ac_det">Teks lebih terang dan tepi lebih jelas di setiap layar (minimal 7:1)</string>
+    <string name="elv_ad_titulo">Deskripsi audio</string>
+    <string name="elv_ad_det">Pilih trek audio yang menjelaskan adegan bila ada</string>
+    <string name="elv_sdh_titulo">Subtitle untuk tunarungu</string>
+    <string name="elv_sdh_det">Selalu tampilkan subtitle dengan suara ([pintu dibanting]) dalam bahasa TV, meski disulih suara</string>
+    <string name="elv_cat_titulo">Poster dan sinopsis video</string>
+    <string name="elv_cat_explica">Hanya judul yang dikirim ke TMDB, tidak pernah folder atau server</string>
+    <string name="elv_cat_ligado">Aktif</string>
+    <string name="elv_cat_desligado">Nonaktif</string>
+    <string name="elv_cat_ep">%1$s · M%2$d E%3$d</string>
+    <string name="elv_cat_so_ep">%1$s · Episode %2$d</string>
+    <string name="elv_cat_temporada">%1$s · Musim %2$d</string>
+    <string name="elv_cat_filme_ano">%1$s (%2$d)</string>
+    <string name="elv_cat_n_temporadas">Musim: %d</string>
+    <string name="elv_cat_procurando">Mencari poster…</string>
+    <string name="elv_cat_nada">Tidak ada di TMDB. Tahan OK untuk menulis nama yang benar.</string>
+    <string name="elv_cat_corrigir_titulo">Perbaiki: %s</string>
+    <string name="elv_cat_corrigir_explica">Poster atau sinopsis salah? Minta hasil berikutnya, atau tulis nama dan tahun yang benar. Nama kosong kembali ke otomatis.</string>
+    <string name="elv_cat_nao_e">Bukan yang ini</string>
+    <string name="elv_cat_escrever">Tulis nama</string>
+    <string name="elv_cat_campo">Nama dan tahun, mis.: Dune 2021</string>
+    <string name="elv_cat_salvar">Simpan</string>
+    <string name="elv_cat_dica">perbaiki</string>
+    <string name="elv_bib_lista">Daftar</string>
+    <string name="elv_bib_pasta">Folder</string>
+    <string name="elv_bib_servidor">Server</string>
+    <string name="elv_bib_nuvem">Cloud</string>
+    <string name="elv_bib_addon">Add-on</string>
+</resources>

@@ -1,0 +1,32 @@
+# Elevação 18.4 (17/11/2026): o painel web num navegador de verdade, em todo PR que mexe nele.
+# Todas as páginas, computador e celular, as 14 línguas (+ pt), acessibilidade básica e rolagem para o lado
+# (scripts/painel-navegador.mjs). Usa o Chrome que já vem no runner: nada de baixar navegador. ~2 min por execução.
+name: Painel no navegador
+
+on:
+  pull_request:
+    paths:
+      - 'app/src/main/assets/painel/**'
+      - 'scripts/painel-navegador.mjs'
+      - '.github/workflows/painel.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: painel-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  navegador:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      # Node e Google Chrome já vêm na imagem ubuntu-latest do GitHub.
+      - name: playwright-core (sem navegador)
+        run: npm install --no-save --no-package-lock playwright-core@1.63.0
+      - name: Todas as páginas, 15 línguas, computador e celular
+        run: node scripts/painel-navegador.mjs

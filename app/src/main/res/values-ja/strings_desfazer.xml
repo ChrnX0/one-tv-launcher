@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 2.11: Desfazer em tudo (Desfazer.kt). -->
+<resources>
+    <string name="desf_diario">変更（%1$s）：%2$s</string>
+    <string name="desf_diario_desfeito">元に戻しました：%1$s</string>
+    <string name="desf_ocultou">%1$s を非表示にしました</string>
+    <string name="desf_mostrou">%1$s を再表示しました</string>
+    <string name="desf_cat_ajuste">設定</string>
+    <string name="desf_cat_organizacao">並び</string>
+    <string name="desf_cat_automacao">オートメーション</string>
+    <string name="desf_cat_limpeza">お掃除</string>
+    <string name="desf_nada">元に戻すものはありません（既に戻しました）。</string>
+    <string name="desf_feito">元に戻しました。すべて前の状態です。</string>
+    <string name="desf_parcial">一部だけ元に戻しました：%1$d 件は再び変わっていたのでそのままです。</string>
+    <string name="desf_barra">変更：%1$s</string>
+    <string name="desf_botao">元に戻す</string>
+    <string name="desf_tela">最近の変更</string>
+    <string name="desf_tela_det">過去 7 日間の変更。選んで OK で前の状態に戻ります。</string>
+    <string name="desf_tela_vazia">過去 7 日間の変更はありません。</string>
+    <string name="desf_ja_desfeita">元に戻し済み</string>
+    <string name="desf_rot_config">設定</string>
+    <string name="desf_rot_automacoes">オートメーション</string>
+    <string name="desf_rot_rotinas">ルーティン</string>
+    <string name="desf_rot_apps">アプリ一覧</string>
+    <string name="desf_rot_organizar">ホーム画面のアプリ</string>
+</resources>

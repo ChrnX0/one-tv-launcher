@@ -306,16 +306,22 @@ object McpServidor {
 
     // ---------------------------------------------------------------- OAuth: página do PIN e token
 
-    private fun form(texto: String): Map<String, String> = texto.split('&').filter { it.isNotEmpty() }.associate {
-        val i = it.indexOf('=')
-        val k = URLDecoder.decode(if (i < 0) it else it.substring(0, i), "UTF-8")
-        val v = if (i < 0) "" else URLDecoder.decode(it.substring(i + 1), "UTF-8")
-        k to v
-    }
+    /** Corpo x-www-form-urlencoded. Null se mal formado ("%" sem dois dígitos hex: o URLDecoder lança) -> 400, não 500. */
+    private fun form(texto: String) = lerFormulario(texto)
+
+    /** Puro (McpServidorTest). */
+    internal fun lerFormulario(texto: String): Map<String, String>? = runCatching {
+        texto.split('&').filter { it.isNotEmpty() }.associate {
+            val i = it.indexOf('=')
+            val k = URLDecoder.decode(if (i < 0) it else it.substring(0, i), "UTF-8")
+            val v = if (i < 0) "" else URLDecoder.decode(it.substring(i + 1), "UTF-8")
+            k to v
+        }
+    }.getOrNull()
 
     private fun authorize(req: Requisicao): Resposta {
         val tx = McpTextos.de(req.cabecalho("accept-language"))
-        val p = if (req.metodo == "POST") form(req.corpoTexto()) else req.consulta
+        val p = if (req.metodo == "POST") form(req.corpoTexto()) ?: return erroOAuth(400, "invalid_request", "corpo mal formado") else req.consulta
         val cliente = p["client_id"]; val redirect = p["redirect_uri"]; val desafio = p["code_challenge"]
         try {
             autorizacao().conferirPedido(cliente, redirect, p["response_type"], desafio, p["code_challenge_method"])
@@ -411,7 +417,7 @@ object McpServidor {
     }
 
     private fun token(req: Requisicao): Resposta {
-        val p = form(req.corpoTexto())
+        val p = form(req.corpoTexto()) ?: return erroOAuth(400, "invalid_request", "corpo mal formado")
         return try {
             val par = when (p["grant_type"]) {
                 "authorization_code" -> autorizacao().trocarCodigo(p["code"], p["client_id"], p["redirect_uri"], p["code_verifier"])

@@ -80,6 +80,7 @@ class EfeitosSom {
         fun ligado(ctx: Context, chave: String) = prefs(ctx).getBoolean(chave, false)
         /** Inverte a chave e devolve o valor novo. */
         fun alternar(ctx: Context, chave: String): Boolean = (!ligado(ctx, chave)).also { prefs(ctx).edit().putBoolean(chave, it).apply() }
+        fun definir(ctx: Context, chave: String, valor: Boolean) = prefs(ctx).edit().putBoolean(chave, valor).apply()
         fun volumeIgual(ctx: Context) = ligado(ctx, PlayerAcessivel.VOLUME_IGUAL)
         fun vozClara(ctx: Context) = ligado(ctx, PlayerAcessivel.VOZ_CLARA)
 

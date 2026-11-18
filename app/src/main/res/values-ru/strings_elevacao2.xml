@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação (17/11/2026, ondas 2): tradução de values/strings_elevacao2.xml. -->
+<resources>
+    <string name="elv_ac_titulo">Высокая контрастность</string>
+    <string name="elv_ac_det">Более яркий текст и чёткие рамки на всех экранах (не меньше 7:1)</string>
+    <string name="elv_ad_titulo">Тифлокомментарий</string>
+    <string name="elv_ad_det">Выбирать звуковую дорожку с описанием происходящего, когда она есть</string>
+    <string name="elv_sdh_titulo">Субтитры для глухих</string>
+    <string name="elv_sdh_det">Всегда показывать субтитры со звуками ([хлопает дверь]) на языке телевизора, даже при дубляже</string>
+    <string name="elv_cat_titulo">Постер и описание для видео</string>
+    <string name="elv_cat_explica">В TMDB уходит только название, никогда папка или сервер</string>
+    <string name="elv_cat_ligado">Вкл.</string>
+    <string name="elv_cat_desligado">Выкл.</string>
+    <string name="elv_cat_ep">%1$s · С%2$d Э%3$d</string>
+    <string name="elv_cat_so_ep">%1$s · Серия %2$d</string>
+    <string name="elv_cat_temporada">%1$s · Сезон %2$d</string>
+    <string name="elv_cat_filme_ano">%1$s (%2$d)</string>
+    <string name="elv_cat_n_temporadas">Сезонов: %d</string>
+    <string name="elv_cat_procurando">Ищу постер…</string>
+    <string name="elv_cat_nada">В TMDB ничего не найдено. Удерживайте OK, чтобы ввести правильное название.</string>
+    <string name="elv_cat_corrigir_titulo">Исправить: %s</string>
+    <string name="elv_cat_corrigir_explica">Не тот постер или описание? Попросите следующий результат или введите правильное название и год. Пустое название возвращает автоматический режим.</string>
+    <string name="elv_cat_nao_e">Не этот</string>
+    <string name="elv_cat_escrever">Ввести название</string>
+    <string name="elv_cat_campo">Название и год, напр.: Дюна 2021</string>
+    <string name="elv_cat_salvar">Сохранить</string>
+    <string name="elv_cat_dica">исправить</string>
+    <string name="elv_bib_lista">Список</string>
+    <string name="elv_bib_pasta">Папка</string>
+    <string name="elv_bib_servidor">Сервер</string>
+    <string name="elv_bib_nuvem">Облако</string>
+    <string name="elv_bib_addon">Аддон</string>
+</resources>

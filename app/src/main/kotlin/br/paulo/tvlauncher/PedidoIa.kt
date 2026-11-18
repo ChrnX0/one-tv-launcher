@@ -69,6 +69,9 @@ object PedidoIa {
      * Começa um pedido com as ações em JSON (formato de ComandosIa.esquema). Devolve o Pedido (já com a situação ERRO
      * se não deu para começar). Com "Permitir" nas Confirmações (o padrão da Sala) roda na hora.
      */
+    /** Quem pediu está na frente da TV (voz, busca da HOME): o "não fiz" aparece na tela, ninguém lê o ver_pedido. */
+    private fun naFrente(origem: String) = origem == CanalTv.ORIGEM_VOZ || origem == BuscaActivity.ORIGEM
+
     fun propor(ctx: Context, fraseCrua: String?, origem: String, acoesJson: String): Pedido {
         val app = ctx.applicationContext
         val frase = ComandosIa.limparFrase(fraseCrua)
@@ -91,7 +94,7 @@ object PedidoIa {
                 if (plano.acoes.isEmpty()) {
                     p.situacao = Situacao.NADA
                     // Pela voz ninguém lê o ver_pedido: diz na TV por que não fez ("não achei o canal ...").
-                    if (origem == CanalTv.ORIGEM_VOZ) ui.post { CanalTv.avisar(app, plano.recusadas.firstOrNull()?.substringAfter(": ") ?: app.getString(R.string.pi_nao_entendi)) }
+                    if (naFrente(origem)) ui.post { CanalTv.avisar(app, plano.recusadas.firstOrNull()?.substringAfter(": ") ?: app.getString(R.string.pi_nao_entendi)) }
                     return@execute
                 }
                 p.situacao = Situacao.ESPERANDO
@@ -103,7 +106,7 @@ object PedidoIa {
                     falhar("bloqueado na TV (Configurações › Sistema › Confirmações)")
                     try { PainelArmazem.registrar(app, origem, "confirmação: ações da IA", "bloqueado nas Confirmações") } catch (_: Exception) {}
                     // Pela voz ninguém lê o ver_pedido: diz na TV que não fez.
-                    if (origem == CanalTv.ORIGEM_VOZ) ui.post { CanalTv.avisar(app, app.getString(R.string.pi_bloqueado)) }
+                    if (naFrente(origem)) ui.post { CanalTv.avisar(app, app.getString(R.string.pi_bloqueado)) }
                     return@execute
                 }
                 ui.post {
@@ -111,7 +114,7 @@ object PedidoIa {
                     else {
                         responder(app, p.id, true)
                         AvisoTv.rapido(app, if (origem == CanalTv.ORIGEM_VOZ) app.getString(R.string.pi_pedido_voz)
-                            else if (origem == CaixaComandoTv.ORIGEM) app.getString(R.string.cc_aviso_titulo) else "Claude",plano.acoes.joinToString(", ") { it.descricao })
+                            else if (origem == CaixaComandoTv.ORIGEM || origem == BuscaActivity.ORIGEM) app.getString(R.string.cc_aviso_titulo) else "Claude",plano.acoes.joinToString(", ") { it.descricao })
                     }
                 }
             } catch (e: Exception) {

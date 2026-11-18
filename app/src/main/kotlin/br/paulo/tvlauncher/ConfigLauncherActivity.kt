@@ -2,6 +2,7 @@ package br.paulo.tvlauncher
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.util.Log
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
@@ -44,9 +45,13 @@ class ConfigLauncherActivity : Activity() {
         const val EXTRA_ABA = "aba"   // índice da aba para abrir (ex.: o atalho "Conta" de outra tela)
         /** Índices das abas que outras telas abrem direto (a ordem mudou em 14/11/2026: use estes, não números). */
         const val ABA_CONTA = 1
+        const val ABA_REMOTO = 5
         const val ABA_AVANCADO = 8
         private const val PIN_VALE_MS = 2 * 60_000L   // depois de acertar o PIN aqui, 2 min sem pedir de novo
         private const val ESTADO_LIBERADO = "hospede_liberado"
+        private const val TAG = "TvLauncher.Config"
+        /** [abaMontada] quando o conteúdo mostra a busca nos ajustes (12.2), não uma aba. */
+        private const val BUSCA = -2
     }
 
     private val trabalho = Executors.newSingleThreadExecutor()   // rede, PBKDF2 e PackageManager fora da thread da tela
@@ -87,6 +92,12 @@ class ConfigLauncherActivity : Activity() {
 
     private var abaAtual = 0
     private var abaMontada = -1   // qual aba está desenhada no conteúdo agora
+    // Elevação 12.2: busca nos ajustes. [indexando] = a aba sendo montada só para o índice (-1 = montagem de verdade).
+    private var indexando = -1
+    private var indice: List<BuscaAjustes.Entrada>? = null
+    private var itemBusca: TextView? = null
+    private var campoBusca: android.widget.EditText? = null
+    private val prefsBusca by lazy { getSharedPreferences("config_busca", MODE_PRIVATE) }
     private lateinit var menu: LinearLayout
     private lateinit var conteudo: LinearLayout
     private lateinit var rolagem: ScrollView
@@ -101,6 +112,8 @@ class ConfigLauncherActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Elevação 2.11: toda mudança feita aqui vira um passo com "Desfazer" por 10 s (Desfazer.kt).
+        VigiaDesfazer.ligar(this, getString(R.string.desf_rot_config)) { if (::conteudo.isInitialized) recarregarAba() }
         abaAtual = (savedInstanceState?.getInt(EXTRA_ABA) ?: intent.getIntExtra(EXTRA_ABA, 0)).coerceIn(0, abas.size - 1)
         // Modo hóspede (degrau 2): as Configurações só abrem com o PIN (o hóspede não desliga a limpeza nem mexe na TV).
         // "liberado" vem do estado salvo só quando a tela foi recriada com o PIN já certo (controle/teclado ligado, giro);
@@ -165,14 +178,15 @@ class ConfigLauncherActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)   // o grafite da HOME (sistema de design)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL - 7))   // a mesma margem da HOME
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL - 7))   // a mesma margem da HOME
             // A pílula com foco cresce 2% e passa um pouco da margem: sem isto a borda esquerda dela saía cortada (TV, 10/11/2026).
             clipChildren = false; clipToPadding = false
         }
         raiz.addView(Estilo.tituloTela(this, getString(R.string.cfg_titulo)))
 
         val colunas = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false }
-        menu = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false; setPadding(0, dp(4), 0, dp(4)) }
+        menu = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false; setPaddingRelative(0, dp(4), 0, dp(4)) }
+        menu.addView(itemDaBusca(), LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(10) })
         abas.forEachIndexed { i, aba -> menu.addView(itemMenu(i, aba), LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(4) }) }
         mostrarAbasDoUso()
         colunas.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(menu)
@@ -185,7 +199,7 @@ class ConfigLauncherActivity : Activity() {
         conteudo = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             clipChildren = false; clipToPadding = false
-            setPadding(dp(12), dp(4), dp(24), dp(24))
+            setPaddingRelative(dp(12), dp(4), dp(24), dp(24))
         }
         rolagem = ScrollView(this).apply {
             isVerticalScrollBarEnabled = false; clipChildren = false; isSmoothScrollingEnabled = true; addView(conteudo)
@@ -198,7 +212,7 @@ class ConfigLauncherActivity : Activity() {
 
         // Dica fixa das teclas (mesmo jeito das dicas do player: 11sp, cor apagada). Muda com o lado em foco.
         // Barra de dicas do controle (componente padrão do sistema de design). Muda com o lado em foco.
-        dica = FrameLayout(this).apply { setPadding(0, dp(12), 0, 0) }
+        dica = FrameLayout(this).apply { setPaddingRelative(0, dp(12), 0, 0) }
         raiz.addView(dica)
         mostrarDica(noMenu = true)
         return raiz
@@ -219,7 +233,7 @@ class ConfigLauncherActivity : Activity() {
     private fun itemMenu(i: Int, aba: Aba): TextView = TextView(this).apply {
         text = aba.titulo
         Estilo.aplicar(this, Estilo.Papel.CORPO)
-        setPadding(dp(20), dp(11), dp(20), dp(11))
+        setPaddingRelative(dp(20), dp(11), dp(20), dp(11))
         maxLines = 1; ellipsize = TextUtils.TruncateAt.END
         isFocusable = true; isClickable = true
         pintarItemMenu(this, foco = false, escolhido = i == abaAtual)
@@ -257,8 +271,8 @@ class ConfigLauncherActivity : Activity() {
         conteudo.removeAllViews()
         rolagem.scrollTo(0, 0)
         val aba = abas[i]
-        conteudo.addView(Estilo.texto(this, Estilo.Papel.TITULO, aba.titulo).apply { setPadding(dp(8), dp(4), 0, 0) })
-        conteudo.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, aba.explica).apply { setPadding(dp(8), dp(6), 0, dp(12)) })
+        conteudo.addView(Estilo.texto(this, Estilo.Papel.TITULO, aba.titulo).apply { setPaddingRelative(dp(8), dp(4), 0, 0) })
+        conteudo.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, aba.explica).apply { setPaddingRelative(dp(8), dp(6), 0, dp(12)) })
         aba.montar(conteudo)
         // Ajuda por QR (degrau 2): no fim de cada aba, o assunto do manual dela, com o QR para ler no celular.
         AjudaQr.topicoDaAba(i)?.let { id ->
@@ -336,10 +350,13 @@ class ConfigLauncherActivity : Activity() {
             val foco = currentFocus
             val noConteudo = foco != null && foco.dentroDe(conteudo)
             val noMenu = foco != null && foco.dentroDe(menu)
-            when (e.keyCode) {
-                KeyEvent.KEYCODE_DPAD_LEFT -> if (noConteudo) { itensMenu[abaAtual].requestFocus(); return true }
-                KeyEvent.KEYCODE_BACK -> if (noConteudo) { engoliuVoltar = true; itensMenu[abaAtual].requestFocus(); return true }
-                KeyEvent.KEYCODE_DPAD_RIGHT -> if (noMenu) { entrarNoConteudo(); return true }
+            when (Rtl.tecla(e.keyCode, window.decorView)) {   // 16.8: no árabe o menu fica à direita
+                KeyEvent.KEYCODE_DPAD_LEFT -> if (noConteudo && foco !is android.widget.EditText) { voltarAoMenu(); return true }
+                KeyEvent.KEYCODE_BACK -> if (noConteudo) { engoliuVoltar = true; voltarAoMenu(); return true }
+                KeyEvent.KEYCODE_DPAD_RIGHT -> if (noMenu) {
+                    if (foco === itemBusca) { if (abaMontada != BUSCA) mostrarBusca(); campoBusca?.requestFocus() } else entrarNoConteudo()
+                    return true
+                }
                 KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> if (foco != null && (noConteudo || noMenu)) {
                     val dir = if (e.keyCode == KeyEvent.KEYCODE_DPAD_UP) View.FOCUS_UP else View.FOCUS_DOWN
                     val prox = foco.focusSearch(dir)
@@ -382,6 +399,16 @@ class ConfigLauncherActivity : Activity() {
             leitura.execute { IdiomaPlayer.definirPadrao(this, nova) }
         }
         c.addView(linhaAudio)
+        // Elevação 16.2: audiodescrição e legenda para surdos, escolhidas uma vez (valem em todo filme e série).
+        var ad = false; var sdh = false
+        lateinit var linhaAd: LinhaCfg; lateinit var linhaSdh: LinhaCfg
+        linhaAd = linha(getString(R.string.elv_ad_titulo), getString(R.string.elv_ad_det), chave = false) {
+            ad = !ad; linhaAd.ligado(ad); val v = ad; leitura.execute { IdiomaPlayer.definirAudiodescricao(this, v) }
+        }
+        linhaSdh = linha(getString(R.string.elv_sdh_titulo), getString(R.string.elv_sdh_det), chave = false) {
+            sdh = !sdh; linhaSdh.ligado(sdh); val v = sdh; leitura.execute { IdiomaPlayer.definirSurdos(this, v) }
+        }
+        c.addView(linhaAd, lp()); c.addView(linhaSdh, lp())
         // Serviços de filmes e séries (14/11/2026): Trakt, Simkl, MDBList, TMDB e OpenSubtitles numa tela só. A chave do
         // OpenSubtitles agora é a do app; a linha antiga (chave do dono) só aparece para quem já tinha cadastrado uma,
         // enquanto o build não tiver a chave do app.
@@ -459,11 +486,13 @@ class ConfigLauncherActivity : Activity() {
             startActivity(Intent(this, FotoPerfilActivity::class.java))
         }, lp())
         leitura.execute {
-            val p = IdiomaPlayer.prefs(this).padrao
+            val todas = IdiomaPlayer.prefs(this)
+            val p = todas.padrao
             val tem = LegendaBaixar.temConta(this)
             ui.post {
                 if (isDestroyed) return@post
                 atual = p; linhaAudio.valor(IdiomaPlayer.rotulo(this, p))
+                ad = todas.audiodescricao; sdh = todas.surdos; linhaAd.ligado(ad); linhaSdh.ligado(sdh)
                 linhaLeg.valor(getString(if (tem) R.string.legenda_conta_sim else R.string.legenda_conta_nao))
             }
         }
@@ -482,7 +511,7 @@ class ConfigLauncherActivity : Activity() {
         val usuario = campo(getString(R.string.cl_os_usuario), T or android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS)
         val senha = campo(getString(R.string.cl_os_senha), T or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD)
         val caixa = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL; setPadding(48, 16, 48, 0)
+            orientation = LinearLayout.VERTICAL; setPaddingRelative(48, 16, 48, 0)
             if (erro != null) addView(Estilo.texto(this@ConfigLauncherActivity, Estilo.Papel.LEGENDA, erro).apply { setTextColor(coral) })
             addView(chave); addView(usuario); addView(senha)
         }
@@ -633,7 +662,7 @@ class ConfigLauncherActivity : Activity() {
             T or android.text.InputType.TYPE_TEXT_VARIATION_URI, antes?.getOrNull(3))
         val caixa = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(48, 16, 48, 0)
+            setPaddingRelative(48, 16, 48, 0)
             if (erro != null) addView(Estilo.texto(this@ConfigLauncherActivity, Estilo.Papel.LEGENDA, erro).apply { setTextColor(coral) })
             addView(endereco)
             if (xtream) { addView(usuario); addView(senha); addView(reservas) }
@@ -949,6 +978,12 @@ class ConfigLauncherActivity : Activity() {
         fun rotuloTamanho(v: Int) = getString(when (v) { 110 -> R.string.tt_grande; 120 -> R.string.tt_maior; else -> R.string.tt_normal })
         c.addView(linha(getString(R.string.tt_titulo), getString(R.string.tt_det), valor = rotuloTamanho(TamanhoTexto.atual(this))) {
             TamanhoTexto.definir(this, TamanhoTexto.proximo(TamanhoTexto.atual(this)))
+            recreate()
+        }, lp())
+        // Alto contraste (elevação 16.3): texto e bordas a 7:1 ou mais; esta tela se refaz para mostrar.
+        c.addView(linha(getString(R.string.elv_ac_titulo), getString(R.string.elv_ac_det), chave = AltoContraste.ligado(this)) {
+            AltoContraste.definir(this, !AltoContraste.ligado(this))
+            reconstruirAoVoltar = true
             recreate()
         }, lp())
         // Tela inicial em cruz (17/11/2026): a única; aqui só o desenho dos ícones (Objeto ou Símbolo). A HOME se refaz ao voltar.
@@ -1336,7 +1371,7 @@ class ConfigLauncherActivity : Activity() {
             minLines = 3; maxLines = 6
             filters = arrayOf(android.text.InputFilter.LengthFilter(600))
         }
-        CaixaTv(this).setTitle(getString(R.string.hos_regras)).setView(FrameLayout(this).apply { setPadding(dp(20), dp(8), dp(20), 0); addView(campo) })
+        CaixaTv(this).setTitle(getString(R.string.hos_regras)).setView(FrameLayout(this).apply { setPaddingRelative(dp(20), dp(8), dp(20), 0); addView(campo) })
             .setNegativeButton(getString(R.string.cl_cancelar), null)
             .setPositiveButton("OK") { _, _ -> ModoHospede.definirRegras(this, campo.text.toString()); recarregarAba() }
             .show()
@@ -1599,6 +1634,10 @@ class ConfigLauncherActivity : Activity() {
         c.addView(linha(getString(R.string.rec_titulo), getString(R.string.rec_subtitulo), seta = true) {
             startActivity(Intent(this, ReceitasActivity::class.java))
         }, lp())
+        // Placar de promessas (elevação 2.1): os 7 pilares com número medido nesta TV, alvo e data.
+        c.addView(linha(getString(R.string.elv_placar_titulo), getString(R.string.elv_placar_det), seta = true) {
+            startActivity(Intent(this, PlacarActivity::class.java))
+        }, lp())
         // Diagnóstico de 1 botão (04/11/2026): o 1º da aba, para ser o OK mais rápido quando "o app parou".
         c.addView(linha(getString(R.string.cfg_diag), getString(R.string.cfg_diag_det), seta = true) {
             startActivity(Intent(this, DiagnosticoActivity::class.java))
@@ -1649,6 +1688,21 @@ class ConfigLauncherActivity : Activity() {
         val novidades = Novidades.itens(this)
         if (novidades.isNotEmpty()) c.addView(linha(getString(R.string.ver_novidades),
             getString(R.string.ver_novidades_det, novidades.size, versaoInstalada().toString()), seta = true) { Novidades.mostrar(this) }, lp())
+        // Elevação 2.11: as mudanças dos últimos 7 dias, com OK para desfazer cada uma (Desfazer.kt).
+        c.addView(linha(getString(R.string.desf_tela), getString(R.string.desf_tela_det), seta = true) {
+            TelaMudancas.abrir(this) { recarregarAba() }
+        }, lp())
+        // Elevação 19.7: TV nova em 2 min (esta TV recebe tudo de outra) e, depois, a fila dos apps que faltam.
+        c.addView(linha(getString(R.string.mtv_titulo), getString(R.string.mtv_cfg_det), seta = true) {
+            reconstruirAoVoltar = true
+            startActivity(Intent(this, ReceberTvActivity::class.java))
+        }, lp())
+        MudarDeTv.faltam(this).takeIf { it > 0 }?.let { n ->
+            c.addView(linha(getString(R.string.mtv_fila_titulo), getString(R.string.mtv_fila_cfg_det, n), seta = true) {
+                reconstruirAoVoltar = true
+                startActivity(Intent(this, FilaAppsActivity::class.java))
+            }, lp())
+        }
         val idsRoteiro = ConferirTvActivity.ids(this)
         if (idsRoteiro.isNotEmpty()) c.addView(linha(getString(R.string.ver_conferir), getString(R.string.ver_conferir_det,
             RoteiroConferencia.conferidos(ConferirTvActivity.estado(this), idsRoteiro), idsRoteiro.size), seta = true) {
@@ -1755,23 +1809,53 @@ class ConfigLauncherActivity : Activity() {
                     val ocultar = !PrivilegioDO.estaOculto(app, item.pacote)
                     val mudou = Debloat.definir(app, item.pacote, ocultar)
                     val ocultoAgora = PrivilegioDO.estaOculto(app, item.pacote)
+                    // Elevação 2.11: a limpeza desfaz pela ação contrária (mostrar o que ocultou e vice-versa).
+                    val passo = if (mudou) Desfazer.registrarLimpeza(app, item.pacote, nomeDebloat(item), ocultar) else null
                     runOnUiThread {
                         if (isDestroyed) return@runOnUiThread
                         if (mudou) linhaApp.ligado(!ocultoAgora)
                         else linhaApp.detalhe(getString(R.string.cl_nao_mudou))
+                        passo?.let { BarraDesfazer.mostrar(this, it) { recarregarAba() } }
                     }
                 }
             }
             c.addView(linhaApp, lp())
+        }
+        // Antes e depois (elevação 14.3): memória livre e tempo de abrir os 3 apps mais usados, medidos a pedido.
+        if (limpaveis.isNotEmpty()) {
+            val antes = LimpezaMedida.antes(this)
+            val det = when {
+                antes == null -> getString(R.string.elv_lp_det_antes)
+                else -> LimpezaMedida.ultimaFrase(this) ?: getString(R.string.elv_lp_det_depois)
+            }
+            lateinit var linhaMedir: LinhaCfg
+            linhaMedir = linha(getString(R.string.elv_lp_titulo), det, seta = true) {
+                val app = applicationContext
+                val depois = LimpezaMedida.antes(app) != null
+                linhaMedir.detalhe(getString(R.string.elv_lp_medindo))
+                Fundo.rodar("limpeza-medir") {
+                    val frase = if (depois) LimpezaMedida.medirDepois(app) else { LimpezaMedida.medirAntes(app); null }
+                    runOnUiThread {
+                        if (isDestroyed) return@runOnUiThread
+                        linhaMedir.detalhe(frase ?: getString(R.string.elv_lp_det_depois))
+                    }
+                }
+            }
+            c.addView(linhaMedir, lp())
         }
         if (Debloat.ocultosPorAqui(this).isNotEmpty()) {
             lateinit var linhaDesfazer: LinhaCfg
             linhaDesfazer = linha(getString(R.string.cl_mostrar_todos), getString(R.string.cl_mostrar_todos_det), seta = true) {
                 val app = applicationContext
                 Fundo.rodar {
+                    val antes = Debloat.ocultosPorAqui(app)
                     val n = Debloat.desfazerTudo(app)
+                    val voltaram = antes.filter { !PrivilegioDO.estaOculto(app, it) }
+                    val passo = Desfazer.registrar(app, DesfazerRegras.Categoria.LIMPEZA, getString(R.string.cl_mostrar_todos),
+                        emptyList(), voltaram.map { DesfazerRegras.reversoDe(it, ocultou = false) })
                     runOnUiThread {
                         if (isDestroyed) return@runOnUiThread
+                        passo?.let { BarraDesfazer.mostrar(this, it) { recarregarAba() } }
                         linhaDesfazer.detalhe(getString(R.string.cl_apps_de_volta, n))
                         ui.postDelayed({ if (!isDestroyed) recarregarAba() }, 1200)
                     }
@@ -1869,7 +1953,7 @@ class ConfigLauncherActivity : Activity() {
             filters = arrayOf(android.text.InputFilter.LengthFilter(PinSeguro.MAX_DIGITOS))
             setSingleLine()
         }
-        val moldura = FrameLayout(this).apply { setPadding(dp(20), dp(8), dp(20), 0); addView(campo) }
+        val moldura = FrameLayout(this).apply { setPaddingRelative(dp(20), dp(8), dp(20), 0); addView(campo) }
         val d = CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert)
             .setTitle(titulo)
             .setView(moldura)
@@ -1898,7 +1982,7 @@ class ConfigLauncherActivity : Activity() {
         val numero = campo(getString(R.string.cl_numero_casa), 6, atual?.numero.orEmpty())
         val caixa = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(48, 16, 48, 0)
+            setPaddingRelative(48, 16, 48, 0)
             addView(cep); addView(numero)
         }
         CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert)
@@ -1962,6 +2046,119 @@ class ConfigLauncherActivity : Activity() {
         else -> if (resources.configuration.locales[0].language == "pt") i.perde else i.perdeEn ?: i.perde
     }
 
+    // ================================================================ busca nos ajustes (elevação 12.2)
+
+    private val indiceMontando = ArrayList<BuscaAjustes.Entrada>()
+
+    private fun voltarAoMenu() { (if (abaMontada == BUSCA) itemBusca else itensMenu[abaAtual])?.requestFocus() }
+
+    /** "Buscar" no alto do menu: foco nele mostra a caixa e a lista "mexidos há pouco" no lugar da aba. */
+    private fun itemDaBusca(): TextView = TextView(this).apply {
+        text = "⌕  " + getString(R.string.elv_aj_buscar)
+        Estilo.aplicar(this, Estilo.Papel.CORPO)
+        setPaddingRelative(dp(20), dp(11), dp(20), dp(11))
+        maxLines = 1; ellipsize = TextUtils.TruncateAt.END
+        isFocusable = true; isClickable = true
+        pintarItemMenu(this, foco = false, escolhido = false)
+        setOnFocusChangeListener { v, temFoco ->
+            pintarItemMenu(this, foco = temFoco, escolhido = abaMontada == BUSCA)
+            if (temFoco) { ui.removeCallbacks(trocarAba); if (abaMontada != BUSCA) mostrarBusca(); mostrarDica(noMenu = true) }
+            v.animate().scaleX(if (temFoco) Estilo.ESCALA_LINHA else 1f).scaleY(if (temFoco) Estilo.ESCALA_LINHA else 1f).setDuration(Estilo.FOCO_MS).start()
+        }
+        setOnClickListener { if (abaMontada != BUSCA) mostrarBusca(); campoBusca?.requestFocus() }
+        itemBusca = this
+    }
+
+    private fun mostrarBusca() {
+        abaMontada = BUSCA
+        itensMenu.forEachIndexed { j, t -> pintarItemMenu(t, foco = t.hasFocus(), escolhido = false) }
+        conteudo.removeAllViews()
+        rolagem.scrollTo(0, 0)
+        conteudo.addView(Estilo.texto(this, Estilo.Papel.TITULO, getString(R.string.elv_aj_buscar)).apply { setPaddingRelative(dp(8), dp(4), 0, 0) })
+        conteudo.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.elv_aj_explica)).apply { setPaddingRelative(dp(8), dp(6), 0, dp(12)) })
+        val campo = android.widget.EditText(this).apply {
+            hint = getString(R.string.elv_aj_dica)
+            setSingleLine()
+            inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+            setTextColor(Estilo.TEXTO); setHintTextColor(Estilo.TEXTO_3); textSize = 20f
+            background = Estilo.fundo(context, Estilo.SUPERFICIE_ALTA, Estilo.RAIO_PILULA, Estilo.BORDA)
+            setPaddingRelative(dp(22), dp(14), dp(22), dp(14))
+        }
+        campoBusca = campo
+        conteudo.addView(campo, LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(12) })
+        val resultados = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false }
+        conteudo.addView(resultados, LinearLayout.LayoutParams(MATCH, WRAP))
+        fun desenhar() {
+            val termo = campo.text.toString().trim()
+            resultados.removeAllViews()
+            if (termo.length < 2) {
+                val rec = BuscaAjustes.ler(prefsBusca.getString("recentes", null)).filter { it.aba in abas.indices }
+                if (rec.isEmpty()) { resultados.addView(info(getString(R.string.elv_aj_recentes), getString(R.string.elv_aj_recentes_vazio)), lp()); return }
+                secao(resultados, getString(R.string.elv_aj_recentes))
+                val agora = System.currentTimeMillis()
+                rec.forEach { r ->
+                    val quando = android.text.format.DateUtils.getRelativeTimeSpanString(r.em, agora, android.text.format.DateUtils.MINUTE_IN_MILLIS)
+                    resultados.addView(linha(r.titulo, "${abas[r.aba].titulo} · $quando", seta = true) { irPara(r.aba, r.titulo) }, lp())
+                }
+                return
+            }
+            val achados = BuscaAjustes.procurar(indiceDosAjustes(), termo, BuscaAjustes.grupos(getString(R.string.elv_aj_sinonimos)))
+            if (achados.isEmpty()) { resultados.addView(info(getString(R.string.elv_aj_nada, termo), getString(R.string.elv_aj_nada_det)), lp()); return }
+            achados.forEach { e -> resultados.addView(linha(e.titulo, "${abas[e.aba].titulo} · ${e.detalhe}", seta = true) { irPara(e.aba, e.titulo) }, lp()) }
+        }
+        val adiada = Runnable { if (abaMontada == BUSCA) desenhar() }
+        campo.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(t: CharSequence?, a: Int, b: Int, c: Int) {}
+            override fun onTextChanged(t: CharSequence?, a: Int, b: Int, c: Int) {}
+            override fun afterTextChanged(t: android.text.Editable?) { ui.removeCallbacks(adiada); ui.postDelayed(adiada, 300) }
+        })
+        desenhar()
+    }
+
+    /**
+     * O índice: cada aba montada uma vez num lugar fora da tela, guardando o título e a explicação de cada linha (é o
+     * mesmo que a pessoa vê ao descer o menu). Montado na primeira busca e guardado enquanto a tela estiver aberta.
+     */
+    private fun indiceDosAjustes(): List<BuscaAjustes.Entrada> {
+        indice?.let { return it }
+        val t0 = System.currentTimeMillis()
+        indiceMontando.clear()
+        abas.forEachIndexed { i, aba ->
+            indexando = i
+            try { aba.montar(LinearLayout(this)) } catch (e: Exception) { Log.w(TAG, "índice da aba $i: ${e.javaClass.simpleName}") }
+        }
+        indexando = -1
+        return indiceMontando.toList().also { indice = it; Log.i(TAG, "índice dos ajustes: ${it.size} linhas em ${System.currentTimeMillis() - t0} ms") }
+    }
+
+    /** Abre a aba [aba] e põe o foco na linha [titulo] (rolando até ela). */
+    private fun irPara(aba: Int, titulo: String) {
+        abaAtual = aba
+        mostrarAba(aba)
+        mostrarAbasDoUso()
+        itensMenu.forEachIndexed { j, t -> pintarItemMenu(t, foco = false, escolhido = j == abaAtual) }
+        itemBusca?.let { pintarItemMenu(it, foco = false, escolhido = false) }
+        conteudo.post {
+            val alvo = focaveis(conteudo).firstOrNull { temTexto(it, titulo) } ?: primeiroFocavel(conteudo)
+            alvo?.requestFocus()
+            alvo?.let { v -> rolagem.post {
+                val r = android.graphics.Rect(); v.getDrawingRect(r); conteudo.offsetDescendantRectToMyCoords(v, r)
+                rolagem.smoothScrollTo(0, (r.top - dp(80)).coerceAtLeast(0))
+            } }
+        }
+    }
+
+    private fun temTexto(v: View, t: String): Boolean = when (v) {
+        is TextView -> v.text?.toString() == t
+        is ViewGroup -> (0 until v.childCount).any { temTexto(v.getChildAt(it), t) }
+        else -> false
+    }
+
+    private fun lembrarRecente(aba: Int, titulo: String) {
+        val l = BuscaAjustes.lembrar(BuscaAjustes.ler(prefsBusca.getString("recentes", null)), aba, titulo, System.currentTimeMillis())
+        prefsBusca.edit().putString("recentes", BuscaAjustes.texto(l)).apply()
+    }
+
     // ================================================================ peças
 
     @Suppress("DEPRECATION")
@@ -1979,11 +2176,16 @@ class ConfigLauncherActivity : Activity() {
     private fun linha(titulo: String, detalhe: String, chave: Boolean? = null, valor: String? = null, seta: Boolean = false,
                       aoClicar: () -> Unit): LinhaCfg =
         LinhaCfg(this, focavel = true).apply {
+            if (indexando >= 0) indiceMontando += BuscaAjustes.Entrada(indexando, titulo, detalhe)
             montarLinha(titulo, detalhe)
             if (chave != null) ligado(chave)
             if (valor != null) this.valor(valor)
             if (seta && chave == null && valor == null) this.seta()
-            setOnClickListener { UsoLocal.contar(this@ConfigLauncherActivity, "opcao:$titulo"); aoClicar() }   // ideia 67
+            setOnClickListener {
+                UsoLocal.contar(this@ConfigLauncherActivity, "opcao:$titulo")   // ideia 67
+                if (abaMontada >= 0) lembrarRecente(abaMontada, titulo)          // elevação 12.2: "mexidos há pouco"
+                aoClicar()
+            }
         }
 
     /** Uma linha só informativa, sem foco nem clique (para ler, não para apertar OK). */
@@ -1994,20 +2196,20 @@ class ConfigLauncherActivity : Activity() {
     private fun cartao() = LinearLayout(this).apply {
         orientation = LinearLayout.VERTICAL
         background = vidro(false)
-        setPadding(dp(24), dp(12), dp(24), dp(12))
+        setPaddingRelative(dp(24), dp(12), dp(24), dp(12))
     }
 
     /** "Rótulo ........ valor" numa linha do cartão. [cor] pinta o valor (alerta). */
     private fun valor(rotulo: String, valor: String, cor: Int? = null) = LinearLayout(this).apply {
         orientation = LinearLayout.HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
-        setPadding(0, dp(6), 0, dp(6))
+        setPaddingRelative(0, dp(6), 0, dp(6))
         addView(texto(16f, textoSuave, fonteMedia).apply { text = rotulo }, LinearLayout.LayoutParams(dp(230), WRAP))
         addView(texto(16f, cor ?: textoClaro, fonteMedia).apply { text = valor; maxLines = 3; ellipsize = TextUtils.TruncateAt.END },
             LinearLayout.LayoutParams(0, WRAP, 1f))
     }
 
-    private fun secao(c: LinearLayout, titulo: String) = c.addView(Estilo.secao(this, titulo).apply { setPadding(dp(8), dp(Estilo.E3), 0, dp(Estilo.E1)) })
+    private fun secao(c: LinearLayout, titulo: String) = c.addView(Estilo.secao(this, titulo).apply { setPaddingRelative(dp(8), dp(Estilo.E3), 0, dp(Estilo.E1)) })
 
     private fun lp() = LinearLayout.LayoutParams(MATCH, WRAP).apply { bottomMargin = dp(8) }
 
@@ -2030,7 +2232,7 @@ class ConfigLauncherActivity : Activity() {
     private inner class LinhaCfg(ctx: Context, focavel: Boolean) : LinearLayout(ctx) {
         private val tTitulo = Estilo.texto(ctx, Estilo.Papel.CORPO).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
         private val tDetalhe = Estilo.texto(ctx, Estilo.Papel.LEGENDA).apply {
-            maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(4), 0, 0)
+            maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPaddingRelative(0, dp(4), 0, 0)
         }
         private var tSeta: TextView? = null
         private var focada = false
@@ -2043,7 +2245,7 @@ class ConfigLauncherActivity : Activity() {
         init {
             orientation = HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            setPadding(dp(Estilo.E3), dp(14), dp(Estilo.E3), dp(14))
+            setPaddingRelative(dp(Estilo.E3), dp(14), dp(Estilo.E3), dp(14))
             val textos = LinearLayout(ctx).apply { orientation = VERTICAL; addView(tTitulo); addView(tDetalhe) }
             addView(textos, LayoutParams(0, WRAP, 1f))
             addView(direita, LayoutParams(WRAP, WRAP).apply { marginStart = dp(16) })

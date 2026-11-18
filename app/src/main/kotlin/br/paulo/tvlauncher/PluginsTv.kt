@@ -120,7 +120,7 @@ class PluginsActivity : Activity() {
                 }
             })
         }
-        coluna.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.plg_seguranca)).apply { setPadding(0, 24, 0, 0) })
+        coluna.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.plg_seguranca)).apply { setPaddingRelative(0, 24, 0, 0) })
         setContentView(raiz)
         coluna.getChildAt(0)?.takeIf { it.isFocusable }?.requestFocus()
     }

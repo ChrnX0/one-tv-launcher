@@ -78,7 +78,7 @@ class CalendarioActivity : Activity() {
     private fun montar(): FrameLayout {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
-            setPadding(dp(Grade.MARGEM), dp(Grade.TOPO), dp(Grade.MARGEM), dp(Grade.TOPO))
+            setPaddingRelative(dp(Grade.MARGEM), dp(Grade.TOPO), dp(Grade.MARGEM), dp(Grade.TOPO))
         }
         // Coluna do mês: colunas 1-5 da grade.
         val colunaMes = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
@@ -86,7 +86,7 @@ class CalendarioActivity : Activity() {
         colunaMes.addView(tituloMes)
         colunaMes.addView(texto(15f, textoSuave).apply {
             text = (if (contas.size > 1) getString(R.string.cal_todas_contas, contas.size) else contas.firstOrNull() ?: getString(R.string.cal_sem_conta)) + "\n" + getString(R.string.cal_dica)
-            setPadding(0, dp(4), 0, dp(18))
+            setPaddingRelative(0, dp(4), 0, dp(18))
         })
         grade = GridLayout(this).apply { columnCount = 7 }
         colunaMes.addView(grade)
@@ -94,8 +94,8 @@ class CalendarioActivity : Activity() {
 
         // Coluna dos eventos: colunas 7-12.
         val colunaEventos = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-        colunaEventos.addView(Estilo.secao(this, getString(R.string.cal_30)).apply { setPadding(0, dp(12), 0, dp(4)) })
-        aviso = texto(15f, textoSuave).apply { setPadding(0, dp(8), 0, 0) }
+        colunaEventos.addView(Estilo.secao(this, getString(R.string.cal_30)).apply { setPaddingRelative(0, dp(12), 0, dp(4)) })
+        aviso = texto(15f, textoSuave).apply { setPaddingRelative(0, dp(8), 0, 0) }
         colunaEventos.addView(aviso)
         listaEventos = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         colunaEventos.addView(ScrollView(this).apply {
@@ -167,13 +167,13 @@ class CalendarioActivity : Activity() {
         proximos.forEach { e ->
             val dia = fmtDia.format(e.inicio).replaceFirstChar { it.uppercase() }
             if (dia != diaAnterior) {
-                listaEventos.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, dia).apply { setTextColor(destaque); setPadding(0, dp(14), 0, dp(4)) })
+                listaEventos.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, dia).apply { setTextColor(destaque); setPaddingRelative(0, dp(14), 0, dp(4)) })
                 diaAnterior = dia
             }
             listaEventos.addView(LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
                 gravity = Gravity.CENTER_VERTICAL
-                setPadding(0, dp(4), 0, dp(4))
+                setPaddingRelative(0, dp(4), 0, dp(4))
                 addView(android.view.View(this@CalendarioActivity).apply {
                     background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(e.cor) }
                 }, LinearLayout.LayoutParams(dp(10), dp(10)).apply { marginEnd = dp(12) })

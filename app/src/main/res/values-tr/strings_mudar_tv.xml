@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 19.7: TV nova em 2 min (MudarDeTv, ReceberTvActivity, FilaAppsActivity). -->
+<resources>
+    <string name="mtv_titulo">Başka TV\'den getir</string>
+    <string name="mtv_qr_desc">Başka bir TV\'nin ayarlarını getirmek için QR</string>
+    <string name="mtv_instrucoes">ESKİ TV\'de paneli açın (telefon veya bilgisayar), Sistem › Yedek › \"Yeni TV\'ye taşı\" bölümüne gidin ve bu QR\'ı okutun ya da aşağıdaki kodu yazın.\nHer şey şifreli gider, yalnızca bu TV\'ye. Kod %1$s geçerli.</string>
+    <string name="mtv_recebendo">Alınıyor… TV\'yi kapatmayın.</string>
+    <string name="mtv_pronto">Her şey %1$s cihazından geldi. TV şimdi yeniden başlıyor; ardından uygulamalarınız tek tek geri gelir.</string>
+    <string name="mtv_erro">Olmadı: %1$s\nBu TV\'de hiçbir şey değişmedi. Yeniden denemek için \"%2$s\"a basın.</string>
+    <string name="mtv_venceu">Kodun süresi doldu (10 dk geçerli).\nYenisini göstermek için \"%1$s\"a basın.</string>
+    <string name="mtv_cfg_det">Eski TV\'nin ayarları, PIN\'i, kanalları ve uygulamaları 2 dakikada, bir QR ile</string>
+    <string name="mtv_fila_titulo">Uygulamalarınız geri geliyor</string>
+    <string name="mtv_fila_texto">Uygulama %1$d / %2$d. Play Store\'da açın ve Yükle\'ye basın; döndüğünüzde sıradaki görünür.</string>
+    <string name="mtv_fila_abrir">Play Store\'da aç</string>
+    <string name="mtv_fila_pular">Atla</string>
+    <string name="mtv_fila_depois">Sonra</string>
+    <string name="mtv_fila_fim">Diğer TV\'deki tüm uygulamalar burada.</string>
+    <string name="mtv_fila_cfg_det">Diğer TV\'den yüklenecek %1$d uygulama kaldı</string>
+    <string name="mtv_diario">%1$s cihazından getirildi: ayarlar geri yüklendi, yüklenecek %2$d uygulama</string>
+    <string name="mtv_diario_enviado">Yeni TV\'ye gönderildi: ayarlar ve %1$d uygulama</string>
+</resources>

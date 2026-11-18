@@ -55,7 +55,7 @@ class ElencoActivity : Activity() {
         coluna = c
         aviso = Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.elenco_carregando)).apply { textSize = Estilo.Leitura.AVISO }
         coluna.addView(aviso)
-        fileira = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false; clipToPadding = false; setPadding(dp(4), dp(12), dp(4), dp(12)) }
+        fileira = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false; clipToPadding = false; setPaddingRelative(dp(4), dp(12), dp(4), dp(12)) }
         coluna.addView(HorizontalScrollView(this).apply { isHorizontalScrollBarEnabled = false; clipChildren = false; clipToPadding = false; addView(fileira) })
         coluna.addView(Estilo.secao(this, getString(R.string.elenco_na_lista)))
         titulos = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false }
@@ -87,7 +87,7 @@ class ElencoActivity : Activity() {
         aviso.text = getString(R.string.elenco_dica)
         for ((i, p) in elenco.withIndex()) {
             val card = LinearLayout(this).apply {
-                orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_HORIZONTAL; isFocusable = true; setPadding(dp(6), dp(6), dp(6), dp(6))
+                orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_HORIZONTAL; isFocusable = true; setPaddingRelative(dp(6), dp(6), dp(6), dp(6))
             }
             val foto = ImageView(this).apply {
                 scaleType = ImageView.ScaleType.CENTER_CROP; clipToOutline = true
@@ -97,7 +97,7 @@ class ElencoActivity : Activity() {
             card.addView(foto, LinearLayout.LayoutParams(dp(120), dp(170)))
             card.addView(TextView(this).apply {
                 text = p.nome; textSize = Estilo.Leitura.CARD; setTextColor(Estilo.TEXTO); gravity = Gravity.CENTER
-                maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPadding(0, dp(6), 0, 0)
+                maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPaddingRelative(0, dp(6), 0, 0)
             }, LinearLayout.LayoutParams(dp(130), -2))
             card.addView(TextView(this).apply {
                 text = p.personagem; textSize = Estilo.Leitura.CARD - 1; setTextColor(Estilo.TEXTO_3); gravity = Gravity.CENTER

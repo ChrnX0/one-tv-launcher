@@ -30,13 +30,13 @@ class LicencasActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         raiz.addView(Estilo.tituloTela(this, getString(R.string.cfg_licencas)))
         val corpo = Estilo.texto(this, Estilo.Papel.LEGENDA, texto).apply {
             setTextColor(Estilo.TEXTO_2)
             setLineSpacing(0f, 1.15f)
-            setPadding(dp(20), dp(14), dp(20), dp(14))
+            setPaddingRelative(dp(20), dp(14), dp(20), dp(14))
         }
         // A ScrollView recebe o foco: as setas do controle rolam o texto, BACK fecha.
         val rolagem = ScrollView(this).apply { isFocusable = true; background = Estilo.superficie(context, false); addView(corpo) }

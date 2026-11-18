@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 19.7: TV nova em 2 min (MudarDeTv, ReceberTvActivity, FilaAppsActivity). -->
+<resources>
+    <string name="mtv_titulo">Bring from another TV</string>
+    <string name="mtv_qr_desc">QR code to bring settings from another TV</string>
+    <string name="mtv_instrucoes">On the OLD TV, open the panel (phone or computer), go to System › Backup › \"Move to a new TV\" and scan this QR or type the code below.\nEverything goes encrypted, only to this TV. The code lasts %1$s.</string>
+    <string name="mtv_recebendo">Receiving… don\'t turn off the TV.</string>
+    <string name="mtv_pronto">Everything came from %1$s. The TV restarts now; then your apps come back one by one.</string>
+    <string name="mtv_erro">It didn\'t work: %1$s\nNothing changed on this TV. Press \"%2$s\" to try again.</string>
+    <string name="mtv_venceu">The code expired (it lasts 10 min).\nPress \"%1$s\" to show a new one.</string>
+    <string name="mtv_cfg_det">Settings, PIN, channels and apps of the old TV in 2 minutes, with a QR</string>
+    <string name="mtv_fila_titulo">Your apps coming back</string>
+    <string name="mtv_fila_texto">App %1$d of %2$d. Open it in the Play Store and press Install; when you come back, the next one shows up.</string>
+    <string name="mtv_fila_abrir">Open in Play Store</string>
+    <string name="mtv_fila_pular">Skip</string>
+    <string name="mtv_fila_depois">Later</string>
+    <string name="mtv_fila_fim">All the apps from the other TV are here.</string>
+    <string name="mtv_fila_cfg_det">%1$d apps from the other TV still to install</string>
+    <string name="mtv_diario">Brought from %1$s: settings restored, %2$d apps to install</string>
+    <string name="mtv_diario_enviado">Sent to a new TV: settings and %1$d apps</string>
+</resources>

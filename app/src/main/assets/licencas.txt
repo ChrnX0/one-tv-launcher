@@ -147,6 +147,7 @@ Fichas de filmes e séries: TMDB (https://www.themoviedb.org). This product uses
   or certified by TMDB.
 Notas: Trakt (https://trakt.tv). One TV Launcher uses Trakt but is not endorsed or certified by Trakt. Nota da comunidade: Simkl (https://simkl.com).
 Legendas: Subtitles provided by OpenSubtitles.com (https://www.opensubtitles.com). Cada legenda fica só na TV de quem pediu.
+Aberturas de episódios (pular abertura): IntroDB (https://introdb.app), banco comunitário.
 Rádios: Radio Browser (https://www.radio-browser.info).
 Endereço pelo nome: dados © colaboradores do OpenStreetMap (https://www.openstreetmap.org/copyright), pelo Nominatim.
 Endereço pelo CEP: ViaCEP (https://viacep.com.br).

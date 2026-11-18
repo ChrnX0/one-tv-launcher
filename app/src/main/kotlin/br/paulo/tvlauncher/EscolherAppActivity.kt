@@ -34,7 +34,7 @@ class EscolherAppActivity : Activity() {
             .filter { it.activityInfo.packageName != packageName }
             .sortedBy { it.loadLabel(pm).toString().lowercase() }
 
-        val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false; setPadding(dp(8), 0, dp(8), dp(8)) }
+        val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false; setPaddingRelative(dp(8), 0, dp(8), dp(8)) }
         var focoInicial: View? = null
         for (app in apps) {
             val pacote = app.activityInfo.packageName
@@ -43,7 +43,7 @@ class EscolherAppActivity : Activity() {
             val linha = LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
                 gravity = Gravity.CENTER_VERTICAL
-                setPadding(dp(16), dp(10), dp(16), dp(10))
+                setPaddingRelative(dp(16), dp(10), dp(16), dp(10))
                 isFocusable = true
                 addView(ImageView(this@EscolherAppActivity).apply { setImageDrawable(app.loadIcon(pm)) },
                     LinearLayout.LayoutParams(dp(40), dp(40)).apply { marginEnd = dp(16) })
@@ -61,7 +61,7 @@ class EscolherAppActivity : Activity() {
 
         val painel = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(dp(24), dp(20), dp(24), dp(20))
+            setPaddingRelative(dp(24), dp(20), dp(24), dp(20))
             // Janela por cima do que estiver na tela: o mesmo vidro escuro das pílulas e avisos (sistema de design).
             background = Estilo.fundo(context, 0xF20E1020.toInt(), Estilo.RAIO, Estilo.VIDRO_BORDA)
             addView(Estilo.texto(this@EscolherAppActivity, Estilo.Papel.TITULO, getString(R.string.esc_botao, botao.nome)),

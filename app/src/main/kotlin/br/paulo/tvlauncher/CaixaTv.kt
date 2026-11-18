@@ -59,7 +59,7 @@ class CaixaTv(private val ctx: Context, @Suppress("UNUSED_PARAMETER") tema: Int 
         val cartao = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
             clipChildren = false; clipToPadding = false
-            setPadding(dp(Estilo.E3 + 8), dp(Estilo.E3 + 8), dp(Estilo.E3 + 8), dp(Estilo.E3 + 8))
+            setPaddingRelative(dp(Estilo.E3 + 8), dp(Estilo.E3 + 8), dp(Estilo.E3 + 8), dp(Estilo.E3 + 8))
             background = Estilo.fundo(ctx, Estilo.CARTAO, Estilo.RAIO, Estilo.VIDRO_BORDA)
         }
         titulo?.let { cartao.addView(Estilo.texto(ctx, Estilo.Papel.TITULO, it).apply { textSize = 22f }) }
@@ -117,7 +117,7 @@ class CaixaTv(private val ctx: Context, @Suppress("UNUSED_PARAMETER") tema: Int 
             v.setTextColor(Estilo.TEXTO)
             v.setHintTextColor(Estilo.TEXTO_2)
             v.textSize = 18f
-            v.setPadding(dp(Estilo.E2), dp(Estilo.E1 + 4), dp(Estilo.E2), dp(Estilo.E1 + 4))
+            v.setPaddingRelative(dp(Estilo.E2), dp(Estilo.E1 + 4), dp(Estilo.E2), dp(Estilo.E1 + 4))
             val antes = v.onFocusChangeListener
             v.setOnFocusChangeListener { c, f -> c.background = if (f) focado else normal; antes?.onFocusChange(c, f) }
             if (v.inputType == InputType.TYPE_NULL) v.inputType = InputType.TYPE_CLASS_TEXT

@@ -147,6 +147,7 @@ async function atualizarEstado() {
   const e = await chamar('GET', '/api/estado');
   if (!e.logado) { mostrarEntrar(); return; }
   ultimoEstado = e;
+  aplicarPapel(e);
   $('nomeAparelho').textContent = e.aparelho;
   document.title = e.aparelho;
   aplicarNaTela(e.naTela);
@@ -252,8 +253,18 @@ const abaAberta = (antiga) => !$('telaPainel').hidden && (PAGINAS[paginaAtual]?.
  * Mostra uma página e esconde as outras. [historico]=false quando veio do botão Voltar do navegador (não empilha de
  * novo). O endereço ganha "#nome": recarregar a página ou mandar o link abre na mesma página.
  */
+// Elevação 18.1: família e visita veem só as páginas do papel (a TV também barra cada pedido, PapeisPainel.kt).
+let paginasDoPapel = [];
+function aplicarPapel(e) {
+  paginasDoPapel = Array.isArray(e.paginas) ? e.paginas : [];
+  document.body.dataset.papel = e.papel || 'dono';
+  for (const b of document.querySelectorAll('.aba[data-aba]'))
+    b.hidden = paginasDoPapel.length > 0 && !paginasDoPapel.includes(b.dataset.aba);
+}
+
 function mudarAba(nome, historico = true) {
   nome = APELIDOS[nome] || nome;
+  if (paginasDoPapel.length && !paginasDoPapel.includes(nome)) nome = paginasDoPapel[0];
   if (!nome || !PAGINAS[nome] || !$(idDaAba(nome))) nome = 'inicio';
   paginaAtual = nome;
   const secao = PAGINAS[nome].grupo || nome;
@@ -696,6 +707,183 @@ async function baixar(caminho, nome, status) {
   }
 }
 $('btnBaixar').addEventListener('click', () => baixar('/api/backup', 'launcher-backup.json', $('statusBaixar')));
+// ---------- convites: família e visita de um dia (elevação 18.1; PainelWeb "/api/papeis") ----------
+const NOMES_PAPEL = { familia: 'Família', convidado: 'Visita de um dia' };
+async function carregarConvites() {
+  const lista = $('listaConvites');
+  let r;
+  try { r = await chamar('GET', '/api/papeis'); } catch (e) { mostrar($('statusConvites'), textoErro(e)); return; }
+  lista.replaceChildren();
+  const convites = (r && r.convites) || [];
+  if (!convites.length) { const p = document.createElement('p'); p.className = 'aviso'; p.textContent = 'Nenhum convite ativo.'; lista.append(p); return; }
+  for (const c of convites) {
+    const linha = document.createElement('div'); linha.className = 'linha-registro';
+    const t = document.createElement('strong'); t.textContent = NOMES_PAPEL[c.papel] || c.papel;
+    const d = document.createElement('span');
+    d.textContent = c.vence ? 'Convite vence em ' + new Date(c.vence).toLocaleString(undefined, { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+      : 'Convite criado em ' + new Date(c.criado).toLocaleDateString();
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'botao-secundario'; b.textContent = 'Revogar';
+    b.addEventListener('click', async () => {
+      const ok = await confirmar('Revogar convite?', 'Quem entrou por convite sai do painel agora.', 'Revogar',
+        () => chamar('POST', '/api/papeis/revogar', { id: c.id }));
+      if (ok) carregarConvites();
+    });
+    linha.append(t, d, b);
+    lista.append(linha);
+  }
+}
+document.addEventListener('aba', (ev) => { if (ev.detail === 'remoto' && document.body.dataset.papel === 'dono') carregarConvites(); });
+async function criarConvite(papel) {
+  const r = await confirmar('Criar convite?', papel === 'convidado'
+    ? 'Quem abrir o link usa o controle remoto e abre apps até amanhã neste horário.'
+    : 'Quem abrir o link usa o controle remoto, abre apps e manda recados e fotos, até você revogar.',
+    'Criar', () => chamar('POST', '/api/papeis/convite', { papel }));
+  if (!r) return;
+  $('qrConvite').src = 'data:image/png;base64,' + r.qr;
+  $('linkConvite').textContent = r.link;
+  $('mostraConvite').hidden = false;
+  carregarConvites();
+}
+$('btnConviteFamilia').addEventListener('click', () => criarConvite('familia'));
+$('btnConviteVisita').addEventListener('click', () => criarConvite('convidado'));
+$('btnCopiarConvite').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText($('linkConvite').textContent); mostrar($('statusConvites'), 'Link copiado.'); }
+  catch (e) { mostrar($('statusConvites'), 'Não deu para copiar: selecione o link e copie.'); }
+});
+$('btnFecharConvite').addEventListener('click', () => {
+  $('mostraConvite').hidden = true; $('qrConvite').removeAttribute('src'); $('linkConvite').textContent = '';
+});
+
+// ---------- chave de recuperação do backup (elevação 19.6; PainelWeb "/api/backup/recuperacao") ----------
+async function carregarRecuperacao() {
+  try {
+    const r = await chamar('GET', '/api/backup/recuperacao');
+    $('estadoRecuperacao').textContent = r.tem
+      ? `Chave criada em ${new Date(r.criadaEm).toLocaleDateString()} (digital ${r.digital}).` : 'Nenhuma chave criada.';
+    $('btnCriarRecuperacao').textContent = r.tem ? 'Criar uma chave nova' : 'Criar chave de recuperação';
+    $('btnApagarRecuperacao').hidden = !r.tem;
+  } catch (e) { $('estadoRecuperacao').textContent = textoErro(e); }
+}
+document.addEventListener('aba', (ev) => { if (ev.detail === 'backup') carregarRecuperacao(); });
+
+$('btnCriarRecuperacao').addEventListener('click', async () => {
+  const nova = !$('btnApagarRecuperacao').hidden;
+  const r = await confirmar('Criar chave de recuperação?',
+    (nova ? 'A chave antiga deixa de valer para os backups NOVOS (os já feitos continuam abrindo com ela). ' : '') +
+    'A chave aparece uma vez só, nesta tela.',
+    'Criar', () => chamar('POST', '/api/backup/recuperacao', {}));
+  if (!r) return;
+  $('qrRecuperacao').src = 'data:image/png;base64,' + r.qr;
+  $('codigoRecuperacao').textContent = r.codigo;
+  $('mostraRecuperacao').hidden = false;
+  carregarRecuperacao();
+});
+function fecharRecuperacao() {
+  // Some da tela e da memória da página: o código não fica em lugar nenhum depois de fechado.
+  $('mostraRecuperacao').hidden = true;
+  $('qrRecuperacao').removeAttribute('src');
+  $('codigoRecuperacao').textContent = '';
+}
+$('btnFecharRecuperacao').addEventListener('click', fecharRecuperacao);
+document.addEventListener('aba', () => { if (paginaAtual !== 'sistema') { fecharRecuperacao(); pararQrRestaurar(); } });
+$('btnImprimirRecuperacao').addEventListener('click', () => {
+  document.body.classList.add('imprimindo-recuperacao');
+  window.print();
+  document.body.classList.remove('imprimindo-recuperacao');
+});
+$('btnApagarRecuperacao').addEventListener('click', async () => {
+  const r = await confirmar('Esquecer a chave?', 'Backups novos voltam a abrir só com a senha.', 'Esquecer a chave',
+    () => chamar('POST', '/api/backup/recuperacao', { apagar: true }));
+  if (r) { fecharRecuperacao(); carregarRecuperacao(); }
+});
+
+// Restaurar: o celular lê o QR impresso e põe o código no campo da senha (o leitor de QR é o do addons.js).
+let qrRestaurarFluxo = null;
+function pararQrRestaurar() {
+  if (qrRestaurarFluxo) { qrRestaurarFluxo.getTracks().forEach((t) => t.stop()); qrRestaurarFluxo = null; }
+  $('videoQrRestaurar').srcObject = null;
+  $('qrRestaurar').hidden = true;
+}
+$('btnFecharQrRestaurar').addEventListener('click', pararQrRestaurar);
+$('btnLerRecuperacao').addEventListener('click', async () => {
+  const status = $('statusBackup');
+  if (!window.isSecureContext || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    mostrar(status, 'Para ler QR, abra o painel pelo endereço https (porta 8444). No http o navegador não libera a câmera.');
+    return;
+  }
+  try { qrRestaurarFluxo = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false }); }
+  catch (e) { mostrar(status, 'Não consegui abrir a câmera. Confira se o navegador tem permissão para usá-la.'); return; }
+  const video = $('videoQrRestaurar');
+  $('qrRestaurar').hidden = false;
+  video.srcObject = qrRestaurarFluxo;
+  await video.play().catch(() => {});
+  let ler;
+  try { ler = await leitorQr(video); } catch (e) { pararQrRestaurar(); mostrar(status, textoErro(e)); return; }
+  const passo = async () => {
+    if (!qrRestaurarFluxo) return;
+    let texto = '';
+    try { texto = await ler(); } catch (e) { texto = ''; }
+    if (/^SOFALY-[0-9A-Z-]{40,}$/.test(texto.trim().toUpperCase())) {
+      pararQrRestaurar();
+      $('senhaRestaurar').value = texto.trim();
+      mostrar(status, 'Chave de recuperação lida.');
+      return;
+    }
+    setTimeout(passo, 250);
+  };
+  passo();
+});
+
+// ---------- levar para uma TV nova (elevação 19.7; PainelWeb "/api/mudar/enviar", MudarDeTv.kt) ----------
+let qrMudarFluxo = null;
+function pararQrMudar() {
+  if (qrMudarFluxo) { qrMudarFluxo.getTracks().forEach((t) => t.stop()); qrMudarFluxo = null; }
+  $('videoQrMudarTv').srcObject = null;
+  $('qrMudarTv').hidden = true;
+}
+$('btnFecharQrMudarTv').addEventListener('click', pararQrMudar);
+document.addEventListener('aba', () => { if (paginaAtual !== 'sistema') pararQrMudar(); });
+$('btnLerMudarTv').addEventListener('click', async () => {
+  const status = $('statusMudarTv');
+  if (!window.isSecureContext || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    mostrar(status, 'Para ler QR, abra o painel pelo endereço https (porta 8444). No http o navegador não libera a câmera.');
+    return;
+  }
+  try { qrMudarFluxo = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false }); }
+  catch (e) { mostrar(status, 'Não consegui abrir a câmera. Confira se o navegador tem permissão para usá-la.'); return; }
+  const video = $('videoQrMudarTv');
+  $('qrMudarTv').hidden = false;
+  video.srcObject = qrMudarFluxo;
+  await video.play().catch(() => {});
+  let ler;
+  try { ler = await leitorQr(video); } catch (e) { pararQrMudar(); mostrar(status, textoErro(e)); return; }
+  const passo = async () => {
+    if (!qrMudarFluxo) return;
+    let texto = '';
+    try { texto = await ler(); } catch (e) { texto = ''; }
+    // Só o QR da tela "Trazer de outra TV" ("SOFALY-TV <ip>:<porta> <código>"); outro QR é ignorado.
+    if (/^SOFALY-TV \S+ [0-9A-Z-]{16,}$/.test(texto.trim().toUpperCase())) {
+      pararQrMudar();
+      $('codigoMudarTv').value = texto.trim();
+      mostrar(status, 'QR da TV nova lido.');
+      return;
+    }
+    setTimeout(passo, 250);
+  };
+  passo();
+});
+$('btnEnviarMudarTv').addEventListener('click', async () => {
+  const status = $('statusMudarTv');
+  const codigo = $('codigoMudarTv').value.trim();
+  if (codigo.length < 20) { mostrar(status, 'Digite o endereço e o código que aparecem na TV nova.'); return; }
+  mostrar(status, '');
+  // Leva os segredos da casa para outro aparelho: a TV pede o PIN de novo (como baixar o backup completo).
+  const r = await confirmar('Levar tudo para a TV nova?',
+    'Vão as configurações, o PIN, os canais e as contas desta TV, cifrados só para aquela TV. Esta TV continua como está.',
+    'Enviar', () => chamar('POST', '/api/mudar/enviar', { codigo }), false);
+  if (r) { $('codigoMudarTv').value = ''; mostrar(status, 'Pronto: a TV nova recebeu tudo e está reiniciando.'); }
+});
+
 $('btnBaixarCompleto').addEventListener('click', async () => {
   const status = $('statusBaixarCompleto');
   const senha = $('senhaBackupCompleto').value;
@@ -2659,6 +2847,13 @@ async function enviarCompartilhado() {
 
 (async () => {
   if (location.hash.startsWith('#primeira=')) return;   // ideia 97: o assistente da 1ª configuração (primeira.js) cuida
+  // Elevação 18.1: link de convite (família ou visita). O código sai do endereço na hora (não fica no histórico).
+  if (location.hash.startsWith('#convite=')) {
+    const codigo = location.hash.slice('#convite='.length);
+    history.replaceState(null, '', location.pathname);
+    try { await chamar('POST', '/api/convite/entrar', { codigo }); await abrirPainel(); return; }
+    catch (e) { mostrarEntrar(textoErro(e)); return; }
+  }
   const qr = pegarCodigoQr();
   if (qr && await entrarPeloQr(qr)) return;
   try {

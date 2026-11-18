@@ -478,7 +478,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         val textos = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.TOP
-            setPadding(0, dpi(TEXTO_TOPO), 0, 0)
+            setPaddingRelative(0, dpi(TEXTO_TOPO), 0, 0)
             addView(linhaNome, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
             // o texto de baixo começa embaixo do nome (alinhado com ele, não com o ponto)
             addView(sub, LinearLayout.LayoutParams(dpi(TEXTO_MAX), LayoutParams.WRAP_CONTENT).apply { topMargin = dpi(8); marginStart = dpi(PONTO + 10) })

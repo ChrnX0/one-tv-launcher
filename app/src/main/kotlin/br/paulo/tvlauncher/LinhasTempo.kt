@@ -110,10 +110,10 @@ class LinhasTempo(private val ctx: Context, private val m400: Typeface, private 
         if (semIcones) { iconeFrase.visibility = GONE; iconeCurio.visibility = GONE }
         if (e == Protetor.LINHAS_VIDRO) {
             background = android.graphics.drawable.GradientDrawable().apply { setColor(0x66000000); cornerRadius = dp(16).toFloat() }
-            setPadding(dp(16), dp(12), dp(18), dp(12))
+            setPaddingRelative(dp(16), dp(12), dp(18), dp(12))
         }
-        (frase.layoutParams as? LayoutParams)?.leftMargin = if (semIcones) 0 else dp(10)
-        (tituloCurio.layoutParams as? LayoutParams)?.leftMargin = if (semIcones) 0 else dp(12)
+        (frase.layoutParams as? LayoutParams)?.marginStart = if (semIcones) 0 else dp(10)
+        (tituloCurio.layoutParams as? LayoutParams)?.marginStart = if (semIcones) 0 else dp(12)
     }
 
     init {
@@ -123,18 +123,18 @@ class LinhasTempo(private val ctx: Context, private val m400: Typeface, private 
         linhaFrase.addView(iconeFrase, LayoutParams(dp(22), dp(22)))
         // Larguras máximas: a coluna das notificações começa em ~678 dp; as linhas (que começam em ~42 dp) param antes dela.
         frase = texto(16f, m600).apply { setTextColor(AMARELO); maxWidth = dp(600) }
-        linhaFrase.addView(frase, LayoutParams(-2, -2).apply { leftMargin = dp(10) })
+        linhaFrase.addView(frase, LayoutParams(-2, -2).apply { marginStart = dp(10) })
         addView(linhaFrase, LayoutParams(-2, -2))
 
         linhaCurio = LinearLayout(ctx).apply { orientation = HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
         iconeCurio = ImageView(ctx).apply { alpha = 0.95f }
-        linhaCurio.addView(iconeCurio, LayoutParams(dp(18), dp(18)).apply { leftMargin = dp(2) })
+        linhaCurio.addView(iconeCurio, LayoutParams(dp(18), dp(18)).apply { marginStart = dp(2) })
         tituloCurio = texto(14f, m600).apply { maxWidth = dp(340) }
-        linhaCurio.addView(tituloCurio, LayoutParams(-2, -2).apply { leftMargin = dp(12) })
+        linhaCurio.addView(tituloCurio, LayoutParams(-2, -2).apply { marginStart = dp(12) })
         detalheCurio = texto(14f, m400).apply { alpha = 0.88f }
-        linhaCurio.addView(detalheCurio, LayoutParams(-2, -2).apply { leftMargin = dp(6) })
+        linhaCurio.addView(detalheCurio, LayoutParams(-2, -2).apply { marginStart = dp(6) })
         bolinhas = LinearLayout(ctx).apply { orientation = HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
-        linhaCurio.addView(bolinhas, LayoutParams(-2, -2).apply { leftMargin = dp(16) })
+        linhaCurio.addView(bolinhas, LayoutParams(-2, -2).apply { marginStart = dp(16) })
         addView(linhaCurio, LayoutParams(-2, -2).apply { topMargin = dp(12) })
         visibility = GONE
     }
@@ -187,7 +187,7 @@ class LinhasTempo(private val ctx: Context, private val m400: Typeface, private 
         if (itens.size > 1) itens.indices.forEach { i ->
             bolinhas.addView(View(ctx).apply {
                 background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(if (i == atual) 0xFFFFFFFF.toInt() else 0x66FFFFFF) }
-            }, LayoutParams(dp(7), dp(7)).apply { leftMargin = dp(if (i == 0) 0 else 7) })
+            }, LayoutParams(dp(7), dp(7)).apply { marginStart = dp(if (i == 0) 0 else 7) })
         }
     }
 

@@ -127,7 +127,7 @@ class ServicosFilmesActivity : Activity() {
             }
         }
         val caixa = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL; setPadding(48, 16, 48, 0)
+            orientation = LinearLayout.VERTICAL; setPaddingRelative(48, 16, 48, 0)
             addView(Estilo.texto(this@ServicosFilmesActivity, Estilo.Papel.LEGENDA, texto).apply { textSize = Estilo.Leitura.ITEM_DETALHE })
             if (erro != null) addView(Estilo.texto(this@ServicosFilmesActivity, Estilo.Papel.LEGENDA, erro).apply {
                 textSize = Estilo.Leitura.ITEM_DETALHE; setTextColor(0xFFFF8A80.toInt())
@@ -161,11 +161,11 @@ class ServicosFilmesActivity : Activity() {
         val tela = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         tela.addView(Estilo.tituloTela(this, getString(R.string.sv_mdblist_titulo)))
         tela.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.sv_mdblist_passos)).apply {
-            textSize = Estilo.Leitura.SINOPSE; setLineSpacing(0f, 1.2f); setPadding(0, dp(Estilo.E2), 0, dp(Estilo.E2))
+            textSize = Estilo.Leitura.SINOPSE; setLineSpacing(0f, 1.2f); setPaddingRelative(0, dp(Estilo.E2), 0, dp(Estilo.E2))
         })
         val qrs = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
         fun qr(url: String, rotulo: String) = LinearLayout(this).apply {
@@ -179,7 +179,7 @@ class ServicosFilmesActivity : Activity() {
                 LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(48) })
         }
         tela.addView(qrs)
-        val botoes = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPadding(0, dp(24), 0, 0) }
+        val botoes = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; setPaddingRelative(0, dp(24), 0, 0) }
         val digitar = Estilo.botao(this, getString(R.string.sv_mdblist_digitar)).apply {
             textSize = Estilo.Leitura.BOTAO
             setOnClickListener {
@@ -208,14 +208,14 @@ class ServicosFilmesActivity : Activity() {
             orientation = LinearLayout.HORIZONTAL
             background = Estilo.fundoTela(context)
             gravity = Gravity.CENTER_VERTICAL
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         col.addView(Estilo.tituloTela(this, s.nome))
         cTexto = Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.sv_pedindo, s.nome)).apply {
-            textSize = Estilo.Leitura.SINOPSE; setLineSpacing(0f, 1.25f); setPadding(0, dp(Estilo.E2), dp(32), 0)
+            textSize = Estilo.Leitura.SINOPSE; setLineSpacing(0f, 1.25f); setPaddingRelative(0, dp(Estilo.E2), dp(32), 0)
         }
-        cCodigo = Estilo.texto(this, Estilo.Papel.DISPLAY, "").apply { letterSpacing = 0.18f; setPadding(0, dp(12), 0, dp(12)) }
+        cCodigo = Estilo.texto(this, Estilo.Papel.DISPLAY, "").apply { letterSpacing = 0.18f; setPaddingRelative(0, dp(12), 0, dp(12)) }
         cDica = Estilo.texto(this, Estilo.Papel.LEGENDA, "").apply { textSize = Estilo.Leitura.AVISO }
         val fechar = Estilo.botao(this, getString(R.string.sv_fechar)).apply { textSize = Estilo.Leitura.BOTAO; setOnClickListener { fecharCodigo() } }
         col.addView(cTexto); col.addView(cCodigo); col.addView(cDica)

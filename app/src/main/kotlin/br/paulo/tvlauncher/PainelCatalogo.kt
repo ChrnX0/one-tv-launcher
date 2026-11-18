@@ -34,7 +34,7 @@ class PainelCatalogo(private val act: Activity) {
 
     /** "Ação 1.204 [pílulas]": uma linha, as pílulas rolam de lado se não couberem (nunca encolhem a letra). */
     val topo: View = LinearLayout(act).apply {
-        orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(dp(4), 0, 0, dp(10))
+        orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPaddingRelative(dp(4), 0, 0, dp(10))
         addView(titulo, LinearLayout.LayoutParams(-2, -2).apply { weight = 0f })
         addView(quantos, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(10) })
         addView(HorizontalScrollView(act).apply { isHorizontalScrollBarEnabled = false; isFocusable = false; addView(pilulas) },
@@ -43,7 +43,7 @@ class PainelCatalogo(private val act: Activity) {
 
     /** A faixa da ficha rápida: caixa um pouco mais clara que o fundo, como o bloco de ações da coluna. */
     val faixa: View = LinearLayout(act).apply {
-        orientation = LinearLayout.VERTICAL; setPadding(dp(18), dp(10), dp(18), dp(12))
+        orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(18), dp(10), dp(18), dp(12))
         background = GradientDrawable().apply { cornerRadius = dp(14).toFloat(); setColor(Estilo.SUPERFICIE); setStroke(dp(1), Estilo.BORDA) }
         addView(info)
         addView(sinopse, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(4) })
@@ -58,7 +58,7 @@ class PainelCatalogo(private val act: Activity) {
             this.pilulas.addView(TextView(act).apply {
                 text = t; textSize = PILULA_SP; typeface = Fontes.nunito(600); maxLines = 1
                 setTextColor(if (destaque) Estilo.FUNDO else Estilo.TEXTO)
-                setPadding(dp(14), dp(5), dp(14), dp(6))
+                setPaddingRelative(dp(14), dp(5), dp(14), dp(6))
                 background = GradientDrawable().apply { cornerRadius = dp(18).toFloat(); setColor(if (destaque) Estilo.ATENCAO else Estilo.SUPERFICIE_ALTA) }
             }, LinearLayout.LayoutParams(-2, -2).apply { marginEnd = dp(8) })
         }
@@ -102,7 +102,7 @@ class PainelCatalogo(private val act: Activity) {
             }
             val cartao = LinearLayout(act).apply {
                 orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER_HORIZONTAL
-                setPadding(dp(28), dp(24), dp(28), dp(28))
+                setPaddingRelative(dp(28), dp(24), dp(28), dp(28))
                 background = Estilo.fundo(act, Estilo.CARTAO, Estilo.RAIO, Estilo.VIDRO_BORDA)
                 addView(TextView(act).apply { text = act.getString(R.string.coluna_letra_titulo); textSize = TITULO_SP; typeface = Fontes.nunito(700); setTextColor(Estilo.TEXTO) },
                     LinearLayout.LayoutParams(-2, -2).apply { bottomMargin = dp(16) })

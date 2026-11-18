@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">impossible d\'ouvrir les Options pour les développeurs (%1$s)</string>
+    <string name="pn_porta_achada">port d\'association %1$d trouvé</string>
+    <string name="pn_mdns_falhou">la recherche sur le réseau a échoué (%1$s)</string>
+    <string name="pn_pareando">association…</string>
+    <string name="pn_confirme">code lu. Pour associer, appuyez sur OK sur la télécommande sur « %1$s »</string>
+    <string name="pn_so_controle">seule une touche de la télécommande confirme l\'association</string>
+</resources>

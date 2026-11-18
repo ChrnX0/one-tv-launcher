@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 19.7: TV nova em 2 min (MudarDeTv, ReceberTvActivity, FilaAppsActivity). -->
+<resources>
+    <string name="mtv_titulo">Перенести с другого телевизора</string>
+    <string name="mtv_qr_desc">QR для переноса настроек с другого телевизора</string>
+    <string name="mtv_instrucoes">На СТАРОМ телевизоре откройте панель (телефон или компьютер), перейдите в Система › Резервная копия › «Перенести на новый телевизор» и отсканируйте этот QR или введите код ниже.\nВсё передаётся в зашифрованном виде, только на этот телевизор. Код действует %1$s.</string>
+    <string name="mtv_recebendo">Получение… не выключайте телевизор.</string>
+    <string name="mtv_pronto">Всё пришло с %1$s. Телевизор сейчас перезапустится; потом ваши приложения вернутся по одному.</string>
+    <string name="mtv_erro">Не получилось: %1$s\nНа этом телевизоре ничего не изменилось. Нажмите «%2$s», чтобы попробовать снова.</string>
+    <string name="mtv_venceu">Код истёк (действует 10 мин).\nНажмите «%1$s», чтобы показать новый.</string>
+    <string name="mtv_cfg_det">Настройки, PIN, каналы и приложения старого телевизора за 2 минуты, по QR</string>
+    <string name="mtv_fila_titulo">Ваши приложения возвращаются</string>
+    <string name="mtv_fila_texto">Приложение %1$d из %2$d. Откройте его в Play Маркете и нажмите «Установить»; когда вернётесь, появится следующее.</string>
+    <string name="mtv_fila_abrir">Открыть в Play Маркете</string>
+    <string name="mtv_fila_pular">Пропустить</string>
+    <string name="mtv_fila_depois">Позже</string>
+    <string name="mtv_fila_fim">Все приложения с другого телевизора уже здесь.</string>
+    <string name="mtv_fila_cfg_det">Осталось установить %1$d приложений с другого телевизора</string>
+    <string name="mtv_diario">Перенесено с %1$s: настройки восстановлены, приложений к установке: %2$d</string>
+    <string name="mtv_diario_enviado">Отправлено на новый телевизор: настройки и %1$d приложений</string>
+</resources>

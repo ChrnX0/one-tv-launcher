@@ -50,6 +50,7 @@ class AutorizaShizukuService : AccessibilityService() {
             HoraDormirTv.janela(this, evento.packageName)   // hora de dormir: app fora da lista volta para a HOME
             TempoTelaTv.janela(this, evento.packageName)   // tempo de tela por dia (ideia 33): conta e fecha se acabou
             JogosTv.janela(this)   // modo jogo: entrou ou saiu de um jogo -> o filtro noturno se reavalia
+            NaoPerturbeTv.janela(this)   // elevação 11.4: o filme acabou -> o resumo dos avisos que esperaram
         } else if (evento?.eventType == AccessibilityEvent.TYPE_VIEW_FOCUSED) {
             TecladoCelular.foco(this, evento)   // ideia 57: só chega com o aviso "Digitar na TV" ligado (TecladoCelular.ajustar)
         }

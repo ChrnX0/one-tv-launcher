@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">開発者向けオプションを開けませんでした（%1$s）</string>
+    <string name="pn_porta_achada">ペア設定ポート %1$d を見つけました</string>
+    <string name="pn_mdns_falhou">ネットワーク検索に失敗しました（%1$s）</string>
+    <string name="pn_pareando">ペア設定中…</string>
+    <string name="pn_confirme">コードを読み取りました。ペア設定するには、リモコンで「%1$s」の OK を押してください</string>
+    <string name="pn_so_controle">ペア設定を確定できるのはリモコンのボタンだけです</string>
+</resources>

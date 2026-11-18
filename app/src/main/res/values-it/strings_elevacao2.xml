@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação (17/11/2026, ondas 2): tradução de values/strings_elevacao2.xml. -->
+<resources>
+    <string name="elv_ac_titulo">Alto contrasto</string>
+    <string name="elv_ac_det">Testo più luminoso e bordi più netti in ogni schermata (almeno 7:1)</string>
+    <string name="elv_ad_titulo">Audiodescrizione</string>
+    <string name="elv_ad_det">Scegliere la traccia audio che descrive la scena quando c’è</string>
+    <string name="elv_sdh_titulo">Sottotitoli per non udenti</string>
+    <string name="elv_sdh_det">Mostrare sempre i sottotitoli con i suoni ([porta che sbatte]) nella lingua della TV, anche se doppiato</string>
+    <string name="elv_cat_titulo">Locandina e trama dei video</string>
+    <string name="elv_cat_explica">Solo il titolo va a TMDB, mai la cartella né il server</string>
+    <string name="elv_cat_ligado">Attivo</string>
+    <string name="elv_cat_desligado">Disattivo</string>
+    <string name="elv_cat_ep">%1$s · S%2$d E%3$d</string>
+    <string name="elv_cat_so_ep">%1$s · Episodio %2$d</string>
+    <string name="elv_cat_temporada">%1$s · Stagione %2$d</string>
+    <string name="elv_cat_filme_ano">%1$s (%2$d)</string>
+    <string name="elv_cat_n_temporadas">Stagioni: %d</string>
+    <string name="elv_cat_procurando">Cerco la locandina…</string>
+    <string name="elv_cat_nada">Niente trovato su TMDB. Tieni premuto OK per scrivere il nome giusto.</string>
+    <string name="elv_cat_corrigir_titulo">Correggi: %s</string>
+    <string name="elv_cat_corrigir_explica">Locandina o trama sbagliate? Chiedi il risultato successivo o scrivi nome e anno giusti. Un nome vuoto torna all’automatico.</string>
+    <string name="elv_cat_nao_e">Non è questo</string>
+    <string name="elv_cat_escrever">Scrivi il nome</string>
+    <string name="elv_cat_campo">Nome e anno, es.: Dune 2021</string>
+    <string name="elv_cat_salvar">Salva</string>
+    <string name="elv_cat_dica">correggi</string>
+    <string name="elv_bib_lista">Lista</string>
+    <string name="elv_bib_pasta">Cartella</string>
+    <string name="elv_bib_servidor">Server</string>
+    <string name="elv_bib_nuvem">Cloud</string>
+    <string name="elv_bib_addon">Addon</string>
+</resources>

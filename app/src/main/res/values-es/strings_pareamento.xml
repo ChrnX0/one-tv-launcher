@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">no pude abrir las Opciones para desarrolladores (%1$s)</string>
+    <string name="pn_porta_achada">puerto de vinculación %1$d encontrado</string>
+    <string name="pn_mdns_falhou">falló la búsqueda en la red (%1$s)</string>
+    <string name="pn_pareando">vinculando…</string>
+    <string name="pn_confirme">código leído. Para vincular, pulsa OK en el mando sobre “%1$s”</string>
+    <string name="pn_so_controle">solo una tecla del mando confirma la vinculación</string>
+</resources>

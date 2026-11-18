@@ -808,6 +808,26 @@
                placeholder="PIN novo de novo" aria-label="PIN novo de novo">
         <button type="button" class="botao-secundario" id="btnPinPainel">Trocar o PIN</button>
       </div>
+      <div id="cartaoOutrasPessoas" class="cartao">
+        <h2>Acesso de outras pessoas</h2>
+        <p class="aviso">Mande um convite em vez do PIN. Família: controle remoto, abrir apps, recados e fotos, até você revogar.
+          Visita de um dia: só o controle remoto e abrir apps, e o convite vence em 24 horas. Nenhum dos dois mexe em
+          configurações, backup ou apps instalados.</p>
+        <div class="barra-acoes">
+          <button type="button" class="botao-secundario" id="btnConviteFamilia">Convite para a família</button>
+          <button type="button" class="botao-secundario" id="btnConviteVisita">Convite de um dia (visita)</button>
+        </div>
+        <div id="mostraConvite" class="recuperacao" hidden>
+          <img id="qrConvite" alt="QR do convite" width="240" height="240">
+          <code id="linkConvite"></code>
+          <div class="barra-acoes">
+            <button type="button" class="botao-primario" id="btnCopiarConvite">Copiar o link</button>
+            <button type="button" class="botao-secundario" id="btnFecharConvite">Fechar</button>
+          </div>
+        </div>
+        <div id="listaConvites" class="lista-registro"></div>
+        <p id="statusConvites" class="aviso" hidden></p>
+      </div>
       <div id="cartaoInstalarComoAppHttps" class="cartao">
         <h2>Instalar como app (https)</h2>
         <p class="aviso">Com o certificado que a TV fez instalado no aparelho, o painel abre com cadeado e vira app no celular e no PC.</p>
@@ -977,6 +997,10 @@
           (ferramenta diario_tv).</p>
         <button type="button" class="botao-secundario" id="btnDiario">Ver o diário</button>
         <pre id="saidaDiario" class="saida-extras" hidden></pre>
+        <h3>Desfazer uma mudança</h3>
+        <p class="aviso">O que foi mudado nas telas da TV (Configurações, organização dos apps, automações e limpeza). Desfazer volta ao que era antes.</p>
+        <div id="listaDesfazer" class="lista-registro" hidden></div>
+        <p id="statusDesfazer" class="aviso" hidden></p>
         <h3>Avisar um link meu</h3>
         <p class="aviso">A TV manda cada linha nova das origens marcadas (POST com JSON) para este endereço: https, ou http só
           dentro de casa (ex.: um webhook do Home Assistant). Mudar pede o PIN. Vazio desliga.</p>
@@ -1013,6 +1037,41 @@
                placeholder="senha do backup (8 ou mais caracteres)">
         <button type="button" class="botao-primario" id="btnBaixarCompleto">Baixar backup completo</button>
         <p id="statusBaixarCompleto" class="aviso" hidden></p>
+        <h3>Chave de recuperação</h3>
+        <p class="aviso">Se a senha do backup se perder, esta chave abre os backups completos feitos depois de criá-la. Ela
+          aparece uma vez só, aqui: imprima ou guarde num lugar seguro. A TV guarda só a parte que tranca, nunca a que abre.</p>
+        <p id="estadoRecuperacao" class="aviso-curto"></p>
+        <div class="barra-acoes">
+          <button type="button" class="botao-secundario" id="btnCriarRecuperacao">Criar chave de recuperação</button>
+          <button type="button" class="botao-secundario" id="btnApagarRecuperacao" hidden>Esquecer a chave</button>
+        </div>
+        <div id="mostraRecuperacao" class="recuperacao" hidden>
+          <p class="aviso"><strong>Guarde agora: esta chave não aparece de novo.</strong></p>
+          <img id="qrRecuperacao" alt="QR da chave de recuperação" width="240" height="240">
+          <code id="codigoRecuperacao"></code>
+          <div class="barra-acoes">
+            <button type="button" class="botao-primario" id="btnImprimirRecuperacao">Imprimir</button>
+            <button type="button" class="botao-secundario" id="btnFecharRecuperacao">Fechar</button>
+          </div>
+        </div>
+        <p id="statusRecuperacao" class="aviso" hidden></p>
+      </div>
+      <div id="cartaoMudarTv" class="cartao">
+        <h2>Levar para uma TV nova</h2>
+        <p class="aviso">Na TV nova, abra Configurações › Sistema › Trazer de outra TV (na primeira vez, o botão está na
+          tela do QR). Leia o QR que aparece nela ou digite o endereço e o código. Vão as configurações, o PIN, os canais e
+          a lista de apps, cifrados só para aquela TV; lá os apps voltam em fila, pela Play Store.</p>
+        <input id="codigoMudarTv" type="text" maxlength="80" autocomplete="off" spellcheck="false"
+               placeholder="192.168.1.50 ABCD-EFGH-JKMN-PQRS" aria-label="Endereço e código da TV nova">
+        <div class="barra-acoes">
+          <button type="button" class="botao-secundario" id="btnLerMudarTv">Ler o QR da TV nova</button>
+          <button type="button" class="botao-primario" id="btnEnviarMudarTv">Enviar</button>
+        </div>
+        <div id="qrMudarTv" class="qr-camera" hidden>
+          <video id="videoQrMudarTv" muted playsinline aria-label="Câmera lendo o QR da TV nova"></video>
+          <button type="button" id="btnFecharQrMudarTv" class="botao-secundario">Fechar câmera</button>
+        </div>
+        <p id="statusMudarTv" class="aviso" hidden></p>
       </div>
       <div id="cartaoCopiasAutomaticas" class="cartao">
         <h2>Cópias automáticas</h2>
@@ -1066,7 +1125,12 @@
         <label class="botao-secundario" for="arquivoBackup">Escolher arquivo…</label>
         <input type="file" id="arquivoBackup" accept=".json,application/json" hidden>
         <input id="senhaRestaurar" type="password" maxlength="128" autocomplete="off"
-               placeholder="senha (só para o backup completo)">
+               placeholder="senha ou chave de recuperação (só para o backup completo)">
+        <button type="button" class="botao-secundario" id="btnLerRecuperacao">Ler chave de recuperação (QR)</button>
+        <div id="qrRestaurar" class="qr-camera" hidden>
+          <video id="videoQrRestaurar" muted playsinline aria-label="Câmera lendo a chave de recuperação"></video>
+          <button type="button" id="btnFecharQrRestaurar" class="botao-secundario">Fechar câmera</button>
+        </div>
         <p id="statusBackup" class="aviso" hidden></p>
       </div>
     </section>
