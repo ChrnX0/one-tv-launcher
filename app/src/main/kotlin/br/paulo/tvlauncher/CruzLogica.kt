@@ -185,11 +185,28 @@ object CruzLogica {
     /**
      * A linha de baixo do escolhido separada em duas partes (Paulo, 18/11/2026 12:15 local: "deixar apenas uma linha com
      * alguma info básica e as complementares no canto inferior direito"): a [Partes.principal] fica embaixo do nome, numa
-     * linha só, e os [Partes.detalhes] vão para o canto de baixo da tela. [tirar] é o que a barra de cima já mostra (o
+     * linha só, e os [Partes.detalhes] vão para o canto de baixo da tela. [tirar] é o que a [Situacao] já mostra (o
      * programa no ar): não aparece de novo. Se a principal não coube e terminou em "…", ela vai inteira para os detalhes
-     * ([principalCortada]), para nada ficar sem ser lido. [tirar]: [BarraIlha.tirarDoItem].
+     * ([principalCortada]), para nada ficar sem ser lido. [tirar]: [tirarDoItem].
      */
     data class Partes(val principal: String, val detalhes: List<String>)
+
+    /**
+     * O que está acontecendo agora com o item (Paulo, 18/11/2026 14:15 local: "mais inteligente, coerente e lógico"):
+     * [rotulo] colorido (No ar, Gravando, Tocando, Parou em, Conectado) + [texto] no formato de [andamento]. Vai na 1ª
+     * linha do canto de baixo à direita. [tira] = as linhas do item que ela substitui (não aparecem de novo).
+     */
+    data class Situacao(val rotulo: String, val texto: String, val origem: String, val tira: List<String> = emptyList())
+
+    /** "o quê · 35% · faltam 43 min": as partes vazias somem; a porcentagem só entre 1% e 99%. */
+    fun andamento(oQue: String?, fracao: Float?, falta: String?): String = listOfNotNull(
+        oQue?.trim()?.takeIf { it.isNotEmpty() },
+        fracao?.takeIf { it >= 0.01f && it < 0.995f }?.let { "${kotlin.math.round(it * 100).toInt()}%" },
+        falta?.trim()?.takeIf { it.isNotEmpty() },
+    ).joinToString(" · ")
+
+    /** O que as linhas do item deixam de mostrar porque a [Situacao] já mostra (o texto dela e o que ela substitui). */
+    fun tirarDoItem(s: Situacao?): List<String> = if (s == null) emptyList() else s.tira + s.texto
 
     fun partes(sub: String?, tirar: Collection<String> = emptyList()): Partes {
         val t = tirar.map { it.trim() }.filter { it.isNotEmpty() }.toSet()

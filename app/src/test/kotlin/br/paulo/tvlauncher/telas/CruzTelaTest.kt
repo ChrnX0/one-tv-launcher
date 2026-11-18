@@ -8,7 +8,6 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.FrameLayout
 import androidx.test.platform.app.InstrumentationRegistry
-import br.paulo.tvlauncher.BarraIlha
 import br.paulo.tvlauncher.CruzLogica
 import br.paulo.tvlauncher.Estilo
 import br.paulo.tvlauncher.HomeCruz
@@ -51,8 +50,8 @@ class CruzTelaTest {
     @Test fun linha() = conferir(IconeCruz.Estilo.LINHA, "linha")
 
     /**
-     * Uma linha embaixo do nome e o resto no canto de baixo à direita (Paulo, 18/11/2026 12:15 local). Com a barra Ilha,
-     * o programa no ar vai para a barra ([HomeCruz.Item.canto]) e não aparece de novo embaixo.
+     * Uma linha embaixo do nome e o resto no canto de baixo à direita (Paulo, 18/11/2026 12:15 local). A situação do
+     * item ([HomeCruz.Item.situacao], o programa no ar) abre os detalhes e não aparece de novo embaixo.
      */
     @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
     @Test fun umaLinhaEDetalhesNoCanto() {
@@ -62,7 +61,6 @@ class CruzTelaTest {
         val raiz = FrameLayout(a).apply { setBackgroundColor(Estilo.FUNDO) }
         a.setContentView(raiz)
         val cruz = HomeCruz(a, Typeface.DEFAULT, Typeface.DEFAULT_BOLD)
-        cruz.cantoNaBarra = true
         raiz.addView(cruz, FrameLayout.LayoutParams(-1, -1))
         fun ic(t: IconeCruz.Tipo) = IconeCruz(t, IconeCruz.Estilo.LINHA)
         val comprida = "Por último: Coração Selvagem | Trailer Oficial | LEG | Paramount Pictures Brasil · Paramount Brasil"
@@ -70,7 +68,7 @@ class CruzTelaTest {
         cruz.definir(listOf(HomeCruz.Categoria(CruzLogica.Categoria.ASSISTIR, "Assistir", ic(IconeCruz.Tipo.ASSISTIR), listOf(
             HomeCruz.Item("app:yt", "YouTube", "$comprida\nVídeos e canais\nAberto há 12 min", ic(IconeCruz.Tipo.APLICATIVOS), {}),
             HomeCruz.Item("tv", "TV", tv, ic(IconeCruz.Tipo.TV), {},
-                canto = BarraIlha.Canto("No ar", "Mil Lugares para Conhecer Antes de Morrer · faltam 25 min", "tv"))))))
+                situacao = CruzLogica.Situacao("No ar", "Mil Lugares para Conhecer Antes de Morrer · faltam 25 min", "tv"))))))
         cruz.requestFocus()
         ShadowLooper.idleMainLooper(1, TimeUnit.SECONDS)
         val sub = cruz.subAtual()!!
@@ -84,7 +82,7 @@ class CruzTelaTest {
         assertEquals("some na hora ao andar", 0f, cruz.detalheAtual().alpha)
         ShadowLooper.idleMainLooper(1, TimeUnit.SECONDS)
         assertEquals("Canal 2 · Globo SP", cruz.subAtual()!!.text.toString())
-        assertEquals("o programa fica na barra, não repete", "Depois, 09:30: Encontro", cruz.detalheAtual().text.toString())
+        assertEquals("a situação abre os detalhes, sem repetir", "No ar  Mil Lugares para Conhecer Antes de Morrer · faltam 25 min\nDepois, 09:30: Encontro", cruz.detalheAtual().text.toString())
         foto(a, "cruz-tv-detalhes")
     }
 
