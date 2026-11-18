@@ -227,7 +227,7 @@ class OuvirServico : Service() {
         garantirSessao()
         primeiroPlano(r.nome, "")
         publicar()
-        Fundo.rodar("radios") { Radios.contarClique(r); Radios.anotarUltima(applicationContext, r) }
+        Fundo.rodar("radios") { Radios.contarClique(r); Radios.anotarUltima(applicationContext, r); Radios.anotarRecente(applicationContext, r) }
     }
 
     /** Conta os pedidos de episódio: só o último que chegou começa a tocar (escolher A e logo B toca B). */

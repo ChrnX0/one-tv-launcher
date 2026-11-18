@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telas Rádio e Podcasts redesenhadas em cruz (18/11/2026): CruzOuvir, RadioActivity, PodcastsActivity. -->
+<resources>
+    <string name="ouv_tocando_agora">正在播放</string>
+    <string name="ouv_pausado">已暂停</string>
+    <string name="ouv_prat_tocando">正在播放</string>
+    <string name="ouv_pausar">暂停</string>
+    <string name="ouv_continuar">继续</string>
+    <string name="ouv_favoritar">收藏</string>
+    <string name="ouv_desfavoritar">取消收藏</string>
+    <string name="ouv_favoritar_det">收藏的电台也可以用遥控器 1–9 键播放</string>
+    <string name="ouv_tecla">遥控器 %d 键</string>
+    <string name="ouv_ao_sair">离开时</string>
+    <string name="ouv_ao_sair_continua">在主屏幕继续播放\n遥控器 ⏯ 可在任意屏幕暂停</string>
+    <string name="ouv_ao_sair_para">离开此屏幕时停止</string>
+    <string name="ouv_recentes">最近</string>
+    <string name="ouv_sem_favoritas">还没有收藏</string>
+    <string name="ouv_sem_favoritas_det">在电台上长按 OK 即可收藏到这里</string>
+    <string name="ouv_sem_recentes">这里还没有内容</string>
+    <string name="ouv_sem_recentes_det">听过的电台会显示在这里</string>
+    <string name="ouv_paises">国家</string>
+    <string name="ouv_n_radios">%d 个电台</string>
+    <string name="ouv_ao_vivo">直播</string>
+    <string name="ouv_dica_pular">快进快退</string>
+    <string name="ouv_voltar">后退 15 秒</string>
+    <string name="ouv_voltar_det">也可按遥控器 ⏪</string>
+    <string name="ouv_avancar">前进 30 秒</string>
+    <string name="ouv_avancar_det">也可按遥控器 ⏩</string>
+    <string name="ouv_velocidade_det">%s · 声调不变</string>
+    <string name="ouv_parar_pod_det">会记住停止的位置</string>
+    <string name="ouv_seguindo">已订阅</string>
+    <string name="ouv_sem_podcasts">还没有播客</string>
+    <string name="ouv_sem_podcasts_det">在“添加”栏添加一个（粘贴地址或用手机）</string>
+    <string name="ouv_n_episodios">%d 集</string>
+    <string name="ouv_colar">粘贴地址</string>
+    <string name="ouv_sobre">简介</string>
+    <string name="ouv_remover_det">剧集和进度将从这台电视删除</string>
+    <string name="ouv_ver_podcast">前往播客</string>
+</resources>

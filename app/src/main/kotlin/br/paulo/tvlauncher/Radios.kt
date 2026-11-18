@@ -32,8 +32,9 @@ object Radios {
     val GENEROS = listOf("sertanejo", "mpb", "gospel", "news", "talk", "pop", "rock", "jazz", "classical", "samba", "pagode",
         "forro", "funk", "electronic", "80s", "oldies", "country", "latin", "reggae", "sports", "kids")
 
+    /** [logo]: o "favicon" do catálogo (endereço da imagem da rádio, às vezes vazio); a tela Rádio mostra no lugar da capa. */
     data class Radio(val id: String, val nome: String, val url: String, val pais: String = "", val tags: String = "",
-                     val bitrate: Int = 0, val codec: String = "")
+                     val bitrate: Int = 0, val codec: String = "", val logo: String = "")
 
     // ---------------------------------------------------------------- puro: o que está tocando
 
@@ -86,9 +87,12 @@ object Radios {
             if (!vistos.add("$n|$url") or !vistos.add("$n|pais:" + o.optString("countrycode").lowercase())) return@mapNotNull null
             Radio(o.optString("stationuuid").ifBlank { "url:" + url.hashCode() }, nome.take(80), url, o.optString("countrycode"),
                 o.optString("tags").split(',').map { it.trim() }.filter { it.isNotEmpty() }.take(3).joinToString(", "),
-                o.optInt("bitrate"), o.optString("codec"))
+                o.optInt("bitrate"), o.optString("codec"), logoValido(o.optString("favicon")))
         }
     }.getOrDefault(emptyList())
+
+    /** O logo só serve em https/http com cara de endereço (o catálogo tem "null", caminhos soltos e data:). */
+    fun logoValido(u: String?): String = u?.trim()?.takeIf { enderecoValido(it) }.orEmpty()
 
     /** Países de /json/countries: (código, nome, quantas rádios), dos que têm mais rádios. */
     fun paises(json: String?): List<Triple<String, String, Int>> = runCatching {
@@ -139,7 +143,7 @@ object Radios {
 
     fun paraJson(l: List<Radio>): JSONArray = JSONArray().apply {
         l.forEach { r -> put(JSONObject().put("id", r.id).put("nome", r.nome).put("url", r.url).put("pais", r.pais).put("tags", r.tags)
-            .put("bitrate", r.bitrate).put("codec", r.codec)) }
+            .put("bitrate", r.bitrate).put("codec", r.codec).put("logo", r.logo)) }
     }
 
     fun deJson(t: String?): List<Radio> = runCatching {
@@ -149,7 +153,7 @@ object Radios {
             val url = o.optString("url")
             if (!enderecoValido(url) || o.optString("nome").isBlank()) null
             else Radio(o.optString("id").ifBlank { "url:" + url.hashCode() }, o.optString("nome").take(80), url, o.optString("pais"),
-                o.optString("tags"), o.optInt("bitrate"), o.optString("codec"))
+                o.optString("tags"), o.optInt("bitrate"), o.optString("codec"), logoValido(o.optString("logo")))
         }.distinctBy { it.id }.take(MAX_FAVORITAS)
     }.getOrDefault(emptyList())
 
@@ -184,6 +188,22 @@ object Radios {
     fun anotarUltima(ctx: Context, r: Radio) = runCatching {
         val o = JSONObject().put("r", paraJson(listOf(r))).put("q", System.currentTimeMillis())
         File(PlayerArmazem.pasta(ctx), "ultima_radio.json.tmp").apply { writeText(o.toString()) }.renameTo(arqUltima(ctx))
+    }
+
+    // Recentes (redesenho do Ouvir, 18/11/2026): as últimas [MAX_RECENTES] rádios que tocaram, a mais nova primeiro.
+    // Mesmo formato das favoritas, em files/player (vai no backup completo); quem grava é o ":player" (OuvirServico).
+    const val MAX_RECENTES = 12
+    private fun arqRecentes(ctx: Context) = File(PlayerArmazem.pasta(ctx), "radios_recentes.json")
+
+    /** A lista de recentes com [r] na frente (sem repetir, pelo id), no máximo [MAX_RECENTES]. Puro. */
+    fun comRecente(l: List<Radio>, r: Radio): List<Radio> = (listOf(r) + l.filterNot { it.id == r.id }).take(MAX_RECENTES)
+
+    fun recentes(ctx: Context): List<Radio> = deJson(runCatching { arqRecentes(ctx).readText() }.getOrNull()).take(MAX_RECENTES)
+
+    @Synchronized
+    fun anotarRecente(ctx: Context, r: Radio) = runCatching {
+        val nova = comRecente(recentes(ctx), r)
+        File(PlayerArmazem.pasta(ctx), "radios_recentes.json.tmp").apply { writeText(paraJson(nova).toString()) }.renameTo(arqRecentes(ctx))
     }
 
     /** A última rádio e quando tocou (ms), ou null. */

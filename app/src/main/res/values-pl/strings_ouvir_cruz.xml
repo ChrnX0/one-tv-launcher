@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telas Rádio e Podcasts redesenhadas em cruz (18/11/2026): CruzOuvir, RadioActivity, PodcastsActivity. -->
+<resources>
+    <string name="ouv_tocando_agora">Teraz gra</string>
+    <string name="ouv_pausado">Wstrzymano</string>
+    <string name="ouv_prat_tocando">Gra</string>
+    <string name="ouv_pausar">Pauza</string>
+    <string name="ouv_continuar">Wznów</string>
+    <string name="ouv_favoritar">Do ulubionych</string>
+    <string name="ouv_desfavoritar">Usuń z ulubionych</string>
+    <string name="ouv_favoritar_det">Ulubione włączają się też klawiszami 1–9 na pilocie</string>
+    <string name="ouv_tecla">Klawisz %d na pilocie</string>
+    <string name="ouv_ao_sair">Po wyjściu</string>
+    <string name="ouv_ao_sair_continua">Gra dalej na ekranie głównym\n⏯ na pilocie wstrzymuje z każdego ekranu</string>
+    <string name="ouv_ao_sair_para">Zatrzymuje się po wyjściu z tego ekranu</string>
+    <string name="ouv_recentes">Ostatnie</string>
+    <string name="ouv_sem_favoritas">Brak ulubionych</string>
+    <string name="ouv_sem_favoritas_det">Przytrzymaj OK na stacji, aby ją tu zachować</string>
+    <string name="ouv_sem_recentes">Na razie pusto</string>
+    <string name="ouv_sem_recentes_det">Tu pojawią się słuchane stacje</string>
+    <string name="ouv_paises">Kraje</string>
+    <string name="ouv_n_radios">Stacji: %d</string>
+    <string name="ouv_ao_vivo">Na żywo</string>
+    <string name="ouv_dica_pular">przewiń</string>
+    <string name="ouv_voltar">15 s wstecz</string>
+    <string name="ouv_voltar_det">Także ⏪ na pilocie</string>
+    <string name="ouv_avancar">30 s naprzód</string>
+    <string name="ouv_avancar_det">Także ⏩ na pilocie</string>
+    <string name="ouv_velocidade_det">%s · głos nie zmienia tonu</string>
+    <string name="ouv_parar_pod_det">Miejsce zatrzymania zostaje zapisane</string>
+    <string name="ouv_seguindo">Obserwujesz</string>
+    <string name="ouv_sem_podcasts">Brak podcastów</string>
+    <string name="ouv_sem_podcasts_det">Dodaj podcast na półce Dodaj (wklej adres lub użyj telefonu)</string>
+    <string name="ouv_n_episodios">Odcinków: %d</string>
+    <string name="ouv_colar">Wklej adres</string>
+    <string name="ouv_sobre">O podcaście</string>
+    <string name="ouv_remover_det">Odcinki i postęp znikną z tego TV</string>
+    <string name="ouv_ver_podcast">Przejdź do podcastu</string>
+</resources>
