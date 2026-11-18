@@ -53,7 +53,14 @@ object ServicosSync {
     fun definirOpcoes(ctx: Context, s: Servico, o: Opcoes): Boolean {
         if (bloqueado(ctx)) return false
         val e = prefs(ctx).edit().putString("opcoes_${s.id}", SincronizarFilmes.opcoesParaJson(o).toString())
-        if (prefs(ctx).getString("perfil", null) == null || nenhumaLigada(ctx)) e.putString("perfil", Perfil.chaveDados(ctx))
+        val antigo = prefs(ctx).getString("perfil", null)
+        if (antigo == null || nenhumaLigada(ctx)) {
+            val novo = Perfil.chaveDados(ctx)
+            // Outro perfil assume a sincronização: as fotos (base dos Interesses, atividades, cópia do Simkl) eram do
+            // outro. Mantê-las faria a mescla de três vias "tirar lá fora" o que só este perfil não tem.
+            if (antigo != null && antigo != novo) listOf(Servico.TRAKT, Servico.SIMKL).forEach { esquecer(ctx, it) }
+            e.putString("perfil", novo)
+        }
         e.apply()
         return true
     }
@@ -199,13 +206,19 @@ object ServicosSync {
         if (o.interesses) {
             val wl = chamar(ctx, s, "/sync/watchlist/$grupo")
             if (wl.codigo in 200..299) {
-                val remoto = SincronizarFilmes.traktLerItens(wl.corpo).filter { it.tipo == tipo }
-                mi = aplicarInteresses(ctx, s, tipo, ind, remoto, enviar) { add, tirar ->
+                val remoto = SincronizarFilmes.traktLerItens(wl.corpo)?.filter { it.tipo == tipo }
+                if (remoto != null) mi = aplicarInteresses(ctx, s, tipo, ind, remoto, enviar) { add, tirar ->
+                    var addOk = emptyList<Item>(); var tirarOk = emptyList<Item>()
                     if (add.isNotEmpty()) {
-                        val a = chamar(ctx, s, "/sync/watchlist", SincronizarFilmes.corpoItens(add.take(MAX_POR_ENVIO)))
-                        if (a.codigo == 420) avisar(ctx, s, ctx.getString(R.string.sync_trakt_cheia)) else if (a.codigo in 200..299) avisar(ctx, s, null)
+                        val lote = add.take(MAX_POR_ENVIO)
+                        val a = chamar(ctx, s, "/sync/watchlist", SincronizarFilmes.corpoItens(lote))
+                        if (a.codigo == 420) avisar(ctx, s, ctx.getString(R.string.sync_trakt_cheia)) else if (ok(a)) { avisar(ctx, s, null); addOk = lote }
                     }
-                    if (tirar.isNotEmpty()) chamar(ctx, s, "/sync/watchlist/remove", SincronizarFilmes.corpoItens(tirar.take(MAX_POR_ENVIO)))
+                    if (tirar.isNotEmpty()) {
+                        val lote = tirar.take(MAX_POR_ENVIO)
+                        if (ok(chamar(ctx, s, "/sync/watchlist/remove", SincronizarFilmes.corpoItens(lote)))) tirarOk = lote
+                    }
+                    addOk to tirarOk
                 }
             }
         }
@@ -213,8 +226,10 @@ object ServicosSync {
             val w = chamar(ctx, s, "/sync/watched/$grupo")
             if (w.codigo in 200..299) {
                 val vistos = SincronizarFilmes.traktLerVistos(w.corpo, tipo)
-                if (tipo == Tipo.FILME) mp = aplicarVistosFilmes(ctx, s, ind, vistos).first || mp
-                else guardarEpisodiosVistos(ctx, s, vistos)
+                if (vistos != null) {
+                    if (tipo == Tipo.FILME) mp = aplicarVistosFilmes(ctx, s, ind, vistos).first || mp
+                    else guardarEpisodiosVistos(ctx, s, vistos)
+                }
             }
         }
         if (o.continuar && SincronizarFilmes.mudou(antes, ativ, "movies.paused_at", "episodes.paused_at")) {
@@ -248,13 +263,19 @@ object ServicosSync {
             val remoto = doTipo.filter { it.status == "plantowatch" }.map { it.item }
             mi = aplicarInteresses(ctx, s, tipo, ind, remoto, enviar) { add, tirar ->
                 val agora = System.currentTimeMillis()
-                if (add.isNotEmpty() && ok(chamar(ctx, s, "/sync/add-to-list", SincronizarFilmes.corpoItens(add.take(MAX_POR_ENVIO), "plantowatch"))))
-                    add.take(MAX_POR_ENVIO).forEach { bib = SincronizarFilmes.simklMarcar(bib, it, "plantowatch", agora) }
-                // O Simkl não tem "tirar da lista para ver" separado: /sync/history/remove tira o título da lista.
-                if (tirar.isNotEmpty() && ok(chamar(ctx, s, "/sync/history/remove", SincronizarFilmes.corpoItens(tirar.take(MAX_POR_ENVIO))))) {
-                    tirar.take(MAX_POR_ENVIO).forEach { bib = SincronizarFilmes.simklMarcar(bib, it, null, agora) }
-                    tirou = true
+                var addOk = emptyList<Item>(); var tirarOk = emptyList<Item>()
+                val loteAdd = add.take(MAX_POR_ENVIO)
+                if (loteAdd.isNotEmpty() && ok(chamar(ctx, s, "/sync/add-to-list", SincronizarFilmes.corpoItens(loteAdd, "plantowatch")))) {
+                    loteAdd.forEach { bib = SincronizarFilmes.simklMarcar(bib, it, "plantowatch", agora) }
+                    addOk = loteAdd
                 }
+                // O Simkl não tem "tirar da lista para ver" separado: /sync/history/remove tira o título da lista.
+                val loteTirar = tirar.take(MAX_POR_ENVIO)
+                if (loteTirar.isNotEmpty() && ok(chamar(ctx, s, "/sync/history/remove", SincronizarFilmes.corpoItens(loteTirar)))) {
+                    loteTirar.forEach { bib = SincronizarFilmes.simklMarcar(bib, it, null, agora) }
+                    tirarOk = loteTirar; tirou = true
+                }
+                addOk to tirarOk
             }
         }
         if (o.assistidos && tipo == Tipo.FILME) {
@@ -313,6 +334,8 @@ object ServicosSync {
         val r = chamar(ctx, s, "/sync/activities")
         if (!ok(r)) error("activities ${r.codigo}")
         val ativ = SincronizarFilmes.simklLerAtividades(r.corpo)
+        // Sem o "all" a resposta é ilegível: parar aqui (seguir faria a fase 1 inteira de novo).
+        if (ativ["all"] == null) error("activities ilegível")
         var bib = lerBibliotecaSimkl(ctx)
         val plano = SincronizarFilmes.simklPlano(antes, ativ, bib != null, o.continuar, est.has("pausas_${s.id}"))
         if (plano.completo) {
@@ -364,17 +387,19 @@ object ServicosSync {
      * id TMDB). Devolve se os Interesses daqui mudaram.
      */
     private fun aplicarInteresses(ctx: Context, s: Servico, tipo: Tipo, ind: Indice, remoto: List<Item>, enviar: Boolean,
-                                  mandar: (List<Item>, List<Item>) -> Unit): Boolean {
+                                  mandar: (List<Item>, List<Item>) -> Pair<List<Item>, List<Item>>): Boolean {
         val local = idsLocaisInteresses(ctx, tipo, ind)
         val remotoIds = remoto.mapNotNull { it.ids.tmdb }.toSet()
         val chaveBase = "base_${s.id}_${tipo.name}"
         val base = conjunto(lerEstado(ctx).optJSONArray(chaveBase))
         val universo = ind.porId.keys + local.keys
         val m = SincronizarFilmes.mesclarInteresses(local.keys, remotoIds, base, enviar, universo)
+        var baseNova = m.base
         if (enviar) {
             val porId = remoto.associateBy { it.ids.tmdb }
             fun item(id: Int) = porId[id] ?: Item(tipo, SincronizarFilmes.Ids(tmdb = id))
-            mandar(m.adicionarFora.map(::item), m.tirarFora.map(::item))
+            val (addOk, tirarOk) = mandar(m.adicionarFora.map(::item), m.tirarFora.map(::item))
+            baseNova = SincronizarFilmes.baseAposEnvio(m, addOk.mapNotNull { it.ids.tmdb }.toSet(), tirarOk.mapNotNull { it.ids.tmdb }.toSet())
         }
         // Os Interesses daqui: tira os que saíram, põe os novos (o mais novo primeiro, como quando se marca na TV).
         val atuais = PlayerArmazem.interesses(ctx, tipo == Tipo.SERIE)
@@ -384,7 +409,7 @@ object ServicosSync {
         val mudou = novos != atuais
         if (mudou) PlayerArmazem.definirInteresses(ctx, tipo == Tipo.SERIE, LinkedHashSet(novos.take(Vod.MAX_INTERESSES)))
         val finais = idsLocaisInteresses(ctx, tipo, ind).keys
-        mudarEstado(ctx) { it.put(chaveBase, arranjo(m.base)).put("local_${s.id}_${tipo.name}", arranjo(finais)) }
+        mudarEstado(ctx) { it.put(chaveBase, arranjo(baseNova)).put("local_${s.id}_${tipo.name}", arranjo(finais)) }
         return mudou
     }
 
@@ -565,7 +590,7 @@ object ServicosSync {
         "trakt" -> {
             val dono = l.dono.takeIf { it.matches(Regex("[A-Za-z0-9_.-]{1,60}")) } ?: "me"
             chamar(ctx, Servico.TRAKT, "/users/$dono/lists/${l.id}/items/movie,show").takeIf { it.codigo in 200..299 }
-                ?.let { SincronizarFilmes.traktLerItens(it.corpo) }
+                ?.let { SincronizarFilmes.traktLerItens(it.corpo) }   // ilegível: null, fica a lista guardada
         }
         "mdblist" -> ServicosContas.chaveMdblist(ctx)?.let { k ->
             ServicosContas.pedir("${ServicosFilmes.MDBLIST_API}/lists/${l.id}/items?limit=1000&apikey=${java.net.URLEncoder.encode(k, "UTF-8")}",
