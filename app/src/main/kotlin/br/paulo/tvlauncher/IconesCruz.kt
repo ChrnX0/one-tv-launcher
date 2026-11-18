@@ -371,12 +371,15 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             }
             Tipo.ASSISTIR, Tipo.TV -> {   // a TV-sofá da logo Sofaly em contorno (18/11/2026, Paulo: miolo vazio, sem barra embaixo)
                 if (fase < 0f) { c.drawLine(12f, 7.6f, 8.2f, 3.6f, traco); c.drawLine(12f, 7.6f, 16.6f, 4.8f, traco) }   // tocando: as da linhaViva
-                // Só contornos, miolo vazio: a tela e os dois braços do sofá saindo dos lados (sem base nem pés).
-                ret(5.6f, 7.6f, 18.4f, 17.8f, 2.2f)
+                // Um contorno só (Paulo, 18/11/2026: "a opção B sem o contorno interno"): a tela e os braços do sofá
+                // fundidos numa silhueta, miolo vazio, e os pezinhos embaixo.
                 p.reset()
-                p.moveTo(5.6f, 11.4f); p.lineTo(4f, 11.4f); p.quadTo(2.4f, 11.4f, 2.4f, 13f); p.lineTo(2.4f, 16.4f); p.quadTo(2.4f, 18f, 4f, 18f); p.lineTo(5.6f, 18f)
-                p.moveTo(18.4f, 11.4f); p.lineTo(20f, 11.4f); p.quadTo(21.6f, 11.4f, 21.6f, 13f); p.lineTo(21.6f, 16.4f); p.quadTo(21.6f, 18f, 20f, 18f); p.lineTo(18.4f, 18f)
+                p.moveTo(5.6f, 11.4f); p.lineTo(5.6f, 9.8f); p.quadTo(5.6f, 7.6f, 7.8f, 7.6f); p.lineTo(16.2f, 7.6f)
+                p.quadTo(18.4f, 7.6f, 18.4f, 9.8f); p.lineTo(18.4f, 11.4f); p.lineTo(20f, 11.4f); p.quadTo(21.6f, 11.4f, 21.6f, 13f)
+                p.lineTo(21.6f, 16.4f); p.quadTo(21.6f, 18f, 20f, 18f); p.lineTo(4f, 18f); p.quadTo(2.4f, 18f, 2.4f, 16.4f)
+                p.lineTo(2.4f, 13f); p.quadTo(2.4f, 11.4f, 4f, 11.4f); p.close()
                 c.drawPath(p, traco)
+                c.drawLine(3.6f, 18f, 3.2f, 20f, traco); c.drawLine(20.4f, 18f, 20.8f, 20f, traco)
             }
             Tipo.SERIES -> {   // quadros empilhados (episódios)
                 ret(2.5f, 8f, 17.5f, 19.5f, 1.6f)
