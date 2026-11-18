@@ -255,7 +255,6 @@ class PodcastPlayerActivity : Activity() {
 
         val meu = jaTocou && doServico != null
         val pausado = meu && s?.pausado == true
-        rotulo.text = getString(if (pausado) R.string.ouv_pausado else R.string.ouv_tocando_agora).uppercase()
         podcast.text = e.podcast
         if (tituloVisto != e.ep.titulo) {
             tituloVisto = e.ep.titulo
@@ -301,10 +300,13 @@ class PodcastPlayerActivity : Activity() {
         falta.text = PodcastPlayerLogic.falta(pos, dur, v)
         val fim = PodcastPlayerLogic.terminaEm(System.currentTimeMillis(), pos, dur, v)
         val dormir = PodcastPlayerLogic.minutosParaDormir(s?.dormirAte ?: 0L, SystemClock.elapsedRealtime())
-        termina.text = listOfNotNull(
-            fim?.let { getString(R.string.pl_termina, DateFormat.getTimeFormat(this).format(Date(it))) },
+        termina.text = fim?.let { getString(R.string.pl_termina, DateFormat.getTimeFormat(this).format(Date(it))) }.orEmpty()
+        // O timer vai no rótulo de cima (largo): no meio da linha dos tempos "dorme em 15 min" era cortado (Sala, v463223).
+        val pausado = jaTocou && s?.episodio != null && s.pausado
+        rotulo.text = listOfNotNull(
+            getString(if (pausado) R.string.ouv_pausado else R.string.ouv_tocando_agora),
             dormir.takeIf { it > 0 }?.let { getString(R.string.pl_dorme_em, it) },
-        ).joinToString(" · ")
+        ).joinToString("  ·  ").uppercase()
         if (andar != ANDAR_SEGUIR) rotuloBotao.text = rotuloDoBotao(Acao.entries[botao])
     }
 
