@@ -435,7 +435,7 @@ object Estilo {
      * Escuro (Fundos.kt, desenharFundoEscuro), em vez da textura pontilhada antiga (drawable fundo.jpg) e dos cinzas
      * soltos de cada tela. Telas de lista ficam em fundo liso mesmo no tema Galeria (decisão 1: vidro só com imagem atrás).
      */
-    fun fundoTela(@Suppress("UNUSED_PARAMETER") ctx: Context): Drawable = FundoGrafite()
+    fun fundoTela(ctx: Context): Drawable = FundoGrafite(World.of(ctx))
 
     /**
      * Tela cuja raiz já pinta o grafite na tela toda: a cor de fundo da janela (tema) por baixo é uma camada de tela
@@ -451,10 +451,10 @@ object Estilo {
         a.window.setBackgroundDrawable(null)
     }
 
-    private class FundoGrafite : Drawable() {
+    private class FundoGrafite(private val mundo: World) : Drawable() {
         override fun draw(c: android.graphics.Canvas) {
             c.save(); c.translate(bounds.left.toFloat(), bounds.top.toFloat())
-            FundoEscuroPronto.desenhar(c, bounds.width().toFloat(), bounds.height().toFloat())   // uma imagem pronta (Fundos.kt)
+            FundoEscuroPronto.desenhar(c, bounds.width().toFloat(), bounds.height().toFloat(), mundo)   // uma imagem pronta (Fundos.kt)
             c.restore()
         }
         override fun setAlpha(alpha: Int) {}   // opaco sempre (ninguém usa alfa neste fundo)

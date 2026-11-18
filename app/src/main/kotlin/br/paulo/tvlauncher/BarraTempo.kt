@@ -28,13 +28,17 @@ object BarraTempo {
     /** Espessura da barra (era 3 dp, fina demais de longe). */
     const val ESPESSURA_DP = 5
 
-    /** "22 min", "1 h", "1 h 05". Menos de 1 min vira "1 min" (nunca "0 min" com o programa ainda no ar). */
+    /**
+     * "22 min", "1 h", "1 h 5 min". Menos de 1 min vira "1 min" (nunca "0 min" com o programa ainda no ar).
+     * É o formato ÚNICO do app (18/11/2026): a Sala mostrava o mesmo programa como "1 h 3 min" na HOME, "1 h 04 min" na
+     * barra do player, "1 h 04" na lista de canais e "64 min" no detalhe do canal.
+     */
     fun duracao(ms: Long): String {
         val min = ((ms + 59_999) / 60_000).coerceAtLeast(1)
         return when {
             min < 60 -> "$min min"
             min % 60 == 0L -> "${min / 60} h"
-            else -> String.format(Locale.ROOT, "%d h %02d", min / 60, min % 60)
+            else -> "${min / 60} h ${min % 60} min"
         }
     }
 
@@ -78,7 +82,8 @@ object BarraTempo {
     class Barra(ctx: Context) : View(ctx) {
         var fracao = 0f
             set(v) { field = v.coerceIn(0f, 1f); invalidate() }
-        var cor = 0xFFFF5A4E.toInt()
+        // O quanto já passou/foi visto: o acento único da marca, igual à barra da cruz (era um vermelho só dos players).
+        var cor = Estilo.ACENTO
             set(v) { field = v; invalidate() }
         private val fundo = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0x2EFFFFFF }
         private val cheio = Paint(Paint.ANTI_ALIAS_FLAG)

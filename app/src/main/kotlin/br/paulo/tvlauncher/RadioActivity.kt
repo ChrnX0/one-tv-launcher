@@ -153,8 +153,12 @@ class RadioActivity : Activity() {
         }
     }
 
+    /** Já apertou alguma tecla aqui: a entrada não muda mais sozinha quando as listas chegam. */
+    private var mexeuNaLista = false
+
     override fun dispatchKeyEvent(e: KeyEvent): Boolean {
         if (e.action == KeyEvent.ACTION_DOWN) {
+            mexeuNaLista = true
             mexeu()
             if (veu.visibility == View.VISIBLE) { veu.visibility = View.GONE; return true }   // 1ª tecla só acende a tela
             val n = e.keyCode - KeyEvent.KEYCODE_1
@@ -179,7 +183,9 @@ class RadioActivity : Activity() {
         val app = applicationContext
         Fundo.rodar("radios") {
             val fav = Radios.favoritas(app); val rec = Radios.recentes(app)
-            runOnUiThread { if (!isDestroyed) { favoritas = fav; recentes = rec; montar() } }
+            // A 1ª montagem (onCreate) roda com as listas ainda vazias e escolhia a prateleira errada (Sala, 18/11/2026: abria em
+            // "Nenhuma favorita ainda" com 2 rádios em Recentes). Com as listas lidas, a entrada é escolhida de novo.
+            runOnUiThread { if (!isDestroyed) { favoritas = fav; recentes = rec; montar(focarInicio = !mexeuNaLista) } }
             val ponto = runCatching { Localizacao.atual(app) { null } }.getOrNull()   // sem rede extra: só o que a TV já sabe
             val p = ponto?.let { pt -> Radios.estacoes(Radios.pedir { Radios.urlPerto(it, pt.lat, pt.lon, 30) }) }
             val d = if (pais.isNotEmpty()) Radios.estacoes(Radios.pedir { Radios.urlPais(it, pais) }) else

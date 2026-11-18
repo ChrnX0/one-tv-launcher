@@ -75,7 +75,8 @@ class ColunaCategorias(
     private val tela = Handler(Looper.getMainLooper())
     private val papel = Estilo.TEXTO
     private val apagado = Estilo.TEXTO_3
-    private val ambar = Estilo.ATENCAO
+    // A escolhida na cor ÚNICA de acento da marca (18/11/2026, identidade: era o âmbar de "atenção", outra cor só aqui).
+    private val ambar get() = Estilo.ACENTO
     private val fonteMedia = Fontes.nunito(500)
 
     private var grupos: Array<List<Linha>> = arrayOf(emptyList(), emptyList(), emptyList())
@@ -424,7 +425,8 @@ class ColunaCategorias(
         const val ESPERA_MS = 180L
         const val COR_NOVOS = 0xFF5FD3B0.toInt()   // o verde-água dos ícones no esboço
         const val COR_ETIQUETA = 0xFFCFD6E0.toInt()   // selo das listas de fora: cinza claro (cores de marca ficam fora)
-        const val COR_ICONE = 0xFF5FD3B0.toInt()
+        // Ícones em repouso no tom do texto secundário (era verde-água): a cor fica só para a escolhida, como na cruz.
+        const val COR_ICONE = 0xB3F4F1EC.toInt()
         // Os trechos da coluna, de cima para baixo (▲▼ anda nesta ordem).
         const val PARADA_TITULO = 0
         const val PARADA_LISTAS = 2
