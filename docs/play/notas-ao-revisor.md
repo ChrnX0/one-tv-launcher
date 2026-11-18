@@ -19,17 +19,17 @@ person at the TV, with an on-screen explanation. No data is sent to us: we have 
 
 **2. Shell through Wireless debugging (ADB over TLS, paired on the TV itself)**
 - Why: the TV has no other way to grant `WRITE_SECURE_SETTINGS` (private DNS), `PACKAGE_USAGE_STATS` (sort apps by use),
-  "Alarms & reminders" and to install an APK the person sends from the phone. Pairing needs the person to open Developer
-  options and type the 6-digit code; the code never leaves the TV.
-- Alternative dropped: `REQUEST_INSTALL_PACKAGES` / self-update — removed from this build; the store updates Sofaly.
+  and "Alarms & reminders". Pairing needs the person to open Developer options and type the 6-digit code on Sofaly's
+  own keypad (this build never reads it from the Settings screen); the code never leaves the TV.
+- Not in this build: installing APKs (no `REQUEST_INSTALL_PACKAGES`, no `pm install`), self-update (the store updates
+  Sofaly), freezing other apps.
 
 **3. Device Owner (optional, only set by the person through ADB / setup)**
 - Why: kiosk-style "simple mode" for an older relative: hide apps, keep Sofaly as HOME, always-on VPN for parental DNS.
   Uses only `DevicePolicyManager` APIs. Never wipes, never transfers ownership.
 
-**4. Lending these powers to other apps (Shizuku-compatible server, Dhizuku-compatible server)**
-- Off by default; each requesting app needs the panel PIN typed on the TV. Requests to wipe the device, clear the owner,
-  transfer ownership or touch Sofaly itself are always refused (`FiltroDpm`).
+**4. No lending of powers** — this build does not share the shell or Device Owner with other apps (no Shizuku- or
+Dhizuku-compatible server components in the manifest).
 
 **5. Notification listener** — only to show "Now playing" (title and artwork of the media session) on the home screen.
 
@@ -41,7 +41,10 @@ person at the TV, with an on-screen explanation. No data is sent to us: we have 
 
 **7. AI assistants (MCP) and web panel** — the person's own Claude/ChatGPT can control the TV through a closed action
 catalog, over the person's own Tailscale account. Every action shows a notice on the TV. Shell commands from AI are
-blocked by default and need the PIN.
+blocked by default and need the PIN. **AI never uses the accessibility service in this build**: keys the assistant asks
+for go through the paired shell (`input keyevent`), HOME opens Sofaly by Intent, text goes through `input text`, and the
+tools that read or click other apps' screens are not included (`PlayPolicy.kt`). The accessibility service only acts on
+the person's own key presses and on routines the person set up.
 
 **8. Subscriptions** — Pro and Ultra are sold only with Google Play Billing. No external payment links.
 

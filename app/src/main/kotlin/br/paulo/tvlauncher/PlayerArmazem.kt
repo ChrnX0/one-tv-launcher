@@ -38,9 +38,12 @@ object PlayerArmazem {
     // ---------------------------------------------------------------- contas
 
     /** Há conta cadastrada? (só olha se o arquivo existe: barato o bastante para a HOME chamar a cada desenho) */
-    fun temContas(ctx: Context): Boolean = File(File(ctx.filesDir, "player"), "contas.json").exists()
+    /** Versão da Play enxuta (PlayPolicy.Power.LIVE_TV_LISTS): contas de TV ao vivo não existem; tudo abaixo vê "nenhuma". */
+    private fun contasExistem() = PlayPolicy.allowed(PlayPolicy.Power.LIVE_TV_LISTS, BuildConfig.PLAY)
 
-    fun fontes(ctx: Context): List<FonteTv> = fontesOuNull(ctx) ?: emptyList()
+    fun temContas(ctx: Context): Boolean = contasExistem() && File(File(ctx.filesDir, "player"), "contas.json").exists()
+
+    fun fontes(ctx: Context): List<FonteTv> = if (!contasExistem()) emptyList() else fontesOuNull(ctx) ?: emptyList()
 
     /** As contas; null se o arquivo existe mas não deu para ler (Keystore fora, arquivo estragado). */
     private fun fontesOuNull(ctx: Context): List<FonteTv>? {
@@ -76,11 +79,13 @@ object PlayerArmazem {
 
     /** Troca TODAS as contas pelas da lista (restauração do backup completo; o Keystore desta instalação cifra de novo). */
     fun substituirContas(ctx: Context, fontes: List<FonteTv>): Boolean =
-        if (fontes.isEmpty()) { arquivoContas(ctx).delete(); true } else gravar(ctx, fontes)
+        if (!contasExistem()) true   // backup da versão completa restaurado na da Play: as contas de TV ficam de fora
+        else if (fontes.isEmpty()) { arquivoContas(ctx).delete(); true } else gravar(ctx, fontes)
 
     /** Cria uma conta nova (id gerado). Devolve a conta, ou o motivo de não ter criado. */
     fun adicionar(ctx: Context, nome: String, tipo: String, endereco: String, usuario: String = "", senha: String = "", guia: String = "",
                   reservas: String = "", guiaExtra: String = ""): Result<FonteTv> {
+        if (!contasExistem()) return Result.failure(IllegalStateException("TV ao vivo por lista não existe nesta versão"))
         val nova = PlayerDados.criar(UUID.randomUUID().toString().take(8), nome, tipo, endereco, usuario, senha, guia, reservas, guiaExtra).getOrElse { return Result.failure(it) }
         return mudarContas(ctx, Result.failure(IllegalStateException("não consegui ler as contas salvas"))) { atuais ->
             if (atuais.size >= 8) Result.failure(IllegalStateException("já há 8 contas; apague uma antes"))

@@ -150,7 +150,7 @@ object McpPoder {
         exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_apertar, teclas.joinToString(" ")))
         val pausa = a.optLong("pausa_ms", 150).coerceIn(0, 3000)
         teclas.forEachIndexed { i, t ->
-            PainelControle.tecla(app, t)?.let { throw McpProtocolo.ErroFerramenta("parou na tecla ${i + 1} ($t): $it") }
+            PainelControle.tecla(app, t, pelaIa = true)?.let { throw McpProtocolo.ErroFerramenta("parou na tecla ${i + 1} ($t): $it") }
             if (i < teclas.size - 1 && pausa > 0) Thread.sleep(pausa)
         }
         return "ok: ${teclas.size} tecla(s)"
@@ -163,16 +163,17 @@ object McpPoder {
         exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(R.string.cf_digitar))
         AutoDesligar.atividade()
         // Ideia 56: com acento, pela acessibilidade (escreve no campo em foco); senão, ou se não deu, `input text`.
+        // Na versão da Play a IA não usa a acessibilidade (PlayPolicy): vai direto ao `input text` sem acento.
         var aviso = ""
         val ascii = if (TextoNaTv.precisaAcessibilidade(texto)) {
-            if (DigitarNaTv.escrever(texto)) null
+            if (PlayPolicy.aiMayUseAccessibility(BuildConfig.PLAY) && DigitarNaTv.escrever(texto)) null
             else TextoNaTv.semAcento(texto).also { aviso = " (sem acento: nenhum campo em foco aceitou pela acessibilidade)" }
         } else texto
         if (ascii != null) {
             val arg = McpPoderRegras.textoParaInput(ascii) ?: throw McpProtocolo.ErroFerramenta("nada para digitar sem acento")
             GuardiaoShizuku.comando(app, "input text '$arg'") ?: throw McpProtocolo.ErroFerramenta("o shell do launcher não respondeu")
         }
-        if (a.optBoolean("enviar")) PainelControle.tecla(app, "entrar")
+        if (a.optBoolean("enviar")) PainelControle.tecla(app, "entrar", pelaIa = true)
         return "ok$aviso"
     }
 
@@ -393,7 +394,7 @@ object McpPoder {
     private fun energia(app: Context, a: JSONObject): String = when (val acao = a.optString("acao")) {
         "acordar", "dormir" -> {
             exigir(app, Confirmacoes.Acao.MCP_ACOES, txt(if (acao == "acordar") R.string.cf_acordar else R.string.cf_dormir))
-            falha(PainelControle.tecla(app, if (acao == "acordar") "ligar" else "apagar"), "ok: $acao")
+            falha(PainelControle.tecla(app, if (acao == "acordar") "ligar" else "apagar", pelaIa = true), "ok: $acao")
         }
         "reiniciar" -> {
             exigir(app, Confirmacoes.Acao.REMOVER, txt(R.string.cf_reiniciar))

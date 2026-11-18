@@ -18,8 +18,11 @@ import org.json.JSONObject
 class McpFerramentas(ctx: Context) : McpProtocolo.Ferramentas, McpProtocolo.ComConteudo {
     private val app = ctx.applicationContext
 
-    override fun lista(): JSONArray = JSONArray().apply {   // + ferramentas das ideias grandes (McpExtras.kt)
-        for (i in 0 until LISTA.length()) put(LISTA.get(i)); McpExtras.LISTA.forEach { put(it) }; McpPoder.LISTA.forEach { put(it) }; McpPoder2.LISTA.forEach { put(it) }; McpIdeias.LISTA.forEach { put(it) }; McpDiario.LISTA.forEach { put(it) }
+    // Versão da Play: o que a PlayPolicy tira some da lista e é recusado na chamada, como se não existisse.
+    override fun lista(): JSONArray = JSONArray().apply { todas().forEach { if (PlayPolicy.mcpToolAllowed(it.optString("name"), BuildConfig.PLAY)) put(it) } }
+
+    private fun todas(): List<JSONObject> = mutableListOf<JSONObject>().apply {   // + ferramentas das ideias grandes (McpExtras.kt)
+        for (i in 0 until LISTA.length()) add(LISTA.getJSONObject(i)); addAll(McpExtras.LISTA); addAll(McpPoder.LISTA); addAll(McpPoder2.LISTA); addAll(McpIdeias.LISTA); addAll(McpDiario.LISTA)
     }
 
     override fun conteudo(nome: String, argumentos: JSONObject): JSONArray? =
@@ -27,7 +30,11 @@ class McpFerramentas(ctx: Context) : McpProtocolo.Ferramentas, McpProtocolo.ComC
 
     override val acoesPedemOk: Boolean get() = ConfirmacoesTv.modo(app, Confirmacoes.Acao.MCP_ACOES) == Confirmacoes.Modo.PERGUNTAR
 
-    override fun chamar(nome: String, argumentos: JSONObject): String = when (nome) {
+    override fun chamar(nome: String, argumentos: JSONObject): String =
+        if (!PlayPolicy.mcpToolAllowed(nome, BuildConfig.PLAY)) throw McpProtocolo.ErroFerramenta("ferramenta desconhecida")
+        else chamarPermitida(nome, argumentos)
+
+    private fun chamarPermitida(nome: String, argumentos: JSONObject): String = when (nome) {
         "estado_tv" -> estadoTv().toString()
         "clima" -> clima().toString()
         "diagnostico_rede" -> diagnostico().toString()

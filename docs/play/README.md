@@ -12,3 +12,4 @@ Preparado em 16/11/2026. Package do produto: **`tv.sofaly.launcher`** (nunca mud
 | [privacidade-sofaly.md](privacidade-sofaly.md) | Política de privacidade do produto (vai para o site) |
 | [notas-ao-revisor.md](notas-ao-revisor.md) | Declaração de cada poder, com motivo e caminho descartado |
 | [pendencias.md](pendencias.md) | O que depende da conta Play, do Paulo ou de decisão |
+| [politicas.md](politicas.md) | Versão enxuta (18/11/2026): o que sai da Play e por quê |

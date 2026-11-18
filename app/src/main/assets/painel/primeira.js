@@ -53,6 +53,15 @@ function mostrarPassoPrimeira() {
   if (p.id === 'pin') $('primeiraPin').focus();
   if (p.id === 'servicos') emprestarServicos();
   if (p.id === 'poderes') vigiarPoderes(); else pararPoderes();
+  if (p.id === 'tv') pularTvSeNaoExiste();
+}
+
+/** Versão da Play enxuta (PlayPolicy.Power.LIVE_TV_LISTS): sem contas de TV ao vivo, o passo some sozinho. */
+async function pularTvSeNaoExiste() {
+  try {
+    const r = await chamar('GET', '/api/tv/contas');
+    if (r.existe === false && PASSOS_PRIMEIRA[primeira.passo].id === 'tv') { primeira.passo++; mostrarPassoPrimeira(); }
+  } catch (_) { /* sem resposta: fica o passo, que tem Pular */ }
 }
 
 // ---- Modo completo: o que cada passo pede na TV (o texto acompanha a tela que abre lá).

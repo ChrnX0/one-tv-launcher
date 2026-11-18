@@ -21,6 +21,20 @@
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" tools:node="remove" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" tools:remove="android:maxSdkVersion" />
 
+    <!-- Versão da Play enxuta (18/11/2026, PlayPolicy.kt / docs/play/politicas.md): emprestar o shell (servidor
+         Shizuku) e o Device Owner (servidor Dhizuku) a outros apps não existe na loja. Sem estes componentes nenhum
+         app de fora chega aos servidores; o código também fica parado (PlayPolicy.Power.LEND_POWERS). -->
+    <application>
+        <provider android:name=".ProvedorShizuku" tools:node="remove" />
+        <activity android:name=".PedidoShizukuActivity" tools:node="remove" />
+        <provider android:name=".ProvedorDhizuku" tools:node="remove" />
+        <activity android:name=".PedidoDhizukuActivity" tools:node="remove" />
+        <service android:name=".ServicoUsuarioDhizuku" tools:node="remove" />
+        <!-- Passo 4: a loja atualiza o app. A resposta do PackageInstaller do Atualizador não tem o que receber, e o
+             código que baixa e instala APK sai do pacote pelo R8 (Atualizador e PainelApps param em BuildConfig.PLAY). -->
+        <receiver android:name=".Atualizador$Resultado" tools:node="remove" />
+    </application>
+
     <queries>
         <intent>
             <action android:name="android.intent.action.MAIN" />

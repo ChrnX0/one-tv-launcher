@@ -272,6 +272,8 @@ object PareamentoNaTv {
     /** Tenta ler o código até 12 vezes (a cada 0,5 s). Achou e a pessoa não digitou nada: preenche e pareia. */
     private fun lerCodigoDaTela(app: Context, tentativa: Int) {
         if (janela == null || codigo.isNotEmpty() || tentativa >= 12) return
+        // Versão da Play enxuta (PlayPolicy): não lê a tela das Configurações; a pessoa digita o código.
+        if (!PlayPolicy.allowed(PlayPolicy.Power.READ_PAIRING_CODE, BuildConfig.PLAY)) return
         val achado = CodigoPareamento.achar(textosDaTela())
         if (achado == null) { principal.postDelayed({ lerCodigoDaTela(app, tentativa + 1) }, 500); return }
         codigo.append(achado); atualizarCodigo()

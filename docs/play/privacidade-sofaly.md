@@ -17,7 +17,7 @@ adiciona e backups locais. Apagar os dados do app ou desinstalar remove tudo.
 - Rádios: Radio Browser. Fundos de arte: The Metropolitan Museum of Art.
 - Compras: Google Play (a Sofaly só lê qual plano está ativo).
 - Login Google e Google Drive: opcionais, com os mesmos escopos e regras de Uso Limitado do One TV Launcher.
-- Serviços que você mesmo configura: IPTV, Plex, Jellyfin, Home Assistant, Tailscale.
+- Serviços que você mesmo configura: Plex, Jellyfin, pastas da rede, Home Assistant, Tailscale.
 
 **Cuidar de longe.** Desligado de fábrica. Só funciona depois que **quem mora na casa aceita na TV**, com o controle
 remoto. Os avisos (pedido de ajuda, "estou bem") só saem quando a pessoa aperta o botão. O aviso vai direto ao celular
