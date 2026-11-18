@@ -69,15 +69,17 @@ object LayoutHome {
 
     /**
      * Barra de cima na cruz (17/11/2026, Paulo: "quero todas as opções"):
-     * - [BarraCruz.RECUA] (padrão): com a cruz em foco, só hora e tempo, pequenos; ▲ traz a barra inteira e a cruz desce;
+     * - [BarraCruz.RECUA] (padrão até 18/11/2026): com a cruz em foco, só hora e tempo, pequenos; ▲ traz a barra inteira e a cruz desce;
      * - [BarraCruz.LEVE]: a barra sempre à mostra, sem as cápsulas de vidro;
      * - [BarraCruz.RELOGIO]: como a Recua, e um relógio grande com data e tempo no canto livre de baixo;
-     * - [BarraCruz.HOJE]: a barra de cápsulas de sempre.
+     * - [BarraCruz.HOJE]: a barra de cápsulas de sempre;
+     * - [BarraCruz.VIDRO] (padrão desde a onda 3, 18/11/2026): a barra sempre à mostra numa faixa só de vidro parado.
+     * A ordem é a guardada nas preferências (o número): opção nova entra no FIM.
      */
-    enum class BarraCruz { RECUA, LEVE, RELOGIO, HOJE }
+    enum class BarraCruz { RECUA, LEVE, RELOGIO, HOJE, VIDRO }
     const val CHAVE_BARRA = "cruz_barra"
-    fun barraCruz(ctx: Context) = barraCruz(Extras.numero(ctx, CHAVE_BARRA, 0))
-    fun barraCruz(valor: Int) = BarraCruz.entries.getOrElse(valor) { BarraCruz.RECUA }
+    fun barraCruz(ctx: Context) = barraCruz(Extras.numero(ctx, CHAVE_BARRA, BarraCruz.VIDRO.ordinal))
+    fun barraCruz(valor: Int) = BarraCruz.entries.getOrElse(valor) { BarraCruz.VIDRO }
     fun definirBarraCruz(ctx: Context, b: BarraCruz) = Extras.definirNumero(ctx, CHAVE_BARRA, b.ordinal)
     fun proximaBarraCruz(ctx: Context) = BarraCruz.entries.let { it[(barraCruz(ctx).ordinal + 1) % it.size] }
         .also { definirBarraCruz(ctx, it) }

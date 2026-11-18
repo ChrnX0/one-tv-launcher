@@ -35,4 +35,18 @@
     <string name="cruz_soltar">Togli dall’alto</string>
     <string name="cruz_tocando">In riproduzione: %1$s</string>
     <string name="cruz_precisa_internet">Serve internet</string>
+    <string name="cruz_barra_vidro">Vetro</string>
+    <string name="cruz_ambiente">Modalità ambiente</string>
+    <string name="cruz_ambiente_det">Dopo 2 min ferma restano solo l’immagine e l’ora grande</string>
+    <string name="cruz_paralaxe">Immagine in movimento</string>
+    <string name="cruz_paralaxe_det">L’immagine scorre un po’ mentre ti muovi</string>
+    <string name="cruz_quem">Chi sta guardando?</string>
+    <string name="cruz_quem_det">Chiede il profilo all’accensione della TV (con 2 o più)</string>
+    <string name="cruz_quem_titulo">Chi sta guardando?</string>
+    <string name="cruz_dormir_atalho">Dormi tra 30 min la sera</string>
+    <string name="cruz_dormir_atalho_det">Scorciatoia in Continua dopo le 22</string>
+    <string name="cruz_dormir">Dormi tra 30 min</string>
+    <string name="cruz_dormir_sub">Lo schermo si scurisce piano e la TV si spegne</string>
+    <string name="cruz_desliga_as">Si spegne alle %1$s</string>
+    <string name="cruz_dormir_cancelar">OK per annullare</string>
 </resources>

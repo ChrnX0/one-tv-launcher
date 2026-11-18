@@ -71,6 +71,14 @@
   ],
   "sobrepostos": []
  },
+ "en\/home-vidro": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [
+   "Videos, music and photos from your home "
+  ],
+  "sobrepostos": []
+ },
  "en\/jogos": {
   "menorSp": 11,
   "foco": true,
@@ -157,6 +165,12 @@
  },
  "pt\/home-relogio": {
   "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": []
+ },
+ "pt\/home-vidro": {
+  "menorSp": 12,
   "foco": true,
   "cortes": [],
   "sobrepostos": []

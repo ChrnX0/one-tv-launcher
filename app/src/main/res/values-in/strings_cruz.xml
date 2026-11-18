@@ -35,4 +35,18 @@
     <string name="cruz_soltar">Lepas sematan</string>
     <string name="cruz_tocando">Diputar: %1$s</string>
     <string name="cruz_precisa_internet">Perlu internet</string>
+    <string name="cruz_barra_vidro">Kaca</string>
+    <string name="cruz_ambiente">Mode ambien</string>
+    <string name="cruz_ambiente_det">Setelah diam 2 menit, hanya gambar dan jam besar yang tersisa</string>
+    <string name="cruz_paralaxe">Gambar bergerak</string>
+    <string name="cruz_paralaxe_det">Gambar bergeser sedikit saat berpindah</string>
+    <string name="cruz_quem">Siapa yang menonton?</string>
+    <string name="cruz_quem_det">Menanyakan profil saat TV dinyalakan (2 atau lebih)</string>
+    <string name="cruz_quem_titulo">Siapa yang menonton?</string>
+    <string name="cruz_dormir_atalho">Tidur dalam 30 menit di malam hari</string>
+    <string name="cruz_dormir_atalho_det">Pintasan di Lanjutkan setelah pukul 22</string>
+    <string name="cruz_dormir">Tidur dalam 30 menit</string>
+    <string name="cruz_dormir_sub">Layar meredup perlahan dan TV mati</string>
+    <string name="cruz_desliga_as">Mati pukul %1$s</string>
+    <string name="cruz_dormir_cancelar">OK untuk membatalkan</string>
 </resources>

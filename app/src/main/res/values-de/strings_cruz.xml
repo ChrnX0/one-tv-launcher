@@ -35,4 +35,18 @@
     <string name="cruz_soltar">Nicht mehr oben anheften</string>
     <string name="cruz_tocando">Läuft: %1$s</string>
     <string name="cruz_precisa_internet">Braucht Internet</string>
+    <string name="cruz_barra_vidro">Glas</string>
+    <string name="cruz_ambiente">Ambiente-Modus</string>
+    <string name="cruz_ambiente_det">Nach 2 Min. Ruhe bleiben nur Bild und große Uhr</string>
+    <string name="cruz_paralaxe">Bewegtes Bild</string>
+    <string name="cruz_paralaxe_det">Das Bild gleitet beim Navigieren leicht mit</string>
+    <string name="cruz_quem">Wer schaut zu?</string>
+    <string name="cruz_quem_det">Fragt beim Einschalten nach dem Profil (ab 2 Profilen)</string>
+    <string name="cruz_quem_titulo">Wer schaut zu?</string>
+    <string name="cruz_dormir_atalho">Abends in 30 Min. schlafen</string>
+    <string name="cruz_dormir_atalho_det">Verknüpfung in „Weiter“ nach 22 Uhr</string>
+    <string name="cruz_dormir">In 30 Min. schlafen</string>
+    <string name="cruz_dormir_sub">Der Bildschirm wird langsam dunkel und der Fernseher geht aus</string>
+    <string name="cruz_desliga_as">Schaltet um %1$s ab</string>
+    <string name="cruz_dormir_cancelar">OK zum Abbrechen</string>
 </resources>

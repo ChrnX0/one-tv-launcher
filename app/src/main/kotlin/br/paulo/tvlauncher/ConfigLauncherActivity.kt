@@ -971,6 +971,7 @@ class ConfigLauncherActivity : Activity() {
                 LayoutHome.BarraCruz.LEVE -> R.string.cruz_barra_leve
                 LayoutHome.BarraCruz.RELOGIO -> R.string.cruz_barra_relogio
                 LayoutHome.BarraCruz.HOJE -> R.string.cruz_barra_capsulas
+                LayoutHome.BarraCruz.VIDRO -> R.string.cruz_barra_vidro
             })
             lateinit var linhaBarra: LinhaCfg
             linhaBarra = linha(getString(R.string.cruz_barra), getString(R.string.cruz_barra_det), valor = rotuloBarra()) {
@@ -994,6 +995,17 @@ class ConfigLauncherActivity : Activity() {
                 linhaSons.valor(rotuloSons())
             }
             c.addView(linhaSons, lp())
+            // Onda 3 do estudo da HOME (18/11/2026): cada parte com a sua chave, todas ligadas de fábrica (CruzOnda3).
+            fun linhaOnda3(titulo: Int, det: Int, chave: String) {
+                fun rotulo() = getString(if (CruzOnda3.ligado(this, chave)) R.string.al_ligado else R.string.al_desligado)
+                lateinit var l: LinhaCfg
+                l = linha(getString(titulo), getString(det), valor = rotulo()) { CruzOnda3.alternar(this, chave); l.valor(rotulo()) }
+                c.addView(l, lp())
+            }
+            linhaOnda3(R.string.cruz_ambiente, R.string.cruz_ambiente_det, CruzOnda3.CHAVE_AMBIENTE)
+            linhaOnda3(R.string.cruz_paralaxe, R.string.cruz_paralaxe_det, CruzOnda3.CHAVE_PARALAXE)
+            linhaOnda3(R.string.cruz_quem, R.string.cruz_quem_det, CruzOnda3.CHAVE_QUEM)
+            linhaOnda3(R.string.cruz_dormir_atalho, R.string.cruz_dormir_atalho_det, CruzOnda3.CHAVE_DORMIR)
         } else c.addView(linha(getString(R.string.lh_arranjo), getString(R.string.lh_arranjo_det),
             valor = getString(if (LayoutHome.grade(this)) R.string.lh_grade else R.string.lh_fileira)) {
             LayoutHome.definirGrade(this, !LayoutHome.grade(this))

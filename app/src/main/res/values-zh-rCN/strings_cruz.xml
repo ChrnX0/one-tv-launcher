@@ -35,4 +35,18 @@
     <string name="cruz_soltar">取消置顶</string>
     <string name="cruz_tocando">正在播放：%1$s</string>
     <string name="cruz_precisa_internet">需要联网</string>
+    <string name="cruz_barra_vidro">玻璃</string>
+    <string name="cruz_ambiente">氛围模式</string>
+    <string name="cruz_ambiente_det">静置 2 分钟后只留下图片和大时钟</string>
+    <string name="cruz_paralaxe">图片随动</string>
+    <string name="cruz_paralaxe_det">移动时图片会轻轻滑动</string>
+    <string name="cruz_quem">谁在看？</string>
+    <string name="cruz_quem_det">打开电视时询问资料（2 个或以上）</string>
+    <string name="cruz_quem_titulo">谁在看？</string>
+    <string name="cruz_dormir_atalho">夜间 30 分钟后睡眠</string>
+    <string name="cruz_dormir_atalho_det">22 点后在“继续”中显示快捷方式</string>
+    <string name="cruz_dormir">30 分钟后睡眠</string>
+    <string name="cruz_dormir_sub">屏幕慢慢变暗，电视随后关闭</string>
+    <string name="cruz_desliga_as">将于 %1$s 关闭</string>
+    <string name="cruz_dormir_cancelar">按 OK 取消</string>
 </resources>
