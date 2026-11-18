@@ -14,19 +14,20 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Home: a barra de cima fica só para o sistema (timer, despertador, sem internet…); o que está acontecendo com o item escolhido — No ar, Gravando, Tocando, Parou em, Conectado, com % e quanto falta — abre os detalhes no canto de baixo à direita</item>
-        <item>Séries, filmes, podcasts e vídeos de apps parados no meio mostram até onde você foi (ex.: “Parou em T1 E1 · 35% · faltam 43 min”)</item>
-        <item>A Casa (Home Assistant) se reencontra sozinha na rede quando o computador muda de endereço: nada para configurar</item>
-        <item>Windows: a TV aparece sempre em Rede com o painel, e a unidade da TV tem um atalho “Abrir o painel da TV” que acompanha o endereço da TV</item>
+        <item>Logo da Sofaly por cerca de 1,5 s quando a TV liga ou acorda (qualquer tecla pula; desliga em Configurações › Sistema › Sobre)</item>
+        <item>Tela nova “Sobre a Sofaly”: logo, slogan, versão, o que mudou e licenças</item>
+        <item>A logo da Sofaly também aparece pequena embaixo das Configurações e num canto do descanso de tela</item>
+        <item>O ícone da TV na tela inicial agora é o sofá-TV da logo, só o contorno</item>
+        <item>Canto de baixo da home: o tempo que falta não se parte mais no meio da linha, e a Casa volta na hora mesmo quando a tela e o celular pedem ao mesmo tempo</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Estado do item no canto</item>
-        <item>Casa se reencontra</item>
-        <item>Atalho do painel no Windows</item>
+        <item>Logo ao acordar</item>
+        <item>Sobre a Sofaly</item>
+        <item>Ícone sofá-TV</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Com Séries em foco, o canto de baixo à direita começa com “Parou em” com o episódio, a % e quanto falta, e com a TV “No ar” com a %? A barra de cima fica só com a hora?</item>
-        <item>A tela Casa (luzes) abre normalmente?</item>
-        <item>No computador, a TV aparece em Rede e o atalho do painel na unidade da TV abre o painel?</item>
+        <item>Depois de a TV dormir 5 min ou mais e acordar, a logo da Sofaly aparece por cerca de 1,5 s sobre a tela inicial e some?</item>
+        <item>Configurações › Sistema › Sobre a Sofaly abre com a logo e a versão, e a logo aparece certa embaixo das Configurações?</item>
+        <item>Na tela inicial, o ícone da TV é o sofá-TV só em contorno, com o miolo vazio?</item>
     </string-array>
 </resources>

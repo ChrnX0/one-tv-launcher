@@ -59,6 +59,7 @@ class TelasTest {
         "home-vidro" to MainActivity::class.java,    // cruz com a barra de Vidro (padrão por algumas horas na onda 3)
         "home-recua" to MainActivity::class.java,    // cruz com a barra Recua ("home" usa a Ilha, padrão desde 18/11/2026)
         "configuracoes" to ConfigLauncherActivity::class.java,
+        "sobre" to br.paulo.tvlauncher.AboutActivity::class.java,   // logo Sofaly, slogan e versão (18/11/2026)
         "filmes" to FilmesActivity::class.java,
         "series" to SeriesActivity::class.java,
         "ajuda" to AjudaActivity::class.java,
@@ -120,6 +121,8 @@ class TelasTest {
         for ((nome, cls) in telas) {
             val chave = "$idioma/$nome"
             val app = RuntimeEnvironment.getApplication()
+            // A abertura com a logo (SplashOverlay) cobriria a HOME na foto: o relógio do Robolectric começa "logo após o boot".
+            br.paulo.tvlauncher.SplashOverlay.setEnabled(app, false)
             br.paulo.tvlauncher.LayoutHome.definirTamanho(app, if (nome == "home-grande") 115 else 100)
             br.paulo.tvlauncher.Extras.definir(app, br.paulo.tvlauncher.Extras.Chave.CARTOES_TRANSPARENTES, nome == "home-grande")
             br.paulo.tvlauncher.LayoutHome.definirGrade(app, nome == "home-grade")

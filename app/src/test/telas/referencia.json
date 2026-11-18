@@ -260,6 +260,15 @@
   "contraste": [],
   "semNome": []
  },
+ "ar\/sobre": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
  "en\/ajuda": {
   "menorSp": 11,
   "foco": true,
@@ -521,6 +530,15 @@
   "contraste": [],
   "semNome": []
  },
+ "en\/sobre": {
+  "menorSp": 16,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
  "pt\/ajuda": {
   "menorSp": 11,
   "foco": true,
@@ -776,6 +794,15 @@
  "pt\/series": {
   "menorSp": 12.5,
   "foco": false,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "pt\/sobre": {
+  "menorSp": 16,
+  "foco": true,
   "cortes": [],
   "sobrepostos": [],
   "soCor": [],

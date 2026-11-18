@@ -250,6 +250,11 @@
             android:name=".LicencasActivity"
             android:exported="false"
             android:label="@string/lbl_licencas" />
+        <!-- "Sobre a Sofaly" (18/11/2026): logo, slogan e versão (Configurações > Sistema > Sobre). -->
+        <activity
+            android:name=".AboutActivity"
+            android:exported="false"
+            android:label="@string/brand_about" />
         <!-- Elevação 2.1 (17/11/2026): "Como esta TV está indo", o placar dos 7 pilares. -->
         <activity
             android:name=".PlacarActivity"

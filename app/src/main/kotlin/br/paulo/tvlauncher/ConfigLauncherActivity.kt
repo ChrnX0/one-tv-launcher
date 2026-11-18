@@ -213,7 +213,13 @@ class ConfigLauncherActivity : Activity() {
         // Dica fixa das teclas (mesmo jeito das dicas do player: 11sp, cor apagada). Muda com o lado em foco.
         // Barra de dicas do controle (componente padrão do sistema de design). Muda com o lado em foco.
         dica = FrameLayout(this).apply { setPaddingRelative(0, dp(12), 0, 0) }
-        raiz.addView(dica)
+        // Logo Sofaly nas Configurações (18/11/2026, pedido do Paulo): no canto de baixo, na linha das dicas. O canto de
+        // cima é do relógio; aqui ela fica à vista sem disputar com o título.
+        val rodape = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
+        rodape.addView(dica, LinearLayout.LayoutParams(0, WRAP, 1f))
+        rodape.addView(SofalyWordmark(this, dp(26).toFloat()).apply { setPaddingRelative(0, dp(12), 0, 0) },
+            LinearLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(Estilo.E3) })
+        raiz.addView(rodape, LinearLayout.LayoutParams(MATCH, WRAP))
         mostrarDica(noMenu = true)
         return raiz
     }
@@ -1734,6 +1740,15 @@ class ConfigLauncherActivity : Activity() {
             val fp = try { ShellProprio.impressaoDigital(this) } catch (e: Exception) { getString(R.string.cfg_erro, e.javaClass.simpleName) }
             ui.post { if (!isDestroyed) (linhaChave.getChildAt(1) as? TextView)?.text = fp }
         }
+        // Sobre a Sofaly (18/11/2026): logo, slogan e versão numa tela própria; e a logo ao ligar a TV (SplashRules).
+        c.addView(linha(getString(R.string.brand_about), getString(R.string.brand_about_det), seta = true) {
+            startActivity(Intent(this, AboutActivity::class.java))
+        }, lp())
+        lateinit var linhaAbertura: LinhaCfg
+        linhaAbertura = linha(getString(R.string.brand_splash), getString(R.string.brand_splash_det), chave = SplashOverlay.enabled(this)) {
+            val v = !SplashOverlay.enabled(this); SplashOverlay.setEnabled(this, v); linhaAbertura.ligado(v)
+        }
+        c.addView(linhaAbertura, lp())
         // Licenças (05/11/2026): o texto fica em assets/licencas.txt, o mesmo que o repositório mostra.
         c.addView(linha(getString(R.string.cfg_licencas), getString(R.string.cfg_licencas_det), seta = true) {
             startActivity(Intent(this, LicencasActivity::class.java))
