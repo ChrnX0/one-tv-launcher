@@ -84,4 +84,8 @@
     <string name="cruz_canto_no_ar">В эфире</string>
     <string name="cruz_canto_buscar">Поиск</string>
     <string name="cruz_canto_buscar_txt">▲ открывает панель с поиском</string>
+    <string name="cruz_canto_gravando">Запись</string>
+    <string name="cruz_canto_tocando">Играет</string>
+    <string name="cruz_canto_parou">Остановлено на</string>
+    <string name="cruz_canto_conectado">Подключено</string>
 </resources>

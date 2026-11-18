@@ -459,9 +459,28 @@ object CasaHA {
 
     class Erro(msg: String) : Exception(msg)
 
+    /** Não chegou ao endereço salvo (nem conectou): o Home Assistant pode ter mudado de endereço na rede. */
+    private class SemConexao(msg: String) : Exception(msg)
+
     private fun pedir(ctx: Context, metodo: String, caminho: String, corpo: String? = null, limite: Int = 2 shl 20): ByteArray {
         val e = endereco(ctx) ?: throw Erro("o Home Assistant não está configurado")
         val t = token(ctx) ?: throw Erro("o token do Home Assistant sumiu: configure de novo")
+        return try { pedirEm(e, t, metodo, caminho, corpo, limite) } catch (ex: SemConexao) {
+            // Plug & play (18/11/2026): só para endereço de dentro de casa; um endereço de fora não se procura na rede.
+            val host = runCatching { URL(e).host }.getOrNull()
+            val novo = if (host != null && hostDeCasa(host)) HomeAssistantFinder.reencontrar(ctx, t, e) else null
+            if (novo == null || novo == e) throw Erro(ex.message ?: "não consegui falar com o Home Assistant")
+            pedirEm(novo, t, metodo, caminho, corpo, limite)
+        }
+    }
+
+    /** Força a procura na rede (adb: EXTRAS casa_procurar). */
+    fun procurarNaRede(ctx: Context): String {
+        val t = token(ctx) ?: return "sem token: configure a Casa primeiro"
+        return HomeAssistantFinder.reencontrar(ctx, t, endereco(ctx), forcar = true)?.let { "achei: $it" } ?: "não achei (endereço fica ${endereco(ctx)})"
+    }
+
+    private fun pedirEm(e: String, t: String, metodo: String, caminho: String, corpo: String?, limite: Int): ByteArray {
         val c = (URL(e + caminho).openConnection() as HttpURLConnection).apply {
             requestMethod = metodo; connectTimeout = 5_000; readTimeout = 10_000; instanceFollowRedirects = false
             setRequestProperty("Authorization", "Bearer $t")
@@ -477,6 +496,9 @@ object CasaHA {
                 s.toByteArray()
             }
         } catch (ex: Erro) { throw ex
+        } catch (ex: java.net.ConnectException) { throw SemConexao("não consegui falar com o Home Assistant: ${ex.javaClass.simpleName}")
+        } catch (ex: java.net.SocketTimeoutException) { throw SemConexao("não consegui falar com o Home Assistant: ${ex.javaClass.simpleName}")
+        } catch (ex: java.net.NoRouteToHostException) { throw SemConexao("não consegui falar com o Home Assistant: ${ex.javaClass.simpleName}")
         } catch (ex: Exception) { throw Erro("não consegui falar com o Home Assistant: ${ex.javaClass.simpleName}")
         } finally { c.disconnect() }
     }

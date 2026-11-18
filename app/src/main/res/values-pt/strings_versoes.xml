@@ -14,12 +14,16 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Player de podcast: o aviso do timer para dormir aparece inteiro, no alto</item>
+        <item>Barra de cima com uma regra só para tudo: mostra o que está acontecendo agora com o item escolhido — No ar, Gravando, Tocando, Parou em, Conectado — com % e quanto falta</item>
+        <item>Séries, filmes, podcasts e vídeos de apps parados no meio mostram até onde você foi (ex.: “Parou em T1 E1 · 35% · faltam 43 min”)</item>
+        <item>A Casa (Home Assistant) se reencontra sozinha na rede quando o computador muda de endereço: nada para configurar</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Timer para dormir</item>
+        <item>Barra mostra o estado</item>
+        <item>Casa se reencontra</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>No player de podcast, com o timer ligado, o alto mostra “Tocando agora · dorme em 15 min” inteiro?</item>
+        <item>Com Séries em foco, o canto de cima mostra “Parou em” com o episódio, a % e quanto falta, e com a TV “No ar” com a %?</item>
+        <item>A tela Casa (luzes) abre normalmente?</item>
     </string-array>
 </resources>

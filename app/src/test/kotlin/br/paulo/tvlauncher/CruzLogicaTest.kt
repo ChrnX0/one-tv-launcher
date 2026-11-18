@@ -223,10 +223,10 @@ class CruzLogicaTest {
 
     @Test fun oQueABarraJaMostraNaoRepete() {
         val tv = "Canal 2 · Globo SP\nSP1 · faltam 58 min\nDepois, 12:45: Globo Esporte"
-        val p = CruzLogica.partes(tv, tirar = " SP1 · faltam 58 min ")
+        val p = CruzLogica.partes(tv, tirar = listOf(" SP1 · faltam 58 min "))
         assertEquals("Canal 2 · Globo SP", p.principal)
         assertEquals(listOf("Depois, 12:45: Globo Esporte"), p.detalhes)
         assertEquals(CruzLogica.Partes("", emptyList()), CruzLogica.partes(null))
-        assertEquals(CruzLogica.Partes("só", emptyList()), CruzLogica.partes("\n só \n\n", tirar = ""))
+        assertEquals(CruzLogica.Partes("só", emptyList()), CruzLogica.partes("\n só \n\n", tirar = listOf("")))
     }
 }

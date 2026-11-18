@@ -84,4 +84,8 @@
     <string name="cruz_canto_no_ar">En el aire</string>
     <string name="cruz_canto_buscar">Buscar</string>
     <string name="cruz_canto_buscar_txt">▲ abre la barra con la búsqueda</string>
+    <string name="cruz_canto_gravando">Grabando</string>
+    <string name="cruz_canto_tocando">Sonando</string>
+    <string name="cruz_canto_parou">Paró en</string>
+    <string name="cruz_canto_conectado">Conectado</string>
 </resources>

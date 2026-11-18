@@ -84,4 +84,8 @@
     <string name="cruz_canto_no_ar">放送中</string>
     <string name="cruz_canto_buscar">検索</string>
     <string name="cruz_canto_buscar_txt">▲ で検索のあるバーを開く</string>
+    <string name="cruz_canto_gravando">録画中</string>
+    <string name="cruz_canto_tocando">再生中</string>
+    <string name="cruz_canto_parou">停止位置</string>
+    <string name="cruz_canto_conectado">接続中</string>
 </resources>

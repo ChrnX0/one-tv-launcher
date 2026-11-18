@@ -84,4 +84,8 @@
     <string name="cruz_canto_no_ar">Yayında</string>
     <string name="cruz_canto_buscar">Ara</string>
     <string name="cruz_canto_buscar_txt">▲ arama çubuğunu açar</string>
+    <string name="cruz_canto_gravando">Kaydediliyor</string>
+    <string name="cruz_canto_tocando">Çalıyor</string>
+    <string name="cruz_canto_parou">Kaldığı yer</string>
+    <string name="cruz_canto_conectado">Bağlı</string>
 </resources>
