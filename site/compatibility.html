@@ -68,7 +68,7 @@ const T = {
     em_teste: "Em teste", planejado: "Na fila",
     home: "Botão Home", acordar: "Acorda rápido", estavel: "24 h estável", telas: "Telas",
     stick: "Stick", box: "Caixinha", tv: "TV", medido: "Medido em",
-    memoria: "Memória da tela inicial", homeTempo: "Montar a tela inicial", baixar: "Download da última versão",
+    memoria: "Memória da tela inicial", resistencia: "{h} h ligado sem vazar memória", heap: "memória do app no início e no fim:", homeTempo: "Montar a tela inicial", baixar: "Download da última versão",
   },
   en: {
     busca: "Find your device", trocar: "Português",
@@ -76,7 +76,7 @@ const T = {
     em_teste: "Testing", planejado: "Queued",
     home: "Home button", acordar: "Fast wake", estavel: "24 h stable", telas: "Screens",
     stick: "Stick", box: "Box", tv: "TV", medido: "Measured on",
-    memoria: "Home screen memory", homeTempo: "Building the home screen", baixar: "Latest version download",
+    memoria: "Home screen memory", resistencia: "{h} h on without leaking memory", heap: "app memory at start and end:", homeTempo: "Building the home screen", baixar: "Latest version download",
   },
 };
 const ORIGINAL = {};
@@ -88,6 +88,8 @@ let aparelhos = [], relatorios = {}, atualizado = "";
 
 function esc(s) { return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 function dataLocal(ms) { return new Date(ms).toLocaleDateString(idioma === "pt" ? "pt-BR" : "en-US", {day: "numeric", month: "short", year: "numeric"}); }
+
+function mb1(x) { return Number(x).toLocaleString(idioma === "pt" ? "pt-BR" : "en-US", {minimumFractionDigits: 1, maximumFractionDigits: 1}); }
 
 function numero(id, r) {
   const m = r.medidas;
@@ -106,6 +108,7 @@ function cartao(a) {
       <ul class="testes">${r.testes.map(x => `<li class="${x.veredito}"><b>${x.veredito === "PASSOU" ? "✓" : x.veredito === "FALHOU" ? "✗" : "…"}</b>
       <span>${esc(t(x.id))}: ${esc(t(x.veredito))}</span><span class="num">${esc(numero(x.id, r))}</span></li>`).join("")}</ul>
       ${r.leveza ? `<p class="sub">${esc(t("memoria"))}: ${esc(r.leveza.memoriaMb)} MB${r.leveza.homeCarregarMs != null ? ` · ${esc(t("homeTempo"))}: ${esc(r.leveza.homeCarregarMs + r.leveza.homeDesenharMs)} ms` : ""}</p>` : ""}
+      ${r.resistencia ? `<p class="sub">${esc(t("resistencia").replace("{h}", r.resistencia.horas))}: ${esc(t(r.resistencia.veredito))} · ${esc(t("heap"))} ${esc(mb1(r.resistencia.heapJavaInicioMb))} → ${esc(mb1(r.resistencia.heapJavaFimMb))} MB</p>` : ""}
       <p class="sub">${esc(t("medido"))} ${esc(dataLocal(r.medidoEm))} · v${esc(r.app.versionCode)}</p>`;
   }
   return `<article class="cartao"><h2>${esc(a.nome)}</h2>
