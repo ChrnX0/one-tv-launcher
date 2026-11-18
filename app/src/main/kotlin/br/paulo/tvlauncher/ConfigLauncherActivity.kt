@@ -2248,7 +2248,7 @@ class ConfigLauncherActivity : Activity() {
     private inner class LinhaCfg(ctx: Context, focavel: Boolean) : LinearLayout(ctx) {
         private val tTitulo = Estilo.texto(ctx, Estilo.Papel.CORPO).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
         private val tDetalhe = Estilo.texto(ctx, Estilo.Papel.LEGENDA).apply {
-            maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setPaddingRelative(0, dp(4), 0, 0)
+            maxLines = 3; ellipsize = TextUtils.TruncateAt.END; setPaddingRelative(0, dp(4), 0, 0)
         }
         private var tSeta: TextView? = null
         private var focada = false
@@ -2280,7 +2280,8 @@ class ConfigLauncherActivity : Activity() {
             }
         }
 
-        fun montarLinha(titulo: String, detalhe: String, maxLinhas: Int = 2) {
+        // 3 linhas: com a letra maior (18/11/2026) a explicação não pode cortar
+        fun montarLinha(titulo: String, detalhe: String, maxLinhas: Int = 3) {
             tTitulo.text = titulo
             tDetalhe.text = detalhe
             tDetalhe.maxLines = maxLinhas
