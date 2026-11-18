@@ -263,15 +263,18 @@ class TimeWheel(ctx: Context, private val maximo: Int) : FrameLayout(ctx) {
         setaBaixo.alpha = if (ativo) 1f else 0f
     }
 
-    /** Põe o valor; [de] -1/+1 gira o rolete vindo de cima/de baixo, 0 só troca. */
+    /**
+     * Põe o valor; [de] +1/-1 = subiu/desceu (anima o rolete), 0 só troca. O número MAIOR fica em cima, como a seta ▲
+     * sugere: ▲ traz o de cima para o meio (conferido na Sala em 18/11: com o menor em cima, ▲ ia "para baixo").
+     */
     fun definir(v: Int, de: Int = 0) {
         valor = ((v % maximo) + maximo) % maximo
-        for ((i, t) in numeros.withIndex()) t.text = "%02d".format(((valor + i - 2) % maximo + maximo) % maximo)
+        for ((i, t) in numeros.withIndex()) t.text = "%02d".format(((valor + 2 - i) % maximo + maximo) % maximo)
         contentDescription = "%02d".format(valor)
         if (de != 0 && !MolaViews.semAnimacao(this)) {
             val passo = alturaNumero() * 0.9f
             pilha.animate().cancel()
-            pilha.translationY = passo * de
+            pilha.translationY = -passo * de   // subiu: a pilha desce do lugar do número de cima
             pilha.animate().translationY(0f).setDuration(Estilo.LISTA_FOCO_MS).setInterpolator(android.view.animation.DecelerateInterpolator(1.6f)).start()
         }
     }
