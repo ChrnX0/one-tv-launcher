@@ -17,13 +17,16 @@
         <item>Barra de cima com uma regra só para tudo: mostra o que está acontecendo agora com o item escolhido — No ar, Gravando, Tocando, Parou em, Conectado — com % e quanto falta</item>
         <item>Séries, filmes, podcasts e vídeos de apps parados no meio mostram até onde você foi (ex.: “Parou em T1 E1 · 35% · faltam 43 min”)</item>
         <item>A Casa (Home Assistant) se reencontra sozinha na rede quando o computador muda de endereço: nada para configurar</item>
+        <item>Windows: a TV aparece sempre em Rede com o painel, e a unidade da TV tem um atalho “Abrir o painel da TV” que acompanha o endereço da TV</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Barra mostra o estado</item>
         <item>Casa se reencontra</item>
+        <item>Atalho do painel no Windows</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Com Séries em foco, o canto de cima mostra “Parou em” com o episódio, a % e quanto falta, e com a TV “No ar” com a %?</item>
         <item>A tela Casa (luzes) abre normalmente?</item>
+        <item>No computador, a TV aparece em Rede e o atalho do painel na unidade da TV abre o painel?</item>
     </string-array>
 </resources>
