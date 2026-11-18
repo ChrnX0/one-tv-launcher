@@ -40,6 +40,10 @@ object VariantesCanal {
     private val sobra = Regex("""[\[(]\s*[|/\-]*\s*[\])]|\s*[|/\-–:]+\s*$|^\s*[|/\-–]+\s*""")
     private val espacos = Regex("""\s+""")
     private val pontuacao = Regex("""[^\p{L}\p{N}+]+""")
+    private val acentos = Regex("""\p{Mn}+""")
+    private val palavrasDeGrupo = Regex("""\b(canais|canal|channels?|tv|ao vivo|live)\b""")
+    // Nome de canal maior que isso é lixo da lista: corta antes das regex (o "sobra" pode andar muito em texto longo).
+    private const val NOME_MAX = 200
 
     /** Nível pelo nome (a mesma leitura do filtro de qualidade, mais o "sem marca"). */
     fun nivel(nome: String): Nivel = when (PlayerFiltro.qualidade(nome)) {
@@ -52,7 +56,7 @@ object VariantesCanal {
 
     /** O nome para a TELA, sem os marcadores: "BR: Globo SP FHD" -> "BR: Globo SP"; "ESPN [4K]" -> "ESPN". */
     fun nomeLimpo(nome: String): String {
-        var s = marcadores.replace(nome, " ")
+        var s = marcadores.replace(nome.take(NOME_MAX), " ")
         repeat(2) { s = sobra.replace(s, " ") }
         return espacos.replace(s, " ").trim().ifEmpty { nome.trim() }
     }
@@ -62,8 +66,8 @@ object VariantesCanal {
      * ("SP", "RJ", "+1", "2", "Leste") fica na chave, e por isso não junta.
      */
     fun chave(nome: String): String {
-        val semMarca = marcadores.replace(nome, " ")
-        val semAcento = Normalizer.normalize(semMarca, Normalizer.Form.NFD).replace(Regex("""\p{Mn}+"""), "")
+        val semMarca = marcadores.replace(nome.take(NOME_MAX), " ")
+        val semAcento = acentos.replace(Normalizer.normalize(semMarca, Normalizer.Form.NFD), "")
         return espacos.replace(pontuacao.replace(semAcento.lowercase(), " "), " ").trim()
     }
 
@@ -84,7 +88,7 @@ object VariantesCanal {
     fun grupoDeQualidade(grupo: String): Boolean {
         val g = PlayerLista.nomeExibido(grupo)
         if (!marcadores.containsMatchIn(g)) return false
-        return chave(g).replace(Regex("""\b(canais|canal|channels?|tv|ao vivo|live)\b"""), "").isBlank()
+        return chave(g).replace(palavrasDeGrupo, "").isBlank()
     }
 
     /**
@@ -97,6 +101,8 @@ object VariantesCanal {
         val porChave = LinkedHashMap<String, MutableList<Canal>>()
         val ordem = ArrayList<Any>(canais.size)   // Canal solto ou a chave da família, na ordem da 1ª aparição
         for (c in canais) {
+            // O país do NOME já fica na chave ("BR: ESPN" -> "br espn"); o do grupo não entra de propósito: a variante
+            // "Globo FHD" que mora no grupo "4K" tem de juntar com a "Globo HD" do grupo "BR | Abertos".
             val k = chaveGuardada(c.nome)
             if (k.isEmpty()) { ordem += c; continue }
             val l = porChave[k]
@@ -106,20 +112,22 @@ object VariantesCanal {
         val saida = ArrayList<Canal>(porChave.size)
         val variantes = HashMap<String, List<Canal>>()
         val apelido = HashMap<String, String>()
+        val ehGrupoDeQualidade = HashMap<String, Boolean>()   // poucos grupos, muitos canais: lê cada grupo uma vez
         for (o in ordem) {
             if (o is Canal) { saida += o; continue }
             val familia = porChave.getValue(o as String)
             if (familia.size == 1) { saida += familia[0]; continue }
             // Mora no grupo de verdade (o 1º que não é "4K"/"FHD"); o número e o id são dessa variante.
-            val casa = familia.firstOrNull { !grupoDeQualidade(it.grupo) } ?: familia[0]
+            val casa = familia.firstOrNull { !ehGrupoDeQualidade.getOrPut(it.grupo) { grupoDeQualidade(it.grupo) } } ?: familia[0]
             val rep = casa.copy(nome = nomeLimpo(casa.nome),
                 logo = casa.logo.ifEmpty { familia.firstOrNull { it.logo.isNotEmpty() }?.logo.orEmpty() },
                 guiaId = casa.guiaId.ifEmpty { familia.firstOrNull { it.guiaId.isNotEmpty() }?.guiaId.orEmpty() },
                 arquivoDias = familia.maxOf { it.arquivoDias })
             saida += rep
             // Melhor primeiro; no mesmo nível, a ordem da lista (a 1ª costuma ser a principal, as outras são reserva).
-            variantes[rep.id] = familia.withIndex().sortedWith(compareByDescending<IndexedValue<Canal>> { nivel(it.value.nome).ordinal }
-                .thenBy { it.index }).map { it.value }
+            // O nível é lido uma vez por canal (no comparador seria a cada comparação).
+            val niveis = IntArray(familia.size) { nivel(familia[it].nome).ordinal }
+            variantes[rep.id] = familia.indices.sortedWith(compareByDescending<Int> { niveis[it] }.thenBy { it }).map { familia[it] }
             for (v in familia) if (v.id != rep.id) apelido[v.id] = rep.id
         }
         return Grupos(saida, variantes, apelido)
