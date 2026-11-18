@@ -49,6 +49,37 @@ class CruzTelaTest {
     @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
     @Test fun linha() = conferir(IconeCruz.Estilo.LINHA, "linha")
 
+    /**
+     * Linha comprida (Sala, 18/11/2026): o último vídeo do YouTube quebrava em 3 linhas e empurrava "Aberto há…" para
+     * fora. Agora cabe tudo em até 4 linhas, a comprida termina em "…", e a quebra em 2 linhas continua quando cabe.
+     */
+    @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
+    @Test fun linhaCompridaNaoEmpurraAsOutras() {
+        InstrumentationRegistry.getInstrumentation().setInTouchMode(false)
+        saida.mkdirs()
+        val a = Robolectric.buildActivity(Activity::class.java).setup().get()
+        val raiz = FrameLayout(a).apply { setBackgroundColor(Estilo.FUNDO) }
+        a.setContentView(raiz)
+        val cruz = HomeCruz(a, Typeface.DEFAULT, Typeface.DEFAULT_BOLD)
+        raiz.addView(cruz, FrameLayout.LayoutParams(-1, -1))
+        fun ic(t: IconeCruz.Tipo) = IconeCruz(t, IconeCruz.Estilo.LINHA)
+        val comprida = "Por último: Coração Selvagem | Trailer Oficial | LEG | Paramount Pictures Brasil · Paramount Brasil"
+        val tv = "Canal 2 · Globo SP\nMil Lugares para Conhecer Antes de Morrer · faltam 25 min\nDepois, 09:30: Encontro"
+        cruz.definir(listOf(HomeCruz.Categoria(CruzLogica.Categoria.ASSISTIR, "Assistir", ic(IconeCruz.Tipo.ASSISTIR), listOf(
+            HomeCruz.Item("app:yt", "YouTube", "Vídeos e canais\n$comprida\nAberto há 12 min", ic(IconeCruz.Tipo.APLICATIVOS), {}),
+            HomeCruz.Item("tv", "TV", tv, ic(IconeCruz.Tipo.TV), {})))))
+        cruz.requestFocus()
+        ShadowLooper.idleMainLooper(1, TimeUnit.SECONDS)
+        val sub = cruz.subAtual()!!
+        assertTrue("cabe em 4 linhas: ${sub.lineCount}", sub.lineCount <= HomeCruz.SUB_LINHAS)
+        assertTrue("a última informação continua na tela", sub.text.endsWith("Aberto há 12 min"))
+        assertTrue("a comprida termina em …", sub.text.split('\n')[1].endsWith("…"))
+        foto(a, "cruz-linha-comprida")
+        cruz.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_DOWN)); cruz.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DPAD_DOWN))
+        ShadowLooper.idleMainLooper(1, TimeUnit.SECONDS)
+        assertEquals("cabe em 4 linhas com a quebra: fica igual", tv, cruz.subAtual()!!.text.toString())
+    }
+
     /** Prévia da animação de cada ícone Linha (18/11/2026): uma linha por ícone, o estático e 8 quadros da passada. */
     @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
     @Test fun animacaoDosIcones() {
