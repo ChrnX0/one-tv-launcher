@@ -20,7 +20,7 @@
         <item>Sofaly logo for about 1.5 s when the TV turns on or wakes up (any key skips it; turn it off in Settings › System › About)</item>
         <item>New “About Sofaly” screen: logo, slogan, version, what changed and licenses</item>
         <item>The Sofaly logo also shows small at the bottom of Settings and in a corner of the screensaver</item>
-        <item>The TV icon on the home screen is now the sofa-TV from the logo, outline only</item>
+        <item>The TV icon on the home screen is now the sofa-TV from the logo in outline, a little smaller, with the glass shine; when chosen, the shine sweeps across and the antennas wiggle</item>
         <item>Home bottom corner: the time left no longer breaks across lines, and Home comes back right away even when the screen and the phone ask at the same time</item>
         <item>Long video or podcast names show in full in the bottom corner</item>
     </string-array>
@@ -37,6 +37,6 @@
     <string-array name="roteiro_perguntas">
         <item>After the TV sleeps 5+ min and wakes, does the Sofaly logo show for about 1.5 s over the home screen and then fade?</item>
         <item>Does Settings › System › About Sofaly open with the logo and version, and does the logo look right at the bottom of Settings?</item>
-        <item>On the home screen, is the TV icon the outlined sofa-TV with an empty inside?</item>
+        <item>On the home screen, is the TV icon the outlined sofa-TV clear of the program bar, and when you choose it does the shine sweep across the screen?</item>
     </string-array>
 </resources>
