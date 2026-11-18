@@ -377,4 +377,61 @@ class MtpIpTest {
         assertEquals("sem espaço", erro?.message)
         try { e.close() } catch (_: java.io.IOException) {}   // fechar depois do erro não trava
     }
+
+    // ---- rodada 3 de depuração (18/11/2026) ----
+
+    /** A pasta sumiu entre o "vou mandar" e o arquivo: responde, lê os dados que já vinham e a conversa continua. */
+    @Test fun pastaSumiuNoMeioNaoDerrubaAConexao() {
+        val pc = Pc(); pc.entrar(); pc.op(Mtp.OP_ABRIR_SESSAO, 1)
+        val movies = pc.achar(Mtp.TODOS, "Movies")
+        assertEquals(Mtp.OK, pc.op(Mtp.OP_MANDAR_INFO, Mtp.ARMAZEM, movies, mandar = infoPara("a.bin", 3000)).first)
+        File(raiz, "Movies").deleteRecursively()
+        assertTrue(pc.op(Mtp.OP_MANDAR_OBJETO, mandar = ByteArray(3000)).first != Mtp.OK)
+        assertEquals(Mtp.OK, pc.op(Mtp.OP_ARMAZENS).first)   // antes: "pacote 10 fora de hora" e a conexão caía
+        pc.fechar()
+    }
+
+    /** Data antes de 1970 lançava depois do arquivo gravado: a resposta saía ERRO e o Windows tentava de novo. */
+    @Test fun dataAntigaNaoViraErro() {
+        val pc = Pc(); pc.entrar(); pc.op(Mtp.OP_ABRIR_SESSAO, 1)
+        val movies = pc.achar(Mtp.TODOS, "Movies")
+        val info = Mtp.infoObjeto(Mtp.Objeto(0, 0, "velho.txt", false, 3, -86_400_000L, ByteArray(16)))
+        assertEquals(Mtp.OK, pc.op(Mtp.OP_MANDAR_INFO, Mtp.ARMAZEM, movies, mandar = info).first)
+        assertEquals(Mtp.OK, pc.op(Mtp.OP_MANDAR_OBJETO, mandar = byteArrayOf(1, 2, 3)).first)
+        assertTrue(File(raiz, "Movies/velho.txt").isFile)
+        pc.fechar()
+    }
+
+    /** ".parcial" de um envio interrompido há horas some no envio seguinte para a mesma pasta; o recente fica. */
+    @Test fun parcialEsquecidoEApagado() {
+        val velho = File(raiz, "Movies/.filme.mp4.123.parcial").apply { writeText("x"); setLastModified(System.currentTimeMillis() - 2 * 3_600_000L) }
+        val novo = File(raiz, "Movies/.outro.mp4.456.parcial").apply { writeText("x") }
+        val pc = Pc(); pc.entrar(); pc.op(Mtp.OP_ABRIR_SESSAO, 1)
+        val movies = pc.achar(Mtp.TODOS, "Movies")
+        assertEquals(Mtp.OK, pc.op(Mtp.OP_MANDAR_INFO, Mtp.ARMAZEM, movies, mandar = infoPara("b.txt", 2)).first)
+        assertEquals(Mtp.OK, pc.op(Mtp.OP_MANDAR_OBJETO, mandar = byteArrayOf(1, 2)).first)
+        assertFalse(velho.exists()); assertTrue(novo.exists())
+        pc.fechar()
+    }
+
+    /** O mesmo computador entrando de novo derruba a conexão antiga (ela morreu sem aviso e prenderia a vaga). */
+    @Test(timeout = 10_000) fun mesmoComputadorDeNovoSoltaAConexaoAntiga() {
+        val velho = Pc(); assertEquals(PtpIp.INICIO_COMANDO_OK, velho.entrar())
+        val novo = Pc(); assertEquals(PtpIp.INICIO_COMANDO_OK, novo.entrar())
+        assertEquals(-1, try { velho.e.read() } catch (_: java.io.IOException) { -1 })
+        novo.op(Mtp.OP_ABRIR_SESSAO, 1)
+        assertEquals(Mtp.OK, novo.op(Mtp.OP_ARMAZENS).first)
+        velho.fechar(); novo.fechar()
+    }
+
+    /** Um erro que não é IOException no disco não pode matar a thread de gravação e travar quem escreve. */
+    @Test(timeout = 5_000) fun escritaAdiantadaNaoTravaComErroInesperado() {
+        val quebra = object : java.io.OutputStream() {
+            override fun write(b: Int) {}
+            override fun write(b: ByteArray, off: Int, len: Int) { throw IllegalStateException("bug") }
+        }
+        val e = EscritaAdiantada(quebra, blocos = 2, tamanho = 1024)
+        val erro = try { repeat(100) { e.write(ByteArray(1024)) }; e.close(); null } catch (x: java.io.IOException) { x }
+        assertTrue(erro?.cause is IllegalStateException)
+    }
 }

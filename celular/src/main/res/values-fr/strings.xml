@@ -20,4 +20,6 @@
     <string name="cel_casa_qual">Dans quelle maison se trouve ce téléviseur ?</string>
     <string name="cel_casa_nova">Autre maison…</string>
     <string name="cel_casa_dica">ex. : Maison de plage, Chez maman</string>
+    <string name="cel_baixado">Enregistré dans Téléchargements : %1$s</string>
+    <string name="cel_baixar_falhou">Impossible d\'enregistrer le fichier. Réessaie.</string>
 </resources>

@@ -20,4 +20,6 @@
     <string name="cel_casa_qual">Bu TV hangi evde?</string>
     <string name="cel_casa_nova">Başka bir ev…</string>
     <string name="cel_casa_dica">ör. Yazlık, Annemin evi</string>
+    <string name="cel_baixado">İndirilenler\'e kaydedildi: %1$s</string>
+    <string name="cel_baixar_falhou">Dosya kaydedilemedi. Tekrar deneyin.</string>
 </resources>

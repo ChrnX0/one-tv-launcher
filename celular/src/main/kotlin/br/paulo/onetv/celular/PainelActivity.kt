@@ -6,7 +6,12 @@ import android.net.Uri
 import android.net.http.SslError
 import android.os.Bundle
 import android.view.KeyEvent
+import android.content.Intent
 import android.webkit.CookieManager
+import android.webkit.MimeTypeMap
+import android.webkit.URLUtil
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
 import android.webkit.SslErrorHandler
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -20,6 +25,7 @@ import android.widget.Toast
  *    ([Pareamento.confere]). Qualquer outro erro de TLS, ou outro endereço, é recusado como num navegador.
  *  - volume: os botões de volume do celular apertam volume+/volume- na TV (a mesma rota do Controle do painel).
  *  - fora de casa: se a TV de casa não responde e a TV mandou o nome do Tailscale, tenta o https do Tailscale.
+ *  - arquivos: o seletor do `<input type=file>` e os downloads ([Baixar]).
  */
 class PainelActivity : Activity() {
     companion object {
@@ -34,6 +40,9 @@ class PainelActivity : Activity() {
     private lateinit var web: WebView
     private lateinit var tv: Pareamento.Tv
     private var tentouFora = false
+    /** Quem espera a resposta do seletor de arquivos aberto pela página (no máximo um por vez). */
+    private var escolha: ValueCallback<Array<Uri>>? = null
+    private val pedidoArquivo = 41
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +58,14 @@ class PainelActivity : Activity() {
             settings.allowFileAccess = false
             settings.allowContentAccess = false
             webViewClient = Cliente()
+            webChromeClient = Seletor()
+            // Ponte só de escrita em Downloads; só a TV carrega aqui (shouldOverrideUrlLoading manda o resto para fora).
+            addJavascriptInterface(Baixar.Ponte(applicationContext), "OneTvBaixar")
+            setDownloadListener { url, _, disposicao, mime, _ ->
+                val nome = Baixar.nomeSeguro(URLUtil.guessFileName(url, disposicao, mime))
+                if (url.startsWith("blob:")) evaluateJavascript(Baixar.jsDoBlob(url, nome, mime), null)
+                else if (daTv(Uri.parse(url))) Baixar.direto(this@PainelActivity, tv, url, nome, mime)
+            }
         }
         CookieManager.getInstance().setAcceptCookie(true)
         setContentView(web)
@@ -67,6 +84,38 @@ class PainelActivity : Activity() {
             "?titulo=" + Uri.encode(titulo) + "&texto=" + Uri.encode(if (url.isNotEmpty()) "" else texto) + "&url=" + Uri.encode(url)
         }
         return base + consulta + fragmento
+    }
+
+    private fun daTv(u: Uri): Boolean = u.host == tv.ip || (tv.ts.isNotEmpty() && u.host == tv.ts)
+
+    private inner class Seletor : WebChromeClient() {
+        override fun onShowFileChooser(w: WebView, cb: ValueCallback<Array<Uri>>, p: FileChooserParams): Boolean {
+            escolha?.onReceiveValue(null)   // um seletor esquecido aberto travaria o próximo clique da página
+            escolha = cb
+            val tipos = Baixar.tiposMime(p.acceptTypes) { MimeTypeMap.getSingleton().getMimeTypeFromExtension(it) }
+            val i = Intent(Intent.ACTION_GET_CONTENT).addCategory(Intent.CATEGORY_OPENABLE).apply {
+                type = if (tipos.size == 1) tipos[0] else "*/*"
+                if (tipos.size > 1) putExtra(Intent.EXTRA_MIME_TYPES, tipos)
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, p.mode == FileChooserParams.MODE_OPEN_MULTIPLE)
+            }
+            return try { @Suppress("DEPRECATION") startActivityForResult(i, pedidoArquivo); true }
+            catch (_: Exception) { escolha = null; cb.onReceiveValue(null); true }
+        }
+    }
+
+    @Deprecated("Activity simples, sem AndroidX")
+    override fun onActivityResult(pedido: Int, resultado: Int, dados: Intent?) {
+        if (pedido != pedidoArquivo) { @Suppress("DEPRECATION") super.onActivityResult(pedido, resultado, dados); return }
+        val cb = escolha ?: return
+        escolha = null
+        val clip = dados?.clipData
+        val uris = when {
+            resultado != RESULT_OK -> null
+            clip != null && clip.itemCount > 0 -> Array(clip.itemCount) { clip.getItemAt(it).uri }
+            dados?.data != null -> arrayOf(dados.data!!)
+            else -> null
+        }
+        cb.onReceiveValue(uris)
     }
 
     override fun dispatchKeyEvent(e: KeyEvent): Boolean {
@@ -104,6 +153,8 @@ class PainelActivity : Activity() {
             try { startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, req.url)) } catch (_: Exception) {}
             return true
         }
+
+        override fun onPageFinished(view: WebView, url: String?) { view.evaluateJavascript(Baixar.JS_NOME, null) }
 
         override fun onReceivedError(view: WebView, req: WebResourceRequest, erro: WebResourceError) {
             if (!req.isForMainFrame || tentouFora) return

@@ -194,40 +194,47 @@ object Podcasts {
      * Lê [arq] com [ler]. Arquivo estragado (não abre) é guardado como .estragado e conta como vazio: a próxima gravação
      * não apaga o que havia nele sem deixar cópia.
      */
-    private fun <T> lerArquivo(arq: File, vazio: T, ler: (String?) -> T?): T {
+    private fun <T> lerArquivo(arq: File, vazio: T, estrito: Boolean = false, ler: (String?) -> T?): T {
         if (!arq.exists()) return vazio
-        val t = runCatching { arq.readText() }.getOrNull() ?: return vazio
+        // Existe mas não deu para ler (E/S, memória): para mostrar conta como vazio; para EDITAR não, senão a gravação
+        // seguinte apagava as assinaturas/posições de verdade (rodada 3 de depuração, 18/11/2026).
+        val t = runCatching { arq.readText() }.getOrNull() ?: if (estrito) throw java.io.IOException("não li ${arq.name}") else return vazio
         ler(t)?.let { return it }
         Log.w(TAG, "${arq.name} estragado: guardado como .estragado")
         runCatching { arq.copyTo(File(arq.path + ".estragado"), overwrite = true) }
         return vazio
     }
 
-    fun assinaturas(ctx: Context): List<Assinatura> = lerArquivo(arqAssinaturas(ctx), emptyList(), ::assinaturasDeJsonOuNull)
+    fun assinaturas(ctx: Context): List<Assinatura> = lerArquivo(arqAssinaturas(ctx), emptyList(), ler = ::assinaturasDeJsonOuNull)
+    private fun assinaturasParaEditar(ctx: Context): List<Assinatura> = lerArquivo(arqAssinaturas(ctx), emptyList(), true, ::assinaturasDeJsonOuNull)
+
+    /** Grava ou lança: quem edita precisa saber que não ficou salvo. */
+    private fun gravar(arq: File, texto: String) { if (!PlayerCarga.gravarAtomico(arq, texto)) throw java.io.IOException("não gravei ${arq.name}") }
 
     /** Lê, muda e grava de uma vez (o painel e a tela da TV podem mexer ao mesmo tempo). */
     fun editarAssinaturas(ctx: Context, mudar: (List<Assinatura>) -> List<Assinatura>): List<Assinatura> = comTrava(ctx) {
-        val nova = mudar(assinaturas(ctx))
-        PlayerCarga.gravarAtomico(arqAssinaturas(ctx), assinaturasParaJson(nova))
+        val nova = mudar(assinaturasParaEditar(ctx))
+        gravar(arqAssinaturas(ctx), assinaturasParaJson(nova))
         nova
     }
 
     fun desassinar(ctx: Context, url: String) {
         comTrava(ctx) {
-            PlayerCarga.gravarAtomico(arqAssinaturas(ctx), assinaturasParaJson(assinaturas(ctx).filterNot { it.url == url }))
+            gravar(arqAssinaturas(ctx), assinaturasParaJson(assinaturasParaEditar(ctx).filterNot { it.url == url }))
             runCatching { arqFeed(ctx, url).delete() }
         }
     }
 
-    fun posicoes(ctx: Context): Map<String, Posicao> = lerArquivo(arqPosicoes(ctx), emptyMap(), ::posicoesDeJsonOuNull)
+    fun posicoes(ctx: Context): Map<String, Posicao> = lerArquivo(arqPosicoes(ctx), emptyMap(), ler = ::posicoesDeJsonOuNull)
+    private fun posicoesParaEditar(ctx: Context): Map<String, Posicao> = lerArquivo(arqPosicoes(ctx), emptyMap(), true, ::posicoesDeJsonOuNull)
 
     fun guardarPosicao(ctx: Context, p: Posicao) = comTrava(ctx) {
-        PlayerCarga.gravarAtomico(arqPosicoes(ctx), posicoesParaJson(guardar(posicoes(ctx), p)))
+        gravar(arqPosicoes(ctx), posicoesParaJson(guardar(posicoesParaEditar(ctx), p)))
     }
 
     /** Muda as posições direto (marcar/desmarcar ouvido na tela). */
     fun editarPosicoes(ctx: Context, mudar: (Map<String, Posicao>) -> Map<String, Posicao>) = comTrava(ctx) {
-        PlayerCarga.gravarAtomico(arqPosicoes(ctx), posicoesParaJson(mudar(posicoes(ctx))))
+        gravar(arqPosicoes(ctx), posicoesParaJson(mudar(posicoesParaEditar(ctx))))
     }
 
     fun feed(ctx: Context, url: String): PodcastFeed.Feed? = feedDeJson(runCatching { arqFeed(ctx, url).readText() }.getOrNull())
@@ -306,10 +313,10 @@ object Podcasts {
             is Leitura.Nova -> {
                 val agora = System.currentTimeMillis()
                 val ok = comTrava(ctx) {
-                    val l = assinaturas(ctx)
+                    val l = assinaturasParaEditar(ctx)
                     if (l.none { it.url == u } && l.size >= MAX_ASSINATURAS) return@comTrava false
-                    PlayerCarga.gravarAtomico(arqFeed(ctx, u), feedParaJson(r.feed))
-                    PlayerCarga.gravarAtomico(arqAssinaturas(ctx), assinaturasParaJson(assinar(l, Assinatura(u, r.feed.titulo.ifBlank { u },
+                    gravar(arqFeed(ctx, u), feedParaJson(r.feed))
+                    gravar(arqAssinaturas(ctx), assinaturasParaJson(assinar(l, Assinatura(u, r.feed.titulo.ifBlank { u },
                         r.feed.autor, r.feed.capa, r.feed.explicito, r.etag, r.modificado, agora, agora))))
                     true
                 }
@@ -334,10 +341,10 @@ object Podcasts {
             when (r) {
                 is Leitura.Nova -> comTrava(ctx) {
                     // Removido enquanto baixava (painel, outra tela): não recria a cópia órfã.
-                    val l = assinaturas(ctx)
+                    val l = assinaturasParaEditar(ctx)
                     if (l.none { it.url == a.url }) return@comTrava
-                    PlayerCarga.gravarAtomico(arqFeed(ctx, a.url), feedParaJson(r.feed)); mudaram++
-                    PlayerCarga.gravarAtomico(arqAssinaturas(ctx), assinaturasParaJson(l.map { if (it.url == a.url) it.copy(
+                    gravar(arqFeed(ctx, a.url), feedParaJson(r.feed)); mudaram++
+                    gravar(arqAssinaturas(ctx), assinaturasParaJson(l.map { if (it.url == a.url) it.copy(
                         titulo = r.feed.titulo.ifBlank { it.titulo }, autor = r.feed.autor, capa = r.feed.capa.ifEmpty { it.capa },
                         explicito = r.feed.explicito, etag = r.etag, modificado = r.modificado, verificadoEm = agora) else it }))
                 }
@@ -356,7 +363,7 @@ object Podcasts {
     fun importarOpml(ctx: Context, texto: String): Pair<Int, Int> {
         if (PodcastFeed.temEntidade(texto)) return 0 to 0
         val p = android.util.Xml.newPullParser().apply { setInput(texto.reader()) }
-        val itens = runCatching { PodcastFeed.lerOpml(p) }.getOrDefault(emptyList())
+        val itens = PodcastFeed.lerOpml(p)   // XML quebrado no meio: fica o que veio antes (ver lerOpml)
         if (itens.isEmpty()) return 0 to 0
         val l = editarAssinaturas(ctx) { atual ->
             itens.fold(atual) { acc, i -> if (acc.any { it.url == i.url }) acc else assinar(acc, Assinatura(i.url, i.titulo.ifBlank { i.url }, desde = System.currentTimeMillis())) }

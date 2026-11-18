@@ -482,14 +482,15 @@ object PlayerCarga {
      * desligasse no meio, ficava um arquivo cortado com data de agora (e o guia cortado valia como "fresco" por 6 h).
      * Trocar o nome é tudo ou nada: ou fica o arquivo antigo inteiro, ou o novo inteiro.
      */
-    internal fun gravarAtomico(arquivo: File, texto: String) {
+    /** Devolve se gravou (18/11/2026: antes engolia a falha, e quem chamava dizia "salvo" com o disco cheio). */
+    internal fun gravarAtomico(arquivo: File, texto: String): Boolean {
         // Nome temporário único (dois processos gravando o mesmo arquivo não disputam o mesmo .tmp) e fsync antes de
         // trocar (queda de energia logo depois não deixa o arquivo vazio).
         val tmp = File(arquivo.path + ".tmp-" + java.util.UUID.randomUUID().toString().take(8))
-        runCatching {
+        return runCatching {
             java.io.FileOutputStream(tmp).use { o -> o.write(texto.toByteArray(Charsets.UTF_8)); o.fd.sync() }
-            if (!tmp.renameTo(arquivo)) tmp.delete()
-        }.onFailure { tmp.delete() }
+            tmp.renameTo(arquivo).also { if (!it) tmp.delete() }
+        }.onFailure { tmp.delete() }.getOrDefault(false)
     }
 
     // ---------------------------------------------------------------- rede

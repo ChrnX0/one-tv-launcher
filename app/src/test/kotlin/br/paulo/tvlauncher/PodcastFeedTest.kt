@@ -140,6 +140,24 @@ class PodcastFeedTest {
         assertTrue(partido.recusou)
     }
 
+    /** Rodada 3 (18/11/2026): em UTF-16 o "<!ENTITY" vem com zeros no meio e passava pelo filtro. */
+    @Test
+    fun entradaRecusaEntidadesEmUtf16() {
+        val bomba = "<?xml version=\"1.0\" encoding=\"UTF-16\"?><!DOCTYPE rss [<!ENTITY a \"aaaa\">]><rss/>"
+        for (cs in listOf(Charsets.UTF_16BE, Charsets.UTF_16LE, Charsets.UTF_16)) {
+            val en = PodcastFeed.Entrada(bomba.toByteArray(cs).inputStream(), PodcastFeed.MAX_BYTES)
+            runCatching { en.readBytes() }
+            assertTrue("$cs", en.recusou)
+        }
+    }
+
+    @Test
+    fun opmlQuebradoNoMeioFicaComOQueVeioAntes() {
+        val opml = "<opml><body><outline xmlUrl=\"https://a.b/1.xml\" text=\"Um\"/><outline xmlUrl=\"https://a.b/2.xml\" text=\"Dois\"/><outline <<< quebrado"
+        val itens = PodcastFeed.lerOpml(KXmlParser().apply { setInput(opml.reader()) })
+        assertEquals(listOf("https://a.b/1.xml", "https://a.b/2.xml"), itens.map { it.url })
+    }
+
     @Test
     fun entradaComPrazoEComLimite() {
         var agora = 0L

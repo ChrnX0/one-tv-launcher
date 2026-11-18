@@ -191,6 +191,9 @@ object PodcastFeed {
         }
 
         private fun olhar(c: Int) {
+            // Byte zero não conta: em UTF-16/32 "<!ENTITY" vem com zeros no meio e o padrão nunca casava (o parser do
+            // Android decodifica UTF-16 e expandiria as entidades). Pulando o zero, a busca vale para os dois.
+            if (c == 0) return
             casou = when {
                 c == PADRAO[casou].code -> casou + 1
                 c == '<'.code -> 1
@@ -231,7 +234,8 @@ object PodcastFeed {
                     l[u] = ItemOpml(u, limpar(t, 200))
                 }
             }
-            tipo = p.next()
+            // XML quebrado no meio (item 150 de 200): fica com o que já leu, como a leitura do feed (18/11/2026).
+            tipo = try { p.next() } catch (_: org.xmlpull.v1.XmlPullParserException) { break } catch (_: java.io.IOException) { break }
         }
         return l.values.toList()
     }

@@ -23,7 +23,6 @@ object AnuncioUpnp {
     private const val REANUNCIO_MS = 10 * 60_000L
     @Volatile private var thread: Thread? = null
     @Volatile private var escuta: MulticastSocket? = null
-    private var trava: WifiManager.MulticastLock? = null
 
     @Synchronized fun ligar(ctx: Context) {
         if (thread != null) return
@@ -58,9 +57,12 @@ object AnuncioUpnp {
             try { envio.send(DatagramPacket(b, b.size, para, porta)) } catch (e: Exception) { Log.w(TAG, "envio: $e") }
         }
         // Wi-Fi descarta multicast que chega sem esta trava (a placa economiza energia). No cabo, não faz diferença.
-        try {
-            trava = (app.getSystemService(Context.WIFI_SERVICE) as? WifiManager)?.createMulticastLock("onetv-ssdp")?.apply { setReferenceCounted(false); acquire() }
-        } catch (e: Exception) { Log.w(TAG, "trava multicast: $e") }
+        // Local de cada thread (18/11/2026): num desligar+ligar rápido a thread velha soltava a trava da nova.
+        val trava = try { (app.getSystemService(Context.WIFI_SERVICE) as? WifiManager)?.createMulticastLock("onetv-ssdp")?.apply { setReferenceCounted(false); acquire() }
+        } catch (e: Exception) { Log.w(TAG, "trava multicast: $e"); null }
+        // Só responde a buscas da rede de casa (18/11/2026): a resposta vai para o endereço de origem, que pode ser forjado.
+        val minha = InetAddress.getByName(ip)
+        val prefixo = try { NetworkInterface.getByInetAddress(minha)?.interfaceAddresses?.firstOrNull { it.address == minha }?.networkPrefixLength?.toInt() } catch (_: Exception) { null } ?: 24
         val s = try {
             MulticastSocket(null as java.net.SocketAddress?).apply {
                 reuseAddress = true
@@ -94,7 +96,9 @@ object AnuncioUpnp {
                         val texto = String(p.data, 0, p.length, Charsets.US_ASCII)
                         // Só buscas IPv4: o socket de envio está preso ao IP v4 da TV e uma busca vinda por IPv6
                         // (o Windows também procura por ff02::c) dava EAFNOSUPPORT no sendto (visto na Sala, 14/11/2026).
-                        val r = if (p.address is java.net.Inet4Address) aparelhos.flatMap { (u, l, t) -> Ssdp.respostas(texto, u, l, t) } else emptyList()
+                        val daCasa = p.address is java.net.Inet4Address && p.port != 0 &&
+                            ChecagensPainel.mesmaRede(minha.address, p.address.address, prefixo)
+                        val r = if (daCasa) aparelhos.flatMap { (u, l, t) -> Ssdp.respostas(texto, u, l, t) } else emptyList()
                         if (r.isNotEmpty()) mandar(r, p.address, p.port)
                     } catch (_: java.net.SocketTimeoutException) {}
                 }

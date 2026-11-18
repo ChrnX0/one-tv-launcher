@@ -196,9 +196,10 @@ public final class UserServiceConnection {
         ExecutorService serviceExecutor = executor();
         serviceExecutor.submit(() -> {
             if (manager != null) {
+                // tv-launcher: só o serviço deste app; quit() derrubava os de outros apps no mesmo processo.
                 try {
-                    manager.quit();
-                } catch (RemoteException ignored) {
+                    manager.stopService(this.mArgs.getComponentName());
+                } catch (RemoteException | RuntimeException ignored) {
                 }
             }
             serviceExecutor.shutdown();
