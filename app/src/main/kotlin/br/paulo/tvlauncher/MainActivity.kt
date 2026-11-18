@@ -2511,6 +2511,11 @@ class MainActivity : Activity() {
             t.text = "${txtTemp.text}  ·"
             tempoCruz = t
         }
+        // A pílula "Tocando agora" costuma aparecer DEPOIS que a barra já recolheu (estava GONE, sem posição): a cada novo
+        // layout dela, com a barra recolhida, ela vai para o começo da linha (visto na TV, v462231: ficava sobre a temperatura).
+        capsulaTocando.addOnLayoutChangeListener { v, l, _, _, _, _, _, _, _ ->
+            if (barraRecolhida && v.translationX != -l.toFloat()) { v.animate().cancel(); v.alpha = 1f; v.translationY = 0f; v.translationX = -l.toFloat() }
+        }
         if (barraCruz == LayoutHome.BarraCruz.RELOGIO) relogioCruz = montarRelogioCruz().also {
             raiz.addView(it, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.BOTTOM or Gravity.END).apply {
                 rightMargin = dp(Grade.MARGEM); bottomMargin = dp(40)
