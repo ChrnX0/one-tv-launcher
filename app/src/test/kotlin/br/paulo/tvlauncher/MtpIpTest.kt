@@ -322,6 +322,28 @@ class MtpIpTest {
     }
 
     /** 15/11/2026: a conexão de eventos de uma sessão é uma só; um segundo aparelho não entra nela. Número sorteado. */
+    /** Conexão que o servidor recusou é fechada na hora (leitura devolve -1); a aceita fica aberta esperando o aperto de mão. */
+    private fun foiRecusada(s: Socket): Boolean {
+        s.soTimeout = 700
+        return try { s.getInputStream().read() == -1 } catch (_: java.net.SocketTimeoutException) { false } catch (_: java.io.IOException) { true }
+    }
+
+    @Test fun umSoIpNaoOcupaTodasAsConexoes() {
+        val mudas = List(MtpServico.MAX_POR_IP) { Socket(InetAddress.getLoopbackAddress(), ss.localPort) }
+        try {
+            assertTrue(mudas.none { foiRecusada(it) })
+            Socket(InetAddress.getLoopbackAddress(), ss.localPort).use { assertTrue("a que passa do teto por IP é recusada", foiRecusada(it)) }
+            mudas[0].close()
+            // o servidor percebe a saída na thread da conexão: tenta por até 3 s
+            var entrou = false
+            val fim = System.currentTimeMillis() + 3000
+            while (!entrou && System.currentTimeMillis() < fim) {
+                Socket(InetAddress.getLoopbackAddress(), ss.localPort).use { entrou = !foiRecusada(it) }
+            }
+            assertTrue("liberou a vaga quando uma conexão saiu", entrou)
+        } finally { mudas.forEach { try { it.close() } catch (_: Exception) {} } }
+    }
+
     @Test fun eventosSoDoDonoDaSessao() {
         val pc = Pc()
         assertEquals(PtpIp.INICIO_COMANDO_OK, pc.entrar())

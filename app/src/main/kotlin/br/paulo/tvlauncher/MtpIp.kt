@@ -924,6 +924,11 @@ class MtpServico(
 ) {
     companion object {
         const val MAX_CONEXOES = 12
+        /**
+         * Teto por IP (18/11/2026). Um computador usa 2 conexões (comandos + eventos); 4 dá folga para ele reconectar.
+         * Sem isto um único aparelho da rede abria as 12 conexões mudas e o computador de verdade não entrava.
+         */
+        const val MAX_POR_IP = 4
         const val VERSAO = 0x00010000
     }
 
@@ -945,18 +950,27 @@ class MtpServico(
         while (true) { val n = sorteio.nextInt(Int.MAX_VALUE - 1) + 1; if (!sessoes.containsKey(n)) return n }
     }
     private val vivas = AtomicInteger(0)
+    /** Quantas conexões vivas cada IP tem agora. merge() soma e, na saída, tira a chave quando chega a zero. */
+    private val porIp = ConcurrentHashMap<String, Int>()
     private val abertas = ConcurrentHashMap.newKeySet<Socket>()
 
     /** Fica aceitando até o ServerSocket ser fechado. */
     fun rodar() {
         while (!ss.isClosed) {
             val c = try { ss.accept() } catch (_: IOException) { break }
-            if (vivas.get() >= MAX_CONEXOES || !aceitaRede(c)) { try { c.close() } catch (_: IOException) {}; continue }
+            val ip = c.inetAddress?.hostAddress ?: ""
+            // Só esta thread soma (as de conexão só subtraem), então conferir e somar em seguida não passa do teto.
+            if (vivas.get() >= MAX_CONEXOES || (porIp[ip] ?: 0) >= MAX_POR_IP || !aceitaRede(c)) { try { c.close() } catch (_: IOException) {}; continue }
             vivas.incrementAndGet()
+            porIp.merge(ip, 1, Int::plus)
             abertas.add(c)
             Thread({
                 try { atender(c) } catch (e: Exception) { if (e !is EOFException && e !is java.net.SocketException) registro("conexão caiu: $e") }
-                finally { abertas.remove(c); vivas.decrementAndGet(); try { c.close() } catch (_: IOException) {} }
+                finally {
+                    abertas.remove(c); vivas.decrementAndGet()
+                    porIp.computeIfPresent(ip) { _, n -> if (n <= 1) null else n - 1 }   // null = apaga a chave
+                    try { c.close() } catch (_: IOException) {}
+                }
             }, "Mtp-conexao").apply { isDaemon = true }.start()
         }
     }
