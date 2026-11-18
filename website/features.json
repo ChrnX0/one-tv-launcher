@@ -1,0 +1,45 @@
+{
+  "_doc": "Order of chapters and features on the site, with each feature's minimum plan (basic, pro, ultra). Plans follow Planos.kt; Play-excluded features (PlayPolicy.kt) never go here.",
+  "chapters": [
+    {"id": "home", "color": "#FF6A2B", "icon": "cross", "features": [
+      ["cross", "basic", "cross"], ["continue", "basic", "replay"], ["topbar", "basic", "search"], ["quick-panel", "basic", "panel"],
+      ["remote", "basic", "remote"], ["now-playing", "basic", "play"], ["themes", "basic", "image"], ["icons", "pro", "brush"],
+      ["plugin-cards", "pro", "puzzle"]]},
+    {"id": "watch", "color": "#FF6A2B", "icon": "tv", "features": [
+      ["network-library", "basic", "folder"], ["player", "basic", "film"], ["resume", "basic", "replay"], ["skip-intro", "basic", "skip"],
+      ["audio-subtitles", "basic", "subtitle"], ["easy-viewing", "basic", "eye"], ["auto-subtitles", "ultra", "subtitle"],
+      ["movie-pages", "ultra", "star"], ["lists", "pro", "list"], ["search", "basic", "search"]]},
+    {"id": "listen", "color": "#3CC6B4", "icon": "headphones", "features": [
+      ["radio", "basic", "radio"], ["podcasts", "basic", "mic"], ["podcast-search", "pro", "search"],
+      ["podcast-player", "basic", "moon"], ["phone-sound", "pro", "headphones"]]},
+    {"id": "play", "color": "#8C8CFF", "icon": "gamepad", "features": [
+      ["games-hub", "basic", "gamepad"], ["pc-games", "basic", "monitor"], ["network-test", "basic", "wifi"],
+      ["controllers", "basic", "bluetooth"], ["game-mode", "basic", "shield"], ["crew", "basic", "people"]]},
+    {"id": "apps", "color": "#8FD07A", "icon": "grid", "features": [
+      ["apps-top", "basic", "grid"], ["apps-organize", "basic", "move"], ["app-buttons", "basic", "remote"]]},
+    {"id": "house", "color": "#F5C04A", "icon": "house", "features": [
+      ["alarm", "basic", "alarm"], ["timers", "basic", "hourglass"], ["gentle-off", "basic", "moon"], ["idle-off", "basic", "power"],
+      ["recipes", "basic", "sparkle"], ["automations", "pro", "bolt"], ["home-assistant", "pro", "bulb"], ["doorbell", "pro", "bell"],
+      ["presence", "basic", "people"], ["voice", "basic", "mic"]]},
+    {"id": "sky", "color": "#6FB7FF", "icon": "sun", "features": [
+      ["weather-now", "basic", "sun"], ["weather-3", "ultra", "chart"], ["forecast", "basic", "calendar"], ["rain-alert", "basic", "rain"],
+      ["screensaver", "basic", "image"], ["photos", "basic", "photo"], ["good-morning", "basic", "sunrise"], ["calendar", "basic", "calendar"],
+      ["night-filter", "basic", "moon"], ["recap", "basic", "chart"]]},
+    {"id": "family", "color": "#FF9F5A", "icon": "people", "features": [
+      ["profiles", "basic", "people"], ["kid-profile", "basic", "child"], ["bedtime", "basic", "moon"], ["screen-time", "basic", "hourglass"],
+      ["guest", "basic", "door"], ["guest-wifi", "basic", "wifi"], ["family-board", "basic", "note"], ["family-link", "pro", "heart"],
+      ["video-message", "pro", "video"]]},
+    {"id": "phone", "color": "#B4A7FF", "icon": "phone", "features": [
+      ["web-panel", "basic", "phone"], ["ask-tv", "pro", "chat"], ["share", "pro", "share"], ["network-drive", "pro", "folder"],
+      ["windows", "pro", "monitor"], ["continue-tv", "pro", "cast"], ["together", "ultra", "people"], ["homes", "ultra", "house"]]},
+    {"id": "care", "color": "#9CD3A8", "icon": "wrench", "features": [
+      ["backup", "basic", "lock"], ["cloud-backup", "pro", "cloud"], ["maintenance", "basic", "wrench"], ["diagnose", "basic", "stethoscope"],
+      ["scoreboard", "basic", "chart"], ["safe-mode", "basic", "shield"], ["whats-new", "basic", "sparkle"], ["report", "basic", "chat"]]},
+    {"id": "everyone", "color": "#F5C04A", "icon": "access", "features": [
+      ["languages", "basic", "globe"], ["text-size", "basic", "text"], ["simple-mode", "basic", "access"], ["read-aloud", "basic", "speaker"],
+      ["contrast", "basic", "eye"]]},
+    {"id": "privacy", "color": "#8FD07A", "icon": "shield", "features": [
+      ["no-ads", "basic", "shield"], ["no-tracking", "basic", "eye-off"], ["pin", "basic", "lock"], ["private-dns", "basic", "globe"],
+      ["usage", "basic", "chart"]]}
+  ]
+}
