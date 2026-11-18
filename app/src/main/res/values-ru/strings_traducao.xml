@@ -112,8 +112,6 @@
     <string name="casa_err_keystore">сбой Keystore на ТВ: %1$s</string>
     <string name="casa_err_sensor">неверный датчик (напр. binary_sensor.doorbell)</string>
     <string name="casa_err_camera">неверная камера (напр. camera.front_door)</string>
-    <string name="al_bom_dia_sim">Доброе утро: да</string>
-    <string name="al_bom_dia_nao">Доброе утро: нет</string>
     <string name="ag_agora">сейчас</string>
     <string name="ag_as_h">в %1$d</string>
     <string name="ag_as_hm">в %1$d:%2$02d</string>

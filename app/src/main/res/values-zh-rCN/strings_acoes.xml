@@ -26,7 +26,6 @@
     <string name="rot_cena">运行场景：%1$s</string>
     <string name="rot_cena_linha">场景：%1$s</string>
     <string name="rot_cena_sem">请先创建场景（网页面板 › 附加功能 › 场景）</string>
-    <string name="al_cena">停止时的场景：%1$s</string>
     <string name="lbl_cenas">场景</string>
     <string name="pr_cenas">场景</string>
     <string name="cenas_titulo">场景</string>

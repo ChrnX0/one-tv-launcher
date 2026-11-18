@@ -193,16 +193,11 @@
     <string name="al_criar">Set</string>
     <string name="al_titulo">Alarm clock</string>
     <string name="al_nenhum">No alarm on</string>
-    <string name="al_proximo">Next: %1$s</string>
     <string name="al_novo_mais">+  New alarm</string>
     <string name="al_ligado">On</string>
     <string name="al_desligado">Off</string>
     <string name="al_novo">New alarm</string>
     <string name="al_editar">Edit alarm</string>
-    <string name="al_editor_dica">▲ ▼ change hour and minute (hold to go fast) · OK marks the days</string>
-    <string name="al_nome">Name (optional)</string>
-    <string name="al_som">Sound: %1$s</string>
-    <string name="al_ouvir">Listen</string>
     <string name="al_apagar">Delete</string>
     <string name="al_hoje">today</string>
     <string name="al_amanha">tomorrow</string>
@@ -213,8 +208,6 @@
     <string name="al_perdido_um">The %1$s alarm did not ring because the TV was off.</string>
     <string name="al_perdido_varios">The %1$s alarms did not ring because the TV was off.</string>
     <string name="al_perdido_e">and</string>
-    <string name="al_volume_tv">TV volume when ringing: starts low and rises to %1$d</string>
-    <string name="al_volume_min">Minimum volume when ringing: %1$s</string>
     <string name="al_volume_nao_mexe">don\'t change</string>
     <!-- PopupPerfil.kt -->
     <string name="pp_sem_conta">No Google account</string>

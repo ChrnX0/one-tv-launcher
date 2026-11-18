@@ -26,7 +26,6 @@
     <string name="rot_cena">Jalankan adegan: %1$s</string>
     <string name="rot_cena_linha">Adegan: %1$s</string>
     <string name="rot_cena_sem">Buat adegan dulu (panel web › Ekstra › Adegan)</string>
-    <string name="al_cena">Adegan saat berhenti: %1$s</string>
     <string name="lbl_cenas">Adegan</string>
     <string name="pr_cenas">Adegan</string>
     <string name="cenas_titulo">Adegan</string>

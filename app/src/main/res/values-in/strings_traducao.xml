@@ -112,8 +112,6 @@
     <string name="casa_err_keystore">Keystore TV gagal: %1$s</string>
     <string name="casa_err_sensor">sensor tidak valid (mis. binary_sensor.doorbell)</string>
     <string name="casa_err_camera">kamera tidak valid (mis. camera.front_door)</string>
-    <string name="al_bom_dia_sim">Selamat pagi: ya</string>
-    <string name="al_bom_dia_nao">Selamat pagi: tidak</string>
     <string name="ag_agora">sekarang</string>
     <string name="ag_as_h">pukul %1$d</string>
     <string name="ag_as_hm">pukul %1$d:%2$02d</string>

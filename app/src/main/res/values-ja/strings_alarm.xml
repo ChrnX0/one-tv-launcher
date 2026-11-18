@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela do despertador no jeito da cruz (18/11/2026). -->
+<resources>
+    <string name="al_novo_det">時刻と曜日を選ぶ</string>
+    <string name="al_volume_rotulo">鳴るときの音量</string>
+    <string name="al_volume_det">ミュート中でも、テレビは少なくともこの音量にします</string>
+    <string name="al_volume_lg_det">LG テレビは小さく始めてこの音量まで上げます</string>
+    <string name="al_info_toca">%1$s に鳴ります</string>
+    <string name="al_proximo_rotulo">次のアラーム</string>
+    <string name="al_dica_editar">編集</string>
+    <string name="al_dica_ligar">オン/オフ</string>
+    <string name="al_dica_sair">終了</string>
+    <string name="al_dica_mudar">変更</string>
+    <string name="al_dica_andar">移動</string>
+    <string name="al_dica_salvar">保存</string>
+    <string name="al_ligou">%1$s のアラームをオン</string>
+    <string name="al_desligou">%1$s のアラームをオフ</string>
+    <string name="al_sim">はい</string>
+    <string name="al_nao">いいえ</string>
+    <string name="al_op_salvar_det">戻るでも保存されます</string>
+    <string name="al_op_repetir">繰り返し</string>
+    <string name="al_op_repetir_det">OK で曜日を選ぶ</string>
+    <string name="al_op_som">音</string>
+    <string name="al_op_som_det">OK で音を選んで試聴</string>
+    <string name="al_op_rampa">鳴り方</string>
+    <string name="al_op_rampa_det">小さく始めると穏やかに目覚めます</string>
+    <string name="al_op_bom_dia">おはよう</string>
+    <string name="al_op_bom_dia_det">止めると、テレビが時刻・天気・今日の予定を読み上げます</string>
+    <string name="al_op_cena">止めたときのシーン</string>
+    <string name="al_op_cena_det">OK でシーンを選ぶ</string>
+    <string name="al_op_nome">名前</string>
+    <string name="al_op_nome_det">鳴ったときに画面に表示されます</string>
+    <string name="al_op_nome_dica">例: 薬</string>
+    <string name="al_op_alarme">アラーム</string>
+    <string name="al_op_ligado_det">OK でオン/オフ</string>
+    <string name="al_op_apagar">アラームを削除</string>
+    <string name="al_op_apagar_det">削除前に確認します</string>
+    <string name="al_op_sair">保存せずに終了</string>
+    <string name="al_op_sair_det">ここでの変更を取り消します</string>
+    <string name="al_apagar_q">%1$s のアラームを削除しますか?</string>
+    <string name="al_salvo">アラームを保存しました: %1$s</string>
+    <string name="al_resumo">%1$s に鳴ります</string>
+    <string name="al_resumo_desligado">オフ: 鳴りません</string>
+    <string name="al_op_hora">時</string>
+    <string name="al_op_minuto">分</string>
+</resources>

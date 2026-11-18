@@ -600,6 +600,7 @@ object Estilo {
      */
     fun lista(ctx: Context, titulo: CharSequence, itens: List<CharSequence>, marcadas: Collection<Int> = emptyList(),
               aoFechar: (() -> Unit)? = null, rodape: CharSequence? = null, focoNaMarcada: Boolean = true,
+              focoInicial: Int? = null, entrar: Boolean = true,
               aoEscolher: (Int) -> Unit): android.app.Dialog {
         val d = android.app.Dialog(ctx)
         val rtl = ctx.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
@@ -759,10 +760,11 @@ object Estilo {
         // focoNaMarcada: numa escolha única o foco começa na opção atual; numa lista de liga/desliga (opções do player)
         // começa no topo, senão o foco caía no meio da lista, no primeiro efeito ligado (visto na Sala, 17/11/2026).
         d.setOnShowListener {
-            val i = marcadas.firstOrNull { focoNaMarcada && it in vistas.indices } ?: 0
+            // focoInicial: a lista reaberta logo depois de uma escolha (dias do despertador) volta na mesma linha, sem a entrada.
+            val i = focoInicial?.takeIf { it in vistas.indices } ?: marcadas.firstOrNull { focoNaMarcada && it in vistas.indices } ?: 0
             arrumar(i, animar = false)
             vistas.getOrNull(i)?.raiz?.requestFocus()
-            if (!anima) return@setOnShowListener
+            if (!anima || !entrar) return@setOnShowListener
             // Entrada: o véu aparece, o painel desliza da direita e as linhas chegam em onda (como os vizinhos da cruz).
             val lado = if (rtl) -1 else 1
             raiz.background?.alpha = 0; android.animation.ValueAnimator.ofInt(0, 255).apply {

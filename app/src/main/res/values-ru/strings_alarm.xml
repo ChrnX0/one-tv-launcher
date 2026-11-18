@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela do despertador no jeito da cruz (18/11/2026). -->
+<resources>
+    <string name="al_novo_det">Выберите время и дни</string>
+    <string name="al_volume_rotulo">Громкость сигнала</string>
+    <string name="al_volume_det">Телевизор включит как минимум эту громкость, даже если звук был выключен</string>
+    <string name="al_volume_lg_det">Телевизор LG начнёт тихо и дойдёт до этой громкости</string>
+    <string name="al_info_toca">прозвонит %1$s</string>
+    <string name="al_proximo_rotulo">Следующий будильник</string>
+    <string name="al_dica_editar">изменить</string>
+    <string name="al_dica_ligar">вкл/выкл</string>
+    <string name="al_dica_sair">выйти</string>
+    <string name="al_dica_mudar">изменить</string>
+    <string name="al_dica_andar">перейти</string>
+    <string name="al_dica_salvar">сохранить</string>
+    <string name="al_ligou">Будильник на %1$s включён</string>
+    <string name="al_desligou">Будильник на %1$s выключен</string>
+    <string name="al_sim">Да</string>
+    <string name="al_nao">Нет</string>
+    <string name="al_op_salvar_det">НАЗАД тоже сохраняет</string>
+    <string name="al_op_repetir">Повтор</string>
+    <string name="al_op_repetir_det">OK выбирает дни</string>
+    <string name="al_op_som">Звук</string>
+    <string name="al_op_som_det">OK выбирает звук и проигрывает его</string>
+    <string name="al_op_rampa">Сигнал</string>
+    <string name="al_op_rampa_det">Тихое начало будит мягче</string>
+    <string name="al_op_bom_dia">Доброе утро</string>
+    <string name="al_op_bom_dia_det">После остановки телевизор скажет время, погоду и планы на сегодня</string>
+    <string name="al_op_cena">Сцена при остановке</string>
+    <string name="al_op_cena_det">OK выбирает сцену</string>
+    <string name="al_op_nome">Название</string>
+    <string name="al_op_nome_det">Показывается на экране во время сигнала</string>
+    <string name="al_op_nome_dica">напр.: Лекарство</string>
+    <string name="al_op_alarme">Будильник</string>
+    <string name="al_op_ligado_det">OK включает или выключает</string>
+    <string name="al_op_apagar">Удалить будильник</string>
+    <string name="al_op_apagar_det">Спросит перед удалением</string>
+    <string name="al_op_sair">Выйти без сохранения</string>
+    <string name="al_op_sair_det">Отменяет изменения на этом экране</string>
+    <string name="al_apagar_q">Удалить будильник на %1$s?</string>
+    <string name="al_salvo">Будильник сохранён: %1$s</string>
+    <string name="al_resumo">Прозвонит %1$s</string>
+    <string name="al_resumo_desligado">Выключен: не прозвонит</string>
+    <string name="al_op_hora">Час</string>
+    <string name="al_op_minuto">Минута</string>
+</resources>

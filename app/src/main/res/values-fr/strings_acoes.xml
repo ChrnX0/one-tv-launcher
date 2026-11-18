@@ -26,7 +26,6 @@
     <string name="rot_cena">Lancer la scène : %1$s</string>
     <string name="rot_cena_linha">Scène : %1$s</string>
     <string name="rot_cena_sem">Créez d’abord une scène (panneau web › Extras › Scènes)</string>
-    <string name="al_cena">Scène à l’arrêt : %1$s</string>
     <string name="lbl_cenas">Scènes</string>
     <string name="pr_cenas">Scènes</string>
     <string name="cenas_titulo">Scènes</string>

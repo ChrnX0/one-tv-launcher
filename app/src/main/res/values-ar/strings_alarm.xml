@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela do despertador no jeito da cruz (18/11/2026). -->
+<resources>
+    <string name="al_novo_det">اختر الوقت والأيام</string>
+    <string name="al_volume_rotulo">مستوى الصوت عند الرنين</string>
+    <string name="al_volume_det">يرفع التلفاز الصوت إلى هذا المستوى على الأقل حتى لو كان مكتومًا</string>
+    <string name="al_volume_lg_det">يبدأ تلفاز LG منخفضًا ويرتفع إلى هذا المستوى</string>
+    <string name="al_info_toca">يرن %1$s</string>
+    <string name="al_proximo_rotulo">المنبّه التالي</string>
+    <string name="al_dica_editar">تعديل</string>
+    <string name="al_dica_ligar">تشغيل/إيقاف</string>
+    <string name="al_dica_sair">خروج</string>
+    <string name="al_dica_mudar">تغيير</string>
+    <string name="al_dica_andar">تنقّل</string>
+    <string name="al_dica_salvar">حفظ</string>
+    <string name="al_ligou">تم تشغيل منبّه %1$s</string>
+    <string name="al_desligou">تم إيقاف منبّه %1$s</string>
+    <string name="al_sim">نعم</string>
+    <string name="al_nao">لا</string>
+    <string name="al_op_salvar_det">الرجوع يحفظ أيضًا</string>
+    <string name="al_op_repetir">التكرار</string>
+    <string name="al_op_repetir_det">OK يختار الأيام</string>
+    <string name="al_op_som">الصوت</string>
+    <string name="al_op_som_det">OK يختار الصوت ويُسمعك إياه</string>
+    <string name="al_op_rampa">الرنين</string>
+    <string name="al_op_rampa_det">البدء بصوت منخفض يوقظ بهدوء أكبر</string>
+    <string name="al_op_bom_dia">صباح الخير</string>
+    <string name="al_op_bom_dia_det">عند الإيقاف يقول التلفاز الوقت والطقس ومواعيد اليوم</string>
+    <string name="al_op_cena">مشهد عند الإيقاف</string>
+    <string name="al_op_cena_det">OK يختار المشهد</string>
+    <string name="al_op_nome">الاسم</string>
+    <string name="al_op_nome_det">يظهر على الشاشة عند الرنين</string>
+    <string name="al_op_nome_dica">مثل: الدواء</string>
+    <string name="al_op_alarme">المنبّه</string>
+    <string name="al_op_ligado_det">OK يشغّله أو يوقفه</string>
+    <string name="al_op_apagar">حذف المنبّه</string>
+    <string name="al_op_apagar_det">يسأل قبل الحذف</string>
+    <string name="al_op_sair">خروج دون حفظ</string>
+    <string name="al_op_sair_det">يتراجع عمّا غيّرته هنا</string>
+    <string name="al_apagar_q">حذف منبّه %1$s؟</string>
+    <string name="al_salvo">تم حفظ المنبّه: %1$s</string>
+    <string name="al_resumo">يرن %1$s</string>
+    <string name="al_resumo_desligado">متوقف: لن يرن</string>
+    <string name="al_op_hora">الساعة</string>
+    <string name="al_op_minuto">الدقيقة</string>
+</resources>

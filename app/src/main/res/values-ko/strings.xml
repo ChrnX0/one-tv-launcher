@@ -175,16 +175,11 @@
     <string name="al_criar">설정</string>
     <string name="al_titulo">알람</string>
     <string name="al_nenhum">켜진 알람 없음</string>
-    <string name="al_proximo">다음: %1$s</string>
     <string name="al_novo_mais">+  새 알람</string>
     <string name="al_ligado">켜짐</string>
     <string name="al_desligado">꺼짐</string>
     <string name="al_novo">새 알람</string>
     <string name="al_editar">알람 편집</string>
-    <string name="al_editor_dica">▲ ▼ 시와 분 변경(길게 누르면 빠르게) · OK로 요일 선택</string>
-    <string name="al_nome">이름(선택 사항)</string>
-    <string name="al_som">소리: %1$s</string>
-    <string name="al_ouvir">듣기</string>
     <string name="al_apagar">삭제</string>
     <string name="al_hoje">오늘</string>
     <string name="al_amanha">내일</string>
@@ -194,8 +189,6 @@
     <string name="al_perdido_um">TV가 꺼져 있어서 %1$s 알람이 울리지 않았습니다.</string>
     <string name="al_perdido_varios">TV가 꺼져 있어서 %1$s 알람이 울리지 않았습니다.</string>
     <string name="al_perdido_e">및</string>
-    <string name="al_volume_tv">울릴 때 TV 볼륨: 작게 시작해 %1$d까지 올라갑니다</string>
-    <string name="al_volume_min">울릴 때 최소 볼륨: %1$s</string>
     <string name="al_volume_nao_mexe">변경 안 함</string>
     <string name="pp_sem_conta">Google 계정 없음</string>
     <string name="pp_ativo">"  ·  사용 중"</string>

@@ -112,8 +112,6 @@
     <string name="casa_err_keystore">TV の Keystore でエラー: %1$s</string>
     <string name="casa_err_sensor">無効なセンサー（例: binary_sensor.doorbell）</string>
     <string name="casa_err_camera">無効なカメラ（例: camera.front_door）</string>
-    <string name="al_bom_dia_sim">おはよう: あり</string>
-    <string name="al_bom_dia_nao">おはよう: なし</string>
     <string name="ag_agora">今</string>
     <string name="ag_as_h">%1$d 時に</string>
     <string name="ag_as_hm">%1$d:%2$02d に</string>

@@ -26,7 +26,6 @@
     <string name="rot_cena">장면 실행: %1$s</string>
     <string name="rot_cena_linha">장면: %1$s</string>
     <string name="rot_cena_sem">먼저 장면을 만드세요(웹 패널 › 부가 기능 › 장면)</string>
-    <string name="al_cena">중지 시 장면: %1$s</string>
     <string name="lbl_cenas">장면</string>
     <string name="pr_cenas">장면</string>
     <string name="cenas_titulo">장면</string>

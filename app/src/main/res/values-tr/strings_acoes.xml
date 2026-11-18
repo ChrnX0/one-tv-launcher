@@ -26,7 +26,6 @@
     <string name="rot_cena">Sahne çalıştır: %1$s</string>
     <string name="rot_cena_linha">Sahne: %1$s</string>
     <string name="rot_cena_sem">Önce bir sahne oluşturun (web paneli › Ekstralar › Sahneler)</string>
-    <string name="al_cena">Durdurunca sahne: %1$s</string>
     <string name="lbl_cenas">Sahneler</string>
     <string name="pr_cenas">Sahneler</string>
     <string name="cenas_titulo">Sahneler</string>

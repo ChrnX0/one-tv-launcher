@@ -18,15 +18,18 @@
         <item>Séries, filmes, podcasts e vídeos de apps parados no meio mostram até onde você foi (ex.: “Parou em T1 E1 · 35% · faltam 43 min”)</item>
         <item>A Casa (Home Assistant) se reencontra sozinha na rede quando o computador muda de endereço: nada para configurar</item>
         <item>Windows: a TV aparece sempre em Rede com o painel, e a unidade da TV tem um atalho “Abrir o painel da TV” que acompanha o endereço da TV</item>
+        <item>Despertador redesenhado no jeito da tela inicial: a hora em roletes grandes com setas, as opções numa coluna com o valor em laranja, a frase de quando toca, dias por extenso e o som tocando ao escolher; na lista, segurar OK liga ou desliga o alarme</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Estado do item no canto</item>
         <item>Casa se reencontra</item>
         <item>Atalho do painel no Windows</item>
+        <item>Despertador novo</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Com Séries em foco, o canto de baixo à direita começa com “Parou em” com o episódio, a % e quanto falta, e com a TV “No ar” com a %? A barra de cima fica só com a hora?</item>
         <item>A tela Casa (luzes) abre normalmente?</item>
         <item>No computador, a TV aparece em Rede e o atalho do painel na unidade da TV abre o painel?</item>
+        <item>Na tela inicial, abra o despertador: dá para mudar a hora com ▲▼, ir com ▶ até as opções, escolher o som (ele toca) e sair com VOLTAR, ficando salvo?</item>
     </string-array>
 </resources>

@@ -26,7 +26,6 @@
     <string name="rot_cena">Uruchom scenę: %1$s</string>
     <string name="rot_cena_linha">Scena: %1$s</string>
     <string name="rot_cena_sem">Najpierw utwórz scenę (panel WWW › Dodatki › Sceny)</string>
-    <string name="al_cena">Scena po zatrzymaniu: %1$s</string>
     <string name="lbl_cenas">Sceny</string>
     <string name="pr_cenas">Sceny</string>
     <string name="cenas_titulo">Sceny</string>

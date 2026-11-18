@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela do despertador no jeito da cruz (18/11/2026). -->
+<resources>
+    <string name="al_novo_det">选择时间和日期</string>
+    <string name="al_volume_rotulo">响铃音量</string>
+    <string name="al_volume_det">即使电视静音，也会至少调到这个音量</string>
+    <string name="al_volume_lg_det">LG 电视从小音量开始，逐渐升到这个音量</string>
+    <string name="al_info_toca">%1$s 响铃</string>
+    <string name="al_proximo_rotulo">下一个闹钟</string>
+    <string name="al_dica_editar">编辑</string>
+    <string name="al_dica_ligar">开/关</string>
+    <string name="al_dica_sair">退出</string>
+    <string name="al_dica_mudar">更改</string>
+    <string name="al_dica_andar">移动</string>
+    <string name="al_dica_salvar">保存</string>
+    <string name="al_ligou">%1$s 的闹钟已开启</string>
+    <string name="al_desligou">%1$s 的闹钟已关闭</string>
+    <string name="al_sim">是</string>
+    <string name="al_nao">否</string>
+    <string name="al_op_salvar_det">返回键也会保存</string>
+    <string name="al_op_repetir">重复</string>
+    <string name="al_op_repetir_det">OK 选择日期</string>
+    <string name="al_op_som">铃声</string>
+    <string name="al_op_som_det">OK 选择铃声并试听</string>
+    <string name="al_op_rampa">响铃方式</string>
+    <string name="al_op_rampa_det">从小音量开始，醒来更舒缓</string>
+    <string name="al_op_bom_dia">早安</string>
+    <string name="al_op_bom_dia_det">停止后，电视会说出时间、天气和今天的日程</string>
+    <string name="al_op_cena">停止时的场景</string>
+    <string name="al_op_cena_det">OK 选择场景</string>
+    <string name="al_op_nome">名称</string>
+    <string name="al_op_nome_det">响铃时显示在屏幕上</string>
+    <string name="al_op_nome_dica">例如：吃药</string>
+    <string name="al_op_alarme">闹钟</string>
+    <string name="al_op_ligado_det">OK 开启或关闭</string>
+    <string name="al_op_apagar">删除闹钟</string>
+    <string name="al_op_apagar_det">删除前会确认</string>
+    <string name="al_op_sair">不保存退出</string>
+    <string name="al_op_sair_det">撤销在这里做的更改</string>
+    <string name="al_apagar_q">删除 %1$s 的闹钟？</string>
+    <string name="al_salvo">闹钟已保存：%1$s</string>
+    <string name="al_resumo">%1$s 响铃</string>
+    <string name="al_resumo_desligado">已关闭：不会响铃</string>
+    <string name="al_op_hora">小时</string>
+    <string name="al_op_minuto">分钟</string>
+</resources>

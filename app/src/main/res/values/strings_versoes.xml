@@ -21,20 +21,24 @@
         <item>Series, movies, podcasts and app videos stopped halfway show how far you got (e.g. “Stopped at T1 E1 · 35% · 43 min left”)</item>
         <item>Home (Home Assistant) finds itself again on the network when the computer changes address: nothing to set up</item>
         <item>Windows: the TV always shows under Network with its panel, and the TV drive has an “Open the TV panel” shortcut that follows the TV’s address</item>
+        <item>Alarm clock redesigned like the home screen: the time on big wheels with arrows, the options in a column with the value in orange, a sentence saying when it rings, days spelled out and the sound playing when you pick it; in the list, hold OK to turn an alarm on or off</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>barra_estado</item>
         <item>casa_reencontra</item>
         <item>atalho_painel</item>
+        <item>despertador_novo</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Item state in the corner</item>
         <item>Home finds itself</item>
         <item>Panel shortcut on Windows</item>
+        <item>New alarm clock</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>With Series in focus, does the bottom right corner start with “Stopped at” with the episode, % and time left, and with TV “On air” with %? Does the top bar stay only with the clock?</item>
         <item>Does the Home screen (lights) open normally?</item>
         <item>On the computer, does the TV show under Network, and does the panel shortcut on the TV drive open the panel?</item>
+        <item>Open the alarm clock: can you change the time with ▲▼, go with ▶ to the options, pick a sound (it plays) and leave with BACK, with it saved?</item>
     </string-array>
 </resources>

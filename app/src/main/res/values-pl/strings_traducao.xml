@@ -112,8 +112,6 @@
     <string name="casa_err_keystore">błąd Keystore na telewizorze: %1$s</string>
     <string name="casa_err_sensor">nieprawidłowy czujnik (np. binary_sensor.doorbell)</string>
     <string name="casa_err_camera">nieprawidłowa kamera (np. camera.front_door)</string>
-    <string name="al_bom_dia_sim">Dzień dobry: tak</string>
-    <string name="al_bom_dia_nao">Dzień dobry: nie</string>
     <string name="ag_agora">teraz</string>
     <string name="ag_as_h">o %1$d</string>
     <string name="ag_as_hm">o %1$d:%2$02d</string>

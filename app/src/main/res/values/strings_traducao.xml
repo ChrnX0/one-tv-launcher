@@ -128,8 +128,6 @@
     <string name="casa_err_keystore">the TV\'s Keystore failed: %1$s</string>
     <string name="casa_err_sensor">invalid sensor (e.g. binary_sensor.doorbell)</string>
     <string name="casa_err_camera">invalid camera (e.g. camera.front_door)</string>
-    <string name="al_bom_dia_sim">Good morning: yes</string>
-    <string name="al_bom_dia_nao">Good morning: no</string>
     <string name="ag_agora">now</string>
     <string name="ag_as_h">at %1$d</string>
     <string name="ag_as_hm">at %1$d:%2$02d</string>
