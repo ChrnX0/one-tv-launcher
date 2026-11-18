@@ -213,7 +213,7 @@ class MtpIpTest {
     @Test fun enviaRenomeiaMoveEApaga() {
         val pc = Pc(); pc.entrar(); pc.op(Mtp.OP_ABRIR_SESSAO, 1)
         val movies = pc.achar(Mtp.TODOS, "Movies")
-        val conteudo = ByteArray(300_000) { (it % 251).toByte() }
+        val conteudo = ByteArray(2_500_000) { (it % 251).toByte() }
         val r = pc.op(Mtp.OP_MANDAR_INFO, Mtp.ARMAZEM, movies, mandar = infoPara("novo vídeo.mp4", conteudo.size))
         assertEquals(Mtp.OK, r.first)
         val h = r.second[2]
@@ -322,6 +322,28 @@ class MtpIpTest {
     }
 
     /** 15/11/2026: a conexão de eventos de uma sessão é uma só; um segundo aparelho não entra nela. Número sorteado. */
+    /** Conexão que o servidor recusou é fechada na hora (leitura devolve -1); a aceita fica aberta esperando o aperto de mão. */
+    private fun foiRecusada(s: Socket): Boolean {
+        s.soTimeout = 700
+        return try { s.getInputStream().read() == -1 } catch (_: java.net.SocketTimeoutException) { false } catch (_: java.io.IOException) { true }
+    }
+
+    @Test fun umSoIpNaoOcupaTodasAsConexoes() {
+        val mudas = List(MtpServico.MAX_POR_IP) { Socket(InetAddress.getLoopbackAddress(), ss.localPort) }
+        try {
+            assertTrue(mudas.none { foiRecusada(it) })
+            Socket(InetAddress.getLoopbackAddress(), ss.localPort).use { assertTrue("a que passa do teto por IP é recusada", foiRecusada(it)) }
+            mudas[0].close()
+            // o servidor percebe a saída na thread da conexão: tenta por até 3 s
+            var entrou = false
+            val fim = System.currentTimeMillis() + 3000
+            while (!entrou && System.currentTimeMillis() < fim) {
+                Socket(InetAddress.getLoopbackAddress(), ss.localPort).use { entrou = !foiRecusada(it) }
+            }
+            assertTrue("liberou a vaga quando uma conexão saiu", entrou)
+        } finally { mudas.forEach { try { it.close() } catch (_: Exception) {} } }
+    }
+
     @Test fun eventosSoDoDonoDaSessao() {
         val pc = Pc()
         assertEquals(PtpIp.INICIO_COMANDO_OK, pc.entrar())
@@ -353,5 +375,28 @@ class MtpIpTest {
         subir(File(System.getenv("ONETV_MTP_RAIZ") ?: error("ONETV_MTP_RAIZ")).apply { mkdirs() }, PtpIp.PORTA)
         println("MTP/IP de teste em 127.0.0.1:${PtpIp.PORTA} (pasta $raiz)")
         Thread.sleep(Long.MAX_VALUE)
+    }
+
+    @Test fun escritaAdiantadaEntregaTudoNaOrdemMesmoComDiscoLento() {
+        val dados = ByteArray(3 * 1024 * 1024 + 123).also { java.util.Random(7).nextBytes(it) }
+        val lento = object : java.io.ByteArrayOutputStream() {
+            override fun write(b: ByteArray, off: Int, len: Int) { Thread.sleep(2); super.write(b, off, len) }
+        }
+        EscritaAdiantada(lento, blocos = 3, tamanho = 64 * 1024).use { e ->
+            var o = 0
+            while (o < dados.size) { val n = minOf(100_000, dados.size - o); e.write(dados, o, n); o += n }   // pedaços desalinhados
+        }
+        assertTrue(dados.contentEquals(lento.toByteArray()))
+    }
+
+    @Test fun escritaAdiantadaRepassaOErroDoDiscoSemTravar() {
+        val cheio = object : java.io.OutputStream() {
+            override fun write(b: Int) {}
+            override fun write(b: ByteArray, off: Int, len: Int) { throw java.io.IOException("sem espaço") }
+        }
+        val e = EscritaAdiantada(cheio, blocos = 2, tamanho = 1024)
+        val erro = try { repeat(100) { e.write(ByteArray(1024)) }; e.close(); null } catch (x: java.io.IOException) { x }
+        assertEquals("sem espaço", erro?.message)
+        try { e.close() } catch (_: java.io.IOException) {}   // fechar depois do erro não trava
     }
 }

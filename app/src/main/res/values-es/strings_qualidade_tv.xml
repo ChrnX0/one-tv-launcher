@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- TV ao vivo: canais novos, qualidade automática e motivo do "sem sinal" (18/11/2026). -->
+<resources>
+    <string name="coluna_novos_canais">Nuevos</string>
+    <string name="qual_menu">Calidad: %1$s</string>
+    <string name="qual_auto">Automática</string>
+    <string name="qual_auto_curto">automática</string>
+    <string name="qual_titulo">Calidad de imagen</string>
+    <string name="qual_padrao">Estándar</string>
+    <string name="player_conta_vencida">Tu lista venció el %1$s. Renuévala con quien te la vendió.</string>
+    <string name="player_conta_recusada">El servidor de la lista rechazó la cuenta. Habla con quien te la vendió.</string>
+    <string name="player_telas_cheias">La lista ya está abierta en %1$d de %2$d pantallas. Ciérrala en otro aparato.</string>
+</resources>

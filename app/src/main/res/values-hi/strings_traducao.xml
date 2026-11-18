@@ -227,6 +227,10 @@
     <string name="pn_nao_achei">अभी पेयरिंग स्क्रीन नहीं मिली</string>
     <string name="pn_6">कोड में 6 अंक हैं</string>
     <string name="pn_pareado">पेयर हो गया! शेल जाँचा जा रहा है…</string>
+    <string name="pn_ok_titulo">सफलतापूर्वक पेयर हुआ ✓</string>
+    <string name="pn_ok_texto">हो गया! लॉन्चर अब TV से जुड़ा है। उसका अपना शेल जुड़ रहा है…</string>
+    <string name="pn_ok_shell">सब तैयार: लॉन्चर का अपना शेल काम कर रहा है।</string>
+    <string name="pn_ok_lento">पेयर हो गया। शेल ने अभी जवाब नहीं दिया; लॉन्चर खुद कोशिश करता रहेगा।</string>
     <string name="pn_codigo">कोड: %1$s</string>
     <string name="pn_achada">पेयरिंग स्क्रीन मिली (पोर्ट %1$d)। कोड टाइप करें:</string>
     <string name="pn_falhou">विफल: %1$s</string>

@@ -676,8 +676,11 @@ class MidiaRedeActivity : Activity() {
         // No 1º item, setSelection rolava o nome do grupo ("SEUS SERVIDORES") para fora: mostra a lista desde o topo.
         if (alvo >= 0 && nivel.itens.take(alvo).all { it is Secao }) lista.setSelectionFromTop(alvo, alturaSecoes(alvo)) else lista.setSelection(maxOf(0, alvo))
         dicas.removeAllViews()
-        dicas.addView(if (pilha.size == 1) Estilo.barraDicas(this, "OK" to getString(R.string.rede_dica_abrir),
+        // "segure OK remover" só quando há conta salva para remover (Sala, 17/11/2026: aparecia só com o pendrive, que não sai).
+        val temConta = nivel.itens.any { (it as? Linha)?.alvo is ContaMidia }
+        dicas.addView(if (pilha.size == 1 && temConta) Estilo.barraDicas(this, "OK" to getString(R.string.rede_dica_abrir),
             getString(R.string.rede_tecla_segurar) to getString(R.string.rede_dica_remover), getString(R.string.rede_tecla_voltar) to getString(R.string.rede_dica_sair))
+        else if (pilha.size == 1) Estilo.barraDicas(this, "OK" to getString(R.string.rede_dica_abrir), getString(R.string.rede_tecla_voltar) to getString(R.string.rede_dica_sair))
         else if (nivel.lidos.isNotEmpty() && CatalogoPasta.ligado(this)) Estilo.barraDicas(this, "OK" to getString(R.string.rede_dica_abrir),
             getString(R.string.rede_tecla_segurar) to getString(R.string.elv_cat_dica), getString(R.string.rede_tecla_voltar) to getString(R.string.rede_dica_subir))
         else Estilo.barraDicas(this, "OK" to getString(R.string.rede_dica_abrir), getString(R.string.rede_tecla_voltar) to getString(R.string.rede_dica_subir)))

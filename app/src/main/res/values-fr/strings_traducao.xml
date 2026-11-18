@@ -227,6 +227,10 @@
     <string name="pn_nao_achei">écran d’association pas encore trouvé</string>
     <string name="pn_6">le code a 6 chiffres</string>
     <string name="pn_pareado">appairé ! vérification du shell…</string>
+    <string name="pn_ok_titulo">Association réussie ✓</string>
+    <string name="pn_ok_texto">C\'est fait ! Le launcher est connecté à la TV. Connexion de son propre shell…</string>
+    <string name="pn_ok_shell">Tout est prêt : le shell du launcher fonctionne.</string>
+    <string name="pn_ok_lento">Associé. Le shell n\'a pas encore répondu ; le launcher réessaie tout seul.</string>
     <string name="pn_codigo">Code : %1$s</string>
     <string name="pn_achada">Écran d’association trouvé (port %1$d). Saisissez le code :</string>
     <string name="pn_falhou">échec : %1$s</string>

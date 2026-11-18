@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">वेब पैनल में UniFi राउटर का पता और API कुंजी</string>
     <string name="pb_titulo">क्विक पैनल टाइल</string>
     <string name="pb_subtitulo">OK दिखाता या छिपाता है · ◀ ▶ क्रम बदलें</string>
-    <string name="pb_cfg_det">चुनें कि क्विक पैनल (HOME दबाए रखें) कौन सी टाइल और किस क्रम में दिखाए</string>
+    <string name="pb_cfg_det">चुनें कि क्विक पैनल (वापस दबाए रखें) कौन सी टाइल और किस क्रम में दिखाए</string>
     <string name="pb_mostrado">दिख रहा</string>
     <string name="pb_escondido">छिपा</string>
     <string name="pb_padrao">मानक टाइल पर वापस</string>
@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK बदलता है · मेहमान मोड चालू रहने पर ये गायब होते हैं</string>
     <string name="cfg2_some_visita">मेहमानों से छिपा</string>
     <string name="cfg2_fica_visita">रहता है</string>
-    <string name="cfg2_casa_det">आपके Home Assistant की लाइट, प्लग और सीन</string>
+    <string name="cfg2_casa_det">Google Home या Home Assistant की लाइट, प्लग और सीन</string>
     <string name="oc_titulo">छिपे ऐप</string>
     <string name="oc_subtitulo">OK होम स्क्रीन पर ऐप दिखाता या छिपाता है · छिपे ऐप पहले आते हैं</string>
     <string name="oc_nenhum">कोई छिपा ऐप नहीं · चुनने के लिए OK</string>
@@ -66,7 +66,7 @@
     <string name="tt_grande">बड़ा</string>
     <string name="tt_maior">और बड़ा</string>
     <string name="pi_titulo">आइकन पैक</string>
-    <string name="pi_det">ऐप आइकन को इंस्टॉल किए गए आइकन पैक के आइकन से बदलें। OK अगला चुनता है।</string>
+    <string name="pi_det">ऐप आइकन को बिल्ट-इन शैली (चिह्न, दो रंग) या इंस्टॉल किए गए आइकन पैक से बदलें। OK अगला चुनता है।</string>
     <string name="pi_det_vazio">कोई आइकन पैक इंस्टॉल नहीं है। Play Store से एक लें, वह यहाँ दिखेगा।</string>
     <string name="pi_nenhum">कोई नहीं</string>
     <string name="fm_titulo">मेरा बैकग्राउंड</string>

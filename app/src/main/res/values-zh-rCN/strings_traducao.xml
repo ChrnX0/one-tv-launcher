@@ -227,6 +227,10 @@
     <string name="pn_nao_achei">尚未找到配对界面</string>
     <string name="pn_6">代码为 6 位数字</string>
     <string name="pn_pareado">已配对！正在检查 Shell…</string>
+    <string name="pn_ok_titulo">配对成功 ✓</string>
+    <string name="pn_ok_texto">完成！启动器已连接到电视。正在连接它自己的 shell…</string>
+    <string name="pn_ok_shell">一切就绪：启动器自己的 shell 正在运行。</string>
+    <string name="pn_ok_lento">已配对。shell 尚未响应；启动器会自动继续尝试。</string>
     <string name="pn_codigo">代码：%1$s</string>
     <string name="pn_achada">已找到配对界面（端口 %1$d）。请输入代码：</string>
     <string name="pn_falhou">失败：%1$s</string>

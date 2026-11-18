@@ -2,7 +2,7 @@
 <!-- Tradução (ru) de values/strings_config.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="cl_aba_conta">ТВ и фильмы</string>
-    <string name="cl_aba_conta_det">Аккаунт IPTV на этом ТВ: статус, срок действия и подключения</string>
+    <string name="cl_aba_conta_det">Аккаунт IPTV, сервисы фильмов и сериалов, звук и субтитры</string>
     <string name="cl_aba_parental">Родительский контроль</string>
     <string name="cl_aba_parental_det">Блокировка каналов PIN-кодом: они исчезают из списка и не воспроизводятся</string>
     <string name="cl_aba_aparencia">Внешний вид</string>
@@ -176,6 +176,7 @@
     <string name="cl_ativos">активных: %1$d</string>
     <string name="cl_revogados">отозваны</string>
     <string name="cl_visivel">видно на ТВ</string>
+    <string name="cl_escondido">скрыто на ТВ</string>
     <string name="cl_limpeza">Очистка предустановленных приложений</string>
     <string name="cl_nenhum_liberado">Пока нет одобренных приложений</string>
     <string name="cl_nenhum_liberado_det">Показываются только приложения, проверенные по одному на этом ТВ (см. Debloat.kt)</string>

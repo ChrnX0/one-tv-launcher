@@ -11,7 +11,7 @@
     <string name="extras_HORA_DORMIR">취침 시간(허용된 앱만, 볼륨 제한)</string>
     <string name="extras_TOCANDO_AGORA">지금 재생 중(재생 중인 항목 읽기)</string>
     <string name="extras_MODO_LEVE">가벼운 모드(짧은 애니메이션)</string>
-    <string name="extras_SOM_NAVEGACAO">탐색 소리</string>
+    <string name="extras_SOM_NAVEGACAO">다른 화면에서 이동할 때 클릭음</string>
     <string name="extras_RECADO_LINK">링크로 메시지 보내기(Home Assistant, TvOverlay)</string>
     <string name="extras_caches">앱 캐시 지우기</string>
     <string name="extras_livre">여유 공간 %1$s</string>
@@ -30,6 +30,7 @@
     <string name="casa_vazio">Home Assistant에 조명, 플러그, 장면이 없습니다.</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Google 조명 및 카메라</string>
+    <string name="casa_google_home_vazio">이 Google 계정에는 Google Home에 집이 없습니다</string>
     <string name="casa_resumo">Home Assistant · %2$d개 중 %1$d개 켜짐</string>
     <string name="casa_resumo_so_cenas">Home Assistant · 장면 %1$d개</string>
     <string name="casa_secao_cenas">장면 및 스크립트</string>

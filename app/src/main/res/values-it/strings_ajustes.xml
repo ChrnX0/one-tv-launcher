@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">Indirizzo e chiave API del router UniFi, nel pannello web</string>
     <string name="pb_titulo">Riquadri del pannello rapido</string>
     <string name="pb_subtitulo">OK mostra o nasconde · ◀ ▶ cambiano l’ordine</string>
-    <string name="pb_cfg_det">Scegli quali riquadri mostra il pannello rapido (tieni premuto HOME) e in che ordine</string>
+    <string name="pb_cfg_det">Scegli quali riquadri mostra il pannello rapido (tieni premuto INDIETRO) e in che ordine</string>
     <string name="pb_mostrado">visibile</string>
     <string name="pb_escondido">nascosto</string>
     <string name="pb_padrao">Torna ai riquadri predefiniti</string>
@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK cambia · queste spariscono quando la modalità ospiti è attiva</string>
     <string name="cfg2_some_visita">nascosta agli ospiti</string>
     <string name="cfg2_fica_visita">resta</string>
-    <string name="cfg2_casa_det">Luci, prese e scene del tuo Home Assistant</string>
+    <string name="cfg2_casa_det">Luci, prese e scene di Google Home o Home Assistant</string>
     <string name="oc_titulo">App nascoste</string>
     <string name="oc_subtitulo">OK mostra o nasconde un’app nella schermata Home · le nascoste vengono prima</string>
     <string name="oc_nenhum">Nessuna app nascosta · OK per scegliere</string>
@@ -66,7 +66,7 @@
     <string name="tt_grande">Grande</string>
     <string name="tt_maior">Più grande</string>
     <string name="pi_titulo">Pacchetto di icone</string>
-    <string name="pi_det">Sostituisce le icone delle app con quelle di un pacchetto di icone installato. OK sceglie il successivo.</string>
+    <string name="pi_det">Sostituisce le icone delle app con uno stile incluso (Simbolo, Bicolore) o un pacchetto di icone installato. OK sceglie il successivo.</string>
     <string name="pi_det_vazio">Nessun pacchetto di icone installato. Scaricane uno dal Play Store e comparirà qui.</string>
     <string name="pi_nenhum">Nessuno</string>
     <string name="fm_titulo">Il mio sfondo</string>

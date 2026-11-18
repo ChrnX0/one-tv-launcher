@@ -523,6 +523,20 @@
         <div id="itensRadios" class="lista-registro"></div>
         <p id="statusRadios" class="aviso" hidden></p>
       </div>
+      <div class="cartao" id="cartaoPodcasts">
+        <h2>Podcasts</h2>
+        <p class="aviso">Na TV: Ouvir › Podcasts. Cole o endereço do feed RSS de um podcast, ou importe a lista do seu app de podcast do celular (arquivo OPML, no app: Ajustes › Exportar). Os episódios tocam direto do servidor de quem publica.</p>
+        <form id="formPodcast" class="barra-acoes">
+          <input id="urlPodcast" type="url" maxlength="2000" placeholder="https://.../feed.xml" aria-label="Endereço do feed">
+          <button type="submit" class="botao-secundario">Seguir na TV</button>
+        </form>
+        <div class="barra-acoes">
+          <label class="botao-secundario">Importar lista (OPML) <input id="arquivoOpml" type="file" accept=".opml,.xml,text/xml,application/xml" hidden></label>
+          <button id="exportarOpml" type="button" class="botao-secundario">Exportar lista (OPML)</button>
+        </div>
+        <div id="itensPodcasts" class="lista-registro"></div>
+        <p id="statusPodcasts" class="aviso" hidden></p>
+      </div>
       <div id="cartaoFotoDoPerfil" class="cartao">
         <h2>Foto do perfil</h2>
         <p class="aviso">A imagem da bolinha do perfil, no alto da tela da TV. Escolha qualquer foto: a TV recorta um quadrado

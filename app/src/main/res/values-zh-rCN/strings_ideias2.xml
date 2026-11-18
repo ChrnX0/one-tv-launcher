@@ -11,7 +11,7 @@
     <string name="extras_HORA_DORMIR">就寝时间（仅允许的应用，限制音量）</string>
     <string name="extras_TOCANDO_AGORA">正在播放（读取正在播放的内容）</string>
     <string name="extras_MODO_LEVE">轻量模式（动画更短）</string>
-    <string name="extras_SOM_NAVEGACAO">导航音</string>
+    <string name="extras_SOM_NAVEGACAO">在其他界面移动时的点击声</string>
     <string name="extras_RECADO_LINK">通过链接留言（Home Assistant、TvOverlay）</string>
     <string name="extras_caches">清除应用缓存</string>
     <string name="extras_livre">可用 %1$s</string>
@@ -30,6 +30,7 @@
     <string name="casa_vazio">Home Assistant 中没有灯、插座或场景。</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Google 的灯和摄像头</string>
+    <string name="casa_google_home_vazio">此 Google 账号在 Google Home 中没有家庭</string>
     <string name="casa_resumo">Home Assistant · %2$d 个中 %1$d 个已开启</string>
     <string name="casa_resumo_so_cenas">Home Assistant · %1$d 个场景</string>
     <string name="casa_secao_cenas">场景和脚本</string>

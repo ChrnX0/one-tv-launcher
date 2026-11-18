@@ -65,6 +65,8 @@ object Extras {
         // Card Jogos (14/11/2026)
         /** Card "Jogos" na HOME; os apps de jogo saem da linha de apps. Desligado, eles voltam para lá. */
         CARD_JOGOS(true),
+        /** Card "Ouvir" na HOME (rádio + podcasts, 17/11/2026). */
+        CARD_OUVIR(true),
         /** Modo jogo: com um jogo na frente, protetor, filtro noturno e avisos esperam. */
         MODO_JOGO(true),
         /** Ligar um controle de videogame com a HOME na tela abre a tela Jogos. */
@@ -101,6 +103,12 @@ object Extras {
         temPin && c in CHAVES_COM_PIN && (c !in CHAVES_FAMILIA || ligadoAgora)   // as de família: só desligar pede
 
     private fun prefs(ctx: Context) = ctx.getSharedPreferences(ARQUIVO, Context.MODE_PRIVATE)
+
+    /** Avisa quando alguma chave muda (o Android guarda o ouvinte fraco: quem chama segura a referência). */
+    fun ouvir(ctx: Context, o: android.content.SharedPreferences.OnSharedPreferenceChangeListener) =
+        prefs(ctx).registerOnSharedPreferenceChangeListener(o)
+    fun parar(ctx: Context, o: android.content.SharedPreferences.OnSharedPreferenceChangeListener) =
+        prefs(ctx).unregisterOnSharedPreferenceChangeListener(o)
 
     fun ligado(ctx: Context, c: Chave): Boolean = prefs(ctx).getBoolean(c.name, c.padrao)
     fun definir(ctx: Context, c: Chave, sim: Boolean) { prefs(ctx).edit().putBoolean(c.name, sim).apply() }

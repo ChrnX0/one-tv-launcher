@@ -19,7 +19,7 @@
     <!-- Ideia 42: blocos do painel rápido -->
     <string name="pb_titulo">Blocos do painel rápido</string>
     <string name="pb_subtitulo">OK mostra ou esconde · ◀ ▶ mudam a ordem</string>
-    <string name="pb_cfg_det">Escolha quais blocos o painel rápido (HOME segurado) mostra, e em que ordem</string>
+    <string name="pb_cfg_det">Escolha quais blocos o painel rápido (VOLTAR segurado) mostra, e em que ordem</string>
     <string name="pb_mostrado">aparece</string>
     <string name="pb_escondido">escondido</string>
     <string name="pb_padrao">Voltar aos blocos de sempre</string>
@@ -45,7 +45,7 @@
     <string name="cfg2_apps_visita_sub">OK alterna · estes somem enquanto o modo visita está ligado</string>
     <string name="cfg2_some_visita">some na visita</string>
     <string name="cfg2_fica_visita">fica</string>
-    <string name="cfg2_casa_det">Luzes, tomadas e cenas do seu Home Assistant</string>
+    <string name="cfg2_casa_det">Luzes, tomadas e cenas do Google Home ou do Home Assistant</string>
     <string name="oc_titulo">Apps ocultos</string>
     <string name="oc_subtitulo">OK mostra ou esconde o app na tela inicial · os ocultos vêm primeiro</string>
     <string name="oc_nenhum">Nenhum app oculto · OK para escolher</string>
@@ -72,7 +72,7 @@
     <string name="tt_grande">Grande</string>
     <string name="tt_maior">Maior</string>
     <string name="pi_titulo">Pacote de ícones</string>
-    <string name="pi_det">Troca os ícones dos apps pelos de um pacote instalado. OK passa para o próximo.</string>
+    <string name="pi_det">Troca os ícones dos apps por um estilo pronto (Símbolo, Duotom) ou por um pacote instalado. OK passa para o próximo.</string>
     <string name="pi_det_vazio">Nenhum pacote de ícones instalado. Baixe um na Play Store e ele aparece aqui.</string>
     <string name="pi_nenhum">Nenhum</string>
     <string name="fm_titulo">Meu fundo</string>

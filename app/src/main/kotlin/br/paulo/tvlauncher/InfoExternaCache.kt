@@ -206,8 +206,15 @@ object InfoExternaCache {
         tmdb("ep:$serie:$temporada:$numero", { ElencoTmdb.urlEpisodio(it, serie, temporada, numero, InfoExterna.idiomaTmdb()) }, ElencoTmdb::lerEpisodio)
 
     /** Ideia 84: o elenco com foto. Bloqueia (rede). */
-    fun elenco(id: Int, serie: Boolean): List<ElencoTmdb.Pessoa> =
-        tmdb("elenco:$serie:$id", { ElencoTmdb.urlElenco(it, id, serie, InfoExterna.idiomaTmdb()) }) { ElencoTmdb.lerElenco(it).ifEmpty { null } }.orEmpty()
+    fun elenco(id: Int, serie: Boolean): List<ElencoTmdb.Pessoa> {
+        val idioma = InfoExterna.idiomaTmdb()
+        val l = tmdb("elenco:$serie:$id", { ElencoTmdb.urlElenco(it, id, serie, idioma) }) { ElencoTmdb.lerElenco(it).ifEmpty { null } }.orEmpty()
+        // Nome em outra escrita ("張震" numa TV em português): troca pelo nome em letras latinas da pessoa, se houver.
+        return l.map { p ->
+            if (!ElencoTmdb.precisaLatino(p.nome, idioma)) p
+            else tmdb("nomelat:${p.id}", { ElencoTmdb.urlPessoa(it, p.id) }, ElencoTmdb::lerNomeLatino)?.let { p.copy(nome = it) } ?: p
+        }
+    }
 
     /** Ideia 84: em que filmes e séries a pessoa atuou. Bloqueia (rede). */
     fun creditos(pessoa: Int): ElencoTmdb.Creditos =

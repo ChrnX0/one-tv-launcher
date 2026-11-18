@@ -877,7 +877,10 @@ class FilmesActivity : Activity() {
         }
         // Ideia 23: os outros filmes com o mesmo nome-base (sequências, dublado e legendado) viram uma categoria na grade.
         colecaoFicha?.takeIf { it.first === f && it.second.size > 1 }?.second?.let { lista ->
-            FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.filmes_colecao), lista.size.toString(), "colecao") { abrirColecao(lista) })
+            // O número conta FILMES, não versões: Duna, Duna LEG e Duna 4K são um só (Sala, 17/11/2026: "Coleção 6" ao
+            // lado de "Duna · 2 de 3 na sua lista" confundia). A categoria aberta continua com todas as versões.
+            val filmes = FilmesFiltro.quantosFilmes(lista)
+            FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.filmes_colecao), filmes.toString(), "colecao") { abrirColecao(lista) })
         }
         val sinopse = info?.sinopse?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.sinopse?.takeIf { it.isNotEmpty() }
         val acaoSinopse = sinopse?.let { txt ->
@@ -945,13 +948,17 @@ class FilmesActivity : Activity() {
             TextView(this).apply { text = it; textSize = Estilo.Leitura.SINOPSE; setTextColor(papel); setLineSpacing(0f, 1.25f); maxLines = 5; ellipsize = TextUtils.TruncateAt.END }
                 .also { t -> corpo.addView(t) }
         }
-        (ext?.detalhe?.diretor?.takeIf { it.isNotEmpty() } ?: info?.diretor?.takeIf { it.isNotEmpty() })?.let { corpo.addView(rotuloValor(getString(R.string.filmes_direcao), it).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }) }
+        // Direção: a do TMDB. A do servidor só quando o TMDB já respondeu sem ela (ou não há TMDB): antes ela aparecia
+        // primeiro e trocava ao chegar o TMDB, às vezes errada (Sala, 17/11/2026: Duna mostrou "Cliff Lanning").
+        val tmdbPendente = ext == null && InfoExternaCache.temTmdb()
+        (ext?.detalhe?.diretor?.takeIf { it.isNotEmpty() } ?: info?.diretor?.takeIf { it.isNotEmpty() && !tmdbPendente })?.let { corpo.addView(rotuloValor(getString(R.string.filmes_direcao), it).apply { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }) }
         (info?.elenco?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.elenco?.takeIf { it.isNotEmpty() }?.joinToString(", "))
             ?.let { corpo.addView(rotuloValor(getString(R.string.filmes_elenco), it).apply { maxLines = 2; ellipsize = TextUtils.TruncateAt.END }) }
         direita.addView(corpo, LinearLayout.LayoutParams(-1, 0, 1f))
         linha.addView(direita, LinearLayout.LayoutParams(0, -1, 1f))
 
         painelFicha.addView(linha, FrameLayout.LayoutParams(-1, -1))
+        FundoFicha.por(this, painelFicha, info?.fundo)   // a cena que a lista manda, atrás da ficha (18/11/2026)
         painelFicha.visibility = View.VISIBLE
         // "Sinopse inteira" só aparece quando a sinopse não coube (dá para saber só depois de desenhada).
         if (txtSinopse != null && acaoSinopse != null) txtSinopse.post { if (FichaAcoes.cortada(txtSinopse)) acaoSinopse.visibility = View.VISIBLE }

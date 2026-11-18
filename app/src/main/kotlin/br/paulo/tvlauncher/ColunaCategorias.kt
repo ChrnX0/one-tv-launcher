@@ -55,6 +55,11 @@ class ColunaCategorias(
     private val aoSegurar: ((String) -> Unit)? = null,
     /** Modo simples no player (PlayerAcessivel.escala): letra e linhas maiores. 1 = como sempre. */
     private val escala: Float = 1f,
+    /**
+     * Linhas mais baixas (TV, 18/11/2026: "os itens estão muito grandes, a lista fica limitada a dois itens"). A letra
+     * continua do mesmo tamanho (idosos): só sai o ar entre as linhas.
+     */
+    compacta: Boolean = false,
 ) {
     /**
      * Uma linha. [icone]: IconePlayer.Tipo ou IconeMidia.Tipo (null = sem ícone). [quantos] < 0 = sem número.
@@ -78,16 +83,26 @@ class ColunaCategorias(
     var escolhida: String = ""
         private set
 
-    private val alturaAcao = dp((40 * escala).toInt())
-    private val alturaLinha = dp((46 * escala).toInt())
+    private val alturaAcao = dp(((if (compacta) 36 else 40) * escala).toInt())
+    private val alturaLinha = dp(((if (compacta) 40 else 46) * escala).toInt())
 
     private val listas: Array<ListView> = Array(3) { i -> lista(i) }
     private val acoes get() = listas[0]
     private val fixas get() = listas[1]
     private val rola get() = listas[2]
-    private val tituloListas = TextView(act).apply {
+    private val textoListas = TextView(act).apply {
         text = act.getString(R.string.coluna_listas); textSize = Estilo.Leitura.ROTULO; typeface = Fontes.nunito(600)
         letterSpacing = 0.12f; setTextColor(apagado); setPaddingRelative(dp(14), dp(14), dp(10), dp(4))
+    }
+    /**
+     * Botões redondos ao lado de "LISTAS" (TV, 18/11/2026, pedido do Paulo: "assim como no TV, com os ícones na frente"):
+     * Todos e Guia, que saíram das linhas para abrir espaço para as categorias.
+     */
+    private val caixaBotoesListas = LinearLayout(act).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
+    private val tituloListas = LinearLayout(act).apply {
+        orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
+        addView(textoListas, LinearLayout.LayoutParams(0, -2, 1f))
+        addView(caixaBotoesListas, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(8); bottomMargin = dp(2) })
     }
     private val divisoria = View(act).apply { setBackgroundColor(Estilo.BORDA) }
 
@@ -97,6 +112,7 @@ class ColunaCategorias(
      */
     private val caixaBotoes = LinearLayout(act).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
     private var botoes: List<Pair<Linha, FrameLayout>> = emptyList()
+    private var botoesListas: List<Pair<Linha, FrameLayout>> = emptyList()
 
     val raiz: LinearLayout = LinearLayout(act).apply {
         orientation = LinearLayout.VERTICAL
@@ -128,42 +144,66 @@ class ColunaCategorias(
         val mudou = (0..2).map { novo[it] != grupos[it] }
         this.escolhida = escolhida
         grupos = novo
+        botoes.forEach { (l, v) -> pintarBotao(v, l) }; botoesListas.forEach { (l, v) -> pintarBotao(v, l) }
         for (i in 0..2) {
             if (mudou[i]) (listas[i].adapter as BaseAdapter).notifyDataSetChanged() else recolorir(i)
         }
         ajustarAltura(this.acoes, acoes.size, alturaAcao, dp(8))
         ajustarAltura(this.fixas, fixas.size, alturaLinha, 0)
-        tituloListas.visibility = if (fixas.isEmpty() && rolando.isEmpty()) View.GONE else View.VISIBLE
+        tituloListas.visibility = if (fixas.isEmpty() && rolando.isEmpty() && botoesListas.isEmpty()) View.GONE else View.VISIBLE
         divisoria.visibility = if (fixas.isEmpty() || rolando.isEmpty()) View.GONE else View.VISIBLE
         if (!temFoco()) onde(escolhida)?.let { (i, pos) -> listas[i].setSelection(pos) }
     }
 
     /** Os botões ao lado do título ([Linha.icone] obrigatório; [Linha.destaque] = ícone em âmbar, ex.: filtro ligado). */
-    fun mostrarBotoes(lista: List<Linha>) {
-        if (lista.map { it.chave to it.destaque } == botoes.map { it.first.chave to it.first.destaque }) {
-            botoes = botoes.mapIndexed { k, (_, v) -> lista[k] to v }; return
-        }
-        val focoEm = botoes.indexOfFirst { it.second.hasFocus() }
-        caixaBotoes.removeAllViews()
-        botoes = lista.mapIndexed { k, l -> l to botao(l, k, lista.size) }
-        botoes.forEach { (_, v) -> caixaBotoes.addView(v, LinearLayout.LayoutParams(ladoBotao, ladoBotao).apply { marginStart = dp(8) }) }
-        if (focoEm >= 0) botoes.getOrNull(focoEm.coerceAtMost(botoes.size - 1))?.second?.requestFocus()
+    fun mostrarBotoes(lista: List<Linha>) { botoes = trocarBotoes(caixaBotoes, botoes, lista, PARADA_TITULO) }
+
+    /** Os botões ao lado de "LISTAS" (a [escolhida] também fica em âmbar, como uma linha escolhida). */
+    fun mostrarBotoesListas(lista: List<Linha>) {
+        botoesListas = trocarBotoes(caixaBotoesListas, botoesListas, lista, PARADA_LISTAS)
+        if (lista.isNotEmpty()) tituloListas.visibility = View.VISIBLE
     }
+
+    private fun trocarBotoes(caixa: LinearLayout, atuais: List<Pair<Linha, FrameLayout>>, lista: List<Linha>, parada: Int): List<Pair<Linha, FrameLayout>> {
+        if (lista.map { it.chave to it.destaque } == atuais.map { it.first.chave to it.first.destaque }) {
+            val novos = atuais.mapIndexed { k, (_, v) -> lista[k] to v }
+            novos.forEach { (l, v) -> pintarBotao(v, l) }
+            return novos
+        }
+        val focoEm = atuais.indexOfFirst { it.second.hasFocus() }
+        caixa.removeAllViews()
+        val novos = lista.mapIndexed { k, l -> l to botao(l, k, lista.size, parada) }
+        novos.forEach { (_, v) -> caixa.addView(v, LinearLayout.LayoutParams(ladoBotao, ladoBotao).apply { marginStart = dp(8) }) }
+        if (focoEm >= 0) novos.getOrNull(focoEm.coerceAtMost(novos.size - 1))?.second?.requestFocus()
+        return novos
+    }
+
+    private fun filaDe(parada: Int) = if (parada == PARADA_TITULO) botoes else botoesListas
 
     private val ladoBotao = dp((44 * escala).toInt())
 
-    private fun botao(l: Linha, k: Int, total: Int): FrameLayout {
+    // Drawable próprio (fora do cache das linhas): a ImageView muda os limites dele, e um Drawable dividido com
+    // as linhas sairia do tamanho certo lá.
+    private fun iconeBotao(l: Linha, cor: Int): Drawable = when (val t = l.icone ?: IconePlayer.Tipo.FILTROS) {
+        is IconePlayer.Tipo -> IconePlayer(t, cor)
+        else -> IconeMidia(t as IconeMidia.Tipo, cor)
+    }
+
+    private fun corBotao(l: Linha) = if (l.destaque || l.chave == escolhida) ambar else COR_ICONE
+
+    /** Recolore o ícone de um botão (a escolhida mudou, ou o filtro ligou) sem refazer o botão. */
+    private fun pintarBotao(v: FrameLayout, l: Linha) {
+        val img = v.getChildAt(0) as? ImageView ?: return
+        val cor = corBotao(l)
+        if (img.tag != cor) { img.tag = cor; img.setImageDrawable(iconeBotao(l, cor)) }
+    }
+
+    private fun botao(l: Linha, k: Int, total: Int, parada: Int): FrameLayout {
         val fundoNormal = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(Estilo.SUPERFICIE); setStroke(dp(1), Estilo.BORDA) }
         val fundoFoco = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(Estilo.FOCO) }
-        val corIcone = if (l.destaque) ambar else COR_ICONE
-        // Drawable próprio (fora do cache das linhas): a ImageView muda os limites dele, e um Drawable dividido com
-        // as linhas sairia do tamanho certo lá.
-        fun novo(cor: Int): Drawable = when (val t = l.icone ?: IconePlayer.Tipo.FILTROS) {
-            is IconePlayer.Tipo -> IconePlayer(t, cor)
-            else -> IconeMidia(t as IconeMidia.Tipo, cor)
-        }
-        val img = ImageView(act).apply { setImageDrawable(novo(corIcone)) }
-        val focado = ImageView(act).apply { setImageDrawable(novo(Estilo.FUNDO)); visibility = View.GONE }
+        val corIcone = corBotao(l)
+        val img = ImageView(act).apply { setImageDrawable(iconeBotao(l, corIcone)); tag = corIcone }
+        val focado = ImageView(act).apply { setImageDrawable(iconeBotao(l, Estilo.FUNDO)); visibility = View.GONE }
         val lado = dp((22 * escala).toInt())
         return FrameLayout(act).apply {
             isFocusable = true; isClickable = true; contentDescription = l.nome; background = fundoNormal
@@ -174,14 +214,16 @@ class ColunaCategorias(
                 background = if (tem) fundoFoco else fundoNormal
                 img.visibility = if (tem) View.GONE else View.VISIBLE; focado.visibility = if (tem) View.VISIBLE else View.GONE
             }
-            setOnClickListener { botoes.getOrNull(k)?.first?.let { aoOk(it.chave) } }
+            setOnClickListener { filaDe(parada).getOrNull(k)?.first?.let { aoOk(it.chave) } }
             setOnKeyListener { v, codigo, e ->
                 if (e.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+                val fila = filaDe(parada)
                 when (Rtl.tecla(codigo, v)) {   // 16.8
-                    KeyEvent.KEYCODE_DPAD_DOWN -> { pularPara(-1, +1); true }
-                    KeyEvent.KEYCODE_DPAD_LEFT -> { if (k > 0) botoes[k - 1].second.requestFocus(); true }
-                    KeyEvent.KEYCODE_DPAD_RIGHT -> { if (k < total - 1) botoes[k + 1].second.requestFocus(); true }
-                    KeyEvent.KEYCODE_DPAD_UP -> true
+                    KeyEvent.KEYCODE_DPAD_DOWN -> pular(parada, +1)
+                    KeyEvent.KEYCODE_DPAD_UP -> pular(parada, -1)
+                    KeyEvent.KEYCODE_DPAD_LEFT -> { if (k > 0) fila.getOrNull(k - 1)?.second?.requestFocus(); true }
+                    // ▶ no último botão: deixa a tela levar o foco para os canais (como nas linhas).
+                    KeyEvent.KEYCODE_DPAD_RIGHT -> if (k < total - 1) { fila.getOrNull(k + 1)?.second?.requestFocus(); true } else parada == PARADA_TITULO
                     else -> false
                 }
             }
@@ -189,12 +231,17 @@ class ColunaCategorias(
     }
 
     /** Muda só a categoria escolhida (a cor), sem mexer nas linhas. */
-    fun escolher(chave: String) { escolhida = chave; for (i in 0..2) recolorir(i) }
+    fun escolher(chave: String) {
+        escolhida = chave; for (i in 0..2) recolorir(i)
+        botoes.forEach { (l, v) -> pintarBotao(v, l) }; botoesListas.forEach { (l, v) -> pintarBotao(v, l) }
+    }
 
-    fun temFoco(): Boolean = listas.any { it.hasFocus() } || botoes.any { it.second.hasFocus() }
+    fun temFoco(): Boolean = listas.any { it.hasFocus() } || botoes.any { it.second.hasFocus() } || botoesListas.any { it.second.hasFocus() }
 
     /** Foco na linha da categoria escolhida (ou na primeira ação, se ela não estiver na coluna). */
     fun focar() {
+        // A escolhida é um botão (ex.: Todos ao lado de LISTAS): o foco vai nele.
+        (botoesListas + botoes).firstOrNull { it.first.chave == escolhida }?.let { it.second.requestFocus(); return }
         val (i, pos) = onde(escolhida) ?: (0 to 0)
         val l = listas[i].takeIf { grupos[i].isNotEmpty() } ?: listas.firstOrNull { it.count > 0 } ?: return
         l.requestFocus(); l.setSelection(if (l === listas[i]) pos else 0)
@@ -208,7 +255,7 @@ class ColunaCategorias(
 
     /** A chave da linha em foco, ou null se o foco não está na coluna. */
     fun chaveEmFoco(): String? {
-        botoes.firstOrNull { it.second.hasFocus() }?.let { return it.first.chave }
+        (botoes + botoesListas).firstOrNull { it.second.hasFocus() }?.let { return it.first.chave }
         val i = listas.indexOfFirst { it.hasFocus() }.takeIf { it >= 0 } ?: return null
         return grupos[i].getOrNull(listas[i].selectedItemPosition)?.chave
     }
@@ -337,24 +384,35 @@ class ColunaCategorias(
         setOnKeyListener { _, codigo, e ->
             if (e.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
             when (codigo) {
-                KeyEvent.KEYCODE_DPAD_DOWN -> if (selectedItemPosition >= count - 1) pularPara(i, +1) else false
-                KeyEvent.KEYCODE_DPAD_UP -> if (selectedItemPosition <= 0) pularPara(i, -1) else false
+                KeyEvent.KEYCODE_DPAD_DOWN -> if (selectedItemPosition >= count - 1) pular(PARADA_DA_LISTA[i], +1) else false
+                KeyEvent.KEYCODE_DPAD_UP -> if (selectedItemPosition <= 0) pular(PARADA_DA_LISTA[i], -1) else false
                 else -> false
             }
         }
     }
 
-    /** ▲▼ na ponta da lista [de]: vai para a próxima lista não vazia no [sentido]. Sem vizinha, fica (consome a tecla). */
-    private fun pularPara(de: Int, sentido: Int): Boolean {
+    /**
+     * ▲▼ na ponta de um trecho: vai para o próximo não vazio no [sentido]. A ordem, de cima para baixo: botões do título,
+     * ações, botões de LISTAS, fixas, categorias. Sem vizinho, fica (consome a tecla).
+     */
+    private fun pular(de: Int, sentido: Int): Boolean {
         var j = de + sentido
-        while (j in 0..2 && grupos[j].isEmpty()) j += sentido
-        // ▲ acima da primeira linha: os botões do título (o mais à direita fica mais longe; começa no primeiro).
-        if (j < 0) { botoes.firstOrNull()?.second?.requestFocus(); return true }
-        if (j !in 0..2) return true
-        val l = listas[j]
-        l.requestFocus()
-        l.setSelection(if (sentido > 0) 0 else grupos[j].size - 1)
+        while (j in 0 until PARADAS && vazia(j)) j += sentido
+        if (j !in 0 until PARADAS) return true
+        when (j) {
+            PARADA_TITULO, PARADA_LISTAS -> filaDe(j).firstOrNull()?.second?.requestFocus()
+            else -> {
+                val i = PARADA_DA_LISTA.indexOf(j)
+                listas[i].requestFocus()
+                listas[i].setSelection(if (sentido > 0) 0 else grupos[i].size - 1)
+            }
+        }
         return true
+    }
+
+    private fun vazia(parada: Int): Boolean = when (parada) {
+        PARADA_TITULO, PARADA_LISTAS -> filaDe(parada).isEmpty()
+        else -> grupos[PARADA_DA_LISTA.indexOf(parada)].isEmpty()
     }
 
     /** 20975 -> "20.975" (pt) / "20,975" (en): o separador de milhar do idioma da TV. */
@@ -367,6 +425,11 @@ class ColunaCategorias(
         const val COR_NOVOS = 0xFF5FD3B0.toInt()   // o verde-água dos ícones no esboço
         const val COR_ETIQUETA = 0xFFCFD6E0.toInt()   // selo das listas de fora: cinza claro (cores de marca ficam fora)
         const val COR_ICONE = 0xFF5FD3B0.toInt()
+        // Os trechos da coluna, de cima para baixo (▲▼ anda nesta ordem).
+        const val PARADA_TITULO = 0
+        const val PARADA_LISTAS = 2
+        const val PARADAS = 5
+        val PARADA_DA_LISTA = intArrayOf(1, 3, 4)   // ações, fixas, categorias
     }
 }
 

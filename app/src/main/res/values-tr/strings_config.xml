@@ -2,7 +2,7 @@
 <!-- Tradução (tr) de values/strings_config.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="cl_aba_conta">TV ve filmler</string>
-    <string name="cl_aba_conta_det">Bu TV’de kayıtlı IPTV hesabı: durum, bitiş tarihi ve bağlantılar</string>
+    <string name="cl_aba_conta_det">IPTV hesabı, film ve dizi hizmetleri, ses ve altyazı</string>
     <string name="cl_aba_parental">Ebeveyn denetimi</string>
     <string name="cl_aba_parental_det">Kanalları PIN ile kilitleyin: listeden kaybolur ve oynatılmazlar</string>
     <string name="cl_aba_aparencia">Görünüm</string>
@@ -176,6 +176,7 @@
     <string name="cl_ativos">%1$d etkin</string>
     <string name="cl_revogados">iptal edildi</string>
     <string name="cl_visivel">TV’de görünür</string>
+    <string name="cl_escondido">TV’de gizli</string>
     <string name="cl_limpeza">Önceden yüklü uygulama temizliği</string>
     <string name="cl_nenhum_liberado">Henüz temizlenen uygulama yok</string>
     <string name="cl_nenhum_liberado_det">Yalnızca bu TV’de tek tek test edilen uygulamalar görünür (bkz. Debloat.kt)</string>

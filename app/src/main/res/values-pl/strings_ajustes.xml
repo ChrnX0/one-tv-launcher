@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">Adres routera UniFi i klucz API, w panelu WWW</string>
     <string name="pb_titulo">Kafelki szybkiego panelu</string>
     <string name="pb_subtitulo">OK pokazuje lub ukrywa · ◀ ▶ zmieniają kolejność</string>
-    <string name="pb_cfg_det">Wybierz, które kafelki pokazuje szybki panel (przytrzymaj HOME) i w jakiej kolejności</string>
+    <string name="pb_cfg_det">Wybierz, które kafelki pokazuje szybki panel (przytrzymaj WSTECZ) i w jakiej kolejności</string>
     <string name="pb_mostrado">widoczny</string>
     <string name="pb_escondido">ukryty</string>
     <string name="pb_padrao">Przywróć standardowe kafelki</string>
@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK przełącza · te znikają w trybie gościa</string>
     <string name="cfg2_some_visita">ukryta dla gości</string>
     <string name="cfg2_fica_visita">zostaje</string>
-    <string name="cfg2_casa_det">Światła, gniazdka i sceny Twojego Home Assistant</string>
+    <string name="cfg2_casa_det">Światła, gniazdka i sceny z Google Home lub Home Assistant</string>
     <string name="oc_titulo">Ukryte aplikacje</string>
     <string name="oc_subtitulo">OK pokazuje lub ukrywa aplikację na ekranie głównym · ukryte są pierwsze</string>
     <string name="oc_nenhum">Brak ukrytych aplikacji · OK, by wybrać</string>
@@ -66,7 +66,7 @@
     <string name="tt_grande">Duży</string>
     <string name="tt_maior">Większy</string>
     <string name="pi_titulo">Pakiet ikon</string>
-    <string name="pi_det">Zamienia ikony aplikacji na ikony z zainstalowanego pakietu. OK wybiera następny.</string>
+    <string name="pi_det">Zamienia ikony aplikacji na wbudowany styl (Symbol, Dwukolorowy) lub zainstalowany pakiet. OK wybiera następny.</string>
     <string name="pi_det_vazio">Brak zainstalowanego pakietu ikon. Pobierz go ze Sklepu Play, a pojawi się tutaj.</string>
     <string name="pi_nenhum">Brak</string>
     <string name="fm_titulo">Moje tło</string>

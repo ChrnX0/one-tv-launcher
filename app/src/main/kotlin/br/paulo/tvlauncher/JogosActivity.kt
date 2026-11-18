@@ -58,13 +58,17 @@ class JogosActivity : Activity() {
     private var jogos: List<JogosTv.App> = emptyList()   // já na ordem "jogado por último primeiro"
     private var uso: Map<String, Long> = emptyMap()
     private var atual: JogosTv.App? = null               // o jogo com foco (ou o último que teve)
-    private var filtro: Jogos.Grupo? = null              // "Por tipo": null = todos
+    private var filtro: Jogos.Grupo? = null              // sempre null desde a Central (18/11/2026): os jogos moram na cruz
+    /** Jogado nos últimos 7 dias (ms) e o jogo mais jogado (Central de jogos). */
+    private class Semana(val ms: Long, val topo: String?)
+    private var semana: Semana? = null
     private var turma: TurmaDiscordTv.Estado? = null
     /** Depuração 18/11: virou true na 1ª tecla. Depois dela, nada que chega atrasado (lista, turma) rouba o foco. */
     private var pessoaMexeu = false
     private var aberto = false                           // painel aberto (foco nele)
     private var esperandoPc = false
     private var montado = false
+    private var abrirNoSofa = false   // veio do item "Sofá" da tela em cruz: 1º foco no painel
     private var focoPacote: String? = null   // ao redesenhar (mudou de grupo, voltou de um jogo), o foco volta no mesmo jogo
     private var qr: ImageView? = null        // QR da sala de voz (só aparece com o painel aberto)
     private var qrDica: TextView? = null
@@ -91,6 +95,7 @@ class JogosActivity : Activity() {
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro (VigiaAtualizacao)
+        abrirNoSofa = intent?.getBooleanExtra(EXTRA_SOFA, false) == true
         val raiz = FrameLayout(this).apply { background = Estilo.fundoTela(this@JogosActivity) }
         // Luz da cor do jogo em foco atrás da fileira (a tela "veste" o jogo) e um calor da marca no canto do painel.
         brilho = View(this)
@@ -146,12 +151,15 @@ class JogosActivity : Activity() {
             val u = Uso.ultimoUso(ctx)
             val porPacote = lista.associateBy { it.pacote }
             val ordenada = Jogos.ordenarPorUso(lista.map { it.pacote }, u).mapNotNull { porPacote[it] }
+            // Central (18/11/2026): quanto se jogou nos últimos 7 dias e o jogo mais jogado.
+            val tempos = Uso.tempoNaFrente(ctx).filterKeys { it in porPacote }
+            val sem = Semana(tempos.values.sum(), tempos.maxByOrNull { it.value }?.key?.let { porPacote[it]?.nome })
             // Banners e ícones só dos que ainda não foram lidos nesta tela (voltar de um jogo não relê nada).
             val novos = HashMap<String, Visual>()
             for (j in lista) if (j.pacote !in ja) novos[j.pacote] = lerVisual(j.pacote)
             runOnUiThread {
                 if (isDestroyed) return@runOnUiThread
-                visuais.putAll(novos); uso = u; jogos = ordenada
+                visuais.putAll(novos); uso = u; jogos = ordenada; semana = sem
                 if (focoPacote == null) focoPacote = atual?.pacote
                 montar()
             }
@@ -284,6 +292,8 @@ class JogosActivity : Activity() {
         }
         aplicarAberto()
         if (tinhaFoco) (focavel ?: chamarPainel.takeIf { it.visibility == View.VISIBLE })?.requestFocus()
+        // Já mexeu: a turma que chega atrasada do Discord não puxa o foco.
+        else if (abrirNoSofa && montado && !pessoaMexeu && focavel != null) { abrirNoSofa = false; focavel.requestFocus() }
         atualizarAcoes()
     }
 
@@ -425,6 +435,17 @@ class JogosActivity : Activity() {
         chamarPainel.visibility = if (aberto && turma is TurmaDiscordTv.Estado.Pronta && TurmaDiscordTv.temWebhook(this)) View.VISIBLE else View.GONE
     }
 
+    /** O 1º focável dentro de [g] (ordem da tela). */
+    private fun achar(g: ViewGroup): View? {
+        for (i in 0 until g.childCount) {
+            val v = g.getChildAt(i)
+            if (v.visibility != View.VISIBLE) continue
+            if (v.isFocusable) return v
+            if (v is ViewGroup) achar(v)?.let { return it }
+        }
+        return null
+    }
+
     private fun dentro(v: View, pai: ViewGroup): Boolean {
         var p: Any? = v
         while (p is View) { if (p === pai) return true; p = p.parent }
@@ -459,7 +480,7 @@ class JogosActivity : Activity() {
         addView(LinearLayout(this@JogosActivity).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            addView(Estilo.secao(this@JogosActivity, getString(R.string.jogos_continuar)).apply { setPaddingRelative(dp(4), 0, 0, 0) },
+            addView(Estilo.secao(this@JogosActivity, getString(R.string.jogos_recentes)).apply { setPaddingRelative(dp(4), 0, 0, 0) },
                 LinearLayout.LayoutParams(0, -2, 1f))
             chipRede = Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO).apply { textSize = 16f }
             addView(chipRede)
@@ -500,7 +521,7 @@ class JogosActivity : Activity() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             clipChildren = false
-            addView(Estilo.secao(this@JogosActivity, getString(R.string.jogos_por_tipo)).apply { setPaddingRelative(dp(4), 0, dp(Estilo.E2), 0) })
+            addView(Estilo.secao(this@JogosActivity, getString(R.string.jogos_semana)).apply { setPaddingRelative(dp(4), 0, dp(Estilo.E2), 0) })
             chips = LinearLayout(this@JogosActivity).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false }
             addView(rolagem(chips).apply { setPaddingRelative(dp(6), dp(8), dp(6), dp(8)) }, LinearLayout.LayoutParams(0, -2, 1f))
         })
@@ -563,7 +584,17 @@ class JogosActivity : Activity() {
         val focoNaFila = currentFocus?.let { dentro(it, fila) } == true
         val tag = focoPacote ?: (currentFocus?.tag as? String)?.takeIf { focoNaFila }
         val alvo = redesenharFila(tag)
-        if ((!montado && !pessoaMexeu) || focoNaFila || focoPacote != null) alvo?.requestFocus()
+        if (!montado && abrirNoSofa && !pessoaMexeu) {
+            // Item "Sofá" da cruz: o foco começa no painel (sala de voz, configurar a turma ou parear controle).
+            // A turma ainda pode estar chegando do Discord: sem nada focável no painel, o foco fica no jogo e passa
+            // para a turma quando ela aparecer (desenharTurma).
+            val noPainel = achar(turmaBox) ?: achar(controlesBox)
+            if (noPainel != null) {
+                abrirNoSofa = false
+                alvo?.isFocusedByDefault = false
+                noPainel.isFocusedByDefault = true; noPainel.requestFocus()
+            } else alvo?.requestFocus()
+        } else if ((!montado && !pessoaMexeu) || focoNaFila || focoPacote != null) alvo?.requestFocus()
         focoPacote = null
     }
 
@@ -571,7 +602,8 @@ class JogosActivity : Activity() {
     private fun redesenharFila(tag: String?): View? {
         fila.removeAllViews()
         val t = (turma as? TurmaDiscordTv.Estado.Pronta)?.turma
-        val mostrar = jogos.filter { filtro == null || it.grupo == filtro }
+        // Central de jogos (18/11/2026): os jogos moram na coluna Jogar da cruz; aqui ficam só os jogados por último.
+        val mostrar = jogos.filter { filtro == null || it.grupo == filtro }.take(RECENTES_MAX)
         var primeiro: View? = null
         var alvo: View? = null
         if (jogos.isEmpty()) {
@@ -714,22 +746,40 @@ class JogosActivity : Activity() {
     }
 
     /** "Todos · 9", um chip por tipo com jogos e "Mais opções". O tipo escolhido fica marcado. */
+    /**
+     * "Esta semana" (Central de jogos, 18/11/2026): quadros só de leitura com o tempo jogado, o mais jogado e os controles,
+     * e o "Mais opções" (loja, PC, turma) no fim. Os filtros "Por tipo" saíram: os jogos moram na coluna Jogar da cruz.
+     */
     private fun desenharChips() {
         chips.removeAllViews()
-        val grupos = jogos.groupBy { it.grupo }
-        fun chip(rotulo: String, marcado: Boolean, ao: () -> Unit) = Estilo.botao(this, (if (marcado) "✓ " else "") + rotulo, primario = marcado).apply {
-            textSize = 16f; setPaddingRelative(dp(18), dp(9), dp(18), dp(9))
-            setOnClickListener { ao() }
+        fun quadro(valor: String, rotulo: String) = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            background = GradientDrawable().apply { setColor(0x1FFFFFFF); cornerRadius = dp(14).toFloat(); setStroke(dp(1), 0x26FFFFFF) }
+            setPaddingRelative(dp(18), dp(10), dp(18), dp(10))
+            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO, valor).apply { textSize = 20f; typeface = Estilo.fonte(700); maxLines = 1 })
+            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.LEGENDA, rotulo).apply { textSize = 14f; setTextColor(Estilo.TEXTO_2); maxLines = 1 })
             chips.addView(this, LinearLayout.LayoutParams(-2, -2).apply { marginEnd = dp(Estilo.E1 + 4) })
         }
-        if (grupos.size > 1) {
-            chip(getString(R.string.jogos_todos) + " · " + jogos.size, filtro == null) { filtrar(null) }
-            for (g in Jogos.Grupo.values()) {
-                val n = grupos[g]?.size ?: continue
-                chip(nomeGrupo(g) + " · " + n, filtro == g) { filtrar(g) }
-            }
+        val sem = semana
+        quadro(if (sem == null || sem.ms <= 0) "—" else duracao(sem.ms), getString(R.string.jogos_semana_jogado))
+        sem?.topo?.let { quadro(it, getString(R.string.jogos_semana_mais)) }
+        val controles = runCatching { JogosTv.controles().size }.getOrDefault(0)
+        quadro(controles.toString(), getString(R.string.jogos_semana_controles))
+        Estilo.botao(this, "⋯  " + getString(R.string.jogos_mais_opcoes), primario = false).apply {
+            textSize = 16f; setPaddingRelative(dp(18), dp(9), dp(18), dp(9))
+            setOnClickListener { maisOpcoes() }
+            chips.addView(this, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(Estilo.E1) })
         }
-        chip("⋯  " + getString(R.string.jogos_mais_opcoes), false) { maisOpcoes() }
+    }
+
+    /** "3 h 20 min" / "45 min" / "menos de 1 min". */
+    private fun duracao(ms: Long): String {
+        val min = ms / 60_000
+        return when {
+            min < 1 -> getString(R.string.jogos_menos_de_1_min)
+            min < 60 -> getString(R.string.jogos_min, min)
+            else -> getString(R.string.jogos_h_min, min / 60, min % 60)
+        }
     }
 
     private fun filtrar(g: Jogos.Grupo?) {
@@ -978,18 +1028,23 @@ class JogosActivity : Activity() {
         return super.dispatchKeyEvent(event)
     }
 
-    private companion object {
+    companion object {
+        /** Abrir já no painel do sofá (item "Sofá" da coluna Jogar da tela em cruz): o foco começa na turma. */
+        const val EXTRA_SOFA = "br.paulo.tvlauncher.jogos.SOFA"
+
         /** Cor da marca Sofaly no fundo escuro (17/11/2026). Vira Estilo.ACENTO quando a marca chegar ao Estilo. */
-        const val MARCA = 0xFFFF6A2B.toInt()
-        const val VERDE = 0xFF57D98A.toInt()
-        const val LARGURA_PAINEL = 236
-        const val LARGURA_PAINEL_ABERTO = 312
-        const val CARD_L = 158
-        const val CARD_A = 232
-        const val CARD_RAIO = 18
-        const val QR = 92
-        val CORES_JOGADOR = intArrayOf(MARCA, 0xFF3D7BFF.toInt(), 0xFF2FA866.toInt(), 0xFFC98A12.toInt())
+        private const val MARCA = 0xFFFF6A2B.toInt()
+        private const val VERDE = 0xFF57D98A.toInt()
+        private const val LARGURA_PAINEL = 236
+        private const val LARGURA_PAINEL_ABERTO = 312
+        private const val CARD_L = 158
+        /** Central de jogos: quantos "jogados por último" a fileira mostra. */
+        private const val RECENTES_MAX = 5
+        private const val CARD_A = 232
+        private const val CARD_RAIO = 18
+        private const val QR = 92
+        private val CORES_JOGADOR = intArrayOf(MARCA, 0xFF3D7BFF.toInt(), 0xFF2FA866.toInt(), 0xFFC98A12.toInt())
         // Avatares: tons claros, nenhum rosado (o dono detesta rosa).
-        val CORES_AVATAR = intArrayOf(0xFFFFB37A.toInt(), 0xFF9CC8FF.toInt(), 0xFFA8E6B8.toInt(), 0xFFF5DFA0.toInt(), 0xFF8FE0D0.toInt(), 0xFFC7D3E0.toInt())
+        private val CORES_AVATAR = intArrayOf(0xFFFFB37A.toInt(), 0xFF9CC8FF.toInt(), 0xFFA8E6B8.toInt(), 0xFFF5DFA0.toInt(), 0xFF8FE0D0.toInt(), 0xFFC7D3E0.toInt())
     }
 }

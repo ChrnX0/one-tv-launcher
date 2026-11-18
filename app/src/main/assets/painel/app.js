@@ -1655,6 +1655,17 @@ async function carregarPerfis() {
     const nome = document.createElement('span');
     nome.className = 'nome';
     nome.textContent = c.conta + (c.foto ? (c.manual ? ' · foto enviada por você' : ' · foto da conta Google') : ' · sem foto');
+    // Nome que a TV mostra no lugar do usuário do e-mail (Perfil.nome).
+    const apelido = document.createElement('input');
+    apelido.type = 'text'; apelido.maxLength = 30; apelido.value = c.nome || '';
+    apelido.placeholder = c.conta.split('@')[0];
+    apelido.setAttribute('aria-label', 'Nome na TV');
+    apelido.addEventListener('change', async () => {
+      try {
+        const r2 = await chamar('POST', '/api/perfil/nome', { conta: c.conta, nome: apelido.value });
+        mostrar($('statusPerfil'), `Na TV este perfil aparece como “${r2.nome}”.`);
+      } catch (e) { mostrar($('statusPerfil'), textoErro(e)); }
+    });
     const escolher = document.createElement('input');
     escolher.type = 'file'; escolher.accept = 'image/jpeg,image/png,image/webp'; escolher.hidden = true;
     escolher.addEventListener('change', async () => {
@@ -1670,7 +1681,7 @@ async function carregarPerfis() {
     const enviar = document.createElement('button');
     enviar.type = 'button'; enviar.className = 'botao-primario'; enviar.textContent = c.foto ? 'Trocar foto…' : 'Enviar foto…';
     enviar.addEventListener('click', () => escolher.click());
-    linha.append(rosto, nome, escolher, enviar);
+    linha.append(rosto, nome, apelido, escolher, enviar);
     if (c.foto) {
       const tirar = document.createElement('button');
       tirar.type = 'button'; tirar.className = 'link'; tirar.textContent = 'remover';

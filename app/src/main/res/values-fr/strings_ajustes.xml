@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">Adresse et clé API du routeur UniFi, dans le panneau web</string>
     <string name="pb_titulo">Tuiles du panneau rapide</string>
     <string name="pb_subtitulo">OK affiche ou masque · ◀ ▶ changent l’ordre</string>
-    <string name="pb_cfg_det">Choisissez quelles tuiles le panneau rapide (maintenir HOME) affiche, et dans quel ordre</string>
+    <string name="pb_cfg_det">Choisissez quelles tuiles le panneau rapide (maintenir RETOUR) affiche, et dans quel ordre</string>
     <string name="pb_mostrado">affichée</string>
     <string name="pb_escondido">masquée</string>
     <string name="pb_padrao">Revenir aux tuiles par défaut</string>
@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK bascule · celles-ci disparaissent en mode invité</string>
     <string name="cfg2_some_visita">masquée pour les invités</string>
     <string name="cfg2_fica_visita">reste</string>
-    <string name="cfg2_casa_det">Lampes, prises et scènes de votre Home Assistant</string>
+    <string name="cfg2_casa_det">Lampes, prises et scènes de Google Home ou Home Assistant</string>
     <string name="oc_titulo">Apps masquées</string>
     <string name="oc_subtitulo">OK affiche ou masque une app sur l’accueil · les masquées d’abord</string>
     <string name="oc_nenhum">Aucune app masquée · OK pour choisir</string>
@@ -66,7 +66,7 @@
     <string name="tt_grande">Grande</string>
     <string name="tt_maior">Plus grande</string>
     <string name="pi_titulo">Pack d’icônes</string>
-    <string name="pi_det">Remplace les icônes des applis par celles d’un pack d’icônes installé. OK choisit le suivant.</string>
+    <string name="pi_det">Remplace les icônes des applis par un style intégré (Symbole, Bichrome) ou un pack d’icônes installé. OK choisit le suivant.</string>
     <string name="pi_det_vazio">Aucun pack d’icônes installé. Téléchargez-en un sur le Play Store et il apparaîtra ici.</string>
     <string name="pi_nenhum">Aucun</string>
     <string name="fm_titulo">Mon fond</string>

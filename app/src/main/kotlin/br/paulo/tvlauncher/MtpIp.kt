@@ -544,12 +544,23 @@ class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.in
         val final = File(p.pasta, p.nome)
         val parcial = try { File.createTempFile(".${p.nome.take(40)}.", ".parcial", p.pasta) } catch (_: IOException) { return Mtp.NEGADO }
         try {
+            val t0 = System.nanoTime()
+            var disco = 0L; var chegou = 0L; var tSync = 0L
             FileOutputStream(parcial).use { s ->
-                val n = encher(s)
+                // Arquivo grande: a rede enche e o disco grava ao mesmo tempo (ver EscritaAdiantada). Pequeno: direto.
+                val n = if (p.tamanho in 0 until EscritaAdiantada.MINIMO) encher(s)
+                    else EscritaAdiantada(s).let { e -> e.use { _ -> encher(e) }.also { disco = e.tempoDisco } }
                 if (p.tamanho >= 0 && n != p.tamanho) throw IOException("chegaram $n de ${p.tamanho} bytes")
-                s.fd.sync()
+                chegou = n
+                val t = System.nanoTime(); s.fd.sync(); tSync = System.nanoTime() - t
             }
+            val t1 = System.nanoTime()
             if (final.exists() || !parcial.renameTo(final)) { parcial.delete(); return Mtp.NEGADO }
+            val t2 = System.nanoTime()
+            // Onde foi o tempo de uma gravação demorada (17/11/2026: o pendrive levava 14,8 s para 16 MB, a memória interna 2,4 s).
+            if (t2 - t0 >= MtpSessao.LENTA_MS * 1_000_000) MtpSessao.lenta?.invoke(
+                "gravar %d bytes em %s: receber+gravar %d ms (disco %d ms), sync %d ms, renomear %d ms".format(chegou,
+                    if (p.armazem.removivel) "pendrive" else "interno", (t1 - t0 - tSync) / 1_000_000, disco / 1_000_000, tSync / 1_000_000, (t2 - t1) / 1_000_000))
         } catch (e: Exception) {
             parcial.delete()
             throw e
@@ -561,6 +572,68 @@ class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.in
 
     /** O envio não aconteceu: o handle reservado deixa de existir. */
     fun desistir(p: Pendente) { chaveDe(p.handle)?.let { if (!File(p.pasta, p.nome).exists()) esquecer(it) } }
+}
+
+/**
+ * Grava em [destino] numa thread à parte enquanto quem chama continua lendo a rede (17/11/2026).
+ *
+ * Medido na TV da sala: a rede pura entregava 7,7 MB/s e a cópia para a TV fazia 5,8, porque cada pedaço esperava o
+ * disco terminar antes de ler o próximo da rede. Aqui os pedaços ficam numa fila curta (até [blocos] de [tamanho]
+ * bytes, 2 MB ao todo): a rede só para quando a fila enche. Um erro do disco aparece no write seguinte ou no close.
+ * close() espera o disco gravar tudo; quem chama ainda faz o sync do arquivo depois.
+ */
+class EscritaAdiantada(private val destino: OutputStream, private val blocos: Int = 8, private val tamanho: Int = 256 * 1024) : OutputStream() {
+    companion object { const val MINIMO = 1L shl 20 }   // abaixo de 1 MB não compensa abrir uma thread
+
+    private class Bloco(val b: ByteArray, var n: Int = 0)
+    private val fila = java.util.concurrent.ArrayBlockingQueue<Bloco>(blocos)        // cheios, esperando o disco
+    private val livres = java.util.concurrent.ArrayBlockingQueue<Bloco>(blocos)      // vazios, para reusar (sem lixo)
+    private var criados = 0
+    private val fim = Bloco(ByteArray(0))
+    @Volatile private var erro: IOException? = null
+    private var fechado = false
+    private val gravador = Thread({
+        try {
+            while (true) {
+                val x = fila.take()
+                if (x === fim) break
+                // depois de um erro só esvazia a fila: quem enche não pode ficar preso esperando lugar
+                if (erro == null) try {
+                    val t = System.nanoTime(); destino.write(x.b, 0, x.n); tempoDisco += System.nanoTime() - t
+                } catch (e: IOException) { erro = e }
+                livres.put(x)
+            }
+        } catch (_: InterruptedException) {}
+    }, "Mtp-gravador").apply { isDaemon = true; start() }
+
+    override fun write(b: Int) = write(byteArrayOf(b.toByte()), 0, 1)
+
+    /** O bloco que está enchendo. A rede entrega pedaços pequenos (alguns KB): só vai para o disco quando enche. */
+    private var atual: Bloco? = null
+    /** Quanto tempo o disco levou nas gravações, em nanossegundos (para o registro de operações demoradas). */
+    @Volatile var tempoDisco = 0L; private set
+
+    override fun write(b: ByteArray, off: Int, len: Int) {
+        var o = off; var falta = len
+        while (falta > 0) {
+            erro?.let { throw it }
+            val x = atual ?: (livres.poll() ?: if (criados < blocos) { criados++; Bloco(ByteArray(tamanho)) } else livres.take()).also { it.n = 0; atual = it }
+            val cabe = minOf(falta, tamanho - x.n)
+            System.arraycopy(b, o, x.b, x.n, cabe)
+            x.n += cabe; o += cabe; falta -= cabe
+            if (x.n == tamanho) { fila.put(x); atual = null }
+        }
+    }
+
+    /** Espera o disco gravar o que está na fila. Não fecha o [destino]: quem abriu é que fecha. */
+    override fun close() {
+        if (fechado) return
+        fechado = true
+        atual?.let { if (it.n > 0) fila.put(it) }; atual = null   // o último bloco, que não chegou a encher
+        fila.put(fim)
+        gravador.join()
+        erro?.let { throw it }
+    }
 }
 
 /**
@@ -584,10 +657,18 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
     companion object {
         /** Só para a bancada de testes: recebe cada pedido e cada resposta (código e parâmetros). Na TV fica nulo. */
         @Volatile var rastro: ((String) -> Unit)? = null
+        /**
+         * Operação demorada (17/11/2026): recebe uma linha por operação que passou de [LENTA_MS], com o código, os
+         * parâmetros, quanto levou e quanto o computador ficou parado antes de pedir. Na TV vai para o logcat: é
+         * assim que se descobre se a demora de uma cópia é nossa (disco, pasta) ou do computador.
+         */
+        @Volatile var lenta: ((String) -> Unit)? = null
+        const val LENTA_MS = 300L
     }
 
     private var aberta = false
     private var pendente: MtpLoja.Pendente? = null
+    private var ultimaResposta = 0L   // relógio da última resposta, para medir o tempo parado do computador
     private val bloco = ByteArray(256 * 1024)
 
     fun rodar() {
@@ -691,7 +772,14 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
                 if (fase == 2) receber(tid, Long.MAX_VALUE, Nada)
                 return responder(Mtp.SESSAO_FECHADA, tid)
             }
-            executar(op, tid, p, fase)
+            val t0 = System.nanoTime()
+            val parado = if (ultimaResposta == 0L) 0 else (t0 - ultimaResposta) / 1_000_000
+            try { executar(op, tid, p, fase) } finally {
+                ultimaResposta = System.nanoTime()
+                val ms = (ultimaResposta - t0) / 1_000_000
+                if (ms >= LENTA_MS || parado >= 5 * LENTA_MS) lenta?.invoke("op %04X [%s] levou %d ms; computador parado antes: %d ms"
+                    .format(op, p.joinToString(" ") { "%X".format(it) }, ms, parado))
+            }
         } catch (_: Cancelou) {
             pendente?.let { loja.desistir(it) }; pendente = null
             responder(Mtp.CANCELADA, tid)
@@ -836,6 +924,11 @@ class MtpServico(
 ) {
     companion object {
         const val MAX_CONEXOES = 12
+        /**
+         * Teto por IP (18/11/2026). Um computador usa 2 conexões (comandos + eventos); 4 dá folga para ele reconectar.
+         * Sem isto um único aparelho da rede abria as 12 conexões mudas e o computador de verdade não entrava.
+         */
+        const val MAX_POR_IP = 4
         const val VERSAO = 0x00010000
     }
 
@@ -857,18 +950,27 @@ class MtpServico(
         while (true) { val n = sorteio.nextInt(Int.MAX_VALUE - 1) + 1; if (!sessoes.containsKey(n)) return n }
     }
     private val vivas = AtomicInteger(0)
+    /** Quantas conexões vivas cada IP tem agora. merge() soma e, na saída, tira a chave quando chega a zero. */
+    private val porIp = ConcurrentHashMap<String, Int>()
     private val abertas = ConcurrentHashMap.newKeySet<Socket>()
 
     /** Fica aceitando até o ServerSocket ser fechado. */
     fun rodar() {
         while (!ss.isClosed) {
             val c = try { ss.accept() } catch (_: IOException) { break }
-            if (vivas.get() >= MAX_CONEXOES || !aceitaRede(c)) { try { c.close() } catch (_: IOException) {}; continue }
+            val ip = c.inetAddress?.hostAddress ?: ""
+            // Só esta thread soma (as de conexão só subtraem), então conferir e somar em seguida não passa do teto.
+            if (vivas.get() >= MAX_CONEXOES || (porIp[ip] ?: 0) >= MAX_POR_IP || !aceitaRede(c)) { try { c.close() } catch (_: IOException) {}; continue }
             vivas.incrementAndGet()
+            porIp.merge(ip, 1, Int::plus)
             abertas.add(c)
             Thread({
                 try { atender(c) } catch (e: Exception) { if (e !is EOFException && e !is java.net.SocketException) registro("conexão caiu: $e") }
-                finally { abertas.remove(c); vivas.decrementAndGet(); try { c.close() } catch (_: IOException) {} }
+                finally {
+                    abertas.remove(c); vivas.decrementAndGet()
+                    porIp.computeIfPresent(ip) { _, n -> if (n <= 1) null else n - 1 }   // null = apaga a chave
+                    try { c.close() } catch (_: IOException) {}
+                }
             }, "Mtp-conexao").apply { isDaemon = true }.start()
         }
     }

@@ -152,6 +152,33 @@
   "contraste": [],
   "semNome": []
  },
+ "ar\/home-leve": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "ar\/home-relogio": {
+  "menorSp": 18,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "ar\/home-vidro": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
  "ar\/jogos": {
   "menorSp": 11,
   "foco": true,
@@ -380,6 +407,33 @@
   "contraste": [],
   "semNome": []
  },
+ "en\/home-leve": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "en\/home-relogio": {
+  "menorSp": 18,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "en\/home-vidro": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
  "en\/jogos": {
   "menorSp": 11,
   "foco": true,
@@ -597,6 +651,33 @@
   "semNome": []
  },
  "pt\/home-grande": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "pt\/home-leve": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "pt\/home-relogio": {
+  "menorSp": 18,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "pt\/home-vidro": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],

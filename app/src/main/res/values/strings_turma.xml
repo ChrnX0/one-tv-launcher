@@ -40,4 +40,7 @@
     <string name="turma_config_guardar">Save</string>
     <string name="turma_config_tirar">Remove the crew</string>
     <string name="turma_id_invalido">This is not a Discord server ID (17 to 20 digits).</string>
+    <string name="cruz_sofa">Couch</string>
+    <string name="cruz_sofa_sub">Controllers and your Discord crew</string>
+    <string name="cruz_sofa_voz">%1$d in voice · %2$s</string>
 </resources>

@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">عنوان راوتر UniFi ومفتاح API، في لوحة الويب</string>
     <string name="pb_titulo">مربعات اللوحة السريعة</string>
     <string name="pb_subtitulo">OK يُظهر أو يخفي · ◀ ▶ تغيير الترتيب</string>
-    <string name="pb_cfg_det">اختر المربعات التي تعرضها اللوحة السريعة (اضغط مطولًا على HOME) وبأي ترتيب</string>
+    <string name="pb_cfg_det">اختر المربعات التي تعرضها اللوحة السريعة (اضغط مطولًا على رجوع) وبأي ترتيب</string>
     <string name="pb_mostrado">ظاهر</string>
     <string name="pb_escondido">مخفي</string>
     <string name="pb_padrao">العودة إلى المربعات القياسية</string>
@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK يبدّل · هذه تختفي أثناء تفعيل وضع الضيوف</string>
     <string name="cfg2_some_visita">مخفي عن الضيوف</string>
     <string name="cfg2_fica_visita">يبقى</string>
-    <string name="cfg2_casa_det">أضواء ومقابس ومشاهد Home Assistant الخاص بك</string>
+    <string name="cfg2_casa_det">الأضواء والمقابس والمشاهد من Google Home أو Home Assistant</string>
     <string name="oc_titulo">التطبيقات المخفية</string>
     <string name="oc_subtitulo">OK يُظهر تطبيقًا في الشاشة الرئيسية أو يخفيه · المخفية تأتي أولًا</string>
     <string name="oc_nenhum">لا تطبيقات مخفية · OK للاختيار</string>
@@ -66,7 +66,7 @@
     <string name="tt_grande">كبير</string>
     <string name="tt_maior">أكبر</string>
     <string name="pi_titulo">حزمة الأيقونات</string>
-    <string name="pi_det">يستبدل أيقونات التطبيقات بأيقونات حزمة مثبتة. OK يختار التالية.</string>
+    <string name="pi_det">يستبدل أيقونات التطبيقات بنمط مدمج (رمز، لونان) أو بحزمة مثبتة. OK يختار التالي.</string>
     <string name="pi_det_vazio">لا توجد حزمة أيقونات مثبتة. احصل على واحدة من Play Store وستظهر هنا.</string>
     <string name="pi_nenhum">لا شيء</string>
     <string name="fm_titulo">خلفيتي</string>

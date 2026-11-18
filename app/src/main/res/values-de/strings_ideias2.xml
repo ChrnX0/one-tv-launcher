@@ -11,7 +11,7 @@
     <string name="extras_HORA_DORMIR">Schlafenszeit (nur erlaubte Apps, begrenzte Lautstärke)</string>
     <string name="extras_TOCANDO_AGORA">Läuft gerade (liest, was spielt)</string>
     <string name="extras_MODO_LEVE">Leichter Modus (kürzere Animationen)</string>
-    <string name="extras_SOM_NAVEGACAO">Navigationston</string>
+    <string name="extras_SOM_NAVEGACAO">Klick beim Navigieren in den anderen Bildschirmen</string>
     <string name="extras_RECADO_LINK">Nachricht per Link (Home Assistant, TvOverlay)</string>
     <string name="extras_caches">App-Caches leeren</string>
     <string name="extras_livre">%1$s frei</string>
@@ -30,6 +30,7 @@
     <string name="casa_vazio">Keine Lampen, Steckdosen oder Szenen in Home Assistant.</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Google-Lampen und -Kameras</string>
+    <string name="casa_google_home_vazio">Dieses Google-Konto hat kein Zuhause in Google Home</string>
     <string name="casa_resumo">Home Assistant · %1$d von %2$d an</string>
     <string name="casa_resumo_so_cenas">Home Assistant · %1$d Szenen</string>
     <string name="casa_secao_cenas">Szenen und Skripte</string>

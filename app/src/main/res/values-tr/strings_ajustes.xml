@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">UniFi yönlendirici adresi ve API anahtarı, web panelinde</string>
     <string name="pb_titulo">Hızlı panel kutucukları</string>
     <string name="pb_subtitulo">OK gösterir veya gizler · ◀ ▶ sırayı değiştirir</string>
-    <string name="pb_cfg_det">Hızlı panelin (HOME basılı) hangi kutucukları ve hangi sırayla göstereceğini seçin</string>
+    <string name="pb_cfg_det">Hızlı panelin (GERİ basılı) hangi kutucukları ve hangi sırayla göstereceğini seçin</string>
     <string name="pb_mostrado">gösteriliyor</string>
     <string name="pb_escondido">gizli</string>
     <string name="pb_padrao">Standart kutucuklara dön</string>
@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK değiştirir · bunlar misafir modu açıkken kaybolur</string>
     <string name="cfg2_some_visita">misafirlerden gizli</string>
     <string name="cfg2_fica_visita">kalır</string>
-    <string name="cfg2_casa_det">Home Assistant’ınızın ışıkları, prizleri ve sahneleri</string>
+    <string name="cfg2_casa_det">Google Home veya Home Assistant’tan ışıklar, prizler ve sahneler</string>
     <string name="oc_titulo">Gizli uygulamalar</string>
     <string name="oc_subtitulo">OK bir uygulamayı ana ekranda gösterir veya gizler · gizliler önce gelir</string>
     <string name="oc_nenhum">Gizli uygulama yok · seçmek için OK</string>
@@ -66,7 +66,7 @@
     <string name="tt_grande">Büyük</string>
     <string name="tt_maior">Daha büyük</string>
     <string name="pi_titulo">Simge paketi</string>
-    <string name="pi_det">Uygulama simgelerini yüklü bir simge paketindekilerle değiştirir. OK sonrakini seçer.</string>
+    <string name="pi_det">Uygulama simgelerini yerleşik bir stille (Sembol, Çift renk) veya yüklü bir simge paketiyle değiştirir. OK sonrakini seçer.</string>
     <string name="pi_det_vazio">Yüklü simge paketi yok. Play Store’dan bir tane indirin, burada görünür.</string>
     <string name="pi_nenhum">Yok</string>
     <string name="fm_titulo">Arka planım</string>

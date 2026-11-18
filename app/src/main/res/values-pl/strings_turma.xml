@@ -40,4 +40,7 @@
     <string name="turma_config_guardar">Zapisz</string>
     <string name="turma_config_tirar">Usuń ekipę</string>
     <string name="turma_id_invalido">To nie jest ID serwera Discorda (17 do 20 cyfr).</string>
+    <string name="cruz_sofa">Kanapa</string>
+    <string name="cruz_sofa_sub">Kontrolery i twoja ekipa z Discorda</string>
+    <string name="cruz_sofa_voz">Na głosowym: %1$d · %2$s</string>
 </resources>

@@ -1030,6 +1030,7 @@ class SeriesActivity : Activity() {
         }
         linha.addView(col, LinearLayout.LayoutParams(0, -1, 1f))
         painel.addView(linha, FrameLayout.LayoutParams(-1, -1))
+        FundoFicha.por(this, painel, f?.cenas?.firstOrNull())   // a cena que a lista manda, atrás da ficha (18/11/2026)
         painel.visibility = View.VISIBLE
         // "Sinopse inteira" só aparece quando a sinopse não coube (dá para saber só depois de desenhada).
         val ts = txtSinopse

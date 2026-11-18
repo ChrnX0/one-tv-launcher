@@ -17,6 +17,17 @@ object Uso {
     private const val TAG = "TvLauncher.Uso"
     private const val QUATORZE_DIAS = 14L * 24 * 3600 * 1000
 
+    /**
+     * Tempo na frente da tela por pacote nos últimos [dias] (Central de jogos, 18/11/2026: "jogado esta semana").
+     * Vazio sem a permissão de uso (o Device Owner a concede).
+     */
+    fun tempoNaFrente(contexto: Context, dias: Int = 7): Map<String, Long> = try {
+        val gerente = contexto.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+        val agora = System.currentTimeMillis()
+        gerente.queryAndAggregateUsageStats(agora - dias * 24L * 3600 * 1000, agora)
+            .mapValues { it.value.totalTimeInForeground }.filterValues { it > 0 }
+    } catch (e: Exception) { Log.w(TAG, "tempoNaFrente: ${e.javaClass.simpleName}"); emptyMap() }
+
     fun ultimoUso(contexto: Context): Map<String, Long> {
         return try {
             val gerente = contexto.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager

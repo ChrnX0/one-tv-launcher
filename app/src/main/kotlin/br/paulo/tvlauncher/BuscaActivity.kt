@@ -404,7 +404,7 @@ class BuscaActivity : Activity() {
         val fontes = t.fontes.map { rotulo(it) }.distinct()
         val texto = listOfNotNull(t.ano?.toString(), "▶ " + fontes.first(), fontes.drop(1).take(2).joinToString(" · ").takeIf { it.isNotEmpty() },
             (fontes.size - 3).takeIf { it > 0 }?.let { "+$it" }).joinToString(" · ")
-        return Item(t.nome, texto) { abrirFonte(t.melhor, t) }
+        return Item(Vod.nomeTela(t.nome, t.ano), texto) { abrirFonte(t.melhor, t) }   // sem o ano repetido no nome (main, 16/11)
     }
 
     /** Abre a melhor fonte: lista no catálogo, arquivo da casa direto no player, servidor e addon na busca deles. */

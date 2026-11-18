@@ -16,6 +16,7 @@ data class Canal(
     val guiaId: String = "",   // tvg-id: liga o canal ao guia XMLTV
     val agenteUsuario: String = "",  // algumas listas exigem um "User-Agent" próprio (#EXTVLCOPT:http-user-agent)
     val arquivoDias: Int = 0,  // TV de volta: quantos dias o servidor guarda (tv_archive / catchup-days); 0 = não tem
+    val adicionado: Long = 0,  // quando entrou na lista (Xtream "added", segundos desde 1970); 0 = não informado
 )
 
 object M3u {

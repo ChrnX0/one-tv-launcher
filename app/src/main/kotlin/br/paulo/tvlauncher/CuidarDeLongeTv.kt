@@ -132,6 +132,9 @@ object CuidarDeLongeTv {
     }
 
     /** Funil de teclas (AutorizaShizukuService.tecla). True = a tecla é nossa (só depois de segurar 3 s). */
+    /** A ajuda está ligada e usa [codigo] (o VOLTAR segurado do painel rápido cede a tecla a ela). */
+    fun usaTecla(codigo: Int): Boolean = ajudaLigada && teclaAjuda == codigo
+
     fun tecla(ctx: Context, e: KeyEvent): Boolean {
         if (!ajudaLigada) return false
         segurar.tecla = teclaAjuda

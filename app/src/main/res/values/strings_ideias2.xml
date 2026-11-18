@@ -10,7 +10,7 @@
     <string name="extras_HORA_DORMIR">Bedtime (allowed apps only, capped volume)</string>
     <string name="extras_TOCANDO_AGORA">Now playing (reads what is playing)</string>
     <string name="extras_MODO_LEVE">Light mode (shorter animations)</string>
-    <string name="extras_SOM_NAVEGACAO">Navigation sound</string>
+    <string name="extras_SOM_NAVEGACAO">Click when moving in the other screens</string>
     <string name="extras_RECADO_LINK">Message by link (Home Assistant, TvOverlay)</string>
     <string name="extras_caches">Clear app caches</string>
     <string name="extras_livre">%1$s free</string>
@@ -30,6 +30,7 @@
     <string name="casa_vazio">No lights, plugs or scenes in Home Assistant.</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Google lights and cameras</string>
+    <string name="casa_google_home_vazio">This Google account has no home in Google Home</string>
     <string name="casa_resumo">Home Assistant · %1$d of %2$d on</string>
     <string name="casa_resumo_so_cenas">Home Assistant · %1$d scenes</string>
     <string name="casa_secao_cenas">Scenes and scripts</string>

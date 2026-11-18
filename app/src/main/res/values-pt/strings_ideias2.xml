@@ -11,7 +11,7 @@
     <string name="extras_HORA_DORMIR">Hora de dormir (só apps liberados, volume com teto)</string>
     <string name="extras_TOCANDO_AGORA">Tocando agora (lê o que está tocando)</string>
     <string name="extras_MODO_LEVE">Modo leve (animações mais curtas)</string>
-    <string name="extras_SOM_NAVEGACAO">Som de navegação</string>
+    <string name="extras_SOM_NAVEGACAO">Clique ao navegar nas outras telas</string>
     <string name="extras_RECADO_LINK">Recado por link (Home Assistant, TvOverlay)</string>
     <string name="extras_caches">Limpar caches dos apps</string>
     <string name="extras_livre">%1$s livres</string>
@@ -31,6 +31,7 @@
     <string name="casa_vazio">Nenhuma luz, tomada ou cena no Home Assistant.</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Luzes e câmeras do Google</string>
+    <string name="casa_google_home_vazio">Esta conta Google não tem casa no Google Home</string>
     <string name="casa_resumo">Home Assistant · %1$d de %2$d ligados</string>
     <string name="casa_resumo_so_cenas">Home Assistant · %1$d cenas</string>
     <string name="casa_secao_cenas">Cenas e rotinas</string>

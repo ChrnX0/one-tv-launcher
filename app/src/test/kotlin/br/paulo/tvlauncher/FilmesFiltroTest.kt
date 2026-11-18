@@ -89,4 +89,12 @@ class FilmesFiltroTest {
         val sorteados = (0 until 200).map { FilmesFiltro.sortear(todos, emptySet(), visto, Random(it)) }.toSet()
         assertEquals(setOf(acao90, comedia, semNada, acaoNova), sorteados)
     }
+
+    @Test fun colecaoContaFilmesNaoVersoes() {
+        val l = listOf("Duna (2021)", "Duna (2021) LEG", "Duna (2021)  4K [HDR]", "Duna: Parte Dois (2024)",
+            "Duna: Parte Dois (2024) 4K", "Duna: Parte Dois (2024) LEG").mapIndexed { i, n ->
+            Filme("d$i", "c", n, grupo = "Filmes", ano = if ("2024" in n) 2024 else 2021)
+        }
+        assertEquals(2, FilmesFiltro.quantosFilmes(l))
+    }
 }

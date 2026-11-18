@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">在网页面板中填写 UniFi 路由器地址和 API 密钥</string>
     <string name="pb_titulo">快捷面板图块</string>
     <string name="pb_subtitulo">OK 显示或隐藏 · ◀ ▶ 调整顺序</string>
-    <string name="pb_cfg_det">选择快捷面板（长按主屏幕键）显示哪些图块以及顺序</string>
+    <string name="pb_cfg_det">选择快捷面板（长按返回键）显示哪些图块以及顺序</string>
     <string name="pb_mostrado">显示</string>
     <string name="pb_escondido">隐藏</string>
     <string name="pb_padrao">恢复默认图块</string>
@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">按 OK 切换 · 这些应用在访客模式开启时隐藏</string>
     <string name="cfg2_some_visita">对访客隐藏</string>
     <string name="cfg2_fica_visita">保留</string>
-    <string name="cfg2_casa_det">你的 Home Assistant 中的灯、插座和场景</string>
+    <string name="cfg2_casa_det">Google Home 或 Home Assistant 中的灯、插座和场景</string>
     <string name="oc_titulo">隐藏的应用</string>
     <string name="oc_subtitulo">按 OK 在主屏幕上显示或隐藏应用 · 隐藏的排在前面</string>
     <string name="oc_nenhum">没有隐藏的应用 · 按 OK 选择</string>
@@ -66,7 +66,7 @@
     <string name="tt_grande">大</string>
     <string name="tt_maior">更大</string>
     <string name="pi_titulo">图标包</string>
-    <string name="pi_det">用已安装图标包中的图标替换应用图标。按 OK 选择下一个。</string>
+    <string name="pi_det">用内置样式（符号、双色）或已安装的图标包替换应用图标。按 OK 选择下一个。</string>
     <string name="pi_det_vazio">未安装图标包。从 Play 商店下载一个,它就会出现在这里。</string>
     <string name="pi_nenhum">无</string>
     <string name="fm_titulo">我的背景</string>

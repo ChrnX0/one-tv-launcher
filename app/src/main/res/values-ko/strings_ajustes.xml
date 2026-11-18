@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">웹 패널에서 UniFi 라우터 주소와 API 키</string>
     <string name="pb_titulo">빠른 패널 타일</string>
     <string name="pb_subtitulo">OK로 표시 또는 숨김 · ◀ ▶ 순서 변경</string>
-    <string name="pb_cfg_det">빠른 패널(홈 길게)에 표시할 타일과 순서 선택</string>
+    <string name="pb_cfg_det">빠른 패널(뒤로 길게)에 표시할 타일과 순서 선택</string>
     <string name="pb_mostrado">표시됨</string>
     <string name="pb_escondido">숨김</string>
     <string name="pb_padrao">기본 타일로 되돌리기</string>
@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK로 전환 · 게스트 모드가 켜져 있으면 이 앱들이 사라짐</string>
     <string name="cfg2_some_visita">게스트에게 숨김</string>
     <string name="cfg2_fica_visita">유지</string>
-    <string name="cfg2_casa_det">Home Assistant의 조명, 플러그, 장면</string>
+    <string name="cfg2_casa_det">Google Home 또는 Home Assistant의 조명, 플러그, 장면</string>
     <string name="oc_titulo">숨긴 앱</string>
     <string name="oc_subtitulo">OK로 홈 화면에 앱 표시 또는 숨김 · 숨긴 앱이 먼저 표시됨</string>
     <string name="oc_nenhum">숨긴 앱 없음 · OK로 선택</string>
@@ -66,7 +66,7 @@
     <string name="tt_grande">크게</string>
     <string name="tt_maior">더 크게</string>
     <string name="pi_titulo">아이콘 팩</string>
-    <string name="pi_det">앱 아이콘을 설치된 아이콘 팩의 아이콘으로 바꿉니다. OK를 누르면 다음 팩을 선택합니다.</string>
+    <string name="pi_det">앱 아이콘을 기본 스타일(기호, 투톤)이나 설치된 아이콘 팩으로 바꿉니다. OK를 누르면 다음을 선택합니다.</string>
     <string name="pi_det_vazio">설치된 아이콘 팩이 없습니다. Play 스토어에서 받으면 여기에 표시됩니다.</string>
     <string name="pi_nenhum">없음</string>
     <string name="fm_titulo">내 배경</string>

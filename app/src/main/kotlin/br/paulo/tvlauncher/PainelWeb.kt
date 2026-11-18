@@ -614,6 +614,7 @@ object PainelWeb {
     private fun limiteCorpo(caminho: String): Int = when (caminho) {
         "/api/backup/restaurar" -> BackupConfig.LIMITE_BYTES
         PainelExtras.ROTA_FOTO -> PainelExtras.LIMITE_FOTO
+        PainelIdeias.ROTA_OPML -> PainelIdeias.LIMITE_OPML
         "/api/backup/completo/restaurar" -> BackupCompleto.LIMITE_BYTES * 2 + 1024   // o cofre em Base64 + a senha
         "/api/mudar/receber" -> BackupCompleto.LIMITE_BYTES * 4   // elevação 19.7: o cofre + a lista de apps, cifrados e em Base64
         else -> LIMITE_CORPO
@@ -966,8 +967,18 @@ object PainelWeb {
             "/api/perfil" -> if (req.metodo == "GET") return json(200, JSONObject().put("google", LoginGoogle.configurado(app))
                 .put("contas", org.json.JSONArray().apply {
                     for (c in Perfil.contas(app)) put(JSONObject().put("conta", c)
-                        .put("foto", FotoPerfil.arquivo(app, c)?.lastModified() ?: 0L).put("manual", FotoPerfil.manual(app, c)))
+                        .put("foto", FotoPerfil.arquivo(app, c)?.lastModified() ?: 0L).put("manual", FotoPerfil.manual(app, c))
+                        .put("nome", Perfil.nomeGuardado(app, c) ?: ""))
                 }))
+            // Nome do perfil (17/11/2026): o que a TV mostra na bolinha e nos avisos, no lugar do usuário do e-mail.
+            "/api/perfil/nome" -> if (req.metodo == "POST") {
+                val o = corpoJson(req) ?: return erro(400, "corpo inválido")
+                val conta = Perfil.contas(app).firstOrNull { it.equals(o.optString("conta"), ignoreCase = true) }
+                    ?: return erro(404, "essa conta não está nesta TV")
+                Perfil.definirNome(app, conta, o.optString("nome"))
+                PainelArmazem.registrar(app, ip, "nome do perfil", "ok")   // sem o e-mail nem o nome no registro
+                return json(200, JSONObject().put("ok", true).put("nome", Perfil.nome(app, conta)))
+            }
             "/api/perfil/foto" -> {
                 val conta = Perfil.contas(app).firstOrNull { it.equals(req.consulta["conta"], ignoreCase = true) }
                     ?: return erro(404, "essa conta não está nesta TV")

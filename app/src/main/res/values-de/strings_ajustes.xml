@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">Adresse und API-Schlüssel des UniFi-Routers, im Web-Panel</string>
     <string name="pb_titulo">Kacheln des Schnellmenüs</string>
     <string name="pb_subtitulo">OK zeigt oder blendet aus · ◀ ▶ ändern die Reihenfolge</string>
-    <string name="pb_cfg_det">Wähle, welche Kacheln das Schnellmenü (HOME halten) zeigt und in welcher Reihenfolge</string>
+    <string name="pb_cfg_det">Wähle, welche Kacheln das Schnellmenü (ZURÜCK halten) zeigt und in welcher Reihenfolge</string>
     <string name="pb_mostrado">sichtbar</string>
     <string name="pb_escondido">ausgeblendet</string>
     <string name="pb_padrao">Zurück zu den Standardkacheln</string>
@@ -41,7 +41,7 @@
     <string name="cfg2_apps_visita_sub">OK wechselt · diese verschwinden, solange der Gastmodus an ist</string>
     <string name="cfg2_some_visita">für Gäste ausgeblendet</string>
     <string name="cfg2_fica_visita">bleibt</string>
-    <string name="cfg2_casa_det">Lampen, Steckdosen und Szenen deines Home Assistant</string>
+    <string name="cfg2_casa_det">Lampen, Steckdosen und Szenen aus Google Home oder Home Assistant</string>
     <string name="oc_titulo">Ausgeblendete Apps</string>
     <string name="oc_subtitulo">OK zeigt oder blendet eine App auf dem Startbildschirm aus · ausgeblendete stehen oben</string>
     <string name="oc_nenhum">Keine ausgeblendeten Apps · OK zum Auswählen</string>
@@ -66,7 +66,7 @@
     <string name="tt_grande">Groß</string>
     <string name="tt_maior">Größer</string>
     <string name="pi_titulo">Symbolpaket</string>
-    <string name="pi_det">Ersetzt die App-Symbole durch die eines installierten Symbolpakets. OK wählt das nächste.</string>
+    <string name="pi_det">Ersetzt die App-Symbole durch einen eingebauten Stil (Symbol, Zweifarbig) oder ein installiertes Symbolpaket. OK wählt das nächste.</string>
     <string name="pi_det_vazio">Kein Symbolpaket installiert. Hol dir eines im Play Store, dann erscheint es hier.</string>
     <string name="pi_nenhum">Keines</string>
     <string name="fm_titulo">Mein Hintergrund</string>

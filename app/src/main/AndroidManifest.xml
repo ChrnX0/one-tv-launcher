@@ -57,6 +57,8 @@
     <!-- Gravação da TV ao vivo (GravacaoServico.kt, 14/11/2026): serviço em primeiro plano copiando o canal para o pendrive/NAS. -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <!-- Ouvir (17/11/2026): a rádio segue tocando fora da tela num serviço "mediaPlayback" (OuvirServico). -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <!-- Agenda: ler os eventos (dada uma vez por adb: pm grant ... READ_CALENDAR) e ligar a sincronização da agenda Google -->
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
@@ -965,6 +967,15 @@
         <receiver android:name=".GravacaoReceiver" android:exported="false" android:process=":player" />
         <!-- Ideia 87: rádios (catálogo mundial radio-browser.info). No processo do player: o som é dele. -->
         <activity android:name=".RadioActivity" android:exported="false" android:process=":player"
+            android:excludeFromRecents="true" android:launchMode="singleTask"
+            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection" />
+        <!-- Ouvir parte 1 (17/11/2026): o som da rádio fora da tela. No processo do player, junto da RadioActivity.
+             O receptor recebe pausar/continuar/parar da HOME, do protetor e dos botões da notificação (só do próprio app). -->
+        <service android:name=".OuvirServico" android:exported="false" android:process=":player"
+            android:foregroundServiceType="mediaPlayback" />
+        <receiver android:name=".OuvirComandoReceiver" android:exported="false" android:process=":player" />
+        <!-- Ouvir parte 2 (17/11/2026): podcasts (prévia, aberta pela tela de Rádios). Junto do serviço que toca. -->
+        <activity android:name=".PodcastsActivity" android:exported="false" android:process=":player"
             android:excludeFromRecents="true" android:launchMode="singleTask"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode|density|locale|layoutDirection" />
         <activity android:name=".GravacoesActivity" android:exported="false" android:process=":player"

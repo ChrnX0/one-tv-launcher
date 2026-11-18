@@ -227,6 +227,10 @@
     <string name="pn_nao_achei">아직 페어링 화면을 찾지 못함</string>
     <string name="pn_6">코드는 6자리입니다</string>
     <string name="pn_pareado">페어링됨! 셸 확인 중…</string>
+    <string name="pn_ok_titulo">페어링 성공 ✓</string>
+    <string name="pn_ok_texto">완료! 런처가 TV에 연결되었습니다. 전용 셸을 연결하는 중…</string>
+    <string name="pn_ok_shell">모두 준비됨: 런처 전용 셸이 작동합니다.</string>
+    <string name="pn_ok_lento">페어링됨. 셸이 아직 응답하지 않았습니다. 런처가 계속 자동으로 시도합니다.</string>
     <string name="pn_codigo">코드: %1$s</string>
     <string name="pn_achada">페어링 화면을 찾았습니다(포트 %1$d). 코드를 입력하세요:</string>
     <string name="pn_falhou">실패: %1$s</string>

@@ -96,6 +96,7 @@ object MtpNaRede {
             aceitaRede = { PainelWeb.daRedeDeCasa(it) },
             permitir = { pc, nome, ip -> permitir(app, pc, nome, ip) },
             registro = { Log.i(TAG, it) })
+        MtpSessao.lenta = { Log.i(TAG, it) }   // só operações demoradas: poucas linhas, sem nomes de arquivo
         servico = s
         Thread({
             // Sem a permissão de "todos os arquivos" o Android esconde as pastas: pede ao nosso shell antes de servir.

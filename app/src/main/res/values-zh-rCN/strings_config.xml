@@ -2,7 +2,7 @@
 <!-- Tradução (zh-rCN) de values/strings_config.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="cl_aba_conta">电视和电影</string>
-    <string name="cl_aba_conta_det">此电视上保存的 IPTV 账号：状态、到期时间和连接数</string>
+    <string name="cl_aba_conta_det">IPTV 账号、影视服务、音频和字幕</string>
     <string name="cl_aba_parental">家长控制</string>
     <string name="cl_aba_parental_det">用 PIN 锁定频道：它们会从列表中消失且无法播放</string>
     <string name="cl_aba_aparencia">外观</string>
@@ -176,6 +176,7 @@
     <string name="cl_ativos">%1$d 个有效</string>
     <string name="cl_revogados">已撤销</string>
     <string name="cl_visivel">在电视上可见</string>
+    <string name="cl_escondido">已在电视上隐藏</string>
     <string name="cl_limpeza">预装应用清理</string>
     <string name="cl_nenhum_liberado">还没有可清理的应用</string>
     <string name="cl_nenhum_liberado_det">只显示在此电视上逐一测试过的应用（见 Debloat.kt）</string>

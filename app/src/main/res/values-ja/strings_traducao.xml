@@ -227,6 +227,10 @@
     <string name="pn_nao_achei">まだペアリング画面が見つかりません</string>
     <string name="pn_6">コードは 6 桁です</string>
     <string name="pn_pareado">ペアリングしました！ シェルを確認中…</string>
+    <string name="pn_ok_titulo">ペア設定に成功しました ✓</string>
+    <string name="pn_ok_texto">完了！ランチャーがテレビに接続されました。専用シェルに接続しています…</string>
+    <string name="pn_ok_shell">準備完了：ランチャー専用のシェルが動作しています。</string>
+    <string name="pn_ok_lento">ペア設定済み。シェルがまだ応答しません。ランチャーが自動で再試行します。</string>
     <string name="pn_codigo">コード: %1$s</string>
     <string name="pn_achada">ペアリング画面が見つかりました（ポート %1$d）。コードを入力してください:</string>
     <string name="pn_falhou">失敗: %1$s</string>

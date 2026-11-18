@@ -2,7 +2,7 @@
 <!-- Tradução (in) de values/strings_config.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="cl_aba_conta">TV dan film</string>
-    <string name="cl_aba_conta_det">Akun IPTV yang tersimpan di TV ini: status, masa berlaku, dan koneksi</string>
+    <string name="cl_aba_conta_det">Akun IPTV, layanan film dan serial, audio dan subtitel</string>
     <string name="cl_aba_parental">Kontrol orang tua</string>
     <string name="cl_aba_parental_det">Kunci saluran dengan PIN: saluran hilang dari daftar dan tidak diputar</string>
     <string name="cl_aba_aparencia">Tampilan</string>
@@ -176,6 +176,7 @@
     <string name="cl_ativos">%1$d aktif</string>
     <string name="cl_revogados">dicabut</string>
     <string name="cl_visivel">terlihat di TV</string>
+    <string name="cl_escondido">disembunyikan di TV</string>
     <string name="cl_limpeza">Pembersihan aplikasi bawaan</string>
     <string name="cl_nenhum_liberado">Belum ada aplikasi yang dibersihkan</string>
     <string name="cl_nenhum_liberado_det">Hanya aplikasi yang diuji satu per satu di TV ini yang muncul (lihat Debloat.kt)</string>

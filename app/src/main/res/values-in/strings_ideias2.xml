@@ -11,7 +11,7 @@
     <string name="extras_HORA_DORMIR">Waktu tidur (hanya aplikasi yang diizinkan, volume dibatasi)</string>
     <string name="extras_TOCANDO_AGORA">Sedang diputar (membacakan yang diputar)</string>
     <string name="extras_MODO_LEVE">Mode ringan (animasi lebih singkat)</string>
-    <string name="extras_SOM_NAVEGACAO">Suara navigasi</string>
+    <string name="extras_SOM_NAVEGACAO">Klik saat berpindah di layar lain</string>
     <string name="extras_RECADO_LINK">Pesan lewat tautan (Home Assistant, TvOverlay)</string>
     <string name="extras_caches">Hapus cache aplikasi</string>
     <string name="extras_livre">%1$s kosong</string>
@@ -30,6 +30,7 @@
     <string name="casa_vazio">Tidak ada lampu, colokan, atau adegan di Home Assistant.</string>
     <string name="casa_google_home">Google Home</string>
     <string name="casa_google_home_det">Lampu dan kamera Google</string>
+    <string name="casa_google_home_vazio">Akun Google ini tidak punya rumah di Google Home</string>
     <string name="casa_resumo">Home Assistant · %1$d dari %2$d menyala</string>
     <string name="casa_resumo_so_cenas">Home Assistant · %1$d adegan</string>
     <string name="casa_secao_cenas">Adegan dan skrip</string>

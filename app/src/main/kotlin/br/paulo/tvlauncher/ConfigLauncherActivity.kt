@@ -986,8 +986,75 @@ class ConfigLauncherActivity : Activity() {
             reconstruirAoVoltar = true
             recreate()
         }, lp())
-        // Fileira ou grade (layout flexível, LayoutHome): a HOME se refaz ao voltar.
-        c.addView(linha(getString(R.string.lh_arranjo), getString(R.string.lh_arranjo_det),
+        // Tela inicial em cruz (17/11/2026): a única; aqui só o desenho dos ícones (Objeto ou Símbolo). A HOME se refaz ao voltar.
+        // Fileira ou grade só valia para a tela antiga (que só volta por adb).
+        if (LayoutHome.cruz(this)) {
+            fun rotuloIcones() = getString(when (LayoutHome.iconesCruz(this)) {
+                IconeCruz.Estilo.OBJETO -> R.string.cruz_objeto
+                IconeCruz.Estilo.SIMBOLO -> R.string.cruz_simbolo
+                IconeCruz.Estilo.DUOTOM -> R.string.cruz_duotom
+                IconeCruz.Estilo.LINHA -> R.string.cruz_linha
+            })
+            lateinit var linhaIcones: LinhaCfg
+            linhaIcones = linha(getString(R.string.cruz_icones), getString(R.string.cruz_icones_det), valor = rotuloIcones()) {
+                LayoutHome.proximoIconesCruz(this)
+                linhaIcones.valor(rotuloIcones())
+            }
+            c.addView(linhaIcones, lp())
+            // Como os apps aparecem na cruz (18/11/2026): banner de TV, redondo ou solto.
+            fun rotuloApps() = getString(when (LayoutHome.iconeAppCruz(this)) {
+                LayoutHome.IconeAppCruz.BANNER -> R.string.cruz_app_banner
+                LayoutHome.IconeAppCruz.REDONDO -> R.string.cruz_app_redondo
+                LayoutHome.IconeAppCruz.SOLTO -> R.string.cruz_app_solto
+            })
+            lateinit var linhaApps: LinhaCfg
+            linhaApps = linha(getString(R.string.cruz_apps_icone), getString(R.string.cruz_apps_icone_det), valor = rotuloApps()) {
+                LayoutHome.proximoIconeAppCruz(this)
+                linhaApps.valor(rotuloApps())
+            }
+            c.addView(linhaApps, lp())
+            // Barra de cima (Recua, Leve, Relógio grande ou a de sempre) e a arte do item em foco atrás da cruz.
+            fun rotuloBarra() = getString(when (LayoutHome.barraCruz(this)) {
+                LayoutHome.BarraCruz.RECUA -> R.string.cruz_barra_recua
+                LayoutHome.BarraCruz.LEVE -> R.string.cruz_barra_leve
+                LayoutHome.BarraCruz.RELOGIO -> R.string.cruz_barra_relogio
+                LayoutHome.BarraCruz.HOJE -> R.string.cruz_barra_capsulas
+                LayoutHome.BarraCruz.VIDRO -> R.string.cruz_barra_vidro
+            })
+            lateinit var linhaBarra: LinhaCfg
+            linhaBarra = linha(getString(R.string.cruz_barra), getString(R.string.cruz_barra_det), valor = rotuloBarra()) {
+                LayoutHome.proximaBarraCruz(this)
+                linhaBarra.valor(rotuloBarra())
+            }
+            c.addView(linhaBarra, lp())
+            fun rotuloArte() = getString(if (LayoutHome.arteCruz(this)) R.string.cruz_ligada else R.string.cruz_desligada)
+            lateinit var linhaArte: LinhaCfg
+            linhaArte = linha(getString(R.string.cruz_arte), getString(R.string.cruz_arte_det), valor = rotuloArte()) {
+                LayoutHome.definirArteCruz(this, !LayoutHome.arteCruz(this))
+                linhaArte.valor(rotuloArte())
+            }
+            c.addView(linhaArte, lp())
+            // Sons ao andar na cruz (SonsCruz, 18/11/2026): ligados de fábrica, baixos, mudos com outro áudio tocando.
+            fun rotuloSons() = getString(if (SonsCruz.ligado(this)) R.string.al_ligado else R.string.al_desligado)   // "Sons": masculino
+            lateinit var linhaSons: LinhaCfg
+            linhaSons = linha(getString(R.string.cruz_sons), getString(R.string.cruz_sons_det), valor = rotuloSons()) {
+                SonsCruz.definir(this, !SonsCruz.ligado(this))
+                if (SonsCruz.ligado(this)) SonsCruz.tocar(this, SonsCruz.Som.GRUPO)   // amostra do som ao ligar
+                linhaSons.valor(rotuloSons())
+            }
+            c.addView(linhaSons, lp())
+            // Onda 3 do estudo da HOME (18/11/2026): cada parte com a sua chave, todas ligadas de fábrica (CruzOnda3).
+            fun linhaOnda3(titulo: Int, det: Int, chave: String) {
+                fun rotulo() = getString(if (CruzOnda3.ligado(this, chave)) R.string.al_ligado else R.string.al_desligado)
+                lateinit var l: LinhaCfg
+                l = linha(getString(titulo), getString(det), valor = rotulo()) { CruzOnda3.alternar(this, chave); l.valor(rotulo()) }
+                c.addView(l, lp())
+            }
+            linhaOnda3(R.string.cruz_ambiente, R.string.cruz_ambiente_det, CruzOnda3.CHAVE_AMBIENTE)
+            linhaOnda3(R.string.cruz_paralaxe, R.string.cruz_paralaxe_det, CruzOnda3.CHAVE_PARALAXE)
+            linhaOnda3(R.string.cruz_quem, R.string.cruz_quem_det, CruzOnda3.CHAVE_QUEM)
+            linhaOnda3(R.string.cruz_dormir_atalho, R.string.cruz_dormir_atalho_det, CruzOnda3.CHAVE_DORMIR)
+        } else c.addView(linha(getString(R.string.lh_arranjo), getString(R.string.lh_arranjo_det),
             valor = getString(if (LayoutHome.grade(this)) R.string.lh_grade else R.string.lh_fileira)) {
             LayoutHome.definirGrade(this, !LayoutHome.grade(this))
             recarregarAba()
@@ -1709,7 +1776,10 @@ class ConfigLauncherActivity : Activity() {
                         android.content.pm.PackageManager.MATCH_UNINSTALLED_PACKAGES)).toString()
                 } catch (e: Exception) { pacote }
                 lateinit var linhaApp: LinhaCfg
-                linhaApp = linha(rotulo, getString(R.string.cl_visivel), chave = !PrivilegioDO.estaOculto(this, pacote)) {
+                // O detalhe acompanha a chave: dizia "visível na TV" também com o app escondido (Sala, 17/11/2026).
+                fun detalheApp(visivel: Boolean) = getString(if (visivel) R.string.cl_visivel else R.string.cl_escondido)
+                val visivelAgora = !PrivilegioDO.estaOculto(this, pacote)
+                linhaApp = linha(rotulo, detalheApp(visivelAgora), chave = visivelAgora) {
                     // Fora da thread da tela: sem Device Owner o ocultar passa pelo shell e pode demorar (Congelar.kt).
                     val app = applicationContext
                     Fundo.rodar {
@@ -1718,7 +1788,7 @@ class ConfigLauncherActivity : Activity() {
                         val ocultoAgora = PrivilegioDO.estaOculto(app, pacote)
                         runOnUiThread {
                             if (isDestroyed) return@runOnUiThread
-                            if (mudou) linhaApp.ligado(!ocultoAgora) else linhaApp.detalhe(getString(R.string.cfg_nao_mudou_do))
+                            if (mudou) { linhaApp.ligado(!ocultoAgora); linhaApp.detalhe(detalheApp(!ocultoAgora)) } else linhaApp.detalhe(getString(R.string.cfg_nao_mudou_do))
                         }
                     }
                 }
@@ -2248,7 +2318,13 @@ class ConfigLauncherActivity : Activity() {
             // em "Meu…" (visto na Sala, 17/11/2026). MIDDLE guarda o começo, a extensão e o "›".
             val t = tValor ?: Estilo.texto(context, Estilo.Papel.CORPO).apply {
                 setSingleLine(true); ellipsize = TextUtils.TruncateAt.MIDDLE; maxWidth = dp(360)
-            }.also { direita.removeAllViews(); direita.addView(it); tValor = it }
+            }.also {
+                direita.removeAllViews()
+                // WRAP explícito: o padrão do FrameLayout é MATCH_PARENT, e aí o TextView refaz o texto novo na largura
+                // do ANTERIOR sem pedir layout ("Duotom" -> "Nen…m", visto na Sala, 18/11/2026).
+                direita.addView(it, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.CENTER_VERTICAL or Gravity.END))
+                tValor = it
+            }
             t.text = "$v  ›"
             pintarTextos()
         }

@@ -227,6 +227,10 @@
     <string name="pn_nao_achei">aún no encontré la pantalla de vinculación</string>
     <string name="pn_6">el código tiene 6 dígitos</string>
     <string name="pn_pareado">¡vinculado! comprobando el shell…</string>
+    <string name="pn_ok_titulo">Vinculado correctamente ✓</string>
+    <string name="pn_ok_texto">¡Listo! El launcher ya está conectado a la TV. Conectando su propio shell…</string>
+    <string name="pn_ok_shell">Todo listo: el shell propio del launcher funciona.</string>
+    <string name="pn_ok_lento">Vinculado. El shell aún no respondió; el launcher sigue intentándolo solo.</string>
     <string name="pn_codigo">Código: %1$s</string>
     <string name="pn_achada">Pantalla de vinculación encontrada (puerto %1$d). Escribe el código:</string>
     <string name="pn_falhou">falló: %1$s</string>

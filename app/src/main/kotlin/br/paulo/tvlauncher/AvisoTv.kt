@@ -156,7 +156,10 @@ object AvisoTv {
         p.edit().clear().apply()
         if (titulo == null || texto == null || System.currentTimeMillis() - em > VALIDADE_PENDENTE_MS) return
         val h = java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault()).format(java.util.Date(em))
-        mostrar(app, app.getString(R.string.av_enviado_as, titulo, h), texto, segundos, som, guardarSeApagada = true, fica = fica)
+        // historico = false: o aviso já entrou na central quando chegou; entregar de novo o repetia lá com "(enviado às
+        // 14:09)" (Sala, 18/11/2026: o mesmo "Aparelho novo na rede" duas vezes).
+        mostrar(app, app.getString(R.string.av_enviado_as, titulo, h), texto, segundos, som, guardarSeApagada = true, fica = fica,
+            historico = false)
     }
 
     // ---------------------------------------------------------------- janela

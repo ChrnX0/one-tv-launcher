@@ -40,4 +40,7 @@
     <string name="turma_config_guardar">Kaydet</string>
     <string name="turma_config_tirar">Ekibi kaldır</string>
     <string name="turma_id_invalido">Bu bir Discord sunucu ID’si değil (17 ile 20 rakam).</string>
+    <string name="cruz_sofa">Kanepe</string>
+    <string name="cruz_sofa_sub">Kumandalar ve Discord ekibin</string>
+    <string name="cruz_sofa_voz">Seste %1$d kişi · %2$s</string>
 </resources>

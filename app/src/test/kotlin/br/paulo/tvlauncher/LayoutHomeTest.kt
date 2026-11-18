@@ -24,4 +24,21 @@ class LayoutHomeTest {
     @Test fun estranhoVoltaAoNormal() {
         assertEquals(112, LayoutHome.largura(300)); assertEquals(100, LayoutHome.proximo(115)); assertEquals(100, LayoutHome.proximo(7))
     }
+
+    @Test fun cruzESempreAMenosQueOAdbPecaAAntiga() {
+        assertTrue(LayoutHome.cruz(0)); assertTrue(LayoutHome.cruz(1)); assertTrue(LayoutHome.cruz(99))
+        assertTrue(!LayoutHome.cruz(LayoutHome.JEITO_ANTIGA))
+    }
+
+    @Test fun opcoesDaCruzTemPadraoEValorEstranhoVoltaAoPadrao() {
+        assertEquals(LayoutHome.BarraCruz.RECUA, LayoutHome.barraCruz(0))
+        assertEquals(LayoutHome.BarraCruz.HOJE, LayoutHome.barraCruz(3))
+        assertEquals(LayoutHome.BarraCruz.VIDRO, LayoutHome.barraCruz(4))   // onda 3: entrou no fim, os números antigos valem
+        assertEquals(LayoutHome.BarraCruz.RECUA, LayoutHome.barraCruz(42))  // valor estranho: o padrão (Recua, de novo desde 18/11)
+        assertEquals(IconeCruz.Estilo.OBJETO, LayoutHome.iconesCruz(0))
+        assertEquals(IconeCruz.Estilo.SIMBOLO, LayoutHome.iconesCruz(1))   // o 1 já gravado antes do Duotom continua Símbolo
+        assertEquals(IconeCruz.Estilo.DUOTOM, LayoutHome.iconesCruz(2))
+        assertEquals(IconeCruz.Estilo.LINHA, LayoutHome.iconesCruz(3))     // 18/11/2026: Linha entrou no fim
+        assertEquals(IconeCruz.Estilo.LINHA, LayoutHome.iconesCruz(-1))    // valor estranho: o padrão (Linha)
+    }
 }

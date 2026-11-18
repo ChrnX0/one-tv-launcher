@@ -54,6 +54,9 @@ class TelasTest {
         "home" to MainActivity::class.java,
         "home-grande" to MainActivity::class.java,   // layout flexível: cartões Grandes e transparentes (LayoutHome)
         "home-grade" to MainActivity::class.java,    // layout flexível: apps em grade (LayoutHome, GradeApps)
+        "home-leve" to MainActivity::class.java,     // cruz com a barra Leve (sem cápsulas) e ícones Duotom
+        "home-relogio" to MainActivity::class.java,  // cruz com a barra Relógio grande e ícones Símbolo
+        "home-vidro" to MainActivity::class.java,    // cruz com a barra de Vidro (padrão desde a onda 3)
         "configuracoes" to ConfigLauncherActivity::class.java,
         "filmes" to FilmesActivity::class.java,
         "series" to SeriesActivity::class.java,
@@ -120,6 +123,20 @@ class TelasTest {
             br.paulo.tvlauncher.Extras.definir(app, br.paulo.tvlauncher.Extras.Chave.CARTOES_TRANSPARENTES, nome == "home-grande")
             br.paulo.tvlauncher.LayoutHome.definirGrade(app, nome == "home-grade")
             br.paulo.tvlauncher.AltoContraste.definir(app, nome.endsWith("-ac"))
+            // "home" é a cruz (a única tela inicial desde 17/11/2026); grande e grade ainda medem a antiga até ela sair.
+            br.paulo.tvlauncher.LayoutHome.definirAntiga(app, nome == "home-grande" || nome == "home-grade")
+            br.paulo.tvlauncher.LayoutHome.definirBarraCruz(app, when (nome) {
+                "home-leve" -> br.paulo.tvlauncher.LayoutHome.BarraCruz.LEVE
+                "home-relogio" -> br.paulo.tvlauncher.LayoutHome.BarraCruz.RELOGIO
+                "home-vidro" -> br.paulo.tvlauncher.LayoutHome.BarraCruz.VIDRO
+                else -> br.paulo.tvlauncher.LayoutHome.BarraCruz.RECUA
+            })
+            br.paulo.tvlauncher.LayoutHome.definirIconesCruz(app, when (nome) {
+                "home-leve" -> br.paulo.tvlauncher.IconeCruz.Estilo.DUOTOM
+                "home-relogio" -> br.paulo.tvlauncher.IconeCruz.Estilo.SIMBOLO
+                "home-vidro" -> br.paulo.tvlauncher.IconeCruz.Estilo.OBJETO
+                else -> br.paulo.tvlauncher.IconeCruz.Estilo.LINHA   // o padrão desde 18/11/2026
+            })
             val m = try { medir(cls, "$idioma-$nome") } catch (e: Throwable) {
                 problemas += "$chave: a tela não abriu (${e.javaClass.simpleName}: ${e.message?.take(160)})"; continue
             }
@@ -152,6 +169,8 @@ class TelasTest {
 
     private fun medir(cls: Class<out Activity>, arquivo: String): Medida {
         val a = Robolectric.buildActivity(cls).setup().get()
+        // A HOME lê apps e player fora da tela e desenha depois: espera essas voltas (a cruz só aparece com elas).
+        if (cls == MainActivity::class.java) repeat(10) { Thread.sleep(100); org.robolectric.shadows.ShadowLooper.idleMainLooper(200, java.util.concurrent.TimeUnit.MILLISECONDS) }
         val raiz: View = a.window.decorView
         val foto = Bitmap.createBitmap(raiz.width, raiz.height, Bitmap.Config.ARGB_8888)
         raiz.draw(Canvas(foto))

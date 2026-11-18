@@ -2,7 +2,7 @@
 <!-- Tradução (pt-rPT) de values/strings_config.xml. Gerado a partir do inglês; os nomes seguem iguais. -->
 <resources>
     <string name="cl_aba_conta">TV e filmes</string>
-    <string name="cl_aba_conta_det">A conta de IPTV cadastrada na TV: situação, validade e conexões</string>
+    <string name="cl_aba_conta_det">Conta de IPTV, serviços de filmes e séries, áudio e legendas</string>
     <string name="cl_aba_parental">Controlo parental</string>
     <string name="cl_aba_parental_det">Bloqueie canais com o PIN: eles somem da lista e não tocam</string>
     <string name="cl_aba_aparencia">Aparência</string>
@@ -176,6 +176,7 @@
     <string name="cl_ativos">Ativos: %1$d</string>
     <string name="cl_revogados">revogados</string>
     <string name="cl_visivel">visível na TV</string>
+    <string name="cl_escondido">escondido na TV</string>
     <string name="cl_limpeza">Limpeza de apps de fábrica</string>
     <string name="cl_nenhum_liberado">Nenhum app liberado ainda</string>
     <string name="cl_nenhum_liberado_det">Só entram apps testados um a um nesta TV (ver Debloat.kt)</string>
