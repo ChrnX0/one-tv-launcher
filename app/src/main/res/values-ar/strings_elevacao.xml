@@ -115,4 +115,5 @@
     <string name="elv_ss_dia_util">كان يوم عمل</string>
     <string name="elv_ss_perfil">كان الملف الشخصي %1$s</string>
     <string name="elv_ss_det">◀ ▶ لتغيير الشرط</string>
+    <string name="extras_ABERTURA_PRONTA">تخطي المقدمة (IntroDB): في الحلقات يسأل التلفاز خدمة IntroDB المجتمعية عن موضع المقدمة (يرسل الحلقة فقط، لا حسابك أبدًا)؛ عند الإيقاف: المقدمات التي حددتها أنت فقط</string>
 </resources>

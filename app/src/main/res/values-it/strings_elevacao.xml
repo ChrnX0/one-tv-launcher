@@ -115,4 +115,5 @@
     <string name="elv_ss_dia_util">è un giorno feriale</string>
     <string name="elv_ss_perfil">il profilo è %1$s</string>
     <string name="elv_ss_det">◀ ▶ cambiano la condizione</string>
+    <string name="extras_ABERTURA_PRONTA">Salta sigla (IntroDB): negli episodi la TV chiede al servizio comunitario IntroDB dove si trova la sigla (invia l\'episodio, mai il tuo account); spento, solo le sigle che hai segnato</string>
 </resources>

@@ -25,6 +25,8 @@ object AberturaProntaTv {
     fun buscar(ctx: Context, tmdbSerie: Int, temporada: Int, episodio: Int): AberturaSerie.Marca? {
         val imdb = InfoExternaCache.imdbPorTmdb(ctx, tmdbSerie) ?: return null   // sem o id: nada a perguntar
         val url = AberturaPronta.url(imdb, temporada, episodio) ?: return null
+        // Chave nas Configurações (Sistema > Mais opções), ligada de fábrica: desligada, nada vai ao IntroDB.
+        if (!Extras.ligadoAgora(ctx, Extras.Chave.ABERTURA_PRONTA)) return null
         // Modo visita: o que a visita assiste não sai da TV nem para o IntroDB.
         if (runCatching { ModoVisita.ativo(ctx) }.getOrDefault(false)) return null
         // Prefs próprias (rodada 15): nas "player" cresciam uma chave por episódio para sempre, na memória de cada processo

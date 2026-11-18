@@ -115,4 +115,5 @@
     <string name="elv_ss_dia_util">c\'est un jour ouvré</string>
     <string name="elv_ss_perfil">le profil est %1$s</string>
     <string name="elv_ss_det">◀ ▶ changent la condition</string>
+    <string name="extras_ABERTURA_PRONTA">Passer le générique (IntroDB) : sur les épisodes, la TV demande au service communautaire IntroDB où est le générique (elle envoie l\'épisode, jamais votre compte) ; désactivé, seulement les génériques que vous avez marqués</string>
 </resources>

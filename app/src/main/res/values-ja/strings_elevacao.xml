@@ -115,4 +115,5 @@
     <string name="elv_ss_dia_util">平日</string>
     <string name="elv_ss_perfil">プロフィールが%1$s</string>
     <string name="elv_ss_det">◀ ▶ で条件を変更</string>
+    <string name="extras_ABERTURA_PRONTA">オープニングをスキップ（IntroDB）：エピソードでは、コミュニティのIntroDBにオープニングの位置を問い合わせます（送るのはエピソードだけで、アカウントは送りません）。オフ：自分で印を付けたオープニングのみ</string>
 </resources>

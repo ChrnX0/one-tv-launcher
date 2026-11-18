@@ -1,5 +1,7 @@
 // Painel em ja (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Não perturbe (avisos esperam durante filme, madrugada ou visita)":"おやすみモード（映画中・深夜・来客中はお知らせを保留）",
+"Pular abertura (IntroDB: pergunta onde fica a abertura do episódio)":"オープニングをスキップ（IntroDB：エピソードのオープニング位置を問い合わせ）",
 "Levar para uma TV nova":"新しいテレビへ移す",
 "Na TV nova, abra Configurações › Sistema › Trazer de outra TV (na primeira vez, o botão está na tela do QR). Leia o QR que aparece nela ou digite o endereço e o código. Vão as configurações, o PIN, os canais e a lista de apps, cifrados só para aquela TV; lá os apps voltam em fila, pela Play Store.":"新しいテレビで 設定 › システム › 別のテレビから移す を開きます（初回は QR 画面にボタンがあります）。表示された QR を読み取るか、アドレスとコードを入力します。設定・PIN・チャンネル・アプリ一覧がそのテレビ専用に暗号化されて送られ、向こうでアプリは Play ストアから順番に戻ります。",
 "Endereço e código da TV nova":"新しいテレビのアドレスとコード",
