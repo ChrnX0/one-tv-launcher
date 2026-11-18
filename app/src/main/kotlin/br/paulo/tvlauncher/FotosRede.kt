@@ -112,14 +112,18 @@ object FotosRede {
             try {
                 val bytes = (if (o.tipo == ContaMidia.WEBDAV) baixarDav(c, caminho) else Pastas.lerTudo(c, caminho, MAX_BYTES)) ?: continue
                 val bmp = reduzir(bytes) ?: continue
-                val tmp = File(dir, ".baixando.tmp")
+                // Nome único: o player (escolher) e o protetor (talvezSincronizar) podem copiar ao mesmo tempo, em
+                // processos diferentes; com o mesmo .tmp um renomeava a foto pela metade do outro.
+                val tmp = File(dir, ".baixando.${android.os.Process.myPid()}.${Thread.currentThread().id}.tmp")
                 tmp.outputStream().use { bmp.compress(Bitmap.CompressFormat.JPEG, 85, it) }
                 bmp.recycle()
-                tmp.renameTo(File(dir, nomeLocal(caminho)))
+                if (!tmp.renameTo(File(dir, nomeLocal(caminho)))) tmp.delete()
                 ok++
             } catch (e: Throwable) { Log.w(TAG, "foto: $e") }   // OutOfMemoryError incluso: pula essa foto
         }
-        arquivoOrigem(ctx).writeText(paraJson(o, System.currentTimeMillis()))
+        // Só grava a data se a pasta escolhida ainda é esta: senão a cópia longa trazia de volta a pasta antiga
+        // (ou religava uma que a pessoa mandou parar).
+        if (origem(ctx) == o) arquivoOrigem(ctx).writeText(paraJson(o, System.currentTimeMillis()))
         Log.i(TAG, "pasta sincronizada: ${fotos.size} fotos, $ok novas, ${apagar.size} apagadas")
     }
 
