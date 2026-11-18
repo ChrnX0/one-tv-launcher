@@ -173,8 +173,18 @@ object CruzLogica {
     }
 
     /** Linhas do canal de TV (uma informação por linha; as vazias somem): canal, agora, depois. */
-    fun linhasTv(canal: String, agora: String?, depois: String?): String =
-        listOf(canal, agora, depois).filterNot { it.isNullOrBlank() }.joinToString("\n")
+    fun linhasTv(canal: String, agora: String?, depois: String?): String = linhas(canal, agora, depois)
+
+    /**
+     * A linha de baixo de qualquer item da cruz (dono, 18/11/2026: "a regra da TV em toda a HOME"): uma informação útil
+     * por linha, até [HomeCruz.SUB_LINHAS]; as vazias somem (nunca um campo em branco) e as repetidas também.
+     */
+    fun linhas(vararg partes: String?): String =
+        partes.mapNotNull { it?.trim()?.takeIf { t -> t.isNotEmpty() } }.distinct().take(4).joinToString("\n")
+
+    /** Partes curtas numa linha só ("2021 · 2 h 35 min · ★ 8,0"), sem as vazias; null se não sobrar nada. */
+    fun juntar(vararg partes: String?): String? =
+        partes.mapNotNull { it?.trim()?.takeIf { t -> t.isNotEmpty() } }.joinToString(" · ").ifEmpty { null }
 
     /**
      * Continuar (18/11/2026): os itens com quando (ms) do mais recente para o mais antigo, no máximo [max]. Empate (ou

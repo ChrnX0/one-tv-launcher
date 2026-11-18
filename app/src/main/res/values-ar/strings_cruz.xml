@@ -70,4 +70,12 @@
     <string name="cruz_app_solto">الرمز فقط</string>
     <string name="cruz_tv_canal">القناة %1$d · %2$s</string>
     <string name="cruz_tv_depois">بعده، %1$s: %2$s</string>
+    <string name="cruz_aberto">فُتح %1$s</string>
+    <string name="cruz_jogado">لُعب %1$s</string>
+    <string name="cruz_tocou">شُغّل %1$s</string>
+    <string name="cruz_por_ultimo">الأخير: %1$s</string>
+    <string name="cruz_addons_n">الإضافات المثبتة: %1$d</string>
+    <string name="cruz_apps_n">التطبيقات على هذا التلفاز: %1$d</string>
+    <string name="cruz_podcasts_n">البودكاست التي تتابعها: %1$d</string>
+    <string name="cruz_pendrive">ذاكرة USB: %1$s</string>
 </resources>

@@ -188,4 +188,13 @@ class CruzLogicaTest {
         assertTrue(listOf(IconeCruz.Tipo.CONTINUAR, IconeCruz.Tipo.ASSISTIR, IconeCruz.Tipo.OUVIR, IconeCruz.Tipo.JOGAR, IconeCruz.Tipo.APLICATIVOS)
             .map { IconeCruz.corLinha(it) }.toSet().size == 5)
     }
+
+    /** Toda a HOME: uma informação por linha, sem vazias nem repetidas, no máximo 4. */
+    @Test fun linhasDeInformacao() {
+        assertEquals("Duna\n2021 · 2 h 35 min · ★ 8,0\nFicção científica",
+            CruzLogica.linhas("Duna", CruzLogica.juntar("2021", "2 h 35 min", "★ 8,0"), null, " ", "Ficção científica", "Duna"))
+        assertEquals("a\nb\nc\nd", CruzLogica.linhas("a", "b", "c", "d", "e"))
+        assertNull(CruzLogica.juntar(null, "", "  "))
+        assertEquals("T1 E2 · faltam 10 min", CruzLogica.juntar("T1 E2", null, "faltam 10 min"))
+    }
 }

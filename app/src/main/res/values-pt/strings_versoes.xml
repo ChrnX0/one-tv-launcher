@@ -20,6 +20,7 @@
         <item>Cada ícone da tela inicial tem a sua cor e uma animação curta só dele: a TV liga, o filme corre, o rádio solta ondas, o fone toca um equalizador</item>
         <item>A barra de cima volta a recolher enquanto você navega (a barra de vidro continua como opção nas Configurações)</item>
         <item>Ao sair de um app, a tela inicial volta no item que o abriu, e não na TV</item>
+        <item>Todos os itens da tela inicial mostram as informações úteis, uma por linha: episódio e quanto falta, ano, nota e duração do filme, o que você viu por último em cada app e quando, a última rádio, os controles e a turma do Discord</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Cena atrás da ficha</item>

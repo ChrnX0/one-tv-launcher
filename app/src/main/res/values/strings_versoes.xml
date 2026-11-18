@@ -23,6 +23,7 @@
         <item>Each home screen icon has its own color and a short animation of its own: the TV turns on, the film runs, the radio sends out waves, the headphones play an equalizer</item>
         <item>The top bar folds away again while you browse (the glass bar is still an option in Settings)</item>
         <item>When you leave an app, the home screen goes back to the item that opened it, not to TV</item>
+        <item>Every item on the home screen now shows its useful details, one per line: episode and time left, year, rating and length of a movie, what you last watched in each app and when, the last radio station, controllers and the Discord crew</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>ficha_cena</item>
