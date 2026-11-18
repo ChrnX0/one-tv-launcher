@@ -369,14 +369,24 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
                 c.drawLine(16.25f, 4.64f, 16.6f, 8.6f, traco); c.drawLine(16.25f, 4.64f, 20.1f, 3.9f, traco)
                 tri(10.3f, 8.8f, 6.4f)
             }
-            Tipo.ASSISTIR, Tipo.TV -> {   // a TV-sofá da logo Sofaly em contorno (18/11/2026, Paulo: miolo vazio, sem barra embaixo)
-                if (fase < 0f) { c.drawLine(12f, 7.6f, 8.2f, 3.6f, traco); c.drawLine(12f, 7.6f, 16.6f, 4.8f, traco) }   // tocando: as da linhaViva
-                // Só contornos, miolo vazio: a tela e os dois braços do sofá saindo dos lados (sem base nem pés).
-                ret(5.6f, 7.6f, 18.4f, 17.8f, 2.2f)
+            Tipo.ASSISTIR, Tipo.TV -> {   // a silhueta EXATA da TV-sofá da logo, só o contorno de fora (18/11/2026, Paulo)
+                // Medidas do SVG da marca (quadro 120 x 112) x 0,2, descidas 0,8 para centrar no quadro de 24.
+                // Um pouco menor que o quadro (0,84): embaixo do ícone da TV vem a barra do programa, que não pode encostar.
+                c.save(); c.scale(0.84f, 0.84f, 12f, 10f)
+                // Antenas saindo do alto da tela (no SVG o pino fica por baixo da moldura cheia; aqui só há contorno).
+                if (fase < 0f) { c.drawLine(12f, 6.5f, 7f, 2.9f, traco); c.drawLine(12f, 6.5f, 17.8f, 4.1f, traco) }   // tocando: as da linhaViva
                 p.reset()
-                p.moveTo(5.6f, 11.4f); p.lineTo(4f, 11.4f); p.quadTo(2.4f, 11.4f, 2.4f, 13f); p.lineTo(2.4f, 16.4f); p.quadTo(2.4f, 18f, 4f, 18f); p.lineTo(5.6f, 18f)
-                p.moveTo(18.4f, 11.4f); p.lineTo(20f, 11.4f); p.quadTo(21.6f, 11.4f, 21.6f, 13f); p.lineTo(21.6f, 16.4f); p.quadTo(21.6f, 18f, 20f, 18f); p.lineTo(18.4f, 18f)
+                p.moveTo(3.4f, 12.6f); p.lineTo(3.4f, 11f); p.quadTo(3.4f, 6.5f, 7.9f, 6.5f); p.lineTo(16.1f, 6.5f)   // tela
+                p.quadTo(20.6f, 6.5f, 20.6f, 11f); p.lineTo(20.6f, 12.6f)
+                p.lineTo(21.4f, 12.6f); p.quadTo(23.3f, 12.6f, 23.3f, 14.5f); p.lineTo(23.3f, 18.8f)                // braço direito
+                p.quadTo(23.3f, 20.7f, 21.8f, 20.7f)
+                p.lineTo(22.14f, 22.5f); p.quadTo(22.2f, 23f, 21.72f, 23f); p.lineTo(21.28f, 23f); p.quadTo(20.8f, 23f, 20.6f, 22.56f)   // pé direito
+                p.lineTo(19.77f, 20.7f); p.lineTo(4.23f, 20.7f)                                                       // base
+                p.lineTo(3.4f, 22.56f); p.quadTo(3.2f, 23f, 2.72f, 23f); p.lineTo(2.28f, 23f); p.quadTo(1.8f, 23f, 1.86f, 22.5f)   // pé esquerdo
+                p.lineTo(2.2f, 20.7f); p.quadTo(0.7f, 20.7f, 0.7f, 18.8f); p.lineTo(0.7f, 14.5f); p.quadTo(0.7f, 12.6f, 2.6f, 12.6f)   // braço esquerdo
+                p.close()
                 c.drawPath(p, traco)
+                c.restore()
             }
             Tipo.SERIES -> {   // quadros empilhados (episódios)
                 ret(2.5f, 8f, 17.5f, 19.5f, 1.6f)
@@ -483,8 +493,8 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             }
             Tipo.ASSISTIR, Tipo.TV -> {   // a TV-sofá mexe as antenas, como quem procura o sinal
                 // As antenas balançam (o miolo continua vazio: nada desenhado dentro do contorno).
-                alfa(1f); c.save(); c.rotate(-12f * sino, 12f, 7.6f)
-                c.drawLine(12f, 7.6f, 8.2f, 3.6f, traco); c.drawLine(12f, 7.6f, 16.6f, 4.8f, traco); c.restore()
+                alfa(1f); c.save(); c.scale(0.84f, 0.84f, 12f, 10f); c.rotate(-12f * sino, 12f, 6.5f)
+                c.drawLine(12f, 6.5f, 7f, 2.9f, traco); c.drawLine(12f, 6.5f, 17.8f, 4.1f, traco); c.restore()
             }
             Tipo.SERIES -> {   // o próximo episódio: o quadro de trás sobe e volta
                 alfa(sino); val d = 1.4f * sino
