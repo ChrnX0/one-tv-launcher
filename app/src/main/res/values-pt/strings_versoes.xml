@@ -17,13 +17,16 @@
         <item>Podcasts: novo player em tela cheia, com capa grande, a hora em que o episódio termina, velocidade, pular silêncios e timer para dormir</item>
         <item>No player, ▼ mostra A seguir: os próximos episódios do mesmo podcast; OK toca um deles</item>
         <item>Tocar um episódio abre o player; na tela de Podcasts, Tocando agora tem o item Abrir o player</item>
+        <item>Filmes e séries: quando a lista marca só a versão legendada (“Leg”), a outra passa a contar como dublada, e o ▼ do player troca entre as duas no mesmo ponto (também nas séries)</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Player de podcast</item>
         <item>A seguir</item>
+        <item>Dublada e legendada</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Tocar um episódio de podcast abre o player em tela cheia, com a capa, a barra de tempo e os controles?</item>
         <item>No player, ▼ mostra os próximos episódios, e OK num deles toca?</item>
+        <item>Em “Custe o que Custar” (Séries), a ficha mostra a troca para a versão legendada e o ▼ do episódio troca no mesmo ponto?</item>
     </string-array>
 </resources>

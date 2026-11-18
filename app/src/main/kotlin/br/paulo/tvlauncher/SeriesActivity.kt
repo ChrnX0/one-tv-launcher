@@ -775,7 +775,7 @@ class SeriesActivity : Activity() {
      */
     private fun abrirSerie(s0: Serie, trocar: Boolean = false) {
         val s = if (!trocar || ultimos[s0.chave] != null) s0 else outraVersao(s0)
-            ?.takeIf { Idioma.versao(it.nome, it.grupo) == Idioma.versaoDesejada(prefsIdioma.para(s0.chave)) } ?: s0
+            ?.takeIf { Idioma.versaoComPar(it.nome, it.grupo, s0.nome, s0.grupo) == Idioma.versaoDesejada(prefsIdioma.para(s0.chave)) } ?: s0
         if (aberta !== s) verEpisodios = false
         aberta = s; fichaAberta = null; outraFicha = null
         // A ficha abre já com o foco nela (a grade de trás não mexe mais), mas o "carregando" só aparece se a ficha do
@@ -936,7 +936,7 @@ class SeriesActivity : Activity() {
         }
         // A mesma série na outra versão do catálogo (dublada x legendada): abre a ficha dela.
         outraVersao(s)?.let { o ->
-            val r = if (Idioma.versao(o.nome, o.grupo) == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
+            val r = if (Idioma.versaoComPar(o.nome, o.grupo, s.nome, s.grupo) == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
             FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(r), marca = "versao") { verEpisodios = false; abrirSerie(o) })
         }
         // Ideia 84: elenco com foto e o que mais cada pessoa fez que está na lista.
@@ -1183,8 +1183,8 @@ class SeriesActivity : Activity() {
         val titulo = "${Vod.nomeLimpo(s.nome)} · ${ep.rotulo} · ${Series.tituloCurto(s.nome, ep.titulo)}"
         val outra = outraFicha?.takeIf { it.first.chave == outraVersao(s)?.chave }
         val epOutra = outra?.let { Series.mesmoEpisodio(it.second, ep) }
-        val vOutra = outra?.let { Idioma.versao(it.first.nome, it.first.grupo) } ?: Idioma.Versao.DESCONHECIDA
-        val vEsta = Idioma.versao(s.nome, s.grupo)
+        val vOutra = outra?.let { Idioma.versaoComPar(it.first.nome, it.first.grupo, s.nome, s.grupo) } ?: Idioma.Versao.DESCONHECIDA
+        val vEsta = outra?.let { Idioma.versaoComPar(s.nome, s.grupo, it.first.nome, it.first.grupo) } ?: Idioma.versao(s.nome, s.grupo)
         val naOutra = epOutra != null && prefsIdioma.titulos[s.chave]?.let { Idioma.versaoDesejada(it) == vOutra } == true
         val (srcSerie, srcEp) = if (naOutra) outra!!.first to epOutra!! else s to ep
         VodActivity.abrirComResultado(this, CODIGO_VIDEO, VodActivity.TIPO_EPISODIO, srcSerie.fonteId, srcEp.id, srcEp.extensao,

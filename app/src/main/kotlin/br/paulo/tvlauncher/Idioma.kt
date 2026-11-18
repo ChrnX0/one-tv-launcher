@@ -230,32 +230,47 @@ object Idioma {
     private val reNaoAlfaNum = Regex("""[^a-z0-9]+""")
 
     /**
-     * Índice do catálogo por título (só os itens com marca de versão; os outros nunca têm par). Montado uma vez, fora da
-     * thread da tela: com 30 mil filmes, procurar o par na hora seria lento demais para a ficha abrir sem piscar.
+     * Índice do catálogo por título: só os títulos em que pelo menos um item tem marca de versão (dois sem marca nunca
+     * são par). Montado uma vez, fora da thread da tela: com 30 mil filmes, procurar o par na hora seria lento demais
+     * para a ficha abrir sem piscar.
      */
     fun <T> indice(lista: List<T>, nome: (T) -> String, grupo: (T) -> String): Map<String, List<T>> {
         val m = HashMap<String, MutableList<T>>()
+        val comMarca = HashSet<String>()
         for (x in lista) {
-            if (versao(nome(x), grupo(x)) == Versao.DESCONHECIDA) continue
             val k = chaveTitulo(nome(x))
             if (k.isEmpty()) continue
             m.getOrPut(k) { ArrayList(2) } += x
+            if (versao(nome(x), grupo(x)) != Versao.DESCONHECIDA) comMarca += k
         }
+        m.keys.retainAll(comMarca)
         return m
     }
 
     /**
-     * O mesmo título na outra versão: mesma chave, ano igual (ou um dos dois sem ano) e marca oposta à do alvo. O alvo sem
-     * marca não tem par (não dá para saber o que ele é). Primeiro da lista ganha.
+     * O mesmo título na outra versão: mesma chave, ano igual (ou um dos dois sem ano) e versão oposta. Visto na Sala
+     * (18/11/2026): as listas marcam só um lado ("Custe o que Custar" e "Custe o que Custar Leg"), então um item sem
+     * marca vira par de um com marca e fica com a versão oposta ([versaoComPar]). Par com marca oposta ganha do sem
+     * marca; dois sem marca nunca são par.
      */
     fun <T> outraVersao(alvo: T, indice: Map<String, List<T>>, nome: (T) -> String, grupo: (T) -> String, ano: (T) -> Int?): T? {
         val va = versao(nome(alvo), grupo(alvo))
-        if (va == Versao.DESCONHECIDA) return null
         val candidatos = indice[chaveTitulo(nome(alvo))] ?: return null
         val anoA = ano(alvo)
-        return candidatos.firstOrNull { o ->
-            o !== alvo && (anoA == null || ano(o) == null || ano(o) == anoA) &&
-                versao(nome(o), grupo(o)).let { it != Versao.DESCONHECIDA && it != va }
+        val mesmoTitulo = candidatos.filter { o -> o !== alvo && (anoA == null || ano(o) == null || ano(o) == anoA) }
+        val oposta = mesmoTitulo.firstOrNull { o -> versao(nome(o), grupo(o)).let { it != Versao.DESCONHECIDA && it != va } }
+        if (oposta != null || va == Versao.DESCONHECIDA) return oposta
+        return mesmoTitulo.firstOrNull { o -> versao(nome(o), grupo(o)) == Versao.DESCONHECIDA }
+    }
+
+    /** A versão de um item sabendo o par dele: com marca, a marca; sem marca, o oposto da do par. */
+    fun versaoComPar(nome: String, grupo: String, nomePar: String, grupoPar: String): Versao {
+        val v = versao(nome, grupo)
+        if (v != Versao.DESCONHECIDA) return v
+        return when (versao(nomePar, grupoPar)) {
+            Versao.LEGENDADA -> Versao.DUBLADA
+            Versao.DUBLADA -> Versao.LEGENDADA
+            Versao.DESCONHECIDA -> Versao.DESCONHECIDA
         }
     }
 
