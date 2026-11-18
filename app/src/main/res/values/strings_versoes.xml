@@ -17,39 +17,15 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>TV: the same channel in 4K, Full HD, HD and SD is now a single channel; the TV picks the quality by itself and steps down if the picture stalls (Options › Quality to choose by hand)</item>
-        <item>TV: leaner left menu; All and Guide sit next to LISTS and Radio left (it is in Listen)</item>
-        <item>TV: New category with the channels added to the list in the last 14 days</item>
-        <item>TV: when a channel does not open, the TV tells you if the list expired or another screen is using it</item>
-        <item>New “Line” icons: thin stroke, one color, and the selected item lights up in the brand color (the other styles are still in Settings › Home screen)</item>
-        <item>Apps show their TV banner, without the square; “App icons” in Settings switches to round or symbol only</item>
-        <item>Each app lands in the right category on its own (YouTube in Watch, Spotify in Listen); hold OK on an app and pick “Move to…” to change it</item>
-        <item>Play: each game in the column, last played first, and the Game hub on top with the Discord crew, controllers, network and playtime this week</item>
-        <item>Continue also shows the last radio station, the podcast you were halfway through, recent games and what you watched or heard on YouTube, Spotify, Netflix and other apps</item>
-        <item>On the home screen, the selected item gets an orange dot left of its name, and the line below wraps to up to 4 lines instead of being cut; TV shows the channel, what is on now with the time left, and what is next with its time</item>
+        <item>Movies and Series: the details page shows the movie or series scene sent by the list behind it, darkened so the text stays easy to read</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>tv_menu</item>
-        <item>tv_qualidade</item>
-        <item>cruz_linha</item>
-        <item>cruz_mover</item>
-        <item>cruz_midia</item>
-        <item>cruz_info_tv</item>
+        <item>ficha_cena</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>TV menu</item>
-        <item>TV quality</item>
-        <item>Line icons</item>
-        <item>Move to…</item>
-        <item>Continue with apps</item>
-        <item>TV details</item>
+        <item>Scene behind the details</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>In the TV list, do more categories fit, with All and Guide next to LISTS and no Radio?</item>
-        <item>Does a channel that used to repeat (4K, FHD, HD) show only once, and does ▶ ▶ › Quality show the choices?</item>
-        <item>Are the home screen icons in a thin stroke, with only the selected item in orange?</item>
-        <item>Holding OK on an app and choosing “Move to… › Watch”, does it appear in the Watch column?</item>
-        <item>After watching something on YouTube or listening on Spotify, does the title show in Continue and OK go back to it?</item>
-        <item>With TV selected in Watch, do you see the orange dot, the channel, what is on now with the time left and what is next, with nothing cut off?</item>
+        <item>Opening a movie’s details, does its scene show on the right without getting in the way of reading?</item>
     </string-array>
 </resources>
