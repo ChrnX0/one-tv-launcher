@@ -66,7 +66,7 @@
     <string name="tt_grande">Grande</string>
     <string name="tt_maior">Più grande</string>
     <string name="pi_titulo">Pacchetto di icone</string>
-    <string name="pi_det">Sostituisce le icone delle app con quelle di un pacchetto di icone installato. OK sceglie il successivo.</string>
+    <string name="pi_det">Sostituisce le icone delle app con uno stile incluso (Simbolo, Bicolore) o un pacchetto di icone installato. OK sceglie il successivo.</string>
     <string name="pi_det_vazio">Nessun pacchetto di icone installato. Scaricane uno dal Play Store e comparirà qui.</string>
     <string name="pi_nenhum">Nessuno</string>
     <string name="fm_titulo">Il mio sfondo</string>

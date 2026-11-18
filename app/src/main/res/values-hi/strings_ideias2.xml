@@ -11,7 +11,7 @@
     <string name="extras_HORA_DORMIR">सोने का समय (सिर्फ़ अनुमत ऐप, सीमित वॉल्यूम)</string>
     <string name="extras_TOCANDO_AGORA">अभी चल रहा (जो चल रहा है उसे पढ़ता है)</string>
     <string name="extras_MODO_LEVE">हल्का मोड (छोटे एनिमेशन)</string>
-    <string name="extras_SOM_NAVEGACAO">नेविगेशन ध्वनि</string>
+    <string name="extras_SOM_NAVEGACAO">अन्य स्क्रीन में चलते समय क्लिक</string>
     <string name="extras_RECADO_LINK">लिंक से संदेश (Home Assistant, TvOverlay)</string>
     <string name="extras_caches">ऐप कैश साफ़ करें</string>
     <string name="extras_livre">%1$s ख़ाली</string>

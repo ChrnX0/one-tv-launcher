@@ -66,7 +66,7 @@
     <string name="tt_grande">大</string>
     <string name="tt_maior">特大</string>
     <string name="pi_titulo">アイコンパック</string>
-    <string name="pi_det">アプリのアイコンを、インストール済みのアイコンパックのものに置き換えます。OK で次を選択。</string>
+    <string name="pi_det">アプリのアイコンを、内蔵スタイル（シンボル、ツートン）またはインストール済みのアイコンパックに置き換えます。OK で次を選択。</string>
     <string name="pi_det_vazio">アイコンパックがインストールされていません。Play ストアから入手すると、ここに表示されます。</string>
     <string name="pi_nenhum">なし</string>
     <string name="fm_titulo">マイ背景</string>

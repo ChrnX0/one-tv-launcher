@@ -66,7 +66,7 @@
     <string name="tt_grande">크게</string>
     <string name="tt_maior">더 크게</string>
     <string name="pi_titulo">아이콘 팩</string>
-    <string name="pi_det">앱 아이콘을 설치된 아이콘 팩의 아이콘으로 바꿉니다. OK를 누르면 다음 팩을 선택합니다.</string>
+    <string name="pi_det">앱 아이콘을 기본 스타일(기호, 투톤)이나 설치된 아이콘 팩으로 바꿉니다. OK를 누르면 다음을 선택합니다.</string>
     <string name="pi_det_vazio">설치된 아이콘 팩이 없습니다. Play 스토어에서 받으면 여기에 표시됩니다.</string>
     <string name="pi_nenhum">없음</string>
     <string name="fm_titulo">내 배경</string>
