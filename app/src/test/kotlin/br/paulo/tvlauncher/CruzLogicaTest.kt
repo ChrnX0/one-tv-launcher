@@ -143,4 +143,12 @@ class CruzLogicaTest {
         assertEquals(listOf("p7", "p3", "p12", "p1"), l.take(4))
         assertTrue(CruzLogica.ID_TODOS_APPS !in l)
     }
+
+    @Test fun linhasTvUmaInformacaoPorLinha() {
+        assertEquals("Canal 5 · X\nJornal · faltam 10 min\nDepois, 21:30: Novela",
+            CruzLogica.linhasTv("Canal 5 · X", "Jornal · faltam 10 min", "Depois, 21:30: Novela"))
+        // Sem guia: só o canal (as linhas vazias somem, sem quebra sobrando).
+        assertEquals("Canal 5 · X", CruzLogica.linhasTv("Canal 5 · X", "", null))
+        assertEquals("Canal 5 · X\nDepois, 21:30: Novela", CruzLogica.linhasTv("Canal 5 · X", " ", "Depois, 21:30: Novela"))
+    }
 }

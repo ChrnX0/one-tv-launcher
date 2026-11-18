@@ -70,7 +70,7 @@ class CruzTelaTest {
                 it("c:radio", "Rádio Mar Azul FM", "Rádio", IconeCruz.Tipo.RADIO),
                 it("c:dormir", "Dormir em 30 min", "A tela escurece devagar e a TV desliga", IconeCruz.Tipo.DORMIR))),
             HomeCruz.Categoria(CruzLogica.Categoria.ASSISTIR, "Assistir", ic(IconeCruz.Tipo.ASSISTIR), listOf(
-                it("tv", "TV", "Canal 5 · Jornal da Noite", IconeCruz.Tipo.TV),
+                it("tv", "TV", "Canal 156 · Discovery Channel\nMil Lugares para Conhecer Antes de Morrer · faltam 25 min\nDepois, 21:30: Aventura Selvagem", IconeCruz.Tipo.TV, visto = 0.7f),
                 it("series", "Séries", "O Último Farol · T1 E4", IconeCruz.Tipo.SERIES),
                 it("filmes", "Filmes", "Maré Alta · faltam 52 min", IconeCruz.Tipo.FILMES),
                 it("rede", "Na rede", "Vídeos, músicas e fotos da rede da casa", IconeCruz.Tipo.REDE),

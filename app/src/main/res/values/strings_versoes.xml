@@ -26,6 +26,7 @@
         <item>Each app lands in the right category on its own (YouTube in Watch, Spotify in Listen); hold OK on an app and pick “Move to…” to change it</item>
         <item>Play: each game in the column, last played first, and the Game hub on top with the Discord crew, controllers, network and playtime this week</item>
         <item>Continue also shows the last radio station, the podcast you were halfway through, recent games and what you watched or heard on YouTube, Spotify, Netflix and other apps</item>
+        <item>On the home screen, the selected item gets an orange dot left of its name, and the line below wraps to up to 4 lines instead of being cut; TV shows the channel, what is on now with the time left, and what is next with its time</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>tv_menu</item>
@@ -33,6 +34,7 @@
         <item>cruz_linha</item>
         <item>cruz_mover</item>
         <item>cruz_midia</item>
+        <item>cruz_info_tv</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>TV menu</item>
@@ -40,6 +42,7 @@
         <item>Line icons</item>
         <item>Move to…</item>
         <item>Continue with apps</item>
+        <item>TV details</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>In the TV list, do more categories fit, with All and Guide next to LISTS and no Radio?</item>
@@ -47,5 +50,6 @@
         <item>Are the home screen icons in a thin stroke, with only the selected item in orange?</item>
         <item>Holding OK on an app and choosing “Move to… › Watch”, does it appear in the Watch column?</item>
         <item>After watching something on YouTube or listening on Spotify, does the title show in Continue and OK go back to it?</item>
+        <item>With TV selected in Watch, do you see the orange dot, the channel, what is on now with the time left and what is next, with nothing cut off?</item>
     </string-array>
 </resources>

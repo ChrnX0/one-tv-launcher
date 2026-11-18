@@ -68,4 +68,6 @@
     <string name="cruz_app_banner">Banner TV</string>
     <string name="cruz_app_redondo">Tondo</string>
     <string name="cruz_app_solto">Solo il simbolo</string>
+    <string name="cruz_tv_canal">Canale %1$d · %2$s</string>
+    <string name="cruz_tv_depois">Dopo, %1$s: %2$s</string>
 </resources>

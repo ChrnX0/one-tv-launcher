@@ -56,6 +56,12 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         const val PASSO_COLUNA = 71f    // distância entre itens pequenos na coluna
         const val VAO_ESCOLHIDO = 94f   // do centro do escolhido ao centro do vizinho de baixo (o grande ocupa mais)
         const val VAO_CIMA = 89f        // do centro do escolhido ao centro do vizinho de cima
+        // Linha de baixo em até 4 linhas (Paulo, 18/11/2026: "ao invés de cortar, continua na linha de baixo"): o item
+        // tem SUB_SOBRA dp a mais embaixo do ícone para o texto, e o vizinho de baixo desce o que as linhas extras ocupam.
+        const val SUB_LINHAS = 4
+        const val SUB_SOBRA = 76
+        const val TEXTO_TOPO = 9        // do topo do ícone ao topo do nome (o nome fica na metade de cima do ícone)
+        const val PONTO = 10            // ponto laranja à esquerda do nome do escolhido (era uma barra embaixo dele)
         const val CAT_ESQUERDA = 97f    // centro da categoria logo à esquerda da coluna
         const val CAT_DIREITA = 670f    // centro da 1ª categoria à direita (depois do texto mais longo)
         const val PASSO_CATS = 104f     // entre categorias à direita
@@ -67,7 +73,6 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         const val FONTE_ESCOLHIDO = 32f // nome do item escolhido (fora da escolha fica 0,6 x = ~19)
         const val FONTE_ROTULO = 22f    // nome da categoria em foco (estudo da HOME, 18/11/2026: 20 -> 22)
         const val FONTE_SUB = 18f       // linha de baixo do item escolhido (18 sp = texto padrão do Google para TV; era 16)
-        const val FONTE_SUB_MIN = 16f   // texto longo encolhe até aqui (o tamanho de antes) antes de cortar
         const val FONTE_CATEGORIA = 18f // nome das categorias na linha
         // ---- transparência dos vizinhos na coluna (posição relativa -> alfa)
         // Estudo da HOME (18/11/2026): nenhum nome visível abaixo de 0,6, que a 3 m some (era 0,5 em cima e 0,35 no 3º).
@@ -130,6 +135,8 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
 
     /** As partes de um item que mudam com a escolha. */
     private inner class ItemView(val raiz: LinearLayout, val icone: ImageView, val nome: TextView, val sub: TextView, val traco: View) {
+        /** Linhas da linha de baixo na última arrumação (quando muda, a coluna se rearruma). */
+        var linhas = 1
         var voltarSub: Runnable? = null
         /** Barra de "quanto já foi visto", criada só no item que tem progresso. */
         var barra: BarraProgresso? = null
@@ -223,7 +230,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         viewsCat.clear(); viewsItem.clear()
         for (c in novas) {
             viewsCat += criarCategoria(c).also { addView(it, LayoutParams(dpi(150), LayoutParams.WRAP_CONTENT)) }
-            viewsItem += c.itens.map { item -> criarItem().also { preencher(it, item); addView(it.raiz, LayoutParams(dpi(LARGURA_ITEM), dpi(ICONE_A))) } }
+            viewsItem += c.itens.map { item -> criarItem().also { preencher(it, item); addView(it.raiz, LayoutParams(dpi(LARGURA_ITEM), dpi(ICONE_A + SUB_SOBRA))) } }
         }
         posicionar(animar = false)
         avisarMudanca()
@@ -432,28 +439,36 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             maxWidth = dpi(TEXTO_MAX)
             setShadowLayer(dp(8f), 0f, 0f, 0x99000000.toInt())
         }
-        val traco = View(context).apply { background = GradientDrawable().apply { setColor(Estilo.ACENTO); cornerRadius = dp(2f) } }
+        // O ponto laranja do escolhido (Paulo, 18/11/2026: a barra embaixo do nome virou um ponto à esquerda dele).
+        val traco = View(context).apply { background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(Estilo.ACENTO) } }
         val sub = TextView(context).apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, FONTE_SUB)
             setTextColor(COR_SUB)   // creme claro (contraste > 4,5:1 sobre o véu)
             typeface = fonte
-            maxLines = 1
+            // Até 4 linhas (quebra na palavra) em vez de cortar numa só; largura fixa para a quebra ser a mesma sempre.
+            maxLines = SUB_LINHAS
             ellipsize = TextUtils.TruncateAt.END
             includeFontPadding = false
+            setLineSpacing(dp(3f), 1f)
             setShadowLayer(dp(6f), 0f, 0f, 0x99000000.toInt())
-            // 18 sp; um texto longo (francês, "Na rede") desce até 16 sp antes de cortar. Precisa de largura fixa.
-            setAutoSizeTextTypeUniformWithConfiguration(FONTE_SUB_MIN.toInt(), FONTE_SUB.toInt(), 1, TypedValue.COMPLEX_UNIT_SP)
+        }
+        val linhaNome = LinearLayout(context).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            addView(traco, LinearLayout.LayoutParams(dpi(PONTO), dpi(PONTO)).apply { marginEnd = dpi(10) })
+            addView(nome, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
         }
         val textos = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
-            gravity = Gravity.CENTER_VERTICAL
-            addView(nome, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
-            addView(traco, LinearLayout.LayoutParams(dpi(48), dpi(4)).apply { topMargin = dpi(6) })
-            addView(sub, LinearLayout.LayoutParams(dpi(TEXTO_MAX), LayoutParams.WRAP_CONTENT).apply { topMargin = dpi(6) })
+            gravity = Gravity.TOP
+            setPadding(0, dpi(TEXTO_TOPO), 0, 0)
+            addView(linhaNome, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
+            // o texto de baixo começa embaixo do nome (alinhado com ele, não com o ponto)
+            addView(sub, LinearLayout.LayoutParams(dpi(TEXTO_MAX), LayoutParams.WRAP_CONTENT).apply { topMargin = dpi(8); marginStart = dpi(PONTO + 10) })
         }
         val raiz = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
+            gravity = Gravity.TOP
             clipChildren = false
             importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
             addView(icone, LinearLayout.LayoutParams(dpi(ICONE_L), dpi(ICONE_A)))
@@ -462,7 +477,13 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             visibility = View.INVISIBLE
             alpha = 0f
         }
-        return ItemView(raiz, icone, nome, sub, traco)
+        return ItemView(raiz, icone, nome, sub, traco).also { iv ->
+            // O texto mudou de tamanho (outro programa, outra língua): a coluna se rearruma com as linhas novas.
+            sub.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+                val n = sub.lineCount.coerceIn(1, SUB_LINHAS)
+                if (n != iv.linhas) { iv.linhas = n; post { posicionar(animar = true) } }
+            }
+        }
     }
 
     private fun preencher(v: ItemView, item: Item) {
@@ -498,6 +519,9 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         for ((j, lista) in viewsItem.withIndex()) {
             val k = j - f
             val sel = estado.sel.getOrElse(j) { 0 }
+            // A linha de baixo do escolhido ocupa até 4 linhas: os vizinhos de baixo descem o que as linhas extras ocupam.
+            val extra = lista.getOrNull(sel)?.takeIf { k == 0 && it.sub.visibility == View.VISIBLE }
+                ?.let { (it.linhas - 1).coerceAtLeast(0) * it.sub.lineHeight / dm.density } ?: 0f
             for ((i, iv) in lista.withIndex()) {
                 val rel = i - sel
                 if (k != 0) {
@@ -510,7 +534,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
                 val cy = when {
                     rel == 0 -> LINHA
                     rel < 0 -> LINHA - VAO_CIMA + (rel + 1) * PASSO_COLUNA
-                    else -> LINHA + VAO_ESCOLHIDO + (rel - 1) * PASSO_COLUNA
+                    else -> LINHA + VAO_ESCOLHIDO + extra + (rel - 1) * PASSO_COLUNA
                 }
                 val alfa = if (rel == 0) (if (focada) 1f else 0.75f) else ALFA_COLUNA[rel] ?: 0f
                 val escala = if (rel == 0) 1f else ESCALA_PEQUENO
