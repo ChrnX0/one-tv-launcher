@@ -40,6 +40,16 @@ class PlayerSeriesTest {
         assertEquals(u, Series.ultimosDeJson(json))
     }
 
+    // Dublada x legendada são duas séries no catálogo: o mesmo episódio é achado por temporada e número, não pelo id.
+    @Test fun mesmoEpisodioNaOutraVersao() {
+        val todos = Series.emOrdem(ficha)
+        val outra = FichaSerie(temporadas = mapOf(1 to listOf(Episodio("901", 1, 1, "Um"), Episodio("902", 1, 2, "Dois")),
+            2 to listOf(Episodio("951", 2, 1, "Volta"))))
+        assertEquals("902", Series.mesmoEpisodio(outra, todos[1])?.id)
+        assertEquals("951", Series.mesmoEpisodio(outra, todos[2])?.id)
+        assertNull(Series.mesmoEpisodio(FichaSerie(temporadas = mapOf(1 to listOf(Episodio("901", 1, 1, "Um")))), todos[2]))
+    }
+
     @Test fun proximoESugestao() {
         val todos = Series.emOrdem(ficha)
         assertEquals("21", Series.proximo(ficha, todos[1])?.id)   // fim da temporada 1 -> T2E1

@@ -199,6 +199,13 @@ object Series {
     /** Todos os episódios em ordem (T1E1, T1E2, ..., T2E1...). */
     fun emOrdem(f: FichaSerie): List<Episodio> = f.temporadas.values.flatten()
 
+    /**
+     * O mesmo episódio (temporada e número) na outra versão da série, dublada ou legendada (18/11/2026): no catálogo
+     * são duas séries com ids próprios e cada episódio é um arquivo diferente. Null quando a outra não tem esse.
+     */
+    fun mesmoEpisodio(outra: FichaSerie, ep: Episodio): Episodio? =
+        outra.temporadas[ep.temporada]?.firstOrNull { it.numero == ep.numero }
+
     /** O episódio depois deste (passa para a próxima temporada), ou null no último. */
     fun proximo(f: FichaSerie, atual: Episodio): Episodio? {
         val todos = emOrdem(f)
