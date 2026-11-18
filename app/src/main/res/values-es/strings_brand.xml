@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="brand_slogan">Tu TV, simple otra vez.</string>
+    <string name="brand_about">Acerca de Sofaly</string>
+    <string name="brand_about_det">Versión, novedades y licencias</string>
+    <string name="brand_splash">Logo al encender la TV</string>
+    <string name="brand_splash_det">El logo de Sofaly por un segundo cuando la TV se enciende</string>
+    <string name="brand_version">Versión %1$s</string>
+</resources>

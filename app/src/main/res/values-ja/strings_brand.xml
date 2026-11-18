@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="brand_slogan">テレビを、もう一度シンプルに。</string>
+    <string name="brand_about">Sofalyについて</string>
+    <string name="brand_about_det">バージョン、新機能、ライセンス</string>
+    <string name="brand_splash">起動時のロゴ</string>
+    <string name="brand_splash_det">テレビが起動したとき、Sofalyのロゴを1秒表示</string>
+    <string name="brand_version">バージョン %1$s</string>
+</resources>

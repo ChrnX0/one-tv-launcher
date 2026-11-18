@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="brand_slogan">TV를 다시 간단하게.</string>
+    <string name="brand_about">Sofaly 정보</string>
+    <string name="brand_about_det">버전, 새로운 기능, 라이선스</string>
+    <string name="brand_splash">켤 때 로고</string>
+    <string name="brand_splash_det">TV가 켜질 때 Sofaly 로고를 1초 표시</string>
+    <string name="brand_version">버전 %1$s</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="brand_slogan">تلفازك، بسيط من جديد.</string>
+    <string name="brand_about">حول Sofaly</string>
+    <string name="brand_about_det">الإصدار والجديد والتراخيص</string>
+    <string name="brand_splash">الشعار عند التشغيل</string>
+    <string name="brand_splash_det">شعار Sofaly لثانية عند تشغيل التلفاز</string>
+    <string name="brand_version">الإصدار %1$s</string>
+</resources>
