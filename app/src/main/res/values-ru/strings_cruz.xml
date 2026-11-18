@@ -34,4 +34,5 @@
     <string name="cruz_fixar">Закрепить вверху</string>
     <string name="cruz_soltar">Открепить</string>
     <string name="cruz_tocando">Играет: %1$s</string>
+    <string name="cruz_precisa_internet">Нужен интернет</string>
 </resources>

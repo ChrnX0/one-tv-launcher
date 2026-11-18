@@ -34,4 +34,5 @@
     <string name="cruz_fixar">En üste sabitle</string>
     <string name="cruz_soltar">Sabitlemeyi kaldır</string>
     <string name="cruz_tocando">Çalıyor: %1$s</string>
+    <string name="cruz_precisa_internet">İnternet gerekiyor</string>
 </resources>

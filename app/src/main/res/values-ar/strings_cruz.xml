@@ -34,4 +34,5 @@
     <string name="cruz_fixar">تثبيت في الأعلى</string>
     <string name="cruz_soltar">إلغاء التثبيت</string>
     <string name="cruz_tocando">قيد التشغيل: %1$s</string>
+    <string name="cruz_precisa_internet">يحتاج إلى الإنترنت</string>
 </resources>

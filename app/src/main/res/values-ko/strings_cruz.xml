@@ -34,4 +34,5 @@
     <string name="cruz_fixar">맨 위에 고정</string>
     <string name="cruz_soltar">고정 해제</string>
     <string name="cruz_tocando">재생 중: %1$s</string>
+    <string name="cruz_precisa_internet">인터넷이 필요합니다</string>
 </resources>

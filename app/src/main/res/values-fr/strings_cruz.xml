@@ -34,4 +34,5 @@
     <string name="cruz_fixar">Épingler en haut</string>
     <string name="cruz_soltar">Désépingler</string>
     <string name="cruz_tocando">En cours : %1$s</string>
+    <string name="cruz_precisa_internet">Nécessite Internet</string>
 </resources>

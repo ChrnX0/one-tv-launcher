@@ -34,4 +34,5 @@
     <string name="cruz_fixar">置顶</string>
     <string name="cruz_soltar">取消置顶</string>
     <string name="cruz_tocando">正在播放：%1$s</string>
+    <string name="cruz_precisa_internet">需要联网</string>
 </resources>

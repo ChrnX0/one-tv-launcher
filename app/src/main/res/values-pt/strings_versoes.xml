@@ -21,6 +21,7 @@
         <item>Ao lado do nome do grupo aparece onde você está (“3 de 9”) e, parada a cruz, uma setinha avisa que há mais itens embaixo</item>
         <item>Aplicativos mostra primeiro os que você mais abre (não só o último); segure OK num app para “Fixar no topo”</item>
         <item>Em Continuar, uma barrinha no ícone mostra quanto já foi visto (e quanto do programa da TV já passou); Rádio e Podcasts dizem o que está tocando</item>
+        <item>Sem internet, Séries, Filmes, Rádio e Podcasts avisam “Precisa de internet” antes de você abrir</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Letra maior</item>

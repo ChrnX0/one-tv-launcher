@@ -34,4 +34,5 @@
     <string name="cruz_fixar">Sematkan di atas</string>
     <string name="cruz_soltar">Lepas sematan</string>
     <string name="cruz_tocando">Diputar: %1$s</string>
+    <string name="cruz_precisa_internet">Perlu internet</string>
 </resources>

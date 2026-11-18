@@ -34,4 +34,5 @@
     <string name="cruz_fixar">Fijar arriba</string>
     <string name="cruz_soltar">Quitar de arriba</string>
     <string name="cruz_tocando">Sonando: %1$s</string>
+    <string name="cruz_precisa_internet">Necesita internet</string>
 </resources>

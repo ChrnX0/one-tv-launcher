@@ -34,4 +34,5 @@
     <string name="cruz_fixar">Przypnij na górze</string>
     <string name="cruz_soltar">Odepnij</string>
     <string name="cruz_tocando">Gra: %1$s</string>
+    <string name="cruz_precisa_internet">Wymaga internetu</string>
 </resources>

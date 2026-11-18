@@ -34,4 +34,5 @@
     <string name="cruz_fixar">Oben anheften</string>
     <string name="cruz_soltar">Nicht mehr oben anheften</string>
     <string name="cruz_tocando">Läuft: %1$s</string>
+    <string name="cruz_precisa_internet">Braucht Internet</string>
 </resources>

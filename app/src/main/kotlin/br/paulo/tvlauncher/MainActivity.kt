@@ -217,6 +217,8 @@ class MainActivity : Activity() {
     private lateinit var pilulaSemInternet: LinearLayout
     private lateinit var txtSemInternet: TextView
     private var semInternetDesde = 0L
+    /** Sem internet confirmada (a pílula está à vista): na cruz, o que depende dela diz "Precisa de internet". */
+    private var semInternetCruz = false
     private val tarefaSemInternet = Runnable { avaliarSemInternet() }
 
     /**
@@ -237,6 +239,7 @@ class MainActivity : Activity() {
         val (internet, local) = estadoInternet()
         if (internet) {
             semInternetDesde = 0L
+            if (semInternetCruz) { semInternetCruz = false; atualizarCruz() }
             if (pilulaSemInternet.visibility != View.GONE) {
                 if (pilulaSemInternet.hasFocus()) linhaApps.requestFocus()
                 pilulaSemInternet.visibility = View.GONE
@@ -268,6 +271,7 @@ class MainActivity : Activity() {
                 if (isDestroyed || estadoInternet().first) return@post
                 txtSemInternet.text = frase
                 pilulaSemInternet.visibility = View.VISIBLE
+                if (!semInternetCruz) { semInternetCruz = true; atualizarCruz() }
                 atualizarAvisos()
             }
         }
@@ -2651,6 +2655,8 @@ class MainActivity : Activity() {
         fun visto(f: PlayerArmazem.FichaHome, serie: Boolean): Float? = posicoesHome[f.chave]
             ?.takeIf { it.duracao > 0 && (serie || Vod.deveRetomar(it)) }?.let { (it.ms.toFloat() / it.duracao).coerceIn(0f, 1f) }
         val noAr = programa?.takeIf { it.fim > it.inicio }?.let { ((agora - it.inicio).toFloat() / (it.fim - it.inicio)).coerceIn(0f, 1f) }
+        // Sem internet: Séries, Filmes, Rádio e Podcasts avisam antes do OK (Na rede, TV gravada e pendrive seguem normais).
+        val precisa = if (semInternetCruz) getString(R.string.cruz_precisa_internet) else null
         val cats = ArrayList<HomeCruz.Categoria>()
         fun categoria(k: CruzLogica.Categoria, nome: Int, tipo: IconeCruz.Tipo, itens: List<HomeCruz.Item>) {
             if (itens.isNotEmpty()) cats += HomeCruz.Categoria(k, getString(nome), icCruz("cat:" + k.id, tipo), itens)
@@ -2684,10 +2690,10 @@ class MainActivity : Activity() {
             icCruz("tv", IconeCruz.Tipo.TV), { abrirTv() })
         if (cruzTemVod) {
             assistir += HomeCruz.Item("series", getString(R.string.home_card_series),
-                fichaSerie?.let { listOf(it.titulo, it.episodio).filter { s -> s.isNotEmpty() }.joinToString(" · ") } ?: getString(R.string.home_destaque_series),
+                precisa ?: fichaSerie?.let { listOf(it.titulo, it.episodio).filter { s -> s.isNotEmpty() }.joinToString(" · ") } ?: getString(R.string.home_destaque_series),
                 icCruz("series", IconeCruz.Tipo.SERIES), { abrirCatalogo(SeriesActivity::class.java) })
             assistir += HomeCruz.Item("filmes", getString(R.string.home_card_filmes),
-                fichaFilme?.let { f -> listOfNotNull(f.titulo, faltaFilme(f)).joinToString(" · ") } ?: getString(R.string.home_destaque_filmes),
+                precisa ?: fichaFilme?.let { f -> listOfNotNull(f.titulo, faltaFilme(f)).joinToString(" · ") } ?: getString(R.string.home_destaque_filmes),
                 icCruz("filmes", IconeCruz.Tipo.FILMES), { abrirCatalogo(FilmesActivity::class.java) })
         }
         assistir += HomeCruz.Item("rede", getString(R.string.home_card_rede), getString(R.string.home_destaque_rede),
@@ -2702,13 +2708,13 @@ class MainActivity : Activity() {
         // Ouvir: as rádios (catálogo mundial, sem conta) e os podcasts (plano Básico, Paulo 17/11/2026).
         categoria(CruzLogica.Categoria.OUVIR, R.string.cruz_ouvir, IconeCruz.Tipo.OUVIR, listOf(
             HomeCruz.Item("radio", getString(R.string.cruz_radio),
-                ouvindoCruz?.takeIf { it.first == "radio" }?.let { getString(R.string.cruz_tocando, it.second) } ?: getString(R.string.cruz_radio_sub),
+                ouvindoCruz?.takeIf { it.first == "radio" }?.let { getString(R.string.cruz_tocando, it.second) } ?: precisa ?: getString(R.string.cruz_radio_sub),
                 icCruz("radio", IconeCruz.Tipo.RADIO), {
                 try { startActivity(Intent(this, RadioActivity::class.java)) }
                 catch (e: Exception) { Log.w("TvLauncher.Cruz", "rádio não abriu: ${e.javaClass.simpleName}"); cruz?.naoAbriu() }
             }),
             HomeCruz.Item("podcasts", getString(R.string.pod_titulo),
-                ouvindoCruz?.takeIf { it.first == "podcast" }?.let { getString(R.string.cruz_tocando, it.second) } ?: getString(R.string.ra_podcasts_det),
+                ouvindoCruz?.takeIf { it.first == "podcast" }?.let { getString(R.string.cruz_tocando, it.second) } ?: precisa ?: getString(R.string.ra_podcasts_det),
                 icCruz("podcasts", IconeCruz.Tipo.PODCASTS), {
                 try { startActivity(Intent(this, PodcastsActivity::class.java)) }
                 catch (e: Exception) { Log.w("TvLauncher.Cruz", "podcasts não abriram: ${e.javaClass.simpleName}"); cruz?.naoAbriu() }

@@ -34,4 +34,5 @@
     <string name="cruz_fixar">Fixar no topo</string>
     <string name="cruz_soltar">Tirar do topo</string>
     <string name="cruz_tocando">A tocar: %1$s</string>
+    <string name="cruz_precisa_internet">Precisa de internet</string>
 </resources>

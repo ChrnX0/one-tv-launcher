@@ -34,4 +34,5 @@
     <string name="cruz_fixar">Pin to top</string>
     <string name="cruz_soltar">Unpin from top</string>
     <string name="cruz_tocando">Playing: %1$s</string>
+    <string name="cruz_precisa_internet">Needs the internet</string>
 </resources>

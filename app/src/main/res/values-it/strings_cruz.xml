@@ -34,4 +34,5 @@
     <string name="cruz_fixar">Fissa in alto</string>
     <string name="cruz_soltar">Togli dall’alto</string>
     <string name="cruz_tocando">In riproduzione: %1$s</string>
+    <string name="cruz_precisa_internet">Serve internet</string>
 </resources>

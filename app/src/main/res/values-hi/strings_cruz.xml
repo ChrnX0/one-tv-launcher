@@ -34,4 +34,5 @@
     <string name="cruz_fixar">ऊपर पिन करें</string>
     <string name="cruz_soltar">पिन हटाएँ</string>
     <string name="cruz_tocando">चल रहा है: %1$s</string>
+    <string name="cruz_precisa_internet">इंटरनेट चाहिए</string>
 </resources>

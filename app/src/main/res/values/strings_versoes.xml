@@ -24,6 +24,7 @@
         <item>Next to the group name you see where you are (“3 of 9”) and, when the cross rests, a small arrow shows there are more items below</item>
         <item>Apps shows the ones you open most first (not only the last one); hold OK on an app to “Pin to top”</item>
         <item>In Continue, a thin bar on the icon shows how much you have watched (and how much of the TV show has aired); Radio and Podcasts say what is playing</item>
+        <item>Without internet, Series, Movies, Radio and Podcasts say “Needs the internet” before you open them</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>cruz_letra</item>
@@ -50,6 +51,6 @@
         <item>Changing group with ◀ ▶, does each group sound a different note?</item>
         <item>Next to the group name, does “2 of 5” (or similar) appear and change as you move?</item>
         <item>Holding OK on an app in Apps and choosing “Pin to top”, does it move to the first place?</item>
-        <item>In Continue, does the film or series show a thin orange bar under the icon?</item>
+        <item>In Continue, does the movie or series show a thin orange bar under the icon?</item>
     </string-array>
 </resources>
