@@ -15,6 +15,7 @@
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
         <item>Uma informação comprida, como o título do último vídeo, termina em “…” e não empurra mais as outras para fora; “Aberto há 0 minuto” virou “Aberto agora”</item>
+        <item>Continuar: o nome do filme ou da série aparece sem a marca da lista (“LEG”, “DUB”, “4K”)</item>
         <item>Casa: com o Home Assistant fora do ar, a tela diz o que houve e que tenta de novo sozinha, e o Google Home continua à mão</item>
         <item>Depois do descanso de tela, o foco volta para a tela inicial em cruz, e não para a barra de cima</item>
         <item>Navegação mais leve: o ícone escolhido só começa a animação depois que a coluna para de andar</item>

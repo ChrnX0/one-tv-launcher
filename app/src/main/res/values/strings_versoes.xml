@@ -18,6 +18,7 @@
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
         <item>A long piece of information, like the title of the last video, now ends in “…” and no longer pushes the others out; “Opened 0 minutes ago” became “Opened now”</item>
+        <item>Continue: the movie or series name shows without the list tag (“LEG”, “DUB”, “4K”)</item>
         <item>Home: with Home Assistant offline, the screen says what happened and that it retries by itself, and Google Home stays at hand</item>
         <item>After the screensaver, focus returns to the home screen, not to the top bar</item>
         <item>Lighter navigation: the selected icon only starts its animation after the column stops moving</item>
