@@ -37,6 +37,21 @@ class AlarmesActivity : Activity() {
     /** A prévia do som (editor). Para ao sair da tela, ao escolher outro e 4 s depois de começar. */
     private var previa: android.media.MediaPlayer? = null
     private val ui = android.os.Handler(android.os.Looper.getMainLooper())
+
+    /**
+     * Esconde [vistas] enquanto uma [Estilo.lista] está aberta: o véu da lista é translúcido e o que fica à direita da
+     * tela (as opções do editor, o próximo alarme) aparecia por baixo das linhas, embaralhado (visto na Sala, 18/11/2026).
+     * Devolve o "ao fechar". A contagem cobre a lista que reabre logo em seguida (dias avulsos): não pisca no meio.
+     */
+    private var listasAbertas = 0
+    private fun cobrir(vistas: List<View>): () -> Unit {
+        listasAbertas++
+        vistas.forEach { it.animate().alpha(0f).setDuration(Estilo.LISTA_FOCO_MS).start() }
+        return {
+            listasAbertas--
+            ui.post { if (listasAbertas == 0) vistas.forEach { it.animate().alpha(1f).setDuration(Estilo.LISTA_FOCO_MS).start() } }
+        }
+    }
     private val fimPrevia = Runnable { pararPrevia() }
     private fun pararPrevia() { ui.removeCallbacks(fimPrevia); previa?.release(); previa = null }
 
@@ -237,6 +252,12 @@ class AlarmesActivity : Activity() {
         val proxDia = texto(22f, HomeCruz.COR_SUB, 600).apply { setLineSpacing(dp(4).toFloat(), 1f) }
         val lg = VolumeLg.configurado(this@AlarmesActivity) && VolumeLg.alarmeLigado(this@AlarmesActivity)
         val iNovo = alarmes.size
+        val prox = LinearLayout(this@AlarmesActivity).apply {
+            orientation = LinearLayout.VERTICAL
+            addView(proxRotulo)
+            addView(proxHora, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(8) })
+            addView(proxDia, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(8) })
+        }
         val iVolume = alarmes.size + 1
 
         init {
@@ -244,12 +265,7 @@ class AlarmesActivity : Activity() {
             conteudo.addView(coluna, lp(dp(520), dp(384), 48, 92))
             coluna.topo = dp(72).toFloat()
             // O próximo alarme, em pilha (rótulo, hora grande, dia): um embaixo do outro, nunca por cima.
-            conteudo.addView(LinearLayout(this@AlarmesActivity).apply {
-                orientation = LinearLayout.VERTICAL
-                addView(proxRotulo)
-                addView(proxHora, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(8) })
-                addView(proxDia, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(8) })
-            }, lp(dp(300), -2, 620, 184))
+            conteudo.addView(prox, lp(dp(300), -2, 620, 184))
             conteudo.addView(CrossColumn.dicas(this@AlarmesActivity,
                 getString(R.string.grv_dica_ok) to getString(R.string.al_dica_editar),
                 getString(R.string.grv_dica_segurar) to getString(R.string.al_dica_ligar),
@@ -335,7 +351,7 @@ class AlarmesActivity : Activity() {
             val opcoes = if (lg) LgNetcast.OPCOES_ALARME else VolumeAlarme.OPCOES
             val atual = opcoes.indexOf(volumeAtual())
             Estilo.lista(this@AlarmesActivity, getString(R.string.al_volume_rotulo), opcoes.map { rotuloVolume(it) },
-                marcadas = if (atual >= 0) listOf(atual) else emptyList()) { escolha ->
+                marcadas = if (atual >= 0) listOf(atual) else emptyList(), aoFechar = cobrir(listOf(prox))) { escolha ->
                 if (lg) AlarmeGarantia.definirVolumeLg(this@AlarmesActivity, opcoes[escolha])
                 else AlarmeGarantia.definirVolumeMinimo(this@AlarmesActivity, opcoes[escolha])
                 preencher(coluna.escolhido)
@@ -483,7 +499,8 @@ class AlarmesActivity : Activity() {
         }
 
         fun escolher(titulo: String, nomes: List<String>, atual: Int, aoEscolher: (Int) -> Unit) {
-            Estilo.lista(this@AlarmesActivity, titulo, nomes, marcadas = if (atual >= 0) listOf(atual) else emptyList()) {
+            Estilo.lista(this@AlarmesActivity, titulo, nomes, marcadas = if (atual >= 0) listOf(atual) else emptyList(),
+                aoFechar = cobrir(listOf(coluna))) {
                 aoEscolher(it); preencher()
             }
         }
@@ -493,7 +510,7 @@ class AlarmesActivity : Activity() {
             val nomes = listOf(getString(R.string.dia_uma_vez), getString(R.string.dia_todo), getString(R.string.dia_seg_sex),
                 getString(R.string.dia_fim)) + (0..6).map { nomeDia(it) }
             Estilo.lista(this@AlarmesActivity, getString(R.string.al_op_repetir), nomes, marcadas = AlarmScreenLogic.marcadasRepetir(v.dias),
-                focoInicial = focar, entrar = focar == null) { linha ->
+                focoInicial = focar, entrar = focar == null, aoFechar = cobrir(listOf(coluna))) { linha ->
                 val (dias, reabrir) = AlarmScreenLogic.escolherRepetir(v.dias, linha)
                 v = v.copy(dias = dias)
                 preencher()
