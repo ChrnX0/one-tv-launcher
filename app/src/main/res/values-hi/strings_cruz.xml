@@ -49,4 +49,23 @@
     <string name="cruz_dormir_sub">स्क्रीन धीरे-धीरे धुंधली होती है और टीवी बंद हो जाता है</string>
     <string name="cruz_desliga_as">%1$s बजे बंद होगा</string>
     <string name="cruz_dormir_cancelar">रद्द करने के लिए OK</string>
+    <string name="cruz_linha">रेखा</string>
+    <string name="cruz_mover">यहाँ ले जाएँ…</string>
+    <string name="cruz_mover_titulo">%1$s को यहाँ ले जाएँ</string>
+    <string name="cruz_central">गेम हब</string>
+    <string name="cruz_abrir_app">%1$s खोलें</string>
+    <string name="cruz_tirar_continuar">जारी रखें से हटाएँ</string>
+    <string name="jogos_recentes">हाल में खेले गए</string>
+    <string name="jogos_semana">इस हफ़्ते</string>
+    <string name="jogos_semana_jogado">7 दिन में खेला</string>
+    <string name="jogos_semana_mais">सबसे ज़्यादा खेला</string>
+    <string name="jogos_semana_controles">कंट्रोलर चालू</string>
+    <string name="jogos_menos_de_1_min">1 मिनट से कम</string>
+    <string name="jogos_min">%1$d मिनट</string>
+    <string name="jogos_h_min">%1$d घं %2$d मि</string>
+    <string name="cruz_apps_icone">ऐप आइकन</string>
+    <string name="cruz_apps_icone_det">होम स्क्रीन पर ऐप कैसे दिखें</string>
+    <string name="cruz_app_banner">टीवी बैनर</string>
+    <string name="cruz_app_redondo">गोल</string>
+    <string name="cruz_app_solto">सिर्फ़ चिह्न</string>
 </resources>

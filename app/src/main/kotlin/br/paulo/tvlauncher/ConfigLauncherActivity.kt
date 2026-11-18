@@ -958,6 +958,7 @@ class ConfigLauncherActivity : Activity() {
                 IconeCruz.Estilo.OBJETO -> R.string.cruz_objeto
                 IconeCruz.Estilo.SIMBOLO -> R.string.cruz_simbolo
                 IconeCruz.Estilo.DUOTOM -> R.string.cruz_duotom
+                IconeCruz.Estilo.LINHA -> R.string.cruz_linha
             })
             lateinit var linhaIcones: LinhaCfg
             linhaIcones = linha(getString(R.string.cruz_icones), getString(R.string.cruz_icones_det), valor = rotuloIcones()) {
@@ -965,6 +966,18 @@ class ConfigLauncherActivity : Activity() {
                 linhaIcones.valor(rotuloIcones())
             }
             c.addView(linhaIcones, lp())
+            // Como os apps aparecem na cruz (18/11/2026): banner de TV, redondo ou solto.
+            fun rotuloApps() = getString(when (LayoutHome.iconeAppCruz(this)) {
+                LayoutHome.IconeAppCruz.BANNER -> R.string.cruz_app_banner
+                LayoutHome.IconeAppCruz.REDONDO -> R.string.cruz_app_redondo
+                LayoutHome.IconeAppCruz.SOLTO -> R.string.cruz_app_solto
+            })
+            lateinit var linhaApps: LinhaCfg
+            linhaApps = linha(getString(R.string.cruz_apps_icone), getString(R.string.cruz_apps_icone_det), valor = rotuloApps()) {
+                LayoutHome.proximoIconeAppCruz(this)
+                linhaApps.valor(rotuloApps())
+            }
+            c.addView(linhaApps, lp())
             // Barra de cima (Recua, Leve, Relógio grande ou a de sempre) e a arte do item em foco atrás da cruz.
             fun rotuloBarra() = getString(when (LayoutHome.barraCruz(this)) {
                 LayoutHome.BarraCruz.RECUA -> R.string.cruz_barra_recua
