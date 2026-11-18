@@ -118,4 +118,16 @@ class LegendaExternaTest {
         assertNull(LegendaExterna.redirecionamentoSeguro("https://opensubtitles.com.mal.example/x"))
         assertNull(LegendaExterna.redirecionamentoSeguro(null))
     }
+
+    @Test fun nomeLegivelNaTv() {
+        assertEquals("Dune 2021 1080p WEBRip DD5.1 x264-SHITBOX", LegendaExterna.nomeLegivel("Dune.2021.1080p.WEBRip.DD5.1.x264-SHITBOX"))
+        assertEquals("Dune 2021 1080p HMAX WEB-DL DDP5.1 Atmos x264-EVO", LegendaExterna.nomeLegivel("Dune 2021 1080p HMAX WEB-DL DDP5 1 Atmos x264-EVO"))
+        assertEquals("Show S01E03 720p", LegendaExterna.nomeLegivel("Show_S01E03__720p"))
+    }
+
+    @Test fun nomeDoIdioma() {
+        assertEquals("Português (Brasil)", LegendaExterna.nomeIdioma("pt-BR", java.util.Locale.forLanguageTag("pt-BR")))
+        assertEquals("Inglês", LegendaExterna.nomeIdioma("en", java.util.Locale.forLanguageTag("pt-BR")))
+        assertEquals("XX", LegendaExterna.nomeIdioma("xx", java.util.Locale.forLanguageTag("pt-BR")))
+    }
 }

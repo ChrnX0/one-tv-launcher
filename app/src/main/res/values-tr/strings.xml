@@ -753,6 +753,7 @@ AS\\Filmler).</string>
     <string name="legenda_sem_conta">OpenSubtitles anahtarınızı Ayarlar > Hesap > Filmler ve diziler’e ekleyin</string>
     <string name="legenda_escolher">«%1$s» için altyazı</string>
     <string name="legenda_surdos">işitme engelli</string>
+    <string name="legenda_bate">bu dosya için</string>
     <string name="legenda_atraso_opcao">Altyazı gecikmesi: %1$s</string>
     <string name="legenda_atraso_titulo">Altyazı gecikmesi (+ = metin daha geç görünür)</string>
     <string name="legenda_atraso_zero">Gecikme yok</string>

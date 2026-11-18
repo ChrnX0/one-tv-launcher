@@ -753,6 +753,7 @@ AS\\Filme).</string>
     <string name="legenda_sem_conta">Trage deinen OpenSubtitles-Schlüssel unter Einstellungen > Konto > Filme und Serien ein</string>
     <string name="legenda_escolher">Untertitel für \"%1$s\"</string>
     <string name="legenda_surdos">für Hörgeschädigte</string>
+    <string name="legenda_bate">passt zu dieser Datei</string>
     <string name="legenda_atraso_opcao">Untertitelverzögerung: %1$s</string>
     <string name="legenda_atraso_titulo">Untertitelverzögerung (+ = Text erscheint später)</string>
     <string name="legenda_atraso_zero">Keine Verzögerung</string>

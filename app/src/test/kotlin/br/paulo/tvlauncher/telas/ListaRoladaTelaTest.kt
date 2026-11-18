@@ -19,7 +19,7 @@ import org.robolectric.annotation.GraphicsMode
 import java.io.File
 
 /**
- * Lista do [Estilo.lista] (menu "Áudio e legenda" do player) rolada até o fim: nenhuma linha pode ser desenhada por
+ * Lista do [Estilo.lista] (menu "Áudio e legenda" do player, painel da direita desde 18/11/2026) rolada até o fim: nenhuma linha pode ser desenhada por
  * cima do título (visto na Sala em 15/11/2026). Desenha o cartão duas vezes, com a lista visível e escondida, e compara
  * a faixa do título pixel a pixel. Roda com -Ptelas; a foto vai para app/build/telas/lista-rolada.png.
  */
@@ -32,10 +32,10 @@ class ListaRoladaTelaTest {
         val a = Robolectric.buildActivity(Activity::class.java).setup().get()
         val itens = (1..28).map { "Opção $it" }
         val d = Estilo.lista(a, "Áudio e legenda", itens) {}
-        // O cartão é o conteúdo da janela do diálogo: título + ScrollView.
-        val cartao = (d.findViewById<View>(android.R.id.content) as ViewGroup).getChildAt(0) as ViewGroup
-        val rolagem = cartao.getChildAt(1) as ScrollView
-        val larg = 1200; val alt = 1000   // menor que a lista inteira, para ela precisar rolar
+        // O painel (à direita, 18/11/2026) é o 1º filho do conteúdo da janela: título, posição, ScrollView, rodapé.
+        val cartao = ((d.findViewById<View>(android.R.id.content) as ViewGroup).getChildAt(0) as ViewGroup).getChildAt(0) as ViewGroup
+        val rolagem = (0 until cartao.childCount).map { cartao.getChildAt(it) }.first { it is ScrollView } as ScrollView
+        val larg = 940; val alt = 1000   // menor que a lista inteira, para ela precisar rolar
         cartao.measure(View.MeasureSpec.makeMeasureSpec(larg, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(alt, View.MeasureSpec.EXACTLY))
         cartao.layout(0, 0, larg, alt)
         rolagem.scrollTo(0, rolagem.getChildAt(0).height)   // até o fim, como na TV
@@ -53,7 +53,7 @@ class ListaRoladaTelaTest {
         var diferentes = 0
         for (y in 0 until rolagem.top) for (x in 0 until larg) if (comLista.getPixel(x, y) != semLista.getPixel(x, y)) diferentes++
         assertEquals("pixels de linhas desenhados por cima do título", 0, diferentes)
-        (rolagem.getChildAt(0) as ViewGroup).let { focadaCabe(it.getChildAt(it.childCount - 1), it.paddingLeft + rolagem.paddingLeft) }
+        // A linha em foco não cresce (os vizinhos é que encolhem), então não há o que sobrar para fora do recorte.
         d.dismiss()
     }
 
