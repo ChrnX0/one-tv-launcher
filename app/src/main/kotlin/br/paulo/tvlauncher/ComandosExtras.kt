@@ -116,6 +116,12 @@ object ComandosExtras {
             Extras.definirTexto(ctx, HoraDormir.CHAVE_PERMITIDOS, it) }.ifEmpty { "lista vazia: só os essenciais abrem" }
         "recado_link" -> PainelExtras.novoLinkRecado(ctx)
         "tecla" -> teclaFalsa(i)
+        // Barra de cima da cruz (ilha, recua, leve, relogio, hoje, vidro) e o movimento dos ícones (MovimentoAdaptativo).
+        "barra" -> (i.getStringExtra("nome") ?: "").let { n ->
+            LayoutHome.BarraCruz.entries.firstOrNull { it.name.equals(n, true) }?.let { LayoutHome.definirBarraCruz(ctx, it); "barra=${it.name} (aperte HOME)" }
+                ?: "barra=${LayoutHome.barraCruz(ctx)}; opções: ${LayoutHome.BarraCruz.entries.joinToString { it.name.lowercase() }}"
+        }
+        "movimento" -> MovimentoAdaptativo.comando(ctx, i.getStringExtra("nivel"))
         // Tela inicial em cruz (17/11/2026): saída de emergência para a HOME antiga até a Cruz passar no aceite na TV.
         "home_antiga" -> { LayoutHome.definirAntiga(ctx, i.getBooleanExtra("ligar", false)); "cruz=${LayoutHome.cruz(ctx)} (aperte HOME)" }
         // Cuidar de longe (ideias 77-79): estado, rodar o relógio agora, abrir a pergunta de consentimento, teste de envio.

@@ -17,6 +17,14 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>New top bar, the Island: while you browse, a pill in the center shows the time and temperature</item>
+        <item>The pill grows with what is happening: no internet, timer, alarm in the next 12 h, what is playing, birthday, your team\'s game, list expiring</item>
+        <item>The left corner shows one line about the category: what is on air in Watch, the last radio or podcast in Listen, controllers and crew in Play</item>
+        <item>The corner never repeats: it hides when its item is selected or when the pill already says the same</item>
+        <item>▲ opens the usual bar with a dark veil behind it; when the TV turns on it stays open for 4 seconds</item>
+        <item>The other bars are still in Settings › Home screen › Top bar</item>
+        <item>Icon animation adapts to the device: strong devices animate everything; mid ones animate the selected icon and the categories once on arrival; if frames get heavy, it steps down by itself</item>
+        <item>Radio and Podcasts: button icons show again, and episodes show the podcast cover</item>
         <item>Online subtitles work again: the OpenSubtitles search failed for every title with more than one word (“Couldn’t search for subtitles”)</item>
         <item>Subtitles are searched for the right movie: first by the movie or show ID, then by name and year, then by name only</item>
         <item>Movies whose automatic subtitle failed will try again</item>
@@ -28,18 +36,33 @@
         <item>Trailer: a notice on screen no longer closes YouTube by mistake</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>barra_ilha_recolhida</item>
+        <item>barra_ilha_pilula</item>
+        <item>barra_ilha_canto</item>
+        <item>barra_ilha_aberta</item>
+        <item>movimento_adaptativo</item>
         <item>player_legenda_internet</item>
         <item>player_trocar_versao</item>
         <item>player_trailer</item>
         <item>listas_cruz</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Island collapsed</item>
+        <item>Live pill</item>
+        <item>Category corner</item>
+        <item>Open bar</item>
+        <item>Light animation</item>
         <item>Online subtitles</item>
         <item>Switch version</item>
         <item>Trailer</item>
         <item>Lists like the home screen</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>On HOME, browsing the cross, is there a pill at the top center with an orange dot, the time and the temperature?</item>
+        <item>With a radio playing (or a timer running), does the pill grow and show what it is?</item>
+        <item>In Watch, with an item other than TV selected, does the left corner show what is on air?</item>
+        <item>With ▲ at the top of the cross, does the usual bar appear with the dark veil and the pill hide?</item>
+        <item>Idle on HOME, do the category icons play once and rest, without the screen feeling heavy?</item>
         <item>In a movie, ▼ › “Search subtitles online” shows a list of subtitles?</item>
         <item>In a movie with dubbed and subtitled versions, ▼ shows “Dubbed version · continues from here” (or subtitled) and switches at the same spot?</item>
         <item>On the details page, Trailer opens the right trailer, and BACK closes YouTube and returns to the page?</item>

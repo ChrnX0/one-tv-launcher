@@ -1013,13 +1013,14 @@ class ConfigLauncherActivity : Activity() {
                 linhaApps.valor(rotuloApps())
             }
             c.addView(linhaApps, lp())
-            // Barra de cima (Recua, Leve, Relógio grande ou a de sempre) e a arte do item em foco atrás da cruz.
+            // Barra de cima (Ilha, Recua, Leve, Relógio grande, Vidro ou a de sempre) e a arte do item em foco atrás da cruz.
             fun rotuloBarra() = getString(when (LayoutHome.barraCruz(this)) {
                 LayoutHome.BarraCruz.RECUA -> R.string.cruz_barra_recua
                 LayoutHome.BarraCruz.LEVE -> R.string.cruz_barra_leve
                 LayoutHome.BarraCruz.RELOGIO -> R.string.cruz_barra_relogio
                 LayoutHome.BarraCruz.HOJE -> R.string.cruz_barra_capsulas
                 LayoutHome.BarraCruz.VIDRO -> R.string.cruz_barra_vidro
+                LayoutHome.BarraCruz.ILHA -> R.string.cruz_barra_ilha
             })
             lateinit var linhaBarra: LinhaCfg
             linhaBarra = linha(getString(R.string.cruz_barra), getString(R.string.cruz_barra_det), valor = rotuloBarra()) {

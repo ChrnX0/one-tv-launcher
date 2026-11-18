@@ -80,4 +80,8 @@
     <string name="cruz_pendrive">Memoria USB: %1$s</string>
     <string name="casa_fora_titulo">Home Assistant no responde</string>
     <string name="casa_fora_texto">Comprueba que su servidor esté encendido. La TV vuelve a intentarlo sola cada pocos segundos.</string>
+    <string name="cruz_barra_ilha">Isla</string>
+    <string name="cruz_canto_no_ar">En el aire</string>
+    <string name="cruz_canto_buscar">Buscar</string>
+    <string name="cruz_canto_buscar_txt">▲ abre la barra con la búsqueda</string>
 </resources>

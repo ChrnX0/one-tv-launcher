@@ -80,4 +80,8 @@
     <string name="cruz_pendrive">USB drive: %1$s</string>
     <string name="casa_fora_titulo">Home Assistant is offline</string>
     <string name="casa_fora_texto">Check that its server is on. The TV tries again by itself every few seconds.</string>
+    <string name="cruz_barra_ilha">Island</string>
+    <string name="cruz_canto_no_ar">On air</string>
+    <string name="cruz_canto_buscar">Search</string>
+    <string name="cruz_canto_buscar_txt">▲ opens the bar with search</string>
 </resources>
