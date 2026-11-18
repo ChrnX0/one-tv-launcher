@@ -175,16 +175,11 @@
     <string name="al_criar">Imposta</string>
     <string name="al_titulo">Sveglia</string>
     <string name="al_nenhum">Nessuna sveglia attiva</string>
-    <string name="al_proximo">Prossima: %1$s</string>
     <string name="al_novo_mais">+  Nuova sveglia</string>
     <string name="al_ligado">Attiva</string>
     <string name="al_desligado">Disattiva</string>
     <string name="al_novo">Nuova sveglia</string>
     <string name="al_editar">Modifica sveglia</string>
-    <string name="al_editor_dica">▲ ▼ cambiano ore e minuti (tieni premuto per andare veloce) · OK sceglie i giorni</string>
-    <string name="al_nome">Nome (facoltativo)</string>
-    <string name="al_som">Suono: %1$s</string>
-    <string name="al_ouvir">Ascolta</string>
     <string name="al_apagar">Elimina</string>
     <string name="al_hoje">oggi</string>
     <string name="al_amanha">domani</string>
@@ -194,8 +189,6 @@
     <string name="al_perdido_um">La sveglia delle %1$s non ha suonato perché la TV era spenta.</string>
     <string name="al_perdido_varios">Le sveglie delle %1$s non hanno suonato perché la TV era spenta.</string>
     <string name="al_perdido_e">e</string>
-    <string name="al_volume_tv">Volume della TV quando suona: parte basso e sale fino a %1$d</string>
-    <string name="al_volume_min">Volume minimo quando suona: %1$s</string>
     <string name="al_volume_nao_mexe">non cambiare</string>
     <string name="pp_sem_conta">Nessun account Google</string>
     <string name="pp_ativo">"  ·  attivo"</string>

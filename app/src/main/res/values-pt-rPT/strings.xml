@@ -175,16 +175,11 @@
     <string name="al_criar">Criar</string>
     <string name="al_titulo">Despertador</string>
     <string name="al_nenhum">Nenhum alarme ligado</string>
-    <string name="al_proximo">Próximo: %1$s</string>
     <string name="al_novo_mais">+  Novo alarme</string>
     <string name="al_ligado">Ligado</string>
     <string name="al_desligado">Desligado</string>
     <string name="al_novo">Novo alarme</string>
     <string name="al_editar">Editar alarme</string>
-    <string name="al_editor_dica">▲ ▼ mudam hora e minuto (segure para ir rápido) · OK marca os dias</string>
-    <string name="al_nome">Nome (opcional)</string>
-    <string name="al_som">Som: %1$s</string>
-    <string name="al_ouvir">Ouvir</string>
     <string name="al_apagar">Apagar</string>
     <string name="al_hoje">hoje</string>
     <string name="al_amanha">amanhã</string>
@@ -194,8 +189,6 @@
     <string name="al_perdido_um">O despertador das %1$s não tocou porque a TV estava desligada.</string>
     <string name="al_perdido_varios">Os despertadores das %1$s não tocaram porque a TV estava desligada.</string>
     <string name="al_perdido_e">e</string>
-    <string name="al_volume_tv">Volume da TV ao tocar: começa baixo e sobe até %1$d</string>
-    <string name="al_volume_min">Volume mínimo ao tocar: %1$s</string>
     <string name="al_volume_nao_mexe">não mexer</string>
     <string name="pp_sem_conta">Sem conta Google</string>
     <string name="pp_ativo">"  ·  ativo"</string>

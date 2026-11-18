@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela do despertador no jeito da cruz (18/11/2026). -->
+<resources>
+    <string name="al_novo_det">Wybierz godzinę i dni</string>
+    <string name="al_volume_rotulo">Głośność dzwonienia</string>
+    <string name="al_volume_det">Telewizor ustawi co najmniej tę głośność, nawet jeśli był wyciszony</string>
+    <string name="al_volume_lg_det">Telewizor LG zacznie cicho i dojdzie do tej głośności</string>
+    <string name="al_info_toca">zadzwoni %1$s</string>
+    <string name="al_proximo_rotulo">Następny budzik</string>
+    <string name="al_dica_editar">edytuj</string>
+    <string name="al_dica_ligar">wł./wył.</string>
+    <string name="al_dica_sair">wyjdź</string>
+    <string name="al_dica_mudar">zmień</string>
+    <string name="al_dica_andar">przejdź</string>
+    <string name="al_dica_salvar">zapisz</string>
+    <string name="al_ligou">Budzik %1$s włączony</string>
+    <string name="al_desligou">Budzik %1$s wyłączony</string>
+    <string name="al_sim">Tak</string>
+    <string name="al_nao">Nie</string>
+    <string name="al_op_salvar_det">WSTECZ też zapisuje</string>
+    <string name="al_op_repetir">Powtarzaj</string>
+    <string name="al_op_repetir_det">OK wybiera dni</string>
+    <string name="al_op_som">Dźwięk</string>
+    <string name="al_op_som_det">OK wybiera dźwięk i go odtwarza</string>
+    <string name="al_op_rampa">Dzwonek</string>
+    <string name="al_op_rampa_det">Ciche początki budzą łagodniej</string>
+    <string name="al_op_bom_dia">Dzień dobry</string>
+    <string name="al_op_bom_dia_det">Po zatrzymaniu telewizor poda godzinę, pogodę i dzisiejsze plany</string>
+    <string name="al_op_cena">Scena po zatrzymaniu</string>
+    <string name="al_op_cena_det">OK wybiera scenę</string>
+    <string name="al_op_nome">Nazwa</string>
+    <string name="al_op_nome_det">Pojawia się na ekranie, gdy dzwoni</string>
+    <string name="al_op_nome_dica">np. Lekarstwo</string>
+    <string name="al_op_alarme">Budzik</string>
+    <string name="al_op_ligado_det">OK włącza lub wyłącza</string>
+    <string name="al_op_apagar">Usuń budzik</string>
+    <string name="al_op_apagar_det">Pyta przed usunięciem</string>
+    <string name="al_op_sair">Wyjdź bez zapisywania</string>
+    <string name="al_op_sair_det">Cofa zmiany wprowadzone tutaj</string>
+    <string name="al_apagar_q">Usunąć budzik %1$s?</string>
+    <string name="al_salvo">Budzik zapisany: %1$s</string>
+    <string name="al_resumo">Zadzwoni %1$s</string>
+    <string name="al_resumo_desligado">Wyłączony: nie zadzwoni</string>
+    <string name="al_op_hora">Godzina</string>
+    <string name="al_op_minuto">Minuta</string>
+</resources>

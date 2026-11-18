@@ -112,8 +112,6 @@
     <string name="casa_err_keystore">le Keystore de la TV a échoué : %1$s</string>
     <string name="casa_err_sensor">capteur non valide (ex. binary_sensor.doorbell)</string>
     <string name="casa_err_camera">caméra non valide (ex. camera.front_door)</string>
-    <string name="al_bom_dia_sim">Bonjour : oui</string>
-    <string name="al_bom_dia_nao">Bonjour : non</string>
     <string name="ag_agora">maintenant</string>
     <string name="ag_as_h">à %1$d h</string>
     <string name="ag_as_hm">à %1$d h %2$02d</string>

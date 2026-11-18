@@ -27,7 +27,6 @@
     <string name="rot_cena">Run scene: %1$s</string>
     <string name="rot_cena_linha">Scene: %1$s</string>
     <string name="rot_cena_sem">Create a scene first (web panel › Extras › Scenes)</string>
-    <string name="al_cena">Scene on stop: %1$s</string>
     <!-- Tela Cenas (ideia 4) -->
     <string name="lbl_cenas">Scenes</string>
     <string name="pr_cenas">Scenes</string>

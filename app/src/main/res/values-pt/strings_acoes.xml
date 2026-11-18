@@ -27,7 +27,6 @@
     <string name="rot_cena">Rodar a cena: %1$s</string>
     <string name="rot_cena_linha">Cena: %1$s</string>
     <string name="rot_cena_sem">Crie uma cena antes (painel web › Extras › Cenas)</string>
-    <string name="al_cena">Cena ao parar: %1$s</string>
     <!-- Tela Cenas (ideia 4) -->
     <string name="lbl_cenas">Cenas</string>
     <string name="pr_cenas">Cenas</string>

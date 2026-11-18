@@ -112,8 +112,6 @@
     <string name="casa_err_keystore">TV का Keystore विफल: %1$s</string>
     <string name="casa_err_sensor">अमान्य सेंसर (जैसे binary_sensor.doorbell)</string>
     <string name="casa_err_camera">अमान्य कैमरा (जैसे camera.front_door)</string>
-    <string name="al_bom_dia_sim">सुप्रभात: हाँ</string>
-    <string name="al_bom_dia_nao">सुप्रभात: नहीं</string>
     <string name="ag_agora">अभी</string>
     <string name="ag_as_h">%1$d बजे</string>
     <string name="ag_as_hm">%1$d:%2$02d बजे</string>

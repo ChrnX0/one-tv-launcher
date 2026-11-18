@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela do despertador no jeito da cruz (18/11/2026). -->
+<resources>
+    <string name="al_novo_det">समय और दिन चुनें</string>
+    <string name="al_volume_rotulo">बजते समय आवाज़</string>
+    <string name="al_volume_det">टीवी कम से कम इतनी आवाज़ कर देगा, म्यूट होने पर भी</string>
+    <string name="al_volume_lg_det">LG टीवी धीमे से शुरू होकर इस आवाज़ तक जाएगा</string>
+    <string name="al_info_toca">%1$s बजेगा</string>
+    <string name="al_proximo_rotulo">अगला अलार्म</string>
+    <string name="al_dica_editar">बदलें</string>
+    <string name="al_dica_ligar">चालू/बंद</string>
+    <string name="al_dica_sair">बाहर</string>
+    <string name="al_dica_mudar">बदलें</string>
+    <string name="al_dica_andar">आगे-पीछे</string>
+    <string name="al_dica_salvar">सहेजें</string>
+    <string name="al_ligou">%1$s का अलार्म चालू</string>
+    <string name="al_desligou">%1$s का अलार्म बंद</string>
+    <string name="al_sim">हाँ</string>
+    <string name="al_nao">नहीं</string>
+    <string name="al_op_salvar_det">वापस भी सहेजता है</string>
+    <string name="al_op_repetir">दोहराएँ</string>
+    <string name="al_op_repetir_det">OK दिन चुनता है</string>
+    <string name="al_op_som">आवाज़</string>
+    <string name="al_op_som_det">OK आवाज़ चुनकर सुनाता है</string>
+    <string name="al_op_rampa">घंटी</string>
+    <string name="al_op_rampa_det">धीमे से शुरू होना आराम से जगाता है</string>
+    <string name="al_op_bom_dia">सुप्रभात</string>
+    <string name="al_op_bom_dia_det">रोकने पर टीवी समय, मौसम और आज का कैलेंडर बताता है</string>
+    <string name="al_op_cena">रोकने पर सीन</string>
+    <string name="al_op_cena_det">OK सीन चुनता है</string>
+    <string name="al_op_nome">नाम</string>
+    <string name="al_op_nome_det">बजने पर स्क्रीन पर दिखता है</string>
+    <string name="al_op_nome_dica">जैसे: दवा</string>
+    <string name="al_op_alarme">अलार्म</string>
+    <string name="al_op_ligado_det">OK चालू या बंद करता है</string>
+    <string name="al_op_apagar">अलार्म हटाएँ</string>
+    <string name="al_op_apagar_det">हटाने से पहले पूछता है</string>
+    <string name="al_op_sair">बिना सहेजे बाहर</string>
+    <string name="al_op_sair_det">यहाँ किए बदलाव वापस लेता है</string>
+    <string name="al_apagar_q">%1$s का अलार्म हटाएँ?</string>
+    <string name="al_salvo">अलार्म सहेजा गया: %1$s</string>
+    <string name="al_resumo">%1$s बजेगा</string>
+    <string name="al_resumo_desligado">बंद: नहीं बजेगा</string>
+    <string name="al_op_hora">घंटा</string>
+    <string name="al_op_minuto">मिनट</string>
+</resources>

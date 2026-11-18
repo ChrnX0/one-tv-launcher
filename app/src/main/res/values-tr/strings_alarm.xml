@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela do despertador no jeito da cruz (18/11/2026). -->
+<resources>
+    <string name="al_novo_det">Saati ve günleri seçin</string>
+    <string name="al_volume_rotulo">Çalarken ses düzeyi</string>
+    <string name="al_volume_det">Sessizde olsa bile TV en az bu ses düzeyine çıkar</string>
+    <string name="al_volume_lg_det">LG TV kısık başlar ve bu ses düzeyine çıkar</string>
+    <string name="al_info_toca">%1$s çalar</string>
+    <string name="al_proximo_rotulo">Sonraki alarm</string>
+    <string name="al_dica_editar">düzenle</string>
+    <string name="al_dica_ligar">aç/kapat</string>
+    <string name="al_dica_sair">çık</string>
+    <string name="al_dica_mudar">değiştir</string>
+    <string name="al_dica_andar">geç</string>
+    <string name="al_dica_salvar">kaydet</string>
+    <string name="al_ligou">%1$s alarmı açık</string>
+    <string name="al_desligou">%1$s alarmı kapalı</string>
+    <string name="al_sim">Evet</string>
+    <string name="al_nao">Hayır</string>
+    <string name="al_op_salvar_det">GERİ de kaydeder</string>
+    <string name="al_op_repetir">Tekrarla</string>
+    <string name="al_op_repetir_det">OK günleri seçer</string>
+    <string name="al_op_som">Ses</string>
+    <string name="al_op_som_det">OK sesi seçer ve dinletir</string>
+    <string name="al_op_rampa">Çalma</string>
+    <string name="al_op_rampa_det">Kısık başlamak daha yumuşak uyandırır</string>
+    <string name="al_op_bom_dia">Günaydın</string>
+    <string name="al_op_bom_dia_det">Durdurunca TV saati, hava durumunu ve bugünün ajandasını söyler</string>
+    <string name="al_op_cena">Durdurunca sahne</string>
+    <string name="al_op_cena_det">OK sahneyi seçer</string>
+    <string name="al_op_nome">Ad</string>
+    <string name="al_op_nome_det">Çaldığında ekranda görünür</string>
+    <string name="al_op_nome_dica">örn. İlaç</string>
+    <string name="al_op_alarme">Alarm</string>
+    <string name="al_op_ligado_det">OK açar veya kapatır</string>
+    <string name="al_op_apagar">Alarmı sil</string>
+    <string name="al_op_apagar_det">Silmeden önce sorar</string>
+    <string name="al_op_sair">Kaydetmeden çık</string>
+    <string name="al_op_sair_det">Burada değiştirdiklerinizi geri alır</string>
+    <string name="al_apagar_q">%1$s alarmı silinsin mi?</string>
+    <string name="al_salvo">Alarm kaydedildi: %1$s</string>
+    <string name="al_resumo">%1$s çalar</string>
+    <string name="al_resumo_desligado">Kapalı: çalmayacak</string>
+    <string name="al_op_hora">Saat</string>
+    <string name="al_op_minuto">Dakika</string>
+</resources>

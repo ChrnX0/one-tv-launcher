@@ -175,16 +175,11 @@
     <string name="al_criar">Stellen</string>
     <string name="al_titulo">Wecker</string>
     <string name="al_nenhum">Kein Wecker aktiv</string>
-    <string name="al_proximo">Nächster: %1$s</string>
     <string name="al_novo_mais">+  Neuer Wecker</string>
     <string name="al_ligado">An</string>
     <string name="al_desligado">Aus</string>
     <string name="al_novo">Neuer Wecker</string>
     <string name="al_editar">Wecker bearbeiten</string>
-    <string name="al_editor_dica">▲ ▼ ändern Stunde und Minute (halten für schnell) · OK wählt die Tage</string>
-    <string name="al_nome">Name (optional)</string>
-    <string name="al_som">Ton: %1$s</string>
-    <string name="al_ouvir">Anhören</string>
     <string name="al_apagar">Löschen</string>
     <string name="al_hoje">heute</string>
     <string name="al_amanha">morgen</string>
@@ -194,8 +189,6 @@
     <string name="al_perdido_um">Der Wecker um %1$s hat nicht geklingelt, weil der Fernseher aus war.</string>
     <string name="al_perdido_varios">Die Wecker um %1$s haben nicht geklingelt, weil der Fernseher aus war.</string>
     <string name="al_perdido_e">und</string>
-    <string name="al_volume_tv">TV-Lautstärke beim Klingeln: beginnt leise und steigt bis %1$d</string>
-    <string name="al_volume_min">Mindestlautstärke beim Klingeln: %1$s</string>
     <string name="al_volume_nao_mexe">nicht ändern</string>
     <string name="pp_sem_conta">Kein Google-Konto</string>
     <string name="pp_ativo">"  ·  aktiv"</string>

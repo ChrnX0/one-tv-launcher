@@ -26,7 +26,6 @@
     <string name="rot_cena">सीन चलाएँ: %1$s</string>
     <string name="rot_cena_linha">सीन: %1$s</string>
     <string name="rot_cena_sem">पहले एक सीन बनाएँ (वेब पैनल › एक्स्ट्रा › सीन)</string>
-    <string name="al_cena">रोकने पर सीन: %1$s</string>
     <string name="lbl_cenas">सीन</string>
     <string name="pr_cenas">सीन</string>
     <string name="cenas_titulo">सीन</string>

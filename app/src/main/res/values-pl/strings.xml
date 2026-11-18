@@ -175,16 +175,11 @@
     <string name="al_criar">Ustaw</string>
     <string name="al_titulo">Budzik</string>
     <string name="al_nenhum">Brak włączonych budzików</string>
-    <string name="al_proximo">Następny: %1$s</string>
     <string name="al_novo_mais">+  Nowy budzik</string>
     <string name="al_ligado">Wł.</string>
     <string name="al_desligado">Wył.</string>
     <string name="al_novo">Nowy budzik</string>
     <string name="al_editar">Edytuj budzik</string>
-    <string name="al_editor_dica">▲ ▼ zmień godzinę i minutę (przytrzymaj, by szybciej) · OK zaznacza dni</string>
-    <string name="al_nome">Nazwa (opcjonalnie)</string>
-    <string name="al_som">Dźwięk: %1$s</string>
-    <string name="al_ouvir">Odsłuchaj</string>
     <string name="al_apagar">Usuń</string>
     <string name="al_hoje">dziś</string>
     <string name="al_amanha">jutro</string>
@@ -194,8 +189,6 @@
     <string name="al_perdido_um">Budzik %1$s nie zadzwonił, bo telewizor był wyłączony.</string>
     <string name="al_perdido_varios">Budziki %1$s nie zadzwoniły, bo telewizor był wyłączony.</string>
     <string name="al_perdido_e">i</string>
-    <string name="al_volume_tv">Głośność TV podczas dzwonienia: zaczyna cicho i rośnie do %1$d</string>
-    <string name="al_volume_min">Minimalna głośność podczas dzwonienia: %1$s</string>
     <string name="al_volume_nao_mexe">nie zmieniaj</string>
     <string name="pp_sem_conta">Brak konta Google</string>
     <string name="pp_ativo">"  ·  aktywny"</string>

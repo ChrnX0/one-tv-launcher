@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tela do despertador no jeito da cruz (18/11/2026). -->
+<resources>
+    <string name="al_novo_det">Uhrzeit und Tage wählen</string>
+    <string name="al_volume_rotulo">Lautstärke beim Klingeln</string>
+    <string name="al_volume_det">Der Fernseher stellt mindestens diese Lautstärke ein, auch wenn er stumm war</string>
+    <string name="al_volume_lg_det">Der LG-Fernseher beginnt leise und steigt bis zu dieser Lautstärke</string>
+    <string name="al_info_toca">klingelt %1$s</string>
+    <string name="al_proximo_rotulo">Nächster Wecker</string>
+    <string name="al_dica_editar">bearbeiten</string>
+    <string name="al_dica_ligar">an/aus</string>
+    <string name="al_dica_sair">beenden</string>
+    <string name="al_dica_mudar">ändern</string>
+    <string name="al_dica_andar">wechseln</string>
+    <string name="al_dica_salvar">speichern</string>
+    <string name="al_ligou">Wecker %1$s an</string>
+    <string name="al_desligou">Wecker %1$s aus</string>
+    <string name="al_sim">Ja</string>
+    <string name="al_nao">Nein</string>
+    <string name="al_op_salvar_det">ZURÜCK speichert auch</string>
+    <string name="al_op_repetir">Wiederholen</string>
+    <string name="al_op_repetir_det">OK wählt die Tage</string>
+    <string name="al_op_som">Ton</string>
+    <string name="al_op_som_det">OK wählt den Ton und spielt ihn vor</string>
+    <string name="al_op_rampa">Klingeln</string>
+    <string name="al_op_rampa_det">Leise beginnen weckt sanfter</string>
+    <string name="al_op_bom_dia">Guten Morgen</string>
+    <string name="al_op_bom_dia_det">Beim Stoppen sagt der Fernseher Uhrzeit, Wetter und heutige Termine</string>
+    <string name="al_op_cena">Szene beim Stoppen</string>
+    <string name="al_op_cena_det">OK wählt die Szene</string>
+    <string name="al_op_nome">Name</string>
+    <string name="al_op_nome_det">Erscheint auf dem Bildschirm, wenn er klingelt</string>
+    <string name="al_op_nome_dica">z. B. Medikament</string>
+    <string name="al_op_alarme">Wecker</string>
+    <string name="al_op_ligado_det">OK schaltet ihn an oder aus</string>
+    <string name="al_op_apagar">Wecker löschen</string>
+    <string name="al_op_apagar_det">Fragt vor dem Löschen</string>
+    <string name="al_op_sair">Ohne Speichern verlassen</string>
+    <string name="al_op_sair_det">Macht deine Änderungen hier rückgängig</string>
+    <string name="al_apagar_q">Wecker %1$s löschen?</string>
+    <string name="al_salvo">Wecker gespeichert: %1$s</string>
+    <string name="al_resumo">Klingelt %1$s</string>
+    <string name="al_resumo_desligado">Aus: klingelt nicht</string>
+    <string name="al_op_hora">Stunde</string>
+    <string name="al_op_minuto">Minute</string>
+</resources>

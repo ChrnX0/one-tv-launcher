@@ -26,7 +26,6 @@
     <string name="rot_cena">تشغيل المشهد: %1$s</string>
     <string name="rot_cena_linha">المشهد: %1$s</string>
     <string name="rot_cena_sem">أنشئ مشهدًا أولًا (لوحة الويب › إضافات › المشاهد)</string>
-    <string name="al_cena">المشهد عند التوقف: %1$s</string>
     <string name="lbl_cenas">المشاهد</string>
     <string name="pr_cenas">المشاهد</string>
     <string name="cenas_titulo">المشاهد</string>

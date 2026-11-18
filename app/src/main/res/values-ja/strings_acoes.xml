@@ -26,7 +26,6 @@
     <string name="rot_cena">シーンを実行: %1$s</string>
     <string name="rot_cena_linha">シーン: %1$s</string>
     <string name="rot_cena_sem">先にシーンを作成してください（ウェブパネル › 追加機能 › シーン）</string>
-    <string name="al_cena">停止時のシーン: %1$s</string>
     <string name="lbl_cenas">シーン</string>
     <string name="pr_cenas">シーン</string>
     <string name="cenas_titulo">シーン</string>
