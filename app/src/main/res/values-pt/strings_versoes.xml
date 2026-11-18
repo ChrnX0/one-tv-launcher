@@ -14,25 +14,21 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Logo da Sofaly por cerca de 1,5 s quando a TV liga ou acorda (qualquer tecla pula; desliga em Configurações › Sistema › Sobre)</item>
-        <item>Tela nova “Sobre a Sofaly”: logo, slogan, versão, o que mudou e licenças</item>
-        <item>A logo da Sofaly também aparece pequena embaixo das Configurações e num canto do descanso de tela</item>
-        <item>O ícone da TV na tela inicial agora é o sofá-TV da logo em contorno, um pouco menor, com o brilho do vidro; ao ser escolhido, o brilho passa pela tela e as antenas balançam</item>
-        <item>Canto de baixo da home: o tempo que falta não se parte mais no meio da linha, e a Casa volta na hora mesmo quando a tela e o celular pedem ao mesmo tempo</item>
-        <item>Nome comprido de vídeo ou podcast aparece inteiro no canto de baixo</item>
-        <item>Despertador redesenhado no jeito da tela inicial: a hora em roletes grandes com setas, as opções numa coluna com o valor em laranja, a frase de quando toca, dias por extenso e o som tocando ao escolher; na lista, segurar OK liga ou desliga o alarme</item>
-        <item>Despertador: se a TV não ligar na hora do toque (a LG às vezes não ouve o primeiro pedido), o alarme pede de novo algumas vezes nos primeiros 4 minutos</item>
+        <item>Addons: nova linha “Adicionar addon” (em Addons e em Configurações › Addons) com um código para o celular, que abre o painel pronto para colar o endereço, ou para digitar na TV</item>
+        <item>Addons: lista “Recomendados” com catálogos conferidos (filmes e séries dos serviços, TMDB, MUBI e anime); escolha e confirme com o PIN, sem digitar nada</item>
+        <item>Addons separados por tipo (Filmes e séries, Anime, Legendas...): seções na TV e filtro no painel</item>
+        <item>Addons: título de catálogo sem vídeo para tocar aqui mostra “Onde assistir”, que abre a busca do Google TV</item>
+        <item>Despertador: no rolete da hora o número maior fica em cima, e as listas não mostram mais as opções por baixo</item>
+        <item>Despertador: segurar a seta gira o rolete devagar (4 passos por segundo), dá para parar na hora certa</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Logo ao acordar</item>
-        <item>Sobre a Sofaly</item>
-        <item>Ícone sofá-TV</item>
-        <item>Despertador novo</item>
+        <item>Adicionar addon</item>
+        <item>Recomendados</item>
+        <item>Rolete do despertador</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Depois de a TV dormir 5 min ou mais e acordar, a logo da Sofaly aparece por cerca de 1,5 s sobre a tela inicial e some?</item>
-        <item>Configurações › Sistema › Sobre a Sofaly abre com a logo e a versão, e a logo aparece certa embaixo das Configurações?</item>
-        <item>Na tela inicial, o ícone da TV é o sofá-TV em contorno, longe da barra do programa, e ao escolher o brilho atravessa a tela?</item>
-        <item>Na tela inicial, abra o despertador: dá para mudar a hora com ▲▼, ir com ▶ até as opções, escolher o som (ele toca) e sair com VOLTAR, ficando salvo?</item>
+        <item>Em Addons, a linha “Adicionar addon” mostra o código; lido no celular, o painel abre já no cartão Addons?</item>
+        <item>Em Addons › Recomendados, escolher “The Movie Database” e confirmar com o PIN instala, e os catálogos dele aparecem e abrem?</item>
+        <item>No despertador, segurando ▲ a hora sobe devagar e para onde você soltar?</item>
     </string-array>
 </resources>

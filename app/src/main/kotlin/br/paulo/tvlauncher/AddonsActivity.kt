@@ -41,6 +41,10 @@ class AddonsActivity : Activity() {
     private class Linha(val icone: IconeMidia.Tipo, val titulo: String, val sub: String?, val alvo: Any)
 
     private object Buscar
+    /** Linha "Adicionar add-on" (18/11/2026): QR para o painel ou digitar, em [AddonInstallDialog]. */
+    private object Adicionar
+    /** "Onde assistir" (18/11/2026): catálogo sem fonte que toque aqui abre a busca do Google TV com o título. */
+    private class Onde(val p: BuscaOutrosApps.Pedido)
     private class Mais(val linha: AddonsTv.Linha, val skip: Int, val busca: String?)
     private class ItemDe(val item: AddonsProtocolo.Item, val origem: AddonsProtocolo.Instalado?)
     private class EpisodioDe(val ficha: AddonsProtocolo.Ficha, val v: AddonsProtocolo.Video)
@@ -119,6 +123,13 @@ class AddonsActivity : Activity() {
         window.setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         Estilo.entrar(coluna)
         desenharRaiz()
+        // Lista curada: no máximo 1 pergunta por dia ao servidor; se mudou e a tela ainda está na raiz, redesenha.
+        // Thread à parte, não a fila `rede`: o servidor lento não atrasa o 1º catálogo.
+        Thread {
+            val antes = AddonsTv.sugeridos(this)
+            AddonsTv.atualizarSugeridos(this)
+            if (AddonsTv.sugeridos(this) != antes) tela.post { if (!isDestroyed && pilha.size == 1) desenharRaiz() }
+        }.start()
         // Elevação 7.1: aberta pela busca única com um título que só um addon tem.
         intent.getStringExtra(BibliotecaUnica.EXTRA_BUSCA)?.trim()?.takeIf { it.length >= 2 }?.let { buscar(it) }
     }
@@ -145,6 +156,14 @@ class AddonsActivity : Activity() {
             itens += Secao(grupo.first().addon.m.nome)
             grupo.forEach { l -> itens += Linha(IconeMidia.Tipo.PASTA, l.cat.nome.ifBlank { l.cat.id }, tipoLegivel(l.cat.tipo), l) }
         }
+        // Lista curada (18/11/2026): o que ainda não está instalado; escolher pede PIN e instala sem digitar.
+        val sugeridos = AddonsTv.sugeridos(this)
+        // Uma seção por tipo (pedido do Paulo, 18/11: "separar por tipo, como o Stremio"): Filmes e séries, Anime, Legendas...
+        RecommendedAddons.grouped(sugeridos.map { it.e }).forEach { (g, entradas) ->
+            itens += Secao("${getString(R.string.ad_sug_secao)} · ${AddonsTv.nomeGrupo(this, g)}")
+            entradas.forEach { e -> sugeridos.first { it.e == e }.let { s -> itens += Linha(IconeMidia.Tipo.MAIS, s.nome, s.texto.ifBlank { null }, s) } }
+        }
+        itens += Linha(IconeMidia.Tipo.MAIS, getString(R.string.ad_add_item), null, Adicionar)
         pilha.clear()
         pilha += Nivel(getString(R.string.ad_titulo), itens)
         desenhar(if (AddonsTv.instalados(this).isEmpty()) getString(R.string.ad_vazio) else getString(R.string.ad_resumo))
@@ -260,9 +279,15 @@ class AddonsActivity : Activity() {
                 Linha(IconeMidia.Tipo.VIDEO, f.nome.ifBlank { a.m.nome }.replace('\n', ' '),
                     listOf(a.m.nome, f.descricao.replace('\n', ' ')).filter { it.isNotBlank() }.joinToString(" · "), FonteDe(a, f))
             }.toMutableList()
+            // Add-on só de catálogo (TMDB, Mubi, Streaming Catalogs...): sem fonte aqui, mas o Google TV mostra em qual app está.
+            val nomeOnde = (serie?.item ?: item)?.nome ?: nome
+            val anoOnde = (serie?.item ?: item)?.ano?.take(4)?.toIntOrNull()
+            BuscaOutrosApps.ondeAssistir(Vod.nomeLimpo(nomeOnde), anoOnde, BuscaActivity.comGoogleTv(this, emptySet()))?.let {
+                itens += Linha(IconeMidia.Tipo.LUPA, getString(R.string.onde_assistir_botao), null, Onde(it))
+            }
             val titulo = if (video != null) getString(R.string.ad_episodio, video.episodio, video.titulo.ifBlank { nome }) else nome
             entrarNivel(Nivel(titulo, itens, ficha = serie, video = video, item = item ?: serie?.item),
-                if (itens.isEmpty()) getString(R.string.ad_sem_fontes) else getString(R.string.ad_fontes_resumo))
+                if (fontes.isEmpty()) getString(R.string.ad_sem_fontes) else getString(R.string.ad_fontes_resumo))
         }
     }
 
@@ -337,6 +362,9 @@ class AddonsActivity : Activity() {
         nivel.foco = pos
         when (val a = linha.alvo) {
             Buscar -> pedirBusca()
+            Adicionar -> AddonInstallDialog.mostrar(this) { desenharRaiz() }
+            is Onde -> BuscaActivity.procurarEm(this, a.p)
+            is AddonsTv.Sugerido -> AddonInstallDialog.instalarSugerido(this, a) { desenharRaiz() }
             is AddonsTv.Linha -> abrirCatalogo(a)
             is Mais -> abrirCatalogo(a.linha, a.skip, a.busca)
             is ItemDe -> abrirItem(a)

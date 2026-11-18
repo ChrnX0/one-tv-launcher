@@ -87,6 +87,55 @@ object AddonsTv {
         return null
     }
 
+    // ---------------------------------------------------------------- lista curada (18/11/2026, RecommendedAddons)
+
+    private const val REC_JSON = "recomendados_json"
+    private const val REC_QUANDO = "recomendados_quando"
+
+    /** Um add-on da lista curada, pronto para a tela: nome e texto já no idioma da TV. */
+    data class Sugerido(val e: RecommendedAddons.Entry, val nome: String, val texto: String)
+
+    /** Nome traduzido de uma seção ([RecommendedAddons.GROUPS]). */
+    fun nomeGrupo(ctx: Context, g: String): String = ctx.getString(when (g) {
+        "movies_series" -> R.string.ad_grupo_filmes_series
+        "anime" -> R.string.ad_grupo_anime
+        "tv" -> R.string.ad_grupo_tv
+        "subtitles" -> R.string.ad_grupo_legendas
+        "music" -> R.string.ad_grupo_musica
+        else -> R.string.ad_grupo_outros
+    })
+
+    /** Seção de um addon instalado, pelo manifesto (tipos + recursos). */
+    fun grupoDe(a: AddonsProtocolo.Instalado): String =
+        RecommendedAddons.groupOf(a.m.tipos, a.m.recursos.map { it.nome }.distinct())
+
+    /** A lista atual (do servidor, se já veio; senão a embutida), sem o que já está instalado. Não acessa a rede. */
+    fun sugeridos(ctx: Context): List<Sugerido> {
+        val lista = RecommendedAddons.parse(prefs(ctx).getString(REC_JSON, null)) ?: RecommendedAddons.BUILT_IN
+        val inst = instalados(ctx)
+        return RecommendedAddons.toShow(lista, inst.map { it.m.id }.toSet(), inst.map { it.base }.toSet()).map { e ->
+            // Referência direta ao R (não getIdentifier): o encolhedor de recursos do Release apagaria o texto.
+            val res = when (RecommendedAddons.textKey(e.id)) {
+                "streaming" -> R.string.ad_sug_streaming
+                "tmdb" -> R.string.ad_sug_tmdb
+                "mubi" -> R.string.ad_sug_mubi
+                "kitsu" -> R.string.ad_sug_kitsu
+                "animeseason" -> R.string.ad_sug_animeseason
+                else -> 0
+            }
+            Sugerido(e, RecommendedAddons.name(e.id) ?: e.id, if (res != 0) ctx.getString(res) else "")
+        }
+    }
+
+    /** Pergunta ao servidor no máximo 1 vez por dia (fora da thread da tela). Falhou: fica a lista que já havia. */
+    fun atualizarSugeridos(ctx: Context) {
+        val p = prefs(ctx)
+        if (System.currentTimeMillis() - p.getLong(REC_QUANDO, 0) < RecommendedAddons.REFRESH_MS) return
+        p.edit().putLong(REC_QUANDO, System.currentTimeMillis()).apply()
+        val texto = baixar(RecommendedAddons.URL) ?: return
+        if (RecommendedAddons.parse(texto) != null) p.edit().putString(REC_JSON, texto).apply()
+    }
+
     // ---------------------------------------------------------------- perguntas das telas
 
     data class Linha(val addon: AddonsProtocolo.Instalado, val cat: AddonsProtocolo.CatalogoDecl)

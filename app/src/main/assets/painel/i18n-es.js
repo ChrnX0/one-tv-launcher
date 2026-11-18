@@ -507,6 +507,8 @@ traduzirPainelCom({T:{
 "IPs dos celulares: 192.168.1.20, 192.168.1.21":"IP de los teléfonos: 192.168.1.20, 192.168.1.21",
 "Instalando na TV…":"Instalando en la TV…",
 "Instalar":"Instalar",
+"Recomendados":"Recomendados",
+"Tipo de addon":"Tipo de addon",
 "Instalar APK…":"Instalar APK…",
 "Instalar como app (https)":"Instalar como app (https)",
 "Internet por app":"Internet por app",

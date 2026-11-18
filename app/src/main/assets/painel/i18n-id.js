@@ -507,6 +507,8 @@ traduzirPainelCom({T:{
 "IPs dos celulares: 192.168.1.20, 192.168.1.21":"IP ponsel: 192.168.1.20, 192.168.1.21",
 "Instalando na TV…":"Memasang di TV…",
 "Instalar":"Pasang",
+"Recomendados":"Direkomendasikan",
+"Tipo de addon":"Jenis addon",
 "Instalar APK…":"Pasang APK…",
 "Instalar como app (https)":"Pasang sebagai aplikasi (https)",
 "Internet por app":"Internet per aplikasi",

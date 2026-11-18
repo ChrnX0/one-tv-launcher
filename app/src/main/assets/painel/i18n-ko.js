@@ -507,6 +507,8 @@ traduzirPainelCom({T:{
 "IPs dos celulares: 192.168.1.20, 192.168.1.21":"휴대폰 IP: 192.168.1.20, 192.168.1.21",
 "Instalando na TV…":"TV에 설치 중…",
 "Instalar":"설치",
+"Recomendados":"추천",
+"Tipo de addon":"애드온 유형",
 "Instalar APK…":"APK 설치…",
 "Instalar como app (https)":"앱으로 설치(https)",
 "Internet por app":"앱별 인터넷",

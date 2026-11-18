@@ -10,7 +10,9 @@
 //   DELETE /v1/dns/txt             (TV) apaga os desafios
 //   GET    /v1/dns/txt/<id>        pública: as máquinas de DNS leem o desafio daqui
 //   GET    /v1/health              pública
+//   GET    /v1/addons/recommended  pública: lista curada de add-ons (src/addons.js)
 import { verifySignature, ID_RE, CODE_RE, newCode } from './rules.js';
+import { recommendedBody } from './addons.js';
 export { Mailbox } from './mailbox.js';
 export { Pairing } from './pairing.js';
 
@@ -26,6 +28,12 @@ export default {
     // Chave de desligar tudo (variável DISABLED=1 no painel da Cloudflare): o app segue funcionando em casa.
     if (env.DISABLED === '1') return json({ error: 'api disabled' }, 503);
     if (path === '/v1/health') return json({ ok: true });
+    if (path === '/v1/addons/recommended' && req.method === 'GET') {
+      // Igual para todos e muda raramente: a borda da Cloudflare pode guardar 1 h.
+      return new Response(JSON.stringify(recommendedBody()), {
+        headers: { 'content-type': 'application/json', 'cache-control': 'public, max-age=3600' },
+      });
+    }
 
     const publicTxt = path.match(/^\/v1\/dns\/txt\/([a-z2-7]{20})$/);
     if (publicTxt && req.method === 'GET') {

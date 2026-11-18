@@ -507,6 +507,8 @@ traduzirPainelCom({T:{
 "IPs dos celulares: 192.168.1.20, 192.168.1.21":"Telefonların IP'leri: 192.168.1.20, 192.168.1.21",
 "Instalando na TV…":"TV'ye kuruluyor…",
 "Instalar":"Kur",
+"Recomendados":"Önerilenler",
+"Tipo de addon":"Eklenti türü",
 "Instalar APK…":"APK kur…",
 "Instalar como app (https)":"Uygulama olarak kur (https)",
 "Internet por app":"Uygulama başına internet",

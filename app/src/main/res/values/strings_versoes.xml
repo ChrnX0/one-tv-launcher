@@ -17,31 +17,26 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Sofaly logo for about 1.5 s when the TV turns on or wakes up (any key skips it; turn it off in Settings › System › About)</item>
-        <item>New “About Sofaly” screen: logo, slogan, version, what changed and licenses</item>
-        <item>The Sofaly logo also shows small at the bottom of Settings and in a corner of the screensaver</item>
-        <item>The TV icon on the home screen is now the sofa-TV from the logo in outline, a little smaller, with the glass shine; when chosen, the shine sweeps across and the antennas wiggle</item>
-        <item>Home bottom corner: the time left no longer breaks across lines, and Home comes back right away even when the screen and the phone ask at the same time</item>
-        <item>Long video or podcast names show in full in the bottom corner</item>
-        <item>Alarm clock redesigned like the home screen: the time on big wheels with arrows, the options in a column with the value in orange, a sentence saying when it rings, days spelled out and the sound playing when you pick it; in the list, hold OK to turn an alarm on or off</item>
-        <item>Alarm clock: if the TV does not turn on when it rings (some TVs miss the first request), the alarm asks again a few times in the first 4 minutes</item>
+        <item>Addons: new “Add an addon” row (in Addons and in Settings › Addons) with a code for your phone, which opens the panel ready to paste the address, or to type it on the TV</item>
+        <item>Addons: “Recommended” list with checked catalogs (movies and shows from the services, TMDB, MUBI and anime); pick one and confirm with the PIN, no typing</item>
+        <item>Addons split by type (Movies and shows, Anime, Subtitles...): sections on the TV and a filter in the panel</item>
+        <item>Addons: a catalog title with no video to play here shows “Where to watch”, which opens the Google TV search</item>
+        <item>Alarm clock: on the time wheel the bigger number is on top, and the lists no longer show the options underneath</item>
+        <item>Alarm clock: holding the arrow turns the wheel slowly (4 steps per second), so you can stop at the right time</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>logo_abertura</item>
-        <item>logo_sobre</item>
-        <item>icone_tv</item>
-        <item>despertador_novo</item>
+        <item>addon_adicionar</item>
+        <item>addon_recomendados</item>
+        <item>despertador_rolete</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Logo when waking</item>
-        <item>About Sofaly</item>
-        <item>Sofa-TV icon</item>
-        <item>New alarm clock</item>
+        <item>Add an addon</item>
+        <item>Recommended</item>
+        <item>Alarm wheel</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>After the TV sleeps 5+ min and wakes, does the Sofaly logo show for about 1.5 s over the home screen and then fade?</item>
-        <item>Does Settings › System › About Sofaly open with the logo and version, and does the logo look right at the bottom of Settings?</item>
-        <item>On the home screen, is the TV icon the outlined sofa-TV clear of the program bar, and when you choose it does the shine sweep across the screen?</item>
-        <item>Open the alarm clock: can you change the time with ▲▼, go with ▶ to the options, pick a sound (it plays) and leave with BACK, with it saved?</item>
+        <item>In Addons, does the “Add an addon” row show the code, and when scanned on the phone does the panel open at the Addons card?</item>
+        <item>In Addons › Recommended, does picking “The Movie Database” and confirming with the PIN install it, and do its catalogs show and open?</item>
+        <item>In the alarm clock, does holding ▲ raise the hour slowly and stop where you let go?</item>
     </string-array>
 </resources>

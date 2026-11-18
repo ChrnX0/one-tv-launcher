@@ -30,8 +30,19 @@ object PainelAddons {
             AddonsTv.instalados(app).forEach { a ->
                 put(JSONObject().put("base", a.base).put("nome", a.m.nome).put("versao", a.m.versao).put("descricao", a.m.descricao)
                     .put("recursos", JSONArray(a.m.recursos.map { it.nome }.distinct()))
-                    .put("catalogos", a.m.catalogos.size))
+                    .put("catalogos", a.m.catalogos.size).put("grupo", AddonsTv.grupoDe(a)))
             }
+        })
+        // Lista curada (18/11/2026): o que ainda não está instalado, com o texto no idioma da TV.
+        .put("sugeridos", JSONArray().apply {
+            AddonsTv.sugeridos(app).forEach { s ->
+                put(JSONObject().put("id", s.e.id).put("nome", s.nome).put("texto", s.texto).put("url", s.e.url).put("grupo", s.e.group))
+            }
+        })
+        // Filtro por tipo no painel: as seções na ordem certa, com o nome no idioma da TV ("" = Todos).
+        .put("grupos", JSONArray().apply {
+            put(JSONObject().put("id", "").put("nome", app.getString(R.string.ad_grupo_todos)))
+            RecommendedAddons.GROUPS.forEach { g -> put(JSONObject().put("id", g).put("nome", AddonsTv.nomeGrupo(app, g))) }
         })
 
     fun rotear(app: Context, metodo: String, rota: String, corpo: JSONObject?, elevada: Boolean, ip: String): Pair<Int, JSONObject>? {
