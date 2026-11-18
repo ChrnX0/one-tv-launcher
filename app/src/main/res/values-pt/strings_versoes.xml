@@ -14,6 +14,10 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>TV: o mesmo canal em 4K, Full HD, HD e SD agora é um canal só; a TV escolhe a qualidade sozinha e desce se a imagem travar (Opções › Qualidade para escolher na mão)</item>
+        <item>TV: menu da esquerda mais enxuto; Todos e Guia ficam ao lado de LISTAS e o Rádio saiu (está em Ouvir)</item>
+        <item>TV: categoria Novos com os canais que entraram na lista nos últimos 14 dias</item>
+        <item>TV: quando o canal não abre, a TV diz se a lista venceu ou se outra tela já está usando</item>
         <item>Modo ambiente: parada 2 minutos na tela inicial, a cruz se recolhe e ficam a arte e a hora grande; qualquer tecla volta para onde estava</item>
         <item>A arte atrás da cruz desliza um pouquinho ao andar, dando profundidade</item>
         <item>Barra de cima em vidro: uma faixa só, translúcida, com perfil, busca, tempo e hora (as outras barras continuam em Configurações › Tela inicial)</item>
@@ -22,11 +26,15 @@
         <item>Cada novidade tem a sua chave em Configurações › Tela inicial</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Menu da TV</item>
+        <item>Qualidade da TV</item>
         <item>Modo ambiente</item>
         <item>Barra em vidro</item>
         <item>Dormir em 30 min</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Na lista da TV, cabem mais categorias, com Todos e Guia ao lado de LISTAS e sem Rádio?</item>
+        <item>Um canal que antes aparecia repetido (4K, FHD, HD) aparece uma vez só, e ▶ ▶ › Qualidade mostra as opções?</item>
         <item>Deixando a tela inicial parada por 2 minutos, a cruz some e fica a hora grande? Uma tecla traz tudo de volta?</item>
         <item>A barra de cima aparece numa faixa de vidro, com a hora à direita?</item>
         <item>Depois das 22 h, em Continuar, “Dormir em 30 min” marca o desligamento e mostra “Desliga às…”?</item>

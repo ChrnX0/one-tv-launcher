@@ -81,6 +81,23 @@ class PlayerActivity : Activity() {
     private var parental = ControleParental.Regras()   // canais bloqueados (Configurações > Controle parental)
     private var filtro = PlayerFiltro.Filtro()
     private var visiveis: List<Canal> = emptyList()    // canais depois do filtro: é o que a lista, o ▲▼ e o número usam
+    // Mesmo canal em várias qualidades (18/11/2026): a lista mostra um só; aqui ficam as variantes de cada um.
+    private var familias = VariantesCanal.Grupos(emptyList(), emptyMap(), emptyMap())
+    private var tocando: Canal? = null   // o que está tocando: a [atual] com o endereço da variante escolhida
+    private var nivelTocando: VariantesCanal.Nivel? = null
+    private val tentadas = HashSet<String>()   // endereços que já falharam neste canal (erro): pula para outra variante
+    private val travadas = QualidadeAuto.Travadas()
+    private var jaTocou = false   // o canal já chegou a tocar (só depois disso uma espera conta como travada)
+    private var travouEm = 0L     // quando começou a travada de agora (0 = não está travado)
+    private val nivelDaTela by lazy {
+        val modos = runCatching { @Suppress("DEPRECATION") windowManager.defaultDisplay.supportedModes }.getOrNull()
+        QualidadeAuto.nivelDaTela(modos?.maxOfOrNull { minOf(it.physicalHeight, it.physicalWidth) } ?: 0)
+    }
+    private val medidor by lazy { androidx.media3.exoplayer.upstream.DefaultBandwidthMeter.getSingletonInstance(this) }
+    // A cada medida de rede do Media3 (um pedaço HLS baixado, um canal fechado): guarda a maior das últimas 24 h.
+    private val ouvirBanda = androidx.media3.exoplayer.upstream.BandwidthMeter.EventListener { ms, bytes, _ ->
+        if (ms >= 500 && bytes > 0) { val bps = bytes * 8_000L / ms; val app = applicationContext; gravar { QualidadeTv.medir(app, bps) } }
+    }
     private var ultimaBusca = ""
     private lateinit var janelas: PlayerJanelas
     private var visivel = false   // entre onStart e onStop: fora disso nada toca (nem a nova tentativa atrasada)
@@ -131,6 +148,7 @@ class PlayerActivity : Activity() {
         }
         raiz.addView(seloGravando, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, dp(28), dp(Estilo.MARGEM_LATERAL), 0) })
         janelas = PlayerJanelas(this)
+        medidor.addEventListener(tela, ouvirBanda)
         // Sessão junto (degrau 4): canal ao vivo = "mesmo canal" + reações; quem troca, a outra TV acompanha.
         junto = JuntoNoPlayer(this, aplicar = { _, _ -> }, posicao = { 0L }, tocandoAgora = { player?.isPlaying == true },
             trocarCanal = { nome -> juntoCanal(nome) }).also { it.ligar() }
@@ -138,8 +156,7 @@ class PlayerActivity : Activity() {
         lista = PlayerListaTela(this, aoAssistir = { c, chave -> escolherNaLista(c, chave) }, aoFavoritar = { alternarFavorito(it) }, simples = simples,
             aoBuscar = { buscar() }, aoFiltros = { abrirFiltros() }, aoOcultarGrupo = { alternarOculto(it) },
             aoGuia = { cs, nome -> abrirGrade(cs, nome) },
-            aoGravacoes = { startActivity(android.content.Intent(this, GravacoesActivity::class.java)) },
-            aoRadios = { startActivity(android.content.Intent(this, RadioActivity::class.java)) })
+            aoGravacoes = { startActivity(android.content.Intent(this, GravacoesActivity::class.java)) })
         raiz.addView(lista.raiz, FrameLayout.LayoutParams(-1, -1))
         grade = PlayerGradeView(this, aoAssistir = { c -> grade.fechar(); lista.fechar(); if (c.id != atual?.id) sintonizar(c) else mostrarInfo() },
             aoFechar = { grade.fechar(); if (lista.aberta) lista.voltarFoco() })
@@ -172,7 +189,7 @@ class PlayerActivity : Activity() {
         if (perfil != perfilCarregado) { perfilCarregado = perfil; favoritos = PlayerArmazem.favoritos(this); lista.atualizarFavoritos(favoritos) }
         refiltrar()
         // Gravando: volta para o canal que grava (outro pediria uma 2ª conexão que a lista não dá).
-        val c = Gravacoes.atual?.let { g -> visiveis.firstOrNull { it.id == g.canalId } }
+        val c = Gravacoes.atual?.let { g -> visiveis.firstOrNull { it.id == familias.representante(g.canalId) } }
             ?: atual?.let { a -> visiveis.firstOrNull { it.id == a.id } } ?: visiveis.firstOrNull()
         if (c != null) sintonizar(c, guardarAnterior = false) else { atual = null; mostrarAviso(getString(R.string.player_sem_canais)) }
     }
@@ -194,9 +211,11 @@ class PlayerActivity : Activity() {
      * valem) e, se achar, limpa esses filtros para a lista e o ▲▼ continuarem no canal. False = não pode tocar.
      */
     private fun tocarPedido(id: String): Boolean {
-        val c = PlayerFiltro.aplicar(canais, PlayerFiltro.Filtro(ocultas = filtro.ocultas, parental = parental)).firstOrNull { it.id == id }
+        val achado = PlayerFiltro.aplicar(canais, PlayerFiltro.Filtro(ocultas = filtro.ocultas, parental = parental)).firstOrNull { it.id == id }
             ?: return false
         if (filtro.ativo) { filtro = filtro.copy(qualidade = null, pais = null); refiltrar() }
+        // O pedido pode ser de uma variante ("Globo 4K"): toca o canal que a representa (a qualidade é escolhida aqui).
+        val c = visiveis.firstOrNull { it.id == familias.representante(achado.id) } ?: achado
         // Pedido de fora com a lista/guia aberta (visto na Sala 16/11/2026: "Troque sozinho na hora" trocou por baixo da
         // lista, que seguia mostrando o canal antigo como "assistindo"; um OK ali voltava para ele): fecha antes.
         grade.fechar(); lista.fechar()
@@ -219,6 +238,7 @@ class PlayerActivity : Activity() {
 
     override fun onDestroy() {
         junto?.desligar()
+        runCatching { medidor.removeEventListener(ouvirBanda) }
         Gravacoes.esquecer(mudouGravacao)
         tela.removeCallbacksAndMessages(null)
         disco.shutdown()   // não "Now": deixa terminar a última gravação (canal, recentes)
@@ -266,7 +286,7 @@ class PlayerActivity : Activity() {
                 // Canal pedido de fora que não pode tocar: avisa em vez de cair em outro canal.
                 val externo = intent.getStringExtra(EXTRA_CANAL)?.ifEmpty { null }
                 if (externo != null) { if (!tocarPedido(externo)) mostrarAviso(getString(R.string.player_bloqueado)); return@post }
-                val pedido = Gravacoes.atual?.canalId ?: PlayerArmazem.ultimoCanal(this)   // gravando: abre no que grava
+                val pedido = (Gravacoes.atual?.canalId ?: PlayerArmazem.ultimoCanal(this))?.let { familias.representante(it) }   // gravando: abre no que grava
                 sintonizar(visiveis.firstOrNull { it.id == pedido } ?: visiveis.first(), guardarAnterior = false)
                 juntoPendente?.let { juntoPendente = null; juntoCanal(it) }
             }
@@ -313,8 +333,9 @@ class PlayerActivity : Activity() {
         junto?.let { j -> j.tocandoTitulo(JuntoRegras.chave(JuntoRegras.Tipo.CANAL, null, nome = c.nome)); j.mudou(true, 0) }
         arquivo = null; atualizarSelo()   // trocar de canal (ou voltar ao player) é sempre ao vivo
         tentativas = 0
+        tentadas.clear(); travadas.zerar()
         gravarUltimo(c)
-        tocar(c)
+        tocar(variante(c))
         mostrarInfo()
         recarregarGuiaSeVelho()
         // Zapping: o guia dos vizinhos (▲▼) já vai para o cache, para a faixa aparecer completa no próximo canal.
@@ -324,6 +345,7 @@ class PlayerActivity : Activity() {
 
     private fun tocar(c: Canal, url: String = c.url) {
         pausa.descartar(); tela.removeCallbacks(pausaEstourou)   // mídia nova: o que estava pausado na memória vai embora
+        jaTocou = false; travouEm = 0L; tela.removeCallbacks(travadaLonga)
         if (!visivel) return
         // Trava final do controle parental: canal bloqueado não toca sem o PIN, venha de onde vier o pedido.
         if (ControleParental.bloqueado(c, parental) && !filtro.mostrarOcultas) { mostrarAviso(getString(R.string.player_bloqueado)); return }
@@ -365,8 +387,21 @@ class PlayerActivity : Activity() {
     private val ouvinte = object : Player.Listener {
         override fun onPlaybackStateChanged(estado: Int) {
             when (estado) {
-                Player.STATE_READY -> { tentativas = 0; esconderAviso() }
-                Player.STATE_BUFFERING -> if (aviso.visibility != View.VISIBLE) tela.postDelayed(avisoCarregando, 1_500)
+                Player.STATE_READY -> {
+                    tentativas = 0; esconderAviso()
+                    tela.removeCallbacks(travadaLonga)
+                    jaTocou = true
+                    // Por último: se a travada fizer descer de qualidade, o tocar() novo zera o jaTocou de novo.
+                    if (travouEm > 0) { val dur = android.os.SystemClock.elapsedRealtime() - travouEm; travouEm = 0L; travou(dur) }
+                }
+                Player.STATE_BUFFERING -> {
+                    if (aviso.visibility != View.VISIBLE) tela.postDelayed(avisoCarregando, 1_500)
+                    // Já estava tocando e parou para carregar: é uma travada (conta para baixar a qualidade).
+                    if (jaTocou && travouEm == 0L && !pausa.ativa && arquivo == null && !deGravacao) {
+                        travouEm = android.os.SystemClock.elapsedRealtime()
+                        tela.postDelayed(travadaLonga, QualidadeAuto.TRAVADA_LONGA_MS)
+                    }
+                }
                 Player.STATE_ENDED -> if (arquivo != null) fimDoArquivo()
                 else -> {}
             }
@@ -374,6 +409,13 @@ class PlayerActivity : Activity() {
 
         override fun onVideoSizeChanged(v: androidx.media3.common.VideoSize) {
             tamanhoVideo = v
+            // A resolução que chegou de verdade: o "4K" do nome pode ser 1080 (ou o "SD", 720). Fica lembrada.
+            val t = tocando
+            if (t != null && arquivo == null && !deGravacao && familias.variantes.containsKey(t.id)) QualidadeAuto.nivelPelaAltura(v.height)?.let { n ->
+                nivelTocando = n
+                val app = applicationContext; val url = t.url
+                gravar { QualidadeTv.definirReal(app, url, n) }
+            }
             PlayerImagem.aplicar(video, modoImagem, v.width, v.height, v.pixelWidthHeightRatio)
         }
 
@@ -381,20 +423,138 @@ class PlayerActivity : Activity() {
             val p = player ?: return
             // Ficou para trás na janela ao vivo (rede engasgou): pula para o "agora" sem incomodar ninguém.
             if (erro.errorCode == PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW) {
+                if (!pausa.ativa && arquivo == null && travou(QualidadeAuto.TRAVADA_LONGA_MS)) return   // a rede não acompanha: desceu
                 if (pausa.ativa) { pausa.descartar(); p.playWhenReady = true; mostrarAvisoBreve(getString(R.string.pausa_voltou)) }   // perdeu o atraso
                 p.seekToDefaultPosition(); p.prepare(); return
             }
             val c = atual ?: return
+            // Mesmo canal em outra variante: tenta a próxima antes de esperar (o "4K" fora do ar não deixa sem canal).
+            if (arquivo == null && !deGravacao) {
+                tocando?.let { tentadas += it.url }
+                val outra = variante(c, tentadas)
+                if (outra.url !in tentadas) { tocar(outra); return }
+            }
             if (tentativas < 3) {
                 tentativas++
                 mostrarAviso(getString(R.string.player_tentando, c.numero))
                 val prog = arquivo
                 tela.postDelayed({
                     if (atual?.id != c.id || arquivo !== prog) return@postDelayed
-                    if (prog != null) tocarArquivo(prog, p.currentPosition) else tocar(c)
+                    if (prog != null) tocarArquivo(prog, p.currentPosition) else { tentadas.clear(); tocar(variante(c)) }
                 }, 2_000L shl (tentativas - 1))   // 2, 4, 8 s
             } else {
                 mostrarAviso(getString(R.string.player_sem_sinal, c.numero))
+                explicarSemSinal(c)
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------- qualidade automática (18/11/2026)
+
+    /**
+     * A variante de [c] para tocar agora ([QualidadeAuto]): escolha manual do canal, tela, teto das travadas e banda.
+     * Canal sem variantes = ele mesmo. Devolve [c] com o endereço da variante (o id e o nome continuam os do canal).
+     */
+    private fun variante(c: Canal, pular: Set<String> = emptySet()): Canal {
+        val fam = familias.variantes[c.id]
+        if (fam == null) { tocando = c; nivelTocando = null; return c }
+        val opcoes = fam.filter { it.url !in pular }.ifEmpty { fam }
+        val niveis = opcoes.map { QualidadeTv.real(this, it.url) ?: VariantesCanal.nivel(it.nome) }
+        val i = QualidadeAuto.escolher(niveis, QualidadeTv.manual(this, c.id), nivelDaTela, QualidadeTv.teto(this), QualidadeTv.banda(this))
+        val v = opcoes[i]
+        nivelTocando = niveis[i]
+        return c.copy(url = v.url, agenteUsuario = v.agenteUsuario.ifEmpty { c.agenteUsuario }).also { tocando = it }
+    }
+
+    /** O que está tocando do canal [c] (a variante), ou ele mesmo. */
+    private fun emCurso(c: Canal): Canal = tocando?.takeIf { it.id == c.id } ?: c
+
+    private val travadaLonga = Runnable {
+        if (travouEm > 0 && player?.playbackState == Player.STATE_BUFFERING) { travouEm = 0L; travou(QualidadeAuto.TRAVADA_LONGA_MS) }
+    }
+
+    /**
+     * Uma travada de [ms]. Se já for séria ([QualidadeAuto.Travadas]), baixa o teto um nível abaixo do que toca e
+     * troca para a variante menor na hora (a imagem já estava parada: a troca passa despercebida). True = trocou.
+     */
+    private fun travou(ms: Long): Boolean {
+        val c = atual ?: return false
+        val n = nivelTocando ?: return false
+        val fam = familias.variantes[c.id] ?: return false
+        if (QualidadeTv.manual(this, c.id) != null) return false   // escolha do usuário: não mexe
+        if (!travadas.registrar(android.os.SystemClock.elapsedRealtime(), ms)) return false
+        if (fam.none { (QualidadeTv.real(this, it.url) ?: VariantesCanal.nivel(it.nome)) < n }) return false   // já está na menor
+        QualidadeTv.definirTeto(this, QualidadeAuto.abaixo(n))
+        val antes = tocando?.url
+        val nova = variante(c)
+        if (nova.url == antes) return false
+        android.util.Log.i("TvLauncher.Player", "qualidade: travou, desceu para ${nivelTocando?.name}")
+        tocar(nova)
+        return true
+    }
+
+    /** Opções > Qualidade: Automática ou uma das variantes do canal (fica guardada para este canal). */
+    private fun escolherQualidade(c: Canal) {
+        val fam = familias.variantes[c.id] ?: return
+        val niveis = fam.map { QualidadeTv.real(this, it.url) ?: VariantesCanal.nivel(it.nome) }.distinct()
+        val manual = QualidadeTv.manual(this, c.id)
+        val nomes = listOf(getString(R.string.qual_auto)) + niveis.map { rotuloNivel(it) }
+        val marcada = if (manual == null) 0 else niveis.indexOf(manual) + 1
+        Estilo.lista(this, getString(R.string.qual_titulo), nomes, listOf(marcada).filter { it >= 0 }, focoNaMarcada = true) { i ->
+            QualidadeTv.definirManual(this, c.id, if (i == 0) null else niveis[i - 1])
+            val antes = tocando?.url
+            val nova = variante(c)
+            if (nova.url != antes && visivel && arquivo == null && Gravacoes.atual == null) tocar(nova)
+            mostrarAvisoBreve(getString(R.string.qual_menu, nomes[i]))
+        }
+    }
+
+    private fun rotuloNivel(n: VariantesCanal.Nivel) = n.rotulo.ifEmpty { getString(R.string.qual_padrao) }
+
+    /**
+     * O canal não voltou: a conta explica? (vencida, recusada, todas as telas em uso). Pergunta ao servidor fora da
+     * thread da tela e troca o aviso pelo motivo de verdade. Lista M3U comum: nada a perguntar.
+     */
+    private fun explicarSemSinal(c: Canal) {
+        val origem = TvDeVolta.origem(emCurso(c).url) ?: return
+        Fundo.rodar {
+            val s = PlayerCarga.situacaoDaConta(origem.conta)
+            val m = Xtream.motivoSemSinal(s, System.currentTimeMillis() / 1000) ?: return@rodar
+            tela.post {
+                if (isDestroyed || atual?.id != c.id || player?.playbackState == Player.STATE_READY) return@post
+                mostrarAviso(when (m) {
+                    Xtream.Motivo.VENCIDA -> getString(R.string.player_conta_vencida, SimpleDateFormat("dd/MM", Locale.getDefault()).format(Date((s?.expiraEm ?: 0) * 1000)))
+                    Xtream.Motivo.INATIVA -> getString(R.string.player_conta_recusada)
+                    Xtream.Motivo.TELAS_CHEIAS -> getString(R.string.player_telas_cheias, s?.telasEmUso ?: 0, s?.telasMax ?: 0)
+                })
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------- guia curto do servidor (reserva do XMLTV)
+
+    private val guiaCurto = HashMap<String, Pair<Long, List<Programa>>>()   // canal -> (quando pediu, programas)
+
+    /** Programas de agora em diante pelo guia; sem guia para o canal, pelo guia curto do servidor (Xtream). */
+    private fun programasDe(c: Canal, agora: Long, quantos: Int): List<Programa> {
+        val doGuia = c.guiaId.takeIf { it.isNotEmpty() }?.let { guia.proximos(it, agora, quantos) }.orEmpty()
+        if (doGuia.isNotEmpty() || recarregandoGuia) return doGuia
+        val cache = guiaCurto[c.id]
+        if (cache == null || agora - cache.first > 30 * 60_000L) pedirGuiaCurto(c, agora)
+        return GuiaConsulta.proximos(cache?.second.orEmpty(), agora, quantos)
+    }
+
+    private fun pedirGuiaCurto(c: Canal, agora: Long) {
+        val origem = TvDeVolta.origem(emCurso(c).url) ?: return
+        if (guiaCurto.size > 200) guiaCurto.clear()
+        guiaCurto[c.id] = agora to (guiaCurto[c.id]?.second.orEmpty())   // marca já: não pede duas vezes
+        Fundo.rodar {
+            val lidos = PlayerCarga.guiaCurto(origem) ?: return@rodar
+            val programas = lidos.map { Programa("", it.inicio, it.fim, it.titulo, it.descricao) }
+            tela.post {
+                if (isDestroyed) return@post
+                guiaCurto[c.id] = agora to programas
+                if (programas.isNotEmpty() && atual?.id == c.id) atualizarInfo()
             }
         }
     }
@@ -634,7 +794,7 @@ class PlayerActivity : Activity() {
         }
         gravarUltimo(c)   // o guia pode ter acabado de carregar, ou o programa ter mudado
         val agora = System.currentTimeMillis()
-        val prog = c.guiaId.takeIf { it.isNotEmpty() }?.let { guia.proximos(it, agora, 2) }.orEmpty()
+        val prog = programasDe(c, agora, 2)
         val atualProg = prog.firstOrNull()?.takeIf { agora >= it.inicio }
         infoNumero.text = c.numero.toString()
         infoTitulo.text = atualProg?.titulo ?: c.nome
@@ -642,6 +802,10 @@ class PlayerActivity : Activity() {
         val partes = if (atualProg != null) mutableListOf(c.nome) else mutableListOf()
         atualProg?.let { partes += "${hora.format(Date(it.inicio))} – ${hora.format(Date(it.fim))}" }
         prog.getOrNull(if (atualProg != null) 1 else 0)?.let { partes += getString(R.string.player_a_seguir, it.titulo) }
+        // Canal com variantes: a qualidade que está tocando ("Full HD"; com "manual" quando o usuário escolheu).
+        if (familias.variantes.containsKey(c.id)) nivelTocando?.let { n ->
+            partes += rotuloNivel(n) + if (QualidadeTv.manual(this, c.id) != null) "" else " · " + getString(R.string.qual_auto_curto)
+        }
         infoLinha.text = partes.joinToString("  ·  ")
         infoLinha.visibility = if (partes.isEmpty()) View.GONE else View.VISIBLE
         // Quanto falta do programa de agora, como no card TV da HOME.
@@ -673,6 +837,10 @@ class PlayerActivity : Activity() {
         val origem = if (c.arquivoDias > 0) TvDeVolta.origem(c.url) else null
         if (origem != null && Gravacoes.atual == null) itens += getString(R.string.tvv_abrir) to { abrirTvDeVolta(c, origem) }
         if (arquivo == null) opcoesGravacao(c, itens)
+        if (arquivo == null && familias.variantes.containsKey(c.id)) {
+            val manual = QualidadeTv.manual(this, c.id)
+            itens += getString(R.string.qual_menu, manual?.let { rotuloNivel(it) } ?: getString(R.string.qual_auto)) to { escolherQualidade(c) }
+        }
         itens += getString(R.string.imagem_opcao, PlayerImagem.rotulo(this, modoImagem)) to { escolherImagem() }
         // Para quem ouve pior (14/11/2026): ligar/desligar, marcado quando ligado. Só aparece se o aparelho tem o efeito.
         val marcadas = ArrayList<Int>()
@@ -700,6 +868,8 @@ class PlayerActivity : Activity() {
     private fun juntoCanal(nome: String) {
         if (visiveis.isEmpty()) { juntoPendente = nome; return }
         val c = visiveis.firstOrNull { JuntoRegras.normalizarCanal(it.nome) == nome }
+            // A outra TV pode estar na variante "Globo HD": aqui ela virou "Globo" (sem o marcador de qualidade).
+            ?: VariantesCanal.chave(nome).takeIf { it.isNotEmpty() }?.let { k -> visiveis.firstOrNull { VariantesCanal.chave(it.nome) == k } }
         if (c == null) { mostrarAviso(getString(R.string.junto_sem_canal)); return }
         if (c.id != atual?.id) { grade.fechar(); lista.fechar(); sintonizar(c) }
     }
@@ -719,7 +889,7 @@ class PlayerActivity : Activity() {
         val p = player ?: return
         if (antes != depois && arquivo == null) {
             efeitos.soltar(); pausa.descartar(); sessao.soltar(); p.release(); player = null
-            tocar(c)
+            tocar(emCurso(c))
         } else efeitos.aplicar(p.audioSessionId, EfeitosSom.volumeIgual(this), EfeitosSom.vozClara(this))
     }
 
@@ -733,7 +903,7 @@ class PlayerActivity : Activity() {
         if (isDestroyed) return@mudou
         depoisDeParar?.let { alvo -> if (Gravacoes.atual == null) { depoisDeParar = null; sintonizar(alvo) }; return@mudou }
         val c = atual ?: return@mudou
-        if (visivel && arquivo == null && Gravacoes.gravando(c.id) != deGravacao) tocar(c)
+        if (visivel && arquivo == null && Gravacoes.gravando(c.id) != deGravacao) tocar(emCurso(c))
         atualizarInfo()
     }
 
@@ -742,7 +912,7 @@ class PlayerActivity : Activity() {
         val agora = System.currentTimeMillis()
         if (g?.canalId == c.id) {
             itens += getString(R.string.grv_parar_ate, Gravacoes.hora(g.fim)) to { Gravacoes.parar(this) }
-            itens += getString(R.string.grv_mais_1h) to { Gravacoes.gravarAgora(this, c, g.programa, g.fim + 60 * 60_000L); mostrarAvisoBreve(getString(R.string.grv_ate, g.canalNome, Gravacoes.hora(g.fim + 60 * 60_000L))) }
+            itens += getString(R.string.grv_mais_1h) to { Gravacoes.gravarAgora(this, emCurso(c), g.programa, g.fim + 60 * 60_000L); mostrarAvisoBreve(getString(R.string.grv_ate, g.canalNome, Gravacoes.hora(g.fim + 60 * 60_000L))) }
             return
         }
         if (g != null) return
@@ -761,12 +931,12 @@ class PlayerActivity : Activity() {
         }
         pausa.descartar()
         player?.stop()   // solta a conexão: daqui em diante quem baixa o canal é o gravador, e o player lê dele
-        Gravacoes.gravarAgora(this, c, programa, fim)
+        Gravacoes.gravarAgora(this, emCurso(c), programa, fim)   // grava a variante que está tocando
         mostrarAviso(getString(R.string.grv_comecando))
         // Não começou (pendrive sem permissão, NAS fora, canal fora do ar): volta ao canal direto e avisa.
         tela.postDelayed({
             if (!isDestroyed && visivel && atual?.id == c.id && arquivo == null && Gravacoes.atual == null) {
-                tocar(c); mostrarAvisoBreve(getString(R.string.grv_nao_comecou))
+                tocar(emCurso(c)); mostrarAvisoBreve(getString(R.string.grv_nao_comecou))
             }
         }, 20_000)
     }
@@ -894,7 +1064,7 @@ class PlayerActivity : Activity() {
     }
 
     /** Ao vivo de novo, no mesmo canal: recomeça a mídia (o tocar descarta o que estava na memória). */
-    private fun voltarAoVivo() { atual?.let { tocar(it); mostrarInfo() } }
+    private fun voltarAoVivo() { atual?.let { tocar(emCurso(it)); mostrarInfo() } }
 
     /** Pausado até o buffer chegar ao teto: para de baixar e solta a memória já; ao continuar, volta ao vivo e avisa. */
     private val pausaEstourou = Runnable { if (pausa.pausado) player?.stop() }
@@ -931,7 +1101,16 @@ class PlayerActivity : Activity() {
     /** Recalcula as ocultas e a lista visível (depois de carregar, mudar filtro ou esconder um grupo). */
     private fun refiltrar() {
         filtro = filtro.copy(ocultas = PlayerFiltro.ocultasEfetivas(canais, escondidos, liberados), parental = parental)
-        visiveis = PlayerFiltro.aplicar(canais, filtro)
+        familias = VariantesCanal.agrupar(PlayerFiltro.aplicar(canais, filtro))
+        visiveis = familias.canais
+        // Favoritos e recentes de uma variante que virou "o mesmo canal" passam para ele (senão sumiriam da lista).
+        if (familias.apelido.isNotEmpty()) {
+            val fav = VariantesCanal.migrarIds(favoritos, familias).toSet()
+            if (fav != favoritos) { favoritos = fav; gravar { PlayerArmazem.definirFavoritos(this, fav) } }
+            val rec = VariantesCanal.migrarIds(recentes, familias)
+            if (rec != recentes) { recentes = rec; gravar { PlayerArmazem.definirRecentes(this, rec) } }
+            atual?.let { a -> if (a.id in familias.apelido) atual = visiveis.firstOrNull { it.id == familias.representante(a.id) } ?: a }
+        }
     }
 
     // ---------------------------------------------------------------- busca e filtros

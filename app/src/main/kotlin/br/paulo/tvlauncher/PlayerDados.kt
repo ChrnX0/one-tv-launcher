@@ -99,7 +99,8 @@ object PlayerDados {
         canais.forEach { c ->
             val url = if (fonte.tipo == FonteTv.TIPO_XTREAM) "" else c.url
             put(JSONObject().put("id", c.id).put("nome", c.nome).put("n", c.numero).put("g", c.grupo).put("logo", c.logo)
-                .put("url", url).put("guia", c.guiaId).put("ua", c.agenteUsuario).put("arq", c.arquivoDias))
+                .put("url", url).put("guia", c.guiaId).put("ua", c.agenteUsuario).put("arq", c.arquivoDias)
+                .apply { if (c.adicionado > 0) put("add", c.adicionado) })
         }
     }.toString()
 
@@ -114,7 +115,7 @@ object PlayerDados {
                 else o.optString("url")
             if (url == null || !M3u.urlAceita(url)) null
             else Canal(id, o.optString("nome"), o.optInt("n"), o.optString("g"), o.optString("logo"), url,
-                o.optString("guia"), o.optString("ua"), TvDeVolta.dias(o.optInt("arq")))
+                o.optString("guia"), o.optString("ua"), TvDeVolta.dias(o.optInt("arq")), o.optLong("add").coerceAtLeast(0))
         }
         // Cache gravado antes do id estável (player-8) ainda tem a URL como id: refaz os ids do mesmo jeito que M3u.ler,
         // senão o favorito migrado não acharia o canal por até 12 h (validade do cache).

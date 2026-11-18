@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- TV ao vivo: canais novos, qualidade automática e motivo do "sem sinal" (18/11/2026). -->
+<resources>
+    <string name="coluna_novos_canais">新频道</string>
+    <string name="qual_menu">画质：%1$s</string>
+    <string name="qual_auto">自动</string>
+    <string name="qual_auto_curto">自动</string>
+    <string name="qual_titulo">画质</string>
+    <string name="qual_padrao">标准</string>
+    <string name="player_conta_vencida">你的列表已于 %1$s 到期。请向卖家续费。</string>
+    <string name="player_conta_recusada">列表服务器拒绝了此账号。请联系卖家。</string>
+    <string name="player_telas_cheias">列表已在 %2$d 个屏幕中的 %1$d 个上打开。请在其他设备上关闭。</string>
+</resources>

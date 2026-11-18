@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- TV ao vivo: canais novos, qualidade automática e motivo do "sem sinal" (18/11/2026). -->
+<resources>
+    <string name="coluna_novos_canais">جديدة</string>
+    <string name="qual_menu">الجودة: %1$s</string>
+    <string name="qual_auto">تلقائية</string>
+    <string name="qual_auto_curto">تلقائي</string>
+    <string name="qual_titulo">جودة الصورة</string>
+    <string name="qual_padrao">عادية</string>
+    <string name="player_conta_vencida">انتهت صلاحية قائمتك في %1$s. جدّدها لدى البائع.</string>
+    <string name="player_conta_recusada">رفض خادم القائمة الحساب. تواصل مع البائع.</string>
+    <string name="player_telas_cheias">القائمة مفتوحة بالفعل على %1$d من %2$d شاشات. أغلقها على جهاز آخر.</string>
+</resources>

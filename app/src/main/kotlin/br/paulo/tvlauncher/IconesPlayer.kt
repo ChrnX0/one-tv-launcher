@@ -22,7 +22,9 @@ class IconePlayer(private val tipo: Tipo, cor: Int = Estilo.TEXTO) : Drawable() 
         // Coluna nova do player (14/11/2026): Continuar, Assistidos, Todos, Esportes e "Mostrar ocultas".
         PLAY, VISTO, TODOS, ESPORTE, OCULTO,
         // Gravações na coluna da TV (14/11/2026): o "ponto de gravar" dentro de um anel.
-        GRAVACOES }
+        GRAVACOES,
+        // Canais que acabaram de entrar na lista (18/11/2026): brilho de 4 pontas.
+        NOVO }
 
     private val traco = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE; strokeWidth = 1.6f; strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND; color = cor
@@ -83,6 +85,15 @@ class IconePlayer(private val tipo: Tipo, cor: Int = Estilo.TEXTO) : Drawable() 
             Tipo.GRAVACOES -> {   // gravações: anel com o ponto cheio no meio (o botão REC)
                 c.drawCircle(12f, 12f, 8.5f, traco)
                 c.drawCircle(12f, 12f, 4.2f, cheio)
+            }
+            Tipo.NOVO -> {   // novo: brilho grande de 4 pontas e um pequeno no canto
+                fun brilho(cx: Float, cy: Float, r: Float) {
+                    val m = r * 0.28f
+                    p.reset(); p.moveTo(cx, cy - r); p.lineTo(cx + m, cy - m); p.lineTo(cx + r, cy); p.lineTo(cx + m, cy + m)
+                    p.lineTo(cx, cy + r); p.lineTo(cx - m, cy + m); p.lineTo(cx - r, cy); p.lineTo(cx - m, cy - m); p.close()
+                    c.drawPath(p, cheio)
+                }
+                brilho(10.5f, 13.5f, 8f); brilho(18.5f, 5.5f, 3.6f)
             }
             Tipo.PLAY -> {   // continuar: triângulo cheio
                 p.reset(); p.moveTo(8f, 5.5f); p.lineTo(19f, 12f); p.lineTo(8f, 18.5f); p.close()

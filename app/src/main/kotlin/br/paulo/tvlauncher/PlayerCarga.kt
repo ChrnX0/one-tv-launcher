@@ -125,6 +125,17 @@ object PlayerCarga {
             .onFailure { Log.w(TAG, "conta de ${fonte.servidorVisivel}: ${it.javaClass.simpleName}") }.getOrNull()
     }
 
+    /** Situação da conta dona de um canal (pelo endereço do vídeo). Fora da thread da tela; null = sem resposta. */
+    fun situacaoDaConta(conta: Xtream.Conta): Xtream.Situacao? =
+        runCatching { Xtream.lerSituacao(baixarTexto(Xtream.urlApi(conta), 1024 * 1024)) }.getOrNull()
+
+    /**
+     * Guia curto do próprio servidor (get_short_epg), reserva para canal que o XMLTV não cobre (18/11/2026). Fora da
+     * thread da tela; null = sem resposta. O endereço leva a senha: nunca vai para o log.
+     */
+    fun guiaCurto(o: TvDeVolta.Origem): List<TvDeVolta.Programa>? =
+        runCatching { TvDeVolta.lerTabela(baixarTexto(Xtream.urlGuiaCurto(o.conta, o.streamId, 4), 512 * 1024)) }.getOrNull()
+
     /**
      * TV de volta: os programas do canal que o servidor guardou e o fuso dele (o endereço do arquivo vai no horário do
      * servidor). Chamar fora da thread da tela. null = sem resposta (rede, servidor fora). Os endereços levam a senha:

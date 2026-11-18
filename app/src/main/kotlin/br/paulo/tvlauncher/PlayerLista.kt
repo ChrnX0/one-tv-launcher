@@ -22,10 +22,10 @@ object PlayerLista {
     const val RECENTES = "*recentes"
     const val BUSCA = "*busca"          // resultado da última busca (só existe enquanto há um termo)
     const val ESPORTES = "*esportes"    // fixa da TV (14/11/2026): futebol, lutas, UFC e afins, juntando as categorias ([ColunaRegras.ehEsporte])
+    const val NOVOS = "*novos"          // fixa da TV (18/11/2026): canais que entraram na lista há pouco (Xtream "added")
     const val ACAO_BUSCAR = "*acao:buscar"   // linhas de ação no topo da coluna (não são categorias)
     const val ACAO_FILTROS = "*acao:filtros"
     const val ACAO_GUIA = "*acao:guia"
-    const val ACAO_RADIOS = "*acao:radios"   // ideia 87: a tela de rádios (RadioActivity)
     const val ACAO_GRAVACOES = "*acao:gravacoes"   // 14/11/2026: a tela de gravações (feita em outra frente)
     const val MAX_RECENTES = 30
     const val MAX_FAVORITOS = 500
@@ -93,6 +93,27 @@ object PlayerLista {
         if (chave == TODOS || chave == RECENTES || chave == BUSCA || atual == null) return canais
         val f = filtrar(canais, chave, favoritos, recentes)
         return if (f.size > 1 && f.any { it.id == atual.id }) f else canais
+    }
+
+    /** Quantos dias um canal conta como "novo". */
+    const val DIAS_NOVO = 14
+
+    /**
+     * Canais novos: entraram na lista nos últimos [DIAS_NOVO] dias, do mais novo para o mais velho. Se "novos" for mais
+     * que 30% dos canais com data, o servidor só reimportou a lista (todos ficam com a data de hoje): não vale nada, e
+     * a categoria nem aparece. [agoraS] em segundos.
+     */
+    fun novos(canais: List<Canal>, agoraS: Long): List<Canal> {
+        var comData = 0
+        val desde = agoraS - DIAS_NOVO * 86_400L
+        val achados = ArrayList<Canal>()
+        for (c in canais) {
+            if (c.adicionado <= 0) continue
+            comData++
+            if (c.adicionado in desde..agoraS + 86_400L) achados += c
+        }
+        if (achados.isEmpty() || achados.size * 10 > comData * 3) return emptyList()
+        return achados.sortedByDescending { it.adicionado }
     }
 
     fun alternarFavorito(favoritos: Set<String>, id: String): Set<String> =

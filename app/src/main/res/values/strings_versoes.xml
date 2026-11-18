@@ -17,6 +17,10 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>TV: the same channel in 4K, Full HD, HD and SD is now a single channel; the TV picks the quality by itself and steps down if the picture stalls (Options › Quality to choose by hand)</item>
+        <item>TV: leaner left menu; All and Guide sit next to LISTS and Radio left (it is in Listen)</item>
+        <item>TV: New category with the channels added to the list in the last 14 days</item>
+        <item>TV: when a channel does not open, the TV tells you if the list expired or another screen is using it</item>
         <item>Ambient mode: after 2 minutes idle on the home screen, the cross steps back and only the art and a big clock stay; any key brings you back where you were</item>
         <item>The art behind the cross glides a little as you move, adding depth</item>
         <item>Glass top bar: a single translucent strip with profile, search, weather and time (the other bars are still in Settings › Home screen)</item>
@@ -25,16 +29,22 @@
         <item>Each new feature has its own switch in Settings › Home screen</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>tv_menu</item>
+        <item>tv_qualidade</item>
         <item>cruz_ambiente</item>
         <item>cruz_vidro</item>
         <item>cruz_dormir</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>TV menu</item>
+        <item>TV quality</item>
         <item>Ambient mode</item>
         <item>Glass bar</item>
         <item>Sleep in 30 min</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>In the TV list, do more categories fit, with All and Guide next to LISTS and no Radio?</item>
+        <item>Does a channel that used to repeat (4K, FHD, HD) show only once, and does ▶ ▶ › Quality show the choices?</item>
         <item>Leaving the home screen idle for 2 minutes, does the cross disappear and a big clock stay? Does one key bring everything back?</item>
         <item>Does the top bar show as a glass strip, with the time on the right?</item>
         <item>After 10 pm, in Continue, does “Sleep in 30 min” set the timer and show “Turns off at…”?</item>

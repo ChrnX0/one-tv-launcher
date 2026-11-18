@@ -91,3 +91,20 @@ class PlayerListaTest {
         assertEquals("Canais |", PlayerLista.nomeExibido("Canais |"))           // só o prefixo: mantém o original
     }
 }
+
+/** Categoria "Novos" (18/11/2026): só canais com data recente, e some quando o servidor reimportou tudo. */
+class PlayerListaNovosTest {
+    private val dia = 86_400L
+    private val agora = 1_800_000_000L
+    private fun c(id: String, add: Long) = Canal(id, "Canal $id", 1, "", url = "http://e.invalid/$id", adicionado = add)
+
+    @Test fun novosDoMaisNovoParaOMaisVelho() {
+        val lista = (1..10).map { c("v$it", agora - 400 * dia) } + c("n1", agora - 3 * dia) + c("n2", agora - dia) + c("sem", 0)
+        assertEquals(listOf("n2", "n1"), PlayerLista.novos(lista, agora).map { it.id })
+    }
+
+    @Test fun reimportacaoInteiraNaoContaComoNovo() {
+        val lista = (1..10).map { c("v$it", agora - dia) }
+        assertTrue(PlayerLista.novos(lista, agora).isEmpty())
+    }
+}

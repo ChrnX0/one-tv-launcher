@@ -172,3 +172,25 @@ class PlayerBaseTest {
         assertTrue(p.isFailure || p.getOrThrow().isEmpty())
     }
 }
+
+/** O que a conta Xtream explica quando o canal não abre, e a data "added" dos canais (18/11/2026). */
+class XtreamExtrasTest {
+    private val agora = 1_800_000_000L
+
+    @Test fun motivoDoSemSinal() {
+        fun s(json: String) = Xtream.lerSituacao(json)
+        org.junit.Assert.assertEquals(Xtream.Motivo.VENCIDA,
+            Xtream.motivoSemSinal(s("""{"user_info":{"auth":1,"status":"Active","exp_date":"1700000000"}}"""), agora))
+        org.junit.Assert.assertEquals(Xtream.Motivo.INATIVA, Xtream.motivoSemSinal(s("""{"user_info":{"auth":1,"status":"Banned"}}"""), agora))
+        org.junit.Assert.assertEquals(Xtream.Motivo.TELAS_CHEIAS,
+            Xtream.motivoSemSinal(s("""{"user_info":{"auth":1,"status":"Active","max_connections":"1","active_cons":"1"}}"""), agora))
+        org.junit.Assert.assertNull(Xtream.motivoSemSinal(s("""{"user_info":{"auth":1,"status":"Active","max_connections":"2","active_cons":"1","exp_date":"1900000000"}}"""), agora))
+        org.junit.Assert.assertNull(Xtream.motivoSemSinal(null, agora))
+    }
+
+    @Test fun dataDeEntradaDoCanal() {
+        val conta = Xtream.Conta("http://e.invalid", "u", "s")
+        val c = Xtream.lerCanais("""[{"stream_id":1,"name":"A","added":"1799000000"},{"stream_id":2,"name":"B","added":null},{"stream_id":3,"name":"C","added":1799000001}]""", conta)
+        org.junit.Assert.assertEquals(listOf(1_799_000_000L, 0L, 1_799_000_001L), c.map { it.adicionado })
+    }
+}
