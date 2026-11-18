@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação (17/11/2026, ondas 2): tradução de values/strings_elevacao2.xml. -->
+<resources>
+    <string name="elv_ac_titulo">Contraste élevé</string>
+    <string name="elv_ac_det">Texte plus lumineux et bords plus nets sur tous les écrans (au moins 7:1)</string>
+    <string name="elv_ad_titulo">Audiodescription</string>
+    <string name="elv_ad_det">Choisir la piste audio qui décrit la scène dès qu’il y en a une</string>
+    <string name="elv_sdh_titulo">Sous-titres pour sourds</string>
+    <string name="elv_sdh_det">Toujours afficher des sous-titres avec les sons ([porte qui claque]) dans la langue de la télé, même en VF</string>
+    <string name="elv_cat_titulo">Affiche et résumé des vidéos</string>
+    <string name="elv_cat_explica">Seul le titre est envoyé à TMDB, jamais le dossier ni le serveur</string>
+    <string name="elv_cat_ligado">Activé</string>
+    <string name="elv_cat_desligado">Désactivé</string>
+    <string name="elv_cat_ep">%1$s · S%2$d É%3$d</string>
+    <string name="elv_cat_so_ep">%1$s · Épisode %2$d</string>
+    <string name="elv_cat_temporada">%1$s · Saison %2$d</string>
+    <string name="elv_cat_filme_ano">%1$s (%2$d)</string>
+    <string name="elv_cat_n_temporadas">Saisons : %d</string>
+    <string name="elv_cat_procurando">Recherche de l’affiche…</string>
+    <string name="elv_cat_nada">Rien trouvé sur TMDB. Maintenez OK pour écrire le bon nom.</string>
+    <string name="elv_cat_corrigir_titulo">Corriger : %s</string>
+    <string name="elv_cat_corrigir_explica">Mauvaise affiche ou mauvais résumé ? Demandez le résultat suivant ou écrivez le bon nom et l’année. Un nom vide revient au mode automatique.</string>
+    <string name="elv_cat_nao_e">Ce n’est pas celui-ci</string>
+    <string name="elv_cat_escrever">Écrire le nom</string>
+    <string name="elv_cat_campo">Nom et année, ex. : Dune 2021</string>
+    <string name="elv_cat_salvar">Enregistrer</string>
+    <string name="elv_cat_dica">corriger</string>
+    <string name="elv_bib_lista">Liste</string>
+    <string name="elv_bib_pasta">Dossier</string>
+    <string name="elv_bib_servidor">Serveur</string>
+    <string name="elv_bib_nuvem">Cloud</string>
+    <string name="elv_bib_addon">Extension</string>
+</resources>

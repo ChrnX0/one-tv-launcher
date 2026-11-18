@@ -41,7 +41,10 @@ class GradeApps(ctx: Context, var colunas: Int, private val vaoVertical: Int) : 
             if (f.visibility == View.GONE) continue
             val lp = f.layoutParams as MarginLayoutParams
             if (i % colunas == 0 && i > 0) { x = paddingLeft; y += linhaAltura + vaoVertical; linhaAltura = 0 }
-            f.layout(x + lp.leftMargin, y + lp.topMargin, x + lp.leftMargin + f.measuredWidth, y + lp.topMargin + f.measuredHeight)
+            // 16.8: no árabe a grade começa pela direita (mesma conta, espelhada na largura da view).
+            val e = x + lp.leftMargin
+            val esq = if (layoutDirection == View.LAYOUT_DIRECTION_RTL) (r - l) - e - f.measuredWidth else e
+            f.layout(esq, y + lp.topMargin, esq + f.measuredWidth, y + lp.topMargin + f.measuredHeight)
             x += f.measuredWidth + lp.leftMargin + lp.rightMargin
             linhaAltura = maxOf(linhaAltura, f.measuredHeight + lp.topMargin + lp.bottomMargin)
         }

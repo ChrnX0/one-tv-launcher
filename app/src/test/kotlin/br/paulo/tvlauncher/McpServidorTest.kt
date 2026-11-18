@@ -51,6 +51,12 @@ class McpServidorTest {
         }
     }
 
+    @Test fun formularioMalFormadoViraNullNao500() {
+        assertEquals(mapOf("grant_type" to "x y", "code" to ""), McpServidor.lerFormulario("grant_type=x+y&code"))
+        assertNull(McpServidor.lerFormulario("code=%zz"))   // "%" sem hex: o /token responde 400 invalid_request
+        assertNull(McpServidor.lerFormulario("code=abc%"))
+    }
+
     @Test fun pedidoRapidoPassa() {
         val txt = "POST /mcp HTTP/1.1\r\nHost: x\r\nContent-Length: 2\r\n\r\n{}"
         val req = PainelHttp.ler(EntradaComPrazo(txt.byteInputStream(), McpServidor.PRAZO_PEDIDO_MS), 1024)

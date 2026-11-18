@@ -76,14 +76,14 @@ class DiagnosticoActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)   // o grafite da HOME (sistema de design)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         raiz.addView(Estilo.tituloTela(this, getString(R.string.diag_titulo)))
         lista = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             clipChildren = false
             clipToPadding = false
-            setPadding(0, dp(4), 0, dp(4))
+            setPaddingRelative(0, dp(4), 0, dp(4))
         }
         raiz.addView(ScrollView(this).apply {
             isVerticalScrollBarEnabled = false
@@ -105,7 +105,8 @@ class DiagnosticoActivity : Activity() {
         val resumo = info(getString(R.string.diag_resumo), getString(R.string.diag_verificando)).also { adicionar(it) }
         // "A internet caiu? Em uma frase" (InternetEmUmaFrase): junta histórico, roteador, DNS e teste HTTP. Thread
         // própria para não esperar na fila das 4 verificações acima.
-        val frase = info(getString(R.string.diag_frase), getString(R.string.diag_verificando)).also { adicionar(it) }
+        // A frase com a causa e os sinais passa de 3 linhas quando algo falha (DNS, provedor): cortada, perdia a causa.
+        val frase = info(getString(R.string.diag_frase), getString(R.string.diag_verificando)).also { longas += it; adicionar(it) }
         fraseEmCurso?.cancel(true)   // "Verificar de novo" não empilha medições: a anterior é largada
         fraseEmCurso = frasePool.submit {
             val r = try { DiagnosticoInternet.explicar(applicationContext) } catch (e: Exception) { null }
@@ -194,11 +195,11 @@ class DiagnosticoActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)   // o grafite da HOME (sistema de design)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         raiz.addView(Estilo.tituloTela(this, titulo))
         raiz.addView(Estilo.texto(this, Estilo.Papel.LEGENDA).apply { text = getString(R.string.diag_rodape, subtitulo) })
-        val corpo = texto(15f, textoClaro, Typeface.MONOSPACE).apply { text = conteudo; setPadding(dp(8), dp(8), dp(8), dp(8)) }
+        val corpo = texto(15f, textoClaro, Typeface.MONOSPACE).apply { text = conteudo; setPaddingRelative(dp(8), dp(8), dp(8), dp(8)) }
         val rolagem = ScrollView(this).apply { isFocusable = true; addView(corpo) }
         raiz.addView(rolagem, LinearLayout.LayoutParams(MATCH, 0, 1f).apply { topMargin = dp(16) })
         noDetalhe = true
@@ -223,11 +224,11 @@ class DiagnosticoActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)   // o grafite da HOME (sistema de design)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         raiz.addView(Estilo.tituloTela(this, nome))
         raiz.addView(Estilo.texto(this, Estilo.Papel.LEGENDA).apply { text = getString(R.string.diag_rodape, pacote) })
-        val corpo = texto(15f, textoClaro, Typeface.MONOSPACE).apply { text = sb; setPadding(dp(8), dp(8), dp(8), dp(8)) }
+        val corpo = texto(15f, textoClaro, Typeface.MONOSPACE).apply { text = sb; setPaddingRelative(dp(8), dp(8), dp(8), dp(8)) }
         val rolagem = ScrollView(this).apply {
             isFocusable = true
             isVerticalScrollBarEnabled = true
@@ -261,9 +262,12 @@ class DiagnosticoActivity : Activity() {
         }
     }
 
+    /** Linhas que podem passar de 3 linhas (a frase da internet). */
+    private val longas = HashSet<TextView>()
+
     private fun info(titulo: String, detalhe: String, nivel: Int = -1): TextView = TextView(this).apply {
         montarLinha(titulo, detalhe, nivel)
-        setPadding(dp(20), dp(10), dp(20), dp(10))
+        setPaddingRelative(dp(20), dp(10), dp(20), dp(10))
     }
 
     private fun TextView.mostrar(item: Diagnostico.Item) = montarLinha(item.titulo, item.detalhe, item.nivel, hasFocus())
@@ -271,14 +275,15 @@ class DiagnosticoActivity : Activity() {
     /** O que a linha mostra, guardado na própria linha para remontar com as cores certas quando o foco muda. */
     private data class Conteudo(val titulo: String, val detalhe: String, val nivel: Int)
 
-    /** "● Título" (bolinha na cor do nível; -1 = sem bolinha) e o detalhe embaixo, menor e suave. */
+    /** "✓ Título" (sinal e cor do nível; -1 = sem sinal) e o detalhe embaixo, menor e suave. */
     private fun TextView.montarLinha(titulo: String, detalhe: String, nivel: Int, foco: Boolean = false) {
         tag = Conteudo(titulo, detalhe, nivel)
         val claro = if (foco) Estilo.TEXTO_NO_FOCO else textoClaro
         val suave = if (foco) Estilo.TEXTO_NO_FOCO_2 else textoSuave
         val sb = SpannableStringBuilder()
         if (nivel in 0..2) {
-            sb.append("● ")
+            // Elevação 16.4: o sinal muda com o nível (✓ ok, ! atenção, ✕ falha), além da cor.
+            sb.append(arrayOf(CorSegura.SINAL_OK, CorSegura.SINAL_ATENCAO, CorSegura.SINAL_FALHA)[nivel] + "  ")
             sb.setSpan(ForegroundColorSpan(if (foco) Estilo.TEXTO_NO_FOCO else cores[nivel]), 0, sb.length, 0)
             sb.setSpan(AbsoluteSizeSpan(dp(18), false), 0, sb.length, 0)
         }
@@ -292,9 +297,9 @@ class DiagnosticoActivity : Activity() {
         sb.setSpan(AbsoluteSizeSpan(dp(14), false), ini, sb.length, 0)
         sb.setSpan(ForegroundColorSpan(suave), ini, sb.length, 0)
         text = sb
-        maxLines = 3
+        maxLines = if (this in longas) 8 else 3
         ellipsize = TextUtils.TruncateAt.END
-        setPadding(dp(20), dp(14), dp(20), dp(14))
+        setPaddingRelative(dp(20), dp(14), dp(20), dp(14))
     }
 
     private fun dp(valor: Int): Int = (valor * resources.displayMetrics.density + 0.5f).toInt()

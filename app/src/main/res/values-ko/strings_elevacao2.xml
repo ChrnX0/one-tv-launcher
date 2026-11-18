@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação (17/11/2026, ondas 2): tradução de values/strings_elevacao2.xml. -->
+<resources>
+    <string name="elv_ac_titulo">고대비</string>
+    <string name="elv_ac_det">모든 화면에서 더 밝은 글자와 뚜렷한 테두리(최소 7:1)</string>
+    <string name="elv_ad_titulo">화면 해설</string>
+    <string name="elv_ad_det">장면을 설명하는 오디오 트랙이 있으면 선택</string>
+    <string name="elv_sdh_titulo">청각장애인용 자막</string>
+    <string name="elv_sdh_det">더빙이라도 소리 설명이 있는 자막([문 닫히는 소리])을 TV 언어로 항상 표시</string>
+    <string name="elv_cat_titulo">동영상 포스터와 줄거리</string>
+    <string name="elv_cat_explica">TMDB에는 제목만 보내며 폴더나 서버는 절대 보내지 않습니다</string>
+    <string name="elv_cat_ligado">켜짐</string>
+    <string name="elv_cat_desligado">꺼짐</string>
+    <string name="elv_cat_ep">%1$s · 시즌%2$d %3$d화</string>
+    <string name="elv_cat_so_ep">%1$s · %2$d화</string>
+    <string name="elv_cat_temporada">%1$s · 시즌 %2$d</string>
+    <string name="elv_cat_filme_ano">%1$s (%2$d)</string>
+    <string name="elv_cat_n_temporadas">시즌: %d</string>
+    <string name="elv_cat_procurando">포스터를 찾는 중…</string>
+    <string name="elv_cat_nada">TMDB에서 찾지 못했습니다. OK를 길게 눌러 올바른 이름을 입력하세요.</string>
+    <string name="elv_cat_corrigir_titulo">수정: %s</string>
+    <string name="elv_cat_corrigir_explica">포스터나 줄거리가 틀렸나요? 다음 결과를 요청하거나 올바른 이름과 연도를 입력하세요. 이름을 비우면 자동으로 돌아갑니다.</string>
+    <string name="elv_cat_nao_e">이게 아님</string>
+    <string name="elv_cat_escrever">이름 입력</string>
+    <string name="elv_cat_campo">이름과 연도, 예: 듄 2021</string>
+    <string name="elv_cat_salvar">저장</string>
+    <string name="elv_cat_dica">수정</string>
+    <string name="elv_bib_lista">목록</string>
+    <string name="elv_bib_pasta">폴더</string>
+    <string name="elv_bib_servidor">서버</string>
+    <string name="elv_bib_nuvem">클라우드</string>
+    <string name="elv_bib_addon">애드온</string>
+</resources>

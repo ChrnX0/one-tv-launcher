@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 2.11: Desfazer em tudo (Desfazer.kt). -->
+<resources>
+    <string name="desf_diario">Änderung (%1$s): %2$s</string>
+    <string name="desf_diario_desfeito">Rückgängig: %1$s</string>
+    <string name="desf_ocultou">%1$s ausgeblendet</string>
+    <string name="desf_mostrou">%1$s wieder angezeigt</string>
+    <string name="desf_cat_ajuste">Einstellung</string>
+    <string name="desf_cat_organizacao">Anordnung</string>
+    <string name="desf_cat_automacao">Automation</string>
+    <string name="desf_cat_limpeza">Aufräumen</string>
+    <string name="desf_nada">Nichts rückgängig zu machen (schon rückgängig gemacht).</string>
+    <string name="desf_feito">Rückgängig gemacht. Alles ist wie vorher.</string>
+    <string name="desf_parcial">Teilweise rückgängig: %1$d Punkt(e) hatte(n) sich wieder geändert und bleibt/bleiben so.</string>
+    <string name="desf_barra">Geändert: %1$s</string>
+    <string name="desf_botao">Rückgängig</string>
+    <string name="desf_tela">Letzte Änderungen</string>
+    <string name="desf_tela_det">Was in den letzten 7 Tagen geändert wurde. OK auf einer stellt den alten Zustand her.</string>
+    <string name="desf_tela_vazia">Keine Änderungen in den letzten 7 Tagen.</string>
+    <string name="desf_ja_desfeita">rückgängig gemacht</string>
+    <string name="desf_rot_config">Einstellungen</string>
+    <string name="desf_rot_automacoes">Automationen</string>
+    <string name="desf_rot_rotinas">Routinen</string>
+    <string name="desf_rot_apps">App-Liste</string>
+    <string name="desf_rot_organizar">Apps auf dem Startbildschirm</string>
+</resources>

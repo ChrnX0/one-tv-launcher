@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 19.7: TV nova em 2 min (MudarDeTv, ReceberTvActivity, FilaAppsActivity). -->
+<resources>
+    <string name="mtv_titulo">Importer d\'une autre TV</string>
+    <string name="mtv_qr_desc">QR pour importer les réglages d\'une autre TV</string>
+    <string name="mtv_instrucoes">Sur l\'ANCIENNE TV, ouvrez le panneau (téléphone ou ordinateur), allez dans Système › Sauvegarde › « Transférer vers une nouvelle TV » et scannez ce QR ou tapez le code ci-dessous.\nTout est chiffré, uniquement pour cette TV. Le code est valable %1$s.</string>
+    <string name="mtv_recebendo">Réception… n\'éteignez pas la TV.</string>
+    <string name="mtv_pronto">Tout est arrivé de %1$s. La TV redémarre maintenant ; ensuite vos applis reviennent une par une.</string>
+    <string name="mtv_erro">Échec : %1$s\nRien n\'a changé sur cette TV. Appuyez sur « %2$s » pour réessayer.</string>
+    <string name="mtv_venceu">Le code a expiré (valable 10 min).\nAppuyez sur « %1$s » pour en afficher un autre.</string>
+    <string name="mtv_cfg_det">Réglages, PIN, chaînes et applis de l\'ancienne TV en 2 minutes, avec un QR</string>
+    <string name="mtv_fila_titulo">Vos applis reviennent</string>
+    <string name="mtv_fila_texto">Appli %1$d sur %2$d. Ouvrez-la dans le Play Store et appuyez sur Installer ; au retour, la suivante s\'affiche.</string>
+    <string name="mtv_fila_abrir">Ouvrir dans le Play Store</string>
+    <string name="mtv_fila_pular">Passer</string>
+    <string name="mtv_fila_depois">Plus tard</string>
+    <string name="mtv_fila_fim">Toutes les applis de l\'autre TV sont là.</string>
+    <string name="mtv_fila_cfg_det">Encore %1$d applis de l\'autre TV à installer</string>
+    <string name="mtv_diario">Importé de %1$s : réglages restaurés, %2$d applis à installer</string>
+    <string name="mtv_diario_enviado">Envoyé vers une nouvelle TV : réglages et %1$d applis</string>
+</resources>

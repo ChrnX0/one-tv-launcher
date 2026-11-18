@@ -23,6 +23,11 @@ import android.widget.TextView
  * Volta a desenhar no onResume, para mostrar o que os editores mudaram. Visual igual ao das Rotinas.
  */
 class AutomacoesActivity : Activity() {
+    override fun onCreate(b: android.os.Bundle?) {
+        super.onCreate(b)
+        VigiaDesfazer.ligar(this, getString(R.string.desf_rot_automacoes)) { desenhar() }   // elevação 2.11
+    }
+
     override fun onResume() {
         super.onResume()
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
@@ -34,11 +39,11 @@ class AutomacoesActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         raiz.addView(Estilo.tituloTela(this, getString(R.string.aut_titulo)))
         raiz.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.aut_det)), LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(4) })
-        val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(8), dp(4), dp(8), dp(4)); clipChildren = false; clipToPadding = false }
+        val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(8), dp(4), dp(8), dp(4)); clipChildren = false; clipToPadding = false }
         raiz.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(lista) },
             LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f).apply { topMargin = dp(16) })
 
@@ -74,10 +79,12 @@ class AutomacoesActivity : Activity() {
             lateinit var v: TextView
             fun texto() = "${nomeEvento(e)}: ${gatilhos[e] ?: getString(R.string.rot_nenhum)}"
             fun girar(passo: Int) {
+                val tinha = gatilhos[e] != null
                 val novo = Cenas.girar(cenas, gatilhos[e] ?: "", passo, comNenhuma = true)
                 if (novo.isEmpty()) gatilhos.remove(e) else gatilhos[e] = novo
                 Gatilhos.salvar(this, gatilhos)
-                v.titulo(texto())
+                if (tinha != (gatilhos[e] != null)) desenhar()   // a linha "só se" aparece ou some (o foco volta a esta)
+                else v.titulo(texto())
             }
             v = linha("evento:${e.chave}", texto(), getString(if (cenas.isEmpty()) R.string.rot_cena_sem else R.string.rot_app_det)) { girar(1) }
             v.setOnKeyListener { _, k, ev ->
@@ -89,6 +96,30 @@ class AutomacoesActivity : Activity() {
                 }
             }
             adicionar(lista, v)
+            // Elevação 10.5: com cena escolhida, uma linha "só se" logo abaixo (◀ ▶ / OK trocam a condição).
+            if (gatilhos[e] != null) {
+                lateinit var w: TextView
+                val opcoes = SoSe.opcoes(runCatching { Perfil.contas(this) }.getOrDefault(emptyList()))
+                fun girarSoSe(passo: Int) {
+                    val m = Gatilhos.soSe(this).toMutableMap()
+                    val atual = m[e].orEmpty()
+                    val i = opcoes.indexOf(atual).let { if (it < 0) 0 else it }
+                    val novo = opcoes[(i + passo).mod(opcoes.size)]
+                    if (novo.isEmpty()) m.remove(e) else m[e] = novo
+                    Gatilhos.salvarSoSe(this, m)
+                    w.titulo("    " + textoSoSe(novo))
+                }
+                w = linha("soSe:${e.chave}", "    " + textoSoSe(Gatilhos.soSe(this)[e].orEmpty()), getString(R.string.elv_ss_det)) { girarSoSe(1) }
+                w.setOnKeyListener { _, k, ev ->
+                    if (ev.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
+                    when (k) {
+                        KeyEvent.KEYCODE_DPAD_LEFT -> { girarSoSe(-1); true }
+                        KeyEvent.KEYCODE_DPAD_RIGHT -> { girarSoSe(1); true }
+                        else -> false
+                    }
+                }
+                adicionar(lista, w)
+            }
         }
 
         secao(lista, R.string.aut_link)
@@ -115,7 +146,29 @@ class AutomacoesActivity : Activity() {
         Gatilhos.Evento.TV_LIGOU -> R.string.ev_tv_ligou
         Gatilhos.Evento.TODOS_SAIRAM -> R.string.ev_todos_sairam
         Gatilhos.Evento.CHUVA -> R.string.ev_chuva
+        Gatilhos.Evento.FILME_ACABOU -> R.string.elv_ev_filme_acabou
+        Gatilhos.Evento.PROGRAMA_COMECOU -> R.string.elv_ev_programa_comecou
+        Gatilhos.Evento.NASCER_DO_SOL -> R.string.elv_ev_nascer_do_sol
+        Gatilhos.Evento.POR_DO_SOL -> R.string.elv_ev_por_do_sol
+        Gatilhos.Evento.CAMPAINHA -> R.string.elv_ev_campainha
+        Gatilhos.Evento.ALGUEM_CHEGOU -> R.string.elv_ev_alguem_chegou
+        Gatilhos.Evento.INTERNET_CAIU -> R.string.elv_ev_internet_caiu
+        Gatilhos.Evento.INTERNET_VOLTOU -> R.string.elv_ev_internet_voltou
+        Gatilhos.Evento.RECADO_CHEGOU -> R.string.elv_ev_recado_chegou
+        Gatilhos.Evento.ANIVERSARIO -> R.string.elv_ev_aniversario
+        Gatilhos.Evento.COMPROMISSO -> R.string.elv_ev_compromisso
     })
+
+    /** Elevação 10.5: o "só se" em palavras ("Só se alguém em casa e depois do pôr do sol"). */
+    private fun textoSoSe(l: List<SoSe.Condicao>): String = if (l.isEmpty()) getString(R.string.elv_ss_sempre)
+        else getString(R.string.elv_ss_so_se, l.joinToString(getString(R.string.elv_ss_e)) { c ->
+            when (c) {
+                SoSe.Condicao.AlguemEmCasa -> getString(R.string.elv_ss_em_casa)
+                SoSe.Condicao.DepoisDoPorDoSol -> getString(R.string.elv_ss_noite)
+                SoSe.Condicao.DiaUtil -> getString(R.string.elv_ss_dia_util)
+                is SoSe.Condicao.Perfil -> getString(R.string.elv_ss_perfil, Perfil.usuario(c.conta))
+            }
+        })
 
     private fun rotulo(faz: String): String = when {
         faz.startsWith("app:") -> faz.removePrefix("app:").let { Rotinas.rotuloApp(this, it) ?: it }
@@ -162,7 +215,7 @@ class AutomacoesActivity : Activity() {
             sb.setSpan(ForegroundColorSpan(if (foco) Estilo.TEXTO_NO_FOCO_2 else Estilo.TEXTO_2), ini, sb.length, 0)
         }
         text = sb
-        setPadding(dp(20), dp(12), dp(20), dp(12))
+        setPaddingRelative(dp(20), dp(12), dp(20), dp(12))
     }
 
     private fun dp(valor: Int): Int = (valor * resources.displayMetrics.density + 0.5f).toInt()

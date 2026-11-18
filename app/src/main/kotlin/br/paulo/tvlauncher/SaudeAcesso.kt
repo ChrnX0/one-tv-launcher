@@ -115,6 +115,12 @@ object SaudeAcesso {
     /** O shell próprio já respondeu alguma vez neste aparelho? Sem isso é pareamento nunca feito, não perdido. */
     fun shellEsperado(ctx: Context) = prefs(ctx).getBoolean("shell_ja_funcionou", false)
 
+    /** Elevação 2.3: false = o shell está fora há mais que o limite (o mesmo critério do aviso); null = não sei/não se aplica. */
+    fun shellOk(): Boolean? = shell.ok.let { if (it == false && SystemClock.elapsedRealtime() - shell.foraDesde < LIMITE_SHELL_MS) null else it }
+    /** O túnel deveria estar no ar e espera um login (o link de login apareceu). */
+    fun tunelFaltaLogin(ctx: Context): Boolean = tunelEsperado(ctx.applicationContext) &&
+        (TunelTailscale.urlLogin != null || TunelTailscale.urlAtivar != null)
+
     private fun telaAcesa(ctx: Context) = ctx.getSystemService(PowerManager::class.java)?.isInteractive == true
 
     /** O túnel deveria estar no ar? MCP ligado, binário presente e login feito alguma vez (sem isso é configuração, não queda). */

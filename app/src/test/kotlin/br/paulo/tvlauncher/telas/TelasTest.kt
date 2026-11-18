@@ -66,18 +66,36 @@ class TelasTest {
         "jogos" to JogosActivity::class.java,
         "entrar-celular" to EntrarPeloQrActivity::class.java,
         "planos" to br.paulo.tvlauncher.ConhecerProActivity::class.java,
+        "placar" to br.paulo.tvlauncher.PlacarActivity::class.java,   // elevação 2.1: os 7 pilares
+        // Elevação 16.1: mais telas para o leitor de tela conferir (todo elemento com foco tem nome).
+        "extras" to br.paulo.tvlauncher.ExtrasActivity::class.java,
+        "automacoes" to br.paulo.tvlauncher.AutomacoesActivity::class.java,
+        "busca" to br.paulo.tvlauncher.BuscaActivity::class.java,
+        "diagnostico" to br.paulo.tvlauncher.DiagnosticoActivity::class.java,
+        "radio" to br.paulo.tvlauncher.RadioActivity::class.java,
+        // Elevação 19.7: TV nova em 2 min (o QR para receber e a fila dos apps).
+        "mudar-tv" to br.paulo.tvlauncher.ReceberTvActivity::class.java,
+        "fila-apps" to br.paulo.tvlauncher.FilaAppsActivity::class.java,
+        // Elevação 16.3: as mesmas telas com o alto contraste ligado; todo texto tem que passar de 7:1 ("contraste").
+        "home-ac" to MainActivity::class.java,
+        "configuracoes-ac" to ConfigLauncherActivity::class.java,
+        "placar-ac" to br.paulo.tvlauncher.PlacarActivity::class.java,
+        "ajuda-ac" to AjudaActivity::class.java,
     )
     private val referencia = File("src/test/telas/referencia.json")
     private val saida = File("build/telas")
 
-    data class Medida(val menorSp: Float, val cortes: Set<String>, val sobrepostos: Set<String>, val foco: Boolean) {
+    data class Medida(val menorSp: Float, val cortes: Set<String>, val sobrepostos: Set<String>, val foco: Boolean,
+                      val soCor: Set<String> = emptySet(), val contraste: Set<String> = emptySet(),
+                      val semNome: Set<String> = emptySet()) {
         fun json(): JSONObject = JSONObject().put("menorSp", menorSp.toDouble()).put("foco", foco)
             .put("cortes", JSONArray(cortes.sorted())).put("sobrepostos", JSONArray(sobrepostos.sorted()))
+            .put("soCor", JSONArray(soCor.sorted())).put("contraste", JSONArray(contraste.sorted()))
+            .put("semNome", JSONArray(semNome.sorted()))
         companion object {
-            fun de(o: JSONObject) = Medida(o.optDouble("menorSp").toFloat(),
-                o.optJSONArray("cortes").let { a -> (0 until (a?.length() ?: 0)).map { a!!.getString(it) }.toSet() },
-                o.optJSONArray("sobrepostos").let { a -> (0 until (a?.length() ?: 0)).map { a!!.getString(it) }.toSet() },
-                o.optBoolean("foco"))
+            private fun conjunto(o: JSONObject, k: String) = o.optJSONArray(k).let { a -> (0 until (a?.length() ?: 0)).map { a!!.getString(it) }.toSet() }
+            fun de(o: JSONObject) = Medida(o.optDouble("menorSp").toFloat(), conjunto(o, "cortes"), conjunto(o, "sobrepostos"),
+                o.optBoolean("foco"), conjunto(o, "soCor"), conjunto(o, "contraste"), conjunto(o, "semNome"))
         }
     }
 
@@ -86,6 +104,10 @@ class TelasTest {
 
     @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
     @Test fun portugues() = conferir("pt")
+
+    /** Elevação 16.8: árabe espelhado de verdade (as telas de View e as desenhadas à mão). */
+    @Config(qualifiers = "ar-ldrtl-w960dp-h540dp-land-television-xhdpi")
+    @Test fun arabe() = conferir("ar")
 
     private fun conferir(idioma: String) {
         // Na TV não existe "modo toque": sem isto o requestFocus() das telas não pega e o foco parece sumido.
@@ -100,6 +122,7 @@ class TelasTest {
             br.paulo.tvlauncher.LayoutHome.definirTamanho(app, if (nome == "home-grande") 115 else 100)
             br.paulo.tvlauncher.Extras.definir(app, br.paulo.tvlauncher.Extras.Chave.CARTOES_TRANSPARENTES, nome == "home-grande")
             br.paulo.tvlauncher.LayoutHome.definirGrade(app, nome == "home-grade")
+            br.paulo.tvlauncher.AltoContraste.definir(app, nome.endsWith("-ac"))
             // "home" é a cruz (a única tela inicial desde 17/11/2026); grande e grade ainda medem a antiga até ela sair.
             br.paulo.tvlauncher.LayoutHome.definirAntiga(app, nome == "home-grande" || nome == "home-grade")
             br.paulo.tvlauncher.LayoutHome.definirBarraCruz(app, when (nome) {
@@ -123,7 +146,11 @@ class TelasTest {
             for (c in m.cortes - antes.cortes) problemas += "$chave: texto cortado: \"$c\""
             for (s in m.sobrepostos - antes.sobrepostos) problemas += "$chave: texto por cima de outro: $s"
             if (antes.foco && !m.foco) problemas += "$chave: nada tem o foco (o controle não anda)"
+            for (c in m.soCor - antes.soCor) problemas += "$chave: estado só pela cor (16.4): $c"
+            for (c in m.semNome - antes.semNome) problemas += "$chave: elemento com foco sem nome para o leitor de tela (16.1): $c"
+            for (c in m.contraste - antes.contraste) problemas += "$chave: texto abaixo de 7:1 no alto contraste (16.3): $c"
         }
+        br.paulo.tvlauncher.AltoContraste.definir(RuntimeEnvironment.getApplication(), false)
         File(saida, "medidas-$idioma.json").writeText(agora.toString(1))
         File(saida, "relatorio-$idioma.md").writeText(if (problemas.isEmpty()) "Telas ($idioma): nada piorou.\n"
             else "Telas ($idioma): ${problemas.size} problema(s)\n\n" + problemas.joinToString("\n") { "- $it" } + "\n")
@@ -148,6 +175,7 @@ class TelasTest {
         val foto = Bitmap.createBitmap(raiz.width, raiz.height, Bitmap.Config.ARGB_8888)
         raiz.draw(Canvas(foto))
         File(saida, "$arquivo.png").outputStream().use { foto.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        Daltonismo.salvar(foto, File(saida, "daltonismo"), arquivo)   // 16.4: as fotos como quem não vê cor
 
         val escala = RuntimeEnvironment.getApplication().resources.displayMetrics.scaledDensity
         val textos = mutableListOf<Pair<TextView, Rect>>()
@@ -171,8 +199,17 @@ class TelasTest {
             // Encostar não conta: só sobreposição de verdade (mais de 3 px nos dois sentidos).
             if (x.width() > 3 && x.height() > 3) sobrepostos += listOf(rotulo(t1), rotulo(t2)).sorted().joinToString(" × ")
         }
+        val soCor = Daltonismo.estadosSoPelaCor(raiz)
+        val contraste = if (!arquivo.endsWith("-ac")) emptySet() else textos.mapNotNull { (t, _) ->
+            // Fundo de comparação: o grafite da tela, ou o foco branco (texto escuro de linha focada). Vale o melhor.
+            val cor = t.currentTextColor
+            val c = maxOf(br.paulo.tvlauncher.CorSegura.contraste(br.paulo.tvlauncher.CorSegura.compor(cor, br.paulo.tvlauncher.Estilo.FUNDO), br.paulo.tvlauncher.Estilo.FUNDO),
+                br.paulo.tvlauncher.CorSegura.contraste(br.paulo.tvlauncher.CorSegura.compor(cor, br.paulo.tvlauncher.Estilo.FOCO), br.paulo.tvlauncher.Estilo.FOCO))
+            if (c < br.paulo.tvlauncher.AltoContraste.MINIMO) "${rotulo(t)} (${"%.1f".format(c)}:1)" else null
+        }.toSet()
+        val semNome = LeitorTela.semNome(raiz)
         a.finish()
-        return Medida(menor, cortes, sobrepostos, raiz.findFocus() != null)
+        return Medida(menor, cortes, sobrepostos, raiz.findFocus() != null, soCor, contraste, semNome)
     }
 
     /** Onde as letras estão de fato na tela (não a caixa inteira da view), já cortado pelo que os pais deixam ver. */

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação (17/11/2026, ondas 2): tradução de values/strings_elevacao2.xml. -->
+<resources>
+    <string name="elv_ac_titulo">Hoher Kontrast</string>
+    <string name="elv_ac_det">Hellerer Text und deutlichere Ränder auf allen Bildschirmen (mindestens 7:1)</string>
+    <string name="elv_ad_titulo">Audiodeskription</string>
+    <string name="elv_ad_det">Die Tonspur wählen, die die Szene beschreibt, wann immer es eine gibt</string>
+    <string name="elv_sdh_titulo">Untertitel für Hörgeschädigte</string>
+    <string name="elv_sdh_det">Immer Untertitel mit Geräuschen ([Tür knallt]) in der Sprache des Fernsehers zeigen, auch bei Synchronfassung</string>
+    <string name="elv_cat_titulo">Poster und Inhalt für die Videos</string>
+    <string name="elv_cat_explica">Nur der Titel geht an TMDB, nie der Ordner oder der Server</string>
+    <string name="elv_cat_ligado">Ein</string>
+    <string name="elv_cat_desligado">Aus</string>
+    <string name="elv_cat_ep">%1$s · S%2$d E%3$d</string>
+    <string name="elv_cat_so_ep">%1$s · Folge %2$d</string>
+    <string name="elv_cat_temporada">%1$s · Staffel %2$d</string>
+    <string name="elv_cat_filme_ano">%1$s (%2$d)</string>
+    <string name="elv_cat_n_temporadas">Staffeln: %d</string>
+    <string name="elv_cat_procurando">Poster wird gesucht…</string>
+    <string name="elv_cat_nada">Nichts bei TMDB gefunden. OK gedrückt halten, um den richtigen Namen einzugeben.</string>
+    <string name="elv_cat_corrigir_titulo">Korrigieren: %s</string>
+    <string name="elv_cat_corrigir_explica">Falsches Poster oder falscher Inhalt? Das nächste Ergebnis anfordern oder den richtigen Namen und das Jahr eingeben. Ein leerer Name schaltet zurück auf automatisch.</string>
+    <string name="elv_cat_nao_e">Nicht dieser</string>
+    <string name="elv_cat_escrever">Namen eingeben</string>
+    <string name="elv_cat_campo">Name und Jahr, z. B. Dune 2021</string>
+    <string name="elv_cat_salvar">Speichern</string>
+    <string name="elv_cat_dica">korrigieren</string>
+    <string name="elv_bib_lista">Liste</string>
+    <string name="elv_bib_pasta">Ordner</string>
+    <string name="elv_bib_servidor">Server</string>
+    <string name="elv_bib_nuvem">Cloud</string>
+    <string name="elv_bib_addon">Add-on</string>
+</resources>

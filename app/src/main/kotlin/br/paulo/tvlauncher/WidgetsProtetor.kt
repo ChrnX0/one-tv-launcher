@@ -76,11 +76,11 @@ class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
         linha.addView(View(ctx), LinearLayout.LayoutParams(0, 1, 1f))
         d.amanha?.let { a ->
             linha.addView(texto(ctx.getString(R.string.pg_amanha), 13f, m600).apply { isAllCaps = true; letterSpacing = 0.14f; alpha = 0.7f; sombrear() })
-            linha.addView(iconeClima(a.codigo, true, false), LinearLayout.LayoutParams(dp(26), dp(26)).apply { leftMargin = dp(10) })
+            linha.addView(iconeClima(a.codigo, true, false), LinearLayout.LayoutParams(dp(26), dp(26)).apply { marginStart = dp(10) })
             linha.addView(texto("${a.max}° / ${a.min}°", 17f, m600).apply { sombrear() }, lp(8))
         }
         d.nascerPor?.let { (n, p) ->
-            linha.addView(View(ctx).apply { setBackgroundColor(0x40FFFFFF) }, LinearLayout.LayoutParams(dp(1), dp(22)).apply { leftMargin = dp(18); rightMargin = dp(18) })
+            linha.addView(View(ctx).apply { setBackgroundColor(0x40FFFFFF) }, LinearLayout.LayoutParams(dp(1), dp(22)).apply { marginStart = dp(18); marginEnd = dp(18) })
             linha.addView(ImageView(ctx).apply { setImageDrawable(IconeLinha(IconeLinha.Tipo.HORIZONTE, cor = amarelo)) }, LinearLayout.LayoutParams(dp(20), dp(20)))
             linha.addView(texto("${hm.format(Date(n))} – ${hm.format(Date(p))}", 16f, m500).apply { sombrear() }, lp(8))
         }
@@ -115,7 +115,7 @@ class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
     // ------------------------------------------------------------------ 1) faixa de vidro
     private fun faixa(d: Dados): View {
         val caixa = Vidro(ctx, vidro, 18f)
-        val linha = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL; setPadding(dp(22), dp(14), dp(22), dp(14)) }
+        val linha = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL; setPaddingRelative(dp(22), dp(14), dp(22), dp(14)) }
         // Sem a curva das próximas horas, nenhuma zona dava a altura (todas "-1" numa linha "-2"): a faixa virava um traço
         // vazio de 28 dp (visto no teste de telas do protetor v2, 17/11/2026). Aí as zonas medem a si mesmas.
         val alturaZona = if (d.marcas.size >= 2) -1 else -2
@@ -126,7 +126,7 @@ class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
             addView(texto("${d.temp}°", 46f, m500).apply { letterSpacing = -0.03f }, lp(10))
             addView(duasLinhas(IconesClima.texto(d.codigo, d.chovendo), maxMin(d), 14f, 12f, 150), lp(12))
         }), LinearLayout.LayoutParams(-2, alturaZona))
-        linha.addView(divisoria(), LinearLayout.LayoutParams(dp(1), -1).apply { leftMargin = dp(22); rightMargin = dp(22) })
+        linha.addView(divisoria(), LinearLayout.LayoutParams(dp(1), -1).apply { marginStart = dp(22); marginEnd = dp(22) })
         // Próximas horas (curva)
         if (d.marcas.size >= 2) {
             linha.addView(zona(R.string.pw_proximas_horas, CurvaHoras(d.marcas, d.solNaCurva), alturaConteudo = dp(100)),
@@ -134,7 +134,7 @@ class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
         } else linha.addView(View(ctx), LinearLayout.LayoutParams(0, 1, 1f))
         // Amanhã
         d.amanha?.let { a ->
-            linha.addView(divisoria(), LinearLayout.LayoutParams(dp(1), -1).apply { leftMargin = dp(22); rightMargin = dp(22) })
+            linha.addView(divisoria(), LinearLayout.LayoutParams(dp(1), -1).apply { marginStart = dp(22); marginEnd = dp(22) })
             linha.addView(zona(R.string.pg_amanha, LinearLayout(ctx).apply {
                 orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
                 addView(iconeClima(a.codigo, true, false), LinearLayout.LayoutParams(dp(36), dp(36)))
@@ -153,12 +153,12 @@ class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
         fun cartao(titulo: Int, conteudo: View, peso: Float = 0f, largura: Int = 0) {
             val c = Vidro(ctx, vidro, 16f)
             c.addView(LinearLayout(ctx).apply {
-                orientation = LinearLayout.VERTICAL; setPadding(dp(16), dp(12), dp(16), dp(13))
+                orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(16), dp(12), dp(16), dp(13))
                 addView(rotulo(titulo))
                 addView(conteudo, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(8) })
             }, FrameLayout.LayoutParams(-1, -1))
             val lp = if (peso > 0f) LinearLayout.LayoutParams(0, -1, peso) else LinearLayout.LayoutParams(dp(largura), -1)
-            if (linha.childCount > 0) lp.leftMargin = dp(12)
+            if (linha.childCount > 0) lp.marginStart = dp(12)
             linha.addView(c, lp)
         }
         // Agora
@@ -207,7 +207,7 @@ class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
             addView(texto(frase, 17f, m600).apply { linhaUnica(); maxWidth = dp(400); sombrear() }, LinearLayout.LayoutParams(-2, -2))
             if (amanha != null) addView(texto(amanha, 14f, m500).apply { linhaUnica(); maxWidth = dp(400); alpha = 0.85f; sombrear() },
                 LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(4) })
-        }, LinearLayout.LayoutParams(-2, -2).apply { leftMargin = dp(16); bottomMargin = dp(10) })
+        }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(16); bottomMargin = dp(10) })
         linha.addView(View(ctx), LinearLayout.LayoutParams(0, 1, 1f))
         if (d.marcas.isNotEmpty()) linha.addView(colunasHoras(d, iconeDp = 30, tempSp = 17f, juntas = true), LinearLayout.LayoutParams(-2, -2))
         return linha
@@ -267,7 +267,7 @@ class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
     private fun divisoria() = View(ctx).apply { setBackgroundColor(0x24FFFFFF) }
 
     private fun itemHoje(icone: Drawable, t: String) = LinearLayout(ctx).apply {
-        orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(0, dp(3), 0, dp(3))
+        orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPaddingRelative(0, dp(3), 0, dp(3))
         addView(ImageView(ctx).apply { setImageDrawable(icone) }, LinearLayout.LayoutParams(dp(18), dp(18)))
         addView(texto(t, 13f, m500).apply { linhaUnica(); maxWidth = dp(164); sombrear() }, lp(8))
     }
@@ -293,7 +293,7 @@ class WidgetsProtetor(private val ctx: Context, private val vidro: FonteVidro) {
 
     private fun TextView.linhaUnica() { maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
     private fun TextView.sombrear() = setShadowLayer(dp(8).toFloat(), 0f, dp(1).toFloat(), 0xB3000000.toInt())
-    private fun lp(margem: Int) = LinearLayout.LayoutParams(-2, -2).apply { leftMargin = dp(margem) }
+    private fun lp(margem: Int) = LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(margem) }
     private fun dp(v: Int) = (v * ctx.resources.displayMetrics.density + 0.5f).toInt()
     private fun sp(v: Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, v, ctx.resources.displayMetrics)
 

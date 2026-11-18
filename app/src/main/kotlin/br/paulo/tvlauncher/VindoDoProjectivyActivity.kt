@@ -53,12 +53,12 @@ class VindoDoProjectivyActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         raiz.addView(Estilo.tituloTela(this, getString(R.string.vp_titulo)))
         raiz.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.vp_texto)),
             LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(4) })
-        val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(8), dp(8), dp(8), dp(8)); clipChildren = false; clipToPadding = false }
+        val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(8), dp(8), dp(8), dp(8)); clipChildren = false; clipToPadding = false }
         raiz.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(lista) },
             LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f).apply { topMargin = dp(16) })
 

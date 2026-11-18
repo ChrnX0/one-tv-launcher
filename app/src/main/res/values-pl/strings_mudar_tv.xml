@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 19.7: TV nova em 2 min (MudarDeTv, ReceberTvActivity, FilaAppsActivity). -->
+<resources>
+    <string name="mtv_titulo">Przenieś z innego telewizora</string>
+    <string name="mtv_qr_desc">QR do przeniesienia ustawień z innego telewizora</string>
+    <string name="mtv_instrucoes">Na STARYM telewizorze otwórz panel (telefon lub komputer), przejdź do System › Kopia zapasowa › „Przenieś na nowy telewizor” i zeskanuj ten QR albo wpisz kod poniżej.\nWszystko idzie zaszyfrowane, tylko do tego telewizora. Kod ważny %1$s.</string>
+    <string name="mtv_recebendo">Odbieranie… nie wyłączaj telewizora.</string>
+    <string name="mtv_pronto">Wszystko przyszło z %1$s. Telewizor uruchamia się ponownie; potem aplikacje wracają po kolei.</string>
+    <string name="mtv_erro">Nie udało się: %1$s\nNa tym telewizorze nic się nie zmieniło. Naciśnij „%2$s”, aby spróbować ponownie.</string>
+    <string name="mtv_venceu">Kod wygasł (ważny 10 min).\nNaciśnij „%1$s”, aby pokazać nowy.</string>
+    <string name="mtv_cfg_det">Ustawienia, PIN, kanały i aplikacje starego telewizora w 2 minuty, z kodem QR</string>
+    <string name="mtv_fila_titulo">Twoje aplikacje wracają</string>
+    <string name="mtv_fila_texto">Aplikacja %1$d z %2$d. Otwórz ją w Sklepie Play i naciśnij Zainstaluj; po powrocie pojawi się następna.</string>
+    <string name="mtv_fila_abrir">Otwórz w Sklepie Play</string>
+    <string name="mtv_fila_pular">Pomiń</string>
+    <string name="mtv_fila_depois">Później</string>
+    <string name="mtv_fila_fim">Wszystkie aplikacje z drugiego telewizora są tutaj.</string>
+    <string name="mtv_fila_cfg_det">Do zainstalowania zostało %1$d aplikacji z drugiego telewizora</string>
+    <string name="mtv_diario">Przeniesiono z %1$s: ustawienia przywrócone, %2$d aplikacji do zainstalowania</string>
+    <string name="mtv_diario_enviado">Wysłano na nowy telewizor: ustawienia i %1$d aplikacji</string>
+</resources>

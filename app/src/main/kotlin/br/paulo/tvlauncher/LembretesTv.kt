@@ -174,6 +174,7 @@ object LembretesTv {
         val agora = System.currentTimeMillis()
         val devidos = Lembretes.devidos(listar(app), agora)
         if (devidos.isNotEmpty()) {
+            Gatilhos.disparar(app, Gatilhos.Evento.PROGRAMA_COMECOU)   // elevação 10.6 / 5.10: programa marcado no guia começou
             editar(app) { l -> Lembretes.marcarAvisados(Lembretes.limpar(l, agora), devidos.mapTo(HashSet()) { it.chave }) }
             val acesa = app.getSystemService(PowerManager::class.java)?.isInteractive != false
             // Dois ao mesmo tempo (raro): mostra o que começa primeiro; o outro vira aviso curto.

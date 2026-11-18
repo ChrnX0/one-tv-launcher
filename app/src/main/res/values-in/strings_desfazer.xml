@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 2.11: Desfazer em tudo (Desfazer.kt). -->
+<resources>
+    <string name="desf_diario">Perubahan (%1$s): %2$s</string>
+    <string name="desf_diario_desfeito">Diurungkan: %1$s</string>
+    <string name="desf_ocultou">Menyembunyikan %1$s</string>
+    <string name="desf_mostrou">Menampilkan lagi %1$s</string>
+    <string name="desf_cat_ajuste">Setelan</string>
+    <string name="desf_cat_organizacao">Susunan</string>
+    <string name="desf_cat_automacao">Otomatisasi</string>
+    <string name="desf_cat_limpeza">Pembersihan</string>
+    <string name="desf_nada">Tidak ada yang bisa diurungkan (sudah diurungkan).</string>
+    <string name="desf_feito">Diurungkan. Semua kembali seperti semula.</string>
+    <string name="desf_parcial">Diurungkan sebagian: %1$d item sudah berubah lagi dan dibiarkan apa adanya.</string>
+    <string name="desf_barra">Diubah: %1$s</string>
+    <string name="desf_botao">Urungkan</string>
+    <string name="desf_tela">Perubahan terbaru</string>
+    <string name="desf_tela_det">Yang diubah dalam 7 hari terakhir. OK pada salah satunya mengembalikannya.</string>
+    <string name="desf_tela_vazia">Tidak ada perubahan dalam 7 hari terakhir.</string>
+    <string name="desf_ja_desfeita">sudah diurungkan</string>
+    <string name="desf_rot_config">Setelan</string>
+    <string name="desf_rot_automacoes">Otomatisasi</string>
+    <string name="desf_rot_rotinas">Rutinitas</string>
+    <string name="desf_rot_apps">Daftar aplikasi</string>
+    <string name="desf_rot_organizar">Aplikasi layar utama</string>
+</resources>

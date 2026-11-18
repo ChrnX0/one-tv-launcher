@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 19.7: TV nova em 2 min (MudarDeTv, ReceberTvActivity, FilaAppsActivity). -->
+<resources>
+    <string name="mtv_titulo">Von anderem Fernseher übernehmen</string>
+    <string name="mtv_qr_desc">QR, um Einstellungen von einem anderen Fernseher zu übernehmen</string>
+    <string name="mtv_instrucoes">Öffnen Sie am ALTEN Fernseher das Panel (Handy oder Computer), gehen Sie zu System › Backup › „Auf neuen Fernseher übertragen“ und scannen Sie diesen QR oder tippen Sie den Code unten ein.\nAlles geht verschlüsselt, nur an diesen Fernseher. Der Code gilt %1$s.</string>
+    <string name="mtv_recebendo">Empfange… Fernseher nicht ausschalten.</string>
+    <string name="mtv_pronto">Alles kam von %1$s. Der Fernseher startet jetzt neu; danach kommen Ihre Apps eine nach der anderen zurück.</string>
+    <string name="mtv_erro">Hat nicht geklappt: %1$s\nAn diesem Fernseher hat sich nichts geändert. Drücken Sie „%2$s“, um es erneut zu versuchen.</string>
+    <string name="mtv_venceu">Der Code ist abgelaufen (gilt 10 Min.).\nDrücken Sie „%1$s“, um einen neuen anzuzeigen.</string>
+    <string name="mtv_cfg_det">Einstellungen, PIN, Sender und Apps des alten Fernsehers in 2 Minuten, mit einem QR</string>
+    <string name="mtv_fila_titulo">Ihre Apps kommen zurück</string>
+    <string name="mtv_fila_texto">App %1$d von %2$d. Im Play Store öffnen und Installieren drücken; beim Zurückkommen erscheint die nächste.</string>
+    <string name="mtv_fila_abrir">Im Play Store öffnen</string>
+    <string name="mtv_fila_pular">Überspringen</string>
+    <string name="mtv_fila_depois">Später</string>
+    <string name="mtv_fila_fim">Alle Apps des anderen Fernsehers sind da.</string>
+    <string name="mtv_fila_cfg_det">Noch %1$d Apps vom anderen Fernseher zu installieren</string>
+    <string name="mtv_diario">Übernommen von %1$s: Einstellungen wiederhergestellt, %2$d Apps zu installieren</string>
+    <string name="mtv_diario_enviado">An neuen Fernseher gesendet: Einstellungen und %1$d Apps</string>
+</resources>

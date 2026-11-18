@@ -254,10 +254,10 @@ class FundoGaleria(ctx: Context, private val emSegundoPlano: (() -> Unit) -> Uni
             background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(0xB30A0C08.toInt(), 0x800A0C08.toInt(), 0x000A0C08))
         }, LayoutParams(LayoutParams.MATCH_PARENT, ctx.dpf(260f).toInt(), Gravity.TOP))
         addView(etiqueta, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.END or Gravity.BOTTOM).apply {
-            rightMargin = ctx.dpf(Grade.MARGEM.toFloat()).toInt()
+            marginEnd = ctx.dpf(Grade.MARGEM.toFloat()).toInt()
             // Na HOME, logo acima da fileira de apps; no protetor (sem apps), no canto de baixo.
             bottomMargin = if (etiquetaNoCanto) ctx.dpf(40f).toInt() else ctx.dpf((540 - Grade.LINHA_APPS + 14).toFloat()).toInt()
-            if (etiquetaNoCanto) rightMargin = ctx.dpf(48f).toInt()
+            if (etiquetaNoCanto) marginEnd = ctx.dpf(48f).toInt()
         })
         if (!comEtiqueta) etiqueta.visibility = View.GONE   // tela de previsão: a etiqueta ficaria embaixo dos cartões
     }

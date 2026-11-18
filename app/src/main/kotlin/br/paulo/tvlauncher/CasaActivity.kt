@@ -71,7 +71,7 @@ class CasaActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(this@CasaActivity)
             // A rolagem fica presa à própria área: sem isto os cartões de baixo eram desenhados por cima das dicas.
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.E3))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.E3))
             // A rolagem entra na margem (leftMargin negativo, abaixo) para o cartão focado crescer sem corte; sem isto o
             // padding da raiz cortava a borda esquerda do 1º cartão (teste na TV, 15/11/2026).
             clipToPadding = false
@@ -84,7 +84,7 @@ class CasaActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             clipChildren = false; clipToPadding = false
             // Folga em volta: o cartão focado cresce 5% e não pode ser cortado pela borda da rolagem.
-            setPadding(dp(FOLGA_DP), dp(Estilo.E1), dp(FOLGA_DP), dp(Estilo.E3))
+            setPaddingRelative(dp(FOLGA_DP), dp(Estilo.E1), dp(FOLGA_DP), dp(Estilo.E3))
         }
         rolagem = ScrollView(this).apply {
             isVerticalScrollBarEnabled = false; isFillViewport = true
@@ -92,7 +92,7 @@ class CasaActivity : Activity() {
             isVerticalFadingEdgeEnabled = true; setFadingEdgeLength(dp(Estilo.E3))
             addView(grade)
         }
-        raiz.addView(rolagem, LinearLayout.LayoutParams(-1, 0, 1f).apply { leftMargin = -dp(FOLGA_DP); rightMargin = -dp(FOLGA_DP) })
+        raiz.addView(rolagem, LinearLayout.LayoutParams(-1, 0, 1f).apply { marginStart = -dp(FOLGA_DP); marginEnd = -dp(FOLGA_DP) })
         dicas = FrameLayout(this)
         raiz.addView(dicas, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(Estilo.E1) })
         mostrarDicas(false)
@@ -484,7 +484,7 @@ class CasaActivity : Activity() {
         val casca = LinearLayout(this@CasaActivity).apply {
             orientation = LinearLayout.VERTICAL
             isFocusable = true; isClickable = true
-            setPadding(dp(14), dp(12), dp(12), dp(10))
+            setPaddingRelative(dp(14), dp(12), dp(12), dp(10))
             addView(circulo, LinearLayout.LayoutParams(dp(34), dp(34)))
             addView(View(this@CasaActivity), LinearLayout.LayoutParams(0, 0, 1f))   // empurra o texto para baixo
             addView(nomeTv)

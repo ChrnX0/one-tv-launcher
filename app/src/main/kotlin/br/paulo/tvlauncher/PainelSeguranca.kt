@@ -125,7 +125,8 @@ class Sessoes(private val relogio: () -> Long, private val maximoSessoes: Int = 
         const val ELEVADA_MS = 5 * 60_000L
     }
 
-    private class Sessao(val criada: Long, var ultimoUso: Long, var elevadaAte: Long)
+    private class Sessao(val criada: Long, var ultimoUso: Long, var elevadaAte: Long,
+                         var papel: PapeisPainel.Papel = PapeisPainel.Papel.DONO, val venceEm: Long = Long.MAX_VALUE)
 
     private val aleatorio = SecureRandom()
     private val mapa = LinkedHashMap<String, Sessao>()
@@ -134,13 +135,16 @@ class Sessoes(private val relogio: () -> Long, private val maximoSessoes: Int = 
      * Cria a sessão e devolve o token (32 caracteres hex) para o cookie. Com PIN, já nasce elevada (acabou de digitar o
      * PIN); pelo QR da TV ([elevada] = false), não: desinstalar, instalar etc. continuam pedindo o PIN.
      */
-    @Synchronized fun criar(elevada: Boolean = true): String {
+    @Synchronized fun criar(elevada: Boolean = true, papel: PapeisPainel.Papel = PapeisPainel.Papel.DONO,
+                            venceEm: Long = Long.MAX_VALUE): String {
         limpar()
         while (mapa.size >= maximoSessoes) mapa.remove(mapa.keys.first())   // tira a mais antiga
         val bytes = ByteArray(16).also { aleatorio.nextBytes(it) }
         val token = bytes.joinToString("") { "%02x".format(it) }
         val agora = relogio()
-        mapa[chave(token)] = Sessao(agora, agora, if (elevada) agora + ELEVADA_MS else 0L)
+        // Elevação 18.1: só o dono nasce elevado; o convidado de um dia cai quando o convite vence.
+        val dono = papel == PapeisPainel.Papel.DONO
+        mapa[chave(token)] = Sessao(agora, agora, if (elevada && dono) agora + ELEVADA_MS else 0L, papel, venceEm)
         return token
     }
 
@@ -156,14 +160,22 @@ class Sessoes(private val relogio: () -> Long, private val maximoSessoes: Int = 
 
     @Synchronized fun elevada(token: String?): Boolean {
         val s = buscar(token) ?: return false
-        return relogio() < s.elevadaAte
+        return s.papel == PapeisPainel.Papel.DONO && relogio() < s.elevadaAte
     }
 
+    /** O PIN do dono foi digitado: a sessão vira do dono (quem sabe o PIN é o dono) e fica elevada. */
     @Synchronized fun elevar(token: String?): Boolean {
         val s = buscar(token) ?: return false
+        s.papel = PapeisPainel.Papel.DONO
         s.elevadaAte = relogio() + ELEVADA_MS
         return true
     }
+
+    /** O papel da sessão (null = não vale). */
+    @Synchronized fun papel(token: String?): PapeisPainel.Papel? = buscar(token)?.papel
+
+    /** Convites revogados: quem entrou por convite sai na hora (o dono continua). */
+    @Synchronized fun encerrarConvidados() { mapa.values.removeAll { it.papel != PapeisPainel.Papel.DONO } }
 
     @Synchronized fun encerrar(token: String?) { if (token != null) mapa.remove(chave(token)) }
 
@@ -187,7 +199,7 @@ class Sessoes(private val relogio: () -> Long, private val maximoSessoes: Int = 
 
     private fun expirou(s: Sessao): Boolean {
         val agora = relogio()
-        return agora - s.ultimoUso > OCIOSO_MS || agora - s.criada > MAXIMO_MS
+        return agora - s.ultimoUso > OCIOSO_MS || agora - s.criada > MAXIMO_MS || agora >= s.venceEm
     }
 
     private fun limpar() { mapa.values.removeAll { expirou(it) } }

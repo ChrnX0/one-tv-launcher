@@ -38,7 +38,9 @@ object BackupCompleto {
         "ouvir",   // Ouvir (17/11/2026): rádio continua ao sair da tela (e, depois, os ajustes dos podcasts)
         "pacote_icones", "fundo_meu",   // degrau 1 (15/11/2026): pacote de ícones e "Meu fundo" (caminho, brilho, contraste)
         "cruz_apps",   // cruz (18/11/2026): em que categoria cada app mora ("Mover para…"), fixados no topo e aberturas
-        "addons")   // addons no protocolo do Stremio (16/11/2026): a lista instalada e o aceite dos termos
+        "addons",   // addons no protocolo do Stremio (16/11/2026): a lista instalada e o aceite dos termos
+        "backup_recuperacao",   // elevação 19.6: só a parte PÚBLICA da chave de recuperação (a TV restaurada segue trancando com ela)
+        "catalogo_pasta")   // elevação 8.2: o "pôster e sinopse" das pastas ligado e os nomes corrigidos à mão
     // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
     /**
      * Preferências que NÃO vão, de propósito (o teste BackupCompletoTest confere que nenhuma outra ficou esquecida):
@@ -48,6 +50,10 @@ object BackupCompleto {
     internal val FORA_DE_PROPOSITO = setOf("confirmacoes", "familia_link", "plugins",   // plugins: o OK vale para o certificado desta TV
           // degrau 3: o link da família não viaja no backup (restaurar = link novo)
         "emprestimo_shell", "emprestimo_dono",   // empréstimos: restaurar não pode ligar poder emprestado sem o PIN (e o uid de cada app muda entre aparelhos)
+        "painel_papeis",   // elevação 18.1: convites (família/convidado) não viajam: restaurar não pode reabrir acesso revogado
+        "mudar_tv",   // elevação 19.7: a fila dos apps que faltam é desta TV, depois de receber de outra
+        "desfazer",   // elevação 2.11: os passos de desfazer são desta TV e destes dias
+        "nao_perturbe", "config_busca",   // elevação 11.4/12.2: fila de avisos guardados e "mexidos há pouco" são passageiros
         "mtp_permitidos", "painel_log", "atualizador", "aviso_tv", "loja_curada",
         "ceu",   // cache do TLE da Estação Espacial (protetor com tempo): renovado a cada 12 h, de outro aparelho não vale
         "compatibilidade",   // medidas do "acordar" deste aparelho (CompatibilidadeTv): de outro aparelho não valem
@@ -136,7 +142,8 @@ object BackupCompleto {
         val claro = JSONObject().put("versao", 3).put("pacote", app.packageName).put("criadoEm", System.currentTimeMillis())
             .put("preferencias", prefs).put("segredos", segredos).put("arquivos", arquivos).toString()
         conferirTamanho(claro)
-        return CofreBackup.trancar(claro, senha)
+        // Elevação 19.6: com a chave de recuperação criada, o backup abre também com o código do QR.
+        return CofreBackup.trancar(claro, senha, RecuperacaoTv.publica(app))
     }
 
     /**

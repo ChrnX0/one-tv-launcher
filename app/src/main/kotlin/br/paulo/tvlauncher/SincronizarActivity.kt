@@ -82,7 +82,7 @@ class SincronizarActivity : Activity() {
                 lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, sub).apply { textSize = Estilo.Leitura.SINOPSE })
                 val parado = when { bloqueado -> getString(R.string.sync_bloqueado); outroPerfil -> getString(R.string.sync_outro_perfil); else -> aviso }
                 if (parado != null) lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, parado).apply {
-                    textSize = Estilo.Leitura.AVISO; setTextColor(Estilo.ATENCAO); setPadding(0, dp(8), 0, 0)
+                    textSize = Estilo.Leitura.AVISO; setTextColor(Estilo.ATENCAO); setPaddingRelative(0, dp(8), 0, 0)
                 })
                 var i = 0
                 fun proxima() = (i++ == focar)
@@ -109,7 +109,7 @@ class SincronizarActivity : Activity() {
                 // Atribuição que o Simkl e o Trakt pedem onde os dados deles aparecem.
                 val fonte = when (servico) { Servico.TRAKT -> R.string.sync_fonte_trakt; Servico.SIMKL -> R.string.sync_fonte_simkl; else -> 0 }
                 if (fonte != 0) lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(fonte)).apply {
-                    textSize = Estilo.Leitura.ITEM_DETALHE; setPadding(0, dp(16), 0, 0)
+                    textSize = Estilo.Leitura.ITEM_DETALHE; setPaddingRelative(0, dp(16), 0, 0)
                 })
             }
         }
@@ -164,7 +164,7 @@ class SincronizarActivity : Activity() {
         naEscolha = true
         lista.removeAllViews()
         lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.sync_listas_sub, SincronizarFilmes.MAX_LISTAS)).apply { textSize = Estilo.Leitura.SINOPSE })
-        val carregando = Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.sync_listas_carregando)).apply { textSize = Estilo.Leitura.AVISO; setPadding(0, dp(16), 0, 0) }
+        val carregando = Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.sync_listas_carregando)).apply { textSize = Estilo.Leitura.AVISO; setPaddingRelative(0, dp(16), 0, 0) }
         lista.addView(carregando)
         rede.execute {
             val disponiveis = ServicosSync.listasDisponiveis(this)
@@ -175,7 +175,7 @@ class SincronizarActivity : Activity() {
                 val escolhidas = ServicosSync.listas(this).toMutableList()
                 val todas = (escolhidas + disponiveis).distinctBy { it.chave }
                 if (todas.isEmpty()) {
-                    lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.sync_listas_vazio)).apply { textSize = Estilo.Leitura.AVISO; setPadding(0, dp(16), 0, 0) })
+                    lista.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.sync_listas_vazio)).apply { textSize = Estilo.Leitura.AVISO; setPaddingRelative(0, dp(16), 0, 0) })
                     return@post
                 }
                 var primeira = true

@@ -53,7 +53,7 @@ object Moldura {
         conteudo.addView(relogio(a), FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, Estilo.dp(a, ALTURA),
             Gravity.TOP or Gravity.END).apply {
             topMargin = Estilo.dp(a, TOPO)
-            rightMargin = Estilo.dp(a, Estilo.MARGEM_LATERAL)
+            marginEnd = Estilo.dp(a, Estilo.MARGEM_LATERAL)
         })
     }
 

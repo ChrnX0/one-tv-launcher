@@ -56,9 +56,15 @@ object AvisoTv {
         icone: android.graphics.drawable.Drawable? = null,   // ícone de linha à esquerda (sistema de design); null = ponto de luz
         fica: AvisoRegras.Fica = AvisoRegras.Fica.PASSAGEIRO,   // quanto tempo o cartão fica no protetor (12/11/2026)
         historico: Boolean = true,   // false = confirmação curta, fora da central de avisos do painel rápido (ideia 35)
+        prioridade: NaoPerturbe.Tipo = NaoPerturbe.Tipo.COMUM,   // elevação 11.4: alarme, campainha, alerta oficial e regra passam
     ): Resultado {
         val app = ctx.applicationContext
         if (historico) guardarNoHistorico(app, titulo, texto)
+        // Elevação 11.4: não perturbe (filme, madrugada, visita). Confirmação curta (sem histórico) passa: a pessoa pediu.
+        if (historico && runCatching { NaoPerturbeTv.segurar(app, titulo, texto, prioridade) }.getOrDefault(false)) {
+            NotificacoesTv.avisarMudanca()
+            return Resultado.GUARDADO
+        }
         // Guarda o último aviso (recado ou chuva) para o protetor de tela mostrar como cartão por algumas horas
         // ("quadro da família", 10/11/2026). Só o texto: a foto do recado não é guardada. Quanto tempo fica: [fica]
         // (só o que pede atenção fica horas; confirmação como "O Claude olhou a tela" sai em 2 min).
@@ -216,7 +222,7 @@ object AvisoTv {
             if (icone == null) (getChildAt(0).layoutParams as LinearLayout.LayoutParams).apply { width = dp(8); height = dp(8); marginEnd = dp(10) }
             if (cartao) {
                 background = Estilo.vidro(svc, Estilo.RAIO)
-                setPadding(dp(14), dp(12), dp(16), dp(12))
+                setPaddingRelative(dp(14), dp(12), dp(16), dp(12))
                 gravity = Gravity.TOP
             }
             addView(coluna, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))

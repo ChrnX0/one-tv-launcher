@@ -119,7 +119,7 @@ class PlayerJanelas(private val act: Activity) {
 
     private fun moldura(campo: EditText) = FrameLayout(act).apply {
         val m = (20 * act.resources.displayMetrics.density).toInt()
-        setPadding(m, m / 2, m, 0)
+        setPaddingRelative(m, m / 2, m, 0)
         addView(campo)
     }
 }

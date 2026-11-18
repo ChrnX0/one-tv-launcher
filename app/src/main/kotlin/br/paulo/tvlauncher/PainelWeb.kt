@@ -151,7 +151,8 @@ object PainelWeb {
     @Synchronized fun ajustar(ctx: Context) {
         app = ctx.applicationContext
         // Sem PIN, só abre no modo da primeira configuração (tela do QR na TV): o assistente cria o PIN pelo celular.
-        val deve = PainelArmazem.podeLigar(app) || (modoPrimeira && !PainelArmazem.temPin(app))
+        val deve = PainelArmazem.podeLigar(app) || (modoPrimeira && !PainelArmazem.temPin(app)) ||
+            MudarDeTv.recebendo()   // elevação 19.7: só enquanto a tela "Trazer de outra TV" está aberta
         if (deve && !ligado() && !iniciando) iniciar() else if (!deve && (ligado() || iniciando)) parar()
     }
 
@@ -615,6 +616,7 @@ object PainelWeb {
         PainelExtras.ROTA_FOTO -> PainelExtras.LIMITE_FOTO
         PainelIdeias.ROTA_OPML -> PainelIdeias.LIMITE_OPML
         "/api/backup/completo/restaurar" -> BackupCompleto.LIMITE_BYTES * 2 + 1024   // o cofre em Base64 + a senha
+        "/api/mudar/receber" -> BackupCompleto.LIMITE_BYTES * 4   // elevação 19.7: o cofre + a lista de apps, cifrados e em Base64
         else -> LIMITE_CORPO
     }
 
@@ -631,6 +633,16 @@ object PainelWeb {
         if (req.metodo == "POST" &&
             (!ChecagensPainel.origemPermitida(req.cabecalho("origin"), host) || req.cabecalho("x-painel") != "1"))
             return erro(403, "pedido de fora do painel")
+        // Elevação 19.7: a TV antiga manda o envelope sem sessão (ela não tem o PIN desta). O segredo do QR é conferido
+        // AQUI, antes de ler o corpo: chute errado não gasta memória, e depois de 5 erros a porta fecha.
+        if (req.caminho == "/api/mudar/receber" && req.metodo == "POST") {
+            if (!MudarDeTv.recebendo()) return erro(410, "esta TV não está esperando (abra 'Trazer de outra TV' nela)")
+            return when (MudarDeTv.conferirSegredo(req.cabecalho("x-mudar"))) {
+                MudarDeTvRegras.Conferencia.OK -> null
+                MudarDeTvRegras.Conferencia.ERRADO -> erro(403, "código errado")
+                MudarDeTvRegras.Conferencia.VENCIDO -> erro(410, "o código venceu; gere outro na TV nova")
+            }
+        }
         if (req.tamanho > LIMITE_CORPO &&
             !sessoes.existe(PainelHttp.cookie(req.cabecalho("cookie"), COOKIE))) return erro(401, "entre com o PIN")
         return null
@@ -683,6 +695,12 @@ object PainelWeb {
             "/api/eventos" -> if (req.metodo == "GET") return eventos(token)
             "/api/entrar" -> if (req.metodo == "POST") return entrar(req, ip)
             "/api/entrar-qr" -> if (req.metodo == "POST") return entrarPeloQr(req, ip)
+            "/api/convite/entrar" -> if (req.metodo == "POST") return entrarPorConvite(req, ip)   // elevação 18.1
+            // Elevação 19.7 (TV nova): a chave pública e o envelope, livres de sessão mas só com a tela aberta na TV.
+            // O segredo do envelope já foi conferido em antesDoCorpo.
+            "/api/mudar/chave" -> if (req.metodo == "GET") return MudarDeTv.chavePublica()?.takeIf { MudarDeTv.recebendo() }
+                ?.let { json(200, JSONObject().put("publica", it)) } ?: erro(410, "esta TV não está esperando")
+            "/api/mudar/receber" -> if (req.metodo == "POST") return receberDeOutraTv(req, ip)
             "/api/primeira" -> if (req.metodo == "POST") return primeiraConfig(req, ip)   // ideia 97: cria o PIN
             // Ideia 99: digital do celular (passkey), só pelo https do Tailscale. Estado e desafio são livres como a
             // página de entrar; a entrada confere a assinatura.
@@ -701,6 +719,17 @@ object PainelWeb {
         if (req.caminho == "/api/tvs" && req.metodo == "GET")
             return if (sessoes.existe(token)) json(200, PainelVizinhos.json(app)) else erro(401, "entre com o PIN")
         if (!sessoes.valida(token)) return erro(401, "entre com o PIN")
+        // Elevação 18.1: a trava do papel (família, convidado) vale para TODA rota daqui para baixo, antes de qualquer
+        // leitura ou ação. O que não está na lista do papel é negado (PapeisPainel.permite).
+        val papel = sessoes.papel(token) ?: return erro(401, "entre com o PIN")
+        if (!PapeisPainel.permite(papel, req.metodo, req.caminho))
+            return erro(403, "seu acesso a esta TV não inclui isto") { put("papel", papel.chave) }
+        when (req.caminho) {
+            "/api/papeis" -> if (req.metodo == "GET") return json(200, JSONObject().put("convites",
+                JSONArray().apply { convites().forEach { put(PapeisPainel.publico(it)) } }))
+            "/api/papeis/convite" -> if (req.metodo == "POST") return criarConvite(req, token, ip, https, host)
+            "/api/papeis/revogar" -> if (req.metodo == "POST") return revogarConvite(req, token, ip)
+        }
         // Cuidar de longe (ideias 77-79, PainelCuidar.kt). A foto do pedido de ajuda é imagem: sai daqui mesmo.
         if (req.caminho == "/api/cuidar/foto" && req.metodo == "GET") {
             val f = CuidarDeLongeTv.fotoAjuda(app) ?: return erro(404, "sem foto de pedido de ajuda nas últimas 24 h")
@@ -741,6 +770,8 @@ object PainelWeb {
             "/api/backup/restaurar" -> if (req.metodo == "POST") return restaurar(req, token, ip)
             // Backup completo e cifrado (BackupCompleto.kt): leva segredos, então baixar também pede o PIN de novo.
             "/api/backup/completo" -> if (req.metodo == "POST") return backupCompleto(req, token, ip)
+            "/api/backup/recuperacao" -> return recuperacao(req, token, ip)
+            "/api/mudar/enviar" -> if (req.metodo == "POST") return enviarParaTvNova(req, token, ip)   // elevação 19.7
             "/api/backup/completo/restaurar" -> if (req.metodo == "POST") return restaurarCompleto(req, token, ip)
             // Backup automático (BackupAutomatico.kt): as cópias diárias guardadas na TV.
             "/api/backup/automaticos" -> if (req.metodo == "GET") return json(200, JSONObject().put("copias",
@@ -1093,6 +1124,8 @@ object PainelWeb {
             o.put("aparelho", Settings.Global.getString(app.contentResolver, "device_name") ?: "TV")
             o.put("naTela", PainelApps.naTela(app))
             o.put("elevada", sessoes.elevada(token))
+            val papel = sessoes.papel(token) ?: PapeisPainel.Papel.DONO
+            o.put("papel", papel.chave).put("paginas", JSONArray(PapeisPainel.paginas(papel)))
         }
         return json(200, o)
     }
@@ -1412,6 +1445,41 @@ object PainelWeb {
 
     private fun precisaPin() = erro(403, "confirme o PIN") { put("precisaPin", true) }
 
+    // ---------------------------------------------------------------- papéis e convites (elevação 18.1, PapeisPainel)
+
+    private fun prefsPapeis() = app.getSharedPreferences("painel_papeis", android.content.Context.MODE_PRIVATE)
+    @Synchronized private fun convites() = PapeisPainel.validos(PapeisPainel.deJson(prefsPapeis().getString("convites", null)), System.currentTimeMillis())
+    @Synchronized private fun salvarConvites(l: List<PapeisPainel.Convite>) { prefsPapeis().edit().putString("convites", PapeisPainel.paraJson(l)).commit() }
+
+    private fun criarConvite(req: Requisicao, token: String?, ip: String, https: Boolean, host: String?): Resposta {
+        if (!sessoes.elevada(token)) return precisaPin()
+        val papel = PapeisPainel.Papel.de(corpoJson(req)?.optString("papel"))?.takeIf { it != PapeisPainel.Papel.DONO }
+            ?: return erro(400, "papel inválido")
+        val (codigo, lista) = synchronized(this) { PapeisPainel.criar(convites(), papel, System.currentTimeMillis()).also { salvarConvites(it.second) } }
+        val link = (if (https) "https://" else "http://") + host + "/#convite=" + codigo
+        PainelArmazem.registrar(app, ip, "convite criado", papel.chave)   // o código nunca vai para o registro
+        return json(200, JSONObject().put("link", link).put("papel", papel.chave)
+            .put("qr", java.util.Base64.getEncoder().encodeToString(QrCodigo.png(link, 480))), mapOf("Cache-Control" to "no-store"))
+    }
+
+    private fun revogarConvite(req: Requisicao, token: String?, ip: String): Resposta {
+        if (!sessoes.elevada(token)) return precisaPin()
+        val o = corpoJson(req) ?: return erro(400, "JSON inválido")
+        synchronized(this) { salvarConvites(if (o.optBoolean("todos")) emptyList() else PapeisPainel.revogar(convites(), o.optString("id"))) }
+        sessoes.encerrarConvidados()
+        PainelArmazem.registrar(app, ip, "convite revogado", if (o.optBoolean("todos")) "todos" else o.optString("id").take(8))
+        return json(200, JSONObject().put("ok", true))
+    }
+
+    /** Entrar pelo link do convite: sessão do papel do convite (convidado: cai quando o convite vence). */
+    private fun entrarPorConvite(req: Requisicao, ip: String): Resposta {
+        val c = PapeisPainel.usar(convites(), corpoJson(req)?.optString("codigo"), System.currentTimeMillis())
+            ?: return erro(401, "convite vencido ou revogado")
+        val token = sessoes.criar(elevada = false, papel = c.papel, venceEm = c.vence ?: Long.MAX_VALUE)
+        PainelArmazem.registrar(app, ip, "entrou por convite", c.papel.chave)
+        return json(200, JSONObject().put("ok", true).put("papel", c.papel.chave), cookieSessao(token))
+    }
+
     /**
      * Confirmações (ConfirmacoesTv): com o modo "Perguntar na TV", mostra a pergunta e espera até 60 s (esta requisição
      * fica parada, numa thread do servidor, não na da tela). Null = pode seguir; senão, a resposta de recusa pronta.
@@ -1467,6 +1535,28 @@ object PainelWeb {
         PainelArmazem.registrar(app, ip, "baixar backup completo", "ok")
         return Resposta(200, "application/json; charset=utf-8", texto.toByteArray(),
             mapOf("Content-Disposition" to "attachment; filename=\"launcher-backup-completo.json\""))
+    }
+
+    /**
+     * Elevação 19.6: chave de recuperação do backup. GET = se existe (data e digital, nunca o código). POST com PIN =
+     * cria uma nova e devolve o código e o QR UMA vez (a TV guarda só a parte pública; nada aparece na tela da TV).
+     * POST {"apagar":true} = a TV esquece a pública (backups novos voltam a abrir só com a senha).
+     */
+    private fun recuperacao(req: Requisicao, token: String?, ip: String): Resposta {
+        if (req.metodo == "GET") return json(200, JSONObject().put("tem", RecuperacaoTv.publica(app) != null)
+            .put("criadaEm", RecuperacaoTv.criadaEm(app)).put("digital", RecuperacaoTv.digital(app) ?: ""))
+        if (req.metodo != "POST") return erro(405, "método não aceito")
+        if (!sessoes.elevada(token)) return precisaPin()
+        if (corpoJson(req)?.optBoolean("apagar") == true) {
+            RecuperacaoTv.apagar(app)
+            PainelArmazem.registrar(app, ip, "chave de recuperação", "apagada")
+            return json(200, JSONObject().put("ok", true))
+        }
+        val codigo = RecuperacaoTv.criar(app)
+        val qr = java.util.Base64.getEncoder().encodeToString(QrCodigo.png(codigo, 480))
+        PainelArmazem.registrar(app, ip, "chave de recuperação", "criada (${RecuperacaoTv.digital(app)})")   // o código nunca vai para o registro
+        return json(200, JSONObject().put("codigo", codigo).put("qr", qr).put("digital", RecuperacaoTv.digital(app) ?: ""),
+            mapOf("Cache-Control" to "no-store"))
     }
 
     private fun restaurarCompleto(req: Requisicao, token: String?, ip: String): Resposta {
@@ -1657,6 +1747,42 @@ object PainelWeb {
         // ele (AutorizaShizukuService.onServiceConnected) que reabre o painel mesmo sem a HOME na frente. As sessões caem.
         Handler(Looper.getMainLooper()).postDelayed({ Process.killProcess(Process.myPid()) }, 1500)
         return json(200, JSONObject().put("ok", true).put("chaves", n).put("reiniciando", true))
+    }
+
+    /**
+     * Elevação 19.7, TV antiga: manda tudo (backup completo + lista de apps) para a TV nova do código. Leva os segredos
+     * da casa para outro aparelho: só com o PIN confirmado de novo, como baixar o backup completo.
+     */
+    private fun enviarParaTvNova(req: Requisicao, token: String?, ip: String): Resposta {
+        if (!sessoes.elevada(token)) return precisaPin()
+        val codigo = corpoJson(req)?.optString("codigo").orEmpty()
+        val de = try { MudarDeTv.enviar(app, codigo) } catch (e: IllegalArgumentException) {
+            PainelArmazem.registrar(app, ip, "levar para TV nova", "recusado: ${e.message}")
+            return erro(400, e.message ?: "não deu")
+        } catch (e: Exception) {
+            PainelArmazem.registrar(app, ip, "levar para TV nova", "falhou: $e")
+            return erro(500, "não deu para montar o envio (${e.javaClass.simpleName})")
+        }
+        PainelArmazem.registrar(app, ip, "levar para TV nova", "ok")
+        return json(200, JSONObject().put("ok", true).put("de", de))
+    }
+
+    /** Elevação 19.7, TV nova: o envelope chegou (segredo já conferido). Restaura e reinicia, como o restaurar. */
+    private fun receberDeOutraTv(req: Requisicao, ip: String): Resposta {
+        val de = try { MudarDeTv.receber(app, req.corpoTexto()) } catch (e: CofreBackup.SenhaErrada) {
+            return erro(400, "o envelope não abriu")
+        } catch (e: IllegalArgumentException) {
+            PainelArmazem.registrar(app, ip, "trazer de outra TV", "recusado: ${e.message}")
+            return erro(400, "a TV nova recusou: ${e.message}")
+        } catch (e: MudarDeTv.NaoEsperando) {
+            return erro(410, "esta TV não está esperando")
+        } catch (e: Exception) {
+            PainelArmazem.registrar(app, ip, "trazer de outra TV", "falhou: $e")
+            return erro(500, "a restauração falhou na TV nova (${e.javaClass.simpleName}); nada mudou")
+        }
+        PainelArmazem.registrar(app, ip, "trazer de outra TV", "ok")
+        Handler(Looper.getMainLooper()).postDelayed({ Process.killProcess(Process.myPid()) }, 4000)   // a tela mostra "Pronto" antes
+        return json(200, JSONObject().put("ok", true).put("de", PainelVizinhos.nomeDaTv(app)))
     }
 
     // ---------------------------------------------------------------- fase 2: permissões
@@ -1863,6 +1989,7 @@ object PainelWeb {
         return when (d.tipo) {
             Compartilhar.Tipo.RECADO -> {
                 val r = AvisoTv.mostrar(app, "Recado", d.valor, 60, som = true, guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO)
+                Gatilhos.disparar(app, Gatilhos.Evento.RECADO_CHEGOU)   // elevação 10.6
                 if (r == AvisoTv.Resultado.MOSTRADO || r == AvisoTv.Resultado.GUARDADO) json(200, JSONObject().put("ok", true).put("feito", "recado"))
                 else erro(409, "a acessibilidade do launcher está desligada na TV: sem ela o recado não aparece")
             }
@@ -1878,6 +2005,7 @@ object PainelWeb {
             ?: return erro(400, "escreva o recado (até ${Recado.MAX_CARACTERES} caracteres)")
         val segundos = Recado.duracao(if (o.has("segundos")) o.optInt("segundos") else null)
         val r = AvisoTv.mostrar(app, "Recado", texto, segundos, som = o.optBoolean("som", true), guardarSeApagada = true, fica = AvisoRegras.Fica.ATENCAO)
+        Gatilhos.disparar(app, Gatilhos.Evento.RECADO_CHEGOU)   // elevação 10.6
         // O texto não vai para o registro, só o tamanho (mesma regra do "digitar"): o registro é para ver o que mexeu na TV.
         PainelArmazem.registrar(app, ip, "recado de ${texto.length} caractere(s)", r.name.lowercase())
         return when (r) {

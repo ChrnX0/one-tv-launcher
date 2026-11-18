@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação (17/11/2026, ondas 2): tradução de values/strings_elevacao2.xml. -->
+<resources>
+    <string name="elv_ac_titulo">ハイコントラスト</string>
+    <string name="elv_ac_det">すべての画面で文字を明るく、枠をはっきり（7:1 以上）</string>
+    <string name="elv_ad_titulo">音声解説</string>
+    <string name="elv_ad_det">場面を説明する音声トラックがあれば選ぶ</string>
+    <string name="elv_sdh_titulo">聴覚障害者向け字幕</string>
+    <string name="elv_sdh_det">吹き替えでも、効果音入りの字幕（[ドアが閉まる音]）をテレビの言語で常に表示</string>
+    <string name="elv_cat_titulo">動画のポスターとあらすじ</string>
+    <string name="elv_cat_explica">TMDB に送るのはタイトルだけ。フォルダーやサーバーは送りません</string>
+    <string name="elv_cat_ligado">オン</string>
+    <string name="elv_cat_desligado">オフ</string>
+    <string name="elv_cat_ep">%1$s · S%2$d E%3$d</string>
+    <string name="elv_cat_so_ep">%1$s · 第%2$d話</string>
+    <string name="elv_cat_temporada">%1$s · シーズン %2$d</string>
+    <string name="elv_cat_filme_ano">%1$s（%2$d）</string>
+    <string name="elv_cat_n_temporadas">シーズン数: %d</string>
+    <string name="elv_cat_procurando">ポスターを探しています…</string>
+    <string name="elv_cat_nada">TMDB で見つかりませんでした。OK 長押しで正しい名前を入力。</string>
+    <string name="elv_cat_corrigir_titulo">修正: %s</string>
+    <string name="elv_cat_corrigir_explica">ポスターやあらすじが違う？次の候補にするか、正しい名前と年を入力してください。空にすると自動に戻ります。</string>
+    <string name="elv_cat_nao_e">これではない</string>
+    <string name="elv_cat_escrever">名前を入力</string>
+    <string name="elv_cat_campo">名前と年（例: Dune 2021）</string>
+    <string name="elv_cat_salvar">保存</string>
+    <string name="elv_cat_dica">修正</string>
+    <string name="elv_bib_lista">リスト</string>
+    <string name="elv_bib_pasta">フォルダー</string>
+    <string name="elv_bib_servidor">サーバー</string>
+    <string name="elv_bib_nuvem">クラウド</string>
+    <string name="elv_bib_addon">アドオン</string>
+</resources>

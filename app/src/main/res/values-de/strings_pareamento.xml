@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">Entwickleroptionen ließen sich nicht öffnen (%1$s)</string>
+    <string name="pn_porta_achada">Kopplungsport %1$d gefunden</string>
+    <string name="pn_mdns_falhou">Netzwerksuche fehlgeschlagen (%1$s)</string>
+    <string name="pn_pareando">Kopplung läuft…</string>
+    <string name="pn_confirme">Code gelesen. Zum Koppeln auf der Fernbedienung OK auf „%1$s“ drücken</string>
+    <string name="pn_so_controle">nur eine Taste der Fernbedienung bestätigt die Kopplung</string>
+</resources>

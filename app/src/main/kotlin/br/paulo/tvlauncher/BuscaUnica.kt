@@ -28,10 +28,19 @@ object BuscaUnica {
     fun pontos(nome: String, palavras: List<String>): Int? =
         if (palavras.isEmpty()) null else pontosNorm(PlayerFiltro.normalizar(nome), palavras)
 
-    /** [pontos] com o nome já normalizado ([PlayerFiltro.normalizar]): a busca normaliza cada nome uma vez só. */
-    fun pontosNorm(n: String, palavras: List<String>): Int? {
+    /**
+     * [pontos] com o nome já normalizado ([PlayerFiltro.normalizar]): a busca normaliza cada nome uma vez só.
+     * [tolerante] (elevação 3.11): palavra de 4 letras ou mais com UMA letra errada, faltando, sobrando ou trocada de
+     * lugar com a vizinha ainda bate ("netflx", "glbo", "previsoa"), com nota 4 (depois de tudo que bate certo).
+     */
+    fun pontosNorm(n: String, palavras: List<String>, tolerante: Boolean = false): Int? {
         if (palavras.isEmpty()) return null
-        if (palavras.any { it !in n }) return null
+        if (palavras.any { it !in n }) {
+            if (!tolerante) return null
+            val doNome = n.split(' ')
+            val ok = palavras.all { p -> p in n || (p.length >= 4 && doNome.any { w -> umaLetra(p, w) || (w.length > p.length && umaLetra(p, w.take(p.length))) }) }
+            return if (ok) 4 else null
+        }
         val t = palavras.joinToString(" ")
         return when {
             n == t -> 0
@@ -42,11 +51,28 @@ object BuscaUnica {
     }
 
     /** Os que batem, do melhor para o pior (empate: nome mais curto primeiro), até [max]. */
-    fun <T> filtrar(itens: Iterable<T>, termo: String, max: Int = MAX_POR_GRUPO, nome: (T) -> String): List<T> {
+    fun <T> filtrar(itens: Iterable<T>, termo: String, max: Int = MAX_POR_GRUPO, tolerante: Boolean = false, nome: (T) -> String): List<T> {
         val p = palavras(termo)
         if (p.isEmpty()) return emptyList()
-        return itens.mapNotNull { i -> pontos(nome(i), p)?.let { Triple(i, it, nome(i).length) } }
+        return itens.mapNotNull { i -> pontosNorm(PlayerFiltro.normalizar(nome(i)), p, tolerante)?.let { Triple(i, it, nome(i).length) } }
             .sortedWith(compareBy({ it.second }, { it.third })).take(max).map { it.first }
+    }
+
+    /**
+     * [a] e [b] diferem em no máximo UMA letra: trocada, faltando, sobrando, ou duas vizinhas trocadas de lugar.
+     * Linear (sem tabela): roda em dezenas de milhares de nomes do guia a cada busca.
+     */
+    fun umaLetra(a: String, b: String): Boolean {
+        if (a == b) return true
+        val la = a.length; val lb = b.length
+        if (kotlin.math.abs(la - lb) > 1) return false
+        var i = 0
+        while (i < la && i < lb && a[i] == b[i]) i++
+        if (la == lb) {
+            if (a.regionMatches(i + 1, b, i + 1, la - i - 1)) return true                       // uma trocada
+            return i + 1 < la && a[i] == b[i + 1] && a[i + 1] == b[i] && a.regionMatches(i + 2, b, i + 2, la - i - 2)   // vizinhas
+        }
+        return if (la > lb) a.regionMatches(i + 1, b, i, lb - i) else b.regionMatches(i + 1, a, i, la - i)   // sobrando/faltando
     }
 
     /** Um item com o nome guardado já normalizado (feito uma vez ao abrir a busca, não a cada tecla). */
@@ -56,10 +82,10 @@ object BuscaUnica {
         itens.map { val n = nome(it); Indexado(it, n, PlayerFiltro.normalizar(n)) }
 
     /** [filtrar] e [contar] de uma vez sobre o índice: (os melhores até [max], quantos batem ao todo). */
-    fun <T> filtrarIndice(itens: List<Indexado<T>>, termo: String, max: Int = MAX_POR_GRUPO): Pair<List<T>, Int> {
+    fun <T> filtrarIndice(itens: List<Indexado<T>>, termo: String, max: Int = MAX_POR_GRUPO, tolerante: Boolean = false): Pair<List<T>, Int> {
         val p = palavras(termo)
         if (p.isEmpty()) return emptyList<T>() to 0
-        val achados = itens.mapNotNull { i -> pontosNorm(i.norm, p)?.let { Triple(i.item, it, i.nome.length) } }
+        val achados = itens.mapNotNull { i -> pontosNorm(i.norm, p, tolerante)?.let { Triple(i.item, it, i.nome.length) } }
         return achados.sortedWith(compareBy({ it.second }, { it.third })).take(max).map { it.first } to achados.size
     }
 

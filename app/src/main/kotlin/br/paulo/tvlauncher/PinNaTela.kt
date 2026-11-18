@@ -46,7 +46,7 @@ object PinNaTela {
         }
         val d = CaixaTv(tela)
             .setTitle(titulo)
-            .setView(android.widget.FrameLayout(tela).apply { setPadding(dp(20), dp(8), dp(20), 0); addView(campo) })
+            .setView(android.widget.FrameLayout(tela).apply { setPaddingRelative(dp(20), dp(8), dp(20), 0); addView(campo) })
             .setPositiveButton("OK") { _, _ -> conferir(campo.text.toString()) }
             .setNegativeButton(tela.getString(R.string.cl_cancelar)) { _, _ -> aoCancelar?.invoke() }
             .create()

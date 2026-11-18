@@ -113,6 +113,7 @@
     <!-- android:name: LauncherApp liga o registro local de erros (RegistroErros.kt) em todo processo do app. -->
     <application
         android:name=".LauncherApp"
+        android:supportsRtl="true"
         android:allowBackup="false"
         android:networkSecurityConfig="@xml/rede"
         android:icon="@mipmap/ic_onetv"
@@ -243,6 +244,11 @@
             android:name=".LicencasActivity"
             android:exported="false"
             android:label="@string/lbl_licencas" />
+        <!-- Elevação 2.1 (17/11/2026): "Como esta TV está indo", o placar dos 7 pilares. -->
+        <activity
+            android:name=".PlacarActivity"
+            android:exported="false"
+            android:label="@string/elv_placar_titulo" />
         <activity
             android:name=".DiagnosticoActivity"
             android:exported="false"
@@ -347,6 +353,15 @@
             android:name=".EntrarPeloQrActivity"
             android:exported="false"
             android:label="@string/lbl_entrar_celular" />
+        <!-- Elevação 19.7: TV nova em 2 min (receber da TV antiga e a fila dos apps) -->
+        <activity
+            android:name=".ReceberTvActivity"
+            android:exported="false"
+            android:label="@string/mtv_titulo" />
+        <activity
+            android:name=".FilaAppsActivity"
+            android:exported="false"
+            android:label="@string/mtv_fila_titulo" />
         <!-- Modo de segurança: HOME mínima depois de 3 quedas seguidas da HOME (ModoSeguro.kt) -->
         <activity
             android:name=".HomeSeguraActivity"

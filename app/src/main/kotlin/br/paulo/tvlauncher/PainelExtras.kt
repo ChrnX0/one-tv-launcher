@@ -266,7 +266,16 @@ object PainelExtras {
             // ---- diário da TV e webhook (ideias 58 e 59, Diario.kt)
             get && rota == "diario-tv" -> ok(JSONObject().put("itens", Diario.ler(app, 24 * 7))   // "diario" é o de DNS (acima)
                 .put("webhook", Diario.webhook(app)).put("origens", JSONArray(Diario.origensWebhook(app).toList()))
-                .put("ultimo", Diario.ultimoWebhook(app)))
+                .put("ultimo", Diario.ultimoWebhook(app))
+                .put("passos", JSONArray().apply { Desfazer.lista(app).forEach { put(DesfazerRegras.resumo(it)) } }))
+            // Elevação 2.11: desfazer uma mudança feita nas telas da TV. Pede o PIN: volta ajustes de qualquer tipo.
+            post && rota == "desfazer" -> {
+                if (!elevada) return pin()
+                val id = corpo?.optString("id").orEmpty()
+                if (!Regex("^[a-z0-9]{1,20}$").matches(id)) return erro(400, "id inválido")
+                val r = Desfazer.desfazer(app, id, ip) ?: return erro(404, "nada a desfazer")
+                ok(JSONObject().put("voltaram", r.voltaram).put("ficaram", r.ficaram))
+            }
             post && rota == "diario/webhook" -> {
                 if (!elevada) return pin()   // um link novo recebe tudo o que acontece na TV: pede o PIN, como o recado por link
                 val origens = corpo?.optJSONArray("origens")?.let { a -> (0 until a.length()).map { a.optString(it) }.toSet() } ?: emptySet()

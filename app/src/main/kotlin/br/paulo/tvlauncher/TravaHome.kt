@@ -54,7 +54,7 @@ object PinTv {
         }
         val moldura = FrameLayout(act).apply {
             val m = (20 * act.resources.displayMetrics.density).toInt()
-            setPadding(m, m / 2, m, 0); addView(campo)
+            setPaddingRelative(m, m / 2, m, 0); addView(campo)
         }
         val d = CaixaTv(act).setTitle(titulo).setView(moldura)
             .setPositiveButton(android.R.string.ok) { _, _ -> conferir() }

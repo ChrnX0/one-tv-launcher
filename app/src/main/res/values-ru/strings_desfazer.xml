@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 2.11: Desfazer em tudo (Desfazer.kt). -->
+<resources>
+    <string name="desf_diario">Изменение (%1$s): %2$s</string>
+    <string name="desf_diario_desfeito">Отменено: %1$s</string>
+    <string name="desf_ocultou">Скрыто: %1$s</string>
+    <string name="desf_mostrou">Снова показано: %1$s</string>
+    <string name="desf_cat_ajuste">Настройка</string>
+    <string name="desf_cat_organizacao">Порядок</string>
+    <string name="desf_cat_automacao">Автоматизация</string>
+    <string name="desf_cat_limpeza">Очистка</string>
+    <string name="desf_nada">Нечего отменять (уже отменено).</string>
+    <string name="desf_feito">Отменено. Всё вернулось как было.</string>
+    <string name="desf_parcial">Отменено частично: элементов, которые снова изменились и остались как есть: %1$d.</string>
+    <string name="desf_barra">Изменено: %1$s</string>
+    <string name="desf_botao">Отменить</string>
+    <string name="desf_tela">Недавние изменения</string>
+    <string name="desf_tela_det">Что менялось за последние 7 дней. OK на пункте возвращает как было.</string>
+    <string name="desf_tela_vazia">За последние 7 дней изменений нет.</string>
+    <string name="desf_ja_desfeita">отменено</string>
+    <string name="desf_rot_config">Настройки</string>
+    <string name="desf_rot_automacoes">Автоматизации</string>
+    <string name="desf_rot_rotinas">Расписания</string>
+    <string name="desf_rot_apps">Список приложений</string>
+    <string name="desf_rot_organizar">Приложения главного экрана</string>
+</resources>

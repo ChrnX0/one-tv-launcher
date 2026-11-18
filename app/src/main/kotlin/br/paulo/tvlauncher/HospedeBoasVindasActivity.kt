@@ -19,7 +19,7 @@ class HospedeBoasVindasActivity : Activity() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             background = Estilo.fundoTela(context)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         val texto = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         texto.addView(Estilo.tituloTela(this, getString(R.string.hos_bv_titulo)))

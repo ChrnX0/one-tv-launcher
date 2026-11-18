@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">nie udało się otworzyć Opcji programisty (%1$s)</string>
+    <string name="pn_porta_achada">znaleziono port parowania %1$d</string>
+    <string name="pn_mdns_falhou">wyszukiwanie w sieci nie powiodło się (%1$s)</string>
+    <string name="pn_pareando">parowanie…</string>
+    <string name="pn_confirme">kod odczytany. Aby sparować, naciśnij OK na pilocie na „%1$s”</string>
+    <string name="pn_so_controle">tylko przycisk pilota potwierdza parowanie</string>
+</resources>

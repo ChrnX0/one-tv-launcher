@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">não abri as Opções do desenvolvedor (%1$s)</string>
+    <string name="pn_porta_achada">porta de pareamento %1$d achada</string>
+    <string name="pn_mdns_falhou">a busca na rede falhou (%1$s)</string>
+    <string name="pn_pareando">pareando…</string>
+    <string name="pn_confirme">código lido. Para parear, aperte OK no controle em “%1$s”</string>
+    <string name="pn_so_controle">só uma tecla do controle confirma o pareamento</string>
+</resources>

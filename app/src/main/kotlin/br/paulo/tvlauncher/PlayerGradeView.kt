@@ -83,6 +83,7 @@ class PlayerGradeView(
         janela = PlayerGrade.inicioFaixa(agora)
         visibility = VISIBLE
         requestFocus()
+        post { anunciar() }
         invalidate()
         removeCallbacks(relogio); postDelayed(relogio, 30_000)
         val app = context.applicationContext
@@ -200,7 +201,7 @@ class PlayerGradeView(
             KeyEvent.KEYCODE_CHANNEL_UP, KeyEvent.KEYCODE_PAGE_UP -> trocarLinha(-visiveis())
             KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_PAGE_DOWN -> trocarLinha(+visiveis())
             KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                val passo = if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) +1 else -1
+                val passo = PlayerGrade.passoDaSeta(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT, Rtl.ehRtl(this))
                 foco = PlayerGrade.mover(programas(canais[linha]), foco, passo, agora)
                 janela = PlayerGrade.ajustarJanela(janela, foco, agora)
             }
@@ -215,7 +216,21 @@ class PlayerGradeView(
             else -> return super.onKeyDown(keyCode, event)   // volume e o resto seguem para o Android
         }
         invalidate()
+        anunciar()
         return true
+    }
+
+    /** 16.1: diz ao leitor de tela o canal e o programa sob o cursor (e deixa como descrição da grade). */
+    private fun anunciar() {
+        val c = canais.getOrNull(linha) ?: return
+        val p = programaFocado()
+        val fala = PlayerGrade.falaLeitor(c.numero, c.nome, p?.titulo, p?.let { hora.format(Date(it.inicio)) },
+            p?.let { hora.format(Date(it.fim)) }, context.getString(R.string.player_sem_guia_curto))
+        if (fala == contentDescription) return
+        contentDescription = fala
+        val am = context.getSystemService(android.content.Context.ACCESSIBILITY_SERVICE) as? android.view.accessibility.AccessibilityManager
+        @Suppress("DEPRECATION")
+        if (am?.isEnabled == true) announceForAccessibility(fala)
     }
 
     private fun trocarLinha(passo: Int) {
@@ -225,9 +240,17 @@ class PlayerGradeView(
 
     // ---------------------------------------------------------------- desenho
 
+    // 16.8: no árabe o guia anda da direita para a esquerda (canais à direita, o tempo cresce para a esquerda).
+    private var rtl = false
+
     override fun onDraw(c: Canvas) {
         super.onDraw(c)
         if (canais.isEmpty()) return
+        rtl = Rtl.ehRtl(this)
+        Rtl.espelhar(this, c) { desenhar(c) }
+    }
+
+    private fun desenhar(c: Canvas) {
         val agora = System.currentTimeMillis()
         val esquerda = margem
         val direita = width - margem
@@ -238,15 +261,15 @@ class PlayerGradeView(
 
         // Cabeçalho: título e hora.
         var y = margem
-        c.drawText(titulo.uppercase(Locale.getDefault()), esquerda, y + 16f * d, pRotulo)
+        Rtl.texto(c, rtl, titulo.uppercase(Locale.getDefault()), esquerda, y + 16f * d, pRotulo)
         val relogio = hora.format(Date(agora))
-        c.drawText(relogio, direita - pTexto.measureText(relogio), y + 16f * d, pTexto)
+        Rtl.texto(c, rtl, relogio, direita - pTexto.measureText(relogio), y + 16f * d, pTexto)
         y += alturaCabecalho
 
         // Régua de 30 em 30 min.
         var t = janela
         while (t < janela + PlayerGrade.JANELA) {
-            c.drawText(hora.format(Date(t)), x(t) + 6f * d, y + 18f * d, pPequeno)
+            Rtl.texto(c, rtl, hora.format(Date(t)), x(t) + 6f * d, y + 18f * d, pPequeno)
             t += PlayerGrade.FAIXA
         }
         y += alturaRegua
@@ -265,7 +288,7 @@ class PlayerGradeView(
 
             // Coluna do canal: número, logo e nome.
             pTexto.color = if (canal.id == atualId) ambar else papel
-            c.drawText(canal.numero.toString(), esquerda + 4f * d, meio + 6f * d, pTexto)
+            Rtl.texto(c, rtl, canal.numero.toString(), esquerda + 4f * d, meio + 6f * d, pTexto)
             val logo = PlayerLogos.emMemoria(context, canal.logo) { invalidate() }
             val xLogo = esquerda + 46f * d
             if (logo != null) {
@@ -275,7 +298,7 @@ class PlayerGradeView(
             }
             pTexto.color = papel
             val nome = TextUtils.ellipsize(canal.nome, pTexto, larguraCanal - 120f * d, TextUtils.TruncateAt.END)
-            c.drawText(nome, 0, nome.length, esquerda + 106f * d, meio + 6f * d, pTexto)
+            Rtl.texto(c, rtl, nome, 0, nome.length, esquerda + 106f * d, meio + 6f * d, pTexto)
 
             // Programas.
             val ps = PlayerGrade.naJanela(programas(canal), janela)
@@ -283,7 +306,7 @@ class PlayerGradeView(
                 r.set(xGrade, y0, direita, y1)
                 pBloco.color = Estilo.SUPERFICIE
                 c.drawRoundRect(r, 8f * d, 8f * d, pBloco)
-                c.drawText(context.getString(R.string.player_sem_guia_curto), xGrade + 12f * d, meio + 5f * d, pPequeno)
+                Rtl.texto(c, rtl, context.getString(R.string.player_sem_guia_curto), xGrade + 12f * d, meio + 5f * d, pPequeno)
                 if (i == linha) c.drawRoundRect(r, 8f * d, 8f * d, pBorda)
                 continue
             }
@@ -305,9 +328,9 @@ class PlayerGradeView(
                 if (larguraTexto > 12f * d) {
                     pTexto.color = papel
                     val tt = TextUtils.ellipsize(p.titulo, pTexto, larguraTexto, TextUtils.TruncateAt.END)
-                    c.drawText(tt, 0, tt.length, xa + 10f * d, meio - 2f * d, pTexto)
+                    Rtl.texto(c, rtl, tt, 0, tt.length, xa + 10f * d, meio - 2f * d, pTexto)
                     val hh = TextUtils.ellipsize("${hora.format(Date(p.inicio))} – ${hora.format(Date(p.fim))}", pPequeno, larguraTexto, TextUtils.TruncateAt.END)
-                    c.drawText(hh, 0, hh.length, xa + 10f * d, meio + 17f * d, pPequeno)
+                    Rtl.texto(c, rtl, hh, 0, hh.length, xa + 10f * d, meio + 17f * d, pPequeno)
                 }
             }
         }
@@ -326,7 +349,7 @@ class PlayerGradeView(
         val larg = direita - esquerda - 36f * d
         var yt = yD + 34f * d
         val tituloDet = TextUtils.ellipsize(focado?.titulo ?: canal.nome, pTitulo, larg, TextUtils.TruncateAt.END)
-        c.drawText(tituloDet, 0, tituloDet.length, xt, yt, pTitulo)
+        Rtl.texto(c, rtl, tituloDet, 0, tituloDet.length, xt, yt, pTitulo)
         yt += 23f * d
         val info = buildList {
             add("${canal.numero}  ${canal.nome}")
@@ -334,7 +357,7 @@ class PlayerGradeView(
             add(context.getString(R.string.player_grade_teclas))
         }.joinToString("   ·   ")
         val infoCurta = TextUtils.ellipsize(info, pPequeno, larg, TextUtils.TruncateAt.END)
-        c.drawText(infoCurta, 0, infoCurta.length, xt, yt, pPequeno)
+        Rtl.texto(c, rtl, infoCurta, 0, infoCurta.length, xt, yt, pPequeno)
         val desc = focado?.descricao.orEmpty()
         if (desc.isNotEmpty()) {
             // Descrição em até 2 linhas (corte simples por largura; o resto vira "…").
@@ -347,7 +370,7 @@ class PlayerGradeView(
                 val ultima = k == 1 || cabe >= resto.length
                 val trecho = if (ultima) TextUtils.ellipsize(resto, pPequeno, larg, TextUtils.TruncateAt.END).toString()
                     else resto.substring(0, resto.lastIndexOf(' ', cabe).takeIf { it > 0 } ?: cabe)
-                c.drawText(trecho, xt, yt, pPequeno)
+                Rtl.texto(c, rtl, trecho, xt, yt, pPequeno)
                 resto = resto.substring(minOf(resto.length, trecho.length)).trimStart()
                 if (ultima) break
             }

@@ -116,7 +116,7 @@ class AlarmeTocandoActivity : Activity() {
         }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(8) })
         coluna.addView(Estilo.texto(this, Estilo.Papel.TITULO,
             if (timer) nomeTimer.ifBlank { getString(R.string.tm_tempo_esgotado) } else alarme?.nome?.takeIf { it.isNotBlank() } ?: getString(R.string.al_titulo)).apply {
-            setPadding(0, dp(8), 0, dp(40))
+            setPaddingRelative(0, dp(8), 0, dp(40))
             gravity = Gravity.CENTER
         })
         val parar = botao(getString(R.string.al_parar)) { parar() }
@@ -298,7 +298,7 @@ class AlarmeTocandoActivity : Activity() {
     private fun botao(rotulo: String, aoClicar: () -> Unit) = Estilo.texto(this, Estilo.Papel.CORPO, rotulo).apply {
         textSize = 20f
         gravity = Gravity.CENTER
-        setPadding(dp(18), dp(16), dp(18), dp(16))
+        setPaddingRelative(dp(18), dp(16), dp(18), dp(16))
         isFocusable = true
         isClickable = true
         val normal = Estilo.fundo(context, Estilo.SUPERFICIE_ALTA, Estilo.RAIO_PILULA, Estilo.BORDA)

@@ -38,11 +38,17 @@ class CuidarTelaActivity : Activity() {
         const val MODO_LEMBRETE = "lembrete"
         const val MODO_ESTOU_BEM = "estou_bem"
         private const val FECHAR_MS = 30_000L
+        /** Lembretes / "Estou bem?" que chegaram com outro na tela (CuidarDeLonge.esperaNaFila). Só na thread da tela. */
+        private val pendentes = ArrayDeque<Intent>()
     }
 
     private val ui = Handler(Looper.getMainLooper())
     private var modo = ""
     private var aceito: TextView? = null
+    // Aparelhos de entrada que existiam quando a pergunta do consentimento abriu (CuidarDeLonge.aparelhoDeAntes).
+    // Lido UMA vez, ao montar: reler no onResume deixaria entrar um aparelho criado enquanto a tela estava pausada
+    // (com a tela pausada o shell volta a rodar).
+    private var aparelhosNaAbertura: Set<Int>? = null
     private var mandou = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +56,7 @@ class CuidarTelaActivity : Activity() {
         modo = intent.getStringExtra(EXTRA_MODO).orEmpty()
         window.setBackgroundDrawable(ColorDrawable(0))
         when (modo) {
-            MODO_CONSENTIMENTO -> consentimento()
+            MODO_CONSENTIMENTO -> { aparelhosNaAbertura = runCatching { android.view.InputDevice.getDeviceIds().toSet() }.getOrNull(); consentimento() }
             MODO_AJUDA -> ajuda()
             MODO_LEMBRETE -> lembrete()
             MODO_ESTOU_BEM -> estouBem()
@@ -66,6 +72,15 @@ class CuidarTelaActivity : Activity() {
     override fun onNewIntent(novo: Intent) {
         super.onNewIntent(novo)
         if (modo == MODO_AJUDA && !mandou) return   // ajuda em andamento: fica (outra ajuda é a mesma)
+        val novoModo = novo.getStringExtra(EXTRA_MODO).orEmpty()
+        val chave = novo.getStringExtra(EXTRA_CHAVE).orEmpty()
+        if (CuidarDeLonge.esperaNaFila(modo, novoModo)) {
+            // O mesmo pedido repetido não entra duas vezes (nem o que já está na tela).
+            if (chave != intent.getStringExtra(EXTRA_CHAVE) && pendentes.none { it.getStringExtra(EXTRA_CHAVE) == chave }) pendentes.addLast(novo)
+            return
+        }
+        // Ajuda/consentimento passam na frente: o lembrete da tela volta depois, em vez de sumir.
+        if (CuidarDeLonge.esperaNaFila(modo, modo)) pendentes.addFirst(intent)
         setIntent(novo)
         recreate()
     }
@@ -78,6 +93,10 @@ class CuidarTelaActivity : Activity() {
         super.onDestroy()
         ui.removeCallbacksAndMessages(null)
         if (modo == MODO_AJUDA && !mandou) CuidarDeLongeTv.desistirAjuda()
+        // Respondeu (ou fechou): o próximo da fila aparece. recreate() não conta (isFinishing = false).
+        if (isFinishing) pendentes.removeFirstOrNull()?.let { prox ->
+            runCatching { applicationContext.startActivity(Intent(prox).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+        }
     }
 
     // ---------------------------------------------------------------- montagem
@@ -87,7 +106,7 @@ class CuidarTelaActivity : Activity() {
     private fun botao(rotulo: String, primario: Boolean, acao: (() -> Unit)?): TextView = Estilo.botao(this, rotulo, primario).apply {
         textSize = Estilo.Leitura.PERGUNTA_BOTAO
         minWidth = dp(220)
-        setPadding(dp(Estilo.E3 + 8), dp(18), dp(Estilo.E3 + 8), dp(18))
+        setPaddingRelative(dp(Estilo.E3 + 8), dp(18), dp(Estilo.E3 + 8), dp(18))
         if (acao != null) setOnClickListener { acao() }
     }
 
@@ -128,7 +147,7 @@ class CuidarTelaActivity : Activity() {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_HORIZONTAL
             clipChildren = false; clipToPadding = false
-            setPadding(dp(Estilo.E6), dp(Estilo.E3 + 4), dp(Estilo.E6), dp(Estilo.E3 + 4))
+            setPaddingRelative(dp(Estilo.E6), dp(Estilo.E3 + 4), dp(Estilo.E6), dp(Estilo.E3 + 4))
             background = Estilo.fundo(context, Estilo.CARTAO, Estilo.RAIO, Estilo.VIDRO_BORDA)
             addView(rolagem, LinearLayout.LayoutParams(-1, -2))
             if (botoes.isNotEmpty()) addView(LinearLayout(context).apply {
@@ -183,7 +202,8 @@ class CuidarTelaActivity : Activity() {
         if (modo == MODO_CONSENTIMENTO && sim != null && sim.isFocused && SegurarOk.ehOk(e.keyCode)) {
             if (e.action == KeyEvent.ACTION_UP) {
                 // Controle de verdade: aparelho com id próprio. -1 (VIRTUAL_KEYBOARD) é o `input keyevent` do adb/painel.
-                val fisica = CuidarDeLonge.teclaDeGente(e.deviceId, e.source, KeyCharacterMap.VIRTUAL_KEYBOARD, android.view.InputDevice.SOURCE_HDMI)
+                val fisica = CuidarDeLonge.teclaDeGente(e.deviceId, e.source, KeyCharacterMap.VIRTUAL_KEYBOARD, android.view.InputDevice.SOURCE_HDMI) &&
+                    CuidarDeLonge.aparelhoDeAntes(e.deviceId, aparelhosNaAbertura)   // teclado falso criado depois: não
                 if (fisica) {
                     CuidarDeLongeTv.consentir(this)
                     aceito = null

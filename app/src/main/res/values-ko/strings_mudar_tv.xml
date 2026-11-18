@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 19.7: TV nova em 2 min (MudarDeTv, ReceberTvActivity, FilaAppsActivity). -->
+<resources>
+    <string name="mtv_titulo">다른 TV에서 가져오기</string>
+    <string name="mtv_qr_desc">다른 TV의 설정을 가져오는 QR</string>
+    <string name="mtv_instrucoes">기존 TV에서 패널(휴대폰 또는 컴퓨터)을 열고 시스템 › 백업 › \"새 TV로 옮기기\"에서 이 QR을 스캔하거나 아래 코드를 입력하세요.\n모든 내용은 암호화되어 이 TV로만 전송됩니다. 코드는 %1$s 동안 유효합니다.</string>
+    <string name="mtv_recebendo">받는 중… TV를 끄지 마세요.</string>
+    <string name="mtv_pronto">%1$s에서 모두 받았습니다. TV가 지금 다시 시작되고, 그다음 앱이 하나씩 돌아옵니다.</string>
+    <string name="mtv_erro">실패했습니다: %1$s\n이 TV에는 아무 변화도 없습니다. 다시 하려면 \"%2$s\"를 누르세요.</string>
+    <string name="mtv_venceu">코드가 만료되었습니다(10분 유효).\n새 코드를 보려면 \"%1$s\"을(를) 누르세요.</string>
+    <string name="mtv_cfg_det">기존 TV의 설정, PIN, 채널, 앱을 QR 하나로 2분 만에</string>
+    <string name="mtv_fila_titulo">앱을 되돌리는 중</string>
+    <string name="mtv_fila_texto">앱 %1$d / %2$d. Play 스토어에서 열고 설치를 누르세요. 돌아오면 다음 앱이 나옵니다.</string>
+    <string name="mtv_fila_abrir">Play 스토어에서 열기</string>
+    <string name="mtv_fila_pular">건너뛰기</string>
+    <string name="mtv_fila_depois">나중에</string>
+    <string name="mtv_fila_fim">다른 TV의 앱이 모두 여기 있습니다.</string>
+    <string name="mtv_fila_cfg_det">다른 TV에서 설치할 앱 %1$d개가 남았습니다</string>
+    <string name="mtv_diario">%1$s에서 가져옴: 설정 복원, 설치할 앱 %2$d개</string>
+    <string name="mtv_diario_enviado">새 TV로 보냄: 설정과 앱 %1$d개</string>
+</resources>

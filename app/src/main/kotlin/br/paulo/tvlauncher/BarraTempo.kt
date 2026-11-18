@@ -84,7 +84,9 @@ object BarraTempo {
         private val cheio = Paint(Paint.ANTI_ALIAS_FLAG)
         private val r = RectF()
 
-        override fun onDraw(c: Canvas) {
+        override fun onDraw(c: Canvas) = Rtl.espelhar(this, c) { desenhar(c) }   // 16.8: enche da direita no árabe
+
+        private fun desenhar(c: Canvas) {
             val h = height.toFloat(); val raio = h / 2
             r.set(0f, 0f, width.toFloat(), h); c.drawRoundRect(r, raio, raio, fundo)
             if (fracao <= 0f) return

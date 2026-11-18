@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 2.11: Desfazer em tudo (Desfazer.kt). -->
+<resources>
+    <string name="desf_diario">बदलाव (%1$s): %2$s</string>
+    <string name="desf_diario_desfeito">पूर्ववत: %1$s</string>
+    <string name="desf_ocultou">%1$s छिपाया</string>
+    <string name="desf_mostrou">%1$s फिर दिखाया</string>
+    <string name="desf_cat_ajuste">सेटिंग</string>
+    <string name="desf_cat_organizacao">क्रम</string>
+    <string name="desf_cat_automacao">ऑटोमेशन</string>
+    <string name="desf_cat_limpeza">सफ़ाई</string>
+    <string name="desf_nada">पूर्ववत करने को कुछ नहीं (पहले ही पूर्ववत)।</string>
+    <string name="desf_feito">पूर्ववत हो गया। सब पहले जैसा है।</string>
+    <string name="desf_parcial">आंशिक रूप से पूर्ववत: %1$d चीज़ें फिर बदल चुकी थीं और वैसी ही रहीं।</string>
+    <string name="desf_barra">बदला: %1$s</string>
+    <string name="desf_botao">पूर्ववत करें</string>
+    <string name="desf_tela">हाल के बदलाव</string>
+    <string name="desf_tela_det">पिछले 7 दिनों में जो बदला। किसी पर OK दबाने से वह पहले जैसा हो जाता है।</string>
+    <string name="desf_tela_vazia">पिछले 7 दिनों में कोई बदलाव नहीं।</string>
+    <string name="desf_ja_desfeita">पूर्ववत</string>
+    <string name="desf_rot_config">सेटिंग्स</string>
+    <string name="desf_rot_automacoes">ऑटोमेशन</string>
+    <string name="desf_rot_rotinas">रूटीन</string>
+    <string name="desf_rot_apps">ऐप सूची</string>
+    <string name="desf_rot_organizar">होम स्क्रीन ऐप्स</string>
+</resources>

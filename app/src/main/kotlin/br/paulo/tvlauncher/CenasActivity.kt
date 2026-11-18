@@ -27,12 +27,12 @@ class CenasActivity : Activity() {
         val raiz = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             background = Estilo.fundoTela(context)
-            setPadding(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
+            setPaddingRelative(dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL + 9), dp(Estilo.MARGEM_LATERAL), dp(Estilo.MARGEM_VERTICAL))
         }
         raiz.addView(Estilo.tituloTela(this, getString(R.string.cenas_titulo)))
         raiz.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(if (cenas.isEmpty()) R.string.cenas_vazio else R.string.cenas_det)),
             LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(4) })
-        val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(8), dp(4), dp(8), dp(4)); clipChildren = false; clipToPadding = false }
+        val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(8), dp(4), dp(8), dp(4)); clipChildren = false; clipToPadding = false }
         raiz.addView(ScrollView(this).apply { isVerticalScrollBarEnabled = false; clipChildren = false; addView(lista) },
             LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f).apply { topMargin = dp(16) })
         // O que a cena faz, em vez de "3 ações" (Sala, 17/11/2026: as prontas diziam o que faziam e, criadas, viravam um
@@ -68,7 +68,7 @@ class CenasActivity : Activity() {
             filters = arrayOf(android.text.InputFilter.LengthFilter(CanalBusca.MAX_TERMO))
         }
         CaixaTv(this).setTitle(getString(R.string.cpr_canal, titulo))
-            .setView(android.widget.FrameLayout(this).apply { setPadding(dp(20), dp(8), dp(20), 0); addView(campo) })
+            .setView(android.widget.FrameLayout(this).apply { setPaddingRelative(dp(20), dp(8), dp(20), 0); addView(campo) })
             .setNegativeButton(getString(R.string.cl_cancelar), null)
             .setPositiveButton("OK") { _, _ -> campo.text.toString().trim().takeIf { it.isNotEmpty() }?.let(aoEscolher) }
             .show()
@@ -86,7 +86,7 @@ class CenasActivity : Activity() {
         isClickable = true
         background = Estilo.superficie(context, false)
         typeface = Estilo.fonte(500)
-        setPadding(dp(20), dp(12), dp(20), dp(12))
+        setPaddingRelative(dp(20), dp(12), dp(20), dp(12))
         fun pintar(foco: Boolean) {
             val sb = SpannableStringBuilder(titulo)
             sb.setSpan(AbsoluteSizeSpan(dp(17), false), 0, sb.length, 0)

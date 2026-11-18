@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">не удалось открыть параметры разработчика (%1$s)</string>
+    <string name="pn_porta_achada">найден порт сопряжения %1$d</string>
+    <string name="pn_mdns_falhou">поиск в сети не удался (%1$s)</string>
+    <string name="pn_pareando">сопряжение…</string>
+    <string name="pn_confirme">код считан. Чтобы выполнить сопряжение, нажмите OK на пульте на «%1$s»</string>
+    <string name="pn_so_controle">подтвердить сопряжение может только кнопка пульта</string>
+</resources>

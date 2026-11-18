@@ -32,6 +32,8 @@ import java.util.Locale
 class RadioActivity : Activity() {
     companion object {
         private const val ESCURECER_MS = 3 * 60_000L
+        /** Elevação 3.11: aberta pela busca da HOME já procurando este nome. */
+        const val EXTRA_BUSCA = "busca"
         private const val PREFS = "ouvir"   // no backup completo (BackupCompleto.PREFS_EXTRAS)
         private const val CHAVE_CONTINUAR = "continuar_fora"
         /** Sair da tela deixa o som tocando? Padrão sim. Prefs lidas só no ":player". */
@@ -81,6 +83,9 @@ class RadioActivity : Activity() {
         favoritas = Radios.favoritas(this)
         montar()
         carregarListas()
+        intent.getStringExtra(EXTRA_BUSCA)?.trim()?.takeIf { it.length >= 2 }?.let { t ->
+            buscar(getString(R.string.ra_resultado, t)) { Radios.urlNome(it, t) }
+        }
     }
 
     override fun onResume() {
@@ -251,7 +256,7 @@ class RadioActivity : Activity() {
 
     private fun pedirNome() {
         val campo = EditText(this).apply { inputType = InputType.TYPE_CLASS_TEXT; isSingleLine = true; textSize = 20f }
-        val moldura = FrameLayout(this).apply { setPadding(Estilo.dp(this@RadioActivity, 20), Estilo.dp(this@RadioActivity, 8), Estilo.dp(this@RadioActivity, 20), 0); addView(campo) }
+        val moldura = FrameLayout(this).apply { setPaddingRelative(Estilo.dp(this@RadioActivity, 20), Estilo.dp(this@RadioActivity, 8), Estilo.dp(this@RadioActivity, 20), 0); addView(campo) }
         val d = CaixaTv(this, android.R.style.Theme_Material_Dialog_Alert).setTitle(getString(R.string.ra_buscar)).setView(moldura)
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 val t = campo.text.toString().trim()

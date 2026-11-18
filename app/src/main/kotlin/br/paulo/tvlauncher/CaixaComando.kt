@@ -34,6 +34,7 @@ object CaixaComando {
                 "timer", "desligar_em" -> a.put("minutos", numero)
                 "volume" -> a.put("acao", acao).put("vezes", numero.coerceAtLeast(1))
                 "midia" -> a.put("acao", acao)
+                "modo_visita", "filtro_noturno" -> a.put("ligado", numero == 1)   // 1 liga, 0 desliga
             }
             return JSONObject().put("acoes", JSONArray().put(a)).put("resposta", "").toString()
         }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pareamento na TV (PareamentoNaTv): textos que eram fixos em português (depuração 18/11/2026). -->
+<resources>
+    <string name="pn_sem_opcoes">não abri as Opções de programador (%1$s)</string>
+    <string name="pn_porta_achada">porta de emparelhamento %1$d encontrada</string>
+    <string name="pn_mdns_falhou">a pesquisa na rede falhou (%1$s)</string>
+    <string name="pn_pareando">a emparelhar…</string>
+    <string name="pn_confirme">código lido. Para emparelhar, prima OK no comando em “%1$s”</string>
+    <string name="pn_so_controle">só uma tecla do comando confirma o emparelhamento</string>
+</resources>

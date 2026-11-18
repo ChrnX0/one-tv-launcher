@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação (17/11/2026, ondas 2): tradução de values/strings_elevacao2.xml. -->
+<resources>
+    <string name="elv_ac_titulo">हाई कंट्रास्ट</string>
+    <string name="elv_ac_det">हर स्क्रीन पर ज़्यादा चमकीले अक्षर और साफ़ किनारे (कम से कम 7:1)</string>
+    <string name="elv_ad_titulo">ऑडियो विवरण</string>
+    <string name="elv_ad_det">जब भी हो, दृश्य का वर्णन करने वाला ऑडियो ट्रैक चुनें</string>
+    <string name="elv_sdh_titulo">बधिरों के लिए सबटाइटल</string>
+    <string name="elv_sdh_det">डब होने पर भी हमेशा आवाज़ों वाले सबटाइटल ([दरवाज़ा बंद होता है]) टीवी की भाषा में दिखाएँ</string>
+    <string name="elv_cat_titulo">वीडियो का पोस्टर और सारांश</string>
+    <string name="elv_cat_explica">TMDB को सिर्फ़ शीर्षक जाता है, फ़ोल्डर या सर्वर कभी नहीं</string>
+    <string name="elv_cat_ligado">चालू</string>
+    <string name="elv_cat_desligado">बंद</string>
+    <string name="elv_cat_ep">%1$s · सी%2$d ए%3$d</string>
+    <string name="elv_cat_so_ep">%1$s · एपिसोड %2$d</string>
+    <string name="elv_cat_temporada">%1$s · सीज़न %2$d</string>
+    <string name="elv_cat_filme_ano">%1$s (%2$d)</string>
+    <string name="elv_cat_n_temporadas">सीज़न: %d</string>
+    <string name="elv_cat_procurando">पोस्टर ढूँढ रहे हैं…</string>
+    <string name="elv_cat_nada">TMDB पर कुछ नहीं मिला। सही नाम लिखने के लिए OK दबाए रखें।</string>
+    <string name="elv_cat_corrigir_titulo">ठीक करें: %s</string>
+    <string name="elv_cat_corrigir_explica">पोस्टर या सारांश गलत है? अगला नतीजा माँगें, या सही नाम और साल लिखें। खाली नाम फिर से अपने-आप पर लौट आता है।</string>
+    <string name="elv_cat_nao_e">यह नहीं</string>
+    <string name="elv_cat_escrever">नाम लिखें</string>
+    <string name="elv_cat_campo">नाम और साल, जैसे: Dune 2021</string>
+    <string name="elv_cat_salvar">सहेजें</string>
+    <string name="elv_cat_dica">ठीक करें</string>
+    <string name="elv_bib_lista">सूची</string>
+    <string name="elv_bib_pasta">फ़ोल्डर</string>
+    <string name="elv_bib_servidor">सर्वर</string>
+    <string name="elv_bib_nuvem">क्लाउड</string>
+    <string name="elv_bib_addon">ऐड-ऑन</string>
+</resources>

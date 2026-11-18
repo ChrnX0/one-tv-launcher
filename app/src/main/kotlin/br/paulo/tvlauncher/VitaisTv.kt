@@ -55,6 +55,12 @@ object VitaisTv {
         return VitaisLocais.resumo(estado(ctx), data(agora), data(agora - 6L * 24 * 60 * 60 * 1000))
     }
 
+    /** Placar (elevação 2.1): o pilar 1 promete zero quedas em 30 dias. */
+    fun resumo30(ctx: Context): VitaisLocais.Resumo {
+        val agora = System.currentTimeMillis()
+        return VitaisLocais.resumo(estado(ctx), data(agora), data(agora - (VitaisLocais.DIAS - 1L) * 24 * 60 * 60 * 1000))
+    }
+
     /** A linha do Diagnóstico: "Últimos 7 dias: …". */
     fun item(ctx: Context): Diagnostico.Item {
         val r = resumo7(ctx)

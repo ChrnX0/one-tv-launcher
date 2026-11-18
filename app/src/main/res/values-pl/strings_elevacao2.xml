@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação (17/11/2026, ondas 2): tradução de values/strings_elevacao2.xml. -->
+<resources>
+    <string name="elv_ac_titulo">Wysoki kontrast</string>
+    <string name="elv_ac_det">Jaśniejszy tekst i wyraźniejsze krawędzie na każdym ekranie (co najmniej 7:1)</string>
+    <string name="elv_ad_titulo">Audiodeskrypcja</string>
+    <string name="elv_ad_det">Wybieraj ścieżkę dźwiękową opisującą scenę, gdy tylko jest dostępna</string>
+    <string name="elv_sdh_titulo">Napisy dla niesłyszących</string>
+    <string name="elv_sdh_det">Zawsze pokazuj napisy z dźwiękami ([trzask drzwi]) w języku telewizora, nawet przy dubbingu</string>
+    <string name="elv_cat_titulo">Plakat i opis filmów</string>
+    <string name="elv_cat_explica">Do TMDB trafia tylko tytuł, nigdy folder ani serwer</string>
+    <string name="elv_cat_ligado">Wł.</string>
+    <string name="elv_cat_desligado">Wył.</string>
+    <string name="elv_cat_ep">%1$s · S%2$d O%3$d</string>
+    <string name="elv_cat_so_ep">%1$s · Odcinek %2$d</string>
+    <string name="elv_cat_temporada">%1$s · Sezon %2$d</string>
+    <string name="elv_cat_filme_ano">%1$s (%2$d)</string>
+    <string name="elv_cat_n_temporadas">Sezony: %d</string>
+    <string name="elv_cat_procurando">Szukam plakatu…</string>
+    <string name="elv_cat_nada">Nic nie znaleziono w TMDB. Przytrzymaj OK, aby wpisać właściwą nazwę.</string>
+    <string name="elv_cat_corrigir_titulo">Popraw: %s</string>
+    <string name="elv_cat_corrigir_explica">Zły plakat lub opis? Poproś o następny wynik albo wpisz właściwą nazwę i rok. Pusta nazwa przywraca tryb automatyczny.</string>
+    <string name="elv_cat_nao_e">To nie ten</string>
+    <string name="elv_cat_escrever">Wpisz nazwę</string>
+    <string name="elv_cat_campo">Nazwa i rok, np.: Diuna 2021</string>
+    <string name="elv_cat_salvar">Zapisz</string>
+    <string name="elv_cat_dica">popraw</string>
+    <string name="elv_bib_lista">Lista</string>
+    <string name="elv_bib_pasta">Folder</string>
+    <string name="elv_bib_servidor">Serwer</string>
+    <string name="elv_bib_nuvem">Chmura</string>
+    <string name="elv_bib_addon">Dodatek</string>
+</resources>

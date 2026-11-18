@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação do launcher, onda 0 (17/11/2026): placar dos 7 pilares (2.1) e antes e depois da limpeza (14.3). -->
+<resources>
+    <string name="elv_placar_titulo">How this TV is doing</string>
+    <string name="elv_placar_det">Seven promises, each with a number measured on this TV</string>
+    <string name="elv_placar_sub">Measured on this TV. Nothing here leaves the house.</string>
+    <string name="elv_pilar_liga">Turns on and is ready</string>
+    <string name="elv_pilar_ao_vivo">Live TV that does not fail</string>
+    <string name="elv_pilar_player">The best living-room player</string>
+    <string name="elv_pilar_casa">The TV that looks after the home</string>
+    <string name="elv_pilar_controle">Control from anywhere</string>
+    <string name="elv_pilar_todos">Anyone can use it</string>
+    <string name="elv_pilar_instala">Sets itself up and fixes itself</string>
+    <string name="elv_prom_liga">Home screen ready in under 1 second; no crashes in 30 days</string>
+    <string name="elv_prom_ao_vivo">Changing channel takes under 1.5 seconds, from the key to the picture</string>
+    <string name="elv_prom_player">Plays any file; right subtitles without fiddling</string>
+    <string name="elv_prom_casa">The alarm rings on time, every time</string>
+    <string name="elv_prom_controle">Panel, phone and AI do everything the remote does</string>
+    <string name="elv_prom_todos">Older people, children, guests, low vision or hearing; 14 languages</string>
+    <string name="elv_prom_instala">From the first launch to the first channel in 5 minutes</string>
+    <string name="elv_nao_medido">Not measured yet</string>
+    <string name="elv_alvo">target %1$s</string>
+    <string name="elv_n_de_n">on time %1$d of %2$d</string>
+    <string name="elv_dentro">on target</string>
+    <string name="elv_fora">off target</string>
+    <plurals name="elv_quedas">
+        <item quantity="one">%1$d crash or freeze in %2$d days</item>
+        <item quantity="other">%1$d crashes or freezes in %2$d days</item>
+    </plurals>
+    <string name="elv_lp_titulo">Measure before and after</string>
+    <string name="elv_lp_det_antes">Measure free memory and how fast your 3 most used apps open, before cleaning. They open for a few seconds.</string>
+    <string name="elv_lp_det_depois">Before is saved. Hide the apps above, then press OK to measure after.</string>
+    <string name="elv_lp_medindo">Measuring… apps may open for a few seconds</string>
+    <string name="elv_lp_mais_livre">%1$d MB more free</string>
+    <string name="elv_lp_menos_livre">%1$d MB less free</string>
+    <string name="elv_lp_mais_rapido">%1$s opens %2$s faster</string>
+    <string name="elv_lp_mais_lento">%1$s opens %2$s slower</string>
+    <string name="elv_lp_igual">No difference big enough to measure</string>
+    <string name="elv_agora">just now</string>
+    <string name="elv_sem_quedas">No crashes or freezes in %1$d days</string>
+    <string name="elv_reserva">%1$s dropped. Playing %2$s instead.</string>
+    <string name="elv_zap_solte">Release to watch</string>
+    <string name="elv_leg_estilo">Subtitle style: %1$s</string>
+    <string name="elv_leg_padrao">standard</string>
+    <string name="elv_leg_contraste">high contrast</string>
+    <string name="elv_leg_amarela">yellow</string>
+    <string name="elv_leg_posicao">Subtitle position: %1$s</string>
+    <string name="elv_leg_embaixo">bottom</string>
+    <string name="elv_leg_em_cima">top</string>
+    <!-- 3.11 busca que faz -->
+    <string name="elv_bf_fazer">Do it</string>
+    <string name="elv_bf_ok_faz">OK does it now</string>
+    <string name="elv_bf_wifi">Show the guest Wi-Fi</string>
+    <string name="elv_bf_wifi_configurar">Not set up yet: OK opens Settings (Visits)</string>
+    <string name="elv_bf_letra_maior">Bigger text (%1$d%%)</string>
+    <string name="elv_bf_letra_menor">Smaller text (%1$d%%)</string>
+    <string name="elv_bf_letra_limite">It is already at this size</string>
+    <string name="elv_bf_radios">Radio stations</string>
+    <string name="elv_bf_radio_fav">Favorite station</string>
+    <string name="elv_bf_ajuda">Help</string>
+    <string name="elv_bf_ajuda_det">Topic of the manual</string>
+    <string name="elv_bf_procurar">Search further</string>
+    <string name="elv_bf_procurar_radio">Radio stations named “%1$s”</string>
+    <string name="elv_bf_procurar_radio_det">Stations from all over the world</string>
+    <string name="elv_bf_procurar_rede">“%1$s” in your network files</string>
+    <string name="elv_bf_procurar_rede_det">On your Jellyfin, Emby or Plex</string>
+    <!-- 12.2 busca nos ajustes -->
+    <string name="elv_aj_buscar">Search settings</string>
+    <string name="elv_aj_explica">Type a word: the name of the option or another word for it (\"font\" finds the text size)</string>
+    <string name="elv_aj_dica">For example: font, Wi-Fi, screensaver</string>
+    <string name="elv_aj_recentes">Changed recently</string>
+    <string name="elv_aj_recentes_vazio">The options you change appear here, the latest first</string>
+    <string name="elv_aj_nada">Nothing found for “%1$s”</string>
+    <string name="elv_aj_nada_det">Try another word, or look in the tabs on the left</string>
+    <string name="elv_aj_sinonimos">font,letter,text,size,bigger,smaller;wifi,wi-fi,network,internet,connection;screensaver,screen saver,saver,idle,rest;password,pin,code;sound,volume,audio;time,clock,hour;weather,forecast,temperature;language,idiom;kids,child,children,parental;guest,visitor,visit;update,version,new;backup,copy,restore;phone,mobile,cell;light,lamp,home,house;sleep,turn off,timer,energy,power;channel,tv,live;movie,film,series,show;subtitle,caption,captions;alarm,wake,alarm clock;photo,picture,image,background,wallpaper</string>
+    <!-- 2.3 falhas em uma frase -->
+    <string name="elv_f_titulo">Needs attention</string>
+    <string name="elv_f_canal_caiu_frase">This channel is not coming in right now</string>
+    <string name="elv_f_canal_caiu_causa">The channel\'s provider stopped sending it. It usually comes back on its own.</string>
+    <string name="elv_f_canal_caiu_botao">Watch another channel</string>
+    <string name="elv_f_lista_venceu_frase">Your channel list has expired</string>
+    <string name="elv_f_lista_venceu_causa">The account with whoever sells the list ran out or was refused.</string>
+    <string name="elv_f_lista_venceu_botao">Open the account</string>
+    <string name="elv_f_relogio_errado_frase">The TV\'s clock is wrong</string>
+    <string name="elv_f_relogio_errado_causa">With the wrong time, the guide and secure sites fail.</string>
+    <string name="elv_f_relogio_errado_botao">Set the clock</string>
+    <string name="elv_f_disco_cheio_frase">The TV is running out of space</string>
+    <string name="elv_f_disco_cheio_causa">Without space, the guide, recordings and updates cannot be saved.</string>
+    <string name="elv_f_disco_cheio_botao">Free up space</string>
+    <string name="elv_f_shell_parado_frase">The TV\'s extra powers stopped</string>
+    <string name="elv_f_shell_parado_causa">Wireless debugging was turned off or the pairing was lost.</string>
+    <string name="elv_f_shell_parado_botao">Turn them back on</string>
+    <string name="elv_f_tunel_sem_login_frase">Access from outside home is waiting for a login</string>
+    <string name="elv_f_tunel_sem_login_causa">The Tailscale login expired.</string>
+    <string name="elv_f_tunel_sem_login_botao">Log in again</string>
+    <string name="elv_f_backup_falhou_frase">The night backup has not run for 2 days</string>
+    <string name="elv_f_backup_falhou_causa">The destination was unreachable or the password changed.</string>
+    <string name="elv_f_backup_falhou_botao">Back up now</string>
+    <string name="elv_f_religando">Turning them back on: it takes up to a minute</string>
+    <!-- 11.4 não perturbe -->
+    <string name="extras_NAO_PERTURBE">Do not disturb: during a movie, late at night or with guests, notices wait and come back in a summary (alarm and doorbell always show)</string>
+    <plurals name="elv_np_resumo_filme"><item quantity="one">While you were watching: %1$d notice</item><item quantity="other">While you were watching: %1$d notices</item></plurals>
+    <plurals name="elv_np_resumo_noite"><item quantity="one">During the night: %1$d notice</item><item quantity="other">During the night: %1$d notices</item></plurals>
+    <plurals name="elv_np_resumo_visita"><item quantity="one">During the visit: %1$d notice</item><item quantity="other">During the visit: %1$d notices</item></plurals>
+    <string name="elv_np_mais">+%1$d more</string>
+    <!-- 10.5 só se / 10.6 gatilhos -->
+    <string name="elv_ev_filme_acabou">When a movie ends</string>
+    <string name="elv_ev_programa_comecou">When a program you marked in the guide starts</string>
+    <string name="elv_ev_nascer_do_sol">At sunrise</string>
+    <string name="elv_ev_por_do_sol">At sunset</string>
+    <string name="elv_ev_campainha">When the doorbell rings</string>
+    <string name="elv_ev_alguem_chegou">When someone gets home</string>
+    <string name="elv_ev_internet_caiu">When the internet goes down</string>
+    <string name="elv_ev_internet_voltou">When the internet comes back</string>
+    <string name="elv_ev_recado_chegou">When a message arrives</string>
+    <string name="elv_ev_aniversario">On someone\'s birthday (9 AM)</string>
+    <string name="elv_ev_compromisso">When an appointment in the calendar starts</string>
+    <string name="elv_ss_sempre">Always</string>
+    <string name="elv_ss_so_se">Only if %1$s</string>
+    <string name="elv_ss_e">" and "</string>
+    <string name="elv_ss_em_casa">someone is home</string>
+    <string name="elv_ss_noite">after sunset</string>
+    <string name="elv_ss_dia_util">it is a weekday</string>
+    <string name="elv_ss_perfil">the profile is %1$s</string>
+    <string name="elv_ss_det">◀ ▶ change the condition</string>
+</resources>

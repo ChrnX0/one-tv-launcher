@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Elevação 2.11: Desfazer em tudo (Desfazer.kt). -->
+<resources>
+    <string name="desf_diario">Zmiana (%1$s): %2$s</string>
+    <string name="desf_diario_desfeito">Cofnięto: %1$s</string>
+    <string name="desf_ocultou">Ukryto %1$s</string>
+    <string name="desf_mostrou">Znowu pokazano %1$s</string>
+    <string name="desf_cat_ajuste">Ustawienie</string>
+    <string name="desf_cat_organizacao">Układ</string>
+    <string name="desf_cat_automacao">Automatyzacja</string>
+    <string name="desf_cat_limpeza">Porządki</string>
+    <string name="desf_nada">Nic do cofnięcia (już cofnięto).</string>
+    <string name="desf_feito">Cofnięto. Wszystko jest jak było.</string>
+    <string name="desf_parcial">Cofnięto częściowo: elementy zmienione ponownie, które zostały bez zmian: %1$d.</string>
+    <string name="desf_barra">Zmieniono: %1$s</string>
+    <string name="desf_botao">Cofnij</string>
+    <string name="desf_tela">Ostatnie zmiany</string>
+    <string name="desf_tela_det">Co zmieniono w ciągu ostatnich 7 dni. OK na jednej przywraca poprzedni stan.</string>
+    <string name="desf_tela_vazia">Brak zmian w ciągu ostatnich 7 dni.</string>
+    <string name="desf_ja_desfeita">cofnięta</string>
+    <string name="desf_rot_config">Ustawienia</string>
+    <string name="desf_rot_automacoes">Automatyzacje</string>
+    <string name="desf_rot_rotinas">Harmonogramy</string>
+    <string name="desf_rot_apps">Lista aplikacji</string>
+    <string name="desf_rot_organizar">Aplikacje ekranu głównego</string>
+</resources>

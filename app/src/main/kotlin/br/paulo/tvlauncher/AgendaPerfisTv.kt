@@ -127,7 +127,7 @@ class AgendaFamiliaActivity : Activity() {
 
     /** Uma caixa com uma lista de opções (passo do "Adicionar"). */
     private fun escolher(titulo: String, opcoes: List<String>, inicial: Int = 0, aoEscolher: (Int) -> Unit) {
-        val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(0, Estilo.dp(context, 8), 0, 0) }
+        val lista = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(0, Estilo.dp(context, 8), 0, 0) }
         var caixa: android.app.Dialog? = null
         opcoes.forEachIndexed { i, t ->
             lista.addView(Estilo.linhaOpcao(this, t).apply { setOnClickListener { caixa?.dismiss(); aoEscolher(i) } }, lp())
