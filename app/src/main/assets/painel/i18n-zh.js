@@ -507,6 +507,7 @@ traduzirPainelCom({T:{
 "IPs dos celulares: 192.168.1.20, 192.168.1.21":"手机 IP:192.168.1.20、192.168.1.21",
 "Instalando na TV…":"正在安装到电视…",
 "Instalar":"安装",
+"Recomendados":"推荐",
 "Instalar APK…":"安装 APK…",
 "Instalar como app (https)":"安装为应用(https)",
 "Internet por app":"按应用的网络",

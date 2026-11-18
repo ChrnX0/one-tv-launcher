@@ -507,6 +507,7 @@ traduzirPainelCom({T:{
 "IPs dos celulares: 192.168.1.20, 192.168.1.21":"عناوين IP للهواتف: 192.168.1.20، 192.168.1.21",
 "Instalando na TV…":"جارٍ التثبيت على التلفزيون…",
 "Instalar":"تثبيت",
+"Recomendados":"موصى بها",
 "Instalar APK…":"تثبيت APK…",
 "Instalar como app (https)":"التثبيت كتطبيق (https)",
 "Internet por app":"الإنترنت لكل تطبيق",
