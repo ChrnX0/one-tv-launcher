@@ -43,6 +43,8 @@ class JogosActivity : Activity() {
     private var esperandoPc = false
     private var abrirNoSofa = false   // veio do item "Sofá" da tela em cruz: começa na turma
     private var focoPacote: String? = null   // voltou de mudar o grupo: o foco volta no mesmo jogo
+    /** O jogo escolhido por último na 1ª prateleira: Chamar a turma e Jogar no PC usam ele. */
+    private var escolhido: JogosTv.App? = null
 
     /** O que a tela desenha de cada app: o ícone e a cor dele. */
     private class Visual(val icone: Drawable?, val cor: Int)
@@ -69,6 +71,7 @@ class JogosActivity : Activity() {
             definirDicas(getString(R.string.grv_dica_ok) to getString(R.string.jogos_tecla_jogar),
                 getString(R.string.jogos_tecla_segurar) to getString(R.string.jogos_tecla_opcoes))
             aoSom = { s -> SonsCruz.tocar(this@JogosActivity, s, CruzLogica.Categoria.JOGAR) }
+            aoMudar = { p, i -> if (p.id == P_JOGOS) jogos.firstOrNull { it.pacote == i.id }?.let { escolhido = it } }
         }
         setContentView(FrameLayout(this).apply {
             background = Estilo.fundoTela(this@JogosActivity)
@@ -117,6 +120,7 @@ class JogosActivity : Activity() {
             runOnUiThread {
                 if (isDestroyed) return@runOnUiThread
                 visuais.putAll(novos); uso = u; jogos = ordenada; semana = sem
+                if (escolhido == null) escolhido = ordenada.firstOrNull()   // a 1ª prateleira abre no jogado por último
                 montar()
             }
         }
@@ -204,7 +208,7 @@ class JogosActivity : Activity() {
                         abrir = { mostrarQrGrande(sala, servidor) })
                 }
                 if (TurmaDiscordTv.temWebhook(this)) itens += CruzOuvir.Item("chamar", getString(R.string.turma_chamar),
-                    getString(R.string.turma_chamado), icone = IconeOuvir.Tipo.CONTROLE, abrir = { chamarTurma(null) })
+                    getString(R.string.turma_chamado), icone = IconeOuvir.Tipo.CONTROLE, abrir = { chamarTurma(escolhido?.nome) })
                 val gente = t.salas.flatMap { it.membros } + t.outros
                 for ((i, m) in gente.withIndex()) itens += CruzOuvir.Item("membro:$i:" + m.nome, m.nome, statusMembro(m), capa = m.avatar.orEmpty(),
                     cobrir = true, cor = CORES_AVATAR[Math.floorMod(m.nome.hashCode(), CORES_AVATAR.size)],
@@ -236,7 +240,7 @@ class JogosActivity : Activity() {
             CruzOuvir.Item("rede", getString(R.string.jogos_testar_rede), m?.let { textoRede(it) } ?: getString(R.string.jogos_medindo),
                 icone = IconeOuvir.Tipo.REDE, abrir = { testarRede(avisar = true) }),
             CruzOuvir.Item("pc", getString(R.string.jogos_jogar_pc), getString(R.string.jogos_desc_pc),
-                icone = IconeOuvir.Tipo.PC, abrir = { jogarNoPc(null) }),
+                icone = IconeOuvir.Tipo.PC, abrir = { jogarNoPc(escolhido?.takeIf { it.grupo == Jogos.Grupo.PC }?.pacote) }),
             CruzOuvir.Item("baixar", getString(R.string.jogos_baixar), getString(R.string.jogos_loja_explica),
                 icone = IconeOuvir.Tipo.ADICIONAR, abrir = { mostrarLoja() }),
             CruzOuvir.Item("escolher", getString(R.string.jogos_escolher), getString(R.string.jogos_escolher_sub),
@@ -378,7 +382,9 @@ class JogosActivity : Activity() {
 
     /** Segurar OK num jogo: em que grupo ele fica, tirar do card ou voltar ao automático. */
     private fun escolherGrupo(j: JogosTv.App) {
-        lista(j.nome, Jogos.Grupo.values().map { g -> ((if (g == j.grupo) "✓ " else "") + nomeGrupo(g)) to { escolherValor(j, g.name) } } +
+        // App de PC: "Ligar o PC e jogar" com este app vem primeiro (era o botão ao lado do Jogar).
+        val pc = if (j.grupo == Jogos.Grupo.PC) listOf(getString(R.string.jogos_ligar_pc_jogar) to { jogarNoPc(j.pacote) }) else emptyList()
+        lista(j.nome, pc + Jogos.Grupo.values().map { g -> ((if (g == j.grupo) "✓ " else "") + nomeGrupo(g)) to { escolherValor(j, g.name) } } +
             listOf(getString(R.string.jogos_tirar) to { escolherValor(j, Jogos.FORA) }, getString(R.string.jogos_automatico) to { escolherValor(j, null) }))
     }
 
