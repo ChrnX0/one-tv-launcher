@@ -508,6 +508,7 @@ traduzirPainelCom({T:{
 "Instalando na TV…":"TV पर इंस्टॉल हो रहा है…",
 "Instalar":"इंस्टॉल करें",
 "Recomendados":"अनुशंसित",
+"Tipo de addon":"ऐडऑन का प्रकार",
 "Instalar APK…":"APK इंस्टॉल करें…",
 "Instalar como app (https)":"ऐप के रूप में इंस्टॉल करें (https)",
 "Internet por app":"हर ऐप का इंटरनेट",

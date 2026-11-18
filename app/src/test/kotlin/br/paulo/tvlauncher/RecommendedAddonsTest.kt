@@ -17,7 +17,7 @@ class RecommendedAddonsTest {
         }
         // A lista do servidor tem o mesmo formato: o que a TV guarda volta igual.
         val json = org.json.JSONObject().put("addons", org.json.JSONArray().apply {
-            l.forEach { put(org.json.JSONObject().put("id", it.id).put("url", it.url).put("kind", it.kind)) }
+            l.forEach { put(org.json.JSONObject().put("id", it.id).put("url", it.url).put("kind", it.kind).put("group", it.group)) }
         }).toString()
         assertEquals(l, RecommendedAddons.parse(json))
     }
@@ -46,5 +46,28 @@ class RecommendedAddonsTest {
         val l = RecommendedAddons.BUILT_IN
         val r = RecommendedAddons.toShow(l, setOf(l[0].id), setOf(AddonsProtocolo.base(l[1].url)!!))
         assertEquals(l.drop(2), r)
+    }
+}
+
+class RecommendedAddonsGruposTest {
+    @Test fun grupoPeloManifesto() {
+        assertEquals("subtitles", RecommendedAddons.groupOf(listOf("movie", "series"), listOf("subtitles")))
+        assertEquals("anime", RecommendedAddons.groupOf(listOf("anime", "movie", "series"), listOf("catalog", "meta")))
+        assertEquals("movies_series", RecommendedAddons.groupOf(listOf("movie"), listOf("catalog")))
+        assertEquals("tv", RecommendedAddons.groupOf(listOf("tv"), listOf("catalog", "stream")))
+        assertEquals("music", RecommendedAddons.groupOf(listOf("music"), listOf("catalog", "stream")))
+        assertEquals("other", RecommendedAddons.groupOf(listOf("addMovie"), listOf("catalog")))
+    }
+
+    @Test fun secoesNaOrdemSemVazias() {
+        val g = RecommendedAddons.grouped(RecommendedAddons.BUILT_IN)
+        assertEquals(listOf("movies_series", "anime"), g.map { it.first })
+        assertEquals(RecommendedAddons.BUILT_IN.size, g.sumOf { it.second.size })
+    }
+
+    @Test fun grupoDoServidorDesconhecidoCaiNoPadrao() {
+        val r = RecommendedAddons.parse("""{"addons":[{"id":"a","url":"https://x.dev/manifest.json","kind":"subtitles","group":"xyz"},
+            {"id":"b","url":"https://y.dev/manifest.json","group":"anime"}]}""")!!
+        assertEquals(listOf("subtitles", "anime"), r.map { it.group })
     }
 }

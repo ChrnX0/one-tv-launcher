@@ -508,6 +508,7 @@ traduzirPainelCom({T:{
 "Instalando na TV…":"TV'ye kuruluyor…",
 "Instalar":"Kur",
 "Recomendados":"Önerilenler",
+"Tipo de addon":"Eklenti türü",
 "Instalar APK…":"APK kur…",
 "Instalar como app (https)":"Uygulama olarak kur (https)",
 "Internet por app":"Uygulama başına internet",

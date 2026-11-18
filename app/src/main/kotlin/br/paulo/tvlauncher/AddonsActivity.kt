@@ -158,9 +158,10 @@ class AddonsActivity : Activity() {
         }
         // Lista curada (18/11/2026): o que ainda não está instalado; escolher pede PIN e instala sem digitar.
         val sugeridos = AddonsTv.sugeridos(this)
-        if (sugeridos.isNotEmpty()) {
-            itens += Secao(getString(R.string.ad_sug_secao))
-            sugeridos.forEach { s -> itens += Linha(IconeMidia.Tipo.MAIS, s.nome, s.texto.ifBlank { null }, s) }
+        // Uma seção por tipo (pedido do Paulo, 18/11: "separar por tipo, como o Stremio"): Filmes e séries, Anime, Legendas...
+        RecommendedAddons.grouped(sugeridos.map { it.e }).forEach { (g, entradas) ->
+            itens += Secao("${getString(R.string.ad_sug_secao)} · ${AddonsTv.nomeGrupo(this, g)}")
+            entradas.forEach { e -> sugeridos.first { it.e == e }.let { s -> itens += Linha(IconeMidia.Tipo.MAIS, s.nome, s.texto.ifBlank { null }, s) } }
         }
         itens += Linha(IconeMidia.Tipo.MAIS, getString(R.string.ad_add_item), null, Adicionar)
         pilha.clear()

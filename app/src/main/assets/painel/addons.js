@@ -26,25 +26,57 @@ function erroAddon(e) {
   return (m && MOTIVO_ADDON[m]) || textoErro(e);
 }
 
+// Filtro por tipo (pedido do Paulo, 18/11/2026: "separar por tipo, como o Stremio, ou um filtro melhor"): vale para
+// os instalados e os recomendados ao mesmo tempo. '' = Todos. Os nomes das seções vêm da TV, já traduzidos.
+let filtroAddon = '';
+let ultimoAddons = null;
+
 async function carregarAddons() {
-  const status = $('statusAddons'), lista = $('listaAddons');
+  const status = $('statusAddons');
   mostrar(status, '');
   let r;
   try { r = await chamar('GET', '/api/addons'); } catch (e) { mostrar(status, textoErro(e)); return; }
   $('termosAddons').textContent = TERMOS_ADDON;
   $('aceiteAddons').checked = !!r.aceite;
+  ultimoAddons = r;
+  desenharAddons();
+}
+
+function desenharAddons() {
+  const r = ultimoAddons;
+  if (!r) return;
+  const status = $('statusAddons'), lista = $('listaAddons');
+  const sugeridos = r.sugeridos || [];
+  // Só os tipos que têm algo; com um tipo só, o filtro não ajuda e some.
+  const presentes = new Set([...r.addons, ...sugeridos].map((x) => x.grupo));
+  const grupos = (r.grupos || []).filter((g) => g.id === '' || presentes.has(g.id));
+  if (filtroAddon && !presentes.has(filtroAddon)) filtroAddon = '';
+  const barra = $('filtroAddons');
+  barra.replaceChildren();
+  barra.hidden = grupos.length <= 2;
+  for (const g of grupos) {
+    const b = Object.assign(document.createElement('button'), {
+      type: 'button', textContent: g.nome, className: g.id === filtroAddon ? 'botao-primario' : 'botao-secundario',
+    });
+    b.setAttribute('aria-pressed', String(g.id === filtroAddon));
+    b.addEventListener('click', () => { filtroAddon = g.id; desenharAddons(); });
+    barra.appendChild(b);
+  }
+  const passa = (x) => !filtroAddon || x.grupo === filtroAddon;
+  const nomeGrupo = (id) => (r.grupos || []).find((g) => g.id === id)?.nome || '';
   lista.replaceChildren();
-  if (!r.addons.length) {
+  const instalados = r.addons.filter(passa);
+  if (!instalados.length) {
     lista.appendChild(Object.assign(document.createElement('p'), { className: 'aviso-curto', textContent: 'Nenhum addon instalado.' }));
   }
-  mostrarSugeridos(r.sugeridos || []);
-  for (const a of r.addons) {
+  mostrarSugeridos(sugeridos.filter(passa), nomeGrupo);
+  for (const a of instalados) {
     const linha = document.createElement('p');
     const nome = document.createElement('strong');
     nome.textContent = a.nome;
     const det = document.createElement('span');
     det.className = 'aviso-curto';
-    det.textContent = ` · ${a.versao || ''} · ${a.base}`;
+    det.textContent = ` · ${nomeGrupo(a.grupo)} · ${a.versao || ''} · ${a.base}`;
     const botao = document.createElement('button');
     botao.type = 'button';
     botao.className = 'botao-secundario';
@@ -62,17 +94,22 @@ async function carregarAddons() {
 }
 
 /**
- * Lista curada (18/11/2026): add-ons que conferimos e funcionam na TV. "Instalar" faz o mesmo que colar o endereço
- * (aceite dos termos + PIN). Nome, texto e endereço vêm da TV: só por textContent.
+ * Lista curada (18/11/2026): add-ons que conferimos e funcionam na TV, uma seção por tipo. "Instalar" faz o mesmo que
+ * colar o endereço (aceite dos termos + PIN). Nome, texto e endereço vêm da TV: só por textContent.
  */
-function mostrarSugeridos(lista) {
+function mostrarSugeridos(lista, nomeGrupo) {
   const caixa = $('sugeridosAddons');
   if (!caixa) return;
   caixa.replaceChildren();
   caixa.hidden = !lista.length;
   if (!lista.length) return;
   caixa.appendChild(Object.assign(document.createElement('h3'), { textContent: 'Recomendados' }));
+  let grupo = null;
   for (const s of lista) {
+    if (s.grupo !== grupo) {
+      grupo = s.grupo;
+      caixa.appendChild(Object.assign(document.createElement('p'), { className: 'aviso-curto', textContent: nomeGrupo(grupo) }));
+    }
     const linha = document.createElement('p');
     const nome = Object.assign(document.createElement('strong'), { textContent: s.nome });
     const det = Object.assign(document.createElement('span'), { className: 'aviso-curto', textContent: s.texto ? ` · ${s.texto}` : '' });

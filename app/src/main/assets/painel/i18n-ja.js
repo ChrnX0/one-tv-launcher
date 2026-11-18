@@ -508,6 +508,7 @@ traduzirPainelCom({T:{
 "Instalando na TV…":"テレビにインストール中…",
 "Instalar":"インストール",
 "Recomendados":"おすすめ",
+"Tipo de addon":"アドオンの種類",
 "Instalar APK…":"APKをインストール…",
 "Instalar como app (https)":"アプリとしてインストール(https)",
 "Internet por app":"アプリごとのインターネット",

@@ -50,4 +50,11 @@
     <string name="ad_sug_mubi">MUBI की नई और क्लासिक फ़िल्में।</string>
     <string name="ad_sug_kitsu">Kitsu से एनीमे कैटलॉग और एपिसोड।</string>
     <string name="ad_sug_animeseason">सीज़न और साल के अनुसार एनीमे।</string>
+    <string name="ad_grupo_todos">सभी</string>
+    <string name="ad_grupo_filmes_series">फ़िल्में और सीरीज़</string>
+    <string name="ad_grupo_anime">एनीमे</string>
+    <string name="ad_grupo_tv">टीवी चैनल</string>
+    <string name="ad_grupo_legendas">उपशीर्षक</string>
+    <string name="ad_grupo_musica">संगीत और रेडियो</string>
+    <string name="ad_grupo_outros">अन्य</string>
 </resources>

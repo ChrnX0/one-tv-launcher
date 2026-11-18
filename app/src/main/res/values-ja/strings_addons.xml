@@ -50,4 +50,11 @@
     <string name="ad_sug_mubi">MUBI の新作とクラシック映画。</string>
     <string name="ad_sug_kitsu">Kitsu のアニメカタログとエピソード。</string>
     <string name="ad_sug_animeseason">シーズン別・年別のアニメ。</string>
+    <string name="ad_grupo_todos">すべて</string>
+    <string name="ad_grupo_filmes_series">映画とドラマ</string>
+    <string name="ad_grupo_anime">アニメ</string>
+    <string name="ad_grupo_tv">テレビチャンネル</string>
+    <string name="ad_grupo_legendas">字幕</string>
+    <string name="ad_grupo_musica">音楽とラジオ</string>
+    <string name="ad_grupo_outros">その他</string>
 </resources>

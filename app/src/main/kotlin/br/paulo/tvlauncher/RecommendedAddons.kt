@@ -22,15 +22,43 @@ object RecommendedAddons {
     /** De quanto em quanto tempo a TV pergunta ao servidor (a lista muda raramente). */
     const val REFRESH_MS = 24L * 60 * 60 * 1000
 
-    /** [id] = id do manifesto (chave do texto traduzido `ad_sug_<chave>`); [kind] = "catalog" ou "subtitles". */
-    data class Entry(val id: String, val url: String, val kind: String)
+    /**
+     * [id] = id do manifesto (chave do texto traduzido `ad_sug_<chave>`); [kind] = "catalog", "subtitles" ou "stream";
+     * [group] = em qual seção aparece (um de [GROUPS]; pedido do Paulo 18/11: "separar por tipo, como o Stremio").
+     */
+    data class Entry(val id: String, val url: String, val kind: String, val group: String = groupOfKind(kind))
+
+    /** Seções, nesta ordem, na TV e no painel (o painel usa como filtro). Nomes técnicos em inglês; texto em `ad_grupo_*`. */
+    val GROUPS = listOf("movies_series", "anime", "tv", "subtitles", "music", "other")
+
+    private fun groupOfKind(kind: String) = if (kind == "subtitles") "subtitles" else "other"
+
+    /**
+     * Seção de um add-on pelo manifesto (vale para os instalados, que não vêm da lista): anime vence filme/série;
+     * só legenda = legendas. [types] = `types` do manifesto; [resources] = nomes dos recursos.
+     */
+    fun groupOf(types: List<String>, resources: List<String>): String {
+        val t = types.map { it.lowercase() }.toSet()
+        return when {
+            resources.isNotEmpty() && resources.all { it == "subtitles" } -> "subtitles"
+            "anime" in t -> "anime"
+            "movie" in t || "series" in t -> "movies_series"
+            "tv" in t || "channel" in t -> "tv"
+            "music" in t || "radio" in t || "podcast" in t -> "music"
+            else -> "other"
+        }
+    }
+
+    /** A lista em seções, na ordem de [GROUPS], sem seção vazia. */
+    fun grouped(list: List<Entry>): List<Pair<String, List<Entry>>> =
+        GROUPS.mapNotNull { g -> list.filter { it.group == g }.takeIf { it.isNotEmpty() }?.let { g to it } }
 
     val BUILT_IN = listOf(
-        Entry("pw.ers.netflix-catalog", "https://7a82163c306e-stremio-netflix-catalog-addon.baby-beamup.club/manifest.json", "catalog"),
-        Entry("tmdb-addon", "https://94c8cb9f702d-tmdb-addon.baby-beamup.club/manifest.json", "catalog"),
-        Entry("com.stremio.mubi_app", "https://mubi2stremio.adiba.ro/manifest.json", "catalog"),
-        Entry("community.anime.kitsu", "https://anime-kitsu.strem.fun/manifest.json", "catalog"),
-        Entry("animes-season-addon", "https://victorgveloso.github.io/animes-season-addon/manifest.json", "catalog"),
+        Entry("pw.ers.netflix-catalog", "https://7a82163c306e-stremio-netflix-catalog-addon.baby-beamup.club/manifest.json", "catalog", "movies_series"),
+        Entry("tmdb-addon", "https://94c8cb9f702d-tmdb-addon.baby-beamup.club/manifest.json", "catalog", "movies_series"),
+        Entry("com.stremio.mubi_app", "https://mubi2stremio.adiba.ro/manifest.json", "catalog", "movies_series"),
+        Entry("community.anime.kitsu", "https://anime-kitsu.strem.fun/manifest.json", "catalog", "anime"),
+        Entry("animes-season-addon", "https://victorgveloso.github.io/animes-season-addon/manifest.json", "catalog", "anime"),
     )
 
     /** Texto curto traduzido para os add-ons que conhecemos (chave do recurso `ad_sug_<isto>`); null = usar o do manifesto. */
@@ -54,7 +82,7 @@ object RecommendedAddons {
     }
 
     /**
-     * Resposta do servidor: `{"addons":[{"id","url","kind","name"?}]}`. Só https terminando em manifest.json, sem
+     * Resposta do servidor: `{"addons":[{"id","url","kind","group"?}]}`. Só https terminando em manifest.json, sem
      * repetir id, no máximo [MAX]. Resposta estragada ou vazia = null (fica a lista anterior/embutida).
      */
     fun parse(text: String?): List<Entry>? = runCatching {
@@ -68,7 +96,8 @@ object RecommendedAddons {
             if (!url.startsWith("https://") || !url.endsWith("/manifest.json") || url.length > 500) continue
             if (url.contains("torrent", ignoreCase = true) || id.contains("torrent", ignoreCase = true)) continue
             if (kind !in setOf("catalog", "subtitles", "stream")) continue
-            out += Entry(id, url, kind)
+            val group = o.optString("group").trim().takeIf { it in GROUPS } ?: groupOfKind(kind)
+            out += Entry(id, url, kind, group)
             if (out.size >= MAX) break
         }
         out.takeIf { it.isNotEmpty() }
