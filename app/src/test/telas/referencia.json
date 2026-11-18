@@ -117,7 +117,7 @@
   "semNome": []
  },
  "ar\/home": {
-  "menorSp": 12,
+  "menorSp": 18,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -126,7 +126,7 @@
   "semNome": []
  },
  "ar\/home-ac": {
-  "menorSp": 12,
+  "menorSp": 18,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -161,6 +161,15 @@
   "contraste": [],
   "semNome": []
  },
+ "ar\/home-recua": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
  "ar\/home-relogio": {
   "menorSp": 18,
   "foco": true,
@@ -183,10 +192,7 @@
   "menorSp": 11,
   "foco": true,
   "cortes": [],
-  "sobrepostos": [
-   "Moonlight × اعرض أصدقاءك من Discord",
-   "اعرض أصدقاءك من Discord × من الكمبيوتر والجهاز المنزلي"
-  ],
+  "sobrepostos": [],
   "soCor": [],
   "contraste": [],
   "semNome": []
@@ -237,7 +243,7 @@
   "semNome": []
  },
  "ar\/radio": {
-  "menorSp": 11,
+  "menorSp": 14,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -372,7 +378,7 @@
   "semNome": []
  },
  "en\/home": {
-  "menorSp": 12,
+  "menorSp": 18,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -381,7 +387,7 @@
   "semNome": []
  },
  "en\/home-ac": {
-  "menorSp": 12,
+  "menorSp": 18,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -408,6 +414,15 @@
   "semNome": []
  },
  "en\/home-leve": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "en\/home-recua": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],
@@ -489,7 +504,7 @@
   "semNome": []
  },
  "en\/radio": {
-  "menorSp": 11,
+  "menorSp": 14,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -624,7 +639,7 @@
   "semNome": []
  },
  "pt\/home": {
-  "menorSp": 12,
+  "menorSp": 18,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -633,7 +648,7 @@
   "semNome": []
  },
  "pt\/home-ac": {
-  "menorSp": 12,
+  "menorSp": 18,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -660,6 +675,15 @@
   "semNome": []
  },
  "pt\/home-leve": {
+  "menorSp": 12,
+  "foco": true,
+  "cortes": [],
+  "sobrepostos": [],
+  "soCor": [],
+  "contraste": [],
+  "semNome": []
+ },
+ "pt\/home-recua": {
   "menorSp": 12,
   "foco": true,
   "cortes": [],
@@ -741,7 +765,7 @@
   "semNome": []
  },
  "pt\/radio": {
-  "menorSp": 11,
+  "menorSp": 14,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],

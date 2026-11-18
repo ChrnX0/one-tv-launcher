@@ -80,4 +80,8 @@
     <string name="cruz_pendrive">Clé USB : %1$s</string>
     <string name="casa_fora_titulo">Home Assistant ne répond pas</string>
     <string name="casa_fora_texto">Vérifiez que son serveur est allumé. La TV réessaie toute seule toutes les quelques secondes.</string>
+    <string name="cruz_barra_ilha">Île</string>
+    <string name="cruz_canto_no_ar">À l’antenne</string>
+    <string name="cruz_canto_buscar">Rechercher</string>
+    <string name="cruz_canto_buscar_txt">▲ ouvre la barre avec la recherche</string>
 </resources>

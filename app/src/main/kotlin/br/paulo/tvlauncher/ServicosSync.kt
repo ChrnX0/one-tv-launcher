@@ -314,6 +314,10 @@ object ServicosSync {
     private fun arquivoBibliotecaSimkl(ctx: Context) = File(PlayerArmazem.pasta(ctx), ARQ_SIMKL)
 
     /** A cópia local da biblioteca do Simkl; null = ainda não houve a fase 1. */
+    /** Ids do Simkl da biblioteca guardada da pessoa, por id TMDB (vazio sem conta ou sem cópia). Sem rede. */
+    fun idsSimklDaBiblioteca(ctx: Context): Map<String, Int> =
+        lerBibliotecaSimkl(ctx)?.let { SincronizarFilmes.simklIdsPorTmdb(it.values) } ?: emptyMap()
+
     private fun lerBibliotecaSimkl(ctx: Context): Map<String, SincronizarFilmes.EntradaSimkl>? = synchronized(trava) {
         val f = arquivoBibliotecaSimkl(ctx)
         if (!f.exists()) null else runCatching { SincronizarFilmes.simklBibliotecaDeJson(JSONArray(f.readText())) }.getOrNull()

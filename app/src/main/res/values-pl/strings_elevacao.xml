@@ -115,4 +115,5 @@
     <string name="elv_ss_dia_util">jest dzień roboczy</string>
     <string name="elv_ss_perfil">profil to %1$s</string>
     <string name="elv_ss_det">◀ ▶ zmieniają warunek</string>
+    <string name="extras_ABERTURA_PRONTA">Pomiń czołówkę (IntroDB): w odcinkach telewizor pyta społecznościową usługę IntroDB, gdzie jest czołówka (wysyła tylko odcinek, nigdy Twoje konto); wyłączone — tylko czołówki oznaczone przez Ciebie</string>
 </resources>

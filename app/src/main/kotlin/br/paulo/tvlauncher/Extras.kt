@@ -82,7 +82,15 @@ object Extras {
         // Elevação, onda 1 (17/11/2026)
         /** 11.4 Não perturbe: durante filme, de madrugada ou com visita, os avisos esperam e voltam num resumo. */
         NAO_PERTURBE(false),
+        /** 6.3 Abertura pronta: nos episódios, pergunta ao IntroDB onde fica a abertura (manda o episódio e, como todo
+         *  pedido, o IP da casa). Ligada de fábrica; desligada, valem só as aberturas marcadas na TV (18/11/2026). */
+        ABERTURA_PRONTA(true),
     }
+
+    /** [ligado] relido do disco: para o processo :player, que não vê na hora o que a tela de Configurações mudou. */
+    @Suppress("DEPRECATION")
+    fun ligadoAgora(ctx: Context, c: Chave): Boolean =
+        ctx.getSharedPreferences(ARQUIVO, Context.MODE_PRIVATE or Context.MODE_MULTI_PROCESS).getBoolean(c.name, c.padrao)
 
     /**
      * Chaves que só mudam com o PIN: segurança (OTA, travas, PIN da HOME), privacidade (diário de DNS, ver a tela) e a

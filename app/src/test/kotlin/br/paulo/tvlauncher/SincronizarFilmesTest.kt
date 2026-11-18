@@ -314,4 +314,19 @@ class SincronizarFilmesTest {
         // Catálogo todo com id: nada a fazer.
         assertEquals(emptyMap<String, Int>(), SincronizarFilmes.idsPorNome(listOf(cat[3]), fora))
     }
+
+    @Test fun idsDoSimklSemRedirect() {
+        val bib = listOf(
+            SincronizarFilmes.EntradaSimkl(Item(Tipo.FILME, Ids(tmdb = 872585, simkl = 1727566), "Oppenheimer", 2023), "plantowatch", 0),
+            SincronizarFilmes.EntradaSimkl(Item(Tipo.SERIE, Ids(tmdb = 1396, simkl = 11121), "Breaking Bad", 2008), "completed", 0),
+            SincronizarFilmes.EntradaSimkl(Item(Tipo.FILME, Ids(simkl = 5), "Sem tmdb", 2020), "completed", 0))
+        val daBib = SincronizarFilmes.simklIdsPorTmdb(bib)
+        assertEquals(mapOf("F872585" to 1727566, "S1396" to 11121), daBib)
+        // Catálogo: o 4K e o LEG dividem o id achado para a versão comum; filme e série com o mesmo tmdb não se misturam.
+        val cat = listOf(Triple(27205, false, 53536), Triple(27205, false, null), Triple(27205, true, null), Triple(1396, true, 999))
+        val k = InfoExterna.simklConhecidos(cat, daBib)
+        assertEquals(53536, k["F27205"]); assertNull(k["S27205"])
+        assertEquals(11121, k["S1396"])   // a biblioteca da pessoa vale mais que o guardado
+        assertEquals(1727566, k[InfoExterna.chaveTmdb(872585, false)])
+    }
 }

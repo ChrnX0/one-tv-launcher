@@ -80,4 +80,8 @@
     <string name="cruz_pendrive">USB メモリ: %1$s</string>
     <string name="casa_fora_titulo">Home Assistant に接続できません</string>
     <string name="casa_fora_texto">サーバーの電源が入っているか確認してください。テレビは数秒ごとに自動で再接続します。</string>
+    <string name="cruz_barra_ilha">アイランド</string>
+    <string name="cruz_canto_no_ar">放送中</string>
+    <string name="cruz_canto_buscar">検索</string>
+    <string name="cruz_canto_buscar_txt">▲ で検索のあるバーを開く</string>
 </resources>

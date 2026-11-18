@@ -108,6 +108,9 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         const val COR_SUB = 0xFFE2D8CF.toInt()
     }
 
+    /** Quanto os ícones se mexem (MovimentoAdaptativo); quem usa decide pelo aparelho e pelos quadros medidos. */
+    var nivel: MovimentoAdaptativo.Nivel = MovimentoAdaptativo.Nivel.COMPLETO
+        set(v) { if (field != v) { field = v; posicionar(animar = false) } }
     var aoSubirTopo: (() -> Unit)? = null
     /** Andou com uma seta (para a arte deslizar ao contrário: paralaxe, onda 3). Não vem na HOME nem na borda. */
     var aoPasso: ((CruzLogica.Tecla) -> Unit)? = null
@@ -553,6 +556,8 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         val focada = hasFocus() || isFocused
         val semMovimento = semAnimacao()
         semMov = semMovimento   // lido por [mover] em cada view: uma leitura do ajuste por arrumação, não ~40
+        val nivelAgora = if (semMovimento) MovimentoAdaptativo.Nivel.PARADO else nivel
+        val descEsc = MovimentoAdaptativo.descansoEscolhido(nivelAgora)
         for ((j, v) in viewsCat.withIndex()) {
             val k = j - f
             val cx = when {
@@ -563,8 +568,10 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             val visivel = k != 0 && cx > 30f && cx < TELA_L - 40f
             mover(v, dp(cx - 75f), dp(LINHA - CAT_A / 2f), if (visivel) 1f else 0f, 1f, animar, onda(kotlin.math.abs(k)))
             // As categorias dos lados tocam a animação delas de vez em quando, uma de cada vez (atraso pela posição).
+            // Quanto: MovimentoAdaptativo (em ciclo, uma vez ao chegar, ou nada), conforme o aparelho aguenta.
+            val descCat = MovimentoAdaptativo.descansoCategoria(nivelAgora)
             ((v as? ViewGroup)?.getChildAt(0) as? ImageView)?.drawable.let { it as? IconeCruz }
-                ?.animar(visivel && focada && !semMovimento, IconeCruz.DESCANSO_CATEGORIA_MS, 2000L + j * 1900L)
+                ?.animar(visivel && focada && descCat != null, descCat ?: IconeCruz.DESCANSO_CATEGORIA_MS, MovimentoAdaptativo.atrasoCategoria(nivelAgora, j))
         }
         for ((j, lista) in viewsItem.withIndex()) {
             val k = j - f
@@ -595,7 +602,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
                 // Ícones "Linha" (IconeCruz): o escolhido toca a animação dele (a cor é de cada ícone, sempre).
                 val aceso = rel == 0 && focada
                 if (iv.icone.isActivated != aceso) iv.icone.isActivated = aceso
-                (iv.icone.drawable as? IconeCruz)?.animar(aceso && !semMovimento, atraso = if (animar) ICONE_ESPERA_MS else 0L)
+                (iv.icone.drawable as? IconeCruz)?.animar(aceso && descEsc != null, descEsc ?: IconeCruz.DESCANSO_ESCOLHIDO_MS, if (animar) ICONE_ESPERA_MS else 0L)
                 iv.sub.alpha = if (rel == 0) 1f else 0f
             }
         }

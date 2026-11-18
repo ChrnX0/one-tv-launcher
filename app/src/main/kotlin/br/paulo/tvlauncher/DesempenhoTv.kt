@@ -26,13 +26,35 @@ object DesempenhoTv {
 
     fun criou() { abriuEm = SystemClock.uptimeMillis() }
 
+    // ---- juiz do movimento (MovimentoAdaptativo, 18/11/2026): rodadas de quadros; pesada = a HOME desce um degrau.
+    /** O que fazer quando uma rodada sai pesada (roda NESTA thread de quadros: quem põe aqui manda para a tela). */
+    @Volatile var aoPesado: (() -> Unit)? = null
+    /** Acima disto (ms) o quadro conta como lento: duas batidas da tela perdidas (ver MovimentoAdaptativo.limiteQuadroMs). */
+    @Volatile var limiteMs = MovimentoAdaptativo.limiteQuadroMs(60f)
+    @Volatile private var contarDesde = 0L
+    private var rodada = 0
+    private var lentos = 0
+
+    private fun julgar(ms: Double) {
+        val acao = aoPesado ?: return
+        if (SystemClock.uptimeMillis() < contarDesde) return   // montar a tela não conta
+        rodada++
+        if (ms > limiteMs) lentos++
+        if (rodada < MovimentoAdaptativo.AMOSTRA) return
+        val pesada = MovimentoAdaptativo.pesado(lentos, rodada)
+        rodada = 0; lentos = 0
+        if (pesada) acao()
+    }
+
     fun ligar(a: Activity) {
         if (ouvinte != null) return
         val app = a.applicationContext
+        contarDesde = SystemClock.uptimeMillis() + MovimentoAdaptativo.IGNORAR_INICIO_MS
         val o = Window.OnFrameMetricsAvailableListener { _, m, _ ->
             CompatibilidadeTv.quadroDaHome(app)   // relatório de compatibilidade: 1º quadro depois da tela acender
             val ms = m.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000.0
             val abriu = abriuEm
+            julgar(ms)
             synchronized(trava) {
                 parcial.quadro(ms)
                 if (abriu != 0L) { abriuEm = 0L; parcial.abertura((SystemClock.uptimeMillis() - abriu).toInt()) }

@@ -115,4 +115,5 @@
     <string name="elv_ss_dia_util">es ein Werktag ist</string>
     <string name="elv_ss_perfil">das Profil %1$s ist</string>
     <string name="elv_ss_det">◀ ▶ ändern die Bedingung</string>
+    <string name="extras_ABERTURA_PRONTA">Intro überspringen (IntroDB): bei Episoden fragt der Fernseher den Community-Dienst IntroDB, wo das Intro ist (er sendet die Episode, nie Ihr Konto); aus: nur von Ihnen markierte Intros</string>
 </resources>

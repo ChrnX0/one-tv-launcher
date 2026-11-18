@@ -1,5 +1,7 @@
 // Painel em fr (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Não perturbe (avisos esperam durante filme, madrugada ou visita)":"Ne pas déranger (les avis attendent pendant un film, la nuit ou avec des invités)",
+"Pular abertura (IntroDB: pergunta onde fica a abertura do episódio)":"Passer le générique (IntroDB : demande où est le générique de l'épisode)",
 "Levar para uma TV nova":"Transférer vers une nouvelle TV",
 "Na TV nova, abra Configurações › Sistema › Trazer de outra TV (na primeira vez, o botão está na tela do QR). Leia o QR que aparece nela ou digite o endereço e o código. Vão as configurações, o PIN, os canais e a lista de apps, cifrados só para aquela TV; lá os apps voltam em fila, pela Play Store.":"Sur la nouvelle TV, ouvrez Paramètres › Système › Importer d'une autre TV (la première fois, le bouton est sur l'écran du QR). Scannez le QR affiché ou tapez l'adresse et le code. Réglages, PIN, chaînes et liste d'applis partent, chiffrés uniquement pour cette TV ; là-bas les applis reviennent en file, via le Play Store.",
 "Endereço e código da TV nova":"Adresse et code de la nouvelle TV",

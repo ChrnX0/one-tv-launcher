@@ -80,4 +80,8 @@
     <string name="cruz_pendrive">U 盘：%1$s</string>
     <string name="casa_fora_titulo">Home Assistant 无响应</string>
     <string name="casa_fora_texto">请确认它的服务器已开启。电视会每隔几秒自动重试。</string>
+    <string name="cruz_barra_ilha">岛</string>
+    <string name="cruz_canto_no_ar">正在播出</string>
+    <string name="cruz_canto_buscar">搜索</string>
+    <string name="cruz_canto_buscar_txt">▲ 打开带搜索的栏</string>
 </resources>

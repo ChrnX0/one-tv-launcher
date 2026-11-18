@@ -115,4 +115,5 @@
     <string name="elv_ss_dia_util">for dia útil</string>
     <string name="elv_ss_perfil">o perfil for %1$s</string>
     <string name="elv_ss_det">◀ ▶ trocam a condição</string>
+    <string name="extras_ABERTURA_PRONTA">Saltar genérico (IntroDB): nos episódios, a TV pergunta ao serviço comunitário IntroDB onde fica o genérico (envia qual episódio, nunca a sua conta); desligado, só os genéricos que marcou</string>
 </resources>

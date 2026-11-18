@@ -115,4 +115,5 @@
     <string name="elv_ss_dia_util">工作日</string>
     <string name="elv_ss_perfil">个人资料为 %1$s</string>
     <string name="elv_ss_det">◀ ▶ 切换条件</string>
+    <string name="extras_ABERTURA_PRONTA">跳过片头（IntroDB）：播放剧集时，电视向社区服务 IntroDB 查询片头位置（只发送剧集，从不发送你的账户）；关闭后只用你标记的片头</string>
 </resources>

@@ -5,6 +5,10 @@ O texto completo de cada licença está no endereço indicado.
 
 — Bibliotecas —
 
+python-holidays, do projeto Vacanza (só os dados: a tabela de feriados nacionais em assets/feriados)
+  https://github.com/vacanza/holidays
+  Licença MIT.
+
 LibADB Android, de Muntashir Al-Islam
   https://github.com/MuntashirAkon/libadb-android
   Licença dupla GPL-3.0-or-later ou Apache-2.0; este launcher usa sob a Apache-2.0.
