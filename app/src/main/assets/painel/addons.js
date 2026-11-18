@@ -37,6 +37,7 @@ async function carregarAddons() {
   if (!r.addons.length) {
     lista.appendChild(Object.assign(document.createElement('p'), { className: 'aviso-curto', textContent: 'Nenhum addon instalado.' }));
   }
+  mostrarSugeridos(r.sugeridos || []);
   for (const a of r.addons) {
     const linha = document.createElement('p');
     const nome = document.createElement('strong');
@@ -60,24 +61,50 @@ async function carregarAddons() {
   }
 }
 
+/**
+ * Lista curada (18/11/2026): add-ons que conferimos e funcionam na TV. "Instalar" faz o mesmo que colar o endereço
+ * (aceite dos termos + PIN). Nome, texto e endereço vêm da TV: só por textContent.
+ */
+function mostrarSugeridos(lista) {
+  const caixa = $('sugeridosAddons');
+  if (!caixa) return;
+  caixa.replaceChildren();
+  caixa.hidden = !lista.length;
+  if (!lista.length) return;
+  caixa.appendChild(Object.assign(document.createElement('h3'), { textContent: 'Recomendados' }));
+  for (const s of lista) {
+    const linha = document.createElement('p');
+    const nome = Object.assign(document.createElement('strong'), { textContent: s.nome });
+    const det = Object.assign(document.createElement('span'), { className: 'aviso-curto', textContent: s.texto ? ` · ${s.texto}` : '' });
+    const botao = Object.assign(document.createElement('button'), { type: 'button', className: 'botao-secundario', textContent: 'Instalar' });
+    botao.addEventListener('click', () => instalarAddon(s.url));
+    linha.append(nome, det, ' ', botao);
+    caixa.appendChild(linha);
+  }
+}
+
+/** Instala [url] com aceite + PIN (formulário e lista curada). */
+async function instalarAddon(url) {
+  const status = $('statusAddons');
+  if (!$('aceiteAddons').checked) { mostrar(status, MOTIVO_ADDON.SEM_ACEITE); $('aceiteAddons').focus(); return; }
+  mostrar(status, '');
+  const fazer = async () => {
+    try { return await chamar('POST', '/api/addons/instalar', { url, aceite: true }); }
+    catch (e) { if (e instanceof PrecisaPin) throw e; throw new Error(erroAddon(e)); }
+  };
+  try {
+    const r = await confirmar('Instalar addon?', TERMOS_ADDON, 'Instalar', fazer, false);
+    if (r) { $('urlAddon').value = ''; mostrar(status, `Instalado: ${r.instalado}. Aparece na TV no card Addons.`); carregarAddons(); }
+  } catch (e) { mostrar(status, erroAddon(e)); }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const form = $('formAddon');
   if (!form) return;
-  form.addEventListener('submit', async (ev) => {
+  form.addEventListener('submit', (ev) => {
     ev.preventDefault();
-    const status = $('statusAddons');
     const url = $('urlAddon').value.trim();
-    if (!url) return;
-    if (!$('aceiteAddons').checked) { mostrar(status, MOTIVO_ADDON.SEM_ACEITE); return; }
-    mostrar(status, '');
-    const fazer = async () => {
-      try { return await chamar('POST', '/api/addons/instalar', { url, aceite: true }); }
-      catch (e) { if (e instanceof PrecisaPin) throw e; throw new Error(erroAddon(e)); }
-    };
-    try {
-      const r = await confirmar('Instalar addon?', TERMOS_ADDON, 'Instalar', fazer, false);
-      if (r) { $('urlAddon').value = ''; mostrar(status, `Instalado: ${r.instalado}. Aparece na TV no card Addons.`); carregarAddons(); }
-    } catch (e) { mostrar(status, erroAddon(e)); }
+    if (url) instalarAddon(url);
   });
 });
 

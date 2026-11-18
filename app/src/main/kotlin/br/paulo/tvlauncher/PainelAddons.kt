@@ -33,6 +33,12 @@ object PainelAddons {
                     .put("catalogos", a.m.catalogos.size))
             }
         })
+        // Lista curada (18/11/2026): o que ainda não está instalado, com o texto no idioma da TV.
+        .put("sugeridos", JSONArray().apply {
+            AddonsTv.sugeridos(app).forEach { s ->
+                put(JSONObject().put("id", s.e.id).put("nome", s.nome).put("texto", s.texto).put("url", s.e.url))
+            }
+        })
 
     fun rotear(app: Context, metodo: String, rota: String, corpo: JSONObject?, elevada: Boolean, ip: String): Pair<Int, JSONObject>? {
         val get = metodo == "GET"; val post = metodo == "POST"

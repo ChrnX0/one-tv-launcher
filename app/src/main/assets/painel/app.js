@@ -262,7 +262,12 @@ function aplicarPapel(e) {
     b.hidden = paginasDoPapel.length > 0 && !paginasDoPapel.includes(b.dataset.aba);
 }
 
+/** Links que abrem uma página já num cartão (QR "Adicionar add-on" da TV, 18/11/2026): nome -> [página, id do cartão]. */
+const ANCORAS = { addons: ['tvfilmes', 'cartaoAddons'] };
+
 function mudarAba(nome, historico = true) {
+  const ancora = ANCORAS[nome];
+  if (ancora) nome = ancora[0];
   nome = APELIDOS[nome] || nome;
   if (paginasDoPapel.length && !paginasDoPapel.includes(nome)) nome = paginasDoPapel[0];
   if (!nome || !PAGINAS[nome] || !$(idDaAba(nome))) nome = 'inicio';
@@ -285,7 +290,8 @@ function mudarAba(nome, historico = true) {
     document.dispatchEvent(new CustomEvent('aba', { detail: antiga }));
   }
   if (historico && location.hash !== '#' + nome) history.pushState(null, '', '#' + nome);
-  window.scrollTo(0, 0);
+  const cartao = ancora && nome === ancora[0] ? $(ancora[1]) : null;
+  if (cartao) requestAnimationFrame(() => cartao.scrollIntoView({ block: 'start' })); else window.scrollTo(0, 0);
 }
 // Um ouvinte só, no documento: vale também para os botões criados depois (a tela "Mais", os atalhos do Início).
 document.addEventListener('click', (ev) => {

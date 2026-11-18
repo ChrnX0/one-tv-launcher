@@ -507,6 +507,7 @@ traduzirPainelCom({T:{
 "IPs dos celulares: 192.168.1.20, 192.168.1.21":"スマホのIP:192.168.1.20、192.168.1.21",
 "Instalando na TV…":"テレビにインストール中…",
 "Instalar":"インストール",
+"Recomendados":"おすすめ",
 "Instalar APK…":"APKをインストール…",
 "Instalar como app (https)":"アプリとしてインストール(https)",
 "Internet por app":"アプリごとのインターネット",

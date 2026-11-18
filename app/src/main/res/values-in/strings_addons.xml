@@ -3,7 +3,7 @@
 <resources>
     <string name="ad_titulo">Add-on</string>
     <string name="ad_destaque">Film dan serial dari add-on Anda</string>
-    <string name="ad_vazio">Belum ada add-on. Tambahkan di panel web (Setelan, Add-on). Di sini hanya video tautan langsung (HTTP) yang diputar: torrent dan P2P tidak didukung.</string>
+    <string name="ad_vazio">Belum ada addon. Pilih yang direkomendasikan di bawah atau tambahkan lewat alamatnya. Di sini hanya video dari tautan langsung (HTTP) yang diputar: torrent dan P2P tidak diterima.</string>
     <string name="ad_resumo">Katalog dari add-on Anda. Add-on dibuat pihak ketiga: yang memasang add-on bertanggung jawab atas isinya.</string>
     <string name="ad_buscar">Cari</string>
     <string name="ad_buscar_dica">Nama film atau serial</string>
@@ -20,9 +20,34 @@
     <string name="ad_sem_fontes">Tidak ada sumber yang bisa diputar di sini. Sofaly hanya memutar video tautan langsung (HTTP).</string>
     <string name="ad_fontes_resumo">Pilih sumber</string>
     <string name="ad_dica_voltar">kembali</string>
-    <string name="ad_cfg_det">Add-on terpasang. Untuk menambah, gunakan panel web.</string>
-    <string name="ad_cfg_como">Untuk menambah add-on, buka panel web TV di ponsel atau komputer, buka Setelan, Add-on, tempel alamat yang berakhiran manifest.json, lalu konfirmasi dengan PIN.</string>
+    <string name="ad_cfg_det">Addon terpasang. Pilih untuk menambah atau menghapus.</string>
     <string name="ad_cfg_remover_qual">Hapus add-on yang mana?</string>
     <string name="ad_cfg_remover">%1$s akan dihapus dari TV ini.</string>
     <string name="ad_cfg_remover_sim">Hapus</string>
+    <string name="ad_add_titulo">Tambah addon</string>
+    <string name="ad_add_item">Tambah addon</string>
+    <string name="ad_add_texto">Arahkan kamera ponsel ke kode: panel TV terbuka siap untuk menempel alamat addon. Atau ketik di sini.</string>
+    <string name="ad_add_qr">Atau buka %1$s di ponsel (TV dan film, Addon)</string>
+    <string name="ad_add_sem_painel">Panel web mati, jadi kode untuk ponsel tidak muncul. Ketik alamat di sini atau nyalakan panel di Setelan.</string>
+    <string name="ad_add_digitar">Ketik alamat</string>
+    <string name="ad_add_instalar">Pasang</string>
+    <string name="ad_add_termos_titulo">Sebelum memasang</string>
+    <string name="ad_add_termos">Addon dibuat oleh pihak ketiga. Sofaly tidak membuat, menghosting, atau memeriksa apa yang ditampilkan. Yang memasang addon bertanggung jawab atas isinya dan atas hak untuk menontonnya. Sofaly hanya memutar video dari tautan langsung: sumber torrent dan P2P diabaikan.</string>
+    <string name="ad_add_aceito">Saya setuju</string>
+    <string name="ad_add_ok">%1$s terpasang. Katalognya ada di Addon.</string>
+    <string name="ad_recusa_p2p">Addon ini memakai torrent/P2P. TV hanya menerima addon dengan video dari tautan langsung (HTTP).</string>
+    <string name="ad_recusa_adulto">Addon ditandai sebagai konten dewasa: tidak diterima.</string>
+    <string name="ad_recusa_configurar">Addon ini harus diatur dulu. Atur di situsnya lalu gunakan alamat yang diberikan.</string>
+    <string name="ad_recusa_sem_recurso">Addon ini tidak menyediakan katalog, info, video, atau subtitle.</string>
+    <string name="ad_recusa_invalido">Alamat ini tidak berisi addon yang valid (manifest.json).</string>
+    <string name="ad_recusa_endereco">Alamat tidak valid. Gunakan tautan yang berakhiran manifest.json.</string>
+    <string name="ad_recusa_cheio">Batas addon tercapai. Hapus satu untuk memasang yang lain.</string>
+    <string name="ad_recusa_sem_rede">Addon tidak menjawab. Periksa alamat lalu coba lagi.</string>
+    <string name="ad_recusa_sem_aceite">Setujui ketentuan untuk memasang.</string>
+    <string name="ad_sug_secao">Direkomendasikan</string>
+    <string name="ad_sug_streaming">Apa yang ada di Netflix, Disney+, Max, Prime Video, dan lainnya. Pilih judul untuk melihat tempat menontonnya.</string>
+    <string name="ad_sug_tmdb">Populer, sedang tren, dan per tahun, dari The Movie Database.</string>
+    <string name="ad_sug_mubi">Film baru dan klasik dari MUBI.</string>
+    <string name="ad_sug_kitsu">Katalog dan episode anime dari Kitsu.</string>
+    <string name="ad_sug_animeseason">Anime per musim dan per tahun.</string>
 </resources>

@@ -3,7 +3,7 @@
 <resources>
     <string name="ad_titulo">Addons</string>
     <string name="ad_destaque">Films et séries de vos addons</string>
-    <string name="ad_vazio">Aucun addon pour l\'instant. Ajoutez-en un dans le panneau web (Réglages, Addons). Seules les vidéos en lien direct (HTTP) sont lues ici : torrent et P2P ne sont pas pris en charge.</string>
+    <string name="ad_vazio">Aucun addon pour l’instant. Choisissez-en un recommandé ci-dessous ou ajoutez-en un par son adresse. Seule la vidéo par lien direct (HTTP) est lue ici : torrent et P2P ne sont pas acceptés.</string>
     <string name="ad_resumo">Catalogues de vos addons. Les addons sont faits par des tiers : qui en installe un est responsable de son contenu.</string>
     <string name="ad_buscar">Rechercher</string>
     <string name="ad_buscar_dica">Nom du film ou de la série</string>
@@ -20,9 +20,34 @@
     <string name="ad_sem_fontes">Aucune source lisible ici. Sofaly ne lit que les vidéos en lien direct (HTTP).</string>
     <string name="ad_fontes_resumo">Choisissez une source</string>
     <string name="ad_dica_voltar">retour</string>
-    <string name="ad_cfg_det">Addons installés. Pour en ajouter, utilisez le panneau web.</string>
-    <string name="ad_cfg_como">Pour ajouter un addon, ouvrez le panneau web du téléviseur sur votre téléphone ou ordinateur, allez dans Réglages, Addons, collez l\'adresse qui se termine par manifest.json et confirmez avec le PIN.</string>
+    <string name="ad_cfg_det">Addons installés. Choisissez pour ajouter ou supprimer.</string>
     <string name="ad_cfg_remover_qual">Quel addon retirer ?</string>
     <string name="ad_cfg_remover">%1$s sera retiré de ce téléviseur.</string>
     <string name="ad_cfg_remover_sim">Retirer</string>
+    <string name="ad_add_titulo">Ajouter un addon</string>
+    <string name="ad_add_item">Ajouter un addon</string>
+    <string name="ad_add_texto">Visez le code avec votre téléphone : le panneau de la TV s’ouvre prêt à coller l’adresse de l’addon. Ou saisissez-la ici.</string>
+    <string name="ad_add_qr">Ou ouvrez %1$s sur le téléphone (TV et films, Addons)</string>
+    <string name="ad_add_sem_painel">Le panneau web est désactivé, le code pour le téléphone n’apparaît donc pas. Saisissez l’adresse ici ou activez le panneau dans les Paramètres.</string>
+    <string name="ad_add_digitar">Saisir l’adresse</string>
+    <string name="ad_add_instalar">Installer</string>
+    <string name="ad_add_termos_titulo">Avant d’installer</string>
+    <string name="ad_add_termos">Les addons sont créés par des tiers. Sofaly ne crée, n’héberge ni ne vérifie ce qu’ils affichent. La personne qui installe un addon est responsable de son contenu et de son droit de le regarder. Sofaly ne lit que la vidéo par lien direct : les sources torrent et P2P sont ignorées.</string>
+    <string name="ad_add_aceito">J’accepte</string>
+    <string name="ad_add_ok">%1$s est installé. Ses catalogues sont dans Addons.</string>
+    <string name="ad_recusa_p2p">Cet addon utilise le torrent/P2P. La TV n’accepte que les addons avec vidéo par lien direct (HTTP).</string>
+    <string name="ad_recusa_adulto">Addon marqué comme contenu adulte : refusé.</string>
+    <string name="ad_recusa_configurar">Cet addon doit d’abord être configuré. Configurez-le sur son site et utilisez l’adresse qu’il fournit.</string>
+    <string name="ad_recusa_sem_recurso">Cet addon n’offre ni catalogue, ni fiche, ni vidéo, ni sous-titres.</string>
+    <string name="ad_recusa_invalido">Cette adresse ne contient pas d’addon valide (manifest.json).</string>
+    <string name="ad_recusa_endereco">Adresse invalide. Utilisez le lien qui se termine par manifest.json.</string>
+    <string name="ad_recusa_cheio">Limite d’addons atteinte. Supprimez-en un pour en installer un autre.</string>
+    <string name="ad_recusa_sem_rede">L’addon n’a pas répondu. Vérifiez l’adresse et réessayez.</string>
+    <string name="ad_recusa_sem_aceite">Acceptez les conditions pour installer.</string>
+    <string name="ad_sug_secao">Recommandés</string>
+    <string name="ad_sug_streaming">Ce qu’il y a sur Netflix, Disney+, Max, Prime Video et plus. Choisissez un titre pour voir où le regarder.</string>
+    <string name="ad_sug_tmdb">Populaires, tendances et par année, de The Movie Database.</string>
+    <string name="ad_sug_mubi">Films récents et classiques de MUBI.</string>
+    <string name="ad_sug_kitsu">Catalogue et épisodes d’anime de Kitsu.</string>
+    <string name="ad_sug_animeseason">Anime par saison et par année.</string>
 </resources>
