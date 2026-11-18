@@ -847,4 +847,5 @@ AS\\Peliculas).</string>
         <item>O</item>
         <item>NO</item>
     </string-array>
+    <string name="vod_trocar_versao">%1$s · sigue desde aquí</string>
 </resources>

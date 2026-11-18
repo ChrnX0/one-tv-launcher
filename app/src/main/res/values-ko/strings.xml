@@ -841,4 +841,5 @@ AS\\Movies).</string>
         <item>서</item>
         <item>북서</item>
     </string-array>
+    <string name="vod_trocar_versao">%1$s · 여기서 이어서</string>
 </resources>

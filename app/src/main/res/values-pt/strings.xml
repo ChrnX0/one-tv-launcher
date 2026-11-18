@@ -882,4 +882,5 @@
     <string name="info_qps">qps</string>
     <string name="info_mono">mono</string>
     <string name="info_estereo">estéreo</string>
+    <string name="vod_trocar_versao">%1$s · continua daqui</string>
 </resources>

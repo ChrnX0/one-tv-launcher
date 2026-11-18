@@ -76,6 +76,22 @@ class VodActivity : Activity() {
         private const val LEGENDA_TRADUZIR = "legenda_traduzir"   // ideia 90: sem legenda no idioma da TV, traduzir a inglesa
         private val ATRASOS = longArrayOf(-3000, -2000, -1500, -1000, -500, 0, 500, 1000, 1500, 2000, 3000)
 
+        // A mesma obra na outra versão (dublada/legendada), que na lista de IPTV é OUTRO arquivo (18/11/2026).
+        private const val EXTRA_ALT_FONTE = "alt_fonte"
+        private const val EXTRA_ALT_ID = "alt_id"
+        private const val EXTRA_ALT_EXT = "alt_ext"
+        private const val EXTRA_ALT_TITULO = "alt_titulo"
+        private const val EXTRA_ALT_VERSAO = "alt_versao"
+
+        /**
+         * "Áudios que não mudam" (Paulo, 18/11/2026): visto na Sala, os filmes da lista têm UMA faixa de áudio só ("Duna":
+         * AAC estéreo; "Sem Deixar Vestígios LEG": inglês). O dublado e o legendado são arquivos diferentes. Com isto o ▼
+         * do player oferece a outra versão e troca na hora, no mesmo ponto do filme.
+         */
+        fun comOutraVersao(i: Intent, fonteId: String, id: String, extensao: String, titulo: String, versao: Idioma.Versao): Intent =
+            i.putExtra(EXTRA_ALT_FONTE, fonteId).putExtra(EXTRA_ALT_ID, id).putExtra(EXTRA_ALT_EXT, extensao)
+                .putExtra(EXTRA_ALT_TITULO, titulo).putExtra(EXTRA_ALT_VERSAO, versao.name)
+
         /** Põe no Intent o que a busca de legenda precisa (sem nada, a busca usa o título da tela). */
         fun comBusca(i: Intent, b: LegendaExterna.Busca?): Intent = if (b == null) i else i.putExtra(EXTRA_LEG_NOME, b.nome)
             .putExtra(EXTRA_LEG_ANO, b.ano ?: 0).putExtra(EXTRA_LEG_TEMP, b.temporada ?: 0).putExtra(EXTRA_LEG_EP, b.episodio ?: 0).putExtra(EXTRA_TMDB, b.tmdb ?: 0)
@@ -91,8 +107,8 @@ class VodActivity : Activity() {
         private const val ESCONDER_MS = 4_000L
 
         fun abrir(ctx: Context, tipo: String, fonteId: String, id: String, extensao: String, titulo: String, doComeco: Boolean = false,
-                  busca: LegendaExterna.Busca? = null) {
-            ctx.startActivity(comBusca(intent(ctx, tipo, fonteId, id, extensao, titulo, doComeco), busca))
+                  busca: LegendaExterna.Busca? = null, mexer: (Intent) -> Intent = { it }) {
+            ctx.startActivity(mexer(comBusca(intent(ctx, tipo, fonteId, id, extensao, titulo, doComeco), busca)))
         }
 
         /** Mídia da rede (07/11/2026): toca um endereço da rede (http do DLNA, smb://, jellyfin://, plex://, webdav://; ver FontesMidia). */
@@ -140,19 +156,22 @@ class VodActivity : Activity() {
                 // Aberto de fora de uma tela (pedido do catálogo de ações, 14/11/2026): o Android exige tarefa nova.
                 .apply { if (ctx !is Activity) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
 
-        /** Chave da posição salva (a mesma que Filme.chave / Episodio.chave usam). */
         /**
-         * Trailer no app do YouTube (11/11/2026). Só links que o Vod.linkTrailer montou (youtube.com/watch?v=...).
-         * Sem o app do YouTube para TV, o Android escolhe quem abre o link.
+         * Trailer no app do YouTube (11/11/2026; 18/11/2026: TrailerTv). Aceita qualquer forma de link do YouTube
+         * (TrailerLink.codigo). Antes de abrir, avisa o processo principal (VigiaTrailer): VOLTAR ou o fim do trailer
+         * fecham o YouTube e devolvem esta ficha. Sem o app do YouTube para TV, o Android escolhe quem abre o link.
          */
         fun abrirTrailer(ctx: Context, link: String) {
-            if (!link.startsWith("https://www.youtube.com/watch?v=")) return
-            val i = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(link)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            val noApp = Intent(i).setPackage("com.google.android.youtube.tv")
-            runCatching { ctx.startActivity(noApp) }.recoverCatching { ctx.startActivity(i) }
+            val codigo = TrailerLink.codigo(link) ?: return
+            val i = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(TrailerLink.link(codigo))).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            val noApp = Intent(i).setPackage(TrailerLink.YOUTUBE_TV)
+            val temApp = runCatching { ctx.packageManager.getPackageInfo(TrailerLink.YOUTUBE_TV, 0) }.isSuccess
+            if (temApp) TrailerReceiver.avisar(ctx, (ctx as? Activity)?.javaClass?.name)
+            runCatching { ctx.startActivity(if (temApp) noApp else i) }.recoverCatching { ctx.startActivity(i) }
                 .onFailure { android.widget.Toast.makeText(ctx, R.string.trailer_sem_app, android.widget.Toast.LENGTH_SHORT).show() }
         }
 
+        /** Chave da posição salva (a mesma que Filme.chave / Episodio.chave usam). */
         fun chave(tipo: String, fonteId: String, id: String) = if (tipo == TIPO_EPISODIO) "$fonteId:e$id" else "$fonteId:f$id"
     }
 
@@ -904,6 +923,11 @@ class VodActivity : Activity() {
                 }
             }
         }
+        // A outra versão do filme (dublada/legendada): é outro arquivo, troca no mesmo ponto (18/11/2026).
+        outraVersao()?.let { (v, _) ->
+            val r = if (v == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
+            opcoes += Opcao(getString(R.string.vod_trocar_versao, getString(r))) { trocarVersao() }
+        }
         // Passada na TV (12/11): sem legenda ligada, nada da lista aparecia marcado na parte da legenda.
         val comLegenda = legendaArquivo != null || p.currentTracks.groups.any { it.type == C.TRACK_TYPE_TEXT && it.isSelected }
         opcoes += Opcao(semLegenda, marcada = !comLegenda) {
@@ -998,6 +1022,41 @@ class VodActivity : Activity() {
         }
         Estilo.lista(this, getString(R.string.vod_faixas), opcoes.map { it.rotulo },
             opcoes.indices.filter { opcoes[it].marcada }) { i -> opcoes[i].aplicar() }
+    }
+
+    // ---------------------------------------------------------------- outra versão (dublada/legendada)
+
+    private fun outraVersao(): Pair<Idioma.Versao, String>? {
+        val id = intent.getStringExtra(EXTRA_ALT_ID)?.takeIf { it.isNotEmpty() } ?: return null
+        val v = intent.getStringExtra(EXTRA_ALT_VERSAO)?.let { n -> Idioma.Versao.entries.firstOrNull { it.name == n } } ?: return null
+        if (v == Idioma.Versao.DESCONHECIDA) return null
+        return v to id
+    }
+
+    /** Abre a outra versão no mesmo ponto e fecha esta. A escolha vira a preferência deste filme (as duas chaves). */
+    private fun trocarVersao() {
+        val (v, altId) = outraVersao() ?: return
+        val p = player ?: return
+        val pos = p.currentPosition
+        salvar()
+        val altFonte = intent.getStringExtra(EXTRA_ALT_FONTE).orEmpty()
+        val tipo = intent.getStringExtra(EXTRA_TIPO) ?: TIPO_FILME
+        val pref = if (v == Idioma.Versao.LEGENDADA) Idioma.Pref.ORIGINAL else Idioma.Pref.DUBLADO
+        val chaves = listOf(chaveIdioma, chave(tipo, altFonte, altId)).distinct()
+        Fundo.rodar("trocar-versao") { chaves.forEach { IdiomaPlayer.lembrar(this, it, pref) } }
+        val atual = intent.getStringExtra(EXTRA_LEG_VERSAO)?.let { n -> Idioma.Versao.entries.firstOrNull { it.name == n } } ?: Idioma.Versao.DESCONHECIDA
+        val nova = Intent(intent)
+            .putExtra(EXTRA_FONTE, altFonte).putExtra(EXTRA_ID, altId)
+            .putExtra(EXTRA_EXT, intent.getStringExtra(EXTRA_ALT_EXT).orEmpty())
+            .putExtra(EXTRA_TITULO, intent.getStringExtra(EXTRA_ALT_TITULO).orEmpty())
+            .putExtra(EXTRA_LEG_VERSAO, v.name)
+            .putExtra("inicio_ms", pos).putExtra("do_comeco", false)
+            .putExtra(EXTRA_ALT_FONTE, intent.getStringExtra(EXTRA_FONTE).orEmpty()).putExtra(EXTRA_ALT_ID, intent.getStringExtra(EXTRA_ID).orEmpty())
+            .putExtra(EXTRA_ALT_EXT, intent.getStringExtra(EXTRA_EXT).orEmpty())
+            .putExtra(EXTRA_ALT_TITULO, intent.getStringExtra(EXTRA_TITULO).orEmpty()).putExtra(EXTRA_ALT_VERSAO, atual.name)
+        nova.removeExtra(EXTRA_IDIOMA)   // filme: a chave de idioma é a do próprio arquivo
+        startActivity(nova)
+        finish()
     }
 
     // ---------------------------------------------------------------- sessão junto (degrau 4, SessaoJunto.kt)

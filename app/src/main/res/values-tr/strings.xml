@@ -844,4 +844,5 @@ AS\\Filmler).</string>
         <item>B</item>
         <item>KB</item>
     </string-array>
+    <string name="vod_trocar_versao">%1$s · buradan devam</string>
 </resources>

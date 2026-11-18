@@ -861,8 +861,8 @@ class FilmesActivity : Activity() {
             primeiro = FichaAcoes.acao(this, getString(R.string.filmes_assistir), marca = "assistir") { tocar(f, doComeco = true) }
             FichaAcoes.adicionar(acoes, primeiro)
         }
-        // Trailer: o do servidor; sem ele, o do TMDB (chega com a ficha de fora).
-        (info?.trailer?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.linkTrailer?.takeIf { it.isNotEmpty() })?.let { link ->
+        // Trailer: o do TMDB (pelo id do filme) primeiro; o do servidor só sem ele (18/11/2026: o do IPTV às vezes é de outro filme).
+        TrailerLink.escolher(ext?.detalhe?.linkTrailer, info?.trailer)?.let { link ->
             FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.trailer), marca = "trailer") { VodActivity.abrirTrailer(this, link) })
         }
         // Ideia 84: elenco com foto e o que mais cada pessoa fez que está na lista.
@@ -1122,7 +1122,10 @@ class FilmesActivity : Activity() {
         if (paraHome) Fundo.rodar { PlayerArmazem.definirCapaHome(this, serie = false, poster = capa, cenas = cenas, ficha = fichaHome) }
         VodActivity.abrir(this, VodActivity.TIPO_FILME, f.fonteId, f.id, f.extensao, Vod.nomeLimpo(f.nome), doComeco,
             busca = LegendaExterna.Busca(LegendaExterna.nomeDeBusca(f.nome), f.ano,
-                tmdb = f.tmdb ?: externo?.takeIf { it.first === f }?.second?.tmdb, versao = Idioma.versao(f.nome, f.grupo)))
+                tmdb = f.tmdb ?: externo?.takeIf { it.first === f }?.second?.tmdb, versao = Idioma.versao(f.nome, f.grupo))) { i ->
+            // A outra versão (dublada/legendada) vai junto: o ▼ do player troca no mesmo ponto (18/11/2026).
+            outraVersao(f)?.let { o -> VodActivity.comOutraVersao(i, o.fonteId, o.id, o.extensao, Vod.nomeLimpo(o.nome), Idioma.versao(o.nome, o.grupo)) } ?: i
+        }
     }
 
     private fun botao(texto: String, marca: String, aoApertar: () -> Unit) = TextView(this).apply {

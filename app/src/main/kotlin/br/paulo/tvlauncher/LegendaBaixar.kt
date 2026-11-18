@@ -69,7 +69,7 @@ object LegendaBaixar {
 
     private class Resposta(val codigo: Int, val corpo: String)
 
-    private fun pedir(url: String, conta: Conta, corpo: String? = null, comToken: Boolean = false): Resposta {
+    private fun pedir(url: String, conta: Conta, corpo: String? = null, comToken: Boolean = false, saltos: Int = 1): Resposta {
         val c = URL(url).openConnection() as HttpURLConnection
         try {
             c.connectTimeout = 10_000; c.readTimeout = 20_000
@@ -84,6 +84,11 @@ object LegendaBaixar {
                 c.outputStream.use { it.write(corpo.toByteArray()) }
             }
             val codigo = c.responseCode
+            // A API redireciona (301) quando não gosta da ordem/forma dos parâmetros, e o login pode mandar para o
+            // servidor VIP: seguimos UMA vez, só para o próprio OpenSubtitles em https (antes virava "erro" na tela).
+            if (codigo in 300..399 && saltos > 0) {
+                LegendaExterna.redirecionamentoSeguro(c.getHeaderField("Location"))?.let { return pedir(it, conta, corpo, comToken, saltos - 1) }
+            }
             val fluxo = if (codigo in 200..299) c.inputStream else c.errorStream
             val texto = fluxo?.use { String(ler(it, 1_000_000)) }.orEmpty()
             return Resposta(codigo, texto)
@@ -102,9 +107,17 @@ object LegendaBaixar {
     /** [idioma]: o da TV (ideia 25); a ideia 90 pede a inglesa para traduzir. */
     fun buscar(ctx: Context, b: LegendaExterna.Busca, idioma: String = IdiomaPlayer.idiomaDaTv()): Result<List<LegendaExterna.Candidata>> = runCatching {
         val conta = contaEmUso(ctx) ?: throw Falha(ctx.getString(R.string.legenda_sem_conta))
-        val r = pedir(LegendaExterna.urlBusca(b, idioma), conta)
-        if (r.codigo !in 200..299) throw Falha(LegendaExterna.lerErro(r.corpo) ?: ctx.getString(R.string.legenda_erro))
-        LegendaExterna.lerBusca(r.corpo, idioma)
+        // 18/11/2026: id TMDB primeiro, depois nome + ano, depois só o nome (LegendaExterna.buscas). Para na primeira
+        // que acha; erro numa delas não esconde o resultado das outras, só aparece se nenhuma der certo.
+        var erro: Falha? = null
+        for (url in LegendaExterna.buscas(b, idioma)) {
+            val r = runCatching { pedir(url, conta) }.getOrElse { erro = erro ?: Falha(ctx.getString(R.string.legenda_erro)); continue }
+            if (r.codigo !in 200..299) { erro = erro ?: Falha(LegendaExterna.lerErro(r.corpo) ?: ctx.getString(R.string.legenda_erro)); continue }
+            val lista = LegendaExterna.lerBusca(r.corpo, idioma)
+            if (lista.isNotEmpty()) return@runCatching lista
+        }
+        erro?.let { throw it }
+        emptyList()
     }
 
     /** Baixa a escolhida e guarda como a legenda deste vídeo. Devolve o arquivo .srt. */
@@ -201,16 +214,20 @@ object LegendaBaixar {
         return LegendaExterna.hash(t, inicio, fim)
     }
 
-    /** Já tentou a automática para este vídeo nos últimos 7 dias? (Falhar de novo a cada abertura gastaria o limite.) */
+    /**
+     * Já tentou a automática para este vídeo nos últimos 7 dias? (Falhar de novo a cada abertura gastaria o limite.)
+     * Chave "legauto2:" desde 18/11/2026: até ali TODA busca com nome de 2+ palavras falhava (o "%20"), e a marca antiga
+     * travaria por 7 dias justamente os filmes que já tinham sido tentados.
+     */
     fun tentouAuto(ctx: Context, chaveVideo: String): Boolean =
-        System.currentTimeMillis() - ctx.getSharedPreferences("player", Context.MODE_PRIVATE).getLong("legauto:$chaveVideo", 0) < 7L * 24 * 3_600_000
+        System.currentTimeMillis() - ctx.getSharedPreferences("player", Context.MODE_PRIVATE).getLong("legauto2:$chaveVideo", 0) < 7L * 24 * 3_600_000
 
     /**
      * Ideia 89: busca (pelo hash do arquivo, se der, e pelo nome) e baixa a melhor legenda no idioma da TV. Gasta um
      * download do limite diário. Bloqueia (rede).
      */
     fun automatica(ctx: Context, chaveVideo: String, url: String?, b: LegendaExterna.Busca): Result<Pair<File, Boolean>> = runCatching {
-        ctx.getSharedPreferences("player", Context.MODE_PRIVATE).edit().putLong("legauto:$chaveVideo", System.currentTimeMillis()).apply()
+        ctx.getSharedPreferences("player", Context.MODE_PRIVATE).edit().putLong("legauto2:$chaveVideo", System.currentTimeMillis()).apply()
         val hash = url?.let { runCatching { hashDoVideo(it) }.getOrNull() }
         val lista = buscar(ctx, b.copy(hash = hash)).getOrThrow()
         val c = LegendaExterna.escolherAuto(lista) ?: throw Falha(ctx.getString(R.string.legenda_nenhuma))

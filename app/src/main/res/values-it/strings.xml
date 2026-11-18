@@ -844,4 +844,5 @@ AS\\Film).</string>
         <item>O</item>
         <item>NO</item>
     </string-array>
+    <string name="vod_trocar_versao">%1$s · riprende da qui</string>
 </resources>

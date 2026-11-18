@@ -40,7 +40,12 @@ object LegendaExterna {
     data class Candidata(val arquivo: Long, val idioma: String, val nome: String, val baixadas: Int, val surdos: Boolean,
                          val bateHash: Boolean = false)
 
-    private fun cod(v: String) = URLEncoder.encode(v, "UTF-8").replace("+", "%20")
+    /**
+     * Espaço vira "+" (18/11/2026). Antes era "%20", e a API responde 301 para essa forma (conferido com curl: "query=sem%20deixar"
+     * -> 301 para "query=sem+deixar"). Como o redirecionamento não era seguido, TODA busca com nome de mais de uma palavra
+     * acabava em "Não consegui buscar a legenda" na Sala.
+     */
+    private fun cod(v: String) = URLEncoder.encode(v, "UTF-8")
 
     /**
      * Ideia 25: a legenda procurada é a do idioma da TV (2 letras, Idioma.idiomaDaTv). Português: Brasil e Portugal, como
@@ -65,6 +70,45 @@ object LegendaExterna {
         b.hash?.takeIf { it.matches(Regex("[0-9a-f]{16}")) }?.let { p["moviehash"] = it }
         p["query"] = b.nome.trim().lowercase()
         return "$BASE/subtitles?" + p.entries.joinToString("&") { "${it.key}=${cod(it.value)}" }
+    }
+
+    /**
+     * Busca pelo id TMDB (18/11/2026, Paulo: "legendas que não são achadas"). O nome que a lista de IPTV dá é o
+     * TRADUZIDO ("Duna: Parte Dois", "A Casa do Dragão"), e o OpenSubtitles indexa pelo original: a busca por nome
+     * voltava vazia. Com o id TMDB (o filme, ou a série-mãe no episódio) o acerto não depende do nome nem do ano da lista.
+     * Nulo sem id.
+     */
+    fun urlBuscaTmdb(b: Busca, idioma: String = "pt"): String? {
+        val id = b.tmdb?.takeIf { it > 0 } ?: return null
+        val p = sortedMapOf<String, String>()
+        if (b.eEpisodio) {
+            p["episode_number"] = b.episodio.toString(); p["parent_tmdb_id"] = id.toString()
+            p["season_number"] = b.temporada.toString(); p["type"] = "episode"
+        } else { p["tmdb_id"] = id.toString(); p["type"] = "movie" }
+        p["languages"] = idiomasBusca(idioma)
+        b.hash?.takeIf { it.matches(Regex("[0-9a-f]{16}")) }?.let { p["moviehash"] = it }
+        return "$BASE/subtitles?" + p.entries.joinToString("&") { "${it.key}=${cod(it.value)}" }
+    }
+
+    /**
+     * As buscas, da mais certeira para a mais larga, sem repetir: id TMDB; nome + ano; nome sem ano (o ano da lista de
+     * IPTV às vezes é o do lançamento no Brasil, um a mais que o do OpenSubtitles). Quem busca para na primeira com
+     * resultado (cada busca é uma ida à rede; o limite diário é só de download, a busca não gasta).
+     */
+    fun buscas(b: Busca, idioma: String = "pt"): List<String> = buildList {
+        urlBuscaTmdb(b, idioma)?.let { add(it) }
+        if (b.nome.isNotBlank()) {
+            add(urlBusca(b, idioma))
+            if (!b.eEpisodio && b.ano != null) add(urlBusca(b.copy(ano = null), idioma))
+        }
+    }.distinct()
+
+    /** Redirecionamento que pode ser seguido: só https e só para o próprio OpenSubtitles (a chave vai no cabeçalho). */
+    fun redirecionamentoSeguro(local: String?): String? {
+        val u = local?.trim()?.takeIf { it.isNotEmpty() } ?: return null
+        val absoluto = if (u.startsWith("/")) "https://api.opensubtitles.com$u" else u
+        val host = Regex("""^https://([^/:?#]+)""").find(absoluto)?.groupValues?.get(1)?.lowercase() ?: return null
+        return absoluto.takeIf { host == "opensubtitles.com" || host.endsWith(".opensubtitles.com") }
     }
 
     /**

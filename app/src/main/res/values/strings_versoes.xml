@@ -17,39 +17,26 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Radio and Podcasts redesigned like the home screen: shelves to the sides, items in a column, the chosen one large with useful details on several lines and the orange dot</item>
-        <item>“Now playing” always stays at the top, with the cover or logo, the time and how much is left</item>
-        <item>Radio: favorites (keys 1 to 9 play each one), recent, stations near you, from your country, by genre and from other countries with flags</item>
-        <item>Podcasts: Continue listening with a bar of how much you heard, new episodes, your podcasts with covers and, inside each one, episodes and “About”</item>
-        <item>The remote\'s ⏪ ⏩ and ⏯ work anywhere on the podcasts screen; hold OK for more options</item>
-        <item>A long piece of information, like the title of the last video, now ends in “…” and no longer pushes the others out; “Opened 0 minutes ago” became “Opened now”</item>
-        <item>Continue: the movie or series name shows without the list tag (“LEG”, “DUB”, “4K”)</item>
-        <item>Home: with Home Assistant offline, the screen says what happened and that it retries by itself, and Google Home stays at hand</item>
-        <item>After the screensaver, focus returns to the home screen, not to the top bar</item>
-        <item>Lighter navigation: the selected icon only starts its animation after the column stops moving</item>
-        <item>Settings › System › “How this TV is doing”: 7 measurements of the TV, with number and target</item>
-        <item>Live TV: hold ▲▼ to browse channel names without switching the video; release to switch once</item>
-        <item>Series: “Skip intro” button; the chosen subtitle is saved for each series</item>
-        <item>Search that forgives typos (“netflx” finds Netflix) and search inside settings</item>
-        <item>High contrast, audio description and subtitles for the deaf in Settings</item>
-        <item>Changed settings show “Undo” for 10 s; Settings › System › “Recent changes”</item>
-        <item>On the network: a movie folder becomes a catalog with clean titles and “S1 E2”</item>
-        <item>Panel: one-day invite for guests, backup recovery key and “Move to a new TV”</item>
-        <item>Stability fixes from a long debugging round</item>
+        <item>Online subtitles work again: the OpenSubtitles search failed for every title with more than one word (“Couldn’t search for subtitles”)</item>
+        <item>Subtitles are searched for the right movie: first by the movie or show ID, then by name and year, then by name only</item>
+        <item>Movies whose automatic subtitle failed will try again</item>
+        <item>Audio: the player’s ▼ switches to the movie’s dubbed or subtitled version at the same spot</item>
+        <item>Trailer: BACK closes YouTube and returns to the details page; when the trailer ends, the page comes back by itself</item>
+        <item>Trailer: the movie catalog’s trailer comes before the list’s (which is sometimes for another movie), and more link formats open</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>ouvir_radio</item>
-        <item>ouvir_podcasts</item>
-        <item>ouvir_teclas</item>
+        <item>player_legenda_internet</item>
+        <item>player_trocar_versao</item>
+        <item>player_trailer</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>New radio</item>
-        <item>New podcasts</item>
-        <item>Media keys</item>
+        <item>Online subtitles</item>
+        <item>Switch version</item>
+        <item>Trailer</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Opening Radio, do the shelves move sideways with ◀ ▶, does the playing station show at the top with logo and song, and does key 1 play the 1st favorite?</item>
-        <item>Opening Podcasts, does the half-heard episode show in Continue with the bar, and does OK resume where it stopped?</item>
-        <item>Listening to a podcast, does ⏪ go back 15 s and ⏩ forward 30 s, with the time at the top following?</item>
+        <item>In a movie, ▼ › “Search subtitles online” shows a list of subtitles?</item>
+        <item>In a movie with dubbed and subtitled versions, ▼ shows “Dubbed version · continues from here” (or subtitled) and switches at the same spot?</item>
+        <item>On the details page, Trailer opens the right trailer, and BACK closes YouTube and returns to the page?</item>
     </string-array>
 </resources>

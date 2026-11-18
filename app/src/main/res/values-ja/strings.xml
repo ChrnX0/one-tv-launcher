@@ -841,4 +841,5 @@ AS\\Movies）。</string>
         <item>西</item>
         <item>北西</item>
     </string-array>
+    <string name="vod_trocar_versao">%1$s · ここから続ける</string>
 </resources>
