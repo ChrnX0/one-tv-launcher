@@ -3,9 +3,9 @@
 name = "sofaly-carteiro"
 main = "src/index.js"
 compatibility_date = "2026-11-01"
-workers_dev = false   # só pelo domínio próprio (rota abaixo), quando sofaly.tv existir
+workers_dev = false   # só pelo domínio próprio (rota abaixo)
 
-# routes = [{ pattern = "carteiro.sofaly.tv", custom_domain = true }]
+routes = [{ pattern = "carteiro.sofaly.tv", custom_domain = true }]
 
 [vars]
 DESLIGADO = "0"   # "1" desliga tudo (as TVs seguem funcionando em casa e avisam o que ficou indisponível)
