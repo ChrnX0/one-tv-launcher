@@ -2826,7 +2826,7 @@ class MainActivity : Activity() {
             topMargin = dp(TOPO_PALCO + (ALTURA_TOPO - 40) / 2)
         })
         val canto = texto(18f, HomeCruz.COR_SUB, fonteUi).apply {
-            includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(ILHA_CANTO_MAX)
+            includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(ILHA_CANTO_MAX)   // até a 1ª arrumação
             gravity = Gravity.CENTER_VERTICAL
             setShadowLayer(dp(6).toFloat(), 0f, 0f, sombra)
             alpha = 0f
@@ -2835,6 +2835,13 @@ class MainActivity : Activity() {
             marginStart = dp(Grade.MARGEM); topMargin = dp(TOPO_PALCO)
         })
         ilhaPilula = pilula; ilhaExtra = extra; ilhaIcone = icone; ilhaBarras = barras; ilhaTexto = txt; ilhaTemp = temp; ilhaCanto = canto
+        // O canto vai até a pílula (visto na Sala, v463108: com largura fixa "No ar Canal 2 · Globo SP…" cortava cedo); a
+        // pílula cresce com um evento e o canto encolhe junto. Da direita para a esquerda (árabe), as contas espelham.
+        pilula.addOnLayoutChangeListener { v, l, _, r, _, _, _, _, _ ->
+            val rtl = raiz.layoutDirection == View.LAYOUT_DIRECTION_RTL
+            val alvo = BarraIlha.larguraCanto(dp(Grade.MARGEM), if (rtl) raiz.width - r else l, dp(20), dp(BarraIlha.CANTO_MIN_DP))
+            if (canto.maxWidth != alvo) v.post { canto.maxWidth = alvo }
+        }
         copiarTemp()
         // As pílulas da barra mudam por todo lado (timer a cada segundo, rádio, rede): a Ilha lê o estado delas a cada
         // arrumação da tela. Barato: monta um Estado pequeno e só mexe na pílula quando o evento muda.
@@ -2913,10 +2920,10 @@ class MainActivity : Activity() {
     }
 
     /** As linhas do canto, a partir dos itens já montados da cruz (os mesmos textos da linha de baixo de cada item). */
-    private fun montarCantos(assistir: List<HomeCruz.Item>, ouvir: List<HomeCruz.Item>, jogar: List<HomeCruz.Item>, temTv: Boolean) {
+    private fun montarCantos(assistir: List<HomeCruz.Item>, ouvir: List<HomeCruz.Item>, jogar: List<HomeCruz.Item>, tvTexto: String?) {
         if (barraCruz != LayoutHome.BarraCruz.ILHA) return
         val m = HashMap<CruzLogica.Categoria, BarraIlha.Canto>()
-        if (temTv) assistir.firstOrNull { it.id == "tv" }?.let { m[CruzLogica.Categoria.ASSISTIR] = BarraIlha.Canto(getString(R.string.cruz_canto_no_ar), BarraIlha.linhaDoCanto(it.sub), it.id) }
+        if (tvTexto != null && assistir.any { it.id == "tv" }) m[CruzLogica.Categoria.ASSISTIR] = BarraIlha.Canto(getString(R.string.cruz_canto_no_ar), tvTexto, "tv")
         val radioTxt = radioCruz?.let { (r, q) -> CruzLogica.juntar(getString(R.string.cruz_por_ultimo, r.nome), quando(q)) }
         val podTxt = podcastCruz?.let { p -> CruzLogica.juntar(p.titulo, faltaPodcast(p)) }
             ?: assinadosCruz.takeIf { it > 0 }?.let { getString(R.string.cruz_podcasts_n, it) }
@@ -2924,7 +2931,9 @@ class MainActivity : Activity() {
             "radio" -> m[CruzLogica.Categoria.OUVIR] = BarraIlha.Canto(getString(R.string.cruz_radio), radioTxt.orEmpty(), "radio")
             "podcasts" -> m[CruzLogica.Categoria.OUVIR] = BarraIlha.Canto(getString(R.string.pod_titulo), podTxt.orEmpty(), "podcasts")
         }
-        jogar.firstOrNull { it.id == "central" }?.let { m[CruzLogica.Categoria.JOGAR] = BarraIlha.Canto(it.nome, BarraIlha.linhaDoCanto(it.sub), it.id) }
+        // Jogar: só com algo de verdade (controles, turma, último jogo); a frase de apresentação da Central não é notícia.
+        jogar.firstOrNull { it.id == "central" }?.let { BarraIlha.linhaDoCanto(it.sub, ignorar = getString(R.string.cruz_sofa_sub)) to it }
+            ?.takeIf { it.first.isNotEmpty() }?.let { (t, it) -> m[CruzLogica.Categoria.JOGAR] = BarraIlha.Canto(it.nome, t, it.id) }
         m[CruzLogica.Categoria.APLICATIVOS] = BarraIlha.Canto(getString(R.string.cruz_canto_buscar), getString(R.string.cruz_canto_buscar_txt), "")
         if (ouvir.isEmpty()) m.remove(CruzLogica.Categoria.OUVIR)
         cantosCruz = m
@@ -2996,6 +3005,13 @@ class MainActivity : Activity() {
      * uma informação por linha, na ordem em que se lê: o canal; o programa de agora e quanto falta; o próximo e a hora.
      * [comPrograma] = false quando o programa já é o título do item (Continuar). Sem guia, só o canal.
      */
+    /** Canto da Ilha em Assistir: "Mais Você · faltam 7 min · Canal 2 · Globo SP" (o programa antes do canal). */
+    private fun cantoTvCruz(u: PlayerArmazem.Ultimo, agora: Programa?, ms: Long): String {
+        val canal = if (u.nome.isBlank()) getString(R.string.home_dest_tv, u.numero) else getString(R.string.cruz_tv_canal, u.numero, u.nome.trim())
+        val falta = agora?.let { ((it.fim - ms) / 60_000).toInt() }?.takeIf { it > 0 }?.let { getString(R.string.home_faltam, duracaoTexto(it)) }
+        return BarraIlha.cantoTv(canal, listOfNotNull(agora?.titulo?.trim()?.takeIf { it.isNotEmpty() }, falta).joinToString(" · "))
+    }
+
     private fun linhasTvCruz(u: PlayerArmazem.Ultimo, agora: Programa?, ms: Long, comPrograma: Boolean): String {
         val hora = android.text.format.DateFormat.getTimeFormat(this)
         val canal = if (u.nome.isBlank()) getString(R.string.home_dest_tv, u.numero) else getString(R.string.cruz_tv_canal, u.numero, u.nome.trim())
@@ -3152,7 +3168,7 @@ class MainActivity : Activity() {
         categoria(CruzLogica.Categoria.APLICATIVOS, R.string.cruz_aplicativos, IconeCruz.Tipo.APLICATIVOS, apps)
 
         c.definir(cats)
-        montarCantos(assistir, ouvir, jogos, cruzTemTv && ultimoTv != null)
+        montarCantos(assistir, ouvir, jogos, ultimoTv?.takeIf { cruzTemTv }?.let { cantoTvCruz(it, programa, agora) })
         if (focoInicialNaTv && !todosAbertos) { focoInicialNaTv = false; c.requestFocus() }
         else if (currentFocus == null && !todosAbertos) c.requestFocus()
     }

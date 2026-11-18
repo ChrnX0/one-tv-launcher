@@ -50,8 +50,15 @@ object BarraIlha {
     data class Canto(val rotulo: String, val texto: String, val origem: String)
 
     /** As primeiras linhas úteis de uma "linha de baixo" de item (separadas por \n), numa linha só. */
-    fun linhaDoCanto(sub: String?, max: Int = CANTO_LINHAS): String =
-        sub.orEmpty().split('\n').map { it.trim() }.filter { it.isNotEmpty() }.take(max).joinToString(" · ")
+    fun linhaDoCanto(sub: String?, max: Int = CANTO_LINHAS, ignorar: String? = null): String =
+        sub.orEmpty().split('\n').map { it.trim() }.filter { it.isNotEmpty() && it != ignorar?.trim() }.take(max).joinToString(" · ")
+
+    /** Canto de Assistir: o programa no ar primeiro (é o que importa; visto na Sala, o canal sozinho enchia a linha). */
+    fun cantoTv(canal: String, agora: String?): String = listOfNotNull(agora?.trim()?.takeIf { it.isNotEmpty() }, canal.trim()).joinToString(" · ")
+
+    /** Largura do canto: do começo dele até a pílula, menos um respiro (nunca menos que [CANTO_MIN_DP]). */
+    fun larguraCanto(inicioCanto: Int, inicioPilula: Int, respiro: Int, minimo: Int): Int = maxOf(minimo, inicioPilula - inicioCanto - respiro)
+    const val CANTO_MIN_DP = 120
 
     /**
      * Sem repetir (Paulo: "o que está na pílula não aparece no canto"): o canto some quando o item de onde ele vem está em

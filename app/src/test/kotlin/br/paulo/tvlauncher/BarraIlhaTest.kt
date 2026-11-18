@@ -38,6 +38,23 @@ class BarraIlhaTest {
         assertEquals("", BarraIlha.linhaDoCanto(null))
     }
 
+    @Test fun cantoDaTvComOProgramaPrimeiro() {
+        assertEquals("Mais Você · faltam 7 min · Canal 2 · Globo SP", BarraIlha.cantoTv("Canal 2 · Globo SP", "Mais Você · faltam 7 min"))
+        assertEquals("Canal 2 · Globo SP", BarraIlha.cantoTv("Canal 2 · Globo SP", " "))
+        assertEquals("Canal 2 · Globo SP", BarraIlha.cantoTv("Canal 2 · Globo SP", null))
+    }
+
+    @Test fun cantoVaiAtePilulaENaoSomeDeTodo() {
+        assertEquals(332, BarraIlha.larguraCanto(48, 400, 20, 120))      // pílula quieta: espaço até ela
+        assertEquals(120, BarraIlha.larguraCanto(48, 150, 20, 120))      // pílula enorme: sobra o mínimo
+    }
+
+    @Test fun cantoIgnoraAFraseDeApresentacao() {
+        val generica = "Controles e a sua turma do Discord"
+        assertEquals("", BarraIlha.linhaDoCanto(generica, ignorar = generica))
+        assertEquals("2 controles · Por último: Moonlight", BarraIlha.linhaDoCanto("$generica\n2 controles\nPor último: Moonlight", ignorar = generica))
+    }
+
     @Test fun cantoNaoRepete() {
         val c = BarraIlha.Canto("No ar", "Jornal da Noite · faltam 25 min", "tv")
         assertTrue(BarraIlha.cantoVisivel(c, "series", null))
