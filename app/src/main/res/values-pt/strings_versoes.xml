@@ -14,18 +14,21 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>A cruz se mexe como mola: cada item chega com um pouco de inércia e os vizinhos vêm logo atrás, em onda</item>
-        <item>Dois pacotes de ícones embutidos, Símbolo e Duotom, redesenham os apps no estilo da cruz (Configurações › Tela inicial › Pacote de ícones)</item>
-        <item>Sons curtos e suaves ao andar pela cruz, trocar de grupo e abrir; ficam mudos enquanto algo toca e dá para desligar</item>
+        <item>Na cruz, o texto de baixo ficou maior (18) e os itens de longe mais visíveis, para ler do sofá</item>
+        <item>Ao apertar OK o ícone dá um leve aperto; se o app não abrir, a cruz avisa “Não deu para abrir”</item>
+        <item>Segurando a seta, a cruz corre mais rápido e com menos cliques; trocar de grupo ficou mais firme</item>
+        <item>Cada grupo tem sua nota (Assistir, Ouvir, Jogar…) e, de noite, os sons saem mais baixos</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Movimento suave</item>
-        <item>Pacote de ícones</item>
-        <item>Sons</item>
+        <item>Letra maior</item>
+        <item>Aperto ao abrir</item>
+        <item>Seta segurada</item>
+        <item>Nota de cada grupo</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Andando com as setas, os itens deslizam suaves, sem pulos, mesmo apertando rápido?</item>
-        <item>Escolhendo Símbolo ou Duotom em Pacote de ícones, os apps em Aplicativos aparecem só com o símbolo claro?</item>
-        <item>Sem nada tocando, ouve um toque suave ao andar e outro diferente ao trocar de grupo?</item>
+        <item>Do sofá, dá para ler a linha de baixo do item escolhido e ver os itens das pontas?</item>
+        <item>Apertando OK num app, o ícone dá um leve aperto antes de abrir?</item>
+        <item>Segurando ▼ em Aplicativos, a lista corre rápido sem metralhar cliques?</item>
+        <item>Trocando de grupo com ◀ ▶, cada grupo soa numa nota diferente?</item>
     </string-array>
 </resources>

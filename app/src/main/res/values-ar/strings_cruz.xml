@@ -29,4 +29,5 @@
     <string name="cruz_desligada">إيقاف</string>
     <string name="cruz_sons">أصوات التنقل</string>
     <string name="cruz_sons_det">قصيرة وهادئة؛ تصمت أثناء تشغيل شيء ما</string>
+    <string name="cruz_nao_abriu">تعذّر الفتح</string>
 </resources>

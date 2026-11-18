@@ -29,4 +29,5 @@
     <string name="cruz_desligada">Off</string>
     <string name="cruz_sons">Sounds when moving</string>
     <string name="cruz_sons_det">Short and soft; quiet while something is playing</string>
+    <string name="cruz_nao_abriu">Couldn’t open</string>
 </resources>

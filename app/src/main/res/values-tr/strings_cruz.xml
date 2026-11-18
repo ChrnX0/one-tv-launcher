@@ -29,4 +29,5 @@
     <string name="cruz_desligada">Kapalı</string>
     <string name="cruz_sons">Gezinme sesleri</string>
     <string name="cruz_sons_det">Kısa ve yumuşak; bir şey çalarken sessiz</string>
+    <string name="cruz_nao_abriu">Açılamadı</string>
 </resources>

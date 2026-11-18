@@ -29,4 +29,5 @@
     <string name="cruz_desligada">关</string>
     <string name="cruz_sons">导航音效</string>
     <string name="cruz_sons_det">短促柔和；播放内容时静音</string>
+    <string name="cruz_nao_abriu">无法打开</string>
 </resources>

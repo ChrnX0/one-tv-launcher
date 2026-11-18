@@ -2483,7 +2483,7 @@ class MainActivity : Activity() {
         cruz = c
         c.id = View.generateViewId()
         c.aoMudar = { _, item -> arteDoItem(item) }
-        c.aoSom = { som -> if (homeNaFrente) SonsCruz.tocar(this, som) }   // voltando de um app (HOME), sem som
+        c.aoSom = { som, cat -> if (homeNaFrente) SonsCruz.tocar(this, som, cat) }   // voltando de um app (HOME), sem som
         c.aoSubirTopo = { ui.post { bolinhaPerfil?.requestFocus() } }   // ▲ no 1º item: o perfil, 1º da barra
         montarBarraCruz(raiz, c)
     }
@@ -2932,7 +2932,7 @@ class MainActivity : Activity() {
         if (EntradasTv.eh(pacote)) { EntradasTv.abrir(this, pacote); return }   // entrada HDMI/AV (EntradasTv)
         val intent = packageManager.getLeanbackLaunchIntentForPackage(pacote)
             ?: packageManager.getLaunchIntentForPackage(pacote)
-            ?: return
+            ?: run { if (!todosAbertos) cruz?.naoAbriu(); return }   // sem tela para abrir: a cruz avisa, não falha calada
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }

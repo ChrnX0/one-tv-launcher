@@ -29,4 +29,5 @@
     <string name="cruz_desligada">꺼짐</string>
     <string name="cruz_sons">이동 효과음</string>
     <string name="cruz_sons_det">짧고 부드러움, 재생 중에는 울리지 않음</string>
+    <string name="cruz_nao_abriu">열 수 없습니다</string>
 </resources>

@@ -29,4 +29,5 @@
     <string name="cruz_desligada">Désactivée</string>
     <string name="cruz_sons">Sons de navigation</string>
     <string name="cruz_sons_det">Courts et doux ; muets pendant une lecture</string>
+    <string name="cruz_nao_abriu">Impossible d’ouvrir</string>
 </resources>

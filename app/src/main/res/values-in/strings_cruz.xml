@@ -29,4 +29,5 @@
     <string name="cruz_desligada">Nonaktif</string>
     <string name="cruz_sons">Suara navigasi</string>
     <string name="cruz_sons_det">Singkat dan lembut; diam saat ada yang diputar</string>
+    <string name="cruz_nao_abriu">Tidak bisa dibuka</string>
 </resources>

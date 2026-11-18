@@ -61,23 +61,36 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         const val TELA_L = 960f
         // ---- fontes (sp): tabela do estudo 32 / 20 / 16 / 18
         const val FONTE_ESCOLHIDO = 32f // nome do item escolhido (fora da escolha fica 0,6 x = ~19)
-        const val FONTE_ROTULO = 20f    // nome da categoria em foco
-        const val FONTE_SUB = 16f       // linha de baixo do item escolhido
+        const val FONTE_ROTULO = 22f    // nome da categoria em foco (estudo da HOME, 18/11/2026: 20 -> 22)
+        const val FONTE_SUB = 18f       // linha de baixo do item escolhido (18 sp = texto padrão do Google para TV; era 16)
+        const val FONTE_SUB_MIN = 16f   // texto longo encolhe até aqui (o tamanho de antes) antes de cortar
         const val FONTE_CATEGORIA = 18f // nome das categorias na linha
         // ---- transparência dos vizinhos na coluna (posição relativa -> alfa)
-        val ALFA_COLUNA = mapOf(-1 to 0.5f, 1 to 0.9f, 2 to 0.65f, 3 to 0.35f)
+        // Estudo da HOME (18/11/2026): nenhum nome visível abaixo de 0,6, que a 3 m some (era 0,5 em cima e 0,35 no 3º).
+        val ALFA_COLUNA = mapOf(-1 to 0.6f, 1 to 0.9f, 2 to 0.72f, 3 to 0.6f)
         // ---- movimento (Paulo 18/11/2026: "mais suave e orgânico"): mola em vez de tempo fixo. A mola guarda a velocidade
         // quando a tecla vem no meio do caminho (nada "freia e recomeça"), e os vizinhos saem um pouco depois (onda).
         const val MOLA_W = 17f          // rigidez (rad/s): ~0,3 s até assentar, perto dos 220 ms de antes
         const val MOLA_AMORTECE = 0.86f // < 1 passa um tiquinho do alvo e volta (1 % na posição); 1 = sem passar
         const val ONDA_MS = 16L         // atraso por passo de distância do item escolhido
         const val ONDA_MAX_MS = 64L
+        // Trocar de categoria é um salto lateral grande: sem passar do alvo (amortecimento 1), para não "balançar".
+        const val MOLA_AMORTECE_CATEGORIA = 1f
+        // Segurando a seta (a partir da 3ª repetição): mola 40% mais rígida e sem onda, para atravessar a lista sem fila.
+        const val REPETICAO_RAPIDA = 2
+        const val RAPIDA_W = 1.4f
+        // O som, segurando a seta, toca 1 vez a cada 3 itens (não metralha).
+        const val SOM_A_CADA = 3
+        const val APERTO = 0.92f        // "aperto" do ícone no OK: resposta no mesmo quadro do toque
+        const val APERTO_MS = 70L
+        const val NAO_ABRIU_MS = 4000L  // "Não deu para abrir" no lugar da linha de baixo
         const val COR_CATEGORIA = 0xFFE8E2DA.toInt()
+        const val COR_SUB = 0xFFE2D8CF.toInt()
     }
 
     var aoSubirTopo: (() -> Unit)? = null
     /** Som de cada passo (SonsCruz): quem usa decide se toca. */
-    var aoSom: ((SonsCruz.Som) -> Unit)? = null
+    var aoSom: ((SonsCruz.Som, CruzLogica.Categoria?) -> Unit)? = null
     /** Mudou o item em foco (para o destaque/capa de quem usa) */
     var aoMudar: ((Categoria, Item) -> Unit)? = null
     /** OK num item (antes de [Item.abrir]): quem usa grava o "lembrado" da categoria. */
@@ -98,7 +111,9 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private fun dpi(v: Int) = (v * dm.density + 0.5f).toInt()
 
     /** As partes de um item que mudam com a escolha. */
-    private inner class ItemView(val raiz: LinearLayout, val icone: ImageView, val nome: TextView, val sub: TextView, val traco: View)
+    private inner class ItemView(val raiz: LinearLayout, val icone: ImageView, val nome: TextView, val sub: TextView, val traco: View) {
+        var voltarSub: Runnable? = null
+    }
 
     init {
         isFocusable = true
@@ -174,7 +189,11 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
 
     // ------------------------------------------------------------------ teclas
 
+    /** Quantas vezes a tecla de agora já se repetiu (segurada): muda a mola e o som (ver [REPETICAO_RAPIDA]). */
+    private var repeticao = 0
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        repeticao = event.repeatCount
         val t = when (keyCode) {
             KeyEvent.KEYCODE_DPAD_LEFT -> CruzLogica.Tecla.ESQUERDA
             KeyEvent.KEYCODE_DPAD_RIGHT -> CruzLogica.Tecla.DIREITA
@@ -211,20 +230,68 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private fun aplicar(t: CruzLogica.Tecla) {
         val r = CruzLogica.passo(mapa, estado, t)
         if (r is CruzLogica.Resultado.Abrir) {
-            aoSom?.invoke(SonsCruz.Som.ABRIR)
+            aoSom?.invoke(SonsCruz.Som.ABRIR, categoriaAtual()?.cat)
             aoAbrir?.invoke(r.categoria, r.item)
-            itemAtual()?.abrir?.invoke()
+            apertar()
+            // Um app que não abre (desinstalado no meio, sem tela de TV, recusado pelo Android) não falha em silêncio.
+            try { itemAtual()?.abrir?.invoke() } catch (e: Exception) { naoAbriu() }
             return
         }
+        val rapida = t != CruzLogica.Tecla.HOME && repeticao >= REPETICAO_RAPIDA
+        val soar = !rapida || repeticao % SOM_A_CADA == 0
         if (r.estado == estado) {
-            if (t != CruzLogica.Tecla.HOME) aoSom?.invoke(SonsCruz.Som.BORDA)   // fim da coluna/linha: um toque grave
+            if (t != CruzLogica.Tecla.HOME && repeticao == 0) aoSom?.invoke(SonsCruz.Som.BORDA, categoriaAtual()?.cat)   // fim da coluna/linha
             return
         }
-        aoSom?.invoke(if (r.estado.cat != estado.cat) SonsCruz.Som.GRUPO else SonsCruz.Som.ANDAR)
+        val trocouCategoria = r.estado.cat != estado.cat
+        if (soar) aoSom?.invoke(if (trocouCategoria) SonsCruz.Som.GRUPO else SonsCruz.Som.ANDAR, cats.getOrNull(r.estado.cat)?.cat)
         estado = r.estado
+        amortecer = if (trocouCategoria) MOLA_AMORTECE_CATEGORIA else MOLA_AMORTECE
+        rigidez = if (rapida) MOLA_W * RAPIDA_W else MOLA_W
+        semOnda = rapida
         posicionar(animar = true)
         avisarMudanca()
     }
+
+    // Parâmetros da mola para o passo de agora (lidos por [mover]).
+    private var amortecer = MOLA_AMORTECE
+    private var rigidez = MOLA_W
+    private var semOnda = false
+
+    /** O ícone do item escolhido "aperta" e volta: o toque foi entendido, no mesmo quadro. */
+    private fun apertar() {
+        val iv = viewAtual() ?: return
+        if (semAnimacao()) return
+        iv.icone.animate().cancel()
+        iv.icone.pivotX = iv.icone.width / 2f; iv.icone.pivotY = iv.icone.height / 2f
+        iv.icone.animate().scaleX(APERTO).scaleY(APERTO).setDuration(APERTO_MS).withEndAction {
+            iv.icone.animate().scaleX(1f).scaleY(1f).setDuration(APERTO_MS * 3)
+                .setInterpolator(android.view.animation.OvershootInterpolator(2f)).start()
+        }.start()
+    }
+
+    /**
+     * Quem usa avisa que o item não abriu (ou a abertura deu erro): a linha de baixo vira "Não deu para abrir" na cor de
+     * destaque por [NAO_ABRIU_MS], e o leitor de tela fala. Depois volta ao texto de antes.
+     */
+    fun naoAbriu() {
+        val iv = viewAtual() ?: return
+        val antes = itemAtual()?.sub.orEmpty()
+        val aviso = context.getString(R.string.cruz_nao_abriu)
+        iv.sub.text = aviso
+        iv.sub.setTextColor(Estilo.ACENTO)
+        iv.sub.visibility = View.VISIBLE
+        announceForAccessibility(aviso)
+        iv.sub.removeCallbacks(iv.voltarSub)
+        iv.voltarSub = Runnable {
+            iv.sub.setTextColor(COR_SUB)
+            iv.sub.text = antes
+            iv.sub.visibility = if (antes.isEmpty()) View.GONE else View.VISIBLE
+        }
+        iv.sub.postDelayed(iv.voltarSub, NAO_ABRIU_MS)
+    }
+
+    private fun viewAtual(): ItemView? = viewsItem.getOrNull(estado.cat)?.getOrNull(estado.sel.getOrElse(estado.cat) { 0 })
 
     private fun avisarMudanca() {
         val c = categoriaAtual() ?: return
@@ -271,20 +338,21 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         val traco = View(context).apply { background = GradientDrawable().apply { setColor(Estilo.ACENTO); cornerRadius = dp(2f) } }
         val sub = TextView(context).apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, FONTE_SUB)
-            setTextColor(0xFFE2D8CF.toInt())   // creme claro (contraste > 4,5:1 sobre o véu)
+            setTextColor(COR_SUB)   // creme claro (contraste > 4,5:1 sobre o véu)
             typeface = fonte
             maxLines = 1
             ellipsize = TextUtils.TruncateAt.END
             includeFontPadding = false
-            maxWidth = dpi(TEXTO_MAX)
             setShadowLayer(dp(6f), 0f, 0f, 0x99000000.toInt())
+            // 18 sp; um texto longo (francês, "Na rede") desce até 16 sp antes de cortar. Precisa de largura fixa.
+            setAutoSizeTextTypeUniformWithConfiguration(FONTE_SUB_MIN.toInt(), FONTE_SUB.toInt(), 1, TypedValue.COMPLEX_UNIT_SP)
         }
         val textos = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_VERTICAL
             addView(nome, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
             addView(traco, LinearLayout.LayoutParams(dpi(48), dpi(4)).apply { topMargin = dpi(6) })
-            addView(sub, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply { topMargin = dpi(6) })
+            addView(sub, LinearLayout.LayoutParams(dpi(TEXTO_MAX), LayoutParams.WRAP_CONTENT).apply { topMargin = dpi(6) })
         }
         val raiz = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL
@@ -307,7 +375,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         v.sub.visibility = if (item.sub.isEmpty()) View.GONE else View.VISIBLE
     }
 
-    private fun onda(distancia: Int) = minOf(distancia * ONDA_MS, ONDA_MAX_MS)
+    private fun onda(distancia: Int) = if (semOnda) 0L else minOf(distancia * ONDA_MS, ONDA_MAX_MS)
 
     /** Põe cada view no lugar do estado atual (animado ou de uma vez). */
     private fun posicionar(animar: Boolean) {
@@ -356,7 +424,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             m.parar(x, y, alfa, escala)
             return
         }
-        m.mirar(floatArrayOf(x, y, alfa, escala), android.os.SystemClock.uptimeMillis() + atrasoMs)
+        m.mirar(floatArrayOf(x, y, alfa, escala), android.os.SystemClock.uptimeMillis() + atrasoMs, rigidez, amortecer)
         if (m !in ativas) ativas += m
         if (!quadroPedido) { quadroPedido = true; ultimoQuadro = 0L; Choreographer.getInstance().postFrameCallback(quadro) }
     }
@@ -387,15 +455,18 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             if (alfa == 0f) v.visibility = View.INVISIBLE
         }
 
-        fun mirar(novo: FloatArray, quando: Long) {
+        private var w = MOLA_W
+        private var zeta = MOLA_AMORTECE
+
+        fun mirar(novo: FloatArray, quando: Long, rigidez: Float, amortece: Float) {
             if (this !in ativas) { ler(); vel.fill(0f); pos.indices.forEach { alvo[it] = pos[it] } }
-            proximo = novo; trocaEm = quando
+            proximo = novo; trocaEm = quando; w = rigidez; zeta = amortece
         }
 
         /** Anda dt segundos; devolve true se ainda está em movimento. */
         fun andar(agora: Long, dt: Float): Boolean {
             proximo?.let { if (agora >= trocaEm) { it.copyInto(alvo); proximo = null } }
-            val w = MOLA_W; val zw2 = 2f * MOLA_AMORTECE * w; val ww = w * w
+            val zw2 = 2f * zeta * w; val ww = w * w
             var t = dt
             while (t > 0f) {   // passos de até 4 ms: estável mesmo se um quadro atrasar
                 val h = minOf(t, 0.004f); t -= h

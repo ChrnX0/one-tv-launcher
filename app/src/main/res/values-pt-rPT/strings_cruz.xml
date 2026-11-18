@@ -29,4 +29,5 @@
     <string name="cruz_desligada">Desligada</string>
     <string name="cruz_sons">Sons ao navegar</string>
     <string name="cruz_sons_det">Curtos e suaves; ficam mudos enquanto algo toca</string>
+    <string name="cruz_nao_abriu">Não foi possível abrir</string>
 </resources>

@@ -24,4 +24,21 @@ class SonsCruzTest {
         assertEquals(44 + a.size * 2, w.size)
         assertEquals("RIFF", String(w, 0, 4)); assertEquals("WAVE", String(w, 8, 4)); assertEquals("data", String(w, 36, 4))
     }
+
+    @Test fun cadaCategoriaTemSuaNotaNoGrupoEAbrir() {
+        val notas = CruzLogica.Categoria.entries.map { SonsCruz.tom(SonsCruz.Som.GRUPO, it) }
+        assertEquals("notas distintas", notas.size, notas.toSet().size)
+        assertTrue("dentro do que o SoundPool aceita (0,5 a 2)", notas.all { it in 0.5f..2f })
+        assertEquals(SonsCruz.tom(SonsCruz.Som.GRUPO, CruzLogica.Categoria.OUVIR), SonsCruz.tom(SonsCruz.Som.ABRIR, CruzLogica.Categoria.OUVIR))
+        // andar e bater na borda não mudam de tom; sem categoria também não
+        assertEquals(1f, SonsCruz.tom(SonsCruz.Som.ANDAR, CruzLogica.Categoria.JOGAR))
+        assertEquals(1f, SonsCruz.tom(SonsCruz.Som.BORDA, CruzLogica.Categoria.JOGAR))
+        assertEquals(1f, SonsCruz.tom(SonsCruz.Som.GRUPO, null))
+    }
+
+    @Test fun deNoiteSaiMaisBaixo() {
+        val dia = SonsCruz.volume(15)
+        for (h in listOf(22, 23, 0, 3, 6)) assertTrue("$h h", SonsCruz.volume(h) < dia)
+        for (h in listOf(7, 12, 21)) assertEquals("$h h", dia, SonsCruz.volume(h))
+    }
 }

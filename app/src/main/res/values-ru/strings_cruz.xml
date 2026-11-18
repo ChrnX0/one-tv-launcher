@@ -29,4 +29,5 @@
     <string name="cruz_desligada">Выкл.</string>
     <string name="cruz_sons">Звуки при навигации</string>
     <string name="cruz_sons_det">Короткие и мягкие; молчат, пока что-то играет</string>
+    <string name="cruz_nao_abriu">Не удалось открыть</string>
 </resources>

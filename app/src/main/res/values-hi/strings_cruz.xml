@@ -29,4 +29,5 @@
     <string name="cruz_desligada">बंद</string>
     <string name="cruz_sons">नेविगेशन की आवाज़ें</string>
     <string name="cruz_sons_det">छोटी और हल्की; कुछ चलते समय चुप रहती हैं</string>
+    <string name="cruz_nao_abriu">खोला नहीं जा सका</string>
 </resources>

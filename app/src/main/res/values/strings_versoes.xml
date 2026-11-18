@@ -17,23 +17,27 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>The cross moves like a spring: each item arrives with a little inertia and its neighbours follow just after, like a wave</item>
-        <item>Two built-in icon packs, Symbol and Duotone, redraw the apps in the style of the cross (Settings › Home screen › Icon pack)</item>
-        <item>Short, soft sounds when moving through the cross, switching group and opening; they stay quiet while something is playing and can be turned off</item>
+        <item>In the cross, the line below the chosen item is bigger (18) and far items are more visible, to read from the sofa</item>
+        <item>Pressing OK gives the icon a light squeeze; if the app doesn’t open, the cross says “Couldn’t open”</item>
+        <item>Holding an arrow, the cross runs faster with fewer clicks; changing group feels firmer</item>
+        <item>Each group has its own note (Watch, Listen, Play…) and sounds are softer at night</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>cruz_mola</item>
-        <item>cruz_pacote</item>
-        <item>cruz_sons</item>
+        <item>cruz_letra</item>
+        <item>cruz_aperto</item>
+        <item>cruz_segurar</item>
+        <item>cruz_notas</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Smooth movement</item>
-        <item>Icon pack</item>
-        <item>Sounds</item>
+        <item>Bigger text</item>
+        <item>Squeeze on open</item>
+        <item>Holding an arrow</item>
+        <item>Note per group</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Moving with the arrows, do the items glide smoothly, without jumps, even when you press fast?</item>
-        <item>Choosing Symbol or Duotone in Icon pack, do the apps in Apps show only their light symbol?</item>
-        <item>With nothing playing, do you hear a soft tick when moving and a different one when changing group?</item>
+        <item>From the sofa, can you read the line below the chosen item and see the items at the ends?</item>
+        <item>Pressing OK on an app, does the icon give a light squeeze before opening?</item>
+        <item>Holding ▼ in Apps, does the list run fast without a burst of clicks?</item>
+        <item>Changing group with ◀ ▶, does each group sound a different note?</item>
     </string-array>
 </resources>

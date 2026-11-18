@@ -29,4 +29,5 @@
     <string name="cruz_desligada">オフ</string>
     <string name="cruz_sons">移動時のサウンド</string>
     <string name="cruz_sons_det">短く控えめ。何かを再生中は鳴りません</string>
+    <string name="cruz_nao_abriu">開けませんでした</string>
 </resources>
