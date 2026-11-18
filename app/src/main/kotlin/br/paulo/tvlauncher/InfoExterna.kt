@@ -340,6 +340,21 @@ object InfoExterna {
      * em GET /movies/{id} ou /tv/{id} ("ratings":{"simkl":{"rating":8.6,"votes":15265},"imdb":{...}}; a ficha fica em
      * cache no Cloudflare). O bloco "imdb" que vem junto é IGNORADO (dado do IMDb, uso comercial proibido).
      */
+    /** Chave de um título pelo id TMDB e tipo ("F27205", "S1396"): o mesmo id é filme ou série conforme o tipo. */
+    fun chaveTmdb(tmdb: Int, serie: Boolean): String = (if (serie) "S" else "F") + tmdb
+
+    /**
+     * Os ids do Simkl já sabidos, por [chaveTmdb]: os do catálogo que já foram achados (todas as versões de um título,
+     * 4K, LEG, dividem o id) e, por cima, os da biblioteca da pessoa no Simkl. Os ids não mudam (Simkl): com isso o
+     * /redirect só é chamado para título nunca visto.
+     */
+    fun simklConhecidos(catalogo: List<Triple<Int, Boolean, Int?>>, daBiblioteca: Map<String, Int>): HashMap<String, Int> {
+        val r = HashMap<String, Int>()
+        for ((tmdb, serie, simkl) in catalogo) if (simkl != null) r.putIfAbsent(chaveTmdb(tmdb, serie), simkl)
+        r.putAll(daBiblioteca)
+        return r
+    }
+
     fun urlSimklRedirect(tmdb: Int, serie: Boolean, clienteId: String, versao: Int): String =
         ServicosFilmes.simklUrl("/redirect", clienteId, versao, "to=simkl&type=${if (serie) "tv" else "movie"}&tmdb=$tmdb")
 
