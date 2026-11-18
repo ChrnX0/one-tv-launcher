@@ -323,32 +323,32 @@
     "card-moon": [
       "Moon phase",
       "Tonight's moon and how much of it is lit, worked out on the TV itself, with no internet.",
-      "A home screen card, at the end of Watch."
+      "In the forecast, on the screensaver and on the weather icon at night. Settings › Appearance."
     ],
     "card-countdown": [
       "Countdown",
       "How many days are left until the date you pick, or until the next holiday.",
-      "A home screen card, at the end of Watch."
+      "In the pill at the top of the screen. Settings › Appearance."
     ],
     "card-reminder": [
       "House reminder",
       "A note that comes back on the weekdays you choose: recycling day, medicine, a class.",
-      "A home screen card, at the end of Watch."
+      "In the pill at the top of the screen. Settings › Appearance."
     ],
     "card-status": [
       "Your service's status",
       "The TV checks an address you give it and shows whether it's up: the home server, the shop's website.",
-      "A home screen card, at the end of Watch."
+      "In the pill at the top of the screen. Settings › Appearance."
     ],
     "card-rates": [
       "Today's rates",
-      "Currencies, gold and bitcoin at today's value, from an open source.",
-      "A home screen card, at the end of Watch."
+      "Currencies, bitcoin and ether at today's value, from open official sources.",
+      "Next to the weather, in the top bar. Settings › Appearance."
     ],
     "card-match": [
       "Your team's next match",
       "When and against whom your team plays next, on a card on the home screen.",
-      "A home screen card, at the end of Watch."
+      "In the TV item of the cross. Settings › Appearance."
     ],
     "plugin-cards": [
       "Cards from other apps",

@@ -323,32 +323,32 @@
     "card-moon": [
       "Fase bulan",
       "Bulan malam ini dan seberapa terang bagiannya, dihitung di TV sendiri, tanpa internet.",
-      "Kartu layar utama, di akhir Tonton."
+      "Di prakiraan, screensaver, dan ikon cuaca saat malam. Setelan › Tampilan."
     ],
     "card-countdown": [
       "Hitung mundur",
       "Berapa hari lagi menuju tanggal yang Anda pilih, atau hari libur berikutnya.",
-      "Kartu layar utama, di akhir Tonton."
+      "Di pil bagian atas layar. Setelan › Tampilan."
     ],
     "card-reminder": [
       "Pengingat rumah",
       "Catatan yang muncul lagi di hari yang Anda pilih: hari sampah daur ulang, obat, les.",
-      "Kartu layar utama, di akhir Tonton."
+      "Di pil bagian atas layar. Setelan › Tampilan."
     ],
     "card-status": [
       "Status layanan Anda",
       "TV menguji alamat yang Anda berikan dan menunjukkan apakah sedang aktif: server rumah, situs toko.",
-      "Kartu layar utama, di akhir Tonton."
+      "Di pil bagian atas layar. Setelan › Tampilan."
     ],
     "card-rates": [
       "Kurs hari ini",
-      "Mata uang, emas, dan bitcoin dengan nilai hari ini, dari sumber terbuka.",
-      "Kartu layar utama, di akhir Tonton."
+      "Mata uang, bitcoin, dan ether dengan nilai hari ini, dari sumber resmi terbuka.",
+      "Di samping cuaca, di bilah atas. Setelan › Tampilan."
     ],
     "card-match": [
       "Laga berikutnya tim Anda",
       "Kapan dan melawan siapa tim Anda bertanding lagi, di kartu layar utama.",
-      "Kartu layar utama, di akhir Tonton."
+      "Di item TV pada salib. Setelan › Tampilan."
     ],
     "plugin-cards": [
       "Kartu dari aplikasi lain",

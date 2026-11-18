@@ -323,32 +323,32 @@
     "card-moon": [
       "Faza księżyca",
       "Dzisiejszy księżyc i jaka jego część jest oświetlona, liczone na samym telewizorze, bez internetu.",
-      "Karta ekranu głównego, na końcu Oglądaj."
+      "W prognozie, na wygaszaczu i na ikonie pogody nocą. Ustawienia › Wygląd."
     ],
     "card-countdown": [
       "Odliczanie",
       "Ile dni zostało do wybranej daty albo do najbliższego święta.",
-      "Karta ekranu głównego, na końcu Oglądaj."
+      "W pigułce u góry ekranu. Ustawienia › Wygląd."
     ],
     "card-reminder": [
       "Domowe przypomnienie",
       "Notatka, która wraca w wybrane dni tygodnia: dzień segregacji, lek, zajęcia.",
-      "Karta ekranu głównego, na końcu Oglądaj."
+      "W pigułce u góry ekranu. Ustawienia › Wygląd."
     ],
     "card-status": [
       "Stan Twojej usługi",
       "Telewizor sprawdza wskazany adres i pokazuje, czy działa: domowy serwer, strona sklepu.",
-      "Karta ekranu głównego, na końcu Oglądaj."
+      "W pigułce u góry ekranu. Ustawienia › Wygląd."
     ],
     "card-rates": [
       "Kursy dnia",
-      "Waluty, złoto i bitcoin po kursie dnia, z otwartego źródła.",
-      "Karta ekranu głównego, na końcu Oglądaj."
+      "Waluty, bitcoin i ether po kursie dnia, z otwartych oficjalnych źródeł.",
+      "Obok pogody, w górnym pasku. Ustawienia › Wygląd."
     ],
     "card-match": [
       "Następny mecz Twojej drużyny",
       "Kiedy i z kim Twoja drużyna gra następny mecz, na karcie ekranu głównego.",
-      "Karta ekranu głównego, na końcu Oglądaj."
+      "W pozycji TV na krzyżu. Ustawienia › Wygląd."
     ],
     "plugin-cards": [
       "Karty z innych aplikacji",

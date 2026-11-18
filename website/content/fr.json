@@ -323,32 +323,32 @@
     "card-moon": [
       "Phase de la lune",
       "La lune du jour et sa part éclairée, calculées sur la TV elle-même, sans internet.",
-      "Carte de l'écran d'accueil, à la fin de Regarder."
+      "Dans les prévisions, sur l'économiseur d'écran et sur l'icône météo la nuit. Paramètres › Apparence."
     ],
     "card-countdown": [
       "Compte à rebours",
       "Le nombre de jours jusqu'à la date de votre choix, ou jusqu'au prochain jour férié.",
-      "Carte de l'écran d'accueil, à la fin de Regarder."
+      "Dans la pastille en haut de l'écran. Paramètres › Apparence."
     ],
     "card-reminder": [
       "Rappel de la maison",
       "Un rappel qui revient les jours de la semaine choisis : jour du tri, médicament, cours.",
-      "Carte de l'écran d'accueil, à la fin de Regarder."
+      "Dans la pastille en haut de l'écran. Paramètres › Apparence."
     ],
     "card-status": [
       "État de votre service",
       "La TV teste une adresse que vous indiquez et montre si elle répond : le serveur de la maison, le site de la boutique.",
-      "Carte de l'écran d'accueil, à la fin de Regarder."
+      "Dans la pastille en haut de l'écran. Paramètres › Apparence."
     ],
     "card-rates": [
       "Cours du jour",
-      "Devises, or et bitcoin à la valeur du jour, depuis une source ouverte.",
-      "Carte de l'écran d'accueil, à la fin de Regarder."
+      "Devises, bitcoin et ether à la valeur du jour, depuis des sources officielles ouvertes.",
+      "À côté de la météo, dans la barre du haut. Paramètres › Apparence."
     ],
     "card-match": [
       "Prochain match de votre équipe",
       "Quand et contre qui votre équipe rejoue, sur une carte de l'écran d'accueil.",
-      "Carte de l'écran d'accueil, à la fin de Regarder."
+      "Dans l'élément TV de la croix. Paramètres › Apparence."
     ],
     "plugin-cards": [
       "Cartes d'autres applis",

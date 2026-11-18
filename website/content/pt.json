@@ -323,32 +323,32 @@
     "card-moon": [
       "Fase da lua",
       "A lua de hoje e quanto dela está iluminada, calculada na própria TV, sem internet.",
-      "Cartão da tela inicial, no fim do Assistir."
+      "Na Previsão, no protetor de tela e no ícone do clima à noite. Configurações › Aparência."
     ],
     "card-countdown": [
       "Contagem regressiva",
       "Quantos dias faltam para a data que você escolher, ou para o próximo feriado.",
-      "Cartão da tela inicial, no fim do Assistir."
+      "Na pílula do alto da tela. Configurações › Aparência."
     ],
     "card-reminder": [
       "Lembrete da casa",
       "Um aviso que volta nos dias da semana que você marcar: dia do lixo reciclável, remédio, aula.",
-      "Cartão da tela inicial, no fim do Assistir."
+      "Na pílula do alto da tela. Configurações › Aparência."
     ],
     "card-status": [
       "Status do seu serviço",
       "A TV testa um endereço que você indicar e mostra se ele está no ar: o servidor de casa, o site da loja.",
-      "Cartão da tela inicial, no fim do Assistir."
+      "Na pílula do alto da tela. Configurações › Aparência."
     ],
     "card-rates": [
       "Cotação do dia",
-      "Moedas, ouro e bitcoin com o valor do dia, de uma fonte aberta.",
-      "Cartão da tela inicial, no fim do Assistir."
+      "Moedas, bitcoin e ether com o valor do dia, de fontes oficiais abertas.",
+      "Ao lado do clima, na barra de cima. Configurações › Aparência."
     ],
     "card-match": [
       "Próximo jogo do seu time",
       "Quando e contra quem o seu time joga de novo, num cartão na tela inicial.",
-      "Cartão da tela inicial, no fim do Assistir."
+      "No item TV da cruz. Configurações › Aparência."
     ],
     "plugin-cards": [
       "Cartões de outros apps",

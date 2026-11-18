@@ -323,32 +323,32 @@
     "card-moon": [
       "Fase lunar",
       "La luna de hoy y cuánto está iluminada, calculada en la propia TV, sin internet.",
-      "Tarjeta de la pantalla de inicio, al final de Ver."
+      "En el pronóstico, en el salvapantallas y en el icono del clima de noche. Ajustes › Apariencia."
     ],
     "card-countdown": [
       "Cuenta regresiva",
       "Cuántos días faltan para la fecha que elijas, o para el próximo feriado.",
-      "Tarjeta de la pantalla de inicio, al final de Ver."
+      "En la píldora de arriba de la pantalla. Ajustes › Apariencia."
     ],
     "card-reminder": [
       "Recordatorio de casa",
       "Un aviso que vuelve los días de la semana que marques: día del reciclaje, medicina, clase.",
-      "Tarjeta de la pantalla de inicio, al final de Ver."
+      "En la píldora de arriba de la pantalla. Ajustes › Apariencia."
     ],
     "card-status": [
       "Estado de tu servicio",
       "La TV prueba una dirección que le indiques y muestra si está en línea: el servidor de casa, la web de la tienda.",
-      "Tarjeta de la pantalla de inicio, al final de Ver."
+      "En la píldora de arriba de la pantalla. Ajustes › Apariencia."
     ],
     "card-rates": [
       "Cotización del día",
-      "Monedas, oro y bitcoin con el valor del día, de una fuente abierta.",
-      "Tarjeta de la pantalla de inicio, al final de Ver."
+      "Monedas, bitcoin y ether con el valor del día, de fuentes oficiales abiertas.",
+      "Junto al clima, en la barra superior. Ajustes › Apariencia."
     ],
     "card-match": [
       "Próximo partido de tu equipo",
       "Cuándo y contra quién vuelve a jugar tu equipo, en una tarjeta de la pantalla de inicio.",
-      "Tarjeta de la pantalla de inicio, al final de Ver."
+      "En el elemento TV de la cruz. Ajustes › Apariencia."
     ],
     "plugin-cards": [
       "Tarjetas de otras apps",

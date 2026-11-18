@@ -323,32 +323,32 @@
     "card-moon": [
       "Fase da lua",
       "A lua de hoje e quanto dela está iluminada, calculada na própria TV, sem internet.",
-      "Cartão do ecrã inicial, no fim de Ver."
+      "Na Previsão, na proteção de ecrã e no ícone do tempo à noite. Definições › Aparência."
     ],
     "card-countdown": [
       "Contagem decrescente",
       "Quantos dias faltam para a data que escolher, ou para o próximo feriado.",
-      "Cartão do ecrã inicial, no fim de Ver."
+      "Na pílula do topo do ecrã. Definições › Aparência."
     ],
     "card-reminder": [
       "Lembrete da casa",
       "Um aviso que volta nos dias da semana que marcar: dia do lixo reciclável, medicamento, aula.",
-      "Cartão do ecrã inicial, no fim de Ver."
+      "Na pílula do topo do ecrã. Definições › Aparência."
     ],
     "card-status": [
       "Estado do seu serviço",
       "A TV testa um endereço que indicar e mostra se está no ar: o servidor de casa, o site da loja.",
-      "Cartão do ecrã inicial, no fim de Ver."
+      "Na pílula do topo do ecrã. Definições › Aparência."
     ],
     "card-rates": [
       "Câmbio do dia",
-      "Moedas, ouro e bitcoin com o valor do dia, de uma fonte aberta.",
-      "Cartão do ecrã inicial, no fim de Ver."
+      "Moedas, bitcoin e ether com o valor do dia, de fontes oficiais abertas.",
+      "Ao lado do tempo, na barra de cima. Definições › Aparência."
     ],
     "card-match": [
       "Próximo jogo da sua equipa",
       "Quando e contra quem a sua equipa volta a jogar, num cartão no ecrã inicial.",
-      "Cartão do ecrã inicial, no fim de Ver."
+      "No item TV da cruz. Definições › Aparência."
     ],
     "plugin-cards": [
       "Cartões de outras apps",

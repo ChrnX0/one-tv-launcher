@@ -323,32 +323,32 @@
     "card-moon": [
       "Ay evresi",
       "Bu geceki ay ve ne kadarının aydınlık olduğu, internetsiz, televizyonun kendisinde hesaplanır.",
-      "Ana ekran kartı, İzle'nin sonunda."
+      "Tahminde, ekran koruyucuda ve gece hava simgesinde. Ayarlar › Görünüm."
     ],
     "card-countdown": [
       "Geri sayım",
       "Seçtiğiniz tarihe ya da bir sonraki tatile kaç gün kaldığı.",
-      "Ana ekran kartı, İzle'nin sonunda."
+      "Ekranın üstündeki hapta. Ayarlar › Görünüm."
     ],
     "card-reminder": [
       "Ev hatırlatıcısı",
       "Seçtiğiniz hafta günlerinde geri gelen bir not: geri dönüşüm günü, ilaç, ders.",
-      "Ana ekran kartı, İzle'nin sonunda."
+      "Ekranın üstündeki hapta. Ayarlar › Görünüm."
     ],
     "card-status": [
       "Hizmetinizin durumu",
       "Televizyon verdiğiniz bir adresi dener ve açık olup olmadığını gösterir: ev sunucusu, mağazanın sitesi.",
-      "Ana ekran kartı, İzle'nin sonunda."
+      "Ekranın üstündeki hapta. Ayarlar › Görünüm."
     ],
     "card-rates": [
       "Günün kurları",
-      "Döviz, altın ve bitcoin, günün değeriyle, açık bir kaynaktan.",
-      "Ana ekran kartı, İzle'nin sonunda."
+      "Döviz, bitcoin ve ether, günün değeriyle, açık resmi kaynaklardan.",
+      "Hava durumunun yanında, üst çubukta. Ayarlar › Görünüm."
     ],
     "card-match": [
       "Takımınızın sıradaki maçı",
       "Takımınızın ne zaman ve kime karşı oynayacağı, ana ekranda bir kartta.",
-      "Ana ekran kartı, İzle'nin sonunda."
+      "Haçtaki TV öğesinde. Ayarlar › Görünüm."
     ],
     "plugin-cards": [
       "Diğer uygulamalardan kartlar",

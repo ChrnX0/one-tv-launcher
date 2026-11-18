@@ -323,32 +323,32 @@
     "card-moon": [
       "Mondphase",
       "Der Mond von heute und wie viel davon beleuchtet ist, auf dem Fernseher selbst berechnet, ohne Internet.",
-      "Karte im Startbildschirm, am Ende von Ansehen."
+      "In der Vorhersage, im Bildschirmschoner und nachts am Wettersymbol. Einstellungen › Darstellung."
     ],
     "card-countdown": [
       "Countdown",
       "Wie viele Tage bis zu einem Datum Ihrer Wahl bleiben, oder bis zum nächsten Feiertag.",
-      "Karte im Startbildschirm, am Ende von Ansehen."
+      "In der Pille oben am Bildschirm. Einstellungen › Darstellung."
     ],
     "card-reminder": [
       "Haus-Erinnerung",
       "Ein Hinweis, der an den gewählten Wochentagen wiederkommt: Wertstofftag, Medikament, Kurs.",
-      "Karte im Startbildschirm, am Ende von Ansehen."
+      "In der Pille oben am Bildschirm. Einstellungen › Darstellung."
     ],
     "card-status": [
       "Status Ihres Dienstes",
       "Der Fernseher prüft eine Adresse Ihrer Wahl und zeigt, ob sie erreichbar ist: der Heimserver, die Website des Ladens.",
-      "Karte im Startbildschirm, am Ende von Ansehen."
+      "In der Pille oben am Bildschirm. Einstellungen › Darstellung."
     ],
     "card-rates": [
       "Kurse des Tages",
-      "Währungen, Gold und Bitcoin zum Tageswert, aus einer offenen Quelle.",
-      "Karte im Startbildschirm, am Ende von Ansehen."
+      "Währungen, Bitcoin und Ether zum Tageswert, aus offenen amtlichen Quellen.",
+      "Neben dem Wetter, in der oberen Leiste. Einstellungen › Darstellung."
     ],
     "card-match": [
       "Nächstes Spiel Ihres Teams",
       "Wann und gegen wen Ihr Team als Nächstes spielt, auf einer Karte im Startbildschirm.",
-      "Karte im Startbildschirm, am Ende von Ansehen."
+      "Im Eintrag TV des Kreuzes. Einstellungen › Darstellung."
     ],
     "plugin-cards": [
       "Karten anderer Apps",

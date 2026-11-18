@@ -323,32 +323,32 @@
     "card-moon": [
       "Fase lunare",
       "La luna di oggi e quanto è illuminata, calcolata sulla TV stessa, senza internet.",
-      "Scheda della home, in fondo a Guarda."
+      "Nelle previsioni, nel salvaschermo e sull'icona del meteo di notte. Impostazioni › Aspetto."
     ],
     "card-countdown": [
       "Conto alla rovescia",
       "Quanti giorni mancano alla data che scegli, o alla prossima festività.",
-      "Scheda della home, in fondo a Guarda."
+      "Nella pillola in alto sullo schermo. Impostazioni › Aspetto."
     ],
     "card-reminder": [
       "Promemoria di casa",
       "Un avviso che torna nei giorni della settimana che segni: giorno della plastica, medicina, lezione.",
-      "Scheda della home, in fondo a Guarda."
+      "Nella pillola in alto sullo schermo. Impostazioni › Aspetto."
     ],
     "card-status": [
       "Stato del tuo servizio",
       "La TV prova un indirizzo che indichi e mostra se è attivo: il server di casa, il sito del negozio.",
-      "Scheda della home, in fondo a Guarda."
+      "Nella pillola in alto sullo schermo. Impostazioni › Aspetto."
     ],
     "card-rates": [
       "Cambio del giorno",
-      "Valute, oro e bitcoin al valore del giorno, da una fonte aperta.",
-      "Scheda della home, in fondo a Guarda."
+      "Valute, bitcoin ed ether al valore del giorno, da fonti ufficiali aperte.",
+      "Accanto al meteo, nella barra in alto. Impostazioni › Aspetto."
     ],
     "card-match": [
       "Prossima partita della tua squadra",
       "Quando e contro chi gioca di nuovo la tua squadra, in una scheda della home.",
-      "Scheda della home, in fondo a Guarda."
+      "Nella voce TV della croce. Impostazioni › Aspetto."
     ],
     "plugin-cards": [
       "Schede di altre app",
