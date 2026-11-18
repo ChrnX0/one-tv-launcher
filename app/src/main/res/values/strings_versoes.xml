@@ -21,6 +21,7 @@
         <item>New “About Sofaly” screen: logo, slogan, version, what changed and licenses</item>
         <item>The Sofaly logo also shows small at the bottom of Settings and in a corner of the screensaver</item>
         <item>The TV icon on the home screen is now the sofa-TV from the logo, outline only</item>
+        <item>Home bottom corner: the time left no longer breaks across lines, and Home comes back right away even when the screen and the phone ask at the same time</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>logo_abertura</item>

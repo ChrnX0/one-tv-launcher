@@ -18,6 +18,7 @@
         <item>Tela nova “Sobre a Sofaly”: logo, slogan, versão, o que mudou e licenças</item>
         <item>A logo da Sofaly também aparece pequena embaixo das Configurações e num canto do descanso de tela</item>
         <item>O ícone da TV na tela inicial agora é o sofá-TV da logo, só o contorno</item>
+        <item>Canto de baixo da home: o tempo que falta não se parte mais no meio da linha, e a Casa volta na hora mesmo quando a tela e o celular pedem ao mesmo tempo</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Logo ao acordar</item>
