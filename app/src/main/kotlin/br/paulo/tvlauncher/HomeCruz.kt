@@ -491,13 +491,23 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             CruzLogica.detalhes(p, principalCortada = cortada)
         }
         val s = i?.situacao?.takeIf { it.texto.isNotBlank() && iv != null && (hasFocus() || isFocused) }
+        // Nome que não coube ("What universal fre…", visto na Sala 18/11/2026 no Continuar): vai inteiro no topo do canto.
+        val nomeInteiro = i?.nome?.takeIf { n -> iv != null && (hasFocus() || isFocused) &&
+            android.text.TextPaint(iv.nome.paint).apply {
+                textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, FONTE_ESCOLHIDO, resources.displayMetrics)
+            }.measureText(n) > dpi(TEXTO_MAX) }
         detalhe.animate().cancel()
-        if (linhas.isEmpty() && s == null) { detalhe.alpha = 0f; detalhe.text = ""; return@Runnable }
+        if (linhas.isEmpty() && s == null && nomeInteiro == null) { detalhe.alpha = 0f; detalhe.text = ""; return@Runnable }
         // 1ª linha: a situação, com o rótulo em laranja ("Parou em  T1 E1 · 35% · faltam 43 min"); depois os detalhes.
         val texto = android.text.SpannableStringBuilder().apply {
+            if (nomeInteiro != null) {
+                append(nomeInteiro, android.text.style.ForegroundColorSpan(Estilo.TEXTO), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                if (s != null || linhas.isNotEmpty()) append("\n")
+            }
             if (s != null) {
+                val ini = length
                 append(s.rotulo, android.text.style.ForegroundColorSpan(IconeCruz.COR_ACESA), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                setSpan(android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, length, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                setSpan(android.text.style.StyleSpan(android.graphics.Typeface.BOLD), ini, length, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 append("  ").append(s.texto)
                 if (linhas.isNotEmpty()) append("\n")
             }
