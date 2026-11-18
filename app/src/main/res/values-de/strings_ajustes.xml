@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">Adresse und API-Schlüssel des UniFi-Routers, im Web-Panel</string>
     <string name="pb_titulo">Kacheln des Schnellmenüs</string>
     <string name="pb_subtitulo">OK zeigt oder blendet aus · ◀ ▶ ändern die Reihenfolge</string>
-    <string name="pb_cfg_det">Wähle, welche Kacheln das Schnellmenü (HOME halten) zeigt und in welcher Reihenfolge</string>
+    <string name="pb_cfg_det">Wähle, welche Kacheln das Schnellmenü (ZURÜCK halten) zeigt und in welcher Reihenfolge</string>
     <string name="pb_mostrado">sichtbar</string>
     <string name="pb_escondido">ausgeblendet</string>
     <string name="pb_padrao">Zurück zu den Standardkacheln</string>

@@ -70,4 +70,12 @@
     <string name="cruz_app_solto">Yalnız simge</string>
     <string name="cruz_tv_canal">Kanal %1$d · %2$s</string>
     <string name="cruz_tv_depois">Sonra, %1$s: %2$s</string>
+    <string name="cruz_aberto">Açıldı: %1$s</string>
+    <string name="cruz_jogado">Oynandı: %1$s</string>
+    <string name="cruz_tocou">Dinlendi: %1$s</string>
+    <string name="cruz_por_ultimo">Son: %1$s</string>
+    <string name="cruz_addons_n">Yüklü eklentiler: %1$d</string>
+    <string name="cruz_apps_n">Bu TV’deki uygulamalar: %1$d</string>
+    <string name="cruz_podcasts_n">Takip edilen podcastler: %1$d</string>
+    <string name="cruz_pendrive">USB bellek: %1$s</string>
 </resources>

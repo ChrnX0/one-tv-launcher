@@ -50,12 +50,29 @@ object CruzLogica {
      * ([lembrados]: id da categoria -> id do item), ou no 1º se ele sumiu.
      * Sem Assistir (sem nada para assistir), a 1ª categoria que existir.
      */
-    fun inicial(m: Mapa, lembrados: Map<String, String> = emptyMap()): Estado {
+    fun inicial(m: Mapa, lembrados: Map<String, String> = emptyMap(), ultimo: String? = null): Estado {
         val sel = m.categorias.mapIndexed { i, c ->
             if (c == Categoria.ASSISTIR) 0 else m.itens[i].indexOf(lembrados[c.id]).coerceAtLeast(0)
         }
         val cat = m.indice(Categoria.ASSISTIR).takeIf { it >= 0 } ?: 0
-        return Estado(cat, sel)
+        val e = Estado(cat, sel)
+        // A HOME refeita com um app aberto há pouco (o Android fecha o launcher para dar memória a um app grande): volta
+        // no item que abriu esse app, não na TV (dono, 18/11/2026).
+        return ultimo?.let { focar(m, e, it) } ?: e
+    }
+
+    /**
+     * O mesmo estado com o foco no item [id] (dono, 18/11/2026: "ao sair de um app a HOME deveria voltar no último app
+     * aberto"): a categoria dele e a posição dele. Null quando o item não está na cruz (quem chama mantém o foco onde
+     * estava). [preferida]: se o mesmo id estiver em duas categorias, a de onde ele foi aberto.
+     */
+    fun focar(m: Mapa, e: Estado, id: String, preferida: Categoria? = null): Estado? {
+        val ordem = m.categorias.indices.sortedBy { if (m.categorias[it] == preferida) 0 else 1 }
+        for (j in ordem) {
+            val i = m.itens[j].indexOf(id)
+            if (i >= 0) return Estado(j, e.sel.toMutableList().also { while (it.size <= j) it += 0; it[j] = i })
+        }
+        return null
     }
 
     /**
@@ -156,8 +173,18 @@ object CruzLogica {
     }
 
     /** Linhas do canal de TV (uma informação por linha; as vazias somem): canal, agora, depois. */
-    fun linhasTv(canal: String, agora: String?, depois: String?): String =
-        listOf(canal, agora, depois).filterNot { it.isNullOrBlank() }.joinToString("\n")
+    fun linhasTv(canal: String, agora: String?, depois: String?): String = linhas(canal, agora, depois)
+
+    /**
+     * A linha de baixo de qualquer item da cruz (dono, 18/11/2026: "a regra da TV em toda a HOME"): uma informação útil
+     * por linha, até [HomeCruz.SUB_LINHAS]; as vazias somem (nunca um campo em branco) e as repetidas também.
+     */
+    fun linhas(vararg partes: String?): String =
+        partes.mapNotNull { it?.trim()?.takeIf { t -> t.isNotEmpty() } }.distinct().take(4).joinToString("\n")
+
+    /** Partes curtas numa linha só ("2021 · 2 h 35 min · ★ 8,0"), sem as vazias; null se não sobrar nada. */
+    fun juntar(vararg partes: String?): String? =
+        partes.mapNotNull { it?.trim()?.takeIf { t -> t.isNotEmpty() } }.joinToString(" · ").ifEmpty { null }
 
     /**
      * Continuar (18/11/2026): os itens com quando (ms) do mais recente para o mais antigo, no máximo [max]. Empate (ou

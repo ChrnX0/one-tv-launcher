@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">Alamat dan kunci API router UniFi, di panel web</string>
     <string name="pb_titulo">Kotak panel cepat</string>
     <string name="pb_subtitulo">OK menampilkan atau menyembunyikan · ◀ ▶ mengubah urutan</string>
-    <string name="pb_cfg_det">Pilih kotak yang ditampilkan panel cepat (tahan HOME), dan urutannya</string>
+    <string name="pb_cfg_det">Pilih kotak yang ditampilkan panel cepat (tahan KEMBALI), dan urutannya</string>
     <string name="pb_mostrado">tampil</string>
     <string name="pb_escondido">tersembunyi</string>
     <string name="pb_padrao">Kembali ke kotak standar</string>

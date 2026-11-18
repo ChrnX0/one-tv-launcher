@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">Adres routera UniFi i klucz API, w panelu WWW</string>
     <string name="pb_titulo">Kafelki szybkiego panelu</string>
     <string name="pb_subtitulo">OK pokazuje lub ukrywa · ◀ ▶ zmieniają kolejność</string>
-    <string name="pb_cfg_det">Wybierz, które kafelki pokazuje szybki panel (przytrzymaj HOME) i w jakiej kolejności</string>
+    <string name="pb_cfg_det">Wybierz, które kafelki pokazuje szybki panel (przytrzymaj WSTECZ) i w jakiej kolejności</string>
     <string name="pb_mostrado">widoczny</string>
     <string name="pb_escondido">ukryty</string>
     <string name="pb_padrao">Przywróć standardowe kafelki</string>

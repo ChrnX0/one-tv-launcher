@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">UniFi yönlendirici adresi ve API anahtarı, web panelinde</string>
     <string name="pb_titulo">Hızlı panel kutucukları</string>
     <string name="pb_subtitulo">OK gösterir veya gizler · ◀ ▶ sırayı değiştirir</string>
-    <string name="pb_cfg_det">Hızlı panelin (HOME basılı) hangi kutucukları ve hangi sırayla göstereceğini seçin</string>
+    <string name="pb_cfg_det">Hızlı panelin (GERİ basılı) hangi kutucukları ve hangi sırayla göstereceğini seçin</string>
     <string name="pb_mostrado">gösteriliyor</string>
     <string name="pb_escondido">gizli</string>
     <string name="pb_padrao">Standart kutucuklara dön</string>

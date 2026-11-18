@@ -70,4 +70,12 @@
     <string name="cruz_app_solto">Symbole seul</string>
     <string name="cruz_tv_canal">Chaîne %1$d · %2$s</string>
     <string name="cruz_tv_depois">Ensuite, %1$s : %2$s</string>
+    <string name="cruz_aberto">Ouvert %1$s</string>
+    <string name="cruz_jogado">Joué %1$s</string>
+    <string name="cruz_tocou">Écouté %1$s</string>
+    <string name="cruz_por_ultimo">Dernier : %1$s</string>
+    <string name="cruz_addons_n">Addons installés : %1$d</string>
+    <string name="cruz_apps_n">Apps sur cette TV : %1$d</string>
+    <string name="cruz_podcasts_n">Podcasts suivis : %1$d</string>
+    <string name="cruz_pendrive">Clé USB : %1$s</string>
 </resources>

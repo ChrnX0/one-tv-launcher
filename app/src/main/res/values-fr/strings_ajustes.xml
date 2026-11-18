@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">Adresse et clé API du routeur UniFi, dans le panneau web</string>
     <string name="pb_titulo">Tuiles du panneau rapide</string>
     <string name="pb_subtitulo">OK affiche ou masque · ◀ ▶ changent l’ordre</string>
-    <string name="pb_cfg_det">Choisissez quelles tuiles le panneau rapide (maintenir HOME) affiche, et dans quel ordre</string>
+    <string name="pb_cfg_det">Choisissez quelles tuiles le panneau rapide (maintenir RETOUR) affiche, et dans quel ordre</string>
     <string name="pb_mostrado">affichée</string>
     <string name="pb_escondido">masquée</string>
     <string name="pb_padrao">Revenir aux tuiles par défaut</string>
