@@ -169,15 +169,29 @@ class IdiomaTest {
         assertSame(dub, par(leg, lista))
     }
 
-    @Test fun semMarcaOuAnoDiferenteNaoTemPar() {
-        val semMarca = F("Duna", "Ficção", 2021)
+    @Test fun semMarcaViraParDoQueTemMarca() {
+        // Visto na Sala (18/11/2026): a lista marca só a legendada ("Custe o que Custar Leg"); a sem marca é a dublada.
+        val semMarca = F("Custe o que Custar", "Séries", 2026)
+        val leg = F("Custe o que Custar Leg", "Séries", 2026)
+        assertSame(leg, par(semMarca, listOf(semMarca, leg)))
+        assertSame(semMarca, par(leg, listOf(semMarca, leg)))
+        assertEquals(Versao.DUBLADA, Idioma.versaoComPar(semMarca.nome, semMarca.grupo, leg.nome, leg.grupo))
+        assertEquals(Versao.LEGENDADA, Idioma.versaoComPar(leg.nome, leg.grupo, semMarca.nome, semMarca.grupo))
+        // Com marca oposta e sem marca na lista, a de marca ganha.
+        val dub = F("Custe o que Custar [D]", "", 2026)
+        assertSame(dub, par(leg, listOf(semMarca, leg, dub)))
+    }
+
+    @Test fun semParQuandoNadaTemMarcaOuOAnoMuda() {
+        val a = F("Duna", "Ficção", 2021)
+        val b = F("Duna", "Lançamentos", 2021)
+        assertNull(par(a, listOf(a, b)))                        // dois sem marca: não se sabe quem é quem
         val leg = F("Duna [L]", "", 2021)
-        assertNull(par(semMarca, listOf(semMarca, leg)))        // o alvo sem marca: não se sabe o que ele é
-        assertNull(par(leg, listOf(semMarca, leg)))             // o par sem marca: idem
         val dub84 = F("Duna (1984) [D]", "", 1984)
         assertNull(par(leg, listOf(leg, dub84)))                // anos diferentes: outro filme
         val dubSemAno = F("Duna [D]", "", null)
         assertSame(dubSemAno, par(leg, listOf(leg, dubSemAno))) // um sem ano: aceita
+        assertEquals(Versao.DESCONHECIDA, Idioma.versaoComPar(a.nome, a.grupo, b.nome, b.grupo))
     }
 
     @Test fun versaoDesejada() {

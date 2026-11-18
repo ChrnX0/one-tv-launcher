@@ -772,7 +772,7 @@ class FilmesActivity : Activity() {
      */
     private fun abrirFicha(f0: Filme, manterFoco: Boolean = false, trocar: Boolean = false) {
         val f = if (!trocar || Vod.deveRetomar(posicoes[f0.chave])) f0 else outraVersao(f0)
-            ?.takeIf { Idioma.versao(it.nome, it.grupo) == Idioma.versaoDesejada(prefsIdioma.para(f0.chave)) } ?: f0
+            ?.takeIf { Idioma.versaoComPar(it.nome, it.grupo, f0.nome, f0.grupo) == Idioma.versaoDesejada(prefsIdioma.para(f0.chave)) } ?: f0
         if (ficha !== f) fichaInfo = null   // outro filme: as cenas da ficha antiga não valem
         ficha = f
         // A mesma ficha reaberta (volta do vídeo ou do Elenco) fica como estava até a ficha nova chegar: sem piscar.
@@ -872,7 +872,7 @@ class FilmesActivity : Activity() {
         FichaAcoes.ondeAssistir(this, acoes, f.nome, f.ano ?: info?.lancamento?.take(4)?.toIntOrNull(), googleTv)
         // O mesmo filme na outra versão do catálogo (dublado x legendado): abre a ficha dela.
         outraVersao(f)?.let { o ->
-            val r = if (Idioma.versao(o.nome, o.grupo) == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
+            val r = if (Idioma.versaoComPar(o.nome, o.grupo, f.nome, f.grupo) == Idioma.Versao.LEGENDADA) R.string.idioma_versao_legendada else R.string.idioma_versao_dublada
             FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(r), marca = "versao") { abrirFicha(o) })
         }
         // Ideia 23: os outros filmes com o mesmo nome-base (sequências, dublado e legendado) viram uma categoria na grade.
@@ -1124,7 +1124,7 @@ class FilmesActivity : Activity() {
             busca = LegendaExterna.Busca(LegendaExterna.nomeDeBusca(f.nome), f.ano,
                 tmdb = f.tmdb ?: externo?.takeIf { it.first === f }?.second?.tmdb, versao = Idioma.versao(f.nome, f.grupo))) { i ->
             // A outra versão (dublada/legendada) vai junto: o ▼ do player troca no mesmo ponto (18/11/2026).
-            outraVersao(f)?.let { o -> VodActivity.comOutraVersao(i, o.fonteId, o.id, o.extensao, Vod.nomeLimpo(o.nome), Idioma.versao(o.nome, o.grupo)) } ?: i
+            outraVersao(f)?.let { o -> VodActivity.comOutraVersao(i, o.fonteId, o.id, o.extensao, Vod.nomeLimpo(o.nome), Idioma.versaoComPar(o.nome, o.grupo, f.nome, f.grupo)) } ?: i
         }
     }
 
