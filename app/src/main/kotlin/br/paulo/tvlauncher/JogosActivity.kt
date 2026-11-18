@@ -627,9 +627,41 @@ class JogosActivity : Activity() {
 
     private fun lpCard() = LinearLayout.LayoutParams(dp(CARD_L), dp(CARD_A)).apply { marginEnd = dp(Estilo.E2 + 4) }
 
-    private fun rolagem(v: View) = HorizontalScrollView(this).apply {
-        isHorizontalScrollBarEnabled = false; clipChildren = false; clipToPadding = false
-        addView(v)
+    /**
+     * Fileira rolável que não invade o painel ao lado. O foco cresce para cima e para baixo (sem corte vertical), mas
+     * na horizontal a fileira só passa do próprio limite do lado do FIM (a "espiada" até a borda da tela). Antes, em
+     * árabe (direita para a esquerda), os cards desenhavam por cima do painel do sofá/turma.
+     * O corte fica numa moldura que não rola: o clipBounds de quem rola muda de referência com o scroll.
+     */
+    private fun rolagem(v: View): FrameLayout {
+        val rolo = HorizontalScrollView(this).apply {
+            isHorizontalScrollBarEnabled = false; clipChildren = false; clipToPadding = false
+            addView(v)
+        }
+        // Android, em RTL, desfaz o "rolar até o foco" da 1ª medida (inverte o scroll depois), e quando os cards chegam
+        // depois da 1ª medida nem inverte: a fileira abria no FIM, com o jogo em foco fora da tela. A cada recarga
+        // (largura nova) o jogo em foco volta à vista; sem foco na fileira, em RTL ela abre no começo (à direita).
+        v.addOnLayoutChangeListener { _, l, _, r, _, ol, _, or, _ ->
+            if (r - l == or - ol) return@addOnLayoutChangeListener
+            rolo.post {
+                val foco = v.findFocus()
+                if (foco != null && foco !== v) {
+                    val ret = android.graphics.Rect()
+                    foco.getDrawingRect(ret)
+                    (v as? ViewGroup)?.offsetDescendantRectToMyCoords(foco, ret)
+                    rolo.requestChildRectangleOnScreen(v, ret, true)
+                } else if (rolo.layoutDirection == View.LAYOUT_DIRECTION_RTL) rolo.scrollTo(v.width, 0)
+            }
+        }
+        return FrameLayout(this).apply {
+            clipChildren = false; clipToPadding = false
+            addView(rolo, FrameLayout.LayoutParams(-1, -2))
+            addOnLayoutChangeListener { q, _, _, _, _, _, _, _, _ ->
+                val folgaFim = dp(Estilo.MARGEM_LATERAL + 8)   // até a borda da tela, como no LTR
+                val rtl = q.layoutDirection == View.LAYOUT_DIRECTION_RTL
+                q.clipBounds = android.graphics.Rect(if (rtl) -folgaFim else 0, -dp(40), q.width + if (rtl) 0 else folgaFim, q.height + dp(40))
+            }
+        }
     }
 
     private fun nomeGrupo(g: Jogos.Grupo) = getString(when (g) {
