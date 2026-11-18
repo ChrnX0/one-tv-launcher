@@ -182,6 +182,26 @@ object CruzLogica {
     fun linhas(vararg partes: String?): String =
         partes.mapNotNull { it?.trim()?.takeIf { t -> t.isNotEmpty() } }.distinct().take(4).joinToString("\n")
 
+    /**
+     * Nome para a cruz sem a marca de versão que as listas põem no fim ("Sem Deixar Vestígios LEG", "Duna [DUB]",
+     * "Noturno - DUAL 4K"; Sala, 18/11/2026). Só tira palavras-marca inteiras no FIM; se o nome for só marca, fica como
+     * veio. A marca continua valendo onde importa (legenda automática, LegendaExterna), que lê o título original.
+     */
+    fun semMarca(titulo: String): String {
+        var t = titulo.trim()
+        while (true) {
+            val m = MARCA_FIM.find(t) ?: break
+            val resto = t.substring(0, m.range.first).trimEnd(' ', '-', '|', '·', '–')
+            if (resto.isEmpty()) break
+            t = resto
+        }
+        return t
+    }
+    // "L"/"D" só entre colchetes ou parênteses ("Plano D" é nome de filme, "[D]" é marca).
+    private val MARCA_FIM = Regex(
+        "[\\s\\-|·–]+(?:[\\[(][LD][\\])]|[\\[(]?(?:LEG|LEGENDADO|DUB|DUBLADO|DUAL(?: [AÁ]UDIO)?|NACIONAL|4K|UHD|FHD|HD|SD|1080P|720P|2160P|HDR)[\\])]?)$",
+        RegexOption.IGNORE_CASE)
+
     /** Partes curtas numa linha só ("2021 · 2 h 35 min · ★ 8,0"), sem as vazias; null se não sobrar nada. */
     fun juntar(vararg partes: String?): String? =
         partes.mapNotNull { it?.trim()?.takeIf { t -> t.isNotEmpty() } }.joinToString(" · ").ifEmpty { null }

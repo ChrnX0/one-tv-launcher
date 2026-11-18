@@ -78,4 +78,6 @@
     <string name="cruz_apps_n">Apps en esta TV: %1$d</string>
     <string name="cruz_podcasts_n">Podcasts que sigues: %1$d</string>
     <string name="cruz_pendrive">Memoria USB: %1$s</string>
+    <string name="casa_fora_titulo">Home Assistant no responde</string>
+    <string name="casa_fora_texto">Comprueba que su servidor esté encendido. La TV vuelve a intentarlo sola cada pocos segundos.</string>
 </resources>

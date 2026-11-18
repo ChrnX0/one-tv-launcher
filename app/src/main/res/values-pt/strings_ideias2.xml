@@ -46,7 +46,6 @@
     <string name="casa_indisponivel">Indisponível</string>
     <string name="casa_sem_config_titulo">Ligue a sua casa</string>
     <string name="casa_dica_acionar">ligar ou desligar</string>
-    <string name="casa_erro_simples">O Home Assistant não respondeu. Confira se o servidor dele está ligado e tente de novo.</string>
     <string name="casa_erro">O Home Assistant não respondeu: %1$s</string>
     <string name="casa_ligado_pct">Ligado · %1$d%%</string>
     <string name="casa_brilho_ajuste">Brilho %1$d%% · ◀ ▶</string>

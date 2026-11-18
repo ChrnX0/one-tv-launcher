@@ -22,6 +22,20 @@
         <item>Radio: favorites (keys 1 to 9 play each one), recent, stations near you, from your country, by genre and from other countries with flags</item>
         <item>Podcasts: Continue listening with a bar of how much you heard, new episodes, your podcasts with covers and, inside each one, episodes and “About”</item>
         <item>The remote\'s ⏪ ⏩ and ⏯ work anywhere on the podcasts screen; hold OK for more options</item>
+        <item>A long piece of information, like the title of the last video, now ends in “…” and no longer pushes the others out; “Opened 0 minutes ago” became “Opened now”</item>
+        <item>Continue: the movie or series name shows without the list tag (“LEG”, “DUB”, “4K”)</item>
+        <item>Home: with Home Assistant offline, the screen says what happened and that it retries by itself, and Google Home stays at hand</item>
+        <item>After the screensaver, focus returns to the home screen, not to the top bar</item>
+        <item>Lighter navigation: the selected icon only starts its animation after the column stops moving</item>
+        <item>Settings › System › “How this TV is doing”: 7 measurements of the TV, with number and target</item>
+        <item>Live TV: hold ▲▼ to browse channel names without switching the video; release to switch once</item>
+        <item>Series: “Skip intro” button; the chosen subtitle is saved for each series</item>
+        <item>Search that forgives typos (“netflx” finds Netflix) and search inside settings</item>
+        <item>High contrast, audio description and subtitles for the deaf in Settings</item>
+        <item>Changed settings show “Undo” for 10 s; Settings › System › “Recent changes”</item>
+        <item>On the network: a movie folder becomes a catalog with clean titles and “S1 E2”</item>
+        <item>Panel: one-day invite for guests, backup recovery key and “Move to a new TV”</item>
+        <item>Stability fixes from a long debugging round</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>ouvir_radio</item>

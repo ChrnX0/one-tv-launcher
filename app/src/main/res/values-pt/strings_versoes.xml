@@ -19,6 +19,20 @@
         <item>Rádio: favoritas (as teclas 1 a 9 tocam cada uma), recentes, rádios perto de você, do seu país, por gênero e de outros países com bandeira</item>
         <item>Podcasts: Continuar ouvindo com a barra do quanto já ouviu, episódios novos, seus podcasts com capa e, dentro de cada um, episódios e “Sobre”</item>
         <item>⏪ ⏩ e ⏯ do controle funcionam em qualquer lugar da tela de podcasts; segurar OK abre mais opções</item>
+        <item>Uma informação comprida, como o título do último vídeo, termina em “…” e não empurra mais as outras para fora; “Aberto há 0 minuto” virou “Aberto agora”</item>
+        <item>Continuar: o nome do filme ou da série aparece sem a marca da lista (“LEG”, “DUB”, “4K”)</item>
+        <item>Casa: com o Home Assistant fora do ar, a tela diz o que houve e que tenta de novo sozinha, e o Google Home continua à mão</item>
+        <item>Depois do descanso de tela, o foco volta para a tela inicial em cruz, e não para a barra de cima</item>
+        <item>Navegação mais leve: o ícone escolhido só começa a animação depois que a coluna para de andar</item>
+        <item>Configurações › Sistema › “Como esta TV está indo”: 7 medidas da TV, com número e alvo</item>
+        <item>TV ao vivo: segurar ▲▼ passa os nomes dos canais sem trocar o vídeo; soltar troca uma vez</item>
+        <item>Séries: botão “Pular abertura”; a legenda escolhida fica salva para cada série</item>
+        <item>Busca que perdoa erro de digitação (“netflx” acha Netflix) e busca nos ajustes</item>
+        <item>Alto contraste, audiodescrição e legenda para surdos nas Configurações</item>
+        <item>Ajustes mudados mostram “Desfazer” por 10 s; Configurações › Sistema › “Mudanças recentes”</item>
+        <item>Na rede: pasta de filmes vira catálogo com títulos limpos e “T1 E2”</item>
+        <item>Painel: convite de um dia para visitas, chave de recuperação do backup e “Levar para uma TV nova”</item>
+        <item>Correções de estabilidade de uma rodada longa de depuração</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Rádio nova</item>

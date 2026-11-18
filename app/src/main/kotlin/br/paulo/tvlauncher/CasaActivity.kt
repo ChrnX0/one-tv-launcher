@@ -156,13 +156,28 @@ class CasaActivity : Activity() {
         google.requestFocus()
     }
 
+    private fun mostrarForaDoAr() {
+        resumo.text = ""
+        grade.removeAllViews()
+        cartoes.clear()
+        grade.tag = FORA
+        val google = cartaoGoogle()
+        grade.addView(Estilo.estadoVazio(this, IconeCardDrawable("casa"), getString(R.string.casa_fora_titulo),
+            getString(R.string.casa_fora_texto)))
+        grade.addView(linha(listOf(google)))
+        google.requestFocus()
+    }
+
     private fun mostrar(r: Result<List<CasaHA.Entidade>>) {
         val lista = r.getOrElse {
-            if (entidades.isEmpty() && grade.childCount == 0) montar(emptyList())   // ao menos o Google Home fica à mão
             // Frase simples na tela (quem lê pode ser idoso); o detalhe técnico fica no log (teste na TV, 15/11/2026:
             // aparecia "não respondeu: não consegui falar com o Home Assistant: ConnectException").
             android.util.Log.w("TvLauncher.Casa", "Home Assistant: ${it.message ?: it.javaClass.simpleName}")
-            resumo.text = getString(R.string.casa_erro_simples)
+            // Nada carregado ainda: o estado vazio explica (título + o que fazer) e o Google Home fica à mão. Com aparelhos
+            // já na tela, eles ficam e só o resumo avisa. A tela tenta de novo sozinha a cada VIVO_MS (Sala, 18/11/2026: a
+            // frase antiga mandava "tentar de novo", mas não havia botão; a tentativa já era automática).
+            if (entidades.isEmpty()) { if (grade.tag != FORA) mostrarForaDoAr() }
+            else resumo.text = getString(R.string.casa_fora_texto)
             return
         }
         val agora = SystemClock.elapsedRealtime()
@@ -191,6 +206,7 @@ class CasaActivity : Activity() {
     private fun montar(lista: List<CasaHA.Entidade>) {
         val focoAntes = focoId
         grade.removeAllViews()
+        grade.tag = null
         cartoes.clear()
         escreverResumo()
         var alvo: View? = null
@@ -613,6 +629,7 @@ class CasaActivity : Activity() {
         private const val ESCALA_AJUSTE = 1.08f   // no ajuste de brilho o cartão cresce mais: dá para ver que mudou de modo
         /** Releitura com a tela aberta. O Home Assistant é local; 5 s é o mesmo ritmo do vigia (CasaHA). */
         private const val VIVO_MS = 5_000L
+        private const val FORA = "fora_do_ar"
         /** Quanto tempo o estado otimista vale sem confirmação (depois disso, vale o que o Home Assistant disser). */
         private const val PRAZO_MS = 6_000L
         /** Áreas (cômodos) mudam pouco: relidas a cada 2 min com a tela aberta, não a cada 5 s. */

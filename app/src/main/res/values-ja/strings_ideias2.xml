@@ -45,7 +45,6 @@
     <string name="casa_indisponivel">利用不可</string>
     <string name="casa_sem_config_titulo">ホームを接続</string>
     <string name="casa_dica_acionar">オン/オフ</string>
-    <string name="casa_erro_simples">Home Assistant が応答しませんでした。サーバーがオンか確認して、もう一度お試しください。</string>
     <string name="casa_erro">Home Assistant が応答しませんでした: %1$s</string>
     <string name="casa_ligado_pct">オン · %1$d%%</string>
     <string name="casa_brilho_ajuste">明るさ %1$d%% · ◀ ▶</string>

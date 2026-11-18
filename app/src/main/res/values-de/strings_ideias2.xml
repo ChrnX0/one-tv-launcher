@@ -45,7 +45,6 @@
     <string name="casa_indisponivel">Nicht verfügbar</string>
     <string name="casa_sem_config_titulo">Verbinde dein Zuhause</string>
     <string name="casa_dica_acionar">ein- oder ausschalten</string>
-    <string name="casa_erro_simples">Home Assistant hat nicht geantwortet. Prüfe, ob sein Server an ist, und versuch es erneut.</string>
     <string name="casa_erro">Home Assistant hat nicht geantwortet: %1$s</string>
     <string name="casa_ligado_pct">An · %1$d%%</string>
     <string name="casa_brilho_ajuste">Helligkeit %1$d%% · ◀ ▶</string>

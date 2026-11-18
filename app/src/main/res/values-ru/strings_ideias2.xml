@@ -45,7 +45,6 @@
     <string name="casa_indisponivel">Недоступно</string>
     <string name="casa_sem_config_titulo">Подключите свой дом</string>
     <string name="casa_dica_acionar">вкл. или выкл.</string>
-    <string name="casa_erro_simples">Home Assistant не ответил. Проверьте, что сервер включён, и попробуйте снова.</string>
     <string name="casa_erro">Home Assistant не ответил: %1$s</string>
     <string name="casa_ligado_pct">Вкл · %1$d%%</string>
     <string name="casa_brilho_ajuste">Яркость %1$d%% · ◀ ▶</string>

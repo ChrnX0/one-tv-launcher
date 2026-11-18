@@ -78,4 +78,6 @@
     <string name="cruz_apps_n">Apps on this TV: %1$d</string>
     <string name="cruz_podcasts_n">Podcasts you follow: %1$d</string>
     <string name="cruz_pendrive">USB drive: %1$s</string>
+    <string name="casa_fora_titulo">Home Assistant is offline</string>
+    <string name="casa_fora_texto">Check that its server is on. The TV tries again by itself every few seconds.</string>
 </resources>

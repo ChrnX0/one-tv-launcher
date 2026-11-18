@@ -45,7 +45,6 @@
     <string name="casa_indisponivel">不可用</string>
     <string name="casa_sem_config_titulo">连接你的家</string>
     <string name="casa_dica_acionar">开或关</string>
-    <string name="casa_erro_simples">Home Assistant 无响应。请检查其服务器是否已开启，然后重试。</string>
     <string name="casa_erro">Home Assistant 无响应：%1$s</string>
     <string name="casa_ligado_pct">开 · %1$d%%</string>
     <string name="casa_brilho_ajuste">亮度 %1$d%% · ◀ ▶</string>

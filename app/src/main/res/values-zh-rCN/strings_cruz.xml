@@ -78,4 +78,6 @@
     <string name="cruz_apps_n">这台电视上的应用：%1$d</string>
     <string name="cruz_podcasts_n">关注的播客：%1$d</string>
     <string name="cruz_pendrive">U 盘：%1$s</string>
+    <string name="casa_fora_titulo">Home Assistant 无响应</string>
+    <string name="casa_fora_texto">请确认它的服务器已开启。电视会每隔几秒自动重试。</string>
 </resources>

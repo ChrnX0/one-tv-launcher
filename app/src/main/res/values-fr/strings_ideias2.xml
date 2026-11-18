@@ -45,7 +45,6 @@
     <string name="casa_indisponivel">Indisponible</string>
     <string name="casa_sem_config_titulo">Connectez votre maison</string>
     <string name="casa_dica_acionar">allumer ou éteindre</string>
-    <string name="casa_erro_simples">Home Assistant n’a pas répondu. Vérifiez que son serveur est allumé et réessayez.</string>
     <string name="casa_erro">Home Assistant n’a pas répondu : %1$s</string>
     <string name="casa_ligado_pct">Allumé · %1$d%%</string>
     <string name="casa_brilho_ajuste">Luminosité %1$d%% · ◀ ▶</string>
