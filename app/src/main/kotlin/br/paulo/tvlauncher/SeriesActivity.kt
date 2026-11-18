@@ -303,7 +303,7 @@ class SeriesActivity : Activity() {
                 // Aberta pela busca única da HOME (12/11/2026): já entra com o termo buscado.
                 intent.getStringExtra(BuscaUnica.EXTRA_TERMO)?.trim()?.takeIf { it.isNotEmpty() }?.let { t -> termo = t; chave = BUSCA }
                 // A 1ª conta (ocultas, contagens, ordem) também sai da thread da tela; o "Carregando" fica até ela chegar.
-                recalcular(ModoGrade.NOVA, inicial = true) { aviso.visibility = View.GONE; grade.requestFocus() }
+                recalcular(ModoGrade.NOVA, inicialPedido = true) { aviso.visibility = View.GONE; grade.requestFocus() }
                 sincronizarFora(s, forcar = false)
                 classificarIdades(s)
                 // O índice das versões sai depois da grade na tela (é a parte demorada; a ficha funciona sem ele).
@@ -400,6 +400,7 @@ class SeriesActivity : Activity() {
     }
 
     /** O que fazer com a grade quando a conta chegar. */
+    /** A ordem importa: do mais forte ao mais fraco ([GridRequest.Need.strength] = 2 - ordinal). */
     private enum class ModoGrade { NOVA, MANTER_LUGAR, IGUAL }
 
     /** Resultado de uma conta: tudo que a tela precisa, calculado fora dela. */
@@ -437,7 +438,13 @@ class SeriesActivity : Activity() {
      * Refaz, FORA da thread da tela, as categorias ocultas, a busca, as contagens das categorias e (conforme [modo]) a
      * grade (igual à FilmesActivity). Pedidos seguidos descartam os velhos. [inicial]: escolhe a categoria de entrada.
      */
-    private fun recalcular(modo: ModoGrade, inicial: Boolean = false, depois: (() -> Unit)? = null) {
+    /** Pedido que ainda não chegou à tela: o próximo herda o que ele exigia ([GridRequest]). */
+    private var pedidoPendente: GridRequest.Need? = null
+
+    private fun recalcular(modoPedido: ModoGrade, inicialPedido: Boolean = false, depoisPedido: (() -> Unit)? = null) {
+        val pedido = GridRequest.merge(pedidoPendente, GridRequest.Need(2 - modoPedido.ordinal, inicialPedido, depoisPedido))
+        pedidoPendente = pedido
+        val modo = ModoGrade.entries[2 - pedido.strength]; val inicial = pedido.initial; val depois = pedido.after
         val todasS = todas; val ocultasS = if (mostrarOcultas) emptySet() else ocultas; val mostrar = mostrarOcultas
         val idadeS = porIdade
         val termoS = termo; val ultS = ultimos; val posS = posicoes; val intS = interesses; val progS = progresso
@@ -518,6 +525,7 @@ class SeriesActivity : Activity() {
                 Estado(vis, res, acoes, botoes, fixas, rola, ch, g, fora[ch]?.let { it.first.size to it.second })
             },
             aplicar = { e ->
+                pedidoPendente = null
                 if (!isDestroyed) {
                     series = e.series; resultados = e.resultados; itens = e.acoes + e.fixas + e.rola; chave = e.chave
                     coluna.mostrarBotoes(e.botoes)

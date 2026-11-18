@@ -362,7 +362,7 @@ class PlayerListaTela(
             val agora = System.currentTimeMillis()
             val prog = c.guiaId.takeIf { it.isNotEmpty() }?.let { guia.agora(it, agora) }
             l.numero.text = c.numero.toString()
-            l.numero.setTextColor(if (c.id == atualId) ambar else papel)
+            l.numero.setTextColor(if (c.id == atualId) Estilo.ACENTO else papel)   // o canal no ar: o acento único da marca
             l.nome.text = c.nome
             l.sub.text = when {
                 // O número em âmbar já marca o canal atual; "assistindo · " cortava o nome do programa (Sala, 17/11/2026).
@@ -471,8 +471,9 @@ class PlayerListaTela(
             detTitulo.text = atual.titulo
             // Arredonda para cima, como a linha do canal (BarraTempo.duracao): antes o detalhe dizia "faltam 8 min" ao lado
             // de "faltam 9 min" na lista (Sala, 16/11/2026). A unidade fica na frase traduzida.
-            val faltam = ((atual.fim - agora + 59_999L) / 60_000L).coerceAtLeast(1)
-            detHorario.text = act.getString(R.string.player_horario, hora.format(Date(atual.inicio)), hora.format(Date(atual.fim)), faltam) +
+            // 18/11/2026: o tempo no formato único do app (BarraTempo.duracao): "64 min" ao lado de "1 h 04" confundia.
+            detHorario.text = hora.format(Date(atual.inicio)) + " – " + hora.format(Date(atual.fim)) + " · " +
+                act.getString(R.string.tempo_faltam, BarraTempo.duracao(atual.fim - agora)) +
                 (atual.categoria.takeIf { it.isNotEmpty() }?.let { "  ·  $it" } ?: "")
             detBarra.visibility = View.VISIBLE
             detBarra.fracao = guia.progresso(atual, agora)

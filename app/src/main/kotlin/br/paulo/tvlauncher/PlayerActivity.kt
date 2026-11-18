@@ -800,7 +800,7 @@ class PlayerActivity : Activity() {
         info.addView(linha)
         infoProgresso = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
             max = 1000
-            progressTintList = ColorStateList.valueOf(Estilo.ERRO)
+            progressTintList = ColorStateList.valueOf(Estilo.ACENTO)   // quanto do programa passou: a cor da barra da cruz
             progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA)
         }
         info.addView(infoProgresso, LinearLayout.LayoutParams(-1, dp(4)).apply { topMargin = dp(12) })
@@ -1303,7 +1303,7 @@ class PlayerActivity : Activity() {
     private fun vidro(raio: Int) = Estilo.fundo(this, Estilo.alfa(Estilo.FUNDO, 0xD9), raio, Estilo.VIDRO_BORDA)
 
     /** "19 min" ou "1 h 05 min". */
-    private fun minutosTexto(m: Int) = if (m < 60) "$m min" else "${m / 60} h %02d min".format(m % 60)
+    private fun minutosTexto(m: Int) = BarraTempo.duracao(m * 60_000L - 59_999L)
 
     private fun dp(v: Int) = (v * resources.displayMetrics.density + 0.5f).toInt()
 }

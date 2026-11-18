@@ -141,22 +141,22 @@ internal object FundoEscuroPronto {
     private val pintar = Paint(Paint.FILTER_BITMAP_FLAG)
     private val destino = android.graphics.RectF()
 
-    @Synchronized private fun imagem(w: Int, h: Int): Bitmap {
+    @Synchronized private fun imagem(w: Int, h: Int, mundo: World): Bitmap {
         val lw = maxOf(1, w / 2); val lh = maxOf(1, h / 2)
-        val chave = (lw.toLong() shl 32) or lh.toLong()
+        val chave = (lw.toLong() shl 34) or (lh.toLong() shl 2) or mundo.ordinal.toLong()
         prontas[chave]?.let { return it }
-        if (prontas.size >= 3) prontas.clear()   // tamanhos estranhos (janelas parciais) não acumulam
+        if (prontas.size >= 5) prontas.clear()   // tamanhos estranhos (janelas parciais) não acumulam
         val b = Bitmap.createBitmap(lw, lh, Bitmap.Config.ARGB_8888)
-        desenharFundoEscuro(Canvas(b), lw.toFloat(), lh.toFloat(), Paint(Paint.ANTI_ALIAS_FLAG))
+        desenharFundoEscuro(Canvas(b), lw.toFloat(), lh.toFloat(), Paint(Paint.ANTI_ALIAS_FLAG), mundo.glow)
         prontas[chave] = b
         return b
     }
 
-    /** Desenha o grafite em (0,0)-(w,h). Só na thread da tela (usa [destino] compartilhado). */
-    fun desenhar(c: Canvas, w: Float, h: Float) {
+    /** Desenha o grafite em (0,0)-(w,h), com o brilho do [mundo] ([World]). Só na thread da tela (usa [destino] compartilhado). */
+    fun desenhar(c: Canvas, w: Float, h: Float, mundo: World = World.NEUTRAL) {
         if (w < 1f || h < 1f) return
         destino.set(0f, 0f, w, h)
-        c.drawBitmap(imagem(w.toInt(), h.toInt()), null, destino, pintar)
+        c.drawBitmap(imagem(w.toInt(), h.toInt(), mundo), null, destino, pintar)
     }
 }
 
@@ -165,12 +165,14 @@ internal object FundoEscuroPronto {
  * canto de baixo) + vinheta nas bordas + véu embaixo para os cards. Função solta (não método da classe) só para
  * separar, na leitura, "o fundo fixo" da linha do sol/lua, que a classe FundoEscuro desenha por cima.
  */
-internal fun desenharFundoEscuro(c: Canvas, w: Float, h: Float, p: Paint) {
+internal fun desenharFundoEscuro(c: Canvas, w: Float, h: Float, p: Paint, brilho: Int = World.NEUTRAL.glow) {
     p.shader = LinearGradient(0f, 0f, 0f, h,
         intArrayOf(0xFF0E1317.toInt(), 0xFF0A0D10.toInt(), 0xFF07090B.toInt()), floatArrayOf(0f, 0.55f, 1f), Shader.TileMode.CLAMP)
     c.drawRect(0f, 0f, w, h, p)
     // brilho frio, atrás da hora e do clima
-    p.shader = RadialGradient(w * 0.24f, h * 0.14f, w * 0.58f, 0x5A4A7388, 0x004A7388, Shader.TileMode.CLAMP)
+    // (o mundo da tela, World: Assistir quente, Ouvir turquesa, Jogar violeta; o neutro é o azul frio de sempre)
+    val rgb = brilho and 0xFFFFFF
+    p.shader = RadialGradient(w * 0.24f, h * 0.14f, w * 0.58f, 0x5A000000 or rgb, rgb, Shader.TileMode.CLAMP)
     c.drawRect(0f, 0f, w, h, p)
     // brilho quente, no canto de baixo à direita
     p.shader = RadialGradient(w * 0.94f, h * 1.0f, w * 0.52f, 0x3C8A5A2E, 0x008A5A2E, Shader.TileMode.CLAMP)

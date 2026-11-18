@@ -10,8 +10,8 @@ class BarraTempoTest {
         assertEquals("22 min", BarraTempo.duracao(21 * 60_000L + 1))
         assertEquals("59 min", BarraTempo.duracao(59 * 60_000L))
         assertEquals("1 h", BarraTempo.duracao(60 * 60_000L))
-        assertEquals("1 h 05", BarraTempo.duracao(65 * 60_000L))
-        assertEquals("2 h 30", BarraTempo.duracao(150 * 60_000L))
+        assertEquals("1 h 5 min", BarraTempo.duracao(65 * 60_000L))
+        assertEquals("2 h 30 min", BarraTempo.duracao(150 * 60_000L))
     }
 
     @Test fun fracaoFicaEntreZeroEUm() {

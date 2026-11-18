@@ -74,13 +74,13 @@ object Estilo {
         /** Hora, temperatura grande. */
         DISPLAY(56f, 800, 1),
         /** Título de tela, nome do item em destaque. */
-        TITULO(28f, 600, 1),
+        TITULO(30f, 600, 1),       // era 28
         /** Linhas, cards, botões. */
-        CORPO(16f, 500, 1),
+        CORPO(18f, 500, 1),        // era 16 (18/11/2026: ler a 3 m, pensando em idosos; a cruz usa 22-32)
         /** Explicação, metadado. */
-        LEGENDA(13f, 400, 2),
+        LEGENDA(15f, 400, 2),      // era 13
         /** Nome de grupo ("PRÓXIMOS 9 DIAS"). */
-        SECAO(12f, 600, 3, caixaAlta = true, espaco = 0.14f);
+        SECAO(13f, 600, 3, caixaAlta = true, espaco = 0.14f);   // era 12
 
         /** A cor do papel na hora (o alto contraste, 16.3, muda TEXTO_2 e TEXTO_3). */
         val cor: Int get() = when (nivel) { 1 -> TEXTO; 2 -> TEXTO_2; else -> TEXTO_3 }
@@ -435,7 +435,7 @@ object Estilo {
      * Escuro (Fundos.kt, desenharFundoEscuro), em vez da textura pontilhada antiga (drawable fundo.jpg) e dos cinzas
      * soltos de cada tela. Telas de lista ficam em fundo liso mesmo no tema Galeria (decisão 1: vidro só com imagem atrás).
      */
-    fun fundoTela(@Suppress("UNUSED_PARAMETER") ctx: Context): Drawable = FundoGrafite()
+    fun fundoTela(ctx: Context): Drawable = FundoGrafite(World.of(ctx))
 
     /**
      * Tela cuja raiz já pinta o grafite na tela toda: a cor de fundo da janela (tema) por baixo é uma camada de tela
@@ -451,10 +451,10 @@ object Estilo {
         a.window.setBackgroundDrawable(null)
     }
 
-    private class FundoGrafite : Drawable() {
+    private class FundoGrafite(private val mundo: World) : Drawable() {
         override fun draw(c: android.graphics.Canvas) {
             c.save(); c.translate(bounds.left.toFloat(), bounds.top.toFloat())
-            FundoEscuroPronto.desenhar(c, bounds.width().toFloat(), bounds.height().toFloat())   // uma imagem pronta (Fundos.kt)
+            FundoEscuroPronto.desenhar(c, bounds.width().toFloat(), bounds.height().toFloat(), mundo)   // uma imagem pronta (Fundos.kt)
             c.restore()
         }
         override fun setAlpha(alpha: Int) {}   // opaco sempre (ninguém usa alfa neste fundo)

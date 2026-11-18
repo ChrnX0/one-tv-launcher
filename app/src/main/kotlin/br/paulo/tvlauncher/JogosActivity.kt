@@ -1,90 +1,60 @@
 package br.paulo.tvlauncher
 
-import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
 import android.hardware.input.InputManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.InputType
-import android.text.TextUtils
 import android.text.format.DateUtils
 import android.view.Gravity
 import android.view.KeyEvent
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.EditText
 import android.widget.FrameLayout
-import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextClock
-import android.widget.TextView
 
 /**
- * Tela do card Jogos, no desenho "Sofá" (aprovado pelo dono em 17/11/2026, telas-v5 "Sofá v2"):
- *  - à esquerda, um painel com quem está no sofá (os controles ligados e a bateria) e a turma do Discord do servidor
- *    da pessoa (quem está na voz, quem está jogando o quê; [TurmaDiscord]). Com o foco no painel ele abre: aparece o QR
- *    que leva o celular para a sala de voz (a conversa vai pelo celular) e a fileira de jogos escurece;
- *  - à direita, "Continuar": os jogos em cards altos, o jogado por último primeiro, com Jogar, Ligar o PC e jogar e
- *    Chamar a turma embaixo; e "Por tipo", que filtra a fileira.
- * Segurar OK (ou Y no controle) num jogo troca o grupo dele ou tira ele do card. Letras grandes (idosos usam a TV).
- * A lista de apps, o uso, os banners e a turma são lidos fora da thread da tela.
+ * Tela Jogos (Central de jogos). Redesenhada em 18/11/2026 no padrão da cruz da HOME, como Rádio e Podcasts
+ * (o dono escolheu "Refazer no visual da cruz": era a única tela grande que ainda parecia outro app).
+ * É uma [CruzOuvir]: ◀ ▶ trocam a prateleira, ▲ ▼ andam na coluna, OK abre e segurar OK (ou Y no controle) num jogo
+ * troca o grupo dele ou tira ele daqui. Prateleiras, na ordem:
+ *  - Jogados por último: os jogos (o ícone do app), o jogado por último primeiro, e "Mais jogos" (Play Store);
+ *  - No sofá: os controles ligados, com o número do jogador e a bateria, e "Parear um controle";
+ *  - Sua turma: a sala de voz do Discord (OK = QR grande para o celular entrar), quem está online e jogando o quê,
+ *    "Chamar a turma" (com webhook) e a configuração;
+ *  - Mais opções: testar a rede, jogar no PC, baixar jogos, escolher apps.
+ * O cartão de cima à direita ("Esta semana") mostra a rede e quanto se jogou nos últimos 7 dias.
+ * A lista de apps, o uso, os ícones e a turma são lidos fora da thread da tela.
  */
 class JogosActivity : Activity() {
-    private lateinit var painel: LinearLayout
-    private lateinit var direita: LinearLayout
-    private lateinit var controlesBox: LinearLayout
-    private lateinit var sofaTitulo: TextView
-    private lateinit var turmaNome: TextView
-    private lateinit var turmaBox: LinearLayout
-    private lateinit var chamarPainel: TextView
-    private lateinit var chipRede: TextView
-    private lateinit var brilho: View
-    private lateinit var fila: LinearLayout
-    private lateinit var botaoJogar: TextView
-    private lateinit var botaoPc: TextView
-    private lateinit var botaoChamar: TextView
-    private lateinit var frase: TextView
-    private lateinit var chips: LinearLayout
+    private lateinit var cruz: CruzOuvir
     private val ui = Handler(Looper.getMainLooper())
     private var rede: JogosTv.Medida? = null
     private var jogos: List<JogosTv.App> = emptyList()   // já na ordem "jogado por último primeiro"
     private var uso: Map<String, Long> = emptyMap()
-    private var atual: JogosTv.App? = null               // o jogo com foco (ou o último que teve)
-    private var filtro: Jogos.Grupo? = null              // sempre null desde a Central (18/11/2026): os jogos moram na cruz
-    /** Jogado nos últimos 7 dias (ms) e o jogo mais jogado (Central de jogos). */
+    /** Jogado nos últimos 7 dias (ms) e o jogo mais jogado. */
     private class Semana(val ms: Long, val topo: String?)
     private var semana: Semana? = null
     private var turma: TurmaDiscordTv.Estado? = null
-    /** Depuração 18/11: virou true na 1ª tecla. Depois dela, nada que chega atrasado (lista, turma) rouba o foco. */
-    private var pessoaMexeu = false
-    private var aberto = false                           // painel aberto (foco nele)
     private var esperandoPc = false
-    private var montado = false
-    private var abrirNoSofa = false   // veio do item "Sofá" da tela em cruz: 1º foco no painel
-    private var focoPacote: String? = null   // ao redesenhar (mudou de grupo, voltou de um jogo), o foco volta no mesmo jogo
-    private var qr: ImageView? = null        // QR da sala de voz (só aparece com o painel aberto)
-    private var qrDica: TextView? = null
+    private var abrirNoSofa = false   // veio do item "Sofá" da tela em cruz: começa na turma
+    private var focoPacote: String? = null   // voltou de mudar o grupo: o foco volta no mesmo jogo
+    /** O jogo escolhido por último na 1ª prateleira: Chamar a turma e Jogar no PC usam ele. */
+    private var escolhido: JogosTv.App? = null
 
-    /** O que a tela desenha de cada app: o banner oficial (logo) ou, sem banner, o ícone sobre a cor dele. */
-    private class Visual(val banner: Bitmap?, val icone: Drawable?, val cores: IntArray)
+    /** O que a tela desenha de cada app: o ícone e a cor dele. */
+    private class Visual(val icone: Drawable?, val cor: Int)
     private val visuais = HashMap<String, Visual>()   // só na thread da tela
 
     private val ouvinteControles = object : InputManager.InputDeviceListener {
-        override fun onInputDeviceAdded(id: Int) = desenharControles()
-        override fun onInputDeviceRemoved(id: Int) = desenharControles()
-        override fun onInputDeviceChanged(id: Int) = desenharControles()
+        override fun onInputDeviceAdded(id: Int) = montar()
+        override fun onInputDeviceRemoved(id: Int) = montar()
+        override fun onInputDeviceChanged(id: Int) = montar()
     }
-
-    // O painel abre quando o foco entra nele e fecha quando sai (sem ouvinte por view: um só para a tela toda).
-    private val ouvinteFoco = ViewTreeObserver.OnGlobalFocusChangeListener { _, novo -> abrirPainel(novo != null && dentro(novo, painel)) }
 
     private val repetirTurma = object : Runnable {
         override fun run() { buscarTurma(); ui.postDelayed(this, 60_000) }
@@ -96,31 +66,22 @@ class JogosActivity : Activity() {
         super.onCreate(b)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro (VigiaAtualizacao)
         abrirNoSofa = intent?.getBooleanExtra(EXTRA_SOFA, false) == true
-        val raiz = FrameLayout(this).apply { background = Estilo.fundoTela(this@JogosActivity) }
-        // Luz da cor do jogo em foco atrás da fileira (a tela "veste" o jogo) e um calor da marca no canto do painel.
-        brilho = View(this)
-        raiz.addView(brilho, FrameLayout.LayoutParams(-1, -1))
-        raiz.addView(View(this).apply {
-            background = GradientDrawable().apply {
-                gradientType = GradientDrawable.RADIAL_GRADIENT
-                gradientRadius = dp(420).toFloat()
-                setGradientCenter(0f, 0f)
-                colors = intArrayOf(Estilo.alfa(MARCA, 0x30), Estilo.alfa(MARCA, 0x0C), 0x00000000)
-            }
-        }, FrameLayout.LayoutParams(-1, -1))
-
-        val linha = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false }
-        painel = montarPainel()
-        linha.addView(painel, LinearLayout.LayoutParams(dp(LARGURA_PAINEL), -1))
-        direita = montarDireita()
-        linha.addView(direita, LinearLayout.LayoutParams(0, -1, 1f))
-        raiz.addView(linha, FrameLayout.LayoutParams(-1, -1))
-        setContentView(raiz)
-        raiz.viewTreeObserver.addOnGlobalFocusChangeListener(ouvinteFoco)
+        cruz = CruzOuvir(this, Fontes.nunito(this, 500), Fontes.nunito(this, 800)).apply {
+            definirTitulo(getString(R.string.jogos_titulo))
+            definirDicas(getString(R.string.grv_dica_ok) to getString(R.string.jogos_tecla_jogar),
+                getString(R.string.jogos_tecla_segurar) to getString(R.string.jogos_tecla_opcoes))
+            aoSom = { s -> SonsCruz.tocar(this@JogosActivity, s, CruzLogica.Categoria.JOGAR) }
+            aoMudar = { p, i -> if (p.id == P_JOGOS) jogos.firstOrNull { it.pacote == i.id }?.let { escolhido = it } }
+        }
+        setContentView(FrameLayout(this).apply {
+            background = Estilo.fundoTela(this@JogosActivity)
+            addView(cruz, FrameLayout.LayoutParams(-1, -1))
+        })
         getSystemService(InputManager::class.java)?.registerInputDeviceListener(ouvinteControles, ui)
         turma = TurmaDiscordTv.guardado(this)
-        desenharControles()
-        desenharTurma()
+        montar()
+        if (abrirNoSofa) cruz.ir(P_TURMA, animar = false)
+        cruz.requestFocus()
         testarRede()
     }
 
@@ -138,8 +99,8 @@ class JogosActivity : Activity() {
 
     override fun onDestroy() {
         getSystemService(InputManager::class.java)?.unregisterInputDeviceListener(ouvinteControles)
-        if (::painel.isInitialized) painel.rootView.viewTreeObserver.takeIf { it.isAlive }?.removeOnGlobalFocusChangeListener(ouvinteFoco)
         esperandoPc = false
+        ui.removeCallbacksAndMessages(null)
         super.onDestroy()
     }
 
@@ -151,120 +112,169 @@ class JogosActivity : Activity() {
             val u = Uso.ultimoUso(ctx)
             val porPacote = lista.associateBy { it.pacote }
             val ordenada = Jogos.ordenarPorUso(lista.map { it.pacote }, u).mapNotNull { porPacote[it] }
-            // Central (18/11/2026): quanto se jogou nos últimos 7 dias e o jogo mais jogado.
             val tempos = Uso.tempoNaFrente(ctx).filterKeys { it in porPacote }
             val sem = Semana(tempos.values.sum(), tempos.maxByOrNull { it.value }?.key?.let { porPacote[it]?.nome })
-            // Banners e ícones só dos que ainda não foram lidos nesta tela (voltar de um jogo não relê nada).
+            // Ícones só dos que ainda não foram lidos nesta tela (voltar de um jogo não relê nada).
             val novos = HashMap<String, Visual>()
             for (j in lista) if (j.pacote !in ja) novos[j.pacote] = lerVisual(j.pacote)
             runOnUiThread {
                 if (isDestroyed) return@runOnUiThread
                 visuais.putAll(novos); uso = u; jogos = ordenada; semana = sem
-                if (focoPacote == null) focoPacote = atual?.pacote
+                if (escolhido == null) escolhido = ordenada.firstOrNull()   // a 1ª prateleira abre no jogado por último
                 montar()
             }
         }
     }
 
     private fun lerVisual(pacote: String): Visual {
-        val banner = CapaFoco.banner(packageManager, pacote)?.let { runCatching { CapaFoco.bitmapReduzido(it) }.getOrNull() }
         val icone = runCatching { packageManager.getApplicationIcon(pacote) }.getOrNull()
-        val cores = icone?.let { runCatching { CapaFoco.corDoIcone(it) }.getOrNull() } ?: intArrayOf(0xFFF5A524.toInt(), 0xFF7A4A0E.toInt())
-        return Visual(banner, icone, cores)
+        val cor = icone?.let { runCatching { CapaFoco.corDoIcone(it)[0] }.getOrNull() } ?: COR_JOGAR
+        return Visual(icone, cor)
     }
 
-    // ================================================================ painel da esquerda: sofá + turma
+    // ================================================================ a cruz
 
-    private fun montarPainel(): LinearLayout = LinearLayout(this).apply {
-        orientation = LinearLayout.VERTICAL
-        clipChildren = false; clipToPadding = false
-        background = GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, intArrayOf(0x52000000, 0x38000000))
-        setPaddingRelative(dp(30), dp(Estilo.MARGEM_VERTICAL), dp(20), dp(16))
-
-        // "Jogos" com o ponto da marca.
-        addView(LinearLayout(this@JogosActivity).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.BOTTOM
-            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.TITULO, getString(R.string.jogos_titulo)).apply {
-                textSize = 30f; typeface = Estilo.fonte(800)
-            })
-            addView(View(this@JogosActivity).apply { background = Estilo.fundo(this@JogosActivity, MARCA, Estilo.RAIO_PILULA) },
-                LinearLayout.LayoutParams(dp(9), dp(9)).apply { marginStart = dp(4); bottomMargin = dp(6) })
-        })
-
-        sofaTitulo = Estilo.secao(this@JogosActivity, getString(R.string.jogos_no_sofa))
-        addView(sofaTitulo)
-        controlesBox = LinearLayout(this@JogosActivity).apply { orientation = LinearLayout.VERTICAL; clipChildren = false }
-        addView(controlesBox)
-
-        // "SUA TURMA · Os Parças · 9 online": o nome do servidor sem caixa alta.
-        val cab = LinearLayout(this@JogosActivity).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.BOTTOM }
-        cab.addView(Estilo.secao(this@JogosActivity, getString(R.string.turma_titulo)))
-        turmaNome = Estilo.texto(this@JogosActivity, Estilo.Papel.LEGENDA).apply {
-            textSize = 14f; maxLines = 1; ellipsize = TextUtils.TruncateAt.END
-            setPaddingRelative(dp(6), 0, 0, dp(Estilo.E1 - 1))
-        }
-        cab.addView(turmaNome, LinearLayout.LayoutParams(0, -2, 1f))
-        addView(cab, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(4) })
-        turmaBox = LinearLayout(this@JogosActivity).apply {
-            orientation = LinearLayout.VERTICAL; clipChildren = false; clipToPadding = false
-            // Turma grande não passa por cima do botão de baixo: corta embaixo (dos lados sobra folga para o foco crescer).
-            addOnLayoutChangeListener { v, _, _, _, _, _, _, _, _ -> v.clipBounds = android.graphics.Rect(-dp(40), -dp(40), v.width + dp(40), v.height) }
-        }
-        addView(turmaBox, LinearLayout.LayoutParams(-1, 0, 1f))
-
-        chamarPainel = botaoMarca(getString(R.string.turma_chamar)).apply { setOnClickListener { chamarTurma(null) } }
-        addView(chamarPainel, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(Estilo.E1) })
+    /** Refaz as prateleiras e o cartão (a cruz guarda o item escolhido de cada uma e só redesenha o que mudou). */
+    private fun montar() {
+        if (!::cruz.isInitialized || isDestroyed) return
+        val prats = listOf(prateleiraJogos(), prateleiraSofa(), prateleiraTurma(), prateleiraOpcoes())
+        val foco = focoPacote?.let { P_JOGOS to it }
+        focoPacote = null
+        cruz.definir(prats, foco)
+        cruz.tocando(cartaoSemana())
     }
 
-    /** Uma linha por controle ligado: número do jogador, nome e se a bateria aguenta. Sem controle: "Parear um controle". */
-    private fun desenharControles() {
-        if (!::controlesBox.isInitialized) return
-        controlesBox.removeAllViews()
-        val c = JogosTv.controlesComBateria().take(4)
-        if (c.isEmpty()) {
-            controlesBox.addView(linhaCartao(getString(R.string.jogos_chip_sem_controle), getString(R.string.jogos_parear_um), null).apply {
-                isFocusable = true; isClickable = true
-                Estilo.focoCard(this)
-                setOnClickListener {
-                    if (!JogosTv.abrirPareamento(this@JogosActivity)) AvisoTv.rapido(this@JogosActivity, getString(R.string.jogos_parear), getString(R.string.jogos_parear_falhou))
-                }
-            }, LinearLayout.LayoutParams(-1, -2))
-            return
+    private fun prateleiraJogos(): CruzOuvir.Prateleira {
+        val itens = ArrayList<CruzOuvir.Item>()
+        val pronta = (turma as? TurmaDiscordTv.Estado.Pronta)?.turma
+        for (j in jogos) {
+            val v = visuais[j.pacote]
+            // "Lucas e Mari jogando": quem da turma está neste jogo agora vai na linha de baixo.
+            val daTurma = pronta?.let { TurmaDiscord.noApp(it, j.nome) }.orEmpty()
+            val sub = listOf(subtitulo(j), if (daTurma.isEmpty()) "" else getString(R.string.turma_jogando, juntar(daTurma), j.nome))
+                .filter { it.isNotEmpty() }.joinToString("\n")
+            itens += CruzOuvir.Item(j.pacote, j.nome, sub, imagem = v?.icone, cor = v?.cor ?: COR_JOGAR,
+                monograma = CapaOuvir.iniciais(j.nome), abrir = { abrirJogo(j) }, opcoes = { escolherGrupo(j) })
         }
+        if (jogos.isEmpty()) {
+            // Sem jogos: as sugestões, que abrem a página na Play Store.
+            for (s in Jogos.SUGESTOES.filter { !JogosTv.instalado(this, it.pacote) }.take(6)) {
+                itens += CruzOuvir.Item("loja:" + s.pacote, s.nome, nomeGrupo(s.grupo),
+                    icone = IconeOuvir.Tipo.CONTROLE, cor = COR_JOGAR, abrir = { abrirNaLoja(s.pacote) })
+            }
+        }
+        itens += CruzOuvir.Item("mais", getString(R.string.jogos_mais_jogos), getString(R.string.jogos_loja_explica),
+            icone = IconeOuvir.Tipo.ADICIONAR, abrir = { mostrarLoja() })
+        // Sem jogos instalados a prateleira é "Para começar" (as sugestões); com jogos, "Jogados por último".
+        val nome = getString(if (jogos.isEmpty()) R.string.jogos_para_comecar else R.string.jogos_recentes)
+        return CruzOuvir.Prateleira(P_JOGOS, nome, IconeOuvir.Tipo.CONTROLE, itens)
+    }
+
+    /** Um item por controle ligado (número do jogador na cor dele, bateria) e "Parear um controle". */
+    private fun prateleiraSofa(): CruzOuvir.Prateleira {
+        val itens = ArrayList<CruzOuvir.Item>()
+        val c = runCatching { JogosTv.controlesComBateria() }.getOrDefault(emptyList()).take(4)
         for ((i, k) in c.withIndex()) {
             val fraca = k.bateria != null && k.bateria < 20
             val sub = getString(if (fraca) R.string.jogos_controle_carregar else R.string.jogos_controle_pronto) + (k.bateria?.let { " · $it%" } ?: "")
-            val numero = Estilo.texto(this, Estilo.Papel.CORPO, "${i + 1}").apply {
-                textSize = 17f; typeface = Estilo.fonte(800); gravity = Gravity.CENTER; setTextColor(Estilo.TEXTO)
-                background = Estilo.fundo(this@JogosActivity, CORES_JOGADOR[i % CORES_JOGADOR.size], 10)
-            }
-            controlesBox.addView(linhaCartao(k.nome, sub, numero).apply {
-                if (fraca) (getChildAt(1) as? LinearLayout)?.getChildAt(1)?.let { (it as TextView).setTextColor(Estilo.ATENCAO) }
-            }, LinearLayout.LayoutParams(-1, -2).apply { if (i > 0) topMargin = dp(Estilo.E1) })
+            itens += CruzOuvir.Item("controle:$i:${k.nome}", k.nome, sub, cor = CORES_JOGADOR[i % CORES_JOGADOR.size],
+                monograma = "${i + 1}", abrir = { parear() })
         }
+        itens += CruzOuvir.Item("parear", getString(R.string.jogos_parear_um),
+            if (c.isEmpty()) getString(R.string.jogos_sem_controle) else "", icone = IconeOuvir.Tipo.ADICIONAR, abrir = { parear() })
+        return CruzOuvir.Prateleira(P_SOFA, getString(R.string.jogos_no_sofa), IconeOuvir.Tipo.SOFA, itens)
     }
 
-    /** Cartão baixo do painel: [esquerda] (número ou avatar), título e linha de baixo. */
-    private fun linhaCartao(titulo: String, sub: String, esquerda: View?): LinearLayout = LinearLayout(this).apply {
-        orientation = LinearLayout.HORIZONTAL
-        gravity = Gravity.CENTER_VERTICAL
-        background = Estilo.fundo(this@JogosActivity, Estilo.SUPERFICIE_ALTA, Estilo.RAIO)
-        setPaddingRelative(dp(12), dp(10), dp(12), dp(10))
-        if (esquerda != null) addView(esquerda, LinearLayout.LayoutParams(dp(34), dp(34)).apply { marginEnd = dp(12) })
-        else addView(View(this@JogosActivity), LinearLayout.LayoutParams(0, 0))
-        addView(LinearLayout(this@JogosActivity).apply {
-            orientation = LinearLayout.VERTICAL
-            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO, titulo).apply {
-                textSize = 17f; typeface = Estilo.fonte(700); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
-            })
-            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.LEGENDA, sub).apply { textSize = 14f; maxLines = 1 },
-                LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(3) })
-        }, LinearLayout.LayoutParams(0, -2, 1f))
+    /** A sala de voz (OK = QR grande), quem está online, "Chamar a turma" e a configuração. */
+    private fun prateleiraTurma(): CruzOuvir.Prateleira {
+        val itens = ArrayList<CruzOuvir.Item>()
+        val config = CruzOuvir.Item("config", getString(R.string.turma_config_titulo), getString(R.string.turma_mostrar_texto),
+            icone = IconeOuvir.Tipo.OPCOES, abrir = { configurarTurma() })
+        when (val e = turma) {
+            null -> itens += CruzOuvir.Item("procurando", getString(R.string.turma_procurando), "", icone = IconeOuvir.Tipo.TURMA)
+            TurmaDiscordTv.Estado.SemServidor -> itens += CruzOuvir.Item("config", getString(R.string.turma_mostrar_titulo),
+                getString(R.string.turma_mostrar_texto), icone = IconeOuvir.Tipo.TURMA, abrir = { configurarTurma() })
+            TurmaDiscordTv.Estado.Desligado -> itens += CruzOuvir.Item("config", getString(R.string.turma_desligado_titulo),
+                getString(R.string.turma_desligado_texto), icone = IconeOuvir.Tipo.TURMA, abrir = { configurarTurma() })
+            TurmaDiscordTv.Estado.SemRede -> { itens += CruzOuvir.Item("semrede", getString(R.string.turma_sem_rede), "",
+                icone = IconeOuvir.Tipo.REDE, abrir = { buscarTurma() }); itens += config }
+            is TurmaDiscordTv.Estado.Pronta -> {
+                val t = e.turma
+                val servidor = TurmaDiscordTv.servidor(this)
+                for (sala in t.salas) {
+                    val nomes = sala.membros.map { it.nome }
+                    itens += CruzOuvir.Item("sala:" + sala.id, getString(R.string.turma_na_voz) + " · " + sala.nome,
+                        juntar(nomes) + "\n" + getString(R.string.turma_qr_dica), icone = IconeOuvir.Tipo.TURMA,
+                        abrir = { mostrarQrGrande(sala, servidor) })
+                }
+                if (TurmaDiscordTv.temWebhook(this)) itens += CruzOuvir.Item("chamar", getString(R.string.turma_chamar),
+                    getString(R.string.turma_chamado), icone = IconeOuvir.Tipo.CONTROLE, abrir = { chamarTurma(escolhido?.nome) })
+                val gente = t.salas.flatMap { it.membros } + t.outros
+                for ((i, m) in gente.withIndex()) itens += CruzOuvir.Item("membro:$i:" + m.nome, m.nome, statusMembro(m), capa = m.avatar.orEmpty(),
+                    cobrir = true, cor = CORES_AVATAR[Math.floorMod(m.nome.hashCode(), CORES_AVATAR.size)],
+                    monograma = m.nome.take(1).uppercase(), abrir = { m.canalVoz?.let { id -> t.salas.firstOrNull { it.id == id } }?.let { mostrarQrGrande(it, servidor) } })
+                if (gente.isEmpty()) itens += CruzOuvir.Item("ninguem", getString(R.string.turma_ninguem), "", icone = IconeOuvir.Tipo.TURMA)
+                else if (t.online > gente.size) itens += CruzOuvir.Item("mais_online", getString(R.string.turma_mais_online, t.online - gente.size),
+                    t.servidor, icone = IconeOuvir.Tipo.TURMA)
+                itens += config
+            }
+        }
+        val nome = (turma as? TurmaDiscordTv.Estado.Pronta)?.turma?.let { t -> getString(R.string.turma_titulo) + " · " + getString(R.string.turma_online, t.online) }
+            ?: getString(R.string.turma_titulo)
+        return CruzOuvir.Prateleira(P_TURMA, nome, IconeOuvir.Tipo.TURMA, itens)
+    }
+
+    /** "online", "Fortnite" ou "ocupado · EA FC": a palavra do status vai junto quando não está só online. */
+    private fun statusMembro(m: TurmaDiscord.Membro): String {
+        val status = getString(when (m.status) {
+            TurmaDiscord.Status.ONLINE -> R.string.turma_status_online
+            TurmaDiscord.Status.AUSENTE -> R.string.turma_ausente
+            TurmaDiscord.Status.OCUPADO -> R.string.turma_ocupado
+        })
+        return when { m.jogo == null -> status; m.status == TurmaDiscord.Status.ONLINE -> m.jogo; else -> "$status · ${m.jogo}" }
+    }
+
+    private fun prateleiraOpcoes(): CruzOuvir.Prateleira {
+        val m = rede
+        val itens = listOf(
+            CruzOuvir.Item("rede", getString(R.string.jogos_testar_rede), m?.let { textoRede(it) } ?: getString(R.string.jogos_medindo),
+                icone = IconeOuvir.Tipo.REDE, abrir = { testarRede(avisar = true) }),
+            CruzOuvir.Item("pc", getString(R.string.jogos_jogar_pc), getString(R.string.jogos_desc_pc),
+                icone = IconeOuvir.Tipo.PC, abrir = { jogarNoPc(escolhido?.takeIf { it.grupo == Jogos.Grupo.PC }?.pacote) }),
+            CruzOuvir.Item("baixar", getString(R.string.jogos_baixar), getString(R.string.jogos_loja_explica),
+                icone = IconeOuvir.Tipo.ADICIONAR, abrir = { mostrarLoja() }),
+            CruzOuvir.Item("escolher", getString(R.string.jogos_escolher), getString(R.string.jogos_escolher_sub),
+                icone = IconeOuvir.Tipo.OPCOES, abrir = {
+                    startActivity(Intent(this, AppsEscolhaActivity::class.java).putExtra(AppsEscolhaActivity.EXTRA_MODO, AppsEscolhaActivity.MODO_JOGOS))
+                }),
+        )
+        return CruzOuvir.Prateleira(P_OPCOES, getString(R.string.jogos_mais_opcoes), IconeOuvir.Tipo.OPCOES, itens)
+    }
+
+    /** Cartão de cima à direita: ESTA SEMANA, a rede e quanto se jogou (o "—" de antes virou frase). */
+    private fun cartaoSemana(): CruzOuvir.Tocando {
+        val m = rede
+        val titulo = if (m == null) getString(R.string.jogos_chip_medindo) else getString(when (m.rede) {
+            Jogos.Rede.BOA -> R.string.jogos_chip_boa
+            Jogos.Rede.OK -> R.string.jogos_chip_ok
+            Jogos.Rede.FRACA -> R.string.jogos_chip_fraca
+            Jogos.Rede.SEM -> R.string.jogos_chip_sem
+        }) + (m.ms?.let { " · $it ms" } ?: "")
+        val sem = semana
+        val linhas = listOfNotNull(
+            sem?.ms?.takeIf { it > 0 }?.let { duracao(it) + " · " + getString(R.string.jogos_semana_jogado) },
+            sem?.topo?.takeIf { (sem.ms) > 0 }?.let { getString(R.string.jogos_semana_mais) + ": " + it },
+        ).joinToString("\n")
+        return CruzOuvir.Tocando(titulo, linhas, "", COR_JOGAR, "", false, null, null, false,
+            aoVivo = getString(R.string.jogos_semana).uppercase())
+    }
+
+    private fun parear() {
+        if (!JogosTv.abrirPareamento(this)) AvisoTv.rapido(this, getString(R.string.jogos_parear), getString(R.string.jogos_parear_falhou))
     }
 
     private fun buscarTurma() {
-        if (TurmaDiscordTv.servidor(this).isEmpty()) { turma = TurmaDiscordTv.Estado.SemServidor; desenharTurma(); return }
+        if (TurmaDiscordTv.servidor(this).isEmpty()) { turma = TurmaDiscordTv.Estado.SemServidor; montar(); return }
         val app = applicationContext
         Fundo.rodar("jogos-turma") {
             val e = TurmaDiscordTv.buscar(app)
@@ -272,187 +282,12 @@ class JogosActivity : Activity() {
                 if (isDestroyed) return@runOnUiThread
                 // A rede caiu por um instante: fica a turma de antes em vez de piscar "sem conexão".
                 if (e is TurmaDiscordTv.Estado.SemRede && turma is TurmaDiscordTv.Estado.Pronta) return@runOnUiThread
-                turma = e; desenharTurma(); if (montado) desenharFila()
+                turma = e; montar()
             }
         }
     }
 
-    private fun desenharTurma() {
-        val tinhaFoco = currentFocus?.let { dentro(it, turmaBox) } == true
-        turmaBox.removeAllViews()
-        qr = null; qrDica = null
-        turmaNome.text = ""
-        var focavel: View? = null
-        when (val e = turma) {
-            null -> turmaBox.addView(legenda(getString(R.string.turma_procurando)))
-            TurmaDiscordTv.Estado.SemServidor -> focavel = cartaoAcao(getString(R.string.turma_mostrar_titulo), getString(R.string.turma_mostrar_texto)) { configurarTurma() }
-            TurmaDiscordTv.Estado.Desligado -> focavel = cartaoAcao(getString(R.string.turma_desligado_titulo), getString(R.string.turma_desligado_texto)) { configurarTurma() }
-            TurmaDiscordTv.Estado.SemRede -> focavel = cartaoAcao(getString(R.string.turma_sem_rede), getString(R.string.turma_config_titulo)) { configurarTurma() }
-            is TurmaDiscordTv.Estado.Pronta -> focavel = desenharTurmaPronta(e.turma)
-        }
-        aplicarAberto()
-        if (tinhaFoco) (focavel ?: chamarPainel.takeIf { it.visibility == View.VISIBLE })?.requestFocus()
-        // Já mexeu: a turma que chega atrasada do Discord não puxa o foco.
-        else if (abrirNoSofa && montado && !pessoaMexeu && focavel != null) { abrirNoSofa = false; focavel.requestFocus() }
-        atualizarAcoes()
-    }
-
-    /** A sala de voz mais cheia num cartão (com o QR quando o painel abre) e os outros online embaixo. */
-    private fun desenharTurmaPronta(t: TurmaDiscord.Turma): View? {
-        turmaNome.text = listOf(t.servidor, getString(R.string.turma_online, t.online)).filter { it.isNotEmpty() }.joinToString(" · ", prefix = "· ")
-        var mostrados = 0
-        var focavel: View? = null
-        val sala = t.salas.firstOrNull()
-        val servidor = TurmaDiscordTv.servidor(this)
-        if (sala != null) {
-            val cartao = LinearLayout(this).apply {
-                orientation = LinearLayout.VERTICAL
-                isFocusable = true; isClickable = true
-                background = Estilo.fundo(this@JogosActivity, 0x2234C77B, Estilo.RAIO, 0x4434C77B)
-                setPaddingRelative(dp(14), dp(12), dp(14), dp(12))
-                Estilo.focoCard(this)
-                setOnClickListener { mostrarQrGrande(sala, servidor) }
-            }
-            cartao.addView(Estilo.texto(this, Estilo.Papel.SECAO, "●  " + getString(R.string.turma_na_voz) + " · " + sala.nome).apply {
-                setTextColor(VERDE); textSize = 13f; maxLines = 1; ellipsize = TextUtils.TruncateAt.END
-            })
-            val meio = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
-            val nomes = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
-            for (m in sala.membros.take(3)) { nomes.addView(linhaMembro(m), LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(10) }); mostrados++ }
-            if (sala.membros.size > 3) nomes.addView(legenda("+ " + (sala.membros.size - 3)), LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(6); marginStart = dp(44) })
-            mostrados += (sala.membros.size - 3).coerceAtLeast(0)
-            meio.addView(nomes, LinearLayout.LayoutParams(0, -2, 1f))
-            qr = ImageView(this).apply {
-                setImageBitmap(QrCodigo.bitmap(TurmaDiscord.linkSala(servidor, sala.id), dp(QR)))
-                background = Estilo.fundo(this@JogosActivity, 0xFFFFFFFF.toInt(), 10)
-                setPaddingRelative(dp(5), dp(5), dp(5), dp(5))
-                contentDescription = getString(R.string.turma_qr_dica)
-            }
-            meio.addView(qr, LinearLayout.LayoutParams(dp(QR), dp(QR)).apply { marginStart = dp(10) })
-            cartao.addView(meio)
-            qrDica = Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.turma_qr_dica)).apply { textSize = 14f; setTextColor(Estilo.TEXTO) }
-            cartao.addView(qrDica, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(10) })
-            turmaBox.addView(cartao, LinearLayout.LayoutParams(-1, -2))
-            focavel = cartao
-        }
-        // Os outros online: menos linhas quando há sala de voz (o cartão já ocupa o meio do painel).
-        val cabem = if (sala != null) 2 else 5
-        for ((i, m) in t.outros.take(cabem).withIndex()) {
-            turmaBox.addView(linhaMembro(m), LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(if (i == 0 && sala == null) 4 else 12); marginStart = dp(14) })
-            mostrados++
-        }
-        val resto = t.online - mostrados
-        when {
-            mostrados == 0 -> turmaBox.addView(legenda(getString(R.string.turma_ninguem)))
-            resto > 0 -> turmaBox.addView(legenda(getString(R.string.turma_mais_online, resto)), LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(10); marginStart = dp(14) })
-        }
-        return focavel
-    }
-
-    /** Avatar (inicial na cor do nome, bolinha do status), nome e o jogo (ou o status). */
-    private fun linhaMembro(m: TurmaDiscord.Membro): View = LinearLayout(this).apply {
-        orientation = LinearLayout.HORIZONTAL
-        gravity = Gravity.CENTER_VERTICAL
-        val avatar = FrameLayout(this@JogosActivity).apply {
-            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO, m.nome.take(1).uppercase()).apply {
-                textSize = 16f; typeface = Estilo.fonte(800); gravity = Gravity.CENTER; setTextColor(Estilo.FUNDO)
-                background = Estilo.fundo(this@JogosActivity, CORES_AVATAR[Math.floorMod(m.nome.hashCode(), CORES_AVATAR.size)], Estilo.RAIO_PILULA)
-            }, FrameLayout.LayoutParams(dp(32), dp(32)))
-            addView(View(this@JogosActivity).apply {
-                background = Estilo.fundo(this@JogosActivity, when (m.status) {
-                    TurmaDiscord.Status.ONLINE -> VERDE
-                    TurmaDiscord.Status.AUSENTE -> Estilo.ATENCAO
-                    TurmaDiscord.Status.OCUPADO -> Estilo.ERRO
-                }, Estilo.RAIO_PILULA, Estilo.FUNDO, 2)
-                contentDescription = getString(when (m.status) {   // 16.1/16.4: a bolinha diz o status ao leitor de tela
-                    TurmaDiscord.Status.ONLINE -> R.string.turma_status_online
-                    TurmaDiscord.Status.AUSENTE -> R.string.turma_ausente
-                    TurmaDiscord.Status.OCUPADO -> R.string.turma_ocupado
-                })
-            }, FrameLayout.LayoutParams(dp(12), dp(12), Gravity.BOTTOM or Gravity.END))
-        }
-        addView(avatar, LinearLayout.LayoutParams(dp(34), dp(34)).apply { marginEnd = dp(10) })
-        addView(LinearLayout(this@JogosActivity).apply {
-            orientation = LinearLayout.VERTICAL
-            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO, m.nome).apply {
-                textSize = 17f; typeface = Estilo.fonte(700); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
-            })
-            val status = getString(when (m.status) {
-                TurmaDiscord.Status.ONLINE -> R.string.turma_status_online
-                TurmaDiscord.Status.AUSENTE -> R.string.turma_ausente
-                TurmaDiscord.Status.OCUPADO -> R.string.turma_ocupado
-            })
-            // Elevação 16.4: jogando e ausente/ocupado, a palavra do status vai junto (a bolinha sozinha era só cor).
-            val sub = when { m.jogo == null -> status; m.status == TurmaDiscord.Status.ONLINE -> m.jogo; else -> "$status · ${m.jogo}" }
-            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.LEGENDA, sub).apply {
-                textSize = 14f; maxLines = 1; ellipsize = TextUtils.TruncateAt.END
-                if (m.jogo != null) setTextColor(Estilo.TEXTO)
-            }, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(2) })
-        }, LinearLayout.LayoutParams(0, -2, 1f))
-    }
-
-    private fun legenda(t: String) = Estilo.texto(this, Estilo.Papel.LEGENDA, t).apply { textSize = 14f; setPaddingRelative(dp(4), dp(6), 0, 0) }
-
-    /** Cartão focável com título e explicação (configurar a turma, widget desligado, sem rede). */
-    private fun cartaoAcao(titulo: String, texto: String, ao: () -> Unit): View {
-        val v = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            isFocusable = true; isClickable = true
-            background = Estilo.vidro(this@JogosActivity)
-            setPaddingRelative(dp(14), dp(12), dp(14), dp(14))
-            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO, titulo).apply { textSize = 17f; typeface = Estilo.fonte(700) })
-            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.LEGENDA, texto).apply { textSize = 14f; setLineSpacing(0f, 1.15f) },
-                LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(6) })
-            Estilo.focoCard(this)
-            setOnClickListener { ao() }
-        }
-        turmaBox.addView(v, LinearLayout.LayoutParams(-1, -2))
-        return v
-    }
-
-    /** Painel aberto: mais largo, com QR e dica; a direita escurece. Fechado: estreito, sem QR. */
-    private fun abrirPainel(sim: Boolean) {
-        if (sim == aberto) return
-        aberto = sim
-        val de = painel.layoutParams.width
-        val para = dp(if (sim) LARGURA_PAINEL_ABERTO else LARGURA_PAINEL)
-        ValueAnimator.ofInt(de, para).apply {
-            duration = Estilo.TRANSICAO_MS
-            addUpdateListener { a -> painel.layoutParams = painel.layoutParams.apply { width = a.animatedValue as Int } }
-            start()
-        }
-        direita.animate().alpha(if (sim) 0.35f else 1f).setDuration(Estilo.TRANSICAO_MS).start()
-        aplicarAberto()
-    }
-
-    private fun aplicarAberto() {
-        val v = if (aberto) View.VISIBLE else View.GONE
-        qr?.visibility = v; qrDica?.visibility = v
-        // Aberto, o painel é da turma (desenho Sofá v2): os controles saem e o espaço vai para a sala de voz.
-        val sofa = if (aberto && qr != null) View.GONE else View.VISIBLE
-        sofaTitulo.visibility = sofa; controlesBox.visibility = sofa
-        // "Chamar a turma" do painel só com ele aberto; fechado, o mesmo botão está ao lado do Jogar.
-        chamarPainel.visibility = if (aberto && turma is TurmaDiscordTv.Estado.Pronta && TurmaDiscordTv.temWebhook(this)) View.VISIBLE else View.GONE
-    }
-
-    /** O 1º focável dentro de [g] (ordem da tela). */
-    private fun achar(g: ViewGroup): View? {
-        for (i in 0 until g.childCount) {
-            val v = g.getChildAt(i)
-            if (v.visibility != View.VISIBLE) continue
-            if (v.isFocusable) return v
-            if (v is ViewGroup) achar(v)?.let { return it }
-        }
-        return null
-    }
-
-    private fun dentro(v: View, pai: ViewGroup): Boolean {
-        var p: Any? = v
-        while (p is View) { if (p === pai) return true; p = p.parent }
-        return false
-    }
-
-    /** OK no cartão da voz: o QR grande, para o celular ler de longe. */
+    /** OK na sala de voz: o QR grande, para o celular ler de longe. */
     private fun mostrarQrGrande(sala: TurmaDiscord.Sala, servidor: String) {
         val corpo = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -469,85 +304,6 @@ class JogosActivity : Activity() {
             .setPositiveButton(android.R.string.ok, null).show()
     }
 
-    // ================================================================ direita: continuar + por tipo
-
-    private fun montarDireita(): LinearLayout = LinearLayout(this).apply {
-        orientation = LinearLayout.VERTICAL
-        clipChildren = false; clipToPadding = false
-        setPaddingRelative(dp(28), dp(Estilo.MARGEM_VERTICAL + 6), dp(Estilo.MARGEM_LATERAL), dp(14))
-
-        // Topo: CONTINUAR · rede · hora.
-        addView(LinearLayout(this@JogosActivity).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            addView(Estilo.secao(this@JogosActivity, getString(R.string.jogos_recentes)).apply { setPaddingRelative(dp(4), 0, 0, 0) },
-                LinearLayout.LayoutParams(0, -2, 1f))
-            chipRede = Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO).apply { textSize = 16f }
-            addView(chipRede)
-            addView(TextClock(this@JogosActivity).apply {
-                Estilo.aplicar(this, Estilo.Papel.CORPO); textSize = 18f; typeface = Estilo.fonte(700)
-            }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(Estilo.E3) })
-        })
-
-        // A fileira de jogos.
-        fila = LinearLayout(this@JogosActivity).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false; gravity = Gravity.CENTER_VERTICAL }
-        addView(rolagem(fila).apply { setPaddingRelative(dp(8), dp(16), dp(8), dp(16)) }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(4) })
-
-        // Ações do jogo em foco + quem da turma está jogando.
-        val acoes = LinearLayout(this@JogosActivity).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; clipChildren = false }
-        botaoJogar = botaoMarca("▶  " + getString(R.string.jogos_jogar)).apply {
-            id = View.generateViewId()
-            setOnClickListener { atual?.let { abrirJogo(it) } }
-        }
-        botaoPc = Estilo.botao(this@JogosActivity, "⏻  " + getString(R.string.jogos_ligar_pc_jogar), primario = false).apply {
-            textSize = 18f; id = View.generateViewId(); setPaddingRelative(dp(22), dp(11), dp(22), dp(11))
-            setOnClickListener { jogarNoPc(atual?.pacote) }
-        }
-        botaoChamar = Estilo.botao(this@JogosActivity, getString(R.string.turma_chamar), primario = false).apply {
-            textSize = 18f; id = View.generateViewId(); setPaddingRelative(dp(22), dp(11), dp(22), dp(11))
-            setOnClickListener { chamarTurma(atual?.nome) }
-        }
-        frase = Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO).apply { textSize = 16f; setTextColor(Estilo.TEXTO_2); maxLines = 2 }
-        acoes.addView(botaoJogar)
-        acoes.addView(botaoPc, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(Estilo.E2) })
-        acoes.addView(botaoChamar, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(Estilo.E2) })
-        acoes.addView(frase, LinearLayout.LayoutParams(0, -2, 1f).apply { marginStart = dp(Estilo.E3) })
-        addView(acoes, LinearLayout.LayoutParams(-1, -2).apply { marginStart = dp(8) })
-
-        addView(View(this@JogosActivity), LinearLayout.LayoutParams(-1, 0, 1f))
-
-        // Por tipo (filtra a fileira) + Mais opções.
-        addView(LinearLayout(this@JogosActivity).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            clipChildren = false
-            addView(Estilo.secao(this@JogosActivity, getString(R.string.jogos_semana)).apply { setPaddingRelative(dp(4), 0, dp(Estilo.E2), 0) })
-            chips = LinearLayout(this@JogosActivity).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false }
-            addView(rolagem(chips).apply { setPaddingRelative(dp(6), dp(8), dp(6), dp(8)) }, LinearLayout.LayoutParams(0, -2, 1f))
-        })
-        addView(Estilo.barraDicas(this@JogosActivity,
-            "◀ ▶" to getString(R.string.jogos_tecla_escolher),
-            "OK" to getString(R.string.jogos_tecla_jogar),
-            getString(R.string.jogos_tecla_segurar) to getString(R.string.jogos_tecla_opcoes)),
-            LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(Estilo.E1); marginStart = dp(4) })
-    }
-
-    private fun atualizarRede() {
-        val m = rede
-        chipRede.text = "●  " + (if (m == null) getString(R.string.jogos_chip_medindo) else getString(when (m.rede) {
-            Jogos.Rede.BOA -> R.string.jogos_chip_boa
-            Jogos.Rede.OK -> R.string.jogos_chip_ok
-            Jogos.Rede.FRACA -> R.string.jogos_chip_fraca
-            Jogos.Rede.SEM -> R.string.jogos_chip_sem
-        }) + (m.ms?.let { " · $it ms" } ?: ""))
-        chipRede.setTextColor(when (m?.rede) {
-            Jogos.Rede.BOA -> 0xFF7EE2A8.toInt()
-            Jogos.Rede.OK -> 0xFFFFD27A.toInt()
-            Jogos.Rede.FRACA, Jogos.Rede.SEM -> 0xFFFF8A80.toInt()
-            null -> Estilo.TEXTO_2
-        })
-    }
-
     private fun textoRede(m: JogosTv.Medida): String = getString(when (m.rede) {
         Jogos.Rede.BOA -> R.string.jogos_rede_boa
         Jogos.Rede.OK -> R.string.jogos_rede_ok
@@ -557,109 +313,13 @@ class JogosActivity : Activity() {
 
     private fun testarRede(avisar: Boolean = false) {
         rede = null
-        atualizarRede()
+        montar()
         Fundo.rodar("jogos-rede") {
             val m = JogosTv.medirRede(applicationContext)
             runOnUiThread {
                 if (isDestroyed) return@runOnUiThread
-                rede = m; atualizarRede()
+                rede = m; montar()
                 if (avisar) AvisoTv.rapido(this, getString(R.string.jogos_testar_rede), textoRede(m))
-            }
-        }
-    }
-
-    private fun montar() {
-        desenharFila()
-        desenharChips()
-        montado = true
-    }
-
-    /**
-     * A fileira: os jogos do filtro (o jogado por último primeiro) e "+ Mais jogos"; sem jogos, as sugestões.
-     * O foco só vai para a fileira na 1ª vez, quando já estava nela ou quando um jogo pediu ([focoPacote]): a turma
-     * que se atualiza com o foco no painel não rouba o foco.
-     */
-    private fun desenharFila() {
-        if (!::fila.isInitialized) return
-        val focoNaFila = currentFocus?.let { dentro(it, fila) } == true
-        val tag = focoPacote ?: (currentFocus?.tag as? String)?.takeIf { focoNaFila }
-        val alvo = redesenharFila(tag)
-        if (!montado && abrirNoSofa && !pessoaMexeu) {
-            // Item "Sofá" da cruz: o foco começa no painel (sala de voz, configurar a turma ou parear controle).
-            // A turma ainda pode estar chegando do Discord: sem nada focável no painel, o foco fica no jogo e passa
-            // para a turma quando ela aparecer (desenharTurma).
-            val noPainel = achar(turmaBox) ?: achar(controlesBox)
-            if (noPainel != null) {
-                abrirNoSofa = false
-                alvo?.isFocusedByDefault = false
-                noPainel.isFocusedByDefault = true; noPainel.requestFocus()
-            } else alvo?.requestFocus()
-        } else if ((!montado && !pessoaMexeu) || focoNaFila || focoPacote != null) alvo?.requestFocus()
-        focoPacote = null
-    }
-
-    /** Refaz os cards e devolve o que deve receber o foco ([tag] dele, senão o primeiro). */
-    private fun redesenharFila(tag: String?): View? {
-        fila.removeAllViews()
-        val t = (turma as? TurmaDiscordTv.Estado.Pronta)?.turma
-        // Central de jogos (18/11/2026): os jogos moram na coluna Jogar da cruz; aqui ficam só os jogados por último.
-        val mostrar = jogos.filter { filtro == null || it.grupo == filtro }.take(RECENTES_MAX)
-        var primeiro: View? = null
-        var alvo: View? = null
-        if (jogos.isEmpty()) {
-            for (s in Jogos.SUGESTOES) fila.addView(cardSugestao(s).also { if (primeiro == null) primeiro = it }, lpCard())
-        } else for (j in mostrar) {
-            val card = cardJogo(j, t?.let { TurmaDiscord.noApp(it, j.nome) } ?: emptyList())
-            fila.addView(card, lpCard())
-            if (primeiro == null) primeiro = card
-            if (j.pacote == tag) alvo = card
-        }
-        val mais = cardMaisJogos()
-        fila.addView(mais, lpCard())
-        if (tag == "botao:mais") alvo = mais
-        val escolhido = alvo ?: primeiro ?: mais
-        // A janela, ao ganhar foco, escolhe sozinha o 1º focável (o painel): o foco de entrada é sempre um jogo.
-        escolhido.isFocusedByDefault = true
-        if (atual == null || mostrar.none { it.pacote == atual?.pacote }) mudarAtual(mostrar.firstOrNull { it.pacote == tag } ?: mostrar.firstOrNull())
-        else atualizarAcoes()
-        return escolhido
-    }
-
-    private fun lpCard() = LinearLayout.LayoutParams(dp(CARD_L), dp(CARD_A)).apply { marginEnd = dp(Estilo.E2 + 4) }
-
-    /**
-     * Fileira rolável que não invade o painel ao lado. O foco cresce para cima e para baixo (sem corte vertical), mas
-     * na horizontal a fileira só passa do próprio limite do lado do FIM (a "espiada" até a borda da tela). Antes, em
-     * árabe (direita para a esquerda), os cards desenhavam por cima do painel do sofá/turma.
-     * O corte fica numa moldura que não rola: o clipBounds de quem rola muda de referência com o scroll.
-     */
-    private fun rolagem(v: View): FrameLayout {
-        val rolo = HorizontalScrollView(this).apply {
-            isHorizontalScrollBarEnabled = false; clipChildren = false; clipToPadding = false
-            addView(v)
-        }
-        // Android, em RTL, desfaz o "rolar até o foco" da 1ª medida (inverte o scroll depois), e quando os cards chegam
-        // depois da 1ª medida nem inverte: a fileira abria no FIM, com o jogo em foco fora da tela. A cada recarga
-        // (largura nova) o jogo em foco volta à vista; sem foco na fileira, em RTL ela abre no começo (à direita).
-        v.addOnLayoutChangeListener { _, l, _, r, _, ol, _, or, _ ->
-            if (r - l == or - ol) return@addOnLayoutChangeListener
-            rolo.post {
-                val foco = v.findFocus()
-                if (foco != null && foco !== v) {
-                    val ret = android.graphics.Rect()
-                    foco.getDrawingRect(ret)
-                    (v as? ViewGroup)?.offsetDescendantRectToMyCoords(foco, ret)
-                    rolo.requestChildRectangleOnScreen(v, ret, true)
-                } else if (rolo.layoutDirection == View.LAYOUT_DIRECTION_RTL) rolo.scrollTo(v.width, 0)
-            }
-        }
-        return FrameLayout(this).apply {
-            clipChildren = false; clipToPadding = false
-            addView(rolo, FrameLayout.LayoutParams(-1, -2))
-            addOnLayoutChangeListener { q, _, _, _, _, _, _, _, _ ->
-                val folgaFim = dp(Estilo.MARGEM_LATERAL + 8)   // até a borda da tela, como no LTR
-                val rtl = q.layoutDirection == View.LAYOUT_DIRECTION_RTL
-                q.clipBounds = android.graphics.Rect(if (rtl) -folgaFim else 0, -dp(40), q.width + if (rtl) 0 else folgaFim, q.height + dp(40))
             }
         }
     }
@@ -671,67 +331,6 @@ class JogosActivity : Activity() {
         Jogos.Grupo.TV -> R.string.jogos_grupo_tv
     })
 
-    /**
-     * Card alto de um jogo: o banner oficial do app em cima (já traz o logo; nada de logo copiado para o repositório),
-     * sobre a cor do ícone; embaixo o nome grande, o tipo e quando foi jogado. Selo "2 da turma aqui" quando o Discord
-     * diz que alguém da turma joga um jogo com esse mesmo nome.
-     */
-    private fun cardJogo(j: JogosTv.App, daTurma: List<String>): View = FrameLayout(this).apply {
-        tag = j.pacote
-        isFocusable = true; isClickable = true
-        id = View.generateViewId()
-        contentDescription = j.nome
-        val v = visuais[j.pacote]
-        val c = v?.cores ?: intArrayOf(0xFF2B2F3A.toInt(), Estilo.FUNDO)
-        background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(Estilo.matiz(c[0], 0.85f), Estilo.matiz(c[c.size - 1], 0.55f))).apply {
-            cornerRadius = dp(CARD_RAIO).toFloat()
-        }
-        clipToOutline = true
-        outlineProvider = object : android.view.ViewOutlineProvider() {
-            override fun getOutline(vw: View, o: android.graphics.Outline) = o.setRoundRect(0, 0, vw.width, vw.height, dp(CARD_RAIO).toFloat())
-        }
-        // Em cima: o banner 16:9 (ou o ícone do app).
-        val topo = FrameLayout(this@JogosActivity).apply {
-            clipToOutline = true
-            outlineProvider = object : android.view.ViewOutlineProvider() {
-                override fun getOutline(vw: View, o: android.graphics.Outline) = o.setRoundRect(0, 0, vw.width, vw.height, dp(12).toFloat())
-            }
-        }
-        if (v?.banner != null) topo.addView(ImageView(this@JogosActivity).apply { setImageBitmap(v.banner); scaleType = ImageView.ScaleType.CENTER_CROP }, FrameLayout.LayoutParams(-1, -1))
-        else topo.addView(ImageView(this@JogosActivity).apply { setImageDrawable(v?.icone ?: IconeApp(IconeApp.Tipo.JOGOS, Estilo.TEXTO)) },
-            FrameLayout.LayoutParams(dp(56), dp(56), Gravity.CENTER))
-        val larguraTopo = CARD_L - 20
-        addView(topo, FrameLayout.LayoutParams(dp(larguraTopo), dp(larguraTopo * 9 / 16), Gravity.TOP or Gravity.CENTER_HORIZONTAL).apply { topMargin = dp(10) })
-        // Embaixo: selo da turma, nome e "tipo · quando".
-        val baixo = LinearLayout(this@JogosActivity).apply { orientation = LinearLayout.VERTICAL }
-        if (daTurma.isNotEmpty()) baixo.addView(Estilo.texto(this@JogosActivity, Estilo.Papel.LEGENDA, getString(R.string.turma_aqui, daTurma.size)).apply {
-            textSize = 13f; typeface = Estilo.fonte(700); setTextColor(Estilo.TEXTO)
-            background = Estilo.fundo(this@JogosActivity, 0x66000000, Estilo.RAIO_PILULA)
-            setPaddingRelative(dp(10), dp(4), dp(10), dp(4))
-        }, LinearLayout.LayoutParams(-2, -2).apply { bottomMargin = dp(8) })
-        baixo.addView(Estilo.texto(this@JogosActivity, Estilo.Papel.TITULO, j.nome).apply {
-            textSize = 19f; typeface = Estilo.fonte(800); maxLines = 2; ellipsize = TextUtils.TruncateAt.END
-            setLineSpacing(0f, 1.05f)
-            setShadowLayer(dp(4).toFloat(), 0f, dp(1).toFloat(), 0x99000000.toInt())
-        })
-        baixo.addView(Estilo.texto(this@JogosActivity, Estilo.Papel.LEGENDA, subtitulo(j)).apply {
-            textSize = 13f; setTextColor(Estilo.TEXTO_2); maxLines = 1; ellipsize = TextUtils.TruncateAt.END
-        }, LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(4) })
-        addView(baixo, FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM).apply { setMargins(dp(12), 0, dp(12), dp(12)) })
-        Estilo.focoCard(this)
-        val base = onFocusChangeListener
-        setOnFocusChangeListener { vw, foco ->
-            base?.onFocusChange(vw, foco)
-            if (foco) {
-                mudarAtual(j)
-                // ▼ vai aos botões; ▲ nos botões volta para ESTE card.
-                botaoJogar.nextFocusUpId = vw.id; botaoPc.nextFocusUpId = vw.id; botaoChamar.nextFocusUpId = vw.id
-            }
-        }
-        setOnClickListener { abrirJogo(j) }
-        setOnLongClickListener { escolherGrupo(j); true }
-    }
-
     /** "Na nuvem · hoje". */
     private fun subtitulo(j: JogosTv.App): String {
         val quando = uso[j.pacote]?.takeIf { it > 0 }?.let {
@@ -740,68 +339,11 @@ class JogosActivity : Activity() {
         return listOfNotNull(nomeGrupo(j.grupo), quando).joinToString(" · ")
     }
 
-    /** O jogo em foco: a luz da cor dele e os botões de baixo. */
-    private fun mudarAtual(j: JogosTv.App?) {
-        val mudou = atual?.pacote != j?.pacote
-        atual = j
-        if (mudou) {
-            val c = j?.let { visuais[it.pacote]?.cores } ?: intArrayOf(MARCA)
-            brilho.background = GradientDrawable().apply {
-                gradientType = GradientDrawable.RADIAL_GRADIENT
-                gradientRadius = dp(560).toFloat()
-                setGradientCenter(0.6f, 0.35f)
-                colors = intArrayOf(Estilo.alfa(c[0], 0x44), Estilo.alfa(c[0], 0x12), 0x00000000)
-            }
-        }
-        atualizarAcoes()
-    }
-
-    private fun atualizarAcoes() {
-        if (!::botaoJogar.isInitialized) return
-        val j = atual
-        botaoJogar.visibility = if (j != null) View.VISIBLE else View.GONE
-        botaoPc.visibility = if (j?.grupo == Jogos.Grupo.PC) View.VISIBLE else View.GONE
-        val pronta = (turma as? TurmaDiscordTv.Estado.Pronta)?.turma
-        botaoChamar.visibility = if (j != null && pronta != null && TurmaDiscordTv.temWebhook(this)) View.VISIBLE else View.GONE
-        // "Lucas e Mari jogando Fortnite": quem joga o jogo deste card, senão o jogo com mais gente da turma.
-        val jogando = pronta?.let { TurmaDiscord.jogandoAgora(it) } ?: emptyList()
-        val par = j?.let { a -> jogando.firstOrNull { it.first.equals(a.nome, ignoreCase = true) } } ?: jogando.firstOrNull()
-        frase.text = par?.let { (jogo, nomes) -> getString(R.string.turma_jogando, juntar(nomes), jogo) } ?: ""
-        if (j == null && jogos.isEmpty()) frase.text = getString(R.string.jogos_vazio_dica)
-    }
-
     private fun juntar(nomes: List<String>): String = when (nomes.size) {
         0 -> ""
         1 -> nomes[0]
         2 -> getString(R.string.turma_dois, nomes[0], nomes[1])
         else -> getString(R.string.turma_e_mais, nomes[0], nomes.size - 1)
-    }
-
-    /** "Todos · 9", um chip por tipo com jogos e "Mais opções". O tipo escolhido fica marcado. */
-    /**
-     * "Esta semana" (Central de jogos, 18/11/2026): quadros só de leitura com o tempo jogado, o mais jogado e os controles,
-     * e o "Mais opções" (loja, PC, turma) no fim. Os filtros "Por tipo" saíram: os jogos moram na coluna Jogar da cruz.
-     */
-    private fun desenharChips() {
-        chips.removeAllViews()
-        fun quadro(valor: String, rotulo: String) = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            background = GradientDrawable().apply { setColor(0x1FFFFFFF); cornerRadius = dp(14).toFloat(); setStroke(dp(1), 0x26FFFFFF) }
-            setPaddingRelative(dp(18), dp(10), dp(18), dp(10))
-            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO, valor).apply { textSize = 20f; typeface = Estilo.fonte(700); maxLines = 1 })
-            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.LEGENDA, rotulo).apply { textSize = 14f; setTextColor(Estilo.TEXTO_2); maxLines = 1 })
-            chips.addView(this, LinearLayout.LayoutParams(-2, -2).apply { marginEnd = dp(Estilo.E1 + 4) })
-        }
-        val sem = semana
-        quadro(if (sem == null || sem.ms <= 0) "—" else duracao(sem.ms), getString(R.string.jogos_semana_jogado))
-        sem?.topo?.let { quadro(it, getString(R.string.jogos_semana_mais)) }
-        val controles = runCatching { JogosTv.controles().size }.getOrDefault(0)
-        quadro(controles.toString(), getString(R.string.jogos_semana_controles))
-        Estilo.botao(this, "⋯  " + getString(R.string.jogos_mais_opcoes), primario = false).apply {
-            textSize = 16f; setPaddingRelative(dp(18), dp(9), dp(18), dp(9))
-            setOnClickListener { maisOpcoes() }
-            chips.addView(this, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(Estilo.E1) })
-        }
     }
 
     /** "3 h 20 min" / "45 min" / "menos de 1 min". */
@@ -812,62 +354,6 @@ class JogosActivity : Activity() {
             min < 60 -> getString(R.string.jogos_min, min)
             else -> getString(R.string.jogos_h_min, min / 60, min % 60)
         }
-    }
-
-    private fun filtrar(g: Jogos.Grupo?) {
-        filtro = g
-        val foco = currentFocus
-        val pos = (0 until chips.childCount).firstOrNull { chips.getChildAt(it) === foco }
-        atual = null
-        redesenharFila(null)
-        desenharChips()
-        pos?.let { chips.getChildAt(it)?.requestFocus() }
-    }
-
-    /** "+ Mais jogos" no fim da fileira: as sugestões da Play Store. */
-    private fun cardMaisJogos(): View = FrameLayout(this).apply {
-        isFocusable = true; isClickable = true
-        tag = "botao:mais"
-        background = GradientDrawable().apply {
-            cornerRadius = dp(CARD_RAIO).toFloat()
-            setStroke(dp(2), 0x55FFFFFF, dp(8).toFloat(), dp(6).toFloat())
-        }
-        addView(Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO, "+\n" + getString(R.string.jogos_mais_jogos)).apply {
-            textSize = 18f; gravity = Gravity.CENTER; typeface = Estilo.fonte(700); setTextColor(Estilo.TEXTO_2)
-        }, FrameLayout.LayoutParams(-2, -2, Gravity.CENTER))
-        Estilo.focoCard(this)
-        setOnClickListener { mostrarLoja() }
-    }
-
-    private fun cardSugestao(s: Jogos.Sugestao): View = FrameLayout(this).apply {
-        isFocusable = true; isClickable = true
-        background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(Estilo.matiz(0xFFF5A524.toInt(), 0.5f), Estilo.matiz(0xFF7A4A0E.toInt(), 0.4f))).apply { cornerRadius = dp(CARD_RAIO).toFloat() }
-        contentDescription = s.nome
-        addView(ImageView(this@JogosActivity).apply { setImageDrawable(IconeApp(IconeApp.Tipo.JOGOS, Estilo.alfa(Estilo.TEXTO, 0xB0))) },
-            FrameLayout.LayoutParams(dp(52), dp(52), Gravity.TOP or Gravity.CENTER_HORIZONTAL).apply { topMargin = dp(36) })
-        addView(LinearLayout(this@JogosActivity).apply {
-            orientation = LinearLayout.VERTICAL
-            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.TITULO, s.nome).apply { textSize = 19f; typeface = Estilo.fonte(800); maxLines = 2 })
-            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.LEGENDA, nomeGrupo(s.grupo)).apply { textSize = 13f },
-                LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(4) })
-        }, FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM).apply { setMargins(dp(12), 0, dp(12), dp(12)) })
-        Estilo.focoCard(this)
-        setOnClickListener { abrirNaLoja(s.pacote) }
-    }
-
-    /** Pílula na cor da marca (Jogar, Chamar a turma no painel). Foco = branco, como todo botão do app. */
-    private fun botaoMarca(rotulo: String): TextView = Estilo.botao(this, rotulo).apply {
-        textSize = 18f; typeface = Estilo.fonte(800)
-        setPaddingRelative(dp(26), dp(11), dp(26), dp(11))
-        val normal = Estilo.fundo(this@JogosActivity, MARCA, Estilo.RAIO_PILULA)
-        background = normal
-        val base = onFocusChangeListener
-        setOnFocusChangeListener { v, foco ->
-            base?.onFocusChange(v, foco)
-            if (!foco) { v.background = normal; (v as TextView).setTextColor(0xFFFFFFFF.toInt()) }
-        }
-        setTextColor(0xFFFFFFFF.toInt())
     }
 
     // ================================================================ ações
@@ -896,7 +382,9 @@ class JogosActivity : Activity() {
 
     /** Segurar OK num jogo: em que grupo ele fica, tirar do card ou voltar ao automático. */
     private fun escolherGrupo(j: JogosTv.App) {
-        lista(j.nome, Jogos.Grupo.values().map { g -> ((if (g == j.grupo) "✓ " else "") + nomeGrupo(g)) to { escolherValor(j, g.name) } } +
+        // App de PC: "Ligar o PC e jogar" com este app vem primeiro (era o botão ao lado do Jogar).
+        val pc = if (j.grupo == Jogos.Grupo.PC) listOf(getString(R.string.jogos_ligar_pc_jogar) to { jogarNoPc(j.pacote) }) else emptyList()
+        lista(j.nome, pc + Jogos.Grupo.values().map { g -> ((if (g == j.grupo) "✓ " else "") + nomeGrupo(g)) to { escolherValor(j, g.name) } } +
             listOf(getString(R.string.jogos_tirar) to { escolherValor(j, Jogos.FORA) }, getString(R.string.jogos_automatico) to { escolherValor(j, null) }))
     }
 
@@ -978,7 +466,7 @@ class JogosActivity : Activity() {
             AvisoTv.rapido(this, getString(R.string.turma_config_titulo), getString(R.string.turma_id_invalido)); return
         }
         turma = if (id.isBlank()) TurmaDiscordTv.Estado.SemServidor else null
-        desenharTurma()
+        montar()
         buscarTurma()
     }
 
@@ -1050,32 +538,25 @@ class JogosActivity : Activity() {
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        // A pessoa já começou a navegar: a fileira (ou a turma que chega atrasada) não puxa mais o foco sozinha.
-        if (event.action == KeyEvent.ACTION_DOWN) pessoaMexeu = true
         // Botão Y/△ do controle de videogame em cima de um jogo = o mesmo que segurar OK (escolher o grupo).
         if (event.keyCode == KeyEvent.KEYCODE_BUTTON_Y && event.action == KeyEvent.ACTION_UP) {
-            val p = currentFocus?.tag as? String
+            val p = cruz.itemAtual()?.id
             jogos.firstOrNull { it.pacote == p }?.let { escolherGrupo(it); return true }
         }
         return super.dispatchKeyEvent(event)
     }
 
     companion object {
-        /** Abrir já no painel do sofá (item "Sofá" da coluna Jogar da tela em cruz): o foco começa na turma. */
+        /** Abrir já na turma (item "Sofá" da coluna Jogar da tela em cruz). */
         const val EXTRA_SOFA = "br.paulo.tvlauncher.jogos.SOFA"
 
-        /** Cor da marca Sofaly no fundo escuro (17/11/2026). Vira Estilo.ACENTO quando a marca chegar ao Estilo. */
-        private const val MARCA = 0xFFFF6A2B.toInt()
-        private const val VERDE = 0xFF57D98A.toInt()
-        private const val LARGURA_PAINEL = 236
-        private const val LARGURA_PAINEL_ABERTO = 312
-        private const val CARD_L = 158
-        /** Central de jogos: quantos "jogados por último" a fileira mostra. */
-        private const val RECENTES_MAX = 5
-        private const val CARD_A = 232
-        private const val CARD_RAIO = 18
-        private const val QR = 92
-        private val CORES_JOGADOR = intArrayOf(MARCA, 0xFF3D7BFF.toInt(), 0xFF2FA866.toInt(), 0xFFC98A12.toInt())
+        private const val P_JOGOS = "jogos"
+        private const val P_SOFA = "sofa"
+        private const val P_TURMA = "turma"
+        private const val P_OPCOES = "opcoes"
+        /** O violeta do Jogar na cruz ([IconeCruz.corLinha]). */
+        private const val COR_JOGAR = 0xFF8E92FA.toInt()
+        private val CORES_JOGADOR = intArrayOf(Estilo.ACENTO, 0xFF3D7BFF.toInt(), 0xFF2FA866.toInt(), 0xFFC98A12.toInt())
         // Avatares: tons claros, nenhum rosado (o dono detesta rosa).
         private val CORES_AVATAR = intArrayOf(0xFFFFB37A.toInt(), 0xFF9CC8FF.toInt(), 0xFFA8E6B8.toInt(), 0xFFF5DFA0.toInt(), 0xFF8FE0D0.toInt(), 0xFFC7D3E0.toInt())
     }
