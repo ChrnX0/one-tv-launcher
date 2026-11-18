@@ -445,7 +445,6 @@ def page_developers(L):
     why = "".join(f'<li class="card">{icon(i)}<h3>{esc(t)}</h3><p>{esc(x)}</p></li>' for i, t, x in d["why"])
     can = "".join(f'<li class="mini-card"><b>{esc(t)}</b><span>{esc(x)}</span></li>' for t, x in d["can"])
     rules = "".join(f"<li>{icon('shield')}<span>{esc(r)}</span></li>" for r in d["rules"])
-    tmpl = "https://github.com/ChrnX0/one-tv-launcher/tree/main/plugin-modelo"
     return (head(L, "developers", d["title"], d["description"]) + header(L, "developers") + f"""
 <section class="hero dev-hero">
   <div class="wrap hero-in">
@@ -453,8 +452,7 @@ def page_developers(L):
       <p class="eyebrow">{esc(d['eyebrow'])}</p>
       <h1>{esc(d['h1'])}</h1>
       <p class="lead">{esc(d['lead'])}</p>
-      <div class="ctas"><a class="btn primary" href="{tmpl}">{icon('puzzle')}{esc(d['cta_start'])}</a>
-        <a class="btn" href="{L.prefix}plugins.html">{esc(d['cta_spec'])}</a></div>
+      <div class="ctas"><a class="btn primary" href="{L.prefix}plugins.html">{icon('puzzle')}{esc(d['cta_spec'])}</a></div>
     </div>
     <div class="card-demo" aria-hidden="true">
       {demo}
@@ -474,7 +472,6 @@ def page_developers(L):
 <section class="band alt"><div class="wrap split">
   <div class="panel"><h2>{esc(d['rules_title'])}</h2><ul class="rules">{rules}</ul></div>
   <div class="panel"><h2>{esc(d['template_title'])}</h2><p>{esc(d['template_text'])}</p>
-    <a class="more" href="{tmpl}">plugin-modelo →</a>
     <h3 class="soon">{esc(d['soon_title'])}</h3><p>{esc(d['soon_text'])}</p></div>
 </div></section>
 """ + footer(L))
