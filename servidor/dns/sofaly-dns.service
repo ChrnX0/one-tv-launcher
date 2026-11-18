@@ -1,0 +1,22 @@
+# Serviço do DNS da Sofaly no Linux (systemd). Copiar para /etc/systemd/system/ e o binário para /usr/local/bin/.
+[Unit]
+Description=DNS da Sofaly (certificado por TV)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/sofaly-dns -zona lan.sofaly.tv -ns ns1.sofaly.tv,ns2.sofaly.tv -hostmaster contact.sofaly.tv -carteiro https://carteiro.sofaly.tv
+Restart=always
+RestartSec=2
+# Usuário descartável, sem disco gravável e só com o poder de abrir a porta 53.
+DynamicUser=yes
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+MemoryMax=128M
+
+[Install]
+WantedBy=multi-user.target

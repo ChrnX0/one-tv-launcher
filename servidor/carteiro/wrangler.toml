@@ -1,0 +1,24 @@
+# Configuração do Worker. Sem id de conta aqui de propósito: a conta é do Paulo e entra na hora do deploy
+# (`npx wrangler login`), nunca no git.
+name = "sofaly-carteiro"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+workers_dev = false   # só pelo domínio próprio (rota abaixo)
+
+routes = [{ pattern = "carteiro.sofaly.tv", custom_domain = true }]
+
+[vars]
+DESLIGADO = "0"   # "1" desliga tudo (as TVs seguem funcionando em casa e avisam o que ficou indisponível)
+
+[[durable_objects.bindings]]
+name = "CAIXA"
+class_name = "Caixa"
+
+[[durable_objects.bindings]]
+name = "ENCONTRO"
+class_name = "Encontro"
+
+# SQLite nos Durable Objects: único tipo aceito no plano grátis.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Caixa", "Encontro"]

@@ -65,6 +65,17 @@ class OuvirTelaTest {
         File(saida, "ouvir-icones.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
 
+    /**
+     * Na TV, uma view com clipToOutline e contorno vazio não desenha nada: os ícones de ação sumiram na Sala (18/11/2026)
+     * e o Robolectric, que não recorta pelo contorno, desenhava normal. A capa recorta à mão; isto garante que continue.
+     */
+    @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
+    @Test fun capaNaoRecortaPeloContorno() {
+        val a = Robolectric.buildActivity(Activity::class.java).setup().get()
+        val capa = CapaOuvir(a).apply { icone = IconeOuvir(IconeOuvir.Tipo.FAVORITAS) }
+        assertTrue("clipToOutline com ícone apaga o ícone na TV", !capa.clipToOutline)
+    }
+
     private fun montar(): Pair<Activity, CruzOuvir> {
         InstrumentationRegistry.getInstrumentation().setInTouchMode(false)
         val a = Robolectric.buildActivity(Activity::class.java).setup().get()

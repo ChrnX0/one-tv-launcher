@@ -90,7 +90,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         const val APERTO_MS = HomeCruz.APERTO_MS
         /** Arte do fundo: baixada bem pequena (32 px) e esticada; o próprio esticar já desfoca, sem custo de GPU. */
         const val ARTE_LADO = 32
-        const val ARTE_ALFA = 0.42f
+        const val ARTE_ALFA = 0.24f
     }
 
     var aoMudar: ((Prateleira, Item) -> Unit)? = null
