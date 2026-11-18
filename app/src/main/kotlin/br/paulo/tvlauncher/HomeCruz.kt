@@ -133,8 +133,12 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         val sig = novas.flatMap { c -> listOf("#" + c.cat.id) + c.itens.map { it.id } }
         val novoMapa = CruzLogica.Mapa(novas.map { it.cat }, novas.map { c -> c.itens.map { it.id } })
         if (sig == assinatura) {
+            val antes = itemAtual()
             cats = novas
             for ((j, c) in novas.withIndex()) for ((i, it) in c.itens.withIndex()) preencher(viewsItem[j][i], it)
+            // O item em foco mudou de texto ou ícone (canal novo, episódio novo): a arte e o TalkBack acompanham.
+            val agora = itemAtual()
+            if (agora != null && (antes?.nome != agora.nome || antes.sub != agora.sub || antes.icone !== agora.icone)) avisarMudanca()
             return
         }
         estado = if (assinatura == null) CruzLogica.inicial(novoMapa, lembrados) else CruzLogica.reajustar(mapa, estado, novoMapa)
@@ -151,6 +155,9 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         posicionar(animar = false)
         avisarMudanca()
     }
+
+    /** Voltando de um app: só leva a Assistir, sem o 2º passo da HOME (o item lembrado fica). */
+    fun irParaAssistir() { if (categoriaAtual()?.cat != CruzLogica.Categoria.ASSISTIR) home() }
 
     /** HOME: Assistir; HOME de novo: a TV. */
     fun home() = aplicar(CruzLogica.Tecla.HOME)
