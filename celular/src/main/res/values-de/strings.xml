@@ -20,4 +20,6 @@
     <string name="cel_casa_qual">In welchem Zuhause steht dieser Fernseher?</string>
     <string name="cel_casa_nova">Anderes Zuhause…</string>
     <string name="cel_casa_dica">z. B. Strandhaus, Bei Mama</string>
+    <string name="cel_baixado">In Downloads gespeichert: %1$s</string>
+    <string name="cel_baixar_falhou">Die Datei konnte nicht gespeichert werden. Versuch es noch einmal.</string>
 </resources>

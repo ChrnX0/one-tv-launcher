@@ -33,15 +33,14 @@ object ConfirmacoesTv {
     private fun prefs(ctx: Context) = ctx.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
     /**
-     * As regras de agora. Na primeira leitura grava as iniciais: instalação nova (o pacote nunca foi atualizado) começa
-     * protegida; TV que já tinha o launcher (a Sala, atualizada por cima) começa com "Liberar tudo".
+     * As regras de agora. Sem regras gravadas (primeira leitura, ou prefs perdidas/estragadas), começa PROTEGIDA.
+     * Antes, "o pacote já foi atualizado" dava "Liberar tudo" (para a Sala, de 2026); mas toda TV se atualiza sozinha,
+     * então uma instalação da Play que se atualizasse antes da 1ª leitura, ou prefs estragadas, liberavam shell e
+     * instalação sem perguntar. As TVs antigas já têm as regras gravadas desde então: não mudam.
      */
     @Synchronized fun regras(ctx: Context): Confirmacoes.Regras {
         Confirmacoes.deJson(prefs(ctx).getString(CHAVE, null))?.let { return it }
-        val nova = try {
-            val pi = ctx.packageManager.getPackageInfo(ctx.packageName, 0)
-            pi.firstInstallTime == pi.lastUpdateTime
-        } catch (e: Exception) { true }   // na dúvida, o lado protegido
+        val nova = true
         val r = Confirmacoes.iniciais(nova)
         prefs(ctx).edit().putString(CHAVE, Confirmacoes.paraJson(r)).apply()
         Log.i(TAG, "regras iniciais: liberarTudo=${r.liberarTudo} (instalação nova=$nova)")
@@ -58,9 +57,11 @@ object ConfirmacoesTv {
     // ---------------------------------------------------------------- perguntar na TV
 
     private class Pergunta(val titulo: String, val oQue: String, val quem: String) {
+        val id = proximoId.incrementAndGet()
         val pronto = CountDownLatch(1)
         @Volatile var sim = false
     }
+    private val proximoId = java.util.concurrent.atomic.AtomicLong()
     @Volatile private var aberta: Pergunta? = null
 
     /**
@@ -113,6 +114,9 @@ object ConfirmacoesTv {
     /** Para a PerguntaTvActivity. O título sai no idioma da TV (os textos de Confirmacoes.kt ficam para a IA). */
     internal fun atual(): Triple<String, String, String>? = aberta?.let { Triple(it.titulo, it.oQue, it.quem) }
 
+    /** O número da pergunta aberta: a tela responde só a ELA (uma tela velha não responde pela pergunta seguinte). */
+    internal fun atualId(): Long? = aberta?.id
+
     /** Nome, explicação e modo de cada linha das Confirmações, nos recursos de texto (inglês padrão, pt traduzido). */
     fun tituloRes(a: Confirmacoes.Acao): Int = when (a) {
         Confirmacoes.Acao.MCP_CLIENTE -> R.string.cl_acao_mcp_cliente
@@ -141,8 +145,9 @@ object ConfirmacoesTv {
         Confirmacoes.Modo.PERMITIR -> R.string.cl_modo_permitir
         Confirmacoes.Modo.BLOQUEAR -> R.string.cl_modo_bloquear
     }
-    internal fun responder(sim: Boolean) {
+    internal fun responder(id: Long, sim: Boolean) {
         val p = aberta ?: return
+        if (p.id != id) return
         p.sim = sim
         p.pronto.countDown()
     }
@@ -154,6 +159,7 @@ object ConfirmacoesTv {
  */
 class PerguntaTvActivity : Activity() {
     private var respondido = false
+    private var pergunta = 0L
     private val ui = Handler(Looper.getMainLooper())
 
     private fun dp(v: Int) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics).toInt()
@@ -162,6 +168,7 @@ class PerguntaTvActivity : Activity() {
         super.onCreate(estado)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro: tela que derrubou esta versão (VigiaAtualizacao)
         val (titulo, oQue, quem) = ConfirmacoesTv.atual() ?: run { respondido = true; finish(); return }
+        pergunta = ConfirmacoesTv.atualId() ?: 0L
         fun botao(t: String, aoClicar: () -> Unit) = Estilo.botao(this, t).apply { setOnClickListener { aoClicar() } }
         val negar = botao(getString(R.string.cf_negar)) { responder(false) }
         val permitir = botao(getString(R.string.cf_permitir)) { responder(true) }
@@ -176,7 +183,7 @@ class PerguntaTvActivity : Activity() {
         if (respondido) return
         respondido = true
         finish()   // fecha antes: o que a ação abrir fica por cima
-        ConfirmacoesTv.responder(sim)
+        ConfirmacoesTv.responder(pergunta, sim)
     }
 
     @Deprecated("API antiga, mas é a que existe em Activity (sem AndroidX)")
@@ -185,6 +192,6 @@ class PerguntaTvActivity : Activity() {
     override fun onDestroy() {
         super.onDestroy()
         ui.removeCallbacksAndMessages(null)
-        if (!respondido) { respondido = true; ConfirmacoesTv.responder(false) }
+        if (!respondido) { respondido = true; ConfirmacoesTv.responder(pergunta, false) }
     }
 }

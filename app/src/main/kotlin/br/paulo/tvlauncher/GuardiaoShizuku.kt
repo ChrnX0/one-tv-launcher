@@ -181,7 +181,10 @@ object GuardiaoShizuku {
     private fun garantirMesmoComBinder(app: Context, motivo: String) {
         if (!trabalhando.compareAndSet(false, true)) return
         fila.execute {
-            try { executar(app, motivo, forcar = true) } finally { trabalhando.set(false) }
+            // Igual ao garantir: uma exceção aqui mataria a thread da fila e, com ela, o processo do launcher.
+            try { executar(app, motivo, forcar = true) } catch (e: Throwable) {
+                anotar(app, "erro inesperado: ${e.javaClass.simpleName}: ${e.message}")
+            } finally { trabalhando.set(false) }
         }
     }
 

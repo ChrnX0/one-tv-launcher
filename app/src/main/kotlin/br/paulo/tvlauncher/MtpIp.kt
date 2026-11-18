@@ -531,6 +531,7 @@ class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.in
         if (!ChecagensPainel.nomeArquivoValido(novo.nome) || DavLogica.escondido(novo.nome)) return Mtp.NEGADO to null
         if (relDa(c).isEmpty() && novo.nome.lowercase() in ChecagensPainel.PASTAS_FECHADAS) return Mtp.NEGADO to null
         val pasta = arquivoDe(c) ?: return Mtp.PAI_INVALIDO to null
+        limparParciais(pasta)
         if (File(pasta, novo.nome).exists()) return Mtp.NEGADO to null   // nunca sobrescreve: o Windows apaga antes, se a pessoa mandar
         if (novo.tamanho > livre(a)) return Mtp.CHEIO to null
         return Mtp.OK to Pendente(handleDe(filho(c, novo.nome)), pasta, novo.nome, novo.tamanho, novo.modificado, a)
@@ -548,14 +549,27 @@ class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.in
             var disco = 0L; var chegou = 0L; var tSync = 0L
             FileOutputStream(parcial).use { s ->
                 // Arquivo grande: a rede enche e o disco grava ao mesmo tempo (ver EscritaAdiantada). Pequeno: direto.
-                val n = if (p.tamanho in 0 until EscritaAdiantada.MINIMO) encher(s)
-                    else EscritaAdiantada(s).let { e -> e.use { _ -> encher(e) }.also { disco = e.tempoDisco } }
-                if (p.tamanho >= 0 && n != p.tamanho) throw IOException("chegaram $n de ${p.tamanho} bytes")
+                // Erro do disco (cheio, pendrive FAT32 com 4 GB+) não interrompe a leitura da rede ([SoAnota]): o
+                // computador termina de mandar, a conversa continua alinhada e ele recebe CHEIO/ERRO em vez de cair.
+                val n: Long
+                if (p.tamanho in 0 until EscritaAdiantada.MINIMO) {
+                    val g = SoAnota(s); n = encher(g); g.erro?.let { throw ErroDisco(it) }
+                } else {
+                    val e = EscritaAdiantada(s); val g = SoAnota(e)
+                    n = try { encher(g) } finally { try { e.close() } catch (x: IOException) { if (g.erro == null) g.erro = x } }
+                    disco = e.tempoDisco
+                    g.erro?.let { throw ErroDisco(it) }
+                }
+                if (p.tamanho >= 0 && n != p.tamanho) throw ErroDisco(IOException("chegaram $n de ${p.tamanho} bytes"))
                 chegou = n
-                val t = System.nanoTime(); s.fd.sync(); tSync = System.nanoTime() - t
+                val t = System.nanoTime()
+                try { s.fd.sync() } catch (x: IOException) { throw ErroDisco(x) }
+                tSync = System.nanoTime() - t
             }
             val t1 = System.nanoTime()
-            if (final.exists() || !parcial.renameTo(final)) { parcial.delete(); return Mtp.NEGADO }
+            // Conferir e renomear juntos: rename() substitui sem avisar, e dois envios do mesmo nome passavam no exists().
+            val renomeou = synchronized(MtpLoja::class.java) { !final.exists() && parcial.renameTo(final) }
+            if (!renomeou) { parcial.delete(); return Mtp.NEGADO }
             val t2 = System.nanoTime()
             // Onde foi o tempo de uma gravação demorada (17/11/2026: o pendrive levava 14,8 s para 16 MB, a memória interna 2,4 s).
             if (t2 - t0 >= MtpSessao.LENTA_MS * 1_000_000) MtpSessao.lenta?.invoke(
@@ -565,9 +579,34 @@ class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.in
             parcial.delete()
             throw e
         }
-        p.modificado?.let { final.setLastModified(it) }
+        // Data antes de 1970 (ou lixo convertido) lançava IllegalArgumentException com o arquivo já gravado.
+        p.modificado?.takeIf { it >= 0 }?.let { try { final.setLastModified(it) } catch (_: Exception) {} }
         avisar(final)
         return Mtp.OK
+    }
+
+    /** Disco recusou a gravação depois de toda a fase de dados lida: dá para responder sem derrubar a conexão. */
+    class ErroDisco(causa: IOException) : IOException(causa.message, causa) {
+        val semEspaco = generateSequence<Throwable>(causa) { it.cause }.any { (it.message ?: "").let { m -> "ENOSPC" in m || "No space" in m } }
+    }
+
+    /** Repassa ao destino; no 1º erro guarda e descarta o resto, para a rede continuar sendo lida até o fim. */
+    private class SoAnota(private val alvo: OutputStream) : OutputStream() {
+        var erro: IOException? = null
+        override fun write(b: Int) = write(byteArrayOf(b.toByte()), 0, 1)
+        override fun write(b: ByteArray, o: Int, n: Int) {
+            if (erro == null) try { alvo.write(b, o, n) } catch (e: IOException) { erro = e }
+        }
+    }
+
+    /**
+     * Apaga ".nome.123.parcial" esquecidos (processo morto no meio: atualização, queda de energia). Ficam escondidos no
+     * MTP e no DAV, então ninguém via nem apagava. Só os parados há mais de 1 h: um envio em curso grava sem parar.
+     */
+    private fun limparParciais(pasta: File) {
+        val limite = System.currentTimeMillis() - 60 * 60_000L
+        pasta.listFiles { f -> f.isFile && f.name.startsWith(".") && f.name.endsWith(".parcial") && f.lastModified() < limite }
+            ?.forEach { it.delete() }
     }
 
     /** O envio não aconteceu: o handle reservado deixa de existir. */
@@ -600,7 +639,7 @@ class EscritaAdiantada(private val destino: OutputStream, private val blocos: In
                 // depois de um erro só esvazia a fila: quem enche não pode ficar preso esperando lugar
                 if (erro == null) try {
                     val t = System.nanoTime(); destino.write(x.b, 0, x.n); tempoDisco += System.nanoTime() - t
-                } catch (e: IOException) { erro = e }
+                } catch (e: Throwable) { erro = e as? IOException ?: IOException(e) }   // não só IOException: a thread não pode morrer calada
                 livres.put(x)
             }
         } catch (_: InterruptedException) {}
@@ -846,11 +885,16 @@ class MtpSessao(private val loja: MtpLoja, private val ap: Mtp.Aparelho, private
                 val pend = pendente
                 pendente = null
                 if (pend == null) { receber(tid, Long.MAX_VALUE, Nada); return responder(Mtp.SEM_INFO_ANTES, tid) }
+                var leu = false
                 val cod = try {
                     // teto: o tamanho combinado ou, se o computador não disse, o espaço livre de agora
-                    loja.receber(pend) { saida -> receber(tid, if (pend.tamanho >= 0) pend.tamanho else loja.livre(pend.armazem), saida) }
+                    loja.receber(pend) { saida -> leu = true; receber(tid, if (pend.tamanho >= 0) pend.tamanho else loja.livre(pend.armazem), saida) }
                 } catch (e: Cancelou) { loja.desistir(pend); throw e
+                } catch (e: MtpLoja.ErroDisco) { if (e.semEspaco) Mtp.CHEIO else Mtp.ERRO   // dados já lidos: só responder
                 } catch (e: IOException) { loja.desistir(pend); throw e }
+                // Recusou antes de ler (pasta sumiu, pendrive tirado): os dados já vêm vindo e precisam ser lidos, senão
+                // caíam no laço de comandos como "pacote fora de hora" e a conexão inteira caía.
+                if (!leu) receber(tid, Long.MAX_VALUE, Nada)
                 if (cod != Mtp.OK) loja.desistir(pend)
                 responder(cod, tid)
             }
@@ -933,7 +977,7 @@ class MtpServico(
     }
 
     /** Uma sessão aberta pela conexão de comandos, com o IP de quem passou pelo "Permitir?" e a conexão de eventos dela. */
-    private class Aberta(val sessao: MtpSessao, val ip: String) {
+    private class Aberta(val sessao: MtpSessao, val ip: String, val pc: String, val comando: Socket) {
         val evento = java.util.concurrent.atomic.AtomicReference<Socket?>(null)
         /** Por onde a TV avisa o computador (pendrive entrou/saiu). Quem escreve trava nela: duas threads escrevem. */
         @Volatile var saida: OutputStream? = null
@@ -1013,8 +1057,14 @@ class MtpServico(
                     registro("recusado: $nome ($ip)")
                     return
                 }
+                // O mesmo computador abrindo de novo: a conexão antiga morreu sem FIN (notebook dormiu, Wi-Fi caiu) e ficaria
+                // presa em read() para sempre (keepalive do Android só testa depois de ~2 h), ocupando vaga até lotar.
+                for (velha in sessoes.values) if (velha.pc == id) {
+                    try { velha.comando.close() } catch (_: IOException) {}
+                    velha.evento.get()?.let { try { it.close() } catch (_: IOException) {} }
+                }
                 val sessao = MtpSessao(loja, ap, e, s)
-                val aberta = Aberta(sessao, ip)
+                val aberta = Aberta(sessao, ip, id, c)
                 val n = synchronized(sessoes) { novoNumero().also { sessoes[it] = aberta } }
                 try {
                     val w = Mtp.Escritor().u32(n).cru(ap.guid)

@@ -245,8 +245,10 @@ class AssRenderer(ctx: Context, private val saida: TextOutput, looperSaida: Loop
     private fun ajustar() {
         if (ajustes.versao == versaoVista && buffer != null) return
         versaoVista = ajustes.versao
-        for ((nome, dados) in ajustes.fontes(fontesPostas)) FfNativo.assFonte(lib, nome, dados)
-        fontesPostas = ajustes.quantasFontes
+        // Conta as que entregou (não "quantasFontes" relido depois): uma fonte chegando no meio ficava pulada para sempre.
+        val novas = ajustes.fontes(fontesPostas)
+        for ((nome, dados) in novas) FfNativo.assFonte(lib, nome, dados)
+        fontesPostas += novas.size
         val (l, a) = AssLogica.tamanho(ajustes.areaL, ajustes.areaA)
         if (l != larg || a != alt || buffer == null) {
             larg = l; alt = a

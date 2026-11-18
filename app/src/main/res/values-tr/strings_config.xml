@@ -235,6 +235,7 @@
     <string name="cl_vd_ja_dono">launcher zaten cihaz sahibi</string>
     <string name="cl_vd_sem_shell">yerleşik kabuk yanıt vermedi (Ayarlar &gt; Launcher kabuğu’nda eşleştirin)</string>
     <string name="cl_vd_usuario">Android %1$s kullanıcısını kaldırmaya izin vermedi</string>
+    <string name="cl_vd_mudou">Onaydan sonra TV kullanıcıları değişti (şimdi: %1$s). Hiçbir şey kaldırılmadı; yeniden başlayın.</string>
     <string name="cl_vd_google">Android Google’ı bir anlığına duraklatmaya izin vermedi</string>
     <string name="cl_vd_recusou">Android reddetti: %1$s</string>
     <string name="cl_vd_sem_resposta">yanıt yok</string>

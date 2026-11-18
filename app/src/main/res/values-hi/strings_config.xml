@@ -235,6 +235,7 @@
     <string name="cl_vd_ja_dono">लॉन्चर पहले से डिवाइस ओनर है</string>
     <string name="cl_vd_sem_shell">बिल्ट-इन शेल ने जवाब नहीं दिया (सेटिंग्स &gt; लॉन्चर शेल में पेयर करें)</string>
     <string name="cl_vd_usuario">Android ने उपयोगकर्ता %1$s को हटाने नहीं दिया</string>
+    <string name="cl_vd_mudou">पुष्टि के बाद टीवी के उपयोगकर्ता बदल गए (अब: %1$s)। कुछ भी नहीं हटाया गया; फिर से शुरू करें।</string>
     <string name="cl_vd_google">Android ने Google को थोड़ी देर रोकने नहीं दिया</string>
     <string name="cl_vd_recusou">Android ने मना किया: %1$s</string>
     <string name="cl_vd_sem_resposta">कोई जवाब नहीं</string>

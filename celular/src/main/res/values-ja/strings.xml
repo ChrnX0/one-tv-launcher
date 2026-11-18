@@ -20,4 +20,6 @@
     <string name="cel_casa_qual">このテレビはどの家にありますか？</string>
     <string name="cel_casa_nova">別の家…</string>
     <string name="cel_casa_dica">例：別荘、実家</string>
+    <string name="cel_baixado">ダウンロードに保存しました: %1$s</string>
+    <string name="cel_baixar_falhou">ファイルを保存できませんでした。もう一度お試しください。</string>
 </resources>

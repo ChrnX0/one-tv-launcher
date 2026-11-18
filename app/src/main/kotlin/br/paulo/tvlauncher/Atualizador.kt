@@ -22,8 +22,8 @@ import java.security.MessageDigest
  * O launcher, a cada [INTERVALO_MS], pergunta qual é o último Release e, se o versionCode for maior que o instalado:
  *  1. baixa o APK e o .sha256 e confere um contra o outro (download corrompido = não instala);
  *  2. confere que o APK é do MESMO pacote e assinado com a MESMA chave do launcher instalado. Isso é o que protege a
- *     TV: o Android já recusaria chave diferente, mas assim nem tentamos. Na TV da Sala do dono (chave do PC de build,
- *     opção A de 04/11/2026) o Release público é SEMPRE recusado aqui, de propósito;
+ *     TV: o Android já recusaria chave diferente, mas assim nem tentamos. (Desde o reset de 10/11/2026 a Sala também
+ *     usa a chave pública e se atualiza por aqui, como as outras TVs.)
  *  3. instala sozinho pelo PackageInstaller. Como o launcher é Device Owner, o Android instala sem perguntar.
  *     Só instala com a tela APAGADA, para não reiniciar o launcher na frente de quem está usando a TV.
  *
@@ -42,7 +42,13 @@ object Atualizador {
     private const val ESTADO = "estado"
     private const val ESTADO_VERSAO = "estado_versao"   // versão instalada quando o ESTADO foi escrito
     private const val PENDENTE = "pendente"             // Release conferido (sha, pacote, chave) e ainda não instalado
-    private const val RECUSADA = "recusada"             // Release recusado por chave diferente: não baixa de novo
+    private const val RECUSADA = "recusada"             // Release recusado (chave, pacote, versão, ilegível): não baixa de novo
+    private const val RECUSADA_TEXTO = "recusada_texto" // o motivo, para mostrar sem baixar de novo
+    private const val INSTALANDO = "instalando"         // código entregue ao PackageInstaller (o Resultado não sabe qual é)
+    private const val FALHOU_CODIGO = "falhou_codigo"   // instalação que falhou: qual código e quantas vezes
+    private const val FALHOU_N = "falhou_n"
+    private const val MAX_FALHAS = 3
+    private const val NOVA_TENTATIVA_MS = 30 * 60_000L  // erro de rede: tenta de novo em 30 min, não em 6 h
     private const val INTERVALO_MS = 6 * 60 * 60_000L
     // Um APK por arquitetura (12/11/2026, ver splits em app/build.gradle.kts). Nome novo (13/11/2026, pedido do dono):
     // one-tv-launcher*.apk. Os nomes antigos (tv-launcher*.apk) ficam aceitos: o Release de transição sai com eles para a
@@ -123,9 +129,14 @@ object Atualizador {
         if (android.os.Build.VERSION.SDK_INT < 28) { fim?.invoke(txt(R.string.atu_android9)); return }
         if (!ocupado.compareAndSet(false, true)) { fim?.invoke(txt(R.string.atu_ocupado)); return }
         Fundo.rodar {
-            val r = try { verificarAgora(app, instalar, soComTelaApagada) } catch (e: Exception) { txt(R.string.atu_erro, e.javaClass.simpleName, e.message.orEmpty()) }
-            ocupado.set(false)
-            prefs(app).edit().putLong(ULTIMA, System.currentTimeMillis()).apply()
+            var erro = false
+            val r = try { verificarAgora(app, instalar, soComTelaApagada) }
+                catch (e: Throwable) { erro = true; txt(R.string.atu_erro, e.javaClass.simpleName, e.message.orEmpty()) }
+                finally { ocupado.set(false) }   // finally: um Error (falta de memória) deixava "ocupado" até reiniciar
+            // Erro (Wi-Fi caiu, 5xx, limite da API): a próxima tentativa é em 30 min, não em 6 h. Na TV que só fica
+            // apagada de madrugada, 6 h perdiam o dia.
+            val agora = System.currentTimeMillis()
+            prefs(app).edit().putLong(ULTIMA, if (erro) agora - INTERVALO_MS + NOVA_TENTATIVA_MS else agora).apply()
             anotar(app, r)
             fim?.invoke(r)
         }
@@ -140,7 +151,11 @@ object Atualizador {
         val meu = instalado(app).longVersionCode
         if (codigo <= meu) { prefs(app).edit().remove(PENDENTE).apply(); return txt(R.string.atu_em_dia, meu, codigo) }
         // Este mesmo Release já foi recusado pela chave: o APK não muda, então não baixa 12 MB de novo a cada 6 h.
-        if (prefs(app).getLong(RECUSADA, 0L) == codigo) return txt(R.string.atu_chave, codigo)
+        if (prefs(app).getLong(RECUSADA, 0L) == codigo) return prefs(app).getString(RECUSADA_TEXTO, null) ?: txt(R.string.atu_chave, codigo)
+        // Instalação que já falhou [MAX_FALHAS] vezes com este código (disco cheio, dex): não baixa 12 MB a cada 6 h para
+        // falhar de novo. Um Release maior tenta do zero.
+        val falhas = if (prefs(app).getLong(FALHOU_CODIGO, 0L) == codigo) prefs(app).getInt(FALHOU_N, 0) else 0
+        if (falhas >= MAX_FALHAS) return txt(R.string.atu_falhou, falhas, "v$codigo")
         // Atualização vigiada: um Release maior que a versão que caiu tira a pausa; uma versão que já caiu nesta TV
         // nunca é instalada de novo (nem baixa: não adianta).
         VigiaAtualizacao.aoVerRelease(app, codigo)
@@ -164,7 +179,6 @@ object Atualizador {
 
         val esperado = baixarTexto(urlSha).trim().split(Regex("\\s+")).first().lowercase()
         val arquivo = File(app.cacheDir, "atualizacao.apk")
-        var entregue = false   // true = o PackageInstaller ficou com o arquivo (o Resultado apaga depois)
         try {
             // Dentro do try (auditoria 10/11/2026): se a rede cair no meio, o finally apaga o APK pela metade.
             baixarArquivo(urlApk, arquivo)
@@ -181,27 +195,32 @@ object Atualizador {
             )
             when (conferido) {
                 ConferenciaApk.Resultado.OK -> {}
-                ConferenciaApk.Resultado.ILEGIVEL -> return txt(R.string.atu_ilegivel, codigo)
-                ConferenciaApk.Resultado.PACOTE -> return txt(R.string.atu_pacote, codigo, novo?.packageName.toString())
-                ConferenciaApk.Resultado.VERSAO_TAG -> return txt(R.string.atu_versao, codigo, novo?.longVersionCode ?: 0L)
+                // O SHA conferiu: o arquivo é o publicado. Estes não mudam baixando de novo, então ficam recusados.
+                ConferenciaApk.Resultado.ILEGIVEL -> return recusar(app, codigo, txt(R.string.atu_ilegivel, codigo))
+                ConferenciaApk.Resultado.PACOTE -> return recusar(app, codigo, txt(R.string.atu_pacote, codigo, novo?.packageName.toString()))
+                ConferenciaApk.Resultado.VERSAO_TAG -> return recusar(app, codigo, txt(R.string.atu_versao, codigo, novo?.longVersionCode ?: 0L))
                 ConferenciaApk.Resultado.NAO_E_MAIOR -> { prefs(app).edit().remove(PENDENTE).apply(); return txt(R.string.atu_em_dia, atual.longVersionCode, codigo) }
                 ConferenciaApk.Resultado.RUIM -> { prefs(app).edit().remove(PENDENTE).apply(); return txt(R.string.atu_ruim, codigo) }
-                ConferenciaApk.Resultado.CHAVE -> {
-                    prefs(app).edit().putLong(RECUSADA, codigo).remove(PENDENTE).apply()
-                    return txt(R.string.atu_chave, codigo)
-                }
+                ConferenciaApk.Resultado.CHAVE -> return recusar(app, codigo, txt(R.string.atu_chave, codigo))
             }
 
             if (!instalar) { prefs(app).edit().putLong(PENDENTE, codigo).apply(); return txt(R.string.atu_disponivel, codigo, meu) }
             // A tela foi conferida só ANTES do download; se alguém ligou a TV nesse meio-tempo, não reinicia o launcher na
             // frente da pessoa: fica pendente (Configurações > Instalar agora, ou a próxima volta com a tela apagada).
             if (soComTelaApagada && telaAcesa(app)) { prefs(app).edit().putLong(PENDENTE, codigo).apply(); return txt(R.string.atu_disponivel, codigo, meu) }
+            prefs(app).edit().putLong(INSTALANDO, codigo).apply()
             instalarApk(app, arquivo)
-            entregue = true
             return txt(R.string.atu_instalando, codigo, meu)
         } finally {
-            if (!entregue) arquivo.delete()
+            // Sempre: a sessão já copiou os bytes antes do commit. Antes ficava no cache depois do sucesso (o processo
+            // morre antes do Resultado), e o Resultado podia apagar o download de uma verificação seguinte no meio.
+            arquivo.delete()
         }
+    }
+
+    private fun recusar(app: Context, codigo: Long, texto: String): String {
+        prefs(app).edit().putLong(RECUSADA, codigo).putString(RECUSADA_TEXTO, texto).remove(PENDENTE).apply()
+        return texto
     }
 
     private fun instalado(app: Context): PackageInfo =
@@ -218,6 +237,9 @@ object Atualizador {
 
     private fun instalarApk(app: Context, arquivo: File) {
         val instalador = app.packageManager.packageInstaller
+        // Sessões nossas que sobraram (processo morto no meio da cópia, openSession que lançou): o Android só as expira
+        // depois de dias, com os bytes ocupando espaço.
+        for (velha in instalador.mySessions) runCatching { instalador.abandonSession(velha.sessionId) }
         val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL).apply {
             setAppPackageName(app.packageName)
             setSize(arquivo.length())
@@ -285,6 +307,11 @@ object Atualizador {
             }
             File(ctx.cacheDir, "atualizacao.apk").delete()
             val msg = intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE)
+            if (status != PackageInstaller.STATUS_SUCCESS) {
+                // Conta as falhas do código que estava instalando ([MAX_FALHAS] = para de tentar este código).
+                val p = prefs(ctx); val c = p.getLong(INSTALANDO, 0L)
+                if (c > 0) p.edit().putLong(FALHOU_CODIGO, c).putInt(FALHOU_N, if (p.getLong(FALHOU_CODIGO, 0L) == c) p.getInt(FALHOU_N, 0) + 1 else 1).apply()
+            }
             anotar(ctx, if (status == PackageInstaller.STATUS_SUCCESS) txt(R.string.atu_ok) else txt(R.string.atu_falhou, status, msg.toString()))
         }
     }

@@ -38,6 +38,10 @@ class McpAutorizacao(
         const val ACESSO_MS = 60 * 60_000L
         const val RENOVAR_MS = 30L * 24 * 60 * 60_000L
         const val MAX_CLIENTES = 10
+        /** Registros por minuto (18/11/2026): o /register é aberto na internet; o Claude registra 1 vez por login. */
+        const val MAX_REGISTROS_MIN = 6
+        /** Cliente sem login mais novo que isto não é expulso: é quem está agora na página do PIN. */
+        const val PROTEGE_NOVO_MS = 10 * 60_000L
         const val MAX_TOKENS = 40
         /** Resumos de refresh tokens já usados, guardados até vencerem, para pegar o reuso (máximo, os mais novos). */
         const val MAX_USADOS = 100
@@ -131,7 +135,12 @@ class McpAutorizacao(
     // ---------------------------------------------------------------- 1. registro do cliente
 
     /** Registro dinâmico (RFC 7591). Devolve o JSON da resposta, ou lança [Erro]. */
+    private val registrosRecentes = ArrayDeque<Long>()
+
     @Synchronized fun registrar(pedido: JSONObject): JSONObject {
+        val agora = relogio()
+        while (registrosRecentes.isNotEmpty() && agora - registrosRecentes.first() > 60_000L) registrosRecentes.removeFirst()
+        if (registrosRecentes.size >= MAX_REGISTROS_MIN) throw Erro("temporarily_unavailable", "registros demais; tente em 1 minuto")
         val lista = pedido.optJSONArray("redirect_uris") ?: throw Erro("invalid_redirect_uri", "faltam redirect_uris")
         val redirects = (0 until lista.length()).map { lista.optString(it) }
         if (redirects.isEmpty() || redirects.size > 5 || !redirects.all { redirectPermitido(it, hostsExtras()) })
@@ -142,9 +151,12 @@ class McpAutorizacao(
         limpar()
         while (clientes.size >= MAX_CLIENTES) {
             val comLogin = tokens.values.map { it.clienteId }.toSet()
-            val sai = clientes.keys.firstOrNull { it !in comLogin } ?: clientes.keys.first()
+            // Sem login e mais velho que 10 min sai primeiro; quem acabou de registrar (está digitando o PIN) fica.
+            val sai = clientes.values.firstOrNull { it.id !in comLogin && agora - it.criado > PROTEGE_NOVO_MS }?.id
+                ?: clientes.keys.firstOrNull { it !in comLogin } ?: clientes.keys.first()
             clientes.remove(sai)
         }
+        registrosRecentes.addLast(agora)
         val c = Cliente("c_" + aleatorioTexto(16), nome, redirects, relogio())
         clientes[c.id] = c
         gravar()

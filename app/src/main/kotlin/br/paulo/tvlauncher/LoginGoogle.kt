@@ -133,7 +133,15 @@ object LoginGoogle {
                         "client_id" to id, "client_secret" to (segredo(app) ?: ""), "device_code" to deviceCode,
                         "grant_type" to "urn:ietf:params:oauth:grant-type:device_code"), aceitarErro = true)
                     when (t.optString("error")) {
-                        "" -> { concluir(app, s, t); return@Thread }
+                        // O device_code já foi trocado: se o concluir falhar (userinfo fora do ar), a próxima volta
+                        // mandaria o mesmo código e o Google diria invalid_grant ("Google respondeu", sem explicação).
+                        "" -> {
+                            try { concluir(app, s, t) } catch (e: Exception) {
+                                Log.w(TAG, "login feito, mas não li a conta: ${e.javaClass.simpleName}")
+                                if (s.estado == Estado.ESPERANDO) { s.estado = Estado.ERRO; s.mensagem = "o Google não respondeu agora; tente de novo" }
+                            }
+                            return@Thread
+                        }
                         "authorization_pending" -> {}
                         "slow_down" -> intervalo += 5000
                         "access_denied" -> { s.estado = Estado.RECUSADO; s.mensagem = "o login foi negado no Google"; return@Thread }

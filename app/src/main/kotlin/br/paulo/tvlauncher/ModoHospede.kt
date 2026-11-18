@@ -80,7 +80,10 @@ object ModoHospede {
         val h = HospedeRegras.proximaHora(hora(ctx))
         val agora = System.currentTimeMillis()
         val s = saida(ctx)
-        val nova = if (s > agora) HospedeRegras.saidaEm(agora, HospedeRegras.diasAte(agora, s, zona), h, zona).takeIf { it > agora } ?: 0L else 0L
+        // Hora nova que já passou hoje: vai para o dia seguinte (antes virava 0 e a saída sumia sem aviso).
+        val nova = if (s > agora) HospedeRegras.diasAte(agora, s, zona).let { d ->
+            HospedeRegras.saidaEm(agora, d, h, zona).takeIf { it > agora } ?: HospedeRegras.saidaEm(agora, d + 1, h, zona)
+        } else 0L
         prefs(ctx).edit().putInt(HORA, h).putLong(SAIDA, nova).apply()
         agendar(ctx)
         return h
@@ -167,8 +170,10 @@ object ModoHospede {
         val falhas = ArrayList<String>()
         var ok = 0
         for (p in paraLimpar(app)) {
-            val erro = if (dono) PainelControle.limparDados(app, p)
-            else if (GuardiaoShizuku.comando(app, "pm clear $p", 30_000)?.contains("Success") == true) null else "shell"
+            // Com dono, os apps de fábrica (YouTube, Netflix) também: antes o limparDados os recusava e o próximo
+            // hóspede achava a conta do anterior. Se o Android recusar, tenta o pm clear pelo shell.
+            val erro = (if (dono) PainelControle.limparDados(app, p, deSistemaTambem = true) else "sem dono")
+                ?.let { e -> if (GuardiaoShizuku.comando(app, "pm clear $p", 30_000)?.contains("Success") == true) null else if (dono) e else "shell" }
             if (erro == null) ok++ else falhas += "$p ($erro)"
         }
         val resumo = if (falhas.isEmpty()) app.getString(R.string.hos_limpou, ok) else app.getString(R.string.hos_limpou_falhas, ok, falhas.joinToString(", "))

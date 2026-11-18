@@ -58,10 +58,15 @@ bool prepararSwr(Audio* a, const AVFrame* q) {
   swr_free(&a->swr);
   av_channel_layout_uninit(&a->swrLayout);
   AVChannelLayout saida{};
-  int n = q->ch_layout.nb_channels;
+  // A SAÍDA fica a do primeiro quadro: o Kotlin abre o AudioTrack uma vez com esses canais e taxa. Se a entrada
+  // muda no meio (5.1 vira 2.0 no comercial de uma gravação), o swr mistura e reamostra para o formato de antes;
+  // antes mudava a saída e o AudioTrack de 6 canais recebia PCM de 2 (som embaralhado e acelerado).
+  int n = a->canais > 0 ? a->canais : q->ch_layout.nb_channels;
   if (n > 8) n = 8;   // o AudioTrack do Android vai até 7.1
+  if (n < 1) n = 2;
+  int taxaSaida = a->taxa > 0 ? a->taxa : q->sample_rate;
   av_channel_layout_default(&saida, n);
-  if (swr_alloc_set_opts2(&a->swr, &saida, a->saidaFormato, q->sample_rate,
+  if (swr_alloc_set_opts2(&a->swr, &saida, a->saidaFormato, taxaSaida,
                           &q->ch_layout, static_cast<AVSampleFormat>(q->format), q->sample_rate, 0, nullptr) < 0 ||
       swr_init(a->swr) < 0) {
     LOGE("swr_init falhou");
@@ -73,7 +78,7 @@ bool prepararSwr(Audio* a, const AVFrame* q) {
   a->swrTaxa = q->sample_rate;
   a->swrFormato = static_cast<AVSampleFormat>(q->format);
   a->canais = n;
-  a->taxa = q->sample_rate;
+  a->taxa = taxaSaida;
   av_channel_layout_uninit(&saida);
   return true;
 }
@@ -95,7 +100,8 @@ bool guardar(Audio* a) {
 
 NATIVO(jlong, audioAbrir)(JNIEnv* env, jclass, jstring codec, jbyteArray extra, jint taxa, jint canais, jboolean pcmFloat,
                           jint bloco, jint bitrate, jint bits) {
-  const char* nome = env->GetStringUTFChars(codec, nullptr);
+  const char* nome = codec ? env->GetStringUTFChars(codec, nullptr) : nullptr;
+  if (!nome) return 0;
   auto* a = new Audio();
   a->saidaFormato = pcmFloat ? AV_SAMPLE_FMT_FLT : AV_SAMPLE_FMT_S16;
   a->ctx = abrirContexto(nome, env, extra, taxa, canais, bloco, bitrate, bits);
@@ -118,18 +124,29 @@ NATIVO(jint, audioDecodificar)(JNIEnv* env, jclass, jlong p, jobject entrada, ji
   if (!dados) return ERRO_OUTRO;
   a->pacote->data = dados;
   a->pacote->size = tamanho;
+  // Colhe tudo o que o decodificador já tem. 0 = ok, senão ERRO_*.
+  auto colher = [a]() -> int {
+    for (;;) {
+      int r = avcodec_receive_frame(a->ctx, a->quadro);
+      if (r == AVERROR(EAGAIN) || r == AVERROR_EOF) return 0;
+      if (r == AVERROR_INVALIDDATA) return ERRO_DADOS;
+      if (r < 0) { LOGE("receive_frame áudio: %d", r); return ERRO_OUTRO; }
+      bool ok = guardar(a);
+      av_frame_unref(a->quadro);
+      if (!ok) return ERRO_OUTRO;
+    }
+  };
   int r = avcodec_send_packet(a->ctx, a->pacote);
+  if (r == AVERROR(EAGAIN)) {
+    // Cheio: esvazia e manda de novo (antes o pacote se perdia, um buraco no som).
+    int e = colher();
+    if (e != 0) return e;
+    r = avcodec_send_packet(a->ctx, a->pacote);
+  }
   if (r == AVERROR_INVALIDDATA) return ERRO_DADOS;
   if (r < 0 && r != AVERROR(EAGAIN)) { LOGE("send_packet áudio: %d", r); return ERRO_DADOS; }
-  for (;;) {
-    r = avcodec_receive_frame(a->ctx, a->quadro);
-    if (r == AVERROR(EAGAIN) || r == AVERROR_EOF) break;
-    if (r == AVERROR_INVALIDDATA) return ERRO_DADOS;
-    if (r < 0) { LOGE("receive_frame áudio: %d", r); return ERRO_OUTRO; }
-    bool ok = guardar(a);
-    av_frame_unref(a->quadro);
-    if (!ok) return ERRO_OUTRO;
-  }
+  int e = colher();
+  if (e != 0) return e;
   return static_cast<jint>(a->pendente.size());
 }
 
@@ -163,7 +180,8 @@ NATIVO(void, audioFechar)(JNIEnv*, jclass, jlong p) {
 
 // Diz se o FFmpeg compilado tem este decodificador (o Kotlin usa para responder "sei tocar este formato?").
 NATIVO(jboolean, temDecodificador)(JNIEnv* env, jclass, jstring nome) {
-  const char* n = env->GetStringUTFChars(nome, nullptr);
+  const char* n = nome ? env->GetStringUTFChars(nome, nullptr) : nullptr;
+  if (!n) return JNI_FALSE;
   bool tem = avcodec_find_decoder_by_name(n) != nullptr;
   env->ReleaseStringUTFChars(nome, n);
   return tem;

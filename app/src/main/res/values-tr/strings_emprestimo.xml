@@ -16,11 +16,11 @@
     <string name="emp_pin_titulo">İzin vermek için panel PIN’i</string>
     <string name="emp_sem_pin">Önce panel PIN’ini ayarlayın (Ayarlar, Web paneli).</string>
     <string name="emd_titulo">Sahip denetimini başka uygulamalara ödünç ver (Dhizuku)</string>
-    <string name="emd_titulo_det">Dhizuku için yapılan uygulamalar launcher’ın sahip denetimini kullanır. Her uygulama TV’de PIN ile sorar. Hiçbiri launcher’ı sahiplikten çıkaramaz veya TV’yi silemez.</string>
+    <string name="emd_titulo_det">Dhizuku için yapılan uygulamalar launcher’ın sahip denetimini kullanır. Her uygulama TV’de PIN ile sorar. “İzin ver” ile hiçbiri launcher’ı sahiplikten çıkaramaz veya TV’yi silemez; “Tam yetki” ile yapabilir.</string>
     <string name="emd_ligado">Açık</string>
     <string name="emd_sem_dono">Launcher bu TV’nin sahibi (Device Owner) değil, bu yüzden ödünç verilecek bir şey yok.</string>
     <string name="emd_pedido_titulo">%1$s, launcher’ın sahip denetimini kullansın mı?</string>
-    <string name="emd_pedido_texto">“İzin ver” ile uygulama uygulamaları gizleyip engelleyebilir ve TV’nin izinlerini ve kurallarını değiştirebilir, ama launcher’ı asla sahiplikten çıkaramaz veya TV’yi silemez. “Tam yetki” uygulamanın launcher gibi çalışmasına ve verilerini okumasına izin verir: yalnızca tamamen güvendiğiniz uygulamalar için. Web panelinden geri alabilirsiniz.</string>
+    <string name="emd_pedido_texto">“İzin ver” ile uygulama uygulamaları gizleyip engelleyebilir ve TV’nin izinlerini ve kurallarını değiştirebilir, ama launcher’ı asla sahiplikten çıkaramaz veya TV’yi silemez. “Tam yetki” uygulamanın launcher gibi çalışmasına ve verilerini okumasına izin verir: yalnızca tamamen güvendiğiniz uygulamalar için. Web panelinden geri alabilirsiniz. “Tam yetki” ile uygulama launcher’ın yapabildiği her şeyi yapabilir, TV’yi silmek dahil.</string>
     <string name="emd_total">Tam yetki</string>
-    <string name="emd_pin_total">TAM YETKİ: uygulama launcher’ın verilerini okuyacak. Panel PIN’i</string>
+    <string name="emd_pin_total">TAM YETKİ: uygulama launcher’ın yapabildiği her şeyi yapabilir, TV’yi silmek dahil. Panel PIN’i</string>
 </resources>

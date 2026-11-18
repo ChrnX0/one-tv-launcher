@@ -107,19 +107,21 @@ object MidiaRecente {
         val md = c.metadata ?: return
         val pacote = c.packageName ?: return
         if (pacote == app.packageName) return
-        val nomeApp = runCatching { app.packageManager.getApplicationLabel(app.packageManager.getApplicationInfo(pacote, 0)).toString() }.getOrDefault("")
         val titulo = md.getString(MediaMetadata.METADATA_KEY_TITLE) ?: md.getString(MediaMetadata.METADATA_KEY_DISPLAY_TITLE)
+        if (titulo.isNullOrBlank()) return
+        // Mesmo título, mesmo estado, há menos de 30 s: nada novo para o disco (o app pode mandar a posição toda hora).
+        // Conferido ANTES do nome do app (chamada ao sistema) e da posição: é o caminho que roda quase sempre.
+        val chaveEscrita = titulo.trim() + "|" + tocando
+        val ultima = ultimaEscrita[pacote]
+        if (ultima != null && ultima.first == chaveEscrita && SystemClock.elapsedRealtime() - ultima.second < 30_000) return
+        val nomeApp = runCatching { app.packageManager.getApplicationLabel(app.packageManager.getApplicationInfo(pacote, 0)).toString() }.getOrDefault("")
         if (!tituloUtil(titulo, nomeApp)) return
         val sub = listOf(MediaMetadata.METADATA_KEY_ARTIST, MediaMetadata.METADATA_KEY_DISPLAY_SUBTITLE, MediaMetadata.METADATA_KEY_ALBUM)
             .firstNotNullOfOrNull { k -> md.getString(k)?.takeIf { it.isNotBlank() && it != titulo } } ?: ""
         val pos = posicaoAgora(st.position, st.lastPositionUpdateTime, st.playbackSpeed.takeIf { it > 0f } ?: 1f, tocando, SystemClock.elapsedRealtime())
-        val r = Registro(pacote, titulo!!.trim(), sub.trim(), pos, md.getLong(MediaMetadata.METADATA_KEY_DURATION).coerceAtLeast(0), System.currentTimeMillis())
+        val r = Registro(pacote, titulo.trim(), sub.trim(), pos, md.getLong(MediaMetadata.METADATA_KEY_DURATION).coerceAtLeast(0), System.currentTimeMillis())
         // A capa só é copiada quando o título muda (a mesma música/episódio não regrava a cada pausa). Título novo sem
         // capa apaga a velha (senão o episódio novo apareceria com a arte do anterior).
-        // Mesmo título, mesmo estado, há menos de 30 s: nada novo para o disco (o app pode mandar a posição toda hora).
-        val chaveEscrita = r.titulo + "|" + tocando
-        val ultima = ultimaEscrita[pacote]
-        if (ultima != null && ultima.first == chaveEscrita && SystemClock.elapsedRealtime() - ultima.second < 30_000) return
         ultimaEscrita[pacote] = chaveEscrita to SystemClock.elapsedRealtime()
         val mudou = tituloDaCapa[pacote] != r.titulo
         tituloDaCapa[pacote] = r.titulo
@@ -129,8 +131,13 @@ object MidiaRecente {
             runCatching {
                 synchronized(trava) {
                     if (mudou) {
-                        if (capa != null) arqCapa(app, pacote).outputStream().use { capa.compress(Bitmap.CompressFormat.JPEG, 85, it) }
-                        else arqCapa(app, pacote).delete()
+                        // Grava ao lado e troca de uma vez: a cruz pode ler a capa enquanto ela é escrita (JPEG pela metade).
+                        val destino = arqCapa(app, pacote)
+                        if (capa != null) {
+                            val tmp = File(destino.path + ".tmp")
+                            tmp.outputStream().use { capa.compress(Bitmap.CompressFormat.JPEG, 85, it) }
+                            if (!tmp.renameTo(destino)) { tmp.delete(); destino.delete() }
+                        } else destino.delete()
                     }
                     PlayerCarga.gravarAtomico(arquivo(app), paraJson(juntar(ler(app), r)))
                 }

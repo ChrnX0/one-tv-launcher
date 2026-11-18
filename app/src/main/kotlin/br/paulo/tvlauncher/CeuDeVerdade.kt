@@ -134,6 +134,8 @@ object NuvensSatelite {
     }
 
     /** A imagem de nuvens (branca, alfa = nuvem) da [caixa]; guardada em disco por 15 min. null sem satélite ou sem rede. */
+    // Synchronized: a HOME (FundoCeu) e o protetor pedem em threads diferentes e gravavam o mesmo .tmp e a mesma chave.
+    @Synchronized
     fun buscar(ctx: Context, lon0: Double, caixa: DoubleArray): Bitmap? {
         val camada = camada(lon0) ?: return null
         val arq = File(ctx.cacheDir, "ceu-nuvens.png")
@@ -155,7 +157,10 @@ object NuvensSatelite {
                 else c.inputStream.use { BitmapFactory.decodeStream(it) }
             } finally { c.disconnect() }
         } catch (e: Exception) { Log.w(TAG, "GIBS: ${e.javaClass.simpleName}"); null }
-            ?: return if (arq.exists()) BitmapFactory.decodeFile(arq.path) else null   // sem rede: a última que tinha
+            // Sem rede: a última que tinha, se for DESTA caixa e de até 6 h (antes: nuvens de outro lugar ou de dias atrás
+            // apareciam como "agora").
+            ?: return if (arq.exists() && System.currentTimeMillis() - arq.lastModified() < 6 * 3_600_000L &&
+                runCatching { chave.readText() }.getOrNull() == pedido) BitmapFactory.decodeFile(arq.path) else null
         val bw = bruta.width; val bh = bruta.height
         val px = IntArray(bw * bh)
         bruta.getPixels(px, 0, bw, 0, 0, bw, bh)

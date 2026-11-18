@@ -71,7 +71,11 @@ object PonteTunel {
                 is PonteRegras.Resultado.Dns -> return atenderDns(c, entrada)
                 is PonteRegras.Resultado.Ok -> r
             }
-            destino = Socket().apply { connect(InetSocketAddress(alvo.host, alvo.porta), 10_000) }
+            // Resolve UMA vez, confere o endereço e conecta nele: o filtro por texto não pegava 172.16/12, 169.254, 100.64
+            // (Tailscale), ::ffff:127.0.0.1 nem um nome que resolve para a casa (router.lan).
+            val ip = java.net.InetAddress.getAllByName(alvo.host).firstOrNull { !PonteRegras.enderecoDaCasa(it) }
+                ?: return responder(c.getOutputStream(), 403)
+            destino = Socket().apply { connect(InetSocketAddress(ip, alvo.porta), 10_000) }
             c.soTimeout = 0
             c.getOutputStream().apply { write("HTTP/1.1 200 Connection established\r\n\r\n".toByteArray()); flush() }
             val d = destino
@@ -152,6 +156,18 @@ object PonteRegras {
         // Nada de usar a ponte para alcançar a própria TV ou a rede de casa.
         if (host == "localhost" || host.startsWith("127.") || host.startsWith("10.") || host.startsWith("192.168.") || host == "::1") return Resultado.Recusa(403)
         return Resultado.Ok(host, porta)
+    }
+
+    /** Endereço da própria TV ou da rede de casa (a ponte só serve para a internet). */
+    fun enderecoDaCasa(a: java.net.InetAddress): Boolean {
+        if (a.isLoopbackAddress || a.isAnyLocalAddress || a.isLinkLocalAddress || a.isSiteLocalAddress || a.isMulticastAddress) return true
+        val b = a.address
+        if (b.size == 4) return (b[0].toInt() and 0xFF) == 100 && (b[1].toInt() and 0xC0) == 64   // 100.64/10 (CGNAT, Tailscale)
+        if ((b[0].toInt() and 0xFE) == 0xFC) return true                                            // fc00::/7 (ULA)
+        // ::ffff:a.b.c.d e ::a.b.c.d: o IPv4 de dentro decide.
+        if (b.take(10).all { it.toInt() == 0 } && ((b[10].toInt() and 0xFF) == 0xFF && (b[11].toInt() and 0xFF) == 0xFF || b[10].toInt() == 0 && b[11].toInt() == 0))
+            return enderecoDaCasa(java.net.InetAddress.getByAddress(b.copyOfRange(12, 16)))
+        return false
     }
 
     /** Comparação em tempo constante. */

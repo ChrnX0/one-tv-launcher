@@ -16,11 +16,11 @@
     <string name="emp_pin_titulo">허용하려면 패널 PIN</string>
     <string name="emp_sem_pin">먼저 패널 PIN을 설정하세요 (설정, 웹 패널).</string>
     <string name="emd_titulo">다른 앱에 소유자 권한 빌려주기 (Dhizuku)</string>
-    <string name="emd_titulo_det">Dhizuku용 앱이 런처의 소유자 권한을 사용합니다. 각 앱은 TV에서 PIN과 함께 요청합니다. 어떤 앱도 런처를 소유자에서 제거하거나 TV를 초기화할 수 없습니다.</string>
+    <string name="emd_titulo_det">Dhizuku용 앱이 런처의 소유자 권한을 사용합니다. 각 앱은 TV에서 PIN과 함께 요청합니다. “허용”으로는 런처를 소유자에서 제거하거나 TV를 초기화할 수 없지만, “전체 권한”으로는 할 수 있습니다.</string>
     <string name="emd_ligado">켬</string>
     <string name="emd_sem_dono">런처가 이 TV의 소유자(Device Owner)가 아니므로 빌려줄 것이 없습니다.</string>
     <string name="emd_pedido_titulo">%1$s에서 런처의 소유자 권한을 사용하도록 허용할까요?</string>
-    <string name="emd_pedido_texto">“허용”하면 앱이 앱을 숨기거나 차단하고 TV의 권한과 규칙을 바꿀 수 있지만, 런처를 소유자에서 제거하거나 TV를 초기화할 수는 없습니다. “전체 권한”은 앱이 런처로 실행되어 데이터를 읽게 합니다. 완전히 신뢰하는 앱에만 사용하세요. 웹 패널에서 취소할 수 있습니다.</string>
+    <string name="emd_pedido_texto">“허용”하면 앱이 앱을 숨기거나 차단하고 TV의 권한과 규칙을 바꿀 수 있지만, 런처를 소유자에서 제거하거나 TV를 초기화할 수는 없습니다. “전체 권한”은 앱이 런처로 실행되어 데이터를 읽게 합니다. 완전히 신뢰하는 앱에만 사용하세요. 웹 패널에서 취소할 수 있습니다. “전체 권한” 앱은 런처가 할 수 있는 모든 일을 할 수 있으며 TV 초기화도 가능합니다.</string>
     <string name="emd_total">전체 권한</string>
-    <string name="emd_pin_total">전체 권한: 앱이 런처의 데이터를 읽습니다. 패널 PIN</string>
+    <string name="emd_pin_total">전체 권한: 앱이 런처가 할 수 있는 모든 일을 할 수 있으며 TV 초기화도 가능합니다. 패널 PIN</string>
 </resources>

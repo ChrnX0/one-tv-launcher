@@ -42,4 +42,14 @@ class RotinasTest {
         assertEquals(previsto, Rotinas.horaPrevista(a, previsto + 40_000))   // alarme chegou 40 s atrasado
         assertEquals(listOf(b), Rotinas.mesmoHorario(listOf(a, b, outra, desligada), a, previsto))
     }
+
+    @Test fun alarmeForaDaHoraNaoRoda() {
+        val r = Rotinas.Rotina(9, 23, 0, 0b1111111, Rotinas.Acao.DESLIGAR)
+        val c = java.util.Calendar.getInstance().apply { set(2026, 10, 18, 23, 0, 0); set(java.util.Calendar.MILLISECOND, 0) }
+        val hora = c.timeInMillis
+        assertEquals(false, Rotinas.atrasada(r, hora + 30_000))          // na hora (alarme atrasou 30 s)
+        assertEquals(false, Rotinas.atrasada(r, hora + 10 * 60_000))     // 10 min: ainda vale
+        assertEquals(true, Rotinas.atrasada(r, hora + 40 * 60_000))      // 40 min: fora
+        assertEquals(true, Rotinas.atrasada(r, hora - 8 * 3600_000L))    // relógio velho: disparou às 15h
+    }
 }

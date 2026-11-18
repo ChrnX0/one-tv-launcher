@@ -167,7 +167,9 @@ class OuvirServico : Service() {
 
     private val telaApagou = object : BroadcastReceiver() {
         override fun onReceive(c: Context, i: Intent) {
-            if (i.action == Intent.ACTION_SCREEN_OFF && ativo) { Log.i(TAG, "tela apagou: parei"); parar() }
+            // Sem "&& ativo" (18/11/2026): entre escolher o episódio e ele começar (DNS, fila) nada está "ativo", e a
+            // TV desligada nesse meio tempo começava a tocar com a tela apagada. parar() também cancela o pedido.
+            if (i.action == Intent.ACTION_SCREEN_OFF) { Log.i(TAG, "tela apagou: parei"); parar() }
         }
     }
 
@@ -188,6 +190,8 @@ class OuvirServico : Service() {
         val r = intent?.takeIf { it.action == ACAO_RADIO }?.getStringExtra(EXTRA_RADIO)?.let { Radios.deJson(it).firstOrNull() }
         val e = intent?.takeIf { it.action == ACAO_EPISODIO }?.getStringExtra(EXTRA_EP)?.let { EpisodioTocando.deJson(it) }
         primeiroPlano(r?.nome ?: e?.podcast ?: radio?.nome ?: episodio?.podcast ?: "", "")
+        // Sem primeiro plano o serviço já pediu para parar: não cria player (ficava tocando sem serviço, sem liberar).
+        if (!emPrimeiroPlano) return START_NOT_STICKY
         when {
             r != null -> tocar(r)
             e != null -> tocarEp(e, intent.getLongExtra("inicio", RETOMAR))
@@ -198,6 +202,7 @@ class OuvirServico : Service() {
     }
 
     override fun onDestroy() {
+        pedidoEp++   // um episódio ainda resolvendo o endereço não começa depois do fim do serviço
         ui.removeCallbacksAndMessages(null)
         runCatching { unregisterReceiver(telaApagou) }
         runCatching { getSystemService(android.media.AudioManager::class.java)?.unregisterAudioPlaybackCallback(outroTocando) }
@@ -245,7 +250,7 @@ class OuvirServico : Service() {
         val app = applicationContext
         Fundo.rodar("podcast") {
             val ips = runCatching { java.net.InetAddress.getAllByName(java.net.URL(e.ep.url).host).toList() }.getOrNull()
-            val proibido = ips.orEmpty().any { Radios.destinoProibido(it) }
+            val proibido = ips.isNullOrEmpty() || ips.any { Radios.destinoDeFeedProibido(it) }
             Podcasts.naFila {
                 val inicio = if (inicioMs >= 0) inicioMs else Podcasts.retomarEm(Podcasts.posicoes(app)[Podcasts.chave(e.feed, e.ep.guid)])
                 ui.post {
@@ -400,7 +405,10 @@ class OuvirServico : Service() {
         // Conexão que cai sem erro (áudio sem tamanho declarado) também chega aqui: antes de 95% da duração conhecida
         // não é fim, é queda. Guarda onde parou (o parar grava) e avisa; não marca como ouvido.
         val dur = duracaoMs; val pos = posicaoMs
-        if (dur > 0 && !Podcasts.ehOuvido(pos, dur)) {
+        // Só com a duração que o PLAYER sabe: a do feed (itunes:duration) costuma vir inflada pela propaganda dinâmica,
+        // e um fim de verdade virava "falhou" e nunca marcava ouvido.
+        val durDoPlayer = player?.duration?.let { it != C.TIME_UNSET && it > 0 } == true
+        if (durDoPlayer && dur > 0 && !Podcasts.ehOuvido(pos, dur)) {
             Log.w(TAG, "fim antes da hora ($pos de $dur ms): guardei a posição")
             AvisoTv.rapido(this, episodio?.ep?.titulo.orEmpty(), getString(R.string.pod_falhou), 6)
             parar(); return
@@ -473,6 +481,15 @@ class OuvirServico : Service() {
         val s = sessao ?: MediaSession(this, "SofalyOuvir").also { nova ->
             nova.setCallback(object : MediaSession.Callback() {
                 override fun onPlay() = continuar()
+                // ⏯ enquanto carrega: o padrão só vê "tocando" no STATE_PLAYING e chamava onPlay (nada). Aqui vale o pedido.
+                override fun onMediaButtonEvent(i: Intent): Boolean {
+                    @Suppress("DEPRECATION") val k = i.getParcelableExtra<android.view.KeyEvent>(Intent.EXTRA_KEY_EVENT)
+                    if (k != null && (k.keyCode == android.view.KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE || k.keyCode == android.view.KeyEvent.KEYCODE_HEADSETHOOK)) {
+                        if (k.action == android.view.KeyEvent.ACTION_DOWN && k.repeatCount == 0) alternar()
+                        return true
+                    }
+                    return super.onMediaButtonEvent(i)
+                }
                 override fun onPause() = pausar()
                 override fun onStop() = parar()
                 // Teclas ⏪ ⏩ do controle (podcast): 15 s para trás, 30 s para frente.
@@ -511,7 +528,11 @@ class OuvirServico : Service() {
                 else startForeground(NOTIF_ID, n)
                 emPrimeiroPlano = true
             } else nm?.notify(NOTIF_ID, n)
-        } catch (e: Exception) { Log.w(TAG, "primeiro plano: $e") }
+        } catch (e: Exception) {
+            Log.w(TAG, "primeiro plano: $e")
+            // Sem primeiro plano o Android derruba o processo depois (ForegroundServiceDidNotStartInTime): sai antes.
+            if (!emPrimeiroPlano) { soltarPlayer(); radio = null; episodio = null; stopSelf() }
+        }
     }
 }
 

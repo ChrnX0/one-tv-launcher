@@ -163,7 +163,9 @@ object PlayerDados {
         for ((fonte, canais) in porFonte) {
             for (c in canais) {
                 var n = c.numero
-                if (n in usados) n = maior + 1   // "n in usados" garante que já há um maior de verdade
+                // "n in usados" garante que já há um maior de verdade. No teto do Int (lista com número 2147483647)
+                // o +1 virava negativo e o canal ia para o topo: procura o primeiro livre abaixo.
+                if (n in usados) n = if (maior < Int.MAX_VALUE) maior + 1 else generateSequence(1) { it + 1 }.first { it !in usados }
                 usados += n
                 if (n > maior) maior = n
                 saida += c.copy(id = "${fonte.id}:${c.id}", numero = n)

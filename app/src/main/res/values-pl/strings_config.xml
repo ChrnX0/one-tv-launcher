@@ -235,6 +235,7 @@
     <string name="cl_vd_ja_dono">launcher jest już właścicielem urządzenia</string>
     <string name="cl_vd_sem_shell">wbudowana powłoka nie odpowiedziała (sparuj ją w Ustawienia &gt; Powłoka launchera)</string>
     <string name="cl_vd_usuario">Android nie pozwolił usunąć użytkownika %1$s</string>
+    <string name="cl_vd_mudou">Użytkownicy telewizora zmienili się po potwierdzeniu (teraz: %1$s). Nic nie usunięto; zacznij od nowa.</string>
     <string name="cl_vd_google">Android nie pozwolił na chwilę wstrzymać Google</string>
     <string name="cl_vd_recusou">Android odmówił: %1$s</string>
     <string name="cl_vd_sem_resposta">brak odpowiedzi</string>

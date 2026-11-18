@@ -85,7 +85,7 @@ object McpPoder2 {
         val app = ctx.applicationContext
         return when (nome) {
             "elementos_na_tela" -> elementos(app).toString()
-            "tocar_elemento" -> tocar(app, a)
+            "tocar_elemento" -> { McpPoder.semPerguntaNaTela(); tocar(app, a) }
             "midia" -> midia(app, a)
             "rotinas" -> rotinas(app, a)
             "baixar_arquivo" -> baixarArquivo(app, a)

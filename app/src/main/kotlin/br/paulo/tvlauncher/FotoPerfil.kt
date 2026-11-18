@@ -83,9 +83,13 @@ object FotoPerfil {
     }
 
     /** Quanto reduzir ao abrir (1, 2, 4, 8...): o menor lado ainda fica com pelo menos 2x o [alvo]. */
+    const val MAIOR_LADO_DECODIFICADO = 4096
+
     fun amostra(largura: Int, altura: Int, alvo: Int = LADO): Int {
         var a = 1
         while (minOf(largura, altura) / (a * 2) >= alvo * 2) a *= 2
+        // E o lado MAIOR também: uma panorâmica 12000x1000 ficava com amostra 1 (~48 MB em ARGB) e derrubava a HOME. Com 4096 fica em ~3 MB.
+        while (maxOf(largura, altura) / a > MAIOR_LADO_DECODIFICADO) a *= 2
         return a
     }
 
@@ -165,6 +169,10 @@ object FotoPerfil {
         } catch (e: Exception) {
             Log.w(TAG, "receber falhou: ${e.javaClass.simpleName}")
             return "não consegui gravar a foto na TV"
+        } catch (e: OutOfMemoryError) {
+            // Não é Exception: sem isto subia até o tratador padrão e o processo da HOME caía.
+            Log.w(TAG, "receber: sem memória para abrir a foto")
+            return "a TV não conseguiu abrir essa imagem"
         } finally { tmp.delete() }
     }
 

@@ -168,9 +168,7 @@ object Avisos {
         c.setRequestProperty("TTL", ttl.toString())
         c.setRequestProperty("Urgency", if (urgente) "high" else "normal")
         c.setRequestProperty("Authorization", auth)
-        c.outputStream.use { it.write(corpo) }
-        val codigo = c.responseCode
-        c.disconnect()
+        val codigo = try { c.outputStream.use { it.write(corpo) }; c.responseCode } finally { c.disconnect() }
         if (codigo == 404 || codigo == 410) remover(app, i.endpoint)
         Log.i(TAG, "$tipoNome -> ${WebPush.audiencia(i.endpoint)}: $codigo")
         codigo

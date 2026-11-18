@@ -38,6 +38,7 @@ void prepararFontes(Ass* a) {
 std::string texto(JNIEnv* env, jstring s) {
   if (!s) return {};
   const char* c = env->GetStringUTFChars(s, nullptr);
+  if (!c) { env->ExceptionClear(); return {}; }
   std::string r(c);
   env->ReleaseStringUTFChars(s, c);
   return r;
@@ -88,6 +89,7 @@ NATIVO(void, assFonte)(JNIEnv* env, jclass, jlong p, jstring nome, jbyteArray da
   std::string n = texto(env, nome);
   jsize t = env->GetArrayLength(dados);
   jbyte* b = env->GetByteArrayElements(dados, nullptr);
+  if (!b) { env->ExceptionClear(); return; }
   ass_add_font(a->lib, n.c_str(), reinterpret_cast<const char*>(b), t);
   env->ReleaseByteArrayElements(dados, b, JNI_ABORT);
   a->fontesProntas = false;
@@ -101,8 +103,10 @@ NATIVO(jlong, assFaixa)(JNIEnv* env, jclass, jlong p, jbyteArray cabecalho) {
   if (cabecalho) {
     jsize n = env->GetArrayLength(cabecalho);
     jbyte* b = env->GetByteArrayElements(cabecalho, nullptr);
-    ass_process_codec_private(t, reinterpret_cast<char*>(b), n);
-    env->ReleaseByteArrayElements(cabecalho, b, JNI_ABORT);
+    if (b) {
+      ass_process_codec_private(t, reinterpret_cast<char*>(b), n);
+      env->ReleaseByteArrayElements(cabecalho, b, JNI_ABORT);
+    } else env->ExceptionClear();
   }
   return para(t);
 }
@@ -112,6 +116,7 @@ NATIVO(jlong, assFaixaArquivo)(JNIEnv* env, jclass, jlong p, jbyteArray arquivo)
   Ass* a = de<Ass>(p);
   jsize n = env->GetArrayLength(arquivo);
   jbyte* b = env->GetByteArrayElements(arquivo, nullptr);
+  if (!b) { env->ExceptionClear(); return 0; }
   ASS_Track* t = ass_read_memory(a->lib, reinterpret_cast<char*>(b), n, nullptr);
   env->ReleaseByteArrayElements(arquivo, b, JNI_ABORT);
   return para(t);
@@ -121,8 +126,10 @@ NATIVO(jlong, assFaixaArquivo)(JNIEnv* env, jclass, jlong p, jbyteArray arquivo)
 // O libass ignora a fala repetida (mesmo ReadOrder), então reenviar depois de voltar no filme não duplica.
 NATIVO(void, assFala)(JNIEnv* env, jclass, jlong faixa, jbyteArray dados, jlong inicioMs, jlong duracaoMs) {
   auto* t = de<ASS_Track>(faixa);
+  if (!t) return;   // assFaixa devolve 0 quando o libass não cria a faixa
   jsize n = env->GetArrayLength(dados);
   jbyte* b = env->GetByteArrayElements(dados, nullptr);
+  if (!b) { env->ExceptionClear(); return; }
   ass_process_chunk(t, reinterpret_cast<char*>(b), n, inicioMs, duracaoMs);
   env->ReleaseByteArrayElements(dados, b, JNI_ABORT);
 }

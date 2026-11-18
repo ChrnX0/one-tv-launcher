@@ -190,7 +190,18 @@ object PodcastFeed {
             if (recusou) throw java.io.IOException("feed com entidades no DTD")
         }
 
+        // Começo do arquivo (sem os zeros): a declaração `encoding=` vem nele.
+        private val cabeca = StringBuilder()
+
         private fun olhar(c: Int) {
+            if (c != 0 && cabeca.length < CABECA) {
+                cabeca.append(c.toChar())
+                // UTF-7: "<!ENTITY" vira "+ADwAIQ-ENTITY" e passava pela busca acima. Feed de verdade não usa UTF-7.
+                if (cabeca.length >= 5 && cabeca.contains("utf-7", ignoreCase = true)) recusou = true
+            }
+            // Byte zero não conta: em UTF-16/32 "<!ENTITY" vem com zeros no meio e o padrão nunca casava (o parser do
+            // Android decodifica UTF-16 e expandiria as entidades). Pulando o zero, a busca vale para os dois.
+            if (c == 0) return
             casou = when {
                 c == PADRAO[casou].code -> casou + 1
                 c == '<'.code -> 1
@@ -214,7 +225,7 @@ object PodcastFeed {
             return n
         }
 
-        private companion object { const val PADRAO = "<!ENTITY" }
+        private companion object { const val PADRAO = "<!ENTITY"; const val CABECA = 256 }
     }
 
     // ---------------------------------------------------------------- OPML
@@ -231,7 +242,8 @@ object PodcastFeed {
                     l[u] = ItemOpml(u, limpar(t, 200))
                 }
             }
-            tipo = p.next()
+            // XML quebrado no meio (item 150 de 200): fica com o que já leu, como a leitura do feed (18/11/2026).
+            tipo = try { p.next() } catch (_: org.xmlpull.v1.XmlPullParserException) { break } catch (_: java.io.IOException) { break }
         }
         return l.values.toList()
     }
@@ -267,12 +279,15 @@ object PodcastFeed {
         "EEE, dd MMM yyyy HH:mm Z", "EEE, d MMM yyyy HH:mm:ss Z", "yyyy-MM-dd'T'HH:mm:ssXXX", "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
         "EEE, dd MMM yyyy", "yyyy-MM-dd")
 
+    // Um jogo por thread (SimpleDateFormat não é seguro entre threads): antes eram 9 criados por item, milhares por feed.
+    private val formatos = ThreadLocal.withInitial { FORMATOS.map { SimpleDateFormat(it, Locale.US).apply { isLenient = false } } }
+
     /** pubDate (RFC 822, às vezes ISO 8601 ou sem hora) em ms; 0 se não entender. */
     fun data(t: String?): Long {
         val s = t?.trim()?.replace(Regex("\\s+"), " ") ?: return 0L
         if (s.isEmpty()) return 0L
-        for (f in FORMATOS) {
-            val r = runCatching { SimpleDateFormat(f, Locale.US).apply { isLenient = false }.parse(s)?.time }.getOrNull()
+        for (fmt in formatos.get()!!) {
+            val r = runCatching { fmt.parse(s)?.time }.getOrNull()
             if (r != null) return r
         }
         return 0L

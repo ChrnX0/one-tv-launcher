@@ -62,6 +62,9 @@ class FotoPerfilTest {
         assertEquals(1, FotoPerfil.amostra(1000, 800))     // 800/2 = 400 < 512: não reduz
         assertEquals(2, FotoPerfil.amostra(1200, 1024))    // 1024/2 = 512: ainda sobra o dobro do alvo
         assertEquals(4, FotoPerfil.amostra(4000, 6000))    // foto de celular: 4000/4 = 1000; mais uma vez daria 500 < 512
+        // Panorâmica: o lado maior também manda (12000x1000 com amostra 1 eram ~48 MB e derrubavam a HOME).
+        assertEquals(4, FotoPerfil.amostra(12000, 1000))
+        assertTrue(12000 / FotoPerfil.amostra(12000, 1000) <= FotoPerfil.MAIOR_LADO_DECODIFICADO)
         // Depois de reduzir, o menor lado nunca fica abaixo do alvo.
         for ((l, a) in listOf(4000 to 3000, 12000 to 9000, 513 to 5000, 300 to 300)) {
             val n = FotoPerfil.amostra(l, a)

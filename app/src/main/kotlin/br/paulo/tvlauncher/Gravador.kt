@@ -92,7 +92,11 @@ class Gravador(
                         }
                         if (nResto > 0) saida!!.write(resto, 0, nResto)
                         saida!!.write(buf, 0, inteiros - nResto)
-                    } catch (e: Exception) { saida = null; return fim(Motivo.DESTINO, e) }
+                    } catch (e: Exception) {
+                        // Fecha o pedaço: no pendrive o descritor ficava preso (o volume não desmontava) e o buffer se perdia.
+                        runCatching { saida?.close() }
+                        saida = null; return fim(Motivo.DESTINO, e)
+                    }
                     val sobra = total - inteiros
                     System.arraycopy(buf, n - sobra, resto, 0, sobra)
                     nResto = sobra

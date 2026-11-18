@@ -78,7 +78,9 @@ object TunelTailscale {
     }
 
     /** O programa lê as opções só ao iniciar: derruba e o vigia sobe de novo (10 s). */
-    fun reiniciar() { processo?.destroy() }
+    fun reiniciar() { reinicioPedido = true; processo?.destroy() }
+    /** Reinício pedido por quem mudou uma opção: o vigia volta em 10 s, sem herdar a espera crescente das quedas. */
+    @Volatile private var reinicioPedido = false
     fun rodando(): Boolean = processo?.isAlive == true
 
     /** Já entrou no Tailscale alguma vez (estado salvo) ou tem chave esperando o 1º login. Sem isso o login é pelo QR. */
@@ -129,6 +131,8 @@ object TunelTailscale {
             if (!querRodando) break
             // Ficou de pé mais de 10 min: era uma queda, não um erro de configuração. Recomeça a espera curta.
             if (SystemClock.elapsedRealtime() - inicio > 10 * 60_000L) espera = 10_000L
+            // Derrubado de propósito (opção mudou): não é erro, então não herda a espera de até 5 min.
+            if (reinicioPedido) { reinicioPedido = false; espera = 10_000L }
             Log.i(TAG, "túnel parou; religo em ${espera / 1000} s")
             try { Thread.sleep(espera) } catch (_: InterruptedException) { break }
             espera = (espera * 2).coerceAtMost(5 * 60_000L)

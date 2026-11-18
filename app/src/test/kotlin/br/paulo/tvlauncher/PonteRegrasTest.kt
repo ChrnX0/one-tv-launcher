@@ -1,6 +1,7 @@
 package br.paulo.tvlauncher
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -62,5 +63,14 @@ class PonteRegrasTest {
         assertEquals(3, DnsPonte.responder(pergunta("a.com", 1)) { throw java.net.UnknownHostException() }!![3].toInt() and 0x0f)
         assertEquals(3, DnsPonte.responder(pergunta("a\"b.com", 1)) { error("não deveria resolver") }!![3].toInt() and 0x0f)
         assertNull(DnsPonte.responder(ByteArray(5)) { emptyList() })
+    }
+
+    @Test fun enderecoDaCasaPegaTodasAsFormas() {
+        fun ip(s: String) = java.net.InetAddress.getByName(s)
+        for (s in listOf("127.0.0.1", "10.1.2.3", "172.16.0.1", "172.31.255.1", "192.168.1.153", "169.254.1.1", "100.100.1.1",
+                "0.0.0.0", "::1", "::ffff:127.0.0.1", "::ffff:192.168.1.1", "fd7a:115c:a1e0::1", "fe80::1"))
+            assertTrue(s, PonteRegras.enderecoDaCasa(ip(s)))
+        for (s in listOf("8.8.8.8", "172.32.0.1", "100.128.0.1", "2001:4860:4860::8888"))
+            assertFalse(s, PonteRegras.enderecoDaCasa(ip(s)))
     }
 }

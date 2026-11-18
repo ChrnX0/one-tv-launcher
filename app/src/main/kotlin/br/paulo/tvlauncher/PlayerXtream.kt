@@ -146,12 +146,19 @@ object Xtream {
      */
     fun lerCanais(json: String, conta: Conta, categorias: List<Categoria> = emptyList(), formato: String = "ts"): List<Canal> {
         val a = runCatching { JSONArray(json) }.getOrNull() ?: return emptyList()
+        return lerCanais(objetos(a), conta, categorias, formato)
+    }
+
+    /** Os objetos de um JSONArray (o que não é objeto fica de fora). */
+    fun objetos(a: JSONArray): Sequence<JSONObject> = (0 until a.length()).asSequence().mapNotNull { a.optJSONObject(it) }
+
+    /** Igual, de um fluxo ([JsonEmFluxo]): para no máximo e não lê o resto. */
+    fun lerCanais(itens: Sequence<JSONObject>, conta: Conta, categorias: List<Categoria> = emptyList(), formato: String = "ts"): List<Canal> {
         val grupos = categorias.associate { it.id to it.nome }
         val usados = HashSet<Int>()
         val canais = ArrayList<Canal>()
-        for (i in 0 until a.length()) {
+        for (o in itens) {
             if (canais.size >= M3u.MAX_CANAIS) break
-            val o = a.optJSONObject(i) ?: continue
             val sid = o.opt("stream_id")?.toString()?.takeIf { it.isNotEmpty() && it != "null" } ?: continue
             // "num" é o número que o servidor sugere; repetido ou ausente -> próximo livre
             var numero = (o.opt("num")?.toString()?.toIntOrNull())?.takeIf { it in 1..99_999 && it !in usados }
