@@ -14,16 +14,16 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Tela inicial: embaixo do nome do item escolhido fica uma linha só; os outros detalhes aparecem no canto de baixo, à direita, quando você para no item</item>
-        <item>A barra de cima acompanha a seleção: com a TV em foco mostra o que está no ar; sem nada acontecendo, fica só a pílula do relógio</item>
-        <item>A coluna não pula mais quando um item tem muito texto</item>
+        <item>Podcasts: novo player em tela cheia, com capa grande, a hora em que o episódio termina, velocidade, pular silêncios e timer para dormir</item>
+        <item>No player, ▼ mostra A seguir: os próximos episódios do mesmo podcast; OK toca um deles</item>
+        <item>Tocar um episódio abre o player; na tela de Podcasts, Tocando agora tem o item Abrir o player</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Detalhes no canto</item>
-        <item>Barra segue a seleção</item>
+        <item>Player de podcast</item>
+        <item>A seguir</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Em Séries, fica uma linha embaixo do nome e o episódio, o ano e o gênero no canto de baixo, à direita?</item>
-        <item>Com a TV em foco, o canto de cima mostra “No ar” com o programa, e com Séries em foco ele fica vazio?</item>
+        <item>Tocar um episódio de podcast abre o player em tela cheia, com a capa, a barra de tempo e os controles?</item>
+        <item>No player, ▼ mostra os próximos episódios, e OK num deles toca?</item>
     </string-array>
 </resources>
