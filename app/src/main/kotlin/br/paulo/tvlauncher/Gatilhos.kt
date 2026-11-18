@@ -124,6 +124,11 @@ object Gatilhos {
         sessoes.clear()
         for (c in cs) {
             if (c.packageName == app.packageName) continue   // o nosso player já avisa por conta própria
+            // "Continuar" da cruz (18/11/2026): o último título de cada app de mídia. Junta rajadas: no máximo uma
+            // anotação a cada 1,5 s (apps que mandam a posição a cada segundo não seguram a anotação para sempre).
+            var pendente = false
+            val anotar = Runnable { pendente = false; runCatching { MidiaRecente.anotar(app, c) } }
+            fun pedirAnotar() { if (!pendente) { pendente = true; principal.postDelayed(anotar, 1500) } }
             val cb = object : MediaController.Callback() {
                 override fun onPlaybackStateChanged(s: PlaybackState?) {
                     when (s?.state) {
@@ -131,10 +136,13 @@ object Gatilhos {
                         PlaybackState.STATE_PAUSED, PlaybackState.STATE_STOPPED -> midia(app, false)
                         else -> {}
                     }
+                    pedirAnotar()
                 }
+                override fun onMetadataChanged(metadata: android.media.MediaMetadata?) = pedirAnotar()
             }
             c.registerCallback(cb, principal)
             sessoes[c] = cb
+            pedirAnotar()
         }
     }
 }

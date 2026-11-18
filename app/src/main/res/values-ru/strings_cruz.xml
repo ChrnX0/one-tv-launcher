@@ -49,4 +49,23 @@
     <string name="cruz_dormir_sub">Экран медленно темнеет, и ТВ выключается</string>
     <string name="cruz_desliga_as">Выключится в %1$s</string>
     <string name="cruz_dormir_cancelar">OK — отменить</string>
+    <string name="cruz_linha">Линия</string>
+    <string name="cruz_mover">Переместить в…</string>
+    <string name="cruz_mover_titulo">Переместить %1$s в</string>
+    <string name="cruz_central">Игровой центр</string>
+    <string name="cruz_abrir_app">Открыть %1$s</string>
+    <string name="cruz_tirar_continuar">Убрать из «Продолжить»</string>
+    <string name="jogos_recentes">Недавние игры</string>
+    <string name="jogos_semana">На этой неделе</string>
+    <string name="jogos_semana_jogado">игры за 7 дней</string>
+    <string name="jogos_semana_mais">больше всего</string>
+    <string name="jogos_semana_controles">геймпадов подключено</string>
+    <string name="jogos_menos_de_1_min">меньше 1 мин</string>
+    <string name="jogos_min">%1$d мин</string>
+    <string name="jogos_h_min">%1$d ч %2$d мин</string>
+    <string name="cruz_apps_icone">Значки приложений</string>
+    <string name="cruz_apps_icone_det">Как приложения выглядят на главном экране</string>
+    <string name="cruz_app_banner">Баннер для ТВ</string>
+    <string name="cruz_app_redondo">Круглые</string>
+    <string name="cruz_app_solto">Только символ</string>
 </resources>

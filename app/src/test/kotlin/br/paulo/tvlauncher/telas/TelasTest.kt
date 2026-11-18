@@ -111,7 +111,8 @@ class TelasTest {
             br.paulo.tvlauncher.LayoutHome.definirIconesCruz(app, when (nome) {
                 "home-leve" -> br.paulo.tvlauncher.IconeCruz.Estilo.DUOTOM
                 "home-relogio" -> br.paulo.tvlauncher.IconeCruz.Estilo.SIMBOLO
-                else -> br.paulo.tvlauncher.IconeCruz.Estilo.OBJETO
+                "home-vidro" -> br.paulo.tvlauncher.IconeCruz.Estilo.OBJETO
+                else -> br.paulo.tvlauncher.IconeCruz.Estilo.LINHA   // o padrão desde 18/11/2026
             })
             val m = try { medir(cls, "$idioma-$nome") } catch (e: Throwable) {
                 problemas += "$chave: a tela não abriu (${e.javaClass.simpleName}: ${e.message?.take(160)})"; continue

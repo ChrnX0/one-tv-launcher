@@ -142,14 +142,25 @@ object CruzLogica {
     fun appsDaColuna(
         ordemDaLinha: List<String>, ultimoUso: Map<String, Long>,
         frequencia: Map<String, Double> = emptyMap(), fixados: List<String> = emptyList(),
+    ): List<String> = ordenarApps(ordemDaLinha, ultimoUso, frequencia, fixados).take(APPS_NA_COLUNA) + ID_TODOS_APPS
+
+    /** A mesma ordem de [appsDaColuna], sem corte nem "Todos os apps" (apps movidos para Assistir/Ouvir, jogos em Jogar). */
+    fun ordenarApps(
+        ordem: List<String>, ultimoUso: Map<String, Long>,
+        frequencia: Map<String, Double> = emptyMap(), fixados: List<String> = emptyList(),
     ): List<String> {
-        val pos = ordemDaLinha.withIndex().associate { it.value to it.index }
-        val presentes = pos.keys
-        val topo = fixados.filter { it in presentes }.distinct()
-        val resto = ordemDaLinha.filter { it !in topo }.sortedWith(compareBy<String>(
+        val pos = ordem.withIndex().associate { it.value to it.index }
+        val topo = fixados.filter { it in pos }.distinct()
+        return topo + ordem.filter { it !in topo }.sortedWith(compareBy<String>(
             { -(frequencia[it] ?: 0.0) }, { -(ultimoUso[it] ?: 0L) }, { pos[it] ?: Int.MAX_VALUE }))
-        return (topo + resto).take(APPS_NA_COLUNA) + ID_TODOS_APPS
     }
+
+    /**
+     * Continuar (18/11/2026): os itens com quando (ms) do mais recente para o mais antigo, no máximo [max]. Empate (ou
+     * quando = 0, sem data) mantém a ordem em que vieram.
+     */
+    fun <T> recentes(itens: List<Pair<Long, T>>, max: Int): List<T> =
+        itens.withIndex().sortedWith(compareBy({ -it.value.first }, { it.index })).take(max.coerceAtLeast(0)).map { it.value.second }
 
     /** Meia-vida da contagem de aberturas: 7 dias (uma abertura de uma semana atrás vale meia de hoje). */
     const val MEIA_VIDA_MS = 7L * 24 * 3600 * 1000

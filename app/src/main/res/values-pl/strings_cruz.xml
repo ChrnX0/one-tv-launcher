@@ -49,4 +49,23 @@
     <string name="cruz_dormir_sub">Ekran powoli ciemnieje, a TV się wyłącza</string>
     <string name="cruz_desliga_as">Wyłączy się o %1$s</string>
     <string name="cruz_dormir_cancelar">OK, aby anulować</string>
+    <string name="cruz_linha">Linia</string>
+    <string name="cruz_mover">Przenieś do…</string>
+    <string name="cruz_mover_titulo">Przenieś %1$s do</string>
+    <string name="cruz_central">Centrum gier</string>
+    <string name="cruz_abrir_app">Otwórz %1$s</string>
+    <string name="cruz_tirar_continuar">Usuń z Kontynuuj</string>
+    <string name="jogos_recentes">Ostatnio grane</string>
+    <string name="jogos_semana">W tym tygodniu</string>
+    <string name="jogos_semana_jogado">grania w 7 dni</string>
+    <string name="jogos_semana_mais">najczęściej grane</string>
+    <string name="jogos_semana_controles">włączone pady</string>
+    <string name="jogos_menos_de_1_min">poniżej 1 min</string>
+    <string name="jogos_min">%1$d min</string>
+    <string name="jogos_h_min">%1$d godz. %2$d min</string>
+    <string name="cruz_apps_icone">Ikony aplikacji</string>
+    <string name="cruz_apps_icone_det">Wygląd aplikacji na ekranie głównym</string>
+    <string name="cruz_app_banner">Baner TV</string>
+    <string name="cruz_app_redondo">Okrągłe</string>
+    <string name="cruz_app_solto">Sam symbol</string>
 </resources>

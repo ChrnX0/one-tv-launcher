@@ -504,6 +504,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
                     // categoria fora de foco: os itens se recolhem no ícone dela e somem
                     val cx = if (k < 0) CAT_ESQUERDA + (k + 1) * PASSO_CATS else CAT_DIREITA + (k - 1) * PASSO_CATS
                     mover(iv.raiz, dp(cx - ICONE_L * ESCALA_PEQUENO / 2f), dp(LINHA - ICONE_A / 2f), 0f, ESCALA_PEQUENO, animar, onda(kotlin.math.abs(rel)))
+                    if (iv.icone.isActivated) iv.icone.isActivated = false
                     continue
                 }
                 val cy = when {
@@ -516,6 +517,9 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
                 val x = if (rel == 0) COLUNA - ICONE_L / 2f else COLUNA - ICONE_L * ESCALA_PEQUENO / 2f
                 mover(iv.raiz, dp(x), dp(cy - ICONE_A / 2f), alfa, escala, animar, onda(kotlin.math.abs(rel)))
                 iv.traco.alpha = if (rel == 0 && focada) 1f else 0f
+                // Ícones "Linha" (IconeCruz): o escolhido acende na cor da marca; os outros ficam creme.
+                val aceso = rel == 0 && focada
+                if (iv.icone.isActivated != aceso) iv.icone.isActivated = aceso
                 iv.sub.alpha = if (rel == 0) 1f else 0f
             }
         }

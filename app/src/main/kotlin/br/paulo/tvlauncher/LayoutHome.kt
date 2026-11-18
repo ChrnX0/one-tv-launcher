@@ -59,10 +59,22 @@ object LayoutHome {
 
     fun definirAntiga(ctx: Context, sim: Boolean) = Extras.definirNumero(ctx, CHAVE_JEITO, if (sim) JEITO_ANTIGA else 0)
 
-    /** Estilo dos ícones da cruz: 0 = Objeto (padrão), 1 = Símbolo, 2 = Duotom (o número é a ordem do enum). */
+    /**
+     * Como os APPS aparecem na cruz (18/11/2026: o dono não gostou dos ícones quadrados). [BANNER] = a arte 16:9 de TV
+     * do app com cantos arredondados (sem banner: o ícone num retângulo da cor dele); [REDONDO] = o ícone recortado em
+     * círculo; [SOLTO] = só o traço do ícone, sem fundo (sem traço legível: o redondo).
+     */
+    enum class IconeAppCruz { BANNER, REDONDO, SOLTO }
+    const val CHAVE_APPS_ICONE = "cruz_apps_icone"
+    fun iconeAppCruz(ctx: Context) = iconeAppCruz(Extras.numero(ctx, CHAVE_APPS_ICONE, IconeAppCruz.BANNER.ordinal))
+    fun iconeAppCruz(valor: Int) = IconeAppCruz.entries.getOrElse(valor) { IconeAppCruz.BANNER }
+    fun proximoIconeAppCruz(ctx: Context) = IconeAppCruz.entries.let { it[(iconeAppCruz(ctx).ordinal + 1) % it.size] }
+        .also { Extras.definirNumero(ctx, CHAVE_APPS_ICONE, it.ordinal) }
+
+    /** Estilo dos ícones da cruz: 0 = Objeto, 1 = Símbolo, 2 = Duotom, 3 = Linha (padrão desde 18/11/2026; o número é a ordem do enum). */
     const val CHAVE_ICONES = "cruz_icones"
-    fun iconesCruz(ctx: Context) = iconesCruz(Extras.numero(ctx, CHAVE_ICONES, 0))
-    fun iconesCruz(valor: Int) = IconeCruz.Estilo.entries.getOrElse(valor) { IconeCruz.Estilo.OBJETO }
+    fun iconesCruz(ctx: Context) = iconesCruz(Extras.numero(ctx, CHAVE_ICONES, IconeCruz.Estilo.LINHA.ordinal))
+    fun iconesCruz(valor: Int) = IconeCruz.Estilo.entries.getOrElse(valor) { IconeCruz.Estilo.LINHA }
     fun definirIconesCruz(ctx: Context, e: IconeCruz.Estilo) = Extras.definirNumero(ctx, CHAVE_ICONES, e.ordinal)
     fun proximoIconesCruz(ctx: Context) = IconeCruz.Estilo.entries.let { it[(iconesCruz(ctx).ordinal + 1) % it.size] }
         .also { definirIconesCruz(ctx, it) }
