@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telas Rádio e Podcasts redesenhadas em cruz (18/11/2026): CruzOuvir, RadioActivity, PodcastsActivity. -->
+<resources>
+    <string name="ouv_tocando_agora">Сейчас играет</string>
+    <string name="ouv_pausado">Пауза</string>
+    <string name="ouv_prat_tocando">Играет</string>
+    <string name="ouv_pausar">Пауза</string>
+    <string name="ouv_continuar">Продолжить</string>
+    <string name="ouv_favoritar">В избранное</string>
+    <string name="ouv_desfavoritar">Убрать</string>
+    <string name="ouv_favoritar_det">Избранные также включаются кнопками 1–9 на пульте</string>
+    <string name="ouv_tecla">Кнопка %d на пульте</string>
+    <string name="ouv_ao_sair">При выходе</string>
+    <string name="ouv_ao_sair_continua">Играет дальше на главном экране\n⏯ на пульте ставит на паузу с любого экрана</string>
+    <string name="ouv_ao_sair_para">Останавливается, когда вы уходите с экрана</string>
+    <string name="ouv_recentes">Недавние</string>
+    <string name="ouv_sem_favoritas">Избранного пока нет</string>
+    <string name="ouv_sem_favoritas_det">Удерживайте OK на станции, чтобы сохранить её здесь</string>
+    <string name="ouv_sem_recentes">Пока пусто</string>
+    <string name="ouv_sem_recentes_det">Здесь появятся станции, которые вы слушали</string>
+    <string name="ouv_paises">Страны</string>
+    <string name="ouv_n_radios">Станций: %d</string>
+    <string name="ouv_ao_vivo">Эфир</string>
+    <string name="ouv_dica_pular">перемотка</string>
+    <string name="ouv_voltar">Назад 15 с</string>
+    <string name="ouv_voltar_det">Также ⏪ на пульте</string>
+    <string name="ouv_avancar">Вперёд 30 с</string>
+    <string name="ouv_avancar_det">Также ⏩ на пульте</string>
+    <string name="ouv_velocidade_det">%s · голос не меняет тон</string>
+    <string name="ouv_parar_pod_det">Место остановки сохраняется</string>
+    <string name="ouv_seguindo">Подписка</string>
+    <string name="ouv_sem_podcasts">Подкастов пока нет</string>
+    <string name="ouv_sem_podcasts_det">Добавьте подкаст на полке «Добавить» (вставьте адрес или используйте телефон)</string>
+    <string name="ouv_n_episodios">Выпусков: %d</string>
+    <string name="ouv_colar">Вставить адрес</string>
+    <string name="ouv_sobre">О подкасте</string>
+    <string name="ouv_remover_det">Выпуски и прогресс удалятся с этого ТВ</string>
+    <string name="ouv_ver_podcast">К подкасту</string>
+</resources>

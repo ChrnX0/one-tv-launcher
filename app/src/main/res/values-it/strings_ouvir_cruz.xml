@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telas Rádio e Podcasts redesenhadas em cruz (18/11/2026): CruzOuvir, RadioActivity, PodcastsActivity. -->
+<resources>
+    <string name="ouv_tocando_agora">In riproduzione</string>
+    <string name="ouv_pausado">In pausa</string>
+    <string name="ouv_prat_tocando">In onda</string>
+    <string name="ouv_pausar">Pausa</string>
+    <string name="ouv_continuar">Riprendi</string>
+    <string name="ouv_favoritar">Preferita</string>
+    <string name="ouv_desfavoritar">Togli preferita</string>
+    <string name="ouv_favoritar_det">Le preferite partono anche con i tasti da 1 a 9 del telecomando</string>
+    <string name="ouv_tecla">Tasto %d del telecomando</string>
+    <string name="ouv_ao_sair">All’uscita</string>
+    <string name="ouv_ao_sair_continua">Continua nella schermata Home\n⏯ sul telecomando mette in pausa da ogni schermata</string>
+    <string name="ouv_ao_sair_para">Si ferma quando esci da questa schermata</string>
+    <string name="ouv_recentes">Recenti</string>
+    <string name="ouv_sem_favoritas">Ancora nessuna preferita</string>
+    <string name="ouv_sem_favoritas_det">Tieni premuto OK su una radio per salvarla qui</string>
+    <string name="ouv_sem_recentes">Ancora niente</string>
+    <string name="ouv_sem_recentes_det">Le radio che ascolti compaiono qui</string>
+    <string name="ouv_paises">Paesi</string>
+    <string name="ouv_n_radios">%d radio</string>
+    <string name="ouv_ao_vivo">In diretta</string>
+    <string name="ouv_dica_pular">salta</string>
+    <string name="ouv_voltar">Indietro 15 s</string>
+    <string name="ouv_voltar_det">Anche ⏪ sul telecomando</string>
+    <string name="ouv_avancar">Avanti 30 s</string>
+    <string name="ouv_avancar_det">Anche ⏩ sul telecomando</string>
+    <string name="ouv_velocidade_det">%s · la voce non cambia tono</string>
+    <string name="ouv_parar_pod_det">Il punto in cui ti sei fermato resta salvato</string>
+    <string name="ouv_seguindo">Segui già</string>
+    <string name="ouv_sem_podcasts">Ancora nessun podcast</string>
+    <string name="ouv_sem_podcasts_det">Aggiungine uno nello scaffale Aggiungi (incolla l’indirizzo o usa il telefono)</string>
+    <string name="ouv_n_episodios">%d episodi</string>
+    <string name="ouv_colar">Incolla indirizzo</string>
+    <string name="ouv_sobre">Info</string>
+    <string name="ouv_remover_det">Episodi e avanzamento escono da questa TV</string>
+    <string name="ouv_ver_podcast">Vai al podcast</string>
+</resources>

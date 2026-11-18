@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telas Rádio e Podcasts redesenhadas em cruz (18/11/2026): CruzOuvir, RadioActivity, PodcastsActivity. -->
+<resources>
+    <string name="ouv_tocando_agora">지금 재생 중</string>
+    <string name="ouv_pausado">일시정지됨</string>
+    <string name="ouv_prat_tocando">재생 중</string>
+    <string name="ouv_pausar">일시정지</string>
+    <string name="ouv_continuar">계속</string>
+    <string name="ouv_favoritar">즐겨찾기</string>
+    <string name="ouv_desfavoritar">즐겨찾기 해제</string>
+    <string name="ouv_favoritar_det">즐겨찾기는 리모컨 1~9 버튼으로도 재생됩니다</string>
+    <string name="ouv_tecla">리모컨 %d 버튼</string>
+    <string name="ouv_ao_sair">화면을 나갈 때</string>
+    <string name="ouv_ao_sair_continua">홈 화면에서도 계속 재생\n리모컨 ⏯ 로 어느 화면에서나 일시정지</string>
+    <string name="ouv_ao_sair_para">이 화면을 나가면 멈춥니다</string>
+    <string name="ouv_recentes">최근</string>
+    <string name="ouv_sem_favoritas">아직 즐겨찾기가 없습니다</string>
+    <string name="ouv_sem_favoritas_det">방송국에서 OK를 길게 누르면 여기에 저장됩니다</string>
+    <string name="ouv_sem_recentes">아직 아무것도 없습니다</string>
+    <string name="ouv_sem_recentes_det">들은 방송국이 여기에 표시됩니다</string>
+    <string name="ouv_paises">국가</string>
+    <string name="ouv_n_radios">방송국 %d개</string>
+    <string name="ouv_ao_vivo">라이브</string>
+    <string name="ouv_dica_pular">건너뛰기</string>
+    <string name="ouv_voltar">15초 뒤로</string>
+    <string name="ouv_voltar_det">리모컨 ⏪ 도 가능</string>
+    <string name="ouv_avancar">30초 앞으로</string>
+    <string name="ouv_avancar_det">리모컨 ⏩ 도 가능</string>
+    <string name="ouv_velocidade_det">%s · 목소리 높이는 그대로</string>
+    <string name="ouv_parar_pod_det">멈춘 위치가 저장됩니다</string>
+    <string name="ouv_seguindo">팔로우 중</string>
+    <string name="ouv_sem_podcasts">아직 팟캐스트가 없습니다</string>
+    <string name="ouv_sem_podcasts_det">추가 선반에서 추가하세요 (주소 붙여넣기 또는 휴대폰)</string>
+    <string name="ouv_n_episodios">에피소드 %d개</string>
+    <string name="ouv_colar">주소 붙여넣기</string>
+    <string name="ouv_sobre">정보</string>
+    <string name="ouv_remover_det">에피소드와 진행 상황이 이 TV에서 사라집니다</string>
+    <string name="ouv_ver_podcast">팟캐스트로 이동</string>
+</resources>

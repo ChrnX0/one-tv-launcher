@@ -14,6 +14,11 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Rádio e Podcasts redesenhados no jeito da tela inicial: prateleiras de lado, itens em coluna, o escolhido grande com a informação útil em várias linhas e o ponto laranja</item>
+        <item>“Tocando agora” fica sempre no alto, com a capa ou o logo, o tempo e quanto falta</item>
+        <item>Rádio: favoritas (as teclas 1 a 9 tocam cada uma), recentes, rádios perto de você, do seu país, por gênero e de outros países com bandeira</item>
+        <item>Podcasts: Continuar ouvindo com a barra do quanto já ouviu, episódios novos, seus podcasts com capa e, dentro de cada um, episódios e “Sobre”</item>
+        <item>⏪ ⏩ e ⏯ do controle funcionam em qualquer lugar da tela de podcasts; segurar OK abre mais opções</item>
         <item>Uma informação comprida, como o título do último vídeo, termina em “…” e não empurra mais as outras para fora; “Aberto há 0 minuto” virou “Aberto agora”</item>
         <item>Continuar: o nome do filme ou da série aparece sem a marca da lista (“LEG”, “DUB”, “4K”)</item>
         <item>Casa: com o Home Assistant fora do ar, a tela diz o que houve e que tenta de novo sozinha, e o Google Home continua à mão</item>
@@ -30,17 +35,13 @@
         <item>Correções de estabilidade de uma rodada longa de depuração</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Cena atrás da ficha</item>
-        <item>Segurar VOLTAR</item>
-        <item>Segurar HOME</item>
-        <item>Ícones vivos</item>
-        <item>Volta ao app</item>
+        <item>Rádio nova</item>
+        <item>Podcasts novos</item>
+        <item>Teclas de mídia</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Abrindo a ficha de um filme, aparece a cena dele à direita, sem atrapalhar a leitura?</item>
-        <item>Segurando VOLTAR dentro de um app (o YouTube, por exemplo) e na tela inicial, o painel rápido abre, e o VOLTAR curto continua voltando?</item>
-        <item>Segurando HOME, dentro de um app e na tela inicial, a Casa abre com as suas luzes e cenas?</item>
-        <item>Os ícones têm cores diferentes, e o escolhido toca uma animação curta só dele de tempos em tempos?</item>
-        <item>Abrindo o YouTube pela coluna dele e apertando HOME, o foco volta no YouTube (e não na TV)?</item>
+        <item>Abrindo Rádio, as prateleiras andam de lado com ◀ ▶, a rádio que toca aparece no alto com logo e música, e a tecla 1 toca a 1ª favorita?</item>
+        <item>Abrindo Podcasts, o episódio pela metade aparece em Continuar com a barra, e OK continua de onde parou?</item>
+        <item>Ouvindo um podcast, ⏪ volta 15 s e ⏩ avança 30 s, e o tempo no alto acompanha?</item>
     </string-array>
 </resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telas Rádio e Podcasts redesenhadas em cruz (18/11/2026): CruzOuvir, RadioActivity, PodcastsActivity. -->
+<resources>
+    <string name="ouv_tocando_agora">قيد التشغيل الآن</string>
+    <string name="ouv_pausado">متوقف مؤقتًا</string>
+    <string name="ouv_prat_tocando">قيد التشغيل</string>
+    <string name="ouv_pausar">إيقاف مؤقت</string>
+    <string name="ouv_continuar">متابعة</string>
+    <string name="ouv_favoritar">إلى المفضلة</string>
+    <string name="ouv_desfavoritar">إزالة من المفضلة</string>
+    <string name="ouv_favoritar_det">تعمل المفضلة أيضًا بالأزرار من 1 إلى 9 في جهاز التحكم</string>
+    <string name="ouv_tecla">الزر %d في جهاز التحكم</string>
+    <string name="ouv_ao_sair">عند الخروج</string>
+    <string name="ouv_ao_sair_continua">يستمر التشغيل في الشاشة الرئيسية\n⏯ في جهاز التحكم يوقف مؤقتًا من أي شاشة</string>
+    <string name="ouv_ao_sair_para">يتوقف عند مغادرة هذه الشاشة</string>
+    <string name="ouv_recentes">الأخيرة</string>
+    <string name="ouv_sem_favoritas">لا توجد مفضلة بعد</string>
+    <string name="ouv_sem_favoritas_det">اضغط مطولًا على OK في محطة لحفظها هنا</string>
+    <string name="ouv_sem_recentes">لا شيء هنا بعد</string>
+    <string name="ouv_sem_recentes_det">تظهر هنا المحطات التي استمعت إليها</string>
+    <string name="ouv_paises">البلدان</string>
+    <string name="ouv_n_radios">%d محطة</string>
+    <string name="ouv_ao_vivo">مباشر</string>
+    <string name="ouv_dica_pular">تخطٍّ</string>
+    <string name="ouv_voltar">رجوع 15 ث</string>
+    <string name="ouv_voltar_det">أو ⏪ في جهاز التحكم</string>
+    <string name="ouv_avancar">تقديم 30 ث</string>
+    <string name="ouv_avancar_det">أو ⏩ في جهاز التحكم</string>
+    <string name="ouv_velocidade_det">%s · لا تتغير طبقة الصوت</string>
+    <string name="ouv_parar_pod_det">يُحفظ موضع التوقف</string>
+    <string name="ouv_seguindo">متابَع</string>
+    <string name="ouv_sem_podcasts">لا توجد بودكاست بعد</string>
+    <string name="ouv_sem_podcasts_det">أضف واحدًا من رف «إضافة» (الصق العنوان أو استخدم الهاتف)</string>
+    <string name="ouv_n_episodios">%d حلقة</string>
+    <string name="ouv_colar">لصق العنوان</string>
+    <string name="ouv_sobre">حول</string>
+    <string name="ouv_remover_det">ستُحذف الحلقات والتقدم من هذا التلفاز</string>
+    <string name="ouv_ver_podcast">الانتقال إلى البودكاست</string>
+</resources>

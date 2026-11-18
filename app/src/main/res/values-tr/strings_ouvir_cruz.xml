@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telas Rádio e Podcasts redesenhadas em cruz (18/11/2026): CruzOuvir, RadioActivity, PodcastsActivity. -->
+<resources>
+    <string name="ouv_tocando_agora">Şimdi çalıyor</string>
+    <string name="ouv_pausado">Duraklatıldı</string>
+    <string name="ouv_prat_tocando">Çalıyor</string>
+    <string name="ouv_pausar">Duraklat</string>
+    <string name="ouv_continuar">Devam</string>
+    <string name="ouv_favoritar">Favori yap</string>
+    <string name="ouv_desfavoritar">Favoriden çıkar</string>
+    <string name="ouv_favoritar_det">Favoriler kumandadaki 1–9 tuşlarıyla da çalar</string>
+    <string name="ouv_tecla">Kumandada %d tuşu</string>
+    <string name="ouv_ao_sair">Çıkınca</string>
+    <string name="ouv_ao_sair_continua">Ana ekranda çalmaya devam eder\n⏯ kumandada her ekrandan duraklatır</string>
+    <string name="ouv_ao_sair_para">Bu ekrandan çıkınca durur</string>
+    <string name="ouv_recentes">Son dinlenen</string>
+    <string name="ouv_sem_favoritas">Henüz favori yok</string>
+    <string name="ouv_sem_favoritas_det">Burada tutmak için bir radyoda OK’e basılı tutun</string>
+    <string name="ouv_sem_recentes">Henüz bir şey yok</string>
+    <string name="ouv_sem_recentes_det">Dinlediğiniz radyolar burada görünür</string>
+    <string name="ouv_paises">Ülkeler</string>
+    <string name="ouv_n_radios">%d radyo</string>
+    <string name="ouv_ao_vivo">Canlı</string>
+    <string name="ouv_dica_pular">atla</string>
+    <string name="ouv_voltar">15 sn geri</string>
+    <string name="ouv_voltar_det">Kumandada ⏪ da olur</string>
+    <string name="ouv_avancar">30 sn ileri</string>
+    <string name="ouv_avancar_det">Kumandada ⏩ da olur</string>
+    <string name="ouv_velocidade_det">%s · ses tonu değişmez</string>
+    <string name="ouv_parar_pod_det">Kaldığınız yer saklanır</string>
+    <string name="ouv_seguindo">Takipte</string>
+    <string name="ouv_sem_podcasts">Henüz podcast yok</string>
+    <string name="ouv_sem_podcasts_det">Ekle rafından bir tane ekleyin (adresi yapıştırın veya telefonu kullanın)</string>
+    <string name="ouv_n_episodios">%d bölüm</string>
+    <string name="ouv_colar">Adres yapıştır</string>
+    <string name="ouv_sobre">Hakkında</string>
+    <string name="ouv_remover_det">Bölümler ve ilerleme bu TV’den silinir</string>
+    <string name="ouv_ver_podcast">Podcast’e git</string>
+</resources>

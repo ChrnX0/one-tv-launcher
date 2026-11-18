@@ -17,17 +17,18 @@ import android.widget.TextView
 import java.util.Locale
 
 /**
- * Tela "Rádios" (ideia 87, 14/11/2026), dentro da TV ao vivo (coluna da esquerda, como Gravações). Uma lista só, em
- * letra grande:
- *  - "Tocando": o nome da rádio e a música que ela manda (metadados ICY, quando manda). OK pausa/continua.
- *  - Favoritas (números 1–9 do controle tocam direto), Buscar por nome, Gêneros, Outro país.
- *  - Perto de você (100 km da TV) e as mais ouvidas do país da TV. O resultado de uma busca aparece no alto.
- * Segurar OK numa rádio = favoritar/desfavoritar. Tocando e sem tecla por [ESCURECER_MS], a tela escurece (o som segue);
- * qualquer tecla acende. Catálogo e espelhos: [Radios].
+ * Tela "Rádio" (ideia 87, 14/11/2026; redesenhada 18/11/2026 no padrão da cruz da HOME, dono: "a tela de rádio está BEM
+ * ruim"). Antes era uma lista de Configurações com 60 linhas; agora é uma cruz ([CruzOuvir]): ◀ ▶ trocam a prateleira,
+ * ▲ ▼ andam nas rádios, OK toca, OK segurado guarda/tira das favoritas. Prateleiras, na ordem:
+ *  - Tocando (só com som): Pausar/Continuar, Favoritar, Parar e "Ao sair da tela" (continua tocando ou para);
+ *  - Resultado da última busca, gênero ou país (some ao sair da tela);
+ *  - Favoritas (as teclas 1 a 9 do controle tocam direto, e a linha de baixo diz qual), Recentes;
+ *  - Perto de você (100 km da TV), Mais ouvidas no país da TV, Gêneros, Países, Buscar pelo nome.
+ * Cada rádio mostra o logo do catálogo (ou as iniciais sobre a cor dela), e o canto de cima à direita mostra a que está
+ * tocando com a música do momento (metadados ICY, quando a rádio manda). Sem tecla por [ESCURECER_MS] tocando, a tela
+ * escurece (o som segue); qualquer tecla acende. Catálogo e espelhos: [Radios].
  *
- * Desde 17/11/2026 ("Ouvir" parte 1) quem toca é o [OuvirServico]: sair da tela NÃO para o som (segue na HOME e no
- * protetor, com a pílula "Tocando" e as teclas ⏯ do controle). A linha "Parar" e o ajuste "Ao sair desta tela" (que
- * volta ao jeito antigo) ficam aqui. Esta tela só mostra o estado do serviço; não tem player próprio.
+ * Quem toca é o [OuvirServico] (17/11/2026): sair da tela NÃO para o som, a não ser que o dono escolha o jeito antigo.
  */
 class RadioActivity : Activity() {
     companion object {
@@ -39,22 +40,29 @@ class RadioActivity : Activity() {
         /** Sair da tela deixa o som tocando? Padrão sim. Prefs lidas só no ":player". */
         fun continuarFora(ctx: android.content.Context) =
             ctx.getSharedPreferences(PREFS, MODE_PRIVATE).getBoolean(CHAVE_CONTINUAR, true)
+
+        /** Cores das rádios sem logo (as iniciais ficam sobre uma delas, sempre a mesma para a mesma rádio). */
+        private val CORES = intArrayOf(0xFF45C2B1.toInt(), 0xFF7FB2FF.toInt(), 0xFFF2B84B.toInt(), 0xFF8E92FA.toInt(),
+            0xFF9CD27E.toInt(), 0xFFF59E5B.toInt(), 0xFF6FC3B2.toInt(), 0xFFE6C46A.toInt())
+        fun corDe(chave: String): Int = CORES[(chave.hashCode() and 0x7FFFFFFF) % CORES.size]
     }
 
     private val ui = Handler(Looper.getMainLooper())
-    private lateinit var coluna: LinearLayout
-    private lateinit var subtitulo: TextView
+    private lateinit var cruz: CruzOuvir
     private lateinit var veu: LinearLayout
+    private lateinit var veuCapa: CapaOuvir
     private lateinit var veuNome: TextView
     private lateinit var veuMusica: TextView
     private val tocando: Radios.Radio? get() = OuvirServico.instancia?.radio
-    private val musica: String get() = OuvirServico.instancia?.musica.orEmpty()
-    /** O que a tela mostrou por último (id, música, pausado): só redesenha a lista quando muda. */
+    /** O que a tela mostrou por último (id, música, pausado): só refaz quando muda. */
     private var visto: Triple<String?, String, Boolean>? = null
     private val mudou: () -> Unit = { aoMudarSom() }
     private var favoritas: List<Radios.Radio> = emptyList()
+    private var recentes: List<Radios.Radio> = emptyList()
     private var perto: List<Radios.Radio>? = null
     private var doPais: List<Radios.Radio>? = null
+    private var paises: List<Triple<String, String, Int>>? = null
+    private var carregando = true
     private var resultado: Pair<String, List<Radios.Radio>>? = null
     private val pais: String = Locale.getDefault().country.uppercase().takeIf { it.length == 2 } ?: ""
     private val escurecer = Runnable { if (OuvirServico.instancia?.tocando == true) veu.visibility = View.VISIBLE }
@@ -62,26 +70,33 @@ class RadioActivity : Activity() {
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
         if (VigiaAtualizacao.fechada(this)) return
-        val (raiz, col) = Estilo.telaLista(this, getString(R.string.ra_coluna), " ")
-        coluna = col
-        subtitulo = (raiz as LinearLayout).getChildAt(1) as TextView
-        raiz.addView(Estilo.barraDicas(this, getString(R.string.grv_dica_ok) to getString(R.string.ra_dica_ouvir),
-            getString(R.string.grv_dica_segurar) to getString(R.string.ra_dica_favoritar)),
-            LinearLayout.LayoutParams(-2, -2).apply { bottomMargin = Estilo.dp(this@RadioActivity, Estilo.MARGEM_VERTICAL) })
-        // Véu da tela escura: preto quase total, só o nome e a música, para o quarto ficar escuro com o rádio ligado.
+        val fonte = Fontes.nunito(this, 500)
+        val forte = Fontes.nunito(this, 800)
+        cruz = CruzOuvir(this, fonte, forte).apply {
+            definirTitulo(getString(R.string.ra_coluna))
+            definirDicas(getString(R.string.grv_dica_ok) to getString(R.string.ra_dica_ouvir),
+                getString(R.string.grv_dica_segurar) to getString(R.string.ra_dica_favoritar),
+                "⏯" to getString(R.string.ra_pausar))
+            aoSom = { s -> if (OuvirServico.instancia?.tocando != true) SonsCruz.tocar(this@RadioActivity, s, CruzLogica.Categoria.OUVIR) }
+        }
+        // Véu da tela escura: quase preto, só a capa, o nome e a música, para o quarto ficar escuro com o rádio ligado.
+        veuCapa = CapaOuvir(this, 18f).apply { fonte(forte); alpha = 0.5f }
         veuNome = Estilo.texto(this, Estilo.Papel.TITULO, "").apply { textSize = 34f; gravity = Gravity.CENTER; alpha = 0.55f }
         veuMusica = Estilo.texto(this, Estilo.Papel.CORPO, "").apply { textSize = 22f; gravity = Gravity.CENTER; alpha = 0.45f }
         veu = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL; gravity = Gravity.CENTER
             setBackgroundColor(Color.argb(240, 0, 0, 0)); visibility = View.GONE
-            addView(veuNome); addView(veuMusica, LinearLayout.LayoutParams(-2, -2).apply { topMargin = Estilo.dp(this@RadioActivity, 12) })
+            addView(veuCapa, LinearLayout.LayoutParams(Estilo.dp(this@RadioActivity, 120), Estilo.dp(this@RadioActivity, 120)))
+            addView(veuNome, LinearLayout.LayoutParams(-2, -2).apply { topMargin = Estilo.dp(this@RadioActivity, 20) })
+            addView(veuMusica, LinearLayout.LayoutParams(-2, -2).apply { topMargin = Estilo.dp(this@RadioActivity, 12) })
         }
         setContentView(FrameLayout(this).apply {
-            addView(raiz, FrameLayout.LayoutParams(-1, -1))
+            background = Estilo.fundoTela(this@RadioActivity)
+            addView(cruz, FrameLayout.LayoutParams(-1, -1))
             addView(veu, FrameLayout.LayoutParams(-1, -1))
         })
-        favoritas = Radios.favoritas(this)
-        montar()
+        montar(focarInicio = true)
+        cruz.requestFocus()
         carregarListas()
         intent.getStringExtra(EXTRA_BUSCA)?.trim()?.takeIf { it.length >= 2 }?.let { t ->
             buscar(getString(R.string.ra_resultado, t)) { Radios.urlNome(it, t) }
@@ -90,9 +105,12 @@ class RadioActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
-        // Favoritas podem ter mudado pelo painel (rádio colada) com a tela atrás.
+        // Favoritas podem ter mudado pelo painel (rádio colada) e recentes pelo serviço, com a tela atrás.
         val app = applicationContext
-        Fundo.rodar("radios") { val f = Radios.favoritas(app); runOnUiThread { if (!isDestroyed && f != favoritas) { favoritas = f; montar() } } }
+        Fundo.rodar("radios") {
+            val f = Radios.favoritas(app); val r = Radios.recentes(app)
+            runOnUiThread { if (!isDestroyed && (f != favoritas || r != recentes)) { favoritas = f; recentes = r; montar() } }
+        }
     }
 
     override fun onStart() {
@@ -108,24 +126,31 @@ class RadioActivity : Activity() {
         ui.removeCallbacks(escurecer)
         veu.visibility = View.GONE
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        resultado = null   // a busca não volta na próxima vez (a tela abre limpa)
         // O jeito antigo, para quem escolheu: sair da tela para o som. Tela que só apagou também conta (o serviço já para).
         if (!continuarFora(this)) OuvirServico.instancia?.parar()
     }
 
     override fun onDestroy() { ui.removeCallbacksAndMessages(null); OuvirServico.esquecer(mudou); super.onDestroy() }
 
-    /** O serviço mudou (tocou, pausou, música nova, parou): véu, tela acesa e a lista. */
+    /** O serviço mudou (tocou, pausou, música nova, parou): véu, tela acesa, o cartão e a prateleira Tocando. */
     private fun aoMudarSom() {
         if (isDestroyed || !::veu.isInitialized) return
         val s = OuvirServico.instancia
         val r = s?.radio
         veuNome.text = r?.nome.orEmpty(); veuMusica.text = s?.musica.orEmpty()
+        r?.let { veuCapa.cor = corDe(it.id); veuCapa.monograma = CapaOuvir.iniciais(it.nome); veuCapa.carregar(it.logo) }
         // Tela acesa só com o som saindo E esta tela na frente; fora dela, o protetor de tela entra normalmente.
         if (s?.tocando == true) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         else window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         if (r == null) { ui.removeCallbacks(escurecer); veu.visibility = View.GONE }
         val agora = Triple(r?.id, s?.musica.orEmpty(), s?.pausado == true)
-        if (agora != visto) { visto = agora; montar(); mexeu() }
+        if (agora != visto) {
+            // Começou a tocar (OK numa rádio): o foco fica onde está; o cartão de cima à direita já mostra o que toca.
+            visto = agora
+            montar()
+            mexeu()
+        }
     }
 
     override fun dispatchKeyEvent(e: KeyEvent): Boolean {
@@ -134,6 +159,11 @@ class RadioActivity : Activity() {
             if (veu.visibility == View.VISIBLE) { veu.visibility = View.GONE; return true }   // 1ª tecla só acende a tela
             val n = e.keyCode - KeyEvent.KEYCODE_1
             if (n in 0..8) { favoritas.getOrNull(n)?.let { tocar(it) }; return true }
+            when (e.keyCode) {
+                // ⏯ do controle: pausa/continua daqui também (a sessão de mídia já faz isso fora da tela)
+                KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE ->
+                    if (tocando != null) { OuvirServico.instancia?.alternar(); return true }
+            }
         }
         return super.dispatchKeyEvent(e)
     }
@@ -147,16 +177,17 @@ class RadioActivity : Activity() {
 
     private fun carregarListas() {
         val app = applicationContext
-        subtitulo.text = getString(R.string.ra_carregando)
         Fundo.rodar("radios") {
+            val fav = Radios.favoritas(app); val rec = Radios.recentes(app)
+            runOnUiThread { if (!isDestroyed) { favoritas = fav; recentes = rec; montar() } }
             val ponto = runCatching { Localizacao.atual(app) { null } }.getOrNull()   // sem rede extra: só o que a TV já sabe
             val p = ponto?.let { pt -> Radios.estacoes(Radios.pedir { Radios.urlPerto(it, pt.lat, pt.lon, 30) }) }
             val d = if (pais.isNotEmpty()) Radios.estacoes(Radios.pedir { Radios.urlPais(it, pais) }) else
                 Radios.estacoes(Radios.pedir { "https://$it/json/stations/topclick/${Radios.LIMITE}?hidebroken=true" })
+            val ps = Radios.paises(Radios.pedir { Radios.urlPaises(it) }).take(60)
             runOnUiThread {
                 if (isDestroyed) return@runOnUiThread
-                perto = p; doPais = d
-                subtitulo.text = if (d.isEmpty() && p.isNullOrEmpty()) getString(R.string.ra_sem_catalogo) else getString(R.string.ra_subtitulo)
+                perto = p; doPais = d; paises = ps; carregando = false
                 montar()
             }
         }
@@ -165,14 +196,13 @@ class RadioActivity : Activity() {
     private fun buscar(titulo: String, montarUrl: (String) -> String) {
         val app = applicationContext
         resultado = titulo to emptyList()
-        subtitulo.text = getString(R.string.ra_carregando)
+        montar(focar = "res" to null)
         Fundo.rodar("radios") {
             val r = Radios.estacoes(Radios.pedir(montarUrl))
             runOnUiThread {
                 if (isDestroyed) return@runOnUiThread
                 resultado = titulo to r
-                subtitulo.text = getString(R.string.ra_subtitulo)
-                montar(focarResultado = true)
+                montar(focar = "res" to null)
                 if (r.isEmpty()) AvisoTv.rapido(app, titulo, getString(R.string.ra_nada), 5)
             }
         }
@@ -180,78 +210,110 @@ class RadioActivity : Activity() {
 
     // ---------------------------------------------------------------- tela
 
-    private fun montar(focarResultado: Boolean = false) {
-        val focoAntes = coluna.focusedChild?.tag
-        coluna.removeAllViews()
-        tocando?.let { r ->
-            linha("tocando", "● " + r.nome, musica.ifEmpty { detalhe(r) },
-                getString(if (OuvirServico.instancia?.pausado == true) R.string.ra_continuar else R.string.ra_pausar), cor = Estilo.ATENCAO,
-                ok = { alternarPausa() }, segurar = { favoritar(r) })
-            linha("parar", "■ " + getString(R.string.ra_parar),
-                getString(if (continuarFora(this)) R.string.ra_parar_det else R.string.ra_parar_det_antigo), null,
-                ok = { OuvirServico.instancia?.parar() }, segurar = null)
+    private fun montar(focar: Pair<String, String?>? = null, focarInicio: Boolean = false) {
+        val l = ArrayList<CruzOuvir.Prateleira>()
+        val s = OuvirServico.instancia
+        val r = tocando
+        if (r != null && s != null) {
+            val fav = favoritas.any { it.id == r.id }
+            l += CruzOuvir.Prateleira("tocando", getString(R.string.ouv_prat_tocando), IconeOuvir.Tipo.TOCANDO, listOf(
+                CruzOuvir.Item("pausar", getString(if (s.pausado) R.string.ouv_continuar else R.string.ouv_pausar),
+                    CruzLogica.linhas(r.nome, s.musica, detalhe(r)), if (s.pausado) IconeOuvir.Tipo.CONTINUAR else IconeOuvir.Tipo.PAUSAR,
+                    abrir = { OuvirServico.instancia?.alternar() }),
+                CruzOuvir.Item("favoritar", getString(if (fav) R.string.ouv_desfavoritar else R.string.ouv_favoritar),
+                    if (fav) getString(R.string.ouv_tecla, favoritas.indexOfFirst { it.id == r.id } + 1).takeIf { favoritas.indexOfFirst { it.id == r.id } < 9 }.orEmpty()
+                    else getString(R.string.ouv_favoritar_det),
+                    IconeOuvir.Tipo.FAVORITAS, abrir = { favoritar(r) }),
+                CruzOuvir.Item("parar", getString(R.string.ra_parar),
+                    getString(if (continuarFora(this)) R.string.ra_parar_det else R.string.ra_parar_det_antigo), IconeOuvir.Tipo.PARAR,
+                    abrir = { OuvirServico.instancia?.parar() }),
+                CruzOuvir.Item("ao_sair", getString(R.string.ouv_ao_sair),
+                    getString(if (continuarFora(this)) R.string.ouv_ao_sair_continua else R.string.ouv_ao_sair_para), IconeOuvir.Tipo.SAIR,
+                    abrir = {
+                        getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean(CHAVE_CONTINUAR, !continuarFora(this)).apply()
+                        montar()
+                    }),
+            ))
         }
         resultado?.let { (titulo, lista) ->
-            coluna.addView(Estilo.secao(this, titulo))
-            lista.forEach { linhaRadio("res:", it) }
+            l += CruzOuvir.Prateleira("res", titulo, IconeOuvir.Tipo.BUSCAR,
+                if (lista.isEmpty()) listOf(aviso("res:carregando", getString(R.string.ra_carregando), "", IconeOuvir.Tipo.BUSCAR))
+                else lista.map { itemRadio("res:", it) })
         }
-        // Podcasts (Paulo, 17/11/2026: no plano Básico; a tela "Ouvir" = rádio + podcasts, aberta pelo cartão da HOME).
-        linha("podcasts", getString(R.string.pod_titulo), getString(R.string.ra_podcasts_det), null,
-            ok = { startActivity(android.content.Intent(this, PodcastsActivity::class.java)) }, segurar = null)
-        if (favoritas.isNotEmpty()) {
-            coluna.addView(Estilo.secao(this, getString(R.string.ra_favoritas)))
-            favoritas.forEachIndexed { i, r -> linhaRadio("fav:", r, numero = if (i < 9) i + 1 else null) }
-        }
-        coluna.addView(Estilo.secao(this, getString(R.string.ra_procurar)))
-        linha("buscar", getString(R.string.ra_buscar), getString(R.string.ra_buscar_det), null, ok = { pedirNome() }, segurar = null)
-        linha("generos", getString(R.string.ra_generos), Radios.GENEROS.take(5).joinToString(", ") + "…", null, ok = { escolherGenero() }, segurar = null)
-        linha("paises", getString(R.string.ra_paises), getString(R.string.ra_paises_det), null, ok = { escolherPais() }, segurar = null)
-        perto?.takeIf { it.isNotEmpty() }?.let { l ->
-            coluna.addView(Estilo.secao(this, getString(R.string.ra_perto)))
-            l.forEach { linhaRadio("perto:", it) }
-        }
-        doPais?.takeIf { it.isNotEmpty() }?.let { l ->
+        l += CruzOuvir.Prateleira("fav", getString(R.string.ra_favoritas), IconeOuvir.Tipo.FAVORITAS,
+            if (favoritas.isEmpty()) listOf(aviso("fav:vazio", getString(R.string.ouv_sem_favoritas), getString(R.string.ouv_sem_favoritas_det), IconeOuvir.Tipo.FAVORITAS))
+            else favoritas.mapIndexed { i, x -> itemRadio("fav:", x, numero = if (i < 9) i + 1 else null) })
+        l += CruzOuvir.Prateleira("rec", getString(R.string.ouv_recentes), IconeOuvir.Tipo.RECENTES,
+            if (recentes.isEmpty()) listOf(aviso("rec:vazio", getString(R.string.ouv_sem_recentes), getString(R.string.ouv_sem_recentes_det), IconeOuvir.Tipo.RECENTES))
+            else recentes.map { itemRadio("rec:", it) })
+        if (carregando) {
+            l += CruzOuvir.Prateleira("perto", getString(R.string.ra_perto), IconeOuvir.Tipo.PERTO,
+                listOf(aviso("perto:carregando", getString(R.string.ra_carregando), "", IconeOuvir.Tipo.PERTO)))
+        } else {
+            perto?.takeIf { it.isNotEmpty() }?.let { lista ->
+                l += CruzOuvir.Prateleira("perto", getString(R.string.ra_perto), IconeOuvir.Tipo.PERTO, lista.map { itemRadio("perto:", it) })
+            }
+            val d = doPais.orEmpty()
             val nomePais = if (pais.isEmpty()) "" else Locale("", pais).getDisplayCountry(Locale.getDefault())
-            coluna.addView(Estilo.secao(this, if (nomePais.isEmpty()) getString(R.string.ra_mundo) else getString(R.string.ra_mais_ouvidas, nomePais)))
-            l.forEach { linhaRadio("pais:", it) }
+            l += CruzOuvir.Prateleira("pais", nomePais.ifEmpty { getString(R.string.ra_mundo) }, IconeOuvir.Tipo.PAIS,
+                if (d.isEmpty()) listOf(aviso("pais:nada", getString(R.string.ra_nada), getString(R.string.ra_sem_catalogo), IconeOuvir.Tipo.PAIS))
+                else d.map { itemRadio("pais:", it) })
         }
-        coluna.addView(Estilo.secao(this, getString(R.string.ra_ajustes)))
-        linha("ao_sair", getString(R.string.ra_ao_sair), getString(R.string.ra_ao_sair_det),
-            getString(if (continuarFora(this)) R.string.ra_ao_sair_continua else R.string.ra_ao_sair_para),
-            ok = {
-                getSharedPreferences(PREFS, MODE_PRIVATE).edit().putBoolean(CHAVE_CONTINUAR, !continuarFora(this)).apply()
-                montar()
-            }, segurar = null)
-        val filhos = (0 until coluna.childCount).map { coluna.getChildAt(it) }
-        val alvo = if (focarResultado) filhos.firstOrNull { (it.tag as? String)?.startsWith("res:") == true }
-            else filhos.firstOrNull { it.tag != null && it.tag == focoAntes }
-        (alvo ?: filhos.firstOrNull { it.isFocusable })?.requestFocus()
+        l += CruzOuvir.Prateleira("generos", getString(R.string.ra_generos), IconeOuvir.Tipo.GENEROS, Radios.GENEROS.map { g ->
+            val nome = g.replaceFirstChar { it.titlecase(Locale.getDefault()) }
+            CruzOuvir.Item("gen:$g", nome, "", cor = corDe(g), monograma = CapaOuvir.iniciais(nome),
+                abrir = { buscar(nome) { Radios.urlGenero(it, g) } })
+        })
+        paises?.takeIf { it.isNotEmpty() }?.let { ps ->
+            l += CruzOuvir.Prateleira("paises", getString(R.string.ouv_paises), IconeOuvir.Tipo.PAIS, ps.map { (c, n, q) ->
+                val nome = Locale("", c).getDisplayCountry(Locale.getDefault()).ifEmpty { n }
+                CruzOuvir.Item("pa:$c", nome, getString(R.string.ouv_n_radios, q), cor = corDe(c), monograma = CapaOuvir.bandeira(c).ifEmpty { c },
+                    abrir = { buscar(nome) { Radios.urlPais(it, c) } })
+            })
+        }
+        l += CruzOuvir.Prateleira("buscar", getString(R.string.ra_procurar), IconeOuvir.Tipo.BUSCAR, listOf(
+            CruzOuvir.Item("buscar", getString(R.string.ra_buscar), getString(R.string.ra_buscar_det), IconeOuvir.Tipo.BUSCAR, abrir = { pedirNome() })))
+        // Abrindo: o que toca (se toca), senão as favoritas (se há), senão as mais ouvidas do país.
+        val inicio = when {
+            !focarInicio -> null
+            r != null -> "tocando" to null
+            favoritas.isNotEmpty() -> "fav" to null
+            recentes.isNotEmpty() -> "rec" to null
+            else -> "pais" to null
+        }
+        cruz.definir(l, focar ?: inicio)
+        cruz.tocando(cartao())
     }
 
+    private fun cartao(): CruzOuvir.Tocando? {
+        val s = OuvirServico.instancia ?: return null
+        val r = s.radio ?: return null
+        return CruzOuvir.Tocando(r.nome, CruzLogica.linhas(s.musica, detalhe(r)), r.logo, corDe(r.id), CapaOuvir.iniciais(r.nome),
+            cobrir = false, progresso = null, tempo = null, pausado = s.pausado,
+            aoVivo = if (s.pausado) null else getString(R.string.ouv_ao_vivo).uppercase())
+    }
+
+    private fun aviso(id: String, nome: String, sub: String, icone: IconeOuvir.Tipo) = CruzOuvir.Item(id, nome, sub, icone)
+
+    /** "Brasil · 128 kbps", sem as partes vazias. */
     private fun detalhe(r: Radios.Radio): String = listOfNotNull(
         r.pais.takeIf { it.length == 2 }?.let { Locale("", it).getDisplayCountry(Locale.getDefault()) },
-        r.tags.ifEmpty { null }, if (r.bitrate in 8..512) "${r.bitrate} kbps" else null).joinToString(" · ")
+        if (r.bitrate in 8..512) "${r.bitrate} kbps" else null).joinToString(" · ")
 
-    private fun linhaRadio(prefixo: String, r: Radios.Radio, numero: Int? = null) {
-        val fav = favoritas.any { it.id == r.id }
-        val titulo = (if (numero != null) "$numero  " else "") + r.nome
-        val direita = when {
-            tocando?.id == r.id -> "●"
-            fav && numero == null -> "★"
+    private fun itemRadio(prefixo: String, r: Radios.Radio, numero: Int? = null): CruzOuvir.Item {
+        val tocandoEsta = tocando?.id == r.id
+        val s = OuvirServico.instancia
+        val estado = when {
+            tocandoEsta && s?.pausado == true -> getString(R.string.ouv_pausado)
+            tocandoEsta -> "● " + getString(R.string.ouv_tocando_agora)
+            numero != null -> getString(R.string.ouv_tecla, numero)
+            favoritas.any { it.id == r.id } -> "★ " + getString(R.string.ra_favoritas)
             else -> null
         }
-        linha(prefixo + r.id, titulo, detalhe(r), direita, ok = { tocar(r) }, segurar = { favoritar(r) })
-    }
-
-    private fun linha(chave: String, titulo: String, explica: String, direita: String?, cor: Int? = null, ok: () -> Unit, segurar: (() -> Unit)?) {
-        val dir = direita?.let { Estilo.valor(this, it, seta = false) }
-        val v = Estilo.linhaOpcao(this, titulo, explica.ifEmpty { null }, dir).apply {
-            tag = chave
-            setOnClickListener { ok() }
-            if (segurar != null) setOnLongClickListener { segurar(); true }
-        }
-        if (cor != null) ((v.getChildAt(0) as LinearLayout).getChildAt(0) as TextView).setTextColor(cor)
-        coluna.addView(v, Estilo.lpLinha(this))
+        return CruzOuvir.Item(prefixo + r.id, r.nome,
+            CruzLogica.linhas(estado, if (tocandoEsta) s?.musica else null, r.tags.ifEmpty { null }, detalhe(r)),
+            capa = r.logo, cor = corDe(r.id), monograma = CapaOuvir.iniciais(r.nome),
+            abrir = { tocar(r) }, opcoes = { favoritar(r) })
     }
 
     private fun pedirNome() {
@@ -263,31 +325,9 @@ class RadioActivity : Activity() {
                 if (t.length >= 2) buscar(getString(R.string.ra_resultado, t)) { Radios.urlNome(it, t) }
             }
             .setNegativeButton(android.R.string.cancel, null).create()
+        CampoTv.enterConfirma(campo, d)
         d.setOnShowListener { campo.requestFocus() }
         d.show()
-    }
-
-    private fun escolherGenero() {
-        Estilo.lista(this, getString(R.string.ra_generos), Radios.GENEROS) { i ->
-            val g = Radios.GENEROS[i]
-            buscar(getString(R.string.ra_resultado, g)) { Radios.urlGenero(it, g) }
-        }
-    }
-
-    private fun escolherPais() {
-        val app = applicationContext
-        Fundo.rodar("radios") {
-            val lista = Radios.paises(Radios.pedir { Radios.urlPaises(it) }).take(80)
-            runOnUiThread {
-                if (isDestroyed) return@runOnUiThread
-                if (lista.isEmpty()) { AvisoTv.rapido(app, getString(R.string.ra_paises), getString(R.string.ra_sem_catalogo), 5); return@runOnUiThread }
-                val nomes = lista.map { (c, n, q) -> (Locale("", c).getDisplayCountry(Locale.getDefault()).ifEmpty { n }) + "  ·  $q" }
-                Estilo.lista(this, getString(R.string.ra_paises), nomes) { i ->
-                    val (c, n, _) = lista[i]
-                    buscar(Locale("", c).getDisplayCountry(Locale.getDefault()).ifEmpty { n }) { Radios.urlPais(it, c) }
-                }
-            }
-        }
     }
 
     private fun favoritar(r: Radios.Radio) {
@@ -306,11 +346,11 @@ class RadioActivity : Activity() {
     // ---------------------------------------------------------------- som (quem toca é o OuvirServico)
 
     private fun tocar(r: Radios.Radio) {
-        if (tocando?.id == r.id) { alternarPausa(); return }
+        if (tocando?.id == r.id) { OuvirServico.instancia?.alternar(); return }
         OuvirServico.tocarRadio(this, r)
         veuNome.text = r.nome; veuMusica.text = ""
+        // A recente nova entra na lista já (o serviço grava o arquivo; a tela não espera ele).
+        recentes = Radios.comRecente(recentes, r)
         mexeu()
     }
-
-    private fun alternarPausa() { OuvirServico.instancia?.alternar() }
 }

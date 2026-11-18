@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telas Rádio e Podcasts redesenhadas em cruz (18/11/2026): CruzOuvir, RadioActivity, PodcastsActivity. -->
+<resources>
+    <string name="ouv_tocando_agora">再生中</string>
+    <string name="ouv_pausado">一時停止中</string>
+    <string name="ouv_prat_tocando">再生中</string>
+    <string name="ouv_pausar">一時停止</string>
+    <string name="ouv_continuar">再開</string>
+    <string name="ouv_favoritar">お気に入り</string>
+    <string name="ouv_desfavoritar">お気に入り解除</string>
+    <string name="ouv_favoritar_det">お気に入りはリモコンの 1〜9 でも再生できます</string>
+    <string name="ouv_tecla">リモコンの %d</string>
+    <string name="ouv_ao_sair">画面を出るとき</string>
+    <string name="ouv_ao_sair_continua">ホーム画面でも再生を続けます\nリモコンの ⏯ でどの画面からでも一時停止</string>
+    <string name="ouv_ao_sair_para">この画面を出ると止まります</string>
+    <string name="ouv_recentes">最近</string>
+    <string name="ouv_sem_favoritas">お気に入りはまだありません</string>
+    <string name="ouv_sem_favoritas_det">局で OK を長押しするとここに保存されます</string>
+    <string name="ouv_sem_recentes">まだ何もありません</string>
+    <string name="ouv_sem_recentes_det">聞いた局がここに表示されます</string>
+    <string name="ouv_paises">国</string>
+    <string name="ouv_n_radios">%d 局</string>
+    <string name="ouv_ao_vivo">ライブ</string>
+    <string name="ouv_dica_pular">スキップ</string>
+    <string name="ouv_voltar">15 秒戻る</string>
+    <string name="ouv_voltar_det">リモコンの ⏪ でも</string>
+    <string name="ouv_avancar">30 秒進む</string>
+    <string name="ouv_avancar_det">リモコンの ⏩ でも</string>
+    <string name="ouv_velocidade_det">%s · 声の高さは変わりません</string>
+    <string name="ouv_parar_pod_det">止めた位置は保存されます</string>
+    <string name="ouv_seguindo">フォロー中</string>
+    <string name="ouv_sem_podcasts">ポッドキャストはまだありません</string>
+    <string name="ouv_sem_podcasts_det">「追加」の棚から追加できます（アドレスを貼り付けるかスマホから）</string>
+    <string name="ouv_n_episodios">%d エピソード</string>
+    <string name="ouv_colar">アドレスを貼り付け</string>
+    <string name="ouv_sobre">概要</string>
+    <string name="ouv_remover_det">エピソードと進行状況がこの TV から消えます</string>
+    <string name="ouv_ver_podcast">ポッドキャストへ</string>
+</resources>

@@ -17,6 +17,11 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Radio and Podcasts redesigned like the home screen: shelves to the sides, items in a column, the chosen one large with useful details on several lines and the orange dot</item>
+        <item>“Now playing” always stays at the top, with the cover or logo, the time and how much is left</item>
+        <item>Radio: favorites (keys 1 to 9 play each one), recent, stations near you, from your country, by genre and from other countries with flags</item>
+        <item>Podcasts: Continue listening with a bar of how much you heard, new episodes, your podcasts with covers and, inside each one, episodes and “About”</item>
+        <item>The remote\'s ⏪ ⏩ and ⏯ work anywhere on the podcasts screen; hold OK for more options</item>
         <item>A long piece of information, like the title of the last video, now ends in “…” and no longer pushes the others out; “Opened 0 minutes ago” became “Opened now”</item>
         <item>Continue: the movie or series name shows without the list tag (“LEG”, “DUB”, “4K”)</item>
         <item>Home: with Home Assistant offline, the screen says what happened and that it retries by itself, and Google Home stays at hand</item>
@@ -33,24 +38,18 @@
         <item>Stability fixes from a long debugging round</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>ficha_cena</item>
-        <item>tecla_voltar</item>
-        <item>tecla_home</item>
-        <item>icones_vivos</item>
-        <item>volta_app</item>
+        <item>ouvir_radio</item>
+        <item>ouvir_podcasts</item>
+        <item>ouvir_teclas</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Scene behind the details</item>
-        <item>Hold BACK</item>
-        <item>Hold HOME</item>
-        <item>Living icons</item>
-        <item>Back to the app</item>
+        <item>New radio</item>
+        <item>New podcasts</item>
+        <item>Media keys</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Opening a movie’s details, does its scene show on the right without getting in the way of reading?</item>
-        <item>Holding BACK inside an app (YouTube, for example) and on the home screen, does the quick panel open, and does a short BACK still go back?</item>
-        <item>Holding HOME, inside an app and on the home screen, does Home open with your lights and scenes?</item>
-        <item>Do the icons have different colors, and does the selected one play a short animation of its own every few seconds?</item>
-        <item>Opening YouTube from its column and pressing HOME, does the focus go back to YouTube (and not to TV)?</item>
+        <item>Opening Radio, do the shelves move sideways with ◀ ▶, does the playing station show at the top with logo and song, and does key 1 play the 1st favorite?</item>
+        <item>Opening Podcasts, does the half-heard episode show in Continue with the bar, and does OK resume where it stopped?</item>
+        <item>Listening to a podcast, does ⏪ go back 15 s and ⏩ forward 30 s, with the time at the top following?</item>
     </string-array>
 </resources>
