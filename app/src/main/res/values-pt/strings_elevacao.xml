@@ -122,4 +122,5 @@
     <string name="elv_ss_dia_util">for dia útil</string>
     <string name="elv_ss_perfil">o perfil for %1$s</string>
     <string name="elv_ss_det">◀ ▶ trocam a condição</string>
+    <string name="extras_ABERTURA_PRONTA">Pular abertura (IntroDB): nos episódios, a TV pergunta ao serviço comunitário IntroDB onde fica a abertura (manda qual episódio, nunca a sua conta); desligado, só as aberturas que você marcou</string>
 </resources>

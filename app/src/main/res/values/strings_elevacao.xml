@@ -123,4 +123,5 @@
     <string name="elv_ss_dia_util">it is a weekday</string>
     <string name="elv_ss_perfil">the profile is %1$s</string>
     <string name="elv_ss_det">◀ ▶ change the condition</string>
+    <string name="extras_ABERTURA_PRONTA">Skip intro (IntroDB): on episodes, the TV asks the community IntroDB service where the opening is (it sends which episode, never your account); off, only intros you marked</string>
 </resources>

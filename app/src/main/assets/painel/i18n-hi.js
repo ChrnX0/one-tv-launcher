@@ -1,5 +1,7 @@
 // Painel em hi (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Não perturbe (avisos esperam durante filme, madrugada ou visita)":"परेशान न करें (फ़िल्म, देर रात या मेहमानों के समय सूचनाएँ इंतज़ार करती हैं)",
+"Pular abertura (IntroDB: pergunta onde fica a abertura do episódio)":"इंट्रो छोड़ें (IntroDB: एपिसोड का इंट्रो कहाँ है, यह पूछता है)",
 "Levar para uma TV nova":"नए टीवी पर ले जाएँ",
 "Na TV nova, abra Configurações › Sistema › Trazer de outra TV (na primeira vez, o botão está na tela do QR). Leia o QR que aparece nela ou digite o endereço e o código. Vão as configurações, o PIN, os canais e a lista de apps, cifrados só para aquela TV; lá os apps voltam em fila, pela Play Store.":"नए टीवी पर सेटिंग्स › सिस्टम › दूसरे टीवी से लाएँ खोलें (पहली बार बटन QR वाली स्क्रीन पर है)। वहाँ दिखा QR स्कैन करें या पता और कोड लिखें। सेटिंग्स, PIN, चैनल और ऐप सूची सिर्फ़ उसी टीवी के लिए एन्क्रिप्ट होकर जाती हैं; वहाँ ऐप Play Store से एक-एक करके लौटते हैं।",
 "Endereço e código da TV nova":"नए टीवी का पता और कोड",

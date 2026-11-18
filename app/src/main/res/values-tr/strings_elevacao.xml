@@ -115,4 +115,5 @@
     <string name="elv_ss_dia_util">iş günüyse</string>
     <string name="elv_ss_perfil">profil %1$s ise</string>
     <string name="elv_ss_det">◀ ▶ koşulu değiştirir</string>
+    <string name="extras_ABERTURA_PRONTA">Jeneriği atla (IntroDB): bölümlerde TV, topluluk hizmeti IntroDB\'ye jeneriğin yerini sorar (yalnızca bölümü gönderir, hesabınızı asla); kapalıyken yalnızca sizin işaretledikleriniz</string>
 </resources>
