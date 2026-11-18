@@ -231,7 +231,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
 
         dicas = LinearLayout(ctx).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END or Gravity.CENTER_VERTICAL }
         addView(dicas, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, Gravity.BOTTOM or Gravity.END).apply {
-            rightMargin = dpi(28); bottomMargin = dpi(20)
+            marginEnd = dpi(28); bottomMargin = dpi(20)
         })
 
         setOnFocusChangeListener { _, _ -> posicionar(animar = false); anunciar() }
@@ -247,7 +247,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
                 text = tecla; setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f); typeface = fonteForte; setTextColor(Estilo.TEXTO)
                 includeFontPadding = false
                 background = GradientDrawable().apply { cornerRadius = dp(7f); setColor(0x40FFFFFF) }
-                setPadding(dpi(8), dpi(3), dpi(8), dpi(3))
+                setPaddingRelative(dpi(8), dpi(3), dpi(8), dpi(3))
             })
             dicas.addView(TextView(context).apply {
                 text = acao; setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f); typeface = fonte; setTextColor(HomeCruz.COR_SUB)
@@ -541,7 +541,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         val textos = LinearLayout(context).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.TOP
-            setPadding(0, dpi(HomeCruz.TEXTO_TOPO), 0, 0)
+            setPaddingRelative(0, dpi(HomeCruz.TEXTO_TOPO), 0, 0)
             addView(linhaNome, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
             addView(sub, LinearLayout.LayoutParams(dpi(TEXTO_MAX), LayoutParams.WRAP_CONTENT).apply { topMargin = dpi(8); marginStart = dpi(PONTO + 10) })
         }

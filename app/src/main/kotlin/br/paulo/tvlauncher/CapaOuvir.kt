@@ -69,7 +69,7 @@ class CapaOuvir(ctx: Context, private val raioDp: Float = 14f) : ImageView(ctx) 
     }
 
     /** O logo inteiro precisa de uma folga do quadro; a capa que cobre, não. */
-    private fun ajustarMargem() { val m = if (cobrir) 0 else dp(10f).toInt(); setPadding(m, m, m, m) }
+    private fun ajustarMargem() { val m = if (cobrir) 0 else dp(10f).toInt(); setPaddingRelative(m, m, m, m) }
 
     override fun verifyDrawable(who: Drawable): Boolean = who === icone || super.verifyDrawable(who)
 
