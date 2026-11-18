@@ -369,16 +369,14 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
                 c.drawLine(16.25f, 4.64f, 16.6f, 8.6f, traco); c.drawLine(16.25f, 4.64f, 20.1f, 3.9f, traco)
                 tri(10.3f, 8.8f, 6.4f)
             }
-            Tipo.ASSISTIR, Tipo.TV -> {   // a TV-sofá da logo Sofaly (18/11/2026, Paulo): antenas, tela, braços e pés
-                c.drawLine(12f, 7.6f, 8.2f, 3.6f, traco); c.drawLine(12f, 7.6f, 16.6f, 4.8f, traco)
-                ret(5.2f, 7.6f, 18.8f, 17f, 2.4f)
-                p.reset()   // braços de sofá dos lados da tela, unidos pelo assento embaixo
-                p.moveTo(5.2f, 11.6f); p.lineTo(3.4f, 11.6f); p.quadTo(1.8f, 11.6f, 1.8f, 13.2f); p.lineTo(1.8f, 18.4f)
-                p.quadTo(1.8f, 19.6f, 3f, 19.6f); p.lineTo(21f, 19.6f); p.quadTo(22.2f, 19.6f, 22.2f, 18.4f); p.lineTo(22.2f, 13.2f)
-                p.quadTo(22.2f, 11.6f, 20.6f, 11.6f); p.lineTo(18.8f, 11.6f)
+            Tipo.ASSISTIR, Tipo.TV -> {   // a TV-sofá da logo Sofaly em contorno (18/11/2026, Paulo: miolo vazio, sem barra embaixo)
+                if (fase < 0f) { c.drawLine(12f, 7.6f, 8.2f, 3.6f, traco); c.drawLine(12f, 7.6f, 16.6f, 4.8f, traco) }   // tocando: as da linhaViva
+                // Só contornos, miolo vazio: a tela e os dois braços do sofá saindo dos lados (sem base nem pés).
+                ret(5.6f, 7.6f, 18.4f, 17.8f, 2.2f)
+                p.reset()
+                p.moveTo(5.6f, 11.4f); p.lineTo(4f, 11.4f); p.quadTo(2.4f, 11.4f, 2.4f, 13f); p.lineTo(2.4f, 16.4f); p.quadTo(2.4f, 18f, 4f, 18f); p.lineTo(5.6f, 18f)
+                p.moveTo(18.4f, 11.4f); p.lineTo(20f, 11.4f); p.quadTo(21.6f, 11.4f, 21.6f, 13f); p.lineTo(21.6f, 16.4f); p.quadTo(21.6f, 18f, 20f, 18f); p.lineTo(18.4f, 18f)
                 c.drawPath(p, traco)
-                c.drawLine(3.4f, 19.6f, 2.9f, 21.6f, traco); c.drawLine(20.6f, 19.6f, 21.1f, 21.6f, traco)   // pezinhos
-                p.reset(); p.moveTo(7.6f, 12.6f); p.quadTo(7.6f, 10.4f, 9.8f, 10.1f); c.drawPath(p, traco)   // reflexo do vidro
             }
             Tipo.SERIES -> {   // quadros empilhados (episódios)
                 ret(2.5f, 8f, 17.5f, 19.5f, 1.6f)
@@ -483,10 +481,10 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
                 val passo = sino(((f - 0.6f) / 0.4f).coerceIn(0f, 1f))
                 if (passo > 0f) { alfa(passo); c.drawLine(17.6f, 10f, 18.6f, 12f, traco); c.drawLine(18.6f, 12f, 17.6f, 14f, traco) }
             }
-            Tipo.ASSISTIR, Tipo.TV -> {   // a TV liga: uma linha de varredura desce pela tela
-                val y = 9.4f + 6f * f   // por dentro da tela da TV-sofá (7,6 a 17)
-                alfa(sino * 0.9f); c.drawLine(7f, y, 17f, y, traco)
-                alfa(sino * 0.35f); c.drawLine(7f, y - 1.4f, 17f, y - 1.4f, traco)
+            Tipo.ASSISTIR, Tipo.TV -> {   // a TV-sofá mexe as antenas, como quem procura o sinal
+                // As antenas balançam (o miolo continua vazio: nada desenhado dentro do contorno).
+                alfa(1f); c.save(); c.rotate(-12f * sino, 12f, 7.6f)
+                c.drawLine(12f, 7.6f, 8.2f, 3.6f, traco); c.drawLine(12f, 7.6f, 16.6f, 4.8f, traco); c.restore()
             }
             Tipo.SERIES -> {   // o próximo episódio: o quadro de trás sobe e volta
                 alfa(sino); val d = 1.4f * sino
