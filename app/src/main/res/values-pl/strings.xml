@@ -850,4 +850,5 @@ AS\\Filmy).</string>
         <item>W</item>
         <item>NW</item>
     </string-array>
+    <string name="vod_trocar_versao">%1$s · od tego miejsca</string>
 </resources>

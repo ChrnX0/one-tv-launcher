@@ -200,6 +200,24 @@ object BotoesControle {
     private fun tratarVoltar(ctx: Context, e: KeyEvent): Boolean {
         if (CuidarDeLongeTv.usaTecla(KeyEvent.KEYCODE_BACK)) return false
         val desce = e.action == KeyEvent.ACTION_DOWN
+        // Trailer no YouTube (18/11/2026, VigiaTrailer): o toque curto é nosso e devolve a ficha (o YouTube levava para a
+        // tela inicial dele e ficava aberto). Segurar continua abrindo o painel rápido.
+        if (VigiaTrailer.emCurso() || (!desce && trailerSegurando)) {
+            if (desce && e.repeatCount == 0) trailerSegurando = true
+            val longo = tratarVoltarNormal(ctx, e, desce)
+            if (!desce) {
+                trailerSegurando = false
+                if (!longo) VigiaTrailer.voltar(ctx)
+            }
+            return true
+        }
+        return tratarVoltarNormal(ctx, e, desce)
+    }
+
+    /** VOLTAR do trailer: o DOWN já foi engolido; o UP decide se foi toque curto. */
+    private var trailerSegurando = false
+
+    private fun tratarVoltarNormal(ctx: Context, e: KeyEvent, desce: Boolean): Boolean {
         if (desce && e.repeatCount == 0) {
             voltarRelogio?.let { principal.removeCallbacks(it) }
             voltarRelogio = Runnable { voltarRelogio = null; if (voltar.venceu(SystemClock.uptimeMillis())) PainelRapidoActivity.abrir(ctx) }

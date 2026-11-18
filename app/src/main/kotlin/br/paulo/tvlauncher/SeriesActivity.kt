@@ -926,8 +926,8 @@ class SeriesActivity : Activity() {
             }.also { if (primeiro == null) primeiro = it })
             if (nTemp > 1) FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.series_trocar_temporada), nTemp.toString(), "temporadas") { escolherTemporada(s, f) })
         }
-        // Trailer: o do servidor; sem ele, o do TMDB.
-        (f?.trailer?.takeIf { it.isNotEmpty() } ?: ext?.detalhe?.linkTrailer?.takeIf { it.isNotEmpty() })?.let { link ->
+        // Trailer: o do TMDB (pelo id da série) primeiro; o do servidor só sem ele (18/11/2026).
+        TrailerLink.escolher(ext?.detalhe?.linkTrailer, f?.trailer)?.let { link ->
             FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.trailer), marca = "trailer") { VodActivity.abrirTrailer(this, link) })
         }
         // A mesma série na outra versão do catálogo (dublada x legendada): abre a ficha dela.

@@ -856,4 +856,5 @@ AS\\Movies).</string>
         <item>غ</item>
         <item>شغ</item>
     </string-array>
+    <string name="vod_trocar_versao">%1$s · يكمل من هنا</string>
 </resources>

@@ -6,6 +6,8 @@
     <uses-feature android:name="android.software.leanback" android:required="false" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
+    <!-- Trailer (TrailerTv.kt): fechar o YouTube que ficou em segundo plano quando não há o shell próprio. Permissão comum. -->
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- A biblioteca do Shizuku (módulo provider) traz o pedido da permissão dos CLIENTES e a marca V3_SUPPORT. O launcher é
          o gerente, não cliente: sem isto ele apareceria na lista de apps do app Shizuku oficial, se instalado. -->
@@ -154,6 +156,10 @@
         <!-- Eventos como gatilho (ideia 7): o player (processo :player) avisa "tocando/pausado" ao processo principal. -->
         <receiver
             android:name=".GatilhoReceiver"
+            android:exported="false" />
+        <!-- Trailer no YouTube (18/11/2026, TrailerTv.kt): o player (processo :player) avisa que abriu; VOLTAR devolve a ficha. -->
+        <receiver
+            android:name=".TrailerReceiver"
             android:exported="false" />
         <!-- Automações (ideia 1): o editor único de horários, botões, eventos e links. Aberta pelas Configurações. -->
         <activity

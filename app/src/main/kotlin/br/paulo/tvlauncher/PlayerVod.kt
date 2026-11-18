@@ -214,14 +214,7 @@ object Vod {
      * youtube_trailer do Xtream vira link do YouTube (11/11/2026, visto no 1 Play). O servidor manda só o código
      * ("dQw4w9WgXcQ") ou o link inteiro. Qualquer outra coisa = "" (não abrimos endereço desconhecido).
      */
-    fun linkTrailer(valor: String): String {
-        val v = valor.trim()
-        val codigo = when {
-            v.matches(Regex("[A-Za-z0-9_-]{11}")) -> v
-            else -> Regex("""^https?://(?:www\.|m\.)?(?:youtube\.com/watch\?(?:.*&)?v=|youtu\.be/)([A-Za-z0-9_-]{11})""").find(v)?.groupValues?.get(1)
-        } ?: return ""
-        return "https://www.youtube.com/watch?v=$codigo"
-    }
+    fun linkTrailer(valor: String): String = TrailerLink.normalizar(valor)   // 18/11/2026: embed/, shorts/ etc. também
 
     // ---------------------------------------------------------------- continuar de onde parou
 

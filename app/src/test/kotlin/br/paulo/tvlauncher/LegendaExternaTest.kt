@@ -9,7 +9,7 @@ import org.junit.Test
 
 class LegendaExternaTest {
     @Test fun buscaDeFilmeEmOrdemAlfabetica() {
-        assertEquals("https://api.opensubtitles.com/api/v1/subtitles?languages=pt-br%2Cpt-pt&query=duna%20parte%202&type=movie&year=2024",
+        assertEquals("https://api.opensubtitles.com/api/v1/subtitles?languages=pt-br%2Cpt-pt&query=duna+parte+2&type=movie&year=2024",
             LegendaExterna.urlBusca(Busca("Duna Parte 2", 2024)))
     }
 
@@ -22,7 +22,7 @@ class LegendaExternaTest {
         assertEquals("pt-br,pt-pt", LegendaExterna.idiomasBusca("pt"))
         assertEquals("en", LegendaExterna.idiomasBusca("en"))
         assertEquals("es", LegendaExterna.idiomasBusca("es"))
-        assertEquals("https://api.opensubtitles.com/api/v1/subtitles?languages=en&query=duna%20parte%202&type=movie&year=2024",
+        assertEquals("https://api.opensubtitles.com/api/v1/subtitles?languages=en&query=duna+parte+2&type=movie&year=2024",
             LegendaExterna.urlBusca(Busca("Duna Parte 2", 2024), "en"))
         // Sem idioma: o mesmo endereço de antes (português).
         assertEquals(LegendaExterna.urlBusca(Busca("Frieren", 2023, 1, 3)), LegendaExterna.urlBusca(Busca("Frieren", 2023, 1, 3), "pt"))
@@ -83,5 +83,39 @@ class LegendaExternaTest {
     @Test fun textoUtf8OuLatin1() {
         assertEquals("Olá", LegendaExterna.decodificar("﻿Olá".toByteArray(Charsets.UTF_8)))
         assertEquals("Olá", LegendaExterna.decodificar("Olá".toByteArray(Charsets.ISO_8859_1)))
+    }
+
+    // 18/11/2026: "%20" levava a API a responder 301 (conferido com curl) e a busca falhava sempre.
+    @Test fun espacoViraMaisNaoPorcento20() {
+        val u = LegendaExterna.urlBusca(Busca("Sem Deixar Vestigios", 2024))
+        assertFalse(u.contains("%20"))
+        assertTrue(u.contains("query=sem+deixar+vestigios"))
+    }
+
+    @Test fun buscaPeloTmdbDoFilmeEDaSerie() {
+        assertEquals("https://api.opensubtitles.com/api/v1/subtitles?languages=pt-br%2Cpt-pt&tmdb_id=1129598&type=movie",
+            LegendaExterna.urlBuscaTmdb(Busca("Sem Deixar Vestigios", 2024, tmdb = 1129598)))
+        assertEquals("https://api.opensubtitles.com/api/v1/subtitles?episode_number=3&languages=pt-br%2Cpt-pt&parent_tmdb_id=209867&season_number=1&type=episode",
+            LegendaExterna.urlBuscaTmdb(Busca("Frieren", null, 1, 3, tmdb = 209867)))
+        assertNull(LegendaExterna.urlBuscaTmdb(Busca("Frieren")))
+    }
+
+    @Test fun buscasDaMaisCerteiraParaAMaisLarga() {
+        val l = LegendaExterna.buscas(Busca("Duna Parte 2", 2024, tmdb = 693134))
+        assertEquals(3, l.size)
+        assertTrue(l[0].contains("tmdb_id=693134"))
+        assertTrue(l[1].contains("year=2024"))
+        assertFalse(l[2].contains("year="))
+        // Episódio: sem a busca "sem ano" (o ano não entra na do episódio).
+        assertEquals(2, LegendaExterna.buscas(Busca("Frieren", 2023, 1, 3, tmdb = 1)).size)
+        assertEquals(1, LegendaExterna.buscas(Busca("Frieren", null, 1, 3)).size)
+    }
+
+    @Test fun soSegueRedirecionamentoDoProprioOpenSubtitles() {
+        assertEquals("https://api.opensubtitles.com/api/v1/x", LegendaExterna.redirecionamentoSeguro("/api/v1/x"))
+        assertEquals("https://vip-api.opensubtitles.com/api/v1/x", LegendaExterna.redirecionamentoSeguro("https://vip-api.opensubtitles.com/api/v1/x"))
+        assertNull(LegendaExterna.redirecionamentoSeguro("http://api.opensubtitles.com/api/v1/x"))
+        assertNull(LegendaExterna.redirecionamentoSeguro("https://opensubtitles.com.mal.example/x"))
+        assertNull(LegendaExterna.redirecionamentoSeguro(null))
     }
 }
