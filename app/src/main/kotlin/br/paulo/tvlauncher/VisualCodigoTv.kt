@@ -25,7 +25,7 @@ object VisualCodigoTv {
         val v = VisualCodigo.decodificar(entrada) ?: return null
         val feito = ArrayList<String>()
         v.tema?.let { t ->
-            val tema = Tema.valueOf(t).let { if (it == Tema.MEU && FundoMeuDados.arquivo(ctx) == null) Tema.ESCURO else it }
+            val tema = Tema.valueOf(t).let { if (it == Tema.MEU && FundoMeuDados.arquivo(ctx) == null || it == Tema.PLUGIN && WallpaperPlugins.escolhidoId(ctx) == null) Tema.ESCURO else it }
             Tema.definir(ctx, tema); feito += "tema=${tema.name}"
         }
         v.texto?.let { TamanhoTexto.definir(ctx, it); feito += "texto=$it" }

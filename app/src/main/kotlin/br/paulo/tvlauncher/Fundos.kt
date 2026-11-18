@@ -388,6 +388,7 @@ fun criarFundo(ctx: Context, t: Tema, decoracao: Boolean = true, emSegundoPlano:
     Tema.ESCURO -> FundoEscuro(ctx, comArco = decoracao)
     Tema.CEU -> FundoCeu(ctx, emSegundoPlano)
     Tema.MEU -> FundoMeu(ctx, emSegundoPlano)
+    Tema.PLUGIN -> WallpaperPluginView(ctx, emSegundoPlano)
 }.also {
     // Camada de hardware: a GPU guarda o fundo pronto numa textura e so o "cola" a cada quadro. Sem isto, os degrades
     // de tela cheia eram refeitos em TODO quadro (medido na TV: 69 ms por quadro no Ceu e no Astrolabio, contra 24 ms sem fundo).

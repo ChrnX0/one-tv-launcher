@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plugins visuais (18/11/2026): fundo de plugin, trocar ícone, pacote congelado, vitrine -->
+<resources>
+    <string name="wp_tema">Plugin de fond</string>
+    <string name="wp_cfg_det">Fonds, packs d\'icônes et cartes d\'autres apps. Chacun a besoin de votre accord.</string>
+    <string name="wp_det">Apps d\'autres développeurs qui ajoutent des fonds, des icônes ou des cartes à l\'accueil. N\'activez que celles en qui vous avez confiance.</string>
+    <string name="wp_secao_fundos">Fonds</string>
+    <string name="wp_secao_icones">Packs d\'icônes</string>
+    <string name="wp_secao_cartoes">Cartes</string>
+    <string name="wp_secao_descobrir">Obtenir des plugins</string>
+    <string name="wp_tipo_fundo">Fond</string>
+    <string name="wp_tipo_icones">Icônes</string>
+    <string name="wp_em_uso">Utilisé</string>
+    <string name="wp_usar">Utiliser comme fond</string>
+    <string name="wp_configurar">Réglages du plugin</string>
+    <string name="wp_parar">Ne plus utiliser</string>
+    <string name="wp_sem_cert">Impossible de lire la signature de ce plugin.</string>
+    <string name="wp_nenhum_fundo">Pas encore de plugin de fond. Voyez ci-dessous où en trouver.</string>
+    <string name="wp_nenhum_icone">Pas encore de pack d\'icônes. Voyez ci-dessous où en trouver.</string>
+    <string name="wp_icones_det">Reste gelé : le launcher garde une copie des icônes utilisées.</string>
+    <string name="wp_usar_icones">Utiliser</string>
+    <string name="wp_instalado">Installé</string>
+    <string name="wp_instalar">Installer</string>
+    <string name="wp_instalando">Installation…</string>
+    <string name="wp_instalou">%1$s installé.</string>
+    <string name="wp_nao_instalou">Installation impossible : %1$s</string>
+    <string name="wp_abrir_play">Ouvrir dans le Play Store</string>
+    <string name="wp_qr">Visez le code avec l\'appareil photo du téléphone pour ouvrir la page.</string>
+    <string name="wp_trocar_icone">Changer l\'icône</string>
+    <string name="wp_icone_titulo">Icône de %1$s</string>
+    <string name="wp_icone_sub">%1$s · %2$d icônes</string>
+    <string name="wp_icone_original">Icône d\'origine</string>
+    <string name="wp_icone_sugerido">Suggérée</string>
+    <string name="wp_icone_voltar">Suivre le pack d\'icônes</string>
+    <string name="wp_icone_sem_pacote">Aucun pack d\'icônes installé. Trouvez-en un dans Réglages › Apparence › Plugins.</string>
+    <string name="wp_d_aerial">Vidéos aériennes lentes de villes et de nature</string>
+    <string name="wp_d_overflight">Vidéos aériennes d\'Apple TV, ou toute liste de vidéos</string>
+    <string name="wp_d_daily">Une nouvelle photo du jour, chaque jour</string>
+    <string name="wp_d_weather">La météo du jour en fond</string>
+    <string name="wp_d_movieart">Images de films et séries de TMDB</string>
+    <string name="wp_d_sofadrop">Images des listes tendance, Trakt ou Simkl</string>
+    <string name="wp_d_immich">Photos de votre propre serveur Immich</string>
+    <string name="wp_d_tvicons">Plus de 800 icônes faites pour la TV</string>
+    <string name="wp_d_minimalist">Symboles épurés sur une seule couleur</string>
+    <string name="wp_d_arcticons">15 000 icônes en trait fin (pour téléphone, marchent ici)</string>
+</resources>

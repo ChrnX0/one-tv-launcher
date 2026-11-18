@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plugins visuais (18/11/2026): fundo de plugin, trocar ícone, pacote congelado, vitrine -->
+<resources>
+    <string name="wp_tema">خلفية من إضافة</string>
+    <string name="wp_cfg_det">خلفيات وحزم أيقونات وبطاقات من تطبيقات أخرى. كل واحدة تحتاج موافقتك.</string>
+    <string name="wp_det">تطبيقات من مطورين آخرين تضيف خلفيات أو أيقونات أو بطاقات إلى الشاشة الرئيسية. فعّل فقط ما تثق به.</string>
+    <string name="wp_secao_fundos">الخلفيات</string>
+    <string name="wp_secao_icones">حزم الأيقونات</string>
+    <string name="wp_secao_cartoes">البطاقات</string>
+    <string name="wp_secao_descobrir">احصل على إضافات</string>
+    <string name="wp_tipo_fundo">خلفية</string>
+    <string name="wp_tipo_icones">أيقونات</string>
+    <string name="wp_em_uso">قيد الاستخدام</string>
+    <string name="wp_usar">استخدام كخلفية</string>
+    <string name="wp_configurar">إعدادات الإضافة</string>
+    <string name="wp_parar">إيقاف الاستخدام</string>
+    <string name="wp_sem_cert">تعذرت قراءة توقيع هذه الإضافة.</string>
+    <string name="wp_nenhum_fundo">لا توجد إضافة خلفية بعد. انظر أدناه من أين تحصل عليها.</string>
+    <string name="wp_nenhum_icone">لا توجد حزمة أيقونات بعد. انظر أدناه من أين تحصل عليها.</string>
+    <string name="wp_icones_det">تبقى مجمّدة: يحتفظ المشغّل بنسخة من الأيقونات التي يستخدمها.</string>
+    <string name="wp_usar_icones">استخدام</string>
+    <string name="wp_instalado">مثبّت</string>
+    <string name="wp_instalar">تثبيت</string>
+    <string name="wp_instalando">جارٍ التثبيت…</string>
+    <string name="wp_instalou">تم تثبيت %1$s.</string>
+    <string name="wp_nao_instalou">تعذر التثبيت: %1$s</string>
+    <string name="wp_abrir_play">فتح في متجر Play</string>
+    <string name="wp_qr">وجّه كاميرا الهاتف إلى الرمز لفتح الصفحة.</string>
+    <string name="wp_trocar_icone">تغيير الأيقونة</string>
+    <string name="wp_icone_titulo">أيقونة %1$s</string>
+    <string name="wp_icone_sub">%1$s · %2$d أيقونة</string>
+    <string name="wp_icone_original">الأيقونة الأصلية</string>
+    <string name="wp_icone_sugerido">مقترحة</string>
+    <string name="wp_icone_voltar">اتباع حزمة الأيقونات</string>
+    <string name="wp_icone_sem_pacote">لا توجد حزمة أيقونات مثبتة. احصل على واحدة من الإعدادات › المظهر › الإضافات.</string>
+    <string name="wp_d_aerial">لقطات جوية بطيئة لمدن وطبيعة</string>
+    <string name="wp_d_overflight">لقطات Apple TV الجوية أو أي قائمة فيديو</string>
+    <string name="wp_d_daily">صورة اليوم جديدة كل يوم</string>
+    <string name="wp_d_weather">طقس اليوم كخلفية</string>
+    <string name="wp_d_movieart">صور أفلام ومسلسلات من TMDB</string>
+    <string name="wp_d_sofadrop">صور من القوائم الرائجة أو Trakt أو Simkl</string>
+    <string name="wp_d_immich">صور من خادم Immich الخاص بك</string>
+    <string name="wp_d_tvicons">أكثر من 800 أيقونة مصممة للتلفزيون</string>
+    <string name="wp_d_minimalist">رموز بسيطة على لون واحد</string>
+    <string name="wp_d_arcticons">15 ألف أيقونة بخط رفيع (للهاتف، وتعمل هنا)</string>
+</resources>

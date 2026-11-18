@@ -96,6 +96,8 @@
         <package android:name="com.spocky.projengmenu" />
         <!-- Plugins de cartão (PluginCartao) e o plugin Extras: no build da Play não há QUERY_ALL_PACKAGES. -->
         <intent><action android:name="tv.sofaly.plugin.CARTAO" /></intent>
+        <!-- Plugins de fundo compatíveis (WallpaperPluginContract): serviços com esta ação. -->
+        <intent><action android:name="tv.projectivy.plugin.WALLPAPER_PROVIDER" /></intent>
         <package android:name="tv.sofaly.extras" />
         <!-- Busca que continua nos outros apps (ideia 14): BuscaOutrosApps.DESTINOS. -->
         <package android:name="com.google.android.youtube.tv" />
@@ -418,6 +420,11 @@
             android:name=".PluginsActivity"
             android:exported="false"
             android:label="@string/plg_titulo" />
+        <!-- Trocar ícone app por app (18/11/2026, IconPickerActivity.kt): a grade de ícones de um pacote -->
+        <activity
+            android:name=".IconPickerActivity"
+            android:exported="false"
+            android:label="@string/wp_trocar_icone" />
         <!-- Degrau 3: relatar um problema pelo celular (RelatarProblema.kt) -->
         <activity
             android:name=".RelatarProblemaActivity"

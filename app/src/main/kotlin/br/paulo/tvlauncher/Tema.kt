@@ -15,7 +15,9 @@ import android.graphics.Typeface
 enum class Tema(private val rotulo: Int) {
     ESCURO(R.string.tema_escuro), GALERIA(R.string.tema_galeria), CEU(R.string.tema_ceu),
     /** "Meu fundo" (degrau 1, 15/11/2026): foto, GIF ou vídeo da pessoa (FundoMeu.kt). Só entra na volta com arquivo escolhido. */
-    MEU(R.string.tema_meu);
+    MEU(R.string.tema_meu),
+    /** "Plugin de fundo" (18/11/2026): imagens/vídeos de um plugin de fundo (WallpaperPluginView). Só entra com um escolhido. */
+    PLUGIN(R.string.wp_tema);
 
     /** Nome do tema no idioma da TV. */
     val nome: String get() = txt(rotulo)
@@ -27,6 +29,8 @@ enum class Tema(private val rotulo: Int) {
             valueOf(ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).getString(CHAVE, ESCURO.name) ?: ESCURO.name)
                 // "Meu fundo" sem arquivo (apagado do pendrive, por exemplo) volta ao Escuro em vez de tela preta.
                 .let { if (it == MEU && FundoMeuDados.arquivo(ctx) == null) ESCURO else it }
+                // Plugin de fundo sem plugin escolhido (desinstalado, desligado): Escuro. O OK (certificado) a view confere.
+                .let { if (it == PLUGIN && WallpaperPlugins.escolhidoId(ctx) == null) ESCURO else it }
         } catch (e: IllegalArgumentException) { ESCURO }
 
         /** Grava o tema escolhido (painel web, aba Configurações). */
@@ -36,7 +40,7 @@ enum class Tema(private val rotulo: Int) {
 
         /** Passa para o próximo tema da lista (dá a volta). */
         fun proximo(ctx: Context): Tema {
-            val opcoes = values().filter { it != MEU || FundoMeuDados.arquivo(ctx) != null }
+            val opcoes = values().filter { (it != MEU || FundoMeuDados.arquivo(ctx) != null) && (it != PLUGIN || WallpaperPlugins.escolhidoId(ctx) != null) }
             val novo = opcoes[(opcoes.indexOf(atual(ctx)) + 1).coerceAtLeast(0) % opcoes.size]
             ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE).edit().putString(CHAVE, novo.name).apply()
             return novo

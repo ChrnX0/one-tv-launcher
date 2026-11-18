@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plugins visuais (18/11/2026): fundo de plugin, trocar ícone, pacote congelado, vitrine -->
+<resources>
+    <string name="wp_tema">Фон из плагина</string>
+    <string name="wp_cfg_det">Фоны, наборы значков и карточки из других приложений. Каждому нужно ваше разрешение.</string>
+    <string name="wp_det">Приложения других разработчиков, которые добавляют фоны, значки или карточки на главный экран. Включайте только те, которым доверяете.</string>
+    <string name="wp_secao_fundos">Фоны</string>
+    <string name="wp_secao_icones">Наборы значков</string>
+    <string name="wp_secao_cartoes">Карточки</string>
+    <string name="wp_secao_descobrir">Где взять плагины</string>
+    <string name="wp_tipo_fundo">Фон</string>
+    <string name="wp_tipo_icones">Значки</string>
+    <string name="wp_em_uso">Используется</string>
+    <string name="wp_usar">Сделать фоном</string>
+    <string name="wp_configurar">Настройки плагина</string>
+    <string name="wp_parar">Не использовать</string>
+    <string name="wp_sem_cert">Не удалось прочитать подпись этого плагина.</string>
+    <string name="wp_nenhum_fundo">Плагинов фона пока нет. Ниже — где их взять.</string>
+    <string name="wp_nenhum_icone">Наборов значков пока нет. Ниже — где их взять.</string>
+    <string name="wp_icones_det">Остаётся замороженным: лаунчер хранит копию нужных значков.</string>
+    <string name="wp_usar_icones">Использовать</string>
+    <string name="wp_instalado">Установлено</string>
+    <string name="wp_instalar">Установить</string>
+    <string name="wp_instalando">Установка…</string>
+    <string name="wp_instalou">%1$s установлено.</string>
+    <string name="wp_nao_instalou">Не удалось установить: %1$s</string>
+    <string name="wp_abrir_play">Открыть в Play Маркете</string>
+    <string name="wp_qr">Наведите камеру телефона на код, чтобы открыть страницу.</string>
+    <string name="wp_trocar_icone">Сменить значок</string>
+    <string name="wp_icone_titulo">Значок для %1$s</string>
+    <string name="wp_icone_sub">%1$s · значков: %2$d</string>
+    <string name="wp_icone_original">Исходный значок</string>
+    <string name="wp_icone_sugerido">Предложено</string>
+    <string name="wp_icone_voltar">Как в наборе значков</string>
+    <string name="wp_icone_sem_pacote">Наборы значков не установлены. Найдите их в Настройки › Оформление › Плагины.</string>
+    <string name="wp_d_aerial">Медленная съёмка городов и природы с воздуха</string>
+    <string name="wp_d_overflight">Видео с воздуха из Apple TV или любой ваш список</string>
+    <string name="wp_d_daily">Новое фото дня каждый день</string>
+    <string name="wp_d_weather">Сегодняшняя погода как фон</string>
+    <string name="wp_d_movieart">Кадры фильмов и сериалов из TMDB</string>
+    <string name="wp_d_sofadrop">Кадры из популярных списков, Trakt или Simkl</string>
+    <string name="wp_d_immich">Фото с вашего сервера Immich</string>
+    <string name="wp_d_tvicons">Более 800 значков для ТВ</string>
+    <string name="wp_d_minimalist">Чистые символы на одном цвете</string>
+    <string name="wp_d_arcticons">15 000 тонких линейных значков (для телефона, работают и тут)</string>
+</resources>

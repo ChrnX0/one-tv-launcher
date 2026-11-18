@@ -45,7 +45,7 @@ object LojaCurada {
         // Xbox na TV (15/11/2026, dono: "xbox tb"): XStreaming, código aberto, joga do Xbox de casa e do Xbox Cloud.
         // Só no GitHub (não está na Play Store). Pacote com.xstreaming (li no build.gradle do projeto).
         Item("xstreaming", "XStreaming", "Geocld/XStreaming", "Jogar do Xbox e do Xbox Cloud na TV"),
-    )
+    ) + PluginCatalog.itensLoja()   // plugins de fundo e pacotes de ícones (18/11/2026), também na vitrine da TV
 
     /** Ideia 69: até quantos repositórios a pessoa pode somar à lista fixa. */
     const val MAX_REPOS = 20
@@ -143,6 +143,9 @@ object LojaCurada {
         ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString("repos_extras", JSONArray(nova).toString()).apply()
         return null
     }
+
+    /** O pacote que a 1ª instalação de [id] guardou (vitrine de plugins: saber se já está instalado), ou null. */
+    fun pacoteGuardado(ctx: Context, id: String): String? = guardado(ctx, id)?.first
 
     private fun instalado(ctx: Context, pacote: String) = try { ctx.packageManager.getPackageInfo(pacote, 0); true } catch (e: Exception) { false }
 

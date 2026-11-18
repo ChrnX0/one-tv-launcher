@@ -294,7 +294,7 @@ class MainActivity : Activity() {
         VigiaDesfazer.ligar(this, getString(R.string.desf_rot_organizar), setOf(DesfazerRegras.Categoria.ORGANIZACAO))
         DesempenhoTv.criou()   // guarda de desempenho (12/11/2026): o 1º quadro depois disto dá o tempo de abertura
         tema = Tema.atual(this)
-        assinaturaFundo = FundoMeuDados.assinatura(this)
+        assinaturaFundo = FundoMeuDados.assinatura(this) + "|" + WallpaperPlugins.escolhidoId(this)
         idiomaMontado = idiomaAtual()
         assinaturaLayout = assinaturaDoLayout()
         setContentView(montarTela())
@@ -338,7 +338,7 @@ class MainActivity : Activity() {
     /** O que, mudando em Configurações, faz a HOME se refazer ao voltar (cartões, cruz, alto contraste 16.3, letra). */
     private fun assinaturaDoLayout() = "${LayoutHome.tamanho(this)}|${LayoutHome.transparente(this)}|${LayoutHome.grade(this)}|" +
         "${LayoutHome.cruz(this)}|${LayoutHome.iconesCruz(this)}|${LayoutHome.barraCruz(this)}|${LayoutHome.arteCruz(this)}|" +
-        "${AltoContraste.ligado(this)}|${TamanhoTexto.atual(this)}"
+        "${AltoContraste.ligado(this)}|${TamanhoTexto.atual(this)}|${PacoteIcones.versao(this)}"
 
     override fun onResume() {
         super.onResume()
@@ -363,7 +363,7 @@ class MainActivity : Activity() {
         if (Tema.atual(this) != tema) { recreate(); return }
         // Trocou o idioma (do sistema ou só do launcher): textos já montados (data, destaque) ficavam no antigo.
         if (idiomaAtual() != idiomaMontado) { recreate(); return }
-        if (tema == Tema.MEU && FundoMeuDados.assinatura(this) != assinaturaFundo) { recreate(); return }   // outro arquivo/brilho
+        if ((tema == Tema.MEU || tema == Tema.PLUGIN) && FundoMeuDados.assinatura(this) + "|" + WallpaperPlugins.escolhidoId(this) != assinaturaFundo) { recreate(); return }   // outro arquivo/brilho/plugin
         if (assinaturaDoLayout() != assinaturaLayout) { recreate(); return }   // cartões, cruz, alto contraste (16.3) ou letra mudaram
         // Modo simples (12/11/2026, ideia 10; desligado por padrão): a HOME vira a tela de cards grandes.
         if (ModoSimples.ligado(this)) {
@@ -892,7 +892,7 @@ class MainActivity : Activity() {
         fundo = vivo
         // Sem fundo preto aqui (nem na janela, ver onCreate): o fundo vivo já cobre a tela inteira e é opaco. Cada camada
         // de tela cheia a mais é a GPU pintando 1920x1080 de novo A CADA QUADRO (medido: 3 camadas, 22 ms por quadro).
-        capa = CapaFoco(this).apply { desligada = tema == Tema.GALERIA || tema == Tema.MEU || (emCruz && !LayoutHome.arteCruz(this@MainActivity)) }   // Galeria: a obra é o fundo, sem brilho por cima
+        capa = CapaFoco(this).apply { desligada = tema == Tema.GALERIA || tema == Tema.MEU || tema == Tema.PLUGIN || (emCruz && !LayoutHome.arteCruz(this@MainActivity)) }   // Galeria: a obra é o fundo, sem brilho por cima
         if (emCruz) montarCruz(raiz)
         conteudo = raiz
         return FrameLayout(this).apply {
@@ -1047,6 +1047,8 @@ class MainActivity : Activity() {
         /** A abertura com a logo do boot já foi decidida neste processo (recriar a HOME não mostra de novo). */
         @Volatile var splashBootDecidido = false
         val cacheApps = HashMap<String, Pair<String, Item>>()
+        /** Apps cujo ícone veio de um pacote de ícones (ou foi trocado à mão): no modo banner da cruz, o ícone vence o banner. */
+        val iconeDePacote: MutableSet<String> = java.util.concurrent.ConcurrentHashMap.newKeySet()
         // Topo C3 (12/11/2026): cápsulas de 52 dp em 24 (até 76). Ordem pedida pelo dono (12/11 tarde): nome do card em foco
         // (36 sp) e a descrição na mesma linha em 222 (até ~266), "ASSISTIR" em 290 e os cards (do tamanho dos apps) em 316
         // (até 379), "APPS" em 397 e os apps em 429 (até 492): embaixo sobra a mesma margem das laterais (48 dp).
@@ -1128,7 +1130,10 @@ class MainActivity : Activity() {
             if (cacheApps[pkg]?.first != null && cacheApps[pkg]?.first != chave) capas.remove(pkg)
             itens[pkg] = cacheApps[pkg]?.takeIf { it.first == chave }?.second ?: run {
                 // Só o ícone redondo fica guardado: o original (loadIcon) vira lixo logo depois de desenhado.
-                val original = PacoteIcones.icone(this, pkg, ri.activityInfo.name) ?: ri.loadIcon(pm)
+                // Ícone trocado à mão ou do pacote de ícones (CustomIcons; pacote de outro desenvolvedor = plano Pro).
+                val doPacote = CustomIcons.icone(this, pkg, ri.activityInfo.name)
+                if (doPacote != null) iconeDePacote += pkg else iconeDePacote -= pkg
+                val original = doPacote ?: ri.loadIcon(pm)
                 // Pacote embutido (Símbolo/Duotom, 18/11/2026): o traço do app no estilo da cruz; sem traço legível, o de sempre.
                 val icone = PacoteIcones.embutido(this)?.let { DesenhoHome.iconeTraco(resources, original, it == PacoteIcones.Embutido.DUOTOM) }
                     ?: DesenhoHome.iconeRedondo(resources, original)
@@ -2571,8 +2576,19 @@ class MainActivity : Activity() {
                     val forma = android.graphics.Path().apply { addRoundRect(android.graphics.RectF(0f, 0f, l.toFloat(), a.toFloat()), raio, raio, android.graphics.Path.Direction.CW) }
                     c.clipPath(forma)
                     val capa = capas[item.pacote]
+                    // Ícone de pacote (ou trocado à mão): vence o banner do app, numa placa da moldura da cruz.
+                    val doPacote = if (item.pacote in iconeDePacote) CustomIcons.icone(this, item.pacote, null) else null
                     val banner = capa?.first
-                    if (banner != null && !banner.isRecycled) {
+                    if (doPacote != null) {
+                        c.drawColor(0xFF1C2030.toInt())
+                        val brilho = android.graphics.Paint().apply {
+                            shader = android.graphics.LinearGradient(0f, 0f, 0f, a.toFloat(), 0x1FFFFFFF, 0x00FFFFFF, android.graphics.Shader.TileMode.CLAMP)
+                        }
+                        c.drawRect(0f, 0f, l.toFloat(), a.toFloat(), brilho)
+                        val t = (a * 0.68f).toInt()
+                        doPacote.setBounds((l - t) / 2, (a - t) / 2, (l + t) / 2, (a + t) / 2)
+                        doPacote.draw(c)
+                    } else if (banner != null && !banner.isRecycled) {
                         // corte central, como a capa grande (CapaFoco): preenche o 16:9 sem deformar
                         val esc = maxOf(l.toFloat() / banner.width, a.toFloat() / banner.height)
                         val w = banner.width * esc; val h = banner.height * esc
@@ -2927,6 +2943,8 @@ class MainActivity : Activity() {
      * Filmes: a cena do último título); um app, o banner dele; o resto, o degradê da cor do grupo.
      */
     private fun arteDoItem(item: HomeCruz.Item) {
+        // Plugin de fundo que pediu o foco (a arte do item vem dele): nome e pacote do item, nada mais.
+        (fundo as? WallpaperPluginView)?.focar(item.nome, pacoteDoItem(item.id))
         if (capa.desligada) return
         val id = item.id
         when {
@@ -2949,6 +2967,14 @@ class MainActivity : Activity() {
                 capa.mostrar(null, intArrayOf(Estilo.matiz(cor, 0.6f), Estilo.matiz(cor, 0.35f)))
             }
         }
+    }
+
+    /** O pacote por trás de um item da cruz ("app:", "c:jogo:", "c:midia:"), ou null (atalhos nossos). */
+    private fun pacoteDoItem(id: String): String? = when {
+        id.startsWith("app:") -> id.removePrefix("app:")
+        id.startsWith("c:jogo:") -> id.removePrefix("c:jogo:")
+        id.startsWith("c:midia:") -> id.removePrefix("c:midia:")
+        else -> null
     }
 
     /**
@@ -3301,6 +3327,27 @@ class MainActivity : Activity() {
         menuAberto = Estilo.lista(this, nomeApp, opcoes.map { it.rotulo }) { i -> opcoes[i].acao() }
     }
 
+    /**
+     * "Trocar ícone" (18/11/2026): escolhe o pacote (se houver mais de um) e abre a grade dele para este app; "Ícone
+     * original" volta ao do app. Pacote de ícones de outro desenvolvedor é do plano Pro.
+     */
+    private fun trocarIconeCruz(pacote: String) {
+        if (!Planos.permite(this, Planos.Recurso.PLUGINS)) { startActivity(Intent(this, ConhecerProActivity::class.java)); return }
+        val pacotes = PacoteIcones.deFora(this)
+        val temTroca = CustomIcons.escolha(this, pacote) != null
+        if (pacotes.isEmpty() && !temTroca) { AvisoTv.rapido(this, getString(R.string.wp_trocar_icone), getString(R.string.wp_icone_sem_pacote)); return }
+        val classe = packageManager.getLeanbackLaunchIntentForPackage(pacote)?.component?.className
+        fun abrir(p: String) = startActivity(Intent(this, IconPickerActivity::class.java)
+            .putExtra(IconPickerActivity.EXTRA_APP, pacote).putExtra(IconPickerActivity.EXTRA_CLASSE, classe)
+            .putExtra(IconPickerActivity.EXTRA_PACOTE, p).putExtra(IconPickerActivity.EXTRA_NOME, nomeDe(pacote)))
+        if (pacotes.size == 1 && !temTroca) { abrir(pacotes[0].first); return }
+        val nomes = pacotes.map { it.second } + getString(R.string.wp_icone_voltar)
+        menuAberto = Estilo.lista(this, getString(R.string.wp_icone_titulo, nomeDe(pacote)), nomes) { i ->
+            if (i < pacotes.size) abrir(pacotes[i].first)
+            else { CustomIcons.definir(this, pacote, null); recreate() }   // volta a seguir o pacote de todos (ou o do app)
+        }
+    }
+
     /** "Mover para…": Assistir, Ouvir, Jogar (com a Central ligada) ou Aplicativos; a atual vem marcada. */
     private fun moverAppCruz(pacote: String) {
         val eraJogo = JogosTv.ehJogo(this, pacote)
@@ -3343,6 +3390,7 @@ class MainActivity : Activity() {
         if (!CruzOnda3.entraAmbiente(CruzOnda3.ligado(this, CruzOnda3.CHAVE_AMBIENTE), c.hasFocus() || c.isFocused, todosAbertos,
                 menuAberto?.isShowing == true, tocandoAgora())) { reagendarAmbiente(); return }
         ambiente = true
+        (fundo as? WallpaperPluginView)?.ocioso(true)
         val d = CruzOnda3.AMBIENTE_FADE_MS
         c.animate().alpha(0f).setDuration(d).start()
         topoRaiz?.animate()?.alpha(0f)?.setDuration(d)?.start()
@@ -3364,6 +3412,7 @@ class MainActivity : Activity() {
     private fun sairAmbiente(animar: Boolean = true) {
         if (!ambiente) return
         ambiente = false
+        (fundo as? WallpaperPluginView)?.ocioso(false)
         val d = if (animar) CruzOnda3.VOLTA_MS else 0L
         cruz?.animate()?.alpha(1f)?.setDuration(d)?.start()
         topoRaiz?.animate()?.alpha(1f)?.setDuration(d)?.start()
@@ -3503,6 +3552,7 @@ class MainActivity : Activity() {
             atualizarAposMudanca(null)
         })
         opcoes += Opcao(getString(R.string.cruz_mover)) { moverAppCruz(pacote) }
+        opcoes += Opcao(getString(R.string.wp_trocar_icone)) { trocarIconeCruz(pacote) }
         opcoes += Opcao(getString(R.string.home_ocultar)) { Organizacao.ocultar(this, pacote); atualizarAposMudanca(null); avisarOculto() }
         if (PainelApps.podeDesinstalar(this, pacote)) opcoes += Opcao(getString(R.string.home_desinstalar)) { confirmarDesinstalar(pacote) }
         val titulo = nomeDe(pacote) + if (PainelApps.eSistema(this, pacote)) getString(R.string.home_app_sistema) else ""

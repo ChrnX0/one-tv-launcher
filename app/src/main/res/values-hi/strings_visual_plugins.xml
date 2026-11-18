@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plugins visuais (18/11/2026): fundo de plugin, trocar ícone, pacote congelado, vitrine -->
+<resources>
+    <string name="wp_tema">प्लगइन बैकग्राउंड</string>
+    <string name="wp_cfg_det">दूसरे ऐप्स के बैकग्राउंड, आइकन पैक और कार्ड। हर एक को आपकी मंज़ूरी चाहिए।</string>
+    <string name="wp_det">दूसरे डेवलपर्स के ऐप्स जो होम स्क्रीन पर बैकग्राउंड, आइकन या कार्ड जोड़ते हैं। सिर्फ़ भरोसेमंद वाले चालू करें।</string>
+    <string name="wp_secao_fundos">बैकग्राउंड</string>
+    <string name="wp_secao_icones">आइकन पैक</string>
+    <string name="wp_secao_cartoes">कार्ड</string>
+    <string name="wp_secao_descobrir">प्लगइन पाएँ</string>
+    <string name="wp_tipo_fundo">बैकग्राउंड</string>
+    <string name="wp_tipo_icones">आइकन</string>
+    <string name="wp_em_uso">इस्तेमाल में</string>
+    <string name="wp_usar">बैकग्राउंड बनाएँ</string>
+    <string name="wp_configurar">प्लगइन सेटिंग</string>
+    <string name="wp_parar">इस्तेमाल बंद करें</string>
+    <string name="wp_sem_cert">इस प्लगइन का हस्ताक्षर नहीं पढ़ा जा सका।</string>
+    <string name="wp_nenhum_fundo">अभी कोई बैकग्राउंड प्लगइन नहीं। नीचे देखें कहाँ मिलेगा।</string>
+    <string name="wp_nenhum_icone">अभी कोई आइकन पैक नहीं। नीचे देखें कहाँ मिलेगा।</string>
+    <string name="wp_icones_det">फ़्रीज़ रहता है: लॉन्चर इस्तेमाल होने वाले आइकन की कॉपी रखता है।</string>
+    <string name="wp_usar_icones">इस्तेमाल करें</string>
+    <string name="wp_instalado">इंस्टॉल है</string>
+    <string name="wp_instalar">इंस्टॉल करें</string>
+    <string name="wp_instalando">इंस्टॉल हो रहा है…</string>
+    <string name="wp_instalou">%1$s इंस्टॉल हुआ।</string>
+    <string name="wp_nao_instalou">इंस्टॉल नहीं हो सका: %1$s</string>
+    <string name="wp_abrir_play">Play Store में खोलें</string>
+    <string name="wp_qr">पेज खोलने के लिए फ़ोन का कैमरा कोड पर रखें।</string>
+    <string name="wp_trocar_icone">आइकन बदलें</string>
+    <string name="wp_icone_titulo">%1$s का आइकन</string>
+    <string name="wp_icone_sub">%1$s · %2$d आइकन</string>
+    <string name="wp_icone_original">मूल आइकन</string>
+    <string name="wp_icone_sugerido">सुझाया गया</string>
+    <string name="wp_icone_voltar">आइकन पैक के हिसाब से</string>
+    <string name="wp_icone_sem_pacote">कोई आइकन पैक इंस्टॉल नहीं। सेटिंग › दिखावट › प्लगइन में पाएँ।</string>
+    <string name="wp_d_aerial">शहरों और प्रकृति के धीमे हवाई वीडियो</string>
+    <string name="wp_d_overflight">Apple TV के हवाई वीडियो, या कोई भी वीडियो सूची</string>
+    <string name="wp_d_daily">हर दिन दिन की एक नई फ़ोटो</string>
+    <string name="wp_d_weather">आज का मौसम बैकग्राउंड में</string>
+    <string name="wp_d_movieart">TMDB से फ़िल्मों और सीरीज़ की तस्वीरें</string>
+    <string name="wp_d_sofadrop">ट्रेंडिंग सूचियों, Trakt या Simkl से तस्वीरें</string>
+    <string name="wp_d_immich">आपके अपने Immich सर्वर की फ़ोटो</string>
+    <string name="wp_d_tvicons">TV के लिए बने 800+ आइकन</string>
+    <string name="wp_d_minimalist">एक रंग पर साफ़ प्रतीक</string>
+    <string name="wp_d_arcticons">15,000 पतली लाइन वाले आइकन (फ़ोन के लिए, यहाँ भी चलते हैं)</string>
+</resources>

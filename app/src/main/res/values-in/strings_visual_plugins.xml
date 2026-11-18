@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plugins visuais (18/11/2026): fundo de plugin, trocar ícone, pacote congelado, vitrine -->
+<resources>
+    <string name="wp_tema">Latar dari plugin</string>
+    <string name="wp_cfg_det">Latar, paket ikon, dan kartu dari aplikasi lain. Masing-masing perlu persetujuan Anda.</string>
+    <string name="wp_det">Aplikasi dari pengembang lain yang menambah latar, ikon, atau kartu ke layar utama. Aktifkan hanya yang Anda percaya.</string>
+    <string name="wp_secao_fundos">Latar</string>
+    <string name="wp_secao_icones">Paket ikon</string>
+    <string name="wp_secao_cartoes">Kartu</string>
+    <string name="wp_secao_descobrir">Dapatkan plugin</string>
+    <string name="wp_tipo_fundo">Latar</string>
+    <string name="wp_tipo_icones">Ikon</string>
+    <string name="wp_em_uso">Dipakai</string>
+    <string name="wp_usar">Jadikan latar</string>
+    <string name="wp_configurar">Pengaturan plugin</string>
+    <string name="wp_parar">Berhenti memakai</string>
+    <string name="wp_sem_cert">Tanda tangan plugin ini tidak bisa dibaca.</string>
+    <string name="wp_nenhum_fundo">Belum ada plugin latar. Lihat di bawah cara mendapatkannya.</string>
+    <string name="wp_nenhum_icone">Belum ada paket ikon. Lihat di bawah cara mendapatkannya.</string>
+    <string name="wp_icones_det">Tetap dibekukan: launcher menyimpan salinan ikon yang dipakai.</string>
+    <string name="wp_usar_icones">Pakai</string>
+    <string name="wp_instalado">Terpasang</string>
+    <string name="wp_instalar">Pasang</string>
+    <string name="wp_instalando">Memasang…</string>
+    <string name="wp_instalou">%1$s terpasang.</string>
+    <string name="wp_nao_instalou">Tidak bisa memasang: %1$s</string>
+    <string name="wp_abrir_play">Buka di Play Store</string>
+    <string name="wp_qr">Arahkan kamera ponsel ke kode untuk membuka halaman.</string>
+    <string name="wp_trocar_icone">Ganti ikon</string>
+    <string name="wp_icone_titulo">Ikon untuk %1$s</string>
+    <string name="wp_icone_sub">%1$s · %2$d ikon</string>
+    <string name="wp_icone_original">Ikon asli</string>
+    <string name="wp_icone_sugerido">Disarankan</string>
+    <string name="wp_icone_voltar">Ikuti paket ikon</string>
+    <string name="wp_icone_sem_pacote">Belum ada paket ikon. Dapatkan di Pengaturan › Tampilan › Plugin.</string>
+    <string name="wp_d_aerial">Video udara lambat kota dan alam</string>
+    <string name="wp_d_overflight">Video udara Apple TV, atau daftar video apa pun</string>
+    <string name="wp_d_daily">Foto hari ini yang baru, setiap hari</string>
+    <string name="wp_d_weather">Cuaca hari ini sebagai latar</string>
+    <string name="wp_d_movieart">Gambar film dan serial dari TMDB</string>
+    <string name="wp_d_sofadrop">Gambar dari daftar populer, Trakt atau Simkl</string>
+    <string name="wp_d_immich">Foto dari server Immich Anda sendiri</string>
+    <string name="wp_d_tvicons">800+ ikon khusus TV</string>
+    <string name="wp_d_minimalist">Simbol bersih di atas satu warna</string>
+    <string name="wp_d_arcticons">15.000 ikon garis tipis (untuk ponsel, bisa di sini)</string>
+</resources>

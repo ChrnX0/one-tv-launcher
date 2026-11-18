@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plugins visuais (18/11/2026): fundo de plugin, trocar ícone, pacote congelado, vitrine -->
+<resources>
+    <string name="wp_tema">Eklenti arka planı</string>
+    <string name="wp_cfg_det">Diğer uygulamalardan arka planlar, simge paketleri ve kartlar. Her biri onayınızı ister.</string>
+    <string name="wp_det">Ana ekrana arka plan, simge veya kart ekleyen başka geliştiricilerin uygulamaları. Yalnızca güvendiklerinizi açın.</string>
+    <string name="wp_secao_fundos">Arka planlar</string>
+    <string name="wp_secao_icones">Simge paketleri</string>
+    <string name="wp_secao_cartoes">Kartlar</string>
+    <string name="wp_secao_descobrir">Eklenti edinin</string>
+    <string name="wp_tipo_fundo">Arka plan</string>
+    <string name="wp_tipo_icones">Simgeler</string>
+    <string name="wp_em_uso">Kullanımda</string>
+    <string name="wp_usar">Arka plan yap</string>
+    <string name="wp_configurar">Eklenti ayarları</string>
+    <string name="wp_parar">Kullanmayı bırak</string>
+    <string name="wp_sem_cert">Bu eklentinin imzası okunamadı.</string>
+    <string name="wp_nenhum_fundo">Henüz arka plan eklentisi yok. Nereden alınacağı aşağıda.</string>
+    <string name="wp_nenhum_icone">Henüz simge paketi yok. Nereden alınacağı aşağıda.</string>
+    <string name="wp_icones_det">Dondurulmuş kalır: başlatıcı kullandığı simgelerin bir kopyasını tutar.</string>
+    <string name="wp_usar_icones">Kullan</string>
+    <string name="wp_instalado">Yüklü</string>
+    <string name="wp_instalar">Yükle</string>
+    <string name="wp_instalando">Yükleniyor…</string>
+    <string name="wp_instalou">%1$s yüklendi.</string>
+    <string name="wp_nao_instalou">Yüklenemedi: %1$s</string>
+    <string name="wp_abrir_play">Play Store\'da aç</string>
+    <string name="wp_qr">Sayfayı açmak için telefon kamerasını koda tutun.</string>
+    <string name="wp_trocar_icone">Simgeyi değiştir</string>
+    <string name="wp_icone_titulo">%1$s simgesi</string>
+    <string name="wp_icone_sub">%1$s · %2$d simge</string>
+    <string name="wp_icone_original">Orijinal simge</string>
+    <string name="wp_icone_sugerido">Önerilen</string>
+    <string name="wp_icone_voltar">Simge paketini izle</string>
+    <string name="wp_icone_sem_pacote">Simge paketi yok. Ayarlar › Görünüm › Eklentiler\'den edinin.</string>
+    <string name="wp_d_aerial">Şehirlerin ve doğanın yavaş hava çekimleri</string>
+    <string name="wp_d_overflight">Apple TV hava videoları ya da istediğiniz bir video listesi</string>
+    <string name="wp_d_daily">Her gün yeni bir günün fotoğrafı</string>
+    <string name="wp_d_weather">Bugünün havası arka plan olarak</string>
+    <string name="wp_d_movieart">TMDB\'den film ve dizi görselleri</string>
+    <string name="wp_d_sofadrop">Trend listelerden, Trakt veya Simkl görselleri</string>
+    <string name="wp_d_immich">Kendi Immich sunucunuzdan fotoğraflar</string>
+    <string name="wp_d_tvicons">TV için yapılmış 800+ simge</string>
+    <string name="wp_d_minimalist">Tek renk üzerinde sade semboller</string>
+    <string name="wp_d_arcticons">15.000 ince çizgi simge (telefon için, burada da çalışır)</string>
+</resources>

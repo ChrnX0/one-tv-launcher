@@ -25,10 +25,12 @@ object PacoteIcones {
     fun escolher(ctx: Context, pacote: String) {
         ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putString("pacote", pacote).apply()
         mapa = null
+        // Regra do Paulo (18/11/2026): o pacote escolhido tem os ícones copiados para dentro do launcher e fica congelado.
+        IconPackFreezer.congelarDepois(ctx, pacote)
     }
 
-    /** Muda quando o pacote escolhido muda: a HOME usa na chave do cache de ícones. */
-    fun versao(ctx: Context): String = escolhido(ctx)
+    /** Muda quando o pacote escolhido ou um ícone trocado à mão muda: a HOME usa na chave do cache de ícones. */
+    fun versao(ctx: Context): String = escolhido(ctx) + "|" + CustomIcons.versao(ctx) + "|" + Planos.permite(ctx, Planos.Recurso.PLUGINS)
 
     /**
      * Pacotes que já vêm no launcher (Paulo, 18/11/2026: quase não há pacote de ícones na Play Store da TV). Redesenham o
@@ -44,6 +46,9 @@ object PacoteIcones {
     /** O pacote embutido escolhido, ou null (nenhum ou um pacote instalado). */
     fun embutido(ctx: Context): Embutido? = escolhido(ctx).let { e -> Embutido.entries.firstOrNull { it.id == e } }
 
+    /** Só os pacotes instalados de outros desenvolvedores (pacote -> nome): a lista do "Trocar ícone". */
+    fun deFora(ctx: Context): List<Pair<String, String>> = instaladosDeFora(ctx)
+
     /** Pacotes de ícones: os embutidos primeiro, depois os instalados (pacote -> nome), em ordem de nome. */
     fun instalados(ctx: Context): List<Pair<String, String>> =
         Embutido.entries.map { it.id to ctx.getString(it.nome) } + instaladosDeFora(ctx)
@@ -58,24 +63,51 @@ object PacoteIcones {
                 if (p !in vistos) vistos[p] = runCatching { ri.activityInfo.applicationInfo.loadLabel(pm).toString() }.getOrDefault(p)
             }
         }
+        // Os que nós congelamos (IconPackFreezer) não respondem mais à busca: entram pela lista guardada.
+        for ((p, n) in IconPackFreezer.congelados(ctx)) if (p !in vistos) vistos[p] = n
         return vistos.entries.map { it.key to it.value }.sortedBy { it.second.lowercase() }
     }
 
     fun nome(ctx: Context, pacote: String): String =
-        Embutido.entries.firstOrNull { it.id == pacote }?.let { ctx.getString(it.nome) } ?: runCatching { ctx.packageManager.getApplicationInfo(pacote, 0).loadLabel(ctx.packageManager).toString() }.getOrDefault(pacote)
+        Embutido.entries.firstOrNull { it.id == pacote }?.let { ctx.getString(it.nome) } ?: runCatching { ctx.packageManager.getApplicationInfo(pacote, PackageManager.MATCH_DISABLED_COMPONENTS).loadLabel(ctx.packageManager).toString() }.getOrDefault(pacote)
 
     @SuppressLint("DiscouragedApi")   // getIdentifier é o único jeito: o nome do recurso vem do appfilter de outro app
     private fun carregar(ctx: Context, pacote: String): PacoteIconesRegras.Mapa? = runCatching {
-        val res = ctx.packageManager.getResourcesForApplication(pacote)
+        // Congelado e o Android não deixa ler: o mapa guardado na última leitura (IconPackFreezer).
+        val res = IconPackFreezer.recursos(ctx, pacote) ?: return IconPackFreezer.mapaGuardado(ctx, pacote)
         val id = res.getIdentifier("appfilter", "xml", pacote)
-        if (id != 0) res.getXml(id).use { PacoteIconesRegras.ler(it) }
+        val m = if (id != 0) res.getXml(id).use { PacoteIconesRegras.ler(it) }
         else res.assets.open("appfilter.xml").use { s ->
             val p = Xml.newPullParser()
             p.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
             p.setInput(s, null)
             PacoteIconesRegras.ler(p)
         }
-    }.getOrNull()
+        IconPackFreezer.guardarMapa(ctx, pacote, m)
+        m
+    }.getOrNull() ?: IconPackFreezer.mapaGuardado(ctx, pacote)
+
+    /** O mapa de qualquer pacote (o "Trocar ícone" abre um que não é o escolhido): não mexe no guardado da HOME. */
+    fun mapaDeQualquer(ctx: Context, pacote: String): PacoteIconesRegras.Mapa? =
+        mapa?.takeIf { it.first == pacote }?.second ?: carregar(ctx, pacote)
+
+    /**
+     * Um ícone pelo nome do recurso, de qualquer pacote instalado; null = não achou. Primeiro a cópia guardada no launcher
+     * (o pacote pode estar congelado); senão lê do pacote e guarda a cópia para a próxima vez.
+     */
+    @SuppressLint("DiscouragedApi", "UseCompatLoadingForDrawables")
+    fun desenho(ctx: Context, pacote: String, nome: String): Drawable? {
+        if (pacote.startsWith(EMBUTIDO) || !PacoteIconesRegras.drawableValido(nome)) return null
+        IconPackFreezer.copia(ctx, pacote, nome)?.let { return it }
+        return runCatching {
+            val res = IconPackFreezer.recursos(ctx, pacote) ?: return null
+            val id = res.getIdentifier(nome, "drawable", pacote).takeIf { it != 0 }
+                ?: res.getIdentifier(nome, "mipmap", pacote).takeIf { it != 0 } ?: return null
+            res.getDrawable(id, null)?.also { d ->
+                IconPackFreezer.guardar(ctx, pacote, nome, d.constantState?.newDrawable(ctx.resources) ?: d)
+            }
+        }.getOrNull()
+    }
 
     private fun mapaDe(ctx: Context, pacote: String): PacoteIconesRegras.Mapa? {
         mapa?.let { (p, m) -> if (p == pacote) return m }
@@ -94,11 +126,6 @@ object PacoteIcones {
         if (escolhido.isEmpty() || escolhido.startsWith(EMBUTIDO)) return null
         val m = mapaDe(ctx, escolhido) ?: return null
         val nome = m.drawable(pacoteApp, classe) ?: return null
-        return runCatching {
-            val res = ctx.packageManager.getResourcesForApplication(escolhido)
-            val id = res.getIdentifier(nome, "drawable", escolhido).takeIf { it != 0 }
-                ?: res.getIdentifier(nome, "mipmap", escolhido).takeIf { it != 0 } ?: return null
-            res.getDrawable(id, null)
-        }.getOrNull()
+        return desenho(ctx, escolhido, nome)
     }
 }
