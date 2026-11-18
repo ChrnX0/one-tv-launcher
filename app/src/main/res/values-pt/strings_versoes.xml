@@ -14,24 +14,18 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Parear sem PC agora confirma na tela: aparece um aviso grande “Pareado com sucesso ✓” e, depois, se o shell próprio do launcher está funcionando</item>
-        <item>Tela inicial mais fluida: andar pela cruz redesenha menos a cada quadro</item>
-        <item>Copiar arquivos do computador para a TV pela unidade de rede ficou mais rápido (disco e rede trabalham ao mesmo tempo)</item>
-            <item>Podcasts: em Ouvir › Podcasts, siga qualquer programa colando o endereço do feed, ou importe pelo painel a lista do app do celular. Volta de onde parou, com velocidade e botões de pular</item>
-        <item>A rádio continua tocando fora da tela: segue na tela inicial e no protetor, e o play/pausa do controle funciona de qualquer lugar</item>
+        <item>A cruz se mexe como mola: cada item chega com um pouco de inércia e os vizinhos vêm logo atrás, em onda</item>
+        <item>Dois pacotes de ícones embutidos, Símbolo e Duotom, redesenham os apps no estilo da cruz (Configurações › Tela inicial › Pacote de ícones)</item>
+        <item>Sons curtos e suaves ao andar pela cruz, trocar de grupo e abrir; ficam mudos enquanto algo toca e dá para desligar</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Pareamento confirmado</item>
-        <item>Cruz fluida</item>
-        <item>Cópia mais rápida</item>
-            <item>Podcasts</item>
-        <item>Rádio continua</item>
+        <item>Movimento suave</item>
+        <item>Pacote de ícones</item>
+        <item>Sons</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Depois de parear em Configurações › Avançado › Parear sem PC, apareceu o aviso “Pareado com sucesso ✓” e depois “Tudo pronto”?</item>
-        <item>Andar pela cruz com as setas está fluido, sem engasgar?</item>
-        <item>Copiar um arquivo grande do computador para a TV (Este Computador › TV) foi mais rápido que antes?</item>
-            <item>Em Ouvir › Podcasts, depois de seguir um podcast, o episódio tocou e na vez seguinte voltou de onde parou?</item>
-        <item>Tocando uma rádio e apertando HOME, o som continuou e a pílula “Tocando” mostrou a rádio?</item>
+        <item>Andando com as setas, os itens deslizam suaves, sem pulos, mesmo apertando rápido?</item>
+        <item>Escolhendo Símbolo ou Duotom em Pacote de ícones, os apps em Aplicativos aparecem só com o símbolo claro?</item>
+        <item>Sem nada tocando, ouve um toque suave ao andar e outro diferente ao trocar de grupo?</item>
     </string-array>
 </resources>

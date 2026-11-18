@@ -66,7 +66,7 @@
     <string name="tt_grande">Grande</string>
     <string name="tt_maior">Maior</string>
     <string name="pi_titulo">Pacote de ícones</string>
-    <string name="pi_det">Troca os ícones dos apps pelos de um pacote instalado. OK passa para o próximo.</string>
+    <string name="pi_det">Troca os ícones das apps por um estilo incluído (Símbolo, Duotom) ou por um pacote instalado. OK passa para o seguinte.</string>
     <string name="pi_det_vazio">Nenhum pacote de ícones instalado. Transfira um na Play Store e ele aparece aqui.</string>
     <string name="pi_nenhum">Nenhum</string>
     <string name="fm_titulo">Meu fundo</string>

@@ -27,4 +27,6 @@
     <string name="cruz_arte_det">十字の後ろ、右側</string>
     <string name="cruz_ligada">オン</string>
     <string name="cruz_desligada">オフ</string>
+    <string name="cruz_sons">移動時のサウンド</string>
+    <string name="cruz_sons_det">短く控えめ。何かを再生中は鳴りません</string>
 </resources>

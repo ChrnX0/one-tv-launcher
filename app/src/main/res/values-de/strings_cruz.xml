@@ -27,4 +27,6 @@
     <string name="cruz_arte_det">Hinter dem Kreuz, rechts</string>
     <string name="cruz_ligada">An</string>
     <string name="cruz_desligada">Aus</string>
+    <string name="cruz_sons">Töne beim Navigieren</string>
+    <string name="cruz_sons_det">Kurz und leise; stumm, solange etwas abgespielt wird</string>
 </resources>

@@ -17,31 +17,23 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Pair without a PC now confirms on screen: a big “Paired successfully ✓” notice, and then whether the launcher’s own shell is working</item>
-        <item>Smoother home screen: moving through the cross redraws less on each frame</item>
-        <item>Copying files from the computer to the TV over the network drive is faster (disk and network work at the same time)</item>
-            <item>Podcasts: in Listen › Podcasts, follow any show by pasting its feed address, or import your phone app’s list from the web panel. It resumes where you stopped, with speed and skip buttons</item>
-        <item>The radio keeps playing when you leave its screen: it follows you to the home screen and the screensaver, and the remote’s play/pause works from anywhere</item>
+        <item>The cross moves like a spring: each item arrives with a little inertia and its neighbours follow just after, like a wave</item>
+        <item>Two built-in icon packs, Symbol and Duotone, redraw the apps in the style of the cross (Settings › Home screen › Icon pack)</item>
+        <item>Short, soft sounds when moving through the cross, switching group and opening; they stay quiet while something is playing and can be turned off</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>pareamento_ok</item>
-        <item>cruz_fluida2</item>
-        <item>rede_rapida</item>
-            <item>podcasts_ouvir</item>
-        <item>radio_continua</item>
+        <item>cruz_mola</item>
+        <item>cruz_pacote</item>
+        <item>cruz_sons</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Pairing confirmed</item>
-        <item>Smooth cross</item>
-        <item>Faster copy</item>
-            <item>Podcasts</item>
-        <item>Radio keeps playing</item>
+        <item>Smooth movement</item>
+        <item>Icon pack</item>
+        <item>Sounds</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>After pairing in Settings › Advanced › Pair without a PC, did a “Paired successfully ✓” notice appear, followed by “All set”?</item>
-        <item>Moving through the cross with the arrows is smooth, without stutter?</item>
-        <item>Copying a big file from the computer to the TV (This PC › TV) went faster than before?</item>
-            <item>In Listen › Podcasts, after following a podcast, did an episode play and resume where it stopped the next time?</item>
-        <item>Playing a radio station and pressing HOME, did the sound keep going and the “Playing” pill show the station?</item>
+        <item>Moving with the arrows, do the items glide smoothly, without jumps, even when you press fast?</item>
+        <item>Choosing Symbol or Duotone in Icon pack, do the apps in Apps show only their light symbol?</item>
+        <item>With nothing playing, do you hear a soft tick when moving and a different one when changing group?</item>
     </string-array>
 </resources>

@@ -11,7 +11,7 @@
     <string name="extras_HORA_DORMIR">وقت النوم (التطبيقات المسموحة فقط، صوت محدود)</string>
     <string name="extras_TOCANDO_AGORA">قيد التشغيل الآن (يقرأ ما يُشغَّل)</string>
     <string name="extras_MODO_LEVE">الوضع الخفيف (حركات أقصر)</string>
-    <string name="extras_SOM_NAVEGACAO">صوت التنقل</string>
+    <string name="extras_SOM_NAVEGACAO">نقرة عند التنقل في الشاشات الأخرى</string>
     <string name="extras_RECADO_LINK">رسالة عبر رابط (Home Assistant، TvOverlay)</string>
     <string name="extras_caches">مسح ذاكرة التخزين المؤقت للتطبيقات</string>
     <string name="extras_livre">%1$s متاحة</string>

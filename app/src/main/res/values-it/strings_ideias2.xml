@@ -11,7 +11,7 @@
     <string name="extras_HORA_DORMIR">Ora di dormire (solo app consentite, volume limitato)</string>
     <string name="extras_TOCANDO_AGORA">In riproduzione (legge ciò che è in riproduzione)</string>
     <string name="extras_MODO_LEVE">Modalità leggera (animazioni più brevi)</string>
-    <string name="extras_SOM_NAVEGACAO">Suono di navigazione</string>
+    <string name="extras_SOM_NAVEGACAO">Clic nella navigazione delle altre schermate</string>
     <string name="extras_RECADO_LINK">Messaggio tramite link (Home Assistant, TvOverlay)</string>
     <string name="extras_caches">Svuota la cache delle app</string>
     <string name="extras_livre">%1$s liberi</string>

@@ -27,4 +27,6 @@
     <string name="cruz_arte_det">Detrás de la cruz, a la derecha</string>
     <string name="cruz_ligada">Activada</string>
     <string name="cruz_desligada">Desactivada</string>
+    <string name="cruz_sons">Sonidos al navegar</string>
+    <string name="cruz_sons_det">Cortos y suaves; se silencian mientras algo suena</string>
 </resources>

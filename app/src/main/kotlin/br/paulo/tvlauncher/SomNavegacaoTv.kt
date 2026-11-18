@@ -16,6 +16,7 @@ object SomNavegacaoTv {
         if (e.action != KeyEvent.ACTION_DOWN || pacoteNaFrente != ctx.packageName) return
         val som = SomNavegacao.som(e.keyCode) ?: return
         if (!Extras.ligado(ctx, Extras.Chave.SOM_NAVEGACAO)) return
+        if (SonsCruz.cuidaDaTela(ctx)) return   // a cruz tem os sons dela: sem clique dobrado
         val efeito = when (som) {
             SomNavegacao.Som.CIMA -> AudioManager.FX_FOCUS_NAVIGATION_UP
             SomNavegacao.Som.BAIXO -> AudioManager.FX_FOCUS_NAVIGATION_DOWN

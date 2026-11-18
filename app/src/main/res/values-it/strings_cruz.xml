@@ -27,4 +27,6 @@
     <string name="cruz_arte_det">Dietro la croce, a destra</string>
     <string name="cruz_ligada">Attiva</string>
     <string name="cruz_desligada">Disattiva</string>
+    <string name="cruz_sons">Suoni di navigazione</string>
+    <string name="cruz_sons_det">Brevi e morbidi; muti mentre qualcosa è in riproduzione</string>
 </resources>

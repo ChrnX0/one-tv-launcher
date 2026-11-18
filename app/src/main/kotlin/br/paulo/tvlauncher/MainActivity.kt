@@ -323,6 +323,8 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        homeNaFrente = true
+        SonsCruz.naFrente = true
         if (desviadaParaSegura) return
         ModoSeguro.aoRetomarHome(this)   // 30 s de pé = a HOME firmou (zera a conta de quedas seguidas)
         ModoHospede.talvezBoasVindas(this)   // modo hóspede: boas-vindas uma vez por estadia
@@ -385,6 +387,8 @@ class MainActivity : Activity() {
 
     override fun onPause() {
         super.onPause()
+        homeNaFrente = false
+        SonsCruz.naFrente = false
         ModoSeguro.aoPausarHome()
         if (desviadaParaSegura) return
         focoTopo = currentFocus?.takeIf { f -> generateSequence(f.parent) { it.parent }.any { it === topoRaiz } }
@@ -428,7 +432,9 @@ class MainActivity : Activity() {
             focoTopo = null
             voltarAoPerfil = false   // HOME de novo depois de bolinha > Configurações: o foco vai ao 1º app (home-12)
             // Cruz: HOME vai para Assistir; HOME de novo, para a TV (CruzLogica). Fecha o "Todos os apps".
-            cruz?.let { c -> if (todosAbertos) fecharTodos(); c.home(); c.requestFocus() }
+            // Só o 2º passo (Assistir -> TV) com a HOME já na frente: voltando de um app, quem estava em Assistir › Filmes
+            // continua em Filmes (depuração 18/11/2026).
+            cruz?.let { c -> if (todosAbertos) fecharTodos(); if (homeNaFrente) c.home() else c.irParaAssistir(); c.requestFocus() }
         }
     }
 
@@ -1067,8 +1073,11 @@ class MainActivity : Activity() {
             if (cacheApps[pkg]?.first != null && cacheApps[pkg]?.first != chave) capas.remove(pkg)
             itens[pkg] = cacheApps[pkg]?.takeIf { it.first == chave }?.second ?: run {
                 // Só o ícone redondo fica guardado: o original (loadIcon) vira lixo logo depois de desenhado.
-                Item(pkg, ri.loadLabel(pm).toString(), DesenhoHome.iconeRedondo(resources,
-                    PacoteIcones.icone(this, pkg, ri.activityInfo.name) ?: ri.loadIcon(pm))).also { cacheApps[pkg] = chave to it }
+                val original = PacoteIcones.icone(this, pkg, ri.activityInfo.name) ?: ri.loadIcon(pm)
+                // Pacote embutido (Símbolo/Duotom, 18/11/2026): o traço do app no estilo da cruz; sem traço legível, o de sempre.
+                val icone = PacoteIcones.embutido(this)?.let { DesenhoHome.iconeTraco(resources, original, it == PacoteIcones.Embutido.DUOTOM) }
+                    ?: DesenhoHome.iconeRedondo(resources, original)
+                Item(pkg, ri.loadLabel(pm).toString(), icone).also { cacheApps[pkg] = chave to it }
             }
         }
         // Entradas HDMI/AV (EntradasTv, degrau 1): só em TV com entrada; chave "entrada:<id>", ícone redondo como os apps.
@@ -2447,6 +2456,8 @@ class MainActivity : Activity() {
     private var rotuloApps: TextView? = null
     /** "Todos os apps" aberto: a cruz some e a grade dos apps aparece; Voltar ou HOME fecham. */
     private var todosAbertos = false
+    /** Entre onResume e onPause: a HOME é o que está na tela (onNewIntent chega ANTES do onResume vindo de um app). */
+    private var homeNaFrente = false
     private var cruzTemTv = false
     private var cruzTemVod = false
     /** A 1ª leitura do player chegou (sem ela a cruz montaria sem a TV e pularia de lugar logo depois). */
@@ -2472,6 +2483,7 @@ class MainActivity : Activity() {
         cruz = c
         c.id = View.generateViewId()
         c.aoMudar = { _, item -> arteDoItem(item) }
+        c.aoSom = { som -> if (homeNaFrente) SonsCruz.tocar(this, som) }   // voltando de um app (HOME), sem som
         c.aoSubirTopo = { ui.post { bolinhaPerfil?.requestFocus() } }   // ▲ no 1º item: o perfil, 1º da barra
         montarBarraCruz(raiz, c)
     }
@@ -2511,6 +2523,11 @@ class MainActivity : Activity() {
             t.text = "${txtTemp.text}  ·"
             tempoCruz = t
         }
+        // A pílula "Tocando agora" costuma aparecer DEPOIS que a barra já recolheu (estava GONE, sem posição): a cada novo
+        // layout dela, com a barra recolhida, ela vai para o começo da linha (visto na TV, v462231: ficava sobre a temperatura).
+        capsulaTocando.addOnLayoutChangeListener { v, l, _, _, _, _, _, _, _ ->
+            if (barraRecolhida && v.translationX != -l.toFloat()) { v.animate().cancel(); v.alpha = 1f; v.translationY = 0f; v.translationX = -l.toFloat() }
+        }
         if (barraCruz == LayoutHome.BarraCruz.RELOGIO) relogioCruz = montarRelogioCruz().also {
             raiz.addView(it, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.BOTTOM or Gravity.END).apply {
                 rightMargin = dp(Grade.MARGEM); bottomMargin = dp(40)
@@ -2538,7 +2555,13 @@ class MainActivity : Activity() {
             // mas invisível): o grupo dela fica, e só os vizinhos (busca, clima, avisos) recolhem.
             if (v is ViewGroup && capsulaTocando.parent === v) {
                 v.animate().cancel(); v.alpha = 1f; v.translationY = 0f
-                for (j in 0 until v.childCount) v.getChildAt(j).let { mexer(it, fica || it === capsulaTocando) }
+                for (j in 0 until v.childCount) v.getChildAt(j).let {
+                    // Recolhida, a pílula vai para o começo da linha (onde ficavam busca e clima, agora apagados): no lugar
+                    // de sempre ela batia na temperatura que entra ao lado da hora (visto na TV, v462204).
+                    if (it === capsulaTocando) it.animate().alpha(1f).translationY(0f)
+                        .translationX(if (recolher) -it.left.toFloat() else 0f).setDuration(d).start()
+                    else mexer(it, fica)
+                }
             } else mexer(v, fica)
         }
         tempoCruz?.animate()?.alpha(if (recolher) 1f else 0f)?.setDuration(d)?.start()
@@ -2711,11 +2734,13 @@ class MainActivity : Activity() {
     private fun abrirTodos() {
         val c = cruz ?: return
         todosAbertos = true
+        recolherBarra(false, animar = false)   // ▲ na 1ª fileira vai à barra: ela precisa estar visível (o ouvinte sai cedo aqui)
         c.visibility = View.GONE
         rotuloApps?.visibility = View.VISIBLE
         rolagem.visibility = View.VISIBLE
         rolagem.scrollTo(0, 0)
-        linhaApps.post { linhaApps.getChildAt(0)?.requestFocus() }
+        // Sem nenhum app na grade, o foco não pode ficar sem dono: vai à bolinha do perfil, 1º da barra.
+        linhaApps.post { linhaApps.getChildAt(0)?.requestFocus() ?: bolinhaPerfil?.requestFocus() }
     }
 
     private fun fecharTodos() {

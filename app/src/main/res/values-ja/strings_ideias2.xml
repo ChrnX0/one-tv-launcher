@@ -11,7 +11,7 @@
     <string name="extras_HORA_DORMIR">就寝時間（許可したアプリのみ、音量制限）</string>
     <string name="extras_TOCANDO_AGORA">再生中（再生中のものを読み取る）</string>
     <string name="extras_MODO_LEVE">軽量モード（アニメーションを短く）</string>
-    <string name="extras_SOM_NAVEGACAO">操作音</string>
+    <string name="extras_SOM_NAVEGACAO">ほかの画面で移動するときのクリック音</string>
     <string name="extras_RECADO_LINK">リンクでメッセージ（Home Assistant、TvOverlay）</string>
     <string name="extras_caches">アプリのキャッシュを消去</string>
     <string name="extras_livre">空き %1$s</string>

@@ -66,7 +66,7 @@
     <string name="tt_grande">Крупный</string>
     <string name="tt_maior">Очень крупный</string>
     <string name="pi_titulo">Набор значков</string>
-    <string name="pi_det">Заменяет значки приложений значками из установленного набора. OK выбирает следующий.</string>
+    <string name="pi_det">Заменяет значки приложений встроенным стилем («Символ», «Двухцветный») или установленным набором. OK выбирает следующий.</string>
     <string name="pi_det_vazio">Наборы значков не установлены. Скачайте набор в Play Маркете, и он появится здесь.</string>
     <string name="pi_nenhum">Нет</string>
     <string name="fm_titulo">Мой фон</string>

@@ -23,20 +23,22 @@ class SincronizarFilmesTest {
             {"rank":2,"type":"show","show":{"title":"Breaking Bad","year":2008,"ids":{"trakt":1,"tvdb":81189,"imdb":"tt0903747","tmdb":1396}}},
             {"rank":3,"type":"season","season":{"number":1,"ids":{"tmdb":3572}}},
             {"rank":4,"type":"person","person":{"name":"x","ids":{"tmdb":1}}}]""")
-        assertEquals(2, itens.size)
+        assertEquals(2, itens!!.size)
         assertEquals(Item(Tipo.FILME, Ids(20526, "tt1104001", 1), "TRON: Legacy", 2010), itens[0])
         assertEquals(Tipo.SERIE, itens[1].tipo); assertEquals(1396, itens[1].ids.tmdb)
-        assertTrue(SincronizarFilmes.traktLerItens("lixo").isEmpty())
+        assertNull(SincronizarFilmes.traktLerItens("lixo"))   // ilegível: null (vazia apagaria os Interesses)
+        assertNull(SincronizarFilmes.traktLerVistos("[{\"plays\":1", Tipo.FILME))   // cortado no meio
+        assertTrue(SincronizarFilmes.traktLerItens("[]")!!.isEmpty())
     }
 
     @Test fun vistosDoTrakt() {
         val f = SincronizarFilmes.traktLerVistos("""[{"plays":4,"last_watched_at":"2014-10-11T17:00:54.000Z","movie":{"title":"Batman Begins","year":2005,"ids":{"trakt":6,"imdb":"tt0372784","tmdb":272}}}]""", Tipo.FILME)
-        assertEquals(272, f.single().item.ids.tmdb); assertEquals(1413046854000, f.single().quandoMs)
+        assertEquals(272, f!!.single().item.ids.tmdb); assertEquals(1413046854000, f.single().quandoMs)
         val s = SincronizarFilmes.traktLerVistos("""[{"plays":56,"last_watched_at":"2014-10-11T17:00:54.000Z","reset_at":"2014-10-01T00:00:00.000Z",
             "show":{"title":"Breaking Bad","year":2008,"ids":{"trakt":1,"tmdb":1396}},
             "seasons":[{"number":1,"episodes":[{"number":1,"plays":1,"last_watched_at":"2014-10-11T17:00:54.000Z"},
                                               {"number":2,"plays":1,"last_watched_at":"2014-09-11T17:00:54.000Z"}]}]}]""", Tipo.SERIE)
-        assertEquals(setOf(Ep(1, 1)), s.single().eps)   // o episódio 2 foi visto antes do recomeço (reset_at)
+        assertEquals(setOf(Ep(1, 1)), s!!.single().eps)   // o episódio 2 foi visto antes do recomeço (reset_at)
     }
 
     @Test fun pausasDoTrakt() {
@@ -71,7 +73,7 @@ class SincronizarFilmesTest {
     @Test fun todosDoSimkl() {
         val e = SincronizarFilmes.simklLerTodos("""{"movies":[{"last_watched_at":null,"status":"plantowatch","movie":{"title":"Inception","year":2010,"ids":{"simkl":53536,"slug":"inception","imdb":"tt1375666","tmdb":"27205"}}}],
             "shows":[{"status":"watching","show":{"title":"The Boys","year":2019,"ids":{"simkl":967226,"tmdb":76479}}}],
-            "anime":[{"status":"completed","last_watched_at":"2020-01-01T00:00:00Z","show":{"title":"One Piece","ids":{"simkl":38636}}}]}""")
+            "anime":[{"status":"completed","last_watched_at":"2020-01-01T00:00:00Z","show":{"title":"One Piece","ids":{"simkl":38636}}}]}""")!!
         assertEquals(3, e.size)
         assertEquals(27205, e[0].item.ids.tmdb); assertEquals("plantowatch", e[0].status)   // tmdb como texto também vale
         assertEquals(Tipo.SERIE, e[2].item.tipo); assertEquals(38636, e[2].item.ids.simkl)
@@ -191,5 +193,106 @@ class SincronizarFilmesTest {
         assertTrue(SincronizarFilmes.listasDeJson(ruim).isEmpty())
         val itens = listOf(filme(1, "A", 2000), Item(Tipo.SERIE, Ids(imdb = "tt0903747"), "B"))
         assertEquals(itens, SincronizarFilmes.itensDeJson(SincronizarFilmes.itensParaJson(itens)))
+    }
+
+    // ---------------------------------------------------------------- Simkl: cópia local + delta (guia /sync, 18/11/2026)
+
+    private fun ent(tipo: Tipo, simkl: Int?, tmdb: Int?, status: String) =
+        SincronizarFilmes.EntradaSimkl(Item(tipo, Ids(tmdb = tmdb, simkl = simkl)), status, 1L)
+
+    @Test fun simklPlanoSegueOGuia() {
+        val foto = mapOf("all" to "A", "movies.removed_from_list" to "R", "movies.playback" to "P")
+        // Sem cópia local: fase 1 (tudo), uma vez.
+        assertTrue(SincronizarFilmes.simklPlano(null, foto, false, false, false).completo)
+        assertTrue(SincronizarFilmes.simklPlano(foto, foto, false, false, false).completo)
+        // "all" igual: nada a buscar.
+        val nada = SincronizarFilmes.simklPlano(foto, foto, true, true, true)
+        assertFalse(nada.completo); assertNull(nada.desde); assertFalse(nada.conferirTirados); assertFalse(nada.pausas)
+        // "all" mudou: date_from = o "all" SALVO (não o novo).
+        val so = SincronizarFilmes.simklPlano(foto, foto + ("all" to "B"), true, false, false)
+        assertEquals("A", so.desde); assertFalse(so.conferirTirados); assertFalse(so.pausas)
+        // removed_from_list andou: confere a lista de ids.
+        assertTrue(SincronizarFilmes.simklPlano(foto, foto + mapOf("all" to "B", "movies.removed_from_list" to "R2"), true, false, false).conferirTirados)
+        // Pausas: só com "continuar", quando o playback andou ou nunca vieram.
+        assertTrue(SincronizarFilmes.simklPlano(foto, foto + mapOf("all" to "B", "movies.playback" to "P2"), true, true, true).pausas)
+        assertFalse(SincronizarFilmes.simklPlano(foto, foto + mapOf("all" to "B", "movies.playback" to "P2"), true, false, true).pausas)
+        assertTrue(SincronizarFilmes.simklPlano(foto, foto, true, true, false).pausas)
+    }
+
+    @Test fun simklLerIdsDoSimklIdsOnly() {
+        val ids = SincronizarFilmes.simklLerIds("""{"movies":[{"movie":{"ids":{"simkl":53536}}}],"shows":[{"show":{"ids":{"simkl":967226}}}],"anime":[{"show":{"ids":{"simkl":38636}}}]}""")
+        assertEquals(setOf(53536, 967226, 38636), ids)
+        assertEquals(emptySet<Int>(), SincronizarFilmes.simklLerIds("{}"))
+        assertNull(SincronizarFilmes.simklLerIds("<html>"))
+    }
+
+    @Test fun simklMesclarTrocaProvisorioEStatus() {
+        var c = SincronizarFilmes.simklMesclar(emptyMap(), listOf(ent(Tipo.FILME, 1, 10, "plantowatch"), ent(Tipo.SERIE, 2, 10, "watching")))
+        assertEquals(setOf("s1", "s2"), c.keys)   // mesmo tmdb, tipos diferentes: dois títulos
+        // Nós pusemos o tmdb 30 na lista: entra provisório; o date_from traz o id do Simkl e o provisório sai.
+        c = SincronizarFilmes.simklMarcar(c, Item(Tipo.FILME, Ids(tmdb = 30)), "plantowatch", 5L)
+        assertTrue("t30:FILME" in c.keys)
+        c = SincronizarFilmes.simklMesclar(c, listOf(ent(Tipo.FILME, 3, 30, "plantowatch"), ent(Tipo.FILME, 1, 10, "completed")))
+        assertEquals(setOf("s1", "s2", "s3"), c.keys)
+        assertEquals("completed", c.getValue("s1").status)
+    }
+
+    @Test fun simklTirarSumidosPoupaProvisorios() {
+        var c = SincronizarFilmes.simklMesclar(emptyMap(), listOf(ent(Tipo.FILME, 1, 10, "plantowatch"), ent(Tipo.FILME, 2, 20, "completed")))
+        c = SincronizarFilmes.simklMarcar(c, Item(Tipo.FILME, Ids(tmdb = 30)), "plantowatch", 5L)
+        c = SincronizarFilmes.simklTirarSumidos(c, setOf(2))
+        assertEquals(setOf("s2", "t30:FILME"), c.keys)
+    }
+
+    @Test fun simklMarcarTiraEMudaStatus() {
+        var c = SincronizarFilmes.simklMesclar(emptyMap(), listOf(ent(Tipo.FILME, 1, 10, "plantowatch"), ent(Tipo.SERIE, 2, 10, "plantowatch")))
+        c = SincronizarFilmes.simklMarcar(c, Item(Tipo.FILME, Ids(tmdb = 10)), "completed", 9L)
+        assertEquals("completed", c.getValue("s1").status); assertEquals(9L, c.getValue("s1").quandoMs)
+        assertEquals("plantowatch", c.getValue("s2").status)   // a série com o mesmo tmdb não muda
+        c = SincronizarFilmes.simklMarcar(c, Item(Tipo.SERIE, Ids(tmdb = 10)), null, 9L)
+        assertEquals(setOf("s1"), c.keys)
+    }
+
+    @Test fun simklBibliotecaIdaEVolta() {
+        val c = SincronizarFilmes.simklMesclar(emptyMap(), listOf(
+            SincronizarFilmes.EntradaSimkl(Item(Tipo.FILME, Ids(tmdb = 27205, imdb = "tt1375666", simkl = 53536), "Inception", 2010), "plantowatch", 7L),
+            ent(Tipo.SERIE, 38636, null, "completed")))
+        val volta = SincronizarFilmes.simklBibliotecaDeJson(org.json.JSONArray(SincronizarFilmes.simklBibliotecaParaJson(c).toString()))
+        assertEquals(c, volta)
+    }
+
+    @Test fun simklFotoAposTirarSoAndaORemoved() {
+        val salva = mapOf("all" to "A", "movies.removed_from_list" to "R", "movies.plantowatch" to "P")
+        val nova = mapOf("all" to "B", "movies.removed_from_list" to "R2", "movies.plantowatch" to "P2")
+        assertEquals(mapOf("all" to "A", "movies.removed_from_list" to "R2", "movies.plantowatch" to "P"), SincronizarFilmes.simklFotoAposTirar(salva, nova))
+    }
+
+    @Test fun simklAgenteNomeBarraVersao() {
+        assertEquals("sofaly/1.0.457800", ServicosFilmes.simklCabecalhos("abc", 457800, "t")["User-Agent"])
+        assertEquals("sofaly/1.0.457800", ServicosFilmes.simklCabecalhosForm(457800)["User-Agent"])
+    }
+
+    @Test fun simklLerTodosIlegivelEhNull() {
+        assertNull(SincronizarFilmes.simklLerTodos("""{"movies":[{"status":"plantowatch","movie":{"ids":{"simkl":1"""))   // cortado em 2 MB
+        assertTrue(SincronizarFilmes.simklLerTodos("{}")!!.isEmpty())
+    }
+
+    @Test fun baseSoComOQueOServicoConfirmou() {
+        // 300 Interesses aqui, nada lá, sem base: a mescla manda pôr os 300, mas só sobe um lote de 100.
+        val local = (1..300).toSet()
+        val m = SincronizarFilmes.mesclarInteresses(local, emptySet(), null, true, local)
+        val base = SincronizarFilmes.baseAposEnvio(m, (1..100).toSet(), emptySet())
+        assertEquals((1..100).toSet(), base)
+        // Na volta (lá só os 100): os outros 200 continuam aqui e sobem; nada some da TV.
+        val m2 = SincronizarFilmes.mesclarInteresses(local, (1..100).toSet(), base, true, local)
+        assertEquals(local, m2.local); assertEquals((101..300).toSet(), m2.adicionarFora)
+        // Tirar que falhou (429) fica na base: na próxima vez tenta tirar de novo, não volta à TV.
+        val m3 = SincronizarFilmes.mesclarInteresses(setOf(1), setOf(1, 2), setOf(1, 2), true, setOf(1, 2))
+        assertEquals(setOf(2), m3.tirarFora)
+        val b3 = SincronizarFilmes.baseAposEnvio(m3, emptySet(), emptySet())
+        val m4 = SincronizarFilmes.mesclarInteresses(setOf(1), setOf(1, 2), b3, true, setOf(1, 2))
+        assertEquals(setOf(1), m4.local); assertEquals(setOf(2), m4.tirarFora)
+        // Tudo aceito: igual à base da mescla.
+        assertEquals(m.base, SincronizarFilmes.baseAposEnvio(m, m.adicionarFora, m.tirarFora))
     }
 }

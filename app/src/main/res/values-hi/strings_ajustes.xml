@@ -66,7 +66,7 @@
     <string name="tt_grande">बड़ा</string>
     <string name="tt_maior">और बड़ा</string>
     <string name="pi_titulo">आइकन पैक</string>
-    <string name="pi_det">ऐप आइकन को इंस्टॉल किए गए आइकन पैक के आइकन से बदलें। OK अगला चुनता है।</string>
+    <string name="pi_det">ऐप आइकन को बिल्ट-इन शैली (चिह्न, दो रंग) या इंस्टॉल किए गए आइकन पैक से बदलें। OK अगला चुनता है।</string>
     <string name="pi_det_vazio">कोई आइकन पैक इंस्टॉल नहीं है। Play Store से एक लें, वह यहाँ दिखेगा।</string>
     <string name="pi_nenhum">कोई नहीं</string>
     <string name="fm_titulo">मेरा बैकग्राउंड</string>
