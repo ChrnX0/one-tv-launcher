@@ -116,6 +116,8 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     var aoAbrir: ((CruzLogica.Categoria, String) -> Unit)? = null
     /** Itens lembrados (id da categoria -> id do item), lidos por quem usa; valem só na 1ª montagem. */
     var lembrados: Map<String, String> = emptyMap()
+    /** O último item aberto ("categoria|item"); quem usa grava e devolve aqui na 1ª montagem (HOME refeita). */
+    var ultimoAberto: String? = null
 
     private var cats: List<Categoria> = emptyList()
     private var mapa = CruzLogica.Mapa(emptyList(), emptyList())
@@ -221,7 +223,8 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             if (agora != null && (antes?.nome != agora.nome || antes.sub != agora.sub || antes.icone !== agora.icone)) avisarMudanca()
             return
         }
-        estado = if (assinatura == null) CruzLogica.inicial(novoMapa, lembrados) else CruzLogica.reajustar(mapa, estado, novoMapa)
+        estado = if (assinatura == null) CruzLogica.inicial(novoMapa, lembrados, ultimoAberto?.substringAfter('|'))
+            else CruzLogica.reajustar(mapa, estado, novoMapa)
         assinatura = sig
         cats = novas
         mapa = novoMapa
@@ -236,8 +239,18 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         avisarMudanca()
     }
 
-    /** Voltando de um app: só leva a Assistir, sem o 2º passo da HOME (o item lembrado fica). */
-    fun irParaAssistir() { if (categoriaAtual()?.cat != CruzLogica.Categoria.ASSISTIR) home() }
+    /**
+     * Voltando de um app (HOME ou VOLTAR): o foco vai para o item que abriu o último app, na categoria e posição dele
+     * (dono, 18/11/2026; antes ia sempre para Assistir, quase sempre na TV). Se o item não está na cruz, fica onde estava.
+     */
+    fun voltarDoApp() {
+        val u = ultimoAberto ?: return
+        val cat = CruzLogica.Categoria.entries.firstOrNull { it.id == u.substringBefore('|') }
+        val e = CruzLogica.focar(mapa, estado, u.substringAfter('|'), cat) ?: return
+        if (e == estado) return
+        estado = e
+        posicionar(animar = false); avisarMudanca()
+    }
 
     /** HOME: Assistir; HOME de novo: a TV. */
     fun home() = aplicar(CruzLogica.Tecla.HOME)
@@ -297,6 +310,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         val r = CruzLogica.passo(mapa, estado, t)
         if (r is CruzLogica.Resultado.Abrir) {
             aoSom?.invoke(SonsCruz.Som.ABRIR, categoriaAtual()?.cat)
+            ultimoAberto = r.categoria.id + "|" + r.item
             aoAbrir?.invoke(r.categoria, r.item)
             apertar()
             // Um app que não abre (desinstalado no meio, sem tela de TV, recusado pelo Android) não falha em silêncio.
@@ -506,6 +520,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private fun posicionar(animar: Boolean) {
         val f = estado.cat
         val focada = hasFocus() || isFocused
+        val semMovimento = semAnimacao()
         for ((j, v) in viewsCat.withIndex()) {
             val k = j - f
             val cx = when {
@@ -515,6 +530,9 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             }
             val visivel = k != 0 && cx > 30f && cx < TELA_L - 40f
             mover(v, dp(cx - 75f), dp(LINHA - CAT_A / 2f), if (visivel) 1f else 0f, 1f, animar, onda(kotlin.math.abs(k)))
+            // As categorias dos lados tocam a animação delas de vez em quando, uma de cada vez (atraso pela posição).
+            ((v as? ViewGroup)?.getChildAt(0) as? ImageView)?.drawable.let { it as? IconeCruz }
+                ?.animar(visivel && focada && !semMovimento, IconeCruz.DESCANSO_CATEGORIA_MS, 2000L + j * 1900L)
         }
         for ((j, lista) in viewsItem.withIndex()) {
             val k = j - f
@@ -529,6 +547,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
                     val cx = if (k < 0) CAT_ESQUERDA + (k + 1) * PASSO_CATS else CAT_DIREITA + (k - 1) * PASSO_CATS
                     mover(iv.raiz, dp(cx - ICONE_L * ESCALA_PEQUENO / 2f), dp(LINHA - ICONE_A / 2f), 0f, ESCALA_PEQUENO, animar, onda(kotlin.math.abs(rel)))
                     if (iv.icone.isActivated) iv.icone.isActivated = false
+                    (iv.icone.drawable as? IconeCruz)?.animar(false)
                     continue
                 }
                 val cy = when {
@@ -541,9 +560,10 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
                 val x = if (rel == 0) COLUNA - ICONE_L / 2f else COLUNA - ICONE_L * ESCALA_PEQUENO / 2f
                 mover(iv.raiz, dp(x), dp(cy - ICONE_A / 2f), alfa, escala, animar, onda(kotlin.math.abs(rel)))
                 iv.traco.alpha = if (rel == 0 && focada) 1f else 0f
-                // Ícones "Linha" (IconeCruz): o escolhido acende na cor da marca; os outros ficam creme.
+                // Ícones "Linha" (IconeCruz): o escolhido toca a animação dele (a cor é de cada ícone, sempre).
                 val aceso = rel == 0 && focada
                 if (iv.icone.isActivated != aceso) iv.icone.isActivated = aceso
+                (iv.icone.drawable as? IconeCruz)?.animar(aceso && !semMovimento)
                 iv.sub.alpha = if (rel == 0) 1f else 0f
             }
         }

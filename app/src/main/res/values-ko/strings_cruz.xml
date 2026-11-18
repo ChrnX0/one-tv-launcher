@@ -70,4 +70,12 @@
     <string name="cruz_app_solto">기호만</string>
     <string name="cruz_tv_canal">채널 %1$d · %2$s</string>
     <string name="cruz_tv_depois">다음 %1$s: %2$s</string>
+    <string name="cruz_aberto">%1$s 열었음</string>
+    <string name="cruz_jogado">%1$s 플레이</string>
+    <string name="cruz_tocou">%1$s 재생</string>
+    <string name="cruz_por_ultimo">최근: %1$s</string>
+    <string name="cruz_addons_n">설치된 애드온: %1$d</string>
+    <string name="cruz_apps_n">이 TV의 앱: %1$d</string>
+    <string name="cruz_podcasts_n">팔로우한 팟캐스트: %1$d</string>
+    <string name="cruz_pendrive">USB 드라이브: %1$s</string>
 </resources>

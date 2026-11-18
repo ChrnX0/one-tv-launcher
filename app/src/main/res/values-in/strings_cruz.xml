@@ -70,4 +70,12 @@
     <string name="cruz_app_solto">Simbol saja</string>
     <string name="cruz_tv_canal">Saluran %1$d · %2$s</string>
     <string name="cruz_tv_depois">Berikutnya, %1$s: %2$s</string>
+    <string name="cruz_aberto">Dibuka %1$s</string>
+    <string name="cruz_jogado">Dimainkan %1$s</string>
+    <string name="cruz_tocou">Diputar %1$s</string>
+    <string name="cruz_por_ultimo">Terakhir: %1$s</string>
+    <string name="cruz_addons_n">Addon terpasang: %1$d</string>
+    <string name="cruz_apps_n">Aplikasi di TV ini: %1$d</string>
+    <string name="cruz_podcasts_n">Podcast yang diikuti: %1$d</string>
+    <string name="cruz_pendrive">Flashdisk: %1$s</string>
 </resources>

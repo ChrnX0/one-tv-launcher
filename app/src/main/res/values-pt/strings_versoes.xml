@@ -15,11 +15,25 @@
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
         <item>Filmes e Séries: a ficha mostra atrás a cena do filme ou da série que a lista manda, escurecida para o texto continuar fácil de ler</item>
+        <item>Segurar VOLTAR, em qualquer app ou na tela inicial, abre o painel rápido (o toque curto continua voltando como antes)</item>
+        <item>Segurar HOME abre a Casa: as luzes e cenas do Home Assistant</item>
+        <item>Cada ícone da tela inicial tem a sua cor e uma animação curta só dele: a TV liga, o filme corre, o rádio solta ondas, o fone toca um equalizador</item>
+        <item>A barra de cima volta a recolher enquanto você navega (a barra de vidro continua como opção nas Configurações)</item>
+        <item>Ao sair de um app, a tela inicial volta no item que o abriu, e não na TV</item>
+        <item>Todos os itens da tela inicial mostram as informações úteis, uma por linha: episódio e quanto falta, ano, nota e duração do filme, o que você viu por último em cada app e quando, a última rádio, os controles e a turma do Discord</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Cena atrás da ficha</item>
+        <item>Segurar VOLTAR</item>
+        <item>Segurar HOME</item>
+        <item>Ícones vivos</item>
+        <item>Volta ao app</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Abrindo a ficha de um filme, aparece a cena dele à direita, sem atrapalhar a leitura?</item>
+        <item>Segurando VOLTAR dentro de um app (o YouTube, por exemplo) e na tela inicial, o painel rápido abre, e o VOLTAR curto continua voltando?</item>
+        <item>Segurando HOME, dentro de um app e na tela inicial, a Casa abre com as suas luzes e cenas?</item>
+        <item>Os ícones têm cores diferentes, e o escolhido toca uma animação curta só dele de tempos em tempos?</item>
+        <item>Abrindo o YouTube pela coluna dele e apertando HOME, o foco volta no YouTube (e não na TV)?</item>
     </string-array>
 </resources>

@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">عنوان راوتر UniFi ومفتاح API، في لوحة الويب</string>
     <string name="pb_titulo">مربعات اللوحة السريعة</string>
     <string name="pb_subtitulo">OK يُظهر أو يخفي · ◀ ▶ تغيير الترتيب</string>
-    <string name="pb_cfg_det">اختر المربعات التي تعرضها اللوحة السريعة (اضغط مطولًا على HOME) وبأي ترتيب</string>
+    <string name="pb_cfg_det">اختر المربعات التي تعرضها اللوحة السريعة (اضغط مطولًا على رجوع) وبأي ترتيب</string>
     <string name="pb_mostrado">ظاهر</string>
     <string name="pb_escondido">مخفي</string>
     <string name="pb_padrao">العودة إلى المربعات القياسية</string>

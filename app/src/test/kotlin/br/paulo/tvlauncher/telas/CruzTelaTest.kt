@@ -49,6 +49,21 @@ class CruzTelaTest {
     @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
     @Test fun linha() = conferir(IconeCruz.Estilo.LINHA, "linha")
 
+    /** Prévia da animação de cada ícone Linha (18/11/2026): uma linha por ícone, o estático e 8 quadros da passada. */
+    @Config(qualifiers = "pt-w960dp-h540dp-land-television-xhdpi")
+    @Test fun animacaoDosIcones() {
+        saida.mkdirs()
+        val tipos = IconeCruz.Tipo.entries
+        val lado = 96; val fases = listOf(-1f, 0.12f, 0.25f, 0.37f, 0.5f, 0.62f, 0.75f, 0.87f)
+        val bmp = Bitmap.createBitmap(lado * fases.size, lado * tipos.size, Bitmap.Config.ARGB_8888)
+        val c = Canvas(bmp); c.drawColor(Estilo.FUNDO)
+        for ((i, t) in tipos.withIndex()) for ((j, f) in fases.withIndex()) {
+            val ic = IconeCruz(t, IconeCruz.Estilo.LINHA).apply { faseFixa = f; setBounds(j * lado + 12, i * lado + 12, (j + 1) * lado - 12, (i + 1) * lado - 12) }
+            ic.draw(c)
+        }
+        File(saida, "cruz-icones-animacao.png").outputStream().use { bmp.compress(Bitmap.CompressFormat.PNG, 100, it) }
+    }
+
     private fun conferir(estilo: IconeCruz.Estilo, nome: String) {
         InstrumentationRegistry.getInstrumentation().setInTouchMode(false)
         saida.mkdirs()
@@ -71,8 +86,8 @@ class CruzTelaTest {
                 it("c:dormir", "Dormir em 30 min", "A tela escurece devagar e a TV desliga", IconeCruz.Tipo.DORMIR))),
             HomeCruz.Categoria(CruzLogica.Categoria.ASSISTIR, "Assistir", ic(IconeCruz.Tipo.ASSISTIR), listOf(
                 it("tv", "TV", "Canal 156 · Discovery Channel\nMil Lugares para Conhecer Antes de Morrer · faltam 25 min\nDepois, 21:30: Aventura Selvagem", IconeCruz.Tipo.TV, visto = 0.7f),
-                it("series", "Séries", "O Último Farol · T1 E4", IconeCruz.Tipo.SERIES),
-                it("filmes", "Filmes", "Maré Alta · faltam 52 min", IconeCruz.Tipo.FILMES),
+                it("series", "Séries", "O Último Farol\nT1 E4 · faltam 18 min\n2023 · ★ 8,1\nDrama", IconeCruz.Tipo.SERIES),
+                it("filmes", "Filmes", "Maré Alta\n2021 · 2 h 35 min · ★ 8,0\nFicção científica\nfaltam 52 min", IconeCruz.Tipo.FILMES),
                 it("rede", "Na rede", "Vídeos, músicas e fotos da rede da casa", IconeCruz.Tipo.REDE),
                 it("addons", "Addons", "Filmes e séries dos seus addons", IconeCruz.Tipo.ADDONS))),
             HomeCruz.Categoria(CruzLogica.Categoria.OUVIR, "Ouvir", ic(IconeCruz.Tipo.OUVIR), listOf(

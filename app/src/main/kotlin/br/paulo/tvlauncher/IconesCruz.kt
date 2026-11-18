@@ -32,6 +32,48 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
     /** Linha: true = item escolhido com a cruz em foco (o ImageView avisa pelo estado "activated"). */
     private var aceso = false
 
+    // ---- animação própria de cada ícone (Linha; 18/11/2026, dono: "sutil, mas atraente; nada de só brilhar, crescer
+    // ou girar, mas algo único de cada um"). Toca [DURACAO_MS] e descansa; parada, o desenho é exatamente o estático.
+    /** Em ciclo agora (a HomeCruz liga no item escolhido e, devagar, nas categorias dos lados). */
+    private var vivo = false
+    private var descansoMs = DESCANSO_ESCOLHIDO_MS
+    private var desdeMs = 0L
+    /** Fase da passada de desenho atual: 0..1 tocando, -1 parado (desenho estático). */
+    private var fase = -1f
+    private val tique = Runnable { invalidateSelf() }
+
+    /**
+     * Liga ou desliga o ciclo. [descanso]: pausa entre duas passadas; [atraso]: quando começa a primeira (as categorias
+     * dos lados não tocam juntas). Quem chama já confere "Remover animações" (HomeCruz.semAnimacao).
+     */
+    fun animar(liga: Boolean, descanso: Long = DESCANSO_ESCOLHIDO_MS, atraso: Long = 0L) {
+        if (estilo != Estilo.LINHA) return
+        if (liga == vivo && (!liga || descanso == descansoMs)) return
+        vivo = liga
+        descansoMs = descanso
+        desdeMs = android.os.SystemClock.uptimeMillis() + atraso
+        unscheduleSelf(tique)
+        invalidateSelf()
+    }
+
+    /** Só para a prévia (teste de telas): desenha sempre nesta fase, sem relógio. */
+    internal var faseFixa: Float? = null
+
+    private fun faseAgora(): Float = faseFixa ?: if (!vivo) -1f else faseEm(android.os.SystemClock.uptimeMillis() - desdeMs, DURACAO_MS, descansoMs)
+
+    /** Próximo quadro: ~30 por segundo tocando; parado no descanso, acorda só quando a próxima passada começa. */
+    private fun agendar() {
+        if (!vivo || callback == null) return
+        val agora = android.os.SystemClock.uptimeMillis()
+        unscheduleSelf(tique)
+        scheduleSelf(tique, agora + proximoEm(agora - desdeMs, DURACAO_MS, descansoMs))
+    }
+
+    override fun setVisible(visible: Boolean, restart: Boolean): Boolean {
+        if (!visible) unscheduleSelf(tique) else if (vivo) invalidateSelf()
+        return super.setVisible(visible, restart)
+    }
+
     private val cheio = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL }
     private val traco = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.STROKE; strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND }
     private val p = Path()
@@ -47,8 +89,11 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             val esc = minOf(b.width(), b.height()) / 24f
             c.translate((b.width() - 24f * esc) / 2f, (b.height() - 24f * esc) / 2f)
             c.scale(esc, esc)
-            corTraco = if (aceso) COR_ACESA else COR_CLARA
+            corTraco = corLinha(tipo)
+            fase = faseAgora()
             linhaFina(c)
+            if (fase >= 0f) linhaViva(c, fase)
+            if (faseFixa == null) agendar()
         } else if (estilo == Estilo.OBJETO) {
             // quadro 120 x 100 centrado, sem deformar
             val esc = minOf(b.width() / 120f, b.height() / 100f)
@@ -336,7 +381,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             Tipo.FILMES -> {   // rolo de filme: o quadro com as perfurações dos lados
                 ret(3f, 3.5f, 21f, 20.5f, 1.6f)
                 c.drawLine(7.5f, 3.5f, 7.5f, 20.5f, traco); c.drawLine(16.5f, 3.5f, 16.5f, 20.5f, traco)
-                for (y in floatArrayOf(8f, 12f, 16f)) { c.drawLine(3f, y, 7.5f, y, traco); c.drawLine(16.5f, y, 21f, y, traco) }
+                if (fase < 0f) for (y in floatArrayOf(8f, 12f, 16f)) { c.drawLine(3f, y, 7.5f, y, traco); c.drawLine(16.5f, y, 21f, y, traco) }
             }
             Tipo.REDE -> {   // dois servidores
                 ret(3.5f, 4f, 20.5f, 10.5f, 1.6f); ret(3.5f, 13.5f, 20.5f, 20f, 1.6f)
@@ -374,7 +419,8 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             }
             Tipo.CENTRAL -> {   // mostrador (o painel de informações da Central de jogos)
                 r.set(3f, 5f, 21f, 23f); c.drawArc(r, 150f, 240f, false, traco)
-                c.drawLine(12f, 14f, 16f, 9.5f, traco); c.drawCircle(12f, 14f, 1.3f, cheio)
+                if (fase < 0f) c.drawLine(12f, 14f, 16f, 9.5f, traco)   // tocando, o ponteiro é o da linhaViva
+                c.drawCircle(12f, 14f, 1.3f, cheio)
                 c.drawLine(5.5f, 19.5f, 18.5f, 19.5f, traco)
             }
             Tipo.SOFA -> {
@@ -393,7 +439,8 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         }
     }
 
-    // Linha: o ImageView marca "activated" no item escolhido (HomeCruz.posicionar) e o ícone acende na cor da marca.
+    // Linha: o ImageView marca "activated" no item escolhido (HomeCruz.posicionar); desde 18/11/2026 cada ícone já tem
+    // a cor dele e o escolhido ganha a animação (ligada pela HomeCruz), então o estado só redesenha.
     override fun isStateful() = estilo == Estilo.LINHA
     override fun onStateChange(state: IntArray): Boolean {
         val novo = estilo == Estilo.LINHA && state.contains(android.R.attr.state_activated)
@@ -408,7 +455,154 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
     @Deprecated("Deprecated in Java")
     override fun getOpacity() = PixelFormat.TRANSLUCENT
 
+    // ------------------------------------------------------------------ linha viva (a animação de cada ícone)
+
+    /**
+     * Desenha, por cima do estático, o que se mexe em [f] (0..1). Cada ícone conta algo dele mesmo: a TV liga (uma
+     * linha de varredura desce pela tela), o filme corre na película, o rádio solta ondas pela antena, o fone toca um
+     * equalizador, o controle aperta os botões, o ponteiro da Central dá a volta e assenta... Em f = 0 e f = 1 nada
+     * aparece além do estático (a passada começa e termina sem salto).
+     */
+    private fun linhaViva(c: Canvas, f: Float) {
+        val sino = sino(f)   // 0 -> 1 -> 0
+        fun alfa(a: Float) { traco.alpha = (a.coerceIn(0f, 1f) * 255).toInt(); cheio.alpha = traco.alpha }
+        when (tipo) {
+            Tipo.CONTINUAR -> {   // a seta corre a volta inteira e o play dá um passo à frente
+                val corre = (f / 0.7f).coerceIn(0f, 1f)
+                if (corre in 0.001f..0.999f) {
+                    val ang = Math.toRadians((-60.0 + 300.0 * corre))
+                    alfa(sino(corre)); c.drawCircle(12f + 8.5f * Math.cos(ang).toFloat(), 12f + 8.5f * Math.sin(ang).toFloat(), 1.1f, cheio)
+                }
+                val passo = sino(((f - 0.6f) / 0.4f).coerceIn(0f, 1f))
+                if (passo > 0f) { alfa(passo); c.drawLine(17.6f, 10f, 18.6f, 12f, traco); c.drawLine(18.6f, 12f, 17.6f, 14f, traco) }
+            }
+            Tipo.ASSISTIR, Tipo.TV -> {   // a TV liga: uma linha de varredura desce pela tela
+                val y = 6f + 9f * f
+                alfa(sino * 0.9f); c.drawLine(4.5f, y, 19.5f, y, traco)
+                alfa(sino * 0.35f); c.drawLine(4.5f, y - 1.6f, 19.5f, y - 1.6f, traco)
+            }
+            Tipo.SERIES -> {   // o próximo episódio: o quadro de trás sobe e volta
+                alfa(sino); val d = 1.4f * sino
+                p.reset(); p.moveTo(5.5f + d, 5f - d); p.lineTo(19f + d, 5f - d); p.quadTo(20.5f + d, 5f - d, 20.5f + d, 6.5f - d); p.lineTo(20.5f + d, 16.5f - d)
+                c.drawPath(p, traco)
+            }
+            Tipo.FILMES -> {   // a película corre: as perfurações descem um quadro
+                c.save(); r.set(3.6f, 4.1f, 20.4f, 19.9f); c.clipRect(r)
+                val off = 4f * easeInOut(f)   // as perfurações estáticas (8, 12, 16) descem um quadro e voltam ao lugar
+                for (y in floatArrayOf(4f, 8f, 12f, 16f)) {
+                    val yy = y + off
+                    alfa(1f); c.drawLine(3.6f, yy, 7.5f, yy, traco); c.drawLine(16.5f, yy, 20.4f, yy, traco)
+                }
+                c.restore()
+            }
+            Tipo.REDE -> {   // tráfego: a luz de cima, depois a de baixo
+                alfa(sino(((f) / 0.55f).coerceIn(0f, 1f))); c.drawCircle(7f, 7.25f, 1.9f, traco)
+                alfa(sino(((f - 0.45f) / 0.55f).coerceIn(0f, 1f))); c.drawCircle(7f, 16.75f, 1.9f, traco)
+            }
+            Tipo.ADDONS, Tipo.PLUGIN -> {   // uma peça nova chega e encaixa no dente da direita
+                val x = 6f * (1f - easeOut((f / 0.6f).coerceIn(0f, 1f)))
+                alfa(sino(((f) / 0.9f).coerceIn(0f, 1f)))
+                r.set(18.8f + x, 12.3f, 22f + x, 14.7f); c.drawRoundRect(r, 0.8f, 0.8f, traco)
+            }
+            Tipo.OUVIR -> {   // o som toca: um equalizador pequeno entre as conchas
+                for ((i, x) in floatArrayOf(10f, 12f, 14f).withIndex()) {
+                    val h = sino * (1.5f + 2.6f * kotlin.math.abs(kotlin.math.sin((f * 3f + i * 0.33f) * Math.PI.toFloat())))
+                    if (h > 0.05f) { alfa(1f); c.drawLine(x, 19.5f, x, 19.5f - h, traco) }
+                }
+            }
+            Tipo.RADIO -> {   // a antena solta ondas
+                for (k in 0..1) {
+                    val g = ((f - k * 0.3f) / 0.7f).coerceIn(0f, 1f)
+                    if (g <= 0f || g >= 1f) continue
+                    val raio = 1.5f + 3.5f * g
+                    alfa(sino(g)); r.set(16.5f - raio, 3.5f - raio, 16.5f + raio, 3.5f + raio); c.drawArc(r, -80f, 90f, false, traco)
+                }
+            }
+            Tipo.PODCASTS -> {   // alguém fala: o nível sobe na cápsula
+                val n = (sino * 3.99f).toInt()
+                alfa(1f); for (i in 0 until n) { val y = 11.5f - i * 2.3f; c.drawLine(10.8f, y, 13.2f, y, traco) }
+            }
+            Tipo.JOGAR, Tipo.JOGOS -> {   // os botões são apertados, um e depois o outro
+                val a = sino(((f) / 0.5f).coerceIn(0f, 1f)); val b = sino(((f - 0.5f) / 0.5f).coerceIn(0f, 1f))
+                if (a > 0f) { alfa(a); c.drawCircle(15.6f, 11.8f, 1.9f, traco) }
+                if (b > 0f) { alfa(b); c.drawCircle(18f, 10f, 1.9f, traco) }
+            }
+            Tipo.CENTRAL -> {   // o ponteiro vai ao começo do mostrador e volta, assentando
+                val ang = if (f < 0.3f) -48f - 112f * easeOut(f / 0.3f) else -160f + 112f * voltaComMola((f - 0.3f) / 0.7f)
+                val rad = Math.toRadians(ang.toDouble())
+                alfa(1f); c.drawLine(12f, 14f, 12f + 6f * Math.cos(rad).toFloat(), 14f + 6f * Math.sin(rad).toFloat(), traco)
+            }
+            Tipo.SOFA -> {   // alguém senta: a almofada afunda e volta
+                alfa(sino); c.drawLine(8f, 13.5f + 0.9f * sino, 16f, 13.5f + 0.9f * sino, traco)
+            }
+            Tipo.APLICATIVOS -> {   // os quadros se acendem um depois do outro (Z)
+                for ((i, xy) in arrayOf(floatArrayOf(4f, 4f), floatArrayOf(13.5f, 4f), floatArrayOf(4f, 13.5f), floatArrayOf(13.5f, 13.5f)).withIndex()) {
+                    val g = sino(((f - i * 0.15f) / 0.55f).coerceIn(0f, 1f))
+                    if (g > 0f) { cheio.alpha = (g * 0.55f * 255).toInt(); r.set(xy[0] + 1.6f, xy[1] + 1.6f, xy[0] + 4.9f, xy[1] + 4.9f); c.drawRoundRect(r, 0.8f, 0.8f, cheio) }
+                }
+            }
+            Tipo.TODOS_APPS -> {   // uma onda em diagonal pelos nove
+                for ((i, x) in floatArrayOf(4f, 10.5f, 17f).withIndex()) for ((j, y) in floatArrayOf(4f, 10.5f, 17f).withIndex()) {
+                    val g = sino(((f - (i + j) * 0.12f) / 0.5f).coerceIn(0f, 1f))
+                    if (g > 0f) { cheio.alpha = (g * 0.7f * 255).toInt(); r.set(x, y, x + 3f, y + 3f); c.drawRoundRect(r, 0.8f, 0.8f, cheio) }
+                }
+            }
+            Tipo.DORMIR -> {   // um "z" pequeno sobe da lua e some
+                val y = 15.5f - 5f * f; val x = 14.5f + 1.5f * f; val t = 1.6f
+                alfa(sino); c.drawLine(x, y, x + t, y, traco); c.drawLine(x + t, y, x, y + t, traco); c.drawLine(x, y + t, x + t, y + t, traco)
+            }
+        }
+        traco.alpha = 255; cheio.alpha = 255
+    }
+
     companion object {
+        /** Uma passada da animação, e o descanso entre passadas (item escolhido / categoria dos lados). */
+        const val DURACAO_MS = 1500L
+        const val DESCANSO_ESCOLHIDO_MS = 2500L
+        const val DESCANSO_CATEGORIA_MS = 9000L
+        private const val QUADRO_MS = 33L
+
+        /** Fase 0..1 se está tocando em [t] ms desde o começo do ciclo, -1 no descanso ou antes de começar. */
+        fun faseEm(t: Long, duracao: Long, descanso: Long): Float {
+            if (t < 0) return -1f
+            val m = t % (duracao + descanso)
+            return if (m < duracao) m.toFloat() / duracao else -1f
+        }
+
+        /** Daqui a quantos ms vale redesenhar: um quadro tocando; o fim do descanso (ou do atraso) parado. */
+        fun proximoEm(t: Long, duracao: Long, descanso: Long): Long {
+            if (t < 0) return -t
+            val m = t % (duracao + descanso)
+            return if (m < duracao) QUADRO_MS else (duracao + descanso - m).coerceAtLeast(1)
+        }
+
+        /** 0 -> 1 -> 0, suave. */
+        fun sino(f: Float): Float = if (f <= 0f || f >= 1f) 0f else kotlin.math.sin(f * Math.PI).toFloat()
+        private fun easeOut(f: Float) = 1f - (1f - f) * (1f - f)
+        private fun easeInOut(f: Float) = if (f < 0.5f) 2f * f * f else 1f - 2f * (1f - f) * (1f - f)
+        /** Sobe passando um pouco do ponto e assenta (o ponteiro da Central). */
+        private fun voltaComMola(f: Float): Float = 1f + 0.12f * kotlin.math.sin(f * Math.PI * 2).toFloat() * (1f - f) - (1f - f) * (1f - f) * (1f - f)
+
+        /**
+         * Linha (18/11/2026, dono: "todos com a mesma cor ficou sem personalidade"): cada ícone com a cor dele, tons
+         * adultos (médios, nada saturado de brinquedo, nada rosado) que leem bem no fundo escuro. As categorias e seus
+         * itens ficam na mesma família; dentro da coluna, cada item tem o seu tom.
+         */
+        fun corLinha(t: Tipo): Int = when (t) {
+            Tipo.CONTINUAR -> 0xFFF2B84B      // âmbar
+            Tipo.ASSISTIR, Tipo.TV -> 0xFFFF7A45   // o laranja da marca
+            Tipo.SERIES -> 0xFFF59E5B         // laranja claro
+            Tipo.FILMES -> 0xFFE6C46A         // dourado
+            Tipo.REDE -> 0xFF6FC3B2           // verde-água
+            Tipo.ADDONS, Tipo.PLUGIN -> 0xFF8FB4F0   // azul acinzentado
+            Tipo.OUVIR, Tipo.RADIO -> 0xFF45C2B1   // turquesa
+            Tipo.PODCASTS -> 0xFF7FB2FF       // azul
+            Tipo.JOGAR, Tipo.JOGOS, Tipo.CENTRAL -> 0xFF8E92FA   // violeta-azulado
+            Tipo.SOFA -> 0xFFA9B0FF
+            Tipo.APLICATIVOS, Tipo.TODOS_APPS -> 0xFF9CD27E   // verde-folha
+            Tipo.DORMIR -> 0xFFB9C6E4         // luar
+        }.toInt()
+
         /** A cor clara do traço (Símbolo/Duotom), também nos ícones de app do pacote embutido. */
         const val COR_TRACO = 0xFFF4F1EC.toInt()
         private const val COR_CLARA = 0xFFF4F1EC.toInt()

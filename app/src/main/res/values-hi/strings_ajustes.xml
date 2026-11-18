@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">वेब पैनल में UniFi राउटर का पता और API कुंजी</string>
     <string name="pb_titulo">क्विक पैनल टाइल</string>
     <string name="pb_subtitulo">OK दिखाता या छिपाता है · ◀ ▶ क्रम बदलें</string>
-    <string name="pb_cfg_det">चुनें कि क्विक पैनल (HOME दबाए रखें) कौन सी टाइल और किस क्रम में दिखाए</string>
+    <string name="pb_cfg_det">चुनें कि क्विक पैनल (वापस दबाए रखें) कौन सी टाइल और किस क्रम में दिखाए</string>
     <string name="pb_mostrado">दिख रहा</string>
     <string name="pb_escondido">छिपा</string>
     <string name="pb_padrao">मानक टाइल पर वापस</string>

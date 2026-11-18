@@ -49,6 +49,7 @@ object BotoesControle {
     /** Chamado para cada tecla. true = a tecla é nossa (o sistema não a vê). */
     fun tratar(ctx: Context, e: KeyEvent): Boolean {
         if (e.keyCode == KeyEvent.KEYCODE_HOME && Home.launcherxAtivo(ctx)) return tratarHome(ctx, e)
+        if (e.keyCode == KeyEvent.KEYCODE_BACK) return tratarVoltar(ctx, e)
         // Remap (ideia 6): só teclas livres; coloridas e números só com a nossa HOME na frente (RemapTeclas).
         if (RemapTeclas.livre(e.keyCode)) {
             if (RemapTeclas.capturando) return false   // a tela "aperte a tecla" está esperando por ela
@@ -152,8 +153,9 @@ object BotoesControle {
      * Botão HOME com o launcherx do Google ATIVO (04/11/2026). Ele declara a HOME com priority=2 (app de sistema
      * privilegiado), e no resolvedor do Android a prioridade vence QUALQUER preferência, até a persistente do Device
      * Owner e o papel de HOME (medido: role HOME = nosso, preferred = nosso, e o HOME abria launcherx/.home.HomeActivity).
-     * Então a tecla é tratada aqui, antes do sistema: aperto curto = a nossa HOME; segurado = o NOSSO painel rápido
-     * (PainelRapidoActivity, 11/11/2026), que substitui o painel do Google (notificações, timer, Wi-Fi...).
+     * Então a tecla é tratada aqui, antes do sistema: aperto curto = a nossa HOME; segurado = a tela Casa (luzes e cenas
+     * do Home Assistant, CasaActivity). Até 18/11/2026 segurar HOME abria o painel rápido; o dono pediu o painel no
+     * VOLTAR segurado ("a seta da direita para a esquerda é o mesmo movimento do painel abrindo") e a Casa no HOME.
      */
     private fun tratarHome(ctx: Context, e: KeyEvent): Boolean {
         when (e.action) {
@@ -164,7 +166,7 @@ object BotoesControle {
                 homeLongo = Runnable {
                     homeLongoDisparou = true
                     homeLongo = null
-                    PainelRapidoActivity.abrir(ctx)   // o nosso painel (11/11/2026), não mais o do Google
+                    abrirCasa(ctx)
                 }.also { principal.postDelayed(it, Home.SEGURAR_HOME_MS) }
             }
             KeyEvent.ACTION_UP -> {
@@ -175,6 +177,40 @@ object BotoesControle {
             }
         }
         return true
+    }
+
+    private fun abrirCasa(ctx: Context) {
+        try {
+            ctx.startActivity(Intent(ctx, CasaActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        } catch (e: Exception) { Log.w(TAG, "não abriu a Casa: $e") }   // processo da HOME: nada aqui pode derrubá-lo
+    }
+
+    /** VOLTAR segurado: a mesma conta do "segurar" da ajuda (toque curto passa intacto para o app; ver [CuidarDeLonge.Segurar]). */
+    private val voltar = CuidarDeLonge.Segurar(Home.SEGURAR_HOME_MS).apply { tecla = KeyEvent.KEYCODE_BACK }
+    private var voltarRelogio: Runnable? = null
+
+    /**
+     * Botão VOLTAR (18/11/2026, pedido do dono): segurado abre o painel rápido (PainelRapidoActivity), em qualquer tela.
+     * O toque curto NÃO é engolido: o DOWN segue para o app da frente e o voltar continua igual, sem atraso e sem
+     * reinjetar tecla. Só quando completa [Home.SEGURAR_HOME_MS] o painel abre e daí em diante as repetições e o UP
+     * ficam conosco (o app não recebe o "soltar", e por isso não volta). Com a ajuda de longe (77) ligada no VOLTAR, a
+     * tecla é dela (3 s): os dois no mesmo botão disparariam um por cima do outro.
+     */
+    private fun tratarVoltar(ctx: Context, e: KeyEvent): Boolean {
+        if (CuidarDeLongeTv.usaTecla(KeyEvent.KEYCODE_BACK)) return false
+        val desce = e.action == KeyEvent.ACTION_DOWN
+        if (desce && e.repeatCount == 0) {
+            voltarRelogio?.let { principal.removeCallbacks(it) }
+            voltarRelogio = Runnable { voltarRelogio = null; if (voltar.venceu(SystemClock.uptimeMillis())) PainelRapidoActivity.abrir(ctx) }
+                .also { principal.postDelayed(it, Home.SEGURAR_HOME_MS) }
+        } else if (!desce) {
+            voltarRelogio?.let { principal.removeCallbacks(it) }; voltarRelogio = null
+        }
+        return voltar.evento(e.keyCode, desce, e.repeatCount, e.eventTime) {
+            voltarRelogio?.let { principal.removeCallbacks(it) }; voltarRelogio = null
+            PainelRapidoActivity.abrir(ctx)
+        }
     }
 
     /** Abre um app pelo pacote. Na TV o certo é o atalho "leanback"; se o app não tiver, tenta o comum. */
