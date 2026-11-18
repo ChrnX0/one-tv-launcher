@@ -198,12 +198,17 @@ object CruzLogica {
      */
     data class Situacao(val rotulo: String, val texto: String, val origem: String, val tira: List<String> = emptyList())
 
-    /** "o quê · 35% · faltam 43 min": as partes vazias somem; a porcentagem só entre 1% e 99%. */
+    /**
+     * "o quê · 35% · faltam 43 min": as partes vazias somem; a porcentagem só entre 1% e 99%. Quebra de linha só no
+     * título ou depois de um "·" (visto na Sala, v463338: "faltam 28 / min" e "· 92%" começando a linha): o "·" fica
+     * grudado no que vem antes e "faltam 28 min" não se parte.
+     */
     fun andamento(oQue: String?, fracao: Float?, falta: String?): String = listOfNotNull(
         oQue?.trim()?.takeIf { it.isNotEmpty() },
         fracao?.takeIf { it >= 0.01f && it < 0.995f }?.let { "${kotlin.math.round(it * 100).toInt()}%" },
-        falta?.trim()?.takeIf { it.isNotEmpty() },
-    ).joinToString(" · ")
+        falta?.trim()?.takeIf { it.isNotEmpty() }?.replace(' ', NBSP),
+    ).joinToString("$NBSP· ")
+    private const val NBSP = '\u00A0'
 
     /** O que as linhas do item deixam de mostrar porque a [Situacao] já mostra (o texto dela e o que ela substitui). */
     fun tirarDoItem(s: Situacao?): List<String> = if (s == null) emptyList() else s.tira + s.texto
