@@ -754,6 +754,7 @@ AS\\Films).</string>
     <string name="legenda_escolher">Sous-titres pour « %1$s »</string>
     <string name="legenda_surdos">malentendants</string>
     <string name="legenda_bate">fait pour ce fichier</string>
+    <string name="lista_dica_escolher">choisir</string>
     <string name="legenda_atraso_opcao">Décalage des sous-titres : %1$s</string>
     <string name="legenda_atraso_titulo">Décalage des sous-titres (+ = texte plus tard)</string>
     <string name="legenda_atraso_zero">Aucun décalage</string>

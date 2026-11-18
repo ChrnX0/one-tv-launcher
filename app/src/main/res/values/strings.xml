@@ -828,6 +828,7 @@
     <string name="legenda_escolher">Subtitles for \"%1$s\"</string>
     <string name="legenda_surdos">hearing impaired</string>
     <string name="legenda_bate">made for this file</string>
+    <string name="lista_dica_escolher">choose</string>
     <string name="legenda_atraso_opcao">Subtitle delay: %1$s</string>
     <string name="legenda_atraso_titulo">Subtitle delay (+ = text shows later)</string>
     <string name="legenda_atraso_zero">No delay</string>

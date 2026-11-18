@@ -14,16 +14,14 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Barra Ilha: a linha do canto usa todo o espaço até a pílula do centro, em vez de cortar cedo</item>
-        <item>Em Assistir, o canto mostra primeiro o programa no ar e quanto falta, depois o canal</item>
-        <item>Em Jogar, o canto só aparece com algo de verdade: controles ligados, a turma do Discord ou o último jogo</item>
+        <item>Listas do player (áudio, legenda, qualidade, temporadas) em painel à direita com o filme visível ao lado, letras maiores e a posição “1 de 5”</item>
+        <item>Item escolhido fica em destaque e os outros ficam mais claros e menores, como na tela inicial em cruz; com som de andar e de escolher</item>
+        <item>As dicas “OK escolhe · voltar fecha” ficam dentro do painel, sem cobrir a legenda do filme</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Canto inteiro</item>
-        <item>Programa no ar</item>
+        <item>Lista do player</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Em Aplicativos, o canto esquerdo mostra “Buscar ▲ abre a barra com a busca” inteiro, sem “…”?</item>
-        <item>Em Assistir, com Filmes escolhido, o canto mostra o nome do programa no ar antes do canal?</item>
+        <item>Num filme, com ▼ e “Áudio e legenda”, a lista abre à direita com o filme visível e as dicas embaixo da lista?</item>
     </string-array>
 </resources>

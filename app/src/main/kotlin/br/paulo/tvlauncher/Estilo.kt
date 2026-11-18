@@ -588,10 +588,13 @@ object Estilo {
      * Lista de escolha por cima da tela, no jeito da cruz (18/11/2026, Paulo: "todo o sistema tem que ter a mesma leitura
      * visual"; antes era um cartão no meio que cobria o filme inteiro, com uma caixa por linha). Agora:
      *  - um PAINEL à direita sobre um véu em degradê: o vídeo continua à mostra à esquerda (dá para ver a legenda mudar);
-     *  - nome da lista em caixa alta + "3 de 14", como o nome da categoria na HOME;
-     *  - uma COLUNA sem caixas: a linha escolhida em letra grande e branca com o ponto laranja à esquerda; as outras
-     *    menores e mais apagadas quanto mais longe (a mesma escada de opacidade da cruz, [HomeCruz.ALFA_COLUNA]);
-     *  - a coluna rola para manter a escolhida no meio; marcadas ganham "✓" no acento.
+     *  - nome da lista em caixa alta no laranja + "3 de 14" na mesma linha, igual ao nome da categoria na HOME;
+     *  - uma COLUNA sem caixas: a linha escolhida grande e branca com o ponto laranja à esquerda; as outras menores e
+     *    mais apagadas quanto mais longe (a mesma escada de opacidade da cruz, [HomeCruz.ALFA_COLUNA]);
+     *  - a coluna rola para manter a escolhida no meio; marcadas ganham "✓" no acento;
+     *  - 2ª passada (Paulo: "dava pra ser melhor"): letra de peso fixo (o texto não pula de largura no foco), linhas entram
+     *    em onda ao abrir, o ponto "acende", som de passo da cruz (mudo com som tocando) e as dicas "OK escolher ·
+     *    VOLTAR fechar" no pé, como na tela do Rádio.
      * O que entra continua igual para quem chama: OK numa linha fecha e chama [aoEscolher]; VOLTAR fecha sem escolher.
      * Os rótulos guardam spans (ícones de [JanelaIcones.comIcone], que o toString() antigo apagava).
      */
@@ -601,33 +604,66 @@ object Estilo {
         val d = android.app.Dialog(ctx)
         val rtl = ctx.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
         val forte = fonte(800)
+        val media = fonte(500)
         val sombra = 0x99000000.toInt()
-        val posicao = TextView(ctx).apply {
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, LISTA_FONTE_POSICAO); typeface = fonte(500); setTextColor(HomeCruz.COR_SUB)
-            includeFontPadding = false; setShadowLayer(dp(ctx, 6).toFloat(), 0f, 0f, sombra)
+        val anima = android.provider.Settings.Global.getFloat(ctx.contentResolver, android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 1f) > 0f
+        val suave = DecelerateInterpolator(1.6f)
+        val nomeLista = titulo.toString().uppercase()
+        // Cabeçalho num texto só: "ÁUDIO E LEGENDA   3 de 14" (a posição quebra junto se o nome for comprido).
+        val cabecalho = TextView(ctx).apply {
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, HomeCruz.FONTE_ROTULO); typeface = forte; setTextColor(ACENTO)
+            letterSpacing = 0.08f; includeFontPadding = false; maxLines = 3; setLineSpacing(dp(ctx, 4).toFloat(), 1f)
+            setShadowLayer(dp(ctx, 6).toFloat(), 0f, 0f, sombra)
+            text = nomeLista
+        }
+        fun posicao(i: Int) {
+            if (itens.size < 2) return
+            // espaço que não quebra: "1 de\n5" ficava partido quando o nome era comprido
+            val pos = ctx.getString(R.string.cruz_posicao, i + 1, itens.size).replace(' ', '\u00A0')
+            cabecalho.text = android.text.SpannableStringBuilder(nomeLista).append("   ").apply {
+                val ini = length; append(pos)
+                setSpan(android.text.style.ForegroundColorSpan(HomeCruz.COR_SUB), ini, length, 0)
+                setSpan(android.text.style.AbsoluteSizeSpan(HomeCruz.FONTE_POSICAO.toInt(), true), ini, length, 0)
+                setSpan(android.text.style.TypefaceSpan(media), ini, length, 0)
+            }
         }
         val linhas = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
             setPaddingRelative(0, dp(ctx, E1), 0, dp(ctx, E1))
         }
-        val rolagem = android.widget.ScrollView(ctx).apply {
+        // As dicas vêm logo embaixo da lista; a rolagem deixa o lugar delas (sem isso ela pegava todo o resto do painel).
+        val reservaDicas = dp(ctx, LISTA_RESERVA_DICAS)
+        val rolagem = object : android.widget.ScrollView(ctx) {
+            override fun onMeasure(larg: Int, alt: Int) {
+                val h = View.MeasureSpec.getSize(alt)
+                super.onMeasure(larg, if (View.MeasureSpec.getMode(alt) == View.MeasureSpec.UNSPECIFIED) alt
+                    else View.MeasureSpec.makeMeasureSpec((h - reservaDicas).coerceAtLeast(0), View.MeasureSpec.AT_MOST))
+            }
+        }.apply {
             isVerticalScrollBarEnabled = false
             // Borda que esmaece em cima e embaixo: mostra que há mais itens.
-            isVerticalFadingEdgeEnabled = true; setFadingEdgeLength(dp(ctx, 48))
+            isVerticalFadingEdgeEnabled = true; setFadingEdgeLength(dp(ctx, 56))
             addView(linhas)
         }
         class Linha(val raiz: LinearLayout, val ponto: View, val nome: TextView)
         val vistas = ArrayList<Linha>()
-        fun arrumar(focada: Int) {
+        var atual = -1
+        fun arrumar(focada: Int, animar: Boolean) {
             for ((i, l) in vistas.withIndex()) {
                 val dist = kotlin.math.abs(i - focada)
                 val alfa = if (dist == 0) 1f else HomeCruz.ALFA_COLUNA[dist] ?: LISTA_ALFA_LONGE
                 val escala = if (dist == 0) 1f else LISTA_ESCALA
-                l.nome.animate().alpha(alfa).scaleX(escala).scaleY(escala).setDuration(FOCO_MS).setInterpolator(desacelera).start()
-                l.ponto.animate().alpha(if (dist == 0) 1f else 0f).setDuration(FOCO_MS).start()
-                l.nome.typeface = if (dist == 0) forte else fonte(600)
+                val ponto = if (dist == 0) 1f else 0f
+                if (animar) {
+                    l.nome.animate().alpha(alfa).scaleX(escala).scaleY(escala).setDuration(LISTA_FOCO_MS).setInterpolator(suave).start()
+                    // o ponto "acende": cresce de 40% e aparece
+                    if (dist == 0) { l.ponto.scaleX = 0.4f; l.ponto.scaleY = 0.4f }
+                    l.ponto.animate().alpha(ponto).scaleX(1f).scaleY(1f).setDuration(LISTA_FOCO_MS).setInterpolator(suave).start()
+                } else {
+                    l.nome.alpha = alfa; l.nome.scaleX = escala; l.nome.scaleY = escala; l.ponto.alpha = ponto
+                }
             }
-            if (vistas.size > 1) posicao.text = ctx.getString(R.string.cruz_posicao, focada + 1, vistas.size)
+            posicao(focada)
         }
         itens.forEachIndexed { i, rotulo ->
             val ponto = View(ctx).apply {
@@ -636,57 +672,75 @@ object Estilo {
             }
             val nome = TextView(ctx).apply {
                 text = rotulo
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, LISTA_FONTE); typeface = fonte(600); setTextColor(TEXTO)
-                includeFontPadding = false; setLineSpacing(dp(ctx, 2).toFloat(), 1f)
+                // peso fixo: trocar a fonte no foco mudava a largura e a quebra de linha (o texto "pulava")
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, LISTA_FONTE); typeface = fonte(700); setTextColor(TEXTO)
+                includeFontPadding = false; setLineSpacing(dp(ctx, 3).toFloat(), 1f)
                 setShadowLayer(dp(ctx, 8).toFloat(), 0f, 0f, sombra)
                 // encolhe pelo começo da linha (do lado do ponto), como os vizinhos da cruz
-                addOnLayoutChangeListener { v, l, t, r, b, _, _, _, _ -> v.pivotX = if (rtl) (r - l).toFloat() else 0f; v.pivotY = (b - t) / 2f }
+                addOnLayoutChangeListener { v, l, t, r, _, _, _, _, _ -> v.pivotX = if (rtl) (r - l).toFloat() else 0f; v.pivotY = dp(ctx, 14).toFloat() }
                 alpha = LISTA_ALFA_LONGE; scaleX = LISTA_ESCALA; scaleY = LISTA_ESCALA
             }
             val raiz = LinearLayout(ctx).apply {
                 orientation = LinearLayout.HORIZONTAL
                 // em cima: com 2-3 linhas, o ponto e o ✓ ficam na altura da 1ª (como na cruz), não no meio
                 gravity = Gravity.TOP
-                minimumHeight = dp(ctx, 52)
-                setPaddingRelative(0, dp(ctx, 8), 0, dp(ctx, 8))
+                minimumHeight = dp(ctx, 50)
+                setPaddingRelative(0, dp(ctx, 10), 0, dp(ctx, 10))
                 isFocusable = true; isClickable = true
                 contentDescription = rotulo.toString().trim() + if (i in marcadas) " ✓" else ""
                 addView(ponto, LinearLayout.LayoutParams(dp(ctx, HomeCruz.PONTO), dp(ctx, HomeCruz.PONTO)).apply { marginEnd = dp(ctx, 14); topMargin = dp(ctx, 11) })
                 addView(nome, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
                 if (i in marcadas) addView(TextView(ctx).apply {
-                    text = "✓"; setTextSize(TypedValue.COMPLEX_UNIT_SP, LISTA_FONTE); typeface = forte; setTextColor(ACENTO)
+                    text = "✓"; setTextSize(TypedValue.COMPLEX_UNIT_SP, LISTA_FONTE_MARCA); typeface = forte; setTextColor(ACENTO)
                     includeFontPadding = false; setShadowLayer(dp(ctx, 6).toFloat(), 0f, 0f, sombra)
-                }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginStart = dp(ctx, E2) })
-                setOnClickListener { d.dismiss(); aoEscolher(i) }
+                }, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginStart = dp(ctx, E2); topMargin = dp(ctx, 3) })
+                setOnClickListener { SonsCruz.tocar(ctx, SonsCruz.Som.ABRIR); d.dismiss(); aoEscolher(i) }
                 setOnFocusChangeListener { v, foco ->
                     if (!foco) return@setOnFocusChangeListener
-                    arrumar(i)
+                    // som de passo da cruz (só quando anda, não ao abrir; mudo com o filme tocando: SonsCruz se cala)
+                    if (atual >= 0 && atual != i) SonsCruz.tocar(ctx, SonsCruz.Som.ANDAR)
+                    atual = i
+                    arrumar(i, animar = anima)
                     // a escolhida fica no meio da coluna (a cruz não deixa o foco grudar na borda)
                     rolagem.post { rolagem.smoothScrollTo(0, (v.top + v.height / 2 - rolagem.height / 2).coerceAtLeast(0)) }
                 }
             }
             vistas += Linha(raiz, ponto, nome)
-            linhas.addView(raiz, LinearLayout.LayoutParams(-1, -2).apply { if (i > 0) topMargin = dp(ctx, 4) })
+            linhas.addView(raiz, LinearLayout.LayoutParams(-1, -2).apply { if (i > 0) topMargin = dp(ctx, 2) })
         }
+        // Dicas logo embaixo da lista, no mesmo desenho das do Rádio/Podcasts (tecla numa pílula + o que ela faz).
+        val dicas = LinearLayout(ctx).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            for ((tecla, acao) in listOf(ctx.getString(R.string.grv_dica_ok) to ctx.getString(R.string.lista_dica_escolher),
+                ctx.getString(R.string.rede_tecla_voltar) to ctx.getString(R.string.fp_fechar).lowercase())) {
+                addView(TextView(ctx).apply {
+                    text = tecla; setTextSize(TypedValue.COMPLEX_UNIT_SP, LISTA_FONTE_DICA); typeface = forte; setTextColor(TEXTO)
+                    includeFontPadding = false
+                    background = GradientDrawable().apply { cornerRadius = dp(ctx, 7).toFloat(); setColor(0x40FFFFFF) }
+                    setPaddingRelative(dp(ctx, 8), dp(ctx, 3), dp(ctx, 8), dp(ctx, 3))
+                })
+                addView(TextView(ctx).apply {
+                    text = acao; setTextSize(TypedValue.COMPLEX_UNIT_SP, LISTA_FONTE_DICA); typeface = media; setTextColor(HomeCruz.COR_SUB)
+                    includeFontPadding = false; setShadowLayer(dp(ctx, 6).toFloat(), 0f, 0f, sombra)
+                }, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(ctx, 8); marginEnd = dp(ctx, 18) })
+            }
+        }
+        val recuo = dp(ctx, HomeCruz.PONTO + 14)   // textos do cabeçalho alinhados com o texto das linhas, não com o ponto
         val painel = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER_VERTICAL
-            // embaixo sobra a faixa da legenda do filme (~últimos 18% da tela): a lista não passa por cima dela
+            // embaixo sobra a faixa da legenda do filme: nem a lista nem as dicas passam por cima dela
             setPaddingRelative(dp(ctx, 8), dp(ctx, 44), dp(ctx, 56), dp(ctx, 96))
-            addView(TextView(ctx).apply {
-                text = titulo.toString().uppercase()
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, HomeCruz.FONTE_ROTULO); typeface = forte; setTextColor(HomeCruz.COR_CATEGORIA)
-                letterSpacing = 0.06f; includeFontPadding = false; maxLines = 3
-                setShadowLayer(dp(ctx, 6).toFloat(), 0f, 0f, sombra)
-            }, LinearLayout.LayoutParams(-1, -2).apply { marginStart = dp(ctx, HomeCruz.PONTO + 14) })
-            addView(posicao, LinearLayout.LayoutParams(-1, -2).apply { marginStart = dp(ctx, HomeCruz.PONTO + 14); topMargin = dp(ctx, 8) })
-            // Crédito de quem forneceu os itens (ex.: "Subtitles provided by OpenSubtitles.com"), embaixo do
-            // nome da lista: no pé ele sumia quando a lista enchia o painel (a rolagem fica com todo o espaço que sobra).
+            addView(cabecalho, LinearLayout.LayoutParams(-1, -2).apply { marginStart = recuo })
+            // Crédito de quem forneceu os itens (ex.: "Subtitles provided by OpenSubtitles.com"), embaixo do nome da lista:
+            // no pé ele sumia quando a lista enchia o painel (a rolagem fica com todo o espaço que sobra).
             if (rodape != null) addView(TextView(ctx).apply {
-                text = rodape; setTextSize(TypedValue.COMPLEX_UNIT_SP, LISTA_FONTE_POSICAO); typeface = fonte(500); setTextColor(HomeCruz.COR_SUB)
+                text = rodape; setTextSize(TypedValue.COMPLEX_UNIT_SP, LISTA_FONTE_POSICAO); typeface = media; setTextColor(HomeCruz.COR_SUB)
                 alpha = 0.85f; includeFontPadding = false; setShadowLayer(dp(ctx, 6).toFloat(), 0f, 0f, sombra)
-            }, LinearLayout.LayoutParams(-1, -2).apply { marginStart = dp(ctx, HomeCruz.PONTO + 14); topMargin = dp(ctx, 6) })
+            }, LinearLayout.LayoutParams(-1, -2).apply { marginStart = recuo; topMargin = dp(ctx, 8) })
             addView(rolagem, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(ctx, E2) })
+            addView(dicas, LinearLayout.LayoutParams(-2, -2).apply { marginStart = recuo; topMargin = dp(ctx, 14) })
         }
         val raiz = FrameLayout(ctx).apply {
             // Véu só do lado do painel: transparente à esquerda, quase opaco atrás do texto.
@@ -700,17 +754,30 @@ object Estilo {
             setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT))
             clearFlags(android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND)
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            setWindowAnimations(0)   // a entrada é nossa (abaixo); a do sistema somava um "pulo" cinza
         }
         // focoNaMarcada: numa escolha única o foco começa na opção atual; numa lista de liga/desliga (opções do player)
         // começa no topo, senão o foco caía no meio da lista, no primeiro efeito ligado (visto na Sala, 17/11/2026).
         d.setOnShowListener {
             val i = marcadas.firstOrNull { focoNaMarcada && it in vistas.indices } ?: 0
+            arrumar(i, animar = false)
             vistas.getOrNull(i)?.raiz?.requestFocus()
-            // entra deslizando da direita (220 ms, desacelerando); sem animação no aparelho = aparece direto
-            if (android.provider.Settings.Global.getFloat(ctx.contentResolver, android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 1f) > 0f) {
-                painel.translationX = dp(ctx, if (rtl) -40 else 40).toFloat(); painel.alpha = 0f
-                painel.animate().translationX(0f).alpha(1f).setDuration(220).setInterpolator(desacelera).start()
+            if (!anima) return@setOnShowListener
+            // Entrada: o véu aparece, o painel desliza da direita e as linhas chegam em onda (como os vizinhos da cruz).
+            val lado = if (rtl) -1 else 1
+            raiz.background?.alpha = 0; android.animation.ValueAnimator.ofInt(0, 255).apply {
+                duration = LISTA_ENTRAR_MS; interpolator = suave
+                addUpdateListener { raiz.background?.alpha = it.animatedValue as Int }
+            }.start()
+            painel.translationX = dp(ctx, 48).toFloat() * lado; painel.alpha = 0f
+            painel.animate().translationX(0f).alpha(1f).setDuration(LISTA_ENTRAR_MS).setInterpolator(suave).start()
+            for ((k, l) in vistas.withIndex()) {
+                val atraso = (kotlin.math.abs(k - i) * LISTA_ONDA_MS).coerceAtMost(LISTA_ONDA_MAX_MS)
+                l.raiz.translationX = dp(ctx, 28).toFloat() * lado
+                l.raiz.animate().translationX(0f).setStartDelay(atraso).setDuration(LISTA_ENTRAR_MS).setInterpolator(suave).start()
             }
+            dicas.alpha = 0f
+            dicas.animate().alpha(1f).setStartDelay(LISTA_ENTRAR_MS / 2).setDuration(LISTA_ENTRAR_MS).start()
         }
         if (aoFechar != null) d.setOnDismissListener { aoFechar() }
         d.show()
@@ -740,4 +807,14 @@ object Estilo {
     /** Vizinhos: 24 sp viram ~20 sp na tela (a escada da cruz é 0,6; aqui a lista é de ler, então encolhe menos). */
     const val LISTA_ESCALA = 0.85f
     const val LISTA_ALFA_LONGE = 0.5f
+    const val LISTA_FONTE_MARCA = 20f
+    /** Dicas do pé: 16 sp, o mínimo da casa (idosos); as do Rádio usam 14 na tecla. */
+    const val LISTA_FONTE_DICA = 16f
+    const val LISTA_FOCO_MS = 180L
+    const val LISTA_ENTRAR_MS = 260L
+    /** Cada linha chega este tanto depois da vizinha (a "onda" da cruz é 16 ms por passo). */
+    const val LISTA_ONDA_MS = 18L
+    const val LISTA_ONDA_MAX_MS = 120L
+    /** Altura guardada para as dicas embaixo da lista (pílula de ~26 dp + 14 de vão). */
+    const val LISTA_RESERVA_DICAS = 44
 }
