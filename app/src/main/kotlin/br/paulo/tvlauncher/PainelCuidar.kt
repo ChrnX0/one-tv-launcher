@@ -34,7 +34,7 @@ object PainelCuidar {
                 if (!elevada) return pin()
                 val o = corpo ?: return erro(400, "JSON inválido")
                 when (o.optString("acao")) {
-                    "remover" -> CuidarDeLongeTv.mudar(app) { it.copy(lembretes = CuidarDeLonge.removerLembrete(it.lembretes, o.optInt("id"))) }
+                    "remover" -> CuidarDeLongeTv.removerLembrete(app, o.optInt("id"))
                     "salvar" -> {
                         val antes = CuidarDeLongeTv.config(app).lembretes
                         val l = CuidarDeLonge.Lembrete(o.optInt("id"), o.optInt("hora", -1), o.optInt("minuto", -1),

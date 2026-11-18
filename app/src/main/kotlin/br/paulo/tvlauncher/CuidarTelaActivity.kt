@@ -38,6 +38,8 @@ class CuidarTelaActivity : Activity() {
         const val MODO_LEMBRETE = "lembrete"
         const val MODO_ESTOU_BEM = "estou_bem"
         private const val FECHAR_MS = 30_000L
+        /** Lembretes / "Estou bem?" que chegaram com outro na tela (CuidarDeLonge.esperaNaFila). Só na thread da tela. */
+        private val pendentes = ArrayDeque<Intent>()
     }
 
     private val ui = Handler(Looper.getMainLooper())
@@ -70,6 +72,15 @@ class CuidarTelaActivity : Activity() {
     override fun onNewIntent(novo: Intent) {
         super.onNewIntent(novo)
         if (modo == MODO_AJUDA && !mandou) return   // ajuda em andamento: fica (outra ajuda é a mesma)
+        val novoModo = novo.getStringExtra(EXTRA_MODO).orEmpty()
+        val chave = novo.getStringExtra(EXTRA_CHAVE).orEmpty()
+        if (CuidarDeLonge.esperaNaFila(modo, novoModo)) {
+            // O mesmo pedido repetido não entra duas vezes (nem o que já está na tela).
+            if (chave != intent.getStringExtra(EXTRA_CHAVE) && pendentes.none { it.getStringExtra(EXTRA_CHAVE) == chave }) pendentes.addLast(novo)
+            return
+        }
+        // Ajuda/consentimento passam na frente: o lembrete da tela volta depois, em vez de sumir.
+        if (CuidarDeLonge.esperaNaFila(modo, modo)) pendentes.addFirst(intent)
         setIntent(novo)
         recreate()
     }
@@ -82,6 +93,10 @@ class CuidarTelaActivity : Activity() {
         super.onDestroy()
         ui.removeCallbacksAndMessages(null)
         if (modo == MODO_AJUDA && !mandou) CuidarDeLongeTv.desistirAjuda()
+        // Respondeu (ou fechou): o próximo da fila aparece. recreate() não conta (isFinishing = false).
+        if (isFinishing) pendentes.removeFirstOrNull()?.let { prox ->
+            runCatching { applicationContext.startActivity(Intent(prox).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+        }
     }
 
     // ---------------------------------------------------------------- montagem

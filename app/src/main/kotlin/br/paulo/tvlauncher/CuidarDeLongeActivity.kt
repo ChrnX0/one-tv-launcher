@@ -96,7 +96,7 @@ class CuidarDeLongeActivity : Activity() {
             textSize = Estilo.Leitura.ITEM_DETALHE; setPaddingRelative(Estilo.dp(context, 8), 0, 0, 0) })
         for (l in c.lembretes) linha("${l.hhmm}  ${l.texto}", diasTexto(l.dias)) {
             Estilo.lista(this, "${l.hhmm}  ${l.texto}", listOf(getString(R.string.cuidar_apagar), getString(R.string.cuidar_cancelar))) { i ->
-                if (i == 0) { CuidarDeLongeTv.mudar(this) { it.copy(lembretes = CuidarDeLonge.removerLembrete(it.lembretes, l.id)) }; montar() }
+                if (i == 0) { CuidarDeLongeTv.removerLembrete(this, l.id); montar() }
             }
         }
         linha(getString(R.string.cuidar_lembrete_celular), getString(R.string.cuidar_lembrete_celular_det)) { qrPainel() }

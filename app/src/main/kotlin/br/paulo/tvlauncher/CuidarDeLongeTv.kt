@@ -57,6 +57,12 @@ object CuidarDeLongeTv {
     fun estado(ctx: Context): CuidarDeLonge.Estado = CuidarDeLonge.estadoDeJson(prefs(ctx).getString("estado", null))
 
     @Synchronized
+    /** Remove o lembrete e as marcas do dia dele (o id pode voltar num lembrete novo: [CuidarDeLonge.esquecerLembrete]). */
+    fun removerLembrete(ctx: Context, id: Int) {
+        mudar(ctx) { it.copy(lembretes = CuidarDeLonge.removerLembrete(it.lembretes, id)) }
+        mudarEstado(ctx) { CuidarDeLonge.esquecerLembrete(it, id) }
+    }
+
     private fun mudarEstado(ctx: Context, f: (CuidarDeLonge.Estado) -> CuidarDeLonge.Estado): CuidarDeLonge.Estado {
         val novo = CuidarDeLonge.podar(f(estado(ctx)), System.currentTimeMillis(), fuso)
         prefs(ctx).edit().putString("estado", CuidarDeLonge.estadoParaJson(novo).toString()).commit()
@@ -359,8 +365,13 @@ class CuidarReceiver : BroadcastReceiver() {
     override fun onReceive(ctx: Context, intent: Intent) {
         val app = ctx.applicationContext
         val fim = goAsync()   // o envio é rede: segura o processo (e o despertar do alarme) até acabar; transmissão de fundo tem até 60 s
+        // Solta o broadcast no máximo em 50 s (depuração 18/11/2026: vários avisos seguidos passavam de 60 s = ANR). O
+        // trabalho continua na thread de fundo; o launcher é a HOME com acessibilidade, o processo fica de pé.
+        val solto = java.util.concurrent.atomic.AtomicBoolean(false)
+        val soltar = { if (solto.compareAndSet(false, true)) fim.finish() }
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({ soltar() }, 50_000L)
         Fundo.rodar("cuidar-alarme") {
-            try { CuidarDeLongeTv.rodar(app) } catch (e: Exception) { Log.w("TvLauncher.Cuidar", "rodar: $e") } finally { fim.finish() }
+            try { CuidarDeLongeTv.rodar(app) } catch (e: Exception) { Log.w("TvLauncher.Cuidar", "rodar: $e") } finally { soltar() }
         }
     }
 }

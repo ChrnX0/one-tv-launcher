@@ -183,6 +183,22 @@ object CuidarDeLonge {
 
     fun removerLembrete(lista: List<Lembrete>, id: Int) = lista.filterNot { it.id == id }
 
+    /**
+     * Depuração 18/11/2026: o id de um lembrete apagado volta no próximo novo (máximo + 1) e herdava as marcas do dia
+     * ("confirmado"), então o novo não aparecia hoje. Quem remove apaga também as marcas "<id>@...".
+     */
+    /**
+     * Depuração 18/11/2026: chegou outro lembrete (ou o "Estou bem?") com um lembrete/"Estou bem?" ainda na tela. Antes a
+     * tela se refazia e o 1º sumia já anotado como mostrado (a família recebia "não confirmado"). Agora o novo ESPERA
+     * numa fila e aparece quando a pessoa responde ao atual. Ajuda e consentimento (a pessoa pediu) passam na frente.
+     */
+    fun esperaNaFila(atual: String, novo: String): Boolean {
+        val perguntas = setOf("lembrete", "estou_bem")
+        return atual in perguntas && novo in perguntas
+    }
+
+    fun esquecerLembrete(e: Estado, id: Int) = e.copy(marcas = e.marcas.filterNot { it.chave.startsWith("$id@") })
+
     // ---------------------------------------------------------------- JSON da configuração
 
     fun paraJson(c: Config): JSONObject = JSONObject()
