@@ -17,15 +17,24 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Podcasts: new full-screen player with big cover art, the time the episode ends, speed, skip silences and a sleep timer</item>
+        <item>In the player, ▼ shows Up next: the next episodes of the same podcast; OK plays one</item>
+        <item>Playing an episode opens the player; on the Podcasts screen, Now playing has an Open player item</item>
         <item>Movies and series: when the list marks only the subtitled version (“Leg”), the other one counts as dubbed, and the player ▼ switches between them at the same point (series too)</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>player_podcast</item>
+        <item>a_seguir</item>
         <item>versao_par</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Podcast player</item>
+        <item>Up next</item>
         <item>Dubbed and subtitled</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Does playing a podcast episode open the full-screen player with the cover, time bar and controls?</item>
+        <item>In the player, does ▼ show the next episodes, and does OK on one play it?</item>
         <item>In “Custe o que Custar” (Series), does the page offer the subtitled version, and does the episode ▼ switch at the same point?</item>
     </string-array>
 </resources>
