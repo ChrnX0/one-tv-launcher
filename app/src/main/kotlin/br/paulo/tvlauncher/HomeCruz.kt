@@ -36,11 +36,12 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     /**
      * Um item da coluna. [abrir] roda no OK; [opcoes] no OK segurado (null = segurar é igual a apertar).
      * [progresso] (0..1): quanto já foi visto (filme, série, programa da TV ao vivo); vira uma barra embaixo do ícone.
+     * [canto]: o que está acontecendo agora com o item (o programa no ar), para a barra de cima mostrar com ele em foco.
      */
     class Item(
         val id: String, val nome: String, val sub: String, val icone: Drawable,
         val abrir: () -> Unit, val opcoes: (() -> Unit)? = null, val aoEscolher: (() -> Unit)? = null,
-        val progresso: Float? = null,
+        val progresso: Float? = null, val canto: BarraIlha.Canto? = null,
     )
     class Categoria(val cat: CruzLogica.Categoria, val nome: String, val icone: Drawable, val itens: List<Item>)
 
@@ -56,10 +57,19 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         const val PASSO_COLUNA = 71f    // distância entre itens pequenos na coluna
         const val VAO_ESCOLHIDO = 94f   // do centro do escolhido ao centro do vizinho de baixo (o grande ocupa mais)
         const val VAO_CIMA = 89f        // do centro do escolhido ao centro do vizinho de cima
-        // Linha de baixo em até 4 linhas (Paulo, 18/11/2026: "ao invés de cortar, continua na linha de baixo"): o item
-        // tem SUB_SOBRA dp a mais embaixo do ícone para o texto, e o vizinho de baixo desce o que as linhas extras ocupam.
+        // Até 4 linhas por item nas telas de Ouvir (CruzOuvir); o item tem SUB_SOBRA dp a mais embaixo do ícone para o texto.
         const val SUB_LINHAS = 4
         const val SUB_SOBRA = 76
+        // Na HOME, embaixo do nome fica UMA linha (Paulo, 18/11/2026 12:15 local); o resto vai para o canto de baixo à
+        // direita, onde a tela está vazia ([CruzLogica.partes]). Aparece quando o foco para, para não piscar navegando.
+        const val DETALHE_L = 330         // largura do bloco de detalhes
+        const val DETALHE_MARGEM = 48     // da borda direita
+        const val DETALHE_BAIXO = 44      // da borda de baixo
+        const val DETALHE_LINHAS = 5
+        const val DETALHE_ESPERA_MS = 300L
+        // A informação de baixo é UMA, mas pode quebrar em 2 linhas na palavra (cortar "Vídeos, músicas e fotos da rede
+        // da …" a 3 letras do fim e repetir inteiro no canto ficava pior); passou de 2, termina em "…" e vai inteira para o canto.
+        const val ITEM_LINHAS = 2
         const val TEXTO_TOPO = 9        // do topo do ícone ao topo do nome (o nome fica na metade de cima do ícone)
         const val PONTO = 10            // ponto laranja à esquerda do nome do escolhido (era uma barra embaixo dele)
         const val CAT_ESQUERDA = 97f    // centro da categoria logo à esquerda da coluna
@@ -120,6 +130,22 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     var aoMudar: ((Categoria, Item) -> Unit)? = null
     /** OK num item (antes de [Item.abrir]): quem usa grava o "lembrado" da categoria. */
     var aoAbrir: ((CruzLogica.Categoria, String) -> Unit)? = null
+    /** Barra "Relógio" ocupa o canto de baixo com a hora grande: os detalhes vão para o canto de cima, à direita. */
+    var detalheEmCima = false
+        set(v) {
+            if (field == v) return
+            field = v
+            (detalhe.layoutParams as LayoutParams).apply {
+                gravity = (if (v) Gravity.TOP else Gravity.BOTTOM) or Gravity.END
+                topMargin = if (v) dpi(DETALHE_BAIXO) else 0
+                bottomMargin = if (v) 0 else dpi(DETALHE_BAIXO)
+            }
+            detalhe.gravity = (if (v) Gravity.TOP else Gravity.BOTTOM) or Gravity.END
+            detalhe.requestLayout()
+        }
+    /** A barra de cima mostra o [Item.canto] (barra Ilha): ele não se repete nos detalhes. */
+    var cantoNaBarra = false
+        set(v) { if (field != v) { field = v; atualizarDetalhe() } }
     /** Itens lembrados (id da categoria -> id do item), lidos por quem usa; valem só na 1ª montagem. */
     var lembrados: Map<String, String> = emptyMap()
     /** O último item aberto ("categoria|item"); quem usa grava e devolve aqui na 1ª montagem (HOME refeita). */
@@ -137,17 +163,19 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private val posicao: TextView
     /** Seta ▼ embaixo da coluna quando há itens escondidos lá embaixo; aparece com a cruz parada ([DICA_MS]). */
     private val maisAbaixo: View
+    /** Os detalhes do item em foco, no canto de baixo à direita. */
+    private val detalhe: TextView
     private val dm = resources.displayMetrics
     private fun dp(v: Float) = v * dm.density
     private fun dpi(v: Int) = (v * dm.density + 0.5f).toInt()
 
     /** As partes de um item que mudam com a escolha. */
     private inner class ItemView(val raiz: LinearLayout, val icone: ImageView, val nome: TextView, val sub: TextView, val traco: View) {
-        /** Linhas da linha de baixo na última arrumação (quando muda, a coluna se rearruma). */
+        /** Linhas da linha de baixo na última arrumação (1 ou 2; com 2, os vizinhos de baixo descem uma linha). */
         var linhas = 1
         var voltarSub: Runnable? = null
-        /** O texto de baixo como veio (antes do corte por linha): só refaz a medida quando ele muda. */
-        var subBruto: String? = null
+        /** A linha de baixo (só a principal: [CruzLogica.partes]), para voltar depois do "Não deu para abrir". */
+        var principal: String = ""
         /** Barra de "quanto já foi visto", criada só no item que tem progresso. */
         var barra: BarraProgresso? = null
     }
@@ -175,6 +203,10 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     init {
         isFocusable = true
         isFocusableInTouchMode = false
+        // A cruz é desenhada por posição absoluta (translationX a partir da esquerda). Em árabe a direção da view virava
+        // da direita para a esquerda e todos os filhos começavam na borda direita: a coluna saía da tela (telas ar,
+        // 18/11/2026). Fica sempre da esquerda para a direita; o texto em árabe continua escrito na direção dele.
+        layoutDirection = View.LAYOUT_DIRECTION_LTR
         clipChildren = false
         clipToPadding = false
         importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
@@ -212,7 +244,24 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         addView(maisAbaixo, LayoutParams(dpi(SETA_L), dpi(SETA_A)))
         maisAbaixo.translationX = dp(COLUNA - SETA_L / 2f)
         maisAbaixo.translationY = dp(SETA_Y)
-        setOnFocusChangeListener { _, tem -> posicionar(animar = false); anunciar(); if (tem) dicaDepois() else esconderDica() }
+        detalhe = TextView(ctx).apply {
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, FONTE_SUB)
+            setTextColor(COR_SUB)
+            typeface = fonte
+            // à direita, colado no canto (a cruz é sempre da esquerda para a direita: END = direita)
+            gravity = Gravity.END or Gravity.BOTTOM
+            maxLines = DETALHE_LINHAS
+            ellipsize = TextUtils.TruncateAt.END
+            includeFontPadding = false
+            setLineSpacing(dp(6f), 1f)
+            setShadowLayer(dp(8f), 0f, 0f, 0xCC000000.toInt())
+            alpha = 0f
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO   // o TalkBack já ouve tudo no item
+        }
+        addView(detalhe, LayoutParams(dpi(DETALHE_L), LayoutParams.WRAP_CONTENT, Gravity.BOTTOM or Gravity.END).apply {
+            marginEnd = dpi(DETALHE_MARGEM); bottomMargin = dpi(DETALHE_BAIXO)
+        })
+        setOnFocusChangeListener { _, tem -> posicionar(animar = false); anunciar(); atualizarDetalhe(); if (tem) dicaDepois() else esconderDica() }
     }
 
     /**
@@ -373,9 +422,9 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         iv.sub.removeCallbacks(iv.voltarSub)
         iv.voltarSub = Runnable {
             // o texto de AGORA (o item pode ter mudado nesses 4 s: programa novo, minutos que passaram)
-            val agora = iv.subBruto.orEmpty()
+            val agora = iv.principal
             iv.sub.setTextColor(COR_SUB)
-            iv.sub.text = cortarLinhas(agora, iv.sub)
+            iv.sub.text = agora
             iv.sub.visibility = if (agora.isEmpty()) View.GONE else View.VISIBLE
         }
         iv.sub.postDelayed(iv.voltarSub, NAO_ABRIU_MS)
@@ -430,7 +479,37 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         i.aoEscolher?.invoke()
         aoMudar?.invoke(c, i)
         anunciar()
+        atualizarDetalhe()
     }
+
+    // ---- detalhes no canto de baixo
+
+    private val mostrarDetalhe = Runnable {
+        val i = itemAtual()
+        val iv = viewAtual()
+        val linhas = if (i == null || iv == null || !(hasFocus() || isFocused)) emptyList() else {
+            val p = CruzLogica.partes(i.sub, i.canto?.texto?.takeIf { cantoNaBarra })
+            val cortada = p.principal.isNotEmpty() && android.text.StaticLayout.Builder
+                .obtain(p.principal, 0, p.principal.length, iv.sub.paint, dpi(TEXTO_MAX)).setIncludePad(false).build().lineCount > ITEM_LINHAS
+            CruzLogica.detalhes(p, principalCortada = cortada)
+        }
+        detalhe.animate().cancel()
+        if (linhas.isEmpty()) { detalhe.alpha = 0f; detalhe.text = ""; return@Runnable }
+        val texto = linhas.joinToString("\n")
+        if (detalhe.text.toString() != texto) detalhe.text = texto
+        detalhe.animate().alpha(1f).setDuration(if (semAnimacao()) 0L else 220L).start()
+    }
+
+    /** O foco mudou (ou o texto do item): os detalhes somem na hora e voltam quando o foco para ([DETALHE_ESPERA_MS]). */
+    private fun atualizarDetalhe() {
+        removeCallbacks(mostrarDetalhe)
+        detalhe.animate().cancel()
+        detalhe.alpha = 0f
+        postDelayed(mostrarDetalhe, if (semAnimacao()) 0L else DETALHE_ESPERA_MS)
+    }
+
+    /** Para o teste de tela: os detalhes do item em foco, como estão no canto de baixo. */
+    internal fun detalheAtual(): TextView = detalhe
 
     // ------------------------------------------------------------------ desenho
 
@@ -471,8 +550,9 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             setTextSize(TypedValue.COMPLEX_UNIT_SP, FONTE_SUB)
             setTextColor(COR_SUB)   // creme claro (contraste > 4,5:1 sobre o véu)
             typeface = fonte
-            // Até 4 linhas (quebra na palavra) em vez de cortar numa só; largura fixa para a quebra ser a mesma sempre.
-            maxLines = SUB_LINHAS
+            // Uma informação, até 2 linhas (o resto vai para o canto de baixo: [detalhe]).
+            maxLines = ITEM_LINHAS
+            setLineSpacing(dp(3f), 1f)
             ellipsize = TextUtils.TruncateAt.END
             includeFontPadding = false
             setLineSpacing(dp(3f), 1f)
@@ -504,41 +584,20 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             alpha = 0f
         }
         return ItemView(raiz, icone, nome, sub, traco).also { iv ->
-            // O texto mudou de tamanho (outro programa, outra língua): a coluna se rearruma com as linhas novas.
+            // A informação quebrou em 2 linhas (ou voltou a 1): a coluna se rearruma.
             sub.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-                val n = sub.lineCount.coerceIn(1, SUB_LINHAS)
+                val n = sub.lineCount.coerceIn(1, ITEM_LINHAS)
                 if (n != iv.linhas) { iv.linhas = n; post { posicionar(animar = true) } }
             }
         }
     }
 
-    /**
-     * No máximo [SUB_LINHAS] linhas na tela (Sala, 18/11/2026: o título comprido do último vídeo do YouTube ocupava 3
-     * linhas e empurrava as outras para fora). Uma informação comprida pode quebrar em 2 linhas enquanto couber tudo;
-     * se passar do limite, a mais comprida vira uma linha só, terminada em "…", até caber. Mede com o mesmo pincel e a
-     * mesma largura do TextView, então a conta é a mesma que ele faz ao desenhar.
-     */
-    internal fun cortarLinhas(texto: String, tv: TextView): String {
-        if (texto.isEmpty()) return texto
-        val largura = dpi(TEXTO_MAX)
-        val partes = texto.split('\n').toMutableList()
-        val conta = partes.map { linhasDe(it, tv, largura) }.toMutableList()
-        while (conta.sum() > SUB_LINHAS) {
-            val i = conta.indices.filter { conta[it] > 1 }.maxByOrNull { conta[it] } ?: break
-            partes[i] = TextUtils.ellipsize(partes[i], tv.paint, largura.toFloat(), TextUtils.TruncateAt.END).toString()
-            conta[i] = 1
-        }
-        return partes.joinToString("\n")
-    }
-
-    private fun linhasDe(s: String, tv: TextView, largura: Int): Int =
-        if (s.isEmpty()) 1 else android.text.StaticLayout.Builder.obtain(s, 0, s.length, tv.paint, largura).setIncludePad(false).build().lineCount
-
     private fun preencher(v: ItemView, item: Item) {
         if (v.icone.drawable !== item.icone) v.icone.setImageDrawable(item.icone)
         if (v.nome.text.toString() != item.nome) v.nome.text = item.nome
-        if (v.subBruto != item.sub) { v.subBruto = item.sub; v.sub.text = cortarLinhas(item.sub, v.sub) }
-        v.sub.visibility = if (item.sub.isEmpty()) View.GONE else View.VISIBLE
+        val principal = CruzLogica.partes(item.sub, item.canto?.texto?.takeIf { cantoNaBarra }).principal
+        if (v.principal != principal || v.sub.text.toString() != principal) { v.principal = principal; v.sub.text = principal }
+        v.sub.visibility = if (principal.isEmpty()) View.GONE else View.VISIBLE
         val p = item.progresso
         if (p == null) { if (v.icone.foreground != null) v.icone.foreground = null }
         else {
@@ -576,7 +635,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         for ((j, lista) in viewsItem.withIndex()) {
             val k = j - f
             val sel = estado.sel.getOrElse(j) { 0 }
-            // A linha de baixo do escolhido ocupa até 4 linhas: os vizinhos de baixo descem o que as linhas extras ocupam.
+            // A informação do escolhido em 2 linhas: os vizinhos de baixo descem a linha a mais.
             val extra = lista.getOrNull(sel)?.takeIf { k == 0 && it.sub.visibility == View.VISIBLE }
                 ?.let { (it.linhas - 1).coerceAtLeast(0) * it.sub.lineHeight / dm.density } ?: 0f
             for ((i, iv) in lista.withIndex()) {

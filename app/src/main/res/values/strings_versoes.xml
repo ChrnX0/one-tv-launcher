@@ -17,16 +17,20 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Series: in the player ▼, “Dubbed version” or “Subtitled version” switches the episode at the same point, as movies already did</item>
-        <item>After switching, the next episodes of that series open in the chosen version</item>
+        <item>Home screen: under the name of the chosen item there is now one line only; the other details appear in the lower right corner when you stop on the item</item>
+        <item>The top bar follows the selection: with TV in focus it shows what is on now; with nothing happening, only the clock pill stays</item>
+        <item>The column no longer jumps when an item has a lot of text</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>serie_versao</item>
+        <item>detalhes_canto</item>
+        <item>barra_segue</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Dubbed series</item>
+        <item>Details in the corner</item>
+        <item>Bar follows the selection</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>On a series available dubbed and subtitled, does ▼ show the version switch and the episode continue from the same point?</item>
+        <item>On Series, is there one line under the name and the episode, year and genre in the lower right corner?</item>
+        <item>With TV in focus, does the top left show “On air” with the program, and with Series in focus does it stay empty?</item>
     </string-array>
 </resources>

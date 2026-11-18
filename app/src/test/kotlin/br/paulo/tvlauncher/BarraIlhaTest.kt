@@ -32,45 +32,21 @@ class BarraIlhaTest {
         assertEquals(BarraIlha.Tipo.TOCANDO, BarraIlha.escolher(e.copy(alarmeFaltaMs = -5_000L))?.tipo) // já passou
     }
 
-    @Test fun linhaDoCantoJuntaAsPrimeirasLinhas() {
-        assertEquals("Canal 5 · Globo · Jornal · faltam 25 min", BarraIlha.linhaDoCanto("Canal 5 · Globo\nJornal · faltam 25 min\nDepois: 21:00 Novela"))
-        assertEquals("só uma", BarraIlha.linhaDoCanto("\n  só uma  \n\n"))
-        assertEquals("", BarraIlha.linhaDoCanto(null))
-    }
-
-    @Test fun cantoDaTvComOProgramaPrimeiro() {
-        assertEquals("Mais Você · faltam 7 min · Canal 2 · Globo SP", BarraIlha.cantoTv("Canal 2 · Globo SP", "Mais Você · faltam 7 min"))
-        assertEquals("Canal 2 · Globo SP", BarraIlha.cantoTv("Canal 2 · Globo SP", " "))
-        assertEquals("Canal 2 · Globo SP", BarraIlha.cantoTv("Canal 2 · Globo SP", null))
-    }
-
     @Test fun cantoVaiAtePilulaENaoSomeDeTodo() {
         assertEquals(332, BarraIlha.larguraCanto(48, 400, 20, 120))      // pílula quieta: espaço até ela
         assertEquals(120, BarraIlha.larguraCanto(48, 150, 20, 120))      // pílula enorme: sobra o mínimo
     }
 
-    @Test fun cantoIgnoraAFraseDeApresentacao() {
-        val generica = "Controles e a sua turma do Discord"
-        assertEquals("", BarraIlha.linhaDoCanto(generica, ignorar = generica))
-        assertEquals("2 controles · Por último: Moonlight", BarraIlha.linhaDoCanto("$generica\n2 controles\nPor último: Moonlight", ignorar = generica))
-    }
-
-    @Test fun cantoNaoRepete() {
+    @Test fun cantoSegueASelecaoESemRepetirAPilula() {
         val c = BarraIlha.Canto("No ar", "Jornal da Noite · faltam 25 min", "tv")
-        assertTrue(BarraIlha.cantoVisivel(c, "series", null))
-        assertFalse(BarraIlha.cantoVisivel(c, "tv", null))                       // a linha de baixo do item já diz
-        assertFalse(BarraIlha.cantoVisivel(c, "series", "jornal da noite"))      // a pílula já diz
-        assertTrue(BarraIlha.cantoVisivel(c, "series", "4:32"))
-        assertFalse(BarraIlha.cantoVisivel(null, "series", null))
-        assertFalse(BarraIlha.cantoVisivel(c.copy(texto = " "), "series", null))
-    }
-
-    @Test fun ouvirTrocaDeItemQuandoONossoSomToca() {
-        assertEquals("podcasts", BarraIlha.origemOuvir("radio", temRadio = true, temPodcast = true))
-        assertNull(BarraIlha.origemOuvir("radio", temRadio = true, temPodcast = false))
-        assertEquals("radio", BarraIlha.origemOuvir("podcast", temRadio = true, temPodcast = true))
-        assertEquals("radio", BarraIlha.origemOuvir(null, temRadio = true, temPodcast = true))
-        assertEquals("podcasts", BarraIlha.origemOuvir(null, temRadio = false, temPodcast = true))
-        assertNull(BarraIlha.origemOuvir(null, temRadio = false, temPodcast = false))
+        assertTrue(BarraIlha.cantoVisivel(c, null))
+        assertFalse(BarraIlha.cantoVisivel(c, "jornal da noite"))      // a pílula já diz
+        assertTrue(BarraIlha.cantoVisivel(c, "4:32"))
+        assertFalse(BarraIlha.cantoVisivel(null, null))
+        assertFalse(BarraIlha.cantoVisivel(c.copy(texto = " "), null))
+        val buscar = BarraIlha.Canto("Buscar", "▲ abre a barra com a busca", "")
+        assertEquals(c, BarraIlha.cantoDoFoco(c, buscar))
+        assertEquals(buscar, BarraIlha.cantoDoFoco(null, buscar))          // item sem nada: o da categoria (Aplicativos)
+        assertNull(BarraIlha.cantoDoFoco(c.copy(texto = ""), null))          // Séries, Filmes…: vazio
     }
 }
