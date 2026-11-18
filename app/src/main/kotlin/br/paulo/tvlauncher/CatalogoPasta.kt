@@ -62,8 +62,10 @@ object CatalogoPasta {
     fun <T> ordenar(itens: List<T>, pasta: (T) -> Boolean, lido: (T) -> LeitorNomes.Lido?): List<T> {
         val pastas = itens.filter(pasta)
         val resto = itens.filterNot(pasta)
-        val lidos = resto.filter { lido(it) != null }.sortedWith(compareBy<T>(
-            { Idioma.chaveTitulo(lido(it)!!.nome) }, { lido(it)!!.temporada ?: -1 }, { lido(it)!!.episodio ?: -1 }, { lido(it)!!.data ?: "" }))
+        // A chave do título é calculada uma vez por item (no comparador era a cada comparação: ~120 mil com 5000 vídeos).
+        val chaves = resto.mapNotNull { e -> lido(e)?.let { l -> e to l } }.map { (e, l) -> Triple(e, l, Idioma.chaveTitulo(l.nome)) }
+        val lidos = chaves.sortedWith(compareBy<Triple<T, LeitorNomes.Lido, String>>(
+            { it.third }, { it.second.temporada ?: -1 }, { it.second.episodio ?: -1 }, { it.second.data ?: "" })).map { it.first }
         return pastas + lidos + resto.filter { lido(it) == null }
     }
 }

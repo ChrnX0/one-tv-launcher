@@ -89,6 +89,17 @@ object MudarDeTvRegras {
 
     enum class Conferencia { OK, ERRADO, VENCIDO }
 
+    /** O segredo como ele entra na conta (o mesmo que a pessoa digitaria: sem traços, maiúsculo, O->0, I/L->1). */
+    fun segredoNormal(s: String) = normalizar(s).filter { it.isLetterOrDigit() }
+
+    /**
+     * O que vai no cabeçalho X-Mudar: o SHA-256 do segredo, nunca o segredo (rodada 15 da depuração). O segredo em si
+     * entra como AAD do envelope ([selar]): quem copia o cabeçalho na rede não consegue montar um envelope que a TV nova
+     * aceite (precisaria do segredo, 80 bits, que não passa pela rede).
+     */
+    fun prova(segredo: String): String =
+        MessageDigest.getInstance("SHA-256").digest((ROTULO + "|prova|" + segredoNormal(segredo)).toByteArray()).joinToString("") { "%02x".format(it) }
+
     /** O segredo em vigor na TV nova. Uso único: depois do OK, [usado] = true e nada mais entra. */
     class Recepcao(val segredo: String, val criadoEm: Long) {
         var erros = 0; private set
@@ -96,8 +107,8 @@ object MudarDeTvRegras {
 
         fun conferir(tentado: String?, agora: Long): Conferencia {
             if (usado || erros >= MAX_ERROS || agora - criadoEm !in 0..VALIDADE_MS) return Conferencia.VENCIDO
-            val t = normalizar(tentado ?: "").filter { it.isLetterOrDigit() }
-            if (!MessageDigest.isEqual(t.toByteArray(), segredo.toByteArray())) { erros++; return Conferencia.ERRADO }
+            val t = (tentado ?: "").trim().lowercase()
+            if (!MessageDigest.isEqual(t.toByteArray(), prova(segredo).toByteArray())) { erros++; return Conferencia.ERRADO }
             usado = true
             return Conferencia.OK
         }
@@ -113,21 +124,21 @@ object MudarDeTvRegras {
         MessageDigest.getInstance("SHA-256").digest(ROTULO.toByteArray() + compartilhado + efemera)
 
     /** Tranca [dados] para a chave pública [publica] (X.509) da TV nova. Par descartável a cada envio (ECIES). */
-    fun selar(publica: ByteArray, dados: ByteArray): JSONObject {
+    fun selar(publica: ByteArray, dados: ByteArray, segredo: String): JSONObject {
         val pub = KeyFactory.getInstance("EC").generatePublic(X509EncodedKeySpec(publica))
         val efemero = novoPar()
         val acordo = KeyAgreement.getInstance("ECDH").apply { init(efemero.private); doPhase(pub, true) }
         val iv = ByteArray(12).also { aleatorio.nextBytes(it) }
         val c = Cipher.getInstance("AES/GCM/NoPadding")
         c.init(Cipher.ENCRYPT_MODE, SecretKeySpec(kek(acordo.generateSecret(), efemero.public.encoded), "AES"), GCMParameterSpec(128, iv))
-        c.updateAAD(ROTULO.toByteArray())
+        c.updateAAD((ROTULO + "|" + segredoNormal(segredo)).toByteArray())
         val b64 = Base64.getEncoder()
         return JSONObject().put("v", 1).put("efemera", b64.encodeToString(efemero.public.encoded))
             .put("iv", b64.encodeToString(iv)).put("dados", b64.encodeToString(c.doFinal(dados)))
     }
 
     /** Abre com a chave privada da TV nova. Qualquer defeito (outra chave, byte trocado) = IllegalArgumentException. */
-    fun abrir(privada: PrivateKey, envelope: JSONObject): ByteArray {
+    fun abrir(privada: PrivateKey, envelope: JSONObject, segredo: String): ByteArray {
         try {
             if (envelope.optInt("v") != 1) throw IllegalArgumentException("formato desconhecido")
             val b64 = Base64.getDecoder()
@@ -138,7 +149,7 @@ object MudarDeTvRegras {
             val acordo = KeyAgreement.getInstance("ECDH").apply { init(privada); doPhase(pub, true) }
             val c = Cipher.getInstance("AES/GCM/NoPadding")
             c.init(Cipher.DECRYPT_MODE, SecretKeySpec(kek(acordo.generateSecret(), efemera), "AES"), GCMParameterSpec(128, iv))
-            c.updateAAD(ROTULO.toByteArray())
+            c.updateAAD((ROTULO + "|" + segredoNormal(segredo)).toByteArray())
             return c.doFinal(b64.decode(envelope.getString("dados")))
         } catch (e: IllegalArgumentException) { throw e
         } catch (e: Exception) { throw IllegalArgumentException("não abriu: ${e.javaClass.simpleName}") }

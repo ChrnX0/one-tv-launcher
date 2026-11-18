@@ -50,7 +50,9 @@ object AlarmeGarantia {
         val p = ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         p.edit().putLong("tocou_em", maxOf(previsto, p.getLong("tocou_em", 0)))
             .putLong("resolvido_ate", maxOf(previsto, p.getLong("resolvido_ate", 0))).apply()
-        anotarAcerto(ctx, previsto, AcertoAlarme.classificar(previsto, System.currentTimeMillis()))
+        // Soneca não é um toque a mais no placar (3 sonecas contavam como 4 acertos): só o toque do alarme conta.
+        val soneca = ctx.getSharedPreferences(Despertador.PREFS, Context.MODE_PRIVATE).getLong("soneca_em", 0)
+        if (previsto != soneca) anotarAcerto(ctx, previsto, AcertoAlarme.classificar(previsto, System.currentTimeMillis()))
     }
 
     /** Placar (elevação 10.2): "tocou na hora em N de N". Fora da thread de quem chamou (a tela do alarme). */

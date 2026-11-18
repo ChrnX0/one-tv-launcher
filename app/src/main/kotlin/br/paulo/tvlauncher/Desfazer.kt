@@ -35,11 +35,17 @@ object Desfazer {
     fun passo(ctx: Context, id: String): Passo? = lista(ctx).firstOrNull { it.id == id }
 
     /** Grava o passo (ou junta ao último). Um passo NOVO entra também no Diário, com o id para desfazer de lá. */
+    private val aleatorio = java.security.SecureRandom()
+
     @Synchronized fun registrar(ctx: Context, categoria: Categoria, rotulo: String, mudancas: List<Mudanca>,
                                 reverso: List<String> = emptyList()): Passo? {
         val agora = System.currentTimeMillis()
         val antes = lista(ctx)
-        val id = java.lang.Long.toString(agora, 36) + (antes.size % 36).toString(36)
+        // Hora + 4 letras ao acaso, sem repetir na lista: dois passos no mesmo milissegundo com a lista cheia (50) davam o
+        // mesmo id, e desfazer um marcava os dois (rodada 15).
+        var id: String
+        do { id = java.lang.Long.toString(agora, 36) + java.lang.Long.toString(1_679_616L + aleatorio.nextInt(1_679_616 * 35), 36).takeLast(4) }
+        while (antes.any { it.id == id })
         val (nova, passo) = DesfazerRegras.registrar(antes, categoria, rotulo, mudancas, reverso, agora, id)
         prefs(ctx).edit().putString("passos", DesfazerRegras.paraJson(nova)).apply()
         if (passo != null && passo.id == id)
@@ -59,7 +65,10 @@ object Desfazer {
         val todos = lista(ctx)
         val passo = todos.firstOrNull { it.id == id && !it.desfeito } ?: return null
         val cache = HashMap<String, SharedPreferences>()
-        fun sp(nome: String) = cache.getOrPut(nome) { ctx.getSharedPreferences(nome, Context.MODE_PRIVATE) }
+        // MULTI_PROCESS relê do disco: o processo :player grava em "player" e "catalogo_pasta", e o cache velho deste
+        // processo, gravado inteiro no commit, apagava o que o player tinha acabado de salvar (rodada 15).
+        @Suppress("DEPRECATION")
+        fun sp(nome: String) = cache.getOrPut(nome) { ctx.getSharedPreferences(nome, Context.MODE_PRIVATE or Context.MODE_MULTI_PROCESS) }
         val (voltam, ficaram) = DesfazerRegras.planoDesfazer(passo) { p, k -> sp(p).all[k] }
         desfezEm = System.currentTimeMillis()
         voltam.groupBy { it.prefs }.forEach { (nome, ms) ->

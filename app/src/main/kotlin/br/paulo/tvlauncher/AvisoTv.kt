@@ -61,9 +61,9 @@ object AvisoTv {
         val app = ctx.applicationContext
         if (historico) guardarNoHistorico(app, titulo, texto)
         // Elevação 11.4: não perturbe (filme, madrugada, visita). Confirmação curta (sem histórico) passa: a pessoa pediu.
-        if (historico && runCatching { NaoPerturbeTv.segurar(app, titulo, texto, prioridade) }.getOrDefault(false)) {
+        if (historico && runCatching { NaoPerturbeTv.segurar(app, titulo, texto, prioridade, guardarSeApagada) }.getOrDefault(false)) {
             NotificacoesTv.avisarMudanca()
-            return Resultado.GUARDADO
+            return if (guardarSeApagada) Resultado.GUARDADO else Resultado.DESCARTADO
         }
         // Guarda o último aviso (recado ou chuva) para o protetor de tela mostrar como cartão por algumas horas
         // ("quadro da família", 10/11/2026). Só o texto: a foto do recado não é guardada. Quanto tempo fica: [fica]

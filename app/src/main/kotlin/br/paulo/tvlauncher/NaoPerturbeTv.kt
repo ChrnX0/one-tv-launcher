@@ -23,10 +23,14 @@ object NaoPerturbeTv {
             runCatching { ModoVisita.ativo(app) }.getOrDefault(false))
     }
 
-    /** true = o aviso ficou na fila (não mostrar agora). */
-    @Synchronized fun segurar(ctx: Context, titulo: String, texto: String, tipo: NaoPerturbe.Tipo): Boolean {
+    /**
+     * true = não mostrar agora. Com [guardar] o aviso vai para a fila do resumo; sem (chuva, convite de 30 s, "continuar
+     * aqui?": avisos que perdem a validade) fica só na central de avisos, e não volta horas depois no resumo.
+     */
+    @Synchronized fun segurar(ctx: Context, titulo: String, texto: String, tipo: NaoPerturbe.Tipo, guardar: Boolean = true): Boolean {
         if (NaoPerturbe.passa(tipo)) return false
         val m = motivoAgora(ctx) ?: return false
+        if (!guardar) { Log.i(TAG, "não perturbe (motivo=$m): aviso passageiro só na central"); return true }
         val pr = ctx.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val fila = NaoPerturbe.guardar(NaoPerturbe.ler(pr.getString("fila", null)), NaoPerturbe.Guardado(titulo, texto, System.currentTimeMillis()))
         pr.edit().putString("fila", NaoPerturbe.texto(fila)).putString("motivo", m.name).apply()
@@ -35,7 +39,7 @@ object NaoPerturbeTv {
     }
 
     /** Uma tela abriu: se o motivo acabou e há fila, mostra o resumo. */
-    fun janela(ctx: Context) {
+    @Synchronized fun janela(ctx: Context) {   // mesmo monitor do segurar: um aviso gravado entre ler e limpar não se perde
         val app = ctx.applicationContext
         val pr = app.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
         val bruto = pr.getString("fila", null) ?: return

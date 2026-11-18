@@ -76,6 +76,8 @@ class ReceberTvActivity : Activity() {
 
     private fun gerar() {
         terminou = false
+        // Depois de um ERRO o laço parou de se reagendar: "Gerar outro" tem de ligá-lo de novo (sem duplicar).
+        ui.removeCallbacks(volta); ui.postDelayed(volta, 1000)
         titulo.text = getString(R.string.mtv_titulo)
         convite = MudarDeTv.iniciar(this)
         val c = convite
