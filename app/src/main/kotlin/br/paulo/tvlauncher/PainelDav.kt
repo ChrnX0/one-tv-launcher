@@ -57,6 +57,8 @@ object PainelDav {
         fun acesso(): Boolean
         fun registrar(ip: String, acao: String)
         fun avisar(f: File)
+        /** O atalho "Abrir o painel da TV.url" (PanelShortcut), só leitura, na raiz; null = sem atalho. */
+        fun atalho(): File? = null
     }
 
     /** O ambiente de verdade, na TV. */
@@ -64,6 +66,7 @@ object PainelDav {
         override fun acesso() = PainelArquivos.garantirAcesso(app)
         override fun registrar(ip: String, acao: String) = PainelArmazem.registrar(app, ip, acao, "ok")
         override fun avisar(f: File) = PainelArquivos.avisarGaleria(app, f)
+        override fun atalho(): File? = PainelWeb.atalhoPainel(app)
     }
 
     /** Recusa da senha: código HTTP e texto. */
@@ -93,8 +96,8 @@ object PainelDav {
         val rel = DavLogica.relativo(req.caminho) ?: return texto(saida, req, 400, "caminho inválido")
         try {
             when (req.metodo) {
-                "PROPFIND" -> propfind(req, entrada, saida, rel)
-                "GET", "HEAD" -> baixar(req, saida, rel)
+                "PROPFIND" -> propfind(amb, req, entrada, saida, rel)
+                "GET", "HEAD" -> baixar(amb, req, saida, rel)
                 "PUT" -> enviar(amb, req, entrada, saida, rel, ip)
                 "DELETE" -> apagar(amb, req, saida, rel, ip)
                 "MKCOL" -> criarPasta(req, entrada, saida, rel)
@@ -154,13 +157,28 @@ object PainelDav {
                 ChecagensPainel.nomeArquivoValido(it.name) && !DavLogica.escondido(it.name)
         }.sortedWith(compareBy<File>({ !it.isDirectory }, { it.name.lowercase() }))
 
-    private fun propfind(req: Requisicao, entrada: InputStream, saida: OutputStream, rel: String) {
+    /**
+     * O atalho do painel se [rel] é ele (raiz, nome exato) e não há arquivo de verdade com o mesmo nome. Só GET, HEAD e
+     * PROPFIND o enxergam: apagar, mover ou gravar por cima caem no arquivo de verdade (que não existe: 404).
+     */
+    private fun atalhoEm(amb: Ambiente, rel: String): File? {
+        if (rel.isEmpty() || '/' in rel) return null
+        val f = try { amb.atalho() } catch (_: Exception) { null } ?: return null
+        if (!PanelShortcut.isShortcut(rel, f.name) || File(PainelArquivos.raiz(), rel).exists()) return null
+        return f
+    }
+
+    private fun propfind(amb: Ambiente, req: Requisicao, entrada: InputStream, saida: OutputStream, rel: String) {
         corpoXml(req, entrada)   // a pergunta (quais propriedades) é ignorada: respondemos sempre o mesmo conjunto
-        val f = PainelArquivos.resolver(rel)
+        val f = atalhoEm(amb, rel) ?: PainelArquivos.resolver(rel)
         val itens = ArrayList<DavLogica.Item>()
         itens.add(item(f, rel))
-        if (f.isDirectory && DavLogica.profundidade(req.cabecalho("depth")) == 1)
-            for (x in filhos(f, rel).take(DavLogica.MAX_ITENS)) itens.add(item(x, filho(rel, x.name)))
+        if (f.isDirectory && DavLogica.profundidade(req.cabecalho("depth")) == 1) {
+            val lista = filhos(f, rel).take(DavLogica.MAX_ITENS)
+            for (x in lista) itens.add(item(x, filho(rel, x.name)))
+            // o atalho do painel, no fim da raiz (PanelShortcut)
+            if (rel.isEmpty()) (try { amb.atalho() } catch (_: Exception) { null })?.let { a -> if (atalhoEm(amb, a.name) != null) itens.add(item(a, a.name)) }
+        }
         val raiz = PainelArquivos.raiz()
         xml(saida, 207, DavLogica.multistatus(itens, PainelArquivos.livre(), raiz.totalSpace - raiz.usableSpace))
     }
@@ -174,8 +192,8 @@ object PainelDav {
 
     // ---------------------------------------------------------------- baixar
 
-    private fun baixar(req: Requisicao, saida: OutputStream, rel: String) {
-        val f = PainelArquivos.resolver(rel)
+    private fun baixar(amb: Ambiente, req: Requisicao, saida: OutputStream, rel: String) {
+        val f = atalhoEm(amb, rel) ?: PainelArquivos.resolver(rel)
         if (f.isDirectory) {
             val html = DavLogica.paginaPasta(rel, filhos(f, rel).take(DavLogica.MAX_ITENS).map { item(it, filho(rel, it.name)) })
             val b = html.toByteArray(Charsets.UTF_8)
@@ -425,12 +443,12 @@ object AnuncioDav {
         }
         try { m.registerService(info, android.net.nsd.NsdManager.PROTOCOL_DNS_SD, r); registro = r }
         catch (e: Exception) { Log.w(TAG, "mDNS indisponível: $e") }
-        AnuncioUpnp.ligar(app)   // e na tela "Rede" do Windows (SSDP)
         MtpNaRede.ligar(app)     // e em "Este Computador", como um celular (MTP pela rede)
+        AnuncioUpnp.mostrarMtp(true, app)   // o anúncio SSDP que leva o Windows até ele
     }
 
     @Synchronized fun desligar() {
-        AnuncioUpnp.desligar()
+        AnuncioUpnp.mostrarMtp(false)   // o atalho "· painel" em Rede continua (é do painel, não da unidade)
         MtpNaRede.desligar()
         val m = nsd ?: return
         try { registro?.let { m.unregisterService(it) } } catch (_: Exception) {}

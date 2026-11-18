@@ -204,6 +204,7 @@ object PainelWeb {
             }
             Log.i(TAG, "painel ligado na porta ${Config.PAINEL_PORTA}")
             PainelVizinhos.ligar(app)   // anuncia esta TV e procura as outras na rede (mDNS)
+            AnuncioUpnp.ligar(app)      // e o atalho "<TV> · painel" na tela "Rede" do Windows (SSDP)
             iniciarTls(minha)
             aceitar(s, https = false)
             // Saiu do laço: se não foi um parar() (a porta ainda é a atual), limpa para o próximo ajustar() religar.
@@ -222,6 +223,7 @@ object PainelWeb {
         sessoes.encerrarTodas()
         PainelVizinhos.desligar()
         AnuncioDav.desligar()
+        AnuncioUpnp.desligar()
         Log.i(TAG, "painel desligado")
     }
 
@@ -432,6 +434,28 @@ object PainelWeb {
     }
 
     fun ipsDaRede(): Set<String> = redes().keys
+
+    /**
+     * O atalho "Abrir o painel da TV.url" (PanelShortcut) com o IP de agora, para o MTP e o WebDAV mostrarem na raiz.
+     * Fica no cache do app (não na memória que o computador vê) e só é regravado quando o IP ou o idioma mudam.
+     * null sem rede.
+     */
+    fun atalhoPainel(ctx: Context): File? {
+        val ip = ipsDaRede().minOrNull() ?: return null
+        val nome = PanelShortcut.fileName(ctx.getString(R.string.ur_atalho_nome)) ?: return null
+        val bytes = PanelShortcut.content(ip, Config.PAINEL_PORTA)
+        synchronized(travaAtalho) {
+            val pasta = File(ctx.applicationContext.cacheDir, "panel-shortcut")
+            if (!pasta.isDirectory && !pasta.mkdirs()) return null
+            pasta.listFiles()?.forEach { if (it.name != nome) it.delete() }   // o de outro idioma
+            val f = File(pasta, nome)
+            if (!f.isFile || f.length() != bytes.size.toLong() || !f.readBytes().contentEquals(bytes)) {
+                try { f.writeBytes(bytes) } catch (e: IOException) { Log.w(TAG, "atalho do painel: $e"); return null }
+            }
+            return f
+        }
+    }
+    private val travaAtalho = Any()
 
     /** O endereço para digitar no navegador (o primeiro IP da rede), ou null sem rede. */
     fun endereco(): String? = ipsDaRede().minOrNull()?.let { "http://$it:${Config.PAINEL_PORTA}/" }
@@ -670,13 +694,17 @@ object PainelWeb {
         if (req.metodo == "GET") when (req.caminho) {
             "/certificado" -> return paginaCertificado(req.cabecalho("user-agent"))
             // A TV na tela "Rede" do Windows (Ssdp/AnuncioUpnp): a descrição do aparelho e a página que o duplo clique
-            // abre. Livres como a do certificado (não dizem nada além do endereço); só com a unidade de rede ligada.
-            Ssdp.CAMINHO_DESCRICAO -> if (PainelDav.ligado(app)) return descricaoUpnp(host)
+            // abre. Livres como a do certificado (não dizem nada além do endereço). Desde 18/11/2026 sempre que o
+            // painel está ligado (o atalho "· painel" não depende mais da unidade de rede).
+            Ssdp.CAMINHO_DESCRICAO -> return descricaoUpnp(host)
             "/unidade" -> if (PainelDav.ligado(app)) return paginaUnidade()
             Ssdp.CAMINHO_MTP -> if (PainelDav.ligado(app)) return descricaoMtp(host)
             // o ícone da marca que as descrições acima apontam (só os nomes da lista: nada de caminho vindo de fora)
-            in Ssdp.ARQUIVOS_ICONE.keys.map { Ssdp.CAMINHO_ICONES + it } -> if (PainelDav.ligado(app)) return Resposta(200, "image/png",
+            in Ssdp.ARQUIVOS_ICONE.keys.map { Ssdp.CAMINHO_ICONES + it } -> return Resposta(200, "image/png",
                 app.assets.open("upnp/" + req.caminho.removePrefix(Ssdp.CAMINHO_ICONES)).use { it.readBytes() }, mapOf("Cache-Control" to "max-age=86400"))
+            // o ícone do atalho "Abrir o painel da TV.url" (PanelShortcut)
+            PanelShortcut.ICON_PATH -> return Resposta(200, "image/x-icon",
+                app.assets.open("upnp/sofaly.ico").use { it.readBytes() }, mapOf("Cache-Control" to "max-age=86400"))
             Ssdp.CAMINHO_MTP_SERVICO -> if (PainelDav.ligado(app)) return Resposta(200, "text/xml; charset=utf-8", Ssdp.SERVICO_MTP.toByteArray())
             // O .cmd roda como administrador e instala um certificado no Windows: só sai pela porta https (15/11/2026).
             // Pelo http, alguém no meio do caminho trocaria o certificado de dentro dele; lá, manda para o https.

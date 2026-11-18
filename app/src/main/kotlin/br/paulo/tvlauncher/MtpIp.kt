@@ -368,7 +368,12 @@ object Mtp {
  * computador só fala por esses números. O caminho de verdade nunca vem do computador: ele manda só um handle que nós
  * demos e, ao criar, um nome solto (conferido por nomeArquivoValido). Não há como pedir "../../algo".
  */
-class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.interno()) }, private val avisar: (File) -> Unit) {
+/**
+ * [atalho]: o arquivo "Abrir o painel da TV.url" (PanelShortcut), mostrado na raiz da memória interna sem estar nela.
+ * Só leitura: apagar ou mover dá "negado"; um arquivo de verdade com o mesmo nome tem a preferência.
+ */
+class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.interno()) },
+              private val atalho: () -> File? = { null }, private val avisar: (File) -> Unit) {
     companion object {
         /** Teto de objetos numa resposta só (pasta gigante ou "liste tudo"): protege a memória da TV. */
         const val MAX_OBJETOS = 20_000
@@ -416,7 +421,18 @@ class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.in
 
     private fun arquivoDe(chave: String): File? {
         val a = armazemDa(chave) ?: run { esquecer(chave); return null }
+        atalhoDa(chave, a)?.let { return it }
         return try { PainelArquivos.resolver(relDa(chave), base = a.raiz()) } catch (_: PainelArquivos.Erro) { esquecer(chave); null }
+    }
+
+    /** O atalho do painel, se [chave] é ele (raiz da memória interna, nome exato, sem arquivo de verdade com o nome). */
+    private fun atalhoDa(chave: String, a: MtpArmazem): File? {
+        if (a.id != Mtp.ARMAZEM) return null
+        val rel = relDa(chave)
+        if ('/' in rel || rel.isEmpty()) return null
+        val f = try { atalho() } catch (_: Exception) { null } ?: return null
+        if (!PanelShortcut.isShortcut(rel, f.name) || File(a.raiz(), rel).exists()) return null
+        return f
     }
 
     private fun paiDe(chave: String): Int = if ('/' in relDa(chave)) handleDe(chave.substringBeforeLast('/')) else 0
@@ -438,11 +454,18 @@ class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.in
     private fun listar(chave: String): List<Pair<String, File>> {
         val pasta = arquivoDe(chave) ?: return emptyList()
         val naRaiz = relDa(chave).isEmpty()
-        return (pasta.listFiles() ?: emptyArray()).filter {
+        val lista = (pasta.listFiles() ?: emptyArray()).filter {
             !(naRaiz && it.name.lowercase() in ChecagensPainel.PASTAS_FECHADAS) &&
                 ChecagensPainel.nomeArquivoValido(it.name) && !DavLogica.escondido(it.name)
         }.sortedWith(compareBy<File>({ !it.isDirectory }, { it.name.lowercase() }))
             .map { filho(chave, it.name) to it }
+        // o atalho do painel, no fim da raiz da memória interna (os arquivos de verdade vêm antes)
+        if (!naRaiz) return lista
+        val a = armazemDa(chave) ?: return lista
+        val nome = (try { atalho() } catch (_: Exception) { null })?.name ?: return lista
+        val c = filho(chave, nome)
+        val f = atalhoDa(c, a) ?: return lista
+        return lista + (c to f)
     }
 
     private fun objetos(chave: String): List<Mtp.Objeto> {
@@ -494,6 +517,7 @@ class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.in
     fun apagar(h: Int): Int {
         val c = chaveDe(h) ?: return Mtp.HANDLE_INVALIDO
         val a = armazemDa(c) ?: return Mtp.HANDLE_INVALIDO
+        if (atalhoDa(c, a) != null) return Mtp.NEGADO   // o atalho do painel não sai (volta na próxima listagem)
         return try { PainelArquivos.apagar(relDa(c), avisar, a.raiz()); esquecer(c); Mtp.OK } catch (e: PainelArquivos.Erro) { codigo(e) }
     }
 
@@ -504,6 +528,7 @@ class MtpLoja(private val fonte: () -> List<MtpArmazem> = { listOf(MtpArmazem.in
     fun mover(h: Int, novoArm: Int, novoPai: Int?, novoNome: String?): Int {
         val c = chaveDe(h) ?: return Mtp.HANDLE_INVALIDO
         val a = armazemDa(c) ?: return Mtp.HANDLE_INVALIDO
+        if (atalhoDa(c, a) != null) return Mtp.NEGADO
         val rel = relDa(c)
         val destino = if (novoPai == null) chave(a, rel.substringBeforeLast('/', "")) else pasta(novoArm, novoPai) ?: return Mtp.PAI_INVALIDO
         if (armazemDa(destino)?.id != a.id) return Mtp.PARAMETRO_NAO_SUPORTADO

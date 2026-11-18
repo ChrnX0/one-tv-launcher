@@ -13,4 +13,6 @@
     <string name="mtp_pcs_nenhum">None yet. The TV asks on screen when a computer requests the files.</string>
     <string name="mtp_pcs_lista">%1$s · OK forgets all (each one asks again)</string>
     <string name="mtp_pcs_esquecidos">Computers forgotten</string>
+    <!-- File name of the shortcut to the web panel shown in the TV storage on the computer (no extension; PanelShortcut.kt). -->
+    <string name="ur_atalho_nome">Open the TV panel</string>
 </resources>

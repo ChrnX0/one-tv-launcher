@@ -13,4 +13,5 @@
     <string name="mtp_pcs_nenhum">아직 없습니다. 컴퓨터가 파일을 요청하면 TV가 화면에서 묻습니다.</string>
     <string name="mtp_pcs_lista">%1$s · OK로 모두 잊기(각 컴퓨터가 다시 묻게 됨)</string>
     <string name="mtp_pcs_esquecidos">컴퓨터를 잊었습니다</string>
+    <string name="ur_atalho_nome">TV 패널 열기</string>
 </resources>

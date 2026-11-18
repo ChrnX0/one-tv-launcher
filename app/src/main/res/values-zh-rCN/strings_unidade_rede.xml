@@ -13,4 +13,5 @@
     <string name="mtp_pcs_nenhum">还没有。当有电脑请求文件时，电视会在屏幕上询问。</string>
     <string name="mtp_pcs_lista">%1$s · OK 全部忘记（每台都会重新询问）</string>
     <string name="mtp_pcs_esquecidos">已忘记这些电脑</string>
+    <string name="ur_atalho_nome">打开电视面板</string>
 </resources>

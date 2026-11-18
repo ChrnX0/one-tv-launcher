@@ -108,7 +108,7 @@ object MtpNaRede {
         val icone = try { app.assets.open("upnp/sofaly.ico").use { it.readBytes() } } catch (_: Exception) { null }
         val ap = Mtp.Aparelho(Ssdp.nomeNaUnidade(PainelVizinhos.nomeDaTv(app)), Build.MODEL ?: "Android TV", versao, id, guid, icone)
         armazens = try { lerArmazens(app) } catch (_: Exception) { listOf(MtpArmazem.interno()) }
-        val s = MtpServico(ss, ap, MtpLoja({ armazens }) { PainelArquivos.avisarGaleria(app, it) },
+        val s = MtpServico(ss, ap, MtpLoja({ armazens }, atalho = { PainelWeb.atalhoPainel(app) }) { PainelArquivos.avisarGaleria(app, it) },
             aceitaRede = { PainelWeb.daRedeDeCasa(it) },
             permitir = { pc, nome, ip -> permitir(app, pc, nome, ip) },
             registro = { Log.i(TAG, it) })

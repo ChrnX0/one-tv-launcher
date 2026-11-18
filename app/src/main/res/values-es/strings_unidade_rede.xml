@@ -13,4 +13,5 @@
     <string name="mtp_pcs_nenhum">Ninguna aún. La TV pregunta en pantalla cuando una computadora pide los archivos.</string>
     <string name="mtp_pcs_lista">%1$s · OK olvida todas (cada una vuelve a preguntar)</string>
     <string name="mtp_pcs_esquecidos">Computadoras olvidadas</string>
+    <string name="ur_atalho_nome">Abrir el panel de la TV</string>
 </resources>
