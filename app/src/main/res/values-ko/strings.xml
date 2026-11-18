@@ -754,6 +754,7 @@ AS\\Movies).</string>
     <string name="legenda_escolher">‘%1$s’ 자막</string>
     <string name="legenda_surdos">청각 장애인용</string>
     <string name="legenda_bate">이 파일용</string>
+    <string name="lista_dica_escolher">선택</string>
     <string name="legenda_atraso_opcao">자막 지연: %1$s</string>
     <string name="legenda_atraso_titulo">자막 지연(+ = 자막이 늦게 표시됨)</string>
     <string name="legenda_atraso_zero">지연 없음</string>

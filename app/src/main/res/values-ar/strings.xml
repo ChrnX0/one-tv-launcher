@@ -754,6 +754,7 @@ AS\\Movies).</string>
     <string name="legenda_escolher">ترجمة لـ\"%1$s\"</string>
     <string name="legenda_surdos">لضعاف السمع</string>
     <string name="legenda_bate">مصممة لهذا الملف</string>
+    <string name="lista_dica_escolher">اختيار</string>
     <string name="legenda_atraso_opcao">تأخير الترجمة: %1$s</string>
     <string name="legenda_atraso_titulo">تأخير الترجمة (+ = يظهر النص لاحقًا)</string>
     <string name="legenda_atraso_zero">بلا تأخير</string>

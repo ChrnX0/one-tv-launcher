@@ -754,6 +754,7 @@ AS\\Filmes).</string>
     <string name="legenda_escolher">Legendas para \"%1$s\"</string>
     <string name="legenda_surdos">para surdos</string>
     <string name="legenda_bate">feita para este ficheiro</string>
+    <string name="lista_dica_escolher">escolher</string>
     <string name="legenda_atraso_opcao">Atraso da legenda: %1$s</string>
     <string name="legenda_atraso_titulo">Atraso da legenda (+ = a fala aparece depois)</string>
     <string name="legenda_atraso_zero">Sem atraso</string>
