@@ -17,7 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Top bar with one rule for everything: it shows what is happening now with the chosen item — On air, Recording, Playing, Stopped at, Connected — with % and time left</item>
+        <item>Home: the top bar is only for the system (timer, alarm, no internet…); what is happening with the chosen item — On air, Recording, Playing, Stopped at, Connected, with % and time left — opens the details in the bottom right corner</item>
         <item>Series, movies, podcasts and app videos stopped halfway show how far you got (e.g. “Stopped at T1 E1 · 35% · 43 min left”)</item>
         <item>Home (Home Assistant) finds itself again on the network when the computer changes address: nothing to set up</item>
         <item>Windows: the TV always shows under Network with its panel, and the TV drive has an “Open the TV panel” shortcut that follows the TV’s address</item>
@@ -28,12 +28,12 @@
         <item>atalho_painel</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Bar shows the state</item>
+        <item>Item state in the corner</item>
         <item>Home finds itself</item>
         <item>Panel shortcut on Windows</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>With Series in focus, does the top left show “Stopped at” with the episode, % and time left, and with TV “On air” with %?</item>
+        <item>With Series in focus, does the bottom right corner start with “Stopped at” with the episode, % and time left, and with TV “On air” with %? Does the top bar stay only with the clock?</item>
         <item>Does the Home screen (lights) open normally?</item>
         <item>On the computer, does the TV show under Network, and does the panel shortcut on the TV drive open the panel?</item>
     </string-array>

@@ -2,8 +2,10 @@ package br.paulo.tvlauncher
 
 /**
  * Barra de cima "Ilha" (Paulo, 18/11/2026: a mistura A+B+D do estudo da barra). Navegando na cruz ela recolhe, e sobram:
- * - no centro, a pílula com o ponto laranja e a hora, que se estica com o que está acontecendo ([escolher]);
- * - no canto esquerdo, o estado agora do item em foco ([Canto]): no ar, gravando, tocando, onde parou, conectado.
+ * no centro, a pílula com o ponto laranja e a hora, que se estica com o que está acontecendo no SISTEMA ([escolher]).
+ * O estado de cada item da cruz (no ar, parou em…) fica no canto de baixo à direita, com os detalhes dele ([CruzLogica.Situacao];
+ * Paulo, 18/11/2026 14:59 local: "a barra inteligente fica para as coisas do sistema e o canto inferior direito para as
+ * infos dos nossos apps").
  * Com ▲ a barra de sempre volta (com o véu atrás) e a pílula dá lugar a ela. Lógica pura, testada na JVM.
  */
 object BarraIlha {
@@ -41,37 +43,5 @@ object BarraIlha {
         ok(e.jogo)?.let { return Evento(Tipo.JOGO, it) }
         ok(e.vencimento)?.let { return Evento(Tipo.VENCIMENTO, it) }
         return null
-    }
-
-    /**
-     * O "estado agora" do item em foco (Paulo, 18/11/2026 14:15 local: "mais inteligente, coerente e lógico"): [rotulo]
-     * colorido (No ar, Gravando, Tocando, Parou em, Conectado) + [texto] no formato de [andamento]. [tira] = as linhas
-     * da linha de baixo do item que o canto substitui (não aparecem de novo embaixo nem nos detalhes).
-     */
-    data class Canto(val rotulo: String, val texto: String, val origem: String, val tira: List<String> = emptyList())
-
-    /** "o quê · 35% · faltam 43 min": as partes vazias somem; a porcentagem só entre 1% e 99%. */
-    fun andamento(oQue: String?, fracao: Float?, falta: String?): String = listOfNotNull(
-        oQue?.trim()?.takeIf { it.isNotEmpty() },
-        fracao?.takeIf { it >= 0.01f && it < 0.995f }?.let { "${kotlin.math.round(it * 100).toInt()}%" },
-        falta?.trim()?.takeIf { it.isNotEmpty() },
-    ).joinToString(" · ")
-
-    /** O que a linha de baixo deixa de mostrar porque o canto mostra (o próprio texto do canto e o que ele substitui). */
-    fun tirarDoItem(c: Canto?): List<String> = if (c == null) emptyList() else c.tira + c.texto
-
-    /** Largura do canto: do começo dele até a pílula, menos um respiro (nunca menos que [CANTO_MIN_DP]). */
-    fun larguraCanto(inicioCanto: Int, inicioPilula: Int, respiro: Int, minimo: Int): Int = maxOf(minimo, inicioPilula - inicioCanto - respiro)
-    const val CANTO_MIN_DP = 120
-
-    /**
-     * O canto segue a seleção (Paulo, 18/11/2026 12:15 local: "a barra inteligente tem que acompanhar a seleção"): mostra
-     * o que está acontecendo agora com o item em foco ([HomeCruz.Item.canto]); sem nada, fica vazio. Some também quando a
-     * pílula já mostra o mesmo texto (Paulo: "o que está na pílula não aparece no canto").
-     */
-    fun cantoVisivel(c: Canto?, pilula: String?): Boolean {
-        if (c == null || c.texto.isBlank()) return false
-        val p = pilula?.trim().orEmpty()
-        return p.isEmpty() || !c.texto.contains(p, ignoreCase = true)
     }
 }

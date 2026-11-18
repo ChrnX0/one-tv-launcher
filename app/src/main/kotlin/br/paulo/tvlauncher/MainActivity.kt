@@ -1052,7 +1052,6 @@ class MainActivity : Activity() {
         // (até 379), "APPS" em 397 e os apps em 429 (até 492): embaixo sobra a mesma margem das laterais (48 dp).
         const val TOPO_PALCO = 28          // onde começa a barra do topo (estilo Google TV, 12/11/2026)
         const val ILHA_TEXTO_MAX = 240     // texto do evento na pílula da Ilha (a pílula não chega no canto)
-        const val ILHA_CANTO_MAX = 230     // linha do canto esquerdo da Ilha
         const val ALTURA_TOPO = 48         // altura das cápsulas (pílulas de 32 dp com 8 de folga em cima e embaixo)
         const val TOPO_DESTAQUE = 278      // onde TERMINA a ficha do card em foco (ela cresce para cima), 12 dp acima de "ASSISTIR"
         const val CORAL = 0xFFFF8A80.toInt()   // a cor do "ao vivo"
@@ -2627,9 +2626,8 @@ class MainActivity : Activity() {
         raiz.addView(c, 0, FrameLayout.LayoutParams(MATCH, MATCH))   // atrás da barra de cima (o véu não a escurece)
         cruz = c
         c.id = View.generateViewId()
-        c.cantoNaBarra = barraCruz == LayoutHome.BarraCruz.ILHA
         c.detalheEmCima = barraCruz == LayoutHome.BarraCruz.RELOGIO
-        c.aoMudar = { cat, item -> arteDoItem(item); cantoFoco = item.canto; atualizarCanto() }
+        c.aoMudar = { _, item -> arteDoItem(item) }
         c.aoSom = { som, cat -> if (homeNaFrente) SonsCruz.tocar(this, som, cat) }   // voltando de um app (HOME), sem som
         c.aoSubirTopo = { ui.post { bolinhaPerfil?.requestFocus() } }   // ▲ no 1º item: o perfil, 1º da barra
         c.aoPasso = { t -> deslizarArte(t) }
@@ -2728,10 +2726,9 @@ class MainActivity : Activity() {
             } else mexer(v, fica)
         }
         tempoCruz?.animate()?.alpha(if (recolher) 1f else 0f)?.setDuration(d)?.start()
-        // Ilha: recolhida = pílula + canto; aberta = a barra de sempre com o véu atrás (a pílula dá lugar à hora dela).
+        // Ilha: recolhida = só a pílula; aberta = a barra de sempre com o véu atrás (a pílula dá lugar à hora dela).
         ilhaPilula?.animate()?.alpha(if (recolher) 1f else 0f)?.translationY(if (recolher) 0f else -dp(16).toFloat())?.setDuration(d)?.start()
         ilhaVeu?.animate()?.alpha(if (recolher) 0f else 1f)?.setDuration(d)?.start()
-        atualizarCanto(d)
         relogioCruz?.animate()?.alpha(if (recolher) 1f else 0.35f)?.setDuration(d)?.start()
         cruz?.animate()?.translationY(if (recolher) 0f else dp(34).toFloat())?.setDuration(d)?.start()
     }
@@ -2774,18 +2771,15 @@ class MainActivity : Activity() {
     private var ilhaBarras: BarrasSom? = null
     private var ilhaTexto: TextView? = null
     private var ilhaTemp: TextView? = null
-    private var ilhaCanto: TextView? = null
     private var ilhaVeu: View? = null
     private var ilhaEvento: BarraIlha.Evento? = null
-    /** O estado agora do item em foco (segue a seleção; [HomeCruz.Item.canto]). */
-    private var cantoFoco: BarraIlha.Canto? = null
     /** Quando toca o próximo despertador (ms), para a pílula só mostrá-lo nas últimas 12 h. */
     private var alarmeEm: Long? = null
     private val tarefaIlhaAcordou = Runnable { if (cruz?.hasFocus() == true) recolherBarra(true) }
 
     /**
-     * Monta as três peças da Ilha: o véu (atrás da barra aberta), a pílula do centro (ponto laranja, hora, e o que está
-     * acontecendo) e o canto esquerdo (uma linha da categoria em foco). Nenhuma é focável: com ▲ a barra de sempre volta,
+     * Monta as duas peças da Ilha: o véu (atrás da barra aberta) e a pílula do centro (ponto laranja, hora, e o que está
+     * acontecendo no sistema). Nenhuma é focável: com ▲ a barra de sempre volta,
      * com os botões de verdade (pausar, cancelar o timer, abrir o Diagnóstico).
      */
     private fun montarIlha(raiz: FrameLayout, topo: ViewGroup) {
@@ -2838,23 +2832,7 @@ class MainActivity : Activity() {
         raiz.addView(pilula, FrameLayout.LayoutParams(WRAP, dp(40), Gravity.TOP or Gravity.CENTER_HORIZONTAL).apply {
             topMargin = dp(TOPO_PALCO + (ALTURA_TOPO - 40) / 2)
         })
-        val canto = texto(18f, HomeCruz.COR_SUB, fonteUi).apply {
-            includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(ILHA_CANTO_MAX)   // até a 1ª arrumação
-            gravity = Gravity.CENTER_VERTICAL
-            setShadowLayer(dp(6).toFloat(), 0f, 0f, sombra)
-            alpha = 0f
-        }
-        raiz.addView(canto, FrameLayout.LayoutParams(WRAP, dp(ALTURA_TOPO), Gravity.TOP or Gravity.START).apply {
-            marginStart = dp(Grade.MARGEM); topMargin = dp(TOPO_PALCO)
-        })
-        ilhaPilula = pilula; ilhaExtra = extra; ilhaIcone = icone; ilhaBarras = barras; ilhaTexto = txt; ilhaTemp = temp; ilhaCanto = canto
-        // O canto vai até a pílula (visto na Sala, v463108: com largura fixa "No ar Canal 2 · Globo SP…" cortava cedo); a
-        // pílula cresce com um evento e o canto encolhe junto. Da direita para a esquerda (árabe), as contas espelham.
-        pilula.addOnLayoutChangeListener { v, l, _, r, _, _, _, _, _ ->
-            val rtl = raiz.layoutDirection == View.LAYOUT_DIRECTION_RTL
-            val alvo = BarraIlha.larguraCanto(dp(Grade.MARGEM), if (rtl) raiz.width - r else l, dp(20), dp(BarraIlha.CANTO_MIN_DP))
-            if (canto.maxWidth != alvo) v.post { canto.maxWidth = alvo }
-        }
+        ilhaPilula = pilula; ilhaExtra = extra; ilhaIcone = icone; ilhaBarras = barras; ilhaTexto = txt; ilhaTemp = temp
         copiarTemp()
         // As pílulas da barra mudam por todo lado (timer a cada segundo, rádio, rede): a Ilha lê o estado delas a cada
         // arrumação da tela. Barato: monta um Estado pequeno e só mexe na pílula quando o evento muda.
@@ -2903,24 +2881,6 @@ class MainActivity : Activity() {
         }
         ilhaTemp?.visibility = if (e != null || ilhaTemp?.text.isNullOrEmpty()) View.GONE else View.VISIBLE
         pilula.contentDescription = listOfNotNull(e?.texto).joinToString()
-        atualizarCanto()
-    }
-
-    /** O canto esquerdo mostra o que está acontecendo com o item em foco, se a pílula já não diz o mesmo. */
-    private fun atualizarCanto(duracao: Long = 180L) {
-        val v = ilhaCanto ?: return
-        val c = cantoFoco
-        val mostra = barraRecolhida && BarraIlha.cantoVisivel(c, ilhaEvento?.texto)
-        if (c != null) {
-            val novo = android.text.SpannableStringBuilder().apply {
-                append(c.rotulo, android.text.style.ForegroundColorSpan(IconeCruz.COR_ACESA), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                setSpan(android.text.style.StyleSpan(Typeface.BOLD), 0, length, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                append("  ").append(c.texto)
-            }
-            if (v.text.toString() != novo.toString()) v.text = novo
-        }
-        val alvo = if (mostra) 1f else 0f
-        if (v.alpha != alvo) v.animate().alpha(alvo).setDuration(if (semAnimacoes()) 0L else duracao).start()
     }
 
     /** Ao acordar a TV (Ilha): a barra fica aberta por 4 s, para quem chega ver tudo, e recolhe se o foco está na cruz. */
@@ -3025,17 +2985,17 @@ class MainActivity : Activity() {
         val noAr = programa?.takeIf { it.fim > it.inicio }?.let { ((agora - it.inicio).toFloat() / (it.fim - it.inicio)).coerceIn(0f, 1f) }
         // Sem internet: Séries, Filmes, Rádio e Podcasts avisam antes do OK (Na rede, TV gravada e pendrive seguem normais).
         val precisa = if (semInternetCruz) getString(R.string.cruz_precisa_internet) else null
-        // Barra Ilha: o "estado agora" de cada item, sempre "rótulo + o quê · % · quanto falta" (Paulo, 18/11/2026 14:15
+        // A situação de cada item (1ª linha do canto de baixo à direita), sempre "rótulo + o quê · % · quanto falta" (Paulo, 18/11/2026 14:15
         // local: "mais inteligente, coerente e lógico"). Gravando vence No ar; Tocando vence Parou em.
-        fun cantoTv(oQue: String?, tira: String?): BarraIlha.Canto? =
-            gravandoTv?.let { BarraIlha.Canto(getString(R.string.cruz_canto_gravando), it, "tv") }
-                ?: programa?.let { p -> BarraIlha.Canto(getString(R.string.cruz_canto_no_ar),
-                    BarraIlha.andamento(oQue, noAr, linhaAgoraTv(p, agora, comPrograma = false)), "tv", listOfNotNull(tira)) }
+        fun situacaoTv(oQue: String?, tira: String?): CruzLogica.Situacao? =
+            gravandoTv?.let { CruzLogica.Situacao(getString(R.string.cruz_canto_gravando), it, "tv") }
+                ?: programa?.let { p -> CruzLogica.Situacao(getString(R.string.cruz_canto_no_ar),
+                    CruzLogica.andamento(oQue, noAr, linhaAgoraTv(p, agora, comPrograma = false)), "tv", listOfNotNull(tira)) }
                     ?.takeIf { it.texto.isNotEmpty() }
-        fun cantoParou(oQue: String?, fracao: Float?, falta: String?, tira: String?, origem: String): BarraIlha.Canto? =
-            falta?.takeIf { it.isNotBlank() }?.let { BarraIlha.Canto(getString(R.string.cruz_canto_parou), BarraIlha.andamento(oQue, fracao, it), origem, listOfNotNull(tira)) }
-        fun cantoTocando(tipo: String): BarraIlha.Canto? = ouvindoCruz?.takeIf { it.first == tipo && it.second.isNotBlank() }
-            ?.let { BarraIlha.Canto(getString(R.string.cruz_canto_tocando), it.second, tipo, listOf(getString(R.string.cruz_tocando, it.second))) }
+        fun situacaoParou(oQue: String?, fracao: Float?, falta: String?, tira: String?, origem: String): CruzLogica.Situacao? =
+            falta?.takeIf { it.isNotBlank() }?.let { CruzLogica.Situacao(getString(R.string.cruz_canto_parou), CruzLogica.andamento(oQue, fracao, it), origem, listOfNotNull(tira)) }
+        fun situacaoTocando(tipo: String): CruzLogica.Situacao? = ouvindoCruz?.takeIf { it.first == tipo && it.second.isNotBlank() }
+            ?.let { CruzLogica.Situacao(getString(R.string.cruz_canto_tocando), it.second, tipo, listOf(getString(R.string.cruz_tocando, it.second))) }
         fun fracaoPodcast(p: Podcasts.Posicao): Float? = if (p.durMs > 0) (p.ms.toFloat() / p.durMs).coerceIn(0f, 1f) else null
         val cats = ArrayList<HomeCruz.Categoria>()
         fun categoria(k: CruzLogica.Categoria, nome: Int, tipo: IconeCruz.Tipo, itens: List<HomeCruz.Item>) {
@@ -3066,28 +3026,28 @@ class MainActivity : Activity() {
         ultimoTv?.let { u ->
             continuar += HomeCruz.Item("c:tv", programa?.titulo ?: u.nome.ifBlank { getString(R.string.home_card_tv) },
                 linhasTvCruz(u, programa, agora, comPrograma = false), icCruz("c:tv", IconeCruz.Tipo.TV), { abrirTv() }, progresso = noAr,
-                canto = cantoTv(null, linhaAgoraTv(programa, agora, comPrograma = false)))
+                situacao = situacaoTv(null, linhaAgoraTv(programa, agora, comPrograma = false)))
         }
         val recentes = ArrayList<Pair<Long, HomeCruz.Item>>()
         if (cruzTemVod) {
             fichaSerie?.let { f -> recentes += (posicoesHome[f.chave]?.quando ?: 0L) to HomeCruz.Item("c:serie", CruzLogica.semMarca(f.titulo),
                 CruzLogica.linhas(CruzLogica.juntar(f.episodio.ifEmpty { getString(R.string.home_card_series) }, faltaSerie(f)), metaFicha(f, serie = true)),
                 icCruz("c:serie", IconeCruz.Tipo.SERIES), { abrirCatalogo(SeriesActivity::class.java) }, progresso = visto(f, serie = true),
-                canto = cantoParou(f.episodio, visto(f, serie = true), faltaSerie(f),
+                situacao = situacaoParou(f.episodio, visto(f, serie = true), faltaSerie(f),
                     CruzLogica.juntar(f.episodio.ifEmpty { getString(R.string.home_card_series) }, faltaSerie(f)), "c:serie")) }
             fichaFilme?.let { f -> recentes += (posicoesHome[f.chave]?.quando ?: 0L) to HomeCruz.Item("c:filme", CruzLogica.semMarca(f.titulo),
                 CruzLogica.linhas(CruzLogica.juntar(getString(R.string.cruz_filme), faltaFilme(f)), metaFicha(f, serie = false)),
                 icCruz("c:filme", IconeCruz.Tipo.FILMES), { abrirCatalogo(FilmesActivity::class.java) }, progresso = visto(f, serie = false),
-                canto = cantoParou(null, visto(f, serie = false), faltaFilme(f), CruzLogica.juntar(getString(R.string.cruz_filme), faltaFilme(f)), "c:filme")) }
+                situacao = situacaoParou(null, visto(f, serie = false), faltaFilme(f), CruzLogica.juntar(getString(R.string.cruz_filme), faltaFilme(f)), "c:filme")) }
         }
         radioCruz?.let { (r, ouvidaEm) -> recentes += ouvidaEm to HomeCruz.Item("c:radio", r.nome,
             CruzLogica.linhas(getString(R.string.cruz_radio), quando(ouvidaEm)?.let { getString(R.string.cruz_tocou, it) }),
-            icCruz("c:radio", IconeCruz.Tipo.RADIO), { tocarRadioCruz(r) }, canto = cantoTocando("radio")?.takeIf { it.texto.contains(r.nome, true) }) }
+            icCruz("c:radio", IconeCruz.Tipo.RADIO), { tocarRadioCruz(r) }, situacao = situacaoTocando("radio")?.takeIf { it.texto.contains(r.nome, true) }) }
         podcastCruz?.let { p -> recentes += p.em to HomeCruz.Item("c:podcast", p.titulo.ifBlank { getString(R.string.pod_titulo) },
             CruzLogica.linhas(p.podcast, faltaPodcast(p), quando(p.em)?.let { getString(R.string.cruz_tocou, it) }),
             icCruz("c:podcast", IconeCruz.Tipo.PODCASTS), { retomarPodcastCruz(p) },
             progresso = fracaoPodcast(p),
-            canto = cantoTocando("podcast") ?: cantoParou(null, fracaoPodcast(p), faltaPodcast(p), faltaPodcast(p), "c:podcast")) }
+            situacao = situacaoTocando("podcast") ?: situacaoParou(null, fracaoPodcast(p), faltaPodcast(p), faltaPodcast(p), "c:podcast")) }
         for ((pacote, item) in jogosRecentes()) recentes += (ultimoUso[pacote] ?: 0L) to HomeCruz.Item("c:jogo:$pacote", item.nome,
             CruzLogica.linhas(getString(R.string.cruz_jogo), quando(ultimoUso[pacote])?.let { getString(R.string.cruz_jogado, it) }), icApp(item), { abrir(pacote) }, opcoes = { menuAppCruz(pacote) })
         for (m in midiaCruz) {
@@ -3097,7 +3057,7 @@ class MainActivity : Activity() {
                 m.capa ?: instalados.firstOrNull { it.pacote == m.registro.pacote }?.let { icApp(it) } ?: icCruz("c:midia", IconeCruz.Tipo.CONTINUAR),
                 { abrirMidiaCruz(m.registro.pacote) }, progresso = MidiaRecente.progresso(m.registro),
                 opcoes = { menuMidiaCruz(m.registro.pacote, nomeApp) },
-                canto = cantoParou(null, MidiaRecente.progresso(m.registro), faltaMidia(m.registro), faltaMidia(m.registro), "c:midia"))
+                situacao = situacaoParou(null, MidiaRecente.progresso(m.registro), faltaMidia(m.registro), faltaMidia(m.registro), "c:midia"))
         }
         continuar += CruzLogica.recentes(recentes, CONTINUAR_MAX - continuar.size)
         itemDormir()?.let { continuar += it }   // onda 3: à noite, "Dormir em 30 min" no fim do Continuar
@@ -3108,26 +3068,26 @@ class MainActivity : Activity() {
         if (cruzTemTv) assistir += HomeCruz.Item("tv", getString(R.string.home_card_tv),
             ultimoTv?.let { linhasTvCruz(it, programa, agora, comPrograma = true) } ?: getString(R.string.home_destaque_tv_sub),
             icCruz("tv", IconeCruz.Tipo.TV), { abrirTv() }, progresso = noAr,
-            canto = cantoTv(programa?.titulo, programa?.let { linhaAgoraTv(it, agora, comPrograma = true) }))
+            situacao = situacaoTv(programa?.titulo, programa?.let { linhaAgoraTv(it, agora, comPrograma = true) }))
         if (cruzTemVod) {
             assistir += HomeCruz.Item("series", getString(R.string.home_card_series),
                 precisa ?: fichaSerie?.let { f -> CruzLogica.linhas(f.titulo, CruzLogica.juntar(f.episodio, faltaSerie(f)), metaFicha(f, serie = true), f.genero) }
                     ?: getString(R.string.home_destaque_series),
                 icCruz("series", IconeCruz.Tipo.SERIES), { abrirCatalogo(SeriesActivity::class.java) },
-                canto = fichaSerie?.takeIf { precisa == null }?.let { f ->
-                    cantoParou(f.episodio, visto(f, serie = true), faltaSerie(f), CruzLogica.juntar(f.episodio, faltaSerie(f)), "series") })
+                situacao = fichaSerie?.takeIf { precisa == null }?.let { f ->
+                    situacaoParou(f.episodio, visto(f, serie = true), faltaSerie(f), CruzLogica.juntar(f.episodio, faltaSerie(f)), "series") })
             assistir += HomeCruz.Item("filmes", getString(R.string.home_card_filmes),
                 precisa ?: fichaFilme?.let { f -> CruzLogica.linhas(f.titulo, metaFicha(f, serie = false), f.genero, faltaFilme(f)) }
                     ?: getString(R.string.home_destaque_filmes),
                 icCruz("filmes", IconeCruz.Tipo.FILMES), { abrirCatalogo(FilmesActivity::class.java) },
-                canto = fichaFilme?.takeIf { precisa == null }?.let { f -> cantoParou(null, visto(f, serie = false), faltaFilme(f), faltaFilme(f), "filmes") })
+                situacao = fichaFilme?.takeIf { precisa == null }?.let { f -> situacaoParou(null, visto(f, serie = false), faltaFilme(f), faltaFilme(f), "filmes") })
         }
         val pendrives = pendrivesCruz()
         assistir += HomeCruz.Item("rede", getString(R.string.home_card_rede),
             CruzLogica.linhas(getString(R.string.home_destaque_rede), *pendrives.map { getString(R.string.cruz_pendrive, it) }.toTypedArray()),
             icCruz("rede", IconeCruz.Tipo.REDE), { abrirCatalogo(MidiaRedeActivity::class.java) },
-            canto = pendrives.takeIf { it.isNotEmpty() }?.let { pd ->
-                BarraIlha.Canto(getString(R.string.cruz_canto_conectado), pd.joinToString(" · "), "rede", pd.map { getString(R.string.cruz_pendrive, it) }) })
+            situacao = pendrives.takeIf { it.isNotEmpty() }?.let { pd ->
+                CruzLogica.Situacao(getString(R.string.cruz_canto_conectado), pd.joinToString(" · "), "rede", pd.map { getString(R.string.cruz_pendrive, it) }) })
         if (AddonsTv.instalados(this).isNotEmpty()) assistir += HomeCruz.Item("addons", getString(R.string.ad_titulo),
             CruzLogica.linhas(getString(R.string.ad_destaque), getString(R.string.cruz_addons_n, AddonsTv.instalados(this).size)), icCruz("addons", IconeCruz.Tipo.ADDONS), { abrirCatalogo(AddonsActivity::class.java) })
         for ((i, p) in cartoesPlugin.withIndex()) assistir += HomeCruz.Item("plugin:${p.pacote}:$i", p.titulo.ifEmpty { p.valor },
@@ -3144,7 +3104,7 @@ class MainActivity : Activity() {
                 icCruz("radio", IconeCruz.Tipo.RADIO), {
                 try { startActivity(Intent(this, RadioActivity::class.java)) }
                 catch (e: Exception) { Log.w("TvLauncher.Cruz", "rádio não abriu: ${e.javaClass.simpleName}"); cruz?.naoAbriu() }
-            }, canto = cantoTocando("radio")),
+            }, situacao = situacaoTocando("radio")),
             HomeCruz.Item("podcasts", getString(R.string.pod_titulo),
                 CruzLogica.linhas(ouvindoCruz?.takeIf { it.first == "podcast" }?.let { getString(R.string.cruz_tocando, it.second) } ?: precisa ?: getString(R.string.ra_podcasts_det),
                     podcastCruz?.let { p -> CruzLogica.juntar(p.titulo, faltaPodcast(p)) },
@@ -3152,8 +3112,8 @@ class MainActivity : Activity() {
                 icCruz("podcasts", IconeCruz.Tipo.PODCASTS), {
                 try { startActivity(Intent(this, PodcastsActivity::class.java)) }
                 catch (e: Exception) { Log.w("TvLauncher.Cruz", "podcasts não abriram: ${e.javaClass.simpleName}"); cruz?.naoAbriu() }
-            }, canto = cantoTocando("podcast") ?: podcastCruz?.let { p ->
-                cantoParou(p.titulo, fracaoPodcast(p), faltaPodcast(p), CruzLogica.juntar(p.titulo, faltaPodcast(p)), "podcasts") })) + appsDe(CruzLogica.Categoria.OUVIR)
+            }, situacao = situacaoTocando("podcast") ?: podcastCruz?.let { p ->
+                situacaoParou(p.titulo, fracaoPodcast(p), faltaPodcast(p), CruzLogica.juntar(p.titulo, faltaPodcast(p)), "podcasts") })) + appsDe(CruzLogica.Categoria.OUVIR)
         categoria(CruzLogica.Categoria.OUVIR, R.string.cruz_ouvir, IconeCruz.Tipo.OUVIR, ouvir)
 
         // Jogar (18/11/2026, pedido do dono: "Jogos" e "Sofá" abriam a mesma tela): a Central de jogos no topo (o painel com
