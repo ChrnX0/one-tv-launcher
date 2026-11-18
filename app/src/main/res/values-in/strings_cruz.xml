@@ -49,4 +49,23 @@
     <string name="cruz_dormir_sub">Layar meredup perlahan dan TV mati</string>
     <string name="cruz_desliga_as">Mati pukul %1$s</string>
     <string name="cruz_dormir_cancelar">OK untuk membatalkan</string>
+    <string name="cruz_linha">Garis</string>
+    <string name="cruz_mover">Pindahkan ke…</string>
+    <string name="cruz_mover_titulo">Pindahkan %1$s ke</string>
+    <string name="cruz_central">Pusat game</string>
+    <string name="cruz_abrir_app">Buka %1$s</string>
+    <string name="cruz_tirar_continuar">Hapus dari Lanjutkan</string>
+    <string name="jogos_recentes">Baru dimainkan</string>
+    <string name="jogos_semana">Minggu ini</string>
+    <string name="jogos_semana_jogado">dimainkan dalam 7 hari</string>
+    <string name="jogos_semana_mais">paling sering dimainkan</string>
+    <string name="jogos_semana_controles">kontroler menyala</string>
+    <string name="jogos_menos_de_1_min">kurang dari 1 mnt</string>
+    <string name="jogos_min">%1$d mnt</string>
+    <string name="jogos_h_min">%1$d j %2$d mnt</string>
+    <string name="cruz_apps_icone">Ikon aplikasi</string>
+    <string name="cruz_apps_icone_det">Tampilan aplikasi di layar utama</string>
+    <string name="cruz_app_banner">Banner TV</string>
+    <string name="cruz_app_redondo">Bulat</string>
+    <string name="cruz_app_solto">Simbol saja</string>
 </resources>

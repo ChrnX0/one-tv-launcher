@@ -49,4 +49,23 @@
     <string name="cruz_dormir_sub">Ekran yavaşça kararır ve TV kapanır</string>
     <string name="cruz_desliga_as">%1$s’te kapanır</string>
     <string name="cruz_dormir_cancelar">İptal için OK</string>
+    <string name="cruz_linha">Çizgi</string>
+    <string name="cruz_mover">Taşı…</string>
+    <string name="cruz_mover_titulo">%1$s uygulamasını taşı</string>
+    <string name="cruz_central">Oyun merkezi</string>
+    <string name="cruz_abrir_app">%1$s uygulamasını aç</string>
+    <string name="cruz_tirar_continuar">Devam et listesinden çıkar</string>
+    <string name="jogos_recentes">Son oynananlar</string>
+    <string name="jogos_semana">Bu hafta</string>
+    <string name="jogos_semana_jogado">7 günde oynandı</string>
+    <string name="jogos_semana_mais">en çok oynanan</string>
+    <string name="jogos_semana_controles">açık kumanda</string>
+    <string name="jogos_menos_de_1_min">1 dk’dan az</string>
+    <string name="jogos_min">%1$d dk</string>
+    <string name="jogos_h_min">%1$d sa %2$d dk</string>
+    <string name="cruz_apps_icone">Uygulama simgeleri</string>
+    <string name="cruz_apps_icone_det">Uygulamaların ana ekranda görünüşü</string>
+    <string name="cruz_app_banner">TV afişi</string>
+    <string name="cruz_app_redondo">Yuvarlak</string>
+    <string name="cruz_app_solto">Yalnız simge</string>
 </resources>

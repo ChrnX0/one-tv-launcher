@@ -18,25 +18,24 @@
         <item>TV: menu da esquerda mais enxuto; Todos e Guia ficam ao lado de LISTAS e o Rádio saiu (está em Ouvir)</item>
         <item>TV: categoria Novos com os canais que entraram na lista nos últimos 14 dias</item>
         <item>TV: quando o canal não abre, a TV diz se a lista venceu ou se outra tela já está usando</item>
-        <item>Modo ambiente: parada 2 minutos na tela inicial, a cruz se recolhe e ficam a arte e a hora grande; qualquer tecla volta para onde estava</item>
-        <item>A arte atrás da cruz desliza um pouquinho ao andar, dando profundidade</item>
-        <item>Barra de cima em vidro: uma faixa só, translúcida, com perfil, busca, tempo e hora (as outras barras continuam em Configurações › Tela inicial)</item>
-        <item>À noite, “Dormir em 30 min” aparece no fim de Continuar: a tela escurece devagar e a TV desliga; OK de novo cancela</item>
-        <item>Com dois perfis ou mais, a TV pergunta “Quem está vendo?” ao ligar depois de dormir</item>
-        <item>Cada novidade tem a sua chave em Configurações › Tela inicial</item>
+        <item>Ícones novos no estilo “Linha”: traço fino, uma cor só, e o item escolhido acende na cor da marca (os outros estilos continuam em Configurações › Tela inicial)</item>
+        <item>Os apps aparecem com o banner de TV deles, sem o quadrado; “Ícones dos apps” em Configurações troca para redondo ou só o símbolo</item>
+        <item>Cada app cai sozinho na categoria certa (YouTube em Assistir, Spotify em Ouvir); segurar OK num app e escolher “Mover para…” muda à mão</item>
+        <item>Jogar: cada jogo na coluna, do jogado por último, e a Central de jogos no topo, com turma do Discord, controles, rede e o tempo jogado na semana</item>
+        <item>Continuar mostra também a última rádio, o podcast pela metade, os últimos jogos e o que você viu ou ouviu no YouTube, Spotify, Netflix e outros apps</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Menu da TV</item>
         <item>Qualidade da TV</item>
-        <item>Modo ambiente</item>
-        <item>Barra em vidro</item>
-        <item>Dormir em 30 min</item>
+        <item>Ícones Linha</item>
+        <item>Mover para…</item>
+        <item>Continuar com apps</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Na lista da TV, cabem mais categorias, com Todos e Guia ao lado de LISTAS e sem Rádio?</item>
         <item>Um canal que antes aparecia repetido (4K, FHD, HD) aparece uma vez só, e ▶ ▶ › Qualidade mostra as opções?</item>
-        <item>Deixando a tela inicial parada por 2 minutos, a cruz some e fica a hora grande? Uma tecla traz tudo de volta?</item>
-        <item>A barra de cima aparece numa faixa de vidro, com a hora à direita?</item>
-        <item>Depois das 22 h, em Continuar, “Dormir em 30 min” marca o desligamento e mostra “Desliga às…”?</item>
+        <item>Os ícones da tela inicial estão em traço fino, e só o item escolhido fica laranja?</item>
+        <item>Segurando OK num app e escolhendo “Mover para… › Assistir”, ele aparece na coluna Assistir?</item>
+        <item>Depois de ver algo no YouTube ou ouvir no Spotify, o título aparece em Continuar e o OK volta nele?</item>
     </string-array>
 </resources>

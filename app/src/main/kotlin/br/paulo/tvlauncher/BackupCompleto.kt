@@ -37,6 +37,7 @@ object BackupCompleto {
         "sincronizar_filmes",   // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
         "ouvir",   // Ouvir (17/11/2026): rádio continua ao sair da tela (e, depois, os ajustes dos podcasts)
         "pacote_icones", "fundo_meu",   // degrau 1 (15/11/2026): pacote de ícones e "Meu fundo" (caminho, brilho, contraste)
+        "cruz_apps",   // cruz (18/11/2026): em que categoria cada app mora ("Mover para…"), fixados no topo e aberturas
         "addons")   // addons no protocolo do Stremio (16/11/2026): a lista instalada e o aceite dos termos
     // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
     /**

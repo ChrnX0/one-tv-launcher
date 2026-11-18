@@ -21,32 +21,31 @@
         <item>TV: leaner left menu; All and Guide sit next to LISTS and Radio left (it is in Listen)</item>
         <item>TV: New category with the channels added to the list in the last 14 days</item>
         <item>TV: when a channel does not open, the TV tells you if the list expired or another screen is using it</item>
-        <item>Ambient mode: after 2 minutes idle on the home screen, the cross steps back and only the art and a big clock stay; any key brings you back where you were</item>
-        <item>The art behind the cross glides a little as you move, adding depth</item>
-        <item>Glass top bar: a single translucent strip with profile, search, weather and time (the other bars are still in Settings › Home screen)</item>
-        <item>At night, “Sleep in 30 min” appears at the end of Continue: the screen dims slowly and the TV turns off; OK again cancels</item>
-        <item>With two or more profiles, the TV asks “Who’s watching?” when it turns on after sleeping</item>
-        <item>Each new feature has its own switch in Settings › Home screen</item>
+        <item>New “Line” icons: thin stroke, one color, and the selected item lights up in the brand color (the other styles are still in Settings › Home screen)</item>
+        <item>Apps show their TV banner, without the square; “App icons” in Settings switches to round or symbol only</item>
+        <item>Each app lands in the right category on its own (YouTube in Watch, Spotify in Listen); hold OK on an app and pick “Move to…” to change it</item>
+        <item>Play: each game in the column, last played first, and the Game hub on top with the Discord crew, controllers, network and playtime this week</item>
+        <item>Continue also shows the last radio station, the podcast you were halfway through, recent games and what you watched or heard on YouTube, Spotify, Netflix and other apps</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>tv_menu</item>
         <item>tv_qualidade</item>
-        <item>cruz_ambiente</item>
-        <item>cruz_vidro</item>
-        <item>cruz_dormir</item>
+        <item>cruz_linha</item>
+        <item>cruz_mover</item>
+        <item>cruz_midia</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>TV menu</item>
         <item>TV quality</item>
-        <item>Ambient mode</item>
-        <item>Glass bar</item>
-        <item>Sleep in 30 min</item>
+        <item>Line icons</item>
+        <item>Move to…</item>
+        <item>Continue with apps</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>In the TV list, do more categories fit, with All and Guide next to LISTS and no Radio?</item>
         <item>Does a channel that used to repeat (4K, FHD, HD) show only once, and does ▶ ▶ › Quality show the choices?</item>
-        <item>Leaving the home screen idle for 2 minutes, does the cross disappear and a big clock stay? Does one key bring everything back?</item>
-        <item>Does the top bar show as a glass strip, with the time on the right?</item>
-        <item>After 10 pm, in Continue, does “Sleep in 30 min” set the timer and show “Turns off at…”?</item>
+        <item>Are the home screen icons in a thin stroke, with only the selected item in orange?</item>
+        <item>Holding OK on an app and choosing “Move to… › Watch”, does it appear in the Watch column?</item>
+        <item>After watching something on YouTube or listening on Spotify, does the title show in Continue and OK go back to it?</item>
     </string-array>
 </resources>

@@ -58,7 +58,10 @@ class JogosActivity : Activity() {
     private var jogos: List<JogosTv.App> = emptyList()   // já na ordem "jogado por último primeiro"
     private var uso: Map<String, Long> = emptyMap()
     private var atual: JogosTv.App? = null               // o jogo com foco (ou o último que teve)
-    private var filtro: Jogos.Grupo? = null              // "Por tipo": null = todos
+    private var filtro: Jogos.Grupo? = null              // sempre null desde a Central (18/11/2026): os jogos moram na cruz
+    /** Jogado nos últimos 7 dias (ms) e o jogo mais jogado (Central de jogos). */
+    private class Semana(val ms: Long, val topo: String?)
+    private var semana: Semana? = null
     private var turma: TurmaDiscordTv.Estado? = null
     private var aberto = false                           // painel aberto (foco nele)
     private var esperandoPc = false
@@ -146,12 +149,15 @@ class JogosActivity : Activity() {
             val u = Uso.ultimoUso(ctx)
             val porPacote = lista.associateBy { it.pacote }
             val ordenada = Jogos.ordenarPorUso(lista.map { it.pacote }, u).mapNotNull { porPacote[it] }
+            // Central (18/11/2026): quanto se jogou nos últimos 7 dias e o jogo mais jogado.
+            val tempos = Uso.tempoNaFrente(ctx).filterKeys { it in porPacote }
+            val sem = Semana(tempos.values.sum(), tempos.maxByOrNull { it.value }?.key?.let { porPacote[it]?.nome })
             // Banners e ícones só dos que ainda não foram lidos nesta tela (voltar de um jogo não relê nada).
             val novos = HashMap<String, Visual>()
             for (j in lista) if (j.pacote !in ja) novos[j.pacote] = lerVisual(j.pacote)
             runOnUiThread {
                 if (isDestroyed) return@runOnUiThread
-                visuais.putAll(novos); uso = u; jogos = ordenada
+                visuais.putAll(novos); uso = u; jogos = ordenada; semana = sem
                 if (focoPacote == null) focoPacote = atual?.pacote
                 montar()
             }
@@ -464,7 +470,7 @@ class JogosActivity : Activity() {
         addView(LinearLayout(this@JogosActivity).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
-            addView(Estilo.secao(this@JogosActivity, getString(R.string.jogos_continuar)).apply { setPadding(dp(4), 0, 0, 0) },
+            addView(Estilo.secao(this@JogosActivity, getString(R.string.jogos_recentes)).apply { setPadding(dp(4), 0, 0, 0) },
                 LinearLayout.LayoutParams(0, -2, 1f))
             chipRede = Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO).apply { textSize = 16f }
             addView(chipRede)
@@ -505,7 +511,7 @@ class JogosActivity : Activity() {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             clipChildren = false
-            addView(Estilo.secao(this@JogosActivity, getString(R.string.jogos_por_tipo)).apply { setPadding(dp(4), 0, dp(Estilo.E2), 0) })
+            addView(Estilo.secao(this@JogosActivity, getString(R.string.jogos_semana)).apply { setPadding(dp(4), 0, dp(Estilo.E2), 0) })
             chips = LinearLayout(this@JogosActivity).apply { orientation = LinearLayout.HORIZONTAL; clipChildren = false }
             addView(rolagem(chips).apply { setPadding(dp(6), dp(8), dp(6), dp(8)) }, LinearLayout.LayoutParams(0, -2, 1f))
         })
@@ -586,7 +592,8 @@ class JogosActivity : Activity() {
     private fun redesenharFila(tag: String?): View? {
         fila.removeAllViews()
         val t = (turma as? TurmaDiscordTv.Estado.Pronta)?.turma
-        val mostrar = jogos.filter { filtro == null || it.grupo == filtro }
+        // Central de jogos (18/11/2026): os jogos moram na coluna Jogar da cruz; aqui ficam só os jogados por último.
+        val mostrar = jogos.filter { filtro == null || it.grupo == filtro }.take(RECENTES_MAX)
         var primeiro: View? = null
         var alvo: View? = null
         if (jogos.isEmpty()) {
@@ -729,22 +736,40 @@ class JogosActivity : Activity() {
     }
 
     /** "Todos · 9", um chip por tipo com jogos e "Mais opções". O tipo escolhido fica marcado. */
+    /**
+     * "Esta semana" (Central de jogos, 18/11/2026): quadros só de leitura com o tempo jogado, o mais jogado e os controles,
+     * e o "Mais opções" (loja, PC, turma) no fim. Os filtros "Por tipo" saíram: os jogos moram na coluna Jogar da cruz.
+     */
     private fun desenharChips() {
         chips.removeAllViews()
-        val grupos = jogos.groupBy { it.grupo }
-        fun chip(rotulo: String, marcado: Boolean, ao: () -> Unit) = Estilo.botao(this, (if (marcado) "✓ " else "") + rotulo, primario = marcado).apply {
-            textSize = 16f; setPadding(dp(18), dp(9), dp(18), dp(9))
-            setOnClickListener { ao() }
+        fun quadro(valor: String, rotulo: String) = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            background = GradientDrawable().apply { setColor(0x1FFFFFFF); cornerRadius = dp(14).toFloat(); setStroke(dp(1), 0x26FFFFFF) }
+            setPadding(dp(18), dp(10), dp(18), dp(10))
+            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.CORPO, valor).apply { textSize = 20f; typeface = Estilo.fonte(700); maxLines = 1 })
+            addView(Estilo.texto(this@JogosActivity, Estilo.Papel.LEGENDA, rotulo).apply { textSize = 14f; setTextColor(Estilo.TEXTO_2); maxLines = 1 })
             chips.addView(this, LinearLayout.LayoutParams(-2, -2).apply { marginEnd = dp(Estilo.E1 + 4) })
         }
-        if (grupos.size > 1) {
-            chip(getString(R.string.jogos_todos) + " · " + jogos.size, filtro == null) { filtrar(null) }
-            for (g in Jogos.Grupo.values()) {
-                val n = grupos[g]?.size ?: continue
-                chip(nomeGrupo(g) + " · " + n, filtro == g) { filtrar(g) }
-            }
+        val sem = semana
+        quadro(if (sem == null || sem.ms <= 0) "—" else duracao(sem.ms), getString(R.string.jogos_semana_jogado))
+        sem?.topo?.let { quadro(it, getString(R.string.jogos_semana_mais)) }
+        val controles = runCatching { JogosTv.controles().size }.getOrDefault(0)
+        quadro(controles.toString(), getString(R.string.jogos_semana_controles))
+        Estilo.botao(this, "⋯  " + getString(R.string.jogos_mais_opcoes), primario = false).apply {
+            textSize = 16f; setPadding(dp(18), dp(9), dp(18), dp(9))
+            setOnClickListener { maisOpcoes() }
+            chips.addView(this, LinearLayout.LayoutParams(-2, -2).apply { marginStart = dp(Estilo.E1) })
         }
-        chip("⋯  " + getString(R.string.jogos_mais_opcoes), false) { maisOpcoes() }
+    }
+
+    /** "3 h 20 min" / "45 min" / "menos de 1 min". */
+    private fun duracao(ms: Long): String {
+        val min = ms / 60_000
+        return when {
+            min < 1 -> getString(R.string.jogos_menos_de_1_min)
+            min < 60 -> getString(R.string.jogos_min, min)
+            else -> getString(R.string.jogos_h_min, min / 60, min % 60)
+        }
     }
 
     private fun filtrar(g: Jogos.Grupo?) {
@@ -1001,6 +1026,8 @@ class JogosActivity : Activity() {
         private const val LARGURA_PAINEL = 236
         private const val LARGURA_PAINEL_ABERTO = 312
         private const val CARD_L = 158
+        /** Central de jogos: quantos "jogados por último" a fileira mostra. */
+        private const val RECENTES_MAX = 5
         private const val CARD_A = 232
         private const val CARD_RAIO = 18
         private const val QR = 92

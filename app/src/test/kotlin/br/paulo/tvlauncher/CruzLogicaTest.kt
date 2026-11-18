@@ -128,4 +128,19 @@ class CruzLogicaTest {
         repeat(30) { p = CruzLogica.somarAbertura(p, t, t + 86_400_000L); t += 86_400_000L }
         assertTrue(p in 8.0..10.6)
     }
+
+    @Test fun continuarDoMaisRecenteMantendoEmpateECortando() {
+        val l = listOf(5L to "a", 0L to "b", 9L to "c", 5L to "d", 0L to "e")
+        assertEquals(listOf("c", "a", "d", "b", "e"), CruzLogica.recentes(l, 10))
+        assertEquals(listOf("c", "a"), CruzLogica.recentes(l, 2))
+        assertEquals(emptyList<String>(), CruzLogica.recentes(l, -1))
+    }
+
+    @Test fun ordenarAppsSemCorteNemTodos() {
+        val ordem = (1..12).map { "p$it" }
+        val l = CruzLogica.ordenarApps(ordem, mapOf("p12" to 5L), mapOf("p3" to 2.0), listOf("p7"))
+        assertEquals(12, l.size)
+        assertEquals(listOf("p7", "p3", "p12", "p1"), l.take(4))
+        assertTrue(CruzLogica.ID_TODOS_APPS !in l)
+    }
 }

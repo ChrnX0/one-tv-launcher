@@ -1037,6 +1037,9 @@ class MainActivity : Activity() {
         val CORES_OUVIR = intArrayOf(0xFF4A8BFF.toInt(), 0xFF123A7A.toInt())    // azul (card Ouvir, 17/11/2026)
         const val PREFS_CRUZ_APPS = "cruz_apps"   // aberturas por app (meia-vida 7 dias) e fixados no topo de Aplicativos
         const val PREFS_CRUZ = "cruz"   // cruz: o último item escolhido em cada categoria (id da categoria -> id do item)
+        const val CONTINUAR_MAX = 9          // itens do Continuar da cruz (o 10º seria o "Dormir em 30 min")
+        const val MIDIA_NO_CONTINUAR = 4     // apps de mídia (MidiaRecente) no Continuar
+        const val JOGOS_NO_CONTINUAR = 3     // jogos recentes no Continuar
         const val LARGURA_ARTE = 640   // px da arte de filme/série no fundo (ver carregarArte)
         /** Frase curta embaixo do nome de cada app da HOME. Pacote novo na TV: acrescentar aqui (e nas strings). */
         val DESCRICAO_APPS = mapOf(
@@ -1196,6 +1199,9 @@ class MainActivity : Activity() {
             ultimoJogo = Jogos.ultimoUsado(doJogos.map { it.pacote }, uso)?.let { p -> p to doJogos.first { it.pacote == p }.nome }
             // Os retângulos mostram o banner de cada app: lê os que faltam ANTES de desenhar (só na 1ª vez do processo).
             for (app in todos) if (!capas.containsKey(app.pacote)) runCatching { lerCapa(app.pacote, app.icone) }
+            // Ícones da cruz no estilo escolhido (banner, redondo, solto): feitos aqui, fora da tela, uma vez por app.
+            for (app in todos) prepararIconeCruz(app)
+            iconeCruzApp.keys.retainAll(todos.map { it.pacote }.toSet())
             val t1 = android.os.SystemClock.elapsedRealtime()
             ui.post {
                 if (isDestroyed) return@post
@@ -1675,6 +1681,7 @@ class MainActivity : Activity() {
             fichaFilme = filme?.ficha
             fichaSerie = serie?.ficha
             posicoesHome = if (temVod) PlayerArmazem.posicoes(this) else emptyMap()
+            if (cruz != null) lerContinuarCruz()
             ui.post { if (!isDestroyed) desenharContinuar(temTv, temVod, ultimo) }
             // Plugins (degrau 3, PluginsTv): desenha já com os cartões da última leitura e só redesenha se mudaram. Sem
             // plugin permitido, cartoes() volta na hora; com plugin, cada um tem 2 s de prazo (aqui, fora da tela).
@@ -2485,7 +2492,72 @@ class MainActivity : Activity() {
     private val iconesAppCruz = java.util.WeakHashMap<Item, android.graphics.drawable.Drawable>()
 
     private fun icCruz(lugar: String, tipo: IconeCruz.Tipo) = iconesCruz.getOrPut(lugar) { IconeCruz(tipo, estiloCruz) }
-    private fun icApp(item: Item) = iconesAppCruz.getOrPut(item) { item.icone.constantState?.newDrawable(resources) ?: item.icone }
+    private fun icApp(item: Item) = iconesAppCruz.getOrPut(item) {
+        iconeCruzApp[item.pacote]?.takeIf { it.first == estiloAppCruz }?.second?.let { android.graphics.drawable.BitmapDrawable(resources, it) }
+            ?: item.icone.constantState?.newDrawable(resources) ?: item.icone
+    }
+
+    /** Como os apps aparecem na cruz (LayoutHome.IconeAppCruz), lido uma vez por abertura da HOME. */
+    private val estiloAppCruz by lazy { LayoutHome.iconeAppCruz(this) }
+    /** Ícone de cada app no estilo da cruz, feito na fila dos apps (fora da tela): pacote -> (estilo, bitmap). */
+    private val iconeCruzApp = java.util.concurrent.ConcurrentHashMap<String, Pair<LayoutHome.IconeAppCruz, Bitmap>>()
+
+    /**
+     * Faz o ícone de [item] no estilo escolhido (roda na fila dos apps). Banner: a arte de TV em 16:9 com cantos
+     * arredondados, ou o ícone sobre a cor dele quando o app não tem banner. Redondo: o ícone num círculo. Solto: o
+     * traço do ícone sem fundo (sem traço legível, o redondo). Tamanho: o do ícone grande da cruz, em pixels da TV.
+     */
+    private fun prepararIconeCruz(item: Item) {
+        if (cruz == null || iconeCruzApp[item.pacote]?.first == estiloAppCruz) return
+        val d = resources.displayMetrics.density
+        val l = (HomeCruz.ICONE_L * d).toInt()
+        val bmp: Bitmap? = runCatching {
+            when (estiloAppCruz) {
+                LayoutHome.IconeAppCruz.BANNER -> {
+                    val a = l * 9 / 16
+                    val out = Bitmap.createBitmap(l, a, Bitmap.Config.ARGB_8888)
+                    val c = android.graphics.Canvas(out)
+                    val raio = 10f * d
+                    val forma = android.graphics.Path().apply { addRoundRect(android.graphics.RectF(0f, 0f, l.toFloat(), a.toFloat()), raio, raio, android.graphics.Path.Direction.CW) }
+                    c.clipPath(forma)
+                    val capa = capas[item.pacote]
+                    val banner = capa?.first
+                    if (banner != null && !banner.isRecycled) {
+                        // corte central, como a capa grande (CapaFoco): preenche o 16:9 sem deformar
+                        val esc = maxOf(l.toFloat() / banner.width, a.toFloat() / banner.height)
+                        val w = banner.width * esc; val h = banner.height * esc
+                        c.drawBitmap(banner, null, android.graphics.RectF((l - w) / 2, (a - h) / 2, (l + w) / 2, (a + h) / 2),
+                            android.graphics.Paint(android.graphics.Paint.FILTER_BITMAP_FLAG))
+                    } else {
+                        val cores = capa?.second ?: intArrayOf(0xFF2B2F3A.toInt(), Estilo.FUNDO)
+                        c.drawColor(cores[0])
+                        val t = (a * 0.72f).toInt()
+                        val ic = redondo(item.icone, t)
+                        c.drawBitmap(ic, (l - t) / 2f, (a - t) / 2f, null)
+                        ic.recycle()
+                    }
+                    out
+                }
+                LayoutHome.IconeAppCruz.REDONDO -> redondo(item.icone, (HomeCruz.ICONE_A * d).toInt())
+                LayoutHome.IconeAppCruz.SOLTO -> {
+                    val traco = DesenhoHome.iconeTraco(resources, item.icone, duotom = false)
+                    val t = (HomeCruz.ICONE_A * d).toInt()
+                    if (traco == null) redondo(item.icone, t)
+                    else Bitmap.createBitmap(t, t, Bitmap.Config.ARGB_8888).also { traco.setBounds(0, 0, t, t); traco.draw(android.graphics.Canvas(it)) }
+                }
+            }
+        }.getOrNull()
+        if (bmp != null) iconeCruzApp[item.pacote] = estiloAppCruz to bmp
+    }
+
+    /** O ícone (já do tamanho cheio, DesenhoHome.iconeRedondo) recortado em círculo de [t] px. */
+    private fun redondo(icone: Drawable, t: Int): Bitmap {
+        val out = Bitmap.createBitmap(t, t, Bitmap.Config.ARGB_8888)
+        val c = android.graphics.Canvas(out)
+        c.clipPath(android.graphics.Path().apply { addCircle(t / 2f, t / 2f, t / 2f, android.graphics.Path.Direction.CW) })
+        icone.constantState?.newDrawable(resources)?.let { it.setBounds(0, 0, t, t); it.draw(c) }
+        return out
+    }
 
     private fun montarCruz(raiz: FrameLayout) {
         rolagem.visibility = View.GONE
@@ -2648,8 +2720,10 @@ class MainActivity : Activity() {
             id == "series" || id == "c:serie" -> mostrarCapaAtalho(IconeApp.Tipo.SERIES)
             id == "filmes" || id == "c:filme" -> mostrarCapaAtalho(IconeApp.Tipo.FILMES)
             id == "rede" -> mostrarCapaAtalho(IconeApp.Tipo.REDE)
-            id == "jogos" || id == "c:jogo" -> mostrarCapaAtalho(IconeApp.Tipo.JOGOS)
+            id == "central" -> mostrarCapaAtalho(IconeApp.Tipo.JOGOS)
             id.startsWith("app:") -> mostrarCapaDoApp(id.removePrefix("app:"), null)
+            id.startsWith("c:jogo:") -> mostrarCapaDoApp(id.removePrefix("c:jogo:"), null)
+            id.startsWith("c:midia:") -> mostrarCapaDoApp(id.removePrefix("c:midia:"), null)
             else -> {
                 capaPedida = null
                 val cor = when (cruz?.categoriaAtual()?.cat) {
@@ -2682,24 +2756,57 @@ class MainActivity : Activity() {
             if (itens.isNotEmpty()) cats += HomeCruz.Categoria(k, getString(nome), icCruz("cat:" + k.id, tipo), itens)
         }
 
-        // Continuar: o que o "Continuar" de hoje sabe (último canal, última série, último filme, último jogo). Quando a fila
-        // única da elevação (2.8/3.8) existir, ela entra aqui.
+        // Os apps visíveis (os mesmos da grade, pilhas abertas), cada um na categoria dele (CategoriaApps: escolha manual
+        // "Mover para…" > tipo que o app declara > Aplicativos). Os jogos moram em Jogar (jogosNaCruz).
+        val porPacote = LinkedHashMap<String, Item>()
+        for (e in lista) when (e) {
+            is Entrada.App -> porPacote[e.item.pacote] = e.item
+            is Entrada.Pilha -> for (it in e.itens) porPacote[it.pacote] = it
+            else -> {}
+        }
+        val escolhasCat = CategoriaApps.escolhas(this)
+        val porDestino = porPacote.keys.groupBy { CategoriaApps.destino(it, this@MainActivity.categoria(it), false, escolhasCat[it]) }
+        val frequencia = frequenciaApps()
+        val fixados = fixadosCruz()
+        fun appsDe(k: CruzLogica.Categoria): List<HomeCruz.Item> =
+            CruzLogica.ordenarApps(porDestino[k].orEmpty(), ultimoUso, frequencia, fixados).map { id -> porPacote.getValue(id).let { app ->
+                HomeCruz.Item("app:$id", app.nome, subApp(id, app.nome), icApp(app), { abrir(id) }, opcoes = { menuAppCruz(id) })
+            } }
+
+        // Continuar (18/11/2026, pedido do dono): o canal de TV primeiro (a TV da casa); depois, do mais recente para o mais
+        // antigo, a série, o filme, a última rádio, o podcast pela metade, até 3 jogos e o último de cada app de mídia
+        // (YouTube, Spotify, Netflix…; MidiaRecente). "Dormir em 30 min" no fim, à noite.
         val continuar = ArrayList<HomeCruz.Item>()
         ultimoTv?.let { u ->
             continuar += HomeCruz.Item("c:tv", programa?.titulo ?: u.nome.ifBlank { getString(R.string.home_card_tv) },
                 getString(R.string.home_dest_tv, u.numero), icCruz("c:tv", IconeCruz.Tipo.TV), { abrirTv() }, progresso = noAr)
         }
+        val recentes = ArrayList<Pair<Long, HomeCruz.Item>>()
         if (cruzTemVod) {
-            fichaSerie?.let { f -> continuar += HomeCruz.Item("c:serie", f.titulo, f.episodio.ifEmpty { getString(R.string.home_card_series) },
+            fichaSerie?.let { f -> recentes += (posicoesHome[f.chave]?.quando ?: 0L) to HomeCruz.Item("c:serie", f.titulo,
+                f.episodio.ifEmpty { getString(R.string.home_card_series) },
                 icCruz("c:serie", IconeCruz.Tipo.SERIES), { abrirCatalogo(SeriesActivity::class.java) }, progresso = visto(f, serie = true)) }
-            fichaFilme?.let { f -> continuar += HomeCruz.Item("c:filme", f.titulo,
+            fichaFilme?.let { f -> recentes += (posicoesHome[f.chave]?.quando ?: 0L) to HomeCruz.Item("c:filme", f.titulo,
                 listOfNotNull(getString(R.string.cruz_filme), faltaFilme(f)).joinToString(" · "),
                 icCruz("c:filme", IconeCruz.Tipo.FILMES), { abrirCatalogo(FilmesActivity::class.java) }, progresso = visto(f, serie = false)) }
         }
-        ultimoJogo?.let { (pacote, nome) ->
-            val icone = instalados.firstOrNull { it.pacote == pacote }?.let { icApp(it) } ?: icCruz("c:jogo", IconeCruz.Tipo.JOGOS)
-            continuar += HomeCruz.Item("c:jogo", nome, getString(R.string.cruz_jogo), icone, { abrir(pacote) })
+        radioCruz?.let { (r, quando) -> recentes += quando to HomeCruz.Item("c:radio", r.nome, getString(R.string.cruz_radio),
+            icCruz("c:radio", IconeCruz.Tipo.RADIO), { tocarRadioCruz(r) }) }
+        podcastCruz?.let { p -> recentes += p.em to HomeCruz.Item("c:podcast", p.titulo.ifBlank { getString(R.string.pod_titulo) },
+            listOf(p.podcast, faltaPodcast(p)).filter { it.isNotEmpty() }.joinToString(" · "),
+            icCruz("c:podcast", IconeCruz.Tipo.PODCASTS), { retomarPodcastCruz(p) },
+            progresso = if (p.durMs > 0) (p.ms.toFloat() / p.durMs).coerceIn(0f, 1f) else null) }
+        for ((pacote, item) in jogosRecentes()) recentes += (ultimoUso[pacote] ?: 0L) to HomeCruz.Item("c:jogo:$pacote", item.nome,
+            getString(R.string.cruz_jogo), icApp(item), { abrir(pacote) }, opcoes = { menuAppCruz(pacote) })
+        for (m in midiaCruz) {
+            val nomeApp = nomeDe(m.registro.pacote)
+            recentes += m.registro.quando to HomeCruz.Item("c:midia:${m.registro.pacote}", m.registro.titulo,
+                listOf(nomeApp, m.registro.sub).filter { it.isNotEmpty() }.joinToString(" · "),
+                m.capa ?: instalados.firstOrNull { it.pacote == m.registro.pacote }?.let { icApp(it) } ?: icCruz("c:midia", IconeCruz.Tipo.CONTINUAR),
+                { abrirMidiaCruz(m.registro.pacote) }, progresso = MidiaRecente.progresso(m.registro),
+                opcoes = { menuMidiaCruz(m.registro.pacote, nomeApp) })
         }
+        continuar += CruzLogica.recentes(recentes, CONTINUAR_MAX - continuar.size)
         itemDormir()?.let { continuar += it }   // onda 3: à noite, "Dormir em 30 min" no fim do Continuar
         categoria(CruzLogica.Categoria.CONTINUAR, R.string.cruz_continuar, IconeCruz.Tipo.CONTINUAR, continuar)
 
@@ -2724,6 +2831,7 @@ class MainActivity : Activity() {
         for ((i, p) in cartoesPlugin.withIndex()) assistir += HomeCruz.Item("plugin:${p.pacote}:$i", p.titulo.ifEmpty { p.valor },
             if (p.titulo.isEmpty()) p.detalhe else listOf(p.valor, p.detalhe).filter { it.isNotEmpty() }.joinToString(" · "),
             icCruz("plugin:${p.pacote}:$i", IconeCruz.Tipo.PLUGIN), { PluginsTv.abrir(this, p) })
+        assistir += appsDe(CruzLogica.Categoria.ASSISTIR)   // YouTube, Netflix… (movidos ou pelo tipo do app)
         categoria(CruzLogica.Categoria.ASSISTIR, R.string.cruz_assistir, IconeCruz.Tipo.ASSISTIR, assistir)
 
         // Ouvir: as rádios (catálogo mundial, sem conta) e os podcasts (plano Básico, Paulo 17/11/2026).
@@ -2739,26 +2847,23 @@ class MainActivity : Activity() {
                 icCruz("podcasts", IconeCruz.Tipo.PODCASTS), {
                 try { startActivity(Intent(this, PodcastsActivity::class.java)) }
                 catch (e: Exception) { Log.w("TvLauncher.Cruz", "podcasts não abriram: ${e.javaClass.simpleName}"); cruz?.naoAbriu() }
-            })))
+            })) + appsDe(CruzLogica.Categoria.OUVIR))
 
-        // Jogar: o hub de Jogos (com o card Jogos ligado, os apps de jogo moram só nele) e o Sofá, que abre a mesma tela
-        // já no painel dos controles e da turma do Discord (#183).
-        if (JogosTv.cardLigado(this)) categoria(CruzLogica.Categoria.JOGAR, R.string.cruz_jogar, IconeCruz.Tipo.JOGAR, listOf(
-            HomeCruz.Item("jogos", getString(R.string.home_card_jogos), resumoJogos(), icCruz("jogos", IconeCruz.Tipo.JOGOS),
-                { abrirCatalogo(JogosActivity::class.java) }),
-            HomeCruz.Item("sofa", getString(R.string.cruz_sofa), resumoSofa(), icCruz("sofa", IconeCruz.Tipo.SOFA), {
-                try { startActivity(Intent(this, JogosActivity::class.java).putExtra(JogosActivity.EXTRA_SOFA, true)) }
-                catch (e: Exception) { Log.w("TvLauncher.Cruz", "sofá não abriu: ${e.javaClass.simpleName}"); cruz?.naoAbriu() }
-            })))
-
-        // Aplicativos: os 8 mais usados (os mesmos apps visíveis da grade, pilhas abertas) e "Todos os apps".
-        val porPacote = HashMap<String, Item>()
-        for (e in lista) when (e) {
-            is Entrada.App -> porPacote[e.item.pacote] = e.item
-            is Entrada.Pilha -> for (it in e.itens) porPacote[it.pacote] = it
-            else -> {}
+        // Jogar (18/11/2026, pedido do dono: "Jogos" e "Sofá" abriam a mesma tela): a Central de jogos no topo (o painel com
+        // controles, turma do Discord, rede e recentes) e cada jogo instalado, do jogado por último ao mais antigo.
+        if (JogosTv.cardLigado(this)) {
+            val jogos = ArrayList<HomeCruz.Item>()
+            jogos += HomeCruz.Item("central", getString(R.string.cruz_central), resumoSofa(), icCruz("central", IconeCruz.Tipo.CENTRAL),
+                { abrirCatalogo(JogosActivity::class.java) })
+            val doJogo = jogosNaCruz().associateBy { it.pacote }
+            for (p in CruzLogica.ordenarApps(doJogo.keys.sorted(), ultimoUso, emptyMap(), fixadosCruz())) doJogo.getValue(p).let { app ->
+                jogos += HomeCruz.Item("app:$p", app.nome, subApp(p, app.nome), icApp(app), { abrir(p) }, opcoes = { menuAppCruz(p) })
+            }
+            categoria(CruzLogica.Categoria.JOGAR, R.string.cruz_jogar, IconeCruz.Tipo.JOGAR, jogos)
         }
-        val apps = CruzLogica.appsDaColuna(porPacote.keys.toList(), ultimoUso, frequenciaApps(), fixadosCruz()).map { id ->
+
+        // Aplicativos: os 8 mais usados dos que moram aqui (nem movidos nem automáticos de Assistir/Ouvir) e "Todos os apps".
+        val apps = CruzLogica.appsDaColuna(porDestino[CruzLogica.Categoria.APLICATIVOS].orEmpty(), ultimoUso, frequencia, fixados).map { id ->
             if (id == CruzLogica.ID_TODOS_APPS) HomeCruz.Item(id, getString(R.string.cruz_todos_apps), getString(R.string.cruz_todos_apps_sub),
                 icCruz(id, IconeCruz.Tipo.TODOS_APPS), { abrirTodos() })
             else porPacote.getValue(id).let { app ->
@@ -2770,6 +2875,131 @@ class MainActivity : Activity() {
         c.definir(cats)
         if (focoInicialNaTv && !todosAbertos) { focoInicialNaTv = false; c.requestFocus() }
         else if (currentFocus == null && !todosAbertos) c.requestFocus()
+    }
+
+    // ------------------------------------------------------------------ Continuar e Jogar da cruz (18/11/2026)
+
+    /** Uma entrada de app de mídia no Continuar, com a capa já pronta (lida fora da tela). */
+    private class MidiaCruz(val registro: MidiaRecente.Registro, val capa: Drawable?)
+    @Volatile private var radioCruz: Pair<Radios.Radio, Long>? = null
+    @Volatile private var podcastCruz: Podcasts.Posicao? = null
+    @Volatile private var midiaCruz: List<MidiaCruz> = emptyList()
+
+    /** Lê, na fila dos apps, o que o Continuar da cruz mostra além de TV/série/filme. */
+    private fun lerContinuarCruz() {
+        radioCruz = runCatching { Radios.ultima(this) }.getOrNull()
+        podcastCruz = runCatching {
+            Podcasts.continuar(Podcasts.posicoes(this), Podcasts.assinaturas(this).map { it.url }.toSet(), max = 1).firstOrNull()
+        }.getOrNull()
+        val pm = packageManager
+        midiaCruz = runCatching {
+            MidiaRecente.validos(MidiaRecente.ler(this), System.currentTimeMillis())
+                .filter { r -> pm.getLeanbackLaunchIntentForPackage(r.pacote) != null || pm.getLaunchIntentForPackage(r.pacote) != null }
+                .take(MIDIA_NO_CONTINUAR)
+                .map { r -> MidiaCruz(r, MidiaRecente.capa(this, r.pacote)?.let { capaArredondada(it) }) }
+        }.getOrDefault(emptyList())
+    }
+
+    /** A capa da música/episódio com cantos arredondados (como os ícones), num bitmap nosso. */
+    private fun capaArredondada(b: android.graphics.Bitmap): Drawable {
+        val out = android.graphics.Bitmap.createBitmap(b.width, b.height, android.graphics.Bitmap.Config.ARGB_8888)
+        val c = android.graphics.Canvas(out)
+        val raio = minOf(b.width, b.height) * 0.12f
+        val p = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
+        p.shader = android.graphics.BitmapShader(b, android.graphics.Shader.TileMode.CLAMP, android.graphics.Shader.TileMode.CLAMP)
+        c.drawRoundRect(android.graphics.RectF(0f, 0f, b.width.toFloat(), b.height.toFloat()), raio, raio, p)
+        b.recycle()
+        return android.graphics.drawable.BitmapDrawable(resources, out)
+    }
+
+    /** Os jogos visíveis na TV (instalados por você ou sempre mostrados), sem os ocultos e os da visita. */
+    private fun jogosNaCruz(): List<Item> {
+        val ocultos = Organizacao.ocultos(this)
+        val daVisita = if (ModoVisita.ativo(this)) ModoVisita.apps(this) else emptySet()
+        return instalados.filter { JogosTv.ehJogo(this, it.pacote) && it.pacote !in ocultos && it.pacote !in daVisita }
+    }
+
+    /** Até [JOGOS_NO_CONTINUAR] jogos já abertos, do mais recente. */
+    private fun jogosRecentes(): List<Pair<String, Item>> =
+        jogosNaCruz().filter { (ultimoUso[it.pacote] ?: 0L) > 0L }.sortedByDescending { ultimoUso[it.pacote] }
+            .take(JOGOS_NO_CONTINUAR).map { it.pacote to it }
+
+    private fun faltaPodcast(p: Podcasts.Posicao): String =
+        if (p.durMs > p.ms) ((p.durMs - p.ms) / 60_000).toInt().takeIf { it > 0 }?.let { getString(R.string.home_faltam, duracaoTexto(it)) } ?: ""
+        else ""
+
+    private fun tocarRadioCruz(r: Radios.Radio) {
+        if (semInternetCruz) { cruz?.naoAbriu(); return }
+        OuvirServico.tocarRadio(this, r)   // toca e fica na HOME; a pílula "Tocando agora" aparece
+    }
+
+    /** Retoma o episódio de onde parou (o feed já está no cache); sem o feed, abre a tela de Podcasts. */
+    private fun retomarPodcastCruz(p: Podcasts.Posicao) {
+        Fundo.rodar("podcast-continuar") {
+            val ass = runCatching { Podcasts.assinaturas(this).firstOrNull { it.url == p.feed } }.getOrNull()
+            val feed = runCatching { Podcasts.feeds(this)[p.feed] }.getOrNull()
+            val ep = feed?.episodios?.firstOrNull { it.guid == p.guid }
+            ui.post {
+                if (isDestroyed) return@post
+                if (ep != null && feed != null) OuvirServico.tocarEpisodio(this, OuvirServico.EpisodioTocando(p.feed,
+                    p.podcast.ifEmpty { ass?.titulo ?: feed.titulo }, feed.capa, ep), OuvirServico.RETOMAR)
+                else try { startActivity(Intent(this, PodcastsActivity::class.java)) } catch (e: Exception) { cruz?.naoAbriu() }
+            }
+        }
+    }
+
+    /**
+     * App de mídia do Continuar: com a sessão ainda aberta, música volta a tocar sem sair da HOME e vídeo abre o player
+     * do app (a "atividade da sessão"); sem sessão, abre o app (a maioria retoma sozinho de onde parou).
+     */
+    private fun abrirMidiaCruz(pacote: String) {
+        val sessao = runCatching {
+            getSystemService(android.media.session.MediaSessionManager::class.java)
+                ?.getActiveSessions(android.content.ComponentName(this, OuvinteNotificacoes::class.java))
+                ?.firstOrNull { it.packageName == pacote }
+        }.getOrNull()
+        val musica = CategoriaApps.destino(pacote, categoria(pacote), false, CategoriaApps.escolhas(this)[pacote]) == CruzLogica.Categoria.OUVIR
+        if (sessao != null && musica) { runCatching { sessao.transportControls.play() }.onSuccess { return } }
+        val pi = sessao?.sessionActivity
+        if (pi != null) {
+            val ok = runCatching {
+                val op = android.app.ActivityOptions.makeBasic()
+                if (android.os.Build.VERSION.SDK_INT >= 34)
+                    op.setPendingIntentBackgroundActivityStartMode(android.app.ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED)
+                pi.send(this, 0, null, null, null, null, op.toBundle())
+            }.isSuccess
+            if (ok) return
+        }
+        abrir(pacote)
+    }
+
+    private fun menuMidiaCruz(pacote: String, nomeApp: String) {
+        val opcoes = listOf(
+            Opcao(getString(R.string.cruz_abrir_app, nomeApp)) { abrir(pacote) },
+            Opcao(getString(R.string.cruz_tirar_continuar)) {
+                Fundo.rodar("midia-esquecer") { MidiaRecente.esquecer(this, pacote); lerContinuarCruz(); ui.post { if (!isDestroyed) atualizarCruz() } }
+            })
+        menuAberto = Estilo.lista(this, nomeApp, opcoes.map { it.rotulo }) { i -> opcoes[i].acao() }
+    }
+
+    /** "Mover para…": Assistir, Ouvir, Jogar (com a Central ligada) ou Aplicativos; a atual vem marcada. */
+    private fun moverAppCruz(pacote: String) {
+        val eraJogo = JogosTv.ehJogo(this, pacote)
+        val atual = CategoriaApps.destino(pacote, categoria(pacote), eraJogo && JogosTv.cardLigado(this), CategoriaApps.escolhas(this)[pacote])
+        val destinos = CategoriaApps.DESTINOS.filter { it != CruzLogica.Categoria.JOGAR || JogosTv.cardLigado(this) }
+        val nomes = destinos.map { k -> getString(when (k) {
+            CruzLogica.Categoria.ASSISTIR -> R.string.cruz_assistir
+            CruzLogica.Categoria.OUVIR -> R.string.cruz_ouvir
+            CruzLogica.Categoria.JOGAR -> R.string.cruz_jogar
+            else -> R.string.cruz_aplicativos
+        }) + if (k == atual) getString(R.string.pp_ativo) else "" }
+        menuAberto = Estilo.lista(this, getString(R.string.cruz_mover_titulo, nomeDe(pacote)), nomes) { i ->
+            val k = destinos[i]
+            if (k == atual) return@lista
+            CategoriaApps.escolher(this, pacote, k, categoria(pacote), eraJogo)
+            getSharedPreferences(PREFS_CRUZ, MODE_PRIVATE).edit().putString(k.id, "app:$pacote").apply()   // a coluna nova abre nele
+            atualizarAposMudanca(null)
+        }
     }
 
     // ------------------------------------------------------------------ onda 3 (CruzOnda3): ambiente, paralaxe, quem vê
@@ -2946,6 +3176,7 @@ class MainActivity : Activity() {
             guardarFixadosCruz(if (fixado) fixados - pacote else fixados + pacote)
             atualizarAposMudanca(null)
         })
+        opcoes += Opcao(getString(R.string.cruz_mover)) { moverAppCruz(pacote) }
         opcoes += Opcao(getString(R.string.home_ocultar)) { Organizacao.ocultar(this, pacote); atualizarAposMudanca(null); avisarOculto() }
         if (PainelApps.podeDesinstalar(this, pacote)) opcoes += Opcao(getString(R.string.home_desinstalar)) { confirmarDesinstalar(pacote) }
         val titulo = nomeDe(pacote) + if (PainelApps.eSistema(this, pacote)) getString(R.string.home_app_sistema) else ""

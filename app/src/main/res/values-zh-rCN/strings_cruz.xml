@@ -49,4 +49,23 @@
     <string name="cruz_dormir_sub">屏幕慢慢变暗，电视随后关闭</string>
     <string name="cruz_desliga_as">将于 %1$s 关闭</string>
     <string name="cruz_dormir_cancelar">按 OK 取消</string>
+    <string name="cruz_linha">线条</string>
+    <string name="cruz_mover">移动到…</string>
+    <string name="cruz_mover_titulo">将 %1$s 移动到</string>
+    <string name="cruz_central">游戏中心</string>
+    <string name="cruz_abrir_app">打开 %1$s</string>
+    <string name="cruz_tirar_continuar">从“继续”中移除</string>
+    <string name="jogos_recentes">最近玩过</string>
+    <string name="jogos_semana">本周</string>
+    <string name="jogos_semana_jogado">7 天内游玩</string>
+    <string name="jogos_semana_mais">玩得最多</string>
+    <string name="jogos_semana_controles">已连接手柄</string>
+    <string name="jogos_menos_de_1_min">不到 1 分钟</string>
+    <string name="jogos_min">%1$d 分钟</string>
+    <string name="jogos_h_min">%1$d 小时 %2$d 分钟</string>
+    <string name="cruz_apps_icone">应用图标</string>
+    <string name="cruz_apps_icone_det">应用在主屏幕上的样子</string>
+    <string name="cruz_app_banner">电视横幅</string>
+    <string name="cruz_app_redondo">圆形</string>
+    <string name="cruz_app_solto">仅符号</string>
 </resources>
