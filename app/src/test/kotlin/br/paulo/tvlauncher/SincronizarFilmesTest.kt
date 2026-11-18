@@ -295,4 +295,23 @@ class SincronizarFilmesTest {
         // Tudo aceito: igual à base da mescla.
         assertEquals(m.base, SincronizarFilmes.baseAposEnvio(m, m.adicionarFora, m.tirarFora))
     }
+
+    @Test fun idsPorNomeEnsinaOsTitulosSemId() {
+        // Catálogo do IPTV: as 3 versões do Oppenheimer vieram sem tmdb; Duna já tem id (não pode mudar).
+        val ch = { nome: String, ano: Int? -> InfoExterna.chaveNomeAno(nome, ano) }
+        val cat = listOf(Titulo("op", null, ch("Oppenheimer", 2023)), Titulo("op4k", null, ch("Oppenheimer", 2023)),
+            Titulo("opleg", null, ch("Oppenheimer", 2023)), Titulo("duna", 438631, ch("Duna", 2021)),
+            Titulo("outro", null, ch("Oppenheimer", 1980)))
+        val fora = listOf(Item(Tipo.FILME, SincronizarFilmes.Ids(tmdb = 872585), "Oppenheimer", 2023),
+            Item(Tipo.FILME, SincronizarFilmes.Ids(tmdb = 999), "Duna", 2021),          // catálogo já tem id: não mexe
+            Item(Tipo.FILME, SincronizarFilmes.Ids(simkl = 5), "Sem Id", 2020),         // sem tmdb lá fora: nada a ensinar
+            Item(Tipo.FILME, SincronizarFilmes.Ids(tmdb = 438631), "Duna", 2021))       // id que o catálogo já usa: não repete
+        val r = SincronizarFilmes.idsPorNome(cat, fora)
+        assertEquals(mapOf("op" to 872585, "op4k" to 872585, "opleg" to 872585), r)
+        // O nome do catálogo (com ano e marca de versão) dá a mesma chave que o título de fora.
+        for (n in listOf("Oppenheimer (2023)", "Oppenheimer (2023) 4K", "Oppenheimer (2023) LEG"))
+            assertEquals(n, ch("Oppenheimer", 2023), ch(Vod.nomeLimpo(n), 2023))
+        // Catálogo todo com id: nada a fazer.
+        assertEquals(emptyMap<String, Int>(), SincronizarFilmes.idsPorNome(listOf(cat[3]), fora))
+    }
 }
