@@ -41,6 +41,22 @@ object LegendaExterna {
                          val bateHash: Boolean = false)
 
     /**
+     * O nome do lançamento legível na TV (18/11/2026, lista no jeito da cruz): pontos e "_" viram espaço, mas o canal do
+     * som continua "5.1"/"7.1" ("Dune.2021.1080p.WEBRip.DD5.1.x264" -> "Dune 2021 1080p WEBRip DD5.1 x264"). O nome
+     * importa (diz se a legenda bate com o arquivo), então nada é cortado nem trocado além disso.
+     */
+    fun nomeLegivel(nome: String): String =
+        nome.replace(Regex("[._]+"), " ").replace(Regex("(?<=[A-Za-z]\\d) (?=\\d(?!\\d))"), ".").replace(Regex("\\s+"), " ").trim()
+
+    /** "pt-BR" -> "Português (Brasil)", no idioma da TV. Código desconhecido fica como veio, em maiúsculas. */
+    fun nomeIdioma(codigo: String, tv: java.util.Locale = java.util.Locale.getDefault()): String {
+        val l = java.util.Locale.forLanguageTag(codigo.replace('_', '-'))
+        val n = l.getDisplayName(tv)
+        if (l.language.isEmpty() || n.isBlank() || n.equals(codigo, ignoreCase = true)) return codigo.uppercase()
+        return n.replaceFirstChar { it.titlecase(tv) }
+    }
+
+    /**
      * Espaço vira "+" (18/11/2026). Antes era "%20", e a API responde 301 para essa forma (conferido com curl: "query=sem%20deixar"
      * -> 301 para "query=sem+deixar"). Como o redirecionamento não era seguido, TODA busca com nome de mais de uma palavra
      * acabava em "Não consegui buscar a legenda" na Sala.

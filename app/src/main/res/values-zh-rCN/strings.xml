@@ -753,6 +753,7 @@ AS\\Movies）。</string>
     <string name="legenda_sem_conta">请在 设置 > 账号 > 电影和剧集 中添加你的 OpenSubtitles 密钥</string>
     <string name="legenda_escolher">“%1$s”的字幕</string>
     <string name="legenda_surdos">听障</string>
+    <string name="legenda_bate">适配此文件</string>
     <string name="legenda_atraso_opcao">字幕延迟：%1$s</string>
     <string name="legenda_atraso_titulo">字幕延迟（+ = 文字稍后显示）</string>
     <string name="legenda_atraso_zero">无延迟</string>

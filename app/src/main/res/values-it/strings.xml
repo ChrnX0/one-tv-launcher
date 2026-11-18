@@ -753,6 +753,7 @@ AS\\Film).</string>
     <string name="legenda_sem_conta">Aggiungi la tua chiave OpenSubtitles in Impostazioni > Account > Film e serie</string>
     <string name="legenda_escolher">Sottotitoli per «%1$s»</string>
     <string name="legenda_surdos">per non udenti</string>
+    <string name="legenda_bate">fatto per questo file</string>
     <string name="legenda_atraso_opcao">Ritardo sottotitoli: %1$s</string>
     <string name="legenda_atraso_titulo">Ritardo sottotitoli (+ = il testo appare dopo)</string>
     <string name="legenda_atraso_zero">Nessun ritardo</string>
