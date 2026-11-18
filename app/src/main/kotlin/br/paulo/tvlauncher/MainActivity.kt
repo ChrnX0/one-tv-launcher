@@ -1067,8 +1067,11 @@ class MainActivity : Activity() {
             if (cacheApps[pkg]?.first != null && cacheApps[pkg]?.first != chave) capas.remove(pkg)
             itens[pkg] = cacheApps[pkg]?.takeIf { it.first == chave }?.second ?: run {
                 // Só o ícone redondo fica guardado: o original (loadIcon) vira lixo logo depois de desenhado.
-                Item(pkg, ri.loadLabel(pm).toString(), DesenhoHome.iconeRedondo(resources,
-                    PacoteIcones.icone(this, pkg, ri.activityInfo.name) ?: ri.loadIcon(pm))).also { cacheApps[pkg] = chave to it }
+                val original = PacoteIcones.icone(this, pkg, ri.activityInfo.name) ?: ri.loadIcon(pm)
+                // Pacote embutido (Símbolo/Duotom, 18/11/2026): o traço do app no estilo da cruz; sem traço legível, o de sempre.
+                val icone = PacoteIcones.embutido(this)?.let { DesenhoHome.iconeTraco(resources, original, it == PacoteIcones.Embutido.DUOTOM) }
+                    ?: DesenhoHome.iconeRedondo(resources, original)
+                Item(pkg, ri.loadLabel(pm).toString(), icone).also { cacheApps[pkg] = chave to it }
             }
         }
         // Entradas HDMI/AV (EntradasTv, degrau 1): só em TV com entrada; chave "entrada:<id>", ícone redondo como os apps.
@@ -2472,6 +2475,7 @@ class MainActivity : Activity() {
         cruz = c
         c.id = View.generateViewId()
         c.aoMudar = { _, item -> arteDoItem(item) }
+        c.aoSom = { som -> SonsCruz.tocar(this, som) }
         c.aoSubirTopo = { ui.post { bolinhaPerfil?.requestFocus() } }   // ▲ no 1º item: o perfil, 1º da barra
         montarBarraCruz(raiz, c)
     }

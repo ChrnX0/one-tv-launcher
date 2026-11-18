@@ -27,4 +27,6 @@
     <string name="cruz_arte_det">خلف الصليب، على اليمين</string>
     <string name="cruz_ligada">تشغيل</string>
     <string name="cruz_desligada">إيقاف</string>
+    <string name="cruz_sons">أصوات التنقل</string>
+    <string name="cruz_sons_det">قصيرة وهادئة؛ تصمت أثناء تشغيل شيء ما</string>
 </resources>

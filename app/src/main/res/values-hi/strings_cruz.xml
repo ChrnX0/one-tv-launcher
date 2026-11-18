@@ -27,4 +27,6 @@
     <string name="cruz_arte_det">क्रॉस के पीछे, दाईं ओर</string>
     <string name="cruz_ligada">चालू</string>
     <string name="cruz_desligada">बंद</string>
+    <string name="cruz_sons">नेविगेशन की आवाज़ें</string>
+    <string name="cruz_sons_det">छोटी और हल्की; कुछ चलते समय चुप रहती हैं</string>
 </resources>

@@ -27,4 +27,6 @@
     <string name="cruz_arte_det">十字后方，右侧</string>
     <string name="cruz_ligada">开</string>
     <string name="cruz_desligada">关</string>
+    <string name="cruz_sons">导航音效</string>
+    <string name="cruz_sons_det">短促柔和；播放内容时静音</string>
 </resources>

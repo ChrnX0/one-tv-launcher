@@ -985,6 +985,15 @@ class ConfigLauncherActivity : Activity() {
                 linhaArte.valor(rotuloArte())
             }
             c.addView(linhaArte, lp())
+            // Sons ao andar na cruz (SonsCruz, 18/11/2026): ligados de fábrica, baixos, mudos com outro áudio tocando.
+            fun rotuloSons() = getString(if (SonsCruz.ligado(this)) R.string.cruz_ligada else R.string.cruz_desligada)
+            lateinit var linhaSons: LinhaCfg
+            linhaSons = linha(getString(R.string.cruz_sons), getString(R.string.cruz_sons_det), valor = rotuloSons()) {
+                SonsCruz.definir(this, !SonsCruz.ligado(this))
+                if (SonsCruz.ligado(this)) SonsCruz.tocar(this, SonsCruz.Som.GRUPO)   // amostra do som ao ligar
+                linhaSons.valor(rotuloSons())
+            }
+            c.addView(linhaSons, lp())
         } else c.addView(linha(getString(R.string.lh_arranjo), getString(R.string.lh_arranjo_det),
             valor = getString(if (LayoutHome.grade(this)) R.string.lh_grade else R.string.lh_fileira)) {
             LayoutHome.definirGrade(this, !LayoutHome.grade(this))

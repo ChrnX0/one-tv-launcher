@@ -27,4 +27,6 @@
     <string name="cruz_arte_det">За крестом, справа</string>
     <string name="cruz_ligada">Вкл.</string>
     <string name="cruz_desligada">Выкл.</string>
+    <string name="cruz_sons">Звуки при навигации</string>
+    <string name="cruz_sons_det">Короткие и мягкие; молчат, пока что-то играет</string>
 </resources>

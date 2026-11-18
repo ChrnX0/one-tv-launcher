@@ -27,4 +27,6 @@
     <string name="cruz_arte_det">Behind the cross, on the right</string>
     <string name="cruz_ligada">On</string>
     <string name="cruz_desligada">Off</string>
+    <string name="cruz_sons">Sounds when moving</string>
+    <string name="cruz_sons_det">Short and soft; quiet while something is playing</string>
 </resources>

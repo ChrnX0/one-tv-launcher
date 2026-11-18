@@ -27,4 +27,6 @@
     <string name="cruz_arte_det">Di belakang salib, di kanan</string>
     <string name="cruz_ligada">Aktif</string>
     <string name="cruz_desligada">Nonaktif</string>
+    <string name="cruz_sons">Suara navigasi</string>
+    <string name="cruz_sons_det">Singkat dan lembut; diam saat ada yang diputar</string>
 </resources>
