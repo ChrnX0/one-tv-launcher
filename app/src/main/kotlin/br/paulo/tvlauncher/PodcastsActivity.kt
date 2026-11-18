@@ -135,8 +135,11 @@ class PodcastsActivity : Activity() {
     // ---------------------------------------------------------------- tela
 
     private fun nomeDe(feed: String) = assinaturas.firstOrNull { it.url == feed }?.titulo ?: feeds[feed]?.titulo.orEmpty()
+    // A capa do PODCAST primeiro (a mesma em toda a lista, já baixada); a do episódio só quando o podcast não tem.
+    // Na Sala (18/11/2026) a capa por episódio do Up First não chegava e a lista ficava só com as iniciais.
     private fun capaDe(feed: String, ep: PodcastFeed.Episodio? = null) =
-        ep?.capa?.takeIf { it.isNotEmpty() } ?: assinaturas.firstOrNull { it.url == feed }?.capa?.takeIf { it.isNotEmpty() } ?: feeds[feed]?.capa.orEmpty()
+        assinaturas.firstOrNull { it.url == feed }?.capa?.takeIf { it.isNotEmpty() } ?: feeds[feed]?.capa?.takeIf { it.isNotEmpty() }
+            ?: ep?.capa.orEmpty()
 
     private fun continuarLista() = Podcasts.continuar(posicoes, assinaturas.map { it.url }.toSet())
         .mapNotNull { p -> feeds[p.feed]?.episodios?.firstOrNull { it.guid == p.guid }?.let { Triple(p.feed, it, p) } }
