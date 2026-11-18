@@ -89,6 +89,18 @@ object Pareamento {
     fun enderecoCasa(tv: Tv): String =
         if (tv.fp.isNotEmpty()) "https://${tv.ip}:$PORTA_HTTPS/" else "http://${tv.ip}:$PORTA_HTTP/"
 
+    /**
+     * O endereço é um dos que a TV serve (esquema + host + porta)? Só o host não basta: outra porta do mesmo IP pode ser
+     * outro programa, e ele ficaria dentro do app com a ponte de downloads. O https de casa só vale com o certificado
+     * fixado; o http fica (primeira entrada pelo QR e TVs sem certificado).
+     */
+    fun daTv(tv: Tv, esquema: String?, host: String?, porta: Int): Boolean = when {
+        host == tv.ip && esquema == "http" -> porta == PORTA_HTTP
+        host == tv.ip && esquema == "https" -> tv.fp.isNotEmpty() && porta == PORTA_HTTPS
+        tv.ts.isNotEmpty() && host == tv.ts && esquema == "https" -> porta == PORTA_TAILSCALE
+        else -> false
+    }
+
     /** Fora de casa: o https do Tailscale (certificado de verdade, sem fixação), se a TV mandou o nome. */
     fun enderecoFora(tv: Tv): String? = tv.ts.takeIf { it.isNotEmpty() }?.let { "https://$it:$PORTA_TAILSCALE/" }
 

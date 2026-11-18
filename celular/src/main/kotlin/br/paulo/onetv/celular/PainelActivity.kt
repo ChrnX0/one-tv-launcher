@@ -60,7 +60,9 @@ class PainelActivity : Activity() {
             webViewClient = Cliente()
             webChromeClient = Seletor()
             // Ponte só de escrita em Downloads; só a TV carrega aqui (shouldOverrideUrlLoading manda o resto para fora).
-            addJavascriptInterface(Baixar.Ponte(applicationContext), "OneTvBaixar")
+            // Só com a TV pareada pelo QR (certificado fixado): uma "TV" achada pela rede pode ser qualquer aparelho
+            // anunciando o nome, e com a ponte gravaria arquivos em Downloads sem a pessoa pedir.
+            if (tv.fp.isNotEmpty()) addJavascriptInterface(Baixar.Ponte(applicationContext), "OneTvBaixar")
             setDownloadListener { url, _, disposicao, mime, _ ->
                 val nome = Baixar.nomeSeguro(URLUtil.guessFileName(url, disposicao, mime))
                 if (url.startsWith("blob:")) evaluateJavascript(Baixar.jsDoBlob(url, nome, mime), null)
@@ -86,7 +88,7 @@ class PainelActivity : Activity() {
         return base + consulta + fragmento
     }
 
-    private fun daTv(u: Uri): Boolean = u.host == tv.ip || (tv.ts.isNotEmpty() && u.host == tv.ts)
+    private fun daTv(u: Uri): Boolean = Pareamento.daTv(tv, u.scheme, u.host, if (u.port == -1 && u.scheme == "https") 443 else if (u.port == -1) 80 else u.port)
 
     private inner class Seletor : WebChromeClient() {
         override fun onShowFileChooser(w: WebView, cb: ValueCallback<Array<Uri>>, p: FileChooserParams): Boolean {
@@ -148,8 +150,7 @@ class PainelActivity : Activity() {
 
         // Só endereços da própria TV ficam no app; o resto (ajuda, sites) abre no navegador.
         override fun shouldOverrideUrlLoading(view: WebView, req: WebResourceRequest): Boolean {
-            val h = req.url.host
-            if (h == tv.ip || (tv.ts.isNotEmpty() && h == tv.ts)) return false
+            if (daTv(req.url)) return false
             try { startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, req.url)) } catch (_: Exception) {}
             return true
         }

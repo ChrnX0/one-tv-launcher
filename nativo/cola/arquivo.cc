@@ -8,6 +8,7 @@
 #include <cstring>
 #include <string>
 #include <cstdlib>
+#include <pthread.h>
 extern "C" {
 #include <libavformat/avformat.h>
 #include <libavcodec/avcodec.h>
@@ -54,6 +55,7 @@ int ler(void* opaco, uint8_t* destino, int n) {
   jint lidos = env->CallIntMethod(a->leitor, mLer, static_cast<jlong>(a->posicao), a->pedaco, n);
   if (env->ExceptionCheck()) { env->ExceptionClear(); return AVERROR(EIO); }
   if (lidos <= 0) return AVERROR_EOF;
+  if (lidos > n) lidos = n;   // um leitor que devolvesse mais estouraria `destino`
   env->GetByteArrayRegion(a->pedaco, 0, lidos, reinterpret_cast<jbyte*>(destino));
   a->posicao += lidos;
   return lidos;
@@ -106,17 +108,30 @@ NATIVO(jstring, arquivoSondar)(JNIEnv* env, jclass, jbyteArray inicio) {
 // Abre pelo leitor. `infoCompleta` lê o começo dos pacotes para descobrir tamanho/canais (mais lento; o extrator
 // precisa, a sonda de capítulos/fontes/miniatura não).
 NATIVO(jlong, arquivoAbrir)(JNIEnv* env, jclass, jobject leitor, jboolean infoCompleta) {
-  if (!mLer) {
-    // Pela interface (não pela classe do objeto): o id vale para qualquer LeitorNativo.
-    jclass c = env->FindClass("br/paulo/tvlauncher/LeitorNativo");
-    if (!c) { env->ExceptionClear(); return 0; }
-    mLer = env->GetMethodID(c, "ler", "(J[BI)I");
-    mTamanho = env->GetMethodID(c, "tamanho", "()J");
-    if (!mLer || !mTamanho) return 0;
+  {
+    // Sonda e extrator abrem em threads diferentes: sem a trava, a segunda via mLer pronto e mTamanho ainda nulo.
+    // pthread (não std::mutex): std::mutex puxava meia libc++ estática para dentro da .so.
+    static pthread_mutex_t trava = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutex_lock(&trava);
+    if (!mLer || !mTamanho) {
+      // Pela interface (não pela classe do objeto): o id vale para qualquer LeitorNativo.
+      jclass c = env->FindClass("br/paulo/tvlauncher/LeitorNativo");
+      if (!c) { env->ExceptionClear(); pthread_mutex_unlock(&trava); return 0; }
+      jmethodID l = env->GetMethodID(c, "ler", "(J[BI)I");
+      jmethodID t = env->GetMethodID(c, "tamanho", "()J");
+      env->DeleteLocalRef(c);
+      if (!l || !t) { env->ExceptionClear(); pthread_mutex_unlock(&trava); return 0; }
+      mTamanho = t;
+      mLer = l;
+    }
+    pthread_mutex_unlock(&trava);
   }
   auto* a = new Arquivo();
   a->leitor = env->NewGlobalRef(leitor);
-  a->pedaco = static_cast<jbyteArray>(env->NewGlobalRef(env->NewByteArray(PEDACO)));
+  jbyteArray pedaco = env->NewByteArray(PEDACO);
+  if (!pedaco) { env->ExceptionClear(); env->DeleteGlobalRef(a->leitor); delete a; return 0; }
+  a->pedaco = static_cast<jbyteArray>(env->NewGlobalRef(pedaco));
+  env->DeleteLocalRef(pedaco);
   a->tamanho = env->CallLongMethod(leitor, mTamanho);
   if (env->ExceptionCheck()) { env->ExceptionClear(); a->tamanho = -1; }
   auto* buf = static_cast<uint8_t*>(av_malloc(PEDACO));
@@ -155,6 +170,7 @@ NATIVO(jlongArray, arquivoFaixaInfo)(JNIEnv* env, jclass, jlong p, jint i) {
                  s->duration == AV_NOPTS_VALUE ? -1 : av_rescale_q(s->duration, s->time_base, AVRational{1, 1000000}),
                  fps.den ? static_cast<jlong>(av_q2d(fps) * 1000) : 0, c->bit_rate, c->bits_per_coded_sample, c->block_align};
   jlongArray r = env->NewLongArray(10);
+  if (!r) return nullptr;
   env->SetLongArrayRegion(r, 0, 10, v);
   return r;
 }
@@ -176,7 +192,8 @@ NATIVO(jbyteArray, arquivoFaixaExtra)(JNIEnv* env, jclass, jlong p, jint i) {
 NATIVO(jstring, arquivoFaixaMeta)(JNIEnv* env, jclass, jlong p, jint i, jstring chave) {
   AVStream* s = faixa(de<Arquivo>(p), i);
   if (!s) return nullptr;
-  const char* k = env->GetStringUTFChars(chave, nullptr);
+  const char* k = chave ? env->GetStringUTFChars(chave, nullptr) : nullptr;
+  if (!k) return nullptr;
   const AVDictionaryEntry* e = av_dict_get(s->metadata, k, nullptr, 0);
   env->ReleaseStringUTFChars(chave, k);
   return e ? env->NewStringUTF(e->value) : nullptr;
@@ -187,6 +204,7 @@ NATIVO(jlongArray, arquivoCapitulos)(JNIEnv* env, jclass, jlong p) {
   auto* a = de<Arquivo>(p);
   int n = static_cast<int>(a->fmt->nb_chapters);
   jlongArray r = env->NewLongArray(n * 2);
+  if (!r) return nullptr;
   for (int i = 0; i < n; i++) {
     const AVChapter* c = a->fmt->chapters[i];
     jlong v[2] = {av_rescale_q(c->start, c->time_base, AVRational{1, 1000}), av_rescale_q(c->end, c->time_base, AVRational{1, 1000})};
@@ -238,7 +256,9 @@ NATIVO(void, arquivoPacoteCopiar)(JNIEnv* env, jclass, jlong p, jbyteArray desti
 NATIVO(jboolean, arquivoBuscar)(JNIEnv*, jclass, jlong p, jlong tempoUs) {
   auto* a = de<Arquivo>(p);
   if (a->pacoteCheio) { av_packet_unref(a->pacote); a->pacoteCheio = false; }
-  return av_seek_frame(a->fmt, -1, tempoUs, AVSEEK_FLAG_BACKWARD) >= 0;
+  // tempoUs é relativo ao começo (arquivoPacoteTempoUs desconta o start_time); a busca na faixa -1 quer o absoluto.
+  int64_t inicio = a->fmt->start_time != AV_NOPTS_VALUE ? a->fmt->start_time : 0;
+  return av_seek_frame(a->fmt, -1, tempoUs + inicio, AVSEEK_FLAG_BACKWARD) >= 0;
 }
 
 // Miniatura (ideia 3): quadro-chave em `tempoUs` reduzido para largura x altura em RGBA (destino direto, l*a*4 bytes).
@@ -252,7 +272,10 @@ NATIVO(jboolean, arquivoMiniatura)(JNIEnv* env, jclass, jlong p, jlong tempoUs, 
     a->minFaixa = av_find_best_stream(a->fmt, AVMEDIA_TYPE_VIDEO, -1, -1, &codec, 0);
     if (a->minFaixa < 0 || !codec) return JNI_FALSE;
     a->minDec = avcodec_alloc_context3(codec);
-    avcodec_parameters_to_context(a->minDec, a->fmt->streams[a->minFaixa]->codecpar);
+    if (!a->minDec) return JNI_FALSE;
+    if (avcodec_parameters_to_context(a->minDec, a->fmt->streams[a->minFaixa]->codecpar) < 0) {
+      avcodec_free_context(&a->minDec); return JNI_FALSE;
+    }
     a->minDec->thread_count = 2;
     a->minDec->thread_type = FF_THREAD_SLICE;   // sem atraso de quadros: um pacote, um quadro
     if (avcodec_open2(a->minDec, codec, nullptr) < 0) { avcodec_free_context(&a->minDec); return JNI_FALSE; }
@@ -264,6 +287,8 @@ NATIVO(jboolean, arquivoMiniatura)(JNIEnv* env, jclass, jlong p, jlong tempoUs, 
   if (av_seek_frame(a->fmt, a->minFaixa, alvo, AVSEEK_FLAG_BACKWARD) < 0) { LOGW("miniatura: busca falhou"); return JNI_FALSE; }
   avcodec_flush_buffers(a->minDec);
   AVFrame* q = av_frame_alloc();
+  if (!q) return JNI_FALSE;
+  if (a->pacoteCheio) { av_packet_unref(a->pacote); a->pacoteCheio = false; }
   bool ok = false;
   // Acha o primeiro quadro-chave (no máximo 60 pacotes de vídeo, para não ficar preso num arquivo ruim), manda só ele e
   // "esvazia" o decodificador: sem isso, quadros seguintes (pulados) nunca empurrariam o chave para fora.
@@ -303,6 +328,7 @@ NATIVO(jlongArray, arquivoPontoBusca)(JNIEnv* env, jclass, jlong p, jlong tempoU
   if (!e) return nullptr;
   jlong v[2] = {av_rescale_q(e->timestamp - inicio, s->time_base, AVRational{1, 1000000}), e->pos};
   jlongArray r = env->NewLongArray(2);
+  if (!r) return nullptr;
   env->SetLongArrayRegion(r, 0, 2, v);
   return r;
 }

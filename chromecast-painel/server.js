@@ -213,6 +213,10 @@ app.use((req, res, next) => {
     const muda = !['GET', 'HEAD', 'OPTIONS'].includes(req.method);
     let origemOk = !muda;
     if (origem) { try { origemOk = new URL(origem).host === host; } catch { origemOk = false; } }
+    // GET também mexe na TV (/tela sobe o scrcpy, /baixar puxa arquivo): um <img src="http://localhost:9000/api/...">
+    // em qualquer site disparava sem Origin. O navegador marca de onde veio (Sec-Fetch-Site): de outro site, recusa.
+    const site = String(req.headers['sec-fetch-site'] || '');
+    if (req.path.startsWith('/api/') && site && !['same-origin', 'none'].includes(site)) origemOk = false;
     if (!hostOk || !origemOk) return res.status(403).json({ erro: 'pedido de fora do painel' });
     next();
 });
@@ -270,15 +274,20 @@ app.post('/api/dispositivos/:id/arquivos', upload.single('arquivo'), envolver(as
     if (!req.file) throw Object.assign(new Error('Nenhum arquivo enviado'), { status: 400 });
     const pasta = req.body.pasta || '/sdcard/Download';
     try {
-        const destino = await enviarArquivo(endpointDe(req.params.id), req.file.path, pasta, req.file.originalname);
+        // O multer entrega o nome em latin1: "ação.mp4" chegava como "aÃ§Ã£o.mp4".
+        const nome = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
+        const destino = await enviarArquivo(endpointDe(req.params.id), req.file.path, pasta, nome);
         res.json({ ok: true, destino });
     } finally { fs.unlink(req.file.path, () => {}); }
 }));
 app.get('/api/dispositivos/:id/arquivos/baixar', envolver(async (req, res) => {
     const caminhoRemoto = req.query.caminho;
-    if (!caminhoRemoto) throw Object.assign(new Error('Falta o caminho do arquivo'), { status: 400 });
-    const nomeArquivo = caminhoRemoto.split('/').pop();
-    const tmp = path.join(os.tmpdir(), `baixado-${Date.now()}-${nomeArquivo}`);
+    if (typeof caminhoRemoto !== 'string' || !caminhoRemoto || caminhoRemoto.startsWith('-'))
+        throw Object.assign(new Error('Falta o caminho do arquivo'), { status: 400 });
+    // O nome só vai para o navegador. A cópia temporária tem nome próprio: no Windows "\" também separa pastas, e um
+    // nome de arquivo da TV com "..\" gravava (e depois apagava) fora da pasta temporária.
+    const nomeArquivo = path.basename(caminhoRemoto.replace(/\\/g, '/')) || 'arquivo';
+    const tmp = path.join(os.tmpdir(), `baixado-${require('crypto').randomUUID()}`);
     await baixarArquivo(endpointDe(req.params.id), caminhoRemoto, tmp);
     res.download(tmp, nomeArquivo, () => fs.unlink(tmp, () => {}));
 }));

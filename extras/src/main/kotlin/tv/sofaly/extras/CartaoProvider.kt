@@ -15,6 +15,8 @@ class CartaoProvider : ContentProvider() {
 
     override fun query(uri: Uri, p: Array<out String>?, s: String?, a: Array<out String>?, o: String?): Cursor? {
         val ctx = context ?: return null
+        // Exportado (o launcher precisa ler), mas só o launcher lê: o cartão diz se a casa usa o aviso "não ligou".
+        if (callingPackage !in Launcher.PACOTES) return null
         val e = Launcher.estado(ctx)
         // Aproveita a leitura do launcher para garantir o alarme (a pessoa pode nunca abrir o Extras).
         Launcher.agendar(ctx)

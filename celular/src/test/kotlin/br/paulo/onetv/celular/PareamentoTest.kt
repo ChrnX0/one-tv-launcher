@@ -45,6 +45,18 @@ class PareamentoTest {
         assertEquals("https://a.b.ts.net:8443/", Pareamento.enderecoFora(Pareamento.Tv("TV", "1.2.3.4", ts = "a.b.ts.net")))
     }
 
+    @Test fun `so os enderecos que a TV serve ficam no app`() {
+        val par = Pareamento.Tv("TV", "192.168.1.50", fp, ts = "a.b.ts.net")
+        val achada = Pareamento.Tv("TV", "192.168.1.50")
+        assertTrue(Pareamento.daTv(par, "https", "192.168.1.50", 8444))
+        assertTrue(Pareamento.daTv(par, "http", "192.168.1.50", 8080))
+        assertTrue(Pareamento.daTv(par, "https", "a.b.ts.net", 8443))
+        assertFalse(Pareamento.daTv(par, "http", "192.168.1.50", 9000))      // outro programa no mesmo IP
+        assertFalse(Pareamento.daTv(par, "http", "a.b.ts.net", 8443))
+        assertFalse(Pareamento.daTv(achada, "https", "192.168.1.50", 8444))  // sem certificado fixado
+        assertFalse(Pareamento.daTv(par, "https", "192.168.1.51", 8444))
+    }
+
     @Test fun `confere so o certificado lido no QR`() {
         val tv = Pareamento.Tv("TV", "192.168.1.50", fp)
         assertTrue(Pareamento.confere(tv, "abc".toByteArray()))

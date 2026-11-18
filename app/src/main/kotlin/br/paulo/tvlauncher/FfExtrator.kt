@@ -91,7 +91,11 @@ class FfExtratores(private val base: ExtractorsFactory, private val dados: DataS
  */
 @OptIn(UnstableApi::class)
 class FfExtrator(private val uri: Uri, private val dados: DataSource.Factory) : Extractor {
-    companion object { private const val TAG = "FfExtrator" }
+    companion object {
+        private const val TAG = "FfExtrator"
+        /** Maior pacote aceito (um quadro 4K sem compressão tem ~25 MB). */
+        const val MAX_PACOTE = 128 * 1024 * 1024
+    }
 
     private lateinit var saida: ExtractorOutput
     @Volatile private var ctx = 0L
@@ -138,7 +142,9 @@ class FfExtrator(private val uri: Uri, private val dados: DataSource.Factory) : 
             if (n < 0) throw IOException("FFmpeg não conseguiu ler o arquivo")
             val i = FfNativo.arquivoPacoteFaixa(ctx)
             val t = faixas[i] ?: return Extractor.RESULT_CONTINUE
-            if (pacote.size < n) pacote = ByteArray(n + n / 2)
+            // Teto: um AVI ruim declarando pacote de GB estourava o n + n/2 (Int) ou a memória do player.
+            if (n > MAX_PACOTE) throw IOException("pacote grande demais ($n bytes)")
+            if (pacote.size < n) pacote = ByteArray(minOf(n.toLong() + n / 2, MAX_PACOTE.toLong()).toInt())
             FfNativo.arquivoPacoteCopiar(ctx, pacote)
             var tempo = FfNativo.arquivoPacoteTempoUs(ctx)
             if (tempo == Long.MIN_VALUE) tempo = (ultimoTempo[i] ?: 0L) + maxOf(FfNativo.arquivoPacoteDuracaoUs(ctx), 0)

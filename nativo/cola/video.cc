@@ -32,6 +32,7 @@ void esvaziar(Video* v) {
 bool colher(Video* v) {
   for (;;) {
     AVFrame* q = av_frame_alloc();
+    if (!q) return false;
     int r = avcodec_receive_frame(v->ctx, q);
     if (r < 0) {
       av_frame_free(&q);
@@ -43,7 +44,8 @@ bool colher(Video* v) {
 }  // namespace
 
 NATIVO(jlong, videoAbrir)(JNIEnv* env, jclass, jstring codec, jbyteArray extra, jint largura, jint altura, jint threads) {
-  const char* nome = env->GetStringUTFChars(codec, nullptr);
+  const char* nome = codec ? env->GetStringUTFChars(codec, nullptr) : nullptr;
+  if (!nome) return 0;
   const AVCodec* c = avcodec_find_decoder_by_name(nome);
   if (!c) { LOGE("sem decodificador de vídeo '%s'", nome); env->ReleaseStringUTFChars(codec, nome); return 0; }
   env->ReleaseStringUTFChars(codec, nome);
@@ -54,6 +56,7 @@ NATIVO(jlong, videoAbrir)(JNIEnv* env, jclass, jstring codec, jbyteArray extra, 
   if (extra) {
     jsize n = env->GetArrayLength(extra);
     v->ctx->extradata = static_cast<uint8_t*>(av_mallocz(n + AV_INPUT_BUFFER_PADDING_SIZE));
+    if (!v->ctx->extradata) { avcodec_free_context(&v->ctx); av_packet_free(&v->pacote); delete v; return 0; }
     v->ctx->extradata_size = n;
     env->GetByteArrayRegion(extra, 0, n, reinterpret_cast<jbyte*>(v->ctx->extradata));
   }

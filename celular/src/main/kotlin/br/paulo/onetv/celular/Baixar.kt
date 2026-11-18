@@ -90,13 +90,16 @@ object Baixar {
                     c.sslSocketFactory = SSLContext.getInstance("TLS").apply { init(null, arrayOf(fixo), null) }.socketFactory
                     c.hostnameVerifier = javax.net.ssl.HostnameVerifier { h, _ -> h == tv.ip }   // o certificado já foi fixado
                 }
+                // Sem seguir redirecionamento: o cookie da sessão do painel, posto à mão, iria junto para outro endereço.
+                c.instanceFollowRedirects = false
                 CookieManager.getInstance().getCookie(url)?.let { c.setRequestProperty("Cookie", it) }
                 c.connectTimeout = 15_000; c.readTimeout = 60_000
-                if (c.responseCode == 200) {
-                    destino = abrir(app, nome, mime ?: c.contentType)
-                    destino?.let { (_, s) -> c.inputStream.use { it.copyTo(s, 64 * 1024) }; ok = true }
-                }
-                c.disconnect()
+                try {
+                    if (c.responseCode == 200) {
+                        destino = abrir(app, nome, mime ?: c.contentType)
+                        destino?.let { (_, s) -> c.inputStream.use { it.copyTo(s, 64 * 1024) }; ok = true }
+                    }
+                } finally { c.disconnect() }
             } catch (_: Exception) { ok = false }
             destino?.let { (uri, s) -> fechar(app, uri, s, ok) }
             aviso(app, ok, nome)
