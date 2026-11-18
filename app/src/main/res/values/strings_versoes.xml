@@ -17,24 +17,24 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Home: the top bar is only for the system (timer, alarm, no internet…); what is happening with the chosen item — On air, Recording, Playing, Stopped at, Connected, with % and time left — opens the details in the bottom right corner</item>
-        <item>Series, movies, podcasts and app videos stopped halfway show how far you got (e.g. “Stopped at T1 E1 · 35% · 43 min left”)</item>
-        <item>Home (Home Assistant) finds itself again on the network when the computer changes address: nothing to set up</item>
-        <item>Windows: the TV always shows under Network with its panel, and the TV drive has an “Open the TV panel” shortcut that follows the TV’s address</item>
+        <item>Sofaly logo for about 1.5 s when the TV turns on or wakes up (any key skips it; turn it off in Settings › System › About)</item>
+        <item>New “About Sofaly” screen: logo, slogan, version, what changed and licenses</item>
+        <item>The Sofaly logo also shows small at the bottom of Settings and in a corner of the screensaver</item>
+        <item>The TV icon on the home screen is now the sofa-TV from the logo, outline only</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>barra_estado</item>
-        <item>casa_reencontra</item>
-        <item>atalho_painel</item>
+        <item>logo_abertura</item>
+        <item>logo_sobre</item>
+        <item>icone_tv</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Item state in the corner</item>
-        <item>Home finds itself</item>
-        <item>Panel shortcut on Windows</item>
+        <item>Logo when waking</item>
+        <item>About Sofaly</item>
+        <item>Sofa-TV icon</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>With Series in focus, does the bottom right corner start with “Stopped at” with the episode, % and time left, and with TV “On air” with %? Does the top bar stay only with the clock?</item>
-        <item>Does the Home screen (lights) open normally?</item>
-        <item>On the computer, does the TV show under Network, and does the panel shortcut on the TV drive open the panel?</item>
+        <item>After the TV sleeps 5+ min and wakes, does the Sofaly logo show for about 1.5 s over the home screen and then fade?</item>
+        <item>Does Settings › System › About Sofaly open with the logo and version, and does the logo look right at the bottom of Settings?</item>
+        <item>On the home screen, is the TV icon the outlined sofa-TV with an empty inside?</item>
     </string-array>
 </resources>
