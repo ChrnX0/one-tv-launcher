@@ -19,7 +19,7 @@
     <!-- Ideia 42: blocos do painel rápido -->
     <string name="pb_titulo">Quick panel tiles</string>
     <string name="pb_subtitulo">OK shows or hides · ◀ ▶ change the order</string>
-    <string name="pb_cfg_det">Choose which tiles the quick panel (hold HOME) shows, and in what order</string>
+    <string name="pb_cfg_det">Choose which tiles the quick panel (hold BACK) shows, and in what order</string>
     <string name="pb_mostrado">shown</string>
     <string name="pb_escondido">hidden</string>
     <string name="pb_padrao">Back to the standard tiles</string>

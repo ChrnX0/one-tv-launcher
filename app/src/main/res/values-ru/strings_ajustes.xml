@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">Адрес и ключ API роутера UniFi в веб-панели</string>
     <string name="pb_titulo">Плитки быстрой панели</string>
     <string name="pb_subtitulo">OK показывает или скрывает · ◀ ▶ меняют порядок</string>
-    <string name="pb_cfg_det">Какие плитки показывает быстрая панель (удерживайте HOME) и в каком порядке</string>
+    <string name="pb_cfg_det">Какие плитки показывает быстрая панель (удерживайте НАЗАД) и в каком порядке</string>
     <string name="pb_mostrado">показана</string>
     <string name="pb_escondido">скрыта</string>
     <string name="pb_padrao">Вернуть стандартные плитки</string>

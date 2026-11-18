@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">UniFi ルーターのアドレスと API キーをウェブパネルで</string>
     <string name="pb_titulo">クイックパネルのタイル</string>
     <string name="pb_subtitulo">OK で表示/非表示 · ◀ ▶ で順番を変更</string>
-    <string name="pb_cfg_det">クイックパネル（HOME 長押し）に表示するタイルとその順番を選びます</string>
+    <string name="pb_cfg_det">クイックパネル（戻る 長押し）に表示するタイルとその順番を選びます</string>
     <string name="pb_mostrado">表示</string>
     <string name="pb_escondido">非表示</string>
     <string name="pb_padrao">標準のタイルに戻す</string>

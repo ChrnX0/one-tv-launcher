@@ -19,7 +19,7 @@
     <!-- Ideia 42: blocos do painel rápido -->
     <string name="pb_titulo">Blocos do painel rápido</string>
     <string name="pb_subtitulo">OK mostra ou esconde · ◀ ▶ mudam a ordem</string>
-    <string name="pb_cfg_det">Escolha quais blocos o painel rápido (HOME segurado) mostra, e em que ordem</string>
+    <string name="pb_cfg_det">Escolha quais blocos o painel rápido (VOLTAR segurado) mostra, e em que ordem</string>
     <string name="pb_mostrado">aparece</string>
     <string name="pb_escondido">escondido</string>
     <string name="pb_padrao">Voltar aos blocos de sempre</string>

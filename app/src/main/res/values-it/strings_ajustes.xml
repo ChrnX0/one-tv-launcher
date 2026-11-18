@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">Indirizzo e chiave API del router UniFi, nel pannello web</string>
     <string name="pb_titulo">Riquadri del pannello rapido</string>
     <string name="pb_subtitulo">OK mostra o nasconde · ◀ ▶ cambiano l’ordine</string>
-    <string name="pb_cfg_det">Scegli quali riquadri mostra il pannello rapido (tieni premuto HOME) e in che ordine</string>
+    <string name="pb_cfg_det">Scegli quali riquadri mostra il pannello rapido (tieni premuto INDIETRO) e in che ordine</string>
     <string name="pb_mostrado">visibile</string>
     <string name="pb_escondido">nascosto</string>
     <string name="pb_padrao">Torna ai riquadri predefiniti</string>

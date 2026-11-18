@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">在网页面板中填写 UniFi 路由器地址和 API 密钥</string>
     <string name="pb_titulo">快捷面板图块</string>
     <string name="pb_subtitulo">OK 显示或隐藏 · ◀ ▶ 调整顺序</string>
-    <string name="pb_cfg_det">选择快捷面板（长按主屏幕键）显示哪些图块以及顺序</string>
+    <string name="pb_cfg_det">选择快捷面板（长按返回键）显示哪些图块以及顺序</string>
     <string name="pb_mostrado">显示</string>
     <string name="pb_escondido">隐藏</string>
     <string name="pb_padrao">恢复默认图块</string>

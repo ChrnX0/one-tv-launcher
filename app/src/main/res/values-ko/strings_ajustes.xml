@@ -16,7 +16,7 @@
     <string name="qrd_roteador_det">웹 패널에서 UniFi 라우터 주소와 API 키</string>
     <string name="pb_titulo">빠른 패널 타일</string>
     <string name="pb_subtitulo">OK로 표시 또는 숨김 · ◀ ▶ 순서 변경</string>
-    <string name="pb_cfg_det">빠른 패널(홈 길게)에 표시할 타일과 순서 선택</string>
+    <string name="pb_cfg_det">빠른 패널(뒤로 길게)에 표시할 타일과 순서 선택</string>
     <string name="pb_mostrado">표시됨</string>
     <string name="pb_escondido">숨김</string>
     <string name="pb_padrao">기본 타일로 되돌리기</string>

@@ -14,31 +14,15 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>TV: o mesmo canal em 4K, Full HD, HD e SD agora é um canal só; a TV escolhe a qualidade sozinha e desce se a imagem travar (Opções › Qualidade para escolher na mão)</item>
-        <item>TV: menu da esquerda mais enxuto; Todos e Guia ficam ao lado de LISTAS e o Rádio saiu (está em Ouvir)</item>
-        <item>TV: categoria Novos com os canais que entraram na lista nos últimos 14 dias</item>
-        <item>TV: quando o canal não abre, a TV diz se a lista venceu ou se outra tela já está usando</item>
-        <item>Ícones novos no estilo “Linha”: traço fino, uma cor só, e o item escolhido acende na cor da marca (os outros estilos continuam em Configurações › Tela inicial)</item>
-        <item>Os apps aparecem com o banner de TV deles, sem o quadrado; “Ícones dos apps” em Configurações troca para redondo ou só o símbolo</item>
-        <item>Cada app cai sozinho na categoria certa (YouTube em Assistir, Spotify em Ouvir); segurar OK num app e escolher “Mover para…” muda à mão</item>
-        <item>Jogar: cada jogo na coluna, do jogado por último, e a Central de jogos no topo, com turma do Discord, controles, rede e o tempo jogado na semana</item>
-        <item>Continuar mostra também a última rádio, o podcast pela metade, os últimos jogos e o que você viu ou ouviu no YouTube, Spotify, Netflix e outros apps</item>
-        <item>Na tela inicial, o item escolhido ganha um ponto laranja à esquerda do nome, e a linha de baixo quebra em até 4 linhas em vez de cortar; a TV mostra o canal, o programa de agora com quanto falta e o próximo com o horário</item>
+        <item>Segurar VOLTAR, em qualquer app ou na tela inicial, abre o painel rápido (o toque curto continua voltando como antes)</item>
+        <item>Segurar HOME abre a Casa: as luzes e cenas do Home Assistant</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Menu da TV</item>
-        <item>Qualidade da TV</item>
-        <item>Ícones Linha</item>
-        <item>Mover para…</item>
-        <item>Continuar com apps</item>
-        <item>Informação da TV</item>
+        <item>Segurar VOLTAR</item>
+        <item>Segurar HOME</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Na lista da TV, cabem mais categorias, com Todos e Guia ao lado de LISTAS e sem Rádio?</item>
-        <item>Um canal que antes aparecia repetido (4K, FHD, HD) aparece uma vez só, e ▶ ▶ › Qualidade mostra as opções?</item>
-        <item>Os ícones da tela inicial estão em traço fino, e só o item escolhido fica laranja?</item>
-        <item>Segurando OK num app e escolhendo “Mover para… › Assistir”, ele aparece na coluna Assistir?</item>
-        <item>Depois de ver algo no YouTube ou ouvir no Spotify, o título aparece em Continuar e o OK volta nele?</item>
-        <item>Com a TV escolhida em Assistir, aparecem o ponto laranja, o canal, o programa de agora com quanto falta e o próximo, sem nada cortado?</item>
+        <item>Segurando VOLTAR dentro de um app (o YouTube, por exemplo) e na tela inicial, o painel rápido abre, e o VOLTAR curto continua voltando?</item>
+        <item>Segurando HOME, dentro de um app e na tela inicial, a Casa abre com as suas luzes e cenas?</item>
     </string-array>
 </resources>

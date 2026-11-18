@@ -308,4 +308,24 @@ class CuidarDeLongeTest {
         assertFalse(CuidarDeLonge.teclaDeGente(-1, 0x101))               // input keyevent do shell (teclado virtual)
         assertFalse(CuidarDeLonge.teclaDeGente(0, 0x101))
     }
+
+    /** VOLTAR segurado do painel rápido (BotoesControle, 18/11/2026): a mesma conta, com 700 ms. */
+    @Test fun voltarSeguradoAbrePainelEToqueCurtoPassa() {
+        val v = CuidarDeLonge.Segurar(Home.SEGURAR_HOME_MS).apply { tecla = 4 }
+        var abriu = 0
+        // Toque curto: nada é engolido (o app volta normalmente).
+        assertFalse(v.evento(4, true, 0, 1000) { abriu++ })
+        assertFalse(v.venceu(1300))
+        assertFalse(v.evento(4, false, 0, 1300) { abriu++ })
+        assertEquals(0, abriu)
+        // Segurado: o relógio vence aos 700 ms; daí em diante as repetições e o soltar são nossos.
+        assertFalse(v.evento(4, true, 0, 2000) { abriu++ })
+        assertFalse(v.evento(4, true, 1, 2400) { abriu++ })   // repetição antes do tempo ainda passa
+        assertTrue(v.venceu(2700))
+        assertTrue(v.evento(4, true, 2, 2800) { abriu++ })
+        assertTrue(v.evento(4, false, 0, 3000) { abriu++ })
+        assertEquals(0, abriu)   // abriu pelo relógio (venceu), não de novo pela repetição
+        // Outra tecla não é com ele.
+        assertFalse(v.evento(3, true, 0, 4000) { abriu++ })
+    }
 }
