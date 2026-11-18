@@ -2793,12 +2793,12 @@ class MainActivity : Activity() {
             typeface = Typeface.create(fonteUi, Typeface.BOLD)
             includeFontPadding = false
         }
-        val temp = texto(17f, textoClaro, fonteUi).apply { includeFontPadding = false; maxLines = 1 }
+        val temp = texto(18f, textoClaro, fonteUi).apply { includeFontPadding = false; maxLines = 1 }
         fun copiarTemp() { temp.text = txtTemp.text.toString().takeIf { it.isNotBlank() && it != "…" }.orEmpty(); temp.visibility = if (temp.text.isEmpty() || ilhaEvento != null) View.GONE else View.VISIBLE }
         txtTemp.addTextChangedListener(espelho { copiarTemp() })
         val icone = ImageView(this).apply { visibility = View.GONE }
         val barras = BarrasSom(this).apply { visibility = View.GONE }
-        val txt = texto(17f, Estilo.TEXTO, fonteUi).apply {
+        val txt = texto(18f, Estilo.TEXTO, fonteUi).apply {
             includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(ILHA_TEXTO_MAX)
         }
         val extra = LinearLayout(this).apply {
@@ -2825,7 +2825,7 @@ class MainActivity : Activity() {
         raiz.addView(pilula, FrameLayout.LayoutParams(WRAP, dp(40), Gravity.TOP or Gravity.CENTER_HORIZONTAL).apply {
             topMargin = dp(TOPO_PALCO + (ALTURA_TOPO - 40) / 2)
         })
-        val canto = texto(17f, HomeCruz.COR_SUB, fonteUi).apply {
+        val canto = texto(18f, HomeCruz.COR_SUB, fonteUi).apply {
             includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(ILHA_CANTO_MAX)
             gravity = Gravity.CENTER_VERTICAL
             setShadowLayer(dp(6).toFloat(), 0f, 0f, sombra)
