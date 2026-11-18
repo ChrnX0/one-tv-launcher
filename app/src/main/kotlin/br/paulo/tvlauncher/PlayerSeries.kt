@@ -104,11 +104,15 @@ object Series {
 
     fun lerSeries(json: String, fonteId: String, categorias: List<Xtream.Categoria> = emptyList()): List<Serie> {
         val a = runCatching { JSONArray(json) }.getOrNull() ?: return emptyList()
+        return lerSeries(Xtream.objetos(a), fonteId, categorias)
+    }
+
+    /** Igual, de um fluxo ([JsonEmFluxo]): para no máximo e não lê o resto. */
+    fun lerSeries(itens: Sequence<JSONObject>, fonteId: String, categorias: List<Xtream.Categoria> = emptyList()): List<Serie> {
         val grupos = categorias.associate { it.id to it.nome }
         val saida = ArrayList<Serie>()
-        for (i in 0 until a.length()) {
+        for (o in itens) {
             if (saida.size >= Vod.MAX_FILMES) break
-            val o = a.optJSONObject(i) ?: continue
             val id = o.opt("series_id")?.toString()?.takeIf { it.isNotEmpty() && it != "null" } ?: continue
             val nome = texto(o, "name")
             if (nome.isEmpty()) continue

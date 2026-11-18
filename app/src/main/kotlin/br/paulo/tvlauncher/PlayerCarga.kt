@@ -27,6 +27,12 @@ object PlayerCarga {
     private const val VALIDADE_LISTA = 12 * 3_600_000L
     private const val VALIDADE_GUIA = 6 * 3_600_000L
     private const val MAX_LISTA = 30L * 1024 * 1024
+    /**
+     * Catálogos Xtream lidos em fluxo ([JsonEmFluxo]): só um item por vez na memória e a leitura para no máximo de
+     * itens; o teto aqui só barra servidor que manda sem fim. (Antes: 30 MB inteiros na memória, 3 cópias, e lista
+     * maior que isso dava erro em toda abertura.)
+     */
+    private const val MAX_FLUXO = 400L * 1024 * 1024
     private const val MAX_GUIA = 150L * 1024 * 1024
     private const val AGENTE = "TvLauncher-Player/1.0"
 
@@ -113,7 +119,7 @@ object PlayerCarga {
         PlayerArmazem.definirVencimento(ctx, fonte.id, fonte.nome, situacao.expiraEm)   // pílula "vence em N dias" da HOME
         if (!situacao.ativa) throw IOException("conta ${situacao.status.ifEmpty { "recusada" }}")
         val categorias = runCatching { Xtream.lerCategorias(baixarTexto(Xtream.urlCategoriasAoVivo(conta), 5L * 1024 * 1024)) }.getOrDefault(emptyList())
-        return Xtream.lerCanais(baixarTexto(Xtream.urlCanaisAoVivo(conta), MAX_LISTA), conta, categorias)
+        return abrir(Xtream.urlCanaisAoVivo(conta), MAX_FLUXO).use { Xtream.lerCanais(JsonEmFluxo.objetos(it.reader()), conta, categorias) }
     }
 
     /**
@@ -193,7 +199,7 @@ object PlayerCarga {
         if (fresco && !forcar) Vod.filmesDeJson(cache.readText(), fonte.id).takeIf { it.isNotEmpty() }?.let { return@flatMap it }
         val baixados = runCatching {
             val cats = runCatching { Xtream.lerCategorias(baixarTexto(Vod.urlCategoriasFilmes(conta), 5L * 1024 * 1024)) }.getOrDefault(emptyList())
-            Vod.lerFilmes(baixarTexto(Vod.urlFilmes(conta), MAX_LISTA), fonte.id, cats)
+            abrir(Vod.urlFilmes(conta), MAX_FLUXO).use { Vod.lerFilmes(JsonEmFluxo.objetos(it.reader()), fonte.id, cats) }
         }.onFailure { Log.w(TAG, "filmes de ${fonte.servidorVisivel}: ${it.javaClass.simpleName}") }.getOrNull()
         if (!baixados.isNullOrEmpty()) {
             gravarAtomico(cache, Vod.filmesParaJson(baixados))
@@ -256,7 +262,7 @@ object PlayerCarga {
         if (fresco && !forcar) Series.seriesDeJson(cache.readText(), fonte.id).takeIf { it.isNotEmpty() }?.let { return@flatMap it }
         val baixadas = runCatching {
             val cats = runCatching { Xtream.lerCategorias(baixarTexto(Series.urlCategorias(conta), 5L * 1024 * 1024)) }.getOrDefault(emptyList())
-            Series.lerSeries(baixarTexto(Series.urlSeries(conta), MAX_LISTA), fonte.id, cats)
+            abrir(Series.urlSeries(conta), MAX_FLUXO).use { Series.lerSeries(JsonEmFluxo.objetos(it.reader()), fonte.id, cats) }
         }.onFailure { Log.w(TAG, "séries de ${fonte.servidorVisivel}: ${it.javaClass.simpleName}") }.getOrNull()
         if (!baixadas.isNullOrEmpty()) {
             gravarAtomico(cache, Series.seriesParaJson(baixadas))
