@@ -187,7 +187,7 @@
     "privacy_text": "A Sofaly não pede conta, não mostra publicidade e não rastreia o que assiste. Definições, fotos, recados e backups ficam na TV, ou numa conta sua se ligar uma. A TV só fala com os serviços que liga, e a política de privacidade lista cada um.",
     "privacy_link": "Ler a política de privacidade",
     "dev_title": "Tem uma app? Ponha-a no ecrã inicial.",
-    "dev_text": "Um plugin da Sofaly é a sua própria app de Android TV a mandar um cartão para o ecrã inicial: o placar do jogo, a cotação do dia, a contagem para as férias. Sem SDK, sem custo, e a app continua a ser sua.",
+    "dev_text": "A Sofaly já traz cartões prontos (lua, câmbio, contagem, lembrete). Um plugin é a sua própria app de Android TV a mandar mais um cartão para o ecrã inicial: a encomenda, o autocarro que está a chegar, o aviso do condomínio. Sem SDK, sem custo, e a app continua a ser sua.",
     "dev_link": "Conhecer o kit de desenvolvedor",
     "plans_title": "Comece de graça. Cresça quando quiser.",
     "plans_text": "O Básico já tem o ecrã inicial completa, o player, o Ouvir, o Jogar, o despertador e o protetor. O Pro e o Ultra somam o telemóvel, a casa e a família.",
@@ -320,9 +320,39 @@
       "Use um pacote de ícones da Play ou troque o ícone de uma app só, um a um.",
       "Segure OK na app › Trocar ícone."
     ],
+    "card-moon": [
+      "Fase da lua",
+      "A lua de hoje e quanto dela está iluminada, calculada na própria TV, sem internet.",
+      "Cartão do ecrã inicial, no fim de Ver."
+    ],
+    "card-countdown": [
+      "Contagem decrescente",
+      "Quantos dias faltam para a data que escolher, ou para o próximo feriado.",
+      "Cartão do ecrã inicial, no fim de Ver."
+    ],
+    "card-reminder": [
+      "Lembrete da casa",
+      "Um aviso que volta nos dias da semana que marcar: dia do lixo reciclável, medicamento, aula.",
+      "Cartão do ecrã inicial, no fim de Ver."
+    ],
+    "card-status": [
+      "Estado do seu serviço",
+      "A TV testa um endereço que indicar e mostra se está no ar: o servidor de casa, o site da loja.",
+      "Cartão do ecrã inicial, no fim de Ver."
+    ],
+    "card-rates": [
+      "Câmbio do dia",
+      "Moedas, ouro e bitcoin com o valor do dia, de uma fonte aberta.",
+      "Cartão do ecrã inicial, no fim de Ver."
+    ],
+    "card-match": [
+      "Próximo jogo da sua equipa",
+      "Quando e contra quem a sua equipa volta a jogar, num cartão no ecrã inicial.",
+      "Cartão do ecrã inicial, no fim de Ver."
+    ],
     "plugin-cards": [
       "Cartões de outras apps",
-      "Apps parceiras põem um cartão no ecrã inicial: o placar do jogo, a cotação, a contagem para uma data.",
+      "Além dos cartões da Sofaly, apps parceiras põem o seu no ecrã inicial: a encomenda, o autocarro, o aviso do condomínio.",
       "Os cartões aparecem no fim do Ver."
     ],
     "network-library": [
@@ -731,7 +761,7 @@
     "pro_who": "Para quem cuida da TV",
     "ultra_who": "Para a casa e a família",
     "basic_text": "O ecrã em cruz, o player, o Ouvir, o Jogar, o despertador, o protetor e toda a acessibilidade.",
-    "pro_text": "Tudo do Básico, mais o telemóvel, as automações, a casa conectada, os recados de longe e a personalização completa.",
+    "pro_text": "Tudo do Básico, mais o telemóvel, as automações, a casa ligada, as mensagens de longe, os cartões prontos do ecrã inicial e a personalização completa.",
     "ultra_text": "Tudo do Pro, mais o clima em três modelos, fichas completas, legenda automática, várias casas e assistir junto.",
     "includes": "Inclui",
     "everything_basic": "Tudo do Básico",
@@ -763,31 +793,31 @@
         "Publique na Play como quiser, grátis ou pago. A Sofaly só desenha o cartão; a app e os clientes são seus."
       ]
     ],
-    "can_title": "O que dá para fazer",
+    "can_title": "O que pode criar além dos nossos",
     "can": [
       [
-        "Placar em direto",
-        "2 x 1, aos 38 do segundo tempo."
+        "A sua entrega",
+        "A encomenda saiu, chega em 12 min."
       ],
       [
-        "Cotação do dia",
-        "Dólar, bitcoin, a ação que acompanha."
+        "O seu autocarro",
+        "A linha 42 passa em 6 min."
       ],
       [
-        "Contagem regressiva",
-        "Faltam 12 dias para as férias."
+        "O seu ginásio",
+        "Aula de hoje às 19h."
       ],
       [
-        "Lembrete da casa",
-        "Hoje é dia de lixo reciclável."
+        "O seu condomínio",
+        "Água cortada amanhã, das 9h às 12h."
       ],
       [
-        "Fase da lua",
-        "Lua crescente, 62%."
+        "A sua loja",
+        "Oferta do dia: 20% no café."
       ],
       [
-        "Status do seu serviço",
-        "O servidor de casa está no ar."
+        "O seu clube",
+        "Treino remarcado para sábado."
       ]
     ],
     "steps_title": "Dois passos",
@@ -802,6 +832,20 @@
     "soon_title": "Em breve",
     "soon_text": "Plugins de fundo de ecrã e vitrine de plugins na própria TV.",
     "template_title": "Modelo pronto",
-    "template_text": "Duas apps de exemplo para compilar hoje: uma contagem para uma data que a pessoa escolhe na TV e a fase da lua de hoje. Sem internet, sem conta. Licença MIT No Attribution: copie, troque o pacote e publique."
+    "template_text": "Duas apps de exemplo para compilar hoje: uma contagem para uma data que a pessoa escolhe na TV e a fase da lua de hoje. Sem internet, sem conta. Licença MIT No Attribution: copie, troque o pacote e publique.",
+    "demo": [
+      [
+        "Entrega",
+        "12 min"
+      ],
+      [
+        "Autocarro 42",
+        "6 min"
+      ],
+      [
+        "Ginásio",
+        "19h"
+      ]
+    ]
   }
 }

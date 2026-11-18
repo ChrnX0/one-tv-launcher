@@ -83,6 +83,7 @@ ICONS = {
     "cloud": '<path d="M7 18.5a4.5 4.5 0 1 1 1-8.9A5.5 5.5 0 0 1 18.5 11 3.75 3.75 0 0 1 18 18.5z"/>',
     "wrench": '<path d="M14.5 4a5 5 0 0 0-5.3 6.7L3.5 16.5l4 4 5.8-5.7A5 5 0 0 0 20 9.5l-3 3-3.5-1-1-3.5 3-3z"/>',
     "stethoscope": '<path d="M6 3v6a4 4 0 0 0 8 0V3"/><path d="M10 13v2.5a4.5 4.5 0 0 0 9 0V13"/><circle cx="19" cy="11" r="2"/>',
+    "ball": '<circle cx="12" cy="12" r="9"/><path d="M12 7.5l4 2.9-1.5 4.7h-5L8 10.4z"/><path d="M12 3v4.5M16 10.4l4.3-1.4M14.5 15.1l2.7 3.7M9.5 15.1l-2.7 3.7M8 10.4L3.7 9"/>',
     "globe": '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/>',
     "text": '<path d="M4 7V5h11v2M9.5 5v14M7.5 19h4M14 12v-1.5h7V12M17.5 10.5V19M16 19h3"/>',
     "access": '<circle cx="12" cy="4.5" r="2"/><path d="M4.5 8.5l7.5 1.5 7.5-1.5M12 10v5l-3.5 6.5M12 15l3.5 6.5"/>',
@@ -434,6 +435,8 @@ ROW = """override fun query(uri: Uri, p: Array&lt;String&gt;?, s: String?,
 
 def page_developers(L):
     d = L.d["dev_page"]
+    demo = "".join(f'<div class="demo-tile" style="--tile:{c}"><small>{esc(a)}</small><b>{esc(b)}</b></div>'
+                   for (a, b), c in zip(d["demo"], ["#1E7A46", "#2B4C9B", "#7A3FB0"]))
     why = "".join(f'<li class="card">{icon(i)}<h3>{esc(t)}</h3><p>{esc(x)}</p></li>' for i, t, x in d["why"])
     can = "".join(f'<li class="mini-card"><b>{esc(t)}</b><span>{esc(x)}</span></li>' for t, x in d["can"])
     rules = "".join(f"<li>{icon('shield')}<span>{esc(r)}</span></li>" for r in d["rules"])
@@ -449,9 +452,7 @@ def page_developers(L):
         <a class="btn" href="{L.prefix}plugins.html">{esc(d['cta_spec'])}</a></div>
     </div>
     <div class="card-demo" aria-hidden="true">
-      <div class="demo-tile" style="--tile:#1E7A46"><small>Match score</small><b>2 x 1</b></div>
-      <div class="demo-tile" style="--tile:#2B4C9B"><small>USD</small><b>$5.42</b></div>
-      <div class="demo-tile" style="--tile:#7A3FB0"><small>Vacation</small><b>12 d</b></div>
+      {demo}
     </div>
   </div>
 </section>

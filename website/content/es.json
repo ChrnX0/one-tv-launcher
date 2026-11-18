@@ -187,7 +187,7 @@
     "privacy_text": "Sofaly no pide cuenta, no muestra anuncios y no rastrea lo que ves. Ajustes, fotos, mensajes y copias quedan en la TV, o en una cuenta tuya si conectas una. La TV solo habla con los servicios que activas, y la política de privacidad los enumera todos.",
     "privacy_link": "Leer la política de privacidad",
     "dev_title": "¿Tienes una app? Ponla en la pantalla de inicio.",
-    "dev_text": "Un plugin de Sofaly es tu propia app de Android TV enviando una tarjeta a la pantalla de inicio: el marcador del partido, la cotización del día, la cuenta atrás para las vacaciones. Sin SDK, sin coste, y la app sigue siendo tuya.",
+    "dev_text": "Sofaly ya trae tarjetas listas (luna, cotización, cuenta regresiva, recordatorio). Un plugin es tu propia app de Android TV enviando una tarjeta más a la pantalla de inicio: el pedido del delivery, el autobús que llega, el aviso del edificio. Sin SDK, sin costo, y la app sigue siendo tuya.",
     "dev_link": "Conocer el kit de desarrollador",
     "plans_title": "Empieza gratis. Crece cuando quieras.",
     "plans_text": "El Básico ya trae la pantalla de inicio completa, el reproductor, Escuchar, Jugar, el despertador y el salvapantallas. Pro y Ultra suman el móvil, la casa y la familia.",
@@ -320,9 +320,39 @@
       "Usa un paquete de iconos de Play o cambia el icono de una sola app, uno a uno.",
       "Mantén OK en la app › Cambiar icono."
     ],
+    "card-moon": [
+      "Fase lunar",
+      "La luna de hoy y cuánto está iluminada, calculada en la propia TV, sin internet.",
+      "Tarjeta de la pantalla de inicio, al final de Ver."
+    ],
+    "card-countdown": [
+      "Cuenta regresiva",
+      "Cuántos días faltan para la fecha que elijas, o para el próximo feriado.",
+      "Tarjeta de la pantalla de inicio, al final de Ver."
+    ],
+    "card-reminder": [
+      "Recordatorio de casa",
+      "Un aviso que vuelve los días de la semana que marques: día del reciclaje, medicina, clase.",
+      "Tarjeta de la pantalla de inicio, al final de Ver."
+    ],
+    "card-status": [
+      "Estado de tu servicio",
+      "La TV prueba una dirección que le indiques y muestra si está en línea: el servidor de casa, la web de la tienda.",
+      "Tarjeta de la pantalla de inicio, al final de Ver."
+    ],
+    "card-rates": [
+      "Cotización del día",
+      "Monedas, oro y bitcoin con el valor del día, de una fuente abierta.",
+      "Tarjeta de la pantalla de inicio, al final de Ver."
+    ],
+    "card-match": [
+      "Próximo partido de tu equipo",
+      "Cuándo y contra quién vuelve a jugar tu equipo, en una tarjeta de la pantalla de inicio.",
+      "Tarjeta de la pantalla de inicio, al final de Ver."
+    ],
     "plugin-cards": [
       "Tarjetas de otras apps",
-      "Apps asociadas ponen una tarjeta en el inicio: el marcador, la cotización, la cuenta atrás para una fecha.",
+      "Además de las tarjetas de Sofaly, las apps socias ponen la suya en la pantalla de inicio: el pedido del delivery, el autobús, el aviso del edificio.",
       "Aparecen al final de Ver."
     ],
     "network-library": [
@@ -731,7 +761,7 @@
     "pro_who": "Para quien cuida la TV",
     "ultra_who": "Para la casa y la familia",
     "basic_text": "La cruz, el reproductor, Escuchar, Jugar, el despertador, el salvapantallas y toda la accesibilidad.",
-    "pro_text": "Todo el Básico, más el móvil, las automatizaciones, la casa conectada, los mensajes desde lejos y la personalización completa.",
+    "pro_text": "Todo lo de Básico, más el móvil, las automatizaciones, la casa conectada, los mensajes desde lejos, las tarjetas listas de la pantalla de inicio y la personalización completa.",
     "ultra_text": "Todo el Pro, más el tiempo en tres modelos, fichas completas, subtítulos automáticos, varias casas y ver juntos.",
     "includes": "Incluye",
     "everything_basic": "Todo el Básico",
@@ -763,31 +793,31 @@
         "Publica en Play como quieras, gratis o de pago. Sofaly solo dibuja la tarjeta; la app y los clientes son tuyos."
       ]
     ],
-    "can_title": "Qué puedes hacer",
+    "can_title": "Lo que puedes crear además de las nuestras",
     "can": [
       [
-        "Marcador en vivo",
-        "2 a 1, minuto 38 del segundo tiempo."
+        "Tu delivery",
+        "El pedido salió, llega en 12 min."
       ],
       [
-        "Cotización del día",
-        "Dólar, bitcoin, la acción que sigues."
+        "Tu autobús",
+        "La línea 42 pasa en 6 min."
       ],
       [
-        "Cuenta atrás",
-        "Faltan 12 días para las vacaciones."
+        "Tu gimnasio",
+        "Clase de hoy a las 19 h."
       ],
       [
-        "Recordatorio de casa",
-        "Hoy toca sacar el reciclaje."
+        "Tu edificio",
+        "Sin agua mañana, de 9 a 12 h."
       ],
       [
-        "Fase lunar",
-        "Luna creciente, 62%."
+        "Tu tienda",
+        "Oferta del día: 20% en café."
       ],
       [
-        "Estado de tu servicio",
-        "El servidor de casa está en línea."
+        "Tu club",
+        "Entrenamiento movido al sábado."
       ]
     ],
     "steps_title": "Dos pasos",
@@ -802,6 +832,20 @@
     "soon_title": "Muy pronto",
     "soon_text": "Plugins de fondo de pantalla y un escaparate de plugins en la propia TV.",
     "template_title": "Plantilla lista",
-    "template_text": "Dos apps de ejemplo para compilar hoy: una cuenta atrás para la fecha que la persona elige en la TV y la fase lunar de hoy. Sin internet, sin cuenta. Licencia MIT No Attribution: copia, cambia el paquete y publica."
+    "template_text": "Dos apps de ejemplo para compilar hoy: una cuenta atrás para la fecha que la persona elige en la TV y la fase lunar de hoy. Sin internet, sin cuenta. Licencia MIT No Attribution: copia, cambia el paquete y publica.",
+    "demo": [
+      [
+        "Delivery",
+        "12 min"
+      ],
+      [
+        "Bus 42",
+        "6 min"
+      ],
+      [
+        "Gimnasio",
+        "19 h"
+      ]
+    ]
   }
 }

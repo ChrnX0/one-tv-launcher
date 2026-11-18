@@ -187,7 +187,7 @@
     "privacy_text": "Sofaly verlangt kein Konto, zeigt keine Werbung und verfolgt nicht, was du schaust. Einstellungen, Fotos, Nachrichten und Backups bleiben auf dem Fernseher oder in einem eigenen Konto, wenn du eins verbindest. Der Fernseher spricht nur mit Diensten, die du einschaltest, und die Datenschutzerklärung listet jeden auf.",
     "privacy_link": "Datenschutzerklärung lesen",
     "dev_title": "Du hast eine App? Bring sie auf den Startbildschirm.",
-    "dev_text": "Ein Sofaly-Plugin ist deine eigene Android-TV-App, die eine Karte auf den Startbildschirm schickt: den Spielstand, den Tageskurs, den Countdown zum Urlaub. Kein SDK, keine Gebühr, und die App bleibt deine.",
+    "dev_text": "Sofaly bringt schon fertige Karten mit (Mond, Kurse, Countdown, Erinnerung). Ein Plugin ist Ihre eigene Android-TV-App, die eine weitere Karte an den Startbildschirm schickt: die Lieferung, der Bus, der gleich kommt, der Hinweis der Hausverwaltung. Kein SDK, keine Gebühr, und die App bleibt Ihre.",
     "dev_link": "Entwickler-Kit ansehen",
     "plans_title": "Kostenlos starten. Wachsen, wann du willst.",
     "plans_text": "Basis hat schon den vollen Startbildschirm, den Player, Hören, Spielen, den Wecker und den Bildschirmschoner. Pro und Ultra bringen Handy, Zuhause und Familie dazu.",
@@ -320,9 +320,39 @@
       "Nutze ein Symbolpaket aus Play oder ändere das Symbol einzelner Apps.",
       "OK auf der App halten › Symbol ändern."
     ],
+    "card-moon": [
+      "Mondphase",
+      "Der Mond von heute und wie viel davon beleuchtet ist, auf dem Fernseher selbst berechnet, ohne Internet.",
+      "Karte im Startbildschirm, am Ende von Ansehen."
+    ],
+    "card-countdown": [
+      "Countdown",
+      "Wie viele Tage bis zu einem Datum Ihrer Wahl bleiben, oder bis zum nächsten Feiertag.",
+      "Karte im Startbildschirm, am Ende von Ansehen."
+    ],
+    "card-reminder": [
+      "Haus-Erinnerung",
+      "Ein Hinweis, der an den gewählten Wochentagen wiederkommt: Wertstofftag, Medikament, Kurs.",
+      "Karte im Startbildschirm, am Ende von Ansehen."
+    ],
+    "card-status": [
+      "Status Ihres Dienstes",
+      "Der Fernseher prüft eine Adresse Ihrer Wahl und zeigt, ob sie erreichbar ist: der Heimserver, die Website des Ladens.",
+      "Karte im Startbildschirm, am Ende von Ansehen."
+    ],
+    "card-rates": [
+      "Kurse des Tages",
+      "Währungen, Gold und Bitcoin zum Tageswert, aus einer offenen Quelle.",
+      "Karte im Startbildschirm, am Ende von Ansehen."
+    ],
+    "card-match": [
+      "Nächstes Spiel Ihres Teams",
+      "Wann und gegen wen Ihr Team als Nächstes spielt, auf einer Karte im Startbildschirm.",
+      "Karte im Startbildschirm, am Ende von Ansehen."
+    ],
     "plugin-cards": [
       "Karten anderer Apps",
-      "Partner-Apps legen eine Karte auf den Startbildschirm: Spielstand, Kurs, Countdown.",
+      "Neben den Karten von Sofaly legen Partner-Apps ihre eigene auf den Startbildschirm: die Lieferung, der Bus, der Hinweis der Hausverwaltung.",
       "Karten erscheinen am Ende von Ansehen."
     ],
     "network-library": [
@@ -731,7 +761,7 @@
     "pro_who": "Für alle, die sich um den Fernseher kümmern",
     "ultra_who": "Für Zuhause und Familie",
     "basic_text": "Das Kreuz, der Player, Hören, Spielen, der Wecker, der Bildschirmschoner und alle Bedienungshilfen.",
-    "pro_text": "Alles aus Basis plus Handy, Automationen, vernetztes Zuhause, Nachrichten aus der Ferne und volle Personalisierung.",
+    "pro_text": "Alles aus Basic, dazu das Handy, Automationen, das vernetzte Zuhause, Nachrichten aus der Ferne, fertige Karten für den Startbildschirm und volle Personalisierung.",
     "ultra_text": "Alles aus Pro plus Wetter aus drei Modellen, vollständige Filmseiten, automatische Untertitel, mehrere Zuhause und gemeinsames Schauen.",
     "includes": "Enthält",
     "everything_basic": "Alles aus Basis",
@@ -763,31 +793,31 @@
         "Veröffentliche auf Play, wie du willst, kostenlos oder kostenpflichtig. Sofaly zeichnet nur die Karte; App und Kunden gehören dir."
       ]
     ],
-    "can_title": "Was du bauen kannst",
+    "can_title": "Was Sie zusätzlich zu unseren bauen können",
     "can": [
       [
-        "Live-Spielstand",
-        "2:1, 38. Minute der zweiten Halbzeit."
+        "Ihre Lieferung",
+        "Bestellung unterwegs, in 12 Min. da."
       ],
       [
-        "Tageskurs",
-        "Dollar, Bitcoin, die Aktie, die du verfolgst."
+        "Ihr Bus",
+        "Linie 42 kommt in 6 Min."
       ],
       [
-        "Countdown",
-        "Noch 12 Tage bis zum Urlaub."
+        "Ihr Fitnessstudio",
+        "Kurs heute um 19 Uhr."
       ],
       [
-        "Erinnerung im Haus",
-        "Heute kommt die gelbe Tonne raus."
+        "Ihr Wohnhaus",
+        "Morgen kein Wasser, 9 bis 12 Uhr."
       ],
       [
-        "Mondphase",
-        "Zunehmender Mond, 62 %."
+        "Ihr Laden",
+        "Angebot des Tages: 20 % auf Kaffee."
       ],
       [
-        "Status deines Dienstes",
-        "Der Heimserver läuft."
+        "Ihr Verein",
+        "Training auf Samstag verschoben."
       ]
     ],
     "steps_title": "Zwei Schritte",
@@ -802,6 +832,20 @@
     "soon_title": "Bald",
     "soon_text": "Hintergrund-Plugins und ein Plugin-Schaufenster direkt auf dem Fernseher.",
     "template_title": "Fertige Vorlage",
-    "template_text": "Zwei Beispiel-Apps zum sofortigen Bauen: ein Countdown zu einem auf dem Fernseher gewählten Datum und die heutige Mondphase. Kein Internet, kein Konto. Lizenz MIT No Attribution: kopieren, Paket umbenennen, veröffentlichen."
+    "template_text": "Zwei Beispiel-Apps zum sofortigen Bauen: ein Countdown zu einem auf dem Fernseher gewählten Datum und die heutige Mondphase. Kein Internet, kein Konto. Lizenz MIT No Attribution: kopieren, Paket umbenennen, veröffentlichen.",
+    "demo": [
+      [
+        "Lieferung",
+        "12 Min."
+      ],
+      [
+        "Bus 42",
+        "6 Min."
+      ],
+      [
+        "Fitness",
+        "19 Uhr"
+      ]
+    ]
   }
 }

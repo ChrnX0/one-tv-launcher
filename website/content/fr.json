@@ -187,7 +187,7 @@
     "privacy_text": "Sofaly ne demande pas de compte, n'affiche pas de publicité et ne suit pas ce que vous regardez. Réglages, photos, messages et sauvegardes restent sur la TV, ou dans un compte à vous si vous en connectez un. La TV ne parle qu'aux services que vous activez, et la politique de confidentialité les liste tous.",
     "privacy_link": "Lire la politique de confidentialité",
     "dev_title": "Vous avez une appli ? Mettez-la sur l'accueil.",
-    "dev_text": "Un plugin Sofaly, c'est votre propre appli Android TV qui envoie une carte à l'écran d'accueil : le score du match, le cours du jour, le compte à rebours des vacances. Sans SDK, sans frais, et l'appli reste la vôtre.",
+    "dev_text": "Sofaly apporte déjà des cartes prêtes (lune, cours, compte à rebours, rappel). Un plugin, c'est votre propre app Android TV qui envoie une carte de plus à l'écran d'accueil : la commande en livraison, le bus qui arrive, l'avis de l'immeuble. Sans SDK, sans frais, et l'app reste à vous.",
     "dev_link": "Découvrir le kit développeur",
     "plans_title": "Commencez gratuitement. Grandissez quand vous voulez.",
     "plans_text": "Le Basique offre déjà l'écran d'accueil complet, le lecteur, Écouter, Jouer, le réveil et l'économiseur d'écran. Pro et Ultra ajoutent le téléphone, la maison et la famille.",
@@ -320,9 +320,39 @@
       "Utilisez un pack d'icônes de Play ou changez l'icône d'une seule appli, une par une.",
       "Maintenez OK sur l'appli › Changer l'icône."
     ],
+    "card-moon": [
+      "Phase de la lune",
+      "La lune du jour et sa part éclairée, calculées sur la TV elle-même, sans internet.",
+      "Carte de l'écran d'accueil, à la fin de Regarder."
+    ],
+    "card-countdown": [
+      "Compte à rebours",
+      "Le nombre de jours jusqu'à la date de votre choix, ou jusqu'au prochain jour férié.",
+      "Carte de l'écran d'accueil, à la fin de Regarder."
+    ],
+    "card-reminder": [
+      "Rappel de la maison",
+      "Un rappel qui revient les jours de la semaine choisis : jour du tri, médicament, cours.",
+      "Carte de l'écran d'accueil, à la fin de Regarder."
+    ],
+    "card-status": [
+      "État de votre service",
+      "La TV teste une adresse que vous indiquez et montre si elle répond : le serveur de la maison, le site de la boutique.",
+      "Carte de l'écran d'accueil, à la fin de Regarder."
+    ],
+    "card-rates": [
+      "Cours du jour",
+      "Devises, or et bitcoin à la valeur du jour, depuis une source ouverte.",
+      "Carte de l'écran d'accueil, à la fin de Regarder."
+    ],
+    "card-match": [
+      "Prochain match de votre équipe",
+      "Quand et contre qui votre équipe rejoue, sur une carte de l'écran d'accueil.",
+      "Carte de l'écran d'accueil, à la fin de Regarder."
+    ],
     "plugin-cards": [
       "Cartes d'autres applis",
-      "Des applis partenaires posent une carte sur l'accueil : le score, le cours, un compte à rebours.",
+      "En plus des cartes de Sofaly, les apps partenaires posent la leur sur l'écran d'accueil : la commande en livraison, le bus, l'avis de l'immeuble.",
       "Les cartes s'affichent à la fin de Regarder."
     ],
     "network-library": [
@@ -731,7 +761,7 @@
     "pro_who": "Pour qui s'occupe de la TV",
     "ultra_who": "Pour la maison et la famille",
     "basic_text": "La croix, le lecteur, Écouter, Jouer, le réveil, l'économiseur et toute l'accessibilité.",
-    "pro_text": "Tout le Basique, plus le téléphone, les automatisations, la maison connectée, les messages de loin et la personnalisation complète.",
+    "pro_text": "Tout Basic, plus le téléphone, les automatisations, la maison connectée, les messages de loin, les cartes prêtes de l'écran d'accueil et la personnalisation complète.",
     "ultra_text": "Tout le Pro, plus la météo à trois modèles, les fiches complètes, les sous-titres automatiques, plusieurs maisons et regarder ensemble.",
     "includes": "Comprend",
     "everything_basic": "Tout le Basique",
@@ -763,31 +793,31 @@
         "Publiez sur Play comme vous voulez, gratuite ou payante. Sofaly ne fait que dessiner la carte ; l'appli et les clients sont à vous."
       ]
     ],
-    "can_title": "Ce que vous pouvez faire",
+    "can_title": "Ce que vous pouvez créer en plus des nôtres",
     "can": [
       [
-        "Score en direct",
-        "2 à 1, 38e minute de la seconde période."
+        "Votre livraison",
+        "Commande partie, arrivée dans 12 min."
       ],
       [
-        "Cours du jour",
-        "Dollar, bitcoin, l'action que vous suivez."
+        "Votre bus",
+        "La ligne 42 passe dans 6 min."
       ],
       [
-        "Compte à rebours",
-        "Plus que 12 jours avant les vacances."
+        "Votre salle de sport",
+        "Cours du jour à 19 h."
       ],
       [
-        "Rappel maison",
-        "Aujourd'hui, sortir le recyclage."
+        "Votre immeuble",
+        "Coupure d'eau demain, de 9 h à 12 h."
       ],
       [
-        "Phase de la lune",
-        "Lune croissante, 62 %."
+        "Votre boutique",
+        "Offre du jour : -20 % sur le café."
       ],
       [
-        "État de votre service",
-        "Le serveur de la maison est en ligne."
+        "Votre club",
+        "Entraînement déplacé à samedi."
       ]
     ],
     "steps_title": "Deux étapes",
@@ -802,6 +832,20 @@
     "soon_title": "Bientôt",
     "soon_text": "Plugins de fond d'écran et vitrine de plugins directement sur la TV.",
     "template_title": "Modèle prêt",
-    "template_text": "Deux applis d'exemple à compiler dès aujourd'hui : un compte à rebours vers une date choisie sur la TV et la phase de la lune du jour. Sans internet, sans compte. Licence MIT No Attribution : copiez, renommez le paquet, publiez."
+    "template_text": "Deux applis d'exemple à compiler dès aujourd'hui : un compte à rebours vers une date choisie sur la TV et la phase de la lune du jour. Sans internet, sans compte. Licence MIT No Attribution : copiez, renommez le paquet, publiez.",
+    "demo": [
+      [
+        "Livraison",
+        "12 min"
+      ],
+      [
+        "Bus 42",
+        "6 min"
+      ],
+      [
+        "Sport",
+        "19 h"
+      ]
+    ]
   }
 }

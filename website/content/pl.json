@@ -1,0 +1,851 @@
+{
+  "lang": "pl",
+  "path": "pl",
+  "label": "Polski",
+  "ui": {
+    "nav_features": "Funkcje",
+    "nav_plans": "Plany",
+    "nav_developers": "Dla twórców",
+    "nav_help": "Pomoc",
+    "cta_get": "Wkrótce w Google Play",
+    "cta_see": "Zobacz wszystko, co potrafi",
+    "plan_basic": "Basic",
+    "plan_pro": "Pro",
+    "plan_ultra": "Ultra",
+    "plan_from": "od",
+    "how": "Jak",
+    "skip": "Przejdź do treści",
+    "language": "Język",
+    "back_top": "Do góry",
+    "footer_tagline": "Ekran główny dla Google TV i Android TV.",
+    "footer_privacy": "Prywatność",
+    "footer_terms": "Warunki",
+    "footer_compat": "Czy działa na Twoim urządzeniu?",
+    "footer_trademark": "Sofaly nie jest powiązana z Google. Google TV, Android TV i Chromecast są znakami towarowymi Google LLC.",
+    "of": "z"
+  },
+  "home": {
+    "title": "Sofaly · Twój telewizor znów prosty",
+    "description": "Sofaly to ekran główny dla Google TV i Android TV: wszystko ułożone w krzyż (Oglądaj, Słuchaj, Graj, Aplikacje), duże litery i zero reklam.",
+    "eyebrow": "Ekran główny dla Google TV i Android TV",
+    "h1": "Twój telewizor znów prosty.",
+    "lead": "Sofaly zastępuje ekran główny telewizora uporządkowanym krzyżem: Oglądaj, Słuchaj, Graj i Aplikacje, dużymi literami i bez reklam. A do tego dba o dom, budzi Cię i rozmawia z telefonem.",
+    "hero_note": "Bez konta, bez reklam, bez śledzenia tego, co oglądasz.",
+    "cross_title": "Jeden ekran, cztery drogi",
+    "cross_lead": "◀ ▶ wybierz świat. ▲ ▼ przeglądaj, co w nim jest. To wszystko, i każdy w domu nauczy się tego w minutę.",
+    "worlds": {
+      "continue": [
+        "Kontynuuj",
+        "Wróć tam, gdzie skończyłeś: do odcinka, radia, podcastu albo aplikacji."
+      ],
+      "watch": [
+        "Oglądaj",
+        "Twoje aplikacje wideo, filmy z komputera lub pendrive'a i odtwarzacz, który odtwarza wszystko."
+      ],
+      "listen": [
+        "Słuchaj",
+        "Radio z całego świata i podcasty, z odtwarzaczem na pełny ekran i wyłącznikiem czasowym."
+      ],
+      "play": [
+        "Graj",
+        "Gry w chmurze, z PC i retro w jednym miejscu, z już sparowanym kontrolerem."
+      ],
+      "apps": [
+        "Aplikacje",
+        "8 najczęściej używanych na wierzchu, a wszystkie inne jedno kliknięcie dalej."
+      ]
+    },
+    "mock": {
+      "weather": "25° · Częściowe zachmurzenie",
+      "day": "Środa",
+      "date": "18 listopada",
+      "watch_items": [
+        "Filmy",
+        "Seriale",
+        "W sieci",
+        "YouTube"
+      ],
+      "watch_title": "W sieci",
+      "watch_detail": "Filmy z Twojego komputera · 214 tytułów",
+      "listen_items": [
+        "Radio",
+        "Podcasty",
+        "Teraz gra"
+      ],
+      "listen_title": "Radio",
+      "listen_detail": "Stacje z całego świata, po nazwie lub kraju",
+      "play_items": [
+        "Chmura",
+        "Z PC",
+        "Retro",
+        "Ekipa"
+      ],
+      "play_title": "Gry",
+      "play_detail": "3 gry w chmurze · kontroler połączony",
+      "apps_items": [
+        "YouTube",
+        "Netflix",
+        "Prime Video",
+        "Wszystkie aplikacje"
+      ],
+      "apps_title": "Aplikacje",
+      "apps_detail": "8 najczęściej używanych",
+      "continue_items": [
+        "Odcinek 4",
+        "Radio",
+        "Podcast"
+      ],
+      "continue_title": "Kontynuuj",
+      "continue_detail": "Zatrzymane na odcinku 4 · zostało 21 min"
+    },
+    "why_title": "Po co zmieniać ekran główny Google",
+    "why_lead": "Ekran, z którym przyszedł telewizor, powstał, żeby sprzedawać. Sofaly powstała, żeby korzystała z niej Twoja rodzina.",
+    "why_rows": [
+      [
+        "Reklamy na ekranie głównym",
+        "Tak: sponsorowane polecenia i reklamy",
+        "Nigdy"
+      ],
+      [
+        "Duże litery na każdym ekranie",
+        "Nie",
+        "Normalne, Duże lub Większe"
+      ],
+      [
+        "Budzik, który włącza telewizor",
+        "Nie",
+        "Włącza, powoli podgłaśnia i mówi dzień dobry"
+      ],
+      [
+        "Radio i podcasty na ekranie głównym",
+        "Tylko przez aplikacje",
+        "We własnym świecie, Słuchaj"
+      ],
+      [
+        "Filmy z komputera lub NAS",
+        "Tylko przez aplikacje",
+        "W sieci, z plakatami i wznawianiem"
+      ],
+      [
+        "Sterowanie z każdego telefonu w domu",
+        "Prosty pilot",
+        "Pełny panel chroniony PIN-em"
+      ],
+      [
+        "Profil dziecka i pora snu",
+        "Ograniczony",
+        "Dozwolone aplikacje, limit głośności i PIN do wyjścia"
+      ],
+      [
+        "Kopia ustawień",
+        "Nie",
+        "Co noc, zabezpieczona hasłem"
+      ]
+    ],
+    "why_head": [
+      "",
+      "Ekran Google TV",
+      "Sofaly"
+    ],
+    "why_source": "Reklamy na ekranie głównym Google TV: Android Authority, kwiecień 2026.",
+    "highlights_title": "Dla całego domu",
+    "highlights": [
+      [
+        "access",
+        "Także dla dziadków",
+        "Duże litery, tryb prosty, który mówi nazwę aplikacji, wysoki kontrast i czytnik ekranu. W 15 językach."
+      ],
+      [
+        "alarm",
+        "Budzi się razem z Tobą",
+        "Budzik sam włącza telewizor, powoli podgłaśnia i otwiera Dzień dobry: godzina, pogoda i plan dnia."
+      ],
+      [
+        "house",
+        "Dba o dom",
+        "Światła, sceny i dzwonek z Home Assistant na telewizorze. Zasypia, gdy wszyscy wyjdą."
+      ],
+      [
+        "phone",
+        "Rozmawia z telefonem",
+        "Steruj, pisz i wysyłaj wiadomości z każdego telefonu lub komputera w domu, chronione PIN-em."
+      ],
+      [
+        "sun",
+        "Trafna pogoda",
+        "Aktualna pogoda pochodzi z najbliższego lotniska: zmierzona, nie zgadywana. Prognoza na 9 dni jednym OK."
+      ],
+      [
+        "lock",
+        "Sama o siebie dba",
+        "Zabezpieczona kopia co noc, konserwacja, gdy śpisz, i diagnoza, która wyjaśnia, co poszło nie tak."
+      ]
+    ],
+    "chapters_title": "Wszystko, co potrafi, ułożone jak ona sama",
+    "chapters_lead": "Ponad 80 funkcji. Wybierz świat, by zobaczyć każdą z objaśnieniem.",
+    "privacy_title": "To, co Twoje, zostaje w domu",
+    "privacy_text": "Sofaly nie wymaga konta, nie pokazuje reklam i nie śledzi tego, co oglądasz. Ustawienia, zdjęcia, wiadomości i kopie zostają na telewizorze albo na Twoim koncie, jeśli je połączysz. Telewizor łączy się tylko z usługami, które włączysz, a polityka prywatności wymienia każdą z nich.",
+    "privacy_link": "Przeczytaj politykę prywatności",
+    "dev_title": "Masz aplikację? Umieść ją na ekranie głównym.",
+    "dev_text": "Sofaly ma już gotowe karty (księżyc, kursy, odliczanie, przypomnienie). Wtyczka to Twoja własna aplikacja na Android TV, która wysyła kolejną kartę na ekran główny: zamówienie w drodze, nadjeżdżający autobus, ogłoszenie administracji. Bez SDK, bez opłat, a aplikacja zostaje Twoja.",
+    "dev_link": "Poznaj zestaw dla twórców",
+    "plans_title": "Zacznij za darmo. Rośnij, kiedy chcesz.",
+    "plans_text": "Basic ma już pełny ekran główny, odtwarzacz, Słuchaj, Graj, budzik i wygaszacz. Pro i Ultra dodają telefon, dom i rodzinę.",
+    "plans_link": "Porównaj plany",
+    "faq_title": "Szybkie pytania",
+    "faq": [
+      [
+        "Czy działa na moim telewizorze?",
+        "Działa na Google TV i Android TV, np. Chromecast z Google TV, telewizorach z Google TV i przystawkach Android TV. Strona zgodności wymienia przetestowane urządzenia."
+      ],
+      [
+        "Czy do instalacji potrzebny jest komputer?",
+        "Nie. Zainstaluj z Google Play na samym telewizorze i przejdź kroki pilotem."
+      ],
+      [
+        "Czy moje aplikacje zostaną?",
+        "Wszystkie. Sofaly zastępuje tylko ekran główny: Netflix, YouTube, Prime Video i reszta otwierają się jak zawsze, a przycisk mikrofonu to dalej Asystent Google."
+      ],
+      [
+        "Czy są reklamy?",
+        "Nie, nawet w darmowym planie. Sofaly nie sprzedaje reklam i nie śledzi tego, co oglądasz."
+      ],
+      [
+        "Czy ma kanały albo filmy?",
+        "Nie. Sofaly porządkuje to, co już jest Twoje: Twoje aplikacje, Twoje pliki oraz otwarte radia i podcasty."
+      ],
+      [
+        "A jeśli zechcę wrócić do ekranu Google?",
+        "Wystarczy znowu wybrać ekran Google w ustawieniach telewizora. Nic Twojego nie zostanie usunięte."
+      ]
+    ],
+    "final_title": "Twój telewizor znów prosty.",
+    "final_text": "Zainstaluj, naciśnij HOME i cały dom zrozumie."
+  },
+  "features_page": {
+    "title": "Wszystko, co robi Sofaly",
+    "description": "Każda funkcja Sofaly wyjaśniona: ekran w kształcie krzyża, Oglądaj, Słuchaj, Graj, dom, pogoda, rodzina, telefon i prywatność.",
+    "h1": "Wszystko, co robi Sofaly",
+    "lead": "Ułożone jak ekran telewizora: jeden świat naraz. Etykieta przy funkcji mówi, od którego planu jest dostępna.",
+    "index": "Światy"
+  },
+  "chapters": {
+    "home": [
+      "Krzyż",
+      "Uporządkowany ekran, który każdy rozumie, ułożony tak, jak lubisz."
+    ],
+    "watch": [
+      "Oglądaj",
+      "Twoje filmy, seriale i odtwarzacz godny kina domowego."
+    ],
+    "listen": [
+      "Słuchaj",
+      "Radio i podcasty z tą samą starannością co wideo."
+    ],
+    "play": [
+      "Graj",
+      "Wszystkie Twoje gry w jednym miejscu, gotowe na kontroler."
+    ],
+    "apps": [
+      "Aplikacje",
+      "Twoje aplikacje w sensownej kolejności."
+    ],
+    "house": [
+      "Dom",
+      "Budzik, minutniki, automatyzacje i inteligentny dom."
+    ],
+    "sky": [
+      "Pogoda i wygaszacz",
+      "Trafna pogoda i wygaszacz, który warto zostawić."
+    ],
+    "family": [
+      "Rodzina",
+      "Profil dla każdego, opieka nad dziećmi i ciepłe przyjęcie gości."
+    ],
+    "phone": [
+      "Telefon i komputer",
+      "Telewizor rozmawia z urządzeniami w domu."
+    ],
+    "care": [
+      "Sama o siebie dba",
+      "Kopie, konserwacja i diagnoza bez Twojego pamiętania."
+    ],
+    "everyone": [
+      "Dla wszystkich",
+      "Dla tych, którzy inaczej widzą, słyszą lub korzystają z pilota."
+    ],
+    "privacy": [
+      "Prywatność",
+      "Bez reklam, bez śledzenia i z PIN-em tam, gdzie trzeba."
+    ]
+  },
+  "features": {
+    "cross": [
+      "Krzyż",
+      "Kontynuuj, Oglądaj, Słuchaj, Graj i Aplikacje w jednym rzędzie. Wybrany świat robi się duży, a jego zawartość jest tuż pod nim.",
+      "◀ ▶ zmieniają świat, ▲ ▼ schodzą w kolumnę, OK otwiera."
+    ],
+    "continue": [
+      "Kontynuuj",
+      "Jedno miejsce, by wrócić do tego, co robiłeś: odcinka, stacji, podcastu lub ostatniej aplikacji.",
+      "To pierwszy element krzyża."
+    ],
+    "topbar": [
+      "Górny pasek",
+      "Wyszukiwanie, głos, pogoda w jednej linii i zegar, zawsze w tym samym miejscu. Chowa się podczas przeglądania, żeby ekran oddychał.",
+      "Wejdź do niego przyciskiem ▲."
+    ],
+    "quick-panel": [
+      "Szybki panel",
+      "Wi-Fi, Bluetooth, wyłącznik czasowy, wyjście dźwięku, budzik, profile, powiadomienia i lista zakupów, z każdej aplikacji.",
+      "Przytrzymaj WSTECZ."
+    ],
+    "remote": [
+      "Twój pilot, Twoje zasady",
+      "HOME zawsze wraca do Sofaly. Przytrzymanie WSTECZ otwiera szybki panel, przytrzymanie HOME otwiera Dom, a przytrzymanie OK na aplikacji otwiera jej menu.",
+      "Tester przycisków pokazuje każdy przycisk, który odbiera telewizor."
+    ],
+    "now-playing": [
+      "Teraz gra",
+      "Pigułka u góry z okładką i tytułem tego, co gra. OK pauzuje lub wznawia, przytrzymanie OK otwiera aplikację.",
+      "Włącz w Ekran główny › Więcej opcji."
+    ],
+    "themes": [
+      "Motywy i tła",
+      "Ciemny, z grafiką tego, co zaznaczone. Galeria, z obrazem z Met każdego dnia. Niebo, z satelitą i mapą. Albo własne tło, zdjęcie lub wideo.",
+      "Ciemny, Galeria i Niebo w Basic; pozostałe w Pro."
+    ],
+    "icons": [
+      "Ikony, które lubisz",
+      "Użyj pakietu ikon z Play albo zmień ikonę jednej aplikacji, po kolei.",
+      "Przytrzymaj OK na aplikacji › Zmień ikonę."
+    ],
+    "card-moon": [
+      "Faza księżyca",
+      "Dzisiejszy księżyc i jaka jego część jest oświetlona, liczone na samym telewizorze, bez internetu.",
+      "Karta ekranu głównego, na końcu Oglądaj."
+    ],
+    "card-countdown": [
+      "Odliczanie",
+      "Ile dni zostało do wybranej daty albo do najbliższego święta.",
+      "Karta ekranu głównego, na końcu Oglądaj."
+    ],
+    "card-reminder": [
+      "Domowe przypomnienie",
+      "Notatka, która wraca w wybrane dni tygodnia: dzień segregacji, lek, zajęcia.",
+      "Karta ekranu głównego, na końcu Oglądaj."
+    ],
+    "card-status": [
+      "Stan Twojej usługi",
+      "Telewizor sprawdza wskazany adres i pokazuje, czy działa: domowy serwer, strona sklepu.",
+      "Karta ekranu głównego, na końcu Oglądaj."
+    ],
+    "card-rates": [
+      "Kursy dnia",
+      "Waluty, złoto i bitcoin po kursie dnia, z otwartego źródła.",
+      "Karta ekranu głównego, na końcu Oglądaj."
+    ],
+    "card-match": [
+      "Następny mecz Twojej drużyny",
+      "Kiedy i z kim Twoja drużyna gra następny mecz, na karcie ekranu głównego.",
+      "Karta ekranu głównego, na końcu Oglądaj."
+    ],
+    "plugin-cards": [
+      "Karty z innych aplikacji",
+      "Oprócz kart Sofaly aplikacje partnerów umieszczają swoje na ekranie głównym: dostawę, autobus, ogłoszenie administracji.",
+      "Karty pojawiają się na końcu Oglądaj."
+    ],
+    "network-library": [
+      "W sieci",
+      "Wideo, muzyka i zdjęcia z Plex, Jellyfin, Emby, folderów PC lub NAS (SMB, WebDAV, FTP, SFTP, NFS), OneDrive, Dropbox, Box, Dysku Google, UPnP i pendrive'ów.",
+      "Włączone serwery i pendrive'y pojawiają się same; resztę dodasz w Dodaj."
+    ],
+    "player": [
+      "Odtwarzacz, który odtwarza wszystko",
+      "Dźwięk Dolby (AC3, E-AC3), DTS i TrueHD oraz napisy z Blu-ray, DVD i anime, bez instalowania Kodi czy VLC.",
+      "Naciśnij ▼ podczas filmu, by wybrać dźwięk, napisy i ich rozmiar."
+    ],
+    "resume": [
+      "Wznawia tam, gdzie skończyłeś",
+      "Filmy i odcinki wracają we właściwym miejscu. Następny odcinek startuje po 10 sekundach, a po 3 z rzędu telewizor pyta, czy wciąż oglądasz.",
+      "Działa samo."
+    ],
+    "skip-intro": [
+      "Pomiń czołówkę",
+      "Gdy czołówka serialu jest znana, pojawia się „Pomiń czołówkę · OK”. Możesz też raz ją zaznaczyć, a telewizor zapamięta.",
+      "Włączone fabrycznie."
+    ],
+    "audio-subtitles": [
+      "Ulubiony dźwięk i napisy",
+      "Oryginał z napisami albo dubbing, wybrane raz i zapamiętane dla każdego tytułu. Napisy z internetu, gdy plik ich nie ma.",
+      "TV i filmy › Dźwięk i napisy."
+    ],
+    "easy-viewing": [
+      "Lepiej widać i słychać",
+      "Napisy na czarnym tle lub żółte, „Wyraźniejszy głos”, który wydobywa mowę, i „Równa głośność”, która ucisza głośne filmy i podnosi ciche.",
+      "W menu ▼ odtwarzacza."
+    ],
+    "auto-subtitles": [
+      "Automatyczne napisy",
+      "Gdy nie ma napisów w Twoim języku, telewizor tłumaczy te, które są.",
+      "Wybierz w menu napisów odtwarzacza."
+    ],
+    "movie-pages": [
+      "Pełne strony filmów",
+      "Plakat, ocena, obsada, zwiastun, kategoria wiekowa i kolekcja filmu na pięknej stronie, dużymi literami.",
+      "OK na filmie lub serialu."
+    ],
+    "lists": [
+      "Twoje listy Trakt i Simkl",
+      "Co chcesz obejrzeć i co już obejrzałeś, zsynchronizowane z kontem i innymi urządzeniami.",
+      "Zaloguj się kodem QR w TV i filmy › Usługi."
+    ],
+    "search": [
+      "Jedno wyszukiwanie do wszystkiego",
+      "Znajduje filmy, seriale, stacje i aplikacje naraz i przenosi to samo wyszukiwanie do YouTube, Netflix lub Prime Video.",
+      "W górnym pasku albo głosem."
+    ],
+    "radio": [
+      "Radio z całego świata",
+      "Tysiące otwartych stacji, po nazwie, kraju lub gatunku, z ulubionymi i ostatnio słuchanymi.",
+      "Słuchaj › Radio."
+    ],
+    "podcasts": [
+      "Podcasty",
+      "Subskrybuj po nazwie, słuchaj na telewizorze i wracaj do odcinka tam, gdzie skończyłeś.",
+      "Słuchaj › Podcasty."
+    ],
+    "podcast-search": [
+      "Odkrywaj podcasty",
+      "Przeszukuj cały otwarty katalog podcastów i sprawdzaj, co jest na topie w Twoim kraju.",
+      "Słuchaj › Podcasty › Szukaj."
+    ],
+    "podcast-player": [
+      "Odtwarzacz na pełny ekran",
+      "Duża okładka, rozdziały, prędkość i wyłącznik, który pauzuje na końcu odcinka.",
+      "Słuchaj › Teraz gra › Otwórz odtwarzacz."
+    ],
+    "phone-sound": [
+      "Dźwięk w słuchawkach",
+      "Dźwięk filmu idzie do słuchawek telefonu, zsynchronizowany, żeby oglądać w nocy i nikogo nie budzić.",
+      "Menu ▼ odtwarzacza › Dźwięk w telefonie."
+    ],
+    "games-hub": [
+      "Wszystkie gry w jednym miejscu",
+      "GeForce NOW, Steam Link, Moonlight, PS Remote Play, RetroArch i gry z telewizora opuszczają rząd aplikacji i mieszkają w Graj, w grupach Chmura, Z PC, Retro i Na TV.",
+      "Przytrzymaj OK na grze, by zmienić jej grupę."
+    ],
+    "pc-games": [
+      "Graj na PC piętro wyżej",
+      "Telewizor budzi komputer przez sieć, czeka na odpowiedź i otwiera Moonlight lub Steam Link.",
+      "Zapisz komputer raz w panelu WWW."
+    ],
+    "network-test": [
+      "Test sieci",
+      "Mówi, czy Twój internet uciągnie granie w chmurze, i ostrzega przed otwarciem gry w chmurze na słabej sieci.",
+      "Graj › Testuj sieć."
+    ],
+    "controllers": [
+      "Kontrolery",
+      "Sparuj kontroler bez szukania po menu, widź połączone u góry i, jeśli chcesz, niech podłączony kontroler otwiera Graj.",
+      "Graj › Sparuj kontroler."
+    ],
+    "game-mode": [
+      "Tryb gry",
+      "Gdy gra jest otwarta, wygaszacz, filtr nocny i powiadomienia czekają na koniec rozgrywki.",
+      "Włącza się sam."
+    ],
+    "crew": [
+      "Twoja ekipa z Discorda",
+      "Zobacz, kto z Twojego serwera Discord jest online i w jaką grę gra, i zawołaj ekipę prosto z telewizora.",
+      "Włącz widżet serwera i wklej jego numer."
+    ],
+    "apps-top": [
+      "Ulubione na wierzchu",
+      "Aplikacje pokazują 8 najczęściej otwieranych, a „Wszystkie aplikacje” resztę w siatce.",
+      "Aplikacje, na krzyżu."
+    ],
+    "apps-organize": [
+      "Po Twojemu",
+      "Przenoś, grupuj w stosy lub ukrywaj dowolną aplikację. Fabryczne aplikacje, których nie używasz, schodzą z drogi.",
+      "Przytrzymaj OK na aplikacji."
+    ],
+    "app-buttons": [
+      "Wolne przyciski Netflix i YouTube",
+      "Przyciski aplikacji na pilocie otwierają dowolną aplikację. Naciśnij, by otworzyć, przytrzymaj 3 sekundy, by zmienić.",
+      "Działa z oryginalnym pilotem."
+    ],
+    "alarm": [
+      "Budzik, który włącza telewizor",
+      "O czasie telewizor sam się włącza, głośność rośnie powoli i jest drzemka. Każdy budzik ma nazwę, dni, dźwięk i głośność, nawet aplikację lub ostatnią stację.",
+      "Przytrzymaj WSTECZ › Budzik."
+    ],
+    "timers": [
+      "Minutniki i klepsydra",
+      "Do 3 nazwanych minutników z komunikatem na ekranie i stoper.",
+      "„Hej Google, otwórz Przypomnij za 10 minut”."
+    ],
+    "gentle-off": [
+      "Łagodne wyłączanie",
+      "Wyłącznik czasowy przyciemnia ekran i ścisza dźwięk w ostatnich 5 minutach, żeby nikt nie obudził się przy odcięciu.",
+      "Kafelek minutnika w szybkim panelu."
+    ],
+    "idle-off": [
+      "Wyłącza się, gdy nikt nie ogląda",
+      "Po wybranym czasie bez naciśnięcia przycisku telewizor dużymi literami pyta, czy wciąż oglądasz, a potem zasypia.",
+      "Ekran i zasilanie › Wyłącz przy bezczynności."
+    ],
+    "recipes": [
+      "Gotowe przepisy",
+      "Sen, Telenowela i Mecz ustawiają telewizor za jednym razem (dźwięk, ekran i powiadomienia). Jedno OK włącza, drugie cofa.",
+      "Szybki panel."
+    ],
+    "automations": [
+      "Automatyzacje",
+      "O wybranej porze, po naciśnięciu przycisku albo gdy coś się stanie (film zapauzowany, wszyscy wyszli, będzie padać): telewizor otwiera aplikację, uruchamia scenę lub się wyłącza.",
+      "Dom i automatyzacje › Automatyzacje."
+    ],
+    "home-assistant": [
+      "Home Assistant na telewizorze",
+      "Światła, gniazdka, wentylatory, rolety, klimatyzacja i sceny prosto z kanapy. Rozmawia z Twoim serwerem w Twojej sieci, bez chmury pośrodku.",
+      "Przytrzymaj HOME."
+    ],
+    "doorbell": [
+      "Kto jest pod drzwiami",
+      "Gdy dzwoni dzwonek, zdjęcie z kamery pojawia się nad tym, co oglądasz.",
+      "Z Home Assistant."
+    ],
+    "presence": [
+      "Zasypia, gdy wszyscy wyjdą",
+      "Z routerem UniFi telewizor zauważa, że telefony domowników wyszły, i zasypia.",
+      "Ekran i zasilanie › Więcej opcji."
+    ],
+    "voice": [
+      "Skróty głosowe",
+      "„Hej Google, otwórz Prognoza pogody” czyta prognozę na głos. Filmy, Mój dom, Tablica, minutniki i wyłączanie otwierają się tak samo.",
+      "Użyj przycisku mikrofonu."
+    ],
+    "weather-now": [
+      "Dzisiejsza pogoda, zmierzona",
+      "Temperatura pochodzi z komunikatu najbliższego lotniska, a ikona dnia i nocy podąża za wschodem i zachodem słońca tam, gdzie stoi telewizor.",
+      "U góry ekranu głównego."
+    ],
+    "weather-3": [
+      "Deszcz z trzech modeli",
+      "Szansa na deszcz to mediana trzech modeli pogody (ECMWF, ICON i GFS), która myli się rzadziej niż każdy z nich osobno.",
+      "Pojawia się w prognozie sama."
+    ],
+    "forecast": [
+      "Prognoza na pełnym ekranie",
+      "Najbliższe 24 godziny, wykres opadów, 9 dni, jakość powietrza, słońce i księżyc.",
+      "OK na pogodzie."
+    ],
+    "rain-alert": [
+      "Ostrzeżenie o deszczu",
+      "Komunikat nad aplikacją, gdy zaraz zacznie padać. Czas zdjąć pranie.",
+      "Ekran główny › Pogoda."
+    ],
+    "screensaver": [
+      "Wygaszacz, który warto zostawić",
+      "Powitanie, duży zegar, data, pogoda i karty z powiadomieniami, następnym budzikiem i wiadomościami. W motywie Galeria obraz dnia przesuwa się powoli, żeby nic się nie wypaliło.",
+      "Ekran i zasilanie › Wygaszacz."
+    ],
+    "photos": [
+      "Twoje zdjęcia na wygaszaczu",
+      "Wyślij zdjęcia z telefonu albo wybierz folder sieciowy. Leżą w folderze, który widzi tylko telewizor.",
+      "Kod QR otwiera panel na właściwej stronie."
+    ],
+    "good-morning": [
+      "Dzień dobry",
+      "Gdy wyłączysz budzik: powitanie, godzina, prognoza i plan dnia, a telewizor może przeczytać je na głos.",
+      "„Hej Google, otwórz Dzień dobry”."
+    ],
+    "calendar": [
+      "Kalendarz Google",
+      "Dzisiejsze wydarzenia i urodziny na telewizorze, z jednego konta lub ze wszystkich razem.",
+      "OK na dacie u góry."
+    ],
+    "night-filter": [
+      "Filtr nocny",
+      "Nocą ekran robi się cieplejszy i łagodniejszy dla oczu.",
+      "Ekran i zasilanie › Więcej opcji."
+    ],
+    "recap": [
+      "Podsumowanie tygodnia",
+      "W niedzielę wieczorem karta z czasem przed ekranem według aplikacji, zużytym internetem i przerwami w sieci.",
+      "Ekran i zasilanie › Więcej opcji."
+    ],
+    "profiles": [
+      "Profil dla każdego",
+      "Każde konto Google na telewizorze ma własne ulubione, własne „kontynuuj” i kolejność aplikacji.",
+      "Przytrzymaj WSTECZ › Profile."
+    ],
+    "kid-profile": [
+      "Profil dziecka",
+      "Oznacz profil jako dziecięcy: tryb dziecka i pora snu włączają się same, a wyjście wymaga PIN-u rodziców.",
+      "Szybki panel › Profile."
+    ],
+    "bedtime": [
+      "Pora snu",
+      "W wybranych godzinach otwierają się tylko dozwolone aplikacje, a głośność ma limit.",
+      "Rodzina › Więcej opcji."
+    ],
+    "screen-time": [
+      "Czas przed ekranem",
+      "Dzienny limit telewizji dla tych, których wybierzesz.",
+      "Rodzina › Więcej opcji."
+    ],
+    "guest": [
+      "Tryb gościa",
+      "Ukrywa Twój profil, kalendarz i wybrane aplikacje, gdy masz gości.",
+      "Kafelek Gość w szybkim panelu."
+    ],
+    "guest-wifi": [
+      "Wi-Fi dla gości",
+      "Wpisz hasło raz; goście skanują kod QR na telewizorze i są w sieci.",
+      "Rodzina › Wi-Fi dla gości."
+    ],
+    "family-board": [
+      "Tablica rodzinna",
+      "Lista zakupów, przypięte notatki i dzisiejsze urodziny, w szybkim panelu i na wygaszaczu.",
+      "Edytuj z telefonu; OK odhacza pozycję."
+    ],
+    "family-link": [
+      "Wiadomości z daleka",
+      "Rodzina, która mieszka daleko, wysyła wiadomości i zdjęcia na domowy telewizor, skądkolwiek.",
+      "Zaproszenie przez link."
+    ],
+    "video-message": [
+      "Wiadomości wideo",
+      "Krótkie wideo od rodziny pojawia się na telewizorze z imieniem nadawcy.",
+      "Z panelu na telefonie."
+    ],
+    "web-panel": [
+      "Panel na telefonie i komputerze",
+      "Pilot, pisanie z polskimi znakami, podgląd ekranu na żywo, zdjęcia do wygaszacza, tablica i kopie, z przeglądarki każdego urządzenia w domu.",
+      "Dostęp zdalny › Zaloguj się z telefonu (QR)."
+    ],
+    "ask-tv": [
+      "Poproś telewizor",
+      "Napisz lub powiedz „otwórz YouTube”, „przypomnij za 7 minut”, „wyłącz za 30 minut”, a telewizor to zrobi.",
+      "W panelu na telefonie."
+    ],
+    "share": [
+      "Udostępniaj z telefonu",
+      "Zainstalowany jak aplikacja, panel pojawia się w Udostępnij: film z YouTube i link otwierają się na telewizorze, a tekst staje się wiadomością.",
+      "Udostępnij › Sofaly."
+    ],
+    "network-drive": [
+      "Telewizor jako dysk sieciowy",
+      "Kopiuj pliki na telewizor przeciąganiem: w Windows pojawia się w Ten komputer jak telefon; na Macu, Linuksie i telefonach przez bezpieczny WebDAV.",
+      "Dostęp zdalny › Pokaż jako dysk sieciowy."
+    ],
+    "windows": [
+      "Skrót w Windows",
+      "Telewizor pojawia się w Sieci Eksploratora ze skrótem, który otwiera panel, nawet gdy zmieni się jego IP.",
+      "Działa, gdy panel jest włączony."
+    ],
+    "continue-tv": [
+      "Kontynuuj na innym telewizorze",
+      "Przerwałeś w salonie? Wyślij do sypialni: drugi telewizor pokaże „Kontynuować tam, gdzie skończyłeś?” i otworzy w tym samym miejscu.",
+      "Menu odtwarzacza › Wyślij na inny telewizor."
+    ],
+    "together": [
+      "Oglądajcie razem",
+      "Dwa domy oglądają to samo w tym samym czasie: pauza tutaj, pauza tam, z reakcjami w rogu.",
+      "Zaproszenie między rodzinnymi telewizorami."
+    ],
+    "homes": [
+      "Kilka domów",
+      "Dbaj o telewizor u siebie i u rodziców z tego samego telefonu.",
+      "Z aplikacji na telefonie."
+    ],
+    "backup": [
+      "Zabezpieczona kopia co noc",
+      "Gdy telewizor stoi bezczynnie, pełna kopia zabezpieczona Twoim hasłem. Zostaje 7 ostatnich, a co noc telewizor sprawdza, czy dałoby się ją przywrócić.",
+      "System › Automatyczna kopia."
+    ],
+    "cloud-backup": [
+      "Kopia w chmurze",
+      "Kopie trafiają też na Dysk Google, OneDrive, Dropbox, Box, NAS lub pendrive. Zabezpieczone: nawet chmura ich nie odczyta.",
+      "System › Automatyczna kopia."
+    ],
+    "maintenance": [
+      "Nocna konserwacja",
+      "Sprząta resztki, naprawia uprawnienia i przeplanowuje budziki, gdy śpisz.",
+      "Działa sama."
+    ],
+    "diagnose": [
+      "Diagnoza telewizora",
+      "Internet, DNS i dlaczego aplikacja się zatrzymała, wszystko naraz i zdaniami, które da się zrozumieć.",
+      "„Hej Google, otwórz Diagnoza telewizora”."
+    ],
+    "scoreboard": [
+      "Jak się ma ten telewizor",
+      "Telewizor sam mierzy swoje liczby (czas otwierania, awarie, budziki na czas) i pokazuje je na jednym ekranie. Nic nie wychodzi z domu.",
+      "System › Jak się ma ten telewizor."
+    ],
+    "safe-mode": [
+      "Tryb bezpieczny",
+      "Jeśli nowa wersja źle działa zaraz po instalacji, telewizor przechodzi w tryb bezpieczny i pokazuje wyjście.",
+      "Pojawia się tylko w razie potrzeby."
+    ],
+    "whats-new": [
+      "Co się zmieniło",
+      "Każda wersja wyjaśnia, co się zmieniło, i daje krótką listę do sprawdzenia pilotem.",
+      "System › Co się zmieniło."
+    ],
+    "report": [
+      "Zgłoś problem",
+      "Opowiedz, co się stało, pilotem lub z telefonu; telewizor zbierze, co trzeba, nic osobistego.",
+      "System › Zgłoś problem."
+    ],
+    "languages": [
+      "15 języków",
+      "Portugalski, angielski, hiszpański, francuski, niemiecki, włoski, rosyjski, polski, turecki, japoński, chiński, koreański, hindi, indonezyjski i arabski, z ekranami od prawej do lewej. Podąża za językiem telewizora.",
+      "Zmienia się razem z telewizorem."
+    ],
+    "text-size": [
+      "Rozmiar tekstu",
+      "Normalny, Duży lub Większy, na każdym ekranie, sprawdzone, żeby tekst nigdy się nie uciął ani nie nachodził.",
+      "Ekran główny › Rozmiar tekstu."
+    ],
+    "simple-mode": [
+      "Tryb prosty",
+      "Duże karty, mniej rzeczy na ekranie i nazwa aplikacji wypowiadana na głos. Dla tych, którym pilot sprawia trudność.",
+      "Ekran główny › Więcej opcji."
+    ],
+    "read-aloud": [
+      "Czytanie na głos",
+      "Telewizor mówi, co jest zaznaczone, z dźwiękami nawigacji, żebyś wiedział, gdzie jesteś.",
+      "Ekran główny › Więcej opcji."
+    ],
+    "contrast": [
+      "Wysoki kontrast",
+      "Tekst z kontrastem 7:1 i każdy ekran czytelny dla czytnika ekranu Androida.",
+      "Podąża za ustawieniami ułatwień dostępu telewizora."
+    ],
+    "no-ads": [
+      "Zero reklam",
+      "Nawet w darmowym planie, ani jednego sponsorowanego polecenia. Ekran jest Twój.",
+      "Zawsze."
+    ],
+    "no-tracking": [
+      "Bez śledzenia",
+      "Bez konta, bez analityki i bez raportów o błędach wysyłanych bez Twojej zgody.",
+      "Zawsze."
+    ],
+    "pin": [
+      "PIN tam, gdzie trzeba",
+      "Wszystko, co zmienia telewizor, wymaga PIN-u, a działania, które coś usuwają, pytają ponownie. Za dużo pomyłek? Czas oczekiwania rośnie za każdym razem.",
+      "Dostęp zdalny › PIN."
+    ],
+    "private-dns": [
+      "Prywatny DNS",
+      "Wybierz bezpieczny DNS (DNS over TLS); jeśli nie odpowiada, telewizor sam wraca do poprzedniego.",
+      "Zaawansowane › Sieć."
+    ],
+    "usage": [
+      "Internet według aplikacji",
+      "Ile internetu zużyła każda aplikacja i z kim rozmawiała, przechowywane na telewizorze przez 7 dni.",
+      "Zaawansowane › Sieć."
+    ]
+  },
+  "plans_page": {
+    "title": "Plany · Sofaly",
+    "description": "Basic, Pro i Ultra: co zawiera każdy plan Sofaly.",
+    "h1": "Plany",
+    "lead": "Zacznij od Basic, który już jest pełnym ekranem głównym. Sprzedaż jeszcze nie ruszyła: na razie wszystko jest za darmo.",
+    "price_soon": "Cena na starcie",
+    "basic_who": "Dla tych na kanapie",
+    "pro_who": "Dla tego, kto dba o telewizor",
+    "ultra_who": "Dla domu i rodziny",
+    "basic_text": "Ekran w kształcie krzyża, odtwarzacz, Słuchaj, Graj, budzik, wygaszacz i wszystkie ułatwienia dostępu.",
+    "pro_text": "Wszystko z Basic oraz telefon, automatyzacje, inteligentny dom, wiadomości z daleka, gotowe karty ekranu głównego i pełna personalizacja.",
+    "ultra_text": "Wszystko z Pro oraz pogoda z trzech modeli, pełne strony filmów, automatyczne napisy, kilka domów i wspólne oglądanie.",
+    "includes": "Zawiera",
+    "everything_basic": "Wszystko z Basic",
+    "everything_pro": "Wszystko z Pro"
+  },
+  "dev_page": {
+    "title": "Dla twórców · Sofaly",
+    "description": "Umieść kartę swojej aplikacji Android TV na ekranie głównym Sofaly. Bez SDK, bez opłat.",
+    "eyebrow": "Zestaw dla twórców",
+    "h1": "Twoja aplikacja na ekranie, na który ludzie naprawdę patrzą.",
+    "lead": "Wtyczka Sofaly to Twoja własna aplikacja na Android TV. Wysyła krótką kartę, a Sofaly rysuje ją na ekranie głównym, dużymi literami i w stylu domu.",
+    "cta_start": "Zacznij od szablonu",
+    "cta_spec": "Przeczytaj pełny kontrakt",
+    "why_title": "Dlaczego zrobić wtyczkę",
+    "why": [
+      [
+        "star",
+        "Na widoku, nie w szufladzie",
+        "Twoja karta jest na ekranie głównym, na który rodzina patrzy przy każdym włączeniu telewizora, a nie zgubiona na liście aplikacji."
+      ],
+      [
+        "puzzle",
+        "Bez SDK, bez opłat",
+        "Jeden ContentProvider i jeden wiersz danych. Żadnej naszej biblioteki do instalowania, żadnych opłat."
+      ],
+      [
+        "heart",
+        "Twoja aplikacja, Twój biznes",
+        "Publikuj w Play, jak chcesz, za darmo lub płatnie. Sofaly tylko rysuje kartę; aplikacja i klienci są Twoi."
+      ]
+    ],
+    "can_title": "Co możesz zbudować oprócz naszych",
+    "can": [
+      [
+        "Twoja dostawa",
+        "Zamówienie w drodze, za 12 min."
+      ],
+      [
+        "Twój autobus",
+        "Linia 42 za 6 min."
+      ],
+      [
+        "Twoja siłownia",
+        "Zajęcia dziś o 19:00."
+      ],
+      [
+        "Twój blok",
+        "Jutro brak wody od 9 do 12."
+      ],
+      [
+        "Twój sklep",
+        "Oferta dnia: −20% na kawę."
+      ],
+      [
+        "Twój klub",
+        "Trening przeniesiony na sobotę."
+      ]
+    ],
+    "steps_title": "Dwa kroki",
+    "step1": "Zadeklaruj provider z akcją Sofaly",
+    "step2": "Odpowiedz jednym wierszem: tytuł, wartość, szczegół i kolor",
+    "rules_title": "Zasady, które chronią widza",
+    "rules": [
+      "Nigdy nie rysujesz na ekranie głównym: wysyłasz tekst i kolor, rysuje Sofaly.",
+      "Sofaly nigdy nie wysyła Ci niczego o aplikacjach, kontach ani o tym, co ogląda dana osoba.",
+      "Wtyczki są częścią planu Pro, a osoba sama wybiera, które się pokazują."
+    ],
+    "soon_title": "Wkrótce",
+    "soon_text": "Wtyczki tła i witryna wtyczek prosto na telewizorze.",
+    "template_title": "Gotowy szablon",
+    "template_text": "Dwie przykładowe aplikacje do zbudowania dziś: odliczanie do daty, którą osoba wybiera na telewizorze, i dzisiejsza faza księżyca. Bez internetu, bez konta. Licencja MIT No Attribution: skopiuj, zmień pakiet i publikuj.",
+    "demo": [
+      [
+        "Dostawa",
+        "12 min"
+      ],
+      [
+        "Autobus 42",
+        "6 min"
+      ],
+      [
+        "Siłownia",
+        "19:00"
+      ]
+    ]
+  }
+}
