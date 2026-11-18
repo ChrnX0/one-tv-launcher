@@ -366,7 +366,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         iv.sub.removeCallbacks(iv.voltarSub)
         iv.voltarSub = Runnable {
             iv.sub.setTextColor(COR_SUB)
-            iv.sub.text = antes
+            iv.sub.text = cortarLinhas(antes, iv.sub)
             iv.sub.visibility = if (antes.isEmpty()) View.GONE else View.VISIBLE
         }
         iv.sub.postDelayed(iv.voltarSub, NAO_ABRIU_MS)
@@ -404,6 +404,9 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             c.drawPath(caminho, tinta)
         }
     }
+
+    /** Para o teste de tela: o texto de baixo do item em foco, como está desenhado. */
+    internal fun subAtual(): TextView? = viewAtual()?.sub
 
     private fun viewAtual(): ItemView? = viewsItem.getOrNull(estado.cat)?.getOrNull(estado.sel.getOrElse(estado.cat) { 0 })
 
@@ -500,10 +503,33 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         }
     }
 
+    /**
+     * No máximo [SUB_LINHAS] linhas na tela (Sala, 18/11/2026: o título comprido do último vídeo do YouTube ocupava 3
+     * linhas e empurrava as outras para fora). Uma informação comprida pode quebrar em 2 linhas enquanto couber tudo;
+     * se passar do limite, a mais comprida vira uma linha só, terminada em "…", até caber. Mede com o mesmo pincel e a
+     * mesma largura do TextView, então a conta é a mesma que ele faz ao desenhar.
+     */
+    internal fun cortarLinhas(texto: String, tv: TextView): String {
+        if (texto.isEmpty()) return texto
+        val largura = dpi(TEXTO_MAX)
+        val partes = texto.split('\n').toMutableList()
+        val conta = partes.map { linhasDe(it, tv, largura) }.toMutableList()
+        while (conta.sum() > SUB_LINHAS) {
+            val i = conta.indices.filter { conta[it] > 1 }.maxByOrNull { conta[it] } ?: break
+            partes[i] = TextUtils.ellipsize(partes[i], tv.paint, largura.toFloat(), TextUtils.TruncateAt.END).toString()
+            conta[i] = 1
+        }
+        return partes.joinToString("\n")
+    }
+
+    private fun linhasDe(s: String, tv: TextView, largura: Int): Int =
+        if (s.isEmpty()) 1 else android.text.StaticLayout.Builder.obtain(s, 0, s.length, tv.paint, largura).setIncludePad(false).build().lineCount
+
     private fun preencher(v: ItemView, item: Item) {
         if (v.icone.drawable !== item.icone) v.icone.setImageDrawable(item.icone)
         if (v.nome.text.toString() != item.nome) v.nome.text = item.nome
-        if (v.sub.text.toString() != item.sub) v.sub.text = item.sub
+        val sub = cortarLinhas(item.sub, v.sub)
+        if (v.sub.text.toString() != sub) v.sub.text = sub
         v.sub.visibility = if (item.sub.isEmpty()) View.GONE else View.VISIBLE
         val p = item.progresso
         if (p == null) { if (v.icone.foreground != null) v.icone.foreground = null }

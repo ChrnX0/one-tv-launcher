@@ -2969,7 +2969,11 @@ class MainActivity : Activity() {
     private fun quando(ms: Long?): String? {
         val agora = System.currentTimeMillis()
         if (ms == null || ms <= 0L || ms > agora + 60_000) return null
-        return android.text.format.DateUtils.getRelativeTimeSpanString(ms, agora, android.text.format.DateUtils.MINUTE_IN_MILLIS).toString()
+        // Menos de 1 min: "agora" (o Android diria "Há 0 minuto"). Senão "há 5 min", abreviado e com minúscula,
+        // porque entra no meio da frase ("Aberto há 5 min").
+        if (agora - ms < 60_000) return getString(R.string.pg_agora)
+        return android.text.format.DateUtils.getRelativeTimeSpanString(ms, agora, android.text.format.DateUtils.MINUTE_IN_MILLIS,
+            android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE).toString().replaceFirstChar { it.lowercase(Locale.getDefault()) }
     }
 
     /** Ano · duração (filme) · nota, numa linha. */

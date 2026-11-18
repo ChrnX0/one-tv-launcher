@@ -21,6 +21,7 @@
         <item>A barra de cima volta a recolher enquanto você navega (a barra de vidro continua como opção nas Configurações)</item>
         <item>Ao sair de um app, a tela inicial volta no item que o abriu, e não na TV</item>
         <item>Todos os itens da tela inicial mostram as informações úteis, uma por linha: episódio e quanto falta, ano, nota e duração do filme, o que você viu por último em cada app e quando, a última rádio, os controles e a turma do Discord</item>
+        <item>Uma informação comprida, como o título do último vídeo, termina em “…” e não empurra mais as outras para fora; “Aberto há 0 minuto” virou “Aberto agora”</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Cena atrás da ficha</item>
