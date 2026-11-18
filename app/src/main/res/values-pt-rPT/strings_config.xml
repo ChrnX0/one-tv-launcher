@@ -235,6 +235,7 @@
     <string name="cl_vd_ja_dono">o launcher já é o dono do aparelho</string>
     <string name="cl_vd_sem_shell">o shell próprio não respondeu (pareie em Definições &gt; Shell do launcher)</string>
     <string name="cl_vd_usuario">o Android não deixou remover o utilizador %1$s</string>
+    <string name="cl_vd_mudou">Os utilizadores da TV mudaram depois da confirmação (agora: %1$s). Nada foi removido; comece de novo.</string>
     <string name="cl_vd_google">o Android não deixou desativar o Google por um instante</string>
     <string name="cl_vd_recusou">o Android recusou: %1$s</string>
     <string name="cl_vd_sem_resposta">sem resposta</string>

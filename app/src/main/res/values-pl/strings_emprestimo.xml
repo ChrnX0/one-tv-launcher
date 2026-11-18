@@ -16,11 +16,11 @@
     <string name="emp_pin_titulo">PIN panelu, aby zezwolić</string>
     <string name="emp_sem_pin">Najpierw ustaw PIN panelu (Ustawienia, Panel WWW).</string>
     <string name="emd_titulo">Pożycz kontrolę właściciela innym aplikacjom (Dhizuku)</string>
-    <string name="emd_titulo_det">Aplikacje stworzone dla Dhizuku używają kontroli właściciela launchera. Każda aplikacja pyta na telewizorze, z PIN-em. Żadna nie może odebrać launcherowi roli właściciela ani wyczyścić telewizora.</string>
+    <string name="emd_titulo_det">Aplikacje stworzone dla Dhizuku używają kontroli właściciela launchera. Każda aplikacja pyta na telewizorze, z PIN-em. Z „Zezwól” żadna nie może odebrać launcherowi roli właściciela ani wyczyścić telewizora; z „Pełną mocą” może.</string>
     <string name="emd_ligado">Włączone</string>
     <string name="emd_sem_dono">Launcher nie jest właścicielem (Device Owner) tego telewizora, więc nie ma czego pożyczać.</string>
     <string name="emd_pedido_titulo">Zezwolić %1$s na używanie kontroli właściciela launchera?</string>
-    <string name="emd_pedido_texto">Z „Zezwól” aplikacja może ukrywać i blokować aplikacje oraz zmieniać uprawnienia i reguły telewizora, ale nigdy nie odbierze launcherowi roli właściciela ani nie wyczyści telewizora. „Pełna moc” pozwala aplikacji działać jako launcher i czytać jego dane: tylko dla aplikacji, którym w pełni ufasz. Możesz to cofnąć w panelu WWW.</string>
+    <string name="emd_pedido_texto">Z „Zezwól” aplikacja może ukrywać i blokować aplikacje oraz zmieniać uprawnienia i reguły telewizora, ale nigdy nie odbierze launcherowi roli właściciela ani nie wyczyści telewizora. „Pełna moc” pozwala aplikacji działać jako launcher i czytać jego dane: tylko dla aplikacji, którym w pełni ufasz. Możesz to cofnąć w panelu WWW. Z „Pełną mocą” aplikacja może wszystko, co launcher, nawet wyczyścić telewizor.</string>
     <string name="emd_total">Pełna moc</string>
-    <string name="emd_pin_total">PEŁNA MOC: aplikacja odczyta dane launchera. PIN panelu</string>
+    <string name="emd_pin_total">PEŁNA MOC: aplikacja może wszystko, co launcher, nawet wyczyścić telewizor. PIN panelu</string>
 </resources>

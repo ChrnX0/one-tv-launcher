@@ -95,4 +95,12 @@ class RegrasDonoTest {
         assertFalse(Regex("<permission[^>]+com\\.rosan\\.dhizuku").containsMatchIn(m))
         assertTrue(m.contains("dhizuku_server.provider"))
     }
+
+    @Test fun pacotesDeQueATvDependeFicamDeFora() {
+        val dpm = RegrasDono.DPM; val nosso = "br.paulo.tvlauncher"
+        val prot = setOf("com.google.android.apps.tv.launcherx", "com.google.android.gms")
+        assertEquals(Veredito.BLOQUEIA, RegrasDono.transacao(dpm, "setApplicationHidden", listOf("com.google.android.apps.tv.launcherx"), nosso, false, protegidos = prot))
+        assertEquals(Veredito.BLOQUEIA, RegrasDono.transacao(dpm, "clearApplicationUserData", listOf("com.google.android.gms"), nosso, false, protegidos = prot))
+        assertEquals(Veredito.PASSA, RegrasDono.transacao(dpm, "setApplicationHidden", listOf("com.exemplo.jogo"), nosso, false, protegidos = prot))
+    }
 }

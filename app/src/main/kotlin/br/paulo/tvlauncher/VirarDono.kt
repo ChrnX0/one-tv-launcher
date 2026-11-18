@@ -59,7 +59,7 @@ object VirarDono {
                     .setPositiveButton(R.string.dono_ok) { _, _ ->
                         aviso(act.getString(R.string.dono_andando))
                         Fundo.rodar {
-                            val r = executar(app)
+                            val r = executar(app, extras)
                             act.runOnUiThread { if (!act.isDestroyed) { aviso(r.texto); depois(r) } }
                         }
                     }.show()
@@ -69,17 +69,33 @@ object VirarDono {
 
     private fun prefs(ctx: Context) = ctx.getSharedPreferences("launcher", Context.MODE_PRIVATE)
 
+    /**
+     * Tentativa em andamento NESTE processo. A marca gravada não distingue "morreu no meio" de "está rodando agora":
+     * sem isto a autocura (que roda em paralelo) reativava o Google durante os 3 s de espera e o set-device-owner falhava.
+     */
+    @Volatile private var andando = false
+
     /** Chamado pela autocura: se uma tentativa morreu no meio e deixou o Google desativado, reativa. */
     fun recuperar(ctx: Context) {
-        if (!prefs(ctx).getBoolean(MARCA, false)) return
+        if (andando || !prefs(ctx).getBoolean(MARCA, false)) return
         if (Congelar.definir(ctx, GOOGLE, false)) prefs(ctx).edit().putBoolean(MARCA, false).apply()
     }
 
-    /** A sequência inteira. BLOQUEIA (até ~1 min): nunca na thread da tela. */
-    fun executar(ctx: Context): Resultado {
+    /**
+     * A sequência inteira. BLOQUEIA (até ~1 min): nunca na thread da tela. [confirmados] = os usuários extras que a tela
+     * mostrou e a pessoa aceitou apagar: se a lista mudou nesse meio-tempo (alguém criou um perfil), para sem apagar nada.
+     */
+    @Synchronized fun executar(ctx: Context, confirmados: List<Int>? = null): Resultado {
+        andando = true
+        try { return executarJa(ctx, confirmados) } finally { andando = false }
+    }
+
+    private fun executarJa(ctx: Context, confirmados: List<Int>?): Resultado {
         val app = ctx.applicationContext
         if (PrivilegioDO.somosDonos(app)) return Resultado(true, app.getString(R.string.cl_vd_ja_dono))
         val extras = usuariosAgora(app) ?: return Resultado(false, app.getString(R.string.cl_vd_sem_shell))
+        if (confirmados != null && extras.toSet() != confirmados.toSet())
+            return Resultado(false, app.getString(R.string.cl_vd_mudou, extras.joinToString().ifEmpty { "-" }))
 
         // 1) Usuários extras saem (a tela já mostrou quais e a pessoa confirmou).
         for (u in extras) Log.i(TAG, "pm remove-user $u => ${GuardiaoShizuku.comando(app, "pm remove-user $u")?.trim()}")

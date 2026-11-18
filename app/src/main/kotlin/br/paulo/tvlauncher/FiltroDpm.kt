@@ -66,7 +66,7 @@ object FiltroDpm {
         val ler = metodo != null && !poderTotal && (RegrasDono.mexeEmPacote(metodo) || RegrasDono.mexeEmAjuste(metodo))
         val args = if (ler) carregar()?.metodos?.get(metodo)?.let { ler(it, dados) } else null
         return RegrasDono.transacao(descritor, metodo, args?.let { RegrasDono.alvos(it) }, nosso, poderTotal,
-            args?.let { RegrasDono.textos(it) }) to metodo
+            args?.let { RegrasDono.textos(it) }, MenuApp.PROTEGIDOS_FIXOS) to metodo
     }
 
     /** Argumentos de [m] lidos de uma cópia de [dados]; null se algum tipo não for conhecido. */

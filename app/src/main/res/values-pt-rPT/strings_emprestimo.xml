@@ -16,11 +16,11 @@
     <string name="emp_pin_titulo">PIN do painel para permitir</string>
     <string name="emp_sem_pin">Defina o PIN do painel primeiro (Definições, Painel web).</string>
     <string name="emd_titulo">Emprestar o comando de dono a outros apps (Dhizuku)</string>
-    <string name="emd_titulo_det">Apps feitos para o Dhizuku usam o comando de dono do launcher. Cada app pede na TV, com o PIN. Nenhum consegue tirar o dono do launcher nem apagar a TV.</string>
+    <string name="emd_titulo_det">Apps feitos para o Dhizuku usam o comando de dono do launcher. Cada app pede na TV, com o PIN. Com “Permitir”, nenhum consegue tirar o dono do launcher nem apagar a TV; com “Poder total”, consegue.</string>
     <string name="emd_ligado">Ligado</string>
     <string name="emd_sem_dono">O launcher não é o dono (Device Owner) desta TV, então não há o que emprestar.</string>
     <string name="emd_pedido_titulo">Permitir que %1$s use o comando de dono do launcher?</string>
-    <string name="emd_pedido_texto">Com “Permitir”, o app pode esconder e bloquear apps e mudar permissões e regras da TV, mas nunca tirar o dono do launcher nem apagar a TV. “Poder total” deixa o app rodar como o launcher e ler os dados dele: só para apps em que confia muito. Dá para revogar no painel web.</string>
+    <string name="emd_pedido_texto">Com “Permitir”, o app pode esconder e bloquear apps e mudar permissões e regras da TV, mas nunca tirar o dono do launcher nem apagar a TV. “Poder total” deixa o app rodar como o launcher e ler os dados dele: só para apps em que confia muito. Dá para revogar no painel web. Com “Poder total” o app pode fazer tudo o que o launcher faz, até apagar a TV.</string>
     <string name="emd_total">Poder total</string>
-    <string name="emd_pin_total">PODER TOTAL: o app vai ler os dados do launcher. PIN do painel</string>
+    <string name="emd_pin_total">PODER TOTAL: o app pode fazer tudo o que o launcher faz, até apagar a TV. PIN do painel</string>
 </resources>

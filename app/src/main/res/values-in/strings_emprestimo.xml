@@ -16,11 +16,11 @@
     <string name="emp_pin_titulo">PIN panel untuk mengizinkan</string>
     <string name="emp_sem_pin">Atur dulu PIN panel (Setelan, Panel web).</string>
     <string name="emd_titulo">Pinjamkan kendali pemilik ke aplikasi lain (Dhizuku)</string>
-    <string name="emd_titulo_det">Aplikasi yang dibuat untuk Dhizuku memakai kendali pemilik launcher. Setiap aplikasi meminta di TV, dengan PIN. Tidak ada yang bisa mencopot launcher sebagai pemilik atau menghapus TV.</string>
+    <string name="emd_titulo_det">Aplikasi yang dibuat untuk Dhizuku memakai kendali pemilik launcher. Setiap aplikasi meminta di TV, dengan PIN. Dengan “Izinkan”, tidak ada yang bisa mencopot launcher sebagai pemilik atau menghapus TV; dengan “Kuasa penuh”, bisa.</string>
     <string name="emd_ligado">Aktif</string>
     <string name="emd_sem_dono">Launcher bukan pemilik (Device Owner) TV ini, jadi tidak ada yang bisa dipinjamkan.</string>
     <string name="emd_pedido_titulo">Izinkan %1$s memakai kendali pemilik launcher?</string>
-    <string name="emd_pedido_texto">Dengan “Izinkan”, aplikasi bisa menyembunyikan dan memblokir aplikasi serta mengubah izin dan aturan TV, tetapi tidak pernah mencopot launcher sebagai pemilik atau menghapus TV. “Kuasa penuh” membuat aplikasi berjalan sebagai launcher dan membaca datanya: hanya untuk aplikasi yang sepenuhnya Anda percaya. Anda bisa mencabutnya di panel web.</string>
+    <string name="emd_pedido_texto">Dengan “Izinkan”, aplikasi bisa menyembunyikan dan memblokir aplikasi serta mengubah izin dan aturan TV, tetapi tidak pernah mencopot launcher sebagai pemilik atau menghapus TV. “Kuasa penuh” membuat aplikasi berjalan sebagai launcher dan membaca datanya: hanya untuk aplikasi yang sepenuhnya Anda percaya. Anda bisa mencabutnya di panel web. Dengan “Kuasa penuh” aplikasi bisa melakukan apa pun yang bisa dilakukan launcher, bahkan menghapus TV.</string>
     <string name="emd_total">Kuasa penuh</string>
-    <string name="emd_pin_total">KUASA PENUH: aplikasi akan membaca data launcher. PIN panel</string>
+    <string name="emd_pin_total">KUASA PENUH: aplikasi bisa melakukan apa pun yang bisa dilakukan launcher, bahkan menghapus TV. PIN panel</string>
 </resources>

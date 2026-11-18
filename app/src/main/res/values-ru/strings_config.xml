@@ -235,6 +235,7 @@
     <string name="cl_vd_ja_dono">лаунчер уже владелец устройства</string>
     <string name="cl_vd_sem_shell">встроенная оболочка не ответила (выполните сопряжение в Настройки &gt; Оболочка лаунчера)</string>
     <string name="cl_vd_usuario">Android не позволил удалить пользователя %1$s</string>
+    <string name="cl_vd_mudou">Пользователи телевизора изменились после подтверждения (сейчас: %1$s). Ничего не удалено; начните заново.</string>
     <string name="cl_vd_google">Android не позволил ненадолго приостановить Google</string>
     <string name="cl_vd_recusou">Android отказал: %1$s</string>
     <string name="cl_vd_sem_resposta">нет ответа</string>

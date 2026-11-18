@@ -235,6 +235,7 @@
     <string name="cl_vd_ja_dono">런처가 이미 기기 소유자입니다</string>
     <string name="cl_vd_sem_shell">내장 셸이 응답하지 않음(설정 &gt; 런처 셸에서 페어링하세요)</string>
     <string name="cl_vd_usuario">Android가 사용자 %1$s 삭제를 허용하지 않음</string>
+    <string name="cl_vd_mudou">확인 후 TV 사용자가 바뀌었습니다(현재: %1$s). 아무것도 삭제하지 않았습니다. 처음부터 다시 시작하세요.</string>
     <string name="cl_vd_google">Android가 Google 일시 중지를 허용하지 않음</string>
     <string name="cl_vd_recusou">Android가 거부함: %1$s</string>
     <string name="cl_vd_sem_resposta">응답 없음</string>
