@@ -165,6 +165,10 @@ class PodcastsActivity : Activity() {
         val v = OuvirServico.velocidade(this)
         val sil = OuvirServico.pularSilencio(this)
         return CruzOuvir.Prateleira("tocando", getString(R.string.ouv_prat_tocando), IconeOuvir.Tipo.TOCANDO, listOf(
+            // O player em tela cheia (capa grande, barra de tempo, timer para dormir, "A seguir").
+            CruzOuvir.Item("abrir", getString(R.string.pl_abrir), CruzLogica.linhas(e.ep.titulo, getString(R.string.pl_abrir_det)),
+                capa = capaDe(e.feed, e.ep).ifEmpty { e.capaPodcast }, cor = IconeOuvir.cor(IconeOuvir.Tipo.PODCAST),
+                monograma = CapaOuvir.iniciais(e.podcast), cobrir = true, abrir = { PodcastPlayerActivity.abrir(this, OuvirServico.instancia?.episodio) }),
             CruzOuvir.Item("pausar", getString(if (s.pausado) R.string.ouv_continuar else R.string.ouv_pausar),
                 CruzLogica.linhas(e.ep.titulo, e.podcast), if (s.pausado) IconeOuvir.Tipo.CONTINUAR else IconeOuvir.Tipo.PAUSAR,
                 abrir = { OuvirServico.instancia?.alternar() }),
@@ -360,11 +364,17 @@ class PodcastsActivity : Activity() {
             return
         }
         val atual = OuvirServico.instancia?.episodio
-        if (!doComeco && atual != null && atual.feed == feed && atual.ep.guid == ep.guid) { OuvirServico.instancia?.alternar(); return }
+        if (!doComeco && atual != null && atual.feed == feed && atual.ep.guid == ep.guid) {
+            // O que já toca: abre o player (e continua, se estava pausado), como nos apps de podcast.
+            if (OuvirServico.instancia?.pausado == true) OuvirServico.instancia?.continuar()
+            PodcastPlayerActivity.abrir(this, atual); return
+        }
         // De onde parou: o serviço lê a posição gravada (a desta tela pode estar velha).
         val inicio = if (doComeco) 0L else OuvirServico.RETOMAR
         val capa = assinaturas.firstOrNull { it.url == feed }?.capa.orEmpty()
-        OuvirServico.tocarEpisodio(this, OuvirServico.EpisodioTocando(feed, nome, capa, ep), inicio)
+        val e = OuvirServico.EpisodioTocando(feed, nome, capa, ep)
+        OuvirServico.tocarEpisodio(this, e, inicio)
+        PodcastPlayerActivity.abrir(this, e)
     }
 
     private fun menuEpisodio(feed: String, ep: PodcastFeed.Episodio) {

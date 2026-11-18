@@ -176,6 +176,8 @@ class OuvirTelaTest {
             a.getString(R.string.grv_dica_segurar) to a.getString(R.string.pod_dica_mais), "⏪ ⏩" to a.getString(R.string.ouv_dica_pular))
         cruz.definir(listOf(
             CruzOuvir.Prateleira("tocando", a.getString(R.string.ouv_prat_tocando), IconeOuvir.Tipo.TOCANDO, listOf(
+                CruzOuvir.Item("abrir", a.getString(R.string.pl_abrir), CruzLogica.linhas("Os vulcões do Pacífico", a.getString(R.string.pl_abrir_det)),
+                    cor = azul, monograma = CapaOuvir.iniciais("Café com Ciência"), cobrir = true),
                 CruzOuvir.Item("pausar", a.getString(R.string.ouv_pausar), CruzLogica.linhas("Os vulcões do Pacífico", "Café com Ciência"), IconeOuvir.Tipo.PAUSAR),
                 CruzOuvir.Item("voltar", a.getString(R.string.ouv_voltar), a.getString(R.string.ouv_voltar_det), IconeOuvir.Tipo.VOLTAR),
                 CruzOuvir.Item("avancar", a.getString(R.string.ouv_avancar), a.getString(R.string.ouv_avancar_det), IconeOuvir.Tipo.AVANCAR),
@@ -202,6 +204,9 @@ class OuvirTelaTest {
         val problemas = mutableListOf<String>()
         problemas += MedirTela.medir(a, "podcasts-continuar", "ouvir-podcasts-$lingua-1-continuar", 14f, cartao = true)
         tecla(cruz, KeyEvent.KEYCODE_DPAD_LEFT)
+        assertEquals("abrir", cruz.itemAtual()?.id)
+        problemas += MedirTela.medir(a, "podcasts-abrir", "ouvir-podcasts-$lingua-2-abrir", 14f, cartao = true)
+        tecla(cruz, KeyEvent.KEYCODE_DPAD_DOWN)
         assertEquals("pausar", cruz.itemAtual()?.id)
         tecla(cruz, KeyEvent.KEYCODE_DPAD_DOWN); tecla(cruz, KeyEvent.KEYCODE_DPAD_DOWN); tecla(cruz, KeyEvent.KEYCODE_DPAD_DOWN)
         assertEquals("velocidade", cruz.itemAtual()?.id)

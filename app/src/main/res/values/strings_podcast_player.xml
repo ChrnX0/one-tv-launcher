@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Player de podcast em tela cheia (PodcastPlayerActivity, 18/11/2026). -->
+<resources>
+    <string name="pl_termina">ends at %1$s</string>
+    <string name="pl_dorme_em">sleeps in %1$d min</string>
+    <string name="pl_a_seguir">Up next</string>
+    <string name="pl_dormir">Sleep timer</string>
+    <string name="pl_dormir_min">In %1$d min</string>
+    <string name="pl_barra_dica">◀ ▶ move 10 s · hold to go faster</string>
+    <string name="pl_abrir">Open player</string>
+    <string name="pl_abrir_det">Full screen, with what plays next</string>
+</resources>

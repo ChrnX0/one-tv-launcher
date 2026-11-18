@@ -386,6 +386,19 @@ class OuvirServico : Service() {
         publicar()
     }
 
+    /**
+     * Timer para dormir (player de podcast, 18/11/2026): pausa sozinho daqui a [ms] (null ou 0 = desliga). Pausa, não
+     * para: de manhã o ⏯ continua de onde parou. [dormirAte] é o relógio do aparelho (elapsedRealtime) da pausa; 0 = sem timer.
+     */
+    var dormirAte: Long = 0L
+        private set
+    private val dormir = Runnable { dormirAte = 0L; pausar(); publicar() }
+    fun definirDormir(ms: Long?) {
+        ui.removeCallbacks(dormir); dormirAte = 0L
+        if (ms != null && ms > 0) { dormirAte = SystemClock.elapsedRealtime() + ms; ui.postDelayed(dormir, ms) }
+        publicar()
+    }
+
     /** Posição e duração do episódio (ms); duração 0 = ainda não sabe. */
     val posicaoMs: Long get() = player?.currentPosition ?: 0L
     val duracaoMs: Long get() = player?.duration?.takeIf { it != C.TIME_UNSET && it > 0 } ?: ((episodio?.ep?.duracaoS ?: 0) * 1000L)
@@ -421,7 +434,7 @@ class OuvirServico : Service() {
     /** Para de vez: solta o player e a conexão, some da HOME e do protetor, e o serviço acaba. */
     fun parar() {
         pedidoEp++   // episódio pedido e ainda não começado não começa mais
-        ui.removeCallbacks(pausaLonga); ui.removeCallbacks(salvarPeriodico)
+        ui.removeCallbacks(pausaLonga); ui.removeCallbacks(salvarPeriodico); ui.removeCallbacks(dormir); dormirAte = 0L
         if (episodio != null) salvarPosicao()
         soltarPlayer()
         radio = null; episodio = null; musica = ""

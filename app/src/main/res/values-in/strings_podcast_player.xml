@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Player de podcast em tela cheia (PodcastPlayerActivity, 18/11/2026). -->
+<resources>
+    <string name="pl_termina">selesai pukul %1$s</string>
+    <string name="pl_dorme_em">mati dalam %1$d mnt</string>
+    <string name="pl_a_seguir">Berikutnya</string>
+    <string name="pl_dormir">Timer tidur</string>
+    <string name="pl_dormir_min">Dalam %1$d mnt</string>
+    <string name="pl_barra_dica">◀ ▶ geser 10 dtk · tahan agar lebih cepat</string>
+    <string name="pl_abrir">Buka pemutar</string>
+    <string name="pl_abrir_det">Layar penuh, dengan yang diputar berikutnya</string>
+</resources>
