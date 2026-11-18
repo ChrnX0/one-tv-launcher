@@ -351,6 +351,8 @@ class MainActivity : Activity() {
         DesempenhoTv.ligar(this)   // conta o tempo de cada quadro da HOME, numa thread própria (DesempenhoTv)
         preencherApps()
         preencherContinuar()
+        reagendarAmbiente()
+        talvezPerguntarQuemVe()
         if (voltarAoPerfil) bolinhaPerfil?.requestFocus()
         else if (focoTopo?.isShown == true) focoTopo?.requestFocus()
         else if (atalhoAberto < 0 && ::linhaContinuar.isInitialized && linhaContinuar.hasFocus()) linhaApps.getChildAt(indiceFoco.coerceAtLeast(0))?.requestFocus()
@@ -394,6 +396,8 @@ class MainActivity : Activity() {
         homeNaFrente = false
         SonsCruz.naFrente = false
         ModoSeguro.aoPausarHome()
+        ui.removeCallbacks(tarefaAmbiente); ui.removeCallbacks(tarefaQuemVe)
+        sairAmbiente(animar = false)
         if (desviadaParaSegura) return
         focoTopo = currentFocus?.takeIf { f -> generateSequence(f.parent) { it.parent }.any { it === topoRaiz } }
         DesempenhoTv.desligar(this)
@@ -420,6 +424,7 @@ class MainActivity : Activity() {
     }
 
     override fun onDestroy() {
+        vigiaTela?.let { runCatching { unregisterReceiver(it) } }; vigiaTela = null
         rede.shutdownNow()
         // Cada recreate() (troca de tema) cria uma Activity nova com a sua própria fila: sem isto a thread "Apps"
         // da Activity velha ficava viva para sempre. shutdown (não Now): deixa terminar uma carga em curso.
@@ -431,6 +436,7 @@ class MainActivity : Activity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent?.hasCategory(Intent.CATEGORY_HOME) == true) {
+            sairAmbiente(animar = false)
             ultimoToken = null
             indiceFoco = 0
             focoTopo = null
@@ -2495,6 +2501,9 @@ class MainActivity : Activity() {
         c.aoMudar = { _, item -> arteDoItem(item) }
         c.aoSom = { som, cat -> if (homeNaFrente) SonsCruz.tocar(this, som, cat) }   // voltando de um app (HOME), sem som
         c.aoSubirTopo = { ui.post { bolinhaPerfil?.requestFocus() } }   // ▲ no 1º item: o perfil, 1º da barra
+        c.aoPasso = { t -> deslizarArte(t) }
+        raizCruz = raiz
+        vigiarTela()
         montarBarraCruz(raiz, c)
     }
 
@@ -2523,6 +2532,17 @@ class MainActivity : Activity() {
         val direita = topo.getChildAt(2) as? LinearLayout
         if (barraCruz == LayoutHome.BarraCruz.LEVE) {
             esquerda?.let { e -> for (i in 0 until e.childCount) e.getChildAt(i).background = null }
+            return
+        }
+        // Vidro (onda 3, como a barra do tvOS 26): uma faixa só, translúcida e parada, atrás da barra inteira; as cápsulas
+        // perdem o fundo próprio. Sem desfoque de verdade (custa caro no Chromecast): gradiente claro + fio de luz em cima.
+        if (barraCruz == LayoutHome.BarraCruz.VIDRO) {
+            esquerda?.let { e -> for (i in 0 until e.childCount) e.getChildAt(i).background = null }
+            val vidro = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(0x33FFFFFF, 0x14FFFFFF)).apply {
+                cornerRadius = dp(ALTURA_TOPO / 2).toFloat()
+                setStroke(dp(1), 0x2EFFFFFF)
+            }
+            topo.background = android.graphics.drawable.InsetDrawable(vidro, dp(Grade.MARGEM - 20), 0, dp(Grade.MARGEM - 20), 0)
             return
         }
         // Recua: a temperatura entra ao lado da hora enquanto a barra está recolhida.
@@ -2680,6 +2700,7 @@ class MainActivity : Activity() {
             val icone = instalados.firstOrNull { it.pacote == pacote }?.let { icApp(it) } ?: icCruz("c:jogo", IconeCruz.Tipo.JOGOS)
             continuar += HomeCruz.Item("c:jogo", nome, getString(R.string.cruz_jogo), icone, { abrir(pacote) })
         }
+        itemDormir()?.let { continuar += it }   // onda 3: à noite, "Dormir em 30 min" no fim do Continuar
         categoria(CruzLogica.Categoria.CONTINUAR, R.string.cruz_continuar, IconeCruz.Tipo.CONTINUAR, continuar)
 
         // Assistir: os cards de hoje (TV, Séries, Filmes, Na rede, Addons, plugins), cada um só se o recurso existe.
@@ -2751,6 +2772,149 @@ class MainActivity : Activity() {
         else if (currentFocus == null && !todosAbertos) c.requestFocus()
     }
 
+    // ------------------------------------------------------------------ onda 3 (CruzOnda3): ambiente, paralaxe, quem vê
+
+    private var raizCruz: FrameLayout? = null
+    private var ambiente = false
+    private var relogioAmbiente: View? = null
+    /** Tecla que tirou do modo ambiente: o "soltar" dela também é engolido (senão o OK abriria o item). */
+    private var engolirTecla = -1
+    private val tarefaAmbiente = Runnable { entrarAmbiente() }
+
+    private fun reagendarAmbiente() {
+        ui.removeCallbacks(tarefaAmbiente)
+        if (cruz != null && homeNaFrente && CruzOnda3.ligado(this, CruzOnda3.CHAVE_AMBIENTE)) ui.postDelayed(tarefaAmbiente, CruzOnda3.AMBIENTE_MS)
+    }
+
+    private fun tocandoAgora() = ::capsulaTocando.isInitialized && capsulaTocando.visibility == View.VISIBLE && barrasTocando.tocando
+
+    private fun entrarAmbiente() {
+        val c = cruz ?: return
+        if (ambiente || !homeNaFrente) return
+        if (!CruzOnda3.entraAmbiente(CruzOnda3.ligado(this, CruzOnda3.CHAVE_AMBIENTE), c.hasFocus() || c.isFocused, todosAbertos,
+                menuAberto?.isShowing == true, tocandoAgora())) { reagendarAmbiente(); return }
+        ambiente = true
+        val d = CruzOnda3.AMBIENTE_FADE_MS
+        c.animate().alpha(0f).setDuration(d).start()
+        topoRaiz?.animate()?.alpha(0f)?.setDuration(d)?.start()
+        relogioCruz?.animate()?.alpha(0f)?.setDuration(d)?.start()
+        // A hora grande no canto livre de baixo (a mesma da barra "Relógio grande"), com a data e o tempo.
+        val r = relogioAmbiente ?: montarRelogioCruz().also { v ->
+            v.alpha = 0f
+            raizCruz?.addView(v, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.BOTTOM or Gravity.END).apply {
+                rightMargin = dp(Grade.MARGEM); bottomMargin = dp(40)
+            })
+            relogioAmbiente = v
+        }
+        r.visibility = View.VISIBLE
+        r.animate().alpha(1f).setDuration(d).start()
+        c.announceForAccessibility(getString(R.string.cruz_ambiente))
+    }
+
+    /** Volta exatamente onde estava (a cruz não mudou de lugar; só a transparência). */
+    private fun sairAmbiente(animar: Boolean = true) {
+        if (!ambiente) return
+        ambiente = false
+        val d = if (animar) CruzOnda3.VOLTA_MS else 0L
+        cruz?.animate()?.alpha(1f)?.setDuration(d)?.start()
+        topoRaiz?.animate()?.alpha(1f)?.setDuration(d)?.start()
+        relogioCruz?.animate()?.alpha(if (barraRecolhida) 1f else 0.35f)?.setDuration(d)?.start()
+        relogioAmbiente?.animate()?.alpha(0f)?.setDuration(d)?.withEndAction { relogioAmbiente?.visibility = View.GONE }?.start()
+        reagendarAmbiente()
+    }
+
+    /** Antes de tudo no dispatchKeyEvent: no modo ambiente, a 1ª tecla só acorda a cruz (volume passa direto). */
+    private fun teclaDoAmbiente(e: KeyEvent): Boolean {
+        val volume = e.keyCode == KeyEvent.KEYCODE_VOLUME_UP || e.keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || e.keyCode == KeyEvent.KEYCODE_VOLUME_MUTE
+        if (ambiente && !volume) {
+            if (e.action == KeyEvent.ACTION_DOWN) { engolirTecla = e.keyCode; sairAmbiente() }
+            return true
+        }
+        if (e.keyCode == engolirTecla && e.action == KeyEvent.ACTION_UP) { engolirTecla = -1; return true }
+        if (e.keyCode == engolirTecla) return true   // repetição da mesma tecla segurada
+        if (e.action == KeyEvent.ACTION_DOWN) reagendarAmbiente()
+        return false
+    }
+
+    /** Paralaxe: a arte anda [CruzOnda3.PARALAXE_DP] para o lado oposto da tecla e volta devagar. */
+    private fun deslizarArte(t: CruzLogica.Tecla) {
+        if (!::capa.isInitialized || capa.desligada || !CruzOnda3.ligado(this, CruzOnda3.CHAVE_PARALAXE)) return
+        if (android.provider.Settings.Global.getFloat(contentResolver, android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f) return
+        val (x, y) = CruzOnda3.paralaxe(t)
+        if (x == 0 && y == 0) return
+        val passo = CruzOnda3.PARALAXE_DP * resources.displayMetrics.density
+        capa.animate().cancel()
+        capa.translationX = x * passo; capa.translationY = y * passo
+        capa.animate().translationX(0f).translationY(0f).setDuration(CruzOnda3.PARALAXE_MS)
+            .setInterpolator(android.view.animation.DecelerateInterpolator(1.6f)).start()
+    }
+
+    // ---- "Quem está vendo?" ao ligar a TV
+    private var vigiaTela: android.content.BroadcastReceiver? = null
+    private var apagouEm = 0L
+    private var acendeuEm = 0L
+    private var dormiuMs = 0L
+    private var perguntouNestaVez = true   // começa true: abrir o launcher não é "ligar a TV"
+    private val tarefaQuemVe = Runnable { talvezPerguntarQuemVe() }
+
+    private fun vigiarTela() {
+        if (vigiaTela != null) return
+        val r = object : android.content.BroadcastReceiver() {
+            override fun onReceive(ctx: android.content.Context, i: Intent) {
+                val agora = android.os.SystemClock.elapsedRealtime()
+                when (i.action) {
+                    Intent.ACTION_SCREEN_OFF -> { apagouEm = agora; sairAmbiente(animar = false) }
+                    Intent.ACTION_SCREEN_ON -> {
+                        acendeuEm = agora
+                        dormiuMs = if (apagouEm > 0) agora - apagouEm else 0L
+                        perguntouNestaVez = false
+                        if (homeNaFrente) { ui.removeCallbacks(tarefaQuemVe); ui.postDelayed(tarefaQuemVe, 1500) }
+                    }
+                }
+            }
+        }
+        val f = android.content.IntentFilter().apply { addAction(Intent.ACTION_SCREEN_ON); addAction(Intent.ACTION_SCREEN_OFF) }
+        runCatching {
+            if (android.os.Build.VERSION.SDK_INT >= 33) registerReceiver(r, f, android.content.Context.RECEIVER_NOT_EXPORTED) else registerReceiver(r, f)
+            vigiaTela = r
+        }
+    }
+
+    private fun talvezPerguntarQuemVe() {
+        if (perguntouNestaVez || !homeNaFrente || isDestroyed) return
+        val desde = android.os.SystemClock.elapsedRealtime() - acendeuEm
+        val contas = Perfil.contas(this)
+        if (!CruzOnda3.perguntaQuemVe(CruzOnda3.ligado(this, CruzOnda3.CHAVE_QUEM), contas.size, dormiuMs, desde, ModoVisita.ativo(this))) {
+            if (desde > CruzOnda3.QUEM_JANELA_MS) perguntouNestaVez = true
+            return
+        }
+        if (menuAberto?.isShowing == true) return
+        perguntouNestaVez = true
+        val ativa = Perfil.ativa(this, contas)
+        val nomes = contas.map { Perfil.nome(this, it) + if (it == ativa) getString(R.string.pp_ativo) else "" }
+        menuAberto = Estilo.lista(this, getString(R.string.cruz_quem_titulo), nomes) { i ->
+            val conta = contas[i]
+            if (conta != ativa) PerfilCriancaTv.trocar(this, ativa, conta) { trocou ->
+                if (trocou && !isDestroyed) { atualizarFotoPerfil(); reorganizar(); preencherContinuar() }
+            }
+        }
+    }
+
+    // ---- "Dormir em 30 min" (Continuar, à noite)
+
+    private fun itemDormir(): HomeCruz.Item? {
+        val marcado = Desligamento.marcado(this)
+        val hora = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
+        if (!CruzOnda3.mostraDormir(CruzOnda3.ligado(this, CruzOnda3.CHAVE_DORMIR), hora, marcado != null)) return null
+        val ic = icCruz("c:dormir", IconeCruz.Tipo.DORMIR)
+        return if (marcado != null) HomeCruz.Item("c:dormir",
+            getString(R.string.cruz_desliga_as, android.text.format.DateFormat.getTimeFormat(this).format(java.util.Date(marcado))),
+            getString(R.string.cruz_dormir_cancelar), ic, { Desligamento.cancelar(this); atualizarCruz() })
+        else HomeCruz.Item("c:dormir", getString(R.string.cruz_dormir), getString(R.string.cruz_dormir_sub), ic, {
+            Desligamento.agendar(this, CruzOnda3.DORMIR_MIN); atualizarCruz()
+        })
+    }
+
     private fun abrirTodos() {
         val c = cruz ?: return
         todosAbertos = true
@@ -2794,6 +2958,7 @@ class MainActivity : Activity() {
      * Fora dele: segurar OK (ver tratarSegurar) e ▲▼ numa pilha (ver trocarDaFrente).
      */
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (teclaDoAmbiente(event)) return true
         val confirma = event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER
         if (!modoMover) {
             // Cruz: Voltar no "Todos os apps" volta para a cruz (na cruz, Voltar não faz nada).

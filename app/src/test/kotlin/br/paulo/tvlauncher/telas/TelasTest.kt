@@ -56,6 +56,7 @@ class TelasTest {
         "home-grade" to MainActivity::class.java,    // layout flexível: apps em grade (LayoutHome, GradeApps)
         "home-leve" to MainActivity::class.java,     // cruz com a barra Leve (sem cápsulas) e ícones Duotom
         "home-relogio" to MainActivity::class.java,  // cruz com a barra Relógio grande e ícones Símbolo
+        "home-vidro" to MainActivity::class.java,    // cruz com a barra de Vidro (padrão desde a onda 3)
         "configuracoes" to ConfigLauncherActivity::class.java,
         "filmes" to FilmesActivity::class.java,
         "series" to SeriesActivity::class.java,
@@ -104,6 +105,7 @@ class TelasTest {
             br.paulo.tvlauncher.LayoutHome.definirBarraCruz(app, when (nome) {
                 "home-leve" -> br.paulo.tvlauncher.LayoutHome.BarraCruz.LEVE
                 "home-relogio" -> br.paulo.tvlauncher.LayoutHome.BarraCruz.RELOGIO
+                "home-vidro" -> br.paulo.tvlauncher.LayoutHome.BarraCruz.VIDRO
                 else -> br.paulo.tvlauncher.LayoutHome.BarraCruz.RECUA
             })
             br.paulo.tvlauncher.LayoutHome.definirIconesCruz(app, when (nome) {

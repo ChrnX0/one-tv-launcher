@@ -35,4 +35,18 @@
     <string name="cruz_soltar">Odepnij</string>
     <string name="cruz_tocando">Gra: %1$s</string>
     <string name="cruz_precisa_internet">Wymaga internetu</string>
+    <string name="cruz_barra_vidro">Szkło</string>
+    <string name="cruz_ambiente">Tryb ambient</string>
+    <string name="cruz_ambiente_det">Po 2 min bezczynności zostaje tylko obraz i duży zegar</string>
+    <string name="cruz_paralaxe">Ruchomy obraz</string>
+    <string name="cruz_paralaxe_det">Obraz lekko przesuwa się podczas nawigacji</string>
+    <string name="cruz_quem">Kto ogląda?</string>
+    <string name="cruz_quem_det">Pyta o profil po włączeniu TV (przy 2 lub więcej)</string>
+    <string name="cruz_quem_titulo">Kto ogląda?</string>
+    <string name="cruz_dormir_atalho">Uśpij za 30 min wieczorem</string>
+    <string name="cruz_dormir_atalho_det">Skrót w Kontynuuj po 22:00</string>
+    <string name="cruz_dormir">Uśpij za 30 min</string>
+    <string name="cruz_dormir_sub">Ekran powoli ciemnieje, a TV się wyłącza</string>
+    <string name="cruz_desliga_as">Wyłączy się o %1$s</string>
+    <string name="cruz_dormir_cancelar">OK, aby anulować</string>
 </resources>

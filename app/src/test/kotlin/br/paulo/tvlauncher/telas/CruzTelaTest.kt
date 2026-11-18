@@ -61,7 +61,8 @@ class CruzTelaTest {
         cruz.definir(listOf(
             HomeCruz.Categoria(CruzLogica.Categoria.CONTINUAR, "Continuar", ic(IconeCruz.Tipo.CONTINUAR), listOf(
                 it("c:serie", "O Último Farol", "T1 E4 · faltam 18 min", IconeCruz.Tipo.SERIES, visto = 0.6f),
-                it("c:filme", "Maré Alta", "Filme · faltam 52 min", IconeCruz.Tipo.FILMES, visto = 0.45f))),
+                it("c:filme", "Maré Alta", "Filme · faltam 52 min", IconeCruz.Tipo.FILMES, visto = 0.45f),
+                it("c:dormir", "Dormir em 30 min", "A tela escurece devagar e a TV desliga", IconeCruz.Tipo.DORMIR))),
             HomeCruz.Categoria(CruzLogica.Categoria.ASSISTIR, "Assistir", ic(IconeCruz.Tipo.ASSISTIR), listOf(
                 it("tv", "TV", "Canal 5 · Jornal da Noite", IconeCruz.Tipo.TV),
                 it("series", "Séries", "O Último Farol · T1 E4", IconeCruz.Tipo.SERIES),

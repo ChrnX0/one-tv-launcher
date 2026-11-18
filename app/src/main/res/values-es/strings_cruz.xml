@@ -35,4 +35,18 @@
     <string name="cruz_soltar">Quitar de arriba</string>
     <string name="cruz_tocando">Sonando: %1$s</string>
     <string name="cruz_precisa_internet">Necesita internet</string>
+    <string name="cruz_barra_vidro">Cristal</string>
+    <string name="cruz_ambiente">Modo ambiente</string>
+    <string name="cruz_ambiente_det">Tras 2 min quieta, solo quedan el arte y la hora grande</string>
+    <string name="cruz_paralaxe">Arte en movimiento</string>
+    <string name="cruz_paralaxe_det">El arte se desliza un poco al moverte</string>
+    <string name="cruz_quem">¿Quién está viendo?</string>
+    <string name="cruz_quem_det">Pregunta el perfil al encender la TV (con 2 o más)</string>
+    <string name="cruz_quem_titulo">¿Quién está viendo?</string>
+    <string name="cruz_dormir_atalho">Dormir en 30 min de noche</string>
+    <string name="cruz_dormir_atalho_det">Atajo en Continuar después de las 22 h</string>
+    <string name="cruz_dormir">Dormir en 30 min</string>
+    <string name="cruz_dormir_sub">La pantalla se oscurece despacio y la TV se apaga</string>
+    <string name="cruz_desliga_as">Se apaga a las %1$s</string>
+    <string name="cruz_dormir_cancelar">OK para cancelar</string>
 </resources>

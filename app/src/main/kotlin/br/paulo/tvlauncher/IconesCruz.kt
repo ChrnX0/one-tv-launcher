@@ -20,7 +20,7 @@ import android.graphics.drawable.Drawable
  */
 class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJETO) : Drawable() {
 
-    enum class Tipo { CONTINUAR, ASSISTIR, OUVIR, JOGAR, APLICATIVOS, TV, SERIES, FILMES, REDE, ADDONS, RADIO, PODCASTS, JOGOS, SOFA, TODOS_APPS, PLUGIN }
+    enum class Tipo { CONTINUAR, ASSISTIR, OUVIR, JOGAR, APLICATIVOS, TV, SERIES, FILMES, REDE, ADDONS, RADIO, PODCASTS, JOGOS, SOFA, TODOS_APPS, PLUGIN, DORMIR }
     /** [DUOTOM] (17/11/2026, 3º estilo embutido): o traço do Símbolo em branco quente sobre um halo suave na cor do grupo. */
     enum class Estilo { OBJETO, SIMBOLO, DUOTOM }
 
@@ -91,6 +91,7 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             Tipo.PODCASTS -> microfone(c)
             Tipo.SOFA -> sofa(c)
             Tipo.APLICATIVOS, Tipo.TODOS_APPS -> quadradinhos(c)
+            Tipo.DORMIR -> lua(c)
         }
         cheio.shader = null; cheio.alpha = 255
     }
@@ -208,6 +209,27 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
         linha(c, 0xFF3A2A20, 5f, 20f, 86f, 20f, 94f, 100f, 86f, 100f, 94f)
     }
 
+    /** "Dormir em 30 min" (onda 3): lua crescente creme com duas estrelinhas. */
+    private fun lua(c: Canvas) {
+        val fora = Path().apply { addCircle(52f, 52f, 42f, Path.Direction.CW) }
+        val dentro = Path().apply { addCircle(74f, 36f, 34f, Path.Direction.CW) }
+        fora.op(dentro, Path.Op.DIFFERENCE)
+        vert(0xFFFFEBC4, 0xFFE8A55E, 10f, 94f); c.drawPath(fora, cheio)
+        solido(0xFFFFFFFF, .22f); c.drawCircle(26f, 50f, 6f, cheio)
+        solido(0xFFFFD166); estrela(c, 96f, 74f, 10f); estrela(c, 108f, 44f, 6.5f)
+    }
+
+    private fun estrela(c: Canvas, x: Float, y: Float, raio: Float) {
+        p.reset()
+        for (i in 0 until 8) {
+            val a = i * Math.PI / 4 - Math.PI / 2
+            val rr = if (i % 2 == 0) raio else raio * 0.38f
+            val px = x + (rr * Math.cos(a)).toFloat(); val py = y + (rr * Math.sin(a)).toFloat()
+            if (i == 0) p.moveTo(px, py) else p.lineTo(px, py)
+        }
+        p.close(); c.drawPath(p, cheio)
+    }
+
     private fun quadradinhos(c: Canvas) {
         solido(0xFFFF8A55); rr(c, 20f, 10f, 38f, 38f, 10f)
         solido(0xFF7DD3C0); rr(c, 62f, 10f, 38f, 38f, 10f)
@@ -261,6 +283,14 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
             }
             Tipo.APLICATIVOS, Tipo.TODOS_APPS -> for (x in listOf(4f, 13.5f)) for (y in listOf(4f, 13.5f)) {
                 r.set(x, y, x + 6.5f, y + 6.5f); c.drawRoundRect(r, 1.8f, 1.8f, traco)
+            }
+            Tipo.DORMIR -> {
+                // lua crescente: dois arcos que se encontram nas pontas
+                p.reset(); p.moveTo(14.5f, 3.6f)
+                p.cubicTo(8f, 4.5f, 3.6f, 9.6f, 4.2f, 14.6f); p.cubicTo(4.9f, 19.6f, 10.6f, 22.4f, 16.6f, 19.6f)
+                p.cubicTo(11.4f, 18.6f, 8.6f, 14.4f, 9.6f, 10f); p.cubicTo(10.2f, 7.2f, 12f, 5f, 14.5f, 3.6f); p.close()
+                c.drawPath(p, traco)
+                c.drawLine(17f, 6f, 21f, 6f, traco); c.drawLine(21f, 6f, 17f, 10f, traco); c.drawLine(17f, 10f, 21f, 10f, traco)
             }
         }
     }

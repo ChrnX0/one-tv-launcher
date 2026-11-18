@@ -101,6 +101,8 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     }
 
     var aoSubirTopo: (() -> Unit)? = null
+    /** Andou com uma seta (para a arte deslizar ao contrário: paralaxe, onda 3). Não vem na HOME nem na borda. */
+    var aoPasso: ((CruzLogica.Tecla) -> Unit)? = null
     /** Som de cada passo (SonsCruz): quem usa decide se toca. */
     var aoSom: ((SonsCruz.Som, CruzLogica.Categoria?) -> Unit)? = null
     /** Mudou o item em foco (para o destaque/capa de quem usa) */
@@ -308,6 +310,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         semOnda = rapida
         posicionar(animar = true)
         avisarMudanca()
+        if (t != CruzLogica.Tecla.HOME && !rapida) aoPasso?.invoke(t)
     }
 
     // Parâmetros da mola para o passo de agora (lidos por [mover]).

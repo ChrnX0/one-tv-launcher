@@ -35,4 +35,18 @@
     <string name="cruz_soltar">固定を解除</string>
     <string name="cruz_tocando">再生中: %1$s</string>
     <string name="cruz_precisa_internet">インターネットが必要です</string>
+    <string name="cruz_barra_vidro">ガラス</string>
+    <string name="cruz_ambiente">アンビエントモード</string>
+    <string name="cruz_ambiente_det">2分操作がないとアートと大きな時計だけになります</string>
+    <string name="cruz_paralaxe">アートの動き</string>
+    <string name="cruz_paralaxe_det">移動するとアートが少しスライドします</string>
+    <string name="cruz_quem">誰が見ていますか？</string>
+    <string name="cruz_quem_det">テレビをつけたときにプロフィールを聞きます（2人以上）</string>
+    <string name="cruz_quem_titulo">誰が見ていますか？</string>
+    <string name="cruz_dormir_atalho">夜の「30分後にスリープ」</string>
+    <string name="cruz_dormir_atalho_det">22時以降「続きを見る」にショートカット</string>
+    <string name="cruz_dormir">30分後にスリープ</string>
+    <string name="cruz_dormir_sub">画面がゆっくり暗くなりテレビが消えます</string>
+    <string name="cruz_desliga_as">%1$s にオフ</string>
+    <string name="cruz_dormir_cancelar">OKで取り消し</string>
 </resources>

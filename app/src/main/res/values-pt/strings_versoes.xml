@@ -14,31 +14,21 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Na cruz, o texto de baixo ficou maior (18) e os itens de longe mais visíveis, para ler do sofá</item>
-        <item>Ao apertar OK o ícone dá um leve aperto; se o app não abrir, a cruz avisa “Não deu para abrir”</item>
-        <item>Segurando a seta, a cruz corre mais rápido e com menos cliques; trocar de grupo ficou mais firme</item>
-        <item>Cada grupo tem sua nota (Assistir, Ouvir, Jogar…) e, de noite, os sons saem mais baixos</item>
-        <item>Ao lado do nome do grupo aparece onde você está (“3 de 9”) e, parada a cruz, uma setinha avisa que há mais itens embaixo</item>
-        <item>Aplicativos mostra primeiro os que você mais abre (não só o último); segure OK num app para “Fixar no topo”</item>
-        <item>Em Continuar, uma barrinha no ícone mostra quanto já foi visto (e quanto do programa da TV já passou); Rádio e Podcasts dizem o que está tocando</item>
-        <item>Sem internet, Séries, Filmes, Rádio e Podcasts avisam “Precisa de internet” antes de você abrir</item>
+        <item>Modo ambiente: parada 2 minutos na tela inicial, a cruz se recolhe e ficam a arte e a hora grande; qualquer tecla volta para onde estava</item>
+        <item>A arte atrás da cruz desliza um pouquinho ao andar, dando profundidade</item>
+        <item>Barra de cima em vidro: uma faixa só, translúcida, com perfil, busca, tempo e hora (as outras barras continuam em Configurações › Tela inicial)</item>
+        <item>À noite, “Dormir em 30 min” aparece no fim de Continuar: a tela escurece devagar e a TV desliga; OK de novo cancela</item>
+        <item>Com dois perfis ou mais, a TV pergunta “Quem está vendo?” ao ligar depois de dormir</item>
+        <item>Cada novidade tem a sua chave em Configurações › Tela inicial</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Letra maior</item>
-        <item>Aperto ao abrir</item>
-        <item>Seta segurada</item>
-        <item>Nota de cada grupo</item>
-        <item>Onde estou</item>
-        <item>Fixar no topo</item>
-        <item>Barra de progresso</item>
+        <item>Modo ambiente</item>
+        <item>Barra em vidro</item>
+        <item>Dormir em 30 min</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Do sofá, dá para ler a linha de baixo do item escolhido e ver os itens das pontas?</item>
-        <item>Apertando OK num app, o ícone dá um leve aperto antes de abrir?</item>
-        <item>Segurando ▼ em Aplicativos, a lista corre rápido sem metralhar cliques?</item>
-        <item>Trocando de grupo com ◀ ▶, cada grupo soa numa nota diferente?</item>
-        <item>Ao lado do nome do grupo aparece “2 de 5” (ou parecido) e muda ao andar?</item>
-        <item>Segurando OK num app em Aplicativos e escolhendo “Fixar no topo”, ele vai para o primeiro lugar?</item>
-        <item>Em Continuar, o filme ou a série aparece com uma barrinha laranja embaixo do ícone?</item>
+        <item>Deixando a tela inicial parada por 2 minutos, a cruz some e fica a hora grande? Uma tecla traz tudo de volta?</item>
+        <item>A barra de cima aparece numa faixa de vidro, com a hora à direita?</item>
+        <item>Depois das 22 h, em Continuar, “Dormir em 30 min” marca o desligamento e mostra “Desliga às…”?</item>
     </string-array>
 </resources>

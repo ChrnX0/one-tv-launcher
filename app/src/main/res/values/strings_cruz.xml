@@ -35,4 +35,18 @@
     <string name="cruz_soltar">Unpin from top</string>
     <string name="cruz_tocando">Playing: %1$s</string>
     <string name="cruz_precisa_internet">Needs the internet</string>
+    <string name="cruz_barra_vidro">Glass</string>
+    <string name="cruz_ambiente">Ambient mode</string>
+    <string name="cruz_ambiente_det">Idle for 2 min, only the art and a big clock stay</string>
+    <string name="cruz_paralaxe">Moving art</string>
+    <string name="cruz_paralaxe_det">The art glides a little as you move</string>
+    <string name="cruz_quem">Who’s watching?</string>
+    <string name="cruz_quem_det">Asks for the profile when the TV turns on (2 or more)</string>
+    <string name="cruz_quem_titulo">Who’s watching?</string>
+    <string name="cruz_dormir_atalho">Sleep in 30 min at night</string>
+    <string name="cruz_dormir_atalho_det">Shortcut in Continue after 10 pm</string>
+    <string name="cruz_dormir">Sleep in 30 min</string>
+    <string name="cruz_dormir_sub">The screen dims slowly and the TV turns off</string>
+    <string name="cruz_desliga_as">Turns off at %1$s</string>
+    <string name="cruz_dormir_cancelar">OK to cancel</string>
 </resources>

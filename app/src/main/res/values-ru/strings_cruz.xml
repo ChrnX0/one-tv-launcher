@@ -35,4 +35,18 @@
     <string name="cruz_soltar">Открепить</string>
     <string name="cruz_tocando">Играет: %1$s</string>
     <string name="cruz_precisa_internet">Нужен интернет</string>
+    <string name="cruz_barra_vidro">Стекло</string>
+    <string name="cruz_ambiente">Фоновый режим</string>
+    <string name="cruz_ambiente_det">Через 2 мин без действий остаются только картинка и большие часы</string>
+    <string name="cruz_paralaxe">Движение картинки</string>
+    <string name="cruz_paralaxe_det">Картинка слегка сдвигается при перемещении</string>
+    <string name="cruz_quem">Кто смотрит?</string>
+    <string name="cruz_quem_det">Спрашивает профиль при включении ТВ (если их 2 и больше)</string>
+    <string name="cruz_quem_titulo">Кто смотрит?</string>
+    <string name="cruz_dormir_atalho">Сон через 30 мин вечером</string>
+    <string name="cruz_dormir_atalho_det">Ярлык в «Продолжить» после 22:00</string>
+    <string name="cruz_dormir">Сон через 30 мин</string>
+    <string name="cruz_dormir_sub">Экран медленно темнеет, и ТВ выключается</string>
+    <string name="cruz_desliga_as">Выключится в %1$s</string>
+    <string name="cruz_dormir_cancelar">OK — отменить</string>
 </resources>
