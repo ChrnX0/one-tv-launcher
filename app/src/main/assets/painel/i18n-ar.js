@@ -1,5 +1,7 @@
 // Painel em ar (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Não perturbe (avisos esperam durante filme, madrugada ou visita)":"عدم الإزعاج (تنتظر التنبيهات أثناء الفيلم أو آخر الليل أو مع الضيوف)",
+"Pular abertura (IntroDB: pergunta onde fica a abertura do episódio)":"تخطي المقدمة (IntroDB: يسأل عن موضع مقدمة الحلقة)",
 "Levar para uma TV nova":"النقل إلى تلفاز جديد",
 "Na TV nova, abra Configurações › Sistema › Trazer de outra TV (na primeira vez, o botão está na tela do QR). Leia o QR que aparece nela ou digite o endereço e o código. Vão as configurações, o PIN, os canais e a lista de apps, cifrados só para aquela TV; lá os apps voltam em fila, pela Play Store.":"على التلفاز الجديد افتح الإعدادات › النظام › النقل من تلفاز آخر (في المرة الأولى يكون الزر في شاشة رمز QR). امسح الرمز الظاهر أو اكتب العنوان والرمز. تُرسل الإعدادات والرمز السري والقنوات وقائمة التطبيقات مشفرة لذلك التلفاز وحده؛ وهناك تعود التطبيقات بالدور عبر متجر Play.",
 "Endereço e código da TV nova":"عنوان التلفاز الجديد ورمزه",

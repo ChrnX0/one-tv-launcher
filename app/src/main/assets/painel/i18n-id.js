@@ -1,5 +1,7 @@
 // Painel em id (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Não perturbe (avisos esperam durante filme, madrugada ou visita)":"Jangan ganggu (pemberitahuan menunggu saat film, larut malam, atau ada tamu)",
+"Pular abertura (IntroDB: pergunta onde fica a abertura do episódio)":"Lewati intro (IntroDB: menanyakan letak intro episode)",
 "Levar para uma TV nova":"Pindahkan ke TV baru",
 "Na TV nova, abra Configurações › Sistema › Trazer de outra TV (na primeira vez, o botão está na tela do QR). Leia o QR que aparece nela ou digite o endereço e o código. Vão as configurações, o PIN, os canais e a lista de apps, cifrados só para aquela TV; lá os apps voltam em fila, pela Play Store.":"Di TV baru, buka Setelan › Sistem › Bawa dari TV lain (pertama kali, tombolnya ada di layar QR). Pindai QR yang muncul atau ketik alamat dan kodenya. Setelan, PIN, saluran, dan daftar aplikasi dikirim terenkripsi hanya untuk TV itu; di sana aplikasi kembali berurutan lewat Play Store.",
 "Endereço e código da TV nova":"Alamat dan kode TV baru",

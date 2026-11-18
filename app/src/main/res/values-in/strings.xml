@@ -753,6 +753,7 @@ AS\\Film).</string>
     <string name="legenda_sem_conta">Tambahkan kunci OpenSubtitles Anda di Setelan > Akun > Film dan serial</string>
     <string name="legenda_escolher">Subtitle untuk \"%1$s\"</string>
     <string name="legenda_surdos">tunarungu</string>
+    <string name="legenda_bate">dibuat untuk file ini</string>
     <string name="legenda_atraso_opcao">Jeda subtitle: %1$s</string>
     <string name="legenda_atraso_titulo">Jeda subtitle (+ = teks muncul lebih lambat)</string>
     <string name="legenda_atraso_zero">Tanpa jeda</string>

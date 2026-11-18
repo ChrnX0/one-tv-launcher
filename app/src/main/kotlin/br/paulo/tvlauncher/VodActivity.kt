@@ -1265,11 +1265,17 @@ class VodActivity : Activity() {
                 r.onFailure { avisoBreve((it as? LegendaBaixar.Falha)?.message ?: getString(R.string.legenda_erro)) }
                 r.onSuccess { lista ->
                     if (lista.isEmpty()) { avisoBreve(getString(R.string.legenda_nenhuma)); return@onSuccess }
+                    // Nome do lançamento em cima; idioma, downloads e "feita para este arquivo" na linha de baixo (como a cruz)
+                    val mil = android.icu.text.CompactDecimalFormat.getInstance(java.util.Locale.getDefault(),
+                        android.icu.text.CompactDecimalFormat.CompactStyle.SHORT)
                     val rotulos = lista.map { c ->
-                        listOfNotNull(c.idioma.uppercase(), c.nome, "↓ ${c.baixadas}", if (c.surdos) getString(R.string.legenda_surdos) else null)
-                            .joinToString("  ·  ")
+                        Estilo.comInfo(LegendaExterna.nomeLegivel(c.nome), listOfNotNull(
+                            if (c.bateHash) "✓ " + getString(R.string.legenda_bate) else null,
+                            LegendaExterna.nomeIdioma(c.idioma), "↓ " + mil.format(c.baixadas.toLong()),
+                            if (c.surdos) getString(R.string.legenda_surdos) else null).joinToString(" · "))
                     }
-                    Estilo.lista(this, getString(R.string.legenda_escolher, b.nome), rotulos, rodape = LegendaExterna.CREDITO) { i -> baixarLegenda(lista[i]) }
+                    val nome = intent.getStringExtra(EXTRA_TITULO)?.substringBefore(" · ")?.takeIf { it.isNotBlank() } ?: b.nome
+                    Estilo.lista(this, getString(R.string.legenda_escolher, nome), rotulos, rodape = LegendaExterna.CREDITO) { i -> baixarLegenda(lista[i]) }
                 }
             }
         }

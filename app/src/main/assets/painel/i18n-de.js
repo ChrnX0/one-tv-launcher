@@ -1,5 +1,7 @@
 // Painel em de (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Não perturbe (avisos esperam durante filme, madrugada ou visita)":"Nicht stören (Hinweise warten bei Film, spät nachts oder mit Gästen)",
+"Pular abertura (IntroDB: pergunta onde fica a abertura do episódio)":"Intro überspringen (IntroDB: fragt, wo das Intro der Episode ist)",
 "Levar para uma TV nova":"Auf neuen Fernseher übertragen",
 "Na TV nova, abra Configurações › Sistema › Trazer de outra TV (na primeira vez, o botão está na tela do QR). Leia o QR que aparece nela ou digite o endereço e o código. Vão as configurações, o PIN, os canais e a lista de apps, cifrados só para aquela TV; lá os apps voltam em fila, pela Play Store.":"Öffnen Sie am neuen Fernseher Einstellungen › System › Von anderem Fernseher übernehmen (beim ersten Mal ist die Taste auf dem QR-Bildschirm). Scannen Sie den angezeigten QR oder tippen Sie Adresse und Code ein. Einstellungen, PIN, Sender und App-Liste gehen verschlüsselt nur an diesen Fernseher; dort kommen die Apps der Reihe nach über den Play Store zurück.",
 "Endereço e código da TV nova":"Adresse und Code des neuen Fernsehers",

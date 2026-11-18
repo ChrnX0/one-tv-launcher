@@ -115,4 +115,5 @@
     <string name="elv_ss_dia_util">сегодня рабочий день</string>
     <string name="elv_ss_perfil">профиль — %1$s</string>
     <string name="elv_ss_det">◀ ▶ меняют условие</string>
+    <string name="extras_ABERTURA_PRONTA">Пропуск заставки (IntroDB): в сериалах ТВ спрашивает у сообщества IntroDB, где заставка (отправляется только эпизод, не ваш аккаунт); выключено — только отмеченные вами заставки</string>
 </resources>

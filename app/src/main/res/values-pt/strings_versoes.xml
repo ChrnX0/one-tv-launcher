@@ -22,6 +22,15 @@
         <item>As outras barras continuam em Configurações › Tela inicial › Barra de cima</item>
         <item>Animação dos ícones se ajusta ao aparelho: forte anima tudo; médio anima o escolhido e as categorias uma vez ao chegar; se os quadros pesarem, desce sozinha um degrau</item>
         <item>Rádio e Podcasts: os ícones dos botões voltam a aparecer, e os episódios mostram a capa do podcast</item>
+        <item>Legendas da internet voltaram: a busca no OpenSubtitles falhava em todo nome com mais de uma palavra (“Não consegui buscar a legenda”)</item>
+        <item>Busca de legenda pelo filme certo: primeiro pelo código do filme ou da série, depois pelo nome e ano, depois só pelo nome</item>
+        <item>Filmes que tentaram a legenda automática e falharam tentam de novo</item>
+        <item>Áudio: o ▼ do player troca para a versão dublada ou legendada do filme no mesmo ponto em que você está</item>
+        <item>Trailer: VOLTAR fecha o YouTube e devolve a ficha; quando o trailer acaba, a ficha volta sozinha</item>
+        <item>Trailer: o do catálogo de filmes vem antes do da lista (que às vezes é de outro filme) e mais formatos de link abrem</item>
+        <item>As listas de escolha (áudio, legenda, temporadas, qualidade e as outras) agora têm a cara da tela inicial: um painel à direita que deixa o filme à mostra, a linha escolhida grande com o ponto laranja e “3 de 14”</item>
+        <item>Legendas da internet com o nome do lançamento legível, o idioma por extenso, os downloads em milhares e “feita para este arquivo” quando bate</item>
+        <item>Trailer: um aviso na tela não fecha mais o YouTube por engano</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Ilha recolhida</item>
@@ -29,6 +38,10 @@
         <item>Canto da categoria</item>
         <item>Barra aberta</item>
         <item>Animação leve</item>
+        <item>Legenda da internet</item>
+        <item>Trocar versão</item>
+        <item>Trailer</item>
+        <item>Listas com a cara da tela inicial</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Na HOME, navegando na cruz, aparece no centro de cima uma pílula com ponto laranja, hora e temperatura?</item>
@@ -36,5 +49,9 @@
         <item>Em Assistir, com outro item escolhido que não a TV, o canto esquerdo mostra o que está no ar?</item>
         <item>Com ▲ no topo da cruz, a barra de sempre aparece com o véu escuro e a pílula some?</item>
         <item>Parada na HOME, os ícones das categorias tocam uma vez e descansam, sem a tela ficar pesada?</item>
+        <item>Num filme, ▼ › “Buscar legenda na internet” mostra uma lista de legendas em português?</item>
+        <item>Num filme que tem versão dublada e legendada, ▼ mostra “Versão dublada · continua daqui” (ou legendada) e troca no mesmo ponto?</item>
+        <item>Na ficha, Trailer abre o trailer certo, e VOLTAR fecha o YouTube e volta para a ficha?</item>
+        <item>Num filme, o ▼ abre um painel à direita (o filme continua aparecendo à esquerda), com o ponto laranja na linha escolhida?</item>
     </string-array>
 </resources>

@@ -41,6 +41,20 @@ object TrailerLink {
 
     fun link(codigo: String) = "https://www.youtube.com/watch?v=$codigo"
 
+    /**
+     * Uma janela nova quer dizer que a pessoa saiu do YouTube? Só uma TELA de verdade (Activity). Janelas por cima que
+     * não tiram o YouTube da frente também geram o evento: os nossos avisos (serviço de acessibilidade: classe
+     * "android.widget.FrameLayout"), diálogos e toasts ("android.app.Dialog", "android.widget.Toast"...). Visto na Sala
+     * (18/11/2026): o aviso "o Claude olhou a tela" fechava o trailer 2 s depois de abrir.
+     */
+    fun saiuDoYoutube(nosso: String, pacote: String, classe: String): Boolean {
+        if (classe.startsWith("android.widget.") || classe.startsWith("android.view.") || classe.startsWith("android.app.Dialog") ||
+            classe.startsWith("android.app.AlertDialog") || classe.startsWith("android.inputmethodservice.")) return false
+        // nosso pacote: só uma Activity nossa (a ficha voltando, a HOME); o resto são janelas nossas por cima
+        if (pacote == nosso) return classe.startsWith("$nosso.") && classe.endsWith("Activity")
+        return true
+    }
+
     /** O link normalizado, ou "" quando não é um vídeo do YouTube. */
     fun normalizar(valor: String?): String = codigo(valor)?.let { link(it) } ?: ""
 
@@ -75,6 +89,7 @@ object VigiaTrailer {
     private const val PRAZO_MS = 30 * 60_000L
     private const val OLHAR_MS = 2_000L
     private const val ESPERA_YOUTUBE_MS = 15_000L
+    private const val CONFIRMA_MS = 1_200L
 
     private class Sessao(val inicio: Long, val origem: String?) {
         var viuYoutube = false
@@ -115,8 +130,13 @@ object VigiaTrailer {
         val c = classe?.toString().orEmpty()
         if (p == ctx.packageName && (c.contains("PainelRapido") || c.contains("Protetor") || c.contains("Dream"))) return
         if (p == TrailerLink.YOUTUBE_TV) { s.viuYoutube = true; return }
-        // Saiu do YouTube por outro caminho (HOME, outro app, a ficha voltou): fecha o YouTube que ficou por trás.
-        if (s.viuYoutube) encerrar(ctx, trazer = false)
+        if (!s.viuYoutube || !TrailerLink.saiuDoYoutube(ctx.packageName, p, c)) return
+        // Saiu do YouTube por outro caminho (HOME, outro app, a ficha voltou)? Confere de novo daqui a pouco: visto na Sala
+        // (v463053), um aviso por cima (janela do serviço de acessibilidade, pacote nosso) fechava o trailer em 2 s.
+        Log.i(TAG, "janela fora do YouTube: $p/$c")
+        principal.postDelayed({
+            if (sessao === s && JanelaNaFrente.pacote != TrailerLink.YOUTUBE_TV) encerrar(ctx, trazer = false)
+        }, CONFIRMA_MS)
     }
 
     /** VOLTAR no trailer ou fim do trailer: fecha o YouTube e traz a ficha. */

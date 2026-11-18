@@ -115,4 +115,5 @@
     <string name="elv_ss_dia_util">es día laborable</string>
     <string name="elv_ss_perfil">el perfil es %1$s</string>
     <string name="elv_ss_det">◀ ▶ cambian la condición</string>
+    <string name="extras_ABERTURA_PRONTA">Saltar intro (IntroDB): en los episodios, la TV pregunta al servicio comunitario IntroDB dónde está la apertura (envía qué episodio, nunca tu cuenta); apagado, solo las aperturas que marcaste</string>
 </resources>

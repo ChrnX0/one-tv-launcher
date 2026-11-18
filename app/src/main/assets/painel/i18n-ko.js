@@ -1,5 +1,7 @@
 // Painel em ko (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Não perturbe (avisos esperam durante filme, madrugada ou visita)":"방해 금지 (영화, 늦은 밤, 손님이 있을 때 알림 대기)",
+"Pular abertura (IntroDB: pergunta onde fica a abertura do episódio)":"오프닝 건너뛰기 (IntroDB: 에피소드 오프닝 위치를 물어봄)",
 "Levar para uma TV nova":"새 TV로 옮기기",
 "Na TV nova, abra Configurações › Sistema › Trazer de outra TV (na primeira vez, o botão está na tela do QR). Leia o QR que aparece nela ou digite o endereço e o código. Vão as configurações, o PIN, os canais e a lista de apps, cifrados só para aquela TV; lá os apps voltam em fila, pela Play Store.":"새 TV에서 설정 › 시스템 › 다른 TV에서 가져오기를 여세요(처음에는 버튼이 QR 화면에 있습니다). 표시된 QR을 스캔하거나 주소와 코드를 입력하세요. 설정, PIN, 채널, 앱 목록이 그 TV 전용으로 암호화되어 가고, 그곳에서 앱은 Play 스토어를 통해 차례로 돌아옵니다.",
 "Endereço e código da TV nova":"새 TV의 주소와 코드",

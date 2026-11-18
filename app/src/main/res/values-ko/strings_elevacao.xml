@@ -115,4 +115,5 @@
     <string name="elv_ss_dia_util">평일일</string>
     <string name="elv_ss_perfil">프로필이 %1$s일</string>
     <string name="elv_ss_det">◀ ▶ 로 조건 변경</string>
+    <string name="extras_ABERTURA_PRONTA">오프닝 건너뛰기(IntroDB): 에피소드에서 TV가 커뮤니티 서비스 IntroDB에 오프닝 위치를 묻습니다(에피소드만 보내고 계정은 보내지 않음). 끄면 직접 표시한 오프닝만</string>
 </resources>

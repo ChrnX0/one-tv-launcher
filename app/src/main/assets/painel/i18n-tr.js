@@ -1,5 +1,7 @@
 // Painel em tr (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Não perturbe (avisos esperam durante filme, madrugada ou visita)":"Rahatsız etmeyin (bildirimler film, gece veya misafir varken bekler)",
+"Pular abertura (IntroDB: pergunta onde fica a abertura do episódio)":"Jeneriği atla (IntroDB: bölümün jeneriğinin yerini sorar)",
 "Levar para uma TV nova":"Yeni TV'ye taşı",
 "Na TV nova, abra Configurações › Sistema › Trazer de outra TV (na primeira vez, o botão está na tela do QR). Leia o QR que aparece nela ou digite o endereço e o código. Vão as configurações, o PIN, os canais e a lista de apps, cifrados só para aquela TV; lá os apps voltam em fila, pela Play Store.":"Yeni TV'de Ayarlar › Sistem › Başka TV'den getir'i açın (ilk seferde düğme QR ekranındadır). Gösterilen QR'ı okutun ya da adresi ve kodu yazın. Ayarlar, PIN, kanallar ve uygulama listesi yalnızca o TV için şifreli gider; orada uygulamalar Play Store üzerinden sırayla geri gelir.",
 "Endereço e código da TV nova":"Yeni TV'nin adresi ve kodu",

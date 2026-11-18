@@ -1,0 +1,24 @@
+# Configuração do Worker. Sem id de conta aqui de propósito: a conta entra na hora do deploy
+# (`npx wrangler login`), nunca no git.
+name = "sofaly-api"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+workers_dev = false   # só pelo domínio próprio (rota abaixo)
+
+routes = [{ pattern = "api.sofaly.tv", custom_domain = true }]
+
+[vars]
+DISABLED = "0"   # "1" desliga tudo (as TVs seguem funcionando em casa e avisam o que ficou indisponível)
+
+[[durable_objects.bindings]]
+name = "MAILBOX"
+class_name = "Mailbox"
+
+[[durable_objects.bindings]]
+name = "PAIRING"
+class_name = "Pairing"
+
+# SQLite nos Durable Objects: único tipo aceito no plano grátis.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Mailbox", "Pairing"]

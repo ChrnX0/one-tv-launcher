@@ -1,4 +1,4 @@
-module github.com/ChrnX0/one-tv-launcher/servidor/dns
+module github.com/ChrnX0/one-tv-launcher/server/dns
 
 go 1.24.7
 

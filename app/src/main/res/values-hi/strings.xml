@@ -753,6 +753,7 @@ AS\\Movies)।</string>
     <string name="legenda_sem_conta">सेटिंग्स &gt; खाता &gt; फ़िल्में और सीरीज़ में अपनी OpenSubtitles कुंजी जोड़ें</string>
     <string name="legenda_escolher">“%1$s” के सबटाइटल</string>
     <string name="legenda_surdos">श्रवण-बाधितों के लिए</string>
+    <string name="legenda_bate">इसी फ़ाइल के लिए</string>
     <string name="legenda_atraso_opcao">सबटाइटल देरी: %1$s</string>
     <string name="legenda_atraso_titulo">सबटाइटल देरी (+ = टेक्स्ट बाद में दिखता है)</string>
     <string name="legenda_atraso_zero">कोई देरी नहीं</string>

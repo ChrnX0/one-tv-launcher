@@ -12,6 +12,7 @@ object SoSeTv {
         val agora = System.currentTimeMillis()
         val sol = sol(app, agora)
         return SoSe.Estado(agora, emCasa(app, agora), sol?.first, sol?.second, SoSe.diaDaSemana(agora),
+            feriado = runCatching { FeriadosTv.hoje(app, agora) }.getOrDefault(false),
             perfil = runCatching { Perfil.ativa(app) }.getOrNull())
     }
 

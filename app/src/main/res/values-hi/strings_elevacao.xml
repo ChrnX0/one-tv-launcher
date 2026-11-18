@@ -115,4 +115,5 @@
     <string name="elv_ss_dia_util">कामकाजी दिन हो</string>
     <string name="elv_ss_perfil">प्रोफ़ाइल %1$s हो</string>
     <string name="elv_ss_det">◀ ▶ शर्त बदलते हैं</string>
+    <string name="extras_ABERTURA_PRONTA">इंट्रो छोड़ें (IntroDB): एपिसोड में टीवी सामुदायिक सेवा IntroDB से इंट्रो की जगह पूछता है (सिर्फ़ एपिसोड भेजता है, आपका खाता कभी नहीं); बंद होने पर सिर्फ़ आपके चिह्नित इंट्रो</string>
 </resources>

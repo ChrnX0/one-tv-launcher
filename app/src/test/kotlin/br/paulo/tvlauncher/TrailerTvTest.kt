@@ -41,4 +41,16 @@ class TrailerTvTest {
         assertTrue(TrailerLink.acabou(true, "Trailer", PlaybackState.STATE_PLAYING, "Outro vídeo"))   // o YouTube emendou outro
         assertFalse(TrailerLink.acabou(true, "Trailer", PlaybackState.STATE_BUFFERING, null))
     }
+
+    @Test fun saiuDoYoutubeSoComTelaDeVerdade() {
+        val nosso = "br.paulo.tvlauncher"
+        // o aviso "o Claude olhou a tela" (janela do serviço de acessibilidade) fechava o trailer (Sala, 18/11/2026)
+        assertFalse(TrailerLink.saiuDoYoutube(nosso, nosso, "android.widget.FrameLayout"))
+        assertFalse(TrailerLink.saiuDoYoutube(nosso, nosso, ""))
+        assertFalse(TrailerLink.saiuDoYoutube(nosso, "com.google.android.gms", "android.app.Dialog"))
+        assertTrue(TrailerLink.saiuDoYoutube(nosso, nosso, "br.paulo.tvlauncher.MainActivity"))
+        assertTrue(TrailerLink.saiuDoYoutube(nosso, nosso, "br.paulo.tvlauncher.FilmesActivity"))
+        assertTrue(TrailerLink.saiuDoYoutube(nosso, "com.netflix.ninja", "com.netflix.ninja.MainActivity"))
+        assertTrue(TrailerLink.saiuDoYoutube(nosso, "com.google.android.apps.tv.launcherx", ""))
+    }
 }

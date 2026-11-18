@@ -1,5 +1,7 @@
 // Painel em ru (gerado; veja i18n.js). Chave = texto em português da tela.
 traduzirPainelCom({T:{
+"Não perturbe (avisos esperam durante filme, madrugada ou visita)":"Не беспокоить (уведомления ждут во время фильма, ночью или при гостях)",
+"Pular abertura (IntroDB: pergunta onde fica a abertura do episódio)":"Пропуск заставки (IntroDB: спрашивает, где заставка эпизода)",
 "Levar para uma TV nova":"Перенести на новый телевизор",
 "Na TV nova, abra Configurações › Sistema › Trazer de outra TV (na primeira vez, o botão está na tela do QR). Leia o QR que aparece nela ou digite o endereço e o código. Vão as configurações, o PIN, os canais e a lista de apps, cifrados só para aquela TV; lá os apps voltam em fila, pela Play Store.":"На новом телевизоре откройте Настройки › Система › Перенести с другого телевизора (в первый раз кнопка на экране с QR). Отсканируйте показанный QR или введите адрес и код. Передаются настройки, PIN, каналы и список приложений, зашифрованные только для того телевизора; там приложения вернутся по очереди через Play Маркет.",
 "Endereço e código da TV nova":"Адрес и код нового телевизора",
