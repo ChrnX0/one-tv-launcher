@@ -1,0 +1,807 @@
+{
+  "lang": "pt-PT",
+  "path": "pt-PT",
+  "label": "Português (Portugal)",
+  "ui": {
+    "nav_features": "Funções",
+    "nav_plans": "Planos",
+    "nav_developers": "Desenvolvedores",
+    "nav_help": "Ajuda",
+    "cta_get": "Em breve na Google Play",
+    "cta_see": "Ver tudo o que ela faz",
+    "plan_basic": "Básico",
+    "plan_pro": "Pro",
+    "plan_ultra": "Ultra",
+    "plan_from": "a partir do",
+    "how": "Como usar",
+    "skip": "Pular para o conteúdo",
+    "language": "Idioma",
+    "back_top": "Voltar ao topo",
+    "footer_tagline": "O ecrã inicial para Google TV e Android TV.",
+    "footer_privacy": "Privacidade",
+    "footer_terms": "Termos",
+    "footer_compat": "Funciona no seu aparelho?",
+    "footer_trademark": "Sofaly não tem ligação com o Google. Google TV, Android TV e Chromecast são marcas do Google LLC.",
+    "of": "de"
+  },
+  "home": {
+    "title": "Sofaly · Sua TV, simples de novo",
+    "description": "Sofaly é o ecrã inicial para Google TV e Android TV: tudo organizado numa cruz (Ver, Ouvir, Jogar, Aplicações), letra grande e nenhuma publicidade.",
+    "eyebrow": "Ecrã inicial para Google TV e Android TV",
+    "h1": "Sua TV, simples de novo.",
+    "lead": "A Sofaly troca o ecrã inicial da sua TV por uma cruz organizada: Ver, Ouvir, Jogar e Aplicações, com letra grande e nenhuma publicidade. E ainda cuida da casa, acorda-o e conversa com o seu telemóvel.",
+    "hero_note": "Sem conta, sem publicidade, sem rastrear o que assiste.",
+    "cross_title": "Um ecrã, quatro caminhos",
+    "cross_lead": "◀ ▶ escolhem o mundo. ▲ ▼ descem pelo que tem dentro. É só isso, e qualquer pessoa da casa aprende em um minuto.",
+    "worlds": {
+      "continue": [
+        "Continuar",
+        "Volta de onde parou: o episódio, a rádio, o podcast ou a app."
+      ],
+      "watch": [
+        "Ver",
+        "As suas apps de vídeo, os seus filmes do computador ou do pendrive, e um player que toca de tudo."
+      ],
+      "listen": [
+        "Ouvir",
+        "Rádios do mundo inteiro e podcasts, com player em ecrã inteiro e timer para dormir."
+      ],
+      "play": [
+        "Jogar",
+        "Jogos na nuvem, do PC e retro num lugar só, com o comando já pareado."
+      ],
+      "apps": [
+        "Aplicações",
+        "As 8 que mais usa na frente, e todas as outras a um clique."
+      ]
+    },
+    "mock": {
+      "weather": "25° · Poucas nuvens",
+      "day": "Quarta-feira",
+      "date": "18 de novembro",
+      "watch_items": [
+        "Filmes",
+        "Séries",
+        "Na rede",
+        "YouTube"
+      ],
+      "watch_title": "Na rede",
+      "watch_detail": "Filmes do computador · 214 títulos",
+      "listen_items": [
+        "Rádio",
+        "Podcasts",
+        "A tocar agora"
+      ],
+      "listen_title": "Rádio",
+      "listen_detail": "Rádios do mundo inteiro, pelo nome ou pelo país",
+      "play_items": [
+        "Na nuvem",
+        "Do PC",
+        "Retro",
+        "Turma"
+      ],
+      "play_title": "Jogos",
+      "play_detail": "3 jogos na nuvem · comando ligado",
+      "apps_items": [
+        "YouTube",
+        "Netflix",
+        "Prime Video",
+        "Todas as apps"
+      ],
+      "apps_title": "Aplicações",
+      "apps_detail": "As 8 que mais usa",
+      "continue_items": [
+        "Episódio 4",
+        "Rádio",
+        "Podcast"
+      ],
+      "continue_title": "Continuar",
+      "continue_detail": "Parou no episódio 4 · faltam 21 min"
+    },
+    "why_title": "Por que trocar o ecrã do Google",
+    "why_lead": "O ecrã inicial que veio com a TV foi feita para vender. A Sofaly foi feita para a sua família usar.",
+    "why_rows": [
+      [
+        "Publicidade no ecrã inicial",
+        "Sim: destaques patrocinados e anúncios",
+        "Nunca"
+      ],
+      [
+        "Letra grande em todas os ecrãs",
+        "Não",
+        "Normal, Grande ou Maior"
+      ],
+      [
+        "Despertador que liga a TV",
+        "Não",
+        "Liga, sobe o volume aos poucos e dá bom dia"
+      ],
+      [
+        "Rádio e podcasts no ecrã inicial",
+        "Só por apps",
+        "Num mundo próprio, o Ouvir"
+      ],
+      [
+        "Filmes do seu computador ou NAS",
+        "Só por apps",
+        "Na rede, com póster e continuar"
+      ],
+      [
+        "Comando pelo telemóvel da casa",
+        "Comando básico",
+        "Painel completo com PIN"
+      ],
+      [
+        "Perfil de criança e hora de dormir",
+        "Limitado",
+        "Apps liberados, teto de volume e PIN para sair"
+      ],
+      [
+        "Backup da sua ecrã",
+        "Não",
+        "Toda noite, trancado com senha"
+      ]
+    ],
+    "why_head": [
+      "",
+      "Ecrã do Google TV",
+      "Sofaly"
+    ],
+    "why_source": "Publicidade no ecrã do Google TV: Android Authority, abril de 2026.",
+    "highlights_title": "Feita para a casa inteira",
+    "highlights": [
+      [
+        "access",
+        "Para os avós também",
+        "Letra grande, modo simples que fala o nome da app, alto contraste e leitor de ecrã. Em 15 línguas."
+      ],
+      [
+        "alarm",
+        "Acorda consigo",
+        "O despertador liga a TV sozinho, sobe o volume devagar e abre o Bom dia: hora, clima e agenda."
+      ],
+      [
+        "house",
+        "Cuida da casa",
+        "Luzes, cenas e a campainha do Home Assistant na TV. Desliga sozinha quando todos saem."
+      ],
+      [
+        "phone",
+        "Fala com o telemóvel",
+        "Comando, introduza e mande recados pelo telemóvel ou computador da casa, protegidos por PIN."
+      ],
+      [
+        "sun",
+        "Clima de verdade",
+        "O tempo de agora vem do aeroporto mais perto: medido, não chutado. Previsão de 9 dias com um OK."
+      ],
+      [
+        "lock",
+        "Se cuida sozinha",
+        "Backup trancado todas as noites, manutenção de madrugada e um diagnóstico que explica o que deu errado."
+      ]
+    ],
+    "chapters_title": "Tudo o que ela faz, organizado como ela",
+    "chapters_lead": "São mais de 80 funções. Escolha um mundo para ver cada uma explicada.",
+    "privacy_title": "O que é seu fica na sua casa",
+    "privacy_text": "A Sofaly não pede conta, não mostra publicidade e não rastreia o que assiste. Definições, fotos, recados e backups ficam na TV, ou numa conta sua se ligar uma. A TV só fala com os serviços que liga, e a política de privacidade lista cada um.",
+    "privacy_link": "Ler a política de privacidade",
+    "dev_title": "Tem uma app? Ponha-a no ecrã inicial.",
+    "dev_text": "Um plugin da Sofaly é a sua própria app de Android TV a mandar um cartão para o ecrã inicial: o placar do jogo, a cotação do dia, a contagem para as férias. Sem SDK, sem custo, e a app continua a ser sua.",
+    "dev_link": "Conhecer o kit de desenvolvedor",
+    "plans_title": "Comece de graça. Cresça quando quiser.",
+    "plans_text": "O Básico já tem o ecrã inicial completa, o player, o Ouvir, o Jogar, o despertador e o protetor. O Pro e o Ultra somam o telemóvel, a casa e a família.",
+    "plans_link": "Comparar os planos",
+    "faq_title": "Perguntas rápidas",
+    "faq": [
+      [
+        "Funciona na minha TV?",
+        "Funciona em Google TV e Android TV, como o Chromecast com Google TV, TVs com Google TV e caixinhas Android TV. A página de compatibilidade mostra os aparelhos testados."
+      ],
+      [
+        "Preciso de computador para instalar?",
+        "Não. Instale pela Google Play na própria TV e siga o passo a passo com o comando."
+      ],
+      [
+        "As minhas apps continuam?",
+        "Todas. A Sofaly só troca o ecrã inicial: Netflix, YouTube, Prime Video e o resto abrem como sempre, e o botão do microfone continua a ser o Google Assistente."
+      ],
+      [
+        "Tem publicidade?",
+        "Não, nem no plano grátis. A Sofaly não vende anúncio e não rastreia o que assiste."
+      ],
+      [
+        "Vem com canais ou filmes?",
+        "Não. A Sofaly organiza o que já é seu: as suas apps, os seus ficheiros e as rádios e podcasts abertos."
+      ],
+      [
+        "E se eu quiser voltar para o ecrã do Google?",
+        "É só escolher o ecrã do Google como inicial de novo nas definições da TV. Nada seu é apagado."
+      ]
+    ],
+    "final_title": "Sua TV, simples de novo.",
+    "final_text": "Instale, prima HOME e a casa inteira entende."
+  },
+  "features_page": {
+    "title": "Tudo o que a Sofaly faz",
+    "description": "Cada função da Sofaly explicada: o ecrã em cruz, Ver, Ouvir, Jogar, a casa, o clima, a família, o telemóvel e a privacidade.",
+    "h1": "Tudo o que a Sofaly faz",
+    "lead": "Organizado do mesmo jeito que o ecrã da TV: um mundo de cada vez. A etiqueta de cada função diz em qual plano ela começa.",
+    "index": "Mundos"
+  },
+  "chapters": {
+    "home": [
+      "O ecrã em cruz",
+      "Um ecrã organizada que qualquer um entende, e que se ajeita à sua maneira."
+    ],
+    "watch": [
+      "Ver",
+      "Seus filmes, suas séries e um player de sala de cinema."
+    ],
+    "listen": [
+      "Ouvir",
+      "Rádio e podcast com o mesmo cuidado que vídeo."
+    ],
+    "play": [
+      "Jogar",
+      "Todos os jogos num lugar só, prontos para o comando."
+    ],
+    "apps": [
+      "Aplicações",
+      "As suas apps na ordem que faz sentido."
+    ],
+    "house": [
+      "A casa",
+      "Despertador, timers, automações e a casa conectada."
+    ],
+    "sky": [
+      "Clima e protetor",
+      "O tempo certo e um protetor de ecrã que vale a pena deixar ligado."
+    ],
+    "family": [
+      "Família",
+      "Um perfil para cada um, cuidado com as crianças e visita bem-vinda."
+    ],
+    "phone": [
+      "Telemóvel e computador",
+      "A TV conversa com os aparelhos da casa."
+    ],
+    "care": [
+      "Se cuida sozinha",
+      "Backup, manutenção e diagnóstico sem ter de se lembrar."
+    ],
+    "everyone": [
+      "Para todo mundo",
+      "Feita para quem enxerga, ouve ou anda com o comando de jeitos diferentes."
+    ],
+    "privacy": [
+      "Privacidade",
+      "Sem publicidade, sem rastreio, com PIN no que importa."
+    ]
+  },
+  "features": {
+    "cross": [
+      "A cruz",
+      "Continuar, Ver, Ouvir, Jogar e Aplicações numa linha. O mundo escolhido fica grande, com o que tem dentro logo abaixo.",
+      "◀ ▶ trocam de mundo, ▲ ▼ descem pela coluna, OK abre."
+    ],
+    "continue": [
+      "Continuar",
+      "Um lugar só para voltar ao que estava a fazer: o episódio, a rádio, o podcast ou a última app.",
+      "É o primeiro item da cruz."
+    ],
+    "topbar": [
+      "Barra do topo",
+      "Pesquisa, voz, o clima numa linha e a hora, sempre no mesmo lugar. Recolhe-se enquanto navega para o ecrã respirar.",
+      "Suba até ela com ▲."
+    ],
+    "quick-panel": [
+      "Painel rápido",
+      "Wi-Fi, Bluetooth, temporizador para desligar, saída de som, alarme, perfis, notificações e a lista de compras, de qualquer app.",
+      "Segure VOLTAR."
+    ],
+    "remote": [
+      "O comando à sua maneira",
+      "HOME sempre volta para a Sofaly. Segurar VOLTAR abre o painel rápido, segurar HOME abre a Casa, e segurar OK numa app abre o menu dela.",
+      "Um testador de teclas mostra cada botão que a TV recebe."
+    ],
+    "now-playing": [
+      "A tocar agora",
+      "Uma pílula no topo com a capa e o título do que está a tocar. OK pausa ou continua, segurar OK abre a app.",
+      "Ligue em Ecrã inicial › Mais opções."
+    ],
+    "themes": [
+      "Temas e fundos",
+      "Escuro, com a arte do que está em foco. Galeria, com um quadro do Met por dia. Céu, com satélite e mapa. Ou um fundo seu, foto ou vídeo.",
+      "Escuro, Galeria e Céu no Básico; os outros no Pro."
+    ],
+    "icons": [
+      "Ícones do seu gosto",
+      "Use um pacote de ícones da Play ou troque o ícone de uma app só, um a um.",
+      "Segure OK na app › Trocar ícone."
+    ],
+    "plugin-cards": [
+      "Cartões de outras apps",
+      "Apps parceiras põem um cartão no ecrã inicial: o placar do jogo, a cotação, a contagem para uma data.",
+      "Os cartões aparecem no fim do Ver."
+    ],
+    "network-library": [
+      "Na rede",
+      "Vídeos, músicas e fotos do Plex, Jellyfin, Emby, pastas do PC ou do NAS (SMB, WebDAV, FTP, SFTP, NFS), OneDrive, Dropbox, Box, Google Drive, UPnP e pendrive.",
+      "Os servidores ligados e o pendrive aparecem sozinhos; os outros entram em Adicionar."
+    ],
+    "player": [
+      "Um player que toca de tudo",
+      "Som Dolby (AC3, E-AC3), DTS e TrueHD, e legendas de Blu-ray, DVD e de anime, sem instalar Kodi nem VLC.",
+      "Prima ▼ durante o vídeo para áudio, legenda e tamanho da legenda."
+    ],
+    "resume": [
+      "Continua de onde parou",
+      "Filmes e episódios voltam no ponto certo. O próximo episódio começa depois de 10 segundos, e depois de 3 seguidos a TV pergunta se ainda está a ver.",
+      "Funciona sozinho."
+    ],
+    "skip-intro": [
+      "Pular abertura",
+      "Quando a abertura da série é conhecida, aparece “Pular abertura · OK”. Também pode marcar a abertura uma vez e a TV lembra.",
+      "Vem ligado de fábrica."
+    ],
+    "audio-subtitles": [
+      "Áudio e legenda preferidos",
+      "Original com legenda ou dobrado, escolhido uma vez e lembrado por título. Legendas da internet quando o ficheiro não tem.",
+      "TV e filmes › Áudio e legendas."
+    ],
+    "easy-viewing": [
+      "Ver e ouvir melhor",
+      "Legenda com fundo preto ou amarela, “Voz mais clara” que realça a fala e “Volume parecido” que segura o filme alto e sobe o baixo.",
+      "No menu ▼ do player."
+    ],
+    "auto-subtitles": [
+      "Legenda automática",
+      "Quando não existe legenda no seu idioma, a TV traduz a que existe.",
+      "Escolha no menu de legenda do player."
+    ],
+    "movie-pages": [
+      "Fichas completas",
+      "Póster, nota, elenco, trailer, classificação e a coleção do filme numa ficha bonita, com letra grande.",
+      "OK num filme ou série."
+    ],
+    "lists": [
+      "Suas listas do Trakt e do Simkl",
+      "O que quer ver e o que já viu, sincronizado com a sua conta e com os outros aparelhos.",
+      "Entre pelo QR em TV e filmes › Serviços."
+    ],
+    "search": [
+      "Uma pesquisa para tudo",
+      "Procura filmes, séries, rádios e apps de uma vez, e continua a mesma pesquisa no YouTube, na Netflix ou no Prime Video.",
+      "Na barra do topo, ou pela voz."
+    ],
+    "radio": [
+      "Rádio do mundo inteiro",
+      "Milhares de rádios abertas, por nome, país ou género, com as suas favoritas e as últimas que tocaram.",
+      "Ouvir › Rádio."
+    ],
+    "podcasts": [
+      "Podcasts",
+      "Assine pelo nome, ouça na TV e continue o episódio de onde parou.",
+      "Ouvir › Podcasts."
+    ],
+    "podcast-search": [
+      "Descobrir podcasts",
+      "Pesquisa em todo o catálogo aberto de podcasts e a lista do que está em alta no seu país.",
+      "Ouvir › Podcasts › Pesquisar."
+    ],
+    "podcast-player": [
+      "Player em ecrã inteiro",
+      "Capa grande, capítulos, velocidade e um timer para dormir que pausa no fim do episódio.",
+      "Ouvir › A tocar agora › Abrir o player."
+    ],
+    "phone-sound": [
+      "O som no seu fone",
+      "O som do filme vai para o fone do telemóvel, sincronizado, para ver de noite sem acordar ninguém.",
+      "Menu ▼ do player › Som no fone."
+    ],
+    "games-hub": [
+      "Todos os jogos num lugar",
+      "GeForce NOW, Steam Link, Moonlight, PS Remote Play, RetroArch e os jogos da TV saem da linha de apps e moram no Jogar, separados em Na nuvem, Do PC, Retro e Da TV.",
+      "Segure OK num jogo para mudar de grupo."
+    ],
+    "pc-games": [
+      "Jogar no PC do quarto",
+      "A TV acorda o computador pela rede, espera que ele responda e abre o Moonlight ou o Steam Link.",
+      "Guarde o computador uma vez no painel."
+    ],
+    "network-test": [
+      "Testar a rede",
+      "Diz se a sua internet aguenta jogo na nuvem, e avisa antes de abrir um jogo com a rede fraca.",
+      "Jogar › Testar a rede."
+    ],
+    "controllers": [
+      "comando de jogos",
+      "Pareie o comando sem procurar menu, veja os ligados no alto do ecrã e, se quiser, faça o comando ligado abrir o Jogar.",
+      "Jogar › Parear comando."
+    ],
+    "game-mode": [
+      "Modo jogo",
+      "Com um jogo aberto, o protetor, o filtro noturno e os avisos esperam a partida acabar.",
+      "Liga sozinho."
+    ],
+    "crew": [
+      "A turma do Discord",
+      "Veja quem do seu servidor do Discord está online e em qual jogo, e chame a turma direto da TV.",
+      "Ligue o widget do servidor e cole o número."
+    ],
+    "apps-top": [
+      "As que mais usa à frente",
+      "Aplicações mostra as 8 apps que mais abre, e “Todas as apps” traz o resto numa grelha.",
+      "Aplicações, na cruz."
+    ],
+    "apps-organize": [
+      "À sua maneira",
+      "Mova, junte em pilhas ou esconda qualquer app. Apps de fábrica que não usa saem da frente.",
+      "Segure OK numa app."
+    ],
+    "app-buttons": [
+      "Botões Netflix e YouTube livres",
+      "Os botões de app do comando abrem a app que quiser. Prima para abrir, segure 3 segundos para trocar.",
+      "Funciona com o comando original."
+    ],
+    "alarm": [
+      "Despertador que liga a TV",
+      "Na hora, a TV liga sozinha, o volume sobe aos poucos e tem soneca. Cada alarme tem nome, dias, som e volume, até uma app ou a última rádio.",
+      "Segure VOLTAR › Alarme."
+    ],
+    "timers": [
+      "Timers e ampulheta",
+      "Até 3 timers com nome e aviso no ecrã, e um cronómetro.",
+      "“Ok Google, abrir Avisar em 10 minutos”."
+    ],
+    "gentle-off": [
+      "Desligar suave",
+      "O timer para dormir escurece o ecrã e baixa o volume nos 5 minutos finais, para ninguém acordar com o corte.",
+      "Bloco Timer do painel rápido."
+    ],
+    "idle-off": [
+      "Desliga se ninguém está a ver",
+      "Depois do tempo que escolher sem tocar no comando, a TV pergunta em letra grande se ainda está a ver e desliga.",
+      "Ecrã e energia › Desligar sem uso."
+    ],
+    "recipes": [
+      "Receitas prontas",
+      "Dormir, Novela e Jogo ajustam a TV de uma vez (som, ecrã e avisos). Um OK aplica, outro desfaz.",
+      "Painel rápido."
+    ],
+    "automations": [
+      "Automações",
+      "Na hora certa, ao premir um botão ou quando algo acontece (o filme pausou, todos saíram, vai chover): a TV abre uma app, roda uma cena ou desliga.",
+      "Casa e automações › Automações."
+    ],
+    "home-assistant": [
+      "Home Assistant na TV",
+      "Luzes, tomadas, ventiladores, cortinas, ar-condicionado e cenas, direto do sofá. Fala com o seu servidor na sua rede, sem nuvem no meio.",
+      "Segure HOME."
+    ],
+    "doorbell": [
+      "Quem está na porta",
+      "Quando a campainha toca, a foto da câmara aparece por cima do que está a ver.",
+      "Com Home Assistant."
+    ],
+    "presence": [
+      "Desliga quando todos saem",
+      "Com um router UniFi, a TV percebe que os telemóveis da casa saíram e vai dormir.",
+      "Ecrã e energia › Mais opções."
+    ],
+    "voice": [
+      "Atalhos de voz",
+      "“Ok Google, abrir Boletim do Tempo” lê a previsão. Também abrem Filmes, Minha casa, Mural, timers e o desligar.",
+      "Use o botão do microfone."
+    ],
+    "weather-now": [
+      "O tempo de agora, medido",
+      "A temperatura vem do boletim do aeroporto mais perto, e o ícone de dia e noite segue o nascer e o pôr do sol de onde a TV está.",
+      "No topo do ecrã inicial."
+    ],
+    "weather-3": [
+      "Chuva em três modelos",
+      "A chance de chuva é a mediana de três modelos do tempo (ECMWF, ICON e GFS), que erra menos que um só.",
+      "Aparece sozinha na previsão."
+    ],
+    "forecast": [
+      "Previsão em ecrã inteiro",
+      "As próximas 24 horas, gráfico de chuva, 9 dias, qualidade do ar, o sol e a lua.",
+      "OK no clima."
+    ],
+    "rain-alert": [
+      "Aviso de chuva",
+      "Um aviso por cima da app quando a chuva está para começar. Hora de recolher a roupa.",
+      "Ecrã inicial › Clima."
+    ],
+    "screensaver": [
+      "Um protetor que vale a pena",
+      "Saudação, hora grande, data, clima e cartões com notificações, próximo alarme e recados. No tema Galeria, o quadro do dia se move devagar para não marcar o ecrã.",
+      "Ecrã e energia › Protetor de ecrã."
+    ],
+    "photos": [
+      "Suas fotos no protetor",
+      "Mande fotos pelo telemóvel ou escolha uma pasta da rede. Elas ficam numa pasta só da TV.",
+      "Um QR abre o painel já na página certa."
+    ],
+    "good-morning": [
+      "Bom dia",
+      "Ao parar o despertador: saudação, hora, previsão e a agenda de hoje, e a TV pode ler em voz alta.",
+      "“Ok Google, abrir Bom dia”."
+    ],
+    "calendar": [
+      "Agenda do Google",
+      "Os compromissos de hoje e os aniversários na TV, de uma conta ou de todas juntas.",
+      "OK na data, no topo."
+    ],
+    "night-filter": [
+      "Filtro noturno",
+      "À noite o ecrã fica mais quente e menos forte para os olhos.",
+      "Ecrã e energia › Mais opções."
+    ],
+    "recap": [
+      "Retrospectiva da semana",
+      "Domingo à noite, um cartão com o tempo de ecrã por app, a internet usada e as quedas da rede.",
+      "Ecrã e energia › Mais opções."
+    ],
+    "profiles": [
+      "Um perfil para cada um",
+      "Cada conta Google da TV tem os seus favoritos, o que continuar e a ordem das apps.",
+      "Segure VOLTAR › Perfis."
+    ],
+    "kid-profile": [
+      "Perfil de criança",
+      "Marque um perfil como de criança: o modo infantil e a hora de dormir ligam sozinhos, e sair pede o PIN dos pais.",
+      "Painel rápido › Perfis."
+    ],
+    "bedtime": [
+      "Hora de dormir",
+      "No horário que escolhe, só as apps permitidas abrem e o volume tem teto.",
+      "Família › Mais opções."
+    ],
+    "screen-time": [
+      "Tempo de ecrã por dia",
+      "Um limite diário de TV para quem escolher.",
+      "Família › Mais opções."
+    ],
+    "guest": [
+      "Modo visita",
+      "Esconde o seu perfil, a agenda e as apps que escolher enquanto tem gente em casa.",
+      "Bloco Visita do painel rápido."
+    ],
+    "guest-wifi": [
+      "Wi-Fi da visita",
+      "Introduza a senha uma vez; a visita lê um QR na TV e já entra.",
+      "Família › Wi-Fi das visitas."
+    ],
+    "family-board": [
+      "Mural da família",
+      "Lista de compras, recados fixos e aniversários do dia, no painel rápido e no protetor de ecrã.",
+      "Edite pelo telemóvel; OK risca um item."
+    ],
+    "family-link": [
+      "Recado de longe",
+      "Quem mora longe manda recado e foto para a TV da casa, de qualquer lugar.",
+      "Convite por link."
+    ],
+    "video-message": [
+      "Recado em vídeo",
+      "Um vídeo curto da família aparece na TV com o nome de quem mandou.",
+      "Pelo painel no telemóvel."
+    ],
+    "web-panel": [
+      "Painel no telemóvel e no computador",
+      "Comando, escrever com acento, ver o ecrã da TV, fotos do protetor, mural e backups, pelo navegador de qualquer aparelho da casa.",
+      "Acesso remoto › Entrar pelo telemóvel (QR)."
+    ],
+    "ask-tv": [
+      "Pedir à TV",
+      "Escreva ou dite “abre o YouTube”, “avisa em 7 minutos”, “desliga em 30 minutos” e a TV faz.",
+      "No painel do telemóvel."
+    ],
+    "share": [
+      "Partilhar do telemóvel",
+      "Instalado com a app, o painel aparece em Partilhar: um vídeo do YouTube abre na TV, um link abre na TV e um texto vira recado.",
+      "Partilhar › Sofaly."
+    ],
+    "network-drive": [
+      "A TV como unidade de rede",
+      "Copie ficheiros para a TV a arrastar: no Windows ela aparece em Este Computador como um telemóvel; no Mac, no Linux e no telemóvel, por WebDAV seguro.",
+      "Acesso remoto › Mostrar como unidade de rede."
+    ],
+    "windows": [
+      "Atalho no Windows",
+      "A TV aparece na Rede do Explorador com um atalho que abre o painel, mesmo se o IP mudar.",
+      "Liga junto com o painel."
+    ],
+    "continue-tv": [
+      "Continuar em outra TV",
+      "Parou na sala? Mande para o quarto: a outra TV mostra “Continuar de onde parou?” e abre no mesmo ponto.",
+      "Menu do player › Enviar para outra TV."
+    ],
+    "together": [
+      "Ver junto",
+      "Duas casas assistem a mesma coisa ao mesmo tempo: pausou aqui, pausou lá, com reações no canto do ecrã.",
+      "Convite entre as TVs da família."
+    ],
+    "homes": [
+      "Várias casas",
+      "Cuide da TV da sua casa e da casa dos seus pais pelo mesmo telemóvel.",
+      "Pela app do telemóvel."
+    ],
+    "backup": [
+      "Backup trancado, todas as noites",
+      "Com a TV parada, um backup completo trancado com a sua senha. Ficam os 7 últimos, e todas as noites a TV confere se o backup restauraria.",
+      "Sistema › Backup automático."
+    ],
+    "cloud-backup": [
+      "Cópia na nuvem",
+      "As cópias vão também para o seu Google Drive, OneDrive, Dropbox, Box, NAS ou pendrive. Trancadas: nem a nuvem lê.",
+      "Sistema › Backup automático."
+    ],
+    "maintenance": [
+      "Manutenção de madrugada",
+      "Limpa o que sobra, conserta permissões e reagenda alarmes enquanto dorme.",
+      "Liga sozinha."
+    ],
+    "diagnose": [
+      "Diagnóstico da TV",
+      "Internet, DNS e porque uma app parou, tudo de uma vez e em frases que dá para entender.",
+      "“Ok Google, abrir Diagnóstico da TV”."
+    ],
+    "scoreboard": [
+      "Como esta TV está indo",
+      "A TV mede os próprios números (tempo para abrir, quedas, alarmes no horário) e mostra numa ecrã só. Nada sai da sua casa.",
+      "Sistema › Como esta TV está indo."
+    ],
+    "safe-mode": [
+      "Modo seguro",
+      "Se uma versão nova der problema logo depois de instalar, a TV volta para um modo seguro e mostra o caminho.",
+      "Aparece só quando precisa."
+    ],
+    "whats-new": [
+      "O que mudou",
+      "Cada versão explica o que mudou e traz um roteiro curto para conferir com o comando.",
+      "Sistema › O que mudou."
+    ],
+    "report": [
+      "Relatar um problema",
+      "Conte o que aconteceu com o comando ou pelo telemóvel; a TV junta o que precisa, sem nada pessoal.",
+      "Sistema › Relatar problema."
+    ],
+    "languages": [
+      "15 línguas",
+      "Português, inglês, espanhol, francês, alemão, italiano, russo, polonês, turco, japonês, chinês, coreano, hindi, indonésio e árabe, com ecrãs da direita para a esquerda. Segue o idioma da TV.",
+      "Muda sozinha com a TV."
+    ],
+    "text-size": [
+      "Tamanho do texto",
+      "Normal, Grande ou Maior, em todas os ecrãs, testado para não cortar nem sobrepor texto.",
+      "Ecrã inicial › Tamanho do texto."
+    ],
+    "simple-mode": [
+      "Modo simples",
+      "Cartões grandes, menos coisas no ecrã e o nome da app falado em voz alta. Para quem acha o comando difícil.",
+      "Ecrã inicial › Mais opções."
+    ],
+    "read-aloud": [
+      "Ler em voz alta",
+      "A TV fala o que está em foco, com som de navegação para saber onde está.",
+      "Ecrã inicial › Mais opções."
+    ],
+    "contrast": [
+      "Alto contraste",
+      "Texto com contraste de 7:1 e todas os ecrãs lidas pelo leitor de ecrã do Android.",
+      "Segue a acessibilidade da TV."
+    ],
+    "no-ads": [
+      "Nenhuma publicidade",
+      "Nem no plano grátis, nem um destaque patrocinado. O ecrã é sua.",
+      "Sempre."
+    ],
+    "no-tracking": [
+      "Nada de rastreio",
+      "Sem conta, sem análise de uso e sem relatório de erro a sair sem o seu pedido.",
+      "Sempre."
+    ],
+    "pin": [
+      "PIN no que importa",
+      "O que muda a TV pede PIN, e ações que apagam algo pedem de novo. Errou demais? A espera cresce a cada tentativa.",
+      "Acesso remoto › PIN."
+    ],
+    "private-dns": [
+      "DNS privado",
+      "Escolha um DNS seguro (DNS sobre TLS); se não responder, a TV volta para o anterior sozinha.",
+      "Avançado › Rede."
+    ],
+    "usage": [
+      "Internet por app",
+      "Quanto cada app usou de internet e com quem falou, guardado na TV por 7 dias.",
+      "Avançado › Rede."
+    ]
+  },
+  "plans_page": {
+    "title": "Planos · Sofaly",
+    "description": "Básico, Pro e Ultra: o que cada plano da Sofaly tem.",
+    "h1": "Planos",
+    "lead": "Comece pelo Básico, que já é o ecrã inicial completa. As vendas ainda não abriram: por enquanto, tudo é grátis.",
+    "price_soon": "Preço no lançamento",
+    "basic_who": "Para quem está no sofá",
+    "pro_who": "Para quem cuida da TV",
+    "ultra_who": "Para a casa e a família",
+    "basic_text": "O ecrã em cruz, o player, o Ouvir, o Jogar, o despertador, o protetor e toda a acessibilidade.",
+    "pro_text": "Tudo do Básico, mais o telemóvel, as automações, a casa conectada, os recados de longe e a personalização completa.",
+    "ultra_text": "Tudo do Pro, mais o clima em três modelos, fichas completas, legenda automática, várias casas e assistir junto.",
+    "includes": "Inclui",
+    "everything_basic": "Tudo do Básico",
+    "everything_pro": "Tudo do Pro"
+  },
+  "dev_page": {
+    "title": "Desenvolvedores · Sofaly",
+    "description": "Ponha o cartão da sua app de Android TV no ecrã inicial da Sofaly. Sem SDK, sem custo.",
+    "eyebrow": "Kit de desenvolvedor",
+    "h1": "A sua app no ecrã inicial de quem assiste.",
+    "lead": "Um plugin da Sofaly é a sua própria app de Android TV. Ela manda um cartão curto e a Sofaly desenha no ecrã inicial, com letra grande e no estilo da casa.",
+    "cta_start": "Começar pelo modelo",
+    "cta_spec": "Ler o contrato completo",
+    "why_title": "Por que fazer um plugin",
+    "why": [
+      [
+        "star",
+        "Na frente, não na gaveta",
+        "O seu cartão fica no ecrã inicial, onde a família olha sempre que liga a TV, e não perdido numa lista de apps."
+      ],
+      [
+        "puzzle",
+        "Sem SDK, sem custo",
+        "Um ContentProvider e uma linha de dados. Nenhuma biblioteca nossa para instalar, nenhuma taxa."
+      ],
+      [
+        "heart",
+        "A sua app, o seu negócio",
+        "Publique na Play como quiser, grátis ou pago. A Sofaly só desenha o cartão; a app e os clientes são seus."
+      ]
+    ],
+    "can_title": "O que dá para fazer",
+    "can": [
+      [
+        "Placar em direto",
+        "2 x 1, aos 38 do segundo tempo."
+      ],
+      [
+        "Cotação do dia",
+        "Dólar, bitcoin, a ação que acompanha."
+      ],
+      [
+        "Contagem regressiva",
+        "Faltam 12 dias para as férias."
+      ],
+      [
+        "Lembrete da casa",
+        "Hoje é dia de lixo reciclável."
+      ],
+      [
+        "Fase da lua",
+        "Lua crescente, 62%."
+      ],
+      [
+        "Status do seu serviço",
+        "O servidor de casa está no ar."
+      ]
+    ],
+    "steps_title": "Dois passos",
+    "step1": "Declare um provider com a ação da Sofaly",
+    "step2": "Responda com uma linha: título, valor, detalhe e cor",
+    "rules_title": "Regras que protegem quem assiste",
+    "rules": [
+      "Nunca desenha no ecrã inicial: manda texto e cor, a Sofaly desenha.",
+      "A Sofaly nunca lhe manda nada sobre as apps, as contas ou o que a pessoa assiste.",
+      "Plugins são do plano Pro, e a pessoa escolhe quais aparecem."
+    ],
+    "soon_title": "Em breve",
+    "soon_text": "Plugins de fundo de ecrã e vitrine de plugins na própria TV.",
+    "template_title": "Modelo pronto",
+    "template_text": "Duas apps de exemplo para compilar hoje: uma contagem para uma data que a pessoa escolhe na TV e a fase da lua de hoje. Sem internet, sem conta. Licença MIT No Attribution: copie, troque o pacote e publique."
+  }
+}
