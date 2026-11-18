@@ -36,12 +36,12 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     /**
      * Um item da coluna. [abrir] roda no OK; [opcoes] no OK segurado (null = segurar é igual a apertar).
      * [progresso] (0..1): quanto já foi visto (filme, série, programa da TV ao vivo); vira uma barra embaixo do ícone.
-     * [canto]: o que está acontecendo agora com o item (o programa no ar), para a barra de cima mostrar com ele em foco.
+     * [situacao]: o que está acontecendo agora com o item (no ar, parou em…): 1ª linha do canto de baixo à direita.
      */
     class Item(
         val id: String, val nome: String, val sub: String, val icone: Drawable,
         val abrir: () -> Unit, val opcoes: (() -> Unit)? = null, val aoEscolher: (() -> Unit)? = null,
-        val progresso: Float? = null, val canto: BarraIlha.Canto? = null,
+        val progresso: Float? = null, val situacao: CruzLogica.Situacao? = null,
     )
     class Categoria(val cat: CruzLogica.Categoria, val nome: String, val icone: Drawable, val itens: List<Item>)
 
@@ -143,9 +143,6 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             detalhe.gravity = (if (v) Gravity.TOP else Gravity.BOTTOM) or Gravity.END
             detalhe.requestLayout()
         }
-    /** A barra de cima mostra o [Item.canto] (barra Ilha): ele não se repete nos detalhes. */
-    var cantoNaBarra = false
-        set(v) { if (field != v) { field = v; atualizarDetalhe() } }
     /** Itens lembrados (id da categoria -> id do item), lidos por quem usa; valem só na 1ª montagem. */
     var lembrados: Map<String, String> = emptyMap()
     /** O último item aberto ("categoria|item"); quem usa grava e devolve aqui na 1ª montagem (HOME refeita). */
@@ -277,7 +274,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
             for ((j, c) in novas.withIndex()) for ((i, it) in c.itens.withIndex()) preencher(viewsItem[j][i], it)
             // O item em foco mudou de texto ou ícone (canal novo, episódio novo): a arte e o TalkBack acompanham.
             val agora = itemAtual()
-            if (agora != null && (antes?.nome != agora.nome || antes.sub != agora.sub || antes.icone !== agora.icone || antes.canto != agora.canto)) avisarMudanca()
+            if (agora != null && (antes?.nome != agora.nome || antes.sub != agora.sub || antes.icone !== agora.icone || antes.situacao != agora.situacao)) avisarMudanca()
             return
         }
         estado = if (assinatura == null) CruzLogica.inicial(novoMapa, lembrados, ultimoAberto?.substringAfter('|'))
@@ -488,15 +485,25 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         val i = itemAtual()
         val iv = viewAtual()
         val linhas = if (i == null || iv == null || !(hasFocus() || isFocused)) emptyList() else {
-            val p = CruzLogica.partes(i.sub, if (cantoNaBarra) BarraIlha.tirarDoItem(i.canto) else emptyList())
+            val p = CruzLogica.partes(i.sub, CruzLogica.tirarDoItem(i.situacao))
             val cortada = p.principal.isNotEmpty() && android.text.StaticLayout.Builder
                 .obtain(p.principal, 0, p.principal.length, iv.sub.paint, dpi(TEXTO_MAX)).setIncludePad(false).build().lineCount > ITEM_LINHAS
             CruzLogica.detalhes(p, principalCortada = cortada)
         }
+        val s = i?.situacao?.takeIf { it.texto.isNotBlank() && iv != null && (hasFocus() || isFocused) }
         detalhe.animate().cancel()
-        if (linhas.isEmpty()) { detalhe.alpha = 0f; detalhe.text = ""; return@Runnable }
-        val texto = linhas.joinToString("\n")
-        if (detalhe.text.toString() != texto) detalhe.text = texto
+        if (linhas.isEmpty() && s == null) { detalhe.alpha = 0f; detalhe.text = ""; return@Runnable }
+        // 1ª linha: a situação, com o rótulo em laranja ("Parou em  T1 E1 · 35% · faltam 43 min"); depois os detalhes.
+        val texto = android.text.SpannableStringBuilder().apply {
+            if (s != null) {
+                append(s.rotulo, android.text.style.ForegroundColorSpan(IconeCruz.COR_ACESA), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                setSpan(android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, length, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                append("  ").append(s.texto)
+                if (linhas.isNotEmpty()) append("\n")
+            }
+            append(linhas.joinToString("\n"))
+        }
+        if (detalhe.text.toString() != texto.toString()) detalhe.text = texto
         detalhe.animate().alpha(1f).setDuration(if (semAnimacao()) 0L else 220L).start()
     }
 
@@ -595,7 +602,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private fun preencher(v: ItemView, item: Item) {
         if (v.icone.drawable !== item.icone) v.icone.setImageDrawable(item.icone)
         if (v.nome.text.toString() != item.nome) v.nome.text = item.nome
-        val principal = CruzLogica.partes(item.sub, if (cantoNaBarra) BarraIlha.tirarDoItem(item.canto) else emptyList()).principal
+        val principal = CruzLogica.partes(item.sub, CruzLogica.tirarDoItem(item.situacao)).principal
         if (v.principal != principal || v.sub.text.toString() != principal) { v.principal = principal; v.sub.text = principal }
         v.sub.visibility = if (principal.isEmpty()) View.GONE else View.VISIBLE
         val p = item.progresso
@@ -780,7 +787,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private fun anunciar() {
         val c = categoriaAtual() ?: return
         val i = itemAtual() ?: return
-        contentDescription = listOf(c.nome, i.nome, i.sub, posicao.text.toString()).filter { it.isNotEmpty() }.joinToString(", ")
+        contentDescription = listOf(c.nome, i.nome, i.situacao?.let { it.rotulo + " " + it.texto }.orEmpty(), i.sub, posicao.text.toString()).filter { it.isNotEmpty() }.joinToString(", ")
         if (isFocused) sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
     }
 

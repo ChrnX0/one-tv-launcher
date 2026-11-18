@@ -32,31 +32,17 @@ class BarraIlhaTest {
         assertEquals(BarraIlha.Tipo.TOCANDO, BarraIlha.escolher(e.copy(alarmeFaltaMs = -5_000L))?.tipo) // já passou
     }
 
-    @Test fun cantoVaiAtePilulaENaoSomeDeTodo() {
-        assertEquals(332, BarraIlha.larguraCanto(48, 400, 20, 120))      // pílula quieta: espaço até ela
-        assertEquals(120, BarraIlha.larguraCanto(48, 150, 20, 120))      // pílula enorme: sobra o mínimo
-    }
-
-    @Test fun cantoSegueASelecaoESemRepetirAPilula() {
-        val c = BarraIlha.Canto("No ar", "Jornal da Noite · faltam 25 min", "tv")
-        assertTrue(BarraIlha.cantoVisivel(c, null))
-        assertFalse(BarraIlha.cantoVisivel(c, "jornal da noite"))      // a pílula já diz
-        assertTrue(BarraIlha.cantoVisivel(c, "4:32"))
-        assertFalse(BarraIlha.cantoVisivel(null, null))
-        assertFalse(BarraIlha.cantoVisivel(c.copy(texto = " "), null))
-    }
-
     @Test fun andamentoNoMesmoFormatoParaTudo() {
-        assertEquals("T1 E1 · 35% · faltam 43 min", BarraIlha.andamento("T1 E1", 0.35f, "faltam 43 min"))
-        assertEquals("Globo Esporte · 62% · faltam 17 min", BarraIlha.andamento(" Globo Esporte ", 0.6249f, "faltam 17 min"))
-        assertEquals("faltam 2 min", BarraIlha.andamento(null, 0.999f, "faltam 2 min"))   // 100% não aparece
-        assertEquals("T1 E1", BarraIlha.andamento("T1 E1", 0f, " "))                       // 0% também não
-        assertEquals("", BarraIlha.andamento(null, null, null))
+        assertEquals("T1 E1 · 35% · faltam 43 min", CruzLogica.andamento("T1 E1", 0.35f, "faltam 43 min"))
+        assertEquals("Globo Esporte · 62% · faltam 17 min", CruzLogica.andamento(" Globo Esporte ", 0.6249f, "faltam 17 min"))
+        assertEquals("faltam 2 min", CruzLogica.andamento(null, 0.999f, "faltam 2 min"))   // 100% não aparece
+        assertEquals("T1 E1", CruzLogica.andamento("T1 E1", 0f, " "))                       // 0% também não
+        assertEquals("", CruzLogica.andamento(null, null, null))
     }
 
-    @Test fun oQueOCantoMostraSaiDoItem() {
-        val c = BarraIlha.Canto("Parou em", "T1 E1 · 35% · faltam 43 min", "series", tira = listOf("T1 E1 · faltam 43 min"))
-        assertEquals(listOf("T1 E1 · faltam 43 min", "T1 E1 · 35% · faltam 43 min"), BarraIlha.tirarDoItem(c))
-        assertEquals(emptyList<String>(), BarraIlha.tirarDoItem(null))
+    @Test fun oQueASituacaoMostraSaiDoItem() {
+        val c = CruzLogica.Situacao("Parou em", "T1 E1 · 35% · faltam 43 min", "series", tira = listOf("T1 E1 · faltam 43 min"))
+        assertEquals(listOf("T1 E1 · faltam 43 min", "T1 E1 · 35% · faltam 43 min"), CruzLogica.tirarDoItem(c))
+        assertEquals(emptyList<String>(), CruzLogica.tirarDoItem(null))
     }
 }
