@@ -60,4 +60,7 @@
     <string name="home_card_ouvir">Слушать</string>
     <string name="home_destaque_ouvir">Радио и подкасты</string>
     <string name="extras_CARD_OUVIR">Карточка «Слушать» на главном экране (радио и подкасты)</string>
+    <string name="pod_sugestoes">Рекомендации</string>
+    <string name="pod_sugestao_seguir">OK — подписаться</string>
+    <string name="pod_sugeridos_seguidos">Рекомендованные подкасты добавлены в «Мои подкасты»</string>
 </resources>

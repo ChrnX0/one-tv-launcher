@@ -60,4 +60,7 @@
     <string name="home_card_ouvir">Dengarkan</string>
     <string name="home_destaque_ouvir">Radio dan podcast</string>
     <string name="extras_CARD_OUVIR">Kartu Dengarkan di layar utama (radio dan podcast)</string>
+    <string name="pod_sugestoes">Saran</string>
+    <string name="pod_sugestao_seguir">OK untuk mengikuti</string>
+    <string name="pod_sugeridos_seguidos">Podcast saran ditambahkan ke Podcast saya</string>
 </resources>

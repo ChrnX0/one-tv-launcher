@@ -19,7 +19,8 @@ import java.util.Locale
  *  - Tocando (só com episódio): Pausar/Continuar, Voltar 15 s, Avançar 30 s, Velocidade (0,8x a 2x, sem mudar o tom),
  *    Pular silêncios e Parar. As teclas ⏪ ⏩ ⏯ do controle fazem o mesmo de qualquer prateleira;
  *  - Continuar (começados, com a barra do quanto já ouviu), Novos (14 dias, nunca começados), Meus podcasts (capas);
- *  - Resultado da busca e Buscar (plano Pro, com a busca ligada), Adicionar (colar o endereço, pelo celular).
+ *  - Sugestões (os que vêm no app, do idioma da TV, [PodcastStarter]; OK segue), Resultado da busca e Buscar (plano Pro,
+ *    com a busca ligada), Adicionar (colar o endereço, pelo celular). Na primeira vez, segue sozinho 4 sugeridos.
  * Um podcast aberto troca as prateleiras pelos episódios dele e "Sobre" (a descrição, deixar de seguir); Voltar sai dele.
  * O canto de cima à direita mostra o episódio que toca, com capa, onde está e quanto falta (barra), e a capa desfocada no
  * fundo. Episódio em vídeo abre no player de vídeo. Explícito some com o modo infantil ou o controle dos pais ligado.
@@ -34,6 +35,8 @@ class PodcastsActivity : Activity() {
     private var leu = false
     /** Resultado da busca (título da prateleira, lista), só com a busca ligada ([PodcastBusca]). */
     private var resultados: Pair<String, List<PodcastBusca.Resultado>>? = null
+    /** Os podcasts que vêm no app, do idioma da TV ([PodcastStarter]). */
+    private var sugestoes: List<PodcastStarter.Sugestao> = emptyList()
     /** O podcast aberto (episódios dele), ou null = a tela principal. */
     private var aberto: String? = null
     /** Na próxima montagem, o foco vai para esta (prateleira, item). */
@@ -109,11 +112,22 @@ class PodcastsActivity : Activity() {
         val app = applicationContext
         Podcasts.naFila {
             val a = Podcasts.assinaturas(app); val f = Podcasts.feeds(app); val p = Podcasts.posicoes(app); val prot = Podcasts.protegido(app)
+            val sug = PodcastStarter.lista(app)
             runOnUiThread {
                 if (isDestroyed) return@runOnUiThread
-                assinaturas = a; feeds = f; posicoes = p; protegido = prot; leu = true
+                assinaturas = a; feeds = f; posicoes = p; protegido = prot; sugestoes = sug; leu = true
                 if (inicio) focarDepois = inicial()
                 montar()
+            }
+            // Primeira vez com quase nada seguido: segue sozinho 4 sugeridos do idioma (rede: fora da fila).
+            if (inicio && !PodcastStarter.jaFez(app)) Fundo.rodar("podcast") {
+                val n = runCatching { PodcastStarter.seguirNaPrimeiraVez(app, a.map { it.url }.toSet()) }.getOrDefault(0)
+                if (n > 0) runOnUiThread {
+                    if (isDestroyed) return@runOnUiThread
+                    AvisoTv.rapido(app, getString(R.string.pod_titulo), getString(R.string.pod_sugeridos_seguidos), 5)
+                    if (aberto == null) focarDepois = "meus" to null
+                    recarregar()
+                }
             }
             if (buscarNovos && a.isNotEmpty()) Fundo.rodar("podcast") {   // rede: fora da fila
                 // Feeds lidos há mais de 6 h: relê (pedido condicional, quase sempre "nada novo").
@@ -129,6 +143,7 @@ class PodcastsActivity : Activity() {
         continuarLista().isNotEmpty() -> "continuar" to null
         novosLista().isNotEmpty() -> "novos" to null
         assinaturas.isNotEmpty() -> "meus" to null
+        sugestoesVisiveis().isNotEmpty() -> "sugestoes" to null
         else -> "adicionar" to null
     }
 
@@ -144,6 +159,8 @@ class PodcastsActivity : Activity() {
     private fun continuarLista() = Podcasts.continuar(posicoes, assinaturas.map { it.url }.toSet())
         .mapNotNull { p -> feeds[p.feed]?.episodios?.firstOrNull { it.guid == p.guid }?.let { Triple(p.feed, it, p) } }
         .filter { Podcasts.visivel(it.second, protegido) }
+
+    private fun sugestoesVisiveis() = PodcastStarter.paraMostrar(sugestoes, assinaturas.map { it.url }.toSet(), protegido)
 
     private fun novosLista() = Podcasts.novos(feeds, posicoes, System.currentTimeMillis()).filter { Podcasts.visivel(it.second, protegido) }
 
@@ -300,6 +317,14 @@ class PodcastsActivity : Activity() {
                     CruzLogica.linhas(a.autor.ifEmpty { f?.autor }, CruzLogica.juntar(ultimo, if (n > 0) getString(R.string.ouv_n_episodios, n) else null)),
                     capa = a.capa.ifEmpty { f?.capa.orEmpty() }, cor = IconeOuvir.cor(IconeOuvir.Tipo.PODCAST), monograma = CapaOuvir.iniciais(a.titulo),
                     cobrir = true, abrir = { abrir(a.url) }, opcoes = { menuPodcast(a) })
+            })
+        // Os que vêm no app (18/11/2026): OK segue e abre o podcast, como um resultado de busca.
+        val sug = sugestoesVisiveis()
+        if (sug.isNotEmpty()) l += CruzOuvir.Prateleira("sugestoes", getString(R.string.pod_sugestoes), IconeOuvir.Tipo.EM_ALTA,
+            sug.map { s ->
+                CruzOuvir.Item("sug:${s.url}", s.titulo, CruzLogica.linhas(s.autor, getString(R.string.pod_sugestao_seguir)),
+                    capa = s.capa, cor = IconeOuvir.cor(IconeOuvir.Tipo.PODCAST), monograma = CapaOuvir.iniciais(s.titulo), cobrir = true,
+                    abrir = { adicionar(s.url) })
             })
         // Buscar é do Pro (Paulo, 17/11/2026); seguir pelo endereço ou pelo OPML é do Básico.
         if (PodcastBusca.disponivel() && Planos.permite(this, Planos.Recurso.PODCAST_BUSCA)) {

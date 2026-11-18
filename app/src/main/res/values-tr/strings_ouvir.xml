@@ -60,4 +60,7 @@
     <string name="home_card_ouvir">Dinle</string>
     <string name="home_destaque_ouvir">Radyo ve podcast\'ler</string>
     <string name="extras_CARD_OUVIR">Ana ekranda Dinle kartı (radyo ve podcast\'ler)</string>
+    <string name="pod_sugestoes">Öneriler</string>
+    <string name="pod_sugestao_seguir">Takip için OK</string>
+    <string name="pod_sugeridos_seguidos">Önerilen podcast\'ler Podcast\'lerim\'e eklendi</string>
 </resources>

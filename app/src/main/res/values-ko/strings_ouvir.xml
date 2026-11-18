@@ -60,4 +60,7 @@
     <string name="home_card_ouvir">듣기</string>
     <string name="home_destaque_ouvir">라디오 및 팟캐스트</string>
     <string name="extras_CARD_OUVIR">홈 화면의 듣기 카드(라디오 및 팟캐스트)</string>
+    <string name="pod_sugestoes">추천</string>
+    <string name="pod_sugestao_seguir">OK를 눌러 팔로우</string>
+    <string name="pod_sugeridos_seguidos">추천 팟캐스트를 내 팟캐스트에 추가했습니다</string>
 </resources>
