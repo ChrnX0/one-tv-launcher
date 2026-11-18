@@ -99,15 +99,70 @@ object PluginsTv {
     }
 }
 
-/** Configurações › Aparência › Plugins: liga e desliga cada plugin instalado (o OK é dado aqui, depois do PIN). */
+/**
+ * Configurações › Aparência › Plugins (o PIN parental já foi pedido para entrar). Uma tela só, em quatro grupos:
+ * FUNDOS (plugins de fundo instalados: usar, ajustes do plugin, parar), ÍCONES (pacotes de ícones de outros
+ * desenvolvedores; ficam congelados, IconPackFreezer), CARTÕES (o OK de cada cartão) e CONSEGUIR PLUGINS (a vitrine
+ * PluginCatalog: Play Store, instalar do Release oficial ou QR). Pacotes e fundos de terceiros = plano Pro.
+ */
 class PluginsActivity : Activity() {
+    private val trabalho = Executors.newSingleThreadExecutor { r -> Thread(r, "Plugins").apply { isDaemon = true } }
+    private var aberto: android.app.Dialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (VigiaAtualizacao.fechada(this)) return
-        val (raiz, coluna) = Estilo.telaLista(this, getString(R.string.plg_titulo), getString(R.string.plg_det))
-        val todos = PluginsTv.instalados(this)
-        if (todos.isEmpty()) coluna.addView(Estilo.texto(this, Estilo.Papel.CORPO, getString(R.string.plg_nenhum)))
-        for (p in todos) {
+        montar()
+    }
+
+    override fun onDestroy() { super.onDestroy(); aberto?.dismiss(); trabalho.shutdown() }
+
+    /** Volta de outro app (ajustes do plugin, Play Store): a lista pode ter mudado. */
+    override fun onRestart() { super.onRestart(); montar() }
+
+    private fun pro(): Boolean {
+        if (Planos.permite(this, Planos.Recurso.PLUGINS)) return true
+        startActivity(Intent(this, ConhecerProActivity::class.java))
+        return false
+    }
+
+    private fun montar() {
+        val (raiz, coluna) = Estilo.telaLista(this, getString(R.string.plg_titulo), getString(R.string.wp_det))
+        val fundos = WallpaperPlugins.instalados(this)
+        val pacotes = PacoteIcones.deFora(this)
+        val cartoes = PluginsTv.instalados(this)
+
+        // ---- Fundos
+        coluna.addView(Estilo.secao(this, getString(R.string.wp_secao_fundos)))
+        if (fundos.isEmpty()) coluna.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.wp_nenhum_fundo)))
+        val escolhido = WallpaperPlugins.escolhidoId(this)
+        for (f in fundos) {
+            val emUso = f.id == escolhido && Tema.atual(this) == Tema.PLUGIN && WallpaperPlugins.permitido(this, f.pacote)
+            val valor = Estilo.valor(this, if (emUso) getString(R.string.wp_em_uso) else "", seta = !emUso)
+            coluna.addView(Estilo.linhaOpcao(this, f.nome, getString(R.string.wp_tipo_fundo), valor).apply {
+                setOnClickListener { menuFundo(f, emUso) }
+            }, Estilo.lpLinha(this))
+        }
+
+        // ---- Ícones
+        coluna.addView(Estilo.secao(this, getString(R.string.wp_secao_icones)).apply { setPaddingRelative(0, Estilo.dp(context, 24), 0, 0) })
+        if (pacotes.isEmpty()) coluna.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.wp_nenhum_icone)))
+        for ((pac, nome) in pacotes) {
+            val emUso = PacoteIcones.escolhido(this) == pac
+            val valor = Estilo.valor(this, if (emUso) getString(R.string.wp_em_uso) else getString(R.string.wp_usar_icones), seta = !emUso)
+            coluna.addView(Estilo.linhaOpcao(this, nome, getString(R.string.wp_icones_det), valor).apply {
+                setOnClickListener {
+                    if (!pro()) return@setOnClickListener
+                    PacoteIcones.escolher(this@PluginsActivity, if (emUso) "" else pac)   // de novo no que está em uso = desliga
+                    montar()
+                }
+            }, Estilo.lpLinha(this))
+        }
+
+        // ---- Cartões
+        coluna.addView(Estilo.secao(this, getString(R.string.wp_secao_cartoes)).apply { setPaddingRelative(0, Estilo.dp(context, 24), 0, 0) })
+        if (cartoes.isEmpty()) coluna.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.plg_nenhum)))
+        for (p in cartoes) {
             val valor = Estilo.valor(this, "", seta = false)
             fun pintar() { valor.text = getString(if (PluginsTv.permitido(this, p.pacote)) R.string.plg_ligado else R.string.plg_desligado) }
             pintar()
@@ -118,10 +173,93 @@ class PluginsActivity : Activity() {
                         android.widget.Toast.makeText(this@PluginsActivity, getString(R.string.plg_limite, PluginCartao.MAX_PLUGINS), android.widget.Toast.LENGTH_LONG).show()
                     pintar()
                 }
-            })
+            }, Estilo.lpLinha(this))
+        }
+
+        // ---- Conseguir plugins (vitrine)
+        coluna.addView(Estilo.secao(this, getString(R.string.wp_secao_descobrir)).apply { setPaddingRelative(0, Estilo.dp(context, 24), 0, 0) })
+        val instalados = (fundos.map { it.pacote } + pacotes.map { it.first }).toSet()
+        for (e in PluginCatalog.LISTA) {
+            val pac = e.pacote ?: e.lojaId?.let { LojaCurada.pacoteGuardado(this, it) }
+            val ja = pac != null && (pac in instalados || instaladoNoSistema(pac))
+            val tipo = getString(if (e.tipo == PluginCatalog.Tipo.FUNDO) R.string.wp_tipo_fundo else R.string.wp_tipo_icones)
+            val valor = Estilo.valor(this, if (ja) getString(R.string.wp_instalado) else "", seta = !ja)
+            coluna.addView(Estilo.linhaOpcao(this, e.nome, "$tipo · ${getString(e.descricao)}", valor).apply {
+                setOnClickListener { if (ja) montar() else oferecer(e) }
+            }, Estilo.lpLinha(this))
         }
         coluna.addView(Estilo.texto(this, Estilo.Papel.LEGENDA, getString(R.string.plg_seguranca)).apply { setPaddingRelative(0, 24, 0, 0) })
         setContentView(raiz)
-        coluna.getChildAt(0)?.takeIf { it.isFocusable }?.requestFocus()
+        coluna.getChildAt(1)?.takeIf { it.isFocusable }?.requestFocus() ?: run {
+            for (k in 0 until coluna.childCount) if (coluna.getChildAt(k).isFocusable) { coluna.getChildAt(k).requestFocus(); break }
+        }
+    }
+
+    private fun instaladoNoSistema(p: String) =
+        runCatching { packageManager.getApplicationInfo(p, PackageManager.MATCH_DISABLED_COMPONENTS); true }.getOrDefault(false)
+
+    /** Fundo instalado: usar como fundo, ajustes do próprio plugin, parar de usar. */
+    private fun menuFundo(f: WallpaperPlugins.Provider, emUso: Boolean) {
+        val opcoes = mutableListOf<Pair<String, () -> Unit>>()
+        if (!emUso) opcoes += getString(R.string.wp_usar) to {
+            if (pro()) {
+                if (WallpaperPlugins.usar(this, f)) montar()
+                else android.widget.Toast.makeText(this, getString(R.string.wp_sem_cert), android.widget.Toast.LENGTH_LONG).show()
+            }
+        }
+        if (f.settings != null || emUso) opcoes += getString(R.string.wp_configurar) to { WallpaperPlugins.configurar(this, f); Unit }
+        if (emUso) opcoes += getString(R.string.wp_parar) to { WallpaperPlugins.parar(this, f); montar() }
+        aberto = Estilo.lista(this, f.nome, opcoes.map { it.first }) { i -> opcoes[i].second() }
+    }
+
+    /** Plugin da vitrine que não está na TV: Play Store, instalar do Release oficial (APK do site) e o QR da página. */
+    private fun oferecer(e: PluginCatalog.Entrada) {
+        val temPlay = runCatching { packageManager.getPackageInfo("com.android.vending", 0); true }.getOrDefault(false)
+        val acao = PluginCatalog.acao(e, BuildConfig.PLAY, temPlay)
+        val d = android.app.Dialog(this)
+        val botoes = mutableListOf(Estilo.botao(this, getString(R.string.vq_fechar), primario = false).apply { setOnClickListener { d.dismiss() } })
+        when (acao) {
+            PluginCatalog.Acao.PLAY -> botoes += Estilo.botao(this, getString(R.string.wp_abrir_play)).apply {
+                setOnClickListener {
+                    d.dismiss()
+                    runCatching { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${e.play}")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+                }
+            }
+            PluginCatalog.Acao.INSTALAR -> botoes += Estilo.botao(this, getString(R.string.wp_instalar)).apply {
+                setOnClickListener {
+                    if (!pro()) return@setOnClickListener
+                    isEnabled = false
+                    text = getString(R.string.wp_instalando)
+                    val id = e.lojaId ?: return@setOnClickListener
+                    trabalho.execute {
+                        val r = LojaCurada.instalar(applicationContext, id)
+                        runOnUiThread {
+                            if (isDestroyed) return@runOnUiThread
+                            d.dismiss()
+                            val ok = !r.startsWith("erro:")
+                            android.widget.Toast.makeText(this@PluginsActivity, if (ok) getString(R.string.wp_instalou, e.nome)
+                                else getString(R.string.wp_nao_instalou, r.removePrefix("erro:").trim()), android.widget.Toast.LENGTH_LONG).show()
+                            montar()
+                        }
+                    }
+                }
+            }
+            PluginCatalog.Acao.SO_QR -> {}
+        }
+        val tela = Estilo.dialogo(this, getString(if (e.tipo == PluginCatalog.Tipo.FUNDO) R.string.wp_tipo_fundo else R.string.wp_tipo_icones),
+            e.nome, getString(e.descricao) + "\n\n" + getString(R.string.wp_qr), botoes)
+        PluginCatalog.pagina(e)?.let { link ->
+            val lado = Estilo.dp(this, 220)
+            val qr = android.widget.ImageView(this).apply { setImageBitmap(runCatching { QrCodigo.bitmap(link, lado) }.getOrNull()) }
+            (tela.getChildAt(0) as? android.widget.LinearLayout)?.addView(qr, 0, android.widget.LinearLayout.LayoutParams(lado, lado).apply {
+                bottomMargin = Estilo.dp(this@PluginsActivity, 16)
+            })
+        }
+        d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
+        d.setContentView(tela)
+        d.window?.apply { setBackgroundDrawable(android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT)); setLayout(-1, -1) }
+        d.show()
+        aberto = d
+        botoes.last().requestFocus()
     }
 }

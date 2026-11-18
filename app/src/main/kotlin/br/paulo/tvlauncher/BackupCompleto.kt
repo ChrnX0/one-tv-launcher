@@ -37,6 +37,7 @@ object BackupCompleto {
         "sincronizar_filmes",   // Trakt/Simkl (14/11/2026): o que sincronizar, de qual perfil, e as listas escolhidas
         "ouvir",   // Ouvir (17/11/2026): rádio continua ao sair da tela (e, depois, os ajustes dos podcasts)
         "pacote_icones", "fundo_meu",   // degrau 1 (15/11/2026): pacote de ícones e "Meu fundo" (caminho, brilho, contraste)
+        "custom_icons",   // plugins visuais (18/11/2026): ícone trocado à mão, app por app (o OK dos plugins NÃO vai: é por certificado desta TV)
         "cruz_apps",   // cruz (18/11/2026): em que categoria cada app mora ("Mover para…"), fixados no topo e aberturas
         "addons",   // addons no protocolo do Stremio (16/11/2026): a lista instalada e o aceite dos termos
         "backup_recuperacao",   // elevação 19.6: só a parte PÚBLICA da chave de recuperação (a TV restaurada segue trancando com ela)
@@ -48,6 +49,8 @@ object BackupCompleto {
      * "atualizador", "aviso_tv" e "loja_curada" (estado passageiro ou cache baixado de novo).
      */
     internal val FORA_DE_PROPOSITO = setOf("confirmacoes", "familia_link", "plugins",   // plugins: o OK vale para o certificado desta TV
+        "wallpaper_plugins",   // plugins de fundo (18/11/2026): o OK também é por certificado desta TV
+        "icon_pack_frozen",   // pacotes que NÓS congelamos nesta TV (na outra o pacote nem está congelado)
           // degrau 3: o link da família não viaja no backup (restaurar = link novo)
         "emprestimo_shell", "emprestimo_dono",   // empréstimos: restaurar não pode ligar poder emprestado sem o PIN (e o uid de cada app muda entre aparelhos)
         "abertura_pronta",   // rodada 15: só cache das marcações do IntroDB (refaz sozinho)

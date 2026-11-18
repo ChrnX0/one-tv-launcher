@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plugins visuais (18/11/2026): fundo de plugin, trocar ícone, pacote congelado, vitrine -->
+<resources>
+    <string name="wp_tema">插件背景</string>
+    <string name="wp_cfg_det">来自其他应用的背景、图标包和卡片。每一个都需要你同意。</string>
+    <string name="wp_det">其他开发者的应用，可为主屏幕添加背景、图标或卡片。只开启你信任的。</string>
+    <string name="wp_secao_fundos">背景</string>
+    <string name="wp_secao_icones">图标包</string>
+    <string name="wp_secao_cartoes">卡片</string>
+    <string name="wp_secao_descobrir">获取插件</string>
+    <string name="wp_tipo_fundo">背景</string>
+    <string name="wp_tipo_icones">图标</string>
+    <string name="wp_em_uso">使用中</string>
+    <string name="wp_usar">设为背景</string>
+    <string name="wp_configurar">插件设置</string>
+    <string name="wp_parar">停止使用</string>
+    <string name="wp_sem_cert">无法读取此插件的签名。</string>
+    <string name="wp_nenhum_fundo">还没有背景插件。下方可查看获取途径。</string>
+    <string name="wp_nenhum_icone">还没有图标包。下方可查看获取途径。</string>
+    <string name="wp_icones_det">保持冻结：启动器会保存所用图标的副本。</string>
+    <string name="wp_usar_icones">使用</string>
+    <string name="wp_instalado">已安装</string>
+    <string name="wp_instalar">安装</string>
+    <string name="wp_instalando">正在安装…</string>
+    <string name="wp_instalou">已安装 %1$s。</string>
+    <string name="wp_nao_instalou">无法安装：%1$s</string>
+    <string name="wp_abrir_play">在 Play 商店中打开</string>
+    <string name="wp_qr">用手机相机对准二维码即可打开页面。</string>
+    <string name="wp_trocar_icone">更换图标</string>
+    <string name="wp_icone_titulo">%1$s 的图标</string>
+    <string name="wp_icone_sub">%1$s · %2$d 个图标</string>
+    <string name="wp_icone_original">原始图标</string>
+    <string name="wp_icone_sugerido">推荐</string>
+    <string name="wp_icone_voltar">跟随图标包</string>
+    <string name="wp_icone_sem_pacote">未安装图标包。请在 设置 › 外观 › 插件 中获取。</string>
+    <string name="wp_d_aerial">城市与自然的慢速航拍视频</string>
+    <string name="wp_d_overflight">Apple TV 航拍视频，或任意视频列表</string>
+    <string name="wp_d_daily">每天一张新的每日照片</string>
+    <string name="wp_d_weather">以今天的天气为背景</string>
+    <string name="wp_d_movieart">来自 TMDB 的电影和剧集图片</string>
+    <string name="wp_d_sofadrop">来自热门榜单、Trakt 或 Simkl 的图片</string>
+    <string name="wp_d_immich">来自你自己的 Immich 服务器的照片</string>
+    <string name="wp_d_tvicons">800 多个为电视设计的图标</string>
+    <string name="wp_d_minimalist">单一颜色上的简洁符号</string>
+    <string name="wp_d_arcticons">15,000 个细线图标（为手机设计，这里也能用）</string>
+</resources>

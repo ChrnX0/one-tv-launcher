@@ -926,7 +926,7 @@ class ConfigLauncherActivity : Activity() {
             startActivity(Intent(this, VindoDoProjectivyActivity::class.java))
         }, lp())
         // Plugins (degrau 3, PluginsTv): cartões de outros apps na linha Assistir. Ligar um plugin pede o PIN parental.
-        c.addView(linha(getString(R.string.plg_titulo), getString(R.string.plg_cfg_det), seta = true) {
+        c.addView(linha(getString(R.string.plg_titulo), getString(R.string.wp_cfg_det), seta = true) {
             // Título padrão ("PIN do controle parental"): só "Plugins" sobre um campo vazio não dizia o que digitar (Sala, 17/11).
             pedirPinParental {
                 reconstruirAoVoltar = true

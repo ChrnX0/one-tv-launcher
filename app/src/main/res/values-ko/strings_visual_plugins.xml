@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plugins visuais (18/11/2026): fundo de plugin, trocar ícone, pacote congelado, vitrine -->
+<resources>
+    <string name="wp_tema">플러그인 배경</string>
+    <string name="wp_cfg_det">다른 앱의 배경, 아이콘 팩, 카드. 각각 사용자의 허락이 필요합니다.</string>
+    <string name="wp_det">홈 화면에 배경, 아이콘, 카드를 더하는 다른 개발자의 앱입니다. 신뢰하는 것만 켜세요.</string>
+    <string name="wp_secao_fundos">배경</string>
+    <string name="wp_secao_icones">아이콘 팩</string>
+    <string name="wp_secao_cartoes">카드</string>
+    <string name="wp_secao_descobrir">플러그인 받기</string>
+    <string name="wp_tipo_fundo">배경</string>
+    <string name="wp_tipo_icones">아이콘</string>
+    <string name="wp_em_uso">사용 중</string>
+    <string name="wp_usar">배경으로 사용</string>
+    <string name="wp_configurar">플러그인 설정</string>
+    <string name="wp_parar">사용 중지</string>
+    <string name="wp_sem_cert">이 플러그인의 서명을 읽을 수 없습니다.</string>
+    <string name="wp_nenhum_fundo">아직 배경 플러그인이 없습니다. 아래에서 받을 곳을 보세요.</string>
+    <string name="wp_nenhum_icone">아직 아이콘 팩이 없습니다. 아래에서 받을 곳을 보세요.</string>
+    <string name="wp_icones_det">정지된 상태로 둡니다: 런처가 사용하는 아이콘의 사본을 보관합니다.</string>
+    <string name="wp_usar_icones">사용</string>
+    <string name="wp_instalado">설치됨</string>
+    <string name="wp_instalar">설치</string>
+    <string name="wp_instalando">설치 중…</string>
+    <string name="wp_instalou">%1$s 설치됨.</string>
+    <string name="wp_nao_instalou">설치할 수 없음: %1$s</string>
+    <string name="wp_abrir_play">Play 스토어에서 열기</string>
+    <string name="wp_qr">휴대폰 카메라로 코드를 비추면 페이지가 열립니다.</string>
+    <string name="wp_trocar_icone">아이콘 바꾸기</string>
+    <string name="wp_icone_titulo">%1$s 아이콘</string>
+    <string name="wp_icone_sub">%1$s · 아이콘 %2$d개</string>
+    <string name="wp_icone_original">원래 아이콘</string>
+    <string name="wp_icone_sugerido">추천</string>
+    <string name="wp_icone_voltar">아이콘 팩 따르기</string>
+    <string name="wp_icone_sem_pacote">설치된 아이콘 팩이 없습니다. 설정 › 화면 › 플러그인에서 받으세요.</string>
+    <string name="wp_d_aerial">도시와 자연의 느린 항공 영상</string>
+    <string name="wp_d_overflight">Apple TV 항공 영상 또는 원하는 동영상 목록</string>
+    <string name="wp_d_daily">매일 새로운 오늘의 사진</string>
+    <string name="wp_d_weather">오늘 날씨를 배경으로</string>
+    <string name="wp_d_movieart">TMDB의 영화·시리즈 이미지</string>
+    <string name="wp_d_sofadrop">인기 목록, Trakt, Simkl 이미지</string>
+    <string name="wp_d_immich">내 Immich 서버의 사진</string>
+    <string name="wp_d_tvicons">TV용 아이콘 800개 이상</string>
+    <string name="wp_d_minimalist">한 가지 색 위의 깔끔한 기호</string>
+    <string name="wp_d_arcticons">가는 선 아이콘 15,000개 (휴대폰용, 여기서도 작동)</string>
+</resources>

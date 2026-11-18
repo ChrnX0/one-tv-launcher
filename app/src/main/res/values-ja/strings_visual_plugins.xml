@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plugins visuais (18/11/2026): fundo de plugin, trocar ícone, pacote congelado, vitrine -->
+<resources>
+    <string name="wp_tema">プラグインの背景</string>
+    <string name="wp_cfg_det">他のアプリの背景、アイコンパック、カード。それぞれに許可が必要です。</string>
+    <string name="wp_det">他の開発者のアプリで、ホーム画面に背景・アイコン・カードを追加します。信頼できるものだけオンにしてください。</string>
+    <string name="wp_secao_fundos">背景</string>
+    <string name="wp_secao_icones">アイコンパック</string>
+    <string name="wp_secao_cartoes">カード</string>
+    <string name="wp_secao_descobrir">プラグインを入手</string>
+    <string name="wp_tipo_fundo">背景</string>
+    <string name="wp_tipo_icones">アイコン</string>
+    <string name="wp_em_uso">使用中</string>
+    <string name="wp_usar">背景に使う</string>
+    <string name="wp_configurar">プラグインの設定</string>
+    <string name="wp_parar">使用をやめる</string>
+    <string name="wp_sem_cert">このプラグインの署名を読み取れませんでした。</string>
+    <string name="wp_nenhum_fundo">背景プラグインはまだありません。入手先は下にあります。</string>
+    <string name="wp_nenhum_icone">アイコンパックはまだありません。入手先は下にあります。</string>
+    <string name="wp_icones_det">停止したままです：ランチャーが使うアイコンのコピーを保存します。</string>
+    <string name="wp_usar_icones">使う</string>
+    <string name="wp_instalado">インストール済み</string>
+    <string name="wp_instalar">インストール</string>
+    <string name="wp_instalando">インストール中…</string>
+    <string name="wp_instalou">%1$s をインストールしました。</string>
+    <string name="wp_nao_instalou">インストールできません：%1$s</string>
+    <string name="wp_abrir_play">Play ストアで開く</string>
+    <string name="wp_qr">スマホのカメラをコードに向けるとページが開きます。</string>
+    <string name="wp_trocar_icone">アイコンを変更</string>
+    <string name="wp_icone_titulo">%1$s のアイコン</string>
+    <string name="wp_icone_sub">%1$s · %2$d 個</string>
+    <string name="wp_icone_original">元のアイコン</string>
+    <string name="wp_icone_sugerido">おすすめ</string>
+    <string name="wp_icone_voltar">アイコンパックに従う</string>
+    <string name="wp_icone_sem_pacote">アイコンパックがありません。設定 › 外観 › プラグインで入手できます。</string>
+    <string name="wp_d_aerial">街と自然のゆっくりした空撮映像</string>
+    <string name="wp_d_overflight">Apple TV の空撮、または好きな動画リスト</string>
+    <string name="wp_d_daily">毎日新しい今日の写真</string>
+    <string name="wp_d_weather">今日の天気を背景に</string>
+    <string name="wp_d_movieart">TMDB の映画とドラマの画像</string>
+    <string name="wp_d_sofadrop">人気リスト、Trakt、Simkl の画像</string>
+    <string name="wp_d_immich">自分の Immich サーバーの写真</string>
+    <string name="wp_d_tvicons">テレビ向けの 800 以上のアイコン</string>
+    <string name="wp_d_minimalist">単色の上のすっきりした記号</string>
+    <string name="wp_d_arcticons">細線アイコン 15,000 個（スマホ用、ここでも使えます）</string>
+</resources>
