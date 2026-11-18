@@ -1,0 +1,22 @@
+# Testes do servidor da Sofaly (API em JS + DNS em Go). Só roda em PR que mexe em server/.
+name: Servidor
+
+on:
+  pull_request:
+    paths: ['server/**', '.github/workflows/server.yml']
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: API (regras puras)
+        working-directory: server/api
+        run: node --test
+      - uses: actions/setup-go@v5
+        with: { go-version-file: server/dns/go.mod, cache-dependency-path: server/dns/go.sum }
+      - name: DNS
+        working-directory: server/dns
+        run: go vet ./... && go test ./...

@@ -1,8 +1,10 @@
-# Roteiro de publicação (quando sofaly.tv estiver registrado)
+# Roteiro de publicação
+
+Feito até 18/11/2026: passos 1 e 2 (domínio na Cloudflare, contact@sofaly.tv, API em api.sofaly.tv). Falta: CAA, 3, 4 e 5.
 
 Quem faz o quê: **[Paulo]** = conta, pagamento ou clique que só o dono faz. **[Claude]** = comando ou conferência que
 o Claude faz (pelo Dell ou pela nuvem) depois que a conta existir. Nada aqui é feito sem o Paulo dar o sinal.
-Tempo estimado: ~1 h de trabalho + espera de propagação do DNS (minutos a 24 h). Custo: US$ 0 no carteiro (plano
+Tempo estimado: ~1 h de trabalho + espera de propagação do DNS (minutos a 24 h). Custo: US$ 0 na API (plano
 grátis) + ~US$ 5 + €5,49 por mês nas duas máquinas.
 
 ## 1. Domínio na Cloudflare (DNS do sofaly.tv)
@@ -17,12 +19,11 @@ grátis) + ~US$ 5 + €5,49 por mês nas duas máquinas.
 5. [Claude] Registro CAA (só o Let's Encrypt emite certificado para sofaly.tv e subdomínios):
    `sofaly.tv CAA 0 issue "letsencrypt.org"` e `sofaly.tv CAA 0 iodef "mailto:contact@sofaly.tv"`.
 
-## 2. Carteiro (Cloudflare Workers)
+## 2. API (Cloudflare Workers)
 
 1. [Paulo] `npx wrangler login` no Dell (abre o navegador; ele aprova).
-2. [Claude] Em `servidor/carteiro/wrangler.toml`, descomentar a rota `carteiro.sofaly.tv` e rodar
-   `npx wrangler deploy` (o domínio próprio cria o registro de DNS sozinho).
-3. [Claude] `node ponta-a-ponta.mjs https://carteiro.sofaly.tv` tem que dizer "tudo certo".
+2. [Claude] Em `server/api`, rodar `npx wrangler deploy` (rota `api.sofaly.tv` já em `wrangler.toml`) (o domínio próprio cria o registro de DNS sozinho).
+3. [Claude] `node e2e.mjs https://api.sofaly.tv` tem que dizer "all good".
 
 ## 3. Duas máquinas de DNS
 
@@ -60,4 +61,4 @@ acrescentar `ns3.sofaly.tv` no `-ns` do serviço das três máquinas.
   (formulário de rate limit; leva semanas). Só quando o app (cliente) estiver pronto.
 - [Paulo + advogado] Base legal das caixas de casas brasileiras nos EUA (ver README.md).
 - [Claude] Política de privacidade e formulário de segurança de dados da Play passam a citar IP e horário.
-- [Claude] Monitor externo grátis batendo em `https://carteiro.sofaly.tv/v1/saude` e no DNS (a escolher).
+- [Claude] Monitor externo grátis batendo em `https://api.sofaly.tv/v1/health` e no DNS (a escolher).

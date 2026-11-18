@@ -29,7 +29,7 @@ name: Build e Release
 
 on:
   pull_request:
-    paths-ignore: ['servidor/**', '.github/workflows/servidor.yml']   # o servidor tem o próprio teste
+    paths-ignore: ['server/**', '.github/workflows/server.yml']   # o servidor tem o próprio teste
   workflow_dispatch:   # publicar: rodar à mão na main (ver o topo)
     inputs:
       canal:
