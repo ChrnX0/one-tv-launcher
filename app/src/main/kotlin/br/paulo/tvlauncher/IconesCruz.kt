@@ -270,7 +270,9 @@ class IconeCruz(private val tipo: Tipo, private val estilo: Estilo = Estilo.OBJE
     @Deprecated("Deprecated in Java")
     override fun getOpacity() = PixelFormat.TRANSLUCENT
 
-    private companion object {
-        const val COR_CLARA = 0xFFF4F1EC.toInt()
+    companion object {
+        /** A cor clara do traço (Símbolo/Duotom), também nos ícones de app do pacote embutido. */
+        const val COR_TRACO = 0xFFF4F1EC.toInt()
+        private const val COR_CLARA = 0xFFF4F1EC.toInt()
     }
 }

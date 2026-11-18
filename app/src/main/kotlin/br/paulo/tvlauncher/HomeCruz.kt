@@ -13,7 +13,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
-import android.view.animation.DecelerateInterpolator
+import android.provider.Settings
+import android.view.Choreographer
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -65,11 +66,18 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         const val FONTE_CATEGORIA = 18f // nome das categorias na linha
         // ---- transparência dos vizinhos na coluna (posição relativa -> alfa)
         val ALFA_COLUNA = mapOf(-1 to 0.5f, 1 to 0.9f, 2 to 0.65f, 3 to 0.35f)
-        const val ANIMA_MS = 220L
+        // ---- movimento (Paulo 18/11/2026: "mais suave e orgânico"): mola em vez de tempo fixo. A mola guarda a velocidade
+        // quando a tecla vem no meio do caminho (nada "freia e recomeça"), e os vizinhos saem um pouco depois (onda).
+        const val MOLA_W = 17f          // rigidez (rad/s): ~0,3 s até assentar, perto dos 220 ms de antes
+        const val MOLA_AMORTECE = 0.86f // < 1 passa um tiquinho do alvo e volta (1 % na posição); 1 = sem passar
+        const val ONDA_MS = 16L         // atraso por passo de distância do item escolhido
+        const val ONDA_MAX_MS = 64L
         const val COR_CATEGORIA = 0xFFE8E2DA.toInt()
     }
 
     var aoSubirTopo: (() -> Unit)? = null
+    /** Som de cada passo (SonsCruz): quem usa decide se toca. */
+    var aoSom: ((SonsCruz.Som) -> Unit)? = null
     /** Mudou o item em foco (para o destaque/capa de quem usa) */
     var aoMudar: ((Categoria, Item) -> Unit)? = null
     /** OK num item (antes de [Item.abrir]): quem usa grava o "lembrado" da categoria. */
@@ -88,7 +96,6 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private val dm = resources.displayMetrics
     private fun dp(v: Float) = v * dm.density
     private fun dpi(v: Int) = (v * dm.density + 0.5f).toInt()
-    private val interp = DecelerateInterpolator(1.6f)
 
     /** As partes de um item que mudam com a escolha. */
     private inner class ItemView(val raiz: LinearLayout, val icone: ImageView, val nome: TextView, val sub: TextView, val traco: View)
@@ -197,11 +204,16 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
     private fun aplicar(t: CruzLogica.Tecla) {
         val r = CruzLogica.passo(mapa, estado, t)
         if (r is CruzLogica.Resultado.Abrir) {
+            aoSom?.invoke(SonsCruz.Som.ABRIR)
             aoAbrir?.invoke(r.categoria, r.item)
             itemAtual()?.abrir?.invoke()
             return
         }
-        if (r.estado == estado) return
+        if (r.estado == estado) {
+            if (t != CruzLogica.Tecla.HOME) aoSom?.invoke(SonsCruz.Som.BORDA)   // fim da coluna/linha: um toque grave
+            return
+        }
+        aoSom?.invoke(if (r.estado.cat != estado.cat) SonsCruz.Som.GRUPO else SonsCruz.Som.ANDAR)
         estado = r.estado
         posicionar(animar = true)
         avisarMudanca()
@@ -288,6 +300,8 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
         v.sub.visibility = if (item.sub.isEmpty()) View.GONE else View.VISIBLE
     }
 
+    private fun onda(distancia: Int) = minOf(distancia * ONDA_MS, ONDA_MAX_MS)
+
     /** Põe cada view no lugar do estado atual (animado ou de uma vez). */
     private fun posicionar(animar: Boolean) {
         val f = estado.cat
@@ -300,7 +314,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
                 else -> CAT_DIREITA + (k - 1) * PASSO_CATS
             }
             val visivel = k != 0 && cx > 30f && cx < TELA_L - 40f
-            mover(v, dp(cx - 75f), dp(LINHA - CAT_A / 2f), if (visivel) 1f else 0f, 1f, animar)
+            mover(v, dp(cx - 75f), dp(LINHA - CAT_A / 2f), if (visivel) 1f else 0f, 1f, animar, onda(kotlin.math.abs(k)))
         }
         for ((j, lista) in viewsItem.withIndex()) {
             val k = j - f
@@ -310,7 +324,7 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
                 if (k != 0) {
                     // categoria fora de foco: os itens se recolhem no ícone dela e somem
                     val cx = if (k < 0) CAT_ESQUERDA + (k + 1) * PASSO_CATS else CAT_DIREITA + (k - 1) * PASSO_CATS
-                    mover(iv.raiz, dp(cx - ICONE_L * ESCALA_PEQUENO / 2f), dp(LINHA - ICONE_A / 2f), 0f, ESCALA_PEQUENO, animar)
+                    mover(iv.raiz, dp(cx - ICONE_L * ESCALA_PEQUENO / 2f), dp(LINHA - ICONE_A / 2f), 0f, ESCALA_PEQUENO, animar, onda(kotlin.math.abs(rel)))
                     continue
                 }
                 val cy = when {
@@ -321,28 +335,112 @@ class HomeCruz(ctx: Context, private val fonte: Typeface, private val fonteForte
                 val alfa = if (rel == 0) (if (focada) 1f else 0.75f) else ALFA_COLUNA[rel] ?: 0f
                 val escala = if (rel == 0) 1f else ESCALA_PEQUENO
                 val x = if (rel == 0) COLUNA - ICONE_L / 2f else COLUNA - ICONE_L * ESCALA_PEQUENO / 2f
-                mover(iv.raiz, dp(x), dp(cy - ICONE_A / 2f), alfa, escala, animar)
+                mover(iv.raiz, dp(x), dp(cy - ICONE_A / 2f), alfa, escala, animar, onda(kotlin.math.abs(rel)))
                 iv.traco.alpha = if (rel == 0 && focada) 1f else 0f
                 iv.sub.alpha = if (rel == 0) 1f else 0f
             }
         }
     }
 
-    private fun mover(v: View, x: Float, y: Float, alfa: Float, escala: Float, animar: Boolean) {
-        v.animate().cancel()
+    private fun mover(v: View, x: Float, y: Float, alfa: Float, escala: Float, animar: Boolean, atrasoMs: Long = 0L) {
+        val m = molas.getOrPut(v) { Mola(v) }
         if (alfa > 0f) v.visibility = View.VISIBLE
-        if (!animar || v.visibility != View.VISIBLE) {
-            v.translationX = x; v.translationY = y; v.alpha = alfa; v.scaleX = escala; v.scaleY = escala
-            if (alfa == 0f) v.visibility = View.INVISIBLE
+        if (!animar || v.visibility != View.VISIBLE || semAnimacao()) {
+            m.parar(x, y, alfa, escala)
             return
         }
-        val a = v.animate().translationX(x).translationY(y).alpha(alfa).scaleX(escala).scaleY(escala)
-            .setDuration(ANIMA_MS).setInterpolator(interp)
-            .withEndAction { if (alfa == 0f) v.visibility = View.INVISIBLE }
-        // Escala ou transparência mudando: anima numa camada de GPU (texto e vetor rasterizados UMA vez, não a cada
-        // quadro). Foi a cauda lenta medida na Sala (p95 42 ms, "Slow issue draw commands"). Só translação não precisa.
-        if (v.scaleX != escala || v.alpha != alfa) a.withLayer()
-        a.start()
+        m.mirar(floatArrayOf(x, y, alfa, escala), android.os.SystemClock.uptimeMillis() + atrasoMs)
+        if (m !in ativas) ativas += m
+        if (!quadroPedido) { quadroPedido = true; ultimoQuadro = 0L; Choreographer.getInstance().postFrameCallback(quadro) }
+    }
+
+    /** "Remover animações" (acessibilidade) ou escala de animação 0 nas opções do desenvolvedor: tudo vai direto. */
+    private fun semAnimacao() =
+        runCatching { Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f }.getOrDefault(false)
+
+    // ------------------------------------------------------------------ mola
+
+    /**
+     * Uma view com quatro propriedades em mola (x, y, transparência, escala), cada uma com posição e velocidade. A conta é a
+     * de um amortecedor: aceleração = -w²·(posição - alvo) - 2·ζ·w·velocidade. Um quadro do Choreographer anda todas.
+     */
+    private inner class Mola(val v: View) {
+        val pos = FloatArray(4); val vel = FloatArray(4); val alvo = FloatArray(4)
+        private var proximo: FloatArray? = null
+        private var trocaEm = 0L
+        private var camada = false
+
+        fun ler() { pos[0] = v.translationX; pos[1] = v.translationY; pos[2] = v.alpha; pos[3] = v.scaleX }
+
+        fun parar(x: Float, y: Float, alfa: Float, escala: Float) {
+            ativas.remove(this); proximo = null
+            vel.fill(0f); alvo[0] = x; alvo[1] = y; alvo[2] = alfa; alvo[3] = escala
+            pos.indices.forEach { pos[it] = alvo[it] }
+            aplicar(); semCamada()
+            if (alfa == 0f) v.visibility = View.INVISIBLE
+        }
+
+        fun mirar(novo: FloatArray, quando: Long) {
+            if (this !in ativas) { ler(); vel.fill(0f); pos.indices.forEach { alvo[it] = pos[it] } }
+            proximo = novo; trocaEm = quando
+        }
+
+        /** Anda dt segundos; devolve true se ainda está em movimento. */
+        fun andar(agora: Long, dt: Float): Boolean {
+            proximo?.let { if (agora >= trocaEm) { it.copyInto(alvo); proximo = null } }
+            val w = MOLA_W; val zw2 = 2f * MOLA_AMORTECE * w; val ww = w * w
+            var t = dt
+            while (t > 0f) {   // passos de até 4 ms: estável mesmo se um quadro atrasar
+                val h = minOf(t, 0.004f); t -= h
+                for (i in 0..3) {
+                    // transparência sem passar do alvo (amortecimento crítico): piscar de alfa chama atenção
+                    val z = if (i == 2) 2f * w else zw2
+                    vel[i] += (-ww * (pos[i] - alvo[i]) - z * vel[i]) * h
+                    pos[i] += vel[i] * h
+                }
+            }
+            pos[2] = pos[2].coerceIn(0f, 1f)
+            val parado = proximo == null &&
+                kotlin.math.abs(pos[0] - alvo[0]) < 0.5f && kotlin.math.abs(pos[1] - alvo[1]) < 0.5f &&
+                kotlin.math.abs(pos[2] - alvo[2]) < 0.004f && kotlin.math.abs(pos[3] - alvo[3]) < 0.002f &&
+                kotlin.math.abs(vel[0]) < 8f && kotlin.math.abs(vel[1]) < 8f
+            if (parado) { pos.indices.forEach { pos[it] = alvo[it] }; vel.fill(0f) }
+            // Escala ou transparência mudando: camada de GPU (texto e vetor rasterizados UMA vez, não a cada quadro; foi a
+            // cauda lenta medida na Sala, p95 42 ms). Só translação não precisa.
+            if (!parado && (kotlin.math.abs(pos[2] - alvo[2]) > 0.004f || kotlin.math.abs(pos[3] - alvo[3]) > 0.002f)) comCamada()
+            aplicar()
+            if (parado) { semCamada(); if (alvo[2] == 0f) v.visibility = View.INVISIBLE }
+            return !parado
+        }
+
+        private fun aplicar() {
+            v.translationX = pos[0]; v.translationY = pos[1]; v.alpha = pos[2]; v.scaleX = pos[3]; v.scaleY = pos[3]
+        }
+        private fun comCamada() { if (!camada && v.isAttachedToWindow) { camada = true; v.setLayerType(View.LAYER_TYPE_HARDWARE, null) } }
+        private fun semCamada() { if (camada) { camada = false; v.setLayerType(View.LAYER_TYPE_NONE, null) } }
+    }
+
+    private val molas = HashMap<View, Mola>()
+    private val ativas = ArrayList<Mola>()
+    private var quadroPedido = false
+    private var ultimoQuadro = 0L
+    private val quadro: Choreographer.FrameCallback = object : Choreographer.FrameCallback {
+        override fun doFrame(t: Long) {
+            val dt = if (ultimoQuadro == 0L) 1f / 60f else ((t - ultimoQuadro) / 1e9f).coerceIn(0f, 1f / 20f)
+            ultimoQuadro = t
+            val agora = android.os.SystemClock.uptimeMillis()
+            ativas.removeAll { !it.andar(agora, dt) }
+            if (ativas.isNotEmpty() && isAttachedToWindow) Choreographer.getInstance().postFrameCallback(this)
+            else quadroPedido = false
+        }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        Choreographer.getInstance().removeFrameCallback(quadro); quadroPedido = false
+        // fora da tela: tudo direto no lugar (nada fica no meio do caminho)
+        ativas.toList().forEach { m -> m.andar(Long.MAX_VALUE, 5f) }
+        ativas.clear()
     }
 
     // ------------------------------------------------------------------ TalkBack

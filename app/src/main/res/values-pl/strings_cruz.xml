@@ -27,4 +27,6 @@
     <string name="cruz_arte_det">Za krzyżem, po prawej</string>
     <string name="cruz_ligada">Wł.</string>
     <string name="cruz_desligada">Wył.</string>
+    <string name="cruz_sons">Dźwięki nawigacji</string>
+    <string name="cruz_sons_det">Krótkie i ciche; wyciszone, gdy coś gra</string>
 </resources>

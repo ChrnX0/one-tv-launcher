@@ -27,4 +27,6 @@
     <string name="cruz_arte_det">Atrás da cruz, à direita</string>
     <string name="cruz_ligada">Ligada</string>
     <string name="cruz_desligada">Desligada</string>
+    <string name="cruz_sons">Sons ao navegar</string>
+    <string name="cruz_sons_det">Curtos e suaves; ficam mudos enquanto algo toca</string>
 </resources>

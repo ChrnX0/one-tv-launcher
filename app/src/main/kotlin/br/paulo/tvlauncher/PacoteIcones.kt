@@ -30,8 +30,25 @@ object PacoteIcones {
     /** Muda quando o pacote escolhido muda: a HOME usa na chave do cache de ícones. */
     fun versao(ctx: Context): String = escolhido(ctx)
 
-    /** Pacotes de ícones instalados (pacote -> nome), em ordem de nome. */
-    fun instalados(ctx: Context): List<Pair<String, String>> {
+    /**
+     * Pacotes que já vêm no launcher (Paulo, 18/11/2026: quase não há pacote de ícones na Play Store da TV). Redesenham o
+     * ícone de cada app no estilo da cruz: Símbolo (o traço do app, claro, sem fundo) e Duotom (o traço com um halo da cor
+     * de destaque). O traço vem da camada monocromática do ícone (Android 13+) ou é recortado do próprio ícone.
+     */
+    const val EMBUTIDO = "embutido:"
+    enum class Embutido(val id: String, val nome: Int) {
+        SIMBOLO(EMBUTIDO + "simbolo", R.string.cruz_simbolo),
+        DUOTOM(EMBUTIDO + "duotom", R.string.cruz_duotom)
+    }
+
+    /** O pacote embutido escolhido, ou null (nenhum ou um pacote instalado). */
+    fun embutido(ctx: Context): Embutido? = escolhido(ctx).let { e -> Embutido.entries.firstOrNull { it.id == e } }
+
+    /** Pacotes de ícones: os embutidos primeiro, depois os instalados (pacote -> nome), em ordem de nome. */
+    fun instalados(ctx: Context): List<Pair<String, String>> =
+        Embutido.entries.map { it.id to ctx.getString(it.nome) } + instaladosDeFora(ctx)
+
+    private fun instaladosDeFora(ctx: Context): List<Pair<String, String>> {
         val pm = ctx.packageManager
         val vistos = LinkedHashMap<String, String>()
         for (acao in PacoteIconesRegras.ACOES) {
@@ -45,7 +62,7 @@ object PacoteIcones {
     }
 
     fun nome(ctx: Context, pacote: String): String =
-        runCatching { ctx.packageManager.getApplicationInfo(pacote, 0).loadLabel(ctx.packageManager).toString() }.getOrDefault(pacote)
+        Embutido.entries.firstOrNull { it.id == pacote }?.let { ctx.getString(it.nome) } ?: runCatching { ctx.packageManager.getApplicationInfo(pacote, 0).loadLabel(ctx.packageManager).toString() }.getOrDefault(pacote)
 
     @SuppressLint("DiscouragedApi")   // getIdentifier é o único jeito: o nome do recurso vem do appfilter de outro app
     private fun carregar(ctx: Context, pacote: String): PacoteIconesRegras.Mapa? = runCatching {
@@ -74,7 +91,7 @@ object PacoteIcones {
     @SuppressLint("DiscouragedApi", "UseCompatLoadingForDrawables")
     fun icone(ctx: Context, pacoteApp: String, classe: String?): Drawable? {
         val escolhido = escolhido(ctx)
-        if (escolhido.isEmpty()) return null
+        if (escolhido.isEmpty() || escolhido.startsWith(EMBUTIDO)) return null
         val m = mapaDe(ctx, escolhido) ?: return null
         val nome = m.drawable(pacoteApp, classe) ?: return null
         return runCatching {

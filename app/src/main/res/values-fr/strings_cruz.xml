@@ -27,4 +27,6 @@
     <string name="cruz_arte_det">Derrière la croix, à droite</string>
     <string name="cruz_ligada">Activée</string>
     <string name="cruz_desligada">Désactivée</string>
+    <string name="cruz_sons">Sons de navigation</string>
+    <string name="cruz_sons_det">Courts et doux ; muets pendant une lecture</string>
 </resources>
