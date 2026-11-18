@@ -33,8 +33,11 @@ object ModoSimples {
      * Regra pura (ModoSimplesTest): os escolhidos que estão instalados, na ordem, completados com os mais usados, sem
      * repetir, até [max]. [vagas] = quantos cards sobram para apps (a TV ao vivo ocupa um quando há conta).
      */
-    fun escolher(escolhidos: List<String>, instalados: Set<String>, maisUsados: List<String>, vagas: Int = MAX): List<String> =
-        (escolhidos + maisUsados).filter { it in instalados }.distinct().take(vagas.coerceAtLeast(0))
+    fun escolher(escolhidos: List<String>, instalados: Set<String>, maisUsados: List<String>, vagas: Int = MAX,
+                 ocultos: Set<String> = emptySet()): List<String> =
+        // Os mais usados não trazem app oculto (Sala, 18/11/2026: "Teste do Shizuku", oculto na HOME, virava card
+        // grande no modo simples). O que a pessoa escolheu à mão entra mesmo oculto: foi escolha dela.
+        (escolhidos + maisUsados.filter { it !in ocultos }).filter { it in instalados }.distinct().take(vagas.coerceAtLeast(0))
 
     fun lerLista(texto: String): List<String> = texto.split(',', '\n').map { it.trim() }
         .filter { Regex("^[A-Za-z0-9_]+(\\.[A-Za-z0-9_]+)+$").matches(it) }.distinct().take(MAX)
@@ -88,10 +91,17 @@ class ModoSimplesActivity : Activity() {
             val instalados = ModoSimples.instalados(this)
             val temTv = PlayerArmazem.fontes(this).isNotEmpty()
             val pacotes = ModoSimples.escolher(ModoSimples.escolhidos(this), instalados.keys, ModoSimples.maisUsados(this),
-                ModoSimples.MAX - if (temTv) 1 else 0)
+                ModoSimples.MAX - if (temTv) 1 else 0, Organizacao.ocultos(this))
             runOnUiThread { if (!isDestroyed) montar(temTv, pacotes.map { it to (instalados[it] ?: it) }) }
         }
     }
+
+    // Desligado de fora (receita desfeita, painel, Claude) com a tela aberta: sai na hora. Antes ficava até o próximo HOME.
+    private val ouvinteChave = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, k ->
+        if (k == Extras.Chave.MODO_SIMPLES.name && !ModoSimples.ligado(this)) runOnUiThread { if (!isFinishing) finish() }
+    }
+    override fun onStart() { super.onStart(); Extras.ouvir(this, ouvinteChave) }
+    override fun onStop() { super.onStop(); Extras.parar(this, ouvinteChave) }
 
     override fun onDestroy() { super.onDestroy(); voz?.shutdown(); voz = null }
 

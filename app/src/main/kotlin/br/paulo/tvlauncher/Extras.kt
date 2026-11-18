@@ -101,6 +101,12 @@ object Extras {
 
     private fun prefs(ctx: Context) = ctx.getSharedPreferences(ARQUIVO, Context.MODE_PRIVATE)
 
+    /** Avisa quando alguma chave muda (o Android guarda o ouvinte fraco: quem chama segura a referência). */
+    fun ouvir(ctx: Context, o: android.content.SharedPreferences.OnSharedPreferenceChangeListener) =
+        prefs(ctx).registerOnSharedPreferenceChangeListener(o)
+    fun parar(ctx: Context, o: android.content.SharedPreferences.OnSharedPreferenceChangeListener) =
+        prefs(ctx).unregisterOnSharedPreferenceChangeListener(o)
+
     fun ligado(ctx: Context, c: Chave): Boolean = prefs(ctx).getBoolean(c.name, c.padrao)
     fun definir(ctx: Context, c: Chave, sim: Boolean) { prefs(ctx).edit().putBoolean(c.name, sim).apply() }
 
