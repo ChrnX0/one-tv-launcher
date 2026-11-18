@@ -11,7 +11,7 @@
     <string name="extras_HORA_DORMIR">Yatma saati (yalnızca izin verilen uygulamalar, sınırlı ses)</string>
     <string name="extras_TOCANDO_AGORA">Şimdi çalıyor (çalanı okur)</string>
     <string name="extras_MODO_LEVE">Hafif mod (daha kısa animasyonlar)</string>
-    <string name="extras_SOM_NAVEGACAO">Gezinme sesi</string>
+    <string name="extras_SOM_NAVEGACAO">Diğer ekranlarda gezinirken tık sesi</string>
     <string name="extras_RECADO_LINK">Bağlantıyla mesaj (Home Assistant, TvOverlay)</string>
     <string name="extras_caches">Uygulama önbelleklerini temizle</string>
     <string name="extras_livre">%1$s boş</string>

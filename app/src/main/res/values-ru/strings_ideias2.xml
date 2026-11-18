@@ -11,7 +11,7 @@
     <string name="extras_HORA_DORMIR">Время сна (только разрешённые приложения, ограниченная громкость)</string>
     <string name="extras_TOCANDO_AGORA">Сейчас играет (читает, что воспроизводится)</string>
     <string name="extras_MODO_LEVE">Лёгкий режим (короче анимации)</string>
-    <string name="extras_SOM_NAVEGACAO">Звук навигации</string>
+    <string name="extras_SOM_NAVEGACAO">Щелчок при перемещении на других экранах</string>
     <string name="extras_RECADO_LINK">Сообщение по ссылке (Home Assistant, TvOverlay)</string>
     <string name="extras_caches">Очистить кеш приложений</string>
     <string name="extras_livre">свободно %1$s</string>

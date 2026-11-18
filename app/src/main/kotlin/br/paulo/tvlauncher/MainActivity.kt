@@ -324,6 +324,7 @@ class MainActivity : Activity() {
     override fun onResume() {
         super.onResume()
         homeNaFrente = true
+        SonsCruz.naFrente = true
         if (desviadaParaSegura) return
         ModoSeguro.aoRetomarHome(this)   // 30 s de pé = a HOME firmou (zera a conta de quedas seguidas)
         ModoHospede.talvezBoasVindas(this)   // modo hóspede: boas-vindas uma vez por estadia
@@ -387,6 +388,7 @@ class MainActivity : Activity() {
     override fun onPause() {
         super.onPause()
         homeNaFrente = false
+        SonsCruz.naFrente = false
         ModoSeguro.aoPausarHome()
         if (desviadaParaSegura) return
         focoTopo = currentFocus?.takeIf { f -> generateSequence(f.parent) { it.parent }.any { it === topoRaiz } }

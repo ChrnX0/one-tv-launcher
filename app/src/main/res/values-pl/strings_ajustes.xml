@@ -66,7 +66,7 @@
     <string name="tt_grande">Duży</string>
     <string name="tt_maior">Większy</string>
     <string name="pi_titulo">Pakiet ikon</string>
-    <string name="pi_det">Zamienia ikony aplikacji na ikony z zainstalowanego pakietu. OK wybiera następny.</string>
+    <string name="pi_det">Zamienia ikony aplikacji na wbudowany styl (Symbol, Dwukolorowy) lub zainstalowany pakiet. OK wybiera następny.</string>
     <string name="pi_det_vazio">Brak zainstalowanego pakietu ikon. Pobierz go ze Sklepu Play, a pojawi się tutaj.</string>
     <string name="pi_nenhum">Brak</string>
     <string name="fm_titulo">Moje tło</string>

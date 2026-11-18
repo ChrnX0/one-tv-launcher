@@ -21,6 +21,13 @@ object SonsCruz {
     enum class Som { ANDAR, GRUPO, ABRIR, BORDA }
 
     const val CHAVE = "cruz_sons"
+
+    /**
+     * A cruz está na frente (MainActivity entre onResume e onPause). Com os sons dela ligados, o clique antigo do Android
+     * ([SomNavegacaoTv], Extras "Som de navegação") se cala ali, senão cada tecla tocava DOIS sons (visto na Sala, 18/11/2026).
+     */
+    @Volatile var naFrente = false
+    fun cuidaDaTela(ctx: Context) = naFrente && ligado(ctx)
     fun ligado(ctx: Context) = Extras.numero(ctx, CHAVE, 1) != 0
     fun definir(ctx: Context, sim: Boolean) { Extras.definirNumero(ctx, CHAVE, if (sim) 1 else 0); if (!sim) soltar() }
 
