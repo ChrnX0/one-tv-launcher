@@ -95,6 +95,20 @@ object AddonsTv {
     /** Um add-on da lista curada, pronto para a tela: nome e texto já no idioma da TV. */
     data class Sugerido(val e: RecommendedAddons.Entry, val nome: String, val texto: String)
 
+    /** Nome traduzido de uma seção ([RecommendedAddons.GROUPS]). */
+    fun nomeGrupo(ctx: Context, g: String): String = ctx.getString(when (g) {
+        "movies_series" -> R.string.ad_grupo_filmes_series
+        "anime" -> R.string.ad_grupo_anime
+        "tv" -> R.string.ad_grupo_tv
+        "subtitles" -> R.string.ad_grupo_legendas
+        "music" -> R.string.ad_grupo_musica
+        else -> R.string.ad_grupo_outros
+    })
+
+    /** Seção de um addon instalado, pelo manifesto (tipos + recursos). */
+    fun grupoDe(a: AddonsProtocolo.Instalado): String =
+        RecommendedAddons.groupOf(a.m.tipos, a.m.recursos.map { it.nome }.distinct())
+
     /** A lista atual (do servidor, se já veio; senão a embutida), sem o que já está instalado. Não acessa a rede. */
     fun sugeridos(ctx: Context): List<Sugerido> {
         val lista = RecommendedAddons.parse(prefs(ctx).getString(REC_JSON, null)) ?: RecommendedAddons.BUILT_IN

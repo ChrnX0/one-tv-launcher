@@ -19,6 +19,7 @@
     <string-array name="novidades">
         <item>Addons: new “Add an addon” row (in Addons and in Settings › Addons) with a code for your phone, which opens the panel ready to paste the address, or to type it on the TV</item>
         <item>Addons: “Recommended” list with checked catalogs (movies and shows from the services, TMDB, MUBI and anime); pick one and confirm with the PIN, no typing</item>
+        <item>Addons split by type (Movies and shows, Anime, Subtitles...): sections on the TV and a filter in the panel</item>
         <item>Addons: a catalog title with no video to play here shows “Where to watch”, which opens the Google TV search</item>
         <item>Alarm clock: on the time wheel the bigger number is on top, and the lists no longer show the options underneath</item>
         <item>Alarm clock: holding the arrow turns the wheel slowly (4 steps per second), so you can stop at the right time</item>

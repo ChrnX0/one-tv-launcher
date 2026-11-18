@@ -50,4 +50,11 @@
     <string name="ad_sug_mubi">MUBI’den yeni ve klasik filmler.</string>
     <string name="ad_sug_kitsu">Kitsu’dan anime kataloğu ve bölümleri.</string>
     <string name="ad_sug_animeseason">Sezona ve yıla göre anime.</string>
+    <string name="ad_grupo_todos">Tümü</string>
+    <string name="ad_grupo_filmes_series">Filmler ve diziler</string>
+    <string name="ad_grupo_anime">Anime</string>
+    <string name="ad_grupo_tv">TV kanalları</string>
+    <string name="ad_grupo_legendas">Altyazılar</string>
+    <string name="ad_grupo_musica">Müzik ve radyo</string>
+    <string name="ad_grupo_outros">Diğer</string>
 </resources>

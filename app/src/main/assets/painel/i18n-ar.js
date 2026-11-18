@@ -508,6 +508,7 @@ traduzirPainelCom({T:{
 "Instalando na TV…":"جارٍ التثبيت على التلفزيون…",
 "Instalar":"تثبيت",
 "Recomendados":"موصى بها",
+"Tipo de addon":"نوع الملحق",
 "Instalar APK…":"تثبيت APK…",
 "Instalar como app (https)":"التثبيت كتطبيق (https)",
 "Internet por app":"الإنترنت لكل تطبيق",

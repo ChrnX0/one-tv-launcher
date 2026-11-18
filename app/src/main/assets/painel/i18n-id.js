@@ -508,6 +508,7 @@ traduzirPainelCom({T:{
 "Instalando na TV…":"Memasang di TV…",
 "Instalar":"Pasang",
 "Recomendados":"Direkomendasikan",
+"Tipo de addon":"Jenis addon",
 "Instalar APK…":"Pasang APK…",
 "Instalar como app (https)":"Pasang sebagai aplikasi (https)",
 "Internet por app":"Internet per aplikasi",

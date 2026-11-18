@@ -50,4 +50,11 @@
     <string name="ad_sug_mubi">Film baru dan klasik dari MUBI.</string>
     <string name="ad_sug_kitsu">Katalog dan episode anime dari Kitsu.</string>
     <string name="ad_sug_animeseason">Anime per musim dan per tahun.</string>
+    <string name="ad_grupo_todos">Semua</string>
+    <string name="ad_grupo_filmes_series">Film dan serial</string>
+    <string name="ad_grupo_anime">Anime</string>
+    <string name="ad_grupo_tv">Saluran TV</string>
+    <string name="ad_grupo_legendas">Subtitle</string>
+    <string name="ad_grupo_musica">Musik dan radio</string>
+    <string name="ad_grupo_outros">Lainnya</string>
 </resources>

@@ -50,4 +50,11 @@
     <string name="ad_sug_mubi">MUBI의 신작과 고전 영화.</string>
     <string name="ad_sug_kitsu">Kitsu의 애니메이션 카탈로그와 에피소드.</string>
     <string name="ad_sug_animeseason">시즌별, 연도별 애니메이션.</string>
+    <string name="ad_grupo_todos">전체</string>
+    <string name="ad_grupo_filmes_series">영화 및 시리즈</string>
+    <string name="ad_grupo_anime">애니메이션</string>
+    <string name="ad_grupo_tv">TV 채널</string>
+    <string name="ad_grupo_legendas">자막</string>
+    <string name="ad_grupo_musica">음악 및 라디오</string>
+    <string name="ad_grupo_outros">기타</string>
 </resources>

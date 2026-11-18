@@ -50,4 +50,11 @@
     <string name="ad_sug_mubi">أفلام جديدة وكلاسيكية من MUBI.</string>
     <string name="ad_sug_kitsu">كتالوج الأنمي وحلقاته من Kitsu.</string>
     <string name="ad_sug_animeseason">أنمي حسب الموسم والسنة.</string>
+    <string name="ad_grupo_todos">الكل</string>
+    <string name="ad_grupo_filmes_series">أفلام ومسلسلات</string>
+    <string name="ad_grupo_anime">أنمي</string>
+    <string name="ad_grupo_tv">قنوات تلفزيونية</string>
+    <string name="ad_grupo_legendas">ترجمات</string>
+    <string name="ad_grupo_musica">موسيقى وراديو</string>
+    <string name="ad_grupo_outros">أخرى</string>
 </resources>

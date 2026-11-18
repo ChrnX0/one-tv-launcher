@@ -50,4 +50,11 @@
     <string name="ad_sug_mubi">Neue und klassische Filme von MUBI.</string>
     <string name="ad_sug_kitsu">Anime-Katalog und Folgen von Kitsu.</string>
     <string name="ad_sug_animeseason">Anime nach Saison und Jahr.</string>
+    <string name="ad_grupo_todos">Alle</string>
+    <string name="ad_grupo_filmes_series">Filme und Serien</string>
+    <string name="ad_grupo_anime">Anime</string>
+    <string name="ad_grupo_tv">TV-Sender</string>
+    <string name="ad_grupo_legendas">Untertitel</string>
+    <string name="ad_grupo_musica">Musik und Radio</string>
+    <string name="ad_grupo_outros">Sonstige</string>
 </resources>
