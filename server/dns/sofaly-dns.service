@@ -5,7 +5,7 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-ExecStart=/usr/local/bin/sofaly-dns -zona lan.sofaly.tv -ns ns1.sofaly.tv,ns2.sofaly.tv -hostmaster contact.sofaly.tv -carteiro https://carteiro.sofaly.tv
+ExecStart=/usr/local/bin/sofaly-dns -zone lan.sofaly.tv -ns ns1.sofaly.tv,ns2.sofaly.tv -hostmaster contact.sofaly.tv -api https://api.sofaly.tv
 Restart=always
 RestartSec=2
 # Usuário descartável, sem disco gravável e só com o poder de abrir a porta 53.
