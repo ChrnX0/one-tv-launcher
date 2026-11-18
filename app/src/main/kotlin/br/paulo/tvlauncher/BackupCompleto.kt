@@ -84,6 +84,8 @@ object BackupCompleto {
         // (inscrever de novo pelo painel). "desempenho" é medida por versão; "retrospectiva" se refaz no domingo; "presenca"
         // e "ideias_12_11" são estado passageiro. A escolha dos celulares, o Meu time e o mural moram em "extras", que vai.
         "avisos_celular", "desempenho", "retrospectiva", "presenca", "ideias_12_11",
+        // "movimento" (18/11/2026): o nível que ESTE aparelho aguenta (MovimentoAdaptativo); em outro aparelho não vale.
+        "movimento",
         // "painel_tls" (#34): só o nome do certificado https desta TV (ex.: tv-sala). O certificado não vai no backup, e
         // restaurar em outra TV daria a ela o nome da primeira; cada TV escolhe o seu no painel.
         "painel_tls",

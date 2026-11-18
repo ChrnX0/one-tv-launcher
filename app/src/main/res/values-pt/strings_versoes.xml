@@ -14,21 +14,27 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Legendas da internet voltaram: a busca no OpenSubtitles falhava em todo nome com mais de uma palavra (“Não consegui buscar a legenda”)</item>
-        <item>Busca de legenda pelo filme certo: primeiro pelo código do filme ou da série, depois pelo nome e ano, depois só pelo nome</item>
-        <item>Filmes que tentaram a legenda automática e falharam tentam de novo</item>
-        <item>Áudio: o ▼ do player troca para a versão dublada ou legendada do filme no mesmo ponto em que você está</item>
-        <item>Trailer: VOLTAR fecha o YouTube e devolve a ficha; quando o trailer acaba, a ficha volta sozinha</item>
-        <item>Trailer: o do catálogo de filmes vem antes do da lista (que às vezes é de outro filme) e mais formatos de link abrem</item>
+        <item>Barra de cima nova, a Ilha: navegando, sobra no centro uma pílula com a hora e a temperatura</item>
+        <item>A pílula cresce com o que está acontecendo: sem internet, timer, despertador das próximas 12 h, o que está tocando, aniversário, jogo do seu time, lista vencendo</item>
+        <item>No canto esquerdo, uma linha da categoria: o que está no ar em Assistir, a última rádio ou podcast em Ouvir, controles e turma em Jogar</item>
+        <item>O canto não repete: some quando o item de onde ele vem está escolhido ou quando a pílula já mostra o mesmo</item>
+        <item>▲ abre a barra de sempre com um véu escuro atrás; ao ligar a TV ela fica aberta 4 segundos</item>
+        <item>As outras barras continuam em Configurações › Tela inicial › Barra de cima</item>
+        <item>Animação dos ícones se ajusta ao aparelho: forte anima tudo; médio anima o escolhido e as categorias uma vez ao chegar; se os quadros pesarem, desce sozinha um degrau</item>
+        <item>Rádio e Podcasts: os ícones dos botões voltam a aparecer, e os episódios mostram a capa do podcast</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Legenda da internet</item>
-        <item>Trocar versão</item>
-        <item>Trailer</item>
+        <item>Ilha recolhida</item>
+        <item>Pílula viva</item>
+        <item>Canto da categoria</item>
+        <item>Barra aberta</item>
+        <item>Animação leve</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Num filme, ▼ › “Buscar legenda na internet” mostra uma lista de legendas em português?</item>
-        <item>Num filme que tem versão dublada e legendada, ▼ mostra “Versão dublada · continua daqui” (ou legendada) e troca no mesmo ponto?</item>
-        <item>Na ficha, Trailer abre o trailer certo, e VOLTAR fecha o YouTube e volta para a ficha?</item>
+        <item>Na HOME, navegando na cruz, aparece no centro de cima uma pílula com ponto laranja, hora e temperatura?</item>
+        <item>Com uma rádio tocando (ou um timer correndo), a pílula se estica e mostra o que é?</item>
+        <item>Em Assistir, com outro item escolhido que não a TV, o canto esquerdo mostra o que está no ar?</item>
+        <item>Com ▲ no topo da cruz, a barra de sempre aparece com o véu escuro e a pílula some?</item>
+        <item>Parada na HOME, os ícones das categorias tocam uma vez e descansam, sem a tela ficar pesada?</item>
     </string-array>
 </resources>

@@ -80,4 +80,8 @@
     <string name="cruz_pendrive">Pendrive: %1$s</string>
     <string name="casa_fora_titulo">O Home Assistant está fora do ar</string>
     <string name="casa_fora_texto">Confira se o servidor dele está ligado. A TV tenta de novo sozinha a cada poucos segundos.</string>
+    <string name="cruz_barra_ilha">Ilha</string>
+    <string name="cruz_canto_no_ar">No ar</string>
+    <string name="cruz_canto_buscar">Buscar</string>
+    <string name="cruz_canto_buscar_txt">▲ abre a barra com a busca</string>
 </resources>

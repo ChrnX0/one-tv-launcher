@@ -80,4 +80,8 @@
     <string name="cruz_pendrive">ذاكرة USB: %1$s</string>
     <string name="casa_fora_titulo">Home Assistant لا يستجيب</string>
     <string name="casa_fora_texto">تأكد من أن الخادم الخاص به يعمل. يعيد التلفاز المحاولة تلقائيًا كل بضع ثوانٍ.</string>
+    <string name="cruz_barra_ilha">جزيرة</string>
+    <string name="cruz_canto_no_ar">على الهواء</string>
+    <string name="cruz_canto_buscar">بحث</string>
+    <string name="cruz_canto_buscar_txt">▲ يفتح الشريط مع البحث</string>
 </resources>

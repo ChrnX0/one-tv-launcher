@@ -80,4 +80,8 @@
     <string name="cruz_pendrive">USB 드라이브: %1$s</string>
     <string name="casa_fora_titulo">Home Assistant가 응답하지 않습니다</string>
     <string name="casa_fora_texto">서버가 켜져 있는지 확인하세요. TV가 몇 초마다 자동으로 다시 시도합니다.</string>
+    <string name="cruz_barra_ilha">아일랜드</string>
+    <string name="cruz_canto_no_ar">방송 중</string>
+    <string name="cruz_canto_buscar">검색</string>
+    <string name="cruz_canto_buscar_txt">▲ 검색이 있는 막대 열기</string>
 </resources>

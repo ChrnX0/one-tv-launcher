@@ -360,6 +360,7 @@ class MainActivity : Activity() {
             try { startActivity(Intent(this, ModoSimplesActivity::class.java)); return } catch (_: Exception) {}
         }
         DesempenhoTv.ligar(this)   // conta o tempo de cada quadro da HOME, numa thread própria (DesempenhoTv)
+        ligarMovimento()
         preencherApps()
         preencherContinuar()
         reagendarAmbiente()
@@ -419,6 +420,7 @@ class MainActivity : Activity() {
         if (desviadaParaSegura) return
         focoTopo = currentFocus?.takeIf { f -> generateSequence(f.parent) { it.parent }.any { it === topoRaiz } }
         pausadaEm = android.os.SystemClock.elapsedRealtime()
+        DesempenhoTv.aoPesado = null
         DesempenhoTv.desligar(this)
         if (::capa.isInitialized) capa.parar()   // zoom da cena: não fica pedindo quadro com a HOME por trás de um app
         ui.removeCallbacks(tarefaClima)
@@ -1037,6 +1039,8 @@ class MainActivity : Activity() {
         // (36 sp) e a descrição na mesma linha em 222 (até ~266), "ASSISTIR" em 290 e os cards (do tamanho dos apps) em 316
         // (até 379), "APPS" em 397 e os apps em 429 (até 492): embaixo sobra a mesma margem das laterais (48 dp).
         const val TOPO_PALCO = 28          // onde começa a barra do topo (estilo Google TV, 12/11/2026)
+        const val ILHA_TEXTO_MAX = 240     // texto do evento na pílula da Ilha (a pílula não chega no canto)
+        const val ILHA_CANTO_MAX = 230     // linha do canto esquerdo da Ilha
         const val ALTURA_TOPO = 48         // altura das cápsulas (pílulas de 32 dp com 8 de folga em cima e embaixo)
         const val TOPO_DESTAQUE = 278      // onde TERMINA a ficha do card em foco (ela cresce para cima), 12 dp acima de "ASSISTIR"
         const val CORAL = 0xFFFF8A80.toInt()   // a cor do "ao vivo"
@@ -1469,6 +1473,7 @@ class MainActivity : Activity() {
         capsulaTocando.visibility = View.VISIBLE
         // Pausada: some sozinha depois do prazo. A nossa rádio: confere também tocando (se o ":player" cair, não há aviso).
         if (!p.tocando || p.nosso) ui.postDelayed(tarefaTocando, 60_000)
+        atualizarIlha()   // pausar/continuar não muda o tamanho de nada: a Ilha não veria pela arrumação da tela
     }
 
     /** Ideia 93: aniversário hoje ou amanhã (lista da TV). Mais de um: o primeiro e "+N". */
@@ -1503,7 +1508,7 @@ class MainActivity : Activity() {
     /** O próximo despertador na pílula: "hoje 18:30", "amanhã 6:30" ou "sáb 7:00". Sem alarme, a pílula some. */
     private fun atualizarPilulaAlarme() {
         val prox = runCatching { Despertador.proximo(this) }.getOrNull()
-        if (prox == null) { if (pilulaAlarme.hasFocus()) linhaApps.requestFocus(); pilulaAlarme.visibility = View.GONE; atualizarAvisos(); return }
+        if (prox == null) { alarmeEm = null; if (pilulaAlarme.hasFocus()) linhaApps.requestFocus(); pilulaAlarme.visibility = View.GONE; atualizarAvisos(); return }
         val quando = java.util.Calendar.getInstance().apply { timeInMillis = prox.second }
         val hoje = java.util.Calendar.getInstance()
         val dias = ((java.time.LocalDate.of(quando.get(java.util.Calendar.YEAR), quando.get(java.util.Calendar.MONTH) + 1, quando.get(java.util.Calendar.DAY_OF_MONTH)).toEpochDay()) -
@@ -1514,6 +1519,7 @@ class MainActivity : Activity() {
             1L -> getString(R.string.home_alarme_amanha)
             else -> java.text.SimpleDateFormat("EEE", java.util.Locale.getDefault()).format(java.util.Date(prox.second)).trimEnd('.')
         }
+        alarmeEm = prox.second
         txtAlarme.text = "$dia $hora"
         pilulaAlarme.visibility = View.VISIBLE
         atualizarAvisos()
@@ -2609,7 +2615,7 @@ class MainActivity : Activity() {
         raiz.addView(c, 0, FrameLayout.LayoutParams(MATCH, MATCH))   // atrás da barra de cima (o véu não a escurece)
         cruz = c
         c.id = View.generateViewId()
-        c.aoMudar = { _, item -> arteDoItem(item) }
+        c.aoMudar = { cat, item -> arteDoItem(item); cantoEm = cat.cat to item.id; atualizarCanto() }
         c.aoSom = { som, cat -> if (homeNaFrente) SonsCruz.tocar(this, som, cat) }   // voltando de um app (HOME), sem som
         c.aoSubirTopo = { ui.post { bolinhaPerfil?.requestFocus() } }   // ▲ no 1º item: o perfil, 1º da barra
         c.aoPasso = { t -> deslizarArte(t) }
@@ -2656,6 +2662,7 @@ class MainActivity : Activity() {
             topo.background = android.graphics.drawable.InsetDrawable(vidro, dp(Grade.MARGEM - 20), 0, dp(Grade.MARGEM - 20), 0)
             return
         }
+        if (barraCruz == LayoutHome.BarraCruz.ILHA) montarIlha(raiz, topo)
         // Recua: a temperatura entra ao lado da hora enquanto a barra está recolhida.
         if (barraCruz == LayoutHome.BarraCruz.RECUA && direita != null) {
             val t = texto(18f, textoClaro, fonteUi).apply { includeFontPadding = false; text = txtTemp.text; alpha = 0f }
@@ -2667,7 +2674,7 @@ class MainActivity : Activity() {
         // A pílula "Tocando agora" costuma aparecer DEPOIS que a barra já recolheu (estava GONE, sem posição): a cada novo
         // layout dela, com a barra recolhida, ela vai para o começo da linha (visto na TV, v462231: ficava sobre a temperatura).
         capsulaTocando.addOnLayoutChangeListener { v, l, _, _, _, _, _, _, _ ->
-            if (barraRecolhida && v.translationX != -l.toFloat()) { v.animate().cancel(); v.alpha = 1f; v.translationY = 0f; v.translationX = -l.toFloat() }
+            if (barraRecolhida && barraCruz != LayoutHome.BarraCruz.ILHA && v.translationX != -l.toFloat()) { v.animate().cancel(); v.alpha = 1f; v.translationY = 0f; v.translationX = -l.toFloat() }
         }
         if (barraCruz == LayoutHome.BarraCruz.RELOGIO) relogioCruz = montarRelogioCruz().also {
             raiz.addView(it, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.BOTTOM or Gravity.END).apply {
@@ -2694,7 +2701,8 @@ class MainActivity : Activity() {
             val fica = recolher && i == 2 && barraCruz == LayoutHome.BarraCruz.RECUA
             // A pílula "Tocando agora" nunca some com a barra (visto na TV 17/11/2026: estava na árvore de acessibilidade,
             // mas invisível): o grupo dela fica, e só os vizinhos (busca, clima, avisos) recolhem.
-            if (v is ViewGroup && capsulaTocando.parent === v) {
+            // Na Ilha o que toca está na pílula do centro: a cápsula recolhe com as outras.
+            if (v is ViewGroup && capsulaTocando.parent === v && barraCruz != LayoutHome.BarraCruz.ILHA) {
                 v.animate().cancel(); v.alpha = 1f; v.translationY = 0f
                 for (j in 0 until v.childCount) v.getChildAt(j).let {
                     // Recolhida, a pílula vai para o começo da linha (onde ficavam busca e clima, agora apagados): no lugar
@@ -2706,6 +2714,10 @@ class MainActivity : Activity() {
             } else mexer(v, fica)
         }
         tempoCruz?.animate()?.alpha(if (recolher) 1f else 0f)?.setDuration(d)?.start()
+        // Ilha: recolhida = pílula + canto; aberta = a barra de sempre com o véu atrás (a pílula dá lugar à hora dela).
+        ilhaPilula?.animate()?.alpha(if (recolher) 1f else 0f)?.translationY(if (recolher) 0f else -dp(16).toFloat())?.setDuration(d)?.start()
+        ilhaVeu?.animate()?.alpha(if (recolher) 0f else 1f)?.setDuration(d)?.start()
+        atualizarCanto(d)
         relogioCruz?.animate()?.alpha(if (recolher) 1f else 0.35f)?.setDuration(d)?.start()
         cruz?.animate()?.translationY(if (recolher) 0f else dp(34).toFloat())?.setDuration(d)?.start()
     }
@@ -2738,6 +2750,209 @@ class MainActivity : Activity() {
         txtChuva.addTextChangedListener(espelho { copiar() })
         copiar()
         addView(clima, LinearLayout.LayoutParams(WRAP, WRAP).apply { topMargin = dp(2) })
+    }
+
+    // ------------------------------------------------------------------ barra Ilha (A+B+D, 18/11/2026; ver BarraIlha)
+
+    private var ilhaPilula: LinearLayout? = null
+    private var ilhaExtra: LinearLayout? = null
+    private var ilhaIcone: ImageView? = null
+    private var ilhaBarras: BarrasSom? = null
+    private var ilhaTexto: TextView? = null
+    private var ilhaTemp: TextView? = null
+    private var ilhaCanto: TextView? = null
+    private var ilhaVeu: View? = null
+    private var ilhaEvento: BarraIlha.Evento? = null
+    /** Linha do canto de cada categoria (montada junto com a cruz) e onde o foco está agora (categoria, item). */
+    private var cantosCruz: Map<CruzLogica.Categoria, BarraIlha.Canto> = emptyMap()
+    private var cantoEm: Pair<CruzLogica.Categoria, String>? = null
+    /** Quando toca o próximo despertador (ms), para a pílula só mostrá-lo nas últimas 12 h. */
+    private var alarmeEm: Long? = null
+    private val tarefaIlhaAcordou = Runnable { if (cruz?.hasFocus() == true) recolherBarra(true) }
+
+    /**
+     * Monta as três peças da Ilha: o véu (atrás da barra aberta), a pílula do centro (ponto laranja, hora, e o que está
+     * acontecendo) e o canto esquerdo (uma linha da categoria em foco). Nenhuma é focável: com ▲ a barra de sempre volta,
+     * com os botões de verdade (pausar, cancelar o timer, abrir o Diagnóstico).
+     */
+    private fun montarIlha(raiz: FrameLayout, topo: ViewGroup) {
+        val veu = View(this).apply {
+            background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(0xC7080910.toInt(), 0x80080910.toInt(), 0x00080910))
+            alpha = 0f
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+        }
+        raiz.addView(veu, raiz.indexOfChild(topo).coerceAtLeast(0), FrameLayout.LayoutParams(MATCH, dp(TOPO_PALCO + ALTURA_TOPO + 90)))
+        ilhaVeu = veu
+
+        val sombra = 0x99000000.toInt()
+        val ponto = View(this).apply { background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(IconeCruz.COR_ACESA) } }
+        val hora = RelogioTela(this, data = false).apply {
+            format12Hour = "HH:mm"; format24Hour = "HH:mm"
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
+            setTextColor(Color.WHITE)
+            typeface = Typeface.create(fonteUi, Typeface.BOLD)
+            includeFontPadding = false
+        }
+        val temp = texto(17f, textoClaro, fonteUi).apply { includeFontPadding = false; maxLines = 1 }
+        fun copiarTemp() { temp.text = txtTemp.text.toString().takeIf { it.isNotBlank() && it != "…" }.orEmpty(); temp.visibility = if (temp.text.isEmpty() || ilhaEvento != null) View.GONE else View.VISIBLE }
+        txtTemp.addTextChangedListener(espelho { copiarTemp() })
+        val icone = ImageView(this).apply { visibility = View.GONE }
+        val barras = BarrasSom(this).apply { visibility = View.GONE }
+        val txt = texto(17f, Estilo.TEXTO, fonteUi).apply {
+            includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(ILHA_TEXTO_MAX)
+        }
+        val extra = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            visibility = View.GONE
+            addView(icone, LinearLayout.LayoutParams(dp(18), dp(18)).apply { marginEnd = dp(8) })
+            addView(barras, LinearLayout.LayoutParams(dp(11), dp(12)).apply { marginEnd = dp(8) })
+            addView(txt)
+        }
+        val pilula = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            background = GradientDrawable().apply {
+                cornerRadius = dp(20).toFloat(); setColor(0xC70A0B14.toInt()); setStroke(dp(1), 0x1FFFFFFF)
+            }
+            setPaddingRelative(dp(14), 0, dp(16), 0)
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            addView(ponto, LinearLayout.LayoutParams(dp(8), dp(8)).apply { marginEnd = dp(10) })
+            addView(hora)
+            addView(temp, LinearLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(10) })
+            addView(extra, LinearLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(12) })
+        }
+        raiz.addView(pilula, FrameLayout.LayoutParams(WRAP, dp(40), Gravity.TOP or Gravity.CENTER_HORIZONTAL).apply {
+            topMargin = dp(TOPO_PALCO + (ALTURA_TOPO - 40) / 2)
+        })
+        val canto = texto(17f, HomeCruz.COR_SUB, fonteUi).apply {
+            includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(ILHA_CANTO_MAX)
+            gravity = Gravity.CENTER_VERTICAL
+            setShadowLayer(dp(6).toFloat(), 0f, 0f, sombra)
+            alpha = 0f
+        }
+        raiz.addView(canto, FrameLayout.LayoutParams(WRAP, dp(ALTURA_TOPO), Gravity.TOP or Gravity.START).apply {
+            marginStart = dp(Grade.MARGEM); topMargin = dp(TOPO_PALCO)
+        })
+        ilhaPilula = pilula; ilhaExtra = extra; ilhaIcone = icone; ilhaBarras = barras; ilhaTexto = txt; ilhaTemp = temp; ilhaCanto = canto
+        copiarTemp()
+        // As pílulas da barra mudam por todo lado (timer a cada segundo, rádio, rede): a Ilha lê o estado delas a cada
+        // arrumação da tela. Barato: monta um Estado pequeno e só mexe na pílula quando o evento muda.
+        topo.viewTreeObserver.addOnGlobalLayoutListener { atualizarIlha() }
+        atualizarIlha()
+    }
+
+    private fun atualizarIlha() {
+        val pilula = ilhaPilula ?: return
+        fun TextView.se(p: View) = text?.toString()?.takeIf { p.visibility == View.VISIBLE }
+        val e = BarraIlha.escolher(BarraIlha.Estado(
+            semInternet = txtSemInternet.se(pilulaSemInternet),
+            timer = txtTimer.se(pilulaTimer),
+            alarme = txtAlarme.se(pilulaAlarme),
+            alarmeFaltaMs = alarmeEm?.let { it - System.currentTimeMillis() },
+            tocandoTitulo = txtTocandoTitulo.se(capsulaTocando),
+            tocando = barrasTocando.tocando,
+            aniversario = txtAniversario.se(pilulaAniversario),
+            jogo = txtJogo.se(pilulaJogo),
+            vencimento = txtVencimento.se(pilulaVencimento),
+        ))
+        if (e == ilhaEvento) return
+        val mudouTipo = e?.tipo != ilhaEvento?.tipo
+        if (mudouTipo && ::capa.isInitialized && !semAnimacoes()) {
+            android.transition.TransitionManager.beginDelayedTransition(pilula, android.transition.AutoTransition().setDuration(260))
+        }
+        ilhaEvento = e
+        val extra = ilhaExtra ?: return
+        if (e == null) {
+            extra.visibility = View.GONE
+            ilhaBarras?.tocando = false
+        } else {
+            ilhaTexto?.text = e.texto
+            ilhaTexto?.setTextColor(if (e.tipo == BarraIlha.Tipo.SEM_INTERNET || e.tipo == BarraIlha.Tipo.VENCIMENTO) Estilo.ATENCAO else Estilo.TEXTO)
+            val ic: Drawable? = when (e.tipo) {
+                BarraIlha.Tipo.SEM_INTERNET -> IconeApp(IconeApp.Tipo.SEM_REDE, Estilo.ATENCAO)
+                BarraIlha.Tipo.TIMER -> IconeApp(IconeApp.Tipo.TIMER)
+                BarraIlha.Tipo.ALARME -> IconeLinha(IconeLinha.Tipo.DESPERTADOR)
+                BarraIlha.Tipo.JOGO -> IconeApp(IconeApp.Tipo.TV)
+                else -> null
+            }
+            if (mudouTipo) { ilhaIcone?.setImageDrawable(ic); ilhaIcone?.visibility = if (ic != null) View.VISIBLE else View.GONE }
+            ilhaBarras?.visibility = if (e.tipo == BarraIlha.Tipo.TOCANDO) View.VISIBLE else View.GONE
+            ilhaBarras?.tocando = e.tipo == BarraIlha.Tipo.TOCANDO && e.tocando
+            extra.visibility = View.VISIBLE
+        }
+        ilhaTemp?.visibility = if (e != null || ilhaTemp?.text.isNullOrEmpty()) View.GONE else View.VISIBLE
+        pilula.contentDescription = listOfNotNull(e?.texto).joinToString()
+        atualizarCanto()
+    }
+
+    /** O canto esquerdo mostra a linha da categoria em foco, se ela não repete o item focado nem a pílula. */
+    private fun atualizarCanto(duracao: Long = 180L) {
+        val v = ilhaCanto ?: return
+        val (cat, item) = cantoEm ?: (null to null)
+        val c = cat?.let { cantosCruz[it] }
+        val mostra = barraRecolhida && BarraIlha.cantoVisivel(c, item, ilhaEvento?.texto)
+        if (c != null) {
+            val novo = android.text.SpannableStringBuilder().apply {
+                append(c.rotulo, android.text.style.ForegroundColorSpan(IconeCruz.COR_ACESA), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                setSpan(android.text.style.StyleSpan(Typeface.BOLD), 0, length, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                append("  ").append(c.texto)
+            }
+            if (v.text.toString() != novo.toString()) v.text = novo
+        }
+        val alvo = if (mostra) 1f else 0f
+        if (v.alpha != alvo) v.animate().alpha(alvo).setDuration(if (semAnimacoes()) 0L else duracao).start()
+    }
+
+    /** Ao acordar a TV (Ilha): a barra fica aberta por 4 s, para quem chega ver tudo, e recolhe se o foco está na cruz. */
+    private fun abrirIlhaAoAcordar() {
+        if (barraCruz != LayoutHome.BarraCruz.ILHA || ilhaPilula == null || !homeNaFrente) return
+        recolherBarra(false)
+        ui.removeCallbacks(tarefaIlhaAcordou)
+        ui.postDelayed(tarefaIlhaAcordou, BarraIlha.ACORDAR_ABERTA_MS)
+    }
+
+    /** As linhas do canto, a partir dos itens já montados da cruz (os mesmos textos da linha de baixo de cada item). */
+    private fun montarCantos(assistir: List<HomeCruz.Item>, ouvir: List<HomeCruz.Item>, jogar: List<HomeCruz.Item>, temTv: Boolean) {
+        if (barraCruz != LayoutHome.BarraCruz.ILHA) return
+        val m = HashMap<CruzLogica.Categoria, BarraIlha.Canto>()
+        if (temTv) assistir.firstOrNull { it.id == "tv" }?.let { m[CruzLogica.Categoria.ASSISTIR] = BarraIlha.Canto(getString(R.string.cruz_canto_no_ar), BarraIlha.linhaDoCanto(it.sub), it.id) }
+        val radioTxt = radioCruz?.let { (r, q) -> CruzLogica.juntar(getString(R.string.cruz_por_ultimo, r.nome), quando(q)) }
+        val podTxt = podcastCruz?.let { p -> CruzLogica.juntar(p.titulo, faltaPodcast(p)) }
+            ?: assinadosCruz.takeIf { it > 0 }?.let { getString(R.string.cruz_podcasts_n, it) }
+        when (BarraIlha.origemOuvir(ouvindoCruz?.first, radioTxt != null, podTxt != null)) {
+            "radio" -> m[CruzLogica.Categoria.OUVIR] = BarraIlha.Canto(getString(R.string.cruz_radio), radioTxt.orEmpty(), "radio")
+            "podcasts" -> m[CruzLogica.Categoria.OUVIR] = BarraIlha.Canto(getString(R.string.pod_titulo), podTxt.orEmpty(), "podcasts")
+        }
+        jogar.firstOrNull { it.id == "central" }?.let { m[CruzLogica.Categoria.JOGAR] = BarraIlha.Canto(it.nome, BarraIlha.linhaDoCanto(it.sub), it.id) }
+        m[CruzLogica.Categoria.APLICATIVOS] = BarraIlha.Canto(getString(R.string.cruz_canto_buscar), getString(R.string.cruz_canto_buscar_txt), "")
+        if (ouvir.isEmpty()) m.remove(CruzLogica.Categoria.OUVIR)
+        cantosCruz = m
+        atualizarCanto()
+    }
+
+    // ------------------------------------------------------------------ movimento dos ícones (MovimentoAdaptativo)
+
+    private fun semAnimacoes() =
+        runCatching { android.provider.Settings.Global.getFloat(contentResolver, android.provider.Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f }.getOrDefault(false)
+
+    /** Na volta da HOME: o nível que vale (aparelho, rebaixado, forçado pelo adb) e o juiz dos quadros. */
+    private fun ligarMovimento() {
+        val c = cruz ?: return
+        c.nivel = MovimentoAdaptativo.atual(this, semAnimacoes())
+        DesempenhoTv.limiteMs = MovimentoAdaptativo.limiteQuadroMs(runCatching { windowManager.defaultDisplay.refreshRate }.getOrDefault(60f))
+        DesempenhoTv.aoPesado = if (c.nivel > MovimentoAdaptativo.Nivel.ECONOMICO) ({ ui.post { rebaixarMovimento() } }) else null
+    }
+
+    private fun rebaixarMovimento() {
+        val c = cruz ?: return
+        if (!homeNaFrente) return
+        val novo = MovimentoAdaptativo.descer(c.nivel)
+        if (novo == c.nivel) { DesempenhoTv.aoPesado = null; return }
+        Log.i("TvLauncher.Movimento", "quadros lentos demais: ${c.nivel} -> $novo")
+        MovimentoAdaptativo.rebaixar(this, novo)
+        c.nivel = novo
+        if (novo <= MovimentoAdaptativo.Nivel.ECONOMICO) DesempenhoTv.aoPesado = null
     }
 
     private fun espelho(acao: () -> Unit) = object : android.text.TextWatcher {
@@ -2892,7 +3107,7 @@ class MainActivity : Activity() {
         categoria(CruzLogica.Categoria.ASSISTIR, R.string.cruz_assistir, IconeCruz.Tipo.ASSISTIR, assistir)
 
         // Ouvir: as rádios (catálogo mundial, sem conta) e os podcasts (plano Básico, Paulo 17/11/2026).
-        categoria(CruzLogica.Categoria.OUVIR, R.string.cruz_ouvir, IconeCruz.Tipo.OUVIR, listOf(
+        val ouvir = listOf(
             HomeCruz.Item("radio", getString(R.string.cruz_radio),
                 CruzLogica.linhas(ouvindoCruz?.takeIf { it.first == "radio" }?.let { getString(R.string.cruz_tocando, it.second) } ?: precisa ?: getString(R.string.cruz_radio_sub),
                     radioCruz?.let { (r, q) -> CruzLogica.juntar(getString(R.string.cruz_por_ultimo, r.nome), quando(q)) }),
@@ -2907,12 +3122,13 @@ class MainActivity : Activity() {
                 icCruz("podcasts", IconeCruz.Tipo.PODCASTS), {
                 try { startActivity(Intent(this, PodcastsActivity::class.java)) }
                 catch (e: Exception) { Log.w("TvLauncher.Cruz", "podcasts não abriram: ${e.javaClass.simpleName}"); cruz?.naoAbriu() }
-            })) + appsDe(CruzLogica.Categoria.OUVIR))
+            })) + appsDe(CruzLogica.Categoria.OUVIR)
+        categoria(CruzLogica.Categoria.OUVIR, R.string.cruz_ouvir, IconeCruz.Tipo.OUVIR, ouvir)
 
         // Jogar (18/11/2026, pedido do dono: "Jogos" e "Sofá" abriam a mesma tela): a Central de jogos no topo (o painel com
         // controles, turma do Discord, rede e recentes) e cada jogo instalado, do jogado por último ao mais antigo.
+        val jogos = ArrayList<HomeCruz.Item>()
         if (JogosTv.cardLigado(this)) {
-            val jogos = ArrayList<HomeCruz.Item>()
             jogos += HomeCruz.Item("central", getString(R.string.cruz_central), linhasCentral(), icCruz("central", IconeCruz.Tipo.CENTRAL),
                 { abrirCatalogo(JogosActivity::class.java) })
             val doJogo = jogosNaCruz().associateBy { it.pacote }
@@ -2936,6 +3152,7 @@ class MainActivity : Activity() {
         categoria(CruzLogica.Categoria.APLICATIVOS, R.string.cruz_aplicativos, IconeCruz.Tipo.APLICATIVOS, apps)
 
         c.definir(cats)
+        montarCantos(assistir, ouvir, jogos, cruzTemTv && ultimoTv != null)
         if (focoInicialNaTv && !todosAbertos) { focoInicialNaTv = false; c.requestFocus() }
         else if (currentFocus == null && !todosAbertos) c.requestFocus()
     }
@@ -3210,6 +3427,7 @@ class MainActivity : Activity() {
                         acendeuEm = agora
                         dormiuMs = if (apagouEm > 0) agora - apagouEm else 0L
                         perguntouNestaVez = false
+                        abrirIlhaAoAcordar()
                         if (homeNaFrente) { ui.removeCallbacks(tarefaQuemVe); ui.postDelayed(tarefaQuemVe, 1500) }
                     }
                 }

@@ -80,4 +80,8 @@
     <string name="cruz_pendrive">USB bellek: %1$s</string>
     <string name="casa_fora_titulo">Home Assistant yanıt vermiyor</string>
     <string name="casa_fora_texto">Sunucusunun açık olduğunu kontrol edin. TV birkaç saniyede bir kendisi yeniden dener.</string>
+    <string name="cruz_barra_ilha">Ada</string>
+    <string name="cruz_canto_no_ar">Yayında</string>
+    <string name="cruz_canto_buscar">Ara</string>
+    <string name="cruz_canto_buscar_txt">▲ arama çubuğunu açar</string>
 </resources>
