@@ -53,7 +53,9 @@ class CapaOuvir(ctx: Context, private val raioDp: Float = 14f) : ImageView(ctx) 
                 if (icone != null) o.setEmpty() else o.setRoundRect(0, 0, v.width, v.height, dp(raioDp))
             }
         }
-        clipToOutline = true
+        // Sem recorte pelo contorno: com ícone o contorno é vazio, e recortar por um contorno vazio some com tudo na TV
+        // (o Robolectric não recorta, por isso o teste de tela não pegou). O canto arredondado é desenhado à mão em onDraw.
+        clipToOutline = false
         importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
         ajustarMargem()
     }
