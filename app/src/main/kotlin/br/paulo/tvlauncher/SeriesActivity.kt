@@ -101,6 +101,8 @@ class SeriesActivity : Activity() {
     private var indiceVersoes: Map<String, List<Serie>> = emptyMap()
     private var prefsIdioma = Idioma.Prefs()
     private var fichaAberta: FichaSerie? = null
+    // A outra versão da série aberta, com os episódios dela, para o ▼ do player trocar no mesmo ponto (18/11/2026).
+    private var outraFicha: Pair<Serie, FichaSerie>? = null
     private var temporada = 1
     private var tocando: Episodio? = null   // o episódio que foi para a VodActivity (para o "próximo")
     private var seguidos = 0   // ideia 19: episódios seguidos que terminaram sem ninguém apertar tecla
@@ -775,7 +777,7 @@ class SeriesActivity : Activity() {
         val s = if (!trocar || ultimos[s0.chave] != null) s0 else outraVersao(s0)
             ?.takeIf { Idioma.versao(it.nome, it.grupo) == Idioma.versaoDesejada(prefsIdioma.para(s0.chave)) } ?: s0
         if (aberta !== s) verEpisodios = false
-        aberta = s; fichaAberta = null
+        aberta = s; fichaAberta = null; outraFicha = null
         // A ficha abre já com o foco nela (a grade de trás não mexe mais), mas o "carregando" só aparece se a ficha do
         // servidor demorar: antes eram 3 desenhos seguidos ao abrir (carregando, servidor, TMDB), cada um com quadros
         // de 50-110 ms na TV (medido em 15/11/2026). Agora os que chegam juntos viram um só.
@@ -793,6 +795,8 @@ class SeriesActivity : Activity() {
                 // A ficha de fora chega 50-400 ms depois (mais com MDBList/Simkl): espera por ela para desenhar uma vez só.
                 pedirDesenho(if (externoVem && externo?.first !== s) ESPERA_EXTERNO_MS else 0)
             }
+            // A outra versão (dublada/legendada): os episódios dela, para trocar no player sem voltar à ficha.
+            outraVersao(s)?.let { o -> PlayerCarga.fichaSerie(this, o)?.let { fo -> tela.post { if (!isDestroyed && aberta === s) outraFicha = o to fo } } }
             // Ficha de fora, depois da do servidor; sem chave nenhuma, não faz nada.
             if (externoVem) {
                 val g = InfoExternaCache.resolver(this, s.chave, s.nome, s.ano, true, f?.tmdb ?: s.tmdb)
@@ -1174,10 +1178,25 @@ class SeriesActivity : Activity() {
             PlayerArmazem.definirUltimosEpisodios(this, copia)
             if (paraHome) PlayerArmazem.definirCapaHome(this, serie = true, poster = capa, cenas = cenas, ficha = fichaHome)
         }
-        VodActivity.abrirComResultado(this, CODIGO_VIDEO, VodActivity.TIPO_EPISODIO, s.fonteId, ep.id, ep.extensao,
-            "${Vod.nomeLimpo(s.nome)} · ${ep.rotulo} · ${Series.tituloCurto(s.nome, ep.titulo)}", doComeco, chaveIdioma = s.chave,
+        // Dublado x legendado: com a outra versão carregada, o ▼ do player troca no mesmo ponto. Se a pessoa já trocou
+        // nesta série (a escolha fica guardada na chave dela), os próximos episódios abrem direto na versão escolhida.
+        val titulo = "${Vod.nomeLimpo(s.nome)} · ${ep.rotulo} · ${Series.tituloCurto(s.nome, ep.titulo)}"
+        val outra = outraFicha?.takeIf { it.first.chave == outraVersao(s)?.chave }
+        val epOutra = outra?.let { Series.mesmoEpisodio(it.second, ep) }
+        val vOutra = outra?.let { Idioma.versao(it.first.nome, it.first.grupo) } ?: Idioma.Versao.DESCONHECIDA
+        val vEsta = Idioma.versao(s.nome, s.grupo)
+        val naOutra = epOutra != null && prefsIdioma.titulos[s.chave]?.let { Idioma.versaoDesejada(it) == vOutra } == true
+        val (srcSerie, srcEp) = if (naOutra) outra!!.first to epOutra!! else s to ep
+        VodActivity.abrirComResultado(this, CODIGO_VIDEO, VodActivity.TIPO_EPISODIO, srcSerie.fonteId, srcEp.id, srcEp.extensao,
+            titulo, doComeco, chaveIdioma = s.chave,
             busca = LegendaExterna.Busca(LegendaExterna.nomeDeBusca(s.nome), temporada = ep.temporada, episodio = ep.numero,
-                tmdb = s.tmdb ?: externo?.takeIf { it.first.chave == s.chave }?.second?.tmdb, versao = Idioma.versao(s.nome, s.grupo)))
+                tmdb = s.tmdb ?: externo?.takeIf { it.first.chave == s.chave }?.second?.tmdb, versao = if (naOutra) vOutra else vEsta)) { i ->
+            when {
+                epOutra == null -> i
+                naOutra -> VodActivity.comOutraVersao(i, s.fonteId, ep.id, ep.extensao, titulo, vEsta)
+                else -> VodActivity.comOutraVersao(i, outra!!.first.fonteId, epOutra.id, epOutra.extensao, titulo, vOutra)
+            }
+        }
     }
 
     // API antiga (deprecated), mas é a que existe numa Activity comum, sem AndroidX.
@@ -1189,9 +1208,11 @@ class SeriesActivity : Activity() {
         // Posições mudaram: relê e redesenha a ficha (barras e botão principal).
         Fundo.rodar {
             val p = PlayerArmazem.posicoes(this)
+            // A troca de versão no player grava a escolha: relê para o próximo episódio já sair na versão escolhida.
+            val pi = IdiomaPlayer.prefs(this)
             tela.post {
                 if (isDestroyed) return@post
-                posicoes = p
+                posicoes = p; prefsIdioma = pi
                 if (s != null && f != null) atualizarProgresso(s, f)
                 val terminou = resultCode == RESULT_OK && data?.getBooleanExtra(VodActivity.RESULTADO_TERMINOU, false) == true
                 val teclou = data?.getBooleanExtra(VodActivity.RESULTADO_TECLA, true) ?: true
