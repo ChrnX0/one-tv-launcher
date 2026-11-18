@@ -189,13 +189,18 @@ object InfoExterna {
      * Devolve (tem, total). "Coleção Duna: 2 de 3 na sua lista".
      */
     fun contarNaLista(partes: List<Candidato>, idsNaLista: Set<Int>, nomesNaLista: Set<String>): Pair<Int, Int> {
-        val tem = partes.count { p -> p.id in idsNaLista || Idioma.chaveTitulo(p.titulo) + "|" + (p.ano ?: 0) in nomesNaLista ||
-            Idioma.chaveTitulo(p.original) + "|" + (p.ano ?: 0) in nomesNaLista }
+        val tem = partes.count { p -> p.id in idsNaLista || chaveNomeAno(p.titulo, p.ano) in nomesNaLista ||
+            chaveNomeAno(p.original, p.ano) in nomesNaLista }
         return tem to partes.size
     }
 
-    /** A chave nome+ano que [contarNaLista] usa para cada título da lista. */
-    fun chaveNomeAno(nome: String, ano: Int?): String = Idioma.chaveTitulo(nome) + "|" + (ano ?: 0)
+    /**
+     * A chave nome+ano que [contarNaLista] e o cruzamento com listas de fora usam. Sem as marcas de qualidade no fim
+     * ("Oppenheimer (2023) 4K" do IPTV = "Oppenheimer" 2023 do Simkl; achado no teste de 18/11/2026).
+     */
+    fun chaveNomeAno(nome: String, ano: Int?): String = Idioma.chaveTitulo(nome).replace(reQualidade, "") + "|" + (ano ?: 0)
+
+    private val reQualidade = Regex("""(\s+(4k|uhd|fhd|hd|hdr|hdr10|dv|sdr|1080p|720p|2160p|hevc|h265|x265))+$""")
 
     // ================================================================ notas
 

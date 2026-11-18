@@ -516,6 +516,27 @@ object SincronizarFilmes {
         return vistos.toList() to casaram
     }
 
+    /**
+     * Títulos do catálogo SEM id TMDB que casam por nome + ano com um item de fora que TEM id: chave -> id de fora.
+     * Sem isso, um filme da lista do Simkl/Trakt cuja entrada no catálogo do IPTV veio sem `tmdb` (e cuja ficha nunca
+     * foi aberta) nunca entrava nos Interesses (visto no teste de 18/11/2026: Oppenheimer em Plan to Watch, 3 versões
+     * no catálogo, Interesses ficou em 0). Todas as versões com o mesmo nome + ano (4K, LEG) recebem o id; quem já tem
+     * id não é tocado (pode ter sido escolhido à mão na ficha).
+     */
+    fun idsPorNome(catalogo: List<Titulo>, remoto: List<Item>): Map<String, Int> {
+        val semId = HashMap<String, MutableList<String>>()
+        for (t in catalogo) if (t.tmdb == null) semId.getOrPut(t.nomeAno) { ArrayList() } += t.chave
+        if (semId.isEmpty()) return emptyMap()
+        val comId = catalogo.mapNotNullTo(HashSet()) { it.tmdb }
+        val r = LinkedHashMap<String, Int>()
+        for (i in remoto) {
+            val id = i.ids.tmdb ?: continue
+            if (id in comId || i.titulo.isBlank()) continue
+            for (ch in semId[InfoExterna.chaveNomeAno(i.titulo, i.ano)].orEmpty()) r.putIfAbsent(ch, id)
+        }
+        return r
+    }
+
     // ================================================================ opções (o que o dono ligou)
 
     /** Por conta (Trakt ou Simkl). Tudo começa desligado. */
