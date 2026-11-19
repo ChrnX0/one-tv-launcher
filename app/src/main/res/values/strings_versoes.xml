@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>The LG now turns off together when the Chromecast falls asleep on its own after sitting idle (it refused the HDMI turn-off command)</item>
         <item>All apps: the same header as the Radio and Games screens, with “In the grid: X · hidden: Y”; wallpaper plugins no longer show as apps</item>
         <item>Radio, Podcasts and Games: the list name sits right above the first item; the “Live” card leaves when the focused station is the one playing</item>
         <item>Bigger letters (nothing below 15) in settings, footer keys, the corner date and lists</item>
