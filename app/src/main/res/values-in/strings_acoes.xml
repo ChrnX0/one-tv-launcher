@@ -56,7 +56,7 @@
     <string name="aut_cfg_det">Jam, tombol remote, peristiwa, dan tautan adegan</string>
     <string name="aut_horario">Saat tiba waktunya</string>
     <string name="aut_botao">Saat tombol ditekan</string>
-    <string name="aut_evento">Saat sesuatu terjadi (menjalankan adegan)</string>
+    <string name="aut_evento">Saat sesuatu terjadi</string>
     <string name="aut_link">Lewat tautan</string>
     <string name="aut_link_det">Buat dan edit di panel web › Ekstra › Adegan</string>
     <string name="ev_midia_tocou">Film atau video dimulai</string>

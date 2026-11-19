@@ -564,7 +564,6 @@
     <string name="home_dest_filme_ultimo">Film · yang terakhir Anda buka</string>
     <string name="home_dest_serie">Acara · Anda di %1$s</string>
     <string name="home_dest_tv">TV · saluran %1$d</string>
-    <string name="home_faltam">sisa %1$s</string>
     <string name="rede_titulo">Jaringan</string>
     <string name="rede_procurando">Mencari server media di jaringan…</string>
     <string name="rede_nenhum">Tidak ada server media yang aktif. Tambahkan di bawah: Plex dan Jellyfin memakai akun Anda; folder PC atau NAS memakai alamatnya.</string>
@@ -757,6 +756,9 @@ AS\\Film).</string>
     <string name="legenda_conta_sim">diatur</string>
     <string name="legenda_conta_nao">belum diatur</string>
     <string name="tempo_faltam">sisa %1$s</string>
+    <string name="tempo_falta_um">sisa %1$s</string>
+    <string name="serie_ep_longo">Musim %1$d, episode %2$d</string>
+    <string name="ficha_continuar_de">dari %1$s</string>
     <string name="tempo_termina_as">berakhir pukul %1$s</string>
     <string name="tempo_episodios_vistos">%1$s episode</string>
     <string name="tempo_x_de_y">%1$d dari %2$d</string>

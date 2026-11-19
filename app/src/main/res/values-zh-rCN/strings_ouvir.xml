@@ -24,7 +24,6 @@
     <string name="pod_desligado">关</string>
     <string name="pod_dica_pular">在正在播放的行上，◀ ▶ 后退 15 秒 / 前进 30 秒</string>
     <string name="pod_continuar">继续收听</string>
-    <string name="pod_faltam">剩余 %s</string>
     <string name="pod_novos">新单集</string>
     <string name="pod_video">视频</string>
     <string name="pod_meus">我的播客</string>

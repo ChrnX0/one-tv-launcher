@@ -901,7 +901,7 @@ class PlayerActivity : Activity() {
         infoLinha.text = partes.joinToString("  ·  ")
         infoLinha.visibility = if (partes.isEmpty()) View.GONE else View.VISIBLE
         // Quanto falta do programa de agora, como no card TV da HOME.
-        infoHora.text = atualProg?.let { getString(R.string.home_faltam, minutosTexto(((it.fim - agora + 59_999) / 60_000).toInt())) + "  ·  " }
+        infoHora.text = atualProg?.let { BarraTempo.faltam(this, minutosTexto(((it.fim - agora + 59_999) / 60_000).toInt())) + "  ·  " }
             .orEmpty() + hora.format(Date(agora))
         infoProgresso.visibility = if (atualProg != null) View.VISIBLE else View.INVISIBLE
         atualProg?.let { infoProgresso.progress = (guia.progresso(it, agora) * 1000).toInt() }

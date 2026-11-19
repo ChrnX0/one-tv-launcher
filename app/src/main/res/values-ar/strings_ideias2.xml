@@ -4,9 +4,9 @@
     <string name="dormir_titulo">وقت النوم</string>
     <string name="dormir_texto">هذا التطبيق غير مسموح الآن. تصبح على خير!</string>
     <string name="dormir_pin">PIN لتغيير وقت النوم</string>
-    <string name="dormir_inicio">وقت النوم: البداية</string>
-    <string name="dormir_fim">وقت النوم: النهاية</string>
-    <string name="dormir_teto">وقت النوم: أقصى صوت</string>
+    <string name="dormir_inicio">البداية</string>
+    <string name="dormir_fim">النهاية</string>
+    <string name="dormir_teto">أقصى صوت</string>
     <string name="recado_link_titulo">الرسالة</string>
     <string name="extras_HORA_DORMIR">وقت النوم (التطبيقات المسموحة فقط، صوت محدود)</string>
     <string name="extras_TOCANDO_AGORA">قيد التشغيل الآن (يقرأ ما يُشغَّل)</string>
@@ -18,11 +18,11 @@
     <string name="extras_consumo">الإنترنت لكل تطبيق (7 أيام)</string>
     <string name="extras_tocando">قيد التشغيل الآن</string>
     <string name="extras_aguarde">لحظة…</string>
-    <string name="dormir_dia">وقت النوم: اليوم</string>
+    <string name="dormir_dia">اليوم</string>
     <string name="dormir_todos">الكل (افتراضي)</string>
     <string name="dormir_proprio">جدول خاص</string>
     <string name="dormir_segue">يتبع الافتراضي</string>
-    <string name="dormir_voltar_padrao">وقت النوم: إعادة هذا اليوم إلى الافتراضي</string>
+    <string name="dormir_voltar_padrao">إعادة هذا اليوم إلى الافتراضي</string>
     <string name="extras_VER_TELA">السماح لـClaude برؤية الشاشة (MCP ver_tela؛ يعرض التلفزيون تنبيهًا)</string>
     <string name="casa_titulo">المنزل</string>
     <string name="casa_sem_config">أعدّ Home Assistant في لوحة الهاتف: تبويب الإضافات، بطاقة المنزل.</string>

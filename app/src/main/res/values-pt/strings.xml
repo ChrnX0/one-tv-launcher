@@ -285,7 +285,7 @@
     <string name="pv_voz_sem_chuva">", sem previsão de chuva. "</string>
     <string name="pv_voz_amanha">Amanhã, %1$s, máxima de %2$d e mínima de %3$d</string>
     <string name="pv_voz_amanha_chuva">, chance de chuva de %1$d por cento</string>
-    <string name="pv_sem">Sem previsão agora (sem internet ou fonte fora do ar).</string>
+    <string name="pv_sem">Não deu para buscar a previsão agora. Confira a internet e tente de novo.</string>
     <string name="pv_max_min">máx %1$d°   mín %2$d°   ·   sensação %3$d°</string>
     <string name="pv_24h">Próximas 24 horas</string>
     <string name="pv_agora">Agora</string>
@@ -628,7 +628,6 @@
     <string name="home_dest_filme_ultimo">Filmes · o último que você abriu</string>
     <string name="home_dest_serie">Séries · você está no %1$s</string>
     <string name="home_dest_tv">TV · canal %1$d</string>
-    <string name="home_faltam">faltam %1$s</string>
     <string name="rede_titulo">Na rede</string>
     <string name="rede_procurando">Procurando servidores de mídia na rede…</string>
     <string name="rede_nenhum">Nenhum servidor de mídia ligado na rede agora. Adicione um abaixo: Plex e Jellyfin entram com a sua conta; pasta do PC ou do NAS, com o endereço.</string>
@@ -834,6 +833,9 @@
     <string name="legenda_conta_nao">não configurada</string>
     <!-- Barra + tempo (BarraTempo.kt): %1$s é trocado pelo valor em destaque. -->
     <string name="tempo_faltam">faltam %1$s</string>
+    <string name="tempo_falta_um">falta %1$s</string>
+    <string name="serie_ep_longo">Temporada %1$d, episódio %2$d</string>
+    <string name="ficha_continuar_de">de %1$s</string>
     <string name="tempo_termina_as">termina às %1$s</string>
     <string name="tempo_episodios_vistos">%1$s episódios</string>
     <string name="tempo_x_de_y">%1$d de %2$d</string>

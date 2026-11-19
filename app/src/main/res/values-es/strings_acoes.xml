@@ -56,7 +56,7 @@
     <string name="aut_cfg_det">Horarios, botones del control, eventos y enlaces de escenas</string>
     <string name="aut_horario">Cuando llega la hora</string>
     <string name="aut_botao">Cuando se presiona un botón</string>
-    <string name="aut_evento">Cuando algo pasa (ejecuta una escena)</string>
+    <string name="aut_evento">Cuando algo pasa</string>
     <string name="aut_link">Por enlace</string>
     <string name="aut_link_det">Crea y edita en el panel web › Extras › Escenas</string>
     <string name="ev_midia_tocou">Empezó una película o video</string>

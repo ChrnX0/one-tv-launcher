@@ -11,7 +11,7 @@
     <string name="elv_pilar_controle">Controle de qualquer lugar</string>
     <string name="elv_pilar_todos">Qualquer pessoa usa</string>
     <string name="elv_pilar_instala">Instala e se conserta sozinha</string>
-    <string name="elv_prom_liga">Ecrã inicial pronto em menos de 1 segundo; nenhuma falha em 30 dias</string>
+    <string name="elv_prom_liga">Ecrã inicial pronto em menos de 1 segundo</string>
     <string name="elv_prom_ao_vivo">Mudar de canal demora menos de 1,5 segundos, da tecla até à imagem</string>
     <string name="elv_prom_player">Reproduz qualquer ficheiro; legendas certas sem mexer</string>
     <string name="elv_prom_casa">O despertador toca na hora, todas as vezes</string>

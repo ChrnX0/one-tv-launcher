@@ -4,9 +4,9 @@
     <string name="dormir_titulo">Heure du coucher</string>
     <string name="dormir_texto">Cette app n’est pas autorisée en ce moment. Bonne nuit !</string>
     <string name="dormir_pin">PIN pour changer l’heure du coucher</string>
-    <string name="dormir_inicio">Heure du coucher : début</string>
-    <string name="dormir_fim">Heure du coucher : fin</string>
-    <string name="dormir_teto">Heure du coucher : volume max.</string>
+    <string name="dormir_inicio">Début</string>
+    <string name="dormir_fim">Fin</string>
+    <string name="dormir_teto">Volume max.</string>
     <string name="recado_link_titulo">Message</string>
     <string name="extras_HORA_DORMIR">Heure du coucher (apps autorisées uniquement, volume plafonné)</string>
     <string name="extras_TOCANDO_AGORA">En lecture (lit ce qui passe)</string>
@@ -18,11 +18,11 @@
     <string name="extras_consumo">Internet par app (7 jours)</string>
     <string name="extras_tocando">En lecture</string>
     <string name="extras_aguarde">Un instant…</string>
-    <string name="dormir_dia">Heure du coucher : jour</string>
+    <string name="dormir_dia">Jour</string>
     <string name="dormir_todos">tous (par défaut)</string>
     <string name="dormir_proprio">horaire propre</string>
     <string name="dormir_segue">suit le défaut</string>
-    <string name="dormir_voltar_padrao">Heure du coucher : remettre ce jour par défaut</string>
+    <string name="dormir_voltar_padrao">Remettre ce jour par défaut</string>
     <string name="extras_VER_TELA">Laisser Claude voir l’écran (MCP ver_tela ; la TV affiche un avis)</string>
     <string name="casa_titulo">Maison</string>
     <string name="casa_sem_config">Configurez Home Assistant dans le panneau du téléphone : onglet Extras, carte Maison.</string>

@@ -11,7 +11,7 @@
     <string name="elv_pilar_controle">Sterowanie z każdego miejsca</string>
     <string name="elv_pilar_todos">Każdy umie go używać</string>
     <string name="elv_pilar_instala">Sam się instaluje i sam naprawia</string>
-    <string name="elv_prom_liga">Ekran główny gotowy w mniej niż 1 sekundę; żadnej awarii przez 30 dni</string>
+    <string name="elv_prom_liga">Ekran główny gotowy w mniej niż 1 sekundę</string>
     <string name="elv_prom_ao_vivo">Zmiana kanału trwa mniej niż 1,5 sekundy, od przycisku do obrazu</string>
     <string name="elv_prom_player">Odtwarza każdy plik; właściwe napisy bez grzebania</string>
     <string name="elv_prom_casa">Budzik dzwoni na czas, za każdym razem</string>

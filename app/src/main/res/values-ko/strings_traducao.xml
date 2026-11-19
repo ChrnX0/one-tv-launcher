@@ -164,6 +164,7 @@
     <string name="bc_bloqueado_cat">카테고리로 차단됨</string>
     <string name="bc_bloqueado">차단됨</string>
     <string name="qr_gerar_outro">새 코드</string>
+    <string name="tentar_de_novo">다시 시도</string>
     <string name="qr_fechar">닫기</string>
     <string name="qr_painel_fora">패널이 실행되고 있지 않습니다.\n런처 설정 &gt; 원격 액세스 &gt; 패널에서 켜세요(PIN 필요).</string>
     <string name="qr_pronto">완료</string>

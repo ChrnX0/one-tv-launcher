@@ -11,7 +11,7 @@
     <string name="elv_pilar_controle">어디서나 제어</string>
     <string name="elv_pilar_todos">누구나 사용</string>
     <string name="elv_pilar_instala">스스로 설치하고 스스로 고침</string>
-    <string name="elv_prom_liga">홈 화면 1초 이내 준비, 30일 동안 다운 없음</string>
+    <string name="elv_prom_liga">홈 화면 1초 이내 준비</string>
     <string name="elv_prom_ao_vivo">채널 전환은 버튼부터 화면까지 1.5초 이내</string>
     <string name="elv_prom_player">어떤 파일도 재생, 손대지 않아도 맞는 자막</string>
     <string name="elv_prom_casa">알람은 매번 제시간에 울림</string>

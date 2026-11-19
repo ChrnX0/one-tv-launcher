@@ -24,7 +24,6 @@
     <string name="pod_desligado">désactivé</string>
     <string name="pod_dica_pular">Sur la ligne en cours, ◀ ▶ reculent de 15 s / avancent de 30 s</string>
     <string name="pod_continuar">Reprendre</string>
-    <string name="pod_faltam">encore %s</string>
     <string name="pod_novos">Nouveaux épisodes</string>
     <string name="pod_video">vidéo</string>
     <string name="pod_meus">Mes podcasts</string>

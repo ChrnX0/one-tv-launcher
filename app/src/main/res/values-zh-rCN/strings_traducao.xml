@@ -164,6 +164,7 @@
     <string name="bc_bloqueado_cat">已按分类屏蔽</string>
     <string name="bc_bloqueado">已屏蔽</string>
     <string name="qr_gerar_outro">新代码</string>
+    <string name="tentar_de_novo">重试</string>
     <string name="qr_fechar">关闭</string>
     <string name="qr_painel_fora">面板未运行。\n请在 启动器设置 &gt; 远程访问 &gt; 面板 中开启（需要 PIN）。</string>
     <string name="qr_pronto">完成</string>

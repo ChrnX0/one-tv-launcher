@@ -42,6 +42,17 @@ object BarraTempo {
         }
     }
 
+    /**
+     * Modelo "faltam X" com a concordância certa: "falta 1 min" / "falta 1 h 20 min" no singular, "faltam 5 min" no plural
+     * (crítica de design 19/11/2026). O verbo concorda com o primeiro número; em inglês e na maioria das línguas os dois
+     * textos são iguais.
+     */
+    fun modeloFaltam(valor: String): Int =
+        if (valor.startsWith("1 ")) R.string.tempo_falta_um else R.string.tempo_faltam
+
+    /** "faltam 22 min" / "falta 1 min", pronto. */
+    fun faltam(ctx: Context, valor: String): String = ctx.getString(modeloFaltam(valor), valor)
+
     /** Fração já vista/passada, entre 0 e 1 (duração 0 ou negativa = 0). */
     fun fracao(passado: Long, total: Long): Float = if (total <= 0) 0f else (passado.toFloat() / total).coerceIn(0f, 1f)
 
@@ -51,7 +62,8 @@ object BarraTempo {
      */
     fun textoFaltam(ctx: Context, restanteMs: Long, terminaEm: Long? = null): CharSequence {
         val sb = SpannableStringBuilder()
-        anexar(sb, ctx.getString(R.string.tempo_faltam), duracao(restanteMs))
+        val d = duracao(restanteMs)
+        anexar(sb, ctx.getString(modeloFaltam(d)), d)
         terminaEm?.let {
             sb.append(" · ")
             anexar(sb, ctx.getString(R.string.tempo_termina_as), SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(it)))

@@ -11,7 +11,7 @@
     <string name="elv_pilar_controle">कहीं से भी कंट्रोल</string>
     <string name="elv_pilar_todos">कोई भी इस्तेमाल कर सकता है</string>
     <string name="elv_pilar_instala">खुद सेट होता है, खुद ठीक होता है</string>
-    <string name="elv_prom_liga">होम स्क्रीन 1 सेकंड से कम में तैयार; 30 दिन में एक भी क्रैश नहीं</string>
+    <string name="elv_prom_liga">होम स्क्रीन 1 सेकंड से कम में तैयार</string>
     <string name="elv_prom_ao_vivo">चैनल बदलना बटन से तस्वीर तक 1.5 सेकंड से कम</string>
     <string name="elv_prom_player">कोई भी फ़ाइल चलाता है; बिना छेड़े सही सबटाइटल</string>
     <string name="elv_prom_casa">अलार्म हर बार समय पर बजता है</string>

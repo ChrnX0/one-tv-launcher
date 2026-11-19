@@ -24,7 +24,6 @@
     <string name="pod_desligado">꺼짐</string>
     <string name="pod_dica_pular">재생 중인 줄에서 ◀ ▶ 로 15초 뒤로 / 30초 앞으로</string>
     <string name="pod_continuar">이어서 듣기</string>
-    <string name="pod_faltam">%s 남음</string>
     <string name="pod_novos">새 에피소드</string>
     <string name="pod_video">동영상</string>
     <string name="pod_meus">내 팟캐스트</string>

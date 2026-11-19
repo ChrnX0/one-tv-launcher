@@ -11,7 +11,7 @@
     <string name="elv_pilar_controle">تحكم من أي مكان</string>
     <string name="elv_pilar_todos">يستخدمه أي شخص</string>
     <string name="elv_pilar_instala">يثبّت نفسه ويصلح نفسه</string>
-    <string name="elv_prom_liga">الشاشة الرئيسية جاهزة في أقل من ثانية؛ بلا أعطال لمدة 30 يومًا</string>
+    <string name="elv_prom_liga">الشاشة الرئيسية جاهزة في أقل من ثانية</string>
     <string name="elv_prom_ao_vivo">تغيير القناة يستغرق أقل من 1.5 ثانية من الزر حتى الصورة</string>
     <string name="elv_prom_player">يشغّل أي ملف؛ الترجمة الصحيحة دون عبث</string>
     <string name="elv_prom_casa">المنبّه يرنّ في وقته، كل مرة</string>

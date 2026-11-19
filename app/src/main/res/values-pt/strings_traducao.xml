@@ -188,6 +188,7 @@
     <string name="bc_bloqueado_cat">bloqueado pela categoria</string>
     <string name="bc_bloqueado">bloqueado</string>
     <string name="qr_gerar_outro">Gerar outro</string>
+    <string name="tentar_de_novo">Tentar de novo</string>
     <string name="qr_fechar">Fechar</string>
     <string name="qr_painel_fora">O painel não está no ar.\nLigue em Configurações do launcher &gt; Acesso remoto &gt; Painel (precisa de um PIN).</string>
     <string name="qr_pronto">Pronto</string>

@@ -164,6 +164,7 @@
     <string name="bc_bloqueado_cat">zablokowany przez kategorię</string>
     <string name="bc_bloqueado">zablokowany</string>
     <string name="qr_gerar_outro">Nowy kod</string>
+    <string name="tentar_de_novo">Spróbuj ponownie</string>
     <string name="qr_fechar">Zamknij</string>
     <string name="qr_painel_fora">Panel nie działa.\nWłącz go w Ustawienia launchera &gt; Dostęp zdalny &gt; Panel (wymaga PIN-u).</string>
     <string name="qr_pronto">Gotowe</string>

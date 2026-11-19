@@ -564,7 +564,6 @@
     <string name="home_dest_filme_ultimo">Filmy · ostatni otwarty</string>
     <string name="home_dest_serie">Seriale · jesteś na %1$s</string>
     <string name="home_dest_tv">TV · kanał %1$d</string>
-    <string name="home_faltam">zostało %1$s</string>
     <string name="rede_titulo">Sieć</string>
     <string name="rede_procurando">Szukanie serwerów multimediów w sieci…</string>
     <string name="rede_nenhum">Żaden serwer multimediów nie jest teraz włączony. Dodaj jeden poniżej: Plex i Jellyfin używają Twojego konta; folder na komputerze lub NAS używa jego adresu.</string>
@@ -757,6 +756,9 @@ AS\\Filmy).</string>
     <string name="legenda_conta_sim">skonfigurowano</string>
     <string name="legenda_conta_nao">nie skonfigurowano</string>
     <string name="tempo_faltam">zostało %1$s</string>
+    <string name="tempo_falta_um">zostało %1$s</string>
+    <string name="serie_ep_longo">Sezon %1$d, odcinek %2$d</string>
+    <string name="ficha_continuar_de">od %1$s</string>
     <string name="tempo_termina_as">kończy się o %1$s</string>
     <string name="tempo_episodios_vistos">odcinki: %1$s</string>
     <string name="tempo_x_de_y">%1$d z %2$d</string>

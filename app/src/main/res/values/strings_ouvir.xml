@@ -24,7 +24,6 @@
     <string name="pod_desligado">off</string>
     <string name="pod_dica_pular">On the playing line, ◀ ▶ go back 15 s / forward 30 s</string>
     <string name="pod_continuar">Continue</string>
-    <string name="pod_faltam">%s left</string>
     <string name="pod_novos">New episodes</string>
     <string name="pod_video">video</string>
     <string name="pod_meus">My podcasts</string>

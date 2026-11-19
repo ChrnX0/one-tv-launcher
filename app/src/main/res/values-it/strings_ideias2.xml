@@ -4,9 +4,9 @@
     <string name="dormir_titulo">Ora di dormire</string>
     <string name="dormir_texto">Questa app non è consentita ora. Buonanotte!</string>
     <string name="dormir_pin">PIN per cambiare l’ora di dormire</string>
-    <string name="dormir_inicio">Ora di dormire: inizio</string>
-    <string name="dormir_fim">Ora di dormire: fine</string>
-    <string name="dormir_teto">Ora di dormire: volume massimo</string>
+    <string name="dormir_inicio">Inizio</string>
+    <string name="dormir_fim">Fine</string>
+    <string name="dormir_teto">Volume massimo</string>
     <string name="recado_link_titulo">Messaggio</string>
     <string name="extras_HORA_DORMIR">Ora di dormire (solo app consentite, volume limitato)</string>
     <string name="extras_TOCANDO_AGORA">In riproduzione (legge ciò che è in riproduzione)</string>
@@ -18,11 +18,11 @@
     <string name="extras_consumo">Internet per app (7 giorni)</string>
     <string name="extras_tocando">In riproduzione</string>
     <string name="extras_aguarde">Un momento…</string>
-    <string name="dormir_dia">Ora di dormire: giorno</string>
+    <string name="dormir_dia">Giorno</string>
     <string name="dormir_todos">tutti (predefinito)</string>
     <string name="dormir_proprio">orario proprio</string>
     <string name="dormir_segue">segue il predefinito</string>
-    <string name="dormir_voltar_padrao">Ora di dormire: riporta questo giorno al predefinito</string>
+    <string name="dormir_voltar_padrao">Riporta questo giorno al predefinito</string>
     <string name="extras_VER_TELA">Lascia che Claude veda lo schermo (MCP ver_tela; la TV mostra un avviso)</string>
     <string name="casa_titulo">Casa</string>
     <string name="casa_sem_config">Configura Home Assistant nel pannello del telefono: scheda Extra, scheda Casa.</string>

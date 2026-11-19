@@ -6,5 +6,5 @@
     <string name="pc_instrucoes">Aponte a câmera do celular para o código ao lado. O celular abre uma configuração de 5 passos.\n\nO celular precisa estar no Wi-Fi de casa. Deixe esta tela aberta até criar o PIN no celular (faltam %1$s).</string>
     <string name="pc_entrou">Continue no celular.</string>
     <string name="pc_venceu">O código venceu.\nAperte \"%1$s\" para mostrar outro.</string>
-    <string name="pc_sem_rede">A TV não está em nenhuma rede.\nLigue-a no Wi-Fi de casa e tente de novo.</string>
+    <string name="pc_sem_rede">A TV não está em nenhuma rede.\nConecte a TV ao Wi-Fi de casa e tente de novo.</string>
 </resources>

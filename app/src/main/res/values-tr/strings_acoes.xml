@@ -56,7 +56,7 @@
     <string name="aut_cfg_det">Saatler, kumanda tuşları, olaylar ve sahne bağlantıları</string>
     <string name="aut_horario">Saati geldiğinde</string>
     <string name="aut_botao">Bir tuşa basıldığında</string>
-    <string name="aut_evento">Bir şey olduğunda (sahne çalıştırır)</string>
+    <string name="aut_evento">Bir şey olduğunda</string>
     <string name="aut_link">Bağlantıyla</string>
     <string name="aut_link_det">Web paneli › Ekstralar › Sahneler’de oluşturun ve düzenleyin</string>
     <string name="ev_midia_tocou">Film veya video başladı</string>
