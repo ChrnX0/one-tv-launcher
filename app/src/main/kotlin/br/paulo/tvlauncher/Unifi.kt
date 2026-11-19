@@ -95,9 +95,19 @@ object Unifi {
     fun refValida(ref: String): Boolean = ref.length in 1..32 && ref.all { it in 'a'..'z' || it in '0'..'9' }
 
     /** Os aparelhos de [atuais] que não estão em [conhecidos] (comparando por [Aparelho.chave]). */
-    fun novos(conhecidos: Set<String>, atuais: List<Aparelho>): List<Aparelho> =
-        atuais.filter { it.chave !in conhecidos && chaveNome(it)?.let { n -> n in conhecidos } != true }
-            .distinctBy { chaveNome(it) ?: it.chave }
+    fun novos(conhecidos: Set<String>, atuais: List<Aparelho>): List<Aparelho> {
+        val ambiguos = ambiguos(atuais)
+        // O nome só reconhece quando nunca foi visto em dois aparelhos ao mesmo tempo (dois "iPhone" diferentes).
+        fun peloNome(a: Aparelho) = chaveNome(a)?.takeIf { it !in ambiguos && AMBIGUO + it !in conhecidos }
+        return atuais.filter { it.chave !in conhecidos && peloNome(it)?.let { n -> n in conhecidos } != true }
+            .distinctBy { peloNome(it) ?: it.chave }
+    }
+
+    /** Nomes (chaveNome) que aparecem agora em mais de um MAC: são aparelhos diferentes com o mesmo nome. */
+    private fun ambiguos(atuais: List<Aparelho>): Set<String> =
+        atuais.mapNotNull { a -> chaveNome(a)?.let { it to a.mac } }.groupBy({ it.first }, { it.second }).filterValues { it.toSet().size > 1 }.keys
+
+    private const val AMBIGUO = "ambiguo:"
 
     /**
      * Celular com MAC aleatório (Android/iOS trocam o MAC por rede e de tempos em tempos): o UniFi dá a ele o nome
@@ -123,6 +133,7 @@ object Unifi {
     fun juntarConhecidos(antigos: List<String>, atuais: List<Aparelho>): List<String> {
         val r = LinkedHashSet(antigos)
         for (a in atuais) { r.add(a.chave); chaveNome(a)?.let { r.add(it) } }
+        for (n in ambiguos(atuais)) r.add(AMBIGUO + n)   // daqui em diante esse nome não basta para reconhecer
         return r.toList().takeLast(MAX_CONHECIDOS)
     }
 

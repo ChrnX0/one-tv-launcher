@@ -2637,6 +2637,7 @@ class MainActivity : Activity() {
         fecharPasta()
         if (foco != null) ultimoToken = foco
         reorganizar()
+        if (todosAbertos) contaTodos?.text = contaApps()   // ocultou/mostrou um app com a grade aberta: a conta acompanha
     }
 
     private fun nomeDe(pacote: String): String = instalados.firstOrNull { it.pacote == pacote }?.nome ?: pacote

@@ -90,6 +90,18 @@ class UnifiTest {
         assertNull(Unifi.chaveNome(Unifi.Aparelho("y", "Notebook", null, "9a:00:00:00:00:01", "WIRELESS", null)))
     }
 
+    @Test fun doisAparelhosComOMesmoNomeNaoSeEscondem() {
+        fun ip(mac: String, fim: String) = Unifi.Aparelho("id$fim", "iPhone $fim", null, mac, "WIRELESS", null)
+        // Dois iPhones diferentes ao mesmo tempo: o nome fica marcado como ambíguo.
+        val juntos = listOf(ip("9a:00:00:00:00:01", "00:01"), ip("9e:00:00:00:00:02", "00:02"))
+        val conhecidos = Unifi.juntarConhecidos(emptyList(), juntos).toSet()
+        // Um terceiro iPhone (MAC novo) avisa, em vez de sumir pelo nome.
+        val terceiro = ip("da:00:00:00:00:03", "00:03")
+        assertEquals(listOf(terceiro), Unifi.novos(conhecidos, listOf(terceiro)))
+        // E dois novos com o mesmo nome no mesmo instante avisam os dois.
+        assertEquals(2, Unifi.novos(emptySet(), juntos).size)
+    }
+
     @Test fun textoDoRecadoCabeNoCartao() {
         val muitos = (1..6).map { Unifi.Aparelho("id$it", "Aparelho com um nome comprido demais para caber $it", "192.168.0.$it", null, "WIRELESS", null) }
         val t = Unifi.textoNovos(muitos)
