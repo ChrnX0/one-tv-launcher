@@ -93,7 +93,14 @@ class WallpaperPluginView(ctx: Context, @Suppress("UNUSED_PARAMETER") filaDaHome
         }
         addView(credito, LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.END).apply { marginEnd = dp(48); bottomMargin = dp(18) })
         emSegundoPlano {
-            val p = WallpaperPlugins.escolhido(app) ?: return@emSegundoPlano
+            val p = WallpaperPlugins.escolhido(app)
+            if (p == null) {
+                // O plugin escolhido sumiu (desinstalado, sem o serviço, assinatura trocada): esquece a escolha e a HOME
+                // se refaz com o tema normal, em vez de ficar no fundo liso desta view para sempre.
+                WallpaperPlugins.esquecer(app)
+                post { (context as? android.app.Activity)?.takeIf { !it.isFinishing }?.recreate() }
+                return@emSegundoPlano
+            }
             provider = p
             carregarLista(p, forcar = false)
         }
@@ -124,13 +131,16 @@ class WallpaperPluginView(ctx: Context, @Suppress("UNUSED_PARAMETER") filaDaHome
 
     private fun agendar() {
         removeCallbacks(trocar)
-        if (itens.size > 1) postDelayed(trocar, WallpaperPluginContract.TROCA_MS)
+        // Com 1 item (ou nenhum) também agenda: na hora em que o cache do plugin vence, ou o novo pedido da lista vazia.
+        val p = provider ?: return
+        postDelayed(trocar, WallpaperPluginContract.esperaMs(itens.size, SystemClock.elapsedRealtime() - listaEm, p.cacheMs))
     }
 
     private fun mostrarProximo() {
         val p = provider ?: return
         // O cache do plugin venceu: pede a lista nova (e ela mesma mostra o 1º).
-        if (itens.isEmpty() || SystemClock.elapsedRealtime() - listaEm > p.cacheMs) {
+        // Lista vazia é resposta válida ("nada agora"): pede de novo só depois de VAZIO_MS, nunca em seguida.
+        if (WallpaperPluginContract.precisaPedir(itens.size, SystemClock.elapsedRealtime() - listaEm, p.cacheMs)) {
             ultimaAtualizacao = SystemClock.elapsedRealtime()
             emSegundoPlano { carregarLista(p, forcar = true) }
             if (itens.isEmpty()) return

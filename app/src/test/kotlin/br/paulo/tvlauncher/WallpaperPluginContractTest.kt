@@ -124,4 +124,21 @@ class WallpaperPluginContractTest {
         assertTrue(W.quer(17, W.EV_LAUNCHER_IDLE_MODE_CHANGED))
         assertFalse(W.quer(17, W.EV_CARD_FOCUSED))
     }
+
+    @Test fun listaVaziaNaoPedeEmSeguida() {
+        assertFalse(W.precisaPedir(0, 0, W.CACHE_PADRAO_MS))
+        assertFalse(W.precisaPedir(0, W.VAZIO_MS - 1, W.CACHE_PADRAO_MS))
+        assertTrue(W.precisaPedir(0, W.VAZIO_MS + 1, W.CACHE_PADRAO_MS))
+        assertEquals(W.VAZIO_MS, W.esperaMs(0, 0, W.CACHE_PADRAO_MS))
+    }
+
+    @Test fun umItemAgendaNoVencimentoDoCache() {
+        val cache = 2 * 60 * 60_000L
+        assertEquals(cache - 1000, W.esperaMs(1, 1000, cache))
+        assertEquals(W.ESPERA_MIN_MS, W.esperaMs(1, cache + 5, cache))   // já venceu: logo, mas não em laço
+        assertTrue(W.precisaPedir(1, cache + 1, cache))
+        assertFalse(W.precisaPedir(1, cache - 1, cache))
+        assertEquals(W.TROCA_MS, W.esperaMs(5, 0, cache))
+        assertTrue(W.precisaPedir(3, -5, cache))   // relógio voltou
+    }
 }

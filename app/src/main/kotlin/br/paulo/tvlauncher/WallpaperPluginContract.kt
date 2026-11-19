@@ -58,6 +58,21 @@ object WallpaperPluginContract {
     const val CACHE_PADRAO_MS = 12 * 3_600_000L
     /** De quanto em quanto tempo o fundo troca com a HOME na frente. */
     const val TROCA_MS = 10 * 60_000L
+    /** Plugin respondeu lista vazia: pergunta de novo só depois disto (sem laço de pedidos com a HOME aberta). */
+    const val VAZIO_MS = 15 * 60_000L
+    /** Menor espera de qualquer agendamento (relógio estranho, cache quase vencido). */
+    const val ESPERA_MIN_MS = 60_000L
+
+    /** Pede a lista de novo? Com itens: quando o cache do plugin venceu. Vazia: só depois de [VAZIO_MS]. */
+    fun precisaPedir(n: Int, idadeMs: Long, cacheMs: Long): Boolean =
+        idadeMs < 0 || idadeMs > (if (n == 0) VAZIO_MS else cacheMs)
+
+    /** Quanto esperar até a próxima troca: [TROCA_MS] com 2+ itens, senão até a hora de pedir a lista de novo. */
+    fun esperaMs(n: Int, idadeMs: Long, cacheMs: Long): Long {
+        val limite = if (n == 0) VAZIO_MS else cacheMs
+        val falta = (limite - idadeMs.coerceAtLeast(0)).coerceAtLeast(ESPERA_MIN_MS)
+        return if (n > 1) TROCA_MS else falta
+    }
 
     /** Um fundo, como o plugin manda (campos na ordem do Parcel). */
     data class Item(

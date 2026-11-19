@@ -86,6 +86,13 @@ object WallpaperPlugins {
     }
 
     /** Para de usar (e tira o OK): a HOME volta ao Escuro. */
+    /** O escolhido não existe mais (ou não passa no OK): tira a escolha e volta o tema ao Escuro. */
+    fun esquecer(ctx: Context) {
+        if (Tema.atual(ctx) == Tema.PLUGIN) Tema.definir(ctx, Tema.ESCURO)   // antes de tirar a escolha (atual() olha ela)
+        prefs(ctx).edit().remove(CHOSEN).apply()
+        limparCache(ctx)
+    }
+
     fun parar(ctx: Context, p: Provider) {
         val e = prefs(ctx).edit().remove("ok:${p.pacote}")
         if (escolhidoId(ctx) == p.id) { e.remove(CHOSEN); if (Tema.atual(ctx) == Tema.PLUGIN) Tema.definir(ctx, Tema.ESCURO) }
