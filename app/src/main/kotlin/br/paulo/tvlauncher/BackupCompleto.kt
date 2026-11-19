@@ -53,6 +53,7 @@ object BackupCompleto {
         "icon_pack_frozen",   // pacotes que NÓS congelamos nesta TV (na outra o pacote nem está congelado)
           // degrau 3: o link da família não viaja no backup (restaurar = link novo)
         "emprestimo_shell", "emprestimo_dono",   // empréstimos: restaurar não pode ligar poder emprestado sem o PIN (e o uid de cada app muda entre aparelhos)
+        "fichas",   // 19/11/2026: só a marca "buscas antigas já liberadas" do cache de fichas desta TV
         "abertura_pronta",   // rodada 15: só cache das marcações do IntroDB (refaz sozinho)
         "painel_papeis",   // elevação 18.1: convites (família/convidado) não viajam: restaurar não pode reabrir acesso revogado
         "mudar_tv",   // elevação 19.7: a fila dos apps que faltam é desta TV, depois de receber de outra
