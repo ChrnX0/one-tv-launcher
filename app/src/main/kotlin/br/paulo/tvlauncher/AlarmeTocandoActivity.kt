@@ -27,7 +27,11 @@ import android.widget.TextView
  * Também é a tela do fim do timer (EXTRA_TIMER, ver Timer.kt): aí só tem "Parar" e o Voltar também para.
  */
 class AlarmeTocandoActivity : Activity() {
-    companion object { const val EXTRA_TIMER = "timer" }
+    companion object {
+        const val EXTRA_TIMER = "timer"
+        /** Menor subida do som do despertador, em segundos (o timer continua direto). */
+        const val RAMPA_MIN_SEG = 30
+    }
     private var timer = false
     private var nomeTimer = ""
     private val ui = Handler(Looper.getMainLooper())
@@ -171,7 +175,10 @@ class AlarmeTocandoActivity : Activity() {
 
     private fun tocarSom() {
         val alarme = if (timer) null else Despertador.listar(this).firstOrNull { it.id == id }
-        segRampa = alarme?.rampa ?: 0
+        // Nunca começa no volume cheio (Paulo, 19/11/2026: "sobe gradualmente, evita som máximo para não assustar"): mesmo
+        // com "Toque: direto", o som do alarme sobe em pelo menos RAMPA_MIN_SEG. Não depende da LG aceitar as teclas de
+        // volume pela rede (no toque de 19/11 ela não aceitou o "baixar" e ficou no 17).
+        segRampa = if (alarme == null) 0 else maxOf(alarme.rampa, RAMPA_MIN_SEG)
         inicioRampa = System.currentTimeMillis()
         // Volume garantido: tira do mudo e sobe a TV até o mínimo escolhido (só no despertador; o timer fica como está).
         if (!timer) volume = AlarmeGarantia.subirVolume(this, segRampa)
