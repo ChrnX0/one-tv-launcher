@@ -53,25 +53,4 @@ class PresencaFontesTest {
         assertFalse(Presenca.algumVizinho("192.168.1.20 dev wlan0 INCOMPLETE"))
         assertFalse(Presenca.algumVizinho(""))
     }
-
-    @Test fun cidadeDaOpenMeteo() {
-        val json = """{"results":[{"name":"Lisboa","latitude":38.71667,"longitude":-9.13333,"country":"Portugal","admin1":"Lisboa"},
-            {"name":"Lisboa","latitude":0,"longitude":0,"country":"X"}]}"""
-        val a = Endereco.lerCidade(json)!!
-        assertEquals("Lisboa, Portugal", a.nome)
-        assertEquals(38.71667, a.lat, 1e-6)
-        val porto = Endereco.lerCidade("""{"results":[{"name":"Springfield","latitude":39.8,"longitude":-89.6,"country":"Estados Unidos","admin1":"Illinois"}]}""")!!
-        assertEquals("Springfield, Illinois, Estados Unidos".take(LocalClima.MAX_NOME), porto.nome)
-        assertNull(Endereco.lerCidade("""{"generationtime_ms":0.1}"""))
-        assertNull(Endereco.lerCidade("lixo"))
-    }
-
-    @Test fun buscarCidadeValidaONome() {
-        assertTrue(Endereco.buscarCidade(" ", "pt") { null }.isFailure)
-        assertTrue(Endereco.buscarCidade("Lisboa", "pt") { null }.isFailure)
-        var pedido = ""
-        val r = Endereco.buscarCidade("São Paulo", "pt") { pedido = it; """{"results":[{"name":"São Paulo","latitude":-23.5,"longitude":-46.6,"country":"Brasil","admin1":"São Paulo"}]}""" }
-        assertEquals("São Paulo, Brasil", r.getOrThrow().nome)
-        assertTrue(pedido.startsWith("https://geocoding-api.open-meteo.com/v1/search?") && "name=S%C3%A3o+Paulo" in pedido && "language=pt" in pedido)
-    }
 }

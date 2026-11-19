@@ -40,6 +40,12 @@ object Planos {
         PODCAST_BUSCA,
         /** Cartões próprios da tela inicial (HomeCards, Paulo 18/11/2026: "os cartões de dados são do Pro"). */
         CARTOES_HOME,
+        /**
+         * Fontes de dados pagas (Paulo, 19/11/2026: "o que existir de alternativa grátis hoje usa para o plano básico,
+         * o que for pago começa no pro e para o ultra ficam os mais especiais"). Quem escolhe a fonte é o DataSources.kt.
+         * Pro: previsão da WeatherAPI (chance de chuva de verdade e qualidade do ar) e a nota do Simkl sem conta (licença).
+         */
+        CLIMA_PRO, SIMKL_NOTA_TODOS,
     }
 
     /** O plano mínimo de cada recurso. O que não está aqui é do Básico (tela inicial, protetor, despertador, player...). */
@@ -51,7 +57,8 @@ object Planos {
         Recurso.HOME_ASSISTANT to Plano.PRO, Recurso.UNIDADE_DE_REDE to Plano.PRO,
         Recurso.TEMAS_TODOS to Plano.PRO, Recurso.BACKUP_NUVEM to Plano.PRO, Recurso.PODER_EMPRESTADO to Plano.PRO,
         Recurso.PODCAST_BUSCA to Plano.PRO, Recurso.CARTOES_HOME to Plano.PRO,
-        Recurso.CLIMA_3_MODELOS to Plano.ULTRA, Recurso.FICHAS_TMDB to Plano.ULTRA,
+        Recurso.CLIMA_3_MODELOS to Plano.ULTRA, Recurso.FICHAS_TMDB to Plano.PRO,   // TMDB: pago, começa no Pro (19/11/2026)
+        Recurso.CLIMA_PRO to Plano.PRO, Recurso.SIMKL_NOTA_TODOS to Plano.PRO,
         Recurso.LEGENDA_AUTOMATICA to Plano.ULTRA, Recurso.SUPORTE_COM_PRAZO to Plano.ULTRA,
         Recurso.CUIDAR_DE_LONGE to Plano.ULTRA,
         Recurso.FAMILIA_LINK to Plano.PRO, Recurso.RECADO_VIDEO to Plano.PRO, Recurso.SOM_NO_FONE to Plano.PRO,

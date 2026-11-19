@@ -143,13 +143,14 @@ Fluent Emoji (ícones 3D da previsão), da Microsoft
 
 — Dados —
 
-Previsão do tempo: Open-Meteo (https://open-meteo.com), dados sob CC BY 4.0.
+Previsão do tempo: Data from MET Norway (https://api.met.no), sob CC BY 4.0. No plano Pro: Powered by WeatherAPI.com
+  (https://www.weatherapi.com). Mediana de modelos (plano Ultra, quando contratada): Open-Meteo (https://open-meteo.com), CC BY 4.0.
 Observação do aeroporto (METAR): Aviation Weather Center, NOAA (domínio público dos EUA).
 Obras de arte dos fundos: The Metropolitan Museum of Art, Open Access (CC0).
 Localização aproximada pelo IP: ipwho.is.
-Fichas de filmes e séries: TMDB (https://www.themoviedb.org). This product uses the TMDB API but is not endorsed
-  or certified by TMDB.
-Notas: Trakt (https://trakt.tv). One TV Launcher uses Trakt but is not endorsed or certified by Trakt. Nota da comunidade: Simkl (https://simkl.com).
+Fichas, pôsteres, elenco e notas de filmes e séries: Trakt (https://trakt.tv). Sofaly uses Trakt but is not endorsed
+  or certified by Trakt. No plano Pro, quando contratado: TMDB (https://www.themoviedb.org). This product uses the TMDB
+  API but is not endorsed or certified by TMDB. Nota da comunidade: Simkl (https://simkl.com), com a conta da própria pessoa.
 Legendas: Subtitles provided by OpenSubtitles.com (https://www.opensubtitles.com). Cada legenda fica só na TV de quem pediu.
 Aberturas de episódios (pular abertura): IntroDB (https://introdb.app), banco comunitário.
 Rádios: Radio Browser (https://www.radio-browser.info).

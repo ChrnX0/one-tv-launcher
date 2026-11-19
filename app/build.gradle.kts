@@ -66,11 +66,9 @@ android {
         // família do lembrete (78) e da TV que não ligou (79) só existe no APK do site.
         buildConfigField("boolean", "CUIDAR_FAMILIA", (!project.hasProperty("play")).toString())
         // Build da Play (`-Pplay`, 16/11/2026): o produto Sofaly. PLAY liga a cobrança da Play e desliga o que a loja
-        // não aceita (atualizador do GitHub, instalar APK). CLIMA_MET: previsão pelo MET Norway (uso comercial liberado).
-        // DESLIGADO por padrão também na Play (16/11/2026, Paulo: "o MET Norway não supre tudo"; fonte do clima em
-        // estudo). Para testar: -Pclima_met ou clima_fonte=met no pessoal.properties. Ver ClimaMet.kt.
+        // não aceita (atualizador do GitHub, instalar APK). A fonte do clima não depende mais do build (19/11/2026): é o
+        // plano e a licença que escolhem, em DataSources.kt (MET Norway no Básico).
         buildConfigField("boolean", "PLAY", project.hasProperty("play").toString())
-        buildConfigField("boolean", "CLIMA_MET", (project.hasProperty("clima_met") || pessoal.getProperty("clima_fonte")?.trim() == "met").toString())
         // Build da Play: sem TMDB (chave pessoal; uso comercial pede contrato) e sem Simkl (licença não cobre app vendido)
         // até haver licença. O Trakt (conta Standard) e o OpenSubtitles (login do próprio usuário) ficam. Ver venda/licencas-custos.md.
         val semLicencaNaPlay = setOf("TMDB_CHAVE", "SIMKL_ID")

@@ -107,13 +107,13 @@ object AvisoChuva {
         val ponto = Localizacao.atual(app) { httpGet(it) } ?: throw IllegalStateException("sem localização")
         val url = "https://api.open-meteo.com/v1/forecast?latitude=${ponto.lat}&longitude=${ponto.lon}" +
             "&hourly=precipitation_probability&forecast_hours=${HORAS_A_FRENTE + 2}&timezone=auto&models=${MODELOS.joinToString(",")}"
-        val met = if (BuildConfig.CLIMA_MET) ClimaMet.previsao(ponto.lat, ponto.lon, desdeAgora = true, dias = 2)
-            ?: throw IllegalStateException("sem resposta") else null
+        val met = if (DataSources.weather(app) != DataSources.Weather.OPEN_METEO)
+            DataSources.forecast(app, ponto.lat, ponto.lon, desdeAgora = true, dias = 2) ?: throw IllegalStateException("sem resposta") else null
         val h = met?.getJSONObject("hourly")
             ?: JSONObject(httpGet(url) ?: throw IllegalStateException("sem resposta")).getJSONObject("hourly")
         val tempo = h.getJSONArray("time")
         val horas = (0 until tempo.length()).map { tempo.getString(it) }
-        // MET (build da Play): um modelo só, a chance (estimada) vem em "precipitation_probability".
+        // MET ou WeatherAPI (Básico e Pro): um modelo só, a chance (estimada) vem em "precipitation_probability".
         val porModelo = (if (met != null) listOf("") else MODELOS).mapNotNull { m ->
             h.optJSONArray(if (m.isEmpty()) "precipitation_probability" else "precipitation_probability_$m")?.let { a ->
                 (0 until a.length()).map { i -> if (a.isNull(i)) null else a.optInt(i, -1).takeIf { it >= 0 } }
