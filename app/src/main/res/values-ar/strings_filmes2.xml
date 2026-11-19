@@ -7,6 +7,7 @@
     <string name="filmes_filtro_genero">النوع: %1$s</string>
     <string name="filmes_filtro_epoca">الفترة: %1$s</string>
     <string name="filmes_filtro_nota">الحد الأدنى للتقييم: %1$s</string>
+    <string name="filmes_filtro_lista">القائمة: %1$s</string>
     <string name="filmes_filtro_nao_vistos">غير المُشاهَد فقط: %1$s</string>
     <string name="filmes_filtro_limpar">مسح التصفية</string>
     <string name="filmes_filtro_qualquer">الكل</string>

@@ -451,25 +451,28 @@ class FilmesActivity : Activity() {
                 val col = colecaoS?.let { (n, fs) -> n to fs.filter { mostrar || it.grupo.trim() !in ocultasS } }?.takeIf { it.second.isNotEmpty() }
                 if (col != null) fixas += L(COLECAO, getString(R.string.filmes_colecao_cat, col.first), col.second.size, null, 0, false, "")
                 fixas += L(TODOS, rotulo(R.string.player_cat_todos), vis.size, IconePlayer.Tipo.TODOS, 0, false, "")
-                // Listas de fora, logo abaixo de Todos (fixas): só os títulos que a lista de IPTV tem, na ordem da lista.
+                // Listas de fora, na parte que rola, em ordem alfabética com as categorias: só os títulos que a lista de IPTV tem, na ordem da lista.
                 val fora = HashMap<String, Pair<List<String>, Int>>()
+                // 19/11/2026 (Paulo: "o MDBList não roda com a lista"): as listas de fora iam nas FIXAS e, com várias,
+                // ocupavam a coluna e espremiam as categorias. Agora abrem a parte que ROLA, antes das categorias de A a Z.
+                val linhasFora = ArrayList<ColunaCategorias.Linha>()
                 if (listasS.isNotEmpty()) {
                     val cat = titulosDoCatalogo(vis)
                     for ((l, itens) in listasS) {
                         val (chs, casaram) = SincronizarFilmes.cruzar(itens, cat, SincronizarFilmes.Tipo.FILME)
                         if (chs.isEmpty()) continue
                         fora["x:${l.chave}"] = chs to itens.count { it.tipo == SincronizarFilmes.Tipo.FILME }
-                        fixas += L("x:${l.chave}", l.nome, casaram, null, 0, false, "", etiquetaLista(l))
+                        linhasFora += L("x:${l.chave}", l.nome, casaram, null, 0, false, "", etiquetaLista(l))
                     }
                 }
                 val grupos = cacheGrupos?.takeIf { it.first === vis }?.second ?: Vod.grupos(vis).also { cacheGrupos = vis to it }
                 val novos = cacheNovos?.takeIf { it.first === vis && it.second == marcoS }?.third
                     ?: ColunaRegras.novosPorGrupo(vis, marcoS, { it.grupo }, { it.adicionado }).also { cacheNovos = Triple(vis, marcoS, it) }
                 // Categoria vazia não aparece (acréscimo aprovado): os grupos já vêm só dos filmes visíveis.
-                val rola = grupos.filter { it.second > 0 }.map { (g, n) ->
+                val rola = ColunaRegras.intercalarAZ(grupos.filter { it.second > 0 }.map { (g, n) ->
                     L("g:$g", PlayerLista.nomeExibido(g).ifEmpty { rotulo(R.string.player_cat_outros) }, n,
                         if (mostrar && g in ocultas) IconePlayer.Tipo.CADEADO else null, novos[g] ?: 0, false, "")
-                }
+                }, linhasFora) { if (it.chave.startsWith("g:")) it.chave.removePrefix("g:") else it.nome }   // categoria: o grupo cru (como ordenarAZ)
                 val todasChaves = (acoes + fixas + rola).mapTo(HashSet()) { it.chave }
                 // Entrada: a última categoria aberta; sem ela, Continuar (se houver) ou Todos.
                 val ch0 = if (inicial && simples) PlayerAcessivel.entradaSimples(listOf(CONTINUAR to cont.size, INTERESSES to ints.size), TODOS)
@@ -489,7 +492,7 @@ class FilmesActivity : Activity() {
                         ch.startsWith("x:") -> { val porChave = vis.associateBy { it.chave }; fora[ch]?.first.orEmpty().mapNotNull { porChave[it] } }
                         ch.startsWith("g:") -> { val alvo = ch.removePrefix("g:"); ordenados().filter { it.grupo.trim() == alvo } }
                         else -> ordenados()
-                    }.let { FilmesFiltro.filtrar(it, filtroS, posS, notasS) }   // o filtro combinado vale sobre qualquer categoria
+                    }.let { FilmesFiltro.filtrar(it, filtroS, posS, notasS, filtroS.lista?.let { k -> fora[k]?.first?.toHashSet() }) }   // o filtro combinado vale sobre qualquer categoria
                 }
                 Estado(vis, res, acoes, botoes, fixas, rola, ch, g, fora[ch]?.let { it.first.size to it.second })
             },
@@ -665,7 +668,7 @@ class FilmesActivity : Activity() {
             // O nome só aparece enquanto o pôster não chega ou quando ele não existe (CapaCartao.aoTrocar).
             c.nome.text = Vod.nomeTela(Idioma.semMarca(f.nome), f.ano)
             // Selo LEG: só o legendado que não tem a versão dublada junto (com par, a ficha escolhe a versão).
-            c.selo.visibility = if (Idioma.versao(f.nome, f.grupo) == Idioma.Versao.LEGENDADA && outraVersao(f) == null) View.VISIBLE else View.GONE
+            c.selo.visibility = if (soLegendado(f)) View.VISIBLE else View.GONE
             val pos = posicoes[f.chave]
             if (Vod.deveRetomar(pos) && pos!!.duracao > 0) {
                 c.barra.visibility = View.VISIBLE; c.barra.fracao = BarraTempo.fracao(pos.ms, pos.duracao)
@@ -741,10 +744,9 @@ class FilmesActivity : Activity() {
         }
         val info = fichasRapidas[f.chave]
         val pos = posicoes[f.chave]?.takeIf { p -> p.duracao > 0 }
-        val soLegendado = Idioma.versao(f.nome, f.grupo) == Idioma.Versao.LEGENDADA && outraVersao(f) == null
         painel.mostrarFoco(Estilo.infoFoco(Vod.nomeTela(Idioma.semMarca(f.nome), f.ano), notaRapida[f.chave] ?: f.nota, listOfNotNull(
             f.ano?.toString(),
-            if (soLegendado) getString(R.string.idioma_legendado) else null,
+            if (soLegendado(f)) getString(R.string.idioma_legendado) else null,
             info?.duracaoMin?.let { if (it >= 60) "${it / 60} h ${"%02d".format(it % 60)}" else "$it min" },
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(f.grupo).ifEmpty { null },
             pos?.takeIf { p -> Vod.deveRetomar(p) }?.let { p -> getString(R.string.tempo_faltam, BarraTempo.duracao(p.duracao - p.ms)) },
@@ -786,7 +788,7 @@ class FilmesActivity : Activity() {
 
     /** As pílulas do filtro em vigor (em âmbar: é o que está escondendo títulos). */
     private fun pilulasFiltro(): List<Pair<String, Boolean>> = listOfNotNull(
-        filtro.genero?.let { nomeGenero(it) }, nomeEpoca(filtro), filtro.notaMin?.let { nomeNota(it) },
+        nomeListaFiltro(), filtro.genero?.let { nomeGenero(it) }, nomeEpoca(filtro), filtro.notaMin?.let { nomeNota(it) },
         if (filtro.naoVistos) getString(R.string.filmes_filtro_nao_vistos_curto) else null,
     ).map { it to true }
 
@@ -816,6 +818,14 @@ class FilmesActivity : Activity() {
     // ---------------------------------------------------------------- ficha do filme
 
     /** O par na outra versão (dublado x legendado), só entre os filmes que a tela pode mostrar (parental). */
+    /**
+     * Legendado sem a versão dublada junto (selo LEG no pôster). Espera o índice de versões: nos primeiros segundos
+     * (índice ainda vazio) todo legendado parecia sem par e ganhava o selo (visto na Sala, 19/11/2026). Índice vazio de
+     * verdade = nenhum nome com marca, então nenhum LEG para mostrar.
+     */
+    private fun soLegendado(f: Filme): Boolean =
+        indiceVersoes.isNotEmpty() && Idioma.versao(f.nome, f.grupo) == Idioma.Versao.LEGENDADA && outraVersao(f) == null
+
     private fun outraVersao(f: Filme): Filme? {
         // Filtra ANTES de procurar: uma cópia oculta que vinha primeiro no catálogo escondia o par visível (e a grade,
         // que já junta só pelo que está nela, sumia com o cartão sem a ficha oferecer a outra versão).
@@ -1062,9 +1072,23 @@ class FilmesActivity : Activity() {
 
     /** "Ação · Anos 1990 · ★ 7+ · não vistos": o que está filtrando, para o título da coluna. */
     private fun resumoFiltro(): String = listOfNotNull(
-        filtro.genero?.let { nomeGenero(it) }, nomeEpoca(filtro), filtro.notaMin?.let { nomeNota(it) },
+        nomeListaFiltro(), filtro.genero?.let { nomeGenero(it) }, nomeEpoca(filtro), filtro.notaMin?.let { nomeNota(it) },
         if (filtro.naoVistos) getString(R.string.filmes_filtro_nao_vistos_curto) else null,
     ).joinToString(" · ")
+
+    /** As listas de fora escolhidas, como opção do Filtro: chave da linha da coluna ("x:…") e nome. */
+    private fun listasDoFiltro(): List<Pair<String, String>> = listasFora.map { (l, _) -> "x:${l.chave}" to l.nome }
+
+    private fun nomeListaFiltro(): String? = filtro.lista?.let { k -> listasDoFiltro().firstOrNull { it.first == k }?.second ?: "?" }
+
+    private fun escolherLista() {
+        val opcoes = listOf<Pair<String, String>?>(null) + listasDoFiltro()
+        val marcada = opcoes.indexOfFirst { it?.first == filtro.lista }.coerceAtLeast(0)
+        Estilo.lista(this, getString(R.string.filmes_filtro_titulo),
+            opcoes.map { it?.second ?: getString(R.string.filmes_filtro_qualquer) }, listOf(marcada)) { i ->
+            aplicarFiltro(filtro.copy(lista = opcoes[i]?.first)); menuFiltro()
+        }
+    }
 
     private fun aplicarFiltro(novo: FilmesFiltro.Criterios) {
         filtro = novo
@@ -1109,13 +1133,17 @@ class FilmesActivity : Activity() {
             getString(R.string.filmes_filtro_nota, filtro.notaMin?.let { nomeNota(it) } ?: qualquer),
             getString(R.string.filmes_filtro_nao_vistos, getString(if (filtro.naoVistos) R.string.filmes_filtro_sim else R.string.filmes_filtro_nao)),
         )
+        // "Lista" (19/11/2026, pedido do Paulo) só aparece com alguma lista de fora escolhida; vai por último antes de Limpar.
+        val temListas = listasDoFiltro().isNotEmpty() || filtro.lista != null
+        if (temListas) linhas += getString(R.string.filmes_filtro_lista, nomeListaFiltro() ?: qualquer)
         if (filtro.ativo) linhas += getString(R.string.filmes_filtro_limpar)
         Estilo.lista(this, getString(R.string.filmes_filtro_titulo), linhas) { i ->
-            when (i) {
-                0 -> escolherGenero(pronto.second)
-                1 -> escolherEpoca(pronto.third)
-                2 -> escolherNota()
-                3 -> { aplicarFiltro(filtro.copy(naoVistos = !filtro.naoVistos)); menuFiltro() }
+            when {
+                i == 0 -> escolherGenero(pronto.second)
+                i == 1 -> escolherEpoca(pronto.third)
+                i == 2 -> escolherNota()
+                i == 3 -> { aplicarFiltro(filtro.copy(naoVistos = !filtro.naoVistos)); menuFiltro() }
+                i == 4 && temListas -> escolherLista()
                 else -> aplicarFiltro(FilmesFiltro.Criterios())
             }
         }

@@ -16,6 +16,26 @@ object ColunaRegras {
         return comNome.map { chaveAZ(it.first) to it }.sortedBy { it.first }.map { it.second } + semNome
     }
 
+    /**
+     * Listas de fora (Trakt, MDBList) no meio das categorias, na ordem alfabética (19/11/2026, pedido do Paulo). As
+     * categorias já vêm em ordem ([ordenarAZ]) e não mudam de lugar entre si; cada lista entra antes da primeira
+     * categoria que viria depois dela. A categoria sem nome ("Outros") continua por último.
+     */
+    fun <T> intercalarAZ(categorias: List<T>, listas: List<T>, nome: (T) -> String): List<T> {
+        if (listas.isEmpty()) return categorias
+        val fila = listas.map { chaveAZ(nome(it)) to it }.sortedBy { it.first }
+        val saida = ArrayList<T>(categorias.size + listas.size)
+        var i = 0
+        for (c in categorias) {
+            val n = nome(c)
+            if (n.isNotBlank()) { val k = chaveAZ(n); while (i < fila.size && fila[i].first <= k) saida += fila[i++].second }
+            else while (i < fila.size) saida += fila[i++].second   // "Outros" fica no fim, depois das listas
+            saida += c
+        }
+        while (i < fila.size) saida += fila[i++].second
+        return saida
+    }
+
     /** Chave da ordem alfabética de um grupo: o nome que aparece na tela, sem acento e minúsculo. */
     fun chaveAZ(grupo: String): String {
         val n = PlayerFiltro.normalizar(PlayerLista.nomeExibido(grupo))

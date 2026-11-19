@@ -7,6 +7,7 @@
     <string name="filmes_filtro_genero">Gatunek: %1$s</string>
     <string name="filmes_filtro_epoca">Okres: %1$s</string>
     <string name="filmes_filtro_nota">Minimalna ocena: %1$s</string>
+    <string name="filmes_filtro_lista">Lista: %1$s</string>
     <string name="filmes_filtro_nao_vistos">Tylko nieobejrzane: %1$s</string>
     <string name="filmes_filtro_limpar">Wyczyść filtr</string>
     <string name="filmes_filtro_qualquer">Dowolny</string>

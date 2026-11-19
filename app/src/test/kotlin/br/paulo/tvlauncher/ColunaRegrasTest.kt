@@ -141,4 +141,12 @@ class ColunaRegrasTest {
         // Anterior nunca aberto: continua não visto.
         assertEquals(p, Series.concluirAnterior(f, "a", e3, p, 99))
     }
+
+    @Test fun listasDeForaEntramEmOrdemAlfabeticaComAsCategorias() {
+        val cats = listOf("4K", "Ação", "Drama", "Terror", "")
+        val listas = listOf("Top 250 Movies", "Latest Streaming", "100% on Rotten")
+        val r = ColunaRegras.intercalarAZ(cats, listas) { it }
+        assertEquals(listOf("100% on Rotten", "4K", "Ação", "Drama", "Latest Streaming", "Terror", "Top 250 Movies", ""), r)
+        assertEquals(cats, ColunaRegras.intercalarAZ(cats, emptyList<String>()) { it })
+    }
 }

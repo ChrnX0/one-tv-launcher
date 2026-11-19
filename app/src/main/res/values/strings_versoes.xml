@@ -17,6 +17,7 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Movies and Series: your Trakt and MDBList lists now scroll with the categories, in alphabetical order; in Movies you can also pick a list in the Filter</item>
         <item>Movies: two full rows of posters fit on screen (6 per row on a typical TV); the title shows large at the top, and subtitled-only copies get a SUB badge</item>
         <item>Movies: dubbed and subtitled copies of the same film now show as one card (the details page has both versions)</item>
         <item>Movie and series details now come from Trakt: plot in your language, director, cast, trailer and the next episode</item>
@@ -26,6 +27,7 @@
         <item>What just arrived (doorbell, reminder, appointment, alarm) grows under the pill for a few seconds; hold ▲ to open the quick panel</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>listas_fora_rolam</item>
         <item>filmes_duas_fileiras</item>
         <item>filmes_um_por_filme</item>
         <item>ficha_trakt</item>
@@ -36,6 +38,7 @@
         <item>ilha_central</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Lists in the column</item>
         <item>Two rows of posters</item>
         <item>One card per movie</item>
         <item>Movie details</item>
@@ -46,6 +49,7 @@
         <item>Hold ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>In Movies, do the MDBList lists scroll with the categories in alphabetical order, and does Filter › List show only the movies of that list?</item>
         <item>In Movies › All, do two full rows of posters show, with no row cut off at the bottom?</item>
         <item>In Movies › All, does a movie with a dubbed and a subtitled copy appear only once, with the other version in its details page?</item>
         <item>Open a movie in Movies: does the details page show the plot in your language, the director and the cast?</item>

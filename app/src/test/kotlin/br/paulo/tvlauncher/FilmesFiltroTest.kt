@@ -97,4 +97,13 @@ class FilmesFiltroTest {
         }
         assertEquals(2, FilmesFiltro.quantosFilmes(l))
     }
+
+    @Test fun listaDeForaCombinaComOResto() {
+        val todos = listOf(acao90, terror, comedia, semNada, acaoNova)
+        val naLista = setOf(acao90.chave, acaoNova.chave, terror.chave)
+        val c = FilmesFiltro.Criterios(lista = "x:mdblist:1", genero = FilmesFiltro.Genero.ACAO)
+        assertEquals(listOf(acao90, acaoNova), FilmesFiltro.filtrar(todos, c, emptyMap(), daLista = naLista))
+        // Lista escolhida que não carregou: nada passa (não ignora o filtro calado).
+        assertEquals(emptyList<Filme>(), FilmesFiltro.filtrar(todos, FilmesFiltro.Criterios(lista = "x:mdblist:1"), emptyMap()))
+    }
 }

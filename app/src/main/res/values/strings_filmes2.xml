@@ -7,6 +7,7 @@
     <string name="filmes_filtro_genero">Genre: %1$s</string>
     <string name="filmes_filtro_epoca">Period: %1$s</string>
     <string name="filmes_filtro_nota">Minimum rating: %1$s</string>
+    <string name="filmes_filtro_lista">List: %1$s</string>
     <string name="filmes_filtro_nao_vistos">Only unwatched: %1$s</string>
     <string name="filmes_filtro_limpar">Clear filter</string>
     <string name="filmes_filtro_qualquer">Any</string>

@@ -7,6 +7,7 @@
     <string name="filmes_filtro_genero">장르: %1$s</string>
     <string name="filmes_filtro_epoca">시대: %1$s</string>
     <string name="filmes_filtro_nota">최소 평점: %1$s</string>
+    <string name="filmes_filtro_lista">목록: %1$s</string>
     <string name="filmes_filtro_nao_vistos">안 본 것만: %1$s</string>
     <string name="filmes_filtro_limpar">필터 지우기</string>
     <string name="filmes_filtro_qualquer">전체</string>
