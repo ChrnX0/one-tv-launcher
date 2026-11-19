@@ -17,25 +17,30 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Movies: the dubbed and subtitled copies of the same movie are now one item in the grid; the details page opens your preferred version and has a button for the other</item>
-        <item>Games › Your crew: Discord bots (names ending in “bot”) no longer show up</item>
+        <item>Movies: dubbed and subtitled copies of the same film now show as one card (the details page has both versions)</item>
+        <item>Movie and series details now come from Trakt: plot in your language, director, cast, trailer and the next episode</item>
+        <item>Weather: forecast from MET Norway; the city or postal code is found on the TV itself, no outside service</item>
+        <item>Simkl: connect your own account to see the community rating; the details page invites you to connect</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>filmes_um_por_filme</item>
-        <item>turma_sem_bot</item>
-        <item>plugin_fundo</item>
-        <item>icone_trocar</item>
+        <item>ficha_trakt</item>
+        <item>serie_trakt</item>
+        <item>previsao_met</item>
+        <item>cidade_offline</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>One item per movie</item>
-        <item>No bots in the crew</item>
-        <item>Wallpaper plugin</item>
-        <item>Change an icon</item>
+        <item>One card per movie</item>
+        <item>Movie details</item>
+        <item>Series details</item>
+        <item>Forecast</item>
+        <item>City</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>In Movies › All, does a movie with a “LEG” copy appear only once, and does its details page offer the other version?</item>
-        <item>In Games › Your crew, are the Discord bots gone, with the people still there?</item>
-        <item>With a wallpaper plugin installed, does choosing the “Plugin background” theme show its background on the home screen?</item>
-        <item>Hold OK on an app › “Change icon”: does picking an icon from a pack change it on the home screen?</item>
+        <item>In Movies › All, does a movie with a dubbed and a subtitled copy appear only once, with the other version in its details page?</item>
+        <item>Open a movie in Movies: does the details page show the plot in your language, the director and the cast?</item>
+        <item>Open a series that is still airing: does the details page show the plot, the seasons and the next episode?</item>
+        <item>Does the Forecast screen open with today, the hours and the coming days?</item>
+        <item>In Settings, typing your city (or postal code) finds it and the weather keeps working?</item>
     </string-array>
 </resources>

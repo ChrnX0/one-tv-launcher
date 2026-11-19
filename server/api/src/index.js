@@ -14,9 +14,11 @@
 //   GET    /v1/addons/public-domain/...  pública: nosso add-on de filmes de domínio público (src/publicdomain.js)
 //   GET    /v1/podcasts/search     pública: busca no Podcast Index (src/podcasts.js), ?q=&lang=&max=
 //   GET    /v1/podcasts/trending   pública: em alta no idioma, ?lang=&max=
+//   GET    /v1/weather             pública: previsão do plano Pro (WeatherAPI), ?lat=&lon= (src/weather.js)
 import { verifySignature, ID_RE, CODE_RE, newCode } from './rules.js';
 import { recommendedBody } from './addons.js';
 import { handlePodcasts } from './podcasts.js';
+import { handleWeather } from './weather.js';
 import { BASE_PATH as PD_BASE, handlePublicDomain } from './publicdomain.js';
 export { Mailbox } from './mailbox.js';
 export { Pairing } from './pairing.js';
@@ -44,6 +46,10 @@ export default {
 
     const podcasts = path.match(/^\/v1\/podcasts\/(search|trending)$/);
     if (podcasts && req.method === 'GET') return handlePodcasts(podcasts[1], url, env);
+
+    if (path === '/v1/weather' && req.method === 'GET') {
+      return handleWeather(url, env, { ip: req.headers.get('cf-connecting-ip') ?? '' });
+    }
 
     const publicTxt = path.match(/^\/v1\/dns\/txt\/([a-z2-7]{20})$/);
     if (publicTxt && req.method === 'GET') {

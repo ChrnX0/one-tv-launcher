@@ -249,7 +249,7 @@ object InfoExterna {
         val traktNota: Float? = null,   // nota do Trakt (0-10), vale para todos, sem login; pedida de madrugada
         val traktEm: Long = 0,          // quando a nota do Trakt foi pedida (0 = nunca)
         val simkl: Int? = null,         // id do Simkl (do /redirect), para não perguntar de novo
-        val simklNota: Float? = null,   // nota da comunidade do Simkl (0-10), sem login; pedida de madrugada
+        val simklNota: Float? = null,   // nota da comunidade do Simkl (0-10), só com a conta Simkl da pessoa; de madrugada
         val simklEm: Long = 0,          // quando a nota do Simkl foi pedida (0 = nunca)
         val recusados: Set<Int> = emptySet(),
         val detalhe: Detalhe? = null,
@@ -257,7 +257,7 @@ object InfoExterna {
         val buscaEm: Long = 0,   // última busca sem resultado (não buscar de novo a cada abertura)
     )
 
-    /** As notas para mostrar: Trakt e Simkl (todos, sem login). */
+    /** As notas para mostrar: Trakt (todos, sem login) e Simkl (só existe com a conta conectada; InfoExternaCache). */
     fun notasDe(g: Guardado): Notas = Notas(g.traktNota, g.simklNota)
 
     fun guardadoParaJson(g: Guardado): JSONObject = JSONObject().apply {
@@ -373,11 +373,49 @@ object InfoExterna {
     const val SIMKL_MIN_VOTOS = TRAKT_MIN_VOTOS
 
     /** A nota da comunidade (0-10); null sem nota, com poucos votos ou resposta estranha. Só o bloco "simkl". */
-    fun lerNotaSimkl(json: String): Float? = runCatching {
-        val s = JSONObject(json).optJSONObject("ratings")?.optJSONObject("simkl") ?: return@runCatching null
-        val nota = s.optDouble("rating", Double.NaN).takeIf { !it.isNaN() && it > 0 && it <= 10 } ?: return@runCatching null
-        if (s.optInt("votes", 0) >= SIMKL_MIN_VOTOS) nota.toFloat() else null
-    }.getOrNull()
+    fun lerNotaSimkl(json: String): Float? = runCatching { notaSimklDe(JSONObject(json)) }.getOrNull()
+
+    /** O bloco ratings.simkl de um título (ficha ou arquivo pronto); null sem nota ou com poucos votos. */
+    private fun notaSimklDe(o: JSONObject): Float? {
+        val s = o.optJSONObject("ratings")?.optJSONObject("simkl") ?: return null
+        val nota = s.optDouble("rating", Double.NaN).takeIf { !it.isNaN() && it > 0 && it <= 10 } ?: return null
+        return if (s.optInt("votes", 0) >= SIMKL_MIN_VOTOS) nota.toFloat() else null
+    }
+
+    /** Um título achado num arquivo pronto do Simkl: o id dele e a nota (null = sem nota ou poucos votos). */
+    data class SimklDoArquivo(val id: Int, val nota: Float?)
+
+    /**
+     * Os títulos de um arquivo pronto do Simkl, por (série?, id TMDB). Aceita os dois formatos: a lista direta dos
+     * arquivos de trending (discover/trending/<tipo>/month_500.json) e o {"calendar":[..],"metadata":{id:{..}}} do
+     * calendário v2. [serie] é o tipo do arquivo; anime com "anime_type":"movie" vira filme. Sem TMDB, fica de fora.
+     */
+    fun lerArquivoSimkl(json: String, serie: Boolean): Map<Pair<Boolean, Int>, SimklDoArquivo> = runCatching {
+        val itens: List<JSONObject> = when (val raiz = org.json.JSONTokener(json).nextValue()) {
+            is JSONArray -> (0 until raiz.length()).mapNotNull { raiz.optJSONObject(it) }
+            is JSONObject -> raiz.optJSONObject("metadata")?.let { m -> m.keys().asSequence().mapNotNull { m.optJSONObject(it) }.toList() }.orEmpty()
+            else -> emptyList()
+        }
+        val r = HashMap<Pair<Boolean, Int>, SimklDoArquivo>()
+        for (i in itens) {
+            val ids = i.optJSONObject("ids") ?: continue
+            val tmdb = ids.optString("tmdb").trim().toIntOrNull()?.takeIf { it > 0 } ?: continue
+            val id = (ids.optInt("simkl_id", 0).takeIf { it > 0 } ?: ids.optInt("simkl", 0)).takeIf { it > 0 } ?: continue
+            val ehSerie = serie && i.optString("anime_type") != "movie"
+            r.putIfAbsent(ehSerie to tmdb, SimklDoArquivo(id, notaSimklDe(i)))
+        }
+        r as Map<Pair<Boolean, Int>, SimklDoArquivo>
+    }.getOrDefault(emptyMap())
+
+    /** Os arquivos prontos lidos de madrugada: caminho e se é de séries. ~7,5 MB no total (medido em 17/11/2026). */
+    val ARQUIVOS_SIMKL = listOf(
+        "discover/trending/movies/month_500.json" to false,
+        "discover/trending/tv/month_500.json" to true,
+        "discover/trending/anime/month_500.json" to true,
+        "calendar/v2/movie_release.json" to false,
+        "calendar/v2/tv.json" to true,
+        "calendar/v2/anime.json" to true,
+    )
 
     /** Id do IMDb (tt...) como IDENTIFICADOR, para casar títulos com Trakt e Simkl. Não é informação do IMDb. */
     fun idImdbValido(id: String): Boolean = id.matches(Regex("tt\\d{5,10}"))

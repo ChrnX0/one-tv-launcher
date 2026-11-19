@@ -1,10 +1,12 @@
 — Dados —
 
-Previsão do tempo: Open-Meteo (https://open-meteo.com), dados sob CC BY 4.0. [FONTE EM ESTUDO: trocar antes de publicar]
+Previsão do tempo: Data from MET Norway (https://api.met.no), sob CC BY 4.0. No plano Pro: Powered by WeatherAPI.com
+  (https://www.weatherapi.com).
 Observação do aeroporto (METAR): Aviation Weather Center, NOAA (domínio público dos EUA).
 Cidades e fusos horários: GeoNames (https://www.geonames.org), sob CC BY 4.0. A busca de cidade fica na TV.
 Fichas, pôsteres, elenco, classificação e notas de filmes e séries: Trakt (https://trakt.tv).
-  Sofaly uses Trakt but is not endorsed or certified by Trakt.
+  Sofaly uses Trakt but is not endorsed or certified by Trakt. Nota da comunidade: Simkl (https://simkl.com), com a conta
+  da própria pessoa.
 Legendas: Subtitles provided by OpenSubtitles.com (https://www.opensubtitles.com), com a conta da própria pessoa.
 Aberturas de episódios (pular abertura): IntroDB (https://introdb.app), banco comunitário.
   Cada legenda fica só na TV de quem pediu.

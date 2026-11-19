@@ -13,7 +13,7 @@ import java.util.zip.GZIPInputStream
  * comercial): sem Wi-Fi do Android e sem cidade cadastrada, vale a maior cidade do fuso horário da TV.
  *
  * Dados: GeoNames (CC BY 4.0, crédito na tela de Licenças), montados por scripts/montar-cidades.py em
- * app/src/play/assets/cidades.tsv.gz: o mundo com 15 mil habitantes ou mais e o Brasil com mil ou mais (~37 mil
+ * app/src/main/assets/cidades.tsv.gz (todo build desde 19/11/2026): o mundo com 15 mil habitantes ou mais e o Brasil com mil ou mais (~37 mil
  * cidades, ~1 MB). Ordem: da mais populosa para a menos, então o primeiro achado é o mais provável.
  * Nada sai da TV ao buscar uma cidade.
  */

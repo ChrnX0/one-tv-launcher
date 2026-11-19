@@ -47,19 +47,20 @@ object LocalClima {
 
     /** CEP + número -> coordenadas (rede: fora da thread da tela) e grava. Devolve o lugar gravado ou o erro. */
     fun definirPorCep(ctx: Context, cep: String?, numero: String?): Result<Lugar> =
-        // Play: sem Nominatim (não serve a app pago); a coordenada vem da lista de cidades do APK (precisão de cidade).
-        Endereco.buscar(cep, numero, if (BuildConfig.PLAY) CidadesOffline.lista(ctx) else null) { Endereco.httpGet(it) }.map { a ->
+        // Sem Nominatim (a política dele não serve a app pago) em todo build desde 19/11/2026: a coordenada vem da lista
+        // de cidades do APK (precisão de cidade).
+        Endereco.buscar(cep, numero, CidadesOffline.lista(ctx)) { Endereco.httpGet(it) }.map { a ->
             Lugar(a.nome, a.lat, a.lon, Endereco.limparCep(cep).orEmpty(), Endereco.limparNumero(numero).orEmpty())
                 .also { gravar(ctx, it) }
         }
 
     /**
-     * Ideia 40 (14/11/2026): para quem está fora do Brasil, o nome da cidade no lugar do CEP. O CEP continua sendo o
-     * caminho mais preciso aqui (chega no bairro ou na rua); a cidade é um segundo caminho, não uma troca.
+     * Ideia 40 (14/11/2026): para quem está fora do Brasil, o nome da cidade no lugar do CEP. Desde 19/11/2026 os
+     * dois caminhos chegam à mesma precisão (a cidade, pela lista do APK); o CEP só acha a cidade sem digitar o nome.
      */
     fun definirPorCidade(ctx: Context, cidade: String?): Result<Lugar> =
-        (if (BuildConfig.PLAY) Endereco.buscarCidadeOffline(cidade, CidadesOffline.lista(ctx))
-        else Endereco.buscarCidade(cidade, java.util.Locale.getDefault().language.ifEmpty { "en" }) { Endereco.httpGet(it) })
+        // Lista de cidades do APK em todo build (19/11/2026): a busca da Open-Meteo é só para uso não comercial.
+        Endereco.buscarCidadeOffline(cidade, CidadesOffline.lista(ctx))
             .map { a -> Lugar(a.nome, a.lat, a.lon).also { gravar(ctx, it) } }
 
     /** "Centro · CEP 01001-000, nº 100" (para as telas). */

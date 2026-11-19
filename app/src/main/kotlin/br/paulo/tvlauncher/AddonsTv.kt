@@ -178,6 +178,7 @@ object AddonsTv {
     }
 
     private fun fichaTmdb(item: AddonsProtocolo.Item): AddonsProtocolo.Ficha? {
+        if (!InfoExternaCache.temTmdb()) return null   // TMDB só no Pro com contrato (DataSources, 19/11/2026)
         val k = ServicosContas.chavesApp().tmdb.takeIf { it.isNotBlank() } ?: return null
         val idioma = InfoExterna.idiomaTmdb()
         val cab = InfoExterna.tmdbCabecalhos(k, ServicosFilmes.agente(BuildConfig.VERSION_CODE))

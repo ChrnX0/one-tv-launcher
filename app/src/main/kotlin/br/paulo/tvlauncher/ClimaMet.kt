@@ -17,7 +17,7 @@ import java.util.TimeZone
  *
  * Em vez de reescrever a HOME, a Previsão e os avisos, este arquivo CONVERTE a resposta do MET no mesmo formato que o
  * resto do código já lê da Open-Meteo (current / hourly / daily, horas locais "2026-11-16T15:00"). Quem escolhe a fonte
- * é [BuildConfig.CLIMA_MET] (desligado por padrão em 16/11/2026: fonte do clima do produto ainda em estudo; liga com -Pclima_met).
+ * é o [DataSources] (19/11/2026: MET Norway é a fonte do plano Básico, em todo build).
  *
  * Diferenças que ficam (verificado na resposta real de 16/11/2026, uma cidade do Brasil):
  *  - Fora da Escandinávia o MET NÃO manda chance de chuva. A chance aqui é ESTIMADA pela chuva prevista em mm e pelo
@@ -35,6 +35,9 @@ object ClimaMet {
 
     private class Guardado(val chave: String, val corpo: String, val expiraMs: Long, val modificado: String?)
     @Volatile private var guardado: Guardado? = null
+
+    /** Só para o teste de telas: a Previsão medida sem a resposta que a HOME deixou na memória. */
+    internal fun esquecerCache() { guardado = null }
 
     /** 4 casas (~11 m), o máximo que os termos aceitam; mais que isso eles recusam ou contam como pedidos diferentes. */
     fun coord(v: Double): String = String.format(Locale.US, "%.4f", v).trimEnd('0').trimEnd('.')

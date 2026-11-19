@@ -101,6 +101,27 @@ class InfoExternaTest {
         assertEquals(2 to 3, InfoExterna.contarNaLista(partes, setOf(438631), setOf(InfoExterna.chaveNomeAno("Duna: Parte Dois", 2024))))
     }
 
+    /** Formatos de api.simkl.org/api-reference/trending (lista direta) e /calendar (v2: calendar + metadata). */
+    @Test fun arquivosProntosDoSimkl() {
+        val trending = """[{"title":"The Drama","ids":{"simkl_id":2533163,"slug":"the-drama","imdb":"tt33071426","tmdb":"1148540"},
+            "ratings":{"simkl":{"rating":7.37,"votes":136},"imdb":{"rating":7.4,"votes":42928}}},
+            {"title":"Sem TMDB","ids":{"simkl_id":5}},
+            {"title":"Poucos votos","ids":{"simkl_id":6,"tmdb":"77"},"ratings":{"simkl":{"rating":9.9,"votes":2}}}]"""
+        val f = InfoExterna.lerArquivoSimkl(trending, serie = false)
+        assertEquals(2, f.size)
+        assertEquals(InfoExterna.SimklDoArquivo(2533163, 7.37f), f[false to 1148540])
+        assertEquals(InfoExterna.SimklDoArquivo(6, null), f[false to 77])
+        val calendario = """{"calendar":[{"simkl_id":3437,"date":"2026-07-20T04:00:00Z"}],"metadata":{
+            "3437":{"title":"King of the Hill","ids":{"simkl_id":3437,"tmdb":"1434","tvdb":"73141"},"ratings":{"simkl":{"rating":8.1,"votes":942}}},
+            "9":{"title":"Filme de anime","anime_type":"movie","ids":{"simkl_id":9,"tmdb":"500"},"ratings":{"simkl":{"rating":null,"votes":null}}}}}"""
+        val s = InfoExterna.lerArquivoSimkl(calendario, serie = true)
+        assertEquals(InfoExterna.SimklDoArquivo(3437, 8.1f), s[true to 1434])
+        assertEquals(InfoExterna.SimklDoArquivo(9, null), s[false to 500])   // anime_type movie = filme
+        assertTrue(InfoExterna.lerArquivoSimkl("lixo", serie = true).isEmpty())
+        assertEquals("https://data.simkl.in/calendar/v2/tv.json?client_id=c&app-name=sofaly&app-version=1.0.1",
+            ServicosFilmes.simklUrlArquivo("calendar/v2/tv.json", "c", 1))
+    }
+
     @Test fun notaDoSimkl() {
         val ficha = """{"title":"Inception","ratings":{"simkl":{"rating":8.6,"votes":15265},"imdb":{"rating":8.8,"votes":2889060}}}"""
         assertEquals(8.6f, InfoExterna.lerNotaSimkl(ficha)!!, 0.001f)

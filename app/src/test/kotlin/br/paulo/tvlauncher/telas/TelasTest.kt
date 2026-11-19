@@ -101,6 +101,9 @@ class TelasTest {
         }
     }
 
+    /** Telas que buscam dados na rede depois de abrir: medidas sem rede (ver conferir). */
+    private val TELAS_SEM_REDE = setOf("previsao")
+
     @Config(qualifiers = "en-w960dp-h540dp-land-television-xhdpi")
     @Test fun ingles() = conferir("en")
 
@@ -142,8 +145,17 @@ class TelasTest {
                 "home-vidro" -> br.paulo.tvlauncher.IconeCruz.Estilo.OBJETO
                 else -> br.paulo.tvlauncher.IconeCruz.Estilo.LINHA   // o padrão desde 18/11/2026
             })
+            // A Previsão busca o tempo numa thread: com rede, às vezes chega antes da foto (outro desenho, outra letra
+            // menor) e às vezes não. Sem rede (proxy que recusa) e sem a resposta guardada na memória, a tela é sempre a mesma: a medida não depende da sorte.
+            val semRede = nome in TELAS_SEM_REDE
+            val proxyAntes = listOf("https.proxyHost", "https.proxyPort", "http.proxyHost", "http.proxyPort").associateWith { System.getProperty(it) }
+            if (semRede) { br.paulo.tvlauncher.ClimaMet.esquecerCache(); br.paulo.tvlauncher.WeatherApiSource.esquecerCache()
+                System.setProperty("https.proxyHost", "127.0.0.1"); System.setProperty("https.proxyPort", "9")
+                System.setProperty("http.proxyHost", "127.0.0.1"); System.setProperty("http.proxyPort", "9") }
             val m = try { medir(cls, "$idioma-$nome") } catch (e: Throwable) {
                 problemas += "$chave: a tela não abriu (${e.javaClass.simpleName}: ${e.message?.take(160)})"; continue
+            } finally {
+                if (semRede) for ((k, v) in proxyAntes) if (v == null) System.clearProperty(k) else System.setProperty(k, v)
             }
             agora.put(chave, m.json())
             val antes = ref.optJSONObject(chave)?.let { Medida.de(it) } ?: continue

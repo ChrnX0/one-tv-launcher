@@ -58,4 +58,7 @@
     <string name="sv_f_longo">nama pengguna atau kata sandi terlalu panjang</string>
     <string name="sv_f_senha">nama pengguna atau kata sandi salah</string>
     <string name="sv_f_gravar">tidak bisa menyimpannya di TV. Coba lagi.</string>
+    <!-- Ficha sem a conta Simkl: convite para conectar (a nota do Simkl só aparece com a conta; licença). -->
+    <string name="sv_simkl_convite">Rating Simkl</string>
+    <string name="sv_simkl_convite_det">Hubungkan akun Anda</string>
 </resources>

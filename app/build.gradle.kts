@@ -66,14 +66,13 @@ android {
         // família do lembrete (78) e da TV que não ligou (79) só existe no APK do site.
         buildConfigField("boolean", "CUIDAR_FAMILIA", (!project.hasProperty("play")).toString())
         // Build da Play (`-Pplay`, 16/11/2026): o produto Sofaly. PLAY liga a cobrança da Play e desliga o que a loja
-        // não aceita (atualizador do GitHub, instalar APK). CLIMA_MET: previsão pelo MET Norway (uso comercial liberado).
-        // DESLIGADO por padrão também na Play (16/11/2026, Paulo: "o MET Norway não supre tudo"; fonte do clima em
-        // estudo). Para testar: -Pclima_met ou clima_fonte=met no pessoal.properties. Ver ClimaMet.kt.
+        // não aceita (atualizador do GitHub, instalar APK). A fonte do clima não depende mais do build (19/11/2026): é o
+        // plano e a licença que escolhem, em DataSources.kt (MET Norway no Básico).
         buildConfigField("boolean", "PLAY", project.hasProperty("play").toString())
-        buildConfigField("boolean", "CLIMA_MET", (project.hasProperty("clima_met") || pessoal.getProperty("clima_fonte")?.trim() == "met").toString())
-        // Build da Play: sem TMDB (chave pessoal; uso comercial pede contrato) e sem Simkl (licença não cobre app vendido)
-        // até haver licença. O Trakt (conta Standard) e o OpenSubtitles (login do próprio usuário) ficam. Ver venda/licencas-custos.md.
-        val semLicencaNaPlay = setOf("TMDB_CHAVE", "SIMKL_ID")
+        // Build da Play: sem TMDB (chave pessoal; uso comercial pede contrato) até haver contrato. O Simkl entra (19/11/2026)
+        // só no caminho grátis que eles aceitaram: a conta da própria pessoa e o convite "Conecte sua conta"; a nota sem
+        // login fica para o Pro com licença (DataSources.kt). Trakt (Standard) e OpenSubtitles (login da pessoa) ficam.
+        val semLicencaNaPlay = setOf("TMDB_CHAVE")
         for (k in listOf("TMDB_CHAVE", "TRAKT_ID", "TRAKT_SEGREDO", "SIMKL_ID", "OPENSUBTITLES_CHAVE"))
             buildConfigField("String", k, if (project.hasProperty("play") && k in semLicencaNaPlay) "\"\"" else chaveApp(k))
         // Degrau 2a (17/11/2026): e-mail que recebe o "Relatar um problema" (quem não tem conta no GitHub). Fora do git:
@@ -149,7 +148,8 @@ android {
     // Build da Play (`./gradlew bundleRelease -Pplay`, 16/11/2026): o produto Sofaly. Package PRÓPRIO, decidido em 16/11/2026
     // e que nunca mais pode mudar depois de publicado; o namespace do código continua br.paulo.tvlauncher e a Sala segue
     // com applicationId br.paulo.tvlauncher (ver CLAUDE.md). Por cima do manifesto principal entra src/play/AndroidManifest.xml
-    // (tira as permissões que a loja recusa) e a lista de cidades offline (src/play/assets, CidadesOffline.kt).
+    // (tira as permissões que a loja recusa) e a seção de dados das licenças (src/play/assets). A lista de cidades offline
+    // (CidadesOffline.kt) fica em src/main/assets desde 19/11/2026: todo build acha a cidade/CEP sem serviço de fora.
     // Sem flavor de propósito: com flavor todas as tarefas mudariam de nome (assembleRelease, testReleaseUnitTest) e os
     // workflows e scripts da Sala quebrariam.
     if (project.hasProperty("play")) {

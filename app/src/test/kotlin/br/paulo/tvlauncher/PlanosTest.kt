@@ -16,7 +16,8 @@ class PlanosTest {
 
     @Test fun divisaoDoDoc() {
         assertTrue(Planos.permite(Plano.PRO, Recurso.IPTV_VARIAS_LISTAS))
-        assertFalse(Planos.permite(Plano.PRO, Recurso.FICHAS_TMDB))
+        assertFalse(Planos.permite(Plano.PRO, Recurso.CLIMA_3_MODELOS))
+        assertFalse(Planos.permite(Plano.BASICO, Recurso.FICHAS_TMDB))
         assertEquals(1, Planos.listasIptv(Plano.BASICO)); assertEquals(3, Planos.tvsPorCompra(Plano.ULTRA))
         assertEquals(Recurso.values().size, Planos.MINIMO.size)   // todo recurso tem dono
     }
@@ -27,5 +28,11 @@ class PlanosTest {
             assertEquals(r.name, Plano.PRO, Planos.MINIMO[r])
         for (r in listOf(Recurso.VARIAS_CASAS, Recurso.SESSAO_JUNTO, Recurso.SERVIDOR_SOFALY))
             assertEquals(r.name, Plano.ULTRA, Planos.MINIMO[r])
+    }
+
+    /** Fontes de dados (Paulo, 19/11/2026): grátis no Básico, pago a partir do Pro, o mais especial no Ultra. */
+    @Test fun fontesPagas() {
+        for (r in listOf(Recurso.FICHAS_TMDB, Recurso.CLIMA_PRO, Recurso.SIMKL_NOTA_TODOS)) assertEquals(r.name, Plano.PRO, Planos.MINIMO[r])
+        assertEquals(Plano.ULTRA, Planos.MINIMO[Recurso.CLIMA_3_MODELOS])
     }
 }

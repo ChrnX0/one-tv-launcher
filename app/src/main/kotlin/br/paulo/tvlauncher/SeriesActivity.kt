@@ -383,7 +383,7 @@ class SeriesActivity : Activity() {
      */
     /** Fora da tela (a primeira leitura do arquivo de fichas de fora vai ao disco). */
     private fun proximosGuardados(series: List<Serie>): Map<String, InfoExterna.ProximoEp> {
-        if (!InfoExternaCache.temTmdb()) return emptyMap()
+        if (!InfoExternaCache.temFicha()) return emptyMap()
         val r = HashMap<String, InfoExterna.ProximoEp>()
         for (s in series) InfoExternaCache.guardado(this, s.chave)?.detalhe?.proximo?.let { r[s.chave] = it }
         return r
@@ -792,7 +792,7 @@ class SeriesActivity : Activity() {
         painel.removeAllViews(); painel.visibility = View.VISIBLE; painel.requestFocus()
         telaDeTras.visibility = View.INVISIBLE
         pedirDesenho(250)
-        val externoVem = InfoExternaCache.temTmdb()
+        val externoVem = InfoExternaCache.temFicha()
         Fundo.rodar {
             val f = PlayerCarga.fichaSerie(this, s)
             tela.post {
@@ -952,6 +952,7 @@ class SeriesActivity : Activity() {
             FichaAcoes.adicionar(acoes, FichaAcoes.acao(this, getString(R.string.elenco_botao), marca = "elenco") { ElencoActivity.abrir(this, id, serie = true, nome = Vod.nomeLimpo(s.nome)) })
         }
         FichaAcoes.ondeAssistir(this, acoes, s.nome, s.ano, googleTv)
+        FichaAcoes.conviteSimkl(this, acoes)
         val acaoSinopse = sinopse?.let { txt ->
             FichaAcoes.acao(this, getString(R.string.series_sinopse_mais), marca = "sinopse") { FichaAcoes.mostrarSinopse(this, Vod.nomeLimpo(s.nome), txt) }
                 .also { FichaAcoes.adicionar(acoes, it); it.visibility = if (verEpisodios) View.VISIBLE else View.GONE }
@@ -982,6 +983,9 @@ class SeriesActivity : Activity() {
             listOfNotNull(ext?.let { InfoExterna.notasDe(it) }?.takeIf { !it.vazia }?.let { InfoExterna.textoNotas(it) }, proximo).takeIf { it.isNotEmpty() }?.let { partes ->
                 texto.addView(TextView(this).apply { text = partes.joinToString("   ·   "); textSize = Estilo.Leitura.DADOS; setTextColor(ambar); setPaddingRelative(0, dp(6), 0, 0); maxLines = 2 })
             }
+            // Atribuição da nota do Simkl na ficha (17/11/2026): "Dados de Simkl (simkl.com)", discreta.
+            if (ext?.let { InfoExterna.notasDe(it).simkl } != null)
+                texto.addView(TextView(this).apply { text = getString(R.string.sync_fonte_simkl); textSize = Estilo.Leitura.DADOS * 0.8f; setTextColor(suave); setPaddingRelative(0, dp(2), 0, 0) })
             // Ideia 82: "Também em: Netflix · Prime Video" (TMDB/JustWatch). DESLIGADO (OndeAssistir.JUSTWATCH_LIBERADO): licença.
             tmdbDe(s, f)?.takeIf { OndeAssistir.JUSTWATCH_LIBERADO && InfoExternaCache.temTmdb() }?.let { id ->
                 val linhaOnde = TextView(this).apply { textSize = Estilo.Leitura.DADOS; setTextColor(suave); setPaddingRelative(0, dp(6), 0, 0); visibility = View.GONE; maxLines = 1 }

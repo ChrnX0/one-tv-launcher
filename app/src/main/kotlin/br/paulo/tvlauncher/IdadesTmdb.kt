@@ -86,7 +86,9 @@ object IdadesTmdb {
     /** Pergunta ao TMDB a classificação dos [ids] ainda não sabidos (ou vencidos), no máximo [limite]. Bloqueia (rede). Devolve quantos mudaram. */
     fun classificar(ctx: Context, serie: Boolean, ids: Collection<Int>, limite: Int = POR_VEZ, intervaloMs: Long = 0L,
                     ate: Long = Long.MAX_VALUE, parar: () -> Boolean = { false }): Int {
-        val k = ServicosContas.chavesApp().tmdb.takeIf { it.isNotBlank() } ?: return 0
+        // TMDB só no Pro com contrato (DataSources, 19/11/2026); no Básico a classificação americana do Trakt.
+        val usarTmdb = InfoExternaCache.temTmdb()
+        val k = ServicosContas.chavesApp().let { if (usarTmdb) it.tmdb else it.traktId }.takeIf { it.isNotBlank() } ?: return 0
         val agora = System.currentTimeMillis()
         val tipo = if (serie) "s" else "f"
         val conhecidos = synchronized(trava) { ler(ctx).optJSONObject(tipo) ?: JSONObject() }
@@ -99,13 +101,19 @@ object IdadesTmdb {
         val agente = ServicosFilmes.agente(BuildConfig.VERSION_CODE)
         for (id in faltam) {
             if (System.currentTimeMillis() >= ate || parar()) break
-            if (intervaloMs > 0) Thread.sleep(intervaloMs)
-            val r = runCatching { ServicosContas.pedir(if (serie) Classificacao.urlSerie(k, id) else Classificacao.urlFilme(k, id), InfoExterna.tmdbCabecalhos(k, agente)) }
+            // Trakt: 500 GET a cada 5 min por chave e IP (developer.trakt.tv/docs/rate-limiting): no mínimo 650 ms entre pedidos.
+            val espera = if (usarTmdb) intervaloMs else maxOf(intervaloMs, 650L)
+            if (espera > 0) Thread.sleep(espera)
+            val r = runCatching {
+                if (usarTmdb) ServicosContas.pedir(if (serie) Classificacao.urlSerie(k, id) else Classificacao.urlFilme(k, id), InfoExterna.tmdbCabecalhos(k, agente))
+                else ServicosContas.pedir(TraktDetails.urlPorTmdb(id, serie), ServicosFilmes.traktCabecalhos(k, BuildConfig.VERSION_CODE))
+            }
                 .onFailure { Log.w(TAG, "classificar: ${it.javaClass.simpleName}") }.getOrNull() ?: break   // sem rede: para e tenta na próxima
             if (r.codigo == 429) break
             if (r.codigo == 404) { achados[id] = Classificacao.SEM; continue }
             if (r.codigo !in 200..299) continue
-            (if (serie) Classificacao.lerSerie(r.corpo) else Classificacao.lerFilme(r.corpo))?.let { achados[id] = it }
+            (if (!usarTmdb) TraktDetails.idade(r.corpo, serie) else if (serie) Classificacao.lerSerie(r.corpo) else Classificacao.lerFilme(r.corpo))
+                ?.let { achados[id] = it }
         }
         if (achados.isEmpty()) return 0
         synchronized(trava) {
