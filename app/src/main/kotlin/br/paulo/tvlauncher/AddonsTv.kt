@@ -113,7 +113,7 @@ object AddonsTv {
     fun sugeridos(ctx: Context): List<Sugerido> {
         val lista = RecommendedAddons.parse(prefs(ctx).getString(REC_JSON, null)) ?: RecommendedAddons.BUILT_IN
         val inst = instalados(ctx)
-        return RecommendedAddons.toShow(lista, inst.map { it.m.id }.toSet(), inst.map { it.base }.toSet()).map { e ->
+        return RecommendedAddons.toShow(lista, inst.map { it.m.id }.toSet(), inst.map { it.base }.toSet(), BuildConfig.PLAY).map { e ->
             // Referência direta ao R (não getIdentifier): o encolhedor de recursos do Release apagaria o texto.
             val res = when (RecommendedAddons.textKey(e.id)) {
                 "streaming" -> R.string.ad_sug_streaming
@@ -121,6 +121,9 @@ object AddonsTv {
                 "mubi" -> R.string.ad_sug_mubi
                 "kitsu" -> R.string.ad_sug_kitsu
                 "animeseason" -> R.string.ad_sug_animeseason
+                "opensubtitles" -> R.string.ad_sug_opensubtitles
+                "livechannels" -> R.string.ad_sug_livechannels
+                "publicdomain" -> R.string.ad_sug_publicdomain
                 else -> 0
             }
             Sugerido(e, RecommendedAddons.name(e.id) ?: e.id, if (res != 0) ctx.getString(res) else "")
@@ -148,7 +151,7 @@ object AddonsTv {
     fun catalogo(l: Linha, skip: Int = 0, genero: String? = null, busca: String? = null): List<AddonsProtocolo.Item> {
         val ex = buildList {
             if (busca != null) add("search" to busca)
-            if (genero != null) add("genre" to genero)
+            (genero ?: l.cat.generoPadrao())?.let { add("genre" to it) }
             if (skip > 0) add("skip" to skip.toString())
         }
         return baixar(AddonsProtocolo.url(l.addon.base, "catalog", l.cat.tipo, l.cat.id, ex))

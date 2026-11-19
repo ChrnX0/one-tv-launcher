@@ -96,6 +96,18 @@ class AddonsProtocoloTest {
         // Reinstalar o mesmo (mesma base) troca, não soma.
         assertEquals(l.size, AddonsProtocolo.instalar(l, AddonsProtocolo.Instalado("https://a0.b", m.copy(id = "id0", versao = "2")))!!.size)
     }
+
+    @Test fun generoObrigatorioComOpcoesViraLinha() {
+        // Formato do Live Channels: um catálogo por país, gênero obrigatório com opções ("All" primeiro).
+        val m = ok("""{"id":"community.live-channels","version":"1.0.0","name":"Live Channels","types":["channels"],
+            "resources":["catalog","meta","stream"],"catalogs":[
+            {"type":"channels","id":"br","name":"Brazil","extra":[{"name":"genre","isRequired":true,"options":["All","Filmes"]}]},
+            {"type":"channels","id":"busca","name":"Busca","extra":[{"name":"search","isRequired":true}]}]}""")
+        val br = m.catalogos.first { it.id == "br" }
+        assertTrue(br.listavel)
+        assertEquals("All", br.generoPadrao())
+        assertFalse(m.catalogos.first { it.id == "busca" }.listavel)
+    }
 }
 
 class AddonsTmdbTest {

@@ -9,6 +9,8 @@ import org.json.JSONObject
  * Por que curada e curta: conferimos os 97 add-ons da lista oficial do Stremio em 18/11/2026 e nenhum entrega vídeo por
  * link direto legal (os de vídeo de lá são torrent, que a Sofaly recusa). Os que funcionam aqui são catálogos: mostram
  * o que há em cada serviço e, sem fonte para tocar, a tela oferece "Onde assistir" (busca do Google TV).
+ * 19/11/2026 (escolha do Paulo): entram OpenSubtitles (legendas), Live Channels (canais grátis da Pluto TV, só fora da
+ * Play) e o NOSSO add-on de vídeo legal, Public Domain Movies (server/api/src/publicdomain.js, Internet Archive).
  * Critérios para entrar: sem configuração, responde, conteúdo legal, nada de IMDb/Cinemeta/Rotten Tomatoes (licença,
  * ver docs/addons.md) e nada com "torrent" no nome.
  *
@@ -43,7 +45,7 @@ object RecommendedAddons {
             resources.isNotEmpty() && resources.all { it == "subtitles" } -> "subtitles"
             "anime" in t -> "anime"
             "movie" in t || "series" in t -> "movies_series"
-            "tv" in t || "channel" in t -> "tv"
+            "tv" in t || "channel" in t || "channels" in t -> "tv"
             "music" in t || "radio" in t || "podcast" in t -> "music"
             else -> "other"
         }
@@ -57,8 +59,11 @@ object RecommendedAddons {
         Entry("pw.ers.netflix-catalog", "https://7a82163c306e-stremio-netflix-catalog-addon.baby-beamup.club/manifest.json", "catalog", "movies_series"),
         Entry("tmdb-addon", "https://94c8cb9f702d-tmdb-addon.baby-beamup.club/manifest.json", "catalog", "movies_series"),
         Entry("com.stremio.mubi_app", "https://mubi2stremio.adiba.ro/manifest.json", "catalog", "movies_series"),
+        Entry("tv.sofaly.publicdomain", "https://api.sofaly.tv/v1/addons/public-domain/manifest.json", "stream", "movies_series"),
         Entry("community.anime.kitsu", "https://anime-kitsu.strem.fun/manifest.json", "catalog", "anime"),
         Entry("animes-season-addon", "https://victorgveloso.github.io/animes-season-addon/manifest.json", "catalog", "anime"),
+        Entry("org.stremio.opensubtitlesv3", "https://opensubtitles-v3.strem.io/manifest.json", "subtitles", "subtitles"),
+        Entry("community.live-channels", "https://jantoom.github.io/live-channels/manifest.json", "stream", "tv"),
     )
 
     /** Texto curto traduzido para os add-ons que conhecemos (chave do recurso `ad_sug_<isto>`); null = usar o do manifesto. */
@@ -68,6 +73,9 @@ object RecommendedAddons {
         "com.stremio.mubi_app" -> "mubi"
         "community.anime.kitsu" -> "kitsu"
         "animes-season-addon" -> "animeseason"
+        "org.stremio.opensubtitlesv3" -> "opensubtitles"
+        "tv.sofaly.publicdomain" -> "publicdomain"
+        "community.live-channels" -> "livechannels"
         else -> null
     }
 
@@ -78,6 +86,9 @@ object RecommendedAddons {
         "com.stremio.mubi_app" -> "MUBI"
         "community.anime.kitsu" -> "Anime Kitsu"
         "animes-season-addon" -> "Anime Seasons"
+        "org.stremio.opensubtitlesv3" -> "OpenSubtitles"
+        "tv.sofaly.publicdomain" -> "Public Domain Movies"
+        "community.live-channels" -> "Live Channels"
         else -> null
     }
 
@@ -103,7 +114,14 @@ object RecommendedAddons {
         out.takeIf { it.isNotEmpty() }
     }.getOrNull()
 
-    /** O que mostrar: a lista menos o que já está instalado (pelo id do manifesto ou pelo mesmo endereço). */
-    fun toShow(list: List<Entry>, installedIds: Set<String>, installedBases: Set<String>): List<Entry> =
-        list.filter { e -> e.id !in installedIds && AddonsProtocolo.base(e.url) !in installedBases }
+    /**
+     * O que mostrar: a lista menos o que já está instalado (pelo id do manifesto ou pelo mesmo endereço). Na versão da
+     * Play ([play]) somem os de [Entry.kind] "stream": lá o recurso `stream` não existe (PlayPolicy.Power.ADDON_STREAMS)
+     * e o Paulo decidiu em 19/11/2026 que os canais (Pluto TV via Live Channels) ficam só fora da Play.
+     */
+    fun toShow(list: List<Entry>, installedIds: Set<String>, installedBases: Set<String>, play: Boolean = false): List<Entry> =
+        list.filter { e ->
+            e.id !in installedIds && AddonsProtocolo.base(e.url) !in installedBases &&
+                (e.kind != "stream" || PlayPolicy.allowed(PlayPolicy.Power.ADDON_STREAMS, play))
+        }
 }

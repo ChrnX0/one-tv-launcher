@@ -50,6 +50,9 @@
     <string name="ad_sug_mubi">Films récents et classiques de MUBI.</string>
     <string name="ad_sug_kitsu">Catalogue et épisodes d’anime de Kitsu.</string>
     <string name="ad_sug_animeseason">Anime par saison et par année.</string>
+    <string name="ad_sug_opensubtitles">Sous-titres en de nombreuses langues pour films et séries, depuis OpenSubtitles.</string>
+    <string name="ad_sug_livechannels">Chaînes en direct gratuites par pays (Pluto TV et autres) : infos, films et séries.</string>
+    <string name="ad_sug_publicdomain">Films classiques du domaine public de l\'Internet Archive, gratuits et légaux. Par Sofaly.</string>
     <string name="ad_grupo_todos">Tous</string>
     <string name="ad_grupo_filmes_series">Films et séries</string>
     <string name="ad_grupo_anime">Anime</string>

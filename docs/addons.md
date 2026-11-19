@@ -17,6 +17,15 @@ Decidido em 16/11/2026 (thread "Estudar o Stremio para inspirar a Sofaly", opç�
    são iguais). A TV pergunta 1 vez por dia; a lista só sugere, a instalação confere tudo de novo. A ficha da Play fica
    neutra (não citar addon, torrent, "filmes grátis"). Modelo do Stremio, que está na Play com a lista da comunidade:
    termos jogam a responsabilidade no autor do addon e o app remove o que infringe (stremio.com/tos).
+   19/11/2026 (escolha do Paulo, "tudo, canais só fora da Play"): entram **OpenSubtitles v3** (legendas, oficial do
+   Stremio), **Live Channels** (canais grátis da Pluto TV e outros por país; o vídeo vem da Pluto, mas por um
+   redirecionador de terceiro, `i.mjh.nz`/`jmp2.uk`, sem acordo com ela) e o **nosso Public Domain Movies**
+   (`server/api/src/publicdomain.js`: longas da coleção `feature_films` do Internet Archive com licença de domínio
+   público, conferida de novo na ficha antes de dar o link; título com reclamação vai para `BLOCKED`). Os de
+   `kind: "stream"` somem da lista na versão da Play (`RecommendedAddons.toShow(play)`), onde o recurso `stream` nem
+   existe. Mortos ou fora em 19/11: add-ons do Internet Archive de terceiros (um não responde, outro exige configuração),
+   trailers (todos YouTube, recusado pela regra 1) e a categoria "HTTP streams" da comunidade (pirataria).
+   Catálogo com `genre` obrigatório e opções vira linha com a primeira opção, como o Stremio (`generoPadrao`).
 4. **Instalar pede o PIN de novo e o aceite dos termos** (`aceite_termos` no prefs `addons`), em qualquer caminho: painel
    web (colar, "Ler QR" ou "Instalar" na lista) ou TV (Addons > Recomendados, ou "Adicionar addon": QR que abre o painel
    em `#addons`, ou digitar; `AddonInstallDialog.kt`). Configurações > Addons lista, adiciona e remove.

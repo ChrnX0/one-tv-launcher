@@ -50,6 +50,9 @@
     <string name="ad_sug_mubi">MUBI’den yeni ve klasik filmler.</string>
     <string name="ad_sug_kitsu">Kitsu’dan anime kataloğu ve bölümleri.</string>
     <string name="ad_sug_animeseason">Sezona ve yıla göre anime.</string>
+    <string name="ad_sug_opensubtitles">Filmler ve diziler için birçok dilde altyazı, OpenSubtitles\'tan.</string>
+    <string name="ad_sug_livechannels">Ülkeye göre ücretsiz canlı kanallar (Pluto TV ve diğerleri): haber, film ve dizi.</string>
+    <string name="ad_sug_publicdomain">Internet Archive\'tan kamu malı klasik filmler, ücretsiz ve yasal. Sofaly\'den.</string>
     <string name="ad_grupo_todos">Tümü</string>
     <string name="ad_grupo_filmes_series">Filmler ve diziler</string>
     <string name="ad_grupo_anime">Anime</string>

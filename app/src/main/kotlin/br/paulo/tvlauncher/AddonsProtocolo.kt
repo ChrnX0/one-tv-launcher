@@ -30,8 +30,15 @@ object AddonsProtocolo {
     data class CatalogoDecl(val tipo: String, val id: String, val nome: String, val extras: List<String>, val obrigatorios: List<String>,
                             val generos: List<String>) {
         val temBusca get() = "search" in extras
-        /** Catálogo que só funciona com um extra obrigatório que não sabemos preencher (ex.: só busca) não vira linha. */
-        val listavel get() = obrigatorios.none { it != "skip" }
+        /**
+         * Catálogo que só funciona com um extra obrigatório que não sabemos preencher (ex.: só busca) não vira linha.
+         * Gênero obrigatório COM opções vira linha com a primeira opção, como o Stremio faz (ex.: Live Channels, um
+         * catálogo por país com gênero "All" obrigatório).
+         */
+        val listavel get() = obrigatorios.none { it != "skip" && !(it == "genre" && generos.isNotEmpty()) }
+
+        /** Gênero a mandar quando a tela não escolheu nenhum: a primeira opção, só se o gênero for obrigatório. */
+        fun generoPadrao(): String? = generos.firstOrNull()?.takeIf { "genre" in obrigatorios }
     }
 
     data class Recurso(val nome: String, val tipos: List<String>?, val prefixos: List<String>?)

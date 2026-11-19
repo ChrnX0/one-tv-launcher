@@ -50,6 +50,9 @@
     <string name="ad_sug_mubi">MUBI の新作とクラシック映画。</string>
     <string name="ad_sug_kitsu">Kitsu のアニメカタログとエピソード。</string>
     <string name="ad_sug_animeseason">シーズン別・年別のアニメ。</string>
+    <string name="ad_sug_opensubtitles">映画とシリーズの多言語字幕(OpenSubtitles)。</string>
+    <string name="ad_sug_livechannels">国別の無料ライブチャンネル(Pluto TV など):ニュース、映画、シリーズ。</string>
+    <string name="ad_sug_publicdomain">Internet Archive のパブリックドメインの名作映画。無料で合法。Sofaly 提供。</string>
     <string name="ad_grupo_todos">すべて</string>
     <string name="ad_grupo_filmes_series">映画とドラマ</string>
     <string name="ad_grupo_anime">アニメ</string>

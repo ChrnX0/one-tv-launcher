@@ -50,6 +50,9 @@
     <string name="ad_sug_mubi">MUBI की नई और क्लासिक फ़िल्में।</string>
     <string name="ad_sug_kitsu">Kitsu से एनीमे कैटलॉग और एपिसोड।</string>
     <string name="ad_sug_animeseason">सीज़न और साल के अनुसार एनीमे।</string>
+    <string name="ad_sug_opensubtitles">फ़िल्मों और सीरीज़ के लिए कई भाषाओं में सबटाइटल, OpenSubtitles से।</string>
+    <string name="ad_sug_livechannels">देश के हिसाब से मुफ़्त लाइव चैनल (Pluto TV और अन्य): ख़बरें, फ़िल्में और सीरीज़।</string>
+    <string name="ad_sug_publicdomain">Internet Archive से पब्लिक डोमेन की क्लासिक फ़िल्में, मुफ़्त और क़ानूनी। Sofaly की ओर से।</string>
     <string name="ad_grupo_todos">सभी</string>
     <string name="ad_grupo_filmes_series">फ़िल्में और सीरीज़</string>
     <string name="ad_grupo_anime">एनीमे</string>

@@ -50,6 +50,9 @@
     <string name="ad_sug_mubi">MUBI의 신작과 고전 영화.</string>
     <string name="ad_sug_kitsu">Kitsu의 애니메이션 카탈로그와 에피소드.</string>
     <string name="ad_sug_animeseason">시즌별, 연도별 애니메이션.</string>
+    <string name="ad_sug_opensubtitles">영화와 시리즈용 다국어 자막, OpenSubtitles 제공.</string>
+    <string name="ad_sug_livechannels">국가별 무료 라이브 채널(Pluto TV 등): 뉴스, 영화, 시리즈.</string>
+    <string name="ad_sug_publicdomain">Internet Archive의 퍼블릭 도메인 고전 영화, 무료이고 합법적입니다. Sofaly 제공.</string>
     <string name="ad_grupo_todos">전체</string>
     <string name="ad_grupo_filmes_series">영화 및 시리즈</string>
     <string name="ad_grupo_anime">애니메이션</string>
