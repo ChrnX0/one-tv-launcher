@@ -70,3 +70,23 @@ test('chave recusada e formato estranho viram 502', async () => {
   assert.equal((await handleWeather(u, env, { fetchFn: async () => new Response('{}'), cache: null })).status, 502);
   assert.equal((await handleWeather(new URL('https://api.sofaly.tv/v1/weather?lat=x&lon=1'), env, { cache: null })).status, 400);
 });
+
+test('limites: 429 por IP e para a WeatherAPI; sem binding passa', async () => {
+  const body = JSON.stringify({ location: {}, current: { temp_c: 1 }, forecast: { forecastday: [] } });
+  const fetchFn = async () => new Response(body);
+  const u = new URL('https://api.sofaly.tv/v1/weather?lat=1&lon=1&days=1');
+  const nao = { limit: async () => ({ success: false }) };
+  const sim = { limit: async () => ({ success: true }) };
+  assert.equal((await handleWeather(u, { WEATHERAPI_KEY: 'K', WEATHER_IP_LIMITER: nao }, { fetchFn, cache: null, ip: '1.2.3.4' })).status, 429);
+  assert.equal((await handleWeather(u, { WEATHERAPI_KEY: 'K', WEATHER_IP_LIMITER: sim, WEATHER_UPSTREAM_LIMITER: nao }, { fetchFn, cache: null })).status, 429);
+  const quebrado = { limit: async () => { throw new Error('x'); } };
+  assert.equal((await handleWeather(u, { WEATHERAPI_KEY: 'K', WEATHER_IP_LIMITER: quebrado }, { fetchFn, cache: null })).status, 200);
+});
+
+test('days do pedido não muda o que vai à WeatherAPI (uma entrada de cache por lugar)', async () => {
+  const urls = [];
+  const fetchFn = async (x) => { urls.push(x); return new Response(JSON.stringify({ current: {}, forecast: { forecastday: [] } })); };
+  for (const d of ['1', '2', '3', '9']) await handleWeather(new URL(`https://api.sofaly.tv/v1/weather?lat=1&lon=1&days=${d}`), { WEATHERAPI_KEY: 'K', WEATHERAPI_MAX_DAYS: '7' }, { fetchFn, cache: null });
+  assert.equal(new Set(urls).size, 1);
+  assert.match(urls[0], /days=7&/);
+});

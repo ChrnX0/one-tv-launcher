@@ -102,4 +102,34 @@ class WeatherApiSourceTest {
         assertEquals(80.6, j.getJSONObject("current").getDouble("temperature_2m"), 0.01)
         assertFalse(j.has("air_quality"))
     }
+
+    @Test fun pausaLongaSoSemChave() {
+        assertEquals(6 * 3_600_000L, WeatherApiSource.pausaPara(503))
+        for (c in listOf(400, 429, 500, 502)) assertEquals(15 * 60_000L, WeatherApiSource.pausaPara(c))
+    }
+
+    private fun previsao(dias: List<String>, horas: List<String>, fonte: String) = JSONObject()
+        .put("daily", JSONObject().put("time", JSONArray(dias)).put("temperature_2m_max", JSONArray(dias.map { fonte })))
+        .put("hourly", JSONObject().put("time", JSONArray(horas)).put("temperature_2m", JSONArray(horas.map { fonte })))
+        .put("fonte", fonte)
+
+    @Test fun completarComMetSoDepoisDoUltimoDia() {
+        val wa = previsao(listOf("2026-11-19", "2026-11-20", "2026-11-21"), listOf("2026-11-21T23:00"), "wa")
+        val met = previsao((19..27).map { "2026-11-$it" }, listOf("2026-11-21T23:00", "2026-11-22T00:00", "2026-11-22T06:00"), "met")
+        val j = WeatherApiSource.completar(wa, met)
+        assertEquals(9, WeatherApiSource.dias(j))
+        val max = j.getJSONObject("daily").getJSONArray("temperature_2m_max")
+        assertEquals("wa", max.getString(2)); assertEquals("met", max.getString(3))
+        val horas = j.getJSONObject("hourly").getJSONArray("time")
+        assertEquals(listOf("2026-11-21T23:00", "2026-11-22T00:00", "2026-11-22T06:00"), (0 until horas.length()).map { horas.getString(it) })
+        assertEquals("wa", j.getString("fonte"))   // o crédito continua sendo da WeatherAPI
+    }
+
+    @Test fun completarSemMetOuFormatoDiferenteNaoMexe() {
+        val wa = previsao(listOf("2026-11-19"), listOf(), "wa")
+        assertEquals(1, WeatherApiSource.dias(WeatherApiSource.completar(wa, null)))
+        val torto = previsao(listOf("2026-11-19", "2026-11-20"), listOf(), "met")
+        torto.getJSONObject("daily").put("temperature_2m_max", JSONArray())
+        assertEquals(1, WeatherApiSource.dias(WeatherApiSource.completar(wa, torto)))
+    }
 }

@@ -27,8 +27,12 @@ import java.util.TimeZone
 object WeatherApiSource {
     private const val TAG = "TvLauncher.WeatherApi"
     const val URL_BASE = "https://api.sofaly.tv/v1/weather"
-    /** Sem chave no servidor (503) ou serviço fora: não pergunta de novo por 6 h (a TV fica no MET Norway). */
+    /** Sem chave no servidor (503): não pergunta de novo por 6 h (a TV fica no MET Norway). */
     private const val PAUSA_MS = 6 * 3_600_000L
+    /** Falha passageira (sem rede, 502 da WeatherAPI, 429 do limite do servidor): tenta de novo em 15 min. */
+    private const val PAUSA_CURTA_MS = 15 * 60_000L
+    /** Exigido no plano Free da WeatherAPI (weatherapi.com/terms.aspx); a tela de Previsão mostra quando os dados vêm dela. */
+    const val FONTE = "weatherapi.com"
     /** O servidor guarda 30 min; aqui 15 min basta para a HOME (5 em 5 min), a Previsão e os avisos dividirem uma chamada. */
     private const val GUARDA_MS = 15 * 60_000L
 
@@ -52,28 +56,59 @@ object WeatherApiSource {
 
     @Synchronized
     private fun buscar(lat: Double, lon: Double, dias: Int): String? {
-        val chave = ClimaMet.coord(lat) + "," + ClimaMet.coord(lon) + "," + dias
+        // Sem "days": o servidor sempre devolve todos os dias do plano contratado (uma entrada de cache por lugar) e o
+        // [converter] corta no que a tela pediu.
+        val chave = ClimaMet.coord(lat) + "," + ClimaMet.coord(lon)
         val agora = System.currentTimeMillis()
         guardado?.takeIf { it.chave == chave && agora - it.em < GUARDA_MS }?.let { return it.corpo }
-        val c = URL("$URL_BASE?lat=${ClimaMet.coord(lat)}&lon=${ClimaMet.coord(lon)}&days=$dias").openConnection() as HttpURLConnection
+        val c = URL("$URL_BASE?lat=${ClimaMet.coord(lat)}&lon=${ClimaMet.coord(lon)}").openConnection() as HttpURLConnection
         return try {
             c.connectTimeout = 8000; c.readTimeout = 8000
             c.setRequestProperty("User-Agent", ClimaMet.AGENTE)
             if (c.responseCode == 200) {
                 c.inputStream.bufferedReader().use { it.readText() }.also { guardado = Guardado(chave, it, agora) }
             } else {
-                Log.i(TAG, "servidor respondeu ${c.responseCode}: MET Norway por ${PAUSA_MS / 3_600_000} h")
-                pausaAte = agora + PAUSA_MS
+                val pausa = pausaPara(c.responseCode)
+                Log.i(TAG, "servidor respondeu ${c.responseCode}: MET Norway por ${pausa / 60_000} min")
+                pausaAte = agora + pausa
                 null
             }
         } catch (e: Exception) {
             Log.w(TAG, "falhou: ${e.javaClass.simpleName}")
-            pausaAte = agora + 15 * 60_000L   // sem rede: tenta de novo logo
+            pausaAte = agora + PAUSA_CURTA_MS   // sem rede: tenta de novo logo
             null
         } finally { c.disconnect() }
     }
 
     // ---------------------------------------------------------------- lógica pura (WeatherApiSourceTest)
+
+    /** 503 = servidor sem a chave (só muda com um deploy): pausa longa. Qualquer outra coisa é passageira. */
+    fun pausaPara(status: Int): Long = if (status == 503) PAUSA_MS else PAUSA_CURTA_MS
+
+    /** Quantos dias a previsão convertida tem. */
+    fun dias(j: JSONObject): Int = j.optJSONObject("daily")?.optJSONArray("time")?.length() ?: 0
+
+    /**
+     * O plano Free da WeatherAPI dá 3 dias e a tela mostra [FaixaDias.DIAS]: os dias (e horas) que faltam vêm do MET
+     * Norway, no mesmo formato. Só entra o que é DEPOIS do último dia/hora da WeatherAPI; o "agora" e o ar ficam dela.
+     */
+    fun completar(wa: JSONObject, met: JSONObject?): JSONObject {
+        if (met == null) return wa
+        for (bloco in listOf("daily", "hourly")) {
+            val a = wa.optJSONObject(bloco) ?: continue
+            val b = met.optJSONObject(bloco) ?: continue
+            val tA = a.optJSONArray("time") ?: continue
+            val tB = b.optJSONArray("time") ?: continue
+            val ultimo = if (tA.length() > 0) tA.optString(tA.length() - 1) else ""
+            val chaves = a.keys().asSequence().toList()
+            if (chaves.any { b.optJSONArray(it)?.length() != tB.length() }) continue   // formato diferente: não mistura
+            for (i in 0 until tB.length()) {
+                if (tB.optString(i) <= ultimo) continue
+                for (k in chaves) a.getJSONArray(k).put(b.getJSONArray(k).get(i))
+            }
+        }
+        return wa
+    }
 
     /** Código da WeatherAPI -> código WMO (o que IconesClima e o resto do código entendem). Desconhecido = nublado. */
     fun codigoWmo(codigo: Int): Int = when (codigo) {
@@ -191,6 +226,6 @@ object WeatherApiSource {
                 .put("weather_code", dCod).put("precipitation_probability_max", dChance).put("sunrise", dNascer).put("sunset", dPor)
                 .put("precipitation_sum", dMm))
             .also { if (aqi != null) it.put("air_quality", JSONObject().put("us_aqi", aqi)) }
-            .put("fonte", "weatherapi.com")
+            .put("fonte", FONTE)
     }
 }

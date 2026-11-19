@@ -9,7 +9,7 @@ import java.util.TimeZone
 /**
  * Ficha de filmes e séries do plano Básico pelo Trakt (19/11/2026, regra do Paulo: grátis no Básico; o TMDB, pago, só
  * no Pro com contrato). O Trakt libera "free and paid apps" sem contrato (developer.trakt.tv/docs/api-use-policy).
- * Só lógica pura (TraktFichaTest); quem fala com a rede é o [InfoExternaCache].
+ * Só lógica pura (TraktDetailsTest); quem fala com a rede é o [InfoExternaCache].
  *
  * O id que fica guardado continua sendo o do TMDB (o Trakt devolve ids.tmdb): a nota da noite, a idade do modo infantil,
  * o Simkl e a lista do IPTV já se entendem por ele. Nada é pedido ao TMDB.
@@ -22,7 +22,7 @@ import java.util.TimeZone
  * traduções [{title,overview,language,country}], pessoas {cast:[{character,person:{name}}],crew:{directing:[{job|jobs,person}]}},
  * próximo episódio {season,number,first_aired:"2026-11-20T01:00:00.000Z"} (204 sem corpo quando não há).
  */
-object TraktFicha {
+object TraktDetails {
     private fun api() = ServicosFilmes.TRAKT_API
     private fun cod(v: String) = URLEncoder.encode(v, "UTF-8").replace("+", "%20")
     private fun tipo(serie: Boolean) = if (serie) "show" else "movie"

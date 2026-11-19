@@ -182,6 +182,8 @@ class PrevisaoActivity : Activity() {
         val dData: List<String>, val dCodigo: List<Int>, val dMax: List<Double>, val dMin: List<Double>, val dChuva: List<Int>,
         val dNascer: List<String>, val dPoente: List<String>, val dChuvaMm: Double,
         val aqi: Int?,
+        /** "weatherapi.com", "met.no" ou "" (Open-Meteo): a WeatherAPI pede o crédito na tela. */
+        val fonte: String = "",
     )
 
     private fun carregar(): Dados? {
@@ -218,6 +220,7 @@ class PrevisaoActivity : Activity() {
             lista(d, "sunrise") { a, i -> a.getString(i) }, lista(d, "sunset") { a, i -> a.getString(i) },
             d.getJSONArray("precipitation_sum").optDouble(0, 0.0),
             aqi,
+            j.optString("fonte"),
         )
     }
 
@@ -400,6 +403,10 @@ class PrevisaoActivity : Activity() {
         if (Extras.ligado(this, Extras.Chave.CARTAO_LUA))   // chave CARTAO_LUA (HomeCards, 18/11/2026)
             trio.addView(lua, LinearLayout.LayoutParams(0, -1, 1.15f).apply { marginStart = dp(Grade.VAO / 2) })
         coluna.addView(trio, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(16) })
+        // Crédito exigido pelo plano Free da WeatherAPI (Pro, 19/11/2026).
+        if (d.fonte == WeatherApiSource.FONTE)
+            coluna.addView(texto(13f, textoSuave).apply { text = getString(R.string.pv_powered_weatherapi) },
+                LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(10) })
 
         if (voz != null) {
             val previsao = boletim(d, tempAgora, maxHoje, minHoje, chovendo)

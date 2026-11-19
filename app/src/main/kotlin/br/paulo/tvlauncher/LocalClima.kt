@@ -55,8 +55,8 @@ object LocalClima {
         }
 
     /**
-     * Ideia 40 (14/11/2026): para quem está fora do Brasil, o nome da cidade no lugar do CEP. O CEP continua sendo o
-     * caminho mais preciso aqui (chega no bairro ou na rua); a cidade é um segundo caminho, não uma troca.
+     * Ideia 40 (14/11/2026): para quem está fora do Brasil, o nome da cidade no lugar do CEP. Desde 19/11/2026 os
+     * dois caminhos chegam à mesma precisão (a cidade, pela lista do APK); o CEP só acha a cidade sem digitar o nome.
      */
     fun definirPorCidade(ctx: Context, cidade: String?): Result<Lugar> =
         // Lista de cidades do APK em todo build (19/11/2026): a busca da Open-Meteo é só para uso não comercial.

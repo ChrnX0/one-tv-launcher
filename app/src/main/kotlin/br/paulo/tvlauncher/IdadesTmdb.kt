@@ -106,13 +106,13 @@ object IdadesTmdb {
             if (espera > 0) Thread.sleep(espera)
             val r = runCatching {
                 if (usarTmdb) ServicosContas.pedir(if (serie) Classificacao.urlSerie(k, id) else Classificacao.urlFilme(k, id), InfoExterna.tmdbCabecalhos(k, agente))
-                else ServicosContas.pedir(TraktFicha.urlPorTmdb(id, serie), ServicosFilmes.traktCabecalhos(k, BuildConfig.VERSION_CODE))
+                else ServicosContas.pedir(TraktDetails.urlPorTmdb(id, serie), ServicosFilmes.traktCabecalhos(k, BuildConfig.VERSION_CODE))
             }
                 .onFailure { Log.w(TAG, "classificar: ${it.javaClass.simpleName}") }.getOrNull() ?: break   // sem rede: para e tenta na próxima
             if (r.codigo == 429) break
             if (r.codigo == 404) { achados[id] = Classificacao.SEM; continue }
             if (r.codigo !in 200..299) continue
-            (if (!usarTmdb) TraktFicha.idade(r.corpo, serie) else if (serie) Classificacao.lerSerie(r.corpo) else Classificacao.lerFilme(r.corpo))
+            (if (!usarTmdb) TraktDetails.idade(r.corpo, serie) else if (serie) Classificacao.lerSerie(r.corpo) else Classificacao.lerFilme(r.corpo))
                 ?.let { achados[id] = it }
         }
         if (achados.isEmpty()) return 0

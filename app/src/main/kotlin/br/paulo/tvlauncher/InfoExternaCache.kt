@@ -179,33 +179,37 @@ object InfoExternaCache {
         if (chaves().traktId.isBlank()) return guardado(app, chave) ?: Guardado()
         val agora = System.currentTimeMillis()
         var g = guardado(app, chave) ?: Guardado()
-        val (lingua, pais) = TraktFicha.idioma()
+        val (lingua, pais) = TraktDetails.idioma()
         val doXtream = tmdbConhecido?.takeIf { it !in g.recusados }
         if (doXtream != null && doXtream != g.tmdb) g = mudar(app, chave) { it.copy(tmdb = doXtream, detalhe = null, detalheEm = 0, traktNota = null, traktEm = 0, simkl = null, simklNota = null, simklEm = 0) }
         if (g.tmdb == null && agora - g.buscaEm > BUSCA_DE_NOVO_MS) {
             val limpo = LegendaExterna.nomeDeBusca(Vod.nomeLimpo(nome)).ifBlank { Vod.nomeLimpo(nome) }
-            val achados = trakt(TraktFicha.urlBusca(limpo, ano, serie))?.let { TraktFicha.lerBusca(it, serie) }.orEmpty()
-                .filter { it.tmdb !in g.recusados }
-            var achado = InfoExterna.escolher(TraktFicha.candidatos(achados), Vod.nomeLimpo(nome), ano, g.recusados)?.id
-            if (achado == null && lingua != "en") {
+            val recusados = g.recusados
+            fun procurar(anoBusca: Int?): Int? {
+                val achados = trakt(TraktDetails.urlBusca(limpo, anoBusca, serie))?.let { TraktDetails.lerBusca(it, serie) }.orEmpty()
+                    .filter { it.tmdb !in recusados }
+                InfoExterna.escolher(TraktDetails.candidatos(achados), Vod.nomeLimpo(nome), anoBusca, recusados)?.id?.let { return it }
+                if (lingua == "en") return null
                 val alvo = Idioma.chaveTitulo(Vod.nomeLimpo(nome))
-                achado = achados.filter { ano == null || it.ano == null || kotlin.math.abs(it.ano - ano) <= 1 }.take(3).firstOrNull { a ->
-                    val t = trakt(TraktFicha.urlTraducao(a.trakt, serie, lingua))?.let { TraktFicha.lerTraducao(it, pais) }
+                return achados.filter { anoBusca == null || it.ano == null || kotlin.math.abs(it.ano - anoBusca) <= 1 }.take(3).firstOrNull { a ->
+                    val t = trakt(TraktDetails.urlTraducao(a.trakt, serie, lingua))?.let { TraktDetails.lerTraducao(it, pais) }
                     t != null && Idioma.chaveTitulo(t.first) == alvo
                 }?.tmdb
             }
+            // Ano errado na lista do IPTV (relançamento, ano da cópia) é comum: sem nada com o ano, tenta sem ele, como o TMDB.
+            val achado = procurar(ano) ?: if (ano != null) procurar(null) else null
             g = mudar(app, chave) { it.copy(tmdb = achado, buscaEm = if (achado == null) agora else 0) }
         }
         val id = g.tmdb ?: return g
         if (InfoExterna.vencido(g.detalheEm, agora, g.detalhe?.noAr == true)) runCatching {
-            val item = trakt(TraktFicha.urlPorTmdb(id, serie))?.let { TraktFicha.lerPorTmdb(it, serie) } ?: return@runCatching
-            val t = TraktFicha.traktDe(item) ?: return@runCatching
+            val item = trakt(TraktDetails.urlPorTmdb(id, serie))?.let { TraktDetails.lerPorTmdb(it, serie) } ?: return@runCatching
+            val t = TraktDetails.traktDe(item) ?: return@runCatching
             synchronized(traktIds) { traktIds[InfoExterna.chaveTmdb(id, serie)] = t }
-            val traducao = if (lingua == "en") null else trakt(TraktFicha.urlTraducao(t, serie, lingua))?.let { TraktFicha.lerTraducao(it, pais) }
-            val pessoas = trakt(TraktFicha.urlPessoas(t, serie))?.let { TraktFicha.lerPessoas(it) } ?: (emptyList<String>() to "")
-            val proximo = if (serie) trakt(TraktFicha.urlProximo(t))?.let { TraktFicha.lerProximo(it) } else null
-            val temporadas = if (serie) trakt(TraktFicha.urlTemporadas(t))?.let { TraktFicha.lerTemporadas(it) } ?: 0 else 0
-            val d = TraktFicha.detalhe(id, item, serie, traducao, pessoas, proximo, temporadas)
+            val traducao = if (lingua == "en") null else trakt(TraktDetails.urlTraducao(t, serie, lingua))?.let { TraktDetails.lerTraducao(it, pais) }
+            val pessoas = trakt(TraktDetails.urlPessoas(t, serie))?.let { TraktDetails.lerPessoas(it) } ?: (emptyList<String>() to "")
+            val proximo = if (serie) trakt(TraktDetails.urlProximo(t))?.let { TraktDetails.lerProximo(it) } else null
+            val temporadas = if (serie) trakt(TraktDetails.urlTemporadas(t))?.let { TraktDetails.lerTemporadas(it) } ?: 0 else 0
+            val d = TraktDetails.detalhe(id, item, serie, traducao, pessoas, proximo, temporadas)
             g = mudar(app, chave) { it.copy(detalhe = d, detalheEm = agora, imdb = d.imdb.ifBlank { it.imdb }) }
         }.onFailure { Log.w(TAG, "ficha Trakt: ${it.javaClass.simpleName}") }
         return guardado(app, chave) ?: g
@@ -217,7 +221,7 @@ object InfoExternaCache {
     private fun traktDaSerie(tmdb: Int): Int? {
         val k = InfoExterna.chaveTmdb(tmdb, true)
         synchronized(traktIds) { traktIds[k]?.let { return it } }
-        val t = trakt(TraktFicha.urlPorTmdb(tmdb, true))?.let { TraktFicha.traktDe(TraktFicha.lerPorTmdb(it, true)) } ?: return null
+        val t = trakt(TraktDetails.urlPorTmdb(tmdb, true))?.let { TraktDetails.traktDe(TraktDetails.lerPorTmdb(it, true)) } ?: return null
         synchronized(traktIds) { traktIds[k] = t }
         return t
     }
@@ -276,10 +280,10 @@ object InfoExternaCache {
         val chave = "ep-trakt:$serie:$temporada:$numero"
         synchronized(pedidos) { @Suppress("UNCHECKED_CAST") (pedidos[chave] as? Pair<String, String>)?.let { return it } }
         val t = traktDaSerie(serie) ?: return null
-        val (lingua, pais) = TraktFicha.idioma()
-        val corpo = trakt(TraktFicha.urlEpisodio(t, temporada, numero)) ?: return null
-        val traducao = if (lingua == "en") null else trakt(TraktFicha.urlTraducaoEpisodio(t, temporada, numero, lingua))?.let { TraktFicha.lerTraducao(it, pais) }
-        val v = TraktFicha.lerEpisodio(corpo, traducao) ?: return null
+        val (lingua, pais) = TraktDetails.idioma()
+        val corpo = trakt(TraktDetails.urlEpisodio(t, temporada, numero)) ?: return null
+        val traducao = if (lingua == "en") null else trakt(TraktDetails.urlTraducaoEpisodio(t, temporada, numero, lingua))?.let { TraktDetails.lerTraducao(it, pais) }
+        val v = TraktDetails.lerEpisodio(corpo, traducao) ?: return null
         synchronized(pedidos) { pedidos[chave] = v }
         return v
     }
@@ -463,14 +467,19 @@ object InfoExternaCache {
         val r = HashMap<Pair<Boolean, Int>, InfoExterna.SimklDoArquivo>()
         val cab = mapOf("User-Agent" to ServicosFilmes.agente(versao), "Accept" to "application/json")
         for ((caminho, serie) in InfoExterna.ARQUIVOS_SIMKL) {
-            val resp = runCatching { ServicosContas.pedir(ServicosFilmes.simklUrlArquivo(caminho, cliente, versao), cab, maxBytes = 6_000_000) }.getOrNull()
+            val resp = runCatching { ServicosContas.pedir(ServicosFilmes.simklUrlArquivo(caminho, cliente, versao), cab, maxBytes = MAX_ARQUIVO_SIMKL) }.getOrNull()
             if (resp == null || resp.codigo !in 200..299) { Log.w(TAG, "Simkl arquivo $caminho: ${resp?.codigo}"); continue }
+            // lerAte corta calado no limite: arquivo maior vira JSON quebrado e cai inteiro. Avisa para o limite ser revisto.
+            if (resp.corpo.length >= MAX_ARQUIVO_SIMKL / 2 && resp.corpo.toByteArray().size >= MAX_ARQUIVO_SIMKL) {
+                Log.w(TAG, "Simkl arquivo $caminho passou de $MAX_ARQUIVO_SIMKL bytes: ignorado"); continue
+            }
             for ((k, v) in InfoExterna.lerArquivoSimkl(resp.corpo, serie)) r.putIfAbsent(k, v)
         }
         return r
     }
 
     private const val MAX_SIMKL_POR_NOITE = 400
+    private const val MAX_ARQUIVO_SIMKL = 6_000_000
 
     /** Apaga a nota do Simkl de todos os títulos (fica o id, que é só identificador). Sem rede. */
     fun esquecerSimkl(ctx: Context) {

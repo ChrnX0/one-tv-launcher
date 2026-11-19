@@ -89,7 +89,9 @@ object ServicosContas {
         if (sessao(s)?.estado == EstadoLogin.ESPERANDO) return Estado(s, Situacao.ENTRANDO)
         val c = conta(ctx, s)
         return when {
-            s == Servico.TMDB -> Estado(s, Situacao.CONECTADO)   // o TMDB não tem conta da pessoa: basta a chave do app
+            // O TMDB não tem conta da pessoa: basta a chave do app, o contrato e o plano (DataSources). Sem isso as fichas
+            // vêm do Trakt e a linha some (não diz "ativo" nem mostra a atribuição de uma fonte que não está em uso).
+            s == Servico.TMDB -> Estado(s, if (DataSources.tmdb(ctx)) Situacao.CONECTADO else Situacao.INDISPONIVEL)
             s == Servico.OPENSUBTITLES -> Estado(s, if (c != null && c.usuario.isNotBlank()) Situacao.CONECTADO else Situacao.DESLIGADO, c?.usuario.orEmpty())
             c != null -> Estado(s, Situacao.CONECTADO, c.usuario)
             else -> Estado(s, Situacao.DESLIGADO)

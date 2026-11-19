@@ -26,7 +26,7 @@ object DataSources {
     const val WEATHERAPI_ENABLED = true
     /** TMDB comercial: só com contrato escrito (themoviedb.org/api-terms-of-use). A chave pessoal de hoje não serve. */
     const val TMDB_LICENSED = false
-    /** Simkl: nota para quem não conectou a conta exige a licença paga (Andrew, Discord, 17/11/2026). */
+    /** Simkl: nota para quem não conectou a conta exige a licença paga (Simkl, 17/11/2026). */
     const val SIMKL_LICENSED = false
 
     enum class Weather { MET_NORWAY, WEATHERAPI, OPEN_METEO }
@@ -60,6 +60,7 @@ object DataSources {
         when (weather(ctx)) {
             Weather.OPEN_METEO -> null
             Weather.WEATHERAPI -> WeatherApiSource.previsao(lat, lon, desdeAgora, dias)
+                ?.let { wa -> if (WeatherApiSource.dias(wa) >= dias) wa else WeatherApiSource.completar(wa, ClimaMet.previsao(lat, lon, desdeAgora, dias)) }
                 ?: ClimaMet.previsao(lat, lon, desdeAgora, dias)
             Weather.MET_NORWAY -> ClimaMet.previsao(lat, lon, desdeAgora, dias)
         }

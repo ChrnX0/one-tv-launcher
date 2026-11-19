@@ -24,3 +24,16 @@ class_name = "Pairing"
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["Mailbox", "Pairing"]
+
+# Limites da previsão do tempo (src/weather.js). Rate Limiting dos Workers: contadores por borda, period 10 ou 60 s.
+# Por IP: uma TV pede no máximo umas poucas vezes por hora; 30/min sobra para uma casa com várias TVs atrás do mesmo IP.
+[[ratelimits]]
+name = "WEATHER_IP_LIMITER"
+namespace_id = "1001"
+simple = { limit = 30, period = 60 }
+
+# Chamadas à WeatherAPI (fora do cache), todas as TVs juntas: 20/min ~ 864 mil/mês, abaixo do 1 milhão/mês do plano Free.
+[[ratelimits]]
+name = "WEATHER_UPSTREAM_LIMITER"
+namespace_id = "1002"
+simple = { limit = 20, period = 60 }
