@@ -1076,8 +1076,12 @@ class FilmesActivity : Activity() {
         if (filtro.naoVistos) getString(R.string.filmes_filtro_nao_vistos_curto) else null,
     ).joinToString(" · ")
 
-    /** As listas de fora escolhidas, como opção do Filtro: chave da linha da coluna ("x:…") e nome. */
-    private fun listasDoFiltro(): List<Pair<String, String>> = listasFora.map { (l, _) -> "x:${l.chave}" to l.nome }
+    /**
+     * As listas de fora como opção do Filtro: chave da linha da coluna ("x:…") e nome. Só as que têm filme no catálogo
+     * (as mesmas linhas da coluna, já em ordem alfabética): listas de séries escolhidas no MDBList apareciam aqui com 0
+     * filmes (visto na Sala, 19/11/2026).
+     */
+    private fun listasDoFiltro(): List<Pair<String, String>> = itens.filter { it.chave.startsWith("x:") }.map { it.chave to it.nome }
 
     private fun nomeListaFiltro(): String? = filtro.lista?.let { k -> listasDoFiltro().firstOrNull { it.first == k }?.second ?: "?" }
 
