@@ -11,8 +11,11 @@
 //   GET    /v1/dns/txt/<id>        pública: as máquinas de DNS leem o desafio daqui
 //   GET    /v1/health              pública
 //   GET    /v1/addons/recommended  pública: lista curada de add-ons (src/addons.js)
+//   GET    /v1/podcasts/search     pública: busca no Podcast Index (src/podcasts.js), ?q=&lang=&max=
+//   GET    /v1/podcasts/trending   pública: em alta no idioma, ?lang=&max=
 import { verifySignature, ID_RE, CODE_RE, newCode } from './rules.js';
 import { recommendedBody } from './addons.js';
+import { handlePodcasts } from './podcasts.js';
 export { Mailbox } from './mailbox.js';
 export { Pairing } from './pairing.js';
 
@@ -34,6 +37,9 @@ export default {
         headers: { 'content-type': 'application/json', 'cache-control': 'public, max-age=3600' },
       });
     }
+
+    const podcasts = path.match(/^\/v1\/podcasts\/(search|trending)$/);
+    if (podcasts && req.method === 'GET') return handlePodcasts(podcasts[1], url, env);
 
     const publicTxt = path.match(/^\/v1\/dns\/txt\/([a-z2-7]{20})$/);
     if (publicTxt && req.method === 'GET') {
