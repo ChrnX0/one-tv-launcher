@@ -564,7 +564,6 @@
     <string name="home_dest_filme_ultimo">Filmes · o último que abriu</string>
     <string name="home_dest_serie">Séries · está no %1$s</string>
     <string name="home_dest_tv">TV · canal %1$d</string>
-    <string name="home_faltam">faltam %1$s</string>
     <string name="rede_titulo">Na rede</string>
     <string name="rede_procurando">A procurar servidores de mídia na rede…</string>
     <string name="rede_nenhum">Nenhum servidor de mídia ligado na rede agora. Adicione um abaixo: Plex e Jellyfin entram com a sua conta; pasta do PC ou do NAS, com o endereço.</string>
@@ -757,6 +756,9 @@ AS\\Filmes).</string>
     <string name="legenda_conta_sim">configurada</string>
     <string name="legenda_conta_nao">não configurada</string>
     <string name="tempo_faltam">faltam %1$s</string>
+    <string name="tempo_falta_um">falta %1$s</string>
+    <string name="serie_ep_longo">Temporada %1$d, episódio %2$d</string>
+    <string name="ficha_continuar_de">de %1$s</string>
     <string name="tempo_termina_as">termina às %1$s</string>
     <string name="tempo_episodios_vistos">%1$s episódios</string>
     <string name="tempo_x_de_y">%1$d de %2$d</string>

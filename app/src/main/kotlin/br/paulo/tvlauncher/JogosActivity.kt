@@ -272,14 +272,15 @@ class JogosActivity : Activity() {
             Jogos.Rede.OK -> R.string.jogos_chip_ok
             Jogos.Rede.FRACA -> R.string.jogos_chip_fraca
             Jogos.Rede.SEM -> R.string.jogos_chip_sem
-        }) + (m.ms?.let { " · $it ms" } ?: "")
+        }) // sem "· 16 ms": número de rede é jargão para quem joga no sofá (crítica de design 19/11/2026)
         val sem = semana
         val linhas = listOfNotNull(
             sem?.ms?.takeIf { it > 0 }?.let { duracao(it) + " · " + getString(R.string.jogos_semana_jogado) },
             sem?.topo?.takeIf { (sem.ms) > 0 }?.let { getString(R.string.jogos_semana_mais) + ": " + it },
         ).joinToString("\n")
         return CruzOuvir.Tocando(titulo, linhas, "", COR_JOGAR, "", false, null, null, false,
-            aoVivo = getString(R.string.jogos_semana).uppercase())
+            // O rótulo diz o que está embaixo: "ESTA SEMANA" só quando há horas jogadas; senão o cartão é só a rede.
+            aoVivo = getString(if (linhas.isNotEmpty()) R.string.jogos_semana else R.string.cfg_sec_rede).uppercase())
     }
 
     private fun parear() {

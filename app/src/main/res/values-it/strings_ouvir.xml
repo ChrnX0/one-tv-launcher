@@ -24,7 +24,6 @@
     <string name="pod_desligado">disattivo</string>
     <string name="pod_dica_pular">Sulla riga in riproduzione, ◀ ▶ tornano indietro di 15 s / avanzano di 30 s</string>
     <string name="pod_continuar">Continua</string>
-    <string name="pod_faltam">mancano %s</string>
     <string name="pod_novos">Nuovi episodi</string>
     <string name="pod_video">video</string>
     <string name="pod_meus">I miei podcast</string>

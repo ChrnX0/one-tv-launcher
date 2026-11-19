@@ -4,9 +4,9 @@
     <string name="dormir_titulo">취침 시간</string>
     <string name="dormir_texto">지금은 이 앱을 사용할 수 없습니다. 안녕히 주무세요!</string>
     <string name="dormir_pin">취침 시간 변경 시 PIN</string>
-    <string name="dormir_inicio">취침 시간: 시작</string>
-    <string name="dormir_fim">취침 시간: 종료</string>
-    <string name="dormir_teto">취침 시간: 최대 볼륨</string>
+    <string name="dormir_inicio">시작</string>
+    <string name="dormir_fim">종료</string>
+    <string name="dormir_teto">최대 볼륨</string>
     <string name="recado_link_titulo">메시지</string>
     <string name="extras_HORA_DORMIR">취침 시간(허용된 앱만, 볼륨 제한)</string>
     <string name="extras_TOCANDO_AGORA">지금 재생 중(재생 중인 항목 읽기)</string>
@@ -18,11 +18,11 @@
     <string name="extras_consumo">앱별 인터넷 사용량(7일)</string>
     <string name="extras_tocando">지금 재생 중</string>
     <string name="extras_aguarde">잠시만 기다려 주세요…</string>
-    <string name="dormir_dia">취침 시간: 요일</string>
+    <string name="dormir_dia">요일</string>
     <string name="dormir_todos">전체(기본값)</string>
     <string name="dormir_proprio">개별 일정</string>
     <string name="dormir_segue">기본값 따름</string>
-    <string name="dormir_voltar_padrao">취침 시간: 이 요일을 기본값으로 되돌리기</string>
+    <string name="dormir_voltar_padrao">이 요일을 기본값으로 되돌리기</string>
     <string name="extras_VER_TELA">Claude가 화면 보기(MCP ver_tela, TV에 알림 표시)</string>
     <string name="casa_titulo">홈</string>
     <string name="casa_sem_config">휴대폰 패널에서 Home Assistant를 설정하세요: 부가 기능 탭, 홈 카드.</string>

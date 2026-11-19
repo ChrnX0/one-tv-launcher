@@ -564,7 +564,6 @@
     <string name="home_dest_filme_ultimo">Filmler · en son açtığınız</string>
     <string name="home_dest_serie">Diziler · %1$s bölümündesiniz</string>
     <string name="home_dest_tv">TV · kanal %1$d</string>
-    <string name="home_faltam">%1$s kaldı</string>
     <string name="rede_titulo">Ağ</string>
     <string name="rede_procurando">Ağda medya sunucuları aranıyor…</string>
     <string name="rede_nenhum">Şu an açık medya sunucusu yok. Aşağıdan ekleyin: Plex ve Jellyfin hesabınızı kullanır; bilgisayar veya NAS klasörü adresini kullanır.</string>
@@ -757,6 +756,9 @@ AS\\Filmler).</string>
     <string name="legenda_conta_sim">ayarlandı</string>
     <string name="legenda_conta_nao">ayarlanmadı</string>
     <string name="tempo_faltam">%1$s kaldı</string>
+    <string name="tempo_falta_um">%1$s kaldı</string>
+    <string name="serie_ep_longo">Sezon %1$d, bölüm %2$d</string>
+    <string name="ficha_continuar_de">%1$s</string>
     <string name="tempo_termina_as">%1$s’de biter</string>
     <string name="tempo_episodios_vistos">%1$s bölüm</string>
     <string name="tempo_x_de_y">%1$d / %2$d</string>

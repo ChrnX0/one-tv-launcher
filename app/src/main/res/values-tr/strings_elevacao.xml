@@ -11,7 +11,7 @@
     <string name="elv_pilar_controle">Her yerden kontrol</string>
     <string name="elv_pilar_todos">Herkes kullanabilir</string>
     <string name="elv_pilar_instala">Kendi kurulur, kendi onarılır</string>
-    <string name="elv_prom_liga">Ana ekran 1 saniyeden kısa sürede hazır; 30 günde hiç çökme yok</string>
+    <string name="elv_prom_liga">Ana ekran 1 saniyeden kısa sürede hazır</string>
     <string name="elv_prom_ao_vivo">Kanal değiştirmek tuştan görüntüye 1,5 saniyeden kısa sürer</string>
     <string name="elv_prom_player">Her dosyayı oynatır; uğraşmadan doğru altyazı</string>
     <string name="elv_prom_casa">Çalar saat her seferinde zamanında çalar</string>

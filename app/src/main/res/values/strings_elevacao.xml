@@ -11,7 +11,7 @@
     <string name="elv_pilar_controle">Control from anywhere</string>
     <string name="elv_pilar_todos">Anyone can use it</string>
     <string name="elv_pilar_instala">Sets itself up and fixes itself</string>
-    <string name="elv_prom_liga">Home screen ready in under 1 second; no crashes in 30 days</string>
+    <string name="elv_prom_liga">Home screen ready in under 1 second</string>
     <string name="elv_prom_ao_vivo">Changing channel takes under 1.5 seconds, from the key to the picture</string>
     <string name="elv_prom_player">Plays any file; right subtitles without fiddling</string>
     <string name="elv_prom_casa">The alarm rings on time, every time</string>

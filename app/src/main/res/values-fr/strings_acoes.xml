@@ -56,7 +56,7 @@
     <string name="aut_cfg_det">Heures, boutons de la télécommande, événements et liens de scène</string>
     <string name="aut_horario">À une heure donnée</string>
     <string name="aut_botao">Quand on appuie sur un bouton</string>
-    <string name="aut_evento">Quand quelque chose arrive (lance une scène)</string>
+    <string name="aut_evento">Quand quelque chose arrive</string>
     <string name="aut_link">Par lien</string>
     <string name="aut_link_det">Créer et modifier dans le panneau web › Extras › Scènes</string>
     <string name="ev_midia_tocou">Un film ou une vidéo a commencé</string>

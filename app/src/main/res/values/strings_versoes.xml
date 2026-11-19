@@ -17,6 +17,9 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>Clearer text: “Season 1, episode 2”, “Continue from 19 min” on the movie page, Extras in sections, the Scoreboard without a repeated line</item>
+        <item>Errors with a way out: without network, the phone and move-from-another-TV screens show “Try again”; so does the Forecast with no data; in Diagnostics, a failing Wi-Fi opens Wi-Fi settings</item>
+        <item>Help: the QR moved out of the clock corner to beside the text; an app’s menu covers the home screen behind it better</item>
         <item>The LG now turns off together when the Chromecast falls asleep on its own after sitting idle (it refused the HDMI turn-off command)</item>
         <item>All apps: the same header as the Radio and Games screens, with “In the grid: X · hidden: Y”; wallpaper plugins no longer show as apps</item>
         <item>Radio, Podcasts and Games: the list name sits right above the first item; the “Live” card leaves when the focused station is the one playing</item>
@@ -37,6 +40,9 @@
         <item>Alarm clock: the sound always starts low and rises slowly, over at least a minute and a half, even with “Ring: direct”, so it never starts at full volume</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>textos_claros</item>
+        <item>erro_tentar</item>
+        <item>ajuda_qr</item>
         <item>lg_desliga_junto</item>
         <item>som_despertador</item>
         <item>todos_apps_cabecalho</item>
@@ -54,6 +60,9 @@
         <item>ilha_central</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Clear text</item>
+        <item>Try again</item>
+        <item>Help QR</item>
         <item>LG turns off too</item>
         <item>Alarm sound</item>
         <item>All apps</item>
@@ -71,6 +80,9 @@
         <item>Hold ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>For a series in Continue, does the home screen say “Season 1, episode 2” (not “T1 E2”), and a half-watched movie show “Continue · from N min” on its page?</item>
+        <item>Open the Forecast with no internet (or wait for the source to fail): does a focused “Try again” button appear?</item>
+        <item>In Help, is the QR beside the text, away from the clock, with the title at the same height as other screens?</item>
         <item>Leave the TV idle until the Chromecast falls asleep: does the LG turn off too (if it was on the Chromecast input)?</item>
         <item>On an alarm, does the sound start very low and take more than a minute to reach normal volume?</item>
         <item>In Apps › All apps, does the title show the count beside it, with no Projectivy plugin in the grid?</item>

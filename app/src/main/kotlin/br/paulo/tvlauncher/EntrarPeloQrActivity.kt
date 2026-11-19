@@ -110,8 +110,11 @@ class EntrarPeloQrActivity : Activity() {
             geradoEm = 0L
             qr.visibility = View.INVISIBLE
             texto.text = getString(if (primeira) R.string.pc_sem_rede else R.string.qr_painel_fora)
+            // Sem rede não há código para "gerar outro": o botão diz o que de fato faz (crítica de design 19/11/2026).
+            outro.text = getString(R.string.tentar_de_novo)
             return
         }
+        outro.text = getString(R.string.qr_gerar_outro)
         geradoEm = System.currentTimeMillis()
         qr.setImageBitmap(try { QrCodigo.bitmap(link, dp(320)) } catch (e: Exception) { null })
         qr.visibility = View.VISIBLE

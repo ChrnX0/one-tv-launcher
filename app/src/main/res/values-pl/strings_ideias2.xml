@@ -4,9 +4,9 @@
     <string name="dormir_titulo">Pora snu</string>
     <string name="dormir_texto">Ta aplikacja nie jest teraz dozwolona. Dobranoc!</string>
     <string name="dormir_pin">PIN do zmiany pory snu</string>
-    <string name="dormir_inicio">Pora snu: początek</string>
-    <string name="dormir_fim">Pora snu: koniec</string>
-    <string name="dormir_teto">Pora snu: maks. głośność</string>
+    <string name="dormir_inicio">Początek</string>
+    <string name="dormir_fim">Koniec</string>
+    <string name="dormir_teto">Maks. głośność</string>
     <string name="recado_link_titulo">Wiadomość</string>
     <string name="extras_HORA_DORMIR">Pora snu (tylko dozwolone aplikacje, ograniczona głośność)</string>
     <string name="extras_TOCANDO_AGORA">Teraz odtwarzane (odczytuje, co gra)</string>
@@ -18,11 +18,11 @@
     <string name="extras_consumo">Internet według aplikacji (7 dni)</string>
     <string name="extras_tocando">Teraz odtwarzane</string>
     <string name="extras_aguarde">Chwileczkę…</string>
-    <string name="dormir_dia">Pora snu: dzień</string>
+    <string name="dormir_dia">Dzień</string>
     <string name="dormir_todos">wszystkie (domyślnie)</string>
     <string name="dormir_proprio">własny harmonogram</string>
     <string name="dormir_segue">według domyślnego</string>
-    <string name="dormir_voltar_padrao">Pora snu: przywróć domyślne dla tego dnia</string>
+    <string name="dormir_voltar_padrao">Przywróć domyślne dla tego dnia</string>
     <string name="extras_VER_TELA">Pozwól Claude widzieć ekran (MCP ver_tela; telewizor pokazuje komunikat)</string>
     <string name="casa_titulo">Dom</string>
     <string name="casa_sem_config">Skonfiguruj Home Assistant w panelu na telefonie: zakładka Dodatki, karta Dom.</string>

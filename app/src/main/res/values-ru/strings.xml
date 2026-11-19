@@ -564,7 +564,6 @@
     <string name="home_dest_filme_ultimo">Фильмы · последний открытый</string>
     <string name="home_dest_serie">Сериалы · вы на %1$s</string>
     <string name="home_dest_tv">ТВ · канал %1$d</string>
-    <string name="home_faltam">осталось %1$s</string>
     <string name="rede_titulo">Сеть</string>
     <string name="rede_procurando">Поиск медиасерверов в сети…</string>
     <string name="rede_nenhum">Сейчас нет включённых медиасерверов. Добавьте сервер ниже: Plex и Jellyfin используют ваш аккаунт, папка ПК или NAS — свой адрес.</string>
@@ -757,6 +756,9 @@ AS\\Фильмы).</string>
     <string name="legenda_conta_sim">настроено</string>
     <string name="legenda_conta_nao">не настроено</string>
     <string name="tempo_faltam">осталось %1$s</string>
+    <string name="tempo_falta_um">осталось %1$s</string>
+    <string name="serie_ep_longo">Сезон %1$d, серия %2$d</string>
+    <string name="ficha_continuar_de">с %1$s</string>
     <string name="tempo_termina_as">заканчивается в %1$s</string>
     <string name="tempo_episodios_vistos">серий: %1$s</string>
     <string name="tempo_x_de_y">%1$d из %2$d</string>

@@ -164,6 +164,7 @@
     <string name="bc_bloqueado_cat">über die Kategorie gesperrt</string>
     <string name="bc_bloqueado">gesperrt</string>
     <string name="qr_gerar_outro">Neuer Code</string>
+    <string name="tentar_de_novo">Erneut versuchen</string>
     <string name="qr_fechar">Schließen</string>
     <string name="qr_painel_fora">Das Panel läuft nicht.\nSchalte es ein unter Launcher-Einstellungen &gt; Fernzugriff &gt; Panel (braucht eine PIN).</string>
     <string name="qr_pronto">Fertig</string>

@@ -242,6 +242,10 @@ class PrevisaoActivity : Activity() {
         coluna.removeAllViews()
         if (d == null) {
             coluna.addView(texto(20f, Estilo.TEXTO).apply { text = getString(R.string.pv_sem) })
+            // Erro com saída (crítica de design 19/11/2026): antes era só a frase solta, sem nada para apertar.
+            val tentar = Estilo.botao(this, getString(R.string.tentar_de_novo)).apply { setOnClickListener { recreate() } }
+            coluna.addView(tentar, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { topMargin = dp(Estilo.E3) })
+            tentar.requestFocus()
             // Sem rede o "Bom dia" ficava mudo: a saudação e a agenda não dependem da previsão, então fala o que tem.
             if (voz != null) falar(FalaBoletim.frase(bomDia, saudacao(), null, agendaHoje, getString(R.string.pv_sem)))
             return

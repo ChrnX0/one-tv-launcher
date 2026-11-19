@@ -11,7 +11,7 @@
     <string name="elv_pilar_controle">Kendali dari mana saja</string>
     <string name="elv_pilar_todos">Siapa pun bisa memakai</string>
     <string name="elv_pilar_instala">Memasang dan memperbaiki diri sendiri</string>
-    <string name="elv_prom_liga">Layar utama siap dalam kurang dari 1 detik; tanpa crash selama 30 hari</string>
+    <string name="elv_prom_liga">Layar utama siap dalam kurang dari 1 detik</string>
     <string name="elv_prom_ao_vivo">Ganti saluran kurang dari 1,5 detik, dari tombol sampai gambar</string>
     <string name="elv_prom_player">Memutar file apa pun; subtitle tepat tanpa diatur</string>
     <string name="elv_prom_casa">Alarm berbunyi tepat waktu, setiap kali</string>

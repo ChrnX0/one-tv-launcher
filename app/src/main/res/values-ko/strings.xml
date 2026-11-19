@@ -564,7 +564,6 @@
     <string name="home_dest_filme_ultimo">영화 · 마지막으로 연 영화</string>
     <string name="home_dest_serie">시리즈 · 현재 %1$s</string>
     <string name="home_dest_tv">TV · 채널 %1$d</string>
-    <string name="home_faltam">%1$s 남음</string>
     <string name="rede_titulo">네트워크</string>
     <string name="rede_procurando">네트워크에서 미디어 서버를 찾는 중…</string>
     <string name="rede_nenhum">지금 켜진 미디어 서버가 없습니다. 아래에서 추가하세요. Plex와 Jellyfin은 계정을 사용하고, PC나 NAS 폴더는 주소를 사용합니다.</string>
@@ -757,6 +756,9 @@ AS\\Movies).</string>
     <string name="legenda_conta_sim">설정됨</string>
     <string name="legenda_conta_nao">설정 안 됨</string>
     <string name="tempo_faltam">%1$s 남음</string>
+    <string name="tempo_falta_um">%1$s 남음</string>
+    <string name="serie_ep_longo">시즌 %1$d %2$d화</string>
+    <string name="ficha_continuar_de">%1$s부터</string>
     <string name="tempo_termina_as">%1$s 종료</string>
     <string name="tempo_episodios_vistos">에피소드 %1$s개</string>
     <string name="tempo_x_de_y">%1$d / %2$d</string>

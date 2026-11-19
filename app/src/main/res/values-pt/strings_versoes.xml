@@ -14,6 +14,9 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Textos mais claros: “falta 1 min”, “Temporada 1, episódio 2”, “Continuar de 19 min” na ficha, Extras em seções, Placar sem frase repetida</item>
+        <item>Erros com saída: sem rede, a tela do celular e a de trazer de outra TV mostram “Tentar de novo”; a Previsão sem dados também; no Diagnóstico, o Wi-Fi com falha abre o Wi-Fi</item>
+        <item>Ajuda: o QR saiu do canto do relógio e fica ao lado do texto; o menu de um app cobre melhor a tela inicial atrás dele</item>
         <item>A LG agora desliga junto quando o Chromecast dorme sozinho por ficar parado (ela recusava o comando de desligar do HDMI)</item>
         <item>Todos os apps: o mesmo cabeçalho das telas Rádio e Jogos, com “Na grade: X · ocultos: Y”; plugin de fundo não aparece mais como app</item>
         <item>Rádio, Podcasts e Jogos: o nome da lista fica junto do primeiro item; o cartão “Ao vivo” sai quando a rádio em foco é a que toca</item>
@@ -34,6 +37,9 @@
         <item>Despertador: o som sempre começa baixo e sobe devagar, por pelo menos 1 minuto e meio, mesmo com “Toque: direto”, para nunca começar no volume cheio</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Textos claros</item>
+        <item>Tentar de novo</item>
+        <item>QR da Ajuda</item>
         <item>LG desliga junto</item>
         <item>Som do despertador</item>
         <item>Todos os apps</item>
@@ -51,6 +57,9 @@
         <item>Segurar ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Numa série em Continuar, a tela inicial diz “Temporada 1, episódio 2” (não “T1 E2”), e um filme pela metade mostra “Continuar · de N min” na ficha?</item>
+        <item>Abra a Previsão sem internet (ou espere a fonte falhar): aparece o botão “Tentar de novo” com o foco nele?</item>
+        <item>Em Ajuda, o QR fica ao lado do texto, longe do relógio, e o título fica na mesma altura das outras telas?</item>
         <item>Deixe a TV parada até o Chromecast dormir sozinho: a LG apaga junto (se estava na entrada do Chromecast)?</item>
         <item>Num despertador, o som começa bem baixo e leva mais de um minuto para chegar ao volume normal?</item>
         <item>Em Aplicativos › Todos os apps, o título tem a conta ao lado e o plugin do Projectivy não aparece na grade?</item>

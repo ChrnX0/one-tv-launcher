@@ -64,7 +64,7 @@
     <string name="aut_cfg_det">Times, remote buttons, events and scene links</string>
     <string name="aut_horario">When it is time</string>
     <string name="aut_botao">When a button is pressed</string>
-    <string name="aut_evento">When something happens (runs a scene)</string>
+    <string name="aut_evento">When something happens</string>
     <string name="aut_link">By link</string>
     <string name="aut_link_det">Create and edit in the web panel › Extras › Scenes</string>
     <plurals name="aut_links">

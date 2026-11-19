@@ -164,6 +164,7 @@
     <string name="bc_bloqueado_cat">diblokir lewat kategori</string>
     <string name="bc_bloqueado">diblokir</string>
     <string name="qr_gerar_outro">Kode baru</string>
+    <string name="tentar_de_novo">Coba lagi</string>
     <string name="qr_fechar">Tutup</string>
     <string name="qr_painel_fora">Panel tidak berjalan.\nAktifkan di Setelan launcher &gt; Akses jarak jauh &gt; Panel (perlu PIN).</string>
     <string name="qr_pronto">Selesai</string>

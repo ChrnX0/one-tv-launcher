@@ -747,7 +747,8 @@ object Estilo {
             // Véu só do lado do painel: transparente à esquerda, quase opaco atrás do texto. O meio ficou mais forte
             // (19/11/2026, Sala): o ícone "Aplicativos" da cruz aparecia através de "Trocar ícone".
             background = GradientDrawable(if (rtl) GradientDrawable.Orientation.RIGHT_LEFT else GradientDrawable.Orientation.LEFT_RIGHT,
-                intArrayOf(0x00000000, 0x66000000, 0xE6080A10.toInt(), 0xF2080A10.toInt()))
+                // 19/11/2026 (crítica de design): ainda vazava; agora fica quase opaco já do meio da tela para a direita.
+                intArrayOf(0x00000000, 0x40000000, 0xE6080A10.toInt(), 0xF5080A10.toInt(), 0xF5080A10.toInt()))
             addView(painel, FrameLayout.LayoutParams(dp(ctx, LISTA_LARGURA), ViewGroup.LayoutParams.MATCH_PARENT, Gravity.END))
         }
         d.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)

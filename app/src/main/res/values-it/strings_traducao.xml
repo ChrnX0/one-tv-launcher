@@ -164,6 +164,7 @@
     <string name="bc_bloqueado_cat">bloccato per categoria</string>
     <string name="bc_bloqueado">bloccato</string>
     <string name="qr_gerar_outro">Nuovo codice</string>
+    <string name="tentar_de_novo">Riprova</string>
     <string name="qr_fechar">Chiudi</string>
     <string name="qr_painel_fora">Il pannello non è attivo.\nAttivalo in Impostazioni del launcher &gt; Accesso remoto &gt; Pannello (serve un PIN).</string>
     <string name="qr_pronto">Fatto</string>

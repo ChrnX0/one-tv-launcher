@@ -24,7 +24,6 @@
     <string name="pod_desligado">nonaktif</string>
     <string name="pod_dica_pular">Di baris yang diputar, ◀ ▶ mundur 15 dtk / maju 30 dtk</string>
     <string name="pod_continuar">Lanjutkan</string>
-    <string name="pod_faltam">sisa %s</string>
     <string name="pod_novos">Episode baru</string>
     <string name="pod_video">video</string>
     <string name="pod_meus">Podcast saya</string>

@@ -4,9 +4,9 @@
     <string name="dormir_titulo">Waktu tidur</string>
     <string name="dormir_texto">Aplikasi ini tidak diizinkan sekarang. Selamat tidur!</string>
     <string name="dormir_pin">PIN untuk mengubah waktu tidur</string>
-    <string name="dormir_inicio">Waktu tidur: mulai</string>
-    <string name="dormir_fim">Waktu tidur: berakhir</string>
-    <string name="dormir_teto">Waktu tidur: volume maksimum</string>
+    <string name="dormir_inicio">Mulai</string>
+    <string name="dormir_fim">Berakhir</string>
+    <string name="dormir_teto">Volume maksimum</string>
     <string name="recado_link_titulo">Pesan</string>
     <string name="extras_HORA_DORMIR">Waktu tidur (hanya aplikasi yang diizinkan, volume dibatasi)</string>
     <string name="extras_TOCANDO_AGORA">Sedang diputar (membacakan yang diputar)</string>
@@ -18,11 +18,11 @@
     <string name="extras_consumo">Internet per aplikasi (7 hari)</string>
     <string name="extras_tocando">Sedang diputar</string>
     <string name="extras_aguarde">Sebentar…</string>
-    <string name="dormir_dia">Waktu tidur: hari</string>
+    <string name="dormir_dia">Hari</string>
     <string name="dormir_todos">semua (bawaan)</string>
     <string name="dormir_proprio">jadwal sendiri</string>
     <string name="dormir_segue">ikut bawaan</string>
-    <string name="dormir_voltar_padrao">Waktu tidur: kembalikan hari ini ke bawaan</string>
+    <string name="dormir_voltar_padrao">Kembalikan hari ini ke bawaan</string>
     <string name="extras_VER_TELA">Izinkan Claude melihat layar (MCP ver_tela; TV menampilkan pemberitahuan)</string>
     <string name="casa_titulo">Rumah</string>
     <string name="casa_sem_config">Atur Home Assistant di panel ponsel: tab Ekstra, kartu Rumah.</string>

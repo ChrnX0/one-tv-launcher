@@ -164,6 +164,7 @@
     <string name="bc_bloqueado_cat">श्रेणी से ब्लॉक</string>
     <string name="bc_bloqueado">ब्लॉक</string>
     <string name="qr_gerar_outro">नया कोड</string>
+    <string name="tentar_de_novo">फिर से कोशिश करें</string>
     <string name="qr_fechar">बंद करें</string>
     <string name="qr_painel_fora">पैनल नहीं चल रहा।\nइसे लॉन्चर सेटिंग्स &gt; रिमोट एक्सेस &gt; पैनल में चालू करें (PIN चाहिए)।</string>
     <string name="qr_pronto">हो गया</string>

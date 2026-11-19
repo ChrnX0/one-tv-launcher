@@ -24,7 +24,6 @@
     <string name="pod_desligado">बंद</string>
     <string name="pod_dica_pular">चल रही पंक्ति पर ◀ ▶ से 15 सेकंड पीछे / 30 सेकंड आगे</string>
     <string name="pod_continuar">जारी रखें</string>
-    <string name="pod_faltam">%s बाकी</string>
     <string name="pod_novos">नए एपिसोड</string>
     <string name="pod_video">वीडियो</string>
     <string name="pod_meus">मेरे पॉडकास्ट</string>

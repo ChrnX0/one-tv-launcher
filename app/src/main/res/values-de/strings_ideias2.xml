@@ -4,9 +4,9 @@
     <string name="dormir_titulo">Schlafenszeit</string>
     <string name="dormir_texto">Diese App ist gerade nicht erlaubt. Gute Nacht!</string>
     <string name="dormir_pin">PIN zum Ändern der Schlafenszeit</string>
-    <string name="dormir_inicio">Schlafenszeit: Beginn</string>
-    <string name="dormir_fim">Schlafenszeit: Ende</string>
-    <string name="dormir_teto">Schlafenszeit: max. Lautstärke</string>
+    <string name="dormir_inicio">Beginn</string>
+    <string name="dormir_fim">Ende</string>
+    <string name="dormir_teto">Max. Lautstärke</string>
     <string name="recado_link_titulo">Nachricht</string>
     <string name="extras_HORA_DORMIR">Schlafenszeit (nur erlaubte Apps, begrenzte Lautstärke)</string>
     <string name="extras_TOCANDO_AGORA">Läuft gerade (liest, was spielt)</string>
@@ -18,11 +18,11 @@
     <string name="extras_consumo">Internet pro App (7 Tage)</string>
     <string name="extras_tocando">Läuft gerade</string>
     <string name="extras_aguarde">Einen Moment …</string>
-    <string name="dormir_dia">Schlafenszeit: Tag</string>
+    <string name="dormir_dia">Tag</string>
     <string name="dormir_todos">alle (Standard)</string>
     <string name="dormir_proprio">eigener Zeitplan</string>
     <string name="dormir_segue">folgt dem Standard</string>
-    <string name="dormir_voltar_padrao">Schlafenszeit: diesen Tag auf Standard zurücksetzen</string>
+    <string name="dormir_voltar_padrao">Diesen Tag auf Standard zurücksetzen</string>
     <string name="extras_VER_TELA">Claude den Bildschirm sehen lassen (MCP ver_tela; der Fernseher zeigt einen Hinweis)</string>
     <string name="casa_titulo">Zuhause</string>
     <string name="casa_sem_config">Richte Home Assistant im Handy-Panel ein: Tab Extras, Karte Zuhause.</string>

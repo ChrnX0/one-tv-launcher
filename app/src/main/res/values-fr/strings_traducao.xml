@@ -164,6 +164,7 @@
     <string name="bc_bloqueado_cat">bloquée par catégorie</string>
     <string name="bc_bloqueado">bloquée</string>
     <string name="qr_gerar_outro">Nouveau code</string>
+    <string name="tentar_de_novo">Réessayer</string>
     <string name="qr_fechar">Fermer</string>
     <string name="qr_painel_fora">Le panneau ne tourne pas.\nActivez-le dans Paramètres du launcher &gt; Accès à distance &gt; Panneau (nécessite un PIN).</string>
     <string name="qr_pronto">C’est fait</string>
