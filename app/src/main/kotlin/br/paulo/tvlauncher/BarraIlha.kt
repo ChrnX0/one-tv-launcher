@@ -117,6 +117,19 @@ object BarraIlha {
         else -> Ponto.CALMO
     }
 
+    // ------------------------------------------------------------------ Ilha que cresce
+
+    /** Tipos que, ao CHEGAR, fazem a Ilha crescer por [CRESCER_MS] com a dica da ação (como a Dynamic Island). */
+    private val CRESCEM = setOf(Tipo.SEM_INTERNET, Tipo.LEMBRETE, Tipo.AGENDA, Tipo.ALARME)
+    const val CRESCER_MS = 5_000L
+
+    /**
+     * O evento que acabou de chegar e merece crescer (null = nada novo de importante). Só o que não estava na fila antes:
+     * o rodízio e a fila reordenando não fazem a Ilha crescer de novo.
+     */
+    fun chegou(antes: List<Evento>, depois: List<Evento>): Evento? =
+        depois.firstOrNull { d -> d.tipo in CRESCEM && antes.none { it.tipo == d.tipo } }
+
     /** "2/3" quando há mais de um na fila; vazio com um só. */
     fun contador(fila: List<Evento>, passo: Int): String =
         if (fila.size < 2) "" else "${Math.floorMod(passo, fila.size) + 1}/${fila.size}"

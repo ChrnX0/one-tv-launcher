@@ -119,5 +119,14 @@ class BarraIlhaTest {
         assertEquals("20:41", BarraIlha.descricao("20:41", emptyList()))
     }
 
+    @Test fun cresceSoQuandoChegaAlgoImportante() {
+        val antes = BarraIlha.fila(BarraIlha.Estado(tocandoTitulo = "Podcast"))
+        val lembrete = BarraIlha.Estado(tocandoTitulo = "Podcast", lembrete = "Jornal · 20:30", lembreteFaltaMs = 60_000L)
+        assertEquals(BarraIlha.Tipo.LEMBRETE, BarraIlha.chegou(antes, BarraIlha.fila(lembrete))?.tipo)
+        assertNull(BarraIlha.chegou(BarraIlha.fila(lembrete), BarraIlha.fila(lembrete)))                          // já estava
+        assertNull(BarraIlha.chegou(emptyList(), antes))                                                          // tocar não cresce
+        assertEquals(BarraIlha.Tipo.SEM_INTERNET, BarraIlha.chegou(antes, BarraIlha.fila(BarraIlha.Estado(semInternet = "Sem internet")))?.tipo)
+    }
+
     private fun and(o: String?, f: Float?, falta: String?) = CruzLogica.andamento(o, f, falta).replace('\u00A0', ' ')
 }

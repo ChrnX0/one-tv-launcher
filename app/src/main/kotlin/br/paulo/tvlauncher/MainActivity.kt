@@ -2754,6 +2754,7 @@ class MainActivity : Activity() {
         }
         tempoCruz?.animate()?.alpha(if (recolher) 1f else 0f)?.setDuration(d)?.start()
         // Ilha: recolhida = só a pílula; aberta = a barra de sempre com o véu atrás (a pílula dá lugar à hora dela).
+        if (!recolher) { ui.removeCallbacks(tarefaIlhaEncolhe); ilhaDica?.animate()?.cancel(); ilhaDica?.alpha = 0f }
         ilhaPilula?.animate()?.alpha(if (recolher) 1f else 0f)?.translationY(if (recolher) 0f else -dp(16).toFloat())?.setDuration(d)?.start()
         ilhaVeu?.animate()?.alpha(if (recolher) 0f else 1f)?.setDuration(d)?.start()
         relogioCruz?.animate()?.alpha(if (recolher) 1f else 0.35f)?.setDuration(d)?.start()
@@ -2811,6 +2812,9 @@ class MainActivity : Activity() {
     @Volatile private var ilhaAgenda: Pair<String, Long>? = null
     @Volatile private var ilhaIndicadores: Set<BarraIlha.Indicador> = emptySet()
     private var ilhaTrilhoMostrado: BarraIlha.Trilho? = null
+    /** Ilha que cresce: a faixa de baixo com o evento que chegou e "▲ para abrir"; some em [BarraIlha.CRESCER_MS]. */
+    private var ilhaDica: TextView? = null
+    private val tarefaIlhaEncolhe = Runnable { ilhaDica?.animate()?.alpha(0f)?.translationY(-dp(6).toFloat())?.setDuration(220)?.start() }
     /** Rodízio da fila: troca o evento da vez a cada [BarraIlha.RODIZIO_MS], só com a barra recolhida e a HOME na frente. */
     private val tarefaIlhaGira = object : Runnable {
         override fun run() {
@@ -2906,6 +2910,17 @@ class MainActivity : Activity() {
         raiz.addView(pilula, FrameLayout.LayoutParams(WRAP, dp(40), Gravity.TOP or Gravity.CENTER_HORIZONTAL).apply {
             topMargin = dp(TOPO_PALCO + (ALTURA_TOPO - 40) / 2)
         })
+        val dica = texto(15f, Estilo.TEXTO, fonteUi).apply {
+            includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(ILHA_TEXTO_MAX + 200)
+            background = GradientDrawable().apply { cornerRadius = dp(16).toFloat(); setColor(0xE60A0B14.toInt()); setStroke(dp(1), 0x26FFFFFF) }
+            setPaddingRelative(dp(16), dp(8), dp(16), dp(8))
+            alpha = 0f
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO   // a pílula já lê a fila inteira
+        }
+        raiz.addView(dica, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.TOP or Gravity.CENTER_HORIZONTAL).apply {
+            topMargin = dp(TOPO_PALCO + (ALTURA_TOPO - 40) / 2 + 46)
+        })
+        ilhaDica = dica
         ilhaPilula = pilula; ilhaExtra = extra; ilhaIcone = icone; ilhaBarras = barras; ilhaTexto = txt; ilhaTemp = temp
         copiarTemp()
         // As pílulas da barra mudam por todo lado (timer a cada segundo, rádio, rede): a Ilha lê o estado delas a cada
@@ -2998,7 +3013,9 @@ class MainActivity : Activity() {
         ))
         pintarTrilho(BarraIlha.trilho(ilhaIndicadores))
         if (fila != ilhaFila) {
-            ilhaPasso = BarraIlha.passoDepois(ilhaEvento, fila)
+            val novo = BarraIlha.chegou(ilhaFila, fila)
+            ilhaPasso = BarraIlha.passoDepois(novo ?: ilhaEvento, fila)   // o que chegou vai para a tela na hora
+            if (novo != null) crescerIlha(novo)
             ilhaFila = fila
             val desc = BarraIlha.descricao(ilhaHora?.text?.toString().orEmpty(), fila)
             pilula.contentDescription = desc
@@ -3012,6 +3029,19 @@ class MainActivity : Activity() {
             if (fila.size > 1 && homeNaFrente) ui.postDelayed(tarefaIlhaGira, BarraIlha.RODIZIO_MS)
         }
         aplicarIlha()
+    }
+
+    /** Ilha que cresce (como a Dynamic Island): por 5 s, embaixo da pílula, o que chegou e "▲ para abrir". */
+    private fun crescerIlha(e: BarraIlha.Evento) {
+        val d = ilhaDica ?: return
+        if (!homeNaFrente || !barraRecolhida) return
+        d.text = if (botaoDoEvento(e) != null) "${e.texto}  ·  ${getString(R.string.ilha_dica_abrir)}" else e.texto
+        d.setTextColor(if (e.atencao) Estilo.ATENCAO else Estilo.TEXTO)
+        d.animate().cancel()
+        if (semAnimacoes()) { d.alpha = 1f; d.translationY = 0f }
+        else { d.translationY = -dp(6).toFloat(); d.animate().alpha(1f).translationY(0f).setDuration(260).start() }
+        ui.removeCallbacks(tarefaIlhaEncolhe)
+        ui.postDelayed(tarefaIlhaEncolhe, BarraIlha.CRESCER_MS)
     }
 
     /** Mostra o evento da vez (rodízio) na pílula; só mexe nas views quando ele muda. */
