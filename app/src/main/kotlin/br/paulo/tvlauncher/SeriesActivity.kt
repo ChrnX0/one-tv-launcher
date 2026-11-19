@@ -137,11 +137,23 @@ class SeriesActivity : Activity() {
         painelInfo = PainelCatalogo(this)
         direita.addView(painelInfo.topo)
         direita.addView(painelInfo.faixa, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = dp(10) })
+        painelInfo.alinharCom(coluna.caixaAcoes)
         grade = GridView(this).apply {
-            numColumns = Estilo.Leitura.GRADE_COLUNAS; horizontalSpacing = dp(12); verticalSpacing = dp(Estilo.Leitura.GRADE_VAO); stretchMode = GridView.STRETCH_COLUMN_WIDTH
+            numColumns = Estilo.Leitura.GRADE_COLUNAS
+            horizontalSpacing = dp(PosterGridSize.VAO_COLUNAS); verticalSpacing = dp(PosterGridSize.VAO_FILEIRAS)
+            stretchMode = GridView.STRETCH_COLUMN_WIDTH
             estilo(this); setPaddingRelative(dp(4), dp(4), dp(4), dp(4)); clipToPadding = false
         }
         direita.addView(grade, LinearLayout.LayoutParams(-1, 0, 1f))
+        // Igual a Filmes (19/11/2026): colunas e altura do pôster pelo espaço real (PosterGridSize), 2 fileiras inteiras.
+        grade.addOnLayoutChangeListener { v, l, t, r, b, _, _, _, _ ->
+            val d = resources.displayMetrics.density
+            val m = PosterGridSize.calcular(((r - l - v.paddingLeft - v.paddingRight) / d).toInt(), ((b - t - v.paddingTop - v.paddingBottom) / d).toInt())
+            if (m == medidaGrade) return@addOnLayoutChangeListener
+            medidaGrade = m
+            // Depois deste layout (mudar a grade dentro dele seria ignorado): as colunas novas e os cards na altura nova.
+            v.post { if (!isDestroyed) { grade.numColumns = m.colunas; adaptadorGrade.notifyDataSetChanged() } }
+        }
         // Dica fixa das teclas, no mesmo jeito da lista de canais do player (player_lista_teclas: 11sp, cor apagada).
         direita.addView(TextView(this).apply { text = getString(R.string.vod_grade_teclas); textSize = Estilo.Leitura.DICA; setTextColor(apagado); setPaddingRelative(dp(8), dp(6), 0, 0) })
         colunas.addView(direita, LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(16) })
@@ -568,20 +580,20 @@ class SeriesActivity : Activity() {
     }
 
     /**
-     * Ficha rápida da série em foco (acréscimo 2): nota, ano, temporadas, gênero e 2 linhas de sinopse, sem abrir a
-     * ficha. Temporadas e sinopse só se a ficha já estiver guardada no disco (nunca pede ao servidor a cada passo).
+     * Ficha rápida da série em foco (acréscimo 2): nota, ano, temporadas, gênero e episódio numa linha, sem abrir a
+     * ficha. Temporadas só se a ficha já estiver guardada no disco (nunca pede ao servidor a cada passo).
      */
     private fun mostrarFocado(s: Serie?) {
         tela.removeCallbacks(lerFichaRapida)
-        if (s == null) { painelInfo.mostrarFoco(if (chave == INTERESSES) getString(R.string.filmes_interesses_vazio) else "", ""); return }
+        if (s == null) { painelInfo.mostrarFoco(if (chave == INTERESSES) getString(R.string.filmes_interesses_vazio) else ""); return }
         val info = fichasRapidas[s.chave]
-        painelInfo.mostrarFoco(Estilo.infoFoco(Vod.nomeTela(s.nome, s.ano), notaRapida[s.chave] ?: s.nota, listOfNotNull(
+        painelInfo.mostrarFoco(Estilo.infoFoco(Vod.nomeTela(Idioma.semMarca(s.nome), s.ano), notaRapida[s.chave] ?: s.nota, listOfNotNull(
             s.ano?.toString(),
+            if (soLegendado(s)) getString(R.string.idioma_legendado) else null,
             info?.temporadas?.size?.takeIf { it > 0 }?.let { resources.getQuantityString(R.plurals.series_temporadas, it, it) },
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(s.grupo).ifEmpty { null },
             ultimos[s.chave]?.let { "T${it.temporada}E${it.numero}" },
-            extRapidas[s.chave]?.ifEmpty { null })),
-            info?.sinopse.orEmpty())
+            extRapidas[s.chave]?.ifEmpty { null })))
         focoRapido = s; if (s.chave !in fichasRapidas) { tela.postDelayed(lerFichaRapida, 400) }
     }
 
@@ -688,7 +700,15 @@ class SeriesActivity : Activity() {
         d.show()
     }
 
-    private class Card(val capa: ImageView, val nome: TextView, val sub: TextView, val estrela: TextView, val etiqueta: TextView, val barra: BarraTempo.Barra)
+    private class Card(val capa: ImageView, val nome: TextView, val estrela: TextView, val etiqueta: TextView, val barra: BarraTempo.Barra,
+                       val moldura: View, val selo: TextView)
+
+    /** Medida atual da grade (PosterGridSize); até a grade ter tamanho, a de antes. */
+    private var medidaGrade = PosterGridSize.Medida(Estilo.Leitura.GRADE_COLUNAS, Estilo.Leitura.POSTER_ALTURA, Estilo.Leitura.POSTER_ALTURA + PosterGridSize.EXTRA_CARD)
+
+    /** Legendada sem a versão dublada junto (selo LEG); espera o índice de versões, como em Filmes. */
+    private fun soLegendado(s: Serie): Boolean =
+        indiceVersoes.isNotEmpty() && Idioma.versao(s.nome, s.grupo) == Idioma.Versao.LEGENDADA && outraVersao(s) == null
 
     private val adaptadorGrade = object : BaseAdapter() {
         override fun getCount() = naGrade.size
@@ -698,9 +718,16 @@ class SeriesActivity : Activity() {
             val v = reuso ?: novoCard()
             val c = v.tag as Card
             val s = naGrade[p]
-            c.nome.text = Vod.nomeTela(s.nome, s.ano)
-            c.sub.text = ultimos[s.chave]?.let { "T${it.temporada}E${it.numero}" }.orEmpty()
-            c.sub.visibility = if (c.sub.text.isEmpty()) View.GONE else View.VISIBLE
+            // Card reaproveitado de antes de a grade mudar de tamanho: acerta a altura (só muda quando a medida muda).
+            val alturaCard = dp(medidaGrade.alturaCard)
+            if (v.layoutParams.height != alturaCard) {
+                v.layoutParams.height = alturaCard
+                c.moldura.layoutParams.height = dp(medidaGrade.alturaPoster)
+            }
+            // O nome só aparece enquanto o pôster não chega ou quando ele não existe (CapaCartao.aoTrocar). O "T2E5"
+            // saiu do card (19/11/2026, igual a Filmes): fica na linha do topo, junto da série em foco.
+            c.nome.text = Vod.nomeTela(Idioma.semMarca(s.nome), s.ano)
+            c.selo.visibility = if (soLegendado(s)) View.VISIBLE else View.GONE
             // Etiqueta: "20 de 62" episódios vistos (sem número de %) ou "Finalizado". Sem conta ainda (ficha nunca aberta
             // depois desta versão) mas com episódio visto: "Assistido".
             // 14/11/2026: verde "Concluída"; amarela "Nova temporada" / "3 episódios novos" quando a concluída ganhou
@@ -739,12 +766,6 @@ class SeriesActivity : Activity() {
         }
     }
 
-    /** Cabeçalho do card: o nome (2 linhas no máximo) encostado embaixo, logo acima do pôster. */
-    private fun cabecalhoCard(alturaDp: Int) = LinearLayout(this).apply {
-        orientation = LinearLayout.VERTICAL; gravity = Gravity.BOTTOM; setPaddingRelative(0, 0, 0, dp(6))
-        layoutParams = LinearLayout.LayoutParams(-1, dp(alturaDp))
-    }
-
     private fun novoCard(): View {
         val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(4), dp(4), dp(4), dp(6)) }
         val capa = CapaCartao(this, dp(8).toFloat())   // cinza só enquanto o pôster não chega (CapaCartao.kt)
@@ -761,16 +782,27 @@ class SeriesActivity : Activity() {
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
         }
         moldura.addView(etiqueta, FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.START).apply { setMargins(dp(5), 0, 0, dp(5)) })
-        // Nome e "T2E5" em cima do pôster, encostados nele (a linha do episódio some quando não há).
-        val nome = TituloCard(this, Estilo.Leitura.CARD).apply { setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END }
-        val sub = TextView(this).apply { textSize = 12f; setTextColor(ambar); maxLines = 1 }
-        col.addView(cabecalhoCard(Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.SUB_CARD_ALTURA).apply { addView(nome); addView(sub) })
-        col.addView(moldura, LinearLayout.LayoutParams(-1, dp(Estilo.Leitura.POSTER_ALTURA)))
+        // 19/11/2026, o mesmo de Filmes: nada de nome em cima do pôster (repetia a arte e gastava espaço). O nome fica
+        // POR CIMA do cinza de espera, centrado, e some quando o pôster chega.
+        val nome = TituloCard(this, Estilo.Leitura.CARD).apply {
+            setTextColor(papel); maxLines = 4; ellipsize = TextUtils.TruncateAt.END; gravity = Gravity.CENTER
+            setPaddingRelative(dp(6), dp(6), dp(6), dp(6))
+        }
+        moldura.addView(nome, 1, FrameLayout.LayoutParams(-1, -2, Gravity.CENTER))
+        capa.aoTrocar = { tem -> nome.visibility = if (tem) View.INVISIBLE else View.VISIBLE }
+        // Selo LEG em cima, à esquerda (a estrela dos interesses fica à direita).
+        val selo = TextView(this).apply {
+            text = getString(R.string.filmes_selo_leg); textSize = 11f; typeface = fonteMedia; setTextColor(papel)
+            setPaddingRelative(dp(6), dp(1), dp(6), dp(2)); visibility = View.GONE
+            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
+        }
+        moldura.addView(selo, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.START).apply { setMargins(dp(5), dp(5), 0, 0) })
+        col.addView(moldura, LinearLayout.LayoutParams(-1, dp(medidaGrade.alturaPoster)))
         val barra = BarraTempo.Barra(this)
         col.addView(barra, LinearLayout.LayoutParams(-1, dp(BarraTempo.ESPESSURA_DP)).apply { topMargin = dp(5) })
-        // 4 + nome e episódio + pôster + barra (5 + 5) + 6
-        col.layoutParams = AbsListView.LayoutParams(-1, dp(4 + Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.SUB_CARD_ALTURA + Estilo.Leitura.POSTER_ALTURA + 10 + 6))
-        col.tag = Card(capa, nome, sub, estrela, etiqueta, barra)
+        // 4 + pôster + barra (5 + 5) + 6 = PosterGridSize.EXTRA_CARD
+        col.layoutParams = AbsListView.LayoutParams(-1, dp(medidaGrade.alturaCard))
+        col.tag = Card(capa, nome, estrela, etiqueta, barra, moldura, selo)
         return col
     }
 

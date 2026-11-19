@@ -89,6 +89,8 @@ class ColunaCategorias(
 
     private val listas: Array<ListView> = Array(3) { i -> lista(i) }
     private val acoes get() = listas[0]
+    /** A caixa das ações (Interesses, Continuar…): a ficha rápida da direita alinha o topo com ela (PainelCatalogo.alinharCom). */
+    val caixaAcoes: View get() = acoes
     private val fixas get() = listas[1]
     private val rola get() = listas[2]
     private val textoListas = TextView(act).apply {
