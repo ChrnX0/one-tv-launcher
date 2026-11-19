@@ -36,6 +36,9 @@
         <item>Alarm clock: the sound always starts low and rises slowly, over at least a minute and a half, even with “Ring: direct”, so it never starts at full volume</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>todos_apps_cabecalho</item>
+        <item>radio_sem_vao</item>
+        <item>letra_ajustes</item>
         <item>series_duas_fileiras</item>
         <item>listas_fora_rolam</item>
         <item>filmes_duas_fileiras</item>
