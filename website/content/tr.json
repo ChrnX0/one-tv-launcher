@@ -749,6 +749,26 @@
       "Uygulama başına internet",
       "Her uygulamanın ne kadar internet kullandığı ve kiminle konuştuğu, televizyonda 7 gün saklanır.",
       "Gelişmiş › Ağ."
+    ],
+    "google-inside": [
+      "Google çalışmaya devam eder",
+      "Google Asistan, Gemini, arama ve Google hesabınız eskisi gibi çalışır. Sofaly TV'nizi değil, ana ekranı değiştirir.",
+      "Mikrofon düğmesini her zamanki gibi kullanın."
+    ],
+    "motion": [
+      "TV'nize göre animasyon",
+      "Güçlü TV her şeyi canlandırır; daha basit olan yalnızca seçtiğinizi canlandırır ve kareler düşünce kendiliğinden yavaşlar.",
+      "Ayarlar › Görünüm."
+    ],
+    "frame-rate": [
+      "Takılmayan filmler",
+      "Film oynarken TV 24 Hz'e geçer, kamera hareketleri akıcı kalır.",
+      "Filmle birlikte açılır; ekran bir saniye kararır."
+    ],
+    "wifi-check": [
+      "Hız testi",
+      "İnternetinizi tek dokunuşla ölçer; Wi-Fi sinyalini, gecikmeyi ve hızı sade sözcüklerle gösterir.",
+      "Ayarlar › Gelişmiş › Ağ."
     ]
   },
   "plans_page": {
@@ -847,5 +867,126 @@
         "19:00"
       ]
     ]
+  },
+  "show": {
+    "title": "TV'de görün",
+    "lead": "Bu ekranlar kendiliğinden geçer; Sofaly gerçek bir TV'de böyle görünür ve hareket eder. Birini seçip orada kalın.",
+    "screens": {
+      "forecast": [
+        "Tahmin",
+        "Sonraki 24 saat, yağmur ihtimali ve ay, tek bakışta ve büyük yazıyla.",
+        [
+          "Hafif çisenti",
+          "Sonraki 24 saat",
+          "Yağmur ihtimali",
+          "Şimdi",
+          "En yüksek 27° · en düşük 19° · hissedilen 26°"
+        ]
+      ],
+      "screensaver": [
+        "Ekran koruyucu",
+        "Her gün The Met'ten bir tablo, saat ve günün havası. Açık bırakmak isteyeceğiniz bir TV.",
+        [
+          "İyi akşamlar",
+          "Günün tablosu · The Met",
+          "Büyüyen hilal"
+        ]
+      ],
+      "player": [
+        "Filmler",
+        "Tek tuşla dublaj ya da altyazı, jenerik sizin yerinize atlanır ve kaldığınız yerden devam.",
+        [
+          "Eve Uzun Yol",
+          "Ses",
+          "Orijinal + altyazı",
+          "Türkçe dublaj",
+          "Jeneriği atla"
+        ]
+      ],
+      "radio": [
+        "Radyo ve podcast",
+        "Dünyanın her yerinden istasyonlar ve podcast'leriniz, tam ekran oynatıcıyla.",
+        [
+          "Şimdi çalıyor",
+          "Canlı radyo",
+          "Sahilden caz",
+          "Sabah haberleri",
+          "Türk sanat müziği",
+          "Podcast · bölüm 12"
+        ]
+      ],
+      "alarm": [
+        "Alarm",
+        "TV kendiliğinden açılır, ses yavaşça yükselir ve günün tahmini sizi bekler.",
+        [
+          "Günaydın",
+          "Ses yükseliyor",
+          "Ertele · 10 dk",
+          "TV kendiliğinden açıldı"
+        ]
+      ],
+      "cards": [
+        "Ana ekran kartları",
+        "Geri sayım, hatırlatıcılar, kurlar, ay ve takımınızın sıradaki maçı, doğrudan ana ekranda.",
+        [
+          "Tatile 12 gün kaldı",
+          "İlaç saat 20:00'de",
+          "Garaj kamerası yanıt vermiyor",
+          "Sıradaki maç",
+          "Cmt · 16:00",
+          "Büyüyen hilal",
+          "Kurlar",
+          "Geri sayım",
+          "Takımınız × Rakip"
+        ]
+      ],
+      "games": [
+        "Oyunlar",
+        "Bulut, PC ve retro oyunlar tek yerde; ağınız oynamadan önce test edilir.",
+        [
+          "Kumanda bağlandı",
+          "Ağ bulut oyunu için hazır",
+          "Bulut",
+          "PC",
+          "Retro",
+          "Ekip",
+          "Oyunlar"
+        ]
+      ],
+      "phone": [
+        "Telefon",
+        "Telefondaki panel: kumanda, yazma, TV ekranı canlı ve TV'de beliren mesajlar.",
+        [
+          "TV'ye gönder",
+          "Yemek hazır!",
+          "Telefondan mesaj",
+          "Kumanda",
+          "Yaz",
+          "Ekran",
+          "Fotoğraflar"
+        ]
+      ],
+      "windows": [
+        "Windows",
+        "TV, Bu bilgisayar'da bir telefon gibi görünür: film ve fotoğrafları doğrudan içine sürükleyin.",
+        [
+          "Bu bilgisayar",
+          "Sofaly · Salon",
+          "Yerel disk",
+          "TV panelini aç",
+          "TV'ye kopyalanıyor… %68"
+        ]
+      ],
+      "kids": [
+        "Aile",
+        "Çocuk profili, uyku saati ve ekran süresi; hepsi ebeveyn PIN'inin arkasında.",
+        [
+          "Uyku saati",
+          "Yarın görüşürüz!",
+          "Saat 7'ye kadar sadece çocuk uygulamaları",
+          "Ebeveyn PIN'i"
+        ]
+      ]
+    }
   }
 }

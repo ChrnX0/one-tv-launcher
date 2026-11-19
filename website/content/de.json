@@ -749,6 +749,26 @@
       "Internet pro App",
       "Wie viel Internet jede App verbraucht hat und mit wem sie sprach, 7 Tage auf dem Fernseher gespeichert.",
       "Erweitert › Netzwerk."
+    ],
+    "google-inside": [
+      "Google funktioniert weiter",
+      "Google Assistant, Gemini, die Suche und dein Google-Konto funktionieren wie vorher. Sofaly ändert den Startbildschirm, nicht deinen Fernseher.",
+      "Nutze die Mikrofontaste wie immer."
+    ],
+    "motion": [
+      "Animation passend zu deinem Fernseher",
+      "Starke Geräte animieren alles; einfachere nur das Gewählte und schalten selbst zurück, wenn Bilder ruckeln.",
+      "Einstellungen › Darstellung."
+    ],
+    "frame-rate": [
+      "Filme ohne Ruckeln",
+      "Der Fernseher schaltet beim Film auf 24 Hz, Kameraschwenks bleiben flüssig.",
+      "Schaltet sich mit dem Film ein; das Bild wird eine Sekunde schwarz."
+    ],
+    "wifi-check": [
+      "Geschwindigkeitstest",
+      "Misst dein Internet mit einem Tastendruck und zeigt WLAN-Signal, Latenz und Tempo in klaren Worten.",
+      "Einstellungen › Erweitert › Netzwerk."
     ]
   },
   "plans_page": {
@@ -847,5 +867,126 @@
         "19 Uhr"
       ]
     ]
+  },
+  "show": {
+    "title": "So sieht es auf dem Fernseher aus",
+    "lead": "Diese Bildschirme laufen von selbst, so wie Sofaly auf einem echten Fernseher aussieht und sich bewegt. Wähle einen, um dort zu bleiben.",
+    "screens": {
+      "forecast": [
+        "Vorhersage",
+        "Die nächsten 24 Stunden, die Regenwahrscheinlichkeit und der Mond, auf einen Blick und in großer Schrift.",
+        [
+          "Leichter Nieselregen",
+          "Nächste 24 Stunden",
+          "Regenwahrscheinlichkeit",
+          "Jetzt",
+          "Max. 27° · min. 19° · gefühlt 26°"
+        ]
+      ],
+      "screensaver": [
+        "Bildschirmschoner",
+        "Jeden Tag ein Gemälde aus dem Met, die Uhr und das Wetter des Tages. Ein Fernseher, den man gern anlässt.",
+        [
+          "Guten Abend",
+          "Gemälde des Tages · The Met",
+          "Zunehmende Sichel"
+        ]
+      ],
+      "player": [
+        "Filme",
+        "Synchronisiert oder mit Untertiteln auf einen Tastendruck, der Vorspann übersprungen und weiter, wo du warst.",
+        [
+          "Der lange Weg nach Hause",
+          "Audio",
+          "Original + Untertitel",
+          "Deutsch synchronisiert",
+          "Vorspann überspringen"
+        ]
+      ],
+      "radio": [
+        "Radio und Podcasts",
+        "Sender aus der ganzen Welt und deine Podcasts, mit Vollbild-Player.",
+        [
+          "Läuft gerade",
+          "Live-Radio",
+          "Jazz von der Küste",
+          "Morgennachrichten",
+          "Klassik am Abend",
+          "Podcast · Folge 12"
+        ]
+      ],
+      "alarm": [
+        "Wecker",
+        "Der Fernseher schaltet sich selbst ein, der Ton wird langsam lauter und die Vorhersage wartet schon.",
+        [
+          "Guten Morgen",
+          "Lautstärke steigt",
+          "Schlummern · 10 Min.",
+          "Der Fernseher hat sich selbst eingeschaltet"
+        ]
+      ],
+      "cards": [
+        "Startkarten",
+        "Countdown, Erinnerungen, Kurse, der Mond und das nächste Spiel deines Teams, direkt auf dem Startbildschirm.",
+        [
+          "Noch 12 Tage bis zum Urlaub",
+          "Medikament um 20 Uhr",
+          "Garagenkamera antwortet nicht mehr",
+          "Nächstes Spiel",
+          "Sa · 16 Uhr",
+          "Zunehmende Sichel",
+          "Kurse",
+          "Countdown",
+          "Dein Team × Gegner"
+        ]
+      ],
+      "games": [
+        "Spiele",
+        "Cloud-, PC- und Retro-Spiele an einem Ort, mit vorher getestetem Netz.",
+        [
+          "Controller verbunden",
+          "Netz bereit für Cloud-Gaming",
+          "Cloud",
+          "PC",
+          "Retro",
+          "Clique",
+          "Spiele"
+        ]
+      ],
+      "phone": [
+        "Handy",
+        "Das Panel auf dem Handy: Fernbedienung, Tippen, der Fernsehbildschirm live und Nachrichten, die auf dem Fernseher erscheinen.",
+        [
+          "An den Fernseher senden",
+          "Das Essen ist fertig!",
+          "Nachricht vom Handy",
+          "Fernbedienung",
+          "Tippen",
+          "Bildschirm",
+          "Fotos"
+        ]
+      ],
+      "windows": [
+        "Windows",
+        "Der Fernseher erscheint in Dieser PC wie ein Handy: Filme und Fotos einfach hineinziehen.",
+        [
+          "Dieser PC",
+          "Sofaly · Wohnzimmer",
+          "Lokaler Datenträger",
+          "Fernseher-Panel öffnen",
+          "Kopiere auf den Fernseher… 68 %"
+        ]
+      ],
+      "kids": [
+        "Familie",
+        "Kinderprofil, Schlafenszeit und Bildschirmzeit, alles hinter der Eltern-PIN.",
+        [
+          "Schlafenszeit",
+          "Bis morgen!",
+          "Nur Kinder-Apps bis 7 Uhr",
+          "Eltern-PIN"
+        ]
+      ]
+    }
   }
 }

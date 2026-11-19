@@ -232,16 +232,158 @@ def tv_mock(L):
                    f'<ul class="w-col">{items}</ul></div>')
     return f"""<div class="tv" aria-hidden="true">
   <div class="screen">
+    <i class="art"></i>
     <div class="bar">
       <span class="pill">{icon('search')}{icon('mic')}</span>
-      <span class="pill">{icon('sun')}{esc(m['weather'])}</span>
+      <span class="pill">{wx('sun')}{esc(m['weather'])}</span>
       <span class="clock"><b>08:57</b><small>{esc(m['day'])}<br>{esc(m['date'])}</small></span>
     </div>
     <div class="label"><span class="label-name"></span> <span class="label-n"></span></div>
     <div class="row">{''.join(row)}</div>
+    <span class="key"></span>
   </div>
   <div class="stand"></div>
 </div>"""
+
+
+# ---- Showcase: the other TV screens, drawn in HTML/CSS and animated by themselves (no video, no images). ----
+SHOW = [  # id, accent color, icon of the tab
+    ("forecast", "#6FB7FF", "sun"), ("screensaver", "#E2B866", "image"), ("player", "#FF6A2B", "film"),
+    ("radio", "#3CC6B4", "radio"), ("alarm", "#F5C04A", "alarm"), ("cards", "#FFB547", "star"),
+    ("games", "#A88BFF", "gamepad"), ("phone", "#8FD07A", "phone"), ("windows", "#4FA3FF", "folder"),
+    ("kids", "#5FD3E8", "moon"),
+]
+WX = {"sun": "#FFC94A", "cloud": "#DCE3F5", "rain": "#6FB7FF", "moon": "#CFD6FF"}
+
+
+def wx(name, cls="ico"):
+    return f'<span class="wx" style="--x:{WX[name]}">{icon(name, cls)}</span>'
+
+
+def scr_forecast(t, m):
+    hours = [("18h", "rain", 23, 71), ("19h", "cloud", 22, 61), ("20h", "cloud", 21, 49), ("21h", "moon", 21, 36),
+             ("22h", "moon", 20, 21), ("23h", "moon", 20, 10), ("0h", "moon", 19, 5), ("1h", "moon", 19, 3),
+             ("2h", "moon", 19, 2), ("3h", "cloud", 19, 8), ("4h", "cloud", 18, 12)]
+    lis = f'<li class="now" style="--i:0"><small>{esc(t[3])}</small>{wx("rain")}<b>24°</b><em>76%</em></li>' + "".join(
+        f'<li style="--i:{n + 1}"><small>{h}</small>{wx(k)}<b>{tp}°</b><em>{r}%</em></li>'
+        for n, (h, k, tp, r) in enumerate(hours))
+    return f"""<div class="fc-now">{wx('rain', 'ico fc-big')}<div><b class="fc-temp">24°</b><span>{esc(t[0])}</span>
+      <small>{esc(t[4])}</small></div></div>
+    <div class="fc-box"><small>{esc(t[1])}</small><ol class="fc-hours">{lis}</ol></div>
+    <div class="fc-box fc-rain"><small>{esc(t[2])}</small>
+      <svg viewBox="0 0 220 40" preserveAspectRatio="none"><path class="fc-area" d="M0 8 C30 6 45 14 70 22 S120 36 150 37 S200 30 220 26 V40 H0Z"/>
+      <path class="fc-line" d="M0 8 C30 6 45 14 70 22 S120 36 150 37 S200 30 220 26"/></svg></div>"""
+
+
+def scr_screensaver(t, m):
+    row = (f'<span>{wx("cloud")}<b>24°</b></span><span>{wx("moon")}{esc(t[2])}</span>'
+           f'<span>{wx("rain")}<b>12%</b></span><span>{wx("sun")}<b>06:12</b></span>')
+    return f"""<div class="ss-art"><i class="ss-moon"></i><i class="ss-hill"></i><i class="ss-sea"></i></div>
+    <div class="ss-clock"><small>{esc(t[0])}</small><b>21<i>:</i>47</b><span>{esc(m['day'])}, {esc(m['date'])}</span></div>
+    <div class="ss-row">{row}</div><em class="ss-cap">{esc(t[1])}</em>"""
+
+
+def scr_player(t, m):
+    return f"""<div class="pl-art"><i class="pl-sun"></i><i class="pl-m1"></i><i class="pl-m2"></i></div>
+    <div class="pl-title"><b>{esc(t[0])}</b><span>2026 · 1h 52 · ★ 8.1</span></div>
+    <div class="pl-skip">{icon('skip')}{esc(t[4])}</div>
+    <div class="pl-menu"><small>{esc(t[1])}</small><span class="o1">{icon('subtitle')}{esc(t[2])}</span>
+      <span class="o2">{icon('speaker')}{esc(t[3])}</span></div>
+    <div class="pl-bar"><i></i></div><div class="pl-time"><span>0:42:10</span><span>1:52:00</span></div>"""
+
+
+def scr_radio(t, m):
+    st = [(t[2], "#3CC6B4", "98.5"), (t[3], "#FF6A2B", "101.3"), (t[4], "#F5C04A", "89.1"), (t[5], "#A88BFF", "")]
+    lis = "".join(f'<li style="--i:{n};--d:{c}"><i></i><span>{esc(a)}</span><small>{f}</small></li>' for n, (a, c, f) in enumerate(st))
+    bars = "".join(f'<i style="--i:{n}"></i>' for n in range(14))
+    return f"""<div class="rd-list"><small>{esc(t[1])}</small><ul>{lis}</ul></div>
+    <div class="rd-now"><div class="rd-cover">{icon('radio')}</div><small>{esc(t[0])}</small><b>{esc(t[2])}</b>
+      <span>98.5 FM</span><div class="eq">{bars}</div></div>"""
+
+
+def scr_alarm(t, m):
+    return f"""<i class="al-dawn"></i><i class="al-sun"></i>
+    <div class="al-txt"><small>{esc(t[0])}</small><b>06:30</b><span>{wx('sun')}22° · {esc(m['day'])}</span></div>
+    <div class="al-cec">{icon('power')}{esc(t[3])}</div>
+    <div class="al-vol">{icon('speaker')}<i><b></b></i><em>{esc(t[1])}</em></div>
+    <div class="al-snooze">{esc(t[2])}</div>"""
+
+
+def scr_cards(t, m):
+    return f"""<div class="cd-bar"><span class="pill cd-pill"><b class="c1">{icon('calendar')}{esc(t[0])}</b>
+      <b class="c2">{icon('bell')}{esc(t[1])}</b><b class="c3">{icon('bolt')}{esc(t[2])}</b></span>
+      <span class="pill">{wx('sun')}25°</span><span class="pill cd-rate">{icon('chart')}USD 5.32 <em>▲0.4%</em> · BTC ▲</span>
+      <span class="clock"><b>19:20</b></span></div>
+    <div class="cd-grid">
+      <div class="cd-card cd-count"><small>{esc(t[7])}</small><b>12</b><span>{esc(t[0])}</span></div>
+      <div class="cd-card cd-match">{icon('ball')}<small>{esc(t[3])}</small><b>{esc(t[4])}</b><span>{esc(t[8])}</span></div>
+      <div class="cd-card cd-moon"><i class="cd-moonball"></i><small>{esc(t[5])}</small><b>32%</b></div>
+      <div class="cd-card cd-rates"><small>{esc(t[6])}</small><b>USD 5.32</b><span>EUR 6.18 · BTC · ETH</span></div>
+    </div>"""
+
+
+def scr_games(t, m):
+    tiles = [("cloud", "#A88BFF", t[2]), ("monitor", "#4FA3FF", t[3]), ("gamepad", "#FF6A2B", t[4]),
+             ("people", "#3CC6B4", t[5]), ("cloud", "#F5C04A", t[2]), ("gamepad", "#8FD07A", t[4])]
+    g = "".join(f'<li style="--i:{n};--d:{c}">{icon(i)}<span>{esc(x)}</span></li>' for n, (i, c, x) in enumerate(tiles))
+    return f"""<div class="gm-head">{icon('gamepad')}<b>{esc(t[6])}</b></div><ul class="gm-tiles">{g}</ul>
+    <div class="gm-net"><span>{icon('wifi')}{esc(t[1])}</span><i><b></b></i><em>42 ms · 180 Mb/s</em></div>
+    <div class="gm-toast">{icon('gamepad')}{esc(t[0])}</div>"""
+
+
+def scr_phone(t, m):
+    btn = [("remote", t[3]), ("text", t[4]), ("monitor", t[5]), ("photo", t[6])]
+    b = "".join(f'<span>{icon(i)}{esc(x)}</span>' for i, x in btn)
+    return f"""<div class="ph-tv"><div class="ph-toast">{icon('chat')}<div><small>{esc(t[2])}</small><b>{esc(t[1])}</b></div></div></div>
+    <div class="ph-phone"><div class="ph-scr"><b class="ph-brand">sofa<em>ly</em></b><div class="ph-grid">{b}</div>
+      <div class="ph-field"><span>{esc(t[1])}</span></div><div class="ph-send">{esc(t[0])}</div><i class="ph-tap"></i></div></div>"""
+
+
+def scr_windows(t, m):
+    return f"""<div class="wn"><div class="wn-bar"><i></i><i></i><i></i><b>{esc(t[0])}</b></div>
+      <div class="wn-body">
+        <div class="wn-drive">{icon('monitor')}<div><b>{esc(t[2])} (C:)</b><i><b style="width:62%"></b></i></div></div>
+        <div class="wn-drive wn-tv">{LOGO}<div><b>{esc(t[1])} (S:)</b><i><b class="wn-fill"></b></i><small>{esc(t[4])}</small></div></div>
+        <div class="wn-file wn-url">{icon('globe')}<span>{esc(t[3])}.url</span></div>
+      </div></div>
+    <div class="wn-drag">{icon('film')}<span>movie.mkv</span></div>"""
+
+
+def scr_kids(t, m):
+    dots = "".join(f'<i style="--i:{n}"></i>' for n in range(4))
+    return f"""<i class="kd-stars"></i><div class="kd-moon">{icon('moon')}</div>
+    <div class="kd-txt"><b>{esc(t[0])}</b><span>{esc(t[1])}</span><small>{esc(t[2])}</small></div>
+    <div class="kd-pin"><small>{icon('lock')}{esc(t[3])}</small><div>{dots}</div></div>"""
+
+
+SCREENS = {"forecast": scr_forecast, "screensaver": scr_screensaver, "player": scr_player, "radio": scr_radio,
+           "alarm": scr_alarm, "cards": scr_cards, "games": scr_games, "phone": scr_phone, "windows": scr_windows,
+           "kids": scr_kids}
+
+
+def showcase(L):
+    s, m = L.d["show"], L.d["home"]["mock"]
+    scr, tabs = [], []
+    for n, (k, c, ic) in enumerate(SHOW):
+        tab, cap, t = s["screens"][k]
+        scr.append(f'<div class="scr scr-{k}" data-k="{k}" style="--k:{c}"{"" if n == 0 else " hidden"}>{SCREENS[k](t, m)}</div>')
+        tabs.append(f'<li><button type="button" class="tab{" on" if n == 0 else ""}" style="--k:{c}" data-k="{k}" '
+                    f'aria-pressed="{"true" if n == 0 else "false"}">{icon(ic)}<span>{esc(tab)}</span><i></i></button></li>')
+    caps = "".join(f'<p class="cap" data-k="{k}"{"" if n == 0 else " hidden"}>{esc(s["screens"][k][1])}</p>'
+                   for n, (k, _, _) in enumerate(SHOW))
+    return f"""<section class="band showcase" id="see">
+  <div class="wrap">
+    <h2>{esc(s['title'])}</h2>
+    <p class="sub">{esc(s['lead'])}</p>
+    <div class="show">
+      <div class="tv tv-show" aria-hidden="true"><div class="screen">{''.join(scr)}</div><div class="stand"></div></div>
+      <div class="show-side">
+        <ul class="tabs" aria-label="{esc(s['title'])}">{''.join(tabs)}</ul>
+        <div class="caps" aria-live="polite">{caps}</div>
+      </div>
+    </div>
+  </div>
+</section>"""
 
 
 def page_index(L):
@@ -275,7 +417,7 @@ def page_index(L):
     <div class="hero-tv" data-names='{esc(names)}' data-of="{esc(ui['of'])}">{tv_mock(L)}</div>
   </div>
 </section>
-
+{showcase(L)}
 <section class="band">
   <div class="wrap">
     <h2>{esc(h['cross_title'])}</h2>

@@ -749,6 +749,26 @@
       "Internet według aplikacji",
       "Ile internetu zużyła każda aplikacja i z kim rozmawiała, przechowywane na telewizorze przez 7 dni.",
       "Zaawansowane › Sieć."
+    ],
+    "google-inside": [
+      "Google dalej działa",
+      "Asystent Google, Gemini, wyszukiwanie i twoje konto Google działają jak wcześniej. Sofaly zmienia ekran główny, nie twój telewizor.",
+      "Używaj przycisku mikrofonu jak zawsze."
+    ],
+    "motion": [
+      "Animacje na miarę telewizora",
+      "Mocny telewizor animuje wszystko; prostszy tylko to, co wybrałeś, i sam zwalnia, gdy spadają klatki.",
+      "Ustawienia › Wygląd."
+    ],
+    "frame-rate": [
+      "Filmy bez szarpania",
+      "Telewizor przełącza się na 24 Hz w czasie filmu, a ruchy kamery są płynne.",
+      "Włącza się z filmem; ekran na sekundę robi się czarny."
+    ],
+    "wifi-check": [
+      "Test prędkości",
+      "Mierzy internet jednym kliknięciem i pokazuje sygnał Wi-Fi, opóźnienie i prędkość prostymi słowami.",
+      "Ustawienia › Zaawansowane › Sieć."
     ]
   },
   "plans_page": {
@@ -847,5 +867,126 @@
         "19:00"
       ]
     ]
+  },
+  "show": {
+    "title": "Zobacz na telewizorze",
+    "lead": "Te ekrany przewijają się same — tak Sofaly wygląda i się porusza na prawdziwym telewizorze. Wybierz jeden, by się na nim zatrzymać.",
+    "screens": {
+      "forecast": [
+        "Prognoza",
+        "Najbliższe 24 godziny, szansa na deszcz i księżyc — w jednym spojrzeniu i dużymi literami.",
+        [
+          "Lekka mżawka",
+          "Najbliższe 24 godziny",
+          "Szansa na deszcz",
+          "Teraz",
+          "Maks. 27° · min. 19° · odczuwalna 26°"
+        ]
+      ],
+      "screensaver": [
+        "Wygaszacz",
+        "Codziennie obraz z The Met, zegar i pogoda na dziś. Telewizor, który chce się zostawić włączony.",
+        [
+          "Dobry wieczór",
+          "Obraz dnia · The Met",
+          "Przybywający sierp"
+        ]
+      ],
+      "player": [
+        "Filmy",
+        "Dubbing albo napisy jednym przyciskiem, czołówka pominięta za ciebie i powrót tam, gdzie skończyłeś.",
+        [
+          "Długa droga do domu",
+          "Dźwięk",
+          "Oryginał + napisy",
+          "Lektor",
+          "Pomiń czołówkę"
+        ]
+      ],
+      "radio": [
+        "Radio i podcasty",
+        "Stacje z całego świata i twoje podcasty, z odtwarzaczem na cały ekran.",
+        [
+          "Teraz gra",
+          "Radio na żywo",
+          "Jazz znad morza",
+          "Wiadomości poranne",
+          "Polski rock",
+          "Podcast · odcinek 12"
+        ]
+      ],
+      "alarm": [
+        "Budzik",
+        "Telewizor włącza się sam, dźwięk rośnie powoli, a prognoza na dziś już czeka.",
+        [
+          "Dzień dobry",
+          "Głośność rośnie",
+          "Drzemka · 10 min",
+          "Telewizor włączył się sam"
+        ]
+      ],
+      "cards": [
+        "Karty na ekranie głównym",
+        "Odliczanie, przypomnienia, kursy, księżyc i najbliższy mecz twojej drużyny, prosto na ekranie głównym.",
+        [
+          "12 dni do wakacji",
+          "Lek o 20:00",
+          "Kamera w garażu nie odpowiada",
+          "Najbliższy mecz",
+          "Sob · 16:00",
+          "Przybywający sierp",
+          "Kursy",
+          "Odliczanie",
+          "Twoja drużyna × Rywal"
+        ]
+      ],
+      "games": [
+        "Gry",
+        "Gry w chmurze, z PC i retro w jednym miejscu, z siecią sprawdzoną przed grą.",
+        [
+          "Pad połączony",
+          "Sieć gotowa do gier w chmurze",
+          "Chmura",
+          "PC",
+          "Retro",
+          "Ekipa",
+          "Gry"
+        ]
+      ],
+      "phone": [
+        "Telefon",
+        "Panel w telefonie: pilot, pisanie, ekran telewizora na żywo i wiadomości, które pojawiają się na TV.",
+        [
+          "Wyślij na TV",
+          "Kolacja gotowa!",
+          "Wiadomość z telefonu",
+          "Pilot",
+          "Pisz",
+          "Ekran",
+          "Zdjęcia"
+        ]
+      ],
+      "windows": [
+        "Windows",
+        "Telewizor pojawia się w Ten komputer jak telefon: przeciągaj do niego filmy i zdjęcia.",
+        [
+          "Ten komputer",
+          "Sofaly · Salon",
+          "Dysk lokalny",
+          "Otwórz panel TV",
+          "Kopiowanie na TV… 68%"
+        ]
+      ],
+      "kids": [
+        "Rodzina",
+        "Profil dziecka, pora snu i czas przed ekranem — wszystko za PIN-em rodziców.",
+        [
+          "Pora spać",
+          "Do jutra!",
+          "Tylko aplikacje dla dzieci do 7:00",
+          "PIN rodziców"
+        ]
+      ]
+    }
   }
 }

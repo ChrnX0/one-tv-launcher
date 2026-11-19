@@ -22,6 +22,11 @@
           "search"
         ],
         [
+          "google-inside",
+          "basic",
+          "mic"
+        ],
+        [
           "quick-panel",
           "basic",
           "panel"
@@ -45,6 +50,11 @@
           "icons",
           "pro",
           "brush"
+        ],
+        [
+          "motion",
+          "basic",
+          "sparkle"
         ],
         [
           "card-moon",
@@ -112,6 +122,11 @@
           "audio-subtitles",
           "basic",
           "subtitle"
+        ],
+        [
+          "frame-rate",
+          "basic",
+          "film"
         ],
         [
           "easy-viewing",
@@ -468,6 +483,11 @@
           "diagnose",
           "basic",
           "stethoscope"
+        ],
+        [
+          "wifi-check",
+          "basic",
+          "wifi"
         ],
         [
           "scoreboard",

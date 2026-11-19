@@ -749,6 +749,26 @@
       "Internet por app",
       "Quanto cada app usou de internet e com quem falou, guardado na TV por 7 dias.",
       "Avançado › Rede."
+    ],
+    "google-inside": [
+      "O Google continua a funcionar",
+      "O Assistente Google, o Gemini, a pesquisa e a sua conta Google funcionam como antes. A Sofaly muda o ecrã inicial, não a sua TV.",
+      "Use o botão do microfone como sempre."
+    ],
+    "motion": [
+      "Animação à medida da sua TV",
+      "Uma TV potente anima tudo; uma mais simples anima só o que escolheu e abranda sozinha quando as imagens falham.",
+      "Definições › Aparência."
+    ],
+    "frame-rate": [
+      "Filmes sem tremer",
+      "A TV muda para 24 Hz enquanto o filme passa, e os movimentos de câmara ficam suaves.",
+      "Liga-se com o filme; o ecrã pisca a preto por um segundo."
+    ],
+    "wifi-check": [
+      "Teste de velocidade",
+      "Mede a sua internet num toque e mostra o sinal Wi-Fi, a latência e a velocidade em palavras simples.",
+      "Definições › Avançado › Rede."
     ]
   },
   "plans_page": {
@@ -847,5 +867,126 @@
         "19h"
       ]
     ]
+  },
+  "show": {
+    "title": "Veja na TV",
+    "lead": "Estes ecrãs passam sozinhos, tal como a Sofaly aparece e se mexe numa TV a sério. Escolha um para ficar nele.",
+    "screens": {
+      "forecast": [
+        "Previsão",
+        "As próximas 24 horas, a probabilidade de chuva e a lua, num só olhar e em letra grande.",
+        [
+          "Chuvisco fraco",
+          "Próximas 24 horas",
+          "Probabilidade de chuva",
+          "Agora",
+          "Máx. 27° · mín. 19° · sensação 26°"
+        ]
+      ],
+      "screensaver": [
+        "Proteção de ecrã",
+        "Uma pintura do The Met por dia, o relógio e o tempo do dia. Uma TV que apetece deixar ligada.",
+        [
+          "Boa noite",
+          "Pintura do dia · The Met",
+          "Quarto crescente"
+        ]
+      ],
+      "player": [
+        "Filmes",
+        "Dobrado ou legendado num botão, o genérico saltado por si e o regresso onde parou.",
+        [
+          "O Longo Caminho para Casa",
+          "Áudio",
+          "Original + legendas",
+          "Dobrado",
+          "Saltar genérico"
+        ]
+      ],
+      "radio": [
+        "Rádio e podcasts",
+        "Rádios do mundo inteiro e os seus podcasts, com leitor em ecrã inteiro.",
+        [
+          "A tocar agora",
+          "Rádio em direto",
+          "Jazz da costa",
+          "Notícias da manhã",
+          "Fado e guitarra",
+          "Podcast · episódio 12"
+        ]
+      ],
+      "alarm": [
+        "Despertador",
+        "A TV liga-se sozinha, o som sobe devagar e a previsão do dia já está à espera.",
+        [
+          "Bom dia",
+          "Volume a subir",
+          "Adiar · 10 min",
+          "A TV ligou-se sozinha"
+        ]
+      ],
+      "cards": [
+        "Cartões do início",
+        "Contagem decrescente, lembretes, câmbios, a lua e o próximo jogo da sua equipa, no ecrã inicial.",
+        [
+          "Faltam 12 dias para as férias",
+          "Medicamento às 20h",
+          "Câmara da garagem deixou de responder",
+          "Próximo jogo",
+          "Sáb · 16h",
+          "Quarto crescente",
+          "Câmbio",
+          "Contagem",
+          "A sua equipa × Rival"
+        ]
+      ],
+      "games": [
+        "Jogos",
+        "Jogos na nuvem, do PC e retro num só lugar, com a sua rede testada antes de jogar.",
+        [
+          "Comando ligado",
+          "Rede pronta para jogos na nuvem",
+          "Nuvem",
+          "PC",
+          "Retro",
+          "Malta",
+          "Jogos"
+        ]
+      ],
+      "phone": [
+        "Telemóvel",
+        "O painel no telemóvel: comando, escrita, o ecrã da TV ao vivo e recados que aparecem na TV.",
+        [
+          "Enviar para a TV",
+          "O jantar está pronto!",
+          "Recado do telemóvel",
+          "Comando",
+          "Escrever",
+          "Ecrã",
+          "Fotos"
+        ]
+      ],
+      "windows": [
+        "Windows",
+        "A TV aparece em Este PC como um telemóvel: arraste filmes e fotos diretamente para ela.",
+        [
+          "Este PC",
+          "Sofaly · Sala",
+          "Disco local",
+          "Abrir o painel da TV",
+          "A copiar para a TV… 68%"
+        ]
+      ],
+      "kids": [
+        "Família",
+        "Perfil infantil, hora de dormir e tempo de ecrã, tudo atrás do PIN dos pais.",
+        [
+          "Hora de dormir",
+          "Até amanhã!",
+          "Só apps infantis até às 7h",
+          "PIN dos pais"
+        ]
+      ]
+    }
   }
 }

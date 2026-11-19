@@ -749,6 +749,26 @@
       "Internet par appli",
       "Combien chaque appli a consommé et avec qui elle a parlé, gardé sur la TV 7 jours.",
       "Avancé › Réseau."
+    ],
+    "google-inside": [
+      "Google continue de marcher",
+      "L'Assistant Google, Gemini, la recherche et votre compte Google marchent comme avant. Sofaly change l'écran d'accueil, pas votre TV.",
+      "Utilisez le bouton micro comme d'habitude."
+    ],
+    "motion": [
+      "Des animations à la taille de votre TV",
+      "Une TV puissante anime tout ; une plus modeste n'anime que ce que vous avez choisi et ralentit seule quand les images saccadent.",
+      "Paramètres › Apparence."
+    ],
+    "frame-rate": [
+      "Des films sans saccades",
+      "La TV passe en 24 Hz pendant le film et les mouvements de caméra restent fluides.",
+      "S'active avec le film ; l'écran devient noir une seconde."
+    ],
+    "wifi-check": [
+      "Test de débit",
+      "Mesure votre internet en un geste et montre le signal Wi-Fi, la latence et le débit en mots simples.",
+      "Paramètres › Avancé › Réseau."
     ]
   },
   "plans_page": {
@@ -847,5 +867,126 @@
         "19 h"
       ]
     ]
+  },
+  "show": {
+    "title": "Voyez-la sur la TV",
+    "lead": "Ces écrans défilent tout seuls, comme Sofaly s'affiche et bouge sur une vraie TV. Choisissez-en un pour vous y arrêter.",
+    "screens": {
+      "forecast": [
+        "Prévisions",
+        "Les 24 prochaines heures, le risque de pluie et la lune, d'un coup d'œil et en gros caractères.",
+        [
+          "Bruine légère",
+          "24 prochaines heures",
+          "Risque de pluie",
+          "Maint.",
+          "Max 27° · min 19° · ressenti 26°"
+        ]
+      ],
+      "screensaver": [
+        "Économiseur",
+        "Une peinture du Met chaque jour, l'horloge et la météo du jour. Une TV qu'on a envie de laisser allumée.",
+        [
+          "Bonsoir",
+          "Peinture du jour · The Met",
+          "Premier croissant"
+        ]
+      ],
+      "player": [
+        "Films",
+        "VF ou VOST en un bouton, le générique sauté pour vous et la reprise là où vous étiez.",
+        [
+          "Le long chemin du retour",
+          "Audio",
+          "VO + sous-titres",
+          "Version française",
+          "Passer le générique"
+        ]
+      ],
+      "radio": [
+        "Radio et podcasts",
+        "Des radios du monde entier et vos podcasts, avec un lecteur plein écran.",
+        [
+          "En cours",
+          "Radio en direct",
+          "Jazz de la côte",
+          "Infos du matin",
+          "Chanson française",
+          "Podcast · épisode 12"
+        ]
+      ],
+      "alarm": [
+        "Réveil",
+        "La TV s'allume toute seule, le son monte doucement et la météo du jour vous attend.",
+        [
+          "Bonjour",
+          "Le volume monte",
+          "Rappel · 10 min",
+          "La TV s'est allumée seule"
+        ]
+      ],
+      "cards": [
+        "Cartes d'accueil",
+        "Compte à rebours, rappels, cours, la lune et le prochain match de votre équipe, sur l'écran d'accueil.",
+        [
+          "Vacances dans 12 jours",
+          "Médicament à 20 h",
+          "La caméra du garage ne répond plus",
+          "Prochain match",
+          "Sam. · 16 h",
+          "Premier croissant",
+          "Cours",
+          "Compte à rebours",
+          "Votre équipe × Rival"
+        ]
+      ],
+      "games": [
+        "Jeux",
+        "Jeux dans le cloud, sur PC et rétro au même endroit, avec votre réseau testé avant de jouer.",
+        [
+          "Manette connectée",
+          "Réseau prêt pour le cloud gaming",
+          "Cloud",
+          "PC",
+          "Rétro",
+          "La bande",
+          "Jeux"
+        ]
+      ],
+      "phone": [
+        "Téléphone",
+        "Le panneau sur votre téléphone : télécommande, saisie, l'écran de la TV en direct et des messages qui s'affichent sur la TV.",
+        [
+          "Envoyer à la TV",
+          "Le dîner est prêt !",
+          "Message du téléphone",
+          "Télécommande",
+          "Saisir",
+          "Écran",
+          "Photos"
+        ]
+      ],
+      "windows": [
+        "Windows",
+        "La TV apparaît dans Ce PC comme un téléphone : glissez-y films et photos directement.",
+        [
+          "Ce PC",
+          "Sofaly · Salon",
+          "Disque local",
+          "Ouvrir le panneau de la TV",
+          "Copie vers la TV… 68 %"
+        ]
+      ],
+      "kids": [
+        "Famille",
+        "Profil enfant, heure du coucher et temps d'écran, le tout derrière le code PIN des parents.",
+        [
+          "Heure du coucher",
+          "À demain !",
+          "Seulement les apps enfants jusqu'à 7 h",
+          "PIN des parents"
+        ]
+      ]
+    }
   }
 }

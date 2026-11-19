@@ -749,6 +749,26 @@
       "Internet per aplikasi",
       "Berapa banyak internet yang dipakai setiap aplikasi dan dengan siapa ia berbicara, disimpan di TV selama 7 hari.",
       "Lanjutan › Jaringan."
+    ],
+    "google-inside": [
+      "Google tetap jalan",
+      "Asisten Google, Gemini, penelusuran, dan akun Google-mu tetap jalan seperti biasa. Sofaly mengganti layar beranda, bukan TV-mu.",
+      "Pakai tombol mikrofon seperti biasa."
+    ],
+    "motion": [
+      "Animasi sesuai TV-mu",
+      "TV yang kuat menganimasikan semuanya; yang lebih sederhana hanya yang kamu pilih, dan mengurangi sendiri saat frame turun.",
+      "Setelan › Tampilan."
+    ],
+    "frame-rate": [
+      "Film tanpa patah-patah",
+      "TV beralih ke 24 Hz selama film diputar, jadi gerakan kamera tetap mulus.",
+      "Menyala bersama film; layar berkedip hitam sedetik."
+    ],
+    "wifi-check": [
+      "Tes kecepatan",
+      "Mengukur internet dengan satu ketukan dan menampilkan sinyal Wi-Fi, latensi, serta kecepatan dengan kata-kata sederhana.",
+      "Setelan › Lanjutan › Jaringan."
     ]
   },
   "plans_page": {
@@ -847,5 +867,126 @@
         "19.00"
       ]
     ]
+  },
+  "show": {
+    "title": "Lihat di TV",
+    "lead": "Layar-layar ini berganti sendiri, persis seperti Sofaly tampil dan bergerak di TV sungguhan. Pilih satu untuk berhenti di sana.",
+    "screens": {
+      "forecast": [
+        "Prakiraan",
+        "24 jam ke depan, peluang hujan, dan bulan, sekali lihat dengan huruf besar.",
+        [
+          "Gerimis ringan",
+          "24 jam ke depan",
+          "Peluang hujan",
+          "Kini",
+          "Maks 27° · min 19° · terasa 26°"
+        ]
+      ],
+      "screensaver": [
+        "Screensaver",
+        "Satu lukisan dari The Met setiap hari, jam, dan cuaca hari ini. TV yang betah dibiarkan menyala.",
+        [
+          "Selamat malam",
+          "Lukisan hari ini · The Met",
+          "Bulan sabit muda"
+        ]
+      ],
+      "player": [
+        "Film",
+        "Sulih suara atau subtitel dengan satu tombol, intro dilewati untukmu, dan lanjut dari terakhir berhenti.",
+        [
+          "Jalan Panjang Pulang",
+          "Audio",
+          "Asli + subtitel",
+          "Sulih suara",
+          "Lewati intro"
+        ]
+      ],
+      "radio": [
+        "Radio & podcast",
+        "Stasiun dari seluruh dunia dan podcast-mu, dengan pemutar layar penuh.",
+        [
+          "Sedang diputar",
+          "Radio langsung",
+          "Jazz dari pesisir",
+          "Berita pagi",
+          "Dangdut klasik",
+          "Podcast · episode 12"
+        ]
+      ],
+      "alarm": [
+        "Alarm",
+        "TV menyala sendiri, suara naik pelan-pelan, dan prakiraan hari ini sudah menunggu.",
+        [
+          "Selamat pagi",
+          "Volume naik",
+          "Tunda · 10 mnt",
+          "TV menyala sendiri"
+        ]
+      ],
+      "cards": [
+        "Kartu beranda",
+        "Hitung mundur, pengingat, kurs, bulan, dan laga berikutnya timmu, langsung di layar beranda.",
+        [
+          "12 hari lagi liburan",
+          "Obat jam 20.00",
+          "Kamera garasi tidak merespons",
+          "Laga berikutnya",
+          "Sab · 16.00",
+          "Bulan sabit muda",
+          "Kurs",
+          "Hitung mundur",
+          "Timmu × Lawan"
+        ]
+      ],
+      "games": [
+        "Game",
+        "Game cloud, PC, dan retro di satu tempat, dengan jaringan diuji sebelum bermain.",
+        [
+          "Kontroler terhubung",
+          "Jaringan siap untuk game cloud",
+          "Cloud",
+          "PC",
+          "Retro",
+          "Geng",
+          "Game"
+        ]
+      ],
+      "phone": [
+        "Ponsel",
+        "Panel di ponsel: remote, mengetik, layar TV secara langsung, dan pesan yang muncul di TV.",
+        [
+          "Kirim ke TV",
+          "Makan malam sudah siap!",
+          "Pesan dari ponsel",
+          "Remote",
+          "Ketik",
+          "Layar",
+          "Foto"
+        ]
+      ],
+      "windows": [
+        "Windows",
+        "TV muncul di This PC seperti ponsel: seret film dan foto langsung ke dalamnya.",
+        [
+          "This PC",
+          "Sofaly · Ruang keluarga",
+          "Disk lokal",
+          "Buka panel TV",
+          "Menyalin ke TV… 68%"
+        ]
+      ],
+      "kids": [
+        "Keluarga",
+        "Profil anak, jam tidur, dan waktu layar, semuanya di balik PIN orang tua.",
+        [
+          "Waktunya tidur",
+          "Sampai besok!",
+          "Hanya aplikasi anak sampai jam 7",
+          "PIN orang tua"
+        ]
+      ]
+    }
   }
 }

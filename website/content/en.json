@@ -749,6 +749,26 @@
       "Internet per app",
       "How much internet each app used and who it talked to, kept on the TV for 7 days.",
       "Advanced › Network."
+    ],
+    "google-inside": [
+      "Google keeps working",
+      "The Google Assistant, Gemini, search and your Google account work as before. Sofaly changes the home screen, not your TV.",
+      "Use the microphone button as always."
+    ],
+    "motion": [
+      "Animations that fit your TV",
+      "Strong TVs animate everything; simpler ones animate only what you picked and slow down by themselves when frames drop.",
+      "Settings › Appearance."
+    ],
+    "frame-rate": [
+      "Movies without judder",
+      "The TV switches to 24 Hz while a movie plays, so camera pans stay smooth.",
+      "Turns on with the movie; the screen blinks black for a second."
+    ],
+    "wifi-check": [
+      "Internet speed test",
+      "Measures your internet in one tap and shows Wi-Fi signal, latency and speed in plain words.",
+      "Settings › Advanced › Network."
     ]
   },
   "plans_page": {
@@ -847,5 +867,126 @@
         "7 pm"
       ]
     ]
+  },
+  "show": {
+    "title": "See it on the TV",
+    "lead": "These screens play by themselves, the way Sofaly looks and moves on a real TV. Pick one to stay on it.",
+    "screens": {
+      "forecast": [
+        "Forecast",
+        "The next 24 hours, the chance of rain and the moon, in one look and in big letters.",
+        [
+          "Light drizzle",
+          "Next 24 hours",
+          "Chance of rain",
+          "Now",
+          "High 27° · low 19° · feels like 26°"
+        ]
+      ],
+      "screensaver": [
+        "Screensaver",
+        "A painting from The Met every day, the clock and the day's weather. A TV worth leaving on.",
+        [
+          "Good evening",
+          "Painting of the day · The Met",
+          "Waxing crescent"
+        ]
+      ],
+      "player": [
+        "Movies",
+        "Dubbed or subtitled with one key, the intro skipped for you, and back where you stopped.",
+        [
+          "The Long Road Home",
+          "Audio",
+          "Original + subtitles",
+          "Dubbed",
+          "Skip intro"
+        ]
+      ],
+      "radio": [
+        "Radio & podcasts",
+        "Stations from the whole world and your podcasts, with a full-screen player.",
+        [
+          "Now playing",
+          "Live radio",
+          "Jazz from the coast",
+          "Morning news",
+          "Samba & bossa",
+          "Podcast · episode 12"
+        ]
+      ],
+      "alarm": [
+        "Alarm",
+        "The TV turns itself on, the sound rises slowly and the day's forecast is already waiting.",
+        [
+          "Good morning",
+          "Volume rising",
+          "Snooze · 10 min",
+          "The TV turned itself on"
+        ]
+      ],
+      "cards": [
+        "Home cards",
+        "Countdown, reminders, rates, the moon and your team's next match, right on the home screen.",
+        [
+          "12 days to vacation",
+          "Medicine at 8 pm",
+          "Garage camera stopped answering",
+          "Next match",
+          "Sat · 4 pm",
+          "Waxing crescent",
+          "Rates",
+          "Countdown",
+          "Your team × Rivals"
+        ]
+      ],
+      "games": [
+        "Games",
+        "Cloud, PC and retro games in one place, with your network tested before you play.",
+        [
+          "Controller connected",
+          "Network ready for cloud gaming",
+          "Cloud",
+          "PC",
+          "Retro",
+          "Crew",
+          "Games"
+        ]
+      ],
+      "phone": [
+        "Phone",
+        "The panel on your phone: remote, typing, a live view of the screen and messages that pop up on the TV.",
+        [
+          "Send to the TV",
+          "Dinner is ready!",
+          "Message from the phone",
+          "Remote",
+          "Type",
+          "Screen",
+          "Photos"
+        ]
+      ],
+      "windows": [
+        "Windows",
+        "The TV shows up in This PC like a phone: drag movies and photos straight into it.",
+        [
+          "This PC",
+          "Sofaly · Living room",
+          "Local disk",
+          "Open the TV panel",
+          "Copying to the TV… 68%"
+        ]
+      ],
+      "kids": [
+        "Family",
+        "Kid profile, bedtime and screen time, all behind the parents' PIN.",
+        [
+          "Bedtime",
+          "See you tomorrow!",
+          "Only kids' apps until 7 am",
+          "Parents' PIN"
+        ]
+      ]
+    }
   }
 }

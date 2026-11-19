@@ -749,6 +749,26 @@
       "Internet per app",
       "Quanto internet ha usato ogni app e con chi ha parlato, conservato sulla TV per 7 giorni.",
       "Avanzate › Rete."
+    ],
+    "google-inside": [
+      "Google continua a funzionare",
+      "L'Assistente Google, Gemini, la ricerca e il tuo account Google funzionano come prima. Sofaly cambia la schermata iniziale, non la tua TV.",
+      "Usa il tasto del microfono come sempre."
+    ],
+    "motion": [
+      "Animazioni su misura per la tua TV",
+      "Una TV potente anima tutto; una più semplice anima solo ciò che hai scelto e rallenta da sola quando i fotogrammi calano.",
+      "Impostazioni › Aspetto."
+    ],
+    "frame-rate": [
+      "Film senza scatti",
+      "La TV passa a 24 Hz durante il film e i movimenti di camera restano fluidi.",
+      "Si attiva col film; lo schermo diventa nero per un secondo."
+    ],
+    "wifi-check": [
+      "Test di velocità",
+      "Misura la tua connessione con un tocco e mostra segnale Wi-Fi, latenza e velocità a parole semplici.",
+      "Impostazioni › Avanzate › Rete."
     ]
   },
   "plans_page": {
@@ -847,5 +867,126 @@
         "19:00"
       ]
     ]
+  },
+  "show": {
+    "title": "Guardala sulla TV",
+    "lead": "Queste schermate scorrono da sole, come Sofaly appare e si muove su una TV vera. Scegline una per fermarti lì.",
+    "screens": {
+      "forecast": [
+        "Previsioni",
+        "Le prossime 24 ore, la probabilità di pioggia e la luna, in un colpo d'occhio e a caratteri grandi.",
+        [
+          "Pioviggine leggera",
+          "Prossime 24 ore",
+          "Probabilità di pioggia",
+          "Ora",
+          "Max 27° · min 19° · percepita 26°"
+        ]
+      ],
+      "screensaver": [
+        "Salvaschermo",
+        "Un dipinto del Met ogni giorno, l'orologio e il meteo del giorno. Una TV che fa piacere lasciare accesa.",
+        [
+          "Buonasera",
+          "Dipinto del giorno · The Met",
+          "Luna crescente"
+        ]
+      ],
+      "player": [
+        "Film",
+        "Doppiato o sottotitolato con un tasto, la sigla saltata per te e si riparte da dove eri.",
+        [
+          "La lunga strada di casa",
+          "Audio",
+          "Originale + sottotitoli",
+          "Doppiato",
+          "Salta sigla"
+        ]
+      ],
+      "radio": [
+        "Radio e podcast",
+        "Radio da tutto il mondo e i tuoi podcast, con lettore a schermo intero.",
+        [
+          "In riproduzione",
+          "Radio in diretta",
+          "Jazz della costa",
+          "Notizie del mattino",
+          "Canzone italiana",
+          "Podcast · episodio 12"
+        ]
+      ],
+      "alarm": [
+        "Sveglia",
+        "La TV si accende da sola, il volume sale piano e le previsioni del giorno ti aspettano.",
+        [
+          "Buongiorno",
+          "Volume in salita",
+          "Posticipa · 10 min",
+          "La TV si è accesa da sola"
+        ]
+      ],
+      "cards": [
+        "Schede della home",
+        "Conto alla rovescia, promemoria, cambi, la luna e la prossima partita della tua squadra, nella schermata iniziale.",
+        [
+          "Mancano 12 giorni alle vacanze",
+          "Medicina alle 20",
+          "La telecamera del garage non risponde",
+          "Prossima partita",
+          "Sab · 16:00",
+          "Luna crescente",
+          "Cambi",
+          "Conto alla rovescia",
+          "La tua squadra × Rivale"
+        ]
+      ],
+      "games": [
+        "Giochi",
+        "Giochi in cloud, dal PC e retrò in un solo posto, con la rete testata prima di giocare.",
+        [
+          "Controller collegato",
+          "Rete pronta per il cloud gaming",
+          "Cloud",
+          "PC",
+          "Retrò",
+          "Compagnia",
+          "Giochi"
+        ]
+      ],
+      "phone": [
+        "Telefono",
+        "Il pannello sul telefono: telecomando, scrittura, lo schermo della TV dal vivo e messaggi che compaiono sulla TV.",
+        [
+          "Invia alla TV",
+          "La cena è pronta!",
+          "Messaggio dal telefono",
+          "Telecomando",
+          "Scrivi",
+          "Schermo",
+          "Foto"
+        ]
+      ],
+      "windows": [
+        "Windows",
+        "La TV compare in Questo PC come un telefono: trascina film e foto direttamente dentro.",
+        [
+          "Questo PC",
+          "Sofaly · Soggiorno",
+          "Disco locale",
+          "Apri il pannello della TV",
+          "Copia sulla TV… 68%"
+        ]
+      ],
+      "kids": [
+        "Famiglia",
+        "Profilo bambini, ora della nanna e tempo davanti allo schermo, tutto dietro il PIN dei genitori.",
+        [
+          "Ora della nanna",
+          "A domani!",
+          "Solo app per bambini fino alle 7",
+          "PIN dei genitori"
+        ]
+      ]
+    }
   }
 }
