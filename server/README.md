@@ -59,7 +59,10 @@ cd ../dns && go test ./...                           # nomes, servidor DNS de ve
 
 ## Publicar: roteiro completo em `DEPLOY.md`
 
-- API: `npx wrangler login` na conta sofalyapp (o Paulo aprova no navegador do Dell), `npx wrangler deploy`
-  dentro de `server/api`. Plano grátis serve até ~1.000 TVs (estimativa); depois, Workers Paid (US$ 5/mês).
+- API: `npx wrangler login` na conta sofalyapp (o Paulo aprova no navegador do Dell), depois **`npm run deploy`
+  dentro de `server/api`** (testa, publica com `--config` fixo e roda o ponta a ponta no ar).
+  **Nunca** `wrangler deploy` fora dessa pasta nem com `--name sofaly-api` sem o `wrangler.toml`: sem config, o wrangler 4
+  sobe a pasta atual como site estático com esse nome, tudo vira 404 e os secrets somem (aconteceu em 19/11/2026).
+  Secrets (ex.: Podcast Index) também de dentro de `server/api`: `npx wrangler secret put NOME`. Plano grátis serve até ~1.000 TVs (estimativa); depois, Workers Paid (US$ 5/mês).
 - DNS: `go build` (GOOS=linux), copiar para cada máquina, rodar como serviço com permissão só para a porta 53
   (`setcap cap_net_bind_service`), apontar `ns1`/`ns2.sofaly.tv` (registros A no domínio) e delegar `lan.sofaly.tv`.
