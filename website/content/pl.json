@@ -988,5 +988,156 @@
         ]
       ]
     }
+  },
+  "site": {
+    "nav_menu_label": "Światy",
+    "cta_main": "Zobacz wszystkie {n} funkcje",
+    "cta_plans": "Porównaj plany",
+    "lang_label": "Język",
+    "toggle": "Menu",
+    "hero": {
+      "title": "Sofaly: ekran główny Google TV dla całej rodziny",
+      "description": "Sofaly zastępuje ekran główny Google TV i Android TV: Oglądaj, Słuchaj, Graj i Aplikacje w jednym krzyżu, tekst w trzech rozmiarach i zero reklam.",
+      "h1": "Ekran główny Google TV dla całej rodziny",
+      "lead": "Sofaly zastępuje ekran główny Google TV i Android TV. Oglądaj, Słuchaj, Graj i Aplikacje mieszczą się w jednym krzyżu, tekst ma trzy rozmiary, a reklamy nie pojawiają się wcale.",
+      "proof": "Dla Chromecasta z Google TV, telewizorów z Google TV i Android TV 10 lub nowszego.",
+      "art": "Ekran główny Sofaly na telewizorze: krzyż z otwartym Oglądaj i karta budzika, który włącza telewizor o 6:30",
+      "note_title": "Budzik · 06:30",
+      "note_chip": "Gotowe",
+      "note_lines": [
+        "Telewizor włączył się sam",
+        "Głośność rośnie do 18",
+        "Prognoza <b>22°</b>, suchy poranek"
+      ]
+    },
+    "cross": {
+      "h2": "Każdy ekran zaczyna się od krzyża",
+      "text": "◀ ▶ wybiera świat: Oglądaj, Słuchaj, Graj lub Aplikacje. ▲ ▼ przechodzi przez jego zawartość. HOME wraca tu z każdej aplikacji.",
+      "link": "Zobacz, jak działa krzyż",
+      "art": "Krzyż Sofaly na telewizorze, od Kontynuuj do Oglądaj, Słuchaj, Graj i Aplikacje"
+    },
+    "house": {
+      "h2": "Co telewizor robi dla domu.",
+      "h2_muted": "Cztery zadania, które ekran Google zostawia innym aplikacjom.",
+      "cards": [
+        [
+          "Włącza telewizor o 6:30, żeby cię obudzić",
+          "Budzik sam włącza telewizor, powoli podgłaśnia i otwiera prognozę na dziś."
+        ],
+        [
+          "Odpowiada każdemu telefonowi w domu",
+          "Otwórz panel telewizora w przeglądarce telefonu, aby pisać, zostawić wiadomość lub używać go jak pilota. Chroni go PIN."
+        ],
+        [
+          "Blokuje ekran główny, gdy dzieci idą spać",
+          "Profil dziecięcy pokazuje tylko dozwolone aplikacje, ogranicza głośność i prosi o PIN, by wyjść w porze snu."
+        ],
+        [
+          "Pokazuje pogodę z lotniska na ekranie głównym",
+          "Bieżąca pogoda pochodzi ze stacji na najbliższym lotnisku. Prognoza obejmuje 9 dni."
+        ]
+      ]
+    },
+    "statement": {
+      "label": "Dlaczego zmienić",
+      "text": "Ekran, który przyszedł z telewizorem, powstał, by sprzedawać programy. <strong>Sofaly</strong> powstał dla ludzi na kanapie: babci, która czyta każde słowo, i dziecka, które idzie spać o czasie."
+    },
+    "movies": {
+      "h2": "Odtwarza filmy z twojego komputera",
+      "text": "Sofaly znajduje filmy i seriale udostępnione na komputerze lub NAS-ie, dodaje plakaty i otwiera je we własnym odtwarzaczu.",
+      "facts": [
+        "Dubbing lub napisy jednym przyciskiem",
+        "Pomija czołówkę za ciebie",
+        "Wznawia tam, gdzie skończyłeś"
+      ],
+      "link": "Wszystko w Oglądaj",
+      "art": "Odtwarzacz Sofaly z otwartym menu dźwięku"
+    },
+    "tour": {
+      "h2": "Pięć kolejnych ekranów tego samego telewizora",
+      "text": "Każdy narysowano z aplikacji działającej na Chromecaście z Google TV. Wybierz jeden.",
+      "tabs": {
+        "radio": [
+          "Słuchaj radia",
+          "Stacje z każdego kraju i twoje podcasty w odtwarzaczu na cały ekran.",
+          "Zobacz Słuchaj"
+        ],
+        "screensaver": [
+          "Zostaw obraz",
+          "Codziennie obraz z The Met, z zegarem i pogodą na dziś.",
+          "Zobacz wygaszacz"
+        ],
+        "cards": [
+          "Odliczaj dni",
+          "Odliczanie, przypomnienie, księżyc i kursy prosto na ekranie głównym.",
+          "Zobacz karty ekranu głównego"
+        ],
+        "games": [
+          "Zacznij grę",
+          "Gry w chmurze, z PC i retro w jednym miejscu, z już sparowanym kontrolerem.",
+          "Zobacz Graj"
+        ],
+        "windows": [
+          "Otwórz z Windows",
+          "Telewizor pojawia się w Ten komputer jako dysk S:. Przeciągnij film, a się odtworzy.",
+          "Zobacz telefon i komputer"
+        ]
+      }
+    },
+    "compare": {
+      "h2": "Ekran Google TV obok Sofaly",
+      "text": "Ten sam telewizor, te same aplikacje. Zmienia się pierwszy ekran, który widzisz.",
+      "col": "Na ekranie głównym"
+    },
+    "plans": {
+      "h2": "Plany",
+      "text": "Basic jest darmowy i to już cały ekran główny. Ceny Pro i Ultra pojawią się wraz z premierą w Google Play.",
+      "free": "Za darmo",
+      "features_n": "{n} funkcji",
+      "cta": "Co zawiera {plan}"
+    },
+    "faq": {
+      "h2": "Pytania",
+      "text": "Reszta jest w pomocy, w 16 językach.",
+      "link": "Otwórz pomoc",
+      "items": [
+        [
+          "Czy Sofaly działa na moim telewizorze?",
+          "Sofaly działa na Google TV i Android TV 10 lub nowszym: Chromecaście z Google TV, telewizorach z Google TV i przystawkach Android TV. Strona zgodności wymienia sprawdzone urządzenia."
+        ],
+        [
+          "Czy potrzebuję komputera, żeby zainstalować Sofaly?",
+          "Nie. Zainstaluj go z Google Play na samym telewizorze i przejdź kroki pilotem."
+        ],
+        [
+          "Czy moje aplikacje zostaną na telewizorze?",
+          "Wszystkie. Sofaly zastępuje tylko ekran główny: Netflix, YouTube, Prime Video i reszta otwierają się jak zawsze, a przycisk mikrofonu to dalej Asystent Google."
+        ],
+        [
+          "Czy Sofaly pokazuje reklamy?",
+          "Nie, w żadnym planie. Sofaly nie sprzedaje reklam i nie śledzi, co oglądasz."
+        ],
+        [
+          "Czy Sofaly daje kanały albo filmy?",
+          "Nie. Sofaly porządkuje to, co już twoje: twoje aplikacje, twoje pliki oraz otwarte radia i podcasty."
+        ],
+        [
+          "Jak wrócić do ekranu Google?",
+          "Wybierz ponownie ekran główny Google w ustawieniach telewizora. Nic twojego nie zostanie usunięte."
+        ]
+      ]
+    },
+    "close": {
+      "h2": "Zobacz każdą funkcję przed premierą",
+      "text": "Sofaly wkrótce trafi do Google Play. Basic pozostaje darmowy."
+    },
+    "footer": {
+      "lede": "Ekran główny dla Google TV i Android TV.",
+      "col_product": "Produkt",
+      "col_build": "Twórz",
+      "col_help": "Pomoc",
+      "compat": "Zgodność",
+      "plugins": "Kontrakt wtyczek"
+    }
   }
 }

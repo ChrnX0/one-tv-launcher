@@ -988,5 +988,156 @@
         ]
       ]
     }
+  },
+  "site": {
+    "nav_menu_label": "Mondes",
+    "cta_main": "Voir les {n} fonctions",
+    "cta_plans": "Comparer les offres",
+    "lang_label": "Langue",
+    "toggle": "Menu",
+    "hero": {
+      "title": "Sofaly : l'écran d'accueil Google TV pour toute la famille",
+      "description": "Sofaly remplace l'écran d'accueil de Google TV et d'Android TV : Regarder, Écouter, Jouer et Applications en croix, le texte en trois tailles et aucune publicité.",
+      "h1": "L'écran d'accueil Google TV pour toute la famille",
+      "lead": "Sofaly remplace l'écran d'accueil de Google TV et d'Android TV. Regarder, Écouter, Jouer et Applications tiennent dans une croix, le texte existe en trois tailles et aucune publicité ne s'affiche.",
+      "proof": "Pour le Chromecast avec Google TV, les téléviseurs Google TV et Android TV 10 ou plus récent.",
+      "art": "L'écran d'accueil de Sofaly sur un téléviseur, la croix avec Regarder ouvert, et la carte du réveil qui allume la TV à 6 h 30",
+      "note_title": "Réveil · 06:30",
+      "note_chip": "Fait",
+      "note_lines": [
+        "La TV s'est allumée toute seule",
+        "Volume qui monte jusqu'à 18",
+        "Prévision <b>22°</b>, matinée sèche"
+      ]
+    },
+    "cross": {
+      "h2": "Chaque écran part d'une croix",
+      "text": "◀ ▶ choisit un monde : Regarder, Écouter, Jouer ou Applications. ▲ ▼ parcourt ce qu'il contient. HOME vous ramène ici depuis n'importe quelle appli.",
+      "link": "Voir comment marche la croix",
+      "art": "La croix de Sofaly sur un téléviseur, de Reprendre à Regarder, Écouter, Jouer et Applications"
+    },
+    "house": {
+      "h2": "Ce que la TV fait pour la maison.",
+      "h2_muted": "Quatre tâches que l'écran de Google laisse à d'autres applis.",
+      "cards": [
+        [
+          "Allume la TV à 6 h 30 pour vous réveiller",
+          "Le réveil allume la TV tout seul, monte le volume doucement et ouvre la météo du jour."
+        ],
+        [
+          "Répond à tous les téléphones de la maison",
+          "Ouvrez le panneau de la TV dans le navigateur du téléphone pour taper, envoyer un message ou en faire une télécommande. Un code PIN le protège."
+        ],
+        [
+          "Verrouille l'écran d'accueil à l'heure du coucher",
+          "Le profil enfant n'affiche que les applis autorisées, plafonne le volume et demande un code pour en sortir à l'heure du coucher."
+        ],
+        [
+          "Affiche la météo de l'aéroport sur l'écran d'accueil",
+          "La météo actuelle vient de la station de l'aéroport le plus proche. La prévision couvre les 9 prochains jours."
+        ]
+      ]
+    },
+    "statement": {
+      "label": "Pourquoi changer",
+      "text": "L'écran livré avec votre TV est fait pour vous vendre des programmes. <strong>Sofaly</strong> est fait pour ceux qui sont sur le canapé : une grand-mère qui lit chaque mot et un enfant couché à l'heure."
+    },
+    "movies": {
+      "h2": "Lit les films de votre ordinateur",
+      "text": "Sofaly trouve les films et séries partagés sur votre ordinateur ou votre NAS, ajoute les affiches et les ouvre dans son propre lecteur.",
+      "facts": [
+        "Doublé ou sous-titré d'une touche",
+        "Saute le générique pour vous",
+        "Reprend là où vous vous êtes arrêté"
+      ],
+      "link": "Tout voir dans Regarder",
+      "art": "Le lecteur de Sofaly avec le menu audio ouvert"
+    },
+    "tour": {
+      "h2": "Cinq autres écrans de la même TV",
+      "text": "Chacun est dessiné d'après l'appli telle qu'elle tourne sur un Chromecast avec Google TV. Choisissez-en un.",
+      "tabs": {
+        "radio": [
+          "Écouter la radio",
+          "Les stations de tous les pays et vos podcasts, dans un lecteur plein écran.",
+          "Voir Écouter"
+        ],
+        "screensaver": [
+          "Laisser un tableau",
+          "Un tableau du Met chaque jour, avec l'horloge et la météo du jour.",
+          "Voir l'économiseur d'écran"
+        ],
+        "cards": [
+          "Compter les jours",
+          "Compte à rebours, rappel, la lune et les cours, directement sur l'écran d'accueil.",
+          "Voir les cartes d'accueil"
+        ],
+        "games": [
+          "Lancer un jeu",
+          "Jeux dans le cloud, sur PC et rétro au même endroit, la manette déjà appairée.",
+          "Voir Jouer"
+        ],
+        "windows": [
+          "L'ouvrir depuis Windows",
+          "La TV apparaît dans Ce PC comme lecteur S:. Glissez un film et il se lance.",
+          "Voir téléphone et ordinateur"
+        ]
+      }
+    },
+    "compare": {
+      "h2": "L'écran de Google TV à côté de Sofaly",
+      "text": "La même TV, les mêmes applis. Seul change le premier écran que vous voyez.",
+      "col": "Sur l'écran d'accueil"
+    },
+    "plans": {
+      "h2": "Offres",
+      "text": "Basique est gratuit et c'est déjà tout l'écran d'accueil. Les prix de Pro et Ultra arrivent avec le lancement sur Google Play.",
+      "free": "Gratuit",
+      "features_n": "{n} fonctions",
+      "cta": "Voir ce que comprend {plan}"
+    },
+    "faq": {
+      "h2": "Questions",
+      "text": "Le reste est dans l'aide, en 16 langues.",
+      "link": "Ouvrir l'aide",
+      "items": [
+        [
+          "Sofaly marche-t-il sur ma TV ?",
+          "Sofaly tourne sur Google TV et Android TV 10 ou plus récent : le Chromecast avec Google TV, les téléviseurs Google TV et les box Android TV. La page de compatibilité liste les appareils testés."
+        ],
+        [
+          "Faut-il un ordinateur pour installer Sofaly ?",
+          "Non. Installez-le depuis Google Play sur la TV elle-même et suivez les étapes avec la télécommande."
+        ],
+        [
+          "Mes applis restent-elles sur la TV ?",
+          "Toutes. Sofaly ne remplace que l'écran d'accueil : Netflix, YouTube, Prime Video et les autres s'ouvrent comme avant, et le bouton micro reste l'Assistant Google."
+        ],
+        [
+          "Sofaly affiche-t-il des publicités ?",
+          "Non, dans aucune offre. Sofaly ne vend pas de publicité et ne suit pas ce que vous regardez."
+        ],
+        [
+          "Sofaly fournit-il des chaînes ou des films ?",
+          "Non. Sofaly range ce qui est déjà à vous : vos applis, vos fichiers, les radios et podcasts ouverts."
+        ],
+        [
+          "Comment retrouver l'écran de Google ?",
+          "Choisissez à nouveau l'écran d'accueil de Google dans les paramètres de la TV. Rien de vos données n'est effacé."
+        ]
+      ]
+    },
+    "close": {
+      "h2": "Voyez chaque fonction avant le lancement",
+      "text": "Sofaly arrive bientôt sur Google Play. Basique reste gratuit."
+    },
+    "footer": {
+      "lede": "L'écran d'accueil pour Google TV et Android TV.",
+      "col_product": "Produit",
+      "col_build": "Créer",
+      "col_help": "Aide",
+      "compat": "Compatibilité",
+      "plugins": "Contrat des plugins"
+    }
   }
 }
