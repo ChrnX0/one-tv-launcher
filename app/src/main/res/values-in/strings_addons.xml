@@ -50,6 +50,9 @@
     <string name="ad_sug_mubi">Film baru dan klasik dari MUBI.</string>
     <string name="ad_sug_kitsu">Katalog dan episode anime dari Kitsu.</string>
     <string name="ad_sug_animeseason">Anime per musim dan per tahun.</string>
+    <string name="ad_sug_opensubtitles">Subtitle dalam banyak bahasa untuk film dan serial, dari OpenSubtitles.</string>
+    <string name="ad_sug_livechannels">Saluran langsung gratis per negara (Pluto TV dan lainnya): berita, film, dan serial.</string>
+    <string name="ad_sug_publicdomain">Film klasik domain publik dari Internet Archive, gratis dan legal. Dari Sofaly.</string>
     <string name="ad_grupo_todos">Semua</string>
     <string name="ad_grupo_filmes_series">Film dan serial</string>
     <string name="ad_grupo_anime">Anime</string>

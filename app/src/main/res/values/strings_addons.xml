@@ -50,6 +50,9 @@
     <string name="ad_sug_mubi">New and classic films from MUBI.</string>
     <string name="ad_sug_kitsu">Anime catalog and episodes from Kitsu.</string>
     <string name="ad_sug_animeseason">Anime by season and year.</string>
+    <string name="ad_sug_opensubtitles">Subtitles in many languages for movies and series, from OpenSubtitles.</string>
+    <string name="ad_sug_livechannels">Free live channels by country (Pluto TV and others), with news, movies and series.</string>
+    <string name="ad_sug_publicdomain">Classic public domain films from the Internet Archive, free and legal to watch. By Sofaly.</string>
     <string name="ad_grupo_todos">All</string>
     <string name="ad_grupo_filmes_series">Movies and shows</string>
     <string name="ad_grupo_anime">Anime</string>

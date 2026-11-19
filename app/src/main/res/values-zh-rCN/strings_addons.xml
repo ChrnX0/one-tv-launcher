@@ -50,6 +50,9 @@
     <string name="ad_sug_mubi">MUBI 的新片与经典电影。</string>
     <string name="ad_sug_kitsu">来自 Kitsu 的动画目录和剧集。</string>
     <string name="ad_sug_animeseason">按季度和年份分类的动画。</string>
+    <string name="ad_sug_opensubtitles">来自 OpenSubtitles 的电影和剧集多语言字幕。</string>
+    <string name="ad_sug_livechannels">按国家/地区划分的免费直播频道(Pluto TV 等):新闻、电影和剧集。</string>
+    <string name="ad_sug_publicdomain">来自 Internet Archive 的公有领域经典电影,免费且合法。由 Sofaly 提供。</string>
     <string name="ad_grupo_todos">全部</string>
     <string name="ad_grupo_filmes_series">电影和剧集</string>
     <string name="ad_grupo_anime">动画</string>

@@ -50,6 +50,9 @@
     <string name="ad_sug_mubi">أفلام جديدة وكلاسيكية من MUBI.</string>
     <string name="ad_sug_kitsu">كتالوج الأنمي وحلقاته من Kitsu.</string>
     <string name="ad_sug_animeseason">أنمي حسب الموسم والسنة.</string>
+    <string name="ad_sug_opensubtitles">ترجمات بلغات كثيرة للأفلام والمسلسلات من OpenSubtitles.</string>
+    <string name="ad_sug_livechannels">قنوات مباشرة مجانية حسب البلد (Pluto TV وغيرها): أخبار وأفلام ومسلسلات.</string>
+    <string name="ad_sug_publicdomain">أفلام كلاسيكية في الملك العام من Internet Archive، مجانية وقانونية. من Sofaly.</string>
     <string name="ad_grupo_todos">الكل</string>
     <string name="ad_grupo_filmes_series">أفلام ومسلسلات</string>
     <string name="ad_grupo_anime">أنمي</string>

@@ -11,11 +11,13 @@
 //   GET    /v1/dns/txt/<id>        pública: as máquinas de DNS leem o desafio daqui
 //   GET    /v1/health              pública
 //   GET    /v1/addons/recommended  pública: lista curada de add-ons (src/addons.js)
+//   GET    /v1/addons/public-domain/...  pública: nosso add-on de filmes de domínio público (src/publicdomain.js)
 //   GET    /v1/podcasts/search     pública: busca no Podcast Index (src/podcasts.js), ?q=&lang=&max=
 //   GET    /v1/podcasts/trending   pública: em alta no idioma, ?lang=&max=
 import { verifySignature, ID_RE, CODE_RE, newCode } from './rules.js';
 import { recommendedBody } from './addons.js';
 import { handlePodcasts } from './podcasts.js';
+import { BASE_PATH as PD_BASE, handlePublicDomain } from './publicdomain.js';
 export { Mailbox } from './mailbox.js';
 export { Pairing } from './pairing.js';
 
@@ -37,6 +39,8 @@ export default {
         headers: { 'content-type': 'application/json', 'cache-control': 'public, max-age=3600' },
       });
     }
+
+    if (path.startsWith(`${PD_BASE}/`) && req.method === 'GET') return handlePublicDomain(path);
 
     const podcasts = path.match(/^\/v1\/podcasts\/(search|trending)$/);
     if (podcasts && req.method === 'GET') return handlePodcasts(podcasts[1], url, env);

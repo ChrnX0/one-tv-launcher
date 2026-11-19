@@ -47,6 +47,14 @@ class RecommendedAddonsTest {
         val r = RecommendedAddons.toShow(l, setOf(l[0].id), setOf(AddonsProtocolo.base(l[1].url)!!))
         assertEquals(l.drop(2), r)
     }
+
+    @Test fun naPlaySomemOsDeStream() {
+        val l = RecommendedAddons.BUILT_IN
+        val play = RecommendedAddons.toShow(l, emptySet(), emptySet(), play = true)
+        assertTrue(play.none { it.kind == "stream" })
+        assertTrue(play.any { it.id == "org.stremio.opensubtitlesv3" })
+        assertTrue(RecommendedAddons.toShow(l, emptySet(), emptySet()).any { it.id == "community.live-channels" })
+    }
 }
 
 class RecommendedAddonsGruposTest {
@@ -55,13 +63,14 @@ class RecommendedAddonsGruposTest {
         assertEquals("anime", RecommendedAddons.groupOf(listOf("anime", "movie", "series"), listOf("catalog", "meta")))
         assertEquals("movies_series", RecommendedAddons.groupOf(listOf("movie"), listOf("catalog")))
         assertEquals("tv", RecommendedAddons.groupOf(listOf("tv"), listOf("catalog", "stream")))
+        assertEquals("tv", RecommendedAddons.groupOf(listOf("channels"), listOf("catalog", "meta", "stream")))
         assertEquals("music", RecommendedAddons.groupOf(listOf("music"), listOf("catalog", "stream")))
         assertEquals("other", RecommendedAddons.groupOf(listOf("addMovie"), listOf("catalog")))
     }
 
     @Test fun secoesNaOrdemSemVazias() {
         val g = RecommendedAddons.grouped(RecommendedAddons.BUILT_IN)
-        assertEquals(listOf("movies_series", "anime"), g.map { it.first })
+        assertEquals(listOf("movies_series", "anime", "tv", "subtitles"), g.map { it.first })
         assertEquals(RecommendedAddons.BUILT_IN.size, g.sumOf { it.second.size })
     }
 
