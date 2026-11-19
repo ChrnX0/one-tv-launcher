@@ -732,7 +732,7 @@
     ],
     "no-tracking": [
       "Takip yok",
-      "Sofaly hesap istemez ve kullanım verisi toplamaz. Hata raporu yalnızca siz gönderirseniz gider.",
+      "Hesap yok, kullanım analizi yok ve siz göndermeden giden hata raporu yok.",
       "Her zaman."
     ],
     "pin": [
@@ -789,7 +789,7 @@
   },
   "dev_page": {
     "title": "Geliştiriciler · Sofaly",
-    "description": "Android TV uygulamanızın kartını Sofaly ana ekranına koyun; ücretsiz ve sıradan Android koduyla.",
+    "description": "Android TV uygulamanızın kartını Sofaly ana ekranına koyun. SDK yok, ücret yok.",
     "eyebrow": "Geliştirici kiti",
     "h1": "Uygulamanız, insanların gerçekten baktığı ana ekranda.",
     "lead": "Bir Sofaly eklentisi kendi Android TV uygulamanızdır. Kısa bir kart gönderir ve Sofaly onu ana ekrana, büyük yazıyla ve evin tarzında çizer.",
@@ -804,8 +804,8 @@
       ],
       [
         "puzzle",
-        "Sıradan Android kodu",
-        "Bir ContentProvider ve bir satır veri, zaten bildiğiniz Android ile. Kartı oluşturmak ve göstermek ücretsiz."
+        "SDK yok, ücret yok",
+        "Bir ContentProvider ve bir satır veri. Kurulacak kütüphanemiz yok, ödenecek ücret yok."
       ],
       [
         "heart",
@@ -987,157 +987,6 @@
           "Ebeveyn PIN'i"
         ]
       ]
-    }
-  },
-  "site": {
-    "nav_menu_label": "Dünyalar",
-    "cta_main": "{n} özelliğin hepsini gör",
-    "cta_plans": "Planları karşılaştır",
-    "lang_label": "Dil",
-    "toggle": "Menü",
-    "hero": {
-      "title": "Sofaly: tüm aile için Google TV ana ekranı",
-      "description": "Sofaly, Google TV ve Android TV ana ekranının yerini alır: İzle, Dinle, Oyna ve Uygulamalar tek bir haçta, üç boyutta yazı ve hiç reklam yok.",
-      "h1": "Tüm aile için Google TV ana ekranı",
-      "lead": "Sofaly, Google TV ve Android TV ana ekranının yerini alır. İzle, Dinle, Oyna ve Uygulamalar tek bir haçta durur, yazı üç boyutta gelir ve hiç reklam çıkmaz.",
-      "proof": "Google TV'li Chromecast, Google TV'li televizyonlar ve Android TV 10 veya üstü için.",
-      "art": "Bir televizyonda Sofaly ana ekranı: İzle açık haç ve TV'yi 6:30'da açan alarm kartı",
-      "note_title": "Alarm · 06:30",
-      "note_chip": "Tamam",
-      "note_lines": [
-        "TV kendiliğinden açıldı",
-        "Ses 18'e kadar yükseliyor",
-        "Tahmin <b>22°</b>, kuru bir sabah"
-      ]
-    },
-    "cross": {
-      "h2": "Her ekran bir haçtan başlar",
-      "text": "◀ ▶ bir dünya seçer: İzle, Dinle, Oyna veya Uygulamalar. ▲ ▼ içindekileri gezer. HOME sizi her uygulamadan buraya geri getirir.",
-      "link": "Haçın nasıl çalıştığını gör",
-      "art": "Bir televizyonda Sofaly haçı, Devam et'ten İzle, Dinle, Oyna ve Uygulamalar'a geçerken"
-    },
-    "house": {
-      "h2": "TV'nin ev için yaptıkları.",
-      "h2_muted": "Google ekranının başka uygulamalara bıraktığı dört iş.",
-      "cards": [
-        [
-          "Sizi uyandırmak için TV'yi 6:30'da açar",
-          "Alarm TV'yi kendisi açar, sesi yavaşça yükseltir ve günün tahminini açar."
-        ],
-        [
-          "Evdeki her telefona yanıt verir",
-          "Yazmak, not bırakmak ya da kumanda gibi kullanmak için TV panelini telefonun tarayıcısında açın. Bir PIN korur."
-        ],
-        [
-          "Çocukların yatma saatinde ana ekranı kilitler",
-          "Çocuk profili yalnızca izin verdiğiniz uygulamaları gösterir, sesi sınırlar ve yatma saatinde çıkmak için PIN ister."
-        ],
-        [
-          "Ana ekranda havalimanının havasını gösterir",
-          "Şu anki hava en yakın havalimanının istasyonundan gelir. Tahmin önümüzdeki 9 günü kapsar."
-        ]
-      ]
-    },
-    "statement": {
-      "label": "Neden değiştirmeli",
-      "text": "TV'nizle gelen ekran size program satmak için yapıldı. <strong>Sofaly</strong> koltuktakiler için yapıldı: her kelimeyi okuyan büyükanne ve vaktinde yatan çocuk için."
-    },
-    "movies": {
-      "h2": "Bilgisayarınızdaki filmleri oynatır",
-      "text": "Sofaly bilgisayarınızda veya NAS'ınızda paylaşılan filmleri ve dizileri bulur, afişleri ekler ve kendi oynatıcısında açar.",
-      "facts": [
-        "Tek tuşla dublaj ya da altyazı",
-        "Jeneriği sizin yerinize atlar",
-        "Kaldığınız yerden devam eder"
-      ],
-      "link": "Hepsi İzle'de",
-      "art": "Ses menüsü açık Sofaly oynatıcısı"
-    },
-    "tour": {
-      "h2": "Aynı TV'den beş ekran daha",
-      "text": "Her biri, Google TV'li bir Chromecast'te çalışan uygulamadan çizildi. Birini seçin.",
-      "tabs": {
-        "radio": [
-          "Radyo dinle",
-          "Her ülkeden istasyonlar ve podcast'leriniz, tam ekran bir oynatıcıda.",
-          "Dinle'yi gör"
-        ],
-        "screensaver": [
-          "Bir tablo bırak",
-          "Her gün The Met'ten bir tablo, saat ve günün havasıyla.",
-          "Ekran koruyucuyu gör"
-        ],
-        "cards": [
-          "Günleri say",
-          "Geri sayım, hatırlatma, ay ve kurlar doğrudan ana ekranda.",
-          "Ana ekran kartlarını gör"
-        ],
-        "games": [
-          "Bir oyun başlat",
-          "Bulut, PC ve retro oyunlar tek yerde, kumanda zaten eşli.",
-          "Oyna'yı gör"
-        ],
-        "windows": [
-          "Windows'tan aç",
-          "TV, Bu Bilgisayar'da S: sürücüsü olarak görünür. Bir filmi sürükleyin, oynasın.",
-          "Telefon ve bilgisayarı gör"
-        ]
-      }
-    },
-    "compare": {
-      "h2": "Google TV ekranı ile Sofaly yan yana",
-      "text": "Aynı TV, aynı uygulamalar. Değişen, gördüğünüz ilk ekran.",
-      "col": "Ana ekranda"
-    },
-    "plans": {
-      "h2": "Planlar",
-      "text": "Basic ücretsizdir ve zaten ana ekranın tamamıdır. Pro ve Ultra fiyatları Google Play çıkışıyla gelir.",
-      "free": "Ücretsiz",
-      "features_n": "{n} özellik",
-      "cta": "{plan} neleri içeriyor"
-    },
-    "faq": {
-      "h2": "Sorular",
-      "text": "Gerisi yardımda, 16 dilde.",
-      "link": "Yardımı aç",
-      "items": [
-        [
-          "Sofaly benim TV'mde çalışır mı?",
-          "Sofaly, Google TV ve Android TV 10 veya üstünde çalışır: Google TV'li Chromecast, Google TV'li televizyonlar ve Android TV kutuları. Uyumluluk sayfası denenen cihazları listeler."
-        ],
-        [
-          "Sofaly'yi kurmak için bilgisayar gerekir mi?",
-          "Hayır. Google Play'den doğrudan TV'ye kurun ve adımları kumandayla izleyin."
-        ],
-        [
-          "Uygulamalarım TV'de kalır mı?",
-          "Hepsi. Sofaly yalnızca ana ekranı değiştirir: Netflix, YouTube, Prime Video ve diğerleri her zamanki gibi açılır, mikrofon tuşu da Google Asistan olarak kalır."
-        ],
-        [
-          "Sofaly reklam gösterir mi?",
-          "Hayır, hiçbir planda. Sofaly reklam satmaz ve ne izlediğinizi takip etmez."
-        ],
-        [
-          "Sofaly kanal veya film sunar mı?",
-          "Hayır. Sofaly zaten sizin olanı düzenler: uygulamalarınız, dosyalarınız, açık radyolar ve podcast'ler."
-        ],
-        [
-          "Google ekranına nasıl dönerim?",
-          "TV ayarlarında Google ana ekranını yeniden seçin. Sizin olan hiçbir şey silinmez."
-        ]
-      ]
-    },
-    "close": {
-      "h2": "Çıkıştan önce her özelliği görün",
-      "text": "Sofaly yakında Google Play'de. Basic ücretsiz kalır."
-    },
-    "footer": {
-      "lede": "Google TV ve Android TV için ana ekran.",
-      "col_product": "Ürün",
-      "col_build": "Geliştir",
-      "col_help": "Yardım",
-      "compat": "Uyumluluk",
-      "plugins": "Eklenti sözleşmesi"
     }
   }
 }

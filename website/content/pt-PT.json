@@ -732,7 +732,7 @@
     ],
     "no-tracking": [
       "Nada de rastreio",
-      "A Sofaly não pede conta nem recolhe dados de uso. Um relatório de erro só sai quando o envia.",
+      "Sem conta, sem análise de uso e sem relatório de erro a sair sem o seu pedido.",
       "Sempre."
     ],
     "pin": [
@@ -789,7 +789,7 @@
   },
   "dev_page": {
     "title": "Desenvolvedores · Sofaly",
-    "description": "Ponha o cartão da sua app de Android TV no ecrã inicial da Sofaly, de graça e com código Android normal.",
+    "description": "Ponha o cartão da sua app de Android TV no ecrã inicial da Sofaly. Sem SDK, sem custo.",
     "eyebrow": "Kit de desenvolvedor",
     "h1": "A sua app no ecrã inicial de quem assiste.",
     "lead": "Um plugin da Sofaly é a sua própria app de Android TV. Ela manda um cartão curto e a Sofaly desenha no ecrã inicial, com letra grande e no estilo da casa.",
@@ -804,8 +804,8 @@
       ],
       [
         "puzzle",
-        "Código Android normal",
-        "Um ContentProvider e uma linha de dados, com o Android que já conhece. Criar e mostrar o cartão é gratuito."
+        "Sem SDK, sem custo",
+        "Um ContentProvider e uma linha de dados. Nenhuma biblioteca nossa para instalar, nenhuma taxa."
       ],
       [
         "heart",
@@ -987,157 +987,6 @@
           "PIN dos pais"
         ]
       ]
-    }
-  },
-  "site": {
-    "nav_menu_label": "Mundos",
-    "cta_main": "Ver as {n} funções",
-    "cta_plans": "Comparar os planos",
-    "lang_label": "Idioma",
-    "toggle": "Menu",
-    "hero": {
-      "title": "Sofaly: o ecrã inicial do Google TV para a família toda",
-      "description": "O Sofaly substitui o ecrã inicial do Google TV e do Android TV: Ver, Ouvir, Jogar e Aplicações numa cruz, letra em três tamanhos e nenhum anúncio.",
-      "h1": "Ecrã inicial do Google TV para a família toda",
-      "lead": "O Sofaly substitui o ecrã inicial do Google TV e do Android TV. Ver, Ouvir, Jogar e Aplicações ficam numa cruz, a letra vem em três tamanhos e nenhum anúncio aparece.",
-      "proof": "Para o Chromecast com Google TV, TVs com Google TV e Android TV 10 ou mais recente.",
-      "art": "O ecrã inicial do Sofaly numa TV, a cruz com Ver aberto, e o cartão do despertador a ligar a TV às 6:30",
-      "note_title": "Despertador · 06:30",
-      "note_chip": "Feito",
-      "note_lines": [
-        "A TV ligou sozinha",
-        "Volume a subir até 18",
-        "Previsão <b>22°</b>, manhã seca"
-      ]
-    },
-    "cross": {
-      "h2": "Cada ecrã começa numa cruz",
-      "text": "◀ ▶ escolhe um mundo: Ver, Ouvir, Jogar ou Aplicações. ▲ ▼ percorre o que tem dentro. HOME trá-lo de volta de qualquer aplicação.",
-      "link": "Ver como a cruz funciona",
-      "art": "A cruz do Sofaly numa TV, a passar de Continuar para Ver, Ouvir, Jogar e Aplicações"
-    },
-    "house": {
-      "h2": "O que a TV faz pela casa.",
-      "h2_muted": "Quatro tarefas que o ecrã da Google deixa para outras aplicações.",
-      "cards": [
-        [
-          "Liga a TV às 6:30 para o acordar",
-          "O despertador liga a TV sozinho, sobe o volume devagar e abre a previsão do dia."
-        ],
-        [
-          "Atende qualquer telemóvel da casa",
-          "Abra o painel da TV no navegador do telemóvel para digitar, deixar um recado ou usar como comando. Um PIN protege."
-        ],
-        [
-          "Bloqueia o ecrã inicial à hora de deitar das crianças",
-          "O perfil infantil mostra só as aplicações que autorizar, limita o volume e pede PIN para sair à hora de deitar."
-        ],
-        [
-          "Mostra o tempo do aeroporto no ecrã inicial",
-          "O tempo de agora vem da estação do aeroporto mais próximo. A previsão cobre os próximos 9 dias."
-        ]
-      ]
-    },
-    "statement": {
-      "label": "Porquê mudar",
-      "text": "O ecrã que veio com a sua TV foi feito para vender programas. O <strong>Sofaly</strong> foi feito para quem está no sofá: a avó que lê cada palavra e a criança que se deita a horas."
-    },
-    "movies": {
-      "h2": "Toca os filmes do seu computador",
-      "text": "O Sofaly encontra os filmes e séries partilhados no seu computador ou NAS, põe os cartazes e abre tudo no seu próprio leitor.",
-      "facts": [
-        "Dobrado ou legendado com uma tecla",
-        "Salta o genérico por si",
-        "Volta de onde parou"
-      ],
-      "link": "Ver tudo em Ver",
-      "art": "O leitor do Sofaly com o menu de áudio aberto e o botão Saltar genérico"
-    },
-    "tour": {
-      "h2": "Mais cinco ecrãs da mesma TV",
-      "text": "Cada um é desenhado a partir da aplicação a correr num Chromecast com Google TV. Escolha um para ver.",
-      "tabs": {
-        "radio": [
-          "Ouvir rádio",
-          "Rádios do mundo todo e os seus podcasts, num leitor de ecrã inteiro.",
-          "Ver Ouvir"
-        ],
-        "screensaver": [
-          "Deixar um quadro",
-          "Um quadro do The Met por dia, com o relógio e o tempo do dia.",
-          "Ver o protetor de ecrã"
-        ],
-        "cards": [
-          "Contar os dias",
-          "Contagem decrescente, lembrete, a lua e as cotações, direto no ecrã inicial.",
-          "Ver os cartões do ecrã inicial"
-        ],
-        "games": [
-          "Começar um jogo",
-          "Jogos na nuvem, do PC e retro num lugar só, com o comando já emparelhado.",
-          "Ver Jogar"
-        ],
-        "windows": [
-          "Abrir pelo Windows",
-          "A TV aparece em Este PC como unidade S:. Arraste um filme e ele toca.",
-          "Ver telemóvel e computador"
-        ]
-      }
-    },
-    "compare": {
-      "h2": "O ecrã do Google TV ao lado do Sofaly",
-      "text": "A mesma TV, as mesmas aplicações. Muda o primeiro ecrã que vê.",
-      "col": "No ecrã inicial"
-    },
-    "plans": {
-      "h2": "Planos",
-      "text": "O Básico é gratuito e já é o ecrã inicial inteira. Os preços do Pro e do Ultra saem no lançamento no Google Play.",
-      "free": "Grátis",
-      "features_n": "{n} funções",
-      "cta": "Ver o que o {plan} inclui"
-    },
-    "faq": {
-      "h2": "Perguntas",
-      "text": "O resto está na ajuda, em 16 idiomas.",
-      "link": "Abrir a ajuda",
-      "items": [
-        [
-          "O Sofaly funciona na minha TV?",
-          "O Sofaly funciona em Google TV e Android TV 10 ou mais recente: o Chromecast com Google TV, TVs com Google TV e boxes Android TV. A página de compatibilidade lista os aparelhos testados."
-        ],
-        [
-          "Preciso de um computador para instalar o Sofaly?",
-          "Não. Instale a partir do Google Play na própria TV e siga os passos com o comando."
-        ],
-        [
-          "As minhas aplicações continuam na TV?",
-          "Todas. O Sofaly só substitui o ecrã inicial: Netflix, YouTube, Prime Video e o resto abrem como sempre, e o botão do microfone continua a ser o Google Assistente."
-        ],
-        [
-          "O Sofaly mostra anúncios?",
-          "Não, em nenhum plano. O Sofaly não vende anúncios e não acompanha o que vê."
-        ],
-        [
-          "O Sofaly vem com canais ou filmes?",
-          "Não. O Sofaly organiza o que já é seu: as suas aplicações, os seus ficheiros e rádios e podcasts abertos."
-        ],
-        [
-          "Como volto para o ecrã da Google?",
-          "Escolha de novo o ecrã inicial da Google nas definições da TV. Nada do que é seu é apagado."
-        ]
-      ]
-    },
-    "close": {
-      "h2": "Veja cada função antes do lançamento",
-      "text": "O Sofaly chega ao Google Play em breve. O Básico continua gratuito."
-    },
-    "footer": {
-      "lede": "O ecrã inicial para Google TV e Android TV.",
-      "col_product": "Produto",
-      "col_build": "Criar",
-      "col_help": "Ajuda",
-      "compat": "Compatibilidade",
-      "plugins": "Contrato de plugins"
     }
   }
 }

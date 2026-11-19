@@ -189,7 +189,7 @@
     },
     {
       "id": "play",
-      "color": "#6FA8FF",
+      "color": "#8C8CFF",
       "icon": "gamepad",
       "features": [
         [
@@ -414,7 +414,7 @@
     },
     {
       "id": "phone",
-      "color": "#7FC8F8",
+      "color": "#B4A7FF",
       "icon": "phone",
       "features": [
         [
