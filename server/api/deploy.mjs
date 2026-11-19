@@ -13,8 +13,11 @@ const config = join(pasta, 'wrangler.toml');
 const BASE = 'https://api.sofaly.tv';
 
 function rodar(cmd, args) {
-  // shell: true para achar o npx.cmd no Windows (Dell).
-  const r = spawnSync(cmd, args, { cwd: pasta, stdio: 'inherit', shell: process.platform === 'win32' });
+  // No Windows (Dell) o npx é um .cmd e só roda via shell; aí cada argumento vai entre aspas (pasta com espaço).
+  const win = process.platform === 'win32';
+  const r = win
+    ? spawnSync([cmd, ...args.map((a) => `"${a}"`)].join(' '), { cwd: pasta, stdio: 'inherit', shell: true })
+    : spawnSync(cmd, args, { cwd: pasta, stdio: 'inherit' });
   if (r.status !== 0) { console.error(`falhou: ${cmd} ${args.join(' ')}`); process.exit(r.status ?? 1); }
 }
 
