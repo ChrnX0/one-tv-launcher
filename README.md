@@ -102,7 +102,8 @@ better jobs:
 | Button | What it does |
 |---|---|
 | **HOME** | Always comes back to One TV Launcher, even though Google's launcher is still installed. |
-| **HOME (hold)** | Opens the **quick panel**: Wi-Fi, Bluetooth, sleep timer, screensaver, audio output, alarm, guest mode, Google Home and notifications. |
+| **BACK (hold)** | Opens the **quick panel**: Wi-Fi, Bluetooth, sleep timer, screensaver, audio output, alarm, guest mode, Home, scenes and notifications. |
+| **HOME (hold)** | Opens **Home** (your Home Assistant lights, plugs and scenes). |
 | **Netflix / YouTube buttons** | Remap them to **any app**: press to open it, **hold for 3 s** to pick a different app. Your choice is saved. |
 | **OK (hold) on an app** | Move it, stack it with another app, or hide it. |
 | **OK (hold 2 s) on a poster or channel** | Add it to or remove it from your list. |
@@ -196,7 +197,7 @@ How it's kept safe:
 
 <img src="docs/screenshots/settings.jpg" alt="Settings" width="60%">
 
-- Turn lights, plugs, fans, covers, scenes and scripts on or off from the couch (the **Home** tile in the quick panel), from the web panel, or by asking Claude.
+- Turn lights, plugs, fans, covers, scenes and scripts on or off from the couch (hold HOME, or the **Home** tile in the quick panel), from the web panel, or by asking Claude.
 - The TV reports itself to Home Assistant (`sensor.tv_<name>`: on or asleep, the app in front, what's playing), so automations like "movie paused → dim the lights" are easy.
 - When the doorbell rings, the camera snapshot pops up over whatever you're watching.
 - Talks directly to your server on your network, with no cloud in between. The token is encrypted on the TV. Setup: [docs/home-assistant.md](docs/home-assistant.md).

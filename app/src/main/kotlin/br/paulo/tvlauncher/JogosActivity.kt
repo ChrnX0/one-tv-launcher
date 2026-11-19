@@ -232,7 +232,7 @@ class JogosActivity : Activity() {
                 itens += config
             }
         }
-        val nome = (turma as? TurmaDiscordTv.Estado.Pronta)?.turma?.let { t -> getString(R.string.turma_titulo) + " · " + getString(R.string.turma_online, t.online) }
+        val nome = (turma as? TurmaDiscordTv.Estado.Pronta)?.turma?.let { t -> getString(R.string.turma_titulo) + "\n" + getString(R.string.turma_online, t.online) /* pente fino 19/11: " · " quebrava e a 2ª linha começava com "·" */ }
             ?: getString(R.string.turma_titulo)
         return CruzOuvir.Prateleira(P_TURMA, nome, IconeOuvir.Tipo.TURMA, itens)
     }

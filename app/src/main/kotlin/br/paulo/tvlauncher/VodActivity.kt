@@ -1413,7 +1413,7 @@ class VodActivity : Activity() {
             progressBackgroundTintList = ColorStateList.valueOf(Estilo.VIDRO_BORDA); secondaryProgressTintList = ColorStateList.valueOf(0x66FFFFFF)
         }
         barra.addView(progresso, LinearLayout.LayoutParams(-1, dp(5)).apply { topMargin = dp(12) })
-        barra.addView(TextView(this).apply { text = getString(R.string.vod_teclas); textSize = 11.5f; setTextColor(suave) },
+        barra.addView(TextView(this).apply { text = getString(R.string.vod_teclas); textSize = Estilo.Leitura.DICA; setTextColor(suave) },
             LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(10) })
         return barra
     }

@@ -296,7 +296,7 @@ class RadioActivity : Activity() {
         val r = s.radio ?: return null
         return CruzOuvir.Tocando(r.nome, CruzLogica.linhas(s.musica, detalhe(r)), r.logo, corDe(r.id), CapaOuvir.iniciais(r.nome),
             cobrir = false, progresso = null, tempo = null, pausado = s.pausado,
-            aoVivo = if (s.pausado) null else getString(R.string.ouv_ao_vivo).uppercase())
+            aoVivo = if (s.pausado) null else getString(R.string.ouv_ao_vivo).uppercase(), chave = r.id)
     }
 
     private fun aviso(id: String, nome: String, sub: String, icone: IconeOuvir.Tipo) = CruzOuvir.Item(id, nome, sub, icone)

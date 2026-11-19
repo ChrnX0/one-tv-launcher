@@ -195,7 +195,7 @@ object AvisoTv {
             append(texto)
         }
         val msg = Estilo.texto(svc, Estilo.Papel.CORPO, "").apply {
-            text = linha; textSize = 13f; includeFontPadding = false
+            text = linha; textSize = Estilo.Papel.LEGENDA.sp; includeFontPadding = false
             maxWidth = maxTexto
         }
         // Cabe numa linha = pílula. Recado comprido não cabe: aí vira cartão (raio 16, até 3 linhas), em vez de cortar

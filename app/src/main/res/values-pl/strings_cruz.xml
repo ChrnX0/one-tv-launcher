@@ -77,7 +77,8 @@
     <string name="cruz_tocou">Słuchano %1$s</string>
     <string name="cruz_por_ultimo">Ostatnio: %1$s</string>
     <string name="cruz_addons_n">Zainstalowane dodatki: %1$d</string>
-    <string name="cruz_apps_n">Aplikacje na tym telewizorze: %1$d</string>
+    <string name="cruz_apps_n">Aplikacje w siatce: %1$d</string>
+    <string name="cruz_apps_ocultos">W siatce: %1$d · ukryte: %2$d</string>
     <string name="cruz_podcasts_n">Obserwowane podcasty: %1$d</string>
     <string name="cruz_pendrive">Pendrive: %1$s</string>
     <string name="casa_fora_titulo">Home Assistant nie odpowiada</string>

@@ -77,7 +77,8 @@
     <string name="cruz_tocou">Gehört %1$s</string>
     <string name="cruz_por_ultimo">Zuletzt: %1$s</string>
     <string name="cruz_addons_n">Installierte Addons: %1$d</string>
-    <string name="cruz_apps_n">Apps auf diesem Fernseher: %1$d</string>
+    <string name="cruz_apps_n">Apps im Raster: %1$d</string>
+    <string name="cruz_apps_ocultos">Im Raster: %1$d · ausgeblendet: %2$d</string>
     <string name="cruz_podcasts_n">Abonnierte Podcasts: %1$d</string>
     <string name="cruz_pendrive">USB-Stick: %1$s</string>
     <string name="casa_fora_titulo">Home Assistant ist nicht erreichbar</string>

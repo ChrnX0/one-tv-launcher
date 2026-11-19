@@ -49,6 +49,8 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
     class Tocando(
         val titulo: String, val linhas: String, val capa: String, val cor: Int, val monograma: String, val cobrir: Boolean,
         val progresso: Float?, val tempo: String?, val pausado: Boolean, val aoVivo: String? = null,
+        /** Id do que toca (a rádio): com o foco nele, o item já diz "Tocando agora" e o cartão sai (não repete). */
+        val chave: String? = null,
     )
 
     companion object {
@@ -65,6 +67,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         private const val CAT_DIREITA = HomeCruz.CAT_DIREITA
         private const val PASSO_CATS = HomeCruz.PASSO_CATS
         private const val ROTULO_Y = HomeCruz.ROTULO_Y
+        private const val ROTULO_VAO = 40f   // do topo do item escolhido ao topo do nome da prateleira, quando nada há acima
         private const val TEXTO_MAX = HomeCruz.TEXTO_MAX
         private const val SUB_LINHAS = HomeCruz.SUB_LINHAS
         private const val SUB_SOBRA = HomeCruz.SUB_SOBRA
@@ -114,6 +117,8 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
     private val arte: ImageView
     private val titulo: TextView
     private val rotulo: TextView
+    private val cabecalho: LinearLayout
+    private var tocandoAgora: Tocando? = null
     private val posicao: TextView
     private val cartao: LinearLayout
     private val cartaoCapa: CapaOuvir
@@ -183,7 +188,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
             includeFontPadding = false; importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             setShadowLayer(dp(6f), 0f, 0f, 0x99000000.toInt())
         }
-        val cabecalho = LinearLayout(ctx).apply {
+        cabecalho = LinearLayout(ctx).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.BOTTOM
             addView(rotulo, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
             addView(posicao, LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply { marginStart = dpi(14) })
@@ -326,6 +331,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
     /** O cartão "Tocando agora" (null = some, e a arte do fundo também). */
     fun tocando(t: Tocando?) {
         val animar = isAttachedToWindow && !MolaViews.semAnimacao(this)
+        tocandoAgora = t
         if (t == null) {
             mola.mover(cartao, dp(CARTAO_X + 24f), dp(CARTAO_Y), 0f, 1f, animar)
             arte.animate().alpha(0f).setDuration(if (animar) 400 else 0).start()
@@ -343,13 +349,26 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         // Cartão só de texto (o "Esta semana" da tela Jogos): sem capa, o quadro vazio some.
         cartaoCapa.visibility = if (t.capa.isEmpty() && t.monograma.isEmpty()) View.GONE else View.VISIBLE
         tempo(t.progresso, t.tempo)
-        if (cartao.visibility != View.VISIBLE || cartao.alpha < 1f) {
-            mola.mover(cartao, dp(CARTAO_X), dp(CARTAO_Y), 1f, 1f, animar)
-        }
+        mostrarCartao(animar)
         if (arte.tag != t.capa) {
             if (t.capa.isEmpty()) { arte.setImageDrawable(null); arte.tag = "" } else PlayerLogos.carregar(context, t.capa, arte, ARTE_LADO)
         }
         arte.animate().alpha(if (t.capa.isEmpty()) 0f else ARTE_ALFA).setDuration(if (animar) 600 else 0).start()
+    }
+
+    /** Com o foco no item que está tocando, o cartão sai: a linha do item já diz o mesmo (pente fino 19/11/2026). */
+    private fun repete(): Boolean {
+        val c = tocandoAgora?.chave ?: return false
+        val id = itemAtual()?.id ?: return false
+        return id == c || id.endsWith(":$c")
+    }
+
+    private fun mostrarCartao(animar: Boolean) {
+        if (tocandoAgora == null) return
+        val some = repete()
+        val alvo = if (some) 0f else 1f
+        if (cartao.alpha != alvo || (!some && cartao.visibility != View.VISIBLE))
+            mola.mover(cartao, dp(if (some) CARTAO_X + 24f else CARTAO_X), dp(CARTAO_Y), alvo, 1f, animar)
     }
 
     /** A cada segundo: só a barra e o texto do tempo (sem layout). */
@@ -469,7 +488,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         tv.text = nome
         var sp = HomeCruz.FONTE_CATEGORIA
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
-        fun maior() = nome.split(' ').maxOfOrNull { tv.paint.measureText(it) } ?: 0f
+        fun maior() = nome.split(' ', '\n').maxOfOrNull { tv.paint.measureText(it) } ?: 0f
         while (sp > 15f && maior() > dpi(ROTULO_CAT)) {
             sp -= 0.5f; tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
         }
@@ -604,8 +623,13 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         val focada = hasFocus() || isFocused
         val semMovimento = MolaViews.semAnimacao(this)
         val p = prats.getOrNull(cat)
-        rotulo.text = p?.nome?.uppercase().orEmpty()
+        rotulo.text = p?.nome?.replace("\n", " · ")?.uppercase().orEmpty()   // nome em 2 linhas ("Sua turma\n0 online") vira uma linha no título
         posicao.text = p?.takeIf { it.itens.size > 1 }?.let { context.getString(R.string.cruz_posicao, indiceSel(it) + 1, it.itens.size) }.orEmpty()
+        // Sem item acima do escolhido, o nome da prateleira desce para junto dele (pente fino 19/11/2026: ficava um vão
+        // grande entre "RECENTES" e o 1º item). Com item acima, volta ao lugar de sempre, acima do vizinho.
+        val semCima = p == null || indiceSel(p) == 0
+        mola.mover(cabecalho, dp(COLUNA - CAPA / 2f), dp(if (semCima) LINHA - CAPA / 2f - ROTULO_VAO else ROTULO_Y), 1f, 1f, animar, amortece = amortece)
+        mostrarCartao(animar)
         for ((j, v) in viewsCat.withIndex()) {
             val k = j - cat
             val cx = cxPrateleira(k)

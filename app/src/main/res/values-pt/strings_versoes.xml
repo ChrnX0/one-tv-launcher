@@ -14,6 +14,11 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Todos os apps: o mesmo cabeçalho das telas Rádio e Jogos, com “Na grade: X · ocultos: Y”; plugin de fundo não aparece mais como app</item>
+        <item>Rádio, Podcasts e Jogos: o nome da lista fica junto do primeiro item; o cartão “Ao vivo” sai quando a rádio em foco é a que toca</item>
+        <item>Letras maiores (nada abaixo de 15) nos ajustes, nas teclas do rodapé, na data do canto e nas listas</item>
+        <item>Painel no celular e no computador com as cores e as letras do site sofaly.tv</item>
+        <item>Aviso de aparelho novo na rede não se repete para o mesmo celular; o botão em foco no player de podcast ficou bem visível</item>
         <item>Séries: as mesmas duas fileiras inteiras de pôsteres de Filmes, com selo LEG; a caixa de cima tem uma linha só (sem sinopse) e fica na altura da caixa da esquerda; título longo é encurtado para a nota e o ano sempre aparecerem</item>
         <item>Filmes e Séries: as listas do Trakt e do MDBList agora rolam junto com as categorias, em ordem alfabética; em Filmes dá para escolher a lista também no Filtro</item>
         <item>Filmes: cabem duas fileiras inteiras de pôsteres (6 por fileira na TV comum); o título aparece grande no topo e a cópia só legendada ganha o selo LEG</item>
@@ -28,6 +33,9 @@
         <item>Despertador: o som sempre começa baixo e sobe devagar, por pelo menos 1 minuto e meio, mesmo com “Toque: direto”, para nunca começar no volume cheio</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Todos os apps</item>
+        <item>Rádio sem vão</item>
+        <item>Letra dos ajustes</item>
         <item>Pôsteres de Séries</item>
         <item>Listas na coluna</item>
         <item>Duas fileiras de pôsteres</item>
@@ -40,6 +48,9 @@
         <item>Segurar ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Em Aplicativos › Todos os apps, o título tem a conta ao lado e o plugin do Projectivy não aparece na grade?</item>
+        <item>Em Rádio, o nome “RECENTES” fica logo acima da primeira rádio, e com o foco na rádio que toca o cartão “Ao vivo” some?</item>
+        <item>Nas Configurações, a data do canto e as teclas do rodapé (OK, VOLTAR) estão maiores e fáceis de ler?</item>
         <item>Em Séries › Todas, aparecem duas fileiras inteiras de pôsteres, e a caixa de cima fica na mesma altura da caixa da esquerda?</item>
         <item>Em Filmes, as listas do MDBList rolam junto com as categorias em ordem alfabética, e Filtro › Lista mostra só os filmes dela?</item>
         <item>Em Filmes › Todos, aparecem duas fileiras inteiras de pôsteres, sem fileira cortada embaixo?</item>

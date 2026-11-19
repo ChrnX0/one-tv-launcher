@@ -77,7 +77,8 @@
     <string name="cruz_tocou">Diputar %1$s</string>
     <string name="cruz_por_ultimo">Terakhir: %1$s</string>
     <string name="cruz_addons_n">Addon terpasang: %1$d</string>
-    <string name="cruz_apps_n">Aplikasi di TV ini: %1$d</string>
+    <string name="cruz_apps_n">Aplikasi di kisi: %1$d</string>
+    <string name="cruz_apps_ocultos">Di kisi: %1$d · tersembunyi: %2$d</string>
     <string name="cruz_podcasts_n">Podcast yang diikuti: %1$d</string>
     <string name="cruz_pendrive">Flashdisk: %1$s</string>
     <string name="casa_fora_titulo">Home Assistant tidak merespons</string>

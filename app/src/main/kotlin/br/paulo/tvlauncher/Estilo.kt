@@ -52,7 +52,7 @@ object Estilo {
     /** Texto: principal, explicação (70%) e rótulo apagado (48%). Nunca branco puro em bloco grande: cansa a vista. */
     const val TEXTO = 0xFFF4F1EC.toInt()
     val TEXTO_2: Int get() = if (altoContraste) 0xFFF4F1EC.toInt() else 0xB3F4F1EC.toInt()
-    val TEXTO_3: Int get() = if (altoContraste) 0xD9F4F1EC.toInt() else 0x7AF4F1EC.toInt()
+    val TEXTO_3: Int get() = if (altoContraste) 0xD9F4F1EC.toInt() else 0x86F4F1EC.toInt()   // era 0x7A: 4,4:1 nos cartões (pente fino 19/11/2026); 0x86 dá ≥ 4,7:1 em todo fundo da casa
     /** Texto em cima do foco branco (linha de lista focada). */
     const val TEXTO_NO_FOCO = 0xFF0E1020.toInt()
     val TEXTO_NO_FOCO_2: Int get() = if (altoContraste) TEXTO_NO_FOCO else 0xA60E1020.toInt()
@@ -80,7 +80,7 @@ object Estilo {
         /** Explicação, metadado. */
         LEGENDA(15f, 400, 2),      // era 13
         /** Nome de grupo ("PRÓXIMOS 9 DIAS"). */
-        SECAO(13f, 600, 3, caixaAlta = true, espaco = 0.14f);   // era 12
+        SECAO(15f, 600, 3, caixaAlta = true, espaco = 0.14f);   // era 13 (pente fino 19/11/2026: nada menor que 15 sp a 3 m)
 
         /** A cor do papel na hora (o alto contraste, 16.3, muda TEXTO_2 e TEXTO_3). */
         val cor: Int get() = when (nivel) { 1 -> TEXTO; 2 -> TEXTO_2; else -> TEXTO_3 }
@@ -107,11 +107,11 @@ object Estilo {
         const val ITEM_DETALHE = 15f    // sinopse do episódio, programa do canal; era 12
         // Coluna de categorias e cabeçalhos
         const val CATEGORIA = 16f       // era 14,5
-        const val CONTAGEM = 13.5f      // número ao lado da categoria; era 12
-        const val ROTULO = 13f          // "CATEGORIAS", "A SEGUIR"; era 11,5
-        const val DICA = 12.5f          // linha de teclas no rodapé; era 11
+        const val CONTAGEM = 15f        // número ao lado da categoria; era 13,5 (19/11/2026: mínimo 15)
+        const val ROTULO = 15f          // "CATEGORIAS", "A SEGUIR"; era 13 (19/11/2026: mínimo 15)
+        const val DICA = 15f            // linha de teclas no rodapé; era 12,5 (19/11/2026: mínimo 15)
         // Grade de pôsteres e painel do canal
-        const val CARD = 14.5f          // nome embaixo do pôster; era 12
+        const val CARD = 15f            // nome embaixo do pôster; era 14,5 (19/11/2026: mínimo 15)
         // Pergunta grande do "Cuidar de longe" (15/11/2026): para quem lê com dificuldade, de longe, às vezes com pressa.
         const val PERGUNTA = 40f        // "Mandar pedido de ajuda para Ana?"
         const val PERGUNTA_TEXTO = 24f  // a explicação embaixo
@@ -374,7 +374,7 @@ object Estilo {
         gravity = Gravity.CENTER_VERTICAL
         for ((tecla, acao) in dicas) {
             addView(texto(ctx, Papel.LEGENDA, tecla).apply {
-                textSize = 11f; typeface = fonte(600); setTextColor(TEXTO_2)
+                typeface = fonte(600); setTextColor(TEXTO_2)   // tecla no tamanho da legenda (era 11 sp: ilegível a 3 m)
                 background = fundo(ctx, 0, 6, 0x40FFFFFF)
                 setPaddingRelative(dp(ctx, 6), dp(ctx, 2), dp(ctx, 6), dp(ctx, 2))
             })

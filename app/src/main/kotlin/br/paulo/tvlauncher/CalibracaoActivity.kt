@@ -64,7 +64,7 @@ object Calibracao {
 private class PadraoView(ctx: Context) : View(ctx) {
     private var atual = 0
     private val p = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val txt = Paint(Paint.ANTI_ALIAS_FLAG).apply { textSize = 28f * ctx.resources.displayMetrics.scaledDensity }
+    private val txt = Paint(Paint.ANTI_ALIAS_FLAG).apply { textSize = 28f * ctx.resources.displayMetrics.scaledDensity; typeface = Fontes.nunito(500) }
 
     fun mudar(d: Int) { atual = (atual + d + Calibracao.NOMES.size) % Calibracao.NOMES.size; invalidate() }
 

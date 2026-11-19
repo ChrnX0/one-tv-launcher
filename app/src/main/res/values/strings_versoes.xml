@@ -17,6 +17,11 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
+        <item>All apps: the same header as the Radio and Games screens, with “In the grid: X · hidden: Y”; wallpaper plugins no longer show as apps</item>
+        <item>Radio, Podcasts and Games: the list name sits right above the first item; the “Live” card leaves when the focused station is the one playing</item>
+        <item>Bigger letters (nothing below 15) in settings, footer keys, the corner date and lists</item>
+        <item>Phone and computer panel with the colours and fonts of the sofaly.tv website</item>
+        <item>The new-device-on-network alert no longer repeats for the same phone; the focused button in the podcast player is clearly visible</item>
         <item>Series: the same two full rows of posters as Movies, with a SUB badge; the box at the top is one line (no plot) and lines up with the box on the left; long titles are shortened so the rating and year always show</item>
         <item>Movies and Series: your Trakt and MDBList lists now scroll with the categories, in alphabetical order; in Movies you can also pick a list in the Filter</item>
         <item>Movies: two full rows of posters fit on screen (6 per row on a typical TV); the title shows large at the top, and subtitled-only copies get a SUB badge</item>
@@ -31,6 +36,9 @@
         <item>Alarm clock: the sound always starts low and rises slowly, over at least a minute and a half, even with “Ring: direct”, so it never starts at full volume</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
+        <item>todos_apps_cabecalho</item>
+        <item>radio_sem_vao</item>
+        <item>letra_ajustes</item>
         <item>series_duas_fileiras</item>
         <item>listas_fora_rolam</item>
         <item>filmes_duas_fileiras</item>
@@ -43,6 +51,9 @@
         <item>ilha_central</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>All apps</item>
+        <item>Radio without gap</item>
+        <item>Settings letters</item>
         <item>Series posters</item>
         <item>Lists in the column</item>
         <item>Two rows of posters</item>
@@ -55,6 +66,9 @@
         <item>Hold ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>In Apps › All apps, does the title show the count beside it, with no Projectivy plugin in the grid?</item>
+        <item>In Radio, does “RECENT” sit right above the first station, and does the “Live” card leave with the focus on the playing station?</item>
+        <item>In Settings, are the corner date and the footer keys (OK, BACK) bigger and easy to read?</item>
         <item>In Series › All, do two full rows of posters show, and is the box at the top at the same height as the box on the left?</item>
         <item>In Movies, do the MDBList lists scroll with the categories in alphabetical order, and does Filter › List show only the movies of that list?</item>
         <item>In Movies › All, do two full rows of posters show, with no row cut off at the bottom?</item>
