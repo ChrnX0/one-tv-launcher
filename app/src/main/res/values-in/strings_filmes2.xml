@@ -7,6 +7,7 @@
     <string name="filmes_filtro_genero">Genre: %1$s</string>
     <string name="filmes_filtro_epoca">Periode: %1$s</string>
     <string name="filmes_filtro_nota">Rating minimum: %1$s</string>
+    <string name="filmes_filtro_lista">Daftar: %1$s</string>
     <string name="filmes_filtro_nao_vistos">Hanya yang belum ditonton: %1$s</string>
     <string name="filmes_filtro_limpar">Hapus filter</string>
     <string name="filmes_filtro_qualquer">Semua</string>

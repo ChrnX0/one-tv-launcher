@@ -485,24 +485,27 @@ class SeriesActivity : Activity() {
                 val fixas = ArrayList<ColunaCategorias.Linha>()
                 if (termoS.isNotEmpty()) fixas += L(BUSCA, getString(R.string.player_cat_busca, termoS), res.size, IconeMidia.Tipo.LUPA, 0, false, "")
                 fixas += L(TODOS, rotulo(R.string.player_cat_todos), vis.size, IconePlayer.Tipo.TODOS, 0, false, "")
-                // Listas de fora, logo abaixo de Todos: só as séries que a lista de IPTV tem, na ordem da lista.
+                // Listas de fora, na parte que rola, em ordem alfabética com as categorias: só as séries que a lista de IPTV tem, na ordem da lista.
                 val fora = HashMap<String, Pair<List<String>, Int>>()
+                // 19/11/2026 (Paulo: "o MDBList não roda com a lista"): as listas de fora iam nas FIXAS e, com várias,
+                // ocupavam a coluna e espremiam as categorias. Agora abrem a parte que ROLA, antes das categorias de A a Z.
+                val linhasFora = ArrayList<ColunaCategorias.Linha>()
                 if (listasS.isNotEmpty()) {
                     val cat = titulosDoCatalogo(vis)
                     for ((l, itensL) in listasS) {
                         val (chs, casaram) = SincronizarFilmes.cruzar(itensL, cat, SincronizarFilmes.Tipo.SERIE)
                         if (chs.isEmpty()) continue
                         fora["x:${l.chave}"] = chs to itensL.count { it.tipo == SincronizarFilmes.Tipo.SERIE }
-                        fixas += L("x:${l.chave}", l.nome, casaram, null, 0, false, "", if (l.servico == "trakt") "Trakt" else "MDBList")
+                        linhasFora += L("x:${l.chave}", l.nome, casaram, null, 0, false, "", if (l.servico == "trakt") "Trakt" else "MDBList")
                     }
                 }
                 val grupos = cacheGrupos?.takeIf { it.first === vis }?.second ?: Series.grupos(vis).also { cacheGrupos = vis to it }
                 val novos = cacheNovos?.takeIf { it.first === vis && it.second == marcoS }?.third
                     ?: ColunaRegras.novosPorGrupo(vis, marcoS, { it.grupo }, { it.atualizada }).also { cacheNovos = Triple(vis, marcoS, it) }
-                val rola = grupos.filter { it.second > 0 }.map { (g, n) ->
+                val rola = ColunaRegras.intercalarAZ(grupos.filter { it.second > 0 }.map { (g, n) ->
                     L("g:$g", PlayerLista.nomeExibido(g).ifEmpty { rotulo(R.string.player_cat_outros) }, n,
                         if (mostrar && g in ocultasTodas) IconePlayer.Tipo.CADEADO else null, novos[g] ?: 0, false, "")
-                }
+                }, linhasFora) { if (it.chave.startsWith("g:")) it.chave.removePrefix("g:") else it.nome }   // categoria: o grupo cru (como ordenarAZ)
                 val todasChaves = (acoes + fixas + rola).mapTo(HashSet()) { it.chave }
                 val ch0 = if (inicial && simples) PlayerAcessivel.entradaSimples(listOf(CONTINUAR to cont.size, INTERESSES to ints.size), TODOS)
                     else if (inicial && chaveS != BUSCA) ColunaRegras.categoriaInicial(ultimaS?.takeIf { it != BUSCA }, todasChaves,

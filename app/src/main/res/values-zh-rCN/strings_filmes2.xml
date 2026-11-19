@@ -7,6 +7,7 @@
     <string name="filmes_filtro_genero">类型：%1$s</string>
     <string name="filmes_filtro_epoca">年代：%1$s</string>
     <string name="filmes_filtro_nota">最低评分：%1$s</string>
+    <string name="filmes_filtro_lista">列表：%1$s</string>
     <string name="filmes_filtro_nao_vistos">仅未看：%1$s</string>
     <string name="filmes_filtro_limpar">清除筛选</string>
     <string name="filmes_filtro_qualquer">任意</string>

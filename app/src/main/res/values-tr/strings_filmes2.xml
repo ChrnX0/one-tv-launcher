@@ -7,6 +7,7 @@
     <string name="filmes_filtro_genero">Tür: %1$s</string>
     <string name="filmes_filtro_epoca">Dönem: %1$s</string>
     <string name="filmes_filtro_nota">En düşük puan: %1$s</string>
+    <string name="filmes_filtro_lista">Liste: %1$s</string>
     <string name="filmes_filtro_nao_vistos">Yalnızca izlenmemiş: %1$s</string>
     <string name="filmes_filtro_limpar">Filtreyi temizle</string>
     <string name="filmes_filtro_qualquer">Herhangi</string>

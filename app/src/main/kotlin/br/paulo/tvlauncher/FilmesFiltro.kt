@@ -42,8 +42,10 @@ object FilmesFiltro {
         val decada: Int? = null,      // 1990 = de 1990 a 1999
         val notaMin: Int? = null,     // 6, 7, 8 (de 0 a 10)
         val naoVistos: Boolean = false,
+        /** Uma lista de fora (Trakt, MDBList) pela chave da linha ("x:mdblist:123"), 19/11/2026: combina com o resto. */
+        val lista: String? = null,
     ) {
-        val ativo: Boolean get() = genero != null || ano != null || decada != null || notaMin != null || naoVistos
+        val ativo: Boolean get() = genero != null || ano != null || decada != null || notaMin != null || naoVistos || lista != null
     }
 
     /** Opções do menu "Nota mínima". */
@@ -83,15 +85,19 @@ object FilmesFiltro {
      * Aplica o filtro a [filmes] mantendo a ordem. O gênero de cada categoria é calculado uma vez (são poucas categorias
      * para dezenas de milhares de filmes). Filme sem ano ou sem nota sai quando o filtro pede ano ou nota.
      */
-    fun filtrar(filmes: List<Filme>, c: Criterios, posicoes: Map<String, Posicao>, notasFora: Map<String, Float> = emptyMap()): List<Filme> {
+    fun filtrar(filmes: List<Filme>, c: Criterios, posicoes: Map<String, Posicao>, notasFora: Map<String, Float> = emptyMap(),
+                daLista: Set<String>? = null): List<Filme> {
         if (!c.ativo) return filmes
+        // Lista escolhida que não carregou (ou saiu das escolhidas): nada passa, em vez de ignorar o filtro calado.
+        val naLista = if (c.lista == null) null else daLista.orEmpty()
         val generoDe = HashMap<String, Boolean>()
         return filmes.filter { f ->
             (c.genero == null || generoDe.getOrPut(f.grupo) { c.genero in generosDoGrupo(f.grupo) }) &&
                 (c.ano == null || f.ano == c.ano) &&
                 (c.decada == null || (f.ano != null && f.ano / 10 * 10 == c.decada)) &&
                 (c.notaMin == null || ((notasFora[f.chave] ?: f.nota)?.let { it >= c.notaMin } == true)) &&   // nota de fora (Trakt) quando houver
-                (!c.naoVistos || !Vod.assistido(posicoes[f.chave]))
+                (!c.naoVistos || !Vod.assistido(posicoes[f.chave])) &&
+                (naLista == null || f.chave in naLista)
         }
     }
 
