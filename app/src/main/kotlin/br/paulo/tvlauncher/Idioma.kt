@@ -263,6 +263,35 @@ object Idioma {
         return mesmoTitulo.firstOrNull { o -> versao(nome(o), grupo(o)) == Versao.DESCONHECIDA }
     }
 
+    /**
+     * A grade com um item por filme: "Else" e "Else LEG" viram um só (pedido do Paulo, 19/11/2026); a ficha já abre na
+     * versão preferida e tem o botão da outra. Conservador: só some um item quando os dois apontam um para o outro
+     * ([outraVersao] dos dois lados) e ambos estão na [lista]; título com 3 ou mais versões fica como está. Fica o que
+     * já foi começado ([comecado]); senão, o que vem primeiro na lista.
+     */
+    fun <T> semPares(lista: List<T>, indice: Map<String, List<T>>, nome: (T) -> String, grupo: (T) -> String,
+                     ano: (T) -> Int?, comecado: (T) -> Boolean): List<T> {
+        if (indice.isEmpty()) return lista
+        val posicao = java.util.IdentityHashMap<T, Int>(lista.size)
+        lista.forEachIndexed { i, x -> posicao[x] = i }
+        val sai = java.util.Collections.newSetFromMap(java.util.IdentityHashMap<T, Boolean>())
+        for (x in lista) {
+            if (x in sai) continue
+            val o = outraVersao(x, indice, nome, grupo, ano) ?: continue
+            if (o === x || !posicao.containsKey(o) || o in sai) continue
+            if (outraVersao(o, indice, nome, grupo, ano) !== x) continue
+            // 3 ou mais itens com o mesmo título e ano: não dá para ter certeza de qual é par de qual.
+            val k = chaveTitulo(nome(x)); val anoX = ano(x) ?: ano(o)
+            if ((indice[k] ?: emptyList()).count { anoX == null || ano(it) == null || ano(it) == anoX } > 2) continue
+            val ficaX = when {
+                comecado(x) != comecado(o) -> comecado(x)
+                else -> posicao.getValue(x) < posicao.getValue(o)
+            }
+            sai += if (ficaX) o else x
+        }
+        return if (sai.isEmpty()) lista else lista.filter { it !in sai }
+    }
+
     /** A versão de um item sabendo o par dele: com marca, a marca; sem marca, o oposto da do par. */
     fun versaoComPar(nome: String, grupo: String, nomePar: String, grupoPar: String): Versao {
         val v = versao(nome, grupo)

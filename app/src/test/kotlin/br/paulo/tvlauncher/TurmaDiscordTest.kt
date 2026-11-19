@@ -96,4 +96,11 @@ class TurmaDiscordTest {
         assertEquals("https://discord.com/channels/81384788765712384/111111111111111111",
             TurmaDiscord.linkSala("81384788765712384", "111111111111111111"))
     }
+
+    @Test fun botsSaemDaTurma() {
+        for (n in listOf("Midjourney Bot", "MEE6 bot", "Music-Bot", "Bot")) assertTrue(n, TurmaDiscord.pareceBot(n))
+        for (n in listOf("Botafogo", "Robot", "Lucas", "Abbott")) assertFalse(n, TurmaDiscord.pareceBot(n))
+        val t = TurmaDiscord.ler("""{"name":"S","members":[{"username":"Midjourney Bot","status":"online"},{"username":"Paulo","status":"online"}]}""")
+        assertEquals(listOf("Paulo"), t.outros.map { it.nome })
+    }
 }

@@ -287,7 +287,8 @@ class FilmesActivity : Activity() {
                 // O índice das versões sai depois da grade na tela (é a parte demorada; a ficha funciona sem ele).
                 Fundo.rodar {
                     val idx = Idioma.indice(f, { it.nome }, { it.grupo })
-                    tela.post { if (!isDestroyed && todos === f) indiceVersoes = idx }
+                    // Com o índice, a grade junta as versões do mesmo filme; o foco fica onde estava.
+                    tela.post { if (!isDestroyed && todos === f) { indiceVersoes = idx; recalcular(ModoGrade.MANTER_LUGAR) } }
                 }
             }
         }
@@ -352,6 +353,7 @@ class FilmesActivity : Activity() {
 
     // Caches da conta (só a thread da [calculo] lê e escreve). A chave é a própria lista (===): lista nova = refaz.
     private var cacheVisiveis: Triple<List<Filme>, Set<String>, List<Filme>>? = null
+    @Volatile private var cacheSemPares: Triple<List<Filme>, Map<String, List<Filme>>, List<Filme>>? = null
     @Volatile private var cacheIdade: IdadesTmdb.Filtro? = null
 
     private fun tmdbDe(f: Filme): Int? = InfoExternaCache.tmdbSemRede(this, f.chave, f.tmdb)
@@ -387,6 +389,7 @@ class FilmesActivity : Activity() {
         val modo = ModoGrade.entries[2 - pedido.strength]; val inicial = pedido.initial; val depois = pedido.after
         val todosS = todos; val ocultasS = if (mostrarOcultas) emptySet() else ocultas; val mostrar = mostrarOcultas
         val idadeS = porIdade
+        val idxS = indiceVersoes
         val termoS = termo; val posS = posicoes; val intS = interesses; val ordemS = ordem; val chaveS = chave; val notasS = notasFora
         val listasS = listasFora
         val temOcultas = ocultas.isNotEmpty()
@@ -401,6 +404,10 @@ class FilmesActivity : Activity() {
                         idadeS != null -> todosS.filter { Classificacao.visivel(it.grupo, tmdbDe(it)?.let(idadeS.idades::get), idadeS.max, idadeS.infantis, idadeS.duras) }
                         else -> VodFiltro.visiveis(todosS, ocultasS) { it.grupo }
                     }).also { cacheVisiveis = Triple(todosS, ocultasS, it); cacheIdade = idadeS }
+                    // Um item por filme: dublado e legendado do mesmo título viram um (a ficha tem as duas versões).
+                    .let { v -> cacheSemPares?.takeIf { it.first === v && it.second === idxS }?.third
+                        ?: Idioma.semPares(v, idxS, { it.nome }, { it.grupo }, { it.ano }) { Vod.deveRetomar(posS[it.chave]) }
+                            .also { cacheSemPares = Triple(v, idxS, it) } }
                 val res = if (termoS.isEmpty()) emptyList() else cacheBusca?.takeIf { it.first === vis && it.second == termoS }?.third
                     ?: Vod.buscar(vis, termoS).also { cacheBusca = Triple(vis, termoS, it) }
                 val cont = Vod.continuar(vis, posS)

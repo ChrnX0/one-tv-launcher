@@ -14,19 +14,18 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Configurações › TV e filmes › Addons: sem nenhum addon, abre a tela de Addons com os Recomendados por tipo</item>
-        <item>Configurações: o quadro da conta de IPTV fica legível com o foco</item>
-        <item>Jogos: as dicas do rodapé seguem a prateleira (“jogar” só nos jogos)</item>
-        <item>Menu do app (segurar OK): fundo mais escuro, a tela inicial não aparece mais por trás</item>
-        <item>“Trocar ícone” sem pacote de ícones agora aponta para Configurações › Tela inicial › Plugins</item>
+        <item>Filmes: o dublado e o legendado do mesmo filme agora são um item só na grade; a ficha abre na versão que você prefere e tem o botão da outra</item>
+        <item>Jogos › Sua turma: bots do Discord (nome terminado em “bot”) não aparecem mais</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Addons sem nenhum instalado</item>
+        <item>Um item por filme</item>
+        <item>Turma sem bots</item>
         <item>Plugin de fundo</item>
         <item>Trocar um ícone</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Configurações › TV e filmes › Addons, sem addon instalado: abre a tela de Addons com as seções “Recomendados · …”?</item>
+        <item>Em Filmes › Todos, um filme que tem cópia “LEG” aparece uma vez só, e a ficha oferece a outra versão?</item>
+        <item>Em Jogos › Sua turma, os bots do Discord sumiram e as pessoas continuam lá?</item>
         <item>Com um plugin de papel de parede instalado, escolher o tema “Plugin de fundo” mostra o fundo dele na tela inicial?</item>
         <item>Segure OK num app › “Trocar ícone”: escolher um ícone de um pacote troca o ícone na tela inicial?</item>
     </string-array>

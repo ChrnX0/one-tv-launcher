@@ -17,24 +17,24 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Settings › TV and movies › Addons: with no addon yet it opens the Addons screen, with the Recommended list by type</item>
-        <item>Settings: the IPTV account box stays readable when it has focus</item>
-        <item>Games: the footer hints follow the shelf (“play” only on games)</item>
-        <item>App menu (hold OK): darker backdrop, so the home screen no longer shows through</item>
-        <item>“Change icon” without an icon pack now points to Settings › Home screen › Plugins</item>
+        <item>Movies: the dubbed and subtitled copies of the same movie are now one item in the grid; the details page opens your preferred version and has a button for the other</item>
+        <item>Games › Your crew: Discord bots (names ending in “bot”) no longer show up</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>addons_vazio</item>
+        <item>filmes_um_por_filme</item>
+        <item>turma_sem_bot</item>
         <item>plugin_fundo</item>
         <item>icone_trocar</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Addons with none installed</item>
+        <item>One item per movie</item>
+        <item>No bots in the crew</item>
         <item>Wallpaper plugin</item>
         <item>Change an icon</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Settings › TV and movies › Addons, with no addon installed: does the Addons screen open with “Recommended · …” sections?</item>
+        <item>In Movies › All, does a movie with a “LEG” copy appear only once, and does its details page offer the other version?</item>
+        <item>In Games › Your crew, are the Discord bots gone, with the people still there?</item>
         <item>With a wallpaper plugin installed, does choosing the “Plugin background” theme show its background on the home screen?</item>
         <item>Hold OK on an app › “Change icon”: does picking an icon from a pack change it on the home screen?</item>
     </string-array>
