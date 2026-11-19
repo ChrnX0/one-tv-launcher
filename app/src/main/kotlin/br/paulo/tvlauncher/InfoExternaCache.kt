@@ -187,14 +187,15 @@ object InfoExternaCache {
         if (g.tmdb == null && g.buscaEm > 0) esquecerBuscasAntigas(app)?.let { g = it[chave] ?: g }
         if (g.tmdb == null && agora - g.buscaEm > BUSCA_DE_NOVO_MS) {
             val recusados = g.recusados
-            fun procurar(titulo: String, anoBusca: Int?): Int? {
-                val limpo = LegendaExterna.nomeDeBusca(titulo).ifBlank { titulo }
+            fun procurar(b: TraktDetails.Busca, anoBusca: Int?): Int? {
+                val titulo = b.alvo
+                val limpo = LegendaExterna.nomeDeBusca(b.consulta).ifBlank { b.consulta }
                 val achados = trakt(TraktDetails.urlBusca(limpo, anoBusca, serie))?.let { TraktDetails.lerBusca(it, serie) }.orEmpty()
                     .filter { it.tmdb !in recusados }
                 Log.i(TAG, "busca Trakt '$limpo' ano=${anoBusca ?: "-"}: ${achados.size} (${achados.take(3).joinToString { "${it.titulo} ${it.ano ?: ""}".trim() }})")
-                InfoExterna.escolher(TraktDetails.candidatos(achados), titulo, anoBusca, recusados)?.id?.let { return it }
+                if (b.direto) InfoExterna.escolher(TraktDetails.candidatos(achados), titulo, anoBusca, recusados)?.id?.let { return it }
                 if (lingua == "en") return null
-                return achados.filter { anoBusca == null || it.ano == null || kotlin.math.abs(it.ano - anoBusca) <= 1 }.take(3).firstOrNull { a ->
+                return achados.filter { anoBusca == null || it.ano == null || kotlin.math.abs(it.ano - anoBusca) <= 1 }.take(4).firstOrNull { a ->
                     val t = trakt(TraktDetails.urlTraducao(a.trakt, serie, lingua))?.let { TraktDetails.lerTraducao(it, pais) }
                     if (t != null && !TraktDetails.mesmoTitulo(t.first, titulo)) Log.i(TAG, "busca Trakt: tradução '${t.first}' não casa")
                     t != null && TraktDetails.mesmoTitulo(t.first, titulo)
@@ -203,8 +204,8 @@ object InfoExternaCache {
             // Ano errado na lista do IPTV (relançamento, ano da cópia) é comum: sem nada com o ano, tenta sem ele, como o TMDB.
             // Nome "dublado - original" da lista ("Lei e Ordem: Unidade de Vítimas Especiais - Law & Order", Sala 19/11/2026)
             // não casa com nada: tenta também só a parte dublada (o Trakt busca nas traduções).
-            val achado = TraktDetails.nomesDeBusca(Vod.nomeLimpo(nome)).firstNotNullOfOrNull { t ->
-                procurar(t, ano) ?: if (ano != null) procurar(t, null) else null
+            val achado = TraktDetails.nomesDeBusca(Vod.nomeLimpo(nome)).firstNotNullOfOrNull { b ->
+                procurar(b, ano) ?: if (ano != null) procurar(b, null) else null
             }
             g = mudar(app, chave) { it.copy(tmdb = achado, buscaEm = if (achado == null) agora else 0) }
         }
@@ -264,7 +265,7 @@ object InfoExternaCache {
         }
     }
     private const val PREFS = "fichas"
-    private const val PREF_BUSCA_TRAKT = "busca_trakt_v2"   // v2: tradução com "&" (19/11/2026)
+    private const val PREF_BUSCA_TRAKT = "busca_trakt_v3"   // v3: busca também pelo nome original (19/11/2026)
 
     /** Id do Trakt de cada título já visto ("F123"/"S45" -> trakt), só na memória. */
     private val traktIds = HashMap<String, Int>()

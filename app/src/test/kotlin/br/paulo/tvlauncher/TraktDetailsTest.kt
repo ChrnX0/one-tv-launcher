@@ -31,10 +31,14 @@ class TraktDetailsTest {
     }
 
     @Test fun nomesDublaoEOriginal() {
-        assertEquals(listOf("Lei e Ordem: Unidade de Vítimas Especiais - Law & Order", "Lei e Ordem: Unidade de Vítimas Especiais"),
-            TraktDetails.nomesDeBusca("Lei e Ordem: Unidade de Vítimas Especiais - Law & Order"))
-        assertEquals(listOf("Duna"), TraktDetails.nomesDeBusca("Duna"))
-        assertEquals(listOf("X - Y"), TraktDetails.nomesDeBusca("X - Y"))   // parte curta demais: só o inteiro
+        val pt = "Lei e Ordem: Unidade de Vítimas Especiais"
+        assertEquals(listOf(
+            TraktDetails.Busca("$pt - Law & Order", "$pt - Law & Order", true),
+            TraktDetails.Busca(pt, pt, true),
+            TraktDetails.Busca("Law & Order", pt, false),   // o original só casa pela tradução da parte dublada
+        ), TraktDetails.nomesDeBusca("$pt - Law & Order"))
+        assertEquals(listOf(TraktDetails.Busca("Duna", "Duna", true)), TraktDetails.nomesDeBusca("Duna"))
+        assertEquals(1, TraktDetails.nomesDeBusca("X - Y").size)   // parte curta demais: só o inteiro
     }
 
     @Test fun tituloComEComercial() {

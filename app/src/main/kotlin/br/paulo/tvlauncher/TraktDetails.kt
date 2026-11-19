@@ -152,13 +152,23 @@ object TraktDetails {
     }.getOrNull()
 
     /**
-     * Nomes a buscar para um título da lista: o inteiro e, quando ele vem como "dublado - original", só a parte antes
-     * do " - " (a parte original sozinha pode ser outra obra: "Law & Order" é a série-mãe, não a SVU).
+     * Uma busca de texto: [consulta] vai ao Trakt; [alvo] é o nome que a tradução tem de bater; [direto] = pode casar
+     * também pelo título em inglês ([InfoExterna.escolher]).
      */
-    fun nomesDeBusca(nome: String): List<String> {
+    data class Busca(val consulta: String, val alvo: String, val direto: Boolean)
+
+    /**
+     * Buscas para um título da lista: o inteiro e, quando ele vem como "dublado - original", a parte dublada e a parte
+     * original. A original sozinha pode ser outra obra ("Law & Order" é a série-mãe, não a SVU), então ela só vale pela
+     * tradução bater com a parte dublada. Na Sala (19/11/2026) a busca com o nome em português devolveu só a série-mãe
+     * e as derivadas, nunca a SVU.
+     */
+    fun nomesDeBusca(nome: String): List<Busca> {
         val inteiro = nome.trim()
         val antes = inteiro.substringBefore(" - ", "").trim()
-        return if (antes.length >= 3 && antes != inteiro) listOf(inteiro, antes) else listOf(inteiro)
+        val depois = inteiro.substringAfter(" - ", "").trim()
+        if (antes.length < 3 || depois.length < 2) return listOf(Busca(inteiro, inteiro, true))
+        return listOf(Busca(inteiro, inteiro, true), Busca(antes, antes, true), Busca(depois, antes, false))
     }
 
     /**
