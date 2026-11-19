@@ -30,7 +30,7 @@ class AlarmeTocandoActivity : Activity() {
     companion object {
         const val EXTRA_TIMER = "timer"
         /** Menor subida do som do despertador, em segundos (o timer continua direto). */
-        const val RAMPA_MIN_SEG = 30
+        const val RAMPA_MIN_SEG = 90
     }
     private var timer = false
     private var nomeTimer = ""

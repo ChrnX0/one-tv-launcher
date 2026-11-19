@@ -152,7 +152,7 @@ object VolumeLg {
 
     /**
      * Despertador: tira do mudo, põe a LG em [LgNetcast.inicioRampaAlarme] e sobe 1 ponto por vez até [alvo] em
-     * [rampaSeg] segundos (no mínimo 60 s, ver LgNetcast.rampaLg). A LG pode estar ligando agora (o CEC acabou de acordá-la e a
+     * [rampaSeg] segundos (no mínimo 90 s, ver LgNetcast.rampaLg). A LG pode estar ligando agora (o CEC acabou de acordá-la e a
      * rede dela demora mais de 37 s): tenta por até [esperaMs]. Se alguém mexer no volume durante a subida, para de
      * subir. Anota o que fez em [m].
      */

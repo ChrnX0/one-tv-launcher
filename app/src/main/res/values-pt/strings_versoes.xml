@@ -25,7 +25,7 @@
         <item>O que acabou de chegar (campainha, lembrete, compromisso, despertador) aparece embaixo da pílula por alguns segundos; segure ▲ para abrir o painel rápido</item>
         <item>TV no Continuar: o “No ar” não some mais quando a TV passa o dia sem abrir o player (a tela inicial busca o guia sozinha)</item>
         <item>Continuar: cada item diz o que é (TV, Série, Filme, Rádio, Podcast, Jogo ou o app), como nas outras categorias; o título vem embaixo e o resto no canto</item>
-        <item>Despertador: o som sempre começa baixo e sobe por pelo menos 30 s, mesmo com “Toque: direto”, para nunca começar no volume cheio</item>
+        <item>Despertador: o som sempre começa baixo e sobe devagar, por pelo menos 1 minuto e meio, mesmo com “Toque: direto”, para nunca começar no volume cheio</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Pôsteres de Séries</item>

@@ -116,7 +116,7 @@ object LgNetcast {
      * Na LG a subida é SEMPRE gradual (pedido do dono, 16/11): um alarme com rampa 0 ("tocar direto", o padrão dos
      * alarmes novos) sobe a LG em [RAMPA_MIN_LG_SEG]. A rampa escolhida, se maior, vale.
      */
-    const val RAMPA_MIN_LG_SEG = 60
+    const val RAMPA_MIN_LG_SEG = 90   // Paulo, 19/11: 60 s ainda pareceu rápido
     fun rampaLg(rampaSeg: Int): Int = maxOf(rampaSeg, RAMPA_MIN_LG_SEG)
 
     /** Onde a subida começa: [INICIO_ALARME], ou já o [alvo] se ele for menor. */

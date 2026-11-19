@@ -28,7 +28,7 @@
         <item>What just arrived (doorbell, reminder, appointment, alarm) grows under the pill for a few seconds; hold ▲ to open the quick panel</item>
         <item>TV in Continue: “On air” no longer disappears when the TV goes all day without opening the player (the home screen fetches the guide by itself)</item>
         <item>Continue: each item says what it is (TV, Series, Movie, Radio, Podcast, Game or the app), like the other categories; the title is below and the rest in the corner</item>
-        <item>Alarm clock: the sound always starts low and rises for at least 30 s, even with “Ring: direct”, so it never starts at full volume</item>
+        <item>Alarm clock: the sound always starts low and rises slowly, over at least a minute and a half, even with “Ring: direct”, so it never starts at full volume</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>series_duas_fileiras</item>
