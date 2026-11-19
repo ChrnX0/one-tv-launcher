@@ -2,18 +2,30 @@ package br.paulo.tvlauncher
 
 /**
  * Barra de cima "Ilha" (Paulo, 18/11/2026: a mistura A+B+D do estudo da barra). Navegando na cruz ela recolhe, e sobram:
- * no centro, a pílula com o ponto laranja e a hora, que se estica com o que está acontecendo no SISTEMA ([escolher]).
+ * no centro, a pílula com o ponto laranja e a hora, que se estica com o que está acontecendo no SISTEMA ([fila]).
  * O estado de cada item da cruz (no ar, parou em…) fica no canto de baixo à direita, com os detalhes dele ([CruzLogica.Situacao];
  * Paulo, 18/11/2026 14:59 local: "a barra inteligente fica para as coisas do sistema e o canto inferior direito para as
  * infos dos nossos apps").
  * Com ▲ a barra de sempre volta (com o véu atrás) e a pílula dá lugar a ela. Lógica pura, testada na JVM.
+ *
+ * Ilha completa (19/11/2026, Paulo: "completíssima, tudo o que Apple, Samsung e Fire TV fazem, melhor e mais bonito"):
+ *  - [fila]: até [MAX_FILA] eventos que se revezam a cada [RODIZIO_MS] (como o Now Bar da Samsung), em vez de só o 1º;
+ *    "sem internet" fica sozinho (é o que importa quando acontece);
+ *  - [trilho]: ícones pequenos do que está VALENDO (como os ícones de estado da Apple TV), no máximo [MAX_TRILHO];
+ *  - [ponto]: o ponto da pílula vira semáforo (calmo, atenção, alerta), para quem não lê o texto.
  */
 object BarraIlha {
 
-    /** Em ordem de importância: o primeiro presente vai para a pílula. */
-    enum class Tipo { SEM_INTERNET, TIMER, ALARME, TOCANDO, ANIVERSARIO, JOGO, VENCIMENTO }
+    /** A fila que a pílula mostra agora, em texto, para o MCP (estado_tv); null = pílula só com a hora. */
+    @Volatile var agora: String? = null
 
-    data class Evento(val tipo: Tipo, val texto: String, val tocando: Boolean = false)
+    /** Em ordem de importância: o primeiro presente abre a fila. */
+    enum class Tipo { SEM_INTERNET, TIMER, ALARME, LEMBRETE, TOCANDO, AGENDA, ANIVERSARIO, JOGO, VENCIMENTO }
+
+    data class Evento(val tipo: Tipo, val texto: String, val tocando: Boolean = false) {
+        /** Pede atenção (texto em âmbar e ponto âmbar/vermelho). */
+        val atencao: Boolean get() = tipo == Tipo.SEM_INTERNET || tipo == Tipo.VENCIMENTO
+    }
 
     /** O que as pílulas da barra mostram agora (null = escondida). */
     data class Estado(
@@ -22,8 +34,14 @@ object BarraIlha {
         val alarme: String? = null,
         /** Quanto falta para o despertador (ms); só entra na pílula dentro de [ALARME_JANELA_MS]. */
         val alarmeFaltaMs: Long? = null,
+        /** Programa com lembrete marcado no guia ("Jornal · 20:30"); entra dentro de [LEMBRETE_JANELA_MS]. */
+        val lembrete: String? = null,
+        val lembreteFaltaMs: Long? = null,
         val tocandoTitulo: String? = null,
         val tocando: Boolean = false,
+        /** Próximo compromisso da agenda de hoje ("Dentista · 15:00"); entra dentro de [AGENDA_JANELA_MS]. */
+        val agenda: String? = null,
+        val agendaFaltaMs: Long? = null,
         val aniversario: String? = null,
         val jogo: String? = null,
         val vencimento: String? = null,
@@ -31,17 +49,78 @@ object BarraIlha {
 
     /** O despertador vai para a pílula nas últimas 12 h (antes disso, só na barra aberta). */
     const val ALARME_JANELA_MS = 12 * 3_600_000L
+    /** Lembrete do guia: da última meia hora até 5 min depois de começar (quem chega atrasado ainda vê). */
+    const val LEMBRETE_JANELA_MS = 30 * 60_000L
+    const val LEMBRETE_ATRASO_MS = 5 * 60_000L
+    /** Compromisso da agenda: nas 3 h antes (e enquanto acontece, até 15 min depois do início). */
+    const val AGENDA_JANELA_MS = 3 * 3_600_000L
+    const val AGENDA_ATRASO_MS = 15 * 60_000L
     /** Ao acordar a TV, a barra fica aberta por este tempo e então recolhe. */
     const val ACORDAR_ABERTA_MS = 4_000L
-    fun escolher(e: Estado): Evento? {
-        fun ok(s: String?) = s?.trim()?.takeIf { it.isNotEmpty() && it != "…" }
-        ok(e.semInternet)?.let { return Evento(Tipo.SEM_INTERNET, it) }
-        ok(e.timer)?.let { return Evento(Tipo.TIMER, it) }
-        ok(e.alarme)?.takeIf { e.alarmeFaltaMs != null && e.alarmeFaltaMs in 0..ALARME_JANELA_MS }?.let { return Evento(Tipo.ALARME, it) }
-        ok(e.tocandoTitulo)?.let { return Evento(Tipo.TOCANDO, it, e.tocando) }
-        ok(e.aniversario)?.let { return Evento(Tipo.ANIVERSARIO, it) }
-        ok(e.jogo)?.let { return Evento(Tipo.JOGO, it) }
-        ok(e.vencimento)?.let { return Evento(Tipo.VENCIMENTO, it) }
-        return null
+    /** Quantos eventos revezam na pílula, e de quanto em quanto tempo (calmo o bastante para ler em voz baixa). */
+    const val MAX_FILA = 3
+    const val RODIZIO_MS = 6_000L
+    /** Ícones de estado ao lado da hora: mais que isso vira "+N" (a tela tem que continuar calma). */
+    const val MAX_TRILHO = 3
+
+    private fun ok(s: String?) = s?.trim()?.takeIf { it.isNotEmpty() && it != "…" }
+    private fun dentro(falta: Long?, janela: Long, atraso: Long = 0L) = falta != null && falta in -atraso..janela
+
+    /** Tudo o que pode ir para a pílula agora, do mais importante para o menos; no máximo [MAX_FILA]. */
+    fun fila(e: Estado): List<Evento> {
+        ok(e.semInternet)?.let { return listOf(Evento(Tipo.SEM_INTERNET, it)) }
+        val l = ArrayList<Evento>(MAX_FILA)
+        fun add(t: Tipo, s: String?, tocando: Boolean = false) { if (l.size < MAX_FILA) ok(s)?.let { l += Evento(t, it, tocando) } }
+        add(Tipo.TIMER, e.timer)
+        if (dentro(e.alarmeFaltaMs, ALARME_JANELA_MS)) add(Tipo.ALARME, e.alarme)
+        if (dentro(e.lembreteFaltaMs, LEMBRETE_JANELA_MS, LEMBRETE_ATRASO_MS)) add(Tipo.LEMBRETE, e.lembrete)
+        add(Tipo.TOCANDO, e.tocandoTitulo, e.tocando)
+        if (dentro(e.agendaFaltaMs, AGENDA_JANELA_MS, AGENDA_ATRASO_MS)) add(Tipo.AGENDA, e.agenda)
+        add(Tipo.ANIVERSARIO, e.aniversario)
+        add(Tipo.JOGO, e.jogo)
+        add(Tipo.VENCIMENTO, e.vencimento)
+        return l
     }
+
+    /** O mais importante (o que a pílula mostra sem rodízio). */
+    fun escolher(e: Estado): Evento? = fila(e).firstOrNull()
+
+    /** O evento da vez no rodízio ([passo] cresce a cada [RODIZIO_MS]). */
+    fun naVez(fila: List<Evento>, passo: Int): Evento? = if (fila.isEmpty()) null else fila[Math.floorMod(passo, fila.size)]
+
+    /**
+     * Quando a fila muda (um evento chega ou sai), em que passo continuar: o mesmo evento que estava na tela, se ele ainda
+     * está na fila (a pílula não pula sozinha); senão, o começo (o mais importante).
+     */
+    fun passoDepois(antes: Evento?, fila: List<Evento>): Int =
+        antes?.let { a -> fila.indexOfFirst { it.tipo == a.tipo }.takeIf { it >= 0 } } ?: 0
+
+    // ------------------------------------------------------------------ trilho de estado
+
+    /** Em ordem de importância. GRAVANDO primeiro: é o que custa caro esquecer ligado. */
+    enum class Indicador { GRAVANDO, NAO_PERTURBE, VISITA, FONE }
+
+    data class Trilho(val mostrar: List<Indicador>, val resto: Int)
+
+    fun trilho(ativos: Set<Indicador>): Trilho {
+        val l = Indicador.entries.filter { it in ativos }
+        return Trilho(l.take(MAX_TRILHO), (l.size - MAX_TRILHO).coerceAtLeast(0))
+    }
+
+    // ------------------------------------------------------------------ ponto-semáforo
+
+    enum class Ponto { CALMO, ATENCAO, ALERTA }
+
+    fun ponto(fila: List<Evento>): Ponto = when {
+        fila.any { it.tipo == Tipo.SEM_INTERNET } -> Ponto.ALERTA
+        fila.any { it.atencao } -> Ponto.ATENCAO
+        else -> Ponto.CALMO
+    }
+
+    /** "2/3" quando há mais de um na fila; vazio com um só. */
+    fun contador(fila: List<Evento>, passo: Int): String =
+        if (fila.size < 2) "" else "${Math.floorMod(passo, fila.size) + 1}/${fila.size}"
+
+    /** Texto para o leitor de tela e o MCP: a hora e a fila inteira (quem ouve não espera o rodízio). */
+    fun descricao(hora: String, fila: List<Evento>): String = (listOf(hora) + fila.map { it.texto }).joinToString(". ")
 }
