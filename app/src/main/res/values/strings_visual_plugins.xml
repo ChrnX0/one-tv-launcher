@@ -32,7 +32,7 @@
     <string name="wp_icone_original">Original icon</string>
     <string name="wp_icone_sugerido">Suggested</string>
     <string name="wp_icone_voltar">Follow the icon pack</string>
-    <string name="wp_icone_sem_pacote">No icon pack installed. Get one in Settings › Appearance › Plugins.</string>
+    <string name="wp_icone_sem_pacote">No icon pack installed. Get one in Settings › Home screen › Plugins.</string>
     <string name="wp_d_aerial">Slow aerial videos of cities and nature</string>
     <string name="wp_d_overflight">Apple TV aerial videos, or any list of videos you choose</string>
     <string name="wp_d_daily">A new photo of the day, every day</string>

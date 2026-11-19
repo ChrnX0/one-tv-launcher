@@ -482,11 +482,15 @@ class ConfigLauncherActivity : Activity() {
         linhaAddons = linha(getString(R.string.ad_titulo), getString(R.string.ad_cfg_det), valor = rotuloAddons()) {
             val todos = AddonsTv.instalados(this)
             val atualizar = { linhaAddons.valor(rotuloAddons()) }
-            if (todos.isEmpty()) { AddonInstallDialog.mostrar(this, atualizar); return@linha }
-            // 1º item = adicionar; os outros = addons instalados (escolher um pergunta se remove).
-            Estilo.lista(this, getString(R.string.ad_titulo), listOf(getString(R.string.ad_add_item)) + todos.map { it.m.nome }, emptyList()) { i ->
+            // Sem nenhum: a tela de Addons, que mostra os Recomendados por tipo e o "Adicionar" (visto na Sala, 19/11/2026:
+            // daqui só abria o QR e os Recomendados ficavam escondidos de quem ainda não tem addon).
+            if (todos.isEmpty()) { startActivity(Intent(this, AddonsActivity::class.java)); return@linha }
+            // 1º item = adicionar, 2º = Recomendados; os outros = addons instalados (escolher um pergunta se remove).
+            Estilo.lista(this, getString(R.string.ad_titulo),
+                listOf(getString(R.string.ad_add_item), getString(R.string.ad_sug_secao)) + todos.map { it.m.nome }, emptyList()) { i ->
                 if (i == 0) { AddonInstallDialog.mostrar(this, atualizar); return@lista }
-                val a = todos[i - 1]
+                if (i == 1) { startActivity(Intent(this, AddonsActivity::class.java)); return@lista }
+                val a = todos[i - 2]
                 CaixaTv(this).setTitle(a.m.nome).setMessage(getString(R.string.ad_cfg_remover, a.m.nome))
                     .setPositiveButton(getString(R.string.ad_cfg_remover_sim)) { _, _ -> AddonsTv.remover(this, a.base); atualizar() }
                     .setNegativeButton(getString(R.string.sv_cancelar), null).show()
@@ -564,7 +568,12 @@ class ConfigLauncherActivity : Activity() {
             val cartao = cartao().apply {
                 // Focável (sem clique) só para o ▲ conseguir voltar até ele: senão o quadro sumia acima da tela.
                 isFocusable = true
-                setOnFocusChangeListener { v, temFoco -> v.background = vidro(temFoco); if (temFoco) mostrarDica(noMenu = false) }
+                // Foco = borda no acento, não o fundo branco das linhas: os textos do quadro são claros e sumiam no branco
+                // (visto na Sala, 19/11/2026).
+                setOnFocusChangeListener { v, temFoco ->
+                    v.background = if (temFoco) Estilo.fundo(this@ConfigLauncherActivity, Estilo.SUPERFICIE, Estilo.RAIO, Estilo.ACENTO, 2) else vidro(false)
+                    if (temFoco) mostrarDica(noMenu = false)
+                }
             }
             c.addView(cartao, lp())
             fun preencher(s: Xtream.Situacao?, consultou: Boolean) {

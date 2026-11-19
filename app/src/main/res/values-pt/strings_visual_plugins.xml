@@ -32,7 +32,7 @@
     <string name="wp_icone_original">Ícone original</string>
     <string name="wp_icone_sugerido">Sugerido</string>
     <string name="wp_icone_voltar">Seguir o pacote de ícones</string>
-    <string name="wp_icone_sem_pacote">Nenhum pacote de ícones instalado. Consiga um em Configurações › Aparência › Plugins.</string>
+    <string name="wp_icone_sem_pacote">Nenhum pacote de ícones instalado. Consiga um em Configurações › Tela inicial › Plugins.</string>
     <string name="wp_d_aerial">Vídeos aéreos lentos de cidades e natureza</string>
     <string name="wp_d_overflight">Vídeos aéreos da Apple TV, ou qualquer lista de vídeos</string>
     <string name="wp_d_daily">Uma foto do dia nova, todo dia</string>

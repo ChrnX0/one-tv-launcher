@@ -32,7 +32,7 @@
     <string name="wp_icone_original">원래 아이콘</string>
     <string name="wp_icone_sugerido">추천</string>
     <string name="wp_icone_voltar">아이콘 팩 따르기</string>
-    <string name="wp_icone_sem_pacote">설치된 아이콘 팩이 없습니다. 설정 › 화면 › 플러그인에서 받으세요.</string>
+    <string name="wp_icone_sem_pacote">설치된 아이콘 팩이 없습니다. 설정 › 홈 화면 › 플러그인에서 받으세요.</string>
     <string name="wp_d_aerial">도시와 자연의 느린 항공 영상</string>
     <string name="wp_d_overflight">Apple TV 항공 영상 또는 원하는 동영상 목록</string>
     <string name="wp_d_daily">매일 새로운 오늘의 사진</string>

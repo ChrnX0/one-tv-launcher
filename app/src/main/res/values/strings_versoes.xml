@@ -17,28 +17,24 @@
     <string name="ver_respondido_sim">answered “yes”</string>
     <string name="ver_respondido_nao">answered “no”</string>
     <string-array name="novidades">
-        <item>Podcasts: new “Suggestions” shelf with hand-picked shows in the TV’s language; OK follows. The first time, 4 are followed for you</item>
-        <item>Podcasts: “Search” and “Popular in your country” are on (Podcast Index)</item>
-        <item>Wallpaper plugins: the new “Plugin background” theme shows backgrounds from installed wallpaper plugins, with a credit line</item>
-        <item>Icons: each app can get its own icon from any installed icon pack (“Change icon” in the app menu); packs also work in banner mode</item>
-        <item>Icon packs stay frozen when not in use, so they use no memory</item>
-        <item>Settings › Plugins: a showcase of plugins with a QR code or Play Store button</item>
+        <item>Settings › TV and movies › Addons: with no addon yet it opens the Addons screen, with the Recommended list by type</item>
+        <item>Settings: the IPTV account box stays readable when it has focus</item>
+        <item>Games: the footer hints follow the shelf (“play” only on games)</item>
+        <item>App menu (hold OK): darker backdrop, so the home screen no longer shows through</item>
+        <item>“Change icon” without an icon pack now points to Settings › Home screen › Plugins</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
-        <item>podcast_sugestoes</item>
-        <item>podcast_busca</item>
+        <item>addons_vazio</item>
         <item>plugin_fundo</item>
         <item>icone_trocar</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Podcast suggestions</item>
-        <item>Podcast search</item>
+        <item>Addons with none installed</item>
         <item>Wallpaper plugin</item>
         <item>Change an icon</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Open Podcasts: is the “Suggestions” shelf there with covers, and does OK on one follow and open it?</item>
-        <item>In Podcasts › Find › Search podcasts, does typing “nerdcast” find NerdCast, and does “Popular in your country” show a list?</item>
+        <item>Settings › TV and movies › Addons, with no addon installed: does the Addons screen open with “Recommended · …” sections?</item>
         <item>With a wallpaper plugin installed, does choosing the “Plugin background” theme show its background on the home screen?</item>
         <item>Hold OK on an app › “Change icon”: does picking an icon from a pack change it on the home screen?</item>
     </string-array>

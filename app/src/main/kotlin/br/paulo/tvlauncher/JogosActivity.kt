@@ -62,17 +62,30 @@ class JogosActivity : Activity() {
 
     private fun dp(v: Int) = Estilo.dp(this, v)
 
+    /** Dicas do rodapé conforme a prateleira: "jogar / mudar de grupo" só vale nos jogos; nas outras, OK abre.
+     *  Guarda a última para não refazer as views a cada passo do foco. */
+    private var dicasDeJogo: Boolean? = null
+    private fun dicasDa(jogo: Boolean) {
+        if (dicasDeJogo == jogo) return
+        dicasDeJogo = jogo
+        if (jogo) cruz.definirDicas(getString(R.string.grv_dica_ok) to getString(R.string.jogos_tecla_jogar),
+            getString(R.string.jogos_tecla_segurar) to getString(R.string.jogos_tecla_opcoes))
+        else cruz.definirDicas(getString(R.string.grv_dica_ok) to getString(R.string.rede_dica_abrir))
+    }
+
     override fun onCreate(b: Bundle?) {
         super.onCreate(b)
         if (VigiaAtualizacao.fechada(this)) return   // modo seguro (VigiaAtualizacao)
         abrirNoSofa = intent?.getBooleanExtra(EXTRA_SOFA, false) == true
         cruz = CruzOuvir(this, Fontes.nunito(this, 500), Fontes.nunito(this, 800)).apply {
             definirTitulo(getString(R.string.jogos_titulo))
-            definirDicas(getString(R.string.grv_dica_ok) to getString(R.string.jogos_tecla_jogar),
-                getString(R.string.jogos_tecla_segurar) to getString(R.string.jogos_tecla_opcoes))
             aoSom = { s -> SonsCruz.tocar(this@JogosActivity, s, CruzLogica.Categoria.JOGAR) }
-            aoMudar = { p, i -> if (p.id == P_JOGOS) jogos.firstOrNull { it.pacote == i.id }?.let { escolhido = it } }
+            aoMudar = { p, i ->
+                if (p.id == P_JOGOS) jogos.firstOrNull { it.pacote == i.id }?.let { escolhido = it }
+                dicasDa(p.id == P_JOGOS)
+            }
         }
+        dicasDa(true)
         setContentView(FrameLayout(this).apply {
             background = Estilo.fundoTela(this@JogosActivity)
             addView(cruz, FrameLayout.LayoutParams(-1, -1))

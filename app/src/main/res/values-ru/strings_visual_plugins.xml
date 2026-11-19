@@ -32,7 +32,7 @@
     <string name="wp_icone_original">Исходный значок</string>
     <string name="wp_icone_sugerido">Предложено</string>
     <string name="wp_icone_voltar">Как в наборе значков</string>
-    <string name="wp_icone_sem_pacote">Наборы значков не установлены. Найдите их в Настройки › Оформление › Плагины.</string>
+    <string name="wp_icone_sem_pacote">Наборы значков не установлены. Найдите их в Настройки › Главный экран › Плагины.</string>
     <string name="wp_d_aerial">Медленная съёмка городов и природы с воздуха</string>
     <string name="wp_d_overflight">Видео с воздуха из Apple TV или любой ваш список</string>
     <string name="wp_d_daily">Новое фото дня каждый день</string>

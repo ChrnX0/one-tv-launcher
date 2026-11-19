@@ -32,7 +32,7 @@
     <string name="wp_icone_original">Oryginalna ikona</string>
     <string name="wp_icone_sugerido">Sugerowana</string>
     <string name="wp_icone_voltar">Jak w pakiecie ikon</string>
-    <string name="wp_icone_sem_pacote">Brak pakietów ikon. Zdobądź je w Ustawienia › Wygląd › Wtyczki.</string>
+    <string name="wp_icone_sem_pacote">Brak pakietów ikon. Zdobądź je w Ustawienia › Ekran główny › Wtyczki.</string>
     <string name="wp_d_aerial">Powolne nagrania z lotu ptaka miast i natury</string>
     <string name="wp_d_overflight">Nagrania z Apple TV albo dowolna lista filmów</string>
     <string name="wp_d_daily">Nowe zdjęcie dnia, codziennie</string>

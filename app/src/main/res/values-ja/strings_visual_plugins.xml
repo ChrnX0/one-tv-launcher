@@ -32,7 +32,7 @@
     <string name="wp_icone_original">元のアイコン</string>
     <string name="wp_icone_sugerido">おすすめ</string>
     <string name="wp_icone_voltar">アイコンパックに従う</string>
-    <string name="wp_icone_sem_pacote">アイコンパックがありません。設定 › 外観 › プラグインで入手できます。</string>
+    <string name="wp_icone_sem_pacote">アイコンパックがありません。設定 › ホーム画面 › プラグインで入手できます。</string>
     <string name="wp_d_aerial">街と自然のゆっくりした空撮映像</string>
     <string name="wp_d_overflight">Apple TV の空撮、または好きな動画リスト</string>
     <string name="wp_d_daily">毎日新しい今日の写真</string>
