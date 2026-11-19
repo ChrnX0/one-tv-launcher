@@ -97,7 +97,7 @@ object Endereco {
         val numero = limparNumero(numeroTexto) ?: return Result.failure(IllegalArgumentException("número inválido"))
         val c = httpGet("https://viacep.com.br/ws/$cep/json/")?.let { lerViaCep(it) }
             ?: return Result.failure(IllegalStateException("CEP não encontrado (ou sem internet)"))
-        if (offline != null) {   // build da Play: só ViaCEP + lista do APK, sem Nominatim
+        if (offline != null) {   // todo build desde 19/11/2026: só ViaCEP + lista do APK, sem Nominatim
             val cidade = CidadesOffline.noBrasil(offline, c.cidade, c.uf)
                 ?: return Result.failure(IllegalStateException("não achei essa cidade na lista"))
             return Result.success(Achado(nome(c), cidade.lat, cidade.lon, "cidade"))

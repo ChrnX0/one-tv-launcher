@@ -148,7 +148,8 @@ android {
     // Build da Play (`./gradlew bundleRelease -Pplay`, 16/11/2026): o produto Sofaly. Package PRÓPRIO, decidido em 16/11/2026
     // e que nunca mais pode mudar depois de publicado; o namespace do código continua br.paulo.tvlauncher e a Sala segue
     // com applicationId br.paulo.tvlauncher (ver CLAUDE.md). Por cima do manifesto principal entra src/play/AndroidManifest.xml
-    // (tira as permissões que a loja recusa) e a lista de cidades offline (src/play/assets, CidadesOffline.kt).
+    // (tira as permissões que a loja recusa) e a seção de dados das licenças (src/play/assets). A lista de cidades offline
+    // (CidadesOffline.kt) fica em src/main/assets desde 19/11/2026: todo build acha a cidade/CEP sem serviço de fora.
     // Sem flavor de propósito: com flavor todas as tarefas mudariam de nome (assembleRelease, testReleaseUnitTest) e os
     // workflows e scripts da Sala quebrariam.
     if (project.hasProperty("play")) {

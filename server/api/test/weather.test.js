@@ -81,6 +81,7 @@ test('limites: 429 por IP e para a WeatherAPI; sem binding passa', async () => {
   assert.equal((await handleWeather(u, { WEATHERAPI_KEY: 'K', WEATHER_IP_LIMITER: sim, WEATHER_UPSTREAM_LIMITER: nao }, { fetchFn, cache: null })).status, 429);
   const quebrado = { limit: async () => { throw new Error('x'); } };
   assert.equal((await handleWeather(u, { WEATHERAPI_KEY: 'K', WEATHER_IP_LIMITER: quebrado }, { fetchFn, cache: null })).status, 200);
+  assert.equal((await handleWeather(u, { WEATHERAPI_KEY: 'K', WEATHER_UPSTREAM_LIMITER: quebrado }, { fetchFn, cache: null })).status, 429);
 });
 
 test('days do pedido não muda o que vai à WeatherAPI (uma entrada de cache por lugar)', async () => {

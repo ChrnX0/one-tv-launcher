@@ -44,7 +44,7 @@ export function shape(data) {
 export async function handleWeather(url, env, { fetchFn = fetch, cache = globalThis.caches?.default, ip = '' } = {}) {
   const key = env.WEATHERAPI_KEY;
   if (!key) return reply({ error: 'weather not configured' }, 503, 0);
-  if (!(await allowed(env.WEATHER_IP_LIMITER, `ip:${ip}`))) return reply({ error: 'rate limited' }, 429, 0);
+  if (!(await allowed(env.WEATHER_IP_LIMITER, `ip:${ip}`, true))) return reply({ error: 'rate limited' }, 429, 0);
   const lat = snap(url.searchParams.get('lat'), 90);
   const lon = snap(url.searchParams.get('lon'), 180);
   if (lat === null || lon === null) return reply({ error: 'bad request' }, 400, 0);
@@ -55,7 +55,7 @@ export async function handleWeather(url, env, { fetchFn = fetch, cache = globalT
   const hit = cache ? await cache.match(cacheKey) : null;
   if (hit) return hit;
 
-  if (!(await allowed(env.WEATHER_UPSTREAM_LIMITER, 'upstream'))) return reply({ error: 'rate limited' }, 429, 0);
+  if (!(await allowed(env.WEATHER_UPSTREAM_LIMITER, 'upstream', false))) return reply({ error: 'rate limited' }, 429, 0);
   let res;
   try {
     res = await fetchFn(upstreamUrl(key, lat, lon, days), { headers: { 'User-Agent': USER_AGENT } });
@@ -72,10 +72,13 @@ export async function handleWeather(url, env, { fetchFn = fetch, cache = globalT
   return out;
 }
 
-/** Rate Limiting binding da Cloudflare ({ limit({ key }) -> { success } }); sem binding ou se ele falhar, deixa passar. */
-async function allowed(limiter, key) {
+/**
+ * Rate Limiting binding da Cloudflare ({ limit({ key }) -> { success } }). Sem binding (teste, dev) deixa passar. Se o
+ * limitador falhar: o por IP deixa passar (failOpen), o da WeatherAPI recusa, porque é ele que protege a cota da conta.
+ */
+async function allowed(limiter, key, failOpen) {
   if (!limiter) return true;
-  try { return (await limiter.limit({ key })).success !== false; } catch { return true; }
+  try { return (await limiter.limit({ key })).success === true; } catch { return failOpen; }
 }
 
 function reply(obj, status, maxAge) {

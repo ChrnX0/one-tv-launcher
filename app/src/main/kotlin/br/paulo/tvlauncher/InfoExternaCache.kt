@@ -201,7 +201,10 @@ object InfoExternaCache {
             g = mudar(app, chave) { it.copy(tmdb = achado, buscaEm = if (achado == null) agora else 0) }
         }
         val id = g.tmdb ?: return g
-        if (InfoExterna.vencido(g.detalheEm, agora, g.detalhe?.noAr == true)) runCatching {
+        // Ficha que veio do TMDB (só ele traz pôster) numa TV que agora usa o Trakt: troca já, sem esperar vencer, para
+        // nada do TMDB aparecer sem a licença.
+        val doTmdb = g.detalhe?.poster?.isNotEmpty() == true
+        if (doTmdb || InfoExterna.vencido(g.detalheEm, agora, g.detalhe?.noAr == true)) runCatching {
             val item = trakt(TraktDetails.urlPorTmdb(id, serie))?.let { TraktDetails.lerPorTmdb(it, serie) } ?: return@runCatching
             val t = TraktDetails.traktDe(item) ?: return@runCatching
             synchronized(traktIds) { traktIds[InfoExterna.chaveTmdb(id, serie)] = t }

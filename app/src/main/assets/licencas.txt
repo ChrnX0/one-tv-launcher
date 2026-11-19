@@ -154,7 +154,7 @@ Fichas, pôsteres, elenco e notas de filmes e séries: Trakt (https://trakt.tv).
 Legendas: Subtitles provided by OpenSubtitles.com (https://www.opensubtitles.com). Cada legenda fica só na TV de quem pediu.
 Aberturas de episódios (pular abertura): IntroDB (https://introdb.app), banco comunitário.
 Rádios: Radio Browser (https://www.radio-browser.info).
-Endereço pelo nome: dados © colaboradores do OpenStreetMap (https://www.openstreetmap.org/copyright), pelo Nominatim.
+Cidades e fusos horários: GeoNames (https://www.geonames.org), sob CC BY 4.0. A busca de cidade fica na TV.
 Endereço pelo CEP: ViaCEP (https://viacep.com.br).
 Céu de verdade e protetor: nuvens do satélite GOES (NOAA, domínio público dos EUA) pelo NASA GIBS
   (https://earthdata.nasa.gov/gibs); mapa Natural Earth (https://www.naturalearthdata.com, domínio público);
