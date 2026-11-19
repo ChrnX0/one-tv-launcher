@@ -1,5 +1,5 @@
 # Site sofaly.tv: um Worker que só serve os arquivos estáticos de site/ (sem código).
-# Sem id de conta aqui de propósito: a conta vem do `wrangler login` (Dell) ou dos segredos do GitHub (workflow website.yml).
+# Sem id de conta aqui de propósito: publica pelo Workers Builds da Cloudflare (Worker sofaly-website, raiz /website) a cada push na main.
 name = "sofaly-website"
 compatibility_date = "2026-11-01"
 workers_dev = false   # só pelos domínios próprios abaixo
