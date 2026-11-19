@@ -267,7 +267,7 @@ object Idioma {
      * A grade com um item por filme: "Else" e "Else LEG" viram um só (pedido do Paulo, 19/11/2026); a ficha já abre na
      * versão preferida e tem o botão da outra. Conservador: só some um item quando os dois apontam um para o outro
      * ([outraVersao] dos dois lados) e ambos estão na [lista]; título com 3 ou mais versões fica como está. Fica o que
-     * já foi começado ([comecado]); senão, o que vem primeiro na lista.
+     * tem algo guardado ([comecado]: posição, visto, Interesses); com algo nos dois, nenhum some; sem nada, o primeiro da lista.
      */
     fun <T> semPares(lista: List<T>, indice: Map<String, List<T>>, nome: (T) -> String, grupo: (T) -> String,
                      ano: (T) -> Int?, comecado: (T) -> Boolean): List<T> {
@@ -283,10 +283,9 @@ object Idioma {
             // 3 ou mais itens com o mesmo título e ano: não dá para ter certeza de qual é par de qual.
             val k = chaveTitulo(nome(x)); val anoX = ano(x) ?: ano(o)
             if ((indice[k] ?: emptyList()).count { anoX == null || ano(it) == null || ano(it) == anoX } > 2) continue
-            val ficaX = when {
-                comecado(x) != comecado(o) -> comecado(x)
-                else -> posicao.getValue(x) < posicao.getValue(o)
-            }
+            val cx = comecado(x); val co = comecado(o)
+            if (cx && co) continue   // os dois têm algo guardado: juntar esconderia um deles
+            val ficaX = if (cx != co) cx else posicao.getValue(x) < posicao.getValue(o)
             sai += if (ficaX) o else x
         }
         return if (sai.isEmpty()) lista else lista.filter { it !in sai }

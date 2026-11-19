@@ -353,7 +353,9 @@ class FilmesActivity : Activity() {
 
     // Caches da conta (só a thread da [calculo] lê e escreve). A chave é a própria lista (===): lista nova = refaz.
     private var cacheVisiveis: Triple<List<Filme>, Set<String>, List<Filme>>? = null
-    @Volatile private var cacheSemPares: Triple<List<Filme>, Map<String, List<Filme>>, List<Filme>>? = null
+    private class SemPares(val v: List<Filme>, val idx: Map<String, List<Filme>>, val pos: Map<String, Posicao>,
+                           val ints: Set<String>, val res: List<Filme>)
+    @Volatile private var cacheSemPares: SemPares? = null
     @Volatile private var cacheIdade: IdadesTmdb.Filtro? = null
 
     private fun tmdbDe(f: Filme): Int? = InfoExternaCache.tmdbSemRede(this, f.chave, f.tmdb)
@@ -405,9 +407,11 @@ class FilmesActivity : Activity() {
                         else -> VodFiltro.visiveis(todosS, ocultasS) { it.grupo }
                     }).also { cacheVisiveis = Triple(todosS, ocultasS, it); cacheIdade = idadeS }
                     // Um item por filme: dublado e legendado do mesmo título viram um (a ficha tem as duas versões).
-                    .let { v -> cacheSemPares?.takeIf { it.first === v && it.second === idxS }?.third
-                        ?: Idioma.semPares(v, idxS, { it.nome }, { it.grupo }, { it.ano }) { Vod.deveRetomar(posS[it.chave]) }
-                            .also { cacheSemPares = Triple(v, idxS, it) } }
+                    // Fica o que tem algo guardado (posição, visto ou Interesses); com algo nos dois, os dois ficam.
+                    // A conta refaz quando posições ou Interesses mudam (voltar do vídeo troca o mapa).
+                    .let { v -> cacheSemPares?.takeIf { it.v === v && it.idx === idxS && it.pos === posS && it.ints === intS }?.res
+                        ?: Idioma.semPares(v, idxS, { it.nome }, { it.grupo }, { it.ano }) { posS.containsKey(it.chave) || it.chave in intS }
+                            .also { cacheSemPares = SemPares(v, idxS, posS, intS, it) } }
                 val res = if (termoS.isEmpty()) emptyList() else cacheBusca?.takeIf { it.first === vis && it.second == termoS }?.third
                     ?: Vod.buscar(vis, termoS).also { cacheBusca = Triple(vis, termoS, it) }
                 val cont = Vod.continuar(vis, posS)

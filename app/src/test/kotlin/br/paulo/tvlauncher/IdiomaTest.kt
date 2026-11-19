@@ -209,6 +209,8 @@ class IdiomaTest {
         assertEquals(listOf(dub, outro), semPares(listOf(dub, leg, outro)))
         // Fica o que já foi começado.
         assertEquals(listOf(leg, outro), semPares(listOf(dub, leg, outro), setOf(leg)))
+        // Os dois com algo guardado (um começado, outro nos Interesses): nenhum some.
+        assertEquals(listOf(dub, leg, outro), semPares(listOf(dub, leg, outro), setOf(dub, leg)))
     }
 
     @Test fun gradeNaoJuntaOQueNaoTemCerteza() {
