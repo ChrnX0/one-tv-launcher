@@ -101,7 +101,10 @@ class TelasTest {
         }
     }
 
-    /** Telas que buscam dados na rede depois de abrir: medidas sem rede (ver conferir). */
+    /**
+     * Telas que buscam dados na rede depois de abrir: medidas sem rede (ver conferir). Todas as HOMEs também (19/11/2026):
+     * no CI a HOME em grade pegou o tempo de verdade ("nublado, chuva 75% agora" em árabe) e a medida dependeu do clima do dia.
+     */
     private val TELAS_SEM_REDE = setOf("previsao")
 
     @Config(qualifiers = "en-w960dp-h540dp-land-television-xhdpi")
@@ -147,7 +150,7 @@ class TelasTest {
             })
             // A Previsão busca o tempo numa thread: com rede, às vezes chega antes da foto (outro desenho, outra letra
             // menor) e às vezes não. Sem rede (proxy que recusa) e sem a resposta guardada na memória, a tela é sempre a mesma: a medida não depende da sorte.
-            val semRede = nome in TELAS_SEM_REDE
+            val semRede = nome in TELAS_SEM_REDE || cls == MainActivity::class.java
             val proxyAntes = listOf("https.proxyHost", "https.proxyPort", "http.proxyHost", "http.proxyPort").associateWith { System.getProperty(it) }
             if (semRede) { br.paulo.tvlauncher.ClimaMet.esquecerCache(); br.paulo.tvlauncher.WeatherApiSource.esquecerCache()
                 System.setProperty("https.proxyHost", "127.0.0.1"); System.setProperty("https.proxyPort", "9")
