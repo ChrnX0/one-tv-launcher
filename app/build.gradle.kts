@@ -244,6 +244,9 @@ tasks.withType<Test>().configureEach {
     if (!project.hasProperty("telas")) exclude("br/paulo/tvlauncher/telas/**")
     else filter { includeTestsMatching("br.paulo.tvlauncher.telas.*") }
     systemProperty("telas.atualizar", project.hasProperty("telasAtualizar").toString())
+    // Fotos da Simkl para a própria Simkl (SimklDemoTelaTest): só com -PsimklDemo.
+    systemProperty("simkl.demo", project.hasProperty("simklDemo").toString())
+    systemProperty("simkl.proposta", project.hasProperty("simklProposta").toString())
 }
 
 // Túnel para a internet (opção E, 05/11/2026): o programa Go em tunel/ (Tailscale embutido, tsnet) compilado para ARM
