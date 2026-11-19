@@ -596,6 +596,37 @@
         <div id="itensAniversarios" class="lista-registro"></div>
         <p id="statusAniversarios" class="aviso" hidden></p>
       </div>
+      <div class="cartao" id="cartaoCartoesHome">
+        <h2>Cartões da tela inicial</h2>
+        <p class="aviso">Cada um liga e desliga nas chaves acima e na TV, em Configurações › Aparência. Plano Pro.</p>
+        <p id="cartoesSemPlano" class="aviso" hidden>Disponível no plano Pro.</p>
+        <h3>Contagem regressiva</h3>
+        <form id="formContagem" class="barra-acoes">
+          <input id="nomeContagem" type="text" maxlength="40" placeholder="férias" aria-label="Nome">
+          <input id="dataContagem" type="date" aria-label="Data">
+          <button type="submit" class="botao-secundario">Adicionar</button>
+        </form>
+        <div id="itensContagem" class="lista-registro"></div>
+        <h3>Lembretes da casa</h3>
+        <form id="formLembreteCasa" class="barra-acoes">
+          <input id="textoLembreteCasa" type="text" maxlength="60" placeholder="lixo reciclável" aria-label="Lembretes da casa">
+          <span id="diasLembreteCasa"></span>
+          <input id="horaLembreteCasa" type="time" aria-label="Hora do aviso (vazio = só no alto da tela)" title="Hora do aviso (vazio = só no alto da tela)">
+          <button type="submit" class="botao-secundario">Adicionar</button>
+        </form>
+        <div id="itensLembreteCasa" class="lista-registro"></div>
+        <h3>Seus serviços</h3>
+        <form id="formServico" class="barra-acoes">
+          <input id="nomeServico" type="text" maxlength="40" placeholder="servidor de casa" aria-label="Nome">
+          <input id="urlServico" type="url" maxlength="300" placeholder="http://servidor.local:8123" aria-label="Endereço">
+          <button type="submit" class="botao-secundario">Adicionar</button>
+        </form>
+        <div id="itensServico" class="lista-registro"></div>
+        <h3>Cotação do dia</h3>
+        <div id="moedasCotacao" class="barra-acoes"></div>
+        <button type="button" class="botao-secundario" id="btnMoedas">Salvar moedas</button>
+        <p id="statusCartoesHome" class="aviso" hidden></p>
+      </div>
       <div class="cartao" id="cartaoCuidar">
         <h2>Cuidar de longe</h2>
         <p class="aviso">Avisos no celular de quem cuida de quem mora com esta TV: pedido de ajuda (segurar uma tecla 3 s, com a foto da tela),

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartões próprios da tela inicial (HomeCards.kt, 18/11/2026). -->
+<resources>
+    <string name="extras_CARTAO_PLACAR">Nächstes Spiel deines Teams beim TV-Eintrag des Startbildschirms</string>
+    <string name="extras_CARTAO_COTACAO">Wechselkurse des Tages neben dem Wetter (Dollar, Euro, Bitcoin; fragt den kostenlosen Dienst Frankfurter)</string>
+    <string name="extras_CARTAO_CONTAGEM">Countdown oben auf dem Startbildschirm in den letzten 7 Tagen (deine Termine oder der nächste Feiertag)</string>
+    <string name="extras_CARTAO_LEMBRETE_CASA">Haushaltserinnerungen oben auf dem Startbildschirm am jeweiligen Tag (z. B. Wertstoffabholung), mit Hinweis zur eingestellten Zeit</string>
+    <string name="extras_CARTAO_SERVICO">Oben auf dem Startbildschirm warnen, wenn ein eingetragener Dienst nicht mehr antwortet</string>
+    <string name="extras_CARTAO_LUA">Mondphase in der Vorhersage, im Bildschirmschoner und im Wettersymbol bei Nacht</string>
+    <string name="hc_feriado_hoje">Heute Feiertag</string>
+    <string name="hc_hoje">Heute: %1$s</string>
+    <string name="hc_lembrete_rotulo">Haushaltserinnerung</string>
+    <string name="hc_servico_fora">%1$s ist ausgefallen</string>
+    <string name="hc_servico_rotulo">Deine Dienste</string>
+    <string name="hc_cotacao_rotulo">Wechselkurse</string>
+    <string name="hc_cotacao_fonte">Tageswerte, Quelle: Frankfurter (Zentralbanken)</string>
+    <string name="hc_mil">Tsd.</string>
+    <string name="hc_milhao">Mio.</string>
+    <string name="hc_seu_time">Dein Team: %1$s</string>
+    <plurals name="hc_feriado_em">
+        <item quantity="one">Feiertag in %1$d Tag</item>
+        <item quantity="other">Feiertag in %1$d Tagen</item>
+    </plurals>
+    <plurals name="hc_faltam">
+        <item quantity="one">Noch %1$d Tag bis %2$s</item>
+        <item quantity="other">Noch %1$d Tage bis %2$s</item>
+    </plurals>
+</resources>

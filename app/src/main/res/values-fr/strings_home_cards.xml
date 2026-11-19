@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartões próprios da tela inicial (HomeCards.kt, 18/11/2026). -->
+<resources>
+    <string name="extras_CARTAO_PLACAR">Prochain match de votre équipe sur l\'élément TV de l\'écran d\'accueil</string>
+    <string name="extras_CARTAO_COTACAO">Taux de change du jour à côté de la météo (dollar, euro, bitcoin ; interroge le service gratuit Frankfurter)</string>
+    <string name="extras_CARTAO_CONTAGEM">Compte à rebours en haut de l\'écran d\'accueil les 7 derniers jours (vos dates ou le prochain jour férié)</string>
+    <string name="extras_CARTAO_LEMBRETE_CASA">Rappels de la maison en haut de l\'écran d\'accueil le jour venu (ex. jour du recyclage), avec un avis à l\'heure prévue</string>
+    <string name="extras_CARTAO_SERVICO">Prévenir en haut de l\'écran d\'accueil quand un service ajouté ne répond plus</string>
+    <string name="extras_CARTAO_LUA">Phase de la lune dans les prévisions, l\'économiseur d\'écran et l\'icône météo la nuit</string>
+    <string name="hc_feriado_hoje">Jour férié aujourd\'hui</string>
+    <string name="hc_hoje">Aujourd\'hui : %1$s</string>
+    <string name="hc_lembrete_rotulo">Rappel de la maison</string>
+    <string name="hc_servico_fora">%1$s ne répond plus</string>
+    <string name="hc_servico_rotulo">Vos services</string>
+    <string name="hc_cotacao_rotulo">Taux de change</string>
+    <string name="hc_cotacao_fonte">Taux du jour, source : Frankfurter (banques centrales)</string>
+    <string name="hc_mil">k</string>
+    <string name="hc_milhao">M</string>
+    <string name="hc_seu_time">Votre équipe : %1$s</string>
+    <plurals name="hc_feriado_em">
+        <item quantity="one">Jour férié dans %1$d jour</item>
+        <item quantity="other">Jour férié dans %1$d jours</item>
+    </plurals>
+    <plurals name="hc_faltam">
+        <item quantity="one">%2$s dans %1$d jour</item>
+        <item quantity="other">%2$s dans %1$d jours</item>
+    </plurals>
+</resources>

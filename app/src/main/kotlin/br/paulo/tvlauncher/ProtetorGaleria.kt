@@ -461,7 +461,8 @@ class ProtetorGaleria(
             }
         }
         val lua = Lua.resumoCurto(agora, lat).split("  ·  ")
-        val fase = lua[0].substringAfter("  ").trim().takeIf { it.isNotEmpty() }
+        // Fase da lua: chave CARTAO_LUA (HomeCards, 18/11/2026); desligada, o widget não desenha a lua.
+        val fase = lua[0].substringAfter("  ").trim().takeIf { it.isNotEmpty() && Extras.ligado(ctx, Extras.Chave.CARTAO_LUA) }
         val dados = WidgetsProtetor.Dados(
             agora = agora, temClima = temClima,
             temp = clima.getInt("temp", 0), codigo = clima.getInt("codigo", 0), chovendo = clima.getBoolean("chovendo", false),

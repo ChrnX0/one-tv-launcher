@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartões próprios da tela inicial (HomeCards.kt, 18/11/2026). -->
+<resources>
+    <string name="extras_CARTAO_PLACAR">Pertandingan berikutnya tim Anda di item TV layar utama</string>
+    <string name="extras_CARTAO_COTACAO">Kurs hari ini di samping cuaca (dolar, euro, bitcoin; bertanya ke layanan gratis Frankfurter)</string>
+    <string name="extras_CARTAO_CONTAGEM">Hitung mundur di atas layar utama pada 7 hari terakhir (tanggal Anda atau hari libur berikutnya)</string>
+    <string name="extras_CARTAO_LEMBRETE_CASA">Pengingat rumah di atas layar utama pada harinya (mis. hari daur ulang), dengan pemberitahuan pada jam yang ditetapkan</string>
+    <string name="extras_CARTAO_SERVICO">Beri tahu di atas layar utama saat layanan yang ditambahkan berhenti merespons</string>
+    <string name="extras_CARTAO_LUA">Fase bulan di prakiraan, screensaver, dan ikon cuaca saat malam</string>
+    <string name="hc_feriado_hoje">Hari libur hari ini</string>
+    <string name="hc_hoje">Hari ini: %1$s</string>
+    <string name="hc_lembrete_rotulo">Pengingat rumah</string>
+    <string name="hc_servico_fora">%1$s mati</string>
+    <string name="hc_servico_rotulo">Layanan Anda</string>
+    <string name="hc_cotacao_rotulo">Kurs hari ini</string>
+    <string name="hc_cotacao_fonte">Kurs hari ini, sumber: Frankfurter (bank sentral)</string>
+    <string name="hc_mil">rb</string>
+    <string name="hc_milhao">jt</string>
+    <string name="hc_seu_time">Tim Anda: %1$s</string>
+    <plurals name="hc_feriado_em">
+        <item quantity="other">Libur dalam %1$d hari</item>
+    </plurals>
+    <plurals name="hc_faltam">
+        <item quantity="other">%1$d hari lagi menuju %2$s</item>
+    </plurals>
+</resources>

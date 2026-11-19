@@ -38,6 +38,8 @@ object Planos {
         VARIAS_CASAS, SESSAO_JUNTO, SERVIDOR_SOFALY,
         /** Ouvir (Paulo, 17/11/2026): podcasts no Básico; buscar e "em alta" (Podcast Index, pelo servidor nosso) no Pro. */
         PODCAST_BUSCA,
+        /** Cartões próprios da tela inicial (HomeCards, Paulo 18/11/2026: "os cartões de dados são do Pro"). */
+        CARTOES_HOME,
     }
 
     /** O plano mínimo de cada recurso. O que não está aqui é do Básico (tela inicial, protetor, despertador, player...). */
@@ -48,7 +50,7 @@ object Planos {
         Recurso.FORA_DE_CASA to Plano.PRO, Recurso.CLAUDE_MCP to Plano.PRO, Recurso.ROTINAS to Plano.PRO,
         Recurso.HOME_ASSISTANT to Plano.PRO, Recurso.UNIDADE_DE_REDE to Plano.PRO,
         Recurso.TEMAS_TODOS to Plano.PRO, Recurso.BACKUP_NUVEM to Plano.PRO, Recurso.PODER_EMPRESTADO to Plano.PRO,
-        Recurso.PODCAST_BUSCA to Plano.PRO,
+        Recurso.PODCAST_BUSCA to Plano.PRO, Recurso.CARTOES_HOME to Plano.PRO,
         Recurso.CLIMA_3_MODELOS to Plano.ULTRA, Recurso.FICHAS_TMDB to Plano.ULTRA,
         Recurso.LEGENDA_AUTOMATICA to Plano.ULTRA, Recurso.SUPORTE_COM_PRAZO to Plano.ULTRA,
         Recurso.CUIDAR_DE_LONGE to Plano.ULTRA,

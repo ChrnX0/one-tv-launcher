@@ -94,6 +94,31 @@ object PainelIdeias {
                 }
                 ok(Mural.paraJson(novo))
             }
+            // ---- cartões próprios da tela inicial (HomeCards, 18/11/2026): contagem, lembrete da casa, serviço, moedas
+            post && r == "cartoes" -> {
+                val o = corpo ?: return erro(400, "JSON inválido")
+                val remover = o.optString("acao") == "remover"
+                when (o.optString("tipo")) {
+                    "contagem" -> if (remover) HomeCardsTv.editarContagens(app) { HomeCards.removerContagem(it, o.optString("nome")) } else {
+                        val d = runCatching { java.time.LocalDate.parse(o.optString("data")) }.getOrNull() ?: return erro(400, "nome ou data inválidos")
+                        val c = HomeCards.criarContagem(o.optString("nome"), d.year, d.monthValue, d.dayOfMonth) ?: return erro(400, "nome ou data inválidos")
+                        HomeCardsTv.editarContagens(app) { HomeCards.adicionarContagem(it, c, java.time.LocalDate.now()) }
+                    }
+                    "lembrete" -> if (remover) HomeCardsTv.editarLembretes(app) { HomeCards.removerLembrete(it, o.optString("texto")) } else {
+                        val l = HomeCards.criarLembrete(o.optString("texto"), o.optInt("dias"), if (o.has("minuto") && !o.isNull("minuto")) o.optInt("minuto") else null)
+                            ?: return erro(400, "texto ou dias inválidos")
+                        HomeCardsTv.editarLembretes(app) { HomeCards.adicionarLembrete(it, l) }
+                    }
+                    "servico" -> if (remover) HomeCardsTv.editarServicos(app) { HomeCards.removerServico(it, o.optString("nome")) } else {
+                        val s = HomeCards.criarServico(o.optString("nome"), o.optString("url")) ?: return erro(400, "nome ou endereço inválidos (http ou https)")
+                        HomeCardsTv.editarServicos(app) { HomeCards.adicionarServico(it, s) }
+                    }
+                    "moedas" -> HomeCardsTv.definirMoedas(app, o.optString("moedas"))
+                    else -> return erro(400, "tipo: contagem, lembrete, servico ou moedas")
+                }
+                PainelArmazem.registrar(app, ip, "cartões da tela inicial: ${o.optString("tipo")}", "ok")
+                ok(JSONObject().put("cartoes", HomeCardsTv.json(app)))
+            }
             // ---- ideia 93: aniversários
             post && r == "aniversarios" -> {
                 val o = corpo ?: return erro(400, "JSON inválido")
@@ -176,6 +201,7 @@ object PainelIdeias {
             .put("desempenho", DesempenhoTv.json(app))
             .put("mural", Mural.paraJson(Mural.ler(app)))
             .put("aniversarios", Aniversarios.paraJson(Aniversarios.ler(app)))
+            .put("cartoes", HomeCardsTv.json(app))
             .put("radios", Radios.paraJson(Radios.favoritas(app)))
             .put("podcasts", podcastsJson(app))
             .put("presenca", JSONArray(Presenca.escolhidos(app).toList()))
