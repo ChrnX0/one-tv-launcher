@@ -3,7 +3,7 @@
 // 2) Tela "A TV não respondeu" (offline.html) quando o app abre e a TV está fora do ar, no lugar do erro do navegador.
 // 3) Avisos da TV no celular (Web Push, 12/11/2026): só recebe o push e mostra a notificação.
 // Nada do painel fica guardado além da tela de fora do ar: dados e páginas sempre vêm da TV (Cache-Control no-store).
-const CACHE = 'sofaly-fora-do-ar-3';
+const CACHE = 'sofaly-fora-do-ar-4';   // 4: ícones novos (logo Sofaly, 19/11/2026)
 const FORA_DO_AR = ['/offline.html', '/style.css', '/icone-192.png', '/manrope-400.woff2', '/manrope-600.woff2', '/nunito.woff2'];
 
 self.addEventListener('install', (ev) => {
