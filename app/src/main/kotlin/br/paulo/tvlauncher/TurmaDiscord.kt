@@ -59,11 +59,13 @@ object TurmaDiscord {
             canais[c.optString("id")] = c.optString("name") to c.optInt("position", i)
         }
         val membros = ArrayList<Membro>()
+        var bots = 0   // o Discord conta os bots no presence_count: tiramos do número também (visto na Sala, 19/11/2026)
         val ma = o.optJSONArray("members") ?: JSONArray()
         for (i in 0 until ma.length()) {
             val m = ma.optJSONObject(i) ?: continue
             val nome = limpar(m.optString("username"), 32)
-            if (nome.isEmpty() || pareceBot(nome)) continue
+            if (nome.isEmpty()) continue
+            if (pareceBot(nome)) { bots++; continue }
             val jogo = (m.optJSONObject("activity") ?: m.optJSONObject("game"))?.optString("name")?.let { limpar(it, 40) }?.takeIf { it.isNotEmpty() }
             val status = when (m.optString("status")) { "idle" -> Status.AUSENTE; "dnd" -> Status.OCUPADO; else -> Status.ONLINE }
             val canal = m.optString("channel_id").takeIf { it.isNotEmpty() && it != "null" }
@@ -73,7 +75,7 @@ object TurmaDiscord {
             .map { (id, ms) -> Sala(id, canais[id]?.first?.let { limpar(it, 32) } ?: "", ordenar(ms)) }
             .sortedWith(compareByDescending<Sala> { it.membros.size }.thenBy { canais[it.id]?.second ?: Int.MAX_VALUE })
         val outros = ordenar(membros.filter { it.canalVoz == null })
-        val online = o.optInt("presence_count", membros.size).coerceAtLeast(membros.size)
+        val online = (o.optInt("presence_count", membros.size + bots) - bots).coerceAtLeast(membros.size)
         return Turma(limpar(o.optString("name"), 40), online, salas, outros)
     }
 
