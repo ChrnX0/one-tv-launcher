@@ -1,17 +1,10 @@
 <!doctype html>
-<html lang="en" data-lang="en" data-default="en" data-type="software" data-radius="round" data-buttons="tonal" data-motion>
+<html lang="en" data-lang="en" data-default="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Developers · Sofaly</title>
-<meta name="description" content="Put your Android TV app&#x27;s card on the Sofaly home screen, free of charge and with plain Android code.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Developers · Sofaly">
-<meta property="og:description" content="Put your Android TV app&#x27;s card on the Sofaly home screen, free of charge and with plain Android code.">
-<meta property="og:image" content="https://sofaly.tv/assets/og.png">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="assets/favicon-180.png">
+<meta name="description" content="Put your Android TV app&#x27;s card on the Sofaly home screen. No SDK, no fee.">
 <meta name="theme-color" content="#121528">
 <link rel="canonical" href="https://sofaly.tv/developers.html">
 <link rel="alternate" hreflang="en" href="https://sofaly.tv/developers.html">
@@ -31,152 +24,84 @@
 <link rel="alternate" hreflang="tr" href="https://sofaly.tv/tr/developers.html">
 <link rel="alternate" hreflang="zh" href="https://sofaly.tv/zh/developers.html">
 <link rel="alternate" hreflang="x-default" href="https://sofaly.tv/developers.html">
-<meta name="site-kind" content="software">
-<meta name="page-type" content="software">
+<meta property="og:title" content="Developers · Sofaly">
+<meta property="og:description" content="Put your Android TV app&#x27;s card on the Sofaly home screen. No SDK, no fee.">
+<meta property="og:image" content="https://sofaly.tv/assets/og.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/favicon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=JetBrains+Mono:wght@400..500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/system.css">
-<link rel="stylesheet" href="assets/ui/cards.css">
-<link rel="stylesheet" href="assets/motion/motion.css">
-<link rel="stylesheet" href="assets/backgrounds/backgrounds.css">
-<link rel="stylesheet" href="assets/layout/layout.css">
-<link rel="stylesheet" href="assets/icons/icon.css">
-<link rel="stylesheet" href="assets/tv.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Nunito:wght@600;700;800&display=swap">
 <link rel="stylesheet" href="assets/site.css">
-<style>
-:root {
-  --p-bg: #121528; --p-surface: #1b1e30; --p-ink: #fff3e6; --p-muted: #b3afb4;
-  --p-accent: #ff6a2b; --p-accent-ink: #121528; --p-action: #ff6a2b; --p-action-ink: #121528;
-  --p-inv-bg: #fff3e6; --p-inv-surface: #ece1d7; --p-inv-ink: #121528; --p-inv-muted: #5a5965;
-  --p-inv-accent: #ce3d00; --p-inv-accent-ink: #fff3e6; --p-inv-action: #121528; --p-inv-action-ink: #fff3e6;
-  --font-display: "Manrope", system-ui, sans-serif; --font-text: "Manrope", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  --display-weight: 600; --display-tracking: -0.03em; --display-tracking-xl: -0.04em; --ly-scale: 0.97;
-}
-</style>
-<script>document.documentElement.classList.add('m-enter');setTimeout(()=>document.documentElement.classList.add('m-enter-done'),700)</script>
-<script src="assets/backgrounds/backgrounds.js"></script>
-<script>document.documentElement.classList.add('mo-js');setTimeout(()=>document.documentElement.classList.add('mo-safe'),2500)</script>
-<link rel="modulepreload" href="assets/moments/moments.js">
-<link rel="modulepreload" href="assets/moments/lib.js">
-<link rel="modulepreload" href="assets/moments/iris-opens/moment.js">
-<link rel="stylesheet" href="assets/moments/iris-opens/moment.css">
+<script src="assets/site.js" defer></script>
 </head>
 <body>
-<header class="nav nav--centre">
-  <div class="wrap nav__bar">
-    <a class="skip-link" href="#top">Skip to content</a>
-    <a class="nav__logo" href="./" aria-label="Sofaly"><svg class="logo-mark" viewBox="0 -10 120 112" aria-hidden="true"><path d="M60 26 L35 8 M60 26 L89 14" stroke="#FF6A2B" stroke-width="8.5" stroke-linecap="round"/><path d="M51 28 A9 9 0 0 1 69 28 Z" fill="#FF6A2B"/><rect x="23.75" y="25.25" width="72.5" height="57.5" rx="15.75" fill="var(--logo-screen)" stroke="#FF6A2B" stroke-width="13.5"/><rect x="3.5" y="49" width="20.5" height="40.5" rx="9.5" fill="#FF6A2B"/><rect x="96" y="49" width="20.5" height="40.5" rx="9.5" fill="#FF6A2B"/><rect x="12" y="76" width="96" height="13.5" rx="5" fill="#FF6A2B"/><path d="M12.5 82 H24.5 L17 98.8 Q16 101 13.6 101 H11.4 Q9 101 9.3 98.6 Z" fill="#FF6A2B"/><path d="M107.5 82 H95.5 L103 98.8 Q104 101 106.4 101 H108.6 Q111 101 110.7 98.6 Z" fill="#FF6A2B"/><path d="M37 55 Q37 44 48 43" fill="none" stroke="#FFF3E6" stroke-width="5.5" stroke-linecap="round" opacity=".85"/></svg><span>Sofaly</span></a>
-    <nav class="nav__links" aria-label="Sofaly">
-      <div class="nav__item">
-        <a class="nav__link" href="features.html">Features <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        <div class="nav__menu"><div class="wrap grid"><div class="menu-col span-4"><a href="features.html#home">The cross<span>A tidy screen anyone understands, arranged the way you like.</span></a><a href="features.html#watch">Watch<span>Your movies, your series and a home-theater player.</span></a><a href="features.html#listen">Listen<span>Radio and podcasts with the same care as video.</span></a><a href="features.html#play">Play<span>All your games in one place, ready for the controller.</span></a><a href="features.html#apps">Apps<span>Your apps in an order that makes sense.</span></a><a href="features.html#house">The house<span>Alarm clock, timers, automations and the connected home.</span></a></div><div class="menu-col span-4"><a href="features.html#sky">Weather and screensaver<span>The right weather and a screensaver worth leaving on.</span></a><a href="features.html#family">Family<span>A profile for everyone, care for the kids and a warm welcome for guests.</span></a><a href="features.html#phone">Phone and computer<span>The TV talks to the devices at home.</span></a><a href="features.html#care">Takes care of itself<span>Backup, maintenance and diagnosis without you remembering.</span></a><a href="features.html#everyone">For everyone<span>Made for people who see, hear or use the remote in different ways.</span></a><a href="features.html#privacy">Privacy<span>No ads, no tracking, and a PIN where it matters.</span></a></div></div></div>
-      </div>
-      <div class="nav__item"><a class="nav__link" href="plans.html">Plans</a></div>
-      <div class="nav__item"><a class="nav__link" href="developers.html" aria-current="page">Developers</a></div>
-      <div class="nav__item"><a class="nav__link" href="help.html?l=en">Help</a></div>
-    </nav>
-    <div class="nav__actions">
-      <a class="btn btn--primary" href="features.html">See all 98 features</a>
-    </div>
-    <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
-      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    </button>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="./" aria-label="Sofaly"><svg class="logo-mark" viewBox="0 -10 120 112" aria-hidden="true"><path d="M60 26 L35 8 M60 26 L89 14" stroke="#FF6A2B" stroke-width="8.5" stroke-linecap="round"/><path d="M51 28 A9 9 0 0 1 69 28 Z" fill="#FF6A2B"/><rect x="23.75" y="25.25" width="72.5" height="57.5" rx="15.75" fill="var(--logo-screen)" stroke="#FF6A2B" stroke-width="13.5"/><rect x="3.5" y="49" width="20.5" height="40.5" rx="9.5" fill="#FF6A2B"/><rect x="96" y="49" width="20.5" height="40.5" rx="9.5" fill="#FF6A2B"/><rect x="12" y="76" width="96" height="13.5" rx="5" fill="#FF6A2B"/><path d="M12.5 82 H24.5 L17 98.8 Q16 101 13.6 101 H11.4 Q9 101 9.3 98.6 Z" fill="#FF6A2B"/><path d="M107.5 82 H95.5 L103 98.8 Q104 101 106.4 101 H108.6 Q111 101 110.7 98.6 Z" fill="#FF6A2B"/><path d="M37 55 Q37 44 48 43" fill="none" stroke="#FFF3E6" stroke-width="5.5" stroke-linecap="round" opacity=".85"/></svg><span class="wordmark">sofa<b>ly</b></span></a>
+    <nav class="menu" aria-label="Sofaly"><a href="features.html">Features</a><a href="plans.html">Plans</a><a href="developers.html" aria-current="page">Developers</a><a href="help.html?l=en">Help</a></nav>
+    <label class="lang"><span class="sr">Language</span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg><select id="lang"><option value="developers.html" selected data-code="en">English</option><option value="ar/developers.html" data-code="ar">العربية</option><option value="de/developers.html" data-code="de">Deutsch</option><option value="es/developers.html" data-code="es">Español</option><option value="fr/developers.html" data-code="fr">Français</option><option value="hi/developers.html" data-code="hi">हिन्दी</option><option value="id/developers.html" data-code="id">Bahasa Indonesia</option><option value="it/developers.html" data-code="it">Italiano</option><option value="ja/developers.html" data-code="ja">日本語</option><option value="ko/developers.html" data-code="ko">한국어</option><option value="pl/developers.html" data-code="pl">Polski</option><option value="pt-PT/developers.html" data-code="pt-PT">Português (Portugal)</option><option value="pt/developers.html" data-code="pt">Português</option><option value="ru/developers.html" data-code="ru">Русский</option><option value="tr/developers.html" data-code="tr">Türkçe</option><option value="zh/developers.html" data-code="zh">中文（简体）</option></select></label>
   </div>
 </header>
-<main id="top">
+<main id="main">
 
-  <section class="hero hero--dev" data-enter aria-labelledby="hero-h">
-    <div class="wrap"><div class="hero-text grid hero__grid">
-      <div class="hero__text span-5">
-        <h1 id="hero-h">Your app on the home screen people actually look at.</h1>
-        <p class="hero__lead">A Sofaly plugin is your own Android TV app. It sends a short card and Sofaly draws it on the home screen, in large text and in the house style.</p>
-        <div class="btn-row"><a class="btn btn--primary" href="plugins.html">Read the full contract<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
-      </div>
-      <div class="hero__art dev-art span-6 start-7" role="img" aria-label="Your app on the home screen people actually look at.">
-        <div class="tv tv--still"><div class="screen "><div class="dev-row"><div class="dev-tile" style="--tile:#1E7A46"><small>Delivery</small><b>12 min</b></div><div class="dev-tile" style="--tile:#2B4C9B"><small>Bus 42</small><b>6 min</b></div><div class="dev-tile" style="--tile:#B4531C"><small>Gym</small><b>7 pm</b></div></div></div></div>
-      </div>
-    </div></div>
-  </section>
-
-  <section class="section ground-surface" id="why" aria-labelledby="why-h">
-    <div class="wrap">
-      <div class="grid dev-split">
-        <div class="span-5 stack-5"><h2 id="why-h">Why build a plugin</h2><ul class="dev-whys"><li class="dev-why"><h3>Up front, not in a drawer</h3><p class="muted">Your card sits on the home screen, where the family looks every time the TV turns on, not lost in a list of apps.</p></li><li class="dev-why"><h3>Plain Android code</h3><p class="muted">One ContentProvider and one row of data, written with the Android you already know. Building and showing a card costs nothing.</p></li><li class="dev-why"><h3>Your app, your business</h3><p class="muted">Publish on Play however you like, free or paid. Sofaly only draws the card; the app and the customers are yours.</p></li></ul></div>
-        <div class="panel panel--tv dev-vis span-6 start-7" role="img" aria-label="What you can build beyond ours"><div class="stage"><div class="tv-fit"><div class="tv tv--still"><div class="screen "><div class="dev-row dev-row--six"><div class="dev-tile" style="--tile:#1E7A46"><small>Your delivery</small><b>Order is out, 12 min away.</b></div><div class="dev-tile" style="--tile:#2B4C9B"><small>Your bus</small><b>Line 42 arrives in 6 min.</b></div><div class="dev-tile" style="--tile:#B4531C"><small>Your gym</small><b>Today&#x27;s class at 7 pm.</b></div><div class="dev-tile" style="--tile:#1F6F8B"><small>Your building</small><b>Water off tomorrow, 9 am to noon.</b></div><div class="dev-tile" style="--tile:#8A5A12"><small>Your shop</small><b>Deal of the day: 20% off coffee.</b></div><div class="dev-tile" style="--tile:#3F5F2A"><small>Your club</small><b>Practice moved to Saturday.</b></div></div></div></div></div></div></div>
-      </div>
+<section class="hero dev-hero">
+  <div class="wrap hero-in">
+    <div class="hero-text">
+      <p class="eyebrow">Developer kit</p>
+      <h1>Your app on the home screen people actually look at.</h1>
+      <p class="lead">A Sofaly plugin is your own Android TV app. It sends a short card and Sofaly draws it on the home screen, in large text and in the house style.</p>
+      <div class="ctas"><a class="btn primary" href="plugins.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg>Read the full contract</a></div>
     </div>
-  </section>
-
-  <section class="section ground-inverse" id="steps" data-moment="iris-opens" data-moment-opts='{"from": "base"}' aria-labelledby="steps-h">
-    <div class="wrap">
-      <div class="grid dev-split">
-        <div class="span-5 stack-5"><h2 id="steps-h">Two steps</h2><h3>1. Declare a provider with Sofaly&#x27;s action</h3><pre class="code"><code>&lt;provider
+    <div class="card-demo" aria-hidden="true">
+      <div class="demo-tile" style="--tile:#1E7A46"><small>Delivery</small><b>12 min</b></div><div class="demo-tile" style="--tile:#2B4C9B"><small>Bus 42</small><b>6 min</b></div><div class="demo-tile" style="--tile:#7A3FB0"><small>Gym</small><b>7 pm</b></div>
+    </div>
+  </div>
+</section>
+<section class="band"><div class="wrap"><h2>Why build a plugin</h2><ul class="cards"><li class="card"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8L3.5 9.7l5.9-.8z"/></svg><h3>Up front, not in a drawer</h3><p>Your card sits on the home screen, where the family looks every time the TV turns on, not lost in a list of apps.</p></li><li class="card"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg><h3>No SDK, no fee</h3><p>One ContentProvider and one row of data. No library of ours to install, no fee to pay.</p></li><li class="card"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 7.5 3c0 5.4-7.5 10-7.5 10z"/></svg><h3>Your app, your business</h3><p>Publish on Play however you like, free or paid. Sofaly only draws the card; the app and the customers are yours.</p></li></ul></div></section>
+<section class="band alt"><div class="wrap"><h2>What you can build beyond ours</h2><ul class="minis"><li class="mini-card"><b>Your delivery</b><span>Order is out, 12 min away.</span></li><li class="mini-card"><b>Your bus</b><span>Line 42 arrives in 6 min.</span></li><li class="mini-card"><b>Your gym</b><span>Today&#x27;s class at 7 pm.</span></li><li class="mini-card"><b>Your building</b><span>Water off tomorrow, 9 am to noon.</span></li><li class="mini-card"><b>Your shop</b><span>Deal of the day: 20% off coffee.</span></li><li class="mini-card"><b>Your club</b><span>Practice moved to Saturday.</span></li></ul></div></section>
+<section class="band"><div class="wrap narrow">
+  <h2>Two steps</h2>
+  <ol class="steps">
+    <li><h3>Declare a provider with Sofaly&#x27;s action</h3><pre><code>&lt;provider
     android:name=".CardProvider"
     android:authorities="com.example.score.card"
     android:exported="true"&gt;
     &lt;intent-filter&gt;
         &lt;action android:name="tv.sofaly.plugin.CARTAO" /&gt;
     &lt;/intent-filter&gt;
-&lt;/provider&gt;</code></pre><h3>2. Answer with one row: title, value, detail and color</h3><pre class="code"><code>override fun query(uri: Uri, p: Array&lt;String&gt;?, s: String?,
+&lt;/provider&gt;</code></pre></li>
+    <li><h3>Answer with one row: title, value, detail and color</h3><pre><code>override fun query(uri: Uri, p: Array&lt;String&gt;?, s: String?,
                    a: Array&lt;String&gt;?, o: String?): Cursor =
     MatrixCursor(arrayOf("titulo", "valor", "detalhe", "cor")).apply {
-        addRow(arrayOf("Match score", "2 x 1",
-                       "38' second half", "#1E7A46"))
-    }</code></pre><a class="link" href="plugins.html">Read the full contract<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></div>
-        <div class="frame frame--split frame--tv span-6 start-7" role="img" aria-label="Answer with one row: title, value, detail and color"><div class="stage stage--fade-br"><div class="tv-fit tv-fit--cut"><div class="tv tv--still"><div class="screen "><div class="dev-row dev-row--one"><div class="dev-tile dev-tile--one" style="--tile:#1E7A46"><small>Match score</small><b>2 x 1</b><span>38' second half</span></div></div></div></div></div></div></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section ground-surface" id="rules" aria-labelledby="rules-h">
-    <div class="wrap">
-      <div class="grid dev-split">
-        <div class="span-5 stack-5"><h2 id="rules-h">Rules that protect the viewer</h2><ul class="dev-rules"><li>You never draw on the home screen: you send text and a color, Sofaly draws.</li><li>Sofaly never sends you anything about the person&#x27;s apps, accounts or what they watch.</li><li>Plugins are part of the Pro plan, and the person chooses which ones show.</li></ul><h3>Coming soon</h3><p class="muted">Background plugins and a plugin showcase right on the TV.</p></div>
-        <div class="panel panel--tv dev-vis span-6 start-7" role="img" aria-label="Rules that protect the viewer"><div class="stage"><div class="tv-fit"><div class="tv tv--still"><div class="screen scr-list"><div class="ls-head"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg><b>Cards from other apps</b></div><ul class="ls-rows"><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Your delivery</span><i class="ls-on"></i></li><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Your bus</span><i class="ls-on"></i></li><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Your gym</span><i class="ls-on"></i></li><li><span class="ls-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h3a2 2 0 1 1 4 0h3v5a2 2 0 1 1 0 4v6h-5a2 2 0 1 0-4 0H5v-5a2 2 0 1 0 0-4V4z"/></svg></span><span>Your building</span><i class="ls-on"></i></li></ul></div></div></div></div></div>
-      </div>
-    </div>
-  </section>
+        addRow(arrayOf("Match score", "2 x 1", "38' second half", "#1E7A46"))
+    }</code></pre></li>
+  </ol>
+  <p class="center"><a class="more" href="plugins.html">Read the full contract →</a></p>
+</div></section>
+<section class="band alt"><div class="wrap split">
+  <div class="panel"><h2>Rules that protect the viewer</h2><ul class="rules"><li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7.5 3v5.5c0 4.5-3.2 8.2-7.5 9.5-4.3-1.3-7.5-5-7.5-9.5V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span>You never draw on the home screen: you send text and a color, Sofaly draws.</span></li><li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7.5 3v5.5c0 4.5-3.2 8.2-7.5 9.5-4.3-1.3-7.5-5-7.5-9.5V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span>Sofaly never sends you anything about the person&#x27;s apps, accounts or what they watch.</span></li><li><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7.5 3v5.5c0 4.5-3.2 8.2-7.5 9.5-4.3-1.3-7.5-5-7.5-9.5V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span>Plugins are part of the Pro plan, and the person chooses which ones show.</span></li></ul></div>
+  <div class="panel"><h2>Ready-made template</h2><p>Two sample apps you can build today: a countdown to a date the person picks on the TV, and today&#x27;s moon phase. No internet, no account. MIT No Attribution: copy it, rename the package, publish.</p>
+    <h3 class="soon">Coming soon</h3><p>Background plugins and a plugin showcase right on the TV.</p></div>
+</div></section>
 </main>
-<footer class="footer closing footer--dark ground-inverse" id="contact" aria-labelledby="close-h">
-  <div class="wrap">
-    <div class="closing__cta close--word">
-      <div class="section-head--split">
-        <div><h2 id="close-h">Ready-made template</h2><p class="t-lead">Two sample apps you can build today: a countdown to a date the person picks on the TV, and today&#x27;s moon phase.</p></div>
-        <a class="btn btn--primary" href="plugins.html">Read the full contract<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
-      </div>
-      <p class="close__word" aria-hidden="true">Sofaly</p>
-    </div>
-    <div class="closing__links">
-      <div class="grid">
-        <div class="span-4 stack-4">
-          <a class="nav__logo" href="./" aria-label="Sofaly"><svg class="logo-mark" viewBox="0 -10 120 112" aria-hidden="true"><path d="M60 26 L35 8 M60 26 L89 14" stroke="#FF6A2B" stroke-width="8.5" stroke-linecap="round"/><path d="M51 28 A9 9 0 0 1 69 28 Z" fill="#FF6A2B"/><rect x="23.75" y="25.25" width="72.5" height="57.5" rx="15.75" fill="var(--logo-screen)" stroke="#FF6A2B" stroke-width="13.5"/><rect x="3.5" y="49" width="20.5" height="40.5" rx="9.5" fill="#FF6A2B"/><rect x="96" y="49" width="20.5" height="40.5" rx="9.5" fill="#FF6A2B"/><rect x="12" y="76" width="96" height="13.5" rx="5" fill="#FF6A2B"/><path d="M12.5 82 H24.5 L17 98.8 Q16 101 13.6 101 H11.4 Q9 101 9.3 98.6 Z" fill="#FF6A2B"/><path d="M107.5 82 H95.5 L103 98.8 Q104 101 106.4 101 H108.6 Q111 101 110.7 98.6 Z" fill="#FF6A2B"/><path d="M37 55 Q37 44 48 43" fill="none" stroke="#FFF3E6" stroke-width="5.5" stroke-linecap="round" opacity=".85"/></svg><span>Sofaly</span></a>
-          <p class="footer__lede">The home screen for Google TV and Android TV.</p>
-        </div>
-        <div class="span-2 footer__col"><h3>Product</h3><ul>
-          <li><a href="features.html">Features</a></li>
-          <li><a href="plans.html">Plans</a></li>
-          <li><a href="compatibility.html">Compatibility</a></li></ul></div>
-        <div class="span-2 footer__col"><h3>Build</h3><ul>
-          <li><a href="developers.html">Developers</a></li>
-          <li><a href="plugins.html">Plugin contract</a></li></ul></div>
-        <div class="span-2 footer__col"><h3>Help</h3><ul>
-          <li><a href="help.html?l=en">Help</a></li>
-          <li><a href="privacy.html">Privacy</a></li>
-          <li><a href="terms.html">Terms</a></li></ul></div>
-        <div class="span-2 footer__col"><h3>Language</h3><label class="lang-pick"><span>Language</span><select data-lang-pick><option value="developers.html" selected lang="en" data-code="en">English</option><option value="ar/developers.html" lang="ar" data-code="ar">العربية</option><option value="de/developers.html" lang="de" data-code="de">Deutsch</option><option value="es/developers.html" lang="es" data-code="es">Español</option><option value="fr/developers.html" lang="fr" data-code="fr">Français</option><option value="hi/developers.html" lang="hi" data-code="hi">हिन्दी</option><option value="id/developers.html" lang="id" data-code="id">Bahasa Indonesia</option><option value="it/developers.html" lang="it" data-code="it">Italiano</option><option value="ja/developers.html" lang="ja" data-code="ja">日本語</option><option value="ko/developers.html" lang="ko" data-code="ko">한국어</option><option value="pl/developers.html" lang="pl" data-code="pl">Polski</option><option value="pt-PT/developers.html" lang="pt-PT" data-code="pt-PT">Português (Portugal)</option><option value="pt/developers.html" lang="pt-BR" data-code="pt">Português</option><option value="ru/developers.html" lang="ru" data-code="ru">Русский</option><option value="tr/developers.html" lang="tr" data-code="tr">Türkçe</option><option value="zh/developers.html" lang="zh" data-code="zh">中文（简体）</option></select></label></div>
-      </div>
-      <div class="footer__legal">
-        <span>&copy; 2026 Sofaly</span>
-        <span class="footer__mark">Sofaly is not affiliated with Google. Google TV, Android TV and Chromecast are trademarks of Google LLC.</span>
-      </div>
-    </div>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <div><a class="brand" href="./"><svg class="logo-mark" viewBox="0 -10 120 112" aria-hidden="true"><path d="M60 26 L35 8 M60 26 L89 14" stroke="#FF6A2B" stroke-width="8.5" stroke-linecap="round"/><path d="M51 28 A9 9 0 0 1 69 28 Z" fill="#FF6A2B"/><rect x="23.75" y="25.25" width="72.5" height="57.5" rx="15.75" fill="var(--logo-screen)" stroke="#FF6A2B" stroke-width="13.5"/><rect x="3.5" y="49" width="20.5" height="40.5" rx="9.5" fill="#FF6A2B"/><rect x="96" y="49" width="20.5" height="40.5" rx="9.5" fill="#FF6A2B"/><rect x="12" y="76" width="96" height="13.5" rx="5" fill="#FF6A2B"/><path d="M12.5 82 H24.5 L17 98.8 Q16 101 13.6 101 H11.4 Q9 101 9.3 98.6 Z" fill="#FF6A2B"/><path d="M107.5 82 H95.5 L103 98.8 Q104 101 106.4 101 H108.6 Q111 101 110.7 98.6 Z" fill="#FF6A2B"/><path d="M37 55 Q37 44 48 43" fill="none" stroke="#FFF3E6" stroke-width="5.5" stroke-linecap="round" opacity=".85"/></svg><span class="wordmark">sofa<b>ly</b></span></a>
+      <p>The home screen for Google TV and Android TV.</p></div>
+    <nav aria-label="Links">
+      <a href="features.html">Features</a>
+      <a href="plans.html">Plans</a>
+      <a href="developers.html">Developers</a>
+      <a href="help.html?l=en">Help</a>
+      <a href="compatibility.html">Does it work on your device?</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
   </div>
+  <p class="wrap fine">© 2026 Sofaly · Sofaly is not affiliated with Google. Google TV, Android TV and Chromecast are trademarks of Google LLC.</p>
 </footer>
-<script type="module" src="assets/system.js"></script>
-<script type="module" src="assets/motion/motion.js"></script>
-<script type="module" src="assets/layout/layout.js"></script>
-<script src="assets/site.js" defer></script>
 </body>
 </html>

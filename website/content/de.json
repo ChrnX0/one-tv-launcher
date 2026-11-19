@@ -732,7 +732,7 @@
     ],
     "no-tracking": [
       "Kein Tracking",
-      "Sofaly verlangt kein Konto und sammelt keine Nutzungsdaten. Ein Fehlerbericht geht nur raus, wenn du ihn sendest.",
+      "Kein Konto, keine Nutzungsanalyse und kein Fehlerbericht, der ohne dich rausgeht.",
       "Immer."
     ],
     "pin": [
@@ -789,7 +789,7 @@
   },
   "dev_page": {
     "title": "Entwickler · Sofaly",
-    "description": "Bring die Karte deiner Android-TV-App auf den Sofaly-Startbildschirm, kostenlos und mit ganz normalem Android-Code.",
+    "description": "Bring die Karte deiner Android-TV-App auf den Sofaly-Startbildschirm. Kein SDK, keine Gebühr.",
     "eyebrow": "Entwickler-Kit",
     "h1": "Deine App auf dem Bildschirm, den alle wirklich ansehen.",
     "lead": "Ein Sofaly-Plugin ist deine eigene Android-TV-App. Sie schickt eine kurze Karte, und Sofaly zeichnet sie auf den Startbildschirm, in großer Schrift und im Stil des Hauses.",
@@ -804,8 +804,8 @@
       ],
       [
         "puzzle",
-        "Ganz normales Android",
-        "Ein ContentProvider und eine Datenzeile, mit dem Android, das du schon kennst. Karte bauen und anzeigen kostet nichts."
+        "Kein SDK, keine Gebühr",
+        "Ein ContentProvider und eine Datenzeile. Keine Bibliothek von uns, keine Gebühr."
       ],
       [
         "heart",
@@ -987,157 +987,6 @@
           "Eltern-PIN"
         ]
       ]
-    }
-  },
-  "site": {
-    "nav_menu_label": "Welten",
-    "cta_main": "Alle {n} Funktionen ansehen",
-    "cta_plans": "Pläne vergleichen",
-    "lang_label": "Sprache",
-    "toggle": "Menü",
-    "hero": {
-      "title": "Sofaly: der Google-TV-Startbildschirm für die ganze Familie",
-      "description": "Sofaly ersetzt den Startbildschirm von Google TV und Android TV: Ansehen, Hören, Spielen und Apps in einem Kreuz, Schrift in drei Größen und keine Werbung.",
-      "h1": "Google-TV-Startbildschirm für die ganze Familie",
-      "lead": "Sofaly ersetzt den Startbildschirm von Google TV und Android TV. Ansehen, Hören, Spielen und Apps liegen in einem Kreuz, die Schrift gibt es in drei Größen und Werbung erscheint nie.",
-      "proof": "Für den Chromecast mit Google TV, Fernseher mit Google TV und Android TV 10 oder neuer.",
-      "art": "Der Startbildschirm von Sofaly auf einem Fernseher, das Kreuz mit geöffnetem Ansehen, und die Weckerkarte, die den Fernseher um 6:30 einschaltet",
-      "note_title": "Wecker · 06:30",
-      "note_chip": "Erledigt",
-      "note_lines": [
-        "Der Fernseher hat sich selbst eingeschaltet",
-        "Lautstärke steigt auf 18",
-        "Vorhersage <b>22°</b>, trockener Morgen"
-      ]
-    },
-    "cross": {
-      "h2": "Jeder Bildschirm beginnt mit einem Kreuz",
-      "text": "◀ ▶ wählt eine Welt: Ansehen, Hören, Spielen oder Apps. ▲ ▼ geht durch ihren Inhalt. HOME bringt Sie aus jeder App hierher zurück.",
-      "link": "So funktioniert das Kreuz",
-      "art": "Das Kreuz von Sofaly auf einem Fernseher, von Weiter zu Ansehen, Hören, Spielen und Apps"
-    },
-    "house": {
-      "h2": "Was der Fernseher fürs Zuhause tut.",
-      "h2_muted": "Vier Aufgaben, die Googles Startbildschirm anderen Apps überlässt.",
-      "cards": [
-        [
-          "Schaltet den Fernseher um 6:30 ein und weckt Sie",
-          "Der Wecker schaltet den Fernseher selbst ein, erhöht langsam die Lautstärke und öffnet die Tagesvorhersage."
-        ],
-        [
-          "Antwortet jedem Handy im Haus",
-          "Öffnen Sie das Panel des Fernsehers im Browser des Handys, um zu tippen, eine Nachricht zu senden oder es als Fernbedienung zu nutzen. Eine PIN schützt es."
-        ],
-        [
-          "Sperrt den Startbildschirm zur Schlafenszeit",
-          "Das Kinderprofil zeigt nur erlaubte Apps, begrenzt die Lautstärke und verlangt zur Schlafenszeit eine PIN zum Verlassen."
-        ],
-        [
-          "Zeigt das Wetter vom Flughafen auf dem Startbildschirm",
-          "Das aktuelle Wetter kommt von der Station am nächsten Flughafen. Die Vorhersage reicht 9 Tage."
-        ]
-      ]
-    },
-    "statement": {
-      "label": "Warum wechseln",
-      "text": "Der Startbildschirm Ihres Fernsehers ist gebaut, um Ihnen Sendungen zu verkaufen. <strong>Sofaly</strong> ist gebaut für die Menschen auf dem Sofa: eine Großmutter, die jedes Wort liest, und ein Kind, das pünktlich ins Bett geht."
-    },
-    "movies": {
-      "h2": "Spielt die Filme von Ihrem Computer",
-      "text": "Sofaly findet die Filme und Serien, die auf Ihrem Computer oder NAS freigegeben sind, ergänzt die Poster und öffnet sie im eigenen Player.",
-      "facts": [
-        "Synchronisiert oder mit Untertiteln, eine Taste",
-        "Überspringt den Vorspann für Sie",
-        "Macht dort weiter, wo Sie aufgehört haben"
-      ],
-      "link": "Alles unter Ansehen",
-      "art": "Der Player von Sofaly mit geöffnetem Audiomenü"
-    },
-    "tour": {
-      "h2": "Fünf weitere Bildschirme desselben Fernsehers",
-      "text": "Jeder ist nach der App gezeichnet, wie sie auf einem Chromecast mit Google TV läuft. Wählen Sie einen aus.",
-      "tabs": {
-        "radio": [
-          "Radio hören",
-          "Sender aus allen Ländern und Ihre Podcasts, in einem Vollbild-Player.",
-          "Hören ansehen"
-        ],
-        "screensaver": [
-          "Ein Gemälde zeigen",
-          "Jeden Tag ein Gemälde aus dem Met, mit Uhr und Tageswetter.",
-          "Den Bildschirmschoner ansehen"
-        ],
-        "cards": [
-          "Tage zählen",
-          "Countdown, Erinnerung, Mond und Kurse direkt auf dem Startbildschirm.",
-          "Die Startkarten ansehen"
-        ],
-        "games": [
-          "Ein Spiel starten",
-          "Cloud-, PC- und Retro-Spiele an einem Ort, der Controller schon gekoppelt.",
-          "Spielen ansehen"
-        ],
-        "windows": [
-          "Von Windows aus öffnen",
-          "Der Fernseher erscheint unter Dieser PC als Laufwerk S:. Ziehen Sie einen Film hinein und er läuft.",
-          "Handy und Computer ansehen"
-        ]
-      }
-    },
-    "compare": {
-      "h2": "Googles TV-Startbildschirm neben Sofaly",
-      "text": "Derselbe Fernseher, dieselben Apps. Anders ist der erste Bildschirm, den Sie sehen.",
-      "col": "Auf dem Startbildschirm"
-    },
-    "plans": {
-      "h2": "Pläne",
-      "text": "Basis ist kostenlos und schon der ganze Startbildschirm. Die Preise für Pro und Ultra kommen mit dem Start bei Google Play.",
-      "free": "Kostenlos",
-      "features_n": "{n} Funktionen",
-      "cta": "Was {plan} enthält"
-    },
-    "faq": {
-      "h2": "Fragen",
-      "text": "Der Rest steht in der Hilfe, in 16 Sprachen.",
-      "link": "Hilfe öffnen",
-      "items": [
-        [
-          "Läuft Sofaly auf meinem Fernseher?",
-          "Sofaly läuft auf Google TV und Android TV 10 oder neuer: dem Chromecast mit Google TV, Fernsehern mit Google TV und Android-TV-Boxen. Die Kompatibilitätsseite listet die getesteten Geräte."
-        ],
-        [
-          "Brauche ich einen Computer, um Sofaly zu installieren?",
-          "Nein. Installieren Sie es über Google Play direkt auf dem Fernseher und folgen Sie den Schritten mit der Fernbedienung."
-        ],
-        [
-          "Bleiben meine Apps auf dem Fernseher?",
-          "Alle. Sofaly ersetzt nur den Startbildschirm: Netflix, YouTube, Prime Video und der Rest öffnen sich wie immer, und die Mikrofontaste bleibt der Google Assistant."
-        ],
-        [
-          "Zeigt Sofaly Werbung?",
-          "Nein, in keinem Plan. Sofaly verkauft keine Werbung und verfolgt nicht, was Sie ansehen."
-        ],
-        [
-          "Bringt Sofaly Sender oder Filme mit?",
-          "Nein. Sofaly ordnet, was Ihnen schon gehört: Ihre Apps, Ihre Dateien und freie Radiosender und Podcasts."
-        ],
-        [
-          "Wie bekomme ich Googles Startbildschirm zurück?",
-          "Wählen Sie in den Einstellungen des Fernsehers wieder Googles Startbildschirm. Nichts von Ihnen wird gelöscht."
-        ]
-      ]
-    },
-    "close": {
-      "h2": "Jede Funktion vor dem Start ansehen",
-      "text": "Sofaly kommt bald zu Google Play. Basis bleibt kostenlos."
-    },
-    "footer": {
-      "lede": "Der Startbildschirm für Google TV und Android TV.",
-      "col_product": "Produkt",
-      "col_build": "Entwickeln",
-      "col_help": "Hilfe",
-      "compat": "Kompatibilität",
-      "plugins": "Plugin-Vertrag"
     }
   }
 }

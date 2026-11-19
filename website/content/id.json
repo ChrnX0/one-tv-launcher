@@ -732,7 +732,7 @@
     ],
     "no-tracking": [
       "Tanpa pelacakan",
-      "Sofaly tidak meminta akun dan tidak mengumpulkan data penggunaan. Laporan error hanya terkirim jika Anda mengirimnya.",
+      "Tanpa akun, tanpa analitik penggunaan, dan tidak ada laporan error yang terkirim tanpa Anda kirim.",
       "Selalu."
     ],
     "pin": [
@@ -789,7 +789,7 @@
   },
   "dev_page": {
     "title": "Developer · Sofaly",
-    "description": "Taruh kartu aplikasi Android TV Anda di layar utama Sofaly, gratis dan dengan kode Android biasa.",
+    "description": "Taruh kartu aplikasi Android TV Anda di layar utama Sofaly. Tanpa SDK, tanpa biaya.",
     "eyebrow": "Kit developer",
     "h1": "Aplikasi Anda di layar utama yang benar-benar dilihat orang.",
     "lead": "Plugin Sofaly adalah aplikasi Android TV Anda sendiri. Ia mengirim kartu singkat dan Sofaly menggambarnya di layar utama, dengan huruf besar dan gaya rumah.",
@@ -804,8 +804,8 @@
       ],
       [
         "puzzle",
-        "Kode Android biasa",
-        "Satu ContentProvider dan satu baris data, dengan Android yang sudah Anda kenal. Membuat dan menampilkan kartu itu gratis."
+        "Tanpa SDK, tanpa biaya",
+        "Satu ContentProvider dan satu baris data. Tidak ada pustaka kami yang perlu dipasang, tidak ada biaya."
       ],
       [
         "heart",
@@ -987,157 +987,6 @@
           "PIN orang tua"
         ]
       ]
-    }
-  },
-  "site": {
-    "nav_menu_label": "Dunia",
-    "cta_main": "Lihat semua {n} fitur",
-    "cta_plans": "Bandingkan paket",
-    "lang_label": "Bahasa",
-    "toggle": "Menu",
-    "hero": {
-      "title": "Sofaly: layar utama Google TV untuk seluruh keluarga",
-      "description": "Sofaly menggantikan layar utama Google TV dan Android TV: Tonton, Dengar, Main, dan Aplikasi dalam satu salib, teks tiga ukuran, dan tanpa iklan.",
-      "h1": "Layar utama Google TV untuk seluruh keluarga",
-      "lead": "Sofaly menggantikan layar utama Google TV dan Android TV. Tonton, Dengar, Main, dan Aplikasi ada dalam satu salib, teksnya tersedia dalam tiga ukuran, dan iklan tidak pernah muncul.",
-      "proof": "Untuk Chromecast dengan Google TV, TV dengan Google TV, dan Android TV 10 atau lebih baru.",
-      "art": "Layar utama Sofaly di TV: salib dengan Tonton terbuka, dan kartu alarm yang menyalakan TV pukul 6:30",
-      "note_title": "Alarm · 06:30",
-      "note_chip": "Selesai",
-      "note_lines": [
-        "TV menyala sendiri",
-        "Volume naik sampai 18",
-        "Prakiraan <b>22°</b>, pagi kering"
-      ]
-    },
-    "cross": {
-      "h2": "Setiap layar berawal dari satu salib",
-      "text": "◀ ▶ memilih dunia: Tonton, Dengar, Main, atau Aplikasi. ▲ ▼ menelusuri isinya. HOME membawa Anda kembali dari aplikasi mana pun.",
-      "link": "Lihat cara kerja salib",
-      "art": "Salib Sofaly di TV, dari Lanjutkan ke Tonton, Dengar, Main, dan Aplikasi"
-    },
-    "house": {
-      "h2": "Yang dilakukan TV untuk rumah.",
-      "h2_muted": "Empat tugas yang diserahkan layar Google ke aplikasi lain.",
-      "cards": [
-        [
-          "Menyalakan TV pukul 6:30 untuk membangunkan Anda",
-          "Alarm menyalakan TV sendiri, menaikkan volume perlahan, dan membuka prakiraan hari ini."
-        ],
-        [
-          "Menjawab setiap ponsel di rumah",
-          "Buka panel TV di browser ponsel untuk mengetik, meninggalkan pesan, atau memakainya sebagai remote. Sebuah PIN melindunginya."
-        ],
-        [
-          "Mengunci layar utama saat jam tidur anak",
-          "Profil anak hanya menampilkan aplikasi yang Anda izinkan, membatasi volume, dan meminta PIN untuk keluar saat jam tidur."
-        ],
-        [
-          "Menampilkan cuaca bandara di layar utama",
-          "Cuaca saat ini berasal dari stasiun bandara terdekat. Prakiraan mencakup 9 hari ke depan."
-        ]
-      ]
-    },
-    "statement": {
-      "label": "Mengapa beralih",
-      "text": "Layar bawaan TV Anda dibuat untuk menjual tayangan. <strong>Sofaly</strong> dibuat untuk orang di sofa: nenek yang membaca setiap kata dan anak yang tidur tepat waktu."
-    },
-    "movies": {
-      "h2": "Memutar film dari komputer Anda",
-      "text": "Sofaly menemukan film dan serial yang dibagikan di komputer atau NAS Anda, menambahkan poster, dan membukanya di pemutarnya sendiri.",
-      "facts": [
-        "Sulih suara atau subtitle dengan satu tombol",
-        "Melewati intro untuk Anda",
-        "Lanjut dari tempat Anda berhenti"
-      ],
-      "link": "Lihat semua di Tonton",
-      "art": "Pemutar Sofaly dengan menu audio terbuka"
-    },
-    "tour": {
-      "h2": "Lima layar lagi dari TV yang sama",
-      "text": "Masing-masing digambar dari aplikasi yang berjalan di Chromecast dengan Google TV. Pilih satu.",
-      "tabs": {
-        "radio": [
-          "Dengarkan radio",
-          "Stasiun dari setiap negara dan podcast Anda, dalam pemutar layar penuh.",
-          "Lihat Dengar"
-        ],
-        "screensaver": [
-          "Pajang lukisan",
-          "Satu lukisan dari The Met setiap hari, dengan jam dan cuaca hari itu.",
-          "Lihat screensaver"
-        ],
-        "cards": [
-          "Hitung hari",
-          "Hitung mundur, pengingat, bulan, dan kurs langsung di layar utama.",
-          "Lihat kartu layar utama"
-        ],
-        "games": [
-          "Mulai permainan",
-          "Game cloud, PC, dan retro di satu tempat, dengan kontroler sudah tersambung.",
-          "Lihat Main"
-        ],
-        "windows": [
-          "Buka dari Windows",
-          "TV muncul di This PC sebagai drive S:. Seret film dan film diputar.",
-          "Lihat ponsel dan komputer"
-        ]
-      }
-    },
-    "compare": {
-      "h2": "Layar Google TV di samping Sofaly",
-      "text": "TV yang sama, aplikasi yang sama. Yang berubah adalah layar pertama yang Anda lihat.",
-      "col": "Di layar utama"
-    },
-    "plans": {
-      "h2": "Paket",
-      "text": "Basic gratis dan sudah mencakup seluruh layar utama. Harga Pro dan Ultra hadir saat peluncuran di Google Play.",
-      "free": "Gratis",
-      "features_n": "{n} fitur",
-      "cta": "Isi paket {plan}"
-    },
-    "faq": {
-      "h2": "Pertanyaan",
-      "text": "Sisanya ada di bantuan, dalam 16 bahasa.",
-      "link": "Buka bantuan",
-      "items": [
-        [
-          "Apakah Sofaly berjalan di TV saya?",
-          "Sofaly berjalan di Google TV dan Android TV 10 atau lebih baru: Chromecast dengan Google TV, TV dengan Google TV, dan kotak Android TV. Halaman kompatibilitas mencantumkan perangkat yang sudah diuji."
-        ],
-        [
-          "Perlukah komputer untuk memasang Sofaly?",
-          "Tidak. Pasang dari Google Play langsung di TV dan ikuti langkahnya dengan remote."
-        ],
-        [
-          "Apakah aplikasi saya tetap ada di TV?",
-          "Semuanya. Sofaly hanya mengganti layar utama: Netflix, YouTube, Prime Video, dan lainnya terbuka seperti biasa, dan tombol mikrofon tetap Google Assistant."
-        ],
-        [
-          "Apakah Sofaly menampilkan iklan?",
-          "Tidak, di paket mana pun. Sofaly tidak menjual iklan dan tidak melacak tontonan Anda."
-        ],
-        [
-          "Apakah Sofaly menyediakan saluran atau film?",
-          "Tidak. Sofaly menata yang sudah milik Anda: aplikasi Anda, file Anda, serta radio dan podcast terbuka."
-        ],
-        [
-          "Bagaimana kembali ke layar Google?",
-          "Pilih lagi layar utama Google di setelan TV. Tidak ada data Anda yang terhapus."
-        ]
-      ]
-    },
-    "close": {
-      "h2": "Lihat setiap fitur sebelum peluncuran",
-      "text": "Sofaly segera hadir di Google Play. Basic tetap gratis."
-    },
-    "footer": {
-      "lede": "Layar utama untuk Google TV dan Android TV.",
-      "col_product": "Produk",
-      "col_build": "Bangun",
-      "col_help": "Bantuan",
-      "compat": "Kompatibilitas",
-      "plugins": "Kontrak plugin"
     }
   }
 }

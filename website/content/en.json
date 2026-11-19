@@ -732,7 +732,7 @@
     ],
     "no-tracking": [
       "No tracking",
-      "Sofaly asks for no account and collects no usage data. A crash report leaves only when you send it.",
+      "No account, no usage analytics and no crash report leaving without you sending it.",
       "Always."
     ],
     "pin": [
@@ -789,7 +789,7 @@
   },
   "dev_page": {
     "title": "Developers · Sofaly",
-    "description": "Put your Android TV app's card on the Sofaly home screen, free of charge and with plain Android code.",
+    "description": "Put your Android TV app's card on the Sofaly home screen. No SDK, no fee.",
     "eyebrow": "Developer kit",
     "h1": "Your app on the home screen people actually look at.",
     "lead": "A Sofaly plugin is your own Android TV app. It sends a short card and Sofaly draws it on the home screen, in large text and in the house style.",
@@ -804,8 +804,8 @@
       ],
       [
         "puzzle",
-        "Plain Android code",
-        "One ContentProvider and one row of data, written with the Android you already know. Building and showing a card costs nothing."
+        "No SDK, no fee",
+        "One ContentProvider and one row of data. No library of ours to install, no fee to pay."
       ],
       [
         "heart",
@@ -987,157 +987,6 @@
           "Parents' PIN"
         ]
       ]
-    }
-  },
-  "site": {
-    "nav_menu_label": "Worlds",
-    "cta_main": "See all {n} features",
-    "cta_plans": "Compare the plans",
-    "lang_label": "Language",
-    "toggle": "Menu",
-    "hero": {
-      "title": "Sofaly: the Google TV home screen for the whole family",
-      "description": "Sofaly replaces the home screen on Google TV and Android TV: Watch, Listen, Play and Apps in one cross, text in three sizes and no ads.",
-      "h1": "Google TV home screen for the whole family",
-      "lead": "Sofaly replaces the home screen on Google TV and Android TV. Watch, Listen, Play and Apps sit in one cross, the text comes in three sizes and no ad ever shows.",
-      "proof": "For the Chromecast with Google TV, TVs with Google TV and Android TV 10 or later.",
-      "art": "The Sofaly home screen on a TV, the cross with Watch open, and the alarm card turning the TV on at 6:30",
-      "note_title": "Alarm · 06:30",
-      "note_chip": "Done",
-      "note_lines": [
-        "The TV turned itself on",
-        "Volume rising to 18",
-        "Forecast <b>22°</b>, dry morning"
-      ]
-    },
-    "cross": {
-      "h2": "Every screen starts from one cross",
-      "text": "◀ ▶ picks a world: Watch, Listen, Play or Apps. ▲ ▼ walks through what is inside it. HOME brings you back here from any app.",
-      "link": "See how the cross works",
-      "art": "The Sofaly cross on a TV, moving from Continue to Watch, Listen, Play and Apps"
-    },
-    "house": {
-      "h2": "What the TV does for the house.",
-      "h2_muted": "Four jobs Google's home screen leaves to other apps.",
-      "cards": [
-        [
-          "Turns the TV on at 6:30 to wake you",
-          "The alarm switches the TV on by itself, raises the volume slowly and opens the day's forecast."
-        ],
-        [
-          "Answers any phone at home",
-          "Open the TV's panel in a phone's browser to type, send a message or use it as a remote. A PIN guards it."
-        ],
-        [
-          "Locks the home screen at the kids' bedtime",
-          "A kid profile shows only the apps you allow, caps the volume and asks for a PIN to leave at bedtime."
-        ],
-        [
-          "Shows the airport's weather on the home screen",
-          "The current weather comes from the station at the nearest airport. The forecast covers the next 9 days."
-        ]
-      ]
-    },
-    "statement": {
-      "label": "Why switch",
-      "text": "The home screen your TV came with is built to sell you shows. <strong>Sofaly</strong> is built for the people on the couch: a grandmother who reads every word and a child in bed on time."
-    },
-    "movies": {
-      "h2": "Plays the movies on your computer",
-      "text": "Sofaly finds the movies and series shared on your computer or NAS, adds the posters and opens them in its own player.",
-      "facts": [
-        "Dubbed or subtitled with one key",
-        "Skips the opening for you",
-        "Starts where you stopped"
-      ],
-      "link": "See everything in Watch",
-      "art": "The Sofaly player with the audio menu open and the Skip intro button"
-    },
-    "tour": {
-      "h2": "Five more screens from the same TV",
-      "text": "Each one is drawn from the app as it runs on a Chromecast with Google TV. Pick one to see it.",
-      "tabs": {
-        "radio": [
-          "Play the radio",
-          "Stations from every country and your podcasts, in a full-screen player.",
-          "See Listen"
-        ],
-        "screensaver": [
-          "Leave a painting on",
-          "A painting from The Met each day, with the clock and the day's weather.",
-          "See the screensaver"
-        ],
-        "cards": [
-          "Count the days",
-          "A countdown, a reminder, the moon and the rates, right on the home screen.",
-          "See the home cards"
-        ],
-        "games": [
-          "Start a game",
-          "Cloud, PC and retro games in one place, with the controller already paired.",
-          "See Play"
-        ],
-        "windows": [
-          "Open it from Windows",
-          "The TV shows up in This PC as drive S:. Drag a movie in and it plays.",
-          "See the phone and computer"
-        ]
-      }
-    },
-    "compare": {
-      "h2": "Google TV's home screen next to Sofaly",
-      "text": "The same TV, the same apps. What changes is the screen you see first.",
-      "col": "On the home screen"
-    },
-    "plans": {
-      "h2": "Plans",
-      "text": "Basic is free and already the whole home screen. Prices for Pro and Ultra come with the launch on Google Play.",
-      "free": "Free",
-      "features_n": "{n} features",
-      "cta": "See what {plan} includes"
-    },
-    "faq": {
-      "h2": "Questions",
-      "text": "The rest is in the help pages, in 16 languages.",
-      "link": "Open the help pages",
-      "items": [
-        [
-          "Does Sofaly work on my TV?",
-          "Sofaly runs on Google TV and Android TV 10 or later: the Chromecast with Google TV, TVs with Google TV and Android TV boxes. The compatibility page lists the tested devices."
-        ],
-        [
-          "Do I need a computer to install Sofaly?",
-          "No. Install it from Google Play on the TV itself and follow the steps with the remote."
-        ],
-        [
-          "Do my apps stay on the TV?",
-          "All of them. Sofaly only replaces the home screen: Netflix, YouTube, Prime Video and the rest open as always, and the microphone button is still the Google Assistant."
-        ],
-        [
-          "Does Sofaly show ads?",
-          "No, on no plan. Sofaly sells no ads and doesn't track what you watch."
-        ],
-        [
-          "Does Sofaly come with channels or movies?",
-          "No. Sofaly organizes what's already yours: your apps, your files and open radio stations and podcasts."
-        ],
-        [
-          "How do I get Google's home screen back?",
-          "Pick Google's home screen again in the TV's settings. Nothing of yours is deleted."
-        ]
-      ]
-    },
-    "close": {
-      "h2": "See every feature before launch",
-      "text": "Sofaly arrives on Google Play soon. Basic stays free."
-    },
-    "footer": {
-      "lede": "The home screen for Google TV and Android TV.",
-      "col_product": "Product",
-      "col_build": "Build",
-      "col_help": "Help",
-      "compat": "Compatibility",
-      "plugins": "Plugin contract"
     }
   }
 }

@@ -732,7 +732,7 @@
     ],
     "no-tracking": [
       "Nada de rastreio",
-      "A Sofaly não pede conta nem coleta dados de uso. Um relatório de erro só sai quando você manda.",
+      "Sem conta, sem análise de uso e sem relatório de erro saindo sem você mandar.",
       "Sempre."
     ],
     "pin": [
@@ -789,7 +789,7 @@
   },
   "dev_page": {
     "title": "Desenvolvedores · Sofaly",
-    "description": "Ponha o cartão do seu app de Android TV na tela inicial da Sofaly, de graça e com código Android comum.",
+    "description": "Ponha o cartão do seu app de Android TV na tela inicial da Sofaly. Sem SDK, sem custo.",
     "eyebrow": "Kit de desenvolvedor",
     "h1": "Seu app na tela inicial de quem assiste.",
     "lead": "Um plugin da Sofaly é o seu próprio app de Android TV. Ele manda um cartão curto e a Sofaly desenha na tela inicial, com letra grande e no estilo da casa.",
@@ -804,8 +804,8 @@
       ],
       [
         "puzzle",
-        "Código Android comum",
-        "Um ContentProvider e uma linha de dados, com o Android que você já conhece. Criar e mostrar o cartão é de graça."
+        "Sem SDK, sem custo",
+        "Um ContentProvider e uma linha de dados. Nenhuma biblioteca nossa para instalar, nenhuma taxa."
       ],
       [
         "heart",
@@ -987,157 +987,6 @@
           "PIN dos pais"
         ]
       ]
-    }
-  },
-  "site": {
-    "nav_menu_label": "Mundos",
-    "cta_main": "Ver os {n} recursos",
-    "cta_plans": "Comparar os planos",
-    "lang_label": "Idioma",
-    "toggle": "Menu",
-    "hero": {
-      "title": "Sofaly: a tela inicial do Google TV para a família toda",
-      "description": "O Sofaly troca a tela inicial do Google TV e do Android TV: Assistir, Ouvir, Jogar e Apps numa cruz, letra em três tamanhos e nenhum anúncio.",
-      "h1": "Tela inicial do Google TV para a família toda",
-      "lead": "O Sofaly troca a tela inicial do Google TV e do Android TV. Assistir, Ouvir, Jogar e Apps ficam numa cruz, a letra vem em três tamanhos e nenhum anúncio aparece.",
-      "proof": "Para o Chromecast com Google TV, TVs com Google TV e Android TV 10 ou mais novo.",
-      "art": "A tela inicial do Sofaly numa TV, a cruz com Assistir aberto, e o cartão do despertador ligando a TV às 6:30",
-      "note_title": "Despertador · 06:30",
-      "note_chip": "Feito",
-      "note_lines": [
-        "A TV ligou sozinha",
-        "Volume subindo até 18",
-        "Previsão <b>22°</b>, manhã seca"
-      ]
-    },
-    "cross": {
-      "h2": "Toda tela começa de uma cruz",
-      "text": "◀ ▶ escolhe um mundo: Assistir, Ouvir, Jogar ou Apps. ▲ ▼ percorre o que tem dentro. HOME traz você de volta de qualquer app.",
-      "link": "Ver como a cruz funciona",
-      "art": "A cruz do Sofaly numa TV, passando de Continuar para Assistir, Ouvir, Jogar e Apps"
-    },
-    "house": {
-      "h2": "O que a TV faz pela casa.",
-      "h2_muted": "Quatro tarefas que a tela do Google deixa para outros apps.",
-      "cards": [
-        [
-          "Liga a TV às 6:30 para acordar você",
-          "O despertador liga a TV sozinho, sobe o volume devagar e abre a previsão do dia."
-        ],
-        [
-          "Atende qualquer celular da casa",
-          "Abra o painel da TV no navegador do celular para digitar, mandar recado ou usar como controle. Um PIN protege."
-        ],
-        [
-          "Trava a tela inicial na hora das crianças dormirem",
-          "O perfil infantil mostra só os apps que você liberar, limita o volume e pede PIN para sair na hora de dormir."
-        ],
-        [
-          "Mostra o tempo do aeroporto na tela inicial",
-          "O tempo de agora vem da estação do aeroporto mais perto. A previsão cobre os próximos 9 dias."
-        ]
-      ]
-    },
-    "statement": {
-      "label": "Por que trocar",
-      "text": "A tela que veio com a sua TV foi feita para vender programas. O <strong>Sofaly</strong> foi feito para quem está no sofá: a avó que lê cada palavra e a criança que dorme na hora."
-    },
-    "movies": {
-      "h2": "Toca os filmes do seu computador",
-      "text": "O Sofaly acha os filmes e séries compartilhados no seu computador ou NAS, põe os pôsteres e abre tudo no próprio player.",
-      "facts": [
-        "Dublado ou legendado com uma tecla",
-        "Pula a abertura por você",
-        "Volta de onde você parou"
-      ],
-      "link": "Ver tudo em Assistir",
-      "art": "O player do Sofaly com o menu de áudio aberto e o botão Pular abertura"
-    },
-    "tour": {
-      "h2": "Mais cinco telas da mesma TV",
-      "text": "Cada uma é desenhada do app rodando num Chromecast com Google TV. Escolha uma para ver.",
-      "tabs": {
-        "radio": [
-          "Ouvir rádio",
-          "Rádios do mundo todo e os seus podcasts, num player de tela cheia.",
-          "Ver Ouvir"
-        ],
-        "screensaver": [
-          "Deixar um quadro",
-          "Um quadro do The Met por dia, com o relógio e o tempo do dia.",
-          "Ver o descanso de tela"
-        ],
-        "cards": [
-          "Contar os dias",
-          "Contagem regressiva, lembrete, a lua e as cotações, direto na tela inicial.",
-          "Ver os cartões da tela inicial"
-        ],
-        "games": [
-          "Começar um jogo",
-          "Jogos na nuvem, do PC e retrô num lugar só, com o controle já pareado.",
-          "Ver Jogar"
-        ],
-        "windows": [
-          "Abrir pelo Windows",
-          "A TV aparece em Este Computador como unidade S:. Arraste um filme e ele toca.",
-          "Ver celular e computador"
-        ]
-      }
-    },
-    "compare": {
-      "h2": "A tela do Google TV ao lado do Sofaly",
-      "text": "A mesma TV, os mesmos apps. Muda a primeira tela que você vê.",
-      "col": "Na tela inicial"
-    },
-    "plans": {
-      "h2": "Planos",
-      "text": "O Básico é grátis e já é a tela inicial inteira. Os preços do Pro e do Ultra saem no lançamento no Google Play.",
-      "free": "Grátis",
-      "features_n": "{n} recursos",
-      "cta": "Ver o que o {plan} inclui"
-    },
-    "faq": {
-      "h2": "Perguntas",
-      "text": "O resto está na ajuda, em 16 idiomas.",
-      "link": "Abrir a ajuda",
-      "items": [
-        [
-          "O Sofaly funciona na minha TV?",
-          "O Sofaly roda em Google TV e Android TV 10 ou mais novo: o Chromecast com Google TV, TVs com Google TV e TV boxes Android TV. A página de compatibilidade lista os aparelhos testados."
-        ],
-        [
-          "Preciso de computador para instalar o Sofaly?",
-          "Não. Instale pelo Google Play na própria TV e siga os passos com o controle."
-        ],
-        [
-          "Meus apps continuam na TV?",
-          "Todos. O Sofaly só troca a tela inicial: Netflix, YouTube, Prime Video e o resto abrem como sempre, e o botão do microfone continua sendo o Google Assistente."
-        ],
-        [
-          "O Sofaly mostra anúncios?",
-          "Não, em nenhum plano. O Sofaly não vende anúncios e não acompanha o que você assiste."
-        ],
-        [
-          "O Sofaly vem com canais ou filmes?",
-          "Não. O Sofaly organiza o que já é seu: seus apps, seus arquivos e rádios e podcasts abertos."
-        ],
-        [
-          "Como volto para a tela do Google?",
-          "Escolha de novo a tela inicial do Google nas configurações da TV. Nada seu é apagado."
-        ]
-      ]
-    },
-    "close": {
-      "h2": "Veja cada recurso antes do lançamento",
-      "text": "O Sofaly chega ao Google Play em breve. O Básico continua grátis."
-    },
-    "footer": {
-      "lede": "A tela inicial para Google TV e Android TV.",
-      "col_product": "Produto",
-      "col_build": "Criar",
-      "col_help": "Ajuda",
-      "compat": "Compatibilidade",
-      "plugins": "Contrato de plugins"
     }
   }
 }
