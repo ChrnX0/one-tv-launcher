@@ -9,7 +9,7 @@ android {
         buildConfig = true
     }
     defaultConfig {
-        buildConfigField "String", "MANAGER_APPLICATION_ID", "\"br.paulo.tvlauncher\"" // tv-launcher: gerente = o proprio launcher (o modulo :manager nao veio)
+        buildConfigField "String", "MANAGER_APPLICATION_ID", project.hasProperty("legacy") ? "\"br.paulo.tvlauncher\"" : "\"tv.sofaly.launcher\"" // tv-launcher: gerente = o proprio launcher (o modulo :manager nao veio); pacote do app (19/11/2026: tv.sofaly.launcher; -Plegacy = ponte)
     }
 }
 

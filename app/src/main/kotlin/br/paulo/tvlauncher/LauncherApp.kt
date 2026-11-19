@@ -33,6 +33,9 @@ class LauncherApp : Application() {
         // contar como queda do launcher (RegistroErros/VigiaAtualizacao marcariam a versão como ruim), e nada da tela
         // do launcher precisa existir lá.
         if (android.os.Build.VERSION.SDK_INT >= 28 && getProcessName().endsWith(":dhizuku_usuario")) return
+        // Troca de pacote (PackageMigration.kt): o processo ":migration" só copia dados. Nada pode subir nele, e nada pode
+        // ler preferências antes da cópia (elas ficariam velhas na memória).
+        if (android.os.Build.VERSION.SDK_INT >= 28 && getProcessName().endsWith(":migration")) return
         RegistroErros.instalar(this)
         // Atualização vigiada: anota a versão que abriu (versão nova = começa a vigiar) e liga o modo seguro, que não
         // deixa abrir a tela que derrubou uma versão ruim. Logo depois do RegistroErros: uma queda já conta.

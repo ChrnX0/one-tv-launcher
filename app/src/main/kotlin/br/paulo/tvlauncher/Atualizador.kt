@@ -161,10 +161,27 @@ object Atualizador {
         VigiaAtualizacao.aoVerRelease(app, codigo)
         if (!VigiaAtualizacao.podeInstalar(app, codigo)) { prefs(app).edit().remove(PENDENTE).apply(); return txt(R.string.atu_ruim, codigo) }
 
+        // Troca de pacote (19/11/2026, PackageMigration.kt): no app ANTIGO, um Release com o APK do app novo
+        // (sofaly-launcher*.apk) não é atualização, é a mudança para tv.sofaly.launcher. Vem antes do "em dia": a ponte
+        // tem o mesmo versionCode do app novo do mesmo Release.
+        if (PackageMigration.allowed(app, sozinho = soComTelaApagada)) {
+            val nomesRelease = HashSet<String>()
+            val lista = json.optJSONArray("assets")
+            for (i in 0 until (lista?.length() ?: 0)) nomesRelease += lista!!.getJSONObject(i).optString("name")
+            PackageMigrationRules.pickAsset(nomesRelease, android.os.Process.is64Bit())?.let { nome ->
+                return migrar(app, json, codigo, nome, instalar, soComTelaApagada)
+            }
+        }
         // Baixa o APK da MESMA arquitetura em que este launcher está rodando: o processo de um app de 32 bits é de 32 bits
         // mesmo num aparelho de 64 (o Android escolhe pela lib nativa do APK instalado). Assim a Sala (32) segue no de 32,
         // uma TV que instalou o de 64 segue no de 64, e ninguém troca de arquitetura numa atualização automática.
-        val nomes = if (android.os.Process.is64Bit()) listOf(NOME_APK_64, NOME_ANTIGO_64) else listOf(NOME_APK_32, NOME_ANTIGO_32)
+        // O app novo (tv.sofaly.launcher) só procura os APKs dele; o antigo, os nomes antigos.
+        val nomes = when {
+            app.packageName != AppIdentity.LEGACY_PACKAGE ->
+                listOf(if (android.os.Process.is64Bit()) PackageMigrationRules.ASSET_64 else PackageMigrationRules.ASSET_32)
+            android.os.Process.is64Bit() -> listOf(NOME_APK_64, NOME_ANTIGO_64)
+            else -> listOf(NOME_APK_32, NOME_ANTIGO_32)
+        }
         // Mapa nome do arquivo -> link de download, para escolher o primeiro nome que tiver o APK e o .sha256 juntos.
         val links = HashMap<String, String>()
         val assets = json.optJSONArray("assets")
@@ -217,6 +234,44 @@ object Atualizador {
             arquivo.delete()
         }
     }
+
+    /**
+     * App antigo: baixa e confere o APK do app NOVO (sha, pacote tv.sofaly.launcher, versão da tag, MESMA chave) e o
+     * instala em silêncio. Quando o PackageInstaller responde "instalado", o [Resultado] chama PackageMigration.start.
+     * Se o app novo já estiver instalado nesta versão (uma tentativa que parou depois da instalação), vai direto.
+     */
+    private fun migrar(app: Context, json: JSONObject, codigo: Long, nomeApk: String, instalar: Boolean, soComTelaApagada: Boolean): String {
+        val novoPacote = AppIdentity.NEW_PACKAGE
+        val meu = instalado(app)
+        val jaTem = runCatching { app.packageManager.getPackageInfo(novoPacote, PackageManager.GET_SIGNING_CERTIFICATES) }.getOrNull()
+        if (jaTem != null && jaTem.longVersionCode >= codigo && mesmaChave(meu, jaTem)) {
+            if (!instalar || (soComTelaApagada && telaAcesa(app))) return txt(R.string.atu_migracao_disponivel, codigo)
+            return PackageMigration.start(app)
+        }
+        val links = HashMap<String, String>()
+        val assets = json.optJSONArray("assets")
+        for (i in 0 until (assets?.length() ?: 0)) assets!!.getJSONObject(i).let { links[it.optString("name")] = it.optString("browser_download_url") }
+        val esperado = baixarTexto(links.getValue("$nomeApk.sha256")).trim().split(Regex("\\s+")).first().lowercase()
+        val arquivo = File(app.cacheDir, "sofaly.apk")
+        try {
+            baixarArquivo(links.getValue(nomeApk), arquivo)
+            if (sha256(arquivo) != esperado) return txt(R.string.atu_sha, codigo)
+            val novo = app.packageManager.getPackageArchiveInfo(arquivo.path, PackageManager.GET_SIGNING_CERTIFICATES)
+                ?: return recusar(app, codigo, txt(R.string.atu_ilegivel, codigo))
+            if (novo.packageName != novoPacote) return recusar(app, codigo, txt(R.string.atu_pacote, codigo, novo.packageName))
+            if (novo.longVersionCode != codigo) return recusar(app, codigo, txt(R.string.atu_versao, codigo, novo.longVersionCode))
+            // A mesma chave do app instalado: sem isto o app novo não recebe o dono nem os dados (e não deve).
+            if (!mesmaChave(meu, novo)) return recusar(app, codigo, txt(R.string.atu_chave, codigo))
+            if (!instalar || (soComTelaApagada && telaAcesa(app))) return txt(R.string.atu_migracao_disponivel, codigo)
+            prefs(app).edit().putLong(INSTALANDO, codigo).apply()
+            val aviso = Intent(app, Resultado::class.java).setAction(ACAO_RESULTADO).putExtra(EXTRA_MIGRACAO, true)
+            val pi = PendingIntent.getBroadcast(app, 0x5AF, aviso, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+            PackageMigration.installNewApk(app, arquivo, pi.intentSender)
+            return txt(R.string.atu_migracao_instalando, codigo)
+        } finally { arquivo.delete() }
+    }
+
+    private const val EXTRA_MIGRACAO = "migracao"
 
     private fun recusar(app: Context, codigo: Long, texto: String): String {
         prefs(app).edit().putLong(RECUSADA, codigo).putString(RECUSADA_TEXTO, texto).remove(PENDENTE).apply()
@@ -313,6 +368,13 @@ object Atualizador {
                 if (c > 0) p.edit().putLong(FALHOU_CODIGO, c).putInt(FALHOU_N, if (p.getLong(FALHOU_CODIGO, 0L) == c) p.getInt(FALHOU_N, 0) + 1 else 1).apply()
             }
             anotar(ctx, if (status == PackageInstaller.STATUS_SUCCESS) txt(R.string.atu_ok) else txt(R.string.atu_falhou, status, msg.toString()))
+            // Troca de pacote: o app novo acabou de entrar (este processo não foi trocado: é outro pacote). Agora a
+            // migração (fora da thread da tela; bloqueia até a transferência do dono).
+            if (status == PackageInstaller.STATUS_SUCCESS && intent.getBooleanExtra(EXTRA_MIGRACAO, false)) {
+                val app = ctx.applicationContext
+                // Sem goAsync: a migração leva mais que o prazo de um broadcast; o processo segue vivo pela acessibilidade.
+                Fundo.rodar("migracao") { anotar(app, PackageMigration.start(app)) }
+            }
         }
     }
 }

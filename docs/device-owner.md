@@ -38,7 +38,7 @@ Later, the same button lives in *Launcher settings → permissions → Device ow
 adb shell pm list users                      # note every user that is not 0
 adb shell pm remove-user <N>                 # one per extra user (deletes its data)
 adb shell pm disable-user --user 0 com.google.android.gms
-adb shell dpm set-device-owner --user 0 br.paulo.tvlauncher/.AdminReceiver
+adb shell dpm set-device-owner --user 0 tv.sofaly.launcher/br.paulo.tvlauncher.AdminReceiver
 adb shell pm enable --user 0 com.google.android.gms   # ALWAYS, even if the line above failed
 ```
 

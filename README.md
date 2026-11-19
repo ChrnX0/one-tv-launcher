@@ -230,22 +230,22 @@ You need a **Google TV / Android TV** device. It's tested daily on a Chromecast 
 
 | File | For |
 |---|---|
-| `one-tv-launcher.apk` | 32-bit devices (`armeabi-v7a`), e.g. **Chromecast with Google TV** |
-| `one-tv-launcher-arm64.apk` | 64-bit devices (`arm64-v8a`) |
+| `sofaly-launcher.apk` | 32-bit devices (`armeabi-v7a`), e.g. **Chromecast with Google TV** |
+| `sofaly-launcher-arm64.apk` | 64-bit devices (`arm64-v8a`) |
 
 ### Install with Downloader (no computer needed)
 
 1. Install **Downloader** by AFTVnews from the Play Store on your TV.
 2. Open it and enter the code **`8887571`** (or the short link [`aftv.news/8887571`](https://aftv.news/8887571)). It downloads
-   `one-tv-launcher.apk` (32-bit, Chromecast with Google TV).
+   `sofaly-launcher.apk` (32-bit, Chromecast with Google TV).
 3. Tap **Install**.
 
 On a 64-bit TV, type this address in Downloader instead:
-`https://github.com/ChrnX0/one-tv-launcher/releases/latest/download/one-tv-launcher-arm64.apk`
+`https://github.com/ChrnX0/one-tv-launcher/releases/latest/download/sofaly-launcher-arm64.apk`
 
 ### Then
 
-1. **Install the APK** with Downloader (above), any other sideloading app, or `adb install one-tv-launcher.apk`.
+1. **Install the APK** with Downloader (above), any other sideloading app, or `adb install sofaly-launcher.apk`.
 2. **Open it.** A welcome wizard walks you through each step with the remote. You don't need a computer:
    1. Turn on the launcher's remote-key service (accessibility).
    2. Turn on Developer options. The wizard shows you where.

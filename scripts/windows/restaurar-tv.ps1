@@ -39,7 +39,7 @@ $ErrorActionPreference = "Stop"
 
 # ---------------------------------------------------------------- o que este script mexe
 
-$LauncherPkg   = "br.paulo.tvlauncher"
+$LauncherPkg   = "tv.sofaly.launcher"   # 19/11/2026: pacote novo (TV ainda no antigo: "br.paulo.tvlauncher")
 $SetupWizard   = "com.google.android.tungsten.setupwraith"   # NUNCA desativar: guarda as credenciais do Cast (ver TrocarHome)
 $GoogleTvHome  = "com.google.android.apps.tv.launcherx"
 

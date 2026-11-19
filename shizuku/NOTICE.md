@@ -15,7 +15,7 @@ Copiado em 04/11/2026. Projeto original: RikkaApps/Shizuku (Apache-2.0).
 Tudo o que foi mexido está marcado com o comentário `// tv-launcher:` no arquivo, para dar para comparar
 com a origem depois. Resumo:
 
-- `server/build.gradle` e `starter/build.gradle`: `MANAGER_APPLICATION_ID` fixo em `"br.paulo.tvlauncher"`
+- `server/build.gradle` e `starter/build.gradle`: `MANAGER_APPLICATION_ID` = o pacote do launcher (`"tv.sofaly.launcher"`; `"br.paulo.tvlauncher"` só no build da ponte, `-Plegacy`)
   (na origem ele era lido do módulo `:manager`, que não veio).
 - Os módulos foram registrados no `settings.gradle.kts` do launcher com os MESMOS nomes da origem (`:server`,
   `:aidl`, `:api`...), porque os `build.gradle` deles se referenciam por esses nomes.

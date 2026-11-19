@@ -152,6 +152,30 @@ object PainelTls {
         java.security.Signature.getInstance("SHA256withECDSA").apply { initVerify(pub); update(dado) }.verify(ass)
     } catch (_: Exception) { false }
 
+    /**
+     * Troca de pacote (PackageMigration.kt): a chave do certificado em claro (PKCS#8), para o app novo trancar com o
+     * Keystore dele. Assim os aparelhos que já confiam na CA desta TV continuam abrindo o painel sem instalar nada.
+     */
+    fun plainKey(ctx: Context): ByteArray? = try {
+        val f = File(pasta(ctx), "chave.bin")
+        if (f.exists()) decifrar(f.readBytes()) else null
+    } catch (e: Exception) { Log.w(TAG, "chave para a migração: $e"); null }
+
+    /** No app novo: grava os certificados que vieram do antigo ([plainKey] + ca.der/servidor.der) com a chave trancada aqui. */
+    @Synchronized fun restorePlainKey(ctx: Context, chave: ByteArray, ca: ByteArray, servidor: ByteArray) {
+        val pk = KeyFactory.getInstance("EC").generatePrivate(PKCS8EncodedKeySpec(chave))
+        val e = CertificadoX509.Emissao(CertificadoX509.ler(ca), CertificadoX509.ler(servidor), pk)
+        if (!mesmoPar(pk, e.servidor.publicKey)) throw IllegalArgumentException("key does not match the certificate")
+        salvar(ctx, e)
+        atual = null
+    }
+
+    /** Os dois certificados (públicos) em DER, para a migração. */
+    fun certificates(ctx: Context): Pair<ByteArray, ByteArray>? {
+        val p = pasta(ctx); val ca = File(p, "ca.der"); val srv = File(p, "servidor.der")
+        return if (ca.exists() && srv.exists()) ca.readBytes() to srv.readBytes() else null
+    }
+
     /** Escreve em arquivos .novo e só então troca: uma queda no meio não deixa metade velha e metade nova. */
     private fun salvar(ctx: Context, e: CertificadoX509.Emissao) {
         val p = pasta(ctx).apply { mkdirs() }

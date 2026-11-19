@@ -102,7 +102,7 @@ object VigiaTrailer {
     private var olhando: Runnable? = null
 
     fun iniciar(ctx: Context, origem: String?) {
-        sessao = Sessao(SystemClock.uptimeMillis(), origem?.takeIf { it.startsWith(ctx.packageName + ".") })
+        sessao = Sessao(SystemClock.uptimeMillis(), origem?.takeIf { it.startsWith(AppIdentity.NAMESPACE + ".") })
             .apply { viuYoutube = JanelaNaFrente.pacote == TrailerLink.YOUTUBE_TV }
         olhar(ctx.applicationContext)
         Log.i(TAG, "trailer aberto")

@@ -453,6 +453,8 @@
     <string name="atu_pacote">Release %1$d: different package (%2$s)</string>
     <string name="atu_versao">Release %1$d: APK version (%2$d) does not match the tag</string>
     <string name="atu_chave">GitHub has version %1$d, but it is signed with another key this TV does not accept: this TV is updated from a PC</string>
+    <string name="atu_migracao_disponivel">version %1$d: ready to move this TV to the new app (tv.sofaly.launcher)</string>
+    <string name="atu_migracao_instalando">installing the new app (%1$d); it then takes over this TV with all settings</string>
     <string name="atu_disponivel">version %1$d ready to install (installed %2$d)</string>
     <string name="atu_trocou">the version changed since the last check · OK checks again</string>
     <string name="atu_instalando">installing %1$d (installed %2$d)</string>

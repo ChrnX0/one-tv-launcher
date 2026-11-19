@@ -201,6 +201,14 @@ object ComandosExtras {
             "subir" -> LgNetcast.TECLA_SUBIR; "descer" -> LgNetcast.TECLA_DESCER; "mudo" -> LgNetcast.TECLA_MUDO; else -> null
         }?.let { if (VolumeLg.tecla(ctx, it, i.getIntExtra("vezes", 1))) "ok" else "a LG não aceitou (pareada? ligada?)" }
             ?: "tecla: subir, descer ou mudo"
+        // Troca de pacote (19/11/2026, PackageMigration.kt). "migration" = estado. "migration_start" (no antigo) e
+        // "migration_rollback" (no novo) rodam em fundo: o resultado aparece no "migration" uns segundos depois.
+        // "migration_remove_legacy" (no novo) DESINSTALA o antigo: irreversível, some o caminho de volta.
+        "migration" -> PackageMigration.status(ctx)
+        "migration_start" -> { val app = ctx.applicationContext; Fundo.rodar("migracao") { PackageMigration.note(app, PackageMigration.start(app, manual = true)) }; "started (see: migration)" }
+        "migration_rollback" -> { val app = ctx.applicationContext; Fundo.rodar("migracao-volta") { PackageMigration.note(app, PackageMigration.rollback(app)) }; "started (see: migration)" }
+        "migration_remove_legacy" -> PackageMigration.removeLegacy(ctx)
+        "migration_auto" -> { PackageMigration.setAuto(ctx, i.getBooleanExtra("ligado", false)); PackageMigration.status(ctx) }
         "canal" -> when (i.getStringExtra("canal")) {
             "teste" -> { Atualizador.definirCanalTeste(ctx, true); "canal=teste" }
             "normal" -> { Atualizador.definirCanalTeste(ctx, false); "canal=normal" }

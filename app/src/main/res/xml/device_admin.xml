@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Sem políticas declaradas: o app é dono do dispositivo, mas não força nada. -->
+<!-- Sem políticas declaradas: o app é dono do dispositivo, mas não força nada.
+     support-transfer-ownership (19/11/2026): o Device Owner passa de br.paulo.tvlauncher para tv.sofaly.launcher (e a
+     volta, se precisar) sem reset de fábrica. Ver PackageMigration.kt. -->
 <device-admin xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-policies />
+    <support-transfer-ownership />
 </device-admin>
