@@ -482,14 +482,15 @@ class ConfigLauncherActivity : Activity() {
         linhaAddons = linha(getString(R.string.ad_titulo), getString(R.string.ad_cfg_det), valor = rotuloAddons()) {
             val todos = AddonsTv.instalados(this)
             val atualizar = { linhaAddons.valor(rotuloAddons()) }
+            // Na volta a aba se refaz (reconstruirAoVoltar), para a contagem seguir o que foi instalado lá.
             // Sem nenhum: a tela de Addons, que mostra os Recomendados por tipo e o "Adicionar" (visto na Sala, 19/11/2026:
             // daqui só abria o QR e os Recomendados ficavam escondidos de quem ainda não tem addon).
-            if (todos.isEmpty()) { startActivity(Intent(this, AddonsActivity::class.java)); return@linha }
+            if (todos.isEmpty()) { reconstruirAoVoltar = true; startActivity(Intent(this, AddonsActivity::class.java)); return@linha }
             // 1º item = adicionar, 2º = Recomendados; os outros = addons instalados (escolher um pergunta se remove).
             Estilo.lista(this, getString(R.string.ad_titulo),
                 listOf(getString(R.string.ad_add_item), getString(R.string.ad_sug_secao)) + todos.map { it.m.nome }, emptyList()) { i ->
                 if (i == 0) { AddonInstallDialog.mostrar(this, atualizar); return@lista }
-                if (i == 1) { startActivity(Intent(this, AddonsActivity::class.java)); return@lista }
+                if (i == 1) { reconstruirAoVoltar = true; startActivity(Intent(this, AddonsActivity::class.java)); return@lista }
                 val a = todos[i - 2]
                 CaixaTv(this).setTitle(a.m.nome).setMessage(getString(R.string.ad_cfg_remover, a.m.nome))
                     .setPositiveButton(getString(R.string.ad_cfg_remover_sim)) { _, _ -> AddonsTv.remover(this, a.base); atualizar() }
