@@ -1057,6 +1057,28 @@ class MainActivity : Activity() {
             .putExtra(PrevisaoActivity.EXTRA_UMIDADE, getSharedPreferences("clima", MODE_PRIVATE).getInt("umidade", -1)))
     }
 
+    /** ▲ que saiu da cruz para a barra (Ilha); se ele for SEGURADO, abre a Central em vez de ficar na barra. */
+    private var ilhaCimaDaCruz = false
+    private var ilhaCentralAberta = false
+
+    /**
+     * Central ao segurar ▲ (como a Central de Controle da Apple TV e o painel rápido da Samsung): o toque curto abre a barra,
+     * como sempre; segurado, a primeira repetição da tecla abre o painel rápido. As repetições seguintes e o soltar são
+     * engolidos, para o foco não continuar subindo.
+     */
+    private fun centralAoSegurarCima(event: KeyEvent): Boolean {
+        if (event.keyCode != KeyEvent.KEYCODE_DPAD_UP) return false
+        if (event.action == KeyEvent.ACTION_UP) {
+            val engole = ilhaCentralAberta
+            ilhaCimaDaCruz = false; ilhaCentralAberta = false
+            return engole
+        }
+        if (event.repeatCount == 0) { ilhaCentralAberta = false; return false }
+        if (!ilhaCimaDaCruz) return false
+        if (!ilhaCentralAberta) { ilhaCentralAberta = true; abrirPopup() }
+        return true
+    }
+
     /** Abre o painel rápido (perfis, Wi-Fi, timer, notificações...): ver PainelRapidoActivity.kt. */
     private fun abrirPopup() {
         // No modo visita o painel (perfis, Configurações, Wi-Fi) não abre: só a pergunta para sair do modo.
@@ -3872,9 +3894,15 @@ class MainActivity : Activity() {
         if (!modoMover) {
             // Cruz: Voltar no "Todos os apps" volta para a cruz (na cruz, Voltar não faz nada).
             if (todosAbertos && event.keyCode == KeyEvent.KEYCODE_BACK) { if (event.action == KeyEvent.ACTION_UP) fecharTodos(); return true }
+            if (centralAoSegurarCima(event)) return true
             if (tratarSegurar(event, currentFocus)) return true
             if (trocarDaFrente(event)) return true
-            return super.dispatchKeyEvent(event)
+            val cimaNaCruz = event.keyCode == KeyEvent.KEYCODE_DPAD_UP && event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0 &&
+                barraCruz == LayoutHome.BarraCruz.ILHA && cruz?.hasFocus() == true
+            val r = super.dispatchKeyEvent(event)
+            // Só conta o ▲ que SAIU da cruz para a barra (▲ entre itens da cruz continua repetindo normalmente).
+            if (cimaNaCruz) ilhaCimaDaCruz = cruz?.hasFocus() != true
+            return r
         }
         val pressionou = event.action == KeyEvent.ACTION_DOWN
         val soltou = event.action == KeyEvent.ACTION_UP
