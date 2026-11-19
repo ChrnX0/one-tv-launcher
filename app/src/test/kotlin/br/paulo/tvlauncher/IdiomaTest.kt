@@ -199,8 +199,8 @@ class IdiomaTest {
         assertEquals(Versao.DUBLADA, Idioma.versaoDesejada(Pref.DUBLADO))
     }
 
-    private fun semPares(lista: List<F>, comecado: Set<F> = emptySet()) = Idioma.semPares(lista,
-        Idioma.indice(lista, { it.nome }, { it.grupo }), { it.nome }, { it.grupo }, { it.ano }) { it in comecado }
+    private fun semPares(lista: List<F>, comecado: Set<F> = emptySet(), catalogo: List<F> = lista) = Idioma.semPares(lista,
+        Idioma.indice(catalogo, { it.nome }, { it.grupo }), { it.nome }, { it.grupo }, { it.ano }) { it in comecado }
 
     @Test fun gradeJuntaDubladoELegendado() {
         // Visto na Sala (19/11/2026): "Else" e "Else LEG" lado a lado na grade.
@@ -211,6 +211,13 @@ class IdiomaTest {
         assertEquals(listOf(leg, outro), semPares(listOf(dub, leg, outro), setOf(leg)))
         // Os dois com algo guardado (um começado, outro nos Interesses): nenhum some.
         assertEquals(listOf(dub, leg, outro), semPares(listOf(dub, leg, outro), setOf(dub, leg)))
+        // Nomes como chegam da lista da Sala: ano entre parênteses antes da marca.
+        val m1 = F("Madden: O Homem e o Jogo (2026)", "Lançamentos", 2026); val m2 = F("Madden: O Homem e o Jogo (2026) LEG", "Lançamentos", 2026)
+        assertEquals(listOf(m1), semPares(listOf(m1, m2)))
+        // Visto na Sala (19/11/2026, v463879): o índice vem do catálogo inteiro, com cópias em categorias ocultas.
+        // Só conta o que está na grade; antes a cópia escondida fazia "3 versões" e nada juntava.
+        val m3 = F("Madden: O Homem e o Jogo (2026)", "Adultos", 2026); val m4 = F("Madden: O Homem e o Jogo (2026) LEG", "4K", 2026)
+        assertEquals(listOf(m1), semPares(listOf(m1, m2), catalogo = listOf(m3, m4, m1, m2)))
     }
 
     @Test fun gradeNaoJuntaOQueNaoTemCerteza() {
