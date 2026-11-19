@@ -102,5 +102,8 @@ class TurmaDiscordTest {
         for (n in listOf("Botafogo", "Robot", "Lucas", "Abbott")) assertFalse(n, TurmaDiscord.pareceBot(n))
         val t = TurmaDiscord.ler("""{"name":"S","members":[{"username":"Midjourney Bot","status":"online"},{"username":"Paulo","status":"online"}]}""")
         assertEquals(listOf("Paulo"), t.outros.map { it.nome })
+        // O número do servidor também não conta o bot ("2 online" com só o Paulo de gente).
+        val n = TurmaDiscord.ler("""{"name":"S","presence_count":2,"members":[{"username":"Midjourney Bot","status":"online"},{"username":"Paulo","status":"idle"}]}""")
+        assertEquals(1, n.online)
     }
 }
