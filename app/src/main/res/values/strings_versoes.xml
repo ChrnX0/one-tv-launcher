@@ -52,6 +52,8 @@
         <item>ilha_central</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>LG turns off too</item>
+        <item>Alarm sound</item>
         <item>All apps</item>
         <item>Radio without gap</item>
         <item>Settings letters</item>
@@ -67,6 +69,8 @@
         <item>Hold ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Leave the TV idle until the Chromecast falls asleep: does the LG turn off too (if it was on the Chromecast input)?</item>
+        <item>On an alarm, does the sound start very low and take more than a minute to reach normal volume?</item>
         <item>In Apps › All apps, does the title show the count beside it, with no Projectivy plugin in the grid?</item>
         <item>In Radio, does “RECENT” sit right above the first station, and does the “Live” card leave with the focus on the playing station?</item>
         <item>In Settings, are the corner date and the footer keys (OK, BACK) bigger and easy to read?</item>

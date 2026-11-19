@@ -34,6 +34,8 @@
         <item>Despertador: o som sempre começa baixo e sobe devagar, por pelo menos 1 minuto e meio, mesmo com “Toque: direto”, para nunca começar no volume cheio</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>LG desliga junto</item>
+        <item>Som do despertador</item>
         <item>Todos os apps</item>
         <item>Rádio sem vão</item>
         <item>Letra dos ajustes</item>
@@ -49,6 +51,8 @@
         <item>Segurar ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Deixe a TV parada até o Chromecast dormir sozinho: a LG apaga junto (se estava na entrada do Chromecast)?</item>
+        <item>Num despertador, o som começa bem baixo e leva mais de um minuto para chegar ao volume normal?</item>
         <item>Em Aplicativos › Todos os apps, o título tem a conta ao lado e o plugin do Projectivy não aparece na grade?</item>
         <item>Em Rádio, o nome “RECENTES” fica logo acima da primeira rádio, e com o foco na rádio que toca o cartão “Ao vivo” some?</item>
         <item>Nas Configurações, a data do canto e as teclas do rodapé (OK, VOLTAR) estão maiores e fáceis de ler?</item>
