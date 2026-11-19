@@ -6,22 +6,21 @@ import java.net.URL
 import java.net.URLEncoder
 
 /**
- * Buscar podcasts e "Em alta no meu país" ("Ouvir" parte 2, 17/11/2026): PREPARADA E DESLIGADA.
+ * Buscar podcasts e "Em alta no meu país" ("Ouvir" parte 2, 17/11/2026; ligada em 19/11/2026).
  *
  * O catálogo é o Podcast Index (podcastindex.org). Ele exige chave + segredo assinando cada pedido, e o segredo não pode
- * ir dentro do APK. Então a TV pergunta ao servidor nosso (o "carteiro"), que guarda o segredo e repassa:
- *   GET {SERVIDOR}/podcasts/buscar?q=<termo>&lang=<pt>   →  {"feeds":[{url,title,author,image,explicit,language}]}
- *   GET {SERVIDOR}/podcasts/em_alta?lang=<pt>&max=30     →  o mesmo formato
- * (é o formato do /search/byterm e do /podcasts/trending do Podcast Index, só com esses campos).
- *
- * Liga quando: o carteiro publicar essas duas rotas E o Podcast Index confirmar por escrito o uso em app pago. Até lá
- * [SERVIDOR] fica vazio e a tela não mostra as linhas. Atribuição pedida pelos termos: "Busca: Podcast Index" na tela.
+ * ir dentro do APK. Então a TV pergunta ao nosso servidor (api.sofaly.tv, server/api/src/podcasts.js), que guarda a
+ * chave nos secrets do Worker (PODCASTINDEX_API_KEY, PODCASTINDEX_API_SECRET) e repassa:
+ *   GET {SERVIDOR}/v1/podcasts/search?q=<termo>&lang=<pt>&max=30  →  {"feeds":[{url,title,author,image,explicit,language}]}
+ *   GET {SERVIDOR}/v1/podcasts/trending?lang=<pt>&max=30          →  o mesmo formato
+ * Servidor sem a chave responde 503: a lista vem vazia e a tela diz "nada encontrado".
+ * Atribuição pedida pelos termos: "Busca: Podcast Index" na tela.
  * NÃO usar a API de busca da Apple: os termos dela só permitem promover a loja da Apple.
  * Lógica pura: PodcastBuscaTest.
  */
 object PodcastBusca {
-    /** Endereço do carteiro (https://...). Vazio = desligada. */
-    const val SERVIDOR = ""
+    /** Endereço do nosso servidor (https://...). Vazio = desligada. */
+    const val SERVIDOR = "https://api.sofaly.tv"
     const val MAX = 30
 
     data class Resultado(val url: String, val titulo: String, val autor: String, val capa: String, val explicito: Boolean)
@@ -30,8 +29,8 @@ object PodcastBusca {
 
     private fun q(s: String) = URLEncoder.encode(s, "UTF-8")
     fun urlBuscar(servidor: String, termo: String, idioma: String) =
-        "${servidor.trimEnd('/')}/podcasts/buscar?q=${q(termo.trim().take(100))}&lang=${q(idioma)}&max=$MAX"
-    fun urlEmAlta(servidor: String, idioma: String) = "${servidor.trimEnd('/')}/podcasts/em_alta?lang=${q(idioma)}&max=$MAX"
+        "${servidor.trimEnd('/')}/v1/podcasts/search?q=${q(termo.trim().take(100))}&lang=${q(idioma)}&max=$MAX"
+    fun urlEmAlta(servidor: String, idioma: String) = "${servidor.trimEnd('/')}/v1/podcasts/trending?lang=${q(idioma)}&max=$MAX"
 
     /** Lê a resposta; ignora feed sem endereço http(s) ou sem nome; sem repetir. */
     fun ler(json: String?): List<Resultado> = runCatching {

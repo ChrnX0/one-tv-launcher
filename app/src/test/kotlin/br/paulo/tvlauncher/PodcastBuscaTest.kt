@@ -5,19 +5,19 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** Busca de podcasts pelo servidor nosso (preparada e desligada, 17/11/2026). */
+/** Busca de podcasts pelo servidor nosso (17/11/2026; ligada 19/11/2026). */
 class PodcastBuscaTest {
     @Test
-    fun desligadaDeFabrica() {
-        assertFalse(PodcastBusca.disponivel())                  // até o carteiro e o Podcast Index confirmarem
+    fun ligadaNoNossoServidor() {
+        assertTrue(PodcastBusca.disponivel())                   // api.sofaly.tv com a chave do Podcast Index (19/11/2026)
         assertTrue(PodcastBusca.disponivel("https://x.sofaly.tv"))
         assertFalse(PodcastBusca.disponivel("http://x"))       // só https
     }
 
     @Test
     fun enderecos() {
-        assertEquals("https://s/podcasts/buscar?q=caf%C3%A9+da+manh%C3%A3&lang=pt&max=30", PodcastBusca.urlBuscar("https://s/", " café da manhã ", "pt"))
-        assertEquals("https://s/podcasts/em_alta?lang=pt&max=30", PodcastBusca.urlEmAlta("https://s", "pt"))
+        assertEquals("https://s/v1/podcasts/search?q=caf%C3%A9+da+manh%C3%A3&lang=pt&max=30", PodcastBusca.urlBuscar("https://s/", " café da manhã ", "pt"))
+        assertEquals("https://s/v1/podcasts/trending?lang=pt&max=30", PodcastBusca.urlEmAlta("https://s", "pt"))
     }
 
     @Test
