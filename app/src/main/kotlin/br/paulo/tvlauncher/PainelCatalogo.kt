@@ -5,6 +5,7 @@ import android.graphics.drawable.GradientDrawable
 import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -14,9 +15,10 @@ import android.widget.TextView
  *
  *   Ação  1.204   [Ordem: mais recentes] [Só não vistos] [★ 7+]      <- o que está na grade e por quê
  *   ┌──────────────────────────────────────────────────────────┐
- *   │ Velocidade Máxima   ★ 7,4   2024 · 1 h 58 · Ação          │  <- ficha rápida do pôster em foco
- *   │ Um piloto aposentado volta às pistas para salvar o irmão… │     (2 linhas de sinopse, se já guardada)
+ *   │ Velocidade Máxima   ★ 7,4   2024 · 1 h 58 · Ação          │  <- ficha rápida do pôster em foco (1 linha)
  *   └──────────────────────────────────────────────────────────┘
+ *
+ * Sem sinopse desde 19/11/2026 (Paulo: "não aparece tudo e rouba espaço da tela"): a sinopse inteira fica na ficha.
  *
  * Letra grande de propósito (pedido do Paulo: gente mais velha usa a TV): nada abaixo dos tamanhos de [Estilo.Leitura].
  */
@@ -28,9 +30,6 @@ class PainelCatalogo(private val act: Activity) {
     private val quantos = TextView(act).apply { textSize = TITULO_SP; typeface = Fontes.nunito(500); setTextColor(Estilo.TEXTO_2); maxLines = 1 }
     private val pilulas = LinearLayout(act).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL }
     private val info = TextView(act).apply { textSize = Estilo.Leitura.FOCADO; setTextColor(Estilo.TEXTO_2); maxLines = 1; ellipsize = TextUtils.TruncateAt.END }
-    private val sinopse = TextView(act).apply {
-        textSize = SINOPSE_SP; setTextColor(Estilo.TEXTO); maxLines = 2; ellipsize = TextUtils.TruncateAt.END; setLineSpacing(0f, 1.1f)
-    }
 
     /** "Ação 1.204 [pílulas]": uma linha, as pílulas rolam de lado se não couberem (nunca encolhem a letra). */
     val topo: View = LinearLayout(act).apply {
@@ -43,10 +42,30 @@ class PainelCatalogo(private val act: Activity) {
 
     /** A faixa da ficha rápida: caixa um pouco mais clara que o fundo, como o bloco de ações da coluna. */
     val faixa: View = LinearLayout(act).apply {
-        orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(18), dp(10), dp(18), dp(12))
+        orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(18), dp(10), dp(18), dp(11))
         background = GradientDrawable().apply { cornerRadius = dp(14).toFloat(); setColor(Estilo.SUPERFICIE); setStroke(dp(1), Estilo.BORDA) }
         addView(info)
-        addView(sinopse, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(4) })
+    }
+
+    /**
+     * Alinha o topo da [faixa] com o topo de [outra] (a caixa de ações da coluna da esquerda). Paulo, 19/11/2026: "viu como
+     * as caixas estão em alturas diferentes?". A linha de cima da coluna (nome + botões redondos) é mais alta que a do
+     * catálogo (nome + pílulas), e a diferença muda com a escala do modo simples: por isso é medida, não fixa. Só desce a
+     * faixa (nunca sobe por cima do título); a grade embaixo se ajusta sozinha (PosterGridSize).
+     */
+    fun alinharCom(outra: View) {
+        val a = IntArray(2); val b = IntArray(2)
+        fun ajustar() {
+            if (outra.height == 0 || faixa.height == 0) return
+            outra.getLocationInWindow(a); faixa.getLocationInWindow(b)
+            val lp = faixa.layoutParams as? ViewGroup.MarginLayoutParams ?: return
+            val novo = (lp.topMargin + a[1] - b[1]).coerceAtLeast(0)
+            // Depois deste layout (mudar a margem dentro dele seria ignorado). Igual = para: não entra em laço.
+            if (novo != lp.topMargin) faixa.post { lp.topMargin = novo; faixa.layoutParams = lp }
+        }
+        // As duas caixas podem mudar de lugar (a coluna ganha as ações depois que o catálogo carrega).
+        faixa.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> ajustar() }
+        outra.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ -> ajustar() }
     }
 
     /** O título do catálogo, o total e as pílulas ([destaque] = filtro que está escondendo títulos, em âmbar). */
@@ -64,11 +83,9 @@ class PainelCatalogo(private val act: Activity) {
         }
     }
 
-    /** A ficha rápida: a linha de informação e a sinopse (vazia = só a linha; a faixa não muda de altura). */
-    fun mostrarFoco(linha: CharSequence, textoSinopse: String) {
+    /** A ficha rápida: uma linha (título, nota, ano, duração, gênero). */
+    fun mostrarFoco(linha: CharSequence) {
         info.text = linha
-        sinopse.text = textoSinopse
-        sinopse.visibility = if (textoSinopse.isEmpty()) View.INVISIBLE else View.VISIBLE
     }
 
     private fun dp(v: Int) = (v * act.resources.displayMetrics.density + 0.5f).toInt()
@@ -76,7 +93,6 @@ class PainelCatalogo(private val act: Activity) {
     companion object {
         const val TITULO_SP = 24f
         const val PILULA_SP = 16f
-        const val SINOPSE_SP = 17f
 
         /**
          * "Ir para a letra" (acréscimo 3): letras grandes numa grade 9 × 3 por cima, só enquanto escolhe. Grade e não lista:

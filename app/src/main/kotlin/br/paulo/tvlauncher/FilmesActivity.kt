@@ -136,6 +136,7 @@ class FilmesActivity : Activity() {
         painel = PainelCatalogo(this)
         direita.addView(painel.topo)
         direita.addView(painel.faixa, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = dp(10) })
+        painel.alinharCom(coluna.caixaAcoes)
         grade = GridView(this).apply {
             numColumns = Estilo.Leitura.GRADE_COLUNAS
             horizontalSpacing = dp(PosterGridSize.VAO_COLUNAS); verticalSpacing = dp(PosterGridSize.VAO_FILEIRAS)
@@ -730,8 +731,8 @@ class FilmesActivity : Activity() {
     }
 
     /**
-     * Ficha rápida do pôster em foco (acréscimo 2): nota, ano, duração, gênero e 2 linhas de sinopse, sem abrir a ficha.
-     * Duração e sinopse só se a ficha já estiver guardada no disco (nunca pede ao servidor a cada passo do controle).
+     * Ficha rápida do pôster em foco (acréscimo 2): nota, ano, duração e gênero numa linha, sem abrir a ficha.
+     * Duração só se a ficha já estiver guardada no disco (nunca pede ao servidor a cada passo do controle).
      */
     private fun mostrarFocado(f: Filme?) {
         tela.removeCallbacks(lerFichaRapida)
@@ -740,7 +741,7 @@ class FilmesActivity : Activity() {
                 chave == INTERESSES -> getString(R.string.filmes_interesses_vazio)
                 filtro.ativo -> getString(R.string.filmes_filtro_vazio)
                 else -> ""
-            }, ""); return
+            }); return
         }
         val info = fichasRapidas[f.chave]
         val pos = posicoes[f.chave]?.takeIf { p -> p.duracao > 0 }
@@ -750,8 +751,7 @@ class FilmesActivity : Activity() {
             info?.duracaoMin?.let { if (it >= 60) "${it / 60} h ${"%02d".format(it % 60)}" else "$it min" },
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(f.grupo).ifEmpty { null },
             pos?.takeIf { p -> Vod.deveRetomar(p) }?.let { p -> getString(R.string.tempo_faltam, BarraTempo.duracao(p.duracao - p.ms)) },
-            extRapidas[f.chave]?.ifEmpty { null })),
-            info?.sinopse.orEmpty())
+            extRapidas[f.chave]?.ifEmpty { null })))
         focoRapido = f; if (f.chave !in fichasRapidas) { tela.postDelayed(lerFichaRapida, 400) }   // espera o dedo parar
     }
 
