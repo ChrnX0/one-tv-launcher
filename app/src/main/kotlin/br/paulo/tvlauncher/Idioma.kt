@@ -227,6 +227,17 @@ object Idioma {
     fun semMarca(nome: String): String = nome.replace(reMarcas, " ").replace(reEspacos, " ").trim().ifEmpty { nome }
     private val reEspacos = Regex("""\s{2,}""")
 
+    /**
+     * Título curto para a linha de cima de Filmes e Séries (19/11/2026): "Lei e Ordem: Unidade de Vítimas Especiais - Law &
+     * Order" ocupava a linha toda e escondia nota, ano e gênero. Corta na última palavra que cabe em [max] e põe "…";
+     * o título inteiro continua na ficha.
+     */
+    fun tituloCurto(nome: String, max: Int = 34): String {
+        if (nome.length <= max) return nome
+        val corte = nome.lastIndexOf(' ', max - 1).takeIf { it >= max / 2 } ?: (max - 1)
+        return nome.substring(0, corte).trimEnd(' ', '-', ':', '·', ',', '–') + "…"
+    }
+
     /** O título sem marca, ano, acento nem pontuação: "Duna: Parte 2 (2024) [L]" e "Duna - Parte 2 (2024)" dão o mesmo. */
     fun chaveTitulo(nome: String): String =
         semAcento(Vod.nomeLimpo(nome.replace(reMarcas, " ")).replace(reMarcas, " "))
