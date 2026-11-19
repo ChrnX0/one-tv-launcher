@@ -183,6 +183,14 @@ object LgNetcast {
         e != null && entradaDoChromecast(e, nossoNome, aprendida)
 
     /**
+     * Chromecast dormiu por qualquer caminho (tempo parado, botão, protetor de tela): vale tentar desligar a LG pela rede?
+     * Não se nós mesmos a desligamos há menos de [JA_DESLIGOU_MS] (timer/sem uso já fizeram, e uma 2ª tecla de energia
+     * numa LG ainda desligando não deve ir). [ultimaMs] = 0 nunca desligou.
+     */
+    fun desligarAoApagar(agoraMs: Long, ultimaMs: Long): Boolean = ultimaMs <= 0 || agoraMs - ultimaMs >= JA_DESLIGOU_MS
+    const val JA_DESLIGOU_MS = 60_000L
+
+    /**
      * Quando conferir a entrada ([AcordarComLg]): [ver] recebe cada leitura "LG na rede?" e devolve true quando ela
      * voltou depois de sair. Só conta como desligada depois de [FORA_SEGUIDAS] leituras fora (uma perdida não é a LG
      * desligando), e uma vez por volta: se a pessoa escolheu a antena, não fica perguntando de novo.

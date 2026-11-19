@@ -37,7 +37,7 @@ object AcordarComLg {
         app = a
         val r = object : BroadcastReceiver() {
             override fun onReceive(c: Context, i: Intent) {
-                if (i.action == Intent.ACTION_SCREEN_OFF) comecar(a) else { parar(); aprender(a) }
+                if (i.action == Intent.ACTION_SCREEN_OFF) { Desligamento.lgAoApagar(a); comecar(a) } else { parar(); aprender(a) }
             }
         }
         val f = IntentFilter().apply { addAction(Intent.ACTION_SCREEN_ON); addAction(Intent.ACTION_SCREEN_OFF) }

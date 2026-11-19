@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>A LG agora desliga junto quando o Chromecast dorme sozinho por ficar parado (ela recusava o comando de desligar do HDMI)</item>
         <item>Todos os apps: o mesmo cabeçalho das telas Rádio e Jogos, com “Na grade: X · ocultos: Y”; plugin de fundo não aparece mais como app</item>
         <item>Rádio, Podcasts e Jogos: o nome da lista fica junto do primeiro item; o cartão “Ao vivo” sai quando a rádio em foco é a que toca</item>
         <item>Letras maiores (nada abaixo de 15) nos ajustes, nas teclas do rodapé, na data do canto e nas listas</item>

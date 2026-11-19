@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.os.PowerManager
+import android.os.SystemClock
 import android.util.Log
 
 /**
@@ -118,10 +119,40 @@ object Desligamento {
             }
             if (lgAntes > 0) VolumeLg.irPara(app, lgAntes)
             val ok = VolumeLg.desligar(app)
+            if (ok) lgDesligadaEm = SystemClock.elapsedRealtime()
             Log.i(TAG, "LG desligada pela rede: $ok")
             ui.postDelayed(depois, if (ok) DEPOIS_DA_LG_MS else 0L)
         }
     }
+    @Volatile private var lgDesligadaEm = 0L
+
+    /**
+     * O Chromecast dormiu por conta própria (tempo parado + protetor de tela, botão do controle dele...). O Android manda
+     * <Standby> pelo CEC, mas a LG da Sala RECUSA (Feature Abort 36:04, visto em 19/11/2026 às 18:31 e 18:32) e fica
+     * ligada sem sinal. Então, como no timer de sono: se ela está na rede e na entrada do Chromecast, desliga pela rede.
+     * Espera [ESPERA_APAGAR_MS] antes: se foi o botão do controle (que também manda IR para a LG), ela já saiu da rede.
+     * Chamado no ACTION_SCREEN_OFF ([AcordarComLg]).
+     */
+    fun lgAoApagar(ctx: Context) {
+        val app = ctx.applicationContext
+        if (!VolumeLg.configurado(app) || !VolumeLg.desligarJunto(app)) return
+        Fundo.rodar("Apagou-lg") {
+            Thread.sleep(ESPERA_APAGAR_MS)
+            if (telaAcesa(app)) return@rodar   // acordou de novo
+            if (!LgNetcast.desligarAoApagar(SystemClock.elapsedRealtime(), lgDesligadaEm)) return@rodar
+            if (!VolumeLg.naRede(app)) { Log.i(TAG, "Chromecast dormiu; LG já fora da rede"); return@rodar }
+            val e = VolumeLg.entrada(app)
+            val nosso = runCatching { android.provider.Settings.Global.getString(app.contentResolver, "device_name") }.getOrNull()
+            if (!LgNetcast.desligarLgJunto(e, nosso, VolumeLg.entradaAprendida(app))) {
+                Log.i(TAG, "Chromecast dormiu; LG fica ligada: entrada ${e?.nome ?: "não lida"} não é a do Chromecast")
+                return@rodar
+            }
+            val ok = VolumeLg.desligar(app)
+            if (ok) lgDesligadaEm = SystemClock.elapsedRealtime()
+            Log.i(TAG, "Chromecast dormiu; LG desligada pela rede: $ok")
+        }
+    }
+    private const val ESPERA_APAGAR_MS = 4_000L
     private const val DEPOIS_DA_LG_MS = 2_000L
     private const val PRAZO_LG_MS = 25_000L
 

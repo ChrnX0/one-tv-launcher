@@ -153,4 +153,10 @@ class LgNetcastTest {
         assertFalse(LgNetcast.desligarLgJunto(LgNetcast.Entrada("HDMI2", "PS4"), "Sala", "HDMI1")) // outro HDMI
         assertFalse(LgNetcast.desligarLgJunto(null, "Sala", "HDMI1"))                               // não leu: não desliga
     }
+
+    @Test fun desligarAoApagarNaoRepeteLogoDepois() {
+        assertTrue(LgNetcast.desligarAoApagar(1_000L, 0L))          // nunca desligamos
+        assertFalse(LgNetcast.desligarAoApagar(30_000L, 5_000L))    // o timer acabou de desligar
+        assertTrue(LgNetcast.desligarAoApagar(70_000L, 5_000L))
+    }
 }
