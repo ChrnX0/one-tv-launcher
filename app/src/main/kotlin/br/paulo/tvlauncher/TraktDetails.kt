@@ -160,4 +160,13 @@ object TraktDetails {
         val antes = inteiro.substringBefore(" - ", "").trim()
         return if (antes.length >= 3 && antes != inteiro) listOf(inteiro, antes) else listOf(inteiro)
     }
+
+    /**
+     * Mesmo título, sem contar "&" nem o "e"/"and" que o substitui: a tradução do Trakt é "Lei & Ordem: Unidade de
+     * Vítimas Especiais" e a lista do IPTV escreve "Lei e Ordem: ..." (Sala, 19/11/2026).
+     */
+    fun mesmoTitulo(a: String, b: String): Boolean = chaveSemE(a).let { it.isNotEmpty() && it == chaveSemE(b) }
+    private val CONJUNCOES = setOf("e", "and", "y", "et", "und", "i")
+    private fun chaveSemE(t: String): String =
+        Idioma.chaveTitulo(t.replace("&", " ")).split(' ').filter { it.isNotEmpty() && it !in CONJUNCOES }.joinToString(" ")
 }
