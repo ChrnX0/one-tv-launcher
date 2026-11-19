@@ -26,6 +26,12 @@ class CapaCartao(ctx: Context, private val raioPx: Float) : ImageView(ctx) {
     // Pode ser lido antes do init (se o construtor do ImageView chamar setImageDrawable): por isso é anulável.
     private var espera: GradientDrawable? = GradientDrawable().apply { cornerRadius = raioPx; setColor(Estilo.BORDA) }
 
+    /**
+     * Avisa quando o card ganha ou perde o pôster (19/11/2026): o nome do filme só aparece sobre o cinza de espera ou
+     * quando o pôster não existe. Quem usa troca INVISIBLE/VISIBLE (sem GONE), que não pede layout.
+     */
+    var aoTrocar: ((temImagem: Boolean) -> Unit)? = null
+
     // true só enquanto troca a imagem de um card que já tem tamanho: aí o pedido de layout do ImageView é ignorado.
     private var semLayout = false
 
@@ -41,6 +47,7 @@ class CapaCartao(ctx: Context, private val raioPx: Float) : ImageView(ctx) {
     override fun setImageDrawable(d: Drawable?) {
         semLayout = width > 0 && height > 0
         try { super.setImageDrawable(d) } finally { semLayout = false }
+        aoTrocar?.invoke(d != null)
     }
 
     override fun requestLayout() {

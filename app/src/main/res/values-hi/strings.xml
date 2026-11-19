@@ -466,6 +466,7 @@
     <string name="vod_grade_teclas">OK खोलें · OK दबाए रखें: और विकल्प · पंक्ति के अंत में ▶: अक्षर · BACK श्रेणियाँ</string>
     <string name="filmes_finalizado">पूरी हुई</string>
     <string name="filmes_assistido">देखी गई</string>
+    <string name="filmes_selo_leg">SUB</string>
     <string name="vod_sem_conta">इस वीडियो का खाता अब मौजूद नहीं है।</string>
     <string name="vod_erro">यह वीडियो नहीं चल सका। बाहर जाने के लिए BACK।</string>
     <string name="vod_sem_legenda">कोई सबटाइटल नहीं</string>

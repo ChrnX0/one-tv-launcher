@@ -466,6 +466,7 @@
     <string name="vod_grade_teclas">OK buka · tahan OK: opsi lain · ▶ di ujung baris: huruf · BACK kategori</string>
     <string name="filmes_finalizado">Selesai</string>
     <string name="filmes_assistido">Sudah ditonton</string>
+    <string name="filmes_selo_leg">SUB</string>
     <string name="vod_sem_conta">Akun video ini sudah tidak ada.</string>
     <string name="vod_erro">Video ini tidak bisa diputar. BACK untuk keluar.</string>
     <string name="vod_sem_legenda">Tanpa subtitle</string>

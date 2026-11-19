@@ -14,6 +14,7 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
+        <item>Filmes: cabem duas fileiras inteiras de pôsteres (6 por fileira na TV comum); o título aparece grande no topo e a cópia só legendada ganha o selo LEG</item>
         <item>Filmes: a cópia dublada e a legendada do mesmo filme agora aparecem num cartão só (a ficha tem as duas versões)</item>
         <item>As fichas de filmes e séries agora vêm do Trakt: sinopse em português, direção, elenco, trailer e o próximo episódio</item>
         <item>Tempo: previsão do MET Norway; a cidade ou o CEP são achados na própria TV, sem serviço de fora</item>
@@ -22,6 +23,7 @@
         <item>O que acabou de chegar (campainha, lembrete, compromisso, despertador) aparece embaixo da pílula por alguns segundos; segure ▲ para abrir o painel rápido</item>
     </string-array>
     <string-array name="roteiro_titulos">
+        <item>Duas fileiras de pôsteres</item>
         <item>Um cartão por filme</item>
         <item>Ficha do filme</item>
         <item>Ficha da série</item>
@@ -31,6 +33,7 @@
         <item>Segurar ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
+        <item>Em Filmes › Todos, aparecem duas fileiras inteiras de pôsteres, sem fileira cortada embaixo?</item>
         <item>Em Filmes › Todos, um filme com cópia dublada e legendada aparece uma vez só, com a outra versão na ficha?</item>
         <item>Abra um filme em Filmes: a ficha mostra a sinopse em português, a direção e o elenco?</item>
         <item>Abra uma série que ainda está no ar: a ficha mostra a sinopse, as temporadas e o próximo episódio?</item>

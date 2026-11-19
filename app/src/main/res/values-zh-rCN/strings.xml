@@ -466,6 +466,7 @@
     <string name="vod_grade_teclas">OK 打开 · 长按 OK：更多选项 · 行尾按 ▶：字母 · 返回 类别</string>
     <string name="filmes_finalizado">已看完</string>
     <string name="filmes_assistido">已看过</string>
+    <string name="filmes_selo_leg">字幕</string>
     <string name="vod_sem_conta">此视频的账号已不存在。</string>
     <string name="vod_erro">无法播放此视频。按返回键退出。</string>
     <string name="vod_sem_legenda">无字幕</string>

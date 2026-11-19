@@ -466,6 +466,7 @@
     <string name="vod_grade_teclas">OK öffnen · OK halten: weitere Optionen · ▶ am Zeilenende: Buchstaben · ZURÜCK Kategorien</string>
     <string name="filmes_finalizado">Beendet</string>
     <string name="filmes_assistido">Gesehen</string>
+    <string name="filmes_selo_leg">OmU</string>
     <string name="vod_sem_conta">Das Konto dieses Videos existiert nicht mehr.</string>
     <string name="vod_erro">Dieses Video konnte nicht abgespielt werden. ZURÜCK zum Verlassen.</string>
     <string name="vod_sem_legenda">Keine Untertitel</string>

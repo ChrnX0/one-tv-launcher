@@ -231,4 +231,13 @@ class IdiomaTest {
         val e1 = F("Else", "", 2025); val e2 = F("Else LEG", "", 2025); val e3 = F("Else [D]", "", 2025)
         assertEquals(listOf(e1, e2, e3), semPares(listOf(e1, e2, e3)))
     }
+
+    @Test fun semMarcaTiraSoAMarcaDeVersao() {
+        assertEquals("O Sonho da Liberdade", Idioma.semMarca("O Sonho da Liberdade Leg"))
+        assertEquals("Duna: Parte 2 (2024)", Idioma.semMarca("Duna: Parte 2 [L] (2024)"))
+        assertEquals("Madden: O Homem e o Jogo (2026)", Idioma.semMarca("Madden: O Homem e o Jogo (2026) LEG"))
+        assertEquals("Aniquilação", Idioma.semMarca("Aniquilação"))
+        // "Legião" começa com "Leg" mas não é marca.
+        assertEquals("Legião Urbana", Idioma.semMarca("Legião Urbana"))
+    }
 }

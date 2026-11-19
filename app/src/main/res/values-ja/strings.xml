@@ -466,6 +466,7 @@
     <string name="vod_grade_teclas">OK 開く · OK 長押し: その他のオプション · 行の最後で ▶: 文字 · 戻る カテゴリ</string>
     <string name="filmes_finalizado">視聴完了</string>
     <string name="filmes_assistido">視聴済み</string>
+    <string name="filmes_selo_leg">字幕</string>
     <string name="vod_sem_conta">この動画のアカウントはもう存在しません。</string>
     <string name="vod_erro">この動画を再生できませんでした。戻るで終了します。</string>
     <string name="vod_sem_legenda">字幕なし</string>

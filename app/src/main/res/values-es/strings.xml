@@ -466,6 +466,7 @@
     <string name="vod_grade_teclas">OK abrir · mantén OK: más opciones · ▶ al final de una fila: letras · ATRÁS categorías</string>
     <string name="filmes_finalizado">Terminada</string>
     <string name="filmes_assistido">Vista</string>
+    <string name="filmes_selo_leg">SUB</string>
     <string name="vod_sem_conta">La cuenta de este video ya no existe.</string>
     <string name="vod_erro">No se pudo reproducir este video. ATRÁS para salir.</string>
     <string name="vod_sem_legenda">Sin subtítulos</string>
