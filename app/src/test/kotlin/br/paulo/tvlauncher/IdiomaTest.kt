@@ -169,6 +169,16 @@ class IdiomaTest {
         assertSame(dub, par(leg, lista))
     }
 
+    @Test fun tituloCurtoCortaNaPalavraSemSobrarPontuacao() {
+        assertEquals("Duna", Idioma.tituloCurto("Duna"))
+        val longo = "Lei e Ordem: Unidade de Vítimas Especiais - Law & Order"
+        val c = Idioma.tituloCurto(longo)
+        assertEquals("Lei e Ordem: Unidade de Vítimas…", c)
+        assert(c.length <= 34)
+        // Sem espaço útil: corta no limite.
+        assertEquals("A".repeat(33) + "…", Idioma.tituloCurto("A".repeat(50)))
+    }
+
     @Test fun semMarcaViraParDoQueTemMarca() {
         // Visto na Sala (18/11/2026): a lista marca só a legendada ("Custe o que Custar Leg"); a sem marca é a dublada.
         val semMarca = F("Custe o que Custar", "Séries", 2026)
