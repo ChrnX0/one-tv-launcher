@@ -11,6 +11,8 @@
     <string name="cruz_radio">Радио</string>
     <string name="cruz_radio_sub">Станции со всего мира</string>
     <string name="cruz_filme">Фильм</string>
+    <string name="continue_series">Сериал</string>
+    <string name="continue_podcast">Подкаст</string>
     <string name="cruz_jogo">Игра</string>
     <string name="cruz_icones">Значки главного экрана</string>
     <string name="cruz_icones_det">Рисунок для «Смотреть», «Слушать» и «Играть»</string>

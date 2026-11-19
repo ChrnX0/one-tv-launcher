@@ -11,6 +11,8 @@
     <string name="cruz_radio">Radio</string>
     <string name="cruz_radio_sub">Stations from around the world</string>
     <string name="cruz_filme">Movie</string>
+    <string name="continue_series">Series</string>
+    <string name="continue_podcast">Podcast</string>
     <string name="cruz_jogo">Game</string>
     <string name="cruz_icones">Home screen icons</string>
     <string name="cruz_icones_det">Drawing used for Watch, Listen and Play</string>
