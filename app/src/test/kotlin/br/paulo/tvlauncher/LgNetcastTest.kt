@@ -131,10 +131,10 @@ class LgNetcastTest {
         assertEquals(LgNetcast.NAO_MEXER, LgNetcast.alvoFixoAlarme(-3))
         assertEquals(LgNetcast.NAO_MEXER, LgNetcast.volumeLgInicial(0))   // quem tinha "não mexer" continua sem mexer
         assertEquals(LgNetcast.PADRAO_ALARME, LgNetcast.volumeLgInicial(30))
-        // Começa em 5 (ou no alvo, se menor); rampa 0 na LG vira 60 s: sempre gradual.
+        // Começa em 5 (ou no alvo, se menor); rampa 0 na LG vira 90 s: sempre gradual.
         assertEquals(5, LgNetcast.inicioRampaAlarme(15))
         assertEquals(3, LgNetcast.inicioRampaAlarme(3))
-        assertEquals(60, LgNetcast.rampaLg(0))
+        assertEquals(90, LgNetcast.rampaLg(0))
         assertEquals(120, LgNetcast.rampaLg(120))
         // 5 -> 15 em 60 s: 10 passos de 6 s; nunca menos de 1 s entre teclas.
         assertEquals(6000L, LgNetcast.intervaloRampaMs(60, 5, 15))
