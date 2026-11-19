@@ -96,7 +96,25 @@ object Unifi {
 
     /** Os aparelhos de [atuais] que não estão em [conhecidos] (comparando por [Aparelho.chave]). */
     fun novos(conhecidos: Set<String>, atuais: List<Aparelho>): List<Aparelho> =
-        atuais.filter { it.chave !in conhecidos }.distinctBy { it.chave }
+        atuais.filter { it.chave !in conhecidos && chaveNome(it)?.let { n -> n in conhecidos } != true }
+            .distinctBy { chaveNome(it) ?: it.chave }
+
+    /**
+     * Celular com MAC aleatório (Android/iOS trocam o MAC por rede e de tempos em tempos): o UniFi dá a ele o nome
+     * do aparelho + o fim do MAC ("S25-de-Paulo 9c:d3"). Pente fino 19/11/2026 (Sala): o mesmo celular avisava
+     * "Aparelho novo na rede" a cada MAC novo (4 avisos em 2 dias). A chave pelo nome sem esse fim reconhece o aparelho.
+     * Só para MAC administrado localmente (bit 0x02 do 1º byte) E nome nesse formato; MAC de fábrica segue pelo MAC.
+     */
+    fun chaveNome(a: Aparelho): String? {
+        val mac = a.mac ?: return null
+        val primeiro = mac.take(2).toIntOrNull(16) ?: return null
+        if (primeiro and 0x02 == 0) return null
+        val m = SUFIXO_MAC.find(a.nome) ?: return null
+        val base = a.nome.substring(0, m.range.first).trim()
+        return if (base.isEmpty()) null else "nome:" + base.lowercase()
+    }
+
+    private val SUFIXO_MAC = Regex("""\s[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$""")
 
     /**
      * A lista de conhecidos depois de uma leitura: os antigos + os novos, no máximo [MAX_CONHECIDOS] (sai o mais
@@ -104,7 +122,7 @@ object Unifi {
      */
     fun juntarConhecidos(antigos: List<String>, atuais: List<Aparelho>): List<String> {
         val r = LinkedHashSet(antigos)
-        for (a in atuais) r.add(a.chave)
+        for (a in atuais) { r.add(a.chave); chaveNome(a)?.let { r.add(it) } }
         return r.toList().takeLast(MAX_CONHECIDOS)
     }
 

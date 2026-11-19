@@ -52,7 +52,7 @@ object Estilo {
     /** Texto: principal, explicação (70%) e rótulo apagado (48%). Nunca branco puro em bloco grande: cansa a vista. */
     const val TEXTO = 0xFFF4F1EC.toInt()
     val TEXTO_2: Int get() = if (altoContraste) 0xFFF4F1EC.toInt() else 0xB3F4F1EC.toInt()
-    val TEXTO_3: Int get() = if (altoContraste) 0xD9F4F1EC.toInt() else 0x7AF4F1EC.toInt()
+    val TEXTO_3: Int get() = if (altoContraste) 0xD9F4F1EC.toInt() else 0x86F4F1EC.toInt()   // era 0x7A: 4,4:1 nos cartões (pente fino 19/11/2026); 0x86 dá ≥ 4,7:1 em todo fundo da casa
     /** Texto em cima do foco branco (linha de lista focada). */
     const val TEXTO_NO_FOCO = 0xFF0E1020.toInt()
     val TEXTO_NO_FOCO_2: Int get() = if (altoContraste) TEXTO_NO_FOCO else 0xA60E1020.toInt()

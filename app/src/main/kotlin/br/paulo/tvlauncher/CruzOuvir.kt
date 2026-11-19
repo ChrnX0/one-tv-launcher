@@ -469,7 +469,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         tv.text = nome
         var sp = HomeCruz.FONTE_CATEGORIA
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
-        fun maior() = nome.split(' ').maxOfOrNull { tv.paint.measureText(it) } ?: 0f
+        fun maior() = nome.split(' ', '\n').maxOfOrNull { tv.paint.measureText(it) } ?: 0f
         while (sp > 15f && maior() > dpi(ROTULO_CAT)) {
             sp -= 0.5f; tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
         }
@@ -604,7 +604,7 @@ class CruzOuvir(ctx: Context, private val fonte: Typeface, private val fonteFort
         val focada = hasFocus() || isFocused
         val semMovimento = MolaViews.semAnimacao(this)
         val p = prats.getOrNull(cat)
-        rotulo.text = p?.nome?.uppercase().orEmpty()
+        rotulo.text = p?.nome?.replace("\n", " · ")?.uppercase().orEmpty()   // nome em 2 linhas ("Sua turma\n0 online") vira uma linha no título
         posicao.text = p?.takeIf { it.itens.size > 1 }?.let { context.getString(R.string.cruz_posicao, indiceSel(it) + 1, it.itens.size) }.orEmpty()
         for ((j, v) in viewsCat.withIndex()) {
             val k = j - cat

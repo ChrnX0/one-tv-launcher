@@ -75,6 +75,21 @@ class UnifiTest {
         assertEquals("m3", juntos.first())
     }
 
+    @Test fun celularComMacAleatorioNaoAvisaDeNovo() {
+        fun cel(mac: String, fim: String) = Unifi.Aparelho("id$fim", "S25-de-Ana $fim", "192.168.1.9", mac, "WIRELESS", null)
+        val primeiro = cel("9a:11:22:33:9c:d3", "9c:d3")
+        val conhecidos = Unifi.juntarConhecidos(emptyList(), listOf(primeiro))
+        assertTrue("nome:s25-de-ana" in conhecidos)
+        // O mesmo celular volta com outro MAC aleatório: não é novo.
+        assertEquals(emptyList<Unifi.Aparelho>(), Unifi.novos(conhecidos.toSet(), listOf(cel("de:44:55:66:8d:57", "8d:57"))))
+        // MAC de fábrica (bit 0x02 apagado) segue só pelo MAC, mesmo com nome parecido.
+        val fabrica = Unifi.Aparelho("x", "S25-de-Ana 01:02", null, "00:11:22:33:01:02", "WIRELESS", null)
+        assertNull(Unifi.chaveNome(fabrica))
+        assertEquals(listOf(fabrica), Unifi.novos(conhecidos.toSet(), listOf(fabrica)))
+        // Nome sem o fim do MAC não vira chave (pode ser um nome escolhido no UniFi).
+        assertNull(Unifi.chaveNome(Unifi.Aparelho("y", "Notebook", null, "9a:00:00:00:00:01", "WIRELESS", null)))
+    }
+
     @Test fun textoDoRecadoCabeNoCartao() {
         val muitos = (1..6).map { Unifi.Aparelho("id$it", "Aparelho com um nome comprido demais para caber $it", "192.168.0.$it", null, "WIRELESS", null) }
         val t = Unifi.textoNovos(muitos)

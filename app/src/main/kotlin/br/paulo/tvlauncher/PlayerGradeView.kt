@@ -46,7 +46,7 @@ class PlayerGradeView(
     private val agoraCor = Estilo.ERRO     // a linha do "agora" no vermelho do "ao vivo"
 
     private val pTexto = TextPaint(Paint.ANTI_ALIAS_FLAG).apply { color = papel; textSize = 16f * d; typeface = Fontes.nunito(500) }   // 14 -> 16 (13/11/2026: letra maior em Filmes, Séries e TV)
-    private val pPequeno = TextPaint(Paint.ANTI_ALIAS_FLAG).apply { color = suave; textSize = Estilo.Leitura.CONTAGEM * d }
+    private val pPequeno = TextPaint(Paint.ANTI_ALIAS_FLAG).apply { color = suave; textSize = Estilo.Leitura.CONTAGEM * d; typeface = Fontes.nunito(400) }   // pente fino 19/11/2026: sem isto saía em Roboto (horários, "Sem guia")
     private val pTitulo = TextPaint(Paint.ANTI_ALIAS_FLAG).apply { color = papel; textSize = Estilo.Leitura.PROGRAMA * d; typeface = Fontes.nunito(500) }
     private val pRotulo = TextPaint(Paint.ANTI_ALIAS_FLAG).apply { color = Estilo.TEXTO_3; textSize = Estilo.Leitura.ROTULO * d; typeface = Fontes.nunito(600); letterSpacing = 0.06f }
     private val pBloco = Paint(Paint.ANTI_ALIAS_FLAG)

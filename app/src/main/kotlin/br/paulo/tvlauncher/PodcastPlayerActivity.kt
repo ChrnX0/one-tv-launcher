@@ -540,20 +540,22 @@ class PodcastPlayerActivity : Activity() {
             val w = width.toFloat(); val h = height.toFloat(); val raio = minOf(w, h) / 2f
             fundo.color = when {
                 grande -> Estilo.ACENTO
-                focado -> 0x40FFFFFF
+                // Pente fino 19/11/2026: o foco era branco 25% (~1,6:1 contra o botão sem foco, abaixo dos 3:1 da WCAG
+                // 1.4.11) e na Sala não dava para saber onde estava. Regra da casa: foco é BRANCO, ícone escuro em cima.
+                focado -> Estilo.FOCO
                 else -> 0x14FFFFFF
             }
             cv.drawCircle(w / 2, h / 2, raio, fundo)
-            if (grande && focado) { fundo.color = 0x55FFFFFF; fundo.style = Paint.Style.STROKE; fundo.strokeWidth = dp(3f); cv.drawCircle(w / 2, h / 2, raio - dp(1.5f), fundo); fundo.style = Paint.Style.FILL }
+            if (grande && focado) { fundo.color = Estilo.FOCO; fundo.style = Paint.Style.STROKE; fundo.strokeWidth = dp(3f); cv.drawCircle(w / 2, h / 2, raio - dp(1.5f), fundo); fundo.style = Paint.Style.FILL }
             val m = (raio * if (grande) 0.48f else 0.52f).toInt()
             ic?.let {
                 it.setBounds(m, m, width - m, height - m)
                 it.alpha = if (ligado || focado) 255 else 140
-                it.colorFilter = if (grande) escuro else null
+                it.colorFilter = if (grande || focado) escuro else null
                 it.draw(cv)
             }
             escrita?.let {
-                letra.color = Estilo.TEXTO; letra.textSize = h * 0.3f
+                letra.color = if (focado) 0xFF14161F.toInt() else Estilo.TEXTO; letra.textSize = h * 0.3f
                 cv.drawText(it, w / 2, h / 2 - (letra.descent() + letra.ascent()) / 2, letra)
             }
             // Ligado (pular silêncios, timer): um ponto laranja embaixo, como o ponto do item escolhido da cruz.

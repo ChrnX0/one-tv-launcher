@@ -244,6 +244,7 @@ tasks.withType<Test>().configureEach {
     if (!project.hasProperty("telas")) exclude("br/paulo/tvlauncher/telas/**")
     else filter { includeTestsMatching("br.paulo.tvlauncher.telas.*") }
     systemProperty("telas.atualizar", project.hasProperty("telasAtualizar").toString())
+    systemProperty("telas.auditoria", project.hasProperty("auditoria").toString())
 }
 
 // Túnel para a internet (opção E, 05/11/2026): o programa Go em tunel/ (Tailscale embutido, tsnet) compilado para ARM
