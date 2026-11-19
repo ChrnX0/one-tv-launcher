@@ -223,6 +223,10 @@ object Idioma {
         }
     }
 
+    /** O nome como veio, sem a marca de versão: "O Sonho da Liberdade Leg" -> "O Sonho da Liberdade" (o selo LEG vai no pôster). */
+    fun semMarca(nome: String): String = nome.replace(reMarcas, " ").replace(reEspacos, " ").trim().ifEmpty { nome }
+    private val reEspacos = Regex("""\s{2,}""")
+
     /** O título sem marca, ano, acento nem pontuação: "Duna: Parte 2 (2024) [L]" e "Duna - Parte 2 (2024)" dão o mesmo. */
     fun chaveTitulo(nome: String): String =
         semAcento(Vod.nomeLimpo(nome.replace(reMarcas, " ")).replace(reMarcas, " "))

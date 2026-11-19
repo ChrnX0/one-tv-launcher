@@ -466,6 +466,7 @@
     <string name="vod_grade_teclas">OK aç · OK basılı: diğer seçenekler · satır sonunda ▶: harfler · GERİ kategoriler</string>
     <string name="filmes_finalizado">Bitti</string>
     <string name="filmes_assistido">İzlendi</string>
+    <string name="filmes_selo_leg">ALT</string>
     <string name="vod_sem_conta">Bu videonun hesabı artık yok.</string>
     <string name="vod_erro">Bu video oynatılamadı. Çıkmak için GERİ.</string>
     <string name="vod_sem_legenda">Altyazı yok</string>

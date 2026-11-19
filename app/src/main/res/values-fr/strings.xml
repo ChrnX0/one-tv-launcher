@@ -466,6 +466,7 @@
     <string name="vod_grade_teclas">OK ouvrir · maintenir OK : plus d’options · ▶ en fin de rangée : lettres · RETOUR catégories</string>
     <string name="filmes_finalizado">Terminé</string>
     <string name="filmes_assistido">Vu</string>
+    <string name="filmes_selo_leg">VOST</string>
     <string name="vod_sem_conta">Le compte de cette vidéo n’existe plus.</string>
     <string name="vod_erro">Impossible de lire cette vidéo. RETOUR pour quitter.</string>
     <string name="vod_sem_legenda">Sans sous-titres</string>

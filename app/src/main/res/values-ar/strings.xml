@@ -466,6 +466,7 @@
     <string name="vod_grade_teclas">OK فتح · اضغط مطولًا على OK: خيارات أخرى · ▶ في نهاية الصف: الحروف · BACK الفئات</string>
     <string name="filmes_finalizado">انتهى</string>
     <string name="filmes_assistido">تمت مشاهدته</string>
+    <string name="filmes_selo_leg">مترجم</string>
     <string name="vod_sem_conta">حساب هذا الفيديو لم يعد موجودًا.</string>
     <string name="vod_erro">تعذّر تشغيل هذا الفيديو. BACK للخروج.</string>
     <string name="vod_sem_legenda">بلا ترجمة</string>

@@ -526,6 +526,7 @@
     <string name="vod_grade_teclas">OK abrir · segure OK: mais opções · ▶ no fim da linha: letras · VOLTAR categorias</string>
     <string name="filmes_finalizado">Finalizado</string>
     <string name="filmes_assistido">Assistido</string>
+    <string name="filmes_selo_leg">LEG</string>
     <string name="vod_sem_conta">A conta deste vídeo não existe mais.</string>
     <string name="vod_erro">Não consegui tocar este vídeo. VOLTAR para sair.</string>
     <string name="vod_sem_legenda">Sem legenda</string>

@@ -524,6 +524,7 @@
     <string name="vod_grade_teclas">OK open · hold OK: more options · ▶ at the end of a row: letters · BACK categories</string>
     <string name="filmes_finalizado">Finished</string>
     <string name="filmes_assistido">Watched</string>
+    <string name="filmes_selo_leg">SUB</string>
     <string name="vod_sem_conta">This video\'s account no longer exists.</string>
     <string name="vod_erro">Could not play this video. BACK to leave.</string>
     <string name="vod_sem_legenda">No subtitles</string>

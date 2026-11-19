@@ -138,12 +138,21 @@ class FilmesActivity : Activity() {
         direita.addView(painel.faixa, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = dp(10) })
         grade = GridView(this).apply {
             numColumns = Estilo.Leitura.GRADE_COLUNAS
-            horizontalSpacing = dp(12); verticalSpacing = dp(Estilo.Leitura.GRADE_VAO)
+            horizontalSpacing = dp(PosterGridSize.VAO_COLUNAS); verticalSpacing = dp(PosterGridSize.VAO_FILEIRAS)
             stretchMode = GridView.STRETCH_COLUMN_WIDTH
             estiloLista(this)
             setPaddingRelative(dp(4), dp(4), dp(4), dp(4)); clipToPadding = false
         }
         direita.addView(grade, LinearLayout.LayoutParams(-1, 0, 1f))
+        // Colunas e altura do pôster pelo espaço real da grade (PosterGridSize): 2 fileiras inteiras, sem fileira cortada.
+        grade.addOnLayoutChangeListener { v, l, t, r, b, _, _, _, _ ->
+            val d = resources.displayMetrics.density
+            val m = PosterGridSize.calcular(((r - l - v.paddingLeft - v.paddingRight) / d).toInt(), ((b - t - v.paddingTop - v.paddingBottom) / d).toInt())
+            if (m == medidaGrade) return@addOnLayoutChangeListener
+            medidaGrade = m
+            // Depois deste layout (mudar a grade dentro dele seria ignorado): as colunas novas e os cards na altura nova.
+            v.post { if (!isDestroyed) { grade.numColumns = m.colunas; adaptadorGrade.notifyDataSetChanged() } }
+        }
         // Dica fixa das teclas, no mesmo jeito da lista de canais do player (player_lista_teclas: 11sp, cor apagada).
         direita.addView(TextView(this).apply { text = getString(R.string.vod_grade_teclas); textSize = Estilo.Leitura.DICA; setTextColor(apagado); setPaddingRelative(dp(8), dp(6), 0, 0) })
         colunas.addView(direita, LinearLayout.LayoutParams(0, -1, 1f).apply { marginStart = dp(16) })
@@ -633,7 +642,11 @@ class FilmesActivity : Activity() {
 
     // ---------------------------------------------------------------- grade de pôsteres
 
-    private class Card(val capa: ImageView, val nome: TextView, val barra: BarraTempo.Barra, val etiqueta: TextView, val estrela: TextView)
+    private class Card(val capa: ImageView, val nome: TextView, val barra: BarraTempo.Barra, val etiqueta: TextView, val estrela: TextView,
+                       val moldura: View, val selo: TextView)
+
+    /** Medida atual da grade (PosterGridSize); até a grade ter tamanho, a de antes (5 colunas, pôster de 180). */
+    private var medidaGrade = PosterGridSize.Medida(Estilo.Leitura.GRADE_COLUNAS, Estilo.Leitura.POSTER_ALTURA, Estilo.Leitura.POSTER_ALTURA + PosterGridSize.EXTRA_CARD)
 
     private val adaptadorGrade = object : BaseAdapter() {
         override fun getCount() = naGrade.size
@@ -643,7 +656,16 @@ class FilmesActivity : Activity() {
             val v = reuso ?: novoCard()
             val c = v.tag as Card
             val f = naGrade[p]
-            c.nome.text = Vod.nomeTela(f.nome, f.ano)
+            // Card reaproveitado de antes de a grade mudar de tamanho: acerta a altura (só muda quando a medida muda).
+            val alturaCard = dp(medidaGrade.alturaCard)
+            if (v.layoutParams.height != alturaCard) {
+                v.layoutParams.height = alturaCard
+                c.moldura.layoutParams.height = dp(medidaGrade.alturaPoster)
+            }
+            // O nome só aparece enquanto o pôster não chega ou quando ele não existe (CapaCartao.aoTrocar).
+            c.nome.text = Vod.nomeTela(Idioma.semMarca(f.nome), f.ano)
+            // Selo LEG: só o legendado que não tem a versão dublada junto (com par, a ficha escolhe a versão).
+            c.selo.visibility = if (Idioma.versao(f.nome, f.grupo) == Idioma.Versao.LEGENDADA && outraVersao(f) == null) View.VISIBLE else View.GONE
             val pos = posicoes[f.chave]
             if (Vod.deveRetomar(pos) && pos!!.duracao > 0) {
                 c.barra.visibility = View.VISIBLE; c.barra.fracao = BarraTempo.fracao(pos.ms, pos.duracao)
@@ -663,12 +685,6 @@ class FilmesActivity : Activity() {
         }
     }
 
-    /** Cabeçalho do card: o nome (2 linhas no máximo) encostado embaixo, logo acima do pôster. */
-    private fun cabecalhoCard(alturaDp: Int) = LinearLayout(this).apply {
-        orientation = LinearLayout.VERTICAL; gravity = Gravity.BOTTOM; setPaddingRelative(0, 0, 0, dp(6))
-        layoutParams = LinearLayout.LayoutParams(-1, dp(alturaDp))
-    }
-
     private fun novoCard(): View {
         val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPaddingRelative(dp(4), dp(4), dp(4), dp(6)) }
         val capa = CapaCartao(this, dp(8).toFloat())   // cinza só enquanto o pôster não chega (CapaCartao.kt)
@@ -686,14 +702,27 @@ class FilmesActivity : Activity() {
             background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
         }
         moldura.addView(estrela, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.END).apply { setMargins(0, dp(5), dp(5), 0) })
-        val nome = TituloCard(this, Estilo.Leitura.CARD).apply { setTextColor(papel); maxLines = 2; ellipsize = TextUtils.TruncateAt.END }
-        col.addView(cabecalhoCard(Estilo.Leitura.NOME_CARD_ALTURA).apply { addView(nome) })
-        col.addView(moldura, LinearLayout.LayoutParams(-1, dp(Estilo.Leitura.POSTER_ALTURA)))
+        // 19/11/2026: o nome saiu de cima do pôster (repetia o título da arte e gastava 48 dp por fileira). Fica POR CIMA
+        // do cinza de espera, centrado, e some quando o pôster chega; o título do filme em foco aparece grande no topo.
+        val nome = TituloCard(this, Estilo.Leitura.CARD).apply {
+            setTextColor(papel); maxLines = 4; ellipsize = TextUtils.TruncateAt.END; gravity = Gravity.CENTER
+            setPaddingRelative(dp(6), dp(6), dp(6), dp(6))
+        }
+        moldura.addView(nome, 1, FrameLayout.LayoutParams(-1, -2, Gravity.CENTER))
+        capa.aoTrocar = { tem -> nome.visibility = if (tem) View.INVISIBLE else View.VISIBLE }
+        // Selo LEG (em cima, à esquerda; a estrela fica à direita): no lugar do "Leg" que vinha colado no nome.
+        val selo = TextView(this).apply {
+            text = getString(R.string.filmes_selo_leg); textSize = 11f; typeface = fonteMedia; setTextColor(papel)
+            setPaddingRelative(dp(6), dp(1), dp(6), dp(2)); visibility = View.GONE
+            background = GradientDrawable().apply { cornerRadius = dp(6).toFloat(); setColor(0xD90E1020.toInt()) }
+        }
+        moldura.addView(selo, FrameLayout.LayoutParams(-2, -2, Gravity.TOP or Gravity.START).apply { setMargins(dp(5), dp(5), 0, 0) })
+        col.addView(moldura, LinearLayout.LayoutParams(-1, dp(medidaGrade.alturaPoster)))
         val barra = BarraTempo.Barra(this)
         col.addView(barra, LinearLayout.LayoutParams(-1, dp(BarraTempo.ESPESSURA_DP)).apply { topMargin = dp(5) })
-        // 4 + nome + pôster + barra (5 + 5) + 6
-        col.layoutParams = AbsListView.LayoutParams(-1, dp(4 + Estilo.Leitura.NOME_CARD_ALTURA + Estilo.Leitura.POSTER_ALTURA + 10 + 6))
-        col.tag = Card(capa, nome, barra, etiqueta, estrela)
+        // 4 + pôster + barra (5 + 5) + 6 = PosterGridSize.EXTRA_CARD
+        col.layoutParams = AbsListView.LayoutParams(-1, dp(medidaGrade.alturaCard))
+        col.tag = Card(capa, nome, barra, etiqueta, estrela, moldura, selo)
         return col
     }
 
@@ -712,8 +741,10 @@ class FilmesActivity : Activity() {
         }
         val info = fichasRapidas[f.chave]
         val pos = posicoes[f.chave]?.takeIf { p -> p.duracao > 0 }
-        painel.mostrarFoco(Estilo.infoFoco(Vod.nomeTela(f.nome, f.ano), notaRapida[f.chave] ?: f.nota, listOfNotNull(
+        val soLegendado = Idioma.versao(f.nome, f.grupo) == Idioma.Versao.LEGENDADA && outraVersao(f) == null
+        painel.mostrarFoco(Estilo.infoFoco(Vod.nomeTela(Idioma.semMarca(f.nome), f.ano), notaRapida[f.chave] ?: f.nota, listOfNotNull(
             f.ano?.toString(),
+            if (soLegendado) getString(R.string.idioma_legendado) else null,
             info?.duracaoMin?.let { if (it >= 60) "${it / 60} h ${"%02d".format(it % 60)}" else "$it min" },
             info?.genero?.ifEmpty { null } ?: PlayerLista.nomeExibido(f.grupo).ifEmpty { null },
             pos?.takeIf { p -> Vod.deveRetomar(p) }?.let { p -> getString(R.string.tempo_faltam, BarraTempo.duracao(p.duracao - p.ms)) },

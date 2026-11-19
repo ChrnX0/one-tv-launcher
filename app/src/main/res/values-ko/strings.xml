@@ -466,6 +466,7 @@
     <string name="vod_grade_teclas">OK 열기 · OK 길게: 더 많은 옵션 · 줄 끝에서 ▶: 문자 · 뒤로 카테고리</string>
     <string name="filmes_finalizado">완료</string>
     <string name="filmes_assistido">시청함</string>
+    <string name="filmes_selo_leg">자막</string>
     <string name="vod_sem_conta">이 동영상의 계정이 더 이상 없습니다.</string>
     <string name="vod_erro">이 동영상을 재생할 수 없습니다. 뒤로를 누르면 나갑니다.</string>
     <string name="vod_sem_legenda">자막 없음</string>

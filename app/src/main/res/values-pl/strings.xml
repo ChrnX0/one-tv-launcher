@@ -466,6 +466,7 @@
     <string name="vod_grade_teclas">OK otwórz · przytrzymaj OK: więcej opcji · ▶ na końcu rzędu: litery · WSTECZ kategorie</string>
     <string name="filmes_finalizado">Ukończono</string>
     <string name="filmes_assistido">Obejrzany</string>
+    <string name="filmes_selo_leg">NAP</string>
     <string name="vod_sem_conta">Konto tego wideo już nie istnieje.</string>
     <string name="vod_erro">Nie można odtworzyć tego wideo. WSTECZ, aby wyjść.</string>
     <string name="vod_sem_legenda">Bez napisów</string>

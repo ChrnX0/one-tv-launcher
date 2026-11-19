@@ -466,6 +466,7 @@
     <string name="vod_grade_teclas">OK открыть · удерживайте OK: ещё · ▶ в конце ряда: буквы · НАЗАД категории</string>
     <string name="filmes_finalizado">Завершено</string>
     <string name="filmes_assistido">Просмотрено</string>
+    <string name="filmes_selo_leg">СУБ</string>
     <string name="vod_sem_conta">Аккаунта этого видео больше нет.</string>
     <string name="vod_erro">Не удалось воспроизвести видео. НАЗАД — выйти.</string>
     <string name="vod_sem_legenda">Без субтитров</string>
