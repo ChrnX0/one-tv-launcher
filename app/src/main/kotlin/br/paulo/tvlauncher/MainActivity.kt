@@ -2975,6 +2975,13 @@ class MainActivity : Activity() {
         override fun run() {
             if (!homeNaFrente || ilhaPilula == null) return
             filaApps.execute { runCatching { lerFontesIlha() }; ui.post { atualizarIlha() } }
+            // Cartões (visto na Sala 19/11/2026): o serviço só era testado ao voltar à HOME, então com a TV parada na
+            // tela inicial o "fora do ar" nunca aparecia. Aqui ele e a cotação seguem o próprio intervalo (5 min e 3 h).
+            Fundo.rodar("cartoes-tique") {
+                val mudou = runCatching { HomeCardsTv.testarServicos(this@MainActivity) }.getOrDefault(false) or
+                    runCatching { HomeCardsTv.atualizarCotacoes(this@MainActivity) }.getOrDefault(false)
+                if (mudou) ui.post { if (!isDestroyed) atualizarPilulasCartoes() }
+            }
             ui.postDelayed(this, 60_000L)
         }
     }
