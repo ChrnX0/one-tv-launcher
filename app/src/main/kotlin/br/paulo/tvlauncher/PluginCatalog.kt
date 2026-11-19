@@ -31,11 +31,15 @@ object PluginCatalog {
             play = "com.danielkorgel.projectivy.plugin.cinemaglow"),
         Entrada("sofadrop", Tipo.FUNDO, "Sofadrop", R.string.wp_d_sofadrop, repo = "rfmarcos/projectivy-plugin-sofadrop"),
         Entrada("immich", Tipo.FUNDO, "Immich Wallpaper", R.string.wp_d_immich, repo = "raizer88/immich-projectivy-provider"),
-        Entrada("tvicons", Tipo.ICONES, "Projectivy Icon Pack", R.string.wp_d_tvicons, repo = "SicMundus86/ProjectivyIconPack"),
+        // O app se chama "Projectivy Icon Pack": aqui e na nossa tela mostramos um nome neutro (regra: nada de nome de concorrente).
+        Entrada("tvicons", Tipo.ICONES, "TV Icon Pack", R.string.wp_d_tvicons, "dev.projectivy.blueprint.app", repo = "SicMundus86/ProjectivyIconPack"),
         Entrada("minimalist", Tipo.ICONES, "Minimalist Icon Pack", R.string.wp_d_minimalist, repo = "hqn-scl/android-tv-minimalist-icon-pack"),
         // Arcticons: traço fino, combina com o estilo Linha da cruz. O Release tem vários APKs (claro/escuro): só pela página.
         Entrada("arcticons", Tipo.ICONES, "Arcticons", R.string.wp_d_arcticons, "com.donnnno.arcticons", play = "com.donnnno.arcticons"),
     )
+
+    /** Nome que mostramos para um pacote instalado que está na vitrine (o rótulo do app pode citar outro launcher). */
+    fun nomeDoPacote(pacote: String): String? = LISTA.firstOrNull { it.pacote == pacote }?.nome
 
     /** Página para o QR: a da Play quando existe, senão o último Release no GitHub. */
     fun pagina(e: Entrada): String? = when {
