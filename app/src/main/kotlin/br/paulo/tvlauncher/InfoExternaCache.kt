@@ -184,22 +184,27 @@ object InfoExternaCache {
         val (lingua, pais) = TraktDetails.idioma()
         val doXtream = tmdbConhecido?.takeIf { it !in g.recusados }
         if (doXtream != null && doXtream != g.tmdb) g = mudar(app, chave) { it.copy(tmdb = doXtream, detalhe = null, detalheEm = 0, traktNota = null, traktEm = 0, simkl = null, simklNota = null, simklEm = 0) }
+        if (g.tmdb == null && g.buscaEm > 0) esquecerBuscasAntigas(app)?.let { g = it[chave] ?: g }
         if (g.tmdb == null && agora - g.buscaEm > BUSCA_DE_NOVO_MS) {
-            val limpo = LegendaExterna.nomeDeBusca(Vod.nomeLimpo(nome)).ifBlank { Vod.nomeLimpo(nome) }
             val recusados = g.recusados
-            fun procurar(anoBusca: Int?): Int? {
+            fun procurar(titulo: String, anoBusca: Int?): Int? {
+                val limpo = LegendaExterna.nomeDeBusca(titulo).ifBlank { titulo }
                 val achados = trakt(TraktDetails.urlBusca(limpo, anoBusca, serie))?.let { TraktDetails.lerBusca(it, serie) }.orEmpty()
                     .filter { it.tmdb !in recusados }
-                InfoExterna.escolher(TraktDetails.candidatos(achados), Vod.nomeLimpo(nome), anoBusca, recusados)?.id?.let { return it }
+                InfoExterna.escolher(TraktDetails.candidatos(achados), titulo, anoBusca, recusados)?.id?.let { return it }
                 if (lingua == "en") return null
-                val alvo = Idioma.chaveTitulo(Vod.nomeLimpo(nome))
+                val alvo = Idioma.chaveTitulo(titulo)
                 return achados.filter { anoBusca == null || it.ano == null || kotlin.math.abs(it.ano - anoBusca) <= 1 }.take(3).firstOrNull { a ->
                     val t = trakt(TraktDetails.urlTraducao(a.trakt, serie, lingua))?.let { TraktDetails.lerTraducao(it, pais) }
                     t != null && Idioma.chaveTitulo(t.first) == alvo
                 }?.tmdb
             }
             // Ano errado na lista do IPTV (relançamento, ano da cópia) é comum: sem nada com o ano, tenta sem ele, como o TMDB.
-            val achado = procurar(ano) ?: if (ano != null) procurar(null) else null
+            // Nome "dublado - original" da lista ("Lei e Ordem: Unidade de Vítimas Especiais - Law & Order", Sala 19/11/2026)
+            // não casa com nada: tenta também só a parte dublada (o Trakt busca nas traduções).
+            val achado = TraktDetails.nomesDeBusca(Vod.nomeLimpo(nome)).firstNotNullOfOrNull { t ->
+                procurar(t, ano) ?: if (ano != null) procurar(t, null) else null
+            }
             g = mudar(app, chave) { it.copy(tmdb = achado, buscaEm = if (achado == null) agora else 0) }
         }
         val id = g.tmdb ?: run { Log.i(TAG, "ficha Trakt: $chave sem id do TMDB (busca de novo em ${((g.buscaEm + BUSCA_DE_NOVO_MS - agora) / 3_600_000).coerceAtLeast(0)} h)"); return g }
@@ -238,6 +243,27 @@ object InfoExternaCache {
         }
         "títulos=${m.size} trakt=${chaves().traktId.isNotBlank()} tmdb=${temTmdb()}\n" + linhas.joinToString("\n")
     }
+
+    /**
+     * Uma vez por TV: buscas que falharam antes do Trakt virar a fonte do Básico (19/11/2026) esperavam 7 dias para
+     * tentar de novo, então a série que o TMDB não achou ficava sem ficha mesmo com o Trakt achando. Zera a espera delas.
+     * Devolve o mapa quando zerou algo (null quando já foi feito).
+     */
+    private fun esquecerBuscasAntigas(app: Context): Map<String, Guardado>? {
+        val prefs = app.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+        if (prefs.getBoolean(PREF_BUSCA_TRAKT, false)) return null
+        return synchronized(trava) {
+            val m = mapa(app)
+            var n = 0
+            for ((k, g) in m.entries.toList()) if (g.tmdb == null && g.buscaEm > 0) { m[k] = g.copy(buscaEm = 0); sujos.add(k); n++ }
+            if (n > 0) gravar(app)
+            prefs.edit().putBoolean(PREF_BUSCA_TRAKT, true).apply()
+            Log.i(TAG, "ficha Trakt: $n buscas antigas liberadas")
+            m
+        }
+    }
+    private const val PREFS = "fichas"
+    private const val PREF_BUSCA_TRAKT = "busca_trakt_v1"
 
     /** Id do Trakt de cada título já visto ("F123"/"S45" -> trakt), só na memória. */
     private val traktIds = HashMap<String, Int>()

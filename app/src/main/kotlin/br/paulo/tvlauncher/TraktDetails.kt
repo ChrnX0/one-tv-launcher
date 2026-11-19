@@ -150,4 +150,14 @@ object TraktDetails {
         val resumo = traducao?.second?.takeIf { it.isNotBlank() } ?: o.optString("overview").trim()
         if (resumo.isEmpty()) null else (traducao?.first?.takeIf { it.isNotBlank() } ?: o.optString("title").trim()) to resumo.take(900)
     }.getOrNull()
+
+    /**
+     * Nomes a buscar para um título da lista: o inteiro e, quando ele vem como "dublado - original", só a parte antes
+     * do " - " (a parte original sozinha pode ser outra obra: "Law & Order" é a série-mãe, não a SVU).
+     */
+    fun nomesDeBusca(nome: String): List<String> {
+        val inteiro = nome.trim()
+        val antes = inteiro.substringBefore(" - ", "").trim()
+        return if (antes.length >= 3 && antes != inteiro) listOf(inteiro, antes) else listOf(inteiro)
+    }
 }
