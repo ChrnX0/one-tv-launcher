@@ -164,9 +164,11 @@ object InfoExternaCache {
     /** Pergunta ao Trakt com a chave do app; null sem chave, sem rede ou fora de 2xx (204 = corpo vazio). */
     private fun trakt(url: String): String? {
         val id = chaves().traktId.takeIf { it.isNotBlank() } ?: return null
-        return runCatching { ServicosContas.pedir(url, ServicosFilmes.traktCabecalhos(id, BuildConfig.VERSION_CODE)) }
-            .onFailure { Log.w(TAG, "Trakt: ${it.javaClass.simpleName}") }.getOrNull()
-            ?.takeIf { it.codigo in 200..299 }?.corpo
+        val r = runCatching { ServicosContas.pedir(url, ServicosFilmes.traktCabecalhos(id, BuildConfig.VERSION_CODE)) }
+            .onFailure { Log.w(TAG, "Trakt: ${it.javaClass.simpleName}") }.getOrNull() ?: return null
+        // Sem isto uma recusa do Trakt (403, 429...) deixava a ficha vazia sem rastro (19/11/2026, conferência na Sala).
+        if (r.codigo !in 200..299) Log.w(TAG, "Trakt ${url.substringAfter("trakt.tv").substringBefore('?')}: HTTP ${r.codigo}")
+        return r.takeIf { it.codigo in 200..299 }?.corpo
     }
 
     /**
@@ -176,7 +178,7 @@ object InfoExternaCache {
      * temporadas na série), até 5 perguntas por título a cada 30 dias.
      */
     private fun resolverTrakt(app: Context, chave: String, nome: String, ano: Int?, serie: Boolean, tmdbConhecido: Int?): Guardado {
-        if (chaves().traktId.isBlank()) return guardado(app, chave) ?: Guardado()
+        if (chaves().traktId.isBlank()) { Log.w(TAG, "ficha Trakt: build sem TRAKT_ID"); return guardado(app, chave) ?: Guardado() }
         val agora = System.currentTimeMillis()
         var g = guardado(app, chave) ?: Guardado()
         val (lingua, pais) = TraktDetails.idioma()
@@ -205,8 +207,9 @@ object InfoExternaCache {
         // nada do TMDB aparecer sem a licença.
         val doTmdb = g.detalhe?.poster?.isNotEmpty() == true
         if (doTmdb || InfoExterna.vencido(g.detalheEm, agora, g.detalhe?.noAr == true)) runCatching {
-            val item = trakt(TraktDetails.urlPorTmdb(id, serie))?.let { TraktDetails.lerPorTmdb(it, serie) } ?: return@runCatching
-            val t = TraktDetails.traktDe(item) ?: return@runCatching
+            val item = trakt(TraktDetails.urlPorTmdb(id, serie))?.let { TraktDetails.lerPorTmdb(it, serie) }
+                ?: run { Log.w(TAG, "ficha Trakt: tmdb $id sem item"); return@runCatching }
+            val t = TraktDetails.traktDe(item) ?: run { Log.w(TAG, "ficha Trakt: tmdb $id sem id do Trakt"); return@runCatching }
             synchronized(traktIds) { traktIds[InfoExterna.chaveTmdb(id, serie)] = t }
             val traducao = if (lingua == "en") null else trakt(TraktDetails.urlTraducao(t, serie, lingua))?.let { TraktDetails.lerTraducao(it, pais) }
             val pessoas = trakt(TraktDetails.urlPessoas(t, serie))?.let { TraktDetails.lerPessoas(it) } ?: (emptyList<String>() to "")
@@ -214,6 +217,7 @@ object InfoExternaCache {
             val temporadas = if (serie) trakt(TraktDetails.urlTemporadas(t))?.let { TraktDetails.lerTemporadas(it) } ?: 0 else 0
             val d = TraktDetails.detalhe(id, item, serie, traducao, pessoas, proximo, temporadas)
             g = mudar(app, chave) { it.copy(detalhe = d, detalheEm = agora, imdb = d.imdb.ifBlank { it.imdb }) }
+            Log.i(TAG, "ficha Trakt: tmdb $id ok (sinopse ${d.sinopse.isNotBlank()}, elenco ${d.elenco.size}, próximo ${d.proximo != null})")
         }.onFailure { Log.w(TAG, "ficha Trakt: ${it.javaClass.simpleName}") }
         return guardado(app, chave) ?: g
     }
