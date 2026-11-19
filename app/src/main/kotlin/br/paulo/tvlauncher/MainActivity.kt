@@ -344,6 +344,11 @@ class MainActivity : Activity() {
         super.onResume()
         homeNaFrente = true
         SonsCruz.naFrente = true
+        if (ilhaPilula != null) {
+            ui.removeCallbacks(tarefaIlhaTique); ui.post(tarefaIlhaTique)
+            CasaHA.aoTocarCampainha = { ui.post { atualizarIlha() } }   // a campainha entra na Ilha na hora
+            ui.removeCallbacks(tarefaIlhaGira); if (ilhaFila.size > 1) ui.postDelayed(tarefaIlhaGira, BarraIlha.RODIZIO_MS)
+        }
         // A tela acendeu com a HOME ainda pausada (o Android retoma a HOME logo depois do SCREEN_ON): a logo entra agora.
         if (splashPendenteAte > 0L) {
             if (android.os.SystemClock.elapsedRealtime() <= splashPendenteAte) SplashOverlay.show(this)
@@ -425,6 +430,8 @@ class MainActivity : Activity() {
         super.onPause()
         homeNaFrente = false
         SonsCruz.naFrente = false
+        ui.removeCallbacks(tarefaIlhaTique); ui.removeCallbacks(tarefaIlhaGira)
+        CasaHA.aoTocarCampainha = null
         ModoSeguro.aoPausarHome()
         ui.removeCallbacks(tarefaAmbiente); ui.removeCallbacks(tarefaQuemVe)
         sairAmbiente(animar = false)
@@ -1056,6 +1063,28 @@ class MainActivity : Activity() {
             .putExtra(PrevisaoActivity.EXTRA_UMIDADE, getSharedPreferences("clima", MODE_PRIVATE).getInt("umidade", -1)))
     }
 
+    /** ▲ que saiu da cruz para a barra (Ilha); se ele for SEGURADO, abre a Central em vez de ficar na barra. */
+    private var ilhaCimaDaCruz = false
+    private var ilhaCentralAberta = false
+
+    /**
+     * Central ao segurar ▲ (como a Central de Controle da Apple TV e o painel rápido da Samsung): o toque curto abre a barra,
+     * como sempre; segurado, a primeira repetição da tecla abre o painel rápido. As repetições seguintes e o soltar são
+     * engolidos, para o foco não continuar subindo.
+     */
+    private fun centralAoSegurarCima(event: KeyEvent): Boolean {
+        if (event.keyCode != KeyEvent.KEYCODE_DPAD_UP) return false
+        if (event.action == KeyEvent.ACTION_UP) {
+            val engole = ilhaCentralAberta
+            ilhaCimaDaCruz = false; ilhaCentralAberta = false
+            return engole
+        }
+        if (event.repeatCount == 0) { ilhaCentralAberta = false; return false }
+        if (!ilhaCimaDaCruz) return false
+        if (!ilhaCentralAberta) { ilhaCentralAberta = true; abrirPopup() }
+        return true
+    }
+
     /** Abre o painel rápido (perfis, Wi-Fi, timer, notificações...): ver PainelRapidoActivity.kt. */
     private fun abrirPopup() {
         // No modo visita o painel (perfis, Configurações, Wi-Fi) não abre: só a pergunta para sair do modo.
@@ -1102,6 +1131,7 @@ class MainActivity : Activity() {
         // (36 sp) e a descrição na mesma linha em 222 (até ~266), "ASSISTIR" em 290 e os cards (do tamanho dos apps) em 316
         // (até 379), "APPS" em 397 e os apps em 429 (até 492): embaixo sobra a mesma margem das laterais (48 dp).
         const val TOPO_PALCO = 28          // onde começa a barra do topo (estilo Google TV, 12/11/2026)
+        const val ILHA_VERMELHO = 0xFFFF5A4F.toInt()   // ponto e "gravando" da Ilha (alerta)
         const val ILHA_TEXTO_MAX = 240     // texto do evento na pílula da Ilha (a pílula não chega no canto)
         const val ALTURA_TOPO = 48         // altura das cápsulas (pílulas de 32 dp com 8 de folga em cima e embaixo)
         const val TOPO_DESTAQUE = 278      // onde TERMINA a ficha do card em foco (ela cresce para cima), 12 dp acima de "ASSISTIR"
@@ -2787,6 +2817,7 @@ class MainActivity : Activity() {
             topo.background = android.graphics.drawable.InsetDrawable(vidro, dp(Grade.MARGEM - 20), 0, dp(Grade.MARGEM - 20), 0)
             return
         }
+        BarraIlha.agora = null   // outro estilo de barra (ou a tela refeita): o MCP não fica com a fila velha
         if (barraCruz == LayoutHome.BarraCruz.ILHA) montarIlha(raiz, topo)
         // Recua: a temperatura entra ao lado da hora enquanto a barra está recolhida.
         if (barraCruz == LayoutHome.BarraCruz.RECUA && direita != null) {
@@ -2806,8 +2837,13 @@ class MainActivity : Activity() {
                 marginEnd = dp(Grade.MARGEM); bottomMargin = dp(40)
             })
         }
-        window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { _, novo ->
+        window.decorView.viewTreeObserver.addOnGlobalFocusChangeListener { velho, novo ->
             if (novo == null || todosAbertos) return@addOnGlobalFocusChangeListener
+            // Ilha (19/11/2026): ▲ saindo da cruz vai direto ao botão do evento que a pílula mostrava (pausar, cancelar o
+            // timer, Diagnóstico), como a Central da Apple TV abre na aba do que está ativo.
+            if (velho === c && novo !== c && barraCruz == LayoutHome.BarraCruz.ILHA) {
+                botaoDoEvento(ilhaEvento)?.takeIf { it !== novo && it.visibility == View.VISIBLE && it.isFocusable }?.let { b -> b.post { b.requestFocus() } }
+            }
             recolherBarra(novo === c)
         }
         recolherBarra(true, animar = false)
@@ -2840,6 +2876,7 @@ class MainActivity : Activity() {
         }
         tempoCruz?.animate()?.alpha(if (recolher) 1f else 0f)?.setDuration(d)?.start()
         // Ilha: recolhida = só a pílula; aberta = a barra de sempre com o véu atrás (a pílula dá lugar à hora dela).
+        if (!recolher) { ui.removeCallbacks(tarefaIlhaEncolhe); ilhaDica?.animate()?.cancel(); ilhaDica?.alpha = 0f }
         ilhaPilula?.animate()?.alpha(if (recolher) 1f else 0f)?.translationY(if (recolher) 0f else -dp(16).toFloat())?.setDuration(d)?.start()
         ilhaVeu?.animate()?.alpha(if (recolher) 0f else 1f)?.setDuration(d)?.start()
         relogioCruz?.animate()?.alpha(if (recolher) 1f else 0.35f)?.setDuration(d)?.start()
@@ -2886,9 +2923,43 @@ class MainActivity : Activity() {
     private var ilhaTemp: TextView? = null
     private var ilhaVeu: View? = null
     private var ilhaEvento: BarraIlha.Evento? = null
+    private var ilhaFila: List<BarraIlha.Evento> = emptyList()
+    private var ilhaPasso = 0
+    private var ilhaPontoView: View? = null
+    private var ilhaTrilho: LinearLayout? = null
+    private var ilhaContador: TextView? = null
+    private var ilhaHora: TextView? = null
+    /** Lidos a cada minuto fora da thread da tela ([tarefaIlhaTique]): (texto, quando começa). */
+    @Volatile private var ilhaLembrete: Pair<String, Long>? = null
+    @Volatile private var ilhaAgenda: Pair<String, Long>? = null
+    @Volatile private var ilhaIndicadores: Set<BarraIlha.Indicador> = emptySet()
+    private var ilhaTrilhoMostrado: BarraIlha.Trilho? = null
+    /** Ilha que cresce: a faixa de baixo com o evento que chegou e "▲ para abrir"; some em [BarraIlha.CRESCER_MS]. */
+    private var ilhaDica: TextView? = null
+    private val tarefaIlhaEncolhe = Runnable { ilhaDica?.animate()?.alpha(0f)?.translationY(-dp(6).toFloat())?.setDuration(220)?.start() }
+    /** Rodízio da fila: troca o evento da vez a cada [BarraIlha.RODIZIO_MS], só com a barra recolhida e a HOME na frente. */
+    private val tarefaIlhaGira = object : Runnable {
+        override fun run() {
+            if (ilhaFila.size < 2 || !homeNaFrente) return
+            if (barraRecolhida) { ilhaPasso++; aplicarIlha() }
+            ui.postDelayed(this, BarraIlha.RODIZIO_MS)
+        }
+    }
+    /** A cada minuto: lembrete do guia, agenda de hoje e o trilho de estado (nada disso muda a arrumação da tela sozinho). */
+    private val tarefaIlhaTique = object : Runnable {
+        override fun run() {
+            if (!homeNaFrente || ilhaPilula == null) return
+            filaApps.execute { runCatching { lerFontesIlha() }; ui.post { atualizarIlha() } }
+            ui.postDelayed(this, 60_000L)
+        }
+    }
     /** Quando toca o próximo despertador (ms), para a pílula só mostrá-lo nas últimas 12 h. */
     private var alarmeEm: Long? = null
-    private val tarefaIlhaAcordou = Runnable { if (cruz?.hasFocus() == true) recolherBarra(true) }
+    private val tarefaIlhaAcordou = Runnable {
+        if (cruz?.hasFocus() != true) return@Runnable
+        recolherBarra(true)
+        BarraIlha.resumoChegada(ilhaFila)?.let { crescerIlhaTexto(it, ilhaFila.any { e -> e.atencao }) }   // resumo de chegada
+    }
 
     /**
      * Monta as duas peças da Ilha: o véu (atrás da barra aberta) e a pílula do centro (ponto laranja, hora, e o que está
@@ -2906,6 +2977,7 @@ class MainActivity : Activity() {
 
         val sombra = 0x99000000.toInt()
         val ponto = View(this).apply { background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(IconeCruz.COR_ACESA) } }
+        ilhaPontoView = ponto
         val hora = RelogioTela(this, data = false).apply {
             format12Hour = "HH:mm"; format24Hour = "HH:mm"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
@@ -2913,7 +2985,22 @@ class MainActivity : Activity() {
             typeface = Typeface.create(fonteUi, Typeface.BOLD)
             includeFontPadding = false
         }
+        ilhaHora = hora
         val temp = texto(18f, textoClaro, fonteUi).apply { includeFontPadding = false; maxLines = 1 }
+        // Trilho de estado (como os ícones de estado da Apple TV): gravando, não perturbe, visita, fone. Sem texto.
+        val trilho = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            visibility = View.GONE
+            setPaddingRelative(dp(10), 0, 0, 0)
+        }
+        ilhaTrilho = trilho
+        val contador = texto(12f, textoClaro, fonteUi).apply {
+            includeFontPadding = false; visibility = View.GONE
+            background = GradientDrawable().apply { cornerRadius = dp(9).toFloat(); setStroke(dp(1), 0x40FFFFFF) }
+            setPaddingRelative(dp(7), dp(2), dp(7), dp(2))
+        }
+        ilhaContador = contador
         fun copiarTemp() { temp.text = txtTemp.text.toString().takeIf { it.isNotBlank() && it != "…" }.orEmpty(); temp.visibility = if (temp.text.isEmpty() || ilhaEvento != null) View.GONE else View.VISIBLE }
         txtTemp.addTextChangedListener(espelho { copiarTemp() })
         val icone = ImageView(this).apply { visibility = View.GONE }
@@ -2936,33 +3023,122 @@ class MainActivity : Activity() {
                 cornerRadius = dp(20).toFloat(); setColor(0xC70A0B14.toInt()); setStroke(dp(1), 0x1FFFFFFF)
             }
             setPaddingRelative(dp(14), 0, dp(16), 0)
-            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            // O leitor de tela lê a fila inteira (antes a pílula era invisível para ele e para o MCP).
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
+            accessibilityLiveRegion = View.ACCESSIBILITY_LIVE_REGION_POLITE
             addView(ponto, LinearLayout.LayoutParams(dp(8), dp(8)).apply { marginEnd = dp(10) })
             addView(hora)
+            addView(trilho)
             addView(temp, LinearLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(10) })
             addView(extra, LinearLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(12) })
+            addView(contador, LinearLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(10) })
         }
         raiz.addView(pilula, FrameLayout.LayoutParams(WRAP, dp(40), Gravity.TOP or Gravity.CENTER_HORIZONTAL).apply {
             topMargin = dp(TOPO_PALCO + (ALTURA_TOPO - 40) / 2)
         })
+        val dica = texto(15f, Estilo.TEXTO, fonteUi).apply {
+            includeFontPadding = false; maxLines = 1; ellipsize = TextUtils.TruncateAt.END; maxWidth = dp(ILHA_TEXTO_MAX + 200)
+            background = GradientDrawable().apply { cornerRadius = dp(16).toFloat(); setColor(0xE60A0B14.toInt()); setStroke(dp(1), 0x26FFFFFF) }
+            setPaddingRelative(dp(16), dp(8), dp(16), dp(8))
+            alpha = 0f
+            importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO   // a pílula já lê a fila inteira
+        }
+        raiz.addView(dica, FrameLayout.LayoutParams(WRAP, WRAP, Gravity.TOP or Gravity.CENTER_HORIZONTAL).apply {
+            topMargin = dp(TOPO_PALCO + (ALTURA_TOPO - 40) / 2 + 46)
+        })
+        ilhaDica = dica
         ilhaPilula = pilula; ilhaExtra = extra; ilhaIcone = icone; ilhaBarras = barras; ilhaTexto = txt; ilhaTemp = temp
         copiarTemp()
         // As pílulas da barra mudam por todo lado (timer a cada segundo, rádio, rede): a Ilha lê o estado delas a cada
         // arrumação da tela. Barato: monta um Estado pequeno e só mexe na pílula quando o evento muda.
         topo.viewTreeObserver.addOnGlobalLayoutListener { atualizarIlha() }
         atualizarIlha()
+        ui.post(tarefaIlhaTique)
+    }
+
+    /** Fora da thread da tela: o que a Ilha lê de banco/agenda/sistema. Modo visita fecha a agenda (como no "Bom dia"). */
+    private fun lerFontesIlha() {
+        val agora = System.currentTimeMillis()
+        val hm = android.text.format.DateFormat.getTimeFormat(this)
+        ilhaLembrete = runCatching {
+            LembretesTv.listar(this).filter { it.inicio + BarraIlha.LEMBRETE_ATRASO_MS > agora }.minByOrNull { it.inicio }
+                ?.let { "${it.titulo} · ${hm.format(java.util.Date(it.inicio))}" to it.inicio }
+        }.getOrNull()
+        val visita = runCatching { ModoVisita.ativo(this) }.getOrDefault(false)
+        ilhaAgenda = if (visita) null else runCatching {
+            Agenda.eventosDaTv(this, agora - BarraIlha.AGENDA_ATRASO_MS, agora + BarraIlha.AGENDA_JANELA_MS)
+                .filter { !it.diaInteiro && it.inicio + BarraIlha.AGENDA_ATRASO_MS > agora }.minByOrNull { it.inicio }
+                ?.let { "${it.titulo} · ${hm.format(java.util.Date(it.inicio))}" to it.inicio }
+        }.getOrNull()
+        val ind = HashSet<BarraIlha.Indicador>()
+        if (runCatching { Gravacoes.resumoParaHome(this) }.getOrNull() != null) ind += BarraIlha.Indicador.GRAVANDO   // grava no ":player"
+        if (runCatching { NaoPerturbeTv.motivoAgora(this) }.getOrNull() != null) ind += BarraIlha.Indicador.NAO_PERTURBE
+        if (visita) ind += BarraIlha.Indicador.VISITA
+        if (foneLigado()) ind += BarraIlha.Indicador.FONE
+        ilhaIndicadores = ind
+    }
+
+    /** Fone com fio, Bluetooth (A2DP/BLE) ou aparelho auditivo como saída de som agora. */
+    private fun foneLigado(): Boolean = runCatching {
+        val am = getSystemService(android.media.AudioManager::class.java) ?: return false
+        val fones = setOf(android.media.AudioDeviceInfo.TYPE_WIRED_HEADPHONES, android.media.AudioDeviceInfo.TYPE_WIRED_HEADSET,
+            android.media.AudioDeviceInfo.TYPE_BLUETOOTH_A2DP, android.media.AudioDeviceInfo.TYPE_BLE_HEADSET,
+            android.media.AudioDeviceInfo.TYPE_HEARING_AID)
+        am.getDevices(android.media.AudioManager.GET_DEVICES_OUTPUTS).any { it.type in fones }
+    }.getOrDefault(false)
+
+    /** A pílula da barra aberta que responde ao evento (null = o evento não tem botão próprio). */
+    private fun botaoDoEvento(e: BarraIlha.Evento?): View? = when (e?.tipo) {
+        BarraIlha.Tipo.SEM_INTERNET -> pilulaSemInternet
+        BarraIlha.Tipo.TIMER -> pilulaTimer
+        BarraIlha.Tipo.ALARME -> pilulaAlarme
+        BarraIlha.Tipo.TOCANDO -> pilulaTocando
+        BarraIlha.Tipo.ANIVERSARIO -> pilulaAniversario
+        BarraIlha.Tipo.JOGO -> pilulaJogo
+        BarraIlha.Tipo.VENCIMENTO -> pilulaVencimento
+        BarraIlha.Tipo.SERVICO_FORA -> pilulaServico
+        BarraIlha.Tipo.LEMBRETE_CASA -> pilulaLembreteCasa
+        BarraIlha.Tipo.CONTAGEM -> pilulaContagem
+        else -> null
+    }
+
+    private fun pintarTrilho(t: BarraIlha.Trilho) {
+        val box = ilhaTrilho ?: return
+        if (t == ilhaTrilhoMostrado) return
+        ilhaTrilhoMostrado = t
+        box.removeAllViews()
+        for (i in t.mostrar) {
+            val ic: Drawable = when (i) {
+                BarraIlha.Indicador.GRAVANDO -> IconeLinha(IconeLinha.Tipo.GRAVAR, cor = ILHA_VERMELHO)
+                BarraIlha.Indicador.NAO_PERTURBE -> IconeLinha(IconeLinha.Tipo.LUA, fracaoLua = 0.22, cor = 0xFFD9D5CF.toInt())
+                BarraIlha.Indicador.VISITA -> IconeLinha(IconeLinha.Tipo.PESSOA, cor = 0xFFD9D5CF.toInt())
+                BarraIlha.Indicador.FONE -> IconeLinha(IconeLinha.Tipo.FONE, cor = 0xFFD9D5CF.toInt())
+            }
+            box.addView(ImageView(this).apply { setImageDrawable(ic) }, LinearLayout.LayoutParams(dp(15), dp(15)).apply { marginStart = dp(6) })
+        }
+        if (t.resto > 0) box.addView(texto(12f, textoClaro, fonteUi).apply { text = "+${t.resto}"; includeFontPadding = false },
+            LinearLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(6) })
+        box.visibility = if (t.mostrar.isEmpty()) View.GONE else View.VISIBLE
     }
 
     private fun atualizarIlha() {
         val pilula = ilhaPilula ?: return
         fun TextView.se(p: View) = text?.toString()?.takeIf { p.visibility == View.VISIBLE || p in cortadas }
-        val e = BarraIlha.escolher(BarraIlha.Estado(
+        val agora = System.currentTimeMillis()
+        val fila = BarraIlha.fila(BarraIlha.Estado(
             semInternet = txtSemInternet.se(pilulaSemInternet),
+            campainha = CasaHA.campainhaEm.takeIf { it > 0 }?.let {
+                "${getString(R.string.casa_campainha)} · ${android.text.format.DateFormat.getTimeFormat(this).format(java.util.Date(it))}" },
+            campainhaHaMs = CasaHA.campainhaEm.takeIf { it > 0 }?.let { agora - it },
             timer = txtTimer.se(pilulaTimer),
             alarme = txtAlarme.se(pilulaAlarme),
-            alarmeFaltaMs = alarmeEm?.let { it - System.currentTimeMillis() },
+            alarmeFaltaMs = alarmeEm?.let { it - agora },
+            lembrete = ilhaLembrete?.first,
+            lembreteFaltaMs = ilhaLembrete?.let { it.second - agora },
             tocandoTitulo = txtTocandoTitulo.se(capsulaTocando),
             tocando = barrasTocando.tocando,
+            agenda = ilhaAgenda?.first,
+            agendaFaltaMs = ilhaAgenda?.let { it.second - agora },
             aniversario = txtAniversario.se(pilulaAniversario),
             jogo = txtJogo.se(pilulaJogo),
             vencimento = txtVencimento.se(pilulaVencimento),
@@ -2970,6 +3146,56 @@ class MainActivity : Activity() {
             lembreteCasa = txtLembreteCasa.se(pilulaLembreteCasa),
             contagem = txtContagem.se(pilulaContagem),
         ))
+        pintarTrilho(BarraIlha.trilho(ilhaIndicadores))
+        if (fila != ilhaFila && BarraIlha.mesmaEstrutura(ilhaFila, fila)) {
+            // Só o texto mudou (o timer conta a cada segundo): não reinicia o rodízio nem repete o anúncio do TalkBack.
+            ilhaFila = fila
+            BarraIlha.agora = BarraIlha.paraMcp(fila)
+        } else if (fila != ilhaFila) {
+            val novo = BarraIlha.chegou(ilhaFila, fila)
+            ilhaPasso = BarraIlha.passoDepois(novo ?: ilhaEvento, fila)   // o que chegou vai para a tela na hora
+            if (novo != null) crescerIlha(novo)
+            ilhaFila = fila
+            val desc = BarraIlha.descricao(ilhaHora?.text?.toString().orEmpty(), fila)
+            pilula.contentDescription = desc
+            BarraIlha.agora = BarraIlha.paraMcp(fila)
+            (ilhaPontoView?.background as? GradientDrawable)?.setColor(when (BarraIlha.ponto(fila)) {
+                BarraIlha.Ponto.ALERTA -> ILHA_VERMELHO
+                BarraIlha.Ponto.ATENCAO -> Estilo.ATENCAO
+                BarraIlha.Ponto.CALMO -> IconeCruz.COR_ACESA
+            })
+            ui.removeCallbacks(tarefaIlhaGira)
+            if (fila.size > 1 && homeNaFrente) ui.postDelayed(tarefaIlhaGira, BarraIlha.RODIZIO_MS)
+        }
+        aplicarIlha()
+    }
+
+    /** Ilha que cresce (como a Dynamic Island): por 5 s, embaixo da pílula, o que chegou e "▲ para abrir". */
+    private fun crescerIlha(e: BarraIlha.Evento) =
+        crescerIlhaTexto(if (botaoDoEvento(e) != null) "${e.texto}  ·  ${getString(R.string.ilha_dica_abrir)}" else e.texto, e.atencao)
+
+    private fun crescerIlhaTexto(texto: String, atencao: Boolean) {
+        val d = ilhaDica ?: return
+        if (!homeNaFrente || !barraRecolhida) return
+        d.text = texto
+        d.setTextColor(if (atencao) Estilo.ATENCAO else Estilo.TEXTO)
+        d.animate().cancel()
+        if (semAnimacoes()) { d.alpha = 1f; d.translationY = 0f }
+        else { d.translationY = -dp(6).toFloat(); d.animate().alpha(1f).translationY(0f).setDuration(260).start() }
+        ui.removeCallbacks(tarefaIlhaEncolhe)
+        ui.postDelayed(tarefaIlhaEncolhe, BarraIlha.CRESCER_MS)
+    }
+
+    /** Mostra o evento da vez (rodízio) na pílula; só mexe nas views quando ele muda. */
+    private fun aplicarIlha() {
+        val pilula = ilhaPilula ?: return
+        val fila = ilhaFila
+        val e = BarraIlha.naVez(fila, ilhaPasso)
+        ilhaContador?.let { c ->
+            val t = BarraIlha.contador(fila, ilhaPasso)
+            if (c.text.toString() != t) c.text = t
+            c.visibility = if (t.isEmpty()) View.GONE else View.VISIBLE
+        }
         if (e == ilhaEvento) return
         val mudouTipo = e?.tipo != ilhaEvento?.tipo
         if (mudouTipo && ::capa.isInitialized && !semAnimacoes()) {
@@ -2982,12 +3208,13 @@ class MainActivity : Activity() {
             ilhaBarras?.tocando = false
         } else {
             ilhaTexto?.text = e.texto
-            ilhaTexto?.setTextColor(if (e.tipo == BarraIlha.Tipo.SEM_INTERNET || e.tipo == BarraIlha.Tipo.VENCIMENTO || e.tipo == BarraIlha.Tipo.SERVICO_FORA) Estilo.ATENCAO else Estilo.TEXTO)
+            ilhaTexto?.setTextColor(if (e.atencao) Estilo.ATENCAO else Estilo.TEXTO)
             val ic: Drawable? = when (e.tipo) {
                 BarraIlha.Tipo.SEM_INTERNET -> IconeApp(IconeApp.Tipo.SEM_REDE, Estilo.ATENCAO)
                 BarraIlha.Tipo.TIMER -> IconeApp(IconeApp.Tipo.TIMER)
                 BarraIlha.Tipo.ALARME -> IconeLinha(IconeLinha.Tipo.DESPERTADOR)
-                BarraIlha.Tipo.JOGO -> IconeApp(IconeApp.Tipo.TV)
+                BarraIlha.Tipo.JOGO, BarraIlha.Tipo.LEMBRETE -> IconeApp(IconeApp.Tipo.TV)
+                BarraIlha.Tipo.AGENDA -> IconeLinha(IconeLinha.Tipo.CALENDARIO)
                 BarraIlha.Tipo.SERVICO_FORA -> IconeApp(IconeApp.Tipo.SEM_REDE, Estilo.ATENCAO)
                 BarraIlha.Tipo.LEMBRETE_CASA -> IconeLinha(IconeLinha.Tipo.RECADO)
                 BarraIlha.Tipo.CONTAGEM -> IconeLinha(IconeLinha.Tipo.CALENDARIO)
@@ -2999,7 +3226,6 @@ class MainActivity : Activity() {
             extra.visibility = View.VISIBLE
         }
         ilhaTemp?.visibility = if (e != null || ilhaTemp?.text.isNullOrEmpty()) View.GONE else View.VISIBLE
-        pilula.contentDescription = listOfNotNull(e?.texto).joinToString()
     }
 
     /** Ao acordar a TV (Ilha): a barra fica aberta por 4 s, para quem chega ver tudo, e recolhe se o foco está na cruz. */
@@ -3677,9 +3903,15 @@ class MainActivity : Activity() {
         if (!modoMover) {
             // Cruz: Voltar no "Todos os apps" volta para a cruz (na cruz, Voltar não faz nada).
             if (todosAbertos && event.keyCode == KeyEvent.KEYCODE_BACK) { if (event.action == KeyEvent.ACTION_UP) fecharTodos(); return true }
+            if (centralAoSegurarCima(event)) return true
             if (tratarSegurar(event, currentFocus)) return true
             if (trocarDaFrente(event)) return true
-            return super.dispatchKeyEvent(event)
+            val cimaNaCruz = event.keyCode == KeyEvent.KEYCODE_DPAD_UP && event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0 &&
+                barraCruz == LayoutHome.BarraCruz.ILHA && cruz?.hasFocus() == true
+            val r = super.dispatchKeyEvent(event)
+            // Só conta o ▲ que SAIU da cruz para a barra (▲ entre itens da cruz continua repetindo normalmente).
+            if (cimaNaCruz) ilhaCimaDaCruz = cruz?.hasFocus() != true
+            return r
         }
         val pressionou = event.action == KeyEvent.ACTION_DOWN
         val soltou = event.action == KeyEvent.ACTION_UP

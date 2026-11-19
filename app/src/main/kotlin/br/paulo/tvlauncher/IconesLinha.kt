@@ -22,7 +22,9 @@ class IconeLinha(private val tipo: Tipo, private val fracaoLua: Double = 0.0, pr
                  private val cor: Int = 0xFFFFFFFF.toInt()) : Drawable() {
     enum class Tipo { HORIZONTE, LUA, GOTA, CHUVA, CALENDARIO, DESPERTADOR, RECADO,
         /** Protetor que reage ao tempo (17/11/2026): sol (UV), folha (ar), satélite (Estação Espacial), estrela (céu). */
-        SOL, FOLHA, SATELITE, ESTRELA }
+        SOL, FOLHA, SATELITE, ESTRELA,
+        /** Trilho de estado da Ilha (19/11/2026): fone ligado, modo visita (pessoa) e gravação (ponto cheio). */
+        FONE, PESSOA, GRAVAR }
 
     private val traco = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE; strokeWidth = 1.6f; strokeCap = Paint.Cap.ROUND; strokeJoin = Paint.Join.ROUND; color = cor
@@ -110,6 +112,17 @@ class IconeLinha(private val tipo: Tipo, private val fracaoLua: Double = 0.0, pr
                 c.drawPath(p, traco)
                 c.drawCircle(18.5f, 18.5f, 1.3f, cheio)
             }
+            Tipo.FONE -> {
+                // Arco da tiara e as duas conchas.
+                c.drawArc(RectF(4f, 4f, 20f, 20f), 180f, 180f, false, traco)
+                c.drawRoundRect(RectF(3.5f, 12.5f, 7.5f, 20f), 1.6f, 1.6f, traco)
+                c.drawRoundRect(RectF(16.5f, 12.5f, 20.5f, 20f), 1.6f, 1.6f, traco)
+            }
+            Tipo.PESSOA -> {
+                c.drawCircle(12f, 8f, 3.8f, traco)
+                c.drawArc(RectF(4.5f, 13.5f, 19.5f, 28.5f), 180f, 180f, false, traco)
+            }
+            Tipo.GRAVAR -> c.drawCircle(12f, 12f, 6f, cheio)
         }
         c.restore()
     }

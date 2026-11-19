@@ -18,6 +18,8 @@
         <item>As fichas de filmes e séries agora vêm do Trakt: sinopse em português, direção, elenco, trailer e o próximo episódio</item>
         <item>Tempo: previsão do MET Norway; a cidade ou o CEP são achados na própria TV, sem serviço de fora</item>
         <item>Simkl: conecte a sua conta para ver a nota da comunidade; a ficha convida a conectar</item>
+        <item>Barra de cima (Ilha): até 3 coisas se revezam, ícones de estado ao lado da hora, e o ponto fica âmbar ou vermelho quando algo pede atenção</item>
+        <item>O que acabou de chegar (campainha, lembrete, compromisso, despertador) aparece embaixo da pílula por alguns segundos; segure ▲ para abrir o painel rápido</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>Um cartão por filme</item>
@@ -25,6 +27,8 @@
         <item>Ficha da série</item>
         <item>Previsão</item>
         <item>Cidade</item>
+        <item>Fila da barra</item>
+        <item>Segurar ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>Em Filmes › Todos, um filme com cópia dublada e legendada aparece uma vez só, com a outra versão na ficha?</item>
@@ -32,5 +36,7 @@
         <item>Abra uma série que ainda está no ar: a ficha mostra a sinopse, as temporadas e o próximo episódio?</item>
         <item>A tela de Previsão abre com hoje, as horas e os próximos dias?</item>
         <item>Nos Ajustes, digitar a sua cidade (ou o CEP) acha o lugar e o tempo continua funcionando?</item>
+        <item>Com algo tocando e um timer ligado, a pílula de cima alterna entre os dois a cada poucos segundos, mostrando 1/2 e 2/2?</item>
+        <item>Na tela inicial, segurar ▲ abre o painel rápido, e um ▲ curto só abre a barra de cima?</item>
     </string-array>
 </resources>

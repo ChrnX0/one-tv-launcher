@@ -21,6 +21,8 @@
         <item>Movie and series details now come from Trakt: plot in your language, director, cast, trailer and the next episode</item>
         <item>Weather: forecast from MET Norway; the city or postal code is found on the TV itself, no outside service</item>
         <item>Simkl: connect your own account to see the community rating; the details page invites you to connect</item>
+        <item>Top bar (Ilha): up to 3 things take turns, small status icons next to the clock, and the dot turns amber or red when something needs attention</item>
+        <item>What just arrived (doorbell, reminder, appointment, alarm) grows under the pill for a few seconds; hold ▲ to open the quick panel</item>
     </string-array>
     <string-array name="roteiro_ids" translatable="false">
         <item>filmes_um_por_filme</item>
@@ -28,6 +30,8 @@
         <item>serie_trakt</item>
         <item>previsao_met</item>
         <item>cidade_offline</item>
+        <item>ilha_fila</item>
+        <item>ilha_central</item>
     </string-array>
     <string-array name="roteiro_titulos">
         <item>One card per movie</item>
@@ -35,6 +39,8 @@
         <item>Series details</item>
         <item>Forecast</item>
         <item>City</item>
+        <item>Top bar queue</item>
+        <item>Hold ▲</item>
     </string-array>
     <string-array name="roteiro_perguntas">
         <item>In Movies › All, does a movie with a dubbed and a subtitled copy appear only once, with the other version in its details page?</item>
@@ -42,5 +48,7 @@
         <item>Open a series that is still airing: does the details page show the plot, the seasons and the next episode?</item>
         <item>Does the Forecast screen open with today, the hours and the coming days?</item>
         <item>In Settings, typing your city (or postal code) finds it and the weather keeps working?</item>
+        <item>With something playing and a timer on, does the pill at the top switch between them every few seconds, showing 1/2 and 2/2?</item>
+        <item>On the home screen, holding ▲ opens the quick panel, and a short ▲ just opens the top bar?</item>
     </string-array>
 </resources>

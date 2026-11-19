@@ -599,7 +599,15 @@ object CasaHA {
         if (campainha.tocou(estado)) tocouCampainha(ctx)   // o estado já ficou guardado antes de buscar a foto
     }
 
+    /** Quando a campainha tocou por último (0 = nunca, desde que o processo subiu): a Ilha da home mostra por alguns minutos. */
+    @Volatile var campainhaEm = 0L
+        private set
+    /** A home (MainActivity) escuta para a Ilha crescer na hora, sem esperar o tique de 1 min. */
+    @Volatile var aoTocarCampainha: (() -> Unit)? = null
+
     private fun tocouCampainha(ctx: Context) {
+        campainhaEm = System.currentTimeMillis()
+        runCatching { aoTocarCampainha?.invoke() }
         Gatilhos.disparar(ctx, Gatilhos.Evento.CAMPAINHA)   // elevação 10.6
         val camera = texto(ctx, CHAVE_CAMERA)
         val foto = if (camera.isEmpty()) null else try { fotoCamera(ctx, camera) } catch (e: Exception) { null }
