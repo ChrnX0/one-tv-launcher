@@ -1,0 +1,992 @@
+{
+  "lang": "tr",
+  "path": "tr",
+  "label": "Türkçe",
+  "ui": {
+    "nav_features": "Özellikler",
+    "nav_plans": "Planlar",
+    "nav_developers": "Geliştiriciler",
+    "nav_help": "Yardım",
+    "cta_get": "Yakında Google Play'de",
+    "cta_see": "Yapabildiği her şeyi gör",
+    "plan_basic": "Basic",
+    "plan_pro": "Pro",
+    "plan_ultra": "Ultra",
+    "plan_from": "itibaren",
+    "how": "Nasıl",
+    "skip": "İçeriğe geç",
+    "language": "Dil",
+    "back_top": "Başa dön",
+    "footer_tagline": "Google TV ve Android TV için ana ekran.",
+    "footer_privacy": "Gizlilik",
+    "footer_terms": "Koşullar",
+    "footer_compat": "Cihazınızda çalışır mı?",
+    "footer_trademark": "Sofaly, Google ile bağlantılı değildir. Google TV, Android TV ve Chromecast, Google LLC'nin ticari markalarıdır.",
+    "of": "/"
+  },
+  "home": {
+    "title": "Sofaly · Televizyonunuz yeniden basit",
+    "description": "Sofaly, Google TV ve Android TV için ana ekrandır: her şey bir haç düzeninde (İzle, Dinle, Oyna, Uygulamalar), büyük yazı ve hiç reklam yok.",
+    "eyebrow": "Google TV ve Android TV için ana ekran",
+    "h1": "Televizyonunuz yeniden basit.",
+    "lead": "Sofaly, televizyonunuzun ana ekranını düzenli bir haçla değiştirir: İzle, Dinle, Oyna ve Uygulamalar, büyük yazıyla ve reklamsız. Üstelik evi gözetir, sizi uyandırır ve telefonunuzla konuşur.",
+    "hero_note": "Hesap yok, reklam yok, ne izlediğinizin takibi yok.",
+    "cross_title": "Tek ekran, dört yol",
+    "cross_lead": "◀ ▶ bir dünya seçin. ▲ ▼ içindekileri gezin. Bu kadar; evdeki herkes bir dakikada öğrenir.",
+    "worlds": {
+      "continue": [
+        "Devam et",
+        "Kaldığınız yere dönün: bölüm, radyo, podcast ya da uygulama."
+      ],
+      "watch": [
+        "İzle",
+        "Video uygulamalarınız, bilgisayardaki veya USB bellekteki filmleriniz ve her şeyi oynatan bir oynatıcı."
+      ],
+      "listen": [
+        "Dinle",
+        "Dünyanın her yerinden radyolar ve podcast'ler, tam ekran oynatıcı ve uyku zamanlayıcısıyla."
+      ],
+      "play": [
+        "Oyna",
+        "Bulut, PC ve retro oyunlar tek yerde, kumandanız zaten eşlenmiş halde."
+      ],
+      "apps": [
+        "Uygulamalar",
+        "En çok kullandığınız 8 tanesi önde, diğerleri bir tık ötede."
+      ]
+    },
+    "mock": {
+      "weather": "25° · Parçalı bulutlu",
+      "day": "Çarşamba",
+      "date": "18 Kasım",
+      "watch_items": [
+        "Filmler",
+        "Diziler",
+        "Ağda",
+        "YouTube"
+      ],
+      "watch_title": "Ağda",
+      "watch_detail": "Bilgisayarınızdaki filmler · 214 başlık",
+      "listen_items": [
+        "Radyo",
+        "Podcast'ler",
+        "Şimdi çalıyor"
+      ],
+      "listen_title": "Radyo",
+      "listen_detail": "Dünyanın her yerinden istasyonlar, ada veya ülkeye göre",
+      "play_items": [
+        "Bulut",
+        "PC'den",
+        "Retro",
+        "Ekip"
+      ],
+      "play_title": "Oyunlar",
+      "play_detail": "3 bulut oyunu · kumanda bağlı",
+      "apps_items": [
+        "YouTube",
+        "Netflix",
+        "Prime Video",
+        "Tüm uygulamalar"
+      ],
+      "apps_title": "Uygulamalar",
+      "apps_detail": "En çok kullandığınız 8 tanesi",
+      "continue_items": [
+        "4. bölüm",
+        "Radyo",
+        "Podcast"
+      ],
+      "continue_title": "Devam et",
+      "continue_detail": "4. bölümde kaldı · 21 dk kaldı"
+    },
+    "why_title": "Google'ın ana ekranını neden değiştirmeli",
+    "why_lead": "Televizyonla gelen ana ekran satış yapmak için tasarlandı. Sofaly ise ailenizin kullanması için yapıldı.",
+    "why_rows": [
+      [
+        "Ana ekranda reklam",
+        "Evet: sponsorlu öneriler ve reklamlar",
+        "Asla"
+      ],
+      [
+        "Her ekranda büyük yazı",
+        "Hayır",
+        "Normal, Büyük veya Daha büyük"
+      ],
+      [
+        "Televizyonu açan alarm",
+        "Hayır",
+        "Açar, sesi yavaşça yükseltir ve günaydın der"
+      ],
+      [
+        "Ana ekranda radyo ve podcast",
+        "Sadece uygulamalarla",
+        "Kendi dünyasında, Dinle"
+      ],
+      [
+        "Bilgisayardan veya NAS'tan filmler",
+        "Sadece uygulamalarla",
+        "Ağda, afişler ve kaldığı yerden devamla"
+      ],
+      [
+        "Evdeki her telefondan kontrol",
+        "Basit kumanda",
+        "PIN korumalı tam bir panel"
+      ],
+      [
+        "Çocuk profili ve yatma saati",
+        "Sınırlı",
+        "İzinli uygulamalar, ses sınırı ve çıkmak için PIN"
+      ],
+      [
+        "Ayarlarınızın yedeği",
+        "Hayır",
+        "Her gece, parolayla kilitli"
+      ]
+    ],
+    "why_head": [
+      "",
+      "Google TV ana ekranı",
+      "Sofaly"
+    ],
+    "why_source": "Google TV ana ekranında reklam: Android Authority, Nisan 2026.",
+    "highlights_title": "Tüm ev için yapıldı",
+    "highlights": [
+      [
+        "access",
+        "Büyükler için de",
+        "Büyük yazı, uygulamanın adını söyleyen basit mod, yüksek kontrast ve ekran okuyucu. 15 dilde."
+      ],
+      [
+        "alarm",
+        "Sizinle uyanır",
+        "Alarm televizyonu kendiliğinden açar, sesi yavaşça yükseltir ve Günaydın'ı açar: saat, hava ve ajanda."
+      ],
+      [
+        "house",
+        "Evi gözetir",
+        "Home Assistant ışıkları, sahneleri ve kapı zili televizyonda. Herkes çıkınca uyur."
+      ],
+      [
+        "phone",
+        "Telefonunuzla konuşur",
+        "Evdeki her telefon veya bilgisayardan PIN ile kontrol edin, yazın ve mesaj gönderin."
+      ],
+      [
+        "sun",
+        "Doğru hava durumu",
+        "Anlık hava en yakın havalimanından gelir: tahmin değil, ölçüm. Tek OK ile 9 günlük tahmin."
+      ],
+      [
+        "lock",
+        "Kendine bakar",
+        "Her gece kilitli bir yedek, siz uyurken bakım ve neyin ters gittiğini anlatan bir teşhis."
+      ]
+    ],
+    "chapters_title": "Yaptığı her şey, kendisi gibi düzenli",
+    "chapters_lead": "80'den fazla özellik. Her birinin açıklamasını görmek için bir dünya seçin.",
+    "privacy_title": "Sizin olan evde kalır",
+    "privacy_text": "Sofaly hesap istemez, reklam göstermez ve ne izlediğinizi takip etmez. Ayarlar, fotoğraflar, mesajlar ve yedekler televizyonda ya da bağlarsanız kendi hesabınızda kalır. Televizyon yalnızca açtığınız hizmetlerle konuşur ve gizlilik politikası her birini listeler.",
+    "privacy_link": "Gizlilik politikasını okuyun",
+    "dev_title": "Uygulamanız mı var? Ana ekrana koyun.",
+    "dev_text": "Sofaly hazır kartlarla gelir (ay, kurlar, geri sayım, hatırlatıcı). Eklenti, ana ekrana bir kart daha gönderen kendi Android TV uygulamanızdır: yoldaki sipariş, gelen otobüs, apartman duyurusu. SDK yok, ücret yok ve uygulama sizin kalır.",
+    "dev_link": "Geliştirici kitini tanıyın",
+    "plans_title": "Ücretsiz başlayın. İstediğinizde büyüyün.",
+    "plans_text": "Basic'te zaten tam ana ekran, oynatıcı, Dinle, Oyna, alarm ve ekran koruyucu var. Pro ve Ultra telefonu, evi ve aileyi ekler.",
+    "plans_link": "Planları karşılaştırın",
+    "faq_title": "Kısa sorular",
+    "faq": [
+      [
+        "Televizyonumda çalışır mı?",
+        "Google TV ve Android TV'de çalışır: Google TV'li Chromecast, Google TV'li televizyonlar ve Android TV kutuları gibi. Uyumluluk sayfası test edilen cihazları listeler."
+      ],
+      [
+        "Kurmak için bilgisayar gerekir mi?",
+        "Hayır. Google Play'den doğrudan televizyona kurun ve adımları kumandayla izleyin."
+      ],
+      [
+        "Uygulamalarım kalır mı?",
+        "Hepsi. Sofaly sadece ana ekranı değiştirir: Netflix, YouTube, Prime Video ve diğerleri her zamanki gibi açılır, mikrofon düğmesi hâlâ Google Asistan'dır."
+      ],
+      [
+        "Reklam var mı?",
+        "Hayır, ücretsiz planda bile. Sofaly reklam satmaz ve ne izlediğinizi takip etmez."
+      ],
+      [
+        "Kanal veya film içeriyor mu?",
+        "Hayır. Sofaly zaten sizin olanı düzenler: uygulamalarınızı, dosyalarınızı ve açık radyo ve podcast'leri."
+      ],
+      [
+        "Google'ın ana ekranına dönmek istersem?",
+        "Televizyonun ayarlarından Google'ın ana ekranını yeniden seçmeniz yeterli. Sizin hiçbir şeyiniz silinmez."
+      ]
+    ],
+    "final_title": "Televizyonunuz yeniden basit.",
+    "final_text": "Kurun, HOME'a basın ve tüm ev anlasın."
+  },
+  "features_page": {
+    "title": "Sofaly'nin yaptığı her şey",
+    "description": "Sofaly'nin her özelliği açıklamalı: haç ana ekran, İzle, Dinle, Oyna, ev, hava durumu, aile, telefon ve gizlilik.",
+    "h1": "Sofaly'nin yaptığı her şey",
+    "lead": "Televizyon ekranıyla aynı düzende: her seferinde bir dünya. Her özelliğin etiketi hangi planla başladığını söyler.",
+    "index": "Dünyalar"
+  },
+  "chapters": {
+    "home": [
+      "Haç",
+      "Herkesin anladığı, istediğiniz gibi düzenlenen derli toplu bir ekran."
+    ],
+    "watch": [
+      "İzle",
+      "Filmleriniz, dizileriniz ve ev sineması kalitesinde bir oynatıcı."
+    ],
+    "listen": [
+      "Dinle",
+      "Radyo ve podcast'ler, videoyla aynı özenle."
+    ],
+    "play": [
+      "Oyna",
+      "Tüm oyunlarınız tek yerde, kumandaya hazır."
+    ],
+    "apps": [
+      "Uygulamalar",
+      "Uygulamalarınız mantıklı bir sırada."
+    ],
+    "house": [
+      "Ev",
+      "Alarm, zamanlayıcılar, otomasyonlar ve akıllı ev."
+    ],
+    "sky": [
+      "Hava ve ekran koruyucu",
+      "Doğru hava durumu ve açık bırakmaya değer bir ekran koruyucu."
+    ],
+    "family": [
+      "Aile",
+      "Herkese bir profil, çocuklara özen ve misafirlere sıcak bir karşılama."
+    ],
+    "phone": [
+      "Telefon ve bilgisayar",
+      "Televizyon evdeki cihazlarla konuşur."
+    ],
+    "care": [
+      "Kendine bakar",
+      "Yedek, bakım ve teşhis, sizin hatırlamanıza gerek olmadan."
+    ],
+    "everyone": [
+      "Herkes için",
+      "Farklı şekilde gören, duyan veya kumanda kullananlar için yapıldı."
+    ],
+    "privacy": [
+      "Gizlilik",
+      "Reklam yok, takip yok ve gereken yerde PIN."
+    ]
+  },
+  "features": {
+    "cross": [
+      "Haç",
+      "Devam et, İzle, Dinle, Oyna ve Uygulamalar tek sırada. Seçtiğiniz dünya büyür, içindekiler hemen altında.",
+      "◀ ▶ dünya değiştirir, ▲ ▼ sütunda iner, OK açar."
+    ],
+    "continue": [
+      "Devam et",
+      "Yaptığınız şeye dönmek için tek yer: bölüm, istasyon, podcast veya son uygulama.",
+      "Haçın ilk öğesidir."
+    ],
+    "topbar": [
+      "Üst çubuk",
+      "Arama, ses, tek satırda hava durumu ve saat, hep aynı yerde. Siz gezinirken ekran nefes alsın diye toplanır.",
+      "▲ ile ona çıkın."
+    ],
+    "quick-panel": [
+      "Hızlı panel",
+      "Wi-Fi, Bluetooth, uyku zamanlayıcısı, ses çıkışı, alarm, profiller, bildirimler ve alışveriş listesi, her uygulamadan.",
+      "GERİ'yi basılı tutun."
+    ],
+    "remote": [
+      "Kumandanız, kurallarınız",
+      "HOME her zaman Sofaly'ye döner. GERİ'yi basılı tutmak hızlı paneli, HOME'u basılı tutmak Ev'i, bir uygulamada OK'u basılı tutmak onun menüsünü açar.",
+      "Tuş test aracı televizyonun aldığı her düğmeyi gösterir."
+    ],
+    "now-playing": [
+      "Şimdi çalıyor",
+      "Üstte çalan şeyin kapağı ve adıyla bir hap. OK duraklatır veya sürdürür, OK'u basılı tutmak uygulamayı açar.",
+      "Ana ekran › Diğer seçenekler'den açın."
+    ],
+    "themes": [
+      "Temalar ve arka planlar",
+      "Koyu, odaktaki şeyin görseliyle. Galeri, her gün The Met'ten bir tabloyla. Gökyüzü, uydu ve haritayla. Ya da kendi arka planınız, fotoğraf veya video.",
+      "Koyu, Galeri ve Gökyüzü Basic'te; diğerleri Pro'da."
+    ],
+    "icons": [
+      "Sevdiğiniz simgeler",
+      "Play'den bir simge paketi kullanın veya tek bir uygulamanın simgesini tek tek değiştirin.",
+      "Uygulamada OK'u basılı tutun › Simgeyi değiştir."
+    ],
+    "card-moon": [
+      "Ay evresi",
+      "Bu geceki ay ve ne kadarının aydınlık olduğu, internetsiz, televizyonun kendisinde hesaplanır.",
+      "Tahminde, ekran koruyucuda ve gece hava simgesinde. Ayarlar › Görünüm."
+    ],
+    "card-countdown": [
+      "Geri sayım",
+      "Seçtiğiniz tarihe ya da bir sonraki tatile kaç gün kaldığı.",
+      "Ekranın üstündeki hapta. Ayarlar › Görünüm."
+    ],
+    "card-reminder": [
+      "Ev hatırlatıcısı",
+      "Seçtiğiniz hafta günlerinde geri gelen bir not: geri dönüşüm günü, ilaç, ders.",
+      "Ekranın üstündeki hapta. Ayarlar › Görünüm."
+    ],
+    "card-status": [
+      "Hizmetinizin durumu",
+      "Televizyon verdiğiniz bir adresi dener ve açık olup olmadığını gösterir: ev sunucusu, mağazanın sitesi.",
+      "Ekranın üstündeki hapta. Ayarlar › Görünüm."
+    ],
+    "card-rates": [
+      "Günün kurları",
+      "Döviz, bitcoin ve ether, günün değeriyle, açık resmi kaynaklardan.",
+      "Hava durumunun yanında, üst çubukta. Ayarlar › Görünüm."
+    ],
+    "card-match": [
+      "Takımınızın sıradaki maçı",
+      "Takımınızın ne zaman ve kime karşı oynayacağı, ana ekranda bir kartta.",
+      "Haçtaki TV öğesinde. Ayarlar › Görünüm."
+    ],
+    "plugin-cards": [
+      "Diğer uygulamalardan kartlar",
+      "Sofaly'nin kendi kartlarının yanında ortak uygulamalar da kendi kartlarını ana ekrana koyar: sipariş, otobüs, apartman duyurusu.",
+      "Kartlar İzle'nin sonunda görünür."
+    ],
+    "network-library": [
+      "Ağda",
+      "Plex, Jellyfin, Emby, PC veya NAS klasörleri (SMB, WebDAV, FTP, SFTP, NFS), OneDrive, Dropbox, Box, Google Drive, UPnP ve USB belleklerden video, müzik ve fotoğraf.",
+      "Açık sunucular ve USB bellekler kendiliğinden görünür; gerisi Ekle'den."
+    ],
+    "player": [
+      "Her şeyi oynatan bir oynatıcı",
+      "Dolby (AC3, E-AC3), DTS ve TrueHD ses, Blu-ray, DVD ve anime altyazıları, Kodi veya VLC kurmadan.",
+      "Video sırasında ses, altyazı ve altyazı boyutu için ▼'ye basın."
+    ],
+    "resume": [
+      "Kaldığınız yerden devam eder",
+      "Filmler ve bölümler doğru yerden döner. Sonraki bölüm 10 saniye sonra başlar ve art arda 3 bölümden sonra televizyon hâlâ izleyip izlemediğinizi sorar.",
+      "Kendiliğinden çalışır."
+    ],
+    "skip-intro": [
+      "Jeneriği atla",
+      "Bir dizinin jeneriği biliniyorsa “Jeneriği atla · OK” görünür. Jeneriği bir kez işaretleyebilirsiniz, televizyon hatırlar.",
+      "Fabrikadan açık."
+    ],
+    "audio-subtitles": [
+      "Tercih ettiğiniz ses ve altyazı",
+      "Altyazılı orijinal veya dublaj, bir kez seçilir ve her başlık için hatırlanır. Dosyada yoksa internetten altyazı.",
+      "TV ve filmler › Ses ve altyazı."
+    ],
+    "easy-viewing": [
+      "Daha iyi gör ve duy",
+      "Siyah kutuda veya sarı altyazılar, konuşmayı öne çıkaran “Daha net ses” ve gürültülü filmleri yumuşatıp sessizleri yükselten “Dengeli ses”.",
+      "Oynatıcının ▼ menüsünde."
+    ],
+    "auto-subtitles": [
+      "Otomatik altyazı",
+      "Kendi dilinizde altyazı yoksa televizyon mevcut olanı çevirir.",
+      "Oynatıcının altyazı menüsünden seçin."
+    ],
+    "movie-pages": [
+      "Tam film sayfaları",
+      "Afiş, puan, oyuncular, fragman, yaş sınırı ve filmin serisi güzel bir sayfada, büyük yazıyla.",
+      "Bir film veya dizide OK."
+    ],
+    "lists": [
+      "Trakt ve Simkl listeleriniz",
+      "İzlemek istedikleriniz ve izledikleriniz, hesabınız ve diğer cihazlarınızla eşitlenmiş.",
+      "TV ve filmler › Hizmetler'deki QR ile giriş yapın."
+    ],
+    "search": [
+      "Her şey için tek arama",
+      "Filmleri, dizileri, istasyonları ve uygulamaları bir kerede bulur, aynı aramayı YouTube, Netflix veya Prime Video'ya taşır.",
+      "Üst çubukta veya sesle."
+    ],
+    "radio": [
+      "Dünyanın her yerinden radyo",
+      "Ada, ülkeye veya türe göre binlerce açık radyo, favorileriniz ve son dinledikleriniz.",
+      "Dinle › Radyo."
+    ],
+    "podcasts": [
+      "Podcast'ler",
+      "Adıyla abone olun, televizyonda dinleyin ve bölüme kaldığınız yerden devam edin.",
+      "Dinle › Podcast'ler."
+    ],
+    "podcast-search": [
+      "Podcast keşfet",
+      "Tüm açık podcast kataloğunda arayın ve ülkenizde neyin popüler olduğunu görün.",
+      "Dinle › Podcast'ler › Ara."
+    ],
+    "podcast-player": [
+      "Tam ekran oynatıcı",
+      "Büyük kapak, bölümler, hız ve bölüm sonunda duraklatan uyku zamanlayıcısı.",
+      "Dinle › Şimdi çalıyor › Oynatıcıyı aç."
+    ],
+    "phone-sound": [
+      "Ses kulaklığınızda",
+      "Filmin sesi telefonunuzun kulaklığına senkronize gider; gece kimseyi uyandırmadan izleyin.",
+      "Oynatıcının ▼ menüsü › Ses telefonda."
+    ],
+    "games-hub": [
+      "Tüm oyunlarınız tek yerde",
+      "GeForce NOW, Steam Link, Moonlight, PS Remote Play, RetroArch ve televizyonun oyunları uygulama sırasından çıkıp Oyna'da yaşar: Bulut, PC'den, Retro ve TV'de.",
+      "Grubunu değiştirmek için oyunda OK'u basılı tutun."
+    ],
+    "pc-games": [
+      "Üst kattaki PC'de oynayın",
+      "Televizyon bilgisayarı ağ üzerinden uyandırır, yanıt vermesini bekler ve Moonlight ya da Steam Link'i açar.",
+      "Bilgisayarı web panelinde bir kez kaydedin."
+    ],
+    "network-test": [
+      "Ağı test et",
+      "İnternetinizin bulut oyununu kaldırıp kaldıramayacağını söyler, zayıf ağda bulut oyunu açmadan önce uyarır.",
+      "Oyna › Ağı test et."
+    ],
+    "controllers": [
+      "Oyun kumandaları",
+      "Menülerde aramadan kumanda eşleyin, bağlı olanları üstte görün ve isterseniz bağlanan kumanda Oyna'yı açsın.",
+      "Oyna › Kumanda eşle."
+    ],
+    "game-mode": [
+      "Oyun modu",
+      "Bir oyun açıkken ekran koruyucu, gece filtresi ve bildirimler maçın bitmesini bekler.",
+      "Kendiliğinden açılır."
+    ],
+    "crew": [
+      "Discord ekibiniz",
+      "Discord sunucunuzdan kimin çevrimiçi olduğunu ve hangi oyunda olduğunu görün, ekibi doğrudan televizyondan çağırın.",
+      "Sunucu widget'ını açın ve numarasını yapıştırın."
+    ],
+    "apps-top": [
+      "Favorileriniz önde",
+      "Uygulamalar en çok açtığınız 8 uygulamayı gösterir, “Tüm uygulamalar” geri kalanı bir ızgarada getirir.",
+      "Haçtaki Uygulamalar."
+    ],
+    "apps-organize": [
+      "Sizin tarzınız",
+      "Herhangi bir uygulamayı taşıyın, yığınlayın veya gizleyin. Kullanmadığınız fabrika uygulamaları yoldan çekilir.",
+      "Bir uygulamada OK'u basılı tutun."
+    ],
+    "app-buttons": [
+      "Serbest Netflix ve YouTube tuşları",
+      "Kumandanın uygulama tuşları istediğiniz uygulamayı açar. Açmak için basın, değiştirmek için 3 saniye basılı tutun.",
+      "Orijinal kumandayla çalışır."
+    ],
+    "alarm": [
+      "Televizyonu açan alarm",
+      "Vakti gelince televizyon kendiliğinden açılır, ses yavaşça yükselir ve erteleme vardır. Her alarmın adı, günleri, sesi ve ses seviyesi vardır, hatta bir uygulama veya son istasyon.",
+      "GERİ'yi basılı tutun › Alarm."
+    ],
+    "timers": [
+      "Zamanlayıcılar ve kum saati",
+      "Ekranda uyarıyla en fazla 3 adlandırılmış zamanlayıcı ve kronometre.",
+      "“Hey Google, 10 dakika sonra hatırlat'ı aç”."
+    ],
+    "gentle-off": [
+      "Yumuşak kapanış",
+      "Uyku zamanlayıcısı son 5 dakikada ekranı karartır ve sesi kısar; kesilince kimse uyanmaz.",
+      "Hızlı paneldeki zamanlayıcı kutucuğu."
+    ],
+    "idle-off": [
+      "İzleyen yoksa kapanır",
+      "Seçtiğiniz süre boyunca tuşa basılmazsa televizyon büyük yazıyla hâlâ izleyip izlemediğinizi sorar, sonra uyur.",
+      "Ekran ve güç › Boştayken kapat."
+    ],
+    "recipes": [
+      "Hazır tarifler",
+      "Uyku, Dizi ve Maç televizyonu tek seferde ayarlar (ses, ekran ve bildirimler). Bir OK uygular, bir diğeri geri alır.",
+      "Hızlı panel."
+    ],
+    "automations": [
+      "Otomasyonlar",
+      "Belirli bir saatte, bir tuşa basıldığında veya bir şey olduğunda (film durakladı, herkes çıktı, yağmur geliyor): televizyon bir uygulama açar, bir sahne çalıştırır veya kapanır.",
+      "Ev ve otomasyonlar › Otomasyonlar."
+    ],
+    "home-assistant": [
+      "Televizyonda Home Assistant",
+      "Işıklar, prizler, vantilatörler, panjurlar, klima ve sahneler, kanepeden. Arada bulut olmadan, ağınızdaki sunucunuzla konuşur.",
+      "HOME'u basılı tutun."
+    ],
+    "doorbell": [
+      "Kapıda kim var",
+      "Kapı zili çalınca kameranın görüntüsü izlediğinizin üzerinde belirir.",
+      "Home Assistant ile."
+    ],
+    "presence": [
+      "Herkes çıkınca uyur",
+      "UniFi yönlendiriciyle televizyon, evdekilerin telefonlarının çıktığını fark eder ve uyur.",
+      "Ekran ve güç › Diğer seçenekler."
+    ],
+    "voice": [
+      "Sesli kısayollar",
+      "“Hey Google, Hava raporu'nu aç” tahmini sesli okur. Filmler, Evim, Pano, zamanlayıcılar ve kapatma aynı şekilde açılır.",
+      "Mikrofon düğmesini kullanın."
+    ],
+    "weather-now": [
+      "Bugünün havası, ölçülmüş",
+      "Sıcaklık en yakın havalimanının raporundan gelir; gündüz/gece simgesi televizyonun bulunduğu yerdeki gün doğumu ve batımını izler.",
+      "Ana ekranın üstünde."
+    ],
+    "weather-3": [
+      "Üç modelden yağmur",
+      "Yağmur olasılığı üç hava modelinin (ECMWF, ICON ve GFS) medyanıdır; tek başına herhangi birinden daha az yanılır.",
+      "Tahminde kendiliğinden görünür."
+    ],
+    "forecast": [
+      "Tam ekran tahmin",
+      "Önümüzdeki 24 saat, yağış grafiği, 9 gün, hava kalitesi, güneş ve ay.",
+      "Hava durumunda OK."
+    ],
+    "rain-alert": [
+      "Yağmur uyarısı",
+      "Yağmur başlamak üzereyken uygulamanızın üzerinde bir uyarı. Çamaşırları toplama vakti.",
+      "Ana ekran › Hava durumu."
+    ],
+    "screensaver": [
+      "Açık bırakmaya değer ekran koruyucu",
+      "Selamlama, büyük saat, tarih, hava ve bildirim, sonraki alarm ve mesaj kartları. Galeri temasında günün tablosu yavaşça kayar, ekranda iz kalmaz.",
+      "Ekran ve güç › Ekran koruyucu."
+    ],
+    "photos": [
+      "Ekran koruyucuda fotoğraflarınız",
+      "Telefondan fotoğraf gönderin veya bir ağ klasörü seçin. Yalnızca televizyonun gördüğü bir klasörde dururlar.",
+      "Bir QR paneli doğru sayfada açar."
+    ],
+    "good-morning": [
+      "Günaydın",
+      "Alarmı kapattığınızda: selamlama, saat, tahmin ve günün ajandası; televizyon bunları sesli okuyabilir.",
+      "“Hey Google, Günaydın'ı aç”."
+    ],
+    "calendar": [
+      "Google Takvim",
+      "Bugünün etkinlikleri ve doğum günleri televizyonda, tek hesaptan veya hepsinden birlikte.",
+      "Üstteki tarihte OK."
+    ],
+    "night-filter": [
+      "Gece filtresi",
+      "Geceleri ekran daha sıcak ve gözlere daha yumuşak olur.",
+      "Ekran ve güç › Diğer seçenekler."
+    ],
+    "recap": [
+      "Haftalık özet",
+      "Pazar akşamı, uygulama başına ekran süresi, kullanılan internet ve ağ kesintileriyle bir kart.",
+      "Ekran ve güç › Diğer seçenekler."
+    ],
+    "profiles": [
+      "Herkese bir profil",
+      "Televizyondaki her Google hesabının kendi favorileri, devam edilecekleri ve uygulama sırası vardır.",
+      "GERİ'yi basılı tutun › Profiller."
+    ],
+    "kid-profile": [
+      "Çocuk profili",
+      "Bir profili çocuk olarak işaretleyin: çocuk modu ve yatma saati kendiliğinden açılır, çıkmak ebeveyn PIN'i ister.",
+      "Hızlı panel › Profiller."
+    ],
+    "bedtime": [
+      "Yatma saati",
+      "Seçtiğiniz saatlerde yalnızca izinli uygulamalar açılır ve sesin bir sınırı olur.",
+      "Aile › Diğer seçenekler."
+    ],
+    "screen-time": [
+      "Günlük ekran süresi",
+      "Seçtiğiniz kişiler için günlük TV sınırı.",
+      "Aile › Diğer seçenekler."
+    ],
+    "guest": [
+      "Misafir modu",
+      "Misafirleriniz varken profilinizi, ajandanızı ve seçtiğiniz uygulamaları gizler.",
+      "Hızlı paneldeki Misafir kutucuğu."
+    ],
+    "guest-wifi": [
+      "Misafir Wi-Fi",
+      "Parolayı bir kez yazın; misafirler televizyondaki QR'ı okutur ve bağlanır.",
+      "Aile › Misafir Wi-Fi."
+    ],
+    "family-board": [
+      "Aile panosu",
+      "Alışveriş listesi, sabitlenmiş notlar ve bugünün doğum günleri, hızlı panelde ve ekran koruyucuda.",
+      "Telefondan düzenleyin; OK bir öğeyi işaretler."
+    ],
+    "family-link": [
+      "Uzaktan mesajlar",
+      "Uzakta yaşayan aile, her yerden evdeki televizyona mesaj ve fotoğraf gönderir.",
+      "Bağlantıyla davet."
+    ],
+    "video-message": [
+      "Video mesajları",
+      "Aileden kısa bir video, gönderenin adıyla televizyonda belirir.",
+      "Telefondaki panelden."
+    ],
+    "web-panel": [
+      "Telefonda ve bilgisayarda panel",
+      "Kumanda, Türkçe karakterlerle yazma, televizyon ekranını canlı görme, ekran koruyucu fotoğrafları, pano ve yedekler, evdeki her cihazın tarayıcısından.",
+      "Uzaktan erişim › Telefondan giriş (QR)."
+    ],
+    "ask-tv": [
+      "Televizyona sorun",
+      "“YouTube'u aç”, “7 dakika sonra hatırlat”, “30 dakika sonra kapan” yazın veya söyleyin, televizyon yapar.",
+      "Telefondaki panelde."
+    ],
+    "share": [
+      "Telefondan paylaşın",
+      "Uygulama olarak kurulduğunda panel Paylaş'ta görünür: YouTube videosu ve bağlantı televizyonda açılır, metin mesaja dönüşür.",
+      "Paylaş › Sofaly."
+    ],
+    "network-drive": [
+      "Ağ sürücüsü olarak televizyon",
+      "Dosyaları sürükleyerek televizyona kopyalayın: Windows'ta Bu Bilgisayar'da telefon gibi görünür; Mac, Linux ve telefonlarda güvenli WebDAV ile.",
+      "Uzaktan erişim › Ağ sürücüsü olarak göster."
+    ],
+    "windows": [
+      "Windows'ta kısayol",
+      "Televizyon, Gezgin'in Ağ bölümünde paneli açan bir kısayolla görünür, IP'si değişse bile.",
+      "Panel açık olduğu sürece açık."
+    ],
+    "continue-tv": [
+      "Başka televizyonda devam et",
+      "Salonda mı bıraktınız? Yatak odasına gönderin: diğer televizyon “Kaldığınız yerden devam edilsin mi?” der ve aynı yerden açar.",
+      "Oynatıcı menüsü › Başka televizyona gönder."
+    ],
+    "together": [
+      "Birlikte izleyin",
+      "İki ev aynı şeyi aynı anda izler: burada duraklatın, orada da durur; köşede tepkilerle.",
+      "Aile televizyonları arasında davet."
+    ],
+    "homes": [
+      "Birden fazla ev",
+      "Kendi evinizdeki ve anne babanızın evindeki televizyonu aynı telefondan yönetin.",
+      "Telefon uygulamasından."
+    ],
+    "backup": [
+      "Her gece kilitli yedek",
+      "Televizyon boştayken, parolanızla kilitli tam bir yedek. Son 7'si tutulur ve televizyon her gece geri yüklenebildiğini kontrol eder.",
+      "Sistem › Otomatik yedek."
+    ],
+    "cloud-backup": [
+      "Bulutta bir kopya",
+      "Kopyalar ayrıca Google Drive, OneDrive, Dropbox, Box, NAS veya USB belleğe gider. Kilitli: bulut bile okuyamaz.",
+      "Sistem › Otomatik yedek."
+    ],
+    "maintenance": [
+      "Gece bakımı",
+      "Siz uyurken artıkları temizler, izinleri onarır ve alarmları yeniden planlar.",
+      "Kendiliğinden çalışır."
+    ],
+    "diagnose": [
+      "TV teşhisi",
+      "İnternet, DNS ve bir uygulamanın neden durduğu, hepsi bir arada ve anlaşılır cümlelerle.",
+      "“Hey Google, TV teşhisi'ni aç”."
+    ],
+    "scoreboard": [
+      "Bu televizyon nasıl",
+      "Televizyon kendi sayılarını (açılış süresi, çökmeler, zamanında çalan alarmlar) ölçer ve tek ekranda gösterir. Hiçbir şey evden çıkmaz.",
+      "Sistem › Bu televizyon nasıl."
+    ],
+    "safe-mode": [
+      "Güvenli mod",
+      "Yeni bir sürüm kurulumdan hemen sonra sorun çıkarırsa televizyon güvenli moda geçer ve çıkış yolunu gösterir.",
+      "Yalnızca gerektiğinde görünür."
+    ],
+    "whats-new": [
+      "Neler değişti",
+      "Her sürüm neyin değiştiğini açıklar ve kumandayla denemek için kısa bir liste getirir.",
+      "Sistem › Neler değişti."
+    ],
+    "report": [
+      "Sorun bildir",
+      "Ne olduğunu kumandayla veya telefondan anlatın; televizyon gerekeni toplar, kişisel hiçbir şey değil.",
+      "Sistem › Sorun bildir."
+    ],
+    "languages": [
+      "15 dil",
+      "Portekizce, İngilizce, İspanyolca, Fransızca, Almanca, İtalyanca, Rusça, Lehçe, Türkçe, Japonca, Çince, Korece, Hintçe, Endonezce ve Arapça, sağdan sola ekranlarla. Televizyonun dilini izler.",
+      "Televizyonla birlikte kendiliğinden değişir."
+    ],
+    "text-size": [
+      "Yazı boyutu",
+      "Normal, Büyük veya Daha büyük, her ekranda; yazı asla kesilmesin veya üst üste binmesin diye test edildi.",
+      "Ana ekran › Yazı boyutu."
+    ],
+    "simple-mode": [
+      "Basit mod",
+      "Büyük kartlar, ekranda daha az şey ve uygulamanın adı sesli söylenir. Kumandayı zor bulanlar için.",
+      "Ana ekran › Diğer seçenekler."
+    ],
+    "read-aloud": [
+      "Sesli okuma",
+      "Televizyon odaktakini söyler, nerede olduğunuzu bilmeniz için gezinme sesleriyle.",
+      "Ana ekran › Diğer seçenekler."
+    ],
+    "contrast": [
+      "Yüksek kontrast",
+      "7:1 kontrastlı yazı ve Android ekran okuyucusunun okuyabildiği her ekran.",
+      "Televizyonun erişilebilirlik ayarlarını izler."
+    ],
+    "no-ads": [
+      "Hiç reklam yok",
+      "Ücretsiz planda bile, tek bir sponsorlu öneri yok. Ekran sizin.",
+      "Her zaman."
+    ],
+    "no-tracking": [
+      "Takip yok",
+      "Hesap yok, kullanım analizi yok ve siz göndermeden giden hata raporu yok.",
+      "Her zaman."
+    ],
+    "pin": [
+      "Gereken yerde PIN",
+      "Televizyonu değiştiren her şey PIN ister, bir şey silen işlemler yeniden sorar. Çok fazla yanlış deneme mi? Bekleme her seferinde uzar.",
+      "Uzaktan erişim › PIN."
+    ],
+    "private-dns": [
+      "Özel DNS",
+      "Güvenli bir DNS seçin (TLS üzerinden DNS); yanıt vermezse televizyon kendiliğinden öncekine döner.",
+      "Gelişmiş › Ağ."
+    ],
+    "usage": [
+      "Uygulama başına internet",
+      "Her uygulamanın ne kadar internet kullandığı ve kiminle konuştuğu, televizyonda 7 gün saklanır.",
+      "Gelişmiş › Ağ."
+    ],
+    "google-inside": [
+      "Google çalışmaya devam eder",
+      "Google Asistan, Gemini, arama ve Google hesabınız eskisi gibi çalışır. Sofaly TV'nizi değil, ana ekranı değiştirir.",
+      "Mikrofon düğmesini her zamanki gibi kullanın."
+    ],
+    "motion": [
+      "TV'nize göre animasyon",
+      "Güçlü TV her şeyi canlandırır; daha basit olan yalnızca seçtiğinizi canlandırır ve kareler düşünce kendiliğinden yavaşlar.",
+      "Ayarlar › Görünüm."
+    ],
+    "frame-rate": [
+      "Takılmayan filmler",
+      "Film oynarken TV 24 Hz'e geçer, kamera hareketleri akıcı kalır.",
+      "Filmle birlikte açılır; ekran bir saniye kararır."
+    ],
+    "wifi-check": [
+      "Hız testi",
+      "İnternetinizi tek dokunuşla ölçer; Wi-Fi sinyalini, gecikmeyi ve hızı sade sözcüklerle gösterir.",
+      "Ayarlar › Gelişmiş › Ağ."
+    ]
+  },
+  "plans_page": {
+    "title": "Planlar · Sofaly",
+    "description": "Basic, Pro ve Ultra: her Sofaly planının içeriği.",
+    "h1": "Planlar",
+    "lead": "Zaten tam ana ekran olan Basic ile başlayın. Satışlar henüz açılmadı: şimdilik her şey ücretsiz.",
+    "price_soon": "Çıkışta fiyat",
+    "basic_who": "Kanepedekiler için",
+    "pro_who": "Televizyonla ilgilenen için",
+    "ultra_who": "Ev ve aile için",
+    "basic_text": "Haç ana ekran, oynatıcı, Dinle, Oyna, alarm, ekran koruyucu ve tüm erişilebilirlik.",
+    "pro_text": "Basic'teki her şey, artı telefon, otomasyonlar, akıllı ev, uzaktan mesajlar, hazır ana ekran kartları ve tam kişiselleştirme.",
+    "ultra_text": "Pro'daki her şey, artı üç modelden hava, tam film sayfaları, otomatik altyazı, birden fazla ev ve birlikte izleme.",
+    "includes": "İçerir",
+    "everything_basic": "Basic'teki her şey",
+    "everything_pro": "Pro'daki her şey"
+  },
+  "dev_page": {
+    "title": "Geliştiriciler · Sofaly",
+    "description": "Android TV uygulamanızın kartını Sofaly ana ekranına koyun. SDK yok, ücret yok.",
+    "eyebrow": "Geliştirici kiti",
+    "h1": "Uygulamanız, insanların gerçekten baktığı ana ekranda.",
+    "lead": "Bir Sofaly eklentisi kendi Android TV uygulamanızdır. Kısa bir kart gönderir ve Sofaly onu ana ekrana, büyük yazıyla ve evin tarzında çizer.",
+    "cta_start": "Şablondan başlayın",
+    "cta_spec": "Tam sözleşmeyi okuyun",
+    "why_title": "Neden eklenti yapmalı",
+    "why": [
+      [
+        "star",
+        "Önde, çekmecede değil",
+        "Kartınız ana ekranda durur; aile televizyonu her açışında oraya bakar, uygulama listesinde kaybolmaz."
+      ],
+      [
+        "puzzle",
+        "SDK yok, ücret yok",
+        "Bir ContentProvider ve bir satır veri. Kurulacak kütüphanemiz yok, ödenecek ücret yok."
+      ],
+      [
+        "heart",
+        "Uygulamanız, işiniz",
+        "Play'de istediğiniz gibi yayınlayın, ücretsiz veya ücretli. Sofaly sadece kartı çizer; uygulama ve müşteriler sizindir."
+      ]
+    ],
+    "can_title": "Bizimkilerin ötesinde neler yapabilirsiniz",
+    "can": [
+      [
+        "Siparişiniz",
+        "Sipariş yolda, 12 dk içinde gelir."
+      ],
+      [
+        "Otobüsünüz",
+        "42 numara 6 dk sonra geliyor."
+      ],
+      [
+        "Spor salonunuz",
+        "Bugünkü ders saat 19:00'da."
+      ],
+      [
+        "Apartmanınız",
+        "Yarın 9-12 arası su kesintisi."
+      ],
+      [
+        "Mağazanız",
+        "Günün fırsatı: kahvede %20 indirim."
+      ],
+      [
+        "Kulübünüz",
+        "Antrenman cumartesiye alındı."
+      ]
+    ],
+    "steps_title": "İki adım",
+    "step1": "Sofaly eylemiyle bir provider tanımlayın",
+    "step2": "Tek satırla yanıt verin: başlık, değer, ayrıntı ve renk",
+    "rules_title": "İzleyiciyi koruyan kurallar",
+    "rules": [
+      "Ana ekrana asla siz çizmezsiniz: metin ve renk gönderirsiniz, Sofaly çizer.",
+      "Sofaly size kişinin uygulamaları, hesapları veya ne izlediği hakkında asla bir şey göndermez.",
+      "Eklentiler Pro planının parçasıdır ve hangilerinin görüneceğini kişi seçer."
+    ],
+    "soon_title": "Yakında",
+    "soon_text": "Arka plan eklentileri ve doğrudan televizyonda bir eklenti vitrini.",
+    "template_title": "Hazır şablon",
+    "template_text": "Bugün derleyebileceğiniz iki örnek uygulama: kişinin televizyonda seçtiği bir tarihe geri sayım ve bugünün ay evresi. İnternet yok, hesap yok. MIT No Attribution lisansı: kopyalayın, paketi değiştirin ve yayınlayın.",
+    "demo": [
+      [
+        "Sipariş",
+        "12 dk"
+      ],
+      [
+        "Otobüs 42",
+        "6 dk"
+      ],
+      [
+        "Spor",
+        "19:00"
+      ]
+    ]
+  },
+  "show": {
+    "title": "TV'de görün",
+    "lead": "Bu ekranlar kendiliğinden geçer; Sofaly gerçek bir TV'de böyle görünür ve hareket eder. Birini seçip orada kalın.",
+    "screens": {
+      "forecast": [
+        "Tahmin",
+        "Sonraki 24 saat, yağmur ihtimali ve ay, tek bakışta ve büyük yazıyla.",
+        [
+          "Hafif çisenti",
+          "Sonraki 24 saat",
+          "Yağmur ihtimali",
+          "Şimdi",
+          "En yüksek 27° · en düşük 19° · hissedilen 26°"
+        ]
+      ],
+      "screensaver": [
+        "Ekran koruyucu",
+        "Her gün The Met'ten bir tablo, saat ve günün havası. Açık bırakmak isteyeceğiniz bir TV.",
+        [
+          "İyi akşamlar",
+          "Günün tablosu · The Met",
+          "Büyüyen hilal"
+        ]
+      ],
+      "player": [
+        "Filmler",
+        "Tek tuşla dublaj ya da altyazı, jenerik sizin yerinize atlanır ve kaldığınız yerden devam.",
+        [
+          "Eve Uzun Yol",
+          "Ses",
+          "Orijinal + altyazı",
+          "Türkçe dublaj",
+          "Jeneriği atla"
+        ]
+      ],
+      "radio": [
+        "Radyo ve podcast",
+        "Dünyanın her yerinden istasyonlar ve podcast'leriniz, tam ekran oynatıcıyla.",
+        [
+          "Şimdi çalıyor",
+          "Canlı radyo",
+          "Sahilden caz",
+          "Sabah haberleri",
+          "Türk sanat müziği",
+          "Podcast · bölüm 12"
+        ]
+      ],
+      "alarm": [
+        "Alarm",
+        "TV kendiliğinden açılır, ses yavaşça yükselir ve günün tahmini sizi bekler.",
+        [
+          "Günaydın",
+          "Ses yükseliyor",
+          "Ertele · 10 dk",
+          "TV kendiliğinden açıldı"
+        ]
+      ],
+      "cards": [
+        "Ana ekran kartları",
+        "Geri sayım, hatırlatıcılar, kurlar, ay ve takımınızın sıradaki maçı, doğrudan ana ekranda.",
+        [
+          "Tatile 12 gün kaldı",
+          "İlaç saat 20:00'de",
+          "Garaj kamerası yanıt vermiyor",
+          "Sıradaki maç",
+          "Cmt · 16:00",
+          "Büyüyen hilal",
+          "Kurlar",
+          "Geri sayım",
+          "Takımınız × Rakip"
+        ]
+      ],
+      "games": [
+        "Oyunlar",
+        "Bulut, PC ve retro oyunlar tek yerde; ağınız oynamadan önce test edilir.",
+        [
+          "Kumanda bağlandı",
+          "Ağ bulut oyunu için hazır",
+          "Bulut",
+          "PC",
+          "Retro",
+          "Ekip",
+          "Oyunlar"
+        ]
+      ],
+      "phone": [
+        "Telefon",
+        "Telefondaki panel: kumanda, yazma, TV ekranı canlı ve TV'de beliren mesajlar.",
+        [
+          "TV'ye gönder",
+          "Yemek hazır!",
+          "Telefondan mesaj",
+          "Kumanda",
+          "Yaz",
+          "Ekran",
+          "Fotoğraflar"
+        ]
+      ],
+      "windows": [
+        "Windows",
+        "TV, Bu bilgisayar'da bir telefon gibi görünür: film ve fotoğrafları doğrudan içine sürükleyin.",
+        [
+          "Bu bilgisayar",
+          "Sofaly · Salon",
+          "Yerel disk",
+          "TV panelini aç",
+          "TV'ye kopyalanıyor… %68"
+        ]
+      ],
+      "kids": [
+        "Aile",
+        "Çocuk profili, uyku saati ve ekran süresi; hepsi ebeveyn PIN'inin arkasında.",
+        [
+          "Uyku saati",
+          "Yarın görüşürüz!",
+          "Saat 7'ye kadar sadece çocuk uygulamaları",
+          "Ebeveyn PIN'i"
+        ]
+      ]
+    }
+  }
+}

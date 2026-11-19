@@ -1,0 +1,15 @@
+# Site sofaly.tv: um Worker que só serve os arquivos estáticos de site/ (sem código).
+# Sem id de conta aqui de propósito: a conta vem do `wrangler login` (Dell) ou dos segredos do GitHub (workflow website.yml).
+name = "sofaly-website"
+compatibility_date = "2026-11-01"
+workers_dev = false   # só pelos domínios próprios abaixo
+
+routes = [
+  { pattern = "sofaly.tv", custom_domain = true },
+  { pattern = "www.sofaly.tv", custom_domain = true },
+]
+
+[assets]
+directory = "../site"
+html_handling = "auto-trailing-slash"   # /features e /features.html mostram a mesma página
+not_found_handling = "none"

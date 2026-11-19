@@ -1,0 +1,992 @@
+{
+  "lang": "id",
+  "path": "id",
+  "label": "Bahasa Indonesia",
+  "ui": {
+    "nav_features": "Fitur",
+    "nav_plans": "Paket",
+    "nav_developers": "Developer",
+    "nav_help": "Bantuan",
+    "cta_get": "Segera di Google Play",
+    "cta_see": "Lihat semua yang bisa dilakukan",
+    "plan_basic": "Basic",
+    "plan_pro": "Pro",
+    "plan_ultra": "Ultra",
+    "plan_from": "mulai",
+    "how": "Caranya",
+    "skip": "Langsung ke konten",
+    "language": "Bahasa",
+    "back_top": "Kembali ke atas",
+    "footer_tagline": "Layar utama untuk Google TV dan Android TV.",
+    "footer_privacy": "Privasi",
+    "footer_terms": "Ketentuan",
+    "footer_compat": "Apakah berjalan di perangkat Anda?",
+    "footer_trademark": "Sofaly tidak berafiliasi dengan Google. Google TV, Android TV, dan Chromecast adalah merek dagang Google LLC.",
+    "of": "dari"
+  },
+  "home": {
+    "title": "Sofaly · TV Anda, sederhana lagi",
+    "description": "Sofaly adalah layar utama untuk Google TV dan Android TV: semuanya tertata dalam bentuk salib (Tonton, Dengar, Main, Aplikasi), huruf besar, dan tanpa iklan.",
+    "eyebrow": "Layar utama untuk Google TV dan Android TV",
+    "h1": "TV Anda, sederhana lagi.",
+    "lead": "Sofaly mengganti layar utama TV Anda dengan salib yang rapi: Tonton, Dengar, Main, dan Aplikasi, dengan huruf besar dan tanpa iklan. Ia juga menjaga rumah, membangunkan Anda, dan berbicara dengan ponsel Anda.",
+    "hero_note": "Tanpa akun, tanpa iklan, tanpa pelacakan tontonan Anda.",
+    "cross_title": "Satu layar, empat arah",
+    "cross_lead": "◀ ▶ pilih dunia. ▲ ▼ telusuri isinya. Itu saja, dan siapa pun di rumah bisa belajar dalam satu menit.",
+    "worlds": {
+      "continue": [
+        "Lanjutkan",
+        "Kembali ke tempat Anda berhenti: episode, radio, podcast, atau aplikasi."
+      ],
+      "watch": [
+        "Tonton",
+        "Aplikasi video Anda, film dari komputer atau flashdisk, dan pemutar yang memutar apa saja."
+      ],
+      "listen": [
+        "Dengar",
+        "Radio dari seluruh dunia dan podcast, dengan pemutar layar penuh dan pengatur waktu tidur."
+      ],
+      "play": [
+        "Main",
+        "Game cloud, PC, dan retro di satu tempat, dengan kontroler yang sudah tersambung."
+      ],
+      "apps": [
+        "Aplikasi",
+        "8 yang paling sering dipakai di depan, sisanya cukup satu klik."
+      ]
+    },
+    "mock": {
+      "weather": "29° · Berawan sebagian",
+      "day": "Rabu",
+      "date": "18 November",
+      "watch_items": [
+        "Film",
+        "Serial",
+        "Di jaringan",
+        "YouTube"
+      ],
+      "watch_title": "Di jaringan",
+      "watch_detail": "Film dari komputer Anda · 214 judul",
+      "listen_items": [
+        "Radio",
+        "Podcast",
+        "Sedang diputar"
+      ],
+      "listen_title": "Radio",
+      "listen_detail": "Stasiun dari seluruh dunia, berdasarkan nama atau negara",
+      "play_items": [
+        "Cloud",
+        "Dari PC",
+        "Retro",
+        "Kru"
+      ],
+      "play_title": "Game",
+      "play_detail": "3 game cloud · kontroler tersambung",
+      "apps_items": [
+        "YouTube",
+        "Netflix",
+        "Prime Video",
+        "Semua aplikasi"
+      ],
+      "apps_title": "Aplikasi",
+      "apps_detail": "8 yang paling sering dipakai",
+      "continue_items": [
+        "Episode 4",
+        "Radio",
+        "Podcast"
+      ],
+      "continue_title": "Lanjutkan",
+      "continue_detail": "Berhenti di episode 4 · sisa 21 mnt"
+    },
+    "why_title": "Kenapa mengganti layar utama Google",
+    "why_lead": "Layar utama bawaan TV dibuat untuk berjualan. Sofaly dibuat untuk dipakai keluarga Anda.",
+    "why_rows": [
+      [
+        "Iklan di layar utama",
+        "Ya: rekomendasi bersponsor dan iklan",
+        "Tidak pernah"
+      ],
+      [
+        "Huruf besar di setiap layar",
+        "Tidak",
+        "Normal, Besar, atau Lebih besar"
+      ],
+      [
+        "Alarm yang menyalakan TV",
+        "Tidak",
+        "Menyala, menaikkan volume perlahan, dan mengucapkan selamat pagi"
+      ],
+      [
+        "Radio dan podcast di layar utama",
+        "Hanya lewat aplikasi",
+        "Di dunianya sendiri, Dengar"
+      ],
+      [
+        "Film dari komputer atau NAS",
+        "Hanya lewat aplikasi",
+        "Di jaringan, dengan poster dan lanjut tonton"
+      ],
+      [
+        "Kendali dari ponsel mana pun di rumah",
+        "Remote dasar",
+        "Panel lengkap, dilindungi PIN"
+      ],
+      [
+        "Profil anak dan jam tidur",
+        "Terbatas",
+        "Aplikasi yang diizinkan, batas volume, dan PIN untuk keluar"
+      ],
+      [
+        "Cadangan pengaturan",
+        "Tidak",
+        "Setiap malam, dikunci kata sandi"
+      ]
+    ],
+    "why_head": [
+      "",
+      "Layar utama Google TV",
+      "Sofaly"
+    ],
+    "why_source": "Iklan di layar utama Google TV: Android Authority, April 2026.",
+    "highlights_title": "Dibuat untuk seisi rumah",
+    "highlights": [
+      [
+        "access",
+        "Kakek-nenek juga bisa",
+        "Huruf besar, mode sederhana yang menyebut nama aplikasi, kontras tinggi, dan pembaca layar. Dalam 15 bahasa."
+      ],
+      [
+        "alarm",
+        "Bangun bersama Anda",
+        "Alarm menyalakan TV sendiri, menaikkan volume perlahan, dan membuka Selamat pagi: jam, cuaca, dan agenda."
+      ],
+      [
+        "house",
+        "Menjaga rumah",
+        "Lampu, adegan, dan bel pintu Home Assistant di TV. Tidur saat semua orang pergi."
+      ],
+      [
+        "phone",
+        "Berbicara dengan ponsel",
+        "Kendalikan, ketik, dan kirim pesan dari ponsel atau komputer mana pun di rumah, dilindungi PIN."
+      ],
+      [
+        "sun",
+        "Cuaca yang tepat",
+        "Cuaca saat ini berasal dari bandara terdekat: diukur, bukan ditebak. Prakiraan 9 hari dengan satu OK."
+      ],
+      [
+        "lock",
+        "Merawat dirinya sendiri",
+        "Cadangan terkunci setiap malam, perawatan saat Anda tidur, dan diagnosis yang menjelaskan apa yang salah."
+      ]
+    ],
+    "chapters_title": "Semua yang bisa dilakukan, tertata seperti dirinya",
+    "chapters_lead": "Lebih dari 80 fitur. Pilih dunia untuk melihat penjelasan masing-masing.",
+    "privacy_title": "Milik Anda tetap di rumah",
+    "privacy_text": "Sofaly tidak meminta akun, tidak menampilkan iklan, dan tidak melacak tontonan Anda. Pengaturan, foto, pesan, dan cadangan tetap di TV, atau di akun Anda sendiri jika Anda menyambungkannya. TV hanya berbicara dengan layanan yang Anda aktifkan, dan kebijakan privasi mencantumkan semuanya.",
+    "privacy_link": "Baca kebijakan privasi",
+    "dev_title": "Punya aplikasi? Taruh di layar utama.",
+    "dev_text": "Sofaly sudah punya kartu siap pakai (bulan, kurs, hitung mundur, pengingat). Plugin adalah aplikasi Android TV Anda sendiri yang mengirim satu kartu lagi ke layar utama: pesanan yang diantar, bus yang akan tiba, pengumuman pengelola gedung. Tanpa SDK, tanpa biaya, dan aplikasinya tetap milik Anda.",
+    "dev_link": "Kenali kit developer",
+    "plans_title": "Mulai gratis. Kembangkan kapan pun Anda mau.",
+    "plans_text": "Basic sudah berisi layar utama lengkap, pemutar, Dengar, Main, alarm, dan screensaver. Pro dan Ultra menambahkan ponsel, rumah, dan keluarga.",
+    "plans_link": "Bandingkan paket",
+    "faq_title": "Pertanyaan singkat",
+    "faq": [
+      [
+        "Apakah berjalan di TV saya?",
+        "Berjalan di Google TV dan Android TV, seperti Chromecast with Google TV, TV dengan Google TV, dan box Android TV. Halaman kompatibilitas mencantumkan perangkat yang sudah diuji."
+      ],
+      [
+        "Perlu komputer untuk memasang?",
+        "Tidak. Pasang dari Google Play langsung di TV dan ikuti langkahnya dengan remote."
+      ],
+      [
+        "Apakah aplikasi saya tetap ada?",
+        "Semuanya. Sofaly hanya mengganti layar utama: Netflix, YouTube, Prime Video, dan lainnya terbuka seperti biasa, dan tombol mikrofon tetap Google Assistant."
+      ],
+      [
+        "Ada iklan?",
+        "Tidak, bahkan di paket gratis. Sofaly tidak menjual iklan dan tidak melacak tontonan Anda."
+      ],
+      [
+        "Apakah ada saluran atau film?",
+        "Tidak. Sofaly menata apa yang sudah milik Anda: aplikasi Anda, file Anda, serta radio dan podcast terbuka."
+      ],
+      [
+        "Bagaimana jika ingin kembali ke layar Google?",
+        "Cukup pilih lagi layar utama Google di pengaturan TV. Tidak ada milik Anda yang terhapus."
+      ]
+    ],
+    "final_title": "TV Anda, sederhana lagi.",
+    "final_text": "Pasang, tekan HOME, dan seisi rumah langsung paham."
+  },
+  "features_page": {
+    "title": "Semua yang dilakukan Sofaly",
+    "description": "Setiap fitur Sofaly dijelaskan: layar utama salib, Tonton, Dengar, Main, rumah, cuaca, keluarga, ponsel, dan privasi.",
+    "h1": "Semua yang dilakukan Sofaly",
+    "lead": "Tertata sama seperti layar TV: satu dunia setiap kali. Label setiap fitur menunjukkan mulai dari paket mana.",
+    "index": "Dunia"
+  },
+  "chapters": {
+    "home": [
+      "Salib",
+      "Layar rapi yang dipahami siapa pun, diatur sesuai keinginan Anda."
+    ],
+    "watch": [
+      "Tonton",
+      "Film, serial, dan pemutar sekelas home theater."
+    ],
+    "listen": [
+      "Dengar",
+      "Radio dan podcast dengan perhatian yang sama seperti video."
+    ],
+    "play": [
+      "Main",
+      "Semua game Anda di satu tempat, siap untuk kontroler."
+    ],
+    "apps": [
+      "Aplikasi",
+      "Aplikasi Anda dalam urutan yang masuk akal."
+    ],
+    "house": [
+      "Rumah",
+      "Alarm, timer, otomatisasi, dan rumah pintar."
+    ],
+    "sky": [
+      "Cuaca dan screensaver",
+      "Cuaca yang tepat dan screensaver yang layak dibiarkan menyala."
+    ],
+    "family": [
+      "Keluarga",
+      "Profil untuk setiap orang, perhatian untuk anak, dan sambutan hangat untuk tamu."
+    ],
+    "phone": [
+      "Ponsel dan komputer",
+      "TV berbicara dengan perangkat di rumah."
+    ],
+    "care": [
+      "Merawat dirinya sendiri",
+      "Cadangan, perawatan, dan diagnosis tanpa perlu Anda ingat."
+    ],
+    "everyone": [
+      "Untuk semua",
+      "Dibuat untuk yang melihat, mendengar, atau memakai remote dengan cara berbeda."
+    ],
+    "privacy": [
+      "Privasi",
+      "Tanpa iklan, tanpa pelacakan, dan PIN di tempat yang penting."
+    ]
+  },
+  "features": {
+    "cross": [
+      "Salib",
+      "Lanjutkan, Tonton, Dengar, Main, dan Aplikasi dalam satu baris. Dunia yang dipilih membesar, dengan isinya tepat di bawah.",
+      "◀ ▶ ganti dunia, ▲ ▼ turun di kolom, OK membuka."
+    ],
+    "continue": [
+      "Lanjutkan",
+      "Satu tempat untuk kembali ke yang sedang Anda lakukan: episode, stasiun, podcast, atau aplikasi terakhir.",
+      "Item pertama di salib."
+    ],
+    "topbar": [
+      "Bilah atas",
+      "Pencarian, suara, cuaca dalam satu baris, dan jam, selalu di tempat yang sama. Bilah ini melipat saat Anda menjelajah agar layar lega.",
+      "Naik ke sana dengan ▲."
+    ],
+    "quick-panel": [
+      "Panel cepat",
+      "Wi-Fi, Bluetooth, timer tidur, keluaran suara, alarm, profil, notifikasi, dan daftar belanja, dari aplikasi mana pun.",
+      "Tahan KEMBALI."
+    ],
+    "remote": [
+      "Remote Anda, aturan Anda",
+      "HOME selalu kembali ke Sofaly. Menahan KEMBALI membuka panel cepat, menahan HOME membuka Rumah, dan menahan OK di aplikasi membuka menunya.",
+      "Penguji tombol menampilkan setiap tombol yang diterima TV."
+    ],
+    "now-playing": [
+      "Sedang diputar",
+      "Pil di atas dengan sampul dan judul yang sedang diputar. OK menjeda atau melanjutkan, menahan OK membuka aplikasinya.",
+      "Aktifkan di Layar utama › Opsi lainnya."
+    ],
+    "themes": [
+      "Tema dan latar",
+      "Gelap, dengan gambar dari yang sedang disorot. Galeri, dengan lukisan dari The Met setiap hari. Langit, dengan satelit dan peta. Atau latar Anda sendiri, foto atau video.",
+      "Gelap, Galeri, dan Langit di Basic; lainnya di Pro."
+    ],
+    "icons": [
+      "Ikon yang Anda suka",
+      "Pakai paket ikon dari Play atau ganti ikon satu aplikasi, satu per satu.",
+      "Tahan OK di aplikasi › Ganti ikon."
+    ],
+    "card-moon": [
+      "Fase bulan",
+      "Bulan malam ini dan seberapa terang bagiannya, dihitung di TV sendiri, tanpa internet.",
+      "Di prakiraan, screensaver, dan ikon cuaca saat malam. Setelan › Tampilan."
+    ],
+    "card-countdown": [
+      "Hitung mundur",
+      "Berapa hari lagi menuju tanggal yang Anda pilih, atau hari libur berikutnya.",
+      "Di pil bagian atas layar. Setelan › Tampilan."
+    ],
+    "card-reminder": [
+      "Pengingat rumah",
+      "Catatan yang muncul lagi di hari yang Anda pilih: hari sampah daur ulang, obat, les.",
+      "Di pil bagian atas layar. Setelan › Tampilan."
+    ],
+    "card-status": [
+      "Status layanan Anda",
+      "TV menguji alamat yang Anda berikan dan menunjukkan apakah sedang aktif: server rumah, situs toko.",
+      "Di pil bagian atas layar. Setelan › Tampilan."
+    ],
+    "card-rates": [
+      "Kurs hari ini",
+      "Mata uang, bitcoin, dan ether dengan nilai hari ini, dari sumber resmi terbuka.",
+      "Di samping cuaca, di bilah atas. Setelan › Tampilan."
+    ],
+    "card-match": [
+      "Laga berikutnya tim Anda",
+      "Kapan dan melawan siapa tim Anda bertanding lagi, di kartu layar utama.",
+      "Di item TV pada salib. Setelan › Tampilan."
+    ],
+    "plugin-cards": [
+      "Kartu dari aplikasi lain",
+      "Selain kartu Sofaly, aplikasi mitra menaruh kartu mereka di layar utama: pesanan, bus, pengumuman gedung.",
+      "Kartu muncul di akhir Tonton."
+    ],
+    "network-library": [
+      "Di jaringan",
+      "Video, musik, dan foto dari Plex, Jellyfin, Emby, folder PC atau NAS (SMB, WebDAV, FTP, SFTP, NFS), OneDrive, Dropbox, Box, Google Drive, UPnP, dan flashdisk.",
+      "Server yang menyala dan flashdisk muncul sendiri; sisanya lewat Tambah."
+    ],
+    "player": [
+      "Pemutar yang memutar apa saja",
+      "Suara Dolby (AC3, E-AC3), DTS, dan TrueHD, serta subtitel Blu-ray, DVD, dan anime, tanpa memasang Kodi atau VLC.",
+      "Tekan ▼ saat video untuk audio, subtitel, dan ukuran subtitel."
+    ],
+    "resume": [
+      "Lanjut dari tempat Anda berhenti",
+      "Film dan episode kembali di titik yang tepat. Episode berikutnya mulai setelah 10 detik, dan setelah 3 berturut-turut TV bertanya apakah Anda masih menonton.",
+      "Berjalan sendiri."
+    ],
+    "skip-intro": [
+      "Lewati intro",
+      "Jika intro sebuah serial diketahui, muncul “Lewati intro · OK”. Anda juga bisa menandai intro sekali dan TV akan mengingatnya.",
+      "Aktif sejak awal."
+    ],
+    "audio-subtitles": [
+      "Audio dan subtitel favorit",
+      "Asli dengan subtitel atau sulih suara, dipilih sekali dan diingat per judul. Subtitel dari internet jika file tidak punya.",
+      "TV dan film › Audio dan subtitel."
+    ],
+    "easy-viewing": [
+      "Lihat dan dengar lebih baik",
+      "Subtitel di kotak hitam atau kuning, “Suara lebih jelas” yang menonjolkan percakapan, dan “Volume rata” yang meredam film keras dan menaikkan yang pelan.",
+      "Di menu ▼ pemutar."
+    ],
+    "auto-subtitles": [
+      "Subtitel otomatis",
+      "Jika tidak ada subtitel dalam bahasa Anda, TV menerjemahkan subtitel yang ada.",
+      "Pilih di menu subtitel pemutar."
+    ],
+    "movie-pages": [
+      "Halaman film lengkap",
+      "Poster, rating, pemeran, trailer, rating usia, dan koleksi film dalam halaman yang indah, dengan huruf besar.",
+      "OK pada film atau serial."
+    ],
+    "lists": [
+      "Daftar Trakt dan Simkl Anda",
+      "Yang ingin ditonton dan yang sudah ditonton, tersinkron dengan akun dan perangkat lain.",
+      "Masuk dengan QR di TV dan film › Layanan."
+    ],
+    "search": [
+      "Satu pencarian untuk semua",
+      "Menemukan film, serial, stasiun, dan aplikasi sekaligus, dan membawa pencarian yang sama ke YouTube, Netflix, atau Prime Video.",
+      "Di bilah atas, atau dengan suara."
+    ],
+    "radio": [
+      "Radio dari seluruh dunia",
+      "Ribuan stasiun radio terbuka, berdasarkan nama, negara, atau genre, dengan favorit dan yang terakhir didengar.",
+      "Dengar › Radio."
+    ],
+    "podcasts": [
+      "Podcast",
+      "Berlangganan berdasarkan nama, dengarkan di TV, dan lanjutkan episode dari tempat berhenti.",
+      "Dengar › Podcast."
+    ],
+    "podcast-search": [
+      "Temukan podcast",
+      "Cari di seluruh katalog podcast terbuka dan lihat yang sedang tren di negara Anda.",
+      "Dengar › Podcast › Cari."
+    ],
+    "podcast-player": [
+      "Pemutar layar penuh",
+      "Sampul besar, bab, kecepatan, dan timer tidur yang berhenti di akhir episode.",
+      "Dengar › Sedang diputar › Buka pemutar."
+    ],
+    "phone-sound": [
+      "Suara di earphone Anda",
+      "Suara film masuk ke earphone ponsel Anda, tersinkron, untuk menonton malam hari tanpa membangunkan siapa pun.",
+      "Menu ▼ pemutar › Suara di ponsel."
+    ],
+    "games-hub": [
+      "Semua game di satu tempat",
+      "GeForce NOW, Steam Link, Moonlight, PS Remote Play, RetroArch, dan game TV keluar dari baris aplikasi dan tinggal di Main, dikelompokkan ke Cloud, Dari PC, Retro, dan Di TV.",
+      "Tahan OK pada game untuk mengganti kelompoknya."
+    ],
+    "pc-games": [
+      "Main di PC lantai atas",
+      "TV membangunkan komputer lewat jaringan, menunggu jawabannya, lalu membuka Moonlight atau Steam Link.",
+      "Simpan komputer sekali di panel web."
+    ],
+    "network-test": [
+      "Uji jaringan",
+      "Memberi tahu apakah internet Anda sanggup untuk cloud gaming, dan memperingatkan sebelum membuka game cloud di jaringan lemah.",
+      "Main › Uji jaringan."
+    ],
+    "controllers": [
+      "Kontroler game",
+      "Sambungkan kontroler tanpa mencari di menu, lihat yang tersambung di atas dan, jika mau, buat kontroler yang tersambung membuka Main.",
+      "Main › Sambungkan kontroler."
+    ],
+    "game-mode": [
+      "Mode game",
+      "Saat game terbuka, screensaver, filter malam, dan notifikasi menunggu sampai pertandingan selesai.",
+      "Aktif sendiri."
+    ],
+    "crew": [
+      "Kru Discord Anda",
+      "Lihat siapa di server Discord Anda yang online dan sedang main apa, lalu panggil kru langsung dari TV.",
+      "Aktifkan widget server dan tempel nomornya."
+    ],
+    "apps-top": [
+      "Favorit di depan",
+      "Aplikasi menampilkan 8 aplikasi yang paling sering Anda buka, dan “Semua aplikasi” membawa sisanya dalam kisi.",
+      "Aplikasi, di salib."
+    ],
+    "apps-organize": [
+      "Sesuka Anda",
+      "Pindahkan, tumpuk, atau sembunyikan aplikasi apa pun. Aplikasi bawaan yang tidak dipakai menyingkir.",
+      "Tahan OK pada aplikasi."
+    ],
+    "app-buttons": [
+      "Tombol Netflix dan YouTube bebas",
+      "Tombol aplikasi di remote membuka aplikasi apa pun yang Anda mau. Tekan untuk membuka, tahan 3 detik untuk mengganti.",
+      "Berfungsi dengan remote asli."
+    ],
+    "alarm": [
+      "Alarm yang menyalakan TV",
+      "Tepat waktu, TV menyala sendiri, volume naik perlahan, dan ada tunda. Setiap alarm punya nama, hari, suara, dan volume, bahkan aplikasi atau stasiun terakhir.",
+      "Tahan KEMBALI › Alarm."
+    ],
+    "timers": [
+      "Timer dan jam pasir",
+      "Hingga 3 timer bernama dengan pemberitahuan di layar, dan stopwatch.",
+      "“Hey Google, buka Ingatkan 10 menit lagi”."
+    ],
+    "gentle-off": [
+      "Mati dengan lembut",
+      "Timer tidur meredupkan layar dan menurunkan volume di 5 menit terakhir, agar tak ada yang terbangun saat mati.",
+      "Ubin timer di panel cepat."
+    ],
+    "idle-off": [
+      "Mati jika tak ada yang menonton",
+      "Setelah waktu yang Anda pilih tanpa tombol ditekan, TV bertanya dengan huruf besar apakah Anda masih menonton, lalu tidur.",
+      "Layar dan daya › Matikan saat diam."
+    ],
+    "recipes": [
+      "Resep siap pakai",
+      "Tidur, Sinetron, dan Pertandingan mengatur TV sekaligus (suara, layar, dan notifikasi). Satu OK menerapkan, satu lagi membatalkan.",
+      "Panel cepat."
+    ],
+    "automations": [
+      "Otomatisasi",
+      "Pada jam tertentu, saat tombol ditekan, atau saat sesuatu terjadi (film dijeda, semua pergi, akan hujan): TV membuka aplikasi, menjalankan adegan, atau mati.",
+      "Rumah dan otomatisasi › Otomatisasi."
+    ],
+    "home-assistant": [
+      "Home Assistant di TV",
+      "Lampu, stopkontak, kipas, tirai, AC, dan adegan, langsung dari sofa. Berbicara dengan server Anda di jaringan Anda, tanpa cloud di tengah.",
+      "Tahan HOME."
+    ],
+    "doorbell": [
+      "Siapa di depan pintu",
+      "Saat bel berbunyi, gambar kamera muncul di atas tontonan Anda.",
+      "Dengan Home Assistant."
+    ],
+    "presence": [
+      "Tidur saat semua pergi",
+      "Dengan router UniFi, TV tahu ponsel penghuni rumah sudah pergi dan langsung tidur.",
+      "Layar dan daya › Opsi lainnya."
+    ],
+    "voice": [
+      "Pintasan suara",
+      "“Hey Google, buka Laporan cuaca” membacakan prakiraan. Film, Rumahku, Papan, timer, dan mematikan dibuka dengan cara yang sama.",
+      "Pakai tombol mikrofon."
+    ],
+    "weather-now": [
+      "Cuaca hari ini, diukur",
+      "Suhu berasal dari laporan bandara terdekat, dan ikon siang/malam mengikuti matahari terbit dan terbenam di lokasi TV.",
+      "Di atas layar utama."
+    ],
+    "weather-3": [
+      "Hujan dari tiga model",
+      "Peluang hujan adalah median dari tiga model cuaca (ECMWF, ICON, dan GFS), yang lebih jarang meleset daripada satu model saja.",
+      "Muncul sendiri di prakiraan."
+    ],
+    "forecast": [
+      "Prakiraan layar penuh",
+      "24 jam ke depan, grafik hujan, 9 hari, kualitas udara, matahari, dan bulan.",
+      "OK pada cuaca."
+    ],
+    "rain-alert": [
+      "Peringatan hujan",
+      "Pemberitahuan di atas aplikasi Anda saat hujan akan turun. Saatnya angkat jemuran.",
+      "Layar utama › Cuaca."
+    ],
+    "screensaver": [
+      "Screensaver yang layak dibiarkan menyala",
+      "Sapaan, jam besar, tanggal, cuaca, dan kartu berisi notifikasi, alarm berikutnya, dan pesan. Di tema Galeri, lukisan hari ini bergeser pelan agar layar tidak berbekas.",
+      "Layar dan daya › Screensaver."
+    ],
+    "photos": [
+      "Foto Anda di screensaver",
+      "Kirim foto dari ponsel atau pilih folder jaringan. Foto disimpan di folder yang hanya bisa dilihat TV.",
+      "QR membuka panel di halaman yang tepat."
+    ],
+    "good-morning": [
+      "Selamat pagi",
+      "Saat Anda mematikan alarm: sapaan, jam, prakiraan, dan agenda hari ini, dan TV bisa membacakannya.",
+      "“Hey Google, buka Selamat pagi”."
+    ],
+    "calendar": [
+      "Google Kalender",
+      "Acara dan ulang tahun hari ini di TV, dari satu akun atau semuanya sekaligus.",
+      "OK pada tanggal di atas."
+    ],
+    "night-filter": [
+      "Filter malam",
+      "Pada malam hari layar jadi lebih hangat dan lebih nyaman di mata.",
+      "Layar dan daya › Opsi lainnya."
+    ],
+    "recap": [
+      "Ringkasan mingguan",
+      "Minggu malam, kartu berisi waktu layar per aplikasi, internet yang dipakai, dan putusnya jaringan.",
+      "Layar dan daya › Opsi lainnya."
+    ],
+    "profiles": [
+      "Profil untuk setiap orang",
+      "Setiap akun Google di TV punya favorit, daftar lanjutkan, dan urutan aplikasi sendiri.",
+      "Tahan KEMBALI › Profil."
+    ],
+    "kid-profile": [
+      "Profil anak",
+      "Tandai profil sebagai anak: mode anak dan jam tidur aktif sendiri, dan keluar perlu PIN orang tua.",
+      "Panel cepat › Profil."
+    ],
+    "bedtime": [
+      "Jam tidur",
+      "Pada jam yang Anda pilih, hanya aplikasi yang diizinkan yang terbuka dan volume punya batas.",
+      "Keluarga › Opsi lainnya."
+    ],
+    "screen-time": [
+      "Waktu layar harian",
+      "Batas TV harian untuk siapa pun yang Anda pilih.",
+      "Keluarga › Opsi lainnya."
+    ],
+    "guest": [
+      "Mode tamu",
+      "Menyembunyikan profil, agenda, dan aplikasi pilihan Anda saat ada tamu.",
+      "Ubin Tamu di panel cepat."
+    ],
+    "guest-wifi": [
+      "Wi-Fi tamu",
+      "Ketik kata sandi sekali; tamu memindai QR di TV dan langsung tersambung.",
+      "Keluarga › Wi-Fi tamu."
+    ],
+    "family-board": [
+      "Papan keluarga",
+      "Daftar belanja, catatan tersemat, dan ulang tahun hari ini, di panel cepat dan screensaver.",
+      "Edit dari ponsel; OK mencentang item."
+    ],
+    "family-link": [
+      "Pesan dari jauh",
+      "Keluarga yang tinggal jauh mengirim pesan dan foto ke TV di rumah, dari mana saja.",
+      "Undang lewat tautan."
+    ],
+    "video-message": [
+      "Pesan video",
+      "Video singkat dari keluarga muncul di TV dengan nama pengirimnya.",
+      "Dari panel di ponsel."
+    ],
+    "web-panel": [
+      "Panel di ponsel dan komputer",
+      "Remote, mengetik, layar TV secara langsung, foto screensaver, papan, dan cadangan, dari browser perangkat mana pun di rumah.",
+      "Akses jarak jauh › Masuk dari ponsel (QR)."
+    ],
+    "ask-tv": [
+      "Minta ke TV",
+      "Ketik atau ucapkan “buka YouTube”, “ingatkan 7 menit lagi”, “matikan 30 menit lagi” dan TV melakukannya.",
+      "Di panel di ponsel."
+    ],
+    "share": [
+      "Bagikan dari ponsel",
+      "Jika dipasang sebagai aplikasi, panel muncul di Bagikan: video YouTube dan tautan terbuka di TV, dan teks menjadi pesan.",
+      "Bagikan › Sofaly."
+    ],
+    "network-drive": [
+      "TV sebagai drive jaringan",
+      "Salin file ke TV dengan menyeretnya: di Windows muncul di This PC seperti ponsel; di Mac, Linux, dan ponsel lewat WebDAV yang aman.",
+      "Akses jarak jauh › Tampilkan sebagai drive jaringan."
+    ],
+    "windows": [
+      "Pintasan di Windows",
+      "TV muncul di Network pada Explorer dengan pintasan yang membuka panel, bahkan jika IP-nya berubah.",
+      "Aktif selama panel menyala."
+    ],
+    "continue-tv": [
+      "Lanjutkan di TV lain",
+      "Berhenti di ruang keluarga? Kirim ke kamar: TV lain menampilkan “Lanjutkan dari tempat terakhir?” dan membuka di titik yang sama.",
+      "Menu pemutar › Kirim ke TV lain."
+    ],
+    "together": [
+      "Nonton bareng",
+      "Dua rumah menonton hal yang sama pada waktu yang sama: jeda di sini, berhenti di sana, dengan reaksi di pojok.",
+      "Undangan antar TV keluarga."
+    ],
+    "homes": [
+      "Beberapa rumah",
+      "Urus TV di rumah Anda dan di rumah orang tua dari ponsel yang sama.",
+      "Dari aplikasi ponsel."
+    ],
+    "backup": [
+      "Cadangan terkunci setiap malam",
+      "Saat TV tidak dipakai, cadangan lengkap dikunci dengan kata sandi Anda. 7 terakhir disimpan, dan setiap malam TV memeriksa bahwa cadangan bisa dipulihkan.",
+      "Sistem › Cadangan otomatis."
+    ],
+    "cloud-backup": [
+      "Salinan di cloud",
+      "Salinan juga dikirim ke Google Drive, OneDrive, Dropbox, Box, NAS, atau flashdisk. Terkunci: bahkan cloud tidak bisa membacanya.",
+      "Sistem › Cadangan otomatis."
+    ],
+    "maintenance": [
+      "Perawatan malam",
+      "Membersihkan sisa-sisa, memperbaiki izin, dan menjadwalkan ulang alarm saat Anda tidur.",
+      "Berjalan sendiri."
+    ],
+    "diagnose": [
+      "Diagnosis TV",
+      "Internet, DNS, dan kenapa aplikasi berhenti, semuanya sekaligus dalam kalimat yang mudah dipahami.",
+      "“Hey Google, buka Diagnosis TV”."
+    ],
+    "scoreboard": [
+      "Kondisi TV ini",
+      "TV mengukur angkanya sendiri (waktu membuka, crash, alarm tepat waktu) dan menampilkannya di satu layar. Tidak ada yang keluar dari rumah.",
+      "Sistem › Kondisi TV ini."
+    ],
+    "safe-mode": [
+      "Mode aman",
+      "Jika versi baru bermasalah tepat setelah dipasang, TV beralih ke mode aman dan menunjukkan jalan keluarnya.",
+      "Hanya muncul saat diperlukan."
+    ],
+    "whats-new": [
+      "Apa yang berubah",
+      "Setiap versi menjelaskan apa yang berubah dan memberi daftar singkat untuk dicoba dengan remote.",
+      "Sistem › Apa yang berubah."
+    ],
+    "report": [
+      "Laporkan masalah",
+      "Ceritakan apa yang terjadi dengan remote atau dari ponsel; TV mengumpulkan yang perlu, tidak ada yang pribadi.",
+      "Sistem › Laporkan masalah."
+    ],
+    "languages": [
+      "15 bahasa",
+      "Portugis, Inggris, Spanyol, Prancis, Jerman, Italia, Rusia, Polandia, Turki, Jepang, Mandarin, Korea, Hindi, Indonesia, dan Arab, dengan layar kanan ke kiri. Mengikuti bahasa TV.",
+      "Berubah sendiri bersama TV."
+    ],
+    "text-size": [
+      "Ukuran teks",
+      "Normal, Besar, atau Lebih besar, di setiap layar, diuji agar teks tidak pernah terpotong atau bertumpuk.",
+      "Layar utama › Ukuran teks."
+    ],
+    "simple-mode": [
+      "Mode sederhana",
+      "Kartu besar, lebih sedikit hal di layar, dan nama aplikasi diucapkan. Untuk yang merasa remote itu sulit.",
+      "Layar utama › Opsi lainnya."
+    ],
+    "read-aloud": [
+      "Bacakan",
+      "TV menyebutkan apa yang disorot, dengan suara navigasi agar Anda tahu posisi Anda.",
+      "Layar utama › Opsi lainnya."
+    ],
+    "contrast": [
+      "Kontras tinggi",
+      "Teks dengan kontras 7:1 dan setiap layar bisa dibaca pembaca layar Android.",
+      "Mengikuti pengaturan aksesibilitas TV."
+    ],
+    "no-ads": [
+      "Tanpa iklan sama sekali",
+      "Bahkan di paket gratis, tak ada satu pun rekomendasi bersponsor. Layar ini milik Anda.",
+      "Selalu."
+    ],
+    "no-tracking": [
+      "Tanpa pelacakan",
+      "Tanpa akun, tanpa analitik penggunaan, dan tidak ada laporan error yang terkirim tanpa Anda kirim.",
+      "Selalu."
+    ],
+    "pin": [
+      "PIN di tempat yang penting",
+      "Semua yang mengubah TV meminta PIN, dan tindakan yang menghapus sesuatu meminta lagi. Terlalu banyak salah? Waktu tunggu bertambah setiap kali.",
+      "Akses jarak jauh › PIN."
+    ],
+    "private-dns": [
+      "DNS pribadi",
+      "Pilih DNS aman (DNS over TLS); jika tidak menjawab, TV kembali sendiri ke yang sebelumnya.",
+      "Lanjutan › Jaringan."
+    ],
+    "usage": [
+      "Internet per aplikasi",
+      "Berapa banyak internet yang dipakai setiap aplikasi dan dengan siapa ia berbicara, disimpan di TV selama 7 hari.",
+      "Lanjutan › Jaringan."
+    ],
+    "google-inside": [
+      "Google tetap jalan",
+      "Asisten Google, Gemini, penelusuran, dan akun Google-mu tetap jalan seperti biasa. Sofaly mengganti layar beranda, bukan TV-mu.",
+      "Pakai tombol mikrofon seperti biasa."
+    ],
+    "motion": [
+      "Animasi sesuai TV-mu",
+      "TV yang kuat menganimasikan semuanya; yang lebih sederhana hanya yang kamu pilih, dan mengurangi sendiri saat frame turun.",
+      "Setelan › Tampilan."
+    ],
+    "frame-rate": [
+      "Film tanpa patah-patah",
+      "TV beralih ke 24 Hz selama film diputar, jadi gerakan kamera tetap mulus.",
+      "Menyala bersama film; layar berkedip hitam sedetik."
+    ],
+    "wifi-check": [
+      "Tes kecepatan",
+      "Mengukur internet dengan satu ketukan dan menampilkan sinyal Wi-Fi, latensi, serta kecepatan dengan kata-kata sederhana.",
+      "Setelan › Lanjutan › Jaringan."
+    ]
+  },
+  "plans_page": {
+    "title": "Paket · Sofaly",
+    "description": "Basic, Pro, dan Ultra: isi setiap paket Sofaly.",
+    "h1": "Paket",
+    "lead": "Mulai dengan Basic, yang sudah merupakan layar utama lengkap. Penjualan belum dibuka: untuk saat ini semuanya gratis.",
+    "price_soon": "Harga saat peluncuran",
+    "basic_who": "Untuk yang duduk di sofa",
+    "pro_who": "Untuk yang mengurus TV",
+    "ultra_who": "Untuk rumah dan keluarga",
+    "basic_text": "Layar utama salib, pemutar, Dengar, Main, alarm, screensaver, dan semua aksesibilitas.",
+    "pro_text": "Semua di Basic, plus ponsel, otomatisasi, rumah pintar, pesan dari jauh, kartu siap pakai di layar utama, dan personalisasi penuh.",
+    "ultra_text": "Semua di Pro, plus cuaca dari tiga model, halaman film lengkap, subtitel otomatis, beberapa rumah, dan nonton bareng.",
+    "includes": "Termasuk",
+    "everything_basic": "Semua di Basic",
+    "everything_pro": "Semua di Pro"
+  },
+  "dev_page": {
+    "title": "Developer · Sofaly",
+    "description": "Taruh kartu aplikasi Android TV Anda di layar utama Sofaly. Tanpa SDK, tanpa biaya.",
+    "eyebrow": "Kit developer",
+    "h1": "Aplikasi Anda di layar utama yang benar-benar dilihat orang.",
+    "lead": "Plugin Sofaly adalah aplikasi Android TV Anda sendiri. Ia mengirim kartu singkat dan Sofaly menggambarnya di layar utama, dengan huruf besar dan gaya rumah.",
+    "cta_start": "Mulai dari template",
+    "cta_spec": "Baca kontrak lengkap",
+    "why_title": "Kenapa membuat plugin",
+    "why": [
+      [
+        "star",
+        "Di depan, bukan di laci",
+        "Kartu Anda ada di layar utama, tempat keluarga melihat setiap kali TV menyala, bukan hilang di daftar aplikasi."
+      ],
+      [
+        "puzzle",
+        "Tanpa SDK, tanpa biaya",
+        "Satu ContentProvider dan satu baris data. Tidak ada pustaka kami yang perlu dipasang, tidak ada biaya."
+      ],
+      [
+        "heart",
+        "Aplikasi Anda, bisnis Anda",
+        "Terbitkan di Play sesuka Anda, gratis atau berbayar. Sofaly hanya menggambar kartunya; aplikasi dan pelanggan milik Anda."
+      ]
+    ],
+    "can_title": "Yang bisa Anda buat selain kartu kami",
+    "can": [
+      [
+        "Pesanan Anda",
+        "Pesanan sedang diantar, tiba 12 mnt lagi."
+      ],
+      [
+        "Bus Anda",
+        "Jalur 42 tiba 6 mnt lagi."
+      ],
+      [
+        "Gym Anda",
+        "Kelas hari ini pukul 19.00."
+      ],
+      [
+        "Apartemen Anda",
+        "Air mati besok, pukul 9–12."
+      ],
+      [
+        "Toko Anda",
+        "Promo hari ini: kopi diskon 20%."
+      ],
+      [
+        "Klub Anda",
+        "Latihan dipindah ke Sabtu."
+      ]
+    ],
+    "steps_title": "Dua langkah",
+    "step1": "Deklarasikan provider dengan action Sofaly",
+    "step2": "Jawab dengan satu baris: judul, nilai, detail, dan warna",
+    "rules_title": "Aturan yang melindungi penonton",
+    "rules": [
+      "Anda tidak pernah menggambar di layar utama: Anda mengirim teks dan warna, Sofaly yang menggambar.",
+      "Sofaly tidak pernah mengirimi Anda apa pun tentang aplikasi, akun, atau tontonan orang tersebut.",
+      "Plugin adalah bagian dari paket Pro, dan orang itu sendiri yang memilih mana yang tampil."
+    ],
+    "soon_title": "Segera hadir",
+    "soon_text": "Plugin latar dan etalase plugin langsung di TV.",
+    "template_title": "Template siap pakai",
+    "template_text": "Dua contoh aplikasi untuk dibangun hari ini: hitung mundur ke tanggal yang dipilih di TV dan fase bulan hari ini. Tanpa internet, tanpa akun. Lisensi MIT No Attribution: salin, ganti paketnya, dan terbitkan.",
+    "demo": [
+      [
+        "Pesanan",
+        "12 mnt"
+      ],
+      [
+        "Bus 42",
+        "6 mnt"
+      ],
+      [
+        "Gym",
+        "19.00"
+      ]
+    ]
+  },
+  "show": {
+    "title": "Lihat di TV",
+    "lead": "Layar-layar ini berganti sendiri, persis seperti Sofaly tampil dan bergerak di TV sungguhan. Pilih satu untuk berhenti di sana.",
+    "screens": {
+      "forecast": [
+        "Prakiraan",
+        "24 jam ke depan, peluang hujan, dan bulan, sekali lihat dengan huruf besar.",
+        [
+          "Gerimis ringan",
+          "24 jam ke depan",
+          "Peluang hujan",
+          "Kini",
+          "Maks 27° · min 19° · terasa 26°"
+        ]
+      ],
+      "screensaver": [
+        "Screensaver",
+        "Satu lukisan dari The Met setiap hari, jam, dan cuaca hari ini. TV yang betah dibiarkan menyala.",
+        [
+          "Selamat malam",
+          "Lukisan hari ini · The Met",
+          "Bulan sabit muda"
+        ]
+      ],
+      "player": [
+        "Film",
+        "Sulih suara atau subtitel dengan satu tombol, intro dilewati untukmu, dan lanjut dari terakhir berhenti.",
+        [
+          "Jalan Panjang Pulang",
+          "Audio",
+          "Asli + subtitel",
+          "Sulih suara",
+          "Lewati intro"
+        ]
+      ],
+      "radio": [
+        "Radio & podcast",
+        "Stasiun dari seluruh dunia dan podcast-mu, dengan pemutar layar penuh.",
+        [
+          "Sedang diputar",
+          "Radio langsung",
+          "Jazz dari pesisir",
+          "Berita pagi",
+          "Dangdut klasik",
+          "Podcast · episode 12"
+        ]
+      ],
+      "alarm": [
+        "Alarm",
+        "TV menyala sendiri, suara naik pelan-pelan, dan prakiraan hari ini sudah menunggu.",
+        [
+          "Selamat pagi",
+          "Volume naik",
+          "Tunda · 10 mnt",
+          "TV menyala sendiri"
+        ]
+      ],
+      "cards": [
+        "Kartu beranda",
+        "Hitung mundur, pengingat, kurs, bulan, dan laga berikutnya timmu, langsung di layar beranda.",
+        [
+          "12 hari lagi liburan",
+          "Obat jam 20.00",
+          "Kamera garasi tidak merespons",
+          "Laga berikutnya",
+          "Sab · 16.00",
+          "Bulan sabit muda",
+          "Kurs",
+          "Hitung mundur",
+          "Timmu × Lawan"
+        ]
+      ],
+      "games": [
+        "Game",
+        "Game cloud, PC, dan retro di satu tempat, dengan jaringan diuji sebelum bermain.",
+        [
+          "Kontroler terhubung",
+          "Jaringan siap untuk game cloud",
+          "Cloud",
+          "PC",
+          "Retro",
+          "Geng",
+          "Game"
+        ]
+      ],
+      "phone": [
+        "Ponsel",
+        "Panel di ponsel: remote, mengetik, layar TV secara langsung, dan pesan yang muncul di TV.",
+        [
+          "Kirim ke TV",
+          "Makan malam sudah siap!",
+          "Pesan dari ponsel",
+          "Remote",
+          "Ketik",
+          "Layar",
+          "Foto"
+        ]
+      ],
+      "windows": [
+        "Windows",
+        "TV muncul di This PC seperti ponsel: seret film dan foto langsung ke dalamnya.",
+        [
+          "This PC",
+          "Sofaly · Ruang keluarga",
+          "Disk lokal",
+          "Buka panel TV",
+          "Menyalin ke TV… 68%"
+        ]
+      ],
+      "kids": [
+        "Keluarga",
+        "Profil anak, jam tidur, dan waktu layar, semuanya di balik PIN orang tua.",
+        [
+          "Waktunya tidur",
+          "Sampai besok!",
+          "Hanya aplikasi anak sampai jam 7",
+          "PIN orang tua"
+        ]
+      ]
+    }
+  }
+}
