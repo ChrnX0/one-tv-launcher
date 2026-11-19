@@ -77,7 +77,8 @@
     <string name="cruz_tocou">%1$s播放过</string>
     <string name="cruz_por_ultimo">最近：%1$s</string>
     <string name="cruz_addons_n">已安装的插件：%1$d</string>
-    <string name="cruz_apps_n">这台电视上的应用：%1$d</string>
+    <string name="cruz_apps_n">网格中的应用：%1$d</string>
+    <string name="cruz_apps_ocultos">网格中：%1$d · 已隐藏：%2$d</string>
     <string name="cruz_podcasts_n">关注的播客：%1$d</string>
     <string name="cruz_pendrive">U 盘：%1$s</string>
     <string name="casa_fora_titulo">Home Assistant 无响应</string>

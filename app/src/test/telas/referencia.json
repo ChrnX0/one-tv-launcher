@@ -1,6 +1,6 @@
 {
  "ar\/ajuda": {
-  "menorSp": 11,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -9,7 +9,7 @@
   "semNome": []
  },
  "ar\/ajuda-ac": {
-  "menorSp": 11,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -18,7 +18,7 @@
   "semNome": []
  },
  "ar\/automacoes": {
-  "menorSp": 12,
+  "menorSp": 14,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -27,7 +27,7 @@
   "semNome": []
  },
  "ar\/boas-vindas": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -36,7 +36,7 @@
   "semNome": []
  },
  "ar\/busca": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -45,7 +45,7 @@
   "semNome": []
  },
  "ar\/configuracoes": {
-  "menorSp": 11,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -54,7 +54,7 @@
   "semNome": []
  },
  "ar\/configuracoes-ac": {
-  "menorSp": 11,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -63,7 +63,7 @@
   "semNome": []
  },
  "ar\/despertador": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -72,7 +72,7 @@
   "semNome": []
  },
  "ar\/diagnostico": {
-  "menorSp": 12,
+  "menorSp": 14,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -81,7 +81,7 @@
   "semNome": []
  },
  "ar\/entrar-celular": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -90,7 +90,7 @@
   "semNome": []
  },
  "ar\/extras": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -99,7 +99,7 @@
   "semNome": []
  },
  "ar\/fila-apps": {
-  "menorSp": 16,
+  "menorSp": 18,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -108,7 +108,7 @@
   "semNome": []
  },
  "ar\/filmes": {
-  "menorSp": 12.5,
+  "menorSp": 15,
   "foco": false,
   "cortes": [],
   "sobrepostos": [],
@@ -189,7 +189,7 @@
   "semNome": []
  },
  "ar\/jogos": {
-  "menorSp": 11,
+  "menorSp": 14,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -198,7 +198,7 @@
   "semNome": []
  },
  "ar\/mudar-tv": {
-  "menorSp": 16,
+  "menorSp": 18,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -225,7 +225,7 @@
   "semNome": []
  },
  "ar\/planos": {
-  "menorSp": 13,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -234,7 +234,7 @@
   "semNome": []
  },
  "ar\/previsao": {
-  "menorSp": 18,
+  "menorSp": 20,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -252,7 +252,7 @@
   "semNome": []
  },
  "ar\/series": {
-  "menorSp": 12.5,
+  "menorSp": 15,
   "foco": false,
   "cortes": [],
   "sobrepostos": [],
@@ -261,7 +261,7 @@
   "semNome": []
  },
  "ar\/sobre": {
-  "menorSp": 16,
+  "menorSp": 18,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -270,7 +270,7 @@
   "semNome": []
  },
  "en\/ajuda": {
-  "menorSp": 11,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -279,7 +279,7 @@
   "semNome": []
  },
  "en\/ajuda-ac": {
-  "menorSp": 11,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -288,7 +288,7 @@
   "semNome": []
  },
  "en\/automacoes": {
-  "menorSp": 12,
+  "menorSp": 14,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -297,7 +297,7 @@
   "semNome": []
  },
  "en\/boas-vindas": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -306,7 +306,7 @@
   "semNome": []
  },
  "en\/busca": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -315,7 +315,7 @@
   "semNome": []
  },
  "en\/configuracoes": {
-  "menorSp": 11,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -324,7 +324,7 @@
   "semNome": []
  },
  "en\/configuracoes-ac": {
-  "menorSp": 11,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -333,7 +333,7 @@
   "semNome": []
  },
  "en\/despertador": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -342,7 +342,7 @@
   "semNome": []
  },
  "en\/diagnostico": {
-  "menorSp": 12,
+  "menorSp": 14,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -351,7 +351,7 @@
   "semNome": []
  },
  "en\/entrar-celular": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -360,7 +360,7 @@
   "semNome": []
  },
  "en\/extras": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -369,7 +369,7 @@
   "semNome": []
  },
  "en\/fila-apps": {
-  "menorSp": 16,
+  "menorSp": 18,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -378,7 +378,7 @@
   "semNome": []
  },
  "en\/filmes": {
-  "menorSp": 12.5,
+  "menorSp": 15,
   "foco": false,
   "cortes": [],
   "sobrepostos": [],
@@ -459,7 +459,7 @@
   "semNome": []
  },
  "en\/jogos": {
-  "menorSp": 11,
+  "menorSp": 14,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -468,7 +468,7 @@
   "semNome": []
  },
  "en\/mudar-tv": {
-  "menorSp": 16,
+  "menorSp": 18,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -495,7 +495,7 @@
   "semNome": []
  },
  "en\/planos": {
-  "menorSp": 13,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -504,7 +504,7 @@
   "semNome": []
  },
  "en\/previsao": {
-  "menorSp": 18,
+  "menorSp": 20,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -522,7 +522,7 @@
   "semNome": []
  },
  "en\/series": {
-  "menorSp": 12.5,
+  "menorSp": 15,
   "foco": false,
   "cortes": [],
   "sobrepostos": [],
@@ -531,7 +531,7 @@
   "semNome": []
  },
  "en\/sobre": {
-  "menorSp": 16,
+  "menorSp": 18,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -540,7 +540,7 @@
   "semNome": []
  },
  "pt\/ajuda": {
-  "menorSp": 11,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -549,7 +549,7 @@
   "semNome": []
  },
  "pt\/ajuda-ac": {
-  "menorSp": 11,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -558,7 +558,7 @@
   "semNome": []
  },
  "pt\/automacoes": {
-  "menorSp": 12,
+  "menorSp": 14,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -567,7 +567,7 @@
   "semNome": []
  },
  "pt\/boas-vindas": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -576,7 +576,7 @@
   "semNome": []
  },
  "pt\/busca": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -585,7 +585,7 @@
   "semNome": []
  },
  "pt\/configuracoes": {
-  "menorSp": 11,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -594,7 +594,7 @@
   "semNome": []
  },
  "pt\/configuracoes-ac": {
-  "menorSp": 11,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -603,7 +603,7 @@
   "semNome": []
  },
  "pt\/despertador": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -612,7 +612,7 @@
   "semNome": []
  },
  "pt\/diagnostico": {
-  "menorSp": 12,
+  "menorSp": 14,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -621,7 +621,7 @@
   "semNome": []
  },
  "pt\/entrar-celular": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -630,7 +630,7 @@
   "semNome": []
  },
  "pt\/extras": {
-  "menorSp": 12,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -639,7 +639,7 @@
   "semNome": []
  },
  "pt\/fila-apps": {
-  "menorSp": 16,
+  "menorSp": 18,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -648,7 +648,7 @@
   "semNome": []
  },
  "pt\/filmes": {
-  "menorSp": 12.5,
+  "menorSp": 15,
   "foco": false,
   "cortes": [],
   "sobrepostos": [],
@@ -729,7 +729,7 @@
   "semNome": []
  },
  "pt\/jogos": {
-  "menorSp": 11,
+  "menorSp": 14,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -738,7 +738,7 @@
   "semNome": []
  },
  "pt\/mudar-tv": {
-  "menorSp": 16,
+  "menorSp": 18,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -765,7 +765,7 @@
   "semNome": []
  },
  "pt\/planos": {
-  "menorSp": 13,
+  "menorSp": 15,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -774,7 +774,7 @@
   "semNome": []
  },
  "pt\/previsao": {
-  "menorSp": 18,
+  "menorSp": 20,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],
@@ -792,7 +792,7 @@
   "semNome": []
  },
  "pt\/series": {
-  "menorSp": 12.5,
+  "menorSp": 15,
   "foco": false,
   "cortes": [],
   "sobrepostos": [],
@@ -801,7 +801,7 @@
   "semNome": []
  },
  "pt\/sobre": {
-  "menorSp": 16,
+  "menorSp": 18,
   "foco": true,
   "cortes": [],
   "sobrepostos": [],

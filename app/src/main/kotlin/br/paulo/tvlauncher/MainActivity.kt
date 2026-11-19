@@ -894,9 +894,29 @@ class MainActivity : Activity() {
             raiz.addView(rolagem, FrameLayout.LayoutParams(MATCH, WRAP).apply { topMargin = dp(linhaDosApps - folga) })
         }
         // Título "APPS" em cima da linha, como o "CONTINUAR" (esboço do dono, 06/11 noite).
-        raiz.addView(texto(if (emCruz) 20f else 12f, if (emCruz) Estilo.ACENTO else textoSuave, fonteUi).apply {
+        if (emCruz) {
+            // "Todos os apps" da cruz (Paulo, 19/11/2026: no visual da casa e do site): o mesmo cabeçalho das telas Rádio,
+            // Podcasts e Jogos (nome em laranja espaçado + a conta ao lado, em creme) e o véu Noite sobre o fundo.
+            veuTodos = View(this).apply {
+                visibility = View.GONE
+                background = android.graphics.drawable.GradientDrawable(android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
+                    intArrayOf(0xB30E1020.toInt(), 0x990E1020.toInt(), 0xD90E1020.toInt()))
+            }
+            raiz.addView(veuTodos, 0, FrameLayout.LayoutParams(MATCH, MATCH))
+            val forte = Fontes.nunito(800)
+            val nome = texto(HomeCruz.FONTE_ROTULO, Estilo.ACENTO, forte).apply {
+                text = getString(R.string.cruz_todos_apps).uppercase(); letterSpacing = 0.16f; includeFontPadding = false
+            }
+            contaTodos = texto(HomeCruz.FONTE_POSICAO, HomeCruz.COR_SUB, Fontes.nunito(600)).apply { includeFontPadding = false }
+            raiz.addView(LinearLayout(this).apply {
+                rotuloApps = this
+                orientation = LinearLayout.HORIZONTAL; gravity = Gravity.BOTTOM; visibility = View.GONE
+                addView(nome)
+                addView(contaTodos, LinearLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(14) })
+            }, FrameLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(Grade.MARGEM); topMargin = dp(linhaDosApps - 36) })
+        } else raiz.addView(texto(12f, textoSuave, fonteUi).apply {
             rotuloApps = this
-            text = if (emCruz) getString(R.string.cruz_todos_apps).uppercase() else getString(R.string.home_linha_apps)
+            text = getString(R.string.home_linha_apps)
             letterSpacing = 0.1f
             if (tema != Tema.ESCURO) setShadowLayer(dp(6).toFloat(), 0f, 0f, 0x99000000.toInt())
         }, FrameLayout.LayoutParams(WRAP, WRAP).apply { marginStart = dp(Grade.MARGEM); topMargin = dp(linhaDosApps - 32) })
@@ -1188,9 +1208,13 @@ class MainActivity : Activity() {
         val itens = LinkedHashMap<String, Item>()
         val jogos = HashSet<String>()   // pacotes de jogo com ícone na TV, de sistema também (a conta da tela Jogos)
         val pacoteIcones = PacoteIcones.versao(this)
+        // Plugin (fundo animado no formato do Projectivy) não é app de abrir: some da grade e da conta (Paulo, 19/11/2026).
+        // Ele continua achado pelo próprio serviço em WallpaperPlugins.
+        val plugins = runCatching { pm.queryIntentServices(Intent(WallpaperPluginContract.ACTION), 0).map { it.serviceInfo.packageName }.toSet() }
+            .getOrDefault(emptySet())
         for (ri in pm.queryIntentActivities(consulta, 0)) {
             val pkg = ri.activityInfo.packageName
-            if (pkg == packageName || pkg == Config.PACOTE_CONFIG || pkg in itens) continue
+            if (pkg == packageName || pkg == Config.PACOTE_CONFIG || pkg in itens || pkg in plugins) continue
             // Jogos contam ANTES do filtro de sistema (17/11/2026): a tela Jogos (JogosTv.listar) mostra também os de
             // sistema, como o Play Games; contar só os instalados por você dava "5 jogos" na cruz e "Todos · 6" no hub.
             JogosTv.primar(this, pkg, ri.activityInfo.applicationInfo.category)
@@ -2678,7 +2702,9 @@ class MainActivity : Activity() {
     // tela "Todos os apps" (com mover, ocultar e pilhas de hoje).
 
     private var cruz: HomeCruz? = null
-    private var rotuloApps: TextView? = null
+    private var rotuloApps: View? = null
+    private var contaTodos: TextView? = null   // "Na grade: 8 · ocultos: 5" ao lado de TODOS OS APPS
+    private var veuTodos: View? = null
     /** "Todos os apps" aberto: a cruz some e a grade dos apps aparece; Voltar ou HOME fecham. */
     private var todosAbertos = false
     /** Entre onResume e onPause: a HOME é o que está na tela (onNewIntent chega ANTES do onResume vindo de um app). */
@@ -2879,8 +2905,15 @@ class MainActivity : Activity() {
         if (recolher == barraRecolhida && animar) return
         barraRecolhida = recolher
         val d = if (animar) 220L else 0L
-        fun mexer(v: View, fica: Boolean) =
+        // Leitor de tela (pente fino 19/11/2026): o que está apagado sai da árvore de acessibilidade; antes ele lia
+        // "Perfil", "Buscar" e a hora duas vezes com a barra recolhida. O foco do controle não muda com isto.
+        fun leitor(v: View?, visivel: Boolean) {
+            v?.importantForAccessibility = if (visivel) View.IMPORTANT_FOR_ACCESSIBILITY_AUTO else View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+        }
+        fun mexer(v: View, fica: Boolean) {
+            leitor(v, !recolher || fica)
             v.animate().alpha(if (!recolher || fica) 1f else 0f).translationY(if (recolher && !fica) -dp(24).toFloat() else 0f).setDuration(d).start()
+        }
         for (i in 0 until topo.childCount) {
             val v = topo.getChildAt(i)
             // Recua: a direita (hora, e a temperatura) fica; Relógio: some tudo (a hora está grande embaixo).
@@ -2889,7 +2922,7 @@ class MainActivity : Activity() {
             // mas invisível): o grupo dela fica, e só os vizinhos (busca, clima, avisos) recolhem.
             // Na Ilha o que toca está na pílula do centro: a cápsula recolhe com as outras.
             if (v is ViewGroup && capsulaTocando.parent === v && barraCruz != LayoutHome.BarraCruz.ILHA) {
-                v.animate().cancel(); v.alpha = 1f; v.translationY = 0f
+                v.animate().cancel(); v.alpha = 1f; v.translationY = 0f; leitor(v, true)
                 for (j in 0 until v.childCount) v.getChildAt(j).let {
                     // Recolhida, a pílula vai para o começo da linha (onde ficavam busca e clima, agora apagados): no lugar
                     // de sempre ela batia na temperatura que entra ao lado da hora (visto na TV, v462204).
@@ -2900,6 +2933,9 @@ class MainActivity : Activity() {
             } else mexer(v, fica)
         }
         tempoCruz?.animate()?.alpha(if (recolher) 1f else 0f)?.setDuration(d)?.start()
+        leitor(tempoCruz, recolher)
+        leitor(ilhaPilula, recolher)
+        leitor(relogioCruz, recolher)   // aberta, a hora já está na barra (o relógio grande fica a 35%)
         // Ilha: recolhida = só a pílula; aberta = a barra de sempre com o véu atrás (a pílula dá lugar à hora dela).
         if (!recolher) { ui.removeCallbacks(tarefaIlhaEncolhe); ilhaDica?.animate()?.cancel(); ilhaDica?.alpha = 0f }
         ilhaPilula?.animate()?.alpha(if (recolher) 1f else 0f)?.translationY(if (recolher) 0f else -dp(16).toFloat())?.setDuration(d)?.start()
@@ -3528,7 +3564,7 @@ class MainActivity : Activity() {
         // Aplicativos: os 8 mais usados dos que moram aqui (nem movidos nem automáticos de Assistir/Ouvir) e "Todos os apps".
         val apps = CruzLogica.appsDaColuna(porDestino[CruzLogica.Categoria.APLICATIVOS].orEmpty(), ultimoUso, frequencia, fixados).map { id ->
             if (id == CruzLogica.ID_TODOS_APPS) HomeCruz.Item(id, getString(R.string.cruz_todos_apps),
-                CruzLogica.linhas(getString(R.string.cruz_todos_apps_sub), getString(R.string.cruz_apps_n, instalados.size)),
+                CruzLogica.linhas(getString(R.string.cruz_todos_apps_sub), contaApps()),
                 icCruz(id, IconeCruz.Tipo.TODOS_APPS), { abrirTodos() })
             else porPacote.getValue(id).let { app ->
                 HomeCruz.Item("app:$id", app.nome, linhasApp(id, app.nome), icApp(app), { abrir(id) }, opcoes = { menuAppCruz(id) })
@@ -3888,12 +3924,27 @@ class MainActivity : Activity() {
         })
     }
 
+    /**
+     * O que a grade de "Todos os apps" mostra e quantos ficaram escondidos (Paulo, 19/11/2026: "3 apps na grade · 5 ocultos").
+     * Jogos não contam como ocultos: com o cartão Jogos ligado eles moram lá.
+     */
+    private fun contaApps(): String {
+        val ocultos = Organizacao.ocultos(this) + (if (ModoVisita.ativo(this)) ModoVisita.apps(this) else emptySet())
+        val semJogos = JogosTv.cardLigado(this)
+        val apps = instalados.filter { !it.pacote.startsWith("entrada:") && !(semJogos && JogosTv.ehJogo(this, it.pacote)) }
+        val escondidos = apps.count { it.pacote in ocultos }
+        val naGrade = apps.size - escondidos
+        return if (escondidos == 0) getString(R.string.cruz_apps_n, naGrade) else getString(R.string.cruz_apps_ocultos, naGrade, escondidos)
+    }
+
     private fun abrirTodos() {
         val c = cruz ?: return
         todosAbertos = true
         recolherBarra(false, animar = false)   // ▲ na 1ª fileira vai à barra: ela precisa estar visível (o ouvinte sai cedo aqui)
         c.visibility = View.GONE
         rotuloApps?.visibility = View.VISIBLE
+        contaTodos?.text = contaApps()
+        veuTodos?.visibility = View.VISIBLE
         rolagem.visibility = View.VISIBLE
         rolagem.scrollTo(0, 0)
         // Sem nenhum app na grade, o foco não pode ficar sem dono: vai à bolinha do perfil, 1º da barra.
@@ -3906,6 +3957,7 @@ class MainActivity : Activity() {
         todosAbertos = false
         rolagem.visibility = View.GONE
         rotuloApps?.visibility = View.GONE
+        veuTodos?.visibility = View.GONE
         c.visibility = View.VISIBLE
         c.requestFocus()
     }

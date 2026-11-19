@@ -1,5 +1,6 @@
 package br.paulo.tvlauncher.telas
 
+import br.paulo.tvlauncher.Estilo
 import android.view.KeyEvent
 import androidx.test.platform.app.InstrumentationRegistry
 import br.paulo.tvlauncher.AlarmesActivity
@@ -62,8 +63,9 @@ class AlarmeTelaTest {
         problemas += MedirTela.medir(a, "$lingua/opcoes2", "despertador-$lingua-5-editor-bomdia", 16f, cartao = false)
         @Suppress("DEPRECATION") a.onBackPressed()   // VOLTAR salva
         ShadowLooper.idleMainLooper(2, TimeUnit.SECONDS)
-        // A data da Moldura (hora do canto, comum a todas as listas) tem 12 sp de propósito; o resto desta tela, 16 ou mais.
-        val desta = problemas.filterNot { "(12.0sp)" in it && ("feira" in it || "janeiro" in it || "Thursday" in it || "January" in it) }
+        // A data da Moldura (hora do canto, comum a todas as telas) tem o tamanho da legenda (15 sp desde o pente fino de
+        // 19/11/2026; era 12); o resto desta tela, 16 ou mais.
+        val desta = problemas.filterNot { "(${Estilo.Papel.LEGENDA.sp}sp)" in it && ("feira" in it || "janeiro" in it || "Thursday" in it || "January" in it) }
         assertTrue(desta.joinToString("\n"), desta.isEmpty())
         val horas = Despertador.listar(app).map { Despertador.horaTexto(it) }.sorted()
         assertEquals(listOf("07:30", "09:00", "21:15"), horas)

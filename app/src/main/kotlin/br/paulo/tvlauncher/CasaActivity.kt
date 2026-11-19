@@ -478,7 +478,7 @@ class CasaActivity : Activity() {
             textSize = 15f; maxLines = 2; ellipsize = TextUtils.TruncateAt.END; includeFontPadding = false
         }
         private val estadoTv = Estilo.texto(this@CasaActivity, Estilo.Papel.LEGENDA, "").apply {
-            textSize = 12.5f; typeface = Estilo.fonte(500); maxLines = 1; ellipsize = TextUtils.TruncateAt.END; includeFontPadding = false
+            textSize = Estilo.Papel.LEGENDA.sp; typeface = Estilo.fonte(500); maxLines = 1; ellipsize = TextUtils.TruncateAt.END; includeFontPadding = false
         }
         private val barra = BarraBrilho()
         val casca = LinearLayout(this@CasaActivity).apply {

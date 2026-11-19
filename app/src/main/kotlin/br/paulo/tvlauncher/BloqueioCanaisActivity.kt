@@ -81,7 +81,7 @@ class BloqueioCanaisActivity : Activity() {
         raiz.addView(TextView(this).apply {
             text = if (modoInfantis) getString(R.string.infantil_dica)
                 else getString(R.string.bc_dica)
-            textSize = 11f; setTextColor(apagado); setPaddingRelative(0, dp(10), 0, 0)
+            textSize = Estilo.Papel.LEGENDA.sp; setTextColor(apagado); setPaddingRelative(0, dp(10), 0, 0)
         })
         setContentView(raiz)
 
@@ -270,7 +270,7 @@ class BloqueioCanaisActivity : Activity() {
         background = vidro(false)
         setPaddingRelative(dp(10), dp(10), dp(10), dp(10))
         addView(TextView(this@BloqueioCanaisActivity).apply {
-            text = titulo; textSize = 13f; typeface = fonteMedia; setTextColor(suave); letterSpacing = 0.12f; setPaddingRelative(dp(16), dp(4), 0, dp(8))
+            text = titulo; textSize = Estilo.Papel.SECAO.sp; typeface = fonteMedia; setTextColor(suave); letterSpacing = 0.12f; setPaddingRelative(dp(16), dp(4), 0, dp(8))
         })
         addView(l, LinearLayout.LayoutParams(-1, 0, 1f))
     }

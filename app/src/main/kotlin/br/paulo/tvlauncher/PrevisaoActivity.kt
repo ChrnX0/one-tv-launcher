@@ -295,8 +295,8 @@ class PrevisaoActivity : Activity() {
             item.addView(IconesClima.imagem(this, if (i == i0) iconeAgora else IconesClima.chave(d.hCodigo[i], eDiaNaHora(i), false)),
                 LinearLayout.LayoutParams(dp(40), dp(40)).apply { topMargin = dp(6); bottomMargin = dp(6) })
             item.addView(texto(18f, Estilo.TEXTO, fonteMedia).apply { text = "${if (i == i0) tempAgora else Math.round(d.hTemp[i]).toInt()}°"; gravity = Gravity.CENTER })
-            item.addView(texto(13f, azulChuva).apply { text = "${d.hChuva[i]}%"; gravity = Gravity.CENTER })
-            item.addView(texto(12f, textoSuave).apply { text = "${Math.round(d.hVento[i]).toInt()} km/h"; gravity = Gravity.CENTER })
+            item.addView(texto(Estilo.Papel.LEGENDA.sp, azulChuva).apply { text = "${d.hChuva[i]}%"; gravity = Gravity.CENTER })
+            item.addView(texto(Estilo.Papel.LEGENDA.sp, textoSuave).apply { text = "${Math.round(d.hVento[i]).toInt()} km/h"; gravity = Gravity.CENTER })
             faixa.addView(item, LinearLayout.LayoutParams(dp(66), ViewGroup.LayoutParams.WRAP_CONTENT))
         }
         horas.addView(android.widget.HorizontalScrollView(this).apply {
@@ -405,7 +405,7 @@ class PrevisaoActivity : Activity() {
         coluna.addView(trio, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(16) })
         // Crédito exigido pelo plano Free da WeatherAPI (Pro, 19/11/2026).
         if (d.fonte == WeatherApiSource.FONTE)
-            coluna.addView(texto(13f, textoSuave).apply { text = getString(R.string.pv_powered_weatherapi) },
+            coluna.addView(texto(Estilo.Papel.LEGENDA.sp, textoSuave).apply { text = getString(R.string.pv_powered_weatherapi) },
                 LinearLayout.LayoutParams(-2, -2).apply { topMargin = dp(10) })
 
         if (voz != null) {
@@ -423,10 +423,10 @@ class PrevisaoActivity : Activity() {
         addView(LinearLayout(this@PrevisaoActivity).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
             addView(IconesClima.imagem(this@PrevisaoActivity, IconesClima.PREFIXO + "3d/" + icone), LinearLayout.LayoutParams(dp(22), dp(22)))
-            addView(texto(13f, textoSuave).apply { text = rotulo; setPaddingRelative(dp(6), 0, 0, 0); maxLines = 1 })
+            addView(texto(Estilo.Papel.LEGENDA.sp, textoSuave).apply { text = rotulo; setPaddingRelative(dp(6), 0, 0, 0); maxLines = 1 })
         })
         addView(texto(26f, Estilo.TEXTO, fonteMedia).apply { text = valor; setPaddingRelative(0, dp(4), 0, 0); maxLines = 1 })
-        addView(texto(13f, textoSuave).apply { text = extra.ifEmpty { " " } })
+        addView(texto(Estilo.Papel.LEGENDA.sp, textoSuave).apply { text = extra.ifEmpty { " " } })
     }
 
     private fun rotuloUv(uv: Double) = when {

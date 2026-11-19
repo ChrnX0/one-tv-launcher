@@ -77,7 +77,8 @@
     <string name="cruz_tocou">%1$s 재생</string>
     <string name="cruz_por_ultimo">최근: %1$s</string>
     <string name="cruz_addons_n">설치된 애드온: %1$d</string>
-    <string name="cruz_apps_n">이 TV의 앱: %1$d</string>
+    <string name="cruz_apps_n">그리드의 앱: %1$d</string>
+    <string name="cruz_apps_ocultos">그리드: %1$d · 숨김: %2$d</string>
     <string name="cruz_podcasts_n">팔로우한 팟캐스트: %1$d</string>
     <string name="cruz_pendrive">USB 드라이브: %1$s</string>
     <string name="casa_fora_titulo">Home Assistant가 응답하지 않습니다</string>

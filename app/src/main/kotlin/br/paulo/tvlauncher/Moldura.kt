@@ -77,7 +77,7 @@ object Moldura {
             orientation = LinearLayout.VERTICAL
             for (fmt in listOf(R.string.fmt_data_dia, R.string.fmt_data_mes)) addView(RelogioTela(a, data = true).apply {
                 format12Hour = a.getString(fmt); format24Hour = a.getString(fmt)
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, Estilo.Papel.LEGENDA.sp)   // era 12 sp
                 maxLines = 1
                 setTextColor(Estilo.TEXTO_2)
                 typeface = Estilo.fonte(500)

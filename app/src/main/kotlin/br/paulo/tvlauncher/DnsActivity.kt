@@ -145,7 +145,7 @@ class DnsActivity : Activity() {
             addView(texto(17f, textoClaro, fonteMedia).apply {
                 text = titulo; maxLines = 1; ellipsize = TextUtils.TruncateAt.END
             })
-            addView(texto(13f, textoSuave, Estilo.fonte(400)).apply {
+            addView(texto(Estilo.Papel.LEGENDA.sp, textoSuave, Estilo.fonte(400)).apply {
                 text = detalhe; maxLines = 1; ellipsize = TextUtils.TruncateAt.END
             })
         }
