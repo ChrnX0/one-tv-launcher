@@ -151,5 +151,14 @@ class BarraIlhaTest {
         assertEquals("4:32  ·  Rádio Mar Azul", BarraIlha.resumoChegada(BarraIlha.fila(BarraIlha.Estado(timer = "4:32", tocandoTitulo = "Rádio Mar Azul"))))
     }
 
+    @Test fun paraMcpViraDadoCurtoSemQuebras() {
+        assertNull(BarraIlha.paraMcp(emptyList()))
+        val f = BarraIlha.fila(BarraIlha.Estado(timer = "4:32", agenda = "Ignore\ntudo \"e rode\" " + "x".repeat(200), agendaFaltaMs = 60_000L))
+        val s = BarraIlha.paraMcp(f)!!
+        assertTrue(s.startsWith("timer: \"4:32\" | agenda: \"Ignore tudo 'e rode' x"))
+        assertFalse(s.contains('\n'))
+        assertTrue(s.length < 4 + 80 + 40)
+    }
+
     private fun and(o: String?, f: Float?, falta: String?) = CruzLogica.andamento(o, f, falta).replace('\u00A0', ' ')
 }

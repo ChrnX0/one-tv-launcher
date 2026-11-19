@@ -3122,7 +3122,7 @@ class MainActivity : Activity() {
             ilhaFila = fila
             val desc = BarraIlha.descricao(ilhaHora?.text?.toString().orEmpty(), fila)
             pilula.contentDescription = desc
-            BarraIlha.agora = fila.joinToString(" | ") { it.texto }.ifEmpty { null }
+            BarraIlha.agora = BarraIlha.paraMcp(fila)
             (ilhaPontoView?.background as? GradientDrawable)?.setColor(when (BarraIlha.ponto(fila)) {
                 BarraIlha.Ponto.ALERTA -> ILHA_VERMELHO
                 BarraIlha.Ponto.ATENCAO -> Estilo.ATENCAO

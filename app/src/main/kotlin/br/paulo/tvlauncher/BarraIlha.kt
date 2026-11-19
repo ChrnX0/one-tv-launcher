@@ -149,6 +149,19 @@ object BarraIlha {
      */
     fun resumoChegada(fila: List<Evento>): String? = if (fila.size < 2) null else fila.joinToString("  ·  ") { it.texto }
 
+    /** Cada texto que sai para o MCP: no máximo este tamanho (títulos vêm de fora: guia, agenda, Casa). */
+    const val MCP_MAX = 80
+
+    /**
+     * A fila para o MCP (estado_tv.barra), como DADO: tipo + texto, sem quebras/controles e cortado em [MCP_MAX], para um
+     * título de agenda ou do guia não virar um bloco de "instruções" na saída da ferramenta (alerta do code scanning, #277).
+     * Visita já tira a agenda da fila; o resto é o que a própria tela mostra a quem está na sala.
+     */
+    fun paraMcp(fila: List<Evento>): String? = fila.joinToString(" | ") { e ->
+        val t = e.texto.replace(Regex("[\\p{Cntrl}\\u2028\\u2029]+"), " ").replace(Regex("\\s+"), " ").trim()
+        e.tipo.name.lowercase() + ": \"" + (if (t.length > MCP_MAX) t.take(MCP_MAX - 1) + "…" else t).replace("\"", "'") + "\""
+    }.ifEmpty { null }
+
     /** "2/3" quando há mais de um na fila; vazio com um só. */
     fun contador(fila: List<Evento>, passo: Int): String =
         if (fila.size < 2) "" else "${Math.floorMod(passo, fila.size) + 1}/${fila.size}"
