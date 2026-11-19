@@ -32,7 +32,7 @@
     <string name="wp_icone_original">Orijinal simge</string>
     <string name="wp_icone_sugerido">Önerilen</string>
     <string name="wp_icone_voltar">Simge paketini izle</string>
-    <string name="wp_icone_sem_pacote">Simge paketi yok. Ayarlar › Görünüm › Eklentiler\'den edinin.</string>
+    <string name="wp_icone_sem_pacote">Simge paketi yok. Ayarlar › Ana ekran › Eklentiler\'den edinin.</string>
     <string name="wp_d_aerial">Şehirlerin ve doğanın yavaş hava çekimleri</string>
     <string name="wp_d_overflight">Apple TV hava videoları ya da istediğiniz bir video listesi</string>
     <string name="wp_d_daily">Her gün yeni bir günün fotoğrafı</string>

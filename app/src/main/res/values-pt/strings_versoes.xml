@@ -14,22 +14,19 @@
     <string name="ver_respondido_sim">respondido “sim”</string>
     <string name="ver_respondido_nao">respondido “não”</string>
     <string-array name="novidades">
-        <item>Podcasts: nova prateleira “Sugestões” com programas escolhidos a dedo no idioma da TV; OK segue. Na primeira vez, 4 já vêm seguidos</item>
-        <item>Podcasts: “Buscar” e “Em alta no seu país” ligados (Podcast Index)</item>
-        <item>Plugins de fundo: o novo tema “Plugin de fundo” mostra os fundos dos plugins de papel de parede instalados, com o crédito</item>
-        <item>Ícones: cada app pode ter o próprio ícone, de qualquer pacote instalado (“Trocar ícone” no menu do app); os pacotes valem também no modo banner</item>
-        <item>Pacotes de ícones ficam congelados quando não estão em uso, sem gastar memória</item>
-        <item>Configurações › Plugins: vitrine de plugins com QR code ou botão da Play Store</item>
+        <item>Configurações › TV e filmes › Addons: sem nenhum addon, abre a tela de Addons com os Recomendados por tipo</item>
+        <item>Configurações: o quadro da conta de IPTV fica legível com o foco</item>
+        <item>Jogos: as dicas do rodapé seguem a prateleira (“jogar” só nos jogos)</item>
+        <item>Menu do app (segurar OK): fundo mais escuro, a tela inicial não aparece mais por trás</item>
+        <item>“Trocar ícone” sem pacote de ícones agora aponta para Configurações › Tela inicial › Plugins</item>
     </string-array>
     <string-array name="roteiro_titulos">
-        <item>Sugestões de podcasts</item>
-        <item>Busca de podcasts</item>
+        <item>Addons sem nenhum instalado</item>
         <item>Plugin de fundo</item>
         <item>Trocar um ícone</item>
     </string-array>
     <string-array name="roteiro_perguntas">
-        <item>Abra Podcasts: a prateleira “Sugestões” aparece com as capas, e OK num deles segue e abre?</item>
-        <item>Em Podcasts › Procurar › Buscar podcasts, digitar “nerdcast” acha o NerdCast, e “Em alta no seu país” mostra uma lista?</item>
+        <item>Configurações › TV e filmes › Addons, sem addon instalado: abre a tela de Addons com as seções “Recomendados · …”?</item>
         <item>Com um plugin de papel de parede instalado, escolher o tema “Plugin de fundo” mostra o fundo dele na tela inicial?</item>
         <item>Segure OK num app › “Trocar ícone”: escolher um ícone de um pacote troca o ícone na tela inicial?</item>
     </string-array>

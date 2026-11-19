@@ -32,7 +32,7 @@
     <string name="wp_icone_original">मूल आइकन</string>
     <string name="wp_icone_sugerido">सुझाया गया</string>
     <string name="wp_icone_voltar">आइकन पैक के हिसाब से</string>
-    <string name="wp_icone_sem_pacote">कोई आइकन पैक इंस्टॉल नहीं। सेटिंग › दिखावट › प्लगइन में पाएँ।</string>
+    <string name="wp_icone_sem_pacote">कोई आइकन पैक इंस्टॉल नहीं। सेटिंग › होम स्क्रीन › प्लगइन में पाएँ।</string>
     <string name="wp_d_aerial">शहरों और प्रकृति के धीमे हवाई वीडियो</string>
     <string name="wp_d_overflight">Apple TV के हवाई वीडियो, या कोई भी वीडियो सूची</string>
     <string name="wp_d_daily">हर दिन दिन की एक नई फ़ोटो</string>

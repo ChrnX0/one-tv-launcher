@@ -32,7 +32,7 @@
     <string name="wp_icone_original">原始图标</string>
     <string name="wp_icone_sugerido">推荐</string>
     <string name="wp_icone_voltar">跟随图标包</string>
-    <string name="wp_icone_sem_pacote">未安装图标包。请在 设置 › 外观 › 插件 中获取。</string>
+    <string name="wp_icone_sem_pacote">未安装图标包。请在 设置 › 主屏幕 › 插件 中获取。</string>
     <string name="wp_d_aerial">城市与自然的慢速航拍视频</string>
     <string name="wp_d_overflight">Apple TV 航拍视频，或任意视频列表</string>
     <string name="wp_d_daily">每天一张新的每日照片</string>

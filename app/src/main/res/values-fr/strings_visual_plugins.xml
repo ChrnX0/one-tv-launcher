@@ -32,7 +32,7 @@
     <string name="wp_icone_original">Icône d\'origine</string>
     <string name="wp_icone_sugerido">Suggérée</string>
     <string name="wp_icone_voltar">Suivre le pack d\'icônes</string>
-    <string name="wp_icone_sem_pacote">Aucun pack d\'icônes installé. Trouvez-en un dans Réglages › Apparence › Plugins.</string>
+    <string name="wp_icone_sem_pacote">Aucun pack d\'icônes installé. Trouvez-en un dans Réglages › Écran d’accueil › Plugins.</string>
     <string name="wp_d_aerial">Vidéos aériennes lentes de villes et de nature</string>
     <string name="wp_d_overflight">Vidéos aériennes d\'Apple TV, ou toute liste de vidéos</string>
     <string name="wp_d_daily">Une nouvelle photo du jour, chaque jour</string>

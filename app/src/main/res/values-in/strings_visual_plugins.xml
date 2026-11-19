@@ -32,7 +32,7 @@
     <string name="wp_icone_original">Ikon asli</string>
     <string name="wp_icone_sugerido">Disarankan</string>
     <string name="wp_icone_voltar">Ikuti paket ikon</string>
-    <string name="wp_icone_sem_pacote">Belum ada paket ikon. Dapatkan di Pengaturan › Tampilan › Plugin.</string>
+    <string name="wp_icone_sem_pacote">Belum ada paket ikon. Dapatkan di Pengaturan › Layar utama › Plugin.</string>
     <string name="wp_d_aerial">Video udara lambat kota dan alam</string>
     <string name="wp_d_overflight">Video udara Apple TV, atau daftar video apa pun</string>
     <string name="wp_d_daily">Foto hari ini yang baru, setiap hari</string>

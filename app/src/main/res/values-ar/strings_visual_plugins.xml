@@ -32,7 +32,7 @@
     <string name="wp_icone_original">الأيقونة الأصلية</string>
     <string name="wp_icone_sugerido">مقترحة</string>
     <string name="wp_icone_voltar">اتباع حزمة الأيقونات</string>
-    <string name="wp_icone_sem_pacote">لا توجد حزمة أيقونات مثبتة. احصل على واحدة من الإعدادات › المظهر › الإضافات.</string>
+    <string name="wp_icone_sem_pacote">لا توجد حزمة أيقونات مثبتة. احصل على واحدة من الإعدادات › الشاشة الرئيسية › الإضافات.</string>
     <string name="wp_d_aerial">لقطات جوية بطيئة لمدن وطبيعة</string>
     <string name="wp_d_overflight">لقطات Apple TV الجوية أو أي قائمة فيديو</string>
     <string name="wp_d_daily">صورة اليوم جديدة كل يوم</string>
